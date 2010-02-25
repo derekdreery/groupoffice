@@ -19,7 +19,40 @@ GO.users.MainPanel = function(config)
 	{
 		config = {};
 	}
-	//this.userDialog = new UserDialog();
+
+
+	var fields = {
+		fields:['id', 'username', 'name','company','logins','lastlogin','registration_time','address','address_no','zip','city','state','country','phone','email',
+	    	'waddress','waddress_no','wzip','wcity','wstate','wcountry','wphone','enabled'],
+		columns:[
+        {header: GO.lang['strUsername'], dataIndex: 'username'},
+        {header: GO.lang['strName'], dataIndex: 'name', width: 250},
+        {header: GO.lang['strCompany'], dataIndex: 'company', width: 200},
+        {header: GO.users.lang['cmdFormLabelTotalLogins'], dataIndex: 'logins'},
+        {header: GO.users.lang['cmdFormLabelLastLogin'], dataIndex: 'lastlogin'},
+        {header: GO.users.lang['cmdFormLabelRegistrationTime'], dataIndex: 'registration_time'},
+        {header: GO.lang['strAddress'], dataIndex: 'address',  hidden: true},
+				{header: GO.lang['strAddressNo'], dataIndex: 'address_no',  hidden: true},
+        {header: GO.lang['strZip'], dataIndex: 'zip',  hidden: true},
+        {header: GO.lang['strCity'], dataIndex: 'city',  hidden: true},
+        {header: GO.lang['strState'], dataIndex: 'state',  hidden: true},
+        {header: GO.lang['strCountry'], dataIndex: 'country',  hidden: true},
+        {header: GO.lang['strPhone'], dataIndex: 'phone',  hidden: true},
+        {header: GO.lang['strEmail'], dataIndex: 'email',  hidden: true},
+        {header: GO.lang['strWorkAddress'], dataIndex: 'work_address',  hidden: true},
+				{header: GO.lang['strWorkAddressNo'], dataIndex: 'work_address_no',  hidden: true},
+        {header: GO.lang['strWorkZip'], dataIndex: 'work_zip',  hidden: true},
+        {header: GO.lang['strWorkCity'], dataIndex: 'work_city',  hidden: true},
+        {header: GO.lang['strWorkState'], dataIndex: 'work_state',  hidden: true},
+        {header: GO.lang['strWorkCountry'], dataIndex: 'work_country',  hidden: true},
+        {header: GO.lang['strWorkPhone'], dataIndex: 'work_phone',  hidden: true}
+    ]
+	};
+
+	if(GO.customfields)
+	{
+		GO.customfields.addColumns(8, fields);
+	}
 
 	config.store = new GO.data.JsonStore({
 	    url: GO.settings.modules.users.url+'non_admin_json.php',
@@ -27,8 +60,7 @@ GO.users.MainPanel = function(config)
 	    id: 'id',
 	    totalProperty: 'total',
 	    root: 'results',
-	    fields: ['id', 'username', 'name','company','logins','lastlogin','registration_time','address','address_no','zip','city','state','country','phone','email',
-	    	'waddress','waddress_no','wzip','wcity','wstate','wcountry','wphone','enabled'],
+	    fields: fields.fields,
 	    remoteSort: true
 	});
 						
@@ -51,34 +83,13 @@ GO.users.MainPanel = function(config)
 	});
 
 	config.deleteConfig={extraWarning:GO.users.lang.deleteWarning+"\n\n"};
+
 			
 	config.cm = new Ext.grid.ColumnModel({
 		defaults:{
 			sortable:true
 		},
-		columns:[
-        {header: GO.lang['strUsername'], dataIndex: 'username'},
-        {header: GO.lang['strName'], dataIndex: 'name', width: 250},
-        {header: GO.lang['strCompany'], dataIndex: 'company', width: 200},
-        {header: GO.users.lang['cmdFormLabelTotalLogins'], dataIndex: 'logins'},
-        {header: GO.users.lang['cmdFormLabelLastLogin'], dataIndex: 'lastlogin'},
-        {header: GO.users.lang['cmdFormLabelRegistrationTime'], dataIndex: 'registration_time'},        
-        {header: GO.lang['strAddress'], dataIndex: 'address',  hidden: true},
-				{header: GO.lang['strAddressNo'], dataIndex: 'address_no',  hidden: true},
-        {header: GO.lang['strZip'], dataIndex: 'zip',  hidden: true},
-        {header: GO.lang['strCity'], dataIndex: 'city',  hidden: true},
-        {header: GO.lang['strState'], dataIndex: 'state',  hidden: true},
-        {header: GO.lang['strCountry'], dataIndex: 'country',  hidden: true},
-        {header: GO.lang['strPhone'], dataIndex: 'phone',  hidden: true},
-        {header: GO.lang['strEmail'], dataIndex: 'email',  hidden: true},
-        {header: GO.lang['strWorkAddress'], dataIndex: 'waddress',  hidden: true},
-				{header: GO.lang['strWorkAddress_no'], dataIndex: 'waddress_no',  hidden: true},
-        {header: GO.lang['strWorkZip'], dataIndex: 'wzip',  hidden: true},
-        {header: GO.lang['strWorkCity'], dataIndex: 'wcity',  hidden: true},
-        {header: GO.lang['strWorkState'], dataIndex: 'wstate',  hidden: true},
-        {header: GO.lang['strWorkCountry'], dataIndex: 'wcountry',  hidden: true},
-        {header: GO.lang['strWorkPhone'], dataIndex: 'wphone',  hidden: true}      			        
-    ]
+		columns:fields.columns
 	});
 	
 		    	
