@@ -1,3 +1,6 @@
+2010/02/25 3.4.1
+- Corrected z-push instructions
+
 2010/02/23 3.4.0
 General
 - Microsoft ActiveSync support for sync with iphone, android, Nokia etc.
