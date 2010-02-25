@@ -268,6 +268,6 @@ switch($task)
 		$response['data']=$users->get_register_email();
 		echo json_encode($response);
 		break;
-}
 
+}
 ?>
