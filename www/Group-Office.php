@@ -59,9 +59,6 @@ if(!$GO_CONFIG->enabled)
 	die('<h1>Disabled</h1>This Group-Office installation has been disabled');
 }
 
-
-go_debug('['.date('Y-m-d G:i').'] Start of new request');
-
 if($GO_CONFIG->session_inactivity_timeout>0){
 	$now = time();
 	if(isset($_SESSION['last_activity']) && $_SESSION['last_activity']+$GO_CONFIG->session_inactivity_timeout<$now){
@@ -122,6 +119,9 @@ if(!is_int($_SESSION['GO_SESSION']['timezone']))
 	//set user timezone setting after user class is loaded
 	date_default_timezone_set($_SESSION['GO_SESSION']['timezone']);
 }
+//after date_default_timezone otherwise date function might raise an error
+go_debug('['.date('Y-m-d G:i').'] Start of new request');
+
 $GO_GROUPS = new GO_GROUPS();
 $GO_LANGUAGE = new GO_LANGUAGE();
 $GO_MODULES = new GO_MODULES();
