@@ -252,7 +252,7 @@ class GO_USERS extends db
 				$fields=array();
 				if($field == '')
 				{
-					$fields_sql = "SHOW FIELDS FROM go_users u";
+					$fields_sql = "SHOW FIELDS FROM go_users";
 					$this->query($fields_sql);
 					while($this->next_record())
 					{
