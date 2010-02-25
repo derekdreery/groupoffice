@@ -61,7 +61,7 @@ function get_folder_nodes($folder_id, $site, $path='') {
 
 	while($item = array_shift($items)) {
 		if($item['fstype']=='file') {
-			if ($cms->has_folder_access($GO_SECURITY->user_id, $item['folder_id'])) {
+			if (!$cms->filter_enabled($GO_SECURITY->user_id,$site['id']) || $cms->has_folder_access($GO_SECURITY->user_id, $item['folder_id'])) {
 				$response[] = array(
 								'text'=>$item['name'],
 								'id'=>'file_'.$item['id'],
@@ -76,7 +76,7 @@ function get_folder_nodes($folder_id, $site, $path='') {
 				);
 			}
 		} else {
-			if ($cms->has_folder_access($GO_SECURITY->user_id, $item['id'])) {
+			if (!$cms->filter_enabled($GO_SECURITY->user_id,$site['id']) || $cms->has_folder_access($GO_SECURITY->user_id, $item['id'])) {
 				$folderNode = array(
 								'text'=>$item['name'],
 								'id'=>'folder_'.$item['id'],
@@ -476,6 +476,14 @@ try {
 		case 'is_admin':
 
 			$response['is_admin'] = $GO_MODULES->modules['cms']['write_permission'];
+			$response['success'] = true;
+
+			break;
+
+		case 'filter':
+			$cms = new cms();
+
+			$response['filter'] = $cms->filter_enabled($GO_SECURITY->user_id,$_POST['site_id']);
 			$response['success'] = true;
 
 			break;

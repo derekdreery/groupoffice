@@ -48,6 +48,7 @@ GO.cms.WritingUsersPanel = function(config) {
 	GO.cms.foldersDialog = new GO.cms.FoldersDialog();
 
 	config.items = [this.writingUsersGrid];
+	config.layout = 'fit';
 
 	GO.cms.WritingUsersPanel.superclass.constructor.call(this, config);
 
