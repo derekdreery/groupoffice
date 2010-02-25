@@ -52,6 +52,7 @@ function get_folder_tree($folder_id, $user_id) {
 
 function get_folder_nodes($folder_id, $site, $path='') {
 
+	global $GO_SECURITY;
 	$cms = new cms();
 
 	$response = array();
@@ -71,7 +72,7 @@ function get_folder_nodes($folder_id, $site, $path='') {
 							'leaf'=>true,
 							'path'=> $path.'/'.urlencode($item['name'])
 			);
-		}else {
+		}else if ($cms->has_folder_access($GO_SECURITY->user_id, $item['id'])) {
 			$folderNode = array(
 							'text'=>$item['name'],
 							'id'=>'folder_'.$item['id'],
@@ -459,6 +460,14 @@ try {
 			}
 
 			$response['success'] = true;
+
+			break;
+
+		case 'is_admin':
+
+			$response['is_admin'] = $GO_MODULES->modules['cms']['write_permission'];
+			$response['success'] = true;
+
 			break;
 		/* {TASKSWITCH} */
 	}
