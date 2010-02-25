@@ -58,41 +58,51 @@ function get_folder_nodes($folder_id, $site, $path='') {
 	$response = array();
 
 	$items = $cms->get_items($folder_id);
+
 	while($item = array_shift($items)) {
 		if($item['fstype']=='file') {
-			$response[] = array(
-							'text'=>$item['name'],
-							'id'=>'file_'.$item['id'],
-							'iconCls'=>'filetype-html',
-							'site_id'=>$site['id'],
-							'file_id'=>$item['id'],
-							'folder_id'=>$item['folder_id'],
-							'template'=>$site['template'],
-							'root_folder_id'=>$item['files_folder_id'],
-							'leaf'=>true,
-							'path'=> $path.'/'.urlencode($item['name'])
-			);
-		}else if ($cms->has_folder_access($GO_SECURITY->user_id, $item['id'])) {
-			$folderNode = array(
-							'text'=>$item['name'],
-							'id'=>'folder_'.$item['id'],
-							'iconCls'=> $item['disabled']=='1' ? 'cms-folder-disabled' : 'filetype-folder',
-							'site_id'=>$site['id'],
-							'folder_id'=>$item['id'],
-							'template'=>$site['template'],
-							'root_folder_id'=>$site['files_folder_id'],
-							'default_template'=>$item['default_template'],
-							'path'=> $path.'/'.urlencode($item['name'])
-			);
-
-			$subitems = $cms->get_items($item['id']);
-
-			if(!count($subitems)) {
-				$folderNode['expanded']=true;
-				$folderNode['children']=array();
+			if ($cms->has_folder_access($GO_SECURITY->user_id, $item['folder_id'])) {
+				$response[] = array(
+								'text'=>$item['name'],
+								'id'=>'file_'.$item['id'],
+								'iconCls'=>'filetype-html',
+								'site_id'=>$site['id'],
+								'file_id'=>$item['id'],
+								'folder_id'=>$item['folder_id'],
+								'template'=>$site['template'],
+								'root_folder_id'=>$item['files_folder_id'],
+								'leaf'=>true,
+								'path'=> $path.'/'.urlencode($item['name'])
+				);
 			}
+		} else {
+			if ($cms->has_folder_access($GO_SECURITY->user_id, $item['id'])) {
+				$folderNode = array(
+								'text'=>$item['name'],
+								'id'=>'folder_'.$item['id'],
+								'iconCls'=> $item['disabled']=='1' ? 'cms-folder-disabled' : 'filetype-folder',
+								'site_id'=>$site['id'],
+								'folder_id'=>$item['id'],
+								'template'=>$site['template'],
+								'root_folder_id'=>$site['files_folder_id'],
+								'default_template'=>$item['default_template'],
+								'path'=> $path.'/'.urlencode($item['name'])
+				);
 
-			$response[] = $folderNode;
+				$subitems = $cms->get_items($item['id']);
+
+				if(!count($subitems)) {
+					$folderNode['expanded']=true;
+					$folderNode['children']=array();
+				}
+
+				$response[] = $folderNode;
+			} else {
+				$children = get_folder_nodes($item['id'],$site);
+				foreach($children as $child) {
+					$response[] = $child;
+				}
+			}
 		}
 	}
 
