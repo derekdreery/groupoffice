@@ -194,7 +194,7 @@ class GO_USERS extends db
    * @return array
    */
 	
-	function search($query, $field, $user_id=0, $start=0, $offset=0, $sort="name", $sort_direction='ASC')
+	function search($query, $field, $user_id=0, $start=0, $offset=0, $sort="name", $sort_direction='ASC', $search_operator='LIKE')
 	{
 		global $GO_MODULES;
 		
@@ -243,7 +243,7 @@ class GO_USERS extends db
 			}			
 		}
 		
-		if(!empty($query))
+		if($query!='')
 		{
 			$sql .= $where ? " AND " : " WHERE ";
 			
@@ -293,10 +293,10 @@ class GO_USERS extends db
 				
 				if($field=='name')
 				{
-					$sql .= "CONCAT(first_name,middle_name,last_name) LIKE '".$this->escape(str_replace(' ','%', $query))."' ";
+					$sql .= "CONCAT(first_name,middle_name,last_name) $search_operator '".$this->escape(str_replace(' ','%', $query))."' ";
 				}else
 				{
-					$sql .= "$field LIKE '".$this->escape($query)."' ";
+					$sql .= "$field $search_operator '".$this->escape($query)."' ";
 				}
 			}
 			if(count($fields)>1)
