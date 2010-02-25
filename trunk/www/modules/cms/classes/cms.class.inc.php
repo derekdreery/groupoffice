@@ -1366,4 +1366,27 @@ class cms extends db {
         $path .= $sub.$file['name'];
         return $path;        
     }
+
+		public function has_folder_access($user_id,$folder_id){
+			$this->query("SELECT * FROM cms_user_folder_forbid WHERE user_id = $user_id AND folder_id = $folder_id");
+			if ($this->num_rows())
+				return false;
+			else
+				return true;
+		}
+
+		public function user_folder_allow($user_id,$folder_id) {
+			return $this->query("DELETE FROM cms_user_folder_forbid WHERE ".
+				"user_id=$user_id AND folder_id=$folder_id");
+		}
+
+		public function user_folder_deny($user_id,$folder_id) {
+			if ($this->has_folder_access($user_id,$folder_id)) {
+				$uf['user_id'] = $user_id;
+				$uf['folder_id'] = $folder_id;
+				return $this->insert_row('cms_user_folder_forbid', $uf);
+			} else {
+				return true;
+			}
+		}
 }

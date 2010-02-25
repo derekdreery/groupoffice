@@ -59,6 +59,7 @@ GO.cms.SiteDialog = function(config){
 	];
 	
 	GO.cms.SiteDialog.superclass.constructor.call(this, config);
+	
 	this.addEvents({'save' : true});	
 }
 Ext.extend(GO.cms.SiteDialog, Ext.Window,{
@@ -85,7 +86,9 @@ Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 				
 				success:function(form, action)
 				{
-					this.writePermissionsTab.setAcl(action.result.data.acl_write);					
+					this.writePermissionsTab.setAcl(action.result.data.acl_write);
+					this.writePermissionsTab.aclUsersStore.load();
+					this.writePermissionsTab.aclGroupsStore.load();
 					GO.cms.SiteDialog.superclass.show.call(this);
 				},
 				failure:function(form, action)
@@ -109,7 +112,7 @@ Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 	{
 		this.formPanel.form.baseParams['site_id']=site_id;
 		this.site_id=site_id;
-		
+		GO.cms.foldersDialog.site_id=site_id;
 	},
 	
 	submitForm : function(hide){
@@ -226,7 +229,13 @@ Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 		});
     
     items.push(this.writePermissionsTab);
-		
+
+		if (/*Current user is admin*/true) {
+			this.writingUsersPanel = new GO.cms.WritingUsersPanel(
+				{'permissionsTab':this.writePermissionsTab
+				});
+			items.push(this.writingUsersPanel);
+		}
  
     this.tabPanel = new Ext.TabPanel({
       activeTab: 0,      
