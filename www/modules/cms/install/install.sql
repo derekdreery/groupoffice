@@ -93,3 +93,16 @@ CREATE TABLE IF NOT EXISTS `cms_sites` (
 	`files_folder_id` INT NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabel structuur voor tabel `cms_user_folder_access`
+--
+
+DROP TABLE IF EXISTS `cms_user_folder_forbid`;
+CREATE TABLE IF NOT EXISTS `cms_user_folder_forbid` (
+  `user_id` int(11) NOT NULL default '0',
+  `folder_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`user_id`,`folder_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

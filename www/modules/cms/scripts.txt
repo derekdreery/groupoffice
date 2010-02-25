@@ -10,3 +10,5 @@ modules/cms/SelectFile.js
 modules/cms/EditorPanel.js
 modules/cms/TemplateOptionsPanel.js
 modules/cms/MainPanel.js
+modules/cms/WritingUsersPanel.js
+modules/cms/FoldersDialog.js
