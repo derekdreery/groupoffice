@@ -883,6 +883,8 @@ class cms extends db {
 	function add_folder($folder)
 	{
 
+		global $GO_SECURITY;
+
 		$folder['ctime']=$folder['mtime']=time();
 
 		$items = $this->get_items($folder['parent_id']);
@@ -892,7 +894,7 @@ class cms extends db {
 		}
 
 		$folder['id']=$this->nextid('cms_folders');
-		if($this->insert_row('cms_folders', $folder))
+		if($this->insert_row('cms_folders', $folder) && $this->user_folder_allow($GO_SECURITY->user_id,$folder['id']))
 		{
 			return $folder['id'];
 		}
