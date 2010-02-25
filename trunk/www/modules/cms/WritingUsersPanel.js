@@ -42,25 +42,7 @@ GO.cms.WritingUsersPanel = function(config) {
 		},
 		sm : new Ext.grid.RowSelectionModel({}),
 		// paging:true,
-		layout : 'fit',
-		tbar : [{
-				iconCls : 'btn-add',
-				text : GO.lang['cmdAdd'],
-				cls : 'x-btn-text-icon',
-				handler : function() {
-					this.showAddUsersDialog();
-				},
-				scope : this
-			}, {
-				iconCls : 'btn-delete',
-				text : GO.lang['cmdDelete'],
-				cls : 'x-btn-text-icon',
-				handler : function() {
-					this.aclUsersGrid.deleteSelected();
-				},
-				scope : this
-			}]
-
+		layout : 'fit'
 	});
 
 	GO.cms.foldersDialog = new GO.cms.FoldersDialog();
@@ -100,9 +82,7 @@ Ext.extend(GO.cms.WritingUsersPanel, Ext.Panel, {
 		/* Put writing users into array */
 
 		for (var i=0; i<usersStore.data.items.length; i++) {
-			if (usersStore.data.items[i].data.level != 1) {
-				this.writingUserIds.push(usersStore.data.items[i].data.id);
-			}
+			this.writingUserIds.push(usersStore.data.items[i].data.id);
 		}
 
 		this.writingGroupIds = new Array();
@@ -110,9 +90,7 @@ Ext.extend(GO.cms.WritingUsersPanel, Ext.Panel, {
 		/* Put writing groups into array */
 
 		for (var i=0; i<groupsStore.data.items.length; i++) {
-			if (groupsStore.data.items[i].data.level != 1) {
-				this.writingGroupIds.push(groupsStore.data.items[i].data.id);
-			}
+			this.writingGroupIds.push(groupsStore.data.items[i].data.id);
 		}
 
 		Ext.Ajax.request({
@@ -136,7 +114,7 @@ Ext.extend(GO.cms.WritingUsersPanel, Ext.Panel, {
 												responseParams.results[i].name
 											]
 					}
-
+					GO.isAdmin = responseParams.isAdmin;
 					this.writingUsersStore.loadData(data);
 					//this.writingUsersStore.load();
 

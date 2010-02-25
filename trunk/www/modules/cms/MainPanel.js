@@ -12,7 +12,26 @@
  */
  
 GO.cms.MainPanel = function(config){
-	
+
+		Ext.Ajax.request({
+			url:GO.settings.modules.cms.url+'json.php',
+			params:{
+				task:'is_admin'
+			},
+			success: function(response, options)
+			{
+				var responseParams = Ext.decode(response.responseText);
+				if(!responseParams.success)
+				{
+					alert(responseParams.feedback);
+				}else
+				{
+					GO.cms.is_admin = responseParams.is_admin;
+				}
+			},
+			scope:this
+		});
+
 	if(!config)
 	{
 		config = {};//GO.cms.CommentsGrid;

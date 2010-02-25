@@ -13,7 +13,6 @@
  
 GO.cms.SiteDialog = function(config){
 	
-	
 	if(!config)
 	{
 		config={};
@@ -38,29 +37,31 @@ GO.cms.SiteDialog = function(config){
 	config.items= this.formPanel;
 	config.focus= focusFirstField.createDelegate(this);
 	config.buttons=[{
-			text: GO.lang['cmdOk'],
-			handler: function(){
-				this.submitForm(true);
-			},
-			scope: this
-		},{
-			text: GO.lang['cmdApply'],
-			handler: function(){
-				this.submitForm();
-			},
-			scope:this
-		},{
-			text: GO.lang['cmdClose'],
-			handler: function(){
-				this.hide();
-			},
-			scope:this
-		}					
+		text: GO.lang['cmdOk'],
+		handler: function(){
+			this.submitForm(true);
+		},
+		scope: this
+	},{
+		text: GO.lang['cmdApply'],
+		handler: function(){
+			this.submitForm();
+		},
+		scope:this
+	},{
+		text: GO.lang['cmdClose'],
+		handler: function(){
+			this.hide();
+		},
+		scope:this
+	}
 	];
 	
 	GO.cms.SiteDialog.superclass.constructor.call(this, config);
 	
-	this.addEvents({'save' : true});	
+	this.addEvents({
+		'save' : true
+	});
 }
 Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 	
@@ -119,7 +120,9 @@ Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 		this.formPanel.form.submit(
 		{
 			url:GO.settings.modules.cms.url+'action.php',
-			params: {'task' : 'save_site'},
+			params: {
+				'task' : 'save_site'
+			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 				
@@ -159,67 +162,70 @@ Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 	buildForm : function () {
 		this.propertiesPanel = new Ext.Panel({
 			title:GO.lang['strProperties'],			
-			cls:'go-form-panel',waitMsgTarget:true,			
+			cls:'go-form-panel',
+			waitMsgTarget:true,
 			layout:'form',
 			autoScroll:true,
 			items:[{
 				xtype: 'textfield',
-			  name: 'name',
+				name: 'name',
 				anchor: '-20',
-			  allowBlank:false,
-			  fieldLabel: GO.lang.strName
+				allowBlank:false,
+				fieldLabel: GO.lang.strName
 			},{
 				xtype: 'textfield',
-			  name: 'domain',
+				name: 'domain',
 				anchor: '-20',
-			  allowBlank:false,
-			  fieldLabel: GO.cms.lang.domain
+				allowBlank:false,
+				fieldLabel: GO.cms.lang.domain
 			},{
 				xtype: 'textfield',
-			  name: 'webmaster',
+				name: 'webmaster',
 				anchor: '-20',
-			  allowBlank:false,
-			  fieldLabel: GO.cms.lang.webmaster
+				allowBlank:false,
+				fieldLabel: GO.cms.lang.webmaster
 			},new Ext.form.ComboBox({
-         	fieldLabel: GO.cms.lang.template,
-          hiddenName:'template',
-          store: new GO.data.JsonStore({
-            fields: ['name'],
-            url: GO.settings.modules.cms.url+'json.php',
-            root: 'results',
-            baseParams: {'task':'templates'}                    
-          }),
-          valueField:'name',
-          displayField:'name',                
-          mode: 'remote',
-          triggerAction: 'all',
-          editable: false,                
-          forceSelection: true,
-        	anchor:'-20',
-        	allowBlank:false
-     	 }),
-     		new Ext.form.ComboBox({
-					fieldLabel: GO.lang.strLanguage,
-					name: 'language',
-					store:  new Ext.data.SimpleStore({
-							fields: ['id', 'language'],
-							data : GO.Languages
-						}),
-					displayField:'language',
-					valueField: 'id',
-					hiddenName:'language',
-					mode:'local',
-					triggerAction:'all',
-					editable: false,
-					selectOnFocus:true,
-					forceSelection: true,
-					value: GO.settings.language
+				fieldLabel: GO.cms.lang.template,
+				hiddenName:'template',
+				store: new GO.data.JsonStore({
+					fields: ['name'],
+					url: GO.settings.modules.cms.url+'json.php',
+					root: 'results',
+					baseParams: {
+						'task':'templates'
+					}
 				}),
-     	 {
-        	xtype: 'plainfield',
-        	fieldLabel: GO.cms.lang.siteId,
-        	name: 'id'
-       }]
+				valueField:'name',
+				displayField:'name',
+				mode: 'remote',
+				triggerAction: 'all',
+				editable: false,
+				forceSelection: true,
+				anchor:'-20',
+				allowBlank:false
+			}),
+			new Ext.form.ComboBox({
+				fieldLabel: GO.lang.strLanguage,
+				name: 'language',
+				store:  new Ext.data.SimpleStore({
+					fields: ['id', 'language'],
+					data : GO.Languages
+				}),
+				displayField:'language',
+				valueField: 'id',
+				hiddenName:'language',
+				mode:'local',
+				triggerAction:'all',
+				editable: false,
+				selectOnFocus:true,
+				forceSelection: true,
+				value: GO.settings.language
+			}),
+			{
+				xtype: 'plainfield',
+				fieldLabel: GO.cms.lang.siteId,
+				name: 'id'
+			}]
 				
 		});
 		var items  = [this.propertiesPanel];
@@ -228,29 +234,33 @@ Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 			title: GO.lang['strWritePermissions']
 		});
     
-    items.push(this.writePermissionsTab);
+		items.push(this.writePermissionsTab);
 
-		if (/*Current user is admin*/true) {
-			this.writingUsersPanel = new GO.cms.WritingUsersPanel(
-				{'permissionsTab':this.writePermissionsTab
-				});
-			items.push(this.writingUsersPanel);
-		}
- 
-    this.tabPanel = new Ext.TabPanel({
-      activeTab: 0,      
-      deferredRender: false,
-    	border: false,
-      items: items,
-      anchor: '100% 100%'
-    }) ;    
+		GO.cms.writingUsersPanel = this.writingUsersPanel = new GO.cms.WritingUsersPanel(
+		{
+			'permissionsTab':this.writePermissionsTab
+		});
+
+		if (GO.cms.is_admin) {
+						items.push(GO.cms.writingUsersPanel);
+					}
+
+		this.tabPanel = new Ext.TabPanel({
+			activeTab: 0,
+			deferredRender: false,
+			border: false,
+			items: items,
+			anchor: '100% 100%'
+		}) ;
     
     
-    this.formPanel = new Ext.form.FormPanel({
-    	waitMsgTarget:true,
+		this.formPanel = new Ext.form.FormPanel({
+			waitMsgTarget:true,
 			url: GO.settings.modules.cms.url+'action.php',
 			border: false,
-			baseParams: {task: 'site'},				
+			baseParams: {
+				task: 'site'
+			},
 			items:this.tabPanel				
 		});
     
