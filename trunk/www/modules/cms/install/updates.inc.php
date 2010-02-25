@@ -9,10 +9,14 @@ $updates[]="script:2_new_paths.inc.php";
 $updates[]="ALTER TABLE `cms_sites` CHANGE `template` `template` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
 $updates[]="ALTER TABLE `cms_files` ADD `show_until` INT NOT NULL ,ADD INDEX ( show_until )";
 //$updates[]="script:3_convert_acl.inc.php";
-$updates[]="DROP TABLE IF EXISTS `cms_user_folder_forbid`;
-CREATE TABLE IF NOT EXISTS `cms_user_folder_forbid` (
+$updates[]="CREATE TABLE IF NOT EXISTS `cms_user_folder_access` (
   `user_id` int(11) NOT NULL default '0',
   `folder_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`user_id`,`folder_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$updates[]="CREATE TABLE IF NOT EXISTS `cms_user_site_filter` (
+  `user_id` int(11) NOT NULL default '0',
+  `site_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`user_id`,`site_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 ?>

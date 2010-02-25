@@ -90,6 +90,20 @@ GO.cms.FoldersDialog = function(config) {
 				ignoreNoChange : true
 			});
 
+	this.dummyForm = new Ext.form.FormPanel({
+    	waitMsgTarget:true,
+			url: GO.settings.modules.cms.url+'json.php',
+			border: false,
+			cls:'go-form-panel',
+			autoHeight:true,
+			baseParams: {task: 'filter', site_id: GO.cms.site_id},
+			items:[this.checkFilter = new Ext.form.Checkbox({
+					fieldLabel:'Enable filter',
+					name:'filter',
+					anchor:'100%'
+				})]
+		});
+
 	GO.cms.FoldersDialog.superclass.constructor.call(this, {
 		layout : 'fit',
 		modal : false,
@@ -102,7 +116,7 @@ GO.cms.FoldersDialog = function(config) {
 		closeAction : 'hide',
 		title : GO.cms.lang.folders,
 
-		items : this.foldersTree,
+		items : [this.dummyForm, this.foldersTree],
 
 		buttons : [{
 					text : GO.lang.cmdClose,
@@ -112,6 +126,30 @@ GO.cms.FoldersDialog = function(config) {
 					scope : this
 				}]
 	});
+
+	this.checkFilter.on('check', function(checkbox, checked) {
+
+				this.body.mask(GO.lang.waitMsgSave, 'x-mask-loading');
+
+				var task = checked ? 'enable_filter' : 'disable_filter';
+
+				Ext.Ajax.request({
+							url : GO.settings.modules.cms.url + 'action.php',
+							params : {
+								task : task,
+								site_id : GO.cms.site_id
+							},
+							callback : function(options, success, response) {
+								if (!success) {
+									Ext.MessageBox.alert(GO.lang.strError,
+											response.result.feedback);
+								}
+								this.body.unmask();
+							},
+							scope : this
+						});
+
+			}, this);
 }
 
 Ext.extend(GO.cms.FoldersDialog, Ext.Window, {
@@ -122,7 +160,9 @@ Ext.extend(GO.cms.FoldersDialog, Ext.Window, {
 
 				this.site = site_id;
 				this.foldersTree.loader.baseParams.user_id = GO.cms.user_id = user_id;
-				this.foldersTree.loader.baseParams.site_id = site_id;
+				this.foldersTree.loader.baseParams.site_id = this.dummyForm.baseParams.site_id = GO.cms.site_id = site_id;
+
+				this.dummyForm.form.load();
 
 				if (!this.rootNode.isExpanded())
 					this.rootNode.expand();

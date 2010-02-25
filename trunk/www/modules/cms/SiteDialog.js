@@ -241,7 +241,7 @@ Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 			'permissionsTab':this.writePermissionsTab
 		});
 
-		if (GO.cms.is_admin) {
+		if (GO.settings.modules.cms.write_permission) {
 						items.push(GO.cms.writingUsersPanel);
 					}
 

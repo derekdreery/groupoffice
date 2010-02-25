@@ -362,6 +362,27 @@ try {
 			}
 			break;
 
+		case 'enable_filter':
+
+			$site_id = $_POST['site_id'];
+
+			$response['success']=$cms->enable_filter($GO_SECURITY->user_id, $site_id);
+
+			if(!$response['success']) {
+				$response['feedback']=$lang['email']['feedbackSubscribeFolderFailed'];
+			}
+			break;
+
+		case 'disable_filter':
+
+			$site_id = $_POST['site_id'];
+
+			$response['success']=$cms->disable_filter($GO_SECURITY->user_id, $site_id);
+
+			if(!$response['success']) {
+				$response['feedback']=$lang['email']['feedbackSubscribeFolderFailed'];
+			}
+			break;
 
 			break;
 		/* {TASKSWITCH} */

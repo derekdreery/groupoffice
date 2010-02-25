@@ -100,9 +100,22 @@ CREATE TABLE IF NOT EXISTS `cms_sites` (
 -- Tabel structuur voor tabel `cms_user_folder_access`
 --
 
-DROP TABLE IF EXISTS `cms_user_folder_forbid`;
-CREATE TABLE IF NOT EXISTS `cms_user_folder_forbid` (
+DROP TABLE IF EXISTS `cms_user_folder_access`;
+CREATE TABLE IF NOT EXISTS `cms_user_folder_access` (
   `user_id` int(11) NOT NULL default '0',
   `folder_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`user_id`,`folder_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabel structuur voor tabel `cms_user_site_filter`
+--
+
+DROP TABLE IF EXISTS `cms_user_site_filter`;
+CREATE TABLE IF NOT EXISTS `cms_user_site_filter` (
+  `user_id` int(11) NOT NULL default '0',
+  `site_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`user_id`,`site_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

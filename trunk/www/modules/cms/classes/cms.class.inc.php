@@ -1389,4 +1389,28 @@ class cms extends db {
 			return $this->query("DELETE FROM cms_user_folder_access WHERE ".
 				"user_id=$user_id AND folder_id=$folder_id");
 		}
+
+		public function filter_enabled($user_id, $site_id) {
+			$this->query("SELECT * FROM cms_user_site_filter WHERE user_id = '$user_id' AND site_id = '$site_id'");
+			if ($this->num_rows())
+				return true;
+			else
+				return false;
+		}
+
+		public function enable_filter($user_id,$site_id) {
+			if (!$this->filter_enabled($user_id,$site_id)) {
+				$us['user_id'] = $user_id;
+				$us['site_id'] = $site_id;
+				return $this->insert_row('cms_user_site_filter', $us);
+			} else {
+				return true;
+			}
+		}
+
+		public function disable_filter($user_id,$site_id) {
+			return $this->query("DELETE FROM cms_user_site_filter WHERE ".
+				"user_id=$user_id AND site_id=$site_id");
+		}
+
 }
