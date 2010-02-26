@@ -241,9 +241,7 @@ Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 			'permissionsTab':this.writePermissionsTab
 		});
 
-		if (GO.settings.modules.cms.write_permission) {
-						items.push(GO.cms.writingUsersPanel);
-					}
+		items.push(GO.cms.writingUsersPanel);
 
 		this.tabPanel = new Ext.TabPanel({
 			activeTab: 0,
