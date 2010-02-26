@@ -245,7 +245,7 @@ try
 			while($record = $ab->next_record())
 			{
 				addressbook::format_contact_record($record, $cf);
-
+				$record['cf'] = $record['id'].':'.$record['name'];
 				$response['results'][] = $record;
 			}
 

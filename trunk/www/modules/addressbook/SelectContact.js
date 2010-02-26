@@ -16,7 +16,7 @@ GO.addressbook.SelectContact = function(config){
 	
 	Ext.apply(this, config);
 		
-	this.displayField='name';
+	this.displayField='cf';
 
 	
 	this.store = new GO.data.JsonStore({
@@ -28,11 +28,11 @@ GO.addressbook.SelectContact = function(config){
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',	    
-        fields: ['id', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular'],
+        fields: ['id', 'cf', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular'],
 	    remoteSort: true
 	});
 	
-	this.store.setDefaultSort('name', 'asc');
+	this.store.setDefaultSort('id', 'asc');
 
 	GO.addressbook.SelectContact.superclass.constructor.call(this,{
 		valueField: 'id',
@@ -43,3 +43,5 @@ GO.addressbook.SelectContact = function(config){
 	
 }
 Ext.extend(GO.addressbook.SelectContact, GO.form.ComboBoxReset);
+
+Ext.ComponentMgr.registerType('selectcontact', GO.addressbook.SelectContact);
