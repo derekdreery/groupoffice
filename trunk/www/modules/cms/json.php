@@ -448,6 +448,8 @@ try {
 
 		case 'writing_users':
 
+			if($GO_MODULES->modules['cms']['write_permission']) {
+
 			$writing_groups = json_decode($_POST['group_ids']);
 			$writing_users = json_decode($_POST['user_ids']);
 
@@ -471,6 +473,12 @@ try {
 
 			$response['success'] = true;
 
+			} else {
+
+				$response['feedback'] = $lang['cms']['no_admin_rights'];
+				$response['success'] = false;
+
+			}
 			break;
 
 		case 'is_admin':

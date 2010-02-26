@@ -20,8 +20,10 @@ GO.cms.WritingUsersPanel = function(config) {
 	config.title = GO.cms.lang.writingUsers;
 
 	this.writingUsersStore = new Ext.data.SimpleStore(
-		{ fields : ['id','name'] }
-		);
+	{
+		fields : ['id','name']
+	}
+	);
 
 	this.writingUsersGrid = new GO.grid.GridPanel({
 		anchor : '100% 50%',
@@ -29,10 +31,10 @@ GO.cms.WritingUsersPanel = function(config) {
 		store : this.writingUsersStore,
 		border : false,
 		columns : [{
-				header : GO.lang['strName'],
-				dataIndex : 'name',
-				menuDisabled:true
-			}],
+			header : GO.lang['strName'],
+			dataIndex : 'name',
+			menuDisabled:true
+		}],
 		view : new Ext.grid.GridView({
 			autoFill : true,
 			forceFit : true
@@ -94,35 +96,37 @@ Ext.extend(GO.cms.WritingUsersPanel, Ext.Panel, {
 			this.writingGroupIds.push(groupsStore.data.items[i].data.id);
 		}
 
-		Ext.Ajax.request({
-			url:GO.settings.modules.cms.url+'json.php',
-			params:{
-				task:'writing_users',
-				group_ids: Ext.encode(this.writingGroupIds),
-				user_ids: Ext.encode(this.writingUserIds)
-			},
-			success: function(response, options)
-			{
-				var responseParams = Ext.decode(response.responseText);
-				if(!responseParams.success)
+		if (GO.settings.modules.cms.write_permission) {
+			Ext.Ajax.request({
+				url:GO.settings.modules.cms.url+'json.php',
+				params:{
+					task:'writing_users',
+					group_ids: Ext.encode(this.writingGroupIds),
+					user_ids: Ext.encode(this.writingUserIds)
+				},
+				success: function(response, options)
 				{
-					alert(responseParams.feedback);
-				}else
-				{
-					var data = new Array();
-					for (var i in responseParams.results) {
-						data[i] = [ responseParams.results[i].id,
-												responseParams.results[i].name
-											]
-					}
-					GO.isAdmin = responseParams.isAdmin;
-					this.writingUsersStore.loadData(data);
+					var responseParams = Ext.decode(response.responseText);
+					if(!responseParams.success)
+					{
+						alert(responseParams.feedback);
+					}else
+					{
+						var data = new Array();
+						for (var i in responseParams.results) {
+							data[i] = [ responseParams.results[i].id,
+							responseParams.results[i].name
+							]
+						}
+						GO.isAdmin = responseParams.isAdmin;
+						this.writingUsersStore.loadData(data);
 					//this.writingUsersStore.load();
 
-			}
-		},
-		scope:this
-	})
+					}
+				},
+				scope:this
+			})
+		}
 
-}
+	}
 });
