@@ -12,6 +12,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+
+$GO_EVENTS->fire_event('before_scripts_load');
+
 $root_uri = $GO_CONFIG->debug ? $GO_CONFIG->host : $GO_CONFIG->root_path;
 
 $scripts=array();
@@ -26,9 +29,6 @@ if($GO_CONFIG->debug) {
 $scripts[]=$root_uri.'javascript/namespaces.js';
 ?>
 <script type="text/javascript">
-
-
-
 	var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
 
 	GO = {};
@@ -73,9 +73,6 @@ if($GO_SECURITY->logged_in() && $fullscreen=='true' && !isset($_REQUEST['fullscr
 ?>
 </script>
 <?php
-
-
-
 if(!isset($lang['common']['extjs_lang'])) $lang['common']['extjs_lang'] = $GO_LANGUAGE->language;
 
 $file = 'base-'.md5($GO_LANGUAGE->language.$GO_CONFIG->mtime).'.js';
@@ -328,6 +325,8 @@ if($GO_SECURITY->logged_in()) {
 			}
 		}
 	}
+
+
 	
 	
 
