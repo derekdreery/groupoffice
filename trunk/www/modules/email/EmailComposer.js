@@ -322,15 +322,20 @@ GO.email.EmailComposer = function(config) {
 				 * so it's certain the right content is submitted.
 				 */
 
+        if(this.readOnly){
+            return;
+        }
+
         if(!this.activated){
             this.onFirstFocus();
             return;
         }
 
-        var btns = this.tb.items.map, doc = this.doc;
+        var btns = this.tb.items.map,
+            doc = this.getDoc();
 
         if(this.enableFont && !Ext.isSafari2){
-            var name = (this.doc.queryCommandValue('FontName')||this.defaultFont).toLowerCase();
+            var name = (doc.queryCommandValue('FontName')||this.defaultFont).toLowerCase();
             if(name != this.fontSelect.dom.value){
                 this.fontSelect.dom.value = name;
             }
