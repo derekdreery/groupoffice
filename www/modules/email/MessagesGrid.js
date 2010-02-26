@@ -109,7 +109,7 @@ GO.email.MessagesGrid = function(config){
 			
 	config.border=false;
 	config.split= true;
-		
+	config.header=false;
 	config.enableDragDrop= true;
 	config.ddGroup = 'EmailDD';
 	config.animCollapse=false;
@@ -219,7 +219,7 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 	{
 		GO.email.messagesGrid.store.baseParams['unread']=pressed;
                 
-		GO.email.messagesGrid.store.reload();
+		GO.email.messagesGrid.store.load();
 	},
 	renderMessageSmallRes : function(value, p, record){
 		

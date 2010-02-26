@@ -1411,9 +1411,9 @@ class email extends db
 	 * @access public
 	 * @return Array Record properties
 	 */
-	function get_alias_by_name($name)
+	function get_alias_by_email($account_id, $email)
 	{
-		$this->query("SELECT * FROM em_aliases WHERE name=?", 's', $name);
+		$this->query("SELECT * FROM em_aliases WHERE account_id=? AND email=?", 'is', array($account_id,$name));
 		return $this->next_record();		
 	}
 	/**
