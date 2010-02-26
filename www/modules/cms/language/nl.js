@@ -46,4 +46,4 @@ GO.cms.lang.showUntil='Toon pagina tot';
 GO.cms.lang.alwaysShow='Laat leeg om altijd te tonen';
 
 GO.cms.lang.root='Root';
-GO.cms.lang.writingUsers='Schrijvende gebruikers';
+siteFolderAccess='Toegang sitefolders';

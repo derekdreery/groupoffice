@@ -17,7 +17,7 @@ GO.cms.WritingUsersPanel = function(config) {
 		config={};
 	}
 
-	config.title = GO.cms.lang.writingUsers;
+	config.title = GO.cms.lang.siteFolderAccess;
 
 	this.writingUsersStore = new Ext.data.SimpleStore(
 	{

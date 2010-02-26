@@ -56,4 +56,4 @@ GO.cms.lang.showUntil='Show page until';
 GO.cms.lang.alwaysShow='Leave empty to show forever';
 
 GO.cms.lang.root='Root';
-GO.cms.lang.writingUsers='Writing users';
+siteFolderAccess='Site folder access';
