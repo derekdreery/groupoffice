@@ -18,6 +18,7 @@ class addressbook extends db {
 		$events->add_listener('user_delete', __FILE__, 'addressbook', 'user_delete');
 		$events->add_listener('add_user', __FILE__, 'addressbook', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'addressbook', 'build_search_index');
+		$events->add_listener('init_customfields_types', __FILE__, 'addressbook', 'init_customfields_types');
 		$events->add_listener('check_database', __FILE__, 'addressbook', 'check_database');
 	}
 	public static function check_database() {
@@ -99,6 +100,12 @@ class addressbook extends db {
 
 		echo 'Done with addressbook'.$line_break.$line_break;
 
+	}
+
+	function init_customfields_types(){
+		global $GO_MODULES, $customfield_types;
+		require_once($GO_MODULES->modules['addressbook']['class_path'].'contact_customfield_type.class.inc.php');
+		$customfield_types['contact']=new contact_customfield_type(array());
 	}
 
 	function is_duplicate_contact($contact) {
