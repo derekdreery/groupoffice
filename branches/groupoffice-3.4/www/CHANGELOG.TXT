@@ -1,3 +1,8 @@
+2010/02/27 3.4.3
+- Fixed sendmail bug, subfolders and non-ascii characters bug in z-push
+- Fixed bug where calendar would crash if you had access to a calendar with
+tasklists in it that you didn't have access too.
+
 2010/02/25 3.4.1
 - Corrected z-push instructions
 
