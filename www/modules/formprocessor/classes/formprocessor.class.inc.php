@@ -1,5 +1,10 @@
 <?php
 class formprocessor{
+	/*
+	 * For spammers...
+	 */
+	var $no_urls=true;
+
 	function localize_dbfields($post_fields)
 	{
 		global $lang, $GO_LANGUAGE;
@@ -106,6 +111,10 @@ class formprocessor{
 					}
 				}
 				$contact_credentials['comment']=$comments;
+			}
+
+			if($this->no_urls && stripos($contact_credentials['comment'], 'http')){
+				throw new Exception('Sorry, but to prevent spamming we don\'t allow URL\'s in the message');
 			}
 
 			$contact_credentials['addressbook_id']=$addressbook['id'];
