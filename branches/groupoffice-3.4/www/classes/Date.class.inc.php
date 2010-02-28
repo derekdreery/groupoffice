@@ -75,7 +75,7 @@ class Date {
 	 */
 
 
-	public function byday_to_days($byday)
+	public static function byday_to_days($byday)
 	{
 		//$days_arr = explode(',', $byday);
 		
@@ -367,7 +367,7 @@ class Date {
 
 
 
-	function shift_days_to_gmt($days, $local_start_hour, $timezone_offset)
+	public static function shift_days_to_gmt($days, $local_start_hour, $timezone_offset)
 	{
 		$gmt_start_hour = $local_start_hour-$timezone_offset;
 
@@ -681,7 +681,7 @@ class Date {
 		return $d->getOffset()/3600;
 	}
 
-	function ical_freq_to_repeat_type($rrule)
+	public static function ical_freq_to_repeat_type($rrule)
 	{
 		switch($rrule['FREQ'])
 		{
@@ -826,12 +826,9 @@ class Date {
 	}
 	
 	
-	function get_last_sunday($time)
+	public static function get_last_sunday($time)
 	{
 		$date = getdate($time);		
 		return mktime(0,0,0,$date['mon'],$date['mday']-$date['wday'], $date['year']);
 	}
-
-
-
 }
