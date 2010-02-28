@@ -5,12 +5,12 @@ class Image {
 	var $image;
 	var $image_type;
 
-	function __construct($filename=false){
+	public function __construct($filename=false){
 		if($filename)
 			$this->load($filename);
 	}
 
-	function load($filename) {
+	public function load($filename) {
 		$image_info = getimagesize($filename);
 		$this->image_type = $image_info[2];
 		if( $this->image_type == IMAGETYPE_JPEG ) {
@@ -21,7 +21,7 @@ class Image {
 			$this->image = imagecreatefrompng($filename);
 		}
 	}
-	function save($filename, $image_type=IMAGETYPE_JPEG, $compression=75, $permissions=null) {
+	public function save($filename, $image_type=IMAGETYPE_JPEG, $compression=75, $permissions=null) {
 		if( $image_type == IMAGETYPE_JPEG ) {
 			imagejpeg($this->image,$filename,$compression);
 		} elseif( $image_type == IMAGETYPE_GIF ) {
@@ -33,7 +33,7 @@ class Image {
 			chmod($filename,$permissions);
 		}
 	}
-	function output($image_type=IMAGETYPE_JPEG) {
+	public function output($image_type=IMAGETYPE_JPEG) {
 		if( $image_type == IMAGETYPE_JPEG ) {
 			imagejpeg($this->image);
 		} elseif( $image_type == IMAGETYPE_GIF ) {
@@ -42,28 +42,28 @@ class Image {
 			imagepng($this->image);
 		}
 	}
-	function getWidth() {
+	public function getWidth() {
 		return imagesx($this->image);
 	}
-	function getHeight() {
+	public function getHeight() {
 		return imagesy($this->image);
 	}
-	function resizeToHeight($height) {
+	public function resizeToHeight($height) {
 		$ratio = $height / $this->getHeight();
 		$width = $this->getWidth() * $ratio;
 		$this->resize($width,$height);
 	}
-	function resizeToWidth($width) {
+	public function resizeToWidth($width) {
 		$ratio = $width / $this->getWidth();
 		$height = $this->getheight() * $ratio;
 		$this->resize($width,$height);
 	}
-	function scale($scale) {
+	public function scale($scale) {
 		$width = $this->getWidth() * $scale/100;
 		$height = $this->getheight() * $scale/100;
 		$this->resize($width,$height);
 	}
-	function resize($width,$height) {
+	public function resize($width,$height) {
 		$current_width=$this->getWidth();
 		$current_height=$this->getHeight();
 
@@ -72,7 +72,7 @@ class Image {
 		$this->image = $new_image;
 	}
 
-	function zoomcrop($thumbnail_width,$thumbnail_height) { //$imgSrc is a FILE - Returns an image resource.
+	public function zoomcrop($thumbnail_width,$thumbnail_height) { //$imgSrc is a FILE - Returns an image resource.
 
 		$width_orig=$this->getWidth();
 		$height_orig=$this->getHeight();
