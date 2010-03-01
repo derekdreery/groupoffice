@@ -46,4 +46,5 @@ GO.cms.lang.showUntil='Toon pagina tot';
 GO.cms.lang.alwaysShow='Laat leeg om altijd te tonen';
 
 GO.cms.lang.root='Root';
-siteFolderAccess='Toegang sitefolders';
+GO.cms.lang.advancedPermissions='Geavanceeerde toegangsrechten';
+GO.cms.lang.enablePermissionsPerFolder='Schakel toegangsrechten per map in voor deze gebruiker';
