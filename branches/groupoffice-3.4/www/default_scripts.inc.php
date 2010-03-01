@@ -12,9 +12,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-
-$GO_EVENTS->fire_event('before_scripts_load');
-
 $root_uri = $GO_CONFIG->debug ? $GO_CONFIG->host : $GO_CONFIG->root_path;
 
 $scripts=array();

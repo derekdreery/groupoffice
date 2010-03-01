@@ -125,6 +125,15 @@ go_debug('['.date('Y-m-d G:i').'] Start of new request');
 $GO_GROUPS = new GO_GROUPS();
 $GO_LANGUAGE = new GO_LANGUAGE();
 $GO_MODULES = new GO_MODULES();
+
+/*
+ * License checking for pro modules. Don't remove it or Group-Office will fail
+ * to load!
+ */
+if(file_exists($GO_CONFIG->root_path.'modules/professional/check.php')){
+	require_once($GO_CONFIG->root_path.'modules/professional/check.php');
+	check_license();
+}
 $GO_SECURITY = new GO_SECURITY();
 $GO_LINKS = new GO_LINKS();
 $GO_EVENTS = new GO_EVENTS();
