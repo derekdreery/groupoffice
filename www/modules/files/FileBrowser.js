@@ -434,7 +434,7 @@ GO.files.FileBrowser = function(config){
 	{
 		tbar.push(this.newButton);
 		tbar.push(this.uploadButton);
-		tbar.push({
+		/*tbar.push({
 
 			text: 'SWF upload',
 			handler:function(){
@@ -459,7 +459,7 @@ GO.files.FileBrowser = function(config){
 
 				window.show();
 			}
-		});
+		});*/
 		tbar.push('-');
 	}
 	tbar.push(this.upButton);
