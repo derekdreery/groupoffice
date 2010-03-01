@@ -17,6 +17,6 @@ class contact_customfield_type extends default_customfield_type {
 
 	private function get_name($cf) {
 		$pos = strpos($cf,':');
-		return substr($cf,$pos+1);
+		return htmlspecialchars(substr($cf,$pos+1), ENT_COMPAT,'UTF-8');
 	}
 }
