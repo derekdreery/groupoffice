@@ -87,7 +87,7 @@ class cms_output extends cms {
 			$this->file['content']='No file found';
 		}else {
 			$this->folder['path']=$this->build_path($this->file['folder_id'], $this->site['root_folder_id']);
-			$this->file['path']=$this->folder['path'].$this->file['name'];
+			$this->file['path']=$this->folder['path'].'/'.$this->file['name'];
 			$this->file['level']=count(explode('/', $this->file['path']))-1;
 		}
 
