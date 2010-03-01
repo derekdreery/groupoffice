@@ -13,17 +13,18 @@
 
 
 GO.addressbook.SelectContact = function(config){
-	
-	Ext.apply(this, config);
-		
-	this.displayField='cf';
 
+	if(!config.displayField)
+		config.displayField='name';
 	
-	this.store = new GO.data.JsonStore({
+	if(!config.valueField)
+		config.valueField='id';
+	
+	config.store = new GO.data.JsonStore({
 	    url: GO.settings.modules.addressbook.url+ 'json.php',
 	    baseParams: {
 	    	task: 'contacts',
-				'addressbook_id' : this.addressbook_id
+				'addressbook_id' : config.addressbook_id
 				},
 	    root: 'results',
 	    id: 'id',
@@ -32,14 +33,13 @@ GO.addressbook.SelectContact = function(config){
 	    remoteSort: true
 	});
 	
-	this.store.setDefaultSort('id', 'asc');
+	config.store.setDefaultSort('name', 'asc');
 
-	GO.addressbook.SelectContact.superclass.constructor.call(this,{
-		valueField: 'id',
-		triggerAction: 'all',
-		selectOnFocus:true,
-		pageSize: parseInt(GO.settings['max_rows_list'])
-	});
+	config.triggerAction='all';
+	config.selectOnFocus=true;
+	config.pageSize=parseInt(GO.settings['max_rows_list']);
+
+	GO.addressbook.SelectContact.superclass.constructor.call(this,config);
 	
 }
 Ext.extend(GO.addressbook.SelectContact, GO.form.ComboBoxReset);

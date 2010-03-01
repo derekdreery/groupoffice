@@ -6,8 +6,9 @@ GO.moduleManager.onModuleReady('customfields', function(){
 			return {
 				xtype: 'selectcontact',
        	fieldLabel: customfield.name,
-        name:customfield.dataname,
-        anchor:'-20'
+        hiddenName:customfield.dataname,
+        anchor:'-20',
+				valueField:'cf'
 			}
 		}
 	}
