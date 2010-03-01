@@ -41,7 +41,7 @@ function get_folder_tree($folder_id, $user_id) {
 	return array(
 					'text' => $folder['name'],
 					'id' => 'folder_'.$folder['id'],
-					'iconCls' => 'folderIcon',
+					'iconCls'=> $folder['disabled']=='1' ? 'cms-folder-disabled' : 'filetype-folder',
 					'folder_id' => $folder['id'],
 					'expanded' => true,
 					'checked' => $cms2->has_folder_access($user_id,$folder_id),
@@ -50,10 +50,15 @@ function get_folder_tree($folder_id, $user_id) {
 	);
 }
 
+$filter_enabled=-1;
 function get_folder_nodes($folder_id, $site, $path='') {
 
-	global $GO_SECURITY;
+	global $GO_SECURITY, $filter_enabled;
 	$cms = new cms();
+	if($filter_enabled===-1){
+		$filter_enabled=$cms->filter_enabled($GO_SECURITY->user_id,$site['id']);
+	}
+
 
 	$response = array();
 
@@ -61,7 +66,7 @@ function get_folder_nodes($folder_id, $site, $path='') {
 
 	while($item = array_shift($items)) {
 		if($item['fstype']=='file') {
-			if (!$cms->filter_enabled($GO_SECURITY->user_id,$site['id']) || $cms->has_folder_access($GO_SECURITY->user_id, $item['folder_id'])) {
+			if (!$filter_enabled || $cms->has_folder_access($GO_SECURITY->user_id, $item['folder_id'])) {
 				$response[] = array(
 								'text'=>$item['name'],
 								'id'=>'file_'.$item['id'],
@@ -76,7 +81,7 @@ function get_folder_nodes($folder_id, $site, $path='') {
 				);
 			}
 		} else {
-			if (!$cms->filter_enabled($GO_SECURITY->user_id,$site['id']) || $cms->has_folder_access($GO_SECURITY->user_id, $item['id'])) {
+			if (!$filter_enabled || $cms->has_folder_access($GO_SECURITY->user_id, $item['id'])) {
 				$folderNode = array(
 								'text'=>$item['name'],
 								'id'=>'folder_'.$item['id'],
@@ -491,7 +496,7 @@ try {
 		case 'filter':
 			$cms = new cms();
 
-			$response['filter'] = $cms->filter_enabled($GO_SECURITY->user_id,$_POST['site_id']);
+			$response['data']['filter'] = $cms->filter_enabled($_POST['user_id'],$_POST['site_id']);
 			$response['success'] = true;
 
 			break;

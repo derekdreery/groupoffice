@@ -366,7 +366,7 @@ try {
 
 			$site_id = $_POST['site_id'];
 
-			$response['success']=$cms->enable_filter($GO_SECURITY->user_id, $site_id);
+			$response['success']=$cms->enable_filter($_POST['user_id'], $site_id);
 
 			if(!$response['success']) {
 				$response['feedback']=$lang['email']['feedbackSubscribeFolderFailed'];
@@ -377,7 +377,7 @@ try {
 
 			$site_id = $_POST['site_id'];
 
-			$response['success']=$cms->disable_filter($GO_SECURITY->user_id, $site_id);
+			$response['success']=$cms->disable_filter($_POST['user_id'], $site_id);
 
 			if(!$response['success']) {
 				$response['feedback']=$lang['email']['feedbackSubscribeFolderFailed'];

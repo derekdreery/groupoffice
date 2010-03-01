@@ -21,88 +21,88 @@ GO.cms.FoldersDialog = function(config) {
 	if(!config || !config.site_id) var site_id = 0 ;
 
 	this.foldersTree = new Ext.tree.TreePanel({
-				animate : true,
-				border : false,
-				autoScroll : true,
-				height : 200,
-				loader : new Ext.tree.TreeLoader({
-							dataUrl : GO.settings.modules.cms.url
-									+ 'json.php',
-							baseParams : {
-								task : 'tree-edit',
-								user_id : user_id,
-								site_id : site_id
-							},
-							preloadChildren : true,
-							listeners : {
-								beforeload : function() {
-									this.body.mask(GO.lang.waitMsgLoad);
-								},
-								load : function() {
-									this.body.unmask();
-								},
-								scope : this
-							}
-						})
-			});
+		animate : true,
+		border : false,
+		autoScroll : true,
+		rootVisible:false,
+		height : 200,
+		loader : new Ext.tree.TreeLoader({
+			dataUrl : GO.settings.modules.cms.url
+			+ 'json.php',
+			baseParams : {
+				task : 'tree-edit',
+				user_id : user_id,
+				site_id : site_id
+			},
+			preloadChildren : true,
+			listeners : {
+				beforeload : function() {
+					this.body.mask(GO.lang.waitMsgLoad);
+				},
+				load : function() {
+					this.body.unmask();
+				},
+				scope : this
+			}
+		})
+	});
 
 	// set the root node
 	this.rootNode = new Ext.tree.AsyncTreeNode({
-				text : GO.cms.lang.root,
-				draggable : false,
-				id : 'folder_root',
-				folder_id : 0,
-				expanded : false
-			});
+		text : GO.cms.lang.root,
+		draggable : false,
+		id : 'folder_root',
+		folder_id : 0,
+		expanded : false,
+		iconCls : 'folder-default'
+	});
 	this.foldersTree.setRootNode(this.rootNode);
 
-	this.rootNode.on('load', function() {
-				this.rootNode.select();
-
-			}, this);
 
 	this.foldersTree.on('checkchange', function(node, checked) {
 
-				this.body.mask(GO.lang.waitMsgSave, 'x-mask-loading');
+		this.body.mask(GO.lang.waitMsgSave, 'x-mask-loading');
 
-				var task = checked ? 'subscribe' : 'unsubscribe';
+		var task = checked ? 'subscribe' : 'unsubscribe';
 
-				Ext.Ajax.request({
-							url : GO.settings.modules.cms.url + 'action.php',
-							params : {
-								task : task,
-								user_id : GO.cms.user_id,
-								folder_id : node.attributes.folder_id
-							},
-							callback : function(options, success, response) {
-								if (!success) {
-									Ext.MessageBox.alert(GO.lang.strError,
-											response.result.feedback);
-								}
-								this.body.unmask();
-							},
-							scope : this
-						});
+		Ext.Ajax.request({
+			url : GO.settings.modules.cms.url + 'action.php',
+			params : {
+				task : task,
+				user_id : GO.cms.user_id,
+				folder_id : node.attributes.folder_id
+			},
+			callback : function(options, success, response) {
+				if (!success) {
+					Ext.MessageBox.alert(GO.lang.strError,
+						response.result.feedback);
+				}
+				this.body.unmask();
+			},
+			scope : this
+		});
 
-			}, this);
+	}, this);
 
-	var treeEdit = new Ext.tree.TreeEditor(this.foldersTree, {
-				ignoreNoChange : true
-			});
 
 	this.dummyForm = new Ext.form.FormPanel({
-    	waitMsgTarget:true,
-			url: GO.settings.modules.cms.url+'json.php',
-			border: false,
-			cls:'go-form-panel',
-			autoHeight:true,
-			baseParams: {task: 'filter', site_id: GO.cms.site_id},
-			items:[this.checkFilter = new Ext.form.Checkbox({
-					fieldLabel:'Enable filter',
-					name:'filter',
-					anchor:'100%'
-				})]
-		});
+		waitMsgTarget:true,
+		url: GO.settings.modules.cms.url+'json.php',
+		border: false,
+		cls:'go-form-panel',
+		autoHeight:true,
+		baseParams: {
+			task: 'filter',
+			site_id: GO.cms.site_id,
+			user_id:0
+		},
+		items:[this.checkFilter = new Ext.form.Checkbox({
+			boxLabel:GO.cms.lang.enablePermissionsPerFolder,
+			hideLabel:true,
+			name:'filter',
+			anchor:'100%'
+		})]
+	});
 
 	GO.cms.FoldersDialog.superclass.constructor.call(this, {
 		layout : 'fit',
@@ -115,75 +115,63 @@ GO.cms.FoldersDialog = function(config) {
 		plain : true,
 		closeAction : 'hide',
 		title : GO.cms.lang.folders,
-
 		items : [this.dummyForm, this.foldersTree],
-
 		buttons : [{
-					text : GO.lang.cmdClose,
-					handler : function() {
-						this.hide();
-					},
-					scope : this
-				}]
+			text : GO.lang.cmdClose,
+			handler : function() {
+				this.hide();
+			},
+			scope : this
+		}]
 	});
 
 	this.checkFilter.on('check', function(checkbox, checked) {
 
-				this.body.mask(GO.lang.waitMsgSave, 'x-mask-loading');
+		this.body.mask(GO.lang.waitMsgSave, 'x-mask-loading');
 
-				var task = checked ? 'enable_filter' : 'disable_filter';
+		var task = checked ? 'enable_filter' : 'disable_filter';
 
-				Ext.Ajax.request({
-							url : GO.settings.modules.cms.url + 'action.php',
-							params : {
-								task : task,
-								site_id : GO.cms.site_id
-							},
-							callback : function(options, success, response) {
-								if (!success) {
-									Ext.MessageBox.alert(GO.lang.strError,
-											response.result.feedback);
-								}
-								this.body.unmask();
-							},
-							scope : this
-						});
+		Ext.Ajax.request({
+			url : GO.settings.modules.cms.url + 'action.php',
+			params : {
+				task : task,
+				site_id : GO.cms.site_id,
+				user_id: this.dummyForm.baseParams.user_id
+			},
+			callback : function(options, success, response) {
+				if (!success) {
+					Ext.MessageBox.alert(GO.lang.strError,
+						response.result.feedback);
+				}
+				this.body.unmask();
+			},
+			scope : this
+		});
 
-			}, this);
+	}, this);
 }
 
 Ext.extend(GO.cms.FoldersDialog, Ext.Window, {
 
-			show : function(user_id,site_id) {
+	show : function(user_id,site_id) {
 
-				this.render(Ext.getBody());
+		this.site = site_id;
+		this.foldersTree.loader.baseParams.user_id = GO.cms.user_id = user_id;
+		this.foldersTree.loader.baseParams.site_id = this.dummyForm.baseParams.site_id = GO.cms.site_id = site_id;
+		this.dummyForm.baseParams.user_id=user_id;
+		this.dummyForm.form.load();
 
-				this.site = site_id;
-				this.foldersTree.loader.baseParams.user_id = GO.cms.user_id = user_id;
-				this.foldersTree.loader.baseParams.site_id = this.dummyForm.baseParams.site_id = GO.cms.site_id = site_id;
+		if(!this.rendered)
+		{
+			//render will automatically expand hidden root folder because rootVisible=false
+			this.render(Ext.getBody());
+		}else
+		{
+			this.rootNode.reload();
+		}
+			
 
-				this.dummyForm.form.load();
+		GO.cms.FoldersDialog.superclass.show.call(this);
 
-				if (!this.rootNode.isExpanded())
-					this.rootNode.expand();
-				else
-					this.rootNode.reload();
-
-				GO.cms.FoldersDialog.superclass.show.call(this);
-
-			}
-/*
-			,getSubscribtionData : function() {
-				var data = [];
-				for (var i = 0; i < this.allFoldersStore.data.items.length; i++) {
-					data[i] = {
-						id : this.allFoldersStore.data.items[i].get('id'),
-						subscribed : this.allFoldersStore.data.items[i]
-								.get('subscribed'),
-						name : this.allFoldersStore.data.items[i].get('name')
-					};
-				}
-				return data;
-			}
-			*/
-		});
+	}
+});

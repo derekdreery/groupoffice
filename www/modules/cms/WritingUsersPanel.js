@@ -17,7 +17,7 @@ GO.cms.WritingUsersPanel = function(config) {
 		config={};
 	}
 
-	config.title = GO.cms.lang.siteFolderAccess;
+	config.title = GO.cms.lang.advancedPermissions;
 
 	this.writingUsersStore = new Ext.data.SimpleStore(
 	{
@@ -27,7 +27,6 @@ GO.cms.WritingUsersPanel = function(config) {
 
 	this.writingUsersGrid = new GO.grid.GridPanel({
 		anchor : '100% 50%',
-		title : GO.lang['strAuthorizedUsers'],
 		store : this.writingUsersStore,
 		border : false,
 		columns : [{
