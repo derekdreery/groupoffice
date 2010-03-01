@@ -22,6 +22,8 @@ GO.cms.FoldersDialog = function(config) {
 
 	this.foldersTree = new Ext.tree.TreePanel({
 		animate : true,
+		region:'center',
+		layout:'fit',
 		border : false,
 		autoScroll : true,
 		rootVisible:false,
@@ -91,6 +93,7 @@ GO.cms.FoldersDialog = function(config) {
 		border: false,
 		cls:'go-form-panel',
 		autoHeight:true,
+		region:'north',
 		baseParams: {
 			task: 'filter',
 			site_id: GO.cms.site_id,
@@ -105,7 +108,7 @@ GO.cms.FoldersDialog = function(config) {
 	});
 
 	GO.cms.FoldersDialog.superclass.constructor.call(this, {
-		layout : 'fit',
+		layout : 'border',
 		modal : false,
 		shadow : false,
 		minWidth : 300,
