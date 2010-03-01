@@ -1,3 +1,6 @@
+2010/03/01 3.4.4
+- Fixed license invalid error.
+
 2010/03/01 3.4.3
 - Fixed sendmail bug, subfolders and non-ascii characters bug in z-push
 - Fixes for iphone sync.
