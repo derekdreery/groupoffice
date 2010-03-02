@@ -47,7 +47,7 @@ class cached_imap extends imap{
 			$this->folder = $this->email->get_folder($this->account['id'],$mailbox);
 
 			if($this->folder)
-				$this->folder_sort_cache=json_decode($this->folder['sort'], true);
+				$this->folder_sort_cache=unserialize($this->folder['sort']);
 		}
 	}
 	/**
@@ -113,22 +113,22 @@ class cached_imap extends imap{
 		} else {
 			if($this->folder['msgcount']!=$this->count || $this->folder['unseen']!=$this->unseen)
 			{
-				//go_debug('Cleared sort cache');
+				go_debug('Cleared sort cache');
 				$this->folder_sort_cache=array();
 			}
 				
 			if(isset($this->folder_sort_cache[$sort_type.'_'.$reverse]))
 			{
-				//go_debug('Used cached sort info');
+				go_debug('Used cached sort info');
 				$this->sort = $this->folder_sort_cache[$sort_type.'_'.$reverse];
 			}else
 			{
-				//go_debug('Got sort from IMAP server: '.$this->folder['msgcount'].' = '.$this->count.' && '.$this->folder['unseen'].' = '.$this->unseen);
+				go_debug('Got sort from IMAP server: '.$this->folder['msgcount'].' = '.$this->count.' && '.$this->folder['unseen'].' = '.$this->unseen);
 				$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID+SE_NOPREFETCH);
 				$this->folder_sort_cache[$sort_type.'_'.$reverse]=$this->sort;
 
 				$up_folder['id'] = $this->folder['id'];
-				$up_folder['sort']=json_encode($this->folder_sort_cache);
+				$up_folder['sort']=serialize($this->folder_sort_cache);
 				$up_folder['unseen']=$this->unseen;
 				$up_folder['msgcount']=$this->count;
 
@@ -206,21 +206,30 @@ class cached_imap extends imap{
 						}else
 						{
 							$removed++;
-							//go_debug('Removed '.$uid.' from sort cache '.$key);
+							go_debug('Removed '.$uid.' from sort cache '.$key);
 						}
 					}
 				}
 			}
 			if(isset($this->sort_type))
 			{
-				//go_debug('Updated sort');
+				go_debug('Updated sort');
 				$this->sort=$this->folder_sort_cache[$this->sort_type.'_'.$this->sort_reverse];
 			}
 				
 			$up_folder['id'] = $this->folder['id'];
-			$up_folder['sort']=json_encode($this->folder_sort_cache);
+			$up_folder['sort']=serialize($this->folder_sort_cache);
 
-			//test
+
+			$status = $this->status($this->mailbox, SA_UNSEEN+SA_MESSAGES);
+			if($status)
+			{
+				$this->unseen = $status->unseen;
+				$this->count = $status->messages;
+			}else
+			{
+				$this->unseen = $this->count = 0;
+			}
 			$this->folder['unseen']=$up_folder['unseen']=$this->unseen;
 			$this->folder['msgcount']=$up_folder['msgcount']=$this->count;
 
@@ -399,9 +408,9 @@ class cached_imap extends imap{
 		$message['from']=isset($address[0]['personal']) ? $address[0]['personal'] : '';
 
 		$message['to_string']='';
+		$to=array();
 		if(!empty($message['to']))
-		{			
-			$to=array();
+		{
 			foreach($message['to'] as $address)
 			{
 				$message['to_string'].= $address.', ';
@@ -410,11 +419,12 @@ class cached_imap extends imap{
 				'name'=>$address[0]['personal']);
 			}
 			$message['to_string']=substr($message['to_string'],0,-2);
-			$message['to']=$to;
+			
 		}else
 		{
-			$message['to']=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
+			$to[]=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
 		}
+		$message['to']=$to;
 
 
 		$message['cc_string']='';
