@@ -26,27 +26,32 @@ GO.email.MessagesGrid = function(config){
 	{
 		this.searchtypeWidth = 150;
 		this.searchfieldWidth = 320;
-		config.cm = new Ext.grid.ColumnModel([
-		{
-			header:"&nbsp;",
-			width:50,
-			dataIndex: 'icon',
-			renderer: this.renderIcon,
-			hideable:false,
-			sortable:false
-		},{
-			header: GO.email.lang.from,
-			dataIndex: 'from',
-			id:'from'
-		},{
-			header: GO.email.lang.subject,
-			dataIndex: 'subject'
-		},{
-			header: GO.lang.strDate,
-			dataIndex: 'date',
-			width:65,
-			align:'right'
-		}]);
+		config.cm = new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+			},
+			columns:[
+			{
+				header:"&nbsp;",
+				width:50,
+				dataIndex: 'icon',
+				renderer: this.renderIcon,
+				hideable:false,
+				sortable:false
+			},{
+				header: GO.email.lang.from,
+				dataIndex: 'from',
+				id:'from'
+			},{
+				header: GO.email.lang.subject,
+				dataIndex: 'subject'
+			},{
+				header: GO.lang.strDate,
+				dataIndex: 'date',
+				width:65,
+				align:'right'
+			}]
+		});
 		config.view=new Ext.grid.GridView({
 			autoFill: true,
 			forceFit: true,
