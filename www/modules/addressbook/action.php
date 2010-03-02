@@ -428,6 +428,7 @@ try
 								{
 									if ((isset ($record[$_POST['first_name']]) && $record[$_POST['first_name']] != "") || (isset ($record[$_POST['last_name']]) && $record[$_POST['last_name']] != ''))
 									{
+										$contact=array();
 										$contact['email_allowed']='1';
 										$contact['title'] = isset ($record[$_POST['title']]) ? trim($record[$_POST['title']]) : '';
 										$contact['first_name'] = isset ($record[$_POST['first_name']]) ? trim($record[$_POST['first_name']]) : '';
@@ -461,6 +462,7 @@ try
 												
 											if(!$contact['company_id'])
 											{
+												$company=array();
 												$company['addressbook_id']=$addressbook_id;
 												$company['name']=$company_name;
 
@@ -477,10 +479,12 @@ try
 								} else {
 									if (isset ($record[$_POST['name']]) && $record[$_POST['name']] != '')
 									{
+										$company=array();
 										$company['name'] = trim($record[$_POST['name']]);
 
 										//if (!$ab->get_company_by_name($_POST['addressbook_id'], $company['name']))
 										{
+
 											$company['email_allowed']='1';
 											$company['email'] = isset ($record[$_POST['email']]) ? String::get_email_from_string($record[$_POST['email']]) : '';
 											$company['phone'] = isset ($record[$_POST['phone']]) ? trim($record[$_POST['phone']]) : '';
