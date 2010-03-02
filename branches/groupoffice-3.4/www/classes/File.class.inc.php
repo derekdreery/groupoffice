@@ -51,13 +51,17 @@ class File
 		$cmd = 'du -sk "'.$dir.'" 2>/dev/null';
 
 		$io = popen ($cmd, 'r' );
-		$size = fgets ( $io, 4096);
 
-		$size = preg_replace('/[\t\s]+/', ' ', trim($size));
+		if($io){
+			$size = fgets ( $io, 4096);
+			$size = preg_replace('/[\t\s]+/', ' ', trim($size));
 
-
-		$size = substr ( $size, 0, strpos ( $size, ' ' ) );
-		//go_debug($cmd.' Size: '.$size);
+			$size = substr ( $size, 0, strpos ( $size, ' ' ) );
+			//go_debug($cmd.' Size: '.$size);
+		}else
+		{
+			return false;
+		}
 
 		return $size;
 	}
