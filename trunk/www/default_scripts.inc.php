@@ -96,8 +96,8 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 			$scripts[]=$root_uri.'language/common/'.$GO_LANGUAGE->language.'.js';
 		}
 
-		if(file_exists($GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'-min.js')) {
-			$scripts[]=$root_uri.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'-min.js';
+		if(file_exists($GO_CONFIG->root_path.'ext/src/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js')) {
+			$scripts[]=$root_uri.'ext/src/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js';
 		}
 
 		if(file_exists($GO_CONFIG->root_path.'modules/users/language/'.$GO_LANGUAGE->language.'.js')) {
