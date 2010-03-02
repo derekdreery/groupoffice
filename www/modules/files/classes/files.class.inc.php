@@ -56,67 +56,7 @@ class files extends db {
 		require_once($GO_MODULES->modules['files']['class_path'].'file_customfield_type.class.inc.php');
 		$customfield_types['file']=new file_customfield_type(array());
 	}
-
-	function get_thumb_url($path) {
-		global $GO_THEME, $GO_CONFIG;
-
-		$extension = File::get_extension($path);
-
-		switch($extension) {
-			case 'jpg':
-			case 'jpeg';
-			case 'png';
-			case 'gif';
-				return phpThumbURL('src='.urlencode($GO_CONFIG->file_storage_path.$path).'&w=100&h=100&zc=1');
-				break;
-
-			case 'pdf':
-				return $GO_THEME->image_url.'128x128/filetypes/pdf.png';
-				break;
-
-			case 'tar':
-			case 'tgz':
-			case 'gz':
-			case 'bz2':
-			case 'zip':
-				return $GO_THEME->image_url.'128x128/filetypes/zip.png';
-				break;
-			case 'odt':
-			case 'docx':
-			case 'doc':
-				return $GO_THEME->image_url.'128x128/filetypes/doc.png';
-				break;
-
-			case 'odc':
-			case 'ods':
-			case 'xls':
-			case 'xlsx':
-				return $GO_THEME->image_url.'128x128/filetypes/spreadsheet.png';
-				break;
-
-			case 'odp':
-			case 'pps':
-			case 'pptx':
-			case 'ppt':
-				return $GO_THEME->image_url.'128x128/filetypes/pps.png';
-				break;
-
-			case 'htm':
-				return $GO_THEME->image_url.'128x128/filetypes/doc.png';
-				break;
-
-			default:
-				if(file_exists($GO_THEME->theme_path.'images/128x128/filetypes/'.$extension.'.png')) {
-					return $GO_THEME->image_url.'128x128/filetypes/'.$extension.'.png';
-				}else {
-					return $GO_THEME->image_url.'128x128/filetypes/unknown.png';
-				}
-				break;
-
-		}
-
-	}
-
+	
 	/**
 	 * Check if a path is the user's home path
 	 *

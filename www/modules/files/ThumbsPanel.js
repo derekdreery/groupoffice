@@ -14,9 +14,6 @@
 GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
 	store : false,
 	initComponent : function(){
-
-		this.forceLayout=true;
-
 		this.bbar = new Ext.PagingToolbar({
   					cls: 'go-paging-tb',
 	          store: this.store,
@@ -35,7 +32,7 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
      
         
      this.items=[this.view = new Ext.DataView({
-    //        store: this.store,
+            store: this.store,
             tpl: tpl,
             autoHeight:true,
             multiSelect: true,
@@ -92,7 +89,7 @@ GO.files.ThumbsPanel = Ext.extend(Ext.Panel, {
 			this.store.on("load", this.onStoreLoad, this);
 		}
 		
-		this.view.setStore(this.store);
+		this.view.bindStore(this.store);
 		
 	},
 	/**
