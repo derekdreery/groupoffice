@@ -131,7 +131,7 @@ try
 							$img->zoomcrop(90,120);
 							$img->save($destination);
 
-							$response['image']=$GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id='.$contact_id;
+							$result['image']=$GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id='.$contact_id;
 
 							//go_log(LOG_DEBUG, var_export($response, true));
 						}

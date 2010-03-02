@@ -460,6 +460,13 @@ try
 
 				$response['success']=true;	
 			}
+
+			if(file_exists($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$response['data']['id'].'.jpg'))
+			{
+				$response['data']['photo_src'] = $GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id='.$response['data']['id'].'&mtime='.time();
+			} else {
+				$response['data']['photo_src'] = false;
+			}
 				
 			if($task == 'load_contact')
 			{
@@ -530,12 +537,7 @@ try
 			if(!isset($response['data']['iso_address_format']) || $response['data']['iso_address_format'] == '')
 				$response['data']['iso_address_format'] = $response['data']['default_iso_address_format'];
 
-			if(file_exists($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$response['data']['id'].'.jpg'))
-			{
-				$response['data']['photo_src'] = $GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id='.$response['data']['id'].'&mtime='.time();
-			} else {
-				$response['data']['photo_src'] = false;
-			}
+			
 
 			echo json_encode($response);
 			break;
