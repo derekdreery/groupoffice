@@ -130,7 +130,7 @@ $GO_MODULES = new GO_MODULES();
  * License checking for pro modules. Don't remove it or Group-Office will fail
  * to load!
  */
-if(file_exists($GO_CONFIG->root_path.'modules/professional/check.php')){
+if(PHP_SAPI != 'cli' && file_exists($GO_CONFIG->root_path.'modules/professional/check.php')){
 	require_once($GO_CONFIG->root_path.'modules/professional/check.php');
 	check_license();
 }

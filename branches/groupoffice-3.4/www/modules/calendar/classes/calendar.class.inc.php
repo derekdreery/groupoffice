@@ -2148,7 +2148,7 @@ class calendar extends db
 
 		$this->query($sql, 'i', $event_id);
 		$record = $this->next_record();
-		if($record)
+		if($record && empty($record['private']))
 		{
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
