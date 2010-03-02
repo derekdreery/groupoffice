@@ -1,6 +1,7 @@
 2010/03/02 3.4.7
 - Select participants needed addressbook and e-mail module. Now it works without
   too.
+- Fixed files folder problem with addressbook import
 - Sending newsletters was broken due to new license check system.
 - Small bug fixes
 
