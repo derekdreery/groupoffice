@@ -454,7 +454,6 @@ try{
 							if(!isset($extensions) || in_array($extension, $extensions))
 							{
 								$file['type_id']='f:'.$file['id'];
-								//$file['thumb_url']=$files->get_thumb_url($file['id']);
 								$file['extension']=$extension;
 								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.$file['name'].'</div>';
 								$file['type']=File::get_filetype_description($extension);
@@ -742,7 +741,7 @@ try{
 								{
 									$file['path']=$path.'/'.$file['name'];
 									$file['type_id']='f:'.$file['id'];
-									$file['thumb_url']=$files->get_thumb_url($file['path']);
+									$file['thumb_url']=get_thumb_url($file['path']);
 									//$file['extension']=$extension;
 									$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$file['extension'].'">'.$file['name'].'</div>';
 									$file['type']=File::get_filetype_description($file['extension']);

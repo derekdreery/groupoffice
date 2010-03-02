@@ -490,11 +490,11 @@ GO.files.FileBrowser = function(config){
       toggleHandler: function(item, pressed){
       	if(pressed)
 		  	{
-		  		this.thumbsPanel.setStore(this.gridStore);	        		    		
+		  		//this.thumbsPanel.setStore(this.gridStore);
 		  		this.cardPanel.getLayout().setActiveItem(1);
 		  	}else
 		  	{
-		  		this.thumbsPanel.setStore(false);	        		
+		  		//this.thumbsPanel.setStore(false);
 		  		this.cardPanel.getLayout().setActiveItem(0);
 		  	}        	
       	
