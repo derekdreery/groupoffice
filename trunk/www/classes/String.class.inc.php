@@ -24,11 +24,11 @@
 
 class String {
 
-	function escape_javascript($str){
+	public static function escape_javascript($str){
 		return strtr($str, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
 	}
 
-	function clean_utf8($str, $source_charset='UTF-8') {
+	public static function clean_utf8($str, $source_charset='UTF-8') {
 
 		//Does not always work. We suppress the:
 		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31
@@ -194,7 +194,7 @@ class String {
 
 
 
-	function replace_once($search, $replace, $subject) {
+	public static function replace_once($search, $replace, $subject) {
 		$firstChar = strpos($subject, $search);
 		if($firstChar !== false) {
 			$beforeStr = substr($subject,0,$firstChar);
@@ -213,7 +213,7 @@ class String {
 	 * @param int $offset
 	 * @return int
 	 */
-	function rstrpos ($haystack, $needle, $offset=0)
+	public static function rstrpos ($haystack, $needle, $offset=0)
 	{
 		$size = strlen ($haystack);
 		$pos = strpos (strrev($haystack), strrev($needle), $size - $offset);
@@ -224,7 +224,7 @@ class String {
 		return $size - $pos - strlen($needle);
 	}
 
-	function trim_lines($text)
+	public static function trim_lines($text)
 	{
 		//go_log(LOG_DEBUG, $text);
 		str_replace("\r\n","\n", $text);
@@ -261,7 +261,7 @@ class String {
 	 * @access public
 	 * @return void
 	 */
-	function get_email_from_string($email) {
+	public static function get_email_from_string($email) {
 		if (preg_match("/(\b)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,4})\b/i", $email, $matches)) {
 			return $matches[0];
 		} else {
@@ -288,7 +288,7 @@ class String {
 	 * @return string
 	 */
 
-	function add_params_to_url($url, $params) {
+	public static function add_params_to_url($url, $params) {
 		if (strpos($url, '?') === false) {
 			$url .= '?'.$params;
 		} else {
@@ -307,7 +307,7 @@ class String {
 	 * @return array An array of SQL strings
 	 */
 
-	function get_sql_queries($file) {
+	public static function get_sql_queries($file) {
 		$sql = '';
 		$queries = array ();
 		if ($handle = fopen($file, "r")) {
@@ -354,7 +354,7 @@ class String {
 	 * @return string HTML formated string
 	 */
 
-	function get_html_body($html) {
+	public static function get_html_body($html) {
 		$to_removed_array = array ("'<html[^>]*>'si", "'</html>'si", "'<body[^>]*>'si", "'</body>'si", "'<head[^>]*>.*?</head>'si", "'<style[^>]*>.*?</style>'si", "'<object[^>]*>.*?</object>'si",);
 
 		//$html = str_replace("\r", "", $html);
@@ -374,7 +374,7 @@ class String {
 	 * @return array array with keys first, middle and last
 	 */
 
-	function split_name($full_name) {
+	public static function split_name($full_name) {
 		$name_arr = explode(' ', $full_name);
 
 		$name['first'] = $full_name;
@@ -409,7 +409,7 @@ class String {
 	 * @access	public
 	 * @return	string
 	 */
-	function get_email_validation_regex() {
+	public static function get_email_validation_regex() {
 		return "/^[a-z0-9\._\-]+@[a-z0-9\.\-_]+\.[a-z]{2,4}$/i";
 	}
 
@@ -421,7 +421,7 @@ class String {
 	 * @access public
 	 * @return bool
 	 */
-	function validate_email($email) {
+	public static function validate_email($email) {
 		return preg_match(String::get_email_validation_regex(), $email);
 	}
 
@@ -432,7 +432,7 @@ class String {
 	 * @access public
 	 * @return string
 	 */
-	function empty_to_stripe($input) {
+	public static function empty_to_stripe($input) {
 		if ($input == "") {
 			return "-";
 		} else {
@@ -447,7 +447,7 @@ class String {
 	 * @access public
 	 * @return string Address formatted
 	 */
-	function address_format($object, $linebreak = '<br />') {
+	public static function address_format($object, $linebreak = '<br />') {
 		if (isset ($object['name'])) {
 			$name = $object['name'];
 		} else {
@@ -533,7 +533,7 @@ class String {
 	 * @return string
 	 */
 
-	function cut_string($string, $maxlength, $cut_whole_words = true) {
+	public static function cut_string($string, $maxlength, $cut_whole_words = true) {
 		if (strlen($string) > $maxlength) {
 			$temp = substr($string, 0, $maxlength -3);
 			if ($cut_whole_words) {
@@ -558,7 +558,7 @@ class String {
 	 * @param $maxlines
 	 * @return String
 	 */
-	function limit_lines($string,$maxlines)
+	public static function limit_lines($string,$maxlines)
 	{
 		$string = str_replace("\r", '', $string);
 		$lines = explode("\n", $string, $maxlines);
@@ -582,7 +582,7 @@ class String {
 	 * @access public
 	 * @return string HTML formated string
 	 */
-	function enriched_to_html($enriched, $convert_links=true) {
+	public static function enriched_to_html($enriched, $convert_links=true) {
 		global $GO_CONFIG, $GO_MODULES;
 
 		// We add space at the beginning and end of the string as it will
@@ -661,7 +661,7 @@ class String {
 	 * @access public
 	 * @return string HTML formatted string
 	 */
-	function text_to_html($text, $convert_links=true) {
+	public static function text_to_html($text, $convert_links=true) {
 		global $GO_CONFIG, $GO_MODULES;
 
 		if($convert_links)
@@ -702,7 +702,7 @@ class String {
 	 * @access public
 	 * @return string HTML formatted string
 	 */
-	function convert_html($html) {
+	public static function convert_html($html) {
 		global $GO_CONFIG;
 
 		//don't do this because it will mess up <pre></pre> tags
@@ -786,7 +786,7 @@ class String {
 	 * @return string HTML formatted string
 	 */
 
-	function convert_links($html)
+	public static function convert_links($html)
 	{
 		global $GO_CONFIG, $GO_MODULES;
 
@@ -817,7 +817,7 @@ class String {
 	 * @access public
 	 * @return string A string quoted with >
 	 */
-	function quote($text) {
+	public static function quote($text) {
 		$text = "> ".ereg_replace("\n", "\n> ", trim($text));
 		return ($text);
 	}
@@ -831,7 +831,7 @@ class String {
 	 * @return unknown
 	 */
 
-	function quoted_printable_encode($sLine,$bEmulate_imap_8bit=false) {
+	public static function quoted_printable_encode($sLine,$bEmulate_imap_8bit=false) {
 
 		if(empty($sLine)){
 			return $sLine;
@@ -892,7 +892,7 @@ class String {
 		//return implode(chr(13).chr(10),$aLines);
 	}
 
-	function wrap_quoted_printable_encoded_string($sText, $add_leading_space=false){
+	public static function wrap_quoted_printable_encoded_string($sText, $add_leading_space=false){
 		$lb = '='.chr(13).chr(10);
 
 		//funambol clients need this to parse the vcard correctly.
@@ -904,7 +904,7 @@ class String {
 		
 	}
 
-	function format_vcard_line($name_part, $value_part, $add_leading_space=false)
+	public static function format_vcard_line($name_part, $value_part, $add_leading_space=false)
 	{
 		//$value_part = str_replace("\r\n","\n", $value_part);
 

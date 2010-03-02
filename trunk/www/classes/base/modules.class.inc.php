@@ -194,6 +194,7 @@ class GO_MODULES extends db {
 	function load_modules()
 	{
 		global $GO_SECURITY, $GO_LANGUAGE, $lang_modules;
+		
 		$this->modules=array();
 		$_SESSION['GO_SESSION']['modules']=array();
 
@@ -227,7 +228,6 @@ class GO_MODULES extends db {
 				
 		}
 		$this->modules=$_SESSION['GO_SESSION']['modules'];
-
 	}
 
 

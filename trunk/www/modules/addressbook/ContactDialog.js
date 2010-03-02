@@ -31,7 +31,7 @@ GO.addressbook.ContactDialog = function(config)
 			if (this.el)
 				var src = contact_id ? GO.settings.modules.addressbook.url+'photo.php?contact_id='+contact_id+'&mtime='+now.format('U') : Ext.BLANK_IMAGE_URL;
 				this.el.set({
-					src: src
+					src: contact_id==0 ? Ext.BLANK_IMAGE_URL : GO.settings.modules.addressbook.url+'photo.php?contact_id='+contact_id+'&mtime='+now.format('U')
 				});
 			this.setVisible(true);
 		}
@@ -228,6 +228,7 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 		{
 			var tempAddressbookID = this.personalPanel.formAddressBooks.getValue();
 			this.formPanel.form.reset();
+
 			this.personalPanel.formAddressBooks.setValue(tempAddressbookID);
 			//this.personalPanel.formAddressFormat.selectDefault();
 
@@ -248,7 +249,8 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 			if(this.contact_id > 0)
 			{
 				this.loadContact(contact_id);
-			} else {	
+			} else {
+				this.setPhoto(0);
 				GO.addressbook.ContactDialog.superclass.show.call(this);
 			}
 			var abRecord = this.personalPanel.formAddressBooks.store.getById(this.personalPanel.formAddressBooks.getValue());
@@ -284,14 +286,14 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 				{					
 					this.personalPanel.setAddressbookID(action.result.data.addressbook_id);
 					this.formPanel.form.findField('company_id').setRemoteText(action.result.data.company_name);
-					this.setPhoto(id);
+					if(!GO.util.empty(action.result.data.photo_src))
+						this.setPhoto(id);
+					
 					GO.addressbook.ContactDialog.superclass.show.call(this);
 				}
 			},
 			scope: this
 		});
-
-		this.setPhoto(id);
 	},
 	
 	saveContact : function(hide)
@@ -315,7 +317,10 @@ Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
 				}
 				this.uploadFile.clearQueue();
 				this.fireEvent('save', this, this.contact_id);
-				this.setPhoto(this.contact_id);
+				if(!GO.util.empty(action.result.image))
+					this.setPhoto(this.contact_id);
+				else
+					this.setPhoto(0);
 				if (hide)
 				{
 					this.hide();

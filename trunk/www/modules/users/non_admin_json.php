@@ -57,52 +57,30 @@ switch($task)
 		$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 		$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : null;
 		$search_field = isset($_REQUEST['search_field']) ? ($_REQUEST['search_field']) : null;
-		$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : null;
+		//$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : null;
 		
-		if(isset($user_id))
-		{
-			$user = $GO_USERS->get_user($user_id);
-		}else
-		{
-			$user=false;
-			$user_id = (!$GO_MODULES->modules['users']['read_permission']) ? $GO_SECURITY->user_id : 0;
-			$response['total'] = $GO_USERS->search($query, $search_field, $user_id, $start, $limit, $sort,$dir);
+
+		$user_id = (!$GO_MODULES->modules['users']['read_permission']) ? $GO_SECURITY->user_id : 0;
+		$response['total'] = $GO_USERS->search($query, $search_field, $user_id, $start, $limit, $sort,$dir);
+
+		if($GO_MODULES->has_module('customfields')) {
+			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+			$cf = new customfields();
 		}
 		
+		
 		$response['results']=array();
-		while($user || $GO_USERS->next_record())
-		{
-			$user=false;
-			
-			$name = String::format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'));
-			$address = $GO_USERS->f('address').' '.$GO_USERS->f('address_no');
-			$waddress = $GO_USERS->f('work_address').' '.$GO_USERS->f('work_address_no');
+		while($user=$GO_USERS->next_record())
+		{			
+			$user['name'] = String::format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'));
+			$user['lastlogin']=Date::get_timestamp($user['lastlogin']);
+			$user['registration_time']=Date::get_timestamp($user['registration_time']);
+
+			if(isset($cf)){
+				$cf->format_record($user, 8, true);
+			}
 				
-			$response['results'][]=array(
-					'id'=>$GO_USERS->f('id'),
-					'username'=>$GO_USERS->f('username'), 
-					'name'=>htmlspecialchars($name), 
-					'company'=>$GO_USERS->f('company'),
-					'logins'=>$GO_USERS->f('logins'),
-					'lastlogin'=>Date::get_timestamp($GO_USERS->f('lastlogin')), 
-					'registration_time'=>Date::get_timestamp($GO_USERS->f('registration_time')),
-					'address' => $GO_USERS->f('address'),
-					'address_no' => $GO_USERS->f('address_no'),
-					'zip' => $GO_USERS->f('zip'),
-					'city' => $GO_USERS->f('city'),
-					'state' => $GO_USERS->f('state'),
-					'country' => $GO_USERS->f('country'),
-					'phone' => $GO_USERS->f('phone'),
-					'email' => $GO_USERS->f('email'),
-					'waddress' => $GO_USERS->f('work_address'),
-					'waddress_no' => $GO_USERS->f('work_address_no'),
-					'wzip' => $GO_USERS->f('work_zip'),
-					'wcity' => $GO_USERS->f('work_city'),
-					'wstate' => $GO_USERS->f('work_state'),
-					'wcountry' => $GO_USERS->f('work_country'),
-					'wphone' => $GO_USERS->f('work_phone'),
-					'enabled'=> $GO_USERS->f('enabled')
-			);				
+			$response['results'][]=$user;
 		}
 
 		echo json_encode($response);

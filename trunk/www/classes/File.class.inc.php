@@ -24,11 +24,9 @@
 
 class File
 {
-	var $path;
-
 	const INVALID_CHARS = '/[\/:\*\?"<>|\\\]/';
 
-	function __construct($path){
+	public function __construct($path){
 		$this->path = $path;
 	}
 
@@ -53,13 +51,17 @@ class File
 		$cmd = 'du -sk "'.$dir.'" 2>/dev/null';
 
 		$io = popen ($cmd, 'r' );
-		$size = fgets ( $io, 4096);
 
-		$size = preg_replace('/[\t\s]+/', ' ', trim($size));
+		if($io){
+			$size = fgets ( $io, 4096);
+			$size = preg_replace('/[\t\s]+/', ' ', trim($size));
 
-
-		$size = substr ( $size, 0, strpos ( $size, ' ' ) );
-		//go_debug($cmd.' Size: '.$size);
+			$size = substr ( $size, 0, strpos ( $size, ' ' ) );
+			//go_debug($cmd.' Size: '.$size);
+		}else
+		{
+			return false;
+		}
 
 		return $size;
 	}
@@ -85,7 +87,7 @@ class File
 
 	}
 
-	function get_filetype_image($extension=null) {
+	public static function get_filetype_image($extension=null) {
 
 		if(!isset($extension))
 		{
@@ -108,15 +110,12 @@ class File
 	}
 
 
-	function get_filetype_description($extension=null) {
+	public static function get_filetype_description($extension) {
 		global $lang, $GO_LANGUAGE;
 
 		require_once($GO_LANGUAGE->get_base_language_file('filetypes'));
 
-		if(!isset($extension))
-		{
-			$extension = $this->get_extension();
-		}
+	
 
 		if (isset ($lang['filetypes'][$extension])) {
 			return $lang['filetypes'][$extension];
@@ -127,7 +126,7 @@ class File
 
 
 
-	function get_mime($path)
+	public static function get_mime($path)
 	{
 		global $GO_CONFIG;
 
@@ -176,13 +175,7 @@ class File
 	 * @access public
 	 * @return string A filename without the extension
 	 */
-	function strip_extension($filename=null) {
-
-		if(!isset($filename))
-		{
-			$filename = utf8_basename($this->path);
-		}
-
+	public static function strip_extension($filename) {
 
 		$pos = strrpos($filename, '.');
 		if ($pos) {
@@ -198,13 +191,7 @@ class File
 	 * @access public
 	 * @return string  The extension of a filename
 	 */
-	function get_extension($filename=null) {
-
-		if(!isset($filename) && isset($this->path))
-		{
-			$filename = utf8_basename($this->path);
-		}
-
+	public static function get_extension($filename) {
 		$extension = '';
 		$pos = strrpos($filename, '.');
 		if ($pos) {
@@ -220,7 +207,7 @@ class File
 	 * @access public
 	 * @return string  New filepath
 	 */
-	function checkfilename($filepath)
+	public static function checkfilename($filepath)
 	{
 		$dir = dirname($filepath).'/';
 		$name = utf8_basename($filepath);

@@ -13,7 +13,7 @@ class GO_EVENTS
 			 * listeners is a heavy job.
 			 */
 			$cache_file = $GO_CONFIG->file_storage_path.'cache/listeners.txt';
-			if(file_exists($cache_file)){
+			if(!$GO_CONFIG->debug && file_exists($cache_file)){
 				$this->listeners = unserialize(file_get_contents($cache_file));
 			}
 
