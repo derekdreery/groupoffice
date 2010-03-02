@@ -267,13 +267,13 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 	},
 
 	showAddParticipantsDialog : function() {
-		if (!GO.addressbook) {
+		/*if (!GO.addressbook) {
 			var tpl = new Ext.XTemplate(GO.lang.moduleRequired);
 			Ext.Msg.alert(GO.lang.strError, tpl.apply({
 				module : GO.calendar.lang.addressbook
 			}));
 			return false;
-		}
+		}*/
 		if (!this.addParticipantsDialog) {
 			this.addParticipantsDialog = new GO.dialog.SelectEmail({
 				handler : function(grid, type) {

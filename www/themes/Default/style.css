@@ -21,6 +21,9 @@
     color:#333;
     background: #f1f2f4;
 }
+.x-grid3-summary-table{
+	background: #f1f2f4;
+}
 .x-grid3-summary-row .x-grid3-cell-inner {
     font-weight:bold;
     padding-bottom:4px;
@@ -1156,3 +1159,9 @@ table.display-panel a:active
 }
 
 /* eof */
+
+
+/* checkbox labels don't wrap */
+.x-form-check-group .x-form-check-wrap, .x-form-radio-group .x-form-radio-wrap{
+	height: auto !important;
+}

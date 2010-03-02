@@ -46,7 +46,7 @@ try {
 			$calendars = array();
 			$calendars_name = array();
 			$calendars_with_bdays = array();
-			
+
 			if($cal->get_visible_calendars($user_id) == 0) {
 				$default_calendar = $cal->get_default_calendar($user_id);
 				$vc['calendar_id']=$default_calendar['id'];
@@ -64,7 +64,7 @@ try {
 					$calendars_with_bdays[] = $cur_calendar;
 				}
 			}
-						
+
 			$today_end = mktime(0, 0, 0, $month, $day+1, $year);
 
 			$unsorted=array();
@@ -93,26 +93,26 @@ try {
 					$start_timestamp = Date::to_unixtime($start_time);
 
 					$index = strtotime($start_time);
-					while(isset($unsorted[$index])){
+					while(isset($unsorted[$index])) {
 						$index++;
 					}
-					
+
 					$unsorted[$index] = array(
-							'id'=>$response['count']++,
-							'name'=>str_replace('{NAME}',$name,$lang['calendar']['birthday_name']),
-							'description'=>str_replace(array('{NAME}','{AGE}'), array($name,$contact['upcoming']-$contact['birthday']), $lang['calendar']['birthday_desc']),
-							'time'=>date($_SESSION['GO_SESSION']['date_format'], $start_timestamp),
-							'start_time'=>$start_time,
-							'end_time'=>$end_time,
-							'day'=>$today_end<=$start_timestamp ? $lang['common']['tomorrow'] : $lang['common']['today'],
-							'read_only'=>true,
-							'contact_id'=>$contact['id']
+									'id'=>$response['count']++,
+									'name'=>str_replace('{NAME}',$name,$lang['calendar']['birthday_name']),
+									'description'=>str_replace(array('{NAME}','{AGE}'), array($name,$contact['upcoming']-$contact['birthday']), $lang['calendar']['birthday_desc']),
+									'time'=>date($_SESSION['GO_SESSION']['date_format'], $start_timestamp),
+									'start_time'=>$start_time,
+									'end_time'=>$end_time,
+									'day'=>$today_end<=$start_timestamp ? $lang['common']['tomorrow'] : $lang['common']['today'],
+									'read_only'=>true,
+									'contact_id'=>$contact['id']
 					);
 				}
 			}
 
 			$events = $cal->get_events_in_array($calendars, 0, $interval_start_time, $interval_end_time);
-			
+
 			foreach($events as $event) {
 				if($event['all_day_event'] == '1') {
 					$date_format = $_SESSION['GO_SESSION']['date_format'];
@@ -128,27 +128,27 @@ try {
 				$cal_id = array_search($event['calendar_id'], $calendars);
 
 				$index = $event['start_time'];
-				while(isset($unsorted[$index])){
+				while(isset($unsorted[$index])) {
 					$index++;
 				}
 
 				$unsorted[$index] = array(
-						'id'=>$response['count'],
-						'event_id'=> $event['id'],
-						'name'=> htmlspecialchars($event['name'],ENT_COMPAT,'UTF-8'),
-						'time'=>date($date_format, $event['start_time']),
-						'start_time'=> date('Y-m-d H:i', $event['start_time']),
-						'end_time'=> date('Y-m-d H:i', $event['end_time']),
-						'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
-						'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
-						'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
-						'repeats'=>!empty($event['rrule']),
-						'day'=>$event['start_time']<$today_end ? $lang['common']['today'] : $lang['common']['tomorrow'],
-						'calendar_name'=>(isset($calendars_name) && $cal_id !== false)? $calendars_name[$cal_id]: ''
+								'id'=>$response['count'],
+								'event_id'=> $event['id'],
+								'name'=> htmlspecialchars($event['name'],ENT_COMPAT,'UTF-8'),
+								'time'=>date($date_format, $event['start_time']),
+								'start_time'=> date('Y-m-d H:i', $event['start_time']),
+								'end_time'=> date('Y-m-d H:i', $event['end_time']),
+								'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
+								'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
+								'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
+								'repeats'=>!empty($event['rrule']),
+								'day'=>$event['start_time']<$today_end ? $lang['common']['today'] : $lang['common']['tomorrow'],
+								'calendar_name'=>(isset($calendars_name) && $cal_id !== false)? $calendars_name[$cal_id]: ''
 				);
 				$response['count']++;
 			}
-			
+
 
 			ksort($unsorted);
 			while($event = array_shift($unsorted))
@@ -283,7 +283,7 @@ try {
 			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
 			$response['data']['write_permission']=$response['data']['permission_level']>1;
 			if(!$response['data']['permission_level'] ||
-					($event['private']=='1' && $event['user_id']!=$GO_SECURITY->user_id)) {
+							($event['private']=='1' && $event['user_id']!=$GO_SECURITY->user_id)) {
 				throw new AccessDeniedException();
 			}
 
@@ -321,7 +321,7 @@ try {
 			$response['success']=true;
 			break;
 
-                case 'events':
+		case 'events':
 		//setlocale(LC_ALL, 'nl_NL@euro');
 
 		//return all events for a given period
@@ -345,15 +345,15 @@ try {
 						$calendars[] = $cal->record['id'];
 				}
 
-                                if (count($calendars)==0) {
-                                    throw new Exception($lang['calendar']['noCalSelected']);
-                                }
+				if (count($calendars)==0) {
+					throw new Exception($lang['calendar']['noCalSelected']);
+				}
 
 				/* Default colors for merged calendars */
 				$default_colors = array('F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
-									'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
-									'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
-									'C43B3B','996600','66FF99','999999','FFFFFF');
+								'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
+								'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
+								'C43B3B','996600','66FF99','999999','FFFFFF');
 				$default_bg = array();
 				foreach ($calendars as $k=>$v)
 					$default_bg[$v] = $default_colors[$k];
@@ -368,7 +368,7 @@ try {
 			$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
 			$response['write_permission']=$response['permission_level']>1;
 			if(!$response['permission_level']) {
-                            throw new AccessDeniedException();
+				throw new AccessDeniedException();
 			}
 
 			$events = $cal->get_events_in_array($calendars,0,$start_time,$end_time);
@@ -396,26 +396,25 @@ try {
 				}
 
 				if ($view_id && $owncolor)
-						$event['background'] = $default_bg[$event['calendar_id']];
+					$event['background'] = $default_bg[$event['calendar_id']];
 
 				$response['results'][] = array(
-						'id'=>$response['count']++,
-						'event_id'=> $event['id'],
-						'name'=> htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),
-						'time'=>date($date_format, $event['start_time']),
-						'start_time'=> date('Y-m-d H:i', $event['start_time']),
-						'end_time'=> date('Y-m-d H:i', $event['end_time']),
-						'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
-						'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
-						'background'=>$event['background'],
-						'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
-						'repeats'=>!empty($event['rrule']),
-						'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time'])
+								'id'=>$response['count']++,
+								'event_id'=> $event['id'],
+								'name'=> htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),
+								'time'=>date($date_format, $event['start_time']),
+								'start_time'=> date('Y-m-d H:i', $event['start_time']),
+								'end_time'=> date('Y-m-d H:i', $event['end_time']),
+								'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
+								'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
+								'background'=>$event['background'],
+								'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
+								'repeats'=>!empty($event['rrule']),
+								'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time'])
 				);
 			}
 
-			if(isset($GO_MODULES->modules['addressbook']) && $calendar['show_bdays'])
-			{
+			if(isset($GO_MODULES->modules['addressbook']) && $calendar['show_bdays']) {
 				require_once ($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 				$ab = new addressbook();
 				$abooks = $ab->get_user_addressbook_ids($calendar['user_id']);
@@ -428,26 +427,24 @@ try {
 					$end_time = $contact['upcoming'].' 23:59';
 
 					$response['results'][] = array(
-							'id'=>$response['count']++,
-							'name'=>htmlspecialchars(str_replace('{NAME}',$name,$lang['calendar']['birthday_name']), ENT_COMPAT, 'UTF-8'),
-							'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$contact['upcoming']-$contact['birthday']), $lang['calendar']['birthday_desc']), ENT_COMPAT, 'UTF-8'),
-							'time'=>'00:00',
-							'start_time'=>$start_time,
-							'end_time'=>$end_time,
-							'background'=>'EBF1E2',
-							'day'=>$lang['common']['full_days'][date('w', strtotime($start_time))].' '.date($_SESSION['GO_SESSION']['date_format'], strtotime($start_time)),
-							'read_only'=>true,
-							'contact_id'=>$contact['id']							
+									'id'=>$response['count']++,
+									'name'=>htmlspecialchars(str_replace('{NAME}',$name,$lang['calendar']['birthday_name']), ENT_COMPAT, 'UTF-8'),
+									'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$contact['upcoming']-$contact['birthday']), $lang['calendar']['birthday_desc']), ENT_COMPAT, 'UTF-8'),
+									'time'=>'00:00',
+									'start_time'=>$start_time,
+									'end_time'=>$end_time,
+									'background'=>'EBF1E2',
+									'day'=>$lang['common']['full_days'][date('w', strtotime($start_time))].' '.date($_SESSION['GO_SESSION']['date_format'], strtotime($start_time)),
+									'read_only'=>true,
+									'contact_id'=>$contact['id']
 					);
 				}
 			}
 
-			if(isset($GO_MODULES->modules['tasks'])) 
-			{
+			if(isset($GO_MODULES->modules['tasks'])) {
 				$visible_lists = array();
 				$cal->get_visible_tasklists($calendar['id']);
-				while($cal->next_record())
-				{
+				while($cal->next_record()) {
 					$visible_lists[] = $cal->f('tasklist_id');
 				}
 
@@ -458,18 +455,16 @@ try {
 
 					require($GO_LANGUAGE->get_language_file('tasks'));
 
-					$tasklists_ids = array();
+					/*$tasklists_ids = array();
 					$tasks->get_authorized_tasklists();
-					while($list = $tasks->next_record())
-					{
-						if(in_array($list['id'], $visible_lists))
-						{
+					while($list = $tasks->next_record()) {
+						if(in_array($list['id'], $visible_lists)) {
 							$tasklists_ids[] = $list['id'];
 							$tasklists_names[$list['id']] = $list['name'];
 						}
-					}
+					}*/
 
-					$tasks->get_tasks($tasklists_ids, 0, false, 'due_time', 'ASC', 0, 0, true);
+					$tasks->get_tasks($visible_lists, 0, false, 'due_time', 'ASC', 0, 0, true);
 					while($task = $tasks->next_record()) {
 						$name = htmlspecialchars($lang['tasks']['task'].': '.$task['name'], ENT_QUOTES, 'UTF-8');
 						$description = $lang['tasks']['list'].': '.htmlspecialchars($tasklists_names[$task['tasklist_id']], ENT_QUOTES, 'UTF-8');
@@ -479,16 +474,16 @@ try {
 						$end_time = date('Y-m-d',$task['due_time']).' 23:59';
 
 						$response['results'][] = array(
-								'id'=>$response['count']++,
-								'name'=>$name,
-								'description'=>$description,
-								'time'=>'00:00',
-								'start_time'=>$start_time,
-								'end_time'=>$end_time,
-								'background'=>'EBF1E2',
-								'day'=>$lang['common']['full_days'][date('w', ($task['start_time']))].' '.date($_SESSION['GO_SESSION']['date_format'], ($task['start_time'])),
-								'read_only'=>true,
-								'task_id'=>$task['id']
+										'id'=>$response['count']++,
+										'name'=>$name,
+										'description'=>$description,
+										'time'=>'00:00',
+										'start_time'=>$start_time,
+										'end_time'=>$end_time,
+										'background'=>'EBF1E2',
+										'day'=>$lang['common']['full_days'][date('w', ($task['start_time']))].' '.date($_SESSION['GO_SESSION']['date_format'], ($task['start_time'])),
+										'read_only'=>true,
+										'task_id'=>$task['id']
 						);
 					}
 				}
@@ -496,14 +491,14 @@ try {
 
 			break;
 
-                case 'view_events':
+		case 'view_events':
 
 			$view_id = ($_REQUEST['view_id']);
 			$start_time=isset($_REQUEST['start_time']) ? strtotime($_REQUEST['start_time']) : 0;
 			$end_time=isset($_REQUEST['end_time']) ? strtotime($_REQUEST['end_time']) : 0;
 
 			if(isset($_REQUEST['update_event_id'])) {
-			//an event is moved or resized
+				//an event is moved or resized
 				$update_event_id=$_REQUEST['update_event_id'];
 				$old_event = $cal->get_event($update_event_id);
 
@@ -525,7 +520,7 @@ try {
 					$update_event['end_time']=$exception['time']+$old_event['end_time']-$old_event['start_time'];
 
 					if(isset($_REQUEST['offset'])) {
-					//move an event
+						//move an event
 						$offset = ($_REQUEST['offset']);
 
 
@@ -536,7 +531,7 @@ try {
 
 
 					if(isset($_REQUEST['offsetDays'])) {
-					//move an event
+						//move an event
 						$offsetDays = ($_REQUEST['offsetDays']);
 						$update_event['start_time'] = Date::date_add($update_event['start_time'], $offsetDays);
 						$update_event['end_time'] = Date::date_add($update_event['end_time'], $offsetDays);
@@ -544,7 +539,7 @@ try {
 					}
 
 					if(isset($_REQUEST['duration'])) {
-					//change duration
+						//change duration
 						$duration = ($_REQUEST['duration']);
 						$update_event['end_time']=$update_event['start_time']+$duration;
 					}
@@ -558,7 +553,7 @@ try {
 				}
 				else {
 					if(isset($_REQUEST['offset'])) {
-					//move an event
+						//move an event
 						$offset = ($_REQUEST['offset']);
 
 
@@ -567,14 +562,14 @@ try {
 					}
 
 					if(isset($_REQUEST['offsetDays'])) {
-					//move an event
+						//move an event
 						$offsetDays = ($_REQUEST['offsetDays']);
 						$update_event['start_time'] = Date::date_add($old_event['start_time'], $offsetDays);
 						$update_event['end_time'] = Date::date_add($old_event['end_time'], $offsetDays);
 					}
 
 					if(isset($_REQUEST['duration'])) {
-					//change duration
+						//change duration
 						$duration = ($_REQUEST['duration']);
 
 						$update_event['start_time']=$old_event['start_time'];
@@ -606,8 +601,8 @@ try {
 				$response[$cal->f('id')]['write_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $cal2->f('acl_id'))>1;
 
 				$events = $cal2->get_events_in_array(array($cal->f('id')), 0,
-						$start_time,
-						$end_time
+								$start_time,
+								$end_time
 				);
 
 				$response[$cal->f('id')]['events']=array();
@@ -635,18 +630,18 @@ try {
 
 
 					$response[$cal->f('id')]['events'][] = array(
-							'id'=>$count,
-							'calendar_id'=>$cal->f('id'),
-							'event_id'=> $event['id'],
-							'name'=>htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),
-							'start_time'=> date('Y-m-d H:i', $event['start_time']),
-							'end_time'=> date('Y-m-d H:i', $event['end_time']),
-							'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
-							'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
-							'background'=>$event['background'],
-							'repeats'=>!empty($event['rrule']),
-							'private'=>$private,
-							'write_permission'=>$response[$cal->f('id')]['write_permission']
+									'id'=>$count,
+									'calendar_id'=>$cal->f('id'),
+									'event_id'=> $event['id'],
+									'name'=>htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),
+									'start_time'=> date('Y-m-d H:i', $event['start_time']),
+									'end_time'=> date('Y-m-d H:i', $event['end_time']),
+									'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
+									'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
+									'background'=>$event['background'],
+									'repeats'=>!empty($event['rrule']),
+									'private'=>$private,
+									'write_permission'=>$response[$cal->f('id')]['write_permission']
 					);
 					$count++;
 				}
@@ -659,13 +654,13 @@ try {
 			$resources = isset($_REQUEST['resources']) ? $_REQUEST['resources'] : 0;
 
 			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources);
-            /*
+			/*
 			if(!$response['total'])
 			{
 				$cal->get_calendar();
 				$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id);
 			}
-             */
+			*/
 
 			$response['results']=array();
 			while($cal->next_record(DB_ASSOC)) {
@@ -676,7 +671,7 @@ try {
 			}
 			break;
 
-                case 'writable_calendars':
+		case 'writable_calendars':
 
 			if(isset($_REQUEST['delete_keys'])) {
 				try {
@@ -728,7 +723,7 @@ try {
 		case 'view_calendars':
 
 			$view_id = ($_REQUEST['view_id']);
-			
+
 			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id);
 			if(!$response['total']) {
 				$cal->get_calendar();
@@ -786,7 +781,7 @@ try {
 
 			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'name';
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'ASC';
-			
+
 			$response['total'] = $cal->get_writable_views($GO_SECURITY->user_id, $sort, $dir);
 			$response['results']=array();
 			while($cal->next_record(DB_ASSOC)) {
@@ -856,7 +851,7 @@ try {
 			if($event_id>0) {
 				$event = $cal->get_event($event_id);
 
-				if(!empty($event['participants_event_id'])){
+				if(!empty($event['participants_event_id'])) {
 					$event_id=$event['participants_event_id'];
 				}
 
@@ -876,7 +871,7 @@ try {
 
 			}
 			break;
-                case 'get_default_participant':
+		case 'get_default_participant':
 			$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
 			$calendar_user = $GO_USERS->get_user($calendar['user_id']);
 
@@ -935,8 +930,8 @@ try {
 							$merged_free_busy[$min]=1;
 						}
 						$participant['freebusy'][]=array(
-								'time'=>date('G:i', mktime(0,$min)),
-								'busy'=>$busy);
+										'time'=>date('G:i', mktime(0,$min)),
+										'busy'=>$busy);
 					}
 				}
 				$response['participants'][]=$participant;
@@ -949,8 +944,8 @@ try {
 
 			foreach($merged_free_busy as $min=>$busy) {
 				$participant['freebusy'][]=array(
-						'time'=>date($_SESSION['GO_SESSION']['time_format'], mktime(0,$min)),
-						'busy'=>$busy);
+								'time'=>date($_SESSION['GO_SESSION']['time_format'], mktime(0,$min)),
+								'busy'=>$busy);
 			}
 
 			$response['participants'][]=$participant;
@@ -1067,22 +1062,17 @@ try {
 			$response['total'] = 0;
 			$response['results'] = array();
 			$response['success'] = false;
-			
-			
-			if($group_id > 0)
-			{
-				if(isset($_POST['add_users']))
-				{
-					try
-					{
+
+
+			if($group_id > 0) {
+				if(isset($_POST['add_users'])) {
+					try {
 						$response['addSuccess']=true;
 						$add_group_admins = json_decode($_POST['add_users']);
-						foreach($add_group_admins as $user_id)
-						{
-							if(!$cal->group_admin_exists($group_id, $user_id))
-							{
+						foreach($add_group_admins as $user_id) {
+							if(!$cal->group_admin_exists($group_id, $user_id)) {
 								$cal->add_group_admin(array('group_id' => $group_id, 'user_id' => $user_id));
-							}					
+							}
 						}
 					}
 					catch(Exception $e) {
@@ -1091,29 +1081,25 @@ try {
 					}
 				}
 
-				if(isset($_POST['delete_keys']))
-				{
-					try
-					{
+				if(isset($_POST['delete_keys'])) {
+					try {
 						$response['deleteSuccess']=true;
-						
+
 						$delete_group_admins = json_decode($_POST['delete_keys']);
-						foreach($delete_group_admins as $user_id)
-						{
-							$cal->delete_group_admin($group_id, $user_id);													
-						}						
+						foreach($delete_group_admins as $user_id) {
+							$cal->delete_group_admin($group_id, $user_id);
+						}
 					}
 					catch(Exception $e) {
 						$response['deleteSuccess']=false;
 						$response['deleteFeedback']=$e->getMessage();
 					}
 				}
-				
+
 				$response['total'] = $cal->get_group_admins($group_id);
-				while($cal->next_record())
-				{
+				while($cal->next_record()) {
 					$admin['id'] = $cal->f('user_id');
-					
+
 					$user = $GO_USERS->get_user($admin['id']);
 					$admin['email'] = $GO_USERS->f('email');
 					$admin['name'] = String::format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'));
@@ -1121,7 +1107,7 @@ try {
 					$response['results'][] = $admin;
 				}
 			}
-			
+
 			$response['success'] = true;
 			break;
 
@@ -1133,11 +1119,9 @@ try {
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
 
 			$visible_lists = array();
-			if($calendar_id)
-			{
+			if($calendar_id) {
 				$cal->get_visible_tasklists($calendar_id);
-				while($cal->next_record())
-				{
+				while($cal->next_record()) {
 					$visible_lists[] = $cal->f('tasklist_id');
 				}
 			}
@@ -1145,15 +1129,14 @@ try {
 
 			require_once ($GO_MODULES->modules['tasks']['class_path'].'tasks.class.inc.php');
 			$tasks = new tasks();
-							
+
 			$response['results']=array();
 			$response['total'] = $tasks->get_authorized_tasklists('read', '', $GO_SECURITY->user_id, 0, 0, $sort, $dir);
-			while($tasks->next_record())
-			{
+			while($tasks->next_record()) {
 				$tasklist['id'] = $tasks->f('id');
 				$tasklist['name'] = $tasks->f('name');
 				$tasklist['visible'] = (in_array($tasklist['id'], $visible_lists));
-				
+
 				$response['results'][] = $tasklist;
 			}
 
@@ -1171,7 +1154,7 @@ try {
 			$response['data'][0] = $my_cal;
 			$response['success'] = true;
 			break;
-/*
+		/*
 		case 'addressbooks_participants':
 			$ids = json_decode($_POST['ids']);
 
@@ -1200,7 +1183,7 @@ try {
 			$response['success'] =true;
 
 			break;
-*/
+		*/
 
 		case 'mailings_participants':
 			$ids = json_decode($_POST['ids']);
@@ -1260,7 +1243,7 @@ try {
 	}
 }
 catch(Exception $e) {
-        $response['feedback']=$e->getMessage();
-        $response['success']=false;
+	$response['feedback']=$e->getMessage();
+	$response['success']=false;
 }
 echo json_encode($response);

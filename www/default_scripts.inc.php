@@ -26,9 +26,6 @@ if($GO_CONFIG->debug) {
 $scripts[]=$root_uri.'javascript/namespaces.js';
 ?>
 <script type="text/javascript">
-
-
-
 	var BaseHref = '<?php echo $GO_CONFIG->host; ?>';
 
 	GO = {};
@@ -73,9 +70,6 @@ if($GO_SECURITY->logged_in() && $fullscreen=='true' && !isset($_REQUEST['fullscr
 ?>
 </script>
 <?php
-
-
-
 if(!isset($lang['common']['extjs_lang'])) $lang['common']['extjs_lang'] = $GO_LANGUAGE->language;
 
 $file = 'base-'.md5($GO_LANGUAGE->language.$GO_CONFIG->mtime).'.js';
@@ -102,8 +96,8 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 			$scripts[]=$root_uri.'language/common/'.$GO_LANGUAGE->language.'.js';
 		}
 
-		if(file_exists($GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js')) {
-			$scripts[]=$root_uri.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js';
+		if(file_exists($GO_CONFIG->root_path.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'-min.js')) {
+			$scripts[]=$root_uri.'ext/build/locale/ext-lang-'.$lang['common']['extjs_lang'].'-min.js';
 		}
 
 		if(file_exists($GO_CONFIG->root_path.'modules/users/language/'.$GO_LANGUAGE->language.'.js')) {
@@ -328,6 +322,8 @@ if($GO_SECURITY->logged_in()) {
 			}
 		}
 	}
+
+
 	
 	
 

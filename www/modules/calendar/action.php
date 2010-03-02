@@ -360,7 +360,7 @@ try {
 			/* Check for conflicts regarding resources */
 			if (isset($resources)) {
 				$cal = new calendar();
-				$concurrent_resources = $cal->get_events_in_array($resources,0, $event['start_time'], $event['end_time']);
+				$concurrent_resources = $cal->get_events_in_array($resources,0, $event['start_time'], $event['end_time'], true);
 				foreach ($concurrent_resources as $key=>$value) {
 					if ($value['id'] != $event['id']) {
 						$cal2 = new calendar();
@@ -388,10 +388,10 @@ try {
 
 			/* Check for conflicts with other events in the calendar */
 			if ($check_conflicts) {
-				$conflict_events = $cal->get_events_in_array($calendar['id'], $GO_SECURITY->user_id, $event['start_time'], $event['end_time']);
+				$conflict_events = $cal->get_events_in_array($calendar['id'], $GO_SECURITY->user_id, $event['start_time'], $event['end_time'], true);
 				while($conflict_event = array_shift($conflict_events)) {
 					if($conflict_event['id']!=$event_id)
-						throw new Exception('Ask permission');					
+						throw new Exception('Ask permission');
 				}
 			}
 

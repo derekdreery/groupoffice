@@ -194,7 +194,7 @@ class GO_USERS extends db
    * @return array
    */
 	
-	function search($query, $field, $user_id=0, $start=0, $offset=0, $sort="name", $sort_direction='ASC')
+	function search($query, $field, $user_id=0, $start=0, $offset=0, $sort="name", $sort_direction='ASC', $search_operator='LIKE')
 	{
 		global $GO_MODULES;
 		
@@ -212,35 +212,38 @@ class GO_USERS extends db
 		if($user_id > 0)
 		{
 			$where=true;
-			$sql = "SELECT DISTINCT go_users.*";
-		/*	if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+			$sql = "SELECT DISTINCT u.*";
+			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{
 				$sql .= ", cf_8.* ";
-			}*/
-			$sql .=" FROM go_users INNER JOIN go_acl ON go_users.acl_id = go_acl.acl_id ".
-			"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ";
+			}
+			$sql .=" FROM go_users u INNER JOIN go_acl a ON u.acl_id = a.acl_id ".
+			"LEFT JOIN go_users_groups ug ON a.group_id = ug.group_id ";
 			
 			
-		/*	if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{
-				$sql .= "LEFT JOIN cf_8 ON cf_8.link_id=users.link_id ";
-			}*/
+				$sql .= "LEFT JOIN cf_8 ON cf_8.link_id=u.id ";
+			}
 			
-			$sql .= "WHERE (go_acl.user_id=".$this->escape($user_id)." ".
-			"OR go_users_groups.user_id=".$this->escape($user_id).")";
+			$sql .= "WHERE (a.user_id=".$this->escape($user_id)." ".
+			"OR ug.user_id=".$this->escape($user_id).")";
 		}else
 		{
 			$where=false;
-			$sql = "SELECT * FROM go_users";
-			/*if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+			$sql = "SELECT u.* ";
+			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{
-				$sql .= "LEFT JOIN cf_8 ON cf_8.link_id=users.link_id ";
-			}*/
-			
-			
+				$sql .= ", cf_8.* ";
+			}
+			$sql .= "FROM go_users u";
+			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+			{
+				$sql .= " LEFT JOIN cf_8 ON cf_8.link_id=u.id ";
+			}			
 		}
 		
-		if(!empty($query))
+		if($query!='')
 		{
 			$sql .= $where ? " AND " : " WHERE ";
 			
@@ -255,10 +258,10 @@ class GO_USERS extends db
 					{
 						if(stripos($this->f('Type'),'varchar')!==false)
 						{
-							$fields[]='go_users.'.$this->f('Field');
+							$fields[]='u.'.$this->f('Field');
 						}
 					}
-					/*if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+					if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 					{
 						$fields_sql = "SHOW FIELDS FROM cf_8";
 						$this->query($fields_sql);
@@ -266,7 +269,7 @@ class GO_USERS extends db
 							$fields[]='cf_8.'.$this->f('Field');
 						}
 						
-					}*/
+					}
 				}else {
 					$fields[]=$field;
 				}
@@ -290,10 +293,10 @@ class GO_USERS extends db
 				
 				if($field=='name')
 				{
-					$sql .= "CONCAT(first_name,middle_name,last_name) LIKE '".$this->escape(str_replace(' ','%', $query))."' ";
+					$sql .= "CONCAT(first_name,middle_name,last_name) $search_operator '".$this->escape(str_replace(' ','%', $query))."' ";
 				}else
 				{
-					$sql .= "$field LIKE '".$this->escape($query)."' ";
+					$sql .= "$field $search_operator '".$this->escape($query)."' ";
 				}
 			}
 			if(count($fields)>1)

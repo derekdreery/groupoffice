@@ -224,10 +224,6 @@ GO.lang.strLoggedInAs= 'Logged in as';
 
 GO.lang.strErrorsInForm= 'You have errors in your form. The invalid fields are marked.';
 
-
-
-
-
 GO.lang.strMinute="Minute";
 GO.lang.strMinutes="Minutes";
 GO.lang.strHour="Hour";
@@ -343,3 +339,5 @@ GO.lang.spellcheckAsk = 'Send without spell checking?';
 GO.lang.age='Age';
 
 GO.lang.selectFolder = 'Select a folder please';
+
+GO.lang.userGroups='User groups';
