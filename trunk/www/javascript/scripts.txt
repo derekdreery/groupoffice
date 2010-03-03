@@ -86,7 +86,7 @@ javascript/links/LinksAccordion.js
 javascript/panels/SearchPanel.js
 javascript/checker.js
 
-javascript/grids/TreeGrid.packed.js
+javascript/grids/TreeGrid.js
 javascript/grids/RowExpander.js
 
 javascript/SWFUpload/swfupload.js
