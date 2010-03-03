@@ -8,7 +8,7 @@ GO.files.SaveAsDialog = Ext.extend(Ext.Window, {
 		this.layout='border';
 		this.title=GO.files.lang.saveFile;
 		this.height=450;
-		this.width=700;
+		this.width=750;
 		this.border=false;
 		this.collapsible=true;
 		this.maximizable=true;
@@ -52,7 +52,7 @@ GO.files.SaveAsDialog = Ext.extend(Ext.Window, {
 			border:false,
 			loadDelayed:true,
 			hideActionButtons:true,
-			treeCollapsed:true,
+			treeCollapsed:false,
 			fileClickHandler: function(r){										
 			},
 			scope: this
