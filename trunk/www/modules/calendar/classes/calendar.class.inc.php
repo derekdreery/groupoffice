@@ -216,22 +216,20 @@ class calendar extends db
 
 		require($GO_LANGUAGE->get_language_file('calendar'));
 
+		go_debug($event);
+
 		$html = '<table>'.
 			'<tr><td>'.$lang['calendar']['subject'].':</td>'.
 			'<td>'.$event['name'].'</td></tr>'.
 
 			'<tr><td>'.$lang['calendar']['status'].':</td>'.
 			'<td>'.$lang['calendar']['statuses'][$event['status']].'</td></tr>';
-			
-
 
 		if (!empty($event['location'])) {
 			$html .= '<tr><td style="vertical-align:top">'.$lang['calendar']['location'].':</td>'.
 				'<td>'.String::text_to_html($event['location']).'</td></tr>';
 		}
-
-
-
+		
 		//don't calculate timezone offset for all day events
 		$timezone_offset_string = Date::get_timezone_offset($event['start_time']);
 
@@ -1334,8 +1332,9 @@ class calendar extends db
 		}
 
 		if($update_related && !empty($event['id']))
-		{			
-			unset($event['user_id'], $event['calendar_id'], $event['participants_event_id']);						
+		{
+			$related_event = $event;
+			unset($related_event['user_id'], $related_event['calendar_id'], $related_event['participants_event_id']);
 			
 			$cal = new calendar();
 			if(!empty($old_event['participants_event_id'])){
@@ -1348,21 +1347,102 @@ class calendar extends db
 			$cal->query($sql);
 			while($old_event = $cal->next_record())
 			{
-				$event['id']=$cal->f('id');
-				$event['calendar_id'] = $cal->f('calendar_id');
+				$related_event['id']=$cal->f('id');
+				$related_event['calendar_id'] = $cal->f('calendar_id');
 
 				if(!$update_related_status)
 				{
-					$event['status'] = $cal->f('status');
-					$event['background'] = $cal->f('background');
+					$related_event['status'] = $cal->f('status');
+					$related_event['background'] = $cal->f('background');
 				}
 
-				$this->update_event($event, false, $old_event, false);
+				$this->update_event($related_event, false, $old_event, false);
 			}
 		}		
 	
 		return $r;
 	}
+
+	function send_resource_notification($message_type, $resource, $calendar, $user_name, $recipient, $resource_group){
+		global $GO_CONFIG, $GO_MODULES, $lang;
+
+		if(!isset($lang['calendar'])){
+			global $GO_LANGUAGE;
+			$GO_LANGUAGE->require_language_file('calendar');
+		}
+		
+		$url = $GO_CONFIG->full_url.'dialog.php?module=calendar&function=showEvent&params='.base64_encode(json_encode(array('values'=>array('event_id' => $resource['id']))));
+
+		switch($message_type){
+			case 'new':
+				$body = sprintf($lang['calendar']['resource_modified_mail_body'],$user_name).'<br /><br />'
+					. $this->event_to_html($resource, true)
+					. '<br /><a href="'.$url.'">'.$lang['calendar']['open_resource'].'</a>';
+				$subject = sprintf($lang['calendar']['resource_modified_mail_subject'],$calendar['name'], $resource['name'], date($_SESSION['GO_SESSION']['date_format'], $resource['start_time']));
+			break;
+
+			case 'modified_for_admin':
+				$body = sprintf($lang['calendar']['resource_mail_body'],$user_name,$calendar['name']).'<br /><br />'
+					. $this->event_to_html($resource, true)
+					. '<br /><a href="'.$url.'">'.$lang['calendar']['open_resource'].'</a>';
+				$subject = sprintf($lang['calendar']['resource_mail_subject'],$calendar['name'], $resource['name'], date($_SESSION['GO_SESSION']['date_format'], $resource['start_time']));
+			break;
+
+			case 'mofified_for_user':
+				$body = sprintf($lang['calendar']['your_resource_modified_mail_body'],$user_name,$calendar['name']).'<br /><br />';
+				$body .= $this->event_to_html($resource, true);
+
+				$subject = sprintf($lang['calendar']['your_resource_modified_mail_subject'],$calendar['name'], date($_SESSION['GO_SESSION']['date_format'], $resource['start_time']),$lang['calendar']['statuses'][$resource['status']]);
+				break;
+
+			case 'declined':
+				$body = sprintf($lang['calendar']['your_resource_declined_mail_body'],$user_name,$calendar['name']).'<br /><br />';
+				$body .= $this->event_to_html($resource, true);
+
+				$subject = sprintf($lang['calendar']['your_resource_declined_mail_subject'],$calendar['name'], date($_SESSION['GO_SESSION']['date_format'], $resource['start_time']));
+				break;
+
+			case 'accepted':
+				$body = sprintf($lang['calendar']['your_resource_accepted_mail_body'],$user_name,$calendar['name']).'<br /><br />';
+				$body .= $this->event_to_html($resource, true);
+
+				$subject = sprintf($lang['calendar']['your_resource_accepted_mail_subject'],$calendar['name'], date($_SESSION['GO_SESSION']['date_format'], $resource['start_time']));
+
+				break;
+		}
+
+		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+		$swift = new GoSwift($recipient, $subject);
+
+		$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+
+		$values = '';
+		$labels = '';
+
+		if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission']) {
+			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+			$cf = new customfields();
+
+			$categories = explode(',',$resource_group['fields']);
+			$fields = $cf->get_fields_with_values(1, 1, $resource['id']);
+
+			$cf = array();
+			for($j=0; $j<count($fields); $j++) {
+				if(in_array('cf_category_'.$fields[$j]['category_id'], $categories) && $fields[$j]['datatype'] == 'checkbox') {
+					$labels .= $fields[$j]['name'].': <br />';
+
+					$value = (empty($fields[$j]['value'])) ? $lang['common']['no'] : $lang['common']['yes'];
+					$values .= $value.'<br />';
+				}
+			}
+		}
+
+		$body = str_replace(array('{CUSTOM_FIELDS}', '{CUSTOM_VALUES}'), array($labels, $values), $body);
+		$swift->set_body($body);
+
+		return $swift->sendmail();
+	}
+
 
 	function search_events(
 	$user_id,
