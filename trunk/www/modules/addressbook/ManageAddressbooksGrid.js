@@ -9,10 +9,7 @@ GO.addressbook.ManageAddressbooksGrid = function(config){
 	config.layout='fit';
 	config.autoScroll=true;
 	config.split=true;
-	config.store = GO.addressbook.writableAddressbooksStore
-	
-	
-	
+	config.store = GO.addressbook.writableAddressbooksStore	
 	
 	config.paging=false;
 
@@ -42,12 +39,6 @@ GO.addressbook.ManageAddressbooksGrid = function(config){
 	}),
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
-	
-	this.addressbookDialog = new GO.addressbook.AddressbookDialog();
-	this.addressbookDialog.on('save', function(){
-		GO.addressbook.writableAddressbooksStore.load();	
-		GO.addressbook.readableAddressbooksStore.load();	
-	});
 	
 	config.tbar=[
 			{ 
@@ -94,6 +85,11 @@ Ext.extend(GO.addressbook.ManageAddressbooksGrid, GO.grid.GridPanel,{
 			GO.addressbook.writableAddressbooksStore.load();
 		}
 
+		/*this.addressbookDialog = new GO.addressbook.AddressbookDialog();
+		this.addressbookDialog.on('save', function(){
+			GO.addressbook.writableAddressbooksStore.load();
+			GO.addressbook.readableAddressbooksStore.load();
+		});*/
 	},
 	
 	onShow : function(){
