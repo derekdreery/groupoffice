@@ -274,21 +274,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				success : function(form, action) {
 					this.win.show();
 					this.participantsPanel.setEventId(action.result.data.participants_event_id);
-					//this.formPanel.form.baseParams['calendar_id'] = action.result.data.calendar_id;
-					//this.formPanel.form.baseParams['categories'] = Ext.encode(action.result.data.categories);
 					this.formPanel.form.baseParams['group_id'] = action.result.data.group_id;
 					this.initCustomFields(action.result.data.group_id);
-
 					this.changeRepeat(action.result.data.repeat_type);
 					this.setValues(config.values);
-					// this.participantsPanel.setDisabled(false);
-
 					this.setWritePermission(action.result.data.write_permission);
-
 					this.selectCalendar.setValue(action.result.data.calendar_id);
-					//this.selectCalendar.setRemoteText(action.result.data.calendar_name);
-					//this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
-
 					this.files_folder_id = action.result.data.files_folder_id;
 
 					if(action.result.data.group_id == 1)
@@ -1485,10 +1476,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			title:GO.calendar.lang.resources,
 			border:false,
 			layout:'accordion',
+			forceLayout:true,
 			layoutConfig:{
 				titleCollapse:true,
 				animate:false,
 				activeOnTop:false
+			},
+			defaults:{
+				forceLayout:true
 			}
 		});
 		this.resourcesPanel.on('show', function(){
@@ -1501,7 +1496,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 	buildAccordion : function()
 	{
 		this.resourcesPanel.removeAll(true);
-
+		this.resourcesPanel.forceLayout=true;
+		
 		var newFormField;
 		for(var i=0; i<this.resourceGroupsStore.getCount(); i++)
 		{
@@ -1575,20 +1571,23 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					id:'resource_'+resources[j].id,
 					autoHeight:true,
 					collapsed:true,
+					forceLayout:true,
 					items:resourceOptions
 				});
 			}
-            
-			this.resourcesPanel.add(new Ext.Panel({
+
+			var resourcePanel = new Ext.Panel({
 				cls:'go-form-panel',
 				id:'group_'+record.id,
 				layout:'form',
 				autoScroll:true,
+				forceLayout:true,
 				title:record.name,
 				items:resourceFieldSets
-			}));
-		}
-        
+			});
+            
+			this.resourcesPanel.add(resourcePanel);			
+		}		
 		this.tabPanel.doLayout();
 	},
 
