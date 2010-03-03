@@ -60,3 +60,5 @@ $updates[]="ALTER TABLE `em_messages_cache` CHANGE `to` `to` VARCHAR( 255 ) CHAR
 
 $updates[]="ALTER TABLE `em_links` CHANGE `acl_read` `acl_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates[]="ALTER TABLE `em_messages_cache` ADD `serialized_message_object` MEDIUMTEXT NOT NULL ";
+
+$updates[]="TRUNCATE TABLE `em_messages_cache`";
