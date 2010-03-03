@@ -134,8 +134,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
         border:false,
         activeTab:'go-module-panel-'+GO.settings.start_module,
         tabPosition:'top',				
-        items: items,
-        layoutOnTabChange:true
+        items: items/*,
+        layoutOnTabChange:true*/
     	});
 
 		this.tabPanel.on('contextmenu',function(tp, panel, e){
