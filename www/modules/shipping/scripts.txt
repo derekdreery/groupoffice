@@ -1,5 +1,0 @@
-modules/shipping/MainPanel.js
-modules/shipping/GridsContainer.js
-modules/shipping/JobsGrid.js
-modules/shipping/PackagesGrid.js
-modules/shipping/AccordionMenu.js
