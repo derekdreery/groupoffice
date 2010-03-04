@@ -463,9 +463,19 @@ try {
 							$tasklists_names[$list['id']] = $list['name'];
 						}
 					}*/
+					$tasklists_names=array();
+
+					$tasks2= new tasks();
+
 
 					$tasks->get_tasks($visible_lists, 0, false, 'due_time', 'ASC', 0, 0, true);
 					while($task = $tasks->next_record()) {
+
+						if(!isset($tasklists_names[$task['tasklist_id']])){
+							$_tasklist=$tasks2->get_tasklist($task['tasklist_id']);
+							$tasklists_names[$task['tasklist_id']]=$_tasklist['name'];
+						}
+
 						$name = htmlspecialchars($lang['tasks']['task'].': '.$task['name'], ENT_QUOTES, 'UTF-8');
 						$description = $lang['tasks']['list'].': '.htmlspecialchars($tasklists_names[$task['tasklist_id']], ENT_QUOTES, 'UTF-8');
 						$description .= ($task['description']) ? '<br /><br />'.htmlspecialchars($task['description'], ENT_QUOTES, 'UTF-8') : '';

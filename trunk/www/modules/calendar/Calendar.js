@@ -755,16 +755,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				}
 			}
 		}
-
-		if(GO.tasks)
-		{
-			GO.tasks.taskDialog = new GO.tasks.TaskDialog();
-			GO.tasks.taskDialog.on('save', function()
-			{
-				this.init();
-			}, this);
-		}	
-
+		
 		GO.calendar.groupDialog = new GO.calendar.GroupDialog();
 		GO.calendar.groupDialog.on('save', function(e, group_id, fields)
 		{			
