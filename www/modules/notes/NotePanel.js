@@ -21,13 +21,8 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 	loadUrl : GO.settings.modules.notes.url+'json.php',
 	
 	editHandler : function(){
-		if(!GO.notes.noteDialog)
-		{
-			GO.notes.noteDialog = new GO.notes.NoteDialog();			
-		}
+		GO.notes.showNoteDialog(this.link_id);
 		this.addSaveHandler(GO.notes.noteDialog);
-				
-		GO.notes.noteDialog.show(this.link_id);
 	},	
 		
 	initComponent : function(){	

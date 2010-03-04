@@ -87,14 +87,5 @@
 
 Ext.extend(GO.notes.NotesGrid, GO.grid.GridPanel,{
 	
-	afterRender : function()
-	{
-		if(!GO.notes.noteDialog.hasListener('save'))
-		{
-			GO.notes.noteDialog.on('save', function(){   
-					this.store.reload();	    			    			
-			}, this);
-		}
-		GO.notes.NotesGrid.superclass.afterRender.call(this);
-	}
+
 });
