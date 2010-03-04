@@ -184,6 +184,10 @@ class GO_AUTH extends db
 		// Tell the security framework that a user has been logged in. The
 		// security framework takes care on setting the userid as active.
 		$GO_SECURITY->logged_in($user_id);
+
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+
 		// Increment the number of logins of the given user.
 		if($count_login){
 			$GO_USERS->increment_logins($user_id);
@@ -191,16 +195,13 @@ class GO_AUTH extends db
 			//clean temp dir only when counting the login
 			//logins are not counted for example when a synchronization is done.
 			//We also don't want to clear the temp dir in that case because that can
-			//screw up an active session in the browser.
-			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-			$fs = new filesystem();
+			//screw up an active session in the browser.			
 			if(is_dir($GO_CONFIG->tmpdir.$user_id.'/'))
 			{
 				$fs->delete($GO_CONFIG->tmpdir.$user_id.'/');
 			}
-			$fs->mkdir_recursive($GO_CONFIG->tmpdir.$user_id.'/');
-
 		}
+		$fs->mkdir_recursive($GO_CONFIG->tmpdir.$user_id.'/');
 		//reinitialise available modules
 		$GO_MODULES->load_modules();
 	}
