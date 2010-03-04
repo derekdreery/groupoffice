@@ -194,7 +194,7 @@ GO.files.FilePropertiesDialog = function(config){
 			}]
 	});
 	
-	this.addEvents({'rename' : true});
+	this.addEvents({'rename' : true, 'save':true});
 }
 
 Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
@@ -272,7 +272,8 @@ Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
 				if(action.result.path)
 				{
 					this.formPanel.form.findField('path').setValue(action.result.path);
-					this.fireEvent('rename', this, this.folder_id);				
+					this.fireEvent('rename', this, this.folder_id);
+					this.fireEvent('save', this, this.file_id, this.folder_id);
 				}
 				if(hide)
 				{

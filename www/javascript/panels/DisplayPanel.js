@@ -29,11 +29,14 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	noFileBrowser : false,
 	
 	
-	addSaveHandler : function(win)
+	addSaveHandler : function(win, eventName)
 	{
+		if(!eventName)
+			eventName='save';
+
 		if(!this.saveHandlerAdded)
 		{
-			win.on('save', this.onSave, this);
+			win.on(eventName, this.onSave, this);
 			this.saveHandlerAdded=true;
 		}
 	},

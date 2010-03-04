@@ -698,27 +698,32 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 	afterRender : function(){		
 		GO.files.FileBrowser.superclass.afterRender.call(this);
-		
-		GO.files.filePropertiesDialog.on('rename', function(dlg, folder_id){
+
+		GO.files.filePropertiesDialogListeners={
+			scope:this,
+			rename:function(dlg, folder_id){
 				if(this.folder_id==folder_id)
 				{
 					this.getActiveGridStore().load();
 				}
-			}, this);
+			}
+		}
 
-
-		GO.files.folderPropertiesDialog.on('rename', function(dlg, parent_id){					
-					if(parent_id==this.folder_id)
-					{
-						this.setFolderID(parent_id);
-					}
-					var node = this.treePanel.getNodeById(parent_id);
-					if(node)
-					{			
-						delete node.attributes.children;
-						node.reload();
-					}
-			}, this);
+		GO.files.folderPropertiesDialogListeners={
+			scope:this,
+			rename:function(dlg, parent_id){
+				if(parent_id==this.folder_id)
+				{
+					this.setFolderID(parent_id);
+				}
+				var node = this.treePanel.getNodeById(parent_id);
+				if(node)
+				{
+					delete node.attributes.children;
+					node.reload();
+				}
+			}
+		}
 		
 		this.buildNewMenu();	
 	},
@@ -1433,25 +1438,49 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	{
 		if(record.data.extension=='folder')
 		{
-			GO.files.folderPropertiesDialog.show(record.data.id);
+			GO.files.showFolderPropertiesDialog(record.data.id);
 		}else
 		{
-			GO.files.filePropertiesDialog.show(record.data.id);			
+			GO.files.showFilePropertiesDialog(record.data.id);
 		}
 	}
 });
 
 
+GO.files.showFilePropertiesDialog = function(file_id){
+
+	if(!GO.files.filePropertiesDialog)
+		GO.files.filePropertiesDialog = new GO.files.FilePropertiesDialog();
+
+	if(GO.files.filePropertiesDialogListeners){
+		GO.files.filePropertiesDialog.on(GO.files.filePropertiesDialogListeners);
+		delete GO.files.filePropertiesDialogListeners;
+	}
+
+	GO.files.filePropertiesDialog.show(file_id);
+}
+
+GO.files.showFolderPropertiesDialog = function(folder_id){
+
+	if(!GO.files.folderPropertiesDialog)
+		GO.files.folderPropertiesDialog = new GO.files.FolderPropertiesDialog();
+
+	if(GO.files.folderPropertiesDialogListeners){
+		GO.files.folderPropertiesDialog.on(GO.files.folderPropertiesDialogListeners);
+		delete GO.files.folderPropertiesDialogListeners;
+	}
+
+	GO.files.folderPropertiesDialog.show(folder_id);
+}
+
+
+
 GO.mainLayout.onReady(function(){
-	GO.files.filePropertiesDialog = new GO.files.FilePropertiesDialog();
-	GO.files.folderPropertiesDialog = new GO.files.FolderPropertiesDialog();
-	
-	
 	
 	if(GO.workflowLinkHandlers)
 	{
 		GO.workflowLinkHandlers[6]=function(id, process_file_id){
-			GO.files.filePropertiesDialog.show(id+"", {loadParams:{process_file_id:process_file_id}});
+			GO.files.showFilePropertiesDialog(id+"", {loadParams:{process_file_id:process_file_id}});
 			GO.files.filePropertiesDialog.tabPanel.setActiveTab(3);
 		}
 	}
@@ -1622,7 +1651,7 @@ GO.files.createSelectFileBrowser = function(){
 
 
 GO.linkHandlers[6]=function(id, record){
-	GO.files.filePropertiesDialog.show(id+"");
+	GO.files.showFilePropertiesDialog(id+"");
 }
 GO.linkPreviewPanels[6]=function(config){
 	config = config || {};

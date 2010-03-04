@@ -47,7 +47,8 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 			text: GO.lang.strProperties,
 			cls: 'x-btn-text-icon',
 			handler: function(){
-				GO.files.filePropertiesDialog.show(this.link_id+"");
+				GO.files.showFilePropertiesDialog(this.link_id+"");
+				this.addSaveHandler(GO.files.filePropertiesDialog);
 			},
 			scope: this
 		});
