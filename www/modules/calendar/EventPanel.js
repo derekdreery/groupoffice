@@ -20,9 +20,9 @@ GO.calendar.EventPanel = Ext.extend(GO.DisplayPanel,{
 
 	loadUrl : GO.settings.modules.calendar.url+'json.php',
 
-	editHandler : function(){
+	editHandler : function(){		
+		GO.calendar.showEventDialog({event_id: this.link_id});
 		this.addSaveHandler(GO.calendar.eventDialog);
-		GO.calendar.eventDialog.show({event_id: this.link_id});
 	},
 
 	initComponent : function(){
