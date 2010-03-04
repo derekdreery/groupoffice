@@ -13,13 +13,11 @@
  */
 
 GO.users.MainPanel = function(config)
-{
-	
+{	
 	if(!config)
 	{
 		config = {};
 	}
-
 
 	var fields = {
 		fields:['id', 'username', 'name','company','logins','lastlogin','registration_time','address','address_no','zip','city','state','country','phone','email',
@@ -66,7 +64,6 @@ GO.users.MainPanel = function(config)
 						
 	config.store.setDefaultSort('username', 'ASC');
 
-
   this.searchField = new GO.form.SearchField({
 		store: config.store,
 		width:320
@@ -83,15 +80,13 @@ GO.users.MainPanel = function(config)
 	});
 
 	config.deleteConfig={extraWarning:GO.users.lang.deleteWarning+"\n\n"};
-
 			
 	config.cm = new Ext.grid.ColumnModel({
 		defaults:{
 			sortable:true
 		},
 		columns:fields.columns
-	});
-	
+	});	
 		    	
 	config.tbar = new Ext.Toolbar({		
 			cls:'go-head-tb',
@@ -106,7 +101,7 @@ GO.users.MainPanel = function(config)
 		  				Ext.Msg.alert(GO.lang.strError, GO.users.lang.maxUsersReached);
 		  			}else
 		  			{
-		  				GO.users.userDialog.show();
+		  				GO.users.showUserDialog();
 		  			}
 		  		}, 
 		  		scope: this
@@ -171,32 +166,40 @@ Ext.extend(GO.users.MainPanel, GO.grid.GridPanel,{
 		
 		this.on("rowdblclick",this.rowDoubleClick, this);			
 		this.store.load();
-		
-		
-		if(!GO.users.userDialog.hasListener('save'))
-		{
-			GO.users.userDialog.on('save', function(){
+
+
+		GO.users.userDialogListeners={
+			scope:this,
+			save:function(){
 				this.store.reload();
-			}, this);
+			}
 		}
-		
 	},			
 	
 	rowDoubleClick : function (grid, rowIndex, event)
 	{
 		var selectionModel = grid.getSelectionModel();
 		var record = selectionModel.getSelected();
-		GO.users.userDialog.show(record.data['id']);
+		GO.users.showUserDialog(record.data['id']);
 	}
 });
 
-GO.mainLayout.onReady(function(){
-	GO.users.userDialog = new GO.users.UserDialog();
-});
+GO.users.showUserDialog = function(user_id, config){
+
+	if(!GO.users.userDialog)
+		GO.users.userDialog = new GO.users.UserDialog();
+
+	if(GO.users.userDialogListeners){
+		GO.users.userDialog.on(GO.users.userDialogListeners);
+		delete GO.users.userDialogListeners;
+	}
+
+	GO.users.userDialog.show(user_id, config);
+}
 
 
 GO.linkHandlers[8]=function(id){
-	GO.users.userDialog.show(id);
+	GO.users.showUserDialog(id);
 };
 
 GO.linkPreviewPanels[8]=function(config){
