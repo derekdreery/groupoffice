@@ -1,3 +1,7 @@
+2010/03/04 3.4.8
+- tmpdir wasn't always present.
+- Crash on empty to field in e-mail bug
+
 2010/03/02 3.4.7
 - Select participants needed addressbook and e-mail module. Now it works without
   too.
