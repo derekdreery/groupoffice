@@ -99,11 +99,6 @@ GO.tasks.MainPanel = function(config){
 	}, this);
 
 	this.gridPanel.on('rowdblclick', function(grid, rowIndex){
-		/*var record = grid.getStore().getAt(rowIndex);
-		GO.tasks.taskDialog.show({
-			task_id: record.data.id
-		});*/
-
 		this.taskPanel.editHandler();
 	}, this);
 
@@ -150,7 +145,7 @@ GO.tasks.MainPanel = function(config){
 				cls: 'x-btn-text-icon',
 				handler: function(){
 
-					GO.tasks.taskDialog.show({
+					GO.tasks.showTaskDialog({
 						tasklist_id: this.tasklist_id,
 						tasklist_name: this.tasklist_name
 					});
@@ -244,11 +239,19 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 	afterRender : function()
 	{
 		GO.tasks.MainPanel.superclass.afterRender.call(this);
-		
-		GO.tasks.taskDialog.on('save', function(){
-			this.gridPanel.store.reload();
-		}, this);
-					
+
+		GO.tasks.taskDialogListeners={
+			scope:this,
+			save:function(){
+				this.gridPanel.store.reload();
+
+				var calendar = GO.mainLayout.getModulePanel('calendar');
+				if(calendar && calendar.isVisible()){
+					calendar.refresh();
+				}
+			}
+		}
+
 		this.taskListsStore.on('load', function(){
 
 			var defaultRecord;
@@ -382,9 +385,19 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 });
 
 
-GO.mainLayout.onReady(function(){
-	GO.tasks.taskDialog = new GO.tasks.TaskDialog();
-});
+GO.tasks.showTaskDialog = function(task_id){
+
+	if(!GO.tasks.taskDialog)
+		GO.tasks.taskDialog = new GO.tasks.TaskDialog();
+
+	if(GO.tasks.taskDialogListeners){
+		GO.tasks.taskDialog.on(GO.tasks.taskDialogListeners);
+		delete GO.tasks.taskDialogListeners;
+	}
+
+	GO.tasks.taskDialog.show(task_id);
+}
+
 
 
 GO.tasks.writableTasklistsStore = new GO.data.JsonStore({
@@ -426,7 +439,7 @@ GO.linkHandlers[12]=function(id, link_config){
 		{
 			GO.tasks.taskDialog = new GO.tasks.TaskDialog();		
 		}
-		GO.tasks.taskDialog.show({task_id: id, link_config: link_config});*/
+		GO.tasks.showTaskDialog({task_id: id, link_config: link_config});*/
 		
 	var taskPanel = new GO.tasks.TaskPanel();
 	var linkWindow = new GO.LinkViewWindow({
@@ -455,6 +468,6 @@ GO.newMenuItems.push({
 		var taskShowConfig = item.parentMenu.taskShowConfig || {};
 		taskShowConfig.link_config=item.parentMenu.link_config
 
-		GO.tasks.taskDialog.show(taskShowConfig);
+		GO.tasks.showTaskDialog(taskShowConfig);
 	}
 });
