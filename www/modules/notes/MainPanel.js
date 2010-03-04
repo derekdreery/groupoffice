@@ -188,13 +188,16 @@ GO.moduleManager.addModule('notes', GO.notes.MainPanel, {
  */
 
 GO.linkHandlers[4]=function(id){
-	var notePanel = new GO.notes.NotePanel();
-	var linkWindow = new GO.LinkViewWindow({
-		title: GO.notes.lang.note,
-		items: notePanel
-	});
+	if(!GO.notes.linkWindow){
+		var notePanel = new GO.notes.NotePanel();
+		GO.notes.linkWindow= new GO.LinkViewWindow({
+			title: GO.notes.lang.note,
+			items: notePanel,
+			closeAction:"hide"
+		});
+	}
 	notePanel.load(id);
-	linkWindow.show();
+	GO.notes.linkWindow.show();
 }
 
 GO.linkPreviewPanels[4]=function(config){

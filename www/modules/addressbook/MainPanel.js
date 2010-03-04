@@ -561,13 +561,16 @@ GO.moduleManager.addModule('addressbook', GO.addressbook.MainPanel, {
 });
 
 GO.linkHandlers[2]=GO.mailFunctions.showContact=function(id){		
-	var contactPanel = new GO.addressbook.ContactReadPanel();
-	var linkWindow = new GO.LinkViewWindow({
-		title: GO.addressbook.lang.contact,
-		items: contactPanel
-	});
+	if(!GO.addressbook.linkContactWindow){
+		var contactPanel = new GO.addressbook.ContactReadPanel();
+		GO.addressbook.linkContactWindow = new GO.LinkViewWindow({
+			title: GO.addressbook.lang.contact,
+			items: contactPanel,
+			closeAction:"hide"
+		});
+	}
 	contactPanel.load(id);
-	linkWindow.show();
+	GO.addressbook.linkContactWindow.show();
 }
 
 GO.linkPreviewPanels[2]=function(config){
@@ -582,13 +585,15 @@ GO.linkPreviewPanels[3]=function(config){
 
 
 GO.linkHandlers[3]=function(id){
-	//GO.addressbook.companyDialog.show(id);	
 	
-	var companyPanel = new GO.addressbook.CompanyReadPanel();
-	var linkWindow = new GO.LinkViewWindow({
-		title: GO.addressbook.lang.company,
-		items: companyPanel
-	});
+	if(!GO.addressbook.linkCompanyWindow){
+		var companyPanel = new GO.addressbook.CompanyReadPanel();
+		GO.addressbook.linkCompanyWindow = new GO.LinkViewWindow({
+			title: GO.addressbook.lang.company,
+			items: companyPanel,
+			closeAction:"hide"
+		});
+	}
 	companyPanel.load(id);
-	linkWindow.show();
+	GO.addressbook.linkCompanyWindow.show();
 }
