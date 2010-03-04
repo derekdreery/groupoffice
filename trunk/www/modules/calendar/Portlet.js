@@ -118,10 +118,14 @@ Ext.extend(GO.calendar.SummaryGroupPanel, Ext.grid.GridPanel, {
 	afterRender : function()
 	{
 		GO.calendar.SummaryGroupPanel.superclass.afterRender.call(this);
-    
-		GO.calendar.eventDialog.on('save', function(){
-			this.store.reload()
-			}, this);
+
+		GO.calendar.eventDialogListeners= GO.calendar.eventDialogListeners || [];
+		GO.calendar.eventDialogListeners.push({
+			save:function(){
+				this.store.reload()
+			},
+			scope:this
+		});		
 
 		this.on("rowdblclick", function(grid, rowClicked, e){
 			if(grid.selModel.selections.items[0].json.contact_id)

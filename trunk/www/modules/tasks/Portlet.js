@@ -106,12 +106,17 @@ Ext.extend(GO.tasks.SimpleTasksPanel, GO.grid.GridPanel, {
 	afterRender : function()
 	{
 		GO.tasks.SimpleTasksPanel.superclass.afterRender.call(this);
-		
-		GO.tasks.taskDialog.on('save', function(){
-			this.store.reload();
-		}, this);
-    
 
+		GO.tasks.taskDialogListeners= GO.tasks.taskDialogListeners || [];
+		GO.tasks.taskDialogListeners.push({
+			scope:this,
+			save:function(){
+				if(GO.mainLayout.getModulePanel('summary').isVisible()){
+					this.store.reload();
+				}
+			}
+		});
+   
 		this.on("rowdblclick", function(grid, rowClicked, e){
 			GO.linkHandlers[12].call(this, grid.selModel.selections.keys[0]);
 		}, this);

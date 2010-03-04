@@ -15,8 +15,7 @@
  Ext.namespace('GO.groups')
  
  GO.groups.MainPanel = function(config)
- {
- 	
+ { 	
  	if(!config)
  	{
  		config={};
@@ -32,7 +31,6 @@
 	    remoteSort: true
 	});			
 
-
 	var columnModel =  new Ext.grid.ColumnModel({
 		defaults:{
 			sortable:true
@@ -41,8 +39,7 @@
         {header: GO.groups.lang.groups, dataIndex: 'name', width: 300},
         {header: GO.groups.lang.owner, dataIndex: 'user_name'}	        			        
     ]
-	});
-  
+	});  
     
 	var tbar = new Ext.Toolbar({		
 			cls:'go-head-tb',
@@ -271,8 +268,6 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 			});
 		}
 });
-
-
 
 GO.moduleManager.addModule('groups', GO.groups.MainPanel, {
 		title : GO.groups.lang.groups,

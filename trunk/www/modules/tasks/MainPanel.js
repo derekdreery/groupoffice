@@ -240,17 +240,13 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 	{
 		GO.tasks.MainPanel.superclass.afterRender.call(this);
 
-		GO.tasks.taskDialogListeners={
+		GO.tasks.taskDialogListeners= GO.tasks.taskDialogListeners || [];
+		GO.tasks.taskDialogListeners.push({
 			scope:this,
 			save:function(){
 				this.gridPanel.store.reload();
-
-				var calendar = GO.mainLayout.getModulePanel('calendar');
-				if(calendar && calendar.isVisible()){
-					calendar.refresh();
-				}
 			}
-		}
+		});
 
 		this.taskListsStore.on('load', function(){
 
@@ -391,7 +387,9 @@ GO.tasks.showTaskDialog = function(task_id){
 		GO.tasks.taskDialog = new GO.tasks.TaskDialog();
 
 	if(GO.tasks.taskDialogListeners){
-		GO.tasks.taskDialog.on(GO.tasks.taskDialogListeners);
+		for(var i=0;i<GO.tasks.taskDialogListeners.length;i++){
+			GO.tasks.taskDialog.on(GO.tasks.taskDialogListeners[i]);
+		}
 		delete GO.tasks.taskDialogListeners;
 	}
 

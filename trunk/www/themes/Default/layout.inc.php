@@ -39,7 +39,7 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 			</span>			
 			
 			<img id="reminder-icon" src="<?php echo $GO_THEME->theme_url; ?>images/16x16/reminders.png" style="border:0;vertical-align:middle;cursor:pointer" />
-			<img id="checker-icon" src="<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/grid/loading.gif" style="border:0;vertical-align:middle" />
+			<!-- <img id="checker-icon" src="<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/grid/loading.gif" style="border:0;vertical-align:middle" /> -->
 			
 				
 			<img src="<?php echo $GO_CONFIG->host; ?>themes/Default/images/16x16/icon-search.png" style="border:0px;margin-left:10px;margin-right:1px;vertical-align:middle" />

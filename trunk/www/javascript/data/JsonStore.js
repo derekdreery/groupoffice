@@ -62,15 +62,28 @@ GO.data.JsonStore = function(config) {
 				GO.errorDialog.show(GO.lang.strRequestError, "");
 			}else	if(!this.reader.jsonData || GO.jsonAuthHandler(this.reader.jsonData, this.load, this))
 			{
-				var msg = GO.lang.serverError;
-							
-				if(this.reader.jsonData && this.reader.jsonData.feedback)
+				switch(response.responseText.trim())
 				{
-					msg += '<br /><br />'+this.reader.jsonData.feedback;
-				}
+					case 'NOTLOGGEDIN':
+						document.location=BaseHref;
+					break;
 
-				msg += '<br /><br />JsonStore load exception occurred';
-				GO.errorDialog.show(msg, response.responseText);			
+					case 'UNAUTHORIZED':
+						Ext.Msg.alert(GO.lang['strUnauthorized'], GO.lang['strUnauthorizedText']);
+					break;
+
+					default:
+						var msg = GO.lang.serverError;
+
+						if(this.reader.jsonData && this.reader.jsonData.feedback)
+						{
+							msg += '<br /><br />'+this.reader.jsonData.feedback;
+						}
+
+						msg += '<br /><br />JsonStore load exception occurred';
+						GO.errorDialog.show(msg, response.responseText);
+						break;
+				}					
 			}
 		}
 		,this);
