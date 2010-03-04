@@ -36,14 +36,14 @@ $zc = !empty($_REQUEST['zc']) && !empty($w) && !empty($h);
 
 $full_path = $GO_CONFIG->file_storage_path.$path;
 
-$cache_dir = $GO_CONFIG->file_storage_path.'thumbcache/'.dirname($path);
+$cache_dir = $GO_CONFIG->file_storage_path.'thumbcache';
 if(!is_dir($cache_dir)){
 	mkdir($cache_dir, 0755, true);
 }
 $filename = basename($path);
 $file_mtime = filemtime($full_path);
 
-$cache_filename = $w.'_'.$h.'_';
+$cache_filename = str_replace(array('/','\\'),'_', dirname($path)).'_'.$w.'_'.$h.'_';
 if($zc)
 {
 	$cache_filename .= 'zc_';

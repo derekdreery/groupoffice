@@ -7,7 +7,7 @@ GO.moduleManager.onModuleReady('customfields', function(){
 				xtype: 'selectcontact',
        	fieldLabel: customfield.name,
         hiddenName:customfield.dataname,
-				forceSelect:true,
+				forceSelection:true,
         anchor:'-20',
 				valueField:'cf'
 			}

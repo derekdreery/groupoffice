@@ -213,7 +213,7 @@ function detect_browser() {
 }
 
 
-function get_thumb_url($path) {
+function get_thumb_url($path, $w=100,$h=100,$zc=1) {
 		global $GO_THEME, $GO_CONFIG;
 
 		$extension = File::get_extension($path);
@@ -223,7 +223,7 @@ function get_thumb_url($path) {
 			case 'jpeg';
 			case 'png';
 			case 'gif';
-				return $GO_CONFIG->control_url.'thumb.php?src='.urlencode($path).'&w=100&h=100&zc=1&filemtime='.filemtime($GO_CONFIG->file_storage_path.$path);
+				return $GO_CONFIG->control_url.'thumb.php?src='.urlencode($path).'&w='.$w.'&h='.$h.'&zc='.$zc.'&filemtime='.filemtime($GO_CONFIG->file_storage_path.$path);
 				break;
 
 			case 'pdf':
