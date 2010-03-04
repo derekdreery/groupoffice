@@ -509,7 +509,7 @@ GO.calendar.MainPanel = function(config){
 		cls: 'x-btn-text-icon',
 		handler: function(){
 							
-			GO.calendar.eventDialog.show({
+			GO.calendar.showEventDialog({
 				calendar_id: this.displayType != 'view' ? this.calendar_id : 0,
 				calendar_name_id: this.displayType != 'view' ? this.calendar_name : ''
 			});
@@ -716,45 +716,45 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	afterRender : function(){
 		GO.calendar.MainPanel.superclass.afterRender.call(this);
-		//couldn't add key events to panels so I add this event to the whole doc
-			
 		
-		GO.calendar.eventDialog.on('save', function(newEvent,oldDomId){
-			
-			if(this.displayType=='list')
-			{
-				this.setDisplay();
-			}else
-			{
-				var activeGrid = this.getActivePanel();
-				//reload grid if old or new event repeats. Do not reload if an occurence of a repeating event is modified
-				if(newEvent.repeats|| (activeGrid.remoteEvents[oldDomId] && activeGrid.remoteEvents[oldDomId].repeats && activeGrid.remoteEvents[oldDomId].event_id==newEvent.event_id))
+
+		GO.calendar.eventDialogListeners={
+			scope:this,
+			save:function(newEvent,oldDomId){
+
+				if(this.displayType=='list')
 				{
-					activeGrid.store.reload();
+					this.setDisplay();
 				}else
 				{
-					activeGrid.removeEvent(oldDomId);			
-			
-					switch(this.displayType)
+					var activeGrid = this.getActivePanel();
+					//reload grid if old or new event repeats. Do not reload if an occurence of a repeating event is modified
+					if(newEvent.repeats|| (activeGrid.remoteEvents[oldDomId] && activeGrid.remoteEvents[oldDomId].repeats && activeGrid.remoteEvents[oldDomId].event_id==newEvent.event_id))
 					{
-						case 'month':
-							if(newEvent.calendar_id==this.calendar_id)
-								GO.calendar.eventDialog.oldDomId=this.monthGrid.addMonthGridEvent(newEvent);
-							break;
-						case 'days':	
-							if(newEvent.calendar_id==this.calendar_id)
-								GO.calendar.eventDialog.oldDomId=this.daysGrid.addDaysGridEvent(newEvent, true);
-							break;
-								
-						case 'view':						
-							GO.calendar.eventDialog.oldDomId=this.viewGrid.addViewGridEvent(newEvent);
-							break;
+						activeGrid.store.reload();
+					}else
+					{
+						activeGrid.removeEvent(oldDomId);
+
+						switch(this.displayType)
+						{
+							case 'month':
+								if(newEvent.calendar_id==this.calendar_id)
+									GO.calendar.eventDialog.oldDomId=this.monthGrid.addMonthGridEvent(newEvent);
+								break;
+							case 'days':
+								if(newEvent.calendar_id==this.calendar_id)
+									GO.calendar.eventDialog.oldDomId=this.daysGrid.addDaysGridEvent(newEvent, true);
+								break;
+
+							case 'view':
+								GO.calendar.eventDialog.oldDomId=this.viewGrid.addViewGridEvent(newEvent);
+								break;
+						}
 					}
 				}
 			}
-						
-		}, this);
-
+		}
 
 		if(GO.tasks)
 		{
@@ -774,7 +774,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			}			
 			GO.calendar.groupsGrid.store.load({
 				callback:function(){
-					GO.calendar.eventDialog.resourceGroupsStore.reload();
+					if(GO.calendar.eventDialog)
+						GO.calendar.eventDialog.resourceGroupsStore.reload();
 				},
 				scope:this
 			});
@@ -1319,7 +1320,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			formValues['end_hour'] = newEvent['endDate'].format("H");
 			formValues['end_min'] = newEvent['endDate'].format("i");
 				
-			GO.calendar.eventDialog.show({
+			GO.calendar.showEventDialog({
 				values: formValues,
 				calendar_id: this.calendar_id,
 				calendar_name: this.calendar_name
@@ -1340,7 +1341,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				end_min: '00'
 			};
 				
-			GO.calendar.eventDialog.show({
+			GO.calendar.showEventDialog({
 				values: formValues,
 				calendar_id: this.calendar_id,
 				calendar_name: this.calendar_name
@@ -1428,7 +1429,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			formValues['end_hour'] = event['endDate'].format("H");
 			formValues['end_min'] = event['endDate'].format("i");
 
-			GO.calendar.eventDialog.show({
+			GO.calendar.showEventDialog({
 				values: formValues,
 				exceptionDate: event['startDate'].format(this.daysGrid.dateTimeFormat),
 				exception_event_id: event['event_id'],
@@ -1448,7 +1449,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			}else
 			if(event['event_id'])
 			{
-				GO.calendar.eventDialog.show({
+				GO.calendar.showEventDialog({
 					event_id: event['event_id'],
 					oldDomId : event.domId
 				});
@@ -1819,11 +1820,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					this.resourcesStore.reload();
 					this.calendarsStore.reload();
 
-					GO.calendar.eventDialog.updateResourcePanel();
-					GO.calendar.eventDialog.selectCalendar.store.reload();
-					
-					//this.resourcesList.store.reload();
-					
+					if(GO.calendar.eventDialog){
+						GO.calendar.eventDialog.updateResourcePanel();
+						GO.calendar.eventDialog.selectCalendar.store.reload();
+					}					
 					this.adminDialog.madeChanges=false;
 				}
 			}, this);
@@ -1855,8 +1855,6 @@ GO.mainLayout.onReady(function(){
 		remoteSort: true
 	}),
 
-	GO.calendar.eventDialog = new GO.calendar.EventDialog();
-
 	GO.newMenuItems.push({
 		text: GO.calendar.lang.appointment,
 		iconCls: 'go-link-icon-1',
@@ -1865,14 +1863,27 @@ GO.mainLayout.onReady(function(){
 			var eventShowConfig = item.parentMenu.eventShowConfig || {};
 			eventShowConfig.link_config=item.parentMenu.link_config
 
-			GO.calendar.eventDialog.show(eventShowConfig);
+			GO.calendar.showEventDialog(eventShowConfig);
 		}
 	});
-}); 
+});
+
+GO.calendar.showEventDialog = function(config){
+
+	if(!GO.calendar.eventDialog)
+		GO.calendar.eventDialog = new GO.calendar.EventDialog();
+
+	if(GO.calendar.eventDialogListeners){
+		GO.calendar.eventDialog.on(GO.calendar.eventDialogListeners);
+		delete GO.calendar.eventDialogListeners;
+	}
+
+	GO.calendar.eventDialog.show(config);
+}
 
 GO.linkHandlers[1]=function(id){
 	
-	GO.calendar.eventDialog.show({
+	GO.calendar.showEventDialog({
 		event_id: id
 	});
 };
@@ -1891,6 +1902,6 @@ GO.calendar.showEvent = function(config){
 	config.event_id = config.values.event_id;
 	//delete(config.values.event_id);
     
-	GO.calendar.eventDialog.show(config);
+	GO.calendar.showEventDialog(config);
 
 };
