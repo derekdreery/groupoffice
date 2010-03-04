@@ -49,10 +49,6 @@ GO.notes.MainPanel = function(config){
 		}
 		sm.selectRecords([defaultRecord]);
 
-		
-		
-		//GO.notes.writableCategoriesStore.load();
-
 		if(defaultRecord)
 		{
 			this.centerPanel.store.baseParams.category_id = defaultRecord.data.id;
@@ -104,7 +100,7 @@ GO.notes.MainPanel = function(config){
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){
-	    	GO.notes.noteDialog.show(0, {category_id: this.centerPanel.store.baseParams.category_id, category_name: this.category_name});
+	    	GO.notes.showNoteDialog(0, {category_id: this.centerPanel.store.baseParams.category_id, category_name: this.category_name});
 			},
 			scope: this
 		},{
@@ -148,7 +144,16 @@ GO.notes.MainPanel = function(config){
 
 
 Ext.extend(GO.notes.MainPanel, Ext.Panel, {
-
+	afterRender : function()
+	{
+		GO.notes.noteDialogListeners={
+			scope:this,
+			save:function(){
+				this.centerPanel.store.reload();
+			}
+		}		
+		GO.notes.MainPanel.superclass.afterRender.call(this);
+	}
 });
 
 
@@ -166,10 +171,20 @@ Ext.extend(GO.notes.MainPanel, Ext.Panel, {
 	});*/
 
 
-GO.mainLayout.onReady(function(){
+
+GO.notes.showNoteDialog = function(note_id, config){
+
+	if(!GO.notes.noteDialog)
 		GO.notes.noteDialog = new GO.notes.NoteDialog();
-	/* {LINKDIALOGS} */
-});
+
+	if(GO.notes.noteDialogListeners){
+		GO.notes.noteDialog.on(GO.notes.noteDialogListeners);
+		delete GO.notes.noteDialogListeners;
+	}
+
+	GO.notes.noteDialog.show(note_id, config);
+}
+
 
 /*
  * This will add the module to the main tabpanel filled with all the modules
@@ -211,7 +226,7 @@ GO.newMenuItems.push({
 	text: GO.notes.lang.note,
 	iconCls: 'go-link-icon-4',
 	handler:function(item, e){		
-		GO.notes.noteDialog.show(0, {
+		GO.notes.showNoteDialog(0, {
 			link_config: item.parentMenu.link_config			
 		});
 	}
