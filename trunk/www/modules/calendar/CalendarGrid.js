@@ -306,7 +306,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		var timeCol = Ext.DomHelper.append(gridRow,
 			{tag: 'td', style: 'width:40px'}, true);
 	
-		var timeFormat;
+		var timeformat;
 		
 		var timeColHeight = (((this.rowHeight+1)*this.rowsPerHour)-1);
 		
