@@ -156,22 +156,6 @@ Ext.extend(GO.notes.MainPanel, Ext.Panel, {
 	}
 });
 
-
-/*GO.notes.writableCategoriesStore = new GO.data.JsonStore({
-	    url: GO.settings.modules.notes.url+ 'json.php',
-	    baseParams: {
-	    	auth_type:'write',
-	    	task: 'categories'
-	    	},
-	    root: 'results',
-	    id: 'id',
-	    totalProperty:'total',
-	    fields: ['id', 'name', 'user_name'],
-	    remoteSort: true
-	});*/
-
-
-
 GO.notes.showNoteDialog = function(note_id, config){
 
 	if(!GO.notes.noteDialog)
