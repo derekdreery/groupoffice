@@ -41,7 +41,7 @@ GO.email.UnknownRecipientsDialog = Ext.extend(Ext.Window, {
 					}
 				}
 				
-				GO.addressbook.contactDialog.show();
+				GO.addressbook.showContactDialog();
 				GO.addressbook.contactDialog.formPanel.form.setValues(record.data);
 				
 				this.store.remove(record);

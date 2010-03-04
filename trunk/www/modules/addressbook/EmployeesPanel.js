@@ -136,7 +136,7 @@ GO.addressbook.EmployeesPanel = function(config)
 	
 		this.on('rowdblclick', function(grid, index){
 			var record = grid.getStore().getAt(index);
-			GO.addressbook.contactDialog.show(record.data.id);
+			GO.addressbook.showContactDialog(record.data.id);
 		}, this);
 	}
 
