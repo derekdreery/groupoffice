@@ -716,9 +716,21 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	afterRender : function(){
 		GO.calendar.MainPanel.superclass.afterRender.call(this);
-		
 
-		GO.calendar.eventDialogListeners={
+		if(GO.tasks){
+			GO.tasks.taskDialogListeners= GO.tasks.taskDialogListeners || [];
+			GO.tasks.taskDialogListeners.push({
+				scope:this,
+				save:function(){
+					if(this.isVisible()){
+						this.refresh();
+					}
+				}
+			});
+		}
+
+		GO.calendar.eventDialogListeners= GO.calendar.eventDialogListeners || [];
+		GO.calendar.eventDialogListeners.push({
 			scope:this,
 			save:function(newEvent,oldDomId){
 
@@ -754,7 +766,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					}
 				}
 			}
-		}
+		});
 		
 		GO.calendar.groupDialog = new GO.calendar.GroupDialog();
 		GO.calendar.groupDialog.on('save', function(e, group_id, fields)
@@ -1865,7 +1877,10 @@ GO.calendar.showEventDialog = function(config){
 		GO.calendar.eventDialog = new GO.calendar.EventDialog();
 
 	if(GO.calendar.eventDialogListeners){
-		GO.calendar.eventDialog.on(GO.calendar.eventDialogListeners);
+		for(var i=0;i<GO.calendar.eventDialogListeners.length;i++){
+			GO.calendar.eventDialog.on(GO.calendar.eventDialogListeners[i]);
+		}
+		
 		delete GO.calendar.eventDialogListeners;
 	}
 
