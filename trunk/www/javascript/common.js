@@ -600,7 +600,7 @@ GO.util.html_entity_decode = function (string, quote_style ) {
     if (false === (histogram = GO.util.get_html_translation_table('HTML_ENTITIES', quote_style))) {
         return false;
     }
-    
+    var entity;
     for (symbol in histogram) {
         entity = histogram[symbol];
         tmp_str = tmp_str.split(entity).join(symbol);
