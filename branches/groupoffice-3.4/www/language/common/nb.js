@@ -324,3 +324,14 @@ GO.lang.permissionWrite='Skrive';
 GO.lang.permissionDelete='Skrive og slette';
 GO.lang.permissionManage='Behandle';
 GO.lang.totals='Totalt';
+
+GO.lang.spellcheck= 'Stavekontroll';
+GO.lang.spellcheckdetails= 'Stavekontroll';
+GO.lang.spellcheckNoError= 'Fant ingen feil';
+GO.lang.spellcheckServerError= 'Problem ved kjøring av stavekontrollen. Kontakt brukerstøtte hvis problemet fortsetter';
+GO.lang.spellcheckNoErrors= 'Send meldingen med [{1}] stavefeil';
+GO.lang.spellcheckAsk= 'Sende uten å kontrollere stavingen?';
+GO.lang.age='Alder';
+GO.lang.selectFolder= 'Velg en mappe';
+
+GO.lang.userGroups='Brukergrupper';

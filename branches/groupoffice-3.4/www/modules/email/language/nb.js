@@ -165,3 +165,5 @@ GO.email.lang.showUnread='Vis uleste';
 GO.email.lang.searchFrom='Avsender';
 GO.email.lang.searchTo='Mottaker';
 GO.email.lang.searchCC='Mottaker (CC)';
+
+GO.email.lang.forwardTo='Videresend e-post til';

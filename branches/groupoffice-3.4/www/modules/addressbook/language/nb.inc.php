@@ -42,4 +42,7 @@ $lang['addressbook']['companies'] = 'Firmaer';
 $lang['addressbook']['newContactAdded']='Ny kontaktperson er lagt til';
 $lang['addressbook']['newContactFromSite']='En ny kontaktperson er lagt til via et nettstedskjema.';
 $lang['addressbook']['clickHereToView']='Trykk her for å vise kontakpersonen';
+$lang['addressbook']['contactFromAddressbook']='Kontaktperson fra %s';
+$lang['addressbook']['companyFromAddressbook']='Firma fra %s';
+
 ?>
