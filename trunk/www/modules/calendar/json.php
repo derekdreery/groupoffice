@@ -333,16 +333,12 @@ try {
 			$end_time=isset($_REQUEST['end_time']) ? strtotime($_REQUEST['end_time']) : 0;
 
 			if ($view_id) {
-				$ncals = $cal->get_authorized_calendars($GO_SECURITY->user_id);
-				if(!$ncals) {
-					$cal->get_calendar();
-					$ncals = $cal->get_authorized_calendars($GO_SECURITY->user_id);
-				}
+				$calendar_names=array();
 				$calendars = array();
-				while($cal->next_record(DB_ASSOC)) {
-					$cal->record['selected']=$cal2->is_view_calendar($cal->f('id'), $view_id) ? '1' : '0';
-					if ($cal->record['selected'])
-						$calendars[] = $cal->record['id'];
+				$cal->get_view_calendars($view_id);
+				while($record = $cal->next_record()) {
+					$calendars[] = $record['id'];
+					$calendar_names[$record['id']]=htmlspecialchars($record['name'], ENT_QUOTES, 'UTF-8');
 				}
 
 				if (count($calendars)==0) {
@@ -403,6 +399,7 @@ try {
 								'event_id'=> $event['id'],
 								'name'=> htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),
 								'time'=>date($date_format, $event['start_time']),
+								'calendar_name'=>isset($calendar_names[$event['calendar_id']]) ? $calendar_names[$event['calendar_id']] : '',
 								'start_time'=> date('Y-m-d H:i', $event['start_time']),
 								'end_time'=> date('Y-m-d H:i', $event['end_time']),
 								'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),

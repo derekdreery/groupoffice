@@ -229,9 +229,11 @@ try{
 				$tmp_files = json_decode($_POST['tmp_files'], true);
 				while($tmp_file = array_shift($tmp_files))
 				{
-					$new_path = $GO_CONFIG->file_storage_path.$path.'/'.$tmp_file['name'];
-					$fs->move($tmp_file['tmp_file'], $new_path);
-					$files->import_file($new_path, $task['files_folder_id']);
+					if(!empty($tmp_file['tmp_file'])){
+						$new_path = $GO_CONFIG->file_storage_path.$path.'/'.$tmp_file['name'];
+						$fs->move($tmp_file['tmp_file'], $new_path);
+						$files->import_file($new_path, $task['files_folder_id']);
+					}
 				}
 			}
 

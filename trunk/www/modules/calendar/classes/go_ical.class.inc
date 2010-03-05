@@ -276,7 +276,7 @@ class go_ical extends calendar
 				if(isset($rrule['BYDAY']))
 				{
 
-					if($rrule['FREQ']=='MONTLY'){
+					if($rrule['FREQ']=='MONTHLY'){
 						$event['month_time'] = $rrule['BYDAY'][0];
 						$day = substr($rrule['BYDAY'], 1);
 						$days =Date::byday_to_days($day);

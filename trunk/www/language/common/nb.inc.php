@@ -204,3 +204,5 @@ $lang['common']['dontChangeOwnersPermissions']='Du kan ikke endre eierens tilate
 $lang['common']['running_sys_upgrade']='Kjører nødvendig systemoppdatering';
 $lang['common']['sys_upgrade_text']='Vennligst vent. Alle meldinger blir loggført.';
 $lang['common']['click_here_to_contine']='Trykk her for å fortsette';
+$lang['common']['month']= 'måned';
+$lang['common']['strMonths']= 'måneder';

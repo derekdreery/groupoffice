@@ -88,6 +88,14 @@ class cached_imap extends imap{
 		return $conn;
 	}
 
+	function set_message_flag($mailbox = "INBOX", $uid_array, $flags, $action = "") {
+		if(!$this->conn){
+			$this->set_account($this->account, $mailbox);
+			$this->open($this->account, $mailbox);
+		}
+		return parent::set_message_flag($mailbox, $uid_array, $flags,$action);
+	}
+
 	function reopen($mailbox = "INBOX", $flags = "") {
 		parent::reopen($mailbox, $flags);
 		//update $this->folder with the db cache
@@ -361,7 +369,7 @@ class cached_imap extends imap{
 		$values=$this->email->next_record();
 		if(!$this->disable_message_cache && !empty($values['serialized_message_object'])){
 			$message =  unserialize($values['serialized_message_object']);
-
+			$message['from_cache']=true;
 			if($create_temporary_attachment_files) {
 				for ($i = 0; $i < count($message['attachments']); $i ++) {
 					$tmp_file = $GO_CONFIG->tmpdir.$message['attachments'][$i]['name'];

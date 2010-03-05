@@ -467,7 +467,7 @@ GO.files.FileBrowser = function(config){
       iconCls: "btn-refresh",
       text:GO.lang.cmdRefresh,      
       handler: function(){
-      	this.refresh();	
+      	this.refresh(true);
       },
       scope:this
   });
@@ -1130,11 +1130,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	},
 	
 	
-	refresh : function(){
+	refresh : function(syncFilesystemWithDatabase){
 	
 		var activeNode = this.treePanel.getNodeById(this.folder_id);
 
 		this.treeLoader.baseParams.expand_folder_id=this.folder_id;
+		if(syncFilesystemWithDatabase)
+			this.treeLoader.baseParams.sync_folder_id=this.folder_id;
 
 		this.expandPath=false;
 		if(activeNode)
@@ -1148,6 +1150,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				if(this.expandPath)
 					this.treePanel.expandPath(this.expandPath);
 			}).createDelegate(this));
+
+		if(syncFilesystemWithDatabase)
+			delete this.treeLoader.baseParams.sync_folder_id;
 	},
 	
 	sendOverwrite : function(params){

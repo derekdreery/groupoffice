@@ -313,6 +313,7 @@ GO.email.EmailComposer = function(config) {
 		plugins : plugins,
 		style:'font:12px arial";',
 		defaultFont:'arial',
+		value:'',
 		updateToolbar: function(){
 
 				/*

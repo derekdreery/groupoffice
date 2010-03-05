@@ -259,17 +259,7 @@ GO.grid.LinksPanel = function(config){
 				},
 				scope: this
 				
-			}),this.unlinkButton = new Ext.Button({
-				iconCls: 'btn-unlink',
-				text: GO.lang['cmdUnlink'],
-				cls: 'x-btn-text-icon',
-				handler: function() {
-					
-					this.unlinkSelected();
-				},
-				scope: this
 			}),this.newFolderButton = new Ext.Button({
-				id: 'unlink',
 				iconCls: 'btn-add',
 				text: GO.lang.newFolder,
 				cls: 'x-btn-text-icon',
@@ -282,7 +272,7 @@ GO.grid.LinksPanel = function(config){
 					});
 				},
 				scope: this
-			}),this.deleteButton = new Ext.Button({
+			}),'-',this.deleteButton = new Ext.Button({
 				iconCls: 'btn-delete',
 				text: GO.lang['cmdDelete'],
 				cls: 'x-btn-text-icon',
@@ -290,7 +280,26 @@ GO.grid.LinksPanel = function(config){
 					this.linksGrid.deleteSelected();
 				},
 				scope: this
-			})
+			}),this.unlinkButton = new Ext.Button({
+				iconCls: 'btn-unlink',
+				text: GO.lang['cmdUnlink'],
+				cls: 'x-btn-text-icon',
+				handler: function() {
+
+					this.unlinkSelected();
+				},
+				scope: this
+			}),'-',{
+				iconCls: 'btn-refresh',
+				text: GO.lang['cmdRefresh'],
+				cls: 'x-btn-text-icon',
+				handler: function(){
+					this.linksGrid.store.load();
+					this.linksTree.getRootNode().reload();
+				},
+				scope: this
+
+			}
 		];
 		
 	if(GO.links && GO.links.SettingsDialog)
