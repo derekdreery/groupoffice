@@ -62,3 +62,4 @@ $updates[]="ALTER TABLE `em_links` CHANGE `acl_read` `acl_id` INT( 11 ) NOT NULL
 $updates[]="ALTER TABLE `em_messages_cache` ADD `serialized_message_object` MEDIUMTEXT NOT NULL ";
 
 $updates[]="TRUNCATE TABLE `em_messages_cache`";
+$updates[]="update `em_folders` set `sort`='';";
