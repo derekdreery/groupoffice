@@ -588,7 +588,7 @@ try{
 				if(!empty($response['new'])){
 					if($imap->set_unseen_cache(array($uid), false))
 					{
-						if($response['from_cache'] || stripos($account['host'],'gmail')!==false)
+						if(!empty($response['from_cache']) || stripos($account['host'],'gmail')!==false)
 						{
 							$imap->set_message_flag($mailbox, array($uid), "\\Seen");
 						}
