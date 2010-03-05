@@ -729,8 +729,6 @@ class String {
 		"'<\/?v:[^>]*>'usi",
 		"'<\/?st1:[^>]*>'usi",
 		"'<\?xml[^>]*>'usi",
-		"'MsoNormal'us",
-
 
 		"'<style[^>]*>.*?</style>'usi",
 		"'<script[^>]*>.*?</script>'usi",
