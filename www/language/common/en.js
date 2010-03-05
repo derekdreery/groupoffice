@@ -341,3 +341,7 @@ GO.lang.age='Age';
 GO.lang.selectFolder = 'Select a folder please';
 
 GO.lang.userGroups='User groups';
+
+
+GO.lang.firebugDetected="Warning! Firebug Add-on detected";
+GO.lang.firebugWarning="The Firebug Add-on is known to slow down this application. Please don't use it for production work."
