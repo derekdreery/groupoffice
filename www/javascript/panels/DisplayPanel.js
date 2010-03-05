@@ -246,7 +246,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 						}else
 						{
 							var record = new GO.files.FileRecord(file);
-							GO.files.filePropertiesDialog.show(record.get('id'));
+							GO.files.showFilePropertiesDialog(record.get('id'));
 						}
 					}
 				}
