@@ -1,8 +1,9 @@
-2010/03/04 3.4.9
+2010/03/05 3.4.9
 - Updated Norwegian translation
 - Browser doesn't ask to open GOTA anymore. It launches automatically.
 - Fixed printing of merged calendar views
 - Added calendar name to event tooltip in merged calendar view
+- Fixed small bugs
 
 2010/03/04 3.4.8
 - tmpdir wasn't always present.
