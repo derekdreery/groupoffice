@@ -361,7 +361,7 @@ class cached_imap extends imap{
 		$values=$this->email->next_record();
 		if(!$this->disable_message_cache && !empty($values['serialized_message_object'])){
 			$message =  unserialize($values['serialized_message_object']);
-
+			$message['from_cache']=true;
 			if($create_temporary_attachment_files) {
 				for ($i = 0; $i < count($message['attachments']); $i ++) {
 					$tmp_file = $GO_CONFIG->tmpdir.$message['attachments'][$i]['name'];

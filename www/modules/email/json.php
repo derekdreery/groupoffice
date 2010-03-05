@@ -585,11 +585,13 @@ try{
 				}
 				unset($response['html_body'], $response['plain_body']);
 
-				if($imap->set_unseen_cache(array($uid), false))
-				{
-					if(stripos($account['host'],'gmail')!==false)
+				if(!empty($response['new'])){
+					if($imap->set_unseen_cache(array($uid), false))
 					{
-						$imap->set_message_flag($mailbox, array($uid), "\\Seen");
+						if($response['from_cache'] || stripos($account['host'],'gmail')!==false)
+						{
+							$imap->set_message_flag($mailbox, array($uid), "\\Seen");
+						}
 					}
 				}
 				$response['account_id']=$account_id;				
