@@ -313,12 +313,32 @@ GO.email.EmailComposer = function(config) {
 		plugins : plugins,
 		style:'font:12px arial";',
 		defaultFont:'arial',
+		/*onFirstFocus : function(){
+        this.activated = true;
+        this.tb.items.each(function(item){
+           item.enable();
+        });
+        if(Ext.isGecko){ // prevent silly gecko errors
+            this.win.focus();
+            var s = this.win.getSelection();
+            if(!s.focusNode || s.focusNode.nodeType != 3){
+                var r = s.getRangeAt(0);
+                r.selectNodeContents(this.getEditorBody());
+                r.collapse(true);
+                this.deferFocus();
+            }
+            try{
+                this.execCmd('useCSS', true);
+                this.execCmd('styleWithCSS', false);
+            }catch(e){}
+        }
+        this.fireEvent('activate', this);
+    },
 		listeners:{
-			activate:function(){
-				this.htmlEditorActivated=true;
+			activate:function(){				
 			},
 			scope:this
-		},
+		},*/
 		value:'',		
 		updateToolbar: function(){
 
@@ -677,9 +697,6 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	},
 
 	reset : function(keepAttachmentsAndOptions) {
-
-		
-		
 		if(!keepAttachmentsAndOptions){
 			this.sendParams = {
 				'task' : 'sendmail',
@@ -960,12 +977,12 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.editor.selectText(0,0);
 		}else
 		{
-			if(this.htmlEditorActivated){
+			/*if(this.htmlEditorActivated){
 				this.insertDefaultFont();
 			}else
 			{
 				this.htmlEditor.on('activate', this.insertDefaultFont, this);
-			}			
+			}*/
 		}
 
 		this.setEditorHeight();
