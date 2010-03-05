@@ -191,6 +191,9 @@ class filesystem extends db
 
 	function move($source_path, $destination_path, $uploaded_file=false)
 	{
+		if(empty($source_path) || empty($destination_path)){
+			throw new Exception('Empty arguments in move function');
+		}
 		$source_path = dirname($source_path).'/'.utf8_basename($source_path);
 		$destination_path = dirname($destination_path).'/'.utf8_basename($destination_path);
 
