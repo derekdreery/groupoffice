@@ -29,11 +29,11 @@ try{
 	switch($task)
 	{
 		case 'tree':
-			/*if(!empty($_POST['refresh_folder_id']) && is_numeric($_POST['refresh_folder_id']))
+			if(!empty($_POST['sync_folder_id']) && is_numeric($_POST['sync_folder_id']))
 			{
-				$folder = $this->get_folder($_POST['refresh_folder_id']);
+				$folder = $files->get_folder($_POST['sync_folder_id']);
 				$files->sync_folder($folder);
-			}*/
+			}
 
 			$fs2= new files();
 
