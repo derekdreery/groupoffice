@@ -103,6 +103,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			text : GO.lang.cmdBrowseLinks,
 			disabled : true,
 			handler : function() {
+				if(!GO.linkBrowser){
+					GO.linkBrowser = new GO.LinkBrowser();
+				}
 				GO.linkBrowser.show({
 					link_id : this.event_id,
 					link_type : "1",

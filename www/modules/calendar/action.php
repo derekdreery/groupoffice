@@ -404,7 +404,7 @@ try {
 
 			/* Check for conflicts with other events in the calendar */
 			if ($check_conflicts) {
-				$conflict_events = $cal->get_events_in_array($calendar['id'], $GO_SECURITY->user_id, $event['start_time'], $event['end_time'], true);
+				$conflict_events = $cal->get_events_in_array(array($event['calendar_id']), 0, $event['start_time'], $event['end_time'], true);
 				while($conflict_event = array_shift($conflict_events)) {
 					if($conflict_event['id']!=$event_id)
 						throw new Exception('Ask permission');
@@ -496,9 +496,11 @@ try {
 
 				$tmp_files = json_decode($_POST['tmp_files'], true);
 				while($tmp_file = array_shift($tmp_files)) {
-					$new_path = $GO_CONFIG->file_storage_path.$path.'/'.$tmp_file['name'];
-					$fs->move($tmp_file['tmp_file'], $new_path);
-					$files->import_file($new_path, $event['files_folder_id']);
+					if(!empty($tmp_file['tmp_file'])){
+						$new_path = $GO_CONFIG->file_storage_path.$path.'/'.$tmp_file['name'];
+						$fs->move($tmp_file['tmp_file'], $new_path);
+						$files->import_file($new_path, $event['files_folder_id']);
+					}
 				}
 			}
 

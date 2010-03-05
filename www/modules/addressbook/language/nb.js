@@ -102,3 +102,14 @@ GO.addressbook.lang.defaultSalutation='Forvalgt hilsning';
 GO.addressbook.lang.explanationVariables='Forklaring til hilsningsvariabler';
 GO.addressbook.lang.explanationSex='Mannlig og kvinnelig hilsningsform';
 
+GO.addressbook.lang.newSearch='Nytt søk';
+GO.addressbook.lang.executeQuery='Kjør søk';
+GO.addressbook.lang.savedQueries='Lagrede søk';
+GO.addressbook.lang.selectField= 'Velg felt';
+GO.addressbook.lang.searchQueryName='Navn på søk';
+GO.addressbook.lang.enterSearchQueryName='Angi et navn for dette søket:';
+GO.addressbook.lang.photo= 'Bilde';
+GO.addressbook.lang.deleteImage='Slett bilde';
+GO.addressbook.lang.addAllSearchResults='Legg til alle søkeresultater';
+GO.addressbook.lang.confirmAddAllSearchResults='Er du sikker på at du vil legge alle søkeresultatene til adresselisten?';
+

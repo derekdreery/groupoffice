@@ -40,7 +40,7 @@ $lang['calendar']['statuses']['IN-PROCESS'] = 'Under behandling';
 
 
 $lang['calendar']['accept_mail_subject'] = 'Invitasjon til \'%s\' er akseptert';
-$lang['calendar']['accept_mail_body'] = '%s her akseptert din invitasjon til:';
+$lang['calendar']['accept_mail_body'] = '%s har akseptert din invitasjon til:';
 
 $lang['calendar']['decline_mail_subject'] = 'Invitasjon til \'%s\' er avvist';
 $lang['calendar']['decline_mail_body'] = '%s har avvist din invitasjon til:';
@@ -93,3 +93,10 @@ $lang['calendar']['your_resource_declined_mail_body']= '%s har avvist din bestil
 $lang['calendar']['birthday_name']='Fødselsdag: {NAME}';
 $lang['calendar']['birthday_desc']='{NAME} fyller {AGE} i dag';
 $lang['calendar']['unauthorized_participants_write']='Du har ikke tilstrekkelige rettigheter til å registrere avtaler for disse brukerne:<br /><br />{NAMES}<br /><br />I stedet kan du sende dem en invitasjon, slik at de selv kan akseptere og registrere avtalen.';
+
+$lang['calendar']['noCalSelected']= 'Det er ikke valgt noen kalendere for denne oversikten. Velg minst en kalender i Administrasjon.';
+$lang['calendar']['month_times'][1]='den første';
+$lang['calendar']['month_times'][2]='den andre';
+$lang['calendar']['month_times'][3]='den tredje';
+$lang['calendar']['month_times'][4]='den fjerde';
+$lang['calendar']['month_times'][5]='den femte';

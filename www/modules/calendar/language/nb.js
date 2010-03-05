@@ -82,3 +82,11 @@ GO.calendar.lang.no_status='Ny';
 GO.calendar.lang.no_custom_fields='Det er ingen flere ekstrainstillinger tilgjengelig.';
 GO.calendar.lang.show_bdays='Vis fødselsdager fra adressebøker';
 GO.calendar.lang.show_tasks='Vis oppgaver fra oppgavelister';
+
+GO.calendar.lang.myCalendar='Min kalender';
+GO.calendar.lang.merge='Slå sammen';
+GO.calendar.lang.ownColor= 'Hver kalender i sin egen farge';
+GO.calendar.lang.ignoreConflictsTitle= 'Ignorere konflikter?';
+GO.calendar.lang.ignoreConflictsMsg= 'Denne hendelsen er i konflikt med en annen hendelse i kalenderen din. Lagre hendelsen likevel?';
+GO.calendar.lang.resourceConflictTitle= 'Ressurskonflikt';
+GO.calendar.lang.resourceConflictMsg= 'En eller flere ressurser i denne hendelsen er allerede i bruk på samme tidspunkt:</br>';
