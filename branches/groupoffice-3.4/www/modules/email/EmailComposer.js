@@ -313,7 +313,13 @@ GO.email.EmailComposer = function(config) {
 		plugins : plugins,
 		style:'font:12px arial";',
 		defaultFont:'arial',
-		value:'',
+		listeners:{
+			activate:function(){
+				this.htmlEditorActivated=true;
+			},
+			scope:this
+		},
+		value:'',		
 		updateToolbar: function(){
 
 				/*
@@ -932,6 +938,15 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			}
 		}
 	},
+
+	insertDefaultFont : function(){
+		var font = this.htmlEditor.fontSelect.dom.value;
+		var v = this.htmlEditor.getValue();
+		if(v.toLowerCase().substring(0,5)!='<font'){
+			v='<font face="'+font+'">'+v+'</font>'
+		}
+		this.htmlEditor.setValue(v);		
+	},
 	
 	afterShowAndLoad : function(addSignature){
 		if(addSignature)
@@ -943,9 +958,15 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		{
 			//set cursor at top
 			this.editor.selectText(0,0);
+		}else
+		{
+			if(this.htmlEditorActivated){
+				this.insertDefaultFont();
+			}else
+			{
+				this.htmlEditor.on('activate', this.insertDefaultFont, this);
+			}			
 		}
-		
-		
 
 		this.setEditorHeight();
 		this.startAutoSave();
