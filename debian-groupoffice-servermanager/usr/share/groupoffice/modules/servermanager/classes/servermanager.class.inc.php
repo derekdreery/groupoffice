@@ -294,6 +294,7 @@ class servermanager extends db {
 
 
 			}else {
+				$installation['status']='ignore';
 				$this->add_installation($installation);
 			}
 
