@@ -22,25 +22,47 @@ $end_time = strtotime($_REQUEST['end_time']);
 
 $pdf = new PDF();
 
-if(!empty($_REQUEST['view_id']))
-{
-	
+if(!empty($_REQUEST['view_id'])){
 	$view = $cal->get_view($_REQUEST['view_id']);
 	$title=$view['name'];
 	$pdf->setParams($view['name'], $start_time, $end_time);
 	$pdf->AddPage();
 	$cal->get_view_calendars($view['id']);
-	$cal2 = new calendar();
-	$first = true;
-	$even=false;
-	while($calendar=$cal->next_record())
+	if(empty($view['merge'])){
+		$cal2 = new calendar();
+		$first = true;
+		$even=false;
+		while($calendar=$cal->next_record())
+		{
+			$pdf->setCurrentCalendar($calendar);
+			$events = $cal2->get_events_in_array(array($cal->f('id')), 0, $start_time, $end_time);
+			$pdf->addCalendar($events, false,$first, $cal->f('name'));
+			$first=false;
+		}
+	}else
 	{
-		$pdf->setCurrentCalendar($calendar);
-		
-		$events = $cal2->get_events_in_array(array($cal->f('id')), 0, $start_time, $end_time);
-		//$pdf->H3($cal->f('name'));
-		$pdf->addCalendar($events, false,$first, $cal->f('name'));
-		$first=false;
+		$calendars=array();
+		while($calendar=$cal->next_record())
+		{
+			$calendars[]=$calendar['id'];
+		}
+
+		$events = $cal->get_events_in_array($calendars, 0, $start_time, $end_time);
+		if(!empty($view['owncolor'])){
+			/* Default colors for merged calendars */
+			$default_colors = array('F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
+							'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
+							'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
+							'C43B3B','996600','66FF99','999999','FFFFFF');
+			$default_bg = array();
+			foreach ($calendars as $k=>$v)
+				$default_bg[$v] = $default_colors[$k];
+
+			for($i=0,$max=sizeof($events);$i<$max;$i++){
+				$events[$i]['background']=$default_bg[$events[$i]['calendar_id']];
+			}
+		}		
+		$pdf->addCalendar($events);
 	}
 }else
 {

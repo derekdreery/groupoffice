@@ -642,7 +642,7 @@ GO.calendar.MainPanel = function(config){
 									
 			var l = GO.settings.modules.calendar.url+'print.php?start_time='+sD.format('Y-m-d')+'&end_time='+eD.format('Y-m-d');
 									
-			if(this.displayType=='view')
+			if(!GO.util.empty(this.view_id))
 			{
 				l+='&view_id='+this.view_id;
 			}else
