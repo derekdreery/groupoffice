@@ -536,10 +536,11 @@ try{
 										$files->delete_folder($folder);
 										$deleted[]=$folder['name'];
 									}
-
 								}
 
-								$files->notify_users($_POST['id'], $GO_SECURITY->user_id, array(), array(), $deleted);
+								
+
+								$files->notify_users($curfolder, $GO_SECURITY->user_id, array(), array(), $deleted);
 
 							}catch(Exception $e)
 							{
