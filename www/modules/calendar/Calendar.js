@@ -29,6 +29,11 @@ GO.calendar.formatQtip = function(data)
 
 	var str = GO.calendar.lang.startsAt+': '+data.startDate.format(new_df)+'<br />'+
 	GO.calendar.lang.endsAt+': '+data.endDate.format(new_df);
+
+	if(data.calendar_name!='')
+	{
+		str += '<br />'+GO.calendar.lang.calendar+': '+data.calendar_name;
+	}
 	
 	if(data.location!='')
 	{
@@ -370,7 +375,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name']
 	});
 	
 	this.monthGridStore = new GO.data.JsonStore({
@@ -381,7 +386,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name']
 	});
 
 	this.daysGrid = new GO.grid.CalendarGrid(

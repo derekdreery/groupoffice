@@ -1,3 +1,7 @@
+2010/03/04 3.4.9
+- Updated Norwegian translation
+- Browser doesn't ask to open GOTA anymore. It launches automatically.
+
 2010/03/04 3.4.8
 - tmpdir wasn't always present.
 - Crash on empty to field in e-mail bug
