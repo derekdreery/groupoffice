@@ -34,11 +34,14 @@ GO.modules.MainPanel = function(config) {
         baseParams : {
             task : 'available_modules'
         },
+				sortInfo: {
+					field: 'name',
+					direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
+				},
         root : 'results',
         id : 'id',
         fields : ['name', 'description', 'id', 'sort_order',
-        'admin_menu', 'acl_id'],
-        remoteSort : true
+        'admin_menu', 'acl_id']
     });
 
     config.tbar = new Ext.Toolbar({
@@ -144,6 +147,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
                 sm : new Ext.grid.RowSelectionModel({
                     singleSelect : false
                 }),
+
                 columns : [{
                     header : GO.lang['strName'],
                     dataIndex : 'name'// ,
@@ -232,10 +236,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
                     task : 'install',
                     modules : keys.join(',')
                 },
-                callback : function(options, success, response) {
-
-									var responseParams = Ext.decode(response.responseText);
-									
+                callback : function(options, success, response) {				
 									grid.container.unmask();
 									grid.store.reload();
 									this.store.reload();
