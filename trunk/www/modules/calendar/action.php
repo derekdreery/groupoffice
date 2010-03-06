@@ -40,23 +40,19 @@ function get_posted_event() {
 
 	if (isset ($_POST['all_day_event'])) {
 		$event['all_day_event'] = '1';
-		$start_hour = 0 ;
-		$start_min = '0';
-		$end_hour = 23;
-		$end_min = 59;
+		$start_time = "00:00";
+		$end_time = '23:59';
 	} else {
 		$event['all_day_event'] = '0';
-		$start_min = $_POST['start_min'];
-		$start_hour = $_POST['start_hour'];
-		$end_hour = $_POST['end_hour'];
-		$end_min = $_POST['end_min'];
+		$start_time = $_POST['start_time'];
+		$end_time = $_POST['end_time'];
 	}
 
-	$start_date = new DateTime(Date::to_input_format($_POST['start_date'].' '.$start_hour.':'.$start_min));
+	$start_date = new DateTime(Date::to_input_format($_POST['start_date'].' '.$start_time));
 	$start_date->setTimezone($gmt_tz);
 	$event['start_time'] = $start_date->format('U');
 
-	$end_date = new DateTime(Date::to_input_format($_POST['end_date'].' '.$end_hour.':'.$end_min));
+	$end_date = new DateTime(Date::to_input_format($_POST['end_date'].' '.$end_time));
 	$start_date->setTimezone($gmt_tz);
 	$event['end_time'] = $end_date->format('U');
 
