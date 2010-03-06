@@ -315,14 +315,11 @@ GO.email.EmailComposer = function(config) {
 		defaultFont:'arial',
 		onFirstFocus : function(){
         this.activated = true;
-        this.tb.items.each(function(item){
-           item.enable();
-        });
+        this.disableItems(this.readOnly);
         if(Ext.isGecko){ // prevent silly gecko errors
             /*this.win.focus();
             var s = this.win.getSelection();
-
-            if(!s.focusNode || (s.focusNode.nodeType != 3 && s.focusNode.nodeName!='BODY')){
+            if(!s.focusNode || s.focusNode.nodeType != 3){
                 var r = s.getRangeAt(0);
                 r.selectNodeContents(this.getEditorBody());
                 r.collapse(true);
