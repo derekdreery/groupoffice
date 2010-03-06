@@ -312,34 +312,7 @@ GO.email.EmailComposer = function(config) {
 		anchor : '100% '+anchor,
 		plugins : plugins,
 		style:'font:12px arial";',
-		defaultFont:'arial',
-		/*onFirstFocus : function(){
-        this.activated = true;
-        this.tb.items.each(function(item){
-           item.enable();
-        });
-        if(Ext.isGecko){ // prevent silly gecko errors
-            this.win.focus();
-            var s = this.win.getSelection();
-            if(!s.focusNode || s.focusNode.nodeType != 3){
-                var r = s.getRangeAt(0);
-                r.selectNodeContents(this.getEditorBody());
-                r.collapse(true);
-                this.deferFocus();
-            }
-            try{
-                this.execCmd('useCSS', true);
-                this.execCmd('styleWithCSS', false);
-            }catch(e){}
-        }
-        this.fireEvent('activate', this);
-    },
-		listeners:{
-			activate:function(){				
-			},
-			scope:this
-		},*/
-		value:'',		
+		defaultFont:'arial',		
 		updateToolbar: function(){
 
 				/*
