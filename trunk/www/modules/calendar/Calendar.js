@@ -30,7 +30,7 @@ GO.calendar.formatQtip = function(data)
 	var str = GO.calendar.lang.startsAt+': '+data.startDate.format(new_df)+'<br />'+
 	GO.calendar.lang.endsAt+': '+data.endDate.format(new_df);
 
-	if(data.calendar_name!='')
+	if(!GO.util.empty(data.calendar_name))
 	{
 		str += '<br />'+GO.calendar.lang.calendar+': '+data.calendar_name;
 	}
