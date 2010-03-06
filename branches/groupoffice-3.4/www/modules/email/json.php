@@ -644,9 +644,10 @@ try{
 						}
 					}
 				}
+				$block_images=true;
 				if(!empty($_POST['unblock'])){
 					$block_images=false;
-				}else
+				}elseif($GO_MODULES->has_module('addressbook'))
 				{
 					require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 					$ab = new addressbook();
