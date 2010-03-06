@@ -199,9 +199,8 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
             };
         }
 
-        this.container.mask(GO.lang.waitMsgLoad, 'x-mask-loading');
-        var conn = new GO.data.Connection();
-        conn.request({
+        this.container.mask(GO.lang.waitMsgLoad, 'x-mask-loading');        
+        Ext.Ajax.request({
             url : GO.settings.modules.modules.url + 'action.php',
             params : {
                 task : 'update',
@@ -227,8 +226,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
         }
 
         if (records.length > 0) {
-            var conn = new GO.data.Connection();
-            conn.request({
+            Ext.Ajax.request({
                 url : GO.settings.modules.modules.url + 'action.php',
                 params : {
                     task : 'install',

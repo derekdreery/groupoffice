@@ -542,7 +542,7 @@ GO.email.EmailClient = function(config){
 					Ext.MessageBox.progress(GO.email.lang.moving, '', '');
 					Ext.MessageBox.updateProgress(0, '0%', '');
 
-					var conn = new GO.data.Connection({
+					var conn = new Ext.data.Connection({
 							timeout:300000
 						});
 
