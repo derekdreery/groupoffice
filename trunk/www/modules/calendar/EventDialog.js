@@ -891,10 +891,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				border : false,
 				layout : 'tableform',
 				layoutConfig:{
-					tableAttrs: {
-            style: {width: '100%'}
-					},
-
 					columns:3,
 					columnWidths: [0.30,0.2,0.4]
 				},
@@ -1070,67 +1066,20 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			bodyStyle : 'padding: 5px',
 			layout : 'form',
 			hideMode : 'offsets',
-			autoScroll : true,
 			defaults:{
-				forceLayout:true
+				forceLayout:true,
+				border:false
 			},
 			items : [{
-				border : false,
-				layout : 'table',
-				defaults : {
-					border : false,
-					layout : 'form',
-					bodyStyle : 'padding-right:3px',
-					forceLayout:true
-				},
-				items : [{
-					items : this.repeatEvery
-				}, {
-					items : this.repeatType
-				}]
+				layout : 'tableform',
+				items : [this.repeatEvery,this.repeatType]
 			}, {
-				border : false,
-				layout : 'table',
-				defaults : {
-					border : false,
-					layout : 'form',
-					bodyStyle : 'padding-right:3px;white-space:nowrap',
-					forceLayout:true
-				},
-
-				items : [{
-					items : this.monthTime
-				}, {
-					items : this.cb[0]
-				}, {
-					items : this.cb[1]
-				}, {
-					items : this.cb[2]
-				}, {
-					items : this.cb[3]
-				}, {
-					items : this.cb[4]
-				}, {
-					items : this.cb[5]
-				}, {
-					items : this.cb[6]
-				}]
+				layout : 'tableform',
+				items : [this.monthTime,this.cb[1],this.cb[2],this.cb[3],this.cb[4],this.cb[5],this.cb[6],this.cb[0]]
 			}, {
-				border : false,
-				layout : 'table',
-				defaults : {
-					border : false,
-					layout : 'form',
-					bodyStyle : 'padding-right:3px',
-					forceLayout:true
-				},
-				items : [{
-					items : this.repeatEndDate
-				}, {
-					items : this.repeatForever
-				}]
+				layout : 'tableform',
+				items : [this.repeatEndDate,this.repeatForever]
 			}
-
 			]
 		});
 
@@ -1206,27 +1155,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 			title : GO.calendar.lang.options,
 			bodyStyle : 'padding:5px',
-			layout : 'form',
+			layout : 'tableform',
+			layoutConfig:{columns:2},
 			hideMode : 'offsets',
-			autoScroll : true,
-			defaults:{
-				forceLayout:true
-			},
-			items : [{
-				border : false,
-				layout : 'table',
-				defaults : {
-					forceLayout:true,
-					border : false,
-					layout : 'form',
-					bodyStyle : 'padding-right:3px'
-				},
-				items : [{
-					items : this.reminderValue
-				}, {
-					items : this.reminderMultiplier
-				}]
-			}, this.colorField = new GO.form.ColorField({
+			border:false,
+			items : [this.reminderValue,this.reminderMultiplier,
+				this.colorField = new GO.form.ColorField({
+				colspan:2,
 				fieldLabel : GO.lang.color,
 				value : GO.calendar.defaultBackground,
 				name : 'background',
