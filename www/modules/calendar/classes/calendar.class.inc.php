@@ -2580,14 +2580,10 @@ class calendar extends db
 		$end_time = $event['end_time'];
 
 		$event['start_date']=date($_SESSION['GO_SESSION']['date_format'], $start_time);
-		$event['start_hour'] = date('G', $start_time);
-		$event['start_min'] = date('i', $start_time);
+		$event['start_time'] = date($_SESSION['GO_SESSION']['time_format'], $start_time);
 
 		$event['end_date']=date($_SESSION['GO_SESSION']['date_format'], $end_time);
-		$event['end_hour'] = date('G', $end_time);
-		$event['end_min'] = date('i', $end_time);
-
-
+		$event['end_time'] = date($_SESSION['GO_SESSION']['time_format'], $end_time);
 
 		$event['repeat_every'] = 1;
 		$event['repeat_forever'] = 0;

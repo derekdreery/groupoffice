@@ -1321,12 +1321,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			var formValues={};
 				
 			formValues['start_date'] = newEvent['startDate'];//.format(GO.settings['date_format']);
-			formValues['start_hour'] = newEvent['startDate'].format("H");
-			formValues['start_min'] = newEvent['startDate'].format("i");
+			formValues['start_time'] = newEvent['startDate'].format(GO.settings.time_format);
 				
 			formValues['end_date'] = newEvent['endDate'];//.format(GO.settings['date_format']);
-			formValues['end_hour'] = newEvent['endDate'].format("H");
-			formValues['end_min'] = newEvent['endDate'].format("i");
+			formValues['end_time'] = newEvent['endDate'].format(GO.settings.time_format);
+			
 				
 			GO.calendar.showEventDialog({
 				values: formValues,

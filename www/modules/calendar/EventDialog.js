@@ -359,16 +359,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 			if (!config.values.start_date)
 				config.values['start_date'] = new Date();
-			if (!config.values.start_hour)
-				config.values['start_hour'] = date.format("H");
-			if (!config.values.start_min)
-				config.values['start_min'] = i;
+			if (!config.values.start_time)
+				config.values['start_time'] = date.format(GO.settings.time_format);
+
 			if (!config.values.end_date)
 				config.values['end_date'] = new Date();
-			if (!config.values.end_hour)
-				config.values['end_hour'] = date.add(Date.HOUR, 1).format("H");
-			if (!config.values.end_min)
-				config.values['end_min'] = i;
+			if (!config.values.end_time)
+				config.values['end_time'] = date.add(Date.HOUR, 1).format(GO.settings.time_format);
+
 
 			this.setValues(config.values);
 
@@ -555,13 +553,11 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		var date = new Date();
 
 		formValues['start_date'] = date.format(GO.settings['date_format']);
-		formValues['start_hour'] = date.format("H");
-		formValues['start_min'] = '00';
-
+		formValues['start_time'] = date.format(GO.settings.time_format);
+		
 		formValues['end_date'] = date.format(GO.settings['date_format']);
-		formValues['end_hour'] = date.add(Date.HOUR, 1).format("H");
-		formValues['end_min'] = '00';
-
+		formValues['end_time'] = date.add(Date.HOUR, 1).format(GO.settings.time_format);
+		
 		this.formPanel.form.setValues(formValues);
 	},
 
@@ -596,23 +592,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					this.setEventId(action.result.event_id);
 				}
 
-				var startDate = this.formPanel.form.findField('start_date')
-				.getValue();
-				if (!this.formPanel.form.findField('all_day_event').getValue()) {
-					startDate = startDate.add(Date.HOUR, this.formPanel.form
-						.findField('start_hour').getValue());
-					startDate = startDate.add(Date.MINUTE, this.formPanel.form
-						.findField('start_min').getValue());
-				}
-
-				var endDate = this.formPanel.form.findField('end_date')
-				.getValue();
-				if (!this.formPanel.form.findField('all_day_event').getValue()) {
-					endDate = endDate.add(Date.HOUR, this.formPanel.form
-						.findField('end_hour').getValue());
-					endDate = endDate.add(Date.MINUTE, this.formPanel.form
-						.findField('end_min').getValue());
-				}
+				var startDate = this.getStartDate();
+				
+				var endDate = this.getEndDate();
 
 				var newEvent = {
 					// id : Ext.id(),
@@ -700,19 +682,21 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 	},
 
 	getStartDate : function() {
-		var date = this.startDate.getValue();
-		date = date.add(Date.HOUR, this.startHour.getValue());
-		date = date.add(Date.MINUTE, this.startMin.getValue());
 
-		return date;
+		var startDate = this.startDate.getValue();
+		if (!this.formPanel.form.findField('all_day_event').getValue()) {
+			startDate = Date.parseDate(startDate.format('Y-m-d')+' '+this.formPanel.form.findField('start_time').getValue(),'Y-m-d '+GO.settings.time_format);
+		}
+
+		return startDate;
 	},
 
 	getEndDate : function() {
-		var date = this.endDate.getValue();
-		date = date.add(Date.HOUR, this.endHour.getValue());
-		date = date.add(Date.MINUTE, this.endMin.getValue());
-
-		return date;
+		var endDate = this.endDate.getValue();
+		if (!this.formPanel.form.findField('all_day_event').getValue()) {
+			endDate = Date.parseDate(endDate.format('Y-m-d')+' '+this.formPanel.form.findField('end_time').getValue(),'Y-m-d '+GO.settings.time_format);
+		}
+		return endDate;
 	},
 
 	checkDateInput : function() {
@@ -725,18 +709,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		}
 
 		if (sD.getElapsed(eD) == 0) {
-			var sH = parseInt(this.startHour.getValue());
-			var eH = parseInt(this.endHour.getValue());
-			var sM = parseInt(this.startMin.getValue());
-			var eM = parseInt(this.endMin.getValue());
-						
-			if (sH > eH) {
-				eH = sH+1;
-				this.endHour.setValue(eH);
-			}
-
-			if (sH == eH && sM > eM) {
-				this.endMin.setValue(sM);
+			var sT = Date.parseDate(sD.format('Y-m-d '+this.startTime.getValue()), 'Y-m-d '+GO.settings.time_format);
+			var eT = Date.parseDate(sD.format('Y-m-d '+this.endTime.getValue()), 'Y-m-d '+GO.settings.time_format);
+			if(sT>eT){
+				this.endTime.setValue(sT.add(Date.HOUR, 1).format(GO.settings.time_format))
 			}
 		}
 
@@ -758,8 +734,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		this.selectLinkField = new GO.form.SelectLink({});
 
-        
-
 		this.subjectField = new Ext.form.TextField({
 			name : 'subject',
 			allowBlank : false,
@@ -771,9 +745,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			allowBlank : true,
 			fieldLabel : GO.lang.strLocation
 		});
-
-
-
 		this.startDate = new Ext.form.DateField({
 			name : 'start_date',
 			width : 100,
@@ -790,20 +761,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		var hourWidth = GO.settings.time_format.substr(0, 1) == 'G' ? 40 : 60;
 
-		this.startHour = new Ext.form.ComboBox({
-			hiddenName : 'start_hour',
-			store : new Ext.data.SimpleStore({
-				fields : ['value', 'text'],
-				data : GO.date.hours
-			}),
-			valueField : 'value',
-			displayField : 'text',
-			mode : 'local',
-			triggerAction : 'all',
-			selectOnFocus : true,
-			width : hourWidth,
-			labelSeparator : '',
-			hideLabel : true,
+
+		this.startTime = new Ext.form.TimeField({
+			increment: 15,
+			format:GO.settings.time_format,
+			name:'start_time',
+			width:80,
+			hideLabel:true,
+			autoSelect :true,
+			forceSelection:true,
 			listeners : {
 				change : {
 					fn : this.checkDateInput,
@@ -812,19 +778,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			}
 		});
 
-		this.startMin = new Ext.form.ComboBox({
-			name : 'start_min',
-			store : new Ext.data.SimpleStore({
-				fields : ['value', 'text'],
-				data : GO.date.minutes
-			}),
-			displayField : 'text',
-			mode : 'local',
-			triggerAction : 'all',
-			selectOnFocus : true,
-			width : 40,
-			labelSeparator : '',
-			hideLabel : true,
+		this.endTime = new Ext.form.TimeField({
+			increment: 15,
+			format:GO.settings.time_format,
+			name:'end_time',
+			width:80,
+			hideLabel:true,
+			autoSelect :true,
+			forceSelection:true,
 			listeners : {
 				change : {
 					fn : this.checkDateInput,
@@ -832,6 +793,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				}
 			}
 		});
+
+	
 
 		this.endDate = new Ext.form.DateField({
 			name : 'end_date',
@@ -839,49 +802,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			format : GO.settings['date_format'],
 			allowBlank : false,
 			fieldLabel : GO.lang.strEnd,
-			listeners : {
-				change : {
-					fn : this.checkDateInput,
-					scope : this
-				}
-			}
-		});
-
-		this.endHour = new Ext.form.ComboBox({
-			hiddenName : 'end_hour',
-			store : new Ext.data.SimpleStore({
-				fields : ['value', 'text'],
-				data : GO.date.hours
-			}),
-			displayField : 'text',
-			valueField : 'value',
-			mode : 'local',
-			triggerAction : 'all',
-			selectOnFocus : true,
-			width : hourWidth,
-			labelSeparator : '',
-			hideLabel : true,
-			listeners : {
-				change : {
-					fn : this.checkDateInput,
-					scope : this
-				}
-			}
-		});
-
-		this.endMin = new Ext.form.ComboBox({
-			name : 'end_min',
-			store : new Ext.data.SimpleStore({
-				fields : ['value', 'text'],
-				data : GO.date.minutes
-			}),
-			displayField : 'text',
-			mode : 'local',
-			triggerAction : 'all',
-			selectOnFocus : true,
-			width : 40,
-			labelSeparator : '',
-			hideLabel : true,
 			listeners : {
 				change : {
 					fn : this.checkDateInput,
@@ -900,10 +820,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		});
 
 		this.allDayCB.on('check', function(checkbox, checked) {
-			this.startHour.setDisabled(checked);
-			this.endHour.setDisabled(checked);
-			this.startMin.setDisabled(checked);
-			this.endMin.setDisabled(checked);
+			this.startTime.setDisabled(checked);
+			this.endTime.setDisabled(checked);
+			
 		}, this);
 
 		this.eventStatus = new Ext.form.ComboBox({
@@ -968,53 +887,28 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			this.subjectField,
 			this.locationField,
 			this.selectLinkField,
-			{
+			{				
 				border : false,
-				layout : 'table',
-				defaults : {
-					border : false,
-					layout : 'form',
-					bodyStyle : 'padding-right:3px'
+				layout : 'tableform',
+				layoutConfig:{
+					tableAttrs: {
+            style: {width: '100%'}
+					},
+
+					columns:3,
+					columnWidths: [0.30,0.2,0.4]
 				},
-				items : [{
-					items : this.startDate
-				}, {
-					items : this.startHour
-				}, {
-					items : this.startMin
-				}, {
-					bodyStyle : 'white-space:nowrap;',
-					items : this.allDayCB
-				}]
-			}, {
+				items : [this.startDate,this.startTime,this.allDayCB,
+					this.endDate, this.endTime, new Ext.BoxComponent()
+				]
+			},{
 				border : false,
-				layout : 'table',
-				defaults : {
-					border : false,
-					layout : 'form',
-					bodyStyle : 'padding-right:3px'
-				},
-				items : [{
-					items : this.endDate
-				}, {
-					items : this.endHour
-				}, {
-					items : this.endMin
-				}]
-			}, {
-				border : false,
-				layout : 'table',
-				defaults : {
-					border : false,
-					layout : 'form',
-					bodyStyle : 'padding-right:3px'
-				},
-				items : [{
-					items : this.eventStatus
-				}, {
-					items : this.busy
-				}]
-			}, this.selectCalendar = new GO.calendar.SelectCalendar({
+				layout : 'tableform',
+				items : [
+					this.eventStatus,this.busy
+				]
+			},
+			this.selectCalendar = new GO.calendar.SelectCalendar({
 				anchor : '-20',
 				valueField : 'id',
 				displayField : 'name',

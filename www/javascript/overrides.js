@@ -12,6 +12,11 @@
  */
 
 
+/*
+ *When upgrading extjs don't forget to check htmleditor overrides in E-mail composer
+ */
+
+
 if(Ext.version=="2.3.0"){
 
 	//Hack to make 2.3 compatible with 3.x

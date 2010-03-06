@@ -486,53 +486,22 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 			this.availabilityWindow = new GO.calendar.AvailabilityCheckWindow();
 			this.availabilityWindow.on('select', function(dataview, index, node) {
 				var d = this.eventDialog;				
-				var time = node.id.substr(4);
-
-				var colonIndex = time.indexOf(':');
-
-				var minutes = time.substr(colonIndex + 1);
-				var hours = time.substr(0, colonIndex);
-
-				var hourDiff = parseInt(d.endHour.getValue())
-				- parseInt(d.startHour.getValue());
-				var minDiff = parseInt(d.endMin.getValue())
-				- parseInt(d.startMin.getValue());
-
-				if (minDiff < 0) {
-					minDiff += 60;
-					hourDiff--;
-				}
-
-				minutes = minutes+"";
-				if (minutes.length==1) {
-					minutes = '0' + minutes;
-				}
-
-				d.startHour.setValue(hours);
-				d.startMin.setValue(minutes);
 				d.startDate.setValue(Date.parseDate(
 					dataview.store.baseParams.date,
 					GO.settings.date_format));
-
-				var endHour = parseInt(hours) + hourDiff;
-				var endMin = parseInt(minutes) + minDiff;
-				
-				if (endMin >= 60) {
-					endMin -= 60;
-					endHour++;
-				}
-				
-				endMin = endMin+"";
-				if (endMin.length==1) {
-					endMin = '0' + endMin;
-				}
-
-				d.endHour.setValue(endHour);
-				d.endMin.setValue(endMin);
 				d.endDate.setValue(Date.parseDate(
 					dataview.store.baseParams.date,
 					GO.settings.date_format));
+					
+				var oldStartTime = Date.parseDate(d.startTime.getValue(), GO.settings.time_format);
+				var oldEndTime = Date.parseDate(d.endTime.getValue(), GO.settings.time_format);
+				var elapsed = oldEndTime.getElapsed(oldStartTime);
 
+
+				var time = Date.parseDate(node.id.substr(4), 'G:i');
+				d.startTime.setValue(time.format(GO.settings.time_format));
+				d.endTime.setValue(time.add(Date.MILLI, elapsed).format(GO.settings.time_format));
+				
 				d.tabPanel.setActiveTab(0);
 				this.reloadAvailability();
 				this.availabilityWindow.hide();
