@@ -316,3 +316,6 @@ GO.lang.age='Leeftijd';
 GO.lang.selectFolder = 'Selecteer een map a.u.b.';
 
 GO.lang.userGroups='Gebruikersgroepen';
+
+GO.lang.firebugDetected="Waarschuwing! Firebug Add-on gedetecteerd";
+GO.lang.firebugWarning="De Firebug Add-on vertraagd deze applicatie. Gebruik het a.u.b. niet voor productie."

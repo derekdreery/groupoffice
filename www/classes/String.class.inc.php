@@ -713,7 +713,6 @@ class String {
 		//sometimes things like this happen <style> </ style >
 		$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u","</$1>", $html);
 		
-
 		$to_removed_array = array (
 		"'<html[^>]*>'usi",
 		"'</html>'usi",
@@ -723,8 +722,14 @@ class String {
 		"'<link[^>]*>'usi",
 		"'<head[^>]*>.*?</head>'usi",
 		"'<head[^>]*>'usi",
+		
+		/* MS Word junk */
 		"'<xml[^>]*>.*?</xml>'usi",
+		"'<\/?o:[^>]*>'usi",
+		"'<\/?v:[^>]*>'usi",
+		"'<\/?st1:[^>]*>'usi",
 		"'<\?xml[^>]*>'usi",
+
 		"'<style[^>]*>.*?</style>'usi",
 		"'<script[^>]*>.*?</script>'usi",
 		"'<iframe[^>]*>.*?</iframe>'usi",

@@ -55,7 +55,12 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		this.fireReady();		
 		this.createLoginCallback();
 		GO.loginDialog.show();
-		this.removeLoadMask();		
+		this.removeLoadMask();
+
+		if(window.console && window.console.firebug)
+		{
+			this.msg(GO.lang.firebugDetected, GO.lang.firebugWarning, 4, 300);
+		}
 	},
 
 	saveState : function(){
@@ -532,22 +537,37 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		});
 	},
 	
-	createBox : function (t, s){
-			return ['<div class="msg">',
+	createBox : function (t, s, width){
+
+			if(!width){
+				width=250;
+			}
+			return ['<div class="msg" style="width:'+width+'px">',
 							'<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>',
 							'<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc"><h3>', t, '</h3>', s, '</div></div></div>',
 							'<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
 							'</div>'].join('');
 	},
 
-  msg : function(title, format){
+  msg : function(title, format, time, width){
+
+			if(!time){
+				time=4;
+			}
+
 			if(!this.msgCt){
 					this.msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
 			}
-			this.msgCt.alignTo(this.tabPanel.el, 'tr-tr');
+
+			if (this.tabPanel){
+				this.msgCt.alignTo(this.tabPanel.el, 'tr-tr');
+			}else
+			{
+				this.msgCt.alignTo(Ext.getBody(), 'c-c', [350,0]);
+			}
 			var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
-			var m = Ext.DomHelper.append(this.msgCt, {html:this.createBox(title, s)}, true);
-			m.slideIn('t').pause(3).ghost("t", {remove:true});
+			var m = Ext.DomHelper.append(this.msgCt, {html:this.createBox(title, s, width)}, true);
+			m.slideIn('t').pause(4).ghost("t", {remove:true});
 	},
 	onLinksDeletedHandler : function(link_types, modulePanel, store){
 		if(link_types){
