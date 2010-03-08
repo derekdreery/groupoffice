@@ -817,7 +817,7 @@ class GO_CONFIG {
 		}
 
 
-		if(empty($this->title)) {
+		if(empty($this->db_user)) {
 		//Detect some default values for installation if root_path is not set yet
 			$this->host = dirname(dirname($_SERVER['PHP_SELF']));
 			

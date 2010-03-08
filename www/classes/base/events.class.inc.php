@@ -20,7 +20,8 @@ class GO_EVENTS
 			if(!$this->listeners)// || $GO_CONFIG->debug))
 			{
 				$this->load_listeners();
-				file_put_contents($cache_file, serialize($this->listeners));
+				if(!empty($GO_CONFIG->db_user))
+					file_put_contents($cache_file, serialize($this->listeners));
 			}
 		}
 	}	
