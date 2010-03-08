@@ -42,4 +42,7 @@ $lang['addressbook']['companies'] = 'Společnosti';
 $lang['addressbook']['newContactAdded']='Nový kontakt přidán';
 $lang['addressbook']['newContactFromSite']='Nový kontakt byl přidán přes webový formulář.';
 $lang['addressbook']['clickHereToView']='Klikni zde pro zobrazení kontaktu';
+
+$lang['addressbook']['contactFromAddressbook']='Kontakt od %s';
+$lang['addressbook']['companyFromAddressbook']='Společnost od %s';
 ?>
