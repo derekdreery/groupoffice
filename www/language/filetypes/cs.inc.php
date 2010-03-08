@@ -73,3 +73,4 @@ $lang['filetypes']['swf'] = 'Macromedia Flash Movie';
 $lang['filetypes']['fla'] = 'Macromedia Flash Dokument (Zdroj)';
 $lang['filetypes']['ai'] = 'Adobe Illustrator soubor';
 $lang['filetypes']['eml'] = 'E-mailová zpráva';
+$lang['filetypes']['csv'] = 'Hodnoty oddělené čárkami';

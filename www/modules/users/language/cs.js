@@ -95,3 +95,5 @@ GO.users.lang.lastName = 'Příjmení';
 GO.users.lang.firstName = 'Křestního jména';
 
 GO.users.lang.sendInvitation='Poslat pozvánku';
+
+GO.users.lang.contactInfo='Kontaktní informace';

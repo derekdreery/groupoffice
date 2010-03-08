@@ -148,6 +148,8 @@ $lang['common']['day'] = 'den';
 $lang['common']['days'] = 'dny';
 $lang['common']['week'] = 'týden';
 $lang['common']['weeks'] = 'týdny';
+$lang['common']['month'] = 'měsíc';
+$lang['common']['strMonths'] = 'měsíců';
 
 $lang['common']['group_everyone']='Všichni';
 $lang['common']['group_admins']='Administrátoři';
