@@ -15,63 +15,70 @@ GO.ab2users.randomPassword = function(length)
 
 GO.moduleManager.onModuleReady('addressbook',function(){
 	GO.mainLayout.onReady(function(){
-		GO.addressbook.contactDialog.height+=25;
-		GO.addressbook.contactDialog.elements += ',tbar';
 
-		GO.addressbook.contactDialog.topToolbar=new Ext.Toolbar({
-			items:[{
-				iconCls:'btn-save',
-				text:GO.ab2users.lang.createUser,
-				handler:function(){
-					GO.users.userDialog.show();
+		Ext.override(GO.addressbook.ContactDialog, {
+			initComponent : GO.addressbook.ContactDialog.prototype.initComponent.createInterceptor(function(){
+				this.height+=25;
 
-					var values = this.formPanel.form.getValues();
-					values.username=values.email;
-					values.password1=values.password2=GO.ab2users.randomPassword(8);
-					values.company=this.formPanel.form.findField('company_id').getRawValue();
+				this.elements += ',tbar';
 
-					GO.users.userDialog.formPanel.form.setValues(values);
-				},
-				scope:GO.addressbook.contactDialog
-			}]
+
+				this.tbar=[{
+					iconCls:'btn-save',
+					text:GO.ab2users.lang.createUser,
+					handler:function(){
+						GO.users.showUserDialog();
+
+						var values = this.formPanel.form.getValues();
+						values.username=values.email;
+						values.password1=values.password2=GO.ab2users.randomPassword(8);
+						values.company=this.formPanel.form.findField('company_id').getRawValue();
+
+						GO.users.userDialog.formPanel.form.setValues(values);
+					},
+					scope:this
+				}];
+			})
 		});
 
 
-		GO.addressbook.companyDialog.height+=25;
-		GO.addressbook.companyDialog.elements += ',tbar';
+		Ext.override(GO.addressbook.CompanyDialog, {
+			initComponent : GO.addressbook.CompanyDialog.prototype.initComponent.createInterceptor(function(){
+				this.height+=25;
 
-		GO.addressbook.companyDialog.topToolbar=new Ext.Toolbar({
-			items:[{
-				iconCls:'btn-save',
-				text:GO.ab2users.lang.createUser,
-				handler:function(){
-					GO.users.userDialog.show();
+				//GO.addressbook.contactDialog.elements += ',tbar';
 
-					var cv = this.companyForm.form.getValues();
-					var values={};
-					values.username=cv.email;
-					values.password1=values.password2=GO.ab2users.randomPassword(8);
-					values.email=cv.email;
+				this.tbar=[{
+					iconCls:'btn-save',
+					text:GO.ab2users.lang.createUser,
+					handler:function(){
+						GO.users.showUserDialog();
 
-					values.first_name=GO.ab2users.lang.companyUserFirstName;
-					values.last_name=values.company=cv.name;
-			
-					values.address=values.work_address=cv.post_address;
-					values.address_no=values.work_address_no=cv.post_address_no;
-					values.zip=values.work_zip=cv.zip;
-					values.city=values.work_city=cv.city;
-					values.state=values.work_state=cv.state;
-					values.country=values.work_country=cv.country;
+						var cv = this.companyForm.form.getValues();
+						var values={};
+						values.username=cv.email;
+						values.password1=values.password2=GO.ab2users.randomPassword(8);
+						values.email=cv.email;
 
-					values.home_phone=values.work_phone=cv.phone;
-					values.fax=values.work_fax=cv.fax;
+						values.first_name=GO.ab2users.lang.companyUserFirstName;
+						values.last_name=values.company=cv.name;
 
-					GO.users.userDialog.formPanel.form.setValues(values);
-				},
-				scope:GO.addressbook.companyDialog
-			}]
+						values.address=values.work_address=cv.post_address;
+						values.address_no=values.work_address_no=cv.post_address_no;
+						values.zip=values.work_zip=cv.zip;
+						values.city=values.work_city=cv.city;
+						values.state=values.work_state=cv.state;
+						values.country=values.work_country=cv.country;
+
+						values.home_phone=values.work_phone=cv.phone;
+						values.fax=values.work_fax=cv.fax;
+
+						GO.users.userDialog.formPanel.form.setValues(values);
+					},
+					scope:this
+				}];
+			})
 		});
-
 
 	});
 });
