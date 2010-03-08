@@ -53,6 +53,7 @@
 .alphabet-view-over
 {
   border:1px solid #dddddd;
+	margin:0px !important;
   background: #efefef url(../../../../ext/resources/images/default/grid/row-over.gif) repeat-x left top;
 }
 
