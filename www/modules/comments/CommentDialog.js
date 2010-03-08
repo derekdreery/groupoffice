@@ -151,10 +151,18 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 });
 
 
-GO.mainLayout.onReady(function(){
-	GO.comments.commentDialog = new GO.comments.CommentDialog();
-	
-});
+GO.comments.showCommentDialog = function(comment_id, config){
+
+	if(!GO.comments.commentDialog)
+		GO.comments.commentDialog = new GO.comments.CommentDialog();
+
+	if(GO.comments.commentDialogListeners){
+		GO.comments.commentDialog.on(GO.comments.commentDialogListeners);
+		delete GO.comments.commentDialogListeners;
+	}
+
+	GO.comments.commentDialog.show(comment_id, config);
+}
 
 GO.comments.browseComments= function (link_id, link_type)
 {
@@ -171,7 +179,7 @@ GO.newMenuItems.push({
 	text: GO.comments.lang.comment,
 	iconCls: 'go-menu-icon-comments',
 	handler:function(item, e){				
-		GO.comments.commentDialog.show(0, {
+		GO.comments.showCommentDialog(0, {
 			link_config: item.parentMenu.link_config			
 		});
 	}
