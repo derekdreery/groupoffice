@@ -16,7 +16,7 @@ header('Content-Type: text/html; charset=UTF-8');
 require_once("Group-Office.php");
 
 //$config_file = $GO_CONFIG->get_config_file();
-if(empty($GO_CONFIG->title))
+if(empty($GO_CONFIG->username))
 {
 	header('Location: install/');
 	exit();
