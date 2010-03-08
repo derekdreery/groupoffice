@@ -475,7 +475,7 @@ class GoSwiftImport extends GoSwift{
 		parent::__construct($to, $subject,0,$alias_id,'3',null, $transport);
 
 
-		if(isset($structure->headers['from']) )
+		if(empty($alias_id) && isset($structure->headers['from']) )
 		{
 			$addresses=$RFC822->parse_address_list($structure->headers['from']);
 			if(isset($addresses[0]))
