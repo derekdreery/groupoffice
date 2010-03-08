@@ -306,6 +306,7 @@ GO.lang.off ='Vypnuto';
 GO.lang.keyword='Klíčové slovo';
 
 GO.lang.total='Celkem';
+GO.lang.totals='Celkem';
 
 GO.lang.closeApps='Zavřít aplikace';
 GO.lang.rightClickToClose='Pravé kliknutní na hlavičce panelu slouží k zavření.';
@@ -322,3 +323,16 @@ GO.lang.permissionRead='Pouze čtení';
 GO.lang.permissionWrite='Zápis';
 GO.lang.permissionDelete='Zápis a smazání';
 GO.lang.permissionManage='Upravit';
+
+GO.lang.spellcheck = 'Kontrola pravopisu';
+GO.lang.spellcheckdetails = 'Kontrola pravopisu';
+GO.lang.spellcheckNoError = 'Nebyly nalezeny žádné chyby';
+GO.lang.spellcheckServerError = 'Došlo k problému při spuštění kontroly pravopisu, pokud problém přetrvává, obraťte se na podporu';
+GO.lang.spellcheckNoErrors = 'E-mail obsahuje [{1}] chyb';
+GO.lang.spellcheckAsk = 'Odeslat bez kontroly pravopisu?';
+
+GO.lang.age='Věk';
+
+GO.lang.selectFolder = 'Vyberte prosím složku';
+
+GO.lang.userGroups='Uživatelské skupiny';

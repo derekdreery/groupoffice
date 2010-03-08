@@ -1,7 +1,7 @@
 /**
  * Copy everything below for translations
  */
- 
+GO.email.lang.forwardTo='Přeposílat emaily na'; 
 GO.email.lang.messages='Zprávy';
 GO.email.lang.message='Zpráva';
 GO.email.lang.inbox='Příchozí pošta';
