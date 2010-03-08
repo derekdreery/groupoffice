@@ -85,3 +85,12 @@ GO.calendar.lang.no_status='Nový';
 GO.calendar.lang.no_custom_fields='Nejsou k dispozici žádné další možnosti.';
 GO.calendar.lang.show_bdays='Zobrazit narozeniny z adresáře';
 GO.calendar.lang.show_tasks='Zobrazit úkoly z přehledu úkolů';
+
+GO.calendar.lang.myCalendar='Můj kalendář';
+GO.calendar.lang.merge='Sloučit';
+GO.calendar.lang.ownColor = 'Pro každý kalendář použít vlastní barvu';
+
+GO.calendar.lang.ignoreConflictsTitle = 'Ignorovat konflikty?';
+GO.calendar.lang.ignoreConflictsMsg = 'Tato událost koliduje s jinou údálostí ve Vašem kalendáři. Save this event anyway?';
+GO.calendar.lang.resourceConflictTitle = 'Zdroj konfliktu';
+GO.calendar.lang.resourceConflictMsg = 'Jeden nebo více zdrojů v této události používá ve stejný čas:</br>';

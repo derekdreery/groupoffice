@@ -94,3 +94,13 @@ $lang['calendar']['your_resource_declined_mail_body'] = '%s odmítnul Vaši reze
 
 $lang['calendar']['birthday_name']='Narozeniny: {NAME}';
 $lang['calendar']['birthday_desc']='{NAME} oslavil dnes {AGE}';
+
+$lang['calendar']['unauthorized_participants_write']='Nemáte dostatečná oprávnění k naplánování událostí pro následující uživatele:<br /><br />{NAMES}<br /><br />Můžete poslat pozvánku, aby mohli událost přijmout a naplánovat.';
+
+$lang['calendar']['noCalSelected'] = 'Nebyly vybráný kalendáře pro tento přehled. Vyberte alespoň jeden kalendář v Administraci.';
+
+$lang['calendar']['month_times'][1]='první';
+$lang['calendar']['month_times'][2]='druhý';
+$lang['calendar']['month_times'][3]='třetí';
+$lang['calendar']['month_times'][4]='čtvrtý';
+$lang['calendar']['month_times'][5]='pátý';

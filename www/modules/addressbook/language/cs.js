@@ -15,7 +15,10 @@
  * Copy everything below for translations
  */
 
-
+GO.addressbook.lang.newSearch='Nové hledání';
+GO.addressbook.lang.executeQuery='Spustit vyhledávací dotaz';
+GO.addressbook.lang.savedQueries='Uložené vyhledávací dotazy';
+GO.addressbook.lang.selectField = 'Vyberte pole';
 GO.addressbook.lang.selectMailingGroup='Vyberte skupinu pro odesílání';
 
 GO.addressbook.lang.cmdFormLabelAddressBooks = 'Vyberte adresář';
@@ -87,7 +90,7 @@ GO.addressbook.lang.noAddressbooks = 'Neexistují žádné adresáře';
 GO.addressbook.lang.moveAll = 'Společnosti a všichni zaměstnanci budou přesunuty do nového adresáře. Jste si jisti, že to chcete udělat?';
 GO.addressbook.lang.addressbook = 'Adresář';
 GO.addressbook.lang.addressbooks = 'Adresáře';
-GO.addressbook.lang.sendMailing='Rozeslání zpráv';
+GO.addressbook.lang.sendMailing='Rozeslat nové zprávy';
 GO.addressbook.lang.importSuccess='Data byly v pořádku importována';
 GO.addressbook.lang.searchOnSender='Najít';
 GO.addressbook.lang.confirmCreate='Kontakt neexistuje. Chcete založit nový?';
@@ -99,3 +102,12 @@ GO.addressbook.lang.defaultAddressFormat='Výchozí formát adresy';
 GO.addressbook.lang.defaultSalutation='Výchozí pozdrav';
 GO.addressbook.lang.explanationVariables='Nápověda k zakládním proměnným pozdravů';
 GO.addressbook.lang.explanationSex='Mužská a ženská podoba pozdravu';
+
+GO.addressbook.lang.searchQueryName='Vyhledat název dotazu';
+GO.addressbook.lang.enterSearchQueryName='Vložte název vyhledávacího dotazu:';
+
+GO.addressbook.lang.photo = 'Fotografie';
+GO.addressbook.lang.deleteImage='Smazat obrázek';
+
+GO.addressbook.lang.addAllSearchResults='Přidat všechny výsledky vyhledávání';
+GO.addressbook.lang.confirmAddAllSearchResults='Jste si jisti, že chcete přidat všechny výsledky hledání do seznamu adres?';
