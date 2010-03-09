@@ -218,6 +218,7 @@ try {
 			$cms->update_folder($folder);
 
 			$folder = $cms->get_folder($_POST['folder_id']);
+			$parent = $cms->get_folder($_POST['parent_id']);
 			$site = $cms->get_site($folder['site_id']);
 
 			$sort_order = json_decode($_POST['sort_order'],true);
@@ -227,6 +228,7 @@ try {
 				if($item['fstype']=='folder') {
 					$up_folder['id']=$item['id'];
 					$up_folder['priority']=$item['sort_order'];
+					$up_folder['site_id']=$parent['site_id'];
 					$cms->update_folder($up_folder);
 				}else {
 					$up_file['id']=$item['id'];

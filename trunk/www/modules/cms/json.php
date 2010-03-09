@@ -50,11 +50,9 @@ function get_folder_tree($folder_id, $user_id) {
 	);
 }
 
-function get_folder_nodes($folder_id, $site, $path='') {
-
-	global $GO_SECURITY, $filter_enabled;
+function create_tree($folder_id,$site,$path='',$filter_enabled) {
+	global $GO_SECURITY;
 	$cms = new cms();
-	$filter_enabled=$cms->filter_enabled($GO_SECURITY->user_id,$site['id']);
 
 	$response = array();
 
@@ -99,7 +97,7 @@ function get_folder_nodes($folder_id, $site, $path='') {
 
 				$response[] = $folderNode;
 			} else {
-				$children = get_folder_nodes($item['id'],$site);
+				$children = create_tree($item['id'],$site,$path,$filter_enabled);
 				foreach($children as $child) {
 					$response[] = $child;
 				}
@@ -108,7 +106,13 @@ function get_folder_nodes($folder_id, $site, $path='') {
 	}
 
 	return $response;
+}
 
+function get_folder_nodes($folder_id, $site, $path='') {
+	global $GO_SECURITY;
+	$cms = new cms();
+	$filter_enabled=$cms->filter_enabled($GO_SECURITY->user_id,$site['id']);
+	return create_tree($folder_id,$site,$path,$filter_enabled);
 }
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
