@@ -14,7 +14,9 @@
 
 class csv_export_query extends base_export_query
 {
+	var $extension='csv';
 	var $list_separator=';';
+
 	var $text_separator='"';
 
 	function __construct()

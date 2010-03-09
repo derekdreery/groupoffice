@@ -66,10 +66,23 @@ try {
 
 
 
-			require_once($GO_CONFIG->class_path.'export_query.class.inc.php');
+			require_once($GO_CONFIG->class_path.'/export/export_query.class.inc.php');
 			$eq = new export_query();
 
-			$tmp_file = $GO_CONFIG->tmpdir.File::strip_invalid_chars($_POST['title']).'.'.strtolower($_POST['type']);
+			$type = $_REQUEST['type'];
+			$filename = $type.'.class.inc.php';
+
+			$file = $GO_CONFIG->class_path.'export/'.$filename;
+			if(!file_exists($file)){
+				$file = $GO_CONFIG->file_storage_path.'customexports/'.$filename;
+			}
+			if(!file_exists($file)){
+				die('Custom export class not found.');
+			}
+			require_once($file);
+			$eq = new $type();
+
+			$tmp_file = $GO_CONFIG->tmpdir.File::strip_invalid_chars($_POST['title']).'.'.$eq->extension;
 
 			$fp = fopen($tmp_file, 'w+');
 			$eq->export($fp);
