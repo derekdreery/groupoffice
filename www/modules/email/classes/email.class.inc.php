@@ -1215,7 +1215,7 @@ class email extends db
 				while(file_exists($filename))
 				{
 					$x++;
-					$filename .= File::strip_extension($filename).' ('.$x.').'.File::get_extension($filename);
+					$filename = File::strip_extension($filename).' ('.$x.').'.File::get_extension($filename);
 				}
 
 				if(!$fp = fopen($filename,'w+'))
