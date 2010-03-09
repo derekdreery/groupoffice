@@ -50,15 +50,11 @@ function get_folder_tree($folder_id, $user_id) {
 	);
 }
 
-$filter_enabled=-1;
 function get_folder_nodes($folder_id, $site, $path='') {
 
 	global $GO_SECURITY, $filter_enabled;
 	$cms = new cms();
-	if($filter_enabled===-1){
-		$filter_enabled=$cms->filter_enabled($GO_SECURITY->user_id,$site['id']);
-	}
-
+	$filter_enabled=$cms->filter_enabled($GO_SECURITY->user_id,$site['id']);
 
 	$response = array();
 
