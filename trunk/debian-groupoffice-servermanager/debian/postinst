@@ -15,6 +15,8 @@ invoke-rc.d apache2 restart 3> /dev/null || true
 
 php /usr/share/groupoffice-servermanager/upgradeinstallations.php
 
+find /home/groupoffice -maxdepth 2 -exec chown www-data:www-data {} \;
+
 #DEBHELPER#
 
 exit 0
