@@ -1039,7 +1039,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				tbar.push({
 					// id : 'add-remote',
 					iconCls : 'btn-add',
-					text : GO.email.lang.attachFilesGO,
+					text : GO.email.lang.attachFilesGO.replace('{product_name}', GO.settings.config.product_name),
 					cls : 'x-btn-text-icon',
 					handler : function() {
 						if (!this.fileBrowser) {

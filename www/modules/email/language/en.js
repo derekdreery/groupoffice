@@ -102,7 +102,7 @@ GO.email.lang.emptyFolderConfirm='Are you sure you want to EMPTY \'{name}\'?';
 GO.email.lang.addUnknownRecipients='Add unknown recipients';
 GO.email.lang.addUnknownRecipientsText='You just sent an e-mail to one or more recipients that are not in your addressbook. Click on a name if you want to add that person or close this window.';
 GO.email.lang.attachFilesPC='Add from PC';
-GO.email.lang.attachFilesGO='Add from Group-Office';
+GO.email.lang.attachFilesGO='Add from {product_name}';
 GO.email.lang.renameFolder='Rename folder';
 
 
@@ -129,14 +129,14 @@ GO.email.lang.loadEmailFirst = 'To use this function you must load your e-mail f
 GO.email.lang.confirmEmptySubject='You didn\'t fill in a subject. Are you sure you want to send this message without a subject?';
 
 GO.email.lang.usage='Disk usage';
-GO.email.lang.searchGO='Search through Group-Office';
+GO.email.lang.searchGO='Search through {product_name}';
 GO.email.lang.toggleWindowPosition = 'Toggle message window position';
 GO.email.lang.closeUploadDialog='Close the upload dialog first or wait for the upload to finish';
 
 GO.email.lang.signature='Signature';
 
 GO.email.defaultProgram='Default e-mail program';
-GO.email.defaultProgramInstructions ='<p>To set Group-Office as your default e-mail program please <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">read the instructions</a>.</p><p>Then if you are using Windows you must download and run <a class="normal-link" href="{url}">this register file</a></p>';
+GO.email.defaultProgramInstructions ='<p>To set {product_name} as your default e-mail program please <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">read the instructions</a>.</p><p>Then if you are using Windows you must download and run <a class="normal-link" href="{url}">this register file</a></p>';
 
 
 GO.email.lang.htmlMarkup = 'Use HTML markup';

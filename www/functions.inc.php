@@ -143,7 +143,7 @@ function go_log($level, $message) {
 
 function set_debug_log($file)
 {
-	$_SESSION['GO_SESION']['debug_log']=$file;
+	$_SESSION['GO_SESSION']['debug_log']=$file;
 }
 
 /**
@@ -165,13 +165,13 @@ function go_debug($text, $config=false)
 			$text = var_export($text, true);
 		}
 
-		if(!isset($_SESSION['GO_SESION']['debug_log']))
-		$_SESSION['GO_SESION']['debug_log']=$config->file_storage_path.'debug.log';
+		if(!isset($_SESSION['GO_SESSION']['debug_log']))
+		$_SESSION['GO_SESSION']['debug_log']=$config->file_storage_path.'debug.log';
 
 		//$text = '['.date('Y-m-d G:i').'] '.$text;
 
 
-		file_put_contents($_SESSION['GO_SESION']['debug_log'], $text."\n", FILE_APPEND);
+		file_put_contents($_SESSION['GO_SESSION']['debug_log'], $text."\n", FILE_APPEND);
 
 		//go_log(LOG_DEBUG, $text);
 	}

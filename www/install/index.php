@@ -111,16 +111,18 @@ $menu_language['send_info'] = 'Send information';
 
 function print_head()
 {
+	global $GO_CONFIG;
+	
 	echo '<html><head>'.
 	'<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />'.
 	'<link href="install.css" rel="stylesheet" type="text/css" />'.
-	'<title>Group-Office Installation</title>'.
+	'<title>'.$GO_CONFIG->product_name.' Installation</title>'.
 	'</head>'.
 	'<body style="font-family: Arial,Helvetica;">';
 	echo '<form method="post" action="index.php">';
 	echo '<table width="100%" cellpadding="0" cellspacing="0">';
-	echo '<tr><td style="border-bottom:1px solid black;"><img src="../themes/Default/images/groupoffice.gif" border="0" align="middle" style="margin:10px" /></td>';
-	echo '<td style="border-bottom:1px solid black;text-align:right;padding-right:10px;"><h1>Group-Office installation</h1></td></tr>';
+	echo '<tr><td style="border-bottom:1px solid black;"><img src="logo.gif" border="0" align="middle" style="margin:10px" /></td>';
+	echo '<td style="border-bottom:1px solid black;text-align:right;padding-right:10px;"><h1>'.$GO_CONFIG->product_name.' installation</h1></td></tr>';
 	echo '<tr><td valign="top" style="">';
 
 	foreach($GLOBALS['tasks'] as $task)
@@ -176,7 +178,7 @@ if($task !='test')
 		echo '<br /><br /><font color="#003399">';
 		echo '<i>$ touch config.php (Or FTP an empty config.php to the server)<br />';
 		echo '$ chmod 666 config.php</i></font>';
-		echo '<br /><br />If it does exist and you still see this message then it might be that safe_mode is enabled and the config.php is owned by another user then the Group-Office files.';
+		echo '<br /><br />If it does exist and you still see this message then it might be that safe_mode is enabled and the config.php is owned by another user then the '.$GO_CONFIG->product_name.' files.';
 		echo '<br /><br /><div style="text-align: right;"><input type="submit" value="Continue" /></div>';
 		print_foot();
 		exit();
@@ -300,7 +302,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 
 				$user['language'] = $GO_LANGUAGE->language;
-				$user['first_name']='Group-Office';
+				$user['first_name']=$GO_CONFIG->product_name;
 				$user['middle_name']='';
 				$user['last_name']=$lang['common']['admin'];
 				$user['username'] = 'admin';
@@ -626,7 +628,7 @@ switch($task)
 		print_head();
 		echo '<input type="hidden" name="task" value="test" />';
 
-		echo '<h1>Welcome!</h1><p>Thank you for installing Group-Office. This page checks if your system meets the requirements to run Group-Office.</p>'.
+		echo '<h1>Welcome!</h1><p>Thank you for installing '.$GO_CONFIG->product_name.'. This page checks if your system meets the requirements to run '.$GO_CONFIG->product_name.'.</p>'.
 			'<p>If this page prints errors or warnings, please visit this page for more information: <a target="_blank" href="http://www.group-office.com/wiki/Installation">http://www.group-office.com/wiki/Installation</a></p>';
 
 		if(!output_system_test())
@@ -686,7 +688,7 @@ switch($task)
 		}
 		?>
 			<input type="hidden" name="task" value="post_create_database" />
-			Enter the administrator username and password and fill in the other fields to create a new database and user for Group-Office.
+			Enter the administrator username and password and fill in the other fields to create a new database and user for <?php echo $GO_CONFIG->product_name; ?>.
 			<br /><br />
 			<table>
 			<tr>
@@ -892,7 +894,7 @@ switch($task)
 			$record = $db->next_record(MYSQL_BOTH);
 			if(strstr($record[0], 'STRICT')!==false)
 			{
-				echo '<p style="color:red">The sql-mode setting in the MySQL config my.cnf is set to STRICT_TRANS_TABLES, STRICT_ALL_TABLES or TRADITIONAL. Group-Office does not yet work with this setting. You might want this setting enabled if you are a developer, but for production use you should disable it.</p>';
+				echo '<p style="color:red">The sql-mode setting in the MySQL config my.cnf is set to STRICT_TRANS_TABLES, STRICT_ALL_TABLES or TRADITIONAL. '.$GO_CONFIG->product_name.' does not yet work with this setting. You might want this setting enabled if you are a developer, but for production use you should disable it.</p>';
 			}
 
 			$settings_exist = false;
@@ -933,7 +935,7 @@ switch($task)
 
 				?>
 					<input type="hidden" name="task" value="upgrade" />
-					Group-Office has detected a previous installation of Group-Office. By pressing continue the database will be upgraded. This may take some time
+					<?php echo $GO_CONFIG->product_name; ?> has detected a previous installation of <?php echo $GO_CONFIG->product_name; ?> By pressing continue the database will be upgraded. This may take some time
 					and you should <b>backup your database before you continue with this step!</b>
 					<?php
 					/*if (!$db_version)
@@ -968,15 +970,15 @@ switch($task)
 			}else if($is_old_go)
 			{
 				?>
-				Group-Office has detected an older version of Group-Office. The installer can't automatically upgrade this database.
+				<?php echo $GO_CONFIG->product_name; ?> has detected an older version of <?php echo $GO_CONFIG->product_name; ?>. The installer can't automatically upgrade this database.
 				<a href="../INSTALL.TXT">Read this for upgrade instructions</a>
 				<?php
 			}else
 			{
 				echo 	'<input type="hidden" name="task" value="database_structure" />';
 
-				echo 'Group-Office succesfully connected to your database!<br />'.
-				'Click on \'Continue\' to create the tables for the Group-Office '.
+				echo $GO_CONFIG->product_name.' succesfully connected to your database!<br />'.
+				'Click on \'Continue\' to create the tables for the '.$GO_CONFIG->product_name.' '.
 				'base system. This can take some time. Don\'t interupt this process.<br /><br />';
 
 				echo '<div align="right"><input type="submit" value="Continue" /></div>';
@@ -1018,7 +1020,7 @@ switch($task)
 		}
 	?>
 		<input type="hidden" name="task" value="title" />
-		Enter a title for your Group-Office and webmaster email address for your application.<br />
+		Enter a title for your <?php echo $GO_CONFIG->product_name; ?> and webmaster email address for your application.<br />
 		The email address will receive information about new registered users.
 		<br /><br />
 		<table>
@@ -1028,7 +1030,7 @@ switch($task)
 		<tr>
 		<?php
 		if(empty($GO_CONFIG->title))
-			$GO_CONFIG->title='Group-Office';
+			$GO_CONFIG->title=$GO_CONFIG->product_name;
 
 		$title = isset($_POST['title']) ? $_POST['title'] : $GO_CONFIG->title;
 		$webmaster_email = isset($_POST['webmaster_email']) ? $_POST['webmaster_email'] : $GO_CONFIG->webmaster_email;
@@ -1104,7 +1106,7 @@ switch($task)
 		<table>
 		<tr>
 			<td colspan="2">
-			Group-Office needs a place to store protected data. This folder should not be accessible through the webserver. Create a writable path for this purpose now and enter it in the box below.<br />
+			<?php echo $GO_CONFIG->product_name; ?> needs a place to store protected data. This folder should not be accessible through the webserver. Create a writable path for this purpose now and enter it in the box below.<br />
 			The path should be have 0777 permissions or should be owned by the webserver user. You probably need to be root to do the last.
 			<br />Also enter a maximum number of bytes to upload and a valid octal value for the file permissions.
 			<br /><br />
@@ -1142,7 +1144,7 @@ switch($task)
 		<tr>
 			<td colspan="2">
 			<br /><br />
-		Group-Office needs a place to store temporary data such as session data or file uploads. Create a writable path for this purpose now and enter it in the box below.<br />
+		<?php echo $GO_CONFIG->product_name; ?> needs a place to store temporary data such as session data or file uploads. Create a writable path for this purpose now and enter it in the box below.<br />
 		The /tmp directory is a good option.
 		<br /><br />
 		</td>
@@ -1175,7 +1177,7 @@ switch($task)
 		}
 	?>
 		<input type="hidden" name="task" value="theme" />
-		Select default regional settings for Group-Office. If your language is not in the list please select the closest match.<br />
+		Select default regional settings for <?php echo $GO_CONFIG->product_name; ?>. If your language is not in the list please select the closest match.<br />
 		It would be nice if you added your missing language to the language/languages.inc file and send it to
 		info@intermesh.nl!
 		<br /><br />
@@ -1572,7 +1574,7 @@ switch($task)
 		}
 	?>
 		<input type="hidden" name="task" value="smtp" />
-		Group-Office needs to connect to an SMTP server to send and receive e-mail.
+		<?php echo $GO_CONFIG->product_name; ?> needs to connect to an SMTP server to send and receive e-mail.
 		<br />
 		<br />
 		<table>
@@ -1679,7 +1681,7 @@ switch($task)
 		}
 		?>
 			<input type="hidden" name="task" value="administrator" />
-			Group-Office needs an administrator account. Please create one now.
+			<?php echo $GO_CONFIG->product_name; ?> needs an administrator account. Please create one now.
 			<br /><br />
 			<table style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
 			<tr>
@@ -1752,7 +1754,7 @@ switch($task)
 	<br /><br />
 	Don't use this account for regular use!
 	<br />
-	Read this to get started with Group-Office: <a href="http://www.group-office.com/wiki/Getting_started" target="_blank">http://www.group-office.com/wiki/Getting_started</a>
+	Read this to get started with <?php echo $GO_CONFIG->product_name; ?>: <a href="http://www.group-office.com/wiki/Getting_started" target="_blank">http://www.group-office.com/wiki/Getting_started</a>
 	<ul>
 	<li>Navigate to the menu: Administrator menu -&gt; Modules and remove the modules you do not wish to use.</li>
 	<li>Navigate to the menu: Administrator menu -&gt; User groups and create user groups.</li>
@@ -1768,7 +1770,7 @@ switch($task)
 	<br /><br />
 	<div align="right">
 	<?php echo '<input type="button" onclick="document.location=\''.$_SERVER['PHP_SELF'].'?task='.$lasttask.'\';" value="Back" />&nbsp;&nbsp;'; ?>
-	<input type="button" value="Launch Group-Office!" onclick="javascript:window.location='<?php echo $GO_CONFIG->host; ?>';" />
+	<input type="button" value="Launch <?php echo $GO_CONFIG->product_name; ?>!" onclick="javascript:window.location='<?php echo $GO_CONFIG->host; ?>';" />
 	</div>
 	<?php
 	print_foot();

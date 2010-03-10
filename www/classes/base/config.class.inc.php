@@ -789,7 +789,10 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-		var $zlib_compress = true;
+	var $zlib_compress = true;
+
+
+	var $product_name='Group-Office';
 
 
 	/**
@@ -1127,6 +1130,8 @@ class GO_CONFIG {
 		//$response['modules']=$GO_MODULES->modules;
 		$response['config']['theme_url']=$GO_THEME->theme_url;
 		$response['config']['theme']=$GO_THEME->theme;
+		$response['config']['product_name']=$this->product_name;
+		$response['config']['product_version']=$this->version;
 		$response['config']['host']=$this->host;
 		$response['config']['title']=$this->title;
 		$response['config']['webmaster_email']=$this->webmaster_email;

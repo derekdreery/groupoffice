@@ -12,6 +12,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+$product_name = isset($GO_CONFIG->product_name) ? $GO_CONFIG->product_name : 'Group-Office';
+
 /**
 * Format a size to a human readable format.
 * 
@@ -51,14 +53,14 @@ if(!function_exists('format_size'))
 
 function test_system(){
 
-	global $GO_CONFIG;
+	global $GO_CONFIG, $product_name;
 	
 	$tests=array();
 
 	
 	$test['name']='PHP version';
 	$test['pass']=function_exists('version_compare') && version_compare( phpversion(), "5.2", ">=");
-	$test['feedback']='Fatal error: Your PHP version is too old to run Group-Office. PHP 5.2 or higher is required';
+	$test['feedback']='Fatal error: Your PHP version is too old to run '.$product_name.'. PHP 5.2 or higher is required';
 	$test['fatal']=true;
 
 	$tests[]=$test;
@@ -124,7 +126,7 @@ function test_system(){
 	
 	$test['name']='Calendar functions';
 	$test['pass']=function_exists('easter_date');
-	$test['feedback']='Warning: Calendar functions not available. The Group-Office calendar won\'t be able to generate all holidays for you. Please compile PHP with --enable-calendar.';
+	$test['feedback']='Warning: Calendar functions not available. The '.$product_name.' calendar won\'t be able to generate all holidays for you. Please compile PHP with --enable-calendar.';
 	$test['fatal']=false;
 
 	$memory_limit = return_bytes(ini_get('memory_limit'));
@@ -258,7 +260,7 @@ function test_system(){
 
 	$test['name']='zend.ze1_compatibility_mode';
 	$test['pass']=empty($ze1compat);
-	$test['feedback']='Fatal error: zend.ze1_compatibility_mode is enabled. Group-Office can\'t run with this setting enabled';
+	$test['feedback']='Fatal error: zend.ze1_compatibility_mode is enabled. '.$product_name.' can\'t run with this setting enabled';
 	$test['fatal']=true;
 
 	$tests[]=$test;
@@ -269,7 +271,7 @@ function test_system(){
 	{		
 		$test['name']='Protected files path';
 		$test['pass']=is_writable($GO_CONFIG->file_storage_path);
-		$test['feedback']='Fatal error: the file_storage_path setting in config.php is not writable. You must correct this or Group-Office will not run.';
+		$test['feedback']='Fatal error: the file_storage_path setting in config.php is not writable. You must correct this or '.$product_name.' will not run.';
 		$test['fatal']=false;
 		$tests[]=$test;
 	}	
@@ -278,7 +280,8 @@ function test_system(){
 }
 
 function output_system_test(){
-	
+	global $product_name;
+
 	$tests = test_system();
 	
 	$fatal = false;
@@ -299,17 +302,17 @@ function output_system_test(){
 
 	if($fatal)
 	{
-		echo '<tr><td colspan="2" style="color:red"><br />Fatal errors occured. Group-Office will not run properly with current system setup!</td></tr>';
+		echo '<tr><td colspan="2" style="color:red"><br />Fatal errors occured. '.$product_name.' will not run properly with current system setup!</td></tr>';
 	}else
 	{
-		echo '<tr><td colspan="2"><br /><b>Passed!</b> Group-Office should run on this machine</td></tr>';
+		echo '<tr><td colspan="2"><br /><b>Passed!</b> '.$product_name.' should run on this machine</td></tr>';
 	}
 	
 	
 	echo '<tr>
 	<td colspan="2">
 	<br />
-	<b>Use this information for your Group-Office Professional license:</b>
+	<b>Use this information for your '.$product_name.' Professional license:</b>
 	</td>
 </tr>
 
@@ -592,7 +595,7 @@ function return_bytes($val) {
 //check if we are included
 if(!isset($GO_CONFIG))
 {
-	echo '<h1 style="font-family: Arial, Helvetica;font-size: 18px;">Group-Office test script</h1>';
+	echo '<h1 style="font-family: Arial, Helvetica;font-size: 18px;">'.$product_name.' test script</h1>';
 	output_system_test();
 }
 ?>

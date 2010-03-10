@@ -78,12 +78,14 @@ Ext.extend(GO.tasks.SettingsPanel, Ext.Panel, {
 				var now = new Date();
 				
 				GO.tasks.reminderDaysBefore=parseInt(this.numberField.getValue());
-				
-				var remindDate = now.add(Date.DAY, -GO.tasks.reminderDaysBefore);
-				
-				t.formPanel.form.findField('remind').originalValue=this.remindCheck.getValue();
-				t.formPanel.form.findField('remind_time').originalValue=this.timeField.getValue();
-				t.formPanel.form.findField('remind_date').originalValue=remindDate;
+				GO.tasks.reminderTime=this.timeField.getValue();
+				if(t){				
+					var remindDate = now.add(Date.DAY, -GO.tasks.reminderDaysBefore);
+
+					t.formPanel.form.findField('remind').originalValue=this.remindCheck.getValue();
+					t.formPanel.form.findField('remind_time').originalValue=this.timeField.getValue();
+					t.formPanel.form.findField('remind_date').originalValue=remindDate;
+				}
 			}
 
 		});
