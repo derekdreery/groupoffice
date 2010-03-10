@@ -268,12 +268,19 @@ Ext.extend(GO.calendar.SettingsPanel, Ext.Panel, {
 	},
 
 	onSaveSettings : function() {
-		GO.calendar.eventDialog.reminderValue.originalValue = this.reminderValue
-				.getValue();
-		GO.calendar.eventDialog.reminderMultiplier.originalValue = this.reminderMultiplier
-				.getValue();
-		GO.calendar.eventDialog.colorField.originalValue = this.colorField
-				.getValue();
+
+		if(GO.calendar.eventDialog){
+			GO.calendar.eventDialog.reminderValue.originalValue = this.reminderValue
+					.getValue();
+			GO.calendar.eventDialog.reminderMultiplier.originalValue = this.reminderMultiplier
+					.getValue();
+			GO.calendar.eventDialog.colorField.originalValue = this.colorField
+					.getValue();
+		}else
+		{
+			GO.calendar.defaultReminderValue=this.reminderValue.getValue();
+			GO.calendar.defaultReminderMultiplier=this.reminderMultiplier.getValue();
+		}
 	}
 
 });
