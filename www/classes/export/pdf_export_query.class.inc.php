@@ -16,6 +16,7 @@ require_once($GO_CONFIG->class_path.'tcpdf/tcpdf.php');
 
 
 class pdf_export_query extends base_export_query{
+	var $extension='pdf';
 
 	function download_headers()
 	{
@@ -70,7 +71,7 @@ class pdf_export_query extends base_export_query{
 
 		$this->pdf->SetTitle($_REQUEST['title']);
 
-		$this->totals=array();
+		//$this->totals=array();
 
 
 		while($record = $this->db->next_record())

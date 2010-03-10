@@ -28,6 +28,7 @@ GO.notes.NoteDialog = function(config){
 	config.layout='fit';
 	config.modal=false;
 	config.resizable=true;
+	config.maximizable=true;
 	config.width=700;
 	config.autoHeight=true;
 	config.closeAction='hide';
