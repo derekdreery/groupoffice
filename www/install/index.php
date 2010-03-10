@@ -1459,6 +1459,9 @@ switch($task)
 
 		echo '<table><tr><td><b>Module</b></td><td><b>Use</b></td><td><b>Manage</b></td></tr>';
 
+		$modules_read = isset($_POST['register_modules_read']) ? $_POST['register_modules_read'] : explode(',', $GO_CONFIG->register_modules_read);
+		$modules_write = isset($_POST['register_modules_write']) ? $_POST['modules_write'] : explode(',', $GO_CONFIG->register_modules_write);
+
 		$module_count = $GO_MODULES->get_modules('0');
 		while($GO_MODULES->next_record())
 		{
@@ -1473,13 +1476,8 @@ switch($task)
 			$lang_var = isset($lang[$GO_MODULES->f('id')]['name']) ? $lang[$GO_MODULES->f('id')]['name'] : $GO_MODULES->f('id');
 
 
-			echo '<tr><td>'.$lang_var.'</td><td>';
-
-
-			$modules_read = isset($_POST['register_modules_read']) ? $_POST['register_modules_read'] : explode(',', $GO_CONFIG->register_modules_read);
+			echo '<tr><td>'.$lang_var.'</td><td>';			
 			$read_check = in_array($GO_MODULES->f('id'), $modules_read);
-
-			$modules_write = isset($_POST['register_modules_write']) ? $_POST['modules_write'] : explode(',', $GO_CONFIG->register_modules_write);
 			$write_check = in_array($GO_MODULES->f('id'), $modules_write);
 
 			echo '<input type="checkbox" name="register_modules_read[]" value="'.$GO_MODULES->f('id').'"';
