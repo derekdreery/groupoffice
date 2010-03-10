@@ -126,6 +126,8 @@ invoke-rc.d dovecot restart 3> /dev/null || true
 
 php /usr/share/groupoffice-mailserver/addadminaccount.php
 
+find /home/groupoffice -maxdepth 2 -exec chown www-data:www-data {} \;
+
 #DEBHELPER#
 
 exit 0
