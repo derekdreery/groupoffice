@@ -48,6 +48,7 @@ class base_export_query{
 	var $q;
 	var $totals = array();
 	var $title='';
+	var $extension='';
 
 	function __construct(){
 		$this->db = new db();
