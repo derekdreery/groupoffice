@@ -83,7 +83,7 @@ GO.email.lang.type='Type';
 GO.email.lang.noEncryption='Geen encryptie';
 GO.email.lang.noAccountTitle='Geen account';
 GO.email.lang.attachFilesPC='Toevoegen vanaf PC';
-GO.email.lang.attachFilesGO='Toevoegen vanaf Group-Office';
+GO.email.lang.attachFilesGO='Toevoegen vanaf {product_name}';
 GO.email.lang.priority='Prioriteit';
 GO.email.lang.read='Gelezen';
 GO.email.lang.NA='N.v.t.';
@@ -116,7 +116,7 @@ GO.email.lang.confirmEmptySubject='U heeft geen onderwerp ingevuld. Weet u zeker
 
 GO.email.lang.usage='Schijfgebruik';
 
-GO.email.lang.searchGO='Group-Office doorzoeken';
+GO.email.lang.searchGO='{product_name} doorzoeken';
 
 GO.email.lang.toggleWindowPosition = 'Verander berichtvenster positie';
 GO.email.lang.closeUploadDialog='Sluit eerst het upload venster of wacht tot de upload klaar is.';
@@ -124,7 +124,7 @@ GO.email.lang.signature='Handtekening';
 
 
 GO.email.defaultProgram='Standaard e-mail programma';
-GO.email.defaultProgramInstructions ='<p>Lees a.u.b. <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">de instructies</a> om Group-Office als uw standaard e-mail programma in te stellen.</p><p>Als u Windows gebruikt dan moet u <a class="normal-link" href="{url}">het registerbestand</a> uitvoeren.</p>';
+GO.email.defaultProgramInstructions ='<p>Lees a.u.b. <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">de instructies</a> om {product_name} als uw standaard e-mail programma in te stellen.</p><p>Als u Windows gebruikt dan moet u <a class="normal-link" href="{url}">het registerbestand</a> uitvoeren.</p>';
 
 
 GO.email.lang.htmlMarkup = 'Gebruik HTML opmaak';

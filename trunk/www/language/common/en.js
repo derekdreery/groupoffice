@@ -44,13 +44,13 @@ GO.lang.smallUpload='Small files';
 
 
 GO.lang.lostPassword='Lost password?';
-GO.lang.lostPasswordText='To recover your password you must be able to read your e-mail without access to Group-Office. If you enter your e-mail address an e-mail with instructions will be sent to your e-mail address.<br /><br />Enter your e-mail address:';
+GO.lang.lostPasswordText='To recover your password you must be able to read your e-mail without access to {product_name}. If you enter your e-mail address an e-mail with instructions will be sent to your e-mail address.<br /><br />Enter your e-mail address:';
 
 GO.lang.noJava='Java Webstart is not installed. Java enables easier editing of files and easier file uploading. Please visit <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> to install it.';
 
 GO.lang.strHelpContents='Help contents';
 GO.lang.strReportBug='Report a bug';
-GO.lang.strAbout='About Group-Office';
+GO.lang.strAbout='About {product_name}';
 GO.lang.strUsage='Usage statistics';
 
 GO.lang.strName = 'Name';

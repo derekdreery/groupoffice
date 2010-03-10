@@ -35,7 +35,7 @@ GO.lang.largeUpload='Grote bestanden/mappen (Java Vereist)';
 GO.lang.smallUpload='Kleine bestanden';
 
 GO.lang.lostPassword='Wachtwoord vergeten?';
-GO.lang.lostPasswordText='Om uw wachtwoord opnieuw in te stellen heeft u toegang tot uw e-mail nodig zonder toegang tot Group-Office. Als u hier uw e-mail adres invult wordt een e-mail met instructies naar uw e-mail adres verzonden.<br /><br />Vul uw e-mail adres in:';
+GO.lang.lostPasswordText='Om uw wachtwoord opnieuw in te stellen heeft u toegang tot uw e-mail nodig zonder toegang tot {product_name}. Als u hier uw e-mail adres invult wordt een e-mail met instructies naar uw e-mail adres verzonden.<br /><br />Vul uw e-mail adres in:';
 
 
 GO.lang.noJava='Java Webstart is niet geïnstalleerd. Java maakt het mogelijk om gemakkelijk bestanden te uploaden en te bewerken. Ga naar <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> om Java op uw computer te installeren.';
@@ -46,7 +46,7 @@ GO.lang.strDefault = 'Standaard';
 
 GO.lang.strHelpContents='Helpinhoud';
 GO.lang.strReportBug='Meld een programmafout';
-GO.lang.strAbout='Over Group-Office';
+GO.lang.strAbout='Over {product_name}';
 
 GO.lang.strName = 'Naam';
 GO.lang.strDescription = 'Beschrijving';

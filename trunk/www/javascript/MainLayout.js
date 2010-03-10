@@ -253,7 +253,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
     		border:false,
     		cls:'go-form-panel',
     		title: 'No modules',
-    		html: '<h1>No modules available</h1>You have a valid Group-Office account but you don\'t have access to any of the modules. Please contact the administrator if you feel this is an error.'
+    		html: '<h1>No modules available</h1>You have a valid account but you don\'t have access to any of the modules. Please contact the administrator if you feel this is an error.'
     	});
     }
 
@@ -399,7 +399,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	    		},    		
 	    		'-',{
     			iconCls:'btn-info',
-    			text:GO.lang.strAbout,
+    			text:GO.lang.strAbout.replace('{product_name}', GO.settings.config.product_name),
     			handler:function(){
     				if(!this.aboutDialog)
     				{

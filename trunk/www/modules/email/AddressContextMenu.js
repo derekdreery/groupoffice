@@ -48,7 +48,7 @@ GO.email.AddressContextMenu = function(config)
 				});
 	this.searchButton = new Ext.menu.Item({
 					iconCls: 'btn-search',
-					text: GO.email.lang.searchGO,
+					text: GO.email.lang.searchGO.replace('{product_name}', GO.settings.config.product_name),
 					cls: 'x-btn-text-icon',
 					handler: function(){
 						var searchPanel = new GO.grid.SearchPanel(

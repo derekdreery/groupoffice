@@ -16,7 +16,7 @@ GO.email.SettingsPanel = function(config) {
 		xtype:'fieldset',
 		title:GO.email.defaultProgram,
 		autoHeight:true,		
-		html:GO.email.defaultProgramInstructions.replace('{url}', GO.settings.modules.email.url+'register_email.php')
+		html:GO.email.defaultProgramInstructions.replace('{url}', GO.settings.modules.email.url+'register_email.php').replace('{product_name}', GO.settings.config.product_name)
 	},this.useHtml = new Ext.form.Checkbox({
 		boxLabel:GO.email.lang.htmlMarkup,
 		hideLabel:true,

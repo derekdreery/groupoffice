@@ -130,7 +130,7 @@ GO.dialog.LoginDialog = function(config){
 			handler: function(){
 					
 				// Prompt for user data and process the result using a callback:
-				Ext.Msg.prompt(GO.lang.lostPassword, GO.lang.lostPasswordText, function(btn, text){
+				Ext.Msg.prompt(GO.lang.lostPassword, GO.lang.lostPasswordText.replace('{product_name}', GO.settings.config.product_name), function(btn, text){
 					if (btn == 'ok'){
 					        
 						Ext.Ajax.request({
