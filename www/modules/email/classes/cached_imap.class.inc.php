@@ -198,6 +198,11 @@ class cached_imap extends imap{
 			$sql = "DELETE FROM em_messages_cache WHERE folder_id=".$this->email->escape($this->folder['id'])." AND uid IN(".$this->email->escape(implode(',',$uids)).")";
 			$this->email->query($sql);
 			//go_debug('Deleted '.implode(',', $uids).' from cache');
+
+			/*
+			 * this doesn't work because we don't know how many unseen messages have
+			 * been deleted.
+
 			if(is_array($this->folder_sort_cache))
 			{
 				foreach($this->folder_sort_cache as $key=>$sort)
@@ -240,8 +245,10 @@ class cached_imap extends imap{
 			}
 			$this->folder['unseen']=$up_folder['unseen']=$this->unseen;
 			$this->folder['msgcount']=$up_folder['msgcount']=$this->count;
+			*/
 
-
+			$up_folder['id'] = $this->folder['id'];
+			$up_folder['sort']='';
 				
 			$this->email->__update_folder($up_folder);
 		}
