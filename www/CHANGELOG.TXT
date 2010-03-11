@@ -1,3 +1,7 @@
+2010/03/11 3.4.10
+- Fixed issues with IMAP cache
+- Easier error reporting in syncml
+
 2010/03/08 3.4.9
 - Updated Norwegian and Czech translation
 - Browser doesn't ask to open GOTA anymore. It launches automatically.
