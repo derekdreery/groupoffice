@@ -85,11 +85,11 @@ Ext.extend(GO.addressbook.ManageAddressbooksGrid, GO.grid.GridPanel,{
 			GO.addressbook.writableAddressbooksStore.load();
 		}
 
-		/*this.addressbookDialog = new GO.addressbook.AddressbookDialog();
+		this.addressbookDialog = new GO.addressbook.AddressbookDialog();
 		this.addressbookDialog.on('save', function(){
 			GO.addressbook.writableAddressbooksStore.load();
 			GO.addressbook.readableAddressbooksStore.load();
-		});*/
+		});
 	},
 	
 	onShow : function(){
