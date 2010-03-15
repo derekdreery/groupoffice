@@ -213,3 +213,4 @@ $lang['common']['dontChangeOwnersPermissions']='You can\'t change the permission
 $lang['common']['running_sys_upgrade']='Running required system update';
 $lang['common']['sys_upgrade_text']='One moment please. All output will be logged.';
 $lang['common']['click_here_to_contine']='Click here to continue';
+$lang['common']['parentheses_invalid_error']='Parentheses in your query are invalid. Please correct them.';
