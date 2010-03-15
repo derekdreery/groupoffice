@@ -382,7 +382,7 @@ try{
 			}else
 			{
 				$header_om  = "\n\n".$lang['email']['original_message']."\n";
-				$header_om .= $lang['email']['subject'].": ".$subject."\n";
+				$header_om .= $lang['email']['subject'].": ".$content['subject']."\n";
 				$header_om .= $lang['email']['from'].": ".$content['from']."\n";
 				$header_om .= $lang['email']['to'].": ".$om_to."\n";
 				if(!empty($om_cc))
