@@ -713,6 +713,20 @@ class servermanager extends db {
 				$swift->message->addBcc($sm_config['bcc_email']);
 			$swift->set_from($sm_config['sender_email'], $sm_config['sender_name']);
 			$swift->sendmail();
+
+
+			//Interesting prospect!
+			if($installation['total_logins']>10 && $installation['last_login']>Date::date_add(time(),-7) ){
+
+				$body='Name: '.$installation['name'].'<br />'.
+				'Admin name: '.$installation['admin_salutation'].'<br />'.
+				'Admin e-mail: '.$installation['admin_email'].'<br />';
+
+				$swift = new GoSwift('info@intermesh.nl', 'Interesting prospect with trial',0,0,'3',$body);
+				$swift->set_from($sm_config['sender_email'], $sm_config['sender_name']);
+				$swift->sendmail();
+			}
+
 		}
 
 		$sql = "UPDATE sm_installations SET status='".$this->escape($status)."', status_change_time='".time()."' WHERE id=".$this->escape($installation['id']);
