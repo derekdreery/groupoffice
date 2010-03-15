@@ -800,7 +800,7 @@ class addressbook extends db {
 		}
 
 		if(!empty($advanced_query)) {
-			$sql .= ' AND '.$advanced_query;
+			$sql .= ' AND ('.$advanced_query.')';
 		}
 
 		$sql .= " ORDER BY $sort_index $sort_order";
