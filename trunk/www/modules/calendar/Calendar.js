@@ -760,8 +760,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 									GO.calendar.eventDialog.oldDomId=this.monthGrid.addMonthGridEvent(newEvent);
 								break;
 							case 'days':
-								if(newEvent.calendar_id==this.calendar_id)
-									GO.calendar.eventDialog.oldDomId=this.daysGrid.addDaysGridEvent(newEvent, true);
+								if(newEvent.calendar_id==this.calendar_id){
+									var eventRecord = new GO.calendar.CalendarEvent(newEvent);
+									this.daysGridStore.add(eventRecord);
+									//GO.calendar.eventDialog.oldDomId=this.daysGrid.addDaysGridEvent(newEvent, true);
+								}
 								break;
 
 							case 'view':
@@ -837,7 +840,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						this.daysGrid.store.reload();
 					}else
 					{
-						this.daysGrid.removeEvent(event.domId);
+						this.daysGrid.removeEvent(event.domId);						
 					}
 				};			
 				break;
