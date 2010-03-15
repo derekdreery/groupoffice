@@ -716,7 +716,7 @@ class servermanager extends db {
 
 
 			//Interesting prospect!
-			if($installation['status']=='warntrial1' && $installation['total_logins']>10 && $installation['last_login']>Date::date_add(time(),-7) ){
+			if($status=='warntrial1' && $installation['total_logins']>10 && $installation['last_login']>Date::date_add(time(),-7) ){
 
 				$body='Name: '.$installation['name'].'<br />'.
 				'Admin name: '.$installation['admin_salutation'].'<br />'.
