@@ -313,6 +313,23 @@ GO.email.EmailComposer = function(config) {
 		plugins : plugins,
 		style:'font:12px arial";',
 		defaultFont:'arial',
+		listeners:{
+			activate:function(){
+
+				if (Ext.isGecko){
+					Ext.EventManager.on(this.htmlEditor.doc, {
+						keypress: this.fireSubmit,
+						scope: this
+					});
+				}
+				if (Ext.isIE || Ext.isWebKit || Ext.isOpera) {
+					Ext.EventManager.on(this.doc, 'keydown', this.fireSubmit,
+						this);
+				}
+			},
+			scope:this
+		},
+		
 		onFirstFocus : function(){
         this.activated = true;
         this.disableItems(this.readOnly);
@@ -379,19 +396,6 @@ GO.email.EmailComposer = function(config) {
         //this.syncValue();
     }
 	}));
-
-	/*
-	 *Handles ctrl+enter = send
-	 */	
-	this.htmlEditor.composer = this;
-	this.htmlEditor.onEditorEvent=function(e){		
-		this.updateToolbar();
-
-   var keyCode = (document.layers) ? keyStroke.which : e.keyCode;
-   if (keyCode == 13 && e.ctrlKey) this.composer.sendMail(false, false);
-	}
-
-	
 
 				
 	items.push(this.textEditor = new Ext.form.TextArea({
@@ -622,6 +626,16 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	lastAutoSave : false,
 	
 	bodyContentAtWindowOpen : false,
+
+	/*
+	 *handles ctrl+enter from html editor
+	 */
+	fireSubmit : function(e) {
+			if (e.ctrlKey && Ext.EventObject.ENTER == e.getKey()) {				
+				this.sendMail(false, false);
+			}
+	},
+
 
 	isHTML : function(){
 		if (this.formPanel.baseParams.content_type == 'html'){
@@ -957,6 +971,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		var font = this.htmlEditor.fontSelect.dom.value;
 		var v = this.htmlEditor.getValue();
 		if(v.toLowerCase().substring(0,5)!='<font'){
+			if(v=='')
+				v='<br />';
+			
 			v='<font face="'+font+'">'+v+'</font>'
 		}
 		this.htmlEditor.setValue(v);		
@@ -1268,8 +1285,13 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	},
 
 	sendMail : function(draft, autoSave) {
+		//prevent double send with ctrl+enter
+		if(this.sendButton.disabled){
+			return false;
+		}
 
-		var self = this;
+		this.saveButton.setDisabled(true);
+		this.sendButton.setDisabled(true);
 
 		/*if (this.isHTML() && this.htmlEditor.SpellCheck == false && !draft){
 			//Ask if they want to run a spell check
@@ -1311,8 +1333,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			// extra sync to make sure all is in there.
 			this.htmlEditor.syncValue();
 			
-			this.saveButton.setDisabled(true);
-			this.sendButton.setDisabled(true);
+			
 
 			this.formPanel.form.submit({
 				url : this.sendURL,
@@ -1377,6 +1398,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			});
 		} else {
 			this.subjectField.focus();
+			this.saveButton.setDisabled(false);
+			this.sendButton.setDisabled(false);
 		}
 	},
 

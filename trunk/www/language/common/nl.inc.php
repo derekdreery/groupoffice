@@ -204,3 +204,5 @@ $lang['common']['dontChangeOwnersPermissions']='U kunt de toegangsrechten van de
 $lang['common']['running_sys_upgrade']='Bezig met uitvoeren van vereiste systeemupdate';
 $lang['common']['sys_upgrade_text']='Een ogenblik geduld a.u.b. Alle uitvoer wordt in een logfile opgeslagen.';
 $lang['common']['click_here_to_contine']='Klik hier om door te gaan';
+
+$lang['common']['parentheses_invalid_error']='De haakjes in uw zoekopdracht zijn ongeldig. Corrigeer deze a.u.b.';

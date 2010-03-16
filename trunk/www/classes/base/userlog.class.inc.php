@@ -29,15 +29,12 @@ class userlog{
 	var $mode;
 	var $max_size=0;
 
-	function userlog($file, $mode='w', $max_size=0)
+	function userlog($file, $max_size=0)
 	{
 		global $GO_CONFIG;
 
 		$this->max_size=$max_size;
-		$this->mode=$mode;
 		$this->file=$file;
-		//$file = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/'.$file;
-
 		$this->handle=fopen($file, 'w');
 
 		$this->log('Log opened at: '.date(date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], time())));
@@ -52,17 +49,19 @@ class userlog{
 	{
 		$this->close();
 
-		if(file_exists($new_file))
+
+		if(file_exists($new_file) && filesize($new_file)>$this->max_size)
 		{
 			unlink($new_file);
 		}
 
-		if(!rename($this->file, $new_file))
-		{
-			return false;
-		}
+		$add = file_get_contents($this->file);
+		unlink($this->file);
+
 		$this->file=$new_file;
 		$this->handle=fopen($new_file, 'a');
+
+		fwrite($this->handle, $add);
 
 		/*if(($this->mode=='a' || $this->mode=='a+') && file_exists($new_file) && ($this->max_size ==0 || filesize($new_file)<$this->max_size))
 		{

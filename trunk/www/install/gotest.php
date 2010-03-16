@@ -65,6 +65,13 @@ function test_system(){
 
 	$tests[]=$test;
 
+	$test['name']='Output buffering';
+	$test['pass']=ini_get('output_buffering')!=1;
+	$test['feedback']='Warning: output_buffering is enabled. This will increase memory usage might cause memory errors';
+	$test['fatal']=false;
+
+	$tests[]=$test;
+
 	$test['name']='Magic quotes setting';
 	$test['pass']=!get_magic_quotes_gpc();
 	$test['feedback']='Warning: magic_quotes_gpc is enabled. You will get better performance if you disable this setting.';

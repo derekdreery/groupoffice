@@ -659,15 +659,8 @@ try {
 		case 'calendars':
 
 			$resources = isset($_REQUEST['resources']) ? $_REQUEST['resources'] : 0;
-
-			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources);
-			/*
-			if(!$response['total'])
-			{
-				$cal->get_calendar();
-				$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id);
-			}
-			*/
+			
+			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources, 1);
 
 			$response['results']=array();
 			while($cal->next_record(DB_ASSOC)) {
@@ -731,20 +724,19 @@ try {
 
 			$view_id = ($_REQUEST['view_id']);
 
-			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id);
+			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id,0,0,0,-1);
 			if(!$response['total']) {
 				$cal->get_calendar();
-				$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id);
+				$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id,0,0,0,-1);
 			}
 			$response['results']=array();
-			while($cal->next_record(DB_ASSOC)) {
+			while($record = $cal->next_record(DB_ASSOC)) {
 				$user = $GO_USERS->get_user($cal->f('user_id'));
 
-				$cal->record['user_name'] = String::format_name($user);
+				$record['user_name'] = String::format_name($user);
+				$record['selected']=$cal2->is_view_calendar($cal->f('id'), $view_id) ? '1' : '0';
 
-				$cal->record['selected']=$cal2->is_view_calendar($cal->f('id'), $view_id) ? '1' : '0';
-
-				$response['results'][] = $cal->record;
+				$response['results'][] = $record;
 			}
 
 			$response['success'] = true;
@@ -752,15 +744,13 @@ try {
 			break;
 
 		case 'views':
-
-
 			$response['total'] = $cal->get_authorized_views($GO_SECURITY->user_id);
 			$response['results']=array();
-			while($cal->next_record(DB_ASSOC)) {
+			while($record= $cal->next_record(DB_ASSOC)) {
 				$user = $GO_USERS->get_user($cal->f('user_id'));
 
-				$cal->record['user_name'] = String::format_name($user);
-				$response['results'][] = $cal->record;
+				$record['user_name'] = String::format_name($user);
+				$response['results'][] = $record;
 			}
 			break;
 
@@ -1050,7 +1040,7 @@ try {
 				$visible_cals[] = $cal->f('calendar_id');
 			}
 
-			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id, $start, $limit);
+			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id, $start, $limit,0,1);
 
 			$response['results']=array();
 

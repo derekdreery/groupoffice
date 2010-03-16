@@ -807,7 +807,11 @@ class addressbook extends db {
 		}
 
 		if(!empty($advanced_query)) {
-			$sql .= ' AND '.$advanced_query;
+			if(!String::check_parentheses($advanced_query)){
+				throw new Exception($GLOBALS['lang']['common']['parentheses_invalid_error']);
+			}
+			$sql .= ' AND ('.$advanced_query.')';
+			
 		}
 
 		$sql .= " ORDER BY $sort_index $sort_order";
@@ -964,6 +968,9 @@ class addressbook extends db {
 		}
 
 		if(!empty($advanced_query)) {
+			if(!String::check_parentheses($advanced_query)){
+				throw new Exception($GLOBALS['lang']['common']['parentheses_invalid_error']);
+			}
 			$sql .= ' AND ('.$advanced_query.')';
 		}
 
