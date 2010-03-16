@@ -29,6 +29,16 @@ class String {
 	 */
 	public static function check_parentheses($str){
 
+		//remove escaped slashes
+		$str = str_replace("\'", "", $str);
+		$str = str_replace('\"', "", $str);
+
+		//remove slashed strings
+		$str = preg_replace('/"[^"]*"/', '', $str);
+		$str = preg_replace("/'[^']*'/", '', $str);
+
+		go_debug($str);
+
 		$opened=0;
 
 		for($i=0,$max=strlen($str);$i<$max;$i++){
