@@ -1,3 +1,7 @@
+2010/03/16 3.4.11
+- Manual page break in quotes or invoices
+- Small bug fixes
+
 2010/03/15 3.4.10
 - Fixed issues with IMAP cache
 - Easier error reporting in syncml
