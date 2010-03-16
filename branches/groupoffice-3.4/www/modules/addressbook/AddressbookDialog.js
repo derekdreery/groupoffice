@@ -18,7 +18,6 @@ GO.addressbook.AddressbookDialog = function(config)
 	{
 		config={};
 	}
-	this.salutation = GO.addressbook.lang.cmdSalutation+' ['+GO.addressbook.lang.cmdSir+'/'+GO.addressbook.lang.cmdMadam+'] {middle_name} {last_name}';
 	
 	this.buildForm();
 	
@@ -130,7 +129,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 						name: 'default_salutation',
 						allowBlank: false,
 						anchor:'100%',
-						value:this.salutation
+						value:GO.addressbook.lang.defaultSalutationExpression
 					}
 				},{
 					columnWidth:.2,
@@ -138,7 +137,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
 					bodyStyle:'padding-left:5px',
 					items:{
 						xtype:'button',
-						handler:function(){this.propertiesPanel.form.findField('default_salutation').setValue(this.salutation);},
+						handler:function(){this.propertiesPanel.form.findField('default_salutation').setValue(GO.addressbook.lang.defaultSalutationExpression);},
 						scope:this,
 						text:GO.lang.cmdReset
 					}
