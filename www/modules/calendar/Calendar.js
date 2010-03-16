@@ -1732,17 +1732,17 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				sm: new Ext.grid.RowSelectionModel(),
 				loadMask: true,
 				plugins : [this.mergeColumn],
-				tbar: [{
-					id: 'addView',
+				tbar: [{					
 					iconCls: 'btn-add',
 					text: GO.lang.cmdAdd,
 					cls: 'x-btn-text-icon',
+					disabled: !GO.settings.modules.calendar.write_permission,
 					handler: function(){
 						this.viewDialog.show();
 					},
 					scope: this
 				},{
-					id: 'delete',
+					disabled: !GO.settings.modules.calendar.write_permission,
 					iconCls: 'btn-delete',
 					text: GO.lang.cmdDelete,
 					cls: 'x-btn-text-icon',
@@ -1788,11 +1788,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			});
 
 			var items = [this.calendarsGrid, this.viewsGrid];
-			if(GO.settings.modules['calendar']['write_permission'])
+			if(GO.settings.has_admin_permission)
 			{
 				items.push(this.groupsGrid);
 				items.push(this.resourcesGrid);
-			}
+			}		
             
 			this.adminDialog = new Ext.Window({
 				title: GO.calendar.lang.administration,

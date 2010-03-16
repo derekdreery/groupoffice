@@ -35,17 +35,17 @@ GO.calendar.ResourcesGrid = function(config){
 	config.loadMask=true;
 
 	config.tbar=[{
-        id: 'addCalendar',
         iconCls: 'btn-add',
         text: GO.lang.cmdAdd,
+				disabled: !GO.settings.modules.calendar.write_permission,
         cls: 'x-btn-text-icon',
         handler: function(){
             GO.calendar.calendarDialog.show(0, true);
         },
         scope: this
-	},{
-        id: 'delete',
+	},{        
         iconCls: 'btn-delete',
+				disabled: !GO.settings.modules.calendar.write_permission,
         text: GO.lang.cmdDelete,
         cls: 'x-btn-text-icon',
         handler: function(){
