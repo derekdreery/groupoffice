@@ -70,7 +70,9 @@ GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 
 	initValue : function(){
 		GO.form.ComboBox.superclass.initValue.call(this);
-		this.setRawValue(this.lastSelectionText);
+		
+		if(!GO.util.empty(this.lastSelectionText))
+			this.setRawValue(this.lastSelectionText);
 	},
 
 	/**
