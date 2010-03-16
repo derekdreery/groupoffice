@@ -244,7 +244,7 @@ GO.email.AccountDialog = function(config) {
 	var properties_items = [
 	this.selectUser = new GO.form.SelectUser({
 		fieldLabel : GO.lang.strUser,
-		disabled : !GO.settings.modules['email']['write_permission'],
+		disabled : !GO.settings.has_admin_permission,
 		anchor : '100%'
 	}),
 	{

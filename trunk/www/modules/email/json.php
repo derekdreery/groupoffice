@@ -1061,6 +1061,7 @@ try{
 															'user_name'=>String::format_name($record),
 															'user_id'=>$email->f('user_id'),
 															'host'=>$email->f('host'),
+															'smtp_host'=>$email->f('smtp_host'),
 															'type'=>$email->f('type'),
 															'html_signature'=>String::text_to_html($email->f('signature')),
 															'plain_signature'=>$email->f('signature')

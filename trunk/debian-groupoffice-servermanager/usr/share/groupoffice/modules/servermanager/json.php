@@ -190,6 +190,7 @@ try{
 					require($config_file);
 					if(isset($config))
 					{
+						$installation['enabled']=isset($config['enabled']) ? $config['enabled'] : true;
 						$installation['title']=$config['title'];
 						$installation['webmaster_email']=$config['webmaster_email'];
 						$installation['max_users']=isset($config['max_users']) ? $config['max_users'] : 0;
