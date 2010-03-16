@@ -87,6 +87,13 @@ GO.email.AccountsDialog = function(config){
 
 	}, this);
 
+	config.listeners={
+		render:function(){
+			this.accountsGrid.store.load();
+		},
+		scope:this
+	}
+
 	GO.email.AccountsDialog.superclass.constructor.call(this, config);	
 
 }
