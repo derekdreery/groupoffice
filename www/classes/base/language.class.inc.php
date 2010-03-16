@@ -96,7 +96,11 @@ class GO_LANGUAGE extends db {
 	 * @return string	language code
 	 */
 	function set_language($language) {
+		if($this->language==$language)
+			return true;
+
 		global $lang, $GO_LANGUAGE;
+
 		if(file_exists($this->language_path.'common/'.$language.'.inc.php'))
 		{
 			$this->language=$_SESSION['GO_SESSION']['language']=$language;

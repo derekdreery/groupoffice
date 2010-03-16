@@ -966,26 +966,33 @@ class calendar extends db
 		return $this->num_rows();
 	}
 
-	function get_authorized_calendars($user_id, $start=0, $offset=0, $resources=0, $group_id=-1)
+	function get_authorized_calendars($user_id, $start=0, $offset=0, $resources=0, $group_id=1)
 	{
-		$sql = "SELECT DISTINCT cal_calendars.* ".
-		"FROM cal_calendars ".
-		"INNER JOIN go_acl ON cal_calendars.acl_id = go_acl.acl_id ".
-		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-		"WHERE (go_acl.user_id=".$this->escape($user_id)." ".
-		"OR go_users_groups.user_id=".$this->escape($user_id).")";
+		$sql = "SELECT DISTINCT c.* ";
+
+		if($group_id<0){
+			$sql .= ",g.name AS group_name ";
+		}
+
+		$sql .= "FROM cal_calendars c ";
+
+		if($group_id<0){
+			$sql .= " LEFT JOIN cal_groups g ON g.id=c.group_id ";
+		}
+
+		$sql .= "INNER JOIN go_acl a ON c.acl_id = a.acl_id ".
+		"LEFT JOIN go_users_groups ug ON a.group_id = ug.group_id ".
+		"WHERE (a.user_id=".$this->escape($user_id)." ".
+		"OR ug.user_id=".$this->escape($user_id).")";
     
-        if($resources)
-        {
-            $sql .= " AND cal_calendars.group_id > 1";
-        }else
-        $group_id = 1;
-        
-        if($group_id>-1)
-        {
-            $sql .= " AND cal_calendars.group_id = ".$this->escape($group_id);
-        }
-        $sql .= " ORDER BY cal_calendars.name ASC";
+		if($resources)
+		{
+				$sql .= " AND c.group_id > 1";
+		}elseif($group_id>-1)
+		{
+				$sql .= " AND c.group_id = ".$this->escape($group_id);
+		}
+		$sql .= " ORDER BY c.name ASC";
 
 		$this->query($sql);
 

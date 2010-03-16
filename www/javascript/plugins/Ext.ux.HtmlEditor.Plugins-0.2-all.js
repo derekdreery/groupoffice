@@ -113,15 +113,15 @@ Ext.ux.form.HtmlEditor.IndentOutdent = Ext.extend(Ext.ux.form.HtmlEditor.MidasCo
     midasBtns: ['|', {
         cmd: 'indent',
         tooltip: {
-            title: 'Indent Text'
+            title: GO.lang.indent
         },
-        overflowText: 'Indent Text'
+        overflowText: GO.lang.indent
     }, {
         cmd: 'outdent',
         tooltip: {
-            title: 'Outdent Text'
+            title: GO.lang.outdent
         },
-        overflowText: 'Outdent Text'
+        overflowText: GO.lang.outdent
     }]
 });
 /**
@@ -135,9 +135,9 @@ Ext.ux.form.HtmlEditor.RemoveFormat = Ext.extend(Ext.ux.form.HtmlEditor.MidasCom
         enableOnSelection: true,
         cmd: 'removeFormat',
         tooltip: {
-            title: 'Remove Formatting'
+            title: GO.lang.removeFormatting
         },
-        overflowText: 'Remove Formatting'
+        overflowText: GO.lang.removeFormatting
     }]
 });
 /**
@@ -520,7 +520,7 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
                 if (!this.hrWindow){
 										
                     this.hrWindow = new Ext.Window({
-                        title: 'Insert Rule',
+                        title: GO.lang.insertHorizontalRule,
                         closeAction: 'hide',
 												focus: function(){													
 													this.items.get(0).form.findField('hrwidth').focus(true);
@@ -536,7 +536,7 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
                             labelAlign: 'right',
                             items: [{
                                 xtype: 'label',
-                                html: 'Enter the width of the Rule in percentage<br/> followed by the % sign at the end, or to<br/> set a fixed width ommit the % symbol.<br/>&nbsp;'
+                                html: GO.lang.insertHRtext+'<br/>&nbsp;'
                             }, {
 																
                                 xtype: 'textfield',
@@ -559,7 +559,7 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
                             }]
                         }],
                         buttons: [{
-                            text: 'Insert',
+                            text: GO.lang.cmdInsert,
                             handler: function(){
                                 var frm = this.hrWindow.getComponent('insert-hr').getForm();
                                 if (frm.isValid()){
@@ -570,7 +570,7 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
     						},
                             scope: this
                         }, {
-                            text: 'Cancel',
+                            text: GO.lang.cmdCancel,
                             handler: function(){
                                 this.hrWindow.hide();
                             },
@@ -584,9 +584,9 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
             },
             scope: this,
             tooltip: {
-                title: 'Insert Horizontal Rule'
+                title: GO.lang.insertHorizontalRule
             },
-            overflowText: 'Horizontal Rule'
+            overflowText: GO.lang.insertHorizontalRule
         });
     },
     // private

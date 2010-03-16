@@ -24,6 +24,45 @@
 
 class String {
 
+	/*
+	 * Check if parenthesis are closed properly.
+	 */
+	public static function check_parentheses($str){
+
+		//remove escaped slashes
+		$str = str_replace("\'", "", $str);
+		$str = str_replace('\"', "", $str);
+
+		//remove slashed strings
+		$str = preg_replace('/"[^"]*"/', '', $str);
+		$str = preg_replace("/'[^']*'/", '', $str);
+
+		go_debug($str);
+
+		$opened=0;
+
+		for($i=0,$max=strlen($str);$i<$max;$i++){
+			switch($str[$i]){
+				case '(':
+					$opened++;
+				break;
+
+				case ')':
+					if($opened>0){
+						$opened--;
+					}else
+					{
+						//closing bracket and it wasn't opened. This is invalid
+						return false;
+					}
+					break;
+			}
+		}
+
+		//opened should be 0 if number of ( matches ).
+		return $opened==0;
+	}
+
 	public static function escape_javascript($str){
 		return strtr($str, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
 	}

@@ -151,6 +151,7 @@ GO.lang.cmdReset = 'Reset';
 GO.lang.cmdExport='Export';
 GO.lang.cmdPrint='Print';
 GO.lang.cmdImport='Import';
+GO.lang.cmdInsert='Insert';
 
 GO.lang.cmdActions = 'Actions';
 
@@ -345,3 +346,10 @@ GO.lang.userGroups='User groups';
 
 GO.lang.firebugDetected="Warning! Firebug Add-on detected";
 GO.lang.firebugWarning="The Firebug Add-on is known to slow down this application. Please don't use it for production work."
+
+GO.lang.indent='Indent Text';
+GO.lang.outdent='Outdent Text';
+GO.lang.removeFormatting='Remove Formatting';
+GO.lang.insertHorizontalRule='Insert Horizontal Rule';
+GO.lang.insertHRtext='Enter the width of the Rule in percentage<br/> followed by the % sign at the end, or to<br/> set a fixed width ommit the % symbol.';
+GO.lang.cmdInsert='Insert';

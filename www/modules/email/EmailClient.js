@@ -1503,8 +1503,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 					}
 				}, this);
 				
-			this.accountsDialog.accountsGrid.on('delete', function(){this.refresh();}, this);
-			this.accountsDialog.accountsGrid.store.load();				
+			this.accountsDialog.accountsGrid.on('delete', function(){this.refresh();}, this);							
 		}
 		this.accountsDialog.show();
 	},

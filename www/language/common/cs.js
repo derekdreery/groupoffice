@@ -336,3 +336,6 @@ GO.lang.age='Věk';
 GO.lang.selectFolder = 'Vyberte prosím složku';
 
 GO.lang.userGroups='Uživatelské skupiny';
+
+GO.lang.firebugDetected='Upozornění! Firebug Add-on detekován';
+GO.lang.firebugWarning='Firebug Add-on může spomalit tuto aplikaci. Prosím nepoužívejte jej při produkční práci.'
