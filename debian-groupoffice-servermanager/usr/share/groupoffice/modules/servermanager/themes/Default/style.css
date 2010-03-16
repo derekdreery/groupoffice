@@ -8,3 +8,7 @@
 .go-link-icon-13 {
 	background-image: url('images/servermanager.gif') !important;
 }
+
+.installation-disabled td{
+	color: red;
+}
