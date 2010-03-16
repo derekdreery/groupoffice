@@ -9,16 +9,16 @@ $ab = new addressbook();
 require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
 
 
-$default_salutation = $lang['common']['dear'].' ['.$lang['common']['sirMadam']['M'].'/'.$lang['common']['sirMadam']['F'].'] {middle_name} {last_name}';
+//$default_salutation = $lang['common']['dear'].' ['.$lang['common']['sirMadam']['M'].'/'.$lang['common']['sirMadam']['F'].'] {middle_name} {last_name}';
 
 $default_language = $GO_CONFIG->default_country;
 if(!$GO_LANGUAGE->get_address_format_by_iso($default_language))
 	$default_language = 'US';
 
-$addressbook = $ab->add_addressbook(1, $lang['addressbook']['prospects'], $default_language, $default_salutation);
+$addressbook = $ab->add_addressbook(1, $lang['addressbook']['prospects'], $default_language, $lang['addressbook']['defaultSalutation']);
 $GLOBALS['GO_SECURITY']->add_group_to_acl($GO_CONFIG->group_internal, $addressbook['acl_id'], GO_SECURITY::WRITE_PERMISSION);
 
-$addressbook = $ab->add_addressbook(1, $lang['addressbook']['suppliers'], $default_language, $default_salutation);
+$addressbook = $ab->add_addressbook(1, $lang['addressbook']['suppliers'], $default_language, $lang['addressbook']['defaultSalutation']);
 $GLOBALS['GO_SECURITY']->add_group_to_acl($GO_CONFIG->group_internal, $addressbook['acl_id'], GO_SECURITY::WRITE_PERMISSION);
 
 
@@ -69,7 +69,7 @@ if (!is_dir($GO_CONFIG->file_storage_path.'contacts/contact_photos'))
 //$ab->add_contact($contact);
 
 
-$addressbook = $ab->add_addressbook(1, $lang['addressbook']['customers'], $default_language, $default_salutation);
+$addressbook = $ab->add_addressbook(1, $lang['addressbook']['customers'], $default_language, $lang['addressbook']['defaultSalutation']);
 $GLOBALS['GO_SECURITY']->add_group_to_acl($GO_CONFIG->group_internal, $addressbook['acl_id'], GO_SECURITY::WRITE_PERMISSION);
 
 /*

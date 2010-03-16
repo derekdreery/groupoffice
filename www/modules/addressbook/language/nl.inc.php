@@ -41,3 +41,5 @@ $lang['addressbook']['clickHereToView']='Klik hier om de contactpersoon te bekij
 
 $lang['addressbook']['contactFromAddressbook']='Contactpersoon uit %s';
 $lang['addressbook']['companyFromAddressbook']='Bedrijf uit %s';
+
+$lang['addressbook']['defaultSalutation']='Geachte [heer/mevrouw] {middle_name} {last_name}';
