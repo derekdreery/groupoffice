@@ -19,30 +19,39 @@ GO.calendar.ViewDialog = function(config)
 	}
 	
 	var checkCol = new GO.grid.CheckColumn({
-		header: GO.lang.strSelected,
+		header: '&nbsp;',
 		dataIndex: 'selected',
 		width: 55
 	});
 	 
-	this.calendarsStore = new GO.data.JsonStore({
-		url: GO.settings.modules.calendar.url+'json.php',
+	this.calendarsStore = new Ext.data.GroupingStore({
 		baseParams: {
 			'task': 'view_calendars',
 			view_id: this.view_id
 		},
-		root: 'results',
-		totalProperty: 'total',
-		id: 'id',
-		fields:['id','name','user_name','selected'],
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			id: 'id',
+			totalProperty: 'total',
+			fields:['id','name','user_name','selected', 'group_name']
+		}),
+		proxy: new Ext.data.HttpProxy({
+			url: GO.settings.modules.calendar.url+'json.php'
+		}),
+		sortInfo:{
+			field: 'name',
+			direction: "ASC"
+		},
+		groupField:'group_name',
 		remoteSort:true
-	});
-	 
+	});	 
 	 
 	this.calendarsGrid = new GO.grid.GridPanel( {
 		region:'center',
 		layout:'fit',
 		paging:false,
 		border:false,
+		split:true,
 		plugins:checkCol,
 		store: this.calendarsStore,
 		columns:[
@@ -53,11 +62,18 @@ GO.calendar.ViewDialog = function(config)
 		},{
 			header:GO.lang.strOwner,
 			dataIndex: 'user_name'
+		},{
+      header:GO.calendar.lang.group,
+			dataIndex: 'group_name',
+			id:'group_name',
+			hidden:true
 		}],
-		view:new  Ext.grid.GridView({
-			autoFill:true,
-			forceFit: true
-		}),
+		view:new Ext.grid.GroupingView({
+        autoFill: true,
+        forceFit:true,
+        groupTextTpl: '{text}',
+        emptyText: GO.lang['strNoItems']
+    }),
 		sm: new Ext.grid.RowSelectionModel(),
 		loadMask: true
 	});

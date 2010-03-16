@@ -29,7 +29,7 @@ GO.calendar.ResourcesGrid = function(config){
         forceFit:true,
         groupTextTpl: '{text}',
         emptyText: GO.lang['strNoItems']
-    }),
+    });
 
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
