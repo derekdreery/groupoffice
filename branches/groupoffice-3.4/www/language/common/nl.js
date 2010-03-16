@@ -311,6 +311,15 @@ GO.lang.permissionWrite='Schrijven';
 GO.lang.permissionDelete='Schrijven en verwijderen';
 GO.lang.permissionManage='Beheren';
 
+
+GO.lang.spellcheck = 'Spellingscontrole';
+GO.lang.spellcheckdetails = 'Controleer spelling';
+GO.lang.spellcheckNoError = 'Geen fouten gevonden';
+GO.lang.spellcheckServerError = 'Er is een onbekende fout opgetreden bij het uitvoeren van de spellingscontrole.';
+GO.lang.spellcheckNoErrors = 'E-mail bericth met [{1}] fout(en)';
+GO.lang.spellcheckAsk = 'Bericht versturen zonder spellingscontrole?';
+
+
 GO.lang.age='Leeftijd';
 
 GO.lang.selectFolder = 'Selecteer een map a.u.b.';
@@ -319,3 +328,10 @@ GO.lang.userGroups='Gebruikersgroepen';
 
 GO.lang.firebugDetected="Waarschuwing! Firebug Add-on gedetecteerd";
 GO.lang.firebugWarning="De Firebug Add-on vertraagd deze applicatie. Gebruik het a.u.b. niet voor productie."
+
+GO.lang.indent='Inspringen';
+GO.lang.outdent='Uitspringen';
+GO.lang.removeFormatting='Verwijder opmaak';
+GO.lang.insertHorizontalRule='Horizontale lijn invoegen';
+GO.lang.insertHRtext='Voer de breedte in procenten van de lijn in gevolgd door het % teken aan het einde, of stel een vaste breedte in zonder het procent teken.';
+GO.lang.cmdInsert='Invoegen';
