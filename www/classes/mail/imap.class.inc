@@ -590,7 +590,8 @@ class imap{
 			$message['udate']=strtotime($values['date']);
 		}else
 		{
-			$message['udate']=0;
+			//No date header?!? just use current time.
+			$message['udate']=time();
 		}	
 		
 		$message['subject'] = isset($values['subject']) ? $this->enc_utf8($values['subject']) : '';
