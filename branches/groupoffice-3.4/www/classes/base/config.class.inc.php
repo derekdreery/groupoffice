@@ -1116,14 +1116,17 @@ class GO_CONFIG {
 		$response['language']=$GO_LANGUAGE->language;
 		$response['state']=array();
 		if($GO_SECURITY->logged_in()) {
-		//state for Ext components
+			//state for Ext components
 			$response['state'] = $this->get_state($GO_SECURITY->user_id, $response['state_index']);
+
+			$response['has_admin_permission']=$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id);
 		}
 		foreach($_SESSION['GO_SESSION'] as $key=>$value) {
 			if(!is_array($value)) {
 				$response[$key]=$value;
 			}
 		}
+
 		//$response['modules']=$GO_MODULES->modules;
 		$response['config']['theme_url']=$GO_THEME->theme_url;
 		$response['config']['theme']=$GO_THEME->theme;
