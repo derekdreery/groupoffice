@@ -762,6 +762,9 @@ try{
 					case 'subject':
 					$sort_field=SORTSUBJECT;
 					break;
+					case 'size':
+					$sort_field=SORTSIZE;
+					break;
 					default:
 					$sort_field=SORTDATE;
 				}
