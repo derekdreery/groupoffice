@@ -340,12 +340,9 @@ try{
 		{
 			require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 			$gnupg = new gnupg();
-			$sender = String::get_email_from_string($content['from']);
-			$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$sender]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$sender] : '';
-		}
-
-		if($GO_MODULES->has_module('gnupg'))
+			$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$content['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$content['sender']] : '';
 			$response['data']['body'] = $gnupg->replace_encoded($response['data']['body'],$passphrase,false);
+		}
 
 
 		/*if($response['data']['body'] != '')
@@ -613,6 +610,31 @@ try{
 				}
 
 				$response['date']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $response['udate']);
+				$response['blocked_images']=0;
+				$response['full_from']=htmlspecialchars($response['full_from'], ENT_COMPAT, 'UTF-8');
+				$response['sender']=htmlspecialchars($response['sender'], ENT_COMPAT, 'UTF-8');
+				$response['from']=htmlspecialchars($response['from'], ENT_COMPAT, 'UTF-8');
+				$response['subject']=htmlspecialchars($response['subject'], ENT_COMPAT, 'UTF-8');
+				$response['reply-to']=htmlspecialchars($response['reply-to'], ENT_COMPAT, 'UTF-8');
+				for($i=0;$i<count($response['to']);$i++){
+					$response['to'][$i]=array(
+						'email'=>htmlspecialchars($response['to'][$i]['email'], ENT_COMPAT, 'UTF-8'),
+						'name'=>htmlspecialchars($response['to'][$i]['name'], ENT_COMPAT, 'UTF-8')
+					);
+				}
+				for($i=0;$i<count($response['cc']);$i++){
+					$response['cc'][$i]=array(
+						'email'=>htmlspecialchars($response['cc'][$i]['email'], ENT_COMPAT, 'UTF-8'),
+						'name'=>htmlspecialchars($response['cc'][$i]['name'], ENT_COMPAT, 'UTF-8')
+					);
+				}
+				for($i=0;$i<count($response['bcc']);$i++){
+					$response['bcc'][$i]=array(
+						'email'=>htmlspecialchars($response['bcc'][$i]['email'], ENT_COMPAT, 'UTF-8'),
+						'name'=>htmlspecialchars($response['bcc'][$i]['name'], ENT_COMPAT, 'UTF-8')
+					);
+				}
+
 				//$response['size']=Number::format_size($response['size']);		
 				
 				if($GO_MODULES->has_module('gnupg'))
@@ -623,6 +645,7 @@ try{
 					if(isset($_POST['passphrase']))
 					{
 						$passphrase=$_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']]=$_POST['passphrase'];
+						//$passphrase=$_POST['passphrase'];
 					}
 					try{
 						$response['body'] = $gnupg->replace_encoded($response['body'],$passphrase);
@@ -655,35 +678,12 @@ try{
 					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
 					$block_images = !is_array($contact);
 				}
-				$response['blocked_images']=0;
+				
 				if($block_images)
 				{
 					$response['body'] = preg_replace("/<([^a]{1})([^>]*)https?:([^>]*)/iu", "<$1$2blocked:$3", $response['body'], -1, $response['blocked_images']);
 				}
 
-				$response['full_from']=htmlspecialchars($response['full_from'], ENT_COMPAT, 'UTF-8');
-				$response['sender']=htmlspecialchars($response['sender'], ENT_COMPAT, 'UTF-8');
-				$response['from']=htmlspecialchars($response['from'], ENT_COMPAT, 'UTF-8');
-				$response['subject']=htmlspecialchars($response['subject'], ENT_COMPAT, 'UTF-8');
-				$response['reply-to']=htmlspecialchars($response['reply-to'], ENT_COMPAT, 'UTF-8');
-				for($i=0;$i<count($response['to']);$i++){
-					$response['to'][$i]=array(
-						'email'=>htmlspecialchars($response['to'][$i]['email'], ENT_COMPAT, 'UTF-8'),
-						'name'=>htmlspecialchars($response['to'][$i]['name'], ENT_COMPAT, 'UTF-8')
-					);
-				}
-				for($i=0;$i<count($response['cc']);$i++){
-					$response['cc'][$i]=array(
-						'email'=>htmlspecialchars($response['cc'][$i]['email'], ENT_COMPAT, 'UTF-8'),
-						'name'=>htmlspecialchars($response['cc'][$i]['name'], ENT_COMPAT, 'UTF-8')
-					);
-				}
-				for($i=0;$i<count($response['bcc']);$i++){
-					$response['bcc'][$i]=array(
-						'email'=>htmlspecialchars($response['bcc'][$i]['email'], ENT_COMPAT, 'UTF-8'),
-						'name'=>htmlspecialchars($response['bcc'][$i]['name'], ENT_COMPAT, 'UTF-8')
-					);
-				}
 
 				break;
 
