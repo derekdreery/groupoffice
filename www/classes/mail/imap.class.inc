@@ -864,7 +864,7 @@ class imap{
 			$tmp = Array (
 					'number' => $section,
 					'id' => $mimeobj->ifid ? $mimeobj->id : 0,
-					'name' => $name,
+					'name' => $this->enc_utf8($name),
 					'mime' => $full_mime_type,
 					'transfer' => $encoding,
 					'charset' => $part_charset,
