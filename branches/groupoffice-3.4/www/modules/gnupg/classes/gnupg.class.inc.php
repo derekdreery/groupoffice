@@ -290,7 +290,7 @@ class gnupg{
 
 		$data='';
 		$data.="Key-Type: DSA\n";
-		$data.="Key-Length: 2048\n";
+		$data.="Key-Length: 1024\n";
 		$data.="Subkey-Type: ELG-E\n";
 		$data.="Subkey-Length: " . $keylength . "\n";
 		$data.="Name-Real: " . $name . "\n";
@@ -315,7 +315,7 @@ class gnupg{
 
 		$this->error = '';
 
-		$complete_cmd = $this->gpg.' --display-charset utf-8 --utf8-strings --no-tty';
+		$complete_cmd = $this->gpg.' --no-use-agent --display-charset utf-8 --utf8-strings --no-tty';
 		//$complete_cmd = $this->gpg.' --display-charset utf-8 --utf8-strings';
 
 		if(isset($passphrase))
@@ -330,7 +330,7 @@ class gnupg{
 		go_debug($complete_cmd);
 		
 		
-		if(isset($passphrase))
+		if(!empty($passphrase))
 		{
 			$this->passphrase=$passphrase;
 		}else
@@ -342,7 +342,7 @@ class gnupg{
 
 		foreach($this->pipes as $pipe)
 		{
-			//stream_set_blocking($pipe,0);
+			stream_set_blocking($pipe,0);
 		}
 		//stream_set_blocking($this->pipes[STATUS_FD], 0);
 		//stream_set_blocking($this->pipes[GPGSTDOUT],0 );
@@ -366,10 +366,12 @@ class gnupg{
 		$this->output .= stream_get_contents($this->pipes[GPGSTDOUT]);
 		
 		$output = $this->output;
-		go_debug($this->output);
+
+		go_debug('Output: '.$this->output);
 
 		$this->error = stream_get_contents($this->pipes[GPGSTDERR]);
-		go_debug('Error :'.$this->error);
+		if(!empty($this->error))
+			go_debug('Error :'.$this->error);
 		
 		
 
@@ -381,6 +383,8 @@ class gnupg{
 		//fclose($this->pipes[GPGSTDERR]);
 
 		$ret = proc_close($p);
+
+		go_debug('Exit status: '.$ret);
 
 		if($ret>0)
 		{
