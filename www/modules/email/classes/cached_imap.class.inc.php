@@ -31,7 +31,7 @@ class cached_imap extends imap{
 	var $filtered=0;
 
 
-	var $disable_message_cache=false;
+	var $disable_message_cache=true;
 
 
 	function __construct()
@@ -590,8 +590,13 @@ class cached_imap extends imap{
 						if(!$plain_alternative || (strtolower($part['type'])!='related' && strtolower($part['type'])!='alternative')){
 							$plain_part = String::html_to_text($html_part);
 						}
+
+						
 						break;					
 				}
+
+				if(!empty($part['name']))
+					$attachments[]=$part;
 
 
 				if(!empty($message['html_body']) && !empty($html_part)){

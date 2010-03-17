@@ -50,6 +50,13 @@ GO.email.MessagesGrid = function(config){
 				dataIndex: 'date',
 				width:65,
 				align:'right'
+			},{
+				header: GO.lang.strSize,
+				dataIndex: 'size',
+				width:65,
+				align:'right',
+				hidden:true,
+				renderer:Ext.util.Format.fileSize
 			}]
 		});
 		config.view=new Ext.grid.GridView({
@@ -91,7 +98,14 @@ GO.email.MessagesGrid = function(config){
 			dataIndex: 'date',
 			width:65,
 			align:'right'
-		}]
+		},{
+				header: GO.lang.strSize,
+				dataIndex: 'size',
+				width:65,
+				align:'right',
+				hidden:true,
+				renderer:Ext.util.Format.fileSize
+			}]
 		});
 		config.bbar = new Ext.PagingToolbar({
 			cls: 'go-paging-tb',

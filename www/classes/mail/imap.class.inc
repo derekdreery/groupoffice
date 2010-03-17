@@ -448,7 +448,7 @@ class imap{
 			$cached_message['uid']=$message['uid'];
 			$cached_message['new']=$message['new'] ? '1' : '0';
 			$cached_message['subject']=$message['subject'];
-			$cached_message['size']=$message['uid'];
+			$cached_message['size']=$message['size'];
 			$cached_message['udate']=$message['udate'];
 			$cached_message['attachments']=$message['attachments'] ? '1' : '0';
 			$cached_message['flagged']=$message['flagged'] ? '1' : '0';
