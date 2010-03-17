@@ -1162,7 +1162,7 @@ class calendar extends db
 
 			$this->cache_event($event['id']);
 
-			if(!empty($event['reminder']))
+			if(!empty($event['reminder']) && $event['reminder']>time())
 			{
 				global $GO_CONFIG;
 
@@ -1304,7 +1304,7 @@ class calendar extends db
 				$rm->delete_reminder($existing_reminder['id']);
 			}
 
-			if(!empty($event['reminder']))
+			if(!empty($event['reminder'])  && $event['reminder']>time())
 			{
 				if(!$calendar)
 				{
