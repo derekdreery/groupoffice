@@ -1,5 +1,6 @@
-2010/03/16 3.4.11
+2010/03/17 3.4.11
 - Manual page break in quotes or invoices
+- Added size column to E-mail messages grid
 - Small bug fixes
 
 2010/03/15 3.4.10
