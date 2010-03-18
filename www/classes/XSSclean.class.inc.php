@@ -103,7 +103,7 @@ class XSSclean {
 
 		//merijn remove HTML comments
 		$str = preg_replace('/<!.*>/U', '', $str);
-		$str = preg_replace("/on[a-z\w]+=[^\"'>\n]*/iU", "removed='' ", $str);
+		$str = preg_replace("/ on[a-z\w]+=[^\"'>\n]*/iU", " removed='' ", $str);
 
 		/*
 		* Remove Invisible Characters

@@ -30,7 +30,10 @@ class cached_imap extends imap{
 
 	var $filtered=0;
 
-
+	/*
+	 * You can disable the cache for debugging.
+	 * If enabled the message will be converted to safe HTML only once.
+	 */
 	var $disable_message_cache=false;
 
 
@@ -590,8 +593,13 @@ class cached_imap extends imap{
 						if(!$plain_alternative || (strtolower($part['type'])!='related' && strtolower($part['type'])!='alternative')){
 							$plain_part = String::html_to_text($html_part);
 						}
+
+						
 						break;					
 				}
+
+				if(!empty($part['name']))
+					$attachments[]=$part;
 
 
 				if(!empty($message['html_body']) && !empty($html_part)){

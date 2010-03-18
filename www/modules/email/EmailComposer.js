@@ -1288,10 +1288,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		//prevent double send with ctrl+enter
 		if(this.sendButton.disabled){
 			return false;
-		}
-
-		this.saveButton.setDisabled(true);
-		this.sendButton.setDisabled(true);
+		}		
 
 		/*if (this.isHTML() && this.htmlEditor.SpellCheck == false && !draft){
 			//Ask if they want to run a spell check
@@ -1305,6 +1302,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.uploadDialog.show();
 			return false;
 		}
+
+		this.saveButton.setDisabled(true);
+		this.sendButton.setDisabled(true);
 
 		if (autoSave || this.subjectField.getValue() != ''
 			|| confirm(GO.email.lang.confirmEmptySubject)) {

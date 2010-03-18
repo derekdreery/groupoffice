@@ -183,7 +183,8 @@ try{
 			while($servermanager->next_record())
 			{
 				$installation = $servermanager->record;
-				
+
+				unset($config);
 				$config_file = '/etc/groupoffice/'.$installation['name'].'/config.php';
 				if(file_exists($config_file))
 				{
