@@ -45,4 +45,6 @@ $lang['addressbook']['clickHereToView']='Trykk her for å vise kontakpersonen';
 $lang['addressbook']['contactFromAddressbook']='Kontaktperson fra %s';
 $lang['addressbook']['companyFromAddressbook']='Firma fra %s';
 
+$lang['addressbook']['defaultSalutation']='Kjære [Hr./Fr.] {middle_name} {last_name}';
+
 ?>

@@ -157,7 +157,6 @@ $fs = new filesystem();
 if($GO_SECURITY->user_id>0)
 {
 	$GO_CONFIG->tmpdir=$GO_CONFIG->tmpdir.$GO_SECURITY->user_id.'/';
-	//$fs->mkdir_recursive($GO_CONFIG->tmpdir);
 }
 
 

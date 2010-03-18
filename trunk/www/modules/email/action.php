@@ -433,7 +433,7 @@ try{
 								}
 							}
 
-							if(!empty($_POST['encrypt']) && $draft)
+							if(!empty($_POST['encrypt']) && !$draft)
 							{
 								require_once ($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 								$gnupg = new gnupg();

@@ -473,7 +473,7 @@ class tasks extends db
 			$rm->delete_reminder($existing_reminder['id']);
 		}
 
-		if(!empty($task['reminder'])) {
+		if(!empty($task['reminder']) && $task['reminder']>time()) {
 			$reminder['user_id']=$tasklist['user_id'];
 			$reminder['name']=$task['name'];
 			$reminder['link_type']=12;

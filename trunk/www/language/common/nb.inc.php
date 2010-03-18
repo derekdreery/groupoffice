@@ -206,3 +206,4 @@ $lang['common']['sys_upgrade_text']='Vennligst vent. Alle meldinger blir loggfø
 $lang['common']['click_here_to_contine']='Trykk her for å fortsette';
 $lang['common']['month']= 'måned';
 $lang['common']['strMonths']= 'måneder';
+$lang['common']['parentheses_invalid_error']='Ugyldige paranteser i spørringen. Du må endre disse.';

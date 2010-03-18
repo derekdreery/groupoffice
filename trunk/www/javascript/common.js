@@ -67,8 +67,8 @@ GO.util.getFileExtension = function(filename)
 GO.playAlarm = function(){
 	if(GO.util.empty(GO.settings.mute_sound))
 	{
-		var flashMovie= GO.util.getFlashMovieObject("alarmSound");
-		if(flashMovie && flashMovie.Play)
+		var flashMovie= GO.util.getFlashMovieObject("alarmSound");		
+		if(flashMovie && typeof(flashMovie.Play)=='function')
 		{
 			flashMovie.Play();
 		}
@@ -166,6 +166,7 @@ GO.deleteItems = function(config)
 			config.store.reload({
 				//params: config.params,
 				callback: function(){
+					var callback;
 					if(!this.reader.jsonData.deleteSuccess)
 					{
 						if(config.failure)
@@ -207,6 +208,8 @@ GO.deleteItems = function(config)
 				params: config.params,
 				callback: function(options, success, response)
 				{
+					var callback;
+					
 					var responseParams = Ext.decode(response.responseText);
 					if(!responseParams.success)
 					{
