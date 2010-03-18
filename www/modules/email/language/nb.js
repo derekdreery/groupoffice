@@ -129,7 +129,7 @@ GO.email.lang.closeUploadDialog='Lukk opplastingsvinduet først eller vent til o
 GO.email.lang.signature='Signatur';
 
 GO.email.defaultProgram='Forvalgt e-postprogram';
-GO.email.defaultProgramInstructions ='<p>For å sette Group-Office som forvalgt e-postprogram må du lese <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">lese instruksjonene</a>.</p><p>Hvis du bruker Windows må du også laste ned og kjøre <a class="normal-link" href="{url}">denne registerfilen</a></p>';
+GO.email.defaultProgramInstructions ='<p>For å sette Group-Office som forvalgt e-postprogram må du <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">lese instruksjonene</a>.</p><p>Hvis du bruker Windows må du også laste ned og kjøre <a class="normal-link" href="{url}">denne registerfilen</a></p>';
 
 
 GO.email.lang.htmlMarkup = 'Bruk HTML';
