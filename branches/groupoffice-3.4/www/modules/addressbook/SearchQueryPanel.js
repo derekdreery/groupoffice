@@ -18,6 +18,10 @@ GO.addressbook.SearchQueryPanel = function(config)
 			remoteSort: true
 		});
 
+		this.typesStore.on('load', function(){
+			this.typesBox.selectFirst();
+		},this);
+
 		config.border=false;
 		config.layout='form';
 		config.defaults={hideLabel:true};
@@ -61,7 +65,7 @@ GO.addressbook.SearchQueryPanel = function(config)
 					forceSelection:true
 				})
 			},{
-				items:this.typesBox = new Ext.form.ComboBox({
+				items:this.typesBox = new GO.form.ComboBox({
 					store: this.typesStore,
 					valueField:'field',
 					displayField:'label',
@@ -105,7 +109,7 @@ GO.addressbook.SearchQueryPanel = function(config)
 						if (this.queryField.getValue() && this.operatorBox.value) text = text + ' ' + this.operatorBox.value;
 						if (this.typesBox.value) text = text + ' ' + this.typesBox.value;
 						if (this.comparatorBox.value) text = text + ' ' + this.comparatorBox.value;
-						if (this.criteriumField.getValue()) text = text + ' \'' + this.criteriumField.getValue() + '\'';
+						text = text + ' \'' + this.criteriumField.getValue() + '\'';
 						this.queryField.setValue(text);
 					},
 					text: GO.lang.cmdAdd,
