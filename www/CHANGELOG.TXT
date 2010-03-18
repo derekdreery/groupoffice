@@ -1,3 +1,7 @@
+2010/03/18 3.4.12
+- Send button could dissapear sometimes.
+- Updated Norwegian translation
+
 2010/03/17 3.4.11
 - Manual page break in quotes or invoices
 - Added size column to E-mail messages grid
