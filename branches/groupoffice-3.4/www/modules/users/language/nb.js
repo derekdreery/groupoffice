@@ -84,7 +84,7 @@ GO.users.lang.muteSound='Demp lyd';
 
 GO.users.lang.downloadSampleCSV='Last ned prøve CSV';
 
-GO.users.lang.importText='Du kan importere brukere fra en CSV fil. Du kan laste ned en CSV prøvefil for å se hvordan en slik fil skal bygges oppe.<br />Den første linjen må inneholde kolonnenavnene. Følgende felt kreves for hver bruker :<br /><br />username, password, first_name, last_name, email';
+GO.users.lang.importText='Brukere kan importeres fra en CSV fil. Last ned en prøvefil for å se hvordan en slik fil skal bygges opp.<br />Den første linjen må inneholde kolonnenavn. Følgende felt kreves for hver bruker :<br /><br />username, password, first_name, last_name, email';
 
 
 GO.users.lang.useModule= 'Bruk';

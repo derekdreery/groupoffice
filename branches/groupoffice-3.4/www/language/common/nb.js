@@ -335,3 +335,12 @@ GO.lang.age='Alder';
 GO.lang.selectFolder= 'Velg en mappe';
 
 GO.lang.userGroups='Brukergrupper';
+
+GO.lang.cmdInsert='Sett inn';
+GO.lang.firebugDetected="Advarsel! Oppdaget utvidelsen Firebug";
+GO.lang.firebugWarning="Firebug er kjent for å gjøre dette programmet tregere, og bør ikke brukes i produksjonsmiljø."
+GO.lang.indent='Øk innrykk';
+GO.lang.outdent='Reduser innrykk';
+GO.lang.removeFormatting='Fjern formatering';
+GO.lang.insertHorizontalRule='Sett inn vannrett linje';
+GO.lang.insertHRtext='Angi linjebredde i prosent<br/> etterfulgt av %-tegnet, eller<br/> angi en fast bredde ved å unnlate %-tegnet.';
