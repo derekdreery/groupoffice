@@ -123,6 +123,11 @@ class GoSwift extends Swift_Mailer{
 	{
 		global $GO_CONFIG, $GO_MODULES;
 
+		/*
+		 * Make sure temp dir exists
+		 */
+		File::mkdir($GO_CONFIG->tmpdir);
+
 
 		if($account_id>0 || $alias_id>0)
 		{

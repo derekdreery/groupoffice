@@ -30,6 +30,24 @@ class File
 		$this->path = $path;
 	}
 
+	/**
+	 * Creates a directory recursively
+	 *
+	 * @param	string $path
+	 * @access public
+	 * @return bool True on success
+	 */
+
+	public static function mkdir($path) {
+	  global $GO_CONFIG;
+
+	  if(!is_dir($path))
+	  {
+	  	return mkdir($path, $GO_CONFIG->folder_create_mode, true);
+	  }
+	  return true;
+	}
+
 	public static function convert_to_utf8($path){
 		$enc='UTF-8';
 		$str = file_get_contents($path);
