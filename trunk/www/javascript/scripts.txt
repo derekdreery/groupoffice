@@ -91,6 +91,3 @@ javascript/checker.js
 
 javascript/grids/TreeGrid.js
 javascript/grids/RowExpander.js
-
-javascript/SWFUpload/swfupload.js
-javascript/SWFUpload/SwfUploadPanel.js
