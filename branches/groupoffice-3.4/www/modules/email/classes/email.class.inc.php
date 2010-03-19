@@ -200,7 +200,17 @@ class email extends db
 		global $GO_LINKS;
 
 		$message['link_id']=$this->nextid('em_links');
+
+		if(empty($message['subject'])){
+			global $GO_LANGUAGE, $lang;
+			$GO_LANGUAGE->require_language_file('email');
+
+			$message['subject']=$lang['email']['no_subject'];
+		}
+
 		$this->insert_row('em_links',$message);
+
+
 
 		$this->cache_message($message['link_id']);
 
