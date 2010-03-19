@@ -330,7 +330,7 @@ a.normal-link:hover{
 	background-image:url('images/16x16/filetypes/html.png') !important;
 }
 
-.filetype-odc, .filetype-xls, .filetype-xlsx  {
+.filetype-ods, .filetype-xls, .filetype-xlsx  {
 	background-image:url('images/16x16/filetypes/spreadsheet.png') !important;
 }
 
