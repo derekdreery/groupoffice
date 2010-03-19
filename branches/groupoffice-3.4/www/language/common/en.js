@@ -353,3 +353,4 @@ GO.lang.removeFormatting='Remove Formatting';
 GO.lang.insertHorizontalRule='Insert Horizontal Rule';
 GO.lang.insertHRtext='Enter the width of the Rule in percentage<br/> followed by the % sign at the end, or to<br/> set a fixed width ommit the % symbol.';
 GO.lang.cmdInsert='Insert';
+GO.lang.width='Width';
