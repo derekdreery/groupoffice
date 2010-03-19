@@ -81,10 +81,9 @@ GO.comments.CommentsGrid = function(config){
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){
+				GO.comments.showCommentDialog();
 				GO.comments.commentDialog.formPanel.baseParams.link_id=this.store.baseParams.link_id;
  		 		GO.comments.commentDialog.formPanel.baseParams.link_type=this.store.baseParams.link_type;
-  	
-	    	GO.comments.commentDialog.show();
 			},
 			scope: this
 		},{
@@ -117,9 +116,13 @@ Ext.extend(GO.comments.CommentsGrid, GO.grid.GridPanel,{
 	
 	afterRender : function(){
 		
-		GO.comments.commentDialog.on('save', function(){   
-			this.store.reload();	    			    			
-		}, this);
+		GO.comments.commentDialogListeners={
+			save:function(){
+				this.store.reload();
+			},
+			scope:this
+		};
+
 		
 		GO.comments.CommentsGrid.superclass.afterRender.call(this);
 	},
