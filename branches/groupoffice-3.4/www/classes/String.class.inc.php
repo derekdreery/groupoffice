@@ -231,15 +231,25 @@ class String {
 		return $out;
 	}
 
+	/**
+	 * Replace a string within a string once.
+	 *
+	 * @param String $search
+	 * @param String $replace
+	 * @param String $subject
+	 * @param bool $found Pass this to check if an occurence was replaced or not
+	 * @return String
+	 */
 
-
-	public static function replace_once($search, $replace, $subject) {
+	public static function replace_once($search, $replace, $subject, &$found=false) {
 		$firstChar = strpos($subject, $search);
 		if($firstChar !== false) {
+			$found=true;
 			$beforeStr = substr($subject,0,$firstChar);
 			$afterStr = substr($subject, $firstChar + strlen($search));
 			return $beforeStr.$replace.$afterStr;
 		} else {
+			$found=false;
 			return $subject;
 		}
 	}
