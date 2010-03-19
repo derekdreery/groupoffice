@@ -41,7 +41,9 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	
 	createTopToolbar : function(){
 		
-		this.newMenuButton = new GO.NewMenuButton();		
+		this.newMenuButton = new GO.NewMenuButton({
+			panel:this
+		});
 		
 		var tbar=[];
 		tbar.push(this.editButton = new Ext.Button({

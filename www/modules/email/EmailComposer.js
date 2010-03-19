@@ -765,6 +765,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	show : function(config) {
 
 		Ext.getBody().mask(GO.lang.waitMsgLoad);
+
+		delete this.link_config;
 		
 		this.showConfig=config;
 
@@ -953,14 +955,12 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			{
 				this.afterShowAndLoad(true);
 			}
-			
-		}
-
-		if (config.link_config) {
-			this.link_config = config.link_config;
-			if (config.link_config.type_id) {
-				this.selectLinkField.setValue(config.link_config.type_id);
-				this.selectLinkField.setRemoteText(config.link_config.text);
+			if (config.link_config) {
+				this.link_config = config.link_config;
+				if (config.link_config.type_id) {
+					this.selectLinkField.setValue(config.link_config.type_id);
+					this.selectLinkField.setRemoteText(config.link_config.text);
+				}
 			}
 		}
 	},
@@ -1369,6 +1369,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 							});
 	
 							GO.email.unknownRecipientsDialog.show();
+						}
+
+						if (this.link_config && this.link_config.callback) {
+							this.link_config.callback.call(this);
 						}
 	
 						this.fireEvent('send', this);
