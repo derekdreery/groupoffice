@@ -170,6 +170,9 @@ GO.comments.browseComments= function (link_id, link_type)
 	{
 		GO.comments.commentsBrowser = new GO.comments.CommentsBrowser();
 	}
+	if(GO.comments.commentDialogListeners){
+		GO.comments.commentsBrowser.on(GO.comments.commentDialogListeners);
+	}
 	
 	GO.comments.commentsBrowser.show({link_id: link_id, link_type:link_type});
 };
