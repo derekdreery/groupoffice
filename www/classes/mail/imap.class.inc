@@ -591,7 +591,9 @@ class imap{
 		}else
 		{
 			//No date header?!? just use current time.
-			$message['udate']=time();
+
+			//current time caused sync to send message over and over again.
+			$message['udate']=0;//time();
 		}	
 		
 		$message['subject'] = isset($values['subject']) ? $this->enc_utf8($values['subject']) : '';

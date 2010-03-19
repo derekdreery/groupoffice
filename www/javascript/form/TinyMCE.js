@@ -480,8 +480,5 @@
 				return res;
 			}
 		}
-	);
-	
+	);	
 }());
-
-Ext.ux.TinyMCE.initTinyMCE();
