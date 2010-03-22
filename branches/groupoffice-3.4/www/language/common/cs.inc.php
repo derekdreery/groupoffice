@@ -198,3 +198,4 @@ $lang['common']['dontChangeOwnersPermissions']='Nemůžete měnit práva vlastn�
 $lang['common']['running_sys_upgrade']='Running required system update';
 $lang['common']['sys_upgrade_text']='Vyčkejte prosím. Všechny výstupy budou přihlášeny.';
 $lang['common']['click_here_to_contine']='Klikněte zde pro pokračování';
+$lang['common']['parentheses_invalid_error']='Závorky ve Vašem dotazu jsou neplatné. Prosím, opravte je.';
