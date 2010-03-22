@@ -114,6 +114,14 @@ try {
 			$events = $cal->get_events_in_array($calendars, 0, $interval_start_time, $interval_end_time);
 
 			foreach($events as $event) {
+
+				$private = ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']);
+				if($private) {
+					$event['name']=$lang['calendar']['private'];
+					$event['description']='';
+					$event['location']='';
+				}
+
 				if($event['all_day_event'] == '1') {
 					$date_format = $_SESSION['GO_SESSION']['date_format'];
 				}
@@ -141,7 +149,7 @@ try {
 								'end_time'=> date('Y-m-d H:i', $event['end_time']),
 								'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
 								'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
-								'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
+								'private'=>$private,
 								'repeats'=>!empty($event['rrule']),
 								'day'=>$event['start_time']<$today_end ? $lang['common']['today'] : $lang['common']['tomorrow'],
 								'calendar_name'=>(isset($calendars_name) && $cal_id !== false)? $calendars_name[$cal_id]: ''
