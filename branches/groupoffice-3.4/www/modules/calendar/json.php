@@ -159,6 +159,7 @@ try {
 
 
 			ksort($unsorted);
+
 			while($event = array_shift($unsorted))
 				$response['results'][]=$event;
 
