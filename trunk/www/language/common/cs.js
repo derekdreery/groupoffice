@@ -142,6 +142,7 @@ GO.lang.cmdReset = 'Výchozí';
 GO.lang.cmdExport='Exportovat';
 GO.lang.cmdPrint='Tisk';
 GO.lang.cmdImport='Importovat';
+GO.lang.cmdInsert='Vložit';
 
 GO.lang.cmdActions = 'Akce';
 
@@ -279,7 +280,7 @@ GO.lang.remindPassword='Zapamatovat přihlašení pro tento počítač';
 GO.lang.reminders = 'Upomínky';
 GO.lang.dismiss='Zamítnutí';
 GO.lang.selectAll='Označit vše';
-GO.lang.snooze='Snooze';
+GO.lang.snooze='Odložit';
 
 GO.lang.strMax = 'Maximum';
 
@@ -339,3 +340,10 @@ GO.lang.userGroups='Uživatelské skupiny';
 
 GO.lang.firebugDetected='Upozornění! Firebug Add-on detekován';
 GO.lang.firebugWarning='Firebug Add-on může spomalit tuto aplikaci. Prosím nepoužívejte jej při produkční práci.'
+
+GO.lang.indent='Odsazení textu';
+GO.lang.outdent='Předsazení textu';
+GO.lang.removeFormatting='Odstranit formátování';
+GO.lang.insertHorizontalRule='Vložit vodorovnou čáru';
+GO.lang.insertHRtext='Vložte šířku čáry v procentech<br/> poté následuje znak % na konci, nebo<br/> zadejte pevnou šířku a vynechtejte znak %.';
+GO.lang.width='Šířka';

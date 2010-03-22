@@ -11,13 +11,16 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-
 /*
  *When upgrading extjs don't forget to check htmleditor overrides in E-mail composer
  */
 
 
 if(Ext.version=="2.3.0"){
+
+	Ext.isFunction = function(obj){
+		return typeof(obj)=='function';
+	}
 
 	//Hack to make 2.3 compatible with 3.x
 	Ext.override(Ext.grid.ColumnModel,{

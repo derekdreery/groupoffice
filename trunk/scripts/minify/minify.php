@@ -82,7 +82,7 @@ foreach($modules as $module) {
 				if(!$contents) {
 					exit('Could not get contents from '.$script);
 				}
-				file_put_contents($all_scripts_file, $contents.';', FILE_APPEND);
+				file_put_contents($all_scripts_file, $contents.";\n", FILE_APPEND);
 
 				if($delete) {
 					unlink($script);
@@ -98,6 +98,8 @@ foreach($modules as $module) {
 
 		exec($compressor.' '.$all_scripts_file.' -o modules/'.$module.'/all-module-scripts-min');
 		unlink($all_scripts_file);
+		//rename($all_scripts_file, 'modules/'.$module.'/all-module-scripts-min');
+		
 	}
 
 }

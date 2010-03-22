@@ -542,7 +542,7 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
                                 xtype: 'textfield',
                                 maskRe: /[0-9]|%/,
                                 regex: /^[1-9][0-9%]{1,3}/,
-                                fieldLabel: 'Width',
+                                fieldLabel: GO.lang.width,
                                 name: 'hrwidth',
 																value:'100%',
                                 width: 60,

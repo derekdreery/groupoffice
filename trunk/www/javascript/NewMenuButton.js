@@ -11,11 +11,12 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  GO.NewMenuButton = Ext.extend(Ext.Button, {
-	
+	panel : false,
 	initComponent : function(){
 		
 		this.menu = new Ext.menu.Menu({				
-				items:GO.newMenuItems
+				items:GO.newMenuItems,
+				panel:this.panel
 			});
 		this.text=GO.lang.cmdNew;
 		this.iconCls='btn-add';			
