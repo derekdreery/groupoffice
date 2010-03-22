@@ -11,8 +11,11 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-
 if(Ext.version=="2.3.0"){
+
+	Ext.isFunction = function(obj){
+		return typeof(obj)=='function';
+	}
 
 	//Hack to make 2.3 compatible with 3.x
 	Ext.override(Ext.grid.ColumnModel,{
