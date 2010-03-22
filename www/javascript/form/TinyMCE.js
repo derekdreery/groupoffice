@@ -1,352 +1,540 @@
 /** ************************************************************
-	Ext.ux.TinyMCE v0.6
+	Ext.ux.TinyMCE v0.7-b1
 	ExtJS form field containing TinyMCE v3.
-	
-	Author: Andrew Mayorov (http://blogs.byte-force.com/xor)
+
+	Author: Andrew Mayorov et al.
+	http://blogs.byte-force.com/xor
+
 	Copyright (c)2008 BYTE-force
 	www.byte-force.com
-	
+
 	License: LGPLv2.1 or later
 */
 
 (function() {
 
-	Ext.namespace( "Ext.ux" );
-	
-	var tmceInitialized = false;
-	
-	/** ----------------------------------------------------------
-		Ext.ux.TinyMCE
-	*/        
-	Ext.ux.TinyMCE = Ext.extend( 
+	Ext.namespace("Ext.ux");
 
-		// Constructor
-		function( cfg ){
-		
+	var tmceInitialized = false;
+
+	/** ----------------------------------------------------------
+	Ext.ux.TinyMCE
+	*/
+	Ext.ux.TinyMCE = Ext.extend(
+
+	// Constructor
+		function(cfg) {
+
 			var config = {
 				tinymceSettings: {
-					accessibility_focus : false
+					accessibility_focus: false
 				}
 			};
-			
-			Ext.apply( config, cfg );
+
+			Ext.apply(config, cfg);
 
 			// Add events
 			this.addEvents({
 				"editorcreated": true
 			});
-			
-			Ext.ux.TinyMCE.superclass.constructor.call( this, config );
+
+			Ext.ux.TinyMCE.superclass.constructor.call(this, config);
 		},
-		
-		// Base class
+
+	// Base class
 		Ext.form.Field,
-		
-		// Members
+
+	// Members
 		{
-			
-			// TinyMCE Settings specified for this instance of the editor.
-			tinymceSettings: null,
-			
-			// HTML markup for this field
-			defaultAutoCreate: { tag: "div", style: { overflow: "hidden" }, children: [{ tag: "textarea" }] },
-			
-			// Default width
-			width: 200,
-			
-			// Default height
-			height: 200,
-			
-			/** ----------------------------------------------------------
-			*/        
-			initComponent: function(){
-				this.tinymceSettings = this.tinymceSettings || {};
-				Ext.ux.TinyMCE.initTinyMCE({ language: this.tinymceSettings.language });
-			},
-			
-			reInit : function(){
-				//tinyMCE.remove( this.ed );
-				tinyMCE.execCommand('mceRemoveControl',false,this.textareaEl.id); 
-				this.initTinyMce();
-				this.onResize();
-			},
-			
-			/** ----------------------------------------------------------
-			*/        
-			onRender : function( ct, position ){ 
-				Ext.ux.TinyMCE.superclass.onRender.call( this, ct, position );
-				
-				//var self = this;
+		// TinyMCE Settings specified for this instance of the editor.
+		tinymceSettings: null,
 
-				
-				
-				// Fix size if it was specified in config
-				var el = this.getEl();
-				if( Ext.type( this.width ) == "number" ) {
-					el.setWidth( this.width );
-					this.tinymceSettings.width = this.width;
-				}
-				if( Ext.type( this.height ) == "number" ) {
-					el.setHeight( this.height );
-					this.tinymceSettings.height = this.height;
-				}
+		// Validation properties
+		allowBlank: true,
+		invalidText: "The value in this field is invalid",
+		invalidClass: "invalid-content-body",
+		minLengthText : 'The minimum length for this field is {0}',
+		maxLengthText : 'The maximum length for this field is {0}',
+		blankText : 'This field is required',
 
-				// Fetch reference to <textarea> element
-				this.textareaEl = el.child( "textarea" );
+		// HTML markup for this field
+		hideMode: 'offsets',
+		defaultAutoCreate: {
+			tag: "textarea",
+			style: "width:1px;height:1px;",
+			autocomplete: "off"
+		},
 
-				if( this.name ) this.textareaEl.set({ name: this.name });
-				
-				this.initTinyMce();
-			},
-			
-			initTinyMce : function(){
-				
-				
-			
-				// Create TinyMCE editor.
-				this.ed = new tinymce.Editor( this.textareaEl.id, this.tinymceSettings );
-				
-				this.ed.onBeforeRenderUI.add( function( ed, controlManager ){
-					// Replace control manager
-					ed.controlManager = new ControlManager( this, ed );
-				}.createDelegate( this ));
+		/** ----------------------------------------------------------
+		*/
+		initComponent: function() {
+			this.tinymceSettings = this.tinymceSettings || {};
+			Ext.ux.TinyMCE.initTinyMCE({ language: this.tinymceSettings.language });
+		},
 
-				this.ed.onPostRender.add( function( ed, controlManager ){
-					// Change window manager
-					ed.windowManager = new WindowManager( this.ed );
-				}.createDelegate( this ));
-				
-				// Set event handler on editor init.
-				this.ed.onInit.add( function(){
-					// Modify markup.
-					var tbar = Ext.get( Ext.DomQuery.selectNode( "#" + this.ed.id + "_tbl td.mceToolbar" ));
-					var tbars = tbar.select( "> table.mceToolbar" );
-					Ext.DomHelper.append( 
-						tbar, 
-						{ tag: "div", style: { overflow: "hidden" }}, true 
-					)
-					.appendChild( tbars );
-				}.createDelegate( this ));
-				
-				// Bind to editor focus
-				//this.ed.onActivate.add( this.focus.createDelegate( this, [ false, false ], false ));
-				
-				// Render the editor
-				this.ed.render();
-				tinyMCE.add( this.ed );
-				
-				
-				// Indicate that editor is created
-				this.fireEvent( "editorcreated" );
-			},
-			
-			/** ----------------------------------------------------------
-			     * Returns the name attribute of the field if available
-			     * @return {String} name The field name
-			*/
-			getName: function(){
-				return this.rendered && this.textareaEl.dom.name ? this.textareaEl.dom.name : (this.name || '');
-			},
-		 			
-			/** ----------------------------------------------------------
-			*/        
-			initValue : function(){
-			
-				if( this.value !== undefined )
-				{
-					this.setValue( this.value );
-				}
-				else 
-				{
-					var textarea = this.getEl().child( "textarea", true );
-					if( textarea.value.length > 0 )
-						this.setValue( textarea.value );
-				}
-			},
+		/** ----------------------------------------------------------
+		*/
+		initEvents: function() {
+			this.originalValue = this.getValue();
+		},
 
-			/** ----------------------------------------------------------
-			*/        
-			onDestroy: function(){
-				if( this.ed ) tinyMCE.remove( this.ed );
-				Ext.ux.TinyMCE.superclass.onDestroy.call( this );
-			},
-			
-			/** ----------------------------------------------------------
-			*/        
-			getValue : function(){
-			
-				if( !this.rendered || !this.ed.initialized ) 
-					return this.value;
+		/** ----------------------------------------------------------
+		*/
+		onRender: function(ct, position) {
+			Ext.ux.TinyMCE.superclass.onRender.call(this, ct, position);
 
-				var v = this.ed.getContent();
-				if( v === this.emptyText || v === undefined ){
-					v = '';
-				}
-				return v;
-			},
-
-			/** ----------------------------------------------------------
-			*/        
-			setValue : function( v ){
-				this.value = v;
-				if( this.rendered )
-					this.withEd( function(){
-						this.ed.undoManager.clear();
-						this.ed.setContent( v === null || v === undefined ? '' : v );
-						this.ed.startContent = this.ed.getContent({ format : 'raw' });						
-						this.validate();
-					});
-			},
-			
-			/** ----------------------------------------------------------
-			*/        
-			isDirty : function() {
-			    if( this.disabled || !this.rendered ) {
-			        return false;
-			    }
-			    return this.ed.isDirty();
-			},
-
-			/** ----------------------------------------------------------
-			*/        
-			syncValue : function(){
-				if( this.rendered && this.ed.initialized )
-					this.ed.save();
-			},
-			
-			/** ----------------------------------------------------------
-			*/        
-			getEd: function() {
-				return this.ed;
-			},
-			
-			/** ----------------------------------------------------------
-			*/        
-			onResize : function( aw, ah ){
-				if( this.rendered ){
-					this.withEd( function() {
-					
-						if( Ext.type( aw ) != "number" ) aw = this.el.getWidth();
-						if( Ext.type( ah ) != "number" ) ah = this.el.getHeight();
-						
-						this.ed.theme.resizeTo( aw, ah );
-					});
-				}
-			},
-			
-			/** ----------------------------------------------------------
-			*/        
-			focus: function( selectText, delay ){
-				Ext.ux.TinyMCE.superclass.focus.call( this, selectText, delay );
-			},
-			
-			/** ----------------------------------------------------------
-			*/        
-			onFocus : function(){
-				if(!this.hasFocus){
-					this.hasFocus = true;
-					this.startValue = this.getValue();
-					this.withEd( function() {
-						this.ed.focus();
-						this.fireEvent("focus", this);
-					});
-				}
-			}, 
-
-			/** ----------------------------------------------------------
-				If ed (local editor instance) is already initilized, calls
-				specified function directly. Otherwise - adds it to ed.onInit event.
-			*/        
-			withEd: function( func ){
-			
-				// If editor is not created yet, reschedule this call.
-				if( !this.ed ) this.on( 
-					"editorcreated", 
-					function() { this.withEd( func ) }, 
-					this );
-
-				// Else if editor is created and initialized
-				else if( this.ed.initialized ) func.call( this );
-				
-				// Else if editor is created but not initialized yet.
-				else this.ed.onInit.add( function(){ func.defer( 10, this ); }.createDelegate( this ));
+			// Fix size if it was specified in config
+			var el = this.getEl();
+			if (Ext.type(this.width) == "number") {
+				this.tinymceSettings.width = this.width;
+			}
+			if (Ext.type(this.height) == "number") {
+				this.tinymceSettings.height = this.height;
 			}
 
+			//this.el.dom.style.border = '0 none';
+			this.el.dom.setAttribute('tabIndex', -1);
+			this.el.addClass('x-hidden');
+
+			// Wrap textarea into DIV
+			this.textareaEl = this.el;
+			var wrapElStyle = { overflow: "hidden" };
+			if( Ext.isIE ) { // fix IE 1px bogus margin
+				wrapElStyle["margin-top"] = "-1px";
+				wrapElStyle["margin-bottom"] = "-1px";
+			}
+			this.wrapEl = this.el.wrap({ style: wrapElStyle });
+			this.actionMode = "wrapEl"; // Set action element to the new wrapper
+
+
+			var id = this.getId();
+
+			// Create TinyMCE editor.
+			this.ed = new tinymce.Editor(id, this.tinymceSettings);
+
+			// Validate value onKeyPress
+			var validateContentTask = new Ext.util.DelayedTask( this.validate, this );
+			this.ed.onKeyPress.add(function(ed, controlManager) {
+				validateContentTask.delay( 250 );
+			} .createDelegate(this));
+
+			// Set up editor events' handlers
+			this.ed.onBeforeRenderUI.add(function(ed, controlManager) {
+				// Replace control manager
+				ed.controlManager = new ControlManager(this, ed);
+			} .createDelegate(this));
+
+			this.ed.onPostRender.add(function(ed, controlManager) {
+				var s = ed.settings;
+
+				// Modify markup.
+				var tbar = Ext.get(Ext.DomQuery.selectNode("#" + this.ed.id + "_tbl td.mceToolbar"));
+				if( tbar != null ) {
+					// If toolbar is present
+					var tbars = tbar.select("> table.mceToolbar");
+					Ext.DomHelper
+						.append( tbar,
+							{ tag: "div", id: this.ed.id + "_xtbar", style: { overflow: "hidden"} }
+							, true )
+						.appendChild(tbars);
+				}
+
+				// Change window manager
+				ed.windowManager = new WindowManager(this.ed);
+				// Patch css-style for validation body like ExtJS
+				Ext.get(ed.getContentAreaContainer()).addClass('patch-content-body');
+
+				// Event of focused body
+				Ext.Element.fly(s.content_editable ? ed.getBody() : (tinymce.isGecko ? ed.getDoc() : ed.getWin()))
+					.on("focus", this.onFocus, this);
+
+				// Event of blur body
+				Ext.Element.fly(s.content_editable ? ed.getBody() : (tinymce.isGecko ? ed.getDoc() : ed.getWin()))
+					.on("blur", this.onBlur, this,
+						this.inEditor && Ext.isWindows && Ext.isGecko ? { buffer: 10} : null
+					);
+
+			} .createDelegate(this));
+
+			// Set event handler on editor init.
+			//this.ed.onInit.add(function() {
+			//} .createDelegate(this));
+
+			// Wire "change" event
+			this.ed.onChange.add(function(ed, l) {
+				this.fireEvent("change", ed, l);
+			} .createDelegate(this));
+
+			// Render the editor
+			this.ed.render();
+			tinyMCE.add(this.ed);
+
+			// Fix editor size when control will be visible
+			(function fixEditorSize() {
+
+				// If element is not visible yet, wait.
+				if( !this.isVisible() ) {
+					arguments.callee.defer( 50, this );
+					return;
+				}
+
+				var size = this.getSize();
+				this.withEd( function() {
+					this._setEditorSize( size.width, size.height );
+				});
+			}).call( this );
+
+			// Indicate that editor is created
+			this.fireEvent("editorcreated");
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		getResizeEl: function() {
+			return this.wrapEl;
+		},
+
+		/** ----------------------------------------------------------
+		* Returns the name attribute of the field if available
+		* @return {String} name The field name
+		*/
+		getName: function() {
+			return this.rendered && this.textareaEl.dom.name
+				? this.textareaEl.dom.name : (this.name || '');
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		initValue: function() {
+
+			if (!this.rendered)
+				Ext.ux.TinyMCE.superclass.initValue.call(this);
+			else {
+				if (this.value !== undefined) {
+					this.setValue(this.value);
+				}
+				else {
+					var v = this.textareaEl.value;
+					if ( v )
+						this.setValue( v );
+				}
+			}
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		beforeDestroy: function() {
+			if (this.ed) tinyMCE.remove(this.ed);
+			Ext.ux.TinyMCE.superclass.beforeDestroy.call(this);
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		getRawValue : function(){
+
+			if( !this.rendered || !this.ed.initialized )
+				return Ext.value( this.value, '' );
+
+			var v = this.ed.getContent();
+			if(v === this.emptyText){
+				v = '';
+			}
+			return v;
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		getValue: function() {
+
+			if( !this.rendered || !this.ed.initialized )
+				return Ext.value( this.value, '' );
+
+			var v = this.ed.getContent();
+			if( v === this.emptyText || v === undefined ){
+				v = '';
+			}
+			return v;
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		setRawValue: function(v) {
+			this.value = v;
+			if (this.rendered)
+				this.withEd(function() {
+					this.ed.undoManager.clear();
+					this.ed.setContent(v === null || v === undefined ? '' : v);
+					this.ed.startContent = this.ed.getContent({ format: 'raw' });
+				});
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		setValue: function(v) {
+			this.value = v;
+			if (this.rendered)
+				this.withEd(function() {
+					this.ed.undoManager.clear();
+					this.ed.setContent(v === null || v === undefined ? '' : v);
+					this.ed.startContent = this.ed.getContent({ format: 'raw' });
+					this.validate();
+					//this.ed.resizeToContent();
+				});
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		isDirty: function() {
+			if (this.disabled || !this.rendered) {
+				return false;
+			}
+			this.withEd(function() {
+				return this.ed.isDirty();
+			});
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		syncValue: function() {
+			if (this.rendered && this.ed.initialized)
+				this.ed.save();
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		getEd: function() {
+			return this.ed;
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		disable: function() {
+			this.withEd(function() {
+				var bodyEl = this.ed.getBody();
+				bodyEl = Ext.get(bodyEl);
+
+				if (bodyEl.hasClass('mceContentBody')) {
+					bodyEl.removeClass('mceContentBody');
+					bodyEl.addClass('mceNonEditable');
+				}
+			});
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		enable: function() {
+			this.withEd(function() {
+				var bodyEl = this.ed.getBody();
+				bodyEl = Ext.get(bodyEl);
+
+				if (bodyEl.hasClass('mceNonEditable')) {
+					bodyEl.removeClass('mceNonEditable');
+					bodyEl.addClass('mceContentBody');
+				}
+			});
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		onResize: function(aw, ah) {
+			if( Ext.type( aw ) != "number" ){
+				aw = this.getWidth();
+			}
+			if( Ext.type(ah) != "number" ){
+				ah = this.getHeight();
+			}
+			if (aw == 0 || ah == 0)
+				return;
+
+			if (this.rendered) {
+				this.withEd(function() { this._setEditorSize( aw, ah ); });
+			}
+		},
+
+		/** ----------------------------------------------------------
+			Sets control size to the given width and height
+		*/
+		_setEditorSize: function( width, height ) {
+
+			if( height < 100 ) height = 100;
+
+			// Set toolbar div width
+			var div = Ext.get(this.ed.id + "_xtbar");
+			if( div )
+				div.setWidth( width - 2 );
+
+			this.ed.theme.resizeTo( width, height );
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		focus: function(selectText, delay) {
+			if (delay) {
+				this.focus.defer(typeof delay == 'number' ? delay : 10, this, [selectText, false]);
+				return;
+			}
+
+			this.withEd(function() {
+				this.ed.focus();
+				/*if (selectText === true) {
+				// TODO: Select editor's content
+				}*/
+			});
+
+			return this;
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		processValue : function( value ){
+			return Ext.util.Format.stripTags( value );
+		},
+
+		/** ----------------------------------------------------------
+		*/
+		validateValue: function( value ) {
+			if(Ext.isFunction(this.validator)){
+				var msg = this.validator(value);
+				if(msg !== true){
+					this.markInvalid(msg);
+					return false;
+				}
+			}
+			if(value.length < 1 || value === this.emptyText){ // if it's blank
+				 if(this.allowBlank){
+					 this.clearInvalid();
+					 return true;
+				 }else{
+					 this.markInvalid(this.blankText);
+					 return false;
+				 }
+			}
+			if(value.length < this.minLength){
+				this.markInvalid(String.format(this.minLengthText, this.minLength));
+				return false;
+			}
+			if(value.length > this.maxLength){
+				this.markInvalid(String.format(this.maxLengthText, this.maxLength));
+				return false;
+			}
+			if(this.vtype){
+				var vt = Ext.form.VTypes;
+				if(!vt[this.vtype](value, this)){
+					this.markInvalid(this.vtypeText || vt[this.vtype +'Text']);
+					return false;
+				}
+			}
+			if(this.regex && !this.regex.test(value)){
+				this.markInvalid(this.regexText);
+				return false;
+			}
+			return true;
+		},
+
+		/** ----------------------------------------------------------
+		If ed (local editor instance) is already initilized, calls
+		specified function directly. Otherwise - adds it to ed.onInit event.
+		*/
+		withEd: function(func) {
+
+			// If editor is not created yet, reschedule this call.
+			if (!this.ed) this.on(
+				"editorcreated",
+				function() { this.withEd(func); },
+				this);
+
+			// Else if editor is created and initialized
+			else if (this.ed.initialized) func.call(this);
+
+			// Else if editor is created but not initialized yet.
+			else this.ed.onInit.add(function() { func.defer(10, this); } .createDelegate(this));
 		}
-	);
+	});
 
 	// Add static members
-	Ext.apply( Ext.ux.TinyMCE, {
-	
+	Ext.apply(Ext.ux.TinyMCE, {
+
 		/**
-			Static field with all the plugins that should be loaded by TinyMCE.
-			Should be set before first component would be created.
-			@static
+		Static field with all the plugins that should be loaded by TinyMCE.
+		Should be set before first component would be created.
+		@static
 		*/
 		tinymcePlugins: "safari,pagebreak,style,layer,table,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
-		
-		initTinyMCE: function( settings ) {
-			if( !tmceInitialized ){
-			
+
+		initTinyMCE: function(settings) {
+			if (!tmceInitialized) {
+
 				var s = {
-					mode : "none",
-					plugins : Ext.ux.TinyMCE.tinymcePlugins,
+					mode: "none",
+					plugins: Ext.ux.TinyMCE.tinymcePlugins,
 					theme: "advanced"
 				};
-				Ext.apply( s, settings );
-			
-				tinyMCE.init( s );
+				Ext.apply(s, settings);
+
+				if (!tinymce.dom.Event.domLoaded)
+					tinymce.dom.Event._pageInit();
+
+				tinyMCE.init(s);
 				tmceInitialized = true;
 			}
 		}
 	});
 
-	Ext.ComponentMgr.registerType( "tinymce", Ext.ux.TinyMCE );
-	
-	
+	Ext.ComponentMgr.registerType("tinymce", Ext.ux.TinyMCE);
+
+
 	/** ----------------------------------------------------------
-		WindowManager
-	*/        
-	var WindowManager = Ext.extend( 
-	
-		function( editor ) {
-			WindowManager.superclass.constructor.call( this, editor );
+	WindowManager
+	*/
+	var WindowManager = Ext.extend(
+
+		function(editor) {
+			WindowManager.superclass.constructor.call(this, editor);
 		},
-		
+
 		tinymce.WindowManager,
-		
+
 		{
 			// Override WindowManager methods
-			alert : function( txt, cb, s ) {
-				Ext.MessageBox.alert( "", txt, function() { cb.call( this ); }, s );
+			alert: function(txt, cb, s) {
+				Ext.MessageBox.alert("", txt, function() {
+					if (!Ext.isEmpty(cb)) {
+						cb.call(this);
+					}
+				}, s);
 			},
-			
-			confirm : function( txt, cb, s ) {
-				Ext.MessageBox.confirm( "", txt, function( btn ) { cb.call( this, btn == "yes" ); }, s );
+
+			confirm: function(txt, cb, s) {
+				Ext.MessageBox.confirm("", txt, function(btn) {
+					if (!Ext.isEmpty(cb)) {
+						cb.call(this, btn == "yes");
+					}
+				}, s);
 			},
-			
-			open : function( s, p ) {
-				
+
+			open: function(s, p) {
+
 				s = s || {};
 				p = p || {};
-				
-				if ( !s.type )
-					this.bookmark = this.editor.selection.getBookmark( 'simple' );
-				
+
+				if (!s.type)
+					this.bookmark = this.editor.selection.getBookmark('simple');
+
 				s.width = parseInt(s.width || 320);
 				s.height = parseInt(s.height || 240) + (tinymce.isIE ? 8 : 0);
 				s.min_width = parseInt(s.min_width || 150);
 				s.min_height = parseInt(s.min_height || 100);
 				s.max_width = parseInt(s.max_width || 2000);
 				s.max_height = parseInt(s.max_height || 2000);
-				s.movable = s.resizable = true;
+				s.movable = true;
+				s.resizable = true;
 				p.mce_width = s.width;
 				p.mce_height = s.height;
 				p.mce_inline = true;
 
 				this.features = s;
 				this.params = p;
-						
+
 				var win = new Ext.Window(
 				{
 					title: s.name,
@@ -355,130 +543,129 @@
 					minWidth: s.min_width,
 					minHeight: s.min_height,
 					resizable: true,
-					maximizable: s.maximizable == true,
-					minimizable: s.minimizable == true,
+					maximizable: s.maximizable,
+					minimizable: s.minimizable,
 					modal: true,
+					stateful: false,
+					constrain: true,
 					layout: "fit",
 					items: [
 					new Ext.BoxComponent({
-							autoEl: {
-									tag: 'iframe',
-									src: s.url || s.file
-							},
-							style : 'border-width: 0px;'
+						autoEl: {
+							tag: 'iframe',
+							src: s.url || s.file
+						},
+						style : 'border-width: 0px;'
 					})
 					]
 				});
-				
+
 				p.mce_window_id = win.getId();
-				
-				win.show( null,
+
+				win.show(null,
 					function() {
-						if( s.left && s.top ) 
-							win.setPagePosition( s.left, s.top );
+						if (s.left && s.top)
+							win.setPagePosition(s.left, s.top);
 						var pos = win.getPosition();
 						s.left = pos[0];
 						s.top = pos[1];
-						this.onOpen.dispatch( this, s, p );
+						this.onOpen.dispatch(this, s, p);
 					},
 					this
 				);
-				
+
 				return win;
 			},
-			
-			close : function( win ) {
-			
+
+			close: function(win) {
+
 				// Probably not inline
-				if( !win.tinyMCEPopup || !win.tinyMCEPopup.id ) {
-					WindowManager.superclass.close.call( this, win );
+				if (!win.tinyMCEPopup || !win.tinyMCEPopup.id) {
+					WindowManager.superclass.close.call(this, win);
 					return;
 				}
-					
-				var w = Ext.getCmp( win.tinyMCEPopup.id );
-				if( w ) {
-					this.onClose.dispatch( this );
+
+				var w = Ext.getCmp(win.tinyMCEPopup.id);
+				if (w) {
+					this.onClose.dispatch(this);
 					w.close();
-				}					
-			},
-			
-			setTitle : function( win, ti ) {
-			
-				// Probably not inline
-				if( !win.tinyMCEPopup || !win.tinyMCEPopup.id ) {
-					WindowManager.superclass.setTitle.call( this, win, ti );
-					return;
 				}
-				
-				var w = Ext.getCmp( win.tinyMCEPopup.id );
-				if( w ) w.setTitle( ti );
 			},
 
-			resizeBy : function( dw, dh, id ) {
-			
-				var w = Ext.getCmp( id );
-				if( w ) {
+			setTitle: function(win, ti) {
+
+				// Probably not inline
+				if (!win.tinyMCEPopup || !win.tinyMCEPopup.id) {
+					WindowManager.superclass.setTitle.call(this, win, ti);
+					return;
+				}
+
+				var w = Ext.getCmp(win.tinyMCEPopup.id);
+				if (w) w.setTitle(ti);
+			},
+
+			resizeBy: function(dw, dh, id) {
+
+				var w = Ext.getCmp(id);
+				if (w) {
 					var size = w.getSize();
-					w.setSize( size.width + dw, size.height + dh );
+					w.setSize(size.width + dw, size.height + dh);
 				}
 			},
-			
-			focus : function(id) {
-				var w = Ext.getCmp( id );
-				if( w ) w.setActive( true );
+
+			focus: function(id) {
+				var w = Ext.getCmp(id);
+				if (w) w.setActive(true);
 			}
-			
+
 		}
 	);
 
 	/** ----------------------------------------------------------
-		ControlManager
-	*/        
-	var ControlManager = Ext.extend( 
-	
-		// Constructor
-		function( control, ed, s ) {
+	ControlManager
+	*/
+	var ControlManager = Ext.extend(
+
+	// Constructor
+		function(control, ed, s) {
 			this.control = control;
-			ControlManager.superclass.constructor.call( this, ed, s );
+			ControlManager.superclass.constructor.call(this, ed, s);
 		},
-		
-		// Base class
+
+	// Base class
 		tinymce.ControlManager,
-	
-		// Members
+
+	// Members
 		{
-			// Reference to ExtJS control Ext.ux.TinyMCE.
-			control: null,
-			
-			createDropMenu: function( id, s ){
-				// Call base method
-				var res = ControlManager.superclass.createDropMenu.call( this, id, s );
-				
-				// Modify returned result
-				//var self = this;
-				var orig = res.showMenu;
-				res.showMenu = function( x, y, px ) {
-					orig.call( this, x, y, px );
-					//var zi = self.control.getEl().getStyle( "z-index" );
-					Ext.fly( 'menu_' + this.id ).setStyle( "z-index", 200001 );
-				}
-				
-				return res;
-			},
-			
-			createColorSplitButton: function( id, s ){
-				// Call base method
-				var res = ControlManager.superclass.createColorSplitButton.call( this, id, s );
-				
-				// Modify returned result
-				var orig = res.showMenu;
-				res.showMenu = function( x, y, px ) {
-					orig.call( this, x, y, px );
-					Ext.fly( this.id + '_menu' ).setStyle( "z-index", 200001 );
-				}
-				
-				return res;
-			}
+		// Reference to ExtJS control Ext.ux.TinyMCE.
+		control: null,
+
+		createDropMenu: function(id, s) {
+			// Call base method
+			var res = ControlManager.superclass.createDropMenu.call(this, id, s);
+
+			// Modify returned result
+			var orig = res.showMenu;
+			res.showMenu = function(x, y, px) {
+				orig.call(this, x, y, px);
+				Ext.fly('menu_' + this.id).setStyle("z-index", 200001);
+			};
+
+			return res;
+		},
+
+		createColorSplitButton: function(id, s) {
+			// Call base method
+			var res = ControlManager.superclass.createColorSplitButton.call(this, id, s);
+
+			// Modify returned result
+			var orig = res.showMenu;
+			res.showMenu = function(x, y, px) {
+				orig.call(this, x, y, px);
+				Ext.fly(this.id + '_menu').setStyle("z-index", 200001);
+			};
+
+			return res;
 		}
-	);	
-}());
+	});
+})();
