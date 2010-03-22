@@ -67,10 +67,15 @@ GO.util.getFileExtension = function(filename)
 GO.playAlarm = function(){
 	if(GO.util.empty(GO.settings.mute_sound))
 	{
-		var flashMovie= GO.util.getFlashMovieObject("alarmSound");		
-		if(flashMovie && typeof(flashMovie.Play)=='function')
+		var flashMovie= GO.util.getFlashMovieObject("alarmSound");
+		if(flashMovie)
 		{
-			flashMovie.Play();
+			try{
+				flashMovie.Play();
+			}
+			catch(e){
+				//fails if flash is not loaded. Ignore that.
+			}
 		}
 	}	
 }
