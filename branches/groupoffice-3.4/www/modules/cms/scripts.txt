@@ -1,7 +1,6 @@
-modules/cms/miframe.js
+javascript/form/TinyMCEpreInit.js
 javascript/tiny_mce/tiny_mce_src.js
 javascript/form/TinyMCE.js
-
 
 modules/cms/SitesDialog.js
 modules/cms/SitesGrid.js
