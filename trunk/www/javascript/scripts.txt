@@ -91,3 +91,9 @@ javascript/checker.js
 
 javascript/grids/TreeGrid.js
 javascript/grids/RowExpander.js
+
+javascript/panels/GroupTab.js
+javascript/panels/GroupTabPanel.js
+javascript/panels/Portal.js
+javascript/panels/PortalColumn.js
+javascript/panels/Portlet.js
