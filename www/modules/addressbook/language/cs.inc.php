@@ -45,4 +45,6 @@ $lang['addressbook']['clickHereToView']='Klikni zde pro zobrazení kontaktu';
 
 $lang['addressbook']['contactFromAddressbook']='Kontakt od %s';
 $lang['addressbook']['companyFromAddressbook']='Společnost od %s';
+$lang['addressbook']['defaultSalutation']='Milý/Milá [Pane/Paní] {middle_name} {last_name}';
+
 ?>
