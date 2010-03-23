@@ -90,7 +90,12 @@ class GO_SECURITY extends db {
 			if(empty($this->user_id)) {
 				global $GO_AUTH;
 
-				if(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
+				if(!empty($_COOKIE['GO_UN']) && !empty($_COOKIE['GO_PW'])) {
+					$username = $_COOKIE['GO_UN'];
+					$password = $_COOKIE['GO_PW'];
+
+					return $GO_AUTH->login($username, $password);
+				}elseif(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
 					$username = $_SERVER['PHP_AUTH_USER'];
 					$password = $_SERVER['PHP_AUTH_PW'];
 
@@ -98,11 +103,6 @@ class GO_SECURITY extends db {
 						$this->http_authenticated_session=$_SESSION['GO_SESSION']['http_authenticated_user']=true;
 						return true;
 					}
-				}elseif(!empty($_COOKIE['GO_UN']) && !empty($_COOKIE['GO_PW'])) {
-					$username = $_COOKIE['GO_UN'];
-					$password = $_COOKIE['GO_PW'];
-
-					return $GO_AUTH->login($username, $password);
 				}
 
 				return false;
