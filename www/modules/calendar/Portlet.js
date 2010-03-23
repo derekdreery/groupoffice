@@ -22,7 +22,7 @@ GO.calendar.SummaryGroupPanel = function(config)
 		reader: new Ext.data.JsonReader({
 			totalProperty: "count",
 			root: "results",
-			id: "event_id",
+			id: "id",
 			fields: [
 			'id',
 			'event_id',
@@ -48,7 +48,7 @@ GO.calendar.SummaryGroupPanel = function(config)
 		}),
 		groupField:'day',
 		sortInfo: {
-			field: 'start_time',
+			field: 'id',
 			direction: 'ASC'
 		},
 		remoteGroup:true,
