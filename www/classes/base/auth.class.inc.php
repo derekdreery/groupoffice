@@ -240,7 +240,7 @@ class GO_AUTH extends db
 		// user management backend database.
 		global $GO_USERS, $GO_EVENTS, $GO_SECURITY;
 
-		$args = array($username, $password);
+		$args = array(&$username, &$password);
 		$GO_EVENTS->fire_event('before_login', $args);
 
 		// This variable is used to set the id of the user that is currently
