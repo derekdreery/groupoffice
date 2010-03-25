@@ -283,7 +283,7 @@ class servermanager extends db {
 						}
 						break;
 
-					default:
+					case 'trial':
 					//send mail after 20 days
 						$time = Date::date_add(time(), -20);
 						if($old_installation['status_change_time']<$time) {
