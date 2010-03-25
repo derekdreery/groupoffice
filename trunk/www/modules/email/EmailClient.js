@@ -1807,7 +1807,7 @@ GO.newMenuItems.push({
 	handler:function(item, e){
 		var taskShowConfig = item.parentMenu.taskShowConfig || {};
 		taskShowConfig.link_config=item.parentMenu.link_config
-		if(item.parentMenu.panel.data.email){
+		if(item.parentMenu.panel && item.parentMenu.panel.data.email){
 			var to='';
 			if(item.parentMenu.panel.data.full_name){
 				to='"'+item.parentMenu.panel.data.full_name+'" <'+item.parentMenu.panel.data.email+'>';
