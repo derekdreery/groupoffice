@@ -622,6 +622,11 @@ GO.util.add_slashes = function(str)
 	return (str+'').replace(/([\\"'])/g, "\\$1").replace(/\0/g, "\\0");
 }
 
+GO.util.addParamToUrl = function(url, param, value){
+	var splitter = url.indexOf('?')!=-1 ? '&' : '?';
+	return url+splitter+param+'='+encodeURIComponent(value);
+}
+
 GO.util.basename = function(path)
 {
 	var pos = path.lastIndexOf('/');
