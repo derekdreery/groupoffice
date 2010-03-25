@@ -25,7 +25,8 @@ go_debug($argv);
 require_once ($GO_MODULES->modules['servermanager']['class_path']."servermanager.class.inc.php");
 $sm = new servermanager();
 
-require('/etc/groupoffice/servermanager.inc.php');
+$args['sm_config']=isset($args['sm_config']) ? $args['sm_config'] : '/etc/groupoffice/servermanager.inc.php';
+require($args['sm_config']);
 
 
 $go_root =$sm_config['install_path'].$args['name'].'/';

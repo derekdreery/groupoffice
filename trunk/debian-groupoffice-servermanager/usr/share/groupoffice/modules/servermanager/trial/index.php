@@ -58,7 +58,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 		$_body = str_replace('{url}', $url, $body);
 		$_body = str_replace('{name}', $new_trial['first_name'].' '.$new_trial['last_name'], $_body);
-		$_body = str_replace('{link}',$GO_MODULES->modules['servermanager']['full_url'].'trial/create.php?key='.$new_trial['key'], $_body);
+		$_body = str_replace('{link}',$GO_MODULES->modules['servermanager']['full_url'].basename(dirname(__FILE__)).'/create.php?key='.$new_trial['key'], $_body);
 		$_body = str_replace('{password}', stripslashes($new_trial['password']), $_body);
 
 		$swift = new GoSwift($new_trial['email'], $lang['servermanager']['new_trial_subject'],0,0,'3',$_body);
