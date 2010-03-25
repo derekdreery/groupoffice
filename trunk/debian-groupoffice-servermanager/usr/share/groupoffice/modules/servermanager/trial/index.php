@@ -1,5 +1,5 @@
 <?php
-require('../../Group-Office.php');
+require('../../../Group-Office.php');
 require('/etc/groupoffice/servermanager.inc.php');
 
 $GO_LANGUAGE->set_language('en');
@@ -52,13 +52,13 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 		$new_trial['key']=md5($new_trial['name']);
 		
 
-		$body = file_get_contents('templates/trial.txt');
+		$body = file_get_contents('../templates/trial.txt');
 		
 		$url = $sm_config['protocol'].$new_trial['name'].'.'.$sm_config['domain'];
 
 		$_body = str_replace('{url}', $url, $body);
 		$_body = str_replace('{name}', $new_trial['first_name'].' '.$new_trial['last_name'], $_body);
-		$_body = str_replace('{link}',$GO_MODULES->modules['servermanager']['full_url'].'create.php?key='.$new_trial['key'], $_body);
+		$_body = str_replace('{link}',$GO_MODULES->modules['servermanager']['full_url'].'trial/create.php?key='.$new_trial['key'], $_body);
 		$_body = str_replace('{password}', stripslashes($new_trial['password']), $_body);
 
 		$swift = new GoSwift($new_trial['email'], $lang['servermanager']['new_trial_subject'],0,0,'3',$_body);

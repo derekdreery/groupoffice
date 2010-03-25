@@ -30,8 +30,9 @@ try{
 
 			if(!$installation)
 				throw new Exception('Installation '.$installation_name.' does not exist');
-			
-			exec('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' remove '.$installation_name);
+
+			//$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php --go_config='.$GO_CONFIG->get_config_file().' --task=remove --name='.$installation_name
+			//exec($cmd);
 			
 			$servermanager->delete_installation($installation['id']);			
 			$servermanager->delete_report($installation_name);			
@@ -163,8 +164,8 @@ try{
 				//unset($config['id']);
 				$servermanager->write_config($tmp_config, $config);
 
-				//go_debug ('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' move_config '.$old_installation['name'].' '.$tmp_config);
-				$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' move_config '.$old_installation['name'].' '.$tmp_config;
+				
+				$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php --go_config='.$GO_CONFIG->get_config_file().' --task=move_config --name='.$old_installation['name'].' --tmp_config='.$tmp_config;
 				if(isset($admin_password))
 				{
 					$cmd .= ' "'.$admin_password.'"';
@@ -242,12 +243,10 @@ try{
 				$installation['billing']=strpos($config['allowed_modules'], 'billing')!==false ? 1 : 0;
 
 			
-
-				//go_debug ('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' install '.$installation['name'].' '.$tmp_config);
-				$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' install '.$installation['name'].' '.$tmp_config;
+				$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php --go_config='.$GO_CONFIG->get_config_file().' --task=install --name='.$installation['name'].' --tmp_config='.$tmp_config;
 				if(isset($admin_password))
 				{
-					$cmd .= ' "'.$admin_password.'"';
+					$cmd .= ' --password="'.$admin_password.'"';
 				}
 				exec($cmd, $output, $return_var);
 
@@ -304,7 +303,7 @@ try{
 				
 			$servermanager->write_config($tmp_config, $config);
 				
-			exec('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' move_config '.$installation_name.' '.$tmp_config);
+			exec('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php --go_config='.$GO_CONFIG->get_config_file().'--task=move_config --name='.$installation_name.' --tmp_config='.$tmp_config);
 				
 			$response['success']=true;
 				

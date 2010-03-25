@@ -1,18 +1,26 @@
 #!/usr/bin/php
 <?php
-$task = $argv[2];
-$name = $argv[3];
-$db_name = str_replace('.','_', $name);
+chdir(dirname(__FILE__));
+require('../../cli-functions.inc.php');
 
-if($task!='change_admin_password' && !preg_match('/^[a-z0-9-_\.]*$/',$name))
+
+
+$args = parse_cli_args($argv);
+
+$db_name = str_replace('.','_', $args['name']);
+
+if($args['task']!='change_admin_password' && !preg_match('/^[a-z0-9-_\.]*$/',$args['name']))
 {
 	die('Invalid installation name');
 }
 
-define('CONFIG_FILE', $argv[1]);
+if(isset($args['go_config']))
+	define('CONFIG_FILE', $args['go_config']);
 
-chdir(dirname(__FILE__));
+
 require('../../Group-Office.php');
+
+go_debug($argv);
 
 require_once ($GO_MODULES->modules['servermanager']['class_path']."servermanager.class.inc.php");
 $sm = new servermanager();
@@ -20,18 +28,18 @@ $sm = new servermanager();
 require('/etc/groupoffice/servermanager.inc.php');
 
 
-$go_root =$sm_config['install_path'].$name.'/';
-$apache_conf_file = $sm_config['apache_conf'].$name;
-$config_file = '/etc/groupoffice/'.$name.'/config.php';
+$go_root =$sm_config['install_path'].$args['name'].'/';
+$apache_conf_file = $sm_config['apache_conf'].$args['name'];
+$config_file = '/etc/groupoffice/'.$args['name'].'/config.php';
 
 
-switch($task)
+switch($args['task'])
 {
 	case 'change_admin_password':
 		
 		//when the admin password is changed it must also be changed in globalconfig.inc.php so all installations
 		//can still connect.
-		$new_password = $argv[3];
+		$new_password = $args['password'];
 		
 		$config=array();
 		require('/etc/groupoffice/globalconfig.inc.php');
@@ -43,9 +51,9 @@ switch($task)
 	
 	case 'install':
 		
-		$tmp_config = $argv[4];
+		$tmp_config = $args['tmp_config'];
 		
-		if(is_dir('/etc/groupoffice/'.$name))
+		if(is_dir('/etc/groupoffice/'.$args['name']))
 			die('config file exists');
 			
 		if(is_dir($go_root))
@@ -54,12 +62,12 @@ switch($task)
 		if(!file_exists($tmp_config))
 			die('Temp config does not exist');
 		
-		if(is_dir('/var/lib/mysql/'.$name))
-			die('Database '.$name.' already exists');
+		if(is_dir('/var/lib/mysql/'.$args['name']))
+			die('Database '.$args['name'].' already exists');
 		
 		
 		if(file_exists($apache_conf_file))
-			die('Apache conf for '.$name.' already exists');
+			die('Apache conf for '.$args['name'].' already exists');
 
 			
 		$config['db_pass']=$GO_USERS->random_password();
@@ -87,23 +95,23 @@ switch($task)
 		
 		
 		mkdir($go_root.'data',0755, true);		
-		mkdir('/tmp/'.$name,0777, true);
-		mkdir('/etc/groupoffice/'.$name,0755, true);
+		mkdir('/tmp/'.$args['name'],0777, true);
+		mkdir('/etc/groupoffice/'.$args['name'],0755, true);
 
 
-		if(floatval($GO_CONFIG->version)<3.3){
-			mkdir($sm_config['install_path'].'sm-local/'.$name.'/',0755,true);
-			chown($sm_config['install_path'].'sm-local/'.$name.'/', $sm_config['apache_user']);
-		}
+		/*if(floatval($GO_CONFIG->version)<3.3){
+			mkdir($sm_config['install_path'].'sm-local/'.$args['name'].'/',0755,true);
+			chown($sm_config['install_path'].'sm-local/'.$args['name'].'/', $sm_config['apache_user']);
+		}*/
 		
 		/*
 				
 		$apache_conf_data = '#Install date '.date('r')."\n".
 			'<VirtualHost '.$sm_config['ip_address'].'>'."\n".
 			'DocumentRoot '.$go_root."groupoffice\n".
-			'ServerName '.$name.'.'.$sm_config['domain']."\n".
-			'ErrorLog /var/log/apache2/'.$name.'.'.$sm_config['domain'].'-error.log'."\n".
-			'CustomLog /var/log/apache2/'.$name.'.'.$sm_config['domain'].'-access.log common'."\n".
+			'ServerName '.$args['name'].'.'.$sm_config['domain']."\n".
+			'ErrorLog /var/log/apache2/'.$args['name'].'.'.$sm_config['domain'].'-error.log'."\n".
+			'CustomLog /var/log/apache2/'.$args['name'].'.'.$sm_config['domain'].'-access.log common'."\n".
 			"</VirtualHost>";
 		
 		file_put_contents($apache_conf_file, $apache_conf_data);*/
@@ -123,21 +131,21 @@ switch($task)
 		
 		system('chown -R '.$sm_config['apache_user'].' '.$go_root.'data');
 		
-		if(isset($argv[5]))
+		if(isset($args['password']))
 		{
 			//set admin password
 			
 			$db->query('USE `'.$db_name.'`');
-			$db->query("UPDATE go_users SET password=MD5('".$argv[5]."') WHERE id=1");
+			$db->query("UPDATE go_users SET password=MD5('".$args['password']."') WHERE id=1");
 		}
 		
 		break;
 		
 	case 'move_config':		
-		$config_file = '/etc/groupoffice/'.$name.'/config.php';		
-		system('mv '.$argv[4].' '.$config_file);	
+		$config_file = '/etc/groupoffice/'.$args['name'].'/config.php';
+		system('mv '.$args['tmp_config'].' '.$config_file);
 		
-		if(isset($argv[5]))
+		if(isset($args['password']))
 		{
 			//set admin password
 			$db = new db();
@@ -164,7 +172,7 @@ switch($task)
 							
 			$params=array(
 					'task'=>'serverclient_delete_installation',
-					'go_installation_id'=>$name
+					'go_installation_id'=>$args['name']
 			);
 			
 			//$response = $sc->send_request($sc->server_url.'modules/postfixadmin/action.php', $params);
@@ -185,11 +193,11 @@ switch($task)
 		}
 		
 		system('rm -Rf '.$go_root);
-		//system('rm -Rf '.$sm_config['install_path'].'sm-local/'.$name);
-		system('rm -Rf /etc/groupoffice/'.$name);
-		system('rm -Rf /tmp/'.$name);
+		//system('rm -Rf '.$sm_config['install_path'].'sm-local/'.$args['name']);
+		system('rm -Rf /etc/groupoffice/'.$args['name']);
+		system('rm -Rf /tmp/'.$args['name']);
 		
-		$db_name = str_replace('.', '_', $name);
+		$db_name = str_replace('.', '_', $args['name']);
 		$db->query("DROP DATABASE `".$db_name."`");		
 		$db->query("DROP USER '".substr($db_name,0,16)."'");
 		
