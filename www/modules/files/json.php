@@ -315,7 +315,7 @@ try{
 					}
 					ksort($nodes);
 
-					go_debug($nodes);
+					//go_debug($nodes);
 
 					$fs = new filesystem();
 
