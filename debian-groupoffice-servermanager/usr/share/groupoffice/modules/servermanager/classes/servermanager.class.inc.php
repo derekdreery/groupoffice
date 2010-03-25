@@ -308,8 +308,8 @@ class servermanager extends db {
 		if($user['id']==1 && !empty($user['password'])) {
 			global $GO_CONFIG, $GO_MODULES;
 
-			$cmd='sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.
-					$GO_CONFIG->get_config_file().' change_admin_password "'.$user['password'].'"';
+			$cmd='sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php --go_config='.
+					$GO_CONFIG->get_config_file().' --task=change_admin_password --password="'.$user['password'].'"';
 
 			system($cmd);
 		}
@@ -609,7 +609,7 @@ class servermanager extends db {
 
 
 		$installation = $this->get_installation($installation_id);
-		$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' remove '.$installation['name'];
+		$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php --go_config='.$GO_CONFIG->get_config_file().' --task=remove --name='.$installation['name'];
 
 		exec($cmd, $output, $return_var);
 
