@@ -130,6 +130,10 @@ GO.files.FilePropertiesDialog = function(config){
 			text : GO.lang.cmdBrowseLinks,
 			disabled : true,
 			handler : function() {
+				if(!GO.linkBrowser){
+					GO.linkBrowser = new GO.LinkBrowser();
+				}
+				
 				GO.linkBrowser.show({
 					link_id : this.file_id,
 					link_type : "6",
