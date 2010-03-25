@@ -126,7 +126,8 @@ class filesystem extends db
    */
 	function is_sub_dir($sub_path, $parent_path)
 	{
-		$parent_path = $this->check_path($parent_path);
+		$parent_path = $this->check_trailing_slash($parent_path);
+		$sub_path =  $this->check_trailing_slash($sub_path);
 
 		if(strpos($sub_path, $parent_path)===0)
 		{
@@ -142,9 +143,9 @@ class filesystem extends db
 	 *
 	 * @param unknown_type $path
 	 */
-	function check_path($path)
+	function check_trailing_slash($path)
 	{
-		if(is_dir($path) && substr($path,-1,1)!='/')
+		if(substr($path,-1,1)!='/')
 		{
 			$path.='/';
 		}
