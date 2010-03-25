@@ -20,11 +20,13 @@ class GO_EVENTS
 			if(!$this->listeners)// || $GO_CONFIG->debug))
 			{
 				$this->load_listeners();
-				if(!empty($GO_CONFIG->db_user))
+				if(!empty($GO_CONFIG->db_user)){
+					File::mkdir(dirname($cache_file));
 					file_put_contents($cache_file, serialize($this->listeners));
+				}
 			}
 		}
-	}	
+	}
 	/**
 	 * Scans all modules and looks for listerners. This method uses a lot of memory so should be avoided.
 	 * It's generally only called the first time Group-Office loads.
