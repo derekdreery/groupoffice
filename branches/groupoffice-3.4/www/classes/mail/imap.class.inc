@@ -753,10 +753,10 @@ class imap{
 		}
 
 		if(empty($name) && !empty($mimeobj->description)) {
-			$name = $this->enc_utf8($mimeobj->description);
+			$name = $mimeobj->description;
 		}
 
-		if(substr($name,0,2)=='=?') {
+		/*if(substr($name,0,2)=='=?') {
 			$name = $this->enc_utf8($name);
 		}else {
 			$start = strpos($name,"''");
@@ -764,7 +764,7 @@ class imap{
 				$name = substr($name, $start);
 			}
 			$name = rawurldecode($name);
-		}
+		}*/
 
 		$x = 0;
 		if (isset ($mimeobj->parts)) {
