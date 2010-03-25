@@ -2,6 +2,7 @@
 - TinyMCE was broken
 - Fullscreen mode was loading very long
 - Attachment decoding failed with non-ascii characters
+- Fit windows when larger then the viewport
 
 2010/03/18 3.4.12
 - Send button could dissapear sometimes.

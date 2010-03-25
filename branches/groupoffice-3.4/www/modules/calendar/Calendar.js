@@ -206,7 +206,7 @@ GO.calendar.MainPanel = function(config){
 		view:new Ext.grid.GridView({
 			forceFit:true
 		}),
-		sm: new Ext.grid.RowSelectionModel()
+		sm: new Ext.grid.RowSelectionModel({singleSelect:true})
 	});
 
 	this.viewsList = new GO.grid.GridPanel({
@@ -226,7 +226,7 @@ GO.calendar.MainPanel = function(config){
 			forceFit:true,
 			autoFill:true
 		}),
-		sm: new Ext.grid.RowSelectionModel()
+		sm: new Ext.grid.RowSelectionModel({singleSelect:true})
 	});
 
 	this.resourcesList = new GO.grid.GridPanel({
@@ -252,7 +252,7 @@ GO.calendar.MainPanel = function(config){
 			hideGroupedColumn:true,
 			groupTextTpl: '{text} ({[values.rs.length]})'
 		}),
-		sm: new Ext.grid.RowSelectionModel()
+		sm: new Ext.grid.RowSelectionModel({singleSelect:true})
 	});
    
 	this.calendarList.on('rowclick', function(grid, rowIndex)
