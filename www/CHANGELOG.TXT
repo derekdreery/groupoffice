@@ -1,5 +1,7 @@
 2010/03/22 3.4.13
 - TinyMCE was broken
+- Fullscreen mode was loading very long
+- Attachment decoding failed with non-ascii characters
 
 2010/03/18 3.4.12
 - Send button could dissapear sometimes.
