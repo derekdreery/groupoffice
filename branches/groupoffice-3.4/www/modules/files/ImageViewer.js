@@ -1,4 +1,4 @@
-GO.files.ImageViewer = Ext.extend(Ext.Window, {
+GO.files.ImageViewer = Ext.extend(GO.Window, {
 	
 	originalImgSize : false,
 	

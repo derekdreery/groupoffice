@@ -63,7 +63,7 @@ GO.notes.NoteDialog = function(config){
 	});
 }
 
-Ext.extend(GO.notes.NoteDialog, Ext.Window,{
+Ext.extend(GO.notes.NoteDialog, GO.Window,{
 	
 	show : function (note_id, config) {
 

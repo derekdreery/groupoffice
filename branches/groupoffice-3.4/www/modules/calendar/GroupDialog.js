@@ -47,7 +47,7 @@ GO.calendar.GroupDialog = function(config) {
     
 };
 
-Ext.extend(GO.calendar.GroupDialog, Ext.Window, {
+Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 	show : function(group_id, config)
 	{
 		if (!this.rendered)

@@ -124,7 +124,7 @@ GO.addressbook.CompanyDialog = function(config)
 	this.addEvents({'save':true});
 }
 	
-Ext.extend(GO.addressbook.CompanyDialog, Ext.Window, {
+Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 		
 	show : function(company_id)
 	{

@@ -40,7 +40,7 @@ GO.LinkBrowser = function(config){
    this.addEvents({'link' : true});
 };
 
-Ext.extend(GO.LinkBrowser, Ext.Window, {
+Ext.extend(GO.LinkBrowser, GO.Window, {
 	
 	show : function(config)
 	{
