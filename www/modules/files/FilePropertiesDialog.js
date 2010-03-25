@@ -197,7 +197,7 @@ GO.files.FilePropertiesDialog = function(config){
 	this.addEvents({'rename' : true});
 }
 
-Ext.extend(GO.files.FilePropertiesDialog, Ext.Window, {
+Ext.extend(GO.files.FilePropertiesDialog, GO.Window, {
 	folder_id : 0,
 	show : function(file_id, config)
 	{

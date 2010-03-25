@@ -560,7 +560,7 @@ GO.email.AccountDialog = function(config) {
 
 }
 
-Ext.extend(GO.email.AccountDialog, Ext.Window, {
+Ext.extend(GO.email.AccountDialog, GO.Window, {
 	
 	save : function(hide) {
 		this.propertiesPanel.form.submit({

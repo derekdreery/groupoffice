@@ -312,7 +312,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
         border:false
       });		
 		
-		var viewport = new Ext.Viewport({
+		GO.viewport = new Ext.Viewport({
         layout:'border',
         border:false,
         items:[topPanel,this.tabPanel]

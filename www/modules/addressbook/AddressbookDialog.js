@@ -80,7 +80,7 @@ GO.addressbook.AddressbookDialog = function(config)
 	
 }
 
-Ext.extend(GO.addressbook.AddressbookDialog, Ext.Window,{
+Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 	
 
 	buildForm : function(id)

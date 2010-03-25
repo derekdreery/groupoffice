@@ -273,6 +273,7 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	this.labelWidth=120;
 	this.bodyStyle='padding: 5px'; 
 	this.layout='column';
+	this.autoScroll=true;
 	this.defaults={border: false};
 	this.items=[
 		{	 

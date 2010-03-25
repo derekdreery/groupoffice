@@ -61,7 +61,7 @@ GO.PersonalSettingsDialog = function(config){
 	this.addEvents({'save' : true});	
 };
 
-Ext.extend(GO.PersonalSettingsDialog, Ext.Window,{
+Ext.extend(GO.PersonalSettingsDialog, GO.Window,{
 
 	reload : false,
 
