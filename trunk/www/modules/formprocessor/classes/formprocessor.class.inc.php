@@ -374,6 +374,10 @@ class formprocessor{
 		
 		$name = isset($_POST['name']) ? $_POST['name'] : $_POST['email'];
 
+		if($this->no_urls && stripos($body, 'http')){
+					throw new Exception('Sorry, but to prevent spamming we don\'t allow URL\'s in the message');
+				}
+
 		//if(empty($body))
 			//throw new Exception($lang['common']['missingField']);
 
