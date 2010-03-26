@@ -801,17 +801,10 @@ try{
 
 				$messages = $imap->get_message_headers($start, $limit, $sort_field , $sort_order, $query);
 
-
-				//filtering might have changed the uid list
-				$uids = $imap->get_uids_subset($start, $limit);
-
-				//go_debug($uids);
-				//go_debug($messages);
-
 				$response['results']=array();
 
-				foreach($uids as $uid) {
-					$message = $messages[$uid];
+				foreach($messages as $message) {
+					//$message = $messages[$uid];
 					unset($message['content_type'], $message['reply_to'], $message['content_transfer_encoding'], $message['notification']);
 					if($message['udate']>$day_start && $message['udate']<$day_end) {
 						$message['date'] = date($_SESSION['GO_SESSION']['time_format'],$message['udate']);
