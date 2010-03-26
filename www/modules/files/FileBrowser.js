@@ -429,10 +429,11 @@ GO.files.FileBrowser = function(config){
 				});
 				
 	var tbar = [];
+
+	tbar.push(this.newButton);
 	
 	if(!config.hideActionButtons)
-	{
-		tbar.push(this.newButton);
+	{		
 		tbar.push(this.uploadButton);
 		tbar.push('-');
 	}
