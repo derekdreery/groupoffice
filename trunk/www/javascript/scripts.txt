@@ -4,6 +4,7 @@ javascript/Date.js
 javascript/DeployJava.js
 javascript/MainLayout.js
 javascript/ColumnFitLayout.js
+javascript/windows/Window.js
 javascript/Export.js
 
 javascript/WeekPicker.js
@@ -18,7 +19,6 @@ modules/users/ProfilePanel.js
 modules/users/PersonalPanel.js
 modules/users/CompanyPanel.js
 
-javascript/windows/Window.js
 javascript/windows/AboutDialog.js
 javascript/windows/LoginDialog.js
 

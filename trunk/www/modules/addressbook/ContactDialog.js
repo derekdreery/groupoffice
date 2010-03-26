@@ -188,7 +188,7 @@ GO.addressbook.ContactDialog = function(config)
 	});
 }
 
-Ext.extend(GO.addressbook.ContactDialog, Ext.Window, {
+Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 
 	show : function(contact_id)
 	{

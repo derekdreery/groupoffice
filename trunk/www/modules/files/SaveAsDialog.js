@@ -1,4 +1,4 @@
-GO.files.SaveAsDialog = Ext.extend(Ext.Window, {
+GO.files.SaveAsDialog = Ext.extend(GO.Window, {
 	
 	handler : function(){
 		

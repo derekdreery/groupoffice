@@ -749,9 +749,22 @@ class cached_imap extends imap{
 
 					$message['folder_id']=$this->folder['id'];
 					$message['account_id']=$this->account['id'];
+
+					//we don't need this in the database
+					unset($message['cc']);
+
 					$this->add_cached_message($message);
 				}
 			}
+
+			$sorted_messages=array();
+			foreach($uids as $uid){
+				if(isset($messages[$uid]))//message might have been moved by filter
+				{
+					$sorted_messages[]=$messages[$uid];
+				}
+			}
+
 			//go_debug('Got '.count($uncached_uids).' from IMAP server');
 
 			if(count($this->filtered))
@@ -761,15 +774,15 @@ class cached_imap extends imap{
 				$newstart = count($messages);
 				$newlimit = $newstart+count($this->filtered);
 
-				$extra_messages = $this->get_message_headers($newstart, $newlimit, $sort_field , $sort_order, $query);
-				foreach($extra_messages as $uid=>$message)
+				$sorted_messages = array_merge($sorted_messages, $this->get_message_headers($newstart, $newlimit, $sort_field , $sort_order, $query));
+				/*foreach($extra_messages as $uid=>$message)
 				{
 					$messages[$uid]=$message;
-				}
+				}*/
 				$this->filtered=array();
 			}
 		}
-		return $messages;
+		return $sorted_messages;
 	}
 
 	function set_filters($filters)

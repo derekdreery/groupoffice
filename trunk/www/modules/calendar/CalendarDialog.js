@@ -197,7 +197,7 @@ GO.calendar.CalendarDialog = function(config)
 
 }
 
-Ext.extend(GO.calendar.CalendarDialog, Ext.Window, {
+Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 
 	resource: 0,
     
