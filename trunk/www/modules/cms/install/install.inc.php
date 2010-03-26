@@ -31,7 +31,7 @@ $site_id = $cms->add_site($site);
 
 $file['name']='Home';
 $file['content']='<h1>Demo site<br /></h1>
-<p>Just showing off some features here!</p>
+<p>Just showing off some features here! Press the "View" button to preview this site. In a real production site the CMS will generate friendly URL\'s like http://www.example.com/Home.</p>
 <p>&nbsp;</p>';
 $file['type']='default';
 $file['auto_meta']='1';
