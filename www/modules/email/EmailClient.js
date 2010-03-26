@@ -1833,7 +1833,7 @@ GO.newMenuItems.push({
 	handler:function(item, e){
 		var taskShowConfig = item.parentMenu.taskShowConfig || {};
 		taskShowConfig.link_config=item.parentMenu.link_config
-		if(item.parentMenu.panel && item.parentMenu.panel.data.email){
+		if(item.parentMenu.panel.data.email){
 			var to='';
 			if(item.parentMenu.panel.data.full_name){
 				to='"'+item.parentMenu.panel.data.full_name+'" <'+item.parentMenu.panel.data.email+'>';
@@ -1844,19 +1844,7 @@ GO.newMenuItems.push({
 			taskShowConfig.values={
 				to:to
 			};
-		} else if (GO.monkeytown && GO.monkeytown.gridsContainer.activeGroup.activeTab.centerPanel.selModel.getSelected()) {
-			var items = GO.monkeytown.gridsContainer.activeGroup.activeTab.centerPanel.selModel.getSelected().store.data.items;
-			var to='';
-			for (var i in items) {
-				if (typeof(items[i])=='object') {
-					to=to+'"'+items[i].data.full_name+'" <'+items[i].data.email+'>,';
-				}
-			}
-			taskShowConfig.values={
-						to:to
-					};
 		}
-
 		GO.email.showComposer(taskShowConfig);
 	}
 });
