@@ -458,6 +458,10 @@ class imap{
 			$cached_message['reply_to']=$message['reply-to'];
 			$cached_message['to']=implode(',', $message['to']);
 
+			//this field will not be stored in cached by cached_imap.class.inc.php but
+			//is used for filtering
+			$cached_message['cc']=implode(',', $message['cc']);
+
 			$cached_message['notification']=$message['notification'];
 			$cached_message['content_type']=$message['content_type'];
 			$cached_message['content_transfer_encoding']=$message['content_transfer_encoding'];

@@ -749,6 +749,10 @@ class cached_imap extends imap{
 
 					$message['folder_id']=$this->folder['id'];
 					$message['account_id']=$this->account['id'];
+
+					//we don't need this in the database
+					unset($message['cc']);
+
 					$this->add_cached_message($message);
 				}
 			}
