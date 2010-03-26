@@ -23,20 +23,24 @@ GO.servermanager.InstallationsGrid = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.servermanager.url+ 'json.php',
-	    baseParams: {
-	    	task: 'installations'
-	    	},
-	    root: 'results',
-	    id: 'id',
-	    totalProperty:'total',
-	    fields: ['id','status','name','webmaster_email','title','default_country','language','default_timezone','default_currency','default_date_format','default_date_separator','default_thousands_separator','theme','allow_themes','allow_password_change','allow_registration','allow_duplicate_email','auto_activate_accounts','notify_admin_of_registration','registration_fields','required_registration_fields','register_modules_read','register_modules_write','register_user_groups','register_visible_user_groups','max_users','ctime','mtime','count_users', 'install_time','lastlogin','total_logins','database_usage','file_storage_usage','mailbox_usage','total_usage', 'comment', 'ctime', 'mailbox_domains', 'features', 'billing', 'professional', 'enabled'],
-	    remoteSort: true
+		url: GO.settings.modules.servermanager.url+ 'json.php',
+		baseParams: {
+			task: 'installations'
+		},
+		root: 'results',
+		id: 'id',
+		totalProperty:'total',
+		fields: ['id','status','name','webmaster_email','title','default_country','language','default_timezone','default_currency','default_date_format','default_date_separator','default_thousands_separator','theme','allow_themes','allow_password_change','allow_registration','allow_duplicate_email','auto_activate_accounts','notify_admin_of_registration','registration_fields','required_registration_fields','register_modules_read','register_modules_write','register_user_groups','register_visible_user_groups','max_users','ctime','mtime','count_users', 'install_time','lastlogin','total_logins','database_usage','file_storage_usage','mailbox_usage','total_usage', 'comment', 'ctime', 'mailbox_domains', 'features', 'billing', 'professional', 'enabled'],
+		remoteSort: true
 	});
 	
 	config.paging=true;
-	var columnModel =  new Ext.grid.ColumnModel([
-	   		{
+	var columnModel =  new Ext.grid.ColumnModel({
+		defaults:{
+			sortable:true
+		},
+		columns:[
+		{
 			header: GO.lang.strName, 
 			dataIndex: 'name'
 		},{
@@ -44,10 +48,12 @@ GO.servermanager.InstallationsGrid = function(config){
 			dataIndex: 'status'
 		},		{
 			header: GO.servermanager.lang.webmasterEmail, 
-			dataIndex: 'webmaster_email'
+			dataIndex: 'webmaster_email',
+			sortable:false
 		},		{
 			header: GO.servermanager.lang.title, 
-			dataIndex: 'title'
+			dataIndex: 'title',
+			sortable:false
 		},	{
 			header: GO.servermanager.lang.maxUsers, 
 			dataIndex: 'max_users'
@@ -95,22 +101,26 @@ GO.servermanager.InstallationsGrid = function(config){
 			dataIndex: 'comment'
 		},{
 			header: GO.servermanager.lang.mailDomains,
-			dataIndex: 'mailbox_domains'
+			dataIndex: 'mailbox_domains',
+			sortable:false
 		},{
 			header: GO.servermanager.lang.billing,
 			dataIndex: 'billing',
 			renderer:function(v){
 				return v=="1" ? GO.lang.cmdYes : GO.lang.cmdNo;
-			}
+			},
+			sortable:false
 		},{
 			header: 'Professional',
 			dataIndex: 'professional',
 			renderer:function(v){
 				return v=="1" ? GO.lang.cmdYes : GO.lang.cmdNo;
-			}
+			},
+			sortable:false
 		}
-	]);
-	columnModel.defaultSortable = true;
+		]
+	});
+	
 	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({
@@ -129,7 +139,7 @@ GO.servermanager.InstallationsGrid = function(config){
 	this.searchField = new GO.form.SearchField({
 		store: config.store,
 		width:320
-  });
+	});
 	
 		    			    		
 	GO.servermanager.installationDialog.on('save', function(){   
@@ -148,7 +158,7 @@ GO.servermanager.InstallationsGrid = function(config){
 		
 		
 		GO.servermanager.installationDialog.show(record.data.id);
-		}, this);
+	}, this);
 	
 };
 
