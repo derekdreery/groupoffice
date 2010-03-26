@@ -43,7 +43,7 @@ GO.comments.CommentsBrowser = function(config){
    this.addEvents({'link' : true});
 };
 
-Ext.extend(GO.comments.CommentsBrowser, Ext.Window, {
+Ext.extend(GO.comments.CommentsBrowser, GO.Window, {
 	
 	show : function(config)
 	{

@@ -90,7 +90,12 @@ class GO_SECURITY extends db {
 			if(empty($this->user_id)) {
 				global $GO_AUTH;
 
-				if(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
+				if(!empty($_COOKIE['GO_UN']) && !empty($_COOKIE['GO_PW'])) {
+					$username = $_COOKIE['GO_UN'];
+					$password = $_COOKIE['GO_PW'];
+
+					return $GO_AUTH->login($username, $password);
+				}elseif(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
 					$username = $_SERVER['PHP_AUTH_USER'];
 					$password = $_SERVER['PHP_AUTH_PW'];
 
@@ -98,11 +103,6 @@ class GO_SECURITY extends db {
 						$this->http_authenticated_session=$_SESSION['GO_SESSION']['http_authenticated_user']=true;
 						return true;
 					}
-				}elseif(!empty($_COOKIE['GO_UN']) && !empty($_COOKIE['GO_PW'])) {
-					$username = $_COOKIE['GO_UN'];
-					$password = $_COOKIE['GO_PW'];
-
-					return $GO_AUTH->login($username, $password);
 				}
 
 				return false;
@@ -119,8 +119,19 @@ class GO_SECURITY extends db {
 	 * @return void
 	 */
 	function logout() {
+		global $GO_CONFIG;
+
 		$username = isset($_SESSION['GO_SESSION']['username']) ? $_SESSION['GO_SESSION']['username'] : 'notloggedin';
 		go_log(LOG_DEBUG, 'LOGOUT Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
+
+
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+		if(is_dir($GO_CONFIG->tmpdir))
+		{
+			$fs->delete($GO_CONFIG->tmpdir);
+		}
+
 
 		SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
 		SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);

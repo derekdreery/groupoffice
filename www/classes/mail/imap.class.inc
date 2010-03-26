@@ -458,6 +458,10 @@ class imap{
 			$cached_message['reply_to']=$message['reply-to'];
 			$cached_message['to']=implode(',', $message['to']);
 
+			//this field will not be stored in cached by cached_imap.class.inc.php but
+			//is used for filtering
+			$cached_message['cc']=implode(',', $message['cc']);
+
 			$cached_message['notification']=$message['notification'];
 			$cached_message['content_type']=$message['content_type'];
 			$cached_message['content_transfer_encoding']=$message['content_transfer_encoding'];
@@ -753,10 +757,10 @@ class imap{
 		}
 
 		if(empty($name) && !empty($mimeobj->description)) {
-			$name = $this->enc_utf8($mimeobj->description);
+			$name = $mimeobj->description;
 		}
 
-		if(substr($name,0,2)=='=?') {
+		/*if(substr($name,0,2)=='=?') {
 			$name = $this->enc_utf8($name);
 		}else {
 			$start = strpos($name,"''");
@@ -764,7 +768,7 @@ class imap{
 				$name = substr($name, $start);
 			}
 			$name = rawurldecode($name);
-		}
+		}*/
 
 		$x = 0;
 		if (isset ($mimeobj->parts)) {

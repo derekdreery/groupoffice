@@ -8,7 +8,6 @@ GO.Window = function(config)
 	config.maximizable=true;
 	config.minimizable=true;
 
-
 	if(!config.keys)
 	{
 		config.keys=[];
@@ -33,13 +32,19 @@ GO.Window = Ext.extend(Ext.Window,{
 
 	beforeShow : function() {
 		GO.Window.superclass.beforeShow.call(this);
-		if (this.height > screen.height || this.width > screen.width) {
-			this.maximizable=true;
-			this.minimizable=true;
-			//this.maximized=false;
-			this.fitContainer();
-			//this.render();
+
+		var vpH=GO.viewport.getEl().getHeight();
+		var vpW=GO.viewport.getEl().getWidth();
+		var center=false;
+
+		if (this.height > vpH){
+			this.setHeight(vpH);
 		}
+		if(this.width > vpW) {
+			this.setWidth(vpW);
+		}
+		if(center)
+			this.center();
 	},
 
 	hide : function(){

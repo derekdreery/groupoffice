@@ -78,8 +78,11 @@ function autologin_groupoffice()
 	if(isset($_REQUEST['goauth']))
 	{
 		$file = base64_decode($_REQUEST['goauth']);
+
+		$_SESSION['groupoffice_to_phpbb_session_file']=$file;
+
 		$user_id = intval(file_get_contents($file));
-		unlink($file);	
+		//unlink($file);
 			
 		$gorow = user_row_groupoffice('', '', $user_id);
 
@@ -163,7 +166,7 @@ function user_row_groupoffice($username, $password, $user_id=false)
 	$godb=get_godb();
 	
 
-	$sql = "SELECT username,email FROM go_users WHERE ";
+	$sql = "SELECT username,email,id FROM go_users WHERE ";
 
 	if($user_id)	
 	{
@@ -180,6 +183,19 @@ function user_row_groupoffice($username, $password, $user_id=false)
 	if(!$gorow)
 	{
 		return false;
+	}
+
+	$adpos = strpos($gorow['username'],'@');
+	if($adpos){
+		$gorow['username']=substr($gorow['username'],0,$adpos);
+
+		//check for a duplicate user in GO.
+		$sql = "SELECT id FROM go_users WHERE username='".$db->sql_escape(utf8_clean_string($gorow['username']))."'";
+		$result = $godb->sql_query($sql);
+		if($godb->sql_fetchrow($result)){
+			//duplicate found append the id
+			$gorow['username'].=$gorow['id'];
+		}
 	}
 
 	// generate user account data
@@ -227,5 +243,17 @@ function acp_groupoffice(&$new)
 		'config'	=> array('groupoffice_server', 'groupoffice_database', 'groupoffice_user', 'groupoffice_pass', 'groupoffice_port')
 	);
 }
+
+/**
+* The session validation function checks whether the user is still logged in
+*
+* @return boolean true if the given user is authenticated or false if the session should be closed
+*/
+function validate_session_groupoffice(&$user)
+{
+	return file_exists($_SESSION['groupoffice_to_phpbb_session_file']);
+}
+
+
 
 ?>

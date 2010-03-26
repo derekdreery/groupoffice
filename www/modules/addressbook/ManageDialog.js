@@ -57,5 +57,5 @@ GO.addressbook.ManageDialog = function(config)
 	GO.addressbook.ManageDialog.superclass.constructor.call(this, config);
 }
 	
-Ext.extend(GO.addressbook.ManageDialog, Ext.Window,{
+Ext.extend(GO.addressbook.ManageDialog, GO.Window,{
 });	

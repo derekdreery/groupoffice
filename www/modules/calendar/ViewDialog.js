@@ -192,7 +192,7 @@ GO.calendar.ViewDialog = function(config)
 
 }
 
-Ext.extend(GO.calendar.ViewDialog, Ext.Window, {
+Ext.extend(GO.calendar.ViewDialog, GO.Window, {
 	
 	initComponent : function(){
 		
