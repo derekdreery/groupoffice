@@ -705,7 +705,7 @@ class cached_imap extends imap{
 		$uids = $this->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
 
 		//go_debug($uids);
-
+		$sorted_messages=array();
 		$messages=array();
 		$this->filtered=array();
 
@@ -757,7 +757,7 @@ class cached_imap extends imap{
 				}
 			}
 
-			$sorted_messages=array();
+			
 			foreach($uids as $uid){
 				if(isset($messages[$uid]))//message might have been moved by filter
 				{
