@@ -408,12 +408,12 @@ if(in_array('calendar', $module_ids))
 
 
 			$todo['id'] = $db2->nextid("ta_tasks");
-			$db2->insert_row('ta_tasks', $task);
+			$db2->insert_row('ta_tasks', $todo);
 
-			$sql = "UPDATE go_links SET link_id1=".$task_id.",type1=12 WHERE link_id1=".$db->f('id')." AND type1=1";
+			$sql = "UPDATE go_links SET link_id1=".$todo['id'].",type1=12 WHERE link_id1=".$db->f('id')." AND type1=1";
 			$db2->query($sql);
 
-			$sql = "UPDATE go_links SET link_id2=".$task_id.",type2=12 WHERE link_id2=".$db->f('id')." AND type2=1";
+			$sql = "UPDATE go_links SET link_id2=".$todo['id'].",type2=12 WHERE link_id2=".$db->f('id')." AND type2=1";
 			$db2->query($sql);
 
 			$sql = "DELETE FROM cal_events WHERE id=".$db->f('id');
