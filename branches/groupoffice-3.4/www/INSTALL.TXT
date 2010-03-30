@@ -51,7 +51,7 @@ Put your old config.php file in the root of the new Group-Office 3.0 directory. 
 
 Then it's wise to create another backup in case anything goes wrong in the upgrade2to3.php script.
 
-Run install/upgrade2to3.php in your browser or run it on the command line:
+Run install/upgrade2to3/upgrade2to3.php in your browser or run it on the command line:
 
 $ php upgrade2to3.php | tee upgrade.log
 
