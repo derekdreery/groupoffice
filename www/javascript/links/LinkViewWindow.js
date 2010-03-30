@@ -28,14 +28,17 @@ GO.LinkViewWindow = function(config){
 		config.height=500;
 
 
-	config.buttons=[{
+	/*config.buttons=[{
 			text: GO.lang['cmdClose'],
 			handler: function(){
-				this.close();
+				if(this.closeAction=='hide')
+					this.hide();
+				else
+					this.close();
 			},
 			scope:this
 		}					
-	];
+	];*/
 	
 	GO.LinkViewWindow.superclass.constructor.call(this, config);
 	
