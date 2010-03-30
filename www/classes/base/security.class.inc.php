@@ -124,12 +124,17 @@ class GO_SECURITY extends db {
 		$username = isset($_SESSION['GO_SESSION']['username']) ? $_SESSION['GO_SESSION']['username'] : 'notloggedin';
 		go_log(LOG_DEBUG, 'LOGOUT Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 
+		if(!empty($this->user_id)){
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+			$fs = new filesystem();
 
-		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-		$fs = new filesystem();
-		if(is_dir($GO_CONFIG->tmpdir))
-		{
-			$fs->delete($GO_CONFIG->tmpdir);
+			$length = -strlen($this->user_id)-1;
+
+			//go_debug(substr($GO_CONFIG->tmpdir,$length));
+
+			if(substr($GO_CONFIG->tmpdir,$length)==$this->user_id.'/' && is_dir($GO_CONFIG->tmpdir)){
+				$fs->delete($GO_CONFIG->tmpdir);
+			}
 		}
 
 
