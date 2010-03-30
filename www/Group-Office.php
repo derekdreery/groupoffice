@@ -123,10 +123,14 @@ if(!is_int($_SESSION['GO_SESSION']['timezone']))
 go_debug('['.date('Y-m-d G:i').'] Start of new request: '.$_SERVER['PHP_SELF']);
 if($GO_CONFIG->debug){
 	function groupoffice_error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
-    go_debug("PHP error: $errfile:$errline $errstr ($errno)");
+		$err_str = "PHP error: $errfile:$errline $errstr ($errno)";
+		print $err_str;
+		print php_sapi_name()=='cli' ? "\n" : '<br />';
+
+    go_debug($err_str);
 	}
-	error_reporting(E_ALL);
-	set_error_handler("groupoffice_error_handler");
+	//error_reporting(E_ALL & ~E_STRICT);
+	set_error_handler("groupoffice_error_handler", E_ALL);
 }
 
 $GO_GROUPS = new GO_GROUPS();
