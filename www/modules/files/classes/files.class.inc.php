@@ -597,7 +597,7 @@ class files extends db {
 
 
 	function add_file($file) {
-		global $GO_CONFIG;
+		global $GO_CONFIG, $GO_EVENTS;
 
 		$file['id']=$this->nextid('fs_files');
 		$file['user_id']=$GLOBALS['GO_SECURITY']->user_id;
@@ -607,6 +607,8 @@ class files extends db {
 		$this->cache_file($file);
 
 		$this->add_new_filelink($file);
+
+		$GO_EVENTS->fire_event('add_file', $params=array($file));
 
 		return $file['id'];
 	}
@@ -1358,7 +1360,7 @@ class files extends db {
 	}
 
 	function delete_file($file) {
-		global $GO_CONFIG, $GO_MODULES;
+		global $GO_CONFIG, $GO_MODULES, $GO_EVENTS;
 
 		if(is_numeric($file)) {
 			$file = $this->get_file($file);
@@ -1412,6 +1414,9 @@ class files extends db {
 		require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
 		$quota = new quota();
 		$quota->add(-filesize($path)/1024);
+
+
+		$GO_EVENTS->fire_event('delete_file', array($file, $path));
 
 		return @unlink($path);
 	}

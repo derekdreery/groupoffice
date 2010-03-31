@@ -524,6 +524,7 @@ try{
 										{
 											throw new AccessDeniedException();
 										}
+										go_debug($ti[1]);
 										$file = $files->get_file($ti[1]);
 										$deleted[]=$file['name'];
 										$files->delete_file($file);
