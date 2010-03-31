@@ -180,6 +180,9 @@ Ext.override(Ext.form.HtmlEditor, {
 Ext.override(Ext.DatePicker, {
 	startDay: parseInt(GO.settings.first_weekday)
 });
+Ext.override(Ext.form.DateField, {
+	format: GO.settings.date_format
+});
 
 
 /*
