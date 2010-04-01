@@ -19,6 +19,10 @@ function smarty_function_html_input($params, &$smarty)
 	if(!isset($params['class']))
 		$params['class']='textbox';
 
+	$isset=false;
+
+	$params['required']=empty($params['required']) ? false : true;
+
 	if(empty($params['forget_value'])){
 		if($pos = strpos($params['name'], '['))
 		{
