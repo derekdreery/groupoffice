@@ -228,13 +228,13 @@ class cms_output extends cms {
 		return $files;
 	}
 
-	function find_file($folder_id, $go_down_tree=true) {
+	function find_file($folder_id, $nested=false, $go_down_tree=true) {
 		global $GO_SECURITY;
 
 		if($folder_id==0) {
 			$folder_id=$this->site['root_folder_id'];
 		}
-
+		
 		$items = $this->get_authorized_items($folder_id, $GO_SECURITY->user_id,true);
 
 		foreach($items as $item) {
@@ -245,14 +245,21 @@ class cms_output extends cms {
 				$this->file['option_values']=$this->get_template_values($this->file['option_values']);
 				return $this->file['id'];
 			}elseif($go_down_tree) {
-				return $this->find_file($item['id']);
+				$file = $this->find_file($item['id'],true);
+				if($file)
+					return $file;
 			}
 		}
 
-		$folder = $this->get_folder($folder_id);
-		if($folder && $folder['parent_id']>0) {
-			//pass go_down_tree as false so it won't go in an endless loop between two empty folders
-			return $this->find_file($folder['parent_id'], false);
+
+		if(!$nested){
+			//if we reach this and we are not nested then we didn't find a file below the tree from the requested start point.
+			//We'll go up the tree now.
+			$folder = $this->get_folder($folder_id);
+			if($folder && $folder['parent_id']>0) {
+				//pass go_down_tree as false so it won't go in an endless loop between two empty folders
+				return $this->find_file($folder['parent_id'], true, false);
+			}
 		}
 		return false;
 	}
