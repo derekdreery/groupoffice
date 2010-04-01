@@ -525,28 +525,36 @@ class files extends db {
 
 	}
 
-	function move_version($file) {
+	function move_version($file, $path) {
 
-		if($this->enable_versioning) {
-		//no db functions apply to this move
+		if(!isset($GO_CONFIG->max_file_versions)){
+			$GO_CONFIG->max_file_versions=3;
+		}
+
+		if(empty($GO_CONFIG->max_file_versions) || $GO_CONFIG->max_file_versions!=1){
+			//no db functions apply to this move
 			$fs = new filesystem();
 
 			$versions_dir = $this->get_versions_dir($file['id']);
+			$filename = utf8_basename($path);
 
-			if($source_versions_dir!=$versions_dir && is_dir($source_versions_dir)) {
-				$fs->move($source_versions_dir, $versions_dir);
-			}
+			$version_filepath = $versions_dir.'/'.date('YmdGi',filectime($path)).'_'.$_SESSION['GO_SESSION']['username'].'_'.$filename;
+			$fs->move($path, $version_filepath);
 
-			if(file_exists($destination_path)) {
-				if(!is_dir($versions_dir)) {
-					global $GO_CONFIG;
-					mkdir($versions_dir, $GO_CONFIG->folder_create_mode);
+			global $GO_CONFIG;
+
+			if(!empty($GO_CONFIG->max_file_versions)){
+				$max = $GO_CONFIG->max_file_versions-1;
+
+				$files = $fs->get_files_sorted($versions_dir, 'filemtime', 'ASC');
+				$count=count($files);
+				if($count>$max){
+					$delete_count = $count - $max;
+					for($i=0;$i<$delete_count;$i++){
+						$file = array_shift($files);
+						unlink($file['path']);
+					}
 				}
-
-				$filename = utf8_basename($destination_path);
-				$version_filepath = $versions_dir.'/'.date('YmdGi').'_'.$_SESSION['GO_SESSION']['username'].'_'.$filename;
-
-				$fs->move($destination_path, $version_filepath);
 			}
 		}
 	}

@@ -277,8 +277,7 @@ try{
                     
 					if($existing_file)
 					{
-							$version_filepath = $files->get_versions_dir($existing_file['id']).'/'.date('YmdGi',filectime($new_path)).'_'.$_SESSION['GO_SESSION']['username'].'_'.$filename;
-							$fs->move($new_path, $version_filepath);
+							$files->move_version($existing_file, $new_path);
 					}
 
 					if(!$fs->move($tmp_file, $new_path))
