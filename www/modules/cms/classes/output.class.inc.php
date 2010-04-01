@@ -228,7 +228,7 @@ class cms_output extends cms {
 		return $files;
 	}
 
-	function find_file($folder_id, $nested=false, $go_down_tree=true) {
+	function find_file($folder_id, $nested=false) {
 		global $GO_SECURITY;
 
 		if($folder_id==0) {
@@ -244,7 +244,7 @@ class cms_output extends cms {
 				$this->file=$item;
 				$this->file['option_values']=$this->get_template_values($this->file['option_values']);
 				return $this->file['id'];
-			}elseif($go_down_tree) {
+			}else {
 				$file = $this->find_file($item['id'],true);
 				if($file)
 					return $file;
@@ -258,7 +258,7 @@ class cms_output extends cms {
 			$folder = $this->get_folder($folder_id);
 			if($folder && $folder['parent_id']>0) {
 				//pass go_down_tree as false so it won't go in an endless loop between two empty folders
-				return $this->find_file($folder['parent_id'], true, false);
+				return $this->find_file($folder['parent_id'], false);
 			}
 		}
 		return false;
