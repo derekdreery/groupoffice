@@ -34,7 +34,7 @@ $db = new db();
 
 $sql = "SELECT *
 	FROM `ab_contacts`
-	ORDER BY mtime DESC";
+	ORDER BY id DESC";
 	
 $db->query($sql);
 
@@ -74,7 +74,7 @@ function is_duplicate_event($record)
 		"end_time='".$db->escape($record['end_time'])."' AND ".
 		"calendar_id='".$db->escape($record['calendar_id'])."' AND ".
 		"rrule='".$db->escape($record['rrule'])."' AND ".
-		"user_id='".$db->escape($record['user_id'])."' ORDER BY mtime ASC";
+		"user_id='".$db->escape($record['user_id'])."' ORDER BY id ASC";
 		
 	$db->query($sql);
 	if($db->num_rows()>1)
@@ -89,7 +89,7 @@ function is_duplicate_event($record)
 
 $sql = "SELECT id, name, start_time, end_time, user_id, calendar_id, rrule ".
 	"FROM `cal_events` ".
-	" ORDER BY mtime DESC";
+	" ORDER BY id DESC";
 
 $db->query($sql);
 
