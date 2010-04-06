@@ -33,7 +33,7 @@ if(isset($_REQUEST['path']))
 $smarty = new cms_smarty($co);
 
 
-//hide errors in smarty
+//hide on screen errors in smarty
 $GO_CONFIG->debug_display_errors=false;
 
 echo $co->replace_urls($smarty->fetch('index.tpl'));
