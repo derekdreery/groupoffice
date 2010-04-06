@@ -54,3 +54,6 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cal_visible_tasklists` (
 
 $updates[]= "ALTER TABLE `cal_views` ADD `merge` tinyint(1) NOT NULL default '0'";
 $updates[]= "ALTER TABLE `cal_views` ADD `owncolor` tinyint(1) NOT NULL default '1'";
+
+$updates[]= "ALTER TABLE `cal_events` ADD INDEX ( `calendar_id` )";
+$updates[]= "ALTER TABLE `cal_events` ADD INDEX ( `busy` )";
