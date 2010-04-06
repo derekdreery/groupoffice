@@ -439,10 +439,11 @@ GO.linkHandlers[12]=function(id, link_config){
 		GO.tasks.taskLinkWindow = new GO.LinkViewWindow({
 			title: GO.tasks.lang.task,
 			closeAction:'hide',
-			items: taskPanel
+			items: taskPanel,
+			taskPanel: taskPanel
 		});
 	}
-	taskPanel.load(id);
+	GO.tasks.taskLinkWindow.taskPanel.load(id);
 	GO.tasks.taskLinkWindow.show();
 }
 
