@@ -57,6 +57,14 @@ class GO_CONFIG {
 	var $debug = false;
 
 	/**
+	 * Output errors in debug mode
+	 *
+	 * @var     bool
+	 * @access  public
+	 */
+	var $debug_display_errors=true;
+
+	/**
 	 * Enable syslog
 	 *
 	 * @var     bool

@@ -1292,7 +1292,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 										alert(values.feedback);
 									}else
 									{																		
-										GO.calendar.eventDialog.show({
+										GO.calendar.showEventDialog({
 											values: values
 										});
 									}

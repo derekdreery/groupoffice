@@ -124,8 +124,13 @@ go_debug('['.date('Y-m-d G:i').'] Start of new request: '.$_SERVER['PHP_SELF']);
 if($GO_CONFIG->debug){
 	function groupoffice_error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
 		$err_str = "PHP error: $errfile:$errline $errstr ($errno)";
-		print $err_str;
-		print php_sapi_name()=='cli' ? "\n" : '<br />';
+
+		global $GO_CONFIG;
+
+		if($GO_CONFIG->debug_display_errors){
+			print $err_str;
+			print php_sapi_name()=='cli' ? "\n" : '<br />';
+		}
 
     go_debug($err_str);
 	}
