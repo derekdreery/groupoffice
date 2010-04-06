@@ -193,10 +193,11 @@ GO.linkHandlers[4]=function(id){
 		GO.notes.linkWindow= new GO.LinkViewWindow({
 			title: GO.notes.lang.note,
 			items: notePanel,
+			notePanel: notePanel,
 			closeAction:"hide"
 		});
 	}
-	notePanel.load(id);
+	GO.notes.linkWindow.notePanel.load(id);
 	GO.notes.linkWindow.show();
 }
 

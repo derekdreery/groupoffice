@@ -566,10 +566,11 @@ GO.linkHandlers[2]=GO.mailFunctions.showContact=function(id){
 		GO.addressbook.linkContactWindow = new GO.LinkViewWindow({
 			title: GO.addressbook.lang.contact,
 			items: contactPanel,
+			contactPanel: contactPanel,
 			closeAction:"hide"
 		});
 	}
-	contactPanel.load(id);
+	GO.addressbook.linkContactWindow.contactPanel.load(id);
 	GO.addressbook.linkContactWindow.show();
 }
 
@@ -591,9 +592,10 @@ GO.linkHandlers[3]=function(id){
 		GO.addressbook.linkCompanyWindow = new GO.LinkViewWindow({
 			title: GO.addressbook.lang.company,
 			items: companyPanel,
+			companyPanel: companyPanel,
 			closeAction:"hide"
 		});
 	}
-	companyPanel.load(id);
+	GO.addressbook.linkCompanyWindow.companyPanel.load(id);
 	GO.addressbook.linkCompanyWindow.show();
 }
