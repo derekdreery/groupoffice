@@ -17,7 +17,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
  
 			this.template = '<div>'+
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
-					'<tr>'+
+					/*'<tr>'+
 						'<tpl if="this.isCompanySecondColumn(values)">'+
 							'<td colspan="2" valign="top" class="display-panel-heading">'+
 						'</tpl>'+
@@ -28,8 +28,97 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 						
 							GO.addressbook.lang['cmdCompanyDetailsFor'] + ' <b>{name}</b>'+
 						'</td>'+
-					'</tr>'+
-					
+					'</tr>'+*/
+
+				// CONTACT DETAILS+ 1e KOLOM					
+				'<tr>'+
+					'<tpl if="this.isCompanySecondColumn(values)">'+
+						'<td colspan="2" valign="top" class="display-panel-heading">'+
+					'</tpl>'+
+
+					'<tpl if="this.isCompanySecondColumn(values) == false">'+
+						'<td valign="top" class="display-panel-heading">'+
+					'</tpl>'+
+
+					GO.addressbook.lang['cmdFieldsetContact']+
+					'</td>'+
+				'</tr>'+
+
+				'<tr>'+
+
+					'<tpl if="this.isCompanySecondColumn(values)">'+
+						'<tpl if="this.isAddressPost(values)">'+
+							'<td valign="top" class="contactCompanyDetailsPanelKolom">'+
+						'</tpl>'+
+
+						'<tpl if="this.isAddressPost(values) == false">'+
+							'<td colspan="2" valign="top" class="contactCompanyDetailsPanelKolom100">'+
+						'</tpl>'+
+					'</tpl>'+
+
+					'<tpl if="this.isCompanySecondColumn(values) == false">'+
+						'<td valign="top" class="contactCompanyDetailsPanelKolom100">'+
+					'</tpl>'+
+
+						'<table cellpadding="0" cellspacing="0" border="0">'+
+							'<tpl if="this.isAddressPost(values) != false">'+
+							'<tr>'+
+								'<td colspan="2" class="readPanelSubHeading">' + GO.addressbook.lang['cmdFieldsetVisitAddress'] + '</td>'+
+							'</tr>'+
+							'</tpl>'+
+
+							// LEGE REGEL
+							'<tr>'+
+								'<td>'+
+								'<b>{name}</b><br />'+
+							//ADDRESS
+							'<tpl if="!GO.util.empty(google_maps_link)">'+
+								'<a href="{google_maps_link}" target="_blank">'+
+							'</tpl>'+
+							'{formatted_address}'+
+							'<tpl if="!GO.util.empty(google_maps_link)">'+
+								'</a>'+
+							'</tpl>'+
+
+						'</table>'+
+					'</td>'+
+
+
+					// CONTACT DETAILS+ 2e KOLOM
+					'<tpl if="this.isAddressPost(values)">'+
+						'<tpl if="this.isAddressVisit(values)">'+
+							'<td valign="top" class="contactCompanyDetailsPanelKolom">'+
+						'</tpl>'+
+
+						'<tpl if="this.isAddressVisit(values) == false">'+
+							'<td colspan="2" valign="top" class="contactCompanyDetailsPanelKolom100">'+
+						'</tpl>'+
+
+							'<table cellpadding="0" cellspacing="0" border="0">'+
+
+								'<tr>'+
+									'<td colspan="2" class="readPanelSubHeading">' + GO.addressbook.lang['cmdFieldsetPostAddress'] + '</td>'+
+								'</tr>'+
+
+								// LEGE REGEL
+								'<tr>'+
+									'<td>'+
+
+								//ADDRESS
+								'<b>{name}</b><br />'+
+								'<tpl if="!GO.util.empty(post_google_maps_link)">'+
+									'<a href="{post_google_maps_link}" target="_blank">'+
+								'</tpl>'+
+								'{post_formatted_address}'+
+								'<tpl if="!GO.util.empty(post_google_maps_link)">'+
+									'</a>'+
+								'</tpl>'+
+							'</table>'+
+						'</td>'+
+					'</tpl>'+
+				'</tr>'+
+
+
 					'<tr>'+	
 						// COMPANY DETAILS+ 1e KOLOM
 						'<tpl if="this.isCompanySecondColumn(values)">'+
@@ -69,15 +158,9 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 									'</tr>'+						
 								'</tpl>'+		
 								
-								// LEGE REGEL
-								'<tr><td colspan="2">&nbsp;</td></tr>'+																
+																							
 											
-								//HOMEPAGE							
-								'<tpl if="!GO.util.empty(homepage)">'+
-									'<tr>'+
-										'<td class="contactCompanyLabelWidth">' + GO.lang['strHomepage'] + ':</td><td>&nbsp;<a href="{homepage}" target="_blank">{homepage}</a></td>'+
-									'</tr>'+						
-								'</tpl>'+																			
+																										
 							'</table>'+
 						'</td>'+
 						
@@ -99,99 +182,20 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 											'<td>' + GO.addressbook.lang['cmdFormLabelVatNo'] + ':</td><td> {vat_no}</td>'+
 										'</tr>'+						
 									'</tpl>'+
+
+									//HOMEPAGE
+									'<tpl if="!GO.util.empty(homepage)">'+
+										'<tr>'+
+											'<td class="contactCompanyLabelWidth">' + GO.lang['strHomepage'] + ':</td><td>&nbsp;<a href="{homepage}" target="_blank">{homepage}</a></td>'+
+										'</tr>'+
+									'</tpl>'+
 								'</table>'+
 							'</td>'+
 						'</tpl>'+					
 					'</tr>'+
 					
 					
-					// CONTACT DETAILS+ 1e KOLOM
-					'<tpl if="this.isAddress(values)">'+					
-						'<tr>'+
-							'<tpl if="this.isCompanySecondColumn(values)">'+
-								'<td colspan="2" valign="top" class="display-panel-heading">'+
-							'</tpl>'+
-	
-							'<tpl if="this.isCompanySecondColumn(values) == false">'+
-								'<td valign="top" class="display-panel-heading">'+
-							'</tpl>'+
-							
-							GO.addressbook.lang['cmdFieldsetContact']+
-							'</td>'+
-						'</tr>'+
-
-						'<tr>'+
-							'<tpl if="this.isAddressVisit(values)">'+
-							
-								'<tpl if="this.isCompanySecondColumn(values)">'+
-									'<tpl if="this.isAddressPost(values)">'+
-										'<td valign="top" class="contactCompanyDetailsPanelKolom">'+
-									'</tpl>'+
-									
-									'<tpl if="this.isAddressPost(values) == false">'+
-										'<td colspan="2" valign="top" class="contactCompanyDetailsPanelKolom100">'+
-									'</tpl>'+							
-								'</tpl>'+
-								
-								'<tpl if="this.isCompanySecondColumn(values) == false">'+
-									'<td valign="top" class="contactCompanyDetailsPanelKolom100">'+
-								'</tpl>'+
-							
-									'<table cellpadding="0" cellspacing="0" border="0">'+
-										
-										'<tr>'+
-											'<td colspan="2" class="readPanelSubHeading">' + GO.addressbook.lang['cmdFieldsetVisitAddress'] + '</td>'+
-										'</tr>'+
-										
-										// LEGE REGEL													
-										'<tr>'+
-											'<td>'+
-										//ADDRESS															
-										'<tpl if="!GO.util.empty(google_maps_link)">'+
-											'<a href="{google_maps_link}" target="_blank">'+
-										'</tpl>'+
-										'{formatted_address}'+
-										'<tpl if="!GO.util.empty(google_maps_link)">'+
-											'</a>'+
-										'</tpl>'+
-
-									'</table>'+
-								'</td>'+		
-							'</tpl>'+
-							
-							// CONTACT DETAILS+ 2e KOLOM
-							'<tpl if="this.isAddressPost(values)">'+
-								'<tpl if="this.isAddressVisit(values)">'+
-									'<td valign="top" class="contactCompanyDetailsPanelKolom">'+
-								'</tpl>'+				
-								
-								'<tpl if="this.isAddressVisit(values) == false">'+
-									'<td colspan="2" valign="top" class="contactCompanyDetailsPanelKolom100">'+
-								'</tpl>'+
-									
-									'<table cellpadding="0" cellspacing="0" border="0">'+
-										
-										'<tr>'+
-											'<td colspan="2" class="readPanelSubHeading">' + GO.addressbook.lang['cmdFieldsetPostAddress'] + '</td>'+
-										'</tr>'+											
-										
-										// LEGE REGEL
-										'<tr>'+
-											'<td>'+							
-										
-										//ADDRESS															
-										'<tpl if="!GO.util.empty(post_google_maps_link)">'+
-											'<a href="{post_google_maps_link}" target="_blank">'+
-										'</tpl>'+
-										'{post_formatted_address}'+
-										'<tpl if="!GO.util.empty(post_google_maps_link)">'+
-											'</a>'+
-										'</tpl>'+
-									'</table>'+
-								'</td>'+														
-							'</tpl>'+							
-						'</tr>'+
-					'</tpl>'+		
+					
 					
 					'</table>'+		
 
@@ -270,7 +274,8 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			{
 				if(
 					!GO.util.empty(values['bank_no']) ||
-					!GO.util.empty(values['vat_no']) 				
+					!GO.util.empty(values['vat_no']) 	||
+					!GO.util.empty(values['homepage'])
 				)
 				{
 					return true;

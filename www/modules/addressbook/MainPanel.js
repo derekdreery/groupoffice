@@ -71,14 +71,20 @@ GO.addressbook.MainPanel = function(config)
 		id:'ab-contact-panel',
 		region : 'east',
 		title: GO.addressbook.lang['cmdPanelContact'],
-		width:420
+		width:420,
+		collapseMode:'mini',
+		collapsible:true,
+		split:true
 	});
 	
 	this.companyEastPanel = new GO.addressbook.CompanyReadPanel({
 		id:'ab-company-panel',
 		region : 'east',
 		title: GO.addressbook.lang['cmdPanelCompany'],
-		width:420
+		width:420,
+		collapseMode:'mini',
+		collapsible:true,
+		split:true
 	});	
 	
 	this.contactsPanel = new Ext.Panel({
