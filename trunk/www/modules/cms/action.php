@@ -171,6 +171,7 @@ try {
 
 			foreach($folders as $folder_id) {
 				if($cms->is_in_path($folder_id, $destination_folder_id)) {
+					require_once($GO_LANGUAGE->get_language_file('cms'));
 					throw new Exception($lang['cms']['cant_move_into_itself']);
 				}else {
 					$cms->copy_folder($folder_id, $destination_folder_id);
