@@ -1,4 +1,4 @@
-GO.DisplayPanel = Ext.extend(Ext.Panel,{
+GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	link_id: 0,
 	link_type : 0,
 	
@@ -27,6 +27,7 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	saveHandlerAdded : false,
 
 	noFileBrowser : false,
+
 	
 	
 	addSaveHandler : function(win, eventName)
@@ -106,16 +107,30 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	  });
 	  
 	  return tbar;
-	},	
+	},
+
+	initTemplate : function(){
+
+	},
 	
 	initComponent : function(){
 		this.autoScroll=true;
 		this.split=true;
-		this.tbar = this.createTopToolbar();	
+		this.tbar = this.createTopToolbar();
+
+		this.initTemplate();
+
 		this.xtemplate = new Ext.XTemplate(this.template, this.templateConfig);
 		this.xtemplate.compile();
 		
-		GO.DisplayPanel.superclass.initComponent.call(this);		
+		GO.DisplayPanel.superclass.initComponent.call(this);
+
+		this.on('expand', function(){
+			if(this.collapsedLinkId){
+				this.load(this.collapsedLinkId);
+				delete this.collapsedLinkId;
+			}
+		}, this);
 	},
 	
 	afterRender : function(){		
@@ -258,7 +273,9 @@ GO.DisplayPanel = Ext.extend(Ext.Panel,{
 	
 	load : function(id, reload)
 	{
-		if(this.link_id!=id || reload)
+		if(this.collapsed){
+			this.collapsedLinkId=id;
+		}else if(this.link_id!=id || reload)
 		{
 			this.loadParams[this.idParam]=this.link_id=id;
 			

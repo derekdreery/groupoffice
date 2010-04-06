@@ -186,6 +186,7 @@ GO.files.FileBrowser = function(config){
 	var fields ={
 		fields:['type_id', 'id','name','type', 'size', 'mtime', 'extension', 'timestamp', 'thumb_url','path','acl_id'],
 		columns:[{
+					id:'name',
 					header:GO.lang['strName'],
 					dataIndex: 'name',
 					renderer:function(v, meta, r){
@@ -195,17 +196,21 @@ GO.files.FileBrowser = function(config){
 				},{
 					header:GO.lang.strType,
 					dataIndex: 'type',
-					sortable:false
+					sortable:false,
+					hidden:true,
+					width:100
 				},{
 					header:GO.lang.strSize,
 					dataIndex: 'size',
 					renderer: function(v){
 						return  v=='-' ? v : Ext.util.Format.fileSize(v);
-					}
-
+					},
+					hidden:true,
+					width:100
 				},{
 					header:GO.lang.strMtime,
-					dataIndex: 'mtime'
+					dataIndex: 'mtime',
+					width:120
 				}]
 	};
 
@@ -256,10 +261,7 @@ GO.files.FileBrowser = function(config){
 				}
 			},
 			cm:cm,
-			view:new Ext.grid.GridView({
-				autoFill:true,
-				forceFit:true		
-			}),
+			autoExpandColumn:'name',
 			sm: new Ext.grid.RowSelectionModel(),
 			loadMask: true,
 			enableDragDrop: true,
@@ -603,14 +605,27 @@ GO.files.FileBrowser = function(config){
 	this.cardPanel =new Ext.Panel({
 			region:'center',
 			layout:'card',
+			id:config.id+'-card-panel',
 			activeItem:0,
 			deferredRender:false,
 		  border:false,
 		  anchor:'100% 100%',
 			items:[this.gridPanel, this.thumbsPanel]		
 		});
+
+
+	this.filePanel = new GO.files.FilePanel({
+				region:'east',
+				id:config.id+'-file-panel',
+				//collapsed:true,
+				collapseMode:'mini',
+				collapsible:true,
+				split:true
+	});
+
+	
 			
-	config['items']=[this.locationPanel, this.treePanel,this.cardPanel];
+	config['items']=[this.locationPanel, this.treePanel,this.cardPanel,this.filePanel];
 	
 	GO.files.FileBrowser.superclass.constructor.call(this, config);
 
@@ -619,6 +634,12 @@ GO.files.FileBrowser = function(config){
 		fileselected : true,
 		filedblclicked : true
 	});
+
+	this.on('fileselected',function(grid, r){
+		if(r.data.extension!='folder'){
+			this.filePanel.load(r.id.substr(2));
+		}
+	}, this);
 }
 
 Ext.extend(GO.files.FileBrowser, Ext.Panel,{
@@ -1583,15 +1604,16 @@ GO.files.openFolder = function(id, folder_id)
 	if(!GO.files.fileBrowser)
 	{	
 		GO.files.fileBrowser=new GO.files.FileBrowser({
+				id:'popupfb',
 				border:false,
 				treeRootVisible:true/*,
 				treeCollapsed:true*/
 			});			        			
-		GO.files.fileBrowserWin = new Ext.Window({
+		GO.files.fileBrowserWin = new GO.Window({
 		
 			title: GO.files.lang.fileBrowser,
 			height:500,
-			width:750,
+			width:900,
 			layout:'fit',
 			border:false,
 			maximizable:true,

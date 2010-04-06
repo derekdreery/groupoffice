@@ -56,14 +56,16 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 		return tbar;
 	},
 
-	initComponent : function(){
+	setData : function(data)
+	{
+		this.setTitle(data.name);
+		GO.files.FilePanel.superclass.setData.call(this, data);
+	},
+
+	initTemplate : function(){
 		this.template =
 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
-					'<tr>'+
-						'<td colspan="2" class="display-panel-heading">{name}</td>'+
-					'</tr>'+
-
 					'<tr>'+
 						'<td>'+GO.lang.strType+'</td>'+
 						'<td>{type}</td>'+
@@ -84,10 +86,10 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						'<td>{mtime}</td>'+
 					'</tr>'+
 
-					'<tr>'+
+					/*'<tr>'+
 						'<td>'+GO.lang.Atime+'</td>'+
 						'<td>{atime}</td>'+
-					'</tr>'+
+					'</tr>'+*/
 
 					'<tpl if="!GO.util.empty(comment)">'+
 						'<tr>'+
@@ -113,6 +115,6 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 			this.template += GO.comments.displayPanelTemplate;
 		}
 
-		GO.files.FilePanel.superclass.initComponent.call(this);
+		GO.files.FilePanel.superclass.initTemplate.call(this);
 	}
 });

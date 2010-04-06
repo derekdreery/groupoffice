@@ -883,10 +883,12 @@ try{
 
 						$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], 6);
 
-						$response['data']['links']=$links_json['results'];						
+						$response['data']['links']=$links_json['results'];
+
 					}
 
 					$params['response']=&$response;
+					$params['task']=$task;
 					$GO_EVENTS->fire_event('load_file_properties', $params);
 
 					break;
