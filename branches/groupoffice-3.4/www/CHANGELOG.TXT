@@ -1,3 +1,6 @@
+2010/03/29 3.4.15
+- Improved remove duplicates script
+
 2010/03/29 3.4.14
 - Error in empty mail folders
 
