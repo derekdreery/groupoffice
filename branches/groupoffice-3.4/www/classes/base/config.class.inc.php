@@ -950,7 +950,11 @@ class GO_CONFIG {
 
 			$count = 0;
 
-			$config_dir = dirname($_SERVER['SCRIPT_FILENAME']).'/';
+			//use SCRIPT_FILENAME in apache mode because it will use a symlinked
+			//directory
+			$script = php_sapi_name()=='cli' ? __FILE__ : $_SERVER['SCRIPT_FILENAME'];
+
+			$config_dir = dirname($script).'/';
 
 			/*
 			 * z-push also has a config.php. Don't detect that.
