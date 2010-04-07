@@ -106,7 +106,9 @@ try {
 
 		case 'import':
 
+			//attempt to use greedy settings
 			ini_set('max_execution_time', 180);
+			ini_set('memory_limit','100M');
 
 			if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
 				throw new Exception($lang['common']['noFileUploaded']);

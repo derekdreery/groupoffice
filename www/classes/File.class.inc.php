@@ -51,6 +51,9 @@ class File
 	public static function convert_to_utf8($path){
 		$enc='UTF-8';
 		$str = file_get_contents($path);
+		if(!$str){
+			return false;
+		}
 		if(function_exists('mb_detect_encoding'))
 		{
 			$enc = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,ISO-8859-15,EUC-JP,SJIS");
