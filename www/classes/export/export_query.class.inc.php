@@ -24,19 +24,20 @@ class export_query
 		$fs = new filesystem();
 
 		$ce=array();
+		if(is_dir($GO_CONFIG->file_storage_path.'customexports')){
+			$files = $fs->get_files($GO_CONFIG->file_storage_path.'customexports');
+			while($file = array_shift($files)){
+				require_once($file['path']);
 
-		$files = $fs->get_files($GO_CONFIG->file_storage_path.'customexports');
-		while($file = array_shift($files)){
-			require_once($file['path']);
+				$names = explode('.', $file['name']);
 
-			$names = explode('.', $file['name']);
-			
-			$cls = new $names[0];
+				$cls = new $names[0];
 
-			if(!isset($ce[$cls->query]))
-				$ce[$cls->query]=array();
+				if(!isset($ce[$cls->query]))
+					$ce[$cls->query]=array();
 
-			$ce[$cls->query][]=array('name'=>$cls->name, 'cls'=>$names[0]);
+				$ce[$cls->query][]=array('name'=>$cls->name, 'cls'=>$names[0]);
+			}
 		}
 
 		return 'GO.customexports='.json_encode($ce).';';
