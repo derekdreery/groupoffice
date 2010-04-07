@@ -1319,9 +1319,15 @@ class calendar extends db
 				$reminder['name']=$event['name'];
 
 				$reminder['link_type']=1;
-				$reminder['link_id']=$event['id'];
-				$reminder['time']=$event['start_time']-$event['reminder'];
+				$reminder['link_id']=$event['id'];				
 				$reminder['vtime']=$event['start_time'];
+
+				if(empty($event['rrule']))
+					$reminder['vtime']=$event['start_time'];
+				else
+					$reminder['vtime'] = Date::get_next_recurrence_time($event['start_time'],time(), $event['rrule']);
+
+				$reminder['time']==$reminder['vtime']-$event['reminder'];
 
 				if($existing_reminder)
 				{
@@ -1754,7 +1760,7 @@ class calendar extends db
 
 	function get_event($event_id)
 	{
-		$sql = "SELECT e.*, c.acl_id FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.id='".$this->escape($event_id)."'";
+		$sql = "SELECT e.*, c.acl_id FROM cal_events e LEFT JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.id='".$this->escape($event_id)."'";
 		$this->query($sql);
 		return $this->next_record(DB_ASSOC);
 	}

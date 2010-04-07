@@ -57,12 +57,11 @@ END:VCALENDAR';
 //$vcalendar = $ical->parse_file('/home/mschering/jos.ics');
 //
 $vcalendar = $ical->parse_icalendar_string($ical_str);
-//var_dump($vcalendar);
+var_dump($vcalendar);
+exit();
 
-while($object = array_shift($vcalendar[0]['objects']))
+while($object = array_shift($objects))
 {
-	if($object['type'] == 'VEVENT' || $object['type'] == 'VTODO' )
-	{
 		var_dump($object);
 		$event = $cal->get_event_from_ical_object($object);
 		
@@ -72,5 +71,4 @@ while($object = array_shift($vcalendar[0]['objects']))
 		echo "\n------------\n\n";
 		
 		//var_dump($event);
-	}
 }

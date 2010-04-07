@@ -87,6 +87,8 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   KEY `repeat_end_time` (`repeat_end_time`),
   KEY `event_id` (`event_id`),
   KEY `rrule` (`rrule`),
+	KEY `busy` (`busy`),
+	KEY `calendar_id` (`calendar_id`),
   KEY `participants_event_id` (`participants_event_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

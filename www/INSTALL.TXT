@@ -24,8 +24,8 @@ UPGRADING FROM VERSION 2.x
 First backup your database!
 
 Upgrading from version 2 is a little bit trickier. There is a special upgrade script 
-for version 2.18 to 3.2 only. So if you run a version prior to version 2.18 you must first
-download 2.18 and 3.2 from Sourceforge:
+for version 2.18 to 3.x only. So if you run a version prior to version 2.18 you must first
+download 2.18 and 3.x from Sourceforge:
 
 https://sourceforge.net/project/showfiles.php?group_id=76359&package_id=77805
 
@@ -45,25 +45,30 @@ eg.:
 
 This should convert it for you.
 
-Now your database can be converted to a Group-Office 3.0 database.
+Now your database can be converted to a Group-Office 3.x database.
 
-Put your old config.php file in the root of the new Group-Office 3.0 directory. Adjust the paths in the file if necessary.
+Put your old config.php file in the root of the new Group-Office 3.x directory. Adjust the paths in the file if necessary.
 
 Then it's wise to create another backup in case anything goes wrong in the upgrade2to3.php script.
 
-Run install/upgrade2to3.php in your browser or run it on the command line:
-
-$ php upgrade2to3.php | tee upgrade.log
+Run install/upgrade2to3/upgrade2to3.php in your browser.
 
 This will take some time.
 
 If you see errors because of a duplicate entry like this:
 
-MySQL Error: 1062 (Duplicate entry ...)
+MySQL Error: 1062 (Duplicate entry ...) or Table or Column already exist.
 
 Then you can ignore them. Any other error can not be ignored.
 
-After that install the latest version of Group-Office and run install/index.php
+Now run install/index.php
+
+Login to Group-Office and run a database check at Start menu -> System tools.
+If system tools is not there install the module.
+
+Now it should be done!
+
+
 
 
 

@@ -39,6 +39,16 @@ if(!defined('REPEAT_NONE'))
 class Date {
 
 	/**
+	 * Calculate how many times the weekday has occured in the month
+	 *
+	 * @param <type> $time
+	 * @return <type> the number of times the weekday occurred
+	 */
+	public static function get_occurring_number_of_day_in_month($time){
+		$mday=date('j', $time);
+		return ceil($mday/7);
+	}
+	/**
 	 * Finds the difference in days between two calendar dates.
 	 *
 	 * @param Date $startDate
