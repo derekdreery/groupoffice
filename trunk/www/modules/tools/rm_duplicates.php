@@ -2,115 +2,133 @@
 
 require('../../Group-Office.php');
 
-$doreal=true;
+$delete=!empty($_REQUEST['delete']);
 $verbose=true;
 
 $GO_SECURITY->html_authenticate('tools');
 
 ini_set('max_exection_time','360');
 
-function is_duplicate_contact($record)
-{
-	$db = new db();
-		
-	$sql = "SELECT id FROM ab_contacts WHERE ".
-		"addressbook_id='".$db->escape($record['addressbook_id'])."' AND ".
-		"first_name='".$db->escape($record['first_name'])."' AND ".
-		"middle_name='".$db->escape($record['middle_name'])."' AND ".
-		"last_name='".$db->escape($record['last_name'])."' AND ".
-		"company_id='".$db->escape($record['company_id'])."' AND ".
-		"email='".$db->escape($record['email'])."'";
-		
-	$db->query($sql);
-	if($db->num_rows()>1)
-	{
-		return true;
-	}
-	return false;
-}
-
-
 $db = new db();
-
-$sql = "SELECT *
-	FROM `ab_contacts`
-	ORDER BY mtime DESC";
-	
-$db->query($sql);
+$db2 =  new db();
 
 require_once('../../modules/addressbook/classes/addressbook.class.inc.php');
 $ab = new addressbook();
 
+$check_fields=array('first_name', 'middle_name', 'last_name', 'addressbook_id', 'company_id', 'email');
+
+$sql = "SELECT id, count(*) AS n, ".implode(',', $check_fields)." ".
+	"FROM `ab_contacts` GROUP BY ".implode(',', $check_fields)." HAVING n>1";
+$db->query($sql);
+
+
 $counter = 0;
-while($db->next_record())
+
+echo '<table border="1">';
+echo '<tr><td>ID</th><th>'.implode('</th><th>',$check_fields).'</th></tr>';
+
+while($r1= $db->next_record())
 {
-	if(is_duplicate_contact($db->record))
-	{
-		if($doreal)
+	$sql = "SELECT id,".implode(',', $check_fields)." FROM ab_contacts WHERE ";
+
+	$first=true;
+	foreach($check_fields as $field){
+		if($first){
+
+			$first=false;
+		}else
 		{
-			$ab->delete_contact($db->f('id'));
+			$sql .= ' AND ';
 		}
-		if($verbose)
-		{
-			echo 'Deleted contact ID:'.$db->f('id').' '.$db->f('last_name').'<br />';
-		}
+
+		$sql .= $field.="='".$db2->escape($r1[$field])."'";
+	}
+
+	$sql .= " ORDER BY id ASC";
+
+
+	$db2->query($sql);
+
+	//skip first
+	$r2 = $db2->next_record();
+
+	while($r2 = $db2->next_record()){
+
 		$counter++;
+
+		if($delete)
+			$ab->delete_contact($db->f('id'));
+		
+		echo '<tr><td>'.implode('</td><td>',$r2).'</td></tr>';		
 	}
 }
-echo 'Deleted '.$counter.' duplicate contacts<br /><hr /><br />';
+echo '</table>';
 
+echo $delete ? 'Deleted' : 'Found';
+echo ' '.$counter.' duplicate contacts<br /><hr /><br />';
 
 
 require_once('../../modules/calendar/classes/calendar.class.inc.php');
 $cal = new calendar();
 
-function is_duplicate_event($record)
-{
-	$db = new db();
-	
-	$sql = "SELECT DISTINCT id FROM cal_events WHERE ".
-		"name='".$db->escape($record['name'])."' AND ".
-		"start_time='".$db->escape($record['start_time'])."' AND ".
-		"end_time='".$db->escape($record['end_time'])."' AND ".
-		"calendar_id='".$db->escape($record['calendar_id'])."' AND ".
-		"rrule='".$db->escape($record['rrule'])."' AND ".
-		"user_id='".$db->escape($record['user_id'])."' ORDER BY mtime ASC";
-		
-	$db->query($sql);
-	if($db->num_rows()>1)
-	{
-		$db->next_record();
-		return $db->record;
-	}
-	return false;
-}
 
+$check_fields=array('name', 'start_time', 'end_time', 'calendar_id', 'rrule', 'user_id');
 
-
-$sql = "SELECT id, name, start_time, end_time, user_id, calendar_id, rrule ".
-	"FROM `cal_events` ".
-	" ORDER BY mtime DESC";
-
+$sql = "SELECT id, count(*) AS n, ".implode(',', $check_fields)." ".
+	"FROM `cal_events` GROUP BY ".implode(',', $check_fields)." HAVING n>1";
 $db->query($sql);
 
+$db2 =  new db();
 $counter = 0;
-while($db->next_record())
+
+echo '<table border="1">';
+echo '<tr><td>ID</th><th>'.implode('</th><th>',$check_fields).'</th></tr>';
+
+while($r1= $db->next_record())
 {
-	$duplicate = is_duplicate_event($db->record);
-	if($duplicate)
-	{
-		if($doreal)
-		{
-			$cal->delete_event($db->f('id'));
-		}
-		if($verbose)
-		{
-			echo 'Deleted event ID:'.$db->f('id').' calendar ID: '.$db->f('calendar_id').' '.date('Ymd G:i', $db->f('start_time')).' "'.$db->f('name').'" Duplicate was: '.$duplicate['id'].'<br />';
+	$sql = "SELECT id,".implode(',', $check_fields)." FROM cal_events WHERE ";
+
+	$first=true;
+	foreach($check_fields as $field){
+		if($first){
 			
+			$first=false;
+		}else
+		{
+			$sql .= ' AND ';
 		}
+
+		$sql .= $field.="='".$db2->escape($r1[$field])."'";
+	}
+
+	$sql .= " ORDER BY id ASC";
+
+
+	$db2->query($sql);
+
+	//skip first
+	$r2 = $db2->next_record();
+	
+	while($r2 = $db2->next_record()){
+
 		$counter++;
+		
+		if($delete)
+			$cal->delete_event($db2->f('id'));
+			
+		
+		$r2['start_time']=Date::get_timestamp($r2['start_time']);
+		$r2['end_time']=Date::get_timestamp($r2['end_time']);
+		echo '<tr><td>'.implode('</td><td>',$r2).'</td></tr>';
+		
 	}
 }
-echo 'Deleted '.$counter.' duplicate events<br /><hr /><br />';
+echo '</table>';
+
+echo $delete ? 'Deleted' : 'Found';
+echo ' '.$counter.' duplicate events<br /><hr /><br />';
+
+if(!$delete)
+	echo '<a href="'.$_SERVER['PHP_SELF'].'?delete=true">Click here to delete the newest version of duplicates</a>';
 
 

@@ -1297,6 +1297,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		}*/
 
 		if (this.uploadDialog && this.uploadDialog.isVisible()) {
+
+			if(autoSave)
+				return false;
+
 			alert(GO.email.lang.closeUploadDialog);
 			this.attachmentsDialog.show();
 			this.uploadDialog.show();

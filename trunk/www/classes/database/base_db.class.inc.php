@@ -633,7 +633,7 @@ class base_db{
 			$this->unlock();
 		}
 
-		go_log(LOG_DEBUG, sprintf("<b>Database error:</b> %s<br>\n<b>MySQL Error</b>: %s (%s)<br>\n",
+		go_log(LOG_DEBUG, sprintf("Database error: %s MySQL Error: %s (%s)",
 		$msg,
 		$this->errno,
 		$this->error));
