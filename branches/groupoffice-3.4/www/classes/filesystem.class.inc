@@ -229,13 +229,20 @@ class filesystem extends db
 					$this->move($child['path'], $destination_path.'/'.$child['name']);
 				}
 				
-				return rmdir($source_path);
+				if(!rmdir($source_path)){
+					throw new Exception('Failed to rmdir');
+				}
+				return true;
 			}else
 			{
 			
 				if($uploaded_file)
 				{
-					return move_uploaded_file($source_path, $destination_path);
+					if(!move_uploaded_file($source_path, $destination_path))
+					{
+						throw new Exception('Failed to move uploaded file');
+					}
+					return true;
 				}	else
 				{				
 					//rename fails when moving accross partitions
@@ -243,11 +250,21 @@ class filesystem extends db
 					strstr($destination_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/')
 					)
 					{
-						return rename($source_path, $destination_path);
+						if(!rename($source_path, $destination_path)){
+							throw new Exception('Failed to rename file');
+						}
+						return true;
 					}else
 					{
-						$this->copy($source_path, $destination_path);
-						return $this->delete($source_path);
+						if($this->copy($source_path, $destination_path)){
+							if(!$this->delete($source_path)){
+								throw new Exception('Failed to delete source path');
+							}
+							return true;
+						}else
+						{
+							throw new Exception('Failed to create file');
+						}
 					}
 				}
 			}
@@ -305,7 +322,7 @@ class filesystem extends db
 			{
 				if(!copy($source_path, $destination_path))
 				{
-					return false;
+					throw new Exception('Copy failed');
 				}
 				chmod($destination_path, $GO_CONFIG->file_create_mode);
 				
