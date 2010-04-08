@@ -76,7 +76,7 @@ class GO_USERS extends db
 		}
 		if(!isset($_SESSION['GO_SESSION']['sort_name']))
 		{		
-			$_SESSION['GO_SESSION']['sort_name'] = 'first_name';
+			$_SESSION['GO_SESSION']['sort_name'] = 'last_name';
 		}
 		
 		
@@ -137,7 +137,7 @@ class GO_USERS extends db
 			$_SESSION['GO_SESSION']['theme'] = $userdata['theme'];
 			$_SESSION['GO_SESSION']['mute_sound'] = $userdata['mute_sound'];
 			$_SESSION['GO_SESSION']['first_weekday'] = $userdata['first_weekday'];
-			$_SESSION['GO_SESSION']['sort_name'] = !empty($userdata['sort_name']) ? $userdata['sort_name'] : 'first_name';
+			$_SESSION['GO_SESSION']['sort_name'] = !empty($userdata['sort_name']) ? $userdata['sort_name'] : 'last_name';
 			
 			$_SESSION['GO_SESSION']['list_separator'] = $userdata['list_separator'];
 			$_SESSION['GO_SESSION']['text_separator'] = $userdata['text_separator'];
@@ -200,12 +200,12 @@ class GO_USERS extends db
 		
 		if($sort == 'name')
 		{
-			if(!isset($_SESSION['GO_SESSION']['sort_name']) || $_SESSION['GO_SESSION']['sort_name'] == 'first_name')
-			{
-				$sort = 'first_name '.$sort_direction.', last_name ';
-			}else
+			if(!isset($_SESSION['GO_SESSION']['sort_name']) || $_SESSION['GO_SESSION']['sort_name'] == 'last_name')
 			{
 				$sort = 'last_name '.$sort_direction.', first_name ';
+			}else
+			{
+				$sort = 'first_name '.$sort_direction.', last_name ';
 			}
 		}
 
@@ -841,6 +841,10 @@ class GO_USERS extends db
 			
 		if(!isset($user['sex']))			
 			$user['sex'] = 'M';
+
+		if(!isset($user['sort_name']))
+			$user['sort_name'] = 'last_name';
+
 
 
 		if (empty($user['id'])){
