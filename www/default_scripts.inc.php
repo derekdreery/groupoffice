@@ -30,6 +30,7 @@ $scripts[]=$root_uri.'javascript/namespaces.js';
 
 	GO = {};
 	GO.settings=<?php echo json_encode($GO_CONFIG->get_client_settings()); ?>;
+	GO.calltoTemplate = '<?php echo $GO_CONFIG->callto_template; ?>';
 
 <?php
 if(isset($_REQUEST['after_login_url'])) {
