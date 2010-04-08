@@ -2115,7 +2115,7 @@ class calendar extends db
 
 		$cal = new calendar();
 
-		$calendar['name']=String::format_name($user);
+		$calendar['name']=String::format_name($user,'','','last_name');
 		$calendar['user_id']=$user['id'];
 		$calendar['acl_id']=$GO_SECURITY->get_new_acl('calendar', $user['id']);
 
