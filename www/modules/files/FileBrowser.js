@@ -618,6 +618,7 @@ GO.files.FileBrowser = function(config){
 				region:'east',
 				id:config.id+'-file-panel',
 				//collapsed:true,
+				width:450,
 				collapseMode:'mini',
 				collapsible:true,
 				split:true
