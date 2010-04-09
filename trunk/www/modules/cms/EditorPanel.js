@@ -41,7 +41,9 @@ GO.cms.EditorPanel = Ext.extend(
 				relative_urls : false,
 
 				spellchecker_languages : spellchecker_languages,
-				spellchecker_rpc_url : BaseHref+'javascript/tiny_mce/plugins/spellchecker/rpc.php'
+				spellchecker_rpc_url : BaseHref+'javascript/tiny_mce/plugins/spellchecker/rpc.php',
+
+				extended_valid_elements : "cms:plugin[*]"
 											
 			}
 		});
@@ -172,8 +174,12 @@ GO.cms.EditorPanel = Ext.extend(
 				var t = tinyMCE.activeEditor.dom;
 					
 				this.currentTemplate = template;
-				t.remove(t.select('link'));
+				t.remove(t.select('link'));				
 				if(template!='')
+					t.add(t.select('head')[0], 'link', {
+						rel : 'stylesheet',
+						href : GO.settings.modules.cms.url+'editor.css'
+						});
 					t.add(t.select('head')[0], 'link', {
 						rel : 'stylesheet',
 						href : GO.settings.modules.cms.url+'templates/'+template+'/css/editor.css'

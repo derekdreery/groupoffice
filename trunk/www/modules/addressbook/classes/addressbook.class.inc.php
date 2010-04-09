@@ -154,7 +154,7 @@ class addressbook extends db {
 	}
 
 	function create_default_addressbook($user) {
-		$name = String::format_name($user);
+		$name = String::format_name($user, '','','last_name');
 		$new_ab_name = $name;
 		$x = 1;
 		while ($this->get_addressbook_by_name($new_ab_name)) {

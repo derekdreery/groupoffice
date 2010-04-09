@@ -240,10 +240,14 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 			}
 
 			if(!GO.util.empty(GO.addressbook.defaultAddressbook)){
-				this.personalPanel.formAddressBooks.setValue(GO.addressbook.defaultAddressbook);
+				this.personalPanel.setAddressbookID(GO.addressbook.defaultAddressbook);
+			}else if(tempAddressbookID>0)
+			{
+				this.personalPanel.setAddressbookID(tempAddressbookID);
 			}else
 			{
 				this.personalPanel.formAddressBooks.selectFirst();
+				this.personalPanel.setAddressbookID(this.personalPanel.formAddressBooks.getValue());
 			}
 						
 			if(this.contact_id > 0)

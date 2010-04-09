@@ -89,15 +89,15 @@ GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 
 										//PHONE
 										'<tpl if="!GO.util.empty(home_phone)">'+
-											'<tr>'+
-												'<td class="userCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="callto:{home_phone}+type=phone">{home_phone}</a></td>'+
+											'<tr>'+callt
+												'<td class="userCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="{[this.callTo(values.home_phone)]}">{home_phone}</a></td>'+
 											'</tr>'+
 										'</tpl>'+
 
 										//CELLULAR
 										'<tpl if="!GO.util.empty(cellular)">'+
 											'<tr>'+
-												'<td class="userCompanyLabelWidth">' + GO.lang['strCellular'] + ':</td><td><a href="callto:{cellular}+type=phone">{cellular}</a></td>'+
+												'<td class="userCompanyLabelWidth">' + GO.lang['strCellular'] + ':</td><td><a href="{[this.callTo(values.cellular)]}">{cellular}</a></td>'+
 											'</tr>'+
 										'</tpl>'+
 
@@ -121,7 +121,7 @@ GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 										//PHONE WORK
 										'<tpl if="!GO.util.empty(work_phone)">'+
 											'<tr>'+
-												'<td class="userCompanyLabelWidth">' + GO.lang['strWorkPhone'] + ':</td><td><a href="callto:{work_phone}+type=phone">{work_phone}</a></td>'+
+												'<td class="userCompanyLabelWidth">' + GO.lang['strWorkPhone'] + ':</td><td><a href="{[this.callTo(values.work_phone)]}">{work_phone}</a></td>'+
 											'</tr>'+
 										'</tpl>'+
 
@@ -218,6 +218,9 @@ GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 				{
 					return '<a href="mailto:'+email+'">'+email+'</a>';
 				}
+			},
+			callTo:function(phone){
+				return GO.calltoTemplate.replace('{phone}', phone);
 			},
 
 			isuserFieldset: function(values){
