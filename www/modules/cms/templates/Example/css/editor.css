@@ -4,10 +4,6 @@ body.mceContentBody{
 	font-size:12px;
 	line-height:20px;
 }
-.mceItemHiddenSpellWord {
-background:url(../../../../../javascript/tiny_mce/plugins/spellchecker/img/wline.gif) repeat-x bottom left;
-cursor:default;
-}
 
 
 a:link, a:active, a:visited{
