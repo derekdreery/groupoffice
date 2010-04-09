@@ -31,6 +31,5 @@ if(isset($_REQUEST['path']))
 	$co->set_by_id($file_id, $folder_id);
 }
 $smarty = new cms_smarty($co);
-
 echo $co->replace_urls($smarty->fetch('index.tpl'));
 ?>

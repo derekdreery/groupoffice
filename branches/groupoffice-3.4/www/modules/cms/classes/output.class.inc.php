@@ -1,4 +1,6 @@
 <?php
+require_once($GLOBALS['GO_CONFIG']->class_path.'TagParser.class.inc.php');
+
 class cms_output extends cms {
 
 	var $site;
@@ -38,6 +40,9 @@ class cms_output extends cms {
 		if(!empty($_SESSION['basehref']))
 			$this->basehref=$_SESSION['basehref'];
 	}
+
+
+	
 
 
 
@@ -97,6 +102,8 @@ class cms_output extends cms {
 		//$this->file['content']=str_replace('/{site_url}?', $GO_MODULES->modules['cms']['url'].'run.php?basehref='.urlencode($GO_MODULES->modules['cms']['url']).'&', $this->file['content']);
 
 		$this->load_config();
+
+	
 	}
 
 	function authenticate() {
@@ -155,6 +162,8 @@ class cms_output extends cms {
 		 * /{site_url}?site_id=5&amp;path=Referenties
 		*/
 		//$this->file['content']=str_replace('/{site_url}?site_id='.$this->site['id'].'&amp;path=', $this->basehref, $this->file['content']);
+
+		$this->load_config();
 
 	}
 

@@ -121,6 +121,8 @@ class GO_USERS extends db
 			$_SESSION['GO_SESSION']['last_name'] = $userdata['last_name'];
 			$_SESSION['GO_SESSION']['country'] = $userdata['country'];
 			$_SESSION['GO_SESSION']['email'] = $userdata['email'];
+			$_SESSION['GO_SESSION']['work_phone'] = $userdata['work_phone'];
+			$_SESSION['GO_SESSION']['home_phone'] = $userdata['home_phone'];
 
 			$_SESSION['GO_SESSION']['thousands_separator'] = $userdata['thousands_separator'];
 			$_SESSION['GO_SESSION']['decimal_separator'] = $userdata['decimal_separator'];
