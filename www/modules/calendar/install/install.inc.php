@@ -15,22 +15,20 @@ $view['acl_id']=$GO_SECURITY->get_new_acl('view', 1);
 $view_id = $cal->add_view($view);
 
 $GO_SECURITY->add_group_to_acl($GO_CONFIG->group_internal, $view['acl_id'], 2);
-	
+
 $count=0;
 $GO_USERS->get_users();
-while($GO_USERS->next_record())
-{
+while($user = $GO_USERS->next_record()) {
 	$count++;
-	$user = $GO_USERS->record;		
-		
-	$calendar['name']=String::format_name($user);
+
+	$calendar['name']=String::format_name($user,'','','last_name');
 	$calendar['user_id']=$user['id'];
-    $calendar['group_id']=1;
+	$calendar['group_id']=1;
 	$calendar['acl_id']=$GO_SECURITY->get_new_acl('calendar', $user['id']);
-	
-	
+
+
 	$calendar_id = $cal->add_calendar($calendar);
-	
+
 	if($count<=20)
 		$cal->add_calendar_to_view($calendar_id, '', $view_id);
 }

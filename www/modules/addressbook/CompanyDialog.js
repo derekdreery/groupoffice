@@ -161,9 +161,6 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 
 			if(!GO.util.empty(GO.addressbook.defaultAddressbook)){
 				this.personalPanel.formAddressBooks.setValue(GO.addressbook.defaultAddressbook);
-			}else
-			{
-				this.personalPanel.formAddressBooks.selectFirst();
 			}
 
 		
@@ -177,11 +174,15 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				var tempAddressbookID = this.personalPanel.formAddressBooks.getValue();
 				
 				this.companyForm.form.reset();
-				this.personalPanel.formAddressBooks.setValue(tempAddressbookID);	
+
+				if(tempAddressbookID>0)
+					this.personalPanel.formAddressBooks.setValue(tempAddressbookID);
+				else
+					this.personalPanel.formAddressBooks.selectFirst();
 				
 				this.personalPanel.setCompanyId(0);
 
-				var abRecord = this.personalPanel.formAddressBooks.store.getById(tempAddressbookID);
+				var abRecord = this.personalPanel.formAddressBooks.store.getById(this.personalPanel.formAddressBooks.getValue());
 				this.personalPanel.formAddressFormat.setValue(abRecord.get('default_iso_address_format'));
 				this.personalPanel.formPostAddressFormat.setValue(abRecord.get('default_iso_address_format'));
 				

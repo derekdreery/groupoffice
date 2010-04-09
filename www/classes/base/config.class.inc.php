@@ -627,6 +627,12 @@ class GO_CONFIG {
 
 	var $session_inactivity_timeout = 0;
 
+	/**
+	 * Callto: link template
+	 */
+
+	var $callto_template='callto:{phone}';
+
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not touched by the installer   /////////////
 	 //////////////////////////////////////////////////////////////////////////////*/
@@ -637,7 +643,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.4.15';
+	var $version = '3.4.17';
 
 
 	/* The permissions mode to use when creating files
@@ -655,14 +661,15 @@ class GO_CONFIG {
 	var $folder_create_mode = '0755';
 
 
-
 	/**
 	 * Modification date
 	 *
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20100408';
+
+	var $mtime = '20100409';
+
 
 	#group configuration
 	/**

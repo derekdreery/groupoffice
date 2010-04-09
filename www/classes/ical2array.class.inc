@@ -146,7 +146,6 @@ class ical2array {
 				$objects[] = $object;
 
 				$count++;
-				echo $count."\n";
 			}
 		}
 

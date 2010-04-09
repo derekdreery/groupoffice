@@ -32,7 +32,6 @@ if(isset($_REQUEST['path']))
 }
 $smarty = new cms_smarty($co);
 
-
 //hide on screen errors in smarty
 $GO_CONFIG->debug_display_errors=false;
 

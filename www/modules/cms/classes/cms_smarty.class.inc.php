@@ -52,7 +52,7 @@ class cms_smarty extends Smarty{
 		if(isset($co->file))
 		{
 			$co->file['safename']=preg_replace($co->safe_regex, '', $co->file['name']);
-
+			$this->load_plugins();
 			$this->assign('file', $co->file);
 		}
 		
@@ -63,6 +63,23 @@ class cms_smarty extends Smarty{
 		}
 		
 		$this->assign('lang', $GO_LANGUAGE->language);				
+	}
+
+	function load_plugins(){
+		global $GO_MODULES, $co;
+		$tp = new TagParser();
+
+		$tags = $tp->parseTag('cms:plugin', $co->file['content']);
+
+		foreach($tags as $tag){
+
+			require_once($GO_MODULES->modules[$tag['attributes']['module']]['path'].'smarty_plugins/function.'.$tag['attributes']['type'].'.php');
+
+			$function = 'smarty_function_'.$tag['attributes']['type'];
+
+			$co->file['content']= substr($co->file['content'],0, $tag['startPos']).$function($tag['attributes'], $this).substr($co->file['content'],$tag['startPos']+strlen($tag['tag']));
+
+		}
 	}
 
 }
