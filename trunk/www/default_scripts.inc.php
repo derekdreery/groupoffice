@@ -354,6 +354,9 @@ if(file_exists($GO_THEME->theme_path.'MainLayout.js')) {
 ?>
 <script type="text/javascript">
 <?php
+
+//these parameter are passed by dialog.php. These are used to directly link to
+//a dialog.
 if(isset($_GET['module']))
 {
     $module = isset($_GET['module']) ? $_GET['module'] : false;
@@ -365,10 +368,8 @@ if(isset($_GET['module']))
     ?>
     if(GO.<?php echo $module; ?>)
     {
-        GO.mainLayout.onReady(function(){
-            GO.<?php echo $module; ?>.<?php echo $function; ?>({
-                values: <?php echo $params; ?>
-            });
+        GO.mainLayout.on('render',function(){
+            GO.<?php echo $module; ?>.<?php echo $function; ?>.apply(this, <?php echo base64_decode($params); ?>);
         });
     }
     <?php
