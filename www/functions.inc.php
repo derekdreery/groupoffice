@@ -13,6 +13,14 @@
  */
 
 
+function create_direct_url($module, $function, $params){
+	global $GO_CONFIG;
+
+	return $GO_CONFIG->full_url.'dialog.php?module='.$module.'&function='.$function.'&params='.urlencode(base64_encode(json_encode($params)));
+
+}
+
+
 /**
  * This file holds global functions for use inside Group-Office
  *

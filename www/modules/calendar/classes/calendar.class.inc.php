@@ -1384,7 +1384,7 @@ class calendar extends db
 			$GO_LANGUAGE->require_language_file('calendar');
 		}
 		
-		$url = $GO_CONFIG->full_url.'dialog.php?module=calendar&function=showEvent&params='.base64_encode(json_encode(array('values'=>array('event_id' => $resource['id']))));
+		$url = create_direct_url('calendar', 'showEvent', array('values'=>array('event_id' => $resource['id'])));
 
 		switch($message_type){
 			case 'new':
