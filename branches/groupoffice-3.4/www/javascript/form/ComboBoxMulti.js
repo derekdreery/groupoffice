@@ -50,7 +50,14 @@ Ext.extend(GO.form.ComboBoxMulti, GO.form.ComboBox, {
 		
 	    if (document.selection) { // IE
 	        var r = document.selection.createRange();
+					if(!r)
+						return false;
+
 	        var d = r.duplicate();
+
+					if(!this.el.dom)
+						return false;
+
 	        d.moveToElementText(this.el.dom);
 	        d.setEndPoint('EndToEnd', r);
 	        return d.text.length;            
