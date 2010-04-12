@@ -323,7 +323,7 @@ GO.email.EmailComposer = function(config) {
 					});
 				}
 				if (Ext.isIE || Ext.isWebKit || Ext.isOpera) {
-					Ext.EventManager.on(this.doc, 'keydown', this.fireSubmit,
+					Ext.EventManager.on(this.htmlEditor.doc, 'keydown', this.fireSubmit,
 						this);
 				}
 			},
@@ -629,7 +629,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	 *handles ctrl+enter from html editor
 	 */
 	fireSubmit : function(e) {
-			if (e.ctrlKey && Ext.EventObject.ENTER == e.getKey()) {				
+			if (e.ctrlKey && Ext.EventObject.ENTER == e.getKey()) {
+				//e.stopEvent();
 				this.sendMail(false, false);
 			}
 	},
