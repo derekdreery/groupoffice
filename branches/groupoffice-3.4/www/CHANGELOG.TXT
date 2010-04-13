@@ -1,3 +1,6 @@
+2010/04/13 3.4.19
+- A lot of small bug fixes
+
 2010/04/12 3.4.18
 - Fixed calendar sync bug with z-push.
 - Better logging with z-push
