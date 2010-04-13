@@ -37,8 +37,6 @@ class String {
 		$str = preg_replace('/"[^"]*"/', '', $str);
 		$str = preg_replace("/'[^']*'/", '', $str);
 
-		go_debug($str);
-
 		$opened=0;
 
 		for($i=0,$max=strlen($str);$i<$max;$i++){
@@ -730,6 +728,11 @@ class String {
 		$text = str_replace("{quot}", '"', $text);
 		$text = str_replace("{lt}", "<", $text);
 		$text = str_replace("{gt}", ">", $text);
+
+
+		//replace repeating spaces with &nbsp;
+		$text = str_replace(' ', '&nbsp;', $text);
+
 
 		return ($text);
 	}
