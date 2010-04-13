@@ -197,7 +197,7 @@ $lang['common']['no']='No';
 
 $lang['common']['system']='System';
 
-$lang['common']['goAlreadyStarted']='Group-Office was already started. The dialog created by {FUNCTION} is loaded in Group-Office. You can now close this window and continue working in your Group-Office.';
+$lang['common']['goAlreadyStarted']='Group-Office was already started. The requested screen is loaded in Group-Office. You can close this window or tab now and continue working in Group-Office.';
 $lang['common']['no']='No';
 
 $lang['commmon']['logFiles']='Log files';

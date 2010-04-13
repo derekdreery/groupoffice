@@ -183,7 +183,6 @@ $lang['common']['no']='Ne';
 
 $lang['common']['system']='Systém';
 
-$lang['common']['goAlreadyStarted']='Group-Office byl již spuštěn. Tento dialog vytvořil {FUNCTION} a byl nahrán v Group-Office. Nyní můžete toho okno zavřít a pokračovat ve Vaší práci v Group-Office.';
 
 $lang['commmon']['logFiles']='Logovací soubory';
 
