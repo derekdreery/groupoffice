@@ -32,7 +32,7 @@ GO.tasks.TasksPanel = function(config)
 		}, this);
     
 		var fields ={
-			fields:['id', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time'],
+			fields:['id', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled'],
 			columns:[this.checkColumn,
 			{
 				id:'name',

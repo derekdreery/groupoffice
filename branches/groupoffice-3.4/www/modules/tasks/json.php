@@ -397,6 +397,10 @@ try{
 
 				$tl_id = array_search($task['tasklist_id'], $tasklists);
 				$task['tasklist_name'] = (isset($tasklists_name) && $tl_id !== false)? $tasklists_name[$tl_id]: '';
+
+				//for disabling checkbox column
+				$task['disabled']=!$response['data']['write_permission'];
+
 				$response['results'][] = $task;
 			}
 
