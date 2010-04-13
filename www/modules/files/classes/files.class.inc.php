@@ -616,7 +616,9 @@ class files extends db {
 	function move_file($sourcefile, $destfolder) {
 		$existing_file = $this->file_exists($destfolder['id'], $sourcefile['name']);
 		if($existing_file) {
-			$this->delete_file($existing_file);
+			//$this->delete_file($existing_file);
+			$sql = "DELETE FROM fs_files WHERE id=?";
+			$this->query($sql, 'i', $existing_file['id']);
 		}
 
 
