@@ -6,7 +6,7 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: PortletSettings.js 2799 2009-08-27 09:15:14Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Danny Wijffelaars <dwijffelaars@intermesh.nl>
  */
