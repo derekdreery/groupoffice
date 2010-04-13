@@ -198,6 +198,7 @@ class filesystem extends db
 		$source_path = dirname($source_path).'/'.utf8_basename($source_path);
 		$destination_path = dirname($destination_path).'/'.utf8_basename($destination_path);
 
+
 		global $GO_CONFIG, $GO_MODULES;
 		
 		if (strpos($destination_path, $source_path.'/')===0)
@@ -235,7 +236,6 @@ class filesystem extends db
 				return true;
 			}else
 			{
-			
 				if($uploaded_file)
 				{
 					if(!move_uploaded_file($source_path, $destination_path))
