@@ -238,9 +238,9 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 				this.contact_id = 0;
 			}
 
-			if(!GO.util.empty(GO.addressbook.defaultAddressbook)){
+			if(!GO.util.empty(GO.addressbook.defaultAddressbook) && this.personalPanel.formAddressBooks.store.getById(GO.addressbook.defaultAddressbook)){
 				this.personalPanel.setAddressbookID(GO.addressbook.defaultAddressbook);
-			}else if(tempAddressbookID>0)
+			}else if(tempAddressbookID>0 && this.personalPanel.formAddressBooks.store.getById(tempAddressbookID))
 			{
 				this.personalPanel.setAddressbookID(tempAddressbookID);
 			}else
