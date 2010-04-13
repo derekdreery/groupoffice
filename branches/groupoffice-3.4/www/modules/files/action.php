@@ -364,7 +364,6 @@ try{
 						$sourcepath = $GO_CONFIG->file_storage_path.$files->build_path($sourcefile['folder_id']).'/'.$sourcefile['name'];
 						$destpath .= '/'.$sourcefile['name'];
 					}
-
 					
 						
 					$fs = new filesystem();
@@ -428,7 +427,7 @@ try{
 								$files->move_file($sourcefile, $destfolder);
 							}
 						}else
-						{
+						{							
 							//todo check if exists on import
 							$fs->copy($sourcepath, $destpath);
 							if($type_id[0]=='d')
