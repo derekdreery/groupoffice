@@ -1036,6 +1036,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				allowBlank : false
 			}),new GO.form.PlainField({
 				fieldLabel: GO.lang.strOwner,
+				value: GO.settings.name,
 				name:'user_name'
 			})]
 
