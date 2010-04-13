@@ -6,7 +6,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: SelectAddressFormat.js 1672 2009-08-06 16:16:02Z dwijffelaars $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Danny Wijffelaars <dwijffelaars@intermesh.nl>
  */

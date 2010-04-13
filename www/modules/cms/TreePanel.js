@@ -6,7 +6,7 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: MessagesGrid.js 1857 2008-04-29 13:57:06Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */

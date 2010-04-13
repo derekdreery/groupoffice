@@ -6,7 +6,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: RadioColumn.js 1384 2009-08-17 13:13:13Z dwijffelaars $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Danny Wijffelaars <dwijffelaars@intermesh.nl>
  */

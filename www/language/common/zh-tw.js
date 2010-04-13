@@ -7,7 +7,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: en.js 1142 2008-10-14 11:22:54Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
  * This is a translation by hodrag. If you have questions please e-mail to hodrag@gmail.com , modify chinese traditional by quincy

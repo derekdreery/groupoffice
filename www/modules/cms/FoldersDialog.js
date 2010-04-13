@@ -6,7 +6,7 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: FoldersDialog.js 1651 2008-12-29 15:00:48Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */

@@ -7,7 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: json.php 3012 2009-08-04 10:29:11Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */

@@ -6,7 +6,7 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: WebFeedsGrid.js 2799 2009-08-12 15:17:54Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Danny Wijffelaars <dwijffelaars@intermesh.nl>
  */

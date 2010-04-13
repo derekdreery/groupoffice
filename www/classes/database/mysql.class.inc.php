@@ -8,7 +8,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  *
  * @copyright Copyright Intermesh
- * @version $Id: about.php 1088 2008-10-07 13:02:06Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package go.database
  */

@@ -6,7 +6,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: ContextMenu.js 1384 2008-11-09 12:00:26Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */

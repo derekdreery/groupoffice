@@ -7,7 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: files.class.inc.php 2763 2009-07-03 08:54:48Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */

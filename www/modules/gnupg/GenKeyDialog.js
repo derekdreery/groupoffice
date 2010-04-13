@@ -7,7 +7,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: SettingsDialog.js 3107 2008-09-27 22:30:36Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  

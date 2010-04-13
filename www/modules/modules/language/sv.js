@@ -7,7 +7,7 @@
  * If you have questions write an e-mail to info@intermesh.nl
  * 
  * @copyright Copyright Intermesh
- * @version $Id: en.js 1827 2009-02-05 14:30:48Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 

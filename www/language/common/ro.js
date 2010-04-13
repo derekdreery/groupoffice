@@ -10,7 +10,7 @@
 
  * 
  * @copyright Copyright Intermesh
- * @version $Id: en.js 2942 2008-09-02 12:24:54Z mschering $
+ * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 

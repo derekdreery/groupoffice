@@ -7,7 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: action.php 1524 2008-12-03 09:35:45Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */

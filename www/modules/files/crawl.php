@@ -7,7 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: dbcheck.php 1733 2009-01-19 10:58:35Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  *

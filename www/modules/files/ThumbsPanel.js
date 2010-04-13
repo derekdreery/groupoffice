@@ -6,7 +6,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: FileBrowser.js 1369 2008-11-07 09:55:58Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */

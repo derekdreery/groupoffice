@@ -6,7 +6,7 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: Dialog.tpl 2276 2008-07-04 12:22:20Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */

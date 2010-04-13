@@ -6,7 +6,7 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: RegionalSettingsPanel.js 2079 2008-06-10 15:04:01Z mschering $
+ * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
