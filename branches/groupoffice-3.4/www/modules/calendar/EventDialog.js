@@ -381,12 +381,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 			this.setValues(config.values);
 
-			if (GO.util.empty(config.calendar_id)) {
+			if (GO.util.empty(config.calendar_id) || !this.selectCalendar.store.getById(config.calendar_id)) {
 				config.calendar_id = GO.calendar.defaultCalendar.id;
 				config.calendar_name = GO.calendar.defaultCalendar.name;
 			}
 
 			var calendarRecord = this.selectCalendar.store.getById(config.calendar_id);
+
             
 			var group_id = calendarRecord.get('group_id');
 			this.formPanel.form.baseParams['group_id'] = group_id;
