@@ -172,8 +172,7 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 			renderTo: 'new-task-due',
 			value: new Date(),
 			disabled:true,
-			format : GO.settings.date_format,
-			altFormats:GO.settings.date_format
+			format : GO.settings.date_format			
 		});
     
    
