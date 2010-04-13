@@ -1402,8 +1402,6 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{
 		var statusEl = Ext.get('status_'+folder_id);
 		
-		var isGridFolder = false;
-		
 		var node = this.treePanel.getNodeById('folder_'+folder_id);
 		if(node && node.attributes.mailbox=='INBOX')
 		{

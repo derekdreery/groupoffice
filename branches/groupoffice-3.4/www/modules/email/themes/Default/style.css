@@ -1,3 +1,8 @@
+.em-folder-status{
+	padding:0 !important;
+	margin:0 !important;
+}
+
 .em-statusbar-body{
 line-height:21px !important;
 padding-left:2px;
