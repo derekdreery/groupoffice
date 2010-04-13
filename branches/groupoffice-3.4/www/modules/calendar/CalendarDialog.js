@@ -123,6 +123,7 @@ GO.calendar.CalendarDialog = function(config)
 						if(action.result.success)
 						{
 							Ext.MessageBox.alert(GO.lang.strSuccess,action.result.feedback);
+							this.fireEvent('calendarimport', this);
 						}else
 						{
 							Ext.MessageBox.alert(GO.lang.strError,action.result.feedback);
@@ -195,6 +196,7 @@ GO.calendar.CalendarDialog = function(config)
 		]
 	});
 
+	this.addEvents({calendarimport:true});
 }
 
 Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
