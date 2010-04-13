@@ -266,7 +266,7 @@ try{
 
 			$GO_LANGUAGE->require_language_file('tasks');
 
-			$response['write_permission']=true;
+			
 			if(isset($_REQUEST['tasklist_id']))
 			{
 				$tasklist_id = $_REQUEST['tasklist_id'];
