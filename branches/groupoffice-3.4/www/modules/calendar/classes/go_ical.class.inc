@@ -30,6 +30,8 @@ class go_ical extends calendar
 
 	var $add_leading_space_to_qp_encoded_line_wraps=false;
 
+	var $dont_use_quoted_printable=false;
+
 	function go_ical($version='2.0', $utc=false)
 	{
 		parent::__construct();
@@ -135,14 +137,14 @@ class go_ical extends calendar
 		$lines[] = "BEGIN:VEVENT";
 		$lines[] = "UID:".$event['id'];
 
-		$lines = array_merge($lines, String::format_vcard_line('SUMMARY', $event['name'], $this->add_leading_space_to_qp_encoded_line_wraps));
+		$lines = array_merge($lines, String::format_vcard_line('SUMMARY', $event['name'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 		//if ($event['description'] != '')
 		//{
-			$lines = array_merge($lines, String::format_vcard_line('DESCRIPTION', $event['description'], $this->add_leading_space_to_qp_encoded_line_wraps));
+			$lines = array_merge($lines, String::format_vcard_line('DESCRIPTION', $event['description'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 		//}
 		//if ($event['location'] != '')
 		//{
-			$lines = array_merge($lines, String::format_vcard_line('LOCATION', $event['location'], $this->add_leading_space_to_qp_encoded_line_wraps));
+			$lines = array_merge($lines, String::format_vcard_line('LOCATION', $event['location'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 		//}
 
 		$lines[] =	"STATUS:".$event['status'];
