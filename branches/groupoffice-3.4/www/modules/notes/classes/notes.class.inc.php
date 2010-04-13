@@ -453,25 +453,13 @@ class notes extends db {
 		if ($offset > 0)
 		{
 			$sql .=" LIMIT ".$this->escape($start.",".$offset);
-			
-			go_log(LOG_DEBUG, $sql);
-
 			$this->query($sql);
 			return $count;
-
 		}else
 		{
 			return $count;
 		}
-	}	
-		
-
-
-	
-
-
-	
-
+	}
 
 	/**
 	 * Gets a Note record
