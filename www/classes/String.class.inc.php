@@ -961,9 +961,18 @@ class String {
 		
 	}
 
-	public static function format_vcard_line($name_part, $value_part, $add_leading_space=false)
+	public static function format_vcard_line($name_part, $value_part, $add_leading_space=false, $dont_use_quoted_printable=false)
 	{
 		//$value_part = str_replace("\r\n","\n", $value_part);
+
+		if($dont_use_quoted_printable){
+			//just wrap texts
+			$value_part = str_replace("\r",'', $value_part);
+			$value_part = str_replace("\n",'\n', $value_part);
+			$value_part = wordwrap($value_part, 74, "\n ");
+			$name_part .= ';CHARSET=UTF-8:';
+			return array($name_part.$value_part);
+		}
 
 		$qp_value_part = String::quoted_printable_encode($value_part);
 
