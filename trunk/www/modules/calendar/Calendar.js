@@ -1592,6 +1592,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				}
 			}, this);
 
+			this.calendarDialog.on('calendarimport', function(){this.adminDialog.madeChanges=true;}, this);
 
 			var tbar = [{
 				iconCls: 'btn-add',

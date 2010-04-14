@@ -453,7 +453,7 @@ class imap{
 			$cached_message['attachments']=$message['attachments'] ? '1' : '0';
 			$cached_message['flagged']=$message['flagged'] ? '1' : '0';
 			$cached_message['answered']=$message['answered'] ? '1' : '0';
-			$cached_message['priority']=empty($message['priority']) ? 3 : intval($message['priority']);			
+			$cached_message['priority']=$message['priority'];
 			$cached_message['from']=$message['from'];
 			$cached_message['reply_to']=$message['reply-to'];
 			$cached_message['to']=implode(',', $message['to']);
@@ -504,7 +504,7 @@ class imap{
 			}
 		}
 
-		$message["priority"] = isset($values['x-priority']) ? $values['x-priority'] : '';
+		$message["priority"] = isset($values['x-priority']) ? intval($values['x-priority']) : 3;
 		$message['attachments']=false;
 
 		if (!empty($values['content-type']) && preg_match("'([^/]*)/([^ ;\n\t]*)'i", $values['content-type'], $regs)) {

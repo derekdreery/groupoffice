@@ -1160,7 +1160,7 @@ class calendar extends db
 
 			$this->cache_event($event['id']);
 
-			if(!empty($event['reminder']) && $event['reminder']>time())
+			if(!empty($event['reminder']))
 			{
 				global $GO_CONFIG;
 
@@ -1176,10 +1176,16 @@ class calendar extends db
 				$reminder['name']=$event['name'];
 				$reminder['link_type']=1;
 				$reminder['link_id']=$event['id'];
-				$reminder['time']=$event['start_time']-$event['reminder'];
-				$reminder['vtime']=$event['start_time'];
 
-				$rm->add_reminder($reminder);
+				if(empty($event['rrule']))
+					$reminder['vtime']=$event['start_time'];
+				else
+					$reminder['vtime'] = Date::get_next_recurrence_time($event['start_time'],time(), $event['rrule']);
+
+				$reminder['time']=$reminder['vtime']-$event['reminder'];
+
+				if($reminder['time']>time())
+					$rm->add_reminder($reminder);
 			}
 
 			return $event['id'];
@@ -1302,7 +1308,7 @@ class calendar extends db
 				$rm->delete_reminder($existing_reminder['id']);
 			}
 
-			if(!empty($event['reminder'])  && $event['reminder']>time())
+			if(!empty($event['reminder']))
 			{
 				if(!$calendar)
 				{
@@ -1319,22 +1325,27 @@ class calendar extends db
 				$reminder['name']=$event['name'];
 
 				$reminder['link_type']=1;
-				$reminder['link_id']=$event['id'];				
-				$reminder['vtime']=$event['start_time'];
+				$reminder['link_id']=$event['id'];							
 
 				if(empty($event['rrule']))
 					$reminder['vtime']=$event['start_time'];
 				else
 					$reminder['vtime'] = Date::get_next_recurrence_time($event['start_time'],time(), $event['rrule']);
 
-				$reminder['time']==$reminder['vtime']-$event['reminder'];
+				$reminder['time']=$reminder['vtime']-$event['reminder'];
 
-				if($existing_reminder)
+				if($reminder['time']>time())
 				{
-					$rm->update_reminder($reminder);
-				}else
+					if($existing_reminder)
+					{
+						$rm->update_reminder($reminder);
+					}else
+					{
+						$rm->add_reminder($reminder);
+					}
+				}elseif($existing_reminder)
 				{
-					$rm->add_reminder($reminder);
+					$rm->delete_reminder($existing_reminder['id']);
 				}
 			}
 		}

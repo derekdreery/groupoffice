@@ -74,6 +74,10 @@ GO.notes.MainPanel = function(config){
 		}, this);
 
 	this.centerPanel.store.on('load', function(){
+
+		northPanel.getTopToolbar().items.get('add').setDisabled(!this.centerPanel.store.reader.jsonData.data.write_permission);
+		northPanel.getTopToolbar().items.get('delete').setDisabled(!this.centerPanel.store.reader.jsonData.data.write_permission);
+
 		if(this.eastPanel.data.category_id!=this.category_id)
 		{
 			this.eastPanel.reset();
@@ -96,7 +100,9 @@ GO.notes.MainPanel = function(config){
 		tbar: new Ext.Toolbar({		
 			cls:'go-head-tb',
 			items: [{
-			iconCls: 'btn-add',							
+			iconCls: 'btn-add',
+			itemId:'add',
+			disabled:true,
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){
@@ -104,6 +110,8 @@ GO.notes.MainPanel = function(config){
 			},
 			scope: this
 		},{
+			disabled:true,
+			itemId:'delete',
 			iconCls: 'btn-delete',
 			text: GO.lang['cmdDelete'],
 			cls: 'x-btn-text-icon',

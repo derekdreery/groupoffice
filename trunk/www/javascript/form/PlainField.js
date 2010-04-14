@@ -62,6 +62,8 @@ GO.form.PlainField = Ext.extend(Ext.form.Field, {
 		}else if(this.el.dom.innerHTML.length > 0){
 			this.setValue(this.el.dom.value);
 		}
+		// reference to original value for reset
+    this.originalValue = this.getValue();
 	},
 
 	getValue : function(){

@@ -175,7 +175,7 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				
 				this.companyForm.form.reset();
 
-				if(tempAddressbookID>0)
+				if(tempAddressbookID>0 && this.personalPanel.formAddressBooks.store.getById(tempAddressbookID))
 					this.personalPanel.formAddressBooks.setValue(tempAddressbookID);
 				else
 					this.personalPanel.formAddressBooks.selectFirst();

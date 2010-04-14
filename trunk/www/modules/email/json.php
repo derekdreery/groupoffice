@@ -119,10 +119,10 @@ function get_mailbox_nodes($account_id, $folder_id){
 
 		if ($unseen > 0)
 		{
-			$status_html = '&nbsp;<span id="status_'.$email->f('id').'">('.$unseen.')</span>';
+			$status_html = '&nbsp;<span class="em-folder-status" id="status_'.$email->f('id').'">('.$unseen.')</span>';
 		}else
 		{
-			$status_html = '&nbsp;<span id="status_'.$email->f('id').'"></span>';
+			$status_html = '&nbsp;<span class="em-folder-status" id="status_'.$email->f('id').'"></span>';
 		}
 
 		if($email2->get_subscribed(0, $email->f('id')))
