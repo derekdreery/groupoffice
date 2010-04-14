@@ -100,9 +100,14 @@ class cached_imap extends imap{
 	}
 
 	function reopen($mailbox = "INBOX", $flags = "") {
-		parent::reopen($mailbox, $flags);
-		//update $this->folder with the db cache
-		$this->set_account($this->account, $mailbox);
+		if(parent::reopen($mailbox, $flags)){
+			//update $this->folder with the db cache
+			$this->set_account($this->account, $mailbox);
+			return true;
+		}else
+		{
+			return false;
+		}
 	}
 
 	/**

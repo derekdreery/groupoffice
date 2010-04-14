@@ -177,12 +177,23 @@ Ext.override(Ext.form.HtmlEditor, {
 	}
 }); */
 
-Ext.override(Ext.DatePicker, {
-	startDay: parseInt(GO.settings.first_weekday)
-});
+//only present when logged in.
+if(GO.settings.date_format){
+	Ext.override(Ext.DatePicker, {
+		startDay: parseInt(GO.settings.first_weekday)
+	});
 Ext.override(Ext.form.DateField, {
 	format: GO.settings.date_format
 });
+
+	Ext.override(Ext.form.DateField, {
+		format: GO.settings.date_format,
+		altFormats:GO.settings.date_format+"|"+GO.settings.date_format.replace("Y","y")
+	});
+}
+
+
+
 
 
 /*

@@ -37,8 +37,6 @@ class String {
 		$str = preg_replace('/"[^"]*"/', '', $str);
 		$str = preg_replace("/'[^']*'/", '', $str);
 
-		go_debug($str);
-
 		$opened=0;
 
 		for($i=0,$max=strlen($str);$i<$max;$i++){
@@ -713,13 +711,17 @@ class String {
 	public static function text_to_html($text, $convert_links=true) {
 		global $GO_CONFIG, $GO_MODULES;
 
+		//replace repeating spaces with &nbsp;		
+		$text = htmlspecialchars($text, ENT_COMPAT, 'UTF-8');
+		$text = str_replace('  ', '&nbsp;&nbsp;', $text);
+
 		if($convert_links)
 		{
 			$text = preg_replace("/\b(https?:\/\/[\pL0-9\.&\-\/@#;`~=%?:_\+,]+)\b/ui", '{lt}a href={quot}$1{quot} target={quot}_blank{quot} class={quot}normal-link{quot}{gt}$1{lt}/a{gt}', $text."\n");
 			$text = preg_replace("/\b([\pL0-9\._\-]+@[\pL0-9\.\-_]+\.[a-z]{2,4})(\s)/ui", "{lt}a class={quot}normal-link{quot} href={quot}mailto:$1{quot}{gt}$1{lt}/a{gt}$2", $text);
 		}
 
-		$text = htmlspecialchars($text, ENT_COMPAT, 'UTF-8');
+		
 		$text = nl2br(trim($text));
 		//$text = str_replace("\r", "", $text);
 		//$text = str_replace("\n", "", $text);
@@ -958,9 +960,18 @@ class String {
 		
 	}
 
-	public static function format_vcard_line($name_part, $value_part, $add_leading_space=false)
+	public static function format_vcard_line($name_part, $value_part, $add_leading_space=false, $dont_use_quoted_printable=false)
 	{
 		//$value_part = str_replace("\r\n","\n", $value_part);
+
+		if($dont_use_quoted_printable){
+			//just wrap texts
+			$value_part = str_replace("\r",'', $value_part);
+			$value_part = str_replace("\n",'\n', $value_part);
+			$value_part = wordwrap($value_part, 74, "\n ");
+			$name_part .= ';CHARSET=UTF-8:';
+			return array($name_part.$value_part);
+		}
 
 		$qp_value_part = String::quoted_printable_encode($value_part);
 

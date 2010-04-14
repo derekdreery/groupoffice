@@ -109,8 +109,8 @@ GO.tasks.MainPanel = function(config){
 	}, this);
 			
 	this.gridPanel.store.on('load', function(store){
-		this.deleteButton.setDisabled(!store.reader.jsonData.write_permission);
-		this.addButton.setDisabled(!store.reader.jsonData.write_permission);
+		this.deleteButton.setDisabled(!store.reader.jsonData.data.write_permission);
+		this.addButton.setDisabled(!store.reader.jsonData.data.write_permission);
 
 		this.gridPanel.setTitle(this.tasklist_name);
 

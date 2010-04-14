@@ -29,8 +29,8 @@ GO.notes.NoteDialog = function(config){
 	config.modal=false;
 	config.resizable=true;
 	config.maximizable=true;
-	config.width=700;
-	config.autoHeight=true;
+	config.width=600;
+	config.height=400;
 	config.closeAction='hide';
 	config.title= GO.notes.lang.note;					
 	config.items= this.formPanel;
@@ -195,7 +195,6 @@ Ext.extend(GO.notes.NoteDialog, GO.Window,{
 			cls:'go-form-panel',
 			waitMsgTarget:true,
 			layout:'form',
-			autoHeight:true,
 			items:[{
 				xtype: 'textfield',
 				name: 'name',
@@ -224,8 +223,7 @@ Ext.extend(GO.notes.NoteDialog, GO.Window,{
 			{
 				xtype: 'textarea',
 				name: 'content',
-				anchor: '100%',
-				height:300,
+				anchor: '100% -80',
 				hideLabel:true
 			}]				
 		});
@@ -252,7 +250,6 @@ Ext.extend(GO.notes.NoteDialog, GO.Window,{
 			waitMsgTarget:true,
 			url: GO.settings.modules.notes.url+'action.php',
 			border: false,
-			autoHeight:true,
 			baseParams: {
 				task: 'note'
 			},

@@ -120,12 +120,16 @@ GO.grid.GridPanel = function(config)
 	}, this);
 
 	this.on('rowclick', function(grid, rowIndex, e){
+		var record = this.getSelectionModel().getSelected();
+
 		if(!e.ctrlKey && !e.shiftKey)
 		{
-			var record = this.getSelectionModel().getSelected();
-			this.fireEvent('delayedrowselect', this, rowIndex, record);
+			if(record)
+				this.fireEvent('delayedrowselect', this, rowIndex, record);
 		}
-		this.rowClicked=true;
+		
+		if(record)
+			this.rowClicked=true;
 	}, this);
 
 	this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){

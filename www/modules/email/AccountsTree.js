@@ -58,6 +58,7 @@ GO.email.AccountsTree = function(config){
 	{		
 		if(e.dropNode)
 		{
+			//drag within tree
 			if(e.source.dragData.node.id.indexOf('account')>-1 && e.target.id.indexOf('account')>-1){
 				if(e.point!='append')
 					return true;
@@ -71,6 +72,7 @@ GO.email.AccountsTree = function(config){
 					(e.source.dragData.node.attributes.account_id == e.target.attributes.account_id));
 		}else
 		{
+			//drag from grid
 			if(e.point!='append'){
 				return false;
 			}else
