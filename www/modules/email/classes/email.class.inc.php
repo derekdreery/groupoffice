@@ -57,6 +57,15 @@ function load_template($template_id, $to='', $keep_tags=false)
 	require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 	require_once($GO_MODULES->modules['mailings']['class_path'].'templates.class.inc.php');
 
+	if($GO_MODULES->has_module('customfields')){
+		require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+		$cf = new customfields();
+	}else
+	{
+		$cf = false;
+	}
+
+
 	$ab = new addressbook();
 	$tp = new templates();
 
@@ -79,18 +88,32 @@ function load_template($template_id, $to='', $keep_tags=false)
 			if ($contact = $ab->get_contact_by_email($to, $GO_SECURITY->user_id)) {
 
 				$values = array_map('htmlspecialchars', $contact);
+				$link_type = 2;
+				$link_id=$contact['id'];
+				
+
 			}elseif($user = $GO_USERS->get_user_by_email($to))
 			{
 				$values = array_map('htmlspecialchars', $user);
+				$link_type = 8;
+				$link_id=$user['id'];
 			}else
 			{
 				$ab->search_companies($GO_SECURITY->user_id, $to, 'email',0,0,1);
 				if($ab->next_record())
 				{
 					$values = array_map('htmlspecialchars', $ab->record);
+					$link_type = 3;
+					$link_id=$values['id'];
 				}
 			}
 		}
+
+		if($cf && !empty($link_id)){
+			$cf_values = $cf->get_values($GO_SECURITY->user_id, $link_type, $link_id);
+			$values = array_merge($values, $cf_values);
+		}
+
 		$tp->replace_fields($response['data']['body'], $values);
 	}
 	
