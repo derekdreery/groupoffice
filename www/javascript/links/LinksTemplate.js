@@ -26,7 +26,7 @@ GO.linksTemplate = '<tpl if="links.length">'+
 		'</tr>'+	
 							
 		'<tpl for="links">'+
-			'<tr>'+
+			'<tr class="display-panel-link">'+
 				'<td><div class="go-icon {iconCls}" ext:qtip="{type}"></div></td>'+
 				'<td><a href="#link_{[xindex-1]}">{name}</a><tpl if="link_description.length"><br />{link_description}</tpl></td>'+
 				'<td style="white-space:nowrap">{mtime}</td>'+
