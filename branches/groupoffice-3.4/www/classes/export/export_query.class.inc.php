@@ -150,6 +150,13 @@ class base_export_query{
 				$this->columns[]=$indexAndHeader[0];
 			}
 		}
+
+		if(isset($this->q['extra_columns'])){
+			foreach($this->q['extra_columns'] as $column){
+				$this->headers[]=$column['header'];
+				$this->columns[]=$column['column'];
+			}
+		}
 	}
 
 	function export($fp)
