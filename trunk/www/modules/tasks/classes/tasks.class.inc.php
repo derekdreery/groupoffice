@@ -514,17 +514,21 @@ class tasks extends db
 
 		if(isset($task['status']))
 		{
-			if($task['status']=='COMPLETED' && $old_task['completion_time']==0)
+			if($task['status']=='COMPLETED')
 			{
-				$task['completion_time']=time();
-			}
+				if($old_task['completion_time']==0 && empty($task['completion_time']))
+					$task['completion_time']=time();
 
-			if($task['status']!='COMPLETED' && $old_task['completion_time']>0)
+				//delete reminder when task is completed.
+				$task['reminder']=0;
+			}else
 			{
-				$task['completion_time']=0;
+				if($old_task['completion_time']>0)
+				{
+					$task['completion_time']=0;
+				}
 			}
 		}
-
 
 		if(isset($task['completion_time']) && $task['completion_time'] > 0 && $this->copy_recurring_completed($task['id'])) {
 			$task['rrule'] = '';
@@ -534,8 +538,6 @@ class tasks extends db
 		if(isset($task['reminder'])) {
 			$this->set_reminder($task);
 		}
-
-
 
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files'])) {
