@@ -190,7 +190,9 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 		this.body.update("");
 		this.data={};
 		
-		this.getTopToolbar().setDisabled(true);
+		var tbar = this.getTopToolbar();
+		if(tbar)
+			tbar.setDisabled(true);
 	},
 	
 	setData : function(data)
@@ -200,7 +202,9 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 		data.link_type=this.link_type;
 		this.data=data;
 		
-		this.getTopToolbar().setDisabled(false);
+		var tbar = this.getTopToolbar();
+		if(tbar)
+			tbar.setDisabled(false);
 	
 		this.editButton.setDisabled(!data.write_permission);
 		
