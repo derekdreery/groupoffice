@@ -89,7 +89,7 @@ GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 
 										//PHONE
 										'<tpl if="!GO.util.empty(home_phone)">'+
-											'<tr>'+callt
+											'<tr>'+
 												'<td class="userCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="{[this.callTo(values.home_phone)]}">{home_phone}</a></td>'+
 											'</tr>'+
 										'</tpl>'+
