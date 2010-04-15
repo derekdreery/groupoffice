@@ -755,7 +755,7 @@ table.display-panel{
 
 table.display-panel td{
 	padding:3px;
-	vertical-align:top;
+	vertical-align:middle;
 }
 
 table.display-panel a:link,
@@ -780,8 +780,14 @@ table.display-panel a:active
 	background-color: #f1f1f1;
 }
 
+.display-panel-link td{
+	padding:3px 3px 1px !important;
+}
+
+
 .display-panel-link-description td{
-	padding:1px 0px 54px 0px;
+	padding:0px 3px 3px !important;
+	vertical-align: top;
 }
 
 /* Ext grid addons */
