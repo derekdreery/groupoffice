@@ -915,7 +915,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				xtype:'textarea',
 				fieldLabel:GO.lang.strDescription,
 				name : 'description',
-				anchor:'-20 -210'
+				anchor:'-20 -220'
 			}]
 
 		});
