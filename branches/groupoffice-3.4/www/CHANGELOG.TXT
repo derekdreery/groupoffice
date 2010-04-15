@@ -1,3 +1,7 @@
+2010/04/15 3.4.21
+- custom fields in templates
+- Small bug fixes
+
 2010/04/14 3.4.20
 - text_to_html function was broken
 
