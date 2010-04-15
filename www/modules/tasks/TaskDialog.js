@@ -30,38 +30,38 @@ GO.tasks.TaskDialog = function() {
 		items : this.formPanel,
 		focus : focusName.createDelegate(this),
 		buttons : [{
-					text : GO.lang['cmdOk'],
-					handler : function() {
-						this.submitForm(true);
+			text : GO.lang['cmdOk'],
+			handler : function() {
+				this.submitForm(true);
 
-					},
-					scope : this
-				}, {
-					text : GO.lang['cmdApply'],
-					handler : function() {
-						this.submitForm();
-					},
-					scope : this
-				}, {
-					text : GO.lang['cmdClose'],
-					handler : function() {
-						this.win.hide();
-					},
-					scope : this
-				}]
-/*
+			},
+			scope : this
+		}, {
+			text : GO.lang['cmdApply'],
+			handler : function() {
+				this.submitForm();
+			},
+			scope : this
+		}, {
+			text : GO.lang['cmdClose'],
+			handler : function() {
+				this.win.hide();
+			},
+			scope : this
+		}]
+	/*
  * , keys: [{ key: Ext.TaskObject.ENTER, fn: function(){ this.submitForm();
  * this.win.hide(); }, scope:this }]
  */
-		});
+	});
 
 	this.win.render(Ext.getBody());
 
 	GO.tasks.TaskDialog.superclass.constructor.call(this);
 
 	this.addEvents({
-				'save' : true
-			});
+		'save' : true
+	});
 
 }
 
@@ -103,9 +103,9 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 					this.setValues(config.values);
 
 					this.selectTaskList
-							.setRemoteText(action.result.data.tasklist_name);
+					.setRemoteText(action.result.data.tasklist_name);
 					this
-							.setWritePermission(action.result.data.write_permission);
+					.setWritePermission(action.result.data.write_permission);
 					
 				},
 				failure : function(form, action) {
@@ -179,7 +179,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		var date = new Date();
 
 		formValues['start_date'] = formValues['remind_date'] = date
-				.format(GO.settings['date_format']);
+		.format(GO.settings['date_format']);
 		formValues['start_hour'] = date.format("H");
 		formValues['start_min'] = '00';
 
@@ -192,48 +192,48 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 	submitForm : function(hide) {
 		this.formPanel.form.submit({
-					url : GO.settings.modules.tasks.url + 'action.php',
-					params : {
-						'task' : 'save_task'
-					},
-					waitMsg : GO.lang['waitMsgSave'],
-					success : function(form, action) {
+			url : GO.settings.modules.tasks.url + 'action.php',
+			params : {
+				'task' : 'save_task'
+			},
+			waitMsg : GO.lang['waitMsgSave'],
+			success : function(form, action) {
 
-						if (action.result.task_id) {
-							this.setTaskId(action.result.task_id);
-						}
+				if (action.result.task_id) {
+					this.setTaskId(action.result.task_id);
+				}
 
-						if (this.link_config && this.link_config.callback) {
-							this.link_config.callback.call(this);
-						}
+				if (this.link_config && this.link_config.callback) {
+					this.link_config.callback.call(this);
+				}
 
-						this.fireEvent('save', this, this.task_id);
+				this.fireEvent('save', this, this.task_id);
 
-						if (hide) {
-							this.win.hide();
-						}
-					},
-					failure : function(form, action) {
-						if (action.failureType == 'client') {
-							Ext.MessageBox.alert(GO.lang['strError'],
-									GO.lang['strErrorsInForm']);
-						} else {
-							Ext.MessageBox.alert(GO.lang['strError'],
-									action.result.feedback);
-						}
-					},
-					scope : this
-				});
+				if (hide) {
+					this.win.hide();
+				}
+			},
+			failure : function(form, action) {
+				if (action.failureType == 'client') {
+					Ext.MessageBox.alert(GO.lang['strError'],
+						GO.lang['strErrorsInForm']);
+				} else {
+					Ext.MessageBox.alert(GO.lang['strError'],
+						action.result.feedback);
+				}
+			},
+			scope : this
+		});
 
 	},
 
 	buildForm : function() {
 
 		this.nameField = new Ext.form.TextField({
-					name : 'name',
-					allowBlank : false,
-					fieldLabel : GO.lang.strSubject
-				});
+			name : 'name',
+			allowBlank : false,
+			fieldLabel : GO.lang.strSubject
+		});
 
 		this.selectLinkField = new GO.form.SelectLink();
 
@@ -253,13 +253,13 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			
 			formPanel.form.findField('remind_date').setValue(remindDate);
 
-			if (repeatType.getValue() > 0) {
-				if (repeatEndDate.getValue() == '') {
-					repeatForever.setValue(true);
+			if (this.repeatType.getValue() > 0) {
+				if (this.repeatEndDate.getValue() == '') {
+					this.repeatForever.setValue(true);
 				} else {
 					var eD = dueDate.getValue();
-					if (repeatEndDate.getValue() < eD) {
-						repeatEndDate.setValue(eD.add(Date.DAY, 1));
+					if (this.repeatEndDate.getValue() < eD) {
+						this.repeatEndDate.setValue(eD.add(Date.DAY, 1));
 					}
 				}
 			}
@@ -268,319 +268,275 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		var now = new Date();
 
 		var startDate = new Ext.form.DateField({
-					name : 'start_date',
-					format : GO.settings['date_format'],
-					allowBlank : false,
-					fieldLabel : GO.tasks.lang.startsAt,
-					value : now.format(GO.settings.date_format),
-					listeners : {
-						change : {
-							fn : checkDateInput,
-							scope : this
-						}
-					}
-				});
-
-		var dueDate = new Ext.form.DateField({
-					name : 'due_date',
-					format : GO.settings['date_format'],
-					allowBlank : false,
-					fieldLabel : GO.tasks.lang.dueAt,
-					value : now.format(GO.settings.date_format),
-					listeners : {
-						change : {
-							fn : checkDateInput,
-							scope : this
-						}
-					}
-				});
-
-		var taskStatus = new Ext.form.ComboBox({
-					name : 'status_text',
-					hiddenName : 'status',
-					triggerAction : 'all',
-					editable : false,
-					selectOnFocus : true,
-					forceSelection : true,
-					fieldLabel : GO.lang.strStatus,
-					mode : 'local',
-					value : 'ACCEPTED',
-					valueField : 'value',
-					displayField : 'text',
-					store : new Ext.data.SimpleStore({
-								fields : ['value', 'text'],
-								data : [
-										['NEEDS-ACTION',
-												GO.tasks.lang.needsAction],
-										['ACCEPTED', GO.tasks.lang.accepted],
-										['DECLINED', GO.tasks.lang.declined],
-										['TENTATIVE', GO.tasks.lang.tentative],
-										['DELEGATED', GO.tasks.lang.delegated],
-										['COMPLETED', GO.tasks.lang.completed],
-										['IN-PROCESS', GO.tasks.lang.inProcess]]
-							})
-				});
-
-		this.selectTaskList = new GO.tasks.SelectTasklist({
-					fieldLabel : GO.tasks.lang.tasklist
-				});
-
-		var propertiesPanel = new Ext.Panel({
-					hideMode : 'offsets',
-					title : GO.lang['strProperties'],
-					defaults : {
-						anchor : '-20'
-					},
-					// cls:'go-form-panel',waitMsgTarget:true,
-					bodyStyle : 'padding:5px',
-					layout : 'form',
-					autoScroll : true,
-					items : [this.nameField, this.selectLinkField,
-							startDate, dueDate, taskStatus, this.selectTaskList]
-
-				});
-				
-		this.descriptionPanel = new Ext.Panel({
-			title: GO.lang.strDescription,
-			layout: 'fit',
-			border:false,
-			items:[{
-					xtype:'textarea',
-					name : 'description',
-					anchor:'100% 100%',
-					hideLabel:true
-				}]
+			name : 'start_date',
+			format : GO.settings['date_format'],
+			allowBlank : false,
+			fieldLabel : GO.tasks.lang.startsAt,
+			value : now.format(GO.settings.date_format),
+			listeners : {
+				change : {
+					fn : checkDateInput,
+					scope : this
+				}
+			}
 		});
 
+		var dueDate = new Ext.form.DateField({
+			name : 'due_date',
+			format : GO.settings['date_format'],
+			allowBlank : false,
+			fieldLabel : GO.tasks.lang.dueAt,
+			value : now.format(GO.settings.date_format),
+			listeners : {
+				change : {
+					fn : checkDateInput,
+					scope : this
+				}
+			}
+		});
+
+		var taskStatus = new Ext.form.ComboBox({
+			name : 'status_text',
+			hiddenName : 'status',
+			triggerAction : 'all',
+			editable : false,
+			selectOnFocus : true,
+			forceSelection : true,
+			fieldLabel : GO.lang.strStatus,
+			mode : 'local',
+			value : 'ACCEPTED',
+			valueField : 'value',
+			displayField : 'text',
+			store : new Ext.data.SimpleStore({
+				fields : ['value', 'text'],
+				data : [
+				['NEEDS-ACTION',
+				GO.tasks.lang.needsAction],
+				['ACCEPTED', GO.tasks.lang.accepted],
+				['DECLINED', GO.tasks.lang.declined],
+				['TENTATIVE', GO.tasks.lang.tentative],
+				['DELEGATED', GO.tasks.lang.delegated],
+				['COMPLETED', GO.tasks.lang.completed],
+				['IN-PROCESS', GO.tasks.lang.inProcess]]
+			})
+		});
+
+		this.selectTaskList = new GO.tasks.SelectTasklist({
+			fieldLabel : GO.tasks.lang.tasklist
+		});
+
+		var propertiesPanel = new Ext.Panel({
+			hideMode : 'offsets',
+			title : GO.lang['strProperties'],
+			defaults : {
+				anchor : '-20'
+			},
+			// cls:'go-form-panel',waitMsgTarget:true,
+			bodyStyle : 'padding:5px',
+			layout : 'form',
+			autoScroll : true,
+			items : [this.nameField, this.selectLinkField,
+			startDate,
+			dueDate,
+			taskStatus,
+			this.selectTaskList,{
+				xtype:'textarea',
+				fieldLabel:GO.lang.strDescription,
+				name : 'description',
+				anchor:'-20 -220'
+			}]
+
+		});
+				
+
 		// Start of recurrence tab
-		this.repeatEvery = new Ext.form.ComboBox({
-					fieldLabel : GO.tasks.lang.repeatEvery,
-					name : 'repeat_every_text',
-					hiddenName : 'repeat_every',
-					triggerAction : 'all',
-					editable : false,
-					selectOnFocus : true,
-					width : 50,
-					forceSelection : true,
-					mode : 'local',
-					value : '1',
-					valueField : 'value',
-					displayField : 'text',
+		this.repeatEvery = new Ext.form.ComboBox({					
+			name : 'repeat_every_text',
+			hiddenName : 'repeat_every',
+			triggerAction : 'all',
+			editable : false,
+			selectOnFocus : true,
+			width : 50,
+			forceSelection : true,
+			mode : 'local',
+			value : '1',
+			valueField : 'value',
+			displayField : 'text',
 
-					store : new Ext.data.SimpleStore({
-								fields : ['value', 'text'],
-								data : [['1', '1'], ['2', '2'], ['3', '3'],
-										['4', '4'], ['5', '5'], ['6', '6'],
-										['7', '7'], ['8', '8'], ['9', '9'],
-										['10', '10'], ['11', '11'],
-										['12', '12']]
-							})
-				});
+			store : new Ext.data.SimpleStore({
+				fields : ['value', 'text'],
+				data : [['1', '1'], ['2', '2'], ['3', '3'],
+				['4', '4'], ['5', '5'], ['6', '6'],
+				['7', '7'], ['8', '8'], ['9', '9'],
+				['10', '10'], ['11', '11'],
+				['12', '12']]
+			})
+		});
 
-		var repeatType = this.repeatType = new Ext.form.ComboBox({
-					hiddenName : 'repeat_type',
-					triggerAction : 'all',
-					editable : false,
-					selectOnFocus : true,
-					width : 200,
-					forceSelection : true,
-					mode : 'local',
-					value : '0',
-					valueField : 'value',
-					displayField : 'text',
-					store : new Ext.data.SimpleStore({
-								fields : ['value', 'text'],
-								data : [['0', GO.lang.noRecurrence],
-										['1', GO.lang.strDays],
-										['2', GO.lang.strWeeks],
-										['3', GO.lang.monthsByDate],
-										['4', GO.lang.monthsByDay],
-										['5', GO.lang.strYears]]
-							}),
-					hideLabel : true,
-					listeners : {
-						change : {
-							fn : checkDateInput,
-							scope : this
-						}
-					}
-				});
+		this.repeatType = new Ext.form.ComboBox({
+			hiddenName : 'repeat_type',
+			triggerAction : 'all',
+			editable : false,
+			selectOnFocus : true,
+			width : 200,
+			forceSelection : true,
+			mode : 'local',
+			value : '0',
+			valueField : 'value',
+			displayField : 'text',
+			store : new Ext.data.SimpleStore({
+				fields : ['value', 'text'],
+				data : [['0', GO.lang.noRecurrence],
+				['1', GO.lang.strDays],
+				['2', GO.lang.strWeeks],
+				['3', GO.lang.monthsByDate],
+				['4', GO.lang.monthsByDay],
+				['5', GO.lang.strYears]]
+			}),
+			hideLabel : true,
+			listeners : {
+				change : {
+					fn : checkDateInput,
+					scope : this
+				}
+			}
+		});
 
 		this.repeatType.on('select', function(combo, record) {
-					this.changeRepeat(record.data.value);
-				}, this);
+			this.changeRepeat(record.data.value);
+		}, this);
 
 		this.monthTime = new Ext.form.ComboBox({
-					hiddenName : 'month_time',
-					triggerAction : 'all',
-					selectOnFocus : true,
-					disabled : true,
-					width : 80,
-					forceSelection : true,
-					fieldLabel : GO.tasks.lang.atDays,
-					mode : 'local',
-					value : '1',
-					valueField : 'value',
-					displayField : 'text',
-					store : new Ext.data.SimpleStore({
-								fields : ['value', 'text'],
-								data : [['1', GO.lang.strFirst],
-										['2', GO.lang.strSecond],
-										['3', GO.lang.strThird],
-										['4', GO.lang.strFourth]]
-							})
-				});
+			hiddenName : 'month_time',
+			triggerAction : 'all',
+			selectOnFocus : true,
+			disabled : true,
+			width : 80,
+			forceSelection : true,
+			fieldLabel : GO.tasks.lang.atDays,
+			mode : 'local',
+			value : '1',
+			valueField : 'value',
+			displayField : 'text',
+			store : new Ext.data.SimpleStore({
+				fields : ['value', 'text'],
+				data : [['1', GO.lang.strFirst],
+				['2', GO.lang.strSecond],
+				['3', GO.lang.strThird],
+				['4', GO.lang.strFourth]]
+			})
+		});
 
-		var cb = [];
+		this.cb = [];
 		for (var day = 0; day < 7; day++) {
-			cb[day] = new Ext.form.Checkbox({
-						boxLabel : GO.lang.shortDays[day],
-						name : 'repeat_days_' + day,
-						disabled : true,
-						checked : false,
-						width : 'auto',
-						hideLabel : true,
-						laelSeperator : ''
-					});
+			this.cb[day] = new Ext.form.Checkbox({
+				boxLabel : GO.lang.shortDays[day],
+				name : 'repeat_days_' + day,
+				disabled : true,
+				checked : false,
+				width : 'auto',
+				hideLabel : true,
+				laelSeperator : ''
+			});
 		}
 
-		var repeatEndDate = this.repeatEndDate = new Ext.form.DateField({
-					name : 'repeat_end_date',
-					width : 100,
-					disabled : true,
-					format : GO.settings['date_format'],
-					allowBlank : true,
-					fieldLabel : GO.tasks.lang.repeatUntil,
-					listeners : {
-						change : {
-							fn : checkDateInput,
-							scope : this
-						}
-					}
-				});
+		this.repeatEndDate = this.repeatEndDate = new Ext.form.DateField({
+			name : 'repeat_end_date',
+			width : 100,
+			disabled : true,
+			format : GO.settings['date_format'],
+			allowBlank : true,
+			fieldLabel : GO.tasks.lang.repeatUntil,
+			listeners : {
+				change : {
+					fn : checkDateInput,
+					scope : this
+				}
+			}
+		});
 
-		var repeatForever = this.repeatForever = new Ext.form.Checkbox({
-					boxLabel : GO.tasks.lang.repeatForever,
-					name : 'repeat_forever',
-					checked : true,
-					disabled : true,
-					width : 'auto',
-					hideLabel : true,
-					laelSeperator : ''
-				});
+		this.repeatForever = new Ext.form.Checkbox({
+			boxLabel : GO.tasks.lang.repeatForever,
+			name : 'repeat_forever',
+			checked : true,
+			disabled : true,
+			width : 'auto',
+			hideLabel : true,
+			laelSeperator : ''
+		});
 
-		var recurrencePanel = new Ext.Panel({
-					title : GO.tasks.lang.recurrence,
-					bodyStyle : 'padding: 5px',
-					layout : 'form',
-					hideMode : 'offsets',
-					autoScroll : true,
-					defaults:{forceLayout:true},
-					items : [{
-								border : false,
-								layout : 'table',
-								defaults : {
-									forceLayout:true,
-									border : false,
-									layout : 'form',
-									bodyStyle : 'padding-right:3px'
-								},
-								items : [{
-											items : this.repeatEvery
-										}, {
-											items : this.repeatType
-										}]
-							}, {
-								border : false,
-								layout : 'table',
-								defaults : {
-									forceLayout:true,
-									border : false,
-									layout : 'form',
-									bodyStyle : 'padding-right:3px;white-space:nowrap'
-								},
-
-								items : [{
-											items : this.monthTime
-										}, {
-											items : cb[0]
-										}, {
-											items : cb[1]
-										}, {
-											items : cb[2]
-										}, {
-											items : cb[3]
-										}, {
-											items : cb[4]
-										}, {
-											items : cb[5]
-										}, {
-											items : cb[6]
-										}]
-							}, {
-								border : false,
-								layout : 'table',
-								defaults : {
-									forceLayout:true,
-									border : false,
-									layout : 'form',
-									bodyStyle : 'padding-right:3px'
-								},
-								items : [{
-											items : this.repeatEndDate
-										}, {
-											items : this.repeatForever
-										}]
-							}]
-				});
+		this.recurrencePanel = new Ext.Panel({
+			title : GO.calendar.lang.recurrence,
+			bodyStyle : 'padding: 5px',
+			layout : 'form',
+			hideMode : 'offsets',
+			defaults:{
+				forceLayout:true,
+				border:false
+			},
+			items : [{
+				fieldLabel : GO.calendar.lang.repeatEvery,
+				xtype : 'compositefield',
+				items : [this.repeatEvery,this.repeatType]
+			}, {
+				xtype : 'compositefield',
+				fieldLabel : GO.calendar.lang.atDays,
+				items : [this.monthTime,this.cb[1],this.cb[2],this.cb[3],this.cb[4],this.cb[5],this.cb[6],this.cb[0]]
+			}, {
+				fieldLabel : GO.calendar.lang.repeatUntil,
+				xtype : 'compositefield',
+				items : [this.repeatEndDate,this.repeatForever]
+			}
+			]
+		});
 
 		var remindDate = now.add(Date.DAY, -GO.tasks.reminderDaysBefore);
 		// start other options tab
 		var optionsPanel = new Ext.Panel({
 
-					title : GO.tasks.lang.options,
-					defaults : {
-						anchor : '100%'
+			title : GO.tasks.lang.options,
+			defaults : {
+				anchor : '100%'
+			},
+			bodyStyle : 'padding:5px',
+			layout : 'form',
+			hideMode : 'offsets',
+			autoScroll : true,
+			items : [{
+				xtype : 'checkbox',
+				boxLabel : GO.tasks.lang.remindMe,
+				hideLabel : true,
+				name : 'remind',
+				listeners : {
+					'check' : function(field, checked) {
+						this.formPanel.form.findField('remind_date')
+						.setDisabled(!checked);
+						this.formPanel.form.findField('remind_time')
+						.setDisabled(!checked);
 					},
-					bodyStyle : 'padding:5px',
-					layout : 'form',
-					hideMode : 'offsets',
-					autoScroll : true,
-					items : [{
-						xtype : 'checkbox',
-						boxLabel : GO.tasks.lang.remindMe,
-						hideLabel : true,
-						name : 'remind',						
-						listeners : {
-							'check' : function(field, checked) {
-								this.formPanel.form.findField('remind_date')
-										.setDisabled(!checked);
-								this.formPanel.form.findField('remind_time')
-										.setDisabled(!checked);
-							},
-							scope : this
-						}
-					}, {
-						xtype : 'datefield',
-						name : 'remind_date',
-						format : GO.settings.date_format,
-						value : remindDate.format(GO.settings['date_format']),
-						fieldLabel : GO.lang.strDate,
-						disabled : true
-					}, {
-						xtype : 'timefield',
-						name : 'remind_time',
-						format : GO.settings.time_format,
-						value : GO.tasks.reminderTime,
-						fieldLabel : GO.lang.strTime,
-						disabled : true
-					}]
-				});
+					scope : this
+				}
+			}, {
+				xtype : 'datefield',
+				name : 'remind_date',
+				format : GO.settings.date_format,
+				value : remindDate.format(GO.settings['date_format']),
+				fieldLabel : GO.lang.strDate,
+				disabled : true
+			}, {
+				xtype : 'timefield',
+				name : 'remind_time',
+				format : GO.settings.time_format,
+				value : GO.tasks.reminderTime,
+				fieldLabel : GO.lang.strTime,
+				disabled : true
+			}]
+		});
 
-		var items = [propertiesPanel, this.descriptionPanel, recurrencePanel, optionsPanel];
+		var items = [propertiesPanel, this.recurrencePanel, optionsPanel];
 
 
-                if(GO.customfields && GO.customfields.types["12"])
+		if(GO.customfields && GO.customfields.types["12"])
 		{
 			for(var i=0;i<GO.customfields.types["12"].panels.length;i++)
 			{
@@ -588,24 +544,24 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			}
 		}
 		this.tabPanel = new Ext.TabPanel({
-					activeTab : 0,
-					deferredRender : false,
-					// layoutOnTabChange:true,
-					border : false,
-					anchor : '100% 100%',
-					hideLabel : true,
-					items : items
-				});
+			activeTab : 0,
+			deferredRender : false,
+			// layoutOnTabChange:true,
+			border : false,
+			anchor : '100% 100%',
+			hideLabel : true,
+			items : items
+		});
 
 		var formPanel = this.formPanel = new Ext.form.FormPanel({
-					waitMsgTarget : true,
-					url : GO.settings.modules.tasks.url + 'action.php',
-					border : false,
-					baseParams : {
-						task : 'task'
-					},
-					items : this.tabPanel
-				});
+			waitMsgTarget : true,
+			url : GO.settings.modules.tasks.url + 'action.php',
+			border : false,
+			baseParams : {
+				task : 'task'
+			},
+			items : this.tabPanel
+		});
 	},
 
 	changeRepeat : function(value) {
@@ -667,7 +623,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 	disableDays : function(disabled) {
 		for (var day = 0; day < 7; day++) {
 			this.formPanel.form.findField('repeat_days_' + day)
-					.setDisabled(disabled);
+			.setDisabled(disabled);
 		}
 	}
 });
