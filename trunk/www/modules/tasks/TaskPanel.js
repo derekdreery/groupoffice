@@ -33,6 +33,10 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 						'<td colspan="2" class="display-panel-heading">{name}</td>'+
 					'</tr>'+
 					'<tr>'+
+						'<td>'+GO.tasks.lang.tasklist+':</td>'+
+						'<td>{tasklist_name}</td>'+
+					'</tr>'+
+					'<tr>'+
 						'<td>'+GO.tasks.lang.startsAt+':</td>'+
 						'<td>{start_date}</td>'+
 					'</tr>'+
@@ -70,8 +74,39 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 		{
 			this.template += GO.comments.displayPanelTemplate;
 		}
+
+
+		this.buttons=[this.continueTaskButton = new Ext.Button({
+			text:GO.tasks.lang.continueTask,
+			handler:function(){
+				if(!this.continueTaskDialog){
+					this.continueTaskDialog = new GO.tasks.ContinueTaskDialog({
+						listeners:{
+							save:function(){
+								this.reload();
+							},
+							scope:this
+						}
+					});
+				}
+
+				this.continueTaskDialog.show(this.data);
+			},
+			scope:this,
+			disabled:true
+		})];
 		
 		GO.tasks.TaskPanel.superclass.initComponent.call(this);
+	},
+	setData : function(data){
+		GO.tasks.TaskPanel.superclass.setData.call(this, data);
+
+		this.continueTaskButton.setDisabled(!data.write_permission);
+	},
+	reset : function(){
+		GO.tasks.TaskPanel.superclass.reset.call(this);
+
+		this.continueTaskButton.setDisabled(true);
 	}
 	
 	/*loadTask : function(task_id)

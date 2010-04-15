@@ -429,7 +429,13 @@ class tasks extends db
 		if(!isset($task['status']))
 		{
 			$task['status'] = 'ACCEPTED';
-		}	
+		}else
+		{
+			if($task['status']=='COMPLETED' && empty($task['completion_time']))
+			{
+				$task['completion_time']=time();
+			}
+		}
 		
 		global $GO_MODULES;
 		if(!isset($task['files_folder_id']) && isset($GO_MODULES->modules['files']))
@@ -499,6 +505,27 @@ class tasks extends db
 			$task['mtime']  = time();
 		}
 
+		if(!$old_task) {
+			$old_task = $this->get_task($task['id']);
+		}
+
+		if(!isset($task['name']))
+			$task['name']=$old_task['name'];
+
+		if(isset($task['status']))
+		{
+			if($task['status']=='COMPLETED' && $old_task['completion_time']==0)
+			{
+				$task['completion_time']=time();
+			}
+
+			if($task['status']!='COMPLETED' && $old_task['completion_time']>0)
+			{
+				$task['completion_time']=0;
+			}
+		}
+
+
 		if(isset($task['completion_time']) && $task['completion_time'] > 0 && $this->copy_recurring_completed($task['id'])) {
 			$task['rrule'] = '';
 			$task['repeat_end_time'] = 0;
@@ -512,9 +539,7 @@ class tasks extends db
 
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files'])) {
-			if(!$old_task) {
-				$old_task = $this->get_task($task['id']);
-			}
+			
 
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
@@ -1092,7 +1117,7 @@ class tasks extends db
 			//$cache['link_id'] = $this->f('link_id');
 			$cache['link_type']=12;
 			$cache['module']='tasks';
-			$cache['description']=sprintf($lang['tasks']['dueAtdate'], Date::get_timestamp($record['due_time'],false));
+			$cache['description']=sprintf($lang['tasks']['dueAtdate'], Date::get_timestamp($record['due_time'],false))."<br />".$record['description'];
 			$cache['type']=$lang['link_type'][12];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');

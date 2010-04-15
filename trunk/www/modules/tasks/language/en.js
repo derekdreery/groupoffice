@@ -45,3 +45,5 @@ GO.tasks.lang.defaultTasklist='Default tasklist';
 GO.tasks.lang.visibleTasklists='Visible tasklists';
 GO.tasks.lang.visible='Visible';
 GO.tasks.lang.selectIcalendarFile='Select an icalendar (*.ics) file';
+
+GO.tasks.lang.continueTask='Continue task';
