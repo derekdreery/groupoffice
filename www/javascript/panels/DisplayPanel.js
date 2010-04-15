@@ -129,7 +129,9 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	initComponent : function(){
 		this.autoScroll=true;
 		this.split=true;
-		this.tbar = this.createTopToolbar();
+		var tbar = this.createTopToolbar();
+		if(tbar)
+			this.tbar = tbar;
 
 		this.initTemplate();
 
@@ -149,7 +151,10 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	afterRender : function(){		
 		
 		GO.DisplayPanel.superclass.afterRender.call(this);
-		this.getTopToolbar().setDisabled(true);
+
+		var tbar = this.getTopToolbar();
+		if(tbar)
+			tbar.setDisabled(true);
 
 		this.body.on('click', this.onBodyClick, this);
 	},
