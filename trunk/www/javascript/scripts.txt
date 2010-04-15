@@ -22,9 +22,6 @@ modules/users/CompanyPanel.js
 javascript/windows/AboutDialog.js
 javascript/windows/LoginDialog.js
 
-javascript/layout/TableLayout.js
-
-
 javascript/data/JsonStore.js
 javascript/grids/GridPanel.js
 javascript/grids/GroupSummary.js
