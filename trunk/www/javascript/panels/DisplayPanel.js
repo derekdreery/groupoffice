@@ -1,3 +1,16 @@
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+
 GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	link_id: 0,
 	link_type : 0,
@@ -134,8 +147,11 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	},
 	
 	afterRender : function(){		
-		this.getTopToolbar().setDisabled(true);
+		
 		GO.DisplayPanel.superclass.afterRender.call(this);
+		this.getTopToolbar().setDisabled(true);
+
+		this.body.on('click', this.onBodyClick, this);
 	},
 	
 	getLinkName : function(){
@@ -174,7 +190,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	
 	setData : function(data)
 	{
-		this.body.removeAllListeners();
+		//this.body.removeAllListeners();
 		
 		data.link_type=this.link_type;
 		this.data=data;
@@ -204,8 +220,9 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 		
 		this.xtemplate.overwrite(this.body, data);			
 		
-		this.body.on('click', this.onBodyClick, this);		
+		//this.body.on('click', this.onBodyClick, this);
 	},
+
 	
 	onBodyClick :  function(e, target){
 		if(target.tagName!='A')
