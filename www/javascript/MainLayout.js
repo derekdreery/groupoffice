@@ -515,6 +515,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		
 		panel.show();
 
+		return panel;
+
 		/*var menuItem = this.startMenu.items.item('go-start-menu-'+item.moduleName);
 		menuItem.hide();
 
