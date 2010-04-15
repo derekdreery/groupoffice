@@ -34,3 +34,5 @@ GO.tasks.lang.defaultTasklist='Standaard takenlijst';
 GO.tasks.lang.visibleTasklists='Zichtbare taaklijsten';
 GO.tasks.lang.visible='Zichtbaar';
 GO.tasks.lang.selectIcalendarFile='Selecteer een icalendar (*.ics) bestand';
+
+GO.tasks.lang.continueTask='Vervolg taak';
