@@ -13,7 +13,7 @@ GO.files.filesTemplate = '<tpl if="files.length">'+
 							
 		'<tpl for="files">'+
 			'<tr>'+											
-				'<td><a class="go-grid-icon filetype-{extension}" href="#files_{[xindex-1]}">{name}</a></td>'+
+				'<td><a class="go-grid-icon filetype filetype-{extension}" href="#files_{[xindex-1]}">{name}</a></td>'+
 				'<td style="white-space:nowrap">{mtime}</td>'+
 			'</tr>'+
 		'</tpl>'+
