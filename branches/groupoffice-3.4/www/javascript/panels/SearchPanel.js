@@ -36,7 +36,7 @@ GO.grid.SearchPanel = function(config){
 		collapsible:true,
 		split:true,
 		border:true,
-		width:120
+		width:160
 	});
 	
 	this.filterPanel.on('change', function(grid, types){		

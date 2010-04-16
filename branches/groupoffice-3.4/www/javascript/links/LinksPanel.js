@@ -42,9 +42,8 @@ GO.grid.LinksPanel = function(config){
 	
 	this.linksTree = new GO.LinksTree({
 		id:config.id+'_tree',
-		region:'west',
-		split:true,
-		width:160
+		region:'center',
+		split:true
 	});
 	
 	this.linksTree.on('click', function(node)	{
@@ -204,8 +203,31 @@ GO.grid.LinksPanel = function(config){
 		layout:'card',
 		items:[this.linkPreviewPanels[0]]
 	});
+
+	this.linkTypeFilter = new GO.LinkTypeFilterPanel({
+		region:'south',
+		height:300
+	});
+	this.linkTypeFilter.on('change', function(grid, types){
+		this.linksGrid.store.baseParams.types = Ext.encode(types);
+		this.linksGrid.store.load();
+		delete this.linksGrid.store.baseParams.types;
+	}, this);
 	
-	config.items=[this.linksTree, this.linksGrid, this.previewPanel];
+	config.items=[
+			{
+				region:'west',
+				width:160,
+				layout:'border',
+				id:config.id+'_west',
+				items:[
+					this.linksTree,
+					this.linkTypeFilter
+				]
+			},
+			this.linksGrid,
+			this.previewPanel
+		];
 	
 	this.linksContextMenu = new GO.LinksContextMenu();
 	

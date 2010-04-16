@@ -6,7 +6,9 @@ GO.LinkTypeFilterPanel = function(config)
 	{
 		config = {};
 	}
-	
+
+	config.split=true;
+	config.resizable=true;
 	config.autoScroll=true;
 	
 	var checkColumn = new GO.grid.CheckColumn({
@@ -15,7 +17,7 @@ GO.LinkTypeFilterPanel = function(config)
 		width: 30
 	});
 	
-	config.title=GO.lang.strType;
+	//config.title=GO.lang.strType;
 	
 	this.filterGrid = new GO.grid.GridPanel({
 		cls:'go-grid3-hide-headers',
@@ -48,15 +50,18 @@ GO.LinkTypeFilterPanel = function(config)
 	
 	
 	var applyButton = new Ext.Button({
-		text:GO.lang.cmdApply,
+		iconCls:'btn-save',
+		text:GO.lang.applyMultiselect,
 		handler:function(){
 			this.applyFilter();
 		},
 		scope: this
 	});
+
+	config.tbar=[applyButton];
 	
 	config.items=[
-	this.filterGrid,
+	this.filterGrid/*,
 	new Ext.Panel({
 		border:false,
 		cls:'go-form-panel',
@@ -64,7 +69,7 @@ GO.LinkTypeFilterPanel = function(config)
 			new GO.form.HtmlComponent({html: '<br />'}), 
 			applyButton
 			]
-	})];
+	})*/];
 	
 	GO.LinkTypeFilterPanel.superclass.constructor.call(this, config);
 	
