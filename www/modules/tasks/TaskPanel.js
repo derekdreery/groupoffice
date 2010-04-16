@@ -84,6 +84,10 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 						listeners:{
 							save:function(){
 								this.reload();
+								var tasksModulePanel =GO.mainLayout.getModulePanel('tasks');
+								if(tasksModulePanel){
+									tasksModulePanel.gridPanel.store.reload();
+								}
 							},
 							scope:this
 						}
