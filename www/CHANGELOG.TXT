@@ -1,3 +1,9 @@
+2010/04/16 3.4.21
+- custom fields in templates
+- More export functions in projects / timetracking
+- Easier type filtering in global search and link browser window.
+- Small bug fixes
+
 2010/04/14 3.4.20
 - text_to_html function was broken
 

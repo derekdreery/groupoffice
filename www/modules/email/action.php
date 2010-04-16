@@ -306,7 +306,7 @@ try{
 
 					$draft = isset($_POST['draft']) && $_POST['draft']=='true';
 
-					if(empty($_POST['to']) && empty($_POST['cc']) && empty($_POST['bcc']) && $draft)
+					if(empty($_POST['to']) && empty($_POST['cc']) && empty($_POST['bcc']) && !$draft)
 					{
 						$response['feedback'] = $lang['email']['feedbackNoReciepent'];
 					}else

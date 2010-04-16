@@ -335,6 +335,7 @@ GO.lang.removeFormatting='Verwijder opmaak';
 GO.lang.insertHorizontalRule='Horizontale lijn invoegen';
 GO.lang.insertHRtext='Voer de breedte in procenten van de lijn in gevolgd door het % teken aan het einde, of stel een vaste breedte in zonder het procent teken.';
 GO.lang.cmdInsert='Invoegen';
-GO.lang.width='Breedte';
 
+GO.lang.width='Breedte';
 GO.lang.thankyou='Hartelijk dank';
+GO.lang.applyMultiselect='Multiselectie toepassen';

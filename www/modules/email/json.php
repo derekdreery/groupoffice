@@ -363,7 +363,7 @@ try{
 			{
 				$header_om  = '<br /><br /><font face="verdana" size="2">'.$lang['email']['original_message']."<br />";
 				$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".htmlspecialchars($content['subject'], ENT_QUOTES, 'UTF-8')."<br />";
-				$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".htmlspecialchars($content['from'], ENT_QUOTES, 'UTF-8')."<br />";
+				$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".htmlspecialchars($content['full_from'], ENT_QUOTES, 'UTF-8')."<br />";
 				$header_om .= "<b>".$lang['email']['to'].":&nbsp;</b>".htmlspecialchars($om_to, ENT_QUOTES, 'UTF-8')."<br />";
 				if(!empty($om_cc))
 				{
@@ -380,7 +380,7 @@ try{
 			{
 				$header_om  = "\n\n".$lang['email']['original_message']."\n";
 				$header_om .= $lang['email']['subject'].": ".$content['subject']."\n";
-				$header_om .= $lang['email']['from'].": ".$content['from']."\n";
+				$header_om .= $lang['email']['from'].": ".$content['full_from']."\n";
 				$header_om .= $lang['email']['to'].": ".$om_to."\n";
 				if(!empty($om_cc))
 				{

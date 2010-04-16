@@ -316,14 +316,15 @@ GO.email.EmailComposer = function(config) {
 		listeners:{
 			activate:function(){
 
-				if (Ext.isGecko){
-					Ext.EventManager.on(this.htmlEditor.getDoc(), {
+				var doc = this.htmlEditor.getDoc();				
+				if (Ext.isGecko){					
+					Ext.EventManager.on(doc, {
 						keypress: this.fireSubmit,
 						scope: this
 					});
 				}
 				if (Ext.isIE || Ext.isWebKit || Ext.isOpera) {
-					Ext.EventManager.on(this.htmlEditor.getDoc(), 'keydown', this.fireSubmit,
+					Ext.EventManager.on(doc, 'keydown', this.fireSubmit,
 						this);
 				}
 			},
