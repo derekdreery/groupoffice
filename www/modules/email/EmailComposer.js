@@ -317,13 +317,13 @@ GO.email.EmailComposer = function(config) {
 			activate:function(){
 
 				if (Ext.isGecko){
-					Ext.EventManager.on(this.htmlEditor.doc, {
+					Ext.EventManager.on(this.htmlEditor.getDoc(), {
 						keypress: this.fireSubmit,
 						scope: this
 					});
 				}
 				if (Ext.isIE || Ext.isWebKit || Ext.isOpera) {
-					Ext.EventManager.on(this.htmlEditor.doc, 'keydown', this.fireSubmit,
+					Ext.EventManager.on(this.htmlEditor.getDoc(), 'keydown', this.fireSubmit,
 						this);
 				}
 			},
