@@ -43,12 +43,13 @@ GO.grid.LinksGrid = function(config){
 	config['store'] = new GO.data.JsonStore({
 
 			url: BaseHref+'json.php',			
-			baseParams: {task: "links", link_id: this.link_id, link_type: this.link_type, folder_id: this.folder_id},
+			baseParams: {task: "links", link_id: this.link_id, link_type: this.link_type, folder_id: this.folder_id,type_filter:'true'},
 			root: 'results',
 			totalProperty: 'total',
 			id: 'link_and_type',
 			fields: ['icon','link_and_type', 'link_type','name','type','url','mtime','id','module', 'description', 'iconCls', 'link_description'],
 			remoteSort: true
+
 		});
 	config['store'].setDefaultSort('mtime', 'desc');
 

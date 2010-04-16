@@ -343,6 +343,14 @@ GO.addressbook.MainPanel = function(config)
 	config.tbar=new Ext.Toolbar({		
 			cls:'go-head-tb',
 			items: tbar});
+
+
+	/*config.listeners={
+		scope:this,
+		show:function(){
+			this.searchPanel.queryField.focus(true);
+		}
+	}*/
 	
 	
 	GO.addressbook.MainPanel.superclass.constructor.call(this, config);

@@ -6,7 +6,16 @@ Group-Office files and follow instructions.
 
 Also have a look at: http://www.group-office.com/wiki/Installation_manual
 
+If you are using the Professional version you also need to install the free
+Ioncube loaders. Download them from:
+
+http://www.ioncube.com/loaders.php
+
+
+
+
 UPGRADING FROM VERSION 3.0 TO FUTURE VERSIONS
+
 Take following steps:
 1. Backup your database
 2. Move away your old source files.

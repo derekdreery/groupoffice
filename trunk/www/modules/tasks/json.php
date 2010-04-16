@@ -284,6 +284,8 @@ try{
 				}
 			}else
 			{
+				$response['data']['write_permission']=true;
+				
 				$user_id = $_REQUEST['user_id'];
 				$tasklists = array();
 				$tasklists_name = array();
