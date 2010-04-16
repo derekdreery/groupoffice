@@ -666,6 +666,7 @@ class calendar extends db
 	{
 		$sql = "SELECT * FROM cal_views WHERE user_id='".$this->escape($user_id)."' AND name='".$this->escape($name)."'";
 		$this->query($sql);
+
 		if($this->next_record())
 		{
 			return $this->record;
