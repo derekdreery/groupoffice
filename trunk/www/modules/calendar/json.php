@@ -417,7 +417,8 @@ try {
 								'background'=>$event['background'],
 								'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
 								'repeats'=>!empty($event['rrule']),
-								'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time'])
+								'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time']),
+								'read_only'=> $event['read_only'] ? true : false
 				);
 			}
 

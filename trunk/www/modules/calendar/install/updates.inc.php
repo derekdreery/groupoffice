@@ -57,3 +57,4 @@ $updates[]= "ALTER TABLE `cal_views` ADD `owncolor` tinyint(1) NOT NULL default 
 
 $updates[]= "ALTER TABLE `cal_events` ADD INDEX ( `calendar_id` )";
 $updates[]= "ALTER TABLE `cal_events` ADD INDEX ( `busy` )";
+$updates[]= "ALTER TABLE `cal_events` ADD COLUMN `read_only` TINYINT(1) NOT NULL default '0'";

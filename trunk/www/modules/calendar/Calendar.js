@@ -1427,6 +1427,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	  
 	onDblClick : function(grid, event, actionData){
 
+		if(event.read_only && !event.contact_id)
+			return false;
+
 		if(event.repeats && actionData.singleInstance)
 		{
 			var formValues={};

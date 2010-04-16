@@ -939,17 +939,22 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		event.setXY(startRowPos);
 		event.setSize(snap["x"]-2, height);
 
-		event.on('mousedown', function(e, eventEl){
+		if(!eventData.read_only){
+			event.on('mousedown', function(e, eventEl){
 
-			eventEl = Ext.get(eventEl).findParent('div.x-calGrid-event-container', 4, true);
+				eventEl = Ext.get(eventEl).findParent('div.x-calGrid-event-container', 4, true);
 
-			this.selectEventElement(eventEl);
+				this.selectEventElement(eventEl);
 
-			this.clickedEventId=eventEl.id;
-			this.eventMouseUp=false;
-			this.startEventDrag(e, eventEl.id);
-			
-		}, this);
+				this.clickedEventId=eventEl.id;
+				this.eventMouseUp=false;
+				this.startEventDrag(e, eventEl.id);
+
+			}, this);
+			event.on('mouseup', function(){
+				this.eventMouseUp=true;
+			}, this);
+		}
 
 
 		event.on('dblclick', function(e, eventEl){
@@ -970,9 +975,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		//event.on('mouseover', function(e){this.el.focus();}, this);
 		
 
-		event.on('mouseup', function(){
-			this.eventMouseUp=true;
-		}, this);		
+			
 			
 		//add the event to the appointments array		
 		if(typeof(this.appointments[day])=='undefined')
