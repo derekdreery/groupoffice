@@ -240,9 +240,13 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 			if(!target)
 				return false;
 		}
+
+		
 		
 		if(target.tagName=='A')
-		{	
+		{
+			e.preventDefault();
+			
 			var href=target.attributes['href'].value;
 			if(GO.email && href.substr(0,6)=='mailto')
 			{
@@ -255,7 +259,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 					var email = href.substr(7);
 				}				
 
-				e.preventDefault();
+				//e.preventDefault();
 				
 				GO.email.addressContextMenu.showAt(e.getXY(), email);					
 				//this.fireEvent('emailClicked', email);			
@@ -264,8 +268,6 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 				var pos = href.indexOf('#link_');
 				if(pos>-1)
 				{
-					e.preventDefault();
-					
 					var index = href.substr(pos+6, href.length);		
 					var link = this.data.links[index];			
 					if(link.link_type=='folder')
@@ -291,6 +293,9 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 							var record = new GO.files.FileRecord(file);
 							GO.files.showFilePropertiesDialog(record.get('id'));
 						}
+					}else if(href!='#')
+					{
+						window.open(href);
 					}
 				}
 			}
