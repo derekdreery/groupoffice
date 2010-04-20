@@ -51,7 +51,7 @@ GO.files.UploadDialog = function(config) {
 			xtype:'textarea',
 			name:'comments',
 			fieldLabel:GO.files.lang.comments,
-			anchor:'-20',
+			anchor:'100%',
 			height:100
 	}];
 
@@ -83,8 +83,9 @@ GO.files.UploadDialog = function(config) {
 
 	this.upForm = new Ext.form.FormPanel({
 		fileUpload : true,
+		border:false,
 		waitMsgTarget : true,
-		autoScroll:true,
+		autoHeight:true,
 		baseParams: {
 			task: 'upload'
 		},
@@ -98,8 +99,13 @@ GO.files.UploadDialog = function(config) {
 	config.layout='fit';
 	config.resizable = false;
 	config.width = 500;
-	config.items = this.upForm;
+	config.items = {
+		autoScroll:true,
+		border:false,
+		items:[this.upForm]
+	}
 	config.height=400;
+	config.autoScroll=true;
 	config.closeAction = 'hide';
 	config.title = GO.lang.uploadFiles;
 	config.buttons = [{

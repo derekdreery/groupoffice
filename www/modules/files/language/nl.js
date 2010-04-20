@@ -21,5 +21,5 @@ GO.files.lang.file='Bestand';
 GO.files.lang.emptyList='Leeg lijst';
 GO.files.lang.newFiles='Nieuw';
 GO.files.lang.olderVersions='Oudere versies';
-GO.files.lang.uploadProperties='The properties below will be applied to all files uploaded with the "Small files" option';
+GO.files.lang.uploadProperties='Onderstaande eigenschappen worden toegepast op alle bestanden die dmv. de "Kleine bestanden" optie worden geüpload.';
 GO.files.lang.selectFiles= 'Selecteer bestanden';
