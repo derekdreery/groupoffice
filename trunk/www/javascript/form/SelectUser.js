@@ -45,12 +45,15 @@ GO.form.SelectUser = function(config){
 
 	if(!this.hiddenName)
 		this.hiddenName='user_id';
-	
-	this.setRemoteValue(GO.settings.user_id, GO.settings.name);
+
+	if(!config.startBlank){
+		this.setRemoteValue(GO.settings.user_id, GO.settings.name);
+		this.value=GO.settings.user_id;
+	}
 	
 	GO.form.SelectUser.superclass.constructor.call(this,{
 		displayField: 'name',		
-		value: GO.settings.user_id,
+		
 		valueField: 'id',
 		triggerAction: 'all',
 		selectOnFocus:true,
