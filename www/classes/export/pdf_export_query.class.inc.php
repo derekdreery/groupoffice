@@ -70,6 +70,10 @@ class pdf_export_query extends base_export_query{
 		$this->print_column_headers();
 
 		$this->pdf->SetTitle($_REQUEST['title']);
+		$this->pdf->SetSubject($_REQUEST['title']);
+		$this->pdf->SetAuthor($_SESSION['GO_SESSION']['name']);
+		$this->pdf->SetCreator('Group-Office '.$GLOBALS['GO_CONFIG']->version);
+		$this->pdf->SetKeywords($_REQUEST['title']);
 
 		//$this->totals=array();
 

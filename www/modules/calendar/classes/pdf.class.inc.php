@@ -33,6 +33,12 @@ class PDF extends TCPDF
 		$this->pageWidth =$this->getPageWidth()-$this->lMargin-$this->rMargin;
 
 		$this->SetAutoPageBreak(true, 30);
+
+		//$this->SetTitle($order['order_id']);
+		$this->SetSubject('Calendar print');
+		$this->SetAuthor($_SESSION['GO_SESSION']['name']);
+		$this->SetCreator('Group-Office '.$GO_CONFIG->version);
+		$this->SetKeywords('Calendar print');
 	}
 
 	function Footer(){
