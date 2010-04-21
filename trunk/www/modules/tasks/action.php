@@ -101,13 +101,24 @@ try {
 
 		case 'continue_task':
 
+			$GO_LANGUAGE->require_language_file('tasks');
+
+			$old_task= $tasks->get_task($_POST['task_id']);
+			$old_tasklist = $tasks->get_tasklist($old_task['tasklist_id']);
+			if($old_task['tasklist_id'] != $_POST['tasklist_id']){
+				$new_tasklist = $tasks->get_task($_POST['tasklist_id']);
+
+				$_POST['description'].= sprintf("\n\n".$lang['tasks']['tasklistChanged'], $old_tasklist['name'], $new_tasklist['name']);
+			}
+
+
 			$task['id']=$_POST['task_id'];
 			$task['due_time']=Date::to_unixtime($_POST['date']);
 			$task['status']=$_POST['status'];
 			$task['tasklist_id']=$_POST['tasklist_id'];
 			$task['reminder']=Date::to_unixtime($_POST['date'].' '.$_POST['remind_time']);
 
-			$tasks->update_task($task);
+			$tasks->update_task($task, $old_tasklist, $old_task);
 
 			if(isset($GO_MODULES->modules['comments']))
 			{

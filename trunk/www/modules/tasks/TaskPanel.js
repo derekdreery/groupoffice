@@ -45,6 +45,10 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 						'<td>{due_date}</td>'+
 					'</tr>'+
 					'<tr>'+
+						'<td>'+GO.lang.createdBy+':</td>'+
+						'<td>{user_name}</td>'+
+					'</tr>'+
+					'<tr>'+
 						'<td>'+GO.lang.strStatus+':</td>'+
 						'<td>{status_text}</td>'+
 					'</tr>'+

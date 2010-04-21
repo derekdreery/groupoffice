@@ -26,4 +26,4 @@ $lang['tasks']['call']='Call';
 $lang['tasks']['dueAtdate']='Due at %s';
 
 $lang['tasks']['list']='Tasklist';
-?>
+$lang['tasks']['tasklistChanged']="* tasklist changed from '%s' to '%s'";
