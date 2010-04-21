@@ -803,12 +803,14 @@ class files extends db {
 
 
 	function update_file($file) {
-
+		global $GO_EVENTS;
 		
 		//$file['mtime']=time();
 		$this->update_row('fs_files', 'id', $file);
 
 		$this->cache_file($file['id']);
+
+		$GO_EVENTS->fire_event('update_file', $params=array($file));
 	}
 
 	function get_folder($id) {

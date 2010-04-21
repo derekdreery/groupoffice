@@ -22,6 +22,11 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 
 	noFileBrowser:true,
 
+	/*
+	 *Can be filled by other modules to display extra info
+	 */
+	extraTemplateProperties : '',
+
 	editHandler : function(){
 		if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
 		{
@@ -67,24 +72,26 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
-						'<td>'+GO.lang.strType+'</td>'+
+						'<td>'+GO.lang.strType+':</td>'+
 						'<td>{type}</td>'+
 					'</tr>'+
 
 					'<tr>'+
-						'<td>'+GO.lang.strSize+'</td>'+
+						'<td>'+GO.lang.strSize+':</td>'+
 						'<td>{size}</td>'+
 					'</tr>'+
 
 					'<tr>'+
-						'<td>'+GO.lang.strCtime+'</td>'+
+						'<td>'+GO.lang.strCtime+':</td>'+
 						'<td>{ctime}</td>'+
 					'</tr>'+
 
 					'<tr>'+
-						'<td>'+GO.lang.strMtime+'</td>'+
+						'<td>'+GO.lang.strMtime+':</td>'+
 						'<td>{mtime}</td>'+
 					'</tr>'+
+
+					this.extraTemplateProperties +
 
 					/*'<tr>'+
 						'<td>'+GO.lang.Atime+'</td>'+
