@@ -357,3 +357,5 @@ GO.lang.cmdInsert='Insert';
 GO.lang.width='Width';
 GO.lang.thankyou='Thank you';
 GO.lang.applyMultiselect='Apply multiselect';
+
+GO.lang.createdBy='Created by';

@@ -339,3 +339,4 @@ GO.lang.cmdInsert='Invoegen';
 GO.lang.width='Breedte';
 GO.lang.thankyou='Hartelijk dank';
 GO.lang.applyMultiselect='Multiselectie toepassen';
+GO.lang.createdBy='Gemaakt door';

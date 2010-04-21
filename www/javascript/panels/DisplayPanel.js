@@ -189,7 +189,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 		//this.body.removeAllListeners();
 		this.body.update("");
 		this.data={};
-		
+		this.link_id=this.collapsedLinkId=0;
 		var tbar = this.getTopToolbar();
 		if(tbar)
 			tbar.setDisabled(true);
