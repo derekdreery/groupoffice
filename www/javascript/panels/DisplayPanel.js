@@ -186,7 +186,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	},
 	
 	reset : function(){
-		this.body.removeAllListeners();
+		//this.body.removeAllListeners();
 		this.body.update("");
 		this.data={};
 		
@@ -234,6 +234,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 
 	
 	onBodyClick :  function(e, target){
+
 		if(target.tagName!='A')
 		{
 			target = Ext.get(target).findParent('A', 10);
