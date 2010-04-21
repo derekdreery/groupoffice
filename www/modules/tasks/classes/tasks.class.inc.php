@@ -509,6 +509,9 @@ class tasks extends db
 			$old_task = $this->get_task($task['id']);
 		}
 
+		if(!isset($task['tasklist_id']))
+			$task['tasklist_id']=$old_task['tasklist_id'];
+
 		if(!isset($task['name']))
 			$task['name']=$old_task['name'];
 

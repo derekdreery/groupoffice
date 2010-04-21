@@ -24,4 +24,4 @@ $lang['tasks']['import_success']='%s taken werden geïmporteerd';
 $lang['tasks']['dueAtdate']='Verloopt op %s';
 
 $lang['tasks']['list']='Takenlijst';
-?>
+$lang['tasks']['tasklistChanged']="* takenlijst is veranderd van '%s' naar '%s'";

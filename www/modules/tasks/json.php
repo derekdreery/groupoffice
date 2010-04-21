@@ -166,6 +166,11 @@ try{
 			}
 			
 			if($_task!='task') {
+
+				$user = $GO_USERS->get_user($task['user_id']);
+
+				$response['data']['user_name']=String::format_name($user);
+
 				$response['data']['description']=String::text_to_html($response['data']['description']);
 
 				require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
@@ -357,7 +362,7 @@ try{
 					$task['status']='NEEDS-ACTION';
 				}
 
-				$tasks->update_task($task);
+				$tasks->update_task($task, false, $old_task);
 			}
 
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'due_time ASC, ctime';
