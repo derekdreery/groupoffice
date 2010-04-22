@@ -1481,7 +1481,10 @@ GO.files.openFile = function(record, store)
 		this.imageViewer.show(images, imgindex);
 			
 		break;
-		
+
+		case 'docx':
+		case 'xlsx':
+		case 'pptx':
 		case 'dwg':
 		case 'doc':
 		case 'odt':
