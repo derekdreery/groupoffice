@@ -95,9 +95,6 @@ GO.{module}.writable{centerpanel_related_friendly_multiple_ucfirst}Store = new G
 	});
 
 
-GO.mainLayout.onReady(function(){
-	/* {LINKDIALOGS} */
-});
 
 /*
  * This will add the module to the main tabpanel filled with all the modules

@@ -69,28 +69,17 @@ GO.{module}.{friendly_multiple_ucfirst}Grid = function(config){
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
 	
-	
-	<gotpl if="!$link_type">this.{friendly_single_js}Dialog = new GO.{module}.{friendly_single_ucfirst}Dialog();
-	    			    		
-		this.{friendly_single_js}Dialog.on('save', function(){   
-			this.store.reload();	    			    			
-		}, this);</gotpl><gotpl if="$link_type &gt; 0">	    			    		
-		GO.{module}.{friendly_single}Dialog.on('save', function(){   
-			this.store.reload();	    			    			
-		}, this);</gotpl>
-	
-	
 	config.tbar=[{
 			iconCls: 'btn-add',							
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				<gotpl if="!$link_type">
-	    	this.{friendly_single_js}Dialog.show();<gotpl if="$relation">
+	    	this.{friendly_single_js}Dialog();<gotpl if="$relation">
 	    	this.{friendly_single_js}Dialog.formPanel.form.setValues({{related_field_id}: this.store.baseParams.{related_field_id}});</gotpl>
 	    	</gotpl>
 	    	<gotpl if="$link_type &gt; 0">
-	    	GO.{module}.{friendly_single_js}Dialog.show();<gotpl if="$relation">
+	    	GO.{module}.show{friendly_single_usfirst}Dialog();<gotpl if="$relation">
 	    	GO.{module}.{friendly_single_js}Dialog.formPanel.form.setValues({{related_field_id}: this.store.baseParams.{related_field_id}});</gotpl>
 	    	</gotpl>
 	    	
@@ -106,18 +95,28 @@ GO.{module}.{friendly_multiple_ucfirst}Grid = function(config){
 			},
 			scope: this
 		}];
-	
-	
-	
-	GO.{module}.{friendly_multiple_ucfirst}Grid.superclass.constructor.call(this, config);
-	
-	this.on('rowdblclick', function(grid, rowIndex){
-		var record = grid.getStore().getAt(rowIndex);	
-		
-		<gotpl if="!$link_type">this.{friendly_single_js}Dialog.show(record.data.id);</gotpl>
-		<gotpl if="$link_type &gt; 0">GO.{module}.{friendly_single_js}Dialog.show(record.data.id);</gotpl>
-		}, this);
-	
+
+	config.listeners={
+		scope:this
+		,render:function(){
+			this.store.load();
+			<gotpl if="$link_type &gt; 0">
+			GO.{module}.{friendly_single_js}DialogListeners={
+				scope:this,
+				save:function(){
+					this.store.reload();
+				}
+			}</gotpl>
+		}
+		,rowdblclick:function(grid, rowIndex){
+			var record = grid.getStore().getAt(rowIndex);
+
+			<gotpl if="!$link_type">this.{friendly_single_js}Dialog.show(record.data.id);</gotpl>
+			<gotpl if="$link_type &gt; 0">GO.{module}.show{friendly_single_ucfirst}Dialog(record.data.id);</gotpl>
+		}
+	}
+
+	GO.{module}.{friendly_multiple_ucfirst}Grid.superclass.constructor.call(this, config);	
 };
 
 

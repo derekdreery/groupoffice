@@ -91,8 +91,7 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 				waitMsg:GO.lang['waitMsgLoad'],
 				success:function(form, action)
 				{					
-					<gotpl if="$authenticate">
-					this.setWritePermission(action.result.data.write_permission);					
+					<gotpl if="$authenticate">				
 					this.readPermissionsTab.setAcl(action.result.data.acl_id);
 					</gotpl>	
 					<gotpl if="$user_id">
@@ -110,9 +109,7 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 		}else 
 		{
 			<gotpl if="$authenticate">
-			this.setWritePermission(true);
 			this.readPermissionsTab.setAcl(0);
-
 			</gotpl>
 			GO.{module}.{friendly_single_ucfirst}Dialog.superclass.show.call(this);
 		}
@@ -131,15 +128,6 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 		</gotpl>
 	},
 	
-	<gotpl if="$authenticate">
-	setWritePermission : function(writePermission)
-	{
-		this.buttons[0].setDisabled(!writePermission);
-		this.buttons[1].setDisabled(!writePermission);
-		</gotpl>
-		<gotpl if="$authenticate">
-	},
-	</gotpl>
 	set{friendly_single_ucfirst}Id : function({friendly_single}_id)
 	{
 		this.formPanel.form.baseParams['{friendly_single}_id']={friendly_single}_id;
@@ -237,3 +225,37 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
 		});   
 	}
 });
+
+<gotpl if="$link_type &gt; 0">
+GO.{module}.show{friendly_single_ucfirst}Dialog = function({friendly_single}_id, config){
+
+	if(!GO.{module}.{friendly_single}Dialog)
+		GO.{module}.{friendly_single}Dialog = new GO.{module}.{friendly_single_ucfirst}Dialog();
+
+	if(GO.{module}.{friendly_single}DialogListeners){
+		GO.{module}.{friendly_single}Dialog.on(GO.{module}.{friendly_single}DialogListeners);
+		delete GO.{module}.{friendly_single}DialogListeners;
+	}
+
+	GO.{module}.{friendly_single}Dialog.show({friendly_single}_id, config);
+}
+
+GO.linkHandlers[{link_type}]=function(id){
+	if(!GO.{module}.linkWindow){
+		var {friendly_single}Panel = new GO.{module}.{friendly_single_ucfirst}Panel();
+		GO.{module}.linkWindow= new GO.LinkViewWindow({
+			title: GO.{friendly_single}s.lang.{friendly_single},
+			items: {friendly_single}Panel,
+			{friendly_single}Panel: {friendly_single}Panel,
+			closeAction:"hide"
+		});
+	}
+	GO.{module}.linkWindow.{friendly_single}Panel.load(id);
+	GO.{module}.linkWindow.show();
+}
+
+GO.linkPreviewPanels[{link_type}]=function(config){
+	config = config || {};
+	return new GO.{module}.{friendly_single_ucfirst}Panel(config);
+}
+</gotpl>
