@@ -123,6 +123,14 @@ if(!is_int($_SESSION['GO_SESSION']['timezone']))
 go_debug('['.date('Y-m-d G:i').'] Start of new request: '.$_SERVER['PHP_SELF']);
 if($GO_CONFIG->debug){
 	function groupoffice_error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
+
+		// if error has been supressed with an @
+    /*
+		 * Doesn't seem to work
+		 * if (error_reporting() == 0) {
+        return;
+    }*/
+		
 		$err_str = "PHP error: $errfile:$errline $errstr ($errno)";
 
 		global $GO_CONFIG;
