@@ -227,7 +227,9 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 			this.fileBrowseButton.setDisabled(data.files_folder_id<1);
 		}
 		
-		this.xtemplate.overwrite(this.body, data);			
+		this.xtemplate.overwrite(this.body, data);
+
+		this.body.scrollTo('top', 0);
 		
 		//this.body.on('click', this.onBodyClick, this);
 	},
