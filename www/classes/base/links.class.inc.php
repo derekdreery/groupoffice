@@ -37,6 +37,7 @@
  * 13=installation
  * 14=Project reports
  * 15=Custom database
+ * 16=fs_docbundles
  * 20=Tickets
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
