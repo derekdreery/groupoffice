@@ -18,6 +18,20 @@ require_once($GO_CONFIG->class_path.'tcpdf/tcpdf.php');
 class pdf_export_query extends base_export_query{
 	var $extension='pdf';
 
+	var $row_body_column=false;
+
+	function init_columns(){
+		parent::init_columns();
+
+		if(!empty($_SESSION['GO_SESSION']['export_queries'][$_REQUEST['query']]['pdf_row_body_column'])){
+			$this->row_body_column = $_SESSION['GO_SESSION']['export_queries'][$_REQUEST['query']]['pdf_row_body_column'];
+
+			$key = array_search($this->row_body_column, $this->columns);
+			unset($this->columns[$key]);
+			unset($this->headers[$key]);
+		}
+	}
+
 	function download_headers()
 	{
 		$browser = detect_browser();
@@ -39,10 +53,13 @@ class pdf_export_query extends base_export_query{
 
 
 	function print_column_headers(){
+
+		//$this->pdf->SetFillColor(241,241,241);
+		//$this->pdf->SetTextColor(255,255,255);
 		$this->pdf->cellWidth = $this->pdf->pageWidth/count($this->columns);
 		if(count($this->headers)){
 			for($i=0;$i<count($this->headers);$i++)
-			{
+			{				
 				$this->pdf->Cell($this->pdf->cellWidth, 20, $this->headers[$i], 1,0,'L', 1);
 			}
 			$this->pdf->Ln();
@@ -56,36 +73,46 @@ class pdf_export_query extends base_export_query{
 		}
 	}
 
-	function export($fp){
-		parent::export($fp);
-		global $GO_USERS, $lang, $GO_MODULES;
-
+	function init_pdf(){
 		$this->pdf = new export_pdf();
 		$this->pdf->AddPage();
 
 		//green border
 		$this->pdf->SetDrawColor(125,165, 65);
 		$this->pdf->SetFillColor(248, 248, 248);
-
-		$this->print_column_headers();
+		$this->pdf->SetTextColor(0,0,0);
 
 		$this->pdf->SetTitle($_REQUEST['title']);
 		$this->pdf->SetSubject($_REQUEST['title']);
 		$this->pdf->SetAuthor($_SESSION['GO_SESSION']['name']);
 		$this->pdf->SetCreator('Group-Office '.$GLOBALS['GO_CONFIG']->version);
 		$this->pdf->SetKeywords($_REQUEST['title']);
+	}
 
+	function increase_totals($record){
+		if(is_array($this->totals)){
+			foreach($this->totals as $field=>$value)
+			{
+				$this->totals[$field]+=$record[$field];
+			}
+		}
+	}
+
+	function export($fp){
+		parent::export($fp);
+		global $GO_USERS, $lang, $GO_MODULES;
+
+		$this->init_pdf();
+		
+		$this->print_column_headers();
+		
 		//$this->totals=array();
 
 
+		$fill=false;
 		while($record = $this->db->next_record())
 		{
-			if(is_array($this->totals)){
-				foreach($this->totals as $field=>$value)
-				{
-					$this->totals[$field]+=$record[$field];
-				}
-			}
+			$this->increase_totals($record);
 
 			if(!count($this->columns))
 			{
@@ -96,11 +123,6 @@ class pdf_export_query extends base_export_query{
 				}
 				$this->print_column_headers();
 			}
-
-			/*if(is_array($this->q) && isset($this->q['method']))
-			{
-				call_user_func_array(array($this->q['class'], $this->q['method']),array(&$record, $cf));
-			}*/
 
 			$this->format_record($record);
 
@@ -128,9 +150,15 @@ class pdf_export_query extends base_export_query{
 
 			foreach($this->columns as $index)
 			{
-				$this->pdf->MultiCell($this->pdf->cellWidth,$lines*($this->pdf->font_size+2)+8, $record[$index],1,'L',0,0);
+				$this->pdf->MultiCell($this->pdf->cellWidth,$lines*($this->pdf->font_size+2)+8, $record[$index],1,'L',$fill,0);
 			}
 			$this->pdf->Ln();
+
+			if($this->row_body_column){
+				$this->pdf->MultiCell($this->pdf->cellWidth*count($this->columns),$lines*($this->pdf->font_size+2)+8, $record[$this->row_body_column],1,'L',$fill,1);
+				$this->pdf->Ln(5);
+			}
+			//$fill=!$fill;
 		}
 
 
