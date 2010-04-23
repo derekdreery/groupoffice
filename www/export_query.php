@@ -15,16 +15,26 @@
 require('Group-Office.php');
 require_once($GO_CONFIG->class_path.'export/export_query.class.inc.php');
 
+
+
 $type = $_REQUEST['type'];
+
+
 $filename = $type.'.class.inc.php';
 
-$file = $GO_CONFIG->class_path.'export/'.$filename;
-if(!file_exists($file)){
-	$file = $GO_CONFIG->file_storage_path.'customexports/'.$filename;
+if(isset($_REQUEST['exporter_directory']) && file_exists($_REQUEST['exporter_directory'].$filename)){
+	$file = $_REQUEST['exporter_directory'].$filename;
+}else
+{
+	$file = $GO_CONFIG->class_path.'export/'.$filename;
+	if(!file_exists($file)){
+		$file = $GO_CONFIG->file_storage_path.'customexports/'.$filename;
+	}
+	if(!file_exists($file)){
+		die('Custom export class not found.');
+	}
 }
-if(!file_exists($file)){
-	die('Custom export class not found.');
-}
+
 require_once($file);
 
 $eq = new $type();
