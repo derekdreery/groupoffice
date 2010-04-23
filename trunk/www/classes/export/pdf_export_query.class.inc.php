@@ -75,8 +75,6 @@ class pdf_export_query extends base_export_query{
 
 	function init_pdf(){
 		$this->pdf = new export_pdf();
-		$this->pdf->AddPage();
-
 		//green border
 		$this->pdf->SetDrawColor(125,165, 65);
 		$this->pdf->SetFillColor(248, 248, 248);
@@ -90,7 +88,7 @@ class pdf_export_query extends base_export_query{
 	}
 
 	function increase_totals($record){
-		if(is_array($this->totals)){
+		if(isset($this->totals) && is_array($this->totals)){
 			foreach($this->totals as $field=>$value)
 			{
 				$this->totals[$field]+=$record[$field];
@@ -106,8 +104,7 @@ class pdf_export_query extends base_export_query{
 		
 		$this->print_column_headers();
 		
-		//$this->totals=array();
-
+		$this->pdf->AddPage();
 
 		$fill=false;
 		while($record = $this->db->next_record())
@@ -162,7 +159,7 @@ class pdf_export_query extends base_export_query{
 		}
 
 
-		if(count($this->totals))
+		if(isset($this->totals) && count($this->totals))
 		{
 			$this->pdf->Ln();
 			$this->pdf->Cell($this->pdf->getPageWidth(),20,$lang['common']['totals'].':');
@@ -289,6 +286,7 @@ class export_pdf extends TCPDF
 
 	function H2($title)
 	{
+
 		$this->SetFont($this->font,'',14);
 		$this->Cell($this->getPageWidth()-$this->lMargin-$this->rMargin,24, $title,0,1);
 		$this->SetFont($this->font,'',$this->font_size);

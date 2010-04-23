@@ -22,8 +22,10 @@ $type = $_REQUEST['type'];
 
 $filename = $type.'.class.inc.php';
 
-if(isset($_REQUEST['exporter_directory']) && file_exists($_REQUEST['exporter_directory'].$filename)){
-	$file = $_REQUEST['exporter_directory'].$filename;
+//$GO_CONFIG->root_path.$_REQUEST['export_directory'].$filename;
+
+if(isset($_REQUEST['export_directory']) && file_exists($GO_CONFIG->root_path.$_REQUEST['export_directory'].$filename)){
+	$file = $GO_CONFIG->root_path.$_REQUEST['export_directory'].$filename;
 }else
 {
 	$file = $GO_CONFIG->class_path.'export/'.$filename;
@@ -36,6 +38,7 @@ if(isset($_REQUEST['exporter_directory']) && file_exists($_REQUEST['exporter_dir
 }
 
 require_once($file);
+
 
 $eq = new $type();
 $eq->download_headers();
