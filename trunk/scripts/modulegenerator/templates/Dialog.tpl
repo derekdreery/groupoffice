@@ -61,7 +61,7 @@ GO.{module}.{friendly_single_ucfirst}Dialog = function(config){
 	this.addEvents({'save' : true});	
 }
 
-Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, Ext.Window,{
+Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, GO.Window,{
 	
 	show : function ({friendly_single}_id, config) {
 
