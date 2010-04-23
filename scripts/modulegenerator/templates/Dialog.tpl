@@ -178,14 +178,16 @@ Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, GO.Window,{
 	
 	buildForm : function () {
 		<gotpl if="$link_type &gt; 0">
-		this.selectLinkField = new GO.form.SelectLink();
+		this.selectLinkField = new GO.form.SelectLink({
+			anchor:'-20'
+		});
 		</gotpl>		
 		this.propertiesPanel = new Ext.Panel({
 			title:GO.lang['strProperties'],			
 			cls:'go-form-panel',			
 			layout:'form',
 			autoScroll:true,
-			items:[<gotpl if="$link_type &gt; 0">this.selectLinkField,</gotpl>{FORMFIELDS}]
+			items:[{FORMFIELDS}<gotpl if="$link_type &gt; 0">this.selectLinkField</gotpl>]
 		});
 
 		var items  = [this.propertiesPanel];		
