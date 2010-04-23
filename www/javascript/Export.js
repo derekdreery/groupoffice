@@ -1,5 +1,10 @@
 GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 
+	/*
+	 * Pass extra type radio buttons with this config option
+	 */
+	customTypes : [],
+
 	initComponent : function() {
 
 
@@ -12,6 +17,10 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 				});
 			}
 		}
+
+		for(var i=0,max=this.customTypes.length;i<max;i++)
+			this.formPanelItems[0].items.push(this.customTypes[i]);
+
 
 
 		Ext.apply(this, {
@@ -124,12 +133,12 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 		if (GO.util.empty(this.title))
 			this.title = this.query
 
-		this.loadParams = {
+		Ext.apply(this.loadParams, {
 			task : 'email_export_query',
 			query : this.query,
 			columns : columns.join(','),
 			title : this.title
-		};
+		});
 
 		if (this.subtitle) {
 			this.loadParams.subtitle = this.subtitle;

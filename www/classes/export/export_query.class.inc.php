@@ -53,16 +53,13 @@ class base_export_query{
 
 	function __construct(){
 		$this->db = new db();
-
+		$this->q = $_SESSION['GO_SESSION']['export_queries'][$_REQUEST['query']];
 		$this->title = $_REQUEST['title'];
 	}
 
 	function query(){
-		$this->q = $_SESSION['GO_SESSION']['export_queries'][$_REQUEST['query']];
-
 		$params = array();
 		$types='';
-
 
 		if(is_array($this->q))
 		{
