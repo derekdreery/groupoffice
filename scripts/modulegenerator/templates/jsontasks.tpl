@@ -130,7 +130,7 @@
 
 					foreach($delete_{friendly_multiple} as ${friendly_single}_id)
 					{
-						${module}->delete_{friendly_single}(addslashes(${friendly_single}_id));
+						${module}->delete_{friendly_single}(${friendly_single}_id);
 					}
 				}catch(Exception $e)
 				{
