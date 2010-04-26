@@ -1401,8 +1401,6 @@ class calendar extends db
 		$sql = "SELECT * FROM cal_events ".
 			"WHERE participants_event_id=".$this->escape($participants_event_id);
 
-		go_debug($sql);
-
 		if(!empty($skip_event_id))
 			$sql .= " AND id!=".$this->escape($skip_event_id);
 
