@@ -980,6 +980,7 @@ tbar.push(new Ext.Toolbar.Separator());
 		if(this.rendered)
 		{
 			GO.email.search_type = 'from';
+			this.messagesGrid.showUnreadButton.toggle(false);
 			this.messagesGrid.store.baseParams['search'] = sender;
 			this.messagesGrid.setSearchFields('from', sender);
 			
