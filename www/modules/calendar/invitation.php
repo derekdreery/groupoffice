@@ -27,6 +27,10 @@ $event_id = isset($_REQUEST['event_id']) ? ($_REQUEST['event_id']) : 0;
 
 $user = $GO_USERS->get_user_by_email($email);
 
+if($user && !$GO_SECURITY->has_permission($user['id'], $GO_MODULES->modules['calendar']['acl_id'])){
+	$user=false;
+}
+
 if($user && $GO_SECURITY->user_id!=$user['id']){
 	$GO_SECURITY->logout();
 }

@@ -931,9 +931,15 @@ class calendar extends db
 
 	
 	
-	function get_user_calendars($user_id,$start=0,$offset=0)
+	function get_user_calendars($user_id,$start=0,$offset=0, $group_id=1)
 	{
-		$sql = "SELECT * FROM cal_calendars WHERE user_id='".$this->escape($user_id)."' ORDER BY id ASC";	
+		$sql = "SELECT * FROM cal_calendars WHERE user_id=".$this->escape($user_id);
+
+		if($group_id>0){
+			$sql .= ' AND group_id='.$group_id;
+		}
+
+		$sql .= " ORDER BY id ASC";
 		$this->query($sql);
 		$count= $this->num_rows();
 		
