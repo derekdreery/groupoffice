@@ -331,7 +331,7 @@ try {
 			$event_id=$event['id'];
 			$group_id = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
 			$calendar_id = $event['calendar_id'];
-			$check_conflicts = isset($_POST['check_conflicts']) ? $_POST['check_conflicts'] : 0;
+			$check_conflicts = isset($_POST['check_conflicts']) && !empty($_POST['busy']) ? $_POST['check_conflicts'] : 0;
 
 			$date_format = $_SESSION['GO_SESSION']['date_format'];
 
