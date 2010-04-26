@@ -1368,14 +1368,17 @@ class calendar extends db
 			unset($event['user_id'], $event['calendar_id'], $event['participants_event_id']);						
 			
 			$cal = new calendar();
-			if(!empty($old_event['participants_event_id'])){
+			/*if(!empty($old_event['participants_event_id'])){
 				$sql = "SELECT * FROM cal_events WHERE id!=".$this->escape($event['id'])." AND (participants_event_id=".$this->escape($old_event['participants_event_id'])." OR id=".$this->escape($old_event['participants_event_id']).")";
 			}else
 			{
 				$sql = "SELECT * FROM cal_events WHERE participants_event_id=".$this->escape($event['id']);
-			}
+			 * $cal->query($sql);
+			}*/
 
-			$cal->query($sql);
+			$participants_event_id=!empty($old_event['participants_event_id']) ? $old_event['participants_event_id'] : $event['id'];
+			$cal->get_participants_events($participants_event_id, $event['id']);
+			
 			while($old_event = $cal->next_record())
 			{
 				$event['id']=$cal->f('id');
@@ -1393,6 +1396,33 @@ class calendar extends db
 	
 		return $r;
 	}
+
+	function get_participants_events($participants_event_id, $skip_event_id=0){
+		$sql = "SELECT * FROM cal_events ".
+			"WHERE participants_event_id=".$this->escape($participants_event_id);
+
+		go_debug($sql);
+
+		if(!empty($skip_event_id))
+			$sql .= " AND id!=".$this->escape($skip_event_id);
+
+		$this->query($sql);
+		return $this->num_rows();
+	}
+
+	function add_exception_for_all_participants($participants_event_id, $exception){
+		$cal = new calendar();
+
+		$this->get_participants_events($participants_event_id);
+		while($event = $this->next_record()){
+			$exception['event_id']=$event['id'];
+
+
+			$cal->add_exception($exception);
+		}
+
+	}
+
 
 	function search_events(
 	$user_id,
