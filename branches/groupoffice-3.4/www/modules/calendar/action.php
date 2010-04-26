@@ -623,9 +623,9 @@ try {
 					$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
 							$cal->event_to_html($event).
 							'<p>'.$lang['calendar']['acccept_question'].'</p>'.
-							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
+							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$participants_event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
 							'&nbsp;|&nbsp;'.
-							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
+							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$participants_event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
 
 					//create ics attachment
 					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');

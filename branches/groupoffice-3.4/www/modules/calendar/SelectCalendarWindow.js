@@ -46,11 +46,28 @@ SelectCalendarWindow = function(){
 		},
 		show : function(event_id){
 
-			this.selectCalendar = new GO.calendar.SelectCalendar({
+			this.selectCalendar = new GO.form.ComboBox({
 				value:GO.calendar.defaultCalendar.id,
 				remoteText:GO.calendar.defaultCalendar.name,
-				fieldLabel:GO.calendar.lang.selectCalendarForAppointment
-			});		
+				fieldLabel:GO.calendar.lang.selectCalendarForAppointment,
+				store:new GO.data.JsonStore({
+					url: GO.settings.modules.calendar.url+'json.php',
+					baseParams: {
+						'task': 'user_calendars'
+					},
+					root: 'results',
+					totalProperty: 'total',
+					id: 'id',
+					fields:['id','name'],
+					remoteSort:true
+				}),
+				displayField:'name',
+				valueField:'id',
+				triggerAction:'all',
+				editable: false,
+				forceSelection: true,
+				emptyText:GO.lang.strPleaseSelect
+			});
 	
 
 			this.window = new Ext.Window({

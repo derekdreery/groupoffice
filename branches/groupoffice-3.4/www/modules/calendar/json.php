@@ -671,6 +671,14 @@ try {
 			}
 			break;
 
+		case 'user_calendars':
+			$response['total'] =$cal->get_user_calendars($GO_SECURITY->user_id);
+
+			while($record =$cal->next_record()) {
+				$response['results'][] = $record;
+			}
+			break;
+
 		case 'writable_calendars':
 
 			if(isset($_REQUEST['delete_keys'])) {
@@ -707,8 +715,8 @@ try {
 			}
 
 			$response['results']=array();
-			while($cal->next_record(DB_ASSOC)) {
-				$record = $cal->record;
+			while($record =$cal->next_record()) {
+
 				$group = $cal2->get_group($record['group_id']);
 				$record['group_name'] = $group['name'];
 
