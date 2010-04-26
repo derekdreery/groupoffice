@@ -144,10 +144,18 @@ GO.CheckerWindow = function(config){
 	
 	this.checkerGrid = new GO.CheckerPanel();
 	config.items=this.checkerGrid;
+
+	config.listeners={
+		scope:this,
+		show:function(){
+			GO.blinkTitle.blink(this.checkerGrid.store.getCount()+' reminders');
+		},
+		hide: function(){
+			GO.blinkTitle.blink(false);
+		}
+	};
 	
 	GO.CheckerWindow.superclass.constructor.call(this, config);
-	
-
 	
 	this.addEvents({changed : true});
 
@@ -302,6 +310,8 @@ GO.Checker = function(){
 };
 
 Ext.extend(GO.Checker, Ext.util.Observable, {
+
+	lastCount : 0,
 			
 	interval : 300000,
 	
@@ -334,8 +344,10 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 							if(data.reminders)
 				   		{
 				   			this.checkerWindow.checkerGrid.store.loadData({results: data.reminders});
-				   			if(!this.reminderIcon.isDisplayed())
+				   			if(this.lastCount != this.checkerWindow.checkerGrid.store.getCount())
 				   			{
+									this.lastCount = this.checkerWindow.checkerGrid.store.getCount();									
+									
 				   				GO.playAlarm();
 				   				
 				   				this.checkerWindow.show();				   			
