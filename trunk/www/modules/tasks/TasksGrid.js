@@ -286,7 +286,8 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 						}else
 						{
 							//dirty, but it works for updating other grids like on the summary
-							GO.tasks.taskDialog.fireEvent('save', GO.tasks.taskDialog, reponseParams.task_id);
+							if(GO.tasks.taskDialog)
+								GO.tasks.taskDialog.fireEvent('save', GO.tasks.taskDialog, reponseParams.task_id);
 							
 									
 							this.store.reload();

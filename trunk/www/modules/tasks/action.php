@@ -111,6 +111,12 @@ try {
 				$_POST['description'].= sprintf("\n\n".$lang['tasks']['tasklistChanged'], $old_tasklist['name'], $new_tasklist['name']);
 			}
 
+			if($old_task['status'] != $_POST['status']){
+				$new_tasklist = $tasks->get_task($_POST['tasklist_id']);
+
+				$_POST['description'].= sprintf("\n\n".$lang['tasks']['statusChanged'], $lang['tasks']['statuses'][$old_task['status']], $lang['tasks']['statuses'][$_POST['status']]);
+			}
+
 
 			$task['id']=$_POST['task_id'];
 			$task['due_time']=Date::to_unixtime($_POST['date']);
