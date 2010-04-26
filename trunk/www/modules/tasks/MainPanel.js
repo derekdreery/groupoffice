@@ -381,7 +381,7 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 });
 
 
-GO.tasks.showTaskDialog = function(task_id){
+GO.tasks.showTaskDialog = function(config){
 
 	if(!GO.tasks.taskDialog)
 		GO.tasks.taskDialog = new GO.tasks.TaskDialog();
@@ -393,7 +393,7 @@ GO.tasks.showTaskDialog = function(task_id){
 		delete GO.tasks.taskDialogListeners;
 	}
 
-	GO.tasks.taskDialog.show(task_id);
+	GO.tasks.taskDialog.show(config);
 }
 
 
