@@ -34,6 +34,7 @@ javascript/grids/RowAction.js
 javascript/grids/RadioColumn.js
 
 javascript/common.js
+javascript/blinkTitle.js
 javascript/state/HttpProvider.js
 
 javascript/plugins/PanelCollapsedTitle.js

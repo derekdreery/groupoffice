@@ -14,6 +14,7 @@
 Ext.namespace('GO.util');
 
 
+
 GO.util.empty = function(v)
 {
 	if(!v)
@@ -677,3 +678,6 @@ if(GO.settings && GO.settings.time_format){
 					['20', '20'], ['25', '25'], ['30', '30'], ['35', '35'],
 					['40', '40'], ['45', '45'], ['50', '50'], ['55', '55']];
 }
+
+
+
