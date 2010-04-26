@@ -1359,7 +1359,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		document.location.href=GO.settings.modules.email.url+
 		'zip_attachments.php?account_id='+this.account_id+
 		'&mailbox='+encodeURIComponent(this.mailbox)+
-		'&uid='+this.messagePanel.uid;	
+		'&uid='+this.messagePanel.uid+'&filename='+encodeURIComponent(this.messagePanel.data.subject);
 	},
 	
 	showComposer : function(values)
