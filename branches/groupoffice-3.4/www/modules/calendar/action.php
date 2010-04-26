@@ -141,12 +141,15 @@ try {
 
 				//an instance of a recurring event was modified. We must create an exception for the
 				//recurring event.
-				$exception['event_id'] = $event_id;
+				//$exception['event_id'] = $event_id;
 
 				$event_start_time = $event['start_time'];
 				$exception['time'] = mktime(date('G', $event_start_time),date('i', $event_start_time), 0, date('n', $exceptionDate), date('j', $exceptionDate), date('Y', $exceptionDate));
 
-				$cal->add_exception($exception);
+				$exception_event = $cal->get_event($event_id);
+				$cal->add_exception_for_all_participants($exception_event['participants_event_id'], $exception);
+
+				//$cal->add_exception($exception);
 			}else {
 				$cal->delete_event($event_id);
 			}
@@ -181,7 +184,8 @@ try {
 
 					//die(date('Ymd : G:i', $exception['time']));
 
-					$cal->add_exception($exception);
+					//$cal->add_exception($exception);
+					$cal->add_exception_for_all_participants($old_event['participants_event_id'], $exception);
 
 					//now we copy the recurring event to a new single event with the new time
 					$update_event['rrule']='';
@@ -449,9 +453,13 @@ try {
 					}
 
 					if(isset($_REQUEST['exception_event_id']) && $_REQUEST['exception_event_id'] > 0) {
-						$exception['event_id'] = ($_REQUEST['exception_event_id']);
+						//$exception['event_id'] = ($_REQUEST['exception_event_id']);
 						$exception['time'] = strtotime(($_POST['exceptionDate']));
-						$cal->add_exception($exception);
+						//$cal->add_exception($exception);
+
+						$exception_event = $cal->get_event($_REQUEST['exception_event_id']);
+
+						$cal->add_exception_for_all_participants($exception_event['participants_event_id'], $exception);
 
 						//for sync update the timestamp
 						$update_recurring_event=array();
