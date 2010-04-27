@@ -214,3 +214,10 @@ $lang['common']['running_sys_upgrade']='Running required system update';
 $lang['common']['sys_upgrade_text']='One moment please. All output will be logged.';
 $lang['common']['click_here_to_contine']='Click here to continue';
 $lang['common']['parentheses_invalid_error']='Parentheses in your query are invalid. Please correct them.';
+
+
+$lang['common']['nReminders']='%s reminders';
+$lang['common']['oneReminder']='1 reminder';
+
+//Example: you have 1 reminders in Group-Office.
+$lang['common']['youHaveReminders']='You have %s in %s.';

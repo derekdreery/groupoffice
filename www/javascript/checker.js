@@ -148,10 +148,10 @@ GO.CheckerWindow = function(config){
 	config.listeners={
 		scope:this,
 		show:function(){
-			GO.blinkTitle.blink(this.checkerGrid.store.getCount()+' reminders');
+			//GO.blinkTitle.blink(this.checkerGrid.store.getCount()+' reminders');
 		},
 		hide: function(){
-			GO.blinkTitle.blink(false);
+			//GO.blinkTitle.blink(false);
 		}
 	};
 	
@@ -313,7 +313,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 
 	lastCount : 0,
 			
-	interval : 300000,
+	interval : 60000,
 	
 	init : function(){
 		
@@ -352,6 +352,17 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 				   				
 				   				this.checkerWindow.show();				   			
 				   				this.reminderIcon.setDisplayed(true);
+
+									//console.log(GO.hasFocus);
+
+									if(!GO.hasFocus){
+										GO.reminderPopup = GO.util.popup({
+											width:400,
+											height:100,
+											url:BaseHref+'reminder.php?count='+this.lastCount,
+											target:'groupofficeReminderPopup'
+										});
+									}
 				   			}		   			
 				   		}else
 				   		{

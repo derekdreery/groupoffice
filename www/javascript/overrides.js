@@ -16,6 +16,15 @@
  */
 
 
+/*testing
+Ext.TaskMgr.start({
+	run: function(){
+		document.title=GO.hasFocus ? 'Focus' : 'No focus';
+	},
+	interval: 1000
+});*/
+
+
 if(Ext.version=="2.3.0"){
 
 	Ext.isFunction = function(obj){

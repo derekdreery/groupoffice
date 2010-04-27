@@ -15,6 +15,8 @@
 $root_uri = $GO_CONFIG->debug ? $GO_CONFIG->host : $GO_CONFIG->root_path;
 
 $scripts=array();
+//important to load focus first
+$scripts[]=$root_uri.'javascript/focus.js';
 $scripts[]=$root_uri.'ext/adapter/ext/ext-base.js';
 
 if($GO_CONFIG->debug) {
