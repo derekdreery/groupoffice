@@ -146,14 +146,16 @@ Ext.extend(GO.calendar.SummaryGroupPanel, Ext.grid.GridPanel, {
 			}, this);
 
 		this.on("rowdblclick", function(grid, rowClicked, e){
-			if(grid.selModel.selections.items[0].json.contact_id)
+
+			var record = grid.store.getAt(rowClicked);
+
+			if(record.data.contact_id)
 			{
-				GO.linkHandlers[2].call(this, grid.selModel.selections.items[0].json.contact_id);
+				GO.linkHandlers[2].call(this, record.data.contact_id);
 			}else
-			{
-				var event_id = grid.selModel.selections.keys[0];
+			{				
 				GO.calendar.eventDialog.show({
-					event_id: event_id
+					event_id: record.data.event_id
 				});
 			}
 		}, this);

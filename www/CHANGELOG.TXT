@@ -1,5 +1,6 @@
 2010/04/? 3.4.23
 - Some bugs with participants were fixed
+- Subject of message as filename for zip of attachments
 
 2010/04/26 3.4.22
 - GOTA opens office 2007 files by default now.
