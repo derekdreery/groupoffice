@@ -206,3 +206,9 @@ $lang['common']['sys_upgrade_text']='Een ogenblik geduld a.u.b. Alle uitvoer wor
 $lang['common']['click_here_to_contine']='Klik hier om door te gaan';
 
 $lang['common']['parentheses_invalid_error']='De haakjes in uw zoekopdracht zijn ongeldig. Corrigeer deze a.u.b.';
+
+$lang['common']['nReminders']='%s herinneringen';
+$lang['common']['oneReminder']='1 herinnering';
+
+//Example: you have 1 reminders in Group-Office.
+$lang['common']['youHaveReminders']='U heeft %s in %s.';

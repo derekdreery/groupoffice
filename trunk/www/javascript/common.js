@@ -14,7 +14,6 @@
 Ext.namespace('GO.util');
 
 
-
 GO.util.empty = function(v)
 {
 	if(!v)
