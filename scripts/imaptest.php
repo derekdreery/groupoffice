@@ -21,7 +21,9 @@ $uids = array_splice($uids, 0, 1);
 //echo count($uids);
 
 
-$headers = $imap->get_message_headers($uids);
-var_dump($headers);
+//$headers = $imap->get_message_headers($uids);
+//var_dump($headers);
+
+$imap->get_message_structure($uids[0]);
 
 $imap->disconnect();
