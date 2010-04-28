@@ -143,6 +143,7 @@ if($GO_CONFIG->debug){
     go_debug($err_str);
 	}
 	//error_reporting(E_ALL & ~E_STRICT);
+	ini_set('error_reporting', E_ALL);
 	set_error_handler("groupoffice_error_handler", E_ALL);
 }
 
