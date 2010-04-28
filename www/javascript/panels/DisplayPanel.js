@@ -333,6 +333,16 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 			});
 		}
 	},
+
+	setTitle : function(title){
+		if(typeof(this.title)!='undefined'){
+			GO.DisplayPanel.superclass.setTitle.call(this, title);
+		}else if(this.ownerCt)
+		{
+			//we are in a window
+			this.ownerCt.setTitle(title);
+		}
+	},
 	
 	reload : function(){
 		if(this.data.id)
