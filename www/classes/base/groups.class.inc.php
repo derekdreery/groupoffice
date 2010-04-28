@@ -214,10 +214,7 @@ class GO_GROUPS extends db
       " user_id='".$this->escape($user_id)."' AND group_id='".$this->escape($group_id)."'";
 		$this->query($sql);
 
-		if ($this->num_rows() > 0)
-		return true;
-		else
-		return false;
+		return ($this->num_rows() > 0);
 	}
 
 	/**
