@@ -19,11 +19,7 @@ GO.{module}.{friendly_single_ucfirst}Dialog = function(config){
 	}
 	
 	this.buildForm();
-	
-	var focusFirstField = function(){
-		this.propertiesPanel.items.items[0].focus();
-	};
-	
+
 	config.collapsible=true;
 	config.maximizable=true;
 	config.layout='fit';
@@ -34,7 +30,6 @@ GO.{module}.{friendly_single_ucfirst}Dialog = function(config){
 	config.closeAction='hide';
 	config.title= GO.{module}.lang.{friendly_single_js};					
 	config.items= this.formPanel;
-	config.focus= focusFirstField.createDelegate(this);
 	config.buttons=[{
 			text: GO.lang['cmdOk'],
 			handler: function(){
@@ -62,6 +57,10 @@ GO.{module}.{friendly_single_ucfirst}Dialog = function(config){
 }
 
 Ext.extend(GO.{module}.{friendly_single_ucfirst}Dialog, GO.Window,{
+
+	focus : function(){
+		this.propertiesPanel.items.items[0].focus();
+	},
 	
 	show : function ({friendly_single}_id, config) {
 
