@@ -173,6 +173,12 @@ function go_debug($text, $config=false)
 			$text = var_export($text, true);
 		}
 
+		if(PHP_SAPI=='cli')
+		{
+			echo 'DEBUG: '.$text."\n\n";
+			return;
+		}
+
 		if(!isset($_SESSION['GO_SESSION']['debug_log']))
 		$_SESSION['GO_SESSION']['debug_log']=$config->file_storage_path.'debug.log';
 
