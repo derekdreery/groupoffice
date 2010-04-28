@@ -212,3 +212,5 @@ $lang['common']['oneReminder']='1 herinnering';
 
 //Example: you have 1 reminders in Group-Office.
 $lang['common']['youHaveReminders']='U heeft %s in %s.';
+
+$lang['common']['createdBy']='Gemaakt door';

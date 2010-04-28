@@ -188,7 +188,8 @@ class GoSwift extends Swift_Mailer{
 		$headers->addTextHeader("X-Mailer", "Group-Office ".$GO_CONFIG->version);
 		$headers->addTextHeader("X-MimeOLE", "Produced by Group-Office ".$GO_CONFIG->version);
 
-		$this->set_to($email_to);
+		if(!empty($email_to))
+			$this->set_to($email_to);
 	}
 
 	function set_to($email_to)
