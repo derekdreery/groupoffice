@@ -4,7 +4,7 @@ class imap_base {
 
 	var $max_read=false;
 
-		var $imap_search_charsets = array(
+	var $imap_search_charsets = array(
 					'UTF-8',
 					'US-ASCII',
 					'');
@@ -14,7 +14,7 @@ class imap_base {
 					'CC',         'TO',      'SIZE',      'UNSEEN',
 					'SEEN',       'FLAGGED', 'UNFLAGGED', 'ANSWERED',
 					'UNANSWERED', 'DELETED', 'UNDELETED', 'TEXT',
-					'ALL',
+					'ALL'
 	);
 
 
@@ -705,7 +705,7 @@ class imap extends imap_base {
 	/* use the SORT extension to get a sorted UID list */
 	private function server_side_sort($sort, $reverse, $filter) {
 		go_debug("server_side_sort($sort, $reverse, $filter");
-		
+
 		$this->clean($sort, 'keyword');
 		$this->clean($filter, 'keyword');
 		$command = 'UID SORT ('.$sort.') US-ASCII '.$filter."\r\n";
@@ -1013,17 +1013,17 @@ class imap extends imap_base {
 						}
 					}
 					$headers[$uid] = array(
-						'uid' => $uid,
-						'flags' => $flags,
-						'internal_date' => $internal_date,
-						'size' => $size,
-						'date' => $date,
-						'from' => $from,
-						'to' => $to,
-						'subject' => $subject,
-						'content-type' => $content_type,
-						'timestamp' => time(),
-						'charset' => $cset);
+									'uid' => $uid,
+									'flags' => $flags,
+									'internal_date' => $internal_date,
+									'size' => $size,
+									'date' => $date,
+									'from' => $from,
+									'to' => $to,
+									'subject' => $subject,
+									'content-type' => $content_type,
+									'timestamp' => time(),
+									'charset' => $cset);
 				}
 			}
 		}
@@ -1034,5 +1034,25 @@ class imap extends imap_base {
 			}
 		}
 		return $final_headers;
+	}
+
+	//todo
+	public function get_quota() {
+
+	}
+
+	function get_message_structure($uid) {
+		$this->clean($uid, 'uid');
+		$part_num = 1;
+		$struct = array();
+		$command = "UID FETCH $uid BODYSTRUCTURE\r\n";
+		$this->send_command($command);
+		$result = $this->get_response(false, true);
+		var_dump($result);
+		while (isset($result[0][0]) && isset($result[0][1]) && $result[0][0] == '*' && strtoupper($result[0][1]) == 'OK') {
+			array_shift($result);
+		}
+		$status = $this->check_response($result, true);
+
 	}
 }
