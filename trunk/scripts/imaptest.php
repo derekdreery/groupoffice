@@ -3,9 +3,7 @@ require('../www/Group-Office.php');
 require($GO_CONFIG->class_path.'mail/imap.class.inc.php');
 
 $imap = new imap();
-//$ret = $imap->connect('mail.imfoss.nl', 143, 'test@intermesh.nl', 'test', false);
-
-$ret = $imap->connect('imap.domeneshop.no', 143, 'nri3', '7MQPHvwz', false);
+$ret = $imap->connect('mail.imfoss.nl', 143, 'test@intermesh.nl', 'test', false);
 
 var_dump($ret);
 //$folders = $imap->get_folders();
@@ -18,7 +16,7 @@ $mailbox = $imap->select_mailbox('INBOX');
 
 $uids = $imap->sort_mailbox('ARRIVAL');
 
-$uids = array_splice($uids, 0, 30);
+$uids = array_splice($uids, 0, 1);
 
 //echo count($uids);
 
