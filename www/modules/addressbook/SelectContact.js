@@ -29,7 +29,7 @@ GO.addressbook.SelectContact = function(config){
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',	    
-        fields: ['id', 'cf', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular'],
+        fields: ['id', 'cf', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular', 'company_id'],
 	    remoteSort: true
 	});
 	
