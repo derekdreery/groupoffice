@@ -667,7 +667,7 @@ class GO_CONFIG {
 	 * @access  public
 	 */
 
-	var $mtime = '20100421';
+	var $mtime = '20100429';
 
 	#group configuration
 	/**
@@ -789,6 +789,15 @@ class GO_CONFIG {
 	var $language_path = 'language';
 
 	/**
+	 * Original tmpdir. The user_id is appended (/tmp/1/) to the normal tmpdir.
+	 * In some cases you don't want that.
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $orig_tmpdir = '';
+
+	/**
 	 * Database object
 	 *
 	 * @var     object
@@ -832,6 +841,7 @@ class GO_CONFIG {
 			$this->$key=$value;
 		}
 
+		$this->orig_tmpdir=$this->tmpdir;
 
 		if(empty($this->db_user)) {
 		//Detect some default values for installation if root_path is not set yet
@@ -880,6 +890,8 @@ class GO_CONFIG {
 
 		// url to user configuration apps
 		$this->configuration_url = $this->host.$this->configuration_url.'/';
+
+		
 
 
 		if($this->debug) {			
