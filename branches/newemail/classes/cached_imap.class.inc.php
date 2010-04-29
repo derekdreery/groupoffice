@@ -301,46 +301,10 @@ class cached_imap extends imap{
 			}
 		}
 
-		return parent::get_message_part($uid, $part_no, $transfer, $part_charset, $peek);
+		return parent::get_message_part($uid, $message_part, $peek);
 	}
 
-	/**
-	 * Get one message with the structure
-	 *
-	 * @param int $uid The unique identifier of the
-	 * @param string $part Get a specific part of a message
-	 * @access public
-	 * @return array The E-mail message elements
-	 */
-	function get_message($uid, $fetchstructure=true, $nocache=false) {
 
-		parent::get_message($uid, $fetchstructure);
-		if($nocache)
-		{
-			return $this->message;
-		}
-		if ($this->message) {
-
-			if(is_object($uid))
-			{
-				$uids = array($uid->uid);
-			}else
-			{
-				$uids = array($uid);
-			}
-			$this->get_cached_messages($this->folder['id'], $uids);
-			$values=$this->email->next_record();
-
-			if($values)
-			{
-				$this->message['new']=$values['new'];
-				$this->message['answered']=$values['answered'];
-				$this->message['flagged']=$values['flagged'];
-				$this->message['priority']=$values['priority'];
-			}
-		}
-		return $this->message;
-	}
 
 	function get_message_with_body($uid, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false, $peek=false) {
 		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $lang;
@@ -382,13 +346,20 @@ class cached_imap extends imap{
 			return $message;
 		}
 
-		if(!$this->conn){
+		if(!$this->handle){
 			if(!$this->open($this->account, $this->folder['name'])){
 				throw new Exception(sprintf($lang['email']['feedbackCannotConnect'], $this->account['host'],  $this->last_error(), $this->account['port']));
 			}
 		}
 		
-		$message = $this->get_message($uid);
+		//$message = $this->get_message($uid);
+		if(!$values){
+			$headers = parent::get_message_headers(array($uid));
+			$message=$this->imap_message_to_cache($headers[0]);
+		}else
+		{
+			$message=$values;
+		}
 
 		if(!$message){
 			throw new Exception($lang['email']['errorGettingMessage']);
@@ -406,15 +377,15 @@ class cached_imap extends imap{
 		$to=array();
 		if(!empty($message['to']))
 		{
-			foreach($message['to'] as $address)
+			$addresses = $RFC822->parse_address_list($message['to']);
+			foreach($addresses as $address)
 			{
-				$message['to_string'].= $address.', ';
-				$address=$RFC822->parse_address_list($address);
-				$to[] = array('email'=>$address[0]['email'],
-				'name'=>$address[0]['personal']);
+				$message['to_string'].= $RFC822->write_address($address['personal'], $address['email']).', ';
+				
+				$to[] = array('email'=>$address['email'],
+				'name'=>$address['personal']);
 			}
-			$message['to_string']=substr($message['to_string'],0,-2);
-			
+			$message['to_string']=substr($message['to_string'],0,-2);			
 		}else
 		{
 			$to[]=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
@@ -426,29 +397,39 @@ class cached_imap extends imap{
 		$cc=array();
 		if(!empty($message['cc']))
 		{
-			foreach($message['cc'] as $address)
+			$addresses = $RFC822->parse_address_list($message['cc']);
+			foreach($addresses as $address)
 			{
-				$message['cc_string'].= $address.', ';
-				$address=$RFC822->parse_address_list($address);
-				$cc[] = array('email'=>$address[0]['email'],
-				'name'=>$address[0]['personal']);
+				$message['cc_string'].= $RFC822->write_address($address['personal'], $address['email']).', ';
+
+				$cc[] = array('email'=>$address['email'],
+				'name'=>$address['personal']);
 			}
 			$message['cc_string']=substr($message['cc_string'],0,-2);
+		}else
+		{
+			$cc[]=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
 		}
 		$message['cc']=$cc;
 
-		$bcc=array();
+
+		//TODO get bcc from IMAP server
 		$message['bcc_string']='';
+		$bcc=array();
 		if(!empty($message['bcc']))
 		{
-			foreach($message['bcc'] as $address)
+			$addresses = $RFC822->parse_address_list($message['bcc']);
+			foreach($addresses as $address)
 			{
-				$message['bcc_string'].= $address.', ';
-				$address=$RFC822->parse_address_list($address);
-				$bcc[] = array('email'=>$address[0]['email'],
-				'name'=>$address[0]['personal']);
+				$message['bcc_string'].= $RFC822->write_address($address['personal'], $address['email']).', ';
+
+				$bcc[] = array('email'=>$address['email'],
+				'name'=>$address['personal']);
 			}
 			$message['bcc_string']=substr($message['bcc_string'],0,-2);
+		}else
+		{
+			$bcc[]=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
 		}
 		$message['bcc']=$bcc;
 
@@ -459,7 +440,8 @@ class cached_imap extends imap{
 		}
 		//$message['subject']= htmlspecialchars($message['subject'], ENT_COMPAT, 'UTF-8');
 
-		
+
+		$struct = $this->get_message_structure($uid);
 
 		/*
 		 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
@@ -468,21 +450,41 @@ class cached_imap extends imap{
 		$html_alternative=false;
 		$plain_alternative=false;
 		
-		for($i=0;$i<count($message['parts']);$i++) {
-			if(stripos($message['parts'][$i]['mime'],'html')!==false && (strtolower($message['parts'][$i]['type'])=='alternative' || strtolower($message['parts'][$i]['type'])=='related')) {
-				$html_alternative=true;
-			}
-			if(stripos($message['parts'][$i]['mime'],'plain')!==false && (strtolower($message['parts'][$i]['type'])=='alternative' || strtolower($message['parts'][$i]['type'])=='related')) {
-				$plain_alternative=true;
-			}
-		}
-
+		
 
 		//go_debug($html_alternative);
 
 		//$message['blocked_images']=0;
 		$message['html_body']='';
 		$message['plain_body']='';
+
+		$body_struct = array_shift($struct);
+
+		if(isset($body_struct['subs'])){
+			foreach($body_struct['subs'] as $part_no => $body_part){
+				if($body_part['subtype']=='plain'){
+					$message['plain_body']=$this->get_message_part_decoded($uid,$part_no,$body_part['encoding'], $body_part['charset']);
+				}else
+				{
+					$message['html_body']=$this->get_message_part_decoded($uid,$part_no,$body_part['encoding'], $body_part['charset']);
+				}
+			}
+		}else
+		{
+			$part_no=1;
+			if($body_struct['subtype']=='plain'){
+				$message['plain_body']=$this->get_message_part_decoded($uid,$part_no,$body_struct['encoding'], $body_struct['charset']);
+			}else
+			{
+				$message['html_body']=$this->get_message_part_decoded($uid,$part_no,$body_struct['encoding'], $body_struct['charset']);
+			}
+		}
+
+
+		$message['html_body']=String::convert_html($message['html_body']);
+
+		return $message;
+
 
 		$attachments=array();
 
@@ -492,19 +494,7 @@ class cached_imap extends imap{
 			$default_mime = 'text/plain';
 		}
 
-		$part_count = count($message['parts']);
-		if($part_count==1) {
-			//if there's only one part use the message parameters.
-			if(stripos($message['parts'][0]['mime'],'plain')!==false)
-				$message['parts'][0]['mime']=$default_mime;
-
-			//go_debug($message['content_transfer_encoding']);
-			//go_debug($message['parts'][0]['transfer']);
-
-			if(!empty($message['content_transfer_encoding']) && (empty($message['parts'][0]['transfer']) || strtolower($message['parts'][0]['transfer'])=='7bit' || strtolower($message['parts'][0]['transfer'])=='8bit'))
-				$message['parts'][0]['transfer']=$message['content_transfer_encoding'];
-		}
-
+		
 		//go_debug($message['parts']);
 
 		while($part = array_shift($message['parts'])) {
@@ -719,42 +709,7 @@ class cached_imap extends imap{
 					//go_debug($message);
 					
 					//trim values for mysql insertion
-					$message['to']=substr($message['to'],0, 255);
-					$message['subject']=substr($message['subject'],0,100);
-					$message['from']=substr($message['from'],0,100);
-					if(isset($message['reply-to']))
-						$message['reply_to']=substr($message['reply-to'],0,100);
-					$message['udate']=intval($message['internal_udate']);
-					if(isset($message['disposition-notification-to']))
-						$message['notification']=$message['disposition-notification-to'];
-					
-					$message['new']=empty($message['seen']) || !empty($message['recent']);
-					$message['content_type']=empty($message['content-type']);
-					$message['priority']=isset($message['x-priority']) ? intval($message['x-priority']) : 3;
-
-					unset(
-								$message['seen'],
-								$message['recent'],
-								$message['disposition-notification-to'],
-								$message['reply-to'],
-								$message['date'],
-								$message['internal_date'],
-								$message['internal_udate'],
-								$message['content-type'],
-								$message['x-priority'],
-								$message['charset']
-								);
-
-
-					$messages[$message['uid']]=$message;
-					$messages[$message['uid']]['cached']=false;
-
-					$message['folder_id']=$this->folder['id'];
-					$message['account_id']=$this->account['id'];
-
-					//we don't need this in the database
-					unset($message['cc']);
-
+					$message = $this->imap_message_to_cache($message);
 					$this->add_cached_message($message);
 				}
 			}
@@ -785,6 +740,45 @@ class cached_imap extends imap{
 			}
 		}
 		return $sorted_messages;
+	}
+
+
+	function imap_message_to_cache($message){
+		$message['to']=substr($message['to'],0, 255);
+		$message['subject']=substr($message['subject'],0,100);
+		$message['from']=substr($message['from'],0,100);
+		if(isset($message['reply-to']))
+			$message['reply_to']=substr($message['reply-to'],0,100);
+		$message['udate']=intval($message['internal_udate']);
+		if(isset($message['disposition-notification-to']))
+			$message['notification']=$message['disposition-notification-to'];
+
+		$message['new']=empty($message['seen']) || !empty($message['recent']);
+		$message['content_type']=empty($message['content-type']);
+		$message['priority']=isset($message['x-priority']) ? intval($message['x-priority']) : 3;
+
+		unset(
+					$message['seen'],
+					$message['recent'],
+					$message['disposition-notification-to'],
+					$message['reply-to'],
+					$message['date'],
+					$message['internal_date'],
+					$message['internal_udate'],
+					$message['content-type'],
+					$message['x-priority'],
+					$message['charset'],
+					$message['cc']
+					);
+
+
+		$messages[$message['uid']]=$message;
+		$messages[$message['uid']]['cached']=false;
+
+		$message['folder_id']=$this->folder['id'];
+		$message['account_id']=$this->account['id'];
+
+		return $message;
 	}
 
 	function set_filters($filters)

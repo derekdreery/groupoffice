@@ -45,7 +45,7 @@ function get_all_mailbox_nodes($account_id, $folder_id){
 		{
 			$folder_name = $email->f('name');
 		}
-		$folder_name = imap::utf7_imap_decode($folder_name);
+		$folder_name = imap::utf7_decode($folder_name);
 
 		$response[] = array(
 				'text'=>$folder_name,
@@ -110,7 +110,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 		}
 		}*/
 
-		$unseen = $imap->get_unseen();
+		$unseen = $imap->get_unseen($email->f('name'));
 
 		if($email->f('name')=='INBOX')
 		{
@@ -562,6 +562,7 @@ try{
 
 			case 'message':
 
+				require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
 				$RFC822 = new RFC822();
 
 				$account_id = $_REQUEST['account_id'];
@@ -615,7 +616,7 @@ try{
 				$response['sender']=htmlspecialchars($response['sender'], ENT_COMPAT, 'UTF-8');
 				$response['from']=htmlspecialchars($response['from'], ENT_COMPAT, 'UTF-8');
 				$response['subject']=htmlspecialchars($response['subject'], ENT_COMPAT, 'UTF-8');
-				$response['reply-to']=htmlspecialchars($response['reply-to'], ENT_COMPAT, 'UTF-8');
+				$response['reply-to']=htmlspecialchars($response['reply_to'], ENT_COMPAT, 'UTF-8');
 				for($i=0;$i<count($response['to']);$i++){
 					$response['to'][$i]=array(
 						'email'=>htmlspecialchars($response['to'][$i]['email'], ENT_COMPAT, 'UTF-8'),
