@@ -42,7 +42,7 @@ $lang['email']['calendar']='calendar';
 
 $lang['email']['quotaError']="Your mailbox is full. Empty your trash folder first. If it is already empty and your mailbox is still full, you must disable the Trash folder to delete messages from other folders. You can disable it at:\n\nSettings -> Accounts -> Double click account -> Folders.";
 
-$lang['email']['draftsDisabled']="Message could not be saved because the 'Drafts' folder is disabled.<br /><br />Go to Settings -> Accounts -> Double click account -> Folders to configure it.";
+$lang['email']['draftsDisabled']="Message could not be saved because the 'Drafts' folder is disabled.<br /><br />Go to E-mail -> Administration -> Accounts -> Double click account -> Folders to configure it.";
 $lang['email']['noSaveWithPop3']='Message could not be saved because a POP3 account does not support this.';
 
 $lang['email']['goAlreadyStarted']='Group-Office has already been started. The e-mail composer is now loaded in Group-Office. Close this window and compose your message in Group-Office.';
