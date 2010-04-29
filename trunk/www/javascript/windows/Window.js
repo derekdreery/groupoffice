@@ -33,18 +33,20 @@ GO.Window = Ext.extend(Ext.Window,{
 	beforeShow : function() {
 		GO.Window.superclass.beforeShow.call(this);
 
-		var vpH=GO.viewport.getEl().getHeight();
-		var vpW=GO.viewport.getEl().getWidth();
-		var center=false;
+		if(GO.viewport){
+			var vpH=GO.viewport.getEl().getHeight();
+			var vpW=GO.viewport.getEl().getWidth();
+			var center=false;
 
-		if (this.height > vpH){
-			this.setHeight(vpH);
+			if (this.height > vpH){
+				this.setHeight(vpH);
+			}
+			if(this.width > vpW) {
+				this.setWidth(vpW);
+			}
+			if(center)
+				this.center();
 		}
-		if(this.width > vpW) {
-			this.setWidth(vpW);
-		}
-		if(center)
-			this.center();
 	},
 
 	hide : function(){

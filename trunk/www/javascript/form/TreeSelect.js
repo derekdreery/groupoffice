@@ -1,13 +1,14 @@
 GO.form.TreeSelect = Ext.extend(Ext.form.TriggerField,{
 
 	triggerClass : 'go-form-tree-select',
+
+	windowConfig : {},
 	
 	onTriggerClick : function(){
 		if(!this.treeSelectWindow)
 		{
-			this.treeSelectWindow = new GO.form.TreeSelectWindow({
-				textfield : this
-			});
+			this.windowConfig.textfield=this;
+			this.treeSelectWindow = new GO.form.TreeSelectWindow(this.windowConfig);
 		}
 		this.treeSelectWindow.show();
 	}
