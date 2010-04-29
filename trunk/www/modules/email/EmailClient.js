@@ -429,6 +429,7 @@ GO.email.EmailClient = function(config){
 				Ext.MessageBox.confirm(GO.lang['strConfirm'], t.applyTemplate(node.attributes), function(btn){
 					if(btn=='yes')
 					{
+						this.getEl().mask(GO.lang.waitMsgLoad);
 						Ext.Ajax.request({
 							url: GO.settings.modules.email.url+'action.php',
 							params:{
@@ -444,6 +445,7 @@ GO.email.EmailClient = function(config){
 								}
 								this.updateFolderStatus(node.attributes.folder_id);
 								this.updateNotificationEl();
+								this.getEl().unmask();
 							},
 							scope: this
 						});
@@ -1378,7 +1380,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		document.location.href=GO.settings.modules.email.url+
 		'zip_attachments.php?account_id='+this.account_id+
 		'&mailbox='+encodeURIComponent(this.mailbox)+
-		'&uid='+this.messagePanel.uid;	
+		'&uid='+this.messagePanel.uid+'&filename='+encodeURIComponent(this.messagePanel.data.subject);
 	},
 	
 	showComposer : function(values)

@@ -24,20 +24,24 @@ $email = new email();
 
 require_once ($GO_LANGUAGE->get_language_file('email'));
 
+$filename = File::strip_invalid_chars($_REQUEST['filename']);
+if(empty($filename))
+	$filename=$lang['email']['attachments'];
+
+
 $browser = detect_browser();
 //header('Content-Length: '.strlen($file));
 header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
+header('Content-Disposition: attachment; filename="'.$filename.'.zip"');
 if ($browser['name'] == 'MSIE')
 {
 	header('Content-Type: application/download');
-	header('Content-Disposition: attachment; filename="'.$lang['email']['attachments'].'.zip"');
 	header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 	header('Pragma: public');
 }else
 {
 	header('Content-Type: application/x-zip');
 	header('Pragma: no-cache');
-	header('Content-Disposition: attachment; filename="'.$lang['email']['attachments'].'.zip"');
 }
 header('Content-Transfer-Encoding: binary');
 echo $email->get_zip_of_attachments($_REQUEST['account_id'],$_REQUEST['uid'], $_REQUEST['mailbox']);

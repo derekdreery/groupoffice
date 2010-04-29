@@ -189,6 +189,13 @@ GO.email.EmailComposer = function(config) {
 				var newSig = newAccountRecord.get(this.formPanel.baseParams.content_type+"_signature");
 
 				var editorValue = this.editor.getValue();
+
+				/*
+				 *GO returns <br /> but the browse turns this into <br> so replace those
+				 */
+				if(this.formPanel.baseParams.content_type=='html'){
+					editorValue = editorValue.replace(/<br>/g, '<br />');
+				}
 				if(GO.util.empty(oldSig))
 				{
 					this.addSignature(newAccountRecord);
