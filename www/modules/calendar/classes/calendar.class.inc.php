@@ -930,9 +930,15 @@ class calendar extends db
 
 	
 	
-	function get_user_calendars($user_id,$start=0,$offset=0)
+	function get_user_calendars($user_id,$start=0,$offset=0, $group_id=1)
 	{
-		$sql = "SELECT * FROM cal_calendars WHERE user_id='".$this->escape($user_id)."' ORDER BY id ASC";	
+		$sql = "SELECT * FROM cal_calendars WHERE user_id=".$this->escape($user_id);
+
+		if($group_id>0){
+			$sql .= ' AND group_id='.$group_id;
+		}
+
+		$sql .= " ORDER BY id ASC";
 		$this->query($sql);
 		$count= $this->num_rows();
 		
@@ -1362,14 +1368,17 @@ class calendar extends db
 			unset($related_event['user_id'], $related_event['calendar_id'], $related_event['participants_event_id']);
 			
 			$cal = new calendar();
-			if(!empty($old_event['participants_event_id'])){
+			/*if(!empty($old_event['participants_event_id'])){
 				$sql = "SELECT * FROM cal_events WHERE id!=".$this->escape($event['id'])." AND (participants_event_id=".$this->escape($old_event['participants_event_id'])." OR id=".$this->escape($old_event['participants_event_id']).")";
 			}else
 			{
 				$sql = "SELECT * FROM cal_events WHERE participants_event_id=".$this->escape($event['id']);
-			}
+			 * $cal->query($sql);
+			}*/
 
-			$cal->query($sql);
+			$participants_event_id=!empty($old_event['participants_event_id']) ? $old_event['participants_event_id'] : $event['id'];
+			$cal->get_participants_events($participants_event_id, $event['id']);
+			
 			while($old_event = $cal->next_record())
 			{
 				$related_event['id']=$cal->f('id');
@@ -1466,6 +1475,30 @@ class calendar extends db
 		$swift->set_body($body);
 
 		return $swift->sendmail();
+	}
+
+	function get_participants_events($participants_event_id, $skip_event_id=0){
+		$sql = "SELECT * FROM cal_events ".
+			"WHERE participants_event_id=".$this->escape($participants_event_id);
+
+		if(!empty($skip_event_id))
+			$sql .= " AND id!=".$this->escape($skip_event_id);
+
+		$this->query($sql);
+		return $this->num_rows();
+	}
+
+	function add_exception_for_all_participants($participants_event_id, $exception){
+		$cal = new calendar();
+
+		$this->get_participants_events($participants_event_id);
+		while($event = $this->next_record()){
+			$exception['event_id']=$event['id'];
+
+
+			$cal->add_exception($exception);
+		}
+
 	}
 
 

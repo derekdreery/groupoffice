@@ -137,12 +137,15 @@ try {
 
 				//an instance of a recurring event was modified. We must create an exception for the
 				//recurring event.
-				$exception['event_id'] = $event_id;
+				//$exception['event_id'] = $event_id;
 
 				$event_start_time = $event['start_time'];
 				$exception['time'] = mktime(date('G', $event_start_time),date('i', $event_start_time), 0, date('n', $exceptionDate), date('j', $exceptionDate), date('Y', $exceptionDate));
 
-				$cal->add_exception($exception);
+				$exception_event = $cal->get_event($event_id);
+				$cal->add_exception_for_all_participants($exception_event['participants_event_id'], $exception);
+
+				//$cal->add_exception($exception);
 			}else {
 				$cal->delete_event($event_id);
 			}
@@ -216,7 +219,8 @@ try {
 
 					//die(date('Ymd : G:i', $exception['time']));
 
-					$cal->add_exception($exception);
+					//$cal->add_exception($exception);
+					$cal->add_exception_for_all_participants($old_event['participants_event_id'], $exception);
 
 					//now we copy the recurring event to a new single event with the new time
 					$update_event['rrule']='';
@@ -349,7 +353,7 @@ try {
 			$event_id=$event['id'];
 			$group_id = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
 			$calendar_id = $event['calendar_id'];
-			$check_conflicts = isset($_POST['check_conflicts']) ? $_POST['check_conflicts'] : 0;
+			$check_conflicts = isset($_POST['check_conflicts']) && !empty($_POST['busy']) ? $_POST['check_conflicts'] : 0;
 
 			$date_format = $_SESSION['GO_SESSION']['date_format'];
 
@@ -448,9 +452,13 @@ try {
 					}
 
 					if(isset($_REQUEST['exception_event_id']) && $_REQUEST['exception_event_id'] > 0) {
-						$exception['event_id'] = ($_REQUEST['exception_event_id']);
+						//$exception['event_id'] = ($_REQUEST['exception_event_id']);
 						$exception['time'] = strtotime(($_POST['exceptionDate']));
-						$cal->add_exception($exception);
+						//$cal->add_exception($exception);
+
+						$exception_event = $cal->get_event($_REQUEST['exception_event_id']);
+
+						$cal->add_exception_for_all_participants($exception_event['participants_event_id'], $exception);
 
 						//for sync update the timestamp
 						$update_recurring_event=array();
@@ -622,9 +630,9 @@ try {
 					$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
 							$cal->event_to_html($event).
 							'<p>'.$lang['calendar']['acccept_question'].'</p>'.
-							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
+							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$participants_event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
 							'&nbsp;|&nbsp;'.
-							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
+							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$participants_event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
 
 					//create ics attachment
 					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');

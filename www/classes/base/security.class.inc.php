@@ -446,10 +446,15 @@ class GO_SECURITY extends db {
 	 * @access public
 	 * @return int			Number of users in the acl
 	 */
-	function get_users_in_acl($acl_id) {
+	function get_users_in_acl($acl_id, $level=0) {
 		$sql = "SELECT u.id, u.first_name, u.middle_name, u.last_name, a.level ".
 				"FROM go_acl a INNER JOIN go_users u ON u.id=a.user_id WHERE ".
 				"a.acl_id='".$this->escape($acl_id)."'";
+
+		if($level>0){
+			$sql .= " AND a.level=".$this->escape($level);
+		}
+
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -461,9 +466,13 @@ class GO_SECURITY extends db {
 	 * @access public
 	 * @return Array			The user id's
 	 */
-	function get_authorized_users_in_acl($acl_id) {
+	function get_authorized_users_in_acl($acl_id, $level=0) {
 		$users=array();
 		$sql = "SELECT user_id FROM go_acl WHERE acl_id='".$this->escape($acl_id)."' AND user_id!=0";
+
+		if($level>0){
+			$sql .= " AND level=".$this->escape($level);
+		}
 
 		$this->query($sql);
 		while($this->next_record()) {
@@ -472,6 +481,11 @@ class GO_SECURITY extends db {
 
 		$sql = "SELECT go_users_groups.user_id FROM go_users_groups INNER JOIN go_acl ON ".
 				"go_acl.group_id=go_users_groups.group_id WHERE go_acl.acl_id=".$this->escape($acl_id)." AND go_users_groups.user_id!=0";
+
+		if($level>0){
+			$sql .= " AND level=".$this->escape($level);
+		}
+
 		$this->query($sql);
 		while($this->next_record()) {
 			if(!in_array($this->f('user_id'), $users)) {
