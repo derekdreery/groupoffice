@@ -568,7 +568,7 @@ class cms extends db {
 	}
 
 	function file_exists($folder_id, $filename) {
-		$this->query("SELECT * FROM cms_files WHERE folder_id='".$this->escape($folder_id)."' AND  name COLLATE utf8_bin LIKE '".$this->escape($filename)."'");
+		$this->query("SELECT * FROM cms_files WHERE folder_id='".$this->escape($folder_id)."' AND  name LIKE '".$this->escape($filename)."'");
 		if ($this->next_record()) {
 			return $this->record;
 		}
@@ -576,7 +576,7 @@ class cms extends db {
 	}
 
 	function folder_exists($parent_id, $name) {
-		$sql = "SELECT * FROM cms_folders WHERE parent_id='".$this->escape($parent_id)."' AND name COLLATE utf8_bin LIKE '".$this->escape($name)."'";
+		$sql = "SELECT * FROM cms_folders WHERE parent_id='".$this->escape($parent_id)."' AND name LIKE '".$this->escape($name)."'";
 		$this->query($sql);
 		if($this->next_record()) {
 			return $this->record;
