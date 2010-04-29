@@ -23,7 +23,7 @@ class cms_smarty extends Smarty{
 		//var_dump($this->plugins_dir);
 		
 		$this->template_dir=$GO_MODULES->modules['cms']['path'].'templates/'.$co->site['template'];
-		$this->compile_dir=$GO_CONFIG->tmpdir.'cms/'.$co->site['id'].'/templates_c';
+		$this->compile_dir=$GO_CONFIG->orig_tmpdir.'cms/'.$co->site['id'].'/templates_c';
 		if(!is_dir($this->compile_dir))
 			mkdir($this->compile_dir,0755, true);
 
