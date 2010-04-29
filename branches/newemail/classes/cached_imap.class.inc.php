@@ -1,6 +1,6 @@
 <?php
 
-require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc');
+require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc.php');
 class cached_imap extends imap{
 
 	/**
@@ -40,7 +40,7 @@ class cached_imap extends imap{
 	function __construct()
 	{
 		$this->email = new email();
-		parent::__construct();
+		//parent::__construct();
 	}
 
 	function set_account($account, $mailbox='INBOX'){
@@ -80,8 +80,9 @@ class cached_imap extends imap{
 		}*/
 
 
-		$conn = parent::open($account['host'], $account['type'], $account['port'], $account['username'], $account['password'], $mailbox, null, $account['use_ssl'], $account['novalidate_cert']);
+		$conn = parent::connect($account['host'], $account['port'], $account['username'], $account['password'], $account['use_ssl']);
 
+		$this->select_mailbox($mailbox);
 		
 			
 
@@ -91,16 +92,16 @@ class cached_imap extends imap{
 		return $conn;
 	}
 
-	function set_message_flag($mailbox = "INBOX", $uid_array, $flags, $action = "") {
-		if(!$this->conn){
-			$this->set_account($this->account, $mailbox);
-			$this->open($this->account, $mailbox);
+	function set_message_flag($uid_array, $flags, $clear=false) {
+		if(!$this->handle){
+			$this->set_account($this->account, $this->selected_mailbox['name']);
+			$this->open($this->account, $this->selected_mailbox['name']);
 		}
-		return parent::set_message_flag($mailbox, $uid_array, $flags,$action);
+		return parent::set_message_flag($uid_array, $flags, $clear);
 	}
 
-	function reopen($mailbox = "INBOX", $flags = "") {
-		if(parent::reopen($mailbox, $flags)){
+	function select_mailbox($mailbox = "INBOX") {
+		if(parent::select_mailbox($mailbox)){
 			//update $this->folder with the db cache
 			$this->set_account($this->account, $mailbox);
 			return true;
@@ -118,14 +119,14 @@ class cached_imap extends imap{
 	 * @param	string $search Search query
 	 * @access public
 	 * @return int	 Number of sorted messages
-	 */
-	function sort($sort_type = SORTDATE, $reverse = "1", $query = '') {
+	
+	function sort_mailbox($sort_type = SORTDATE, $reverse = "1", $filter = 'ALL') {
 
 		$this->sort_type=$sort_type;
 		$this->sort_reverse=$reverse;
 
 		if ($query != '') {
-			parent::sort($sort_type, $reverse, $query);
+			parent::sort($sort_type, $reverse, $filter);
 		} else {
 			if($this->folder['msgcount']!=$this->count || $this->folder['unseen']!=$this->unseen)
 			{
@@ -151,7 +152,7 @@ class cached_imap extends imap{
 				$this->email->__update_folder($up_folder);
 			}
 		}
-	}
+	} */
 
 
 
@@ -183,12 +184,12 @@ class cached_imap extends imap{
 		* @access public
 		* @return bool True on success
 		*/
-	function move($folder, $messages, $expunge=true) {
+	function move($uids, $mailbox) {
 		if(count($messages))
 		{
-			if(parent::move($folder, $messages, $expunge))
+			if(parent::move($uids, $mailbox))
 			{
-				$this->delete_cached_messages($messages);
+				$this->delete_cached_messages($uids);
 				return true;
 			}
 		}
@@ -291,46 +292,16 @@ class cached_imap extends imap{
 		$this->email->query($sql);
 	}
 
-	function get_message_uids($first, $offset, $sort_type = SORTDATE, $reverse = "1", $query = '')
-	{
-		//get the unseen and total messages
 
-		//if(imap_num_recent($this->conn))
-		//{
-		$status = $this->status($this->mailbox, SA_UNSEEN+SA_MESSAGES);
-		if($status)
-		{
-			$this->unseen = $status->unseen;
-			$this->count = $status->messages;
-		}else
-		{
-			$this->unseen = $this->count = 0;
-		}
-		/*}else
-		 {
-			$this->unseen = $this->folder['unseen'];
-			$this->count = $this->folder['msgcount'];
-			go_debug('Used cached folder status');
-			}*/
-		$this->query = $query;
-		$this->first = $first;
-		$this->offset = $offset;
-
-		//sort the uid's
-		$this->sort($sort_type, $reverse, $query);
-
-		return $this->get_uids_subset($first, $offset);
-	}
-
-	function view_part($uid, $part_no, $transfer, $part_charset = '', $peek=false) {
+	function get_message_part($uid, $message_part, $peek=false) {
 		
-		if(!$this->conn){
+		if(!$this->handle){
 			if(!$this->open($this->account, $this->folder['name'])){
 				throw new Exception(sprintf($lang['email']['feedbackCannotConnect'], $this->account['host'],  $this->last_error(), $this->account['port']));
 			}
 		}
 
-		return parent::view_part($uid, $part_no, $transfer, $part_charset, $peek);
+		return parent::get_message_part($uid, $part_no, $transfer, $part_charset, $peek);
 	}
 
 	/**
@@ -705,9 +676,12 @@ class cached_imap extends imap{
 		return $message;
 	}
 
-	function get_message_headers($start, $limit, $sort_field , $sort_order, $query)
+	function get_message_headers($start, $limit, $sort_field , $reverse=false, $query='')
 	{
-		$uids = $this->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
+		//$uids = $this->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
+
+		$uids = $this->sort_mailbox($sort_field, $reverse);
+		$uids=array_slice($uids,$start, $limit);
 
 		//go_debug($uids);
 		$sorted_messages=array();
@@ -742,12 +716,35 @@ class cached_imap extends imap{
 
 				foreach($new_messages as $message)
 				{
+					//go_debug($message);
+					
 					//trim values for mysql insertion
 					$message['to']=substr($message['to'],0, 255);
 					$message['subject']=substr($message['subject'],0,100);
 					$message['from']=substr($message['from'],0,100);
-					$message['reply_to']=substr($message['reply_to'],0,100);
-					$message['udate']=intval($message['udate']);
+					if(isset($message['reply-to']))
+						$message['reply_to']=substr($message['reply-to'],0,100);
+					$message['udate']=intval($message['internal_udate']);
+					if(isset($message['disposition-notification-to']))
+						$message['notification']=$message['disposition-notification-to'];
+					
+					$message['new']=empty($message['seen']) || !empty($message['recent']);
+					$message['content_type']=empty($message['content-type']);
+					$message['priority']=isset($message['x-priority']) ? intval($message['x-priority']) : 3;
+
+					unset(
+								$message['seen'],
+								$message['recent'],
+								$message['disposition-notification-to'],
+								$message['reply-to'],
+								$message['date'],
+								$message['internal_date'],
+								$message['internal_udate'],
+								$message['content-type'],
+								$message['x-priority'],
+								$message['charset']
+								);
+
 
 					$messages[$message['uid']]=$message;
 					$messages[$message['uid']]['cached']=false;
@@ -796,8 +793,7 @@ class cached_imap extends imap{
 	}
 
 	function get_filtered_message_headers($uids)
-	{
-		
+	{		
 		$this->filtered=array();
 		for ($i=0;$i<sizeof($this->filters);$i++)
 		{
@@ -805,14 +801,14 @@ class cached_imap extends imap{
 		}
 
 		$new_messages = parent::get_message_headers($uids);
-		if(strtoupper($this->mailbox)!='INBOX')
+		if(strtoupper($this->selected_mailbox['name'])!='INBOX')
 		{
 			return $new_messages;
 		}
 
 		foreach($new_messages as $message)
 		{
-			if($message['new']=='1')
+			if(empty($message['seen']))
 			{
 				$continue=false;
 

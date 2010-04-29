@@ -16,7 +16,7 @@ require('../../Group-Office.php');
 
 $GO_SECURITY->json_authenticate('email');
 
-require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
+require_once ($GO_CONFIG->class_path."mail/imap.class.inc.php");
 require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
 require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 require_once ($GO_LANGUAGE->get_language_file('email'));
@@ -92,13 +92,13 @@ function get_mailbox_nodes($account_id, $folder_id){
 			{
 				$folder_name = $email->f('name');
 			}
-			$folder_name = imap::utf7_imap_decode($folder_name);
+			$folder_name = imap::utf7_decode($folder_name);
 		}
 
 		//check for unread mail
 		//$unseen = $email->f('unseen');
 
-		$status = $imap->status($email->f('name'), SA_UNSEEN);//+SA_MESSAGES+SA_RECENT);
+		//$status = $imap->status($email->f('name'), SA_UNSEEN);//+SA_MESSAGES+SA_RECENT);
 
 		//first time the e-mail is loaded. Let's check the cache
 		/*if(!isset($_POST['refresh']))
@@ -110,16 +110,16 @@ function get_mailbox_nodes($account_id, $folder_id){
 		}
 		}*/
 
-		$unseen = isset($status->unseen) ? $status->unseen : 0;
+		$unseen = $imap->get_unseen();
 
 		if($email->f('name')=='INBOX')
 		{
-			$inbox_new += $unseen;
+			$inbox_new += $unseen['count'];
 		}
 
-		if ($unseen > 0)
+		if ($unseen['count'] > 0)
 		{
-			$status_html = '&nbsp;<span class="em-folder-status" id="status_'.$email->f('id').'">('.$unseen.')</span>';
+			$status_html = '&nbsp;<span class="em-folder-status" id="status_'.$email->f('id').'">('.$unseen['count'].')</span>';
 		}else
 		{
 			$status_html = '&nbsp;<span class="em-folder-status" id="status_'.$email->f('id').'"></span>';
@@ -135,7 +135,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 				'account_id'=>$email->f('account_id'),
 				'folder_id'=>$email->f('id'),
 				'canHaveChildren'=>$email->f('attributes') > LATT_NOINFERIORS,
-				'unseen'=>$unseen,
+				'unseen'=>$unseen['count'],
 				'mailbox'=>$email->f('name'),
 				'expanded'=>isset($children),
 				'children'=>isset($children) ? $children : null
@@ -150,7 +150,7 @@ function get_mailbox_nodes($account_id, $folder_id){
 				'folder_id'=>$email->f('id'),
 				'mailbox'=>$email->f('name'),
 				'canHaveChildren'=>$email->f('attributes') > LATT_NOINFERIORS,
-				'unseen'=>$unseen,
+				'unseen'=>$unseen['count'],
 				'expanded'=>true,
 				'children'=>array()
 			);
@@ -711,9 +711,9 @@ try{
 
 				$response['trash_folder']=$account['trash'];
 
-				$response['trash']=!empty($account['trash']) && strpos($mailbox, $imap->utf7_imap_encode($account['trash']))!==false;
-				$response['drafts']=!empty($account['drafts']) && strpos($mailbox, $imap->utf7_imap_encode($account['drafts']))!==false;
-				$response['sent']=!empty($account['sent']) && strpos($mailbox, $imap->utf7_imap_encode($account['sent']))!==false;
+				$response['trash']=!empty($account['trash']) && strpos($mailbox, $imap->utf7_encode($account['trash']))!==false;
+				$response['drafts']=!empty($account['drafts']) && strpos($mailbox, $imap->utf7_encode($account['drafts']))!==false;
+				$response['sent']=!empty($account['sent']) && strpos($mailbox, $imap->utf7_encode($account['sent']))!==false;
 
 				if(isset($_POST['delete_keys'])) {
 					$messages = json_decode($_POST['delete_keys']);
@@ -799,9 +799,14 @@ try{
 				$day_start = mktime(0,0,0);
 				$day_end = mktime(0,0,0,date('m'),date('d')+1);
 
+				$sort_field='ARRIVAL';
+
 				$messages = $imap->get_message_headers($start, $limit, $sort_field , $sort_order, $query);
 
 				$response['results']=array();
+
+				require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
+				$RFC822 = new RFC822();
 
 				foreach($messages as $message) {
 					//$message = $messages[$uid];
@@ -812,14 +817,14 @@ try{
 						$message['date'] = date($_SESSION['GO_SESSION']['date_format'],$message['udate']);
 					}
 
-					$subject = $imap->f('subject');
+					
 					if(empty($message['subject'])) {
 						$message['subject']=$lang['email']['no_subject'];
 					}
 
 					$message['from'] = ($response['sent'] || $response['drafts']) ? $message['to'] : $message['from'];
 
-					$RFC822 = new RFC822();
+					
 					$address = $RFC822->parse_address_list($message['from']);
 
 					$readable_addresses=array();
@@ -849,18 +854,20 @@ try{
 				}
 
 				$response['folder_id']=$imap->folder['id'];
-				$response['total'] = count($imap->sort);
+				$response['total'] = $imap->selected_mailbox['messages'];
 
 				foreach($imap->touched_folders as $touched_folder) {
 					if($touched_folder==$mailbox) {
-						$response['unseen'][$imap->folder['id']]=$imap->unseen;
-					}else {
-					//$response=array();
-						$status = $imap->status($touched_folder, SA_UNSEEN);
-						$folder = $email->get_folder($account_id, $touched_folder);
 
-						if(isset($status->unseen))
-							$response['unseen'][$folder['id']]=$status->unseen;
+						$unseen = $imap->get_unseen();
+						$response['unseen'][$imap->folder['id']]=$unseen['count'];
+					}else {
+						
+						$folder = $email->get_folder($account_id, $touched_folder);
+						$imap->select_mailbox($touched_folder);
+						
+						$unseen = $imap->get_unseen();
+						$response['unseen'][$imap->folder['id']]=$unseen['count'];
 					}
 				}
 
@@ -898,7 +905,7 @@ try{
 														if(!empty($_POST['refresh']))
 														{
 															go_debug('refreshing');
-															$email->synchronize_folders($account, $imap);
+															//$email->synchronize_folders($account, $imap);
 															$imap->clear_cache();
 														}
 
@@ -947,7 +954,7 @@ try{
 															$children = get_mailbox_nodes($email2->f('id'), 0);
 														//}
 
-														$imap->close();
+														$imap->disconnect();
 													}else
 													{
 														$text = $email2->f('email').' ('.$lang['common']['error'].')';
