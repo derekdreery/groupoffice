@@ -485,6 +485,9 @@ class imap_bodystruct extends imap_base {
 		}
 		return $res;
 	}
+
+	
+
 	function filter_alternatives($struct, $filter, $parent_type=false, $cnt=0) {
 		$filtered = array();
 		if (!is_array($struct) || empty($struct)) {
@@ -991,11 +994,13 @@ class imap extends imap_bodystruct {
 	 */
 
 	public function select_mailbox($mailbox_name) {
-
-		$this->touched_folders[]=$mailbox_name;
-
+		
 		if($this->selected_mailbox && $this->selected_mailbox['name']==$mailbox_name)
 			return true;
+
+		if(!in_array($mailbox_name, $this->touched_folders))
+			$this->touched_folders[]=$mailbox_name;
+
 
 		$box = $this->utf7_encode(str_replace('"', '\"', $mailbox_name));
 		$this->clean($box, 'mailbox');
@@ -1083,7 +1088,10 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 
-	public function get_unseen() {
+	public function get_unseen($mailbox=false) {
+
+		if($mailbox)
+			$this->select_mailbox($mailbox);
 
 		$command = "UID SEARCH (UNSEEN) ALL\r\n";
 		$this->send_command($command);
@@ -1416,7 +1424,7 @@ class imap extends imap_bodystruct {
 				$count = count($vals);
 				for ($i=0;$i<$count;$i++) {
 
-					go_debug($vals[$i]);
+					//go_debug($vals[$i]);
 
 					if ($vals[$i] == 'BODY[HEADER.FIELDS') {
 						$i++;
@@ -1426,7 +1434,7 @@ class imap extends imap_bodystruct {
 
 						$header = str_replace("\r\n", "\n", $vals[$i]);
 						$header = preg_replace("/\n\s/", " ", $header);
-						go_debug($header);
+						//go_debug($header);
 						$lines = explode("\n", $header);
 						foreach ($lines as $line) {
 							if(!empty($line)){
@@ -1530,6 +1538,38 @@ class imap extends imap_bodystruct {
 		}
 
 		return $struct;
+	}
+
+
+	function decode_message_part($str, $encoding, $charset){
+
+		switch($encoding)
+		{
+			case 'base64':
+				$str = base64_decode($str);
+			break;
+			case 'quoted-printable':
+				$str =  quoted_printable_decode($str);
+			break;
+
+		}
+
+		$str = String::clean_utf8($str, $charset);
+		if($charset != 'utf-8'){
+			$str = str_replace($part_charset, 'utf-8', $str);
+		}
+
+		return $str;
+
+	}
+
+	public function get_message_part_decoded($uid, $part_no, $encoding, $charset){
+		go_debug("get_message_part_decode($uid, $part_no, $encoding, $charset)");
+		return $this->decode_message_part(
+						$this->get_message_part($uid, $part_no),
+						$encoding,
+						$charset
+						);
 	}
 
 
