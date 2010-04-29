@@ -316,7 +316,321 @@ class imap_base {
 
 
 
-class imap extends imap_base {
+/* parsing routines for the imap bodstructure response */
+class imap_bodystruct extends imap_base {
+	function update_part_num($part) {
+		if (!strstr($part, '.')) {
+			$part++;
+		}
+		else {
+			$parts = explode('.', $part);
+			$parts[(count($parts) - 1)]++;
+			$part = implode('.', $parts);
+		}
+		return $part;
+	}
+	function parse_single_part($array) {
+		$vals = $array[0];
+		array_shift($vals);
+		array_pop($vals);
+		$atts = array('name', 'filename', 'type', 'subtype', 'charset', 'id', 'description', 'encoding',
+						'size', 'lines', 'md5', 'disposition', 'language', 'location');
+		$res = array();
+		if (count($vals) > 7) {
+			$res['type'] = strtolower(trim(array_shift($vals)));
+			$res['subtype'] = strtolower(trim(array_shift($vals)));
+			if ($vals[0] == '(') {
+				array_shift($vals);
+				while($vals[0] != ')') {
+					if (isset($vals[0]) && isset($vals[1])) {
+						$res[strtolower($vals[0])] = $vals[1];
+						$vals = array_splice($vals, 2);
+					}
+				}
+				array_shift($vals);
+			}
+			else {
+				array_shift($vals);
+			}
+			$res['id'] = array_shift($vals);
+			$res['description'] = array_shift($vals);
+			$res['encoding'] = strtolower(array_shift($vals));
+			$res['size'] = array_shift($vals);
+			if ($res['type'] == 'text' && isset($vals[0])) {
+				$res['lines'] = array_shift($vals);
+			}
+			if (isset($vals[0]) && $vals[0] != ')') {
+				$res['md5'] = array_shift($vals);
+			}
+			if (isset($vals[0]) && $vals[0] == '(') {
+				array_shift($vals);
+			}
+			if (isset($vals[0]) && $vals[0] != ')') {
+				$res['disposition'] = array_shift($vals);
+				if (strtolower($res['disposition']) == 'attachment' && $vals[0] == '(') {
+					array_shift($vals);
+					if (isset($vals[0]) && strtolower($vals[0]) == 'filename' && isset($vals[1]) && $vals[1] != ')') {
+						array_shift($vals);
+						$res['name'] = array_shift($vals);
+						if ($vals[0] == ')') {
+							array_shift($vals);
+						}
+					}
+				}
+			}
+			if (isset($vals[0]) && $vals[0] != ')') {
+				$res['language'] = array_shift($vals);
+			}
+			if (isset($vals[0]) && $vals[0] != ')') {
+				$res['location'] = array_shift($vals);
+			}
+			foreach ($atts as $v) {
+				if (!isset($res[$v]) || trim(strtoupper($res[$v])) == 'NIL') {
+					$res[$v] = false;
+				}
+				else {
+					if ($v == 'charset') {
+						$res[$v] = strtolower(trim($res[$v]));
+					}
+					else {
+						$res[$v] = trim($res[$v]);
+					}
+				}
+			}
+			if (!isset($res['name'])) {
+				$res['name'] = 'message';
+			}
+		}
+		return $res;
+	}
+	function filter_alternatives($struct, $filter, $parent_type=false, $cnt=0) {
+		$filtered = array();
+		if (!is_array($struct) || empty($struct)) {
+			return array($filtered, $cnt);
+		}
+		if (!$parent_type) {
+			if (isset($struct['subtype'])) {
+				$parent_type = $struct['subtype'];
+			}
+		}
+		foreach ($struct as $index => $value) {
+			if ($parent_type == 'alternative' && isset($value['subtype']) && $value['subtype'] != $filter) {
+				$cnt += 1;
+			}
+			else {
+				$filtered[$index] = $value;
+			}
+			if (isset($value['subs']) && is_array($value['subs'])) {
+				if (isset($struct['subtype'])) {
+					$parent_type = $struct['subtype'];
+				}
+				else {
+					$parent_type = false;
+				}
+				list($filtered[$index]['subs'], $cnt) = $this->filter_alternatives($value['subs'], $filter, $parent_type, $cnt);
+			}
+		}
+		return array($filtered, $cnt);
+	}
+	function parse_multi_part($array, $part_num, $run_num) {
+		$struct = array();
+		$index = 0;
+		foreach ($array as $vals) {
+			if ($vals[0] != '(') {
+				break;
+			}
+			$type = strtolower($vals[1]);
+			$sub = strtolower($vals[2]);
+			$part_type = 1;
+			switch ($type) {
+				case 'message':
+					switch ($sub) {
+						case 'delivery-status':
+						case 'external-body':
+						case 'disposition-notification':
+						case 'rfc822-headers':
+							break;
+						default:
+							$part_type = 2;
+							break;
+					}
+					break;
+			}
+			if ($vals[0] == '(' && $vals[1] == '(') {
+				$part_type = 3;
+			}
+			if ($part_type == 1) {
+				$struct[$part_num] = $this->parse_single_part(array($vals));
+				$part_num = $this->update_part_num($part_num);
+			}
+			elseif ($part_type == 2) {
+				$parts = $this->split_toplevel_result($vals);
+				$struct[$part_num] = $this->parse_rfc822($parts[0], $part_num);
+				$part_num = $this->update_part_num($part_num);
+			}
+			else {
+				$parts = $this->split_toplevel_result($vals);
+				$struct[$part_num]['subs'] = $this->parse_multi_part($parts, $part_num.'.1', $part_num);
+				$part_num = $this->update_part_num($part_num);
+			}
+			$index++;
+		}
+		if (isset($array[$index][0])) {
+			$struct['type'] = 'message';
+			$struct['subtype'] = $array[$index][0];
+		}
+		return $struct;
+	}
+	function parse_rfc822($array, $part_num) {
+		$res = array();
+		array_shift($array);
+		$res['type'] = strtolower(trim(array_shift($array)));
+		$res['subtype'] = strtolower(trim(array_shift($array)));
+		if ($array[0] == '(') {
+			array_shift($array);
+			while($array[0] != ')') {
+				if (isset($array[0]) && isset($array[1])) {
+					$res[strtolower($array[0])] = $array[1];
+					$array = array_splice($array, 2);
+				}
+			}
+			array_shift($array);
+		}
+		else {
+			array_shift($array);
+		}
+		$res['id'] = array_shift($array);
+		$res['description'] = array_shift($array);
+		$res['encoding'] = strtolower(array_shift($array));
+		$res['size'] = array_shift($array);
+		$envelope = array();
+		if ($array[0] == '(') {
+			array_shift($array);
+			$index = 0;
+			$level = 1;
+			foreach ($array as $i => $v) {
+				if ($level == 0) {
+					$index = $i;
+					break;
+				}
+				$envelope[] = $v;
+				if ($v == '(') {
+					$level++;
+				}
+				if ($v == ')') {
+					$level--;
+				}
+			}
+			if ($index) {
+				$array = array_splice($array, $index);
+			}
+		}
+		$res = $this->parse_envelope($envelope, $res);
+		$parts = $this->split_toplevel_result($array);
+		$res['subs'] = $this->parse_multi_part($parts, $part_num.'.1', $part_num);
+		return $res;
+	}
+	function split_toplevel_result($array) {
+		if (empty($array) || $array[1] != '(') {
+			return array($array);
+		}
+		$level = 0;
+		$i = 0;
+		$res = array();
+		foreach ($array as $val) {
+			if ($val == '(') {
+				$level++;
+			}
+			$res[$i][] = $val;
+			if ($val == ')') {
+				$level--;
+			}
+			if ($level == 1) {
+				$i++;
+			}
+		}
+		return array_splice($res, 1, -1);
+	}
+	function parse_envelope_address($array) {
+		$count = count($array) - 1;
+		$string = '';
+		$name = false;
+		$mail = false;
+		$domain = false;
+		for ($i = 0;$i<$count;$i+= 6) {
+			if (isset($array[$i + 1])) {
+				$name = $array[$i + 1];
+			}
+			if (isset($array[$i + 3])) {
+				$mail = $array[$i + 3];
+			}
+			if (isset($array[$i + 4])) {
+				$domain = $array[$i + 4];
+			}
+			if ($name && strtoupper($name) != 'NIL') {
+				$name = str_replace(array('"', "'"), '', $name);
+				if ($string != '') {
+					$string .= ', ';
+				}
+				if ($name != $mail.'@'.$domain) {
+					$string .= '"'.$name.'" ';
+				}
+				if ($mail && $domain) {
+					$string .= $mail.'@'.$domain;
+				}
+			}
+			if ($mail && $domain) {
+				$string .= $mail.'@'.$domain;
+			}
+			$name = false;
+			$mail = false;
+			$domain = false;
+		}
+		return $string;
+	}
+	function parse_envelope($array, $res) {
+		$flds = array('date', 'subject', 'from', 'sender', 'reply-to', 'to', 'cc', 'bcc', 'in-reply-to', 'message_id');
+		foreach ($flds as $val) {
+			if (strtoupper($array[0]) != 'NIL') {
+				if ($array[0] == '(') {
+					array_shift($array);
+					$parts = array();
+					$index = 0;
+					$level = 1;
+					foreach ($array as $i => $v) {
+						if ($level == 0) {
+							$index = $i;
+							break;
+						}
+						$parts[] = $v;
+						if ($v == '(') {
+							$level++;
+						}
+						if ($v == ')') {
+							$level--;
+						}
+					}
+					if ($index) {
+						$array = array_splice($array, $index);
+						$res[$val] = $this->parse_envelope_address($parts);
+					}
+				}
+				else {
+					$res[$val] = array_shift($array);
+				}
+			}
+			else {
+				$res[$val] = false;
+			}
+		}
+		return $res;
+	}
+}
+
+
+
+
+class imap extends imap_bodystruct {
 
 	var $handle=false;
 
@@ -336,6 +650,18 @@ class imap extends imap_base {
 	public function __destruct() {
 		$this->disconnect();
 	}
+
+	/**
+	 * Connects to the IMAP server and authenticates the user
+	 *
+	 * @param <type> $server
+	 * @param <type> $port
+	 * @param <type> $username
+	 * @param <type> $password
+	 * @param <type> $ssl
+	 * @param <type> $starttls
+	 * @return <type>
+	 */
 
 	public function connect($server, $port, $username, $password, $ssl=false, $starttls=false) {
 
@@ -358,6 +684,12 @@ class imap extends imap_base {
 		return $this->authenticate($username, $password);
 	}
 
+	/**
+	 * Disconnect from the IMAP server
+	 *
+	 * @return <type>
+	 */
+
 	public function disconnect() {
 		if (is_resource($this->handle)) {
 			$command = "LOGOUT\r\n";
@@ -372,8 +704,7 @@ class imap extends imap_base {
 	}
 
 
-
-	function authenticate($username, $pass) {
+	private function authenticate($username, $pass) {
 
 		if ($this->starttls) {
 
@@ -446,6 +777,13 @@ class imap extends imap_base {
 		return $this->capability;
 	}
 
+	/**
+	 * Get's the mailboxes
+	 *
+	 * @param <type> $namespace
+	 * @param <type> $subscribed
+	 * @return <type>
+	 */
 
 	public function get_folders($namespace='', $subscribed=false) {
 
@@ -561,6 +899,13 @@ class imap extends imap_base {
 	}
 
 
+	/**
+	 * Before getting message a mailbox must be selected
+	 *
+	 * @param <type> $mailbox_name
+	 * @return <type>
+	 *
+	 */
 
 	public function select_mailbox($mailbox_name) {
 
@@ -646,8 +991,14 @@ class imap extends imap_base {
 		return $mailbox;
 	}
 
+	/**
+	 * Get's the number and UID's of unseen messages of a mailbox
+	 *
+	 * @param <type> $folder
+	 * @return <type>
+	 */
 
-	function get_mailbox_unseen($folder) {
+	public function get_mailbox_unseen($folder) {
 
 		$command = "UID SEARCH (UNSEEN) ALL\r\n";
 		$this->send_command($command);
@@ -670,7 +1021,15 @@ class imap extends imap_base {
 	}
 
 
-	function sort_mailbox($sort, $reverse=false, $filter='ALL') {
+	/**
+	 * Returns a sorted list of mailbox UID's
+	 *
+	 * @param <type> $sort
+	 * @param <type> $reverse
+	 * @param <type> $filter
+	 * @return <type>
+	 */
+	public function sort_mailbox($sort, $reverse=false, $filter='ALL') {
 
 		if(!$this->selected_mailbox)
 			throw new Exception('No mailbox selected');
@@ -702,7 +1061,7 @@ class imap extends imap_base {
 			return $this->client_side_sort($sort, $reverse, $filter);
 		}
 	}
-	/* use the SORT extension to get a sorted UID list */
+
 	private function server_side_sort($sort, $reverse, $filter) {
 		go_debug("server_side_sort($sort, $reverse, $filter");
 
@@ -942,7 +1301,13 @@ class imap extends imap_base {
 
 
 
-	function get_message_headers($uids) {
+	/**
+	 * Get's all message headers from an array of UID's
+	 *
+	 * @param <type> $uids
+	 * @return <type>
+	 */
+	public function get_message_headers($uids) {
 
 		$sorted_string = implode(',', $uids);
 		$this->clean($sorted_string, 'uid_list');
@@ -1041,18 +1406,289 @@ class imap extends imap_base {
 
 	}
 
-	function get_message_structure($uid) {
+	/**
+	 * Get the structure of a message
+	 *
+	 * @param <type> $uid
+	 * @return <type>
+	 */
+	public function get_message_structure($uid) {
 		$this->clean($uid, 'uid');
 		$part_num = 1;
 		$struct = array();
 		$command = "UID FETCH $uid BODYSTRUCTURE\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false, true);
-		var_dump($result);
+
 		while (isset($result[0][0]) && isset($result[0][1]) && $result[0][0] == '*' && strtoupper($result[0][1]) == 'OK') {
 			array_shift($result);
 		}
 		$status = $this->check_response($result, true);
+		$response = array();
+		if (!isset($result[0][4])) {
+			$status = false;
+		}
+		if ($status) {
+			if (strtoupper($result[0][4]) == 'UID') {
+				$response = array_slice($result[0], 7, -1);
+			}
+			else {
+				$response = array_slice($result[0], 5, -1);
+			}
+			$response = $this->split_toplevel_result($response);
+			if (count($response) > 1) {
+				$struct = $this->parse_multi_part($response, 1, 1);
+			}
+			else {
+				$struct[1] = $this->parse_single_part($response);
+			}
+		}
 
+		return $struct;
+	}
+
+
+	/**
+	 * Get the body of a message part. Obtain the partnumbers with get_message_structure.
+	 *
+	 * @param <type> $uid
+	 * @param <type> $message_part
+	 * @param <type> $raw
+	 * @param <type> $max
+	 * @return <type>
+	 */
+	public function get_message_part($uid, $message_part, $raw=false, $max=false) {
+		$this->clean($uid, 'uid');
+		if ($raw) {
+			$command = "UID FETCH $uid BODY[]\r\n";
+		}
+		else {
+			$this->clean($message_part, 'msg_part');
+			$command = "UID FETCH $uid BODY[$message_part]\r\n";
+		}
+		$this->send_command($command);
+		$result = $this->get_response($max, true);
+		$status = $this->check_response($result, true);
+		$res = '';
+		foreach ($result as $vals) {
+			if ($vals[0] != '*') {
+				continue;
+			}
+			$search = true;
+			foreach ($vals as $v) {
+				if ($v != ']' && !$search) {
+					$res = trim(preg_replace("/\s*\)$/", '', $v));
+					break 2;
+				}
+				if (stristr(strtoupper($v), 'BODY')) {
+					$search = false;
+				}
+			}
+		}
+		return $res;
+	}
+
+
+	function message_action($uids, $action, $mailbox=false, $uid_str='') {
+		$keepers = array();
+		$uid_strings = array();
+		if (!empty($uids)) {
+			if (count($uids) > 1000) {
+				while (count($uids) > 1000) {
+					$uid_strings[] = implode(',', array_splice($uids, 0, 1000));
+				}
+				if (count($uids)) {
+					$uid_strings[] = implode(',', $uids);
+				}
+			}
+			else {
+				$uid_strings[] = implode(',', $uids);
+			}
+		}
+		else {
+			$uid_strings[] = $uid_str;
+		}
+		foreach ($uid_strings as $uid_string) {
+			if ($uid_string) {
+				$this->clean($uid_string, 'uid_list');
+			}
+			switch ($action) {
+				case 'READ':
+					$command = "UID STORE $uid_string +FLAGS (\Seen)\r\n";
+					break;
+				case 'FLAG':
+					$command = "UID STORE $uid_string +FLAGS (\Flagged)\r\n";
+					break;
+				case 'UNFLAG':
+					$command = "UID STORE $uid_string -FLAGS (\Flagged)\r\n";
+					break;
+				case 'ANSWERED':
+					$command = "UID STORE $uid_string +FLAGS (\Answered)\r\n";
+					break;
+				case 'UNREAD':
+					$command = "UID STORE $uid_string -FLAGS (\Seen)\r\n";
+					break;
+				case 'DELETE':
+					$command = "UID STORE $uid_string +FLAGS (\Deleted)\r\n";
+					break;
+				case 'UNDELETE':
+					$command = "UID STORE $uid_string -FLAGS (\Deleted)\r\n";
+					break;
+				case 'EXPUNGE':
+					if (is_array($uids) && !empty($uids)) {
+						$res = $this->full_search('DELETED');
+						if (!empty($res)) {
+							foreach ($res as $val) {
+								if (!in_array($val, $uids)) {
+									$keepers[] = $val;
+								}
+							}
+							if (!empty($keepers)) {
+								$this->message_action($keepers, 'UNDELETE');
+							}
+						}
+					}
+					$command = "EXPUNGE\r\n";
+					break;
+				default:
+					$this->clean($mailbox, 'mailbox');
+					$command = "UID COPY $uid_string \"".$this->utf7_encode($mailbox)."\"\r\n";
+					break;
+			}
+			$this->send_command($command);
+			$res = $this->get_response();
+			$status = $this->check_response($res);
+			if ($status && !empty($keepers)) {
+				$this->message_action($keepers, 'DELETE');
+			}
+			if (!$status) {
+				return $status;
+			}
+		}
+		return $status;
+	}
+	function prep_folder_name($mailbox, $prefix='', $parent=false, $subs=false) {
+		if ($prefix) {
+			$prefix = rtrim($prefix, $_SESSION['imap_delimiter']);
+		}
+		if ($parent) {
+			$mailbox = $parent.$_SESSION['imap_delimiter'].$mailbox;
+			$prefix = false;
+		}
+		if ($prefix) {
+			if (strtoupper(substr($mailbox, 0, (strlen($prefix) + 1))) != strtoupper($prefix.$_SESSION['imap_delimiter'])) {
+				$new_box_name = str_replace(array('"'), array('\"'), $prefix.$_SESSION['imap_delimiter'].$mailbox);
+			}
+			else {
+				$new_box_name = str_replace('"', '\"', $mailbox);
+			}
+		}
+		else {
+			$new_box_name = str_replace('"', '\"', $mailbox);
+		}
+		if ($subs) {
+			$new_box_name .= $_SESSION['imap_delimiter'];
+		}
+		return $new_box_name;
+	}
+	function delete_folder($mailbox) {
+		$this->clean($mailbox, 'mailbox');
+		if ($this->read_only) {
+			return 'Operation not permitted in read only mode';
+		}
+		$command = 'DELETE "'.str_replace('"', '\"', $this->utf7_encode($mailbox))."\"\r\n";
+		$this->send_command($command);
+		$result = $this->get_response(false);
+		$status = $this->check_response($result, false);
+		if ($status) {
+			return false;
+		}
+		else {
+			return str_replace('A'.$this->command_count, '', $result[0]);
+		}
+	}
+	function rename_folder($prefix, $mailbox, $new_mailbox) {
+		$this->clean($mailbox, 'mailbox');
+		$this->clean($new_mailbox, 'mailbox');
+		if ($this->read_only) {
+			return 'Operation not permitted in read only mode';
+		}
+		$command = 'RENAME "'.$this->prep_folder_name($this->utf7_encode($mailbox, $prefix)).'" "'.
+						$this->prep_folder_name($this->utf7_encode($new_mailbox, $prefix)).'"'."\r\n";
+		$this->send_command($command);
+		$result = $this->get_response(false);
+		$status = $this->check_response($result, false);
+		if ($status) {
+			return false;
+		}
+		else {
+			return str_replace('A'.$this->command_count, '', $result[0]);
+		}
+	}
+	function create_folder($prefix, $mailbox, $parent) {
+		$this->clean($mailbox, 'mailbox');
+		if ($parent) {
+			$this->clean($parent, 'mailbox');
+		}
+		if ($this->read_only) {
+			return 'Operation not permitted in read only mode';
+		}
+		$command = 'CREATE "'.$this->prep_folder_name($this->utf7_encode($mailbox), $prefix, $parent).'"'."\r\n";
+		$this->send_command($command);
+		$result = $this->get_response(false);
+		$status = $this->check_response($result, false);
+		if ($status) {
+			return false;
+		}
+		else {
+			return str_replace('A'.$this->command_count, '', $result[0]);
+		}
+	}
+	function full_search($terms) {
+		$this->clean($this->search_charset, 'charset');
+		$this->clean($terms, 'search_str');
+		if ($this->search_charset) {
+			$charset = 'CHARSET '.strtoupper($this->search_charset).' ';
+		}
+		else {
+			$charset = '';
+		}
+		$command = 'UID SEARCH '.$charset.$terms."\r\n";
+		$this->send_command($command);
+		$result = $this->get_response(false, true);
+		$status = $this->check_response($result, true);
+		$res = array();
+		if ($status) {
+			array_pop($result);
+			foreach ($result as $vals) {
+				foreach ($vals as $v) {
+					if (preg_match("/^\d+$/", $v)) {
+						$res[] = $v;
+					}
+				}
+			}
+		}
+		return $res;
+	}
+	function append_end() {
+		$result = $this->get_response(false, true);
+		$status = $this->check_response($result, true);
+		return $status;
+	}
+	function append_feed($string) {
+		fwrite($this->handle, $string."\r\n");
+	}
+	function append_start($mailbox, $size) {
+		$this->clean($mailbox, 'mailbox');
+		$this->clean($size, 'uid');
+		$command = 'APPEND "'.$this->utf7_encode($mailbox).'" (\Seen) {'.$size."}\r\n";
+		$this->send_command($command);
+		$result = fgets($this->handle);
+		if (substr($result, 0, 1) == '+') {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }

@@ -16,14 +16,18 @@ $mailbox = $imap->select_mailbox('INBOX');
 
 $uids = $imap->sort_mailbox('ARRIVAL');
 
-$uids = array_splice($uids, 0, 1);
+//$uids = array_splice($uids, 0, 1);
 
 //echo count($uids);
 
 
-//$headers = $imap->get_message_headers($uids);
+//$headers = $imap->get_message_headers(array($uids[4]));
 //var_dump($headers);
 
-$imap->get_message_structure($uids[0]);
+$struct = $imap->get_message_structure($uids[4]);
+
+var_dump($struct);
+
+echo $imap->get_message_part($uids[4], '1.2');
 
 $imap->disconnect();
