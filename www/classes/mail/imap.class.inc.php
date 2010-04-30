@@ -1884,10 +1884,10 @@ class imap extends imap_bodystruct {
 	function append_feed($string) {
 		fwrite($this->handle, $string."\r\n");
 	}
-	function append_start($mailbox, $size) {
+	function append_start($mailbox, $size, $flags = "") {
 		$this->clean($mailbox, 'mailbox');
 		$this->clean($size, 'uid');
-		$command = 'APPEND "'.$this->utf7_encode($mailbox).'" (\Seen) {'.$size."}\r\n";
+		$command = 'APPEND "'.$this->utf7_encode($mailbox).'" ('.$flags.') {'.$size."}\r\n";
 		$this->send_command($command);
 		$result = fgets($this->handle);
 		if (substr($result, 0, 1) == '+') {
@@ -1896,5 +1896,15 @@ class imap extends imap_bodystruct {
 		else {
 			return false;
 		}
+	}
+
+	function append_message($mailbox, $data, $flags=""){
+		if(!$this->append_start($mailbox, strlen($data), $flags))		
+			return false;
+		
+		if(!$this->append_feed($data))
+			return false;
+
+		return $this->append_end();
 	}
 }
