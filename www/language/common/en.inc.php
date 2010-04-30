@@ -223,3 +223,5 @@ $lang['common']['oneReminder']='1 reminder';
 $lang['common']['youHaveReminders']='You have %s in %s.';
 
 $lang['common']['createdBy']='Created by';
+
+$lang['common']['none']='None';
