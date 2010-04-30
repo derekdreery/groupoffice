@@ -388,7 +388,7 @@ class cached_imap extends imap{
 			$message['to_string']=substr($message['to_string'],0,-2);			
 		}else
 		{
-			$to[]=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
+			$to[]=array('email'=>'', 'name'=> $lang['common']['none']);
 		}
 		$message['to']=$to;
 
@@ -406,9 +406,6 @@ class cached_imap extends imap{
 				'name'=>$address['personal']);
 			}
 			$message['cc_string']=substr($message['cc_string'],0,-2);
-		}else
-		{
-			$cc[]=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
 		}
 		$message['cc']=$cc;
 
@@ -427,9 +424,6 @@ class cached_imap extends imap{
 				'name'=>$address['personal']);
 			}
 			$message['bcc_string']=substr($message['bcc_string'],0,-2);
-		}else
-		{
-			$bcc[]=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
 		}
 		$message['bcc']=$bcc;
 
@@ -442,59 +436,46 @@ class cached_imap extends imap{
 
 
 		$struct = $this->get_message_structure($uid);
+			
+		$plain_part = $this->find_message_part($struct,0,'text', 'plain');
+		$html_part = $this->find_message_part($struct,0,'text', 'html');
 
-		/*
-		 * Sometimes clients send multipart/alternative but there's only a text part. FIrst check if there's
-		 * a html alternative to display
-		 */
-		$html_alternative=false;
-		$plain_alternative=false;
-		
-		
-
-		//go_debug($html_alternative);
-
-		//$message['blocked_images']=0;
-		$message['html_body']='';
-		$message['plain_body']='';
-
-		$body_struct = array_shift($struct);
-
-		if(isset($body_struct['subs'])){
-			foreach($body_struct['subs'] as $part_no => $body_part){
-				if($body_part['subtype']=='plain'){
-					$message['plain_body']=$this->get_message_part_decoded($uid,$part_no,$body_part['encoding'], $body_part['charset']);
-				}else
-				{
-					$message['html_body']=$this->get_message_part_decoded($uid,$part_no,$body_part['encoding'], $body_part['charset']);
-				}
-			}
-		}else
-		{
-			$part_no=1;
-			if($body_struct['subtype']=='plain'){
-				$message['plain_body']=$this->get_message_part_decoded($uid,$part_no,$body_struct['encoding'], $body_struct['charset']);
-			}else
-			{
-				$message['html_body']=$this->get_message_part_decoded($uid,$part_no,$body_struct['encoding'], $body_struct['charset']);
-			}
+		//use this array later to find attachments. The body parts will be skipped.
+		$body_ids=array();
+		if($plain_part){
+			$body_ids[]=$plain_part['imap_id'];
+			$message['plain_body']=$this->get_message_part_decoded($uid,$plain_part['imap_id'],$plain_part['encoding'], $plain_part['charset']);
+		}
+		if($html_part){
+			$body_ids[]=$html_part['imap_id'];
+			$message['html_body']=$this->get_message_part_decoded($uid,$html_part['imap_id'],$html_part['encoding'], $html_part['charset']);
 		}
 
+		
+		if(empty($message['html_body'])){
+			$message['html_body']=String::text_to_html($message['plain_body']);
+		}else
+		{
+			$message['html_body']=String::convert_html($message['html_body']);
+		}
 
-		$message['html_body']=String::convert_html($message['html_body']);
+		if(empty($message['plain_body'])){
+			$message['plain_body']=String::html_to_text($message['html_body']);
+		}
 
+		$message['attachments']=$this->find_message_attachments($struct, $body_ids);
+		for($i=0,$max=count($message['attachments']);$i<$max;$i++){
+			$message['attachments'][$i]['extension']=File::get_extension($message['attachments'][$i]['name']);
+			$message['attachments'][$i]['human_size']=Number::format_size($message['attachments'][$i]['size']);
+		}
+		go_debug($struct);
+		//go_debug($message);
 		return $message;
-
+		
 
 		$attachments=array();
 
-		if(stripos($message['content_type'],'html')!==false) {
-			$default_mime = 'text/html';
-		}else {
-			$default_mime = 'text/plain';
-		}
-
-		
+				
 		//go_debug($message['parts']);
 
 		while($part = array_shift($message['parts'])) {
