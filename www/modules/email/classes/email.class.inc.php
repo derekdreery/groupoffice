@@ -307,7 +307,7 @@ class email extends db
 		global $GO_CONFIG, $GO_LANGUAGE;
 
 
-		require_once($GO_CONFIG->class_path."mail/imap.class.inc");
+		require_once($GO_CONFIG->class_path."mail/imap.class.inc.php");
 		$this->mail= new imap();
 
 		if (!$this->mail->open(
@@ -452,7 +452,7 @@ class email extends db
 	{
 		global $GO_CONFIG;
 
-		require_once($GO_CONFIG->class_path."mail/imap.class.inc");
+		require_once($GO_CONFIG->class_path."mail/imap.class.inc.php");
 		$this->mail= new imap();
 
 		$oldaccount = $this->get_account($account['id']);
