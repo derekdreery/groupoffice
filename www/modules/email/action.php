@@ -16,7 +16,7 @@ require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('email');
 
 
-require_once ($GO_CONFIG->class_path."mail/imap.class.inc.php");
+require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
 require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
 require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 require_once ($GO_LANGUAGE->get_language_file('email'));
