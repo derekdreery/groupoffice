@@ -1,5 +1,5 @@
 <?php
-require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap_base.class.inc.php');
+
 require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc.php');
 class cached_imap extends imap{
 
