@@ -64,7 +64,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				'<table style="padding-top:5px;">'+
 				'<tr><td><b>'+GO.email.lang.attachments+':</b></td></tr><tr><td id="'+this.attachmentsId+'">'+
 					'<tpl for="attachments">'+
-					'<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="#">{name} ({human_size})</a> '+
+					'<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{index}" href="#">{name} ({human_size})</a> '+
 					'</tpl>'+
 					'<tpl if="attachments.length&gt;1">'+
 						'<a class="filetype-link filetype-zip" id="'+this.attachmentsId+'_zipofall" href="#">'+GO.email.lang.downloadAllAsZip+'</a>'+
@@ -267,8 +267,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	
 	openAttachment :  function(e, target)
 	{
+		//e.preventDefault();
+		//alert(target.id);
 		if(target.id.substr(0,this.attachmentsId.length)==this.attachmentsId)
-		{
+		{			
 			var attachment_no = target.id.substr(this.attachmentsId.length+1);
 			
 			if(attachment_no=='zipofall')

@@ -1180,15 +1180,14 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	
 	openAttachment :  function(attachment, panel, forceDownload)
 	{		
-		if(attachment.type=='message')
+		if(attachment.mime.indexOf('message')>-1)
 		{
 			GO.linkHandlers[9].call(this, 0, {
 				uid: this.messagePanel.uid,
 				mailbox: this.mailbox,
-				imap_id: attachment.imap_id,
-				encoding: attachment.encoding,
-				type: attachment.type,
-				subtype: attachment.subtype,
+				part: attachment.number,
+				transfer: attachment.transfer,
+				mime: attachment.mime,
 				account_id: this.account_id
 			});
 		}else
@@ -1218,9 +1217,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 								account_id: this.account_id,
 								mailbox: this.mailbox,
 								uid: this.messagePanel.uid,
-								imap_id: attachment.imap_id,
+								part: attachment.number,
 								uuencoded_partnumber: attachment.uuencoded_partnumber,
-								encoding: attachment.encoding
+								transfer: attachment.transfer
 							},
 							callback: function(options, success, response)
 							{
@@ -1235,10 +1234,9 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 										'&mailbox='+encodeURIComponent(this.mailbox)+
 										'&uid='+this.messagePanel.uid+
 										'&sender='+this.messagePanel.data.sender+
-										'&imap_id='+attachment.imap_id+
-										'&encoding='+attachment.encoding+
-										'&type='+attachment.type+
-										'&subtype='+attachment.subtype+
+										'&part='+attachment.number+
+										'&transfer='+attachment.transfer+
+										'&mime='+attachment.mime+
 										'&uuencoded_partnumber='+attachment.uuencoded_partnumber+
 										'&filename='+ encodeURIComponent(attachment.name);
 									}else
