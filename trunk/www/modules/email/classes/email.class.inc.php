@@ -310,16 +310,12 @@ class email extends db
 		require_once($GO_CONFIG->class_path."mail/imap.class.inc");
 		$this->mail= new imap();
 
-		if (!$this->mail->open(
+		if (!$this->mail->connect(
 		$account['host'],
-		$account['type'],
 		$account['port'],
 		$account['username'],
 		$account['password'],
-			"INBOX", 
-		0,
-		$account['use_ssl'],
-		$account['novalidate_cert']))
+		$account['use_ssl']))
 		{
 			return false;
 		}else
@@ -329,7 +325,6 @@ class email extends db
 				$account['mbroot'] = '';
 			}
 
-			$account['spamtag']='***SPAM***';
 			$account['trash'] = '';
 			$account['sent'] = '';
 			$account['drafts'] = '';
@@ -340,14 +335,14 @@ class email extends db
 			{
 				$account=$this->set_default_folders($account);
 
-				$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
-				$subscribed =  $this->mail->get_subscribed($account['mbroot']);
+				$mailboxes =  $this->mail->get_folders($account['mbroot']);
+				$subscribed =  $this->mail->get_folders($account['mbroot'], true);
 			}else
 			{
 				$mailboxes = array();
 				$subscribed = array();
 			}
-			$this->mail->close();
+			$this->mail->disconnect();
 
 			$account['id'] = $this->nextid("em_accounts");
 			
@@ -379,8 +374,8 @@ class email extends db
 
 		require($GO_LANGUAGE->get_language_file('email'));
 
-		$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
-		$subscribed =  $this->mail->get_subscribed($account['mbroot']);
+		$mailboxes =  $this->mail->get_folders($account['mbroot']);
+		$subscribed =  $this->mail->get_folders($account['mbroot'], true);
 
 		$mailbox_names = array();
 		foreach($mailboxes  as $mailbox)
@@ -458,16 +453,12 @@ class email extends db
 		$oldaccount = $this->get_account($account['id']);
 
 
-		if ($this->mail->open(
+		if ($this->mail->connect(
 		$account['host'],
-		$account['type'],
 		$account['port'],
 		$account['username'],
 		$account['password'],
-			"INBOX", 
-		0,
-		$account['use_ssl'],
-		$account['novalidate_cert']))
+		$account['use_ssl']))
 		{
 
 			if (!$mbroot = $this->mail->check_mbroot($account['mbroot']))
@@ -475,11 +466,11 @@ class email extends db
 				$account['mbroot'] = '';
 			}
 				
-			if($oldaccount['type']=='pop3' && $account['type']=='imap')
+			/*if($oldaccount['type']=='pop3' && $account['type']=='imap')
 			{
 				$account=$this->set_default_folders($account);
-				$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
-				$subscribed =  $this->mail->get_subscribed($account['mbroot']);
+				$mailboxes =  $this->mail->get_folders($account['mbroot']);
+				$subscribed =  $this->mail->get_folders($account['mbroot'], true);
 				$this->_synchronize_folders($account, $mailboxes, $subscribed);
 			}elseif($oldaccount['type']=='imap' && $account['type']=='pop3')
 			{
@@ -488,9 +479,9 @@ class email extends db
 				$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
 				$subscribed =  $this->mail->get_subscribed($account['mbroot']);
 				$this->_synchronize_folders($account, $mailboxes, $subscribed);
-			}
+			}*/
 
-			$this->mail->close();
+			$this->mail->disconnect();
 
 			return $this->_update_account($account);
 		}
@@ -498,11 +489,10 @@ class email extends db
 	}
 
 	function _add_folder($name, $mailbox_names, $subscribed_names)
-	{
-		$name = $this->mail->utf7_imap_encode($name);
+	{;
 		if (!in_array($name, $mailbox_names))
 		{
-			return @$this->mail->create_folder($name);
+			return $this->mail->create_folder($name);
 		}else
 		{
 			if (!in_array($name, $subscribed_names))
@@ -579,6 +569,9 @@ class email extends db
 			$sql = "DELETE FROM em_folders WHERE account_id='$id'";
 			$this->query($sql);
 			$sql = "DELETE FROM em_filters WHERE account_id='$id'";
+			$this->query($sql);
+
+			$sql = "DELETE FROM em_messages_cache WHERE account_id='$id'";
 			$this->query($sql);
 
 			$GO_EVENTS->fire_event('delete_email_account', $id);
