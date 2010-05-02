@@ -49,6 +49,8 @@ class imap extends imap_bodystruct {
 
 	public function connect($server, $port, $username, $password, $ssl=false, $starttls=false) {
 
+		go_debug("imap::connect($server, $port, $username, ***, $ssl, $starttls)");
+		
 		$this->ssl = $ssl;
 		$this->starttls = $starttls;
 		$this->server=$server;
@@ -207,7 +209,7 @@ class imap extends imap_bodystruct {
 
 		$command = $imap_command.' "'.$namespace."\" \"*\"\r\n";
 		$this->send_command($command);
-		$result = $this->get_response($this->folder_max, true);
+		$result = $this->get_response(false, true);
 		$folders = array();
 		foreach ($result as $vals) {
 			if (!isset($vals[0])) {
@@ -222,16 +224,13 @@ class imap extends imap_bodystruct {
 			$flag = false;
 			$delim_flag = false;
 			$parent = '';
-			$base_name = '';
 			$folder_parts = array();
 			$no_select = false;
 			$can_have_kids = false;
 			$has_kids = false;
 			$marked = false;
-			$special = false;
 			$hidden = false;
-			$folder_sort_by = 'ARRIVAL';
-			$check_for_new = false;
+
 			foreach ($vals as $v) {
 				if ($v == '(') {
 					$flag = true;
@@ -255,21 +254,6 @@ class imap extends imap_bodystruct {
 				$this->delimiter = $delim;
 				$_SESSION['imap_delimiter'] = $this->delimiter;
 			}
-			if ($delim && strstr($folder, $delim)) {
-				$temp_parts = explode($delim, $folder);
-				$folder_parts = array();
-				foreach ($temp_parts as $g) {
-					if (trim($g)) {
-						$folder_parts[] = $g;
-					}
-				}
-			}
-			if (isset($folder_parts[(count($folder_parts) - 1)])) {
-				$base_name = $folder_parts[(count($folder_parts) - 1)];
-			}
-			else {
-				$base_name = $folder;
-			}
 
 			if (stristr($flags, 'marked')) {
 				$marked = true;
@@ -286,20 +270,17 @@ class imap extends imap_bodystruct {
 
 			if (!isset($folders[$folder]) && $folder) {
 				$folders[$folder] = array(
-								'delim' => $delim,
+								'delimiter' => $delim,
 								'name' => $folder,
-								'name_parts' => $folder_parts,
-								'basename' => $base_name,
-								'realname' => $folder,
-								'namespace' => $namespace,
 								'marked' => $marked,
 								'noselect' => $no_select,
-								'can_have_kids' => $can_have_kids,
-								'has_kids' => $has_kids,
-								'special' => $special
+								'can_have_children' => $can_have_kids,
+								'has_children' => $has_kids
 				);
 			}
 		}
+
+		ksort($folders);
 
 		return $folders;
 	}
@@ -445,7 +426,7 @@ class imap extends imap_bodystruct {
 	 * @param <type> $filter
 	 * @return <type>
 	 */
-	public function sort_mailbox($sort, $reverse=false, $filter='ALL') {
+	public function sort_mailbox($sort='ARRIVAL', $reverse=false, $filter='ALL') {
 
 		if(!$this->selected_mailbox)
 			throw new Exception('No mailbox selected');
@@ -876,7 +857,7 @@ class imap extends imap_bodystruct {
 		return $struct;
 	}
 
-	function find_message_part($struct, $part, $type='text', $subtype=false) {
+	public function find_message_part($struct, $part, $type='text', $subtype=false) {
 		$res = array();
 		if (!is_array($struct) || empty($struct)) {
 			return $res;
@@ -916,7 +897,7 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 
-	function find_message_attachments($struct, $skip_ids=array(), $attachments=array()) {
+	public function find_message_attachments($struct, $skip_ids=array(), $attachments=array()) {
 		if (!is_array($struct) || empty($struct)) {
 			return $attachments;
 		}
@@ -935,7 +916,7 @@ class imap extends imap_bodystruct {
 		return $attachments;
 	}
 
-	function decode_message_part($str, $encoding, $charset) {
+	public function decode_message_part($str, $encoding, $charset) {
 
 		switch($encoding) {
 			case 'base64':
@@ -1012,7 +993,7 @@ class imap extends imap_bodystruct {
 	 * @param <type> $message_part
 	 * @return <type>
 	 */
-	function get_message_part_start($uid, $message_part) {
+	public function get_message_part_start($uid, $message_part=0) {
 		$this->clean($uid, 'uid');
 		if ($message_part == 0) {
 			$command = "UID FETCH $uid BODY[]\r\n";
@@ -1034,7 +1015,7 @@ class imap extends imap_bodystruct {
 	 *
 	 * @return <type>
 	 */
-	function get_message_part_line() {
+	public function get_message_part_line() {
 		$res = fgets($this->handle, 1024);
 		while(substr($res, -2) != "\r\n") {
 			$res .= fgets($this->handle, 1024);
@@ -1046,7 +1027,7 @@ class imap extends imap_bodystruct {
 	}
 
 
-	function set_message_flag($uids, $flags, $clear=false) {
+	public function set_message_flag($uids, $flags, $clear=false) {
 		$status=false;
 		$uid_strings = array();
 		if (!empty($uids)) {
@@ -1124,77 +1105,47 @@ class imap extends imap_bodystruct {
 		return $this->check_response($res);
 	}
 
-
-	private function prep_folder_name($mailbox, $prefix='', $parent=false, $subs=false) {
-		if ($prefix) {
-			$prefix = rtrim($prefix, $_SESSION['imap_delimiter']);
-		}
-		if ($parent) {
-			$mailbox = $parent.$_SESSION['imap_delimiter'].$mailbox;
-			$prefix = false;
-		}
-		if ($prefix) {
-			if (strtoupper(substr($mailbox, 0, (strlen($prefix) + 1))) != strtoupper($prefix.$_SESSION['imap_delimiter'])) {
-				$new_box_name = str_replace(array('"'), array('\"'), $prefix.$_SESSION['imap_delimiter'].$mailbox);
-			}
-			else {
-				$new_box_name = str_replace('"', '\"', $mailbox);
-			}
-		}
-		else {
-			$new_box_name = str_replace('"', '\"', $mailbox);
-		}
-		if ($subs) {
-			$new_box_name .= $_SESSION['imap_delimiter'];
-		}
-		return $new_box_name;
+	private function addslashes($mailbox){
+		return str_replace('"', '\"', $mailbox);
 	}
-	function delete_folder($mailbox) {
+
+	public function delete_folder($mailbox) {
 		$this->clean($mailbox, 'mailbox');
 
-		$command = 'DELETE "'.str_replace('"', '\"', $this->utf7_encode($mailbox))."\"\r\n";
+		$this->unsubscribe($mailbox);
+
+		$command = 'DELETE "'.$this->addslashes($this->utf7_encode($mailbox))."\"\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false);
-		$status = $this->check_response($result, false);
-		if ($status) {
-			return false;
-		}
-		else {
-			return str_replace('A'.$this->command_count, '', $result[0]);
-		}
+		return $this->check_response($result, false);
+		
 	}
-	function rename_folder($prefix, $mailbox, $new_mailbox) {
+	public function rename_folder($mailbox, $new_mailbox) {
 		$this->clean($mailbox, 'mailbox');
 		$this->clean($new_mailbox, 'mailbox');
 
-		$command = 'RENAME "'.$this->prep_folder_name($this->utf7_encode($mailbox, $prefix)).'" "'.
-						$this->prep_folder_name($this->utf7_encode($new_mailbox, $prefix)).'"'."\r\n";
+		$command = 'RENAME "'.$this->addslashes($this->utf7_encode($mailbox)).'" "'.
+						$this->addslashes($this->utf7_encode($new_mailbox)).'"'."\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false);
-		$status = $this->check_response($result, false);
-		if ($status) {
-			return false;
-		}
-		else {
-			return str_replace('A'.$this->command_count, '', $result[0]);
-		}
+		
+		return $this->check_response($result, false);
+		
 	}
-	function create_folder($prefix, $mailbox, $parent) {
+	public function create_folder($mailbox, $subscribe=true) {
 		$this->clean($mailbox, 'mailbox');
-		if ($parent) {
-			$this->clean($parent, 'mailbox');
-		}
 
-		$command = 'CREATE "'.$this->prep_folder_name($this->utf7_encode($mailbox), $prefix, $parent).'"'."\r\n";
+		$command = 'CREATE "'.$this->addslashes($this->utf7_encode($mailbox)).'"'."\r\n";
+		go_debug($command);
 		$this->send_command($command);
 		$result = $this->get_response(false);
+		go_debug($result);
 		$status = $this->check_response($result, false);
-		if ($status) {
+
+		if(!$status)
 			return false;
-		}
-		else {
-			return str_replace('A'.$this->command_count, '', $result[0]);
-		}
+
+		return !$subscribe || $this->subscribe($mailbox);
 	}
 	function full_search($terms) {
 		$this->clean($this->search_charset, 'charset');
@@ -1222,15 +1173,31 @@ class imap extends imap_bodystruct {
 		}
 		return $res;
 	}
-	function append_end() {
+
+	public function subscribe($mailbox){
+		$command = 'SUBSCRIBE "'.$this->addslashes($this->utf7_encode($mailbox)).'"'."\r\n";
+		$this->send_command($command);
+		$result = $this->get_response(false, true);
+		return $this->check_response($result, true);
+	}
+
+	public function unsubscribe($mailbox){
+		$command = 'UNSUBSCRIBE "'.$this->addslashes($this->utf7_encode($mailbox)).'"'."\r\n";
+		$this->send_command($command);
+		$result = $this->get_response(false, true);
+		return $this->check_response($result, true);
+	}
+
+
+	public function append_end() {
 		$result = $this->get_response(false, true);
 		$status = $this->check_response($result, true);
 		return $status;
 	}
-	function append_feed($string) {
+	public function append_feed($string) {
 		return fwrite($this->handle, $string."\r\n");
 	}
-	function append_start($mailbox, $size, $flags = "") {
+	public function append_start($mailbox, $size, $flags = "") {
 		$this->clean($mailbox, 'mailbox');
 		$this->clean($size, 'uid');
 		$command = 'APPEND "'.$this->utf7_encode($mailbox).'" ('.$flags.') {'.$size."}\r\n";
@@ -1244,7 +1211,7 @@ class imap extends imap_bodystruct {
 		}
 	}
 
-	function append_message($mailbox, $data, $flags=""){
+	public function append_message($mailbox, $data, $flags=""){
 
 		go_debug("imap::append_message($mailbox, data, $flags);");
 
@@ -1255,5 +1222,45 @@ class imap extends imap_bodystruct {
 			return false;
 
 		return $this->append_end();
+	}
+
+
+	function extract_uuencoded_attachments(&$body)
+	{
+		$body = str_replace("\r", '', $body);
+		$regex = "/(begin ([0-7]{3}) (.+))\n(.+)\nend/Us";
+
+		preg_match_all($regex, $body, $matches);
+
+    $attachments = array();
+
+    for ($i = 0; $i < count($matches[3]); $i++) {
+			$boundary	= $matches[1][$i];
+			$fileperm	= $matches[2][$i];
+			$filename	= $matches[3][$i];
+
+			$size = strlen($matches[4][$i]);
+
+			$mime = File::get_mime($matches[3][$i]);
+			$ct = explode('/', $mime);
+			$attachments[]=array(
+				'boundary'=>$matches[1][$i],
+				'permissions'=>$matches[2][$i],
+				'name'=>$matches[3][$i],
+				'data'=>$matches[4][$i],
+				'disposition'=>'ATTACHMENT',
+				'encoding'=>'',
+				'type'=>$ct[0],
+				'subtype'=>$ct[1],
+				'size'=>$size,
+				'human_size'=>Number::format_size($size)
+			);
+    }
+
+    //remove it from the body.
+    $body = preg_replace($regex, "", $body);
+    //go_debug($body);
+
+    return $attachments;
 	}
 }

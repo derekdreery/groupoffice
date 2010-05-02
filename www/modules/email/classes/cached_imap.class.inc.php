@@ -263,7 +263,7 @@ class cached_imap extends imap{
 			$up_folder['id'] = $this->folder['id'];
 			$up_folder['sort']='';
 				
-			$this->email->__update_folder($up_folder);
+			$this->email->update_folder($up_folder);
 		}
 	}
 
