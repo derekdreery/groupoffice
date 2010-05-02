@@ -1,4 +1,17 @@
 <?php
+/*
+ * TODO:
+ *
+ * search
+ * Z-push
+ * $forwarded flag
+ * connect on login and don't connect when not necessary
+ * imapauth
+ * filemanager panel
+ * link filter reset and apply button
+ */
+
+
 require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap_base.class.inc.php');
 class imap extends imap_bodystruct {
 
@@ -865,9 +878,26 @@ class imap extends imap_bodystruct {
 		return false;
 	}
 
-	//todo
 	public function get_quota() {
 		$command = "GETQUOTAROOT \"INBOX\"\r\n";
+
+		$this->send_command($command);
+		$res = $this->get_response();
+		$status = $this->check_response($res);
+		if($status){
+			foreach($res as $response){
+				if(strpos($response, 'STORAGE')!==false){
+					$parts = explode(" ", $response);
+					$storage_part = array_search("STORAGE", $parts);
+					if ($storage_part>0){						
+						return array(
+							'usage'=>intval($parts[$storage_part+1]),
+							'limit'=>intval($parts[$storage_part+2]));
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	/**

@@ -824,18 +824,6 @@ try {
 
 							$text = $email2->f('email');
 
-							/*$server_response = $email->get_servermanager_mailbox_info($account);
-														 if(isset($server_response['success']))
-														 {
-															$usage .= Number::format_size($server_response['data']['usage']*1024);
-
-															if($server_response['data']['quota']>0)
-															{
-															$percentage = ceil($server_response['data']['usage']*100/$server_response['data']['quota']);
-															$usage .= '/'.Number::format_size($server_response['data']['quota']*1024).' ('.$percentage.'%)';
-															}
-															}*/
-
 							$quota = $imap->get_quota();
 							if(isset($quota['usage'])) {
 								if(!empty($quota['limit'])) {
@@ -844,26 +832,8 @@ try {
 								}	else {
 									$usage = sprintf($lang['email']['usage'], Number::format_size($quota['usage']*1024));
 								}
-							}
-
-							/*$root_folder=false;
-														if(!empty($account['mbroot']))
-														{
-															$lastchar = substr($account['mbroot'],-1);
-															if($lastchar=='.' || $lastchar == '/')
-															{
-																$root_folder = $email->get_folder($account['id'], substr($account['mbroot'],0,-1));
-															}
-														}
-
-														if($root_folder)
-														{
-															$children = get_mailbox_nodes(0, $root_folder['id']);
-														}else
-														{*/
+							}	
 							$children = get_mailbox_nodes($email2->f('id'), 0);
-							//}
-
 							$imap->disconnect();
 						}else {
 							$text = $email2->f('email').' ('.$lang['common']['error'].')';
