@@ -274,14 +274,14 @@ try {
 				//reattach non-inline attachments
 				foreach($content['attachments'] as $attachment) {
 					//var_dump($parts[$i]);
-					if($imap->part_is_attachment($attachment)) {
+					//if($imap->part_is_attachment($attachment)) {
 						$response['data']['attachments'][]=array(
 										'tmp_name'=>$attachment['tmp_file'],
 										'name'=>$attachment['name'],
 										'size'=>$attachment["size"],
 										'type'=>File::get_filetype_description(File::get_extension($attachment['name']))
 						);
-					}
+					//}
 				}
 
 				break;
@@ -480,11 +480,10 @@ try {
 
 			case 'message_attachment':
 				$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
-				$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
+				$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
 
 				$response=array();
-				$inline_url = $GO_MODULES->modules['email']['url'].'mimepart.php?account_id='.$_REQUEST['account_id'].'&mailbox='.urlencode(($_REQUEST['mailbox'])).'&uid='.($_REQUEST['uid']).'&part='.$_REQUEST['part'].'&transfer='.urlencode($_REQUEST['transfer']);
-
+				$inline_url = $GO_MODULES->modules['email']['url'].'mimepart.php?account_id='.$_REQUEST['account_id'].'&mailbox='.urlencode(($_REQUEST['mailbox'])).'&uid='.($_REQUEST['uid']).'&imap_id='.$_REQUEST['imap_id'].'&encoding='.urlencode($_REQUEST['encoding']);
 
 				require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
 				$go2mime = new Go2Mime();

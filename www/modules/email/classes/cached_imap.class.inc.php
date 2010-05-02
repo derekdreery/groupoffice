@@ -297,7 +297,7 @@ class cached_imap extends imap{
 	}
 
 
-	function get_message_part($uid, $message_part, $peek=false) {
+	function get_message_part($uid, $message_part=0, $peek=false) {
 		
 		if(!$this->handle){
 			if(!$this->open($this->account, $this->folder['name'])){
@@ -494,6 +494,14 @@ class cached_imap extends imap{
 
 		$att=$this->find_message_attachments($struct, $body_ids);
 		for($i=0,$max=count($att);$i<$max;$i++){
+			if(empty($att[$i]['name'])){
+				if(!empty($att[$i]['subject'])){
+					$att[$i]['name']=File::strip_invalid_chars($att[$i]['subject']).'.eml';
+				}else
+				{
+					$att[$i]['name']=$att[$i]['subtype'].'.eml';
+				}
+			}
 			$att[$i]['extension']=File::get_extension($att[$i]['name']);
 			$att[$i]['human_size']=Number::format_size($att[$i]['size']);
 
