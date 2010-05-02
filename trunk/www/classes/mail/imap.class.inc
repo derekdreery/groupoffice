@@ -770,6 +770,7 @@ class imap extends imap_bodystruct {
 					'internal_udate'=>'',
 					'x-priority'=>3,
 					'reply-to'=>'',
+					'content-type'=>'',
 					'disposition-notification-to'=>'',
 				);
 
