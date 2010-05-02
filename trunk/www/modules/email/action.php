@@ -465,7 +465,7 @@ try {
 						if(empty($swift->account['drafts'])) {
 							throw new Exception($lang['email']['draftsDisabled']);
 						}
-						$drafts_folder = $imap->utf7_imap_encode($swift->account['drafts']);
+						$drafts_folder = $swift->account['drafts'];
 						if ($imap->open($swift->account, $drafts_folder)) {
 
 							$status = $imap->status($drafts_folder, SA_UIDNEXT);
@@ -570,7 +570,7 @@ try {
 					if($email->is_mbroot($folder['name'],$delimiter, $account['mbroot'])) {
 						$parent_id=0;
 					}
-					$new_folder_name=$folder['name'].$delimiter.$imap->utf7_imap_encode($new_folder_name);
+					$new_folder_name=$folder['name'].$delimiter.$new_folder_name;
 				}else {
 					$response['success']=false;
 					$response['feedback']=$lang['comon']['selectError'];
@@ -579,11 +579,20 @@ try {
 				}
 
 			}else {
-				$new_folder_name=$account['mbroot'].$imap->utf7_imap_encode($_POST['new_folder_name']);
+				$new_folder_name=$account['mbroot'].$_POST['new_folder_name'];
 			}
 
-			if($imap->create_folder($new_folder_name, $delimiter)) {
-				if($email->add_folder($account['id'], $new_folder_name, $parent_id, 1,$delimiter,64)) {
+			if($imap->create_folder($new_folder_name)) {
+
+				$folder['account_id']=$account['id'];
+				$folder['name']=$new_folder_name;
+				$folder['parent_id']=$parent_id;
+				$folder['subscribed']=1;
+				$folder['can_have_children']=1;
+				$folder['delimiter']=$delimiter;
+				
+				
+				if($email->add_folder($folder)) {
 					$response['success']=true;
 				}
 			}
@@ -633,7 +642,7 @@ try {
 
 				$is_subscribed=in_array($newSubscribedFolder['name'], $curSubscriptions);
 
-				$folderName=$imap->utf7_imap_encode($newSubscribedFolder['name']);
+				$folderName=$newSubscribedFolder['name'];
 
 				$must_be_subscribed=$newSubscribedFolder['subscribed']!='0';
 
@@ -677,7 +686,7 @@ try {
 					$location = '';
 				}
 
-				$new_folder = $location.$imap->utf7_imap_encode(($_POST['new_name']));
+				$new_folder = $location.$_POST['new_name'];
 
 				connect($folder['account_id']);
 
@@ -774,7 +783,7 @@ try {
 
 		case 'save_account_properties':
 
-			$account['mbroot'] = isset($_POST['mbroot']) ? $imap->utf7_imap_encode($_POST['mbroot']) : '';
+			$account['mbroot'] = isset($_POST['mbroot']) ? $_POST['mbroot'] : '';
 
 			if ($_POST['name'] == "" ||	$_POST['email'] == "" ||
 							($GO_MODULES->modules['email']['write_permission'] && ($_POST['port'] == "" ||

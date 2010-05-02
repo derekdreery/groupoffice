@@ -593,7 +593,7 @@ class email extends db
 
 	function get_subscribed($account_id, $folder_id=-1)
 	{
-		$sql = "SELECT id,account_id,name,delimiter,attributes,parent_id,unseen,msgcount FROM em_folders";
+		$sql = "SELECT id,account_id,name,delimiter,can_have_children,parent_id,unseen,msgcount FROM em_folders";
 
 		if($account_id>0)
 		{
@@ -623,7 +623,7 @@ class email extends db
 
 	function get_mailboxes($account_id, $folder_id=-1)
 	{
-		$sql = "SELECT id,account_id,name,subscribed,parent_id,delimiter,attributes,sort_order,msgcount,unseen FROM em_folders WHERE account_id='".$this->escape($account_id)."'";
+		$sql = "SELECT id,account_id,name,subscribed,parent_id,delimiter,can_have_children,sort_order,msgcount,unseen FROM em_folders WHERE account_id='".$this->escape($account_id)."'";
 
 		if ($folder_id > -1)
 		{
@@ -637,7 +637,7 @@ class email extends db
 
 	function get_folders($account_id, $folder_id=-1)
 	{
-		$sql = "SELECT id,account_id,name,subscribed,parent_id,delimiter,attributes,sort_order,msgcount,unseen FROM em_folders";
+		$sql = "SELECT id,account_id,name,subscribed,parent_id,delimiter,can_have_children,sort_order,msgcount,unseen FROM em_folders";
 
 		if($account_id>0)
 		{
@@ -678,22 +678,7 @@ class email extends db
 	 }
 
 	 */
-	function add_folder($account_id, $name, $parent_id=0, $subscribed=1,
-	$delimiter='/', $attributes=0, $sort_order=10)
-	{
-		$folder['id'] = $this->nextid("em_folders");
-		$folder['parent_id']=$parent_id;
-		$folder['account_id']=$account_id;
-		$folder['subscribed']=$subscribed;
-		$folder['name']=$name;
-		$folder['attributes']=$attributes;
-		$folder['delimiter']=$delimiter;
-		$folder['sort_order']=$sort_order;
 
-		$this->insert_row('em_folders',$folder);
-
-		return $folder['id'];
-	}
 	function rename_folder($account_id, $old_name, $new_name, $new_parent_id=-1)
 	{
 		$sql = "UPDATE em_folders SET name='".$this->escape($new_name)."'";
@@ -729,24 +714,17 @@ class email extends db
 		return $this->query($sql);
 	}
 
-	function update_folder($folder_id, $parent_id, $subscribed, $attributes, $sort_order=10)
-	{
-		$folder['id'] = $folder_id;
-		$folder['parent_id']=$parent_id;
-		$folder['subscribed']=$subscribed;
-		$folder['attributes']=$attributes;
-		$folder['sort_order']=$sort_order;
 
-		$this->update_row('em_folders','id', $folder);
-	}
-
-	function __update_folder($folder)
+	function update_folder($folder)
 	{
 		return $this->update_row('em_folders','id', $folder);
 	}
 
-	function __add_folder($folder)
+	function add_folder($folder)
 	{
+		if(!isset($folder['sort_order']))
+			$folder['sort_order']=10;
+		
 		$folder['id'] = $this->nextid("em_folders");
 		if ($folder['id'] > 0)
 		{
@@ -938,7 +916,7 @@ class email extends db
 				{
 					$folder['msgcount'] = $status->messages;
 					$folder['unseen'] = $status->unseen;
-					$email->__update_folder($folder);
+					$email->update_folder($folder);
 				}
 			}
 
@@ -958,7 +936,7 @@ class email extends db
 
 			if($status->messages!=$cached_folder['msgcount'] || $status->unseen!=$cached_folder['unseen'])
 			{
-				$this->__update_folder($folder);
+				$this->update_folder($folder);
 			}
 			return $folder;
 		}
@@ -976,6 +954,9 @@ class email extends db
 
 	function _synchronize_folders($account, $mailboxes, $subscribed)
 	{
+
+		go_debug($mailboxes);
+
 		$mail = new imap();
 
 		$mailbox_names = array();
@@ -991,49 +972,42 @@ class email extends db
 			$mailbox_names[] = $mailbox['name'];
 			$folder['account_id'] = $account['id'];
 			$folder['parent_id'] = $this->get_parent_id($account, $mailbox['name'], $mailbox['delimiter']);
-			$folder['attributes'] = $mailbox['attributes'];
+			$folder['can_have_children'] = $mailbox['can_have_children'];
 			$folder['name'] = $mailbox['name'];
 
 			$folder['subscribed']=in_array($mailbox['name'], $subscribed_names) ? '1' : '0';
-			//$folder['subscribed']='1';
 			$folder['delimiter'] = $mailbox['delimiter'];
-			/*if($status = $mail->status($mailbox['name'], SA_UNSEEN+SA_MESSAGES))
-			 {
-				$folder['msgcount'] = $status->messages;
-				$folder['unseen'] = $status->unseen;
-				}*/
 
-			$unenc_name = $mail->utf7_imap_decode($mailbox['name']);
-
-			if($unenc_name == 'INBOX')
+			switch($folder['name'])
 			{
-				$folder['sort_order'] = 0;
-			}elseif($unenc_name == $account['sent'])
-			{
-				$folder['sort_order'] = 1;
-			}elseif($unenc_name == $account['drafts'])
-			{
-				$folder['sort_order'] = 2;
-			}elseif($unenc_name == $account['trash'])
-			{
-				$folder['sort_order'] = 3;
-			}elseif($unenc_name == $account['spam'])
-			{
-				$folder['sort_order'] = 4;
-			}else
-			{
-				$folder['sort_order'] = 10;
+				case 'INBOX':
+					$folder['sort_order'] = 0;
+					break;
+				case $account['sent']:
+					$folder['sort_order'] = 1;
+					break;
+				case $account['drafts']:
+					$folder['sort_order'] = 2;
+					break;
+				case $account['trash']:
+					$folder['sort_order'] = 3;
+					break;
+				case $account['spam']:
+					$folder['sort_order'] = 4;
+					break;
+				default:
+					$folder['sort_order'] = 10;
+					break;
 			}
 
-			$folder = $folder;
-
-			if ($existing_folder = $this->get_folder($account['id'],$mailbox['name']))
+			$existing_folder = $this->get_folder($account['id'],$mailbox['name']);
+			if ($existing_folder)
 			{
 				$folder['id'] = $existing_folder['id'];
-				$this->__update_folder($folder);
+				$this->update_folder($folder);
 			}else
 			{
-				$folder['id'] = $this->__add_folder($folder);
+				$folder['id'] = $this->add_folder($folder);
 			}
 		}
 
@@ -1044,23 +1018,18 @@ class email extends db
 			$folder['name']='INBOX';
 			$folder['account_id'] = $account['id'];
 			$folder['sort_order']=0;
-			$folder['subscribed']=true;
-			$folder['delimiter'] = '';
+			$folder['subscribed']=1;
+			$folder['delimiter'] = $mailboxes[0]['delimiter'];
 			$folder['parent_id']=0;
-			$folder['attributes']='';
-			/*if($status = $mail->status('INBOX', SA_UNSEEN+SA_MESSAGES))
-			 {
-				$folder['msgcount'] = $status->messages;
-				$folder['unseen'] = $status->unseen;
-				}*/
 
-			if ($existing_folder = $this->get_folder($account['id'],'INBOX'))
+			$existing_folder = $this->get_folder($account['id'],$mailbox['name']);
+			if ($existing_folder)
 			{
 				$folder['id'] = $existing_folder['id'];
-				$this->__update_folder($folder);
+				$this->update_folder($folder);
 			}else
 			{
-				$folder['id'] = $this->__add_folder($folder);
+				$folder['id'] = $this->add_folder($folder);
 			}
 		}
 
@@ -1089,16 +1058,12 @@ class email extends db
 		{
 			$mail = new imap();
 
-			if (!$mail->open(
+			if (!$mail->connect(
 			$account['host'],
-			$account['type'],
 			$account['port'],
 			$account['username'],
 			$account['password'],
-			'INBOX',
-			0,
-			$account['use_ssl'],
-			$account['novalidate_cert']))
+			$account['use_ssl']))
 			{
 				return false;
 			}
@@ -1106,14 +1071,14 @@ class email extends db
 		}
 			
 
-		$subscribed =  $mail->get_subscribed($account['mbroot']);		
-		$mailboxes =  $mail->get_mailboxes($account['mbroot']);
+		$subscribed =  $mail->get_folders($account['mbroot'], true);
+		$mailboxes =  $mail->get_folders($account['mbroot']);
 
 		$this->_synchronize_folders($account, $mailboxes, $subscribed);
 
 		if(isset($close_connection))
 		{
-			$mail->close();
+			$mail->disconnect();
 		}
 	}
 
