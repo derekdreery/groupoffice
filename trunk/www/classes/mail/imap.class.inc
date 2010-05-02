@@ -1,7 +1,8 @@
 <?php
+require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap_base.class.inc.php');
 class imap extends imap_bodystruct {
 
-	var $conn=false;
+	var $handle=false;
 
 	var $ssl=false;
 	var $server='';
@@ -27,6 +28,10 @@ class imap extends imap_bodystruct {
 
 	public function __destruct() {
 		$this->disconnect();
+	}
+
+	public function last_error(){
+		return 'TODO record errors';
 	}
 
 
@@ -55,8 +60,8 @@ class imap extends imap_bodystruct {
 			$this->server = 'tls://'.$this->server;
 		}
 
-		$this->conn = fsockopen($this->server, $this->port, $errorno, $errorstr, 30);
-		if (!is_resource($this->conn)) {
+		$this->handle = fsockopen($this->server, $this->port, $errorno, $errorstr, 30);
+		if (!is_resource($this->handle)) {
 			throw new Exception('#'.$errorno.'. '.$errorstr);
 		}
 
@@ -72,13 +77,18 @@ class imap extends imap_bodystruct {
 	 */
 
 	public function disconnect() {
-		if (is_resource($this->conn)) {
+		if (is_resource($this->handle)) {
 			$command = "LOGOUT\r\n";
 			$this->send_command($command);
 			$this->state = 'disconnected';
 			$result = $this->get_response();
 
-			return fclose($this->conn);
+
+			//go_debug($this->commands);
+
+			//go_debug($this->responses);
+
+			return fclose($this->handle);
 		}else {
 			return false;
 		}
@@ -95,17 +105,17 @@ class imap extends imap_bodystruct {
 			if (!empty($response)) {
 				$end = array_pop($response);
 				if (substr($end, 0, strlen('A'.$this->command_count.' OK')) == 'A'.$this->command_count.' OK') {
-					stream_socket_enable_crypto($this->conn, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
+					stream_socket_enable_crypto($this->handle, true, STREAM_CRYPTO_METHOD_TLS_CLIENT);
 				}
 			}
 		}
 		switch (strtolower($this->auth)) {
 			case 'cram-md5':
-				$this->banner = fgets($this->conn, 1024);
+				$this->banner = fgets($this->handle, 1024);
 				$cram1 = 'A'.$this->command_number().' AUTHENTICATE CRAM-MD5'."\r\n";
-				fputs ($this->conn, $cram1);
+				fputs ($this->handle, $cram1);
 				$this->commands[trim($cram1)] = microtime();
-				$response = fgets($this->conn, 1024);
+				$response = fgets($this->handle, 1024);
 				$this->responses[] = $response;
 				$challenge = base64_decode(substr(trim($response), 1));
 				$pass .= str_repeat(chr(0x00), (64-strlen($pass)));
@@ -114,12 +124,12 @@ class imap extends imap_bodystruct {
 				$digest = bin2hex(pack("H*", md5(($pass ^ $opad).pack("H*", md5(($pass ^ $ipad).$challenge)))));
 				$challenge_response = base64_encode($username.' '.$digest);
 				$this->commands[trim($challenge_response)] = microtime();
-				fputs($this->conn, $challenge_response."\r\n");
+				fputs($this->handle, $challenge_response."\r\n");
 				break;
 			default:
 				$login = 'A'.$this->command_number().' LOGIN "'.str_replace('"', '\"', $username).'" "'.str_replace('"', '\"', $pass). "\"\r\n";
 				$this->commands[trim(str_replace($pass, 'xxxx', $login))] = microtime();
-				fputs($this->conn, $login);
+				fputs($this->handle, $login);
 				break;
 		}
 		$res = $this->get_response();
@@ -422,7 +432,7 @@ class imap extends imap_bodystruct {
 			}
 		}
 
-		go_debug($unseen);
+		//go_debug($unseen);
 		return array('count'=>$unseen, 'uids'=>$uids);
 	}
 
@@ -718,18 +728,33 @@ class imap extends imap_bodystruct {
 		$sorted_string = implode(',', $uids);
 		$this->clean($sorted_string, 'uid_list');
 		$command = 'UID FETCH '.$sorted_string.' (FLAGS INTERNALDATE RFC822.SIZE BODY.PEEK[HEADER.FIELDS (SUBJECT FROM '.
-						"DATE CONTENT-TYPE X-PRIORITY TO CC REPLY-TO DISPOSITION-NOTIFICATION-TO)])\r\n";
+						"DATE CONTENT-TYPE X-PRIORITY TO CC BCC REPLY-TO DISPOSITION-NOTIFICATION-TO)])\r\n";
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 
 		$status = $this->check_response($res, true);
 		$tags = array('UID' => 'uid', 'FLAGS' => 'flags', 'RFC822.SIZE' => 'size', 'INTERNALDATE' => 'internal_date');
-		$junk = array('SUBJECT', 'FROM', 'CONTENT-TYPE', 'TO', 'CC', '(', ')', ']', 'X-PRIORITY', 'DATE','REPLY-TO','DISPOSITION-NOTIFICATION-TO');
-		$flds = array('reply-to' => 'reply_to', 'content-type' => 'content_type','x-priority' => 'priority','disposition-notification-to' => 'notification');
+		$junk = array('SUBJECT', 'FROM', 'CONTENT-TYPE', 'TO', 'CC','BCC', '(', ')', ']', 'X-PRIORITY', 'DATE','REPLY-TO','DISPOSITION-NOTIFICATION-TO');
+		//$flds = array('uid','flags','size','internal_date','answered','seen','','reply-to', 'content-type','x-priority','disposition-notification-to');
 		$headers = array();
 		foreach ($res as $n => $vals) {
 			if (isset($vals[0]) && $vals[0] == '*') {
-				$message=array();
+				$message=array(
+					'to'=>'',
+					'cc'=>'',
+					'bcc'=>'',
+					'from'=>'',
+					'subject'=>'',
+					'uid'=>'',
+					'size'=>'',
+					'internal_date'=>'',
+					'date'=>'',
+					'udate'=>'',
+					'internal_udate'=>'',
+					'x-priority'=>3,
+					'reply-to'=>'',
+					'disposition-notification-to'=>'',
+				);
 
 				$count = count($vals);
 				for ($i=0;$i<$count;$i++) {
@@ -748,9 +773,7 @@ class imap extends imap_bodystruct {
 						$lines = explode("\n", $header);
 						foreach ($lines as $line) {
 							if(!empty($line)) {
-								$header = trim(strtolower(substr($line, 0, strpos($line, ':'))));
-								if(isset($flds[$header]))
-									$header = $flds[$header];
+								$header = trim(strtolower(substr($line, 0, strpos($line, ':'))));	
 
 								if (!$header) {
 									$message[$last_header] .= "\n".trim($line);
@@ -923,11 +946,12 @@ class imap extends imap_bodystruct {
 				break;
 		}
 
-		$str = String::clean_utf8($str, $charset);
-		if($charset != 'utf-8') {
-			$str = str_replace($charset, 'utf-8', $str);
+		if($charset){
+			$str = String::clean_utf8($str, $charset);
+			if($charset != 'utf-8') {
+				$str = str_replace($charset, 'utf-8', $str);
+			}
 		}
-
 		return $str;
 	}
 
@@ -998,7 +1022,7 @@ class imap extends imap_bodystruct {
 			$command = "UID FETCH $uid BODY[$message_part]\r\n";
 		}
 		$this->send_command($command);
-		$result = fgets($this->conn, 1024);
+		$result = fgets($this->handle, 1024);
 		$size = false;
 		if (preg_match("/\{(\d+)\}\r\n/", $result, $matches)) {
 			$size = $matches[1];
@@ -1011,9 +1035,9 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 	function get_message_part_line() {
-		$res = fgets($this->conn, 1024);
+		$res = fgets($this->handle, 1024);
 		while(substr($res, -2) != "\r\n") {
-			$res .= fgets($this->conn, 1024);
+			$res .= fgets($this->handle, 1024);
 		}
 		if ($this->check_response(array($res))) {
 			$res = false;
@@ -1052,8 +1076,11 @@ class imap extends imap_bodystruct {
 				$command = "UID STORE $uid_string +FLAGS ($flags)\r\n";
 			}
 
+			go_debug($command);
+
 			$this->send_command($command);
 			$res = $this->get_response();
+			go_debug($res);
 			$status = $this->check_response($res);
 			if (!$status) {
 				return $status;
@@ -1064,6 +1091,9 @@ class imap extends imap_bodystruct {
 
 	public function copy($uids, $mailbox) {
 		$this->clean($mailbox, 'mailbox');
+
+		$uid_string = implode(',',$uids);
+
 		$command = "UID COPY $uid_string \"".$this->utf7_encode($mailbox)."\"\r\n";
 		$this->send_command($command);
 		$res = $this->get_response();
@@ -1084,7 +1114,7 @@ class imap extends imap_bodystruct {
 
 
 	public function delete($uids) {
-		$this->set_message_flag($uids, '\Deleted');
+		$this->set_message_flag($uids, '\Deleted \Seen');
 		return $this->expunge();
 	}
 
@@ -1198,14 +1228,14 @@ class imap extends imap_bodystruct {
 		return $status;
 	}
 	function append_feed($string) {
-		fwrite($this->conn, $string."\r\n");
+		return fwrite($this->handle, $string."\r\n");
 	}
 	function append_start($mailbox, $size, $flags = "") {
 		$this->clean($mailbox, 'mailbox');
 		$this->clean($size, 'uid');
 		$command = 'APPEND "'.$this->utf7_encode($mailbox).'" ('.$flags.') {'.$size."}\r\n";
 		$this->send_command($command);
-		$result = fgets($this->conn);
+		$result = fgets($this->handle);
 		if (substr($result, 0, 1) == '+') {
 			return true;
 		}
@@ -1215,6 +1245,9 @@ class imap extends imap_bodystruct {
 	}
 
 	function append_message($mailbox, $data, $flags=""){
+
+		go_debug("imap::append_message($mailbox, data, $flags);");
+
 		if(!$this->append_start($mailbox, strlen($data), $flags))
 			return false;
 
