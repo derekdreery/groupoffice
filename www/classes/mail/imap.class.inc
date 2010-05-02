@@ -20,10 +20,10 @@ class imap extends imap_bodystruct {
 
 	var $delimiter=false;
 
+	var $errors=array();
+	
 	public function __construct(){
-		if(isset($_SESSION['imap_delimiter'])){
-			$this->delimiter=$_SESSION['imap_delimiter'];
-		}
+		
 	}
 
 	public function __destruct() {
@@ -31,7 +31,16 @@ class imap extends imap_bodystruct {
 	}
 
 	public function last_error(){
-		return 'TODO record errors';
+		$count=count($this->errors);
+		go_debug($this->errors);
+		if($count)
+			return $this->errors[$count-1];
+		else
+			return false;
+	}
+
+	public function clear_errors(){
+		//$this->errors=array();
 	}
 
 
@@ -135,6 +144,8 @@ class imap extends imap_bodystruct {
 				break;
 		}
 		$res = $this->get_response();
+
+
 		$authed = false;
 		if (is_array($res) && !empty($res)) {
 			$response = array_pop($res);
@@ -150,6 +161,10 @@ class imap extends imap_bodystruct {
 			if (stristr($response, 'A'.$this->command_count.' OK')) {
 				$authed = true;
 				$this->state = 'authed';
+			}else
+			{
+				throw new Exception($response);
+				//$this->errors[]=$response;
 			}
 		}
 		return $authed;
@@ -179,9 +194,18 @@ class imap extends imap_bodystruct {
 
 	function get_mailbox_delimiter() {
 		if(!$this->delimiter){
-			$this->get_folders();
+			if(isset($_SESSION['GO_SESSION']['imap_delimiter'][$this->server])){
+				$this->delimiter=$_SESSION['GO_SESSION']['imap_delimiter'][$this->server];
+			}else
+			{
+				$this->get_folders();
+			}
 		}
 		return $this->delimiter;
+	}
+
+	function set_mailbox_delimiter($delimiter) {
+		$this->delimiter=$_SESSION['GO_SESSION']['imap_delimiter'][$this->server]=$delimiter;
 	}
 
 
@@ -251,8 +275,7 @@ class imap extends imap_bodystruct {
 			}
 
 			if (!$this->delimiter) {
-				$this->delimiter = $delim;
-				$_SESSION['imap_delimiter'] = $this->delimiter;
+				$this->set_mailbox_delimiter($delim);
 			}
 
 			if (stristr($flags, 'marked')) {
@@ -811,9 +834,40 @@ class imap extends imap_bodystruct {
 		return $final_headers;
 	}
 
+
+	/**
+		* Check if the given mailbox root is valid and return it with the correct delimiter
+		*
+		* @param $mbroot The Mailbox root. (eg. INBOX/)
+		* @access public
+		* @return mixed Mailbox root with delimiter or false on failure
+		*/
+
+	function check_mbroot($mbroot) {
+		$mbroot = trim($mbroot);
+
+		$list = $this->get_folders('%');
+		if (is_array($list)) {
+			while ($folder = array_shift($list)) {
+				if (!$this->delimiter && strlen($folder['delimiter']) > 0) {
+					$this->set_mailbox_delimiter($folder['delimiter']);
+
+					if (substr($mbroot, -1) == $this->delimiter) {
+						$mbroot = substr($mbroot, 0, -1);
+					}
+				}
+
+				if ($folder['name'] == $mbroot) {
+					return $mbroot.$this->delimiter;
+				}
+			}
+		}
+		return false;
+	}
+
 	//todo
 	public function get_quota() {
-
+		$command = "GETQUOTAROOT \"INBOX\"\r\n";
 	}
 
 	/**
