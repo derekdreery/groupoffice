@@ -1009,9 +1009,9 @@ class imap extends imap_bodystruct {
 	 * @param <type> $max
 	 * @return <type>
 	 */
-	public function get_message_part($uid, $message_part=-1, $peek=false) {
+	public function get_message_part($uid, $message_part=0, $peek=false) {
 		$this->clean($uid, 'uid');
-		if ($message_part==-1) {
+		if ($message_part==0) {
 			$command = "UID FETCH $uid BODY[]\r\n";
 		}
 		else {
