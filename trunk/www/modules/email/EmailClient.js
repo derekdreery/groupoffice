@@ -1190,7 +1190,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			encoding: attachment.encoding,
 			type: attachment.type,
 			subtype: attachment.subtype,
-			filename:attachment.name
+			filename:attachment.name,
+			charset:attachment.charset
 		}
 
 		var url_params = '?';
