@@ -338,7 +338,6 @@ class GoSwift extends Swift_Mailer{
 		{
 			global $GO_CONFIG, $GO_MODULES;
 
-			require_once ($GO_CONFIG->class_path."mail/imap.class.inc");
 			require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
 			$imap = new cached_imap();
 
@@ -348,12 +347,14 @@ class GoSwift extends Swift_Mailer{
 
 				$this->data=$this->message->toString();
 
-				if ($imap->append_message($imap->utf7_imap_encode($this->account['sent']), $this->data,"\\Seen"))
+				$appended = $imap->append_message($this->account['sent'], $this->data,"\Seen");
+				if ($appended)
 				{
 					if (!empty($this->reply_uid) && !empty($this->reply_mailbox))
 					{
 						$uid_arr = array($this->reply_uid);
-						$imap->set_message_flag($this->reply_mailbox, $uid_arr, "\\Answered");
+						$imap->select_mailbox($this->reply_mailbox);
+						$imap->set_message_flag($uid_arr, "\Answered");
 
 						$folder = $imap->email->get_folder($this->account['id'],$this->reply_mailbox);
 
@@ -365,11 +366,11 @@ class GoSwift extends Swift_Mailer{
 
 					if(!empty($this->draft_uid))
 					{
-						$imap->reopen($this->account['drafts']);
+						$imap->select_mailbox($this->account['drafts']);
 						$imap->delete(array($this->draft_uid));
 					}
 
-					$imap->close();
+					$imap->disconnect();
 				}
 			}
 		}
