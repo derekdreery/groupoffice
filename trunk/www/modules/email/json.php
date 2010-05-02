@@ -16,7 +16,6 @@ require('../../Group-Office.php');
 
 $GO_SECURITY->json_authenticate('email');
 
-require_once ($GO_CONFIG->class_path."mail/imap.class.inc.php");
 require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
 require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 require_once ($GO_LANGUAGE->get_language_file('email'));
@@ -25,7 +24,7 @@ require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 $imap = new cached_imap();
 $email = new email();
 
-function get_all_mailbox_nodes($account_id, $folder_id){
+function get_all_mailbox_nodes($account_id, $folder_id) {
 
 	global $lang;
 
@@ -34,36 +33,32 @@ function get_all_mailbox_nodes($account_id, $folder_id){
 	$email = new email();
 
 	$email->get_folders($account_id, $folder_id);
-	while($email->next_record())
-	{
+	while($email->next_record()) {
 		$pos = strrpos($email->f('name'), $email->f('delimiter'));
 
-		if ($pos && $email->f('delimiter') != '')
-		{
+		if ($pos && $email->f('delimiter') != '') {
 			$folder_name = substr($email->f('name'),$pos+1);
-		}else
-		{
+		}else {
 			$folder_name = $email->f('name');
 		}
-		$folder_name = imap::utf7_decode($folder_name);
 
 		$response[] = array(
-				'text'=>$folder_name,
-				'id'=>'folder_'.$email->f('id'),
-				'iconCls'=>'folderIcon',
-				'account_id'=>$email->f('account_id'),
-				'folder_id'=>$email->f('id'),
-				'mailbox'=>$email->f('name'),
-				'expanded'=>true,
-				'canHaveChildren'=>($email->f('attributes') > LATT_NOINFERIORS),
-				'children'=>get_all_mailbox_nodes($account_id, $email->f('id')),
-				'checked'=>$email->f('subscribed')=='1'
-				);
+						'text'=>$folder_name,
+						'id'=>'folder_'.$email->f('id'),
+						'iconCls'=>'folderIcon',
+						'account_id'=>$email->f('account_id'),
+						'folder_id'=>$email->f('id'),
+						'mailbox'=>$email->f('name'),
+						'expanded'=>true,
+						'canHaveChildren'=>($email->f('attributes') > LATT_NOINFERIORS),
+						'children'=>get_all_mailbox_nodes($account_id, $email->f('id')),
+						'checked'=>$email->f('subscribed')=='1'
+		);
 	}
 	return $response;
 }
 
-function get_mailbox_nodes($account_id, $folder_id){
+function get_mailbox_nodes($account_id, $folder_id) {
 	global $lang, $imap, $inbox_new;
 
 	$email = new email();
@@ -72,27 +67,20 @@ function get_mailbox_nodes($account_id, $folder_id){
 	$response = array();
 
 	$count = $email->get_subscribed($account_id, $folder_id);
-	while($email->next_record())
-	{
-		if($email->f('name') == 'INBOX')
-		{
-			if($count==1 && $email->f('attributes') > LATT_NOINFERIORS)
-			{
+	while($email->next_record()) {
+		if($email->f('name') == 'INBOX') {
+			if($count==1 && $email->f('attributes') > LATT_NOINFERIORS) {
 				$children=get_mailbox_nodes(0, $email->f('id'));
 			}
 			$folder_name = $lang['email']['inbox'];
-		}else
-		{
+		}else {
 			$pos = strrpos($email->f('name'), $email->f('delimiter'));
 
-			if ($pos && $email->f('delimiter') != '')
-			{
+			if ($pos && $email->f('delimiter') != '') {
 				$folder_name = substr($email->f('name'),$pos+1);
-			}else
-			{
+			}else {
 				$folder_name = $email->f('name');
 			}
-			$folder_name = imap::utf7_decode($folder_name);
 		}
 
 		//check for unread mail
@@ -112,47 +100,43 @@ function get_mailbox_nodes($account_id, $folder_id){
 
 		$unseen = $imap->get_unseen($email->f('name'));
 
-		if($email->f('name')=='INBOX')
-		{
+		if($email->f('name')=='INBOX') {
 			$inbox_new += $unseen['count'];
 		}
 
-		if ($unseen['count'] > 0)
-		{
+		if ($unseen['count'] > 0) {
 			$status_html = '&nbsp;<span class="em-folder-status" id="status_'.$email->f('id').'">('.$unseen['count'].')</span>';
-		}else
-		{
+		}else {
 			$status_html = '&nbsp;<span class="em-folder-status" id="status_'.$email->f('id').'"></span>';
 		}
 
-		if($email2->get_subscribed(0, $email->f('id')))
-		{
+		if($email2->get_subscribed(0, $email->f('id'))) {
 			$response[] = array(
-				'text'=>$folder_name.$status_html,
-				'name'=>$folder_name,
-				'id'=>'folder_'.$email->f('id'),
-				'iconCls'=>'folder-default',
-				'account_id'=>$email->f('account_id'),
-				'folder_id'=>$email->f('id'),
-				'canHaveChildren'=>$email->f('attributes') > LATT_NOINFERIORS,
-				'unseen'=>$unseen['count'],
-				'mailbox'=>$email->f('name'),
-				'expanded'=>isset($children),
-				'children'=>isset($children) ? $children : null
+							'text'=>$folder_name.$status_html,
+							'name'=>$folder_name,
+							'id'=>'folder_'.$email->f('id'),
+							'iconCls'=>'folder-default',
+							'account_id'=>$email->f('account_id'),
+							'folder_id'=>$email->f('id'),
+							'canHaveChildren'=>$email->f('attributes') > LATT_NOINFERIORS,
+							'unseen'=>$unseen['count'],
+							'mailbox'=>$email->f('name'),
+							'expanded'=>isset($children),
+							'children'=>isset($children) ? $children : null
 			);
 		}else {
 			$response[] = array(
-				'text'=>$folder_name.$status_html,
-				'name'=>$folder_name,
-				'id'=>'folder_'.$email->f('id'),
-				'iconCls'=>'folder-default',
-				'account_id'=>$email->f('account_id'),
-				'folder_id'=>$email->f('id'),
-				'mailbox'=>$email->f('name'),
-				'canHaveChildren'=>$email->f('attributes') > LATT_NOINFERIORS,
-				'unseen'=>$unseen['count'],
-				'expanded'=>true,
-				'children'=>array()
+							'text'=>$folder_name.$status_html,
+							'name'=>$folder_name,
+							'id'=>'folder_'.$email->f('id'),
+							'iconCls'=>'folder-default',
+							'account_id'=>$email->f('account_id'),
+							'folder_id'=>$email->f('id'),
+							'mailbox'=>$email->f('name'),
+							'canHaveChildren'=>$email->f('attributes') > LATT_NOINFERIORS,
+							'unseen'=>$unseen['count'],
+							'expanded'=>true,
+							'children'=>array()
 			);
 		}
 	}
@@ -160,41 +144,33 @@ function get_mailbox_nodes($account_id, $folder_id){
 }
 
 
-function find_alias_and_recipients()
-{
+function find_alias_and_recipients() {
 	global $email, $account_id, $response, $content, $task;
 
 	$RFC822 = new RFC822();
-	
+
 	$aliases = array();
 	$email->get_aliases($account_id, true);
-	while($alias=$email->next_record())
-	{
+	while($alias=$email->next_record()) {
 		$aliases[strtolower($alias['email'])]=$alias['id'];
 	}
 
 	$fill_to = $task=='reply_all' || $task=='opendraft';
 
 	//add all recievers from this email
-	if (isset($content["to"]))
-	{
+	if (isset($content["to"])) {
 		$first = !empty($response['data']['to']);
-		for ($i=0;$i<sizeof($content["to"]);$i++)
-		{
+		for ($i=0;$i<sizeof($content["to"]);$i++) {
 			$address = strtolower($content["to"][$i]['email']);
-			if (!empty($email))
-			{
-				if(isset($aliases[$address]))
-				{
+			if (!empty($email)) {
+				if(isset($aliases[$address])) {
 					$response['data']['alias_id']=$aliases[$address];
 				}
 
-				if($fill_to && (!isset($aliases[$address]) || $task=='opendraft')){
-					if (!$first)
-					{
+				if($fill_to && (!isset($aliases[$address]) || $task=='opendraft')) {
+					if (!$first) {
 						$first = true;
-					}else
-					{
+					}else {
 						$response['data']['to'] .= ',';
 					}
 					$response['data']['to'] .= $RFC822->write_address($content["to"][$i]['name'],$content["to"][$i]['email']);
@@ -202,24 +178,18 @@ function find_alias_and_recipients()
 			}
 		}
 	}
-	if (isset($content["cc"]) && count($content["cc"]) > 0)
-	{
+	if (isset($content["cc"]) && count($content["cc"]) > 0) {
 		$response['data']['cc']='';
 		$first=false;
-		for ($i=0;$i<sizeof($content["cc"]);$i++)
-		{
+		for ($i=0;$i<sizeof($content["cc"]);$i++) {
 			$address = strtolower($content["cc"][$i]['email']);
-			if (!empty($address))
-			{
-				if(isset($aliases[$address]))
-				{
+			if (!empty($address)) {
+				if(isset($aliases[$address])) {
 					$response['data']['alias_id']=$aliases[$address];
-				}elseif($fill_to){
-					if (!$first)
-					{
+				}elseif($fill_to) {
+					if (!$first) {
 						$first = true;
-					}else
-					{
+					}else {
 						$response['data']['cc'] .= ',';
 					}
 					$response['data']['cc'] .= $RFC822->write_address($content["cc"][$i]['name'],$content["cc"][$i]['email']);
@@ -231,15 +201,14 @@ function find_alias_and_recipients()
 
 
 
-try{
+try {
 
 	$task = $_REQUEST['task'];
-	if($task == 'reply' || $task =='reply_all' || $task == 'forward' || $task=='opendraft')
-	{
-		if(!empty($_POST['uid'])){
+	if($task == 'reply' || $task =='reply_all' || $task == 'forward' || $task=='opendraft') {
+		if(!empty($_POST['uid'])) {
 			/*
 			 * Regular reply in the e-mail client
-			 */
+			*/
 
 			$account_id = $_POST['account_id'];
 			$uid = $_POST['uid'];
@@ -251,24 +220,21 @@ try{
 			$account = $email->get_account($account_id);
 			$imap->set_account($account, $mailbox);
 
-			if(!$account)
-			{
+			if(!$account) {
 				throw new DatabaseSelectException();
 			}
 
 			$content = $imap->get_message_with_body($uid, $task=='forward', true);
-			if($_POST['content_type']!='html'){
+			if($_POST['content_type']!='html') {
 				$content['body']=$content['plain_body'];
-			}else
-			{
+			}else {
 				$content['body']=$content['html_body'];
 			}
 			unset($content['html_body'], $content['plain_body']);
-		}else
-		{
+		}else {
 			/*
 			 * Reply / forward for a linked message. We need the mailings module to fetch the message.
-			 */
+			*/
 			$id = isset($_REQUEST['id']) ? ($_REQUEST['id']) : 0;
 			$path = isset($_REQUEST['path']) ? ($_REQUEST['path']) : "";
 			$part_number = isset($_REQUEST['part_number']) ? ($_REQUEST['part_number']) : "";
@@ -279,16 +245,13 @@ try{
 			$content = $ml->get_message_for_client($id, $path, $part_number, $task=='forward', true);
 		}
 
-		switch($task)
-		{
+		switch($task) {
 			case "reply":
 			case "reply_all":
-				$response['data']['to'] = $content["reply-to"];
-				if(stripos($content['subject'],'Re:')===false)
-				{
+				$response['data']['to'] = $content["reply_to"];
+				if(stripos($content['subject'],'Re:')===false) {
 					$response['data']['subject'] = 'Re: '.$content['subject'];
-				}else
-				{
+				}else {
 					$response['data']['subject'] = $content['subject'];
 				}
 				break;
@@ -296,33 +259,28 @@ try{
 			case "opendraft":
 			case "forward":
 
-				if($task == 'opendraft')
-				{
+				if($task == 'opendraft') {
 					$response['data']['to']='';
 					$response['data']['subject'] = $content['subject'];
 
-				}else
-				{
-					if(stripos($content['subject'],'Fwd:')===false)
-					{
+				}else {
+					if(stripos($content['subject'],'Fwd:')===false) {
 						$response['data']['subject'] = 'Fwd: '.$content['subject'];
-					}else
-					{
+					}else {
 						$response['data']['subject'] = $content['subject'];
 					}
 				}
 
 				//reattach non-inline attachments
-				foreach($content['attachments'] as $attachment){
+				foreach($content['attachments'] as $attachment) {
 					//var_dump($parts[$i]);
-					if($imap->part_is_attachment($attachment))
-					{
+					if($imap->part_is_attachment($attachment)) {
 						$response['data']['attachments'][]=array(
-							'tmp_name'=>$attachment['tmp_file'],
-							'name'=>$attachment['name'],
-							'size'=>$attachment["size"],
-							'type'=>File::get_filetype_description(File::get_extension($attachment['name']))
-							);
+										'tmp_name'=>$attachment['tmp_file'],
+										'name'=>$attachment['name'],
+										'size'=>$attachment["size"],
+										'type'=>File::get_filetype_description(File::get_extension($attachment['name']))
+						);
 					}
 				}
 
@@ -336,8 +294,7 @@ try{
 		$response['data']['body']=$content['body'];
 
 
-		if($GO_MODULES->has_module('gnupg'))
-		{
+		if($GO_MODULES->has_module('gnupg')) {
 			require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 			$gnupg = new gnupg();
 			$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$content['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$content['sender']] : '';
@@ -354,19 +311,16 @@ try{
 			}
 		}*/
 
-		if($task=='forward')
-		{
+		if($task=='forward') {
 			$om_to = $content["to_string"];
 			$om_cc = $content["cc_string"];
 
-			if($_POST['content_type']== 'html')
-			{
+			if($_POST['content_type']== 'html') {
 				$header_om  = '<br /><br /><font face="verdana" size="2">'.$lang['email']['original_message']."<br />";
 				$header_om .= "<b>".$lang['email']['subject'].":&nbsp;</b>".htmlspecialchars($content['subject'], ENT_QUOTES, 'UTF-8')."<br />";
 				$header_om .= '<b>'.$lang['email']['from'].": &nbsp;</b>".htmlspecialchars($content['full_from'], ENT_QUOTES, 'UTF-8')."<br />";
 				$header_om .= "<b>".$lang['email']['to'].":&nbsp;</b>".htmlspecialchars($om_to, ENT_QUOTES, 'UTF-8')."<br />";
-				if(!empty($om_cc))
-				{
+				if(!empty($om_cc)) {
 					$header_om .= "<b>CC:&nbsp;</b>".htmlspecialchars($om_cc, ENT_QUOTES, 'UTF-8')."<br />";
 				}
 
@@ -376,14 +330,12 @@ try{
 
 				$response['data']['body']=$header_om.$response['data']['body'];
 				//$response['data']['body'] = '<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$response['data']['body'].'</blockquote>';
-			}else
-			{
+			}else {
 				$header_om  = "\n\n".$lang['email']['original_message']."\n";
 				$header_om .= $lang['email']['subject'].": ".$content['subject']."\n";
 				$header_om .= $lang['email']['from'].": ".$content['full_from']."\n";
 				$header_om .= $lang['email']['to'].": ".$om_to."\n";
-				if(!empty($om_cc))
-				{
+				if(!empty($om_cc)) {
 					$header_om .= "CC: ".$om_cc."\n";
 				}
 
@@ -395,20 +347,17 @@ try{
 
 				$response['data']['body'] = $header_om.$response['data']['body'];
 			}
-		}elseif($task=='reply' || $task=='reply_all')
-		{
+		}elseif($task=='reply' || $task=='reply_all') {
 			$header_om = sprintf($lang['email']['replyHeader'],
-				$lang['common']['full_days'][date('w', $content["udate"])],
-				date($_SESSION['GO_SESSION']['date_format'],$content["udate"]),
-				date($_SESSION['GO_SESSION']['time_format'],$content["udate"]),
-				$content['from']);
+							$lang['common']['full_days'][date('w', $content["udate"])],
+							date($_SESSION['GO_SESSION']['date_format'],$content["udate"]),
+							date($_SESSION['GO_SESSION']['time_format'],$content["udate"]),
+							$content['from']);
 
-			if($_POST['content_type']== 'html')
-			{
+			if($_POST['content_type']== 'html') {
 
 				$response['data']['body'] = '<br /><br />'.htmlspecialchars($header_om, ENT_QUOTES, 'UTF-8').'<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$response['data']['body'].'</blockquote>';
-			}else
-			{
+			}else {
 				$response['data']['body'] = str_replace("\r",'',$response['data']['body']);
 				$response['data']['body'] = '> '.str_replace("\n","\n> ",$response['data']['body']);
 
@@ -420,8 +369,7 @@ try{
 
 		//go_debug($url_replacements);
 
-		if(isset($_POST['template_id']) && $_POST['template_id']>0)
-		{
+		if(isset($_POST['template_id']) && $_POST['template_id']>0) {
 			$template_id = ($_POST['template_id']);
 			$to = isset($response['data']['to']) ? $response['data']['to'] : '';
 			$template = load_template($template_id, $to);
@@ -430,21 +378,17 @@ try{
 			$response['data']['inline_attachments']=array_merge($response['data']['inline_attachments'], $template['data']['inline_attachments']);
 		}
 
-		if($_POST['content_type']=='plain')
-		{
+		if($_POST['content_type']=='plain') {
 			$response['data']['textbody']=$response['data']['body'];
 			unset($response['data']['body']);
 		}
 
 		$response['success']=true;
 
-	}else
-	{
-		switch($_REQUEST['task'])
-		{
+	}else {
+		switch($_REQUEST['task']) {
 			case 'icalendar_attachment':
-				if(!isset($GO_MODULES->modules['calendar']) || !$GO_MODULES->modules['calendar']['read_permission'])
-				{
+				if(!isset($GO_MODULES->modules['calendar']) || !$GO_MODULES->modules['calendar']['read_permission']) {
 					throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));
 				}
 
@@ -464,17 +408,14 @@ try{
 				$vcalendar = $ical2array->parse_string($data);
 
 				$event=false;
-				while($object = array_shift($vcalendar[0]['objects']))
-				{
-					if($object['type'] == 'VEVENT')
-					{
+				while($object = array_shift($vcalendar[0]['objects'])) {
+					if($object['type'] == 'VEVENT') {
 						$event = $cal->get_event_from_ical_object($object);
 						break;
 					}
 				}
 
-				if(!$event)
-				{
+				if(!$event) {
 					throw new Exception($lang['common']['selectError']);
 				}
 				$response=$cal->event_to_json_response($event);
@@ -484,13 +425,12 @@ try{
 
 			case 'attachments':
 
-				while($file = array_shift($_SESSION['GO_SESSION']['just_uploaded_attachments']))
-				{
+				while($file = array_shift($_SESSION['GO_SESSION']['just_uploaded_attachments'])) {
 					$response['results'][]=array(
-						'tmp_name'=>$file,
-						'name'=>utf8_basename($file),
-						'size'=>filesize($file),
-						'type'=>File::get_filetype_description(File::get_extension($file))
+									'tmp_name'=>$file,
+									'name'=>utf8_basename($file),
+									'size'=>filesize($file),
+									'type'=>File::get_filetype_description(File::get_extension($file))
 					);
 				}
 				$response['total']=count($response['results']);
@@ -503,8 +443,7 @@ try{
 
 				$response = load_template($template_id, $to, isset($_POST['mailing_group_id']) && $_POST['mailing_group_id']>0);
 
-				if($_POST['content_type']=='plain')
-				{
+				if($_POST['content_type']=='plain') {
 					$response['data']['textbody']=$response['data']['body'];
 					unset($response['data']['body']);
 				}
@@ -513,20 +452,17 @@ try{
 				break;
 
 			case 'filters':
-				if(isset($_POST['delete_keys']))
-				{
+				if(isset($_POST['delete_keys'])) {
 					$filters = json_decode(($_POST['delete_keys']));
 
-					foreach($filters as $filter_id)
-					{
+					foreach($filters as $filter_id) {
 						$email->delete_filter($filter_id);
 					}
 					$response['deleteSuccess']=true;
 				}
 				$response['total']=$email->get_filters(($_POST['account_id']));
 				$response['results']=array();
-				while($email->next_record(DB_ASSOC))
-				{
+				while($email->next_record(DB_ASSOC)) {
 					$response['results'][] = $email->record;
 				}
 
@@ -536,8 +472,7 @@ try{
 
 				$response['success']=false;
 				$response['data']=$email->get_filter(($_POST['filter_id']));
-				if($response['data'])
-				{
+				if($response['data']) {
 					$response['success']=true;
 				}
 
@@ -572,42 +507,37 @@ try{
 				//$account = connect($account_id, $mailbox);
 				$account = $email->get_account($account_id);
 				$imap->set_account($account, $mailbox);
-				
+
 				$response = $imap->get_message_with_body($uid, !empty($_POST['create_temporary_attachments']));
 
-				if(!empty($_POST['plaintext'])){
+				if(!empty($_POST['plaintext'])) {
 					$response['body']=$response['plain_body'];
-				}else
-				{
+				}else {
 					$response['body']=$response['html_body'];
 				}
 				unset($response['html_body'], $response['plain_body']);
 
-				if(!empty($response['new'])){
-					if($imap->set_unseen_cache(array($uid), false))
-					{
-						if(!empty($response['from_cache']) || stripos($account['host'],'gmail')!==false)
-						{
+				if(!empty($response['new'])) {
+					if($imap->set_unseen_cache(array($uid), false)) {
+						if(!empty($response['from_cache']) || stripos($account['host'],'gmail')!==false) {
 							$imap->set_message_flag($mailbox, array($uid), "\\Seen");
 						}
 					}
 				}
-				$response['account_id']=$account_id;				
-				
+				$response['account_id']=$account_id;
+
 				$response['sender_contact_id']=0;
-				if(!empty($_POST['get_contact_id']) && $GO_MODULES->has_module('addressbook'))
-				{
+				if(!empty($_POST['get_contact_id']) && $GO_MODULES->has_module('addressbook')) {
 					require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 					$ab = new addressbook();
 
 					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
 					$response['sender_contact_id']=intval($contact['id']);
 
-					if($response['sender_contact_id'])
-					{
-							$contact['contact_name'] = String::format_name($contact);
-							$response['contact']=$contact;
-					}             
+					if($response['sender_contact_id']) {
+						$contact['contact_name'] = String::format_name($contact);
+						$response['contact']=$contact;
+					}
 				}
 
 				$response['date']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $response['udate']);
@@ -617,71 +547,63 @@ try{
 				$response['from']=htmlspecialchars($response['from'], ENT_COMPAT, 'UTF-8');
 				$response['subject']=htmlspecialchars($response['subject'], ENT_COMPAT, 'UTF-8');
 				$response['reply-to']=htmlspecialchars($response['reply_to'], ENT_COMPAT, 'UTF-8');
-				for($i=0;$i<count($response['to']);$i++){
+				for($i=0;$i<count($response['to']);$i++) {
 					$response['to'][$i]=array(
-						'email'=>htmlspecialchars($response['to'][$i]['email'], ENT_COMPAT, 'UTF-8'),
-						'name'=>htmlspecialchars($response['to'][$i]['name'], ENT_COMPAT, 'UTF-8')
+									'email'=>htmlspecialchars($response['to'][$i]['email'], ENT_COMPAT, 'UTF-8'),
+									'name'=>htmlspecialchars($response['to'][$i]['name'], ENT_COMPAT, 'UTF-8')
 					);
 				}
-				for($i=0;$i<count($response['cc']);$i++){
+				for($i=0;$i<count($response['cc']);$i++) {
 					$response['cc'][$i]=array(
-						'email'=>htmlspecialchars($response['cc'][$i]['email'], ENT_COMPAT, 'UTF-8'),
-						'name'=>htmlspecialchars($response['cc'][$i]['name'], ENT_COMPAT, 'UTF-8')
+									'email'=>htmlspecialchars($response['cc'][$i]['email'], ENT_COMPAT, 'UTF-8'),
+									'name'=>htmlspecialchars($response['cc'][$i]['name'], ENT_COMPAT, 'UTF-8')
 					);
 				}
-				for($i=0;$i<count($response['bcc']);$i++){
+				for($i=0;$i<count($response['bcc']);$i++) {
 					$response['bcc'][$i]=array(
-						'email'=>htmlspecialchars($response['bcc'][$i]['email'], ENT_COMPAT, 'UTF-8'),
-						'name'=>htmlspecialchars($response['bcc'][$i]['name'], ENT_COMPAT, 'UTF-8')
+									'email'=>htmlspecialchars($response['bcc'][$i]['email'], ENT_COMPAT, 'UTF-8'),
+									'name'=>htmlspecialchars($response['bcc'][$i]['name'], ENT_COMPAT, 'UTF-8')
 					);
 				}
 
-				//$response['size']=Number::format_size($response['size']);		
-				
-				if($GO_MODULES->has_module('gnupg'))
-				{
+				//$response['size']=Number::format_size($response['size']);
+
+				if($GO_MODULES->has_module('gnupg')) {
 					require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 					$gnupg = new gnupg();
 					$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']] : '';
-					if(isset($_POST['passphrase']))
-					{
+					if(isset($_POST['passphrase'])) {
 						$passphrase=$_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']]=$_POST['passphrase'];
 						//$passphrase=$_POST['passphrase'];
 					}
-					try{
+					try {
 						$response['body'] = $gnupg->replace_encoded($response['body'],$passphrase);
 					}
-					catch(Exception $e)
-					{
+					catch(Exception $e) {
 						$m = $e->getMessage();
 
-						if(strpos($m, 'bad passphrase'))
-						{
+						if(strpos($m, 'bad passphrase')) {
 							$response['askPassphrase']=true;
-							if(isset($_POST['passphrase']))
-							{
+							if(isset($_POST['passphrase'])) {
 								throw new Exception('Wrong passphrase!');
 							}
-						}else
-						{
+						}else {
 							throw new Exception($m);
 						}
 					}
 				}
 				$block_images=true;
-				if(!empty($_POST['unblock'])){
+				if(!empty($_POST['unblock'])) {
 					$block_images=false;
-				}elseif($GO_MODULES->has_module('addressbook'))
-				{
+				}elseif($GO_MODULES->has_module('addressbook')) {
 					require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 					$ab = new addressbook();
 
 					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
 					$block_images = !is_array($contact);
 				}
-				
-				if($block_images)
-				{
+
+				if($block_images) {
 					$response['body'] = preg_replace("/<([^a]{1})([^>]*)https?:([^>]*)/iu", "<$1$2blocked:$3", $response['body'], -1, $response['blocked_images']);
 				}
 
@@ -712,16 +634,17 @@ try{
 
 				$response['trash_folder']=$account['trash'];
 
-				$response['trash']=!empty($account['trash']) && strpos($mailbox, $imap->utf7_encode($account['trash']))!==false;
-				$response['drafts']=!empty($account['drafts']) && strpos($mailbox, $imap->utf7_encode($account['drafts']))!==false;
-				$response['sent']=!empty($account['sent']) && strpos($mailbox, $imap->utf7_encode($account['sent']))!==false;
+				$response['trash']=!empty($account['trash']) && strpos($mailbox, $account['trash'])!==false;
+				$response['drafts']=!empty($account['drafts']) && strpos($mailbox, $account['drafts'])!==false;
+				$response['sent']=!empty($account['sent']) && strpos($mailbox, $account['sent'])!==false;
 
 				if(isset($_POST['delete_keys'])) {
-					$messages = json_decode($_POST['delete_keys']);
+					$messages = json_decode($_POST['delete_keys'], true);
 
-					$imap->set_message_flag($mailbox, $messages, "\\Seen");
-					if($imap->is_imap() && !empty($account['trash']) && $imap->utf7_imap_decode($mailbox) != $account['trash']) {
-						$response['deleteSuccess']=$imap->move($imap->utf7_imap_encode($account['trash']), $messages);
+					
+					if($imap->is_imap() && !empty($account['trash']) && $mailbox != $account['trash']) {
+						$imap->set_message_flag($messages, "\Seen");
+						$response['deleteSuccess']=$imap->move($messages,$account['trash']);
 					}else {
 
 						$response['deleteSuccess']=$imap->delete($messages);
@@ -749,25 +672,24 @@ try{
 							break;
 					}
 				}
-				
+
 				$sort=isset($_POST['sort']) ? $_POST['sort'] : 'from';
 
-				switch($sort)
-				{
+				switch($sort) {
 					case 'from':
-					$sort_field=SORTFROM;
-					break;
+						$sort_field=SORTFROM;
+						break;
 					case 'date':
-					$sort_field=SORTDATE;
-					break;
+						$sort_field=SORTDATE;
+						break;
 					case 'subject':
-					$sort_field=SORTSUBJECT;
-					break;
+						$sort_field=SORTSUBJECT;
+						break;
 					case 'size':
-					$sort_field=SORTSIZE;
-					break;
+						$sort_field=SORTSIZE;
+						break;
 					default:
-					$sort_field=SORTDATE;
+						$sort_field=SORTDATE;
 				}
 
 				//if($sort_field == SORTDATE && $imap->is_imap())
@@ -818,14 +740,14 @@ try{
 						$message['date'] = date($_SESSION['GO_SESSION']['date_format'],$message['udate']);
 					}
 
-					
+
 					if(empty($message['subject'])) {
 						$message['subject']=$lang['email']['no_subject'];
 					}
 
 					$message['from'] = ($response['sent'] || $response['drafts']) ? $message['to'] : $message['from'];
 
-					
+
 					$address = $RFC822->parse_address_list($message['from']);
 
 					$readable_addresses=array();
@@ -833,8 +755,8 @@ try{
 						if(!empty($address[$i]['personal'])) {
 							$readable_addresses[]=$address[$i]['personal'];
 						}else if(!empty($address[$i])) {
-								$readable_addresses[]=$address[$i]['email'];
-							}
+							$readable_addresses[]=$address[$i]['email'];
+						}
 					}
 					$message['from']=implode(',', $readable_addresses);
 
@@ -863,10 +785,10 @@ try{
 						$unseen = $imap->get_unseen();
 						$response['unseen'][$imap->folder['id']]=$unseen['count'];
 					}else {
-						
+
 						$folder = $email->get_folder($account_id, $touched_folder);
 						$imap->select_mailbox($touched_folder);
-						
+
 						$unseen = $imap->get_unseen();
 						$response['unseen'][$imap->folder['id']]=$unseen['count'];
 					}
@@ -874,45 +796,40 @@ try{
 
 				break;
 
-										case 'tree':
-											$email = new email();
-											//$account_id=isset($_REQUEST['account_id']) ? ($_REQUEST['account_id']) : 0;
-											//$folder_id=isset($_REQUEST['folder_id']) ? ($_REQUEST['folder_id']) : 0;
+			case 'tree':
+				$email = new email();
+				//$account_id=isset($_REQUEST['account_id']) ? ($_REQUEST['account_id']) : 0;
+				//$folder_id=isset($_REQUEST['folder_id']) ? ($_REQUEST['folder_id']) : 0;
 
-											if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_'))
-											{
-												$node = explode('_',$_REQUEST['node']);
-												$node_type=$node[0];
-												$node_id=$node[1];
-											}else {
-												$node_type='root';
-												$node_id=0;
-											}
+				if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_')) {
+					$node = explode('_',$_REQUEST['node']);
+					$node_type=$node[0];
+					$node_id=$node[1];
+				}else {
+					$node_type='root';
+					$node_id=0;
+				}
 
-											$response=array();
-											if($node_type=='root')
-											{
-												$email2 = new email();
-												$count = $email2->get_accounts($GO_SECURITY->user_id);
-												//go_log(LOG_DEBUG, $count);
-												while($email2->next_record())
-												{
-													$account = connect($email2->f('id'), 'INBOX', false);
+				$response=array();
+				if($node_type=='root') {
+					$email2 = new email();
+					$count = $email2->get_accounts($GO_SECURITY->user_id);
+					//go_log(LOG_DEBUG, $count);
+					while($email2->next_record()) {
+						$account = connect($email2->f('id'), 'INBOX', false);
 
-													$usage = '';
-													$inbox_new=0;
-													if($account)
-													{
-														if(!empty($_POST['refresh']))
-														{
-															go_debug('refreshing');
-															//$email->synchronize_folders($account, $imap);
-															$imap->clear_cache();
-														}
+						$usage = '';
+						$inbox_new=0;
+						if($account) {
+							if(!empty($_POST['refresh'])) {
+								go_debug('refreshing');
+								//$email->synchronize_folders($account, $imap);
+								$imap->clear_cache();
+							}
 
-														$text = $email2->f('email');
+							$text = $email2->f('email');
 
-														/*$server_response = $email->get_servermanager_mailbox_info($account);
+							/*$server_response = $email->get_servermanager_mailbox_info($account);
 														 if(isset($server_response['success']))
 														 {
 															$usage .= Number::format_size($server_response['data']['usage']*1024);
@@ -924,20 +841,17 @@ try{
 															}
 															}*/
 
-														$quota = $imap->get_quota();
-														if(isset($quota['usage']))
-														{
-															if(!empty($quota['limit']))
-															{
-																$percentage = ceil($quota['usage']*100/$quota['limit']);
-																$usage = sprintf($lang['email']['usage_limit'], $percentage.'%', Number::format_size($quota['limit']*1024));
-															}	else
-															{
-																$usage = sprintf($lang['email']['usage'], Number::format_size($quota['usage']*1024));
-															}
-														}
+							$quota = $imap->get_quota();
+							if(isset($quota['usage'])) {
+								if(!empty($quota['limit'])) {
+									$percentage = ceil($quota['usage']*100/$quota['limit']);
+									$usage = sprintf($lang['email']['usage_limit'], $percentage.'%', Number::format_size($quota['limit']*1024));
+								}	else {
+									$usage = sprintf($lang['email']['usage'], Number::format_size($quota['usage']*1024));
+								}
+							}
 
-														/*$root_folder=false;
+							/*$root_folder=false;
 														if(!empty($account['mbroot']))
 														{
 															$lastchar = substr($account['mbroot'],-1);
@@ -952,283 +866,253 @@ try{
 															$children = get_mailbox_nodes(0, $root_folder['id']);
 														}else
 														{*/
-															$children = get_mailbox_nodes($email2->f('id'), 0);
-														//}
+							$children = get_mailbox_nodes($email2->f('id'), 0);
+							//}
 
-														$imap->disconnect();
-													}else
-													{
-														$text = $email2->f('email').' ('.$lang['common']['error'].')';
-														$children=array();
-													}
+							$imap->disconnect();
+						}else {
+							$text = $email2->f('email').' ('.$lang['common']['error'].')';
+							$children=array();
+						}
 
-													$node =  array(
-														'text'=>$text,
-														'name'=>$email2->f('email'),
-														'id'=>'account_'.$email2->f('id'),
-														'iconCls'=>'folder-account',
-														'expanded'=>true,
-														'account_id'=>$email2->f('id'),
-														'folder_id'=>0,
-														'mailbox'=>'INBOX',
-														'children'=>$children,
-														'canHaveChildren'=>$email2->f('type')=='imap',
-														'inbox_new'=>$inbox_new,
-														'usage'=>$usage
-													);
-													if(!$account)
-													{
-														$node['qtipCfg'] = array('title'=>$lang['common']['error'], 'text' =>htmlspecialchars($imap->last_error(), ENT_QUOTES, 'UTF-8'));
-													}
+						$node =  array(
+										'text'=>$text,
+										'name'=>$email2->f('email'),
+										'id'=>'account_'.$email2->f('id'),
+										'iconCls'=>'folder-account',
+										'expanded'=>true,
+										'account_id'=>$email2->f('id'),
+										'folder_id'=>0,
+										'mailbox'=>'INBOX',
+										'children'=>$children,
+										'canHaveChildren'=>$email2->f('type')=='imap',
+										'inbox_new'=>$inbox_new,
+										'usage'=>$usage
+						);
+						if(!$account) {
+							$node['qtipCfg'] = array('title'=>$lang['common']['error'], 'text' =>htmlspecialchars($imap->last_error(), ENT_QUOTES, 'UTF-8'));
+						}
 
-													$response[]=$node;
-												}
-											}elseif($node_type=='account')
-											{
-												$account = connect($node_id);
-												$response = get_mailbox_nodes($node_id, 0);
-											}	else
-											{
-												$folder_id=$node_id;
-
-												$folder = $email->get_folder_by_id($folder_id);
-												$account = connect($folder['account_id']);
-
-												$response = get_mailbox_nodes(0, $folder_id);
-											}
-											break;
-
-										case 'tree-edit':
-											$email = new email();
-											$email2 = new email();
-
-											$account_id = ($_POST['account_id']);
-											if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_'))
-											{
-												$node = explode('_',$_REQUEST['node']);
-												$folder_id=$node[1];
-											}else
-											{
-												$folder_id=0;
-											}
-
-											$account = $email->get_account($account_id);
-											if($folder_id==0)
-												$email->synchronize_folders($account);
-
-
-											$response = get_all_mailbox_nodes($account_id, $folder_id);
-											break;
-
-										case 'accounts':
-
-											if(isset($_POST['delete_keys']))
-											{
-												$response['deleteSuccess']=true;
-												try{
-													$deleteAccounts = json_decode(($_POST['delete_keys']));
-
-													foreach($deleteAccounts as $account_id)
-													{
-														$account = $email->get_account($account_id);
-
-														if(!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) && (!$GO_MODULES->modules['email']['write_permission'] || $account['user_id']!=$GO_SECURITY->user_id))
-														{
-															throw new AccessDeniedException();
-														}
-
-														$email->delete_account($account_id);
-													}
-												}catch(Exception $e)
-												{
-													$response['deleteSuccess']=false;
-													$response['deleteFeedback']=$e->getMessage();
-												}
-											}
-											$response['results']=array();
-
-											$user_id = !isset($_POST['personal_only']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) ? 0 : $GO_SECURITY->user_id;
-
-											$sort = isset ( $_POST['sort'] ) ? $_POST['sort'] : 'email';
-											$dir = isset ( $_POST['dir'] ) ? $_POST['dir'] : 'ASC';
-
-											$start = isset ( $_POST['start'] ) ? $_POST['start'] : 0;
-											$limit = isset ( $_POST['limit'] ) ? $_POST['limit'] : 0;
-											$response['total'] = $email->get_accounts($user_id,$start, $limit, $sort, $dir);
-
-											while($record = $email->next_record())
-											{
-												$response['results'][] = array(
-															'id'=>$email->f('id'),
-															'email'=>$email->f('email'),
-															'username'=>$email->f('username'),
-															'user_name'=>String::format_name($record),
-															'user_id'=>$email->f('user_id'),
-															'host'=>$email->f('host'),
-															'smtp_host'=>$email->f('smtp_host'),
-															'type'=>$email->f('type'),
-															'html_signature'=>String::text_to_html($email->f('signature')),
-															'plain_signature'=>$email->f('signature')
-												);
-											}
-											break;
-
-										case 'account':
-											$email = new email();											
-											$response['success']=false;
-											$response['data']=$email->get_account($_POST['account_id']);
-
-											if($response['data'])
-											{
-												$user = $GO_USERS->get_user($response['data']['user_id']);
-												$response['data']['user_name']=String::format_name($user['last_name'],$user['first_name'], $user['middle_name']);
-
-												try{
-													$server_response = $email->get_servermanager_mailbox_info($response['data']);
-													
-												}catch(Exception $e){
-													go_log(LOG_DEBUG, 'Connection to postfixadmin failed: '.$e->getMessage());
-												}
-
-												if(is_array($server_response))
-												{
-													$response['data']['vacation_active']=$server_response['data']['vacation_active'];
-													$response['data']['vacation_subject']=$server_response['data']['vacation_subject'];
-													$response['data']['vacation_body']=$server_response['data']['vacation_body'];
-													$response['data']['forward_to'] = $server_response['data']['forward_to'];
-												}elseif(isset($GO_MODULES->modules['systemusers']))
-												{
-													require_once($GO_MODULES->modules['systemusers']['class_path'].'systemusers.class.inc.php');
-													$su = new systemusers();
-
-													$account_id	= $_POST['account_id'];
-													$vacation = $su->get_vacation($account_id);
-
-													$user_home_dirs = isset($GO_CONFIG->user_home_dirs) ? $GO_CONFIG->user_home_dirs : '/home/';
-													$homedir = $user_home_dirs.$response['data']['username'];
-													if(stripos($response['data']['host'],'localhost')===false || !file_exists($homedir))
-													{
-														$response['data']['hidetab'] = true;
-													}else
-													{
-														$response['data']['vacation_active'] = ($vacation['vacation_active']) ? $vacation['vacation_active'] : 0;
-														$response['data']['vacation_subject'] = ($vacation['vacation_subject']) ? $vacation['vacation_subject'] : '';
-														$response['data']['vacation_body'] = ($vacation['vacation_body']) ? $vacation['vacation_body'] : '';
-														
-													}
-												}
-												$response['success']=true;
-											}
-											break;
-
-										case 'all_folders':
-											$account_id = ($_POST['account_id']);
-
-											if(isset($_POST['deleteFolders']))
-											{
-												$deleteFolders = json_decode(($_POST['deleteFolders']));
-												if(count($deleteFolders))
-												{
-													$account = connect($account_id);
-
-													foreach($deleteFolders as $folder_id)
-													{
-														if($folder = $email->get_folder_by_id(($folder_id)))
-														{
-															if($imap->delete_folder($folder['name'], $account['mbroot']))
-															{
-																$email->delete_folder($account_id, $folder['name']);
-															}
-
-														}
-													}
-												}
-											}
-
-											$response['total']=$email->get_folders($account_id);
-											$response['data']=array();
-											while($email->next_record(DB_ASSOC))
-											{
-												$response['data'][]=array(
-				'id'=>$email->f('id'),
-				'name'=>imap::utf7_imap_decode($email->f('name')),
-				'subscribed'=>$email->f('subscribed')
-												);
-											}
-											$response['success']=true;
-
-											break;
-
-										case 'subscribed_folders':
-											$account_id = ($_POST['account_id']);
-
-											$hide_inbox = isset($_POST['hideInbox']) && $_POST['hideInbox']=='true';
-
-											$response['total']=$email->get_subscribed($account_id);
-											$response['data']=array();
-											while($email->next_record(DB_ASSOC))
-											{
-												if ($email->f('attributes') != LATT_NOSELECT && (!$hide_inbox || $email->f('name')!='INBOX'))
-												{
-													$response['data'][]=array(
-					'id'=>$email->f('id'),
-					'name'=>imap::utf7_imap_decode($email->f('name'))
-													);
-												}
-											}
-											$response['success']=true;
-
-											break;
-
-
-		case 'alias':
-			$alias = $email->get_alias($_REQUEST['alias_id']);
-			$response['data']=$alias;
-			$response['success']=true;
-			break;
-		case 'aliases':
-			if(isset($_POST['delete_keys']))
-			{
-				try{
-					$response['deleteSuccess']=true;
-					$delete_aliases = json_decode($_POST['delete_keys']);
-					foreach($delete_aliases as $alias_id)
-					{
-						$email->delete_alias(addslashes($alias_id));
+						$response[]=$node;
 					}
-				}catch(Exception $e)
-				{
-					$response['deleteSuccess']=false;
-					$response['deleteFeedback']=$e->getMessage();
+				}elseif($node_type=='account') {
+					$account = connect($node_id);
+					$response = get_mailbox_nodes($node_id, 0);
+				}	else {
+					$folder_id=$node_id;
+
+					$folder = $email->get_folder_by_id($folder_id);
+					$account = connect($folder['account_id']);
+
+					$response = get_mailbox_nodes(0, $folder_id);
 				}
-			}
+				break;
 
-			$response['total'] = $email->get_aliases($_POST['account_id']);
-			$response['results']=array();
-			while($alias = $email->next_record())
-			{
-				$response['results'][] = $alias;
-			}
-			break;
-		case 'all_aliases':
+			case 'tree-edit':
+				$email = new email();
+				$email2 = new email();
 
-			$response['total'] = $email->get_all_aliases($GO_SECURITY->user_id);
-			$response['results']=array();
-			while($alias = $email->next_record())
-			{
-				$alias['name']='"'.$alias['name'].'" <'.$alias['email'].'>';
-				$alias['html_signature']=String::text_to_html($email->f('signature'));
-				$alias['plain_signature']=$email->f('signature');
-				unset($alias['signature']);
-				$response['results'][] = $alias;
-			}
-			break;
+				$account_id = ($_POST['account_id']);
+				if(isset($_REQUEST['node']) && strpos($_REQUEST['node'],'_')) {
+					$node = explode('_',$_REQUEST['node']);
+					$folder_id=$node[1];
+				}else {
+					$folder_id=0;
+				}
 
-/* {TASKSWITCH} */
+				$account = $email->get_account($account_id);
+				if($folder_id==0)
+					$email->synchronize_folders($account);
+
+
+				$response = get_all_mailbox_nodes($account_id, $folder_id);
+				break;
+
+			case 'accounts':
+
+				if(isset($_POST['delete_keys'])) {
+					$response['deleteSuccess']=true;
+					try {
+						$deleteAccounts = json_decode(($_POST['delete_keys']));
+
+						foreach($deleteAccounts as $account_id) {
+							$account = $email->get_account($account_id);
+
+							if(!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) && (!$GO_MODULES->modules['email']['write_permission'] || $account['user_id']!=$GO_SECURITY->user_id)) {
+								throw new AccessDeniedException();
+							}
+
+							$email->delete_account($account_id);
+						}
+					}catch(Exception $e) {
+						$response['deleteSuccess']=false;
+						$response['deleteFeedback']=$e->getMessage();
+					}
+				}
+				$response['results']=array();
+
+				$user_id = !isset($_POST['personal_only']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) ? 0 : $GO_SECURITY->user_id;
+
+				$sort = isset ( $_POST['sort'] ) ? $_POST['sort'] : 'email';
+				$dir = isset ( $_POST['dir'] ) ? $_POST['dir'] : 'ASC';
+
+				$start = isset ( $_POST['start'] ) ? $_POST['start'] : 0;
+				$limit = isset ( $_POST['limit'] ) ? $_POST['limit'] : 0;
+				$response['total'] = $email->get_accounts($user_id,$start, $limit, $sort, $dir);
+
+				while($record = $email->next_record()) {
+					$response['results'][] = array(
+									'id'=>$email->f('id'),
+									'email'=>$email->f('email'),
+									'username'=>$email->f('username'),
+									'user_name'=>String::format_name($record),
+									'user_id'=>$email->f('user_id'),
+									'host'=>$email->f('host'),
+									'smtp_host'=>$email->f('smtp_host'),
+									'type'=>$email->f('type'),
+									'html_signature'=>String::text_to_html($email->f('signature')),
+									'plain_signature'=>$email->f('signature')
+					);
+				}
+				break;
+
+			case 'account':
+				$email = new email();
+				$response['success']=false;
+				$response['data']=$email->get_account($_POST['account_id']);
+
+				if($response['data']) {
+					$user = $GO_USERS->get_user($response['data']['user_id']);
+					$response['data']['user_name']=String::format_name($user['last_name'],$user['first_name'], $user['middle_name']);
+
+					try {
+						$server_response = $email->get_servermanager_mailbox_info($response['data']);
+
+					}catch(Exception $e) {
+						go_log(LOG_DEBUG, 'Connection to postfixadmin failed: '.$e->getMessage());
+					}
+
+					if(is_array($server_response)) {
+						$response['data']['vacation_active']=$server_response['data']['vacation_active'];
+						$response['data']['vacation_subject']=$server_response['data']['vacation_subject'];
+						$response['data']['vacation_body']=$server_response['data']['vacation_body'];
+						$response['data']['forward_to'] = $server_response['data']['forward_to'];
+					}elseif(isset($GO_MODULES->modules['systemusers'])) {
+						require_once($GO_MODULES->modules['systemusers']['class_path'].'systemusers.class.inc.php');
+						$su = new systemusers();
+
+						$account_id	= $_POST['account_id'];
+						$vacation = $su->get_vacation($account_id);
+
+						$user_home_dirs = isset($GO_CONFIG->user_home_dirs) ? $GO_CONFIG->user_home_dirs : '/home/';
+						$homedir = $user_home_dirs.$response['data']['username'];
+						if(stripos($response['data']['host'],'localhost')===false || !file_exists($homedir)) {
+							$response['data']['hidetab'] = true;
+						}else {
+							$response['data']['vacation_active'] = ($vacation['vacation_active']) ? $vacation['vacation_active'] : 0;
+							$response['data']['vacation_subject'] = ($vacation['vacation_subject']) ? $vacation['vacation_subject'] : '';
+							$response['data']['vacation_body'] = ($vacation['vacation_body']) ? $vacation['vacation_body'] : '';
+
+						}
+					}
+					$response['success']=true;
+				}
+				break;
+
+			case 'all_folders':
+				$account_id = ($_POST['account_id']);
+
+				if(isset($_POST['deleteFolders'])) {
+					$deleteFolders = json_decode(($_POST['deleteFolders']));
+					if(count($deleteFolders)) {
+						$account = connect($account_id);
+
+						foreach($deleteFolders as $folder_id) {
+							if($folder = $email->get_folder_by_id(($folder_id))) {
+								if($imap->delete_folder($folder['name'], $account['mbroot'])) {
+									$email->delete_folder($account_id, $folder['name']);
+								}
+
+							}
+						}
+					}
+				}
+
+				$response['total']=$email->get_folders($account_id);
+				$response['data']=array();
+				while($email->next_record(DB_ASSOC)) {
+					$response['data'][]=array(
+									'id'=>$email->f('id'),
+									'name'=>$email->f('name'),
+									'subscribed'=>$email->f('subscribed')
+					);
+				}
+				$response['success']=true;
+
+				break;
+
+			case 'subscribed_folders':
+				$account_id = ($_POST['account_id']);
+
+				$hide_inbox = isset($_POST['hideInbox']) && $_POST['hideInbox']=='true';
+
+				$response['total']=$email->get_subscribed($account_id);
+				$response['data']=array();
+				while($email->next_record(DB_ASSOC)) {
+					if ($email->f('attributes') != LATT_NOSELECT && (!$hide_inbox || $email->f('name')!='INBOX')) {
+						$response['data'][]=array(
+										'id'=>$email->f('id'),
+										'name'=>$email->f('name')
+						);
+					}
+				}
+				$response['success']=true;
+
+				break;
+
+
+			case 'alias':
+				$alias = $email->get_alias($_REQUEST['alias_id']);
+				$response['data']=$alias;
+				$response['success']=true;
+				break;
+			case 'aliases':
+				if(isset($_POST['delete_keys'])) {
+					try {
+						$response['deleteSuccess']=true;
+						$delete_aliases = json_decode($_POST['delete_keys']);
+						foreach($delete_aliases as $alias_id) {
+							$email->delete_alias(addslashes($alias_id));
+						}
+					}catch(Exception $e) {
+						$response['deleteSuccess']=false;
+						$response['deleteFeedback']=$e->getMessage();
+					}
+				}
+
+				$response['total'] = $email->get_aliases($_POST['account_id']);
+				$response['results']=array();
+				while($alias = $email->next_record()) {
+					$response['results'][] = $alias;
+				}
+				break;
+			case 'all_aliases':
+
+				$response['total'] = $email->get_all_aliases($GO_SECURITY->user_id);
+				$response['results']=array();
+				while($alias = $email->next_record()) {
+					$alias['name']='"'.$alias['name'].'" <'.$alias['email'].'>';
+					$alias['html_signature']=String::text_to_html($email->f('signature'));
+					$alias['plain_signature']=$email->f('signature');
+					unset($alias['signature']);
+					$response['results'][] = $alias;
+				}
+				break;
+
+			/* {TASKSWITCH} */
 		}
 	}
-}catch(Exception $e)
-{
+}catch(Exception $e) {
 	$response['feedback']=$e->getMessage();
 	$response['success']=false;
 }

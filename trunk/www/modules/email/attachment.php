@@ -1,10 +1,10 @@
 <?php
 /** 
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
  * @version $Id$
  * @copyright Copyright Intermesh
@@ -17,75 +17,64 @@ require_once("../../Group-Office.php");
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('email');
 
-require_once($GO_CONFIG->class_path."mail/imap.class.inc");
-require_once($GO_MODULES->class_path."email.class.inc.php");
-$mail = new imap();
+require_once($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
+require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
+$imap = new cached_imap();
 $email = new email();
 
-$account = $email->get_account($_REQUEST['account_id']);
+$account = connect($_REQUEST['account_id']);
 
-if($account['user_id']!=$GO_SECURITY->user_id)
-{
+if($account['user_id']!=$GO_SECURITY->user_id) {
 	die($lang['common']['accessDenied']);
 }
 
 
 
-if ($mail->open($account['host'], $account['type'],$account['port'],$account['username'],$account['password'], $_REQUEST['mailbox'], null, $account['use_ssl'], $account['novalidate_cert']))
-{
-	$file = $mail->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
-	$mail->close();
-	
-	if(!empty($_REQUEST['uuencoded_partnumber']) && $_REQUEST['uuencoded_partnumber']!='undefined')
-	{
-		$attachments = $mail->extract_uuencoded_attachments($file);
-		
-		$file = convert_uudecode($attachments[$_REQUEST['uuencoded_partnumber']-1]['data']);
-	}
+$file = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], false);
+$imap->disconnect();
 
-	
-	if($GO_MODULES->has_module('gnupg'))
-	{
-		$extension = File::get_extension($_REQUEST['filename']);
-		if($extension=='pgp' || $extension=='gpg')
-		{
-			require_once ($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
-			$gnupg = new gnupg();
-								
-			$tmpfile = $GO_CONFIG->tmpdir.$_REQUEST['filename'];
-			$_REQUEST['filename']=File::strip_extension($_REQUEST['filename']);
-			$outfile = $GO_CONFIG->tmpdir.$_REQUEST['filename'];
-			
-			file_put_contents($tmpfile, $file);			
-			
-			$passphrase=isset($_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']] : '';
-			
-			$gnupg->decode_file($tmpfile, $outfile, $passphrase);
-			
-			$file = file_get_contents($outfile);
-		}
-	}
+if(!empty($_REQUEST['uuencoded_partnumber']) && $_REQUEST['uuencoded_partnumber']!='undefined') {
+	$attachments = $imap->extract_uuencoded_attachments($file);
 
-	$browser = detect_browser();
-
-	header("Expires: " . date("D, j M Y G:i:s ", time()+(86400*14)) . 'GMT');//expires in 2 weeks
-	header('Cache-Control: cache');
-	header('Pragma: cache');	
-	if ($browser['name'] == 'MSIE')
-	{
-		header('Content-Type: application/download');
-		header('Content-Disposition: attachment; filename="'.rawurlencode($_REQUEST['filename']).'";');
-	}else
-	{		
-		$mime = File::get_mime($_REQUEST['filename']);
-		
-		header('Content-Type: '.$mime);		
-		header('Content-Disposition: attachment; filename="'.$_REQUEST['filename'].'"');
-	}
-	header('Content-Transfer-Encoding: binary');
-	
-	echo $file;
-}else
-{
-	echo $lang['comon']['selectError'];
+	$file = convert_uudecode($attachments[$_REQUEST['uuencoded_partnumber']-1]['data']);
 }
+
+
+if($GO_MODULES->has_module('gnupg')) {
+	$extension = File::get_extension($_REQUEST['filename']);
+	if($extension=='pgp' || $extension=='gpg') {
+		require_once ($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+		$gnupg = new gnupg();
+
+		$tmpfile = $GO_CONFIG->tmpdir.$_REQUEST['filename'];
+		$_REQUEST['filename']=File::strip_extension($_REQUEST['filename']);
+		$outfile = $GO_CONFIG->tmpdir.$_REQUEST['filename'];
+
+		file_put_contents($tmpfile, $file);
+
+		$passphrase=isset($_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']] : '';
+		
+		$gnupg->decode_file($tmpfile, $outfile, $passphrase);
+
+		$file = file_get_contents($outfile);
+	}
+}
+
+$browser = detect_browser();
+
+header("Expires: " . date("D, j M Y G:i:s ", time()+(86400*14)) . 'GMT');//expires in 2 weeks
+header('Cache-Control: cache');
+header('Pragma: cache');	
+if ($browser['name'] == 'MSIE') {
+	header('Content-Type: application/download');
+	header('Content-Disposition: attachment; filename="'.rawurlencode($_REQUEST['filename']).'";');
+}else {
+	$mime = File::get_mime($_REQUEST['filename']);
+
+	header('Content-Type: '.$mime);
+	header('Content-Disposition: attachment; filename="'.$_REQUEST['filename'].'"');
+}
+header('Content-Transfer-Encoding: binary');
+
+echo $file;
+

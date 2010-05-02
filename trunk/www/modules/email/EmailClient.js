@@ -1179,49 +1179,46 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	},
 	
 	openAttachment :  function(attachment, panel, forceDownload)
-	{		
+	{
+
+		var params = {
+			account_id: this.account_id,
+			mailbox: this.mailbox,
+			uid: this.messagePanel.uid,
+			imap_id: attachment.imap_id,
+			uuencoded_partnumber: attachment.uuencoded_partnumber,
+			encoding: attachment.encoding,
+			type: attachment.type,
+			subtype: attachment.subtype,
+			filename:attachment.name
+		}
+
+		var url_params = '?';
+		for(var name in params){
+			url_params+= name+'='+encodeURIComponent(params[name])+'&';
+		}
+		url_params = url_params.substring(0,url_params.length-1);
+		
 		if(attachment.type=='message')
 		{
-			GO.linkHandlers[9].call(this, 0, {
-				uid: this.messagePanel.uid,
-				mailbox: this.mailbox,
-				imap_id: attachment.imap_id,
-				encoding: attachment.encoding,
-				type: attachment.type,
-				subtype: attachment.subtype,
-				account_id: this.account_id
-			});
+			GO.linkHandlers[9].call(this, 0, params);
 		}else
 		{
 			switch(attachment.extension)
 			{		
 				case 'dat':
 					document.location.href=GO.settings.modules.email.url+
-					'tnef.php?account_id='+this.account_id+
-					'&mailbox='+encodeURIComponent(this.mailbox)+
-					'&uid='+this.messagePanel.uid+
-					'&part='+attachment.number+
-					'&transfer='+attachment.transfer+
-					'&mime='+attachment.mime+
-					'&uuencoded_partnumber='+attachment.uuencoded_partnumber+
-					'&filename='+encodeURIComponent(attachment.name);
+					'tnef.php'+url_params;
 					break;
 				
 				case 'asc':
 				
 					if(!forceDownload && GO.gnupg)
 					{
+						params.task = 'check_public_key_attachment';
 						Ext.Ajax.request({
 							url: GO.settings.modules.gnupg.url+'action.php',
-							params: {
-								task: 'check_public_key_attachment',
-								account_id: this.account_id,
-								mailbox: this.mailbox,
-								uid: this.messagePanel.uid,
-								imap_id: attachment.imap_id,
-								uuencoded_partnumber: attachment.uuencoded_partnumber,
-								encoding: attachment.encoding
-							},
+							params: params,
 							callback: function(options, success, response)
 							{
 								if(success)
@@ -1231,16 +1228,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 									if(!rParams.is_public_key)
 									{
 										document.location.href=GO.settings.modules.email.url+
-										'attachment.php?account_id='+this.account_id+
-										'&mailbox='+encodeURIComponent(this.mailbox)+
-										'&uid='+this.messagePanel.uid+
-										'&sender='+this.messagePanel.data.sender+
-										'&imap_id='+attachment.imap_id+
-										'&encoding='+attachment.encoding+
-										'&type='+attachment.type+
-										'&subtype='+attachment.subtype+
-										'&uuencoded_partnumber='+attachment.uuencoded_partnumber+
-										'&filename='+ encodeURIComponent(attachment.name);
+										'attachment.php'+url_params;
 									}else
 									{																		
 										if(confirm(GO.gnupg.lang.importPublicKeyAttachment))
@@ -1275,17 +1263,10 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 				case 'ics':
 					if(!forceDownload)
 					{
+						params.task='icalendar_attachment';
 						Ext.Ajax.request({
 							url: GO.settings.modules.email.url+'json.php',
-							params: {
-								task: 'icalendar_attachment',
-								account_id: this.account_id,
-								mailbox: this.mailbox,
-								uid: this.messagePanel.uid,
-								part: attachment.number,
-								uuencoded_partnumber: attachment.uuencoded_partnumber,
-								transfer: attachment.transfer
-							},
+							params: params,
 							callback: function(options, success, response)
 							{
 								if(success)
@@ -1339,15 +1320,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 								{
 									images.push({
 										name: r.name,
-										src: GO.settings.modules.email.url+
-										'attachment.php?account_id='+this.account_id+
-										'&mailbox='+encodeURIComponent(this.mailbox)+
-										'&uid='+this.messagePanel.uid+
-										'&part='+r.number+
-										'&transfer='+r.transfer+
-										'&mime='+r.mime+
-										'&uuencoded_partnumber='+attachment.uuencoded_partnumber+
-										'&filename='+encodeURIComponent(r.name)
+										src: GO.settings.modules.email.url+'attachment.php'+url_params
 									});
 								}
 								if(r.name==attachment.name)
@@ -1362,16 +1335,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 				
 				
 				default:
-					document.location.href=GO.settings.modules.email.url+
-					'attachment.php?account_id='+this.account_id+
-					'&mailbox='+encodeURIComponent(this.mailbox)+
-					'&uid='+this.messagePanel.uid+
-					'&sender='+this.messagePanel.data.sender+
-					'&part='+attachment.number+
-					'&transfer='+attachment.transfer+
-					'&mime='+attachment.mime+
-					'&uuencoded_partnumber='+attachment.uuencoded_partnumber+
-					'&filename='+ encodeURIComponent(attachment.name);
+					document.location.href=GO.settings.modules.email.url+'attachment.php'+url_params
 					break;
 			}
 		}
