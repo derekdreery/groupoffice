@@ -1,6 +1,6 @@
 <?php
-require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap_base.class.inc.php');
-require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc.php');
+
+require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc');
 class cached_imap extends imap{
 
 	/**
@@ -41,6 +41,10 @@ class cached_imap extends imap{
 	{
 		$this->email = new email();
 		//parent::__construct();
+	}
+
+	function is_imap(){
+		return true;
 	}
 
 	function set_account($account, $mailbox='INBOX'){
@@ -185,7 +189,7 @@ class cached_imap extends imap{
 		* @return bool True on success
 		*/
 	function move($uids, $mailbox) {
-		if(count($messages))
+		if(count($uids))
 		{
 			if(parent::move($uids, $mailbox))
 			{
@@ -365,6 +369,7 @@ class cached_imap extends imap{
 			throw new Exception($lang['email']['errorGettingMessage']);
 		}
 
+		require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
 		$RFC822 = new RFC822();
 		$address = $RFC822->parse_address_list($message['from']);
 
@@ -463,12 +468,74 @@ class cached_imap extends imap{
 			$message['plain_body']=String::html_to_text($message['html_body']);
 		}
 
+		//URL replacements for inline images
+		$message['url_replacements']=array();
+
 		$message['attachments']=$this->find_message_attachments($struct, $body_ids);
 		for($i=0,$max=count($message['attachments']);$i<$max;$i++){
 			$message['attachments'][$i]['extension']=File::get_extension($message['attachments'][$i]['name']);
 			$message['attachments'][$i]['human_size']=Number::format_size($message['attachments'][$i]['size']);
+
+			//When a mail is saved as a task/appointment/etc. the attachments will be saved temporarily
+			$message['attachments'][$i]['tmp_file']=false;
+
+			if($create_temporary_attachment_files) {
+				$tmp_file = $GO_CONFIG->tmpdir.$message['attachments'][$i]['name'];
+				$data = $this->get_message_part_decoded(
+								$uid, 
+								$message['attachments'][$i]['imap_id'], 
+								$message['attachments'][$i]['encoding'], 
+								$message['attachments'][$i]['charset'],
+								$peek);
+
+				if($data && file_put_contents($tmp_file, $data)) {
+					$message['attachments'][$i]['tmp_file']=$tmp_file;
+				}
+			}
+
+
+			if (!empty($message['attachments'][$i]["id"])) {
+				//when an image has an id it belongs somewhere in the text we gathered above so replace the
+				//source id with the correct link to display the image.
+
+				$tmp_id = $message['attachments'][$i]["id"];
+				if (strpos($tmp_id,'>')) {
+					$tmp_id = substr($message['attachments'][$i]["id"], 1,-1);
+				}
+				$id = "cid:".$tmp_id;
+
+				$url = $GO_MODULES->modules['email']['url']."attachment.php?".
+								"account_id=".$this->account['id'].
+								"&amp;mailbox=".urlencode($this->selected_mailbox['name']).
+								"&amp;uid=".$uid.
+								"&amp;imap_id=".$message['attachments'][$i]["imap_id"].
+								"&amp;encoding=".$message['attachments'][$i]["encoding"].
+								"&amp;type=".$message['attachments'][$i]["type"].
+								"&amp;subtype=".$message['attachments'][$i]["subtype"].
+								"&amp;filename=".urlencode($message['attachments'][$i]["name"]);
+
+				$url_replacement['id'] = $message['attachments'][$i]["id"];
+				$url_replacement['url'] = $url;
+				$url_replacement['tmp_file'] = $message['attachments'][$i]['tmp_file'];
+				
+				//we need the attachment object later when we're creating temporary
+				//attachment files from cache
+				$url_replacement['attachment']=$message['attachments'][$i];
+
+				$message['url_replacements'][]=$url_replacement;
+
+				go_debug($id);
+
+				if(strpos($message['html_body'], $id)) {
+					$message['html_body'] = str_replace($id, $url, $message['html_body']);
+				}else {
+					//id was not found in body so add it as attachment later
+					unset($message['attachments'][$i]['id']);
+				}
+			}
+
 		}
-		go_debug($struct);
+		//go_debug($struct);
 		//go_debug($message);
 		return $message;
 		
@@ -692,6 +759,7 @@ class cached_imap extends imap{
 					//trim values for mysql insertion
 					$message = $this->imap_message_to_cache($message);
 					$this->add_cached_message($message);
+					$messages[$message['uid']]=$message;
 				}
 			}
 
@@ -734,7 +802,7 @@ class cached_imap extends imap{
 		if(isset($message['disposition-notification-to']))
 			$message['notification']=$message['disposition-notification-to'];
 
-		$message['new']=empty($message['seen']) || !empty($message['recent']);
+		$message['new']=empty($message['seen']);
 		$message['content_type']=empty($message['content-type']);
 		$message['priority']=isset($message['x-priority']) ? intval($message['x-priority']) : 3;
 
@@ -749,7 +817,8 @@ class cached_imap extends imap{
 					$message['content-type'],
 					$message['x-priority'],
 					$message['charset'],
-					$message['cc']
+					$message['cc'],
+					$message['bcc']
 					);
 
 
@@ -814,7 +883,7 @@ class cached_imap extends imap{
 				{
 					$ret = $this->set_message_flag($this->mailbox, $this->filters[$i]['uids'], "\\Seen");
 				}
-				if(parent::move($this->utf7_imap_encode($this->filters[$i]["folder"]), $this->filters[$i]['uids'],false))
+				if(parent::move($this->filters[$i]["folder"], $this->filters[$i]['uids'],false))
 				{
 					foreach($this->filters[$i]['uids'] as $uid)
 					{

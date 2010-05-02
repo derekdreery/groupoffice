@@ -775,7 +775,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 	show : function(config) {
 
-		Ext.getBody().mask(GO.lang.waitMsgLoad);
+		//TODO enable after testing
+		//Ext.getBody().mask(GO.lang.waitMsgLoad);
 
 		delete this.link_config;
 		
