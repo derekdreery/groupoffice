@@ -147,7 +147,9 @@ try {
 
 					$imap->select_mailbox('INBOX');
 
-					$response['status'][$inbox['id']]['unseen'] = $imap->get_unseen();
+					$unseen =  $imap->get_unseen();
+
+					$response['status'][$inbox['id']]['unseen'] = $unseen['count'];
 					$response['status'][$inbox['id']]['messages'] = $imap->selected_mailbox['messages'];
 				}else {
 					$imap->clear_errors();
@@ -165,9 +167,8 @@ try {
 			}
 
 			$account = connect($account_id, $mailbox);
-
-			$imap->sort();
-			$imap->delete($imap->sort);
+			$sort = $imap->sort_mailbox();
+			$imap->delete($sort);
 			
 			$response['success']=true;
 			break;
@@ -183,19 +184,19 @@ try {
 			$messages = json_decode($_POST['messages']);
 			switch($_POST['action']) {
 				case 'mark_as_read':
-					$response['success']=$imap->set_message_flag($mailbox, $messages, "\\Seen");
+					$response['success']=$imap->set_message_flag($messages, "\Seen");
 					$imap->set_unseen_cache($messages, false);
 					break;
 				case 'mark_as_unread':
-					$response['success']=$imap->set_message_flag($mailbox, $messages, "\\Seen", "reset");
+					$response['success']=$imap->set_message_flag($messages, "\Seen", "true");
 					$imap->set_unseen_cache($messages, true);
 					break;
 				case 'flag':
-					$response['success']=$imap->set_message_flag($mailbox, $messages, "\\Flagged");
+					$response['success']=$imap->set_message_flag($messages, "\Flagged");
 					$imap->set_flagged_cache($messages, true);
 					break;
 				case 'unflag':
-					$response['success']=$imap->set_message_flag($mailbox, $messages, "\\Flagged", "reset");
+					$response['success']=$imap->set_message_flag($messages, "\Flagged", true);
 					$imap->set_flagged_cache($messages, false);
 					break;
 			}
@@ -204,9 +205,8 @@ try {
 			//$cached_folder = $email->cache_folder_status($imap, $account_id, $mailbox);
 			//$response['unseen']=$cached_folder['unseen'];
 
-			$status = $imap->status($mailbox, SA_UNSEEN);
-			if(isset($status->unseen))
-				$response['unseen']=$status->unseen;
+			$unseen = $imap->get_unseen();
+			$response['unseen']=$unseen['count'];
 
 
 
