@@ -2,8 +2,6 @@
 /*
  * TODO:
  *
- * $forwarded flag
- * imapauth
  * filemanager panel
  * link filter reset and apply button
  */

@@ -57,8 +57,13 @@ class imapauth
 		$domain = isset($arr[1]) ? trim($arr[1]) : '';
 
 		$config = $ia->get_domain_config($domain);
-		if($config)
+		if(!$config)
 		{
+			go_debug('No config for domain found');
+		}else
+		{
+			go_debug($config);
+			
 			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_USERS, $GO_GROUPS,
 			$GO_MODULES;
 
@@ -75,21 +80,18 @@ class imapauth
 
 			go_debug('Attempt IMAP login');
 
-			if ($imap->open(
-			$config['host'],
-			$config['proto'],
+			if ($imap->connect(
+			$config['host'],			
 			$config['port'],
 			$mail_username,
 			$password,
-			'INBOX', 
-			null,
-			$config['ssl'],
-			$config['novalidate_cert']))
+			$config['ssl']))
 			{
 				go_debug('IMAP auth module logged in');
-				$imap->close();
+				$imap->disconnect();
 
-				if ($user = $GO_USERS->get_user_by_username( $go_username ) ) {
+				$user = $GO_USERS->get_user_by_username($go_username);
+				if ($user) {
 
 					//user exists. See if the password is accurate
 					if(md5($password) != $user['password'])
@@ -143,7 +145,7 @@ class imapauth
 				$email_client = new email();
 
 				$account['user_id']=$user_id;
-				$account['type']=$config['proto'];
+				$account['type']='IMAP';//$config['proto'];
 				$account['host']=$config['host'];
 				$account['smtp_host']=$config['smtp_host'];
 				$account['smtp_port']=$config['smtp_port'];
@@ -153,7 +155,7 @@ class imapauth
 
 				$account['port']=$config['port'];
 				$account['use_ssl']=$config['ssl'];
-				$account['novalidate_cert']=$config['novalidate_cert'];
+				//$account['novalidate_cert']=$config['novalidate_cert'];
 				$account['mbroot']=$config['mbroot'];
 				$account['username']=$username;
 				$account['password']=$password;
