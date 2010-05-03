@@ -59,6 +59,14 @@ margin:5px 2px;
 	background-image:url('images/16x16/message_answered.png') !important;
 }
 
+.btn-message-forwarded {
+	background-image:url('images/16x16/message_forwarded.png') !important;
+}
+
+.btn-message-answered-and-forwarded {
+	background-image:url('images/16x16/message_answered_and_forwarded.png') !important;
+}
+
 .btn-compose {
 	background-image:url('images/16x16/gtk-add.png') !important;
 }

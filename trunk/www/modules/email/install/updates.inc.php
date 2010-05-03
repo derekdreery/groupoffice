@@ -66,3 +66,5 @@ $updates[]="update `em_folders` set `sort`='';";
 
 $updates[]="ALTER TABLE `em_folders` DROP `attributes` ";
 $updates[]="ALTER TABLE `em_folders` ADD `can_have_children` BOOLEAN NOT NULL";
+
+$updates[]="ALTER TABLE `em_messages_cache` ADD `forwarded` BOOL NOT NULL";

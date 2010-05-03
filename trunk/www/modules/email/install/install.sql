@@ -144,6 +144,7 @@ CREATE TABLE IF NOT EXISTS `em_messages_cache` (
   `attachments` enum('0','1') NOT NULL,
   `flagged` enum('0','1') NOT NULL,
   `answered` enum('0','1') NOT NULL,
+	`forwarded` BOOL NOT NULL,
   `priority` tinyint(4) NOT NULL,
   `to` varchar(255) DEFAULT NULL,
   `notification` varchar(100) NOT NULL,

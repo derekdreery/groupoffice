@@ -835,6 +835,10 @@ class imap extends imap_bodystruct {
 					'reply-to'=>'',
 					'content-type'=>'',
 					'disposition-notification-to'=>'',
+					'seen'=>0,
+					'flagged'=>0,
+					'answered'=>0,
+					'forwarded'=>0
 				);
 
 				$count = count($vals);
@@ -1322,6 +1326,9 @@ class imap extends imap_bodystruct {
 		return fwrite($this->handle, $string."\r\n");
 	}
 	public function append_start($mailbox, $size, $flags = "") {
+		//it will deselect the mailserver
+		$this->selected_mailbox=false;
+
 		$this->clean($mailbox, 'mailbox');
 		$this->clean($size, 'uid');
 		$command = 'APPEND "'.$this->utf7_encode($mailbox).'" ('.$flags.') {'.$size."}\r\n";
