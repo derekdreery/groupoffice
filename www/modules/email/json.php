@@ -673,31 +673,27 @@ try {
 
 				switch($sort) {
 					case 'from':
-						$sort_field=SORTFROM;
+						$sort_field='FROM';
 						break;
 					case 'date':
-						$sort_field=SORTDATE;
+						$sort_field='ARRIVAL';
 						break;
 					case 'subject':
-						$sort_field=SORTSUBJECT;
+						$sort_field='SUBJECT';
 						break;
 					case 'size':
-						$sort_field=SORTSIZE;
+						$sort_field='SIZE';
 						break;
 					default:
-						$sort_field=SORTDATE;
+						$sort_field='ARRIVAL';
 				}
 
-				//if($sort_field == SORTDATE && $imap->is_imap())
-				//$sort_field = SORTARRIVAL;
 
-				if(($response['sent'] || $response['drafts']) && $sort_field==SORTFROM) {
-					$sort_field=SORTTO;
+				if(($response['sent'] || $response['drafts']) && $sort_field=='FROM') {
+					$sort_field='TO';
 				}
 
 				$sort_order=isset($_POST['dir']) && $_POST['dir']=='ASC' ? 0 : 1;
-
-				//$uids = $imap->get_message_uids();
 
 				//apply filters
 				if(strtoupper($mailbox)=='INBOX') {
@@ -716,11 +712,9 @@ try {
 				}
 
 				$day_start = mktime(0,0,0);
-				$day_end = mktime(0,0,0,date('m'),date('d')+1);
+				$day_end = mktime(0,0,0,date('m'),date('d')+1);				
 
-				$sort_field='ARRIVAL';
-
-				$messages = $imap->get_message_headers($start, $limit, $sort_field , $sort_order, $query);
+				$messages = $imap->get_message_headers_set($start, $limit, $sort_field , $sort_order, $query);
 
 				$response['results']=array();
 
@@ -736,13 +730,11 @@ try {
 						$message['date'] = date($_SESSION['GO_SESSION']['date_format'],$message['udate']);
 					}
 
-
 					if(empty($message['subject'])) {
 						$message['subject']=$lang['email']['no_subject'];
 					}
 
 					$message['from'] = ($response['sent'] || $response['drafts']) ? $message['to'] : $message['from'];
-
 
 					$address = $RFC822->parse_address_list($message['from']);
 
@@ -755,12 +747,10 @@ try {
 						}
 					}
 					$message['from']=implode(',', $readable_addresses);
-
-					$message['sender'] = empty($address[0]) ? '' : $address[0]['email'];
-
 					$message['from']=htmlspecialchars($message['from'], ENT_QUOTES, 'UTF-8');
+					
+					$message['sender'] = empty($address[0]) ? '' : $address[0]['email'];				
 					$message['subject']=htmlspecialchars($message['subject'], ENT_QUOTES, 'UTF-8');
-
 
 					if(empty($message['from'])) {
 						if($mailbox==$account['drafts']) {
@@ -777,9 +767,9 @@ try {
 
 				foreach($imap->touched_folders as $touched_folder) {
 					if($touched_folder==$mailbox) {
-
-						$unseen = $imap->get_unseen();
-						$response['unseen'][$imap->folder['id']]=$unseen['count'];
+						//$unseen = $imap->get_unseen();
+						//unseen property is set by cached_imap::sort_mailbox() because it needs it to determine if cache is dirty.
+						$response['unseen'][$imap->folder['id']]=$imap->selected_mailbox['unseen'];
 					}else {
 
 						$folder = $email->get_folder($account_id, $touched_folder);
@@ -812,7 +802,12 @@ try {
 					$count = $email2->get_accounts($GO_SECURITY->user_id);
 					//go_log(LOG_DEBUG, $count);
 					while($email2->next_record()) {
-						$account = connect($email2->f('id'), 'INBOX', false);
+						try{
+							$account = connect($email2->f('id'), 'INBOX', false);
+						} catch(Exception $e){
+							$account=false;
+							$error = $email->human_connect_error($e->getMessage());
+						}
 
 						$usage = '';
 						$inbox_new=0;
@@ -856,7 +851,7 @@ try {
 										'usage'=>$usage
 						);
 						if(!$account) {
-							$node['qtipCfg'] = array('title'=>$lang['common']['error'], 'text' =>htmlspecialchars($imap->last_error(), ENT_QUOTES, 'UTF-8'));
+							$node['qtipCfg'] = array('title'=>$lang['common']['error'], 'text' =>htmlspecialchars($error, ENT_QUOTES, 'UTF-8'));
 						}
 
 						$response[]=$node;

@@ -59,3 +59,7 @@ $lang['email']['noUidNext']='Your mail server does not support UIDNEXT. The \'Dr
 $lang['email']['disable_trash_folder']='Moving the e-mail to the trash folder failed. This might be because you are out of disk space. You can only free up space by disabling the trash folder at Administration -> Accounts -> Double click your account -> Folders';
 
 $lang['email']['error_move_folder']='Could not move the folder';
+
+$lang['email']['error_getaddrinfo']='Invalid host address specified';
+$lang['email']['error_authentication']='Invalid username or password';
+$lang['email']['error_connection_refused']='The connection was refused. Please check the host and port number.';
