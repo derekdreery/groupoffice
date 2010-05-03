@@ -44,4 +44,8 @@ if ($browser['name'] == 'MSIE')
 	header('Pragma: no-cache');
 }
 header('Content-Transfer-Encoding: binary');
-echo $email->get_zip_of_attachments($_REQUEST['account_id'],$_REQUEST['uid'], $_REQUEST['mailbox']);
+$zip_file=$email->get_zip_of_attachments($_REQUEST['account_id'],$_REQUEST['uid'], $_REQUEST['mailbox']);
+
+readfile($zip_file);
+
+unlink($zip_file);

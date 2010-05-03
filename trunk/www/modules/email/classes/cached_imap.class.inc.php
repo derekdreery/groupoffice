@@ -315,6 +315,13 @@ class cached_imap extends imap{
 
 		require_once($GO_LANGUAGE->get_language_file('email'));
 
+		if($create_temporary_attachment_files || $create_temporary_inline_attachment_files){
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+			$fs = new filesystem();
+			
+			$fs->mkdir_recursive($GO_CONFIG->tmpdir.'attachments');
+		}
+
 
 		/*
 		 * Check cache
@@ -325,6 +332,9 @@ class cached_imap extends imap{
 			$message =  unserialize($values['serialized_message_object']);
 			$message['from_cache']=true;
 			$message['new']=$values['new'];
+
+
+
 			if($create_temporary_attachment_files) {
 				for ($i = 0; $i < count($message['attachments']); $i ++) {
 					$tmp_file = $GO_CONFIG->tmpdir.'attachments/'.$message['attachments'][$i]['name'];
@@ -508,7 +518,7 @@ class cached_imap extends imap{
 			//When a mail is saved as a task/appointment/etc. the attachments will be saved temporarily
 			$att[$i]['tmp_file']=false;
 
-			if($create_temporary_attachment_files || ($create_temporary_inline_attachment_files && !empty($att[$i]['id']))) {
+			if(($create_temporary_attachment_files && empty($att[$i]['id'])) || ($create_temporary_inline_attachment_files && !empty($att[$i]['id']))) {
 				$tmp_file = $GO_CONFIG->tmpdir.'attachments/'.$att[$i]['name'];
 				$data = $this->get_message_part_decoded(
 								$uid, 

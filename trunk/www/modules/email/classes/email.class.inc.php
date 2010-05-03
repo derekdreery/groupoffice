@@ -1157,74 +1157,48 @@ class email extends db
 
 	function get_zip_of_attachments($account_id, $uid, $mailbox='INBOX')
 	{
-		global $GO_CONFIG;
+		global $GO_CONFIG, $GO_MODULES, $imap;
 
-		$tmpdir = $GO_CONFIG->tmpdir.uniqid(time());
-		if(!mkdir($tmpdir))
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+
+		$tmpdir = $GO_CONFIG->tmpdir.'zip_of_attachments_'.uniqid(time()).'/';		
+		if(!$fs->mkdir_recursive($tmpdir))
 		{
 			return false;
 		}
 
-		$account = $this->get_account($account_id);
+		require_once($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
 
-		$imap = new imap();
-		if(!$imap->open($account['host'],
-		$account['type'],
-		$account['port'],
-		$account['username'],
-		$account['password'],
-		$mailbox,
-		null,
-		$account['use_ssl'],
-		$account['novalidate_cert']))
+		$imap = new cached_imap();
+		$account = connect($account_id, $mailbox);
+
+		if(!$account)
 		{
 			return false;
 		}
 
-		if(!$message = $imap->get_message($uid))
+		$message = $imap->get_message_with_body($uid, true, false);
+		if(!$message)
 		{
 			return false;
 		}
 
-		for ($i = 0; $i < count($message['parts']); $i ++) {
-			/*if ((eregi("ATTACHMENT", $message['parts'][$i]["disposition"])  ||
-			 eregi("INLINE", $message['parts'][$i]["disposition"]) &&
-			 !empty($message['parts'][$i]["name"])) ||
-			 !empty($message['parts'][$i]["name"])){*/
-
-			if (
-			(
-			stripos($message['parts'][$i]["disposition"],"ATTACHMENT")!==false  ||
-			($message['parts'][$i]["name"] != '' && empty($message['parts'][$i]["id"])
-			)
-			&& !($message['parts'][$i]['type']=='APPLEDOUBLE' && $message['parts'][$i]['mime']== 'application/APPLEFILE')
-			)
-			){
-
-				$filename = $tmpdir.'/'.$message['parts'][$i]["name"];
-				$x=0;
-				while(file_exists($filename))
-				{
-					$x++;
-					$filename = File::strip_extension($filename).' ('.$x.').'.File::get_extension($filename);
-				}
-
-				if(!$fp = fopen($filename,'w+'))
-				{
-					return false;
-				}
-				if(!fwrite($fp, $imap->view_part($uid, $message['parts'][$i]["number"], $message['parts'][$i]["transfer"])))
-				{
-					return false;
-				}
-				fclose($fp);
-			}
+		foreach($message['attachments'] as $a){			
+			$newpath = File::checkfilename($tmpdir.$a['name']);
+			$fs->move($a['tmp_file'], $newpath);
 		}
+
+		$zipfile = uniqid(time()).'.zip';
+
 		chdir($tmpdir);
-		exec($GO_CONFIG->cmd_zip.' -r "attachments.zip" *.*');
-		$data = file_get_contents(	$tmpdir.'/attachments.zip');
-		exec('rm -Rf '.$tmpdir);
-		return $data;
+		$cmd =$GO_CONFIG->cmd_zip.' -r "../'.$zipfile.'" *.*';
+		
+		exec($cmd);
+
+		$fs->delete($tmpdir);
+	
+		return $GO_CONFIG->tmpdir.$zipfile;
 	}
 
 
