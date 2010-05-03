@@ -30,7 +30,7 @@ try{
 			$imap = new cached_imap();
 
 			$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
-			$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
+			$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
 			
 			$response['success']=true;
 			$response['is_public_key']=$gnupg->is_public_key($data);
@@ -40,7 +40,7 @@ try{
 				$_SESSION['GO_SESSION']['gnupg']['public_key_attachment']=$data;
 			}
 			
-			$imap->close();
+			$imap->disconnect();
 		break;
 		
 		case 'import_public_key_attachment': 
