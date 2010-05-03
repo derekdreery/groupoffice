@@ -1107,12 +1107,15 @@ class imap extends imap_bodystruct {
 	 */
 	public function get_message_part($uid, $message_part=0, $peek=false) {
 		$this->clean($uid, 'uid');
+
+		$peek_str = $peek ? '.PEEK' : '';
+
 		if ($message_part==0) {
-			$command = "UID FETCH $uid BODY[]\r\n";
+			$command = "UID FETCH $uid BODY".$peek_str."[]\r\n";
 		}
 		else {
 			$this->clean($message_part, 'msg_part');
-			$command = "UID FETCH $uid BODY[$message_part]\r\n";
+			$command = "UID FETCH $uid BODY".$peek_str."[$message_part]\r\n";
 		}
 		$this->send_command($command);
 		$result = $this->get_response(false, true);
