@@ -808,7 +808,7 @@ class cached_imap extends imap{
 				{
 					$ret = $this->set_message_flag($this->mailbox, $this->filters[$i]['uids'], "\\Seen");
 				}
-				if(parent::move($this->filters[$i]["folder"], $this->filters[$i]['uids'],false))
+				if(parent::move($this->filters[$i]['uids'],$this->filters[$i]["folder"], false))
 				{
 					foreach($this->filters[$i]['uids'] as $uid)
 					{
