@@ -1,10 +1,10 @@
 <?php
 /** 
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
  * @version $Id$
  * @copyright Copyright Intermesh
@@ -12,7 +12,7 @@
  * @since Group-Office 1.0
  */
 
- 
+
 //load Group-Office
 require_once("../../Group-Office.php");
 
@@ -22,24 +22,21 @@ require_once($GO_CONFIG->class_path."mail/mimeDecode.class.inc");
 $GO_SECURITY->authenticate();
 
 
-if(isset($_REQUEST['path']))
-{
+if(isset($_REQUEST['path'])) {
 	$path = $GO_CONFIG->file_storage_path.$_REQUEST['path'];
 	$params['input'] = file_get_contents($path);
-}else
-{
-	
-	require_once($GO_CONFIG->class_path."mail/imap.class.inc");
+}else {
+
+	require_once($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
 	require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
-	$mail = new imap();
+	$imap = new cached_imap();
 	$email = new email();
 
-	$account = $email->get_account($_REQUEST['account_id']);
+	$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
 
-	if ($mail->open($account['host'], $account['type'],$account['port'],$account['username'],$account['password'], $_REQUEST['mailbox'], null, $account['use_ssl'], $account['novalidate_cert']))
-	{
-		 $params['input'] = $mail->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
-		$mail->close();
+	if ($account) {
+		$params['input'] = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
+		$imap->disconnect();
 	}
 }
 
@@ -51,21 +48,17 @@ $params['decode_headers'] = true;
 $part = Mail_mimeDecode::decode($params);
 
 $parts_arr = explode('.',$_REQUEST['part_number']);
-for($i=0;$i<count($parts_arr);$i++)
-{
+for($i=0;$i<count($parts_arr);$i++) {
 	$part = $part->parts[$parts_arr[$i]];
 }
 
 
 $filename = 'attachment';
-if(!empty($part->ctype_parameters['name']))
-{
+if(!empty($part->ctype_parameters['name'])) {
 	$filename = $part->ctype_parameters['name'];
-}elseif(!empty($part->d_parameters['filename']) )
-{
+}elseif(!empty($part->d_parameters['filename']) ) {
 	$filename = $part->d_parameters['filename'];
-}elseif(!empty($part->d_parameters['filename*']))
-{
+}elseif(!empty($part->d_parameters['filename*'])) {
 	$filename=$part->d_parameters['filename*'];
 }
 
@@ -77,21 +70,17 @@ header("Expires: " . date("D, j M Y G:i:s ", time()+(86400*14)) . 'GMT');//expir
 header('Cache-Control: cache');
 header('Pragma: cache');
 
-if ($browser['name'] == 'MSIE')
-{
+if ($browser['name'] == 'MSIE') {
 	header('Content-Type: application/download');
 	header('Content-Disposition: attachment; filename="'.$filename.'"');
-}else
-{
+}else {
 	header('Content-Type: '.File::get_mime($filename));
 	header('Content-Disposition: attachment; filename="'.$filename.'"');
 }
 header('Content-Transfer-Encoding: binary');
-if ($content_transfer_encoding == 'base_64')
-{
+if ($content_transfer_encoding == 'base_64') {
 	echo base64_encode($part->body);
-}else
-{
+}else {
 	echo ($part->body);
 }
 ?>

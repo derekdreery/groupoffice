@@ -114,8 +114,8 @@ try {
 			$files = new files();
 
 			$account = connect($_POST['account_id'], $_POST['mailbox']);
-			$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
-			$imap->close();
+			$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
+			$imap->disconnect();
 
 			if(empty($data)) {
 				throw new Exception('Could not fetch message from IMAP server');

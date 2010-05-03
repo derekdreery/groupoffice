@@ -1232,7 +1232,8 @@ class imap extends imap_bodystruct {
 
 		return !$subscribe || $this->subscribe($mailbox);
 	}
-	function search($terms) {
+	
+	public function search($terms) {
 		$this->clean($this->search_charset, 'charset');
 		$this->clean($terms, 'search_str');
 		if ($this->search_charset) {

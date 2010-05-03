@@ -395,8 +395,8 @@ try {
 
 
 				$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
-				$data = $imap->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer']);
-
+				$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
+				$imap->disconnect();
 
 				require_once($GO_CONFIG->class_path.'Date.class.inc.php');
 				require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
