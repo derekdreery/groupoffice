@@ -1231,7 +1231,7 @@ class imap extends imap_bodystruct {
 		return $this->check_response($res);
 	}
 
-	public function move($uids, $mailbox) {
+	public function move($uids, $mailbox, $expunge=true) {
 
 		if(!in_array($mailbox, $this->touched_folders)) {
 			$this->touched_folders[]=$mailbox;
@@ -1240,13 +1240,16 @@ class imap extends imap_bodystruct {
 		if(!$this->copy($uids, $mailbox))
 			return false;
 
-		return $this->delete($uids);
+		return $this->delete($uids, $expunge);
 	}
 
 
-	public function delete($uids) {
-		$this->set_message_flag($uids, '\Deleted \Seen');
-		return $this->expunge();
+	public function delete($uids, $expunge=true) {
+		$status = $this->set_message_flag($uids, '\Deleted \Seen');
+		if(!$status)
+			return false;
+
+		return !$expunge || $this->expunge();
 	}
 
 	public function expunge() {
