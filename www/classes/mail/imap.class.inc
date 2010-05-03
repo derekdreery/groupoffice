@@ -464,6 +464,10 @@ class imap extends imap_bodystruct {
 	 */
 	public function sort_mailbox($sort='ARRIVAL', $reverse=false, $filter='ALL') {
 
+		if(empty($filter)){
+			$filter = 'ALL';
+		}
+		
 		if(!$this->selected_mailbox)
 			throw new Exception('No mailbox selected');
 
@@ -496,10 +500,10 @@ class imap extends imap_bodystruct {
 	}
 
 	private function server_side_sort($sort, $reverse, $filter) {
-		go_debug("server_side_sort($sort, $reverse, $filter");
+		go_debug("server_side_sort($sort, $reverse, $filter)");
 
 		$this->clean($sort, 'keyword');
-		$this->clean($filter, 'keyword');
+		//$this->clean($filter, 'keyword');
 		$command = 'UID SORT ('.$sort.') US-ASCII '.$filter."\r\n";
 		$this->send_command($command);
 		/*if ($this->disable_sort_speedup) {
@@ -529,46 +533,96 @@ class imap extends imap_bodystruct {
 		}
 		return $status ? $uids : false;
 	}
+
+	/**
+	 * Function is only used if server doesn't support remote SORT
+	 *
+	 * @param <type> $terms
+	 * @param <type> $sort
+	 * @param <type> $reverse
+	 * @return <type>
+	 */
+	private function search($terms) {
+		//$this->clean($this->search_charset, 'charset');
+		$this->clean($terms, 'search_str');
+		//if ($this->search_charset) {
+			$charset = 'CHARSET UTF-8 ';
+		/*}
+		else {
+			$charset = '';
+		}*/		$command = 'UID SEARCH '.$charset.$terms."\r\n";
+		$this->send_command($command);
+		$result = $this->get_response(false, true);
+		$status = $this->check_response($result, true);
+		$res = array();
+		if ($status) {
+			array_pop($result);
+			foreach ($result as $vals) {
+				foreach ($vals as $v) {
+					if (preg_match("/^\d+$/", $v)) {
+						$res[] = $v;
+					}
+				}
+			}
+		}
+		return $res;
+	}
+
+
 	/* use the FETCH command to manually sort the mailbox */
-	private function client_side_sort($sort, $reverse) {
-		//$this->clean($mailbox, 'mailbox');
+	private function client_side_sort($sort, $reverse, $filter='ALL') {
+		
+		go_debug("imap::client_side_sort($sort, $reverse, $filter)");
+
+		$uid_string='1:*';
+		if(!empty($filter) && $filter !='ALL'){
+			$uids = $this->search($filter);
+			if(!count($uids)){
+				return array();
+			}else
+			{
+				$uid_string=implode(',', $uids);
+			}
+		}
+
 		$this->clean($sort, 'keyword');
-		$command1 = 'UID FETCH 1:* ';
+		$command1 = 'UID FETCH '.$uid_string.' ';
 		switch ($sort) {
 			case 'DATE':
 			case 'R_DATE':
-				$command2 = "BODY.PEEK[HEADER.FIELDS (DATE)]\r\n";
+				$command2 = "BODY.PEEK[HEADER.FIELDS (DATE)]";
 				$key = "BODY[HEADER.FIELDS";
 				break;
 			case 'SIZE':
 			case 'R_SIZE':
-				$command2 = "RFC822.SIZE\r\n";
+				$command2 = "RFC822.SIZE";
 				$key = "RFC822.SIZE";
 				break;
 			case 'ARRIVAL':
-				$command2 = "INTERNALDATE\r\n";
+				$command2 = "INTERNALDATE";
 				$key = "INTERNALDATE";
 				break;
 			case 'R_ARRIVAL':
-				$command2 = "INTERNALDATE\r\n";
+				$command2 = "INTERNALDATE";
 				$key = "INTERNALDATE";
 				break;
 			case 'FROM':
 			case 'R_FROM':
-				$command2 = "BODY.PEEK[HEADER.FIELDS (FROM)]\r\n";
+				$command2 = "BODY.PEEK[HEADER.FIELDS (FROM)]";
 				$key = "BODY[HEADER.FIELDS";
 				break;
 			case 'SUBJECT':
 			case 'R_SUBJECT':
-				$command2 = "BODY.PEEK[HEADER.FIELDS (SUBJECT)]\r\n";
+				$command2 = "BODY.PEEK[HEADER.FIELDS (SUBJECT)]";
 				$key = "BODY[HEADER.FIELDS";
 				break;
 			default:
-				$command2 = "INTERNALDATE\r\n";
+				$command2 = "INTERNALDATE";
 				$key = "INTERNALDATE";
 				break;
 		}
-		$command = $command1.$command2;
+		$command = $command1.$command2."\r\n";
+		//go_debug($command);
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 		$status = $this->check_response($res, true);
@@ -1233,32 +1287,7 @@ class imap extends imap_bodystruct {
 		return !$subscribe || $this->subscribe($mailbox);
 	}
 	
-	public function search($terms) {
-		$this->clean($this->search_charset, 'charset');
-		$this->clean($terms, 'search_str');
-		if ($this->search_charset) {
-			$charset = 'CHARSET '.strtoupper($this->search_charset).' ';
-		}
-		else {
-			$charset = '';
-		}
-		$command = 'UID SEARCH '.$charset.$terms."\r\n";
-		$this->send_command($command);
-		$result = $this->get_response(false, true);
-		$status = $this->check_response($result, true);
-		$res = array();
-		if ($status) {
-			array_pop($result);
-			foreach ($result as $vals) {
-				foreach ($vals as $v) {
-					if (preg_match("/^\d+$/", $v)) {
-						$res[] = $v;
-					}
-				}
-			}
-		}
-		return $res;
-	}
+	
 
 	public function subscribe($mailbox){
 		$command = 'SUBSCRIBE "'.$this->addslashes($this->utf7_encode($mailbox)).'"'."\r\n";

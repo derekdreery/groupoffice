@@ -598,11 +598,60 @@ class cached_imap extends imap{
 		return $message;
 	}
 
-	function get_message_headers($start, $limit, $sort_field , $reverse=false, $query='')
+	public function build_search_query($subject = '', $from = '', $to = '', $cc = '', $body = '', $before = '', $since = '', $before = '', $since = '', $flagged = '', $answered = '', $seen='') {
+		$query = '';
+		if ($subject != '') {
+			$query .= 'SUBJECT "'.$subject.'" ';
+		}
+		if ($from != '') {
+			$query .= 'FROM "'.$from.'" ';
+		}
+		if ($to != '') {
+			$query .= 'TO "'.$to.'" ';
+		}
+		if ($cc != '') {
+			$query .= 'CC "'.$cc.'" ';
+		}
+		if ($body != '') {
+			$query .= 'BODY "'.$body.'" ';
+		}
+
+		if ($before != '') {
+			$unix_before = Date::to_unixtime($before);
+			$query .= 'BEFORE "'.date('d-M-Y', $unix_before).'" ';
+		}
+
+		if ($since != '') {
+			$unix_since = Date::to_unixtime($since);
+			$query .= 'SINCE "'.date('d-M-Y', $unix_since).'" ';
+		}
+
+		if ($flagged != '') {
+			$query .= $flagged.' ';
+		}
+
+		if ($answered != '') {
+			$query .= $answered.' ';
+		}
+
+		if ($seen != '') {
+			$query .= $seen.' ';
+		}
+
+		return $query;
+	}
+
+	function get_message_headers($start, $limit, $sort_field , $reverse=false, $query='ALL')
 	{
 		//$uids = $this->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
+		
 
-		$uids = $this->sort_mailbox($sort_field, $reverse);
+		//if(empty($query) || true){
+			$uids = $this->sort_mailbox($sort_field, $reverse, $query);
+		/*}else
+		{
+			$uids = $this->search($query, $sort_field, $reverse);
+		}*/
 		$uids=array_slice($uids,$start, $limit);
 
 		//go_debug($uids);
