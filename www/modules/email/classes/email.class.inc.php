@@ -915,7 +915,7 @@ class email extends db {
 			$folder['account_id'] = $account['id'];
 			$folder['sort_order']=0;
 			$folder['subscribed']=1;
-			$folder['delimiter'] = $mailboxes[0]['delimiter'];
+			$folder['delimiter'] = isset($mailboxes[0]['delimiter']) ? $mailboxes[0]['delimiter'] : '.';
 			$folder['parent_id']=0;
 
 			$existing_folder = $this->get_folder($account['id'],$mailbox['name']);

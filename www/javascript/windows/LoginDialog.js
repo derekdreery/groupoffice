@@ -215,6 +215,7 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 				if(action.result.name=='')
 				{
 					this.completeProfileDialog();
+					this.profileFormPanel.form.setValues({email:action.result.email});
 				}else
 				{					
 					this.handleCallbacks();
@@ -255,7 +256,7 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 	
 	completeProfileDialog : function(){
 		
-		var formPanel = new Ext.form.FormPanel({
+		/*var formPanel = new Ext.form.FormPanel({
 			waitMsgTarget:true,
 			url: BaseHref+'action.php',
 			border: false,
@@ -283,9 +284,9 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 				allowBlank: false
 			}]				
 		});
-		
+		*/
 		var focusFirstField = function(){
-			formPanel.items.items[0].focus();
+			this.profileFormPanel.form.findField('first_name').focus();
 		};
 
 		this.profileFormPanel = new Ext.form.FormPanel({
@@ -342,7 +343,7 @@ Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
 			}]		 
 		});
 		
-		this.completeProfileDialog.show();
+		this.completeProfileDialog.show();		
 	}
 	
 });

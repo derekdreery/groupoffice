@@ -207,6 +207,7 @@ try{
 				
 			$response['user_id']=$GO_SECURITY->user_id;
 			$response['name']=$_SESSION['GO_SESSION']['name'];
+			$response['email']=$_SESSION['GO_SESSION']['email'];
 			//$response['sid']=session_id();
 			
 			
