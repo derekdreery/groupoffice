@@ -37,17 +37,17 @@ class cached_imap extends imap{
 	var $disable_message_cache=false;
 
 
-	function __construct()
+	public function __construct()
 	{
 		$this->email = new email();
 		//parent::__construct();
 	}
 
-	function is_imap(){
+	public function is_imap(){
 		return true;
 	}
 
-	function set_account($account, $mailbox='INBOX'){
+	public function set_account($account, $mailbox='INBOX'){
 		$this->account = $account;
 
 		if(!$this->folder || $this->folder['name']!=$mailbox){
@@ -72,7 +72,7 @@ class cached_imap extends imap{
 	 * @access public
 	 * @return mixed	The recource ID on success or false on failure
 	 */
-	function open($account, $mailbox='INBOX') {
+	public function open($account, $mailbox='INBOX') {
 		//$start_time = getmicrotime();
 
 		$this->set_account($account, $mailbox);
@@ -96,7 +96,7 @@ class cached_imap extends imap{
 		return $conn;
 	}
 
-	function set_message_flag($uid_array, $flags, $clear=false) {
+	public function set_message_flag($uid_array, $flags, $clear=false) {
 		if(!$this->handle){
 			$this->set_account($this->account, $this->selected_mailbox['name']);
 			$this->open($this->account, $this->selected_mailbox['name']);
@@ -104,7 +104,7 @@ class cached_imap extends imap{
 		return parent::set_message_flag($uid_array, $flags, $clear);
 	}
 
-	function select_mailbox($mailbox = "INBOX") {
+	public function select_mailbox($mailbox = "INBOX") {
 		if(parent::select_mailbox($mailbox)){
 			//update $this->folder with the db cache
 			$this->set_account($this->account, $mailbox);
@@ -123,40 +123,56 @@ class cached_imap extends imap{
 	 * @param	string $search Search query
 	 * @access public
 	 * @return int	 Number of sorted messages
+	 *
+	 * @param <type> $sort_type
+	 * @param <type> $reverse
+	 * @param <type> $filter 
+	 */
 	
-	function sort_mailbox($sort_type = SORTDATE, $reverse = "1", $filter = 'ALL') {
+	public function sort_mailbox($sort_type='ARRIVAL', $reverse=false, $filter='ALL') {
+
+		go_debug("cached_imap::sort_mailbox($sort_type, $reverse, $filter)");
 
 		$this->sort_type=$sort_type;
 		$this->sort_reverse=$reverse;
 
-		if ($query != '') {
-			parent::sort($sort_type, $reverse, $filter);
+		//we need the unseen value to determine if the cache is valid
+		//we also need this value later to pass it to the client.
+		if(!isset($this->selected_mailbox['unseen'])){
+			$this->get_unseen();
+		}
+
+		if ($filter != 'ALL' && !empty($filter)) {
+			return parent::sort_mailbox($sort_type, $reverse, $filter);
 		} else {
-			if($this->folder['msgcount']!=$this->count || $this->folder['unseen']!=$this->unseen)
+			
+			if($this->folder['msgcount']!=$this->selected_mailbox['messages'] || $this->folder['unseen']!=$this->selected_mailbox['unseen'])
 			{
 				go_debug('Cleared sort cache');
 				$this->folder_sort_cache=array();
 			}
-				
+			
 			if(isset($this->folder_sort_cache[$sort_type.'_'.$reverse]))
 			{
 				go_debug('Used cached sort info');
-				$this->sort = $this->folder_sort_cache[$sort_type.'_'.$reverse];
+				return $this->folder_sort_cache[$sort_type.'_'.$reverse];
 			}else
 			{
-				go_debug('Got sort from IMAP server: '.$this->folder['msgcount'].' = '.$this->count.' && '.$this->folder['unseen'].' = '.$this->unseen);
-				$this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_UID+SE_NOPREFETCH);
-				$this->folder_sort_cache[$sort_type.'_'.$reverse]=$this->sort;
+				go_debug('Got sort from IMAP server: '.$this->folder['msgcount'].' = '.$this->selected_mailbox['messages'].' && '.$this->folder['unseen'].' = '.$this->selected_mailbox['unseen']);
+				$sort = parent::sort_mailbox($sort_type, $reverse, $filter);
+				$this->folder_sort_cache[$sort_type.'_'.$reverse]=$sort;
 
 				$up_folder['id'] = $this->folder['id'];
 				$up_folder['sort']=serialize($this->folder_sort_cache);
-				$up_folder['unseen']=$this->unseen;
-				$up_folder['msgcount']=$this->count;
+				$up_folder['unseen']=$this->selected_mailbox['unseen'];
+				$up_folder['msgcount']=$this->selected_mailbox['messages'];
 
-				$this->email->__update_folder($up_folder);
+				$this->email->update_folder($up_folder);
+
+				return $sort;
 			}
 		}
-	} */
+	} 
 
 
 
@@ -168,7 +184,7 @@ class cached_imap extends imap{
 		* @return void
 		*/
 
-	function delete($messages) {
+	public function delete($messages) {
 		if(count($messages))
 		{
 			if(parent::delete($messages))
@@ -188,7 +204,7 @@ class cached_imap extends imap{
 		* @access public
 		* @return bool True on success
 		*/
-	function move($uids, $mailbox) {
+	public function move($uids, $mailbox) {
 		if(count($uids))
 		{
 			if(parent::move($uids, $mailbox))
@@ -200,7 +216,7 @@ class cached_imap extends imap{
 		return false;
 	}
 
-	function delete_cached_messages($uids)
+	public function delete_cached_messages($uids)
 	{
 		/*$sql = "SELECT count(*) AS count FROM em_messages_cache WHERE new='1' AND folder_id=".$this->email->escape($this->folder['id'])." AND uid IN(".$this->email->escape(implode(',',$uids)).")";
 		 $this->query($sql);
@@ -267,7 +283,7 @@ class cached_imap extends imap{
 		}
 	}
 
-	function set_unseen_cache($uids, $new)
+	public function set_unseen_cache($uids, $new)
 	{
 		$new_val = $new ? '1' : '0';
 
@@ -288,7 +304,7 @@ class cached_imap extends imap{
 		return $affected_rows;
 	}
 
-	function set_flagged_cache($uids, $flagged)
+	public function set_flagged_cache($uids, $flagged)
 	{
 		$new_val = $flagged ? '1' : '0';
 
@@ -297,7 +313,7 @@ class cached_imap extends imap{
 	}
 
 
-	function get_message_part($uid, $message_part=0, $peek=false) {
+	public function get_message_part($uid, $message_part=0, $peek=false) {
 		
 		if(!$this->handle){
 			if(!$this->open($this->account, $this->folder['name'])){
@@ -308,9 +324,19 @@ class cached_imap extends imap{
 		return parent::get_message_part($uid, $message_part, $peek);
 	}
 
+	public function get_message_header($uid){
+		$this->get_cached_messages($this->folder['id'], array($uid));
+		$record = $this->email->next_record();
+
+		if($record)
+			return $record;
+		else
+			return parent::get_message_header($uid);
+	}
 
 
-	function get_message_with_body($uid, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false, $peek=false) {
+
+	public function get_message_with_body($uid, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false, $peek=false) {
 		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $lang;
 
 		require_once($GO_LANGUAGE->get_language_file('email'));
@@ -329,6 +355,9 @@ class cached_imap extends imap{
 		$this->get_cached_messages($this->folder['id'], array($uid), true);
 		$values=$this->email->next_record();
 		if(!$this->disable_message_cache && !empty($values['serialized_message_object'])){
+
+			go_debug('got cached message with body');
+
 			$message =  unserialize($values['serialized_message_object']);
 			$message['from_cache']=true;
 			$message['new']=$values['new'];
@@ -598,61 +627,13 @@ class cached_imap extends imap{
 		return $message;
 	}
 
-	public function build_search_query($subject = '', $from = '', $to = '', $cc = '', $body = '', $before = '', $since = '', $before = '', $since = '', $flagged = '', $answered = '', $seen='') {
-		$query = '';
-		if ($subject != '') {
-			$query .= 'SUBJECT "'.$subject.'" ';
-		}
-		if ($from != '') {
-			$query .= 'FROM "'.$from.'" ';
-		}
-		if ($to != '') {
-			$query .= 'TO "'.$to.'" ';
-		}
-		if ($cc != '') {
-			$query .= 'CC "'.$cc.'" ';
-		}
-		if ($body != '') {
-			$query .= 'BODY "'.$body.'" ';
-		}
-
-		if ($before != '') {
-			$unix_before = Date::to_unixtime($before);
-			$query .= 'BEFORE "'.date('d-M-Y', $unix_before).'" ';
-		}
-
-		if ($since != '') {
-			$unix_since = Date::to_unixtime($since);
-			$query .= 'SINCE "'.date('d-M-Y', $unix_since).'" ';
-		}
-
-		if ($flagged != '') {
-			$query .= $flagged.' ';
-		}
-
-		if ($answered != '') {
-			$query .= $answered.' ';
-		}
-
-		if ($seen != '') {
-			$query .= $seen.' ';
-		}
-
-		return $query;
-	}
-
-	function get_message_headers($start, $limit, $sort_field , $reverse=false, $query='ALL')
+	
+	public function get_message_headers_set($start, $limit, $sort_field , $reverse=false, $query='ALL')
 	{
-		//$uids = $this->get_message_uids($start, $limit, $sort_field , $sort_order, $query);
-		
+		$uids = $this->sort_mailbox($sort_field, $reverse, $query);
 
-		//if(empty($query) || true){
-			$uids = $this->sort_mailbox($sort_field, $reverse, $query);
-		/*}else
-		{
-			$uids = $this->search($query, $sort_field, $reverse);
-		}*/
-		$uids=array_slice($uids,$start, $limit);
+		if($limit>0)
+			$uids=array_slice($uids,$start, $limit);
 
 		//go_debug($uids);
 		$sorted_messages=array();
@@ -713,7 +694,7 @@ class cached_imap extends imap{
 				$newstart = count($messages);
 				$newlimit = $newstart+count($this->filtered);
 
-				$sorted_messages = array_merge($sorted_messages, $this->get_message_headers($newstart, $newlimit, $sort_field , $sort_order, $query));
+				$sorted_messages = array_merge($sorted_messages, $this->get_message_headers_set($newstart, $newlimit, $sort_field , $sort_order, $query));
 				/*foreach($extra_messages as $uid=>$message)
 				{
 					$messages[$uid]=$message;
@@ -725,7 +706,7 @@ class cached_imap extends imap{
 	}
 
 
-	function imap_message_to_cache($message){
+	public function imap_message_to_cache($message){
 		$message['to']=substr($message['to'],0, 255);
 		$message['subject']=substr($message['subject'],0,100);
 		$message['from']=substr($message['from'],0,100);
@@ -771,12 +752,12 @@ class cached_imap extends imap{
 		return $message;
 	}
 
-	function set_filters($filters)
+	public function set_filters($filters)
 	{
 		$this->filters=$filters;
 	}
 
-	function get_filtered_message_headers($uids)
+	public function get_filtered_message_headers($uids)
 	{		
 		$this->filtered=array();
 		for ($i=0;$i<sizeof($this->filters);$i++)
@@ -784,7 +765,7 @@ class cached_imap extends imap{
 			$this->filters[$i]['uids']=array();
 		}
 
-		$new_messages = parent::get_message_headers($uids);
+		$new_messages = $this->get_message_headers($uids);
 		if(strtoupper($this->selected_mailbox['name'])!='INBOX')
 		{
 			return $new_messages;
@@ -869,13 +850,13 @@ class cached_imap extends imap{
 	 * @return int New record ID created
 	 */
 
-	function add_cached_message($cached_message)
+	public function add_cached_message($cached_message)
 	{
 		return $this->email->insert_row('em_messages_cache', $cached_message);
 	}
 
 
-	function clear_cache($folder_id=0){
+	public function clear_cache($folder_id=0){
 		if($folder_id==0)
 		{
 			$sql = "DELETE FROM em_messages_cache WHERE account_id=?";
@@ -902,7 +883,7 @@ class cached_imap extends imap{
 	 * @return bool True on success
 	 */
 
-	function update_cached_message($cached_message)
+	public function update_cached_message($cached_message)
 	{
 		return $this->email->update_row('em_messages_cache', array('uid', 'folder_id'), $cached_message);
 	}
@@ -916,7 +897,7 @@ class cached_imap extends imap{
 	 * @return Array Record properties
 	 */
 
-	function get_cached_messages($folder_id, $uids, $with_full_cached_message=false)
+	public function get_cached_messages($folder_id, $uids, $with_full_cached_message=false)
 	{
 		$sql = "SELECT `folder_id`,`uid`,`account_id`,`new`,`subject`,`from`,".
 			"`reply_to`,`size`,`udate`,`attachments`,`flagged`,`answered`,`priority`,".

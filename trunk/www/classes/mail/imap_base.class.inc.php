@@ -283,7 +283,7 @@ class imap_base {
 		}
 
 		//go_debug($command);
-		$this->commands[trim($command)] = microtime();
+		$this->commands[trim($command)] = getmicrotime();
 	}
 	/* determine if an imap response returned an "OK", returns
        true or false */

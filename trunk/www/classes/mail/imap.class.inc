@@ -2,10 +2,7 @@
 /*
  * TODO:
  *
- * search
- * Z-push
  * $forwarded flag
- * connect on login and don't connect when not necessary
  * imapauth
  * filemanager panel
  * link filter reset and apply button
@@ -84,7 +81,7 @@ class imap extends imap_bodystruct {
 			$this->server = 'tls://'.$this->server;
 		}
 
-		$this->handle = fsockopen($this->server, $this->port, $errorno, $errorstr, 30);
+		$this->handle = @fsockopen($this->server, $this->port, $errorno, $errorstr, 30);
 		if (!is_resource($this->handle)) {
 			throw new Exception('#'.$errorno.'. '.$errorstr);
 		}
@@ -108,7 +105,7 @@ class imap extends imap_bodystruct {
 			$result = $this->get_response();
 
 
-			//go_debug($this->commands);
+			go_debug($this->commands);
 
 			//go_debug($this->responses);
 
@@ -138,7 +135,7 @@ class imap extends imap_bodystruct {
 				$this->banner = fgets($this->handle, 1024);
 				$cram1 = 'A'.$this->command_number().' AUTHENTICATE CRAM-MD5'."\r\n";
 				fputs ($this->handle, $cram1);
-				$this->commands[trim($cram1)] = microtime();
+				$this->commands[trim($cram1)] = getmicrotime();
 				$response = fgets($this->handle, 1024);
 				$this->responses[] = $response;
 				$challenge = base64_decode(substr(trim($response), 1));
@@ -147,12 +144,12 @@ class imap extends imap_bodystruct {
 				$opad = str_repeat(chr(0x5c), 64);
 				$digest = bin2hex(pack("H*", md5(($pass ^ $opad).pack("H*", md5(($pass ^ $ipad).$challenge)))));
 				$challenge_response = base64_encode($username.' '.$digest);
-				$this->commands[trim($challenge_response)] = microtime();
+				$this->commands[trim($challenge_response)] = getmicrotime();
 				fputs($this->handle, $challenge_response."\r\n");
 				break;
 			default:
 				$login = 'A'.$this->command_number().' LOGIN "'.str_replace('"', '\"', $username).'" "'.str_replace('"', '\"', $pass). "\"\r\n";
-				$this->commands[trim(str_replace($pass, 'xxxx', $login))] = microtime();
+				$this->commands[trim(str_replace($pass, 'xxxx', $login))] = getmicrotime();
 				fputs($this->handle, $login);
 				break;
 		}
@@ -162,7 +159,7 @@ class imap extends imap_bodystruct {
 		$authed = false;
 		if (is_array($res) && !empty($res)) {
 			$response = array_pop($res);
-			$this->short_responses[$response] = microtime();
+			$this->short_responses[$response] = getmicrotime();
 			if (!$this->auth) {
 				if (isset($res[1])) {
 					$this->banner = $res[1];
@@ -330,7 +327,7 @@ class imap extends imap_bodystruct {
 	 *
 	 */
 
-	public function select_mailbox($mailbox_name) {
+	public function select_mailbox($mailbox_name='INBOX') {
 
 		if($this->selected_mailbox && $this->selected_mailbox['name']==$mailbox_name)
 			return true;
@@ -449,6 +446,8 @@ class imap extends imap_bodystruct {
 			}
 		}
 
+		$this->selected_mailbox['unseen']=$unseen;
+
 		//go_debug($unseen);
 		return array('count'=>$unseen, 'uids'=>$uids);
 	}
@@ -542,7 +541,7 @@ class imap extends imap_bodystruct {
 	 * @param <type> $reverse
 	 * @return <type>
 	 */
-	private function search($terms) {
+	public function search($terms) {
 		//$this->clean($this->search_charset, 'charset');
 		$this->clean($terms, 'search_str');
 		//if ($this->search_charset) {
@@ -784,6 +783,16 @@ class imap extends imap_bodystruct {
 		return array('uids' => $uids, 'total' => count($uids), 'thread_data' => $new_thread_data,
 						'sort' => $sort, 'filter' => $filter, 'timestamp' => time(), 'threads' => $threads);
 
+	}
+
+	public function get_message_header($uid){
+		$headers = $this->get_message_headers(array($uid));
+		if(count($headers)){
+			return $headers[0];
+		}else
+		{
+			return false;
+		}
 	}
 
 
@@ -1055,7 +1064,7 @@ class imap extends imap_bodystruct {
 		return $attachments;
 	}
 
-	public function decode_message_part($str, $encoding, $charset) {
+	public function decode_message_part($str, $encoding, $charset=false) {
 
 		switch($encoding) {
 			case 'base64':
@@ -1075,7 +1084,7 @@ class imap extends imap_bodystruct {
 		return $str;
 	}
 
-	public function get_message_part_decoded($uid, $part_no, $encoding, $charset, $peek=false) {
+	public function get_message_part_decoded($uid, $part_no, $encoding, $charset=false, $peek=false) {
 		go_debug("get_message_part_decode($uid, $part_no, $encoding, $charset)");
 		return $this->decode_message_part(
 						$this->get_message_part($uid, $part_no, $peek),

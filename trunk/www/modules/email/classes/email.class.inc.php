@@ -12,8 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-function connect($account_id, $mailbox='INBOX', $halt_on_error=true)
-{
+function connect($account_id, $mailbox='INBOX', $halt_on_error=true) {
 	global $email, $imap, $GO_SECURITY, $lang;
 
 	if (!$account = $email->get_account($account_id)) {
@@ -23,25 +22,28 @@ function connect($account_id, $mailbox='INBOX', $halt_on_error=true)
 		exit();
 	}
 
-	if($account['user_id']!=$GO_SECURITY->user_id && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
-	{
+	if($account['user_id']!=$GO_SECURITY->user_id && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
 		$response['success']=false;
 		$response['feedback']=$lang['common']['accessDenied'];
 		echo json_encode($response);
 		exit();
 	}
-	if (!$imap->open($account, $mailbox)) {
-		if(!$halt_on_error)
-		return false;
+	try{
+		if (!$imap->open($account, $mailbox)) {
+			if(!$halt_on_error)
+				return false;
 
-		$response['success']=false;
-		$response['feedback']= sprintf($lang['email']['feedbackCannotConnect'], $account['host'],  $imap->last_error(), $account['port']);
-		echo json_encode($response);
-		exit();
+			$response['success']=false;
+			$response['feedback']= sprintf($lang['email']['feedbackCannotConnect'], $account['host'],  $imap->last_error(), $account['port']);
+			echo json_encode($response);
+			exit();
+		}
+	}
+	catch (Exception $e) {
+		throw new Exception($email->human_connect_error($e->getMessage()));
 	}
 
-	if(!defined('IMAP_CONNECTED'))
-	{
+	if(!defined('IMAP_CONNECTED')) {
 		define('IMAP_CONNECTED', true);
 	}
 
@@ -49,19 +51,17 @@ function connect($account_id, $mailbox='INBOX', $halt_on_error=true)
 
 }
 
-function load_template($template_id, $to='', $keep_tags=false)
-{
+function load_template($template_id, $to='', $keep_tags=false) {
 	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $GO_USERS;
 
 	require_once ($GO_CONFIG->class_path.'mail/mimeDecode.class.inc');
 	require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 	require_once($GO_MODULES->modules['mailings']['class_path'].'templates.class.inc.php');
 
-	if($GO_MODULES->has_module('customfields')){
+	if($GO_MODULES->has_module('customfields')) {
 		require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 		$cf = new customfields();
-	}else
-	{
+	}else {
 		$cf = false;
 	}
 
@@ -78,8 +78,7 @@ function load_template($template_id, $to='', $keep_tags=false)
 	$response['data'] = $go2mime->mime2GO($template['content'], $GO_MODULES->modules['mailings']['url'].'mimepart.php?template_id='.$template_id, true, true);
 	unset($response['data']['to'],$response['data']['cc'], $response['data']['bcc'],$response['data']['subject']);
 
-	if(!$keep_tags)
-	{
+	if(!$keep_tags) {
 		$values=array();
 		$contact_id=0;
 		//if contact_id is not set but email is check if there's contact info available
@@ -90,18 +89,15 @@ function load_template($template_id, $to='', $keep_tags=false)
 				$values = array_map('htmlspecialchars', $contact);
 				$link_type = 2;
 				$link_id=$contact['id'];
-				
 
-			}elseif($user = $GO_USERS->get_user_by_email($to))
-			{
+
+			}elseif($user = $GO_USERS->get_user_by_email($to)) {
 				$values = array_map('htmlspecialchars', $user);
 				$link_type = 8;
 				$link_id=$user['id'];
-			}else
-			{
+			}else {
 				$ab->search_companies($GO_SECURITY->user_id, $to, 'email',0,0,1);
-				if($ab->next_record())
-				{
+				if($ab->next_record()) {
 					$values = array_map('htmlspecialchars', $ab->record);
 					$link_type = 3;
 					$link_id=$values['id'];
@@ -109,16 +105,15 @@ function load_template($template_id, $to='', $keep_tags=false)
 			}
 		}
 
-		if($cf && !empty($link_id)){
+		if($cf && !empty($link_id)) {
 			$cf_values = $cf->get_values($GO_SECURITY->user_id, $link_type, $link_id);
 			$values = array_merge($values, $cf_values);
 		}
 
 		$tp->replace_fields($response['data']['body'], $values);
 	}
-	
-	if($_POST['content_type']=='plain')
-	{
+
+	if($_POST['content_type']=='plain') {
 		$response['data']['body']=String::html_to_text($response['data']['body'], false);
 	}
 
@@ -127,12 +122,11 @@ function load_template($template_id, $to='', $keep_tags=false)
 	return $response;
 }
 
-class email extends db
-{
+class email extends db {
 	var $last_error;
 	var $mail;
-	
-	public function __on_load_listeners($events){
+
+	public function __on_load_listeners($events) {
 		$events->add_listener('user_delete', __FILE__, 'email', 'user_delete');
 		$events->add_listener('build_search_index', __FILE__, 'email', 'build_search_index');
 		$events->add_listener('save_settings', __FILE__, 'email', 'save_settings');
@@ -140,8 +134,7 @@ class email extends db
 		$events->add_listener('login', __FILE__, 'email', 'login');
 	}
 
-	public static function login()
-	{
+	public static function login() {
 		global $GO_SECURITY;
 
 		//clear old cache
@@ -149,37 +142,32 @@ class email extends db
 		$sql = "DELETE FROM em_messages_cache WHERE udate<".Date::date_add(time(),-21)." AND account_id IN (SELECT id FROM em_accounts WHERE user_id=".$GO_SECURITY->user_id.")";
 		$db->query($sql);
 	}
-	
-	public static function save_settings(){
+
+	public static function save_settings() {
 
 		global $GO_MODULES, $GO_CONFIG, $GO_SECURITY;
 
-		if($GO_MODULES->has_module('email'))
-		{
+		if($GO_MODULES->has_module('email')) {
 			$value = isset($_POST['use_html_markup']) ? '0' : '1';
 			$GO_CONFIG->save_setting('email_use_plain_text_markup', $value, $GO_SECURITY->user_id);
 		}
 	}
 
-	function get_servermanager_mailbox_info($account)
-	{
+	function get_servermanager_mailbox_info($account) {
 		global $GO_CONFIG, $GO_MODULES;
 
-		if(isset($GO_MODULES->modules['serverclient']))
-		{
+		if(isset($GO_MODULES->modules['serverclient'])) {
 			require_once($GO_MODULES->modules['serverclient']['class_path'].'serverclient.class.inc.php');
 			$sc = new serverclient();
 
-			foreach($sc->domains as $domain)
-			{
-				if(strpos($account['username'], '@'.$domain))
-				{
+			foreach($sc->domains as $domain) {
+				if(strpos($account['username'], '@'.$domain)) {
 					$sc->login();
 
 					$params=array(
-						'task'=>'serverclient_get_mailbox',
-						'username'=>$account['username'],
-						'password'=>$account['password']														
+									'task'=>'serverclient_get_mailbox',
+									'username'=>$account['username'],
+									'password'=>$account['password']
 					);
 					$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/json.php', $params);
 					go_debug($server_response);
@@ -191,26 +179,23 @@ class email extends db
 		return false;
 	}
 
-	function get_accounts($user_id=0, $start=0, $offset=0, $sort='standard', $dir='ASC')
-	{
+	function get_accounts($user_id=0, $start=0, $offset=0, $sort='standard', $dir='ASC') {
 		$sql = "SELECT al.name, al.email, al.signature, al.id AS default_alias_id, a.*,u.first_name, u.middle_name, u.last_name FROM em_accounts a ".
-			"INNER JOIN go_users u on u.id=a.user_id ".
-			"INNER JOIN em_aliases al ON (al.account_id=a.id AND al.`default`='1') ";
+						"INNER JOIN go_users u on u.id=a.user_id ".
+						"INNER JOIN em_aliases al ON (al.account_id=a.id AND al.`default`='1') ";
 
-		if($user_id > 0)
-		{
+		if($user_id > 0) {
 			$sql .= " WHERE user_id='".$this->escape($user_id)."'";
 			$sql .= " ORDER BY ".$this->escape($sort.' '.$dir);
 		}else {
-			$sql = 
-			$sql .= " ORDER BY ".$this->escape($sort.' '.$dir);
+			$sql =
+							$sql .= " ORDER BY ".$this->escape($sort.' '.$dir);
 		}
 
 		$this->query($sql);
 		$count =  $this->num_rows();
 
-		if($offset>0)
-		{
+		if($offset>0) {
 			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 			$this->query($sql);
 		}
@@ -218,13 +203,12 @@ class email extends db
 	}
 
 
-	function link_message($message)
-	{
+	function link_message($message) {
 		global $GO_LINKS;
 
 		$message['link_id']=$this->nextid('em_links');
 
-		if(empty($message['subject'])){
+		if(empty($message['subject'])) {
 			global $GO_LANGUAGE, $lang;
 			$GO_LANGUAGE->require_language_file('email');
 
@@ -240,8 +224,7 @@ class email extends db
 		return $message['link_id'];
 	}
 
-	function delete_linked_message($link_id)
-	{
+	function delete_linked_message($link_id) {
 		global $GO_CONFIG;
 
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
@@ -256,8 +239,7 @@ class email extends db
 		return $this->query($sql);
 	}
 
-	function get_linked_message($id)
-	{
+	function get_linked_message($id) {
 		$sql = "SELECT * FROM em_links WHERE link_id=".$this->escape($id);
 		$this->query($sql);
 		return $this->next_record();
@@ -265,34 +247,27 @@ class email extends db
 
 
 
-	function update_settings($settings)
-	{
-		if(!isset($settings['user_id']))
-		{
+	function update_settings($settings) {
+		if(!isset($settings['user_id'])) {
 			global $GO_SECURITY;
 			$settings['user_id'] = $GO_SECURITY->user_id;
 		}
 		return $this->update_row('em_settings', 'user_id', $settings);
 	}
 
-	function get_settings($user_id)
-	{
+	function get_settings($user_id) {
 		$this->query("SELECT * FROM em_settings WHERE user_id='".$this->escape($user_id)."'");
-		if ($this->next_record())
-		{
+		if ($this->next_record()) {
 			return $this->record;
-		}else
-		{
+		}else {
 			global $GO_MODULES;
 
 			$addressbook_id=0;
-			if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission'])
-			{
+			if(isset($GO_MODULES->modules['addressbook']) && $GO_MODULES->modules['addressbook']['read_permission']) {
 				require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 				$ab = new addressbook();
 
-				if($addressbook=$ab->get_addressbook())
-				{
+				if($addressbook=$ab->get_addressbook()) {
 					$addressbook_id=$addressbook['id'];
 				}
 			}
@@ -302,74 +277,72 @@ class email extends db
 		}
 	}
 
-	function add_account($account)
-	{
+	function add_account($account) {
 		global $GO_CONFIG, $GO_LANGUAGE;
 
 
 		require_once($GO_CONFIG->class_path."mail/imap.class.inc");
 		$this->mail= new imap();
 
-		if (!$this->mail->connect(
-		$account['host'],
-		$account['port'],
-		$account['username'],
-		$account['password'],
-		$account['use_ssl']))
-		{
-			return false;
-		}else
-		{
-			if (!$account['mbroot'] = $this->mail->check_mbroot($account['mbroot']))
-			{
-				$account['mbroot'] = '';
+		try {
+			if (!$this->mail->connect(
+			$account['host'],
+			$account['port'],
+			$account['username'],
+			$account['password'],
+			$account['use_ssl'])) {
+				return false;
+			}else {
+				if (!$account['mbroot'] = $this->mail->check_mbroot($account['mbroot'])) {
+					$account['mbroot'] = '';
+				}
+
+				$account['trash'] = '';
+				$account['sent'] = '';
+				$account['drafts'] = '';
+				$account['spam'] = '';
+
+
+				if ($account['type']=='imap') {
+					$account=$this->set_default_folders($account);
+
+					$mailboxes =  $this->mail->get_folders($account['mbroot']);
+					$subscribed =  $this->mail->get_folders($account['mbroot'], true);
+				}else {
+					$mailboxes = array();
+					$subscribed = array();
+				}
+				$this->mail->disconnect();
+
+				$account['id'] = $this->nextid("em_accounts");
+
+
+				$alias['default']='1';
+				$alias['account_id']=$account['id'];
+				$alias['name']=$account['name'];
+				$alias['email']=$account['email'];
+				if(!empty($account['signature']))
+					$alias['signature']=$account['signature'];
+
+				$this->add_alias($alias);
+
+				unset($account['name'],$account['email'],$account['signature']);
+
+				$this->insert_row('em_accounts', $account);
+
+
+				$this->_synchronize_folders($account, $mailboxes, $subscribed);
+
+				return $account['id'];
 			}
-
-			$account['trash'] = '';
-			$account['sent'] = '';
-			$account['drafts'] = '';
-			$account['spam'] = '';
-
-
-			if ($account['type']=='imap')
-			{
-				$account=$this->set_default_folders($account);
-
-				$mailboxes =  $this->mail->get_folders($account['mbroot']);
-				$subscribed =  $this->mail->get_folders($account['mbroot'], true);
-			}else
-			{
-				$mailboxes = array();
-				$subscribed = array();
-			}
-			$this->mail->disconnect();
-
-			$account['id'] = $this->nextid("em_accounts");
-			
-			
-			$alias['default']='1';
-			$alias['account_id']=$account['id'];
-			$alias['name']=$account['name'];
-			$alias['email']=$account['email'];
-			if(!empty($account['signature']))
-				$alias['signature']=$account['signature'];
-			
-			$this->add_alias($alias);				
-			
-			unset($account['name'],$account['email'],$account['signature']);
-					
-			$this->insert_row('em_accounts', $account);
-				
-				
-			$this->_synchronize_folders($account, $mailboxes, $subscribed);
-				
-			return $account['id'];
-				
+		}
+		catch (Exception $e) {
+			throw new Exception($this->human_connect_error($e->getMessage()));
 		}
 	}
 
-	function set_default_folders($account){
-			
+	function set_default_folders($account) {
+
 		global $GO_LANGUAGE;
 
 		require($GO_LANGUAGE->get_language_file('email'));
@@ -378,40 +351,32 @@ class email extends db
 		$subscribed =  $this->mail->get_folders($account['mbroot'], true);
 
 		$mailbox_names = array();
-		foreach($mailboxes  as $mailbox)
-		{
+		foreach($mailboxes  as $mailbox) {
 			$mailbox_names[]=$mailbox['name'];
 		}
 
 		$subscribed_names = array();
-		foreach($subscribed as $mailbox)
-		{
+		foreach($subscribed as $mailbox) {
 			$subscribed_names[]=$mailbox['name'];
 		}
 
-		if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names))
-		{
+		if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names)) {
 			$account['trash'] = $account['mbroot'].$lang['email']['trash'];
-		}elseif($account['mbroot'] = $this->mail->check_mbroot($mailbox_names[0]))
-		{
-			if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names))
-			{
+		}elseif($account['mbroot'] = $this->mail->check_mbroot($mailbox_names[0])) {
+			if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names)) {
 				$account['trash'] = $account['mbroot'].$lang['email']['trash'];
 			}
 		}
 
-		if($this->_add_folder($account['mbroot'].$lang['email']['sent'], $mailbox_names, $subscribed_names))
-		{
+		if($this->_add_folder($account['mbroot'].$lang['email']['sent'], $mailbox_names, $subscribed_names)) {
 			$account['sent'] = $account['mbroot'].$lang['email']['sent'];
 		}
 
-		if($this->_add_folder($account['mbroot'].$lang['email']['drafts'], $mailbox_names, $subscribed_names))
-		{
+		if($this->_add_folder($account['mbroot'].$lang['email']['drafts'], $mailbox_names, $subscribed_names)) {
 			$account['drafts'] = $account['mbroot'].$lang['email']['drafts'];
 		}
 
-		if($this->_add_folder($account['mbroot'].'Spam', $mailbox_names, $subscribed_names))
-		{
+		if($this->_add_folder($account['mbroot'].'Spam', $mailbox_names, $subscribed_names)) {
 			$account['spam']= $account['mbroot'].'Spam';
 		}
 
@@ -421,30 +386,27 @@ class email extends db
 
 
 
-	function _update_account($account)
-	{
-		if(isset($account['name']))
-		{
+	function _update_account($account) {
+		if(isset($account['name'])) {
 			$alias['default']='1';
 			$alias['account_id']=$account['id'];
 			$alias['name']=$account['name'];
-			
+
 			if(isset($account['email']))
 				$alias['email']=$account['email'];
 
 			if(isset($account['signature']))
 				$alias['signature']=$account['signature'];
-			
+
 			$this->update_row('em_aliases',array('account_id', 'default'), $alias);
-			
+
 			unset($account['name'],$account['email'],$account['signature']);
 		}
-		
+
 		return $this->update_row('em_accounts', 'id', $account,'', false);
 	}
 
-	function update_account($account)
-	{
+	function update_account($account) {
 		global $GO_CONFIG;
 
 		require_once($GO_CONFIG->class_path."mail/imap.class.inc");
@@ -452,51 +414,66 @@ class email extends db
 
 		$oldaccount = $this->get_account($account['id']);
 
+		try {
 
-		if ($this->mail->connect(
-		$account['host'],
-		$account['port'],
-		$account['username'],
-		$account['password'],
-		$account['use_ssl']))
-		{
+			if ($this->mail->connect(
+			$account['host'],
+			$account['port'],
+			$account['username'],
+			$account['password'],
+			$account['use_ssl'])) {
 
-			if (!$mbroot = $this->mail->check_mbroot($account['mbroot']))
-			{
-				$account['mbroot'] = '';
+				if (!$mbroot = $this->mail->check_mbroot($account['mbroot'])) {
+					$account['mbroot'] = '';
+				}
+
+				/*if($oldaccount['type']=='pop3' && $account['type']=='imap')
+				{
+					$account=$this->set_default_folders($account);
+					$mailboxes =  $this->mail->get_folders($account['mbroot']);
+					$subscribed =  $this->mail->get_folders($account['mbroot'], true);
+					$this->_synchronize_folders($account, $mailboxes, $subscribed);
+				}elseif($oldaccount['type']=='imap' && $account['type']=='pop3')
+				{
+					$this->delete_folders($account['id']);
+
+					$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
+					$subscribed =  $this->mail->get_subscribed($account['mbroot']);
+					$this->_synchronize_folders($account, $mailboxes, $subscribed);
+				}*/
+
+				$this->mail->disconnect();
+
+				return $this->_update_account($account);
 			}
-				
-			/*if($oldaccount['type']=='pop3' && $account['type']=='imap')
-			{
-				$account=$this->set_default_folders($account);
-				$mailboxes =  $this->mail->get_folders($account['mbroot']);
-				$subscribed =  $this->mail->get_folders($account['mbroot'], true);
-				$this->_synchronize_folders($account, $mailboxes, $subscribed);
-			}elseif($oldaccount['type']=='imap' && $account['type']=='pop3')
-			{
-				$this->delete_folders($account['id']);
-				
-				$mailboxes =  $this->mail->get_mailboxes($account['mbroot']);
-				$subscribed =  $this->mail->get_subscribed($account['mbroot']);
-				$this->_synchronize_folders($account, $mailboxes, $subscribed);
-			}*/
-
-			$this->mail->disconnect();
-
-			return $this->_update_account($account);
+		}
+		catch (Exception $e) {
+			throw new Exception($this->human_connect_error($e->getMessage()));
 		}
 		return false;
 	}
 
-	function _add_folder($name, $mailbox_names, $subscribed_names)
-	{;
-		if (!in_array($name, $mailbox_names))
-		{
+	function human_connect_error($message) {
+		global $lang, $GO_LANGUAGE;
+
+		$GO_LANGUAGE->require_language_file('email');
+
+		if(stripos($message,'getaddrinfo')) {
+			$message = $lang['email']['error_getaddrinfo'];
+		}else if(stripos($message,'authentication')) {
+			$message = $lang['email']['error_authentication'];
+		}else if(stripos($message,'connection refused')) {
+			$message = $lang['email']['error_connection_refused'];
+		}
+		return $message;
+	}
+
+	function _add_folder($name, $mailbox_names, $subscribed_names) {
+		;
+		if (!in_array($name, $mailbox_names)) {
 			return $this->mail->create_folder($name);
-		}else
-		{
-			if (!in_array($name, $subscribed_names))
-			{
+		}else {
+			if (!in_array($name, $subscribed_names)) {
 				return $this->mail->subscribe($name);
 			}
 			return true;
@@ -504,16 +481,14 @@ class email extends db
 		return false;
 	}
 
-	function update_password($host, $username, $password)
-	{
+	function update_password($host, $username, $password) {
 		$sql = "UPDATE em_accounts SET password='".$this->escape($password).
-		"' WHERE username='".$this->escape($username)."' AND host='".$this->escape($host)."'";
+						"' WHERE username='".$this->escape($username)."' AND host='".$this->escape($host)."'";
 
 		return $this->query($sql);
 	}
 
-	function update_folders($account_id, $sent, $trash, $drafts, $spam)
-	{
+	function update_folders($account_id, $sent, $trash, $drafts, $spam) {
 		$account['sent']=$sent;
 		$account['drafts']=$drafts;
 		$account['spam']=$spam;
@@ -523,29 +498,23 @@ class email extends db
 		return $this->update_row('em_accounts', 'id', $account);
 	}
 
-	function get_account($account_id, $alias_id=0)
-	{
+	function get_account($account_id, $alias_id=0) {
 		$sql = "SELECT a.*, al.name, al.email, al.signature, al.id AS default_alias_id FROM em_accounts a INNER JOIN em_aliases al ON ";
-		if(empty($alias_id))
-		{
+		if(empty($alias_id)) {
 			$sql .= "(al.account_id=a.id AND al.`default`='1') WHERE a.id=".$this->escape($account_id);
-		}else
-		{
+		}else {
 			$sql .= "al.account_id=a.id WHERE al.id=".$this->escape($alias_id);
-		}	
+		}
 
 		$this->query($sql);
-		if ($this->next_record(DB_ASSOC))
-		{
+		if ($this->next_record(DB_ASSOC)) {
 			return $this->record;
-		}else
-		{
+		}else {
 			return false;
 		}
 	}
 
-	function get_account_folders($account_id, $mbroot=false)
-	{
+	function get_account_folders($account_id, $mbroot=false) {
 		if ($mbroot)
 			$sql = "SELECT mbroot, sent, drafts, trash, spam FROM em_accounts WHERE id = ?";
 		else
@@ -556,14 +525,12 @@ class email extends db
 	}
 
 
-	function delete_account($id)
-	{
+	function delete_account($id) {
 		global $GO_EVENTS;
-		
+
 		$id = $this->escape($id);
 		$sql = "DELETE FROM em_accounts WHERE id='$id'";
-		if ($this->query($sql))
-		{
+		if ($this->query($sql)) {
 			$sql = "DELETE FROM em_aliases WHERE account_id='$id'";
 			$this->query($sql);
 			$sql = "DELETE FROM em_folders WHERE account_id='$id'";
@@ -582,22 +549,19 @@ class email extends db
 	/*
 	 gets the subfolder of a folder id. Account id is only usefull for the root
 	 level where all folders have parent 0
-	 */
+	*/
 
-	function get_subscribed($account_id, $folder_id=-1)
-	{
+	function get_subscribed($account_id, $folder_id=-1) {
 		$sql = "SELECT id,account_id,name,delimiter,can_have_children,parent_id,unseen,msgcount FROM em_folders";
 
-		if($account_id>0)
-		{
+		if($account_id>0) {
 			$sql .= " WHERE account_id='".$this->escape($account_id)."'".
-				" AND (subscribed='1' OR name='INBOX')";
+							" AND (subscribed='1' OR name='INBOX')";
 		}else {
 			$sql .= " WHERE (subscribed='1' OR name='INBOX')";
 		}
 
-		if ($folder_id > -1)
-		{
+		if ($folder_id > -1) {
 			$sql .= " AND parent_id='".$this->escape($folder_id)."'";
 		}
 		$sql .= " ORDER BY sort_order ASC, name ASC";
@@ -606,20 +570,17 @@ class email extends db
 		return $this->num_rows();
 	}
 
-	function get_auto_check_folders($account_id)
-	{
+	function get_auto_check_folders($account_id) {
 		$sql = "SELECT * FROM em_folders WHERE account_id='".$this->escape($account_id)."'".
-		" AND (auto_check='1' OR name='INBOX') ORDER BY sort_order ASC, name ASC";
+						" AND (auto_check='1' OR name='INBOX') ORDER BY sort_order ASC, name ASC";
 		$this->query($sql);
 		return $this->num_rows();
 	}
 
-	function get_mailboxes($account_id, $folder_id=-1)
-	{
+	function get_mailboxes($account_id, $folder_id=-1) {
 		$sql = "SELECT id,account_id,name,subscribed,parent_id,delimiter,can_have_children,sort_order,msgcount,unseen FROM em_folders WHERE account_id='".$this->escape($account_id)."'";
 
-		if ($folder_id > -1)
-		{
+		if ($folder_id > -1) {
 			$sql .= " AND parent_id='".$this->escape($folder_id)."'";
 		}
 		$sql .= " ORDER BY sort_order ASC, name ASC";
@@ -628,19 +589,15 @@ class email extends db
 		return $this->num_rows();
 	}
 
-	function get_folders($account_id, $folder_id=-1)
-	{
+	function get_folders($account_id, $folder_id=-1) {
 		$sql = "SELECT id,account_id,name,subscribed,parent_id,delimiter,can_have_children,sort_order,msgcount,unseen FROM em_folders";
 
-		if($account_id>0)
-		{
+		if($account_id>0) {
 			$sql .= " WHERE account_id='".$this->escape($account_id)."'";
-			if ($folder_id > -1)
-			{
+			if ($folder_id > -1) {
 				$sql .= " AND parent_id='".$this->escape($folder_id)."'";
 			}
-		}elseif ($folder_id > -1)
-		{
+		}elseif ($folder_id > -1) {
 			$sql .= " WHERE parent_id='".$this->escape($folder_id)."'";
 		}
 		$sql .= " ORDER BY sort_order ASC, name ASC";
@@ -649,8 +606,7 @@ class email extends db
 		return $this->num_rows();
 	}
 
-	function get_folders_by_path($account_id, $path_name)
-	{
+	function get_folders_by_path($account_id, $path_name) {
 		$sql = "SELECT * FROM em_folders WHERE account_id = ? AND name LIKE ?";
 		$this->query($sql, 'is', array($account_id, $path_name.'%'));
 	}
@@ -670,14 +626,12 @@ class email extends db
 	 return $this->num_rows();
 	 }
 
-	 */
+	*/
 
-	function rename_folder($account_id, $old_name, $new_name, $new_parent_id=-1)
-	{
+	function rename_folder($account_id, $old_name, $new_name, $new_parent_id=-1) {
 		$sql = "UPDATE em_folders SET name='".$this->escape($new_name)."'";
 
-		if($new_parent_id > -1)
-		{
+		if($new_parent_id > -1) {
 			$sql .= ",parent_id='".$this->escape($new_parent_id)."' ";
 		}
 
@@ -688,139 +642,115 @@ class email extends db
 		$saved_folders = $this->get_account_folders($account_id);
 		$folders = array();
 		foreach($saved_folders as $key => $value) {
-			if($value == $old_name)
-			{
+			if($value == $old_name) {
 				$folders[$key] = $new_name;
 			}
 		}
 
-		if(count($folders))
-		{
+		if(count($folders)) {
 			$folders['id'] = $account_id;
 			$this->update_row('em_accounts', 'id', $folders);
 		}
 
 		$sql = "UPDATE em_filters SET folder='".$this->escape($new_name)."' ".
-		"WHERE folder='".$this->escape($old_name)."' AND ".
-		"account_id='".$this->escape($account_id)."'";
+						"WHERE folder='".$this->escape($old_name)."' AND ".
+						"account_id='".$this->escape($account_id)."'";
 
 		return $this->query($sql);
 	}
 
 
-	function update_folder($folder)
-	{
+	function update_folder($folder) {
 		return $this->update_row('em_folders','id', $folder);
 	}
 
-	function add_folder($folder)
-	{
+	function add_folder($folder) {
 		if(!isset($folder['sort_order']))
 			$folder['sort_order']=10;
-		
+
 		$folder['id'] = $this->nextid("em_folders");
-		if ($folder['id'] > 0)
-		{
-			if ($this->insert_row('em_folders', $folder))
-			{
+		if ($folder['id'] > 0) {
+			if ($this->insert_row('em_folders', $folder)) {
 				return $folder['id'];
 			}
 		}
 		return false;
 	}
 
-	function delete_folder($account_id, $name)
-	{
+	function delete_folder($account_id, $name) {
 		$sql = "DELETE FROM em_folders WHERE account_id='".$this->escape($account_id)."' ".
-		"AND name='".$this->escape($name)."'";
+						"AND name='".$this->escape($name)."'";
 		$this->query($sql);
 
 		$sql = "DELETE FROM em_filters WHERE account_id='".$this->escape($account_id)."' ".
-		"AND folder='".$this->escape($name)."'";
+						"AND folder='".$this->escape($name)."'";
 		return $this->query($sql);
 	}
-	function folder_exists($account_id, $name)
-	{
+	function folder_exists($account_id, $name) {
 		$sql = "SELECT id FROM em_folders WHERE name='".$this->escape($name)."' AND account_id='".$this->escape($account_id)."'";
 		$this->query($sql);
-		if ($this->next_record())
-		{
+		if ($this->next_record()) {
 			return $this->f("id");
-		}else
-		{
+		}else {
 			return false;
 		}
 	}
 
-	function get_folder($account_id, $name)
-	{
+	function get_folder($account_id, $name) {
 		$sql = "SELECT * FROM em_folders WHERE name='".$this->escape($name)."' AND ".
-		"account_id='".$this->escape($account_id)."'";
+						"account_id='".$this->escape($account_id)."'";
 		$this->query($sql);
-		if ($this->next_record(DB_ASSOC))
-		{
+		if ($this->next_record(DB_ASSOC)) {
 			return $this->record;
-		}else
-		{
+		}else {
 			return false;
 		}
 	}
 
-	function get_folder_by_id($folder_id)
-	{
+	function get_folder_by_id($folder_id) {
 		$sql = "SELECT * FROM em_folders WHERE id=".$this->escape($folder_id);
 		$this->query($sql);
-		if($this->next_record(DB_ASSOC))
-		{
+		if($this->next_record(DB_ASSOC)) {
 			return $this->record;
 		}
 		return false;
 	}
 
-	function get_unseen_recursive($folder_id)
-	{
+	function get_unseen_recursive($folder_id) {
 		$email = new email();
 		$unseen = 0;
-		if($folder = $email->get_folder_by_id($folder_id))
-		{
+		if($folder = $email->get_folder_by_id($folder_id)) {
 			//echo $folder['name'].'<br>';
 			$unseen += $folder['unseen'];
 			$email->get_folders($folder['account_id'], $folder['id']);
-			while($email->next_record())
-			{
+			while($email->next_record()) {
 				$unseen += $this->get_unseen_recursive($email->f('id'));
 			}
 		}
 		return $unseen;
 	}
 
-	function get_account_unseen($account_id)
-	{
+	function get_account_unseen($account_id) {
 		$unseen = 0;
 		$this->get_subscribed($account_id);
-		while($this->next_record())
-		{
+		while($this->next_record()) {
 			$unseen+=$this->f('unseen');
 		}
 		return $unseen;
 	}
 
-	function subscribe($account_id, $name)
-	{
+	function subscribe($account_id, $name) {
 		return $this->query("UPDATE em_folders SET subscribed='1' ".
-		"WHERE account_id='".$this->escape($account_id)."' AND name='".$this->escape($name)."'");
+						"WHERE account_id='".$this->escape($account_id)."' AND name='".$this->escape($name)."'");
 	}
 
-	function unsubscribe($account_id, $name)
-	{
+	function unsubscribe($account_id, $name) {
 		return $this->query("UPDATE em_folders SET subscribed='0' ".
-		"WHERE account_id='".$this->escape($account_id)."' AND name='".$this->escape($name)."'");
+						"WHERE account_id='".$this->escape($account_id)."' AND name='".$this->escape($name)."'");
 	}
 
-	function is_mbroot($folder_name, $delimiter, $mbroot)
-	{
-		if(substr($mbroot,-1,1)==$delimiter)
-		{
+	function is_mbroot($folder_name, $delimiter, $mbroot) {
+		if(substr($mbroot,-1,1)==$delimiter) {
 			$mbroot = substr($mbroot, 0, -1);
 		}
 		return $mbroot==$folder_name;
@@ -828,54 +758,43 @@ class email extends db
 
 	/*
 	 Gets the parent_id from a folder path
-	 */
-	function get_parent_id($account, $path, $delimiter)
-	{
+	*/
+	function get_parent_id($account, $path, $delimiter) {
 		$mbroot = $account['mbroot'];
 
-		if ($pos = strrpos($path, $delimiter))
-		{
+		if ($pos = strrpos($path, $delimiter)) {
 			$parent_name = substr($path, 0, $pos);
-			if ($parent_folder = $this->get_folder($account['id'], $parent_name))
-			{
-				if($this->is_mbroot($parent_folder['name'],$delimiter, $account['mbroot']))
-				{
+			if ($parent_folder = $this->get_folder($account['id'], $parent_name)) {
+				if($this->is_mbroot($parent_folder['name'],$delimiter, $account['mbroot'])) {
 					return 0;
-				}else
-				{
+				}else {
 					return $parent_folder['id'];
 				}
 			}
-		}else
-		{
+		}else {
 			return 0;
 		}
 		return false;
 
 	}
 
-	function delete_folders($account_id)
-	{
+	function delete_folders($account_id) {
 		$sql = "DELETE FROM em_folders WHERE account_id='".$this->escape($account_id)."'";
 		return $this->query($sql);
 	}
 
-	function cache_accounts($user_id, $auto_check_only=false)
-	{
+	function cache_accounts($user_id, $auto_check_only=false) {
 
-		if($this->get_accounts($user_id))
-		{
+		if($this->get_accounts($user_id)) {
 			$email = new email();
 
-			while($this->next_record())
-			{
+			while($this->next_record()) {
 				$email->cache_account_status($this->record,$auto_check_only);
 			}
 		}
 	}
 
-	function cache_account_status($account,$auto_check_only=false)
-	{
+	function cache_account_status($account,$auto_check_only=false) {
 		$mail = new imap();
 		$email = new email();
 
@@ -888,25 +807,20 @@ class email extends db
 		'INBOX',
 		0,
 		$account['use_ssl'],
-		$account['novalidate_cert']))
-		{
+		$account['novalidate_cert'])) {
 			return false;
 		}
 
-		if($auto_check_only)
-		{
+		if($auto_check_only) {
 			$this->get_auto_check_folders($account['id']);
 		}else {
 			$this->get_subscribed($account['id']);
 		}
 
-		while($this->next_record())
-		{
+		while($this->next_record()) {
 			$folder['id'] = $this->f('id');
-			if($status = $mail->status($this->f('name'), SA_UNSEEN+SA_MESSAGES))
-			{
-				if($status->messages!=$this->f('msgcount') || $status->unseen!=$this->f('unseen'))
-				{
+			if($status = $mail->status($this->f('name'), SA_UNSEEN+SA_MESSAGES)) {
+				if($status->messages!=$this->f('msgcount') || $status->unseen!=$this->f('unseen')) {
 					$folder['msgcount'] = $status->messages;
 					$folder['unseen'] = $status->unseen;
 					$email->update_folder($folder);
@@ -917,18 +831,15 @@ class email extends db
 		$mail->close();
 	}
 
-	function cache_folder_status($imap, $account_id, $mailbox)
-	{
+	function cache_folder_status($imap, $account_id, $mailbox) {
 		$cached_folder = $this->get_folder($account_id, $mailbox);
-			
-		if($status = $imap->status($mailbox, SA_UNSEEN+SA_MESSAGES))
-		{
+
+		if($status = $imap->status($mailbox, SA_UNSEEN+SA_MESSAGES)) {
 			$folder['id']=$cached_folder['id'];
 			$folder['msgcount'] = $status->messages;
 			$folder['unseen'] = $status->unseen;
 
-			if($status->messages!=$cached_folder['msgcount'] || $status->unseen!=$cached_folder['unseen'])
-			{
+			if($status->messages!=$cached_folder['msgcount'] || $status->unseen!=$cached_folder['unseen']) {
 				$this->update_folder($folder);
 			}
 			return $folder;
@@ -937,16 +848,14 @@ class email extends db
 	}
 
 
-	function get_total_unseen($user_id)
-	{
+	function get_total_unseen($user_id) {
 		$sql = "SELECT SUM(unseen) FROM em_folders INNER JOIN em_accounts ON em_folders.account_id=em_accounts.id WHERE user_id='".$this->escape($user_id)."'";
 		$this->query($sql);
 		$this->next_record();
 		return $this->f(0);
 	}
 
-	function _synchronize_folders($account, $mailboxes, $subscribed)
-	{
+	function _synchronize_folders($account, $mailboxes, $subscribed) {
 
 		go_debug($mailboxes);
 
@@ -955,13 +864,11 @@ class email extends db
 		$mailbox_names = array();
 
 		$subscribed_names = array();
-		while($mailbox = array_shift($subscribed))
-		{
+		while($mailbox = array_shift($subscribed)) {
 			$subscribed_names[]=$mailbox['name'];
 		}
 
-		foreach($mailboxes as $mailbox)
-		{
+		foreach($mailboxes as $mailbox) {
 			$mailbox_names[] = $mailbox['name'];
 			$folder['account_id'] = $account['id'];
 			$folder['parent_id'] = $this->get_parent_id($account, $mailbox['name'], $mailbox['delimiter']);
@@ -971,8 +878,7 @@ class email extends db
 			$folder['subscribed']=in_array($mailbox['name'], $subscribed_names) ? '1' : '0';
 			$folder['delimiter'] = $mailbox['delimiter'];
 
-			switch($folder['name'])
-			{
+			switch($folder['name']) {
 				case 'INBOX':
 					$folder['sort_order'] = 0;
 					break;
@@ -994,19 +900,16 @@ class email extends db
 			}
 
 			$existing_folder = $this->get_folder($account['id'],$mailbox['name']);
-			if ($existing_folder)
-			{
+			if ($existing_folder) {
 				$folder['id'] = $existing_folder['id'];
 				$this->update_folder($folder);
-			}else
-			{
+			}else {
 				$folder['id'] = $this->add_folder($folder);
 			}
 		}
 
 		//Courier doesn't return INBOX
-		if(!in_array('INBOX', $mailbox_names))
-		{
+		if(!in_array('INBOX', $mailbox_names)) {
 			$mailbox_names[] = 'INBOX';
 			$folder['name']='INBOX';
 			$folder['account_id'] = $account['id'];
@@ -1016,12 +919,10 @@ class email extends db
 			$folder['parent_id']=0;
 
 			$existing_folder = $this->get_folder($account['id'],$mailbox['name']);
-			if ($existing_folder)
-			{
+			if ($existing_folder) {
 				$folder['id'] = $existing_folder['id'];
 				$this->update_folder($folder);
-			}else
-			{
+			}else {
 				$folder['id'] = $this->add_folder($folder);
 			}
 		}
@@ -1031,24 +932,20 @@ class email extends db
 		/*
 		 get all the Group-Office folders and delete the folders that no longer
 		 exist on the IMAP server
-		 */
+		*/
 
 		$this->get_folders($account['id']);
 		$emailobj = new email();
-		while ($this->next_record())
-		{
-			if (!in_array($this->f('name'), $mailbox_names))
-			{
+		while ($this->next_record()) {
+			if (!in_array($this->f('name'), $mailbox_names)) {
 				$emailobj->delete_folder($account['id'], $this->f('name'));
 			}
 		}
 	}
 
 
-	function synchronize_folders($account, $mail=false)
-	{
-		if(!$mail)
-		{
+	function synchronize_folders($account, $mail=false) {
+		if(!$mail) {
 			$mail = new imap();
 
 			if (!$mail->connect(
@@ -1056,76 +953,64 @@ class email extends db
 			$account['port'],
 			$account['username'],
 			$account['password'],
-			$account['use_ssl']))
-			{
+			$account['use_ssl'])) {
 				return false;
 			}
 			$close_connection = true;
 		}
-			
+
 
 		$subscribed =  $mail->get_folders($account['mbroot'], true);
 		$mailboxes =  $mail->get_folders($account['mbroot']);
 
 		$this->_synchronize_folders($account, $mailboxes, $subscribed);
 
-		if(isset($close_connection))
-		{
+		if(isset($close_connection)) {
 			$mail->disconnect();
 		}
 	}
 
 
 
-	function get_filters($account_id)
-	{
+	function get_filters($account_id) {
 		$sql = "SELECT * FROM em_filters WHERE account_id='".$this->escape($account_id)."' ".
-		" ORDER BY priority ASC";
+						" ORDER BY priority ASC";
 		$this->query($sql);
 		return $this->num_rows();
 	}
 
-	function add_filter($filter)
-	{
+	function add_filter($filter) {
 		$filter['id'] = $this->nextid("em_filters");
-		if ($filter['id'] > 0 && $this->insert_row('em_filters',$filter))
-		{
+		if ($filter['id'] > 0 && $this->insert_row('em_filters',$filter)) {
 			return $filter['id'];
-		}else
-		{
+		}else {
 			return false;
 		}
 	}
 
-	function get_filter($filter_id)
-	{
+	function get_filter($filter_id) {
 		$sql = "SELECT * FROM em_filters WHERE id='$filter_id'";
 		$this->query($sql);
-		if ($this->next_record(DB_ASSOC))
-		{
+		if ($this->next_record(DB_ASSOC)) {
 			return $this->record;
-		}else
-		{
+		}else {
 			return false;
 		}
 	}
 
-	function update_filter($filter)
-	{
+	function update_filter($filter) {
 		return $this->update_row('em_filters','id', $filter);
 
 	}
 
-	function delete_filter($id)
-	{
+	function delete_filter($id) {
 		$sql = "DELETE FROM em_filters WHERE id='$id'";
 		$this->query($sql);
 	}
 
-	function move_up($move_up_id, $move_dn_id, $move_up_pr, $move_dn_pr)
-	{
+	function move_up($move_up_id, $move_dn_id, $move_up_pr, $move_dn_pr) {
 		if ($move_up_pr == $move_dn_pr)
-		$move_up_pr++;
+			$move_up_pr++;
 
 		$sql = "UPDATE em_filters SET priority='".$this->escape($move_up_pr)."' WHERE id='".$this->escape($move_up_id)."'";
 		$this->query($sql);
@@ -1137,8 +1022,7 @@ class email extends db
 
 
 	function register_attachment($tmp_file, $filename, $filesize, $filemime='',
-	$disposition='attachment', $content_id='')
-	{
+					$disposition='attachment', $content_id='') {
 		global $GO_CONFIG;
 
 		$filename = ($filename);
@@ -1155,16 +1039,14 @@ class email extends db
 		$_SESSION['attach_array'][] = $attachment;
 	}
 
-	function get_zip_of_attachments($account_id, $uid, $mailbox='INBOX')
-	{
+	function get_zip_of_attachments($account_id, $uid, $mailbox='INBOX') {
 		global $GO_CONFIG, $GO_MODULES, $imap;
 
 		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 
-		$tmpdir = $GO_CONFIG->tmpdir.'zip_of_attachments_'.uniqid(time()).'/';		
-		if(!$fs->mkdir_recursive($tmpdir))
-		{
+		$tmpdir = $GO_CONFIG->tmpdir.'zip_of_attachments_'.uniqid(time()).'/';
+		if(!$fs->mkdir_recursive($tmpdir)) {
 			return false;
 		}
 
@@ -1173,18 +1055,16 @@ class email extends db
 		$imap = new cached_imap();
 		$account = connect($account_id, $mailbox);
 
-		if(!$account)
-		{
+		if(!$account) {
 			return false;
 		}
 
 		$message = $imap->get_message_with_body($uid, true, false);
-		if(!$message)
-		{
+		if(!$message) {
 			return false;
 		}
 
-		foreach($message['attachments'] as $a){			
+		foreach($message['attachments'] as $a) {
 			$newpath = File::checkfilename($tmpdir.$a['name']);
 			$fs->move($a['tmp_file'], $newpath);
 		}
@@ -1193,17 +1073,16 @@ class email extends db
 
 		chdir($tmpdir);
 		$cmd =$GO_CONFIG->cmd_zip.' -r "../'.$zipfile.'" *.*';
-		
+
 		exec($cmd);
 
 		$fs->delete($tmpdir);
-	
+
 		return $GO_CONFIG->tmpdir.$zipfile;
 	}
 
 
-	function get_default_account_id($user_id)
-	{
+	function get_default_account_id($user_id) {
 		$sql = "SELECT id FROM em_accounts WHERE user_id='".$this->escape($user_id)."' AND standard=1";
 
 		$this->query($sql);
@@ -1217,31 +1096,26 @@ class email extends db
 		}
 	}
 
-	function __on_delete_link($id, $link_type)
-	{
+	function __on_delete_link($id, $link_type) {
 
-		if($link_type==9)
-		{
+		if($link_type==9) {
 			$this->delete_linked_message($id);
 		}
 
 		/* {ON_DELETE_LINK_FUNCTION} */
 	}
 
-	function user_delete($user)
-	{
+	function user_delete($user) {
 		go_debug($user);
 		$email = new email();
 		$del = new email();
 		$email->get_accounts($user['id']);
-		while ($email->next_record())
-		{
+		while ($email->next_record()) {
 			$del->delete_account($email->f("id"));
 		}
 	}
 
-	function cache_message($message_id)
-	{
+	function cache_message($message_id) {
 		global $GO_MODULES, $GO_CONFIG, $GO_LANGUAGE;
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
@@ -1253,8 +1127,7 @@ class email extends db
 
 
 		$record = $this->next_record();
-		if($record)
-		{
+		if($record) {
 			$cache['id']=$this->f('link_id');
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='email';
@@ -1275,45 +1148,41 @@ class email extends db
 	 *
 	 * @param int $last_sync_time The time this function was called last
 	 */
-	public static function build_search_index()
-	{
+	public static function build_search_index() {
 		$email2 = new email();
 		$sql = "SELECT link_id FROM em_links";
 		$email2->query($sql);
 		$email = new email();
-		while($record = $email2->next_record())
-		{
+		while($record = $email2->next_record()) {
 			$email->cache_message($record['link_id']);
 		}
 		/* {ON_BUILD_SEARCH_INDEX_FUNCTION} */
 	}
-	
-	public static function check_database(){
-		
+
+	public static function check_database() {
+
 		global $GO_CONFIG, $GO_LINKS;
-		
+
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
-			
+
 		$sql = "SELECT link_id FROM em_links";
 		$email = new email();
 		$email2 = new email();
 		$email->query($sql);
-		while($record = $email->next_record())
-		{
+		while($record = $email->next_record()) {
 			$search->global_search(1, '', 0, 1, 'name','ASC', array(), $record['link_id'], 9,-1);
 			$sr = $search->next_record();
-			if($sr)
-			{
+			if($sr) {
 				$record['acl_id']=$sr['acl_id'];
 				$email2->update_row('em_links', 'link_id', $record);
 			}
 		}
-		
+
 		$email->build_search_index();
 	}
-	
-		/**
+
+	/**
 	 * Add a Alias
 	 *
 	 * @param Array $alias Associative array of record fields
@@ -1321,11 +1190,9 @@ class email extends db
 	 * @access public
 	 * @return int New record ID created
 	 */
-	function add_alias($alias)
-	{
+	function add_alias($alias) {
 		$alias['id']=$this->nextid('em_aliases');
-		if($this->insert_row('em_aliases', $alias))
-		{
+		if($this->insert_row('em_aliases', $alias)) {
 			return $alias['id'];
 		}
 		return false;
@@ -1338,8 +1205,7 @@ class email extends db
 	 * @access public
 	 * @return bool True on success
 	 */
-	function update_alias($alias)
-	{
+	function update_alias($alias) {
 		$r = $this->update_row('em_aliases', 'id', $alias);
 		return $r;
 	}
@@ -1351,8 +1217,7 @@ class email extends db
 	 * @access public
 	 * @return bool True on success
 	 */
-	function delete_alias($alias_id)
-	{
+	function delete_alias($alias_id) {
 		return $this->query("DELETE FROM em_aliases WHERE id=?", 'i', $alias_id);
 	}
 	/**
@@ -1363,10 +1228,9 @@ class email extends db
 	 * @access public
 	 * @return Array Record properties
 	 */
-	function get_alias($alias_id)
-	{
+	function get_alias($alias_id) {
 		$this->query("SELECT * FROM em_aliases WHERE id=?", 'i', $alias_id);
-		return $this->next_record();		
+		return $this->next_record();
 	}
 	/**
 	 * Gets a Alias record by the name field
@@ -1376,10 +1240,9 @@ class email extends db
 	 * @access public
 	 * @return Array Record properties
 	 */
-	function get_alias_by_email($account_id, $email)
-	{
+	function get_alias_by_email($account_id, $email) {
 		$this->query("SELECT * FROM em_aliases WHERE account_id=? AND email=?", 'is', array($account_id,$name));
-		return $this->next_record();		
+		return $this->next_record();
 	}
 	/**
 	 * Gets all Aliases
@@ -1392,22 +1255,20 @@ class email extends db
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_aliases($account_id, $all=false)
-	{
+	function get_aliases($account_id, $all=false) {
 		$sql = "SELECT * FROM em_aliases WHERE account_id=".$this->escape($account_id);
-		
-		if(!$all)
-		{
+
+		if(!$all) {
 			$sql .= " AND `default`!='1'";
 		}
-		
+
 		$sql .= " ORDER BY name ASC, email ASC";
-			
+
 		$this->query($sql);
 		return $this->num_rows();
 	}
-	
-/**
+
+	/**
 	 * Gets all Aliases
 	 *
 	 * @param Int $start First record of the total record set to return
@@ -1418,16 +1279,15 @@ class email extends db
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_all_aliases($user_id)
-	{
-		$sql = "SELECT a.* FROM em_aliases a INNER JOIN em_accounts e ON e.id=a.account_id WHERE e.user_id=".$this->escape($user_id);		
+	function get_all_aliases($user_id) {
+		$sql = "SELECT a.* FROM em_aliases a INNER JOIN em_accounts e ON e.id=a.account_id WHERE e.user_id=".$this->escape($user_id);
 		$sql .= " ORDER BY `standard` ASC, `default` DESC, name ASC";
-			
+
 		$this->query($sql);
 		return $this->num_rows();
 	}
-	
-	
-/* {CLASSFUNCTIONS} */
+
+
+	/* {CLASSFUNCTIONS} */
 
 }

@@ -26,13 +26,9 @@
  * @access public
  */
 
-
-
 $root = dirname(__FILE__).'/';
 require_once($root.'functions.inc.php');
 require($root.'classes/base/config.class.inc.php');
-
-
 
 //preload classes before session so they can be stored in the session
 if ( isset( $GO_INCLUDES ) ) {
@@ -142,9 +138,11 @@ if($GO_CONFIG->debug){
 
     go_debug($err_str);
 	}
-	//error_reporting(E_ALL & ~E_STRICT);
+	
 	ini_set('error_reporting', E_ALL);
-	set_error_handler("groupoffice_error_handler", E_ALL);
+	ini_set('display_errors', 1);
+	
+	//set_error_handler("groupoffice_error_handler", E_ALL);
 }
 
 $GO_GROUPS = new GO_GROUPS();
@@ -189,7 +187,7 @@ unset($type);
 
 define('GO_LOADED', true);
 
-//undo magic quotes
+//undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
 if (get_magic_quotes_gpc())
 {
 	function stripslashes_array($data) {
@@ -208,6 +206,5 @@ if (get_magic_quotes_gpc())
 	$_POST=stripslashes_array($_POST);
 	$_COOKIE=stripslashes_array($_COOKIE);
 }
-
 
 umask(0);
