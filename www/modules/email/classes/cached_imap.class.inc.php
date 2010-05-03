@@ -710,8 +710,12 @@ class cached_imap extends imap{
 		$message['to']=substr($message['to'],0, 255);
 		$message['subject']=substr($message['subject'],0,100);
 		$message['from']=substr($message['from'],0,100);
-		if(isset($message['reply-to']))
+
+		if(!empty($message['reply-to']))
 			$message['reply_to']=substr($message['reply-to'],0,100);
+		else
+			$message['reply_to']=$message['from'];
+
 		$message['udate']=intval($message['internal_udate']);
 		if(isset($message['disposition-notification-to']))
 			$message['notification']=$message['disposition-notification-to'];
@@ -900,7 +904,7 @@ class cached_imap extends imap{
 	public function get_cached_messages($folder_id, $uids, $with_full_cached_message=false)
 	{
 		$sql = "SELECT `folder_id`,`uid`,`account_id`,`new`,`subject`,`from`,".
-			"`reply_to`,`size`,`udate`,`attachments`,`flagged`,`answered`,`priority`,".
+			"`reply_to`,`size`,`udate`,`attachments`,`flagged`,`answered`,`forwarded`,`priority`,".
 			"`to`,`notification`,`content_type`,`content_transfer_encoding`";
 		if($with_full_cached_message){
 			$sql .= ",`serialized_message_object` ";

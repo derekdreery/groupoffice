@@ -30,7 +30,7 @@ GO.email.EmailClient = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'uid',
-		fields:['uid','icon','flagged','attachments','new','subject','from','sender','size','date', 'priority','answered'],
+		fields:['uid','icon','flagged','attachments','new','subject','from','sender','size','date', 'priority','answered','forwarded'],
 		remoteSort: true
 	});
 	
@@ -1688,6 +1688,15 @@ GO.email.showComposer = function(config){
 				if(record)
 				{
 					record.set('answered',true);
+				}
+			}
+
+			if(composer.sendParams.forward_uid && composer.sendParams.forward_uid>0)
+			{
+				var record = GO.email.messagesGrid.store.getById(composer.sendParams.forward_uid);
+				if(record)
+				{
+					record.set('forwarded',true);
 				}
 			}
 			

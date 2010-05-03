@@ -188,7 +188,7 @@ try {
 					$imap->set_unseen_cache($messages, false);
 					break;
 				case 'mark_as_unread':
-					$response['success']=$imap->set_message_flag($messages, "\Seen", "true");
+					$response['success']=$imap->set_message_flag($messages, "\Seen", true);
 					$imap->set_unseen_cache($messages, true);
 					break;
 				case 'flag':
@@ -309,6 +309,9 @@ try {
 
 					if(!empty($_POST['reply_uid']))
 						$swift->set_reply_to($_POST['reply_uid'],$_POST['reply_mailbox']);
+
+					if(!empty($_POST['forward_uid']))
+						$swift->set_forward_uid($_POST['forward_uid'],$_POST['forward_mailbox']);
 
 
 					$RFC822 = new RFC822();

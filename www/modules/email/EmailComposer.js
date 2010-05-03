@@ -748,7 +748,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				priority : this.sendParams.priority,
 				draft_uid : this.sendParams.draft_uid,
 				reply_uid : this.sendParams.reply_uid,
-				reply_mailbox : this.sendParams.reply_mailbox
+				reply_mailbox : this.sendParams.reply_mailbox,
+				forward_uid : this.sendParams.forward_uid,
+				forward_mailbox : this.sendParams.forward_mailbox
 			};
 			
 		}
@@ -947,7 +949,12 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 							|| config.task == 'reply_all') {
 							this.sendParams['reply_uid'] = config.uid;
 							this.sendParams['reply_mailbox'] = config.mailbox;
+						}else if (config.task == 'forward'){
+							this.sendParams['forward_uid'] = config.uid;
+							this.sendParams['forward_mailbox'] = config.mailbox;
 						}
+
+
 
 						if (action.result.data.inline_attachments) {
 							this.inline_attachments = action.result.data.inline_attachments;

@@ -262,13 +262,21 @@ Ext.extend(GO.email.MessagesGrid, GO.grid.GridPanel,{
 	},
 	renderIcon : function(src, p, record){
 		var str = '';
-		if(record.data['answered']=='1')
+
+		var cls = "email-grid-icon ";
+
+		if(record.data.answered=='1' && record.data.forwarded=='1')
 		{
-			str += '<div class="email-grid-icon btn-message-answered"></div>';
+			cls += "btn-message-answered-and-forwarded";
+		}else if(record.data.answered=='1'){
+			cls += "btn-message-answered";
+		}else if(record.data.forwarded=='1'){
+			cls += "btn-message-forwarded";
 		}else
 		{
-			str += '<div class="email-grid-icon btn-message"></div>';
+			cls += "btn-message";
 		}
+		str += '<div class="'+cls+'"></div>';
 		
 		if(record.data['attachments']=='1')
 		{

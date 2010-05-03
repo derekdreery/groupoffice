@@ -272,6 +272,12 @@ class GoSwift extends Swift_Mailer{
 		$this->reply_mailbox=$reply_mailbox;
 	}
 
+	function set_forward_uid($forward_uid, $forward_mailbox)
+	{
+		$this->forward_uid=$forward_uid;
+		$this->forward_mailbox=$forward_mailbox;
+	}
+
 	function set_draft($draft_uid)
 	{
 		$this->draft_uid=$draft_uid;
@@ -352,15 +358,25 @@ class GoSwift extends Swift_Mailer{
 				{
 					if (!empty($this->reply_uid) && !empty($this->reply_mailbox))
 					{
-						$uid_arr = array($this->reply_uid);
-						$imap->select_mailbox($this->reply_mailbox);
-						$imap->set_message_flag($uid_arr, "\Answered");
+						$flag="\Answered";
+						$flag_uid=$this->reply_uid;
+						$flag_mailbox=$this->reply_mailbox;
+					}elseif(!empty($this->forward_uid) && !empty($this->forward_mailbox)){
+						$flag='$Forwarded';
+						$flag_uid=$this->forward_uid;
+						$flag_mailbox=$this->forward_mailbox;
+					}
 
-						$folder = $imap->email->get_folder($this->account['id'],$this->reply_mailbox);
+					if(isset($flag)){
+						$uid_arr = array($flag_uid);
+						$imap->select_mailbox($flag_mailbox);
+						$imap->set_message_flag($uid_arr, $flag);
+
+						$folder = $imap->email->get_folder($this->account['id'],$flag_mailbox);
 
 						$cached_message['folder_id']=$folder['id'];
-						$cached_message['uid']=$this->reply_uid;
-						$cached_message['answered']='1';
+						$cached_message['uid']=$flag_uid;
+						$cached_message[strtolower(substr($flag,1))]='1';
 						$imap->update_cached_message($cached_message);
 					}
 

@@ -146,8 +146,9 @@ function get_mailbox_nodes($account_id, $folder_id) {
 
 
 function find_alias_and_recipients() {
-	global $email, $account_id, $response, $content, $task;
+	global $GO_CONFIG, $email, $account_id, $response, $content, $task;
 
+	require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
 	$RFC822 = new RFC822();
 
 	$aliases = array();
@@ -156,7 +157,7 @@ function find_alias_and_recipients() {
 		$aliases[strtolower($alias['email'])]=$alias['id'];
 	}
 
-	$fill_to = $task=='reply_all' || $task=='opendraft';
+	$fill_to = $task=='reply_all' || $task=='reply' || $task=='opendraft';
 
 	//add all recievers from this email
 	if (isset($content["to"])) {
