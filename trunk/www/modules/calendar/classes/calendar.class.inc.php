@@ -2676,7 +2676,9 @@ class calendar extends db
 
 						$days = Date::byday_to_days($rrule['BYDAY']);
 
-						$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
+						go_debug($event);
+
+						$days = Date::shift_days_to_local($days, date('G', $start_time), Date::get_timezone_offset($start_time));
 
 
 						$event['repeat_days_0'] = $days['sun'];
@@ -2698,7 +2700,7 @@ class calendar extends db
 
 							$days = Date::byday_to_days($day);
 
-							$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
+							$days = Date::shift_days_to_local($days, date('G', $start_time), Date::get_timezone_offset($start_time));
 
 
 							$event['repeat_days_0'] = $days['sun'];
