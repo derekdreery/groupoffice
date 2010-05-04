@@ -105,7 +105,7 @@ class imap extends imap_bodystruct {
 
 
 
-			go_debug($this->commands);
+			//go_debug($this->commands);
 
 			//go_debug($this->responses);
 
@@ -866,11 +866,13 @@ class imap extends imap_bodystruct {
 							if(!empty($line)) {
 								$header = trim(strtolower(substr($line, 0, strpos($line, ':'))));	
 
-								if (!$header) {
+								if (!$header && !empty($last_header)) {
 									$message[$last_header] .= "\n".trim($line);
 								}else {
-									$message[$header] = trim(substr($line, (strpos($line, ':') + 1)));
-									$last_header = $header;
+									if(isset($message[$header])){
+										$message[$header] = trim(substr($line, (strpos($line, ':') + 1)));
+										$last_header = $header;
+									}
 								}
 							}
 						}
@@ -880,13 +882,20 @@ class imap extends imap_bodystruct {
 							if ($tags[strtoupper($vals[$i])] == 'flags' && $vals[$i + 1] == '(') {
 								$n = 2;
 								while (isset($vals[$i + $n]) && $vals[$i + $n] != ')') {
-									$message[strtolower(substr($vals[$i + $n],1))]=true;
+									$prop = strtolower(substr($vals[$i + $n],1));
+
+									if(isset($message[$prop]))
+										$message[$prop]=true;
+
 									$n++;
 								}
 								$i += $n;
 							}
 							else {
-								$message[$tags[strtoupper($vals[$i])]] = trim($vals[($i + 1)]);
+								$prop = $tags[strtoupper($vals[$i])];
+								
+								if(isset($message[$prop]))
+										$message[$prop] = trim($vals[($i + 1)]);
 								$i++;
 							}
 						}
@@ -1292,12 +1301,36 @@ class imap extends imap_bodystruct {
 		$this->clean($mailbox, 'mailbox');
 		$this->clean($new_mailbox, 'mailbox');
 
+		$children = $this->get_folders($mailbox);
+
+		go_debug($children);
+
 		$command = 'RENAME "'.$this->addslashes($this->utf7_encode($mailbox)).'" "'.
 						$this->addslashes($this->utf7_encode($new_mailbox)).'"'."\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false);
 		
-		return $this->check_response($result, false);
+		$status = $this->check_response($result, false);
+
+		if($status && $this->unsubscribe($mailbox) && $this->subscribe($new_mailbox)){			
+
+			foreach($children as $old_child) {
+				if($old_child['name']!=$mailbox){
+				 $old_child = $old_child['name'];
+				 $pos = strpos($old_child, $mailbox);
+				 $new_child = substr_replace($old_child, $new_mailbox, $pos, strlen($mailbox));
+
+				 $this->unsubscribe($old_child);
+				 $this->subscribe($new_child);
+				}
+			}
+
+			return true;
+
+		}else
+		{
+			return false;
+		}
 		
 	}
 	public function create_folder($mailbox, $subscribe=true) {

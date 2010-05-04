@@ -34,7 +34,7 @@ class cached_imap extends imap{
 	 * You can disable the cache for debugging.
 	 * If enabled the message will be converted to safe HTML only once.
 	 */
-	var $disable_message_cache=false;
+	var $disable_message_cache=true;
 
 
 	public function __construct()
@@ -132,6 +132,10 @@ class cached_imap extends imap{
 	public function sort_mailbox($sort_type='ARRIVAL', $reverse=false, $filter='ALL') {
 
 		go_debug("cached_imap::sort_mailbox($sort_type, $reverse, $filter)");
+
+		if(!$this->selected_mailbox){
+			throw new Exception('No mailbox selected');
+		}
 
 		$this->sort_type=$sort_type;
 		$this->sort_reverse=$reverse;

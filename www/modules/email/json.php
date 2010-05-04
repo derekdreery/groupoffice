@@ -68,9 +68,9 @@ function get_mailbox_nodes($account_id, $folder_id) {
 	$response = array();
 
 	$count = $email->get_subscribed($account_id, $folder_id);
-	while($email->next_record()) {
+	while($record = $email->next_record()) {
 		if($email->f('name') == 'INBOX') {
-			if($count==1 && $email->f('attributes') > LATT_NOINFERIORS) {
+			if($count==1 && $record['can_have_children']==1) {
 				$children=get_mailbox_nodes(0, $email->f('id'));
 			}
 			$folder_name = $lang['email']['inbox'];
@@ -1021,7 +1021,7 @@ try {
 				$response['total']=$email->get_subscribed($account_id);
 				$response['data']=array();
 				while($email->next_record(DB_ASSOC)) {
-					if ($email->f('attributes') != LATT_NOSELECT && (!$hide_inbox || $email->f('name')!='INBOX')) {
+					if (!$hide_inbox || $email->f('name')!='INBOX') {
 						$response['data'][]=array(
 										'id'=>$email->f('id'),
 										'name'=>$email->f('name')
