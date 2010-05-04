@@ -65,26 +65,30 @@ try {
 
 			//move to another imap account
 			$imap2 = new cached_imap();
-			$from_account = connect($_POST['from_account_id'], $_POST['from_mailbox']);
+			$from_account = $imap2->open_account($_POST['from_account_id'], $_POST['from_mailbox']);
 
 			$to_account = $email->get_account($_POST['to_account_id']);
 			$imap2->open($to_account, $_POST['to_mailbox']);
 
 			$delete_messages =array();
 			while($uid=array_shift($_SESSION['GO_SESSION']['email_move_messages'])) {
-				$source = $imap->get_source($uid);
+				$source = $imap->get_message_part($uid);
 
-				$flags = '\\Seen';
+				$header = $imap->get_message_header($uid);
+
+				$flags = '\Seen';
 				$headerinfo = $imap->headerinfo($uid);
-				if($headerinfo->Flagged=='F') {
-					$flags .= ' \\Flagged';
+				if(!empty($header['flagged'])) {
+					$flags .= ' \Flagged';
 				}
-				if($headerinfo->Answered=='A') {
-					$flags .= ' \\Answered';
+				if(!empty($header['answered'])) {
+					$flags .= ' \Answered';
 				}
+				if(!empty($header['forwarded'])) {
+					$flags .= ' $Forwarded';				}
 
 				if(!$imap2->append_message($_POST['to_mailbox'], $source, $flags)) {
-					$imap2->close();
+					$imap2->disconnect();
 					throw new Exception('Could not move message');
 				}
 
@@ -103,7 +107,10 @@ try {
 				}
 			}
 			$imap->delete($delete_messages);
-			$imap2->close();
+
+			$imap2->disconnect();
+			$imap->disconnect();
+			
 			$response['success']=true;
 
 			break;
@@ -113,7 +120,7 @@ try {
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
-			$account = connect($_POST['account_id'], $_POST['mailbox']);
+			$account = $imap->open_account($_POST['account_id'], $_POST['mailbox']);
 			$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
 			$imap->disconnect();
 
@@ -141,7 +148,7 @@ try {
 			$count = $email2->get_accounts($GO_SECURITY->user_id);
 			$response['unseen']=array();
 			while($email2->next_record()) {
-				$account = connect($email2->f('id'), 'INBOX', false);
+				$account = $imap->open_account($email2->f('id'), 'INBOX', false);
 				if($account) {
 					$inbox = $email->get_folder($email2->f('id'), 'INBOX');
 
@@ -168,7 +175,7 @@ try {
 				throw new DatabaseDeleteException();
 			}
 
-			$account = connect($account_id, $mailbox);
+			$account = $imap->open_account($account_id, $mailbox);
 			$sort = $imap->sort_mailbox();
 			$imap->delete($sort);
 			
@@ -181,7 +188,7 @@ try {
 			$mailbox = isset ($_REQUEST['mailbox']) ? ($_REQUEST['mailbox']) : 'INBOX';
 
 
-			$account = connect($account_id, $mailbox);
+			$account = $imap->open_account($account_id, $mailbox);
 
 			$messages = json_decode($_POST['messages']);
 			switch($_POST['action']) {
@@ -556,7 +563,7 @@ try {
 
 		case 'add_folder':
 
-			$account = connect($_REQUEST['account_id']);
+			$account = $imap->open_account($_REQUEST['account_id']);
 
 			$new_folder_name = trim($_POST['new_folder_name']);
 			if(empty($new_folder_name)) {
@@ -610,7 +617,7 @@ try {
 
 		case 'subscribe':
 
-			$account = connect($_REQUEST['account_id']);
+			$account = $imap->open_account($_REQUEST['account_id']);
 			if($imap->subscribe($_POST['mailbox'])) {
 				$response['success']=$email->subscribe($account['id'], $_POST['mailbox']);
 			}
@@ -623,7 +630,7 @@ try {
 
 		case 'unsubscribe':
 
-			$account = connect($_REQUEST['account_id']);
+			$account = $imap->open_account($_REQUEST['account_id']);
 			if($imap->unsubscribe($_POST['mailbox'])) {
 				$response['success']=$email->unsubscribe($account['id'], $_POST['mailbox']);
 			}
@@ -636,7 +643,7 @@ try {
 
 		case 'subscribtions':
 
-			$account = connect(($_REQUEST['account_id']));
+			$account = $imap->open_account(($_REQUEST['account_id']));
 
 			$response['success']=true;
 			$newSubscriptions=json_decode(($_POST['subscribtions']), true);
@@ -669,7 +676,7 @@ try {
 		case 'delete_folder':
 
 			if($folder = $email->get_folder_by_id($_REQUEST['folder_id'])) {
-				$account = connect($folder['account_id']);
+				$account = $imap->open_account($folder['account_id']);
 
 				if (empty($folder['name']) || $imap->delete_folder($folder['name'], $account['mbroot'])) {
 					$response['success']=$email->delete_folder($account['id'], $folder['name']);
@@ -693,7 +700,7 @@ try {
 
 				$new_folder = $location.$_POST['new_name'];
 
-				connect($folder['account_id']);
+				$imap->open_account($folder['account_id']);
 
 				if ($imap->rename_folder($folder['name'], $new_folder)) {
 					$response['success']=$email->rename_folder($folder['account_id'], $folder['name'], $new_folder);
@@ -725,7 +732,7 @@ try {
 
 			$response['success'] = false;
 			if($source_id && $target_id && $account_id) {
-				$account = connect($account_id);
+				$account = $imap->open_account($account_id);
 
 				$folder_src = $email->get_folder_by_id(substr($source_id, 7));
 

@@ -35,7 +35,7 @@ require_once ($GO_LANGUAGE->get_language_file('email'));
 
 $account = $email->get_account($_REQUEST['account_id']);
 
-$account = connect($_POST['account_id'], $_POST['mailbox']);
+$account = $imap->open_account($_POST['account_id'], $_POST['mailbox']);
 $file = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
 $imap->disconnect();
 

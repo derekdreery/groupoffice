@@ -32,7 +32,7 @@ if(isset($_REQUEST['path'])) {
 	$imap = new cached_imap();
 	$email = new email();
 
-	$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
+	$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 
 	$charset = isset($_REQUEST['charset']) ? $_REQUEST['charset'] : false;
 	if ($account) {

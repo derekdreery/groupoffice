@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-function connect($account_id, $mailbox='INBOX', $halt_on_error=true) {
+/*function connect($account_id, $mailbox='INBOX', $halt_on_error=true) {
 	global $email, $imap, $GO_SECURITY, $lang;
 
 	if (!$account = $email->get_account($account_id)) {
@@ -49,7 +49,7 @@ function connect($account_id, $mailbox='INBOX', $halt_on_error=true) {
 
 	return $account;
 
-}
+}*/
 
 function load_template($template_id, $to='', $keep_tags=false) {
 	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $GO_USERS;
@@ -1050,7 +1050,7 @@ class email extends db {
 		require_once($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
 
 		$imap = new cached_imap();
-		$account = connect($account_id, $mailbox);
+		$account = $imap->open_account($account_id, $mailbox);
 
 		if(!$account) {
 			return false;
