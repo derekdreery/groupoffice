@@ -27,19 +27,24 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 {	
 	$username = ($_POST['username']);
 	$password = ($_POST['password']);
-	
-	if (!$GO_AUTH->login($username, $password))
-	{				
-		$smarty->assign('failed', true);
-	}else {
 
-		if(strpos($success_url, 'login.php') || strpos($success_url, 'logout.php')){
-			require_once($GO_MODULES->modules['cms']['path'].'smarty_plugins/function.cms_href.php');
-			$success_url = str_replace('&amp;', '&', smarty_function_cms_href(array('path'=>''), $smarty));
+	try{
+		if (!$GO_AUTH->login($username, $password))
+		{
+			$smarty->assign('failed', true);
+		}else {
+
+			if(strpos($success_url, 'login.php') || strpos($success_url, 'logout.php')){
+				require_once($GO_MODULES->modules['cms']['path'].'smarty_plugins/function.cms_href.php');
+				$success_url = str_replace('&amp;', '&', smarty_function_cms_href(array('path'=>''), $smarty));
+			}
+
+			header('Location: '.$success_url);
+			exit();
 		}
-
-		header('Location: '.$success_url);
-		exit();
+	}
+	catch(Exception $e){
+		$smarty->assign('failed', true);
 	}
 }
 echo $co->replace_urls($smarty->fetch('auth/login.tpl'));
