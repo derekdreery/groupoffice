@@ -30,15 +30,6 @@
 	background-image:url('images/16x16/high_priority.png') !important;
 }
 
-
-.btn-message {
-	background-image:url('images/16x16/message.png') !important;
-}
-
-.btn-message-answered {
-	background-image:url('images/16x16/message_answered.png') !important;
-}
-
 .btn-compose {
 	background-image:url('images/16x16/message_new.png') !important;
 }
