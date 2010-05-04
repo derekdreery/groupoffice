@@ -252,13 +252,6 @@ class Go2Mime
 				}
 				//store attachments in the attachments array
 
-				//var_dump($part);
-
-				/*if(empty($part->d_parameters['filename']) && isset($part->d_parameters['filename*']))
-				{
-					$part->d_parameters['filename']=imap::enc_utf8($part->d_parameters['filename*']);
-				}*/
-
 				$filename = '';
 				if(!empty($part->ctype_parameters['name']))
 				{
@@ -280,9 +273,10 @@ class Go2Mime
 					$mime_attachment['human_size'] = Number::format_size($mime_attachment['size']);
 					$mime_attachment['name'] = $filename;
 					$mime_attachment['extension'] = File::get_extension($filename);
-					$mime_attachment['mime'] = $part->ctype_primary.'/'.$part->ctype_secondary;
-					$mime_attachment['transfer'] = $part->headers['content-transfer-encoding'];
-					$mime_attachment['number'] = $part_number_prefix.$part_number;
+					$mime_attachment['type'] = $part->ctype_primary;
+					$mime_attachment['subtype'] = $part->ctype_secondary;
+					$mime_attachment['encoding'] = $part->headers['content-transfer-encoding'];
+					$mime_attachment['imap_id'] = $part_number_prefix.$part_number;
 					$mime_attachment['disposition'] = isset($part->disposition) ? $part->disposition : '';
 					$mime_attachment['id'] = isset($part->headers['content-id']) ? $part->headers['content-id'] : '';
 						

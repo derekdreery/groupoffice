@@ -102,7 +102,7 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 			win.focus();
 		},
 		attachmentClicked: function(attachment, panel){
-			if(attachment.mime.indexOf('message')>-1)
+			if(attachment.type=='message')
 			{
 				this.remoteMessage.part_number=attachment.number+".0";
 				GO.linkHandlers[9].call(panel, panel.messageId, panel.remoteMessage);
@@ -112,16 +112,16 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 				{
 					document.location.href=GO.settings.modules.email.url+
 					'mimepart.php?path='+
-					encodeURIComponent(panel.data.path)+'&part_number='+attachment.number;
+					encodeURIComponent(panel.data.path)+'&imap_id='+attachment.imap_id;
 				}else
 				{
 					document.location.href=GO.settings.modules.email.url+
 					'mimepart.php?uid='+panel.remoteMessage.uid+'' +
 					'&account_id='+panel.remoteMessage.account_id+'' +
-					'&transfer='+panel.remoteMessage.transfer+'' +
+					'&encoding='+panel.remoteMessage.encoding+'' +
 					'&mailbox='+encodeURIComponent(panel.remoteMessage.mailbox)+'' +
-					'&part='+panel.remoteMessage.part+'' +
-					'&part_number='+attachment.number;
+					'&imap_id='+panel.remoteMessage.imap_id+'' +
+					'&part_imap_id='+attachment.imap_id;
 				}
 			}
 		}

@@ -34,8 +34,9 @@ if(isset($_REQUEST['path'])) {
 
 	$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
 
+	$charset = isset($_REQUEST['charset']) ? $_REQUEST['charset'] : false;
 	if ($account) {
-		$params['input'] = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
+		$params['input'] = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $charset);
 		$imap->disconnect();
 	}
 }
@@ -47,7 +48,7 @@ $params['decode_headers'] = true;
 
 $part = Mail_mimeDecode::decode($params);
 
-$parts_arr = explode('.',$_REQUEST['part_number']);
+$parts_arr = explode('.',$_REQUEST['part_imap_id']);
 for($i=0;$i<count($parts_arr);$i++) {
 	$part = $part->parts[$parts_arr[$i]];
 }
@@ -83,4 +84,3 @@ if ($content_transfer_encoding == 'base_64') {
 }else {
 	echo ($part->body);
 }
-?>

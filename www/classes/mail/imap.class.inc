@@ -806,13 +806,13 @@ class imap extends imap_bodystruct {
 		$sorted_string = implode(',', $uids);
 		$this->clean($sorted_string, 'uid_list');
 		$command = 'UID FETCH '.$sorted_string.' (FLAGS INTERNALDATE RFC822.SIZE BODY.PEEK[HEADER.FIELDS (SUBJECT FROM '.
-						"DATE CONTENT-TYPE X-PRIORITY TO CC BCC REPLY-TO DISPOSITION-NOTIFICATION-TO)])\r\n";
+						"DATE CONTENT-TYPE X-PRIORITY TO CC BCC REPLY-TO DISPOSITION-NOTIFICATION-TO CONTENT-TRANSFER-ENCODING)])\r\n";
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 
 		$status = $this->check_response($res, true);
 		$tags = array('UID' => 'uid', 'FLAGS' => 'flags', 'RFC822.SIZE' => 'size', 'INTERNALDATE' => 'internal_date');
-		$junk = array('SUBJECT', 'FROM', 'CONTENT-TYPE', 'TO', 'CC','BCC', '(', ')', ']', 'X-PRIORITY', 'DATE','REPLY-TO','DISPOSITION-NOTIFICATION-TO');
+		$junk = array('SUBJECT', 'FROM', 'CONTENT-TYPE', 'TO', 'CC','BCC', '(', ')', ']', 'X-PRIORITY', 'DATE','REPLY-TO','DISPOSITION-NOTIFICATION-TO','CONTENT-TRANSFER-ENCODING');
 		//$flds = array('uid','flags','size','internal_date','answered','seen','','reply-to', 'content-type','x-priority','disposition-notification-to');
 		$headers = array();
 		foreach ($res as $n => $vals) {
@@ -833,6 +833,7 @@ class imap extends imap_bodystruct {
 					'reply-to'=>'',
 					'content-type'=>'',
 					'disposition-notification-to'=>'',
+					'content-transfer-encoding'=>'',
 					'seen'=>0,
 					'flagged'=>0,
 					'answered'=>0,
@@ -885,10 +886,13 @@ class imap extends imap_bodystruct {
 					}
 				}
 				if ($message['uid']) {
-					if(isset($message['content_type'])) {
-						if (stristr($message['content_type'], 'charset=')) {
+					if(isset($message['content-type'])) {
+						if (stristr($message['content-type'], 'charset=')) {
 							if (preg_match("/charset\=([^\s]+)/", $message['content-type'], $matches)) {
 								$message['charset'] = trim(strtolower(str_replace(array('"', "'", ';'), '', $matches[1])));
+							}
+							if(preg_match("/[^\/]*\/[^;]*/", $message['content-type'], $matches)){
+								$message['content-type']=$matches[0];
 							}
 						}
 					}
@@ -1068,7 +1072,7 @@ class imap extends imap_bodystruct {
 
 	public function decode_message_part($str, $encoding, $charset=false) {
 
-		switch($encoding) {
+		switch(strtolower($encoding)) {
 			case 'base64':
 				$str = base64_decode($str);
 				break;
@@ -1118,6 +1122,7 @@ class imap extends imap_bodystruct {
 			$command = "UID FETCH $uid BODY".$peek_str."[$message_part]\r\n";
 		}
 		$this->send_command($command);
+
 		$result = $this->get_response(false, true);
 		$status = $this->check_response($result, true);
 		$res = '';

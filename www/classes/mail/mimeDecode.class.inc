@@ -544,7 +544,7 @@ class Mail_mimeDecode
                     foreach($matches[1] as $value)
                         $text = str_replace('='.$value, chr(hexdec($value)), $text);
                     */
-                  	$text = imap::enc_utf8($encoded);
+                  	$text = imap::mime_header_decode($encoded);
                      
                     break;
             }

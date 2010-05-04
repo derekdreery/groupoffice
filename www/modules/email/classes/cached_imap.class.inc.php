@@ -487,8 +487,36 @@ class cached_imap extends imap{
 		}
 		//$message['subject']= htmlspecialchars($message['subject'], ENT_COMPAT, 'UTF-8');
 
+		$struct = $this->get_message_structure($uid);		
 
-		$struct = $this->get_message_structure($uid);
+		if(count($struct)==1) {
+			$header_ct = explode('/', $message['content_type']);
+
+			if(count($header_ct)==2){
+				//if there's only one part the IMAP server always seems to return the type as text/plain even though the headers say text/html
+				//so use the header's content type.
+
+				go_debug('Overriden part type parameters with header parameters');
+				go_debug($message['content_type']);
+				go_debug($message['content_transfer_encoding']);
+				go_debug($message['charset']);
+
+
+				if($struct[1]['subtype']=='plain'){
+					$struct[1]['type']=$header_ct[0];
+					$struct[1]['subtype']=$header_ct[1];					
+				}
+
+				if(!empty($message['content_transfer_encoding']) && 
+					(empty($struct[1]['encoding']) || $struct[1]['encoding']=='7bit' || $struct[1]['encoding']=='8bit')){
+					$struct[1]['encoding']=$message['content_transfer_encoding'];
+				}
+
+				if(!empty($message['charset']) && $struct[1]['charset']=='us-ascii'){
+					$struct[1]['charset']=$message['charset'];
+				}
+			}
+		}
 			
 		$plain_part = $this->find_message_part($struct,0,'text', 'plain');
 		$html_part = $this->find_message_part($struct,0,'text', 'html');
@@ -535,11 +563,14 @@ class cached_imap extends imap{
 		for($i=0,$max=count($att);$i<$max;$i++){
 			if(empty($att[$i]['name'])){
 				if(!empty($att[$i]['subject'])){
-					$att[$i]['name']=File::strip_invalid_chars($att[$i]['subject']).'.eml';
+					$att[$i]['name']=File::strip_invalid_chars($this->mime_header_decode($att[$i]['subject'])).'.eml';
 				}else
 				{
 					$att[$i]['name']=$att[$i]['subtype'].'.eml';
 				}
+			}else
+			{
+				$att[$i]['name']=$this->mime_header_decode($att[$i]['name']);
 			}
 			$att[$i]['extension']=File::get_extension($att[$i]['name']);
 			$att[$i]['human_size']=Number::format_size($att[$i]['size']);
@@ -721,7 +752,8 @@ class cached_imap extends imap{
 			$message['notification']=$message['disposition-notification-to'];
 
 		$message['new']=empty($message['seen']);
-		$message['content_type']=$message['content-type'];
+		$message['content_type']=strtolower($message['content-type']);
+		$message['content_transfer_encoding']=strtolower($message['content-transfer-encoding']);
 		$message['priority']=intval($message['x-priority']);
 		
 		preg_match("'([^/]*)/([^ ;\n\t]*)'i", $message['content_type'], $ct);
@@ -735,13 +767,13 @@ class cached_imap extends imap{
 					$message['seen'],
 					$message['recent'],
 					$message['disposition-notification-to'],
+					$message['content-transfer-encoding'],
 					$message['reply-to'],
 					$message['date'],
 					$message['internal_date'],
 					$message['internal_udate'],
 					$message['content-type'],
 					$message['x-priority'],
-					$message['charset'],
 					$message['cc'],
 					$message['bcc']
 					);
@@ -905,7 +937,7 @@ class cached_imap extends imap{
 	{
 		$sql = "SELECT `folder_id`,`uid`,`account_id`,`new`,`subject`,`from`,".
 			"`reply_to`,`size`,`udate`,`attachments`,`flagged`,`answered`,`forwarded`,`priority`,".
-			"`to`,`notification`,`content_type`,`content_transfer_encoding`";
+			"`to`,`notification`,`content_type`,`content_transfer_encoding`, `charset`";
 		if($with_full_cached_message){
 			$sql .= ",`serialized_message_object` ";
 		}
