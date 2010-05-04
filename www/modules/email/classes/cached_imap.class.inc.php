@@ -47,6 +47,32 @@ class cached_imap extends imap{
 		return true;
 	}
 
+	function open_account($account_id, $mailbox='INBOX', $halt_on_error=true) {
+		global $GO_SECURITY, $lang;
+
+		if (!$account = $this->email->get_account($account_id)) {
+			throw new Exception($lang['common']['selectError']);
+		}
+
+		if($account['user_id']!=$GO_SECURITY->user_id && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
+			throw new AccessDeniedException();
+		}
+		try {
+			if (!$this->open($account, $mailbox)) {
+				if(!$halt_on_error)
+					return false;
+				
+				throw new Exception(printf($lang['email']['feedbackCannotConnect'], $account['host'],  $imap->last_error(), $account['port']));
+
+			}
+		}
+		catch (Exception $e) {
+			throw new Exception($this->email->human_connect_error($e->getMessage()));
+		}
+		return $account;
+
+	}
+
 	public function set_account($account, $mailbox='INBOX'){
 		$this->account = $account;
 

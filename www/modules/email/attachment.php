@@ -22,7 +22,7 @@ require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 $imap = new cached_imap();
 $email = new email();
 
-$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
+$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 
 if($account['user_id']!=$GO_SECURITY->user_id) {
 	die($lang['common']['accessDenied']);

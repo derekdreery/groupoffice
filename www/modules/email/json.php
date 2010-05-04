@@ -218,7 +218,7 @@ try {
 
 			$url_replacements=array();
 
-			//$account = connect($account_id, $mailbox);
+			//$account = $imap->open_account($account_id, $mailbox);
 			$account = $email->get_account($account_id);
 			$imap->set_account($account, $mailbox);
 
@@ -395,7 +395,7 @@ try {
 				}
 
 
-				$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
+				$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 				$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
 				$imap->disconnect();
 
@@ -481,7 +481,7 @@ try {
 				break;
 
 			case 'message_attachment':
-				$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
+				$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 				$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
 
 				$response=array();
@@ -505,7 +505,7 @@ try {
 				$mailbox = $_REQUEST['mailbox'];
 				$uid = $_REQUEST['uid'];
 
-				//$account = connect($account_id, $mailbox);
+				//$account = $imap->open_account($account_id, $mailbox);
 				$account = $email->get_account($account_id);
 				$imap->set_account($account, $mailbox);
 
@@ -627,7 +627,7 @@ try {
 				$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 30;
 
 
-				$account = connect($account_id, $mailbox);
+				$account = $imap->open_account($account_id, $mailbox);
 
 				if(!empty($_POST['refresh'])) {
 					$imap->clear_cache($_POST['folder_id']);
@@ -804,7 +804,7 @@ try {
 					//go_log(LOG_DEBUG, $count);
 					while($email2->next_record()) {
 						try{
-							$account = connect($email2->f('id'), 'INBOX', false);
+							$account = $imap->open_account($email2->f('id'), 'INBOX', false);
 						} catch(Exception $e){
 							$account=false;
 							$error = $email->human_connect_error($e->getMessage());
@@ -858,13 +858,13 @@ try {
 						$response[]=$node;
 					}
 				}elseif($node_type=='account') {
-					$account = connect($node_id);
+					$account = $imap->open_account($node_id);
 					$response = get_mailbox_nodes($node_id, 0);
 				}	else {
 					$folder_id=$node_id;
 
 					$folder = $email->get_folder_by_id($folder_id);
-					$account = connect($folder['account_id']);
+					$account = $imap->open_account($folder['account_id']);
 
 					$response = get_mailbox_nodes(0, $folder_id);
 				}
@@ -987,7 +987,7 @@ try {
 				if(isset($_POST['deleteFolders'])) {
 					$deleteFolders = json_decode(($_POST['deleteFolders']));
 					if(count($deleteFolders)) {
-						$account = connect($account_id);
+						$account = $imap->open_account($account_id);
 
 						foreach($deleteFolders as $folder_id) {
 							if($folder = $email->get_folder_by_id(($folder_id))) {

@@ -105,7 +105,7 @@ class imap extends imap_bodystruct {
 
 
 
-			//go_debug($this->commands);
+			go_debug($this->commands);
 
 			//go_debug($this->responses);
 
