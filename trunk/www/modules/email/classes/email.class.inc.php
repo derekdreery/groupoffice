@@ -856,9 +856,6 @@ class email extends db {
 	}
 
 	function _synchronize_folders($account, $mailboxes, $subscribed) {
-
-		go_debug($mailboxes);
-
 		$mail = new imap();
 
 		$mailbox_names = array();
