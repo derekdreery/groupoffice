@@ -91,14 +91,14 @@ class ical2array {
 			fclose($fp);
 
 			$vcalendar = $this->parse_icalendar_string($data);
-			//$this->timezones = $this->get_timezones($vcalendar);
+			$this->timezones = $this->get_timezones($vcalendar);
 			return $vcalendar;
 		}
 	}
 
 	function parse_string($ical_string) {
 		$vcalendar = $this->parse_icalendar_string($ical_string);
-		//$this->timezones = $this->get_timezones($vcalendar);
+		$this->timezones = $this->get_timezones($vcalendar);
 		return $vcalendar;
 	}
 
@@ -116,7 +116,7 @@ class ical2array {
 		//$data = str_replace(ICAL_WORD_WRAP_MAC, ICAL_WORD_WRAP_UNIX, $data);
 		/*unfolding lines ending up in '=<LF>', originally '=<CRLF>'*/
 		//$regex = '/('.ICAL_DELIM_EQUAL.ICAL_WORD_WRAP_UNIX.')/i';
-	//	$data = preg_replace($regex, "", $data);
+		//	$data = preg_replace($regex, "", $data);
 
 		/*unfolding lines as specified in RFC2425*/
 		//$regex = '/('.ICAL_WORD_WRAP_UNIX.')(['.ICAL_CHAR_WSP.'|'.ICAL_CHAR_HTAB.'])/i';
@@ -167,9 +167,9 @@ class ical2array {
 
 		//echo $data."\n";
 		$lines = explode("\n", $data);
-	
-		for($linecount=0,$count=count($lines);$linecount<$count;$linecount++){
-			$line = array_shift($lines);				
+
+		for($linecount=0,$count=count($lines);$linecount<$count;$linecount++) {
+			$line = array_shift($lines);
 
 			//don't process empty lines
 			if (strlen($line) == 0) {
@@ -178,7 +178,7 @@ class ical2array {
 					$this->buffer_type = 'object_name';
 				}
 			}else {
-			
+
 				/*
 					If we are processing a value and the first value is a tab (chr(9)) or
 					a space (chr(32)) then cut it. if it's not one of these chars
@@ -280,6 +280,10 @@ class ical2array {
 				if(!isset($this->param_name)) {
 					//go_log(LOG_DEBUG, $this->buffer);
 				}
+				if(substr($this->buffer,0,1)=='"' && substr($this->buffer,-1,1)=='"'){
+					$this->buffer = substr($this->buffer,1,-1);
+				}
+
 				$this->object[$this->object_name]['params'][$this->param_name] = $this->buffer;
 				break;
 
@@ -291,7 +295,7 @@ class ical2array {
 		$this->buffer = '';
 	}
 
-	/*function get_timezones($vcalendar) {
+	function get_timezones($vcalendar) {
 		$timezones = array();
 		if(isset($vcalendar[0]['objects'])) {
 			while($object = array_shift($vcalendar[0]['objects'])) {
@@ -308,7 +312,7 @@ class ical2array {
 
 	function convert_timezone($timezone) {
 		return intval(substr($timezone,0,-2));
-	}*/
+	}
 
 	function parse_rrule($rrule) {
 		$rrule_arr = array();
@@ -471,7 +475,6 @@ class ical2array {
 		$year = substr($date,0,4);
 		$month = substr($date,4,2);
 		$day = substr($date,6,2);
-
 		if (strpos($date, 'T') !== false) {
 			$hour = substr($date,9,2);
 			$min = substr($date,11,2);
@@ -482,39 +485,33 @@ class ical2array {
 			$sec = 0;
 		}
 
-		/*if(isset($this->force_timezone))
-		{
+		if(isset($this->force_timezone)) {
 			$timezone_offset = $this->force_timezone;
-		}else
-		{		
-			if(strpos($date, 'Z') !== false)
-			{
-				$timezone_offset = 0;
-			}else
-			{
-				$timezone_offset =  Date::get_timezone_offset(mktime($hour, $min, $sec, $month, $day , $year));
-
-				if(isset($this->timezones[$timezone_id]) && isset($this->timezones[$timezone_id]['STANDARD']))
-				{
+		}else {
+			if(strpos($date, 'Z') === false) {
+				if(isset($this->timezones[$timezone_id]) && isset($this->timezones[$timezone_id]['STANDARD'])) {
+					//if ($this->is_standard_timezone($timezone_id)) {
 					$standard_tzoffset = $this->timezones[$timezone_id]['STANDARD'];
 					$daylight_tzoffset = isset($this->timezones[$timezone_id]['DAYLIGHT']) ? $this->timezones[$timezone_id]['DAYLIGHT'] : $standard_tzoffset;
-
-					if(date('I', mktime($hour, $min, $sec, $month, $day , $year)) > 0)
-					{
+					if(date('I', mktime($hour, $min, $sec, $month, $day , $year)) > 0) {
 						//event is in DST
 						$timezone_offset = $daylight_tzoffset;
-					}else
-					{
+					}else {
 						$timezone_offset = $standard_tzoffset;
 					}
-				}
+				}				
+			}else
+			{
+				$timezone_offset = 0;
 			}
-		}*/
+		}
 
-		if(strpos($date, 'Z'))
-			return gmmktime($hour, $min, $sec, $month, $day , $year);
-		else
+		if(isset($timezone_offset)){
+			return gmmktime($hour-$timezone_offset, $min, $sec, $month, $day , $year);
+		}else
+		{
 			return mktime($hour, $min, $sec, $month, $day , $year);
+		}
 	}
 
 	function parse_duration($duration) {
