@@ -1,4 +1,4 @@
-2010/04/? 3.4.23
+2010/05/04 3.4.23
 - Some bugs with participants were fixed
 - Subject of message as filename for zip of attachments
 
