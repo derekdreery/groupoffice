@@ -1970,7 +1970,7 @@ class calendar extends db
 		if(isset($object['DTSTART']))
 		{
 			$timezone_id = isset($object['DTSTART']['params']['TZID']) ? $object['DTSTART']['params']['TZID'] : '';
-			$event['start_time'] = $this->ical2array->parse_date($object['DTSTART']['value']);
+			$event['start_time'] = $this->ical2array->parse_date($object['DTSTART']['value'], $timezone_id);
 		}
 
 		if(empty($event['start_time'])){
@@ -2154,7 +2154,7 @@ class calendar extends db
 		return false;
 	}
 
-	function import_ical_string($ical_string, $calendar_id)
+	function import_ical_string($ical_string, $calendar_id=-1)
 	{
 		global $GO_MODULES, $GO_CONFIG;
 
@@ -2173,10 +2173,12 @@ class calendar extends db
 				{
 					if($event = $this->get_event_from_ical_object($object))
 					{
-						$event['calendar_id']=$calendar_id;
-						if ($event_id = $this->add_event($event))
-						{
-							$count++;
+						if ($calendar_id != -1) {
+							$event['calendar_id']=$calendar_id;
+							if ($event_id = $this->add_event($event))
+							{
+								$count++;
+							}
 						}
 					}
 				}
