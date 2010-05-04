@@ -151,6 +151,8 @@ try {
 
 					$response['status'][$inbox['id']]['unseen'] = $unseen['count'];
 					$response['status'][$inbox['id']]['messages'] = $imap->selected_mailbox['messages'];
+
+					$imap->disconnect();
 				}else {
 					$imap->clear_errors();
 				}

@@ -103,11 +103,18 @@ class imap extends imap_bodystruct {
 			$result = $this->get_response();
 
 
+
+
 			go_debug($this->commands);
 
 			//go_debug($this->responses);
 
-			return fclose($this->handle);
+			fclose($this->handle);
+
+			$this->handle=false;
+			$this->selected_mailbox=false;
+
+			return true;
 		}else {
 			return false;
 		}
