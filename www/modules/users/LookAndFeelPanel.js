@@ -108,7 +108,7 @@ GO.users.LookAndFeelPanel = function(config)
 			editable: false,
 			selectOnFocus:true,
 			forceSelection: true,
-			value: 30
+			value: 20
 		});
 		
 		config.items.push({

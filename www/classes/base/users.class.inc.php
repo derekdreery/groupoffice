@@ -839,7 +839,7 @@ class GO_USERS extends db
 			$user['theme'] = $GO_CONFIG->theme;
 			
 		if(!isset($user['max_rows_list']))
-			$user['max_rows_list'] = 30;
+			$user['max_rows_list'] = 20;
 			
 		if(!isset($user['sex']))			
 			$user['sex'] = 'M';
