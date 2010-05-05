@@ -551,6 +551,9 @@ class cached_imap extends imap{
 		$plain_part = $this->find_message_part($struct,0,'text', 'plain');
 		$html_part = $this->find_message_part($struct,0,'text', 'html');
 
+		$message['plain_body']='';
+		$message['html_body']='';
+
 		//use this array later to find attachments. The body parts will be skipped.
 		$body_ids=array();
 		if($plain_part){
@@ -755,7 +758,7 @@ class cached_imap extends imap{
 				$newstart = count($messages);
 				$newlimit = $newstart+count($this->filtered);
 
-				$sorted_messages = array_merge($sorted_messages, $this->get_message_headers_set($newstart, $newlimit, $sort_field , $sort_order, $query));
+				$sorted_messages = array_merge($sorted_messages, $this->get_message_headers_set($newstart, $newlimit, $sort_field , $reverse, $query));
 				/*foreach($extra_messages as $uid=>$message)
 				{
 					$messages[$uid]=$message;

@@ -480,10 +480,10 @@ try {
 						$drafts_folder = $swift->account['drafts'];
 						if ($imap->open($swift->account, $drafts_folder)) {
 
-							$status = $imap->status($drafts_folder, SA_UIDNEXT);
-							if(!empty($status->uidnext)) {
-								$response['success']=$imap->append_message($drafts_folder, $swift->message->toString(),"\\Seen");
-								$response['draft_uid']=$status->uidnext;
+							//$status = $imap->status($drafts_folder, SA_UIDNEXT);
+							if(!empty($imap->selected_mailbox['uidnext'])) {
+								$response['success']=$imap->append_message($drafts_folder, $swift->message->toString(),"\Seen");
+								$response['draft_uid']=$imap->selected_mailbox['uidnext'];
 							}
 
 							if(!$response['success']) {
@@ -498,7 +498,7 @@ try {
 								$imap->delete(array($_POST['draft_uid']));
 							}
 
-							$imap->close();
+							$imap->disconnect();
 						}
 					}else {
 
@@ -670,7 +670,7 @@ try {
 					}
 				}
 			}
-			//$imap->close();
+
 			break;
 
 		case 'delete_folder':
@@ -719,7 +719,6 @@ try {
 				}else {
 					$response['feedback']=$lang['common']['saveError'];
 				}
-				//$imap->close();
 			}else {
 				$response['feedback']=$lang['comon']['selectError'];
 			}
