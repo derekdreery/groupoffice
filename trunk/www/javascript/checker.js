@@ -361,9 +361,8 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 
 										this.checkerWindow.show();
 										this.reminderIcon.setDisplayed(true);
-									}
-
-									data.alarm=true;
+										data.alarm=true;
+									}									
 								}else
 								{
 									this.reminderIcon.setDisplayed(false);
