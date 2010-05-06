@@ -367,15 +367,17 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 								{
 									this.reminderIcon.setDisplayed(false);
 								}
-
+								
 								if(data.alarm){
 									GO.playAlarm();
-									if(!GO.hasFocus){//} || true){
+									if(!GO.hasFocus){
 										GO.reminderPopup = GO.util.popup({
 											width:400,
 											height:300,
 											url:BaseHref+'reminder.php?count='+this.lastCount+'&reminder_text='+encodeURIComponent(data.reminderText),
-											target:'groupofficeReminderPopup'
+											target:'groupofficeReminderPopup',
+											position:'br',
+											closeOnFocus:true
 										});
 										
 									}
@@ -388,7 +390,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 				});
 			},
 			scope:this,
-			interval:60000
+			interval:10000
 		});
 	}
 });

@@ -67,10 +67,16 @@ class imap extends imap_bodystruct {
 	public function connect($server, $port, $username, $password, $ssl=false, $starttls=false) {
 
 		go_debug("imap::connect($server, $port, $username, ***, $ssl, $starttls)");
+
+		//cache DNS in session. Seems to be faster with gmail somehow.
+		if(empty($_SESSION['GO_SESSION']['imap'][$server]))
+		{
+			$_SESSION['GO_SESSION']['imap'][$server]=gethostbyname($server);
+		}
 		
 		$this->ssl = $ssl;
 		$this->starttls = $starttls;
-		$this->server=$server;
+		$this->server=$_SESSION['GO_SESSION']['imap'][$server];
 		$this->port=$port;
 		$this->username=$username;
 		$this->password=$password;
