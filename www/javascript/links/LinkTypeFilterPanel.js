@@ -49,16 +49,23 @@ GO.LinkTypeFilterPanel = function(config)
 	
 	
 	
-	var applyButton = new Ext.Button({
+
+
+	config.tbar=[{
 		iconCls:'btn-save',
-		text:GO.lang.applyMultiselect,
+		text:GO.lang.cmdApply,
 		handler:function(){
-			this.applyFilter();
+			this.applyFilter(-1);
 		},
 		scope: this
-	});
-
-	config.tbar=[applyButton];
+	},{
+		iconCls:'btn-delete',
+		text:GO.lang.cmdReset,
+		handler:function(){
+			this.applyFilter(0);
+		},
+		scope: this
+	}];
 	
 	config.items=[
 	this.filterGrid/*,
@@ -84,7 +91,7 @@ Ext.extend(GO.LinkTypeFilterPanel, Ext.Panel,{
 		for (var i = 0; i < this.filterGrid.store.data.items.length;  i++)
 		{
 			current_type_id = this.filterGrid.store.data.items[i].get('id');
-			if(type_id && type_id != current_type_id){
+			if(type_id>-1 && type_id != current_type_id){
 				checked=false;
 				this.filterGrid.store.data.items[i].set('checked', "0");
 			}else
@@ -106,6 +113,7 @@ Ext.extend(GO.LinkTypeFilterPanel, Ext.Panel,{
 		this.fireEvent('change', this, types);
 
 		this.filterGrid.store.commitChanges();
+		this.filterGrid.getSelectionModel().clearSelections();
 	}
 });
 

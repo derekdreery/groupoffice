@@ -1,3 +1,16 @@
+3.5
+- A lot of bug fixes and improvements to the tickets module. Customers can login
+	through the Group-Office interface now too.
+- Wrote custom IMAP library that replaces the php-imap extension. It's much
+	faster, has more features and now the php extension is no longer required.
+- Upgraded to ExtJS 3.2.1
+- Dialogs are now only rendered on demand so Group-Office will start faster
+- Reminders and new e-mail popup when you are not working in Group-Office. This
+  way you'll have a visual on screen.
+- Document templates work for Office 2007 files now too.
+- Easier filtering on links and search results
+- A lot of small enhancements everywhere.
+
 2010/05/04 3.4.23
 - Some bugs with participants were fixed
 - Subject of message as filename for zip of attachments
