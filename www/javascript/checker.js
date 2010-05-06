@@ -289,9 +289,6 @@ GO.CheckerPanel = Ext.extend(function(config){
 	
 	
 },GO.grid.GridPanel, {
-	
-
-	
 	iconRenderer : function(src,cell,record){
 		return '<div class=\"go-icon ' + record.data.iconCls +' \"></div>';
 	}
@@ -390,7 +387,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 				});
 			},
 			scope:this,
-			interval:10000
+			interval:60000 //check changes every minute
 		});
 	}
 });
