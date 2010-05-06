@@ -120,6 +120,14 @@ class imap extends imap_bodystruct {
 		}
 	}
 
+	/**
+	 * Handles authentication. You can optionally set
+	 * $this->starttls or $this->auth to CRAM-MD5
+	 *
+	 * @param <type> $username
+	 * @param <type> $pass
+	 * @return <type>
+	 */
 
 	private function authenticate($username, $pass) {
 
@@ -185,6 +193,13 @@ class imap extends imap_bodystruct {
 		return $authed;
 	}
 
+	/**
+	 * Get's the capabilities of the IMAP server. Useful to determine if the
+	 * IMAP server supports server side sorting.
+	 *
+	 * @return <type>
+	 */
+
 	private function get_capability() {
 		if (isset($_SESSION['GO_IMAP'][$this->server]['imap_capability'])) {
 			$this->capability=$_SESSION['GO_IMAP'][$this->server]['imap_capability'];
@@ -207,7 +222,7 @@ class imap extends imap_bodystruct {
 		* @return mixed The delimiter or false on failure
 		*/
 
-	function get_mailbox_delimiter() {
+	public function get_mailbox_delimiter() {
 		if(!$this->delimiter){
 			if(isset($_SESSION['GO_SESSION']['imap_delimiter'][$this->server])){
 				$this->delimiter=$_SESSION['GO_SESSION']['imap_delimiter'][$this->server];
@@ -219,7 +234,7 @@ class imap extends imap_bodystruct {
 		return $this->delimiter;
 	}
 
-	function set_mailbox_delimiter($delimiter) {
+	private function set_mailbox_delimiter($delimiter) {
 		$this->delimiter=$_SESSION['GO_SESSION']['imap_delimiter'][$this->server]=$delimiter;
 	}
 
@@ -790,6 +805,37 @@ class imap extends imap_bodystruct {
 
 	}
 
+
+	/**
+	 * Get's message headers of a single message:
+	 *
+	 * $message=array(
+					'to'=>'',
+					'cc'=>'',
+					'bcc'=>'',
+					'from'=>'',
+					'subject'=>'',
+					'uid'=>'',
+					'size'=>'',
+					'internal_date'=>'',
+					'date'=>'',
+					'udate'=>'',
+					'internal_udate'=>'',
+					'x-priority'=>3,
+					'reply-to'=>'',
+					'content-type'=>'',
+					'disposition-notification-to'=>'',
+					'content-transfer-encoding'=>'',
+					'seen'=>0,
+					'flagged'=>0,
+					'answered'=>0,
+					'forwarded'=>0
+				);
+	 *
+	 * @param <type> $uid
+	 * @return <type>
+	 */
+
 	public function get_message_header($uid){
 		$headers = $this->get_message_headers(array($uid));
 		if(count($headers)){
@@ -803,7 +849,30 @@ class imap extends imap_bodystruct {
 
 
 	/**
-	 * Get's all message headers from an array of UID's
+	 * Get's message headers from an UID range:
+	 *
+	 * $message=array(
+					'to'=>'',
+					'cc'=>'',
+					'bcc'=>'',
+					'from'=>'',
+					'subject'=>'',
+					'uid'=>'',
+					'size'=>'',
+					'internal_date'=>'',
+					'date'=>'',
+					'udate'=>'',
+					'internal_udate'=>'',
+					'x-priority'=>3,
+					'reply-to'=>'',
+					'content-type'=>'',
+					'disposition-notification-to'=>'',
+					'content-transfer-encoding'=>'',
+					'seen'=>0,
+					'flagged'=>0,
+					'answered'=>0,
+					'forwarded'=>0
+				);
 	 *
 	 * @param <type> $uids
 	 * @return <type>
@@ -964,6 +1033,12 @@ class imap extends imap_bodystruct {
 		return false;
 	}
 
+
+	/**
+	 * Get's an array with two keys. usage and limit in bytes.
+	 *
+	 * @return <type>
+	 */
 	public function get_quota() {
 		$command = "GETQUOTAROOT \"INBOX\"\r\n";
 
@@ -1027,17 +1102,31 @@ class imap extends imap_bodystruct {
 		return $struct;
 	}
 
-	public function find_message_part($struct, $part, $type='text', $subtype=false) {
+	/**
+	 * Find's the first message part in a structure returned from
+	 * get_message_structure that matches the parameters given.
+	 *
+	 * Useful to find the first text/plain or text/html for example to find the
+	 * message body.
+	 *
+	 * @param <type> $struct
+	 * @param <type> $imap_id
+	 * @param <type> $type
+	 * @param <type> $subtype
+	 * @return <type>
+	 */
+
+	public function find_message_part($struct, $imap_id, $type='text', $subtype=false) {
 		$res = array();
 		if (!is_array($struct) || empty($struct)) {
 			return $res;
 		}
 		foreach ($struct as $id => $vals) {
-			if ($part && $id == $part) {
+			if ($imap_id && $id == $imap_id) {
 				$vals['imap_id'] = $id;
 				$res = $vals;
 			}
-			elseif (!$part && isset($vals['type']) && $vals['type'] == $type) {
+			elseif (!$imap_id && isset($vals['type']) && $vals['type'] == $type) {
 				if ($subtype) {
 					if ($subtype == $vals['subtype']) {
 						$vals['imap_id'] = $id;
@@ -1050,7 +1139,7 @@ class imap extends imap_bodystruct {
 				}
 			}
 			if (empty($res) && isset($vals['subs'])) {
-				$res =  $this->find_message_part($vals['subs'], $part, $type, $subtype);
+				$res =  $this->find_message_part($vals['subs'], $imap_id, $type, $subtype);
 			}
 			if (!empty($res)) {
 				break;
@@ -1058,8 +1147,9 @@ class imap extends imap_bodystruct {
 		}
 		return $res;
 	}
+
 	/**
-	 * Find all attachment parts
+	 * Find all attachment parts from a structure returned by get_message_structure
 	 *
 	 * @param <type> $struct
 	 * @param <type> $skip_ids Skip thise ID's
@@ -1086,6 +1176,15 @@ class imap extends imap_bodystruct {
 		return $attachments;
 	}
 
+	/**
+	 * Decodes a message part.
+	 *
+	 * @param <type> $str
+	 * @param <type> $encoding Can be base64 or quoted-printable
+	 * @param <type> $charset If this is given then the part will be converted to UTF-8 and illegal characters will be stripped.
+	 * @return <type>
+	 */
+
 	public function decode_message_part($str, $encoding, $charset=false) {
 
 		switch(strtolower($encoding)) {
@@ -1105,6 +1204,17 @@ class imap extends imap_bodystruct {
 		}
 		return $str;
 	}
+
+	/**
+	 * Get's a message part and returned in binary form or UTF-8 charset.
+	 * 
+	 * @param <type> $uid
+	 * @param <type> $part_no
+	 * @param <type> $encoding
+	 * @param <type> $charset
+	 * @param <type> $peek
+	 * @return <type>
+	 */
 
 	public function get_message_part_decoded($uid, $part_no, $encoding, $charset=false, $peek=false) {
 		go_debug("get_message_part_decode($uid, $part_no, $encoding, $charset)");
@@ -1200,7 +1310,20 @@ class imap extends imap_bodystruct {
 		return $res;
 	}
 
-
+	/**
+	 * Set or clear flags of an UID range. Flags can be:
+	 * 
+	 * \Seen
+	 * \Answered
+	 * \Flagged
+	 * \Deleted
+	 * $Forwarded
+	 *
+	 * @param <type> $uids
+	 * @param <type> $flags
+	 * @param <type> $clear
+	 * @return <type>
+	 */
 	public function set_message_flag($uids, $flags, $clear=false) {
 		$status=false;
 		$uid_strings = array();
@@ -1244,6 +1367,13 @@ class imap extends imap_bodystruct {
 		return $status;
 	}
 
+	/**
+	 * Copy a message from the currently selected mailbox to another mailbox
+	 *
+	 * @param <type> $uids
+	 * @param <type> $mailbox
+	 * @return <type>
+	 */
 	public function copy($uids, $mailbox) {
 		$this->clean($mailbox, 'mailbox');
 
@@ -1255,6 +1385,14 @@ class imap extends imap_bodystruct {
 		return $this->check_response($res);
 	}
 
+	/**
+	 * Move a message from the currently selected mailbox to another mailbox
+	 *
+	 * @param <type> $uids
+	 * @param <type> $mailbox
+	 * @param <type> $expunge
+	 * @return <type>
+	 */
 	public function move($uids, $mailbox, $expunge=true) {
 
 		if(!in_array($mailbox, $this->touched_folders)) {
@@ -1267,7 +1405,13 @@ class imap extends imap_bodystruct {
 		return $this->delete($uids, $expunge);
 	}
 
-
+	/**
+	 * Delete messages from the currently selected mailbox
+	 * 
+	 * @param <type> $uids
+	 * @param <type> $expunge
+	 * @return <type>
+	 */
 	public function delete($uids, $expunge=true) {
 		$status = $this->set_message_flag($uids, '\Deleted \Seen');
 		if(!$status)
@@ -1276,6 +1420,12 @@ class imap extends imap_bodystruct {
 		return !$expunge || $this->expunge();
 	}
 
+	/**
+	 * Expunge the mailbox. It will remove all the messages marked with the
+	 *  \Deleted flag.
+	 *
+	 * @return <type>
+	 */
 	public function expunge() {
 		$this->send_command("EXPUNGE\r\n");
 		$res = $this->get_response();
@@ -1286,6 +1436,12 @@ class imap extends imap_bodystruct {
 		return str_replace('"', '\"', $mailbox);
 	}
 
+	/**
+	 * Removes a mailbox
+	 * 
+	 * @param <type> $mailbox
+	 * @return <type>
+	 */
 	public function delete_folder($mailbox) {
 		$this->clean($mailbox, 'mailbox');
 
@@ -1294,16 +1450,21 @@ class imap extends imap_bodystruct {
 		$command = 'DELETE "'.$this->addslashes($this->utf7_encode($mailbox))."\"\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false);
-		return $this->check_response($result, false);
-		
+		return $this->check_response($result, false);		
 	}
+
+	/**
+	 * Rename a mailbox
+	 *
+	 * @param <type> $mailbox
+	 * @param <type> $new_mailbox
+	 * @return <type>
+	 */
 	public function rename_folder($mailbox, $new_mailbox) {
 		$this->clean($mailbox, 'mailbox');
 		$this->clean($new_mailbox, 'mailbox');
 
-		$children = $this->get_folders($mailbox);
-
-		go_debug($children);
+		$children = $this->get_folders($mailbox);;
 
 		$command = 'RENAME "'.$this->addslashes($this->utf7_encode($mailbox)).'" "'.
 						$this->addslashes($this->utf7_encode($new_mailbox)).'"'."\r\n";
@@ -1324,15 +1485,20 @@ class imap extends imap_bodystruct {
 				 $this->subscribe($new_child);
 				}
 			}
-
 			return true;
-
 		}else
 		{
 			return false;
-		}
-		
+		}		
 	}
+
+	/**
+	 * Create a new mailbox
+	 *
+	 * @param <type> $mailbox
+	 * @param <type> $subscribe
+	 * @return <type>
+	 */
 	public function create_folder($mailbox, $subscribe=true) {
 		$this->clean($mailbox, 'mailbox');
 
@@ -1350,7 +1516,12 @@ class imap extends imap_bodystruct {
 	}
 	
 	
-
+	/**
+	 * Subscribe to a mailbox
+	 * 
+	 * @param <type> $mailbox
+	 * @return <type>
+	 */
 	public function subscribe($mailbox){
 		$command = 'SUBSCRIBE "'.$this->addslashes($this->utf7_encode($mailbox)).'"'."\r\n";
 		$this->send_command($command);
@@ -1358,6 +1529,12 @@ class imap extends imap_bodystruct {
 		return $this->check_response($result, true);
 	}
 
+	/**
+	 * Unsubscribe a mailbox
+	 *
+	 * @param <type> $mailbox
+	 * @return <type>
+	 */
 	public function unsubscribe($mailbox){
 		$command = 'UNSUBSCRIBE "'.$this->addslashes($this->utf7_encode($mailbox)).'"'."\r\n";
 		$this->send_command($command);
@@ -1365,15 +1542,36 @@ class imap extends imap_bodystruct {
 		return $this->check_response($result, true);
 	}
 
-
+	/**
+	 * End's a line by line append operation
+	 *
+	 * @return <type>
+	 */
 	public function append_end() {
 		$result = $this->get_response(false, true);
 		$status = $this->check_response($result, true);
 		return $status;
 	}
+
+	/**
+	 * Feed data when after append_start is called to start an append operation
+	 *
+	 * @param <type> $string
+	 * @return <type>
+	 */
 	public function append_feed($string) {
 		return fwrite($this->handle, $string."\r\n");
 	}
+
+	/**
+	 * Start an append operation. Data can be fed line by line with append_feed
+	 * after this function is called.
+	 *
+	 * @param <type> $mailbox
+	 * @param <type> $size
+	 * @param <type> $flags
+	 * @return <type>
+	 */
 	public function append_start($mailbox, $size, $flags = "") {
 		//it will deselect the mailserver
 		$this->selected_mailbox=false;
@@ -1391,6 +1589,14 @@ class imap extends imap_bodystruct {
 		}
 	}
 
+	/**
+	 * Append a message to a mailbox
+	 * 
+	 * @param <type> $mailbox
+	 * @param <type> $data
+	 * @param <type> $flags See set_message_flag
+	 * @return <type>
+	 */
 	public function append_message($mailbox, $data, $flags=""){
 
 		go_debug("imap::append_message($mailbox, data, $flags);");
@@ -1405,7 +1611,16 @@ class imap extends imap_bodystruct {
 	}
 
 
-	function extract_uuencoded_attachments(&$body)
+	/**
+	 * Extract uuencoded attachment from a text/plain body. Some mail clients
+	 * embed attachments in the text body. This function will take them out and
+	 * retrn them in an array.
+	 *
+	 * @param <type> $body
+	 * @return <type>
+	 *
+	 */
+	public function extract_uuencoded_attachments(&$body)
 	{
 		$body = str_replace("\r", '', $body);
 		$regex = "/(begin ([0-7]{3}) (.+))\n(.+)\nend/Us";
