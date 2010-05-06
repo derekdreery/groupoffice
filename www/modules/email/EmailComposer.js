@@ -401,6 +401,10 @@ GO.email.EmailComposer = function(config) {
 
         Ext.menu.MenuMgr.hideAll();
 
+				//This property is set in javascript/focus.js. When the mouse goes into
+				//the editor iframe it thinks it has lost the focus.
+				GO.hasFocus=true;
+
         //this.syncValue();
     }
 	}));

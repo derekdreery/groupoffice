@@ -11,6 +11,10 @@
 - Easier filtering on links and search results
 - A lot of small enhancements everywhere.
 
+* max 3 login failures, custom admin username
+* tickets puntjes
+* templates office 2007
+
 2010/05/04 3.4.23
 - Some bugs with participants were fixed
 - Subject of message as filename for zip of attachments
