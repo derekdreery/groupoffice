@@ -401,13 +401,37 @@ GO.util.popup = function (config)
 		config.target='_blank';
 	}
 
-	var centered;
-	x = (screen.availWidth - config.width) / 2;
-	y = (screen.availHeight - config.height) / 2;
-	centered =',width=' + config.width + ',height=' + config.height + ',left=' + x + ',top=' + y + ',scrollbars=yes,resizable=yes,status=no';
-
-	var popup = window.open(config.url, config.target, centered);
 	
+	if(!config.scrollbars)
+		config.scrollbars="yes";
+
+	if(!config.resizable)
+		config.resizable="yes";
+
+	if(!config.status)
+		config.status="no";
+
+	if (typeof(config.left)=='undefined' || typeof(config.top)=='undefined'){
+		config.position=config.position || 'center';
+
+		if(config.position=='center'){
+			config.left = (screen.availWidth - config.width) / 2;
+			config.top = (screen.availHeight - config.height) / 2;
+		}else
+		{
+			config.left = screen.availWidth - config.width;
+			config.top = screen.availHeight - config.height;
+		}
+	}
+
+	var options = '';
+	for(var key in config){
+		if(key!='position' && key!='focus' && key!='closeOnFocus')
+		options+=','+key+'='+config[key];
+	}
+	options=options.substring(1, options.length);
+
+	var popup = window.open(config.url, config.target, options);
 	
 	if(!popup)
 	{
@@ -416,8 +440,12 @@ GO.util.popup = function (config)
 	}
 	
   if (!popup.opener) popup.opener = self;
-  
-	popup.focus();
+
+	if(config.focus)
+		popup.focus();
+
+	if(config.closeOnFocus)
+		GO.mainLayout.on('focus', function(){popup.close();}, {single:true});
 	
 	return popup;
 }

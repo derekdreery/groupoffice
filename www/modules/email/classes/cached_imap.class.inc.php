@@ -103,13 +103,6 @@ class cached_imap extends imap{
 
 		$this->set_account($account, $mailbox);
 
-		//cache DNS in session. Seems to be faster with gmail somehow.
-		/*if(empty($_SESSION['cached_imap'][$account['host']]))
-		{
-		$_SESSION['cached_imap'][$account['host']]=gethostbyname($account['host']);
-		}*/
-
-
 		$conn = parent::connect($account['host'], $account['port'], $account['username'], $account['password'], $account['use_ssl']);
 
 		$this->select_mailbox($mailbox);

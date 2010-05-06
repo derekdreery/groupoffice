@@ -1481,20 +1481,20 @@ doTaskOnMessages : function (task){
 								field='new';
 								value=false;
 
-								/*for(var i=0;i<records.length;i++){
+								for(var i=0;i<records.length;i++){
 									if(records[i].get('new')=='1')
 										GO.email.totalUnseen--;
-								}*/
+								}
 									
 								break;
 							case 'mark_as_unread':
 								field='new';
 								value=true;
 									
-								/*for(var i=0;i<records.length;i++){
+								for(var i=0;i<records.length;i++){
 									if(records[i].get('new')!='1')
 										GO.email.totalUnseen++;
-								}*/
+								}
 								break;
 									
 							case 'flag':

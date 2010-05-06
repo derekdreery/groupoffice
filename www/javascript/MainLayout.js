@@ -17,7 +17,9 @@ GO.MainLayout = function(){
 	this.addEvents({
 		'ready' : true,
 		'render' : true,
-		'linksDeleted' : true
+		'linksDeleted' : true,
+		'focus' : true,
+		'blur' : true
 	});
 	
 	this.resumeEvents();
