@@ -151,3 +151,5 @@ GO.email.lang.showUnread='Toon ongelezen';
 GO.email.lang.searchFrom='Afzender';
 GO.email.lang.searchTo='Ontvanger';
 GO.email.lang.searchCC='Ontvanger (CC)';
+
+GO.email.lang.youHaveNewMails = 'U heeft {new} nieuwe e-mail bericht(en)';

@@ -1616,7 +1616,7 @@ GO.mainLayout.onReady(function(){
 		if(totalUnseen!=GO.email.totalUnseen)
 		{
 			data.alarm=true;
-			data.reminderText+='<p>'+totalUnseen+' new e-mails</p>';
+			data.reminderText+='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', totalUnseen)+'</p>';
 
 			if(!ep || !ep.isVisible())
 				GO.email.notificationEl.setDisplayed(true);

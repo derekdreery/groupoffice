@@ -171,3 +171,5 @@ GO.email.lang.showUnread='Show unread';
 GO.email.lang.searchFrom='Sender';
 GO.email.lang.searchTo='Recipient';
 GO.email.lang.searchCC='Recipient (CC)';
+
+GO.email.lang.youHaveNewMails = 'You have {new} new e-mail(s)';

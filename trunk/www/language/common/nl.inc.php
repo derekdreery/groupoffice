@@ -214,3 +214,5 @@ $lang['common']['oneReminder']='1 herinnering';
 $lang['common']['youHaveReminders']='U heeft %s in %s.';
 
 $lang['common']['createdBy']='Gemaakt door';
+
+$lang['common']['alert']='Attentie';
