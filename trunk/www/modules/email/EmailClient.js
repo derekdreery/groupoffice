@@ -1065,18 +1065,12 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		}, this);		
 	},
 	
-	//checkMailInterval : 300000,
-	//checkMailInterval : 5000,
-	
-	justMarkedUnread : 0,
-
-	
 	afterRender : function(){
-		GO.email.EmailClient.superclass.afterRender.call(this);		
+		GO.email.EmailClient.superclass.afterRender.call(this);
+
+		GO.email.notificationEl.setDisplayed(false);
 		
-		this.body.mask(GO.lang.waitMsgLoad);
-		
-		
+		this.body.mask(GO.lang.waitMsgLoad);		
 	},
 	
 	onShow : function(){
