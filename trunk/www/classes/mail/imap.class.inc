@@ -1,12 +1,4 @@
 <?php
-/*
- * TODO:
- *
- * filemanager panel
- * link filter reset and apply button
- */
-
-
 require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap_base.class.inc.php');
 class imap extends imap_bodystruct {
 
