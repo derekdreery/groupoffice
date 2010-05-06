@@ -233,6 +233,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
     
 		GO.loginDialog = new GO.dialog.LoginDialog({modal:true});
 
+		GO.checker = new GO.Checker();
+
    	this.fireReady();
 
 		Ext.QuickTips.init();
@@ -430,7 +432,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
   	if(!activeTab)
    		this.tabPanel.setActiveTab(0);				
 		
-		GO.checker = new GO.Checker();
+		
 		GO.checker.init.defer(2000,GO.checker);
 		GO.checker.on('alert', function(data){   		
    		if(data.notification_area)

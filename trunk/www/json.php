@@ -167,8 +167,8 @@ try {
 
 				$response['reminders'][]=$reminder;
 			}
-
-			//$GO_MODULES->fire_event('checker',$response);
+			$params = array(&$response);
+			$GO_EVENTS->fire_event('checker', $params);
 
 			break;
 

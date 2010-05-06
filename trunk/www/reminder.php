@@ -9,7 +9,7 @@ $style = $GO_CONFIG->theme_url.$GO_THEME->theme.'/reminder.css';
 if(!file_exists($style))
 	$style = $GO_CONFIG->theme_url.'Default/reminder.css';
 
-$title = $_REQUEST['count']==1 ? $lang['common']['oneReminder'] : sprintf($lang['common']['nReminders'], $_REQUEST['count']);
+$title='Alert';//= $_REQUEST['count']==1 ? $lang['common']['oneReminder'] : sprintf($lang['common']['nReminders'], $_REQUEST['count']);
 
 ?>
 <html>
@@ -20,7 +20,14 @@ $title = $_REQUEST['count']==1 ? $lang['common']['oneReminder'] : sprintf($lang[
 	</head>
 	<body>
 
-		<div id="reminderText"><?php echo sprintf($lang['common']['youHaveReminders'], $title, $GO_CONFIG->product_name); ?></div>
+		<div id="reminderText">
+		<?php
+		if($_REQUEST['count']>1)
+			echo '<p>'.sprintf($lang['common']['youHaveReminders'], $title, $GO_CONFIG->product_name),'</p>';
+		
+		echo $_REQUEST['reminder_text'];
+		?>
+		</div>
 
 	</body>
 </html>
