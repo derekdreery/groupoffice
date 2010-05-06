@@ -1610,10 +1610,8 @@ GO.mainLayout.onReady(function(){
 
 			totalUnseen += data.email_status[folder_id].unseen;
 		}
-
 		
-		
-		if(totalUnseen!=GO.email.totalUnseen)
+		if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
 		{
 			data.alarm=true;
 			data.reminderText+='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', totalUnseen)+'</p>';
