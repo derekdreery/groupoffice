@@ -617,11 +617,12 @@ GO.files.FileBrowser = function(config){
 	this.filePanel = new GO.files.FilePanel({
 				region:'east',
 				id:config.id+'-file-panel',
-				//collapsed:true,
+				collapsed:config.filePanelCollapsed,
 				width:450,
 				collapseMode:'mini',
 				collapsible:true,
-				split:true
+				split:true,
+				title: '&nbsp;'
 	});
 
 	
@@ -1610,11 +1611,10 @@ GO.files.openFolder = function(id, folder_id)
 		GO.files.fileBrowser=new GO.files.FileBrowser({
 				id:'popupfb',
 				border:false,
-				treeRootVisible:true/*,
-				treeCollapsed:true*/
+				treeRootVisible:true,
+				filePanelCollapsed:true
 			});			        			
-		GO.files.fileBrowserWin = new GO.Window({
-		
+		GO.files.fileBrowserWin = new GO.Window({			
 			title: GO.files.lang.fileBrowser,
 			height:500,
 			width:900,
@@ -1657,6 +1657,7 @@ GO.files.createSelectFileBrowser = function(){
 			layout:'fit',
 			border:false,
 			collapsible:true,
+			filePanelCollapsed:true,
 			maximizable:true,
 			closeAction:'hide',
 			items: GO.selectFileBrowser,
