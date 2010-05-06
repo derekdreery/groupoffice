@@ -132,6 +132,38 @@ class email extends db {
 		$events->add_listener('save_settings', __FILE__, 'email', 'save_settings');
 		$events->add_listener('check_database', __FILE__, 'email', 'check_database');
 		$events->add_listener('login', __FILE__, 'email', 'login');
+		$events->add_listener('checker', __FILE__, 'email', 'check_mail');
+	}
+
+	public static function check_mail(&$response){
+		global $GO_SECURITY, $GO_MODULES;
+		require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
+		require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
+
+		$imap = new cached_imap();
+		$email = new email();
+		$email2 = new email();
+
+		
+		$count = $email->get_accounts($GO_SECURITY->user_id);
+		$response['unseen']=array();
+		while($email->next_record()) {
+			$account = $imap->open_account($email->f('id'), 'INBOX', false);
+			if($account) {
+				$inbox = $email2->get_folder($email->f('id'), 'INBOX');
+
+				$imap->select_mailbox('INBOX');
+
+				$unseen =  $imap->get_unseen();
+
+				$response['email_status'][$inbox['id']]['unseen'] = $unseen['count'];
+				$response['email_status'][$inbox['id']]['messages'] = $imap->selected_mailbox['messages'];
+
+				$imap->disconnect();
+			}else {
+				$imap->clear_errors();
+			}
+		}
 	}
 
 	public static function login() {

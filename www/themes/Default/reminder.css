@@ -8,3 +8,7 @@ body{
 	padding-left:40px;
 	line-height:32px;
 }
+
+#reminderText p {
+	margin:0px 0px 10px 0px;
+}

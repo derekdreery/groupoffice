@@ -673,8 +673,8 @@ GO.email.EmailClient = function(config){
 						firstInboxNode.attributes.mailbox,
 						firstInboxNode.parentNode.attributes.usage
 						);
-					if(!this.checkMailStarted)
-						this.checkMail.defer(this.checkMailInterval, this);
+					//if(!this.checkMailStarted)
+						//this.checkMail.defer(this.checkMailInterval, this);
 				}
 			},this, {
 				single: true
@@ -1065,7 +1065,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		}, this);		
 	},
 	
-	checkMailInterval : 300000,
+	//checkMailInterval : 300000,
 	//checkMailInterval : 5000,
 	
 	justMarkedUnread : 0,
@@ -1076,57 +1076,26 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		
 		this.body.mask(GO.lang.waitMsgLoad);
 		
-		//create notify icon
 		
-		var notificationArea = Ext.get('notification-area');		
-		if(notificationArea)
-		{
-			this.notificationEl = notificationArea.createChild({
-				id: 'ml-notify',
-				tag:'a',
-				href:'#',
-				style:'display:none'				
-			});
-			this.notificationEl.on('click', function(){
-				//GO.mainLayout.getModulePanel('email').show();
-				this.show();
-			}, this);
-		}
 	},
 	
-	onShow : function(){		
-		if(this.notificationEl){
-			this.notificationEl.setDisplayed(false);
-		}
+	onShow : function(){
+		
+		GO.email.notificationEl.setDisplayed(false);
 		
 		GO.email.EmailClient.superclass.onShow.call(this);	
 	},	
 	
 	updateNotificationEl : function(){
-		
-		if(this.notificationEl)
-		{
-			var node = this.treePanel.getRootNode();
-			
-	
-			var inbox_new=0;
-			for(var i=0;i<node.childNodes.length;i++)
-			{			
-				inbox_new += node.childNodes[i].attributes.inbox_new;			
-			}
-			
-			var current = this.notificationEl.dom.innerHTML;
+		//console.log('updateNotificationEl');
+		var node = this.treePanel.getRootNode();
 
-			if(current!='' && inbox_new-this.justMarkedUnread>current)
-			{
-				GO.playAlarm();
-				this.notificationEl.setDisplayed(!this.isVisible());
-			}
-			
-			this.notificationEl.update(inbox_new);
-			
-			this.justMarkedUnread=0;
+		GO.email.totalUnseen=0;
+		for(var i=0;i<node.childNodes.length;i++)
+		{
+			GO.email.totalUnseen += node.childNodes[i].attributes.inbox_new;
 		}
+
 	},
 	
 	saveAttachment : function(attachment)
@@ -1438,36 +1407,7 @@ incrementFolderStatus : function(folder_id, increment)
 	this.updateNotificationEl();
 },	
 	
-	
-checkMail : function(){
-	this.checkMailStarted=true;
-	Ext.Ajax.request({
-		url: GO.settings.modules.email.url+'action.php',
-		params: {
-			task: 'check_mail'
-		},
-		callback: function(options, success, response)
-		{
-			if(success)
-			{
-				var responseParams = Ext.decode(response.responseText);
-					
-				for(var folder_id in responseParams.status)
-				{
-					var changed = this.updateFolderStatus(folder_id, responseParams.status[folder_id].unseen);
-					if(changed && this.messagesGrid.store.baseParams.folder_id==folder_id)
-					{
-						this.messagesGrid.store.reload();
-					}
-				}
-				this.updateNotificationEl();
-					
-				this.checkMail.defer(this.checkMailInterval, this);
-			}
-		},
-		scope: this
-	});
-},
+
 
 
 refresh : function(refresh)
@@ -1541,20 +1481,20 @@ doTaskOnMessages : function (task){
 								field='new';
 								value=false;
 
-								for(var i=0;i<records.length;i++){
+								/*for(var i=0;i<records.length;i++){
 									if(records[i].get('new')=='1')
-										this.justMarkedUnread--;
-								}
+										GO.email.totalUnseen--;
+								}*/
 									
 								break;
 							case 'mark_as_unread':
 								field='new';
 								value=true;
 									
-								for(var i=0;i<records.length;i++){
+								/*for(var i=0;i<records.length;i++){
 									if(records[i].get('new')!='1')
-										this.justMarkedUnread++;
-								}
+										GO.email.totalUnseen++;
+								}*/
 								break;
 									
 							case 'flag':
@@ -1637,8 +1577,54 @@ GO.mainLayout.onReady(function(){
 	GO.email.addressContextMenu=new GO.email.AddressContextMenu();
 
 	GO.email.search_type_default = 'from';
-	
-	
+
+
+	//create notify icon
+	var notificationArea = Ext.get('notification-area');
+	if(notificationArea)
+	{
+		GO.email.notificationEl = notificationArea.createChild({
+			id: 'ml-notify',
+			tag:'a',
+			href:'#',
+			style:'display:none'
+		});
+		GO.email.notificationEl.on('click', function(){
+			GO.mainLayout.openModule('email');
+		}, this);
+	}
+
+	GO.checker.on('check', function(checker, data){
+		var ep = GO.mainLayout.getModulePanel('email');
+
+		var totalUnseen = 0;
+		for(var folder_id in data.email_status)
+		{
+			if(ep){
+				var changed = ep.updateFolderStatus(folder_id, data.email_status[folder_id].unseen);
+				if(changed && ep.messagesGrid.store.baseParams.folder_id==folder_id)
+				{
+					ep.messagesGrid.store.reload();
+				}
+			}
+
+			totalUnseen += data.email_status[folder_id].unseen;
+		}
+
+		
+		
+		if(totalUnseen!=GO.email.totalUnseen)
+		{
+			data.alarm=true;
+			data.reminderText+='<p>'+totalUnseen+' new e-mails</p>';
+
+			if(!ep || !ep.isVisible())
+				GO.email.notificationEl.setDisplayed(true);
+		}
+
+		GO.email.notificationEl.update(totalUnseen);
+		GO.email.totalUnseen=totalUnseen;
+	});
 });
 
 GO.email.aliasesStore = new GO.data.JsonStore({
