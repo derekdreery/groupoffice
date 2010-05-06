@@ -53,6 +53,7 @@ GO.files.SaveAsDialog = Ext.extend(GO.Window, {
 			loadDelayed:true,
 			hideActionButtons:true,
 			treeCollapsed:false,
+			filePanelCollapsed:true,
 			fileClickHandler: function(r){										
 			},
 			scope: this
