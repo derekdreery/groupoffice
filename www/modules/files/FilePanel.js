@@ -72,6 +72,10 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
+						'<td>'+GO.lang.strLocation+':</td>'+
+						'<td>{location}</td>'+
+					'</tr>'+
+					'<tr>'+
 						'<td>'+GO.lang.strType+':</td>'+
 						'<td>{type}</td>'+
 					'</tr>'+
