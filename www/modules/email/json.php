@@ -251,7 +251,7 @@ try {
 				throw new DatabaseSelectException();
 			}
 
-			$content = $imap->get_message_with_body($uid, $task=='forward', true);
+			$content = $imap->get_message_with_body($uid, $task=='forward', true, false, $_POST['content_type']!='html', $_POST['content_type']=='html');
 			if($_POST['content_type']!='html') {
 				$content['body']=$content['plain_body'];
 			}else {
@@ -518,7 +518,7 @@ try {
 				$account = $email->get_account($account_id);
 				$imap->set_account($account, $mailbox);
 
-				$response = $imap->get_message_with_body($uid, !empty($_POST['create_temporary_attachments']));
+				$response = $imap->get_message_with_body($uid, !empty($_POST['create_temporary_attachments']),false,false,!empty($_POST['plaintext']),empty($_POST['plaintext']));
 
 				//go_debug($response);
 

@@ -34,7 +34,7 @@ class cached_imap extends imap{
 	 * You can disable the cache for debugging.
 	 * If enabled the message will be converted to safe HTML only once.
 	 */
-	var $disable_message_cache=false;
+	var $disable_message_cache=true;
 
 
 	public function __construct()
@@ -113,13 +113,7 @@ class cached_imap extends imap{
 			parent::connect($account['host'], $account['port'], $account['username'], $account['password'], $account['use_ssl']);
 
 			$this->select_mailbox($mailbox);
-
-
-
-			//$end_time = getmicrotime();
-			//go_debug('IMAP connect took '.($end_time-$start_time).'s');
 		}
-
 		return $this->handle;
 	}
 
@@ -367,7 +361,7 @@ class cached_imap extends imap{
 
 
 
-	public function get_message_with_body($uid, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false, $peek=false) {
+	public function get_message_with_body($uid, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false, $peek=false, $plain_body_requested=true, $html_body_requested=true) {
 		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $lang;
 
 		require_once($GO_LANGUAGE->get_language_file('email'));
@@ -392,8 +386,6 @@ class cached_imap extends imap{
 			$message =  unserialize($values['serialized_message_object']);
 			$message['from_cache']=true;
 			$message['new']=$values['new'];
-
-
 
 			if($create_temporary_attachment_files) {
 				for ($i = 0; $i < count($message['attachments']); $i ++) {
@@ -558,7 +550,7 @@ class cached_imap extends imap{
 
 		//use this array later to find attachments. The body parts will be skipped.
 		$body_ids=array();
-		if($plain_part){
+		if($plain_part && ($plain_body_requested || $html_body_requested && !$html_part)){
 			$body_ids[]=$plain_part['imap_id'];
 			$message['plain_body']=$this->get_message_part_decoded($uid,$plain_part['imap_id'],$plain_part['encoding'], $plain_part['charset']);
 
@@ -574,20 +566,21 @@ class cached_imap extends imap{
 			}
 
 		}
-		if($html_part){
+		if($html_part && ($html_body_requested || $plain_body_requested && !$plain_part)){
 			$body_ids[]=$html_part['imap_id'];
 			$message['html_body']=$this->get_message_part_decoded($uid,$html_part['imap_id'],$html_part['encoding'], $html_part['charset']);
 		}
 
-		
-		if(empty($message['html_body'])){
-			$message['html_body']=String::text_to_html($message['plain_body']);
-		}else
-		{
-			$message['html_body']=String::convert_html($message['html_body']);
+		if($html_body_requested){
+			if(empty($message['html_body'])){
+				$message['html_body']=String::text_to_html($message['plain_body']);
+			}else
+			{
+				$message['html_body']=String::convert_html($message['html_body']);
+			}
 		}
 
-		if(empty($message['plain_body'])){
+		if(empty($message['plain_body']) && $plain_body_requested){
 			$message['plain_body']=String::html_to_text($message['html_body']);
 		}
 
