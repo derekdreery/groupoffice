@@ -138,8 +138,7 @@ class email extends db {
 	public static function check_mail(&$response){
 		global $GO_SECURITY, $GO_MODULES;
 		require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
-		require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
-
+		
 		$imap = new cached_imap();
 		$email = new email();
 		$email2 = new email();
