@@ -180,6 +180,7 @@ function find_alias_and_recipients() {
 			}
 		}
 	}
+
 	if (isset($content["cc"]) && count($content["cc"]) > 0) {
 		$response['data']['cc']='';
 		$first=false;
@@ -188,13 +189,37 @@ function find_alias_and_recipients() {
 			if (!empty($address)) {
 				if(isset($aliases[$address])) {
 					$response['data']['alias_id']=$aliases[$address];
-				}elseif($fill_to) {
+				}
+				
+				if($fill_to && (!isset($aliases[$address]) || $task=='opendraft')) {
 					if (!$first) {
 						$first = true;
 					}else {
 						$response['data']['cc'] .= ',';
 					}
 					$response['data']['cc'] .= $RFC822->write_address($content["cc"][$i]['name'],$content["cc"][$i]['email']);
+				}
+			}
+		}
+	}
+
+	if (isset($content["bcc"]) && count($content["bcc"]) > 0) {
+		$response['data']['bcc']='';
+		$first=false;
+		for ($i=0;$i<sizeof($content["bcc"]);$i++) {
+			$address = strtolower($content["bcc"][$i]['email']);
+			if (!empty($address)) {
+				if(isset($aliases[$address])) {
+					$response['data']['alias_id']=$aliases[$address];
+				}
+
+				if($fill_to && (!isset($aliases[$address]) || $task=='opendraft')) {
+					if (!$first) {
+						$first = true;
+					}else {
+						$response['data']['bcc'] .= ',';
+					}
+					$response['data']['bcc'] .= $RFC822->write_address($content["bcc"][$i]['name'],$content["bcc"][$i]['email']);
 				}
 			}
 		}
