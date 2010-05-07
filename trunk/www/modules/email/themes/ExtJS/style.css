@@ -1,34 +1,7 @@
-#ml-notify, #ml-notify:hover{
-	float:left;
-	padding-left:20px;
-	line-height:16px;
-	background: url(images/16x16/message.png) no-repeat;	
-	height:16px;
-	vertical-align:middle;
-	color:white;
-	font-size: 10px;
-	margin-top:3px;
-}
-.ml-new-row .x-grid3-cell-inner{
-	font-weight:bold !important;	
-}
-.go-link-icon-9 {
-	background-image: url('images/16x16/message.png') !important;
-	width:16px;
-	height:16px;
-}
-
 .go-module-icon-email , .go-menu-icon-email , .go-tab-icon-email {
 	background-image: url('images/16x16/message.png') !important;
 }
 
-.btn-low-priority{
-	background-image:url('images/16x16/low_priority.png') !important;
-}
-
-.btn-high-priority{
-	background-image:url('images/16x16/high_priority.png') !important;
-}
 
 .btn-compose {
 	background-image:url('images/16x16/message_new.png') !important;
@@ -47,11 +20,6 @@
 .btn-forward {
 	background-image:url('images/16x16/mail_forward.png') !important;
 }
-
-.ml-icon-attach {
-	background-image:url('images/16x16/attach.png') !important;
-}
-
 
 .btn-reload {
 	background-image:url('images/16x16/reload.png') !important;
@@ -107,4 +75,4 @@
 
 .x-tree-node-expanded img.folder-default{
     background-image:  url("images/16x16/folder_open.png");
-}}
+}
