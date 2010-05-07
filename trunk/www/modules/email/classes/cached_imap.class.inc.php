@@ -34,7 +34,7 @@ class cached_imap extends imap{
 	 * You can disable the cache for debugging.
 	 * If enabled the message will be converted to safe HTML only once.
 	 */
-	var $disable_message_cache=true;
+	var $disable_message_cache=false;
 
 
 	public function __construct()
@@ -427,15 +427,9 @@ class cached_imap extends imap{
 			}
 		}
 		
-		//$message = $this->get_message($uid);
-		if(!$values){
-			$headers = parent::get_message_headers(array($uid));
-			$message=$this->imap_message_to_cache($headers[0]);
-		}else
-		{
-			$message=$values;
-		}
-
+		$headers = parent::get_message_header($uid, true);
+		$message=$this->imap_message_to_cache($headers, true);
+		
 		if(!$message){
 			throw new Exception($lang['email']['errorGettingMessage']);
 		}
@@ -449,6 +443,13 @@ class cached_imap extends imap{
 		$message['sender']=isset($address[0]['email']) ? $address[0]['email'] : '';
 		$message['from']=isset($address[0]['personal']) ? $address[0]['personal'] : '';
 
+		$message['reply-to']=empty($message['reply-to']) ? $message['full_from'] : $RFC822->reformat_address_list($message['reply-to']);
+
+		if(isset($message['disposition-notification-to'])){
+			$message['notification']=$RFC822->reformat_address_list($message['disposition-notification-to']);
+			unset($message['dispostion-notifcation-to']);
+		}
+		
 		$message['to_string']='';
 		$to=array();
 		if(!empty($message['to']))
@@ -513,15 +514,15 @@ class cached_imap extends imap{
 		$struct = $this->get_message_structure($uid);		
 
 		if(count($struct)==1) {
-			$header_ct = explode('/', $message['content_type']);
+			$header_ct = explode('/', $message['content-type']);
 
 			if(count($header_ct)==2){
 				//if there's only one part the IMAP server always seems to return the type as text/plain even though the headers say text/html
 				//so use the header's content type.
 
 				go_debug('Overriden part type parameters with header parameters');
-				go_debug($message['content_type']);
-				go_debug($message['content_transfer_encoding']);
+				go_debug($message['content-type']);
+				go_debug($message['content-transfer-encoding']);
 				go_debug($message['charset']);
 
 
@@ -530,9 +531,9 @@ class cached_imap extends imap{
 					$struct[1]['subtype']=$header_ct[1];					
 				}
 
-				if(!empty($message['content_transfer_encoding']) && 
+				if(!empty($message['content-transfer-encoding']) &&
 					(empty($struct[1]['encoding']) || $struct[1]['encoding']=='7bit' || $struct[1]['encoding']=='8bit')){
-					$struct[1]['encoding']=$message['content_transfer_encoding'];
+					$struct[1]['encoding']=$message['content-transfer-encoding'];
 				}
 
 				if(!empty($message['charset']) && $struct[1]['charset']=='us-ascii'){
@@ -763,50 +764,38 @@ class cached_imap extends imap{
 	}
 
 
-	public function imap_message_to_cache($message){
+	public function imap_message_to_cache($message, $keep_full_data=false){
 		$message['to']=substr($message['to'],0, 255);
 		$message['subject']=substr($message['subject'],0,100);
 		$message['from']=substr($message['from'],0,100);
-
-		if(!empty($message['reply-to']))
-			$message['reply_to']=substr($message['reply-to'],0,100);
-		else
-			$message['reply_to']=$message['from'];
-
-		$message['udate']=intval($message['internal_udate']);
-		if(isset($message['disposition-notification-to']))
-			$message['notification']=$message['disposition-notification-to'];
-
+		$message['udate']=intval($message['internal_udate']);		
 		$message['new']=empty($message['seen']);
-		$message['content_type']=strtolower($message['content-type']);
-		$message['content_transfer_encoding']=strtolower($message['content-transfer-encoding']);
 		$message['priority']=intval($message['x-priority']);
 		
-		preg_match("'([^/]*)/([^ ;\n\t]*)'i", $message['content_type'], $ct);
+		preg_match("'([^/]*)/([^ ;\n\t]*)'i", $message['content-type'], $ct);
 
 		if (isset($ct[2]) && $ct[1] != 'text' && $ct[2] != 'alternative' && $ct[2] != 'related')
 		{
 			$message["attachments"] = 1;
 		}
 
-		unset(
-					$message['seen'],
-					$message['recent'],
-					$message['disposition-notification-to'],
-					$message['content-transfer-encoding'],
-					$message['reply-to'],
-					$message['date'],
-					$message['internal_date'],
-					$message['internal_udate'],
-					$message['content-type'],
-					$message['x-priority'],
-					$message['cc'],
-					$message['bcc']
-					);
-
-
-		$messages[$message['uid']]=$message;
-		$messages[$message['uid']]['cached']=false;
+		if(!$keep_full_data){
+			unset(
+						$message['seen'],
+						$message['recent'],
+						$message['disposition-notification-to'],
+						$message['content-transfer-encoding'],
+						$message['reply-to'],
+						$message['date'],
+						$message['internal_date'],
+						$message['internal_udate'],
+						$message['content-type'],
+						$message['x-priority'],
+						$message['charset'],
+						$message['cc'],
+						$message['bcc']
+						);
+		}
 
 		$message['folder_id']=$this->folder['id'];
 		$message['account_id']=$this->account['id'];
@@ -962,8 +951,8 @@ class cached_imap extends imap{
 	public function get_cached_messages($folder_id, $uids, $with_full_cached_message=false)
 	{
 		$sql = "SELECT `folder_id`,`uid`,`account_id`,`new`,`subject`,`from`,".
-			"`reply_to`,`size`,`udate`,`attachments`,`flagged`,`answered`,`forwarded`,`priority`,".
-			"`to`,`notification`,`content_type`,`content_transfer_encoding`, `charset`";
+			"`size`,`udate`,`attachments`,`flagged`,`answered`,`forwarded`,`priority`,".
+			"`to`";
 		if($with_full_cached_message){
 			$sql .= ",`serialized_message_object` ";
 		}
