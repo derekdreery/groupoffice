@@ -864,6 +864,8 @@ try{
 						}
 					}else {
 
+						$response['data']['location']=$files->build_path($file['folder_id']);
+
 						$response['data']['comment']=$response['data']['comments'];
 
 						if($GO_MODULES->has_module('customfields')) {
