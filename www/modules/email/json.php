@@ -250,7 +250,7 @@ try {
 		switch($task) {
 			case "reply":
 			case "reply_all":
-				$response['data']['to'] = $content["reply_to"];
+				$response['data']['to'] = $content["reply-to"];
 				if(stripos($content['subject'],'Re:')===false) {
 					$response['data']['subject'] = 'Re: '.$content['subject'];
 				}else {
@@ -275,43 +275,27 @@ try {
 
 				//reattach non-inline attachments
 				foreach($content['attachments'] as $attachment) {
-					//var_dump($parts[$i]);
-					//if($imap->part_is_attachment($attachment)) {
-						$response['data']['attachments'][]=array(
+					$response['data']['attachments'][]=array(
 										'tmp_name'=>$attachment['tmp_file'],
 										'name'=>$attachment['name'],
 										'size'=>$attachment["size"],
 										'type'=>File::get_filetype_description(File::get_extension($attachment['name']))
 						);
-					//}
 				}
-
 				break;
 		}
 
 		if(!empty($uid))
 			find_alias_and_recipients();
 
-
 		$response['data']['body']=$content['body'];
-
-
+		
 		if($GO_MODULES->has_module('gnupg')) {
 			require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 			$gnupg = new gnupg();
 			$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$content['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$content['sender']] : '';
 			$response['data']['body'] = $gnupg->replace_encoded($response['data']['body'],$passphrase,false);
 		}
-
-
-		/*if($response['data']['body'] != '')
-		{
-			//replace inline images with the url to display the part by Group-Office
-			for ($i=0;$i<count($url_replacements);$i++)
-			{
-				$response['data']['body'] = str_replace('cid:'.$url_replacements[$i]['id'], $url_replacements[$i]['url'], $response['data']['body']);
-			}
-		}*/
 
 		if($task=='forward') {
 			$om_to = $content["to_string"];
@@ -511,6 +495,8 @@ try {
 
 				$response = $imap->get_message_with_body($uid, !empty($_POST['create_temporary_attachments']));
 
+				//go_debug($response);
+
 				if(!empty($_POST['plaintext'])) {
 					$response['body']=$response['plain_body'];
 				}else {
@@ -547,7 +533,7 @@ try {
 				$response['sender']=htmlspecialchars($response['sender'], ENT_COMPAT, 'UTF-8');
 				$response['from']=htmlspecialchars($response['from'], ENT_COMPAT, 'UTF-8');
 				$response['subject']=htmlspecialchars($response['subject'], ENT_COMPAT, 'UTF-8');
-				$response['reply-to']=htmlspecialchars($response['reply_to'], ENT_COMPAT, 'UTF-8');
+				$response['reply-to']=htmlspecialchars($response['reply-to'], ENT_COMPAT, 'UTF-8');
 				for($i=0;$i<count($response['to']);$i++) {
 					$response['to'][$i]=array(
 									'email'=>htmlspecialchars($response['to'][$i]['email'], ENT_COMPAT, 'UTF-8'),
@@ -724,7 +710,7 @@ try {
 
 				foreach($messages as $message) {
 					//$message = $messages[$uid];
-					unset($message['content_type'], $message['reply_to'], $message['content_transfer_encoding'], $message['notification']);
+					unset($message['content-type'], $message['reply-to'], $message['content-transfer-encoding'], $message['disposition-notification-to']);
 					if($message['udate']>$day_start && $message['udate']<$day_end) {
 						$message['date'] = date($_SESSION['GO_SESSION']['time_format'],$message['udate']);
 					}else {

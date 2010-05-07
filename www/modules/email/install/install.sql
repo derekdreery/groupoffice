@@ -138,23 +138,19 @@ CREATE TABLE IF NOT EXISTS `em_messages_cache` (
   `new` enum('0','1') NOT NULL,
   `subject` varchar(100) DEFAULT NULL,
   `from` varchar(100) DEFAULT NULL,
-  `reply_to` varchar(100) DEFAULT NULL,
   `size` int(11) NOT NULL,
   `udate` int(11) NOT NULL,
   `attachments` enum('0','1') NOT NULL,
   `flagged` enum('0','1') NOT NULL,
   `answered` enum('0','1') NOT NULL,
-	`forwarded` BOOL NOT NULL,
+	`forwarded` tinyint(1) NOT NULL,
   `priority` tinyint(4) NOT NULL,
   `to` varchar(255) DEFAULT NULL,
-  `notification` varchar(100) NOT NULL,
-  `content_type` varchar(100) NOT NULL,
-  `content_transfer_encoding` varchar(50) NOT NULL,
-	`charset` VARCHAR( 20 ) NOT NULL,
   `serialized_message_object` mediumtext NOT NULL,
   PRIMARY KEY (`folder_id`,`uid`),
   KEY `account_id` (`account_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 -- --------------------------------------------------------
 
 -- 

@@ -834,10 +834,10 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 
-	public function get_message_header($uid){
-		$headers = $this->get_message_headers(array($uid));
-		if(count($headers)){
-			return $headers[0];
+	public function get_message_header($uid, $full_data=false){
+		$headers = $this->get_message_headers(array($uid), $full_data);
+		if(isset($headers[$uid])){
+			return $headers[$uid];
 		}else
 		{
 			return false;
@@ -875,14 +875,24 @@ class imap extends imap_bodystruct {
 	 * @param <type> $uids
 	 * @return <type>
 	 */
-	public function get_message_headers($uids) {
+	public function get_message_headers($uids, $full_data=false) {
 
 		$sorted_string = implode(',', $uids);
 		$this->clean($sorted_string, 'uid_list');
 		$command = 'UID FETCH '.$sorted_string.' (FLAGS INTERNALDATE RFC822.SIZE BODY.PEEK[HEADER.FIELDS (SUBJECT FROM '.
-						"DATE CONTENT-TYPE X-PRIORITY TO CC BCC REPLY-TO DISPOSITION-NOTIFICATION-TO CONTENT-TRANSFER-ENCODING)])\r\n";
+						"DATE CONTENT-TYPE X-PRIORITY TO";
+
+		if($full_data)
+			$command .= " CC BCC REPLY-TO DISPOSITION-NOTIFICATION-TO CONTENT-TRANSFER-ENCODING";
+
+		$command .= ")])\r\n";
+
+		//throw new Exception($command);
+		
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
+
+		
 
 		$status = $this->check_response($res, true);
 		$tags = array('UID' => 'uid', 'FLAGS' => 'flags', 'RFC822.SIZE' => 'size', 'INTERNALDATE' => 'internal_date');

@@ -69,3 +69,10 @@ $updates[]="ALTER TABLE `em_folders` ADD `can_have_children` BOOLEAN NOT NULL";
 
 $updates[]="ALTER TABLE `em_messages_cache` ADD `forwarded` BOOL NOT NULL";
 $updates[]="ALTER TABLE `em_messages_cache` ADD `charset` VARCHAR( 20 ) NOT NULL";
+
+$updates[]="ALTER TABLE `em_messages_cache`
+  DROP `reply_to`,
+  DROP `notification`,
+  DROP `content_type`,
+  DROP `content_transfer_encoding`,
+  DROP `charset`;";
