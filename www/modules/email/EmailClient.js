@@ -947,7 +947,6 @@ tbar.push(new Ext.Toolbar.Separator());
 			{		
 				this.incrementFolderStatus(this.folder_id, -1);
 				record.set('new','0');
-				GO.email.totalUnseen--;
 			}
 		}		
   	
@@ -1604,6 +1603,9 @@ GO.mainLayout.onReady(function(){
 
 			totalUnseen += data.email_status[folder_id].unseen;
 		}
+
+		console.log(totalUnseen);
+		console.log(GO.email.totalUnseen);
 		
 		if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
 		{
