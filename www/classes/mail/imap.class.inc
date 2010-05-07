@@ -824,6 +824,7 @@ class imap extends imap_bodystruct {
 					'content-type'=>'',
 					'disposition-notification-to'=>'',
 					'content-transfer-encoding'=>'',
+					'charset'=>'',
 					'seen'=>0,
 					'flagged'=>0,
 					'answered'=>0,
@@ -866,6 +867,7 @@ class imap extends imap_bodystruct {
 					'content-type'=>'',
 					'disposition-notification-to'=>'',
 					'content-transfer-encoding'=>'',
+				 'charset'=>'',
 					'seen'=>0,
 					'flagged'=>0,
 					'answered'=>0,
@@ -918,6 +920,7 @@ class imap extends imap_bodystruct {
 					'content-type'=>'',
 					'disposition-notification-to'=>'',
 					'content-transfer-encoding'=>'',
+					'charset'=>'',
 					'seen'=>0,
 					'flagged'=>0,
 					'answered'=>0,
@@ -1224,10 +1227,10 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 
-	public function get_message_part_decoded($uid, $part_no, $encoding, $charset=false, $peek=false) {
-		go_debug("get_message_part_decode($uid, $part_no, $encoding, $charset)");
+	public function get_message_part_decoded($uid, $part_no, $encoding, $charset=false, $peek=false, $max=false) {
+		go_debug("get_message_part_decoded($uid, $part_no, $encoding, $charset)");
 		return $this->decode_message_part(
-						$this->get_message_part($uid, $part_no, $peek),
+						$this->get_message_part($uid, $part_no, $peek, $max),
 						$encoding,
 						$charset
 		);
@@ -1243,7 +1246,7 @@ class imap extends imap_bodystruct {
 	 * @param <type> $max
 	 * @return <type>
 	 */
-	public function get_message_part($uid, $message_part=0, $peek=false) {
+	public function get_message_part($uid, $message_part=0, $peek=false, $max=false) {
 		$this->clean($uid, 'uid');
 
 		$peek_str = $peek ? '.PEEK' : '';
@@ -1257,7 +1260,7 @@ class imap extends imap_bodystruct {
 		}
 		$this->send_command($command);
 
-		$result = $this->get_response(false, true);
+		$result = $this->get_response($max, true);
 		$status = $this->check_response($result, true);
 		$res = '';
 		foreach ($result as $vals) {
