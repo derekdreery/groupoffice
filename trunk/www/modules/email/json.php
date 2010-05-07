@@ -532,6 +532,7 @@ try {
 				if(!empty($response['new'])) {
 					if($imap->set_unseen_cache(array($uid), false)) {
 						if(!empty($response['from_cache']) || stripos($account['host'],'gmail')!==false) {
+							$imap->open();
 							$imap->set_message_flag(array($uid), "\Seen");
 						}
 					}
@@ -640,6 +641,9 @@ try {
 
 				$account = $imap->open_account($account_id, $mailbox);
 
+				//$account = $email->get_account($account_id);
+				//$imap->set_account($account, $mailbox);
+
 				if(!empty($_POST['refresh'])) {
 					$imap->clear_cache($_POST['folder_id']);
 				}
@@ -652,7 +656,6 @@ try {
 
 				if(isset($_POST['delete_keys'])) {
 					$messages = json_decode($_POST['delete_keys'], true);
-
 					
 					if($imap->is_imap() && !empty($account['trash']) && $mailbox != $account['trash']) {
 						$imap->set_message_flag($messages, "\Seen");

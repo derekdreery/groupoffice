@@ -98,21 +98,29 @@ class cached_imap extends imap{
 	 * @access public
 	 * @return mixed	The recource ID on success or false on failure
 	 */
-	public function open($account, $mailbox='INBOX') {
+	public function open($account=false, $mailbox=false) {
 		//$start_time = getmicrotime();
 
-		$this->set_account($account, $mailbox);
+		if(!$this->handle){
+			if(!$account)
+				$account = $this->account;
 
-		$conn = parent::connect($account['host'], $account['port'], $account['username'], $account['password'], $account['use_ssl']);
+			if(!$mailbox)
+				$mailbox = $this->folder['name'];
 
-		$this->select_mailbox($mailbox);
-		
-			
+			$this->set_account($account, $mailbox);
 
-		//$end_time = getmicrotime();
-		//go_debug('IMAP connect took '.($end_time-$start_time).'s');
+			parent::connect($account['host'], $account['port'], $account['username'], $account['password'], $account['use_ssl']);
 
-		return $conn;
+			$this->select_mailbox($mailbox);
+
+
+
+			//$end_time = getmicrotime();
+			//go_debug('IMAP connect took '.($end_time-$start_time).'s');
+		}
+
+		return $this->handle;
 	}
 
 	public function set_message_flag($uid_array, $flags, $clear=false) {
