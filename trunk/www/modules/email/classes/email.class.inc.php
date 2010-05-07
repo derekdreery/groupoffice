@@ -1087,7 +1087,7 @@ class email extends db {
 			return false;
 		}
 
-		$message = $imap->get_message_with_body($uid, true, false);
+		$message = $imap->get_message_with_body($uid, true, false, false, false, false);
 		if(!$message) {
 			return false;
 		}
