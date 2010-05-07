@@ -387,7 +387,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 				});
 			},
 			scope:this,
-			interval:60000 //check changes every minute
+			interval:120000 //check changes every 2 minutes
 		});
 	}
 });
