@@ -880,10 +880,10 @@ class imap extends imap_bodystruct {
 		$sorted_string = implode(',', $uids);
 		$this->clean($sorted_string, 'uid_list');
 		$command = 'UID FETCH '.$sorted_string.' (FLAGS INTERNALDATE RFC822.SIZE BODY.PEEK[HEADER.FIELDS (SUBJECT FROM '.
-						"DATE CONTENT-TYPE X-PRIORITY TO";
+						"DATE CONTENT-TYPE X-PRIORITY TO CC";
 
 		if($full_data)
-			$command .= " CC BCC REPLY-TO DISPOSITION-NOTIFICATION-TO CONTENT-TRANSFER-ENCODING";
+			$command .= " BCC REPLY-TO DISPOSITION-NOTIFICATION-TO CONTENT-TRANSFER-ENCODING";
 
 		$command .= ")])\r\n";
 
