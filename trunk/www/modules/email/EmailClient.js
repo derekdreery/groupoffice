@@ -1600,12 +1600,8 @@ GO.mainLayout.onReady(function(){
 					ep.messagesGrid.store.reload();
 				}
 			}
-
 			totalUnseen += data.email_status[folder_id].unseen;
 		}
-
-		console.log(totalUnseen);
-		console.log(GO.email.totalUnseen);
 		
 		if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
 		{
