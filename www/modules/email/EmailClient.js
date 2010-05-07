@@ -18,8 +18,7 @@ GO.email.EmailClient = function(config){
 	if(!config)
 	{
 		config = {};
-	}	
-	
+	}
 	
 	this.messagesStore = new GO.data.JsonStore({
 		url: GO.settings.modules.email.url+'json.php',
@@ -947,7 +946,8 @@ tbar.push(new Ext.Toolbar.Separator());
 			if(record.data['new']==1)
 			{		
 				this.incrementFolderStatus(this.folder_id, -1);
-				record.set('new','0');									
+				record.set('new','0');
+				GO.email.totalUnseen--;
 			}
 		}		
   	
