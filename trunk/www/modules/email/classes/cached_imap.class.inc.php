@@ -781,9 +781,14 @@ class cached_imap extends imap{
 			}
 
 			//go_debug('Got '.count($uncached_uids).' from IMAP server');
-
-			if(count($this->filtered))
+			$count = count($this->filtered);
+			if($count)
 			{
+				$this->selected_mailbox['messages']-=$count;
+
+				if(isset($this->selected_mailbox['unseen']))
+					$this->selected_mailbox['unseen']-=$count;
+				
 				//go_debug('Filtered messages:'.count($this->filtered));
 
 				$newstart = count($messages);
