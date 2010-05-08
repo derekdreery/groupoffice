@@ -92,62 +92,68 @@ class GO_USERS extends db
 	 * 
 	 * @return bool
 	 */
-	function update_session( $user_id , $update_language=false) {
+	function update_session( $userdata , $update_language=false) {
 		global $GO_LANGUAGE, $GO_CONFIG, $GO_THEME;
-		if ($userdata = $this->get_user($user_id)) {
-			$middle_name = $userdata['middle_name'] == '' ? '' : $userdata['middle_name'].' ';
-				
-			if($update_language && $GO_LANGUAGE->language != $userdata['language'])
-			{
-				$userdata['language'] = $up_user['language'] = $GO_LANGUAGE->language;
-				$up_user['id']=$user_id;				
-				
-				$this->update_row('go_users', 'id', $up_user);
-			}else
-			{			
-				$GO_LANGUAGE->set_language($userdata['language']);
-			}
 
-			$_SESSION['GO_SESSION']['user_id'] = $user_id;
-			
-			$_SESSION['GO_SESSION']['username'] = $userdata['username'];
-			$_SESSION['GO_SESSION']['name'] = trim($userdata['first_name'].' '.$middle_name.$userdata['last_name']);
-			$_SESSION['GO_SESSION']['company'] = $userdata['company'];
-			$_SESSION['GO_SESSION']['function'] = $userdata['function'];
-			$_SESSION['GO_SESSION']['department'] = $userdata['department'];
-			
-			$_SESSION['GO_SESSION']['first_name'] = $userdata['first_name'];
-			$_SESSION['GO_SESSION']['middle_name'] = $userdata['middle_name'];
-			$_SESSION['GO_SESSION']['last_name'] = $userdata['last_name'];
-			$_SESSION['GO_SESSION']['country'] = $userdata['country'];
-			$_SESSION['GO_SESSION']['email'] = $userdata['email'];
-			$_SESSION['GO_SESSION']['work_phone'] = $userdata['work_phone'];
-			$_SESSION['GO_SESSION']['home_phone'] = $userdata['home_phone'];
+		if(!is_array($userdata)){
+			$userdata = $this->get_user($userdata);
 
-			$_SESSION['GO_SESSION']['thousands_separator'] = $userdata['thousands_separator'];
-			$_SESSION['GO_SESSION']['decimal_separator'] = $userdata['decimal_separator'];
-			$_SESSION['GO_SESSION']['date_format'] = Date::get_dateformat($userdata['date_format'], $userdata['date_separator']);
-			$_SESSION['GO_SESSION']['date_separator'] = $userdata['date_separator'];
-			$_SESSION['GO_SESSION']['time_format'] = $userdata['time_format'];
-			$_SESSION['GO_SESSION']['currency'] = $userdata['currency'];
-			$_SESSION['GO_SESSION']['lastlogin'] = isset ($userdata['lastlogin']) ? $userdata['lastlogin'] : time();
-			$_SESSION['GO_SESSION']['max_rows_list'] = $userdata['max_rows_list'];
-			$_SESSION['GO_SESSION']['timezone'] = $userdata['timezone'];
-			$_SESSION['GO_SESSION']['start_module'] = isset ($userdata['start_module']) ? $userdata['start_module'] : 'summary';
-
-			//$_SESSION['GO_SESSION']['language'] = $userdata['language'];
-			$_SESSION['GO_SESSION']['theme'] = $userdata['theme'];
-			$_SESSION['GO_SESSION']['mute_sound'] = $userdata['mute_sound'];
-			$_SESSION['GO_SESSION']['first_weekday'] = $userdata['first_weekday'];
-			$_SESSION['GO_SESSION']['sort_name'] = !empty($userdata['sort_name']) ? $userdata['sort_name'] : 'last_name';
-			
-			$_SESSION['GO_SESSION']['list_separator'] = $userdata['list_separator'];
-			$_SESSION['GO_SESSION']['text_separator'] = $userdata['text_separator'];
-
-			if (isset($GO_THEME)) $GO_THEME->set_theme();
-			return true;
+			if(!$userdata)
+				return false;
 		}
-		return false;
+
+		$middle_name = $userdata['middle_name'] == '' ? '' : $userdata['middle_name'].' ';
+
+		if($update_language && $GO_LANGUAGE->language != $userdata['language'])
+		{
+			$userdata['language'] = $up_user['language'] = $GO_LANGUAGE->language;
+			$up_user['id']=$user_id;
+
+			$this->update_row('go_users', 'id', $up_user);
+		}else
+		{
+			$GO_LANGUAGE->set_language($userdata['language']);
+		}
+
+		$_SESSION['GO_SESSION']['user_id'] = $userdata['id'];
+
+		$_SESSION['GO_SESSION']['username'] = $userdata['username'];
+		$_SESSION['GO_SESSION']['name'] = trim($userdata['first_name'].' '.$middle_name.$userdata['last_name']);
+		$_SESSION['GO_SESSION']['company'] = $userdata['company'];
+		$_SESSION['GO_SESSION']['function'] = $userdata['function'];
+		$_SESSION['GO_SESSION']['department'] = $userdata['department'];
+
+		$_SESSION['GO_SESSION']['first_name'] = $userdata['first_name'];
+		$_SESSION['GO_SESSION']['middle_name'] = $userdata['middle_name'];
+		$_SESSION['GO_SESSION']['last_name'] = $userdata['last_name'];
+		$_SESSION['GO_SESSION']['country'] = $userdata['country'];
+		$_SESSION['GO_SESSION']['email'] = $userdata['email'];
+		$_SESSION['GO_SESSION']['work_phone'] = $userdata['work_phone'];
+		$_SESSION['GO_SESSION']['home_phone'] = $userdata['home_phone'];
+
+		$_SESSION['GO_SESSION']['thousands_separator'] = $userdata['thousands_separator'];
+		$_SESSION['GO_SESSION']['decimal_separator'] = $userdata['decimal_separator'];
+		$_SESSION['GO_SESSION']['date_format'] = Date::get_dateformat($userdata['date_format'], $userdata['date_separator']);
+		$_SESSION['GO_SESSION']['date_separator'] = $userdata['date_separator'];
+		$_SESSION['GO_SESSION']['time_format'] = $userdata['time_format'];
+		$_SESSION['GO_SESSION']['currency'] = $userdata['currency'];
+		$_SESSION['GO_SESSION']['lastlogin'] = isset ($userdata['lastlogin']) ? $userdata['lastlogin'] : time();
+		$_SESSION['GO_SESSION']['max_rows_list'] = $userdata['max_rows_list'];
+		$_SESSION['GO_SESSION']['timezone'] = $userdata['timezone'];
+		$_SESSION['GO_SESSION']['start_module'] = isset ($userdata['start_module']) ? $userdata['start_module'] : 'summary';
+
+		//$_SESSION['GO_SESSION']['language'] = $userdata['language'];
+		$_SESSION['GO_SESSION']['theme'] = $userdata['theme'];
+		$_SESSION['GO_SESSION']['mute_sound'] = $userdata['mute_sound'];
+		$_SESSION['GO_SESSION']['first_weekday'] = $userdata['first_weekday'];
+		$_SESSION['GO_SESSION']['sort_name'] = !empty($userdata['sort_name']) ? $userdata['sort_name'] : 'last_name';
+
+		$_SESSION['GO_SESSION']['list_separator'] = $userdata['list_separator'];
+		$_SESSION['GO_SESSION']['text_separator'] = $userdata['text_separator'];
+
+		if (isset($GO_THEME)) $GO_THEME->set_theme();
+
+		return true;
 	}
 
 	/**

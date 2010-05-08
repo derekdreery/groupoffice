@@ -53,7 +53,7 @@ class GO_AUTH extends db
 		
 		if($type=='normal')
 		{
-			$sql = 'SELECT id, password, auth_md5_pass FROM go_users WHERE ' .
+			$sql = 'SELECT * FROM go_users WHERE ' .
 					"username='".$this->escape($username)."' AND password='".md5($password)."' " .
 					"AND enabled='1'";
 			$this->query( $sql );
@@ -61,11 +61,11 @@ class GO_AUTH extends db
 			// Check if we got a valid result from the SQL database. Otherwise the
 			// login has failed.
 			if  ( !$this->next_record() ) {
-				return null;
+				return false;
 			}
 		}else
 		{
-			$sql = 'SELECT id, password, auth_md5_pass FROM go_users WHERE ' .
+			$sql = 'SELECT * FROM go_users WHERE ' .
 					"username='".$this->escape($username)."' " .
 					"AND enabled='1'";
 			$this->query( $sql );
@@ -73,14 +73,14 @@ class GO_AUTH extends db
 			// Check if we got a valid result from the SQL database. Otherwise the
 			// login has failed.
 			if  ( !$this->next_record() ) {
-				return null;
+				return false;
 			}else
 			{
 				$md5_auth_pass = $this->md5_base64(base64_encode(pack('H*',$this->f('auth_md5_pass'))).':');
 
 				if($md5_auth_pass!=$password)
 				{
-					return null;
+					return false;
 				}
 			}
 		
@@ -90,25 +90,12 @@ class GO_AUTH extends db
 		// than one result, something is wrong, and we should not authenticate
 		// the given user.
 		if ( $this->num_rows() != 1 ) {
-			return null;
+			return false;
 		}
 
 		
 		// Fetch the userid number from the database
 		$user_id = $this->f('id');
-
-		// Check if we were able to fetch an user_id. If we were not able, this
-		// means that the authentication was successful, but the database has
-		// no user_id number stored for the given user, so we return true.
-		if ( $user_id == null ) {
-			return true;
-		}
-
-		// Check if the userid number is valid. If it is not, the login should
-		// fail.
-		if ( $user_id < 1 ) {
-			return null;
-		}
 		
 		if($this->f('auth_md5_pass')=='')
 		{
@@ -118,7 +105,7 @@ class GO_AUTH extends db
 		}
 		
 		// There were not problems, so we can return the userid number.
-		return $user_id;
+		return $this->record;
 	}
 
 
@@ -138,7 +125,7 @@ class GO_AUTH extends db
 	 * @param array $params The authentication source specified in auth_sources.inc
 	 * 
 	 * @return int the userid number or null if the function has failed.
-	 */
+	
 	function addToUM( $username, $password, $params ) {
 		// Query the database for the given username with the associated
 		// password.
@@ -164,7 +151,7 @@ class GO_AUTH extends db
 				$params['modules_write'] );
 
 		return $user_id;
-	}
+	} */
 	
 	/**
 	 * Actualise session, increment logins and check WebDAV status.
@@ -179,31 +166,36 @@ class GO_AUTH extends db
 	 * @param int $user_id is the userid number of the user that has been
 	 * authenticated successfully.
 	 */
-	function updateAfterLogin($user_id, $count_login=true) {
+	function updateAfterLogin($user, $count_login=true) {
 		global $GO_SECURITY, $GO_MODULES, $GO_USERS,$GO_CONFIG;
 		// Tell the security framework that a user has been logged in. The
 		// security framework takes care on setting the userid as active.
-		$GO_SECURITY->logged_in($user_id);
+		$GO_SECURITY->logged_in($user);
 
 		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 
 		// Increment the number of logins of the given user.
 		if($count_login){
-			$GO_USERS->increment_logins($user_id);
+			$GO_USERS->increment_logins($user['id']);
 
 			//clean temp dir only when counting the login
 			//logins are not counted for example when a synchronization is done.
 			//We also don't want to clear the temp dir in that case because that can
 			//screw up an active session in the browser.			
-			if(is_dir($GO_CONFIG->tmpdir.$user_id.'/'))
+			if(is_dir($GO_CONFIG->tmpdir.$user['id'].'/'))
 			{
-				$fs->delete($GO_CONFIG->tmpdir.$user_id.'/');
+				$fs->delete($GO_CONFIG->tmpdir.$user['id'].'/');
 			}
 		}
-		$fs->mkdir_recursive($GO_CONFIG->tmpdir.$user_id.'/');
+		$fs->mkdir_recursive($GO_CONFIG->tmpdir.$user['id'].'/');
 		//reinitialise available modules
 		$GO_MODULES->load_modules();
+	}
+
+	function bad_login($username){
+		$sql = "UPDATE go_users SET failed_login_attempts=failed_login_attempts+1 WHERE username='".$this->escape($username)."'";
+		return $this->query($sql);
 	}
 
 	/**
@@ -248,45 +240,30 @@ class GO_AUTH extends db
 		// clear the active user from the session.
 
 		$GO_SECURITY->user_id = 0;
-		
-		
 
 		// Authenticate the user.
-		$user_id = $this->authenticate($username, $password, $type);
+		$user = $this->authenticate($username, $password, $type);
 		// Check if the authentication was successful, otherwise exit.
-		if ( $user_id == null ) {
-			go_log(LOG_DEBUG, 'Wrong password entered for '.$username);
+		if (!$user) {
+			$this->bad_login($username);
+			go_debug('Wrong password entered for '.$username);
 			return false;
 		}
 
-		// Check if the given user can be found in the user management system.
-		$user = $GO_USERS->get_user_by_username( $username );
-		if ( $user == null ) {
-			// If the user was not found, we have to add it.
-			$user_id = $this->addToUM( $username, $password, $params );
-			// Check if we were able to add the user to the database. If we
-			// were not able, this function should fail here.
-			if ( $user_id == null ) {				
-				go_log(LOG_DEBUG, 'BAD LOGIN Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR'].' User-Agent: '.$_SERVER['HTTP_USER_AGENT']);
-				return false;
-			}
-		} else {
-			// The user exists in the user management system. So we have to
-			// check, if his account is enabled. If it isn't, the login should
-			// fail.
-			if ( $user['enabled'] != 1 ) {
-				return false;
-			}
-			// The user was found and is enabled, so we can get the user_id
-			// from the user's profile.
-
-			$user_id = $user['id'];
+		if($user['enabled']!=1){
+			go_debug('Login attempt for disabled user '.$username);
+			return false;
 		}
 
+		if($user['failed_login_attempts']>2){
+			go_debug('Login attempt for user with more then 3 attempts '.$username);
+			return false;
+		}
+		
 		// Actualise session and other necessary things.
-		$this->updateAfterLogin($user_id,$count_login);
+		$this->updateAfterLogin($user,$count_login);
 
-		go_log(LOG_DEBUG, 'LOGIN Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
+		go_debug('LOGIN Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 		$args=array($username, $password, $user);
 		$GO_EVENTS->fire_event('login', $args);
 

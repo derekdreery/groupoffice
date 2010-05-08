@@ -80,12 +80,12 @@ class GO_SECURITY extends db {
 	 * @access public
 	 * @return void
 	 */
-	function logged_in( $user_id=null ) {
+	function logged_in( $user=null ) {
 		global $GO_USERS, $GO_CONFIG;
 
-		if(isset($user_id)) {
-			$GO_USERS->update_session($user_id, true);
-			$this->user_id = $user_id;
+		if(isset($user)) {
+			$GO_USERS->update_session($user, true);
+			$this->user_id = $user['id'];
 		}else {
 			if(empty($this->user_id)) {
 				global $GO_AUTH;

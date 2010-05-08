@@ -368,3 +368,6 @@ $updates[]="ALTER TABLE `go_reminders` ADD `mail_send` TINYINT NOT NULL DEFAULT 
 $updates[]="ALTER TABLE `go_users` ADD `mail_reminders` BOOL NOT NULL ";
 
 $updates[]="UPDATE `go_users` SET max_rows_list=20;";
+
+
+$updates[]="ALTER TABLE `go_users` ADD `failed_login_attempts` TINYINT NOT NULL";
