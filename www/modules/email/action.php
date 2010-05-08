@@ -65,9 +65,14 @@ try {
 
 			//move to another imap account
 			$imap2 = new cached_imap();
-			$from_account = $imap2->open_account($_POST['from_account_id'], $_POST['from_mailbox']);
+			$from_account = $imap->open_account($_POST['from_account_id'], $_POST['from_mailbox']);
 
+			
 			$to_account = $email->get_account($_POST['to_account_id']);
+
+			if(!$to_account)
+				throw new DatabaseSelectException();
+
 			$imap2->open($to_account, $_POST['to_mailbox']);
 
 			$delete_messages =array();
@@ -77,7 +82,6 @@ try {
 				$header = $imap->get_message_header($uid);
 
 				$flags = '\Seen';
-				$headerinfo = $imap->headerinfo($uid);
 				if(!empty($header['flagged'])) {
 					$flags .= ' \Flagged';
 				}
@@ -93,8 +97,7 @@ try {
 				}
 
 				$delete_messages[]=$uid;
-
-
+				
 				$left = count($_SESSION['GO_SESSION']['email_move_messages']);
 
 				if($left && $start_time+10<time()) {
