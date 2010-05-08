@@ -3,6 +3,9 @@
 	through the Group-Office interface now too.
 - Wrote custom IMAP library that replaces the php-imap extension. It's much
 	faster, has more features and now the php extension is no longer required.
+	There's really a huge performance improvement especially when connecting to
+	remote IMAP servers.
+
 - Upgraded to ExtJS 3.2.1
 - Dialogs are now only rendered on demand so Group-Office will start faster
 - Reminders and new e-mail popup when you are not working in Group-Office. This
@@ -11,7 +14,6 @@
 - Easier filtering on links and search results
 - A lot of small enhancements everywhere.
 
-* IMAP only connect when really needed
 * max 3 login failures, custom admin username
 * tickets puntjes
 

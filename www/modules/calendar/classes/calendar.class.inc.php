@@ -1690,6 +1690,17 @@ class calendar extends db
 		}
 	}
 
+	/**
+	 * Returns events that are within the start and end time 
+	 *
+	 * @param <type> $calendars
+	 * @param <type> $user_id
+	 * @param <type> $interval_start_time
+	 * @param <type> $interval_end_time
+	 * @param <type> $only_busy_events
+	 * @return <type>
+	 */
+
 	function get_events_in_array(
 	$calendars,
 	$user_id,
@@ -1733,6 +1744,7 @@ class calendar extends db
 	{
 		global $GO_SECURITY;
 
+		//go_debug('interval: '.date('Ymd G:i', $interval_start_time).' - '.date('Ymd G:i', $interval_end_time));
 
 		if(empty($event['rrule']))
 		{
@@ -1747,8 +1759,6 @@ class calendar extends db
 			$duration = $event['end_time'] - $event['start_time'];
 			if($duration == 0) $duration = 3600;
 
-			//go_log(LOG_DEBUG, date('r', $interval_start_time));
-
 			$calculated_event=$event;
 
 			$first_occurrence_time=$event['start_time'];
@@ -1758,8 +1768,6 @@ class calendar extends db
 			//may start exactly on the start of display.
 			$calculated_event['start_time']=$interval_start_time-1;
 
-			//echo date('Ymd G:i', $first_occurrence_time).'<br />';
-
 			//go_debug($calculated_event['name'].': '.date('Ymd G:i', $first_occurrence_time));
 
 			$loops = 0;
@@ -1767,17 +1775,16 @@ class calendar extends db
 			{
 				$loops++;
 
-				//echo date('Ymd G:i', $calculated_event['start_time']).'<br />';
-
-				//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']));
-
 				$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
 
-				if($calculated_event['start_time'] > $interval_end_time || $calculated_event['end_time'] < $interval_start_time)
+				//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
+
+				if($calculated_event['start_time'] >= $interval_end_time || $calculated_event['end_time'] <= $interval_start_time)
 				break;
 
 				if(!$cal->is_exception($calculated_event['id'],$calculated_event['start_time']))
 				{
+					//go_debug('Adding');
 					$this->events[] = $calculated_event;
 					$this->events_sort[] = $calculated_event['start_time'].$calculated_event['name'];
 				}

@@ -407,9 +407,18 @@ try {
 			/* Check for conflicts with other events in the calendar */
 			if ($check_conflicts) {
 				$conflict_events = $cal->get_events_in_array(array($event['calendar_id']), 0, $event['start_time'], $event['end_time'], true);
+				
 				while($conflict_event = array_shift($conflict_events)) {
-					if($conflict_event['id']!=$event_id)
+
+					if($conflict_event['id']!=$event_id){
+
+						go_debug('Event starts:'.Date::get_timestamp($event['start_time']).
+										' ends: '.Date::get_timestamp($event['end_time']));
+
+						go_debug('Conflict with:'.$conflict_event['name'].' starts: '.Date::get_timestamp($conflict_event['start_time']).
+										' ends: '.Date::get_timestamp($conflict_event['end_time']));
 						throw new Exception('Ask permission');
+					}
 				}
 			}
 
