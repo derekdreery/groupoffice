@@ -521,6 +521,15 @@ class imap_base {
 
 
 	function mime_header_decode($string) {
+
+		/*
+		 * (=?ISO-8859-1?Q?a?= =?ISO-8859-1?Q?b?=)     (ab)
+		 *  White space between adjacent 'encoded-word's is not displayed.
+		 *
+		 *  http://www.faqs.org/rfcs/rfc2047.html
+		 */
+		$string = preg_replace("/\?=[\s]*=\?/","?==?", $string);
+
 		if (preg_match_all("/(=\?[^\?]+\?(q|b)\?[^\?]+\?=)/i", $string, $matches)) {
 			foreach ($matches[1] as $v) {
 				$fld = substr($v, 2, -2);

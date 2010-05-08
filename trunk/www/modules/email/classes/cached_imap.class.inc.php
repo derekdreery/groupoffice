@@ -99,8 +99,6 @@ class cached_imap extends imap{
 	 * @return mixed	The recource ID on success or false on failure
 	 */
 	public function open($account=false, $mailbox=false) {
-		//$start_time = getmicrotime();
-
 		if(!$this->handle){
 			if(!$account)
 				$account = $this->account;
@@ -340,6 +338,8 @@ class cached_imap extends imap{
 
 	public function get_message_part($uid, $message_part=0, $peek=false) {
 		
+		go_debug("imap::get_message_part($uid, $message_part, $peek)");
+
 		if(!$this->handle){
 			if(!$this->open($this->account, $this->folder['name'])){
 				throw new Exception(sprintf($lang['email']['feedbackCannotConnect'], $this->account['host'],  $this->last_error(), $this->account['port']));

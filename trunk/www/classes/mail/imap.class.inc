@@ -940,7 +940,7 @@ class imap extends imap_bodystruct {
 
 						$header = str_replace("\r\n", "\n", $vals[$i]);
 						$header = preg_replace("/\n\s/", " ", $header);
-						//go_debug($header);
+
 						$lines = explode("\n", $header);
 						foreach ($lines as $line) {
 							if(!empty($line)) {
@@ -1584,7 +1584,7 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 	public function append_start($mailbox, $size, $flags = "") {
-		//it will deselect the mailserver
+		//it will deselect the mailbox
 		$this->selected_mailbox=false;
 
 		$this->clean($mailbox, 'mailbox');
