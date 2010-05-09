@@ -194,8 +194,8 @@ class GO_AUTH extends db
 	}
 
 	function bad_login($username){
-		$sql = "UPDATE go_users SET failed_login_attempts=failed_login_attempts+1 WHERE username='".$this->escape($username)."'";
-		return $this->query($sql);
+		///$sql = "UPDATE go_users SET failed_login_attempts=failed_login_attempts+1 WHERE username='".$this->escape($username)."'";
+		//return $this->query($sql);
 	}
 
 	/**
@@ -252,11 +252,6 @@ class GO_AUTH extends db
 
 		if($user['enabled']!=1){
 			go_debug('Login attempt for disabled user '.$username);
-			return false;
-		}
-
-		if($user['failed_login_attempts']>2){
-			go_debug('Login attempt for user with more then 3 attempts '.$username);
 			return false;
 		}
 		
