@@ -247,11 +247,17 @@ class GO_AUTH extends db
 		if (!$user) {
 			$this->bad_login($username);
 			go_debug('Wrong password entered for '.$username);
-			return false;
 		}
 
 		if($user['enabled']!=1){
 			go_debug('Login attempt for disabled user '.$username);
+			$user=false;
+		}
+
+		if(!$user)
+		{
+			//sleep for 3 seconds to slow down brute force attacks
+			sleep(3);
 			return false;
 		}
 		
