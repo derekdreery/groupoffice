@@ -1128,36 +1128,81 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 
-	public function find_message_part($struct, $imap_id, $type='text', $subtype=false) {
-		$res = array();
+	public function find_message_parts($struct, $imap_id, $type='text', $subtype=false, $parts=array()) {
 		if (!is_array($struct) || empty($struct)) {
-			return $res;
+			return $parts;
 		}
 		foreach ($struct as $id => $vals) {
 			if ($imap_id && $id == $imap_id) {
 				$vals['imap_id'] = $id;
-				$res = $vals;
+				$parts[] = $vals;
 			}
 			elseif (!$imap_id && isset($vals['type']) && $vals['type'] == $type) {
 				if ($subtype) {
 					if ($subtype == $vals['subtype']) {
 						$vals['imap_id'] = $id;
-						$res = $vals;
+						$parts[] = $vals;
 					}
 				}
 				else {
 					$vals['imap_id'] = $id;
-					$res = $vals;
+					$parts[] = $vals;
 				}
 			}
 			if (empty($res) && isset($vals['subs'])) {
-				$res =  $this->find_message_part($vals['subs'], $imap_id, $type, $subtype);
-			}
-			if (!empty($res)) {
-				break;
+				$this->find_message_parts($vals['subs'], $imap_id, $type, $subtype, $parts);				
 			}
 		}
-		return $res;
+		return $parts;
+	}
+
+
+	/**
+	 * Find's the first message part in a structure returned from
+	 * get_message_structure that matches the parameters given.
+	 *
+	 * Useful to find the first text/plain or text/html for example to find the
+	 * message body.
+	 *
+	 * @param <type> $struct
+	 * @param <type> $imap_id
+	 * @param <type> $type
+	 * @param <type> $subtype
+	 * @return <type>
+	 */
+
+	public function find_body_parts($struct, $type='text', $subtype='html', &$parts=false) {
+		if (!is_array($struct) || empty($struct)) {
+			return $parts;
+		}
+
+		if(!$parts)
+		{
+			$parts=array('text_found'=>false, 'parts'=>array());
+		}
+		foreach ($struct as $id => $vals) {
+			
+			if (isset($vals['type'])){
+				$vals['imap_id'] = $id;
+				//go_debug($vals);
+				
+				if ($vals['type'] == $type && $subtype == $vals['subtype'] && $vals['disposition']!='attachment') {
+					
+					$parts['text_found']=true;
+					$parts['parts'][] = $vals;
+
+				}elseif($vals['type']=='image'&& $vals['disposition']=='inline')
+				{
+					//an inline image
+					$parts['parts'][]=$vals;
+				}
+			}
+			if (isset($vals['subs'])) {
+				$this->find_body_parts($vals['subs'], $type, $subtype, $parts);
+
+			}
+		}
+		return $parts;
 	}
 
 	/**
