@@ -429,6 +429,8 @@ class imap extends imap_bodystruct {
 			$mailbox['permanentflags'] = $pflags;
 
 			$this->selected_mailbox=$mailbox;
+
+			go_debug($mailbox);
 		}
 		return $mailbox;
 	}
@@ -1561,7 +1563,9 @@ class imap extends imap_bodystruct {
 	public function append_end() {
 		$result = $this->get_response(false, true);
 		$status = $this->check_response($result, true);
-		return $status;
+		if($status){
+			return !empty($this->selected_mailbox['uidnext']) ? $this->selected_mailbox['uidnext'] : true;
+		}
 	}
 
 	/**
@@ -1584,8 +1588,8 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 	public function append_start($mailbox, $size, $flags = "") {
-		//it will deselect the mailbox
-		$this->selected_mailbox=false;
+		//Select mailbox first so we can predict the UID.
+		$this->select_mailbox($mailbox);
 
 		$this->clean($mailbox, 'mailbox');
 		$this->clean($size, 'uid');
