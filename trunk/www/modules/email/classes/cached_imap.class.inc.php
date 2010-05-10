@@ -34,7 +34,7 @@ class cached_imap extends imap{
 	 * You can disable the cache for debugging.
 	 * If enabled the message will be converted to safe HTML only once.
 	 */
-	var $disable_message_cache=true;
+	var $disable_message_cache=false;
 
 
 	public function __construct()
@@ -712,6 +712,10 @@ class cached_imap extends imap{
 			foreach($plain_parts['parts'] as $plain_part){
 				go_debug($plain_part);
 				if($plain_part['type']=='text'){
+
+					if(!empty($message['plain_body']))
+						$message['plain_body'].= "\n";
+
 					$message['plain_body'].=$this->get_message_part_decoded($message['uid'],$plain_part['imap_id'],$plain_part['encoding'], $plain_part['charset'],$peek, 512000);
 				}else
 				{
@@ -736,6 +740,10 @@ class cached_imap extends imap{
 			$message['html_body']='';
 			foreach($html_parts['parts'] as $html_part){
 				if($html_part['type']=='text'){
+
+					if(!empty($message['html_body']))
+						$message['html_body'].= '<br />';
+
 					$message['html_body'].=$this->get_message_part_decoded($message['uid'],$html_part['imap_id'],$html_part['encoding'], $html_part['charset'],$peek,512000);
 				}else
 				{
@@ -763,7 +771,7 @@ class cached_imap extends imap{
 		}else
 		{
 			for($i=0,$max=count($inline_images);$i<$max;$i++){
-				$message['html_body']=str_replace('{inline_img_'.$i.'}', '', $message['html_body']);
+				$message['html_body']=str_replace('{inline_'.$i.'}', "\n", $message['html_body']);
 			}
 		}
 
