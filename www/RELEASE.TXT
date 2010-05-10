@@ -1,3 +1,13 @@
+3.5.0
+We wrote a new fast IMAP library that doesn't require the php imap extension
+which could be very slow with remote IMAP servers. POP-3 support is no longer
+supported by the library because it's doesn't make much sense to use POP-3 with
+webmail anyway.
+The startup time of Group-Office has been improved, there is support for
+Microsoft Office templates now and we improved the ticket system a lot.
+Customers can also login through the Group-Office interface now.
+
+
 2009/02/24 3.4.0
 In this release we bring you a lot of small improvements across all modules and
 also Microsoft ActiveSync support so you can sync with any phone that supports

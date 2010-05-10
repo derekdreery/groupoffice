@@ -6,6 +6,10 @@
 	There's really a huge performance improvement especially when connecting to
 	remote IMAP servers.
 
+	!!! IMPORTANT !!! POP-3 is no longer supported in this release. POP-3 doesn't
+	really make sence for a webmail client so we didn't implement it in the new
+	lib.
+
 - Upgraded to ExtJS 3.2.1
 - Dialogs are now only rendered on demand so Group-Office will start faster
 - Reminders and new e-mail popup when you are not working in Group-Office. This
