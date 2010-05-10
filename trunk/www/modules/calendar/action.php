@@ -57,7 +57,7 @@ function get_posted_event() {
 	$event['end_time'] = $end_date->format('U');
 
 	$repeat_every = isset ($_POST['repeat_every']) ? $_POST['repeat_every'] : '1';
-	$event['repeat_end_time'] = (isset ($_POST['repeat_forever']) || !isset($_POST['repeat_end_date'])) ? '0' : Date::to_unixtime($_POST['repeat_end_date'].' '.$end_hour.':'.$end_min);
+	$event['repeat_end_time'] = (isset ($_POST['repeat_forever']) || !isset($_POST['repeat_end_date'])) ? '0' : Date::to_unixtime($_POST['repeat_end_date'].' '.$end_time);
 
 
 	$month_time = isset ($_POST['month_time']) ? $_POST['month_time'] : '0';
