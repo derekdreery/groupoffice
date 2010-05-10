@@ -429,8 +429,6 @@ class imap extends imap_bodystruct {
 			$mailbox['permanentflags'] = $pflags;
 
 			$this->selected_mailbox=$mailbox;
-
-			go_debug($mailbox);
 		}
 		return $mailbox;
 	}
@@ -1366,12 +1364,8 @@ class imap extends imap_bodystruct {
 			}else {
 				$command = "UID STORE $uid_string +FLAGS ($flags)\r\n";
 			}
-
-			go_debug($command);
-
 			$this->send_command($command);
 			$res = $this->get_response();
-			go_debug($res);
 			$status = $this->check_response($res);
 			if (!$status) {
 				return $status;
@@ -1516,10 +1510,10 @@ class imap extends imap_bodystruct {
 		$this->clean($mailbox, 'mailbox');
 
 		$command = 'CREATE "'.$this->addslashes($this->utf7_encode($mailbox)).'"'."\r\n";
-		go_debug($command);
+
 		$this->send_command($command);
 		$result = $this->get_response(false);
-		go_debug($result);
+
 		$status = $this->check_response($result, false);
 
 		if(!$status)
