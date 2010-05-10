@@ -259,7 +259,12 @@ class formprocessor{
 				$swift = new GoSwift(implode(',', $mail_to), $lang['addressbook']['newContactAdded']);
 				$swift->set_body($body);
 				$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
-				$swift->sendmail();
+				try{
+					$swift->sendmail();
+				}
+				catch(Exception $e){
+					go_log(LOG_DEBUG, $e->getMessage());
+				}
 			}
 		}
 
