@@ -107,7 +107,7 @@ class GO_USERS extends db
 		if($update_language && $GO_LANGUAGE->language != $userdata['language'])
 		{
 			$userdata['language'] = $up_user['language'] = $GO_LANGUAGE->language;
-			$up_user['id']=$user_id;
+			$up_user['id']=$userdata['id'];
 
 			$this->update_row('go_users', 'id', $up_user);
 		}else
