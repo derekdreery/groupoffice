@@ -889,5 +889,3 @@ class imap_bodystruct extends imap_base {
 		return $res;
 	}
 }
-
-
