@@ -482,11 +482,9 @@ try {
 						}
 						$drafts_folder = $swift->account['drafts'];
 						if ($imap->open($swift->account, $drafts_folder)) {
-
-							//$status = $imap->status($drafts_folder, SA_UIDNEXT);
-							if(!empty($imap->selected_mailbox['uidnext'])) {
-								$response['success']=$imap->append_message($drafts_folder, $swift->message->toString(),"\Seen");
-								$response['draft_uid']=$imap->selected_mailbox['uidnext'];
+						if(!empty($imap->selected_mailbox['uidnext'])) {
+								$response['draft_uid']=$imap->append_message($drafts_folder, $swift->message->toString(),"\Seen");
+								$response['success']=$response['draft_uid']>0;								
 							}
 
 							if(!$response['success']) {
