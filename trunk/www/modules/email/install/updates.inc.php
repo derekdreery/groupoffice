@@ -76,3 +76,5 @@ $updates[]="ALTER TABLE `em_messages_cache`
   DROP `content_type`,
   DROP `content_transfer_encoding`,
   DROP `charset`;";
+
+$updates[]="TRUNCATE TABLE `em_messages_cache`";
