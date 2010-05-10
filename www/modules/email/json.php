@@ -251,7 +251,7 @@ try {
 				throw new DatabaseSelectException();
 			}
 
-			$content = $imap->get_message_with_body($uid, $task=='forward', true, false, $_POST['content_type']!='html', $_POST['content_type']=='html');
+			$content = $imap->get_message_with_body($uid, $task=='forward' || $task=='opendraft', true, false, $_POST['content_type']!='html', $_POST['content_type']=='html');
 			if($_POST['content_type']!='html') {
 				$content['body']=$content['plain_body'];
 			}else {
