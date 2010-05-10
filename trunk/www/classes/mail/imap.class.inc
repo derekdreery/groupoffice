@@ -245,7 +245,7 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 
-	public function get_folders($namespace='', $subscribed=false) {
+	public function get_folders($namespace='', $subscribed=false, $pattern='*') {
 
 		$this->get_capability();
 
@@ -259,7 +259,7 @@ class imap extends imap_bodystruct {
 		$parents = array();
 		$delim = false;
 
-		$command = $imap_command.' "'.$namespace."\" \"*\"\r\n";
+		$command = $imap_command.' "'.$namespace."\" \"$pattern\"\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false, true);
 		$folders = array();
@@ -1025,7 +1025,8 @@ class imap extends imap_bodystruct {
 	function check_mbroot($mbroot) {
 		$mbroot = trim($mbroot);
 
-		$list = $this->get_folders('%');
+		$list = $this->get_folders('', false,'%');
+		//go_debug($list);
 		if (is_array($list)) {
 			while ($folder = array_shift($list)) {
 				if (!$this->delimiter && strlen($folder['delimiter']) > 0) {
