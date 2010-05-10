@@ -573,6 +573,7 @@ class imap_bodystruct extends imap_base {
 	}
 	function parse_single_part($array) {
 		$vals = $array[0];
+
 		array_shift($vals);
 		array_pop($vals);
 		$atts = array('name', 'filename', 'type', 'subtype', 'charset', 'id', 'description', 'encoding',
@@ -585,7 +586,19 @@ class imap_bodystruct extends imap_base {
 				array_shift($vals);
 				while($vals[0] != ')') {
 					if (isset($vals[0]) && isset($vals[1])) {
-						$res[strtolower($vals[0])] = $vals[1];
+
+						$key = strtolower($vals[0]);
+						$starpos=strpos($key, '*');
+						if($starpos){
+							$key = substr($key, 0, $starpos);
+							if(!isset($res[$key]))
+								$res[$key]='';
+
+							$res[$key].= $vals[1];
+						}else
+						{
+							$res[$key] = $vals[1];
+						}
 						$vals = array_splice($vals, 2);
 					}
 				}
@@ -611,13 +624,18 @@ class imap_bodystruct extends imap_base {
 				$res['disposition'] = array_shift($vals);
 				if (strtolower($res['disposition']) == 'attachment' && $vals[0] == '(') {
 					array_shift($vals);
-					if (isset($vals[0]) && strtolower($vals[0]) == 'filename' && isset($vals[1]) && $vals[1] != ')') {
+
+					$res['filename']='';
+					while (isset($vals[0]) && strtolower(substr($vals[0],0,8)) == 'filename' && isset($vals[1]) && $vals[1] != ')') {
 						array_shift($vals);
-						$res['name'] = array_shift($vals);
+						$res['filename'] .= array_shift($vals);
 						if ($vals[0] == ')') {
 							array_shift($vals);
 						}
 					}
+
+					if(empty($res['name']))
+						$res['name']=$res['filename'];
 				}
 			}
 			if (isset($vals[0]) && $vals[0] != ')') {

@@ -518,6 +518,8 @@ try {
 				$account = $email->get_account($account_id);
 				$imap->set_account($account, $mailbox);
 
+				//$_POST['plaintext']=1;
+
 				$response = $imap->get_message_with_body($uid, !empty($_POST['create_temporary_attachments']),false,false,!empty($_POST['plaintext']),empty($_POST['plaintext']));
 
 				//go_debug($response);

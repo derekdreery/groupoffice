@@ -34,7 +34,7 @@ class cached_imap extends imap{
 	 * You can disable the cache for debugging.
 	 * If enabled the message will be converted to safe HTML only once.
 	 */
-	var $disable_message_cache=false;
+	var $disable_message_cache=true;
 
 
 	public function __construct()
@@ -387,7 +387,7 @@ class cached_imap extends imap{
 
 			$message =  unserialize($values['serialized_message_object']);
 
-			if($this->get_body_parts($plain_body_requested,$html_body_requested, $struct, $message))
+			if($this->get_body_parts($plain_body_requested,$html_body_requested, $struct, $message, $peek))
 			{
 				//additional body part added
 				$cached_message['uid']=$uid;
@@ -525,7 +525,7 @@ class cached_imap extends imap{
 		}
 		//$message['subject']= htmlspecialchars($message['subject'], ENT_COMPAT, 'UTF-8');
 
-		$this->get_body_parts($plain_body_requested, $html_body_requested, $struct, $message);
+		$this->get_body_parts($plain_body_requested, $html_body_requested, $struct, $message, $peek);
 		
 
 		if(count($struct)==1) {
@@ -567,9 +567,12 @@ class cached_imap extends imap{
 			if(empty($att[$i]['name'])){
 				if(!empty($att[$i]['subject'])){
 					$att[$i]['name']=File::strip_invalid_chars($this->mime_header_decode($att[$i]['subject'])).'.eml';
+				}elseif($att[$i]['type']=='message')
+				{
+					$att[$i]['name']='message.eml';
 				}else
 				{
-					$att[$i]['name']=$att[$i]['subtype'].'.eml';
+					$att[$i]['name']=$att[$i]['type'].'-'.$att[$i]['subtype'].'.txt';
 				}
 			}else
 			{
@@ -627,11 +630,13 @@ class cached_imap extends imap{
 				$message['url_replacements'][]=$url_replacement;
 
 
-				if(strpos($message['html_body'], $id)) {
-					$message['html_body'] = str_replace($id, $url, $message['html_body']);
-				}else {
-					//id was not found in body so add it as attachment later
-					unset($att[$i]['id']);
+				if(isset($message['html_body'])){
+					if(strpos($message['html_body'], $id)) {
+						$message['html_body'] = str_replace($id, $url, $message['html_body']);
+					}else {
+						//id was not found in body so add it as attachment later
+						unset($att[$i]['id']);
+					}
 				}
 			}
 		}
@@ -653,7 +658,7 @@ class cached_imap extends imap{
 		return $message;
 	}
 
-	private function get_body_parts($plain_body_requested, $html_body_requested, &$struct, &$message){
+	private function get_body_parts($plain_body_requested, $html_body_requested, &$struct, &$message, $peek){
 		go_debug("get_body_parts($plain_body_requested,$html_body_requested, struct, message)");
 
 	
@@ -673,6 +678,8 @@ class cached_imap extends imap{
 
 		$struct = $this->get_message_structure($message['uid']);
 
+		//go_debug($struct);
+
 		$plain_part = $this->find_message_part($struct,0,'text', 'plain');
 		if($plain_part){
 			$message['body_ids'][]=$plain_part['imap_id'];
@@ -685,7 +692,7 @@ class cached_imap extends imap{
 
 		if(!isset($message['plain_body']) && $plain_part && ($plain_body_requested || ($html_body_requested && !$html_part))){
 			$message['plain_body']='';
-			$message['plain_body']=$this->get_message_part_decoded($message['uid'],$plain_part['imap_id'],$plain_part['encoding'], $plain_part['charset'],false, 512000);
+			$message['plain_body']=$this->get_message_part_decoded($message['uid'],$plain_part['imap_id'],$plain_part['encoding'], $plain_part['charset'],$peek, 512000);
 
 			$uuencoded_attachments = $this->extract_uuencoded_attachments($message['plain_body']);
 			for($i=0;$i<count($uuencoded_attachments);$i++) {
@@ -700,7 +707,7 @@ class cached_imap extends imap{
 		
 
 		if(!isset($message['html_body']) && $html_part && ($html_body_requested || ($plain_body_requested && !$plain_part))){
-			$message['html_body']=$this->get_message_part_decoded($message['uid'],$html_part['imap_id'],$html_part['encoding'], $html_part['charset'],false,512000);
+			$message['html_body']=$this->get_message_part_decoded($message['uid'],$html_part['imap_id'],$html_part['encoding'], $html_part['charset'],$peek,512000);
 		}
 		if($html_body_requested){
 
