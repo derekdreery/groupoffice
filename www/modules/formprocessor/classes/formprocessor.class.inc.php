@@ -298,8 +298,6 @@ class formprocessor{
 			$swift->set_to($_POST['email']);
 			$swift->sendmail();
 		}
-
-
 	}
 
 	function check_required(){
