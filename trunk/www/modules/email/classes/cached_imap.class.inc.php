@@ -771,7 +771,7 @@ class cached_imap extends imap{
 		}else
 		{
 			for($i=0,$max=count($inline_images);$i<$max;$i++){
-				$message['html_body']=str_replace('{inline_'.$i.'}', "\n", $message['html_body']);
+				$message['plain_body']=str_replace('{inline_'.$i.'}', "\n", $message['plain_body']);
 			}
 		}
 
