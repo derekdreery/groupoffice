@@ -528,37 +528,6 @@ class cached_imap extends imap{
 		$this->get_body_parts($plain_body_requested, $html_body_requested, $struct, $message, $peek);
 		
 
-		if(count($struct)==1) {
-			$header_ct = explode('/', $message['content-type']);
-
-			if(count($header_ct)==2){
-				//if there's only one part the IMAP server always seems to return the type as text/plain even though the headers say text/html
-				//so use the header's content type.
-
-				go_debug('Overriden part type parameters with header parameters');
-				go_debug($message['content-type']);
-				go_debug($message['content-transfer-encoding']);
-				go_debug($message['charset']);
-
-
-				if($struct[1]['subtype']=='plain'){
-					$struct[1]['type']=$header_ct[0];
-					$struct[1]['subtype']=$header_ct[1];					
-				}
-
-				if(!empty($message['content-transfer-encoding']) &&
-					(empty($struct[1]['encoding']) || $struct[1]['encoding']=='7bit' || $struct[1]['encoding']=='8bit')){
-					$struct[1]['encoding']=$message['content-transfer-encoding'];
-				}
-
-				if(!empty($message['charset']) && $struct[1]['charset']=='us-ascii'){
-					$struct[1]['charset']=$message['charset'];
-				}
-			}
-		}
-
-		
-
 		//URL replacements for inline images
 		$message['url_replacements']=array();
 
@@ -609,7 +578,7 @@ class cached_imap extends imap{
 				}
 				$id = "cid:".$tmp_id;
 
-				$url = $GO_MODULES->modules['email']['url']."attachment.php?".
+				/*$url = $GO_MODULES->modules['email']['url']."attachment.php?".
 								"account_id=".$this->account['id'].
 								"&amp;mailbox=".urlencode($this->selected_mailbox['name']).
 								"&amp;uid=".$uid.
@@ -617,10 +586,10 @@ class cached_imap extends imap{
 								"&amp;encoding=".$att[$i]["encoding"].
 								"&amp;type=".$att[$i]["type"].
 								"&amp;subtype=".$att[$i]["subtype"].
-								"&amp;filename=".urlencode($att[$i]["name"]);
+								"&amp;filename=".urlencode($att[$i]["name"]);*/
 
 				$url_replacement['id'] = $att[$i]["id"];
-				$url_replacement['url'] = $url;
+				$url_replacement['url'] = $this->get_attachment_url($uid, $att[$i]);
 				$url_replacement['tmp_file'] = $att[$i]['tmp_file'];
 				
 				//we need the attachment object later when we're creating temporary
@@ -632,7 +601,7 @@ class cached_imap extends imap{
 
 				if(isset($message['html_body'])){
 					if(strpos($message['html_body'], $id)) {
-						$message['html_body'] = str_replace($id, $url, $message['html_body']);
+						$message['html_body'] = str_replace($id, $url_replacement['url'], $message['html_body']);
 					}else {
 						//id was not found in body so add it as attachment later
 						unset($att[$i]['id']);
@@ -658,6 +627,20 @@ class cached_imap extends imap{
 		return $message;
 	}
 
+	private function get_attachment_url($uid, $part){
+		global $GO_MODULES;
+		
+		return  $GO_MODULES->modules['email']['url']."attachment.php?".
+			"account_id=".$this->account['id'].
+			"&amp;mailbox=".urlencode($this->selected_mailbox['name']).
+			"&amp;uid=".$uid.
+			"&amp;imap_id=".$part["imap_id"].
+			"&amp;encoding=".$part["encoding"].
+			"&amp;type=".$part["type"].
+			"&amp;subtype=".$part["subtype"].
+			"&amp;filename=".urlencode($part["name"]);
+	}
+
 	private function get_body_parts($plain_body_requested, $html_body_requested, &$struct, &$message, $peek){
 		go_debug("get_body_parts($plain_body_requested,$html_body_requested, struct, message)");
 
@@ -678,22 +661,65 @@ class cached_imap extends imap{
 
 		$struct = $this->get_message_structure($message['uid']);
 
-		//go_debug($struct);
+		if(count($struct)==1) {
+			$header_ct = explode('/', $message['content-type']);
 
-		$plain_part = $this->find_message_part($struct,0,'text', 'plain');
-		if($plain_part){
+			if(count($header_ct)==2){
+				//if there's only one part the IMAP server always seems to return the type as text/plain even though the headers say text/html
+				//so use the header's content type.
+
+				go_debug('Overriden part type parameters with header parameters');
+				go_debug($message['content-type']);
+				go_debug($message['content-transfer-encoding']);
+				go_debug($message['charset']);
+
+
+				if($struct[1]['subtype']=='plain'){
+					$struct[1]['type']=$header_ct[0];
+					$struct[1]['subtype']=$header_ct[1];
+				}
+
+				if(!empty($message['content-transfer-encoding']) &&
+					(empty($struct[1]['encoding']) || $struct[1]['encoding']=='7bit' || $struct[1]['encoding']=='8bit')){
+					$struct[1]['encoding']=$message['content-transfer-encoding'];
+				}
+
+				if(!empty($message['charset']) && $struct[1]['charset']=='us-ascii'){
+					$struct[1]['charset']=$message['charset'];
+				}
+			}
+		}
+
+	//	go_debug($struct);
+
+		$plain_parts = $this->find_body_parts($struct,'text', 'plain');
+		foreach($plain_parts['parts'] as $plain_part){
 			$message['body_ids'][]=$plain_part['imap_id'];
 		}
 
-		$html_part = $this->find_message_part($struct,0,'text', 'html');
-		if($html_part)
+		$html_parts = $this->find_body_parts($struct,'text', 'html');
+		foreach($html_parts['parts'] as $html_part){
 			$message['body_ids'][]=$html_part['imap_id'];
+		}
 
+		//go_debug($plain_parts);
+		//go_debug($html_parts);
 
-		if(!isset($message['plain_body']) && $plain_part && ($plain_body_requested || ($html_body_requested && !$html_part))){
+		$inline_images=array();
+
+		if(!isset($message['plain_body']) && $plain_parts['text_found'] && ($plain_body_requested || ($html_body_requested && !$html_parts['text_found']))){
 			$message['plain_body']='';
-			$message['plain_body']=$this->get_message_part_decoded($message['uid'],$plain_part['imap_id'],$plain_part['encoding'], $plain_part['charset'],$peek, 512000);
-
+			foreach($plain_parts['parts'] as $plain_part){
+				go_debug($plain_part);
+				if($plain_part['type']=='text'){
+					$message['plain_body'].=$this->get_message_part_decoded($message['uid'],$plain_part['imap_id'],$plain_part['encoding'], $plain_part['charset'],$peek, 512000);
+				}else
+				{
+					$message['plain_body'].='{inline_'.count($inline_images).'}';
+					$inline_images[]='<img alt="'.$plain_part['name'].'" src="'.$this->get_attachment_url($message['uid'], $plain_part).'" style="display:block;margin:10px 0;" />';
+				}
+			}
+			
 			$uuencoded_attachments = $this->extract_uuencoded_attachments($message['plain_body']);
 			for($i=0;$i<count($uuencoded_attachments);$i++) {
 				$attachment = $uuencoded_attachments[$i];
@@ -706,23 +732,38 @@ class cached_imap extends imap{
 		}
 		
 
-		if(!isset($message['html_body']) && $html_part && ($html_body_requested || ($plain_body_requested && !$plain_part))){
-			$message['html_body']=$this->get_message_part_decoded($message['uid'],$html_part['imap_id'],$html_part['encoding'], $html_part['charset'],$peek,512000);
+		if(!isset($message['html_body']) && $html_parts['text_found'] && ($html_body_requested || ($plain_body_requested && !$plain_parts['text_found']))){
+			$message['html_body']='';
+			foreach($html_parts['parts'] as $html_part){
+				if($html_part['type']=='text'){
+					$message['html_body'].=$this->get_message_part_decoded($message['uid'],$html_part['imap_id'],$html_part['encoding'], $html_part['charset'],$peek,512000);
+				}else
+				{
+					$message['html_body'].='<img alt="'.$html_part['name'].'" src="'.$this->get_attachment_url($message['uid'], $html_part).'" style="display:block;margin:10px 0;" />';
+				}
+			}
 		}
 		if($html_body_requested){
 
-			if(empty($message['html_body'])){
+			if(empty($message['html_body'])){				
 				$message['html_body']=String::text_to_html($message['plain_body']);
+				for($i=0,$max=count($inline_images);$i<$max;$i++){
+					$message['html_body']=str_replace('{inline_'.$i.'}', $inline_images[$i], $message['html_body']);
+				}
 			}else
 			{
 				$message['html_body']=String::convert_html($message['html_body']);
 			}
 		}
-
 		
 		if(!isset($message['plain_body'])){
 			if(empty($message['plain_body']) && $plain_body_requested){
 				$message['plain_body']=String::html_to_text($message['html_body']);
+			}
+		}else
+		{
+			for($i=0,$max=count($inline_images);$i<$max;$i++){
+				$message['html_body']=str_replace('{inline_img_'.$i.'}', '', $message['html_body']);
 			}
 		}
 
