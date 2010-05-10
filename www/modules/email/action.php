@@ -811,7 +811,7 @@ try {
 				if(isset($_POST['type'])) {
 					$account['mbroot'] = isset($_POST['mbroot']) ? $_POST['mbroot'] : '';
 					$account['use_ssl'] = isset($_REQUEST['use_ssl'])  ? '1' : '0';
-					$account['novalidate_cert'] = isset($_REQUEST['novalidate_cert']) ? '1' : '0';
+					//$account['novalidate_cert'] = isset($_REQUEST['novalidate_cert']) ? '1' : '0';
 					$account['examine_headers'] = isset($_POST['examine_headers']) ? '1' : '0';
 					$account['type']=$_POST['type'];
 					$account['host']=$_POST['host'];

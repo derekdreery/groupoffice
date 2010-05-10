@@ -14,7 +14,6 @@
 GO.email.AccountDialog = function(config) {
 	Ext.apply(this, config);
 
-	var typeField;
 	var sslCb;
 
 	
@@ -146,7 +145,7 @@ GO.email.AccountDialog = function(config) {
 		cls : 'go-form-panel',
 		waitMsgTarget : true,
 		labelWidth : 120,
-		items : [typeField = new Ext.form.ComboBox({
+		items : [/*typeField = new Ext.form.ComboBox({
 			fieldLabel : GO.email.lang.type,
 			hiddenName : 'type',
 			store : new Ext.data.SimpleStore({
@@ -169,8 +168,8 @@ GO.email.AccountDialog = function(config) {
 				},
 				scope : this
 			}
-		}), new Ext.form.TextField({
-			fieldLabel : GO.email.lang.host,
+		}),*/ new Ext.form.TextField({
+			fieldLabel : 'IMAP '+GO.email.lang.host,
 			name : 'host',
 			allowBlank : false,
 			listeners : {
@@ -200,7 +199,11 @@ GO.email.AccountDialog = function(config) {
 				},
 				scope : this
 			}
-		}), {
+		}),sslCb = new Ext.form.Checkbox({
+				fieldLabel : GO.email.lang.ssl,
+				name : 'use_ssl',
+				checked : false
+			}), {
 			xtype : 'fieldset',
 			title : GO.email.lang.advanced,
 			collapsible : true,
@@ -213,21 +216,7 @@ GO.email.AccountDialog = function(config) {
 			labelWidth : 75,
 			labelAlign : 'left',
 
-			items : [sslCb = new Ext.form.Checkbox({
-				boxLabel : GO.email.lang.ssl,
-				name : 'use_ssl',
-				checked : false,
-				hideLabel : true
-			}),/*
-										 * new Ext.form.Checkbox({ boxLabel:
-										 * GO.email.lang.tls, name: 'tls',
-										 * checked: false, hideLabel:true }),
-										 */new Ext.form.Checkbox({
-				boxLabel : GO.email.lang.novalidateCert,
-				name : 'novalidate_cert',
-				checked : false,
-				hideLabel : true
-			}), new Ext.form.TextField({
+			items : [ new Ext.form.TextField({
 				fieldLabel : GO.email.lang.port,
 				name : 'port',
 				value : '143',
@@ -485,12 +474,12 @@ GO.email.AccountDialog = function(config) {
 
 	});
 
-	typeField.on('select', function(combo, record, index) {
+	/*typeField.on('select', function(combo, record, index) {
 
 		var value = index == 1 ? '110' : '143';
 
 		this.propertiesPanel.form.findField('port').setValue(value);
-	}, this);
+	}, this);*/
 
 	this.encryptionField.on('select', function(combo, record, index) {
 		var value = record.data.value == '' ? '25' : '465';
@@ -499,13 +488,13 @@ GO.email.AccountDialog = function(config) {
 	}, this);
 
 	sslCb.on('check', function(checkbox, checked) {
-		if (typeField.getValue() == 'imap') {
+		//if (typeField.getValue() == 'imap') {
 			var port = checked ? 993 : 143;
 			this.propertiesPanel.form.findField('port').setValue(port);
-		} else {
+		/*} else {
 			var port = checked ? 995 : 110;
 			this.propertiesPanel.form.findField('port').setValue(port);
-		}
+		}*/
 	}, this)
 
 	this.selectUser.on('select', function(combo, record, index) {
@@ -568,6 +557,7 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 			url : GO.settings.modules.email.url + 'action.php',
 			params : {
 				'task' : 'save_account_properties',
+				type:'imap',
 				'account_id' : this.account_id
 			},
 			waitMsg : GO.lang['waitMsgSave'],
