@@ -71,10 +71,8 @@ GO.dialog.LoginDialog = function(config){
 		labelWidth: 120, // label settings here cascade unless overridden
 		url:'action.php',
 		defaultType: 'textfield',
-		autoHeight:true,
-		waitMsgTarget:true,
-		//cls:'go-form-panel',
-        
+		//autoHeight:true,
+		waitMsgTarget:true,        
 		bodyStyle:'padding:5px 10px 5px 10px',
 		items: [new GO.LogoComponent(),
 		langCombo,
@@ -93,37 +91,30 @@ GO.dialog.LoginDialog = function(config){
 			xtype: 'checkbox',
 			hideLabel:true,
 			boxLabel: GO.lang.remindPassword,
-			name:'remind'
+			name:'remind',
+			height:20//explicit height for IE7 bug with ext 3.2
 		},this.fullscreenField = new Ext.form.Checkbox({
 			hideLabel:true,
 			boxLabel: GO.lang.fullscreen,
 			checked:GO.fullscreen,
-			name:'fullscreen'
+			name:'fullscreen',
+			height:20//explicit height for IE7 bug with ext 3.2
 		})
 		]
 	});
 
 	
-	//var logo = Ext.getBody().createChild({tag: 'div', cls: 'go-app-logo'});
-	
 	GO.dialog.LoginDialog.superclass.constructor.call(this, {
-		layout: 'fit',
-		
 		autoHeight:true,
 		width:400,
+		draggable:false,
 		resizable: false,
 		closeAction:'hide',
 		title:GO.lang['strLogin'],
 		closable: false,
-		focus: function(){
-			this.formPanel.form.findField('username').focus(true);
-		}.createDelegate(this),
-
-		items: [
-			
+		items: [			
 		this.formPanel
-		],
-		
+		],		
 		buttons: [
 		{
 			text: GO.lang.lostPassword,
@@ -182,11 +173,15 @@ GO.dialog.LoginDialog = function(config){
     
 };
 
-Ext.extend(GO.dialog.LoginDialog, Ext.Window, {
+Ext.extend(GO.dialog.LoginDialog, GO.Window, {
 	
 	callbacks : new Array(),
 	
 	hideDialog : true,
+
+	focus: function(){
+		this.formPanel.form.findField('username').focus(true);
+	},
 	
 	addCallback : function(callback, scope)
 	{		
