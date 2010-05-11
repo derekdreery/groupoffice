@@ -54,10 +54,13 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	login : function(){
 
 		GO.loginDialog = new GO.dialog.LoginDialog({modal:false});
-		this.fireReady();		
+
+		this.fireReady();
 		this.createLoginCallback();
-		GO.loginDialog.show();
+
 		this.removeLoadMask();
+
+		GO.loginDialog.show();
 
 		if(window.console && window.console.firebug)
 		{
@@ -68,23 +71,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	saveState : function(){
 		Ext.state.Manager.getProvider().set('open-modules', this.getOpenModules());
 	},
-		/*
 
-		this.stateToSave = this.getOpenModules();
-
-		if(!this.stateSaveScheduled)
-		{
-			this.stateSaveScheduled=true;			
-			
-			this.sendSaveRequest.defer(2000, this);
-		}
-	},
-	sendSaveRequest : function(){
-		var callback =function(){
-			this.stateSaveScheduled=false;
-		};
-		Ext.state.Manager.getProvider().set('open-modules', Ext.encode(this.stateToSave), callback, this);
-	},*/
 	logout : function(first){
 		
 		if(Ext.Ajax.isLoading())
@@ -533,6 +520,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	{
 		var loading = Ext.get('loading');
 		var mask = Ext.get('loading-mask');
+
 		mask.setOpacity(.8);
 		mask.shift({
 			xy:loading.getXY(),
