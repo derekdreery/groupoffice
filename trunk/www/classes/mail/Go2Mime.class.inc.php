@@ -242,7 +242,7 @@ class Go2Mime
 					$content_part = String::clean_utf8($part->body, $part->ctype_parameters['charset']);
 					if (stripos($part->ctype_secondary,'plain')!==false)
 					{
-						$content_part = nl2br($content_part);
+						$content_part = String::text_to_html($content_part);
 					}else
 					{
 						$content_part = String::convert_html($content_part);
@@ -334,7 +334,7 @@ class Go2Mime
 			//convert text to html
 			if (stripos($structure->ctype_secondary,'plain')!==false)
 			{
-				$text_part = nl2br($text_part);
+				$text_part = String::text_to_html($text_part);
 			}else
 			{
 				$text_part = String::convert_html($text_part);
