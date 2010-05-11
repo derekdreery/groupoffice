@@ -309,6 +309,7 @@ GO.lang.on ='On';
 GO.lang.off ='Off';
 
 GO.lang.keyword='Keyword';
+GO.lang.keywords='Keywords';
 
 
 GO.lang.total='Total';
