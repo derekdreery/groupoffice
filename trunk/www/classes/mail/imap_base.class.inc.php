@@ -552,7 +552,7 @@ class imap_base {
 				$string = str_replace($v, $fld, $string);
 			}
 		}
-		return $string;
+		return str_replace(array('\\\\', '\\(', '\\)'), array('\\','(', ')'), $string);
 	}
 }
 
