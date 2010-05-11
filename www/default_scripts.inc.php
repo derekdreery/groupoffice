@@ -188,7 +188,7 @@ foreach($GO_MODULES->modules as $module) {
 $scripts=array();
 
 
-if($GO_SECURITY->logged_in()) {
+if($GO_SECURITY->logged_in() && !isset($popup_groupoffice)) {
 	//load language first so it can be overridden
 	foreach($GO_MODULES->modules as $module) {
 		if($module['read_permission']) {

@@ -88,6 +88,7 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 	<script type="text/javascript">Ext.get("load-status").update("<?php echo $lang['common']['loadingLogin']; ?>");</script>
 	<script type="text/javascript">	
 	<?php
+	//set in /default_scripts.inc.php
 	if(isset($popup_groupoffice))
 	{
 		echo 'Ext.onReady(function(){
