@@ -389,27 +389,23 @@ GO.util.numberFormat = function (number, decimals, decimal_separator, thousands_
 	return formattedNumber;
 }
 
-GO.util.popup = function (config)
+GO.util.popup = function (c)
 {
+	var config = {
+		scrollbars:"1",
+		resizable:"1",
+		location:"0",
+		status:"0",
+		target:'_blank'
+	}
+
+	Ext.apply(config, c);
+
 	if(!config.width)
 	{
 		config.width = screen.availWidth;
 		config.height = screen.availHeight;
 	}
-	if(!config.target)
-	{
-		config.target='_blank';
-	}
-
-	
-	if(!config.scrollbars)
-		config.scrollbars="yes";
-
-	if(!config.resizable)
-		config.resizable="yes";
-
-	if(!config.status)
-		config.status="no";
 
 	if (typeof(config.left)=='undefined' || typeof(config.top)=='undefined'){
 		config.position=config.position || 'center';
@@ -424,10 +420,12 @@ GO.util.popup = function (config)
 		}
 	}
 
+	var noFeatures = ['url', 'position', 'focus', 'closeOnFocus','target'];
+
 	var options = '';
 	for(var key in config){
-		if(key!='position' && key!='focus' && key!='closeOnFocus')
-		options+=','+key+'='+config[key];
+		if(noFeatures.indexOf(key)==-1)
+			options+=','+key+'='+config[key];
 	}
 	options=options.substring(1, options.length);
 
