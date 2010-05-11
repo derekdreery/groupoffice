@@ -1,14 +1,17 @@
 3.5
 - A lot of bug fixes and improvements to the tickets module. Customers can login
-	through the Group-Office interface now too.
-- Wrote custom IMAP library that replaces the php-imap extension. It's much
-	faster, has more features and now the php extension is no longer required.
-	There's really a huge performance improvement especially when connecting to
-	remote IMAP servers.
+  through the Group-Office interface now too.
+  !!! Important !!! all ticket agents need manage permissions now. Only
+  members of the admin usergroup can change settings
 
-	!!! IMPORTANT !!! POP-3 is no longer supported in this release. POP-3 doesn't
-	really make sence for a webmail client so we didn't implement it in the new
-	lib.
+- Wrote custom IMAP library that replaces the php-imap extension. It's much
+  faster, has more features and now the php extension is no longer required.
+  There's really a huge performance improvement especially when connecting to
+  remote IMAP servers.
+
+  !!! IMPORTANT !!! POP-3 is no longer supported in this release. POP-3 doesn't
+  really make sence for a webmail client so we didn't implement it in the new
+  lib.
 
 - Upgraded to ExtJS 3.2.1
 - Dialogs are now only rendered on demand so Group-Office will start faster
@@ -18,8 +21,7 @@
 - Easier filtering on links and search results
 - A lot of small enhancements everywhere.
 
-* max 3 login failures, custom admin username
-* tickets puntjes
+
 
 2010/05/04 3.4.23
 - Some bugs with participants were fixed
