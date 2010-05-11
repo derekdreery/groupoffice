@@ -56,9 +56,6 @@ echo 'GO.afterLoginUrl="'.$after_login_url.'";';
 $fullscreen = isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1' ? 'true' : 'false';
 echo 'GO.fullscreen='.$fullscreen.';';
 
-if($fullscreen=='false') {
-	echo 'window.name="groupoffice";';
-}
 
 /*
  * If fullscreen mode is enabled and the user is already logged in we set $popup_groupoffice with the URL to load Group-Office
@@ -70,6 +67,14 @@ if($GO_SECURITY->logged_in() && $fullscreen=='true' && !isset($_REQUEST['fullscr
 	$popup_groupoffice = isset($_REQUEST['after_login_url']) ? smart_stripslashes($_REQUEST['after_login_url']) : $GO_CONFIG->host;
 	$popup_groupoffice = String::add_params_to_url($popup_groupoffice, 'fullscreen_loaded=true');
 }
+
+if($GO_SECURITY->logged_in() && !isset($popup_groupoffice)) {
+	echo 'window.name="groupoffice";';
+}else
+{
+	echo 'window.name="groupoffice-login";';
+}
+
 ?>
 </script>
 <?php

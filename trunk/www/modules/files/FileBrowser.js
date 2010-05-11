@@ -1577,14 +1577,14 @@ GO.files.openFile = function(record, store)
 				{
 					GO.files.noJavaNotified=true;
 					Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);					
-					window.location.href=GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index];
+					window.open(GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]);
 				}else
 				{
-					window.location.href=GO.settings.modules.gota.url+'jnlp.php?'+index+'='+record.data['id'];
+					window.open(GO.settings.modules.gota.url+'jnlp.php?'+index+'='+record.data['id']);
 				}
 			}else
 			{
-				window.location.href=GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index];
+				window.open(GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]);
 			}
 		break;
 		
@@ -1598,7 +1598,7 @@ GO.files.openFile = function(record, store)
 			}
 		
 		default:
-			window.location.href=GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index];
+			window.open(GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]);
 		break;	
 	}	
 }
