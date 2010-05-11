@@ -52,10 +52,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	},	
 	
 	login : function(){
-
 		GO.loginDialog = new GO.dialog.LoginDialog({modal:false});
 
-		this.fireReady();
+		//this.fireReady();
 		this.createLoginCallback();
 
 		this.removeLoadMask();
@@ -98,7 +97,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 					GO.loginDialog.hideDialog=false;
 					GO.loginDialog.on('callbackshandled', this.createLoginCallback, this);
 				}else
-				{
+				{					
 					document.location.href=url;
 				}
 			}, this);		
@@ -218,7 +217,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 
 
-	init : function(){  
+	init : function(){
+
+		window.name='groupoffice';
     
 		GO.loginDialog = new GO.dialog.LoginDialog({modal:true});
 
