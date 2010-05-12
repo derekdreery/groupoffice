@@ -1,5 +1,5 @@
-groupoffice-com (3.4.14) three; urgency=low
+groupoffice-com (3.5.0) three; urgency=low
 
   * Initial release (LP: #394166: This report is public)
 
- -- Merijn Schering <mschering@intermesh.nl>  Mon, 29 Mar 2010 12:30:00 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Mon, 12 May 2010 12:30:00 +0200
