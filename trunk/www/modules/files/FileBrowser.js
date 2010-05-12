@@ -1646,18 +1646,18 @@ GO.files.createSelectFileBrowser = function(){
 	{
 		GO.selectFileBrowser= new GO.files.FileBrowser({
 			border:false,
+			filePanelCollapsed:true,
 			treeCollapsed:false
 		});
 
-		GO.selectFileBrowserWindow = new Ext.Window({
+		GO.selectFileBrowserWindow = new GO.Window({
 			title: GO.lang.strSelectFiles,
 			height:500,
 			width:750,
 			modal:true,
 			layout:'fit',
 			border:false,
-			collapsible:true,
-			filePanelCollapsed:true,
+			collapsible:true,			
 			maximizable:true,
 			closeAction:'hide',
 			items: GO.selectFileBrowser,
