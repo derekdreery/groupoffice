@@ -161,6 +161,7 @@ Ext.extend(GO.PersonalSettingsDialog, GO.Window,{
 					}
 
 				GO.settings.mute_sound=this.formPanel.form.findField('mute_sound').getValue();
+				GO.settings.popup_reminders=this.formPanel.form.findField('popup_reminders').getValue();
 				
 				if(this.reload)
 				{

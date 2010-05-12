@@ -236,6 +236,7 @@ try
 				$user['start_module'] = $_POST["start_module"];
 				$user['mute_sound'] = isset($_POST["mute_sound"]) ? '1' : '0';
 				$user['mail_reminders'] = isset($_POST["mail_reminders"]) ? '1' : '0';
+				$user['popup_reminders'] = isset($_POST["popup_reminders"]) ? '1' : '0';
 			}
 
 			if($_POST['language'])
