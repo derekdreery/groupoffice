@@ -27,20 +27,22 @@ GO.addressbook.SelectCompany = function(config){
 	{
 		GO.customfields.addColumns(3, fields);
 	}
-	
-	this.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.addressbook.url+ 'json.php',
-	    baseParams: {
-	    	task: 'companies',
+
+	if (typeof(config.store)=='undefined') {
+		this.store = new GO.data.JsonStore({
+			url: GO.settings.modules.addressbook.url+ 'json.php',
+			baseParams: {
+				task: 'companies',
 				'addressbook_id' : this.addressbook_id
-				},
-	    root: 'results',
-	    id: 'id',
-	    totalProperty:'total',
-	    fields: fields.fields,
-	    remoteSort: true
-	});
-	
+			},
+			root: 'results',
+			id: 'id',
+			totalProperty:'total',
+			fields: fields.fields,
+			remoteSort: true
+		});
+	}
+
 	this.store.setDefaultSort('name', 'asc');
 
 	GO.addressbook.SelectCompany.superclass.constructor.call(this,{
