@@ -7,6 +7,7 @@ $languages['de']='Deutsch';
 $languages['en']='English/American';
 $languages['en_UK']='English/British';
 $languages['es']='Español';
+$languages['et']='Estonian';
 $languages['el']='Ελληνικά';
 $languages['fr']='Francais';
 $languages['it']='Italiano';
@@ -21,4 +22,3 @@ $languages['fi']='Suomi - Finland';
 $languages['sv']='Svenska';
 $languages['tr']='Türkçe';
 $languages['th']='ไทย';
-?>
