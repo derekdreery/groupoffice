@@ -18,14 +18,16 @@ GO.addressbook.SelectCompany = function(config){
 		
 	this.displayField='name';
 
-	var fields = {
-		columns:[],
-		fields:['id', 'name', 'post_address', 'post_address_no', 'post_zip', 'post_city', 'post_state', 'post_country', 'vat_no', 'email']
-	};
+	if (typeof(config.fields)=='undefined') {
+		config.fields = {
+			columns:[],
+			fields:['id', 'name', 'post_address', 'post_address_no', 'post_zip', 'post_city', 'post_state', 'post_country', 'vat_no', 'email']
+		};
+	}
 
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns(3, fields);
+		GO.customfields.addColumns(3, config.fields);
 	}
 
 	if (typeof(config.store)=='undefined') {
@@ -38,7 +40,7 @@ GO.addressbook.SelectCompany = function(config){
 			root: 'results',
 			id: 'id',
 			totalProperty:'total',
-			fields: fields.fields,
+			fields: config.fields.fields,
 			remoteSort: true
 		});
 	}
