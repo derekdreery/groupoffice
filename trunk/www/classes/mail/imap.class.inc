@@ -12,7 +12,7 @@ class imap extends imap_bodystruct {
 
 	var $starttls=false;
 
-	var $auth='PLAIN';
+	var $auth='plain';
 
 	var $selected_mailbox=false;
 
@@ -56,7 +56,7 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 
-	public function connect($server, $port, $username, $password, $ssl=false, $starttls=false) {
+	public function connect($server, $port, $username, $password, $ssl=false, $starttls=false, $auth='plain') {
 
 		go_debug("imap::connect($server, $port, $username, ***, $ssl, $starttls)");
 
@@ -68,6 +68,8 @@ class imap extends imap_bodystruct {
 		
 		$this->ssl = $ssl;
 		$this->starttls = $starttls;
+		$this->auth = strtolower($auth);
+
 		$this->server=$_SESSION['GO_SESSION']['imap'][$server];
 		$this->port=$port;
 		$this->username=$username;
