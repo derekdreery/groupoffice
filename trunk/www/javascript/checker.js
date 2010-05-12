@@ -367,7 +367,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 								
 								if(data.alarm){
 									GO.playAlarm();
-									if(!GO.hasFocus){
+									if(!GO.hasFocus && !GO.util.empty(GO.settings.popup_reminders)){
 										GO.reminderPopup = GO.util.popup({
 											width:400,
 											height:300,

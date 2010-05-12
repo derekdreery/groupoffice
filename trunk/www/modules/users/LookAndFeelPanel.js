@@ -137,9 +137,12 @@ GO.users.LookAndFeelPanel = function(config)
 			hideLabel: true,
 			boxLabel: GO.users.lang.muteSound,
 			name: 'mute_sound'
-		});
-
-		config.items.push({
+		},{
+			xtype:'checkbox',
+			hideLabel: true,
+			boxLabel: GO.users.lang.popupNotification,
+			name: 'popup_reminders'
+		},{
 			xtype:'checkbox',
 			hideLabel: true,
 			boxLabel: GO.users.lang.mailReminders,

@@ -108,3 +108,5 @@ GO.users.lang.firstName = 'First name';
 GO.users.lang.sendInvitation='Send invitation';
 
 GO.users.lang.contactInfo='Contact info';
+
+GO.users.lang.popupNotification='Show a popup window when a reminder becomes active or an e-mail arrives';

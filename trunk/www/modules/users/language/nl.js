@@ -96,3 +96,5 @@ GO.users.lang.firstName = 'Voornaam';
 GO.users.lang.sendInvitation='Verstuur uitnodiging';
 
 GO.users.lang.contactInfo='Contact information';
+
+GO.users.lang.popupNotification='Toon een popup scherm wanneer een herinnering actief wordt of e-mail arriveert';
