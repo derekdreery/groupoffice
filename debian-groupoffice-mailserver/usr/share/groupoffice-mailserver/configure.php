@@ -102,6 +102,9 @@ foreach($output as $line){
 		break;
 	}
 }
+
+echo "Linux version: ".$version."\n\n";
+
 if($version > 9.10){
 	$replacements['sieve']='sieve';
 }
