@@ -90,8 +90,30 @@ file_put_contents('/etc/postfix/transport', "autoreply.$domain vacation:");
 system('postmap /etc/postfix/transport');
 
 
+$version=0;
+$replacements['sieve']='cmusieve';
+exec("lsb_release -a", $output);
+foreach($output as $line){
+	$parts = explode(':', $line);
+	$name = trim($parts[0]);
+	$value = trim($parts[1]);
+	if($name=='Release'){
+		$version = floatval($value);
+		break;
+	}
+}
+if($version > 9.10){
+	$replacements['sieve']='sieve';
+}
+
+
 echo "Configuring Dovecot\n";
 create_file('/etc/dovecot/dovecot-sql.conf','tpl/etc/dovecot/dovecot-sql.conf', $replacements);
+create_file('/etc/dovecot/dovecot.conf','tpl/etc/dovecot/dovecot.conf', $replacements);
+
+
+
+
 
 echo "Configuring vacation\n";
 if(!file_exists('/etc/groupoffice/vacation'))

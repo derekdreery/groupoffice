@@ -109,8 +109,8 @@ cp /usr/share/groupoffice-mailserver/tpl/etc/default/spamassassin /etc/default/s
 cp /etc/spamassassin/local.cf /etc/spamassassin/local.cf.gobak.$2
 cp /usr/share/groupoffice-mailserver/tpl/etc/spamassassin/local.cf /etc/spamassassin
 
-cp /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf.gobak.$2
-cp /usr/share/groupoffice-mailserver/tpl/etc/dovecot/dovecot.conf /etc/dovecot
+#cp /etc/dovecot/dovecot.conf /etc/dovecot/dovecot.conf.gobak.$2
+#cp /usr/share/groupoffice-mailserver/tpl/etc/dovecot/dovecot.conf /etc/dovecot
 
 cp /etc/postfix/master.cf /etc/postfix/master.cf.gobak.$2
 cp /usr/share/groupoffice-mailserver/tpl/etc/postfix/master.cf /etc/postfix
