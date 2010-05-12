@@ -34,7 +34,7 @@ class cached_imap extends imap{
 	 * You can disable the cache for debugging.
 	 * If enabled the message will be converted to safe HTML only once.
 	 */
-	var $disable_message_cache=false;
+	var $disable_message_cache=true;
 
 
 	public function __construct()
@@ -578,16 +578,6 @@ class cached_imap extends imap{
 				}
 				$id = "cid:".$tmp_id;
 
-				/*$url = $GO_MODULES->modules['email']['url']."attachment.php?".
-								"account_id=".$this->account['id'].
-								"&amp;mailbox=".urlencode($this->selected_mailbox['name']).
-								"&amp;uid=".$uid.
-								"&amp;imap_id=".$att[$i]["imap_id"].
-								"&amp;encoding=".$att[$i]["encoding"].
-								"&amp;type=".$att[$i]["type"].
-								"&amp;subtype=".$att[$i]["subtype"].
-								"&amp;filename=".urlencode($att[$i]["name"]);*/
-
 				$url_replacement['id'] = $att[$i]["id"];
 				$url_replacement['url'] = $this->get_attachment_url($uid, $att[$i]);
 				$url_replacement['tmp_file'] = $att[$i]['tmp_file'];
@@ -597,7 +587,6 @@ class cached_imap extends imap{
 				$url_replacement['attachment']=$att[$i];
 
 				$message['url_replacements'][]=$url_replacement;
-
 
 				if(isset($message['html_body'])){
 					if(strpos($message['html_body'], $id)) {
@@ -643,6 +632,7 @@ class cached_imap extends imap{
 
 	private function get_body_parts($plain_body_requested, $html_body_requested, &$struct, &$message, $peek){
 		go_debug("get_body_parts($plain_body_requested,$html_body_requested, struct, message)");
+
 
 	
 		if((isset($message['html_body']) || !$html_body_requested) && (isset($message['plain_body']) || !$plain_body_requested)){
@@ -690,8 +680,6 @@ class cached_imap extends imap{
 			}
 		}
 
-	//	go_debug($struct);
-
 		$plain_parts = $this->find_body_parts($struct,'text', 'plain');
 		foreach($plain_parts['parts'] as $plain_part){
 			$message['body_ids'][]=$plain_part['imap_id'];
@@ -701,9 +689,6 @@ class cached_imap extends imap{
 		foreach($html_parts['parts'] as $html_part){
 			$message['body_ids'][]=$html_part['imap_id'];
 		}
-
-		//go_debug($plain_parts);
-		//go_debug($html_parts);
 
 		$inline_images=array();
 
