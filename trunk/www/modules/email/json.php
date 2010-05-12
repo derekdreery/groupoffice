@@ -157,7 +157,7 @@ function find_alias_and_recipients() {
 		$aliases[strtolower($alias['email'])]=$alias['id'];
 	}
 
-	$fill_to = $task=='reply_all' || $task=='reply' || $task=='opendraft';
+	$fill_to = $task=='reply_all' || $task=='opendraft';
 
 	//add all recievers from this email
 	if (isset($content["to"])) {
