@@ -895,7 +895,7 @@ class email extends db {
 		while($mailbox = array_shift($subscribed)) {
 			$subscribed_names[]=$mailbox['name'];
 		}
-
+		
 		foreach($mailboxes as $mailbox) {
 			$mailbox_names[] = $mailbox['name'];
 			$folder['account_id'] = $account['id'];
@@ -946,7 +946,7 @@ class email extends db {
 			$folder['delimiter'] = isset($mailboxes[0]['delimiter']) ? $mailboxes[0]['delimiter'] : '.';
 			$folder['parent_id']=0;
 
-			$existing_folder = $this->get_folder($account['id'],$mailbox['name']);
+			$existing_folder = $this->get_folder($account['id'],$folder['name']);
 			if ($existing_folder) {
 				$folder['id'] = $existing_folder['id'];
 				$this->update_folder($folder);
