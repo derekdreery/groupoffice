@@ -52,3 +52,7 @@ GO.cms.lang.selectPage='Velg side';
 
 GO.cms.lang.showUntil='Vis siden fram til';
 GO.cms.lang.alwaysShow='La stå tomt for å vise for alltid.';
+
+GO.cms.lang.root='Rot';
+GO.cms.lang.advancedPermissions='Avanserte rettigheter';
+GO.cms.lang.enablePermissionsPerFolder='Aktiver rettigheter per mappe for denne brukeren';

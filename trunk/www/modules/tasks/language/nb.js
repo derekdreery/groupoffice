@@ -41,3 +41,4 @@ GO.tasks.lang.completedAt='Fullført den';
 GO.tasks.lang.visibleTasklists='Synlige oppgavelister';
 GO.tasks.lang.visible='Synlig';
 GO.tasks.lang.selectIcalendarFile='Velg en iCal kalenderfil (*.ics) ';
+GO.tasks.lang.continueTask='Fortsett oppgave';

@@ -345,3 +345,8 @@ GO.lang.removeFormatting='Fjern formatering';
 GO.lang.insertHorizontalRule='Sett inn vannrett linje';
 GO.lang.insertHRtext='Angi linjebredde i prosent<br/> etterfulgt av %-tegnet, eller<br/> angi en fast bredde ved å unnlate %-tegnet.';
 GO.lang.width='Bredde';
+
+GO.lang.keywords='Nøkkelord';
+GO.lang.thankyou='Takk';
+GO.lang.applyMultiselect='Bruk valgene';
+GO.lang.createdBy='Opprettet av';

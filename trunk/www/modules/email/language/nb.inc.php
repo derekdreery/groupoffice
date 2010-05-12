@@ -59,3 +59,7 @@ $lang['email']['noUidNext']='Din mailserver støtter ikke UIDNEXT. Mappen \'Utka
 $lang['email']['disable_trash_folder']='Feil ved flytting av e-post til papirkurv. Årsaken kan være at du ikke har mer diskplass. Du kan bare frigjøre plass ved å deaktivere mappen for papirkurv på: Administrasjon -> Kontoer -> Dobbeltklikk på din konto -> Mapper';
 
 $lang['email']['error_move_folder']='Kunne ikke flytte mappen';
+
+$lang['email']['error_getaddrinfo']='Ugyldig serveradresse angitt';
+$lang['email']['error_authentication']='Ugyldig brukernavn eller passord';
+$lang['email']['error_connection_refused']='Tilkoblingen ble avvist. Kontroller server og portnummer.';

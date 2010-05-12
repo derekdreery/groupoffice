@@ -25,4 +25,6 @@ $lang['tasks']['call']='Telefon';
 
 $lang['tasks']['dueAtdate']='Frist %s';
 $lang['tasks']['list']='Oppgaveliste';
+$lang['tasks']['tasklistChanged']="* Oppgaveliste endret fra '%s' til '%s'";
+$lang['tasks']['statusChanged']="* Status endret fra '%s' til '%s'";
 ?>
