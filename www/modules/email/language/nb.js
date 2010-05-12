@@ -167,3 +167,4 @@ GO.email.lang.searchTo='Mottaker';
 GO.email.lang.searchCC='Mottaker (CC)';
 
 GO.email.lang.forwardTo='Videresend e-post til';
+GO.email.lang.youHaveNewMails= 'Antall nye e-poster: {new}';

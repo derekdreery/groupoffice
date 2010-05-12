@@ -36,3 +36,4 @@ $lang['cms']['cant_move_into_itself']='Kan ikke flyttes inn i seg selv';
 $lang['cms']['done_with_cms']='CMS ferdig';
 
 $lang['cms']['antispam_fail']='Feil ved antispam svar! Vennligst forsøk igjen';
+$lang['cms']['no_admin_rights']="Du har ikke admin-rettigheter til å endre brukernes tilgang til nettstedmappene.";
