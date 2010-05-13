@@ -576,7 +576,8 @@ class email extends db {
 			$sql = "DELETE FROM em_messages_cache WHERE account_id='$id'";
 			$this->query($sql);
 
-			$GO_EVENTS->fire_event('delete_email_account', $id);
+			$params = array($id);
+			$GO_EVENTS->fire_event('delete_email_account', $params);
 		}
 	}
 
