@@ -179,7 +179,7 @@ foreach($scripts as $script) {
 <script type="text/javascript">
 	if(typeof(Ext)=='undefined')
 	{
-		alert('The Group-Office javascripts were not loaded. Check the host property in config.php and see if the file_storage_path folder and it\'s contents are writable');
+		alert('The Group-Office javascripts were not loaded. Check the "host" property in config.php and see if the "file_storage_path" folder and it\'s contents are writable');
 	}
 </script>
 <?php
