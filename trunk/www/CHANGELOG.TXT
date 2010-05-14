@@ -1,4 +1,4 @@
-3.5
+2010/05/14 3.5.1
 - A lot of bug fixes and improvements to the tickets module. Customers can login
   through the Group-Office interface now too.
   !!! Important !!! all ticket agents need manage permissions now. Only
@@ -20,8 +20,6 @@
 - Document templates work for Office 2007 files now too.
 - Easier filtering on links and search results
 - A lot of small enhancements everywhere.
-
-
 
 2010/05/04 3.4.23
 - Some bugs with participants were fixed
