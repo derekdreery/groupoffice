@@ -28,12 +28,12 @@ $updates[]="CREATE TABLE IF NOT EXISTS `su_visible_lists` (
   `user_id` int(11) NOT NULL,
   `tasklist_id` int(11) NOT NULL,
   PRIMARY KEY  (`user_id`,`tasklist_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+) ENGINE=MyISAM DEFAULT CHARSET=UTF-8;";
 $updates[]="script:3_set_visible_list.inc.php";
 
 $updates[]="CREATE TABLE IF NOT EXISTS `su_visible_calendars` (
   `user_id` int(11) NOT NULL,
   `calendar_id` int(11) NOT NULL,
   PRIMARY KEY  (`user_id`,`calendar_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
+) ENGINE=MyISAM DEFAULT CHARSET=UTF-8;";
 $updates[]="script:4_set_visible_calendar.inc.php";
