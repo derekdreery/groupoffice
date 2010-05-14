@@ -140,6 +140,23 @@ LAST-MODIFIED:20100514T080538Z
 END:VEVENT
 END:VCALENDAR';
 
+
+$ical_str='BEGIN:VCALENDAR
+VERSION:1.0
+BEGIN:VEVENT
+SUMMARY:Budget meeting
+CLASS:PUBLIC
+DESCRIPTION;ENCODING=QUOTED-PRINTABLE:Tidspunkt: 13. mai 2010 test=
+=20met een erg lange regel. Ja er moet nog wat meer op denk ik. Ik=
+=20wil zeker weten dat de regel afbreekt.=0D=0A=
+=0D=0A=
+Ook nog een lege regel ja.
+DTSTART:20100513T060000Z
+DTEND:20100513T063000Z
+TRANSP:0
+END:VEVENT
+END:VCALENDAR';
+
 //$vcalendar = $ical->parse_file('/home/mschering/jos.ics');
 //
 $vcalendar = $ical->parse_icalendar_string($ical_str);
