@@ -124,7 +124,8 @@ try {
 			$files = new files();
 
 			$account = $imap->open_account($_POST['account_id'], $_POST['mailbox']);
-			$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
+			$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], false);
+
 			$imap->disconnect();
 
 			if(empty($data)) {
