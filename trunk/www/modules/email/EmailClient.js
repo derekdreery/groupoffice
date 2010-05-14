@@ -1107,13 +1107,15 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						task:'save_attachment',
 						uid: this.messagePanel.uid,
 						mailbox: this.mailbox,
-						part: attachment.number,
-						transfer: attachment.transfer,
-						mime: attachment.mime,
+						imap_id: attachment.imap_id,
+						encoding: attachment.encoding,
+						type: attachment.type,
+						subtype: attachment.subtype,
 						account_id: this.account_id,
 						uuencoded_partnumber: attachment.uuencoded_partnumber,
 						folder_id: folder_id,
-						filename: filename
+						filename: filename,
+						charset:attachment.charset
 					},
 					callback: function(options, success, response)
 					{	
