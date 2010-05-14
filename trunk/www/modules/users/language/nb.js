@@ -100,5 +100,5 @@ GO.users.lang.firstName= 'Fornavn';
 GO.users.lang.profile='Profil';
 GO.users.lang.mailReminders='Send påminnelser';
 GO.users.lang.sendInvitation='Send invitasjon';
-
 GO.users.lang.contactInfo='Kontaktinformasjon';
+GO.users.lang.popupNotification='Vis et sprettoppvindu når en påminnelse blir aktiv, eller når det er kommet ny e-post';
