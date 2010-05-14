@@ -539,9 +539,9 @@ class cached_imap extends imap{
 				}elseif($att[$i]['type']=='message')
 				{
 					$att[$i]['name']='message.eml';
-				}else
+				}elseif($att[$i]['subtype']=='calendar')
 				{
-					$att[$i]['name']=$att[$i]['type'].'-'.$att[$i]['subtype'].'.txt';
+					$att[$i]['name']=$lang['email']['event'].'.ics';
 				}
 			}else
 			{
@@ -739,7 +739,7 @@ class cached_imap extends imap{
 		if($html_body_requested){
 
 			if(empty($message['html_body'])){				
-				$message['html_body']=String::text_to_html($message['plain_body']);
+				$message['html_body']=isset($message['plain_body']) ? String::text_to_html($message['plain_body']) : '';
 				for($i=0,$max=count($inline_images);$i<$max;$i++){
 					$message['html_body']=str_replace('{inline_'.$i.'}', $inline_images[$i], $message['html_body']);
 				}

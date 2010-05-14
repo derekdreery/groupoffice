@@ -54,6 +54,92 @@ UID:0000GK
 END:VEVENT
 END:VCALENDAR';
 
+
+$ical_str='BEGIN:VCALENDAR
+PRODID:-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VEVENT
+ATTENDEE;ROLE=REQ-PARTICIPANT;RSVP=TRUE:MAILTO:egil@digibrev.net
+ORGANIZER:MAILTO:test@test.nl
+DTSTART:20100513T060000Z
+DTEND:20100513T063000Z
+TRANSP:OPAQUE
+SEQUENCE:0
+UID:040000008200E00074C5B7101A82E00800000000E0B6AC5FD9F2CA010000000000000000100
+ 00000D80A7AFDF6D84A44BCA09A118B3CB142
+DTSTAMP:20100513T181756Z
+DESCRIPTION:Tidspunkt: 13. mai 2010 08:00-08:30 (GMT+01:00) Amsterdam\,
+  Berlin\, Bern\, Oslo\, Roma\, Stockholm\,
+  Wien.\n\n*~*~*~*~*~*~*~*~*~*\n\nHello!\n\nNice to ……..\n\n\nTommy
+  Christiansen\n\n
+SUMMARY:Budget meeting
+PRIORITY:5
+X-MICROSOFT-CDO-IMPORTANCE:1
+CLASS:PUBLIC
+BEGIN:VALARM
+TRIGGER:-PT15M
+ACTION:DISPLAY
+DESCRIPTION:Reminder
+END:VALARM
+END:VEVENT
+END:VCALENDAR';
+
+$ical_str='BEGIN:VCALENDAR
+PRODID:-//Ximian//NONSGML Evolution Calendar//EN
+VERSION:2.0
+METHOD:PUBLISH
+BEGIN:VTIMEZONE
+TZID:/freeassociation.sourceforge.net/Tzfile/Europe/Amsterdam
+X-LIC-LOCATION:Europe/Amsterdam
+BEGIN:STANDARD
+TZNAME:CET
+DTSTART:19701031T030000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+END:STANDARD
+BEGIN:DAYLIGHT
+TZNAME:CEST
+DTSTART:19700328T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:20100514T080516Z-4354-1000-1-0@Intermesh-1
+DTSTAMP:20100514T080516Z
+DTSTART;TZID=/freeassociation.sourceforge.net/Tzfile/Europe/Amsterdam:
+ 20100514T113000
+DTEND;TZID=/freeassociation.sourceforge.net/Tzfile/Europe/Amsterdam:
+ 20100514T140000
+TRANSP:OPAQUE
+SEQUENCE:2
+SUMMARY:Bla die bla
+DESCRIPTION:\nOver Intermesh\nWelkom bij Intermesh software
+ ontwikkeling\n\nIntermesh is een in 2003 opgericht IT bedrijf dat zich
+ heeft gespecialiseerd in het maken van Internet applicaties en websites.
+ Op basis van uw eisen realiseren we in korte tijd een betrouwbaar product
+ dat direct inzetbaar is. Hierbij wordt gebruik gemaakt van de nieuwste
+ technologieën en innovatieve software. Intermesh heeft de kennis en
+ flexibiliteit in huis om voor elk automatiseringsprobleem een oplossing
+ te bieden.\n\nMaatwerk gaat altijd gepaard met goed overleg met de klant.
+ Daarom is een prettige samenwerking met de klant voor ons erg belangrijk.
+ Uw wensen en de kennis van Intermesh vormen samen de perfecte
+ samenwerking.\n\nIntermesh is een kleine organisatie en dat willen we
+ graag zo houden. Wij geloven in een klein team van gedreven mensen met
+ elk hun eigen expertise. Een klein team houdt de lijnen kort\, kan snel
+ schakelen en kan de klant persoonlijke aandacht bieden. Zo ontwikkelen we
+ betere en goedkopere producten. Om uitval van teamleden op te vangen
+ heeft Intermesh een netwerk met betrouwbare mensen om zich heen gebouwd
+ waarop teruggevallen kan worden.\n
+CLASS:PUBLIC
+CREATED:20100514T080538Z
+LAST-MODIFIED:20100514T080538Z
+END:VEVENT
+END:VCALENDAR';
+
 //$vcalendar = $ical->parse_file('/home/mschering/jos.ics');
 //
 $vcalendar = $ical->parse_icalendar_string($ical_str);
