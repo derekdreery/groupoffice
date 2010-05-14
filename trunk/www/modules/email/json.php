@@ -68,6 +68,16 @@ function get_mailbox_nodes($account_id, $folder_id) {
 	$response = array();
 
 	$count = $email->get_subscribed($account_id, $folder_id);
+
+	if($account_id>0 && !$count){
+		//empty account folders try to sync
+
+		go_debug('Syncing IMAP folders');
+		global $account;
+		$email->synchronize_folders($account, $imap);
+		$count = $email->get_subscribed($account_id, $folder_id);
+	}
+
 	while($record = $email->next_record()) {
 		if($email->f('name') == 'INBOX') {
 			if($count==1 && $record['can_have_children']==1) {

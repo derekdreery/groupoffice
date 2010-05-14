@@ -78,3 +78,4 @@ $updates[]="ALTER TABLE `em_messages_cache`
   DROP `charset`;";
 
 $updates[]="TRUNCATE TABLE `em_messages_cache`";
+$updates[]="TRUNCATE TABLE `em_folders`";
