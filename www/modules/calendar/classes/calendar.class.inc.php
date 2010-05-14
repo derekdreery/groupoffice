@@ -621,7 +621,7 @@ class calendar extends db
 		{
 			return $this->record;
 		}
-		throw new DatabaseSelectException();
+		return false;
 	}
 
 	function get_view_calendars($view_id)
