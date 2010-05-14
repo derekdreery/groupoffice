@@ -62,16 +62,23 @@ class ical2array {
 	var $object_name;
 	var $param_name;
 	var $buffer;
+
+	var $version = 0;
+	var $prodid='';
 	//var $object_types = array('VTIMEZONE', 'DAYLIGHT', 'VEVENT', 'VTODO', 'STANDARD');
 	var $object_types = array(
-					'VCALENDAR'=>array(
-													'VTIMEZONE'=>array(
-																					'DAYLIGHT'=>array(),
-																					'STANDARD'=>array()
-													),
-													'VEVENT'=>array(),
-													'VTODO'=>array()
-					)
+		'VCALENDAR'=>array(
+			'VTIMEZONE'=>array(
+				'DAYLIGHT'=>array(),
+				'STANDARD'=>array()
+			),
+			'VEVENT'=>array(
+				'VALARM'=>array()
+			),
+			'VTODO'=>array(
+				'VALARM'=>array()
+			)
+		)
 	);
 	var $timezones = array();
 	var $force_timezone;//hours
@@ -122,10 +129,8 @@ class ical2array {
 		//$regex = '/('.ICAL_WORD_WRAP_UNIX.')(['.ICAL_CHAR_WSP.'|'.ICAL_CHAR_HTAB.'])/i';
 		//$data = preg_replace($regex, "", $data)."\n";
 
-		$data = str_replace("\r", "\n", $data);
-
-
-
+		$data = str_replace("\r", "", $data);
+		
 		$objects = array();
 
 		$count=0;
@@ -138,6 +143,15 @@ class ical2array {
 			$matches=$matches[1];
 			while($match=array_shift($matches)) {
 				$object = $this->parse_object_string($match, $children);
+
+				if($type=='VCALENDAR'){
+					if(isset($object['VERSION']))
+						$this->version=$object['VERSION']['value'];
+					
+					if(isset($object['PRODID']))
+						$this->prodid=$object['PRODID']['value'];
+				}
+
 				$object['type'] = $type;
 
 				if(count($children))
@@ -149,7 +163,6 @@ class ical2array {
 			}
 		}
 
-
 		return $objects;
 	}
 
@@ -159,6 +172,18 @@ class ical2array {
 			$regex ='/BEGIN:'.$type.'(.*)END:'.$type.'/s';
 			$data = preg_replace('/BEGIN:'.$type.'.*END:'.$type.'/s', '', $data);
 		}
+
+		if($this->version>1){
+			$data = preg_replace("/\n\s/",'', $data);
+
+			if(stripos($this->prodid, 'nexthaus')){
+				$description = preg_match('/DESCRIPTION:(.*)[A-Z]+(:|;)/Us', $data, $matches);
+				if($matches){
+					$data=str_replace($matches[1], str_replace("\n", ' ', $matches[1])."\n", $data);
+				}
+			}
+		}
+
 
 		$this->object = array();
 		$in_value = false;
