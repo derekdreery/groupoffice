@@ -123,7 +123,6 @@ Ext.extend(GO.portlets.rssFeedPortlet, GO.grid.GridPanel, {
 	onContextClick : function(grid, index, e){
 		if(!this.menu){ // create context menu on first right click
 			this.menu = new Ext.menu.Menu({
-				id:'grid-ctx',
 				items: [
 				{
 					iconCls: 'new-win',
