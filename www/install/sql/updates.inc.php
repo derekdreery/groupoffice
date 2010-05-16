@@ -370,3 +370,7 @@ $updates[]="ALTER TABLE `go_users` ADD `mail_reminders` BOOL NOT NULL ";
 $updates[]="UPDATE `go_users` SET max_rows_list=20;";
 $updates[]="ALTER TABLE `go_users` ADD `popup_reminders` BOOLEAN NOT NULL";
 $updates[]="UPDATE `go_users` SET `popup_reminders`='1'";
+
+$updates[]="ALTER TABLE `go_users` DROP `auth_md5_pass`";
+$updates[]="ALTER TABLE `go_users` ADD `password_type` VARCHAR( 20 ) ";
+$updates[]="UPDATE go_users SET password_type='md5'";

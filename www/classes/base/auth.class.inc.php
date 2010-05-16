@@ -46,66 +46,47 @@ class GO_AUTH extends db
 	 * to authenticate the user, but got no ID, and null if the authentication
 	 * has failed.
 	 */
-	function authenticate( $username, $password, $type='normal') {
+	function authenticate($username, $password) {
 		// Query the database for the given username with the associated
 		// password. We only need to get the userid from the database, all
 		// other columns are not interesting for the authentication.
 		
-		if($type=='normal')
-		{
-			$sql = 'SELECT * FROM go_users WHERE ' .
-					"username='".$this->escape($username)."' AND password='".md5($password)."' " .
-					"AND enabled='1'";
-			$this->query( $sql );
-			
-			// Check if we got a valid result from the SQL database. Otherwise the
-			// login has failed.
-			if  ( !$this->next_record() ) {
+
+		$sql = "SELECT * FROM go_users WHERE username='".$this->escape($username)."'";
+		$this->query($sql);
+
+		// Check if we got a valid result from the SQL database. Otherwise the
+		// login has failed.
+
+		$user = $this->next_record();
+
+		if  (!$user) {
+			return false;
+		}
+
+		//We used to use MD5 but we changed it to crypt 
+		if($user['password_type']=='crypt'){
+			if(!crypt($password, $user['password']) == $user['password']){
 				return false;
 			}
 		}else
 		{
-			$sql = 'SELECT * FROM go_users WHERE ' .
-					"username='".$this->escape($username)."' " .
-					"AND enabled='1'";
-			$this->query( $sql );
-			
-			// Check if we got a valid result from the SQL database. Otherwise the
-			// login has failed.
-			if  ( !$this->next_record() ) {
+			//pwhash is not set yet. We're going to use the old md5 hashed password
+			if(md5($password)!=$user['password']){
 				return false;
 			}else
 			{
-				$md5_auth_pass = $this->md5_base64(base64_encode(pack('H*',$this->f('auth_md5_pass'))).':');
+				//clear old md5 hash and set new pwhash for improved security.
+				$u['id']=$user['id'];
+				$u['password']=crypt($password);
+				$u['password_type']='crypt';
 
-				if($md5_auth_pass!=$password)
-				{
-					return false;
-				}
+				$this->update_row('go_users', 'id', $u);
 			}
-		
-		}
-
-		// Check how many results we got from the search above. If we got more
-		// than one result, something is wrong, and we should not authenticate
-		// the given user.
-		if ( $this->num_rows() != 1 ) {
-			return false;
-		}
-
-		
-		// Fetch the userid number from the database
-		$user_id = $this->f('id');
-		
-		if($this->f('auth_md5_pass')=='')
-		{
-			$up_user['id']=$user_id;
-			$up_user['auth_md5_pass']=md5($username.':'.$password);
-			$this->update_row('go_users','id', $up_user);
 		}
 		
 		// There were not problems, so we can return the userid number.
-		return $this->record;
+		return $user;
 	}
 
 
