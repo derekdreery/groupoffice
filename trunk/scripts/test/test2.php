@@ -1,10 +1,6 @@
 #!/usr/bin/php
 <?php
-chdir(dirname(__FILE__));
-require('../../www/cli-functions.inc.php');
+echo crypt('test');
 
-$args = parse_cli_args($argv);
+echo "\n";
 
-require('../../www/Group-Office.php');
-
-var_dump($args);

@@ -872,18 +872,14 @@ class GO_USERS extends db
 			$GO_SECURITY->set_acl_owner( $user['acl_id'], $user['id'] );
 		} else {
 			$user['acl_id'] = $GO_SECURITY->get_new_acl( $user['email'] );
-		}
+		}		
 		
-		$user['auth_md5_pass']='';
-
 		$user['registration_time'] = $user['mtime']=time();
 
-
+		$user['password_type']='crypt';
 		if(empty($user['password'])){
 			$user['password']=$this->random_password();
-		}
-		
-	
+		}	
 		
 		$GO_EVENTS->fire_event('before_add_user', array($user));
 		
@@ -891,7 +887,7 @@ class GO_USERS extends db
 		if(!empty($user['password']))
 		{
 			$unencrypted_password = $user['password'];
-			$user['password'] = md5($user['password']);
+			$user['password'] = crypt($user['password']);
 		}
 	
 		if(isset($GO_MODULES->modules['files']))
