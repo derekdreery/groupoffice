@@ -66,7 +66,7 @@ class GO_AUTH extends db
 
 		//We used to use MD5 but we changed it to crypt 
 		if($user['password_type']=='crypt'){
-			if(!crypt($password, $user['password']) == $user['password']){
+			if(crypt($password, $user['password']) != $user['password']){
 				return false;
 			}
 		}else
