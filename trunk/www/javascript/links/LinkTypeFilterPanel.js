@@ -26,7 +26,7 @@ GO.LinkTypeFilterPanel = function(config)
 		loadMask:true,
 		store: new Ext.data.JsonStore({
 			root: 'results',
-			data: {"results":GO.linkTypes},
+			data: {"results":GO.linkTypes}, //defined in /default_scripts.inc.php
 			fields: ['id','name', 'checked'],
 			id:'id'
 		}),
