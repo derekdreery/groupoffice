@@ -24,6 +24,8 @@ GO.links.SettingsDialog = function(config){
 			xtype:'htmlcomponent',			
 			html: GO.links.lang.defaultLinkFolderText
 	}];
+
+	//GO.linkTypes is defined in /default_scripts.inc.php
 	for(var i=0;i<GO.linkTypes.length;i++){
 		formItems.push({
 			xtype:'textarea',
