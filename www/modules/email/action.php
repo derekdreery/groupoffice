@@ -809,7 +809,7 @@ try {
 			}else {
 				$account['id']=isset($_POST['account_id']) ? ($_POST['account_id']) : 0;
 
-				if(isset($_POST['type'])) {
+				if(isset($_POST['username'])) {
 					$account['mbroot'] = isset($_POST['mbroot']) ? $_POST['mbroot'] : '';
 					$account['use_ssl'] = isset($_REQUEST['use_ssl'])  ? '1' : '0';
 					//$account['novalidate_cert'] = isset($_REQUEST['novalidate_cert']) ? '1' : '0';

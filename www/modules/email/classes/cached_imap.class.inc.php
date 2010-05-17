@@ -34,7 +34,7 @@ class cached_imap extends imap{
 	 * You can disable the cache for debugging.
 	 * If enabled the message will be converted to safe HTML only once.
 	 */
-	var $disable_message_cache=true;
+	var $disable_message_cache=false;
 
 
 	public function __construct()
@@ -408,7 +408,7 @@ class cached_imap extends imap{
 
 			if($create_temporary_attachment_files) {
 				for ($i = 0; $i < count($message['attachments']); $i ++) {
-					$tmp_file = $GO_CONFIG->tmpdir.'attachments/'.$message['attachments'][$i]['name'];
+					$tmp_file = File::checkfilename($GO_CONFIG->tmpdir.'attachments/'.$message['attachments'][$i]['name']);
 					$data = $this->get_message_part_decoded(
 									$uid,
 									$message['attachments'][$i]['imap_id'],
@@ -423,7 +423,7 @@ class cached_imap extends imap{
 			}
 			if($create_temporary_inline_attachment_files) {
 				for ($i = 0; $i < count($message['url_replacements']); $i ++) {
-					$tmp_file = $GO_CONFIG->tmpdir.'attachments/'.$message['url_replacements'][$i]['attachment']['name'];
+					$tmp_file = File::checkfilename($GO_CONFIG->tmpdir.'attachments/'.$message['url_replacements'][$i]['attachment']['name']);
 					$data = $this->get_message_part_decoded(
 									$uid,
 									$message['url_replacements'][$i]['attachment']['imap_id'],
@@ -559,7 +559,7 @@ class cached_imap extends imap{
 			$att[$i]['tmp_file']=false;
 
 			if(($create_temporary_attachment_files && empty($att[$i]['id'])) || ($create_temporary_inline_attachment_files && !empty($att[$i]['id']))) {
-				$tmp_file = $GO_CONFIG->tmpdir.'attachments/'.$att[$i]['name'];
+				$tmp_file = File::checkfilename($GO_CONFIG->tmpdir.'attachments/'.$att[$i]['name']);
 				$data = $this->get_message_part_decoded(
 								$uid, 
 								$att[$i]['imap_id'],

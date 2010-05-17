@@ -67,28 +67,23 @@ $tasks[] = 'userdir';
 }*/
 
 $tasks[] = 'theme';
-
 $tasks[] = 'new_database';
-
-//if(!isset($dbconn))
-//{
-	$tasks[] = 'create_database';
-	$tasks[] = 'database_connection';
-//}
-
+$tasks[] = 'create_database';
+$tasks[] = 'database_connection';
 $tasks[] = 'database_structure';
-//$tasks[] = 'allow_password_change';
-$tasks[] = 'default_module_access';
-$tasks[] = 'default_groups';
-$tasks[] = 'smtp';
-$GO_USERS->halt_on_error='no';
-/*
 if ($task != 'database_structure' && !empty($GO_CONFIG->db_name) && !$GO_USERS->get_user(1))
 {
 	$tasks[] = 'administrator';
 	//$tasks[] = 'send_info';
 }
-*/
+//$tasks[] = 'allow_password_change';
+$tasks[] = 'default_module_access';
+$tasks[] = 'default_groups';
+$tasks[] = 'smtp';
+$GO_USERS->halt_on_error='no';
+
+
+
 $tasks[] = 'completed';
 
 $menu_language['test'] = 'System test';
@@ -256,16 +251,14 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				//store the version number for future upgrades
 				$GO_CONFIG->save_setting('version', count($updates));
 
-				$user['id'] = $GO_USERS->nextid("go_users");
+				
 
 				$GO_GROUPS->query("DELETE FROM go_db_sequence WHERE seq_name='groups'");
 				$GO_GROUPS->query("DELETE FROM go_groups");
 
-				$admin_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_admins']);
-				$everyone_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_everyone']);
-				$internal_group_id = $GO_GROUPS->add_group($user['id'], $lang['common']['group_internal']);
-
-				$user_groups = array($admin_group_id, $everyone_group_id, $internal_group_id);
+				$admin_group_id = $GO_GROUPS->add_group(1, $lang['common']['group_admins']);
+				$everyone_group_id = $GO_GROUPS->add_group(1, $lang['common']['group_everyone']);
+				$internal_group_id = $GO_GROUPS->add_group(1, $lang['common']['group_internal']);
 
 				$GO_MODULES->load_modules();
 
@@ -299,25 +292,34 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 					}
 				}
 
+				$GO_CONFIG->save_setting('upgrade_mtime', $GO_CONFIG->mtime);
+				
+				$task = 'administrator';
+			}
+			break;
 
+		case 'administrator':
 
+			if($_POST['pass1']!=$_POST['pass2']){
+				$feedback ='<font color="red">The passwords didn\'t match<br>\n</font>';
+			}else
+			{
+				$user['id']=1;
 				$user['language'] = $GO_LANGUAGE->language;
 				$user['first_name']=$GO_CONFIG->product_name;
 				$user['middle_name']='';
 				$user['last_name']=$lang['common']['admin'];
-				$user['username'] = 'admin';
-				$user['password'] = 'admin';
-				$user['email'] = $GO_CONFIG->webmaster_email;
+				$user['username'] = $_POST['username'];
+				$user['password'] = $_POST['pass1'];
+				$user['email'] = $_POST['email'];
 				$user['sex'] = 'M';
 				$user['enabled']='1';
 				$user['country']=$GO_CONFIG->default_country;
 				$user['work_country']=$GO_CONFIG->default_country;
 
-				$GO_USERS->debug=true;
-				$GO_USERS->add_user($user,$user_groups,array($GO_CONFIG->group_everyone));
-				//filesystem::mkdir_recursive($GO_CONFIG->file_storage_path.'users/admin/');
+				//$GO_USERS->debug=true;
+				$GO_USERS->add_user($user,array(1,2,3),array($GO_CONFIG->group_everyone));
 
-				$GO_CONFIG->save_setting('upgrade_mtime', $GO_CONFIG->mtime);
 				
 				$task = $nexttask;
 			}
@@ -1686,7 +1688,7 @@ switch($task)
 			<td>Username:</td>
 			<td>
 			<?php
-			$username = isset($_POST['username']) ? (htmlspecialchars($_POST['username'])) : 'admin';
+			$username = isset($_POST['username']) ? (htmlspecialchars($_POST['username'])) : '';
 		?>
 			<input name="username" type="text" value="<?php echo $username; ?>" />
 			</tr>
@@ -1745,12 +1747,7 @@ switch($task)
 	from the server and upload it back to the server. This way you change the ownership to your account.
 	<br />
 	<br />
-	If this is a fresh install you can login with the default administrator account:<br />
-	<br />
-	<b>Username: admin<br />
-	Password: admin</b>
-	<br /><br />
-	Don't use this account for regular use!
+	Don't use the administrator account for regular use! Only use it for administrative tasks.
 	<br />
 	Read this to get started with <?php echo $GO_CONFIG->product_name; ?>: <a href="http://www.group-office.com/wiki/Getting_started" target="_blank">http://www.group-office.com/wiki/Getting_started</a>
 	<ul>
