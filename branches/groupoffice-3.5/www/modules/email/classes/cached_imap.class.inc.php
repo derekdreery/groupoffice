@@ -34,7 +34,7 @@ class cached_imap extends imap{
 	 * You can disable the cache for debugging.
 	 * If enabled the message will be converted to safe HTML only once.
 	 */
-	var $disable_message_cache=true;
+	var $disable_message_cache=false;
 
 
 	public function __construct()
