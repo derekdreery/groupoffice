@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `em_accounts` (
   `use_ssl` enum('0','1') NOT NULL default '0',
   `novalidate_cert` enum('0','1') NOT NULL default '0',
   `username` varchar(50) default NULL,
-  `password` varchar(64) default NULL,
+  `password` varchar(255) default NULL,
   `signature` text,
   `standard` tinyint(4) NOT NULL default '0',
   `mbroot` varchar(30) default NULL,
@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `em_accounts` (
   `smtp_encryption` char(3) NOT NULL,
   `smtp_username` varchar(50) default NULL,
   `smtp_password` varchar(50) default NULL,
+	`password_encrypted` BOOLEAN NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

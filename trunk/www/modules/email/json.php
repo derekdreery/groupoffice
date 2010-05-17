@@ -967,6 +967,8 @@ try {
 				$response['success']=false;
 				$response['data']=$email->get_account($_POST['account_id']);
 
+				$response['data']=$email->decrypt_account($response['data']);
+
 				if($response['data']) {
 					$user = $GO_USERS->get_user($response['data']['user_id']);
 					$response['data']['user_name']=String::format_name($user['last_name'],$user['first_name'], $user['middle_name']);

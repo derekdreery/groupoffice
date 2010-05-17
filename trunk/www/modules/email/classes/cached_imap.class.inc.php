@@ -74,7 +74,7 @@ class cached_imap extends imap{
 	}
 
 	public function set_account($account, $mailbox='INBOX'){
-		$this->account = $account;
+		$this->account = $this->email->decrypt_account($account);
 
 		if(!$this->folder || $this->folder['name']!=$mailbox){
 			$this->folder = $this->email->get_folder($this->account['id'],$mailbox);
@@ -108,7 +108,12 @@ class cached_imap extends imap{
 
 			$this->set_account($account, $mailbox);
 
-			parent::connect($account['host'], $account['port'], $account['username'], $account['password'], $account['use_ssl']);
+			parent::connect(
+							$this->account['host'],
+							$this->account['port'],
+							$this->account['username'],
+							$this->account['password'],
+							$this->account['use_ssl']);
 
 			$this->select_mailbox($mailbox);
 		}
