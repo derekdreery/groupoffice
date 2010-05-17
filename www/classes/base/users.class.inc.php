@@ -152,6 +152,8 @@ class GO_USERS extends db
 		$_SESSION['GO_SESSION']['list_separator'] = $userdata['list_separator'];
 		$_SESSION['GO_SESSION']['text_separator'] = $userdata['text_separator'];
 
+		
+
 		if (isset($GO_THEME)) $GO_THEME->set_theme();
 
 		return true;

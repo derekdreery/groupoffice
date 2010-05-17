@@ -78,12 +78,18 @@ class GO_AUTH extends db
 			{
 				//clear old md5 hash and set new pwhash for improved security.
 				$u['id']=$user['id'];
-				$u['password']=crypt($password);
+				$user['password']=$u['password']=crypt($password);
 				$u['password_type']='crypt';
 
 				$this->update_row('go_users', 'id', $u);
 			}
 		}
+
+
+		//A secret key used for encryption of private data
+		$_SESSION['GO_SESSION']['key']=md5($user['password'].':'.$password);
+
+		go_debug($_SESSION['GO_SESSION']['key']);
 		
 		// There were not problems, so we can return the userid number.
 		return $user;
