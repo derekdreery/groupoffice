@@ -86,6 +86,10 @@ class cryptastic {
 	 */
 	public function decrypt( $msg, $k='', $base64 = true ) {
 
+		//Check if mcrypt is supported
+		if(!function_exists('mcrypt_module_open'))
+			return false;
+
 		if(empty($k)){
 			$k=$_SESSION['GO_SESSION']['key'];
 		}

@@ -86,6 +86,13 @@ function test_system(){
 
 	$tests[]=$test;
 
+	$test['name']='Mcrypt support';
+	$test['pass']=extension_loaded('mcrypt');
+	$test['feedback']='Warning: No Mcrypt extension for PHP found. Without mcrypt Group-Office has to save e-mail passwords in plain text.';
+	$test['fatal']=false;
+
+	$tests[]=$test;
+
 	$test['name']='File upload support';
 	$test['pass']=ini_get('file_uploads') == '1';
 	$test['feedback']='Warning: File uploads are disabled. Please set file_uploads=On in php.ini.';

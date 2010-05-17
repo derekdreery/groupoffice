@@ -529,6 +529,9 @@ class email extends db {
 				if($encrypted){
 					$account['password']=$encrypted;
 					$account['password_encrypted']=1;
+				}else
+				{
+					$account['password_encrypted']=0;
 				}
 
 				return $this->_update_account($account);
