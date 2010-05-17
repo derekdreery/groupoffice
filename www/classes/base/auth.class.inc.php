@@ -178,10 +178,6 @@ class GO_AUTH extends db
 		$GO_MODULES->load_modules();
 	}
 
-	function bad_login($username){
-		///$sql = "UPDATE go_users SET failed_login_attempts=failed_login_attempts+1 WHERE username='".$this->escape($username)."'";
-		//return $this->query($sql);
-	}
 
 	/**
 	 * This function logs a user in
@@ -230,7 +226,7 @@ class GO_AUTH extends db
 		$user = $this->authenticate($username, $password, $type);
 		// Check if the authentication was successful, otherwise exit.
 		if (!$user) {
-			$this->bad_login($username);
+			$GO_EVENTS->fire_event('bad_login', $args);
 			go_debug('Wrong password entered for '.$username);
 		}
 
