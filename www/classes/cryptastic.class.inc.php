@@ -1,7 +1,20 @@
 <?php
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @copyright Copyright Intermesh
+ * @version $Id: Number.class.inc.php 4305 2010-03-02 15:48:48Z mschering $
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
 
-
-/*-------------------------------------------------------------------------
+/*
+ * Original code is from:
+ * -------------------------------------------------------------------------
 
 	Cryptastic, by Andrew Johnson (2009).
 	http://www.itnewb.com/user/Andrew
@@ -18,9 +31,6 @@
 
 -------------------------------------------------------------------------*/
 
-/**********************************************************************************************************************/
-
-
 class cryptastic {
 
 	/** Encryption Procedure
@@ -32,7 +42,15 @@ class cryptastic {
 	 *	@return  string   iv+ciphertext+mac or
 	 *           boolean  false on error
 	 */
-	public function encrypt( $msg, $k, $base64 = false ) {
+	public function encrypt( $msg, $k='', $base64 = true ) {
+
+		//Check if mcrypt is supported
+		if(!function_exists('mcrypt_module_open'))
+			return false;
+
+		if(empty($k)){
+			$k=$_SESSION['GO_SESSION']['key'];
+		}
 
 		# open cipher module (do not change cipher/mode)
 		if ( ! $td = mcrypt_module_open('rijndael-256', '', 'ctr', '') )
@@ -66,7 +84,11 @@ class cryptastic {
 	 *	@return  string   original message/data or
 	 *           boolean  false on error
 	 */
-	public function decrypt( $msg, $k, $base64 = false ) {
+	public function decrypt( $msg, $k='', $base64 = true ) {
+
+		if(empty($k)){
+			$k=$_SESSION['GO_SESSION']['key'];
+		}
 
 		if ( $base64 ) $msg = base64_decode($msg);			# base64 decode?
 

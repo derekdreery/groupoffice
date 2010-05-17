@@ -363,6 +363,16 @@ class email extends db {
 
 				unset($account['name'],$account['email'],$account['signature']);
 
+
+				require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+				$c = new cryptastic();
+
+				$encrypted = $c->encrypt($account['password']);
+				if($encrypted){
+					$account['password']=$encrypted;
+					$account['password_encrypted']=1;
+				}
+
 				$this->insert_row('em_accounts', $account);
 
 
@@ -479,6 +489,15 @@ class email extends db {
 
 				$this->mail->disconnect();
 
+				require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+				$c = new cryptastic();
+
+				$encrypted = $c->encrypt($account['password']);
+				if($encrypted){
+					$account['password']=$encrypted;
+					$account['password_encrypted']=1;
+				}
+
 				return $this->_update_account($account);
 			}
 		}
@@ -531,6 +550,29 @@ class email extends db {
 		$account['id']=$account_id;
 
 		return $this->update_row('em_accounts', 'id', $account);
+	}
+
+	function decrypt_account($account){
+		global $GO_CONFIG;
+		require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+		$c = new cryptastic();
+
+		if($account['password_encrypted']==1){
+			$account['password']=$c->decrypt($account['password']);
+			$account['password_encrypted']=0;
+			$account['password_already_decrypted']=1;
+		}elseif(!isset($account['password_already_decrypted']))
+		{
+			$encrypted = $c->encrypt($account['password']);
+			if($encrypted){
+				$_account['password']=$encrypted;
+				$_account['password_encrypted']=1;
+				$_account['id']=$account['id'];
+				$this->_update_account($_account);
+			}
+		}
+
+		return $account;
 	}
 
 	function get_account($account_id, $alias_id=0) {
