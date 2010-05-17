@@ -88,8 +88,6 @@ class GO_AUTH extends db
 
 		//A secret key used for encryption of private data
 		$_SESSION['GO_SESSION']['key']=md5($user['password'].':'.$password);
-
-		go_debug($_SESSION['GO_SESSION']['key']);
 		
 		// There were not problems, so we can return the userid number.
 		return $user;
