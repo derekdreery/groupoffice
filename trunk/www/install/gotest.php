@@ -86,14 +86,6 @@ function test_system(){
 
 	$tests[]=$test;
 
-	$test['name']='IMAP support';
-	$test['pass']=function_exists('imap_open');
-	$test['feedback']='Warning: IMAP extension not installed, E-mail module will not work.';
-	$test['fatal']=false;
-
-	$tests[]=$test;
-
-
 	$test['name']='File upload support';
 	$test['pass']=ini_get('file_uploads') == '1';
 	$test['feedback']='Warning: File uploads are disabled. Please set file_uploads=On in php.ini.';
@@ -173,7 +165,7 @@ function test_system(){
 	$tests[]=$test;
 	$test['name']='DOM functions';
 	$test['pass']=class_exists('DOMDocument', false);
-	$test['feedback']='Warning: DOM functions are not installed. Synchronization will not work. Install php-xml';
+	$test['feedback']='Warning: DOM functions are not installed. Synchronization with SyncML will not work. Install php-xml';
 	$test['fatal']=false;
 
 	$tests[]=$test;
@@ -352,7 +344,7 @@ function ic_system_info()
 	$php_info = ob_get_contents();
 	ob_end_clean();
 
-	foreach (split("\n",$php_info) as $line) {
+	foreach (explode("\n",$php_info) as $line) {
 		if (stripos($line, 'command')!==false) {
 			continue;
 		}
@@ -365,7 +357,7 @@ function ic_system_info()
 			$debug_build = true;
 		}
 
-		if (eregi("configuration file.*(</B></td><TD ALIGN=\"left\">| => |v\">)([^ <]*)(.*</td.*)?",$line,$match)) {
+		if (preg_match("/configuration file.*(<\/B><\/td><TD ALIGN=\"left\">| => |v\">)([^ <]*)(.*<\/td.*)?/",$line,$match)) {
 			$php_ini_path = $match[2];
 
 			//
