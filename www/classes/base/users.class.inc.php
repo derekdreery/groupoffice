@@ -493,7 +493,7 @@ class GO_USERS extends db
 	 * @param string $password
 	 * 
 	 * @return bool
-	 */
+	 
 	function check_password($password)
 	{
 		$this->query("SELECT id FROM go_users WHERE password='".md5($password).
@@ -503,7 +503,7 @@ class GO_USERS extends db
 			return true;
 		}
 		return false;
-	}
+	}*/
 
 	/**
 	 * This function searches for a user by his ID andreturns all userdata based on the users ID.
@@ -642,8 +642,12 @@ class GO_USERS extends db
 		
 		$ret = false;
 		if(!empty($user['password']))
-		{			
-			$user['password']=md5($user['password']);
+		{
+			$old_key = $_SESSION['GO_SESSION']['key'];
+			$unencrypted_password = $user['password'];
+
+			$user['password']=crypt($user['password']);
+
 		}
 		
 		if($this->update_row('go_users', 'id', $user))
@@ -651,6 +655,12 @@ class GO_USERS extends db
 			if(isset($_SESSION['GO_SESSION']['user_id']) && $user['id'] == $_SESSION['GO_SESSION']['user_id'])
 			{
 				$ret = $this->update_session($user['id']);
+
+				if(isset($unencrypted_password)){
+					$new_key = $_SESSION['GO_SESSION']['key']= md5($user['password'].':'.$unencrypted_password);
+
+					$GO_EVENTS->fire_event('key_changed', array($user['id'], $old_key, $new_key));
+				}
 			}
 			$ret = true;
 		}

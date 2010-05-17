@@ -133,6 +133,39 @@ class email extends db {
 		$events->add_listener('check_database', __FILE__, 'email', 'check_database');
 		$events->add_listener('login', __FILE__, 'email', 'login');
 		$events->add_listener('checker', __FILE__, 'email', 'check_mail');
+		$events->add_listener('key_changed', __FILE__, 'email', 'key_changed');
+	}
+
+	/**
+	 * When a user changes the password the encryption key changes too. We need to
+	 * re-encrypt the e-mail account passwords.
+	 * 
+	 * @param <type> $user_id
+	 * @param <type> $old_key
+	 * @param <type> $new_key
+	 */
+	public static function key_changed($user_id, $old_key, $new_key){
+		global $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+
+		$c = new cryptastic();
+		$db = new db();
+		$email = new email();
+	
+		$sql = "SELECT id, password FROM em_accounts WHERE password_encrypted=1 AND user_id=?";
+		$db->query($sql, 'i', $user_id);
+
+		while($account = $db->next_record()){
+			$account['password']=$c->decrypt($account['password'], $old_key);
+			$encrypted = $c->encrypt($account['password'], $new_key);
+			if($encrypted)
+				$account['password']=$encrypted;
+			else
+				$account['password_encrypted']=0;
+
+			$email->_update_account($account);
+		}		
 	}
 
 	public static function check_mail(&$response){

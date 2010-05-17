@@ -237,7 +237,9 @@ class users extends db
 
 		if (!empty($_POST["password1"]) || !empty($_POST["password2"]))
 		{
-			if(!$GO_USERS->check_password(($_POST['current_password'])))
+			global $GO_AUTH;
+			
+			if(!$GO_AUTH->authenticate($_SESSION['GO_SESSION']['username'], $_POST['current_password']))
 			{
 				throw new Exception($lang['common']['badPassword']);
 			}

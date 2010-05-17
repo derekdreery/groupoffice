@@ -89,7 +89,7 @@ GO.users.UserDialog = function(config){
 	this.addEvents({'save' : true, 'set_id' : true});	
 }
 
-Ext.extend(GO.users.UserDialog, Ext.Window,{
+Ext.extend(GO.users.UserDialog,GO.Window,{
 
 	user_id : 0,
 	
