@@ -374,3 +374,5 @@ $updates[]="UPDATE `go_users` SET `popup_reminders`='1'";
 $updates[]="ALTER TABLE `go_users` DROP `auth_md5_pass`";
 $updates[]="ALTER TABLE `go_users` ADD `password_type` VARCHAR( 20 ) ";
 $updates[]="UPDATE go_users SET password_type='md5'";
+
+$updates[]='script:7_install_blacklist.inc.php';

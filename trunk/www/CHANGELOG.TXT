@@ -1,3 +1,9 @@
+2010/05/17 3.5.2
+- Improved security. E-mail passwords are encrypted in the database now and
+  with the new blacklist module remote IP addresses are blocked after 5 consecutive
+  login failures.
+- Small bug fixes
+
 2010/05/14 3.5.1
 - A lot of bug fixes and improvements to the tickets module. Customers can login
   through the Group-Office interface now too.
