@@ -831,7 +831,7 @@ class addressbook extends db {
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
-	function format_contact_record(&$record, $cf=false) {
+	public static function format_contact_record(&$record, $cf=false) {
 		$record['name'] = String::format_name($record['last_name'], $record['first_name'], $record['middle_name']);
 		$record['ctime']=Date::get_timestamp($record['ctime']);
 		$record['mtime']=Date::get_timestamp($record['mtime']);
