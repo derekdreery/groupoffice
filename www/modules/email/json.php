@@ -543,6 +543,7 @@ try {
 				if(!empty($response['new'])) {
 					if($imap->set_unseen_cache(array($uid), false)) {
 						if(!empty($response['from_cache']) || stripos($account['host'],'gmail')!==false) {
+							$imap->open();
 							$imap->set_message_flag(array($uid), "\Seen");
 						}
 					}
