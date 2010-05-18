@@ -76,12 +76,12 @@ class imap extends imap_bodystruct {
 		$this->password=$password;
 
 		if ($this->ssl) {
-			$this->server = 'tls://'.$this->server;
+			$this->server = 'ssl://'.$this->server;
 		}
 
-		$this->handle = @fsockopen($this->server, $this->port, $errorno, $errorstr, 30);
+		$this->handle = fsockopen($this->server, $this->port, $errorno, $errorstr, 30);
 		if (!is_resource($this->handle)) {
-			throw new Exception('#'.$errorno.'. '.$errorstr);
+			throw new Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 		}
 
 		return $this->authenticate($username, $password);
@@ -101,10 +101,6 @@ class imap extends imap_bodystruct {
 			$this->send_command($command);
 			$this->state = 'disconnected';
 			$result = $this->get_response();
-
-
-
-
 			go_debug($this->commands);
 
 			//go_debug($this->responses);
