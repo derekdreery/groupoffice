@@ -853,9 +853,9 @@ class cached_imap extends imap{
 
 
 	public function imap_message_to_cache($message, $keep_full_data=false){
-		$message['to']=substr($message['to'],0, 255);
+		/*$message['to']=substr($message['to'],0, 255);
 		$message['subject']=substr($message['subject'],0,100);
-		$message['from']=substr($message['from'],0,100);
+		$message['from']=substr($message['from'],0,100);*/
 		$message['udate']=intval($message['internal_udate']);		
 		$message['new']=empty($message['seen']);
 		$message['priority']=intval($message['x-priority']);
