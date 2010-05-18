@@ -740,6 +740,7 @@ class cached_imap extends imap{
 					$message['html_body'].='<img alt="'.$html_part['name'].'" src="'.$this->get_attachment_url($message['uid'], $html_part).'" style="display:block;margin:10px 0;" />';
 				}
 			}
+			$message['html_body']=String::convert_html($message['html_body']);
 		}
 		if($html_body_requested){
 
@@ -748,9 +749,6 @@ class cached_imap extends imap{
 				for($i=0,$max=count($inline_images);$i<$max;$i++){
 					$message['html_body']=str_replace('{inline_'.$i.'}', $inline_images[$i], $message['html_body']);
 				}
-			}else
-			{
-				$message['html_body']=String::convert_html($message['html_body']);
 			}
 		}
 		
