@@ -109,7 +109,7 @@ class blacklist extends db {
 	 */
 	function get_ip($ip)
 	{
-		$this->query("SELECT * FROM bl_ips WHERE ip=?", 'i', $ip);
+		$this->query("SELECT * FROM bl_ips WHERE ip=?", 's', $ip);
 		return $this->next_record();		
 	}
 
