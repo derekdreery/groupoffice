@@ -51,7 +51,7 @@ class cryptastic {
 		if(empty($k)){
 			$k=$_SESSION['GO_SESSION']['key'];
 		}
-
+		
 		# open cipher module (do not change cipher/mode)
 		if ( ! $td = mcrypt_module_open('rijndael-256', '', 'ctr', '') )
 			return false;
