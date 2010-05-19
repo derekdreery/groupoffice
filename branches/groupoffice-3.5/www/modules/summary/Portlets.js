@@ -243,7 +243,8 @@ GO.mainLayout.onReady(function(){
 		title: GO.summary.lang.announcements,
 		layout:'fit',
 		items: GO.summary.announcementsPanel,
-		autoHeight:true
+		autoHeight:true,
+		hideMode:'offsets'
 	});
 	
 	GO.summary.portlets['portlet-announcements'].hide();
