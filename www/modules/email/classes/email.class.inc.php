@@ -399,6 +399,8 @@ class email extends db {
 				//we can only encrypt the password if the account owner is doing this
 				//otherwise we use the wrong encryption key.
 				$account['password_encrypted']=0;
+
+				go_debug($GO_SECURITY->user_id.'=='.$account['user_id']);
 				if($GO_SECURITY->user_id==$account['user_id']){
 					require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
 					$c = new cryptastic();
@@ -594,7 +596,7 @@ class email extends db {
 	}
 
 	function decrypt_account($account){
-		global $GO_CONFIG;
+		global $GO_CONFIG, $GO_SECURITY;
 		require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
 		$c = new cryptastic();
 
@@ -602,7 +604,7 @@ class email extends db {
 			$account['password']=$c->decrypt($account['password']);
 			$account['password_encrypted']=0;
 			$account['password_already_decrypted']=1;
-		}elseif(!isset($account['password_already_decrypted']))
+		}elseif(!isset($account['password_already_decrypted']) && $GO_SECURITY->user_id==$account['user_id'])
 		{
 			$encrypted = $c->encrypt($account['password']);
 			if($encrypted){
