@@ -777,8 +777,10 @@ try {
 
 		case 'syncfolders':
 
-			$account = $email->get_account($_REQUEST['account_id']);
-			$email->synchronize_folders($account);
+
+			$account = $imap->open_account($_REQUEST['account_id']);
+
+			$email->synchronize_folders($account, $imap);
 			$response['feedback']=true;
 			break;
 
