@@ -74,6 +74,7 @@ class pdf_export_query extends base_export_query{
 	}
 
 	function init_pdf(){
+		global $GO_CONFIG;
 		$this->pdf = new export_pdf();
 		//green border
 		$this->pdf->SetDrawColor(125,165, 65);
@@ -83,7 +84,7 @@ class pdf_export_query extends base_export_query{
 		$this->pdf->SetTitle($_REQUEST['title']);
 		$this->pdf->SetSubject($_REQUEST['title']);
 		$this->pdf->SetAuthor($_SESSION['GO_SESSION']['name']);
-		$this->pdf->SetCreator('Group-Office '.$GLOBALS['GO_CONFIG']->version);
+		$this->pdf->SetCreator($GO_CONFIG->product_name.' '.$GLOBALS['GO_CONFIG']->version);
 		$this->pdf->SetKeywords($_REQUEST['title']);
 	}
 
@@ -215,7 +216,7 @@ class export_pdf extends TCPDF
 		$this->SetFont($this->font,'',$this->font_size);
 		$this->SetY(-20);
 		$pW=$this->getPageWidth();
-		$this->Cell($pW/2, 10, 'Group-Office '.$GO_CONFIG->version, 0, 0, 'L');
+		$this->Cell($pW/2, 10, $GO_CONFIG->product_name.' '.$GO_CONFIG->version, 0, 0, 'L');
 		$this->Cell(($pW/2)-$this->rMargin, 10, sprintf($lang['common']['printPage'], $this->getAliasNumPage(), $this->getAliasNbPages()), 0, 0, 'R');
 	}
 
