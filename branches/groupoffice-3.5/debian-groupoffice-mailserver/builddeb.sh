@@ -24,7 +24,7 @@ mkdir groupoffice-mailserver
 
 cd groupoffice-mailserver
 
-svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice-mailserver
+svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$VERSION/debian-groupoffice-mailserver
 
 mv debian-groupoffice-mailserver groupoffice-mailserver-$VERSION
 
