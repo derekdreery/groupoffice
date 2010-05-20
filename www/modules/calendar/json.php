@@ -1028,7 +1028,7 @@ try {
 			while($group = $cal->next_record()) {
 				$group['fields'] = explode(",", $group['fields']);
 				$group['resources'] = array();
-				$cal2->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 1, $group['id']);
+				$cal2->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 0, $group['id']);
 				while($resource = $cal2->next_record()) {
 					$user = $GO_USERS->get_user($resource['user_id']);
 					$resource['user_name']=String::format_name($user);
