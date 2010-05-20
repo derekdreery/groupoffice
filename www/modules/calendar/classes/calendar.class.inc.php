@@ -1405,21 +1405,21 @@ class calendar extends db
 			$GO_LANGUAGE->require_language_file('calendar');
 		}
 		
-		$url = create_direct_url('calendar', 'showEvent', array('values'=>array('event_id' => $resource['id'])));
+		$url = create_direct_url('calendar', 'showEvent', array(array('values'=>array('event_id' => $resource['id']))));
 
 		switch($message_type){
 			case 'new':
-				$body = sprintf($lang['calendar']['resource_modified_mail_body'],$user_name).'<br /><br />'
-					. $this->event_to_html($resource, true)
-					. '<br /><a href="'.$url.'">'.$lang['calendar']['open_resource'].'</a>';
-				$subject = sprintf($lang['calendar']['resource_modified_mail_subject'],$calendar['name'], $resource['name'], date($_SESSION['GO_SESSION']['date_format'], $resource['start_time']));
-			break;
-
-			case 'modified_for_admin':
 				$body = sprintf($lang['calendar']['resource_mail_body'],$user_name,$calendar['name']).'<br /><br />'
 					. $this->event_to_html($resource, true)
 					. '<br /><a href="'.$url.'">'.$lang['calendar']['open_resource'].'</a>';
 				$subject = sprintf($lang['calendar']['resource_mail_subject'],$calendar['name'], $resource['name'], date($_SESSION['GO_SESSION']['date_format'], $resource['start_time']));
+			break;
+
+			case 'modified_for_admin':
+				$body = sprintf($lang['calendar']['resource_modified_mail_body'], $user_name, $calendar['name']).'<br /><br />'
+					. $this->event_to_html($resource, true)
+					. '<br /><a href="'.$url.'">'.$lang['calendar']['open_resource'].'</a>';
+				$subject = sprintf($lang['calendar']['resource_modified_mail_subject'],$calendar['name'], $resource['name'], date($_SESSION['GO_SESSION']['date_format'], $resource['start_time']));
 			break;
 
 			case 'mofified_for_user':
