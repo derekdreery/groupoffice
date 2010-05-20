@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `em_accounts` (
   `smtp_encryption` char(3) NOT NULL,
   `smtp_username` varchar(50) default NULL,
   `smtp_password` varchar(50) default NULL,
-	`password_encrypted` BOOLEAN NOT NULL,
+	`password_encrypted` TINYINT NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

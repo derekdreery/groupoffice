@@ -634,7 +634,7 @@ class GO_USERS extends db
 	 */
 	function update_profile($user, $complete_profile=false)
 	{
-		global $GO_EVENTS;
+		global $GO_EVENTS, $GO_SECURITY;
 		
 		$user['mtime']=time();
 
@@ -643,24 +643,14 @@ class GO_USERS extends db
 		$ret = false;
 		if(!empty($user['password']))
 		{
-			$old_key = $_SESSION['GO_SESSION']['key'];
-			$unencrypted_password = $user['password'];
-
 			$user['password']=crypt($user['password']);
-
 		}
 		
 		if($this->update_row('go_users', 'id', $user))
 		{
 			if(isset($_SESSION['GO_SESSION']['user_id']) && $user['id'] == $_SESSION['GO_SESSION']['user_id'])
 			{
-				$ret = $this->update_session($user['id']);
-
-				if(isset($unencrypted_password)){
-					$new_key = $_SESSION['GO_SESSION']['key']= md5($user['password'].':'.$unencrypted_password);
-
-					$GO_EVENTS->fire_event('key_changed', array($user['id'], $old_key, $new_key));
-				}
+				$ret = $this->update_session($user['id']);				
 			}
 			$ret = true;
 		}
