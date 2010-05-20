@@ -17,7 +17,12 @@ fi
 
 VERSION=`cat ../www/classes/base/config.class.inc.php | grep '$version' | sed -e 's/[^0-9\.]*//g'`
 
+if [[ $VERSION =~ ^([0-9]\.[0-9])\.[0-9]$ ]]; then
+	MAJORVERSION=${BASH_REMATCH[1]}
+fi
+
 echo "Group-Office version: $VERSION"
+echo "Major version: $MAJORVERSION"
 
 if [ ! -e /var/www/release/packages/groupoffice-pro-$VERSION ]; then
 	echo /var/www/release/packages/groupoffice-pro-$VERSION bestaat niet. eerst createtag.sh draaien.
@@ -32,7 +37,7 @@ mkdir groupoffice-pro
 
 cd groupoffice-pro
 
-svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$VERSION/debian-groupoffice-pro
+svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice-pro
 
 mv debian-groupoffice-pro groupoffice-pro-$VERSION
 

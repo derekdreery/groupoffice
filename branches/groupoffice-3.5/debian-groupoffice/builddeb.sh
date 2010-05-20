@@ -1,8 +1,5 @@
 #!/bin/bash
 
-
-
-
 PRG="$0"
 OLDPWD=`pwd`
 P=`dirname $PRG`
@@ -16,25 +13,22 @@ fi
 
 VERSION=`cat ../www/classes/base/config.class.inc.php | grep '$version' | sed -e 's/[^0-9\.]*//g'`
 
+if [[ $VERSION =~ ^([0-9]\.[0-9])\.[0-9]$ ]]; then
+	MAJORVERSION=${BASH_REMATCH[1]}
+fi
+
 echo "Group-Office version: $VERSION"
+echo "Major version: $MAJORVERSION"
 
 cd /tmp
 
 rm -Rf groupoffice-com
-
 mkdir groupoffice-com
-
 cd groupoffice-com
 
-svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$VERSION/debian-groupoffice
+svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice
 
 if [ "$1" == "real" ]; then
-	#svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/tags/groupoffice-com-$VERSION
-	#mv groupoffice-com-$VERSION debian-groupoffice/usr/share/groupoffice
-
-	#svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/www
-	#mv www debian-groupoffice/usr/share/groupoffice
-
 	cp -R /var/www/release/packages/groupoffice-com-$VERSION debian-groupoffice/usr/share/groupoffice
 	mv debian-groupoffice/usr/share/groupoffice/LICENSE.TXT debian-groupoffice
 fi
