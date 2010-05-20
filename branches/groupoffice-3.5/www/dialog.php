@@ -14,7 +14,7 @@ $params = isset($_REQUEST['params']) ? ($_REQUEST['params']) : '';
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title>Group-Office</title>
+<title><?php echo $GO_CONFIG->product_name; ?></title>
 <script type="text/javascript">
 function launchGO(){
 	var win = window.open('', "groupoffice");

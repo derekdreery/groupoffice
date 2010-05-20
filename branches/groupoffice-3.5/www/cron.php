@@ -13,9 +13,9 @@
  */
 
  /*
-  * Run a cron job every 15 minutes on this file. Add this to /etc/cron.d/groupoffice :
+  * Run a cron job every 5 minutes on this file. Add this to /etc/cron.d/groupoffice :
   *
-  * 0,15,30,45 * * * * root php /path/to/go/cron.php /path/to/config.php
+  * 0,5,10,15,20,25,30,35,40,45,50,55 * * * * root php /path/to/go/cron.php /path/to/config.php
   */
 
 if(isset($argv[1]))
