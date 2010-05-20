@@ -26,7 +26,7 @@ mkdir groupoffice-com
 
 cd groupoffice-com
 
-svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/trunk/debian-groupoffice
+svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$VERSION/debian-groupoffice
 
 if [ "$1" == "real" ]; then
 	#svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/tags/groupoffice-com-$VERSION
