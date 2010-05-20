@@ -346,7 +346,7 @@ class email extends db {
 	}
 
 	function add_account($account) {
-		global $GO_CONFIG, $GO_LANGUAGE;
+		global $GO_CONFIG, $GO_LANGUAGE, $GO_SECURITY;
 
 
 		require_once($GO_CONFIG->class_path."mail/imap.class.inc");
@@ -396,16 +396,21 @@ class email extends db {
 
 				unset($account['name'],$account['email'],$account['signature']);
 
+				//we can only encrypt the password if the account owner is doing this
+				//otherwise we use the wrong encryption key.
+				$account['password_encrypted']=0;
 
-				require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
-				$c = new cryptastic();
+				go_debug($GO_SECURITY->user_id.'=='.$account['user_id']);
+				if($GO_SECURITY->user_id==$account['user_id']){
+					require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+					$c = new cryptastic();
 
-				$encrypted = $c->encrypt($account['password']);
-				if($encrypted){
-					$account['password']=$encrypted;
-					$account['password_encrypted']=1;
+					$encrypted = $c->encrypt($account['password']);
+					if($encrypted){
+						$account['password']=$encrypted;
+						$account['password_encrypted']=1;
+					}
 				}
-
 				$this->insert_row('em_accounts', $account);
 
 
@@ -485,7 +490,7 @@ class email extends db {
 	}
 
 	function update_account($account) {
-		global $GO_CONFIG;
+		global $GO_CONFIG, $GO_SECURITY;
 
 		require_once($GO_CONFIG->class_path."mail/imap.class.inc");
 		$this->mail= new imap();
@@ -522,16 +527,18 @@ class email extends db {
 
 				$this->mail->disconnect();
 
-				require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
-				$c = new cryptastic();
+				//we can only encrypt the password if the account owner is doing this
+				//otherwise we use the wrong encryption key.
+				$account['password_encrypted']=0;
+				if($account['user_id']==$GO_SECURITY->user_id){
+					require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+					$c = new cryptastic();
 
-				$encrypted = $c->encrypt($account['password']);
-				if($encrypted){
-					$account['password']=$encrypted;
-					$account['password_encrypted']=1;
-				}else
-				{
-					$account['password_encrypted']=0;
+					$encrypted = $c->encrypt($account['password']);
+					if($encrypted){
+						$account['password']=$encrypted;
+						$account['password_encrypted']=1;
+					}
 				}
 
 				return $this->_update_account($account);
@@ -589,7 +596,7 @@ class email extends db {
 	}
 
 	function decrypt_account($account){
-		global $GO_CONFIG;
+		global $GO_CONFIG, $GO_SECURITY;
 		require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
 		$c = new cryptastic();
 
@@ -597,7 +604,7 @@ class email extends db {
 			$account['password']=$c->decrypt($account['password']);
 			$account['password_encrypted']=0;
 			$account['password_already_decrypted']=1;
-		}elseif(!isset($account['password_already_decrypted']))
+		}elseif(!isset($account['password_already_decrypted']) && $GO_SECURITY->user_id==$account['user_id'])
 		{
 			$encrypted = $c->encrypt($account['password']);
 			if($encrypted){

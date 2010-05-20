@@ -135,9 +135,11 @@ switch($args['task'])
 		if(isset($args['password']))
 		{
 			//set admin password
+
+			$password = crypt($args['password']);
 			
 			$db->query('USE `'.$db_name.'`');
-			$db->query("UPDATE go_users SET password=MD5('".$args['password']."') WHERE id=1");
+			$db->query("UPDATE go_users SET password='".$password."' WHERE id=1");
 		}
 		
 		break;

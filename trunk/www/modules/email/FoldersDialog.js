@@ -226,6 +226,8 @@ GO.email.FoldersDialog = function(config) {
 
 			cls : 'x-btn-text-icon',
 			handler : function() {
+				this.rootNode.reload();
+				/*
 				Ext.Ajax.request({
 							url : GO.settings.modules.email.url + 'action.php',
 							params : {
@@ -241,7 +243,7 @@ GO.email.FoldersDialog = function(config) {
 								}
 							},
 							scope : this
-						});
+						});*/
 			},
 			scope : this
 		}

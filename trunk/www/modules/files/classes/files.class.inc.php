@@ -648,7 +648,9 @@ class files extends db {
 		$file['folder_id']=$parent_id;
 		$file['size']=filesize($full_path);
 		$file['extension']=File::get_extension($full_path);
-		$file['comments']=$comments;
+
+		if(!empty($comments))
+			$file['comments']=empty($existing_file['comments']) ? $comments : $existing_file['comments']."\n\n---\n\n".$comments;
 
 		if($existing_file) {
 			$file['id']=$existing_file['id'];
