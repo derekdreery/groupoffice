@@ -83,3 +83,5 @@ $updates[]="TRUNCATE TABLE `em_folders`";
 $updates[]="ALTER TABLE `em_accounts` ADD `password_encrypted` BOOLEAN NOT NULL ";
 
 $updates[]="ALTER TABLE `em_accounts` CHANGE `password` `password` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+
+$updates[]="ALTER TABLE `em_accounts` CHANGE `password_encrypted` `password_encrypted` TINYINT NOT NULL";

@@ -408,7 +408,7 @@ class email extends db {
 					$encrypted = $c->encrypt($account['password']);
 					if($encrypted){
 						$account['password']=$encrypted;
-						$account['password_encrypted']=1;
+						$account['password_encrypted']=2;
 					}
 				}
 				$this->insert_row('em_accounts', $account);
@@ -537,7 +537,7 @@ class email extends db {
 					$encrypted = $c->encrypt($account['password']);
 					if($encrypted){
 						$account['password']=$encrypted;
-						$account['password_encrypted']=1;
+						$account['password_encrypted']=2;
 					}
 				}
 
@@ -600,13 +600,49 @@ class email extends db {
 		require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
 		$c = new cryptastic();
 
-		if($account['password_encrypted']==1){
+
+		if($account['password_encrypted']==2){
 			$account['password']=$c->decrypt($account['password']);
+			$account['password_encrypted']=0;
+			$account['password_already_decrypted']=1;
+
+		}elseif(!isset($account['password_already_decrypted']))
+		{
+			$account['password_already_decrypted']=1;
+			
+			if($account['password_encrypted']==1){
+				//old method that doesn't work well
+				//go_debug($account['password'].' '.$_SESSION['GO_SESSION']['key']);
+				$account['password']=$c->decrypt($account['password'], $_SESSION['GO_SESSION']['key']);				
+			}
+			$encrypted = $c->encrypt($account['password']);
+			if($encrypted){
+				$_account['password']=$encrypted;
+				$_account['password_encrypted']=2;
+				$_account['id']=$account['id'];
+				$this->_update_account($_account);
+			}
+		}
+
+		return $account;
+	}
+
+	/*function _decrypt_account($account){
+		global $GO_CONFIG, $GO_SECURITY;
+		require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+		$c = new cryptastic();
+
+
+		if($account['password_encrypted']==1){
+			//go_debug($account['password'].' '.$_SESSION['GO_SESSION']['key']);
+			$account['password']=$c->decrypt($account['password'], $_SESSION['GO_SESSION']['key']);
+			go_debug('Plain: '.$account['password']);
+			
 			$account['password_encrypted']=0;
 			$account['password_already_decrypted']=1;
 		}elseif(!isset($account['password_already_decrypted']) && $GO_SECURITY->user_id==$account['user_id'])
 		{
-			$encrypted = $c->encrypt($account['password']);
+			$encrypted = $c->encrypt($account['password'], $_SESSION['GO_SESSION']['key']);
 			if($encrypted){
 				$_account['password']=$encrypted;
 				$_account['password_encrypted']=1;
@@ -616,7 +652,7 @@ class email extends db {
 		}
 
 		return $account;
-	}
+	}*/
 
 	function get_account($account_id, $alias_id=0) {
 		$sql = "SELECT a.*, al.name, al.email, al.signature, al.id AS default_alias_id FROM em_accounts a INNER JOIN em_aliases al ON ";
