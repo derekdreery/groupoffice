@@ -1393,7 +1393,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					items:resourceOptions
 				});
 			}
-
+			
 			var resourcePanel = new Ext.Panel({
 				cls:'go-form-panel',
 				id:'group_'+record.id,
