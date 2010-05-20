@@ -907,9 +907,9 @@ try {
 					$folder_id=0;
 				}
 
-				$account = $email->get_account($account_id);
+				$account = $imap->open_account($account_id);
 				if($folder_id==0)
-					$email->synchronize_folders($account);
+					$email->synchronize_folders($account, $imap);
 
 
 				$response = get_all_mailbox_nodes($account_id, $folder_id);

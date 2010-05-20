@@ -304,6 +304,9 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				$feedback ='<font color="red">The passwords didn\'t match<br>\n</font>';
 			}else
 			{
+				//increase counter
+				$GO_USERS->nextid('go_users');
+				
 				$user['id']=1;
 				$user['language'] = $GO_LANGUAGE->language;
 				$user['first_name']=$GO_CONFIG->product_name;
