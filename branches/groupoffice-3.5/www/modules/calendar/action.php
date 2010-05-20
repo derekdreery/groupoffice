@@ -784,7 +784,9 @@ try {
 									$cal3->update_event($resource, false, false, true, false);
 								}
 							}else
-							{	
+							{
+								$group = $cal2->get_group($resource_calendar['group_id']);
+
 								if($cal2->group_admin_exists($resource_calendar['group_id'], $resource['user_id']))
 								{
 									$resource['status']='ACCEPTED';
