@@ -101,3 +101,4 @@ GO.calendar.lang.ignoreConflictsTitle = 'Ignore conflict?';
 GO.calendar.lang.ignoreConflictsMsg = 'This event conflicts with another event in your calender. Save this event anyway?';
 GO.calendar.lang.resourceConflictTitle = 'Resource conflict';
 GO.calendar.lang.resourceConflictMsg = 'One or more resources in this event are already in use at the same time:</br>';
+GO.calendar.lang.view = 'View';
