@@ -60,22 +60,6 @@ GO.calendar.MainPanel = function(config){
 		showToday:false
 	});
 
-	/*this.datePicker.on('render',function(){
-		this.myCalBtn = new Ext.Button({
-			renderTo: this.datePicker.el.child("td.x-date-bottom", true),
-			text : GO.calendar.lang.myCalendar,
-				handler : function() {
-					this.setDisplay({
-						group_id: 1,
-						calendar_id: GO.calendar.defaultCalendar['id'],
-						calendar_name: GO.calendar.defaultCalendar['name'],
-						saveState:true,
-						title:GO.calendar.defaultCalendar['name']
-					});
-				},
-				scope : this
-		}, this);
-	}, this);*/
 	
 	this.datePicker.on("select", function(datePicker, DateObj){
 		this.setDisplay({
@@ -301,7 +285,7 @@ GO.calendar.MainPanel = function(config){
 			handler : function() {
 				this.setDisplay({
 					group_id: 1,
-					calendar_id: GO.calendar.defaultCalendar['id'],
+					calendars: [GO.calendar.defaultCalendar['id']],
 					calendar_name: GO.calendar.defaultCalendar['name'],
 					title:GO.calendar.defaultCalendar['name']
 				});
@@ -1018,9 +1002,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		if(config.calendar_id)
 			config.calendars=[config.calendar_id];
 
-		
-
-
 		if(config.title && config.title.length){
 			if(this.calendarTitle.td){
 				//Ext 2
@@ -1031,7 +1012,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				this.calendarTitle.setText(config.title);
 			}
 		}
-
 
 		if(config.displayType)
 		{							
@@ -1050,7 +1030,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		var saveState = config.days && config.days!=this.state.days || config.displayType && config.displayType!=this.state.displayType;
 
 		//when refresh is clicked remember state
-		Ext.apply(this.state, config);
+		//Ext.apply(this.state, config);
 		
 		
 		this.state.displayType=this.displayType;
@@ -1185,42 +1165,57 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		
 		this.updatePeriodInfoPanel();
 
+		
+
+		this.state={
+			displayType:this.displayType,
+			days: this.days,
+			calendars:this.calendars,
+			view_id: this.view_id,
+			merge:this.merge,
+			owncolor:this.owncolor
+		};
+
 		if(saveState)
 		{
 			this.saveState();
 		}
-
-		//update navigation selection
-		this.viewsList.getSelectionModel().clearSelections();
-		this.resourcesList.getSelectionModel().clearSelections();
-		this.calendarList.applyFilter([], true);
 		
-		var selectGrid, selected=[], record;
+		
+		
+		
+		var selectGrid;
 		if(this.view_id>0){
 			selectGrid = this.viewsList;
-			selected = [this.view_id];
+
+			this.resourcesList.getSelectionModel().clearSelections();
+			this.calendarList.applyFilter([], true);
 		}else
 		{
+			this.viewsList.getSelectionModel().clearSelections();
+			
 			if(this.group_id==1){
 				selectGrid = this.calendarList;
+
 				selectGrid.applyFilter(this.calendars, true);
-				return true;
+				this.resourcesList.getSelectionModel().clearSelections();
 			}else
 			{
+				this.calendarList.applyFilter([], true);
 				selectGrid = this.resourcesList;
-				selected=this.calendars;
 			}					
 		}
 
 
 		selectGrid.expand();
+
+		//select calendars for resources grid etc.
+		/*
 		var records=[];
 		for(var i=0,max=selected.length;i<max;i++){
 			records.push(selectGrid.store.getById(selected[i]));			
 		}
-		selectGrid.getSelectionModel().selectRecords(records);
-
-
+		selectGrid.getSelectionModel().selectRecords(records);*/
 	},
 	
 	

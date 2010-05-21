@@ -999,7 +999,9 @@ class calendar extends db
 		{
 				$sql .= " AND c.group_id = ".$this->escape($group_id);
 		}
-		$sql .= " ORDER BY c.name ASC";
+		
+		$sql .= $group_id==-1 ? " ORDER BY g.id, c.name ASC" : " ORDER BY c.name ASC";
+		
 
 		$this->query($sql);
 
