@@ -613,7 +613,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					.getValue(),
 					repeats : this.formPanel.form.findField('repeat_type')
 					.getValue() > 0,
-					'private' : false
+					'private' : false,
+					exception_event_id : this.formPanel.form.baseParams['exception_event_id']
 				};
 
 

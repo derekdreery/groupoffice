@@ -257,7 +257,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			
 			//create grid heading
 			heading = Ext.DomHelper.append(this.headingsRow,
-				{tag: 'td', children:[{tag:'div',cls: cls, style: "width:"+(columnWidth-3)+"px", html: dt.format(dateFormat) }]});	
+				{tag: 'td', children:[{tag:'div',cls: cls, style: "width:"+(columnWidth-3)+"px", html: dt.format(dateFormat)}]});	
 				
 			allDayColumn = Ext.DomHelper.append(this.allDayRow,
 				{tag: 'td', id: 'all_day_'+day, cls: "x-calGrid-all-day-container", style: "width:"+(columnWidth-3)+"px;height:0px"}, true);
@@ -707,6 +707,15 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		}
 	},
 
+	removeEventByRemoteId : function(remote_id){
+		var domIds = this.getEventDomElements(remote_id);
+		if(domIds){
+			for(var i=0, max=domIds.length;i<max;i++){
+				this.removeEvent(domIds[i]);
+			}
+		}
+	},
+
 	removeEvent : function(domId){
 
 		if(this.remoteEvents[domId]){
@@ -824,7 +833,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		
 		for (var i=startDay;i<=endDay;i++)
 		{			
-			var domId = Ext.id();
+			var domId = this.lastDomId = Ext.id();
 			this.registerEvent(domId, eventData);
 			
 			var event = Ext.DomHelper.append(this.allDayColumns[i],
@@ -902,7 +911,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			text += ' @ '+eventData.location;
 		}
 		
-		var domId = Ext.id();		
+		var domId = this.lastDomId = Ext.id();
 		this.registerEvent(domId, eventData);		
 		
 		var snap = this.getSnap();		
@@ -1574,7 +1583,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		var startDate = date.add(Date.MINUTE,startRow*gridPrecision);
 		var endDate = date.add(Date.MINUTE,endRow*gridPrecision);
 				
-		return { 'startDate': startDate, 'endDate':endDate, 'day':day};	
+		return {'startDate': startDate, 'endDate':endDate, 'day':day};	
 	},
 	
 	scrollToRow : function(row)
