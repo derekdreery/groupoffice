@@ -52,7 +52,7 @@ GO.grid.RadioColumn.prototype = {
 
 			if (!disabled)
 			{
-				if(record.get(this.dataIndex)) {
+				if(!GO.util.empty(record.get(this.dataIndex))) {
 					return;
 				}
 
