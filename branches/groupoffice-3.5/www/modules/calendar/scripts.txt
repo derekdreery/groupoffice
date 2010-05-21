@@ -19,3 +19,4 @@ modules/calendar/Calendar.js
 modules/calendar/GroupAdminsPanel.js
 modules/calendar/TasklistsGrid.js
 modules/calendar/EventPanel.js
+modules/calendar/CalendarSelectGrid.js

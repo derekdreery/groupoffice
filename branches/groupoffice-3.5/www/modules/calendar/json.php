@@ -336,7 +336,7 @@ try {
 
 		//return all events for a given period
 			$view_id = isset($_REQUEST['view_id']) ? $_REQUEST['view_id'] : 0;
-			$owncolor = isset($_REQUEST['owncolor']) ? $_REQUEST['owncolor'] : 0;
+			
 			$calendar_id=isset($_REQUEST['calendar_id']) && !isNaN($_REQUEST['calendar_id']) ? ($_REQUEST['calendar_id']) : 0;
 			//$view_id=isset($_REQUEST['view_id']) ? ($_REQUEST['view_id']) : 0;
 			$start_time=isset($_REQUEST['start_time']) ? strtotime($_REQUEST['start_time']) : 0;
@@ -355,17 +355,21 @@ try {
 					throw new Exception($lang['calendar']['noCalSelected']);
 				}
 
-				/* Default colors for merged calendars */
-				$default_colors = array('F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
-								'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
-								'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
-								'C43B3B','996600','66FF99','999999','FFFFFF');
-				$default_bg = array();
-				foreach ($calendars as $k=>$v)
-					$default_bg[$v] = $default_colors[$k];
+				
 			} else {
 				$calendars=isset($_REQUEST['calendars']) ? json_decode(($_REQUEST['calendars'])) : array($calendar_id);
 			}
+
+			$owncolor = isset($_REQUEST['owncolor']) && count($calendars)>1 ? $_REQUEST['owncolor'] : 0;
+
+			/* Default colors for merged calendars */
+			$default_colors = array('F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
+							'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
+							'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
+							'C43B3B','996600','66FF99','999999','FFFFFF');
+			$default_bg = array();
+			foreach ($calendars as $k=>$v)
+				$default_bg[$v] = $default_colors[$k];
 
 			$calendar_id=$calendars[0];
 
@@ -401,7 +405,7 @@ try {
 					$event['location']='';
 				}
 
-				if ($view_id && $owncolor)
+				if ($owncolor)
 					$event['background'] = $default_bg[$event['calendar_id']];
 
 				$response['results'][] = array(
