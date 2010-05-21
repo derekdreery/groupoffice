@@ -165,21 +165,27 @@ class cryptastic {
 	private function get_key(){
 		global $GO_CONFIG, $GO_USERS;
 
+		if(isset($_SESSION['GO_SESSION']['global_key'])){
+			return $_SESSION['GO_SESSION']['global_key'];
+		}
+
 		$key_file=$GO_CONFIG->file_storage_path.'key.txt';
 		
 		if(file_exists($key_file)){
-			return file_get_contents($key_file);
+			$key = file_get_contents($key_file);
 		}else
 		{
-			$password = $GO_USERS->random_password('a-z,A-Z,1-9', 'i,o', 20);
-			if(file_put_contents($key_file, $password)){
-				chmod($key_file,0400);
-				return $password;
+			$key = $GO_USERS->random_password('a-z,A-Z,1-9', 'i,o', 20);
+			if(file_put_contents($key_file, $key)){
+				chmod($key_file,0400);				
 			}else
 			{
 				return false;
 			}
 		}
+
+		$_SESSION['GO_SESSION']['global_key']=$key;
+		return $key;
 
 	}
 }
