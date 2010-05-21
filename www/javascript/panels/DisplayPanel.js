@@ -308,7 +308,9 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	load : function(id, reload)
 	{
 		if(this.collapsed){
-			this.collapsedLinkId=id;
+
+			//link_id is needed for editHandlers
+			this.collapsedLinkId=this.link_id=id;
 		}else if(this.link_id!=id || reload)
 		{
 			this.loadParams[this.idParam]=this.link_id=id;

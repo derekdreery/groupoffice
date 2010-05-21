@@ -82,12 +82,10 @@ GO.addressbook.CompanyDialog = function(config)
 	this.plain= true;
 	this.closeAction= 'hide';
 	this.collapsible=true;
-	//this.iconCls= 'btn-addressbook-company';
 	this.title= GO.addressbook.lang['cmdCompanyDialog'];
 	this.items= this.companyForm;
 	this.buttons=  [
-			{
-				id: 'ok', 
+			{				
 				text: GO.lang['cmdOk'], 
 				handler: function(){
 					this.saveCompany(true);
@@ -95,7 +93,6 @@ GO.addressbook.CompanyDialog = function(config)
 				scope: this 
 			},
 			{
-				id: 'apply', 
 				text: GO.lang['cmdApply'], 
 				handler: function(){
 					this.saveCompany();
@@ -103,7 +100,6 @@ GO.addressbook.CompanyDialog = function(config)
 				scope: this 
 			},
 			{
-				id: 'close', 
 				text: GO.lang['cmdClose'], 
 				handler: function()
 				{
