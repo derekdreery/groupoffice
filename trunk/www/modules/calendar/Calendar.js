@@ -737,7 +737,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		GO.calendar.eventDialogListeners= GO.calendar.eventDialogListeners || [];
 		GO.calendar.eventDialogListeners.push({
 			scope:this,
-			save:function(newEvent,oldDomId){
+			save:function(newEvent, oldDomId){
 
 				if(this.displayType=='list')
 				{
@@ -745,12 +745,15 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				}else
 				{
 					var activeGrid = this.getActivePanel();
+
+					//var oldDomId = activeGrid.domIds[newEvent.event_id] ? activeGrid.domIds[newEvent.event_id][0] : false;
 					//reload grid if old or new event repeats. Do not reload if an occurence of a repeating event is modified
-					if(newEvent.repeats|| (activeGrid.remoteEvents[oldDomId] && activeGrid.remoteEvents[oldDomId].repeats && activeGrid.remoteEvents[oldDomId].event_id==newEvent.event_id))
+					if(newEvent.repeats)//|| (activeGrid.remoteEvents[oldDomId] && activeGrid.remoteEvents[oldDomId].repeats && activeGrid.remoteEvents[oldDomId].event_id==newEvent.event_id))
 					{
 						activeGrid.store.reload();
 					}else
 					{
+						//var remove_id = newEvent.exception_event_id ? newEvent.exception_event_id : newEvent.event_id;
 						activeGrid.removeEvent(oldDomId);
 
 						switch(this.displayType)
@@ -763,7 +766,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 								if(newEvent.calendar_id==this.calendar_id){
 									var eventRecord = new GO.calendar.CalendarEvent(newEvent);
 									this.daysGridStore.add(eventRecord);
-									//GO.calendar.eventDialog.oldDomId=this.daysGrid.addDaysGridEvent(newEvent, true);
+									GO.calendar.eventDialog.oldDomId=this.daysGrid.lastDomId
 								}
 								break;
 
