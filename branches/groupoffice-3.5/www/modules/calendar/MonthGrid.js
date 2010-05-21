@@ -584,6 +584,16 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		
 		return eventData.domId;
 	},
+
+	removeEventByRemoteId : function(remote_id){
+		var domIds = this.getEventDomElements(remote_id);
+		if(domIds){
+			for(var i=0, max=domIds.length;i<max;i++){
+				this.removeEvent(domIds[i]);
+			}
+		}
+	},
+
 	
 	/*
 	 * Removes a single event and it's associated dom elements

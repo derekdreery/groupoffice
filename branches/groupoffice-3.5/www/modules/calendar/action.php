@@ -412,7 +412,7 @@ try {
 				
 				while($conflict_event = array_shift($conflict_events)) {
 
-					if($conflict_event['id']!=$event_id){
+					if($conflict_event['id']!=$event_id && (empty($_POST['exception_event_id']) || $_POST['exception_event_id']!=$conflict_event['id'])){
 
 						go_debug('Event starts:'.Date::get_timestamp($event['start_time']).
 										' ends: '.Date::get_timestamp($event['end_time']));
