@@ -26,6 +26,27 @@ try
 {
 	switch($task)
 	{
+		case 'move_employees':
+
+			$to_company=$ab->get_company($_POST['to_company_id']);
+		
+			$ab2 = new addressbook();
+			$ab->get_company_contacts($_POST['from_company_id']);
+			while($contact = $ab->next_record()){
+				$up=array(
+					'id'=>$contact['id'],
+					'addressbook_id'=>$to_company['addressbook_id'],
+					'company_id'=>$to_company['id']
+				);
+				$ab2->update_contact($up, false, $contact);
+			}
+
+			$response['success']=true;
+
+			echo json_encode($response);
+
+			break;
+
 		case 'save_contact':
 			$contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : 0;
 

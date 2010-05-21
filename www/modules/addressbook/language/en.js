@@ -118,3 +118,5 @@ GO.addressbook.lang.deleteImage='Delete image';
 
 GO.addressbook.lang.addAllSearchResults='Add all search results';
 GO.addressbook.lang.confirmAddAllSearchResults='Are you sure you want to add all the search results to the addresslist?';
+
+GO.addressbook.lang.moveEmployees='Move employees';

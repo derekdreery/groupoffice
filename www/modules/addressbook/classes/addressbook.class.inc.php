@@ -598,9 +598,10 @@ class addressbook extends db {
 			$old_contact = $this->get_contact($contact['id']);
 		}
 
-		if(empty($contact['first_name']) && empty($contact['last_name']) && empty($old_contact['first_name']) && empty($old_contact['last_name'])){
+
+		/*if(empty($contact['first_name']) && empty($contact['last_name']) && empty($old_contact['first_name']) && empty($old_contact['last_name'])){
 			$contact['first_name']='Unnamed';
-		}
+		}*/
 
 
 		global $GO_MODULES;
@@ -610,6 +611,13 @@ class addressbook extends db {
 			}
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
+
+			if(!isset($contact['last_name']))
+				$contact['last_name']=$old_contact['last_name'];
+			if(!isset($contact['first_name']))
+				$contact['first_name']=$old_contact['first_name'];
+			if(!isset($contact['middle_name']))
+				$contact['middle_name']=$old_contact['middle_name'];
 
 			$new_path = $this->build_contact_files_path($contact, $addressbook);
 			$contact['files_folder_id']=$files->check_folder_location($old_contact['files_folder_id'], $new_path);
