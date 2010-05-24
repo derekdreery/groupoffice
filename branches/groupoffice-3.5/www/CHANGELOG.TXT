@@ -1,4 +1,4 @@
-2010/05/21 3.5.2
+2010/05/24 3.5.2
 - Improved security. E-mail passwords are encrypted in the database now and
   with the new blacklist module remote IP addresses are blocked after 5 consecutive
   login failures.
