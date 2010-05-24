@@ -988,6 +988,9 @@ class imap extends imap_bodystruct {
 							if(preg_match("/[^\/]*\/[^;]*/", $message['content-type'], $matches)){
 								$message['content-type']=$matches[0];
 							}
+						}else
+						{
+							$message['content-type']=str_replace(';', '', $message['content-type']);
 						}
 					}
 					$message['udate']=empty($message['date']) ? 0 : strtotime($message['date']);
