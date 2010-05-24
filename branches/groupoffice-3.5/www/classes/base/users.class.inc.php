@@ -644,6 +644,7 @@ class GO_USERS extends db
 		if(!empty($user['password']))
 		{
 			$user['password']=crypt($user['password']);
+			$user['password_type']='crypt';
 		}
 		
 		if($this->update_row('go_users', 'id', $user))
