@@ -123,15 +123,22 @@ GO.dialog.LoginDialog = function(config){
 				// Prompt for user data and process the result using a callback:
 				Ext.Msg.prompt(GO.lang.lostPassword, GO.lang.lostPasswordText.replace('{product_name}', GO.settings.config.product_name), function(btn, text){
 					if (btn == 'ok'){
-					        
+
+						this.hide();
+
+						Ext.getBody().mask(GO.lang.waitMsgLoad);
 						Ext.Ajax.request({
 							url:'action.php',
+							scope:this,
 							params:{
 								task:'lost_password',
 								email:text
 							},
 							callback: function(options, success, response)
 							{
+								Ext.getBody().unmask();
+								this.show();
+
 								if(!success)
 								{
 									Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
@@ -146,10 +153,12 @@ GO.dialog.LoginDialog = function(config){
 										Ext.MessageBox.alert(GO.lang['strSuccess'], responseParams.feedback);
 									}
 								}
+
+								
 							}
 						});
 					}
-				})
+				}, this);
 					
 			},
 			scope:this

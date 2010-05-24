@@ -97,10 +97,8 @@ try{
 			
 			if($user = $GO_USERS->get_user_by_email(($_POST['email'])))
 			{
-				
-
 				$url = $GO_CONFIG->full_url.'change_lost_password.php?username='.$user['username'].'&code1='.md5($user['password']).'&code2='.md5($user['lastlogin'].$user['registration_time']);
-		
+
 				$salutation = $lang['common']['default_salutation'][$user['sex']];
 				if(!empty($user['middle_name']))
 					$salutation .= ' '.$user['middle_name'];
