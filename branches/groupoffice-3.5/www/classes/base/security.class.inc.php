@@ -122,7 +122,7 @@ class GO_SECURITY extends db {
 		global $GO_CONFIG;
 
 		$username = isset($_SESSION['GO_SESSION']['username']) ? $_SESSION['GO_SESSION']['username'] : 'notloggedin';
-		go_log(LOG_DEBUG, 'LOGOUT Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
+		//go_log(LOG_DEBUG, 'LOGOUT Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 
 		if(!empty($this->user_id)){
 			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
