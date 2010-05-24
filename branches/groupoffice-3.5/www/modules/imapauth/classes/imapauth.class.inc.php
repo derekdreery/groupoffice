@@ -1,4 +1,17 @@
 <?php
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+
 require_once( $GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc' );
 
 class imapauth
@@ -49,7 +62,7 @@ class imapauth
 	{
 		$ia = new imapauth();
 
-		go_debug('IMAP auth module active');
+		go_debug('IMAPAUTH: module active');
 		$arr = explode('@', $username);
 
 		$email = trim($username);
@@ -59,7 +72,7 @@ class imapauth
 		$config = $ia->get_domain_config($domain);
 		if(!$config)
 		{
-			go_debug('No config for domain found');
+			go_debug('IMAPAUTH: No config for domain found');
 		}else
 		{
 			go_debug($config);
@@ -78,7 +91,7 @@ class imapauth
 				$mail_username = $mailbox;
 			}
 
-			go_debug('Attempt IMAP login');
+			go_debug('IMAPAUTH: Attempt IMAP login');
 
 			if ($imap->connect(
 			$config['host'],			
@@ -87,15 +100,17 @@ class imapauth
 			$password,
 			$config['ssl']))
 			{
-				go_debug('IMAP auth module logged in');
+				go_debug('IMAPAUTH: IMAP login succesful');
 				$imap->disconnect();
 
 				$user = $GO_USERS->get_user_by_username($go_username);
 				if ($user) {
 
 					//user exists. See if the password is accurate
-					if(crypt($password) != $user['password'])
+					if(crypt($password, $user['password']) != $user['password'])
 					{
+						go_debug('IMAPAUTH: IMAP password has changed. Updating Group-Office database');
+
 						$GO_USERS->update_profile(array('id'=>$user['id'], 'password'=>$password));
 						
 						if(isset($GO_MODULES->modules['email']))
@@ -120,14 +135,14 @@ class imapauth
 					$config['modules_read'],
 					$config['modules_write']))
 					{
-						trigger_error('Failed creating user '.$go_username.' and e-mail '.$email.' with imapauth. The e-mail address probably already existed at another user.', E_USER_WARNING);
+						trigger_error('IMAPAUTH: Failed creating user '.$go_username.' and e-mail '.$email.' with imapauth. The e-mail address probably already existed at another user.', E_USER_WARNING);
 					} else {
 						$ia->create_email_account($config, $user_id, $mail_username, $password, $email);
 					}
 				}
 			}else
 			{
-				go_debug('IMAP auth failed '.$imap->last_error());
+				go_debug('IMAPAUTH: Authentication to IMAP server failed '.$imap->last_error());
 				$imap->clear_errors();
 				
 				throw new Exception($GLOBALS['lang']['common']['badLogin']);
@@ -146,7 +161,7 @@ class imapauth
 				$email_client = new email();
 
 				$account['user_id']=$user_id;
-				$account['type']='IMAP';//$config['proto'];
+				$account['type']='imap';//$config['proto'];
 				$account['host']=$config['host'];
 				$account['smtp_host']=$config['smtp_host'];
 				$account['smtp_port']=$config['smtp_port'];
@@ -165,11 +180,14 @@ class imapauth
 
 				if (!$account_id = $email_client->add_account($account))
 				{
-					trigger_error('Failed creating e-mail account for user '.$username.' in imapauth module.', E_USER_WARNING);
+					go_debug('IMAPAUTH: Failed creating e-mail account for user '.$username.' in imapauth module.');
+					trigger_error('IMAPAUTH: Failed creating e-mail account for user '.$username.' in imapauth module.', E_USER_WARNING);
 				}else
 				{
+					go_debug('IMAPAUTH: Created IMAP account successfully');
 					$_SESSION['GO_SESSION']['imapauth']['new_account_id']=$account_id;
 					$account = $email_client->get_account($account_id);
+					$account = $email_client->decrypt_account($account);
 					$email_client->synchronize_folders($account);
 				}
 			}
@@ -185,6 +203,8 @@ class imapauth
 		
 		if(!empty($_SESSION['GO_SESSION']['imapauth']['new_account_id']))
 		{
+			go_debug('IMAPAUTH: updating e-mail account from user profile');
+			
 			$up_account['id']=$_SESSION['GO_SESSION']['imapauth']['new_account_id'];
 			$up_account['name']=String::format_name($user);
 			$email_client->_update_account($up_account);
