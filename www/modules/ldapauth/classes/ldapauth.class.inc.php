@@ -66,7 +66,7 @@ class ldapauth extends imapauth
 		
 		if(!isset($GO_CONFIG->ldap_host))
 		{
-			//trigger_error('ldapauth module is installed but not configured', E_USER_NOTICE);
+			go_debug('ldapauth module is installed but not configured');
 			return false;
 		}
 
@@ -103,9 +103,10 @@ class ldapauth extends imapauth
 				$GO_USERS->update_profile($user);
 
 				//user exists. See if the password is accurate
-				if(md5($password) != $gouser['password'])
+				if(crypt($password) != $gouser['password'])
 				{
-					$GO_USERS->update_password($gouser['id'], $password);
+					$GO_USERS->update_profile(array('id'=>$user['id'], 'password'=>$password));
+					
 					if(isset($GO_MODULES->modules['email']))
 					{
 						require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
