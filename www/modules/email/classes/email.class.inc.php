@@ -567,8 +567,21 @@ class email extends db {
 	}
 
 	function update_password($host, $username, $password) {
+
+		global $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+		$c = new cryptastic();
+
+		$password_encrypted=0;
+		$encrypted = $c->encrypt($password);
+		if($encrypted){
+			$password=$encrypted;
+			$password_encrypted=2;
+		}
+
 		$sql = "UPDATE em_accounts SET password='".$this->escape($password).
-						"' WHERE username='".$this->escape($username)."' AND host='".$this->escape($host)."'";
+						"', password_encrypted=$password_encrypted WHERE username='".$this->escape($username)."' AND host='".$this->escape($host)."'";
 
 		return $this->query($sql);
 	}

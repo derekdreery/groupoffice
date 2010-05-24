@@ -1,4 +1,16 @@
 <?php
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
 
 require_once($GLOBALS['GO_CONFIG']->class_path.'base/ldap.class.inc.php');
 require_once($GLOBALS['GO_CONFIG']->root_path.'modules/imapauth/classes/imapauth.class.inc.php');
@@ -103,7 +115,7 @@ class ldapauth extends imapauth
 				$GO_USERS->update_profile($user);
 
 				//user exists. See if the password is accurate
-				if(crypt($password) != $gouser['password'])
+				if(crypt($password, $gouser['password']) != $gouser['password'])
 				{
 					$GO_USERS->update_profile(array('id'=>$user['id'], 'password'=>$password));
 					
@@ -111,7 +123,7 @@ class ldapauth extends imapauth
 					{
 						require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 						$email_client = new email();
-						//$email_client->update_password($config['host'], $mail_username, $arguments['password']);
+						$email_client->update_password($config['host'], $username, $password);
 					}
 				}
 			} else {
