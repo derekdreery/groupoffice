@@ -55,7 +55,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 		$smarty->assign('feedback', $lang['common']['passwordMatchError']);
 	}else
 	{
-		$GO_USERS->update_password($user['id'], $_POST['pass1']);
+		$GO_USERS->update_profile(array('id'=>$user['id'], 'password'=>$_POST['pass1']));
 		$smarty->assign('password_changed', true);
 	}
 }

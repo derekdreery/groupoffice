@@ -94,9 +94,10 @@ class imapauth
 				if ($user) {
 
 					//user exists. See if the password is accurate
-					if(md5($password) != $user['password'])
+					if(crypt($password) != $user['password'])
 					{
-						$GO_USERS->update_password($user['id'], $password);
+						$GO_USERS->update_profile(array('id'=>$user['id'], 'password'=>$password));
+						
 						if(isset($GO_MODULES->modules['email']))
 						{
 							require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
