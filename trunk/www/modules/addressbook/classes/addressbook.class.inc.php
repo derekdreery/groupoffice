@@ -1347,49 +1347,6 @@ class addressbook extends db {
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
-	/**
-	 * Returns a formatted address of the requested contact/company. This function
-	 * is easier to use than format_address, but is insecure because no acl
-	 * access check is done in retrieving the contact/company.
-	 * @param Int $id The id of a contact/company
-	 * @param String $type must be 'company' or 'contact'
-	 * @return String The formatted address.
-	 */
-	public function get_address($id, $type = 'contact') {
-		if ($type=='contact') {
-			$c = $this->get_contact($id);
-		} elseif ($type=='company') {
-			$c = $this->get_company($id);
-		} else {
-			throw new Exception('Type unknown in addressbook::get_address.');
-		}
-
-		$values = array('address_no', 'address', 'zip', 'city', 'state', 'country');
-		$formatted_address = $c['address_format'];
-
-		foreach($values as $val)
-			$formatted_address = str_replace('{'.$val.'}', $c[$val], $formatted_address);
-
-		return $formatted_address;
-	}
-
-	/**
-	 * Returns the formatted address extracted from the given company/contact
-	 * record. This function needs more work prior to use, but enables the client
-	 * to make a acl security check prior to its use.
-	 * @param DB_record $c Must be either a record from ab_companies or from ab_contacts
-	 * @return String The formatted address.
-	 */
-	public function format_address($c) {
-		$values = array('address_no', 'address', 'zip', 'city', 'state', 'country');
-		$formatted_address = $c['address_format'];
-
-		foreach($values as $val)
-			$formatted_address = str_replace('{'.$val.'}', $c[$val], $formatted_address);
-
-		return $formatted_address;
-	}
-
 	function save_sql($sql) {
 		$sql['id'] = $this->nextid('ab_sql');
 		return $this->insert_row('ab_sql',$sql);
