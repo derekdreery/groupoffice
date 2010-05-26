@@ -1,3 +1,8 @@
+2010/05/26 3.5.4
+- Bug fix in searching some IMAP servers.
+- American time format bug in calendar
+- Bug fix for attachment filenames without encoding specification
+
 2010/05/25 3.5.3
 - IMAP authentication was broken
 
