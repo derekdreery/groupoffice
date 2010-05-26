@@ -103,7 +103,7 @@ class imap extends imap_bodystruct {
 			$result = $this->get_response();
 			go_debug($this->commands);
 
-			//go_debug($this->responses);
+			go_debug($this->responses);
 
 			fclose($this->handle);
 
@@ -204,9 +204,9 @@ class imap extends imap_bodystruct {
 			$this->send_command($command);
 			$response = $this->get_response();
 			$this->capability = $_SESSION['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);
-
-			go_debug($this->capability);
 		}
+
+		go_debug($this->capability);
 
 		return $this->capability;
 	}
@@ -560,12 +560,15 @@ class imap extends imap_bodystruct {
 	public function search($terms) {
 		//$this->clean($this->search_charset, 'charset');
 		$this->clean($terms, 'search_str');
-		//if ($this->search_charset) {
-			$charset = 'CHARSET UTF-8 ';
-		/*}
-		else {
-			$charset = '';
-		}*/		$command = 'UID SEARCH '.$charset.$terms."\r\n";
+
+		/*
+		 * Sending charset along doesn't work on iMailserver.
+		 * Without seems to work on different servers.
+		 */
+		$charset = '';
+		//$charset =  'CHARSET UTF-8 ';
+		
+		$command = 'UID SEARCH '.$charset.$terms."\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false, true);
 		$status = $this->check_response($result, true);
