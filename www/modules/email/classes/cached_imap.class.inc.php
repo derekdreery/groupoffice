@@ -31,6 +31,12 @@ class cached_imap extends imap{
 	var $filtered=0;
 
 	/*
+	 * If we don't no the encoding of a filename header. Use the last charset found
+	 * in a part. mb_detect_encoding doesn't work reliable.
+	 */
+	var $default_charset='';
+
+	/*
 	 * You can disable the cache for debugging.
 	 * If enabled the message will be converted to safe HTML only once.
 	 */
@@ -538,6 +544,10 @@ class cached_imap extends imap{
 
 		$att=$this->find_message_attachments($struct, $message['body_ids']);
 		for($i=0,$max=count($att);$i<$max;$i++){
+
+			//not needed
+			unset($att[$i]['filename'], $att[$i]['description']);
+
 			if(empty($att[$i]['name'])){
 				if(!empty($att[$i]['subject'])){
 					$att[$i]['name']=File::strip_invalid_chars($this->mime_header_decode($att[$i]['subject'])).'.eml';
@@ -613,7 +623,7 @@ class cached_imap extends imap{
 
 		$cached_message['uid']=$uid;
 		$cached_message['folder_id']=$this->folder['id'];
-		$cached_message['serialized_message_object']=serialize($message);
+		$cached_message['serialized_message_object']=serialize($message);		
 		$this->update_cached_message($cached_message);
 
 		//go_debug($message);
@@ -656,6 +666,8 @@ class cached_imap extends imap{
 
 		$struct = $this->get_message_structure($message['uid']);
 
+		//go_debug($struct);
+
 		if(count($struct)==1) {
 			$header_ct = explode('/', $message['content-type']);
 
@@ -685,7 +697,17 @@ class cached_imap extends imap{
 			}
 		}
 
-		go_debug($struct);
+		//get a default charset to decode filenames of attachments that don't have
+		//that value
+		if(!empty($struct[1]['charset']))
+			$this->default_charset = $struct[1]['charset'];
+
+		//it seems better to use windows-1252 because converting from that also
+		//works for iso-8859-* strings
+		if(stripos($this->default_charset, 'iso-8859')!==false)
+			$this->default_charset = 'windows-1252';
+
+		//go_debug($struct);
 
 		$plain_parts = $this->find_body_parts($struct,'text', 'plain');
 		foreach($plain_parts['parts'] as $plain_part){
@@ -702,7 +724,6 @@ class cached_imap extends imap{
 		if(!isset($message['plain_body']) && $plain_parts['text_found'] && ($plain_body_requested || ($html_body_requested && !$html_parts['text_found']))){
 			$message['plain_body']='';
 			foreach($plain_parts['parts'] as $plain_part){
-				go_debug($plain_part);
 				if($plain_part['type']=='text'){
 
 					if(!empty($message['plain_body']))

@@ -1188,6 +1188,7 @@ class imap extends imap_bodystruct {
 		foreach ($struct as $id => $vals) {
 			
 			if (isset($vals['type'])){
+
 				$vals['imap_id'] = $id;
 				//go_debug($vals);
 				
