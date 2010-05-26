@@ -710,9 +710,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		}
 
 		if (sD.getElapsed(eD) == 0) {
-			var sT = Date.parseDate(sD.format('Y-m-d '+this.startTime.getValue()), 'Y-m-d '+GO.settings.time_format);
-			var eT = Date.parseDate(sD.format('Y-m-d '+this.endTime.getValue()), 'Y-m-d '+GO.settings.time_format);
-			if(sT>eT){
+			
+			var sdWithTime = sD.format('Y-m-d')+' '+this.startTime.getValue();
+			var sT = Date.parseDate(sdWithTime, 'Y-m-d '+GO.settings.time_format);
+
+			var edWithTime = eD.format('Y-m-d')+' '+this.endTime.getValue();
+			var eT = Date.parseDate(edWithTime, 'Y-m-d '+GO.settings.time_format);
+
+			if(sT>=eT){
 				this.endTime.setValue(sT.add(Date.HOUR, 1).format(GO.settings.time_format))
 			}
 		}
