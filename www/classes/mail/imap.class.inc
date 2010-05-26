@@ -103,7 +103,7 @@ class imap extends imap_bodystruct {
 			$result = $this->get_response();
 			go_debug($this->commands);
 
-			go_debug($this->responses);
+			//go_debug($this->responses);
 
 			fclose($this->handle);
 

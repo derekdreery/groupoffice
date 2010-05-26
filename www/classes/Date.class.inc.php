@@ -501,14 +501,12 @@ class Date {
 
 			$datetime_array = explode(' ', $date_string);
 
-			$date = isset ($datetime_array[0]) ?
-			$datetime_array[0] :
-    	'0000'.$date_separator.
-    	'00'.$date_separator.'00';
+			$date = array_shift($datetime_array);
+			if(!$date)
+				$date='0000'.$date_separator.'00'.$date_separator.'00';
 
-			$date_array = explode($date_separator, $datetime_array[0]);
-			//$year = isset ($date_array[2]) ? $date_array[2] : date('Y');
-
+			$date_array = explode($date_separator, $date);
+			
 			$format = str_replace($date_separator,'',$date_format);
 
 			$year_pos = strpos($format, 'Y');
@@ -519,14 +517,14 @@ class Date {
 			$month = isset ($date_array[$month_pos]) ? $date_array[$month_pos] : date('m');
 			$day = isset ($date_array[$day_pos]) ? $date_array[$day_pos] : 0;
 
-			$time = isset ($datetime_array[1]) ? $datetime_array[1] : '00:00';
-			$time_array = explode(':', $time);
+			$time = implode(' ', $datetime_array);
 
-			$hour = isset ($time_array[0]) ? $time_array[0] : '00';
-			$min = isset ($time_array[1]) ? $time_array[1] : '00';
-			//$sec = isset ($time_array[2]) ? $time_array[2] : '00';
+			$newdate=$year.'-'.$month.'-'.$day;
+			
+			if(!empty($time))
+				$newdate .= ' '.$time;
 
-			return $year.'-'.$month.'-'.$day.' '.$hour.':'.$min;
+			return $newdate;
 		}
 		return false;
 
