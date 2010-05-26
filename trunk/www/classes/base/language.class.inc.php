@@ -264,14 +264,19 @@ class GO_LANGUAGE extends db {
 	 * record and an existing address format.
 	 * @param DB_record $c Must be either a record from ab_companies, ab_contacts
 	 * or go_users
-	 * @param Int format_id id to the go_address_format table
+	 * @param Int format_id id to the go_address_format table. This isn't used if
+	 * the first argument, the record, contains an address_format field.
 	 * @return String The formatted address.
 	 */
 	public function format_address($record,$format_id=1) {
 		$values = array('address_no', 'address', 'zip', 'city', 'state', 'country');
 
-		$f = $this->get_address_format($format_id);
-		$formatted_address = $f['format'];
+		if (!isset($record['address_format'])) {
+			$f = $this->get_address_format($format_id);
+			$formatted_address = $f['format'];
+		} else {
+			$formatted_address = $record['address_format'];
+		}
 
 		foreach($values as $val)
 			$formatted_address = str_replace('{'.$val.'}', $record[$val], $formatted_address);
