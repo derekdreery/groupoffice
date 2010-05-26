@@ -1347,6 +1347,24 @@ class addressbook extends db {
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
+	public function get_address($id, $type = 'contact') {
+		if ($type=='contact') {
+			$c = $this->get_contact($id);
+		} elseif ($type=='company') {
+			$c = $this->get_company($id);
+		} else {
+			throw new Exception('Type unknown in addressbook::get_address.');
+		}
+
+		$values = array('address_no', 'address', 'zip', 'city', 'state', 'country');
+		$formatted_address = $c['address_format'];
+
+		foreach($values as $val)
+			$formatted_address = str_replace('{'.$val.'}', $c[$val], $formatted_address);
+
+		return $formatted_address;
+	}
+
 	function save_sql($sql) {
 		$sql['id'] = $this->nextid('ab_sql');
 		return $this->insert_row('ab_sql',$sql);
