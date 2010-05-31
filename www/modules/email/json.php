@@ -643,7 +643,7 @@ try {
 
 				if($unread) {
 					$query = str_replace(array('UNSEEN', 'SEEN'), array('', ''), $query);
-					$query .= ' UNSEEN';
+					if ($query == ''){$query .= 'UNSEEN';}else{$query.= ' UNSEEN';}
 				}
 
 				$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
