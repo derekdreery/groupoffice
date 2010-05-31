@@ -34,3 +34,5 @@ GO.tasks.lang.defaultTasklist='Výchozí přehled úkolů';
 GO.tasks.lang.visibleTasklists='Viditelné přehledy úkolů';
 GO.tasks.lang.visible='Viditelný';
 GO.tasks.lang.selectIcalendarFile='Vyberte iCalendar (*.ics) soubor';
+
+GO.tasks.lang.continueTask='Pokračovat v úkolu';

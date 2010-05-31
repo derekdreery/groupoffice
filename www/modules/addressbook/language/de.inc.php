@@ -19,4 +19,6 @@ $lang['addressbook']['companies']='Firmen';
 $lang['addressbook']['newContactAdded']='Neuen Kontakt erstellt';
 $lang['addressbook']['newContactFromSite']='Sie haben einen neuen Kontakt über das Webseitenformular erhalten';
 $lang['addressbook']['clickHereToView']='Klicken Sie hier, um den Kontakt anzusehen';
+$lang['addressbook']['contactFromAddressbook']='Kontakt von %s';
+$lang['addressbook']['companyFromAddressbook']='Firma von %s';
 $lang['addressbook']['defaultSalutation']='Sehr geehrte[r Herr/ Frau] {middle_name} {last_name}';

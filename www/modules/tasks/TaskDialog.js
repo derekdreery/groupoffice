@@ -26,6 +26,7 @@ GO.tasks.TaskDialog = function() {
 		width : 560,
 		height : 400,
 		closeAction : 'hide',
+		collapsible: true,
 		title : GO.tasks.lang.task,
 		items : this.formPanel,
 		focus : focusName.createDelegate(this),

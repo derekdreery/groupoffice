@@ -49,3 +49,7 @@ GO.cms.lang.selectPage='Vyberte stránku';
 
 GO.cms.lang.showUntil='Zobrazit stránku do';
 GO.cms.lang.alwaysShow='Zobrazit prázdné';
+
+GO.cms.lang.root='Kořenový adresář';
+GO.cms.lang.advancedPermissions='Rozšířená oprávnění';
+GO.cms.lang.enablePermissionsPerFolder='Povolit oprávnění pro tuto složku tomuto uživateli';

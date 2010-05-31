@@ -97,3 +97,5 @@ GO.users.lang.firstName = 'Křestního jména';
 GO.users.lang.sendInvitation='Poslat pozvánku';
 
 GO.users.lang.contactInfo='Kontaktní informace';
+
+GO.users.lang.popupNotification='Zobrazit vyskakovací okno, když se připomínka stane aktivní nebo přijde nový e-mail';

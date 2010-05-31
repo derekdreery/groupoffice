@@ -305,6 +305,7 @@ GO.lang.on ='Zapnuto';
 GO.lang.off ='Vypnuto';
 
 GO.lang.keyword='Klíčové slovo';
+GO.lang.keywords='Klíčová slova';
 
 GO.lang.total='Celkem';
 GO.lang.totals='Celkem';
@@ -347,3 +348,8 @@ GO.lang.removeFormatting='Odstranit formátování';
 GO.lang.insertHorizontalRule='Vložit vodorovnou čáru';
 GO.lang.insertHRtext='Vložte šířku čáry v procentech<br/> poté následuje znak % na konci, nebo<br/> zadejte pevnou šířku a vynechtejte znak %.';
 GO.lang.width='Šířka';
+
+GO.lang.thankyou='Děkujeme';
+GO.lang.applyMultiselect='Použít vícenásobný výběr';
+
+GO.lang.createdBy='Vytvořil';

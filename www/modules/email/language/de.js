@@ -1,3 +1,4 @@
+GO.email.lang.forwardTo='Nachricht weiterleiten an';
 GO.email.lang.messages='Nachrichten';
 GO.email.lang.message='Nachricht';
 GO.email.lang.inbox='Eingang';
@@ -122,8 +123,8 @@ GO.email.lang.manageAliases='Aliase...';
 GO.email.lang.addSendersTo='Absender als Empfänger';
 GO.email.lang.defaultTemplate='Gewählte Vorlage als Standard verwenden';
 GO.email.lang.moving='Verschiebe...';
-GO.email.lang.orderFilters='Sie können die Reihenfolge der Filter durch ziehen verändern.';
-GO.email.lang.orderAccounts='You can change the order of accounts by dragging.';
+GO.email.lang.orderFilters='Sie können die Reihenfolge der Filter durch ziehen und ablegen verändern.';
+GO.email.lang.orderAccounts='Sie können die Reihenfolge der Konten durch ziehen und ablegen verändern.';
 GO.email.lang.groups='Gruppen';
 GO.email.lang.showUnread='Zeige ungelesene Nachrichten';
 GO.email.lang.searchFrom='Absender';
