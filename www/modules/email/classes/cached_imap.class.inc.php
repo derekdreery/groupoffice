@@ -534,7 +534,8 @@ class cached_imap extends imap{
 		{
 			$message['subject']= $lang['email']['no_subject'];
 		}
-		//$message['subject']= htmlspecialchars($message['subject'], ENT_COMPAT, 'UTF-8');
+
+		$message['attachments']=array();
 
 		$this->get_body_parts($plain_body_requested, $html_body_requested, $struct, $message, $peek);
 		
@@ -614,7 +615,7 @@ class cached_imap extends imap{
 			}
 		}
 
-		$message['attachments']=array();
+		
 		while($attachment = array_shift($att)){
 			if(empty($attachment['id'])){
 				$message['attachments'][]=$attachment;
@@ -735,17 +736,17 @@ class cached_imap extends imap{
 					$message['plain_body'].='{inline_'.count($inline_images).'}';
 					$inline_images[]='<img alt="'.$plain_part['name'].'" src="'.$this->get_attachment_url($message['uid'], $plain_part).'" style="display:block;margin:10px 0;" />';
 				}
-			}
-			
-			$uuencoded_attachments = $this->extract_uuencoded_attachments($message['plain_body']);
-			for($i=0;$i<count($uuencoded_attachments);$i++) {
-				$attachment = $uuencoded_attachments[$i];
-				$attachment['number']=$part['number'];
-				unset($attachment['data']);
-				$attachment['uuencoded_partnumber']=$i+1;
 
-				$attachments[]=$attachment;
-			}
+				$uuencoded_attachments = $this->extract_uuencoded_attachments($message['plain_body']);
+				for($i=0;$i<count($uuencoded_attachments);$i++) {
+					$attachment = $uuencoded_attachments[$i];
+					$attachment['imap_id']=$plain_part['imap_id'];
+					unset($attachment['data']);
+					$attachment['uuencoded_partnumber']=$i+1;
+
+					$message['attachments'][]=$attachment;
+				}
+			}			
 		}
 		
 
