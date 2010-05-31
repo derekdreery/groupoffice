@@ -71,18 +71,21 @@ class String {
 		if(empty($str))
 			return $str;
 		
-		if(empty($from_charset)){
-
-			if(function_exists('mb_detect_encoding'))
-			{
-				$from_charset = mb_detect_encoding($str, "auto");				
-			}
-			if(empty($from_charset))
-				$from_charset='ISO-8859-1';
-		}
+		
 		if($from_charset=='UTF-8'){
 			return $str;
 		}else{
+
+			if(empty($from_charset)){
+
+				/*if(function_exists('mb_detect_encoding'))
+				{
+					$from_charset = mb_detect_encoding($str, "auto");
+				}
+				if(empty($from_charset))*/
+				$from_charset='windows-1252';
+			}
+
 			return iconv($from_charset, 'UTF-8//IGNORE', $str);
 		}
 	}

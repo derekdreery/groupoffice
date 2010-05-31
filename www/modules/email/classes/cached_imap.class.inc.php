@@ -701,14 +701,18 @@ class cached_imap extends imap{
 		//get a default charset to decode filenames of attachments that don't have
 		//that value
 		if(!empty($struct[1]['charset']))
-			$this->default_charset = $struct[1]['charset'];
+			$this->default_charset = strtolower($struct[1]['charset']);
+
+		
 
 		//it seems better to use windows-1252 because converting from that also
 		//works for iso-8859-* strings
-		if(stripos($this->default_charset, 'iso-8859')!==false)
+		if(stripos($this->default_charset, 'iso-8859')!==false || $this->default_charset='us-ascii')
 			$this->default_charset = 'windows-1252';
 
-		//go_debug($struct);
+		//default charset is also detected in get_message_structure so do this before decoding subject etc.
+
+		go_debug('Default charset: '.$this->default_charset);
 
 		$plain_parts = $this->find_body_parts($struct,'text', 'plain');
 		foreach($plain_parts['parts'] as $plain_part){
