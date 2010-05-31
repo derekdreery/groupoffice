@@ -1,3 +1,7 @@
+GO.addressbook.lang.newSearch='Neue Suche';
+GO.addressbook.lang.executeQuery='Suche ausführen alle';
+GO.addressbook.lang.savedQueries='Gespeicherte Suchabfragen';
+GO.addressbook.lang.selectField = 'Feld auswählen';
 GO.addressbook.lang.selectMailingGroup='Mailing-Gruppe auswählen';
 GO.addressbook.lang.cmdFormLabelAddressBooks='Adressbuch';
 GO.addressbook.lang.alphabet='A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z';
@@ -82,3 +86,9 @@ GO.addressbook.lang.defaultAddressFormat='Standard Adressformat';
 GO.addressbook.lang.defaultSalutation='Standard Anrede';
 GO.addressbook.lang.explanationVariables='Standard-Format für Anrede-Variablen';
 GO.addressbook.lang.explanationSex='Format für weibliche und männliche Anrede';
+GO.addressbook.lang.searchQueryName='Name für Suchabfrage';
+GO.addressbook.lang.enterSearchQueryName='Geben Sie den Namen für die Suchabfrage ein:';
+GO.addressbook.lang.photo = 'Foto';
+GO.addressbook.lang.deleteImage='Bild löschen';
+GO.addressbook.lang.addAllSearchResults='Alle Suchergebnisse hinzufügen';
+GO.addressbook.lang.confirmAddAllSearchResults='Sind Sie sicher, dass Sie alle Suchergebnisse der Adressliste hinzufügen wollen?';

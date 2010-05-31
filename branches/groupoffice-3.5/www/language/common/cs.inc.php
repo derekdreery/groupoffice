@@ -182,6 +182,7 @@ $lang['common']['yes']='Ano';
 $lang['common']['no']='Ne';
 
 $lang['common']['system']='Systém';
+$lang['common']['goAlreadyStarted']='Group-Office byl úspěšně nastartován. Požadovaná obrazovka byla nahrána v Group-Office. Nyní můžete zavřít toto okno nebo záložku a pokračovat v práci v Group-Office.';
 
 
 $lang['commmon']['logFiles']='Logovací soubory';
@@ -198,3 +199,15 @@ $lang['common']['running_sys_upgrade']='Running required system update';
 $lang['common']['sys_upgrade_text']='Vyčkejte prosím. Všechny výstupy budou přihlášeny.';
 $lang['common']['click_here_to_contine']='Klikněte zde pro pokračování';
 $lang['common']['parentheses_invalid_error']='Závorky ve Vašem dotazu jsou neplatné. Prosím, opravte je.';
+
+$lang['common']['nReminders']='%s připomínek';
+$lang['common']['oneReminder']='1 připomínka';
+
+//Example: you have 1 reminders in Group-Office.
+$lang['common']['youHaveReminders']='Máte %s v %s.';
+
+$lang['common']['createdBy']='Vytvořil';
+
+$lang['common']['none']='Žádné';
+
+$lang['common']['alert']='Upozornění';

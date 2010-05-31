@@ -40,3 +40,4 @@ $lang['email']['alias']='Alias';
 $lang['email']['aliases']='Aliase';
 $lang['email']['noUidNext']='Ihr Mailserver unterstützt kein UIDNEXT. Der Ordner \'Entwürfe\' (Drafts) wurde daher automatisch für dieses E-Mail-Konto deaktiviert.';
 $lang['email']['disable_trash_folder']='Die Nachricht konnte nicht in den Papierkorb verschoben werden. Vielleicht ist der Ihnen zugewiesene Festplattenspeicher voll. Sie können versuchen Speicher freizumachen, indem Sie den gesamten Papierkorb unter Administration -> Accounts -> Doppelklick auf Ihren Account -> Ordner vorübergehend deaktivieren';
+$lang['email']['error_move_folder']='Der Ordner konnte nicht verschoben werden';

@@ -30,8 +30,9 @@ $lang['cms']['adding_share']='Přidání sdílení pro stránku: ';
 $lang['cms']['done_with_cms']='Dokončeno pomocí CMS';
 
 $lang['cms']['path_error']='Chyba: nebylo možné najít cestu: ';
-$lang['cms']['include_file_error']='Error: include_file vyžaduje cestu nebo file_id parametr';
+$lang['cms']['include_file_error']='Chyba: include_file vyžaduje cestu nebo file_id parametr';
 $lang['cms']['cant_delete_site_treeview']='Nemůžete odstranit celý web. Vymažete ho ze stránky administrace, pokud máte oprávnění.';
 $lang['cms']['cant_move_into_itself']='Nelze přesunout do sebe';
 
 $lang['cms']['antispam_fail']='Odpověď antispamu byla chybná. Prosím, zkuste to znovu';
+$lang['cms']['no_admin_rights']="Nemáte administrátorská oprávnění pro změnu uživatelských oprávnění do složek stránek.";
