@@ -348,7 +348,7 @@ try {
 				$cal->get_view_calendars($view_id);
 				while($record = $cal->next_record()) {
 					$calendars[] = $record['id'];
-					$calendar_names[$record['id']]=htmlspecialchars($record['name'], ENT_QUOTES, 'UTF-8');
+					//$calendar_names[$record['id']]=htmlspecialchars($record['name'], ENT_QUOTES, 'UTF-8');
 				}
 
 				if (count($calendars)==0) {
@@ -357,7 +357,8 @@ try {
 
 				
 			} else {
-				$calendars=isset($_REQUEST['calendars']) ? json_decode(($_REQUEST['calendars'])) : array($calendar_id);
+				$calendars=isset($_REQUEST['calendars']) ? json_decode($_REQUEST['calendars']) : array($calendar_id);
+
 			}
 
 			$owncolor = isset($_REQUEST['owncolor']) && count($calendars)>1 ? $_REQUEST['owncolor'] : 0;
@@ -372,13 +373,23 @@ try {
 				$default_bg[$v] = $default_colors[$k];
 
 			$calendar_id=$calendars[0];
+			
+			$check_calendars = $calendars;
+			$calendars=array();
+			$calendar_names=array();
+			$response['write_permission']=false;
+			foreach($check_calendars as $calendar_id){
+				$calendar = $cal->get_calendar($calendar_id);
 
-			$calendar = $cal->get_calendar($calendar_id);
-
-			$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
-			$response['write_permission']=$response['permission_level']>1;
-			if(!$response['permission_level']) {
-				throw new AccessDeniedException();
+				$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
+				if($response['permission_level']>1){
+					$response['write_permission']=true;
+				}
+				
+				if($response['permission_level']) {
+					$calendars[]=$calendar_id;
+					$calendar_names[$calendar_id]=$calendar['name'];
+				}
 			}
 
 			$events = $cal->get_events_in_array($calendars,0,$start_time,$end_time);
