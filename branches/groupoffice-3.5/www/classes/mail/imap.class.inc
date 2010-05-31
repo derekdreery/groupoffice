@@ -1261,6 +1261,11 @@ class imap extends imap_bodystruct {
 		}
 
 		if($charset){
+
+			//some clients don't send the charset.
+			if($charset=='us-ascii')
+				$charset = 'windows-1252';
+
 			$str = String::clean_utf8($str, $charset);
 			if($charset != 'utf-8') {
 				$str = str_replace($charset, 'utf-8', $str);
