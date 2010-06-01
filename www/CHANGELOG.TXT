@@ -1,3 +1,9 @@
+2010/06/? 3.5.5
+- Bug where event owners would get resource e-mails
+- E-mail display bugs
+- Security fixes
+- Small bug fixes
+
 2010/05/26 3.5.4
 - Bug fix in searching some IMAP servers.
 - American time format bug in calendar
