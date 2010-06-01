@@ -21,12 +21,15 @@ function launchGO(){
 	if(win.GO && win.GO.<?php echo $module; ?>)
 	{
 		win.GO.<?php echo $module; ?>.<?php echo $function; ?>.apply(this, <?php echo $params; ?>);
+
 	}else
 	{
 		win.location.href="<?php echo $GO_CONFIG->host; ?>?<?php echo $_SERVER['QUERY_STRING']; ?>";
 	}
+
+	self.close();
 	//win.focus();
-  self.close();
+
 }
 </script>
 </head>
