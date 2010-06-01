@@ -17,7 +17,7 @@
  */
 require('Group-Office.php');
 
-$file = $GO_CONFIG->file_storage_path.'cache/'.$_REQUEST['file'];
+$file = $GO_CONFIG->file_storage_path.'cache/'.basename($_REQUEST['file']);
 
 $ext = File::get_extension($file);
 
