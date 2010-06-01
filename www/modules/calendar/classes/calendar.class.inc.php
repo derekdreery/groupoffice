@@ -2554,7 +2554,7 @@ class calendar extends db
 	{
 		if($event_id>0)
 		{
-			$sql = "SELECT cal_events.* FROM cal_events WHERE participants_event_id ='$event_id'";// OR id='$event_id'";
+			$sql = "SELECT cal_events.* FROM cal_events WHERE participants_event_id ='$event_id' OR id='$event_id' AND group_id>1";
 			$this->query($sql);
 			return $this->num_rows();
 		}
