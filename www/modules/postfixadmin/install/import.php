@@ -2,7 +2,7 @@
 define('CONFIG_FILE', '/etc/groupoffice/servermanager.group-office.com/config.php');
 require('../../../Group-Office.php');
 
-$doreal=true;
+$doreal=false;
 $movefolders=true;
 
 $virtual_file='/etc/postfix/virtual';

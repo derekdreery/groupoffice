@@ -406,10 +406,6 @@ try {
 			$types = 'is';
 
 			if (is_uploaded_file($_FILES['file']['tmp_name'][0])) {
-				/*$fp = fopen($_FILES['file']['tmp_name'][0], "rb");
-				$template['content'] = fread($fp, $_FILES['file']['size'][0]);
-				fclose($fp);*/
-
 				$template['content'] = file_get_contents($_FILES['file']['tmp_name'][0]);
 
 				$template['extension']=File::get_extension($_FILES['file']['name'][0]);

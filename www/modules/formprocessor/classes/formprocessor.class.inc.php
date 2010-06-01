@@ -292,7 +292,7 @@ class formprocessor{
 
 		if(isset($_POST['confirmation_email']))
 		{
-			$email = file_get_contents(dirname($GO_CONFIG->get_config_file()).'/'.$_POST['confirmation_email']);
+			$email = file_get_contents(dirname($GO_CONFIG->get_config_file()).'/'.basename($_POST['confirmation_email']));
 			require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 			$swift = new GoSwiftImport($email);
 			$swift->set_to($_POST['email']);
