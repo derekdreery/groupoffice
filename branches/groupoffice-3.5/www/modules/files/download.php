@@ -133,19 +133,6 @@ if ($public || $files->has_read_permission($GO_SECURITY->user_id, $file['folder_
     }
 
     readfile($path);
-
-    /*$fd = fopen($path,'rb');
-    if($fd)
-    {
-        while (!feof($fd)) {
-            print fread($fd, 32768);
-        }
-        fclose($fd);
-    }else
-    {
-        trigger_error('Could not open '.$path, E_USER_ERROR);
-    }*/
-
 }else
 {
     exit($lang['common']['accessDenied']);
