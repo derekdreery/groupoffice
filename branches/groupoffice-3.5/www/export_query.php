@@ -17,7 +17,7 @@ require_once($GO_CONFIG->class_path.'export/export_query.class.inc.php');
 
 
 
-$type = $_REQUEST['type'];
+$type = basename($_REQUEST['type']);
 
 
 $filename = $type.'.class.inc.php';
