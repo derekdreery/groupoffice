@@ -2550,11 +2550,11 @@ class calendar extends db
 	 * @access public
 	 * @return Int Number of records found
 	 */
-    function get_event_resources($event_id)
+	function get_event_resources($event_id)
 	{
 		if($event_id>0)
 		{
-			$sql = "SELECT cal_events.* FROM cal_events WHERE participants_event_id ='$event_id' OR id='$event_id'";
+			$sql = "SELECT cal_events.* FROM cal_events WHERE participants_event_id ='$event_id'";// OR id='$event_id'";
 			$this->query($sql);
 			return $this->num_rows();
 		}
