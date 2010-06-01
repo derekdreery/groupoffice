@@ -1,4 +1,5 @@
-2010/06/? 3.5.5
+2010/06/01 3.5.5
+- Updated German, Norwegian and Czech translation
 - Bug where event owners would get resource e-mails
 - E-mail display bugs
 - Security fixes
