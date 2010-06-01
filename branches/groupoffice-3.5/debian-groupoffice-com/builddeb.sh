@@ -26,14 +26,14 @@ rm -Rf groupoffice-com
 mkdir groupoffice-com
 cd groupoffice-com
 
-svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice
+svn export https://mschering@group-office.svn.sourceforge.net/svnroot/group-office/branches/groupoffice-$MAJORVERSION/debian-groupoffice-com
 
 if [ "$1" == "real" ]; then
-	cp -R /var/www/release/packages/groupoffice-com-$VERSION debian-groupoffice/usr/share/groupoffice
-	mv debian-groupoffice/usr/share/groupoffice/LICENSE.TXT debian-groupoffice
+	cp -R /var/www/release/packages/groupoffice-com-$VERSION debian-groupoffice-com/usr/share/groupoffice
+	mv debian-groupoffice-com/usr/share/groupoffice/LICENSE.TXT debian-groupoffice-com
 fi
 
-mv debian-groupoffice groupoffice-com-$VERSION
+mv debian-groupoffice-com groupoffice-com-$VERSION
 
 tar --exclude=debian -czf groupoffice-com_$VERSION.orig.tar.gz groupoffice-com-$VERSION
 
