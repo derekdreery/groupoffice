@@ -3,13 +3,12 @@ header('Content-Type: text/html; charset=UTF-8');
 
 require('Group-Office.php');
 
-$module = isset($_REQUEST['module']) ? $_REQUEST['module'] : 'email';
+$module = isset($_REQUEST['module']) && preg_match('/[a-z]+/', $_REQUEST['module']) ? $_REQUEST['module'] : 'email';
 $function = isset($_REQUEST['function']) ? $_REQUEST['function'] : 'showComposer';
-$params = isset($_REQUEST['params']) ? ($_REQUEST['params']) : '';
+$params = isset($_REQUEST['params']) ? base64_decode($_REQUEST['params']) : '';
 
-//echo base64_decode($params);
-//exit();
-
+if(strpos($_SERVER['QUERY_STRING'], '<script') || strpos(urldecode($_SERVER['QUERY_STRING']), '<script'))
+				die('Invalid reqeust');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -21,7 +20,7 @@ function launchGO(){
 
 	if(win.GO && win.GO.<?php echo $module; ?>)
 	{
-		win.GO.<?php echo $module; ?>.<?php echo $function; ?>.apply(this, <?php echo base64_decode($params); ?>);
+		win.GO.<?php echo $module; ?>.<?php echo $function; ?>.apply(this, <?php echo $params; ?>);
 	}else
 	{
 		win.location.href="<?php echo $GO_CONFIG->host; ?>?<?php echo $_SERVER['QUERY_STRING']; ?>";
