@@ -30,11 +30,14 @@ class go_template_parser
 	
 	var $tags = array('gotpl');
 	var $fields;
+
+	var $skip_empty=false;
 	
-	public function __construct($fields, $values)
+	public function __construct($fields, $values, $skip_empty=false)
 	{
 		$this->fields=$fields;
 		$this->values=$values;
+		$this->skip_empty=$skip_empty;
 				
 	}
 	
@@ -145,6 +148,9 @@ class go_template_parser
 	{
 		foreach($this->fields as $field)
 		{
+			if($this->skip_empty && empty($this->values[$field]))
+				continue;
+			
 			$value = isset($this->values[$field]) ? $this->values[$field] : '';
 			$content = str_replace('{'.$field.'}', $value, $content);
 			$content = str_replace('%'.$field.'%', $value, $content);
