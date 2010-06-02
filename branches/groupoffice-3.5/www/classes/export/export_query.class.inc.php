@@ -57,6 +57,11 @@ class base_export_query{
 		$this->title = $_REQUEST['title'];
 	}
 
+	function download_headers()
+	{
+
+	}
+
 	function query(){
 		$params = array();
 		$types='';

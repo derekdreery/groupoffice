@@ -19,6 +19,8 @@ require_once($GO_CONFIG->class_path.'export/export_query.class.inc.php');
 
 $type = basename($_REQUEST['type']);
 
+if(strpos($_SERVER['QUERY_STRING'], '<script') || strpos(urldecode($_SERVER['QUERY_STRING']), '<script'))
+				die('Invalid request');
 
 $filename = $type.'.class.inc.php';
 
