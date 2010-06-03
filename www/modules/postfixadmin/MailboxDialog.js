@@ -44,12 +44,6 @@ GO.postfixadmin.MailboxDialog = function(config){
 			},
 			scope: this
 		},{
-			text: GO.lang['cmdApply'],
-			handler: function(){
-				this.submitForm();
-			},
-			scope:this
-		},{
 			text: GO.lang['cmdClose'],
 			handler: function(){
 				this.hide();
@@ -69,9 +63,7 @@ Ext.extend(GO.postfixadmin.MailboxDialog, Ext.Window,{
 			this.render(Ext.getBody());
 		}
 		
-		this.tabPanel.setActiveTab(0);
-		
-		
+		this.tabPanel.setActiveTab(0);		
 		
 		if(!mailbox_id)
 		{
@@ -99,6 +91,9 @@ Ext.extend(GO.postfixadmin.MailboxDialog, Ext.Window,{
 		}else 
 		{			
 			this.formPanel.form.reset();
+
+			this.formPanel.form.findField('quota').setValue(GO.postfixadmin.defaultQuota);
+			this.formPanel.form.findField('domain').setValue('@'+GO.postfixadmin.domain);
 			
 			GO.postfixadmin.MailboxDialog.superclass.show.call(this);
 		}
@@ -162,11 +157,20 @@ Ext.extend(GO.postfixadmin.MailboxDialog, Ext.Window,{
 			autoScroll:true,
 			labelWidth:150,
 			items:[{
-				xtype: 'textfield',
-			  name: 'username',
-				anchor: '-20',
-			  allowBlank:false,
-			  fieldLabel: GO.postfixadmin.lang.username
+					xtype:'compositefield',
+					anchor:'-20',
+					fieldLabel: GO.postfixadmin.lang.username,
+					items:[{
+							xtype: 'textfield',
+							name: 'username',
+							flex:1,
+							allowBlank:false							
+						},{
+							flex:1,
+							xtype:'plainfield',
+							name:'domain',
+							value:'@domain.com'
+						}]
 			},{
 				xtype: 'textfield',
 				inputType: 'password',

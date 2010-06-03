@@ -111,6 +111,9 @@ try{
 			if(isset($_POST['delete_keys']))
 			{
 				try{
+					if(!$GO_MODULES->modules['postfixadmin']['write_permission'])
+						throw new AccessDeniedException();
+
 					$response['deleteSuccess']=true;
 					$delete_domains = json_decode(($_POST['delete_keys']));
 					foreach($delete_domains as $domain_id)
@@ -129,7 +132,7 @@ try{
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			
-			$response['total'] = $postfixadmin->get_authorized_domains($auth_type, $GO_SECURITY->user_id,  $query, $sort, $dir, $start, $limit);
+			$response['total'] = $postfixadmin->get_authorized_domains($auth_type, $GO_SECURITY->user_id,  $query, $sort, $dir, $start, $limit,!$GO_MODULES->modules['postfixadmin']['write_permission']);
 			$response['results']=array();
 			
 			$pa2 = new postfixadmin();

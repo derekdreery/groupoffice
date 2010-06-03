@@ -87,12 +87,8 @@ GO.postfixadmin.MailboxesGrid = function(config){
 			iconCls: 'btn-add',							
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
-			handler: function(){
-				
-	    	this.mailboxDialog.show();	    	
-	    	this.mailboxDialog.formPanel.form.findField('quota').setValue(GO.postfixadmin.domainDialog.quotaField.getValue());
-	    	
-	    	
+			handler: function(){				
+	    	this.mailboxDialog.show();
 			},
 			scope: this
 		},{
@@ -104,8 +100,22 @@ GO.postfixadmin.MailboxesGrid = function(config){
 			},
 			scope: this
 		}];
-	
-	
+
+	config.listeners={
+		show:function(){
+			if(!this.store.loaded && this.store.baseParams.domain_id>0)
+			{
+				this.store.load();
+			}
+		},/*
+		render:function(){
+			if(!this.store.loaded && this.store.baseParams.domain_id>0)
+			{
+				this.store.load();
+			}
+		},*/
+		scope:this
+	}
 	
 	GO.postfixadmin.MailboxesGrid.superclass.constructor.call(this, config);
 	
@@ -119,14 +129,6 @@ GO.postfixadmin.MailboxesGrid = function(config){
 };
 
 Ext.extend(GO.postfixadmin.MailboxesGrid, GO.grid.GridPanel,{
-	onShow : function(){
-		if(!this.store.loaded)
-		{
-			this.store.load();
-		}
-		
-		GO.postfixadmin.MailboxesGrid.superclass.onShow.call(this);
-	},
 	
 	setDomainId : function(domain_id)
 	{
