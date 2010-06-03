@@ -250,14 +250,14 @@ class email extends db {
 	function get_accounts($user_id=0, $start=0, $offset=0, $sort='standard', $dir='ASC') {
 		$sql = "SELECT al.name, al.email, al.signature, al.id AS default_alias_id, a.*,u.first_name, u.middle_name, u.last_name FROM em_accounts a ".
 						"INNER JOIN go_users u on u.id=a.user_id ".
-						"INNER JOIN em_aliases al ON (al.account_id=a.id AND al.`default`='1') ";
+						"INNER JOIN em_aliases al ON (al.account_id=a.id AND al.`default`='1') ".
+						"WHERE type='imap'";
 
 		if($user_id > 0) {
-			$sql .= " WHERE user_id='".$this->escape($user_id)."'";
+			$sql .= " AND user_id='".$this->escape($user_id)."'";
 			$sql .= " ORDER BY ".$this->escape($sort.' '.$dir);
 		}else {
-			$sql =
-							$sql .= " ORDER BY ".$this->escape($sort.' '.$dir);
+			$sql .= " ORDER BY ".$this->escape($sort.' '.$dir);
 		}
 
 		$this->query($sql);
@@ -396,23 +396,16 @@ class email extends db {
 
 				unset($account['name'],$account['email'],$account['signature']);
 
-				//we can only encrypt the password if the account owner is doing this
-				//otherwise we use the wrong encryption key.
-				$account['password_encrypted']=0;
+				require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+				$c = new cryptastic();
 
-				go_debug($GO_SECURITY->user_id.'=='.$account['user_id']);
-				if($GO_SECURITY->user_id==$account['user_id']){
-					require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
-					$c = new cryptastic();
-
-					$encrypted = $c->encrypt($account['password']);
-					if($encrypted){
-						$account['password']=$encrypted;
-						$account['password_encrypted']=1;
-					}
+				$encrypted = $c->encrypt($account['password']);
+				if($encrypted){
+					$account['password']=$encrypted;
+					$account['password_encrypted']=2;
 				}
+				
 				$this->insert_row('em_accounts', $account);
-
 
 				$this->_synchronize_folders($account, $mailboxes, $subscribed);
 
@@ -527,20 +520,15 @@ class email extends db {
 
 				$this->mail->disconnect();
 
-				//we can only encrypt the password if the account owner is doing this
-				//otherwise we use the wrong encryption key.
-				$account['password_encrypted']=0;
-				if($account['user_id']==$GO_SECURITY->user_id){
-					require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
-					$c = new cryptastic();
+				require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+				$c = new cryptastic();
 
-					$encrypted = $c->encrypt($account['password']);
-					if($encrypted){
-						$account['password']=$encrypted;
-						$account['password_encrypted']=1;
-					}
+				$encrypted = $c->encrypt($account['password']);
+				if($encrypted){
+					$account['password']=$encrypted;
+					$account['password_encrypted']=2;
 				}
-
+				
 				return $this->_update_account($account);
 			}
 		}
@@ -579,8 +567,21 @@ class email extends db {
 	}
 
 	function update_password($host, $username, $password) {
+
+		global $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+		$c = new cryptastic();
+
+		$password_encrypted=0;
+		$encrypted = $c->encrypt($password);
+		if($encrypted){
+			$password=$encrypted;
+			$password_encrypted=2;
+		}
+
 		$sql = "UPDATE em_accounts SET password='".$this->escape($password).
-						"' WHERE username='".$this->escape($username)."' AND host='".$this->escape($host)."'";
+						"', password_encrypted=$password_encrypted WHERE username='".$this->escape($username)."' AND host='".$this->escape($host)."'";
 
 		return $this->query($sql);
 	}
@@ -600,13 +601,49 @@ class email extends db {
 		require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
 		$c = new cryptastic();
 
-		if($account['password_encrypted']==1){
+
+		if($account['password_encrypted']==2){
 			$account['password']=$c->decrypt($account['password']);
+			$account['password_encrypted']=0;
+			$account['password_already_decrypted']=1;
+
+		}elseif(!isset($account['password_already_decrypted']))
+		{
+			$account['password_already_decrypted']=1;
+			
+			if($account['password_encrypted']==1){
+				//old method that doesn't work well
+				//go_debug($account['password'].' '.$_SESSION['GO_SESSION']['key']);
+				$account['password']=$c->decrypt($account['password'], $_SESSION['GO_SESSION']['key']);				
+			}
+			$encrypted = $c->encrypt($account['password']);
+			if($encrypted){
+				$_account['password']=$encrypted;
+				$_account['password_encrypted']=2;
+				$_account['id']=$account['id'];
+				$this->_update_account($_account);
+			}
+		}
+
+		return $account;
+	}
+
+	/*function _decrypt_account($account){
+		global $GO_CONFIG, $GO_SECURITY;
+		require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+		$c = new cryptastic();
+
+
+		if($account['password_encrypted']==1){
+			//go_debug($account['password'].' '.$_SESSION['GO_SESSION']['key']);
+			$account['password']=$c->decrypt($account['password'], $_SESSION['GO_SESSION']['key']);
+			go_debug('Plain: '.$account['password']);
+			
 			$account['password_encrypted']=0;
 			$account['password_already_decrypted']=1;
 		}elseif(!isset($account['password_already_decrypted']) && $GO_SECURITY->user_id==$account['user_id'])
 		{
-			$encrypted = $c->encrypt($account['password']);
+			$encrypted = $c->encrypt($account['password'], $_SESSION['GO_SESSION']['key']);
 			if($encrypted){
 				$_account['password']=$encrypted;
 				$_account['password_encrypted']=1;
@@ -616,7 +653,7 @@ class email extends db {
 		}
 
 		return $account;
-	}
+	}*/
 
 	function get_account($account_id, $alias_id=0) {
 		$sql = "SELECT a.*, al.name, al.email, al.signature, al.id AS default_alias_id FROM em_accounts a INNER JOIN em_aliases al ON ";

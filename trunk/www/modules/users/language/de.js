@@ -82,3 +82,4 @@ GO.users.lang.deleteWarning='WARNUNG!!! Alle Benutzerdaten inkl. Adressbüchern,
 GO.users.lang.lastName='Nachname';
 GO.users.lang.firstName='Vorname';
 GO.users.lang.sendInvitation='Einladung versenden';
+GO.users.lang.contactInfo='Kontakt-Info';

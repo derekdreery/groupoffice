@@ -999,7 +999,9 @@ class calendar extends db
 		{
 				$sql .= " AND c.group_id = ".$this->escape($group_id);
 		}
-		$sql .= " ORDER BY c.name ASC";
+		
+		$sql .= $group_id==-1 ? " ORDER BY g.id, c.name ASC" : " ORDER BY c.name ASC";
+		
 
 		$this->query($sql);
 
@@ -1405,21 +1407,21 @@ class calendar extends db
 			$GO_LANGUAGE->require_language_file('calendar');
 		}
 		
-		$url = create_direct_url('calendar', 'showEvent', array('values'=>array('event_id' => $resource['id'])));
+		$url = create_direct_url('calendar', 'showEvent', array(array('values'=>array('event_id' => $resource['id']))));
 
 		switch($message_type){
 			case 'new':
-				$body = sprintf($lang['calendar']['resource_modified_mail_body'],$user_name).'<br /><br />'
-					. $this->event_to_html($resource, true)
-					. '<br /><a href="'.$url.'">'.$lang['calendar']['open_resource'].'</a>';
-				$subject = sprintf($lang['calendar']['resource_modified_mail_subject'],$calendar['name'], $resource['name'], date($_SESSION['GO_SESSION']['date_format'], $resource['start_time']));
-			break;
-
-			case 'modified_for_admin':
 				$body = sprintf($lang['calendar']['resource_mail_body'],$user_name,$calendar['name']).'<br /><br />'
 					. $this->event_to_html($resource, true)
 					. '<br /><a href="'.$url.'">'.$lang['calendar']['open_resource'].'</a>';
 				$subject = sprintf($lang['calendar']['resource_mail_subject'],$calendar['name'], $resource['name'], date($_SESSION['GO_SESSION']['date_format'], $resource['start_time']));
+			break;
+
+			case 'modified_for_admin':
+				$body = sprintf($lang['calendar']['resource_modified_mail_body'], $user_name, $calendar['name']).'<br /><br />'
+					. $this->event_to_html($resource, true)
+					. '<br /><a href="'.$url.'">'.$lang['calendar']['open_resource'].'</a>';
+				$subject = sprintf($lang['calendar']['resource_modified_mail_subject'],$calendar['name'], $resource['name'], date($_SESSION['GO_SESSION']['date_format'], $resource['start_time']));
 			break;
 
 			case 'mofified_for_user':
@@ -2548,11 +2550,11 @@ class calendar extends db
 	 * @access public
 	 * @return Int Number of records found
 	 */
-    function get_event_resources($event_id)
+	function get_event_resources($event_id)
 	{
 		if($event_id>0)
 		{
-			$sql = "SELECT cal_events.* FROM cal_events WHERE participants_event_id ='$event_id' OR id='$event_id'";
+			$sql = "SELECT cal_events.* FROM cal_events WHERE participants_event_id ='$event_id' AND id!='$event_id'";
 			$this->query($sql);
 			return $this->num_rows();
 		}

@@ -19,26 +19,28 @@ GO.addressbook.CompanyDialog = function(config)
 		    
 	this.commentPanel = new Ext.Panel({
 		title: GO.addressbook.lang['cmdPanelComments'], 
-  	layout: 'fit',
-  	border:false,
+		layout: 'fit',
+		border:false,
 		items: [
-			new Ext.form.TextArea({
-				name: 'comment',
-				fieldLabel: '',
-				hideLabel: true
-			})
+		new Ext.form.TextArea({
+			name: 'comment',
+			fieldLabel: '',
+			hideLabel: true
+		})
 		]
 	});
 
-	this.commentPanel.on('show', function(){ this.companyForm.form.findField('comment').focus(); }, this);
+	this.commentPanel.on('show', function(){
+		this.companyForm.form.findField('comment').focus();
+	}, this);
 
 	/* employees Grid */
-  this.employeePanel = new GO.addressbook.EmployeesPanel();
+	this.employeePanel = new GO.addressbook.EmployeesPanel();
 
   
-  var items = [
-	      	this.personalPanel,
-	      	this.commentPanel];
+	var items = [
+	this.personalPanel,
+	this.commentPanel];
 	      	
 	if(GO.mailings)
 	{
@@ -46,28 +48,28 @@ GO.addressbook.CompanyDialog = function(config)
 	}
 	items.push(this.employeePanel);
   
-  if(GO.customfields && GO.customfields.types["3"])
+	if(GO.customfields && GO.customfields.types["3"])
 	{
-  	for(var i=0;i<GO.customfields.types["3"].panels.length;i++)
-  	{			  	
-  		items.push(GO.customfields.types["3"].panels[i]);
-  	}
+		for(var i=0;i<GO.customfields.types["3"].panels.length;i++)
+		{
+			items.push(GO.customfields.types["3"].panels[i]);
+		}
 	}	
 	
 	this.companyForm = new Ext.FormPanel({
 		waitMsgTarget:true,		
 		border: false,
 		baseParams: {},
-    items: [
-    	this.tabPanel = new Ext.TabPanel({
-    		border: false,
-    		activeTab: 0,
-    		deferredRender: false,
-    		hideLabel: true,
-    		anchor:'100% 100%',
-	      items: items       		
-    	})
-    ]
+		items: [
+		this.tabPanel = new Ext.TabPanel({
+			border: false,
+			activeTab: 0,
+			deferredRender: false,
+			hideLabel: true,
+			anchor:'100% 100%',
+			items: items
+		})
+		]
 	});				
     
 
@@ -82,46 +84,103 @@ GO.addressbook.CompanyDialog = function(config)
 	this.plain= true;
 	this.closeAction= 'hide';
 	this.collapsible=true;
-	//this.iconCls= 'btn-addressbook-company';
 	this.title= GO.addressbook.lang['cmdCompanyDialog'];
 	this.items= this.companyForm;
 	this.buttons=  [
-			{
-				id: 'ok', 
-				text: GO.lang['cmdOk'], 
-				handler: function(){
-					this.saveCompany(true);
-				}, 
-				scope: this 
-			},
-			{
-				id: 'apply', 
-				text: GO.lang['cmdApply'], 
-				handler: function(){
-					this.saveCompany();
-				}, 
-				scope: this 
-			},
-			{
-				id: 'close', 
-				text: GO.lang['cmdClose'], 
-				handler: function()
-				{
-					this.hide();
-				}, 
-				scope: this 
-			}
-		];
+	{
+		text: GO.lang['cmdOk'],
+		handler: function(){
+			this.saveCompany(true);
+		},
+		scope: this
+	},
+	{
+		text: GO.lang['cmdApply'],
+		handler: function(){
+			this.saveCompany();
+		},
+		scope: this
+	},
+	{
+		text: GO.lang['cmdClose'],
+		handler: function()
+		{
+			this.hide();
+		},
+		scope: this
+	}
+	];
 		
 	var focusFirstField = function(){
 		this.companyForm.form.findField('name').focus(true);
 	};
-	this.focus= focusFirstField.createDelegate(this);			
+	this.focus= focusFirstField.createDelegate(this);
+
+
+
+	this.tbar = [this.moveEmployeesButton = new Ext.Button({
+		text:GO.addressbook.lang.moveEmployees,
+		handler:function(){
+			if(!this.moveEmpWin){
+
+				this.moveEmpForm = new Ext.FormPanel({
+					cls:'go-form-panel',
+					url:GO.settings.modules.addressbook.url+'action.php',
+					baseParams:{
+						task:'move_employees',
+						from_company_id:0
+					},
+					waitMsgTarget:true,
+					items:new GO.addressbook.SelectCompany({
+						allowBlank:false,
+						anchor:'100%',
+						hiddenName:'to_company_id'
+					})
+				});
+
+				this.moveEmpWin = new GO.Window({
+					title:GO.addressbook.lang.moveEmployees,
+					closable:true,
+					modal:true,
+					width:400,
+					autoHeight:true,
+					items:this.moveEmpForm,
+					buttons:[{
+						text:GO.lang.cmdOk,
+						handler:function(){
+							this.moveEmpForm.form.submit({
+								waitMsg:GO.lang['waitMsgSave'],
+								success:function(form, action){
+									this.moveEmpWin.hide();
+								},
+								failure: function(form, action) {
+
+									if(action.failureType == 'client')
+									{
+										Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);
+									} else {
+										Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
+									}
+								},
+								scope: this
+							})
+						},
+						scope:this
+					}]
+				});
+			}
+			this.moveEmpForm.baseParams.from_company_id=this.company_id;
+			this.moveEmpWin.show();
+		},
+		scope:this
+	})];
 
 
 	GO.addressbook.CompanyDialog.superclass.constructor.call(this);
 	
-	this.addEvents({'save':true});
+	this.addEvents({
+		'save':true
+	});
 }
 	
 Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
@@ -162,7 +221,7 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 			if(!GO.util.empty(GO.addressbook.defaultAddressbook)){
 				this.personalPanel.formAddressBooks.setValue(GO.addressbook.defaultAddressbook);
 			}
-
+			this.moveEmployeesButton.setDisabled(true);
 		
 			this.tabPanel.setActiveTab(0);
 			
@@ -195,7 +254,10 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 	{
 		this.companyForm.form.load({
 			url: GO.settings.modules.addressbook.url+ 'json.php', 
-			params: {company_id: id, task: 'load_company'},
+			params: {
+				company_id: id,
+				task: 'load_company'
+			},
 			
 			success: function(form, action) {
 				
@@ -206,20 +268,21 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				{					
 					this.employeePanel.setCompanyId(action.result.data['id']);
 					this.personalPanel.setCompanyId(action.result.data['id']);
+					this.moveEmployeesButton.setDisabled(false);
 					
 					GO.addressbook.CompanyDialog.superclass.show.call(this);
 				}						
-	   	},
-		  failure: function(form, action)
-		  {
+			},
+			failure: function(form, action)
+			{
 				if(action.failureType == 'client')
 				{					
 					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
 				} else {
 					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
 				}			 		
-		  },
-		 scope: this
+			},
+			scope: this
 		});			
 	},
 
@@ -239,6 +302,7 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				{
 					this.company_id = action.result.company_id;				
 					this.employeePanel.setCompanyId(action.result.company_id);
+					this.moveEmployeesButton.setDisabled(false);
 				}				
 				this.fireEvent('save', this, this.company_id);
 				

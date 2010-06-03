@@ -111,3 +111,5 @@ GO.addressbook.lang.deleteImage='Smazat obrázek';
 
 GO.addressbook.lang.addAllSearchResults='Přidat všechny výsledky vyhledávání';
 GO.addressbook.lang.confirmAddAllSearchResults='Jste si jisti, že chcete přidat všechny výsledky hledání do seznamu adres?';
+
+GO.addressbook.lang.moveEmployees='Přesunout zaměstnance';

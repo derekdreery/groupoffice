@@ -388,7 +388,9 @@ try {
 			/* Check for conflicts regarding resources */
 			if (isset($resources)) {
 				$cal = new calendar();
-				$concurrent_resources = $cal->get_events_in_array($resources,0, $event['start_time'], $event['end_time'], true);
+				$concurrent_resources = $cal->get_events_in_array($resources,0, $event['start_time'], $event['end_time'], false);
+
+				
 				foreach ($concurrent_resources as $key=>$value) {
 					if ($value['id'] != $event['id']) {
 						$cal2 = new calendar();
@@ -784,7 +786,9 @@ try {
 									$cal3->update_event($resource, false, false, true, false);
 								}
 							}else
-							{	
+							{
+								$group = $cal2->get_group($resource_calendar['group_id']);
+
 								if($cal2->group_admin_exists($resource_calendar['group_id'], $resource['user_id']))
 								{
 									$resource['status']='ACCEPTED';

@@ -26,4 +26,7 @@ $lang['tasks']['call']='Připomenutí';
 $lang['tasks']['dueAtdate']='Vzhledem k %s';
 
 $lang['tasks']['list']='Přehled úkolů';
+
+$lang['tasks']['tasklistChanged']="* Seznam úkolů byl změněn z '%s' na '%s'";
+$lang['tasks']['statusChanged']="* Stav byl změněn z '%s' na '%s'";
 ?>

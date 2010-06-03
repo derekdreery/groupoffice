@@ -1519,7 +1519,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
   	{
   		return false;
   	}
-  	var domElements = this.getEventDomElements(eventData.id);
+  	var domElements = this.getEventDomElements(eventData.event_id);
   	
   	if(!domElements)
   	{

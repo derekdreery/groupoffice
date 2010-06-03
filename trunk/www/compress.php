@@ -17,8 +17,7 @@
  */
 require('Group-Office.php');
 
-$file = $GO_CONFIG->file_storage_path.'cache/'.$_REQUEST['file'];
-go_log(LOG_DEBUG, 'Compressed: '.$file);
+$file = $GO_CONFIG->file_storage_path.'cache/'.basename($_REQUEST['file']);
 
 $ext = File::get_extension($file);
 
@@ -47,4 +46,3 @@ if($use_compression){
 
 	ob_end_flush();  // The main one
 }
-?>

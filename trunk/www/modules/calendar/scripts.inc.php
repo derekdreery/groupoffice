@@ -22,7 +22,7 @@ $calendar['fields'] = $group['fields'];
 
 $reminder = $cal->reminder_seconds_to_form_input($settings['reminder']);
 
-$GO_SCRIPTS_JS .= 'GO.calendar.defaultCalendar = {id: '.$calendar['id'].', name: "'.$calendar['name'].'"};
+$GO_SCRIPTS_JS .= 'GO.calendar.defaultCalendar = {id: "'.$calendar['id'].'", name: "'.$calendar['name'].'"};
 GO.calendar.defaultBackground="'.$settings['background'].'";
 GO.calendar.defaultReminderValue="'.$reminder['reminder_value'].'";
 GO.calendar.defaultReminderMultiplier="'.$reminder['reminder_multiplier'].'";

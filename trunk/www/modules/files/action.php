@@ -93,7 +93,7 @@ try {
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 				$cf->insert_cf_row(6,$up_file['id']);
-				$cf->update_fields($GO_SECURITY->user_id, $up_file['id'], 6, $_POST, false);
+				$cf->update_fields($GO_SECURITY->user_id, $up_file['id'], 6, $_POST, false, true);
 			}
 
 			$GO_EVENTS->fire_event('save_file_properties', array(&$response,$up_file));
@@ -406,10 +406,6 @@ try {
 			$types = 'is';
 
 			if (is_uploaded_file($_FILES['file']['tmp_name'][0])) {
-				/*$fp = fopen($_FILES['file']['tmp_name'][0], "rb");
-				$template['content'] = fread($fp, $_FILES['file']['size'][0]);
-				fclose($fp);*/
-
 				$template['content'] = file_get_contents($_FILES['file']['tmp_name'][0]);
 
 				$template['extension']=File::get_extension($_FILES['file']['name'][0]);

@@ -204,9 +204,9 @@ class imap extends imap_bodystruct {
 			$this->send_command($command);
 			$response = $this->get_response();
 			$this->capability = $_SESSION['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);
-
-			go_debug($this->capability);
 		}
+
+		go_debug($this->capability);
 
 		return $this->capability;
 	}
@@ -560,12 +560,15 @@ class imap extends imap_bodystruct {
 	public function search($terms) {
 		//$this->clean($this->search_charset, 'charset');
 		$this->clean($terms, 'search_str');
-		//if ($this->search_charset) {
-			$charset = 'CHARSET UTF-8 ';
-		/*}
-		else {
-			$charset = '';
-		}*/		$command = 'UID SEARCH '.$charset.$terms."\r\n";
+
+		/*
+		 * Sending charset along doesn't work on iMailserver.
+		 * Without seems to work on different servers.
+		 */
+		$charset = '';
+		//$charset =  'CHARSET UTF-8 ';
+		
+		$command = 'UID SEARCH '.$charset.$terms."\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false, true);
 		$status = $this->check_response($result, true);
@@ -981,13 +984,17 @@ class imap extends imap_bodystruct {
 				}
 				if ($message['uid']) {
 					if(isset($message['content-type'])) {
-						if (stristr($message['content-type'], 'charset=')) {
+						$message['content-type']=strtolower($message['content-type']);
+						if (strpos($message['content-type'], 'charset=')!==false) {
 							if (preg_match("/charset\=([^\s]+)/", $message['content-type'], $matches)) {
-								$message['charset'] = trim(strtolower(str_replace(array('"', "'", ';'), '', $matches[1])));
+								$message['charset'] = trim(str_replace(array('"', "'", ';'), '', $matches[1]));
 							}
 							if(preg_match("/[^\/]*\/[^;]*/", $message['content-type'], $matches)){
 								$message['content-type']=$matches[0];
 							}
+						}else
+						{
+							$message['content-type']=str_replace(';', '', $message['content-type']);
 						}
 					}
 					$message['udate']=empty($message['date']) ? 0 : strtotime($message['date']);
@@ -1181,6 +1188,7 @@ class imap extends imap_bodystruct {
 		foreach ($struct as $id => $vals) {
 			
 			if (isset($vals['type'])){
+
 				$vals['imap_id'] = $id;
 				//go_debug($vals);
 				
@@ -1253,6 +1261,11 @@ class imap extends imap_bodystruct {
 		}
 
 		if($charset){
+
+			//some clients don't send the charset.
+			if($charset=='us-ascii')
+				$charset = 'windows-1252';
+
 			$str = String::clean_utf8($str, $charset);
 			if($charset != 'utf-8') {
 				$str = str_replace($charset, 'utf-8', $str);

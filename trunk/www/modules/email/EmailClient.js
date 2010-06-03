@@ -1574,49 +1574,52 @@ GO.mainLayout.onReady(function(){
 	GO.email.search_type_default = 'from';
 
 
-	//create notify icon
-	var notificationArea = Ext.get('notification-area');
-	if(notificationArea)
-	{
-		GO.email.notificationEl = notificationArea.createChild({
-			id: 'ml-notify',
-			tag:'a',
-			href:'#',
-			style:'display:none'
-		});
-		GO.email.notificationEl.on('click', function(){
-			GO.mainLayout.openModule('email');
-		}, this);
-	}
-
-	GO.checker.on('check', function(checker, data){
-		var ep = GO.mainLayout.getModulePanel('email');
-
-		var totalUnseen = 0;
-		for(var folder_id in data.email_status)
+	//GO.checker is not available in some screens like accept invitation from calendar
+	if(GO.checker){
+		//create notify icon
+		var notificationArea = Ext.get('notification-area');
+		if(notificationArea)
 		{
-			if(ep){
-				var changed = ep.updateFolderStatus(folder_id, data.email_status[folder_id].unseen);
-				if(changed && ep.messagesGrid.store.baseParams.folder_id==folder_id)
-				{
-					ep.messagesGrid.store.reload();
+			GO.email.notificationEl = notificationArea.createChild({
+				id: 'ml-notify',
+				tag:'a',
+				href:'#',
+				style:'display:none'
+			});
+			GO.email.notificationEl.on('click', function(){
+				GO.mainLayout.openModule('email');
+			}, this);
+		}
+
+		GO.checker.on('check', function(checker, data){
+			var ep = GO.mainLayout.getModulePanel('email');
+
+			var totalUnseen = 0;
+			for(var folder_id in data.email_status)
+			{
+				if(ep){
+					var changed = ep.updateFolderStatus(folder_id, data.email_status[folder_id].unseen);
+					if(changed && ep.messagesGrid.store.baseParams.folder_id==folder_id)
+					{
+						ep.messagesGrid.store.reload();
+					}
 				}
+				totalUnseen += data.email_status[folder_id].unseen;
 			}
-			totalUnseen += data.email_status[folder_id].unseen;
-		}
-		
-		if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
-		{
-			data.alarm=true;
-			data.reminderText+='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', totalUnseen)+'</p>';
 
-			if(!ep || !ep.isVisible())
-				GO.email.notificationEl.setDisplayed(true);
-		}
+			if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
+			{
+				data.alarm=true;
+				data.reminderText+='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', totalUnseen)+'</p>';
 
-		GO.email.notificationEl.update(totalUnseen);
-		GO.email.totalUnseen=totalUnseen;
-	});
+				if(!ep || !ep.isVisible())
+					GO.email.notificationEl.setDisplayed(true);
+			}
+
+			GO.email.notificationEl.update(totalUnseen);
+			GO.email.totalUnseen=totalUnseen;
+		});
+	}
 });
 
 GO.email.aliasesStore = new GO.data.JsonStore({

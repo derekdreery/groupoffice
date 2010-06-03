@@ -551,6 +551,10 @@ class imap_base {
 
 				$string = str_replace($v, $fld, $string);
 			}
+		}else
+		{
+			//go_debug('Using default charset for '.$string.': '.$this->default_charset);
+			$string=String::to_utf8($string, $this->default_charset);
 		}
 		return str_replace(array('\\\\', '\\(', '\\)'), array('\\','(', ')'), $string);
 	}
@@ -651,6 +655,12 @@ class imap_bodystruct extends imap_base {
 				else {
 					if ($v == 'charset') {
 						$res[$v] = strtolower(trim($res[$v]));
+						
+						//get a default charset to decode filenames of attachments that don't have
+						//that value
+						if(empty($this->default_charset) && !empty($res[$v])){
+							$this->default_charset = $res[$v];
+						}
 					}
 					else {
 						$res[$v] = trim($res[$v]);

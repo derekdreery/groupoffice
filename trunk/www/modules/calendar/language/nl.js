@@ -89,3 +89,4 @@ GO.calendar.lang.ignoreConflictsTitle = 'Conflict negeren?';
 GO.calendar.lang.ignoreConflictsMsg = 'Deze agenda-item conflicteert met een andere. Toch opslaan?';
 GO.calendar.lang.resourceConflictTitle = 'Hulpmiddelenconflict';
 GO.calendar.lang.resourceConflictMsg = 'Een of meer hulpmiddelen van deze agenda-item worden al elders gebruikt op hetzelfde moment:</br>';
+GO.calendar.lang.view = 'Overzicht';

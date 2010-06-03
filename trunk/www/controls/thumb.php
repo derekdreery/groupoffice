@@ -30,6 +30,11 @@
 require('../Group-Office.php');
 
 $path = $_REQUEST['src'];
+
+if(File::path_leads_to_parent($path))
+	die('Invalid request');
+
+
 $w = isset($_REQUEST['w']) ? intval($_REQUEST['w']) : 0;
 $h = isset($_REQUEST['h']) ? intval($_REQUEST['h']) : 0;
 $zc = !empty($_REQUEST['zc']) && !empty($w) && !empty($h);

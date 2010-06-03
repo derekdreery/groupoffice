@@ -66,7 +66,7 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 										+ '='
 										+ encodeURIComponent(this.loadParams[name]);
 							}
-							document.location = downloadUrl;
+							window.open(downloadUrl);
 							this.hide();
 						},
 						scope : this

@@ -65,20 +65,29 @@ class String {
 		return strtr($str, array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
 	}
 
+
 	public static function to_utf8($str, $from_charset=''){
 
-		if(empty($from_charset)){
-			if(function_exists('mb_detect_encoding'))
-			{
-				$from_charset = mb_detect_encoding($str, "auto");
-			}
-			if(empty($from_charset))
-				$from_charset='ISO-8859-1';
-		}
-		if($from_charset=='UTF-8')
+		if(empty($str))
 			return $str;
-		else
+		
+		
+		if($from_charset=='UTF-8'){
+			return $str;
+		}else{
+
+			if(empty($from_charset)){
+
+				/*if(function_exists('mb_detect_encoding'))
+				{
+					$from_charset = mb_detect_encoding($str, "auto");
+				}
+				if(empty($from_charset))*/
+				$from_charset='windows-1252';
+			}
+
 			return iconv($from_charset, 'UTF-8//IGNORE', $str);
+		}
 	}
 
 	public static function clean_utf8($str, $source_charset='UTF-8') {

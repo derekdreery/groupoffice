@@ -35,9 +35,8 @@ class Number {
 	 */
 
 	public static function format($number, $decimals=2)
-	{
-		return number_format($number, $decimals, $_SESSION['GO_SESSION']['decimal_separator'], $_SESSION['GO_SESSION']['thousands_separator']);
-
+	{		
+		return number_format(floatval($number), $decimals, $_SESSION['GO_SESSION']['decimal_separator'], $_SESSION['GO_SESSION']['thousands_separator']);
 	}
 
 	/**
