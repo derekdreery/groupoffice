@@ -715,13 +715,21 @@ class cached_imap extends imap{
 		go_debug('Default charset: '.$this->default_charset);
 
 		$plain_parts = $this->find_body_parts($struct,'text', 'plain');
-		foreach($plain_parts['parts'] as $plain_part){
-			$message['body_ids'][]=$plain_part['imap_id'];
+		for($i=0,$max=count($plain_parts['parts']);$i<$max;$i++)
+		{
+			if(empty($plain_parts['parts'][$i]['charset']))
+				$plain_parts['parts'][$i]['charset']=$this->default_charset;
+
+			$message['body_ids'][]=$plain_parts['parts'][$i]['imap_id'];
 		}
 
 		$html_parts = $this->find_body_parts($struct,'text', 'html');
-		foreach($html_parts['parts'] as $html_part){
-			$message['body_ids'][]=$html_part['imap_id'];
+		for($i=0,$max=count($html_parts['parts']);$i<$max;$i++)
+		{
+			if(empty($html_parts['parts'][$i]['charset']))
+				$html_parts['parts'][$i]['charset']=$this->default_charset;
+			
+			$message['body_ids'][]=$html_parts['parts'][$i]['imap_id'];
 		}
 
 		$inline_images=array();
