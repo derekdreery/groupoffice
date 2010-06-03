@@ -174,4 +174,4 @@ $lang['common']['dontChangeOwnersPermissions']='Sie können die Berechtigungen d
 $lang['common']['running_sys_upgrade']='Notwendiges Systemupdate läuft...';
 $lang['common']['sys_upgrade_text']='Einen Moment bitte. Alle Ausgaben werden protokolliert.';
 $lang['common']['click_here_to_contine']='Hier klicken um fortzufahren';
-$lang['common']['parentheses_invalid_error']='Die Klammern in Ihnrer Abfrage sind falsch. Bitte korrigieren Sie diese..';
+$lang['common']['parentheses_invalid_error']='Die Klammern in Ihrer Abfrage sind falsch. Bitte korrigieren Sie diese.';
