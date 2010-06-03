@@ -21,7 +21,7 @@ function afterUpload(success){
 </script>
 </head>
 <body>
-<p style="font:12px Arial;"><?php echo $lang['common']['uploadMultipleFiles']; ?></p>
+<p style="font:12px Arial;"><?php echo str_replace('Group-Office', $GO_CONFIG->product_name, $lang['common']['uploadMultipleFiles']); ?></p>
         <applet
             code="wjhk.jupload2.JUploadApplet"
             name="JUpload"
