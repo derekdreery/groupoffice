@@ -23,7 +23,7 @@ GO.postfixadmin.MailboxDialog = function(config){
 	this.buildForm();
 	
 	var focusFirstField = function(){
-		this.propertiesPanel.items.items[0].focus();
+		this.formPanel.form.findField('username').focus();
 	};
 	
 	

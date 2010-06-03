@@ -24,7 +24,7 @@ GO.postfixadmin.DomainDialog = function(config){
 	
 	var focusFirstField = function(){
 		if(this.propertiesPanel)
-			this.propertiesPanel.items.items[0].focus();
+			this.formPanel.form.findField('domain').focus();
 	};
 	
 	
@@ -43,7 +43,7 @@ GO.postfixadmin.DomainDialog = function(config){
 
 	if(GO.settings.modules.postfixadmin.write_permission)
 	{
-		config.push({
+		config.buttons.push({
 			text: GO.lang['cmdOk'],
 			handler: function(){
 				this.submitForm(true);
@@ -78,8 +78,6 @@ Ext.extend(GO.postfixadmin.DomainDialog, Ext.Window,{
 		}
 		
 		this.tabPanel.setActiveTab(0);
-		
-		
 		
 		if(!domain_id)
 		{
@@ -179,6 +177,8 @@ Ext.extend(GO.postfixadmin.DomainDialog, Ext.Window,{
 					}
 				}
 
+				GO.postfixadmin.defaultQuota = this.formPanel.form.findField("quota").getValue();
+				
 				var d = this.formPanel.form.findField("domain");
 				
 				this.updateTitle(d.getValue());
