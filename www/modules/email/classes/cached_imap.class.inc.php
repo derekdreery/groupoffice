@@ -882,7 +882,7 @@ class cached_imap extends imap{
 		/*$message['to']=substr($message['to'],0, 255);
 		$message['subject']=substr($message['subject'],0,100);
 		$message['from']=substr($message['from'],0,100);*/
-		$message['udate']=intval($message['internal_udate']);		
+		//$message['udate']=intval($message['internal_udate']);
 		$message['new']=empty($message['seen']);
 		$message['priority']=intval($message['x-priority']);
 		
