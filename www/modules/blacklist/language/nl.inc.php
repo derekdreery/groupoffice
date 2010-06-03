@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-//require($GO_LANGUAGE->get_fallback_language_file('blacklist'));
+require($GO_LANGUAGE->get_fallback_language_file('blacklist'));
 $lang['blacklist']['name']='IP blacklist';
 $lang['blacklist']['description']='Blokkeerd IP adressen na vijf opeenvolgende foute aanmeldingen.';
 $lang['blacklist']['ip']='IP';

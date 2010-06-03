@@ -121,7 +121,7 @@ try{
 
 			if(isset($_POST['user_id']))
 			$domain['user_id']=$_POST['user_id'];
-			$domain['domain']=$_POST['domain'];
+			
 			$domain['description']=$_POST['description'];
 			if(isset($_POST['aliases']))
 				$domain['aliases']=$_POST['aliases'];
@@ -146,6 +146,8 @@ try{
 				$response['success']=true;
 			}else
 			{
+				$domain['domain']=$_POST['domain'];
+				
 				$domain['user_id']=$GO_SECURITY->user_id;
 
 				$response['acl_id']=$domain['acl_id']=$GO_SECURITY->get_new_acl('domain');

@@ -37,4 +37,5 @@ GO.postfixadmin.lang.email='E-Mail';
 GO.postfixadmin.lang.subject='Betreff';
 GO.postfixadmin.lang.body='Inhalt';
 GO.postfixadmin.lang.cache='Cache';
+GO.postfixadmin.lang.usage='Verwendung';
 GO.postfixadmin.lang.defaultQuota='Standard-Quota (MB)';

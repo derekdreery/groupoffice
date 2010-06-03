@@ -57,3 +57,7 @@ $lang['email']['noUidNext']='Váš emailový server nepodporuje UIDNEXT. Složka
 $lang['email']['disable_trash_folder']='Přesunutí e-mailu do koše se nezdařilo. To by mohlo být tím, že nemáte dostatek volného místa na Vašem disku. Můžete uvolnit volné místo, tím že zakážete složku koše v Administrace -> Účty -> dvojtý klik na Váš účet -> Složky';
 
 $lang['email']['error_move_folder']='Nepodařilo se přesunout složku';
+
+$lang['email']['error_getaddrinfo']='Neplatná adres hosta';
+$lang['email']['error_authentication']='Neplatné uživatelské jméno nebo heslo';
+$lang['email']['error_connection_refused']='Spojení bylo odmítnuto. Zkontrolujte prosím hosta a číslo portu.';

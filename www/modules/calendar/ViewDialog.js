@@ -149,7 +149,7 @@ GO.calendar.ViewDialog = function(config)
 	
 	
 	GO.calendar.ViewDialog.superclass.constructor.call(this,{
-		title: GO.lang.strView,
+		title: GO.calendar.lang.view,
 		layout:'fit',
 		modal:false,
 		height:500,

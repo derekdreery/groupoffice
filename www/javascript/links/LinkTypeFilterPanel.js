@@ -34,11 +34,12 @@ GO.LinkTypeFilterPanel = function(config)
 				checkColumn,
 				{
 					header: GO.lang.strName, 
-					dataIndex: 'name'					
+					dataIndex: 'name',
+					id:'name'
 				}				
 			],
 		plugins: [checkColumn],
-		autoExpandColumn:1,
+		autoExpandColumn:'name',
 		listeners:{
 			scope:this,
 			delayedrowselect:function(grid, rowIndex, r){
@@ -46,9 +47,6 @@ GO.LinkTypeFilterPanel = function(config)
 			}
 		}
 	});
-	
-	
-	
 
 
 	config.tbar=[{

@@ -316,7 +316,7 @@ class postfixadmin extends db {
 	 * @return Int Number of records found
 	 */
 	 
-	function get_authorized_domains($auth_type, $user_id, $query, $sort='name', $direction='ASC', $start=0, $offset=0)
+	function get_authorized_domains($auth_type, $user_id, $query, $sort='name', $direction='ASC', $start=0, $offset=0, $no_backup_mx_domains=false)
 	{
 		$user_id=$this->escape($user_id);
 		
@@ -341,7 +341,12 @@ class postfixadmin extends db {
  		if(!empty($query))
  		{
  			$sql .= " AND domain LIKE '".$this->escape($query)."'";
- 		} 		
+ 		}
+
+		if($no_backup_mx_domains){
+			$sql .= " AND backupmx='0'";
+		}
+
 		$sql .= " ORDER BY `".$this->escape($sort)."` ".$this->escape($direction);
 		
 		$this->query($sql);

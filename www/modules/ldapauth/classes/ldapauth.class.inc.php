@@ -1,4 +1,16 @@
 <?php
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
 
 require_once($GLOBALS['GO_CONFIG']->class_path.'base/ldap.class.inc.php');
 require_once($GLOBALS['GO_CONFIG']->root_path.'modules/imapauth/classes/imapauth.class.inc.php');
@@ -66,7 +78,7 @@ class ldapauth extends imapauth
 		
 		if(!isset($GO_CONFIG->ldap_host))
 		{
-			//trigger_error('ldapauth module is installed but not configured', E_USER_NOTICE);
+			go_debug('LDAPAUTH: module is installed but not configured');
 			return false;
 		}
 
@@ -83,6 +95,7 @@ class ldapauth extends imapauth
 		$entry = $ldap->get_entries();
 		if(!isset($entry[0]))
 		{
+			go_debug('LDAPAUTH: No LDAP user found');
 			return false;
 		}
 		$la = new ldapauth();
@@ -92,32 +105,41 @@ class ldapauth extends imapauth
 
 		if(!$authenticated)
 		{
-			go_debug('LDAP authentication failed for '.$username);
+			go_debug('LDAPAUTH: LDAP authentication failed for '.$username);
 			throw new Exception($GLOBALS['lang']['common']['badLogin']);
 		}else
 		{
 			$gouser = $GO_USERS->get_user_by_username($username);
 			
 			if ($gouser) {
-				$user['id']=$gouser['id'];
-				$GO_USERS->update_profile($user);
+
+				go_debug('LDAPAUTH: Group-Office user was found');
+
+				$user['id']=$gouser['id'];				
 
 				//user exists. See if the password is accurate
-				if(md5($password) != $gouser['password'])
+				if(crypt($password, $gouser['password']) != $gouser['password'])
 				{
-					$GO_USERS->update_password($gouser['id'], $password);
+					go_debug('LDAPAUTH: password on LDAP server has changed. Updating Group-Office database');
+					$user['password']=$password;
+						
 					if(isset($GO_MODULES->modules['email']))
 					{
 						require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 						$email_client = new email();
-						//$email_client->update_password($config['host'], $mail_username, $arguments['password']);
+						$email_client->update_password($config['host'], $username, $password);
 					}
 				}
+
+				$GO_USERS->update_profile($user);
+
 			} else {
 				$user['username'] = $username;
 				$user['password'] = $password;
 				
 				global $GO_GROUPS;
+
+				go_debug('LDAPAUTH: Group-Office user not found. Creating new user from LDAP profile');
 
 				if (!$user_id = $GO_USERS->add_user($user,
 					$GO_GROUPS->groupnames_to_ids(explode(',',$GO_CONFIG->register_user_groups)),
@@ -125,6 +147,7 @@ class ldapauth extends imapauth
 					explode(',',$GO_CONFIG->register_modules_read),
 					explode(',',$GO_CONFIG->register_modules_write)))
 				{
+					go_debug('LDAPAUTH: Failed creating user '.$username.' and e-mail '.$email.' with ldapauth.');
 					trigger_error('Failed creating user '.$username.' and e-mail '.$email.' with ldapauth.', E_USER_WARNING);
 				} else {
 					
@@ -137,10 +160,17 @@ class ldapauth extends imapauth
 						$config = $la->get_domain_config($domain);
 						if($config)
 						{
+							go_debug('LDAPAUTH: E-mail configuration found. Creating e-mail account');
 							$mail_username = empty($config['ldap_use_email_as_imap_username']) ? $username : $user['email'];
 							
 							$la->create_email_account($config, $user_id, $mail_username, $password,$user['email']);
+						}else
+						{
+							go_debug('LDAPAUTH: No E-mail configuration found for domain. Skipped creating e-mail account');
 						}
+					}else
+					{
+						go_debug('LDAPAUTH: No E-mail address found in profile. Skipped creating e-mail account');
 					}
 				}
 			}				

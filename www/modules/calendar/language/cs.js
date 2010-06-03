@@ -94,3 +94,5 @@ GO.calendar.lang.ignoreConflictsTitle = 'Ignorovat konflikty?';
 GO.calendar.lang.ignoreConflictsMsg = 'Tato událost koliduje s jinou údálostí ve Vašem kalendáři. Save this event anyway?';
 GO.calendar.lang.resourceConflictTitle = 'Zdroj konfliktu';
 GO.calendar.lang.resourceConflictMsg = 'Jeden nebo více zdrojů v této události používá ve stejný čas:</br>';
+
+GO.calendar.lang.view = 'Zobrazení';

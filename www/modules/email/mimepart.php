@@ -24,6 +24,11 @@ $GO_SECURITY->authenticate();
 
 if(isset($_REQUEST['path'])) {
 	$path = $GO_CONFIG->file_storage_path.$_REQUEST['path'];
+
+	if(File::path_leads_to_parent($path) || !file_exists($path)){
+		die('Invalid request');
+	}
+
 	$params['input'] = file_get_contents($path);
 }else {
 

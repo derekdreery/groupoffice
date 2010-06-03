@@ -66,12 +66,12 @@ class pdf_export_query extends base_export_query{
 		}
 	}
 
-	function format_record(&$record){
+	/*function format_record(&$record){
 		if(is_array($this->q) && isset($this->q['method']))
 		{
 			call_user_func_array(array($this->q['class'], $this->q['method']),array(&$record, $this->cf));
 		}
-	}
+	}*/
 
 	function init_pdf(){
 		global $GO_CONFIG;

@@ -1,4 +1,19 @@
-2010/05/17 3.5.2
+2010/06/01 3.5.5
+- Updated German, Norwegian and Czech translation
+- Bug where event owners would get resource e-mails
+- E-mail display bugs
+- Security fixes
+- Small bug fixes
+
+2010/05/26 3.5.4
+- Bug fix in searching some IMAP servers.
+- American time format bug in calendar
+- Bug fix for attachment filenames without encoding specification
+
+2010/05/25 3.5.3
+- IMAP authentication was broken
+
+2010/05/24 3.5.2
 - Improved security. E-mail passwords are encrypted in the database now and
   with the new blacklist module remote IP addresses are blocked after 5 consecutive
   login failures.

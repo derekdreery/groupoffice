@@ -112,4 +112,5 @@ GO.addressbook.lang.photo= 'Bilde';
 GO.addressbook.lang.deleteImage='Slett bilde';
 GO.addressbook.lang.addAllSearchResults='Legg til alle søkeresultater';
 GO.addressbook.lang.confirmAddAllSearchResults='Er du sikker på at du vil legge alle søkeresultatene til adresselisten?';
+GO.addressbook.lang.moveEmployees='Flytt ansatte';
 

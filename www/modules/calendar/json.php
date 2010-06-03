@@ -336,7 +336,7 @@ try {
 
 		//return all events for a given period
 			$view_id = isset($_REQUEST['view_id']) ? $_REQUEST['view_id'] : 0;
-			$owncolor = isset($_REQUEST['owncolor']) ? $_REQUEST['owncolor'] : 0;
+			
 			$calendar_id=isset($_REQUEST['calendar_id']) && !isNaN($_REQUEST['calendar_id']) ? ($_REQUEST['calendar_id']) : 0;
 			//$view_id=isset($_REQUEST['view_id']) ? ($_REQUEST['view_id']) : 0;
 			$start_time=isset($_REQUEST['start_time']) ? strtotime($_REQUEST['start_time']) : 0;
@@ -348,33 +348,48 @@ try {
 				$cal->get_view_calendars($view_id);
 				while($record = $cal->next_record()) {
 					$calendars[] = $record['id'];
-					$calendar_names[$record['id']]=htmlspecialchars($record['name'], ENT_QUOTES, 'UTF-8');
+					//$calendar_names[$record['id']]=htmlspecialchars($record['name'], ENT_QUOTES, 'UTF-8');
 				}
 
 				if (count($calendars)==0) {
 					throw new Exception($lang['calendar']['noCalSelected']);
 				}
 
-				/* Default colors for merged calendars */
-				$default_colors = array('F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
-								'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
-								'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
-								'C43B3B','996600','66FF99','999999','FFFFFF');
-				$default_bg = array();
-				foreach ($calendars as $k=>$v)
-					$default_bg[$v] = $default_colors[$k];
+				
 			} else {
-				$calendars=isset($_REQUEST['calendars']) ? json_decode(($_REQUEST['calendars'])) : array($calendar_id);
+				$calendars=isset($_REQUEST['calendars']) ? json_decode($_REQUEST['calendars']) : array($calendar_id);
+
 			}
 
+			$owncolor = isset($_REQUEST['owncolor']) && count($calendars)>1 ? $_REQUEST['owncolor'] : 0;
+
+			/* Default colors for merged calendars */
+			$default_colors = array('F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
+							'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
+							'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
+							'C43B3B','996600','66FF99','999999','FFFFFF');
+			$default_bg = array();
+			foreach ($calendars as $k=>$v)
+				$default_bg[$v] = $default_colors[$k];
+
 			$calendar_id=$calendars[0];
+			
+			$check_calendars = $calendars;
+			$calendars=array();
+			$calendar_names=array();
+			$response['write_permission']=false;
+			foreach($check_calendars as $calendar_id){
+				$calendar = $cal->get_calendar($calendar_id);
 
-			$calendar = $cal->get_calendar($calendar_id);
-
-			$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
-			$response['write_permission']=$response['permission_level']>1;
-			if(!$response['permission_level']) {
-				throw new AccessDeniedException();
+				$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
+				if($response['permission_level']>1){
+					$response['write_permission']=true;
+				}
+				
+				if($response['permission_level']) {
+					$calendars[]=$calendar_id;
+					$calendar_names[$calendar_id]=$calendar['name'];
+				}
 			}
 
 			$events = $cal->get_events_in_array($calendars,0,$start_time,$end_time);
@@ -401,7 +416,7 @@ try {
 					$event['location']='';
 				}
 
-				if ($view_id && $owncolor)
+				if ($owncolor)
 					$event['background'] = $default_bg[$event['calendar_id']];
 
 				$response['results'][] = array(
@@ -1028,7 +1043,7 @@ try {
 			while($group = $cal->next_record()) {
 				$group['fields'] = explode(",", $group['fields']);
 				$group['resources'] = array();
-				$cal2->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 1, $group['id']);
+				$cal2->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 0, $group['id']);
 				while($resource = $cal2->next_record()) {
 					$user = $GO_USERS->get_user($resource['user_id']);
 					$resource['user_name']=String::format_name($user);

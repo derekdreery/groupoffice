@@ -864,6 +864,7 @@ try {
 							foreach($sc->domains as $domain) {
 								if(!$GO_MODULES->modules['email']['write_permission']) {
 									$account = $email->get_account($account['id']);
+									$account = $email->decrypt_account($account);
 								}
 
 								//go_log(LOG_DEBUG, $account['username'].' -> '.$domain);

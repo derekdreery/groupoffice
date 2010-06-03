@@ -49,7 +49,10 @@ class cryptastic {
 			return false;
 
 		if(empty($k)){
-			$k=$_SESSION['GO_SESSION']['key'];
+			$k=$this->get_key();
+			if(empty($k)){
+				throw new Exception('Could not generate private key');
+			}
 		}
 		
 		# open cipher module (do not change cipher/mode)
@@ -91,7 +94,10 @@ class cryptastic {
 			return false;
 
 		if(empty($k)){
-			$k=$_SESSION['GO_SESSION']['key'];
+			$k=$this->get_key();
+			if(empty($k)){
+				throw new Exception('Could not generate private key');
+			}
 		}
 
 		if ( $base64 ) $msg = base64_decode($msg);			# base64 decode?
@@ -154,5 +160,32 @@ class cryptastic {
 
 		# Return derived key of correct length
 		return substr($dk, 0, $kl);
+	}
+
+	private function get_key(){
+		global $GO_CONFIG, $GO_USERS;
+
+		if(isset($_SESSION['GO_SESSION']['global_key'])){
+			return $_SESSION['GO_SESSION']['global_key'];
+		}
+
+		$key_file=$GO_CONFIG->file_storage_path.'key.txt';
+		
+		if(file_exists($key_file)){
+			$key = file_get_contents($key_file);
+		}else
+		{
+			$key = $GO_USERS->random_password('a-z,A-Z,1-9', 'i,o', 20);
+			if(file_put_contents($key_file, $key)){
+				chmod($key_file,0400);				
+			}else
+			{
+				return false;
+			}
+		}
+
+		$_SESSION['GO_SESSION']['global_key']=$key;
+		return $key;
+
 	}
 }

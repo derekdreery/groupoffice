@@ -17,7 +17,7 @@ $GO_SECURITY->json_authenticate('addressbook');
 
 
 
-$path = $GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$_REQUEST['contact_id'].'.jpg';
+$path = $GO_CONFIG->file_storage_path.'contacts/contact_photos/'.basename($_REQUEST['contact_id']).'.jpg';
 
 
 $public=false;

@@ -25,6 +25,10 @@ GO.addressbook.SelectCompany = function(config){
 		};
 	}
 
+	if(!this.fieldLabel){
+		this.fieldLabel=GO.addressbook.lang.company;
+	}
+
 	if(GO.customfields)
 	{
 		GO.customfields.addColumns(3, config.fields);

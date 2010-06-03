@@ -90,3 +90,4 @@ GO.calendar.lang.ignoreConflictsTitle= 'Ignorere konflikter?';
 GO.calendar.lang.ignoreConflictsMsg= 'Denne hendelsen er i konflikt med en annen hendelse i kalenderen din. Lagre hendelsen likevel?';
 GO.calendar.lang.resourceConflictTitle= 'Ressurskonflikt';
 GO.calendar.lang.resourceConflictMsg= 'En eller flere ressurser i denne hendelsen er allerede i bruk på samme tidspunkt:</br>';
+GO.calendar.lang.view= 'Vis';
