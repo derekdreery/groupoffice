@@ -1391,7 +1391,6 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	setFolderID : function(id, expand)
 	{
 		this.folder_id = id;
-		
 		//this.gridStore.baseParams['id']=this.thumbsStore.baseParams['id']=id;
 		this.gridStore.baseParams['id']=id;
 		
