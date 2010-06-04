@@ -361,7 +361,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
             		var dragTime = data.dragDate.format('U');
             		var dropTime = data.dropDate.format('U');
             		
-            		offsetDays = Math.round((dropTime-dragTime)/86400);
+            		var offsetDays = Math.round((dropTime-dragTime)/86400);
             		
             		var actionData = {offsetDays:offsetDays, dragDate: data.dragDate};
             		
@@ -374,8 +374,6 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 							this.handleRecurringEvent("move", remoteEvent, actionData);
 						}else
 						{
-							this.fireEvent("move", this, remoteEvent, actionData);
-
 							this.removeEvent(remoteEvent.domId);
 							delete remoteEvent.domId;
 							remoteEvent.repeats=false;
@@ -383,7 +381,9 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 							remoteEvent.endDate = remoteEvent.endDate.add(Date.DAY, offsetDays);
 							remoteEvent.start_time = remoteEvent.startDate.format('U');
 							remoteEvent.end_time = remoteEvent.endDate.format('U');
-							this.addMonthGridEvent(remoteEvent);
+							var domIds = this.addMonthGridEvent(remoteEvent);
+
+							this.fireEvent("move", this, remoteEvent, actionData, domIds);
 
 							this.clearSelection();
 						}
@@ -496,6 +496,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		//ceil required because of DST changes!
 		var daySpan = Math.round((eventEndTime-eventStartTime)/86400)+1;
 		//var daySpan = Math.round((eventEndTime-eventStartTime)/86400);
+
+		var domIds = [];
 		
 		
 		for(var i=0;i<daySpan;i++)
@@ -503,6 +505,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			var date = eventStartDay.add(Date.DAY, i);
 			
 			eventData.domId = Ext.id();
+			domIds.push(eventData.domId);
 			
 			//related events for dragging
 			if(daySpan>1)
@@ -582,7 +585,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		if(!this.loading)
 			this.checkOverflow();
 		
-		return eventData.domId;
+		return domIds;
 	},
 
 	removeEventByRemoteId : function(remote_id){
@@ -643,9 +646,11 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	},
 	
 
-	setNewEventId : function(dom_id, new_event_id){	
-		this.remoteEvents[dom_id].event_id=new_event_id;
-  },
+	setNewEventId : function(domIds, new_event_id){
+		for(var i=0,max=domIds.length;i<max;i++){
+			this.remoteEvents[domIds[i]].event_id=new_event_id;
+		}
+	},
   
 	handleRecurringEvent : function(fireEvent, event, actionData){
 		
