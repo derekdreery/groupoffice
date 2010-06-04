@@ -1125,7 +1125,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				{					
 					var times = this.domToTimes(eventEl.el.id, false);
 					
-					var newStartTime = times.startDate.format('U');
+					//var newStartTime = times.startDate.format('U');
 					var newEndTime = times.endDate.format('U');					
 					
 					var actionData = {
@@ -1721,6 +1721,28 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			'day':day
 		};
 	},
+
+	getDateByPosition : function(position, allDay){
+		if(!allDay)
+		{
+			var row = this.getRowNumberByY(position[1]);
+			if(row<0)
+			{
+				row=0;
+			}
+		}else
+		{
+			row=0;
+		}
+
+		var day = this.getDayByX(position[0]);
+		var date = this.startDate.add(Date.DAY, day);
+		var gridPrecision = 60/this.rowsPerHour;
+
+		date = date.add(Date.MINUTE,row*gridPrecision);
+
+		return date;
+	},
 	
 	scrollToRow : function(row)
 	{
@@ -1838,13 +1860,15 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			
 			if(newPos[0] != this.dragappointmentstartPos[0] || newPos[1] != this.dragappointmentstartPos[1])
 			{			
-				var times = this.domToTimes(this.dragEvent.id, false);
-				
-				var dropTime = times.startDate.format('U');
-				var dragTime = this.remoteEvents[this.dragEvent.id].startDate.format('U');
+				//var times = this.domToTimes(this.dragEvent.id, false);
+				//var dropTime = times.startDate.format('U');
+				//var dragTime = this.remoteEvents[this.dragEvent.id].startDate.format('U');
+
+				var dragTime = this.getDateByPosition(this.dragappointmentstartPos);				
+				var dropTime = this.getDateByPosition(newPos);
 				
 				var actionData = {
-					offset : dropTime-dragTime,
+					offset : dropTime.format('U')-dragTime.format('U'),
 					dragDate: this.remoteEvents[this.dragEvent.id].startDate
 					};
 				
