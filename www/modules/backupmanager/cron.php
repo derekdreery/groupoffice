@@ -2,10 +2,18 @@
 /*
   * Run a cron job once(?) a day at midnight for example. Add this to /etc/cron.d/groupoffice :
   *
-  * 0 0 * * * root php /path/to/go/cron_backup.php /path/to/config.php
+  * 0 0 * * * root php /path/to/go/modules/backupmanager/cron.php /path/to/config.php
 */
 
-require_once('Group-Office.php');
+if(php_sapi_name()!='cli'){
+	die('This script only runs on the command line');
+}
+
+if(isset($argv[1]))
+	define('CONFIG_FILE', $argv[1]);
+
+chdir(__FILE__);
+require_once('../../Group-Office.php');
 
 if(!isset($GO_MODULES->modules['backupmanager']))
 {
