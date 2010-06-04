@@ -829,7 +829,11 @@ try {
 						}
 					}
 				}
-			}			
+			}
+
+			$params = array(&$response, $event);
+			$GO_EVENTS->fire_event('save_event', $params);
+
 			//When using the option to directly put the event into the user
 			//participant's calendar it might happen that the user is not authorized to do this.
 			if(count($unauthorized_participants))
