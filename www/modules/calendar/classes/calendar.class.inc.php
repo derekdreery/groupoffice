@@ -1768,7 +1768,7 @@ class calendar extends db
 
 			//calculate the next occurrence from the start_time minus one second because an event
 			//may start exactly on the start of display.
-			$calculated_event['start_time']=$interval_start_time-1;
+			$calculated_event['start_time']=$interval_start_time-1-$duration;
 
 			//go_debug($calculated_event['name'].': '.date('Ymd G:i', $first_occurrence_time));
 
@@ -1779,7 +1779,7 @@ class calendar extends db
 
 				$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
 
-				//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
+				go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
 
 				if($calculated_event['start_time'] >= $interval_end_time || $calculated_event['end_time'] <= $interval_start_time)
 				break;

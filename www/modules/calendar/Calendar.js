@@ -1339,7 +1339,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		this.daysGrid.on("move", this.onEventMove,this);
 		
 	
-		this.viewGrid.on("move", function(grid, event, actionData){
+		this.viewGrid.on("move", function(grid, event, actionData, domIds){
 	    		
 			var params = {
 				task : 'update_grid_event',
@@ -1380,7 +1380,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 							grid.store.reload();
 						}else if(responseParams.new_event_id)
 						{
-							grid.setNewEventId(event['domId'], responseParams.new_event_id);
+							grid.setNewEventId(domIds, responseParams.new_event_id);
 						}
 					}
 				}
@@ -1434,7 +1434,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		}
 	},
     
-	onEventMove : function(grid, event, actionData){
+	onEventMove : function(grid, event, actionData, domIds){
 		
 		var params = {
 			task : 'update_grid_event',
@@ -1475,7 +1475,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						grid.store.reload();
 					}else if(responseParams.new_event_id)
 					{
-						grid.setNewEventId(event['domId'], responseParams.new_event_id);
+						grid.setNewEventId(domIds, responseParams.new_event_id);
 					}
 				}
 			}

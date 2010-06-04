@@ -341,8 +341,10 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		}*/
 	},
 	
-	setNewEventId : function(dom_id, new_event_id){	
-		this.remoteEvents[dom_id].event_id=new_event_id;
+	setNewEventId : function(domIds, new_event_id){
+		for(var i=0,max=domIds.length;i<max;i++){
+			this.remoteEvents[domIds[i]].event_id=new_event_id;
+		}
 	},
   
 	initDD :  function(){
@@ -377,7 +379,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					this.handleRecurringEvent("move", remoteEvent, actionData);
 				}else
 				{
-					this.fireEvent("move", this, remoteEvent, actionData);
+					
 						
 					this.removeEvent(remoteEvent.domId);
 					delete remoteEvent.domId;
@@ -387,7 +389,9 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					remoteEvent.endDate = remoteEvent.endDate.add(Date.DAY, offsetDays);
 					remoteEvent.start_time = remoteEvent.startDate.format('U');
 					remoteEvent.end_time = remoteEvent.endDate.format('U');
-					this.addViewGridEvent(remoteEvent);
+					var domIds = this.addViewGridEvent(remoteEvent);
+
+					this.fireEvent("move", this, remoteEvent, actionData, domIds);
 				}
 			},
 			scope : this
@@ -501,13 +505,16 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		//ceil required because of DST changes!
 		var daySpan = Math.round((eventEndTime-eventStartTime)/86400)+1;
 		
-		
+		var domIds=[];
+
 		for(var i=0;i<daySpan;i++)
 		{
 			var date = eventStartDay.add(Date.DAY, i);
 			
 			
 			var domId = eventData.domId ? eventData.domId : Ext.id();
+
+			domIds.push(domId);
 			
 			//related events for dragging
 			if(daySpan>1)
@@ -577,7 +584,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			}
 		}
 		
-		return domId;	
+		return domIds;
 	},
 
 	removeEventFromArray : function (day, event_id)
