@@ -1129,7 +1129,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					var newEndTime = times.endDate.format('U');					
 					
 					var actionData = {
-						duration : newEndTime-newStartTime,
+						end_time : newEndTime,
 						dragDate: this.remoteEvents[eventEl.el.id].startDate
 						};
 					
