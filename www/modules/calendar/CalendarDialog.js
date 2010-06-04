@@ -59,9 +59,13 @@ GO.calendar.CalendarDialog = function(config)
 		}),{
 			xtype:'checkbox',
 			name:'show_bdays',
-			id:'show_bdays',
 			boxLabel:GO.calendar.lang.show_bdays,
 			hideLabel:true
+		},{
+			xtype:'textfield',
+			fieldLabel:'Comment',
+			name:'comment',
+			anchor:'100%'
 		},
 		this.exportButton = new Ext.Button({
 			text:GO.lang.cmdExport,
@@ -77,8 +81,7 @@ GO.calendar.CalendarDialog = function(config)
 	if(GO.tasks)
 	{
 		this.tasklistsTab = new GO.calendar.TasklistsGrid({
-			title:GO.tasks.lang.visibleTasklists,
-			id:'calendar_visible_tasklists'
+			title:GO.tasks.lang.visibleTasklists
 		});
 	}
 

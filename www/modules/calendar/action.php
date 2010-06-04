@@ -852,6 +852,8 @@ try {
 			if($calendar['group_id'] == 0) $calendar['group_id'] = 1;
 			$calendar['name']=$_POST['name'];
 
+			$calendar['comment']=$_POST['comment'];
+
 
 			if(empty($calendar['name'])) {
 				throw new Exception($lang['common']['missingField']);
