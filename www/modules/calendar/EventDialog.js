@@ -132,6 +132,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			modal : false,
 			tbar : tbar,
 			resizable : true,
+			collapsible:true,
 			maximizable:true,
 			width : 620,
 			height : 450,
