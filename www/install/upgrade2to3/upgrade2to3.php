@@ -239,7 +239,49 @@ $db->query("UPDATE `go_modules` SET version = ''");
 $db->query("ALTER TABLE `go_modules` CHANGE `version` `version` INT NOT NULL");
 $db->query("ALTER TABLE `go_modules` DROP `path`");
 
+if (in_array('shipping',$module_ids))
+{
+	echo 'Shipping updates'.$line_break;
+	flush();
 
+	echo 'Updating job links'.$line_break;
+	flush();
+
+	$sql = "SELECT id, link_id FROM sh_jobs";
+	$db->query($sql);
+	while($db->next_record())
+	{
+		update_link($db->f('link_id'),$db->f('id'), 1);
+	}
+	echo 'Updating package links'.$line_break;
+	flush();
+
+	$sql = "SELECT id, link_id FROM sh_packages";
+	$db->query($sql);
+	while($db->next_record())
+	{
+		update_link($db->f('link_id'),$db->f('id'), 1);
+	}
+	echo 'Updating container links'.$line_break;
+	flush();
+
+	$sql = "SELECT id, link_id FROM sh_containers";
+	$db->query($sql);
+	while($db->next_record())
+	{
+		update_link($db->f('link_id'),$db->f('id'), 1);
+	}
+
+	echo 'Updating shipment links'.$line_break;
+	flush();
+
+	$sql = "SELECT id, link_id FROM sh_shipments";
+	$db->query($sql);
+	while($db->next_record())
+	{
+		update_link($db->f('link_id'),$db->f('id'), 1);
+	}
+}
 
 if(in_array('calendar', $module_ids))
 {
