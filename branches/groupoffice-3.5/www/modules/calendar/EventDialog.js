@@ -127,7 +127,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			}));
 		}
 
-		this.win = new Ext.Window({
+		this.win = new GO.Window({
 			layout : 'fit',
 			modal : false,
 			tbar : tbar,
