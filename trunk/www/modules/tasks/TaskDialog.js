@@ -19,10 +19,10 @@ GO.tasks.TaskDialog = function() {
 		this.nameField.focus();
 	};
 
-	this.win = new Ext.Window({
+	this.win = new GO.Window({
 		layout : 'fit',
 		modal : false,
-		resizable : false,
+		resizable : true,
 		width : 560,
 		height : 400,
 		closeAction : 'hide',
@@ -320,7 +320,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				xtype:'textarea',
 				fieldLabel:GO.lang.strDescription,
 				name : 'description',
-				anchor:'-20 -220'
+				anchor:'-20 -170'
 			}]
 
 		});
