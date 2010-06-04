@@ -19,7 +19,7 @@ GO.tasks.TaskDialog = function() {
 		this.nameField.focus();
 	};
 
-	this.win = new Ext.Window({
+	this.win = new GO.Window({
 		layout : 'fit',
 		modal : false,
 		resizable : true,
