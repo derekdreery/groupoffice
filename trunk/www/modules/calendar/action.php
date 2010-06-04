@@ -244,10 +244,10 @@ try {
 
 					}
 
-					if(isset($_POST['duration'])) {
+					if(isset($_POST['end_time'])) {
 					//change duration
-						$duration = ($_POST['duration']);
-						$update_event['end_time']=round_quarters($update_event['start_time']+$duration);
+						//$duration = ($_POST['duration']);
+						$update_event['end_time']=$_POST['end_time'];//round_quarters($update_event['start_time']+$duration);
 					}
 
 					if(isset($_POST['update_calendar_id'])) {
@@ -280,12 +280,12 @@ try {
 						$update_event['end_time'] = Date::date_add($old_event['end_time'], $offsetDays);
 					}
 
-					if(isset($_POST['duration'])) {
+					if(isset($_POST['end_time'])) {
 					//change duration
-						$duration = ($_POST['duration']);
+						//$duration = ($_POST['duration']);
 
 						$update_event['start_time']=$old_event['start_time'];
-						$update_event['end_time']=round_quarters($old_event['start_time']+$duration);
+						$update_event['end_time']=$_POST['end_time'];//round_quarters($old_event['start_time']+$duration);
 					}
 
 					if(isset($_POST['update_calendar_id'])) {

@@ -1251,7 +1251,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			var params = {
 				task : 'update_grid_event',
 				update_event_id : event['event_id'],
-				duration : actionData.duration
+				end_time : actionData.end_time
 			};
 			
 			if(event.repeats && actionData.singleInstance)
