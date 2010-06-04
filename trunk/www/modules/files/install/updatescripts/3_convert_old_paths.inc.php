@@ -11,7 +11,12 @@ require('../../../../Group-Office.php');
 $db = new db();
 $db->halt_on_error='report';*/
 
+ini_set('memory_limit','500M');
+
 $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
+
+echo "Converting old paths...".$line_break;
+flush();
 
 $fs = new filesystem();
 
@@ -90,6 +95,7 @@ function crawl($path, $parent_id)
 
     $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
     echo 'Crawling folder '.$path.$line_break;
+		flush();
 
     $folder_id = get_folder($fsdb->strip_server_path($path), $parent_id);
 

@@ -4,6 +4,11 @@
  * and open the template in the editor.
  */
 
+$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
+
+echo "Setting extensions...".$line_break;
+flush();
+
 $updb=new db();
 
 $sql = "SELECT id,name FROM fs_files";
