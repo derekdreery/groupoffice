@@ -303,7 +303,10 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 						}
 					}else if(href!='#')
 					{
-						window.open(href);
+						if(href.substr(0,6)=='callto')
+							document.location.href=href;
+						else
+							window.open(href);
 					}
 				}
 			}

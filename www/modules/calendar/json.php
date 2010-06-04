@@ -328,6 +328,12 @@ try {
 
 			$response['data']['calendar_name']=$calendar['name'];
 			$response['data']['group_id'] = $calendar['group_id'];
+
+
+			$params = array(&$response, $event);
+			$GO_EVENTS->fire_event('load_event', $params);
+
+
 			$response['success']=true;
 			break;
 
