@@ -1,3 +1,11 @@
+.cal-comment{
+	font-weight:bold !important;
+	position:absolute;
+	left:5px;
+	top:8px;
+}
+
+
 .cal-date-picker .x-date-bottom .x-btn{
 	float:left;
 	margin-left:25px;

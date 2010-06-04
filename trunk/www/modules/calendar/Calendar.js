@@ -75,7 +75,7 @@ GO.calendar.MainPanel = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
-		fields:['id','name','user_name','group_id', 'group_name','checked'],
+		fields:['id','name','comment','user_name','group_id', 'group_name','checked'],
 		remoteSort:true
 	});
 
@@ -100,7 +100,7 @@ GO.calendar.MainPanel = function(config){
 			root: 'results',
 			id: 'id',
 			totalProperty: 'total',
-			fields:['id','name','user_name','group_id', 'group_name']
+			fields:['id','name','comment','user_name','group_id', 'group_name']
 		}),
 		proxy: new Ext.data.HttpProxy({
 			url: GO.settings.modules.calendar.url+'json.php'
@@ -121,10 +121,12 @@ GO.calendar.MainPanel = function(config){
 			{
 				record = this.calendarsStore.getAt(0);
 				this.state.calendar_name=this.state.title=record.data.name;
+				this.state.comment=record.data.comment;
 				this.state.calendars = [record.data.id];
 			}else
 			{
 				this.state.calendar_name=this.state.title=GO.calendar.defaultCalendar['name'];
+				this.state.comment=GO.calendar.defaultCalendar['comment'];
 			}
 			//this.calendarList.getSelectionModel().selectRecords(new Array(record));
 			this.setDisplay(this.state);
@@ -166,6 +168,7 @@ GO.calendar.MainPanel = function(config){
 				record = this.resourcesStore.getAt(0);
 				this.state.calendars = [record.data.id];
 				this.state.title=record.data.name;
+				this.state.comment=record.data.comment;
 			}
 			//this.resourcesList.getSelectionModel().selectRecords(new Array(record));
 			this.setDisplay(this.state);
@@ -236,14 +239,19 @@ GO.calendar.MainPanel = function(config){
 				title = title+' & ';
 			title = title+records[i].data.name;
 		}
-		
-		this.setDisplay({
+
+		var config = {
 			group_id:records[0].data.group_id,
 			calendars: cal_ids,
 			calendar_name: records[0].data.name,
 			title:title,
 			owncolor:true
-		});
+		};
+
+		if(cal_ids.length==1)
+			config.comment=records[0].data.comment;
+		
+		this.setDisplay(config);
 		
 	}, this);
 	
@@ -271,7 +279,9 @@ GO.calendar.MainPanel = function(config){
 			group_id:grid.store.data.items[rowIndex].data.group_id,
 			calendars: [grid.store.data.items[rowIndex].id],
 			calendar_name: grid.store.data.items[rowIndex].data.name,
-			title: grid.store.data.items[rowIndex].data.name
+			title: grid.store.data.items[rowIndex].data.name,
+			comment: grid.store.data.items[rowIndex].data.comment
+
 		});		
 	}, this);
 
@@ -1003,14 +1013,14 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			config.calendars=[config.calendar_id];
 
 		if(config.title && config.title.length){
-			if(this.calendarTitle.td){
-				//Ext 2
-				this.calendarTitle.td.innerHTML = config.title;
-			}else
-			{
-				//Ext 3
-				this.calendarTitle.setText(config.title);
+
+			var title = config.title;
+
+			if(config.comment){
+				title = '<div class="cal-comment">'+config.comment+'</div>'+title;
 			}
+
+			this.calendarTitle.setText(title);
 		}
 
 		if(config.displayType)
