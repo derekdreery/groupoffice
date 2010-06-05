@@ -751,7 +751,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 						var currentEndRow= i==endDay ? endRow : this.rowsPerHour*24;
 						var currentStartRow= i==day ? startRow : 0;
-						domIds.push(this.addGridEvent(eventData, i, currentStartRow, currentEndRow, recalculateAppointments));
+						if(currentEndRow>-1)
+							domIds.push(this.addGridEvent(eventData, i, currentStartRow, currentEndRow, recalculateAppointments));
 					}else
 					{
 						domIds.push(this.addAllDayEvent(eventData, i, i));
@@ -1017,7 +1018,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	
 	
 	addGridEvent : function (eventData, day, startRow, endRow, recalculateAppointments)
-	{		
+	{
 		var text = '<span class="x-calGrid-event-time">'+eventData.startDate.format(GO.settings.time_format)+"</span>&nbsp;"+eventData.name;
 		
 		if(eventData.location!='')
