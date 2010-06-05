@@ -61,3 +61,12 @@ $updates[]= "ALTER TABLE `cal_events` ADD COLUMN `read_only` TINYINT(1) NOT NULL
 $updates[]= "DELETE FROM go_state WHERE name =  'calendar-state';";
 
 $updates[]= "ALTER TABLE `cal_calendars` ADD `comment` VARCHAR( 255 ) NOT NULL";
+
+$updates[]= "CREATE TABLE `cal_holidays` (
+  `id` int(11) NOT NULL default '0',
+  `date` int(10) NOT NULL default '0',
+  `name` varchar(100) NOT NULL default '',
+  `region` varchar(4) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `region` (`region`)
+) TYPE=MyISAM DEFAULT CHARSET=utf8;";
