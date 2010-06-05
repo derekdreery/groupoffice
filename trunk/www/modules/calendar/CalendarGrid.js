@@ -1826,7 +1826,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 			var gridTop = this.columnsContainerY-4;
 			var gridLeft = this.gridCells[0][0].xy[0]-4;
-			var gridBottom= this.columnsContainerY+this.gridTableHeight-this.dragEvent.size['height']+5;
+			var gridBottom= this.columnsContainerY+this.gridTableHeight/*-this.dragEvent.size['height']*/+5;
 			var gridRight=this.gridCells[this.days-1][47].xy[0]+4;
 			
 			//gridBottomRight[0]=gridBottomRight[0]+this.gridCells[this.days-1][47].size['width'];
