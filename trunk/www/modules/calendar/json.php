@@ -470,6 +470,25 @@ try {
 				}
 			}
 
+			require_once($GO_MODULES->modules['calendar']['class_path'].'holidays.class.inc.php');
+			$holidays = new holidays();
+
+			if($holidays->get_holidays_for_period($GO_LANGUAGE->language, $start_time, $end_time)){
+				while($record = $holidays->next_record()){
+					$response['results'][] = array(
+						'id'=>$response['count']++,
+						'name'=>htmlspecialchars($record['name'], ENT_COMPAT, 'UTF-8'),
+						'description'=>'',
+						'time'=>'00:00',
+						'start_time'=>date('Y-m-d',$record['date']).' 00:00',
+						'end_time'=>date('Y-m-d',$record['date']).' 23:59',
+						'background'=>'f1f1f1',
+						'day'=>$lang['common']['full_days'][date('w', $record['date'])].' '.date($_SESSION['GO_SESSION']['date_format'], $record['date']),
+						'read_only'=>true
+						);
+				}
+			}
+
 			if(isset($GO_MODULES->modules['tasks'])) {
 				$visible_lists = array();
 				$cal->get_visible_tasklists($calendar['id']);
