@@ -796,6 +796,7 @@ class String {
 		"'</body>'usi",
 		"'<meta[^>]*>'usi",
 		"'<link[^>]*>'usi",
+		"'<title>.*?</title>'usi",
 		"'<head[^>]*>.*?</head>'usi",
 		"'<head[^>]*>'usi",
 		
