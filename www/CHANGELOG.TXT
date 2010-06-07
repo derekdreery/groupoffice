@@ -1,3 +1,7 @@
+2010/06/07 3.5.6
+- Updated Spanish translation
+- E-mail charset decoding failed on some server configurations
+
 2010/06/01 3.5.5
 - Updated German, Norwegian and Czech translation
 - Bug where event owners would get resource e-mails
