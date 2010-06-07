@@ -1608,16 +1608,42 @@ class imap extends imap_bodystruct {
 	}
 
 	/**
+	 * Get the next UID for the selected mailbox
+	 *
+	 * @return string the next UID on the IMAP server
+	 */
+
+	public function get_uidnext(){
+
+		if(empty($this->selected_mailbox['uidnext'])){			
+			$command = 'STATUS "'.$this->addslashes($this->utf7_encode($this->selected_mailbox['name'])).'"  (UIDNEXT)'."\r\n";
+			$this->send_command($command);
+			$result = $this->get_response(false, true);
+			
+			$vals = array_shift($result);
+			if($vals){
+				foreach ($vals as $i => $v) {
+					if (intval($v) && isset($vals[($i - 1)]) && $vals[($i - 1)] == 'UIDNEXT') {
+						$this->selected_mailbox['uidnext'] = $v;
+					}
+				}
+			}
+		}
+
+		return $this->selected_mailbox['uidnext'];		
+	}
+
+	/**
 	 * End's a line by line append operation
 	 *
 	 * @return <type>
 	 */
 	public function append_end() {
 		$result = $this->get_response(false, true);
-		$status = $this->check_response($result, true);
-		if($status){
+		return  $this->check_response($result, true);
+		/*if($status){
 			return !empty($this->selected_mailbox['uidnext']) ? $this->selected_mailbox['uidnext'] : true;
-		}
+		}*/
 	}
 
 	/**
