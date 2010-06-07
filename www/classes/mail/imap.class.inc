@@ -1197,7 +1197,7 @@ class imap extends imap_bodystruct {
 					$parts['text_found']=true;
 					$parts['parts'][] = $vals;
 
-				}elseif($vals['type']=='image'&& $vals['disposition']=='inline' && empty($vals['id']))
+				}elseif($vals['type']=='image' && in_array($vals['subtype'], array('jpg','jpeg','gif','png','bmp')) && $vals['disposition']=='inline' && empty($vals['id']))
 				{
 					//an inline image without ID. We'll display in the part order. Apple
 					//mail sends mail like this.
