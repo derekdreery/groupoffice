@@ -62,23 +62,23 @@ class holidays extends db {
 
 		go_debug("add_holiday($region, ".Date::get_timestamp($date).", $name)");
 		
-		$next_id = $this->nextid("cal_holidays");
+		$next_id = $this->nextid("go_holidays");
 		if ($next_id > 0) {
 			$name = addslashes($name);
-			$sql = "INSERT INTO cal_holidays (id, region, date, name) VALUES ('$next_id', '$region', '$date', '$name')";
+			$sql = "INSERT INTO go_holidays (id, region, date, name) VALUES ('$next_id', '$region', '$date', '$name')";
 			return $this->query($sql);
 		}
 		return false;
 	}
 
 	/*public 	function update_holiday($id, $date, $name) {
-		$sql = "UPDATE cal_holidays SET date='$date', name='$name'";
+		$sql = "UPDATE go_holidays SET date='$date', name='$name'";
 		$sql .= " WHERE id='$id'";
 		return ($this->query($sql));
 	}
 
 	public function delete_holiday($id) {
-		$sql = "DELETE FROM cal_holidays WHERE id='$id'";
+		$sql = "DELETE FROM go_holidays WHERE id='$id'";
 		$this->query($sql);
 		if ($this->affected_rows() > 0)
 			return true;
@@ -88,7 +88,7 @@ class holidays extends db {
 
 	public function delete_holidays($region, $year=""){
 
-		$sql = "DELETE FROM cal_holidays WHERE region='$region'";
+		$sql = "DELETE FROM go_holidays WHERE region='$region'";
 
 		if(!empty($year)) {
 			$date_from = mktime(0,0,0,12,31,$year-1);
@@ -100,21 +100,21 @@ class holidays extends db {
 	}
 
 	/*public function get_region($user_id) {
-		$sql = "SELECT region FROM cal_holidays WHERE user_id='$user_id'";
+		$sql = "SELECT region FROM go_holidays WHERE user_id='$user_id'";
 
 		$this->query($sql);
 		return $this->next_record();
 	}
 
 	public function get_holiday($user_id, $date) {
-		$sql = "SELECT * FROM cal_holidays WHERE  user_id='$user_id' AND date='$date'";
+		$sql = "SELECT * FROM go_holidays WHERE  user_id='$user_id' AND date='$date'";
 
 		$this->query($sql);
 		return $this->next_record();
 	}
 
 	public function get_holiday_by_id($id) {
-		$sql = "SELECT * FROM cal_holidays WHERE id='$id'";
+		$sql = "SELECT * FROM go_holidays WHERE id='$id'";
 
 		$this->query($sql);
 		return $this->next_record();
@@ -136,7 +136,7 @@ class holidays extends db {
 		}
 
 
-		$sql = "SELECT * FROM cal_holidays WHERE region='$region'".
+		$sql = "SELECT * FROM go_holidays WHERE region='$region'".
 						" AND date>=$start AND date<$end";
 		$this->query($sql);
 		return $this->num_rows();
@@ -148,7 +148,7 @@ class holidays extends db {
 			$start = mktime(0,0,0,1,1,$year);
 			$end = mktime(0,0,0,1,0,$year+1);
 
-			$sql = "SELECT * FROM cal_holidays WHERE region='$region'".
+			$sql = "SELECT * FROM go_holidays WHERE region='$region'".
 							" AND date>=$start AND date<$end";
 			$this->query($sql);
 

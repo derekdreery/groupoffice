@@ -210,14 +210,3 @@ CREATE TABLE IF NOT EXISTS `cal_visible_tasklists` (
   `tasklist_id` int(11) NOT NULL,
   PRIMARY KEY (`calendar_id`,`tasklist_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `cal_holidays`;
-CREATE TABLE `cal_holidays` (
-  `id` int(11) NOT NULL default '0',
-  `date` int(10) NOT NULL default '0',
-  `name` varchar(100) NOT NULL default '',
-  `region` varchar(4) NOT NULL default '',
-  PRIMARY KEY  (`id`),
-  KEY `region` (`region`)
-) TYPE=MyISAM DEFAULT CHARSET=utf8;

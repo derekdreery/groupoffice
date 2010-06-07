@@ -376,3 +376,12 @@ $updates[]="ALTER TABLE `go_users` ADD `password_type` VARCHAR( 20 ) ";
 $updates[]="UPDATE go_users SET password_type='md5'";
 
 $updates[]='script:7_install_blacklist.inc.php';
+
+$updates[]= "CREATE TABLE `go_holidays` (
+  `id` int(11) NOT NULL default '0',
+  `date` int(10) NOT NULL default '0',
+  `name` varchar(100) NOT NULL default '',
+  `region` varchar(4) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `region` (`region`)
+) TYPE=MyISAM DEFAULT CHARSET=utf8;";

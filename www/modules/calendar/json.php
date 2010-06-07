@@ -438,6 +438,7 @@ try {
 								'background'=>$event['background'],
 								'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
 								'repeats'=>!empty($event['rrule']),
+								'all_day_event'=>$event['all_day_event'],
 								'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time']),
 								'read_only'=> $event['read_only'] ? true : false
 				);
@@ -470,7 +471,7 @@ try {
 				}
 			}
 
-			require_once($GO_MODULES->modules['calendar']['class_path'].'holidays.class.inc.php');
+			require_once($GO_CONFIG->class_path.'holidays.class.inc.php');
 			$holidays = new holidays();
 
 			if($holidays->get_holidays_for_period($GO_LANGUAGE->language, $start_time, $end_time)){
