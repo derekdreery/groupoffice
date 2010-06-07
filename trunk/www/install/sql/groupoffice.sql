@@ -11,7 +11,16 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
 -- 
 -- Database: `imfoss_nl`
--- 
+--
+DROP TABLE IF EXISTS `go_holidays`;
+CREATE TABLE `go_holidays` (
+  `id` int(11) NOT NULL default '0',
+  `date` int(10) NOT NULL default '0',
+  `name` varchar(100) NOT NULL default '',
+  `region` varchar(4) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `region` (`region`)
+) TYPE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `go_link_descriptions`;
 CREATE TABLE IF NOT EXISTS `go_link_descriptions` (

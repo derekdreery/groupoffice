@@ -39,6 +39,41 @@ if(!defined('REPEAT_NONE'))
 class Date {
 
 	/**
+	 * Returns true if the time is a holiday or in the weekend
+	 *
+	 * @param <type> $time
+	 * @param <type> $region
+	 * @return <type> boolean
+	 */
+	public static function is_on_free_day($time, $region=false) {
+		
+		$weekday = date('w', $time);
+		if($weekday==6 || $weekday==0) {
+			return true;
+		}else {
+
+			global $GO_CONFIG, $GO_LANGUAGE;
+			
+			$date = getdate($time);
+
+			$day_start = mktime(0,0,0,$date['mon'], $date['mday'], $date['year']);
+			$day_end =  mktime(0,0,0,$date['mon'], $date['mday']+1, $date['year']);
+
+			require_once($GO_CONFIG->class_path.'holidays.class.inc.php');
+			$holidays = new holidays();
+
+			$region=$region ? $region : $GO_LANGUAGE->language;
+
+			$hd = new holidays();
+			$count = $hd->get_holidays_for_period($region, $day_start, $day_end);
+			if($count) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Calculate how many times the weekday has occured in the month
 	 *
 	 * @param <type> $time

@@ -334,7 +334,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','all_day_event']
 	});
 	
 	this.monthGridStore = new GO.data.JsonStore({
@@ -617,41 +617,34 @@ GO.calendar.MainPanel = function(config){
 		
 	config.layout='border';
 	config.border=false;
-	//config.tbar=;
-	config.items=[
-	new Ext.Panel({
-		region:'north',
-		height:32,
-		baseCls:'x-plain',
-		tbar:new Ext.Toolbar({
+	config.tbar= new Ext.Toolbar({
 			cls:'go-head-tb',
 			items: tbar
-		})
+		});
 
-	}),
-				
-	new Ext.Panel({
-		region:'west',
-		titlebar: false,
-		autoScroll:false,
-		//closeOnTab: true,
-		width: 210,
-		split:true,
-		layout:'border',
-		border:false,
-		//plain:true,
-		items:[
+	config.items=[
 		new Ext.Panel({
-			region:'north',
-			border:true,
-			height:160,
+			region:'west',
+			titlebar: false,
+			autoScroll:false,
+			//closeOnTab: true,
+			width: 210,
 			split:true,
-			baseCls:'x-plain',
-			items:this.datePicker
+			layout:'border',
+			border:false,
+			//plain:true,
+			items:[
+			new Ext.Panel({
+				region:'north',
+				border:true,
+				height:160,
+				split:true,
+				baseCls:'x-plain',
+				items:this.datePicker
+			}),
+			this.calendarListPanel]
 		}),
-		this.calendarListPanel]
-	}),
-	this.displayPanel
+		this.displayPanel
 	];		
 		
 	GO.calendar.MainPanel.superclass.constructor.call(this, config);	
