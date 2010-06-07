@@ -545,7 +545,7 @@ class email extends db {
 
 		if(stripos($message,'getaddrinfo')) {
 			$message = $lang['email']['error_getaddrinfo'];
-		}else if(stripos($message,'authentication')) {
+		}else if(stripos($message,'authentication') || stripos($message,'Login failed')) {
 			$message = $lang['email']['error_authentication'];
 		}else if(stripos($message,'connection refused')) {
 			$message = $lang['email']['error_connection_refused'];
