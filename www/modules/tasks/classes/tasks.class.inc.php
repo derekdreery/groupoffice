@@ -637,7 +637,8 @@ class tasks extends db
 			$start=0,
 			$offset=0,
 			$show_inactive=false,
-			$search_query='') {
+			$search_query='',
+                        $categories=array()) {
 
 		global $GO_MODULES;
 
@@ -708,6 +709,18 @@ class tasks extends db
 			$query = $this->escape($search_query);
 			$sql .= "(t.name LIKE '".$query."' OR t.description LIKE '".$query."')";
 		}
+
+                if(count($categories))
+                {
+                    if($where) {
+                            $sql .= " AND ";
+                    }
+                    else {
+                            $where=true;
+                            $sql .= " WHERE ";
+                    }                                           
+                    $sql .= "t.category_id IN (".implode(',', $categories).")";
+                }
 
 		if($sort_field != '' && $sort_order != '') {
 			$sql .=	" ORDER BY ".$this->escape($sort_field)." ".$this->escape($sort_order)."";
@@ -1151,6 +1164,91 @@ class tasks extends db
 	{
 		$this->query("DELETE FROM su_visible_lists WHERE tasklist_id = $tasklist_id AND user_id = $user_id");
 	}
+
+
+        /** Get a Category
+         *
+         * @access public
+         * @return record Record of category
+        */
+        function get_category($category_id)
+        {
+                $this->query("SELECT * FROM ta_categories WHERE id=?", 'i', $category_id);
+                if($this->next_record())
+                {
+                        return $this->record;
+                }else
+                {
+                        return false;
+                }
+        }
+        
+        /**
+	 * Gets all Categories
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+	function get_categories($sortfield='name', $sortorder='ASC', $start=0, $offset=0)
+        {
+		$sql = "SELECT ";
+		if($offset > 0)
+                {
+                        $sql .= "SQL_CALC_FOUND_ROWS ";
+		}
+		$sql .= "* FROM ta_categories ORDER BY ".$this->escape($sortfield." ".$sortorder);
+
+		if($offset>0) {
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+		}
+
+		$this->query($sql);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();	
+	}
+
+        /**
+	 * Create a Category
+	 *
+	 * @param Array $task Associative array of record fields
+	 *
+	 * @access public
+	 * @return int New record ID created
+	 */
+	function create_category($category)
+        {
+		$category['id'] = $this->nextid('ta_categories');
+
+		if($this->insert_row('ta_categories', $category))
+                {
+			return $category['id'];
+		}
+                
+		return false;
+	}
+	/**
+	 * Update a Category
+	 *
+	 * @param Array $category Associative array of record fields
+	 *
+	 * @access public
+	 * @return bool True on success
+	 */
+	function update_category($category)
+        {
+		return $this->update_row('ta_categories', 'id', $category);
+	}
+	/**
+	 * Delete a Category
+	 *
+	 * @param Int $category_id ID of the status
+	 *
+	 * @access public
+	 * @return bool True on success
+	 */
+	function delete_category($category_id) {
+		return $this->query("DELETE FROM ta_categories WHERE id=?", 'i', $category_id);
+	}
+        
 /*
 
 	function get_writable_tasklists($user_id, $start=0, $offset=0, $sort='name', $dir='ASC') {

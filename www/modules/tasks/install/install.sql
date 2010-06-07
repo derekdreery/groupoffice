@@ -61,11 +61,12 @@ CREATE TABLE IF NOT EXISTS `ta_tasks` (
   `reminder` int(11) NOT NULL,
   `rrule` varchar(50) NOT NULL,
   `files_folder_id` INT NOT NULL,
+  `category_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `list_id` (`tasklist_id`),
-  KEY `rrule` (`rrule`)
+  KEY `rrule` (`rrule`),
+  KEY `category_id` (`category_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS `go_links_12`;
 CREATE TABLE IF NOT EXISTS `go_links_12` (
@@ -90,3 +91,16 @@ CREATE TABLE IF NOT EXISTS `cf_12` (
   `link_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`link_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+--
+-- Tabelstructuur voor tabel `ta_categories`
+--
+
+CREATE TABLE IF NOT EXISTS `ta_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
