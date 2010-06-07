@@ -107,6 +107,15 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 					.setRemoteText(action.result.data.tasklist_name);
 					this
 					.setWritePermission(action.result.data.write_permission);
+
+                                        if(action.result.data.category_id == 0)
+                                        {
+                                                this.selectCategory.setRemoteText(GO.tasks.lang.selectCategory);
+                                        }else
+                                        {
+                                                var category = GO.tasks.categoriesStore.getById(action.result.data.category_id);
+                                                this.selectCategory.setRemoteText(category.data.name);
+                                        }
 					
 				},
 				failure : function(form, action) {
@@ -302,6 +311,32 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			fieldLabel : GO.tasks.lang.tasklist
 		});
 
+                this.selectCategory = new GO.form.ComboBoxReset({
+                        hiddenName:'category_id',
+			fieldLabel:GO.tasks.lang.category,
+			valueField:'id',
+			displayField:'name',			
+                        store: new GO.data.JsonStore({
+                                url: GO.settings.modules.tasks.url+ 'json.php',
+                                baseParams: {
+                                        task: 'categories'
+                                },
+                                root: 'results',
+                                id: 'id',
+                                totalProperty:'total',
+                                fields:['id','name','user_name','checked'],
+                                remoteSort: true
+                        }),
+			mode:'remote',
+			triggerAction:'all',
+                        emptyText:GO.tasks.lang.selectCategory,
+			editable:false,
+			selectOnFocus:true,
+			forceSelection:true
+                });
+
+
+
 		var propertiesPanel = new Ext.Panel({
 			hideMode : 'offsets',
 			title : GO.lang['strProperties'],
@@ -316,7 +351,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			startDate,
 			dueDate,
 			taskStatus,
-			this.selectTaskList,{
+			this.selectTaskList,this.selectCategory,{
 				xtype:'textarea',
 				fieldLabel:GO.lang.strDescription,
 				name : 'description',

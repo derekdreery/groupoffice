@@ -36,3 +36,6 @@ GO.tasks.lang.visible='Zichtbaar';
 GO.tasks.lang.selectIcalendarFile='Selecteer een icalendar (*.ics) bestand';
 
 GO.tasks.lang.continueTask='Vervolg taak';
+GO.tasks.lang.categories='Categorieen';
+GO.tasks.lang.category='Categorie';
+GO.tasks.lang.selectCategory='Selecteer categorie';

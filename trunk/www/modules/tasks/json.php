@@ -365,6 +365,15 @@ try{
 				$tasks->update_task($task, false, $old_task);
 			}
 
+
+                        if(isset($_POST['categories'])) {
+				$categories = json_decode($_POST['categories'], true);				
+				$GO_CONFIG->save_setting('tasks_categories_filter',implode(',', $categories), $GO_SECURITY->user_id);
+			} else {
+				$categories = $GO_CONFIG->get_setting('tasks_categories_filter', $GO_SECURITY->user_id);
+				$categories = ($categories) ? explode(',',$categories) : array();
+			}
+
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'due_time ASC, ctime';
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
@@ -385,7 +394,7 @@ try{
 			$show_completed=$GO_CONFIG->get_setting('tasks_show_completed', $GO_SECURITY->user_id);
 			$show_inactive=$GO_CONFIG->get_setting('tasks_show_inactive', $GO_SECURITY->user_id);
 
-			$response['total'] = $tasks->get_tasks($tasklists,$user_id, $show_completed, $sort, $dir, $start, $limit,$show_inactive, $query);
+			$response['total'] = $tasks->get_tasks($tasklists,$user_id, $show_completed, $sort, $dir, $start, $limit,$show_inactive, $query, $categories);
 			$response['results']=array();
 
 			
@@ -443,6 +452,53 @@ try{
 				$response['results'][] = $tasklists;
 			}
 			break;
+
+                        
+                case 'categories':
+
+                        if(isset($_POST['delete_keys']) && $GO_MODULES->modules['tasks']['write_permission'])
+			{
+                                try
+                                {
+					$response['deleteSuccess']=true;
+					$categories = json_decode($_POST['delete_keys']);
+					foreach($categories as $category_id)
+					{						
+						$tasks->delete_category($category_id);
+					}
+				}catch(Exception $e)
+				{
+					$response['deleteSuccess']=false;
+					$response['deleteFeedback']=$e->getMessage();
+				}
+			}
+
+
+                        $categories = $GO_CONFIG->get_setting('tasks_categories_filter', $GO_SECURITY->user_id);
+			$categories = ($categories) ? explode(',',$categories) : array();
+                        
+			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
+			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
+			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
+			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
+
+                        $response['results'] = array();
+                        $response['total'] = $tasks->get_categories();
+                        while($tasks->next_record())
+                        {
+                                $category = $tasks->record;
+
+                                $user = $GO_USERS->get_user($category['user_id']);
+				$category['user_name']=String::format_name($user);
+                                
+                                $category['checked'] = in_array($category['id'], $categories);
+
+                                $response['results'][] = $category;
+                        }
+                        
+                        $response['success'] = true;
+
+                        break;
 	}
 }catch(Exception $e)
 {
