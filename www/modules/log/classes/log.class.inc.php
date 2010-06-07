@@ -17,13 +17,15 @@ class log extends db {
 		$events->add_listener('login', __FILE__, 'log', 'login');
 	}
 	
-	public static function login()
+	public static function login($username, $password, $user, $count_login)
 	{
-		$log = new log();
-		$sql = "DELETE FROM go_log WHERE time<".Date::date_add(time(),0,-1);
-		$log->query($sql);
+		if($count_login){
+			$log = new log();
+			$sql = "DELETE FROM go_log WHERE time<".Date::date_add(time(),0,-1);
+			$log->query($sql);
 
-		$log->add('Logged in');
+			$log->add('Logged in');
+		}
 	}
 	
 	/**
