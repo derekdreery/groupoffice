@@ -1164,7 +1164,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		}
 		url_params = url_params.substring(0,url_params.length-1);
 		
-		if(attachment.type=='message')
+		if(!forceDownload && attachment.type=='message')
 		{
 			GO.linkHandlers[9].call(this, 0, params);
 		}else
