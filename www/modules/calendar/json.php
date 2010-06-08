@@ -635,9 +635,15 @@ try {
 			$response=array();
 			$count=0;
 			$cal->get_view_calendars($view_id);
-			while($cal->next_record()) {
-				$response[$cal->f('id')] = $cal2->get_calendar($cal->f('id'));
-				$response[$cal->f('id')]['write_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $cal2->f('acl_id'))>1;
+			while($view_calendar = $cal->next_record()) {
+
+		
+				$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $view_calendar['acl_id']);
+				if(!$permission_level)
+					continue;
+
+				$response[$cal->f('id')] = $view_calendar;
+				$response[$cal->f('id')]['write_permission'] = $permission_level>GO_SECURITY::READ_PERMISSION;
 
 				$events = $cal2->get_events_in_array(array($cal->f('id')), 0,
 								$start_time,

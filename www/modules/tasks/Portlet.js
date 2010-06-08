@@ -22,7 +22,7 @@ GO.tasks.SimpleTasksPanel = function(config)
 			reader: reader,
 			sortInfo: {field: 'portlet', direction: 'ASC'},
 			groupField: 'tasklist_name',
-			remoteGroup:true,
+			//remoteGroup:true,
 			remoteSort:true
 		});
 
