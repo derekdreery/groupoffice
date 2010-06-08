@@ -135,7 +135,7 @@ foreach($GO_MODULES->modules as $update_module)
 			for($i=$update_module['version'];$i<count($updates);$i++)
 			{
 				ob_flush();
-				if(substr($updates[$i], 0, 7)=='script:')
+				if(strcmp(substr($updates[$i],0,7),'script:')==0)
 				{
 					$update_script=$GO_CONFIG->module_path.$update_module['id'].'/install/updatescripts/'.substr($updates[$i], 7);
 					if (!file_exists($update_script))
@@ -144,7 +144,7 @@ foreach($GO_MODULES->modules as $update_module)
 					}
 					//if(!$quiet)
 					echo 'Running '.$update_script.$line_break;
-
+					
 					require_once($update_script);
 				}else
 				{
