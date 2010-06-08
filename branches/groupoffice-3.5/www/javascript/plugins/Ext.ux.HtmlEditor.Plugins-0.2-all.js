@@ -520,6 +520,9 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
                 if (!this.hrWindow){
 										
                     this.hrWindow = new Ext.Window({
+												width:400,
+												autoHeight:true,
+												resizable:false,
                         title: GO.lang.insertHorizontalRule,
                         closeAction: 'hide',
 												focus: function(){													
@@ -529,8 +532,6 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
                             itemId: 'insert-hr',
                             xtype: 'form',
                             border: false,
-														
-                            plain: true,
                             bodyStyle: 'padding: 10px;',
                             labelWidth: 60,
                             labelAlign: 'right',
