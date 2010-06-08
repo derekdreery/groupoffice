@@ -65,6 +65,10 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		{
 			this.msg(GO.lang.firebugDetected, GO.lang.firebugWarning, 4, 300);
 		}
+		if(GO.settings.config.debug)
+		{
+			this.msg(GO.lang.debugModeDetected, GO.lang.debugModeWarning, 4, 300);
+		}
 	},
 
 	saveState : function(){

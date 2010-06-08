@@ -1173,6 +1173,9 @@ class GO_CONFIG {
 
 		$response['config']['max_users']=$this->max_users;
 
+		$response['config']['debug']=$this->debug;
+
+
 		return $response;
 	}
 }
