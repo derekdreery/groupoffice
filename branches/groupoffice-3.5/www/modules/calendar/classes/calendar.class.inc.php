@@ -626,7 +626,7 @@ class calendar extends db
 
 	function get_view_calendars($view_id)
 	{
-		$sql = "SELECT cal_calendars.name, cal_calendars.user_id, cal_calendars.id, cal_views_calendars.background FROM cal_calendars ".
+		$sql = "SELECT cal_calendars.name, cal_calendars.user_id, cal_calendars.id, cal_calendars.acl_id, cal_views_calendars.background FROM cal_calendars ".
 		"INNER JOIN cal_views_calendars ON cal_calendars.id=cal_views_calendars.calendar_id ".
 		"WHERE cal_views_calendars.view_id='".$this->escape($view_id)."' ORDER BY cal_calendars.name ASC";
 
