@@ -86,8 +86,16 @@ GO.users.PersonalPanel = function(config)
 						format: GO.settings['date_format']
 					}),
 					new GO.form.HtmlComponent({html: '<br />'}),
-					{fieldLabel: GO.lang['strEmail'], name: 'email', allowBlank: false},
-					{fieldLabel: GO.lang['strPhone'], name: 'home_phone'}
+					{
+						fieldLabel: GO.lang['strEmail'],
+						name: 'email',
+						allowBlank: false,
+						vtype:'email'
+					},
+					{
+						fieldLabel: GO.lang['strPhone'],
+						name: 'home_phone'
+					}
 				]
 			},{
 				columnWidth: .5,
