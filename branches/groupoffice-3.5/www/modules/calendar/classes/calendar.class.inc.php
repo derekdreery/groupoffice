@@ -2297,16 +2297,21 @@ class calendar extends db
 
 		$this->query($sql, 'i', $event_id);
 		$record = $this->next_record();
-		if($record && empty($record['private']))
+		if($record)
 		{
+			if(!empty($record['private'])){
+				unset($record['description']);
+				$record['name']=$lang['calendar']['private'];
+			}
+			
 			$cache['id']=$this->f('id');
 			$cache['user_id']=$this->f('user_id');
-			$cache['name'] = htmlspecialchars($this->f('name').' ('.Date::get_timestamp($this->f('start_time'), true).')', ENT_QUOTES, 'utf-8');
+			$cache['name'] = htmlspecialchars($record['name'].' ('.Date::get_timestamp($this->f('start_time'), true).')', ENT_QUOTES, 'utf-8');
 			$cache['link_type']=1;
 			$cache['module']='calendar';
 			$cache['description']='';
 			$cache['type']=$lang['link_type'][1];
-			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
+			$cache['keywords']=$search->record_to_keywords($record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['acl_id']=$this->f('acl_id');
 
