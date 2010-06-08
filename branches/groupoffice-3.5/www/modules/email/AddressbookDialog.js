@@ -177,14 +177,12 @@ GO.email.AddressbookDialog = function(config) {
 		this.contactsStore = new GO.data.JsonStore({
 			url : GO.settings.modules.addressbook.url + 'json.php',
 			baseParams : {
-				task : 'contacts',
-				require_email:true
+				task : 'search_email_contacts'
 			},
 			root : 'results',
-			id : 'id',
+			id : 'email',
 			totalProperty : 'total',
-			fields : ['id', 'name', 'company_name', 'email',
-			'home_phone', 'work_phone', 'work_fax', 'cellular', 'ab_name'],
+			fields : ['id', 'name',  'email', 'ab_name'],
 			remoteSort : true
 		});
 
