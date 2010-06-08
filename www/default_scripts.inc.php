@@ -297,9 +297,7 @@ if($GO_SECURITY->logged_in() && !isset($popup_groupoffice)) {
 	$GO_SCRIPTS_JS='';
 
 	foreach($GO_MODULES->modules as $module) {
-		if($lang_file = $GO_LANGUAGE->get_language_file($module['id'])) {
-			$GO_LANGUAGE->require_language_file($module['id']);
-		}
+		$GO_LANGUAGE->require_language_file($module['id']);
 	}
 
 	//The checked values is used in the SearchPanel.js for the filter
