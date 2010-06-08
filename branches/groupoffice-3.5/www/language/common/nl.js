@@ -341,3 +341,6 @@ GO.lang.width='Breedte';
 GO.lang.thankyou='Hartelijk dank';
 GO.lang.applyMultiselect='Multiselectie toepassen';
 GO.lang.createdBy='Gemaakt door';
+
+GO.lang.debugModeDetected="Waarschuwing! Debug modus is ingeschakeld";
+GO.lang.debugModeWarning="Gebruik $config['debug']=true; alleen voor ontwikkeling en om problemen op te lossen. Het vertraagd de applicatie.";
