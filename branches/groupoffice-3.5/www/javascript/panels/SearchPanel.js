@@ -222,8 +222,10 @@ Ext.extend(GO.grid.SearchPanel, Ext.Panel, {
 	
 	afterRender : function()
 	{
-		GO.grid.SearchPanel.superclass.afterRender.call(this);	
-		this.load();
+		GO.grid.SearchPanel.superclass.afterRender.call(this);
+
+		if(!this.dontLoadOnRender)
+			this.load();
 	},
 	
 	load : function(){
