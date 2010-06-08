@@ -311,12 +311,19 @@ try{
 			$folder['parent_id']=isset($_POST['parent_id']) ? ($_POST['parent_id']) : 0;
 			$folder['link_id']=isset($_POST['link_id']) ? ($_POST['link_id']) : 0;
 			$folder['link_type']=isset($_POST['link_type']) ? ($_POST['link_type']) : 0;
+
+
 			
 			if($folder['id']>0)
 			{
 				$GO_LINKS->update_folder($folder);
 			}else
 			{
+				if($GO_LINKS->get_folder_by_name($folder['name'],$folder['link_id'], $folder['link_type'], $folder['parent_id']))
+				{
+					throw new Exception($lang['common']['theFolderAlreadyExists']);
+				}
+
 				$response['folder_id']=$GO_LINKS->add_folder($folder);
 			}
 

@@ -223,7 +223,6 @@ $lang['common']['oneReminder']='1 reminder';
 $lang['common']['youHaveReminders']='You have %s in %s.';
 
 $lang['common']['createdBy']='Created by';
-
 $lang['common']['none']='None';
-
 $lang['common']['alert']='Alert';
+$lang['common']['theFolderAlreadyExists']='A folder with that name already exists';
