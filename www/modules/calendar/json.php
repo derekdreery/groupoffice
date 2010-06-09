@@ -774,11 +774,12 @@ try {
 
 			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'name';
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'ASC';
+			$query = isset($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
 
-			$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, -1, $show_all, $sort, $dir);
+			$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, -1, $show_all, $sort, $dir, $query);
 			if(!$response['total']) {
 				$cal->get_calendar();
-				$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, -1, $show_all, $sort, $dir);
+				$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, -1, $show_all, $sort, $dir,$query);
 			}
 
 			$response['results']=array();
