@@ -374,9 +374,14 @@ try {
 							'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
 							'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
 							'C43B3B','996600','66FF99','999999','FFFFFF');
+
+			$default_colors_count = count($default_colors);
+
 			$default_bg = array();
-			foreach ($calendars as $k=>$v)
-				$default_bg[$v] = $default_colors[$k];
+			foreach ($calendars as $k=>$v){
+				$index = $k>=$default_colors_count ? $k-$default_colors_count : $k;
+				$default_bg[$v] = $default_colors[$index];
+			}
 
 			$calendar_id=$calendars[0];
 			
