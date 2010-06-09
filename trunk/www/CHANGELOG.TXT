@@ -1,3 +1,10 @@
+2010/06/08 3.5.6
+- Updated Spanish translation
+- E-mail charset decoding failed on some server configurations
+- Limit appointments older then x days server side for activesync too because
+  android always wants to sync all appointments
+- Small bug fixes
+
 2010/06/01 3.5.5
 - Updated German, Norwegian and Czech translation
 - Bug where event owners would get resource e-mails

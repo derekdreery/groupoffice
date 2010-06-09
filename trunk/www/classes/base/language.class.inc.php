@@ -194,7 +194,13 @@ class GO_LANGUAGE extends db {
 
 	function require_language_file($module_id, $language=null){
 		global $GO_LANGUAGE, $lang, $GO_EVENTS;
-		require($this->get_language_file($module_id, $language));
+
+		$lang_file = $this->get_language_file($module_id, $language);
+		
+		if(!$lang_file)
+			return false;
+		
+		require($lang_file);
 			
 		$args=array($module_id, $language);
 		$GO_EVENTS->fire_event('require_language_file', $args);
@@ -211,11 +217,6 @@ class GO_LANGUAGE extends db {
 		global $GO_CONFIG;
 
 		$module_path = $GO_CONFIG->module_path.'/'.$module_id;
-		if(!file_exists($module_path))
-		{
-			$module_path = $GO_CONFIG->root_path.'/legacy/modules/'.$module_id;
-		}
-
 		$file = $module_path.'/language/en.inc.php';
 
 		if (file_exists($file)) {

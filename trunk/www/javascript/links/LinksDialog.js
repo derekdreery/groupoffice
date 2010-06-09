@@ -17,7 +17,8 @@ GO.dialog.LinksDialog = function(config){
 	
 	this.grid = new GO.grid.SearchPanel({
 			noTitle:true,
-			noOpenLinks:true
+			noOpenLinks:true,
+			dontLoadOnRender:true
 		});
 
 	this.grid.searchGrid.on('rowdblclick', this.linkItems, this);
@@ -39,6 +40,12 @@ GO.dialog.LinksDialog = function(config){
 		closeAction:'hide',
 		title:GO.lang['strLinkItems'],
 		items: this.grid,
+		listeners : {
+			show:function(){
+				this.grid.load();
+			},
+			scope:this
+		},
 		buttons: [
 			{
 				text: GO.lang['cmdOk'],

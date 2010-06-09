@@ -112,7 +112,7 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 				{
 					document.location.href=GO.settings.modules.email.url+
 					'mimepart.php?path='+
-					encodeURIComponent(panel.data.path)+'&imap_id='+attachment.imap_id;
+					encodeURIComponent(panel.data.path)+'&part_imap_id='+attachment.imap_id;
 				}else
 				{
 					document.location.href=GO.settings.modules.email.url+

@@ -83,7 +83,7 @@ GO.calendar.lang.show_tasks='Toon taken uit takenlijsten';
 
 GO.calendar.lang.myCalendar='Mijn agenda';
 GO.calendar.lang.merge='Samenvoegen';
-GO.calendar.lang.ownColor = 'Elke agenda zijn eigen kleur';
+GO.calendar.lang.ownColor = 'Geef elke agenda een unieke kleur';
 
 GO.calendar.lang.ignoreConflictsTitle = 'Conflict negeren?';
 GO.calendar.lang.ignoreConflictsMsg = 'Deze agenda-item conflicteert met een andere. Toch opslaan?';

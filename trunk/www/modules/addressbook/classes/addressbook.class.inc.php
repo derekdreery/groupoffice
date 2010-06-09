@@ -256,16 +256,14 @@ class addressbook extends db {
 	}
 
 	function get_user_addressbook_ids($user_id) {
-        /*if(!isset($_SESSION['GO_SESSION'][$user_id]['authorized_addressbooks']))
-         {
-            $_SESSION['GO_SESSION'][$user_id]['authorized_addressbooks'] = array();
-            $this->get_user_addressbooks($user_id);
-            while($this->next_record())
-            {
-            $_SESSION['GO_SESSION'][$user_id]['authorized_addressbooks'][] = $this->f('id');
-            }
-            }
-            return $_SESSION['GO_SESSION'][$user_id]['authorized_addressbooks'];*/
+	/*if(!isset($_SESSION['GO_SESSION'][$user_id]['authorized_addressbooks'])) {
+		$_SESSION['GO_SESSION'][$user_id]['authorized_addressbooks'] = array();
+		$this->get_user_addressbooks($user_id);
+		while($this->next_record()) {
+			$_SESSION['GO_SESSION'][$user_id]['authorized_addressbooks'][] = $this->f('id');
+		}
+	}
+	return $_SESSION['GO_SESSION'][$user_id]['authorized_addressbooks'];*/
 
 		$addressbooks=array();
 		$this->get_user_addressbooks($user_id);
@@ -688,6 +686,60 @@ class addressbook extends db {
 		return $this->query("DELETE FROM ab_contacts WHERE id='".$this->escape($contact_id)."'");
 
 	}
+
+
+	function search_contacts_email($user_id, $query, $start=0, $offset=0, $sort_index='name', $sort_order='ASC'){
+
+		if($sort_index=='name') {
+			if ($_SESSION['GO_SESSION']['sort_name'] == 'first_name') {
+				$sort_index = 'first_name '.$sort_order.', last_name';
+			} else {
+				$sort_index = 'last_name '.$sort_order.', first_name';
+			}
+		}
+
+		$fields = "c.id, c.addressbook_id, c.first_name, c.middle_name, c.last_name";
+
+		if($query!='')
+			$query = '%'.$this->escape(str_replace(' ','%', $query)).'%';
+
+		$conditions = "WHERE email!='' ";
+
+
+		$user_ab = $this->get_user_addressbook_ids($user_id);
+
+		if(count($user_ab) > 1) {
+			$conditions .= "AND addressbook_id IN (".implode(",",$user_ab).") ";
+		}elseif(count($user_ab)==1) {
+			$conditions .= "AND addressbook_id=".$user_ab[0]." ";
+		}else {
+			return false;
+		}
+
+		if(!empty($query))
+			$conditions .= "AND (CONCAT(first_name,middle_name,last_name) LIKE '$query' OR email LIKE '$query')";
+
+		$sql = "SELECT ";
+
+		if($offset>0) {
+			$sql .= "SQL_CALC_FOUND_ROWS ";
+		}
+
+		$sql .= "$fields, email FROM ab_contacts c  $conditions ".
+			"UNION SELECT $fields, email2 AS email FROM ab_contacts c ".str_replace('email', 'email2', $conditions)." ".
+			"UNION SELECT $fields, email3 AS email FROM ab_contacts c ".str_replace('email', 'email3', $conditions)." ".
+			"ORDER BY $sort_index $sort_order";
+
+		$this->query($sql);
+
+		if($offset > 0) {
+			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+		}
+
+		$this->query($sql);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
+	}
+
 
 	function search_contacts($user_id, $query, $field = 'last_name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $writable_only=false, $query_type='LIKE', $mailings_filter=array(), $advanced_query='') {
 		global $GO_MODULES;

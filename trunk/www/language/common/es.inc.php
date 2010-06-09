@@ -4,40 +4,41 @@ require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
 $lang['common']['htmldirection']= 'ltr';
 
-$lang['common']['errorsInForm'] = 'Hay errores en el formulario. Por favor, corrija y vuelva a intentarlo.';
+$lang['common']['errorsInForm'] = 'Hay errores en el formulario. Por favor, corrijalos y vuelva a intentar.';
 
 $lang['common']['loadingCore']= 'Cargando el sistema base';
 $lang['common']['loadingLogin'] = 'Cargando ventana de acceso';
-$lang['common']['renderInterface']='Renderización Interfaz';
-$lang['common']['loadingModule'] = 'Módulo de carga';
+$lang['common']['renderInterface']='Renderizando Interfaz';
+$lang['common']['loadingModule'] = 'Cargando Módulo';
 
-$lang['common']['loggedInAs'] = "Acceso a cabo por";
+$lang['common']['loggedInAs'] = 'Logueado como';
 $lang['common']['search']='Buscar';
 $lang['common']['settings']='Opciones';
 $lang['common']['adminMenu']='Menú de Administrador';
+$lang['common']['startMenu']='Menú de Inicio';
 $lang['common']['help']='Ayuda';
-$lang['common']['logout']='Logout';
-$lang['common']['badLogin'] = 'Nombre de usuario o contraseña equivocada';
+$lang['common']['logout']='Salir';
+$lang['common']['badLogin'] = 'Nombre de usuario o contraseña incorrectos';
 $lang['common']['badPassword'] = 'La contraseña es incorrecta';
 
 $lang['common']['passwordMatchError']='Las contraseñas no coinciden';
 $lang['common']['accessDenied']='Acceso denegado';
 $lang['common']['saveError']='Error al guardar los datos';
-$lang['common']['deleteError']='Error l\'eliminación de los datos';
+$lang['common']['deleteError']='Error al eliminar los datos';
 $lang['common']['selectError']='Error de lectura de datos';
 $lang['common']['missingField'] = 'Usted no ha completado todos los campos obligatorios.';
 
-$lang['common']['salutation']='Fórmula de apertura';
+$lang['common']['salutation']='Saludo';
 $lang['common']['firstName'] = 'Nombre';
 $lang['common']['lastName'] = 'Apellido';
 $lang['common']['middleName'] = 'Segundo Nombre';
 $lang['common']['sirMadam']['M'] = 'Señor';
-$lang['common']['sirMadam']['F'] = 'Dama';
+$lang['common']['sirMadam']['F'] = 'Señora';
 $lang['common']['initials'] = 'Iniciales';
 $lang['common']['sex'] = 'Sexo';
 $lang['common']['birthday'] = 'Fecha de nacimiento';
-$lang['common']['sexes']['M'] = 'Macho';
-$lang['common']['sexes']['F'] = 'Hembra';
+$lang['common']['sexes']['M'] = 'Hombre';
+$lang['common']['sexes']['F'] = 'Mujer';
 $lang['common']['title'] = 'Título';
 $lang['common']['addressNo'] = 'Número';
 $lang['common']['workAddressNo'] = 'Número (trabajo)';
@@ -45,19 +46,19 @@ $lang['common']['postAddress'] = 'Dirección';
 $lang['common']['postAddressNo'] = 'Número';
 $lang['common']['postCity'] = 'Ciudad';
 $lang['common']['postState'] = 'Provincia';
-$lang['common']['postCountry'] = 'Nación';
-$lang['common']['postZip'] = 'PAC';
+$lang['common']['postCountry'] = 'País';
+$lang['common']['postZip'] = 'Código Postal';
 $lang['common']['visitAddress'] = 'Visit Dirección';
 $lang['common']['postAddressHead'] = 'Post Dirección';
 $lang['common']['name'] = 'Nombre';
 $lang['common']['user'] = 'Usuario';
-$lang['common']['username'] = 'Username';
-$lang['common']['password'] = 'Password';
+$lang['common']['username'] = 'Nombre de usuario';
+$lang['common']['password'] = 'Contraseña';
 $lang['common']['authcode'] = 'Código de autorización';
-$lang['common']['country'] = 'Nación';
+$lang['common']['country'] = 'País';
 $lang['common']['state'] = 'Provincia';
 $lang['common']['city'] = 'Ciudad';
-$lang['common']['zip'] = 'PAC';
+$lang['common']['zip'] = 'Código Postal';
 $lang['common']['address'] = 'Dirección';
 $lang['common']['email'] = 'E-mail';
 $lang['common']['phone'] = 'Teléfono';
@@ -70,10 +71,10 @@ $lang['common']['question'] = 'Pregunta';
 $lang['common']['answer'] = 'Respuesta';
 $lang['common']['fax'] = 'Fax';
 $lang['common']['workFax'] = 'Fax (trabajo)';
-$lang['common']['homepage'] = 'Homepage';
+$lang['common']['homepage'] = 'Sitio web';
 $lang['common']['workAddress'] = 'Dirección (trabajo)';
-$lang['common']['workZip'] = 'PAC (trabajo)';
-$lang['common']['workCountry'] = 'Nación (trabajo)';
+$lang['common']['workZip'] = 'Código Postal (trabajo)';
+$lang['common']['workCountry'] = 'País (trabajo)';
 $lang['common']['workState'] = 'Provincia (trabajo)';
 $lang['common']['workCity'] = 'Ciudad (trabajo)';
 $lang['common']['today'] = 'Hoy';
@@ -122,28 +123,28 @@ $lang['common']['default_salutation']['M']='Estimado señor';
 $lang['common']['default_salutation']['F']='Señora';
 
 
-$lang['common']['mins'] = 'Ver';
+$lang['common']['mins'] = 'Mins';
 $lang['common']['hour'] = 'Hora';
 $lang['common']['hours'] = 'Horas';
-$lang['common']['day'] = 'días';
+$lang['common']['day'] = 'día';
 $lang['common']['days'] = 'días';
-$lang['common']['week'] = 'semanas';
+$lang['common']['week'] = 'semana';
 $lang['common']['weeks'] = 'semanas';
 
 $lang['common']['group_everyone']='Todos';
-$lang['common']['group_admins']='Administrador';
-$lang['common']['group_internal']='Interna';
+$lang['common']['group_admins']='Administradores';
+$lang['common']['group_internal']='Interno';
 
 $lang['common']['admin']='Administrador';
 
-$lang['common']['beginning']='Fórmula de apertura';
+$lang['common']['beginning']='Saludo';
 
-$lang['common']['max_emails_reached']= "El número máximo de e-mail a la l\'host SMTP %s de %s por día se alcanza.";
-$lang['common']['usage_stats']='Diskspace usage per %s';
+$lang['common']['max_emails_reached'] = 'Se alcanzó el número máximo de e-mails diarios en el servidor %s. Cantidad %s';
+$lang['common']['usage_stats']='Uso del disco por %s';
 $lang['common']['usage_text']='This Group-Office installation is using';
 
-$lang['common']['database']='Database';
-$lang['common']['files']='File';
+$lang['common']['database']='Base de datos';
+$lang['common']['files']='Archivo';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Total';
 
@@ -160,3 +161,5 @@ Contraseña: %s';
 $lang['common']['lost_password_error']='No se puede encontrar su dirección de correo electrónico.';
 $lang['common']['lost_password_success']='Una nueva contraseña ha sido enviado a su e-mail.';
 
+$lang['common']['loadingModules']='Cargando modulos';
+$lang['common']['loadingModule'] = 'Cargando modulo';

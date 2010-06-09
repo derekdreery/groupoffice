@@ -246,7 +246,7 @@ class GO_AUTH extends db
 		$this->updateAfterLogin($user,$count_login);
 
 		go_debug('LOGIN Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
-		$args=array($username, $password, $user);
+		$args=array($username, $password, $user, $count_login);
 		$GO_EVENTS->fire_event('login', $args);
 
 		return true;

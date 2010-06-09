@@ -1197,7 +1197,7 @@ class imap extends imap_bodystruct {
 					$parts['text_found']=true;
 					$parts['parts'][] = $vals;
 
-				}elseif($vals['type']=='image'&& $vals['disposition']=='inline' && empty($vals['id']))
+				}elseif($vals['type']=='image' && in_array($vals['subtype'], array('jpg','jpeg','gif','png','bmp')) && $vals['disposition']=='inline' && empty($vals['id']))
 				{
 					//an inline image without ID. We'll display in the part order. Apple
 					//mail sends mail like this.
@@ -1205,8 +1205,107 @@ class imap extends imap_bodystruct {
 				}
 			}
 			if (isset($vals['subs'])) {
+				$text_found_at_this_level = $parts['text_found'];
 				$this->find_body_parts($vals['subs'], $type, $subtype, $parts);
 
+				//
+
+				/*
+				 * If we found body parts for example 1.1 and 1.2 don't include a text
+				 * attachment with number 2 like in this sample structure
+				 *
+				 * array (
+  1 =>
+  array (
+    'subs' =>
+    array (
+      '1.1' =>
+      array (
+        'type' => 'text',
+        'subtype' => 'plain',
+        'charset' => 'iso-8859-1',
+        'format' => 'flowed',
+        'id' => false,
+        'description' => false,
+        'encoding' => '8bit',
+        'size' => '279',
+        'lines' => '15',
+        'md5' => false,
+        'disposition' => false,
+        'language' => false,
+        'location' => false,
+        'name' => false,
+        'filename' => false,
+      ),
+      '1.2' =>
+      array (
+        'subs' =>
+        array (
+          '1.2.1' =>
+          array (
+            'type' => 'text',
+            'subtype' => 'html',
+            'charset' => 'iso-8859-1',
+            'id' => false,
+            'description' => false,
+            'encoding' => '7bit',
+            'size' => '1028',
+            'lines' => '28',
+            'md5' => false,
+            'disposition' => false,
+            'language' => false,
+            'location' => false,
+            'name' => false,
+            'filename' => false,
+          ),
+          '1.2.2' =>
+          array (
+            'type' => 'image',
+            'subtype' => 'jpeg',
+            'name' => 'gass-sign.jpg',
+            'id' => '<part1.04070803.02030505@gassinstallasjon.no>',
+            'description' => false,
+            'encoding' => 'base64',
+            'size' => '19818',
+            'md5' => false,
+            'disposition' => 'inline',
+            'language' => '(',
+            'location' => 'filename',
+            'filename' => false,
+            'charset' => false,
+            'lines' => false,
+          ),
+          'type' => 'message',
+          'subtype' => 'related',
+        ),
+      ),
+      'type' => 'message',
+      'subtype' => 'alternative',
+    ),
+  ),
+  2 =>
+  array (
+    'type' => 'text',
+    'subtype' => 'plain',
+    'name' => 'gass-skriver.txt',
+    'charset' => 'us-ascii',
+    'id' => false,
+    'description' => false,
+    'encoding' => 'base64',
+    'size' => '32',
+    'lines' => '0',
+    'md5' => false,
+    'disposition' => 'inline',
+    'language' => '(',
+    'location' => 'filename',
+    'filename' => false,
+  ),
+  'type' => 'message',
+  'subtype' => 'mixed',
+)
+				 */
+				if(!$text_found_at_this_level && $parts['text_found'])
+					break;
 			}
 		}
 		return $parts;
@@ -1348,15 +1447,17 @@ class imap extends imap_bodystruct {
 	 */
 	public function get_message_part_start($uid, $message_part=0) {
 		$this->clean($uid, 'uid');
-		if ($message_part == 0) {
+		if (empty($message_part)) {
 			$command = "UID FETCH $uid BODY[]\r\n";
 		}
 		else {
-			$this->clean($message_part, 'msg_part');
+			//$this->clean($message_part, 'msg_part');
 			$command = "UID FETCH $uid BODY[$message_part]\r\n";
 		}
 		$this->send_command($command);
-		$result = fgets($this->handle, 1024);
+		$result = fgets($this->handle);
+
+		//go_debug($result);
 		$size = false;
 		if (preg_match("/\{(\d+)\}\r\n/", $result, $matches)) {
 			$size = $matches[1];
@@ -1369,14 +1470,45 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 	public function get_message_part_line() {
-		$res = fgets($this->handle, 1024);
+		/*$res = fgets($this->handle, 1024);
 		while(substr($res, -2) != "\r\n") {
 			$res .= fgets($this->handle, 1024);
-		}
+		}*/
+
+		$res = fgets($this->handle);
+		//go_debug($res);
 		if ($this->check_response(array($res))) {
 			$res = false;
 		}
 		return $res;
+	}
+
+	public function save_to_file($uid, $path){
+
+		$fp = fopen($path, 'w+');
+
+		if(!$fp)
+			return false;
+
+		/*
+		 * Somehow fetching a message with an empty message part which should fetch it
+		 * all doesn't work. (http://tools.ietf.org/html/rfc3501#section-6.4.5)
+		 *
+		 * That's why I first fetch the header and then the text.
+		 */
+		$header = $this->get_message_part($uid, 'HEADER');
+
+		if(!fputs($fp, $header))
+			return false;
+
+		$size = $this->get_message_part_start($uid,'TEXT');
+
+		while($line = $this->get_message_part_line()){
+			if(!fputs($fp, $line))
+				return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -1608,16 +1740,42 @@ class imap extends imap_bodystruct {
 	}
 
 	/**
+	 * Get the next UID for the selected mailbox
+	 *
+	 * @return string the next UID on the IMAP server
+	 */
+
+	public function get_uidnext(){
+
+		if(empty($this->selected_mailbox['uidnext'])){			
+			$command = 'STATUS "'.$this->addslashes($this->utf7_encode($this->selected_mailbox['name'])).'"  (UIDNEXT)'."\r\n";
+			$this->send_command($command);
+			$result = $this->get_response(false, true);
+			
+			$vals = array_shift($result);
+			if($vals){
+				foreach ($vals as $i => $v) {
+					if (intval($v) && isset($vals[($i - 1)]) && $vals[($i - 1)] == 'UIDNEXT') {
+						$this->selected_mailbox['uidnext'] = $v;
+					}
+				}
+			}
+		}
+
+		return $this->selected_mailbox['uidnext'];		
+	}
+
+	/**
 	 * End's a line by line append operation
 	 *
 	 * @return <type>
 	 */
 	public function append_end() {
 		$result = $this->get_response(false, true);
-		$status = $this->check_response($result, true);
-		if($status){
+		return  $this->check_response($result, true);
+		/*if($status){
 			return !empty($this->selected_mailbox['uidnext']) ? $this->selected_mailbox['uidnext'] : true;
-		}
+		}*/
 	}
 
 	/**

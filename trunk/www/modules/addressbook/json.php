@@ -252,6 +252,36 @@ try
 			echo json_encode($response);
 			break;
 
+		case 'search_email_contacts':
+
+			$response['total']=$ab->search_contacts_email(
+			$GO_SECURITY->user_id,
+			$query,
+			$start,
+			$limit,
+			$sort,
+			$dir
+			);
+
+			$response['results']=array();
+
+			$addressbooks=array();
+
+			$ab2 = new addressbook();
+
+			while($record = $ab->next_record())
+			{
+				if(!isset($addressbooks[$record['addressbook_id']]))
+					$addressbooks[$record['addressbook_id']]=$ab2->get_addressbook($record['addressbook_id']);
+
+				$record['ab_name']=$addressbooks[$record['addressbook_id']]['name'];
+				$record['name']=String::format_name($record);
+				$response['results'][] = $record;
+			}
+			echo json_encode($response);
+
+			break;
+
 		case 'companies':
 			
 			if(!isset($_POST['enable_mailings_filter']))

@@ -24,6 +24,7 @@ javascript/windows/LoginDialog.js
 
 javascript/data/JsonStore.js
 javascript/grids/GridPanel.js
+javascript/grids/MultiSelectGrid.js
 javascript/grids/GroupSummary.js
 javascript/grids/RemoteGridTotals.js
 javascript/RecordsContextMenu.js

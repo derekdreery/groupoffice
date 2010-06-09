@@ -360,3 +360,7 @@ GO.lang.thankyou='Thank you';
 GO.lang.applyMultiselect='Apply multiselect';
 
 GO.lang.createdBy='Created by';
+
+
+GO.lang.debugModeDetected="Warning! Debug mode enabled";
+GO.lang.debugModeWarning="Use $config['debug']=true; only with development and problem solving. It slows Group-Office down.";

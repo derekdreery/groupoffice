@@ -18,3 +18,10 @@ $lang['users']['error_email']='La dirección de correo electrónico no es válid
 $lang['users']['imported']='%s importados de usuario';
 $lang['users']['failed']='Error';
 $lang['users']['incorrectFormat']='Archivo no era correcta en formato CSV';
+$lang['users']['register_email_body']='Se ha creado una cuenta Group-Office para Ud. en {url}
+Sus datos de logueo son:
+
+Usuario: {username}
+Contraseña: {password}';
+
+

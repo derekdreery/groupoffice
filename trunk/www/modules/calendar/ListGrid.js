@@ -59,7 +59,8 @@ GO.calendar.ListGrid = function(config)
 	config.columns=[
 		{
 			header:GO.lang.strDay,
-			dataIndex: 'day'
+			dataIndex: 'day',
+			menuDisabled:true
 		},		
 		{
 			header:GO.lang.strTime,
@@ -68,13 +69,15 @@ GO.calendar.ListGrid = function(config)
 			renderer: function(v, metadata, record)
 			{
 				return '<div style="border:1px solid #c0c0c0;padding:2px;margin:2px;background-color:#'+record.data.background+';">'+v+'</div>';
-			}
+			},
+			menuDisabled:true
 		},		
 		{
 			id:'listview-calendar-name-heading',
 			header:GO.lang.strName,
 			dataIndex: 'name',
-			renderer: this.renderName
+			renderer: this.renderName,
+			menuDisabled:true
 		}];
 		
 	config.view=  new Ext.grid.GroupingView({
@@ -153,16 +156,14 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 
 			if(record.data.event_id)
 			{
-				GO.calendar.eventDialog.show({event_id: record.data.event_id});
+				GO.calendar.showEventDialog({event_id: record.data.event_id});
 				
-			}else			
-			if(record.data.task_id)
+			}else if(record.data.task_id)
 			{
-				GO.tasks.taskDialog.show({
+				GO.tasks.showTaskDialog({
 					task_id : record.data.task_id
-				})
-			}else
-			if(record.data.contact_id)
+				});
+			}else	if(record.data.contact_id)
 			{
 				GO.linkHandlers[2].call(this, record.data.contact_id);
 			}
@@ -195,8 +196,7 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 		event.startDate = Date.parseDate(event.start_time, this.dateTimeFormat);
 		event.endDate = Date.parseDate(event.end_time, this.dateTimeFormat);
 		
-		return event;
-		
+		return event;		
 	},
 	
 	removeEvent : function(){		
@@ -206,16 +206,7 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 	},
 	
   setDate : function(date, days, load)
-  {
-	  
-  	var oldStartDate = this.startDate;
-  	var oldEndDate = this.endDate;
-  	
-  	if(days)
-  	{
-  		//this.days=+days;
-  	}   
-  	
+  {  	
   	this.configuredDate = date;	    	
 
   	if(this.days>4)

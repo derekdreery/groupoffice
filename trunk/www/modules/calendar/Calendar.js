@@ -128,10 +128,9 @@ GO.calendar.MainPanel = function(config){
 				this.state.calendar_name=this.state.title=GO.calendar.defaultCalendar['name'];
 				this.state.comment=GO.calendar.defaultCalendar['comment'];
 			}
-			//this.calendarList.getSelectionModel().selectRecords(new Array(record));
-			this.setDisplay(this.state);
 
-			
+			//this.calendarList.getSelectionModel().selectRecords(new Array(record));
+			this.setDisplay(this.state);			
 		}
 	}, this);
 
@@ -177,7 +176,7 @@ GO.calendar.MainPanel = function(config){
 
 	
 
-	this.calendarList = new GO.calendar.CalendarSelectGrid({
+	this.calendarList = new GO.grid.MultiSelectGrid({
 		title:GO.calendar.lang.calendars,
 		store: this.calendarsStore
 	});
@@ -765,6 +764,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		this.state.calendars=[GO.calendar.defaultCalendar.id];		
 		this.state.view_id=0;
 		this.state.group_id=1;
+
+		this.state.applyFilter=true;
+		this.calendarsStore.on('load', function(){
+			this.state.applyFilter=false;
+		}, this, {single:true});
 				
 		this.init();	
 		this.createDaysGrid();
@@ -1200,7 +1204,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			if(this.group_id==1){
 				selectGrid = this.calendarList;
 
-				selectGrid.applyFilter(this.calendars, true);
+				if(config.applyFilter)
+					selectGrid.applyFilter(this.calendars, true);
+				
 				this.resourcesList.getSelectionModel().clearSelections();
 			}else
 			{
