@@ -111,6 +111,7 @@ GO.tasks.TasksPanel = function(config)
 		config.enableColumnMove=true;
 
 		// custom template for the grid header
+                /*
 		var headerTpl = new Ext.Template(
 			'<table border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
 			'<thead><tr class="x-grid3-hd-row">{cells}</tr></thead>',
@@ -122,14 +123,17 @@ GO.tasks.TasksPanel = function(config)
 			'</tr></tbody>',
 			"</table>"
 			);
+                */
 
 		config.view=new Ext.grid.GridView({
 			//autoFill: true,
 			//forceFit: true,
 			emptyText: GO.tasks.lang.noTask,
+                        /*
 			templates: {
 				header: headerTpl
 			},
+                        */
 			getRowClass : function(record, rowIndex, p, store){
 				if(record.data.late){
 					return 'tasks-late';
