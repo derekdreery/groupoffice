@@ -92,20 +92,23 @@ GO.addressbook.ContactProfilePanel = function(config)
 		this.formEmail = new Ext.form.TextField(
 		{
 			fieldLabel: GO.lang['strEmail'],
-			name: 'email'
+			name: 'email',
+			vtype:'email'
 		
 		});
 	
 		this.formEmail2 = new Ext.form.TextField(
 		{
 			fieldLabel: GO.lang['strEmail'] + ' 2',
-			name: 'email2'
+			name: 'email2',
+			vtype:'email'
 		});
 	
 		this.formEmail3 = new Ext.form.TextField(
 		{
 			fieldLabel: GO.lang['strEmail'] + ' 3',
-			name: 'email3'
+			name: 'email3',
+			vtype:'email'
 		});
 	
 		this.formHomePhone = new Ext.form.TextField(

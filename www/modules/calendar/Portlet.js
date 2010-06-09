@@ -136,7 +136,7 @@ Ext.extend(GO.calendar.SummaryGroupPanel, Ext.grid.GridPanel, {
 				GO.linkHandlers[2].call(this, record.data.contact_id);
 			}else
 			{				
-				GO.calendar.eventDialog.show({
+				GO.calendar.showEventDialog({
 					event_id: record.data.event_id
 				});
 			}

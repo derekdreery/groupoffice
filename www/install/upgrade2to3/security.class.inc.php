@@ -77,44 +77,7 @@ class UPGRADE_GO_SECURITY extends db {
 	 * @return void
 	 */
 	function logged_in( $user_id=null ) {
-		global $GO_USERS, $GO_CONFIG;
-
-		if(isset($user_id)) {
-			$GO_USERS->update_session($user_id, true);
-			$this->user_id = $user_id;
-
-			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-			$fs = new filesystem();
-			if(is_dir($GO_CONFIG->tmpdir.$this->user_id.'/'))
-			{
-				$fs->delete($GO_CONFIG->tmpdir.$this->user_id.'/');
-			}
-			$fs->mkdir_recursive($GO_CONFIG->tmpdir.$this->user_id.'/');
-
-		}else {
-			if(empty($this->user_id)) {
-				global $GO_AUTH;
-
-				if(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
-					$username = $_SERVER['PHP_AUTH_USER'];
-					$password = $_SERVER['PHP_AUTH_PW'];
-
-					if($GO_AUTH->login($username, $password)) {
-						$this->http_authenticated_session=$_SESSION['GO_SESSION']['http_authenticated_user']=true;
-						return true;
-					}
-				}elseif(!empty($_COOKIE['GO_UN']) && !empty($_COOKIE['GO_PW'])) {
-					$username = $_COOKIE['GO_UN'];
-					$password = $_COOKIE['GO_PW'];
-
-					return $GO_AUTH->login($username, $password);
-				}
-
-				return false;
-			}
-
-			return ($this->user_id > 0);
-		}
+		return false;
 	}
 
 	/**

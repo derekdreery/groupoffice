@@ -556,6 +556,7 @@ try {
 					$ab = new addressbook();
 
 					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
+					$response['company']= $contact['company_id'] > 0 ? $ab->get_company($contact['company_id']) : false;
 					$response['sender_contact_id']=intval($contact['id']);
 
 					if($response['sender_contact_id']) {

@@ -666,7 +666,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20100603';
+	var $mtime = '20100608';
 
 	#group configuration
 	/**
@@ -1172,6 +1172,9 @@ class GO_CONFIG {
 		$response['config']['allow_profile_edit']=$this->allow_profile_edit;
 
 		$response['config']['max_users']=$this->max_users;
+
+		$response['config']['debug']=$this->debug;
+
 
 		return $response;
 	}

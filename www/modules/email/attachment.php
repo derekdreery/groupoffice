@@ -75,6 +75,7 @@ if ($browser['name'] == 'MSIE') {
 	header('Content-Disposition: attachment; filename="'.$_REQUEST['filename'].'"');
 }
 header('Content-Transfer-Encoding: binary');
+header('Content-Length: '.strlen($file));
 
 echo $file;
 

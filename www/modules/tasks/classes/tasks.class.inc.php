@@ -723,7 +723,12 @@ class tasks extends db
                 }
 
 		if($sort_field != '' && $sort_order != '') {
-			$sql .=	" ORDER BY ".$this->escape($sort_field)." ".$this->escape($sort_order)."";
+			if($sort_field=='portlet'){
+				$sql .=	" ORDER BY t.tasklist_id ASC, due_time DESC";
+			}else
+			{
+				$sql .=	" ORDER BY ".$this->escape($sort_field)." ".$this->escape($sort_order);
+			}
 		}
 
 		$_SESSION['GO_SESSION']['export_queries']['get_tasks']=array(

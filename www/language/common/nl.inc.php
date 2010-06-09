@@ -216,3 +216,4 @@ $lang['common']['youHaveReminders']='U heeft %s in %s.';
 $lang['common']['createdBy']='Gemaakt door';
 
 $lang['common']['alert']='Attentie';
+$lang['common']['theFolderAlreadyExists']='Er bestaat al een map met deze naam';

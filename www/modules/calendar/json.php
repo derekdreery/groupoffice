@@ -374,9 +374,18 @@ try {
 							'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
 							'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
 							'C43B3B','996600','66FF99','999999','FFFFFF');
+
+			$default_colors_count = count($default_colors);
+
 			$default_bg = array();
-			foreach ($calendars as $k=>$v)
-				$default_bg[$v] = $default_colors[$k];
+			$index = 0;
+			foreach ($calendars as $k=>$v){
+				$index++;
+				if($index>=$default_colors_count)
+					$index=0;
+
+				$default_bg[$v] = $default_colors[$index];
+			}
 
 			$calendar_id=$calendars[0];
 			
@@ -655,9 +664,15 @@ try {
 			$response=array();
 			$count=0;
 			$cal->get_view_calendars($view_id);
-			while($cal->next_record()) {
-				$response[$cal->f('id')] = $cal2->get_calendar($cal->f('id'));
-				$response[$cal->f('id')]['write_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $cal2->f('acl_id'))>1;
+			while($view_calendar = $cal->next_record()) {
+
+		
+				$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $view_calendar['acl_id']);
+				if(!$permission_level)
+					continue;
+
+				$response[$cal->f('id')] = $view_calendar;
+				$response[$cal->f('id')]['write_permission'] = $permission_level>GO_SECURITY::READ_PERMISSION;
 
 				$events = $cal2->get_events_in_array(array($cal->f('id')), 0,
 								$start_time,
