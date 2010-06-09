@@ -47,6 +47,10 @@ class cached_imap extends imap{
 	{
 		$this->email = new email();
 		//parent::__construct();
+
+		global $GO_CONFIG;
+		$this->disable_message_cache=$GO_CONFIG->debug;
+
 	}
 
 	public function is_imap(){
@@ -667,7 +671,7 @@ class cached_imap extends imap{
 
 		$struct = $this->get_message_structure($message['uid']);
 
-		//go_debug($struct);
+		
 
 		if(count($struct)==1) {
 			$header_ct = explode('/', $message['content-type']);
@@ -715,6 +719,7 @@ class cached_imap extends imap{
 		go_debug('Default charset: '.$this->default_charset);
 
 		$plain_parts = $this->find_body_parts($struct,'text', 'plain');
+		go_debug($plain_parts);
 		for($i=0,$max=count($plain_parts['parts']);$i<$max;$i++)
 		{
 			if(empty($plain_parts['parts'][$i]['charset']))
@@ -724,6 +729,7 @@ class cached_imap extends imap{
 		}
 
 		$html_parts = $this->find_body_parts($struct,'text', 'html');
+		go_debug($html_parts);
 		for($i=0,$max=count($html_parts['parts']);$i<$max;$i++)
 		{
 			if(empty($html_parts['parts'][$i]['charset']))
