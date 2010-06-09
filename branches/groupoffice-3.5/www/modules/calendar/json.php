@@ -378,8 +378,12 @@ try {
 			$default_colors_count = count($default_colors);
 
 			$default_bg = array();
+			$index = 0;
 			foreach ($calendars as $k=>$v){
-				$index = $k>=$default_colors_count ? $k-$default_colors_count : $k;
+				$index++;
+				if($index>=$default_colors_count)
+					$index=0;
+
 				$default_bg[$v] = $default_colors[$index];
 			}
 
