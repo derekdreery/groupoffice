@@ -39,6 +39,9 @@ GO.calendar.SelectCalendar = function(config){
 		remoteSort:true
 	});
 
+	if(!config.emptyText)
+		this.emptyText=GO.lang.strPleaseSelect;
+
 	GO.calendar.SelectCalendar.superclass.constructor.call(this,{
 		displayField: 'name',
 		valueField: 'id',
@@ -46,8 +49,7 @@ GO.calendar.SelectCalendar = function(config){
 		editable: true,
 		selectOnFocus:true,
 		forceSelection: true,
-		typeAhead: true,
-		emptyText:GO.lang.strPleaseSelect,
+		typeAhead: true,		
         tpl: new Ext.XTemplate(
             '<h1></h1>',
             '<tpl for=".">',
