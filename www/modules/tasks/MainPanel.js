@@ -13,43 +13,40 @@ GO.tasks.MainPanel = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
-		fields:['id','dom_id','name']
+		fields:['id','dom_id','name','checked']
 	});
 
-
-	this.taskListsPanel= new GO.grid.GridPanel({
+        this.taskListsPanel= new GO.tasks.TasklistsGrid({
 		id:'ta-tasksgrid',
 		region:'center',
 		store: this.taskListsStore,
 		cls:'go-grid3-hide-headers',
 		title: GO.tasks.lang.tasklists,
 		items:this.tasksLists,
-		loadMask:true,                
-		autoScroll:true,
-		border:true,
-		split:true,
-		sm: new Ext.grid.RowSelectionModel({
-			singleSelect:true
-		}),
+                loadMask:true,
 		viewConfig: {
 			forceFit:true,
 			autoFill: true
-		},
-		columns: [
-		{
-			header: GO.lang.strName,
-			dataIndex: 'name'
 		}
-		]
 	});
-		
-	this.taskListsPanel.on('rowclick', function(grid, index){
-		this.tasklist_id = grid.store.data.items[index].data.id;
-		this.tasklist_name = grid.store.data.items[index].data.name;
-		//this.gridPanel.tasklist_id=this.tasklist_id;
-		this.gridPanel.store.baseParams['tasklist_id']=this.tasklist_id;
-		this.gridPanel.store.load();
+
+        this.taskListsPanel.on('change', function(grid, tasklists, records)
+	{                		                
+                this.gridPanel.store.baseParams.tasklists = Ext.encode(tasklists);
+                this.gridPanel.store.reload();
+                this.tasklist_ids = tasklists;
+
+                if(records.length)
+                {
+                        this.gridPanel.populateComboBox(records);
+
+                        this.tasklist_id = records[0].data.id;
+                        this.tasklist_name = records[0].data.name;
+                }
+
+                delete this.gridPanel.store.baseParams.tasklists;
 	}, this);
+       
 				
 	var showCompletedCheck = new Ext.form.Checkbox({
 		boxLabel: GO.tasks.lang.showCompletedTasks,
@@ -93,13 +90,14 @@ GO.tasks.MainPanel = function(config){
                 id:'ta-categories-grid',
                 title:GO.tasks.lang.categories,
                 region:'south',
+                loadMask:true,
                 height:220,
                 store:GO.tasks.categoriesStore
         });
 
         this.categoriesPanel.on('change', function(grid, categories, records)
 	{
-                this.gridPanel.store.baseParams.categories = Ext.encode(categories);                
+                this.gridPanel.store.baseParams.categories = Ext.encode(categories);
 		this.gridPanel.store.reload();
                 
 		delete this.gridPanel.store.baseParams.categories;
@@ -129,12 +127,20 @@ GO.tasks.MainPanel = function(config){
 		this.deleteButton.setDisabled(!store.reader.jsonData.data.write_permission);
 		this.addButton.setDisabled(!store.reader.jsonData.data.write_permission);
 
-		this.gridPanel.setTitle(this.tasklist_name);
+		this.gridPanel.setTitle(store.reader.jsonData.grid_title);
 
-		if(this.taskPanel.data.tasklist_id!=this.tasklist_id)
-		{
-			this.taskPanel.reset();
-		}
+                var found = false
+                for(var i=0; i<this.tasklist_ids.length; i++)
+                {
+                        if(this.tasklist_ids[i] == this.taskPanel.data.tasklist_id)
+                        {                                
+                                found = true;
+                        }
+                }
+                if(!found)
+                {
+                       this.taskPanel.reset();
+                }
 		
 	}, this);
 	
@@ -254,6 +260,8 @@ GO.tasks.MainPanel = function(config){
 }
  
 Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
+
+        tasklist_ids: [],
 	afterRender : function()
 	{
 		GO.tasks.MainPanel.superclass.afterRender.call(this);
@@ -265,12 +273,11 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				this.gridPanel.store.reload();
 			}
 		});
-
+                
 		this.taskListsStore.on('load', function(){
-
+                        /*
 			var defaultRecord;
-
-			if(this.gridPanel.store.baseParams.tasklist_id)
+			if(this.gridPanel.store.baseParams.tasklists)
 				defaultRecord=this.taskListsStore.getById(this.gridPanel.store.baseParams.tasklist_id);
 			
 			if(!defaultRecord)
@@ -290,6 +297,28 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				},
 				scope: this
 			});
+                        */
+                        
+                        var records = [];
+                        for(var i=0; i<this.taskListsStore.data.length; i++)
+                        {
+                                var item = this.taskListsStore.data.items[i];                                
+                                if(item.data.checked)
+                                {
+                                        records.push(item);
+                                }
+                        }
+
+                        if(records.length)
+                        {
+                                this.gridPanel.populateComboBox(records);
+
+                                this.tasklist_id = records[0].data.id;
+                                this.tasklist_name = records[0].data.name;
+                        }
+                       
+                        this.gridPanel.store.load();
+                       
 		},this);
 
 		this.taskListsStore.load();

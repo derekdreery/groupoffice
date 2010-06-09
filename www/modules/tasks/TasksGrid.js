@@ -144,6 +144,63 @@ GO.tasks.TasksPanel = function(config)
 			width:320
 		});
 
+
+                this.ntName = new Ext.form.TextField({
+			emptyText: GO.tasks.lang.addTask,
+                        fieldLabel:GO.lang['strName'],
+                        flex:1
+                                                
+		});	
+
+                this.ntTasklist = new GO.form.ComboBox({
+			fieldLabel:GO.tasks.lang.tasklist,
+			valueField:'id',
+			displayField:'name',
+                        store: new Ext.data.ArrayStore({
+                                fields: ['id', 'name']
+                        }),
+			mode:'local',
+			triggerAction:'all',
+			editable:false,
+			selectOnFocus:true,
+			forceSelection:true
+                });
+                this.ntTasklist.on('select', function(combo, record){
+                        this.store.baseParams.tasklist_id = record.data.id;
+                })
+
+                this.ntDue = new Ext.form.DateField({
+			value: new Date(),
+                        fieldLabel:GO.tasks.lang.dueDate,
+			disabled:true,
+			format : GO.settings.date_format
+		});
+
+                this.btnNewTask = new Ext.Button({
+                        text: GO.lang['cmdAdd'],
+                        width:100,
+                        handler:function()
+                        {this.userTriggered = true;
+                                this.doBlur();
+                        },
+                        disabled:true,
+                        scope: this
+                })
+
+                config.items=[
+                    new Ext.form.FormPanel({
+                        border:false,          
+                        baseCls:'x-border-layout-ct',
+                        height:30,
+                        items:[{
+                            xtype:'compositefield',                                                        
+                            labelWidth:120,
+                            hideLabel:true,
+                            items:[this.ntName, this.ntTasklist, this.ntDue, this.btnNewTask]
+                        }]
+                    })
+                ];
+
 		config.tbar = [GO.lang['strSearch'] + ':', this.searchField];
 	
 		GO.tasks.TasksPanel.superclass.constructor.call(this, config);
@@ -156,25 +213,27 @@ GO.tasks.TasksPanel = function(config)
 Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 	
 	saveListenerAdded : true,
-	
+
+        populateComboBox : function(records)
+        {
+                var data = [];
+                
+                for(var i=0; i<records.length; i++)
+                {
+                        var tasklist = []                        
+                        tasklist.push(records[i].id);
+                        tasklist.push(records[i].data.name);                        
+
+                        data.push(tasklist);
+                }
+
+                this.ntTasklist.store.loadData(data);
+                this.ntTasklist.setValue(this.ntTasklist.store.getAt(0).data.id);
+        },
+        
 	afterRender : function()
 	{
-		GO.tasks.TasksPanel.superclass.afterRender.call(this);
-		
-		// The fields in the grid's header
-		this.ntName = new Ext.form.TextField({
-			renderTo: 'new-task-name',
-			emptyText: GO.tasks.lang.addTask,
-			width: 200
-		});
-
-		this.ntDue = new Ext.form.DateField({
-			renderTo: 'new-task-due',
-			value: new Date(),
-			disabled:true,
-			format : GO.settings.date_format			
-		});
-    
+		GO.tasks.TasksPanel.superclass.afterRender.call(this);               
    
 		/*this.ntSelectLink = new GO.form.SelectLink({
     	renderTo:'new-task-link',
@@ -199,27 +258,27 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 
     
     
-    
-    
-    
 		this.editing = false;
 		this.focused = false;
 		this.userTriggered = false;
     
-		var handlers = {
+		var handlers = {                    
 			focus: function(){
 				this.focused = true;
 			},
 			blur: function(){
 				this.focused = false;
 				this.doBlur.defer(250, this);
+                                if(Ext.isEmpty(this.ntName.getValue())){
+                                        this.btnNewTask.disable();
+                                }
 			},
 			specialkey: function(f, e){
 				if(e.getKey()==e.ENTER){
 					this.userTriggered = true;
-					e.stopEvent();
-					f.el.blur();
-					if(f.triggerBlur){
+					e.stopEvent();                                        
+					f.el.blur();                                        
+					if(f.triggerBlur){                                            
 						f.triggerBlur();
 					}
 				}
@@ -234,18 +293,19 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 
 		this.ntName.on('focus', function(){
 			this.focused = true;
+                        this.btnNewTask.enable();
 			if(!this.editing){
 				this.ntDue.enable();
 				//this.ntSelectLink.enable();
-				this.syncFields();
+				//this.syncFields();
 				this.editing = true;
 			}
 		}, this);
 
     
 		//there should be a view ready event
-		this.syncFields.defer(200,this);
-		  
+		//this.syncFields.defer(200,this);
+              		  
 	},
 	
 	syncFields : function(){
@@ -260,17 +320,18 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 	// when a field in the add bar is blurred, this determines
 	// whether a new task should be created
 	doBlur : function(){
-		if(this.editing && !this.focused){
+		if(this.userTriggered && this.editing && !this.focused){
 			var taskname = this.ntName.getValue();
-			var due = this.ntDue.getValue();
+			var due = this.ntDue.getValue();                        
+                        var tasklist_id = this.ntTasklist.getValue();
 			// var link = this.ntSelectLink.getValue();
-			if(!Ext.isEmpty(taskname)){
+			if(!Ext.isEmpty(taskname) && due){
             
 				Ext.Ajax.request({
 					url: GO.settings.modules.tasks.url+'action.php',
 					params: {
 						task: 'save_task',
-						tasklist_id: this.store.baseParams.tasklist_id,
+						tasklist_id: tasklist_id,
 						name: taskname,
 						//link: link,
 						start_date: due.format(GO.settings.date_format),
@@ -306,8 +367,12 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 			}
 			//this.ntSelectLink.reset();
 			//this.ntSelectLink.disable();
-			this.ntDue.disable();
-			this.editing = false;
+                        if(due)
+                        {
+                                this.ntDue.disable();
+                                this.btnNewTask.disable();
+                                this.editing = false;
+                        }
 		}
 	}
 });

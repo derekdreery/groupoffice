@@ -249,6 +249,9 @@ try{
 
 			$auth_type = isset($_POST['auth_type']) ? $_POST['auth_type'] : 'read';
 
+                        $tasklists = $GO_CONFIG->get_setting('tasks_tasklists_filter', $GO_SECURITY->user_id);
+			$tasklists = ($tasklists) ? explode(',',$tasklists) : array();
+
 			$response['total'] = $tasks->get_authorized_tasklists($auth_type, $query, $GO_SECURITY->user_id, $start, $limit, $sort, $dir);
 			if(!$response['total'])
 			{
@@ -256,14 +259,17 @@ try{
 				$response['total'] = $tasks->get_authorized_tasklists($auth_type, $query, $GO_SECURITY->user_id, $start, $limit, $sort, $dir);
 			}
 			$response['results']=array();
+                        $tasklist_names = array();
 			while($tasklist = $tasks->next_record(DB_ASSOC))
 			{
 				$tasklist['dom_id']='tl-'.$tasks->f('id');
 				$user = $GO_USERS->get_user($tasklist['user_id']);
 				$tasklist['user_name']=String::format_name($user);
+                                $tasklist['checked'] = in_array($tasklist['id'], $tasklists);                                
+                                
 				$response['results'][] = $tasklist;
 			}
-
+                        
 			break;
 
 
@@ -271,8 +277,89 @@ try{
 
 			$GO_LANGUAGE->require_language_file('tasks');
 
-			
-			if(isset($_REQUEST['tasklist_id']))
+                        if(!isset($_REQUEST['portlet']))
+                        {
+                                if(isset($_POST['tasklists'])) {
+                                        $tasklists = json_decode($_POST['tasklists'], true);
+                                        $GO_CONFIG->save_setting('tasks_tasklists_filter',implode(',', $tasklists), $GO_SECURITY->user_id);
+                                } else {
+                                        $tasklists = $GO_CONFIG->get_setting('tasks_tasklists_filter', $GO_SECURITY->user_id);
+                                        $tasklists = ($tasklists) ? explode(',',$tasklists) : array();
+                                }
+
+                                if(count($tasklists))
+                                {
+                                        $user_id = 0;
+                                        $authorized_tasklists = array();
+                                        $permission_level = 0;
+                                        $response['data']['permission_level'] = 0;
+                                        $tasklist_names = array();
+                                        foreach($tasklists as $tasklist_id)
+                                        {
+                                                $tasklist = $tasks->get_tasklist($tasklist_id);
+
+                                                $permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id']);
+                                                if($permission_level)
+                                                {
+                                                        $authorized_tasklists[] = $tasklist_id;
+                                                }
+
+                                                if($permission_level > $response['data']['permission_level'])
+                                                {
+                                                        $response['data']['permission_level'] = $permission_level;
+                                                }
+
+                                                $tasklist_names[] = $tasklist['name'];
+                                        }
+
+                                        $response['grid_title'] = implode(' & ', $tasklist_names);
+
+                                        $response['data']['write_permission']=$response['data']['permission_level']>1;
+                                        if(!$response['data']['permission_level'])
+                                        {
+                                                throw new AccessDeniedException();
+                                        }
+                                }
+
+                                 if(isset($_POST['categories'])) {
+                                        $categories = json_decode($_POST['categories'], true);
+                                        $GO_CONFIG->save_setting('tasks_categories_filter',implode(',', $categories), $GO_SECURITY->user_id);
+                                } else {
+                                        $categories = $GO_CONFIG->get_setting('tasks_categories_filter', $GO_SECURITY->user_id);
+                                        $categories = ($categories) ? explode(',',$categories) : array();
+                                }
+                        }else
+                        {
+                                $user_id = $GO_SECURITY->user_id;
+                                $response['data']['write_permission']=true;
+
+                                $categories = array();
+				$tasklists = array();
+				$tasklists_name = array();
+				if(isset($_REQUEST['portlet']))
+				{
+					if($tasks->get_visible_tasklists($user_id) == 0){
+
+						$tasklist = $tasks->get_default_tasklist($user_id);
+						$vt['tasklist_id']=$tasklist['id'];
+						$vt['user_id']=$user_id;
+						$tasks->add_visible_tasklist($vt);
+
+						$tasks->get_visible_tasklists($user_id);
+					}
+					while($tasks->next_record())
+					{
+						$cur_tasklist = $tasks2->get_tasklist($tasks->f('tasklist_id'));
+						$tasklists[] = $tasks->f('tasklist_id');
+						$tasklists_name[] = $cur_tasklist['name'];
+					}
+
+					$user_id = 0;
+				}
+                                
+                        }
+                        
+			/*if(isset($_REQUEST['tasklist_id']))
 			{
 				$tasklist_id = $_REQUEST['tasklist_id'];
 				$user_id=0;
@@ -315,6 +402,8 @@ try{
 					$user_id = 0;
 				}
 			}
+                         * 
+                         */
 
 			if(isset($_POST['delete_keys']))
 			{
@@ -363,16 +452,7 @@ try{
 				}
 
 				$tasks->update_task($task, false, $old_task);
-			}
-
-
-                        if(isset($_POST['categories'])) {
-				$categories = json_decode($_POST['categories'], true);				
-				$GO_CONFIG->save_setting('tasks_categories_filter',implode(',', $categories), $GO_SECURITY->user_id);
-			} else {
-				$categories = $GO_CONFIG->get_setting('tasks_categories_filter', $GO_SECURITY->user_id);
-				$categories = ($categories) ? explode(',',$categories) : array();
-			}
+			}                                 
 
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'due_time ASC, ctime';
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
@@ -396,7 +476,6 @@ try{
 
 			$response['total'] = $tasks->get_tasks($tasklists,$user_id, $show_completed, $sort, $dir, $start, $limit,$show_inactive, $query, $categories);
 			$response['results']=array();
-
 			
 
 			if($GO_MODULES->has_module('customfields')) {
