@@ -155,7 +155,7 @@ try {
 			$task['due_time']=Date::to_unixtime($_POST['due_date']);
 			$task['start_time']=Date::to_unixtime($_POST['start_date']);
 			$task['tasklist_id']=$_POST['tasklist_id'];
-                        $task['category_id']=$_POST['category_id'];
+                        $task['category_id']=(isset($_REQUEST['category_id']) && $_REQUEST['category_id']) ? $_REQUEST['category_id'] : 0;
 
 			$tasklist = $tasks->get_tasklist($task['tasklist_id']);
 			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {

@@ -667,7 +667,7 @@ class tasks extends db
 		}
 
 
-		if($user_id > 0) {
+		if($user_id > 0) {                    
 			if($where) {
 				$sql .= " AND ";
 			}else {
