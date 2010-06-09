@@ -1348,15 +1348,17 @@ class imap extends imap_bodystruct {
 	 */
 	public function get_message_part_start($uid, $message_part=0) {
 		$this->clean($uid, 'uid');
-		if ($message_part == 0) {
+		if (empty($message_part)) {
 			$command = "UID FETCH $uid BODY[]\r\n";
 		}
 		else {
-			$this->clean($message_part, 'msg_part');
+			//$this->clean($message_part, 'msg_part');
 			$command = "UID FETCH $uid BODY[$message_part]\r\n";
 		}
 		$this->send_command($command);
-		$result = fgets($this->handle, 1024);
+		$result = fgets($this->handle);
+
+		//go_debug($result);
 		$size = false;
 		if (preg_match("/\{(\d+)\}\r\n/", $result, $matches)) {
 			$size = $matches[1];
@@ -1369,14 +1371,45 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 	public function get_message_part_line() {
-		$res = fgets($this->handle, 1024);
+		/*$res = fgets($this->handle, 1024);
 		while(substr($res, -2) != "\r\n") {
 			$res .= fgets($this->handle, 1024);
-		}
+		}*/
+
+		$res = fgets($this->handle);
+		//go_debug($res);
 		if ($this->check_response(array($res))) {
 			$res = false;
 		}
 		return $res;
+	}
+
+	public function save_to_file($uid, $path){
+
+		$fp = fopen($path, 'w+');
+
+		if(!$fp)
+			return false;
+
+		/*
+		 * Somehow fetching a message with an empty message part which should fetch it
+		 * all doesn't work. (http://tools.ietf.org/html/rfc3501#section-6.4.5)
+		 *
+		 * That's why I first fetch the header and then the text.
+		 */
+		$header = $this->get_message_part($uid, 'HEADER');
+
+		if(!fputs($fp, $header))
+			return false;
+
+		$size = $this->get_message_part_start($uid,'TEXT');
+
+		while($line = $this->get_message_part_line()){
+			if(!fputs($fp, $line))
+				return false;
+		}
+
+		return true;
 	}
 
 	/**
