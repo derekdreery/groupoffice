@@ -34,13 +34,22 @@ $account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 if($account['user_id']!=$GO_SECURITY->user_id)
 	exit($lang['common']['access_denied']);
 
-
 header("Content-type: text/plain; charset: US-ASCII");
-header('Content-Disposition: inline; filename="message_source.txt"');	
+header('Content-Disposition: inline; filename="message_source.txt"');
 
-$imap->get_message_part_start($_REQUEST['uid']);
+/*
+ * Somehow fetching a message with an empty message part which should fetch it
+ * all doesn't work. (http://tools.ietf.org/html/rfc3501#section-6.4.5)
+ *
+ * That's why I first fetch the header and then the text.
+ */
+$header = $imap->get_message_part($_REQUEST['uid'], 'HEADER');
+$size = $imap->get_message_part_start($_REQUEST['uid'],'TEXT');
+
+header('Content-Length: '.strlen($header).$size);
+
+echo $header;
+
 while($line = $imap->get_message_part_line()){
 	echo $line;
 }
-
-
