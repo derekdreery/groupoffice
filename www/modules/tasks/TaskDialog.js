@@ -68,6 +68,10 @@ GO.tasks.TaskDialog = function() {
 
 Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
+	afterRender : function(){
+		GO.tasks.TaskDialog.superclass.afterRender.call(this);
+	},
+	
 	show : function(config) {
 
 		if (!config) {
@@ -91,7 +95,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		}
 
 		this.setTaskId(config.task_id);
-
+		
 		// this.selectTaskList.container.up('div.x-form-item').setDisplayed(false);
 
 		if (config.task_id > 0) {
@@ -316,18 +320,10 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			fieldLabel:GO.tasks.lang.category,
 			valueField:'id',
 			displayField:'name',			
-                        store: new GO.data.JsonStore({
-                                url: GO.settings.modules.tasks.url+ 'json.php',
-                                baseParams: {
-                                        task: 'categories'
-                                },
-                                root: 'results',
-                                id: 'id',
-                                totalProperty:'total',
-                                fields:['id','name','user_name','checked'],
-                                remoteSort: true
+			store: new Ext.data.ArrayStore({
+                                fields: ['id', 'name']
                         }),
-			mode:'remote',
+			mode:'local',
 			triggerAction:'all',
                         emptyText:GO.tasks.lang.selectCategory,
 			editable:false,
@@ -335,7 +331,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			forceSelection:true
                 });
 
-
+		
 
 		var propertiesPanel = new Ext.Panel({
 			hideMode : 'offsets',
@@ -575,6 +571,23 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			items : this.tabPanel
 		});
 	},
+
+	populateComboBox : function(records)
+        {
+                var data = [];		
+
+                for(var i=0; i<records.length; i++)
+                {
+                        var tasklist = []
+                        tasklist.push(records[i].id);
+                        tasklist.push(records[i].data.name);
+
+                        data.push(tasklist);
+                }
+
+                this.selectCategory.store.loadData(data);
+                this.selectCategory.setValue(this.selectCategory.store.getAt(0).data.id);
+        },
 
 	changeRepeat : function(value) {
 

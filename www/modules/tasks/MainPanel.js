@@ -106,6 +106,7 @@ GO.tasks.MainPanel = function(config){
 	this.gridPanel = new GO.tasks.TasksPanel( {
 		title:GO.tasks.lang.tasks,
 		id:'ta-tasks-grid',
+		loadMask:true,
 		region:'center'
 	});
 			
@@ -318,13 +319,20 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
                         }
                        
                         this.gridPanel.store.load();
+			GO.tasks.categoriesStore.load();
                        
 		},this);
 
+		GO.tasks.categoriesStore.on('load', function(){
+			if(GO.tasks.taskDialog)
+			{
+				GO.tasks.taskDialog.populateComboBox(GO.tasks.categoriesStore.data.items);
+			}
+		    
+		},this);
+
 		this.taskListsStore.load();
-
-                GO.tasks.categoriesStore.load();
-
+               
 		
 		GO.mainLayout.on('linksDeleted', function(deleteConfig, link_types){
 			GO.mainLayout.onLinksDeletedHandler(link_types[12], this, this.gridPanel.store);
@@ -351,7 +359,7 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 			}, this);
 
                         this.categoryDialog.on('save', function(){
-                                GO.tasks.categoriesStore.load();
+                                GO.tasks.categoriesStore.load();				
                         },this);
 			
 			this.tasklistsGrid = new GO.grid.GridPanel( {
@@ -508,6 +516,8 @@ GO.tasks.showTaskDialog = function(config){
 		}
 		delete GO.tasks.taskDialogListeners;
 	}
+
+	GO.tasks.taskDialog.populateComboBox(GO.tasks.categoriesStore.data.items);
 
 	GO.tasks.taskDialog.show(config);
 }
