@@ -36,13 +36,15 @@
 	});
 	this.store.setDefaultSort('name', 'asc');
 
+	if(!this.fieldLabel)
+		this.fieldLabel = GO.lang.userGroup;
 
-	this.setRemoteValue(GO.settings.group_id, GO.settings.name);
+	if(!this.hiddenName)
+		this.hiddenName = 'group_id';
+
 
 	GO.form.SelectGroup.superclass.constructor.call(this,{
-		displayField: 'name',
-		hiddenName:'group_id',
-		value: GO.settings.group_id,
+		displayField: 'name',				
 		valueField: 'id',
 		triggerAction: 'all',
 		selectOnFocus:true,
@@ -51,7 +53,7 @@
 	});
 }
 
-Ext.extend(GO.form.SelectGroup, GO.form.ComboBox,{
+Ext.extend(GO.form.SelectGroup, GO.form.ComboBoxReset,{
 	setRemoteValue : function(group_id, name)
 	{
 		var GroupRecord = Ext.data.Record.create([

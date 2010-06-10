@@ -189,17 +189,20 @@ CREATE TABLE IF NOT EXISTS `go_modules` (
 
 DROP TABLE IF EXISTS `go_reminders`;
 CREATE TABLE IF NOT EXISTS `go_reminders` (
-  `id` int(11) NOT NULL default '0',
-  `link_id` int(11) NOT NULL default '0',
+  `id` int(11) NOT NULL,
+  `link_id` int(11) NOT NULL,
   `link_type` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL default '0',
-  `name` varchar(100) default NULL,
-  `time` int(11) NOT NULL default '0',
-  `vtime` int(11) NOT NULL default '0',
-  `mail_send` tinyint(4) NOT NULL default '0',
-	`snooze_time` INT NOT NULL,
-  PRIMARY KEY  (`id`),
-  KEY `link_id` (`link_id`)
+  `user_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `time` int(11) NOT NULL,
+  `vtime` int(11) NOT NULL DEFAULT '0',
+  `mail_send` tinyint(4) NOT NULL DEFAULT '0',
+  `snooze_time` int(11) NOT NULL,
+  `manual` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `group_id` (`group_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

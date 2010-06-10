@@ -1,10 +1,10 @@
 <?php
 require('../../www/Group-Office.php');
 //name of the module. No spaces or strange characters.
-$module = 'blacklist';
+$module = 'reminders';
 
 //Short name of the module. The prefix of the database tables.
-$prefix = 'bl';
+$prefix = 'go_';
 
 $tables=array();
 //Tables to create an interface for
@@ -19,9 +19,9 @@ $tables=array();
 
 $westpanel = array(
 	'template'=>'GridPanel.tpl', //The template to use for the grid. This is the only option at the moment
-	'name'=>'bl_ips',  //Name of the table
-	'friendly_single'=>'ip', //Name for a single item in this table. Must be lower case and alphanummeric
-	'friendly_multiple'=>'ips',//Name for a multiple items in this table. Must be lower case and alphanummeric
+	'name'=>'go_reminders',  //Name of the table
+	'friendly_single'=>'reminder', //Name for a single item in this table. Must be lower case and alphanummeric
+	'friendly_multiple'=>'reminders',//Name for a multiple items in this table. Must be lower case and alphanummeric
 	'authenticate'=>false,//Secure these items with authentication? If true then acl_read and acl_write columns must be defined in the table
 	'paging'=>true, //Use pagination in the grid?
 	'autoload'=>false, //Automatically load this table with data after rendering?

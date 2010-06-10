@@ -389,3 +389,13 @@ $updates[]= "CREATE TABLE `go_holidays` (
 
 $updates[]= "ALTER TABLE  `go_reminders` ADD  `snooze_time` INT NOT NULL";
 $updates[]= "UPDATE go_reminders SET snooze_time=7200";
+$updates[]= "ALTER TABLE  `go_reminders` ADD  `manual` BOOLEAN NOT NULL";
+$updates[]= "ALTER TABLE  `go_reminders` DROP INDEX  `link_id`";
+$updates[]= "ALTER TABLE  `go_reminders` ADD  `group_id` INT NOT NULL AFTER  `user_id`";
+$updates[]= "ALTER TABLE  `go_reminders` ADD INDEX (  `group_id` )";
+$updates[]= "ALTER TABLE  `go_reminders` ADD INDEX (  `user_id` )";
+
+
+
+
+
