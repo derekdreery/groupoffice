@@ -20,28 +20,25 @@ GO.reminders.RemindersGrid = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	var fields ={
-		fields:['id','link_id','link_type','user_name','group_id','name','time','vtime','mail_send','snooze_time','manual'],
+		fields:['id','link_id','link_type','user_name','group_name','name','time','vtime','mail_send','snooze_time','manual'],
 		columns:[{
 			header: GO.lang.strName,
 			dataIndex: 'name'
 		},{
-			header: GO.lang.strOwner, 
+			header: GO.lang.strUser,
 			dataIndex: 'user_name',
 			sortable: false
 		}
 		,		{
-			header: GO.reminders.lang.groupId, 
-			dataIndex: 'group_id'
+			header: GO.lang.userGroup,
+			dataIndex: 'group_name'
 		}
-
 		,		{
 			header: GO.reminders.lang.time, 
 			dataIndex: 'time'
 		}
 		]
 	};
-
-	
 	
 	config.store = new GO.data.JsonStore({
 		url: GO.settings.modules.reminders.url+ 'json.php',

@@ -21,7 +21,9 @@ GO.reminders.ReminderDialog = function(config){
 	config.modal=false;
 	config.resizable=false;
 	config.width=500;
-	config.autoHeight=true;
+	config.height=500;
+	config.layout='border';
+	
 	config.closeAction='hide';
 	config.title= GO.reminders.lang.reminder;					
 	config.items= this.formPanel;
@@ -72,8 +74,8 @@ Ext.extend(GO.reminders.ReminderDialog, GO.Window,{
 				waitMsg:GO.lang['waitMsgLoad'],
 				success:function(form, action)
 				{					
-					this.selectUser.setRemoteText(action.result.data.user_name);
-					this.selectGroup.setRemoteText(action.result.data.group_name);
+					//this.selectUser.setRemoteText(action.result.data.user_name);
+					//this.selectGroup.setRemoteText(action.result.data.group_name);
 					this.selectLink.setRemoteText(action.result.data.link_name);
 
 					GO.reminders.ReminderDialog.superclass.show.call(this);
@@ -126,6 +128,8 @@ Ext.extend(GO.reminders.ReminderDialog, GO.Window,{
 	},
 	buildForm : function () {
 		this.formPanel = new Ext.FormPanel({
+			region:'north',
+			height:200,
 			waitMsgTarget:true,
 			url: GO.settings.modules.reminders.url+'action.php',
 			border: false,
@@ -138,7 +142,7 @@ Ext.extend(GO.reminders.ReminderDialog, GO.Window,{
 					bodyStyle:'font-size:12px;padding-bottom:10px;',
 					border:false
 			},
-			this.selectUser = new GO.form.SelectUser({
+			/*this.selectUser = new GO.form.SelectUser({
 				fieldLabel: GO.lang['strUser'],
 				startBlank:true,
 				anchor: '100%',
@@ -148,8 +152,8 @@ Ext.extend(GO.reminders.ReminderDialog, GO.Window,{
 				name: 'group_id',
 				anchor: '100%',
 				allowBlank:true
-			})
-			,this.selectLink = new GO.form.SelectLink({
+			})*/
+			this.selectLink = new GO.form.SelectLink({
 				anchor:'100%',
 				listeners:{
 					scope:this,

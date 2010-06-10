@@ -391,9 +391,24 @@ $updates[]= "ALTER TABLE  `go_reminders` ADD  `snooze_time` INT NOT NULL";
 $updates[]= "UPDATE go_reminders SET snooze_time=7200";
 $updates[]= "ALTER TABLE  `go_reminders` ADD  `manual` BOOLEAN NOT NULL";
 $updates[]= "ALTER TABLE  `go_reminders` DROP INDEX  `link_id`";
-$updates[]= "ALTER TABLE  `go_reminders` ADD  `group_id` INT NOT NULL AFTER  `user_id`";
 $updates[]= "ALTER TABLE  `go_reminders` ADD INDEX (  `group_id` )";
 $updates[]= "ALTER TABLE  `go_reminders` ADD INDEX (  `user_id` )";
+
+
+$updates[]= "CREATE TABLE IF NOT EXISTS `go_reminders_users` (
+  `reminder_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+	`mail_sent` BOOL NOT NULL,
+  PRIMARY KEY (`reminder_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]= "INSERT INTO `go_reminders_users` SELECT id,user_id,time,mail_send FROM go_reminders;";
+
+
+$updates[]= "ALTER TABLE  `go_reminders` DROP  `time` ,DROP  `user_id` , DROP  `mail_send` ;";
+
+
 
 
 

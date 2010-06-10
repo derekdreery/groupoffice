@@ -27,6 +27,10 @@ try{
 				$link = explode(':', $_POST['link']);
 				$reminder['link_id']=$link[1];
 				$reminder['link_type']=$link[0];
+			}else
+			{
+				$reminder['link_id']=0;
+				$reminder['link_type']=0;
 			}
 
 			$reminder['user_id']=$_POST['user_id'];

@@ -84,8 +84,22 @@ try{
 			$response['results']=array();
 			while($reminder = $reminders->next_record())
 			{
-				$user = $GO_USERS->get_user($reminder['user_id']);
-				$reminder['user_name']=String::format_name($user);
+				if($reminder['user_id']>0){
+					$user = $GO_USERS->get_user($reminder['user_id']);
+					$reminder['user_name']=String::format_name($user);
+				}else
+				{
+					$reminder['user_name']='';
+				}
+
+				if($reminder['group_id']>0){
+					$group = $GO_GROUPS->get_group($reminder['group_id']);
+					$reminder['group_name']=$group['name'];
+				}else
+				{
+					$reminder['group_name']='';
+				}
+				$reminder['time']=Date::get_timestamp($reminder['time']);
 				$response['results'][] = $reminder;
 			}
 			break;
