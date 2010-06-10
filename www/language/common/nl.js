@@ -346,3 +346,6 @@ GO.lang.debugModeDetected="Waarschuwing! Debug modus is ingeschakeld";
 GO.lang.debugModeWarning="Gebruik $config['debug']=true; alleen voor ontwikkeling en om problemen op te lossen. Het vertraagd de applicatie.";
 
 GO.lang.userGroup='Gebruikersgroep';
+
+GO.lang.noItemSelectedWarning='Selecteer minimaal 1 item.';
+GO.lang.selectAll='Selecteer alles';
