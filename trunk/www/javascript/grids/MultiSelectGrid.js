@@ -13,6 +13,7 @@ GO.grid.MultiSelectGrid = function (config){
 			scope:this,
 			change:function(record){
 				record.commit();
+				this.lastRecordClicked = record;
 				this.applyFilter();
 			}
 		}
@@ -27,12 +28,14 @@ GO.grid.MultiSelectGrid = function (config){
 		scope: this
 	})];
 
+	if(config.allowNoSelection)
+	    this.allowNoSelection = true;
 
 	Ext.apply(config, {
 		border: false,
 		plugins: [checkColumn],
 		tbar : [ {
-			text:'Select all',
+			text:GO.lang.selectAll,
 			handler:function()
 			{
 				this.applyFilter('all');
@@ -66,8 +69,8 @@ GO.grid.MultiSelectGrid = function (config){
 
 Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 
-	noItemSelectedWarning : 'Select at least one item please',
-
+	allowNoSelection : false,
+	lastRecordClicked : false,
 	applyFilter : function(select_records, suppressEvent){
 
 		var records = [], ids=[], checked, current_record_id, will_be_checked;
@@ -76,13 +79,13 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 		{
 			current_record_id = this.store.data.items[i].id;
 			will_be_checked= select_records && (select_records=='all' || select_records.indexOf(current_record_id)>-1);
-
+			
 			if(select_records && !will_be_checked){
 				checked=false;
 				if(this.store.data.items[i].data.checked){
-					if(select_records!='all'){
+					if(select_records!='all'){	
 						this.store.data.items[i].set('checked',"0");
-						this.store.data.items[i].commit();
+						this.store.data.items[i].commit();						
 					}else
 					{
 						this.store.data.items[i].data.checked="0";
@@ -113,10 +116,15 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 				records.push(this.store.data.items[i]);
 			}
 		}
-
-		if(ids.length == 0)
+		
+		if(!this.allowNoSelection && (ids.length == 0))
 		{
-			alert(this.noItemSelectedWarning);
+			alert(GO.lang.noItemSelectedWarning);
+						
+			this.lastRecordClicked.set('checked', "1");
+			this.lastRecordClicked.commit();
+			
+			this.lastRecordClicked = false;			
 			this.store.rejectChanges();
 		}else
 		{
@@ -126,15 +134,11 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 			}
 
 			this.store.commitChanges();
+
+			if(select_records=='all')
+			    this.getView().refresh();
+
 			this.getSelectionModel().clearSelections();
 		}
-
-		if(!suppressEvent)
-			this.fireEvent('change', this, ids, records);
-
-		if(select_records=='all')
-			this.getView().refresh();
-			
-		this.getSelectionModel().clearSelections();
 	}
 });
