@@ -138,15 +138,11 @@ try{
 			require($GO_CONFIG->class_path.'base/reminder.class.inc.php');
 			$rm = new reminder();
 			
-			$reminders = json_decode(($_POST['reminders']));
-			
-			$snooze_time = ($_POST['snooze_time']);
+			$reminders = json_decode($_POST['reminders']);
 			
 			foreach($reminders as $reminder_id)
 			{
-				$reminder['id']=$reminder_id;
-				$reminder['time']=time()+$snooze_time;
-				$rm->update_reminder($reminder);
+				$rm->add_user_to_reminder($GO_SECURITY->user_id, $reminder_id, time()+$_POST['snooze_time']);
 			}
 			$response['success']=true;			
 			break;
@@ -155,7 +151,7 @@ try{
 			require($GO_CONFIG->class_path.'base/reminder.class.inc.php');
 			$rm = new reminder();
 			
-			$reminders = json_decode(($_POST['reminders']));
+			$reminders = json_decode($_POST['reminders'], true);
 			
 			foreach($reminders as $reminder_id)
 			{				
@@ -163,8 +159,9 @@ try{
 				
 				//other modules can do something when a reminder is dismissed
 				//eg. The calendar module sets a next reminder for a recurring event.
-				$GO_EVENTS->fire_event('reminder_dismissed', array($reminder));
-				$rm->delete_reminder($reminder_id);
+				$GO_EVENTS->fire_event('reminder_dismissed', array($reminder, $GO_SECURITY->user_id));
+				//$rm->delete_reminder($reminder_id);
+				$rm->remove_user_from_reminder($GO_SECURITY->user_id, $reminder_id);
 			}
 			
 			$response['success']=true;

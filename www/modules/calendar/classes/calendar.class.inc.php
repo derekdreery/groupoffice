@@ -128,13 +128,14 @@ class calendar extends db {
 		}
 	}
 
-	public static function reminder_dismissed($reminder) {
+	public static function reminder_dismissed($reminder, $user_id) {
 		$cal = new calendar();
 
 		$event = $cal->get_event($reminder['link_id']);
 		if($event && !empty($event['rrule'])) {
 			$reminder['time'] = Date::get_next_recurrence_time($event['start_time'], time(),$event['rrule']);
-
+			$reminder['user_id']=$user_id;
+			
 			if($reminder['time']) {
 				$rm = new reminder();
 				$rm->add_reminder($reminder);
