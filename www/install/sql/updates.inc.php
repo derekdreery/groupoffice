@@ -385,3 +385,7 @@ $updates[]= "CREATE TABLE `go_holidays` (
   PRIMARY KEY  (`id`),
   KEY `region` (`region`)
 ) TYPE=MyISAM DEFAULT CHARSET=utf8;";
+
+
+$updates[]= "ALTER TABLE  `go_reminders` ADD  `snooze_time` INT NOT NULL";
+$updates[]= "UPDATE go_reminders SET snooze_time=7200";
