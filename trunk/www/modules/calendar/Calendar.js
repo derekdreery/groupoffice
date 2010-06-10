@@ -583,7 +583,7 @@ GO.calendar.MainPanel = function(config){
 		scope: this
 	}),
 	'-',
-	this.printMessageButton = new Ext.Button({
+	this.printButton = new Ext.Button({
 		iconCls: 'btn-print',
 		text: GO.lang.cmdPrint,
 		cls: 'x-btn-text-icon',
