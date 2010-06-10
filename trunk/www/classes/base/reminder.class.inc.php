@@ -71,9 +71,21 @@ class reminder extends db
 		return $this->replace_row('go_reminders_users', $r);
 	}
 
-	function remove_user_from_reminder($user_id, $reminder_id){
+	function remove_user_from_reminder($user_id, $reminder_id, $delete_reminder_if_last_user=true){
 		$sql = "DELETE FROM go_reminders_users WHERE user_id=? AND reminder_id=?";
-		return $this->query($sql, 'ii', array($user_id, $reminder_id));
+		$this->query($sql, 'ii', array($user_id, $reminder_id));
+
+		if($delete_reminder_if_last_user && !$this->get_reminder_users($reminder_id))
+			$this->delete_reminder($reminder_id);
+
+		return true;
+
+	}
+
+	function get_reminder_users($reminder_id){
+		$sql = "SELECT * FROM go_reminders_users WHERE reminder_id=?";
+		$this->query($sql,'i', $reminder_id);
+		return $this->num_rows();
 	}
 	
 	/**
@@ -221,7 +233,7 @@ class reminder extends db
 	function get_reminders($user_id, $not_mailed=false)
 	{
 	 	$sql = "SELECT DISTINCT r.*,u.time FROM go_reminders r ".
-		"LEFT JOIN go_reminders_users u g ON u.user_id=r.user_id ".
+		"LEFT JOIN go_reminders_users u ON u.reminder_id=r.id ".
 		"WHERE u.user_id=? ".
 		"AND u.time<?";
 
@@ -229,9 +241,8 @@ class reminder extends db
 		{
 			$sql .= ' AND u.mail_sent = 0';
 		}
-		$types='iii';
+		$types='ii';
 		$params=array(
-			$user_id,
 			$user_id,
 			time()
 		);
