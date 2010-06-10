@@ -19,7 +19,8 @@ GO.tasks.SimpleTasksPanel = function(config)
 			baseParams: {
 				'task': 'tasks',
 				'user_id' : GO.settings.user_id,
-				'active_only' : true
+				'active_only' : true,
+				'portlet' : true
 			},
 			reader: reader,
                         sortInfo: {field: 'name', direction: 'ASC'},
