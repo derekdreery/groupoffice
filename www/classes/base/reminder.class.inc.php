@@ -200,15 +200,69 @@ class reminder extends db
 	*/
 	function get_reminders($user_id, $not_mailed=false)
 	{
-		//echo date('Ymd G:i', time());
-	 	$sql = "SELECT * FROM go_reminders WHERE user_id=".$this->escape($user_id)." AND time<".time();
+	 	$sql = "SELECT DISTINCT r.* FROM go_reminders r ".
+		"LEFT JOIN go_users_groups g ON g.group_id=r.group_id ".
+		"WHERE (g.user_id=? OR r.user_id=?) ".
+		"AND time<?";
+
 		if($not_mailed)
 		{
 			$sql .= ' AND mail_send = 0';
 		}
-		$this->query($sql);
-
-		return $this->num_rows();
+		$types='iii';
+		$params=array(
+			$user_id,
+			$user_id,
+			time()
+		);
 		
+		$this->query($sql, $types,$params);
+
+		return $this->num_rows();		
+	}
+
+	/**
+	 * Gets all Reminders
+	 *
+	 * @param Int $start First record of the total record set to return
+	 * @param Int $offset Number of records to return
+	 * @param String $sortfield The field to sort on
+	 * @param String $sortorder The sort order
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+	function get_manual_reminders($query='', $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
+	{
+		$sql = "SELECT ";
+		if($offset>0)
+		{
+			$sql .= "SQL_CALC_FOUND_ROWS ";
+		}
+		$sql .= "* FROM go_reminders ";
+
+		$types='';
+		$params=array();
+
+
+		$sql .= "WHERE manual=1";
+		
+
+		
+		if(!empty($query))
+ 		{
+ 			$sql .= " AND name LIKE ?";
+ 			$types .= 's';
+ 			$params[]=$query;
+ 		}
+
+
+		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);
+		if($offset>0)
+		{
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
+		}
+		$this->query($sql, $types, $params);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 }

@@ -41,4 +41,4 @@ GO.form.SelectLink = function(config){
 	
 }
 
-Ext.extend(GO.form.SelectLink, GO.form.ComboBox);
+Ext.extend(GO.form.SelectLink, GO.form.ComboBoxReset);

@@ -37,13 +37,13 @@ GO.CheckerWindow = function(config){
 		[7200, '2 '+GO.lang.strHours],
 		[10800, '3 '+GO.lang.strHours],
 		[14400, '4 '+GO.lang.strHours],
-		[86400, '1 '+GO.lang.day],
-		[2*86400, '2 '+GO.lang.days],
-		[3*86400, '3 '+GO.lang.days],
-		[4*86400, '4 '+GO.lang.days],
-		[5*86400, '5 '+GO.lang.days],
-		[6*86400, '6 '+GO.lang.days],
-		[7*86400, '7 '+GO.lang.days]
+		[86400, '1 '+GO.lang.strDay],
+		[2*86400, '2 '+GO.lang.strDays],
+		[3*86400, '3 '+GO.lang.strDays],
+		[4*86400, '4 '+GO.lang.strDays],
+		[5*86400, '5 '+GO.lang.strDays],
+		[6*86400, '6 '+GO.lang.strDays],
+		[7*86400, '7 '+GO.lang.strDays]
 	];
 
 	var snoozeMenuItems = [];
@@ -205,7 +205,6 @@ GO.CheckerPanel = Ext.extend(function(config){
 		dataIndex: 'snooze_time',
 		renderer : this.renderSelect.createDelegate(this),
 		editor:new GO.form.ComboBox({
-			hiddenName : 'type',
 			store : new Ext.data.ArrayStore({
 				idIndex:0,
 				fields : ['value', 'text'],
@@ -283,7 +282,7 @@ GO.CheckerPanel = Ext.extend(function(config){
 						this.store.remove(selected[i]);
 					}
 					if(!this.store.getRange().length){
-						this.container.hide();
+						this.ownerCt.hide();
 					}
 				},
 				scope: this
