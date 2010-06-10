@@ -32,7 +32,7 @@ GO.tasks.TasksPanel = function(config)
 		}, this);
     
 		var fields ={
-			fields:['id', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled'],
+			fields:['id', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name'],
 			columns:[this.checkColumn,
 			{
 				id:'name',
@@ -45,6 +45,14 @@ GO.tasks.TasksPanel = function(config)
 					}
 					return value;
 				}
+			},{
+				header:GO.tasks.lang.tasklist,
+				dataIndex: 'tasklist_name',
+				width:60
+			},{
+				header:GO.tasks.lang.category,
+				dataIndex: 'category_name',
+				width:20
 			},{
 				header:GO.tasks.lang.dueDate,
 				dataIndex: 'due_time',
@@ -82,17 +90,37 @@ GO.tasks.TasksPanel = function(config)
 			GO.customfields.addColumns(12, fields);
 		}
 
-		config.store = new GO.data.JsonStore({
+                var reader = new Ext.data.JsonReader({
+                        root: 'results',
+                        totalProperty: 'total',
+                        fields: fields.fields,
+                        id: 'id'
+                });
+                
+                config.store = new Ext.data.GroupingStore({
 			url: GO.settings.modules.tasks.url+'json.php',
 			baseParams: {
 				'task': 'tasks'
 			},
-			root: 'results',
-			totalProperty: 'total',
-			id: 'id',
-			fields: fields.fields,
+			reader: reader,
+                        sortInfo: {field: 'name', direction: 'ASC'},
+			groupField: 'tasklist_name',
+			remoteGroup:true,                        
 			remoteSort:true
 		});
+
+                config.view=new Ext.grid.GroupingView({
+			scrollOffset: 2,
+			forceFit:true,
+			hideGroupedColumn:true,
+			emptyText: GO.tasks.lang.noTask,
+			getRowClass : function(record, rowIndex, p, store){
+                                if(record.data.late){
+                                        return 'tasks-late';
+                                }
+			}
+		}),
+		config.sm=new Ext.grid.RowSelectionModel();		
 
 		var columnModel =  new Ext.grid.ColumnModel({
 			defaults:{
@@ -109,39 +137,8 @@ GO.tasks.TasksPanel = function(config)
 		config.autoExpandMax=2500;
 		config.enableColumnHide=true;
 		config.enableColumnMove=true;
+		config.autoScroll=true;
 
-		// custom template for the grid header
-                /*
-		var headerTpl = new Ext.Template(
-			'<table border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
-			'<thead><tr class="x-grid3-hd-row">{cells}</tr></thead>',
-			'<tbody><tr class="new-task-row">',
-			'<td><div id="tasks-new-task-icon"></div></td>',
-			// '<td><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="x-small-editor" id="new-task-name"></div></td><td><div class="x-small-editor" id="new-task-link"></div></td></tr></table></td>',
-			'<td><div class="x-small-editor" id="new-task-name"></div></td>',
-			'<td><div class="x-small-editor" id="new-task-due"></div></td>',
-			'</tr></tbody>',
-			"</table>"
-			);
-                */
-
-		config.view=new Ext.grid.GridView({
-			//autoFill: true,
-			//forceFit: true,
-			emptyText: GO.tasks.lang.noTask,
-                        /*
-			templates: {
-				header: headerTpl
-			},
-                        */
-			getRowClass : function(record, rowIndex, p, store){
-				if(record.data.late){
-					return 'tasks-late';
-				}
-			}
-		});
-		config.sm=new Ext.grid.RowSelectionModel();
-		config.loadMask=true;
 
 		this.searchField = new GO.form.SearchField({
 			store: config.store,
