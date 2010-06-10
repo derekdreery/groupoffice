@@ -197,6 +197,7 @@ CREATE TABLE IF NOT EXISTS `go_reminders` (
   `time` int(11) NOT NULL default '0',
   `vtime` int(11) NOT NULL default '0',
   `mail_send` tinyint(4) NOT NULL default '0',
+	`snooze_time` INT NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `link_id` (`link_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

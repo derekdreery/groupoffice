@@ -14,7 +14,7 @@ GO.CheckerWindow = function(config){
 	config.closeAction='hide';
 	
 	if(!config.width)
-		config.width=400;
+		config.width=600;
 	if(!config.height)
 		config.height=500;
 
@@ -27,103 +27,47 @@ GO.CheckerWindow = function(config){
 		scope:this
 	}
 	];
+
+	GO.checkerSnoozeTimes = [
+		[300,'5 '+GO.lang.strMinutes],
+		[600, '10 '+GO.lang.strMinutes],
+		[1200, '20 '+GO.lang.strMinutes],
+		[1800, '30 '+GO.lang.strMinutes],
+		[3600, '1 '+GO.lang.strHour],
+		[7200, '2 '+GO.lang.strHours],
+		[10800, '3 '+GO.lang.strHours],
+		[14400, '4 '+GO.lang.strHours],
+		[86400, '1 '+GO.lang.day],
+		[2*86400, '2 '+GO.lang.days],
+		[3*86400, '3 '+GO.lang.days],
+		[4*86400, '4 '+GO.lang.days],
+		[5*86400, '5 '+GO.lang.days],
+		[6*86400, '6 '+GO.lang.days],
+		[7*86400, '7 '+GO.lang.days]
+	];
+
+	var snoozeMenuItems = [];
+
+	for(var i=0,max=GO.checkerSnoozeTimes.length;i<max;i++){
+		snoozeMenuItems.push(	{
+			text: GO.checkerSnoozeTimes[i][1],
+			value: GO.checkerSnoozeTimes[i][0],
+			handler:function(i){
+				this.checkerGrid.doTask('snooze_reminders', i.value);
+			},
+			scope: this
+		});
+	}
 	
 	var snoozeMenu = new Ext.menu.Menu({
-		items:[
-		{
-			text: '5 '+GO.lang.strMinutes,
-			handler:function(){
-				this.doTask('snooze_reminders', 1800);
-			},
-			scope: this
-		},{
-			text: '10 '+GO.lang.strMinutes,
-			handler:function(){
-				this.doTask('snooze_reminders', 1800);
-			},
-			scope: this
-		},{
-			text: '20 '+GO.lang.strMinutes,
-			handler:function(){
-				this.doTask('snooze_reminders', 1800);
-			},
-			scope: this
-		},{
-			text: '30 '+GO.lang.strMinutes,
-			handler:function(){
-				this.doTask('snooze_reminders', 1800);
-			},
-			scope: this
-		},
-		{
-			text: '1 '+GO.lang.strHour,
-			handler:function(){
-				this.doTask('snooze_reminders', 3600);
-			},
-			scope: this
-		},{
-			text: '2 '+GO.lang.strHours,
-			handler:function(){
-				this.doTask('snooze_reminders', 7200);
-			},
-			scope: this
-		},{
-			text: '3 '+GO.lang.strHours,
-			handler:function(){
-				this.doTask('snooze_reminders', 10800);
-			},
-			scope: this
-		},{
-			text: '1 '+GO.lang.strDay,
-			handler:function(){
-				this.doTask('snooze_reminders', 86400);
-			},
-			scope: this
-		},{
-			text: '2 '+GO.lang.strDays,
-			handler:function(){
-				this.doTask('snooze_reminders', 2*86400);
-			},
-			scope: this
-		},{
-			text: '3 '+GO.lang.strDays,
-			handler:function(){
-				this.doTask('snooze_reminders', 3*86400);
-			},
-			scope: this
-		},{
-			text: '4 '+GO.lang.strDays,
-			handler:function(){
-				this.doTask('snooze_reminders', 4*86400);
-			},
-			scope: this
-		},{
-			text: '5 '+GO.lang.strDays,
-			handler:function(){
-				this.doTask('snooze_reminders', 5*86400);
-			},
-			scope: this
-		},{
-			text: '6 '+GO.lang.strDays,
-			handler:function(){
-				this.doTask('snooze_reminders', 6*86400);
-			},
-			scope: this
-		},{
-			text: '7 '+GO.lang.strDays,
-			handler:function(){
-				this.doTask('snooze_reminders', 7*86400);
-			},
-			scope: this
-		}
-		]
+		items:snoozeMenuItems
 	});
 
 	config.tbar=[{
 		iconCls:'btn-delete',
 		text:GO.lang.dismiss,
 		handler: function(){			
-			this.doTask('dismiss_reminders');
+			this.checkerGrid.doTask('dismiss_reminders');
 		},
 		scope: this
 	},
@@ -163,44 +107,9 @@ GO.CheckerWindow = function(config){
 
 };
 
-Ext.extend(GO.CheckerWindow, Ext.Window,{
+Ext.extend(GO.CheckerWindow, GO.Window,{
 	
-	doTask : function(task, seconds)
-	{
-		var selected = this.checkerGrid.selModel.getSelections();
-		
-		if(!selected.length)
-		{
-			Ext.MessageBox.alert(GO.lang['strError'], GO.lang['noItemSelected']);
-		}else
-		{
-			var reminders = [];
-			
-			for (var i = 0; i < selected.length;  i++)
-			{
-				reminders.push(selected[i].get('id'));
-			}
-	  	
-			Ext.Ajax.request({
-				url: BaseHref+'action.php',
-				params: {
-					task:task,
-					snooze_time: seconds,
-					reminders: Ext.encode(reminders)
-				},
-				callback: function(){
-					for (var i = 0; i < selected.length;  i++)
-					{
-						this.checkerGrid.store.remove(selected[i]);
-					}
-					if(!this.checkerGrid.store.getRange().length){
-						this.hide();
-					}
-				},
-				scope: this
-			});
-		}		
-	}
+	
 	
 });
 
@@ -211,8 +120,7 @@ GO.CheckerPanel = Ext.extend(function(config){
 	{
 		config = {};
 	}
-	
-	config.layout='fit';
+
 	config.id='go-checker-panel';
 		
 		
@@ -230,7 +138,8 @@ GO.CheckerPanel = Ext.extend(function(config){
 			'link_type_name',
 			'local_time',
 			'iconCls',
-			'time'
+			'time',
+			'snooze_time'
 			]
 		}),
 		groupField:'link_type_name',
@@ -239,6 +148,35 @@ GO.CheckerPanel = Ext.extend(function(config){
 			direction: 'ASC'
 		}
 	});
+
+	var action = new Ext.ux.grid.RowActions({
+		header : '-',
+		autoWidth:true,
+		align : 'center',
+		actions : [{
+			iconCls : 'btn-dismiss',
+			qtip: GO.lang.snooze
+		},{
+			iconCls : 'btn-delete',
+			qtip:GO.lang.dismiss
+		}]
+	});
+
+	action.on({
+		scope:this,
+		action:function(grid, record, action, row, col) {
+
+			switch(action){
+				case 'btn-dismiss':
+					this.doTask('snooze_reminders', record.get('snooze_time'));
+					break;
+				case 'btn-delete':
+					this.doTask('dismiss_reminders');
+					break;
+			}
+		}
+	}, this);
+
  
 	config.cm = new Ext.grid.ColumnModel([
 	{
@@ -254,12 +192,41 @@ GO.CheckerPanel = Ext.extend(function(config){
 	{
 		header:GO.lang.strTime,
 		dataIndex: 'local_time',
-		width: 50
+		width: 80
 	},
 	{
 		header:GO.lang['strName'],
-		dataIndex: 'name'
-	}]);
+		dataIndex: 'name',
+		id:'name'
+	},
+	{
+		width:80,
+		header:GO.lang.snooze,
+		dataIndex: 'snooze_time',
+		renderer : this.renderSelect.createDelegate(this),
+		editor:new GO.form.ComboBox({
+			hiddenName : 'type',
+			store : new Ext.data.ArrayStore({
+				idIndex:0,
+				fields : ['value', 'text'],
+				data : GO.checkerSnoozeTimes
+			}),
+			valueField : 'value',
+			displayField : 'text',
+			mode : 'local',
+			triggerAction : 'all',
+			editable : false,
+			selectOnFocus : true,
+			forceSelection : true
+		})
+	},
+	action]);
+
+	config.plugins=[action];
+
+	config.clicksToEdit=1;
+
+	config.autoExpandColumn='name';
 			
 	config.view=  new Ext.grid.GroupingView({
 		hideGroupedColumn:true,
@@ -268,9 +235,7 @@ GO.CheckerPanel = Ext.extend(function(config){
 		showGroupName:false
 	});
 	config.selModel = new Ext.grid.RowSelectionModel();
-	config.loadMask=true;
-	config.autoExpandColumn=3;
-	
+	config.loadMask=true;	
 	
 	GO.grid.GridPanel.superclass.constructor.call(this, config);
 	
@@ -288,11 +253,60 @@ GO.CheckerPanel = Ext.extend(function(config){
 	}, this);
 	
 	
-},GO.grid.GridPanel, {
+},GO.grid.EditorGridPanel, {
+	doTask : function(task, seconds)
+	{
+		var selected = this.selModel.getSelections();
+
+		if(!selected.length)
+		{
+			Ext.MessageBox.alert(GO.lang['strError'], GO.lang['noItemSelected']);
+		}else
+		{
+			var reminders = [];
+
+			for (var i = 0; i < selected.length;  i++)
+			{
+				reminders.push(selected[i].get('id'));
+			}
+
+			Ext.Ajax.request({
+				url: BaseHref+'action.php',
+				params: {
+					task:task,
+					snooze_time: seconds,
+					reminders: Ext.encode(reminders)
+				},
+				callback: function(){
+					for (var i = 0; i < selected.length;  i++)
+					{
+						this.store.remove(selected[i]);
+					}
+					if(!this.store.getRange().length){
+						this.container.hide();
+					}
+				},
+				scope: this
+			});
+		}
+	},
 	iconRenderer : function(src,cell,record){
 		return '<div class=\"go-icon ' + record.data.iconCls +' \"></div>';
+	},
+	renderSelect : function(value, p, record, rowIndex, colIndex, ds) {
+		var cm = this.getColumnModel();
+		var ce = cm.getCellEditor(colIndex, rowIndex);
+
+		var val = value;
+		if (ce.field.store.getById(value) !== undefined) {
+
+			var r = ce.field.store.getById(value);
+			val = ce.field.store.getById(value).get("text");
+		}
+		return val;
 	}
-	
+
+
 });
 
 GO.Checker = function(){
@@ -381,14 +395,14 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 								}
 							}
 						}
-						//this.fireEvent('endcheck', this, data);
+					//this.fireEvent('endcheck', this, data);
 					},
 					scope:this
 				});
 			},
 			scope:this,
 			interval:120000 //check changes every 2 minutes
-			//interval:5000 //testing each 5sec
+		//interval:5000 //testing each 5sec
 		});
 	}
 });

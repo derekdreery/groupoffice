@@ -40,6 +40,10 @@ class reminder extends db
 	function add_reminder($reminder)
 	{
 		$reminder['id']=$this->nextid('go_reminders');
+
+		if(!isset($reminder['snooze_time']))
+			$reminder['snooze_time']=7200;
+
 		if($this->insert_row('go_reminders', $reminder))
 		{
 			return $reminder['id'];

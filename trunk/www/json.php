@@ -150,8 +150,8 @@ try {
 
 			$rm->get_reminders($GO_SECURITY->user_id);
 
-			while($rm->next_record()) {
-				$reminder=$rm->record;
+			while($reminder=$rm->next_record()) {
+				
 				$reminder['iconCls']='go-link-icon-'.$reminder['link_type'];
 				$reminder['link_type_name']=isset($lang['link_type'][$reminder['link_type']]) ? $lang['link_type'][$reminder['link_type']] : 'Unknown';
 
@@ -164,6 +164,7 @@ try {
 				}else {
 					$reminder['local_time']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $time);
 				}
+
 
 				$response['reminders'][]=$reminder;
 			}
