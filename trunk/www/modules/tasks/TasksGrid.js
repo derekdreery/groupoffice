@@ -223,7 +223,7 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
                 {
                         var tasklist = []                        
                         tasklist.push(records[i].id);
-                        tasklist.push(records[i].data.name);                        
+                        tasklist.push(records[i].data.name);
 
                         data.push(tasklist);
                 }
