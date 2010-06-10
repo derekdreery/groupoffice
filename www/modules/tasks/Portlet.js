@@ -4,25 +4,27 @@ GO.tasks.SimpleTasksPanel = function(config)
 		{
 			config = {};
 		}
+
+		config.id='su-tasks-grid';
+		
 		var reader = new Ext.data.JsonReader({
-		    root: 'results',
-			totalProperty: 'total',
+                        root: 'results',
+                        totalProperty: 'total',
 			fields:['id', 'name','completed','due_time','description','tasklist_name','late'],
-			id: 'id'
-	    });
+                        id: 'id'
+                });
 	
 		config.store = new Ext.data.GroupingStore({
 			url: GO.settings.modules.tasks.url+'json.php',
 			baseParams: {
 				'task': 'tasks',
 				'user_id' : GO.settings.user_id,
-				'active_only' : true,
-				'portlet' : true
+				'active_only' : true
 			},
 			reader: reader,
-			sortInfo: {field: 'portlet', direction: 'ASC'},
+                        sortInfo: {field: 'name', direction: 'ASC'},
 			groupField: 'tasklist_name',
-			//remoteGroup:true,
+			remoteGroup:true,
 			remoteSort:true
 		});
 
@@ -32,7 +34,6 @@ GO.tasks.SimpleTasksPanel = function(config)
 		}, this);
 	
 		var checkColumn = new GO.grid.CheckColumn({
-			header: '',
 			dataIndex: 'completed',
 			width: 30,
 			header: '<div class="tasks-complete-icon"></div>'
@@ -72,14 +73,17 @@ GO.tasks.SimpleTasksPanel = function(config)
 					p.attr = 'ext:qtip="'+Ext.util.Format.htmlEncode(record.data.description)+'"';
 				}
 				return value;
-			}
+			},
+			sortable:true
 		},{
 			header:GO.tasks.lang.dueDate,
 			dataIndex: 'due_time',
-			width:100
+			width:100,
+			sortable:true
 		},{
 			header:GO.tasks.lang.tasklist,
-			dataIndex: 'tasklist_name'
+			dataIndex: 'tasklist_name',
+			sortable:true
 		}];
 		config.view=new Ext.grid.GroupingView({
 			scrollOffset: 2,
@@ -127,12 +131,6 @@ Ext.extend(GO.tasks.SimpleTasksPanel, GO.grid.GridPanel, {
 			scope:this,
 			interval:960000
 		});
-		this.store.on('load', function() {
-			if(this.store.collect('tasklist_name').length <= 1)
-				this.store.clearGrouping();
-			else
-				this.store.groupBy('tasklist_name');
-		},this);
 	}
 });
 

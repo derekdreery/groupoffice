@@ -638,7 +638,8 @@ class tasks extends db
 			$offset=0,
 			$show_inactive=false,
 			$search_query='',
-                        $categories=array()) {
+                        $categories=array()
+		) {
 
 		global $GO_MODULES;
 
@@ -648,11 +649,9 @@ class tasks extends db
 			$sql .= " ,cf_12.*";
 		}
 
-		$sql .= " FROM ta_tasks t";
-
-		if($user_id > 0) {
-			$sql .= " INNER JOIN ta_lists l ON (t.tasklist_id=l.id)";
-		}
+		$sql .= " FROM ta_tasks t "
+			. "INNER JOIN ta_lists l ON (t.tasklist_id=l.id) "
+			. "LEFT JOIN ta_categories c ON (t.category_id=c.id)";
 
 		if($GO_MODULES->has_module('customfields')) {
 			$sql .= " LEFT JOIN cf_12 ON cf_12.link_id=t.id";
@@ -665,7 +664,6 @@ class tasks extends db
 			$sql .= ' WHERE completion_time=0';
 
 		}
-
 
 		if($user_id > 0) {                    
 			if($where) {
@@ -684,7 +682,6 @@ class tasks extends db
 			}
 
 			$sql .= "t.tasklist_id IN (".$this->escape(implode(',',$lists)).")";
-
 		}
 
 		if(empty($show_inactive)) {
@@ -722,13 +719,9 @@ class tasks extends db
                     $sql .= "t.category_id IN (".implode(',', $categories).")";
                 }
 
-		if($sort_field != '' && $sort_order != '') {
-			if($sort_field=='portlet'){
-				$sql .=	" ORDER BY t.tasklist_id ASC, due_time DESC";
-			}else
-			{
-				$sql .=	" ORDER BY ".$this->escape($sort_field)." ".$this->escape($sort_order);
-			}
+		if($sort_field != '' && $sort_order != '')
+		{			
+			$sql .= " ORDER BY ".$this->escape($sort_field)." ".$this->escape($sort_order);
 		}
 
 		$_SESSION['GO_SESSION']['export_queries']['get_tasks']=array(
