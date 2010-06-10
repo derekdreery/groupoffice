@@ -41,6 +41,11 @@ class reminder extends db
 	{
 		$reminder['id']=$this->nextid('go_reminders');
 
+		if(!empty($reminder['user_id'])){
+			$this->add_user_to_reminder($reminder['user_id'], $reminder['id'], $reminder['time']);
+			unset($reminder['user_id'], $reminder['time']);
+		}
+
 		if(!isset($reminder['snooze_time']))
 			$reminder['snooze_time']=7200;
 
@@ -49,6 +54,26 @@ class reminder extends db
 			return $reminder['id'];
 		}
 		return false;
+	}
+
+	function user_in_reminder($user_id, $reminder_id){
+		$sql = "SELECT * FROM go_reminders_users WHERE user_id=? AND reminder_id=?";
+		$this->query($sql, 'ii', array($user_id, $reminder_id));
+		return $this->next_record();
+	}
+
+	function add_user_to_reminder($user_id, $reminder_id, $time){
+		
+		$r['user_id']=$user_id;
+		$r['reminder_id']=$reminder_id;
+		$r['time']=$time;
+
+		return $this->replace_row('go_reminders_users', $r);
+	}
+
+	function remove_user_from_reminder($user_id, $reminder_id){
+		$sql = "DELETE FROM go_reminders_users WHERE user_id=? AND reminder_id=?";
+		return $this->query($sql, 'ii', array($user_id, $reminder_id));
 	}
 	
 	/**
@@ -80,6 +105,8 @@ class reminder extends db
 	
 	function delete_reminder($reminder_id)
 	{
+		$this->query("DELETE FROM go_reminders_users WHERE reminder_id=".$this->escape($reminder_id));
+
 		return $this->query("DELETE FROM go_reminders WHERE id=".$this->escape($reminder_id));
 	}
 	
@@ -108,7 +135,12 @@ class reminder extends db
 	
 	function delete_reminders_by_link_id($link_id, $link_type)
 	{
-		return $this->query("DELETE FROM go_reminders WHERE link_id=".$this->escape($link_id)." AND link_type=".$this->escape($link_type));		
+		$this->get_reminders_by_link_id($link_id, $link_type);
+
+		$r = new reminder();
+		while($reminder=$this->next_record()){
+			$r->delete_reminder($reminder['id']);
+		}
 	}
 	
 	/**
@@ -123,11 +155,7 @@ class reminder extends db
 	function get_reminder_by_link_id($user_id, $link_id, $link_type)
 	{
 		$this->query("SELECT * FROM go_reminders WHERE user_id=".$this->escape($user_id)." AND link_id=".$this->escape($link_id)." AND link_type=".$this->escape($link_type));
-		if($this->next_record())
-		{
-			return $this->record;
-		}
-		return false;
+		return $this->next_record();
 	}
 	
  /**
@@ -160,11 +188,7 @@ class reminder extends db
 	function get_reminder($reminder_id)
 	{
 		$this->query("SELECT * FROM go_reminders WHERE id=".$this->escape($reminder_id));
-		if($this->next_record())
-		{
-			return $this->record;
-		}
-		return false;
+		return $this->next_record();
 	}
 	
 	/**
@@ -179,11 +203,7 @@ class reminder extends db
 	function get_reminder_by_name($name)
 	{
 		$this->query("SELECT * FROM go_reminders WHERE reminder_name='".$this->escape($name)."'");
-		if($this->next_record())
-		{
-			return $this->record;
-		}
-		return false;
+		return $this->next_record();
 	}
 	
 	
@@ -200,14 +220,14 @@ class reminder extends db
 	*/
 	function get_reminders($user_id, $not_mailed=false)
 	{
-	 	$sql = "SELECT DISTINCT r.* FROM go_reminders r ".
-		"LEFT JOIN go_users_groups g ON g.group_id=r.group_id ".
-		"WHERE (g.user_id=? OR r.user_id=?) ".
-		"AND time<?";
+	 	$sql = "SELECT DISTINCT r.*,u.time FROM go_reminders r ".
+		"LEFT JOIN go_reminders_users u g ON u.user_id=r.user_id ".
+		"WHERE u.user_id=? ".
+		"AND u.time<?";
 
 		if($not_mailed)
 		{
-			$sql .= ' AND mail_send = 0';
+			$sql .= ' AND u.mail_sent = 0';
 		}
 		$types='iii';
 		$params=array(
