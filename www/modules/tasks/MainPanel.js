@@ -78,17 +78,16 @@ GO.tasks.MainPanel = function(config){
 		split:true,
 		items: [showCompletedCheck, showInactiveCheck]
 	});
-
-        this.categoriesPanel = new GO.tasks.CategoriesGrid(
-        {
-                id:'ta-categories-grid',
+      
+	this.categoriesPanel= new GO.grid.MultiSelectGrid({
+		id:'ta-categories-grid',
                 title:GO.tasks.lang.categories,
                 region:'south',
                 loadMask:true,
                 height:220,
+		allowNoSelection:true,
                 store:GO.tasks.categoriesStore
-        });
-
+	});
         this.categoriesPanel.on('change', function(grid, categories, records)
 	{
                 this.gridPanel.store.baseParams.categories = Ext.encode(categories);
