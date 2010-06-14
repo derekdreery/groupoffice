@@ -480,16 +480,16 @@ class tasks extends db
 		}
 
 		if(!empty($task['reminder']) && $task['reminder']>time()) {
-			$reminder['user_id']=$tasklist['user_id'];
+			
 			$reminder['name']=$task['name'];
 			$reminder['link_type']=12;
 			$reminder['link_id']=$task['id'];
 			$reminder['time']=$task['reminder'];
-
 			if($existing_reminder) {
 				$reminder['id']=$existing_reminder['id'];
 				$rm->update_reminder($reminder);
 			}else {
+				$reminder['user_id']=$tasklist['user_id'];
 				$rm->add_reminder($reminder);
 			}
 		}

@@ -1160,7 +1160,7 @@ class calendar extends db {
 				}
 
 				$reminder['id']=$existing_reminder['id'];
-				$reminder['user_id']=$calendar['user_id'];
+				
 				if(isset($event['name']))
 					$reminder['name']=$event['name'];
 
@@ -1178,6 +1178,7 @@ class calendar extends db {
 					if($existing_reminder) {
 						$rm->update_reminder($reminder);
 					}else {
+						$reminder['user_id']=$calendar['user_id'];
 						$rm->add_reminder($reminder);
 					}
 				}elseif($existing_reminder) {
