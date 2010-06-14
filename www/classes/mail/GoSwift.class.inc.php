@@ -196,14 +196,9 @@ class GoSwift extends Swift_Mailer{
 	{
 		$RFC822 = new RFC822();
 		$to_addresses = $RFC822->parse_address_list($email_to);
-
-		$recipients=array();
-		foreach($to_addresses as $address)
-		{
-			$recipients[$address['email']]=$address['personal'];
+		foreach($to_addresses as $address){
+			$this->message->addTo($address['email'], $address['personal']);
 		}
-
-		$this->message->setTo($recipients);
 	}
 
 	function &get_message(){
