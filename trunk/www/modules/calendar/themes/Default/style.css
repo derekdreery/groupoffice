@@ -1,8 +1,5 @@
 .cal-comment{
-	font-weight:bold !important;
-	position:absolute;
-	left:5px;
-	top:8px;
+	white-space:normal !important;
 }
 
 

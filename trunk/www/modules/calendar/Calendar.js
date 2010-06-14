@@ -411,7 +411,10 @@ GO.calendar.MainPanel = function(config){
 		border: true,
 		split: true,
 		cls: 'cal-display-panel',
-		tbar: [this.calendarTitle = new Ext.Toolbar.TextItem({
+		tbar: [this.calendarComments = new Ext.Toolbar.TextItem({
+			text:'',
+			cls:'cal-comment'
+		}),'-',this.calendarTitle = new Ext.Toolbar.TextItem({
 			text:'Calendar'
 		}),'-',{
 			iconCls: 'btn-left-arrow',
@@ -1014,8 +1017,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			var title = config.title;
 
 			if(config.comment){
-				title = '<div class="cal-comment">'+config.comment+'</div>'+title;
+				//title = '<div class="cal-comment" ext:qtip="'+Ext.util.Format.htmlEncode(config.comment)+'">'+config.comment+'</div>'+title;
 			}
+
+
+			this.calendarComments.setText(config.comment || '');
 
 			this.calendarTitle.setText(title);
 		}
