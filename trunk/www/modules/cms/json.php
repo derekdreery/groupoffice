@@ -236,7 +236,7 @@ try {
 
 				$response['data']=$folder;
 
-				$reponse['data']['authentication']=$folder['acl']>0;
+				$response['data']['authentication']=$folder['acl']>0;
 
 
 				$response['data']['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $site['acl_write']);
