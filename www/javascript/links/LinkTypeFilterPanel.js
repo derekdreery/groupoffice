@@ -10,6 +10,9 @@ GO.LinkTypeFilterPanel = function(config)
 	config.split=true;
 	config.resizable=true;
 	config.autoScroll=true;
+	config.collapsible=true;
+	config.header=false;
+	config.collapseMode='mini';
 	
 	var checkColumn = new GO.grid.CheckColumn({
 		header: '&nbsp;',
@@ -18,18 +21,22 @@ GO.LinkTypeFilterPanel = function(config)
 	});
 	
 	//config.title=GO.lang.strType;
+
+	if(!GO.links.typesStore){
+		GO.links.typesStore= new Ext.data.JsonStore({
+				root: 'results',
+				data: {"results":GO.linkTypes}, //defined in /default_scripts.inc.php
+				fields: ['id','name', 'checked'],
+				id:'id'
+			});
+	}
 	
 	this.filterGrid = new GO.grid.GridPanel({
 		cls:'go-grid3-hide-headers',
 		autoHeight:true,
 		border:false,
 		loadMask:true,
-		store: new Ext.data.JsonStore({
-			root: 'results',
-			data: {"results":GO.linkTypes}, //defined in /default_scripts.inc.php
-			fields: ['id','name', 'checked'],
-			id:'id'
-		}),
+		store: GO.links.typesStore,
 		columns: [
 				checkColumn,
 				{
