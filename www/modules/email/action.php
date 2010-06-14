@@ -474,6 +474,8 @@ try {
 						}
 					}
 
+					//throw new Exception(htmlspecialchars(var_export($swift->message->toString(), true)));
+
 					if($draft) {
 						if($swift->account['type']!='imap') {
 							throw new Exception($lang['email']['noSaveWithPop3']);
