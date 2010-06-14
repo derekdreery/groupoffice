@@ -139,7 +139,8 @@ GO.CheckerPanel = Ext.extend(function(config){
 			'local_time',
 			'iconCls',
 			'time',
-			'snooze_time'
+			'snooze_time',
+			'text'
 			]
 		}),
 		groupField:'link_type_name',
@@ -226,12 +227,41 @@ GO.CheckerPanel = Ext.extend(function(config){
 	config.clicksToEdit=1;
 
 	config.autoExpandColumn='name';
+
+		config.view=new Ext.grid.GridView({
+		enableRowBody:true,
+    showPreview:true,
+    forceFit:true,
+    autoFill: true,
+    getRowClass : function(record, rowIndex, p, ds) {
+
+				var cls = rowIndex%2 == 0 ? 'odd' : 'even';
+
+        if (this.showPreview) {
+            p.body = '<div class="description">' +record.data.content + '</div>';
+            return 'x-grid3-row-expanded '+cls;
+        }
+        return 'x-grid3-row-collapsed';
+    },
+		emptyText: GO.lang['strNoItems']
+	});
 			
 	config.view=  new Ext.grid.GroupingView({
 		hideGroupedColumn:true,
 		groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "'+GO.lang.items+'" : "'+GO.lang.item+'"]})',
 		emptyText: GO.lang.strNoItems,
-		showGroupName:false
+		showGroupName:false,
+		enableRowBody:true,
+		getRowClass : function(record, rowIndex, p, ds) {
+
+			if(!GO.util.empty(record.data.text)){
+				p.body = '<div class="description go-html-formatted">' +record.data.text + '</div>';
+				return 'x-grid3-row-expanded';
+			}else
+			{
+				return 'x-grid3-row-collapsed';
+			}
+    }
 	});
 	config.selModel = new Ext.grid.RowSelectionModel();
 	config.loadMask=true;	

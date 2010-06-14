@@ -43,7 +43,7 @@ class reminder extends db
 
 		if(!empty($reminder['user_id'])){
 			$this->add_user_to_reminder($reminder['user_id'], $reminder['id'], $reminder['time']);
-			unset($reminder['user_id'], $reminder['time']);
+			unset($reminder['user_id']);
 		}
 
 		if(!isset($reminder['snooze_time']))
@@ -82,10 +82,39 @@ class reminder extends db
 
 	}
 
-	function get_reminder_users($reminder_id){
-		$sql = "SELECT * FROM go_reminders_users WHERE reminder_id=?";
+	function get_reminder_users($reminder_id, $with_user_info=false, $start=0,$offset=0){
+
+		$sql = "SELECT ";
+
+		if($offset>0)
+		{
+			$sql .= "SQL_CALC_FOUND_ROWS ";
+		}
+
+		if($with_user_info){
+
+			if(!isset($_SESSION['GO_SESSION']['sort_name']) ||  $_SESSION['GO_SESSION']['sort_name'] == 'first_name')
+			{
+				$sort = 'first_name ASC, last_name ASC';
+			}else
+			{
+				$sort = 'last_name ASC, first_name ASC';
+			}
+
+			$sql .= "r.user_id, u.id, u.first_name, u.middle_name,u.last_name,u.email FROM ".
+				"go_reminders_users r INNER JOIN go_users u ON u.id=r.user_id ".
+				"WHERE r.reminder_id=? ORDER BY $sort";			
+		}else
+		{
+			$sql .= "* FROM go_reminders_users WHERE reminder_id=?";
+		}
+		
+		if($offset>0)
+		{
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
+		}
 		$this->query($sql,'i', $reminder_id);
-		return $this->num_rows();
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 	
 	/**
@@ -99,8 +128,10 @@ class reminder extends db
 	
 	function update_reminder($reminder, $reset_mail_send=true)
 	{
-		if($reset_mail_send)
-			$reminder['mail_send'] = 0;
+		if($reset_mail_send){
+			$sql = "UPDATE go_reminders_users SET mail_sent=0 WHERE reminder_id=?";
+			$this->query($sql, 'i', $reminder['id']);
+		}
 			
 		return $this->update_row('go_reminders', 'id', $reminder);
 	}
@@ -232,7 +263,7 @@ class reminder extends db
 	*/
 	function get_reminders($user_id, $not_mailed=false)
 	{
-	 	$sql = "SELECT DISTINCT r.*,u.time FROM go_reminders r ".
+	 	$sql = "SELECT DISTINCT r.id, r.time, r.vtime, r.name, r.link_id,r.link_type,r.snooze_time, r.text FROM go_reminders r ".
 		"LEFT JOIN go_reminders_users u ON u.reminder_id=r.id ".
 		"WHERE u.user_id=? ".
 		"AND u.time<?";

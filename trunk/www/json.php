@@ -152,8 +152,8 @@ try {
 
 			while($reminder=$rm->next_record()) {
 				
-				$reminder['iconCls']='go-link-icon-'.$reminder['link_type'];
-				$reminder['link_type_name']=isset($lang['link_type'][$reminder['link_type']]) ? $lang['link_type'][$reminder['link_type']] : 'Unknown';
+				$reminder['iconCls']=empty($reminder['link_type']) ? 'go-icon-reminders' : 'go-link-icon-'.$reminder['link_type'];
+				$reminder['link_type_name']=isset($lang['link_type'][$reminder['link_type']]) ? $lang['link_type'][$reminder['link_type']] : $lang['common']['other'];
 
 				$now = getdate(time());
 				$today = mktime(0,0,0,$now['mon'],$now['mday'], $now['year']);
@@ -172,6 +172,8 @@ try {
 			$GO_EVENTS->fire_event('checker', $params);
 
 			break;
+
+		
 
 		//used by /javascript/dialog/SelectGroups.js
 		case 'groups':

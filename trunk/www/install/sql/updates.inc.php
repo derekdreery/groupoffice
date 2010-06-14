@@ -403,10 +403,13 @@ $updates[]= "CREATE TABLE IF NOT EXISTS `go_reminders_users` (
   PRIMARY KEY (`reminder_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
-$updates[]= "INSERT INTO `go_reminders_users` SELECT id,user_id,time,mail_send FROM go_reminders;";
+$updates[]= "INSERT INTO `go_reminders_users` SELECT id,user_id,mail_send FROM go_reminders;";
 
 
 $updates[]= "ALTER TABLE  `go_reminders` DROP  `time` ,DROP  `user_id` , DROP  `mail_send` ;";
+
+$updates[]= "ALTER TABLE  `go_reminders` ADD  `text` TEXT NOT NULL";
+
 
 
 

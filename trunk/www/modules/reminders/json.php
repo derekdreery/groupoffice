@@ -23,7 +23,7 @@ try{
 	{
 		case 'reminder':
 			$reminder = $reminders->get_reminder($_REQUEST['reminder_id']);
-			if($reminder['user_id']>0){
+			/*if($reminder['user_id']>0){
 				$user = $GO_USERS->get_user($reminder['user_id']);
 				$reminder['user_name']=String::format_name($user);
 			}else
@@ -37,7 +37,7 @@ try{
 			}else
 			{
 				$reminder['group_name']='';
-			}
+			}*/
 
 			if($reminder['link_id']>0){
 				$reminder['link']=$reminder['link_type'].':'.$reminder['link_id'];
@@ -57,6 +57,61 @@ try{
 			$response['data']=$reminder;
 			$response['success']=true;
 			break;
+
+		case 'reminder_users':
+			
+			if(isset($_POST['delete_keys']))
+			{
+				try{
+					$response['deleteSuccess']=true;
+					$delete_users = json_decode($_POST['delete_keys']);
+					foreach($delete_users as $user_id)
+					{
+						$reminders->remove_user_from_reminder($user_id, $_POST['reminder_id'], false);
+					}
+				}catch(Exception $e)
+				{
+					$response['deleteSuccess']=false;
+					$response['deleteFeedback']=$e->getMessage();
+				}
+			}
+
+			if(isset($_POST['add_users']))
+			{
+				$reminder = $reminders->get_reminder($_POST['reminder_id']);
+
+				$add_users = json_decode($_POST['add_users'], true);
+				foreach($add_users as $user_id){
+					$reminders->add_user_to_reminder($user_id, $_POST['reminder_id'], $reminder['time']);
+				}
+			}
+
+			if(isset($_POST['add_groups']))
+			{
+				$reminder = $reminders->get_reminder($_POST['reminder_id']);
+
+				$add_groups = json_decode($_POST['add_groups'], true);
+				foreach($add_groups as $group_id){
+
+					$GO_GROUPS->get_users_in_group($group_id);
+					while($record = $GO_GROUPS->next_record()){
+						$reminders->add_user_to_reminder($record['id'], $_POST['reminder_id'], $reminder['time']);
+					}
+				}
+			}
+
+			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
+			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
+
+			$response['total'] = $reminders->get_reminder_users($_POST['reminder_id'], true, $start, $limit);
+			$response['results']=array();
+
+			while($record = $reminders->next_record()){
+
+				$record['name']=String::format_name($record);
+				$response['results'][]=$record;
+			}
+			break;
 		
 		case 'reminders':
 			if(isset($_POST['delete_keys']))
@@ -74,7 +129,7 @@ try{
 					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
-			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'id';
+			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'time';
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
@@ -84,7 +139,7 @@ try{
 			$response['results']=array();
 			while($reminder = $reminders->next_record())
 			{
-				if($reminder['user_id']>0){
+				/*if($reminder['user_id']>0){
 					$user = $GO_USERS->get_user($reminder['user_id']);
 					$reminder['user_name']=String::format_name($user);
 				}else
@@ -98,7 +153,7 @@ try{
 				}else
 				{
 					$reminder['group_name']='';
-				}
+				}*/
 				$reminder['time']=Date::get_timestamp($reminder['time']);
 				$response['results'][] = $reminder;
 			}

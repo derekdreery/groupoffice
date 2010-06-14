@@ -20,22 +20,15 @@ GO.reminders.RemindersGrid = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	var fields ={
-		fields:['id','link_id','link_type','user_name','group_name','name','time','vtime','mail_send','snooze_time','manual'],
+		fields:['id','link_id','link_type','name','time','vtime','mail_send','snooze_time','manual'],
 		columns:[{
-			header: GO.lang.strName,
-			dataIndex: 'name'
+			header: GO.reminders.lang.time,
+			dataIndex: 'time',
+			width:80
 		},{
-			header: GO.lang.strUser,
-			dataIndex: 'user_name',
-			sortable: false
-		}
-		,		{
-			header: GO.lang.userGroup,
-			dataIndex: 'group_name'
-		}
-		,		{
-			header: GO.reminders.lang.time, 
-			dataIndex: 'time'
+			header: GO.lang.strName,
+			dataIndex: 'name',
+			id:'name'
 		}
 		]
 	};
@@ -60,10 +53,9 @@ GO.reminders.RemindersGrid = function(config){
 	});
 	config.cm=columnModel;
 	config.view=new Ext.grid.GridView({
-		autoFill: true,
-		forceFit: true,
-		emptyText: GO.lang['strNoItems']		
+			emptyText: GO.lang['strNoItems']		
 	});
+	config.autoExpandColumn='name';
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
 	config.tbar=[{
