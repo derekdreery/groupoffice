@@ -33,13 +33,14 @@ try{
 				$reminder['link_type']=0;
 			}
 
-			$reminder['user_id']=$_POST['user_id'];
-			$reminder['group_id']=$_POST['group_id'];
+			//$reminder['user_id']=$_POST['user_id'];
+			//$reminder['group_id']=$_POST['group_id'];
 
 			$reminder['name']=$_POST['name'];
 			$reminder['vtime']=$reminder['time']=strtotime(Date::to_input_format($_POST['date']).' '.$_POST['time']);
 			$reminder['snooze_time']=$_POST['snooze_time'];
 			$reminder['manual']=1;
+			$reminder['text']=$_POST['text'];
 			if($reminder['id']>0)
 			{
 				$reminders->update_reminder($reminder);
