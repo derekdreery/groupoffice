@@ -129,7 +129,12 @@ class reminder extends db
 	function update_reminder($reminder, $reset_mail_send=true)
 	{
 		if($reset_mail_send){
-			$sql = "UPDATE go_reminders_users SET mail_sent=0 WHERE reminder_id=?";
+			$sql = "UPDATE go_reminders_users SET mail_sent=0";
+
+			if(isset($reminder['time']))
+				$sql.=',time='.$this->escape($reminder['time']);
+
+			$sql .= " WHERE reminder_id=?";
 			$this->query($sql, 'i', $reminder['id']);
 		}
 			
@@ -162,10 +167,10 @@ class reminder extends db
 	* @return bool True on success
 	*/
 	
-	function delete_reminders($user_id)
+	/*function delete_reminders($user_id)
 	{
 		return $this->query("DELETE FROM go_reminders WHERE user_id=".$this->escape($user_id));
-	}
+	}*/
 	
 /**
 	* Gets a reminder record by a link ID
@@ -197,7 +202,7 @@ class reminder extends db
 	
 	function get_reminder_by_link_id($user_id, $link_id, $link_type)
 	{
-		$this->query("SELECT * FROM go_reminders WHERE user_id=".$this->escape($user_id)." AND link_id=".$this->escape($link_id)." AND link_type=".$this->escape($link_type));
+		$this->query("SELECT r.*,u.time FROM go_reminders r INNER JOIN go_reminders_users u ON u.reminder_id=r.id WHERE user_id=".$this->escape($user_id)." AND link_id=".$this->escape($link_id)." AND link_type=".$this->escape($link_type));
 		return $this->next_record();
 	}
 	
