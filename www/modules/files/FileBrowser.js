@@ -196,7 +196,7 @@ GO.files.FileBrowser = function(config){
 				},{
 					header:GO.lang.strType,
 					dataIndex: 'type',
-					sortable:false,
+					sortable:true,
 					hidden:true,
 					width:100
 				},{

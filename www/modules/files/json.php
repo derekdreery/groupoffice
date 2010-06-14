@@ -666,8 +666,13 @@ try{
 						}
 
 						$fsort = isset($_POST['sort']) ? $_POST['sort'] : 'name';
+
+						if($fsort=='type'){
+							$fsort='extension';
+						}
+
 						$dsort = isset($_POST['sort']) ? $_POST['sort'] : 'name';
-						if($dsort!='name' || $dsort !='mtime')
+						if($dsort!='name' || $dsort !='mtime' || $dsort=='type')
 						{
 							$dsort='name';
 						}
