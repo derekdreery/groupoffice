@@ -552,9 +552,9 @@ class calendar extends db {
 	}
 
 	function get_view_calendars($view_id) {
-		$sql = "SELECT cal_calendars.name, cal_calendars.user_id, cal_calendars.id, cal_calendars.acl_id, cal_views_calendars.background FROM cal_calendars ".
-						"INNER JOIN cal_views_calendars ON cal_calendars.id=cal_views_calendars.calendar_id ".
-						"WHERE cal_views_calendars.view_id='".$this->escape($view_id)."' ORDER BY cal_calendars.name ASC";
+		$sql = "SELECT c.name, c.group_id, c.user_id, c.id, c.acl_id, vc.background FROM cal_calendars c ".
+		"INNER JOIN cal_views_calendars vc ON c.id=vc.calendar_id ".
+		"WHERE vc.view_id='".$this->escape($view_id)."' ORDER BY c.name ASC";
 
 		$this->query($sql);
 		return $this->num_rows();

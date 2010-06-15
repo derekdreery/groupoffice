@@ -423,7 +423,13 @@ abstract class Swift_Mime_Headers_AbstractHeader implements Swift_Mime_Header
     
     $encodedToken = '';
     //Split at all whitespace boundaries
-    foreach (preg_split('~(?=[\t ])~', $string) as $token)
+		//
+		//MS: don't split because of bug:
+		//
+		//http://swiftmailer.lighthouseapp.com/projects/21527-swift-mailer/tickets/150-header-encoding-problem
+		//
+    //foreach (preg_split('~(?=[\t ])~', $string) as $token)
+		$token=$string;
     {
       if ($this->tokenNeedsEncoding($token))
       {
