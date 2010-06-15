@@ -27,6 +27,9 @@ GO.users.UserDialog = function(config){
 			text: GO.lang.cmdBrowseLinks,
 			disabled:true,
 			handler: function(){
+				if(!GO.linkBrowser){
+					GO.linkBrowser = new GO.LinkBrowser();
+				}
 				GO.linkBrowser.show({link_id: this.user_id,link_type: "8",folder_id: "0"});				
 			},
 			scope: this
