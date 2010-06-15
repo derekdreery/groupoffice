@@ -391,9 +391,6 @@ $updates[]= "ALTER TABLE  `go_reminders` ADD  `snooze_time` INT NOT NULL";
 $updates[]= "UPDATE go_reminders SET snooze_time=7200";
 $updates[]= "ALTER TABLE  `go_reminders` ADD  `manual` BOOLEAN NOT NULL";
 $updates[]= "ALTER TABLE  `go_reminders` DROP INDEX  `link_id`";
-$updates[]= "ALTER TABLE  `go_reminders` ADD INDEX (  `group_id` )";
-$updates[]= "ALTER TABLE  `go_reminders` ADD INDEX (  `user_id` )";
-
 
 $updates[]= "CREATE TABLE IF NOT EXISTS `go_reminders_users` (
   `reminder_id` int(11) NOT NULL,

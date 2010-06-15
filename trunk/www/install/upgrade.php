@@ -130,7 +130,7 @@ foreach($GO_MODULES->modules as $update_module)
 		if(isset($updates))
 		{
 			//if(!$quiet)
-			echo 'Updating '.$update_module['id'].$line_break;
+			//echo 'Updating '.$update_module['id'].$line_break;
 
 			for($i=$update_module['version'];$i<count($updates);$i++)
 			{
@@ -149,7 +149,7 @@ foreach($GO_MODULES->modules as $update_module)
 				}else
 				{
 					//if(!$quiet)
-						echo 'Excuting: '.$updates[$i].$line_break;
+						//echo 'Excuting: '.$updates[$i].$line_break;
 
 					$db->query($updates[$i]);
 				}
