@@ -21,16 +21,16 @@ GO.cms.MainPanel = function(config){
 	this.folderDialog = new GO.cms.FolderDialog();
 	this.folderDialog.on('save', function(folder_id, formValues, parent_id){
 
-		 var folderNode = this.treePanel.getNodeById('folder_'+folder_id);
+		var folderNode = this.treePanel.getNodeById('folder_'+folder_id);
 		 
-		 if(folderNode){
-		 	folderNode.setText(formValues.name);
-		 }else
-		 {
-		 	var folderNode = this.treePanel.getNodeById('folder_'+parent_id);
+		if(folderNode){
+			folderNode.setText(formValues.name);
+		}else
+		{
+			var folderNode = this.treePanel.getNodeById('folder_'+parent_id);
 		 	
-		 	var newNode = new Ext.tree.AsyncTreeNode({
-		 		text: formValues.name,
+			var newNode = new Ext.tree.AsyncTreeNode({
+				text: formValues.name,
 				id: 'folder_'+folder_id,
 				iconCls: 'filetype-folder',
 				site_id: folderNode.attributes.site_id,
@@ -39,17 +39,17 @@ GO.cms.MainPanel = function(config){
 				template: folderNode.attributes.template,
 				expanded:true,
 				children:[]
-		 	});
+			});
 		 	
 		 	
-		 	folderNode.appendChild(newNode);
-		 }		
-		}, this);	
+			folderNode.appendChild(newNode);
+		}
+	}, this);
 			
 				
 	this.treePanel = GO.cms.treePanel = new GO.cms.TreePanel({
-    region:'west',
-    title:GO.lang.menu,
+		region:'west',
+		title:GO.lang.menu,
 		autoScroll:true,				
 		width: 250,
 		split:true,
@@ -83,29 +83,29 @@ GO.cms.MainPanel = function(config){
 	}, this);					
 	
 	this.editorPanel = new GO.cms.EditorPanel();
-    GO.cms.editorPanel = this.editorPanel;
+	GO.cms.editorPanel = this.editorPanel;
 	
 	this.editorPanel.on('disabled', function(disabled){
 		this.saveButton.setDisabled(disabled);
 		this.viewButton.setDisabled(disabled);
-        if(disabled)
-            this.filesButton.setDisabled(true);
+		if(disabled)
+			this.filesButton.setDisabled(true);
 		
 	}, this);
 	
 	this.editorPanel.on('save', function(file_id, formValues, folder_id){
 		
-		 var fileNode = this.treePanel.getNodeById('file_'+file_id);
+		var fileNode = this.treePanel.getNodeById('file_'+file_id);
 		 
-		 if(fileNode){
-		 	fileNode.setText(formValues.name);
-		 }else
-		 {
+		if(fileNode){
+			fileNode.setText(formValues.name);
+		}else
+		{
 		 	
-		 	var folderNode = this.treePanel.getNodeById('folder_'+folder_id);
+			var folderNode = this.treePanel.getNodeById('folder_'+folder_id);
 		 	
-		 	var newNode = new Ext.tree.AsyncTreeNode({
-		 		text: formValues.name,
+			var newNode = new Ext.tree.AsyncTreeNode({
+				text: formValues.name,
 				id: 'file_'+file_id,
 				iconCls: 'filetype-html',
 				site_id: folderNode.attributes.site_id,
@@ -113,17 +113,17 @@ GO.cms.MainPanel = function(config){
 				folder_id: folderNode.attributes.folder_id,
 				template: folderNode.attributes.template,
 				leaf: true
-		 	});		 	
+			});
 		 	
-		 	folderNode.appendChild(newNode);		 	
-		 	this.treePanel.getSelectionModel().select(newNode);
-		 }
+			folderNode.appendChild(newNode);
+			this.treePanel.getSelectionModel().select(newNode);
+		}
 		
 	}, this);
 	
 	config.items=[
-		this.treePanel,
-		this.editorPanel
+	this.treePanel,
+	this.editorPanel
 	];	
 	
 	config.layout='border';
@@ -268,7 +268,7 @@ GO.cms.MainPanel = function(config){
 				params: {
 					task: 'delete',
 					delete_items: Ext.encode(deleteItems)
-					},
+				},
 				callback:function(responseParams){
 					if(responseParams.deleted_nodes)
 					{
@@ -331,24 +331,26 @@ GO.cms.MainPanel = function(config){
 		tbar.push(this.filesButton = new Ext.Button({
 			iconCls: 'cms-folder-properties',
 			text: GO.cms.lang.files,
-            disabled:true,
+			disabled:true,
 			handler:function(){				
-                GO.cms.createFileBrowser(GO.cms.editorPanel.root_folder_id, '', false, GO.cms.editorPanel.files_folder_id);
+				GO.cms.createFileBrowser(GO.cms.editorPanel.root_folder_id, '', false, GO.cms.editorPanel.files_folder_id);
 			},
 			scope:this
 		}));
 
-        this.editorPanel.on('load', function(){
-          this.filesButton.setDisabled(this.editorPanel.files_folder_id==0);
+		this.editorPanel.on('load', function(){
+			this.filesButton.setDisabled(this.editorPanel.files_folder_id==0);
+		},this);
 
-					this.getEl().unmask();
-        },this);
-
-        this.editorPanel.on('save', function(){
-          this.filesButton.setDisabled(this.editorPanel.files_folder_id==0);
-        },this);
+		this.editorPanel.on('save', function(){
+			this.filesButton.setDisabled(this.editorPanel.files_folder_id==0);
+		},this);
 	}
-	
+
+	this.editorPanel.on('load', function(){
+		this.getEl().unmask();
+	},this);
+
 	if(GO.settings.modules.cms.write_permission)
 	{
 		tbar.push('-');
@@ -389,10 +391,12 @@ GO.cms.MainPanel = function(config){
 						title: GO.webshop.lang.webshops,
 						items:new GO.webshop.WebshopsGrid(),
 						buttons:[{
-								text: GO.lang.cmdClose,
-								handler: function(){this.webshopsDialog.hide();},
-								scope:this
-							}]												
+							text: GO.lang.cmdClose,
+							handler: function(){
+								this.webshopsDialog.hide();
+							},
+							scope:this
+						}]
 					});
 					
 				}
@@ -406,30 +410,35 @@ GO.cms.MainPanel = function(config){
 	if(GO.mailings)
 	{
 		tbar.push({
-				iconCls: 'ml-btn-mailings', 
-				text: GO.addressbook.lang.sendMailing, 
-				cls: 'x-btn-text-icon', 
-				handler: function(){
-					if(!this.selectMailingGroupWindow)
-					{
-						this.selectMailingGroupWindow=new GO.mailings.SelectMailingGroupWindow();
-						this.selectMailingGroupWindow.on("select", function(win, mailing_group_id){
-							GO.email.showComposer({
-								loadUrl: GO.settings.modules.mailings.url+'json.php',								
-								loadParams:{task:'sendcmsfile',file_id: this.editorPanel.baseParams.file_id, mailing_group_id:mailing_group_id},
+			iconCls: 'ml-btn-mailings',
+			text: GO.addressbook.lang.sendMailing,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				if(!this.selectMailingGroupWindow)
+				{
+					this.selectMailingGroupWindow=new GO.mailings.SelectMailingGroupWindow();
+					this.selectMailingGroupWindow.on("select", function(win, mailing_group_id){
+						GO.email.showComposer({
+							loadUrl: GO.settings.modules.mailings.url+'json.php',
+							loadParams:{
+								task:'sendcmsfile',
+								file_id: this.editorPanel.baseParams.file_id,
 								mailing_group_id:mailing_group_id
-							});
-						}, this);
-					}	
-					this.selectMailingGroupWindow.show();
-				}, 
-				scope: this
-			});
+							},
+							mailing_group_id:mailing_group_id
+						});
+					}, this);
+				}
+				this.selectMailingGroupWindow.show();
+			},
+			scope: this
+		});
 	}
 	
 	config.tbar=new Ext.Toolbar({		
-			cls:'go-head-tb',
-			items: tbar});
+		cls:'go-head-tb',
+		items: tbar
+	});
 	
 	config.border=false;
 	
@@ -446,7 +455,9 @@ Ext.extend(GO.cms.MainPanel, Ext.Panel, {
 		{
 			this.editorPanel.saveFile();
 			
-			this.editorPanel.on('save', callback, scope, {single:true});
+			this.editorPanel.on('save', callback, scope, {
+				single:true
+			});
 		}else
 		{		
 			callback.call(scope);
@@ -468,8 +479,8 @@ Ext.extend(GO.cms.MainPanel, Ext.Panel, {
 	
 }else
 {*/
-	GO.moduleManager.addModule('cms', GO.cms.MainPanel, {
-		title : GO.cms.lang.cms,
-		iconCls : 'go-tab-icon-cms'
-	});
+GO.moduleManager.addModule('cms', GO.cms.MainPanel, {
+	title : GO.cms.lang.cms,
+	iconCls : 'go-tab-icon-cms'
+});
 //}
