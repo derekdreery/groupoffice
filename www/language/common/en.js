@@ -368,4 +368,4 @@ GO.lang.debugModeWarning="Use $config['debug']=true; only with development and p
 GO.lang.userGroup='User group';
 
 GO.lang.noItemSelectedWarning='Select at least one item please.';
-GO.lang.selectAll='Select all';
+
