@@ -25,8 +25,7 @@
 	config.store = new GO.data.JsonStore({
 	    url: GO.settings.modules.notes.url+ 'json.php',
 	    baseParams: {
-	    	task: 'notes',
-	    	category_id: 0	    	
+	    	task: 'notes'	
 	    	},
 	    root: 'results',
 	    id: 'id',

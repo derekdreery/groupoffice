@@ -58,6 +58,18 @@ try{
 				}
 			}
 
+			$categories = $GO_CONFIG->get_setting('notes_categories_filter', $GO_SECURITY->user_id);
+			$categories = ($categories) ? explode(',',$categories) : array();
+
+			if(!count($categories))
+			{			
+				$notes->get_category();
+				$default_category_id = $notes->f('id');
+			       
+				$categories[] = $default_category_id;
+				$GO_CONFIG->save_setting('notes_categories_filter',$default_category_id, $GO_SECURITY->user_id);
+			}
+
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
@@ -78,6 +90,8 @@ try{
 				
 				$user = $GO_USERS->get_user($category['user_id']);
 				$category['user_name']=String::format_name($user);
+
+				$category['checked'] = in_array($category['id'], $categories);
 								
 				$response['results'][] = $category;
 			}
@@ -162,16 +176,52 @@ try{
 				break;
 			}
 				
-		case 'notes':
-			$category_id=$_POST['category_id'];
-			$category = $notes->get_category($category_id);
-			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']);
-			$response['data']['write_permission']=$response['data']['permission_level']>GO_SECURITY::READ_PERMISSION;
-			;
-			if(!$response['data']['permission_level'])
+		case 'notes':	
+
+			$response['data']['write_permission'] = false;
+			if(isset($_POST['categories']))
 			{
-				throw new AccessDeniedException();
-			}			
+				$categories = json_decode($_POST['categories'], true);
+				$GO_CONFIG->save_setting('notes_categories_filter',implode(',', $categories), $GO_SECURITY->user_id);
+			}else
+			{
+				$categories = $GO_CONFIG->get_setting('notes_categories_filter', $GO_SECURITY->user_id);
+				$categories = ($categories) ? explode(',',$categories) : array();
+			}
+
+			if(count($categories))
+			{
+				$user_id = 0;
+				$authorized_categories = array();
+				$permission_level = 0;
+				$response['data']['permission_level'] = 0;
+				$categories_name = array();
+				foreach($categories as $category_id)
+				{
+					$category = $notes->get_category($category_id);
+
+					$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']);
+					if($permission_level)
+					{
+						$authorized_categories[] = $category_id;
+					}
+
+					if($permission_level > $response['data']['permission_level'])
+					{
+						$response['data']['permission_level'] = $permission_level;
+					}
+
+					$categories_name[] = $category['name'];
+				}
+
+				$response['grid_title'] = implode(' & ', $categories_name);
+
+				$response['data']['write_permission']=$response['data']['permission_level']>1;
+				if(!$response['data']['permission_level'])
+				{
+					throw new AccessDeniedException();
+				}
+			}				
 
 			if(isset($_POST['delete_keys']))
 			{
@@ -205,7 +255,7 @@ try{
 			}
 			
 			
-			$response['total'] = $notes->get_notes($query, $category_id, $sort, $dir, $start, $limit);
+			$response['total'] = $notes->get_notes($query, $categories, $sort, $dir, $start, $limit);
 			$response['results']=array();
 			while($notes->next_record())
 			{
@@ -214,7 +264,7 @@ try{
 				$user = $GO_USERS->get_user($note['user_id']);
 				$note['user_name']=String::format_name($user);
 				$note['mtime']=Date::get_timestamp($note['mtime']);
-				$note['ctime']=Date::get_timestamp($note['ctime']);				
+				$note['ctime']=Date::get_timestamp($note['ctime']);			
 								
 				$response['results'][] = $note;
 			}

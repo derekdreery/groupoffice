@@ -34,6 +34,6 @@ GO.notes.readableCategoriesStore = new GO.data.JsonStore({
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
-	    fields: ['id','user_name','acl_id','name'],
+	    fields: ['id','user_name','acl_id','name','checked'],
 	    remoteSort: true
 	});
