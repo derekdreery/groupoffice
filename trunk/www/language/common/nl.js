@@ -349,3 +349,4 @@ GO.lang.debugModeWarning="Gebruik $config['debug']=true; alleen voor ontwikkelin
 GO.lang.userGroup='Gebruikersgroep';
 
 GO.lang.noItemSelectedWarning='Selecteer minimaal één item.';
+GO.lang.deselectAll='Deselecteer alles';
