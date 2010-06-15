@@ -335,7 +335,6 @@ GO.lang.age='Alder';
 GO.lang.selectFolder= 'Velg en mappe';
 
 GO.lang.userGroups='Brukergrupper';
-
 GO.lang.cmdInsert='Sett inn';
 GO.lang.firebugDetected="Advarsel! Oppdaget utvidelsen Firebug";
 GO.lang.firebugWarning="Firebug er kjent for å gjøre dette programmet tregere, og bør ikke brukes i produksjonsmiljø."
@@ -345,8 +344,9 @@ GO.lang.removeFormatting='Fjern formatering';
 GO.lang.insertHorizontalRule='Sett inn vannrett linje';
 GO.lang.insertHRtext='Angi linjebredde i prosent<br/> etterfulgt av %-tegnet, eller<br/> angi en fast bredde ved å unnlate %-tegnet.';
 GO.lang.width='Bredde';
-
 GO.lang.keywords='Nøkkelord';
 GO.lang.thankyou='Takk';
 GO.lang.applyMultiselect='Bruk valgene';
 GO.lang.createdBy='Opprettet av';
+GO.lang.debugModeDetected="Advarsel! Debug mode aktivert";
+GO.lang.debugModeWarning="Du bør bare bruke $config['debug']=true; under utvikling og feilsøking. Group-Office kjører saktere i debug mode!";
