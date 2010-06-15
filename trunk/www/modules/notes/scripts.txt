@@ -1,4 +1,3 @@
-modules/notes/CategoriesGrid.js
 modules/notes/CategoryDialog.js
 modules/notes/NotesGrid.js
 modules/notes/NoteDialog.js

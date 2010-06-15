@@ -19,44 +19,47 @@ GO.notes.MainPanel = function(config){
 		config = {};
 	}
 
-	this.westPanel = new GO.notes.CategoriesGrid({
-    region:'west',
-    id:'no-west-panel',
-    title:GO.lang.menu,
-		autoScroll:true,				
+	this.westPanel= new GO.grid.MultiSelectGrid({
+		region:'west',
+		id:'no-west-panel',
+		title:GO.notes.lang.categories,
+		loadMask:true,
+		store: GO.notes.readableCategoriesStore,
 		width: 150,
 		split:true
 	});
-	
-	this.westPanel.on('rowclick', function(grid, rowIndex)
+
+	this.westPanel.on('change', function(grid, categories, records)
 	{
-		var record = grid.getStore().getAt(rowIndex);	
-		this.centerPanel.store.baseParams.category_id = record.data.id;
-		this.category_id=record.data.id;
-		this.category_name=record.data.name;
-		
-		this.centerPanel.store.load();		
+                this.centerPanel.store.baseParams.categories = Ext.encode(categories);		
+                this.centerPanel.store.reload();
+                this.category_ids = categories;
+
+		if(records.length)
+                {
+                        this.category_id = records[0].data.id;
+                        this.category_name = records[0].data.name;
+                }
+              
+                delete this.centerPanel.store.baseParams.categories;
 	}, this);
 	
-	this.westPanel.store.on('load', function(){
-		var sm = this.westPanel.selModel;		
-		
-		var defaultRecord = this.westPanel.store.getById(GO.notes.defaultCategory.id);
-		if(!defaultRecord)
+	this.westPanel.store.on('load', function()
+	{
+		for(var i=0, found=false; i<this.westPanel.store.data.length && !found; i++)
 		{
-			defaultRecord = this.westPanel.store.getAt(0);
-			GO.notes.defaultCategory = defaultRecord.data;
+			var item = this.westPanel.store.data.items[i];
+			if(item.data.checked)
+			{
+				this.category_id = item.data.id;
+				this.category_name = item.data.name;
+				
+				found = true;
+			}
 		}
-		sm.selectRecords([defaultRecord]);
-
-		if(defaultRecord)
-		{
-			this.centerPanel.store.baseParams.category_id = defaultRecord.data.id;
-			this.category_id=defaultRecord.data.id;
-			this.category_name=defaultRecord.data.name;		
-			
-			this.centerPanel.store.load();
-		}		
+		
+		this.centerPanel.store.load();
+		
 	}, this);
 
 	this.centerPanel = new GO.notes.NotesGrid({
@@ -106,7 +109,9 @@ GO.notes.MainPanel = function(config){
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){
-	    	GO.notes.showNoteDialog(0, {category_id: this.centerPanel.store.baseParams.category_id, category_name: this.category_name});
+			GO.notes.showNoteDialog(0, {
+				category_id: this.category_id,
+				category_name: this.category_name});
 			},
 			scope: this
 		},{
@@ -159,7 +164,10 @@ Ext.extend(GO.notes.MainPanel, Ext.Panel, {
 			save:function(){
 				this.centerPanel.store.reload();
 			}
-		}		
+		}
+
+		GO.notes.readableCategoriesStore.load();
+		
 		GO.notes.MainPanel.superclass.afterRender.call(this);
 	}
 });

@@ -513,19 +513,19 @@ class notes extends db {
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_notes($query, $category_id, $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
+	function get_notes($query, $categories=array(), $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
-		$sql = "SELECT n.* FROM no_notes n";
+		$sql = "SELECT n.*, c.name AS category_name FROM no_notes n "
+		    . "INNER JOIN no_categories c ON n.category_id=c.id";
 		
-		if($category_id>0)
+		if(count($categories))
 		{
-			 $sql .= " WHERE n.category_id=".$this->escape($category_id);
+			 $sql .= " WHERE n.category_id IN (".implode(',', $categories).")";
 		}else
 		{
 			global $GO_SECURITY;
 			
-			$sql .= " INNER JOIN no_categories c ON n.category_id=c.id ".
- 				"INNER JOIN go_acl a ON c.acl_id = a.acl_id  ".
+			$sql .= " INNER JOIN go_acl a ON c.acl_id = a.acl_id  ".
 				"LEFT JOIN go_users_groups ug ON (a.group_id = ug.group_id) WHERE ((".
  				"ug.user_id = ".$GO_SECURITY->user_id.") OR (a.user_id = ".$GO_SECURITY->user_id."))";
 		}
