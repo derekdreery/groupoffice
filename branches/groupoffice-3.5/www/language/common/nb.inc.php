@@ -215,3 +215,4 @@ $lang['common']['youHaveReminders']='Du har %s i %s.';
 $lang['common']['createdBy']='Opprettet av';
 $lang['common']['none']='Ingen';
 $lang['common']['alert']='Varsling';
+$lang['common']['theFolderAlreadyExists']='Det eksisterer allerede en mappe med dette navnet!';
