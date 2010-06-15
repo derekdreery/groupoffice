@@ -19,15 +19,6 @@ GO.grid.MultiSelectGrid = function (config){
 		}
 	});
 
-	config.tbar = [ new Ext.Button({
-		text:GO.tasks.lang.selectAllTasklists,
-		handler:function()
-		{
-			this.selectAllTasklists();
-		},
-		scope: this
-	})];
-
 	if(config.allowNoSelection)
 	    this.allowNoSelection = true;
 
