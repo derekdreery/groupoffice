@@ -38,8 +38,12 @@ GO.grid.MultiSelectGrid = function (config){
 		    this.selectButton = new Ext.Button({
 			text:GO.lang.selectAll,
 			handler:function()
-			{
-				this.applyFilter('all');
+			{							
+				if(this.allowNoSelection || !this.selectedAll)
+				{
+					var select_records = (this.selectedAll && this.allowNoSelection) ? 'clear' : 'all';
+				        this.applyFilter(select_records);
+				}
 			},			
 			scope: this
 		})],
@@ -53,7 +57,7 @@ GO.grid.MultiSelectGrid = function (config){
 		}],
 		listeners:{
 			scope:this,
-			delayedrowselect:function(grid, rowIndex, r){
+			delayedrowselect:function(grid, rowIndex, r){				
 				this.applyFilter([r.id]);
 			}
 		},
@@ -72,6 +76,24 @@ GO.grid.MultiSelectGrid = function (config){
 	this.store.on('load', function()
 	{
 	    this.selectButton.setDisabled(!this.store.data.items.length);
+
+	    var num_selected = 0;
+	    for(var i=0; i<this.store.data.items.length; i++)
+	    {
+		    if(this.store.data.items[i].data.checked)
+		    {
+			    num_selected++;
+		    }
+	    }
+
+	    this.selectedAll = (num_selected == this.store.data.items.length) ? true : false;
+
+	    if(this.allowNoSelection)
+	    {
+		    var text = (this.selectedAll) ? GO.lang.deselectAll : GO.lang.selectAll;
+		    this.selectButton.setText(text);
+	    }
+	    
 	},this);
 
 	this.addEvents({
@@ -84,6 +106,7 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 	allowNoSelection : false,
 	lastRecordClicked : false,
 	lastSelectedIndex : -1,
+	selectedAll : false,
 	applyFilter : function(select_records, suppressEvent){
 
 		this.lastSelectedIndex=-1;
@@ -161,6 +184,14 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 		if(this.lastSelectedIndex>-1)
 		{
 			this.getView().focusRow(this.lastSelectedIndex);
-		}		
+		}
+
+		this.selectedAll = (records.length == this.store.data.items.length) ? true : false;
+		if(this.allowNoSelection)
+		{						
+			var text = (this.selectedAll) ? GO.lang.deselectAll : GO.lang.selectAll;			
+			this.selectButton.setText(text);		
+		}
+		
 	}
 });
