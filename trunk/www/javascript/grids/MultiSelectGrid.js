@@ -71,8 +71,10 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 
 	allowNoSelection : false,
 	lastRecordClicked : false,
+	lastSelectedIndex : -1,
 	applyFilter : function(select_records, suppressEvent){
 
+		this.lastSelectedIndex=-1;
 		var records = [], ids=[], checked, current_record_id, will_be_checked;
 
 		for (var i = 0, max=this.store.data.items.length; i < max;  i++)
@@ -104,6 +106,8 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 							this.store.data.items[i].data.checked="1";
 						}
 					}
+
+					this.lastSelectedIndex = i;
 
 				}else
 				{
@@ -141,6 +145,10 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 			    this.getView().refresh();
 
 			this.getSelectionModel().clearSelections();
+		}
+		if(this.lastSelectedIndex>-1)
+		{
+			this.getView().focusRow(this.lastSelectedIndex);
 		}
 	}
 });

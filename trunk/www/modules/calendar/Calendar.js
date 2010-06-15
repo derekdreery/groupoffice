@@ -1202,6 +1202,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		if(this.view_id>0){
 			selectGrid = this.viewsList;
 
+			selectGrid.expand();
+
 			this.resourcesList.getSelectionModel().clearSelections();
 			this.calendarList.allowNoSelection=true;
 			this.calendarList.applyFilter('clear', true);
@@ -1212,11 +1214,14 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			
 			if(this.group_id==1){
 				selectGrid = this.calendarList;
+				this.resourcesList.getSelectionModel().clearSelections();
+
+				selectGrid.expand();
 
 				if(config.applyFilter)
 					selectGrid.applyFilter(this.calendars, true);
 				
-				this.resourcesList.getSelectionModel().clearSelections();
+				
 			}else
 			{
 				this.calendarList.allowNoSelection=true;
@@ -1230,11 +1235,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					records.push(selectGrid.store.getById(this.calendars[i]));
 				}
 				selectGrid.getSelectionModel().selectRecords(records);
+				selectGrid.expand();
 			}					
 		}
 
 
-		selectGrid.expand();
+		
 
 		//select calendars for resources grid etc.
 		/*
