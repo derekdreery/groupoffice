@@ -56,12 +56,13 @@ class RFC822
 	var $quote = false;
 	
 	/**
-	* Bool to check if we already processed an e-mail address
+	* Bool to check if we found an e-mail address
 	*
 	* @var     bool
 	* @access  private
 	*/
-	var $in_email = false;
+
+	var $email_found=false;
 	
 	
 	/**
@@ -94,6 +95,7 @@ class RFC822
 				case '<':
 					$this->personal = trim($this->buffer);
 					$this->buffer = '';
+					$this->email_found=true;
 				break;
 				
 				case '>':
@@ -102,7 +104,7 @@ class RFC822
 				
 				case ',':
 				case ';':			
-					if($this->quote)// || !String::validate_email($this->buffer))
+					if($this->quote || !$this->email_found)// || !String::validate_email($this->buffer))
 					{
 						$this->buffer .= $char;				
 					}else
@@ -208,7 +210,7 @@ class RFC822
 		}
 		$this->buffer = '';
 		$this->personal = false;
-		$this->in_email=false;
+		$this->email_found=false;
 	}
 	
 	/**

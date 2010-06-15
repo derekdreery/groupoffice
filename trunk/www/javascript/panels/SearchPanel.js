@@ -32,8 +32,7 @@ GO.grid.SearchPanel = function(config){
 	config.layout='border';
 
 	this.filterPanel = new GO.LinkTypeFilterPanel({
-		region:'west',
-		collapsible:true,
+		region:'west',		
 		split:true,
 		border:true,
 		width:160

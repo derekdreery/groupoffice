@@ -390,7 +390,8 @@ GO.calendar.MainPanel = function(config){
 		}]
 	});
 	
-	this.viewGrid.on('zoom', function(conf){	
+	this.viewGrid.on('zoom', function(conf){
+		conf.applyFilter=true;
 		this.setDisplay(conf);
 	}, this);	
 	
@@ -1202,7 +1203,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			selectGrid = this.viewsList;
 
 			this.resourcesList.getSelectionModel().clearSelections();
-			this.calendarList.applyFilter([], true);
+			this.calendarList.allowNoSelection=true;
+			this.calendarList.applyFilter('clear', true);
+			this.calendarList.allowNoSelection=false;
 		}else
 		{
 			this.viewsList.getSelectionModel().clearSelections();
@@ -1216,8 +1219,17 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				this.resourcesList.getSelectionModel().clearSelections();
 			}else
 			{
-				this.calendarList.applyFilter([], true);
+				this.calendarList.allowNoSelection=true;
+				this.calendarList.applyFilter('clear', true);
+				this.calendarList.allowNoSelection=false;
+
 				selectGrid = this.resourcesList;
+
+				var records=[];
+				for(var i=0,max=this.calendars.length;i<max;i++){
+					records.push(selectGrid.store.getById(this.calendars[i]));
+				}
+				selectGrid.getSelectionModel().selectRecords(records);
 			}					
 		}
 
