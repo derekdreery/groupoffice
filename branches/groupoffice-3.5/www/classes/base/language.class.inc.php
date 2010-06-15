@@ -101,7 +101,16 @@ class GO_LANGUAGE extends db {
 
 		global $lang, $GO_LANGUAGE;
 
-		if(file_exists($this->language_path.'common/'.$language.'.inc.php'))
+		$f = file_exists($this->language_path.'common/'.$language.'.inc.php');
+		if(!$f){
+			require($this->language_path.'languages.inc.php');
+			if(isset($language_aliases[$language])){
+				$language=$language_aliases[$language];
+				$f = file_exists($this->language_path.'common/'.$language.'.inc.php');
+			}
+		}
+
+		if($f)
 		{
 			$this->language=$_SESSION['GO_SESSION']['language']=$language;
 
