@@ -283,6 +283,7 @@ GO.calendar.MainPanel = function(config){
 			handler : function() {
 				this.setDisplay({
 					group_id: 1,
+					applyFilter:true,
 					calendars: [GO.calendar.defaultCalendar['id']],
 					calendar_name: GO.calendar.defaultCalendar['name'],
 					title:GO.calendar.defaultCalendar['name']
