@@ -269,30 +269,7 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 		});
                 
 		this.taskListsStore.on('load', function(){
-                        /*
-			var defaultRecord;
-			if(this.gridPanel.store.baseParams.tasklists)
-				defaultRecord=this.taskListsStore.getById(this.gridPanel.store.baseParams.tasklist_id);
-			
-			if(!defaultRecord)
-				defaultRecord = this.taskListsStore.getById(GO.tasks.defaultTasklist.id);
-			
-			if(!defaultRecord)
-				defaultRecord =  this.taskListsStore.getAt(0);
-
-			this.tasklist_id = defaultRecord.id;
-			this.tasklist_name = defaultRecord.get('name');
-
-			this.gridPanel.store.baseParams['tasklist_id']=this.tasklist_id;
-			this.gridPanel.store.load({
-				callback:function(){
-					var sm = this.taskListsPanel.getSelectionModel();
-					sm.selectRecords([defaultRecord]);
-				},
-				scope: this
-			});
-                        */
-                        
+		    
                         var records = [];
                         for(var i=0; i<this.taskListsStore.data.length; i++)
                         {
