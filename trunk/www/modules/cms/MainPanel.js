@@ -340,15 +340,17 @@ GO.cms.MainPanel = function(config){
 
         this.editorPanel.on('load', function(){
           this.filesButton.setDisabled(this.editorPanel.files_folder_id==0);
-
-					this.getEl().unmask();
         },this);
 
         this.editorPanel.on('save', function(){
           this.filesButton.setDisabled(this.editorPanel.files_folder_id==0);
         },this);
 	}
-	
+
+	this.editorPanel.on('load', function(){
+		this.getEl().unmask();
+	},this);
+
 	if(GO.settings.modules.cms.write_permission)
 	{
 		tbar.push('-');
