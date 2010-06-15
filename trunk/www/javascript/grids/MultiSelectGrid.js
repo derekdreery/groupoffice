@@ -34,14 +34,15 @@ GO.grid.MultiSelectGrid = function (config){
 	Ext.apply(config, {
 		border: false,
 		plugins: [checkColumn],
-		tbar : [ {
+		tbar : [
+		    this.selectButton = new Ext.Button({
 			text:GO.lang.selectAll,
 			handler:function()
 			{
 				this.applyFilter('all');
-			},
+			},			
 			scope: this
-		}],
+		})],
 		layout:'fit',
 		cls: 'go-grid3-hide-headers',
 		autoScroll:true,
@@ -57,10 +58,21 @@ GO.grid.MultiSelectGrid = function (config){
 			}
 		},
 		autoExpandColumn:'name',
+		view:new Ext.grid.GridView({
+			autoFill: true,
+			forceFit: true,
+			emptyText: GO.lang['strNoItems']
+		}),
 		sm: new Ext.grid.RowSelectionModel()
 	});
 
 	GO.grid.MultiSelectGrid.superclass.constructor.call(this, config);
+
+
+	this.store.on('load', function()
+	{
+	    this.selectButton.setDisabled(!this.store.data.items.length);
+	},this);
 
 	this.addEvents({
 		change : true
@@ -149,6 +161,6 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 		if(this.lastSelectedIndex>-1)
 		{
 			this.getView().focusRow(this.lastSelectedIndex);
-		}
+		}		
 	}
 });
