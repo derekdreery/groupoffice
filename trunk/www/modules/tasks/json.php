@@ -301,7 +301,7 @@ try{
 
                                 $show_categories = array();
 				$tasklists = array();
-				$tasklists_name = array();
+				$tasklist_names = array();
 
 				if($tasks->get_visible_tasklists($user_id) == 0){
 
@@ -316,7 +316,7 @@ try{
 				{
 					$cur_tasklist = $tasks2->get_tasklist($tasks->f('tasklist_id'));
 					$tasklists[] = $tasks->f('tasklist_id');
-					$tasklists_name[] = $cur_tasklist['name'];
+					$tasklist_names[] = $cur_tasklist['name'];
 				}
 
 				$user_id = 0;                                
@@ -333,41 +333,77 @@ try{
                                         $tasklists = ($tasklists) ? explode(',',$tasklists) : array();
                                 }
 
-                                if(count($tasklists))
-                                {
-                                        $user_id = 0;
-                                        $authorized_tasklists = array();
-                                        $permission_level = 0;
-                                        $response['data']['permission_level'] = 0;
-                                        $tasklists_name = array();
-                                        foreach($tasklists as $tasklist_id)
-                                        {
-                                                $tasklist = $tasks->get_tasklist($tasklist_id);
+				if(count($tasklists))
+				{
+					$user_id = 0;
+					$readable_tasklists = array();
+					$writable_tasklists = array();
+					$response['data']['permission_level'] = $permission_level = 0;
+					$tasklist_names = array();
+					foreach($tasklists as $tasklist_id)
+					{
+						$tasklist = $tasks->get_tasklist($tasklist_id);
 
-                                                $permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id']);
-                                                if($permission_level)
-                                                {
-                                                        $authorized_tasklists[] = $tasklist_id;
-                                                }
+						$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id']);
+						if($permission_level)
+						{
+							$readable_tasklists[] = $tasklist_id;
+						}
+						if($permission_level >= GO_SECURITY::DELETE_PERMISSION)
+						{
+							$writable_tasklists[] = $tasklist_id;
+						}
 
-                                                if($permission_level > $response['data']['permission_level'])
-                                                {
-                                                        $response['data']['permission_level'] = $permission_level;
-                                                }
+						if($permission_level > $response['data']['permission_level'])
+						{
+							$response['data']['permission_level'] = $permission_level;
+						}
 
-                                                $tasklists_name[] = $tasklist['name'];
-                                        }
+						$tasklist_names[] = $tasklist['name'];
+					}
 
-					$response['grid_title'] = (count($tasklists_name) > 1) ? $lang['tasks']['multipleSelected'] : $tasklists_name[0];
+					$response['grid_title'] = (count($tasklist_names) > 1) ? $lang['tasks']['multipleSelected'] : $tasklist_names[0];
 
-                                        $response['data']['write_permission']=$response['data']['permission_level']>1;
-                                        if(!$response['data']['permission_level'])
-                                        {
-                                                throw new AccessDeniedException();
-                                        }
-                                }else
+					$response['data']['write_permission']=$response['data']['permission_level']>1;
+					if(!$response['data']['permission_level'])
+					{
+						throw new AccessDeniedException();
+					}
+				}else
 				{
 					$user_id = $GO_SECURITY->user_id;
+				}
+
+				if(isset($_POST['delete_keys']))
+				{
+					try{
+						$delete_tasks = json_decode($_POST['delete_keys']);
+						$tasks_deleted = array();
+						foreach($delete_tasks as $task_id)
+						{
+							$task = $tasks->get_task($task_id);
+							if(in_array($task['tasklist_id'], $writable_tasklists))
+							{
+								$tasks->delete_task($task_id);
+								$tasks_deleted[] = $task_id;
+							}
+						}
+						if(!count($tasks_deleted))
+						{
+							throw new AccessDeniedException();
+						}
+						if(count($delete_tasks) != count($tasks_deleted))
+						{
+							require_once($GO_LANGUAGE->get_language_file('tasks'));
+							$response['feedback'] = $lang['tasks']['incomplete_delete'];
+						}
+						$response['deleteSuccess']=true;
+
+					}catch(Exception $e)
+					{
+						$response['deleteSuccess']=false;
+						$response['deleteFeedback']=$e->getMessage();
+					}
 				}
 
                                 if(isset($_POST['categories']))
@@ -379,31 +415,7 @@ try{
                                         $show_categories = $GO_CONFIG->get_setting('tasks_categories_filter', $GO_SECURITY->user_id);
                                         $show_categories = ($show_categories) ? explode(',',$show_categories) : array();
                                 }                                                             
-                        }
-                       
-			if(isset($_POST['delete_keys']))
-			{
-				try
-				{
-					$response['deleteSuccess']=true;
-					$delete_tasks = json_decode($_POST['delete_keys']);
-
-					foreach($delete_tasks as $task_id)
-					{
-						$old_task = $tasks->get_task($task_id);
-						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_task['acl_id'])<GO_SECURITY::DELETE_PERMISSION)
-						{
-							throw new AccessDeniedException();
-						}
-						$tasks->delete_task($task_id);
-					}
-				}catch(Exception $e)
-				{
-					$response['deleteSuccess']=false;
-					$response['deleteFeedback']=$e->getMessage();
-				}
-			}
-
+                        }                      		
 
 			if(isset($_POST['completed_task_id']))
 			{
@@ -491,7 +503,7 @@ try{
 				$tasks->format_task_record($task, $cf);
 
 				$tl_id = array_search($task['tasklist_id'], $tasklists);
-				$task['tasklist_name'] = (isset($tasklists_name) && $tl_id !== false)? $tasklists_name[$tl_id]: '';
+				$task['tasklist_name'] = (isset($tasklist_names) && $tl_id !== false)? $tasklist_names[$tl_id]: '';
 
 				$cat_index = array_search($task['category_id'], $categories);
 				$task['category_name'] = ($cat_index !== false) ? $categories_name[$cat_index] : '';

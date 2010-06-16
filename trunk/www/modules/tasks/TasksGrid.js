@@ -109,6 +109,14 @@ GO.tasks.TasksPanel = function(config)
 			remoteSort:true
 		});
 
+		config.store.on('load', function()
+		{
+			if(config.store.reader.jsonData.feedback)
+			{
+				alert(config.store.reader.jsonData.feedback);
+			}
+		},this)
+
                 config.view=new Ext.grid.GroupingView({
 			scrollOffset: 2,
 			forceFit:true,
