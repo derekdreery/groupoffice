@@ -193,7 +193,6 @@ try{
 			{
 				$readable_categories = array();
 				$writable_categories = array();
-				$categories_name = array();
 				$response['data']['permission_level'] = $permission_level = 0;				
 				foreach($categories as $category_id)
 				{
@@ -203,7 +202,6 @@ try{
 					if($permission_level)
 					{
 						$readable_categories[] = $category_id;
-						$categories_name[] = $category['name'];
 					}
 					if($permission_level >= GO_SECURITY::DELETE_PERMISSION)
 					{
@@ -216,7 +214,6 @@ try{
 					}					
 				}
 
-				//$response['grid_title'] = implode(' & ', $categories_name);
 				$response['data']['write_permission']=$response['data']['permission_level']>1;
 				if(!$response['data']['permission_level'])
 				{
