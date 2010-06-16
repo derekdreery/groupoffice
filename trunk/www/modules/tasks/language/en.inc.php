@@ -28,3 +28,4 @@ $lang['tasks']['dueAtdate']='Due at %s';
 $lang['tasks']['list']='Tasklist';
 $lang['tasks']['tasklistChanged']="* Tasklist changed from '%s' to '%s'";
 $lang['tasks']['statusChanged']="* Status changed from '%s' to '%s'";
+$lang['tasks']['multipleSelected']='Multiple tasklists selected';
