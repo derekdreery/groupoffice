@@ -12,37 +12,12 @@ GO.addressbook.AddresbooksGrid = function(config){
 	config.store = GO.addressbook.readableAddressbooksStore;
 	config.ddGroup='AddressBooksDD';
 	config.enableDD=true;
-		
-	config.paging=false;
-
-	var companiesColumnModel =  new Ext.grid.ColumnModel({
-		defaults:{
-			sortable:true
-		},
-		columns:[
-	  {
-	  	header: GO.lang['strName'], 
-	  	dataIndex: 'name'
-	  }
-	]
-	});
-	
-	config.cm=companiesColumnModel;
-	
-	config.view=new Ext.grid.GridView({
-		autoFill: true,
-		forceFit: true,
-		emptyText: GO.addressbook.lang.noAddressbooks		
-	}),
-	config.sm=new Ext.grid.RowSelectionModel({singleSelect:true});
-	config.loadMask=true;
-
 	
 	GO.addressbook.AddresbooksGrid.superclass.constructor.call(this, config);
 };
 
 
-Ext.extend(GO.addressbook.AddresbooksGrid, GO.grid.GridPanel, {
+Ext.extend(GO.addressbook.AddresbooksGrid, GO.grid.MultiSelectGrid, {
 	
 	type: '',
 	afterRender : function()

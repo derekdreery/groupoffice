@@ -124,22 +124,48 @@ GO.addressbook.MainPanel = function(config)
 	this.addressbooksGrid = new GO.addressbook.AddresbooksGrid({
 		region:'west',
 		id:'ab-addressbook-grid',
-		width:180
+		width:180,
+		height:250
 	});
-	
+
+	this.addressbooksGrid.on('change', function(grid, abooks, records)
+	{
+	        var books = Ext.encode(abooks);
+		var panel = this.tabPanel.getActiveTab();
+		if(panel.id=='ab-contacts-grid')
+		{
+			this.contactsGrid.store.baseParams.books = books;
+			this.contactsGrid.store.load();
+			delete this.contactsGrid.store.baseParams.books;
+		}else
+		{
+			this.companiesGrid.store.baseParams.books = books;
+			this.companiesGrid.store.load();
+			delete this.companiesGrid.store.baseParams.books;
+		}
+
+		if(records.length)
+                {				
+			GO.addressbook.defaultAddressbook = records[0].data.id;
+                }		               
+    
+	}, this);
+
 	/*this.addressbooksGrid.on('rowclick', function(grid, rowIndex){
 		
 
 	}, this);*/
 
+	/*
 	this.addressbooksGrid.getSelectionModel().on('rowselect', function(sm, rowIndex, r){
 		GO.addressbook.defaultAddressbook = sm.getSelected().get('id');
 
 		var record = this.addressbooksGrid.getStore().getAt(rowIndex);
 		this.setSearchParams({addressbook_id : record.get("id")});
 	}, this);
+	*/
 	
-	
+			
 	this.addressbooksGrid.on('drop', function(type)
 	{
 		if(type == 'company')
@@ -166,19 +192,15 @@ GO.addressbook.MainPanel = function(config)
 	
 	if(GO.mailings)
 	{
-		this.mailingsFilterPanel = new GO.mailings.MailingsFilterPanel({
-			region:'center'
-		});
-		
-		/*GO.mailings.readableMailingsStore.on('load', function(){
-			if(GO.mailings.readableMailingsStore.getCount()==0)
-			{
-				this.mailingsFilterPanel.hide();
-			}else
-			{
-				this.mailingsFilterPanel.show();
-			}
-		}, this);*/
+
+		this.mailingsFilterPanel= new GO.grid.MultiSelectGrid({
+			region:'center',
+			id:'ab-mailingsfilter-panel',
+			title:GO.mailings.lang.filterMailings,
+			loadMask:true,
+			store:GO.mailings.readableMailingsStore,
+			allowNoSelection:true
+		});		
 		
 		this.mailingsFilterPanel.on('change', function(grid, mailings_filter){
 			var panel = this.tabPanel.getActiveTab();		
@@ -194,9 +216,8 @@ GO.addressbook.MainPanel = function(config)
 				delete this.companiesGrid.store.baseParams.mailings_filter;
 			}			
 		}, this);
-			
-		this.addressbooksGrid.region='north';
-		this.addressbooksGrid.height=200;
+		
+		this.addressbooksGrid.region='north';		
 		var westPanel = new Ext.Panel({
 			layout:'border',
 			border:false,
@@ -379,17 +400,20 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 		{
 			GO.addressbook.MainPanel.superclass.afterRender.call(this);
 
-			
+			/*
 			GO.addressbook.readableAddressbooksStore.on('load', function(){
 					if(!this.addressbooksGrid.getSelectionModel().getSelected())
 						this.addressbooksGrid.getSelectionModel().selectFirstRow();
 				}, this);
+			*/
 			GO.addressbook.readableAddressbooksStore.load();
 			
 			if(GO.mailings)
 			{
 				if(!GO.mailings.ooTemplatesStore.loaded)
 					GO.mailings.ooTemplatesStore.load();
+
+				GO.mailings.readableMailingsStore.load();
 			}
 
 			GO.addressbook.contactDialogListeners={

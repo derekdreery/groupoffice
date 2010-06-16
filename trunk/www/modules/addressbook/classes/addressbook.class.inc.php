@@ -741,7 +741,7 @@ class addressbook extends db {
 	}
 
 
-	function search_contacts($user_id, $query, $field = 'last_name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $writable_only=false, $query_type='LIKE', $mailings_filter=array(), $advanced_query='') {
+	function search_contacts($user_id, $query, $field = 'last_name', $addressbooks=array(), $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $writable_only=false, $query_type='LIKE', $mailings_filter=array(), $advanced_query='') {
 		global $GO_MODULES;
 		//$query = str_replace('*', '%', $query);
 
@@ -786,8 +786,9 @@ class addressbook extends db {
 		}
 
 
-		if ($addressbook_id > 0) {
-			$sql .= "WHERE ab_contacts.addressbook_id='$addressbook_id' ";
+		if(count($addressbooks))
+		{
+			$sql .= "WHERE ab_contacts.addressbook_id IN (".implode(',', $addressbooks).")";		
 		} else {
 
 			if($writable_only) {
@@ -929,7 +930,7 @@ class addressbook extends db {
 			$cf->format_record($record, 3, true);
 	}
 
-	function search_companies($user_id, $query, $field = 'name', $addressbook_id = 0, $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $query_type='LIKE', $mailings_filter=array(), $advanced_query='') {
+	function search_companies($user_id, $query, $field = 'name', $addressbooks=array(), $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $query_type='LIKE', $mailings_filter=array(), $advanced_query='') {
 		global $GO_MODULES;
 
 		//$query = str_replace('*', '%', $query);
@@ -955,8 +956,9 @@ class addressbook extends db {
 			$sql .= "INNER JOIN ml_mailing_companies mc ON mc.company_id=ab_companies.id ";
 		}
 
-		if ($addressbook_id > 0) {
-			$sql .= "WHERE ab_companies.addressbook_id='$addressbook_id'";
+		if(count($addressbooks))
+		{
+			$sql .= "WHERE ab_companies.addressbook_id IN (".implode(',', $addressbooks).")";
 		} else {
 
 			$user_ab = $this->get_user_addressbook_ids($user_id);

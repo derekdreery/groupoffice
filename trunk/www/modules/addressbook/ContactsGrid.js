@@ -182,6 +182,14 @@ GO.addressbook.ContactsGrid = function(config){
 	    fields: fields.fields,
 	    remoteSort: true
 	});
+
+	config.store.on('load', function()
+	{
+		if(config.store.reader.jsonData.feedback)
+		{
+			alert(config.store.reader.jsonData.feedback);
+		}
+	},this)
 	
 	config.cm=new Ext.grid.ColumnModel({
 		defaults:{
