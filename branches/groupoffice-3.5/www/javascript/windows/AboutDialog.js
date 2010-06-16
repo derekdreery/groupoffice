@@ -40,7 +40,7 @@ GO.dialog.AboutDialog = function(config){
 		width:520,
 		resizable: false,
 		closeAction:'hide',
-		title:GO.lang.strAbout,
+		title:GO.lang.strAbout.replace('{product_name}', GO.settings.config.product_name),
 		items: new Ext.Panel({
 			border:false,
 			layout:'fit',
