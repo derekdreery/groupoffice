@@ -20,20 +20,20 @@ GO.grid.MultiSelectGrid = function (config){
 	});
 
 	if(config.allowNoSelection)
-	    this.allowNoSelection = true;
+		this.allowNoSelection = true;
 
 	Ext.apply(config, {
 		border: false,
 		plugins: [checkColumn],
 		tbar : [
-		    this.selectButton = new Ext.Button({
+		this.selectButton = new Ext.Button({
 			text:GO.lang.selectAll,
 			handler:function()
 			{							
 				if(this.allowNoSelection || !this.selectedAll)
 				{
 					var select_records = (this.selectedAll && this.allowNoSelection) ? 'clear' : 'all';
-				        this.applyFilter(select_records);
+					this.applyFilter(select_records);
 				}
 			},			
 			scope: this
@@ -48,8 +48,8 @@ GO.grid.MultiSelectGrid = function (config){
 		}],
 		listeners:{
 			scope:this,
-			delayedrowselect:function(grid, rowIndex, r){				
-				this.applyFilter([r.id]);
+			rowclick:function(grid, rowIndex){
+				this.applyFilter([grid.store.getAt(rowIndex).id]);
 			}
 		},
 		autoExpandColumn:'name',
@@ -57,8 +57,7 @@ GO.grid.MultiSelectGrid = function (config){
 			autoFill: true,
 			forceFit: true,
 			emptyText: GO.lang['strNoItems']
-		}),
-		sm: new Ext.grid.RowSelectionModel()
+		})
 	});
 
 	GO.grid.MultiSelectGrid.superclass.constructor.call(this, config);
@@ -66,24 +65,24 @@ GO.grid.MultiSelectGrid = function (config){
 
 	this.store.on('load', function()
 	{
-	    this.selectButton.setDisabled(!this.store.data.items.length);
+		this.selectButton.setDisabled(!this.store.data.items.length);
 
-	    var num_selected = 0;
-	    for(var i=0; i<this.store.data.items.length; i++)
-	    {
-		    if(this.store.data.items[i].data.checked)
-		    {
-			    num_selected++;
-		    }
-	    }
+		var num_selected = 0;
+		for(var i=0; i<this.store.data.items.length; i++)
+		{
+			if(this.store.data.items[i].data.checked)
+			{
+				num_selected++;
+			}
+		}
 
-	    this.selectedAll = (num_selected == this.store.data.items.length) ? true : false;
+		this.selectedAll = (num_selected == this.store.data.items.length) ? true : false;
 
-	    if(this.allowNoSelection)
-	    {
-		    var text = (this.selectedAll) ? GO.lang.deselectAll : GO.lang.selectAll;
-		    this.selectButton.setText(text);
-	    }
+		if(this.allowNoSelection)
+		{
+			var text = (this.selectedAll) ? GO.lang.deselectAll : GO.lang.selectAll;
+			this.selectButton.setText(text);
+		}
 	    
 	},this);
 
@@ -103,38 +102,29 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 		this.lastSelectedIndex=-1;
 		var records = [], ids=[], checked, current_record_id, will_be_checked;
 
+		var changedRecords=[];
+
+
+
 		for (var i = 0, max=this.store.data.items.length; i < max;  i++)
 		{
 			current_record_id = this.store.data.items[i].id;
 			will_be_checked= select_records && select_records!='clear' && (select_records=='all' || select_records.indexOf(current_record_id)>-1);
 
 			if(select_records && !will_be_checked){
-				checked=false;
-				if(this.store.data.items[i].data.checked){
-					if(select_records!='clear'){
-						this.store.data.items[i].set('checked',"0");
-						this.store.data.items[i].commit();
-					}else
-					{
-						this.store.data.items[i].data.checked="0";
-					}
+				checked="0";
+				if(this.store.data.items[i].data.checked=="1"){
+					this.store.data.items[i].data.checked="0";
+					changedRecords.push(this.store.data.items[i]);
 				}
 			}else
 			{
 				if(will_be_checked){
 					checked="1";
-					if(GO.util.empty(this.store.data.items[i].data.checked)){
-						if(select_records!='all'){
-							this.store.data.items[i].set('checked',"1");
-							this.store.data.items[i].commit();
-						}else
-						{
-							this.store.data.items[i].data.checked="1";
-						}
+					if(GO.util.empty(this.store.data.items[i].data.checked)){					
+						this.store.data.items[i].data.checked="1";
+						changedRecords.push(this.store.data.items[i]);
 					}
-
-					this.lastSelectedIndex = i;
-
 				}else
 				{
 					checked = this.store.data.items[i].data.checked;
@@ -142,6 +132,7 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 			}
 			if(checked=="1")
 			{
+				this.lastSelectedIndex = i;
 				ids.push(this.store.data.items[i].id);
 				records.push(this.store.data.items[i]);
 			}
@@ -165,10 +156,13 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 				this.fireEvent('change', this, ids, records);
 			}
 
-			this.store.commitChanges();
-
-			if(select_records=='all' || select_records=='clear')
-			    this.getView().refresh();
+			if(changedRecords.length>10){
+				this.getView().refresh();
+			}else
+			{
+				for (var i = 0, max=changedRecords.length; i < max;  i++)
+					this.getView().refreshRow(changedRecords[i]);
+			}
 
 			this.getSelectionModel().clearSelections();
 		}
