@@ -29,4 +29,4 @@ $lang['tasks']['list']='Tasklist';
 $lang['tasks']['tasklistChanged']="* Tasklist changed from '%s' to '%s'";
 $lang['tasks']['statusChanged']="* Status changed from '%s' to '%s'";
 $lang['tasks']['multipleSelected']='Multiple tasklists selected';
-$lang['tasks']['incomplete_delete']='You don\'t have permission to delete all selected notes';
+$lang['tasks']['incomplete_delete']='You don\'t have permission to delete all selected tasks';
