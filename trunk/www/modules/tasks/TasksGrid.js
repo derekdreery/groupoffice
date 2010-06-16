@@ -200,6 +200,7 @@ GO.tasks.TasksPanel = function(config)
                     new Ext.form.FormPanel({
                         border:false,          
                         baseCls:'x-border-layout-ct',
+			bodyStyle:'margin:2px',
                         height:30,
                         items:[{
                             xtype:'compositefield',                                                        
