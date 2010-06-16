@@ -300,7 +300,7 @@ try{
                                 $response['data']['write_permission']=true;
 
                                 $show_categories = array();
-				$tasklists = array();
+				$readable_tasklists = array();
 				$tasklist_names = array();
 
 				if($tasks->get_visible_tasklists($user_id) == 0){
@@ -315,7 +315,7 @@ try{
 				while($tasks->next_record())
 				{
 					$cur_tasklist = $tasks2->get_tasklist($tasks->f('tasklist_id'));
-					$tasklists[] = $tasks->f('tasklist_id');
+					$readable_tasklists[] = $tasks->f('tasklist_id');
 					$tasklist_names[] = $cur_tasklist['name'];
 				}
 
@@ -348,6 +348,7 @@ try{
 						if($permission_level)
 						{
 							$readable_tasklists[] = $tasklist_id;
+							$tasklist_names[] = $tasklist['name'];
 						}
 						if($permission_level >= GO_SECURITY::DELETE_PERMISSION)
 						{
@@ -357,9 +358,7 @@ try{
 						if($permission_level > $response['data']['permission_level'])
 						{
 							$response['data']['permission_level'] = $permission_level;
-						}
-
-						$tasklist_names[] = $tasklist['name'];
+						}						
 					}
 
 					$response['grid_title'] = (count($tasklist_names) > 1) ? $lang['tasks']['multipleSelected'] : $tasklist_names[0];
@@ -502,7 +501,7 @@ try{
 			{
 				$tasks->format_task_record($task, $cf);
 
-				$tl_id = array_search($task['tasklist_id'], $tasklists);
+				$tl_id = array_search($task['tasklist_id'], $readable_tasklists);
 				$task['tasklist_name'] = (isset($tasklist_names) && $tl_id !== false)? $tasklist_names[$tl_id]: '';
 
 				$cat_index = array_search($task['category_id'], $categories);
