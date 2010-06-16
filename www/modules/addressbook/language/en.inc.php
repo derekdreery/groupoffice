@@ -46,4 +46,8 @@ $lang['addressbook']['clickHereToView']='Click here to view the contact';
 $lang['addressbook']['contactFromAddressbook']='Contact from %s';
 $lang['addressbook']['companyFromAddressbook']='Company from %s';
 $lang['addressbook']['defaultSalutation']='Dear [Mr./Mrs.] {middle_name} {last_name}';
+
+$lang['addressbook']['multipleSelected']='Multiple addressbooks selected';
+$lang['addressbook']['incomplete_delete_contacts']='You don\'t have permission to delete all selected contacts';
+$lang['addressbook']['incomplete_delete_companies']='You don\'t have permission to delete all selected companies';
 ?>

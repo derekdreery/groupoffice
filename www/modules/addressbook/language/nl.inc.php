@@ -43,3 +43,7 @@ $lang['addressbook']['contactFromAddressbook']='Contactpersoon uit %s';
 $lang['addressbook']['companyFromAddressbook']='Bedrijf uit %s';
 
 $lang['addressbook']['defaultSalutation']='Geachte [heer/mevrouw] {middle_name} {last_name}';
+
+$lang['addressbook']['multipleSelected']='Meerdere adresboeken geselecteerd';
+$lang['addressbook']['incomplete_delete_contacts']='U heeft niet voldoende rechten om alle geselecteerde contacten te verwijderen';
+$lang['addressbook']['incomplete_delete_companies']='U heeft niet voldoende rechten om alle geselecteerde bedrijven te verwijderen';

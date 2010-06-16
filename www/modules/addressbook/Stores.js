@@ -21,7 +21,7 @@ GO.addressbook.readableAddressbooksStore = new GO.data.JsonStore({
 			root: 'results', 
 			totalProperty: 'total', 
 			id: 'id',
-			fields: ['id','name','owner'],
+			fields: ['id','name','owner','checked'],
 			remoteSort: true
 		});			
 		
