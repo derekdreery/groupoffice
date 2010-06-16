@@ -1024,16 +1024,27 @@ try {
 
 		case 'groups':
 
-			if(isset($_POST['delete_keys'])) {
+			if(isset($_POST['delete_keys']))
+			{
 				try {
+					if($GO_MODULES->modules['calendar']['permission_level'] != GO_SECURITY::MANAGE_PERMISSION)
+					{
+						throw new AccessDeniedException();
+					}
+
 					$response['deleteSuccess']=true;
 					$delete_groups = json_decode($_POST['delete_keys']);
-					foreach($delete_groups as $group_id) {
-						$cal->get_calendars_by_group_id($group_id);
-						while($cal->next_record()) {
-							$cal2->delete_calendar($cal->f('id'));
+					foreach($delete_groups as $group_id)
+					{
+						if($group_id != 1)
+						{
+							$cal->get_calendars_by_group_id($group_id);
+							while($cal->next_record())
+							{
+								$cal2->delete_calendar($cal->f('id'));
+							}
+							$cal->delete_group($group_id);
 						}
-						$cal->delete_group($group_id);
 					}
 				}
 				catch(Exception $e) {
@@ -1041,6 +1052,7 @@ try {
 					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
+			
 			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'id';
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
