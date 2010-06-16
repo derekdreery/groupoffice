@@ -104,7 +104,7 @@ class RFC822
 				
 				case ',':
 				case ';':			
-					if($this->quote || !$this->email_found)// || !String::validate_email($this->buffer))
+					if($this->quote || (!$this->email_found && !String::validate_email($this->buffer)))
 					{
 						$this->buffer .= $char;				
 					}else
