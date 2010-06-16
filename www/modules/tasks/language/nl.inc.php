@@ -26,3 +26,4 @@ $lang['tasks']['dueAtdate']='Verloopt op %s';
 $lang['tasks']['list']='Takenlijst';
 $lang['tasks']['tasklistChanged']="* Takenlijst is veranderd van '%s' naar '%s'";
 $lang['tasks']['statusChanged']="* Status is veranderd van'%s' naar '%s'";
+$lang['tasks']['multipleSelected']='Meerdere takenlijsten geselecteerd';

@@ -358,7 +358,7 @@ try{
                                                 $tasklists_name[] = $tasklist['name'];
                                         }
 
-                                        $response['grid_title'] = implode(' & ', $tasklists_name);
+					$response['grid_title'] = (count($tasklists_name) > 1) ? $lang['tasks']['multipleSelected'] : $tasklists_name[0];
 
                                         $response['data']['write_permission']=$response['data']['permission_level']>1;
                                         if(!$response['data']['permission_level'])
