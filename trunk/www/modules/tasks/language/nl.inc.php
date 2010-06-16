@@ -27,4 +27,4 @@ $lang['tasks']['list']='Takenlijst';
 $lang['tasks']['tasklistChanged']="* Takenlijst is veranderd van '%s' naar '%s'";
 $lang['tasks']['statusChanged']="* Status is veranderd van'%s' naar '%s'";
 $lang['tasks']['multipleSelected']='Meerdere takenlijsten geselecteerd';
-$lang['tasks']['incomplete_delete']='U heeft niet voldoende rechten om alle geselecteerde notities te verwijderen';
+$lang['tasks']['incomplete_delete']='U heeft niet voldoende rechten om alle geselecteerde taken te verwijderen';
