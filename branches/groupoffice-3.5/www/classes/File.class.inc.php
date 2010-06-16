@@ -180,7 +180,7 @@ class File
 		if(file_exists($path)){
 			if(function_exists('finfo_open')){
 					$finfo    = finfo_open(FILEINFO_MIME);
-					$mimetype = finfo_file($finfo, $filename);
+					$mimetype = finfo_file($finfo, $path);
 					finfo_close($finfo);
 					return $mimetype;
 			}elseif(function_exists('mime_content_type'))
