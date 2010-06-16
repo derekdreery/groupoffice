@@ -191,31 +191,32 @@ try{
 
 			if(count($categories))
 			{
-				$user_id = 0;
-				$authorized_categories = array();
-				$permission_level = 0;
-				$response['data']['permission_level'] = 0;
+				$readable_categories = array();
+				$writable_categories = array();
 				$categories_name = array();
+				$response['data']['permission_level'] = $permission_level = 0;				
 				foreach($categories as $category_id)
 				{
 					$category = $notes->get_category($category_id);
 
-					$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']);
+					$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']);				
 					if($permission_level)
 					{
-						$authorized_categories[] = $category_id;
+						$readable_categories[] = $category_id;
+						$categories_name[] = $category['name'];
+					}
+					if($permission_level >= GO_SECURITY::DELETE_PERMISSION)
+					{
+						$writable_categories[] = $category_id;
 					}
 
 					if($permission_level > $response['data']['permission_level'])
 					{
 						$response['data']['permission_level'] = $permission_level;
-					}
-
-					$categories_name[] = $category['name'];
+					}					
 				}
 
-				$response['grid_title'] = implode(' & ', $categories_name);
-
+				//$response['grid_title'] = implode(' & ', $categories_name);
 				$response['data']['write_permission']=$response['data']['permission_level']>1;
 				if(!$response['data']['permission_level'])
 				{
@@ -224,18 +225,30 @@ try{
 			}				
 
 			if(isset($_POST['delete_keys']))
-			{
+			{				
 				try{
-					if($response['data']['permission_level']<GO_SECURITY::DELETE_PERMISSION){
-						throw new AccessDeniedException();
-					}
-					$response['deleteSuccess']=true;
-					$delete_notes = json_decode(($_POST['delete_keys']));
-
+					$delete_notes = json_decode($_POST['delete_keys']);
+					$notes_deleted = array();
 					foreach($delete_notes as $note_id)
 					{
-						$notes->delete_note($note_id);
+						$note = $notes->get_note($note_id);
+						if(in_array($note['category_id'], $writable_categories))
+						{
+							$notes->delete_note($note_id);
+							$notes_deleted[] = $note_id;
+						}
 					}
+					if(!count($notes_deleted))
+					{
+					        throw new AccessDeniedException();
+					}					
+					if(count($delete_notes) != count($notes_deleted))
+					{
+						require_once($GO_LANGUAGE->get_language_file('notes'));
+						$response['feedback'] = $lang['notes']['incomplete_delete'];
+					}
+					$response['deleteSuccess']=true;
+					
 				}catch(Exception $e)
 				{
 					$response['deleteSuccess']=false;
@@ -253,9 +266,9 @@ try{
 			{
 				$category_id=0;
 			}
-			
-			
-			$response['total'] = $notes->get_notes($query, $categories, $sort, $dir, $start, $limit);
+
+			$sort = ($sort == 'category_name') ? 'c.name' : 'n.'.$sort;
+			$response['total'] = $notes->get_notes($query, $readable_categories, $sort, $dir, $start, $limit);
 			$response['results']=array();
 			while($notes->next_record())
 			{

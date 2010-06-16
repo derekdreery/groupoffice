@@ -12,3 +12,4 @@ $lang['link_type'][4]=$lang['notes']['note']='Note';
 $lang['notes']['notes']='Notes';
 
 $lang['notes']['general'] = 'General';
+$lang['notes']['incomplete_delete']='You don\'t have permission to delete all selected notes';

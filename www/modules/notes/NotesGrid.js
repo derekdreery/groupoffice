@@ -30,11 +30,18 @@
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
-	    fields: ['id','category_id','user_name','ctime','mtime','name','content'],
+	    fields: ['id','category_id','user_name','ctime','mtime','name','content','category_name'],
 	    remoteSort: true
 	});
 
-	
+	config.store.on('load', function()
+	{
+		if(config.store.reader.jsonData.feedback)
+		{
+			alert(config.store.reader.jsonData.feedback);
+		}
+	},this)
+
 	config.paging=true;
 
 	var columnModel =  new Ext.grid.ColumnModel({
@@ -45,20 +52,23 @@
 		{
 			header: GO.lang.strName, 
 			dataIndex: 'name'
-		},
-		{
+		},{
 			header: GO.lang.strOwner, 
 			dataIndex: 'user_name',
 		  sortable: false,
 			hidden:true
-		},		{
+		},{
 			header: GO.lang.strCtime, 
 			dataIndex: 'ctime',
 			hidden:true
-		},		{
+		},{
 			header: GO.lang.strMtime, 
 			dataIndex: 'mtime'
-		}	
+		},{
+			header: GO.notes.lang.category,
+			dataIndex: 'category_name',
+			hidden:true
+		}
 	]
 	});
 	

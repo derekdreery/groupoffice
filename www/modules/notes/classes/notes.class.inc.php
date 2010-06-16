@@ -535,7 +535,7 @@ class notes extends db {
 			//$sql .= " AND (n.name LIKE '".$this->escape($query)."' OR MATCH (n.content) AGAINST ('".$this->escape($query)."')) ";
 			$sql .= " AND (n.name LIKE '".$this->escape($query)."' OR n.content LIKE '".$this->escape($query)."') ";
 		}
-		$sql .= " ORDER BY n.".$this->escape($sortfield." ".$sortorder);
+		$sql .= " ORDER BY ".$this->escape($sortfield." ".$sortorder);
 		
 		$this->query($sql);
 		$count = $this->num_rows();
