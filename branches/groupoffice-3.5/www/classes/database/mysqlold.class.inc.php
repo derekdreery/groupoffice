@@ -20,6 +20,8 @@ define('DB_NUM', MYSQL_NUM);
 define('DB_BOTH', MYSQL_BOTH);
 define('DB_ASSOC', MYSQL_ASSOC);
 
+$GLOBALS['query_count']=0;
+
 /**
  * Class that connects to MySQL using the old MySQL extension
  *
@@ -123,6 +125,9 @@ class db extends base_db {
 
 		# New query, discard previous result.
 		$this->free();
+
+		# Count queries for debugging purposes
+		$GLOBALS['query_count']++;
 		
 		if(!is_array($params))
 		{
