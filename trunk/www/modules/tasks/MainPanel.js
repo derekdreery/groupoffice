@@ -16,7 +16,7 @@ GO.tasks.MainPanel = function(config){
 		fields:['id','dom_id','name','checked']
 	});
 
-        this.taskListsPanel= new GO.grid.MultiSelectGrid({
+	this.taskListsPanel= new GO.grid.MultiSelectGrid({
 		id:'ta-tasksgrid',
 		region:'center',
 		loadMask:true,
@@ -24,21 +24,21 @@ GO.tasks.MainPanel = function(config){
 		title: GO.tasks.lang.tasklists		
 	});
 
-        this.taskListsPanel.on('change', function(grid, tasklists, records)
+	this.taskListsPanel.on('change', function(grid, tasklists, records)
 	{                		                
-                this.gridPanel.store.baseParams.tasklists = Ext.encode(tasklists);
-                this.gridPanel.store.reload();
-                this.tasklist_ids = tasklists;
+		this.gridPanel.store.baseParams.tasklists = Ext.encode(tasklists);
+		this.gridPanel.store.reload();
+		this.tasklist_ids = tasklists;
 
-                if(records.length)
-                {
-                        this.gridPanel.populateComboBox(records);
+		if(records.length)
+		{
+			this.gridPanel.populateComboBox(records);
 
-                        this.tasklist_id = records[0].data.id;
-                        this.tasklist_name = records[0].data.name;
-                }
+			this.tasklist_id = records[0].data.id;
+			this.tasklist_name = records[0].data.name;
+		}
 
-                delete this.gridPanel.store.baseParams.tasklists;
+		delete this.gridPanel.store.baseParams.tasklists;
 	}, this);
        
 				
@@ -81,16 +81,16 @@ GO.tasks.MainPanel = function(config){
       
 	this.categoriesPanel= new GO.grid.MultiSelectGrid({
 		id:'ta-categories-grid',
-                title:GO.tasks.lang.categories,
-                region:'south',
-                loadMask:true,
-                height:220,
+		title:GO.tasks.lang.categories,
+		region:'south',
+		loadMask:true,
+		height:220,
 		allowNoSelection:true,
-                store:GO.tasks.categoriesStore
+		store:GO.tasks.categoriesStore
 	});
-        this.categoriesPanel.on('change', function(grid, categories, records)
+	this.categoriesPanel.on('change', function(grid, categories, records)
 	{
-                this.gridPanel.store.baseParams.categories = Ext.encode(categories);
+		this.gridPanel.store.baseParams.categories = Ext.encode(categories);
 		this.gridPanel.store.reload();
                 
 		delete this.gridPanel.store.baseParams.categories;
@@ -113,7 +113,7 @@ GO.tasks.MainPanel = function(config){
 
 	this.gridPanel.on('checked', function(grid, task_id){
 		if(this.taskPanel.data && this.taskPanel.data.id==task_id)
-				this.taskPanel.reload();
+			this.taskPanel.reload();
 			
 	}, this);
 			
@@ -123,18 +123,18 @@ GO.tasks.MainPanel = function(config){
 
 		this.gridPanel.setTitle(store.reader.jsonData.grid_title);
 
-                var found = false
-                for(var i=0; i<this.tasklist_ids.length; i++)
-                {
-                        if(this.tasklist_ids[i] == this.taskPanel.data.tasklist_id)
-                        {                                
-                                found = true;
-                        }
-                }
-                if(!found)
-                {
-                       this.taskPanel.reset();
-                }
+		var found = false
+		for(var i=0; i<this.tasklist_ids.length; i++)
+		{
+			if(this.tasklist_ids[i] == this.taskPanel.data.tasklist_id)
+			{
+				found = true;
+			}
+		}
+		if(!found)
+		{
+			this.taskPanel.reset();
+		}
 		
 	}, this);
 	
@@ -242,7 +242,7 @@ GO.tasks.MainPanel = function(config){
 		items:[
 		this.taskListsPanel,
 		filterPanel,
-                this.categoriesPanel
+		this.categoriesPanel
 		]
 	}),
 	this.gridPanel,
@@ -255,7 +255,7 @@ GO.tasks.MainPanel = function(config){
  
 Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 
-        tasklist_ids: [],
+	tasklist_ids: [],
 	afterRender : function()
 	{
 		GO.tasks.MainPanel.superclass.afterRender.call(this);
@@ -269,26 +269,25 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 		});
                 
 		this.taskListsStore.on('load', function(){
-		    
-                        var records = [];
-                        for(var i=0; i<this.taskListsStore.data.length; i++)
-                        {
-                                var item = this.taskListsStore.data.items[i];                                
-                                if(item.data.checked)
-                                {
-                                        records.push(item);
-                                }
-                        }
+			var records = [];
+			for(var i=0; i<this.taskListsStore.data.length; i++)
+			{
+				var item = this.taskListsStore.data.items[i];
+				if(item.data.checked)
+				{
+					records.push(item);
+				}
+			}
 
-                        if(records.length)
-                        {
-                                this.gridPanel.populateComboBox(records);
+			if(records.length)
+			{
+				this.gridPanel.populateComboBox(records);
 
-                                this.tasklist_id = records[0].data.id;
-                                this.tasklist_name = records[0].data.name;
-                        }
+				this.tasklist_id = records[0].data.id;
+				this.tasklist_name = records[0].data.name;
+			}
                        
-                        this.gridPanel.store.load();
+			this.gridPanel.store.load();
 			GO.tasks.categoriesStore.load();
                        
 		},this);
@@ -314,7 +313,7 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 		if(!this.adminDialog)
 		{
 			this.tasklistDialog = new GO.tasks.TasklistDialog();
-                        this.categoryDialog = new GO.tasks.CategoryDialog();
+			this.categoryDialog = new GO.tasks.CategoryDialog();
 
 			GO.tasks.writableTasklistsStore.on('load', function(){
 				if(GO.tasks.writableTasklistsStore.reader.jsonData.new_default_tasklist){
@@ -328,14 +327,14 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				this.taskListsStore.load();
 			}, this);
 
-                        this.categoryDialog.on('save', function(){
-                                GO.tasks.categoriesStore.load();				
-                        },this);
+			this.categoryDialog.on('save', function(){
+				GO.tasks.categoriesStore.load();
+			},this);
 			
 			this.tasklistsGrid = new GO.grid.GridPanel( {
 				paging:true,
 				border:false,
-                                title: GO.tasks.lang.tasklists,
+				title: GO.tasks.lang.tasklists,
 				store: GO.tasks.writableTasklistsStore,
 				deleteConfig: {
 					callback:function(){
@@ -377,10 +376,10 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				}]
 			});
 
-                        this.categoriesGrid = new GO.grid.GridPanel( {
+			this.categoriesGrid = new GO.grid.GridPanel( {
 				paging:true,
 				border:false,
-                                title: GO.tasks.lang.categories,
+				title: GO.tasks.lang.categories,
 				store: GO.tasks.categoriesStore,
 				deleteConfig: {
 					callback:function(){
@@ -427,18 +426,18 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				this.tasklistDialog.show(grid.selModel.selections.keys[0]);
 			}, this);
 
-                        this.categoriesGrid.on('rowdblclick', function(grid, rowIndex)
-                        {                            
-                                var record = grid.getStore().getAt(rowIndex);
-                                this.categoryDialog.show(record);
+			this.categoriesGrid.on('rowdblclick', function(grid, rowIndex)
+			{
+				var record = grid.getStore().getAt(rowIndex);
+				this.categoryDialog.show(record);
 
-                        }, this);
+			}, this);
 
-                        this.tabPanel = new Ext.TabPanel({
-                                activeTab:0,
-                                border:false,
-                                items:[this.tasklistsGrid,this.categoriesGrid]
-                        })
+			this.tabPanel = new Ext.TabPanel({
+				activeTab:0,
+				border:false,
+				items:[this.tasklistsGrid,this.categoriesGrid]
+			})
 
 			this.adminDialog = new Ext.Window({
 				title: GO.lang.cmdSettings,
@@ -465,7 +464,7 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 			GO.tasks.writableTasklistsStore.load();
 		}
 
-                if(!GO.tasks.categoriesStore.loaded){
+		if(!GO.tasks.categoriesStore.loaded){
 			GO.tasks.categoriesStore.load();
 		}
 	
@@ -514,7 +513,7 @@ GO.tasks.writableTasklistsStore = new GO.data.JsonStore({
 GO.tasks.categoriesStore = new GO.data.JsonStore({
 	url: GO.settings.modules.tasks.url+'json.php',
 	baseParams: {
-                'task': 'categories'
+		'task': 'categories'
 	},
 	root: 'results',
 	totalProperty: 'total',

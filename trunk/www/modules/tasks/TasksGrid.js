@@ -4,8 +4,8 @@ GO.tasks.TasksPanel = function(config)
 		{
 			config = {};
 		}
-	
-       
+
+
 		this.checkColumn = new GO.grid.CheckColumn({
 			dataIndex: 'completed',
 			width: 30,
@@ -13,11 +13,11 @@ GO.tasks.TasksPanel = function(config)
 			header: '<div class="tasks-complete-icon"></div>',
 			sortable:false
 		});
-  
+
 		this.checkColumn.on('change', function(record, checked){
 			this.store.baseParams['completed_task_id']=record.data.id;
 			this.store.baseParams['checked']=checked;
-  	
+
 			//dirty, but it works for updating all the grids
 			this.store.reload({
 				callback:function(){
@@ -26,11 +26,11 @@ GO.tasks.TasksPanel = function(config)
 				},
 				scope:this
 			});
-  	
+
 			delete this.store.baseParams['completed_task_id'];
 			delete this.store.baseParams['checked'];
 		}, this);
-    
+
 		var fields ={
 			fields:['id', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name'],
 			columns:[this.checkColumn,
@@ -96,7 +96,7 @@ GO.tasks.TasksPanel = function(config)
                         fields: fields.fields,
                         id: 'id'
                 });
-                
+
                 config.store = new Ext.data.GroupingStore({
 			url: GO.settings.modules.tasks.url+'json.php',
 			baseParams: {
@@ -105,7 +105,7 @@ GO.tasks.TasksPanel = function(config)
 			reader: reader,
                         sortInfo: {field: 'name', direction: 'ASC'},
 			groupField: 'tasklist_name',
-			remoteGroup:true,                        
+			remoteGroup:true,
 			remoteSort:true
 		});
 
@@ -128,7 +128,7 @@ GO.tasks.TasksPanel = function(config)
                                 }
 			}
 		}),
-		config.sm=new Ext.grid.RowSelectionModel();		
+		config.sm=new Ext.grid.RowSelectionModel();
 
 		var columnModel =  new Ext.grid.ColumnModel({
 			defaults:{
@@ -136,7 +136,7 @@ GO.tasks.TasksPanel = function(config)
 			},
 			columns:fields.columns
 		});
-		
+
 		config.cm=columnModel;
 
 		config.paging=true,
@@ -158,8 +158,8 @@ GO.tasks.TasksPanel = function(config)
 			emptyText: GO.tasks.lang.addTask,
                         fieldLabel:GO.lang['strName'],
                         flex:1
-                                                
-		});	
+
+		});
 
                 this.ntTasklist = new GO.form.ComboBox({
 			fieldLabel:GO.tasks.lang.tasklist,
@@ -198,12 +198,12 @@ GO.tasks.TasksPanel = function(config)
 
                 config.items=[
                     new Ext.form.FormPanel({
-                        border:false,          
+                        border:false,
                         baseCls:'x-border-layout-ct',
 			bodyStyle:'margin:2px',
                         height:30,
                         items:[{
-                            xtype:'compositefield',                                                        
+                            xtype:'compositefield',
                             labelWidth:120,
                             hideLabel:true,
                             items:[this.ntName, this.ntTasklist, this.ntDue, this.btnNewTask]
@@ -212,25 +212,25 @@ GO.tasks.TasksPanel = function(config)
                 ];
 
 		config.tbar = [GO.lang['strSearch'] + ':', this.searchField];
-	
+
 		GO.tasks.TasksPanel.superclass.constructor.call(this, config);
 
 		this.addEvents({checked : true});
-	
+
 	};
 
 
 Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
-	
+
 	saveListenerAdded : true,
 
         populateComboBox : function(records)
         {
                 var data = [];
-                
+
                 for(var i=0; i<records.length; i++)
                 {
-                        var tasklist = []                        
+                        var tasklist = []
                         tasklist.push(records[i].id);
                         tasklist.push(records[i].data.name);
 
@@ -240,21 +240,21 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
                 this.ntTasklist.store.loadData(data);
                 this.ntTasklist.setValue(this.ntTasklist.store.getAt(0).data.id);
         },
-        
+
 	afterRender : function()
 	{
-		GO.tasks.TasksPanel.superclass.afterRender.call(this);               
-   
+		GO.tasks.TasksPanel.superclass.afterRender.call(this);
+
 		/*this.ntSelectLink = new GO.form.SelectLink({
     	renderTo:'new-task-link',
     	disabled:true,
     	emptyText: GO.tasks.lang.createLink
     });*/
-    
+
 		/* this.on("rowdblclick", function(grid, rowClicked, e){
 	    	if(!GO.tasks.taskDialog)
 				{
-					GO.tasks.taskDialog = new GO.tasks.TaskDialog();		
+					GO.tasks.taskDialog = new GO.tasks.TaskDialog();
 				}
 				if(!this.saveListenerAdded)
 				{
@@ -266,13 +266,13 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 				GO.tasks.taskDialog.show({ task_id: grid.selModel.selections.keys[0]});
 			}, this);*/
 
-    
-    
+
+
 		this.editing = false;
 		this.focused = false;
 		this.userTriggered = false;
-    
-		var handlers = {                    
+
+		var handlers = {
 			focus: function(){
 				this.focused = true;
 			},
@@ -286,9 +286,9 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 			specialkey: function(f, e){
 				if(e.getKey()==e.ENTER){
 					this.userTriggered = true;
-					e.stopEvent();                                        
-					f.el.blur();                                        
-					if(f.triggerBlur){                                            
+					e.stopEvent();
+					f.el.blur();
+					if(f.triggerBlur){
 						f.triggerBlur();
 					}
 				}
@@ -298,8 +298,8 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 		this.ntName.on(handlers, this);
 		this.ntDue.on(handlers, this);
 		//this.ntSelectLink.on(handlers, this);
-    
-    
+
+
 
 		this.ntName.on('focus', function(){
 			this.focused = true;
@@ -312,31 +312,31 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 			}
 		}, this);
 
-    
+
 		//there should be a view ready event
 		//this.syncFields.defer(200,this);
-              		  
+
 	},
-	
+
 	syncFields : function(){
-		
+
 		var cm = this.getColumnModel();
 		//this.ntSelectLink.setSize(cm.getColumnWidth(1)-204);
 		this.ntName.setSize(cm.getColumnWidth(1)-4);
 		this.ntDue.setSize(cm.getColumnWidth(2)-4);
-		
+
 	},
-	
+
 	// when a field in the add bar is blurred, this determines
 	// whether a new task should be created
 	doBlur : function(){
 		if(this.userTriggered && this.editing && !this.focused){
 			var taskname = this.ntName.getValue();
-			var due = this.ntDue.getValue();                        
+			var due = this.ntDue.getValue();
                         var tasklist_id = this.ntTasklist.getValue();
 			// var link = this.ntSelectLink.getValue();
 			if(!Ext.isEmpty(taskname) && due){
-            
+
 				Ext.Ajax.request({
 					url: GO.settings.modules.tasks.url+'action.php',
 					params: {
@@ -349,7 +349,7 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 					},
 					callback: function(options, success, response)
 					{
-								
+
 						var reponseParams = Ext.decode(response.responseText);
 						if(!reponseParams.success)
 						{
@@ -359,16 +359,16 @@ Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 							//dirty, but it works for updating other grids like on the summary
 							if(GO.tasks.taskDialog)
 								GO.tasks.taskDialog.fireEvent('save', GO.tasks.taskDialog, reponseParams.task_id);
-							
-									
+
+
 							this.store.reload();
 						}
-								
+
 					},
 					scope:this
 				});
-            
-            
+
+
 				this.ntName.setValue('');
 				if(this.userTriggered){ // if the entered to add the task, then go to a new add automatically
 					this.userTriggered = false;
