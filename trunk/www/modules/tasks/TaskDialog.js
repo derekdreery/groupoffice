@@ -351,7 +351,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				xtype:'textarea',
 				fieldLabel:GO.lang.strDescription,
 				name : 'description',
-				anchor:'-20 -170'
+				anchor:'-20 -190'
 			}]
 
 		});
