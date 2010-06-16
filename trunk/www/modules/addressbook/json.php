@@ -156,6 +156,19 @@ try
 		
 
 		case 'contacts':
+
+			require_once($GO_LANGUAGE->get_language_file('addressbook'));
+		
+			$response['data']['write_permission'] = false;
+			if(isset($_POST['books']))
+			{
+				$books = json_decode($_POST['books'], true);
+				$GO_CONFIG->save_setting('addressbook_books_filter',implode(',', $books), $GO_SECURITY->user_id);
+			}else
+			{
+				$books = $GO_CONFIG->get_setting('addressbook_books_filter', $GO_SECURITY->user_id);
+				$books = ($books) ? explode(',',$books) : array();
+			}
 			
 			if(!isset($_POST['enable_mailings_filter']))
 			{
@@ -169,32 +182,70 @@ try
 				$mailings_filter = $GO_CONFIG->get_setting('mailings_filter', $GO_SECURITY->user_id);
 				$mailings_filter = empty($mailings_filter) ? array() : explode(',', $mailings_filter);
 			}
+			
+			if(count($books))
+			{
+				$readable_books = array();
+				$writable_books = array();
+				$response['data']['permission_level'] = $permission_level = 0;
+				foreach($books as $book_id)
+				{
+					$book = $ab->get_addressbook($book_id);
+
+					$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $book['acl_id']);
+					if($permission_level)
+					{
+						$readable_books[] = $book_id;
+					}
+					if($permission_level >= GO_SECURITY::DELETE_PERMISSION)
+					{
+						$writable_books[] = $book_id;
+					}
+
+					if($permission_level > $response['data']['permission_level'])
+					{
+						$response['data']['permission_level'] = $permission_level;
+					}
+				}
+
+				$response['data']['write_permission']=$response['data']['permission_level']>1;
+				if(!$response['data']['permission_level'])
+				{
+					throw new AccessDeniedException();
+				}
+			}
 
 			if(isset($_POST['delete_keys']))
 			{
-				$response['deleteSuccess'] = true;
 				try{
-					$delete_contacts = json_decode(($_POST['delete_keys']));
-
-					foreach($delete_contacts as $id)
+					$delete_contacts = json_decode($_POST['delete_keys']);
+					$contacts_deleted = array();
+					foreach($delete_contacts as $contact_id)
 					{
-						$contact = $ab->get_contact($id);
-						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $contact['acl_id'])<GO_SECURITY::DELETE_PERMISSION)
+						$contact = $ab->get_contact($contact_id);
+						if(in_array($contact['addressbook_id'], $writable_books))
 						{
-							throw new AccessDeniedException();
+							$ab->delete_contact($contact_id, $contact);
+							$GO_EVENTS->fire_event('contact_delete', array($contact));
+							$contacts_deleted[] = $contact_id;
 						}
-
-						$ab->delete_contact($id, $contact);
-						
-						$GO_EVENTS->fire_event('contact_delete', array($contact));
 					}
-				}
-				catch (Exception $e)
+					if(!count($contacts_deleted))
+					{
+						throw new AccessDeniedException();
+					}
+					if(count($delete_contacts) != count($contacts_deleted))
+					{
+						$response['feedback'] = $lang['addressbook']['incomplete_delete_contacts'];
+					}
+					$response['deleteSuccess']=true;
+
+				}catch(Exception $e)
 				{
-					$response['deleteFeedback'] = $e->getMessage();
-					$response['deleteSuccess'] = false;
+					$response['deleteSuccess']=false;
+					$response['deleteFeedback']=$e->getMessage();
 				}
-			}
+			}		
 
 			$query_type = 'LIKE';
 			if(!empty($clicked_letter))
@@ -214,13 +265,13 @@ try
 			}
 			
 			$advancedQuery = empty($_POST['advancedQuery']) ? '' : $_POST['advancedQuery'];
-				
+							
 			
 			$response['total']=$ab->search_contacts(
 			$GO_SECURITY->user_id,
 			$query,
 			$field,
-			$addressbook_id,
+			$readable_books,
 			$start,
 			$limit,
 			!empty($_POST['require_email']),
@@ -283,6 +334,19 @@ try
 			break;
 
 		case 'companies':
+
+			require_once($GO_LANGUAGE->get_language_file('addressbook'));
+
+			$response['data']['write_permission'] = false;
+			if(isset($_POST['books']))
+			{
+				$books = json_decode($_POST['books'], true);
+				$GO_CONFIG->save_setting('addressbook_books_filter',implode(',', $books), $GO_SECURITY->user_id);
+			}else
+			{
+				$books = $GO_CONFIG->get_setting('addressbook_books_filter', $GO_SECURITY->user_id);
+				$books = ($books) ? explode(',',$books) : array();
+			}
 			
 			if(!isset($_POST['enable_mailings_filter']))
 			{
@@ -296,29 +360,67 @@ try
 				$mailings_filter = $GO_CONFIG->get_setting('mailings_filter', $GO_SECURITY->user_id);
 				$mailings_filter = empty($mailings_filter) ? array() : explode(',', $mailings_filter);
 			}
-			
-			if(isset($_POST['delete_keys']))
+
+			if(count($books))
 			{
-				$response['deleteSuccess'] = true;
-				try{
-					$delete_companies = json_decode(($_POST['delete_keys']));
+				$readable_books = array();
+				$writable_books = array();
+				$response['data']['permission_level'] = $permission_level = 0;
+				foreach($books as $book_id)
+				{
+					$book = $ab->get_addressbook($book_id);
 
-					foreach($delete_companies as $id)
+					$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $book['acl_id']);
+					if($permission_level)
 					{
-						$company = $ab->get_company($id);
+						$readable_books[] = $book_id;
+					}
+					if($permission_level >= GO_SECURITY::DELETE_PERMISSION)
+					{
+						$writable_books[] = $book_id;
+					}
 
-						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $company['acl_id'])<GO_SECURITY::DELETE_PERMISSION)
-						{
-							throw new AccessDeniedException();
-						}
-
-						$ab->delete_company($id);
+					if($permission_level > $response['data']['permission_level'])
+					{
+						$response['data']['permission_level'] = $permission_level;
 					}
 				}
-				catch (Exception $e)
+
+				$response['data']['write_permission']=$response['data']['permission_level']>1;
+				if(!$response['data']['permission_level'])
 				{
-					$response['deleteFeedback'] = $e->getMessage();
-					$response['deleteSuccess'] = false;
+					throw new AccessDeniedException();
+				}
+			}
+
+			if(isset($_POST['delete_keys']))
+			{
+				try{
+					$delete_companies = json_decode($_POST['delete_keys']);
+					$companies_deleted = array();
+					foreach($delete_companies as $company_id)
+					{
+						$company = $ab->get_company($company_id);
+						if(in_array($company['addressbook_id'], $writable_books))
+						{
+							$ab->delete_company($company_id);
+							$companies_deleted[] = $company_id;
+						}
+					}
+					if(!count($companies_deleted))
+					{
+						throw new AccessDeniedException();
+					}
+					if(count($delete_companies) != count($companies_deleted))
+					{
+						$response['feedback'] = $lang['addressbook']['incomplete_delete_companies'];
+					}
+					$response['deleteSuccess']=true;
+
+				}catch(Exception $e)
+				{
+					$response['deleteSuccess']=false;
+					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
 
@@ -345,7 +447,7 @@ try
 			$GO_SECURITY->user_id,
 			$query,
 			$field,
-			$addressbook_id,
+			$books,
 			$start,
 			$limit,
 			!empty($_POST['require_email']),
@@ -713,19 +815,13 @@ try
 		case 'addressbooks':
 
 			require($GO_LANGUAGE->get_language_file('addressbook'));
-				
+
 			$auth_type = isset($_POST['auth_type']) ?$_POST['auth_type'] : 'read';
 
 			$response['results'] = array();
 				
 			if($auth_type=='read')
-			{
-				$record = array(
-					'id' => '0',
-					'name' => $lang['addressbook']['allAddressbooks']
-				);
-				$response['results'][] = $record;
-
+			{			
 				$response['total'] = $ab->get_user_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
 				
 				if($response['total']==0)
@@ -757,17 +853,29 @@ try
 				$response['total'] = $ab->get_writable_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
 				if($response['total']==0)
 				{
-					$ab->get_addressbook();
+					$ab->get_addressbook(0);
 					$response['total'] = $ab->get_writable_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
 				}
 					
 			}
 				
-
+			$books = $GO_CONFIG->get_setting('addressbook_books_filter', $GO_SECURITY->user_id);
+			$books = ($books) ? explode(',',$books) : array();
 				
-
+			$first_record = true;
 			while($ab->next_record())
 			{
+				if($first_record)
+				{
+					if(!count($books))
+					{
+						$books[] = $ab->f('id');
+						$GO_CONFIG->save_setting('addressbook_books_filter',$ab->f('id'), $GO_SECURITY->user_id);
+					}
+
+					$first_record = false;
+				}
+				
 				$user = $GO_USERS->get_user($ab->f('user_id'));
 				$user_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name']);
 
@@ -778,7 +886,8 @@ try
 					'owner' => $user_name,
 					'acl_id' => $ab->f('acl_id'),
 					'default_iso_address_format' => $ab->f('default_iso_address_format'),
-					'default_salutation' => $ab->f('default_salutation')
+					'default_salutation' => $ab->f('default_salutation'),
+					'checked' => in_array($ab->f('id'), $books)
 				);
 					
 				$response['results'][] = $record;
