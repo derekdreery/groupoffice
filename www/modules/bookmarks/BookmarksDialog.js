@@ -168,7 +168,8 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 			},{
 				name: 'open_extern',
 				xtype: 'checkbox',
-				fieldLabel: GO.bookmarks.lang.extern,
+				boxLabel: GO.bookmarks.lang.extern,
+				hideLabel:true,
 				anchor: '100%',
 				checked:true
 			},
@@ -177,7 +178,7 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 				xtype: 'textarea',
 				fieldLabel: GO.bookmarks.lang.description,
 				anchor: '100%',
-				height:60
+				height:65
 			},
 			this.selectFile = new GO.bookmarks.SelectFile({
 				fieldLabel: GO.bookmarks.lang.logo, 
