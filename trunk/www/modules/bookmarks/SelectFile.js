@@ -25,7 +25,7 @@ GO.bookmarks.SelectFile = Ext.extend(Ext.form.TriggerField,{
 		var thumb_id = this.dialog.formPanel.form.baseParams.id						// bookmark ID
 		var thumbtitle = this.dialog.formPanel.form.items.items[1].value; // titel
 		var thumbicon = this.dialog.formPanel.form.items.items[5].value;  // pad naar logo
-		var pubicon = Ext.get('pubicon');
+		var pubicon = this.dialog.formPanel.baseParams.public_icon
 		if (!thumb_id) thumbtitle='Example';
 		this.thumbsDialog = new GO.bookmarks.ThumbsDialog({
 			thumb_id:thumb_id,
@@ -33,7 +33,8 @@ GO.bookmarks.SelectFile = Ext.extend(Ext.form.TriggerField,{
 			thumbtitle:thumbtitle,
 			thumbicon:thumbicon,
 			folder_id:this.root_folder_id,
-			pubicon:pubicon
+			pubicon:pubicon,
+			dialog:this.dialog
 		});
 		this.thumbsDialog.show(); //thumbsDialog, geen hide() maar close()    :(
 	}

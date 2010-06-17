@@ -16,7 +16,7 @@
 GO.bookmarks.ThumbsDialog = function(config){
 
 	this.chosenlogo="";													// pad naar gekozen logo
-	this.is_publiclogo=config.pubicon.dom.value;// public logo
+	this.is_publiclogo=config.pubicon;// public logo
 	var clearicon=0;														// variabele voor het wissen van het logo
 
 	if(!config)
@@ -49,7 +49,7 @@ GO.bookmarks.ThumbsDialog = function(config){
 			
 			}
 			
-			config.pubicon.dom.value=this.is_publiclogo; // public logo
+			config.dialog.formPanel.baseParams.public_icon=this.is_publiclogo; // public logo
 			this.close();
 		},
 		scope: this
