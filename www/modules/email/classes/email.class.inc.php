@@ -178,7 +178,7 @@ class email extends db {
 
 		
 		$count = $email->get_accounts($GO_SECURITY->user_id);
-		$response['unseen']=array();
+		$response['email_status']=array();
 		while($email->next_record()) {
 			try{
 				$account = $imap->open_account($email->f('id'), 'INBOX', false);			
@@ -186,12 +186,13 @@ class email extends db {
 				if($account) {
 					$inbox = $email2->get_folder($email->f('id'), 'INBOX');
 
-					$imap->select_mailbox('INBOX');
+					if($imap->select_mailbox('INBOX')){
 
-					$unseen =  $imap->get_unseen();
+						$unseen =  $imap->get_unseen();
 
-					$response['email_status'][$inbox['id']]['unseen'] = $unseen['count'];
-					$response['email_status'][$inbox['id']]['messages'] = $imap->selected_mailbox['messages'];
+						$response['email_status'][$inbox['id']]['unseen'] = $unseen['count'];
+						$response['email_status'][$inbox['id']]['messages'] = $imap->selected_mailbox['messages'];
+					}
 
 					$imap->disconnect();
 				}else {
