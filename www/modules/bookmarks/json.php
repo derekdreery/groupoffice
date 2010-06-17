@@ -31,6 +31,43 @@ class thumbimage {
 try {
 
 	switch($task) {
+
+		case 'description':
+			$ch=curl_init();
+
+			curl_setopt($ch, CURLOPT_URL,$_POST['url']);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		
+			//for self-signed certificates
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+			$html = curl_exec ($ch);
+			$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u","</$1>", $html);
+
+
+			preg_match_all('/<meta[^>]*>/i', $html, $matches);
+
+			$description='';
+			foreach($matches[0] as $match){
+				if(stripos($match, 'description')){
+					$name_pos = stripos($match, 'content');
+					if($name_pos){						
+						$description = substr($match, $name_pos+7, -1);
+						$description = trim($description, '="\'/ ');
+						break;
+					}
+
+				}
+			}
+			$response['description']=$description;
+
+
+			preg_match('/<title>(.*)<\/title>/i',$html, $match);
+			$response['title']=$match ? trim($match[1]) : '';
+			
+			break;
+
 		case 'thumbdir':
 			$thumbs = $bookmarks->thumbdir_images();
 

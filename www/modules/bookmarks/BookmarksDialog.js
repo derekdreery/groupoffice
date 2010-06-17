@@ -52,6 +52,10 @@ GO.bookmarks.BookmarksDialog = function(config){
 
 Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 
+	focus : function(){
+		this.formPanel.form.findField('content').focus();
+	},
+
 	show : function (config) {		
 
 		if(!this.selectCategory.store.loaded){
@@ -62,11 +66,14 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 				scope:this
 			});			
 		}
+
+		if(!this.rendered)
+			this.render(Ext.getBody());
 		
-		GO.bookmarks.BookmarksDialog.superclass.show.call(this);
+		
 
 		var logo='icons/bookmark.png';
-		var pub='1';
+		this.formPanel.baseParams.public_icon='1';
   
 		if (config.edit==1) // edit bookmark
 		{
@@ -77,7 +84,7 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 			// thumb voorbeeld
 
 			logo = config.record.logo;
-			pub = config.record.public_icon;
+			this.formPanel.baseParams.public_icon = config.record.public_icon;
 			
 		}
 		else // add bookmark
@@ -92,8 +99,10 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 
 		new Ext.XTemplate('<div class="thumb-wrap" >'+
 				'<div class="thumb" no-repeat center center;">'+
-				'<div class="thumb-name" style="background-image:url('+BaseHref+'modules/bookmarks/bmthumb.php?src='+logo+'&h=32&w=32&pub='+pub+')"><h1>'+GO.bookmarks.lang.title+'</h1>'+GO.bookmarks.lang.description+'</div></div>'
+				'<div class="thumb-name" style="background-image:url('+BaseHref+'modules/bookmarks/bmthumb.php?src='+logo+'&h=32&w=32&pub='+this.formPanel.baseParams.public_icon+')"><h1>'+GO.bookmarks.lang.title+'</h1>'+GO.bookmarks.lang.description+'</div></div>'
 				+'</div>').overwrite(Ext.get('thumbX'));
+
+		GO.bookmarks.BookmarksDialog.superclass.show.call(this);
 	},
 	
 
@@ -152,18 +161,39 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 				forceSelection: true,
 				mode:'local'
 			}),{
-				name: 'name',
-				xtype: 'textfield',
-				fieldLabel: GO.bookmarks.lang.title, 
-				anchor: '100%',
-				allowBlank: false
-			},{
 				name: 'content',
 				xtype: 'textfield',
 				fieldLabel: 'URL',
 				anchor: '100%',
 				vtype: 'url',
 				value:'http://',
+				allowBlank: false,
+				listeners:{
+					change:function(combo){
+						this.el.mask(GO.lang.waitMsgLoad);
+						Ext.Ajax.request({
+							url:GO.settings.modules.bookmarks.url+'json.php',
+							params:{
+								task:'description',
+								url: combo.getValue()
+							},
+							callback:function(options, success, response){
+								var result = Ext.decode(response.responseText);
+								this.formPanel.form.findField('description').setValue(result.description);
+								this.formPanel.form.findField('name').setValue(result.title);
+								this.el.unmask();
+							},
+							scope:this
+						});
+					},
+					scope:this
+				}
+
+			},{
+				name: 'name',
+				xtype: 'textfield',
+				fieldLabel: GO.bookmarks.lang.title, 
+				anchor: '100%',
 				allowBlank: false
 			},{
 				name: 'open_extern',
@@ -188,13 +218,7 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 				root_folder_id: GO.bookmarks.iconsFolderId,
 				dialog: this
 			}),
-			{
-				id: 'pubicon',					// database veld :(  of logo public of ge-upload is
-				name: 'public_icon',
-				xtype: 'hidden',
-				hidden: true
-			},
-
+			
 			this.thumbexample = new Ext.Component({
 				style: {
 					marginLeft: '100px'
