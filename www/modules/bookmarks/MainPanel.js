@@ -120,7 +120,7 @@ GO.bookmarks.MainPanel = function(config){
 					});
 				},
 				scope:this
-			},
+			},/*,
 			{ //  bookmark verwijderen (alleen in grid)
 				iconCls: 'btn-delete',
 				text: GO.lang['cmdDelete'],
@@ -132,7 +132,7 @@ GO.bookmarks.MainPanel = function(config){
 					}
 				},
 				scope:this
-			},
+			},*/
 
 			// categorieen beheren
 			{
