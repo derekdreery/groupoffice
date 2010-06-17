@@ -17,7 +17,7 @@ if($GO_CONFIG->product_name=='Group-Office'){
 
 	$bookmark['user_id']=1;
 	$bookmark['category_id']=$category_id;
-	$bookmark['name']='Intermesh';
+	$bookmark['name']='Intermesh Web Solutions';
 	$bookmark['content']=$GO_LANGUAGE->language=='nl' ? 'http://www.intermesh.nl' : 'http://www.intermesh.nl/en/';
 	$bookmark['description']=$GO_LANGUAGE->language=='nl' ?'Intermesh ontwikkelt webapplicaties op maat en maakt elegante en effectieve websites' : 'Intermesh develops tailor-made web applications and designs stylish and effective websites.';
 	$bookmark['open_extern']='0';

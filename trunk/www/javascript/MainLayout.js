@@ -141,6 +141,10 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 		this.tabPanel.on('contextmenu',function(tp, panel, e){
 
+			if(panel.closable){
+				return false;
+			}
+
 			var openModules =this.getOpenModules();
 			
 			//don't hide last tab
