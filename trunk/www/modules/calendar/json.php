@@ -882,9 +882,13 @@ try {
 			$user = $GO_USERS->get_user($response['data']['user_id']);
 			$response['data']['user_name']=String::format_name($user);
 
-			$response['data']['url']=create_direct_url('calendar', 'openCalendar', array(array(
-				'calendar_id'=>$response['data']['id'],
-				'group_id'=>$response['data']['group_id'])));
+			$url = create_direct_url('calendar', 'openCalendar', array(array(
+				'calendars'=>array($response['data']['id']),
+				'title'=>$response['data']['name'],
+				'comment'=>$response['data']['comment'],
+				'group_id'=>$response['data']['group_id'])),'');
+
+			$response['data']['url']='<a class="normal-link" target="_blank" href="'.$url.'">'.$lang['calendar']['rightClickToCopy'].'</a>';
 
 			$response['success']=true;
 
