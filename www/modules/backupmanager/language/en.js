@@ -15,3 +15,4 @@ GO.backupmanager.lang.rpassword='Wachtwoord';
 GO.backupmanager.lang.publish='Publish';
 GO.backupmanager.lang.publishkey='Publish public key';
 GO.backupmanager.lang.publishSuccess='Public key has succesfully been uploaded.';
+GO.backupmanager.lang.helpText='This module will backup files and all mysql databases to a remote server with SSH. You\'ll have to publish the SSH to this server first, make sure the remote backup folder exists and then run modules/backupmanager/cron.php manually the first time. After that you can schedule it as a cronjob.';

@@ -35,7 +35,7 @@ my $LIVEDBDIR = '/var/lib/mysql';
 
 # Directory where to store the backup data. This directory
 # and the above directory can't be the same.
-my $DATADIR = '/root/mysql_backup/';
+my $DATADIR = '/home/mysqlbackup/';
 # This defines which control panel is installed on the server.
 # Current choices are:  cpanel,psa,none
 my $CP = 'none';

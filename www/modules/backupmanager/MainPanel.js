@@ -10,7 +10,6 @@ GO.backupmanager.MainPanel = function(config){
         baseParams:{task:'get_settings'},
         waitMsgTarget:true,
         border:false,
-        cls:'go-form-panel',
         bodyStyle:'padding:10px',
         anchor:'50% 50%',
         defaults:{
@@ -19,7 +18,12 @@ GO.backupmanager.MainPanel = function(config){
         defaultType:'textfield',
         autoHeight:true,
         labelWidth:150,
-        items:[
+        items:[{
+							border:false,
+							xtype:'panel',
+							bodyStyle:'font-size: 12px;padding-bottom:10px',
+							html:GO.backupmanager.lang.helpText
+						},
             {
                 fieldLabel:GO.backupmanager.lang.rmachine,
                 name:'rmachine',
@@ -65,7 +69,7 @@ GO.backupmanager.MainPanel = function(config){
             },
             scope: this
         },this.publishButton = new Ext.Button({
-            text:GO.backupmanager.lang.publish,
+            text:GO.backupmanager.lang.publishkey,
             handler: function()
             {
                 if(!this.publishDialog)
@@ -151,5 +155,6 @@ Ext.extend(GO.backupmanager.MainPanel, Ext.Panel,{
 
 GO.moduleManager.addModule('backupmanager', GO.backupmanager.MainPanel,
 {
-    title:GO.backupmanager.lang.backupmanager   
+    title:GO.backupmanager.lang.backupmanager,
+		admin:true
 });
