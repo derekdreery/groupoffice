@@ -27,7 +27,7 @@ GO.calendar.CalendarDialog = function(config)
 		anchor: '100% 100%',		
 		autoHeight:true,
 		cls:'go-form-panel',
-		labelWidth: 75, 
+		labelWidth: 120,
 		items: [
 		this.selectUser = new GO.form.SelectUser({
 			fieldLabel: GO.lang.strUser,
@@ -66,7 +66,7 @@ GO.calendar.CalendarDialog = function(config)
 			fieldLabel:GO.lang.strComment,
 			name:'comment',
 			anchor:'100%',
-			height:40
+			height:50
 		},{
 			xtype:'plainfield',
 			fieldLabel:'URL',
