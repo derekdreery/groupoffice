@@ -23,7 +23,6 @@ GO.grid.MultiSelectGrid = function (config){
 		this.allowNoSelection = true;
 
 	Ext.apply(config, {
-		border: false,
 		plugins: [checkColumn],
 		tbar : [
 		this.selectButton = new Ext.Button({
@@ -104,9 +103,17 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 
 		var changedRecords=[];
 
+		var max = this.store.data.items.length;
+		
+		if(select_records=='all' && max>50){
+			
+			if(!confirm(GO.lang.confirmSelectLotsOfItems.replace('{count}', max).replace('Group-Office', GO.settings.config.product_name))){
+				return;
+			}
+		}
 
 
-		for (var i = 0, max=this.store.data.items.length; i < max;  i++)
+		for (var i=0; i < max;  i++)
 		{
 			current_record_id = this.store.data.items[i].id;
 			will_be_checked= select_records && select_records!='clear' && (select_records=='all' || select_records.indexOf(current_record_id)>-1);
