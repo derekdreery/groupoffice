@@ -156,5 +156,6 @@ Ext.extend(GO.backupmanager.MainPanel, Ext.Panel,{
 GO.moduleManager.addModule('backupmanager', GO.backupmanager.MainPanel,
 {
     title:GO.backupmanager.lang.backupmanager,
-		admin:true
+		admin:true,
+		iconCls : 'go-tab-icon-backupmanager'
 });
