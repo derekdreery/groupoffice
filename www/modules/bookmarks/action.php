@@ -173,7 +173,7 @@ try {
 
 		case 'save_bookmark':
 			$bookmark_id=$bookmark['id']=isset($_POST['id']) ? ($_POST['id']) : 0;
-  		$category = $bookmarks->get_category((trim($_POST['category_id'])));
+  		//$category = $bookmarks->get_category((trim($_POST['category_id'])));
      
 
 			$bookmark['user_id']=$GO_SECURITY->user_id;
@@ -187,12 +187,12 @@ try {
 
 			if($bookmark['id']>0)
 			{
-				$bookmarks->update_bookmark($bookmark, $category);
+				$bookmarks->update_bookmark($bookmark);
 				$response['success']=true;
 				$insert=false;
 			}else
 			{
-				$bookmark_id= $bookmarks->add_bookmark($bookmark, $category);
+				$bookmark_id= $bookmarks->add_bookmark($bookmark);
 				$response['bookmark_id']=$bookmark_id;
 				$response['success']=true;
 				$insert=true;

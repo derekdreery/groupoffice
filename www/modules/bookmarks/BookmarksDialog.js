@@ -24,7 +24,7 @@ GO.bookmarks.BookmarksDialog = function(config){
 	config.layout='fit';
 	config.modal=false;
 	config.resizable=false;
-	config.width=350;
+	config.width=500;
 	config.height=350;
 	config.closeAction='hide';
 	config.items= this.formPanel;
@@ -174,9 +174,10 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 			},
 			{
 				name: 'description',
-				xtype: 'textfield',
+				xtype: 'textarea',
 				fieldLabel: GO.bookmarks.lang.description,
-				anchor: '100%'
+				anchor: '100%',
+				height:40
 			},
 			this.selectFile = new GO.bookmarks.SelectFile({
 				fieldLabel: GO.bookmarks.lang.logo, 

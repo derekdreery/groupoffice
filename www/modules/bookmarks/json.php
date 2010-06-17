@@ -72,6 +72,8 @@ try {
 					$bookmark['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $bookmark['acl_id'])>GO_SECURITY::READ_PERMISSION;
 				}
 
+				$bookmark['description']=nl2br($bookmark['description']);
+
 				$bookmark['thumb']=empty($bookmark['logo']) ? '' : $bookmarks->bm_thumb_url($bookmark['logo'],32,32,0);
 				$bookmark['index']=$index;
 				$index++;
