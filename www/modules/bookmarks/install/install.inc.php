@@ -10,6 +10,8 @@ $category['user_id']=1;
 $category['name']=$lang['bookmarks']['general'];
 $category['acl_id']=$GO_SECURITY->get_new_acl('bookmarks');
 
+$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_everyone, $category['acl_id'], GO_SECURITY::READ_PERMISSION);
+
 $category_id= $bookmarks->add_category($category);
 
 

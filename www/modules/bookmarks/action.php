@@ -29,13 +29,8 @@ $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 $bm_id=isset($_REQUEST['bm_id']) ? $_REQUEST['bm_id'] : '';
 $usr_id=isset($_REQUEST['usr_id']) ? $_REQUEST['usr_id'] : '';
 
-
-
 try {
-
 	switch($task) {
-
-
 		case 'upload':
 			$response['success']=true;
 			$fs = new filesystem();
@@ -59,11 +54,7 @@ try {
 			$response['success']=true;
 			break;
 
-
-
-
 			case 'overwrite':
-
 			require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
 		
 			$quota = new quota();
@@ -94,8 +85,7 @@ try {
 		
 
 			while($tmp_file = array_shift($_SESSION['GO_SESSION']['files']['uploaded_files']))
-			{
-       
+			{      
 
 				$filename = utf8_basename($tmp_file);
        // $extension= strtolower(File::get_extension($tmp_filename));
@@ -150,8 +140,6 @@ try {
 
 			break;
 
-
-
 		case 'delete_bookmark':
     
       try {
@@ -166,8 +154,6 @@ try {
 				$response['deleteFeedback']=$e->getMessage();
 
 			}
-
-
 		  break;
 
 
@@ -215,6 +201,16 @@ try {
 					throw new AccessDeniedException();
 				}
 
+				if(isset($_POST['public']) && empty($old_category['acl_id'])){
+					$category['acl_id']=$GO_SECURITY->get_new_acl('bookmarks');
+					$response['acl_id']=$category['acl_id'];
+				}elseif(!isset($_POST['public']) && !empty($old_category['acl_id'])){
+					$category['acl_id']=0;
+					$response['acl_id']=0;
+					
+					$GO_SECURITY->delete_acl($old_category['acl_id']);
+				}
+
 				$bookmarks->update_category($category, $old_category);
 				$response['success']=true;
 
@@ -241,12 +237,8 @@ try {
 	}
 
 } catch(Exception $e) {
-
+	$response['feedback']=$e->getMessage();
+	$response['success']=false;
 }
 
 echo json_encode($response);
-
-
-
-
-?>

@@ -31,15 +31,11 @@ class thumbimage {
 try {
 
 	switch($task) {
-
-
-		case 'thumbdir': //
-
+		case 'thumbdir':
 			$thumbs = $bookmarks->thumbdir_images();
 
 			$response['results']=$thumbs;
 			$response['success']=true;
-
 			break;
 
 		case 'get_one_bookmark':
@@ -47,9 +43,7 @@ try {
 			$bookmark = $bookmarks->get_one_bookmark(($_REQUEST['thumb_id']));
 			$response['results']=$bookmark;
 			$response['success']=true;
-
 			break;
-
 
 		case 'get_bookmarks':
 
@@ -79,18 +73,14 @@ try {
 				$index++;
 
 				$response['results'][] = $bookmark;
-
-
 			}
-
-
 			break;
-
 
 		case 'category':
 			$category = $bookmarks->get_category(($_REQUEST['category_id']));
 			$user = $GO_USERS->get_user($category['user_id']);
 			$category['user_name']=String::format_name($user);
+			$category['public']=$category['acl_id']>0 ? '1' : '0';
 			$category['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id'])>GO_SECURITY::READ_PERMISSION;
 			$response['data']=$category;
 			$response['success']=true;
@@ -114,8 +104,6 @@ try {
 						if ($usr==$GO_SECURITY->user_id) {
 							throw new AccessDeniedException();
 						}
-
-
 						$bookmarks->delete_category($category_id);
 					}
 
@@ -124,7 +112,6 @@ try {
 					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
-
 
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
@@ -141,7 +128,6 @@ try {
 				$response['total'] = $bookmarks->get_authorized_categories($auth_type, $GO_SECURITY->user_id, $query, $sort, $dir, $start, $limit);
 			}
 
-
 			$response['results']=array();
 
 			while($bookmarks->next_record()) {
@@ -154,38 +140,12 @@ try {
 
 			}
 
-
-
 			break;
-
-
-
-
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 } catch(Exception $e) {
-
+	$response['feedback']=$e->getMessage();
+	$response['success']=false;
 }
 
 echo json_encode($response);
-
-
-
-
-?>

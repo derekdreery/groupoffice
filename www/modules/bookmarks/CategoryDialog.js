@@ -148,14 +148,12 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 				{
 					this.hide();	
 				}else
-				{
-				
-					if(action.result.category_id)
-					{
+				{				
+					if(action.result.category_id)					
 						this.setCategoryId(action.result.category_id);
 
+					if(typeof(action.result.acl_id)!='undefined')
 						this.readPermissionsTab.setAcl(action.result.acl_id);
-					}
 				}	
 			},		
 			failure: function(form, action) {
@@ -167,10 +165,8 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 				}
 			},
 			scope: this
-		});
-		
-	},
-	
+		});		
+	},	
 	
 	buildForm : function () {
 
@@ -191,9 +187,9 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 		if (GO.settings.user_id==1) items.push({ // niet 1 maar 'admin-rights''
 			name: 'public',
 			xtype: 'checkbox',
-			fieldLabel: 'Public',
-			anchor: '100%'
-		})
+			boxLabel: GO.bookmarks.lang.sharedCategory,
+			hideLabel:true
+		});
 
 		this.propertiesPanel = new Ext.Panel({
 			url: GO.settings.modules.bookmarks.url+'json.php',
@@ -205,31 +201,24 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 			cls:'go-form-panel',
 			waitMsgTarget:true,
 			layout:'form',
-			autoScroll:true,
-			
-			items: items
-
-			
-
-		
-				
+			autoScroll:true,			
+			items: items				
 		});
 
-		var itemz  = [this.propertiesPanel];
+		var items  = [this.propertiesPanel];
 		
 		this.readPermissionsTab = new GO.grid.PermissionsPanel({
 			});
 
-		itemz.push(this.readPermissionsTab);
+		items.push(this.readPermissionsTab);
  
 		this.tabPanel = new Ext.TabPanel({
 			activeTab: 0,
 			deferredRender: false,
 			border: false,
-			items: itemz,
+			items: items,
 			anchor: '100% 100%'
-		}) ;
-    
+		}) ;    
     
 		this.formPanel = new Ext.form.FormPanel({
 			waitMsgTarget:true,
@@ -240,7 +229,5 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 			},
 			items:this.tabPanel				
 		});
-    
-    
 	}
 });

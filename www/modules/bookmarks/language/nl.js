@@ -12,3 +12,4 @@ GO.bookmarks.lang.chooseIcon='Kies pictogram voor de bookmark';
 GO.bookmarks.lang.clearLogo='Wis logo';
 GO.bookmarks.lang.uploadLogo='Upload Logo';
 GO.bookmarks.lang.showAll='Toon alles';
+GO.bookmarks.lang.sharedCategory='Gedeelde categorie';
