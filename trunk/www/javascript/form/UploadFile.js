@@ -204,6 +204,7 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 		}
 		
 		this.fireEvent('filesChanged',this, this.inputs);
+		this.fireEvent('fileAdded',this, inp);
 		
 	},
 	/**
