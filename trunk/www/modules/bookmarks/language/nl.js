@@ -1,5 +1,5 @@
-GO.bookmarks.lang.bookmarks='Bookmarks';
-GO.bookmarks.lang.bookmark='Bookmark';
+GO.bookmarks.lang.bookmarks='Bladwijzers';
+GO.bookmarks.lang.bookmark='Bladwijzer';
 
 GO.bookmarks.lang.category='Categorie';
 GO.bookmarks.lang.title='Titel';
