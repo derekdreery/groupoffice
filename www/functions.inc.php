@@ -13,10 +13,10 @@
  */
 
 
-function create_direct_url($module, $function, $params){
+function create_direct_url($module, $function, $params, $loadevent='render'){
 	global $GO_CONFIG;
 
-	return $GO_CONFIG->full_url.'dialog.php?module='.$module.'&function='.$function.'&params='.urlencode(base64_encode(json_encode($params)));
+	return $GO_CONFIG->full_url.'dialog.php?loadevent='.$loadevent.'&module='.$module.'&function='.$function.'&params='.urlencode(base64_encode(json_encode($params)));
 
 }
 

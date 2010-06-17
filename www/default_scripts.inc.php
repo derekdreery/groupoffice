@@ -367,15 +367,19 @@ if(isset($_GET['module']))
     $module = isset($_GET['module']) ? $_GET['module'] : false;
     $function = isset($_GET['function']) ? $_GET['function'] : false;
     $params = isset($_GET['params']) ? ($_GET['params']) : false;
+		$loadevent = isset($_REQUEST['loadevent']) ? $_REQUEST['loadevent'] : 'render';
 
     if($module && $function && $params)
     {
     ?>
     if(GO.<?php echo $module; ?>)
     {
-        GO.mainLayout.on('render',function(){
-            GO.<?php echo $module; ?>.<?php echo $function; ?>.apply(this, <?php echo base64_decode($params); ?>);
-        });
+
+       <?php if(!empty($loadevent)) echo 'GO.mainLayout.on("'.$loadevent.'",function(){'; ?>
+            
+						GO.<?php echo $module; ?>.<?php echo $function; ?>.apply(this, <?php echo base64_decode($params); ?>);
+						
+       <?php if(!empty($loadevent)) echo '});'; ?>
     }
     <?php
     }

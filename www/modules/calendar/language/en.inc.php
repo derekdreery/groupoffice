@@ -109,3 +109,5 @@ $lang['calendar']['month_times'][2]='the second';
 $lang['calendar']['month_times'][3]='the third';
 $lang['calendar']['month_times'][4]='the fourth';
 $lang['calendar']['month_times'][5]='the fifth';
+
+$lang['calendar']['rightClickToCopy']='Right click to copy link location';

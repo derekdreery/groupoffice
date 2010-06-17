@@ -91,3 +91,5 @@ $lang['calendar']['month_times'][2]='de tweede';
 $lang['calendar']['month_times'][3]='de derde';
 $lang['calendar']['month_times'][4]='de vierde';
 $lang['calendar']['month_times'][5]='de vijfde';
+
+$lang['calendar']['rightClickToCopy']='Gebruik de rechtermuisknop om de koppelingslocatie te kopiëren';

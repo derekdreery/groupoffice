@@ -5,6 +5,7 @@ require('Group-Office.php');
 
 $module = isset($_REQUEST['module']) && preg_match('/[a-z]+/', $_REQUEST['module']) ? $_REQUEST['module'] : 'email';
 $function = isset($_REQUEST['function']) ? $_REQUEST['function'] : 'showComposer';
+
 $params = isset($_REQUEST['params']) ? base64_decode($_REQUEST['params']) : '';
 
 if(strpos($_SERVER['QUERY_STRING'], '<script') || strpos(urldecode($_SERVER['QUERY_STRING']), '<script'))

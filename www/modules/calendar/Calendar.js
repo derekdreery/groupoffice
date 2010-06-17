@@ -119,18 +119,15 @@ GO.calendar.MainPanel = function(config){
 			var record = this.calendarsStore.getById(this.state.calendars[0]);
 			if(!record)
 			{
-				record = this.calendarsStore.getAt(0);
-				this.state.calendar_name=this.state.title=record.data.name;
-				this.state.comment=record.data.comment;
-				this.state.calendars = [record.data.id];
-			}else
-			{
-				this.state.calendar_name=this.state.title=GO.calendar.defaultCalendar['name'];
-				this.state.comment=GO.calendar.defaultCalendar['comment'];
+				record = this.calendarsStore.getAt(0);				
 			}
 
-			//this.calendarList.getSelectionModel().selectRecords(new Array(record));
-			this.setDisplay(this.state);			
+			this.state.calendar_name=this.state.title=record.data.name;
+			this.state.comment=record.data.comment;
+			this.state.calendars = [record.data.id];
+			this.state.applyFilter=true;
+			this.setDisplay(this.state);
+			this.state.applyFilter=false;
 		}
 	}, this);
 
@@ -660,7 +657,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	 */
 	displayType : 'days',
 	lastCalendarDisplayType : 'days',
-	state : {},
+	state : false,
 	calendarId : 0,
 	viewId : 0,
 	group_id: 1,
@@ -748,32 +745,37 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 								
 		},this);
 		
-		
-		this.state = Ext.state.Manager.get('calendar-state');
-		if(!this.state)
-		{
-			this.state = {
-				displayType:'days',
-				days: 5,
-				calendars:0,
-				view_id: 0
-			};
+
+		if(GO.calendar.openState){
+			this.state=GO.calendar.openState;
 		}else
 		{
-			this.state = Ext.decode(this.state);
+			this.state = Ext.state.Manager.get('calendar-state');
+			if(!this.state)
+			{
+				this.state = {
+					displayType:'days',
+					days: 5,
+					calendars:0,
+					view_id: 0
+				};
+			}else
+			{
+				this.state = Ext.decode(this.state);
+			}
+
+			if(this.state.displayType=='view')
+				this.state.displayType='days';
+
+			this.state.calendars=[GO.calendar.defaultCalendar.id];
+			this.state.view_id=0;
+			this.state.group_id=1;
 		}
-		
-		if(this.state.displayType=='view')
-			this.state.displayType='days';
 
-		this.state.calendars=[GO.calendar.defaultCalendar.id];		
-		this.state.view_id=0;
-		this.state.group_id=1;
-
-		this.state.applyFilter=true;
+		/*this.state.applyFilter=true;
 		this.calendarsStore.on('load', function(){
 			this.state.applyFilter=false;
-		}, this, {single:true});
+		}, this, {single:true});*/
 				
 		this.init();	
 		this.createDaysGrid();
@@ -1011,6 +1013,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			config = {};
 		}
 
+		//console.log(config);
+
 		if(config.calendar_id)
 			config.calendars=[config.calendar_id];
 
@@ -1179,7 +1183,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		this.listButton.toggle(this.displayType=='list');
 		
 		this.updatePeriodInfoPanel();
-
 		
 
 		this.state={
@@ -1194,10 +1197,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		if(saveState)
 		{
 			this.saveState();
-		}
-		
-		
-		
+		}		
 		
 		var selectGrid;
 		if(this.view_id>0){
@@ -1220,8 +1220,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				selectGrid.expand();
 
 				if(config.applyFilter)
-					selectGrid.applyFilter(this.calendars, true);
-				
+					selectGrid.applyFilter(this.calendars, true);			
 				
 			}else
 			{
@@ -1239,17 +1238,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				selectGrid.expand();
 			}					
 		}
-
-
-		
-
-		//select calendars for resources grid etc.
-		/*
-		var records=[];
-		for(var i=0,max=selected.length;i<max;i++){
-			records.push(selectGrid.store.getById(selected[i]));			
-		}
-		selectGrid.getSelectionModel().selectRecords(records);*/
 	},
 	
 	
@@ -1910,3 +1898,22 @@ GO.calendar.showEvent = function(config){
 	GO.calendar.showEventDialog(config);
 
 };
+
+GO.calendar.openCalendar = function(displayConfig){
+	if(GO.mainLayout.rendered){
+		var mp = GO.mainLayout.initModule('calendar');
+		displayConfig.applyFilter=true;
+		if(mp.rendered){
+			mp.setDisplay(displayConfig);
+			mp.show();
+		}else
+		{
+			GO.calendar.openState=displayConfig;
+			mp.show();
+		}
+	}else
+	{
+		GO.calendar.openState=displayConfig;
+	}
+	
+}

@@ -62,9 +62,15 @@ GO.calendar.CalendarDialog = function(config)
 			boxLabel:GO.calendar.lang.show_bdays,
 			hideLabel:true
 		},{
-			xtype:'textfield',
-			fieldLabel:'Comment',
+			xtype:'textarea',
+			fieldLabel:GO.lang.strComment,
 			name:'comment',
+			anchor:'100%',
+			height:40
+		},{
+			xtype:'plainfield',
+			fieldLabel:'URL',
+			id:'url',
 			anchor:'100%'
 		},
 		this.exportButton = new Ext.Button({

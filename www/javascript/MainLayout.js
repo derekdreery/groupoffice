@@ -34,6 +34,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	state : false,
 
 	stateSaveScheduled : false,
+
+	rendered:false,
 	
 	onReady : function(fn, scope){		
 		if(!this.ready){
@@ -480,22 +482,25 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			target:this.startMenuLink
 		});
 
-		this.fireEvent('render');		
+
+		this.rendered=true;
+		this.fireEvent('render');
+
    	
    	this.removeLoadMask();
 	},
 
-	openModule : function(moduleName){
+	initModule : function(moduleName){
 
 		var panelId = 'go-module-panel-'+moduleName;
 		var panel;
-		
+
 		if(!this.tabPanel.items.map[panelId])
 		{
 			panel = GO.moduleManager.getPanel(moduleName);
 			panel.id = panelId;
 			this.tabPanel.add(panel);
-			
+
 			/*if(!this.hintShown)
 			{
 				this.msg(GO.lang.closeApps, GO.lang.rightClickToClose);
@@ -503,22 +508,20 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			}*/
 
 			this.saveState();
-			
+
 		}else{
 			panel = this.tabPanel.items.map[panelId];
 			this.tabPanel.unhideTabStripItem(panel);
-		}
-		
-		panel.show();
+		}	
 
 		return panel;
+	},
 
-		/*var menuItem = this.startMenu.items.item('go-start-menu-'+item.moduleName);
-		menuItem.hide();
+	openModule : function(moduleName){
 
-		this.refreshMenu();*/
-
-		
+		var panel = this.initModule(moduleName);		
+		panel.show();
+		return panel;		
 	},
 	
 	removeLoadMask : function()
