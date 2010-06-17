@@ -881,6 +881,11 @@ try {
 			$response['data']=$cal->get_calendar(($_REQUEST['calendar_id']));
 			$user = $GO_USERS->get_user($response['data']['user_id']);
 			$response['data']['user_name']=String::format_name($user);
+
+			$response['data']['url']=create_direct_url('calendar', 'openCalendar', array(array(
+				'calendar_id'=>$response['data']['id'],
+				'group_id'=>$response['data']['group_id'])));
+
 			$response['success']=true;
 
 

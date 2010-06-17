@@ -369,3 +369,4 @@ GO.lang.userGroup='User group';
 
 GO.lang.noItemSelectedWarning='Select at least one item please.';
 GO.lang.deselectAll='Deselect all';
+GO.lang.confirmSelectLotsOfItems='This action will select {count} items and might cause Group-Office to become slow. Are you sure you want continue?';
