@@ -1914,6 +1914,9 @@ GO.calendar.openCalendar = function(displayConfig){
 	}else
 	{
 		GO.calendar.openState=displayConfig;
+		GO.mainLayout.on('render', function(){
+			 GO.mainLayout.openModule('calendar');
+		});
 	}
 	
 }
