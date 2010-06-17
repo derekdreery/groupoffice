@@ -177,7 +177,7 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 				xtype: 'textarea',
 				fieldLabel: GO.bookmarks.lang.description,
 				anchor: '100%',
-				height:40
+				height:60
 			},
 			this.selectFile = new GO.bookmarks.SelectFile({
 				fieldLabel: GO.bookmarks.lang.logo, 
