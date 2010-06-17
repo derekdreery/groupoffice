@@ -13,3 +13,4 @@ GO.backupmanager.lang.rpassword='Wachtwoord';
 GO.backupmanager.lang.publish='Publiceer';
 GO.backupmanager.lang.publishkey='Publiceer publieke sleutel';
 GO.backupmanager.lang.publishSuccess='Publieke sleutel is succesvol geupload.';
+GO.backupmanager.lang.helpText='Deze module kan van alle bestanden en MySQL databases backups maken naar een externe server dmv. SSH. U dient de SSH sleutel te publiceren, te controleren of de doelmap op de backup server bestaat en vervolgens dient u eerst modules/backupmanager/cron.php handmatig uit te voeren. Daarna kunt u de opdracht als cronjob instellen.';

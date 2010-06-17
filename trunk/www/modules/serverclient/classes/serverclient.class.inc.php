@@ -193,6 +193,7 @@ class serverclient
 				{
 					//get the account because we need special folder info
 					$account = $email->get_account($account['id']);
+					$account = $email->decrypt_account($account);
 					$email->synchronize_folders($account);
 				}
 			}

@@ -12,8 +12,10 @@ if(php_sapi_name()!='cli'){
 if(isset($argv[1]))
 	define('CONFIG_FILE', $argv[1]);
 
-chdir(__FILE__);
+chdir(dirname(__FILE__));
 require_once('../../Group-Office.php');
+
+//echo $GO_CONFIG->get_config_file();
 
 if(!isset($GO_MODULES->modules['backupmanager']))
 {

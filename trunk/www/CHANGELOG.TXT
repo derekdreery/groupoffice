@@ -1,3 +1,7 @@
+2010/06/16 3.5.7
+- Updated Norwegian translation
+- Fixed small bugs
+
 2010/06/08 3.5.6
 - Updated Spanish translation
 - E-mail charset decoding failed on some server configurations
