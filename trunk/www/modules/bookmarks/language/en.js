@@ -16,3 +16,4 @@ GO.bookmarks.lang.chooseIcon='Choose icon for bookmark';
 GO.bookmarks.lang.clearLogo='Clear Logo';
 GO.bookmarks.lang.uploadLogo='Upload Logo';
 GO.bookmarks.lang.showAll='Show all';
+GO.bookmarks.lang.sharedCategory='Shared category';
