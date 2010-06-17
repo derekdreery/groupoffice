@@ -730,10 +730,11 @@ try {
 			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources, 1);
 
 			$response['results']=array();
-			while($cal->next_record(DB_ASSOC)) {
-				$record = $cal->record;
+			while($record =$cal->next_record(DB_ASSOC)) {
+	
 				$group = $cal2->get_group($record['group_id']);
 				$record['group_name'] = $group['name'];
+				$record['comment']=nl2br($record['comment']);
 				$response['results'][] = $record;
 			}
 			break;
