@@ -15,7 +15,25 @@
 $feed = $_REQUEST['feed'];
 if($feed != '' && strpos($feed, 'http') === 0){
 	header('Content-Type: text/xml');
-	$xml = @file_get_contents($feed);
+
+	if(function_exists('curl_init')){
+		$ch=curl_init();
+
+		curl_setopt($ch, CURLOPT_URL,$feed);
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		//for self-signed certificates
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+
+		$xml = curl_exec($ch);
+	}else
+	{
+		$xml = @file_get_contents($feed);
+	}
+	
 	if($xml)
 	{		
 		$xml = str_replace('<content:encoded>', '<content>', $xml);
