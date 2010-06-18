@@ -42,6 +42,8 @@ try {
 			//for self-signed certificates
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+			
 			$html = curl_exec ($ch);
 			$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u","</$1>", $html);
 
@@ -60,11 +62,12 @@ try {
 
 				}
 			}
-			$response['description']=$description;
+			//replace double spaces
+			$response['description']=preg_replace('/\s+/',' ',$description);
 
 
 			preg_match('/<title>(.*)<\/title>/i',$html, $match);
-			$response['title']=$match ? trim($match[1]) : '';
+			$response['title']=$match ? preg_replace('/\s+/',' ',trim($match[1])) : '';
 			
 			break;
 

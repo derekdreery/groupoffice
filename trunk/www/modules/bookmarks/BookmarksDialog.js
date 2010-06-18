@@ -179,8 +179,12 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 							},
 							callback:function(options, success, response){
 								var result = Ext.decode(response.responseText);
-								this.formPanel.form.findField('description').setValue(result.description);
-								this.formPanel.form.findField('name').setValue(result.title);
+								if(!GO.util.empty(result.description))
+									this.formPanel.form.findField('description').setValue(result.description);
+
+								if(!GO.util.empty(result.title))
+									this.formPanel.form.findField('name').setValue(result.title);
+
 								this.el.unmask();
 							},
 							scope:this
