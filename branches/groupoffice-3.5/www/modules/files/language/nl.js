@@ -23,3 +23,6 @@ GO.files.lang.newFiles='Nieuw';
 GO.files.lang.olderVersions='Oudere versies';
 GO.files.lang.uploadProperties='Onderstaande eigenschappen worden toegepast op alle bestanden die dmv. de "Kleine bestanden" optie worden geüpload.';
 GO.files.lang.selectFiles= 'Selecteer bestanden';
+
+GO.files.lang.fitImage='Passende grootte';
+GO.files.lang.normalSize='Normale grootte';
