@@ -33,18 +33,25 @@ try {
 	switch($task) {
 
 		case 'description':
-			$ch=curl_init();
 
-			curl_setopt($ch, CURLOPT_URL,$_POST['url']);
-			curl_setopt($ch, CURLOPT_HEADER, 0);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		
-			//for self-signed certificates
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
-			
-			$html = curl_exec ($ch);
+			if(function_exists('curl_init')){
+				$ch=curl_init();
+
+				curl_setopt($ch, CURLOPT_URL,$_POST['url']);
+				curl_setopt($ch, CURLOPT_HEADER, 0);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+				//for self-signed certificates
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+
+				$html = curl_exec($ch);
+			}else
+			{
+				$html = @file_get_contents($_POST['url']);
+			}
+
 			$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u","</$1>", $html);
 
 

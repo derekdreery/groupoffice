@@ -5,3 +5,4 @@ $lang['bookmarks']['name']='Bookmarks';
 $lang['bookmarks']['description']='A module to create bookmarks.';
 
 $lang['bookmarks']['general']='General';
+$lang['bookmarks']['googleDescription']="Search the web";
