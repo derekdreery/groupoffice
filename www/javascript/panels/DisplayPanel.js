@@ -294,7 +294,8 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 						{
 							if(GO.files){
 								var record = new GO.files.FileRecord(file);
-								GO.files.showFilePropertiesDialog(record.get('id'));
+								//GO.files.showFilePropertiesDialog(record.get('id'));
+								GO.files.openFile(record);
 							}else
 							{
 								window.open(GO.settings.modules.files.url+'download.php?id='+file.id);
