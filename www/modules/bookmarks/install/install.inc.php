@@ -40,3 +40,14 @@ if($GO_CONFIG->product_name=='Group-Office'){
 	$bookmark_id= $bookmarks->add_bookmark($bookmark, $category);
 
 }
+
+	$bookmark['user_id']=1;
+	$bookmark['category_id']=$category_id;
+	$bookmark['name']='Google';
+	$bookmark['content']='http://www.google.com';
+	$bookmark['description']=$lang['bookmarks']['googleDescription'];
+	$bookmark['open_extern']='1';
+	$bookmark['logo']='icons/viewmag.png';
+	$bookmark['public_icon']='1';
+
+	$bookmark_id= $bookmarks->add_bookmark($bookmark, $category);
