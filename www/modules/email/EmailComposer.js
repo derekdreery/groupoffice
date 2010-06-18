@@ -1080,10 +1080,20 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					text : GO.email.lang.attachFilesGO.replace('{product_name}', GO.settings.config.product_name),
 					cls : 'x-btn-text-icon',
 					handler : function() {
-						if (!this.fileBrowser) {
+
+						GO.files.createSelectFileBrowser();
+
+						GO.selectFileBrowser.setFileClickHandler(this.addRemoteFiles, this);
+
+						GO.selectFileBrowser.setFilesFilter('');
+						GO.selectFileBrowser.setRootID(0,0);
+						GO.selectFileBrowserWindow.show();
+
+						/*if (!this.fileBrowser) {
 							this.fileBrowser = new GO.files.FileBrowser({
 								border : false,
 								fileClickHandler : this.addRemoteFiles,
+								filePanelCollapsed:true,
 								scope : this
 							});
 
@@ -1109,7 +1119,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 								}]
 							});
 						}
-						this.fileBrowserWindow.show();
+						this.fileBrowserWindow.show();*/
 					},
 					scope : this
 				});
@@ -1193,9 +1203,6 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 							Ext.MessageBox.alert(GO.lang.strError,
 								GO.lang.noJava);
 						} else {
-							var local_path = this.local_path
-							? 'true'
-							: false;
 
 							/*
 									 * crashes firefox in ubuntu GO.util.popup({
@@ -1274,7 +1281,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			name : 'size'
 		}]);
 
-		var selections = this.fileBrowser.getSelectedGridRecords();
+		var selections = GO.selectFileBrowser.getSelectedGridRecords();
 
 		for (var i = 0; i < selections.length; i++) {
 			var newRecord = new AttachmentRecord({
@@ -1288,7 +1295,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.attachmentsStore.add(newRecord);
 		}
 		this.updateAttachmentsButton();
-		this.fileBrowserWindow.hide();
+		GO.selectFileBrowserWindow.hide();
 
 	},
 

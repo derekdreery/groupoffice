@@ -34,3 +34,7 @@ GO.files.lang.newFiles='New';
 GO.files.lang.olderVersions='Older versions';
 GO.files.lang.uploadProperties='The properties below will be applied to all files uploaded with the "Small files" option';
 GO.files.lang.selectFiles = 'Select files';
+
+GO.files.lang.fitImage='Fit image';
+GO.files.lang.normalSize='Normal size';
+GO.files.lang.imageViewer='Image viewer';
