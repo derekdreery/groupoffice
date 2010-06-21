@@ -1,5 +1,6 @@
-2010/06/16 3.5.8
+2010/06/21 3.5.8
 - Added totals report to projects
+- Fixed small bugs
 
 2010/06/16 3.5.7
 - Updated Norwegian translation
