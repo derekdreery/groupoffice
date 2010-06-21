@@ -15,8 +15,7 @@
 require_once($GLOBALS['GO_CONFIG']->class_path.'base/ldap.class.inc.php');
 require_once($GLOBALS['GO_CONFIG']->root_path.'modules/imapauth/classes/imapauth.class.inc.php');
 
-class ldapauth extends imapauth
-{
+class ldapauth extends imapauth {
 	/**
 	 * This variable defines a mapping between a column of the SQL users table,
 	 * and an attribute in an LDAP user account entry. The KEYs contain the names
@@ -26,75 +25,72 @@ class ldapauth extends imapauth
 	 */
 	var $mapping = array();
 
-	public function __construct(){
+	public function __construct() {
 		$this->mapping = array(
-		'username'	=> 'uid',
-		'password'	=> 'userpassword',
-		'first_name'	=> 'givenname',
-		'middle_name'	=> 'middlename',
-		'last_name'	=> 'sn',
-		'initials'	=> 'initials',
-		'title'	=> 'title',
-		'sex'		=> 'gender',
-		'birthday'	=> 'birthday',
-		'email'	=> 'mail',
-		'company'	=> 'o',
-		'department'	=> 'ou',
-		'function'	=> 'businessrole',	// TODO
-		'home_phone'	=> 'homephone',
-		'work_phone'	=> 'telephonenumber',
-		'fax'		=> 'homefacsimiletelephonenumber',
-		'cellular'	=> 'mobile',
-		'country'	=> 'homecountryname',
-		'state'	=> 'homestate',
-		'city'	=> 'homelocalityname',
-		'zip'		=> 'homepostalcode',
-		'address'	=> 'homepostaladdress',
-		'homepage'	=> 'homeurl',	// TODO: homeurl, workurl, labeledURI
-		'work_address'=> 'postaladdress',
-		'work_zip'	=> 'postalcode',
-		'work_country'=> 'c',
-		'work_state'	=> 'st',
-		'work_city'	=> 'l',
-		'work_fax'	=> 'facsimiletelephonenumber',
-		'currency'	=> 'gocurrency',
-		'max_rows_list'	=> 'gomaxrowslist',
-		'timezone'	=> 'gotimezone',
-		'start_module'=> 'gostartmodule',
-		'theme'	=> 'gotheme',
-		'language'	=> 'golanguage',
+						'username'	=> 'uid',
+						'password'	=> 'userpassword',
+						'first_name'	=> 'givenname',
+						'middle_name'	=> 'middlename',
+						'last_name'	=> 'sn',
+						'initials'	=> 'initials',
+						'title'	=> 'title',
+						'sex'		=> 'gender',
+						'birthday'	=> 'birthday',
+						'email'	=> 'mail',
+						'company'	=> 'o',
+						'department'	=> 'ou',
+						'function'	=> 'businessrole',	// TODO
+						'home_phone'	=> 'homephone',
+						'work_phone'	=> 'telephonenumber',
+						'fax'		=> 'homefacsimiletelephonenumber',
+						'cellular'	=> 'mobile',
+						'country'	=> 'homecountryname',
+						'state'	=> 'homestate',
+						'city'	=> 'homelocalityname',
+						'zip'		=> 'homepostalcode',
+						'address'	=> 'homepostaladdress',
+						'homepage'	=> 'homeurl',	// TODO: homeurl, workurl, labeledURI
+						'work_address'=> 'postaladdress',
+						'work_zip'	=> 'postalcode',
+						'work_country'=> 'c',
+						'work_state'	=> 'st',
+						'work_city'	=> 'l',
+						'work_fax'	=> 'facsimiletelephonenumber',
+						'currency'	=> 'gocurrency',
+						'max_rows_list'	=> 'gomaxrowslist',
+						'timezone'	=> 'gotimezone',
+						'start_module'=> 'gostartmodule',
+						'theme'	=> 'gotheme',
+						'language'	=> 'golanguage',
 		);
 
 	}
 
-	public function __on_load_listeners($events){
+	public function __on_load_listeners($events) {
 		$events->add_listener('before_login', __FILE__, 'ldapauth', 'before_login');
 	}
-	
 
-	public static function before_login($username, $password)
-	{
+
+	public static function before_login($username, $password) {
 		global $GO_CONFIG, $GO_USERS, $GO_MODULES;
-		
-		if(!isset($GO_CONFIG->ldap_host))
-		{
+
+		if(!isset($GO_CONFIG->ldap_host)) {
 			go_debug('LDAPAUTH: module is installed but not configured');
 			return false;
 		}
 
 		$ldap = new ldap(
-		$GO_CONFIG->ldap_host,
-		$GO_CONFIG->ldap_user,
-		$GO_CONFIG->ldap_pass,
-		$GO_CONFIG->ldap_basedn,
-		$GO_CONFIG->ldap_peopledn,
-		$GO_CONFIG->ldap_groupsdn);
+						$GO_CONFIG->ldap_host,
+						$GO_CONFIG->ldap_user,
+						$GO_CONFIG->ldap_pass,
+						$GO_CONFIG->ldap_basedn,
+						$GO_CONFIG->ldap_peopledn,
+						$GO_CONFIG->ldap_groupsdn);
 
 		$ldap->search('uid='.$username, $ldap->PeopleDN);
 
 		$entry = $ldap->get_entries();
-		if(!isset($entry[0]))
-		{
+		if(!isset($entry[0])) {
 			go_debug('LDAPAUTH: No LDAP user found');
 			return false;
 		}
@@ -103,77 +99,68 @@ class ldapauth extends imapauth
 
 		$authenticated = $ldap->bind($entry[0]['dn'], $password);
 
-		if(!$authenticated)
-		{
+		if(!$authenticated) {
 			go_debug('LDAPAUTH: LDAP authentication failed for '.$username);
 			throw new Exception($GLOBALS['lang']['common']['badLogin']);
-		}else
-		{
+		}else {
+			$mail_username=false;
 			$gouser = $GO_USERS->get_user_by_username($username);
-			
-			if ($gouser) {
 
+			if(!empty($user['email']) && isset($GO_MODULES->modules['email'])) {
+				$arr = explode('@', $user['email']);
+				$mailbox = trim($arr[0]);
+				$domain = isset($arr[1]) ? trim($arr[1]) : '';
+
+				$config = $la->get_domain_config($domain);
+				if($config) {
+					go_debug('LDAPAUTH: E-mail configuration found. Creating e-mail account');
+					$mail_username = empty($config['ldap_use_email_as_imap_username']) ? $username : $user['email'];
+				}
+			}else {
+				go_debug('LDAPAUTH: Warning! no E-mail address found in profile.');
+			}
+
+			if ($gouser) {
 				go_debug('LDAPAUTH: Group-Office user was found');
 
-				$user['id']=$gouser['id'];				
+				$user['id']=$gouser['id'];
 
 				//user exists. See if the password is accurate
-				if(crypt($password, $gouser['password']) != $gouser['password'])
-				{
+				if(crypt($password, $gouser['password']) != $gouser['password']) {
 					go_debug('LDAPAUTH: password on LDAP server has changed. Updating Group-Office database');
 					$user['password']=$password;
-						
-					if(isset($GO_MODULES->modules['email']))
-					{
+
+					if($mail_username) {
 						require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 						$email_client = new email();
-						$email_client->update_password($config['host'], $username, $password);
+						$email_client->update_password($config['host'], $mail_username, $password);
 					}
 				}
-
+				
 				$GO_USERS->update_profile($user);
 
 			} else {
 				$user['username'] = $username;
 				$user['password'] = $password;
-				
+
 				global $GO_GROUPS;
 
 				go_debug('LDAPAUTH: Group-Office user not found. Creating new user from LDAP profile');
 
 				if (!$user_id = $GO_USERS->add_user($user,
-					$GO_GROUPS->groupnames_to_ids(explode(',',$GO_CONFIG->register_user_groups)),
-					$GO_GROUPS->groupnames_to_ids(explode(',',$GO_CONFIG->register_visible_user_groups)),
-					explode(',',$GO_CONFIG->register_modules_read),
-					explode(',',$GO_CONFIG->register_modules_write)))
-				{
+				$GO_GROUPS->groupnames_to_ids(explode(',',$GO_CONFIG->register_user_groups)),
+				$GO_GROUPS->groupnames_to_ids(explode(',',$GO_CONFIG->register_visible_user_groups)),
+				explode(',',$GO_CONFIG->register_modules_read),
+				explode(',',$GO_CONFIG->register_modules_write))) {
 					go_debug('LDAPAUTH: Failed creating user '.$username.' and e-mail '.$email.' with ldapauth.');
 					trigger_error('Failed creating user '.$username.' and e-mail '.$email.' with ldapauth.', E_USER_WARNING);
 				} else {
-					
-					if(!empty($user['email']))
-					{
-						$arr = explode('@', $user['email']);						
-						$mailbox = trim($arr[0]);
-						$domain = isset($arr[1]) ? trim($arr[1]) : '';
-			
-						$config = $la->get_domain_config($domain);
-						if($config)
-						{
-							go_debug('LDAPAUTH: E-mail configuration found. Creating e-mail account');
-							$mail_username = empty($config['ldap_use_email_as_imap_username']) ? $username : $user['email'];
-							
-							$la->create_email_account($config, $user_id, $mail_username, $password,$user['email']);
-						}else
-						{
-							go_debug('LDAPAUTH: No E-mail configuration found for domain. Skipped creating e-mail account');
-						}
-					}else
-					{
-						go_debug('LDAPAUTH: No E-mail address found in profile. Skipped creating e-mail account');
+
+					if($mail_username) {
+						$la->create_email_account($config, $user_id, $mail_username, $password,$user['email']);
 					}
 				}
-			}				
+			}
 		}
 	}
 
@@ -202,12 +189,12 @@ class ldapauth extends imapauth
 		/*
 		 * Process each SQL/LDAP key pair of the mapping array, so that we can
 		 * fetch all values that are needed for each SQL key.
-		 */
+		*/
 		foreach ( $this->mapping as $key => $ldapkey ) {
 			/*
 			 * If the ldapkey is undefined, we don't know any attributes that
 			 * match the specifiy SQL column, so we can leave it empty.
-			 */
+			*/
 			if ( $ldapkey == '' ) {
 				$row[$key] = '';
 				continue;
@@ -217,7 +204,7 @@ class ldapauth extends imapauth
 			 * Check if this is already a new mapping - if the data type is not
 			 * a string, we can savely assume that it is a ldap_user_mapping
 			 * object, so we can directly execute the generic method.
-			 */
+			*/
 			if ( !is_string( $ldapkey ) ) {
 
 				$value = $ldapkey->get_value($entry, $key);
@@ -226,15 +213,15 @@ class ldapauth extends imapauth
 			} else {
 				continue;
 			}
-				
+
 			$row[$key] = $value;
-				
+
 		}
 
 		/*
 		 * We have processed all mapping fields and created our SQL result
 		 * array. So we can return it.
-		 */
+		*/
 		return $row;
 	}
 }
@@ -250,9 +237,8 @@ class ldap_mapping_type {
 		$this->value = $value;
 	}
 
-	function get_value($entry, $key){
-		switch($this->type)
-		{
+	function get_value($entry, $key) {
+		switch($this->type) {
 			case 'function':
 				$my_method = $this->value;
 				return $my_method( $entry );
@@ -260,7 +246,7 @@ class ldap_mapping_type {
 			case 'constant':
 				return $this->value;
 				break;
-					
+
 			default:
 				return false;
 				break;
