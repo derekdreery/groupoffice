@@ -386,11 +386,11 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 				}, this);
 			GO.addressbook.readableAddressbooksStore.load();
 			
-			if(GO.mailings)
+			/*if(GO.mailings)
 			{
 				if(!GO.mailings.ooTemplatesStore.loaded)
 					GO.mailings.ooTemplatesStore.load();
-			}
+			}*/
 
 			GO.addressbook.contactDialogListeners={
 				scope:this,

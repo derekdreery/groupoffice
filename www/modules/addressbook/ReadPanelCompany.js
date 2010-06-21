@@ -392,11 +392,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			this.newOODoc = new GO.mailings.NewOODocumentMenuItem();
 			this.newOODoc.on('create', function(){this.reload();}, this);
 			
-			this.newMenuButton.menu.add(this.newOODoc);	
-						
-			GO.mailings.ooTemplatesStore.on('load', function(){
-				this.newOODoc.setDisabled(GO.mailings.ooTemplatesStore.getCount() == 0);
-			}, this);
+			this.newMenuButton.menu.add(this.newOODoc);
 		}
 		
 		if(GO.tasks)
