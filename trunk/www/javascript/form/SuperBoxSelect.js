@@ -1629,7 +1629,7 @@ Ext.ux.form.SuperBoxSelectItem = Ext.extend(Ext.ux.form.SuperBoxSelectItem,Ext.C
 			stopEvent:true
 		});
 
-		this.el.addClassOnOver('x-superboxselect-item x-superboxselect-item-hover');
+		//this.el.addClassOnOver('x-superboxselect-item x-superboxselect-item-hover');
 	},
 
 	enableLnkListeners : function() {
