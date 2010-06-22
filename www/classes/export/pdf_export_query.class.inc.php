@@ -102,10 +102,12 @@ class pdf_export_query extends base_export_query{
 		global $GO_USERS, $lang, $GO_MODULES;
 
 		$this->init_pdf();
+
+		$this->pdf->AddPage();
 		
 		$this->print_column_headers();
 		
-		$this->pdf->AddPage();
+		
 
 		$fill=false;
 		while($record = $this->db->next_record())

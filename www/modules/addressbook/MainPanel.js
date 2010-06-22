@@ -408,14 +408,6 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 			*/
 			GO.addressbook.readableAddressbooksStore.load();
 			
-			if(GO.mailings)
-			{
-				if(!GO.mailings.ooTemplatesStore.loaded)
-					GO.mailings.ooTemplatesStore.load();
-
-				GO.mailings.readableMailingsStore.load();
-			}
-
 			GO.addressbook.contactDialogListeners={
 				scope:this,
 				'save':function(){

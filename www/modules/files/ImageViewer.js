@@ -14,7 +14,8 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		this.width=640;
 		this.height=Ext.getBody().getHeight()-80;
 		this.bodyStyle='text-align:center;vertical-align:middle';
-		this.title='Image viewer';		
+		this.title=GO.files.lang.imageViewer;
+		this.autoScroll=true;
 		
 		this.tbar=[this.previousButton = new Ext.Button({
 			iconCls: 'btn-left-arrow',
@@ -40,24 +41,22 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 				document.location.replace(this.imgEl.dom.src);
 			},
 			scope: this
-		}/*,'-',
+		},'-',
 		{
-			iconCls: 'btn-save',
-			text: 'Ware grootte',
+			text: GO.files.lang.normalSize,
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				this.imgEl.setSize(this.originalImgSize.width, this.originalImgSize.height);
 			},
 			scope: this
 		},{
-			iconCls: 'btn-save',
-			text: 'Passend',
+			text: GO.files.lang.fitImage,
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				this.syncImgSize();
 			},
 			scope: this
-		}*/];
+		}];
 		
 		GO.files.ImageViewer.superclass.initComponent.call(this);
 		this.on('resize', this.syncImgSize, this);
@@ -90,8 +89,10 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		this.imgEl = this.body.createChild({
 			tag:'img',
 			src: this.viewerImages[index].src,
-			cls:'fs-img-viewer'			
+			cls:'fs-img-viewer'
 		});
+
+		this.imgEl.initDD(null);
 		
 		this.syncImgSize();
 		
@@ -109,30 +110,33 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 			}else
 			{			
 				var imgSize = this.imgEl.getSize();
-				var ar = imgSize.width/imgSize.height;
 				
 				if(!this.originalImgSize)
 				{
 					this.originalImgSize = imgSize;
 				}
 				
-				var bodySize = {width:this.getInnerWidth(), height:this.getInnerHeight()};
+				var bodySize = this.body.getSize();
 				
-				if(ar > 1)
-				{
-					//landscape img
-					var w = this.originalImgSize.width > bodySize.width ? bodySize.width : this.originalImgSize.width;
-					this.imgEl.setWidth(w);
-					
-					var h = this.imgEl.getHeight();
-				}else 
-				{
-					var h = this.originalImgSize.height > bodySize.height ? bodySize.height : this.originalImgSize.height;
-					this.imgEl.setHeight(h);
+				var h = imgSize.height;
+				var w = imgSize.width;
+				if(this.originalImgSize.width > bodySize.width){
+					w = bodySize.width;					
+					h= this.originalImgSize.height*bodySize.width/this.originalImgSize.width;
 				}
+
+				if(h>bodySize.height){
+					var ratio = bodySize.height/h;
+					w=w*ratio
+					h=this.originalImgSize.height*ratio
+				}
+
+				this.imgEl.setWidth(w);
+				this.imgEl.setHeight(h);
+				this.imgEl.setPositioning({left:0,top:0});
 				
-				var topMargin = (bodySize.height-h)/2;
-				this.imgEl.setStyle('margin-top', topMargin+'px');
+				//var topMargin = (bodySize.height-h)/2;
+				//this.imgEl.setStyle('margin-top', topMargin+'px');
 				
 				this.body.unmask();
 			}
