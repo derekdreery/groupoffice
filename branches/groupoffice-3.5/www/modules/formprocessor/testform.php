@@ -2,15 +2,24 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Test form</title>
+<style>
+body{
+	font: 12px arial;
+}
+input, textarea{
+	width:250px;
+}
+</style>
 </head>
 <body>
 							
 						
-	<form method="POST" action="submit.php">
+	<form method="POST" action="submit.php" enctype="multipart/form-data">
 	
 	<input type="hidden" name="return_to" value="<?php echo $_SERVER['PHP_SELF']; ?>" />
-	<input type="hidden" name="addressbook" value="test2" />
+	<input type="hidden" name="addressbook" value="Klanten" />
+	<input type="hidden" name="mailings[]" value="test" />
 	<!-- <input type="hidden" name="mailings[]" value="blabla" /> -->
 	<!--
 	Enable this input to send an e-mail confirmation. 
@@ -41,60 +50,69 @@
 	?>
 
 
-	<table class="formulier" cellpadding="0" cellspacing="2">
+	<table class="formulier" cellpadding="1" cellspacing="2">
 	<tr>
-		<td class="label">e-mail *</td>
-		<td><input class="textbox" type="" name="email" value="mschering@intermesh.nl"  /><input type="hidden" name="required[]" value="email" /></td>
+		<td class="label">E-mail *</td>
+		<td>: <input class="textbox" type="" name="email" value="mschering@intermesh.nl"  /><input type="hidden" name="required[]" value="email" /></td>
 
 	</tr>
 	<tr>
-		<td class="label">organisatie</td>
-		<td><input class="textbox" type="" name="company" value="Intermesh"  /></td>
+		<td class="label">Company</td>
+		<td>: <input class="textbox" type="" name="company" value="Intermesh"  /></td>
 	</tr>
 	<tr>
-		<td class="label">functie</td>
-		<td><input class="textbox" type="" name="function" value=""  /></td>
-
+		<td class="label">Function</td>
+		<td>: <input class="textbox" type="" name="function" value=""  /></td>
 	</tr>
 	<tr>
-		<td class="label">aanhef</td>
-		<td>
+		<td class="label">Salutation</td>
+		<td>:
 		<label for="id_1000">
-		<input type="radio" name="sex" value="M" id="id_1000" checked="checked" />De heer
+		<input type="radio" name="sex" value="M" id="id_1000" checked="checked" />Mr.
 		</label>
 		<label for="id_1001">
-		<input type="radio" name="sex" value="F" id="id_1001" />Mevrouw
+		<input type="radio" name="sex" value="F" id="id_1001" />Mrs.
 		</label>
 
 		</td>
 	</tr>
 	<tr>
-		<td class="label">voornaam *</td>
-		<td><input class="textbox" type="" name="first_name" value="Merijn"  /><input type="hidden" name="required[]" value="first_name" /></td>
+		<td class="label">First name *</td>
+		<td>: <input class="textbox" type="" name="first_name" value="Merijn"  /><input type="hidden" name="required[]" value="first_name" /></td>
 	</tr>
 	<tr>
-		<td class="label">achternaam *</td>
+		<td class="label">Middle name</td>
 
-		<td><input class="textbox" type="" name="last_name" value="Schering"  /><input type="hidden" name="required[]" value="last_name" /></td>
+		<td>: <input class="textbox" type="" name="middle_name" value=""  /><input type="hidden" name="required[]" value="last_name" /></td>
 	</tr>
 	<tr>
-		<td class="label">telefoonnummer</td>
-		<td><input class="textbox" type="" name="home_phone" value=""  /></td>
-	</tr>
-	<tr>
-		<td class="label">vraag | opmerking</td>
+		<td class="label">Last name *</td>
 
-		<td><textarea class="textbox" name="comment[Opmerking]" ></textarea></td>
+		<td>: <input class="textbox" type="" name="last_name" value="Schering"  /><input type="hidden" name="required[]" value="last_name" /></td>
+	</tr>
+	<tr>
+		<td class="label">Phone</td>
+		<td>: <input class="textbox" type="" name="home_phone" value=""  /></td>
+	</tr>
+	<tr>
+		<td style="vertical-align:top" class="label">Comments</td>
+
+		<td style="vertical-align:top">: <textarea class="textbox" name="comment[Opmerking]" ></textarea></td>
+	</tr>
+	<tr>
+		<td class="label">File attachment</td>
+		<td>: <input type="file" name="attachment" /></td>
 	</tr>
 	<tr>
 		<td colspan="2">
 			<label for="email_allowed"><input id="email_allowed" type="checkbox" name="email_allowed" style="vertical-align: middle;" />I'd like to recieve newsletters</label>
 		</td>
 	</tr>
+
 	<tr>
 		<td></td>
 		<td>			
-				<input type="submit" />	
+				<input type="submit" value="Send" />
 		</td>
 	</tr>
 	</table>

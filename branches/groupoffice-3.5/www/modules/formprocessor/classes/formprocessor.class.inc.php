@@ -179,6 +179,9 @@ class formprocessor{
 				if(!empty($existing_contact['comment']) && !empty($contact_credentials['comment']))
 				$contact_credentials['comment']=$existing_contact['comment']."\n\n----\n\n".$contact_credentials['comment'];
 
+				if(empty($contact_credentials['comment']))
+					unset($contact_credentials['comment']);
+
 				$ab->update_contact($contact_credentials);
 			}else
 			{
