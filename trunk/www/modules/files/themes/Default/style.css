@@ -4,6 +4,7 @@
 border:1px solid #d0d0d0;
 display:block;
 margin:auto;
+cursor:pointer;
 }
 
 .go-module-icon-files , .go-menu-icon-files {

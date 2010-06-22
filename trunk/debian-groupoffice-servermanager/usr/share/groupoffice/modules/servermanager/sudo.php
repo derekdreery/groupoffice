@@ -153,7 +153,7 @@ switch($args['task'])
 			//set admin password
 			$db = new db();
 			$db->query('USE `'.$db_name.'`');
-			$db->query("UPDATE go_users SET password=MD5('".$argv[5]."') WHERE id=1");
+			$db->query("UPDATE go_users SET password=crypt('".$argv[5]."'), password_type='crypt' WHERE id=1");
 		}
 		break;
 		

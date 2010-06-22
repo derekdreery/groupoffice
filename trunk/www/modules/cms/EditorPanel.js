@@ -303,7 +303,8 @@ GO.cms.createFileBrowser = function(root_folder_id, filter, fileClickHandler, fi
 	{
 		GO.cms.fb = new GO.files.FileBrowser({
 			border:false,
-			treeCollapsed:false
+			treeCollapsed:false,
+			filePanelCollapsed:true
 		});
 		
 		GO.cms.fileBrowserWindow = new Ext.Window({
