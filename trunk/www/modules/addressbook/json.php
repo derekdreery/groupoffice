@@ -182,11 +182,11 @@ try
 				$mailings_filter = $GO_CONFIG->get_setting('mailings_filter', $GO_SECURITY->user_id);
 				$mailings_filter = empty($mailings_filter) ? array() : explode(',', $mailings_filter);
 			}
+			$readable_books = array();
+			$writable_books = array();
 			
 			if(count($books))
-			{
-				$readable_books = array();
-				$writable_books = array();
+			{				
 				$response['data']['permission_level'] = $permission_level = 0;
 				foreach($books as $book_id)
 				{
