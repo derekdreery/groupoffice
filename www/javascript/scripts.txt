@@ -65,6 +65,7 @@ javascript/form/SelectCountry.js
 javascript/form/SelectAddressFormat.js
 javascript/form/FileUploadField.js
 javascript/form/TriggerIdField.js
+javascript/form/SuperBoxSelect.js
 
 javascript/form/HtmlComponent.js
 javascript/form/NumberField.js
