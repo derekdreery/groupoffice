@@ -407,10 +407,5 @@ $updates[]= "ALTER TABLE  `go_reminders` DROP  DROP  `user_id` , DROP  `mail_sen
 
 $updates[]= "ALTER TABLE  `go_reminders` ADD  `text` TEXT NOT NULL";
 
-
-
-
-
-
-
+$updates[]= "ALTER TABLE `go_users` ADD `contact_id` INT NOT NULL";
 

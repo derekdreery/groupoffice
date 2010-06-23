@@ -53,6 +53,8 @@ class formprocessor{
 
 		$this->check_required();
 
+		
+
 		if(isset($_POST['language']) && $_POST['language']!=$GO_LANGUAGE->language)
 		{
 			$GO_LANGUAGE->set_language($_POST['language']);
@@ -61,6 +63,33 @@ class formprocessor{
 
 		if(!isset($_POST['salutation']))
 			$_POST['salutation']=isset($_POST['sex']) ? $lang['common']['default_salutation'][$_POST['sex']] : $lang['common']['default_salutation']['unknown'];
+
+
+		//user registation
+		if(!empty($_POST['username'])){
+			$credentials = array ('username','first_name','middle_name','last_name','title','initials','sex','email',
+			'home_phone','fax','cellular','address','address_no',
+			'zip','city','state','country','company','department','function','work_phone',
+			'work_fax');
+
+			if($_POST['password1'] != $_POST['password2'])
+			{
+				require($GO_LANGUAGE->get_language_file('users'));
+				throw new Exception($lang['users']['error_match_pass']);
+			}
+
+			foreach($credentials as $key)
+			{
+				if(!empty($_REQUEST[$key]))
+				{
+					$user_credentials[$key] = $_REQUEST[$key];
+				}
+			}
+			$user_credentials['password']=$_POST['password1'];
+
+			$user_id=$GO_USERS->add_user($user_credentials);
+		}
+
 
 		
 
@@ -113,7 +142,7 @@ class formprocessor{
 				$contact_credentials['comment']=$comments;
 			}
 
-			if($this->no_urls && stripos($contact_credentials['comment'], 'http')){
+			if($this->no_urls && isset($contact_credentials['comment']) && stripos($contact_credentials['comment'], 'http')){
 				throw new Exception('Sorry, but to prevent spamming we don\'t allow URL\'s in the message');
 			}
 
@@ -147,7 +176,9 @@ class formprocessor{
 				
 				
 			$existing_contact=false;
-			if(!empty($contact_credentials['email']))
+			if(!empty($_POST['contact_id'])){
+				$existing_contact = $ab->get_contact($_POST['contact_id']);
+			}elseif(!empty($contact_credentials['email']))
 			{
 				$existing_contact = $ab->get_contact_by_email($contact_credentials['email'], 0, $contact_credentials['addressbook_id']);
 			}
@@ -163,13 +194,16 @@ class formprocessor{
 				/*
 				 * Only update empty fields
 				 */
-				foreach($contact_credentials as $key=>$value)
-				{
-					if($key!='comment')
+
+				if(empty($_POST['contact_id'])){
+					foreach($contact_credentials as $key=>$value)
 					{
-						if(!empty($existing_contact[$key]))
+						if($key!='comment')
 						{
-							unset($contact_credentials[$key]);
+							if(!empty($existing_contact[$key]))
+							{
+								unset($contact_credentials[$key]);
+							}
 						}
 					}
 				}
@@ -182,17 +216,26 @@ class formprocessor{
 				if(empty($contact_credentials['comment']))
 					unset($contact_credentials['comment']);
 
+				//var_dump($contact_credentials);
+
 				$ab->update_contact($contact_credentials);
 			}else
 			{
 				$contact_id = $ab->add_contact($contact_credentials);
 				$files_folder_id=$contact_credentials['files_folder_id'];
+
+				if(!empty($user_id)){
+					$user['id']=$user_id;
+					$user['contact_id']=$contact_id;
+					$GO_USERS->update_profile($user);
+				}
 			}
 			if(!$contact_id)
 			{
 				throw new Exception($lang['common']['saveError']);
 			}
 
+			//var_dump($_FILES);
 			if($GO_MODULES->modules['files'])
 			{
 				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
@@ -242,64 +285,67 @@ class formprocessor{
 					}
 				}
 			}
-				
-			$notify_users = isset($_POST['notify_users']) ? explode(',', $_POST['notify_users']) : array();
-			if(!empty($_POST['notify_addressbook_owner']))
-			{
-				$notify_users[]=$addressbook['user_id'];
+
+			if(!isset($_POST['contact_id'])){
+				$notify_users = isset($_POST['notify_users']) ? explode(',', $_POST['notify_users']) : array();
+				if(!empty($_POST['notify_addressbook_owner']))
+				{
+					$notify_users[]=$addressbook['user_id'];
+				}
+				$mail_to = array();
+				foreach($notify_users as $notify_user_id)
+				{
+					$user = $GO_USERS->get_user($notify_user_id);
+					$mail_to[]=$user['email'];
+				}
+				if(count($mail_to))
+				{
+					$body = $lang['addressbook']['newContactFromSite'].'<br /><a href="go:showContact('.$contact_id.');">'.$lang['addressbook']['clickHereToView'].'</a>';
+
+					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+					$swift = new GoSwift(implode(',', $mail_to), $lang['addressbook']['newContactAdded']);
+					$swift->set_body($body);
+					$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+					try{
+						$swift->sendmail();
+					}
+					catch(Exception $e){
+						go_log(LOG_DEBUG, $e->getMessage());
+					}
+				}
 			}
-			$mail_to = array();
-			foreach($notify_users as $notify_user_id)
+		
+
+			if(isset($_POST['confirmation_template']))
 			{
-				$user = $GO_USERS->get_user($notify_user_id);
-				$mail_to[]=$user['email'];
-			}
-			if(count($mail_to))
-			{
-				$body = $lang['addressbook']['newContactFromSite'].'<br /><a href="go:showContact('.$contact_id.');">'.$lang['addressbook']['clickHereToView'].'</a>';
+				if(empty($_POST['email']))
+				{
+					throw new Exception('Fatal error: No email given for confirmation e-mail!');
+				}
+
+				global $smarty;
+				$email = $smarty->fetch($_POST['confirmation_template']);
+
+				$pos = strpos($email,"\n");
+
+				$subject = trim(substr($email, 0, $pos));
+				$body = trim(substr($email,$pos));
 
 				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-				$swift = new GoSwift(implode(',', $mail_to), $lang['addressbook']['newContactAdded']);
+				$swift = new GoSwift($_POST['email'], $subject);
 				$swift->set_body($body);
 				$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
-				try{
-					$swift->sendmail();
-				}
-				catch(Exception $e){
-					go_log(LOG_DEBUG, $e->getMessage());
-				}
+				$swift->sendmail();
 			}
-		}
 
-		if(isset($_POST['confirmation_template']))
-		{
-			if(empty($_POST['email']))
+			if(isset($_POST['confirmation_email']))
 			{
-				throw new Exception('Fatal error: No email given for confirmation e-mail!');
+				$email = file_get_contents(dirname($GO_CONFIG->get_config_file()).'/'.basename($_POST['confirmation_email']));
+				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+				$swift = new GoSwiftImport($email);
+				$swift->set_to($_POST['email']);
+				$swift->sendmail();
 			}
-
-			global $smarty;
-			$email = $smarty->fetch($_POST['confirmation_template']);
-
-			$pos = strpos($email,"\n");
-
-			$subject = trim(substr($email, 0, $pos));
-			$body = trim(substr($email,$pos));
-
-			require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-			$swift = new GoSwift($_POST['email'], $subject);
-			$swift->set_body($body);
-			$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
-			$swift->sendmail();
-		}
-
-		if(isset($_POST['confirmation_email']))
-		{
-			$email = file_get_contents(dirname($GO_CONFIG->get_config_file()).'/'.basename($_POST['confirmation_email']));
-			require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-			$swift = new GoSwiftImport($email);
-			$swift->set_to($_POST['email']);
-			$swift->sendmail();
 		}
 	}
 
