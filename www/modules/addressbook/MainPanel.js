@@ -407,6 +407,11 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 				}, this);
 			*/
 			GO.addressbook.readableAddressbooksStore.load();
+
+			if(GO.mailings)
+			{
+				GO.mailings.readableMailingsStore.load();
+			}
 			
 			GO.addressbook.contactDialogListeners={
 				scope:this,
