@@ -100,6 +100,7 @@ try {
 			$folder['type']=isset($_POST['type']) ? $_POST['type'] : '';
 			$folder['name']=$_POST['name'];
 			$folder['disabled']=isset($_POST['disabled']) ? '1' : '0';
+			$folder['feed']=isset($_POST['feed']) ? '1' : '0';
 
 			if($folder['id']>0) {
 				$old_folder = $cms->get_folder($folder['id']);

@@ -7,6 +7,7 @@ class cms_output extends cms {
 	var $file_id;
 	var $folder_id;
 	var $config;
+	var $head='';
 
 	var $safe_regex = "/[^\pL0-9]/i";
 	/**
@@ -67,6 +68,13 @@ class cms_output extends cms {
 		}
 
 		$GO_LANGUAGE->set_language($this->site['language']);
+
+		$this->get_feeds($this->site['id']);
+		while($feed = $this->next_record()){
+			$this->head .= '<link rel="alternate" type="application/rss+xml" title="'.$feed['name'].'" href="'.$GO_MODULES->modules['cms']['full_url'].'feed.php?folder_id='.$feed['id'].'">'."\r\n";
+		}
+		
+
 	}
 
 	function set_by_id($file_id=0, $folder_id=0) {

@@ -66,9 +66,11 @@ CREATE TABLE IF NOT EXISTS `cms_folders` (
   `option_values` text,
   `default_template` varchar(100) NOT NULL default '',
   `type` varchar(100) NOT NULL,
+	`feed` BOOLEAN NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `parent_id` (`parent_id`),
-  KEY `site_id` (`site_id`)
+  KEY `site_id` (`site_id`),
+	KEY `feed` (`feed`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
