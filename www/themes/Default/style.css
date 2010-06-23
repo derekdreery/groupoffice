@@ -755,7 +755,7 @@ table.display-panel{
 
 table.display-panel td{
 	padding:3px;
-	vertical-align:middle;
+	vertical-align:top;
 }
 
 table.display-panel a:link,
