@@ -5,6 +5,9 @@ class formprocessor{
 	 */
 	var $no_urls=true;
 
+	var $user_groups=array();
+	var $visible_user_groups=array();
+
 	function localize_dbfields($post_fields)
 	{
 		global $lang, $GO_LANGUAGE;
@@ -87,7 +90,7 @@ class formprocessor{
 			}
 			$user_credentials['password']=$_POST['password1'];
 
-			$user_id=$GO_USERS->add_user($user_credentials);
+			$user_id=$GO_USERS->add_user($user_credentials, $this->user_groups, $this->visible_user_groups);
 		}
 
 
