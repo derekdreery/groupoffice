@@ -55,6 +55,8 @@ class cms_smarty extends Smarty{
 			$this->load_plugins();
 			$this->assign('file', $co->file);
 		}
+
+		$this->assign('head', $co->head);
 		
 		//process scripts
 		if(file_exists($GO_MODULES->modules['cms']['path'].'templates/'.$co->site['template'].'/scripts.inc.php'))

@@ -34,7 +34,7 @@ GO.cms.FolderDialog = function(config){
 	config.width=400;
 	config.height=500;
 	config.closeAction='hide';
-	config.title= GO.cms.lang.siteFolderAccess;
+	config.title= GO.cms.lang.folderProperties;
 	config.items= this.formPanel;
 	config.focus= focusFirstField.createDelegate(this);
 	config.buttons=[{
@@ -43,12 +43,6 @@ GO.cms.FolderDialog = function(config){
 				this.submitForm(true);
 			},
 			scope: this
-		},{
-			text: GO.lang['cmdApply'],
-			handler: function(){
-				this.submitForm();
-			},
-			scope:this
 		},{
 			text: GO.lang['cmdClose'],
 			handler: function(){
@@ -213,6 +207,13 @@ Ext.extend(GO.cms.FolderDialog, Ext.Window,{
 				anchor: '-20',
 			  allowBlank:false,
 			  boxLabel: GO.cms.lang.authentication,
+			  hideLabel: true
+			},{
+				xtype: 'checkbox',
+			  name: 'feed',
+				anchor: '-20',
+			  allowBlank:false,
+			  boxLabel: GO.cms.lang.feed,
 			  hideLabel: true
 			},
 			new Ext.form.FieldSet({

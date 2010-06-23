@@ -33,6 +33,7 @@ GO.cms.MainPanel = function(config){
 				text: formValues.name,
 				id: 'folder_'+folder_id,
 				iconCls: 'filetype-folder',
+				fstype:'folder',
 				site_id: folderNode.attributes.site_id,
 				file_id: 0,
 				folder_id: folder_id,
@@ -80,7 +81,75 @@ GO.cms.MainPanel = function(config){
 				
 			}
 		}				
-	}, this);					
+	}, this);
+
+	this.treeContextMenu = new Ext.menu.Menu({
+
+		items: [
+		this.addFolderButton = new Ext.menu.Item({
+			iconCls: 'btn-add',
+			text: GO.cms.lang.newFolder,
+			handler: function(){
+				var selModel = this.treePanel.getSelectionModel();
+
+				this.folderDialog.show(0, selModel.selNodes[0].attributes.folder_id, selModel.selNodes[0].attributes.site_id);
+			},
+			scope: this
+		}),
+
+		this.folderPropertiesButton = new Ext.menu.Item({
+			iconCls: 'cms-folder-properties',
+			text: GO.cms.lang.folderProperties,
+			handler: function(){
+				var selModel = this.treePanel.getSelectionModel();
+
+				this.folderDialog.show(selModel.selNodes[0].attributes.folder_id);
+			},
+			scope:this
+		}),
+		this.openFileButton = new Ext.menu.Item({
+			iconCls: 'btn-edit',
+			text: GO.lang.cmdEdit,
+			handler: function(){
+				var selModel = this.treePanel.getSelectionModel();
+
+				this.checkChanges.defer(100, this, [function(){
+					this.getEl().mask(GO.lang.waitMsgLoad);
+					this.editorPanel.loadFile(selModel.selNodes[0].attributes.file_id, selModel.selNodes[0].attributes.template);
+				}, this]);
+			},
+			scope:this
+		})
+		,'-',{
+			iconCls: 'btn-delete',
+			text: GO.lang.cmdDelete,
+			handler: function(){
+				this.deleteSelected();
+			},
+			scope:this
+		}]
+	});
+
+	this.treePanel.on('contextmenu', function(node, e){
+		e.stopEvent();
+
+		var selModel = this.treePanel.getSelectionModel();
+
+		if(!selModel.isSelected(node))
+		{
+			selModel.clearSelections();
+			selModel.select(node);
+		}
+		var coords = e.getXY();
+
+		var nodes = 	selModel.getSelectedNodes();
+
+		this.openFileButton.setDisabled(nodes[0].attributes.fstype=='folder');
+		this.folderPropertiesButton.setDisabled(nodes[0].attributes.fstype!='folder');
+		this.addFolderButton.setDisabled(nodes[0].attributes.fstype!='folder');
+		this.treeContextMenu.showAt([coords[0], coords[1]]);
+	}, this);
+
 	
 	this.editorPanel = new GO.cms.EditorPanel();
 	GO.cms.editorPanel = this.editorPanel;
@@ -252,43 +321,7 @@ GO.cms.MainPanel = function(config){
 		text: GO.lang.cmdDelete,
 		iconCls: 'btn-delete',
 		handler:function(){
-			var selModel = this.treePanel.getSelectionModel();
-			
-			var deleteItems = [];
-			if(selModel.selNodes)
-			{
-				for(var i=0;i<selModel.selNodes.length;i++)
-				{
-					deleteItems.push(selModel.selNodes[i].id);
-				}
-			}
-			GO.deleteItems({
-				count: deleteItems.length,
-				url: GO.settings.modules.cms.url+'action.php',
-				params: {
-					task: 'delete',
-					delete_items: Ext.encode(deleteItems)
-				},
-				callback:function(responseParams){
-					if(responseParams.deleted_nodes)
-					{
-						for(var i=0;i<responseParams.deleted_nodes.length;i++)
-						{
-							var node = this.treePanel.getNodeById(responseParams.deleted_nodes[i]);
-							if(node)
-							{
-								if(node.attributes.file_id==this.editorPanel.baseParams.file_id)
-								{
-									this.editorPanel.form.reset();
-									this.editorPanel.setDisabled(true);
-								}
-								node.remove();
-							}
-						}
-					}
-				},
-				scope:this
-			});
+			this.deleteSelected();
 		},
 		scope: this
 	},'-',this.saveButton = new Ext.Button({
@@ -449,6 +482,46 @@ GO.cms.MainPanel = function(config){
 Ext.extend(GO.cms.MainPanel, Ext.Panel, {
 	copyFolders : [],
 	copyFile : [],
+
+	deleteSelected : function(){
+		var selModel = this.treePanel.getSelectionModel();
+
+		var deleteItems = [];
+		if(selModel.selNodes)
+		{
+			for(var i=0;i<selModel.selNodes.length;i++)
+			{
+				deleteItems.push(selModel.selNodes[i].id);
+			}
+		}
+		GO.deleteItems({
+			count: deleteItems.length,
+			url: GO.settings.modules.cms.url+'action.php',
+			params: {
+				task: 'delete',
+				delete_items: Ext.encode(deleteItems)
+			},
+			callback:function(responseParams){
+				if(responseParams.deleted_nodes)
+				{
+					for(var i=0;i<responseParams.deleted_nodes.length;i++)
+					{
+						var node = this.treePanel.getNodeById(responseParams.deleted_nodes[i]);
+						if(node)
+						{
+							if(node.attributes.file_id==this.editorPanel.baseParams.file_id)
+							{
+								this.editorPanel.form.reset();
+								this.editorPanel.setDisabled(true);
+							}
+							node.remove();
+						}
+					}
+				}
+			},
+			scope:this
+		});
+	},
 	
 	checkChanges : function(callback, scope){
 		var dirty = this.editorPanel.isDirty();

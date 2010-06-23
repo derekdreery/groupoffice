@@ -64,6 +64,7 @@ function create_tree($folder_id,$site,$path='',$filter_enabled) {
 				$response[] = array(
 								'text'=>$item['name'],
 								'id'=>'file_'.$item['id'],
+								'fstype'=>'file',
 								'iconCls'=>'filetype-html',
 								'site_id'=>$site['id'],
 								'file_id'=>$item['id'],
@@ -78,6 +79,7 @@ function create_tree($folder_id,$site,$path='',$filter_enabled) {
 			if (!$filter_enabled || $cms->has_folder_access($GO_SECURITY->user_id, $item['id'])) {
 				$folderNode = array(
 								'text'=>$item['name'],
+								'fstype'=>'folder',
 								'id'=>'folder_'.$item['id'],
 								'iconCls'=> $item['disabled']=='1' ? 'cms-folder-disabled' : 'filetype-folder',
 								'site_id'=>$site['id'],
@@ -147,7 +149,7 @@ try {
 										'id'=>'folder_'.$cms->f('root_folder_id'),
 										'iconCls'=>'folder-account',
 										'expanded'=>count($response)==0,
-										'type'=>'folder',
+										'fstype'=>'folder',
 										'site_id'=>$cms->f('id'),
 										'folder_id'=>$cms->f('root_folder_id'),
 										'template'=>$cms->f('template'),

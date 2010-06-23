@@ -924,6 +924,24 @@ class cms extends db {
 		return $count;
 	}
 
+	/**
+	 * Gets all Folders
+	 *
+	 * @param Int $start First record of the total record set to return
+	 * @param Int $offset Number of records to return
+	 * @param String $sortfield The field to sort on
+	 * @param String $sortorder The sort order
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+	function get_feeds($site_id) {
+		$sql = "SELECT * FROM cms_folders WHERE feed=1 AND site_id=".$this->escape($site_id)." ORDER BY name ASC";
+		$this->query($sql);
+		return $this->num_rows();
+		
+	}
+
 
 	function get_items($folder_id) {
 		$items = array();

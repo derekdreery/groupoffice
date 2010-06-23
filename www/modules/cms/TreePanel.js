@@ -138,22 +138,17 @@ GO.cms.TreePanel = function(config){
 	  });
 	},
 	this);
-	
-	
-	
 }
 
 Ext.extend(GO.cms.TreePanel, Ext.tree.TreePanel, {	
 	resetRootNode : function(id)
-	{
-		
+	{		
 		this.rootNode.id=id;
 		this.rootNode.attributes.id=id;
 		//delete this.rootNode.children;
 		//this.rootNode.expanded=false;
 		//this.rootNode.childrenRendered=false;	
-		this.rootNode.reload();
-		
+		this.rootNode.reload();		
 	},
 	
 	getActivePath : function(){

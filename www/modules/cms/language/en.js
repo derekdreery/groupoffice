@@ -58,3 +58,5 @@ GO.cms.lang.alwaysShow='Leave empty to show forever';
 GO.cms.lang.root='Root';
 GO.cms.lang.advancedPermissions='Advanced permissions';
 GO.cms.lang.enablePermissionsPerFolder='Enable permissions per folder for this user';
+
+GO.cms.lang.feed='Offer items from this folder as feed';
