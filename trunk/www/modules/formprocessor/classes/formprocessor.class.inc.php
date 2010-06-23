@@ -91,6 +91,8 @@ class formprocessor{
 			$user_credentials['password']=$_POST['password1'];
 
 			$user_id=$GO_USERS->add_user($user_credentials, $this->user_groups, $this->visible_user_groups);
+
+			$GO_AUTH->login($user_credentials['username'], $user_credentials['password']);
 		}
 
 
@@ -226,6 +228,9 @@ class formprocessor{
 			{
 				$contact_id = $ab->add_contact($contact_credentials);
 				$files_folder_id=$contact_credentials['files_folder_id'];
+
+				if(isset($_POST['contact_id']) && empty($user_id) && $GO_SECURITY->user_id>0)
+					$user_id=$GO_SECURITY->user_id;
 
 				if(!empty($user_id)){
 					$user['id']=$user_id;
