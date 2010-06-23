@@ -339,6 +339,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `files_folder_id` INT NOT NULL,
 	`mail_reminders` BOOL NOT NULL,
 	`popup_reminders` BOOLEAN NOT NULL,
+	`contact_id` INT NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

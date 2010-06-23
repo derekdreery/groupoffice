@@ -803,16 +803,26 @@ class GO_USERS extends db
 		// email address is used as key for the acl_id, no two users may have the
 		// same address. It also should not be possible to have multiple users
 		// with the same name...
+
 		if(!$GO_CONFIG->allow_duplicate_email)
 		{
 			$this->query( "SELECT email,username,id FROM go_users WHERE email='".$this->escape($user['email'])."' OR username='".$this->escape($user['username'])."'");
 			if ($existing = $this->next_record()) {
-				if($existing['email']==$user['email'])
+				if($existing['email']==$user['email']){
 					throw new Exception($lang['users']['error_email_exists']);
-				else
+
+				}else{
 					throw new Exception($lang['users']['error_username_exists']);
+				}
 			}
-		}		
+		}else
+		{
+			$this->query( "SELECT id FROM go_users WHERE username='".$this->escape($user['username'])."'");
+			if ($existing = $this->next_record()) {
+				throw new Exception($lang['users']['error_username_exists']);
+			}
+		}
+		
 		
 		if(!isset($user['start_module']))
 			$user['start_module']='summary';

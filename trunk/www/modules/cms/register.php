@@ -166,7 +166,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 		$user['password']='';
 	}*/
 
-	$user = array_map('addslashes',$user);
+	//$user = array_map('addslashes',$user);
 
 	if (!check_fields($required_fields) || ($GO_CONFIG->auto_activate_accounts && (empty($pass1) || empty ($pass2))))
 	{
