@@ -135,16 +135,6 @@ border:1px solid black;
 }
 
 
-
-a:link, a:visited, a:active{
-	color:black;
-	text-decoration:none;
-}
-
-
-
-
-
 /* sets the padding for panels with forms or text in it */
 .cal-blue-panel .x-panel-body{
 	background-color:#D0DEF0;
