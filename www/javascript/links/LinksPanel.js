@@ -294,14 +294,6 @@ GO.grid.LinksPanel = function(config){
 					});
 				},
 				scope: this
-			}),'-',this.deleteButton = new Ext.Button({
-				iconCls: 'btn-delete',
-				text: GO.lang['cmdDelete'],
-				cls: 'x-btn-text-icon',
-				handler: function(){
-					this.linksGrid.deleteSelected();
-				},
-				scope: this
 			}),this.unlinkButton = new Ext.Button({
 				iconCls: 'btn-unlink',
 				text: GO.lang['cmdUnlink'],
@@ -321,7 +313,15 @@ GO.grid.LinksPanel = function(config){
 				},
 				scope: this
 
-			}
+			},'-',this.deleteButton = new Ext.Button({
+				iconCls: 'btn-delete',
+				text: GO.lang['cmdDelete'],
+				cls: 'x-btn-text-icon',
+				handler: function(){
+					this.linksGrid.deleteSelected();
+				},
+				scope: this
+			})
 		];
 		
 	if(GO.links && GO.links.SettingsDialog)
