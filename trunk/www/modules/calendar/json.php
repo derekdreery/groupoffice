@@ -1335,6 +1335,40 @@ try {
 
 			break;
 
+
+		case 'permissions':
+
+			$resources = (isset($_REQUEST['resources']) && $_REQUEST['resources']) ? 1 : 0;
+			$group_id = (isset($_REQUEST['group_id']) && $_REQUEST['group_id']) ? $_REQUEST['group_id'] : 0;
+			$level_id = (isset($_REQUEST['level_id']) && $_REQUEST['level_id']) ? $_REQUEST['level_id'] : 0;
+
+			$response['success'] = false;
+			$response['results'] = array();			
+			if($group_id && $level_id)
+			{
+				$checked_calendars = array();
+				$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, 0, 0, $resources);
+				while($cal->next_record())
+				{
+					$calendar = $cal->record;
+
+					$user = $GO_USERS->get_user($calendar['user_id']);
+					$calendar['user_name']=String::format_name($user);
+
+					$acl_level = $GO_SECURITY->group_in_acl($group_id, $calendar['acl_id']);
+					$calendar['checked'] = ($acl_level >= $level_id) ? true : false;
+					
+					if($calendar['checked'])
+					    $checked_calendars[] = $calendar['id'];
+
+					$response['results'][] = $calendar;
+				}
+				
+				$response['success'] = true;
+				$response['checked_calendars'] = $checked_calendars;
+			}
+			break;
+
 	}
 }
 catch(Exception $e) {

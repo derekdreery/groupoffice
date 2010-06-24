@@ -1608,6 +1608,22 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				}));
 			}
 
+			tbar.push('-');
+			tbar.push(new Ext.Button({			    
+				iconCls: 'btn-settings',
+				text: GO.lang.strPermissions,
+				disabled: !GO.settings.modules.calendar.write_permission,
+				cls: 'x-btn-text-icon',
+				handler: function(){
+					if(!GO.calendar.permissionsDialog)
+					{
+						GO.calendar.permissionsDialog = new GO.calendar.PermissionsDialog();
+					}
+					GO.calendar.permissionsDialog.show(0);
+				},
+				scope: this
+			}))
+
 			this.calendarsGrid = new GO.grid.GridPanel( {
 				title: GO.calendar.lang.calendars,
 				paging: true,
