@@ -52,7 +52,7 @@ class formprocessor{
 
 	function process_form()
 	{
-		global $GO_SECURITY, $GO_LANGUAGE, $GO_MODULES, $GO_USERS, $GO_CONFIG, $lang;
+		global $GO_AUTH,$GO_SECURITY, $GO_LANGUAGE, $GO_MODULES, $GO_USERS, $GO_CONFIG, $lang;
 
 		$this->check_required();
 
@@ -90,7 +90,7 @@ class formprocessor{
 			}
 			$user_credentials['password']=$_POST['password1'];
 
-			$user_id=$GO_USERS->add_user($user_credentials, $this->user_groups, $this->visible_user_groups);
+			$this->user_id=$user_id=$GO_USERS->add_user($user_credentials, $this->user_groups, $this->visible_user_groups);
 
 			$GO_AUTH->login($user_credentials['username'], $user_credentials['password']);
 		}
@@ -191,7 +191,7 @@ class formprocessor{
 				
 			if($existing_contact)
 			{
-				$contact_id = $existing_contact['id'];
+				$this->contact_id=$contact_id = $existing_contact['id'];
 
 				$files_folder_id=$existing_contact['files_folder_id'];
 
@@ -226,11 +226,11 @@ class formprocessor{
 				$ab->update_contact($contact_credentials);
 			}else
 			{
-				$contact_id = $ab->add_contact($contact_credentials);
+				$this->contact_id=$contact_id = $ab->add_contact($contact_credentials);
 				$files_folder_id=$contact_credentials['files_folder_id'];
 
 				if(isset($_POST['contact_id']) && empty($user_id) && $GO_SECURITY->user_id>0)
-					$user_id=$GO_SECURITY->user_id;
+					$user_id=$this->user_id=$GO_SECURITY->user_id;
 
 				if(!empty($user_id)){
 					$user['id']=$user_id;

@@ -51,6 +51,7 @@ javascript/windows/SelectUsers.js
 javascript/windows/SelectEmail.js
 javascript/windows/ErrorDialog.js
 
+javascript/form/FieldHelp.js
 javascript/form/TreeSelect.js
 javascript/form/SearchField.js
 javascript/form/Combo.js

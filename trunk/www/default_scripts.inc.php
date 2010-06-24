@@ -191,11 +191,24 @@ foreach($GO_MODULES->modules as $module) {
 }
 
 $scripts=array();
+$load_modules=array();
+if(!isset($default_scripts_load_modules)){
+	if($GO_SECURITY->logged_in() && !isset($popup_groupoffice)){
+		$load_modules=$GO_MODULES->modules;
+	}
+}else
+{
+	foreach($default_scripts_load_modules as $module)
+	{
+		$GO_MODULES->modules[$module]['read_permission']=true;
+		$load_modules[]=$GO_MODULES->modules[$module];
+	}
+}
 
 
-if($GO_SECURITY->logged_in() && !isset($popup_groupoffice)) {
+if(count($load_modules)) {
 	//load language first so it can be overridden
-	foreach($GO_MODULES->modules as $module) {
+	foreach($load_modules as $module) {
 		if($module['read_permission']) {
 
 			$module_uri = $GO_CONFIG->debug ? $module['url'] : $module['path'];
@@ -213,7 +226,7 @@ if($GO_SECURITY->logged_in() && !isset($popup_groupoffice)) {
 	$scripts[]=$root_uri.'javascript/LanguageLoaded.js';
 
 
-	foreach($GO_MODULES->modules as $module) {
+	foreach($load_modules as $module) {
 		if($module['read_permission']) {
 			if(file_exists($module['path'].'prescripts.inc.php')) {
 				require($module['path'].'prescripts.inc.php');
@@ -223,7 +236,7 @@ if($GO_SECURITY->logged_in() && !isset($popup_groupoffice)) {
 
 
 	$modules=array();
-	foreach($GO_MODULES->modules as $module) {
+	foreach($load_modules as $module) {
 		if($module['read_permission']) {
 
 			$module_uri = $GO_CONFIG->debug ? $module['url'] : $module['path'];
@@ -296,7 +309,7 @@ if($GO_SECURITY->logged_in() && !isset($popup_groupoffice)) {
 
 	$GO_SCRIPTS_JS='';
 
-	foreach($GO_MODULES->modules as $module) {
+	foreach($load_modules as $module) {
 		$GO_LANGUAGE->require_language_file($module['id']);
 	}
 
@@ -305,12 +318,14 @@ if($GO_SECURITY->logged_in() && !isset($popup_groupoffice)) {
 	$types = empty($types) ? array() : explode(',', $types);
 
 	$link_types=array();
-	asort($lang['link_type']);
-	foreach($lang['link_type'] as $id=>$name) {
-		$type['id']=$id;
-		$type['name']=$name;
-		$type['checked']=in_array($id, $types);
-		$link_types[] = $type;
+	if(isset($lang['link_type'])){
+		asort($lang['link_type']);
+		foreach($lang['link_type'] as $id=>$name) {
+			$type['id']=$id;
+			$type['name']=$name;
+			$type['checked']=in_array($id, $types);
+			$link_types[] = $type;
+		}
 	}
 
 	$GO_SCRIPTS_JS .= 'GO.linkTypes='.json_encode($link_types).';';
@@ -321,7 +336,7 @@ if($GO_SECURITY->logged_in() && !isset($popup_groupoffice)) {
 	$GO_SCRIPTS_JS.=$eq->find_custom_exports();
 
 	
-	foreach($GO_MODULES->modules as $module) {
+	foreach($load_modules as $module) {
 		if($module['read_permission']) {
 			if(file_exists($module['path'].'scripts.inc.php')) {
 				require($module['path'].'scripts.inc.php');
