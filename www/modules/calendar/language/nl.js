@@ -90,3 +90,6 @@ GO.calendar.lang.ignoreConflictsMsg = 'Deze agenda-item conflicteert met een and
 GO.calendar.lang.resourceConflictTitle = 'Hulpmiddelenconflict';
 GO.calendar.lang.resourceConflictMsg = 'Een of meer hulpmiddelen van deze agenda-item worden al elders gebruikt op hetzelfde moment:</br>';
 GO.calendar.lang.view = 'Overzicht';
+
+GO.calendar.lang.calendarsPermissions='Agenda\'s toegangsrechten';
+GO.calendar.lang.resourcesPermissions='Hulpmiddelen toegangsrechten';

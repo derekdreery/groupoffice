@@ -1043,6 +1043,63 @@ try {
 			$response['success']=true;
 			break;
 
+
+		case 'save_permissions':
+		    
+		    $acl_level = isset($_REQUEST['acl_id']) ? $_REQUEST['acl_id'] : 0;
+		    $group_id = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : 0;
+		    $calendars = isset($_REQUEST['calendars']) ? json_decode($_REQUEST['calendars'], true) : array();
+		    $resources = isset($_REQUEST['resources']) ? $_REQUEST['resources'] : 0;
+
+		    if($acl_level && $group_id)
+		    {
+			$writable_calendars = array();
+			$cal->get_writable_calendars($GO_SECURITY->user_id, 0, 0, $resources);
+			while($cal->next_record())
+			{
+			    $calendar = $cal->record;
+			    $writable_calendars[] = $calendar['id'];
+
+			    if(!in_array($calendar['id'], $calendars))
+			    {
+				$current_acl_level = $GO_SECURITY->group_in_acl($group_id, $calendar['acl_id']);
+				if(!$current_acl_level || ($current_acl_level ==  $acl_level))
+				{
+				    $GO_SECURITY->delete_group_from_acl($group_id, $calendar['acl_id']);
+				}
+			    }
+			}
+
+			foreach($calendars as $calendar_id)
+			{
+			    if(in_array($calendar_id, $writable_calendars))
+			    {
+				$calendar = $cal->get_calendar($calendar_id);
+
+				$current_acl_level = $GO_SECURITY->group_in_acl($group_id, $calendar['acl_id']);
+				if(!$current_acl_level)
+				{
+				    $GO_SECURITY->add_group_to_acl($group_id, $calendar['acl_id'], $acl_level);
+
+				}else
+				if($current_acl_level < $acl_level)
+				{
+				    if($GO_SECURITY->delete_group_from_acl($group_id, $calendar['acl_id']))
+				    {
+					$GO_SECURITY->add_group_to_acl($group_id, $calendar['acl_id'], $acl_level);
+				    }
+				}
+			    }
+			}
+			
+			$response['success'] = true;
+		    }else
+		    {
+			$response['success'] = false;
+		    }
+		    
+		    break;
+
 	}
 }catch(Exception $e)
 {
