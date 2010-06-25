@@ -786,7 +786,7 @@ class addressbook extends db {
 		}
 
 
-		if(count($addressbooks))
+		if($addressbooks && count($addressbooks))
 		{
 			$sql .= "WHERE ab_contacts.addressbook_id IN (".implode(',', $addressbooks).")";		
 		} else {
@@ -956,7 +956,7 @@ class addressbook extends db {
 			$sql .= "INNER JOIN ml_mailing_companies mc ON mc.company_id=ab_companies.id ";
 		}
 
-		if(count($addressbooks))
+		if($addressbooks && count($addressbooks))
 		{
 			$sql .= "WHERE ab_companies.addressbook_id IN (".implode(',', $addressbooks).")";
 		} else {
