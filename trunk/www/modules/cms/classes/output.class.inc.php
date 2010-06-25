@@ -91,6 +91,11 @@ class cms_output extends cms {
 			$this->config = $config;
 		}
 
+		//disable rewriting if we are not in the configured domain
+		if(strpos($_SERVER['HTTP_HOST'], $this->site['domain'])===false){
+			$this->site['enable_rewrite']='0';
+		}
+
 		$GO_LANGUAGE->set_language($this->site['language']);
 
 		$this->get_feeds($this->site['id']);
