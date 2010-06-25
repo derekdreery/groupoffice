@@ -17,8 +17,8 @@ GO.cms.EditorPanel = Ext.extend(
 			if(iso!=GO.settings.language)
 				spellchecker_languages+=','+languages[iso]+'='+iso;
 		}
-			
-		this.editor = new Ext.ux.TinyMCE({
+
+		this.editorConfig = {
 			name:'content',
 			tinymceSettings:{
 				mode : "textareas",
@@ -30,13 +30,13 @@ GO.cms.EditorPanel = Ext.extend(
 				theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,|,forecolor,backcolor",
 				theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,spellchecker,media,advhr,|,ltr,rtl,|,fullscreen",
 				file_browser_callback : 'GO.cms.fileBrowser',
-						
+
 				//theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak",
 				theme_advanced_toolbar_location : "top",
 				theme_advanced_toolbar_align : "left",
 				theme_advanced_statusbar_location : "bottom",
 				theme_advanced_resizing : false,
-						
+
 				convert_urls:false,
 				relative_urls : false,
 
@@ -44,9 +44,11 @@ GO.cms.EditorPanel = Ext.extend(
 				spellchecker_rpc_url : BaseHref+'javascript/tiny_mce/plugins/spellchecker/rpc.php',
 
 				extended_valid_elements : "cms:plugin[*]"
-											
+
 			}
-		});
+		};
+			
+		this.editor = new Ext.ux.TinyMCE(this.editorConfig);
 				
 
 		
@@ -185,6 +187,12 @@ GO.cms.EditorPanel = Ext.extend(
 						rel : 'stylesheet',
 						href : GO.settings.modules.cms.url+'templates/'+template+'/css/editor.css'
 						});
+
+				/*this.editorConfig.content_css = GO.settings.modules.cms.url+'editor.css,'+GO.settings.modules.cms.url+'templates/'+template+'/css/editor.css';
+				tinyMCE.execCommand('mceRemoveControl',true,tinyMCE.activeEditor);
+				tinyMCE.init(this.editorConfig);
+				tinyMCE.execCommand('mceAddControl',true,tinyMCE.activeEditor);*/
+
 			}
 				
 			this.file_id=file_id;

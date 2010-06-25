@@ -58,8 +58,12 @@ class cms extends db {
 	function get_template_config($template) {
 		global $GO_MODULES;
 
+		$file = $GO_MODULES->modules['cms']['path'].'templates/'.$template.'/config.xml';
+		if(!file_exists($file))
+			return false;
+
 		$doc = new DOMDocument();
-		$doc->load($GO_MODULES->modules['cms']['path'].'templates/'.$template.'/config.xml');
+		$doc->load($file);
 
 		$config['types']=array();
 
