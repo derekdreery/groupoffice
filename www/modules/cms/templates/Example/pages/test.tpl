@@ -1,1 +1,1 @@
-{cms_href path="Member area/Photoalbum"}
+<a href="{cms_href path="Member+area/Photo album"}">Photos</a>

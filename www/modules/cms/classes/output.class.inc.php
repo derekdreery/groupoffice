@@ -27,7 +27,7 @@ class cms_output extends cms {
 			if(!$file)
 				return false;
 
-			$path = $this->build_path($file['folder_id']);
+			$path = $this->build_path($file['folder_id'], true, $this->site['root_folder_id']);
 
 			$url = $path.$this->site['rewrite_base'].$file['name'];
 			if(!empty($querystring)){
@@ -36,7 +36,7 @@ class cms_output extends cms {
 		}else {
 			$url = $GLOBALS['GO_MODULES']->modules['cms']['url'].'run.php?file_id='.$file_id;
 			if(!empty($querystring)){
-				$url .= '&'.$querystring;
+				$url .= '&amp;'.$querystring;
 			}
 		}
 
@@ -45,7 +45,7 @@ class cms_output extends cms {
 	function create_href_by_folder_id($folder_id, $querystring=''){
 		if($this->site['enable_rewrite']=='1') {
 
-			$path = $this->build_path($folder_id);
+			$path = $this->build_path($folder_id, true, $this->site['root_folder_id']);
 
 			$url = $this->site['rewrite_base'].$path;
 			if(!empty($querystring)){
@@ -54,7 +54,7 @@ class cms_output extends cms {
 		}else {
 			$url = $GLOBALS['GO_MODULES']->modules['cms']['url'].'run.php?file_id='.$file_id;
 			if(!empty($querystring)){
-				$url .= '&'.$querystring;
+				$url .= '&amp;'.$querystring;
 			}
 		}
 		return $url;
@@ -69,7 +69,7 @@ class cms_output extends cms {
 		}else {
 			$url = $GLOBALS['GO_MODULES']->modules['cms']['url'].'run.php?site_id='.$this->site['id'].'&path='.$path;
 			if(!empty($querystring)){
-				$url .= '&'.$querystring;
+				$url .= '&amp;'.$querystring;
 			}
 		}
 		return $url;
@@ -126,7 +126,7 @@ class cms_output extends cms {
 		if(!$this->file) {
 			$this->file['content']='No file found';
 		}else {
-			$this->folder['path']=$this->build_path($this->file['folder_id'], $this->site['root_folder_id']);
+			$this->folder['path']=$this->build_path($this->file['folder_id'], true, $this->site['root_folder_id']);
 			$this->file['path']=$this->folder['path'].'/'.$this->file['name'];
 			$this->file['level']=count(explode('/', $this->file['path']))-1;
 		}
@@ -176,7 +176,7 @@ class cms_output extends cms {
 
 		if($this->file && (empty($this->folder) || $this->file['folder_id']!=$this->folder['id'])) {
 			$this->folder=$this->get_folder($this->file['folder_id']);
-			$this->folder['path']=$this->build_path($this->file['folder_id'], $this->site['root_folder_id']);
+			$this->folder['path']=$this->build_path($this->file['folder_id'], true, $this->site['root_folder_id']);
 			$this->file['path']=$this->folder['path'].$this->file['name'];
 		}
 
@@ -312,6 +312,14 @@ class cms_output extends cms {
 		return array_reverse($levels);
 	}
 
+	function special_encode($str) {
+		return str_replace('&', '_AMP_', $str);
+	}
+
+	function special_decode($str) {
+		return html_entity_decode(str_replace('_AMP_','&', $str),ENT_QUOTES,'UTF-8');
+	}
+
 	/**
 	 * Prints items (files and folders) in various different ways:
 	 *
@@ -353,14 +361,6 @@ class cms_output extends cms {
 	 * @param int $folder_id
 	 * @return String HTML
 	 */
-
-	function special_encode($str) {
-		return str_replace('&', '_AMP_', $str);
-	}
-
-	function special_decode($str) {
-		return html_entity_decode(str_replace('_AMP_','&', $str),ENT_QUOTES,'UTF-8');
-	}
 
 	function print_items($params, &$smarty, $current_level=0, $folder_id=0, $path=null, $parentitem=false) {
 		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
@@ -430,7 +430,7 @@ class cms_output extends cms {
 		//know the current path yet. If rewrte is enabled we need to know
 		//the path for mod_rewrite to work.
 		if(!isset($path) && $this->site['enable_rewrite']=='1') {
-			$path = $this->build_path($folder_id, $this->site['root_folder_id']);
+			$path = $this->build_path($folder_id, true, $this->site['root_folder_id']);
 		}
 
 		if($search) {
@@ -553,7 +553,7 @@ class cms_output extends cms {
 					}
 
 
-					$filepath = $search ? $this->build_path($item['folder_id'], $this->site['root_folder_id']) : $path;
+					$filepath = $search ? $this->build_path($item['folder_id'], true, $this->site['root_folder_id']) : $path;
 					if(!empty($filepath)){
 						$filepath .= '/';
 					}
