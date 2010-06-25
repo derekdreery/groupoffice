@@ -99,7 +99,7 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 
 		new Ext.XTemplate('<div class="thumb-wrap" >'+
 				'<div class="thumb" no-repeat center center;">'+
-				'<div class="thumb-name" style="background-image:url('+BaseHref+'modules/bookmarks/bmthumb.php?src='+logo+'&h=32&w=32&pub='+this.formPanel.baseParams.public_icon+')"><h1>'+GO.bookmarks.lang.title+'</h1>'+GO.bookmarks.lang.description+'</div></div>'
+				'<div class="thumb-name" style="background-image:url('+GO.bookmarks.getThumbUrl(logo, this.formPanel.baseParams.public_icon)+')"><h1>'+GO.bookmarks.lang.title+'</h1>'+GO.bookmarks.lang.description+'</div></div>'
 				+'</div>').overwrite(Ext.get('thumbX'));
 
 		GO.bookmarks.BookmarksDialog.superclass.show.call(this);

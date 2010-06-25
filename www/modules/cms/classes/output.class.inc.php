@@ -31,7 +31,7 @@ class cms_output extends cms {
 				$url .= '?'.$querystring;
 			}
 		}else {
-			$url = $GLOBALS['GO_MODULES']->modules['cms']['url'].'run.php?file_id='.$file_id;
+			$url = $GLOBALS['GO_MODULES']->modules['cms']['url'].'run.php?file_id='.$file['id'];
 			if(!empty($querystring)){
 				$url .= '&amp;'.$querystring;
 			}

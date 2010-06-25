@@ -114,8 +114,15 @@ try {
 				}
 
 				//$bookmark['description']=nl2br($bookmark['description']);
-
-				$bookmark['thumb']=empty($bookmark['logo']) ? '' : $bookmarks->bm_thumb_url($bookmark['logo'],32,32,0);
+				$bookmark['thumb']='';
+				if(!empty($bookmark['logo'])){
+					if($bookmark['public_icon']=='1'){
+						$bookmark['thumb']=$GO_MODULES->modules['bookmarks']['url'].$bookmark['logo'];
+					}else
+					{
+						$bookmark['thumb']=get_thumb_url($bookmark['logo'],32,32,0);
+					}
+				}
 				$bookmark['index']=$index;
 				$index++;
 

@@ -32,7 +32,7 @@ GO.bookmarks.BookmarksView = function(config){
 		'</tpl>',
 		'<div class="thumb-wrap"  >',
 		'<div class="thumb">',
-		'<div class="thumb-name" style="background-image:url('+BaseHref+'modules/bookmarks/bmthumb.php?src={logo}&h=32&w=32&pub={public_icon})"><h1>{name}</h1>{[Ext.util.Format.nl2br(values.description)]}</div>',
+		'<div class="thumb-name" style="background-image:url({thumb})"><h1>{name}</h1>{[Ext.util.Format.nl2br(values.description)]}</div>',
 		'</div>',	'</div>',	'</tpl>',
 		'<div style="clear:both"></div>',
 		{

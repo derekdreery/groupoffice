@@ -23,6 +23,12 @@ GO.bookmarks.ThumbsDialog = function(config){
 	{
 		config = {};
 	}
+
+	this.thumbTpl = new Ext.XTemplate('<div class="thumb-wrap" >'+
+				'<div class="thumb">'+
+				'<div id="dialog_thumb" class="thumb-name"'+
+				' style="background-image:url({logo})"><h1>{title}</h1>{description}</div></div>'
+				+'</div>');
 	
 	config.height=350;
 	config.width=800;
@@ -33,21 +39,15 @@ GO.bookmarks.ThumbsDialog = function(config){
 		handler: function(){
 			
 			if (clearicon==0){ // normale setting, als er een logo gekozen is
-				this.iconfield.setValue(this.chosenlogo); // pad naar logo
-				Ext.get('thumbX').dom.innerHTML='<div class="thumb-wrap" >'+
-				'<div class="thumb" style="background:url(modules/bookmarks/themes/Default/images/bmbackground2.png) no-repeat center center;">'+
-				'<div id="dialog_thumb" class="thumb-name" style="background-image:url('+BaseHref+'modules/bookmarks/bmthumb.php?src='+this.chosenlogo+'&h=32&w=32&pub='+this.is_publiclogo+')"> '+config.thumbtitle+'</div>'+'</div>'
-				+'</div>';
-			}
-
-			else{ // als een logo gecleared is
+				this.choosenLogo='icons/bookmark.png';
+				this.is_publiclogo=1;
 				this.iconfield.reset(); // pad naar logo = leeg
-				Ext.get('thumbX').dom.innerHTML='<div class="thumb-wrap" >'+
-				'<div class="thumb" style="background:url(modules/bookmarks/themes/Default/images/bmbackground2.png) no-repeat center center;">'+
-				'<div id="dialog_thumb" class="thumb-name" > '+config.thumbtitle+'</div>'+'</div>'
-				+'</div>';
-			
 			}
+			this.iconfield.setValue(this.chosenlogo); // pad naar logo
+			Ext.get('thumbX').dom.innerHTML='<div class="thumb-wrap" >'+
+			'<div class="thumb" style="background:url(modules/bookmarks/themes/Default/images/bmbackground2.png) no-repeat center center;">'+
+			'<div id="dialog_thumb" class="thumb-name" style="background-image:url('+GO.bookmarks.getThumbUrl(this.chosenlogo,this.is_publiclogo)+')"> '+config.thumbtitle+'</div>'+'</div>'
+			+'</div>';
 			
 			config.dialog.formPanel.baseParams.public_icon=this.is_publiclogo; // public logo
 			this.close();
@@ -94,10 +94,12 @@ GO.bookmarks.ThumbsDialog = function(config){
 	this.publiclogoView.on('click',function(DV, index, node, e) {
 		var record = this.publiclogoView.getRecord(node); // waar hebben we op geklikt?
 		this.is_publiclogo=1;
-		this.example = Ext.get('one-thumb'); // voorbeeld thumb in westPanel
-		this.newicon = "background-image: url("+BaseHref+"modules/bookmarks/bmthumb.php?src=icons/" + record.data.filename + "&h=32&w=32&pub="+this.is_publiclogo+")";
-		this.example.dom.style.cssText=this.newicon;
 		this.chosenlogo="icons/" + record.data.filename;
+		this.bookmarkExample.getEl().update(this.thumbTpl.apply({
+				logo:GO.bookmarks.getThumbUrl(this.chosenlogo, this.is_publiclogo),
+				title:GO.bookmarks.lang.title,
+				description:GO.bookmarks.lang.description
+			}));	
 		
 	},this)
 
@@ -109,10 +111,11 @@ GO.bookmarks.ThumbsDialog = function(config){
 		},
 		autoEl:{
 			cls: 'thumbnails',
-			html:	new Ext.XTemplate('<div class="thumb-wrap" >'+
-				'<div class="thumb">'+
-				'<div id="one-thumb" class="thumb-name" style="background-image:url('+BaseHref+'modules/bookmarks/bmthumb.php?src='+config.thumbicon+'&h=32&w=32&pub='+this.is_publiclogo+')"><h1>'+GO.bookmarks.lang.title+'</h1>'+GO.bookmarks.lang.description+'</div>'+'</div>'
-				+'</div>').apply()
+			html:	this.thumbTpl.apply({
+				logo:GO.bookmarks.getThumbUrl(config.thumbicon, this.is_publiclogo),
+				title:GO.bookmarks.lang.title,
+				description:GO.bookmarks.lang.description
+			})
 		}
 	})
 
@@ -277,7 +280,7 @@ Ext.extend(GO.bookmarks.ThumbsDialog, Ext.Window, {
 
 					//----------------------------------------------------------------
 					this.example = Ext.get('one-thumb');
-					this.newicon = "background-image: url("+BaseHref+"modules/bookmarks/bmthumb.php?src="+responseParams.path+"&h=32&w=32&pub=0)";//&mtime="+this.time.format('U')+")";
+					this.newicon = "background-image: url("+BaseHref+"controls/thumb.php?src="+responseParams.path+"&h=32&w=32&pub=0)";//&mtime="+this.time.format('U')+")";
 					this.example.dom.style.cssText=this.newicon;
 					this.chosenlogo= responseParams.path;
           //-----------------------------------------------------------------
