@@ -19,17 +19,14 @@ class cms_output extends cms {
 	}
 
 
-	function create_href_by_file_id($file_id, $querystring=''){
+	function create_href_by_file($file, $querystring=''){
 		
 		if($this->site['enable_rewrite']=='1') {
-			$file=$this->get_file($file_id);
-
-			if(!$file)
-				return false;
+			
 
 			$path = $this->build_path($file['folder_id'], true, $this->site['root_folder_id']);
 
-			$url = $path.$this->site['rewrite_base'].$file['name'];
+			$url = $this->site['rewrite_base'].$path.$this->special_encode($file['name']);
 			if(!empty($querystring)){
 				$url .= '?'.$querystring;
 			}
@@ -193,7 +190,7 @@ class cms_output extends cms {
 
 		if($this->site['enable_rewrite']=='1') {
 			//we do rewriting
-			return str_replace('/{site_url}?site_id='.$this->site['id'].'&amp;path=', $this->site['domain'], $content);
+			return str_replace('/{site_url}?site_id='.$this->site['id'].'&amp;path=', $this->site['rewrite_base'], $content);
 		}else {
 			//we use the ugly URL
 			return str_replace('/{site_url}?', $GO_MODULES->modules['cms']['url'].'run.php?', $content);
@@ -312,13 +309,7 @@ class cms_output extends cms {
 		return array_reverse($levels);
 	}
 
-	function special_encode($str) {
-		return str_replace('&', '_AMP_', $str);
-	}
 
-	function special_decode($str) {
-		return html_entity_decode(str_replace('_AMP_','&', $str),ENT_QUOTES,'UTF-8');
-	}
 
 	/**
 	 * Prints items (files and folders) in various different ways:
@@ -557,7 +548,7 @@ class cms_output extends cms {
 					if(!empty($filepath)){
 						$filepath .= '/';
 					}
-					$filepath .=urlencode($this->special_encode($item['name']));
+					$filepath .=$this->special_encode($item['name']);
 					$item['href']=$this->create_href_by_path($filepath);
 
 					$item_html .= '" href="'.$item['href'].'">'.$name.'</a>';
@@ -579,7 +570,7 @@ class cms_output extends cms {
 					if(!empty($filepath)){
 						$filepath.='/';
 					}
-					$filepath.=urlencode($this->special_encode($item['name']));
+					$filepath.=$this->special_encode($item['name']);
 
 					$item['href']=$this->create_href_by_path($filepath);
 
