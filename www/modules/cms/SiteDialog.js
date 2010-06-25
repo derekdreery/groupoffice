@@ -219,7 +219,8 @@ Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 				editable: false,
 				selectOnFocus:true,
 				forceSelection: true,
-				value: GO.settings.language
+				value: GO.settings.language,
+				anchor:'-20'
 			}),{
 				xtype:'checkbox',
 				name:'enable_rewrite',
@@ -229,6 +230,7 @@ Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 				xtype:'textfield',
 				name:'rewrite_base',
 				value:'/',
+				anchor:'-20',
 				fieldLabel:GO.cms.lang.rewriteBase
 			},
 			{
