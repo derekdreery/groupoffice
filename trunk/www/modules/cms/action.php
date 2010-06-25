@@ -301,23 +301,23 @@ try {
 			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $site['acl_write'])) {
 				throw new AccessDeniedException();
 			}
-
-
-			$template_options=array();
+			
 			$config = $cms->get_template_config($site['template']);
-			while($type = array_shift($config['types'])) {
-				if($file['type']==$type[0]) {
-					$template_options=$type[1];
-					break;
+			if($config){
+				$template_options=array();
+				while($type = array_shift($config['types'])) {
+					if($file['type']==$type[0]) {
+						$template_options=$type[1];
+						break;
+					}
 				}
+				$template_values = array();
+				foreach($template_options as $template_option) {
+					$template_values[$template_option['name']] = isset($_POST[$template_option['name']]) ? ($_POST[$template_option['name']]) : '';
+				}
+				$file['option_values']=  $cms->build_template_values_xml($template_values);
 			}
-			$template_values = array();
-			foreach($template_options as $template_option) {
-				$template_values[$template_option['name']] = isset($_POST[$template_option['name']]) ? ($_POST[$template_option['name']]) : '';
-			}
-			$file['option_values']=  $cms->build_template_values_xml($template_values);
-
-
+			
 			if($file['id']>0) {
 				$cms->update_file($file, $site, $old_file);
 				$response['success']=true;
