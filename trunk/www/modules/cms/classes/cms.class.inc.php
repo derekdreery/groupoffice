@@ -523,7 +523,7 @@ class cms extends db {
 
 
 
-	function build_path($folder_id, $root_folder_id=0, $path='') {
+	function build_path($folder_id, $url_encode=false, $root_folder_id=0, $path='') {
 		if($folder_id==0 || $folder_id==$root_folder_id) {
 			return $path;
 		}else {
@@ -531,8 +531,11 @@ class cms extends db {
 			if(!$folder)
 				return $path;
 
+			if($url_encode)
+				$folder['name']=urlencode($folder['name']);
+
 			$path = empty($path) ? $folder['name'] : $folder['name'].'/'.$path;
-			return $this->build_path($folder['parent_id'], $root_folder_id, $path);
+			return $this->build_path($folder['parent_id'], $url_encode, $root_folder_id, $path);
 		}
 	}
 
