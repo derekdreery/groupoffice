@@ -97,12 +97,6 @@ GO.calendar.ListGrid = function(config)
     config.loadMask=true;
 	
     GO.calendar.ListGrid.superclass.constructor.call(this, config);
-
-	config.store.on('load', function()
-	{
-	    console.debug(config.store);
-	})
-	
 	
     if(!this.startDate)
     {
