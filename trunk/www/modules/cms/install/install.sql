@@ -93,6 +93,8 @@ CREATE TABLE IF NOT EXISTS `cms_sites` (
   `name` varchar(100) default NULL,
   `template` varchar(50) default NULL,
 	`files_folder_id` INT NOT NULL,
+	`enable_rewrite` BOOLEAN NOT NULL,
+	`rewrite_base` VARCHAR( 50 ) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

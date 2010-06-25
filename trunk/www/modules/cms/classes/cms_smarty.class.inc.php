@@ -38,7 +38,6 @@ class cms_smarty extends Smarty{
 		$this->assign('go_root_path', $GO_CONFIG->root_path);
 		$this->assign('file_storage_path', $GO_CONFIG->file_storage_path);
 		$this->assign('modules', $GO_MODULES->modules);
-		$this->assign('basehref', $co->basehref);
 		$this->assign('images_url', $GO_MODULES->modules['files']['url'].'download.php?path='.urlencode('public/cms/'.File::strip_invalid_chars($co->site['name']).'/'));
 		$this->assign('images_path', $GO_CONFIG->file_storage_path.'public/cms/'.File::strip_invalid_chars($co->site['name']).'/');
 		

@@ -10,43 +10,70 @@ class cms_output extends cms {
 	var $head='';
 
 	var $safe_regex = "/[^\pL0-9]/i";
-	/**
-	 * if basehref is set to a path other then the url to the CMS then we will use
-	 * mod_rewrite and use friendly paths.
-	 *
-	 * otherwise we will buid urls like:
-	 * run.php?file_id=1
-	 *
-	 * The rewrite rule must be like this:
-	 *
-	 * RewriteRule ^(.*)$ run.php?site_id=5&path=$1&basehref=/intermesh/
-	 *
-	 * @var unknown_type
-	 */
-	var $basehref;
 
 	function __construct() {
 		parent::__construct();
 
-		global $GO_MODULES;
-		$this->basehref=$GO_MODULES->modules['cms']['url'];
-
 		if(isset($_REQUEST['site_id']))
 			$_SESSION['site_id']=$_REQUEST['site_id'];
-
-		if(isset($_REQUEST['basehref']))
-			$_SESSION['basehref']=$_REQUEST['basehref'];
-
-
-		if(!empty($_SESSION['basehref']))
-			$this->basehref=$_SESSION['basehref'];
 	}
 
 
-	
+	function create_href_by_file_id($file_id, $querystring=''){
+		
+		if($this->site['enable_rewrite']=='1') {
+			$file=$this->get_file($file_id);
 
+			if(!$file)
+				return false;
 
+			$path = $this->build_path($file['folder_id']);
 
+			$url = $path.$this->site['rewrite_base'].$file['name'];
+			if(!empty($querystring)){
+				$url .= '?'.$querystring;
+			}
+		}else {
+			$url = $GLOBALS['GO_MODULES']->modules['cms']['url'].'run.php?file_id='.$file_id;
+			if(!empty($querystring)){
+				$url .= '&'.$querystring;
+			}
+		}
+
+		return $url;
+	}
+	function create_href_by_folder_id($folder_id, $querystring=''){
+		if($this->site['enable_rewrite']=='1') {
+
+			$path = $this->build_path($folder_id);
+
+			$url = $this->site['rewrite_base'].$path;
+			if(!empty($querystring)){
+				$url .= '?'.$querystring;
+			}
+		}else {
+			$url = $GLOBALS['GO_MODULES']->modules['cms']['url'].'run.php?file_id='.$file_id;
+			if(!empty($querystring)){
+				$url .= '&'.$querystring;
+			}
+		}
+		return $url;
+	}
+	function create_href_by_path($path, $querystring=''){
+
+		if($this->site['enable_rewrite']=='1') {
+			$url = $this->site['rewrite_base'].$path;
+			if(!empty($querystring)){
+				$url .= '?'.$querystring;
+			}
+		}else {
+			$url = $GLOBALS['GO_MODULES']->modules['cms']['url'].'run.php?site_id='.$this->site['id'].'&path='.$path;
+			if(!empty($querystring)){
+				$url .= '&'.$querystring;
+			}
+		}
+		return $url;
+	}
 
 	/*
 	 * A page must call load_site, set_by_id or set_by_path to inititalize
@@ -104,22 +131,14 @@ class cms_output extends cms {
 			$this->file['level']=count(explode('/', $this->file['path']))-1;
 		}
 
-
-
-		//$this->file['content']=str_replace('{site_url}', $GO_MODULES->modules['cms']['url'].'run.php', $this->file['content']);
-		//$this->file['content']=str_replace('/{site_url}?', $GO_MODULES->modules['cms']['url'].'run.php?basehref='.urlencode($GO_MODULES->modules['cms']['url']).'&', $this->file['content']);
-
 		$this->load_config();
-
-	
 	}
 
 	function authenticate() {
 
 	}
 
-	function set_by_path($site_id, $path, $basehref) {
-		$this->basehref=$basehref;
+	function set_by_path($site_id, $path) {
 
 		if(empty($site_id)) {
 			$this->site = $this->get_site_by_domain($_SERVER['HTTP_HOST'], true);
@@ -166,24 +185,18 @@ class cms_output extends cms {
 			$this->file['level']=count(explode('/', $this->file['path']))-1;
 		}
 
-		/*
-		 * /{site_url}?site_id=5&amp;path=Referenties
-		*/
-		//$this->file['content']=str_replace('/{site_url}?site_id='.$this->site['id'].'&amp;path=', $this->basehref, $this->file['content']);
-
 		$this->load_config();
-
 	}
 
 	function replace_urls($content) {
 		global $GO_MODULES;
 
-		if($this->basehref!=$GO_MODULES->modules['cms']['url']) {
+		if($this->site['enable_rewrite']=='1') {
 			//we do rewriting
-			return str_replace('/{site_url}?site_id='.$this->site['id'].'&amp;path=', $this->basehref, $content);
+			return str_replace('/{site_url}?site_id='.$this->site['id'].'&amp;path=', $this->site['domain'], $content);
 		}else {
 			//we use the ugly URL
-			return str_replace('/{site_url}?', $GO_MODULES->modules['cms']['url'].'run.php?basehref='.urlencode($GO_MODULES->modules['cms']['url']).'&amp;', $content);
+			return str_replace('/{site_url}?', $GO_MODULES->modules['cms']['url'].'run.php?', $content);
 		}
 	}
 
@@ -414,9 +427,9 @@ class cms_output extends cms {
 		}
 
 		//When we start with a level or root_folder_id we don't
-		//know the current path yet. If basehref is set we need to know
+		//know the current path yet. If rewrte is enabled we need to know
 		//the path for mod_rewrite to work.
-		if(!isset($path) && $this->basehref!=$GO_MODULES->modules['cms']['url']) {
+		if(!isset($path) && $this->site['enable_rewrite']=='1') {
 			$path = $this->build_path($folder_id, $this->site['root_folder_id']);
 		}
 
@@ -538,16 +551,14 @@ class cms_output extends cms {
 					}else {
 						$is_in_path=false;
 					}
-						
-					if($this->basehref!=$GO_MODULES->modules['cms']['url']) {
-						$href_path = $search ? $this->build_path($item['folder_id'], $this->site['root_folder_id']) : $path;
-						if(!empty($href_path)){
-							$href_path .= '/';
-						}
-						$item['href']=$this->basehref.$href_path.urlencode($this->special_encode($item['name']));
-					}else {
-						$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?file_id='.$item['id'];
+
+
+					$filepath = $search ? $this->build_path($item['folder_id'], $this->site['root_folder_id']) : $path;
+					if(!empty($filepath)){
+						$filepath .= '/';
 					}
+					$filepath .=urlencode($this->special_encode($item['name']));
+					$item['href']=$this->create_href_by_path($filepath);
 
 					$item_html .= '" href="'.$item['href'].'">'.$name.'</a>';
 
@@ -555,9 +566,7 @@ class cms_output extends cms {
 
 					$is_in_path = $this->is_in_path($item['id'],$this->folder['id']);
 
-
 					$item_html .= $no_folder_links ? '<div' : '<a title="'.$item['name'].'"';
-
 					$item_html .= ' class="'.$class.' '.$class.'_'.$current_level;
 
 					//if($this->folder['id']==$item['id'])
@@ -565,16 +574,15 @@ class cms_output extends cms {
 						$item_html .= ' selected';
 						$current_item_template = $active_item_template;
 					}
+					
+					$filepath = $path;
+					if(!empty($filepath)){
+						$filepath.='/';
+					}
+					$filepath.=urlencode($this->special_encode($item['name']));
 
-					//double urlencode for apache rewriting of & etc.
-					if($this->basehref!=$GO_MODULES->modules['cms']['url']){
-						$item['href']=$this->basehref.$path;
-						if(!empty($path)){
-							$item['href'].='/';
-						}
-						$item['href'] .= urlencode($this->special_encode($item['name']));
-					}else
-						$item['href']=$GO_MODULES->modules['cms']['url'].'run.php?folder_id='.$item['id'];
+					$item['href']=$this->create_href_by_path($filepath);
+
 
 					if($no_folder_links)
 						$item_html .= '">'.$item['name'].'</div>';
@@ -611,7 +619,6 @@ class cms_output extends cms {
 					$html .= $this->print_items($params, $smarty, $current_level+1,$item['id'],$href_path.urlencode($item['name']), $item);
 				}
 
-
 				/**
 				 * Record the previous and next file if there is an active file
 				 */
@@ -623,15 +630,11 @@ class cms_output extends cms {
 					}
 				}
 
-
 				$counter++;
 
 				if($max_items>0 && $max_items==$counter) {
 					break;
 				}
-
-
-
 
 				$uneven=!$uneven;
 			}
@@ -652,6 +655,4 @@ class cms_output extends cms {
 
 		return $html;
 	}
-
 }
-?>

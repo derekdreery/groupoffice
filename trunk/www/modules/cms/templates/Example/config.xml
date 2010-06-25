@@ -9,6 +9,7 @@
 	<type name="contact">
 		<input name="addressbook" field_label="Addressbook" />
 	</type>
+	<type name="test"></type>
 
 </file_options>
 </config>

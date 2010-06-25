@@ -60,3 +60,5 @@ GO.cms.lang.advancedPermissions='Advanced permissions';
 GO.cms.lang.enablePermissionsPerFolder='Enable permissions per folder for this user';
 
 GO.cms.lang.feed='Offer items from this folder as feed';
+GO.cms.lang.enableRewrite='Enable friendly URL rewriting. The webserver must be configured for this.';
+GO.cms.lang.rewriteBase='Rewrite base path';

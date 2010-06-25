@@ -2,7 +2,7 @@
 function smarty_function_force_url($params, &$smarty) {
 	global $co, $GO_MODULES;
 
-	if($co->basehref!=$GO_MODULES->modules['cms']['url'])
+	if($co->site['enable_rewrite']!='1')
 	{
 		//Only do this when we are not in testing mode
 
