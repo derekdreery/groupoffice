@@ -13,7 +13,8 @@
  */
 class Image {
 
-	var $image;
+	var $original_image;
+	var $resized_image;
 	var $image_type;
 
 	public function __construct($filename=false){
@@ -25,39 +26,87 @@ class Image {
 		$image_info = getimagesize($filename);
 		$this->image_type = $image_info[2];
 		if( $this->image_type == IMAGETYPE_JPEG ) {
-			$this->image = imagecreatefromjpeg($filename);
+			$this->original_image = imagecreatefromjpeg($filename);
 		} elseif( $this->image_type == IMAGETYPE_GIF ) {
-			$this->image = imagecreatefromgif($filename);
+			$this->original_image = imagecreatefromgif($filename);
 		} elseif( $this->image_type == IMAGETYPE_PNG ) {
-			$this->image = imagecreatefrompng($filename);
+			$this->original_image = imagecreatefrompng($filename);
 		}
 	}
-	public function save($filename, $image_type=IMAGETYPE_JPEG, $compression=75, $permissions=null) {
+	
+
+
+	private function transperancy(){
+		if ($this->image_type  == IMAGETYPE_GIF || $this->image_type==IMAGETYPE_PNG) {
+      $trnprt_indx = imagecolortransparent($this->original_image);
+
+      // If we have a specific transparent color
+      if ($trnprt_indx >= 0) {
+
+        // Get the original image's transparent color's RGB values
+        $trnprt_color    = imagecolorsforindex($this->original_image, $trnprt_indx);
+
+        // Allocate the same color in the new image resource
+        $trnprt_indx    = imagecolorallocate($this->resized_image, $trnprt_color['red'], $trnprt_color['green'], $trnprt_color['blue']);
+
+        // Completely fill the background of the new image with allocated color.
+        imagefill($this->resized_image, 0, 0, $trnprt_indx);
+
+        // Set the background color for new image to transparent
+        imagecolortransparent($this->resized_image, $trnprt_indx);
+      }
+      // Always make a transparent background color for PNGs that don't have one allocated already
+      elseif ($this->image_type == IMAGETYPE_PNG) {
+
+        // Turn off transparency blending (temporarily)
+        imagealphablending($this->resized_image, false);
+
+        // Create a new transparent color for image
+        $color = imagecolorallocatealpha($this->resized_image, 0, 0, 0, 127);
+
+        // Completely fill the background of the new image with allocated color.
+        imagefill($this->resized_image, 0, 0, $color);
+
+        // Restore transparency blending
+        imagesavealpha($this->resized_image, true);
+      }
+    }
+	}
+
+	public function output($image_type=false) {
+		if(!$image_type)
+			$image_type=$this->image_type;
+		
 		if( $image_type == IMAGETYPE_JPEG ) {
-			imagejpeg($this->image,$filename,$compression);
+			imagejpeg($this->resized_image);
 		} elseif( $image_type == IMAGETYPE_GIF ) {
-			imagegif($this->image,$filename);
+			imagegif($this->resized_image);
 		} elseif( $image_type == IMAGETYPE_PNG ) {
-			imagepng($this->image,$filename);
+			imagepng($this->resized_image);
+		}
+	}
+
+	public function save($filename, $image_type=false, $compression=75, $permissions=null) {
+		if(!$image_type)
+			$image_type=$this->image_type;
+
+		if( $image_type == IMAGETYPE_JPEG ) {
+			imagejpeg($this->resized_image,$filename,$compression);
+		} elseif( $image_type == IMAGETYPE_GIF ) {
+			imagegif($this->resized_image,$filename);
+		} elseif( $image_type == IMAGETYPE_PNG ) {
+			imagepng($this->resized_image,$filename);
 		}
 		if( $permissions != null) {
 			chmod($filename,$permissions);
 		}
 	}
-	public function output($image_type=IMAGETYPE_JPEG) {
-		if( $image_type == IMAGETYPE_JPEG ) {
-			imagejpeg($this->image);
-		} elseif( $image_type == IMAGETYPE_GIF ) {
-			imagegif($this->image);
-		} elseif( $image_type == IMAGETYPE_PNG ) {
-			imagepng($this->image);
-		}
-	}
+
 	public function getWidth() {
-		return imagesx($this->image);
+		return imagesx($this->original_image);
 	}
 	public function getHeight() {
-		return imagesy($this->image);
+		return imagesy($this->original_image);
 	}
 	public function resizeToHeight($height) {
 		$ratio = $height / $this->getHeight();
@@ -78,9 +127,11 @@ class Image {
 		$current_width=$this->getWidth();
 		$current_height=$this->getHeight();
 
-		$new_image = imagecreatetruecolor($width, $height);
-		imagecopyresampled($new_image, $this->image, 0, 0, 0,0, $width, $height, $current_width, $current_height);
-		$this->image = $new_image;
+		$this->resized_image = imagecreatetruecolor($width, $height);
+
+		$this->transperancy();
+
+		imagecopyresampled($this->resized_image, $this->original_image, 0, 0, 0,0, $width, $height, $current_width, $current_height);
 	}
 
 	public function zoomcrop($thumbnail_width,$thumbnail_height) { //$imgSrc is a FILE - Returns an image resource.
@@ -98,16 +149,13 @@ class Image {
 			$new_width = $thumbnail_height*$ratio_orig;
 			$new_height = $thumbnail_height;
 		}
+		
+		$this->resized_image = imagecreatetruecolor($thumbnail_width, $thumbnail_height);
 
-		$x_mid = $new_width/2;  //horizontal middle
-		$y_mid = $new_height/2; //vertical middle
-
-		$process = imagecreatetruecolor(round($new_width), round($new_height));
-
-		imagecopyresampled($process, $this->image, 0, 0, 0, 0, $new_width, $new_height, $width_orig, $height_orig);
-		$thumb = imagecreatetruecolor($thumbnail_width, $thumbnail_height);
-		imagecopyresampled($thumb, $process, 0, 0, ($x_mid-($thumbnail_width/2)), ($y_mid-($thumbnail_height/2)), $thumbnail_width, $thumbnail_height, $thumbnail_width, $thumbnail_height);
-		imagedestroy($process);
-		$this->image=$thumb;
+		$x = ($new_width-$thumbnail_width)/-2;
+		$y = ($new_height-$thumbnail_height)/-2;
+	
+		$this->transperancy();
+		imagecopyresampled($this->resized_image, $this->original_image, $x, $y, 0,0, $new_width, $new_height, $width_orig, $height_orig);
 	}
 }

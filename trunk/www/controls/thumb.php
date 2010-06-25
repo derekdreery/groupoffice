@@ -53,10 +53,10 @@ if($zc)
 {
 	$cache_filename .= 'zc_';
 }
-$cache_filename .= File::strip_extension($filename).'.jpg';
+$cache_filename .= $filename;
 
 
-if(!file_exists($cache_dir.'/'.$cache_filename) || filemtime($cache_dir.'/'.$cache_filename)<$file_mtime){
+if(!empty($_REQUEST['nocache']) || !file_exists($cache_dir.'/'.$cache_filename) || filemtime($cache_dir.'/'.$cache_filename)<$file_mtime){
 	$image = new Image($full_path);
 	if($zc){
 		$image->zoomcrop($w, $h);		
@@ -81,7 +81,7 @@ header("Expires: " . date("D, j M Y G:i:s ", time()+(86400*365)) . 'GMT');//expi
 header('Cache-Control: cache');
 header('Pragma: cache');
 $mime = File::get_mime($full_path);
-header('Content-Type: image/jpg');
+header('Content-Type: '.$mime);
 header('Content-Disposition: inline; filename="'.$cache_filename.'"');
 header('Content-Transfer-Encoding: binary');
 

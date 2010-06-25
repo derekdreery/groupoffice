@@ -224,37 +224,4 @@ class bookmarks extends db {
 
 		return $this->update_row('bm_categories', 'id', $category);
 	}
-
-
-
-function bm_thumb_url($path, $w=100,$h=100,$zc=1) {
-		global $GO_THEME, $GO_CONFIG;
-
-		$extension = File::get_extension($path);
-
-		switch($extension) {
-			case 'jpg':
-			case 'jpeg';
-			case 'png';
-			case 'gif';
-		
-			
-			return'modules/bookmarks/bmthumb.php?src='.$path.'&w='.$w.'&h='.$h.'&zc='.$zc;
-				break;
-
-			default:
-				if(file_exists($GO_THEME->theme_path.'images/128x128/filetypes/'.$extension.'.png')) {
-					return $GO_THEME->image_url.'128x128/filetypes/'.$extension.'.png';
-				}else {
-					return $GO_THEME->image_url.'128x128/filetypes/unknown.png';
-				}
-				break;
-
-		}
 }
-
-
-
-}
-
-?>
