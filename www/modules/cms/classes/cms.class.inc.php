@@ -521,6 +521,14 @@ class cms extends db {
 		return false;
 	}
 
+	function special_encode($str) {
+		return urlencode(str_replace('&', '_AMP_', $str));
+	}
+
+	function special_decode($str) {
+		return html_entity_decode(str_replace('_AMP_','&', $str),ENT_QUOTES,'UTF-8');
+	}
+
 
 
 	function build_path($folder_id, $url_encode=false, $root_folder_id=0, $path='') {
@@ -532,7 +540,7 @@ class cms extends db {
 				return $path;
 
 			if($url_encode)
-				$folder['name']=urlencode($folder['name']);
+				$folder['name']=$this->special_encode($folder['name']);
 
 			$path = empty($path) ? $folder['name'] : $folder['name'].'/'.$path;
 			return $this->build_path($folder['parent_id'], $url_encode, $root_folder_id, $path);
