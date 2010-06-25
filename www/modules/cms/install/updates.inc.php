@@ -22,3 +22,6 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cms_user_site_filter` (
 
 $updates[]="ALTER TABLE `cms_folders` ADD `feed` BOOLEAN NOT NULL";
 $updates[]="ALTER TABLE `cms_folders` ADD INDEX ( `feed` ) ";
+$updates[]="ALTER TABLE `cms_sites` ADD `enable_rewrite` BOOLEAN NOT NULL";
+$updates[]="ALTER TABLE `cms_sites` ADD `rewrite_base` VARCHAR( 50 ) NOT NULL";
+$updates[]="UPDATE `cms_sites` SET `rewrite_base`='/', enable_rewrite='1'";

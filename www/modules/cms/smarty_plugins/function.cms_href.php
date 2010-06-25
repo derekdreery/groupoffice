@@ -10,24 +10,8 @@ function smarty_function_cms_href($params, &$smarty) {
 		$params['path']='';
 	}
 
-	$site_id = $smarty->_tpl_vars['site']['id'];
+	if(!isset($params['params']))
+		 $params['params']='';
 
-	if($co->basehref!=$GO_MODULES->modules['cms']['url']) {
-		//we do rewriting
-		$url = $co->basehref;
-	}else {
-		//we use the ugly URL
-		$url = $GO_MODULES->modules['cms']['url'].'run.php?basehref='.urlencode($GO_MODULES->modules['cms']['url']).'&amp;site_id='.$site_id.'&amp;path=';
-	}
-
-	$url .= $params['path'];
-	if(!empty($params['params'])) {
-		if($co->basehref!=$GO_MODULES->modules['cms']['url']) {
-			$url .= '?';
-		}else {
-			$url .= '&amp;';
-		}
-		$url .= $params['params'];
-	}
-	return $url;
+	return $co->create_href_by_path($params['path'],  $params['params']);
 }

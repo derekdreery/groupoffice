@@ -168,8 +168,9 @@ GO.cms.EditorPanel = Ext.extend(
 				
 			if(this.currentTemplate!=template)
 			{
-				if(this.currentTemplate!='')
-					this.editor.reInit();
+				//console.log(typeof(this.editor.reInit));
+				//if(this.editor.reInit)
+					//this.editor.reInit();
 					
 				var t = tinyMCE.activeEditor.dom;
 					

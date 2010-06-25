@@ -12,10 +12,10 @@ function smarty_function_login_href($params, &$smarty)
 	
 	if(!$GO_SECURITY->logged_in())
 	{
-		$url = $GO_MODULES->modules['cms']['url'].'login.php?site_id='.$co->site['id'].'&amp;basehref='.urlencode($co->basehref).'&amp;success_url='.urlencode($success_url);	
+		$url = $GO_MODULES->modules['cms']['url'].'login.php?site_id='.$co->site['id'].'&amp;success_url='.urlencode($success_url);	
 	}else
 	{
-		$url = $GO_MODULES->modules['cms']['url'].'logout.php?site_id='.$co->site['id'].'&amp;basehref='.urlencode($co->basehref).'&amp;success_url='.urlencode($success_url);
+		$url = $GO_MODULES->modules['cms']['url'].'logout.php?site_id='.$co->site['id'].'&amp;success_url='.urlencode($success_url);
 		
 	}
 	if(!empty($co->file['id']))

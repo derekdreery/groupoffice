@@ -5,4 +5,4 @@ RewriteEngine On
 RewriteBase   /groupoffice/www/modules/cms/
 
 #  now the rewriting rules
-RewriteRule ^(.*)$ run.php?site_id=5&path=$1&basehref=/&%{QUERY_STRING}
+RewriteRule ^(.*)$ run.php?site_id=5&path=$1&%{QUERY_STRING}

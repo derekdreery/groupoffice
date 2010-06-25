@@ -71,6 +71,15 @@ try {
 			$site['language']=$_POST['language'];
 			$site['template']=$_POST['template'];
 			$site['name']=$_POST['name'];
+			$site['enable_rewrite']=isset($_POST['enable_rewrite']) ? '1' :'0';
+
+			if(isset($_POST['rewrite_base'])){
+				if(substr($_POST['rewrite_base'],-1)!='/'){
+					$_POST['rewrite_base'].='/';
+				}
+				$site['rewrite_base']=$_POST['rewrite_base'];
+			}
+
 			if($site['id']>0) {
 				$cms->update_site($site);
 				$response['success']=true;

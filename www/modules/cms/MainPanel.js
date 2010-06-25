@@ -336,7 +336,7 @@ GO.cms.MainPanel = function(config){
 		iconCls: 'cms-btn-view',
 		text: GO.cms.lang.view,
 		handler:function(){
-			window.open(GO.settings.modules.cms.url+'run.php?file_id='+this.editorPanel.baseParams.file_id+'&basehref='+encodeURIComponent(GO.settings.modules.cms.url));
+			window.open(GO.settings.modules.cms.url+'run.php?file_id='+this.editorPanel.baseParams.file_id);
 		},
 		scope:this,
 		disabled:true

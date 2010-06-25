@@ -1,0 +1,1 @@
+{cms_href path="Member area/Photoalbum"}

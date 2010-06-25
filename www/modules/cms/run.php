@@ -16,7 +16,7 @@ if(isset($_REQUEST['path']))
 {
 	$site_id = isset($_REQUEST['site_id']) ? $_REQUEST['site_id'] : 0;
 	$path = $co->special_decode($_REQUEST['path']);
-	$co->set_by_path($site_id, $path, ($_REQUEST['basehref']));
+	$co->set_by_path($site_id, $path);
 	
 }else
 {
