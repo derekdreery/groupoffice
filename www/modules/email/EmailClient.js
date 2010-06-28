@@ -1283,6 +1283,28 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 							
 								if(ext=='jpg' || ext=='png' || ext=='gif' || ext=='bmp' || ext=='jpeg')
 								{
+									url_params.imap_id=r.imap_id;
+
+									params = {
+										account_id: this.account_id,
+										mailbox: this.mailbox,
+										uid: this.messagePanel.uid,
+										imap_id: r.imap_id,
+										uuencoded_partnumber: r.uuencoded_partnumber,
+										encoding: r.encoding,
+										type: r.type,
+										subtype: r.subtype,
+										filename:r.name,
+										charset:r.charset
+									}
+
+									url_params = '?';
+									for(var name in params){
+										url_params+= name+'='+encodeURIComponent(params[name])+'&';
+									}
+									url_params = url_params.substring(0,url_params.length-1);
+
+									
 									images.push({
 										name: r.name,
 										src: GO.settings.modules.email.url+'attachment.php'+url_params
