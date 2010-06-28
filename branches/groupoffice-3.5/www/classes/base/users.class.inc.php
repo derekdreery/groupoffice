@@ -812,7 +812,10 @@ class GO_USERS extends db
 				else
 					throw new Exception($lang['users']['error_username_exists']);
 			}
-		}		
+		}
+
+		if(!isset($user['enabled']))
+			$user['enabled']='1';
 		
 		if(!isset($user['start_module']))
 			$user['start_module']='summary';
