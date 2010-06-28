@@ -28,7 +28,7 @@ $reminders= $_REQUEST['count']==1 ? $lang['common']['oneReminder'] : sprintf($la
 
 		<div id="reminderText">
 		<?php
-		if($_REQUEST['count']>1)
+		if($_REQUEST['count']>0)
 			echo '<p>'.sprintf($lang['common']['youHaveReminders'], $reminders, $GO_CONFIG->product_name).'</p>';
 		
 		echo $_REQUEST['reminder_text'];
