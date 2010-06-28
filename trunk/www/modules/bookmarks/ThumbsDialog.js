@@ -11,25 +11,23 @@
  * @author Twan Verhofstad
  */
 
+GO.bookmarks.thumbTpl = new Ext.XTemplate('<div class="thumb-wrap" >'+
+		'<div class="thumb">'+
+		'<div id="dialog_thumb" class="thumb-name"'+
+		' style="background-image:url({logo})"><h1>{title}</h1>{description}</div></div>'
+		+'</div>');
 
 
 GO.bookmarks.ThumbsDialog = function(config){
 
 	this.chosenlogo="";													// pad naar gekozen logo
-	this.is_publiclogo=config.pubicon;// public logo
-	var clearicon=0;														// variabele voor het wissen van het logo
-
+	
 	if(!config)
 	{
 		config = {};
 	}
 
-	this.thumbTpl = new Ext.XTemplate('<div class="thumb-wrap" >'+
-				'<div class="thumb">'+
-				'<div id="dialog_thumb" class="thumb-name"'+
-				' style="background-image:url({logo})"><h1>{title}</h1>{description}</div></div>'
-				+'</div>');
-	
+	config.closeAction='hide';
 	config.height=350;
 	config.width=800;
 	config.layout='border';
@@ -38,31 +36,21 @@ GO.bookmarks.ThumbsDialog = function(config){
 		text: GO.lang['cmdOk'],
 		handler: function(){
 			
-			if (clearicon==0){ // normale setting, als er een logo gekozen is
-				this.choosenLogo='icons/bookmark.png';
-				this.is_publiclogo=1;
-				this.iconfield.reset(); // pad naar logo = leeg
-			}
 			this.iconfield.setValue(this.chosenlogo); // pad naar logo
-			Ext.get('thumbX').dom.innerHTML='<div class="thumb-wrap" >'+
-			'<div class="thumb" style="background:url(modules/bookmarks/themes/Default/images/bmbackground2.png) no-repeat center center;">'+
-			'<div id="dialog_thumb" class="thumb-name" style="background-image:url('+GO.bookmarks.getThumbUrl(this.chosenlogo,this.is_publiclogo)+')"> '+config.thumbtitle+'</div>'+'</div>'
-			+'</div>';
 			
 			config.dialog.formPanel.baseParams.public_icon=this.is_publiclogo; // public logo
-			this.close();
+			config.dialog.setIcon(this.chosenlogo, this.is_publiclogo);
+			this.hide();
 		},
 		scope: this
 	}
-
 	,{
 		text: GO.lang['cmdClose'],
 		handler: function(){
-			this.close();
+			this.hide();
 		},
 		scope:this
-	}
-	
+	}	
 	];
 
  	// laat alle public logo's op deze manier zien, in centerPanel van de dialog
@@ -79,8 +67,8 @@ GO.bookmarks.ThumbsDialog = function(config){
 		cls: 'thumbnails',
 		itemSelector:'div.icons',
 		multiSelect: false,
-		singleSelect: true,
-		trackOver:true,
+		singleSelect: false,
+		//trackOver:true,
 		border: false,
 		style: {
 			marginLeft: '13px',
@@ -95,29 +83,16 @@ GO.bookmarks.ThumbsDialog = function(config){
 		var record = this.publiclogoView.getRecord(node); // waar hebben we op geklikt?
 		this.is_publiclogo=1;
 		this.chosenlogo="icons/" + record.data.filename;
-		this.bookmarkExample.getEl().update(this.thumbTpl.apply({
-				logo:GO.bookmarks.getThumbUrl(this.chosenlogo, this.is_publiclogo),
-				title:GO.bookmarks.lang.title,
-				description:GO.bookmarks.lang.description
-			}));	
-		
+		this.setIcon(this.chosenlogo, this.is_publiclogo);		
 	},this)
 
 	// voorbeeld thumb, in westPanel
 	
-	this.bookmarkExample = new Ext.Component({
+	this.thumbExample = new Ext.Component({
 		style: {
 			marginLeft:'13px'
-		},
-		autoEl:{
-			cls: 'thumbnails',
-			html:	this.thumbTpl.apply({
-				logo:GO.bookmarks.getThumbUrl(config.thumbicon, this.is_publiclogo),
-				title:GO.bookmarks.lang.title,
-				description:GO.bookmarks.lang.description
-			})
 		}
-	})
+	});
 
 	// upload logo button in westPanel
 
@@ -125,44 +100,13 @@ GO.bookmarks.ThumbsDialog = function(config){
 		style: {
 			marginTop: '6px'
 		},
-		width: '90px',
 		border: false,
 		inputName : 'attachments',
 		addText : GO.bookmarks.lang.uploadLogo,
 		max: 1		// maar 1 tegelijk, overwrite event word meteen ge-fired.
 	});
 
-	// clear logo button in westPanel
 
-	this.clearLogo = new Ext.Button({
-		height: '21px',
-		text : GO.bookmarks.lang.clearLogo,
-		border: false,
-		handler: function() {
-			clearicon=1;
-			Ext.get('one-thumb').dom.style.backgroundImage=''; // verwijder logo uit voorbeeld bookmark
-		}
-	});
-
-
-	// de twee knoppen in een tabel zetten, voor uitlijning
-	this.buttonTable = new Ext.Panel({
-		border: false,
-		layout: 'table',
-		layoutConfig: {
-			columns: 2
-		},
-		items: [{
-			items: [this.uploadFile],
-			border: false
-		},{
-			items: [this.clearLogo],
-			border: false
-		}
-		]
-	})
-
-	
 	// knoppen in een form, voor upload submit
 	this.uploadForm = new Ext.form.FormPanel({
 		border: false,
@@ -173,7 +117,7 @@ GO.bookmarks.ThumbsDialog = function(config){
 		baseParams: {
 			task: 'upload'
 		},
-		items : [this.buttonTable]
+		items : [this.uploadFile]
 	});
 
 
@@ -184,7 +128,7 @@ GO.bookmarks.ThumbsDialog = function(config){
 		border: true,
 		header:false,
 		width: 215,
-		items: [this.uploadForm,this.bookmarkExample]
+		items: [this.uploadForm,this.thumbExample]
 	})
 
 	
@@ -214,31 +158,44 @@ GO.bookmarks.ThumbsDialog = function(config){
 	GO.bookmarks.ThumbsDialog.superclass.constructor.call(this, config);
 	
 
-	// upload event roept automatisch overwrite aan om icon in goede map te zetten
-	this.on('upload', function(){
-		this.sendOverwrite({
-			task: 'overwrite',
-			thumb_id:   this.thumb_id,
-			folder_id : this.folder_id
-		});
-	},this);
-
 	this.addEvents({
 		'upload' : true
 	 });
 }
 
 Ext.extend(GO.bookmarks.ThumbsDialog, Ext.Window, {
+	setIcon : function(icon, pub){
+
+		var now = new Date();
+		var url = GO.bookmarks.getThumbUrl(icon, pub);
+		if(pub==0){
+			url += '&amp;time='+now.format('U');
+		}
+
+		this.thumbExample.getEl().update(GO.bookmarks.thumbTpl.apply({
+				logo:url,
+				title:GO.bookmarks.lang.title,
+				description:GO.bookmarks.lang.description
+			}));
+	},
 
   // kopie / aanpassing uit Files module
 	uploadHandler : function(){
 		this.uploadForm.form.submit({
 			url:GO.settings.modules.bookmarks.url+'action.php',
 			waitMsg : GO.lang.waitMsgUpload,
-			
+			params:{
+				thumb_id:   this.thumb_id,
+				folder_id : this.folder_id
+			},
 			success:function(form, action){
 				this.uploadFile.clearQueue();
 				this.fireEvent('upload', action);
+				
+				this.chosenlogo=action.result.logo;
+				this.is_publiclogo=0;
+
+				this.setIcon(this.chosenlogo, this.is_publiclogo);
 			},
 			failure:function(form, action)
 			{
@@ -252,51 +209,6 @@ Ext.extend(GO.bookmarks.ThumbsDialog, Ext.Window, {
 				}
 
 				Ext.MessageBox.alert(GO.lang['strError'], error);
-			},
-			scope: this
-		});
-	},
-
- // kopie / aanpassing uit Files module
-	sendOverwrite : function(params){ // word aangeroepen na upload, overschrijft altijd
-
-		if(!params.command)
-		{
-			params.command='ask';
-		}
-
-		this.overwriteParams = params;
-
-		Ext.Ajax.request({
-			url: GO.settings.modules.bookmarks.url+'action.php',
-			params:this.overwriteParams,
-			callback: function(options, success, response){
-				if(!success)
-				{
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-				}else
-				{
-					var responseParams = Ext.decode(response.responseText);
-
-					//----------------------------------------------------------------
-					this.example = Ext.get('one-thumb');
-					this.newicon = "background-image: url("+BaseHref+"controls/thumb.php?src="+responseParams.path+"&h=32&w=32&pub=0)";//&mtime="+this.time.format('U')+")";
-					this.example.dom.style.cssText=this.newicon;
-					this.chosenlogo= responseParams.path;
-          //-----------------------------------------------------------------
-					
-					if(!responseParams.success && !responseParams.file_exists)
-					{
-						Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
-					}else
-					{
-						if(responseParams.file_exists)
-						{
-							this.overwriteParams.command='yes';
-							this.sendOverwrite(this.overwriteParams);
-						}
-					}
-				}
 			},
 			scope: this
 		});

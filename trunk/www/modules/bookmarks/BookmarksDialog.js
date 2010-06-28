@@ -94,13 +94,9 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 			this.formPanel.form.reset();
 			this.selectCategory.selectFirst();
 			// leeg voorbeeld
-			new Ext.XTemplate('').overwrite(Ext.get('thumbX'));
 		}
 
-		new Ext.XTemplate('<div class="thumb-wrap" >'+
-				'<div class="thumb" no-repeat center center;">'+
-				'<div class="thumb-name" style="background-image:url('+GO.bookmarks.getThumbUrl(logo, this.formPanel.baseParams.public_icon)+')"><h1>'+GO.bookmarks.lang.title+'</h1>'+GO.bookmarks.lang.description+'</div></div>'
-				+'</div>').overwrite(Ext.get('thumbX'));
+		this.setIcon(logo, this.formPanel.baseParams.public_icon);
 
 		GO.bookmarks.BookmarksDialog.superclass.show.call(this);
 	},
@@ -137,7 +133,20 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 		});
 	},
 
+	setIcon : function(icon, pub){
 
+		var now = new Date();
+		var url = GO.bookmarks.getThumbUrl(icon, pub);
+		if(pub==0){
+			url += '&amp;time='+now.format('U');
+		}
+
+		this.thumbExample.getEl().update(GO.bookmarks.thumbTpl.apply({
+				logo:url,
+				title:GO.bookmarks.lang.title,
+				description:GO.bookmarks.lang.description
+			}));		
+	},
 
 	buildForm : function (config) {
 	
@@ -223,16 +232,12 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 				dialog: this
 			}),
 			
-			this.thumbexample = new Ext.Component({
+			this.thumbExample = new Ext.Component({
 				style: {
 					marginLeft: '100px'
-				},
-				id: 'thumbX',
-				autoEl:{
-					cls: 'thumbnails',
-					html:	''
 				}
-			})]
+			})
+			]
 		});
 		this.items = [this.bookmarkPanel];
 		this.formPanel = new Ext.form.FormPanel({

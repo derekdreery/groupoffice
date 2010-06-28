@@ -22,21 +22,20 @@ GO.bookmarks.SelectFile = Ext.extend(Ext.form.TriggerField,{
 
 	onTriggerClick : function(){
 
-		var thumb_id = this.dialog.formPanel.form.baseParams.id						// bookmark ID
-		var thumbtitle = this.dialog.formPanel.form.items.items[1].value; // titel
-		var thumbicon = this.dialog.formPanel.form.items.items[5].value;  // pad naar logo
-		var pubicon = this.dialog.formPanel.baseParams.public_icon
+		var thumb_id = this.dialog.formPanel.form.baseParams.id;
 		if (!thumb_id) thumbtitle='Example';
-		this.thumbsDialog = new GO.bookmarks.ThumbsDialog({
-			thumb_id:thumb_id,
-			iconfield:this,
-			thumbtitle:thumbtitle,
-			thumbicon:thumbicon,
-			folder_id:this.root_folder_id,
-			pubicon:pubicon,
-			dialog:this.dialog
-		});
-		this.thumbsDialog.show(); //thumbsDialog, geen hide() maar close()    :(
+		if(!this.thumbsDialog){
+			this.thumbsDialog = new GO.bookmarks.ThumbsDialog({
+				thumb_id:thumb_id,
+				iconfield:this,
+				pubicon:this.dialog.formPanel.baseParams.public_icon,
+				dialog:this.dialog
+			});
+		}
+		this.thumbsDialog.thumb_id=thumb_id;
+		this.thumbsDialog.is_publiclogo=this.dialog.formPanel.baseParams.public_icon;		
+		this.thumbsDialog.show();
+		this.thumbsDialog.setIcon(this.getValue(), this.thumbsDialog.is_publiclogo);
 	}
 
 });
