@@ -22,13 +22,6 @@ require_once ($GO_MODULES->modules['bookmarks']['class_path'] . 'bookmarks.class
 $bookmarks = new bookmarks();
 
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
-
-class thumbimage {
-
-	var $filename;
-
-}
-
 try {
 
 	switch ($task) {

@@ -228,7 +228,6 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 				name: 'logo',
 				anchor: '100%',
 				value:'icons/bookmark.png',
-				root_folder_id: GO.bookmarks.iconsFolderId,
 				dialog: this
 			}),
 			
