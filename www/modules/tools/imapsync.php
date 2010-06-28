@@ -86,6 +86,7 @@ if (!$fp) {
 $record = fgetcsv($fp, 4096, ',', '"');
 
 while ($record = fgetcsv($fp, 4096, ',', '"')) {
+	
 
 	$remote_user = $record[1];
 	$remote_pass = $record[5];
@@ -165,7 +166,7 @@ while ($record = fgetcsv($fp, 4096, ',', '"')) {
 		$account['signature']='';
 
 		$e->add_account($account);
-}
+	}
 
 
 	echo "Syncing " . $record[0] . "\n\n";
