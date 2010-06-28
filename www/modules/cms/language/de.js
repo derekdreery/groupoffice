@@ -3,7 +3,7 @@ GO.cms.lang.cms='Webseiten';
 /* table: cms_sites */
 GO.cms.lang.site="Seite";
 GO.cms.lang.sites="Seiten";
-GO.cms.lang.allowProperties="Erweiterte Einstellungen zulassen";
+GO.cms.lang.allowProperties="Einstellungen zulassen";
 GO.cms.lang.domain="Domäne";
 GO.cms.lang.webmaster="Webmaster";
 GO.cms.lang.language="Sprache";
@@ -44,4 +44,7 @@ GO.cms.lang.selectTemplate='Vorlage auswählen';
 GO.cms.lang.selectPage='Seite auswählen';
 
 GO.cms.lang.showUntil='Zeige Seite bis';
-GO.cms.lang.alwaysShow='Keine Begrenzung bei leerem Feld';
+GO.cms.lang.alwaysShow='Keine Zeitbegrenzung bei leerem Feld';
+GO.cms.lang.root='Root';
+GO.cms.lang.advancedPermissions='Erweiterte Befugnisrechte';
+GO.cms.lang.enablePermissionsPerFolder='Diesem Benutzer Befugnisrechte auf Ordner erteilen';
