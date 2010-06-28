@@ -59,7 +59,7 @@ GO.bookmarks.BookmarksView = function(config){
 		cls: 'thumbnails',
 		itemSelector:'div.thumb',
 		multiSelect: false,
-		singleSelect: true,
+		singleSelect: false,
 		trackOver:true
 		
 	});

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright Intermesh
  *
@@ -11,33 +12,35 @@
  * @copyright Copyright Intermesh
  * @author Twan Verhofstad
  */
-
-
 require_once('../../Group-Office.php');
 
 //Authenticate the user
 $GO_SECURITY->json_authenticate('bookmarks');
 
 //Require the module class
-require_once ($GO_MODULES->modules['bookmarks']['class_path'].'bookmarks.class.inc.php');
+require_once ($GO_MODULES->modules['bookmarks']['class_path'] . 'bookmarks.class.inc.php');
 $bookmarks = new bookmarks();
 
-$task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
+$task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 
 class thumbimage {
+
 	var $filename;
+
 }
 
 try {
 
-	switch($task) {
+	switch ($task) {
 
 		case 'description':
 
-			if(function_exists('curl_init')){
-				$ch=curl_init();
+			$response=array();
 
-				curl_setopt($ch, CURLOPT_URL,$_POST['url']);
+			if (function_exists('curl_init')) {
+				$ch = curl_init();
+
+				curl_setopt($ch, CURLOPT_URL, $_POST['url']);
 				curl_setopt($ch, CURLOPT_HEADER, 0);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
@@ -47,49 +50,54 @@ try {
 				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 
 				$html = curl_exec($ch);
-			}else
-			{
+			} else {
 				$html = @file_get_contents($_POST['url']);
 			}
 
-			$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u","</$1>", $html);
+			$html = str_replace("\r", '', $html);
+			$html = str_replace("\n", ' ', $html);
+
+			$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u", "</$1>", $html);
+
+			preg_match('/<head>(.*)<\/head>/i', $html, $match);
+			if (isset($match[1])) {
+				$html = $match[1];
 
 
-			preg_match_all('/<meta[^>]*>/i', $html, $matches);
+				preg_match_all('/<meta[^>]*>/i', $html, $matches);
 
-			$description='';
-			foreach($matches[0] as $match){
-				if(stripos($match, 'description')){
-					$name_pos = stripos($match, 'content');
-					if($name_pos){						
-						$description = substr($match, $name_pos+7, -1);
-						$description = trim($description, '="\'/ ');
-						break;
+				$description = '';
+				foreach ($matches[0] as $match) {
+					if (stripos($match, 'description')) {
+						$name_pos = stripos($match, 'content');
+						if ($name_pos) {
+							$description = substr($match, $name_pos + 7, -1);
+							$description = trim($description, '="\'/ ');
+							break;
+						}
 					}
-
 				}
+				//replace double spaces
+				$response['description'] = preg_replace('/\s+/', ' ', $description);
+
+				preg_match('/<title>(.*)<\/title>/i', $html, $match);
+				$response['title'] = $match ? preg_replace('/\s+/', ' ', trim($match[1])) : '';
 			}
-			//replace double spaces
-			$response['description']=preg_replace('/\s+/',' ',$description);
 
-
-			preg_match('/<title>(.*)<\/title>/i',$html, $match);
-			$response['title']=$match ? preg_replace('/\s+/',' ',trim($match[1])) : '';
-			
 			break;
 
 		case 'thumbdir':
 			$thumbs = $bookmarks->thumbdir_images();
 
-			$response['results']=$thumbs;
-			$response['success']=true;
+			$response['results'] = $thumbs;
+			$response['success'] = true;
 			break;
 
 		case 'get_one_bookmark':
 
 			$bookmark = $bookmarks->get_one_bookmark(($_REQUEST['thumb_id']));
-			$response['results']=$bookmark;
-			$response['success']=true;
+			$response['results'] = $bookmark;
+			$response['success'] = true;
 			break;
 
 		case 'get_bookmarks':
@@ -97,33 +105,31 @@ try {
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 			$category = isset($_REQUEST['category']) ? ($_REQUEST['category']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			$query = isset($_REQUEST['query']) ? '%' . ($_REQUEST['query']) . '%' : '';
 
-			$bookmarks->get_authorized_bookmarks($GO_SECURITY->user_id,$query,$start,$limit,$category);
+			$bookmarks->get_authorized_bookmarks($GO_SECURITY->user_id, $query, $start, $limit, $category);
 
-			$response['results']=array();
+			$response['results'] = array();
 			$response['total'] = $bookmarks->found_rows(); // paging
-			$index=0;
-			while($bookmark = $bookmarks->next_record()) {
+			$index = 0;
+			while ($bookmark = $bookmarks->next_record()) {
 
-				if ($bookmark['acl_id']==0) {
-					$bookmark['write_permission']=true;
-				}
-				else {
-					$bookmark['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $bookmark['acl_id'])>GO_SECURITY::READ_PERMISSION;
+				if ($bookmark['acl_id'] == 0) {
+					$bookmark['write_permission'] = true;
+				} else {
+					$bookmark['write_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $bookmark['acl_id']) > GO_SECURITY::READ_PERMISSION;
 				}
 
 				//$bookmark['description']=nl2br($bookmark['description']);
-				$bookmark['thumb']='';
-				if(!empty($bookmark['logo'])){
-					if($bookmark['public_icon']=='1'){
-						$bookmark['thumb']=$GO_MODULES->modules['bookmarks']['url'].$bookmark['logo'];
-					}else
-					{
-						$bookmark['thumb']=get_thumb_url($bookmark['logo'],32,32,0);
+				$bookmark['thumb'] = '';
+				if (!empty($bookmark['logo'])) {
+					if ($bookmark['public_icon'] == '1') {
+						$bookmark['thumb'] = $GO_MODULES->modules['bookmarks']['url'] . $bookmark['logo'];
+					} else {
+						$bookmark['thumb'] = get_thumb_url($bookmark['logo'], 32, 32, 0);
 					}
 				}
-				$bookmark['index']=$index;
+				$bookmark['index'] = $index;
 				$index++;
 
 				$response['results'][] = $bookmark;
@@ -133,11 +139,11 @@ try {
 		case 'category':
 			$category = $bookmarks->get_category(($_REQUEST['category_id']));
 			$user = $GO_USERS->get_user($category['user_id']);
-			$category['user_name']=String::format_name($user);
-			$category['public']=$category['acl_id']>0 ? '1' : '0';
-			$category['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id'])>GO_SECURITY::READ_PERMISSION;
-			$response['data']=$category;
-			$response['success']=true;
+			$category['user_name'] = String::format_name($user);
+			$category['public'] = $category['acl_id'] > 0 ? '1' : '0';
+			$category['write_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']) > GO_SECURITY::READ_PERMISSION;
+			$response['data'] = $category;
+			$response['success'] = true;
 			break;
 
 
@@ -145,25 +151,24 @@ try {
 		case 'categories':
 			$auth_type = isset($_POST['auth_type']) ? ($_POST['auth_type']) : 'write';
 
-			if(isset($_POST['delete_keys'])) {
+			if (isset($_POST['delete_keys'])) {
 				try {
-					$response['deleteSuccess']=true;
+					$response['deleteSuccess'] = true;
 
 					$delete_categories = json_decode($_POST['delete_keys']);
-					foreach($delete_categories as $category_id) {
+					foreach ($delete_categories as $category_id) {
 
 						$cat = $bookmarks->get_category($category_id);
 						$usr = $GO_USERS->get_user($cat['user_id']);
 
-						if ($usr==$GO_SECURITY->user_id) {
+						if ($usr == $GO_SECURITY->user_id) {
 							throw new AccessDeniedException();
 						}
 						$bookmarks->delete_category($category_id);
 					}
-
-				}catch(Exception $e) {
-					$response['deleteSuccess']=false;
-					$response['deleteFeedback']=$e->getMessage();
+				} catch (Exception $e) {
+					$response['deleteSuccess'] = false;
+					$response['deleteFeedback'] = $e->getMessage();
 				}
 			}
 
@@ -174,32 +179,30 @@ try {
 			$combo = isset($_REQUEST['combo']) ? ($_REQUEST['combo']) : '0';
 
 
-			$query = '';//isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			$query = ''; //isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 
 			$response['total'] = $bookmarks->get_authorized_categories($auth_type, $GO_SECURITY->user_id, $query, $sort, $dir, $start, $limit);
-			if(!$response['total']) {
+			if (!$response['total']) {
 
 				$response['total'] = $bookmarks->get_authorized_categories($auth_type, $GO_SECURITY->user_id, $query, $sort, $dir, $start, $limit);
 			}
 
-			$response['results']=array();
+			$response['results'] = array();
 
-			while($bookmarks->next_record()) {
+			while ($bookmarks->next_record()) {
 
 				$category = $bookmarks->record;
 
 				$user = $GO_USERS->get_user($category['user_id']);
-				$category['user_name']=String::format_name($user);
+				$category['user_name'] = String::format_name($user);
 				$response['results'][] = $category;
-
 			}
 
 			break;
 	}
-
-} catch(Exception $e) {
-	$response['feedback']=$e->getMessage();
-	$response['success']=false;
+} catch (Exception $e) {
+	$response['feedback'] = $e->getMessage();
+	$response['success'] = false;
 }
 
 echo json_encode($response);
