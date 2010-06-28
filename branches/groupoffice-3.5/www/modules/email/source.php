@@ -50,6 +50,7 @@ header('Content-Length: '.strlen($header).$size);
 
 echo $header;
 
+$count=0;
 while($line = $imap->get_message_part_line()){
 	echo $line;
 }
