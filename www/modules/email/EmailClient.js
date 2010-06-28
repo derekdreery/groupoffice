@@ -23,8 +23,8 @@ GO.email.EmailClient = function(config){
 	this.messagesStore = new GO.data.JsonStore({
 		url: GO.settings.modules.email.url+'json.php',
 		baseParams: {
-			"node": '',
-			"type": 'messages'
+			//"node": '',
+			"task": 'messages'
 		},
 		root: 'results',
 		totalProperty: 'total',
