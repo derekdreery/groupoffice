@@ -36,110 +36,23 @@ try {
 			$fs = new filesystem();
 			$fs->mkdir_recursive($GO_CONFIG->tmpdir.'files_upload');
 
-			$_SESSION['GO_SESSION']['files']['uploaded_files']=array();
-			$_SESSION['GO_SESSION']['files']['uploaded_files_props']=array();
+			$relpath = 'public/bookmarks/';
+			$path = $GO_CONFIG->file_storage_path.$relpath;
 
-			for ($n = 0; $n < count($_FILES['attachments']['tmp_name']); $n++)
+			if(!is_dir($path))
+				mkdir($path,0755, true);
+
+			$response['logo']=$relpath.$_POST['thumb_id'].'.'.File::get_extension($_FILES['attachments']['name'][0]);
+			
+			if (is_uploaded_file($_FILES['attachments']['tmp_name'][0]))
 			{
-				if (is_uploaded_file($_FILES['attachments']['tmp_name'][$n]))
-				{
-					$tmp_file = $GO_CONFIG->tmpdir.'files_upload/'.$_FILES['attachments']['name'][$n];
-					move_uploaded_file($_FILES['attachments']['tmp_name'][$n], $tmp_file);
-					chmod($tmp_file, $GO_CONFIG->file_create_mode);
-
-					$_SESSION['GO_SESSION']['files']['uploaded_files'][]=$tmp_file;
-					$_SESSION['GO_SESSION']['files']['uploaded_files_props'][]=$_POST;
-				}
+				move_uploaded_file($_FILES['attachments']['tmp_name'][0], $GO_CONFIG->file_storage_path.$response['logo']);
 			}
+
 			$response['success']=true;
 			break;
 
-			case 'overwrite':
-			require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
-		
-			$quota = new quota();
-
-			$fs = new filesystem();
-			$files = new files();
-
-			$new = array();
-			$modified=array();
-
-			$command = isset($_POST['command']) ? $_POST['command'] : 'ask';
-
-      $thumb_id = strval($_POST['thumb_id']);
-			$folder = $files->get_folder($_POST['folder_id']);
-			//var_dump($folder);
-			if(!$folder)
-			{
-				throw new FileNotFoundException();
-			}
-		//	if(!$files->has_write_permission($GO_SECURITY->user_id, $folder))
-	//		{
-	//			$response['success']=false;
-	//			throw new AccessDeniedException();
-	//		}
-
-			$rel_path = $files->build_path($folder);
-			$full_path = $GO_CONFIG->file_storage_path.$rel_path;
-		
-
-			while($tmp_file = array_shift($_SESSION['GO_SESSION']['files']['uploaded_files']))
-			{      
-
-				$filename = utf8_basename($tmp_file);
-       // $extension= strtolower(File::get_extension($tmp_filename));
-			//	$filename= $thumb_id.'.'.$extension;
-
-				$new_path = $full_path.'/'.$filename;
-				$icon_path= $rel_path.'/'.$filename;
-				$response['path']=$icon_path;
-
-		//		if(file_exists($new_path) && $command!='yes' && $command!='yestoall')
-	//			{
-				//	if($command!='no' && $command != 'notoall')
-				//	{
-				//		array_unshift($_SESSION['GO_SESSION']['files']['uploaded_files'], $tmp_file);
-				//		$response['file_exists']=$tmp_filename;// utf8_basename($tmp_file);
-				//		throw new Exception('File exists');
-				//	}
-	//			}else
-		//		{
-					
-					$existing_file = $files->file_exists($folder['id'], $filename);
-					if($existing_file)
-					{
-						$modified[]=$filename;
-					}else
-					{
-						$new[]=$filename;
-					}
-
-					if(!$fs->move($tmp_file, $new_path))
-					{
-						throw new Exception($lang['common']['saveError']);
-					}
-
-					$props = isset($_SESSION['GO_SESSION']['files']['uploaded_files_props']) ? array_shift($_SESSION['GO_SESSION']['files']['uploaded_files_props']) : false;
-					$comments = isset($props['comments']) ? $props['comments'] : '';
-
-					$file_id = $files->import_file($new_path, $folder['id'], $comments);
-
-			//	}
-			//	if($command != 'yestoall' && $command != 'notoall')
-			//	{
-			//		$command='ask';
-			//	}
-			}
-
-			$files->touch_folder($folder['id']);
-
-			$files->notify_users($folder, $GO_SECURITY->user_id, $modified, $new);
-
-			$response['success']=true;
-
-			break;
-
+			
 		case 'delete_bookmark':
     
       try {
