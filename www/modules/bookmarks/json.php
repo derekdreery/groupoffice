@@ -54,15 +54,25 @@ try {
 				$html = @file_get_contents($_POST['url']);
 			}
 
+			//go_debug($html);
+
 			$html = str_replace("\r", '', $html);
 			$html = str_replace("\n", ' ', $html);
 
-			$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u", "</$1>", $html);
+			$html = preg_replace("'</[\s]*([\w]*)[\s]*>'", "</$1>", $html);
 
 			preg_match('/<head>(.*)<\/head>/i', $html, $match);
 			if (isset($match[1])) {
 				$html = $match[1];
+				//go_debug($html);
 
+				preg_match('/charset=([^"\'>]*)/i', $html, $match);
+				if(isset($match[1])){
+
+					$charset = strtolower(trim($match[1]));
+					if($charset!='utf-8')
+						$html = String::to_utf8($html, $charset);
+				}			
 
 				preg_match_all('/<meta[^>]*>/i', $html, $matches);
 
