@@ -6,5 +6,5 @@ GO.modules.lang.cmdAvailableModules='Verfügbare Module';
 GO.modules.lang.cmdModuleName='Name';
 GO.modules.lang.cmdModuleDescription='Beschreibung';
 GO.modules.lang.cmdGridColumnModuleName='Name';
-GO.modules.lang.cmdUninstallMessage='ACHTUNG! Wenn Sie dieses Modul entfernen, werden alle zugehörigen Daten gelöscht! Möchten Sie "{0}" wirklich entfernen?';
+GO.modules.lang.cmdUninstallMessage='ACHTUNG! Wenn Sie das Modul "{0}" deaktivieren, werden alle zugehörigen Daten gelöscht! Möchten Sie es wirklich deaktivieren?';
 GO.modules.lang.cmdModulesCannotBeDeleted='Dieses Modul kann nicht entfernt werden!';

@@ -83,3 +83,4 @@ GO.users.lang.lastName='Nachname';
 GO.users.lang.firstName='Vorname';
 GO.users.lang.sendInvitation='Einladung versenden';
 GO.users.lang.contactInfo='Kontakt-Info';
+GO.users.lang.popupNotification='Popupfenster anzeigen wenn eine Erinnerung ansteht oder eine neue E-Mail eintrifft';
