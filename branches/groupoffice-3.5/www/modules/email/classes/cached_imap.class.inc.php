@@ -419,24 +419,23 @@ class cached_imap extends imap{
 			$message['from_cache']=true;
 			$message['new']=$values['new'];
 
-			if($create_temporary_attachment_files) {
-				for ($i = 0; $i < count($message['attachments']); $i ++) {
-					if($create_temporary_inline_attachment_files || empty($message['attachments'][$i]['replacement_url'])){
-						$tmp_file = File::checkfilename($GO_CONFIG->tmpdir.'attachments/'.$message['attachments'][$i]['name']);
-						$data = $this->get_message_part_decoded(
-										$uid,
-										$message['attachments'][$i]['imap_id'],
-										$message['attachments'][$i]['encoding'],
-										$message['attachments'][$i]['charset'],
-										$peek);
 
-						if($data && file_put_contents($tmp_file, $data)) {
-							$message['attachments'][$i]['tmp_file']=$tmp_file;
-						}
+			for ($i = 0; $i < count($message['attachments']); $i ++) {
+				if(($create_temporary_attachment_files && !empty($message['attachments'][$i]['replacement_url'])) || ($create_temporary_inline_attachment_files || empty($message['attachments'][$i]['replacement_url']))){
+					$tmp_file = File::checkfilename($GO_CONFIG->tmpdir.'attachments/'.$message['attachments'][$i]['name']);
+					$data = $this->get_message_part_decoded(
+									$uid,
+									$message['attachments'][$i]['imap_id'],
+									$message['attachments'][$i]['encoding'],
+									$message['attachments'][$i]['charset'],
+									$peek);
+
+					if($data && file_put_contents($tmp_file, $data)) {
+						$message['attachments'][$i]['tmp_file']=$tmp_file;
 					}
 				}
 			}
-
+			
 		
 
 			//go_debug($message);
