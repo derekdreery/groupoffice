@@ -163,15 +163,18 @@ class calendar extends db {
 			}
 		}
 		
-		$events = $cal->get_events_in_array($calendars,0,$start_time,$end_time);
-		$response['calendar']['count'] = count($events);
-		$response['calendar']['mtime']=0;
-		foreach($events as $event)
+		if(count($calendars))
 		{
-			if($event['mtime'] > $response['calendar']['mtime'])
+			$events = $cal->get_events_in_array($calendars,0,$start_time,$end_time);
+			$response['calendar']['count'] = count($events);
+			$response['calendar']['mtime']=0;
+			foreach($events as $event)
 			{
-			        $response['calendar']['mtime'] = $event['mtime'];
-			}		
+				if($event['mtime'] > $response['calendar']['mtime'])
+				{
+					$response['calendar']['mtime'] = $event['mtime'];
+				}
+			}
 		}
 	}
 
