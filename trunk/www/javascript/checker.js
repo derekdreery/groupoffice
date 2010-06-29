@@ -358,6 +358,7 @@ GO.Checker = function(){
 Ext.extend(GO.Checker, Ext.util.Observable, {
 
 	lastCount : 0,
+	params:{task: 'checker'},
 	
 	init : function(){
 		
@@ -367,9 +368,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 			run: function(){
 				Ext.Ajax.request({
 					url: BaseHref+'json.php',
-					params: {
-						task: 'checker'
-					},
+					params: this.params,
 					callback: function(options, success, response)
 					{
 						if(!success)

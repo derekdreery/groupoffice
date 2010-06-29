@@ -399,6 +399,42 @@ GO.calendar.MainPanel = function(config){
 		firstWeekday: parseInt(GO.settings.first_weekday)
 	});
 
+	this.daysGrid.store.on('load', function(){
+	    GO.checker.params.calendar_calendars = this.daysGrid.store.baseParams.calendars;
+	    GO.checker.params.calendar_start_time = this.daysGrid.store.baseParams.start_time;
+	    GO.checker.params.calendar_end_time = this.daysGrid.store.baseParams.end_time;
+	    
+	    GO.calendar.activePanel = this.getActivePanel();
+
+	},this);
+
+	this.monthGrid.store.on('load', function(){
+	    GO.checker.params.calendar_calendars = this.monthGrid.store.baseParams.calendars;
+	    GO.checker.params.calendar_start_time = this.monthGrid.store.baseParams.start_time;
+	    GO.checker.params.calendar_end_time = this.monthGrid.store.baseParams.end_time;
+
+	    GO.calendar.activePanel = this.getActivePanel();
+	},this);
+
+	this.listGrid.store.on('load', function(){
+	    GO.checker.params.calendar_calendars = this.listGrid.store.baseParams.calendars;
+	    GO.checker.params.calendar_start_time = this.listGrid.store.baseParams.start_time;
+	    GO.checker.params.calendar_end_time = this.listGrid.store.baseParams.end_time;
+
+	    GO.calendar.activePanel = this.getActivePanel();
+	},this);
+
+	this.viewGrid.on('storeload', function(e, count, mtime, params){
+	    GO.checker.params.calendar_start_time = params.start_time;
+	    GO.checker.params.calendar_end_time = params.end_time;
+	    GO.checker.params.calendar_view_id = params.view_id;
+	    
+	    GO.calendar.activePanel = this.getActivePanel();
+	    GO.calendar.activePanel.count = count;
+	    GO.calendar.activePanel.mtime = mtime;
+	}, this);
+
+
 	this.listStore = this.listGrid.store;
 
 	this.displayPanel = new Ext.Panel({
@@ -680,7 +716,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					}
 				}
 			});
-		}
+		}		
 
 		GO.calendar.eventDialogListeners= GO.calendar.eventDialogListeners || [];
 		GO.calendar.eventDialogListeners.push({
@@ -782,7 +818,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 		this.on('show', function(){
 			this.refresh();
-		}, this);
+		}, this);		
 	},
 	
 	init : function(){
@@ -1872,6 +1908,30 @@ GO.mainLayout.onReady(function(){
 			GO.calendar.showEventDialog(eventShowConfig);
 		}
 	});
+
+	//GO.checker is not available in some screens like accept invitation from calendar
+	if(GO.checker){
+
+		GO.checker.on('check', function(checker, data){
+			var tp = GO.mainLayout.getModulePanel('calendar');
+			if(tp && tp.isVisible())
+			{			
+				if(GO.calendar.activePanel.id != 'view-grid')
+				{					
+					if((GO.calendar.activePanel.store.reader.jsonData.count != data.calendar.count) || (GO.calendar.activePanel.store.reader.jsonData.mtime != data.calendar.mtime))
+					{
+						GO.calendar.activePanel.store.reload();
+					}
+				}else
+				{
+					if((GO.calendar.activePanel.count != data.calendar.count) || (GO.calendar.activePanel.mtime != data.calendar.mtime))
+					{
+						GO.calendar.activePanel.reload();
+					}
+				}
+			}
+		});
+	}
 });
 
 GO.calendar.showEventDialog = function(config){
