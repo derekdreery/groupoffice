@@ -49,7 +49,7 @@ class cached_imap extends imap{
 		//parent::__construct();
 
 		global $GO_CONFIG;
-		$this->disable_message_cache=false;//$GO_CONFIG->debug;
+		//$this->disable_message_cache=$GO_CONFIG->debug;
 
 	}
 
@@ -437,8 +437,7 @@ class cached_imap extends imap{
 				}
 			}
 
-			if($html_body_requested)
-				$message['attachments']=$this->remove_inline_images($message['attachments']);
+		
 
 			//go_debug($message);
 			return $message;
@@ -541,7 +540,11 @@ class cached_imap extends imap{
 		//URL replacements for inline images
 		//$message['url_replacements']=array();
 
+		//go_debug($struct);
+
 		$message['attachments']=$this->find_message_attachments($struct, $message['body_ids']);
+
+		
 		for($i=0,$max=count($message['attachments']);$i<$max;$i++){
 
 			//not needed
@@ -599,6 +602,8 @@ class cached_imap extends imap{
 			}
 		}
 
+		go_debug($message['attachments']);
+
 		if(isset($message['html_body'])){
 			$message['html_body']=$this->replace_inline_images($message['html_body'], $message['attachments']);
 		}
@@ -611,13 +616,12 @@ class cached_imap extends imap{
 		//go_debug($message)
 		//
 
-		if($html_body_requested)
-			$message['attachments']=$this->remove_inline_images($message['attachments']);
+		
 
 		return $message;
 	}
 
-	private function remove_inline_images($attachments){
+	public function remove_inline_images($attachments){
 		$removed = array();
 		for($i=0;$i<count($attachments);$i++) {
 			if(empty($attachments[$i]['replacement_url'])){
@@ -723,7 +727,7 @@ class cached_imap extends imap{
 		go_debug('Default charset: '.$this->default_charset);
 
 		$plain_parts = $this->find_body_parts($struct,'text', 'plain');
-		go_debug($plain_parts);
+		//go_debug($plain_parts);
 		for($i=0,$max=count($plain_parts['parts']);$i<$max;$i++)
 		{
 			if(empty($plain_parts['parts'][$i]['charset']))
@@ -733,7 +737,7 @@ class cached_imap extends imap{
 		}
 
 		$html_parts = $this->find_body_parts($struct,'text', 'html');
-		go_debug($html_parts);
+		//go_debug($html_parts);
 		for($i=0,$max=count($html_parts['parts']);$i<$max;$i++)
 		{
 			if(empty($html_parts['parts'][$i]['charset']))

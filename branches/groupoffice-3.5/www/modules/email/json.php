@@ -251,9 +251,6 @@ try {
 			$uid = $_POST['uid'];
 			$mailbox = $_POST['mailbox'];
 
-			$url_replacements=array();
-
-			//$account = $imap->open_account($account_id, $mailbox);
 			$account = $email->get_account($account_id);
 			$imap->set_account($account, $mailbox);
 
@@ -281,6 +278,8 @@ try {
 
 			$content = $ml->get_message_for_client($id, $path, $part_number, $task=='forward', true);
 		}
+
+		//go_debug($content);
 
 		switch($task) {
 			case "reply":
@@ -310,12 +309,14 @@ try {
 
 				//reattach non-inline attachments
 				foreach($content['attachments'] as $attachment) {
-					$response['data']['attachments'][]=array(
-										'tmp_name'=>$attachment['tmp_file'],
-										'name'=>$attachment['name'],
-										'size'=>$attachment["size"],
-										'type'=>File::get_filetype_description(File::get_extension($attachment['name']))
-						);
+					if(empty($attachment['replacement_url'])){
+						$response['data']['attachments'][]=array(
+											'tmp_name'=>$attachment['tmp_file'],
+											'name'=>$attachment['name'],
+											'size'=>$attachment["size"],
+											'type'=>File::get_filetype_description(File::get_extension($attachment['name']))
+							);
+					}
 				}
 				break;
 		}
@@ -386,7 +387,15 @@ try {
 			}
 		}
 
-		$response['data']['inline_attachments']=$content['url_replacements'];
+		$response['data']['inline_attachments']=array();
+		foreach($content['attachments'] as $attachment){
+			if(!empty($attachment['replacement_url'])){
+				$response['data']['inline_attachments'][]=array(
+						'id'=>$attachment['id'],
+						'tmp_file'=>$attachment['tmp_file'],
+						'url'=>$attachment['replacement_url']);
+			}
+		}
 
 		//go_debug($url_replacements);
 
@@ -531,11 +540,15 @@ try {
 
 				$response = $imap->get_message_with_body($uid, !empty($_POST['create_temporary_attachments']),false,false,!empty($_POST['plaintext']),empty($_POST['plaintext']));
 
+
 				//go_debug($response);
 
 				if(!empty($_POST['plaintext'])) {
 					$response['body']=$response['plain_body'];
 				}else {
+
+					$response['attachments']=$imap->remove_inline_images($response['attachments']);
+					
 					$response['body']=$response['html_body'];
 				}
 				unset($response['html_body'], $response['plain_body']);
