@@ -1914,7 +1914,7 @@ GO.mainLayout.onReady(function(){
 
 		GO.checker.on('check', function(checker, data){
 			var tp = GO.mainLayout.getModulePanel('calendar');
-			if(tp && tp.isVisible())
+			if(tp && tp.isVisible() && data.calendar)
 			{			
 				if(GO.calendar.activePanel.id != 'view-grid')
 				{					
