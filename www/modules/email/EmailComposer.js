@@ -768,10 +768,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		if(show)
 		{
 			this.ccCombo.onResize();
-		}
+		}		
 	},
 	
-	showBCC : function(show){	
+	showBCC : function(show){
 		this.bccCombo.getEl().up('.x-form-item').setDisplayed(show);
 		if(show)
 		{
@@ -902,6 +902,18 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				this.sendParams.mailing_group_id = config.mailing_group_id;
 
 				this.saveButton.setDisabled(true);
+			}else
+			{
+				this.ccFieldCheck.setChecked(GO.email.showCCfield == '1');
+				this.bccFieldCheck.setChecked(GO.email.showBCCfield == '1');
+				if(GO.email.showCCfield == '1')
+				{
+					this.showCC(true);
+				}
+				if(GO.email.showBCCfield == '1')
+				{
+					this.showBCC(true);
+				}
 			}
 
 			if (config.uid || config.template_id || config.loadUrl) {
@@ -1024,8 +1036,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.startAutoSave();
 		this.bodyContentAtWindowOpen=this.editor.getValue();		
 
-		this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
-		this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
+		//this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
+		//this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
 
 		Ext.getBody().unmask();
 		GO.email.EmailComposer.superclass.show.call(this);
@@ -1379,6 +1391,15 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					
 					if (action.result.account_id) {
 						this.account_id = action.result.account_id;
+					}
+
+					if(action.result.email_show_cc)
+					{
+					       GO.email.showCCfield = action.result.email_show_cc;
+					}
+					if(action.result.email_show_bcc)
+					{
+					       GO.email.showBCCfield = action.result.email_show_bcc;
 					}
 
 					if(!draft)
