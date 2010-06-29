@@ -119,6 +119,8 @@ class Go2Mime
 
 		$structure = Mail_mimeDecode::decode($params);
 
+		go_debug($structure);
+
 		if($part_number!='')
 		{
 			$parts_arr = explode('.',$part_number);
@@ -208,6 +210,8 @@ class Go2Mime
 		$this->response['inline_attachments']=array();
 		$this->response['body']='';
 
+		
+
 		$this->get_parts($structure, '', $create_tmp_attachments, $create_tmp_inline_attachments);
 
 		for ($i=0;$i<count($this->replacements);$i++)
@@ -216,7 +220,7 @@ class Go2Mime
 		}
 
 		//for compatibility with IMAP get_message_with_body
-		$this->response['url_replacements']=$this->response['inline_attachments'];
+		//$this->response['url_replacements']=$this->response['inline_attachments'];
 
 		return $this->response;
 	}
@@ -264,6 +268,7 @@ class Go2Mime
 					$filename=$part->d_parameters['filename*'];
 				}
 
+				
 
 				if (!empty($filename) && empty($part->headers['content-id']))
 				{
@@ -305,8 +310,8 @@ class Go2Mime
 						//$path = 'mimepart.php?path='.urlencode($path).'&part_number='.$part_number;
 						//replace inline images identified by a content id with the url to display the part by Group-Office
 						$url_replacement['id'] = $content_id;
-						$url_replacement['part_number'] = $part_number_prefix.$part_number;
-						$url_replacement['url'] = String::add_params_to_url($this->inline_attachments_url, 'part_number='.$url_replacement['part_number']);
+						//$url_replacement['part_number'] = $part_number_prefix.$part_number;
+						$url_replacement['url'] = String::add_params_to_url($this->inline_attachments_url, 'part_number='.$part_number_prefix.$part_number);
 
 						if($create_tmp_inline_attachments)
 						{
