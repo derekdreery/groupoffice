@@ -39,4 +39,11 @@ if(isset($_GET['mail_to']))
 	</script>
 	<?php
 }
+
+$email_show_cc = $GO_CONFIG->get_setting('email_show_cc', $GO_SECURITY->user_id);
+$email_show_bcc = $GO_CONFIG->get_setting('email_show_bcc', $GO_SECURITY->user_id);
+
+$GO_SCRIPTS_JS .='GO.email.showCCfield="'.$email_show_cc.'";'
+		. 'GO.email.showBCCfield="'.$email_show_bcc.'";';
+
 ?>

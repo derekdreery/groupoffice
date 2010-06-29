@@ -339,7 +339,13 @@ try {
 					}
 
 
-					if(!empty($_POST['cc'])) {
+					$response['email_show_cc'] = empty($_POST['cc']) ? '0' : '1';
+					$response['email_show_bcc'] = empty($_POST['bcc']) ? '0' : '1';
+					$GO_CONFIG->save_setting('email_show_cc', $response['email_show_cc'], $GO_SECURITY->user_id);
+					$GO_CONFIG->save_setting('email_show_bcc', $response['email_show_bcc'], $GO_SECURITY->user_id);
+
+					if(!empty($_POST['cc'])) 
+					{						
 						$cc_addresses = $RFC822->parse_address_list($_POST['cc']);
 
 						$swift_addresses=array();
