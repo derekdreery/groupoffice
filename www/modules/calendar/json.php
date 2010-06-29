@@ -410,6 +410,7 @@ try {
 			$events = $cal->get_events_in_array($calendars,0,$start_time,$end_time);
 			$response['results']=array();
 			$response['count']=0;
+			$response['mtime']=0;
 			foreach($events as $event) {
 				if($event['all_day_event'] == '1') {
 					$date_format = $_SESSION['GO_SESSION']['date_format'];
@@ -449,8 +450,13 @@ try {
 								'repeats'=>!empty($event['rrule']),
 								'all_day_event'=>$event['all_day_event'],
 								'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time']),
-								'read_only'=> $event['read_only'] ? true : false
+								'read_only'=> $event['read_only'] ? true : false								
 				);
+				
+				if($event['mtime'] > $response['mtime'])
+				{
+					$response['mtime'] = $event['mtime'];
+				}
 			}
 
 			if(isset($GO_MODULES->modules['addressbook']) && $calendar['show_bdays']) {
@@ -715,7 +721,8 @@ try {
 									'background'=>$event['background'],
 									'repeats'=>!empty($event['rrule']),
 									'private'=>$private,
-									'write_permission'=>$response[$cal->f('id')]['write_permission']
+									'write_permission'=>$response[$cal->f('id')]['write_permission'],
+									'mtime' => $event['mtime']
 					);
 					$count++;
 				}

@@ -79,7 +79,8 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 			"move" : true,
 			"eventResize" : true,
 			"eventDblClick" : true,
-			"zoom" : true
+			"zoom" : true,
+			"storeload": true
 	
 		});
 	    
@@ -771,22 +772,30 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					this.renderView();
 					
 					
-					
+					var total=0;
+					var mtime=0;
 					for(var calendar_id in this.jsonData)
 					{
 						
 						var events = this.jsonData[calendar_id].events;
-						
+
+						total += events.length;
 						for(var i=0; i< events.length;i++)
-						{						
-							
+						{
 							var eventData = events[i];
 							eventData['startDate'] = Date.parseDate(events[i]['start_time'], this.dateTimeFormat);
 							eventData['endDate'] = Date.parseDate(events[i]['end_time'], this.dateTimeFormat);
 							
 							this.addViewGridEvent(eventData);
+
+							if(eventData['mtime'] > mtime)
+							{
+							       mtime = eventData['mtime'];
+							}
 						}
-					}						
+					}
+
+					this.fireEvent("storeload", this, total, mtime, params);
 				}
 				this.unmask();
 			},

@@ -33,6 +33,7 @@ class calendar extends db {
 		$events->add_listener('add_user', __FILE__, 'calendar', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'calendar', 'build_search_index');
 		$events->add_listener('check_database', __FILE__, 'calendar', 'check_database');
+		$events->add_listener('checker', __FILE__, 'calendar', 'check_unseen');
 	}
 
 	public static function check_database() {
@@ -140,6 +141,37 @@ class calendar extends db {
 				$rm = new reminder();
 				$rm->add_reminder($reminder);
 			}
+		}
+	}
+
+	public static function check_unseen(&$response)
+	{
+		$view_id = isset($_REQUEST['calendar_view_id']) ? $_REQUEST['calendar_view_id'] : 0;
+		$start_time=isset($_REQUEST['calendar_start_time']) ? strtotime($_REQUEST['calendar_start_time']) : 0;
+		$end_time=isset($_REQUEST['calendar_end_time']) ? strtotime($_REQUEST['calendar_end_time']) : 0;
+		$calendars = isset($_REQUEST['calendar_calendars']) ? json_decode($_REQUEST['calendar_calendars'], true) : array();
+
+		$cal = new calendar();
+
+		if($view_id)
+		{
+			$calendars = array();
+			$cal->get_view_calendars($view_id);
+			while($view_calendar = $cal->next_record())
+			{
+			        $calendars[] = $cal->f('id');
+			}
+		}
+		
+		$events = $cal->get_events_in_array($calendars,0,$start_time,$end_time);
+		$response['calendar']['count'] = count($events);
+		$response['calendar']['mtime']=0;
+		foreach($events as $event)
+		{
+			if($event['mtime'] > $response['calendar']['mtime'])
+			{
+			        $response['calendar']['mtime'] = $event['mtime'];
+			}		
 		}
 	}
 
