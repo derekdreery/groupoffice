@@ -3,9 +3,13 @@ require('Group-Office.php');
 
 header('Content-Type: text/html; charset=UTF-8');
 
-$icon = $GO_CONFIG->theme_url.$GO_THEME->theme.'/images/groupoffice.ico';
+$GO_THEME->set_theme('ExtJS');
+
+$icon = $GO_THEME->theme_path.'images/groupoffice.ico';
 if(!file_exists($icon))
 	$icon = $GO_CONFIG->theme_url.'Default/images/groupoffice.ico';
+else
+	$icon = $GO_THEME->theme_url.'images/groupoffice.ico';
 
 $style = $GO_CONFIG->theme_url.$GO_THEME->theme.'/reminder.css';
 if(!file_exists($style))
