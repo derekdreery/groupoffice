@@ -197,6 +197,8 @@ class GoSwift extends Swift_Mailer{
 		$RFC822 = new RFC822();
 		$to_addresses = $RFC822->parse_address_list($email_to);
 
+		//throw new Exception(var_export($to_addresses, true));
+
 		$recipients=array();
 		foreach($to_addresses as $address)
 		{

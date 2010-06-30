@@ -103,8 +103,8 @@ class RFC822
 				break;							
 				
 				case ',':
-				case ';':			
-					if($this->quote || (!$this->email_found && !String::validate_email($this->buffer)))
+				case ';':
+					if($this->quote || (!$this->email_found && !String::validate_email(trim($this->buffer))))
 					{
 						$this->buffer .= $char;				
 					}else
