@@ -74,9 +74,12 @@ class GO_THEME
 	}
 
 
-	function set_theme(){
+	function set_theme($theme=false){
 
 		global $GO_CONFIG;
+
+		if($theme)
+			$_SESSION['GO_SESSION']['theme'] = $theme;
 
 		$_SESSION['GO_SESSION']['theme'] =
 		isset($_SESSION['GO_SESSION']['theme']) ?
