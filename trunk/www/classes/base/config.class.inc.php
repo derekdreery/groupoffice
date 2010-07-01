@@ -1041,21 +1041,29 @@ class GO_CONFIG {
 	 * @access public
 	 */
 	function set_full_url() {
-		if(isset($_SERVER["HTTP_HOST"])) {
-			$https = isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1");
-			$url = 'http';
-			if ($https) {
-				$url .= "s";
-			}
-			/*$url .= "://";
-			if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) {
-				$url .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$this->host;
-			} else {
-				$url .= $_SERVER["HTTP_HOST"].$this->host;
-			}*/
+		//full_url may be configured permanent in config.php. If not then 
+		//autodetect it and put it in the session. It can be used by wordpress for
+		//example.
+		if(empty($this->full_url)){
+			if(!isset($_SESSION['GO_SESSION']['full_url']) && isset($_SERVER["HTTP_HOST"])) {
+				$https = isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1");
+				$_SESSION['GO_SESSION']['full_url'] = 'http';
+				if ($https) {
+					$_SESSION['GO_SESSION']['full_url'] .= "s";
+				}
+				/*$url .= "://";
+				if ((!$https && $_SERVER["SERVER_PORT"] != "80") || ($https && $_SERVER["SERVER_PORT"] != "443")) {
+					$url .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"].$this->host;
+				} else {
+					$url .= $_SERVER["HTTP_HOST"].$this->host;
+				}*/
 
-			$url .= '://'.$_SERVER["HTTP_HOST"].$this->host;
-			$this->full_url=$url;
+				$_SESSION['GO_SESSION']['full_url'] .= '://'.$_SERVER["HTTP_HOST"].$this->host;
+			}
+			$this->full_url=$_SESSION['GO_SESSION']['full_url'];
+		}else
+		{
+			$_SESSION['GO_SESSION']['full_url']=$this->full_url;
 		}
 	}
 
