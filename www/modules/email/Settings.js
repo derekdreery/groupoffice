@@ -22,6 +22,11 @@ GO.email.SettingsPanel = function(config) {
 		hideLabel:true,
 		checked:GO.email.useHtmlMarkup,
 		name:'use_html_markup'
+	}),this.skipUnknownRecipients = new Ext.form.Checkbox({
+		boxLabel:GO.email.lang.skipUnknownRecipients,
+		hideLabel:true,
+		checked:GO.email.skipUnknownRecipients,
+		name:'skip_unknown_recipients'
 	})];
 
 
@@ -35,6 +40,7 @@ Ext.extend(GO.email.SettingsPanel, Ext.Panel, {
 
 	onSaveSettings : function() {
 		GO.email.useHtmlMarkup=this.useHtml.getValue();
+		GO.email.skipUnknownRecipients=this.skipUnknownRecipients.getValue();
 	}
 
 });

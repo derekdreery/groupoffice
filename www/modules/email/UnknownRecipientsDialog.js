@@ -55,12 +55,12 @@ GO.email.UnknownRecipientsDialog = Ext.extend(Ext.Window, {
 		    GO.addressbook.contactDialog.formPanel.form.setValues(record.data);
 		}else
 		{
-		     if(!GO.email.findContactDialog)
-		     {
-			 GO.email.findContactDialog = new GO.email.FindContactDialog();
-		     }
+		    if(!GO.email.findContactDialog)
+		    {
+			GO.email.findContactDialog = new GO.email.FindContactDialog();
+		    }
 		     
-		     GO.email.findContactDialog.show(record.data);
+		    GO.email.findContactDialog.show(record.data);
 		}
 
 		var store = grid.getStore();
@@ -75,9 +75,9 @@ GO.email.UnknownRecipientsDialog = Ext.extend(Ext.Window, {
 				
 	this.grid = new GO.grid.GridPanel({
 	    store: this.store,
-	    autoHeight:true,
 	    plugins:action,
 	    border:false,
+	    region:'center',
 	    loadMask:true,
 	    columns : [{
 		header : GO.lang.strName,
@@ -106,15 +106,47 @@ GO.email.UnknownRecipientsDialog = Ext.extend(Ext.Window, {
 	this.closeAction='hide';
 	this.items= new Ext.Panel({
 	    autoScroll:true,
+	    layout:'border',
 	    items: [
 	    new Ext.Panel({
 		border: false,
+		region:'north',
 		html: GO.email.lang.addUnknownRecipientsText,
 		cls:'go-form-panel'
 	    }),
-	    this.grid
+	    this.grid,
+	    new Ext.Panel({
+		border: false,
+		region:'south',
+		autoHeight:true,
+		items:[
+		this.skipUnknownRecipients = new Ext.form.Checkbox({
+		    boxLabel:GO.email.lang.skipUnknownRecipientsAction,
+		    hideLabel:true,
+		    checked:false,
+		    name:'skip_unknown_recipients',
+		    listeners : {
+			check : function(field, checked)
+			{
+			    GO.email.skipUnknownRecipients = checked;
+			    
+			    Ext.Ajax.request({
+				url: GO.settings.modules.email.url+ 'action.php',
+				params: {
+				    checked: checked,
+				    task: 'save_skip_unknown_recipients'
+				},				
+				scope: this
+			    });
+			},
+			scope : this
+		    }
+		})
+		],
+		cls:'go-form-panel'
+	    })
 	    ]
-	});
+	});	
 		
 	GO.email.UnknownRecipientsDialog.superclass.initComponent.call(this);
     }
