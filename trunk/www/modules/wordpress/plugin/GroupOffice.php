@@ -13,6 +13,21 @@
   Author URI: http://www.intermesh.nl/en/
  */
 
+function groupoffice_get_database(){
+	$go_config = get_option('groupoffice_config');
+
+	require_once($go_config['config_file']);
+	require_once($config['root_path'].'classes/database/base_db.class.inc.php');
+	require_once($config['root_path'].'classes/database/mysql.class.inc.php');
+
+
+	$db = new db();
+	$db->set_parameters($config['db_host'], $config['db_name'], $config['db_user'], $config['db_pass'], $config['db_port']);
+
+	return $db;
+
+}
+
 function groupoffice_unserializesession($data) {
 	$vars = preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
 									$data, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
@@ -25,21 +40,26 @@ function groupoffice() {
 
 	global $current_user;
 
-
+	//import Group-Office session data
 	if (isset($_REQUEST['GO_SID'])) {
-		//determine WordPress user account to impersonate
-
 		$fname = session_save_path() . "/sess_" . $_REQUEST['GO_SID'];
 		if (file_exists($fname)) {
 			$data = file_get_contents($fname);
 			$data = groupoffice_unserializesession($data);
 			$_SESSION['GO_SESSION'] = $data['GO_SESSION'];
+
+			$site_data['full_url']=$_SESSION['GO_SESSION']['full_url'];
+			$site_data['config_file']=$_SESSION['GO_SESSION']['config_file'];
+
+			update_option('groupoffice_config', $site_data);
+
+
+
+			//var_dump($_SESSION['GO_SESSION']);
 		}
 	}
 
-	//var_dump($_SESSION['GO_SESSION']['username']);
-	//$_SESSION['GO_SESSION']['username']='admin';
-
+	//Create and login Group-Office user
 	if (isset($_SESSION['GO_SESSION']['username']) && (!is_user_logged_in() || $current_user->user_login !=$_SESSION['GO_SESSION']['username'])) {
 		//get user's ID
 		$user = get_userdatabylogin($_SESSION['GO_SESSION']['username']);
@@ -57,6 +77,7 @@ function groupoffice() {
 
 	}
 	if (isset($_REQUEST['GO_SID'])) {
+		//direct link to wp-admin didn't work so we go to the main page and redirect
 		wp_redirect(admin_url());
 		exit();
 	}
