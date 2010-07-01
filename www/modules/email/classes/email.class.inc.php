@@ -216,11 +216,11 @@ class email extends db {
 
 		global $GO_MODULES, $GO_CONFIG, $GO_SECURITY;
 
-		if($GO_MODULES->has_module('email')) {
-			$value = isset($_POST['use_html_markup']) ? '0' : '1';			
-			$GO_CONFIG->save_setting('email_use_plain_text_markup', $value, $GO_SECURITY->user_id);
-			$value = isset($_POST['skip_unknown_recipients']) ? '1' : '0';
-			$GO_CONFIG->save_setting('email_skip_unknown_recipients', $value, $GO_SECURITY->user_id);
+		if($GO_MODULES->has_module('email'))
+		{
+			$GO_CONFIG->save_setting('email_use_plain_text_markup', isset($_POST['use_html_markup']) ? '0' : '1', $GO_SECURITY->user_id);
+			$GO_CONFIG->save_setting('email_skip_unknown_recipients', isset($_POST['skip_unknown_recipients']) ? '1' : '0', $GO_SECURITY->user_id);
+			$GO_CONFIG->save_setting('email_always_request_notification', isset($_POST['always_request_notification']) ? '1' : '0', $GO_SECURITY->user_id);
 		}
 	}
 

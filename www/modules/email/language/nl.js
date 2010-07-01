@@ -158,3 +158,4 @@ GO.email.lang.replaceEmailText='Deze contactpersoon heeft al drie email addresse
 GO.email.lang.skipUnknownRecipientsAction='Dit scherm in het vervolg niet tonen';
 GO.email.lang.skipUnknownRecipients='Toon onbekende ontvanger dialoog niet';
 
+GO.email.lang.alwaysRequestNotification='Altijd om een leesbevestiging vragen';
