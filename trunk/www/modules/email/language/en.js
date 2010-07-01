@@ -173,3 +173,5 @@ GO.email.lang.searchTo='Recipient';
 GO.email.lang.searchCC='Recipient (CC)';
 
 GO.email.lang.youHaveNewMails = 'You have {new} new e-mail(s)';
+
+GO.email.lang.replaceEmailText='This contact already has three email addresses in it\'s profile. You can replace one of the existing ones below by clicking on the email address you want replaced.';

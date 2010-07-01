@@ -174,55 +174,12 @@ GO.email.AddressbookDialog = function(config) {
 	items.push(this.addressbooksGrid);
 */
 	if (GO.addressbook) {
-		this.contactsStore = new GO.data.JsonStore({
-			url : GO.settings.modules.addressbook.url + 'json.php',
-			baseParams : {
-				task : 'search_email_contacts'
-			},
-			root : 'results',
-			id : 'email',
-			totalProperty : 'total',
-			fields : ['id', 'name',  'email', 'ab_name'],
-			remoteSort : true
-		});
-
-		this.contactsSearchField = new GO.form.SearchField({
-			store : this.contactsStore,
-			width : 320
-		});
-
-		this.contactsGrid = new GO.grid.GridPanel({
-			title : GO.addressbook.lang.contacts,
-			paging : true,
-			border : false,
-			store : this.contactsStore,
-			view : new Ext.grid.GridView({
-				autoFill : true,
-				forceFit : true
-			}),
-			columns : [{
-				header : GO.lang['strName'],
-				dataIndex : 'name',
-				css : 'white-space:normal;',
-				sortable : true
-			}, {
-				header : GO.lang['strEmail'],
-				dataIndex : 'email',
-				css : 'white-space:normal;',
-				sortable : true
-			}, {
-				header : GO.addressbook.lang.addressbook,
-				dataIndex : 'ab_name',
-				css : 'white-space:normal;',
-				sortable : true
-			}],
-			sm : new Ext.grid.RowSelectionModel(),
-			tbar : [GO.lang['strSearch'] + ': ', ' ',
-			this.contactsSearchField]
+		this.contactsGrid = new GO.email.ContactsGrid({
+			title:GO.addressbook.lang.contacts
 		});
 
 		this.contactsGrid.on('show', function() {
-			this.contactsStore.load();
+			this.contactsGrid.store.load();
 		}, this);
 
 		this.companiesStore = new GO.data.JsonStore({

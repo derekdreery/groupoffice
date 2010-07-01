@@ -50,4 +50,7 @@ $lang['addressbook']['defaultSalutation']='Dear [Mr./Mrs.] {middle_name} {last_n
 $lang['addressbook']['multipleSelected']='Multiple addressbooks selected';
 $lang['addressbook']['incomplete_delete_contacts']='You don\'t have permission to delete all selected contacts';
 $lang['addressbook']['incomplete_delete_companies']='You don\'t have permission to delete all selected companies';
+
+$lang['addressbook']['emailAlreadyExists']='Emailadres is already added to this contact';
+$lang['addressbook']['emailDoesntExists']='Emailadres was not found';
 ?>
