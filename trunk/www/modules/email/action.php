@@ -330,12 +330,15 @@ try {
 					$RFC822 = new RFC822();
 					$to_addresses = $RFC822->parse_address_list($_POST['to']);
 
+					$skip_unknown_recipients = $GO_CONFIG->get_setting('email_skip_unknown_recipients', $GO_SECURITY->user_id);
+
 					//used for gpg encryption
-					$all_recipients = array();
+					$all_recipients = array();					
 
 					foreach($to_addresses as $address) {
 						$all_recipients[]=$address['email'];
-						add_unknown_recipient($address['email'], $address['personal']);
+						if(!$skip_unknown_recipients)
+						    add_unknown_recipient($address['email'], $address['personal']);
 					}
 
 
@@ -352,7 +355,8 @@ try {
 						foreach($cc_addresses as $address) {
 							$all_recipients[]=$address['email'];
 
-							add_unknown_recipient($address['email'], $address['personal']);
+							if(!$skip_unknown_recipients)
+							    add_unknown_recipient($address['email'], $address['personal']);
 							$swift_addresses[$address['email']]=$address['personal'];
 						}
 						$swift->message->setCc($swift_addresses);
@@ -364,7 +368,9 @@ try {
 						$swift_addresses=array();
 						foreach($bcc_addresses as $address) {
 							$all_recipients[]=$address['email'];
-							add_unknown_recipient($address['email'], $address['personal']);
+							
+							if(!$skip_unknown_recipients)
+							    add_unknown_recipient($address['email'], $address['personal']);
 							$swift_addresses[$address['email']]=$address['personal'];
 						}
 						$swift->message->setBcc($swift_addresses);
@@ -997,6 +1003,15 @@ try {
 			}
 			$success=true;
 			break;
+
+		case 'save_skip_unknown_recipients':
+
+		    $value = (isset($_POST['checked']) && $_POST['checked'] == 'true') ? '1' : '0';
+		    $GO_CONFIG->save_setting('email_skip_unknown_recipients', $value, $GO_SECURITY->user_id);
+		    
+		    $response['success'] = true;
+		    break;
+		
 		/* {TASKSWITCH} */
 	}
 }catch(Exception $e) {

@@ -8,6 +8,13 @@ if(!empty($use_plain_text_markup))
 else
 	$GO_SCRIPTS_JS .= 'true;';
 
+$GO_SCRIPTS_JS .= 'GO.email.skipUnknownRecipients=';
+$skip_unknown_recipients = $GO_CONFIG->get_setting('email_skip_unknown_recipients', $GO_SECURITY->user_id);
+if(empty($skip_unknown_recipients))
+	$GO_SCRIPTS_JS .= 'false;';
+else
+	$GO_SCRIPTS_JS .= 'true;';
+
 if(isset($_GET['mail_to']))
 {
 	//$qs=strtolower(str_replace('mailto:','mail_to=', $_GET['mail_to']));

@@ -155,3 +155,6 @@ GO.email.lang.searchCC='Ontvanger (CC)';
 GO.email.lang.youHaveNewMails = 'U heeft {new} nieuwe e-mail bericht(en)';
 
 GO.email.lang.replaceEmailText='Deze contactpersoon heeft al drie email addressen in het profiel. U kunt 1 van de bestaande vervangen door te klikken op het email adres dat u wilt vervangen.';
+GO.email.lang.skipUnknownRecipientsAction='Dit scherm in het vervolg niet tonen';
+GO.email.lang.skipUnknownRecipients='Toon onbekende ontvanger dialoog niet';
+
