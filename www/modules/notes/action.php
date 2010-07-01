@@ -30,12 +30,7 @@ try{
 		case 'save_category':
 				
 			$category_id=$category['id']=isset($_POST['category_id']) ? ($_POST['category_id']) : 0;
-
-			if(isset($_POST['user_id']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
-			{
-				$category['user_id']=$_POST['user_id'];
-			}
-
+			$category['user_id'] = (isset($_REQUEST['user_id']) && $_REQUEST['user_id']) ? $_REQUEST['user_id'] : $GO_SECURITY->user_id;
 			$category['name']=$_POST['name'];
 
 			if($category['id']>0)
@@ -46,15 +41,18 @@ try{
 				{
 					throw new AccessDeniedException();
 				}
+
+				if(!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+				{
+					unset($category['user_id']);
+				}
 				
 				$notes->update_category($category, $old_category);
 				$response['success']=true;
 
 			}else
-			{
-				$category['user_id']=$GO_SECURITY->user_id;
-				
-				$response['acl_id']=$category['acl_id']=$GO_SECURITY->get_new_acl('notes');
+			{				
+				$response['acl_id']=$category['acl_id']=$GO_SECURITY->get_new_acl('notes', $category['user_id']);
 				
 				$category_id= $notes->add_category($category);							
 
