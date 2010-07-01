@@ -435,6 +435,9 @@ try {
 				if ($owncolor)
 					$event['background'] = $default_bg[$event['calendar_id']];
 
+				$user = $GO_USERS->get_user($event['user_id']);
+				$username = String::format_name($user);
+
 				$response['results'][] = array(
 								'id'=>$response['count']++,
 								'event_id'=> $event['id'],
@@ -450,7 +453,8 @@ try {
 								'repeats'=>!empty($event['rrule']),
 								'all_day_event'=>$event['all_day_event'],
 								'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time']),
-								'read_only'=> $event['read_only'] ? true : false								
+								'read_only'=> $event['read_only'] ? true : false,
+								'username' => $username
 				);
 				
 				if($event['mtime'] > $response['mtime'])
