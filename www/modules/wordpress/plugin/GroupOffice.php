@@ -23,32 +23,42 @@ function groupoffice_unserializesession($data) {
 
 function groupoffice() {
 
-	if (isset($_GET['GO_SID'])) {
+	global $current_user;
+
+
+	if (isset($_REQUEST['GO_SID'])) {
 		//determine WordPress user account to impersonate
 
-		$fname = session_save_path() . "/sess_" . $_GET['GO_SID'];
+		$fname = session_save_path() . "/sess_" . $_REQUEST['GO_SID'];
 		if (file_exists($fname)) {
 			$data = file_get_contents($fname);
 			$data = groupoffice_unserializesession($data);
-
-			//	var_dump($data);
-
-			$user_login = $data['GO_SESSION']['username'];
-
-			//get user's ID
-			$user = get_userdatabylogin($user_login);
-			if($user){
-				$user_id = $user->ID;
-			}else
-			{
-				$user_id = groupoffice_add_user($data['GO_SESSION']);
-			}
-
-			//login
-			wp_set_current_user($user_id, $user_login);
-			wp_set_auth_cookie($user_id);
-			do_action('wp_login', $user_login);
+			$_SESSION['GO_SESSION'] = $data['GO_SESSION'];
 		}
+	}
+
+	//var_dump($_SESSION['GO_SESSION']['username']);
+	//$_SESSION['GO_SESSION']['username']='admin';
+
+	if (isset($_SESSION['GO_SESSION']['username']) && (!is_user_logged_in() || $current_user->user_login !=$_SESSION['GO_SESSION']['username'])) {
+		//get user's ID
+		$user = get_userdatabylogin($_SESSION['GO_SESSION']['username']);
+
+		if($user){
+			$user_id = $user->ID;
+		}else
+		{
+			$user_id = groupoffice_add_user($_SESSION['GO_SESSION']);
+		}
+
+		wp_set_current_user($user_id, $_SESSION['GO_SESSION']['username']);
+		wp_set_auth_cookie($user_id);
+		do_action('wp_login', $_SESSION['GO_SESSION']['username']);
+
+	}
+	if (isset($_REQUEST['GO_SID'])) {
+		wp_redirect(admin_url());
+		exit();
 	}
 }
 
