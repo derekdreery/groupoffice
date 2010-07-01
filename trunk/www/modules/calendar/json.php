@@ -536,7 +536,7 @@ try {
 					$tasks2= new tasks();
 
 
-					$tasks->get_tasks($visible_lists, 0, false, 'due_time', 'ASC', 0, 0, true);
+					$tasks->get_tasks($visible_lists, 0, false, 'due_time', 'ASC', 0, 0, true, '', array(), $start_time, $end_time);
 					while($task = $tasks->next_record()) {
 
 						if(!isset($tasklists_names[$task['tasklist_id']])){
