@@ -638,7 +638,9 @@ class tasks extends db
 			$offset=0,
 			$show_inactive=false,
 			$search_query='',
-                        $categories=array()
+                        $categories=array(),
+			$start_time='',
+			$end_time=''
 		) {
 
 		global $GO_MODULES;
@@ -719,6 +721,16 @@ class tasks extends db
                     $sql .= "t.category_id IN (".implode(',', $categories).")";
                 }
 
+		if($start_time && $end_time)
+		{		  
+		    if($where) {
+			    $sql .= " AND ";
+		    }else {
+			    $where=true;
+			    $sql .= " WHERE ";
+		    }
+		    $sql .= "t.start_time >= ".intval($start_time). " AND t.due_time <= ".intval($end_time);
+		}
 		if($sort_field != '' && $sort_order != '')
 		{			
 			$sql .= " ORDER BY ".$this->escape($sort_field)." ".$this->escape($sort_order);
