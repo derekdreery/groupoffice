@@ -93,7 +93,6 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 			defaultType: 'textfield',
 			border: false,
 			bodyStyle:'padding:5px',
-			waitMsgTarget:true,
 			items:[
 			{
 				fieldLabel: GO.lang['strName'],
@@ -103,7 +102,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 			},
 			this.selectUser = new GO.form.SelectUser({
 				fieldLabel: GO.lang['strUser'],
-				disabled: !GO.settings.modules['addressbook']['write_permission'],
+				disabled : !GO.settings.has_admin_permission,
 				allowBlank: false,
 				anchor:'100%'
 			}),
