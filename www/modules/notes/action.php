@@ -30,10 +30,12 @@ try{
 		case 'save_category':
 				
 			$category_id=$category['id']=isset($_POST['category_id']) ? ($_POST['category_id']) : 0;
-		
-			if(isset($_POST['user_id']))
+
+			if(isset($_POST['user_id']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+			{
 				$category['user_id']=$_POST['user_id'];
-				
+			}
+
 			$category['name']=$_POST['name'];
 
 			if($category['id']>0)
