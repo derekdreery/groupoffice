@@ -869,6 +869,10 @@ try {
 				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new AccessDeniedException();
 				}
+				if(!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+				{
+					unset($calendar['user_id']);
+				}
 				$cal->update_calendar($calendar, $old_calendar);
 			}else {
 				if(!$GO_MODULES->modules['calendar']['write_permission']) {
