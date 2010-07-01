@@ -133,6 +133,7 @@ Ext.extend(GO.tasks.CategoryDialog, Ext.Window, {
 				this.selectUser = new GO.form.SelectUser({
 					fieldLabel: GO.lang['strOwner'],
 					value: GO.settings.user_id,
+					disabled : !GO.settings.has_admin_permission,
 					hiddenName:'user_id'
 				}),{
 					fieldLabel: GO.lang['strName'],
