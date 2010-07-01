@@ -47,3 +47,6 @@ $lang['addressbook']['defaultSalutation']='Geachte [heer/mevrouw] {middle_name} 
 $lang['addressbook']['multipleSelected']='Meerdere adresboeken geselecteerd';
 $lang['addressbook']['incomplete_delete_contacts']='U heeft niet voldoende rechten om alle geselecteerde contacten te verwijderen';
 $lang['addressbook']['incomplete_delete_companies']='U heeft niet voldoende rechten om alle geselecteerde bedrijven te verwijderen';
+
+$lang['addressbook']['emailAlreadyExists']='Emailadres is al toegevoegd aan deze contactpersoon';
+$lang['addressbook']['emailDoesntExists']='Emailadres is niet gevonden';
