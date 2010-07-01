@@ -285,6 +285,10 @@ try {
 				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new AccessDeniedException();
 				}
+				if(!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+				{
+					unset($tasklist['user_id']);
+				}				
 				$tasks->update_tasklist($tasklist, $old_tasklist);
 			}else {
 				if(!$GO_MODULES->modules['tasks']['write_permission']) {

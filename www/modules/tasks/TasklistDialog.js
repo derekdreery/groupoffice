@@ -19,7 +19,7 @@ GO.tasks.TasklistDialog = function(config)
 		items: [
 		this.selectUser = new GO.form.SelectUser({
 			fieldLabel: GO.lang['strUser'],
-			disabled: !GO.settings.modules['tasks']['write_permission'],
+			disabled : !GO.settings.has_admin_permission,
 			value: GO.settings.user_id,
 			anchor: '100%'
 		}),
