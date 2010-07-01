@@ -90,7 +90,7 @@ Ext.extend(GO.notes.CategoryDialog, Ext.Window,{
 				
 				success:function(form, action)
 				{					
-					this.setWritePermission(action.result.data.write_permission);					
+					this.setWritePermission(action.result.data.write_permission);
 					this.readPermissionsTab.setAcl(action.result.data.acl_id);
 					
 					this.selectUser.setRemoteText(action.result.data.user_name);
@@ -174,7 +174,7 @@ Ext.extend(GO.notes.CategoryDialog, Ext.Window,{
 			autoScroll:true,
 			items:[this.selectUser = new GO.form.SelectUser({
 				fieldLabel: GO.lang['strUser'],
-				disabled: !GO.settings.modules['notes']['write_permission'],
+				disabled : !GO.settings.has_admin_permission,
 				value: GO.settings.user_id,
 				anchor: '100%'
 			}),{
