@@ -293,7 +293,7 @@ try {
 
 		    $addressbook['id']=$addressbook_id;
 
-		    if(isset($_REQUEST['user_id']))
+		    if(isset($_REQUEST['user_id']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 			$addressbook['user_id']=$_REQUEST['user_id'];
 
 		    $addressbook['default_salutation']=$_REQUEST['default_salutation'];
