@@ -880,6 +880,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.toCombo.getEl().up('.x-form-item').setDisplayed(true);
 			this.sendURL = GO.settings.modules.email.url + 'action.php';
 			this.saveButton.setDisabled(false);
+		
+			this.notifyCheck.setChecked(GO.email.alwaysRequestNotification);
 			
 			if(config.move)
 			{

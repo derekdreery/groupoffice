@@ -27,6 +27,11 @@ GO.email.SettingsPanel = function(config) {
 		hideLabel:true,
 		checked:GO.email.skipUnknownRecipients,
 		name:'skip_unknown_recipients'
+	}),this.alwaysRequestNotification = new Ext.form.Checkbox({
+		boxLabel:GO.email.lang.alwaysRequestNotification,
+		hideLabel:true,
+		checked:GO.email.alwaysRequestNotification,
+		name:'always_request_notification'
 	})];
 
 
@@ -41,6 +46,7 @@ Ext.extend(GO.email.SettingsPanel, Ext.Panel, {
 	onSaveSettings : function() {
 		GO.email.useHtmlMarkup=this.useHtml.getValue();
 		GO.email.skipUnknownRecipients=this.skipUnknownRecipients.getValue();
+		GO.email.alwaysRequestNotification=this.alwaysRequestNotification.getValue();
 	}
 
 });

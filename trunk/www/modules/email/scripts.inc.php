@@ -15,6 +15,13 @@ if(empty($skip_unknown_recipients))
 else
 	$GO_SCRIPTS_JS .= 'true;';
 
+$GO_SCRIPTS_JS .= 'GO.email.alwaysRequestNotification=';
+$always_request_notification = $GO_CONFIG->get_setting('email_always_request_notification', $GO_SECURITY->user_id);
+if(empty($always_request_notification))
+	$GO_SCRIPTS_JS .= 'false;';
+else
+	$GO_SCRIPTS_JS .= 'true;';
+
 if(isset($_GET['mail_to']))
 {
 	//$qs=strtolower(str_replace('mailto:','mail_to=', $_GET['mail_to']));
