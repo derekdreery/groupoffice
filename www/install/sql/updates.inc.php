@@ -403,7 +403,7 @@ $updates[]= "CREATE TABLE IF NOT EXISTS `go_reminders_users` (
 $updates[]= "INSERT INTO `go_reminders_users` SELECT id,user_id,time,mail_send FROM go_reminders;";
 
 
-$updates[]= "ALTER TABLE  `go_reminders` DROP  DROP  `user_id` , DROP  `mail_send` ;";
+$updates[]= "ALTER TABLE  `go_reminders` DROP `user_id`, DROP  `mail_send` ;";
 
 $updates[]= "ALTER TABLE  `go_reminders` ADD  `text` TEXT NOT NULL";
 
