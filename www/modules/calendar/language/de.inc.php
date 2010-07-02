@@ -1,7 +1,7 @@
 <?php
 require($GO_LANGUAGE->get_fallback_language_file('calendar'));
 $lang['calendar']['name']='Kalender';
-$lang['calendar']['description']='Benutzermodul zum Verwalten von Terminen';
+$lang['calendar']['description']='Modul zum Verwalten von Terminen';
 $lang['link_type'][1]='Termin';
 $lang['calendar']['groupView']='Gruppenansicht';
 $lang['calendar']['event']='Ereignis';

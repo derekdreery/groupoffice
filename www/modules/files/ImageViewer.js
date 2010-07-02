@@ -128,15 +128,17 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 				if(h>bodySize.height){
 					var ratio = bodySize.height/h;
 					w=w*ratio
-					h=this.originalImgSize.height*ratio
+					h=h*ratio
 				}
 
 				this.imgEl.setWidth(w);
 				this.imgEl.setHeight(h);
 				this.imgEl.setPositioning({left:0,top:0});
-				
-				//var topMargin = (bodySize.height-h)/2;
-				//this.imgEl.setStyle('margin-top', topMargin+'px');
+
+				if(h<bodySize.height){
+					var topMargin = (bodySize.height-h)/2;
+					this.imgEl.setStyle('margin-top', topMargin+'px');
+				}
 				
 				this.body.unmask();
 			}

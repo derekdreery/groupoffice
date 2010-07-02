@@ -49,7 +49,7 @@ class cached_imap extends imap{
 		//parent::__construct();
 
 		global $GO_CONFIG;
-		$this->disable_message_cache=$GO_CONFIG->debug;
+		//$this->disable_message_cache=$GO_CONFIG->debug;
 
 	}
 
@@ -404,6 +404,9 @@ class cached_imap extends imap{
 
 			if($this->get_body_parts($plain_body_requested,$html_body_requested, $struct, $message, $peek))
 			{
+				if($html_body_requested){
+					$message['html_body']=$this->replace_inline_images($message['html_body'], $message['attachments']);
+				}
 				//additional body part added
 				$cached_message['uid']=$uid;
 				$cached_message['folder_id']=$this->folder['id'];
@@ -416,8 +419,9 @@ class cached_imap extends imap{
 			$message['from_cache']=true;
 			$message['new']=$values['new'];
 
-			if($create_temporary_attachment_files) {
-				for ($i = 0; $i < count($message['attachments']); $i ++) {
+
+			for ($i = 0; $i < count($message['attachments']); $i ++) {
+				if(($create_temporary_attachment_files && !empty($message['attachments'][$i]['replacement_url'])) || ($create_temporary_inline_attachment_files || empty($message['attachments'][$i]['replacement_url']))){
 					$tmp_file = File::checkfilename($GO_CONFIG->tmpdir.'attachments/'.$message['attachments'][$i]['name']);
 					$data = $this->get_message_part_decoded(
 									$uid,
@@ -431,21 +435,9 @@ class cached_imap extends imap{
 					}
 				}
 			}
-			if($create_temporary_inline_attachment_files) {
-				for ($i = 0; $i < count($message['url_replacements']); $i ++) {
-					$tmp_file = File::checkfilename($GO_CONFIG->tmpdir.'attachments/'.$message['url_replacements'][$i]['attachment']['name']);
-					$data = $this->get_message_part_decoded(
-									$uid,
-									$message['url_replacements'][$i]['attachment']['imap_id'],
-									$message['url_replacements'][$i]['attachment']['encoding'],
-									$message['url_replacements'][$i]['attachment']['charset'],
-									$peek);
+			
+		
 
-					if($data && file_put_contents($tmp_file, $data)) {
-						$message['url_replacements'][$i]['tmp_file']=$tmp_file;
-					}
-				}
-			}
 			//go_debug($message);
 			return $message;
 		}
@@ -545,85 +537,74 @@ class cached_imap extends imap{
 		
 
 		//URL replacements for inline images
-		$message['url_replacements']=array();
+		//$message['url_replacements']=array();
 
-		$att=$this->find_message_attachments($struct, $message['body_ids']);
-		for($i=0,$max=count($att);$i<$max;$i++){
+		//go_debug($struct);
+
+		$message['attachments']=$this->find_message_attachments($struct, $message['body_ids']);
+
+		
+		for($i=0,$max=count($message['attachments']);$i<$max;$i++){
 
 			//not needed
-			unset($att[$i]['filename'], $att[$i]['description']);
+			unset($message['attachments'][$i]['filename'], $message['attachments'][$i]['description']);
 
-			if(empty($att[$i]['name'])){
-				if(!empty($att[$i]['subject'])){
-					$att[$i]['name']=File::strip_invalid_chars($this->mime_header_decode($att[$i]['subject'])).'.eml';
-				}elseif($att[$i]['type']=='message')
+			if(empty($message['attachments'][$i]['name'])){
+				if(!empty($message['attachments'][$i]['subject'])){
+					$message['attachments'][$i]['name']=File::strip_invalid_chars($this->mime_header_decode($message['attachments'][$i]['subject'])).'.eml';
+				}elseif($message['attachments'][$i]['type']=='message')
 				{
-					$att[$i]['name']='message.eml';
-				}elseif($att[$i]['subtype']=='calendar')
+					$message['attachments'][$i]['name']='message.eml';
+				}elseif($message['attachments'][$i]['subtype']=='calendar')
 				{
-					$att[$i]['name']=$lang['email']['event'].'.ics';
+					$message['attachments'][$i]['name']=$lang['email']['event'].'.ics';
 				}
 			}else
 			{
-				$att[$i]['name']=$this->mime_header_decode($att[$i]['name']);
+				$message['attachments'][$i]['name']=$this->mime_header_decode($message['attachments'][$i]['name']);
 			}
-			$att[$i]['extension']=File::get_extension($att[$i]['name']);
-			$att[$i]['human_size']=Number::format_size($att[$i]['size']);
+			$message['attachments'][$i]['extension']=File::get_extension($message['attachments'][$i]['name']);
+			$message['attachments'][$i]['human_size']=Number::format_size($message['attachments'][$i]['size']);
+
+			if(!isset($message['attachments'][$i]['charset']))
+				$message['attachments'][$i]['charset']=false;
 
 			//When a mail is saved as a task/appointment/etc. the attachments will be saved temporarily
-			$att[$i]['tmp_file']=false;
+			$message['attachments'][$i]['tmp_file']=false;
 
-			if(($create_temporary_attachment_files && empty($att[$i]['id'])) || ($create_temporary_inline_attachment_files && !empty($att[$i]['id']))) {
-				$tmp_file = File::checkfilename($GO_CONFIG->tmpdir.'attachments/'.$att[$i]['name']);
+			if(($create_temporary_attachment_files && empty($message['attachments'][$i]['id'])) || ($create_temporary_inline_attachment_files && !empty($message['attachments'][$i]['id']))) {
+				$tmp_file = File::checkfilename($GO_CONFIG->tmpdir.'attachments/'.$message['attachments'][$i]['name']);
 				$data = $this->get_message_part_decoded(
 								$uid, 
-								$att[$i]['imap_id'],
-								$att[$i]['encoding'],
-								$att[$i]['charset'],
+								$message['attachments'][$i]['imap_id'],
+								$message['attachments'][$i]['encoding'],
+								$message['attachments'][$i]['charset'],
 								$peek);
 
 				if($data && file_put_contents($tmp_file, $data)) {
-					$att[$i]['tmp_file']=$tmp_file;
+					$message['attachments'][$i]['tmp_file']=$tmp_file;
 				}
 			}
 
 
-			if (!empty($att[$i]["id"])) {
+			if (!empty($message['attachments'][$i]["id"])) {
 				//when an image has an id it belongs somewhere in the text we gathered above so replace the
 				//source id with the correct link to display the image.
 
-				$tmp_id = $att[$i]["id"];
+				$tmp_id = $message['attachments'][$i]["id"];
 				if (strpos($tmp_id,'>')) {
-					$tmp_id = substr($att[$i]["id"], 1,-1);
+					$tmp_id = substr($message['attachments'][$i]["id"], 1,-1);
 				}
 				$id = "cid:".$tmp_id;
-
-				$url_replacement['id'] = $att[$i]["id"];
-				$url_replacement['url'] = $this->get_attachment_url($uid, $att[$i]);
-				$url_replacement['tmp_file'] = $att[$i]['tmp_file'];
-				
-				//we need the attachment object later when we're creating temporary
-				//attachment files from cache
-				$url_replacement['attachment']=$att[$i];
-
-				$message['url_replacements'][]=$url_replacement;
-
-				if(isset($message['html_body'])){
-					if(strpos($message['html_body'], $id)) {
-						$message['html_body'] = str_replace($id, $url_replacement['url'], $message['html_body']);
-					}else {
-						//id was not found in body so add it as attachment later
-						unset($att[$i]['id']);
-					}
-				}
+				$message['attachments'][$i]['id']=$id;
+				$message['attachments'][$i]['replacement_url']=$this->get_attachment_url($uid, $message['attachments'][$i]);
 			}
 		}
 
-		
-		while($attachment = array_shift($att)){
-			if(empty($attachment['id'])){
-				$message['attachments'][]=$attachment;
-			}
+		go_debug($message['attachments']);
+
+		if(isset($message['html_body'])){
+			$message['html_body']=$this->replace_inline_images($message['html_body'], $message['attachments']);
 		}
 
 		$cached_message['uid']=$uid;
@@ -631,9 +612,35 @@ class cached_imap extends imap{
 		$cached_message['serialized_message_object']=serialize($message);		
 		$this->update_cached_message($cached_message);
 
-		//go_debug($message);
+		//go_debug($message)
+		//
+
+		
 
 		return $message;
+	}
+
+	public function remove_inline_images($attachments){
+		$removed = array();
+		for($i=0;$i<count($attachments);$i++) {
+			if(empty($attachments[$i]['replacement_url'])){
+				$removed[]=$attachments[$i];
+			}
+		}
+		return $removed;
+	}
+
+	private function replace_inline_images($html_body, &$attachments) {
+		for($i=0;$i<count($attachments);$i++) {
+			if(isset($attachments[$i]['replacement_url'])){
+				$html_body = str_replace($attachments[$i]['id'], $attachments[$i]['replacement_url'],$html_body, $count);
+				if($count==0){
+					unset($attachments[$i]['replacement_url']);
+				}
+			}
+			
+		}
+		return $html_body;
 	}
 
 	private function get_attachment_url($uid, $part){
@@ -719,7 +726,7 @@ class cached_imap extends imap{
 		go_debug('Default charset: '.$this->default_charset);
 
 		$plain_parts = $this->find_body_parts($struct,'text', 'plain');
-		go_debug($plain_parts);
+		//go_debug($plain_parts);
 		for($i=0,$max=count($plain_parts['parts']);$i<$max;$i++)
 		{
 			if(empty($plain_parts['parts'][$i]['charset']))
@@ -729,7 +736,7 @@ class cached_imap extends imap{
 		}
 
 		$html_parts = $this->find_body_parts($struct,'text', 'html');
-		go_debug($html_parts);
+		//go_debug($html_parts);
 		for($i=0,$max=count($html_parts['parts']);$i<$max;$i++)
 		{
 			if(empty($html_parts['parts'][$i]['charset']))

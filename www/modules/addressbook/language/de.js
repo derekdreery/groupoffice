@@ -92,3 +92,4 @@ GO.addressbook.lang.photo = 'Foto';
 GO.addressbook.lang.deleteImage='Bild löschen';
 GO.addressbook.lang.addAllSearchResults='Alle Suchergebnisse hinzufügen';
 GO.addressbook.lang.confirmAddAllSearchResults='Sind Sie sicher, dass Sie alle Suchergebnisse der Adressliste hinzufügen wollen?';
+GO.addressbook.lang.moveEmployees='Mitarbeiter verschieben';

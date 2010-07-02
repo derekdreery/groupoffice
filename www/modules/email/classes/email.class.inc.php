@@ -658,6 +658,16 @@ class email extends db {
 		return $account;
 	}*/
 
+	function get_account_by_username($username, $user_id=0){
+		$sql = "SELECT * FROM em_accounts WHERE username='".$this->escape($username)."'";
+		if($user_id>0){
+			$sql .= "AND user_id=".$user_id;
+		}
+
+		$this->query($sql);
+		return $this->next_record();
+	}
+
 	function get_account($account_id, $alias_id=0) {
 		$sql = "SELECT a.*, al.name, al.email, al.signature, al.id AS default_alias_id FROM em_accounts a INNER JOIN em_aliases al ON ";
 		if(empty($alias_id)) {

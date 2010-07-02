@@ -43,13 +43,14 @@ header('Content-Disposition: inline; filename="message_source.txt"');
  *
  * That's why I first fetch the header and then the text.
  */
-$header = $imap->get_message_part($_REQUEST['uid'], 'HEADER');
+$header = $imap->get_message_part($_REQUEST['uid'], 'HEADER')."\r\n";
 $size = $imap->get_message_part_start($_REQUEST['uid'],'TEXT');
 
 header('Content-Length: '.strlen($header).$size);
 
 echo $header;
 
+$count=0;
 while($line = $imap->get_message_part_line()){
 	echo $line;
 }
