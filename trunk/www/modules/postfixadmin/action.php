@@ -392,7 +392,7 @@ try{
 			{
 				
 				
-				$mailbox['maildir']=$domain['domain'].'/'.(trim($_POST['username'])).'/';
+				$mailbox['maildir']=$domain['domain'].'/'.trim($_POST['username']).'/';
 				$mailbox['username']=(str_replace('@'.$domain['domain'], '', trim($_POST['username']))).'@'.$domain['domain'];
 				
 				if($postfixadmin->get_mailbox_by_username($mailbox['username']))
@@ -415,18 +415,13 @@ try{
 						$left = $domain['maxquota']-$totalquota;
 						throw new Exception('The maximum quota has been reached. You have '.Number::format($left/1024).'MB left');
 					}
-				}
-				
-				
-				
+				}				
 					
 				$mailbox_id= $postfixadmin->add_mailbox($mailbox);
 				$response['mailbox_id']=$mailbox_id;
 				$response['success']=true;
 
-
-				//create alias
-				
+				//create alias				
 				if($mailbox['vacation_active']=='1')
 				{
 					$vacation_alias = str_replace('@','#', $mailbox['username']).'@'.$GO_CONFIG->postfixadmin_autoreply_domain;

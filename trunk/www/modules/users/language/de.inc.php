@@ -1,7 +1,7 @@
 <?php
 require($GO_LANGUAGE->get_fallback_language_file('users'));
 $lang['users']['name']='Benutzer';
-$lang['users']['description']='Adminmodul zur Benutzerverwaltung';
+$lang['users']['description']='Modul zur Benutzerverwaltung';
 $lang['users']['deletePrimaryAdmin']='Sie können den primären Administrator nicht löschen';
 $lang['users']['deleteYourself']='Sie können sich nicht selbst löschen';
 $lang['link_type'][8]=$us_user='Benutzer';
@@ -14,8 +14,8 @@ $lang['users']['error_user']='Benutzer konnte nicht angelegt werden';
 $lang['users']['imported']='%s Benutzer importiert';
 $lang['users']['failed']='Fehlgeschlagen';
 $lang['users']['incorrectFormat']='Datei hatte nicht das erforderliche CSV-Format';
-$lang['users']['register_email_subject']='Ihre GroupOffice Accountdaten';
-$lang['users']['register_email_body']='Ein GroupOffice Account wurde für Sie auf {url} angelegt
+$lang['users']['register_email_subject']='Ihre GroupOffice-Kontodaten';
+$lang['users']['register_email_body']='Ein GroupOffice-Konto wurde für Sie auf {url} erstellt.
 Ihre Logindaten sind:
 
 Benutzername: {username}

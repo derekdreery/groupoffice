@@ -1,7 +1,7 @@
 <?php
 require($GO_LANGUAGE->get_fallback_language_file('cms'));
 $lang['cms']['name']='Webseiten';
-$lang['cms']['description']='Benutzermodul zur Anlage persönlicher Webseiten';
+$lang['cms']['description']='Modul zur Anlage von Benutzerwebseiten';
 $lang['cms']['site']='Seite';
 $lang['cms']['sites']='Seiten';
 $lang['cms']['folder']='Ordner';
@@ -26,7 +26,8 @@ $lang['cms']['cms_permissions']='Prüfe CMS-Ordnerrechte';
 $lang['cms']['adding_share']='Füge Freigabe für Seite hinzu: ';
 $lang['cms']['done_with_cms']='CMS fertiggestellt';
 $lang['cms']['path_error']='Fehler: Konnte Pfad nicht auflösen: ';
-$lang['cms']['include_file_error']='Error: include_file requires path or file_id parameter';
-$lang['cms']['cant_delete_site_treeview']='You can\'t delete the entire site from the treeview. Delete it from the sites administration dialog if you have permissions.';
-$lang['cms']['cant_move_into_itself']='Can not move into itself';
-$lang['cms']['antispam_fail']='The antispam answer was incorrect. Please try again';
+$lang['cms']['include_file_error']='Fehler: include_file erfordert Pfad oder file_id Parameter';
+$lang['cms']['cant_delete_site_treeview']='Sie können die gesamte Webseite nicht aus der Baumansicht heraus löschen. Löschen Sie die Seite stattdessen aus der Webseitenverwaltung, wenn Sie die erforderlichen Rechte hierzu haben.';
+$lang['cms']['cant_move_into_itself']='Kann nicht auf sich selbst verschoben werden';
+$lang['cms']['antispam_fail']='Die AntiSpam-Antwort war falsch. Bitte versuchen Sie es erneut';
+$lang['cms']['no_admin_rights']="Sie haben nicht die erforderlichen Rechte, um Zugriffsrechte auf die Webseitenordner anzupassen.";

@@ -288,6 +288,7 @@ class imap_base {
 	/* determine if an imap response returned an "OK", returns
        true or false */
 	function check_response($data, $chunked=false) {
+
 		$result = false;
 		if ($chunked) {
 			if (!empty($data)) {

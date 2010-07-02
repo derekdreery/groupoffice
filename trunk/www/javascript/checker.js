@@ -416,7 +416,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 											url:BaseHref+'reminder.php?count='+this.lastCount+'&reminder_text='+encodeURIComponent(data.reminderText),
 											target:'groupofficeReminderPopup',
 											position:'br',
-											closeOnFocus:true
+											closeOnFocus:false
 										});
 										
 									}

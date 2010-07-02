@@ -1408,11 +1408,11 @@ class imap extends imap_bodystruct {
 
 		$peek_str = $peek ? '.PEEK' : '';
 
-		if ($message_part==0) {
+		if (empty($message_part)) {
 			$command = "UID FETCH $uid BODY".$peek_str."[]\r\n";
 		}
 		else {
-			$this->clean($message_part, 'msg_part');
+			//$this->clean($message_part, 'msg_part');
 			$command = "UID FETCH $uid BODY".$peek_str."[$message_part]\r\n";
 		}
 		$this->send_command($command);
@@ -1457,7 +1457,7 @@ class imap extends imap_bodystruct {
 		$this->send_command($command);
 		$result = fgets($this->handle);
 
-		//go_debug($result);
+		go_debug($result);
 		$size = false;
 		if (preg_match("/\{(\d+)\}\r\n/", $result, $matches)) {
 			$size = $matches[1];
@@ -1476,7 +1476,11 @@ class imap extends imap_bodystruct {
 		}*/
 
 		$res = fgets($this->handle);
-		//go_debug($res);
+
+		if(substr(rtrim($res),-1, 1)==')')
+			$res = substr(rtrim($res),0,-1);
+
+		//go_debug($res);if($res && substr(trim($res),-1,1)==')'){
 		if ($this->check_response(array($res))) {
 			$res = false;
 		}
@@ -1496,7 +1500,7 @@ class imap extends imap_bodystruct {
 		 *
 		 * That's why I first fetch the header and then the text.
 		 */
-		$header = $this->get_message_part($uid, 'HEADER');
+		$header = $this->get_message_part($uid, 'HEADER')."\r\n";
 
 		if(!fputs($fp, $header))
 			return false;
