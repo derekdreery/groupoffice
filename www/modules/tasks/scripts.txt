@@ -1,3 +1,4 @@
+modules/tasks/TasksObservable.js
 modules/tasks/SelectTaskStatus.js
 modules/tasks/ContinueTaskDialog.js
 modules/tasks/TaskPanel.js
