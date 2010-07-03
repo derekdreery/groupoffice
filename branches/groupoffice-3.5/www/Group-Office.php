@@ -55,20 +55,7 @@ if(!$GO_CONFIG->enabled)
 	die('<h1>Disabled</h1>This Group-Office installation has been disabled');
 }
 
-if($GO_CONFIG->session_inactivity_timeout>0){
-	$now = time();
-	if(isset($_SESSION['last_activity']) && $_SESSION['last_activity']+$GO_CONFIG->session_inactivity_timeout<$now){
-		session_destroy();
-		unset($_SESSION);
 
-		SetCookie("GO_UN","",time()-3600,"/","",0);
-    SetCookie("GO_PW","",time()-3600,"/","",0);
-
-	}else
-	{
-		$_SESSION['last_activity']=$now;
-	}
-}
 
 if($GO_CONFIG->debug)
 {
@@ -159,6 +146,25 @@ if(PHP_SAPI != 'cli' && file_exists($GO_CONFIG->root_path.'modules/professional/
 	check_license();
 }
 $GO_SECURITY = new GO_SECURITY();
+
+if($GO_CONFIG->session_inactivity_timeout>0){
+	$now = time();
+	if(isset($_SESSION['last_activity']) && $_SESSION['last_activity']+$GO_CONFIG->session_inactivity_timeout<$now){
+		/*session_destroy();
+		unset($_SESSION);
+
+		SetCookie("GO_UN","",time()-3600,"/","",0);
+    SetCookie("GO_PW","",time()-3600,"/","",0);*/
+
+		$GO_SECURITY->logout();
+
+	}else
+	{
+		$_SESSION['last_activity']=$now;
+	}
+}
+
+
 $GO_LINKS = new GO_LINKS();
 $GO_EVENTS = new GO_EVENTS();
 
