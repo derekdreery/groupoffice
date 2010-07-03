@@ -17,6 +17,7 @@ try{
 				//$response['results'][]=array('name'=>$lang['tools']['checkmodules'], 'script'=>$GO_MODULES->modules['tools']['url'].'checkmodules.php');
 				$response['results'][]=array('name'=>$lang['tools']['buildsearchcache'], 'script'=>$GO_MODULES->modules['tools']['url'].'buildsearchcache.php');
 				$response['results'][]=array('name'=>$lang['tools']['rm_duplicates'], 'script'=>$GO_MODULES->modules['tools']['url'].'rm_duplicates.php');
+				$response['results'][]=array('name'=>$lang['tools']['resetState'], 'script'=>$GO_MODULES->modules['tools']['url'].'reset_state.php');
 				
 				if(isset($GO_MODULES->modules['files']))
 				{
