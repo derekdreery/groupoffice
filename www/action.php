@@ -195,8 +195,11 @@ try{
 			}
 			if (isset($_POST['remind']))
 			{
-				SetCookie("GO_UN",$username,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
-				SetCookie("GO_PW",$password,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
+				require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+				$c = new cryptastic();
+
+				SetCookie("GO_UN",$c->encrypt($username),time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
+				SetCookie("GO_PW",$c->encrypt($password),time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
 			}
 			
 			$fullscreen = isset($_POST['fullscreen']) ? '1' : '0';
