@@ -59,11 +59,6 @@ GO.tasks.TaskDialog = function() {
 	this.win.render(Ext.getBody());
 
 	GO.tasks.TaskDialog.superclass.constructor.call(this);
-
-	this.addEvents({
-		'save' : true
-	});
-
 }
 
 Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
@@ -221,7 +216,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 					this.link_config.callback.call(this);
 				}
 
-				this.fireEvent('save', this, this.task_id);
+				GO.tasks.tasksObservable.fireEvent('save', this, this.task_id);
 
 				if (hide) {
 					this.win.hide();
