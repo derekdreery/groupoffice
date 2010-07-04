@@ -44,10 +44,10 @@ GO.tasks.SimpleTasksPanel = function(config)
 			this.store.baseParams['completed_task_id']=record.data.id;
 			this.store.baseParams['checked']=checked;
   	
-			//dirty, but it works for updating all the grids
 			this.store.reload({
 				callback:function(){
-					GO.tasks.taskDialog.fireEvent('save', GO.tasks.taskDialog, record.data.id);
+
+					GO.tasks.tasksObservable.fireEvent('save', this, this.task_id, this.store);
 				},
 				scope:this
 			});
@@ -113,15 +113,10 @@ Ext.extend(GO.tasks.SimpleTasksPanel, GO.grid.GridPanel, {
 	{
 		GO.tasks.SimpleTasksPanel.superclass.afterRender.call(this);
 
-		GO.tasks.taskDialogListeners= GO.tasks.taskDialogListeners || [];
-		GO.tasks.taskDialogListeners.push({
-			scope:this,
-			save:function(){
-				if(GO.mainLayout.getModulePanel('summary').isVisible()){
-					this.store.reload();
-				}
-			}
-		});
+		GO.tasks.tasksObservable.on('save',function(tasksObservable, task_id, loadedStore){
+			if(this.store!=loadedStore)
+				this.store.reload();
+		}, this);
    
 		this.on("rowdblclick", function(grid, rowClicked, e){
 			GO.linkHandlers[12].call(this, grid.selModel.selections.keys[0]);

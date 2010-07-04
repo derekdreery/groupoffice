@@ -13,4 +13,5 @@ $lang['tools']['index_files']='Index all files';
 
 $lang['tools']['buildsearchcache']='Create search index';
 $lang['tools']['checkmodules']='Check modules';
+$lang['tools']['resetState']='Reset state of windows, grids etc.';
 ?>

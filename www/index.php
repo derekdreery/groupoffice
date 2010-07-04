@@ -45,7 +45,12 @@ if($mtime!=$GO_CONFIG->mtime)
 
 
 //will do autologin here before theme is loaded.
+try{
 $GO_SECURITY->logged_in();
+}
+catch(Exception $e){
+
+}
 
 
 if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')

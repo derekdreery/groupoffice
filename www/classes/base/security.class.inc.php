@@ -91,10 +91,19 @@ class GO_SECURITY extends db {
 				global $GO_AUTH;
 
 				if(!empty($_COOKIE['GO_UN']) && !empty($_COOKIE['GO_PW'])) {
-					$username = $_COOKIE['GO_UN'];
-					$password = $_COOKIE['GO_PW'];
 
-					return $GO_AUTH->login($username, $password);
+					require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+					$c = new cryptastic();
+
+					$username = $c->decrypt($_COOKIE['GO_UN']);
+					$password = $c->decrypt($_COOKIE['GO_PW']);
+
+					$res =  $GO_AUTH->login($username, $password);
+
+					if(!$res){
+						$this->logout();
+					}
+					return $res;
 				}elseif(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
 					$username = $_SERVER['PHP_AUTH_USER'];
 					$password = $_SERVER['PHP_AUTH_PW'];
@@ -145,7 +154,7 @@ class GO_SECURITY extends db {
 
 		unset($_SESSION, $_COOKIE['GO_UN'], $_COOKIE['GO_PW']);
 
-		session_destroy();
+		@session_destroy();
 		$this->user_id = 0;
 
 		global $GO_MODULES;

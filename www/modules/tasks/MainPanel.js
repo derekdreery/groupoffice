@@ -260,13 +260,11 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 	{
 		GO.tasks.MainPanel.superclass.afterRender.call(this);
 
-		GO.tasks.taskDialogListeners= GO.tasks.taskDialogListeners || [];
-		GO.tasks.taskDialogListeners.push({
-			scope:this,
-			save:function(){
+
+		GO.tasks.tasksObservable.on('save',function(tasksObservable, task_id, loadedStore){
+			if(this.gridPanel.store!=loadedStore)
 				this.gridPanel.store.reload();
-			}
-		});
+		}, this);
                 
 		this.taskListsStore.on('load', function(){
 			var records = [];

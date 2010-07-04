@@ -44,14 +44,18 @@ if(!empty($GO_CONFIG->serverclient_domains))
 					$account['smtp_encryption']=$GO_CONFIG->serverclient_smtp_encryption;
 					$account['smtp_username']=$GO_CONFIG->serverclient_smtp_username;
 					$account['smtp_password']=$GO_CONFIG->serverclient_smtp_password;
+					try{
+						$account['id'] = $email->add_account($account);
 
-					$account['id'] = $email->add_account($account);
-
-					if($account['id']>0)
-					{
-						//get the account because we need special folder info
-						$account = $email->get_account($account['id']);
-						$email->synchronize_folders($account);
+						if($account['id']>0)
+						{
+							//get the account because we need special folder info
+							$account = $email->get_account($account['id']);
+							$email->synchronize_folders($account);
+						}
+					}
+					catch(Exception $e){
+						echo 'Failed adding addmin account: '.$e->getMessage();
 					}
 				}
 			}
