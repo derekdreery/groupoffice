@@ -93,3 +93,13 @@ GO.calendar.lang.view = 'Overzicht';
 
 GO.calendar.lang.calendarsPermissions='Agenda\'s toegangsrechten';
 GO.calendar.lang.resourcesPermissions='Hulpmiddelen toegangsrechten';
+
+GO.calendar.lang.daynames={};
+GO.calendar.lang.daynames[0]='Zondag';
+GO.calendar.lang.daynames[1]='Maandag';
+GO.calendar.lang.daynames[2]='Dinsdag';
+GO.calendar.lang.daynames[3]='Woensdag';
+GO.calendar.lang.daynames[4]='Donderdag';
+GO.calendar.lang.daynames[5]='Vrijdag';
+GO.calendar.lang.daynames[6]='Zaterdag';
+

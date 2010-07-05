@@ -144,13 +144,46 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		var dateFormat;
 		
 		this.cellWrap = Ext.DomHelper.append(this.body,{tag:'div', id:'cal-monthGrid-wrap'}, true);
-			
+		
 	
 		this.gridCells={};
 		this.weekNumberCells=[];
+		this.dayNameCells=[];
+
+		var cell = Ext.DomHelper.append(this.cellWrap,
+		{
+			tag: 'div',
+			style: 'width:'+(this.weekNumberWidth-1)+'px',
+			cls: 'cal-monthgrid-week-no'
+		}, true);
+
+		Ext.DomHelper.append(cell,{
+			tag: 'div',
+			cls: 'x-monthGrid-cell-day-text',
+			html: '&nbsp;'
+		}, true);
+		
+		for(var i=this.firstWeekday; i<7+this.firstWeekday; i++)
+		{
+		    var dayName = (i == 7) ? GO.calendar.lang.daynames[0] : GO.calendar.lang.daynames[i];
+		    
+		    var cell = Ext.DomHelper.append(this.cellWrap,
+		    {
+			    tag: 'div',
+			    cls: 'cal-monthgrid-week-no'
+		    }, true);
+
+		    Ext.DomHelper.append(cell,{
+			    tag: 'div',
+			    cls: 'x-monthGrid-cell-day-text',
+			    html: dayName
+		    }, true);
+
+		    this.dayNameCells.push(cell);
+		}
 		
 		for(var day=0;day<this.days;day++)
-		{	
+		{						
 			var dt = this.startDate.add(Date.DAY, day);
 			
 			if(day == 0 || dt.format('j')==1)
@@ -314,8 +347,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		}
   },
   
-  syncSize : function(){  
-  	
+  syncSize : function(){
+      
   	if(this.cellWrap)
 		{			
 			//get content size of element
@@ -328,6 +361,11 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 			{
 				this.gridCells[i].setSize(this.cellWidth, this.cellHeight);
 			}
+
+			for(var i=0;i<this.dayNameCells.length;i++)
+			{
+				this.dayNameCells[i].setWidth(this.cellWidth);
+			}			
 			
 			for(var i=0;i<this.weekNumberCells.length;i++)
 			{
