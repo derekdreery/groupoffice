@@ -105,3 +105,12 @@ GO.calendar.lang.view = 'View';
 
 GO.calendar.lang.calendarsPermissions='Calendars permissions';
 GO.calendar.lang.resourcesPermissions='Resources permissions';
+
+GO.calendar.lang.daynames={};
+GO.calendar.lang.daynames[0]='Sunday';
+GO.calendar.lang.daynames[1]='Monday';
+GO.calendar.lang.daynames[2]='Tuesday';
+GO.calendar.lang.daynames[3]='Wednesday';
+GO.calendar.lang.daynames[4]='Thursday';
+GO.calendar.lang.daynames[5]='Friday';
+GO.calendar.lang.daynames[6]='Saturday';
