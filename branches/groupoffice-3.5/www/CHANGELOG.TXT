@@ -1,3 +1,6 @@
+2010/07/05 3.5.9
+- Bug fixes and translations update
+
 2010/06/21 3.5.8
 - Added totals report to projects
 - Fixed small bugs
