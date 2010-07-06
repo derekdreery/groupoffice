@@ -5,8 +5,18 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 	 */
 	customTypes : [],
 
-	initComponent : function() {
+	initComponent : function() {		
 
+		this.formPanelItems[0].items = [{
+			boxLabel : 'CSV',
+			name : 'type',
+			inputValue : 'csv_export_query',
+			checked : true
+		}, {
+			boxLabel : 'PDF',
+			name : 'type',
+			inputValue : 'pdf_export_query'
+		}];
 
 		if(this.query && GO.customexports[this.query]){
 			for(var i=0;i<GO.customexports[this.query].length;i++){
@@ -20,7 +30,6 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 
 		for(var i=0,max=this.customTypes.length;i<max;i++)
 			this.formPanelItems[0].items.push(this.customTypes[i]);
-
 
 
 		Ext.apply(this, {
@@ -90,16 +99,7 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 				xtype : 'radiogroup',
 				fieldLabel : GO.lang.strType,
 				columns:2,
-				items : [{
-							boxLabel : 'CSV',
-							name : 'type',
-							inputValue : 'csv_export_query',
-							checked : true
-						}, {
-							boxLabel : 'PDF',
-							name : 'type',
-							inputValue : 'pdf_export_query'
-						}]
+				items:[]
 			},{
 				xtype:'checkbox',
 				name:'export_hidden',
