@@ -97,6 +97,8 @@ GO.bookmarks.BookmarksView = function(config){
 	 */
 
 	this.DV.on('contextmenu',function( DV, index, node, e) {
+		e.preventDefault();
+		
 		var record = this.DV.getRecord(node).data;
 		if (this.DV.getRecord(node).data.write_permission) // users kunnen niet rechts klikken op public bookmarks
 		{
