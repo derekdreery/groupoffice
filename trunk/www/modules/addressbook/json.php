@@ -160,7 +160,10 @@ try
 			require_once($GO_LANGUAGE->get_language_file('addressbook'));
 		
 			$response['data']['write_permission'] = false;
-			if(isset($_POST['books']))
+
+			if(!empty($_POST['no_addressbooks_filter'])){
+				$books=array();
+			}elseif(isset($_POST['books']))
 			{
 				$books = json_decode($_POST['books'], true);
 				$GO_CONFIG->save_setting('addressbook_books_filter',implode(',', $books), $GO_SECURITY->user_id);
