@@ -23,7 +23,7 @@ $dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 $start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 $limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 $query = isset($_REQUEST['query']) ? ($_REQUEST['query']) : null;
-$field = isset($_REQUEST['field']) ? ($_REQUEST['field']) : 'name';
+$field = isset($_REQUEST['field']) ? ($_REQUEST['field']) : '';
 
 $clicked_letter = isset($_REQUEST['clicked_letter']) ? ($_REQUEST['clicked_letter']) : false;
 
@@ -336,6 +336,7 @@ try
 				}
 			} else {
 				//$field = isset($_POST['field']) ? $_POST['field'] :'';
+				$field='';
 				$query = !empty($query) ? '%'.$query.'%' : '';
 			}
 			
