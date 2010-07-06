@@ -13,10 +13,20 @@
  */
 
 
+/**
+ *
+ * @global <type> $GO_CONFIG
+ * @param <type> $module The name of the module
+ * @param <type> $function the name of the function GO.<module>.<function> must be created
+ * @param <type> $params Associative array of parameters
+ * @param <type> $loadevent Call this function before Group-Office renders with ready or after with render
+ * @return <type> An URL that can call a Group-Office function directly
+ */
+
 function create_direct_url($module, $function, $params, $loadevent='render'){
 	global $GO_CONFIG;
 
-	return $GO_CONFIG->full_url.'dialog.php?loadevent='.$loadevent.'&module='.$module.'&function='.$function.'&params='.urlencode(base64_encode(json_encode($params)));
+	return $GO_CONFIG->full_url.'dialog.php?e='.$loadevent.'&m='.$module.'&f='.$function.'&p='.urlencode(base64_encode(json_encode($params)));
 
 }
 

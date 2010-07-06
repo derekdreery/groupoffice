@@ -377,27 +377,40 @@ if(file_exists($GO_THEME->theme_path.'MainLayout.js')) {
 
 //these parameter are passed by dialog.php. These are used to directly link to
 //a dialog.
-if(isset($_GET['module']))
+if(isset($_REQUEST['m']) || isset($_REQUEST['module']))
 {
-    $module = isset($_GET['module']) ? $_GET['module'] : false;
-    $function = isset($_GET['function']) ? $_GET['function'] : false;
-    $params = isset($_GET['params']) ? ($_GET['params']) : false;
-		$loadevent = isset($_REQUEST['loadevent']) ? $_REQUEST['loadevent'] : 'render';
+	//old names where long
+	if(!isset($_REQUEST['m']) && isset($_REQUEST['module']))
+		$_REQUEST['m']=$_REQUEST['module'];
 
-    if($module && $function && $params)
-    {
-    ?>
-    if(GO.<?php echo $module; ?>)
-    {
+	if(!isset($_REQUEST['e']) && isset($_REQUEST['loadevent']))
+		$_REQUEST['e']=$_REQUEST['loadevent'];
 
-       <?php if(!empty($loadevent)) echo 'GO.mainLayout.on("'.$loadevent.'",function(){'; ?>
-            
-						GO.<?php echo $module; ?>.<?php echo $function; ?>.apply(this, <?php echo base64_decode($params); ?>);
-						
-       <?php if(!empty($loadevent)) echo '});'; ?>
-    }
-    <?php
-    }
+	if(!isset($_REQUEST['f']) && isset($_REQUEST['function']))
+		$_REQUEST['f']=$_REQUEST['function'];
+
+	if(!isset($_REQUEST['p']) && isset($_REQUEST['params']))
+		$_REQUEST['p']=$_REQUEST['params'];
+
+	$module = isset($_REQUEST['m']) ? $_REQUEST['m'] : false;
+	$function = isset($_REQUEST['f']) ? $_REQUEST['f'] : false;
+	$params = isset($_REQUEST['params']) ? ($_REQUEST['p']) : false;
+	$loadevent = isset($_REQUEST['e']) ? $_REQUEST['e'] : 'render';
+
+	if($module && $function && $params)
+	{
+	?>
+	if(GO.<?php echo $module; ?>)
+	{
+
+		 <?php if(!empty($loadevent)) echo 'GO.mainLayout.on("'.$loadevent.'",function(){'; ?>
+
+					GO.<?php echo $module; ?>.<?php echo $function; ?>.apply(this, <?php echo base64_decode($params); ?>);
+
+		 <?php if(!empty($loadevent)) echo '});'; ?>
+	}
+	<?php
+	}
 }
 ?>
 </script>

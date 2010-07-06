@@ -128,12 +128,12 @@ GO.calendar.MainPanel = function(config){
 				record = this.calendarsStore.getAt(0);				
 			}
 
-			this.state.calendar_name=this.state.title=record.data.name;
-			this.state.comment=record.data.comment;
+			/*this.state.calendar_name=this.state.title=record.data.name;
+			this.state.comment=record.data.comment;*/
 			this.state.calendars = [record.data.id];
 			this.state.applyFilter=true;
 			this.setDisplay(this.state);
-			this.state.applyFilter=false;
+			//this.state.applyFilter=false;
 		}
 	}, this);
 
@@ -144,13 +144,13 @@ GO.calendar.MainPanel = function(config){
 		
 		if(this.state.displayType=='view' && this.viewsStore.data.length)
 		{
-			var record = this.viewsStore.getById(this.state.view_id);
+			/*var record = this.viewsStore.getById(this.state.view_id);
 			if(!record)
 			{
 				record = this.viewsStore.getAt(0);
 				this.state.view_id = record.data.id;
-				this.state.title = record.data.name;
-			}
+				//this.state.title = record.data.name;
+			}*/
 			//this.viewsList.getSelectionModel().selectRecords(new Array(record));
 			this.setDisplay(this.state);
 		}
@@ -164,14 +164,14 @@ GO.calendar.MainPanel = function(config){
 		if(this.state.displayType!='view' && this.group_id>1 && this.resourcesStore.data.length)
 		{
 			
-			var record = this.resourcesStore.getById(this.state.calendars[0]);
+			/*var record = this.resourcesStore.getById(this.state.calendars[0]);
 			if(!record)
 			{
 				record = this.resourcesStore.getAt(0);
 				this.state.calendars = [record.data.id];
 				this.state.title=record.data.name;
 				this.state.comment=record.data.comment;
-			}
+			}*/
 			//this.resourcesList.getSelectionModel().selectRecords(new Array(record));
 			this.setDisplay(this.state);
 		}
@@ -233,25 +233,15 @@ GO.calendar.MainPanel = function(config){
 	this.calendarList.on('change', function(grid, calendars, records)
 	{
 		var cal_ids = [];
-		var title = '';
-		
+
 		for (var i=0,max=records.length;i<max;i++) {
 			cal_ids[i] = records[i].data.id;
-			if (i>0)
-				title = title+' & ';
-			title = title+records[i].data.name;
 		}
 
-		var config = {
-			group_id:records[0].data.group_id,
+		var config = {			
 			calendars: cal_ids,
-			calendar_name: records[0].data.name,
-			title:title,
-			owncolor:true
+			group_id:1
 		};
-
-		if(cal_ids.length==1)
-			config.comment=records[0].data.comment;
 		
 		this.setDisplay(config);
 		
@@ -263,12 +253,7 @@ GO.calendar.MainPanel = function(config){
 		//this.resourcesList.getSelectionModel().clearSelections();
 
 		this.setDisplay({
-				group_id:0,
-				view_id: grid.store.data.items[rowIndex].id,
-				calendar_name: grid.store.data.items[rowIndex].data.name,
-				merge: grid.store.data.items[rowIndex].data.merge,
-				owncolor: grid.store.data.items[rowIndex].data.owncolor,
-				title: grid.store.data.items[rowIndex].data.name
+				view_id: grid.store.data.items[rowIndex].id	
 			});
 	}, this);	
 
@@ -278,12 +263,8 @@ GO.calendar.MainPanel = function(config){
 		//this.viewsList.getSelectionModel().clearSelections();
         
 		this.setDisplay({
-			group_id:grid.store.data.items[rowIndex].data.group_id,
 			calendars: [grid.store.data.items[rowIndex].id],
-			calendar_name: grid.store.data.items[rowIndex].data.name,
-			title: grid.store.data.items[rowIndex].data.name,
-			comment: grid.store.data.items[rowIndex].data.comment
-
+			group_id: grid.store.data.items[rowIndex].data.group_id
 		});		
 	}, this);
 
@@ -298,9 +279,7 @@ GO.calendar.MainPanel = function(config){
 				this.setDisplay({
 					group_id: 1,
 					applyFilter:true,
-					calendars: [GO.calendar.defaultCalendar['id']],
-					calendar_name: GO.calendar.defaultCalendar['name'],
-					title:GO.calendar.defaultCalendar['name']
+					calendars: [GO.calendar.defaultCalendar['id']]					
 				});
 			},
 			scope : this
@@ -1060,19 +1039,45 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		if(config.calendar_id)
 			config.calendars=[config.calendar_id];
 
-		if(config.title && config.title.length){
+		config.title = '';
+		var record;
+		//determine title and comments
+		if(config.calendars){			
 
-			var title = config.title;
+			for (var i=0,max=config.calendars.length;i<max;i++) {
+				
+				if (i>0)
+					config.title = config.title+' & ';
 
-			if(config.comment){
-				//title = '<div class="cal-comment" ext:qtip="'+Ext.util.Format.htmlEncode(config.comment)+'">'+config.comment+'</div>'+title;
+				record = config.group_id > 1 ? this.resourcesStore.getById(config.calendars[i]) : this.calendarsStore.getById(config.calendars[i]);
+
+				if(!config.group_id)
+					config.group_id=record.get('group_id');
+
+				if(!config.calendar_name)
+					config.calendar_name=record.get('name');
+
+				config.title = config.title+record.data.name;
 			}
+			
+			if(config.calendars.length==1)
+				config.comment=record.data.comment;
+			
+		}else if(config.view_id){
+			record = this.viewsStore.getById(config.view_id);
 
+			config.title=record.get('name');
+			config.comment='';
+			config.merge=record.get('merge');
+			config.owncolor=record.get('owncolor');
+		}
 
+		if(config.title && config.title.length){
 			this.calendarComments.setText(config.comment || '');
 
-			this.calendarTitle.setText(title);
+			this.calendarTitle.setText(config.title);
 		}
+
 
 		if(config.displayType)
 		{							
