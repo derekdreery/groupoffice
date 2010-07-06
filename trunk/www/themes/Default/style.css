@@ -339,6 +339,7 @@ a.normal-link:hover{
 
 
 /* start buttons */
+
 .btn-add {
 	background-image:url('images/16x16/gtk-add.png') !important;
 }
@@ -444,11 +445,11 @@ a.normal-link:hover{
 }
 
 .btn-left-arrow {
-	background-image:url('images/16x16/left-btn.gif') !important;
+	background-image:url('images/16x16/left-btn.png') !important;
 }
 
 .btn-right-arrow {
-	background-image:url('images/16x16/right-btn.gif') !important;
+	background-image:url('images/16x16/right-btn.png') !important;
 }
 
 .btn-info{
