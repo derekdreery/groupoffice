@@ -364,7 +364,6 @@ try {
 				
 			} else {
 				$calendars=isset($_REQUEST['calendars']) ? json_decode($_REQUEST['calendars']) : array($calendar_id);
-
 			}
 
 			$owncolor = isset($_REQUEST['owncolor']) && count($calendars)>1 ? $_REQUEST['owncolor'] : 0;

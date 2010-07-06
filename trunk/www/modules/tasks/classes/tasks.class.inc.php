@@ -583,7 +583,7 @@ class tasks extends db
 		$task = $this->get_task($task_id);
 		$old_start_time = $task['start_time'];
 
-		if(!empty($task['rrule']) && $next_recurrence_time = Date::get_next_recurrence_time($task['start_time'], $task['start_time'], $task['rrule'])) {
+		if(!empty($task['rrule']) && $next_recurrence_time = Date::get_next_recurrence_time($task['start_time'], $task['start_time'], 0, $task['rrule'])) {
 			$old_id = $task['id'];
 			unset($task['completion_time'], $task['id'], $task['acl_id']);
 			$task['start_time'] = $next_recurrence_time;
@@ -963,7 +963,7 @@ class tasks extends db
 				$start_time=$task['start_time'];
 				for($i=1;$i<$task_count;$i++)
 				{
-					$task['repeat_end_time']=$start_time=Date::get_next_recurrence_time($task['start_time'], $start_time, $task['rrule']);
+					$task['repeat_end_time']=$start_time=Date::get_next_recurrence_time($task['start_time'], $start_time, 0, $task['rrule']);
 				}
 				if($task['repeat_end_time']>0)
 				{

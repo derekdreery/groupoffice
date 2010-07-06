@@ -134,7 +134,7 @@ class calendar extends db {
 
 		$event = $cal->get_event($reminder['link_id']);
 		if($event && !empty($event['rrule'])) {
-			$reminder['time'] = Date::get_next_recurrence_time($event['start_time'], time(),$event['rrule']);
+			$reminder['time'] = Date::get_next_recurrence_time($event['start_time'], time(),$event['end_time']-$event['start_time'],$event['rrule']);
 			$reminder['user_id']=$user_id;
 			
 			if($reminder['time']) {
@@ -1076,7 +1076,7 @@ class calendar extends db {
 				if(empty($event['rrule']))
 					$reminder['vtime']=$event['start_time'];
 				else
-					$reminder['vtime'] = Date::get_next_recurrence_time($event['start_time'],time(), $event['rrule']);
+					$reminder['vtime'] = Date::get_next_recurrence_time($event['start_time'],time(), $event['end_time']-$event['start_time'],$event['rrule']);
 
 				$reminder['time']=$reminder['vtime']-$event['reminder'];
 
@@ -1205,7 +1205,7 @@ class calendar extends db {
 				if(empty($event['rrule']))
 					$reminder['vtime']=$event['start_time'];
 				else
-					$reminder['vtime'] = Date::get_next_recurrence_time($event['start_time'],time(), $event['rrule']);
+					$reminder['vtime'] = Date::get_next_recurrence_time($event['start_time'],time(), $event['end_time']-$event['start_time'],$event['rrule']);
 
 				$reminder['time']=$reminder['vtime']-$event['reminder'];
 
@@ -1546,8 +1546,9 @@ class calendar extends db {
 		$interval_start_time,
 		$interval_end_time,
 		'start_time','ASC',0,0,$only_busy_events)) {
-			while($this->next_record()) {
-				$this->calculate_event($this->record,
+			while($record=$this->next_record()) {
+				go_debug($record);
+				$this->calculate_event($record,
 								$interval_start_time,
 								$interval_end_time);
 			}
@@ -1568,7 +1569,7 @@ class calendar extends db {
 	function calculate_event($event, $interval_start_time, $interval_end_time) {
 		global $GO_SECURITY;
 
-		//go_debug('interval: '.date('Ymd G:i', $interval_start_time).' - '.date('Ymd G:i', $interval_end_time));
+		go_debug('interval: '.date('Ymd G:i', $interval_start_time).' - '.date('Ymd G:i', $interval_end_time));
 
 		if(empty($event['rrule'])) {
 			if($event['start_time'] < $interval_end_time && $event['end_time'] > $interval_start_time) {
@@ -1585,6 +1586,7 @@ class calendar extends db {
 			$first_occurrence_time=$event['start_time'];
 			$start_time=$interval_start_time;
 
+
 			//calculate the next occurrence from the start_time minus one second because an event
 			//may start exactly on the start of display.
 			$calculated_event['start_time']=$interval_start_time-1-$duration;
@@ -1592,7 +1594,7 @@ class calendar extends db {
 			//go_debug($calculated_event['name'].': '.date('Ymd G:i', $first_occurrence_time));
 
 			$loops = 0;
-			while($calculated_event['start_time'] = Date::get_next_recurrence_time($first_occurrence_time, $calculated_event['start_time'], $event['rrule'])) {
+			while($calculated_event['start_time'] = Date::get_next_recurrence_time($first_occurrence_time, $calculated_event['start_time'], $duration, $event['rrule'])) {
 				$loops++;
 
 				$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
@@ -1902,7 +1904,7 @@ class calendar extends db {
 				$event['repeat_end_time']='0';
 				$start_time=$event['start_time'];
 				for($i=1;$i<$event_count;$i++) {
-					$event['repeat_end_time']=$start_time=Date::get_next_recurrence_time($event['start_time'], $start_time, $event['rrule']);
+					$event['repeat_end_time']=$start_time=Date::get_next_recurrence_time($event['start_time'], $start_time, $event['end_time']-$event['start_time'],$event['rrule']);
 				}
 				if($event['repeat_end_time']>0) {
 					$event['repeat_end_time']+=$event['end_time']-$event['start_time'];
