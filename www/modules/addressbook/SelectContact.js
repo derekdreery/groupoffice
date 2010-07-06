@@ -24,7 +24,8 @@ GO.addressbook.SelectContact = function(config){
 	    url: GO.settings.modules.addressbook.url+ 'json.php',
 	    baseParams: {
 	    	task: 'contacts',
-				'addressbook_id' : config.addressbook_id
+				'addressbook_id' : config.addressbook_id,
+				'no_addressbooks_filter' : 1
 				},
 	    root: 'results',
 	    id: 'id',
