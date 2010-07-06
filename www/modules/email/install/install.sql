@@ -170,3 +170,27 @@ CREATE TABLE IF NOT EXISTS `go_links_9` (
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `em_accounts_collapsed`
+--
+
+CREATE TABLE IF NOT EXISTS `em_accounts_collapsed` (
+  `account_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`account_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `em_folders_expanded`
+--
+
+CREATE TABLE IF NOT EXISTS `em_folders_expanded` (
+  `folder_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`folder_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

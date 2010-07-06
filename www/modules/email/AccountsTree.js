@@ -28,6 +28,12 @@ GO.email.AccountsTree = function(config){
 		baseParams:{task: 'tree'},
 		preloadChildren:true
 	});
+
+	config.loader.on("load", function(treeLoader, node)
+	{
+		node.attributes.parentExpanded=true;
+	}, this);
+
 	config.containerScroll=true;
 	config.rootVisible=false;
 	config.collapseFirst=false;

@@ -59,14 +59,19 @@ function get_all_mailbox_nodes($account_id, $folder_id) {
 	return $response;
 }
 
-function get_mailbox_nodes($account_id, $folder_id) {
-	global $lang, $imap, $inbox_new;
+function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
+	global $lang, $imap, $inbox_new, $GO_SECURITY;
+
+	if(!$user_id)
+	{
+	    $user_id = $GO_SECURITY->user_id;
+	}
 
 	$email = new email();
 	$email2 = new email();
 
 	$response = array();
-
+	
 	$count = $email->get_subscribed($account_id, $folder_id);
 
 	if($account_id>0 && !$count){
@@ -76,9 +81,12 @@ function get_mailbox_nodes($account_id, $folder_id) {
 		global $account;
 		$email->synchronize_folders($account, $imap);
 		$count = $email->get_subscribed($account_id, $folder_id);
-	}
+	}	
 
-	while($record = $email->next_record()) {
+	while($record = $email->next_record())
+	{
+		unset($children);
+		
 		if($email->f('name') == 'INBOX') {
 			if($count==1 && $record['can_have_children']==1) {
 				$children=get_mailbox_nodes(0, $email->f('id'));
@@ -91,6 +99,16 @@ function get_mailbox_nodes($account_id, $folder_id) {
 				$folder_name = substr($email->f('name'),$pos+1);
 			}else {
 				$folder_name = $email->f('name');
+			}
+		}
+
+		$parentExpanded=false;
+		if(!isset($children))
+		{
+			if($email2->is_folder_expanded($email->f('id'), $user_id))
+			{
+				$parentExpanded=true;
+				$children=get_mailbox_nodes(0, $email->f('id'), $user_id);
 			}
 		}
 
@@ -133,7 +151,8 @@ function get_mailbox_nodes($account_id, $folder_id) {
 							'unseen'=>$unseen['count'],
 							'mailbox'=>$email->f('name'),
 							'expanded'=>isset($children),
-							'children'=>isset($children) ? $children : null
+							'children'=>isset($children) ? $children : null,
+							'parentExpanded'=>$parentExpanded
 			);
 		}else {
 			$response[] = array(
@@ -147,7 +166,8 @@ function get_mailbox_nodes($account_id, $folder_id) {
 							'canHaveChildren'=>$email->f('can_have_children'),
 							'unseen'=>$unseen['count'],
 							'expanded'=>true,
-							'children'=>array()
+							'children'=>isset($children) ? $children : array(),
+							'parentExpanded'=>$parentExpanded
 			);
 		}
 	}
@@ -831,10 +851,15 @@ try {
 					$node = explode('_',$_REQUEST['node']);
 					$node_type=$node[0];
 					$node_id=$node[1];
+
+					if(!$email->is_folder_expanded($node_id, $GO_SECURITY->user_id))
+					{
+						$email->update_folder_state($node_id, $GO_SECURITY->user_id, true);
+					}
 				}else {
 					$node_type='root';
 					$node_id=0;
-				}
+				}										
 
 				$response=array();
 				if($node_type=='root') {
@@ -847,7 +872,7 @@ try {
 						} catch(Exception $e){
 							$account=false;
 							$error = $email->human_connect_error($e->getMessage());
-						}
+						}						
 
 						$usage = '';
 						$inbox_new=0;
@@ -868,27 +893,32 @@ try {
 								}	else {
 									$usage = sprintf($lang['email']['usage'], Number::format_size($quota['usage']*1024));
 								}
-							}	
+							}
+
+							$account_expanded = $email->is_account_expanded($email2->f('id'), $GO_SECURITY->user_id);
 							$children = get_mailbox_nodes($email2->f('id'), 0);
+							
 							$imap->disconnect();
 						}else {
 							$text = $email2->f('email').' ('.$lang['common']['error'].')';
 							$children=array();
-						}
-
+							$account_expanded=true;
+						}						
+						
 						$node =  array(
 										'text'=>$text,
 										'name'=>$email2->f('email'),
 										'id'=>'account_'.$email2->f('id'),
 										'iconCls'=>'folder-account',
-										'expanded'=>true,
+										'expanded'=>$account_expanded,
 										'account_id'=>$email2->f('id'),
 										'folder_id'=>0,
 										'mailbox'=>'INBOX',
 										'children'=>$children,
-										'canHaveChildren'=>$email2->f('type')=='imap',
+										'canHaveChildren'=>$email2->f('type')=='imap',									
 										'inbox_new'=>$inbox_new,
-										'usage'=>$usage
+										'usage'=>$usage,
+										'parentExpanded'=>$account_expanded
 						);
 						if(!$account) {
 							$node['qtipCfg'] = array('title'=>$lang['common']['error'], 'text' =>htmlspecialchars($error, ENT_QUOTES, 'UTF-8'));
