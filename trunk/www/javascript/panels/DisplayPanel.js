@@ -337,7 +337,12 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 					}else
 					{
 						var responseParams = Ext.decode(response.responseText);
-						this.setData(responseParams.data);
+						if(!responseParams.success){
+							Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
+						}else
+						{
+							this.setData(responseParams.data);
+						}
 					}				
 				},
 				scope: this			
