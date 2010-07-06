@@ -93,6 +93,7 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 
 	loadParams : {},
 	downloadUrl : '',
+	showAllFields:false,
 
 	formPanelItems : [{
 				autoHeight : true,
@@ -120,7 +121,7 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 	beforeRequest : function() {
 		var columns = [];
 
-		var exportHidden = this.formPanel.form.findField('export_hidden').getValue();
+		var exportHidden = (this.showAllFields) ? true : this.formPanel.form.findField('export_hidden').getValue();
 
 		if (this.colModel) {
 			for (var i = 0; i < this.colModel.getColumnCount(); i++) {
