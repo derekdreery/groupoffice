@@ -31,14 +31,6 @@ GO.bookmarks.MainPanel = function(config){
 		config = {};
 	}
 
-	//
-	// rechtermuisknop uitschakelen om zelf af te handelen
-	//
-
-	Ext.getBody().on("contextmenu", Ext.emptyFn, null, {
-		preventDefault: true
-	});
-
 	//----------------------------------------------------------------------------
 
 	// MainPanel heeft :
