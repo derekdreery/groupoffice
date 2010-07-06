@@ -122,3 +122,5 @@ GO.addressbook.lang.confirmAddAllSearchResults='Are you sure you want to add all
 GO.addressbook.lang.moveEmployees='Move employees';
 
 GO.addressbook.lang.emailAdded='Email address succesfully added to contact';
+
+GO.addressbook.lang.exportWithCompanies='With companies';
