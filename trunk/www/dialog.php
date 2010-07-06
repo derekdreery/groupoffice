@@ -3,10 +3,22 @@ header('Content-Type: text/html; charset=UTF-8');
 
 require('Group-Office.php');
 
-$module = isset($_REQUEST['module']) && preg_match('/[a-z]+/', $_REQUEST['module']) ? $_REQUEST['module'] : 'email';
-$function = isset($_REQUEST['function']) ? $_REQUEST['function'] : 'showComposer';
+if(!isset($_REQUEST['m']) && isset($_REQUEST['module']))
+	$_REQUEST['m']=$_REQUEST['module'];
 
-$params = isset($_REQUEST['params']) ? base64_decode($_REQUEST['params']) : '';
+if(!isset($_REQUEST['e']) && isset($_REQUEST['loadevent']))
+	$_REQUEST['e']=$_REQUEST['loadevent'];
+
+if(!isset($_REQUEST['f']) && isset($_REQUEST['function']))
+	$_REQUEST['f']=$_REQUEST['function'];
+
+if(!isset($_REQUEST['p']) && isset($_REQUEST['params']))
+	$_REQUEST['p']=$_REQUEST['params'];
+
+$module = isset($_REQUEST['m']) && preg_match('/[a-z]+/', $_REQUEST['m']) ? $_REQUEST['m'] : 'email';
+$function = isset($_REQUEST['f']) ? $_REQUEST['f'] : 'showComposer';
+
+$params = isset($_REQUEST['p']) ? base64_decode($_REQUEST['p']) : '';
 
 if(strpos($_SERVER['QUERY_STRING'], '<script') || strpos(urldecode($_SERVER['QUERY_STRING']), '<script'))
 				die('Invalid request');
