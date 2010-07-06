@@ -85,3 +85,15 @@ $updates[]="ALTER TABLE `em_accounts` ADD `password_encrypted` BOOLEAN NOT NULL 
 $updates[]="ALTER TABLE `em_accounts` CHANGE `password` `password` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
 
 $updates[]="ALTER TABLE `em_accounts` CHANGE `password_encrypted` `password_encrypted` TINYINT NOT NULL";
+
+$updates[]="CREATE TABLE IF NOT EXISTS `em_accounts_collapsed` (
+  `account_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`account_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="CREATE TABLE IF NOT EXISTS `em_folders_expanded` (
+  `folder_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`folder_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

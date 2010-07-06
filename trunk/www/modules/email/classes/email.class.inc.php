@@ -1454,7 +1454,39 @@ class email extends db {
 		$this->query($sql);
 		return $this->num_rows();
 	}
+	
 
+	function is_account_expanded($account_id, $user_id)
+	{
+	    $this->query("SELECT * FROM em_accounts_collapsed WHERE account_id=? AND user_id=?", 'ii', array($account_id, $user_id));
+	    return $this->next_record() ? false : true;
+	}
+	function is_folder_expanded($folder_id, $user_id)
+	{
+	    $this->query("SELECT * FROM em_folders_expanded WHERE folder_id=? AND user_id=?", 'ii', array($folder_id, $user_id));
+	    return $this->next_record() ? true : false;
+	}
+
+	function update_account_state($account_id, $user_id, $open=false)
+	{
+	    if($open)
+	    {
+		return $this->query("DELETE FROM em_accounts_collapsed WHERE account_id=? AND user_id=?", 'ii', array($account_id, $user_id));
+	    }else
+	    {
+		return $this->insert_row('em_accounts_collapsed', array('account_id'=>$account_id, 'user_id'=>$user_id));
+	    }
+	}
+	function update_folder_state($folder_id, $user_id, $open=false)
+	{
+	    if($open)
+	    {
+		    return $this->insert_row('em_folders_expanded', array('folder_id'=>$folder_id, 'user_id'=>$user_id));
+	    }else
+	    {
+		    return $this->query("DELETE FROM em_folders_expanded WHERE folder_id=? AND user_id=?", 'ii', array($folder_id, $user_id));
+	    }
+	}
 
 	/* {CLASSFUNCTIONS} */
 

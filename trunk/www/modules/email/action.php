@@ -1011,6 +1011,34 @@ try {
 		    
 		    $response['success'] = true;
 		    break;
+
+		
+		case 'update_state':
+
+		    $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+		    $new_state = (isset($_REQUEST['open']) && $_REQUEST['open'] == 'true') ? true : false;
+		    $folder = (isset($_REQUEST['folder']) && $_REQUEST['folder'] == 'true') ? true : false;
+
+		    if($folder)
+		    {
+			    $current_state = $email->is_folder_expanded($id, $GO_SECURITY->user_id);
+			    if($current_state != $new_state)
+			    {
+				    $email->update_folder_state($id, $GO_SECURITY->user_id, $new_state);
+			    }
+
+		    }else
+		    {
+			    $current_state = $email->is_account_expanded($id, $GO_SECURITY->user_id);
+			    if($current_state != $new_state)
+			    {
+				    $email->update_account_state($id, $GO_SECURITY->user_id, $new_state);
+			    }
+		    }			
+
+		    $response['success'] = true;
+		    break;
+
 		
 		/* {TASKSWITCH} */
 	}
