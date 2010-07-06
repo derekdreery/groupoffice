@@ -380,7 +380,7 @@ try {
 			}
 
 			//throw new Exception(date('Ymd G:i', $cal->get_next_recurrence_time(0,$event['start_time'], $event)));
-			if(!empty($event['rrule']) && Date::get_next_recurrence_time($event['start_time'],$event['start_time'], $event['rrule']) < $event['end_time']) {
+			if(!empty($event['rrule']) && Date::get_next_recurrence_time($event['start_time'],$event['start_time'], $event['end_time']-$event['start_time'],$event['rrule']) < $event['end_time']) {
 			//Event will cumulate
 				throw new Exception($lang['calendar']['cumulative']);
 			}

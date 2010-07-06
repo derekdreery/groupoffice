@@ -152,10 +152,9 @@ class Date {
 	 * @param int $first_occurence_time The time this events occurs for the first time.
 	 * @param int $start_time The next occurence returns will happen after this time.
 	 * @param string $rrule The iCalendar rrule
-	 * @param boolean $local_time Set to true if the days in the url are not in GMT but local time
 	 * @return int
 	 */
-	public static function get_next_recurrence_time($first_occurence_time, $start_time, $rrule, $local_time=false)
+	public static function get_next_recurrence_time($first_occurence_time, $start_time, $duration, $rrule)
 	{
 		global $GO_CONFIG;
 
@@ -398,7 +397,7 @@ class Date {
 		}
 
 
-		if ($event['repeat_forever'] == '0' && $occurence_time >= $event['repeat_end_time'])
+		if ($event['repeat_forever'] == '0' && $occurence_time >= $event['repeat_end_time']-$duration)
 		{
 			return 0;
 		}else
