@@ -73,6 +73,30 @@ switch ($_POST['task'])
 
 		echo json_encode($response);
 		break;
+
+	case 'groups_all':
+		
+		$user_id = (!$GO_MODULES->modules['groups']['read_permission']) ? $GO_SECURITY->user_id : 0;
+
+		$response['total'] = $GO_GROUPS->get_groups($user_id, $start, $limit, $sort, $dir);
+		$response['results']=array();
+		while($GO_GROUPS->next_record())
+		{
+			if ($GO_GROUPS->f('id') != 1)
+			{
+				$record = array(
+					'id' => $GO_GROUPS->f('id'),
+					'name' => $GO_GROUPS->f('name'),
+					'user_id' => $GO_GROUPS->f('user_id'),
+					'user_name' => String::format_name($GO_GROUPS->f('last_name'), $GO_GROUPS->f('first_name'), $GO_GROUPS->f('middle_name'))
+				);
+				$response['results'][] = $record;
+			}
+		}
+
+		echo json_encode($response);
+		break;
+
 	case 'users_in_group':
 		$response=array();
 
