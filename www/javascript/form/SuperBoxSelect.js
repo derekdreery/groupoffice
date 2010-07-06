@@ -682,10 +682,12 @@ Ext.ux.form.SuperBoxSelect = Ext.extend(Ext.ux.form.SuperBoxSelect,Ext.form.Comb
 		return true;
 	},
 	manageNameAttribute :  function(){
-		if(this.items.getCount() === 0 && this.forceFormValue){
-			this.el.dom.setAttribute('name', this.hiddenName || this.name);
-		}else{
-			this.el.dom.removeAttribute('name');
+		if(this.el){
+			if(this.items.getCount() === 0 && this.forceFormValue){
+				this.el.dom.setAttribute('name', this.hiddenName || this.name);
+			}else{
+				this.el.dom.removeAttribute('name');
+			}
 		}
 	},
 	setupFormInterception : function(){
