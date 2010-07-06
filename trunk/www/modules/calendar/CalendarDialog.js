@@ -70,7 +70,7 @@ GO.calendar.CalendarDialog = function(config)
 		},{
 			xtype:'plainfield',
 			fieldLabel:'URL',
-			id:'url',
+			name:'url',
 			anchor:'100%'
 		},
 		this.exportButton = new Ext.Button({
