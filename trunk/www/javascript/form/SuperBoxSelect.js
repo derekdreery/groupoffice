@@ -697,20 +697,34 @@ Ext.ux.form.SuperBoxSelect = Ext.extend(Ext.ux.form.SuperBoxSelect,Ext.form.Comb
 				form = p.getForm();
 			}
 		});
-		if(form){
-			var formGet = form.getValues;
-			form.getValues = function(asString){
-				this.el.dom.disabled = true;
-				var oldVal = this.el.dom.value;
-				this.setRawValue('');
+		if(form && !form.hasSuperBoxSequence){
+			form.hasSuperBoxSequence=true;
+			var formGet = this.orginalFormGetValues = form.getValues;
+			form.getValues =  function(asString){
+
+				form.items.each(function(field){
+					//check if this field is a superboxselect
+					if(field.setupFormInterception){
+						field.el.dom.disabled = true;
+						field.oldVal = this.el.dom.value;
+						field.setRawValue('');
+					}
+				});
 				var vals = formGet.call(form);
-				this.el.dom.disabled = false;
-				this.setRawValue(oldVal);
-				if(this.forceFormValue && this.items.getCount() === 0){
-					vals[this.name] = '';
-				}
+
+				form.items.each(function(field){
+					//check if this field is a superboxselect
+					if(field.setupFormInterception){
+						field.el.dom.disabled = false;						
+						field.setRawValue(field.oldVal);
+						if(field.forceFormValue && field.items.getCount() === 0){
+							vals[field.name] = '';
+						}
+					}
+				});			
+				
 				return asString ? Ext.urlEncode(vals) : vals ;
-			}.createDelegate(this);
+			};
 		}
 	},
 	onResize : function(w, h, rw, rh) {
