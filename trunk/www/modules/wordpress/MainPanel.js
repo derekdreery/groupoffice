@@ -1,3 +1,5 @@
+Ext.namespace('GO.wordpress');
+
 GO.moduleManager.addModule('wordpress', GO.panel.IFrameComponent, {
 	title : 'Wordpress',
 	iconCls : 'go-tab-icon-forum',
