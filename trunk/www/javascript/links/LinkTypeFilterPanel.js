@@ -36,7 +36,7 @@ GO.LinkTypeFilterPanel = function(config)
 		autoHeight:true,
 		border:false,
 		loadMask:true,
-		store: GO.linkTypesStore,
+		store: config.store || GO.linkTypesStore,
 		columns: [
 				checkColumn,
 				{
@@ -89,7 +89,11 @@ GO.LinkTypeFilterPanel = function(config)
 }
 
 Ext.extend(GO.LinkTypeFilterPanel, Ext.Panel,{
-	applyFilter : function(type_id){
+
+	getSelectedTypes : function(type_id){
+
+		if(typeof(type_id)=='undefined')
+			type_id=-1;
 
 		var types = [], checked, current_type_id;
 
@@ -114,6 +118,11 @@ Ext.extend(GO.LinkTypeFilterPanel, Ext.Panel,{
 				types.push(this.filterGrid.store.data.items[i].get('id'));
 			}
 		}
+		return types;
+	},
+	applyFilter : function(type_id){
+
+		var types = this.getSelectedTypes(type_id);
 
 		this.fireEvent('change', this, types);
 

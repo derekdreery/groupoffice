@@ -13,10 +13,6 @@
  
 GO.grid.LinksGrid = function(config){
 	
-	var linksDialog;
-	
-	//Ext.apply(this, config);
-	
 	if(!config)
 	{
 		config={};
@@ -43,7 +39,14 @@ GO.grid.LinksGrid = function(config){
 	config['store'] = new GO.data.JsonStore({
 
 			url: BaseHref+'json.php',			
-			baseParams: {task: "links", link_id: this.link_id, link_type: this.link_type, folder_id: this.folder_id,type_filter:'true'},
+			baseParams: {
+				task: "links",
+				link_id: this.link_id,
+				link_type: this.link_type,
+				folder_id: this.folder_id,
+				type_filter:'true',
+				no_filter_save: config.noFilterSave
+			},
 			root: 'results',
 			totalProperty: 'total',
 			id: 'link_and_type',

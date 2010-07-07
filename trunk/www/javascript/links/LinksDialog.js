@@ -12,13 +12,15 @@
  */
   
 GO.dialog.LinksDialog = function(config){
-	
+	config = config || {};
+
 	Ext.apply(this, config);
 	
 	this.grid = new GO.grid.SearchPanel({
 			noTitle:true,
 			noOpenLinks:true,
-			dontLoadOnRender:true
+			dontLoadOnRender:true,
+			singleSelect:config.singleSelect
 		});
 
 	this.grid.searchGrid.on('rowdblclick', this.linkItems, this);

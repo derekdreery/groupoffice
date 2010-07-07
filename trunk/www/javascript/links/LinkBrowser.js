@@ -16,7 +16,9 @@ GO.LinkBrowser = function(config){
 	Ext.apply(this, config);
 
 
-	this.linksPanel = new GO.grid.LinksPanel();
+	this.linksPanel = new GO.grid.LinksPanel({
+		noFilterSave:'true'
+	});
 
 	if(!this.id)
 		this.id='go-link-browser';

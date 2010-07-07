@@ -113,6 +113,7 @@ GO.grid.LinksPanel = function(config){
 	this.linksGrid = new GO.grid.LinksGrid({
 		region:'center',
 		id: config.id+'_grid',
+		noFilterSave:config.noFilterSave,		
 		deleteConfig:{
 				scope:this,
 				success:this.onDelete
@@ -206,12 +207,18 @@ GO.grid.LinksPanel = function(config){
 
 	this.linkTypeFilter = new GO.LinkTypeFilterPanel({
 		region:'south',
-		height:300
+		height:300,
+		store:new Ext.data.JsonStore({
+			root: 'results',
+			data: {"results":GO.linkTypes}, //defined in /default_scripts.inc.php
+			fields: ['id','name', 'checked'],
+			id:'id'
+		})
 	});
 	this.linkTypeFilter.on('change', function(grid, types){
 		this.linksGrid.store.baseParams.types = Ext.encode(types);
 		this.linksGrid.store.load();
-		delete this.linksGrid.store.baseParams.types;
+		//delete this.linksGrid.store.baseParams.types;
 	}, this);
 	
 	config.items=[
@@ -495,7 +502,10 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 		
 		if(!this.loaded && this.link_id>0)
 		{
+			this.linksGrid.store.baseParams.types = Ext.encode(this.linkTypeFilter.getSelectedTypes());
 			this.linksGrid.store.load();
+			//delete this.linksGrid.store.baseParams.types;
+			
 			var rootNode = this.linksTree.getRootNode();
 			
 			if(rootNode.isExpanded()){
@@ -530,8 +540,11 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 		
 		this.folder_id=folder_id;
 		this.linksGrid.store.baseParams["folder_id"]=folder_id;
-		if(!noload)
+		if(!noload){
+			this.linksGrid.store.baseParams.types = Ext.encode(this.linkTypeFilter.getSelectedTypes());
 			this.linksGrid.store.load();
+			//delete this.linksGrid.store.baseParams.types;
+		}
 	},
 	
 	loadLinks : function (link_id, link_type, folder_id)
