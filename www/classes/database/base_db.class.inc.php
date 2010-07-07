@@ -633,10 +633,12 @@ class base_db{
 			$this->unlock();
 		}
 
-		go_log(LOG_DEBUG, sprintf("Database error: %s MySQL Error: %s (%s)",
-		$msg,
-		$this->errno,
-		$this->error));
+		//in other software using this lib it might not exist
+		if(function_exists('go_log'))
+			go_log(LOG_DEBUG, sprintf("Database error: %s MySQL Error: %s (%s)",
+				$msg,
+				$this->errno,
+				$this->error));
 
 		if($this->halt_on_error=='yes')
 		{
