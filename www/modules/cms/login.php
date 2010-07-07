@@ -34,6 +34,15 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 			$smarty->assign('failed', true);
 		}else {
 
+			if (isset($_POST['remind']))
+			{
+				require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+				$c = new cryptastic();
+
+				SetCookie("GO_UN",$c->encrypt($username),time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
+				SetCookie("GO_PW",$c->encrypt($password),time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
+			}
+
 			if(strpos($success_url, 'login.php') || strpos($success_url, 'logout.php')){
 				require_once($GO_MODULES->modules['cms']['path'].'smarty_plugins/function.cms_href.php');
 				$success_url = str_replace('&amp;', '&', smarty_function_cms_href(array('path'=>''), $smarty));

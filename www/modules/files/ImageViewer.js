@@ -36,7 +36,6 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		{
 			iconCls: 'btn-save',
 			text: GO.lang.download,
-			cls: 'x-btn-text-icon',
 			handler: function(){
 				document.location.replace(this.imgEl.dom.src);
 			},
@@ -44,14 +43,14 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		},'-',
 		{
 			text: GO.files.lang.normalSize,
-			cls: 'x-btn-text-icon',
+			iconCls: 'fs-btn-normal-size',
 			handler: function(){
 				this.imgEl.setSize(this.originalImgSize.width, this.originalImgSize.height);
 			},
 			scope: this
 		},{
 			text: GO.files.lang.fitImage,
-			cls: 'x-btn-text-icon',
+			iconCls: 'fs-btn-fit-image',
 			handler: function(){
 				this.syncImgSize();
 			},
