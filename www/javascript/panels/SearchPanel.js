@@ -57,7 +57,7 @@ GO.grid.SearchPanel = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'link_and_type',
-		fields: ['icon','link_and_type', 'link_type','name','type','url','mtime','id','module', 'description', 'iconCls'],
+		fields: ['icon','link_and_type', 'link_type','name','type','url','mtime','id','module', 'description', 'iconCls', 'type_name'],
 		remoteSort: true
 	});
 	
@@ -120,7 +120,7 @@ GO.grid.SearchPanel = function(config){
 		loadMask:{
 			msg: GO.lang['waitMsgLoad']
 			},
-		sm:new Ext.grid.RowSelectionModel({})
+		sm:new Ext.grid.RowSelectionModel({single:config.singleSelect})
 	};
 	
 	this.searchGrid = new GO.grid.GridPanel(gridConfig);
