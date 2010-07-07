@@ -630,6 +630,8 @@ try
 					}
 				}
 
+				$GO_EVENTS->fire_event('load_contact', array(&$response, $task));
+
 				echo json_encode($response);
 				break;
 			}			
@@ -673,7 +675,7 @@ try
 			if(!isset($response['data']['iso_address_format']) || $response['data']['iso_address_format'] == '')
 				$response['data']['iso_address_format'] = $response['data']['default_iso_address_format'];
 
-			
+			$GO_EVENTS->fire_event('load_contact', array(&$response, $task));
 
 			echo json_encode($response);
 			break;
@@ -757,7 +759,10 @@ try
 						$response['data']['mailing_'.$ml->f('id')]=$ml2->company_is_in_group($company_id, $ml->f('id')) ? true : false;
 					}
 				}
+
+				$GO_EVENTS->fire_event('load_company', array(&$response, $task));
 				echo json_encode($response);
+				
 				break;
 			}			
 				
@@ -777,10 +782,7 @@ try
 					'name'=>String::format_name($ab->record),
 					'email'=>$ab->f('email')					
 				);
-			}
-				
-				
-				
+			}				
 				
 			$response['data']['links'] = array();
 			/* loadCompanyDetails - company sidepanel */
@@ -810,6 +812,8 @@ try
 				
 				$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 3);
 			}
+
+			$GO_EVENTS->fire_event('load_company', array(&$response, $task));
 				
 				
 			echo json_encode($response);
