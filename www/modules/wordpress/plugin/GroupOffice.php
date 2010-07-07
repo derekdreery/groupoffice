@@ -12,21 +12,89 @@
   Version: 1.0
   Author URI: http://www.intermesh.nl/en/
  */
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
+class groupoffice_connector{
 
-function groupoffice_get_database(){
-	$go_config = get_option('groupoffice_config');
+	function  __construct() {
 
-	require_once($go_config['config_file']);
-	require_once($config['root_path'].'classes/database/base_db.class.inc.php');
-	require_once($config['root_path'].'classes/database/mysql.class.inc.php');
+		$this->wp_go_config = get_option('groupoffice_config');
+		require($this->wp_go_config['config_file']);
+		$this->go_config=$config;
 
+		require_once($config['root_path'].'classes/database/base_db.class.inc.php');
+		require_once($config['root_path'].'classes/database/mysql.class.inc.php');
+	}
 
-	$db = new db();
-	$db->set_parameters($config['db_host'], $config['db_name'], $config['db_user'], $config['db_pass'], $config['db_port']);
+	function get_database(){
+		$db = new db();
+		$db->set_parameters(
+						$this->go_config['db_host'],
+						$this->go_config['db_name'],
+						$this->go_config['db_user'],
+						$this->go_config['db_pass'],
+						$this->go_config['db_port']
+						);
 
-	return $db;
+		return $db;
+	}
+
+	function sync(){
+		include_once(ABSPATH.'wp-admin/includes/taxonomy.php');
+		$this->sync_contacts();
+	}
+
+	function sync_contacts(){
+		$db = $this->get_database();
+		$db2 = $this->get_database();
+
+		$sql = "SELECT * FROM wp_posts ".
+			"WHERE publish=1 AND updated=1";
+
+		$db->query($sql);
+
+		while($record = $db->next_record()){
+
+			$post = array(
+					'post_content'=>$record['content'],
+					'post_title'=>$record['title'],
+					'post_status'=>'publish'
+					);
+
+			if(empty($record['post_id'])){
+				$post_id=wp_insert_post($post);
+			}else{
+				$post_id=$post['ID']=$record['post_id'];
+
+				$new_post_id= wp_update_post($post);
+				if($new_post_id>0)
+					$post_id=$new_post_id;
+			}
+
+			//insert post to contact link so we know the post id in Group-Office
+			$record['post_id']=$post_id;
+			$record['updated']=0;
+
+			$db2->update_row('wp_posts', array('id','link_type'), $record);
+
+			wp_create_categories(array('Spotlight'),$post_id);
+		}
+
+		$sql = "SELECT * FROM wp_posts p ".
+			"WHERE publish=0 AND post_id>0";
+		$db->query($sql);
+
+		while($record = $db->next_record()){
+
+			wp_delete_post($record['post_id']);
+			$record['post_id']=0;
+
+			$db2->update_row('wp_posts', array('id','link_type'), $record);
+		}
+	}
 
 }
+
 
 function groupoffice_unserializesession($data) {
 	$vars = preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
@@ -53,8 +121,6 @@ function groupoffice() {
 
 			update_option('groupoffice_config', $site_data);
 
-
-
 			//var_dump($_SESSION['GO_SESSION']);
 		}
 	}
@@ -76,6 +142,10 @@ function groupoffice() {
 		do_action('wp_login', $_SESSION['GO_SESSION']['username']);
 
 	}
+
+	$go = new groupoffice_connector();
+	$go->sync();
+
 	if (isset($_REQUEST['GO_SID'])) {
 		//direct link to wp-admin didn't work so we go to the main page and redirect
 		wp_redirect(admin_url());

@@ -1,1 +1,2 @@
 modules/wordpress/MainPanel.js
+modules/wordpress/PublishPanel.js
