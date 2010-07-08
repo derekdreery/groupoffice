@@ -2,5 +2,5 @@
 //start session
 require('../../Group-Office.php');
 
-header('Location: /wordpress/?GO_SID='.session_id());
+header('Location: '.$GO_CONFIG->get_setting('wp_url').'?GO_SID='.session_id());
 ?>
