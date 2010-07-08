@@ -4,6 +4,9 @@ class wordpress extends db{
 	public function __on_load_listeners($events){
 		$events->add_listener('load_contact', __FILE__, 'wordpress', 'load_contact');
 		$events->add_listener('save_contact', __FILE__, 'wordpress', 'save_contact');
+
+		$events->add_listener('load_project', __FILE__, 'wordpress', 'load_project');
+		$events->add_listener('save_project', __FILE__, 'wordpress', 'save_project');
 		
 	}
 
@@ -31,15 +34,30 @@ class wordpress extends db{
 			$this->insert_row('wp_posts', $w);
 	}
 
-	public static function load_contact(&$response){
-		$wp = new wordpress();
-		$wp->load($response, $_POST['contact_id'], 2);
+	public static function load_contact(&$response, $task){
+		if($task=='load_contact'){
+			$wp = new wordpress();
+			$wp->load($response, $_POST['contact_id'], 2);
+		}
 	}
 
 	public static function save_contact($credentials){
 
 		$wp = new wordpress();
 		$wp->save($credentials['id'], 2);
+	}
+
+	public static function load_project(&$response, $task){
+		if($task=='project'){
+			$wp = new wordpress();
+			$wp->load($response, $_POST['project_id'], 5);
+		}
+	}
+
+	public static function save_project($credentials){
+
+		$wp = new wordpress();
+		$wp->save($credentials['id'], 5);
 	}
 
 	public function get_post($id, $link_type){
