@@ -771,8 +771,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			name:'start_time',
 			width:80,
 			hideLabel:true,
-			autoSelect :true,
-			forceSelection:true,
+			autoSelect :true,			
 			listeners : {
 				change : {
 					fn : this.checkDateInput,
@@ -787,8 +786,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			name:'end_time',
 			width:80,
 			hideLabel:true,
-			autoSelect :true,
-			forceSelection:true,
+			autoSelect :true,			
 			listeners : {
 				change : {
 					fn : this.checkDateInput,
