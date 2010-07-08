@@ -53,7 +53,16 @@ class groupoffice_connector{
 
 		$db->query($sql);
 
+		$categories=array();
+
 		while($record = $db->next_record()){
+
+			if(!isset($categories[$record['link_type']])){
+				$db2->query("SELECT * FROM go_settings WHERE name='wp_category_".$record['link_type']."'");
+				$setting = $db2->next_record();
+
+				$categories[$record['link_type']] = $setting ? explode(',', $setting['value']) : array();
+			}
 
 			$post = array(
 					'post_content'=>$record['content'],
@@ -77,7 +86,7 @@ class groupoffice_connector{
 
 			$db2->update_row('wp_posts', array('id','link_type'), $record);
 
-			wp_create_categories(array('Spotlight'),$post_id);
+			wp_create_categories($categories[$record['link_type']],$post_id);
 		}
 
 		$sql = "SELECT * FROM wp_posts p ".
