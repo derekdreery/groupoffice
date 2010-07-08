@@ -38,3 +38,12 @@ GO.moduleManager.onModuleReady('addressbook',function(){
 		})
 	});
 });
+
+GO.moduleManager.onModuleReady('projects',function(){
+
+	Ext.override(GO.projects.ProjectDialog,{
+		initComponent : GO.projects.ProjectDialog.prototype.initComponent.createInterceptor(function(){
+			this.tabPanel.add(new GO.wordpress.PublishPanel());
+		})
+	});
+});
