@@ -17,3 +17,13 @@ CREATE TABLE IF NOT EXISTS `wp_posts` (
   KEY `id` (`id`,`link_type`),
   KEY `updated` (`updated`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `wp_posts_custom`;
+CREATE TABLE `wp_posts_custom` (
+`id` INT NOT NULL ,
+`link_id` INT NOT NULL ,
+`key` VARCHAR( 100 ) NOT NULL ,
+`value` VARCHAR( 255 ) NOT NULL ,
+PRIMARY KEY ( `id` , `link_id` )
+) ENGINE = MYISAM DEFAULT CHARSET=utf8;
