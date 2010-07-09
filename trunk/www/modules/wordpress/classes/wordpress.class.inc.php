@@ -1,6 +1,15 @@
 <?php
 class wordpress extends db{
 
+	var $mapping = array(
+		'5' => array(
+				'post_title' => 'name',				
+				'categories' => 'Vacatures',
+				'tags' => '',
+				'custom' => array('Korte beschrijving'=>'description', 'Sectoren' => 'col_14')
+			)
+		);
+
 	public function __on_load_listeners($events){
 		$events->add_listener('load_contact', __FILE__, 'wordpress', 'load_contact');
 		$events->add_listener('save_contact', __FILE__, 'wordpress', 'save_contact');
@@ -19,19 +28,41 @@ class wordpress extends db{
 			$response['data']=array_merge($response['data'], $record);
 	}
 
-	public function save($id, $link_type){
-		$w['id']=$id;
+	public function save($values, $link_type){
+		$w['id']=$values['id'];
 		$w['link_type']=$link_type;
 		$w['publish']=isset($_POST['wp_publish']) ? '1' : '0';
-		$w['title']=$_POST['wp_title'];
-		$w['content']=$_POST['wp_content'];
+		$w['title']=$values[$this->mapping[$link_type]['post_title']];
+		$w['content']=$_POST['wp_content'];//$values[$this->mapping[$link_type]['post_content']];
 		$w['updated']=1;
 
 
-		if($this->get_post($w['id'], $w['link_type']))
+		if($this->get_post($w['id'], $w['link_type'])){
 			$this->update_row('wp_posts',array('id','link_type'), $w);
-		else
+			$this->query('DELETE FROM wp_posts_custom WHERE id=? AND link_type=?', 'ii', array($values['id'], $link_type));
+		}else{
 			$this->insert_row('wp_posts', $w);
+		}
+		
+		global $GO_MODULES;
+		
+		if(isset($GO_MODULES->modules['customfields'])){
+			$cf = new customfields();
+			$custom = $cf->get_values(1, 5, $values['id'],true);
+			$values = array_merge($values, $custom);
+		}
+
+		foreach($this->mapping[$link_type]['custom'] as $wp_key=>$go_col){
+			if(isset($values[$go_col])){
+				$c['id']=$values['id'];
+				$c['link_type']=$link_type;
+				$c['key']=$wp_key;
+				$c['value']=$values[$go_col];
+				
+				$this->insert_row('wp_posts_custom', $c);
+			}
+		}
+
 	}
 
 	public static function load_contact(&$response, $task){
@@ -41,10 +72,10 @@ class wordpress extends db{
 		}
 	}
 
-	public static function save_contact($credentials){
+	public static function save_contact($values){
 
 		$wp = new wordpress();
-		$wp->save($credentials['id'], 2);
+		$wp->save($values, 2);
 	}
 
 	public static function load_project(&$response, $task){
@@ -54,10 +85,10 @@ class wordpress extends db{
 		}
 	}
 
-	public static function save_project($credentials){
+	public static function save_project($values){
 
 		$wp = new wordpress();
-		$wp->save($credentials['id'], 5);
+		$wp->save($values, 5);
 	}
 
 	public function get_post($id, $link_type){
@@ -66,15 +97,13 @@ class wordpress extends db{
 		return $this->next_record();
 	}
 
-	public function set_contact_wp_user($contact_id, $wp_user_id){
-		$r['contact_id']=$contact_id;
-		$r['wp_user_id']=$wp_user_id;
-
-		return $this->replace_row('gw_contacts_wp_users', $r);
+	public function set_contact_wp_user($r){
+		
+		return $this->replace_row('wp_contacts_wp_users', $r);
 	}
 
-	public function get_contact_id_by_wp_user_id($wp_user_id){
-		$sql = "SELECT contact_id FROM gw_contacts_wp_users WHERE wp_user_id=".intval($wp_user_id);
+	public function get_contact_by_wp_user_id($wp_user_id){
+		$sql = "SELECT contact_id FROM wp_contacts_wp_users WHERE wp_user_id=".intval($wp_user_id);
 		$this->query($sql);
 
 		$record = $this->next_record();
