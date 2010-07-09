@@ -80,9 +80,11 @@ function go_autoload($class_name) {
 		{
 		debug_print_backtrace();
 		}*/
-	$cls = $GO_CONFIG->class_path. $class_name.'.class.inc.php';
-	if(file_exists($cls))
-		require_once $cls;
+	if(isset($GO_CONFIG)){
+		$cls = $GO_CONFIG->class_path. $class_name.'.class.inc.php';
+		if(file_exists($cls))
+			require_once $cls;
+	}
 }
 spl_autoload_register("go_autoload");
 
