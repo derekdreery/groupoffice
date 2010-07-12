@@ -562,6 +562,14 @@ and about screen. Please leave the about screen logo original!
 	margin-top: 10px;
 	margin-bottom: 20px;
 }
+.go-login-captcha
+{
+    margin-left:125px;
+}
+.go-login-captcha-link
+{
+    cursor: pointer;
+}
 
 /* start ext overrides */
 
