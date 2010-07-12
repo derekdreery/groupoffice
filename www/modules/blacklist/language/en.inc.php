@@ -6,4 +6,6 @@ $lang['blacklist']['description']='A module that blocks IP addresses after 5 log
 $lang['blacklist']['ip']='IP';
 $lang['blacklist']['ips']='IP addresses';
 
-$lang['blacklist']['blacklisted']='Your IP address %s is b being blocked because there were 5 consecutive login failures from this IP address. Contact the system administrator and supply your IP address to unblock it.';
+$lang['blacklist']['blacklisted']='Your IP address %s is being blocked because there were 5 consecutive login failures from this IP address. Contact the system administrator and supply your IP address to unblock it.';
+$lang['blacklist']['captchaIncorrect']='The security code you entered is incorrect, please try again.';
+$lang['blacklist']['captchaActivated']='There have been five login failures detected. In order to login you need to type the security code.';

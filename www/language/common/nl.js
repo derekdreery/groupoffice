@@ -351,3 +351,6 @@ GO.lang.userGroup='Gebruikersgroep';
 GO.lang.noItemSelectedWarning='Selecteer minimaal één item.';
 GO.lang.deselectAll='Deselecteer alles';
 GO.lang.confirmSelectLotsOfItems='Deze actie zal {count} items selecteren en kan ervoor zorgen dat Group-Office traag wordt. Weet u zeker dat u door wilt gaan?';
+
+GO.lang.captcha='Beveiligings code';
+GO.lang.captchaEmpty='Beveiligings code ontbreekt';
