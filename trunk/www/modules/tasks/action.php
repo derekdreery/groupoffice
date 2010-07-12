@@ -341,7 +341,38 @@ try {
 			}                     
 
 			$response['success'] = true;
-			break;                    
+			break;
+
+
+		case 'move_tasks':
+
+			$items = (isset($_REQUEST['items']) && count($_REQUEST['items'])) ? json_decode($_REQUEST['items']) : array();
+			$tasklist_id = (isset($_REQUEST['tasklist_id']) && $_REQUEST['tasklist_id']) ? $_REQUEST['tasklist_id'] : 0;
+
+			$num_updated = 0;
+			if($tasklist_id)
+			{				
+				$tasklist = $tasks->get_tasklist($tasklist_id);
+				for($i=0; $i<count($items); $i++)
+				{
+					$old_task = $tasks->get_task($items[$i]);
+					if($old_task['tasklist_id'] != $tasklist_id)
+					{
+						$task = array('id' => $items[$i], 'tasklist_id' => $tasklist_id);
+						$tasks->update_task($task, $tasklist);
+
+						$num_updated++;
+					}
+				}
+			}
+
+			if($num_updated)
+			{
+			    $response['reload_store'] = true;
+			}
+
+			$response['success'] = true;
+			break;
 
 	}
 }catch(Exception $e) {

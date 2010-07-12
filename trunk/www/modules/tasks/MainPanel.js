@@ -16,13 +16,18 @@ GO.tasks.MainPanel = function(config){
 		fields:['id','dom_id','name','checked']
 	});
 
-	this.taskListsPanel= new GO.grid.MultiSelectGrid({
+	this.taskListsPanel = new GO.tasks.TaskListsGrid({
 		id:'ta-tasksgrid',
 		region:'center',
 		loadMask:true,
 		store: this.taskListsStore,
 		title: GO.tasks.lang.tasklists		
 	});
+
+	this.taskListsPanel.on('drop', function(type)
+	{
+	    this.taskListsPanel.store.reload();
+	}, this);
 
 	this.taskListsPanel.on('change', function(grid, tasklists, records)
 	{                		                

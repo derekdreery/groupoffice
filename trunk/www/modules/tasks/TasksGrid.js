@@ -210,6 +210,10 @@ GO.tasks.TasksPanel = function(config)
                     })
                 ];
 
+
+		config.enableDragDrop=true;
+		config.ddGroup='TasklistsDD';
+		
 		config.tbar = [GO.lang['strSearch'] + ':', this.searchField];
 
 		GO.tasks.TasksPanel.superclass.constructor.call(this, config);
