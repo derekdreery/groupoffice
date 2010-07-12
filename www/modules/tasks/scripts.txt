@@ -12,3 +12,4 @@ modules/tasks/Portlet.js
 modules/tasks/Settings.js
 modules/tasks/PortletSettings.js
 modules/tasks/CategoryDialog.js
+modules/tasks/TaskListsGrid.js
