@@ -7,6 +7,12 @@ class wordpress extends db{
 				'categories' => 'Vacatures',
 				'tags' => '',
 				'custom' => array('Korte beschrijving'=>'description', 'Sectoren' => 'col_14')
+			),
+		'2' => array(
+				'post_title' => 'first_name',
+				'categories' => 'Keystaffers',
+				'tags' => '',
+				'custom' => array()
 			)
 		);
 
