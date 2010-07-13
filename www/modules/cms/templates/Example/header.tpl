@@ -26,6 +26,7 @@ Shadowbox.init({
 </script>
 
 {/if}
+{$head}
 </head>
 <body>
 <div class="main-container">
