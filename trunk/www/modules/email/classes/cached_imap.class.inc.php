@@ -622,6 +622,7 @@ class cached_imap extends imap{
 
 	public function remove_inline_images($attachments){
 		$removed = array();
+		go_debug($attachments);
 		for($i=0;$i<count($attachments);$i++) {
 			if(empty($attachments[$i]['replacement_url'])){
 				$removed[]=$attachments[$i];

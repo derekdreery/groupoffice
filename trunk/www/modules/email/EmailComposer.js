@@ -847,6 +847,13 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			//keep attachments when switchting from text <> html
 			this.reset(config.keepEditingMode);
 
+
+			//save the mail to a file location
+			if(config.saveToPath){
+				this.sendParams.save_to_path=config.saveToPath;
+			}
+
+
 			var index=-1;
 			if (config.account_id) {
 				index = this.fromCombo.store.findBy(function(record, id){
