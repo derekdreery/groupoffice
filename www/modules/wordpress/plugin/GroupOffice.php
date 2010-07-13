@@ -16,12 +16,12 @@
 //ini_set('error_reporting', E_ALL);
 
 
-$go_config = get_option('groupoffice_config');
+/*$go_config = get_option('groupoffice_config');
 require($go_config['config_file']);
 define('NO_EVENTS', $go_config['config_file']);
 define('CONFIG_FILE', $go_config['config_file']);
 require($config['root_path'].'Group-Office.php');
-ini_set('display_errors', 0);
+ini_set('display_errors', 0);*/
 
 
 class groupoffice_connector {
@@ -42,8 +42,8 @@ class groupoffice_connector {
 						$this->go_config['db_host'],
 						$this->go_config['db_name'],
 						$this->go_config['db_user'],
-						$this->go_config['db_pass'],
-						$this->go_config['db_port']
+						$this->go_config['db_pass']
+						//$this->go_config['db_port']
 		);
 
 		return $db;
@@ -125,7 +125,7 @@ class groupoffice_connector {
 function groupoffice_unserializesession($data) {
 	$vars = preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
 									$data, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-	for ($i = 0; $vars[$i]; $i++)
+	for ($i = 0; isset($vars[$i]); $i++)
 		$result[$vars[$i++]] = unserialize($vars[$i]);
 	return $result;
 }
@@ -148,6 +148,9 @@ function groupoffice() {
 			update_option('groupoffice_config', $site_data);
 
 //var_dump($_SESSION['GO_SESSION']);
+		}else
+		{
+		exit("Can't read Group-Office session data");
 		}
 	}
 
@@ -161,6 +164,8 @@ function groupoffice() {
 		} else {
 			$user_id = groupoffice_add_user($_SESSION['GO_SESSION']);
 		}
+
+#		var_dump($_SESSION['GO_SESSION']);
 
 		wp_set_current_user($user_id, $_SESSION['GO_SESSION']['username']);
 		wp_set_auth_cookie($user_id);
@@ -219,8 +224,7 @@ function groupoffice_get_permalink_by_name($page_name)
 {
 	global $post;
 	global $wpdb;
-	$sql = "SELECT ID FROM $wpdb->posts WHERE post_name = '".$page_name."'";
-	$pageid = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_name = '".$page_name."'");
+	$pageid = $wpdb->get_var("SELECT ID FROM $wpdb->posts WHERE post_title = '".$page_name."' AND post_status='publish'");
 
 	return get_permalink($pageid);
 }
@@ -238,12 +242,12 @@ function groupoffice_get_contact_form($post_id=-1){
 
 	if(!empty($_SESSION['last_contact_post_id'])){
 	 $post = get_post ($_SESSION['last_contact_post_id']);
-	 var_dump($post);
+	 //var_dump($post);
 	}
 
-	$go_config = get_option('groupoffice_config');
+	//$go_config = get_option('groupoffice_config');
 
 
-	$url = $go_config['full_url'].'modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email;
-	return  '<iframe style="width:600px;height:600px" src="'.$url.'"></iframe>';
+	$url = '/recruity/modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email;
+	return  '<iframe style="width:600px;height:800px" src="'.$url.'"></iframe>';
 }
