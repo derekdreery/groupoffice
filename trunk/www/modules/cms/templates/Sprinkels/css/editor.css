@@ -1,0 +1,52 @@
+body {
+	font-family : "Arial";
+	font-size : small;
+	color : #58585A;
+	background-color: white;
+	width: 98%;
+margin: 0px;
+height: auto;
+padding-top: 20px;
+padding-right: 0px;
+padding-bottom: 20px;
+padding-left: 0px;
+}
+
+h1 {
+	font-family: "Verdana";
+	font-size : large;
+	color : black;
+}
+
+h2 {
+	font-family: "Verdana";
+	font-size : medium;
+	color : black;
+}
+
+a {
+	color : black;
+}
+
+a:hover {
+	color : lightgray;
+}
+
+a img {
+	border : 0px;
+}
+
+#main {
+	position : relative;
+	margin: auto;
+	width : 990px;
+	overflow : hidden;
+}
+
+ul .right-menu-item {
+	display: none;
+}
+
+#right-panel-menu a:hover .right-menu-item {
+	display: block;
+}
