@@ -348,9 +348,21 @@ class formprocessor{
 
 			if(isset($_POST['confirmation_email']))
 			{
-				$email = file_get_contents(dirname($GO_CONFIG->get_config_file()).'/'.basename($_POST['confirmation_email']));
+				if(File::path_leads_to_parent($_POST['confirmation_email']))
+					throw new Exception('Invalid path');
+				
+				$path = $GO_CONFIG->file_storage_path.$_POST['confirmation_email'];
+				if(!file_exists($path)){
+					$path = dirname($GO_CONFIG->get_config_file()).'/'.basename($_POST['confirmation_email']);
+				}
+				$email = file_get_contents($path);
 				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 				$swift = new GoSwiftImport($email);
+				if(isset($GO_MODULES->modules['mailings'])){
+					require_once($GO_MODULES->modules['mailings']['path'].'classes/templates.class.inc.php');
+					$tp = new templates();
+					$swift->set_body($tp->replace_contact_data_fields($swift->body, $this->contact_id, false), 'html');
+				}
 				$swift->set_to($_POST['email']);
 				$swift->sendmail();
 			}
