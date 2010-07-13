@@ -27,7 +27,7 @@ class blacklist extends db {
 
 		$user_id = $bl->get_user_id($args);
 		$ip = $bl->get_ip($_SERVER['REMOTE_ADDR'], $user_id);
-		if($ip && $ip['count']>4)
+		if($ip && $ip['count']>2)
 		{						
 			global $GO_LANGUAGE, $lang, $response, $GO_CONFIG;
 			$response['require_captcha'] = true;
