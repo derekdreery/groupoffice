@@ -52,7 +52,7 @@
 }*/
 
 function load_template($template_id, $to='', $keep_tags=false) {
-	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $GO_USERS;
+	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $GO_USERS, $imap;
 
 	require_once ($GO_CONFIG->class_path.'mail/mimeDecode.class.inc');
 	require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
@@ -76,6 +76,7 @@ function load_template($template_id, $to='', $keep_tags=false) {
 	require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
 	$go2mime = new Go2Mime();
 	$response['data'] = $go2mime->mime2GO($template['content'], $GO_MODULES->modules['mailings']['url'].'mimepart.php?template_id='.$template_id, true, true);
+	
 	unset($response['data']['to'],$response['data']['cc'], $response['data']['bcc'],$response['data']['subject']);
 
 	if(!$keep_tags) {

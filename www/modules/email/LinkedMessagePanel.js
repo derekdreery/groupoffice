@@ -50,6 +50,18 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 						});
 					},
 					scope: this
+				},{
+					iconCls: 'btn-edit',
+					text: GO.lang.cmdEdit,
+					handler: function(){
+						this.remoteMessage.task='opendraft';
+						GO.email.showComposer({
+							loadUrl : GO.settings.modules.email.url + 'json.php',
+							loadParams : this.remoteMessage,
+							saveToPath:this.remoteMessage.path
+						});
+					},
+					scope: this
 				}];
 
 		GO.email.LinkedMessagePanel.superclass.initComponent.call(this);

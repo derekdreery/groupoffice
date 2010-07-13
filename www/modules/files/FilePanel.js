@@ -28,20 +28,21 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 	extraTemplateProperties : '',
 
 	editHandler : function(){
-		if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
-		{
-			if(!deployJava.isWebStartInstalled('1.6.0'))
+
+			if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
 			{
-				Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
-				window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.link_id;
+				if(!deployJava.isWebStartInstalled('1.6.0'))
+				{
+					Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
+					window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.link_id;
+				}else
+				{
+					window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+this.link_id;
+				}
 			}else
 			{
-				window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+this.link_id;
+				window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.link_id;
 			}
-		}else
-		{
-			window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.link_id;
-		}
 	},
 
 	createTopToolbar : function(){

@@ -407,6 +407,7 @@ try {
 								$files = new files();
 
 								$file = $files->get_file($tmp_name);
+								//throw new Exception(var_export($file, true));
 								$folder = $files->get_folder($file['folder_id']);
 								if(!$file || !$folder) {
 									throw new FileNotFoundException();
@@ -415,17 +416,30 @@ try {
 							}
 
 							if(!file_exists($tmp_name)) {
+								//throw new Exception($tmp_name);
 								throw new FileNotFoundException();
 							}
 
-							$img = Swift_EmbeddedFile::fromPath($tmp_name);
-							$img->setContentType(File::get_mime($tmp_name));
-							$src_id = $swift->message->embed($img);
-
 							//Browsers reformat URL's so a pattern match
-							//$body = str_replace($inlineAttachment['url'], $src_id, $body);
 							$just_filename = utf8_basename($inlineAttachment['url']);
-							$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body);
+							if(preg_match('/="([^"]*'.preg_quote($just_filename).')"/',$body,$matches)){
+								go_debug($matches);
+								$img = Swift_EmbeddedFile::fromPath($tmp_name);
+								$img->setContentType(File::get_mime($tmp_name));
+								$src_id = $swift->message->embed($img);
+
+								//Browsers reformat URL's so a pattern match
+								$body = str_replace($matches[1], $src_id, $body);
+
+								//go_debug($body);
+								//go_debug(preg_quote($just_filename));
+								//go_debug($src_id);
+
+								//$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body, null, $count);
+								//go_debug($count);
+								//throw new Exception($just_filename);
+
+							}
 						}
 					}
 
@@ -489,35 +503,52 @@ try {
 					//throw new Exception(htmlspecialchars(var_export($swift->message->toString(), true)));
 
 					if($draft) {
-						if($swift->account['type']!='imap') {
-							throw new Exception($lang['email']['noSaveWithPop3']);
-						}
-						if(empty($swift->account['drafts'])) {
-							throw new Exception($lang['email']['draftsDisabled']);
-						}
-						$drafts_folder = $swift->account['drafts'];
-						if ($imap->open($swift->account, $drafts_folder)) {
 
-							$uid_next = $imap->get_uidnext();
+						if(!empty($_POST['save_to_path'])){
+							//save e-mail to disk
+							$full_path = $GO_CONFIG->file_storage_path.$_POST['save_to_path'];
 
-							if($uid_next && $imap->append_message($drafts_folder, $swift->message->toString(),"\Seen")) {
-								$response['draft_uid']=$uid_next;
-								$response['success']=$response['draft_uid']>0;								
+							file_put_contents($full_path, $swift->message->toString());
+
+							if(!file_exists($full_path)){
+								throw new Exception('Failed to save file');
 							}
+							$response['success']=true;
 
-							if(!$response['success']) {
-								$up_account['id']=$swift->account['id'];
-								$up_account['drafts']='';
-								$email->_update_account($up_account);
+						}else
+						{
+							//save e-mail in IMAP drafts folder
 
-								$response['feedback']=$lang['email']['noUidNext'];
+							if($swift->account['type']!='imap') {
+								throw new Exception($lang['email']['noSaveWithPop3']);
 							}
-
-							if(!empty($_POST['draft_uid'])) {
-								$imap->delete(array($_POST['draft_uid']));
+							if(empty($swift->account['drafts'])) {
+								throw new Exception($lang['email']['draftsDisabled']);
 							}
+							$drafts_folder = $swift->account['drafts'];
+							if ($imap->open($swift->account, $drafts_folder)) {
 
-							$imap->disconnect();
+								$uid_next = $imap->get_uidnext();
+
+								if($uid_next && $imap->append_message($drafts_folder, $swift->message->toString(),"\Seen")) {
+									$response['draft_uid']=$uid_next;
+									$response['success']=$response['draft_uid']>0;
+								}
+
+								if(!$response['success']) {
+									$up_account['id']=$swift->account['id'];
+									$up_account['drafts']='';
+									$email->_update_account($up_account);
+
+									$response['feedback']=$lang['email']['noUidNext'];
+								}
+
+								if(!empty($_POST['draft_uid'])) {
+									$imap->delete(array($_POST['draft_uid']));
+								}
+
+								$imap->disconnect();
+							}
 						}
 					}else {
 
