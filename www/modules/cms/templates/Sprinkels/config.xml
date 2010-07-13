@@ -1,0 +1,19 @@
+<config>
+<file_options>
+	<type name="column">
+		<input name="column_title" field_label="Kop" />
+		<input name="column_date" field_label="Datum" />
+		<checkbox name="top_menu_item" field_label="Top menu item" />
+	</type>
+	<type name="nieuws_voorpagina">
+		<checkbox name="top_menu_item" field_label="Top menu item" />
+	</type>
+	<type name="nieuws_item">
+		<file name="nieuws_afbeelding" field_label="Nieuwsafbeelding" />
+		<checkbox name="top_menu_item" field_label="Top menu item" />
+	</type>
+	<type name="default">
+		<checkbox name="top_menu_item" field_label="Top menu item" />
+	</type>
+</file_options>
+</config>
