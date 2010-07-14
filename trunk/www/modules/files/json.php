@@ -689,16 +689,18 @@ try{
 						//$response['path']=$path;
 
 						$response['total']=$files->get_folders($curfolder['id'],$dsort,$dir,$start,$limit,true);
+
+						$thumb_location = get_thumb_dir();
 						
 						while($folder = $files->next_record())
 						{
 							if($folder['acl_id']>0)
 							{
-								$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder_public.png';
+								$folder['thumb_url']=$thumb_location['url'].'folder_public.png';
 								//$class='folder-shared';
 							}else
 							{
-								$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
+								$folder['thumb_url']=$thumb_location['url'].'folder.png';
 								//$class='filetype-folder';
 							}
 
