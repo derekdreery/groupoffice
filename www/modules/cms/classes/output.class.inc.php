@@ -202,6 +202,16 @@ class cms_output extends cms {
 		}
 	}
 
+	/**
+	 * Returns an array of the files and folders inside the folder with folder_id
+	 * the user with user_id has access to. The folders/files in the array are ordered
+	 * according to the priority of the folder/file in it.
+	 * @param int $folder_id
+	 * @param int $user_id
+	 * @param bool $only_visible
+	 * @param bool $reverse
+	 * @return Array An array of folders and/or files the user has access to.
+	 */
 	function get_authorized_items($folder_id, $user_id, $only_visible=false, $reverse=false) {
 		$items = array();
 		$folders = $this->get_authorized_folders($folder_id, $user_id, $only_visible);
