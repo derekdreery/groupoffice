@@ -544,6 +544,13 @@ GO.email.EmailComposer = function(config) {
 			this.sendMail();
 		},
 		scope : this
+	}), this.saveButton = new Ext.Button({
+		iconCls : 'btn-save',
+		text : GO.lang.cmdSave,
+		handler : function() {
+			this.sendMail(true);
+		},
+		scope : this
 	}), {
 		text : GO.email.lang.extraOptions,
 		iconCls : 'btn-settings',
@@ -558,13 +565,6 @@ GO.email.EmailComposer = function(config) {
 		text : GO.email.lang.attachments,
 		iconCls : 'btn-attach',
 		handler : this.showAttachmentsDialog,
-		scope : this
-	}), this.saveButton = new Ext.Button({
-		iconCls : 'btn-save',
-		text : GO.lang.cmdSave,
-		handler : function() {
-			this.sendMail(true);
-		},
 		scope : this
 	})];
 
@@ -851,6 +851,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			//save the mail to a file location
 			if(config.saveToPath){
 				this.sendParams.save_to_path=config.saveToPath;
+				this.sendButton.hide();
+			}else
+			{
+				this.sendButton.show();
 			}
 
 
