@@ -757,22 +757,26 @@ try {
 			}
 			break;
 
-		case 'writable_calendars':
+		case 'writable_calendars':		
 
-			if(isset($_REQUEST['delete_keys'])) {
-				try {
+			if(isset($_REQUEST['delete_keys']))
+			{
+				try
+				{
 					$response['deleteSuccess']=true;
 					$calendars = json_decode(($_REQUEST['delete_keys']));
-
-					foreach($calendars as $calendar_id) {
+					foreach($calendars as $calendar_id)
+					{
 						$calendar = $cal->get_calendar($calendar_id);
-						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
+						if(($GO_MODULES->modules['calendar']['permission_level'] < GO_SECURITY::MANAGE_PERMISSION) || ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']) < GO_SECURITY::MANAGE_PERMISSION))
+						{
 							throw new AccessDeniedException();
 						}
+						
 						$cal->delete_calendar($calendar_id);
 					}
-				}
-				catch(Exception $e) {
+				}catch(Exception $e)
+				{
 					$response['deleteSuccess']=false;
 					$response['deleteFeedback']=$e->getMessage();
 				}
