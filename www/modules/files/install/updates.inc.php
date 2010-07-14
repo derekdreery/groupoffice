@@ -84,3 +84,4 @@ $updates[] = "CREATE TABLE IF NOT EXISTS `cf_6` (
 
 
 $updates[] = "script:5_convert_acl.inc.php";
+$updates[] = "script:6_create_empty_file_template.inc.php";

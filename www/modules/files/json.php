@@ -557,7 +557,10 @@ try{
 							{
 								$template = $files->get_template($_POST['template_id'], true);
 
-								$new_path = $GO_CONFIG->file_storage_path.$files->build_path($curfolder).'/'.$_POST['template_name'].'.'.$template['extension'];
+								$new_path = $GO_CONFIG->file_storage_path.$files->build_path($curfolder).'/'.$_POST['template_name'];
+								if(!empty($template['extension']))
+									$new_path .= '.'.$template['extension'];
+								
 								file_put_contents($new_path, $template['content']);
 								/*$fp = fopen($new_path, "w+");
 								 fputs($fp, $template['content']);
