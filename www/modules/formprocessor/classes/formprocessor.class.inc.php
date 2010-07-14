@@ -353,7 +353,7 @@ class formprocessor{
 				
 				$path = $GO_CONFIG->file_storage_path.$_POST['confirmation_email'];
 				if(!file_exists($path)){
-					$path = dirname($GO_CONFIG->get_config_file()).'/'.basename($_POST['confirmation_email']);
+					$path = dirname($GO_CONFIG->get_config_file()).'/'.$_POST['confirmation_email'];
 				}
 				$email = file_get_contents($path);
 				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
