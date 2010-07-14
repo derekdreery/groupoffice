@@ -204,19 +204,24 @@ try {
 
 		case 'tasklists':
 
-			if(isset($_POST['delete_keys'])) {
-				try {
+			if(isset($_POST['delete_keys']))
+			{
+				try
+				{
 					$response['deleteSuccess']=true;
 					$tasklists = json_decode($_POST['delete_keys']);
-
-					foreach($tasklists as $tasklist_id) {
+					foreach($tasklists as $tasklist_id)
+					{
 						$tasklist = $tasks->get_tasklist($tasklist_id);
-						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
+						if(($GO_MODULES->modules['tasks']['permission_level'] < GO_SECURITY::MANAGE_PERMISSION) || ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id']) < GO_SECURITY::MANAGE_PERMISSION))
+						{
 							throw new AccessDeniedException();
 						}
+						
 						$tasks->delete_tasklist($tasklist_id);
 					}
-				}catch(Exception $e) {
+				}catch(Exception $e)
+				{
 					$response['deleteSuccess']=false;
 					$response['deleteFeedback']=$e->getMessage();
 				}
@@ -312,7 +317,8 @@ try {
 					$writable_tasklists = array();
 					$response['data']['permission_level'] = $permission_level = 0;
 					$tasklist_names = array();
-					foreach($tasklists as $tasklist_id) {
+					foreach($tasklists as $tasklist_id)
+					{
 						$tasklist = $tasks->get_tasklist($tasklist_id);
 
 						$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id']);
@@ -327,9 +333,12 @@ try {
 						if($permission_level > $response['data']['permission_level']) {
 							$response['data']['permission_level'] = $permission_level;
 						}
-					}
+					}					
 
-					$response['grid_title'] = (count($tasklist_names) > 1) ? $lang['tasks']['multipleSelected'] : $tasklist_names[0];
+					if(count($tasklist_names))
+					{
+						$response['grid_title'] = (count($tasklist_names) > 1) ? $lang['tasks']['multipleSelected'] : $tasklist_names[0];
+					}
 
 					$response['data']['write_permission']=$response['data']['permission_level']>1;
 					if(!$response['data']['permission_level']) {
