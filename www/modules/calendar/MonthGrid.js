@@ -67,6 +67,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
   
   weekNumberWidth : 16,
 
+  dayNameHeight : 16,
+
 
 	// private
   initComponent : function(){	
@@ -153,7 +155,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		var cell = Ext.DomHelper.append(this.cellWrap,
 		{
 			tag: 'div',
-			style: 'width:'+(this.weekNumberWidth-1)+'px',
+			style: 'width:'+(this.dayNameHeight-1)+'px',
 			cls: 'cal-monthgrid-week-no'
 		}, true);
 
@@ -289,7 +291,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
   
   calcCellSize : function (ctSize, scrollOffsetUsed)
   {
-  	this.cellHeight = (ctSize['height']/(this.days/7));
+  	this.cellHeight = ((ctSize['height']-this.dayNameHeight) /(this.days/7));
 		if(this.cellHeight<100)
 		{
 			this.cellHeight=100;
