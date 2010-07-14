@@ -40,16 +40,20 @@ try{
 			
 			if(isset($_POST['delete_keys']))
 			{
-				try{
-					if(!$GO_MODULES->modules['notes']['write_permission']){
-						throw new AccessDeniedException();
-					}
+				try
+				{
 					$response['deleteSuccess']=true;
-					$delete_categories = json_decode($_POST['delete_keys']);
+					$delete_categories = json_decode($_POST['delete_keys']);										
 
 					foreach($delete_categories as $category_id)
 					{
-						$notes->delete_category($category_id);
+						$category = $notes->get_category($category_id);
+						if(($GO_MODULES->modules['notes']['permission_level'] < GO_SECURITY::MANAGE_PERMISSION) || ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']) < GO_SECURITY::MANAGE_PERMISSION))
+						{
+							throw new AccessDeniedException();
+						}
+
+						$notes->delete_category($category_id);						
 					}
 				}catch(Exception $e)
 				{
