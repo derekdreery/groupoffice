@@ -341,6 +341,10 @@ a.normal-link:hover{
 	background-image:url('images/16x16/filetypes/source_j.png') !important;
 }
 
+.filetype-sql  {
+	background-image:url('images/16x16/filetypes/database.png') !important;
+}
+
 /* end filetypes */
 
 
