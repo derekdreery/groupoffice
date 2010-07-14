@@ -16,12 +16,15 @@
 //ini_set('error_reporting', E_ALL);
 
 
-/*$go_config = get_option('groupoffice_config');
-require($go_config['config_file']);
-define('NO_EVENTS', $go_config['config_file']);
-define('CONFIG_FILE', $go_config['config_file']);
-require($config['root_path'].'Group-Office.php');
-ini_set('display_errors', 0);*/
+$go_config = get_option('groupoffice_config');
+if(isset($go_config['config_file'])){
+	require($go_config['config_file']);
+	define('NO_EVENTS', $go_config['config_file']);
+	define('CONFIG_FILE', $go_config['config_file']);
+	require($config['root_path'].'Group-Office.php');
+	//ini_set('display_errors', 0);
+	ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+}
 
 
 class groupoffice_connector {
@@ -241,13 +244,34 @@ function groupoffice_get_contact_form($post_id=-1){
 		$_SESSION['last_contact_post_id']=$post_id;
 
 	if(!empty($_SESSION['last_contact_post_id'])){
-	 $post = get_post ($_SESSION['last_contact_post_id']);
+		$post = get_post ($_SESSION['last_contact_post_id']);
 	 //var_dump($post);
+
+		if($current_user->ID>0){
+
+			$db = new db();
+			$sql = "SELECT contact_id FROM wp_contacts_wp_users WHERE wp_user_id=".intval($current_user->ID);
+			$db->query($sql);
+			$r = $db->next_record();
+
+			if(!empty($r['contact_id'])){
+				$to = get_option('admin_email');
+				$subject='Reactie op vacature '.$post->post_title;
+
+				$message='<a href="go:showContact('.$r['contact_id'].');">Bekijk gegevens van '.$current_user->first_name.' '.$current_user->last_name.' ('.$current_user->user_email.')</a>';
+				$headers="From: Keystaff (Recruity) <noreply@keystaff.nl>\n".
+					"Content-Type: text/html";
+
+				wp_mail($to, $subject, $message, $headers);
+
+				return 'Hartelijk dank. Wij hebben uw reactie ontvangen en nemen spoedig contact met u op.';
+			}
+		}
 	}
+	$go_config = get_option('groupoffice_config');
+	//var_dump($go_config);
 
-	//$go_config = get_option('groupoffice_config');
 
-
-	$url = '/recruity/modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email;
+	$url = $go_config['full_url'].'modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email.'&post_title='.urlencode($post->post_title);
 	return  '<iframe style="width:600px;height:800px" src="'.$url.'"></iframe>';
 }
