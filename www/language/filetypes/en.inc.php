@@ -70,3 +70,4 @@ $lang['filetypes']['fla'] = 'Macromedia Flash Document (Source)';
 $lang['filetypes']['ai'] = 'Adobe Illustrator file';
 $lang['filetypes']['eml'] = 'E-mail message';
 $lang['filetypes']['csv'] = 'Comma Separated Values';
+$lang['filetypes']['js'] = 'Javascript';

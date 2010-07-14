@@ -1559,6 +1559,8 @@ GO.files.openFile = function(record, store)
 			
 		break;
 
+		case 'php':
+		case 'js':
 		case 'docx':
 		case 'xlsx':
 		case 'pptx':
