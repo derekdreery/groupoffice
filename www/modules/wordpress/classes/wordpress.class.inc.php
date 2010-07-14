@@ -6,7 +6,15 @@ class wordpress extends db{
 				'post_title' => 'name',				
 				'categories' => 'Vacatures',
 				'tags' => '',
-				'custom' => array('Korte beschrijving'=>'description', 'Sectoren' => 'col_14')
+				'custom' => array(
+					'Korte beschrijving'=>'description',
+					'Functie' => 'col_19',
+					'Sectoren' => 'col_20',
+					'Opleiding' => 'col_21',					
+					'Werkervaring' => 'col_22',
+					'Locatie' => 'col_23',					
+					'Dienstverband' => 'col_24',
+					)
 			),
 		'2' => array(
 				'post_title' => 'first_name',
@@ -54,8 +62,11 @@ class wordpress extends db{
 		
 		if(isset($GO_MODULES->modules['customfields'])){
 			$cf = new customfields();
-			$custom = $cf->get_values(1, 5, $values['id'],true);
+			$custom = $cf->get_values(1, 5, $values['id']);
+			
+			
 			$values = array_merge($values, $custom);
+			//go_debug($values);
 		}
 
 		foreach($this->mapping[$link_type]['custom'] as $wp_key=>$go_col){
