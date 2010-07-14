@@ -36,3 +36,6 @@ $lang['files']['deleted']='Deleted';
 $lang['files']['file']='File';
 $lang['files']['folder']='Folder';
 $lang['files']['files']='Files';
+
+
+$lang['files']['emptyFile']='Empty file';

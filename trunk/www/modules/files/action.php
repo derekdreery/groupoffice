@@ -412,18 +412,18 @@ try {
 				$types .= 'bs';
 			}
 
-			if(isset($_POST['user_id'])) {
+			/*if(isset($_POST['user_id'])) {
 				$template['user_id']=$_POST['user_id'];
 				$types .= 'i';
-			}
+			}*/
 
 			if($template['id']>0) {
 				$files->update_template($template, $types);
 				$response['success']=true;
 			}else {
-				if(empty($template['user_id'])) {
-					$template['user_id']=$GO_SECURITY->user_id;
-				}
+				//if(empty($template['user_id'])) {
+				$template['user_id']=$GO_SECURITY->user_id;
+				//}
 				$response['acl_id']=$template['acl_id']=$GO_SECURITY->get_new_acl();
 
 				$types .= 'ii';

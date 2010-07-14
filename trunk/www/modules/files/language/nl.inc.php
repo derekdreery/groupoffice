@@ -35,3 +35,5 @@ $lang['files']['deleted']='Verwijderd';
 
 $lang['files']['file']='Bestand';
 $lang['files']['folder']='Map';
+
+$lang['files']['emptyFile']='Leeg bestand';

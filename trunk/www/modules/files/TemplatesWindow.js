@@ -17,7 +17,7 @@ GO.files.TemplateWindow = function(config){
 		baseParams: {
 			'task': 'templates',
 			'writable_only': 'true'
-			},
+		},
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
@@ -27,67 +27,71 @@ GO.files.TemplateWindow = function(config){
 	
 	this.gridStore.on('load', function(){
 		this.firstLoad=false;
-	}, this, {single:true});
+	}, this, {
+		single:true
+	});
 	
 	this.gridStore.load();	
 	
 	this.gridPanel = new GO.grid.GridPanel( {
-			region:'center',
-			layout:'fit',
-			split:true,
-			paging:true,
-			store: this.gridStore,
-			columns:[{
-					header:GO.lang['strName'],
-					dataIndex: 'grid_display',
-					sortable:true
-				},{
-					header:GO.lang.strType,
-					dataIndex: 'type',
-					sortable:false
-				}],						
-			view:new  Ext.grid.GridView({
-				autoFill:true,
-				forceFit:true
-			}),
-			sm: new Ext.grid.RowSelectionModel(),
-			loadMask: true	,
-			tbar: [{
-				iconCls: 'btn-add',
-				text: GO.lang['cmdAdd'],
-				cls: 'x-btn-text-icon',
-				scope: this,
-	    		handler:function(){	    			
-	    			this.showTemplate();	    			
-	    		}
-	    	},{
-				iconCls: 'btn-delete',
-				text: GO.lang['cmdDelete'],
-				cls: 'x-btn-text-icon',
-				scope: this,
-	    		handler:function(){	    			
-	    			this.gridPanel.deleteSelected();	    			
-	    		}
-	    	}]
-		});
+		region:'center',
+		layout:'fit',
+		split:true,
+		paging:true,
+		store: this.gridStore,
+		columns:[{
+			header:GO.lang['strName'],
+			dataIndex: 'grid_display',
+			sortable:true
+		},{
+			header:GO.lang.strType,
+			dataIndex: 'type',
+			sortable:false
+		}],
+		view:new  Ext.grid.GridView({
+			autoFill:true,
+			forceFit:true
+		}),
+		sm: new Ext.grid.RowSelectionModel(),
+		loadMask: true	,
+		tbar: [{
+			iconCls: 'btn-add',
+			text: GO.lang['cmdAdd'],
+			cls: 'x-btn-text-icon',
+			scope: this,
+			handler:function(){
+				this.showTemplate();
+			}
+		},{
+			iconCls: 'btn-delete',
+			text: GO.lang['cmdDelete'],
+			cls: 'x-btn-text-icon',
+			scope: this,
+			handler:function(){
+				this.gridPanel.deleteSelected();
+			}
+		}]
+	});
 		
 	this.gridPanel.on('rowdblclick', function(grid){
 		this.showTemplate(grid.selModel.selections.keys[0]);
 	}, this);	
 	
 	GO.files.TemplateWindow.superclass.constructor.call(this,{
-		title:'Templates',
+		title:GO.files.lang.manageTemplates,
 		layout:'fit',
 		width:500,
 		height:400,
 		closeAction:'hide',
 		items:this.gridPanel,
 		buttons:[
-			{
-				text:GO.lang['cmdClose'],
-				handler: function(){this.hide()}, 
-				scope: this
-			}]
+		{
+			text:GO.lang['cmdClose'],
+			handler: function(){
+				this.hide()
+				},
+			scope: this
+		}]
 	});
 }
 
@@ -100,9 +104,9 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 		if(!this.templateDialog)
 		{			
 			this.uploadFile = new GO.form.UploadFile({
-    			inputName : 'file',
-    			max: 1
-    		});
+				inputName : 'file',
+				max: 1
+			});
 			
 			this.downloadButton = new Ext.Button({
 				handler: function(){
@@ -115,47 +119,58 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 			
 			this.formPanel = new Ext.form.FormPanel({
 				title: GO.lang['strProperties'],
-        cls:'go-form-panel',
-        waitMsgTarget:true,
-        labelWidth: 85,
-        defaultType: 'textfield',
-        fileUpload: true,        
-    			items:[				
-					{							
-		        fieldLabel: GO.lang['strName'],
-			   		name: 'name',
-			   		id: 'template-name',
-		        anchor: '100%',
-		        allowBlank: false 
-				  },
-		     
-					this.selectUser = new GO.form.SelectUser({
-						fieldLabel: GO.lang['strUser'],
-						disabled: !GO.settings.modules['email']['write_permission'],
-						allowBlank: false,
-						anchor: '100%'
-					}),
-					new GO.form.HtmlComponent({
-						html: '<br />'
-					}),
-					this.uploadFile,
-					new GO.form.HtmlComponent({
-						html: '<br />'
-					}),
-					this.downloadButton
+				cls:'go-form-panel',
+				waitMsgTarget:true,
+				labelWidth: 85,
+				defaultType: 'textfield',
+				fileUpload: true,
+				items:[
+				{
+					fieldLabel: GO.lang['strName'],
+					name: 'name',
+					id: 'template-name',
+					anchor: '100%',
+					allowBlank: false
+				},		     
+				
+				new GO.form.HtmlComponent({
+					html: '<br />'
+				}),
+				this.uploadFile,
+				new GO.form.HtmlComponent({
+					html: '<br />'
+				}),
+				this.downloadButton
 				]
 			});
 			
 			var buttons = [			
-				{text: GO.lang['cmdOk'], handler: function(){this.saveTemplate(true)}, scope: this},
-				{text: GO.lang['cmdApply'], handler: function(){this.saveTemplate(false)}, scope: this},
-				{text: GO.lang['cmdClose'], 	handler: 
-					function()
-					{
-						this.templateDialog.hide();
+			{
+				text: GO.lang['cmdOk'],
+				handler: function(){
+					this.saveTemplate(true)
+					},
+				scope: this
+			},
 
-					}, 
-				scope: this }
+			{
+				text: GO.lang['cmdApply'],
+				handler: function(){
+					this.saveTemplate(false)
+					},
+				scope: this
+			},
+
+			{
+				text: GO.lang['cmdClose'],
+				handler:
+				function()
+				{
+					this.templateDialog.hide();
+
+				},
+				scope: this
+			}
 			];				
 			
 			this.templateDialog = new Ext.Window({
@@ -169,15 +184,15 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 					activeTab: 0,
 					border:false,
 					items:[
-						this.formPanel,
-						this.readPermissionsTab = new GO.grid.PermissionsPanel({
+					this.formPanel,
+					this.readPermissionsTab = new GO.grid.PermissionsPanel({
 									
 						})						
 					]
 				})],
 				buttons: buttons,
 				focus: function(){
-		 			Ext.get('template-name').focus();
+					Ext.get('template-name').focus();
 				}									
 			});								
 		}
@@ -206,14 +221,17 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 	{
 		this.formPanel.form.load({
 			url: GO.settings.modules.files.url+'json.php', 
-			params: {template_id: this.template_id, task: 'template'},
+			params: {
+				template_id: this.template_id,
+				task: 'template'
+			},
 			
 			success: function(form, action) {
 				this.selectUser.setRemoteText(action.result.data.user_name);
 				this.readPermissionsTab.setAcl(action.result.data.acl_id);
 				this.downloadButton.setDisabled(false);										
-		    },
-		    scope: this
+			},
+			scope: this
 		});
 	},
 	
@@ -251,6 +269,6 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 				}
 			},
 			scope: this				
-			});
+		});
 	}	
 });
