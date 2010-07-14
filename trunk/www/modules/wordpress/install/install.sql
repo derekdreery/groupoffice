@@ -40,4 +40,3 @@ CREATE TABLE IF NOT EXISTS `wp_posts_custom` (
   `value` varchar(255) NOT NULL,
   KEY `id` (`id`,`link_type`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
