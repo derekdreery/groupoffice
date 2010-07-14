@@ -462,6 +462,8 @@ try {
 				}
 			}
 
+			$response['count_events_only'] = $response['count'];
+
 			if(isset($GO_MODULES->modules['addressbook']) && $calendar['show_bdays']) {
 				require_once ($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 				$ab = new addressbook();

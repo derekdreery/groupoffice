@@ -1928,8 +1928,8 @@ GO.mainLayout.onReady(function(){
 			if(tp && tp.isVisible() && data.calendar)
 			{			
 				if(GO.calendar.activePanel.id != 'view-grid')
-				{					
-					if((GO.calendar.activePanel.store.reader.jsonData.count != data.calendar.count) || (GO.calendar.activePanel.store.reader.jsonData.mtime != data.calendar.mtime))
+				{
+					if((GO.calendar.activePanel.store.reader.jsonData.count_events_only != data.calendar.count) || (GO.calendar.activePanel.store.reader.jsonData.mtime != data.calendar.mtime))
 					{
 						GO.calendar.activePanel.store.reload();
 					}
