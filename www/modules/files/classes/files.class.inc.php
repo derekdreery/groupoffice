@@ -1427,7 +1427,7 @@ class files extends db {
 
 		require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
 		$quota = new quota();
-		$quota->add(-filesize($path)/1024);
+		$quota->add(-@filesize($path)/1024);
 
 
 		$GO_EVENTS->fire_event('delete_file', array($file, $path));
