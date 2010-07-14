@@ -839,23 +839,29 @@ try
 				}
 			}else
 			{
-				try{
-					if(isset($_POST['delete_keys']))
-					{
-						$response['deleteSuccess'] = true;
-							
-						$delete_addressbooks = json_decode(($_POST['delete_keys']));
-							
-						foreach($delete_addressbooks as $id)
-						{
-							$ab->delete_addressbook($id);
-						}
-					}
-				}
-				catch (Exception $e)
+
+				if(isset($_POST['delete_keys']))
 				{
-					$response['deleteFeedback'] = $e->getMessage();
-					$response['deleteSuccess'] = false;
+					try
+					{
+						$response['deleteSuccess']=true;
+						$delete_addressbooks = json_decode(($_POST['delete_keys']));
+						foreach($delete_addressbooks as $book_id)
+						{
+							$addressbook = $ab->get_addressbook($book_id);
+							
+							if(($GO_MODULES->modules['addressbook']['permission_level'] < GO_SECURITY::MANAGE_PERMISSION) || ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id']) < GO_SECURITY::MANAGE_PERMISSION))
+							{
+								throw new AccessDeniedException();
+							}
+
+							$ab->delete_addressbook($book_id);
+						}
+					}catch(Exception $e)
+					{
+						$response['deleteSuccess']=false;
+						$response['deleteFeedback']=$e->getMessage();
+					}
 				}
 
 				$response['total'] = $ab->get_writable_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
