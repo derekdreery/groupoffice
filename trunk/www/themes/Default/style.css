@@ -334,6 +334,13 @@ a.normal-link:hover{
 	background-image:url('images/16x16/filetypes/spreadsheet.png') !important;
 }
 
+.filetype-php  {
+	background-image:url('images/16x16/filetypes/php.png') !important;
+}
+.filetype-js  {
+	background-image:url('images/16x16/filetypes/source_j.png') !important;
+}
+
 /* end filetypes */
 
 
