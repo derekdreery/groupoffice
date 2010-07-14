@@ -97,6 +97,7 @@ class GO_THEME
 		$this->theme_path = $GO_CONFIG->theme_path.$this->theme.'/';
 		$this->theme_url = $GO_CONFIG->theme_url.$this->theme.'/';
 		$this->image_url = $this->theme_url.'images/';
+		$this->image_path = $GO_CONFIG->theme_path.'images/';
 	}
 
 
@@ -112,6 +113,8 @@ class GO_THEME
 	function add_stylesheet($path){
 
 		//echo '<!-- '.$path.' -->'."\n";
+
+		go_debug('Adding stylesheet: '.$path);
 
 		$this->stylesheets[]=$path;
 	}

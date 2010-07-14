@@ -238,11 +238,30 @@ function detect_browser() {
 	return $browser;
 }
 
+function get_thumb_dir(){
+	global $GO_THEME, $GO_CONFIG;
+
+	if(is_dir($GO_THEME->theme_path.'images/128x128/filetypes/')){
+		$dir = $GO_THEME->image_path.'128x128/filetypes/';
+		$url = $GO_THEME->image_url.'128x128/filetypes/';
+	}else{
+		$dir = $GO_CONFIG->theme_path.'Default/images/128x128/filetypes/';
+		$url = $GO_CONFIG->theme_url.'Default/images/128x128/filetypes/';
+	}
+
+	return array('url'=>$url,'dir'=>$dir);
+}
 
 function get_thumb_url($path, $w=100,$h=100,$zc=1) {
 		global $GO_THEME, $GO_CONFIG;
 
 		$extension = File::get_extension($path);
+
+		$arr = get_thumb_dir();
+
+		$url = $arr['url'];
+		$dir = $arr['dir'];
+		
 
 		switch($extension) {
 			case 'jpg':
@@ -253,7 +272,7 @@ function get_thumb_url($path, $w=100,$h=100,$zc=1) {
 				break;
 
 			case 'pdf':
-				return $GO_THEME->image_url.'128x128/filetypes/pdf.png';
+				return $url.'pdf.png';
 				break;
 
 			case 'tar':
@@ -261,37 +280,44 @@ function get_thumb_url($path, $w=100,$h=100,$zc=1) {
 			case 'gz':
 			case 'bz2':
 			case 'zip':
-				return $GO_THEME->image_url.'128x128/filetypes/zip.png';
+				return $url.'zip.png';
 				break;
 			case 'odt':
 			case 'docx':
 			case 'doc':
-				return $GO_THEME->image_url.'128x128/filetypes/doc.png';
+				return $url.'doc.png';
 				break;
 
 			case 'odc':
 			case 'ods':
 			case 'xls':
 			case 'xlsx':
-				return $GO_THEME->image_url.'128x128/filetypes/spreadsheet.png';
+				return $url.'spreadsheet.png';
 				break;
 
 			case 'odp':
 			case 'pps':
 			case 'pptx':
 			case 'ppt':
-				return $GO_THEME->image_url.'128x128/filetypes/pps.png';
+				return $url.'pps.png';
+				break;
+			case 'eml':
+				return $url.'message.png';
 				break;
 
 			case 'htm':
-				return $GO_THEME->image_url.'128x128/filetypes/doc.png';
+				return $url.'doc.png';
+				break;
+
+			case 'log':
+				return $url.'txt.png';
 				break;
 
 			default:
-				if(file_exists($GO_THEME->theme_path.'images/128x128/filetypes/'.$extension.'.png')) {
-					return $GO_THEME->image_url.'128x128/filetypes/'.$extension.'.png';
+				if(file_exists($dir.$extension.'.png')) {
+					return $url.$extension.'.png';
 				}else {
-					return $GO_THEME->image_url.'128x128/filetypes/unknown.png';
+					return $url.'unknown.png';
 				}
 				break;
 
