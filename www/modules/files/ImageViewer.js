@@ -41,21 +41,22 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 			},
 			scope: this
 		},'-',
-		{
+		this.normalSizeBtn=new Ext.Button({
 			text: GO.files.lang.normalSize,
 			iconCls: 'fs-btn-normal-size',
 			handler: function(){
 				this.imgEl.setSize(this.originalImgSize.width, this.originalImgSize.height);
 			},
 			scope: this
-		},{
+		}),
+		this.fitImageBtn=new Ext.Button({
 			text: GO.files.lang.fitImage,
 			iconCls: 'fs-btn-fit-image',
 			handler: function(){
 				this.syncImgSize();
 			},
 			scope: this
-		}];
+		})];
 		
 		GO.files.ImageViewer.superclass.initComponent.call(this);
 		this.on('resize', this.syncImgSize, this);
@@ -94,9 +95,17 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		this.imgEl.initDD(null);
 		
 		this.syncImgSize();
-		
-		this.previousButton.setDisabled(index==0);
-		this.nextButton.setDisabled(index==(this.viewerImages.length-1));
+		if(this.viewerImages.length==1){
+			this.previousButton.hide();
+			this.nextButton.hide();
+		}else
+		{
+			this.previousButton.show();
+			this.nextButton.show();
+
+			this.previousButton.setDisabled(index==0);
+			this.nextButton.setDisabled(index==(this.viewerImages.length-1));
+		}
 	},
 	
 	syncImgSize : function(){	
@@ -130,9 +139,20 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 					h=h*ratio
 				}
 
-				this.imgEl.setWidth(w);
-				this.imgEl.setHeight(h);
-				this.imgEl.setPositioning({left:0,top:0});
+				if(w!=this.originalImgSize.width || h!=this.originalImgSize.height){
+					this.normalSizeBtn.setDisabled(false);
+					this.fitImageBtn.setDisabled(false);
+
+					this.imgEl.setWidth(w);
+					this.imgEl.setHeight(h);
+					this.imgEl.setPositioning({left:0,top:0});
+
+					
+				}else
+				{
+					this.normalSizeBtn.setDisabled(true);
+					this.fitImageBtn.setDisabled(true);
+				}
 
 				if(h<bodySize.height){
 					var topMargin = (bodySize.height-h)/2;
