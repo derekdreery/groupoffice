@@ -661,7 +661,7 @@ class files extends db {
 		}
 	}
 
-	function import_folder($full_path, $parent_id) {
+	function import_folder($full_path, $parent_id, $recurse_only_one_level=false, $levels_recursed=0) {
 		global $GO_SECURITY, $GO_CONFIG;
 
 		$fs = new filesystem();
@@ -671,7 +671,7 @@ class files extends db {
 		$folder['user_id']=$GO_SECURITY->user_id;
 		$folder['parent_id']=$parent_id;
 		$folder['ctime']=filectime($full_path);
-		$folder['mtime']=filemtime($full_path);
+		$folder['mtime']=$recurse_only_one_level ? 1 : filemtime($full_path);
 
 		$existing_folder = $this->folder_exists($parent_id, $folder['name']);
 		if($existing_folder) {
@@ -686,14 +686,16 @@ class files extends db {
 			throw new Exception('Could not create folder: '.$full_path);
 		}
 
-		$files = $fs->get_files($full_path);
-		while($fs_file = array_shift($files)) {
-			$this->import_file($fs_file['path'], $folder['id']);
-		}
+		if($levels_recursed<1){
+			$files = $fs->get_files($full_path);
+			while($fs_file = array_shift($files)) {
+				$this->import_file($fs_file['path'], $folder['id']);
+			}
 
-		$folders = $fs->get_folders($full_path);
-		while($fs_folder=array_shift($folders)) {
-			$this->import_folder($fs_folder['path'], $folder['id']);
+			$folders = $fs->get_folders($full_path);
+			while($fs_folder=array_shift($folders)) {
+				$this->import_folder($fs_folder['path'], $folder['id'], $recurse_only_one_level, $levels_recursed+1);
+			}
 		}
 		return $folder['id'];
 	}
@@ -762,7 +764,7 @@ class files extends db {
 			$key = array_search($fsfolder['name'], $dbfolders_names);
 			if($key===false)
 			{
-				$this->import_folder($fsfolder['path'], $folder['id']);
+				$this->import_folder($fsfolder['path'], $folder['id'], !$recursive);
 			}elseif($recursive){
 				$this->sync_folder($dbfolders[$key], true);
 			}
@@ -1427,7 +1429,7 @@ class files extends db {
 
 		require_once($GO_CONFIG->class_path.'base/quota.class.inc.php');
 		$quota = new quota();
-		$quota->add(-filesize($path)/1024);
+		$quota->add(-@filesize($path)/1024);
 
 
 		$GO_EVENTS->fire_event('delete_file', array($file, $path));
