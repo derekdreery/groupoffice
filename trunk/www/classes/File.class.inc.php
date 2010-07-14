@@ -179,13 +179,13 @@ class File
 
 		if(file_exists($path)){
 			if(function_exists('finfo_open')){
-					$finfo    = finfo_open(FILEINFO_MIME);
-					$mimetype = finfo_file($finfo, $path);
+					$finfo    = @finfo_open(FILEINFO_MIME);
+					$mimetype = @finfo_file($finfo, $path);
 					finfo_close($finfo);
 					return $mimetype;
 			}elseif(function_exists('mime_content_type'))
 			{
-				return mime_content_type($path);
+				return @mime_content_type($path);
 			}
 		}
     
