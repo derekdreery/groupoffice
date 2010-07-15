@@ -440,8 +440,8 @@ try
 					$query= $clicked_letter.'%';
 				}
 			} else {
-				//$field = isset($_POST['field']) ? $_POST['field'] :'';
-				$field='';
+				$field = isset($_POST['field']) ? $_POST['field'] :'';
+				//$field='';
 				$query = !empty($query) ? '%'.$query.'%' : '';
 			}
 			
