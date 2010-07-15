@@ -41,7 +41,11 @@ while($r1= $db->next_record())
 			$sql .= ' AND ';
 		}
 
-		$sql .= $field.="='".$db2->escape($r1[$field])."'";
+		$v = $db2->escape($r1[$field]);
+		if(!empty($v))
+			$sql .= $field."='".$db2->escape($r1[$field])."'";
+		else
+			$sql .= '('.$field."='' OR ISNULL(".$field."))";
 	}
 
 	$sql .= " ORDER BY id ASC";
@@ -57,9 +61,9 @@ while($r1= $db->next_record())
 		$counter++;
 
 		if($delete)
-			$ab->delete_contact($db->f('id'));
+			$ab->delete_contact($db2->f('id'));
 		
-		echo '<tr><td>'.implode('</td><td>',$r2).'</td></tr>';		
+		echo '<tr><td>'.implode('&nbsp;</td><td>',$r2).'&nbsp;</td></tr>';
 	}
 }
 echo '</table>';
@@ -119,7 +123,7 @@ while($r1= $db->next_record())
 		
 		$r2['start_time']=Date::get_timestamp($r2['start_time']);
 		$r2['end_time']=Date::get_timestamp($r2['end_time']);
-		echo '<tr><td>'.implode('</td><td>',$r2).'</td></tr>';
+		echo '<tr><td>'.implode('&nbsp;</td><td>',$r2).'&nbsp;</td></tr>';
 		
 	}
 }
