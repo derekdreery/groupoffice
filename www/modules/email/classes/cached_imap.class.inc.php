@@ -421,7 +421,7 @@ class cached_imap extends imap{
 
 
 			for ($i = 0; $i < count($message['attachments']); $i ++) {
-				if(($create_temporary_attachment_files && !empty($message['attachments'][$i]['replacement_url'])) || ($create_temporary_inline_attachment_files || empty($message['attachments'][$i]['replacement_url']))){
+				if(($create_temporary_attachment_files && empty($message['attachments'][$i]['replacement_url'])) || ($create_temporary_inline_attachment_files && !empty($message['attachments'][$i]['replacement_url']))){
 					$tmp_file = File::checkfilename($GO_CONFIG->tmpdir.'attachments/'.$message['attachments'][$i]['name']);
 					$data = $this->get_message_part_decoded(
 									$uid,
