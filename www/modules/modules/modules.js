@@ -73,15 +73,24 @@ GO.modules.MainPanel = function(config) {
         id:'name',
         renderer : this.iconRenderer,
         width:250
-    }, {
-        header : GO.lang['strDescription'],
-        dataIndex : 'description',
-        id:'description'
     }]);
+
+	config.view=new Ext.grid.GridView({
+			enableRowBody:true,
+			showPreview:true,
+			autoFill:true,
+			emptyText:GO.lang.strNoItems,
+			getRowClass : function(record, rowIndex, p, store){
+				if(this.showPreview && record.data.description.length){
+					p.body = '<div class="mo-description">'+record.data.description+'</div>';
+					return 'x-grid3-row-expanded';
+				}
+				return 'x-grid3-row-collapsed';
+			}
+		});
 
     config.ddGroup = 'ModulesGridDD';
 
-    config.autoExpandMax = 2500;
     config.enableDragDrop = true;
 
     config.layout = 'fit';
@@ -90,7 +99,6 @@ GO.modules.MainPanel = function(config) {
         singleSelect : false
     });
     config.paging = false;
-    config.autoExpandColumn = 'description';
 
     GO.modules.MainPanel.superclass.constructor.call(this, config);
 
@@ -147,18 +155,27 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
                 sm : new Ext.grid.RowSelectionModel({
                     singleSelect : false
                 }),
+				view:new Ext.grid.GridView({
+					enableRowBody:true,
+					showPreview:true,
+					autoFill:true,
+					emptyText:GO.lang.strNoItems,
+					getRowClass : function(record, rowIndex, p, store){
+						if(this.showPreview && record.data.description.length){
+							p.body = '<div class="mo-description">'+record.data.description+'</div>';
+							return 'x-grid3-row-expanded';
+						}
+						return 'x-grid3-row-collapsed';
+					}
+				}),
 
                 columns : [{
                     header : GO.lang['strName'],
-                    dataIndex : 'name'// ,
-                // renderer: this.iconRenderer
-                }, {
-                    header : GO.lang['strDescription'],
-                    dataIndex : 'description',
-										id:'description'
+                    dataIndex : 'name',
+					renderer: this.iconRenderer
                 }],
-                paging : false,
-                autoExpandColumn : 'description'
+                paging : false
+                
             });
 
             this.availableModulesWin = new Ext.Window({
@@ -334,9 +351,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
     },
 
     iconRenderer : function(name, cell, record) {
-        return '<div class="go-module-icon-'
-        + record.data.id
-        + '" style="height:16px;padding-left:22px;background-repeat:no-repeat;">'
+        return '<div class="mo-title" style="background-image:url('+BaseHref+'modules/'+record.data.id+'/themes/Default/images/'+record.data.id+'.png)">'
         + name + '</div>';
     }
 });
