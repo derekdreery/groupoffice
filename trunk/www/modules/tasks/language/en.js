@@ -52,3 +52,5 @@ GO.tasks.lang.category='Category';
 GO.tasks.lang.selectCategory='Select category';
 GO.tasks.lang.noTasklistSelected='You have to select at least 1 tasklist.';
 GO.tasks.lang.selectAllTasklists='Select all tasklists';
+
+GO.tasks.lang.globalCategory='Global category';

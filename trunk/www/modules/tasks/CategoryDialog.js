@@ -68,9 +68,11 @@ Ext.extend(GO.tasks.CategoryDialog, Ext.Window, {
 		
 		if(this.category_id > 0)
 		{
-			this.selectUser.setValue(record.data.user_id);
-			this.selectUser.setRemoteText(record.data.user_name);		
 			this.formPanel.form.findField('name').setValue(record.data.name);
+			if(GO.settings.has_admin_permission)
+			{
+				this.formPanel.form.findField('global').setValue(record.data.user_id == 0);
+			}
 		}else
 		{
 			this.formPanel.form.reset();
@@ -119,7 +121,23 @@ Ext.extend(GO.tasks.CategoryDialog, Ext.Window, {
 		});		
 	},
 	buildForm : function () 
-	{		
+	{
+		var items = [];
+		items.push({
+			fieldLabel: GO.lang['strName'],
+			name: 'name',
+			allowBlank:false
+		});
+		if(GO.settings.has_admin_permission)
+		{
+			items.push(this.globalCategory = new Ext.form.Checkbox({
+				name:'global',
+				boxLabel:GO.tasks.lang.globalCategory,
+				hideLabel:true,
+				checked:false
+			}));
+		}
+		
 		this.formPanel = new Ext.FormPanel({
 			cls:'go-form-panel',
 			anchor:'100% 100%',
@@ -129,18 +147,7 @@ Ext.extend(GO.tasks.CategoryDialog, Ext.Window, {
 			autoHeight:true,
 			waitMsgTarget:true,
 			labelWidth:75,
-			items: [
-				this.selectUser = new GO.form.SelectUser({
-					fieldLabel: GO.lang['strOwner'],
-					value: GO.settings.user_id,
-					disabled : !GO.settings.has_admin_permission,
-					hiddenName:'user_id'
-				}),{
-					fieldLabel: GO.lang['strName'],
-					name: 'name',
-					allowBlank:false
-				}
-			]
+			items: items
 		});	
 	}	
 });

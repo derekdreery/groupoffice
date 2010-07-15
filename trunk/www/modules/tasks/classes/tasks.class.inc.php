@@ -1199,20 +1199,26 @@ class tasks extends db
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_categories($sortfield='name', $sortorder='ASC', $start=0, $offset=0)
+	function get_categories($sortfield='name', $sortorder='ASC', $start=0, $offset=0, $user_id=0)
         {
+		global $GO_SECURITY;
+
+		$user_id = !empty($user_id) ? $user_id : $GO_SECURITY->user_id;
+		
 		$sql = "SELECT ";
 		if($offset > 0)
                 {
                         $sql .= "SQL_CALC_FOUND_ROWS ";
 		}
-		$sql .= "* FROM ta_categories ORDER BY ".$this->escape($sortfield." ".$sortorder);
+		$sql .= "* FROM ta_categories "
+			. "WHERE user_id = 0 OR user_id = ? "
+			. "ORDER BY ".$this->escape($sortfield.' '.$sortorder);
 
 		if($offset>0) {
 			$sql .= " LIMIT ".$this->escape($start.",".$offset);
 		}
 
-		$this->query($sql);
+		$this->query($sql, 'i', $user_id);
 		return $offset>0 ? $this->found_rows() : $this->num_rows();	
 	}
 
@@ -1224,7 +1230,7 @@ class tasks extends db
 	 * @access public
 	 * @return int New record ID created
 	 */
-	function create_category($category)
+	function add_category($category)
         {
 		$category['id'] = $this->nextid('ta_categories');
 

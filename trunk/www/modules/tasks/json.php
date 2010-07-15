@@ -503,19 +503,28 @@ try {
 
 		case 'categories':
 
-			if(isset($_POST['delete_keys']) && $GO_MODULES->modules['tasks']['write_permission']) {
+			if(isset($_POST['delete_keys']))
+			{
 				try {
 					$response['deleteSuccess']=true;
 					$categories = json_decode($_POST['delete_keys']);
-					foreach($categories as $category_id) {
-						$tasks->delete_category($category_id);
+					foreach($categories as $category_id)
+					{
+						$category = $tasks->get_category($category_id);
+						if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) || ($category['user_id'] == $GO_SECURITY->user_id))
+						{
+							$tasks->delete_category($category_id);
+						}else
+						{
+							throw new AccessDeniedException();
+						}
 					}
-				}catch(Exception $e) {
+				}
+				catch(Exception $e) {
 					$response['deleteSuccess']=false;
 					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
-
 
 			$categories = $GO_CONFIG->get_setting('tasks_categories_filter', $GO_SECURITY->user_id);
 			$categories = ($categories) ? explode(',',$categories) : array();
@@ -527,9 +536,8 @@ try {
 
 			$response['results'] = array();
 			$response['total'] = $tasks->get_categories();
-			while($tasks->next_record()) {
-				$category = $tasks->record;
-
+			while($category = $tasks->next_record())
+			{
 				$user = $GO_USERS->get_user($category['user_id']);
 				$category['user_name']=String::format_name($user);
 

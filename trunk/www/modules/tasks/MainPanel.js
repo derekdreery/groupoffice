@@ -432,7 +432,11 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 			this.categoriesGrid.on('rowdblclick', function(grid, rowIndex)
 			{
 				var record = grid.getStore().getAt(rowIndex);
-				this.categoryDialog.show(record);
+
+				if(GO.settings.has_admin_permission || (record.data.user_id > 0))
+				{
+					this.categoryDialog.show(record);
+				}				
 
 			}, this);
 
@@ -521,7 +525,7 @@ GO.tasks.categoriesStore = new GO.data.JsonStore({
 	root: 'results',
 	totalProperty: 'total',
 	id: 'id',
-	fields:['id','name','user_name','checked'],
+	fields:['id','name','user_name','checked','user_id'],
 	remoteSort:true,
 	sortInfo: {
 		field: 'name',

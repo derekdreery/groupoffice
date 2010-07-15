@@ -41,3 +41,5 @@ GO.tasks.lang.category='Categorie';
 GO.tasks.lang.selectCategory='Selecteer categorie';
 GO.tasks.lang.noTasklistSelected='U dient minimaal 1 takenlijst te selecteren.';
 GO.tasks.lang.selectAllTasklists='Selecteer alle takenlijsten';
+
+GO.tasks.lang.globalCategory='Globale category';
