@@ -1861,16 +1861,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			GO.calendar.categoryDialog = new GO.calendar.CategoryDialog();
 			GO.calendar.categoryDialog.on('save', function()
 			{
-				GO.calendar.categoriesStore.reload();
-				/*
-				GO.calendar.groupsGrid.store.load({
-					callback:function(){
-						if(GO.calendar.eventDialog)
-							GO.calendar.eventDialog.resourceGroupsStore.reload();
-					},
-					scope:this
-				});
-				*/
+				GO.calendar.categoriesStore.reload();		
 			},this);
 
 			var items = [this.calendarsGrid, this.viewsGrid, this.categoriesGrid];
