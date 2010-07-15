@@ -724,6 +724,15 @@ try {
 						}
 					}
 
+					if($event['category_id'])
+					{
+						$category = $cal2->get_category($event['category_id']);
+						if($category)
+						{
+							$event['background'] = $category['color'];
+						}
+					}
+
 
 					$private = ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']);
 					if($private) {
