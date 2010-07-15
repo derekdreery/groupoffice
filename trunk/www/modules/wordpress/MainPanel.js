@@ -2,7 +2,7 @@ Ext.namespace('GO.wordpress');
 
 var wpIframe;
 var wpConfig = {
-	title : 'Wordpress',
+	title : GO.wordpress.lang.wordpress,
 	iconCls : 'go-tab-icon-wordpress',
 	layout:'fit',
 	items:[wpIframe = new GO.panel.IFrameComponent({
@@ -11,7 +11,7 @@ var wpConfig = {
 	border:false,
 	tbar:[{
 			iconCls:'go-module-icon-wordpress',
-			text:'Wordpress admin',
+			text:GO.wordpress.lang.wordpressAdmin,
 			handler:function(){
 				wpIframe.el.dom.contentDocument.location=GO.settings.modules.wordpress.url+'redirect.php';
 			},
