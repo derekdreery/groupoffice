@@ -1,28 +1,47 @@
 <?php
-class wordpress extends db{
-
-	var $mapping = array(
-		'5' => array(
-				'post_title' => 'name',				
-				'categories' => 'Vacatures',
-				'tags' => '',
-				'custom' => array(
+/*
+ * Create a file called wp_config.inc.php and put it in the same directory where
+ * your Group-Office config.php is. Then add something like this:
+ *
+ * var $mapping = array(
+		'5' => array( //projects
+				'post_title' => 'name',	//name is page title
+				'categories' => 'Vacatures', //categories
+				'custom' => array( //wordpress custom fields
 					'Korte beschrijving'=>'description',
 					'Functie' => 'col_19',
 					'Sectoren' => 'col_20',
-					'Opleiding' => 'col_21',					
+					'Opleiding' => 'col_21',
 					'Werkervaring' => 'col_22',
-					'Locatie' => 'col_23',					
+					'Locatie' => 'col_23',
 					'Dienstverband' => 'col_24',
 					)
 			),
 		'2' => array(
 				'post_title' => 'first_name',
 				'categories' => 'Keystaffers',
-				'tags' => '',
 				'custom' => array()
 			)
 		);
+ */
+class wordpress extends db{
+
+	var $mapping = array();
+
+	public function __construct(){
+
+		parent::__construct();
+
+		global $GO_CONFIG;
+
+		$config_dir = dirname($GO_CONFIG->get_config_file());
+		$wp_config = $config_dir.'/wp_config.inc.php';
+
+		if(file_exists($wp_config)){
+			require($wp_config);
+			$this->mapping = $mapping;
+		}
+	}
 
 	public function __on_load_listeners($events){
 		$events->add_listener('load_contact', __FILE__, 'wordpress', 'load_contact');
@@ -43,41 +62,47 @@ class wordpress extends db{
 	}
 
 	public function save($values, $link_type){
-		$w['id']=$values['id'];
-		$w['link_type']=$link_type;
-		$w['publish']=isset($_POST['wp_publish']) ? '1' : '0';
-		$w['title']=$values[$this->mapping[$link_type]['post_title']];
-		$w['content']=$_POST['wp_content'];//$values[$this->mapping[$link_type]['post_content']];
-		$w['updated']=1;
+		if(isset($this->mapping[$link_type])){
+			$w['id']=$values['id'];
+			$w['link_type']=$link_type;
+			$w['publish']=isset($_POST['wp_publish']) ? '1' : '0';
+			$w['title']=$values[$this->mapping[$link_type]['post_title']];
+			$w['content']=$_POST['wp_content'];//$values[$this->mapping[$link_type]['post_content']];
+			$w['updated']=1;
+			$w['categories']=$this->mapping[$link_type]['categories'];
 
 
-		if($this->get_post($w['id'], $w['link_type'])){
-			$this->update_row('wp_posts',array('id','link_type'), $w);
-			$this->query('DELETE FROM wp_posts_custom WHERE id=? AND link_type=?', 'ii', array($values['id'], $link_type));
-		}else{
-			$this->insert_row('wp_posts', $w);
-		}
-		
-		global $GO_MODULES;
-		
-		if(isset($GO_MODULES->modules['customfields'])){
-			$cf = new customfields();
-			$custom = $cf->get_values(1, 5, $values['id']);
-			
-			
-			$values = array_merge($values, $custom);
-			//go_debug($values);
-		}
-
-		foreach($this->mapping[$link_type]['custom'] as $wp_key=>$go_col){
-			if(isset($values[$go_col])){
-				$c['id']=$values['id'];
-				$c['link_type']=$link_type;
-				$c['key']=$wp_key;
-				$c['value']=$values[$go_col];
-				
-				$this->insert_row('wp_posts_custom', $c);
+			if($this->get_post($w['id'], $w['link_type'])){
+				$this->update_row('wp_posts',array('id','link_type'), $w);
+				$this->query('DELETE FROM wp_posts_custom WHERE id=? AND link_type=?', 'ii', array($values['id'], $link_type));
+			}else{
+				$this->insert_row('wp_posts', $w);
 			}
+
+			global $GO_MODULES;
+
+			if(isset($GO_MODULES->modules['customfields'])){
+				$cf = new customfields();
+				$custom = $cf->get_values(1, 5, $values['id']);
+
+
+				$values = array_merge($values, $custom);
+				//go_debug($values);
+			}
+
+			foreach($this->mapping[$link_type]['custom'] as $wp_key=>$go_col){
+				if(isset($values[$go_col])){
+					$c['id']=$values['id'];
+					$c['link_type']=$link_type;
+					$c['key']=$wp_key;
+					$c['value']=$values[$go_col];
+
+					$this->insert_row('wp_posts_custom', $c);
+				}
+			}
+		}else
+		{
+			throw new Exception('No mapping found for link type '.$link_type);
 		}
 
 	}

@@ -9,7 +9,7 @@ GO.wordpress.AdminDialog = function(config){
 
 	var formItems=[];
 
-	var supported=[2,5];
+	/*var supported=[2,5];
 	//GO.linkTypes is defined in /default_scripts.inc.php
 	for(var i=0;i<GO.linkTypes.length;i++){
 		if(supported.indexOf(GO.linkTypes[i].id)>-1){
@@ -26,7 +26,7 @@ GO.wordpress.AdminDialog = function(config){
 		title:'Publish categories',
 		autoHeight:true,
 		items:formItems
-	});
+	});*/
 
 	this.formPanel = new Ext.FormPanel({
 		waitMsgTarget:true,
@@ -37,7 +37,7 @@ GO.wordpress.AdminDialog = function(config){
 			fieldLabel:'Wordpress URL',
 			name:'wp_url',
 			anchor:'100%'
-		},this.linkTypesFieldset]
+		}/*,this.linkTypesFieldset*/]
 	});
 
 	config.items=[this.formPanel];	

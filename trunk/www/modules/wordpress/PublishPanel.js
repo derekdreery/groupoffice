@@ -11,11 +11,6 @@ GO.wordpress.PublishPanel = function(config){
 			boxLabel:'Publish to Wordpress',
 			name:'wp_publish'
 		},{
-			xtype:'textfield',
-			fieldLabel:'Title',
-			name:'wp_title',
-			anchor:'100%'
-		},{
 			hideLabel:true,
 			xtype:'htmleditor',
 			anchor:'100% -50',

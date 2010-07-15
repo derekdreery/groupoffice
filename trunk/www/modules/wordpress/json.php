@@ -11,8 +11,8 @@ foreach($GO_MODULES->modules as $module) {
 }
 
 $response['data']['wp_url']=$GO_CONFIG->get_setting('wp_url');
-$response['data']['wp_category_2']=$GO_CONFIG->get_setting('wp_category_2');
-$response['data']['wp_category_5']=$GO_CONFIG->get_setting('wp_category_5');
+//$response['data']['wp_category_2']=$GO_CONFIG->get_setting('wp_category_2');
+//$response['data']['wp_category_5']=$GO_CONFIG->get_setting('wp_category_5');
 
 //otherwise false is displayed
 foreach($response['data'] as $key=>$value){
