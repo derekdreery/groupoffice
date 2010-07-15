@@ -322,26 +322,25 @@ try {
 
                 case 'save_category':
 
-                        if(!$GO_MODULES->modules['tasks']['write_permission']) {
-				throw new AccessDeniedException();
-			}
-
 			$category['id'] = (isset($_REQUEST['id']) && $_REQUEST['id']) ? $_REQUEST['id'] : 0;
                         $category['name'] = (isset($_REQUEST['name']) && $_REQUEST['name']) ? $_REQUEST['name'] : '';
-                        $category['user_id'] = (isset($_REQUEST['user_id']) && $_REQUEST['user_id']) ? $_REQUEST['user_id'] : $GO_SECURITY->user_id;
+                        $category['user_id'] = (isset($_REQUEST['global'])) ? 0 : $GO_SECURITY->user_id;
 
-			if(empty($category['name'])) {
+			if(empty($category['name']))
+			{
 				throw new Exception($lang['common']['missingField']);
 			}
-                        
-			if($category['id']>0) {
+
+			if($category['id']>0)
+			{
 				$tasks->update_category($category);
-			}else {
-				$response['id'] = $tasks->create_category($category);
-			}                     
+			}else
+			{
+				$response['id'] = $tasks->add_category($category);
+			}
 
 			$response['success'] = true;
-			break;
+			break;                        		
 
 
 		case 'move_tasks':
