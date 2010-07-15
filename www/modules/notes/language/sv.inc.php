@@ -15,15 +15,13 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('notes'));
 
-$modules['notes']['name']= 'Noteringar';
-$modules['notes']['description']= 'Sätt en beskrivning här';
-$lang['notes']['note']= 'Notering';
-$lang['notes']['name']= 'Noteringar';
-$lang['notes']['description']= 'Sätt en beskrivning här';
+$lang['notes']['note']= 'Anteckning';
+$lang['notes']['name']= 'Anteckningar';
+$lang['notes']['description']= 'Modul för enklare anteckningar.';
 
 $lang['notes']['category']= 'Kategori';
 $lang['notes']['categories']= 'Kategorier';
-$lang['link_type'][4]=$lang['notes']['note']= 'Notering';
-$lang['notes']['notes']= 'Noteringar';
+$lang['link_type'][4]=$lang['notes']['note']= 'Anteckning';
+$lang['notes']['notes']= 'Anteckningar';
 
 $lang['notes']['general'] = 'Allmänt';

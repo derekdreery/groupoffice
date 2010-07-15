@@ -15,9 +15,10 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('summary'));
 
-$lang['summary']['name']= 'Sammanfattning';
-$lang['summary']['description']= 'Sätt en beskrivning här';
+$lang['summary']['name']= 'Översikt';
+$lang['summary']['description']= 'Visar en översikt från utvalda moduler.';
 
-$lang['summary']['default_rss_url']= 'http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml';
+$lang['summary']['default_rss_url']= 'http://www.dn.se/m/rss/toppnyheter';
+$lang['summary']['default_rss_title']='Nyheter från DN';
 $lang['summary']['announcement']= 'Meddelande';
 $lang['summary']['announcements']= 'Meddelanden';

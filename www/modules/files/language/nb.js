@@ -32,3 +32,6 @@ GO.files.lang.olderVersions='Eldre versjoner';
 
 GO.files.lang.selectFiles= 'Velg filer';
 GO.files.lang.uploadProperties='Opplysningene nedenfor vil gjelde for alle filer lastet opp med funksjonen "Små filer" ';
+GO.files.lang.fitImage='Tilpass bilde';
+GO.files.lang.normalSize='Normal størrelse';
+GO.files.lang.imageViewer='Bildevisning';

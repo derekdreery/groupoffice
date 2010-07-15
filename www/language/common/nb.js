@@ -350,3 +350,4 @@ GO.lang.applyMultiselect='Bruk valgene';
 GO.lang.createdBy='Opprettet av';
 GO.lang.debugModeDetected="Advarsel! Debug mode aktivert";
 GO.lang.debugModeWarning="Du bør bare bruke $config['debug']=true; under utvikling og feilsøking. Group-Office kjører saktere i debug mode!";
+GO.lang.noItemSelectedWarning='Du må velge minst ett element.';
