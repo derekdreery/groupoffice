@@ -174,8 +174,8 @@ try{
 
 			$response['success']=false;
 
-			$username = ($_POST['username']);
-			$password = ($_POST['password']);
+			$username = $_POST['username'];
+			$password = $_POST['password'];
 
 			if (!$username || !$password)
 			{
@@ -214,7 +214,7 @@ try{
 			
 			//$response['fullscreen']=isset($_POST['fullscreen']);
 				
-			//$response['settings'] = $GO_CONFIG->get_client_settings();
+			$response['settings'] = $GO_CONFIG->get_client_settings();
 			
 			
 			
