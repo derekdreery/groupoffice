@@ -936,6 +936,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					title: GO.calendar.lang.recurringEvent,
 					modal: true,
 					html: GO.calendar.lang.deleteRecurringEvent,
+					focus : function(){
+						this.getFooterToolbar().items.get('cancel').focus();
+					},
 					buttons: [{
 						text: GO.calendar.lang.singleOccurence,
 						handler: function(){
@@ -965,6 +968,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						},
 						scope: this
 					},{
+						itemId:'cancel',
 						text: GO.lang.cmdCancel,
 						handler: function(){
 							this.recurrenceDialog.hide();
