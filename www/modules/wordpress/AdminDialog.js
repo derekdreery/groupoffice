@@ -7,9 +7,9 @@ GO.wordpress.AdminDialog = function(config){
 	
 	config.title=GO.lang.cmdSettings;
 
-	var formItems=[];
+	/*var formItems=[];
 
-	/*var supported=[2,5];
+	var supported=[2,5];
 	//GO.linkTypes is defined in /default_scripts.inc.php
 	for(var i=0;i<GO.linkTypes.length;i++){
 		if(supported.indexOf(GO.linkTypes[i].id)>-1){
