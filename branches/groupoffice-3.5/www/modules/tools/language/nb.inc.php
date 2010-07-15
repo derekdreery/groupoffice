@@ -13,4 +13,5 @@ $lang['tools']['index_files']='Indekser alle filer';
 
 $lang['tools']['buildsearchcache']='Opprett søkeindeks';
 $lang['tools']['checkmodules']='Kontroller moduler';
+$lang['tools']['resetState']='Tilbakestill tilstand på vinduer, rutenett etc.';
 ?>

@@ -15,17 +15,17 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('addressbook'));
 $lang['addressbook']['name'] = 'Adressbok';
-$lang['addressbook']['description'] = 'Modul för att hantera alla kontakter.';
+$lang['addressbook']['description'] = 'Modul för att hantera kontakter.';
 
 
 
-$lang['addressbook']['allAddressbooks'] = 'Alla Addressböcker';
-$lang['common']['addressbookAlreadyExists'] = 'Den Adressbok du försöker skapa finns redan';
+$lang['addressbook']['allAddressbooks'] = 'Alla adressböcker';
+$lang['common']['addressbookAlreadyExists'] = 'Den adressbok du försöker skapa finns redan';
 $lang['addressbook']['notIncluded'] = 'Importera inte';
 
 $lang['addressbook']['comment'] = 'Kommentar';
 $lang['addressbook']['bankNo'] = 'Banknummer'; 
-$lang['addressbook']['vatNo'] = 'Momsregistreringsnummer';
+$lang['addressbook']['vatNo'] = 'Momsreg.nummer';
 $lang['addressbook']['contactsGroup'] = 'Grupp';
 
 $lang['link_type'][2]=$lang['addressbook']['contact'] = 'Kontakt';
@@ -33,13 +33,17 @@ $lang['link_type'][3]=$lang['addressbook']['company'] = 'Företag';
 
 $lang['addressbook']['customers'] = 'Kunder';
 $lang['addressbook']['suppliers'] = 'Leverantörer';
-$lang['addressbook']['prospects'] = 'Framtidsutsikter';
+$lang['addressbook']['prospects'] = 'Övriga';
 
 
 $lang['addressbook']['contacts'] = 'Kontakter';
 $lang['addressbook']['companies'] = 'Företag';
 
 $lang['addressbook']['newContactAdded']= 'Ny kontakt tillagd';
-$lang['addressbook']['newContactFromSite']= 'En ny kontakt har lagts till via et webbplats formulär.';
+$lang['addressbook']['newContactFromSite']= 'En ny kontakt har lagts till via ett webb-formulär.';
 $lang['addressbook']['clickHereToView']= 'Klicka här för att visa kontakten';
+
+$lang['addressbook']['contactFromAddressbook']='Kontakt från %s';
+$lang['addressbook']['companyFromAddressbook']='Företag från %s';
+$lang['addressbook']['defaultSalutation']='Bästa [Herr/Fru] {first_name} {last_name}';
 ?>

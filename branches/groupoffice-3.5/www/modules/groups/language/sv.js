@@ -15,5 +15,5 @@ GO.groups.lang.group = 'Grupp';
 GO.groups.lang.groups = 'Grupper';
 GO.groups.lang.owner = 'Ägare';
 GO.groups.lang.lblNew = 'Ny';
-GO.groups.lang.newGroupName = 'Ange nya gruppens namn';
-GO.groups.lang.searchAllUsers = 'Sök alla användare';
+GO.groups.lang.newGroupName = 'Ange den nya gruppens namn';
+GO.groups.lang.searchAllUsers = 'Sök bland alla användare';
