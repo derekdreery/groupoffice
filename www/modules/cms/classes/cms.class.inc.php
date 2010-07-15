@@ -909,8 +909,11 @@ class cms extends db {
 	 * @access public
 	 * @return Array Record properties
 	 */
-	function get_folder_by_name($name) {
-		$this->query("SELECT * FROM cms_folders WHERE name='".$this->escape($name)."'");
+	function get_folder_by_name($name, $site_id=0) {
+		$sql = "SELECT * FROM cms_folders WHERE name='".$this->escape($name)."' ";
+		if ($site_id>0)
+			$sql .= "AND site_id='$site_id'";
+		$this->query($sql);
 		if($this->next_record()) {
 			return $this->record;
 		}
