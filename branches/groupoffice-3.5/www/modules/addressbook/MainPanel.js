@@ -386,11 +386,13 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 				}, this);
 			GO.addressbook.readableAddressbooksStore.load();
 			
-			/*if(GO.mailings)
+			if(GO.mailings)
 			{
-				if(!GO.mailings.ooTemplatesStore.loaded)
-					GO.mailings.ooTemplatesStore.load();
-			}*/
+				//must be loaded here otherwise the contact and company dialog
+				//don't send the selected mailing groups. Doing it on render
+				//time of the dialog didn;t work
+				GO.mailings.writableMailingsStore.load();
+			}
 
 			GO.addressbook.contactDialogListeners={
 				scope:this,
