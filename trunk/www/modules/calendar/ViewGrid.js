@@ -173,7 +173,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				cls: "x-calGrid-heading",
 				style: "width:"+(columnWidth)+"px",
 				html: dt.format(dateFormat)
-				});
+			});
 		}
 		
 
@@ -249,7 +249,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					calendar_id: calendar_id,
 					calendar_name:target.innerHTML,
 					title:target.innerHTML
-					});
+				});
 			}, this);
 			
 			this.gridCells[calendar_id]={};
@@ -374,7 +374,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					offsetDays:offsetDays,
 					dragDate: data.dragDate,
 					calendar_id: data.calendar_id
-					};
+				};
 	
 				var remoteEvent = this.elementToEvent(data.item.id);
 					
@@ -581,7 +581,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 						
 						this.fireEvent("eventDblClick", this, event, {
 							singleInstance : event['write_permission']
-							});
+						});
 					}
 					
 				}, this);	
@@ -637,7 +637,11 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				title:GO.calendar.lang.recurringEvent,
 				modal:false,
 				html: GO.calendar.lang.deleteRecurringEvent,
+				focus : function(){
+					this.getFooterToolbar().items.get('single').focus();
+				},
 				buttons: [{
+					itemId:'single',
 					text: GO.calendar.lang.singleOccurence,
 					handler: function(){
 							
@@ -667,6 +671,12 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 						this.currentActionData.singleInstance=false;
 							
 						this.fireEvent(this.currentFireEvent, this, this.currentRecurringEvent, this.currentActionData);
+						this.recurrenceDialog.hide();
+					},
+					scope: this
+				},{
+					text: GO.lang.cmdCancel,
+					handler: function(){
 						this.recurrenceDialog.hide();
 					},
 					scope: this
@@ -790,7 +800,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 
 							if(eventData['mtime'] > mtime)
 							{
-							       mtime = eventData['mtime'];
+								mtime = eventData['mtime'];
 							}
 						}
 					}

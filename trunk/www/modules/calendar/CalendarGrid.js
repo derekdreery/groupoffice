@@ -1387,7 +1387,11 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				title:GO.calendar.lang.recurringEvent,
 				modal:false,
 				html: GO.calendar.lang.editRecurringEvent,
+				focus : function(){
+					this.getFooterToolbar().items.get('single').focus();
+				},
 				buttons: [{
+					itemId:'single',
 					text: GO.calendar.lang.singleOccurence,
 					handler: function(){
 						this.currentActionData.singleInstance=true;
@@ -1415,6 +1419,12 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					handler: function(){
 						this.currentActionData.singleInstance=false;
 						this.fireEvent(this.currentFireEvent, this, this.currentRecurringEvent, this.currentActionData);
+						this.recurrenceDialog.hide();
+					},
+					scope: this
+				},{
+					text: GO.lang.cmdCancel,
+					handler: function(){
 						this.recurrenceDialog.hide();
 					},
 					scope: this
