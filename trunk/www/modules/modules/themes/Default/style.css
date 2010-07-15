@@ -1,6 +1,6 @@
 
 .go-module-icon-modules, .go-menu-icon-modules{
-	background-image: url('images/16x16/icon-modules.png') !important;
+	background-image: url('images/modules.png') !important;
 }
 
 .go-tab-icon-modules {
@@ -18,7 +18,13 @@ width:100px;
 padding: 0px 0px 0px 0px;
 }
 
-.pm-hours-comments{
-	color: #666666;
-	padding: 1px 2px 4px 5px;
+.mo-description{
+	padding-left:27px;
+}
+
+.mo-title{
+	height:16px;
+	padding-left:22px;
+	background-repeat:no-repeat;
+	font-weight:bold;
 }

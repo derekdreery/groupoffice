@@ -33,6 +33,8 @@ try{
 
 			$folders = $fs->get_folders($GO_CONFIG->module_path);
 
+			$unsorted=array();
+
 			while($module = array_shift($folders))
 			{
 				if($GO_MODULES->module_is_allowed($module['name']))
@@ -54,13 +56,15 @@ try{
 						$record = array(
 							'id' => $module['name'],
 							'name' => isset($lang[$module['name']]['name']) ? $lang[$module['name']]['name'] : $module['name'],
-							'description' => isset($lang[$module['name']]['description']) ? $lang[$module['name']]['description'] : '');
+							'description' => isset($lang[$module['name']]['description']) ? String::text_to_html($lang[$module['name']]['description']) : '');
 
-						$records[] = $record;
-
+						$unsorted[$record['name']]=$record;
 					}
 				}
 			}
+
+			ksort($unsorted);
+			$records = array_values($unsorted);
 			break;
 
 		case 'installed_modules':
@@ -101,7 +105,7 @@ try{
 				$record = array(
 	 			'id' => $module['id'],
 	 			'name' => $module['humanName'],
-	 			'description' => $module['description'],
+	 			'description' => String::text_to_html($module['description']),
 	 			'sort_order' => $module['sort_order'],
 	 			'admin_menu' => $module['admin_menu'],
  				'acl_id' => $module['acl_id']
