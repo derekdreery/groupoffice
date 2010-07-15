@@ -297,12 +297,13 @@ class GO_CONFIG {
 	var $force_login_url = false;
 
 	/**
-	 * Full URL to reach Group-Office with slash on end
+	 * Full URL to reach Group-Office with slash on end. This value is determined
+	 * automatically if not set in config.php
 	 *
 	 * @var     string
 	 * @access  public
 	 */
-	var $full_url = 'http://localhost/groupoffice/';
+	var $full_url = '';
 
 	/**
 	 * Title of Group-Office
