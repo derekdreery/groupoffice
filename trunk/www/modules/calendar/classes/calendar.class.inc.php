@@ -2504,4 +2504,94 @@ class calendar extends db {
 		return $this->query("DELETE FROM cal_visible_tasklists WHERE calendar_id = ? AND tasklist_id = ?", 'ii', array($calendar_id, $tasklist_id));
 	}
 
+		
+	/**
+	 * Add a Category
+	 *
+	 * @param Array $category Associative array of record fields
+	 *
+	 * @access public
+	 * @return int New record ID created
+	 */
+	function add_category($category)
+	{
+		if(!$category['id'])
+			$category['id']=$this->nextid('cal_categories');
+
+		if($this->insert_row('cal_categories', $category)) {
+			return $category['id'];
+		}
+		return false;
+	}
+	/**
+	 * Update a Category
+	 *
+	 * @param Array $category Associative array of record fields
+	 *
+	 * @access public
+	 * @return bool True on success
+	 */
+	function update_category($category)
+	{
+		$r = $this->update_row('cal_categories', 'id', $category);
+		return $r;
+	}
+	/**
+	 * Delete a Category
+	 *
+	 * @param Int $category_id ID of the category
+	 *
+	 * @access public
+	 * @return bool True on success
+	 */
+	function delete_category($category_id)
+	{
+		return $this->query("DELETE FROM cal_categories WHERE id=?", 'i', $category_id);
+	}
+	/**
+	 * Gets a Categories record
+	 *
+	 * @param Int $category_id ID of the category
+	 *
+	 * @access public
+	 * @return Array Record properties
+	 */
+	function get_category($category_id)
+	{
+		$this->query("SELECT * FROM cal_categories WHERE id=?", 'i', $category_id);
+		return $this->next_record();
+	}	
+	/**
+	 * Gets all Categories
+	 *
+	 * @param Int $start First record of the total record set to return
+	 * @param Int $offset Number of records to return
+	 * @param String $sortfield The field to sort on
+	 * @param String $sortorder The sort order
+	 *
+	 * @access public
+	 * @return Int Number of records found
+	 */
+	function get_categories($sortfield='name', $sortorder='ASC', $start=0, $offset=0, $user_id=0)
+	{
+		global $GO_SECURITY;
+
+		$user_id = !empty($user_id) ? $user_id : $GO_SECURITY->user_id;
+
+		$sql = "SELECT ";
+		if($offset>0) {
+			$sql .= "SQL_CALC_FOUND_ROWS ";
+		}
+		$sql .= "* FROM cal_categories "
+			. "WHERE user_id = 0 OR user_id = ? "
+			. "ORDER BY ".$this->escape($sortfield.' '.$sortorder);
+		if($offset>0) {
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
+		}
+
+		$this->query($sql, 'i', $user_id);
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
+	}
+
+
 }

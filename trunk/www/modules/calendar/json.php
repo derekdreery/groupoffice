@@ -285,6 +285,15 @@ try {
 
 			$event = $cal->get_event($_REQUEST['event_id']);
 
+			if($event['category_id'])
+			{
+				$category = $cal->get_category($event['category_id']);
+				if($category)
+				{
+					$event['background'] = $category['color'];
+				}
+			}
+
 			if(!$event) {
 				throw new DatabaseSelectException();
 			}
@@ -432,7 +441,17 @@ try {
 				}
 
 				if ($owncolor)
+				{
 					$event['background'] = $default_bg[$event['calendar_id']];
+				}else
+				if($event['category_id'])
+				{
+					$category = $cal->get_category($event['category_id']);
+					if($category)
+					{
+						$event['background'] = $category['color'];
+					}
+				}			
 
 				$user = $GO_USERS->get_user($event['user_id']);
 				$username = String::format_name($user);
@@ -1379,6 +1398,48 @@ try {
 				$response['success'] = true;
 				$response['checked_calendars'] = $checked_calendars;
 			}
+			break;
+
+
+		case 'categories':
+
+			if(isset($_POST['delete_keys']))
+			{
+				try {
+					$response['deleteSuccess']=true;
+					$categories = json_decode($_POST['delete_keys']);
+					foreach($categories as $category_id)
+					{
+						$category = $cal->get_category($category_id);
+						if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) || ($category['user_id'] == $GO_SECURITY->user_id))
+						{
+							$cal->delete_category($category_id);
+						}else
+						{
+							throw new AccessDeniedException();
+						}						
+					}					
+				}
+				catch(Exception $e) {
+					$response['deleteSuccess']=false;
+					$response['deleteFeedback']=$e->getMessage();
+				}
+			}
+
+			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'id';
+			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
+			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
+			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
+
+			$response['results']=array();
+			$response['total'] = $cal->get_categories($sort, $dir, $start, $limit);
+			while($category = $cal->next_record())
+			{
+				$user = $GO_USERS->get_user($category['user_id']);
+				$category['user_name']=String::format_name($user);
+				$response['results'][] = $category;
+			}
+
 			break;
 
 	}

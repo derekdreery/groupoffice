@@ -114,3 +114,8 @@ GO.calendar.lang.daynames[3]='Wednesday';
 GO.calendar.lang.daynames[4]='Thursday';
 GO.calendar.lang.daynames[5]='Friday';
 GO.calendar.lang.daynames[6]='Saturday';
+
+GO.calendar.lang.categories='Categories';
+GO.calendar.lang.category='Category';
+GO.calendar.lang.globalCategory='Global category';
+GO.calendar.lang.selectCategory='Select category';

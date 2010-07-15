@@ -31,10 +31,11 @@ function get_posted_event() {
 	$event['description'] = (trim($_POST['description']));
 	$event['location'] = (trim($_POST['location']));
 	$event['status'] = ($_POST['status']);
-	$event['background'] = ($_POST['background']);
+	//$event['background'] = ($_POST['background']);
 	$event['busy']=isset($_POST['busy']) ? '1' : '0';
 	$event['reminder'] = isset($_POST['reminder_multiplier']) ? $_POST['reminder_multiplier'] * $_POST['reminder_value'] : 0;
 	//$event['background'] = $_POST['background'];
+	$event['category_id'] = isset($_POST['category_id']) ? $_POST['category_id'] : 0;
 
 	$timezone_offset = Date::get_timezone_offset(Date::to_unixtime($_POST['start_date']));
 
@@ -354,6 +355,7 @@ try {
 			$group_id = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
 			$calendar_id = $event['calendar_id'];
 			$check_conflicts = isset($_POST['check_conflicts']) && !empty($_POST['busy']) ? $_POST['check_conflicts'] : 0;
+			
 
 			$date_format = $_SESSION['GO_SESSION']['date_format'];
 
@@ -1103,6 +1105,30 @@ try {
 		    }
 		    
 		    break;
+
+
+		    case 'save_category':
+
+			$category['id'] = (isset($_REQUEST['id']) && $_REQUEST['id']) ? $_REQUEST['id'] : 0;
+                        $category['name'] = (isset($_REQUEST['name']) && $_REQUEST['name']) ? $_REQUEST['name'] : '';
+			$category['color'] = (isset($_REQUEST['color']) && $_REQUEST['color']) ? $_REQUEST['color'] : '';
+                        $category['user_id'] = (isset($_REQUEST['global'])) ? 0 : $GO_SECURITY->user_id;
+
+			if(empty($category['name']))
+			{
+				throw new Exception($lang['common']['missingField']);
+			}
+
+			if($category['id']>0)
+			{
+				$cal->update_category($category);
+			}else
+			{
+				$response['id'] = $cal->add_category($category);
+			}
+
+			$response['success'] = true;
+			break;
 
 	}
 }catch(Exception $e)

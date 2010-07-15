@@ -289,6 +289,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					{
 						this.toggleFieldSets(action.result.data.resources_checked);
 					}
+
+					this.selectCategory.container.up('div.x-form-item').setDisplayed(this.formPanel.form.baseParams['group_id']==1);					
+					this.colorField.setDisabled(this.formPanel.form.baseParams['group_id']==1);
+
 				},
 				failure : function(form, action) {
 					Ext.Msg.alert(GO.lang.strError, action.result.feedback)
@@ -381,11 +385,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			var group_id = calendarRecord.get('group_id');
 			this.formPanel.form.baseParams['group_id'] = group_id;
 			this.initCustomFields(group_id);
+			
+			this.colorField.setDisabled(group_id==1);			
+			this.selectCategory.container.up('div.x-form-item').setDisplayed(group_id==1);
 
 			if(group_id == 1)
 				this.toggleFieldSets();
 
-			this.selectCalendar.setValue(config.calendar_id);
+			this.selectCalendar.setValue(config.calendar_id);			
+			
 		/*if (config.calendar_name) {
                 //this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
                 this.selectCalendar.setRemoteText(config.calendar_name);
@@ -394,8 +402,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
                 //this.selectCalendar.container.up('div.x-form-item').setDisplayed(false);
             }*/
 		}
-
-                                  
+					
+		
 		// if the newMenuButton from another passed a linkTypeId then set this
 		// value in the select link field
 		if (config && config.link_config) {
@@ -849,7 +857,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			listeners: {
 				scope:this,
 				change:function(cb, newValue){
-					if(this.formPanel.form.baseParams['group_id']>0){
+					if(this.formPanel.form.baseParams['group_id']>1){
 						if(newValue=='ACCEPTED'){
 							this.colorField.setValue('CCFFCC');
 						}else
@@ -869,6 +877,26 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			labelSeparator : '',
 			hideLabel : true
 		});
+
+		this.selectCategory = new GO.form.ComboBoxReset({
+                        hiddenName:'category_id',
+			fieldLabel:GO.calendar.lang.category,
+			valueField:'id',
+			displayField:'name',
+			store: GO.calendar.categoriesStore,
+			mode:'local',
+			triggerAction:'all',
+                        emptyText:GO.calendar.lang.selectCategory,
+			editable:false,
+			selectOnFocus:true,
+			forceSelection:true,
+			tpl:'<tpl for="."><div class="x-combo-list-item"><div style="float:left;width:20px;margin-right:5px;background-color:#{color}">&nbsp;</div>{name}</div></tpl>'
+                });
+
+		this.selectCategory.on('select', function(combo, record)
+		{			
+			this.colorField.setValue(record.data.color);
+		}, this);
 
 		this.propertiesPanel = new Ext.Panel({
 			hideMode : 'offsets',
@@ -912,7 +940,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				selectOnFocus : true,
 				forceSelection : true,
 				allowBlank : false
-			}),new GO.form.PlainField({
+			}),this.selectCategory,new GO.form.PlainField({
 				fieldLabel: GO.lang.strOwner,
 				value: GO.settings.name,
 				name:'user_name'
@@ -920,7 +948,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				xtype:'textarea',
 				fieldLabel:GO.lang.strDescription,
 				name : 'description',
-				anchor:'-20 -220'
+				anchor:'-20 -240'
 			}]
 
 		});
@@ -1156,6 +1184,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					fieldLabel : GO.lang.color,
 					value : GO.calendar.defaultBackground,
 					name : 'background',
+					disabled:true,
 					colors : [
 					'EBF1E2',
 					'95C5D3',

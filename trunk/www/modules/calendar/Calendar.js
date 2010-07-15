@@ -731,12 +731,18 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 								if(newEvent.calendar_id==this.calendar_id)
 									GO.calendar.eventDialog.oldDomId=this.monthGrid.addMonthGridEvent(newEvent);
 								break;
-							case 'days':
-								if(newEvent.calendar_id==this.calendar_id){
-									var eventRecord = new GO.calendar.CalendarEvent(newEvent);
-									this.daysGridStore.add(eventRecord);
-									GO.calendar.eventDialog.oldDomId=this.daysGrid.lastDomId
-								}
+							case 'days':								
+								for(var i=0,found=false; i<this.calendars.length && !found; i++)
+								{
+									if(this.calendars[i] == newEvent.calendar_id)
+									{
+										var eventRecord = new GO.calendar.CalendarEvent(newEvent);
+										this.daysGridStore.add(eventRecord);
+										GO.calendar.eventDialog.oldDomId=this.daysGrid.lastDomId
+
+										found = true;
+									}
+								}							
 								break;
 
 							case 'view':
@@ -810,6 +816,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		this.calendarsStore.load();
 		this.viewsStore.load();	
 		this.resourcesStore.load();
+
+		GO.calendar.categoriesStore.load();
 	},
 	
 	deleteHandler : function(){
@@ -1032,16 +1040,19 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	 * 
 	 */
 	
-	setDisplay : function(config){		
+	setDisplay : function(config){
 		if(!config)
 		{
 			config = {};
 		}
 
-		//console.log(config);
-
 		if(config.calendar_id)
 			config.calendars=[config.calendar_id];
+
+		if(config.group_id)
+		{
+			this.group_id=config.group_id;
+		}
 
 		config.title = '';
 		var record;
@@ -1052,9 +1063,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				
 				if (i>0)
 					config.title = config.title+' & ';
-
-				record = config.group_id > 1 ? this.resourcesStore.getById(config.calendars[i]) : this.calendarsStore.getById(config.calendars[i]);
-
+				record = this.group_id > 1 ? this.resourcesStore.getById(config.calendars[i]) : this.calendarsStore.getById(config.calendars[i]);
 				if(!config.group_id)
 					config.group_id=record.get('group_id');
 
@@ -1157,10 +1166,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.viewGrid.setViewId(config.view_id);
 		}
 
-		if(config.group_id)
-		{
-			this.group_id=config.group_id;
-		}
+		
 
 		this.daysGridStore.baseParams['owncolor']=this.owncolor;
 		this.monthGridStore.baseParams['owncolor']=this.owncolor;
@@ -1840,7 +1846,34 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				}
 			});
 
-			var items = [this.calendarsGrid, this.viewsGrid];
+			this.categoriesGrid = new GO.calendar.CategoriesGrid({
+				title:GO.calendar.lang.categories,
+				layout:'fit',
+				store:GO.calendar.categoriesStore,
+				deleteConfig: {
+					callback:function(){
+						this.adminDialog.madeChanges=true;
+					},
+					scope:this
+				}
+			});
+
+			GO.calendar.categoryDialog = new GO.calendar.CategoryDialog();
+			GO.calendar.categoryDialog.on('save', function()
+			{
+				GO.calendar.categoriesStore.reload();
+				/*
+				GO.calendar.groupsGrid.store.load({
+					callback:function(){
+						if(GO.calendar.eventDialog)
+							GO.calendar.eventDialog.resourceGroupsStore.reload();
+					},
+					scope:this
+				});
+				*/
+			},this);
+
+			var items = [this.calendarsGrid, this.viewsGrid, this.categoriesGrid];
 			if(GO.settings.has_admin_permission)
 			{
 				items.push(this.groupsGrid);
@@ -1909,6 +1942,18 @@ GO.mainLayout.onReady(function(){
 		id: 'id',
 		totalProperty:'total',
 		fields:['id','name','user_name','fields','acl_id'],
+		remoteSort: true
+	}),
+
+	GO.calendar.categoriesStore = new GO.data.JsonStore({
+		url: GO.settings.modules.calendar.url+ 'json.php',
+		baseParams: {
+			task: 'categories'
+		},
+		root: 'results',
+		id: 'id',
+		totalProperty:'total',
+		fields:['id','name','user_name','user_id','color'],
 		remoteSort: true
 	}),
 
