@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   `background` char(6) NOT NULL default 'ebf1e2',
   `files_folder_id` INT NOT NULL,
 	`read_only` TINYINT(1) NOT NULL default '0',
+  `category_id` INT NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `start_time` (`start_time`),
   KEY `end_time` (`end_time`),
@@ -91,7 +92,8 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   KEY `rrule` (`rrule`),
 	KEY `busy` (`busy`),
 	KEY `calendar_id` (`calendar_id`),
-  KEY `participants_event_id` (`participants_event_id`)
+  KEY `participants_event_id` (`participants_event_id`),
+  KEY `category_id` (`category_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -209,4 +211,18 @@ CREATE TABLE IF NOT EXISTS `cal_visible_tasklists` (
   `calendar_id` int(11) NOT NULL,
   `tasklist_id` int(11) NOT NULL,
   PRIMARY KEY (`calendar_id`,`tasklist_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Tabelstructuur voor tabel `cal_categories`
+--
+
+DROP TABLE IF EXISTS `cal_categories`;
+CREATE TABLE IF NOT EXISTS `cal_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `color` char(6) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

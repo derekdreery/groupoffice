@@ -20,3 +20,5 @@ modules/calendar/GroupAdminsPanel.js
 modules/calendar/TasklistsGrid.js
 modules/calendar/EventPanel.js
 modules/calendar/PermissionsDialog.js
+modules/calendar/CategoriesGrid.js
+modules/calendar/CategoryDialog.js

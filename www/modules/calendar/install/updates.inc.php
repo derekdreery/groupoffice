@@ -62,3 +62,15 @@ $updates[]= "DELETE FROM go_state WHERE name =  'calendar-state';";
 
 $updates[]= "ALTER TABLE `cal_calendars` ADD `comment` VARCHAR( 255 ) NOT NULL";
 
+
+$updates[]="CREATE TABLE IF NOT EXISTS `cal_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `color` char(6) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="ALTER TABLE `cal_events` ADD `category_id` INT NOT NULL;";
+$updates[]="ALTER TABLE `cal_events` ADD INDEX ( `category_id` )";
