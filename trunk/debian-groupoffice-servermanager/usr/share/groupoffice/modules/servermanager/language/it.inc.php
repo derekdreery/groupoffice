@@ -1,7 +1,7 @@
 <?php
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('servermanager'));
-$lang['servermanager']['name']='servermanager';
+$lang['servermanager']['name']='Servermanager';
 $lang['servermanager']['description']='Inserisci qui una descrizione';
 $lang['servermanager']['installation']='Installazione';
 $lang['servermanager']['installations']='Installazioni';
