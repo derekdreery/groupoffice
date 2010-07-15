@@ -250,7 +250,7 @@ class email extends db {
 
 	function get_accounts($user_id=0, $start=0, $offset=0, $sort='standard', $dir='ASC') {
 		$sql = "SELECT al.name, al.email, al.signature, al.id AS default_alias_id, a.*,u.first_name, u.middle_name, u.last_name FROM em_accounts a ".
-						"INNER JOIN go_users u on u.id=a.user_id ".
+						"LEFT JOIN go_users u on u.id=a.user_id ".
 						"INNER JOIN em_aliases al ON (al.account_id=a.id AND al.`default`='1') ".
 						"WHERE type='imap'";
 
