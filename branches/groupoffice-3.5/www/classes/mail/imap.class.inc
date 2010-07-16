@@ -1518,6 +1518,8 @@ class imap extends imap_bodystruct {
 				return false;
 		}
 
+		fclose($fp);
+
 		return true;
 	}
 
