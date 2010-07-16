@@ -997,8 +997,14 @@ class imap extends imap_bodystruct {
 							$message['content-type']=str_replace(';', '', $message['content-type']);
 						}
 					}
-					$message['udate']=empty($message['date']) ? 0 : strtotime($message['date']);
+
+					//sometimes headers contain some extra stuff between ()
+					$message['date']=preg_replace('/\([^\)]*\)/','', $message['date']);
+
+					$message['udate']=strtotime($message['date']);
 					$message['internal_udate']=strtotime($message['internal_date']);
+					if(empty($message['udate']))
+						$message['udate']=$message['internal_udate'];
 
 					$message['subject']=$this->mime_header_decode($message['subject']);
 					$message['from']=$this->mime_header_decode($message['from']);
