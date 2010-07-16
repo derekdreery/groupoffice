@@ -427,7 +427,7 @@ class cached_imap extends imap{
 									$uid,
 									$message['attachments'][$i]['imap_id'],
 									$message['attachments'][$i]['encoding'],
-									$message['attachments'][$i]['charset'],
+									'',//$message['attachments'][$i]['charset'], might break attachments
 									$peek);
 
 					if($data && file_put_contents($tmp_file, $data)) {
