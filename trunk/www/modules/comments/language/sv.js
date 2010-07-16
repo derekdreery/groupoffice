@@ -13,5 +13,5 @@
 
 GO.comments.lang.comment= 'Kommentar';
 GO.comments.lang.comments= 'Kommentarer';
-GO.comments.lang.fiveLatestComments= '5 senaste kommentarerna';
-GO.comments.lang.browseComments = 'Bläddra kommentarer';
+GO.comments.lang.recentComments='Senaste kommentarerna';
+GO.comments.lang.browseComments = 'Bläddra bland kommentarer';

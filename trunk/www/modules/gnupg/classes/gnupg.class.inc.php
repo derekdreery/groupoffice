@@ -1,4 +1,10 @@
 <?php
+/*
+ * Command line test
+
+export HOME=/home/groupoffice/users/admin
+sudo -u www-data /usr/bin/gpg --no-use-agent --display-charset utf-8 --utf8-strings --no-tty --status-fd 5 --always-trust -a  -e -r admin@intermesh.dev -u admin@intermesh.dev
+ */
 
 define( 'GPGSTDIN', 0 );
 define( 'GPGSTDOUT', 1 );
@@ -125,7 +131,7 @@ class gnupg{
 	}
 
 	public function encode($data, $recipient, $user=null){
-		$command = '--always-trust -a  -e';
+		$command = '--always-trust -a -e';
 		
 		go_debug($data);
 
@@ -141,8 +147,7 @@ class gnupg{
 		}
 		$this->run_cmd($command, $encrypted, $errorcode,$data);
 
-
-		if(ereg("-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----",$encrypted))
+		if(preg_match('/-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----/s',$encrypted))
 		{
 			return str_replace("\r", '', $encrypted);
 		}else
@@ -327,7 +332,7 @@ class gnupg{
 
 		$complete_cmd .= ' '.$cmd;
 
-		go_debug($complete_cmd);
+		go_debug('CMD: '.$complete_cmd);
 		
 		
 		if(!empty($passphrase))
@@ -340,12 +345,12 @@ class gnupg{
 
 		$p = proc_open($complete_cmd,$this->fd, $this->pipes);
 
-		foreach($this->pipes as $pipe)
-		{
-			stream_set_blocking($pipe,0);
-		}
-		//stream_set_blocking($this->pipes[STATUS_FD], 0);
-		//stream_set_blocking($this->pipes[GPGSTDOUT],0 );
+		stream_set_blocking($this->pipes[GPGSTDIN], 0 );
+		//stream_set_blocking($this->pipes[GPGSTDOUT], 0 );
+		stream_set_blocking($this->pipes[GPGSTDERR], 0 );
+		stream_set_blocking($this->pipes[STATUS_FD],0 );
+		stream_set_blocking($this->pipes[PASSPHRASE_FD], 0 );
+
 
 		if(!is_resource($p))
 		{

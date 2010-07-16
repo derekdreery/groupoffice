@@ -16,9 +16,9 @@ GO.notes.lang.category= 'Kategori';
 GO.notes.lang.categories= 'Kategorier';
 
 /* new table: no_notes */
-GO.notes.lang.note= 'Notering';
-GO.notes.lang.notes= 'Noteringar';
-GO.notes.lang.category_id= 'Kategori id';
+GO.notes.lang.note= 'Anteckning';
+GO.notes.lang.notes= 'Anteckningar';
+GO.notes.lang.category_id= 'Kategori-ID';
 GO.notes.lang.content= 'Innehåll';
 
 

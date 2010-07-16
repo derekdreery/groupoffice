@@ -997,8 +997,14 @@ class imap extends imap_bodystruct {
 							$message['content-type']=str_replace(';', '', $message['content-type']);
 						}
 					}
-					$message['udate']=empty($message['date']) ? 0 : strtotime($message['date']);
+
+					//sometimes headers contain some extra stuff between ()
+					$message['date']=preg_replace('/\([^\)]*\)/','', $message['date']);
+
+					$message['udate']=strtotime($message['date']);
 					$message['internal_udate']=strtotime($message['internal_date']);
+					if(empty($message['udate']))
+						$message['udate']=$message['internal_udate'];
 
 					$message['subject']=$this->mime_header_decode($message['subject']);
 					$message['from']=$this->mime_header_decode($message['from']);
@@ -1500,7 +1506,7 @@ class imap extends imap_bodystruct {
 		 *
 		 * That's why I first fetch the header and then the text.
 		 */
-		$header = $this->get_message_part($uid, 'HEADER')."\r\n";
+		$header = $this->get_message_part($uid, 'HEADER')."\r\n\r\n";
 
 		if(!fputs($fp, $header))
 			return false;
@@ -1511,6 +1517,8 @@ class imap extends imap_bodystruct {
 			if(!fputs($fp, $line))
 				return false;
 		}
+
+		fclose($fp);
 
 		return true;
 	}
@@ -1665,7 +1673,12 @@ class imap extends imap_bodystruct {
 		$this->clean($mailbox, 'mailbox');
 		$this->clean($new_mailbox, 'mailbox');
 
-		$children = $this->get_folders($mailbox);;
+		$delim = $this->get_mailbox_delimiter();
+
+		$children = $this->get_folders($mailbox.$delim);
+
+		//go_debug($children);
+		//throw new Exception('test');
 
 		$command = 'RENAME "'.$this->addslashes($this->utf7_encode($mailbox)).'" "'.
 						$this->addslashes($this->utf7_encode($new_mailbox)).'"'."\r\n";

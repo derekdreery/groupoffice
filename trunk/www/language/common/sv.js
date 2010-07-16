@@ -11,29 +11,33 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+GO.lang.exportHiddenColumns='Exportera även dolda kolumner';
+GO.lang.searchQuery='sökfråga';
+GO.lang.pleaseApplyFirst='Spara först genom att klicka på \'Apply\'';
+GO.lang.passwordMatchError='Lösenorden matchade inte';
 GO.lang.serverError= 'Ett fel inträffade på webbservern. Kontakta systemadministratören och ange det detaljerade felet.';
-GO.lang.errorDetails= 'Detaljerad fel';
+GO.lang.errorDetails= 'Detaljerat fel';
 GO.lang.contactSupportDesk= 'Kontakta support';
 
 GO.lang.disabled= 'Inaktiverade';
-GO.lang.changesWillBeLost= 'Du har gjort ändringar på den aktuella skärmen. Trycker på Avbryt och spara ändringar eller OK för att fortsätta och ta bort dina ändringar.';
-GO.lang.strCommunityForum= 'Community forum';
-GO.lang.moduleRequired='Denna funktion kräver \'{module}\' modulen. Denna modul är inte tillgänglig.';
+GO.lang.changesWillBeLost= 'Du har gjort ändringar i det aktuella fönstret. Tryck på Avbryt och spara ändringarna först eller tryck OK för att fortsätta och radera dina ändringar.';
+GO.lang.strCommunityForum= 'Community-forum';
+GO.lang.moduleRequired='Denna funktion kräver modulen \'{module}\' som inte är tillgänglig.';
 
-GO.lang.completeProfile = 'Fyll i din profil';
+GO.lang.completeProfile = 'Komplettera din profil';
 GO.lang.fullscreen= 'Fullskärmsläge';
-GO.lang.popupBlocker = 'Din webbläsare blockerar ett popup från Group-Office. Stäng av popup-blockeraren för denna webbplats';
+GO.lang.popupBlocker = 'Din webbläsare blockerar ett popup-fönster från Group-Office. Stäng av popup-blockeraren för denna webbplats';
 
 GO.lang.color= 'Färg';
-GO.lang.browse= 'Bläddra ...';
+GO.lang.browse= 'Bläddra...';
 GO.lang.largeUpload= 'Stora filer / mappar (Java krävs)';
 GO.lang.smallUpload= 'Små filer';
 
 
 GO.lang.lostPassword= 'Glömt lösenord?';
-GO.lang.lostPasswordText= 'För att återställa ditt lösenord måste du kunna läsa din e-post utan tillgång till Group-Office. Om du anger din e-postadress kommer ett nytt lösenord att skickas till din e-postadress.<br /><br />Fyll i din e-postadress:';
+GO.lang.lostPasswordText= 'För att återställa ditt lösenord måste du kunna läsa din e-post utan tillgång till Group-Office. Om du anger din e-postadress kommer ett nytt lösenord att skickas till dig.<br /><br />Fyll i din e-postadress:';
 
-GO.lang.noJava= 'Java Webstart inte är installerad. Java möjliggör enklare redigering av filer och lättare filuppladdning. Besök <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> för att installera det.';
+GO.lang.noJava= 'Java Webstart är inte installerad. Java möjliggör enklare redigering av filer och lättare filuppladdning. Besök <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> för att installera Java.';
 
 GO.lang.strHelpContents= 'Hjälpinnehåll';
 GO.lang.strReportBug= 'Rapportera en bugg';
@@ -50,7 +54,7 @@ GO.lang.strContacts = 'Kontakter';
 
 GO.lang.strLanguage= 'Språk';
 
-GO.lang.strOpenOffice = 'OpenOffice.org dokument';
+GO.lang.strOpenOffice = 'OpenOffice-dokument';
 
 GO.lang.strDefault = 'Standard';
 GO.lang.strUsername = 'Användarnamn';
@@ -75,6 +79,7 @@ GO.lang.strZip = 'Postnummer';
 GO.lang.strCity = 'Stad';
 GO.lang.strState = 'Län/Stat';
 GO.lang.strCountry = 'Land';
+GO.lang.strAddressFormat = 'Adressformat';
 GO.lang.strHomepage = 'Hemsida';
 GO.lang.strCompany = 'Företag';
 GO.lang.strDepartment = 'Avdelning';
@@ -99,6 +104,7 @@ GO.lang.strPostZip = 'Postnummer (post)';
 GO.lang.locations = 'Platser';
 GO.lang.folder = 'Mapp';
 GO.lang.folders = 'Mappar';
+GO.lang.newFolder='Ny mapp';
 
 GO.lang.up = 'Upp';
 GO.lang.fileExists = 'Filen finns';
@@ -111,7 +117,7 @@ GO.lang.strFemale = 'Kvinna';
 
 GO.lang.strMtime = 'Ändrad vid';
 GO.lang.strCtime = 'Skapad vid';
-GO.lang.Atime = 'Tillgänglig vid';
+GO.lang.Atime = 'Öppnad vid';
 GO.lang.strText = 'Text';
 GO.lang.texts = 'Texter';
 GO.lang.strDate = 'Datum';
@@ -119,15 +125,17 @@ GO.lang.strUser = 'Användare';
 
 GO.lang.strSize = 'Storlek';
 GO.lang.strType = 'Typ';
-GO.lang.strNA = 'N/A';
+GO.lang.strNA = 'Okänd (N/A)';
 
 GO.lang.cmdDelete = 'Radera';
 GO.lang.cmdAdd = 'Lägg till';
 GO.lang.cmdAddPlusNew = 'Skapa + ny';
 GO.lang.cmdSavePlusNew= 'Spara + ny';
 GO.lang.cmdSave = 'Spara';
+GO.lang.cmdSaveAs = 'Spara som';
+GO.lang.cmdSaveToGO = 'Spara i Group-Office';
 GO.lang.cmdEdit = 'Redigera';
-GO.lang.cmdLink = 'Länk';
+GO.lang.cmdLink = 'Länka';
 GO.lang.cmdUnlink = 'Avlänka';
 GO.lang.cmdClose = 'Stäng';
 GO.lang.cmdSettings = 'Inställningar';
@@ -135,11 +143,12 @@ GO.lang.cmdReset = 'Återställ';
 GO.lang.cmdExport= 'Exportera';
 GO.lang.cmdPrint= 'Skriv ut';
 GO.lang.cmdImport= 'Importera';
+GO.lang.cmdInsert='Infoga';
 
 GO.lang.cmdActions = 'Åtgärder';
 
-GO.lang.cmdNext= 'Nästa';
-GO.lang.cmdPrevious= 'Föregående';
+GO.lang.cmdNext= '';
+GO.lang.cmdPrevious= '';
 
 GO.lang.cmdNew = 'Ny';
 GO.lang.cmdOk = 'Ok';
@@ -157,12 +166,12 @@ GO.lang.strLinks = 'Länkar';
 GO.lang.author = 'Författare';
 
 GO.lang.paste = 'Klistra in';
-GO.lang.cut = 'Klipp';
+GO.lang.cut = 'Klipp ut';
 GO.lang.copy = 'Kopiera';
 GO.lang.compress = 'Komprimera';
-GO.lang.decompress = 'Dekomprimera';
+GO.lang.decompress = 'Packa upp';
 GO.lang.upload = 'Ladda upp';
-GO.lang.download = 'Ladda ner';
+GO.lang.download = 'Ladda ner till din dator';
 GO.lang.uploadFiles = 'Ladda upp filer';
 
 GO.lang.displayingItems = 'Visar objekt {0} - {1} av {2}';
@@ -172,24 +181,25 @@ GO.lang.strLinkItems = 'Sök objekt att länka';
 GO.lang.strSearchResults= 'Sökresultat';
 GO.lang.strSearch= 'Sök';
 
-GO.lang.strPleaseSelect = 'Välj ...';
+GO.lang.strPleaseSelect = 'Välj...';
 GO.lang.strProperties = 'Egenskaper';
 
 GO.lang.strConfirm= 'Bekräfta';
-GO.lang.strSuccess= 'Genomfört';
+GO.lang.strSuccess= 'Lyckades';
 GO.lang.strError= 'Fel';
-GO.lang.waitMsgSave= 'Sparar ...';
-GO.lang.waitMsgLoad= 'Laddar ...';
-GO.lang.waitMsgUpload= 'Uppladdning ...';
+GO.lang.waitMsgSave= 'Sparar...';
+GO.lang.waitMsgLoad= 'Laddar...';
+GO.lang.waitMsgUpload= 'Laddar upp...';
+GO.lang.strRequestError= 'Får inte kontakt med servern. Kontrollera din internetanslutning.';
 
 GO.lang.strSelected = 'Vald';
-GO.lang.noItemSelected= 'Du valde inte ett objekt.';
+GO.lang.noItemSelected= 'Du valde inget objekt.';
 GO.lang.strDeleteSelectedItems= 'Är du säker på att du vill ta bort {count} objekt?';
 GO.lang.strDeleteSelectedItem= 'Är du säker på att du vill ta bort det valda objektet?';
 
 GO.lang.strNoWritePermissions = 'Du har inte tillåtelse att redigera objektet.';
 
-GO.lang.strUnauthorized= 'Obehörigt';
+GO.lang.strUnauthorized= 'Obehörig';
 GO.lang.strUnauthorizedText= 'Du har inte behörighet att utföra den här åtgärden';
 GO.lang.strReadPermissions = 'Läsbehörigheter';
 GO.lang.strWritePermissions = 'Skrivbehörigheter';
@@ -205,7 +215,7 @@ GO.lang.strLogin= 'Inloggning krävs';
 
 GO.lang.strLoggedInAs= 'Inloggad som';
 
-GO.lang.strErrorsInForm= 'Du har fel i dit formulär. De ogiltiga fält är markerade.';
+GO.lang.strErrorsInForm= 'Det finns fel i formuläret. De ogiltiga fälten är markerade.';
 
 
 
@@ -222,16 +232,19 @@ GO.lang.strWeeks= 'Veckor';
 GO.lang.strMonth= 'Månad';
 GO.lang.strMonths= 'Månader';
 GO.lang.strYear= 'År';
-GO.lang.strYears= 'Åren';
+GO.lang.strYears= 'År';
 GO.lang.strTime= 'Tid';
 
-GO.lang.shortDays = ['Sön', 'Mon', 'Tis', 'Ons', 'Tor', 'Fre','Lör'];
+GO.lang.selectWeek='Välj vecka';
+
+GO.lang.shortDays = ['Sön', 'Mån', 'Tis', 'Ons', 'Tor', 'Fre','Lör'];
 
 GO.lang.noRecurrence = 'Ingen upprepning';
 GO.lang.monthsByDate = 'Månader efter datum';
-GO.lang.monthsByDay = 'Månader efter dag';
+GO.lang.monthsByDay = 'Månader efter veckodag';
 
 GO.lang.strSelectFiles= 'Välj filer';
+GO.lang.strSelectFile='Välj fil';
 GO.lang.strFiles= 'Filer';
 GO.lang.strSubject= 'Ämne';
 GO.lang.strLocation= 'Plats';
@@ -249,22 +262,24 @@ GO.lang.strAvailability= 'Tillgänglighet';
 GO.lang.strView= 'Visa';
 
 GO.lang.field = 'Fält';
+GO.lang.value = 'Värde';
 
 GO.lang.customer = 'Kund';
 
 GO.lang.strNoCountrySelected= 'Inget land valt';
 GO.lang.menu = 'Meny';
-GO.lang.root = 'Root';
+GO.lang.root = 'Rot';
 GO.lang.left = 'Vänster';
 GO.lang.right = 'Höger';
 
 GO.lang.noFilesModule = 'Filmodulen krävs för denna funktion';
 
 
-GO.lang.remindPassword= 'Kom ihåg mina inloggningsuppgifter på den här datorn tills jag loggar ut';
+GO.lang.remindPassword= 'Lagra min inloggning på den här datorn tills jag loggar ut';
 
 GO.lang.reminders = 'Påminnelser';
-GO.lang.dismiss= 'Avslå';
+GO.lang.dismiss= 'Kvittera';
+GO.lang.selectAll='Välj alla';
 GO.lang.snooze= 'Vila';
 
 GO.lang.strMax = 'Högsta';
@@ -283,3 +298,67 @@ GO.lang.insertImage= 'Infoga bild i texten';
 
 GO.lang.item= 'objekt';
 GO.lang.items= 'objekten';
+
+GO.lang.more='Mer';
+
+GO.lang.on ='På';
+GO.lang.off ='Av';
+
+GO.lang.keyword='Nyckelord';
+GO.lang.keywords='Nyckelord';
+
+
+GO.lang.total='Totalt';
+GO.lang.totals='Totalt';
+
+GO.lang.closeApps='Stäng applikation';
+GO.lang.rightClickToClose='Högerklicka på en flik för att stänga den.';
+
+GO.lang.adminMenu = 'Adminmeny';
+
+GO.lang.administration='Administration';
+GO.lang.extra='Tillval';
+
+GO.lang.permissionsLevel='Nivå';
+
+GO.lang.permissionRead='Endast läsa';
+GO.lang.permissionWrite='Skriva';
+GO.lang.permissionDelete='Skriva och radera';
+GO.lang.permissionManage='Hantera (administrera)';
+
+
+GO.lang.spellcheck = 'Stavningskontroll';
+GO.lang.spellcheckdetails = 'Kontrollera stavning';
+GO.lang.spellcheckNoError = 'Inga fel funna';
+GO.lang.spellcheckServerError = 'Ett problem uppstod när stavningskontrollen kördes. Kontakta supporten om problemet kvarstår';
+GO.lang.spellcheckNoErrors = 'Skicka e-post med [{1}] fel';
+GO.lang.spellcheckAsk = 'Skicka utan att kontrollera stavning?';
+
+GO.lang.age='Ålder';
+
+GO.lang.selectFolder = 'Välj en mapp';
+
+GO.lang.userGroups='Användargrupper';
+
+
+GO.lang.firebugDetected="Varning! Firebug-add-on upptäckt";
+GO.lang.firebugWarning="Firebug gör att applikationen går långsammare. Använd inte Firebug i produktionsmiljö."
+
+GO.lang.indent='Öka indrag';
+GO.lang.outdent='Minska indrag';
+GO.lang.removeFormatting='Ta bort formatering';
+GO.lang.insertHorizontalRule='Infoga horisontell linje';
+GO.lang.insertHRtext='Ange linjens bredd i procent följt av %,<br/> utelämna %-tecknet om du vill ange en fast<br/> bredd (värdet blir då antal bildpunkter).';
+GO.lang.cmdInsert='Infoga';
+
+GO.lang.width='Bredd';
+GO.lang.thankyou='Tack';
+GO.lang.applyMultiselect='Tillämpa flerval';
+
+GO.lang.createdBy='Skapad av';
+
+
+GO.lang.debugModeDetected="Varning! Debug-läge aktiverat";
+GO.lang.debugModeWarning="Använd $config['debug']=true; endast vid utveckling och felsökning. Group-Office blir långsammare i debug-läge.";
+
+GO.lang.noItemSelectedWarning='Välj minst ett objekt.';

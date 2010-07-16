@@ -26,7 +26,7 @@ GO.calendar.lang.singleOccurence = 'Evento simples';
 GO.calendar.lang.entireSeries = 'Série de eventos';
 GO.calendar.lang.calendar = 'Calendário';
 GO.calendar.lang.calendars = 'Calendários';
-GO.calendar.lang.views = 'Vistas';
+GO.calendar.lang.views = 'Visualizações';
 GO.calendar.lang.administration = 'Administração';
 GO.calendar.lang.needsAction = 'Necessita de ação';
 GO.calendar.lang.accepted = 'Aceito';
@@ -58,3 +58,42 @@ GO.calendar.lang.selectCalendarForAppointment = 'Selecione o calendário para co
 GO.calendar.lang.closeWindow = 'O compromisso foi aceito e agendado. Você pode fechar essa janela.';
 GO.calendar.lang.list='Lista';
 GO.calendar.lang.editRecurringEvent='Você deseja editar este evento ou a série de eventos?';
+GO.calendar.lang.selectIcalendarFile='Selecione um arquivo icalendar (*.ics)';
+
+GO.calendar.lang.location='Localização';
+GO.calendar.lang.startsAt='Inicia em';
+GO.calendar.lang.endsAt='Termina em';
+GO.calendar.lang.eventDefaults='Configurações padrões para compromissos';
+
+GO.calendar.lang.importToCalendar='Adicionar um compromisso diretamente no calendário';
+GO.calendar.lang.default_calendar='Calendário padrão';
+
+GO.calendar.lang.status='Status';
+
+GO.calendar.lang.resource_groups='Grupos de recursos';
+GO.calendar.lang.resource_group='Grupo de recursos';
+GO.calendar.lang.resources='Recursos';
+GO.calendar.lang.resource='Recurso';
+GO.calendar.lang.calendar_group='Grupo de calendário';
+GO.calendar.lang.admins='Administradores';
+GO.calendar.lang.no_group_selected='Você possui erros em seu formulário. Você precisa selecionar um grupo para este recurso.';
+
+GO.calendar.lang.visibleCalendars='Calendários visíveis';
+GO.calendar.lang.visible='Visível';
+
+GO.calendar.lang.group='Grupo';
+GO.calendar.lang.no_status='Novo';
+GO.calendar.lang.no_custom_fields='Não existem opções adicionais disponíveis.';
+GO.calendar.lang.show_bdays='Mostrar aniversários da lista de contatos';
+GO.calendar.lang.show_tasks='Mostrar atividades da lista de tarefas';
+
+GO.calendar.lang.myCalendar='Meu calendário';
+GO.calendar.lang.merge='Juntar';
+GO.calendar.lang.ownColor = 'Dar a cada calendário uma cor distinta';
+
+GO.calendar.lang.ignoreConflictsTitle = 'Ignorar conflito?';
+GO.calendar.lang.ignoreConflictsMsg = 'Este evento conflita com outro evento em seu calendário. Salvar este evento mesmo assim';
+GO.calendar.lang.resourceConflictTitle = 'Conflito de recursos';
+GO.calendar.lang.resourceConflictMsg = 'Um ou mais recursos deste evento já estão em uso ao mesmo tempo:</br>';
+GO.calendar.lang.view = 'Visualizar';
+

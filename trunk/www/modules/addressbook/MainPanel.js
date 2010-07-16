@@ -15,148 +15,148 @@
 GO.addressbook.MainPanel = function(config)
 {
 	
-    if(!config)
-    {
-	config={};
-    }
+	if(!config)
+	{
+		config={};
+	}
 		          	
-    this.contactsGrid = new GO.addressbook.ContactsGrid({
-	layout: 'fit',
-	region: 'center',
-	id: 'ab-contacts-grid-panel'
-    });
+	this.contactsGrid = new GO.addressbook.ContactsGrid({
+		layout: 'fit',
+		region: 'center',
+		id: 'ab-contacts-grid-panel'
+	});
   
-    this.contactsGrid.on("delayedrowselect",function(grid, rowIndex, r){
-	//this.contactsGrid.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
-	this.contactEastPanel.load(r.get('id'));
-    }, this);
-    this.contactsGrid.on("rowdblclick", function(){
-	this.contactEastPanel.editHandler();
-    }, this);
+	this.contactsGrid.on("delayedrowselect",function(grid, rowIndex, r){
+		//this.contactsGrid.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
+		this.contactEastPanel.load(r.get('id'));
+	}, this);
+	this.contactsGrid.on("rowdblclick", function(){
+		this.contactEastPanel.editHandler();
+	}, this);
 		
-    this.contactsGrid.store.on('load', function(){
-	this.setAdvancedSearchNotification(this.contactsGrid.store);
-    }, this);
+	this.contactsGrid.store.on('load', function(){
+		this.setAdvancedSearchNotification(this.contactsGrid.store);
+	}, this);
 	
-    this.companiesGrid = new GO.addressbook.CompaniesGrid({
-	layout: 'fit',
-	region: 'center',
-	id: 'ab-company-grid-panel'
-    });
+	this.companiesGrid = new GO.addressbook.CompaniesGrid({
+		layout: 'fit',
+		region: 'center',
+		id: 'ab-company-grid-panel'
+	});
   
-    this.companiesGrid.on("delayedrowselect",function(grid, rowIndex, r){
-	this.companyEastPanel.load(r.get('id'));
-    }, this);
-    this.companiesGrid.on("rowdblclick", function(){
-	this.companyEastPanel.editHandler();
-    }, this);
+	this.companiesGrid.on("delayedrowselect",function(grid, rowIndex, r){
+		this.companyEastPanel.load(r.get('id'));
+	}, this);
+	this.companiesGrid.on("rowdblclick", function(){
+		this.companyEastPanel.editHandler();
+	}, this);
 		
 		
-    this.companiesGrid.store.on('load', function(){
-	this.setAdvancedSearchNotification(this.companiesGrid.store);
-    }, this);
+	this.companiesGrid.store.on('load', function(){
+		this.setAdvancedSearchNotification(this.companiesGrid.store);
+	}, this);
 		
 		
 	  
-    this.searchPanel = new GO.addressbook.SearchPanel({
-	region: 'north',
-	ab:this
-    });
+	this.searchPanel = new GO.addressbook.SearchPanel({
+		region: 'north',
+		ab:this
+	});
 	
-    this.searchPanel.on('queryChange', function(params){
-	this.setSearchParams(params);
-    }, this);
+	this.searchPanel.on('queryChange', function(params){
+		this.setSearchParams(params);
+	}, this);
 	
-    this.contactEastPanel = new GO.addressbook.ContactReadPanel({
-	id:'ab-contact-panel',
-	region : 'east',
-	title: GO.addressbook.lang['cmdPanelContact'],
-	width:420,
-	collapseMode:'mini',
-	collapsible:true,
-	split:true
-    });
+	this.contactEastPanel = new GO.addressbook.ContactReadPanel({
+		id:'ab-contact-panel',
+		region : 'east',
+		title: GO.addressbook.lang['cmdPanelContact'],
+		width:420,
+		collapseMode:'mini',
+		collapsible:true,
+		split:true
+	});
 	
-    this.companyEastPanel = new GO.addressbook.CompanyReadPanel({
-	id:'ab-company-panel',
-	region : 'east',
-	title: GO.addressbook.lang['cmdPanelCompany'],
-	width:420,
-	collapseMode:'mini',
-	collapsible:true,
-	split:true
-    });
+	this.companyEastPanel = new GO.addressbook.CompanyReadPanel({
+		id:'ab-company-panel',
+		region : 'east',
+		title: GO.addressbook.lang['cmdPanelCompany'],
+		width:420,
+		collapseMode:'mini',
+		collapsible:true,
+		split:true
+	});
 	
-    this.contactsPanel = new Ext.Panel({
-	id: 'ab-contacts-grid',
-	title: GO.addressbook.lang.contacts,
-	layout: 'border',
-	items:[
-	this.contactsGrid,
-	this.contactEastPanel
-	]
-    });
-    this.contactsPanel.on("show", function(){
-	this.contactsGrid.onGridShow();
-	this.setAdvancedSearchNotification(this.contactsGrid.store);
-	this.addressbooksGrid.setType('contact');
-    }, this);
+	this.contactsPanel = new Ext.Panel({
+		id: 'ab-contacts-grid',
+		title: GO.addressbook.lang.contacts,
+		layout: 'border',
+		items:[
+		this.contactsGrid,
+		this.contactEastPanel
+		]
+	});
+	this.contactsPanel.on("show", function(){
+		this.contactsGrid.onGridShow();
+		this.setAdvancedSearchNotification(this.contactsGrid.store);
+		this.addressbooksGrid.setType('contact');
+	}, this);
 	
-    this.companyPanel = new Ext.Panel({
-	id: 'ab-company-grid',
-	title: GO.addressbook.lang.companies,
-	layout: 'border',
-	items:[
-	this.companiesGrid,
-	this.companyEastPanel
-	]
-    });
+	this.companyPanel = new Ext.Panel({
+		id: 'ab-company-grid',
+		title: GO.addressbook.lang.companies,
+		layout: 'border',
+		items:[
+		this.companiesGrid,
+		this.companyEastPanel
+		]
+	});
 	
-    this.companyPanel.on("show",this.companiesGrid.onGridShow, this.companiesGrid);
+	this.companyPanel.on("show",this.companiesGrid.onGridShow, this.companiesGrid);
 	
-    this.companyPanel.on("show", function(){
-	this.companiesGrid.onGridShow();
-	this.setAdvancedSearchNotification(this.companiesGrid.store);
-	this.addressbooksGrid.setType('company');
-    }, this);
+	this.companyPanel.on("show", function(){
+		this.companiesGrid.onGridShow();
+		this.setAdvancedSearchNotification(this.companiesGrid.store);
+		this.addressbooksGrid.setType('company');
+	}, this);
 	
 
-    this.addressbooksGrid = new GO.addressbook.AddresbooksGrid({
-	region:'west',
-	id:'ab-addressbook-grid',
-	width:180,
-	height:250
-    });
+	this.addressbooksGrid = new GO.addressbook.AddresbooksGrid({
+		region:'west',
+		id:'ab-addressbook-grid',
+		width:180,
+		height:250
+	});
 
-    this.addressbooksGrid.on('change', function(grid, abooks, records)
-    {
-	var books = Ext.encode(abooks);
-	var panel = this.tabPanel.getActiveTab();
-	if(panel.id=='ab-contacts-grid')
+	this.addressbooksGrid.on('change', function(grid, abooks, records)
 	{
-	    this.contactsGrid.store.baseParams.books = books;
-	    this.contactsGrid.store.load();
-	    delete this.contactsGrid.store.baseParams.books;
-	}else
-	{
-	    this.companiesGrid.store.baseParams.books = books;
-	    this.companiesGrid.store.load();
-	    delete this.companiesGrid.store.baseParams.books;
-	}
+		var books = Ext.encode(abooks);
+		var panel = this.tabPanel.getActiveTab();
+		if(panel.id=='ab-contacts-grid')
+		{
+			this.contactsGrid.store.baseParams.books = books;
+			this.contactsGrid.store.load();
+			delete this.contactsGrid.store.baseParams.books;
+		}else
+		{
+			this.companiesGrid.store.baseParams.books = books;
+			this.companiesGrid.store.load();
+			delete this.companiesGrid.store.baseParams.books;
+		}
 
-	if(records.length)
-	{
-	    GO.addressbook.defaultAddressbook = records[0].data.id;
-	}
+		if(records.length)
+		{
+			GO.addressbook.defaultAddressbook = records[0].data.id;
+		}
     
-    }, this);
+	}, this);
 
-    /*this.addressbooksGrid.on('rowclick', function(grid, rowIndex){
+	/*this.addressbooksGrid.on('rowclick', function(grid, rowIndex){
 		
 
 	}, this);*/
 
-    /*
+	/*
 	this.addressbooksGrid.getSelectionModel().on('rowselect', function(sm, rowIndex, r){
 		GO.addressbook.defaultAddressbook = sm.getSelected().get('id');
 
@@ -166,241 +166,241 @@ GO.addressbook.MainPanel = function(config)
 	*/
 	
 			
-    this.addressbooksGrid.on('drop', function(type)
-    {
-	if(type == 'company')
+	this.addressbooksGrid.on('drop', function(type)
 	{
-	    this.companiesGrid.store.reload();
+		if(type == 'company')
+		{
+			this.companiesGrid.store.reload();
+		}else
+		{
+			this.contactsGrid.store.reload();
+		}
+	}, this);
+	
+	this.tabPanel = new Ext.TabPanel({
+		region : 'center',
+		activeTab: 0,
+		border: true,
+		items: [
+		this.contactsPanel,
+		this.companyPanel
+		]
+	});
+
+	config.layout='border';
+	config.border=false;
+	
+	if(GO.mailings)
+	{
+
+		this.mailingsFilterPanel= new GO.grid.MultiSelectGrid({
+			region:'center',
+			id:'ab-mailingsfilter-panel',
+			title:GO.mailings.lang.filterMailings,
+			loadMask:true,
+			store:GO.mailings.readableMailingsStore,
+			allowNoSelection:true
+		});
+		
+		this.mailingsFilterPanel.on('change', function(grid, mailings_filter){
+			var panel = this.tabPanel.getActiveTab();
+			if(panel.id=='ab-contacts-grid')
+			{
+				this.contactsGrid.store.baseParams.mailings_filter = Ext.encode(mailings_filter);
+				this.contactsGrid.store.load();
+				delete this.contactsGrid.store.baseParams.mailings_filter;
+			}else
+			{
+				this.companiesGrid.store.baseParams.mailings_filter = Ext.encode(mailings_filter);
+				this.companiesGrid.store.load();
+				delete this.companiesGrid.store.baseParams.mailings_filter;
+			}
+		}, this);
+		
+		this.addressbooksGrid.region='north';
+		var westPanel = new Ext.Panel({
+			layout:'border',
+			border:false,
+			region:'west',
+			width:180,
+			split:true,
+			items:[this.addressbooksGrid,this.mailingsFilterPanel]
+		});
+		config.items= [
+		this.searchPanel,
+		westPanel,
+		this.tabPanel
+		];
 	}else
 	{
-	    this.contactsGrid.store.reload();
+		config.items= [
+		this.searchPanel,
+		this.addressbooksGrid,
+		this.tabPanel
+		];
 	}
-    }, this);
 	
-    this.tabPanel = new Ext.TabPanel({
-	region : 'center',
-	activeTab: 0,
-	border: true,
-	items: [
-	this.contactsPanel,
-	this.companyPanel
-	]
-    });
-
-    config.layout='border';
-    config.border=false;
-	
-    if(GO.mailings)
-    {
-
-	this.mailingsFilterPanel= new GO.grid.MultiSelectGrid({
-	    region:'center',
-	    id:'ab-mailingsfilter-panel',
-	    title:GO.mailings.lang.filterMailings,
-	    loadMask:true,
-	    store:GO.mailings.readableMailingsStore,
-	    allowNoSelection:true
-	});
-		
-	this.mailingsFilterPanel.on('change', function(grid, mailings_filter){
-	    var panel = this.tabPanel.getActiveTab();
-	    if(panel.id=='ab-contacts-grid')
-	    {
-		this.contactsGrid.store.baseParams.mailings_filter = Ext.encode(mailings_filter);
-		this.contactsGrid.store.load();
-		delete this.contactsGrid.store.baseParams.mailings_filter;
-	    }else
-	    {
-		this.companiesGrid.store.baseParams.mailings_filter = Ext.encode(mailings_filter);
-		this.companiesGrid.store.load();
-		delete this.companiesGrid.store.baseParams.mailings_filter;
-	    }
-	}, this);
-		
-	this.addressbooksGrid.region='north';
-	var westPanel = new Ext.Panel({
-	    layout:'border',
-	    border:false,
-	    region:'west',
-	    width:180,
-	    split:true,
-	    items:[this.addressbooksGrid,this.mailingsFilterPanel]
-	});
-	config.items= [
-	this.searchPanel,
-	westPanel,
-	this.tabPanel
-	];
-    }else
-    {
-	config.items= [
-	this.searchPanel,
-	this.addressbooksGrid,
-	this.tabPanel
-	];
-    }
-	
-    var tbar=[
-    {
-	iconCls: 'btn-addressbook-add-contact',
-	text: GO.addressbook.lang['btnAddContact'],
-	cls: 'x-btn-text-icon',
-	handler: function(){
-	    GO.addressbook.showContactDialog(0);
-	    this.tabPanel.setActiveTab('ab-contacts-grid');
+	var tbar=[
+	{
+		iconCls: 'btn-addressbook-add-contact',
+		text: GO.addressbook.lang['btnAddContact'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			GO.addressbook.showContactDialog(0);
+			this.tabPanel.setActiveTab('ab-contacts-grid');
+		},
+		scope: this
 	},
-	scope: this
-    },
-    {
-	iconCls: 'btn-addressbook-add-company',
-	text: GO.addressbook.lang['btnAddCompany'],
-	cls: 'x-btn-text-icon',
-	handler: function(){
-	    GO.addressbook.showCompanyDialog(0);
-	    this.tabPanel.setActiveTab('ab-company-grid');
+	{
+		iconCls: 'btn-addressbook-add-company',
+		text: GO.addressbook.lang['btnAddCompany'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			GO.addressbook.showCompanyDialog(0);
+			this.tabPanel.setActiveTab('ab-company-grid');
+		},
+		scope: this
 	},
-	scope: this
-    },
-    {
-	iconCls: 'btn-delete',
-	text: GO.lang['cmdDelete'],
-	cls: 'x-btn-text-icon',
-	handler: function(){
-	    var activetab = this.tabPanel.getActiveTab();
+	{
+		iconCls: 'btn-delete',
+		text: GO.lang['cmdDelete'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			var activetab = this.tabPanel.getActiveTab();
 			
-	    switch(activetab.id)
-	    {
-		case 'ab-contacts-grid':
-		    this.contactsGrid.deleteSelected({
-			callback : this.contactEastPanel.gridDeleteCallback,
-			scope: this.contactEastPanel
-		    });
-		    break;
-		case 'ab-company-grid':
-		    this.companiesGrid.deleteSelected({
-			callback : this.companyEastPanel.gridDeleteCallback,
-			scope: this.companyEastPanel
-		    });
-		    break;
-	    }
+			switch(activetab.id)
+			{
+				case 'ab-contacts-grid':
+					this.contactsGrid.deleteSelected({
+						callback : this.contactEastPanel.gridDeleteCallback,
+						scope: this.contactEastPanel
+					});
+					break;
+				case 'ab-company-grid':
+					this.companiesGrid.deleteSelected({
+						callback : this.companyEastPanel.gridDeleteCallback,
+						scope: this.companyEastPanel
+					});
+					break;
+			}
+		},
+		scope: this
 	},
-	scope: this
-    },
-    '-',
-    {
-	iconCls: 'btn-addressbook-manage',
-	text: GO.lang.administration,
-	cls: 'x-btn-text-icon',
-	handler:function(){
-	    if(!this.manageDialog)
-	    {
-		this.manageDialog = new GO.addressbook.ManageDialog();
-	    }
-	    this.manageDialog.show();
-	},
-	scope: this
-    },{
-	iconCls: 'btn-export',
-	text: GO.lang.cmdExport,
-	cls: 'x-btn-text-icon',
-	handler:function(){
-	    var activetab = this.tabPanel.getActiveTab();
-	    var config = {};
-	    switch(activetab.id)
-	    {
-		case 'ab-contacts-grid':
-		    config.query='search_contacts';
-		    config.colModel = this.contactsGrid.getColumnModel();
+	'-',
+	{
+		iconCls: 'btn-addressbook-manage',
+		text: GO.lang.administration,
+		cls: 'x-btn-text-icon',
+		handler:function(){
+			if(!this.manageDialog)
+			{
+				this.manageDialog = new GO.addressbook.ManageDialog();
+			}
+			this.manageDialog.show();
+		},
+		scope: this
+	},{
+		iconCls: 'btn-export',
+		text: GO.lang.cmdExport,
+		cls: 'x-btn-text-icon',
+		handler:function(){
+			var activetab = this.tabPanel.getActiveTab();
+			var config = {};
+			switch(activetab.id)
+			{
+				case 'ab-contacts-grid':
+					config.query='search_contacts';
+					config.colModel = this.contactsGrid.getColumnModel();
 						
-		    break;
-		case 'ab-company-grid':
-		    config.query='search_companies';
-		    config.colModel = this.companiesGrid.getColumnModel();
-		    break;
-	    }
+					break;
+				case 'ab-company-grid':
+					config.query='search_companies';
+					config.colModel = this.companiesGrid.getColumnModel();
+					break;
+			}
 				
 				
-	    config.title = activetab.title;
-	    var query = this.searchPanel.queryField.getValue();
-	    if(!GO.util.empty(query))
-	    {
-		config.subtitle= GO.lang.searchQuery+': '+query;
-	    }else
-	    {
-		config.subtile='';
-	    }
+			config.title = activetab.title;
+			var query = this.searchPanel.queryField.getValue();
+			if(!GO.util.empty(query))
+			{
+				config.subtitle= GO.lang.searchQuery+': '+query;
+			}else
+			{
+				config.subtile='';
+			}
 
-	    if(activetab.id == 'ab-contacts-grid')
-	    {		
-		if(!this.exportDialogExtended)
-		{
-		    var columns=[];
-		    for (var i = 0; i < this.companiesGrid.colModel.getColumnCount(); i++) {
-			var c = this.companiesGrid.colModel.config[i];
-			columns.push(c.dataIndex + ':' + GO.addressbook.lang.company +' '+c.header);
-		    }
+			if(activetab.id == 'ab-contacts-grid')
+			{
+				if(!this.exportDialogExtended)
+				{
+					var columns=[];
+					for (var i = 0; i < this.companiesGrid.colModel.getColumnCount(); i++) {
+						var c = this.companiesGrid.colModel.config[i];
+						columns.push(c.dataIndex + ':' + GO.addressbook.lang.company +' '+c.header);
+					}
 		   
-		    this.exportDialogExtended = new GO.ExportQueryDialog({
-			query:'contactsearch',
-			loadParams:{
-			    export_directory:'modules/addressbook/exporters/',
-			    books:this.contactsGrid.store.baseParams.books,
-			    companyColumns:columns
+					this.exportDialogExtended = new GO.ExportQueryDialog({
+						query:'contactsearch',
+						loadParams:{
+							export_directory:'modules/addressbook/exporters/',
+							books:this.contactsGrid.store.baseParams.books,
+							companyColumns:columns
+						},
+						customTypes:[{
+							boxLabel : GO.addressbook.lang.exportWithCompanies,
+							name : 'type',
+							inputValue : 'with_companies_export_query'
+						}]
+					});
+				}
+
+
+				config.showAllFields=true;
+		
+		
+				this.exportDialogExtended.show(config);
+			}else
+			{
+				if(!this.exportDialog)
+				{
+					this.exportDialog = new GO.ExportQueryDialog({
+						query:config.query
+					});
+				}
+
+				this.exportDialog.show(config);
+			}
+		},
+		scope: this
+	}
+		
+	];
+
+	if(GO.mailings && GO.email)
+	{
+		tbar.push('-');
+		tbar.push({
+			iconCls: 'ml-btn-mailings',
+			text: GO.mailings.lang.newsletters,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				if(!this.mailingStatusWindow)
+				{
+					this.mailingStatusWindow = new GO.mailings.MailingStatusWindow();
+				}
+				this.mailingStatusWindow.show();
 			},
-			customTypes:[{
-			    boxLabel : GO.addressbook.lang.exportWithCompanies,
-			    name : 'type',
-			    inputValue : 'with_companies_export_query'
-			}]			
-		    });
-		}		
-
-
-		config.showAllFields=true;
-		
-		
-		this.exportDialogExtended.show(config);
-	    }else
-	    {
-		if(!this.exportDialog)
-		{
-		    this.exportDialog = new GO.ExportQueryDialog({
-			query:config.query
-		    });
-		}
-
-		this.exportDialog.show(config);
-	    }
-	},
-	scope: this
-    }
-		
-    ];
-
-    if(GO.mailings && GO.email)
-    {
-	tbar.push('-');
-	tbar.push({
-	    iconCls: 'ml-btn-mailings',
-	    text: GO.mailings.lang.newsletters,
-	    cls: 'x-btn-text-icon',
-	    handler: function(){
-		if(!this.mailingStatusWindow)
-		{
-		    this.mailingStatusWindow = new GO.mailings.MailingStatusWindow();
-		}
-		this.mailingStatusWindow.show();
-	    },
-	    scope: this
+			scope: this
+		});
+	}
+	config.tbar=new Ext.Toolbar({
+		cls:'go-head-tb',
+		items: tbar
 	});
-    }
-    config.tbar=new Ext.Toolbar({
-	cls:'go-head-tb',
-	items: tbar
-    });
 
 
-    /*config.listeners={
+	/*config.listeners={
 		scope:this,
 		show:function(){
 			this.searchPanel.queryField.focus(true);
@@ -408,266 +408,275 @@ GO.addressbook.MainPanel = function(config)
 	}*/
 	
 	
-    GO.addressbook.MainPanel.superclass.constructor.call(this, config);
+	GO.addressbook.MainPanel.superclass.constructor.call(this, config);
 	
 };
 
 Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 	
-    setAdvancedSearchNotification : function (store)
-    {
-	if(!GO.util.empty(store.baseParams.advancedQuery))
+	setAdvancedSearchNotification : function (store)
 	{
-	    this.searchPanel.queryField.setValue("[ "+GO.addressbook.lang.advancedSearch+" ]");
-	    this.searchPanel.queryField.setDisabled(true);
-	}else
-	{
-	    if(this.searchPanel.queryField.getValue()=="[ "+GO.addressbook.lang.advancedSearch+" ]")
-	    {
-		this.searchPanel.queryField.setValue("");
-	    }
-	    this.searchPanel.queryField.setDisabled(false);
-	}
-    },
+		if(!GO.util.empty(store.baseParams.advancedQuery))
+		{
+			this.searchPanel.queryField.setValue("[ "+GO.addressbook.lang.advancedSearch+" ]");
+			this.searchPanel.queryField.setDisabled(true);
+		}else
+		{
+			if(this.searchPanel.queryField.getValue()=="[ "+GO.addressbook.lang.advancedSearch+" ]")
+			{
+				this.searchPanel.queryField.setValue("");
+			}
+			this.searchPanel.queryField.setDisabled(false);
+		}
+	},
 	
-    afterRender : function()
-    {
-	GO.addressbook.MainPanel.superclass.afterRender.call(this);
+	afterRender : function()
+	{
+		GO.addressbook.MainPanel.superclass.afterRender.call(this);
 
-	/*
+		/*
 			GO.addressbook.readableAddressbooksStore.on('load', function(){
 					if(!this.addressbooksGrid.getSelectionModel().getSelected())
 						this.addressbooksGrid.getSelectionModel().selectFirstRow();
 				}, this);
 			*/
-	GO.addressbook.readableAddressbooksStore.load();
+		GO.addressbook.readableAddressbooksStore.load();
 
-	if(GO.mailings)
-	{
-	    GO.mailings.readableMailingsStore.load();
-	}
+		if(GO.mailings)
+		{
+			GO.mailings.readableMailingsStore.load();
+		}
 			
-	GO.addressbook.contactDialogListeners={
-	    scope:this,
-	    'save':function(){
+		GO.addressbook.contactDialogListeners={
+			scope:this,
+			'save':function(){
+				var panel = this.tabPanel.getActiveTab();
+				if(panel.id=='ab-contacts-grid')
+				{
+					this.contactsGrid.store.reload();
+				}
+			}
+		}
+
+		if(GO.mailings)
+		{
+			//must be loaded here otherwise the contact and company dialog
+			//don't send the selected mailing groups. Doing it on render
+			//time of the dialog didn;t work
+			GO.mailings.writableMailingsStore.load();
+		}
+
+
+		GO.addressbook.companyDialogListeners={
+			scope:this,
+			'save':function(){
+				var panel = this.tabPanel.getActiveTab();
+				if(panel.id=='ab-company-grid')
+				{
+					this.companiesGrid.store.reload();
+				}
+			}
+		}
+	},
+
+
+	setSearchParams : function(params)
+	{
 		var panel = this.tabPanel.getActiveTab();
+			
+		for(var name in params)
+		{
+			if(name!='advancedQuery' || panel.id=='ab-contacts-grid')
+			{
+				this.contactsGrid.store.baseParams[name] = params[name];
+			}
+			if(name!='advancedQuery' || panel.id!='ab-contacts-grid')
+			{
+				this.companiesGrid.store.baseParams[name] = params[name];
+			}
+		}
+			
+			
 		if(panel.id=='ab-contacts-grid')
 		{
-		    this.contactsGrid.store.reload();
-		}
-	    }
-	}
-
-	GO.addressbook.companyDialogListeners={
-	    scope:this,
-	    'save':function(){
-		var panel = this.tabPanel.getActiveTab();
-		if(panel.id=='ab-company-grid')
+			this.companiesGrid.loaded=false;
+			this.contactsGrid.store.load();
+		}else
 		{
-		    this.companiesGrid.store.reload();
+			this.contactsGrid.loaded=false;
+			this.companiesGrid.store.load();
 		}
-	    }
 	}
-    },
-
-
-    setSearchParams : function(params)
-    {
-	var panel = this.tabPanel.getActiveTab();
-			
-	for(var name in params)
-	{
-	    if(name!='advancedQuery' || panel.id=='ab-contacts-grid')
-	    {
-		this.contactsGrid.store.baseParams[name] = params[name];
-	    }
-	    if(name!='advancedQuery' || panel.id!='ab-contacts-grid')
-	    {
-		this.companiesGrid.store.baseParams[name] = params[name];
-	    }
-	}
-			
-			
-	if(panel.id=='ab-contacts-grid')
-	{
-	    this.companiesGrid.loaded=false;
-	    this.contactsGrid.store.load();
-	}else
-	{
-	    this.contactsGrid.loaded=false;
-	    this.companiesGrid.store.load();
-	}
-    }
 });
 
 GO.addressbook.showContactDialog = function(contact_id){
 
-    if(!GO.addressbook.contactDialog)
-	GO.addressbook.contactDialog = new GO.addressbook.ContactDialog();
+	if(!GO.addressbook.contactDialog)
+		GO.addressbook.contactDialog = new GO.addressbook.ContactDialog();
 
-    if(GO.addressbook.contactDialogListeners){
-	GO.addressbook.contactDialog.on(GO.addressbook.contactDialogListeners);
-	delete GO.addressbook.contactDialogListeners;
-    }
+	if(GO.addressbook.contactDialogListeners){
+		GO.addressbook.contactDialog.on(GO.addressbook.contactDialogListeners);
+		delete GO.addressbook.contactDialogListeners;
+	}
 
-    GO.addressbook.contactDialog.show(contact_id);
+	GO.addressbook.contactDialog.show(contact_id);
 }
 
 GO.addressbook.showCompanyDialog = function(company_id){
 	
-    if(!GO.addressbook.companyDialog)
-	GO.addressbook.companyDialog = new GO.addressbook.CompanyDialog();
+	if(!GO.addressbook.companyDialog)
+		GO.addressbook.companyDialog = new GO.addressbook.CompanyDialog();
 
-    if(GO.addressbook.companyDialogListeners){
-	GO.addressbook.companyDialog.on(GO.addressbook.companyDialogListeners);
-	delete GO.addressbook.companyDialogListeners;
-    }
+	if(GO.addressbook.companyDialogListeners){
+		GO.addressbook.companyDialog.on(GO.addressbook.companyDialogListeners);
+		delete GO.addressbook.companyDialogListeners;
+	}
 	
-    GO.addressbook.companyDialog.show(company_id);
+	GO.addressbook.companyDialog.show(company_id);
 }
 
 GO.addressbook.searchSenderStore = new GO.data.JsonStore({
-    url: GO.settings.modules.addressbook.url+ 'json.php',
-    baseParams: {
-	'task': 'search_sender',
-	email:''
-    },
-    root: 'results',
-    totalProperty: 'total',
-    id: 'id',
-    fields:['id','name'],
-    remoteSort:true
+	url: GO.settings.modules.addressbook.url+ 'json.php',
+	baseParams: {
+		'task': 'search_sender',
+		email:''
+	},
+	root: 'results',
+	totalProperty: 'total',
+	id: 'id',
+	fields:['id','name'],
+	remoteSort:true
 });
 
 GO.addressbook.searchSender = function(sender, name){
-    GO.addressbook.searchSenderStore.baseParams.email=sender;
-    GO.addressbook.searchSenderStore.load({
-	callback:function(){
-	    switch(GO.addressbook.searchSenderStore.getCount())
-	    {
-		case 0:
-		    if(confirm(GO.addressbook.lang.confirmCreate))
-		    {
-			GO.addressbook.showContactDialog();
-						
-			var names = name.split(' ');
-			var params = {
-			    email:sender,
-			    first_name: names[0]
-			};
-			if(names[2])
+	GO.addressbook.searchSenderStore.baseParams.email=sender;
+	GO.addressbook.searchSenderStore.load({
+		callback:function(){
+			switch(GO.addressbook.searchSenderStore.getCount())
 			{
-			    params.last_name=names[2];
-			    params.middle_name=names[1];
-			}else if(names[1])
-			{
-			    params.last_name=names[1];
-			}
+				case 0:
+					if(confirm(GO.addressbook.lang.confirmCreate))
+					{
+						GO.addressbook.showContactDialog();
+						
+						var names = name.split(' ');
+						var params = {
+							email:sender,
+							first_name: names[0]
+						};
+						if(names[2])
+						{
+							params.last_name=names[2];
+							params.middle_name=names[1];
+						}else if(names[1])
+						{
+							params.last_name=names[1];
+						}
 						
 						
-			var tldi = sender.lastIndexOf('.');
-			if(tldi)
-			{
-			    var tld = sender.substring(tldi+1, sender.length).toUpperCase();
-			    if(GO.lang.countries[tld])
-			    {
-				params.country=tld;
-			    }
-			}
+						var tldi = sender.lastIndexOf('.');
+						if(tldi)
+						{
+							var tld = sender.substring(tldi+1, sender.length).toUpperCase();
+							if(GO.lang.countries[tld])
+							{
+								params.country=tld;
+							}
+						}
 						
-			GO.addressbook.contactDialog.formPanel.form.setValues(params);
-		    }
+						GO.addressbook.contactDialog.formPanel.form.setValues(params);
+					}
 					
-		    break;
-		case 1:
-		    var r = GO.addressbook.searchSenderStore.getAt(0);
-		    GO.linkHandlers[2].call(this, r.get('id'));
-		    break;
-		default:
-		    if(!GO.addressbook.searchSenderWin)
-		    {
-			var list = new GO.grid.SimpleSelectList({
-			    store: GO.addressbook.searchSenderStore
-			});
+					break;
+				case 1:
+					var r = GO.addressbook.searchSenderStore.getAt(0);
+					GO.linkHandlers[2].call(this, r.get('id'));
+					break;
+				default:
+					if(!GO.addressbook.searchSenderWin)
+					{
+						var list = new GO.grid.SimpleSelectList({
+							store: GO.addressbook.searchSenderStore
+						});
 						
-			list.on('click', function(dataview, index){
-			    var contact_id = dataview.store.data.items[index].id;
-			    list.clearSelections();
-			    GO.addressbook.searchSenderWin.hide();
-			    GO.linkHandlers[2].call(this, contact_id);
-			}, this);
-			GO.addressbook.searchSenderWin=new GO.Window({
-			    title:GO.addressbook.lang.strSelectContact,
-			    items:{
-				autoScroll:true,
-				items: list,
-				cls:'go-form-panel'
-			    },
-			    layout:'fit',
-			    autoScroll:true,
-			    closeAction:'hide',
-			    closeable:true,
-			    height:400,
-			    width:400,
-			    buttons:[{
-				text: GO.lang['cmdClose'],
-				handler: function(){
-				    GO.addressbook.searchSenderWin.hide();
-				}
-			    }]
-			});
-		    }
-		    GO.addressbook.searchSenderWin.show();
-		    break;
-	    }
-	},
-	scope:this
-    });
+						list.on('click', function(dataview, index){
+							var contact_id = dataview.store.data.items[index].id;
+							list.clearSelections();
+							GO.addressbook.searchSenderWin.hide();
+							GO.linkHandlers[2].call(this, contact_id);
+						}, this);
+						GO.addressbook.searchSenderWin=new GO.Window({
+							title:GO.addressbook.lang.strSelectContact,
+							items:{
+								autoScroll:true,
+								items: list,
+								cls:'go-form-panel'
+							},
+							layout:'fit',
+							autoScroll:true,
+							closeAction:'hide',
+							closeable:true,
+							height:400,
+							width:400,
+							buttons:[{
+								text: GO.lang['cmdClose'],
+								handler: function(){
+									GO.addressbook.searchSenderWin.hide();
+								}
+							}]
+						});
+					}
+					GO.addressbook.searchSenderWin.show();
+					break;
+			}
+		},
+		scope:this
+	});
 	
 }
 
 
 GO.moduleManager.addModule('addressbook', GO.addressbook.MainPanel, {
-    title : GO.addressbook.lang.addressbook,
-    iconCls : 'go-tab-icon-addressbook'
+	title : GO.addressbook.lang.addressbook,
+	iconCls : 'go-tab-icon-addressbook'
 });
 
 GO.linkHandlers[2]=GO.mailFunctions.showContact=function(id){		
-    if(!GO.addressbook.linkContactWindow){
-	var contactPanel = new GO.addressbook.ContactReadPanel();
-	GO.addressbook.linkContactWindow = new GO.LinkViewWindow({
-	    title: GO.addressbook.lang.contact,
-	    items: contactPanel,
-	    contactPanel: contactPanel,
-	    closeAction:"hide"
-	});
-    }
-    GO.addressbook.linkContactWindow.contactPanel.load(id);
-    GO.addressbook.linkContactWindow.show();
+	if(!GO.addressbook.linkContactWindow){
+		var contactPanel = new GO.addressbook.ContactReadPanel();
+		GO.addressbook.linkContactWindow = new GO.LinkViewWindow({
+			title: GO.addressbook.lang.contact,
+			items: contactPanel,
+			contactPanel: contactPanel,
+			closeAction:"hide"
+		});
+	}
+	GO.addressbook.linkContactWindow.contactPanel.load(id);
+	GO.addressbook.linkContactWindow.show();
 }
 
 GO.linkPreviewPanels[2]=function(config){
-    config = config || {};
-    return new GO.addressbook.ContactReadPanel(config);
+	config = config || {};
+	return new GO.addressbook.ContactReadPanel(config);
 }
 
 GO.linkPreviewPanels[3]=function(config){
-    config = config || {};
-    return new GO.addressbook.CompanyReadPanel(config);
+	config = config || {};
+	return new GO.addressbook.CompanyReadPanel(config);
 }
 
 
 GO.linkHandlers[3]=function(id){
 	
-    if(!GO.addressbook.linkCompanyWindow){
-	var companyPanel = new GO.addressbook.CompanyReadPanel();
-	GO.addressbook.linkCompanyWindow = new GO.LinkViewWindow({
-	    title: GO.addressbook.lang.company,
-	    items: companyPanel,
-	    companyPanel: companyPanel,
-	    closeAction:"hide"
-	});
-    }
-    GO.addressbook.linkCompanyWindow.companyPanel.load(id);
-    GO.addressbook.linkCompanyWindow.show();
+	if(!GO.addressbook.linkCompanyWindow){
+		var companyPanel = new GO.addressbook.CompanyReadPanel();
+		GO.addressbook.linkCompanyWindow = new GO.LinkViewWindow({
+			title: GO.addressbook.lang.company,
+			items: companyPanel,
+			companyPanel: companyPanel,
+			closeAction:"hide"
+		});
+	}
+	GO.addressbook.linkCompanyWindow.companyPanel.load(id);
+	GO.addressbook.linkCompanyWindow.show();
 }

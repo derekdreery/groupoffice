@@ -381,18 +381,21 @@ try {
 			$default_colors = array('F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
 							'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
 							'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
-							'C43B3B','996600','66FF99','999999','FFFFFF');
+							'C43B3B','996600','66FF99','999999','FFFFFF');			  	
 
 			$default_colors_count = count($default_colors);
 
 			$default_bg = array();
 			$index = 0;
-			foreach ($calendars as $k=>$v){
-				$index++;
-				if($index>=$default_colors_count)
-					$index=0;
+			foreach($calendars as $key=>$cal_id)
+			{				
+				if($index == $default_colors_count)
+				{
+					$index = 0;
+				}
 
-				$default_bg[$v] = $default_colors[$index];
+				$default_bg[$cal_id] = $default_colors[$index];
+				$index++;
 			}
 
 			$calendar_id=$calendars[0];
@@ -467,6 +470,7 @@ try {
 								'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
 								'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
 								'background'=>$event['background'],
+								//'background'=>$default_colors[$response['count']-1],
 								'private'=>($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']),
 								'repeats'=>!empty($event['rrule']),
 								'all_day_event'=>$event['all_day_event'],

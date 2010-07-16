@@ -265,7 +265,7 @@ class GO_MODULES extends db {
 					return true;
 				}
 			}
-			header( 'Location: '.$GO_CONFIG->host.'error_docs/403.php' );
+			header( 'Location: '.$GO_CONFIG->host);
 			exit();
 		} else {
 			exit( 'Invalid module specified' );

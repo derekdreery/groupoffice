@@ -223,7 +223,7 @@ class db extends base_db {
 	 */
 	public function insert_id()
 	{
-		return mysql_insert_id($this->result,$this->link);
+		return mysql_insert_id($this->link);
 	}
 
 	/**

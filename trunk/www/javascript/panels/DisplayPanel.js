@@ -114,7 +114,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	      iconCls: "btn-print",
 	      tooltip:GO.lang.cmdPrint,
 	 			handler: function(){
-					this.body.print();		
+					this.body.print({title:this.getTitle()});
 				},
 				scope:this
 	  });
@@ -358,6 +358,17 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 			//we are in a window
 			this.ownerCt.setTitle(title);
 		}
+	},
+
+	getTitle : function(){
+		if(typeof(this.title)!='undefined'){
+			return this.title;
+		}else if(this.ownerCt)
+		{
+			//we are in a window
+			this.ownerCt.title;
+		}
+		return false;
 	},
 	
 	reload : function(){
