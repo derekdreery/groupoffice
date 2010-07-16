@@ -435,6 +435,17 @@ try {
 					}
 				}
 
+				$duration_minutes = ($event['end_time']-$event['start_time'])/60;
+				if($duration_minutes >= 60)
+				{
+					$duration_hours = floor($duration_minutes / 60);
+					$duration_rest_minutes = $duration_minutes % 60;
+
+					$duration = $duration_hours.' '.$lang['common']['hours'].', '.$duration_rest_minutes.' '.$lang['common']['mins'];
+				}else
+				{
+					$duration = $duration_minutes.'m';
+				}
 
 				$private = ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']);
 				if($private) {
@@ -476,7 +487,8 @@ try {
 								'all_day_event'=>$event['all_day_event'],
 								'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time']),
 								'read_only'=> $event['read_only'] ? true : false,
-								'username' => $username
+								'username' => $username,
+								'duration' => $duration
 				);
 				
 				if($event['mtime'] > $response['mtime'])

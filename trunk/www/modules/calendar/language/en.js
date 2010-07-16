@@ -119,3 +119,5 @@ GO.calendar.lang.categories='Categories';
 GO.calendar.lang.category='Category';
 GO.calendar.lang.globalCategory='Global category';
 GO.calendar.lang.selectCategory='Select category';
+
+GO.calendar.lang.duration='Timespan';

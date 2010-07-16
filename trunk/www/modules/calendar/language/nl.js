@@ -107,3 +107,5 @@ GO.calendar.lang.categories='Categorieën';
 GO.calendar.lang.category='Categorie';
 GO.calendar.lang.globalCategory='Globale categorie';
 GO.calendar.lang.selectCategory='Selecteer categorie';
+
+GO.calendar.lang.duration='Duur';
