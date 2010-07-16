@@ -1506,7 +1506,7 @@ class imap extends imap_bodystruct {
 		 *
 		 * That's why I first fetch the header and then the text.
 		 */
-		$header = $this->get_message_part($uid, 'HEADER')."\r\n";
+		$header = $this->get_message_part($uid, 'HEADER')."\r\n\r\n";
 
 		if(!fputs($fp, $header))
 			return false;
