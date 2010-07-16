@@ -290,7 +290,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						this.toggleFieldSets(action.result.data.resources_checked);
 					}
 
-					this.selectCategory.container.up('div.x-form-item').setDisplayed(this.formPanel.form.baseParams['group_id']==1);					
+					this.selectCategory.container.up('div.x-form-item').setDisplayed(this.formPanel.form.baseParams['group_id']==1);
+					if(this.formPanel.form.baseParams['group_id'] == 1)
+					{
+						this.selectCategory.setValue(GO.calendar.lang.selectCategory);
+					}
+					
 					this.colorField.setDisabled(this.formPanel.form.baseParams['group_id']==1);
 
 				},
