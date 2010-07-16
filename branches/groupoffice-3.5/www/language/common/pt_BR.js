@@ -16,13 +16,26 @@
  */
 
 
+
+
+
+
+GO.lang.exportHiddenColumns='Exportar colunas ocultas também';
+GO.lang.searchQuery='Busca';
+GO.lang.pleaseApplyFirst='Salve primeiro clicando em \'Confirmar\'';
+GO.lang.passwordMatchError='As senhas são diferentes';
+GO.lang.serverError='Ocorreu um erro no servidor web. Entre em contato com o administrador do sistema e informe o erro.';
+GO.lang.errorDetails='Erro detalhado';
+GO.lang.contactSupportDesk='Contate o Help Desk';
+
+GO.lang.disabled='Desabilitado';
+GO.lang.changesWillBeLost='Você fez alterações em sua tela atual. Pressione Cancelar e save as alterações ou Ok para continuar e perder suas alterações.';
 GO.lang.strCommunityForum='Fórum comunitário';
 GO.lang.moduleRequired='Esta função requer o \'{module}\' módulo. Este módulo não está disponível.';
 
 GO.lang.completeProfile = 'Por favor complete seu perfil';
 GO.lang.fullscreen='Tela cheia';
 GO.lang.popupBlocker = 'Seu browser está bloqueando um popup do Group-Office. Por favor, desabilite o bloqueador de popup para este site';
-
 GO.lang.color='Cor';
 GO.lang.browse='Procurar...';
 GO.lang.largeUpload='Arquivos grandes/pastas (requer Java)';
@@ -31,6 +44,7 @@ GO.lang.smallUpload='Arquivos pequenos';
 
 GO.lang.lostPassword='Perdeu a senha?';
 GO.lang.lostPasswordText='Para recuperar sua senha você precisa ter acesso ao seu e-mail sem acessar ao Group-Office. Se você informar o e-mail, uma nova senha será enviada para ele.<br /><br />Informe seu e-mail:';
+
 
 GO.lang.noJava='Java Webstart não instalado. Java habilita a edição e envio fácil de arquivos . Visite <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> para instalar.';
 
@@ -44,15 +58,15 @@ GO.lang.strDescription = 'Descrição';
 GO.lang.strEmail = 'E-mail';
 GO.lang.strUser = 'Usuário';
 GO.lang.users = 'Usuários';
-GO.lang.strOwner = 'Dono';
+GO.lang.strOwner = 'Proprietário';
 GO.lang.strContacts = 'Contatos';
 
-GO.lang.strLanguage='Língua';
+GO.lang.strLanguage='Idioma';
 
 GO.lang.strOpenOffice = 'Documento OpenOffice.org';
 
 GO.lang.strDefault = 'Padrão';
-GO.lang.strUsername = 'Usuário';
+GO.lang.strUsername = 'e-mail';
 GO.lang.strPassword = 'Senha';
 
 GO.lang.strFirstName = 'Primeiro nome';
@@ -74,6 +88,7 @@ GO.lang.strZip = 'CEP';
 GO.lang.strCity = 'Cidade';
 GO.lang.strState = 'Estado';
 GO.lang.strCountry = 'Pais';
+GO.lang.strAddressFormat = 'Formato do endereço';
 GO.lang.strHomepage = 'Homepage';
 GO.lang.strCompany = 'Empresa';
 GO.lang.strDepartment = 'Departamento';
@@ -98,6 +113,7 @@ GO.lang.strPostZip = 'CEP (postal)';
 GO.lang.locations = 'Localização';
 GO.lang.folder = 'Pasta';
 GO.lang.folders = 'Pastas';
+GO.lang.newFolder='Nova Pasta';
 
 GO.lang.up = 'Subir';
 GO.lang.fileExists = 'Arquivo existente';
@@ -105,8 +121,8 @@ GO.lang.overwriteFile = 'Deseja sobrepor o arquivo \'{file}\'?';
 
 GO.lang.url = 'URL';
 
-GO.lang.strMale = 'Homem';
-GO.lang.strFemale = 'Mulher';
+GO.lang.strMale = 'Masculino';
+GO.lang.strFemale = 'Feminino';
 
 GO.lang.strMtime = 'Modificado em';
 GO.lang.strCtime = 'Criado em';
@@ -125,6 +141,7 @@ GO.lang.cmdAdd = 'Adicionar';
 GO.lang.cmdAddPlusNew = 'Adicionar + novo';
 GO.lang.cmdSavePlusNew='Salvar + novo';
 GO.lang.cmdSave = 'Salvar';
+GO.lang.cmdSaveAs = 'Salvar como';
 GO.lang.cmdEdit = 'Editar';
 GO.lang.cmdLink = 'Link';
 GO.lang.cmdUnlink = 'Unlink';
@@ -134,6 +151,7 @@ GO.lang.cmdReset = 'Reset';
 GO.lang.cmdExport='Exportar';
 GO.lang.cmdPrint='Imprimir';
 GO.lang.cmdImport='Importar';
+GO.lang.cmdInsert='Inserir';
 
 GO.lang.cmdActions = 'Ações';
 
@@ -180,7 +198,7 @@ GO.lang.strError= 'Erro';
 GO.lang.waitMsgSave= 'Salvando...';
 GO.lang.waitMsgLoad= 'Carregando...';
 GO.lang.waitMsgUpload= 'Enviando...';
-
+GO.lang.strRequestError= 'Erro de conexão com o servidor. Por favor, verifique sua conexão com a Internet.';
 
 GO.lang.strSelected = 'Selecionado';
 GO.lang.noItemSelected= 'Você não pode selecionar um item.';
@@ -207,7 +225,6 @@ GO.lang.strLoggedInAs= 'Logado como';
 
 GO.lang.strErrorsInForm= 'Você tem erros no seu formulário. Os campos inválidos estão marcados.';
 
-
 GO.lang.strMinute="Minuto";
 GO.lang.strMinutes="Minutos";
 GO.lang.strHour="Hora";
@@ -220,7 +237,9 @@ GO.lang.strMonth="Mês";
 GO.lang.strMonths="Meses";
 GO.lang.strYear="Ano";
 GO.lang.strYears="Anos";
-GO.lang.strTime='Tempo';
+GO.lang.strTime='Hora';
+
+GO.lang.selectWeek='Semana selecionada';
 
 GO.lang.shortDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex','Sab'];
 
@@ -229,6 +248,7 @@ GO.lang.monthsByDate = 'Meses por data';
 GO.lang.monthsByDay = 'Meses por dia';
 
 GO.lang.strSelectFiles='Arquivos selecionados';
+GO.lang.strSelectFile='Arquivo selecionado';
 GO.lang.strFiles='Arquivos';
 GO.lang.strSubject='Assunto';
 GO.lang.strLocation='Localização';
@@ -246,6 +266,7 @@ GO.lang.strAvailability='Disponibilidade';
 GO.lang.strView='Vista';
 
 GO.lang.field = 'Campos';
+GO.lang.value = 'Valor';
 
 GO.lang.customer = 'Cliente';
 
@@ -262,6 +283,7 @@ GO.lang.remindPassword='Lembrar meu login neste computador';
 
 GO.lang.reminders = 'Lembretes';
 GO.lang.dismiss='Desistir';
+GO.lang.selectAll='Selecionar todos';
 GO.lang.snooze='Snooze';
 
 GO.lang.strMax = 'Máximo';
@@ -270,3 +292,77 @@ GO.lang.settings='Configurações';
 
 GO.lang.latestLinks='Últimos links'
 GO.lang.cmdBrowseLinks = 'Links';
+
+GO.lang.today='Hoje';
+
+GO.lang.displayingItemsShort='Total: {2}';
+
+GO.lang.image='Imagem';
+GO.lang.insertImage='Inserir imagem no textot';
+
+GO.lang.item='item';
+GO.lang.items='itens';
+
+GO.lang.more='Mais';
+
+GO.lang.on ='Ligar';
+GO.lang.off ='Desligar';
+
+GO.lang.keyword='Palavra';
+GO.lang.keywords='Palavras';
+
+
+GO.lang.total='Total';
+GO.lang.totals='Totais';
+
+GO.lang.closeApps='Fechar aplicações';
+GO.lang.rightClickToClose='Clique com o botão direito no título de um painel para fechá-lo.';
+
+GO.lang.adminMenu = 'Menu administrativo';
+
+GO.lang.administration='Administração';
+GO.lang.extra='Extra';
+
+GO.lang.permissionsLevel='Nível';
+
+GO.lang.permissionRead='Somente leitura';
+GO.lang.permissionWrite='Escrita';
+GO.lang.permissionDelete='Escrita e exclusão';
+GO.lang.permissionManage='Gerenciar';
+
+
+GO.lang.spellcheck = 'Verificar Ortografia';
+GO.lang.spellcheckdetails = 'Verificando Ortografia';
+GO.lang.spellcheckNoError = 'Nenhum Erro Encontrado';
+GO.lang.spellcheckServerError = 'Ocorreu um erro enquanto executando a verificação ortográfica. Se o problema continuar, por favor, contacte o suporte';
+GO.lang.spellcheckNoErrors = 'Conteúdo do e-mail com [{1}] erro(s)';
+GO.lang.spellcheckAsk = 'Enviar sem verificação ortográfica?';
+
+GO.lang.age='Idade';
+
+GO.lang.selectFolder = 'Por favor selecione uma pasta';
+
+GO.lang.userGroups='Grupos de usuários';
+
+
+GO.lang.firebugDetected="Atenção! Firebug Add-on detectado";
+GO.lang.firebugWarning="O Firebug Add-on tende a reduzir o desempenho desta aplicação. Por favor, não utilize-o em um ambiente de produção."
+GO.lang.indent='Aumentar recuo';
+GO.lang.outdent='Diminuir recuo';
+GO.lang.removeFormatting='Remover Formatação';
+GO.lang.insertHorizontalRule='Inserir Régua Horizontal';
+GO.lang.insertHRtext='Digite a largura da Régua em porcentagem<br/> seguida do sinal de % no fim, ou para<br/> configurar uma largura fiza, omita o símbolo de %.';
+GO.lang.cmdInsert='Inserir';
+
+GO.lang.width='Largura';
+GO.lang.thankyou='Obrigado';
+GO.lang.applyMultiselect='Aplicar multiseleção';
+
+GO.lang.createdBy='Criado por';
+
+
+GO.lang.debugModeDetected="Atenção! Modo de depuração habilitado";
+GO.lang.debugModeWarning="Utilize $config['debug']=true; apenas para desenvolvimento e resolução de problemas. Isto reduz o desempenho no Group-Office.";
+
+GO.lang.noItemSelectedWarning='Selecione pelo menos um item por favor.';
+
