@@ -1,5 +1,5 @@
-groupoffice-com (3.5.9) three; urgency=low
+groupoffice-com (3.5.11) three; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Mon, 5 Jul 2010 09:28:38 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Fri, 16 Jul 2010 12:17:42 +0200
