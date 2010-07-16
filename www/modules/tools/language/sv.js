@@ -11,8 +11,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-GO.tools.lang.tools= 'Admin verktyg';
-GO.tools.lang.description= 'Klicka på en av skripten nedan för att exekvera det.';
+GO.tools.lang.tools= 'Adminverktyg';
+GO.tools.lang.description= 'Klicka på ett av skripten för att köra det.';
 
 GO.tools.lang.scripts= 'Skript';
-GO.tools.lang.scriptOutput= 'Skript utdata';
+GO.tools.lang.scriptOutput= 'Skript-utdata';

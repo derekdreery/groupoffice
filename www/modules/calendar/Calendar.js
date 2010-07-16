@@ -240,7 +240,9 @@ GO.calendar.MainPanel = function(config){
 
 		var config = {			
 			calendars: cal_ids,
-			group_id:1
+			group_id:1,
+			merge:true,
+			owncolor:true
 		};
 		
 		this.setDisplay(config);

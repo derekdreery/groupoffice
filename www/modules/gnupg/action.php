@@ -29,7 +29,12 @@ try{
 			$email = new email();
 			$imap = new cached_imap();
 
-			$account = connect($_REQUEST['account_id'], $_REQUEST['mailbox']);
+			$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
+
+			if($account['user_id']!=$GO_SECURITY->user_id) {
+				die($lang['common']['accessDenied']);
+			}
+			
 			$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
 			
 			$response['success']=true;

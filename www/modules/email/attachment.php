@@ -29,35 +29,60 @@ if($account['user_id']!=$GO_SECURITY->user_id) {
 }
 
 
-
-$file = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], false);
-$imap->disconnect();
-
 if(!empty($_REQUEST['uuencoded_partnumber']) && $_REQUEST['uuencoded_partnumber']!='undefined') {
-	$attachments = $imap->extract_uuencoded_attachments($file);
+	$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], false);
+	
+	$attachments = $imap->extract_uuencoded_attachments($data);
 
-	$file = convert_uudecode($attachments[$_REQUEST['uuencoded_partnumber']-1]['data']);
+	$data = convert_uudecode($attachments[$_REQUEST['uuencoded_partnumber']-1]['data']);
+	$size = strlen($data);
 }
 
+$extension = File::get_extension($_REQUEST['filename']);
 
-if($GO_MODULES->has_module('gnupg')) {
-	$extension = File::get_extension($_REQUEST['filename']);
-	if($extension=='pgp' || $extension=='gpg') {
-		require_once ($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
-		$gnupg = new gnupg();
+if($GO_MODULES->has_module('gnupg') && ($extension=='pgp' || $extension=='gpg')) {
+	require_once ($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+	$gnupg = new gnupg();
 
-		$tmpfile = $GO_CONFIG->tmpdir.$_REQUEST['filename'];
-		$_REQUEST['filename']=File::strip_extension($_REQUEST['filename']);
-		$outfile = $GO_CONFIG->tmpdir.$_REQUEST['filename'];
+	$tmpfile = $GO_CONFIG->tmpdir.$_REQUEST['filename'];
+	
+	$_REQUEST['filename']=File::strip_extension($_REQUEST['filename']);
+	$file=$GO_CONFIG->tmpdir.$_REQUEST['filename'];
+	$fp = fopen($tmpfile, 'w+');
 
-		file_put_contents($tmpfile, $file);
+	if(!$fp)
+		die('Could not write to temp file');
 
-		$passphrase=isset($_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']] : '';
-		
-		$gnupg->decode_file($tmpfile, $outfile, $passphrase);
+	$imap->get_message_part_start($_REQUEST['uid'], $_REQUEST['imap_id']);
 
-		$file = file_get_contents($outfile);
+	while($line = $imap->get_message_part_line()){
+
+		switch(strtolower($_REQUEST['encoding'])) {
+			case 'base64':
+				$line=base64_decode($line);
+				break;
+			case 'quoted-printable':
+				$line= quoted_printable_decode($line);
+				break;
+		}
+
+		if(!fputs($fp, $line))
+			die('Could not write to temp file');
 	}
+
+	fclose($fp);
+
+	$passphrase=isset($_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']] : '';
+
+	$gnupg->decode_file($tmpfile, $file, $passphrase);
+	unlink($tmpfile);
+	
+
+	//$file = file_get_contents($outfile);
+}else
+{
+	$size = $imap->get_message_part_start($_REQUEST['uid'], $_REQUEST['imap_id']);
+	//exit($size);
 }
 
 $browser = detect_browser();
@@ -75,7 +100,32 @@ if ($browser['name'] == 'MSIE') {
 	header('Content-Disposition: attachment; filename="'.$_REQUEST['filename'].'"');
 }
 header('Content-Transfer-Encoding: binary');
-header('Content-Length: '.strlen($file));
 
-echo $file;
+//unfortunately we don't know the size because file is not decoded yet
+//header('Content-Length: '.$size);
 
+
+if(isset($file)){
+	//tmp file from gnupg
+	readfile($file);
+	unlink($file);
+}elseif(isset($data)){
+	echo $data;
+}else
+{
+	//read from IMAP server
+	while($line = $imap->get_message_part_line()){
+		switch(strtolower($_REQUEST['encoding'])) {
+			case 'base64':
+				echo base64_decode($line);
+				break;
+			case 'quoted-printable':
+				echo quoted_printable_decode($line);
+				break;
+			default:
+				echo $line;
+				break;
+		}
+	}
+}
+$imap->disconnect();

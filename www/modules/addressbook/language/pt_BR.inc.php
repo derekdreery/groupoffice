@@ -24,8 +24,8 @@ $lang['common']['addressbookAlreadyExists'] = 'O contato que você está criando
 $lang['addressbook']['notIncluded'] = 'Não importe';
 
 $lang['addressbook']['comment'] = 'Comentário';
-$lang['addressbook']['bankNo'] = 'Nro. banco'; 
-$lang['addressbook']['vatNo'] = 'Nro. VAT';
+$lang['addressbook']['bankNo'] = 'Nº banco'; 
+$lang['addressbook']['vatNo'] = 'Nº VAT';
 $lang['addressbook']['contactsGroup'] = 'Grupo';
 
 $lang['link_type'][2]=$lang['addressbook']['contact'] = 'Contato';
@@ -38,5 +38,14 @@ $lang['addressbook']['prospects'] = 'Prospectos';
 
 $lang['addressbook']['contacts'] = 'Contatos';
 $lang['addressbook']['companies'] = 'Empresas';
+
+$lang['addressbook']['newContactAdded']='Novo contato adicionado';
+$lang['addressbook']['newContactFromSite']='Um novo contato foi adicionado através de um formulário web.';
+$lang['addressbook']['clickHereToView']='Clique aqui para visulizar o contato';
+
+$lang['addressbook']['contactFromAddressbook']='%s';
+$lang['addressbook']['companyFromAddressbook']='%s';
+$lang['addressbook']['defaultSalutation']='Prezado [Sr./Sra.] {first_name} {last_name}';
+
 
 ?>

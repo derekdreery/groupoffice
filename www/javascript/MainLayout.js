@@ -54,6 +54,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	},	
 	
 	login : function(){
+
+		new Ext.Viewport();
+		
 		GO.loginDialog = new GO.dialog.LoginDialog({modal:false});
 
 		//this.fireReady();

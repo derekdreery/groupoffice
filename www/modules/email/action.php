@@ -489,7 +489,7 @@ try {
 								throw new FileNotFoundException();
 							}
 
-							if(!empty($_POST['encrypt']) && $draft) {
+							if(!empty($_POST['encrypt']) && !$draft) {
 								$encoded = $gnupg->encode_file($tmp_name, $all_recipients, $swift->account['email']);
 
 								$attachment = Swift_Attachment::fromPath($encoded,'application/pgp-encoded');

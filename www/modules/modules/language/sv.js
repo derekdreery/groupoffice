@@ -19,5 +19,5 @@ GO.modules.lang.cmdAvailableModules = 'Tillgängliga moduler',
 GO.modules.lang.cmdModuleName = 'Modulnamn',
 GO.modules.lang.cmdModuleDescription = 'Beskrivning',
 GO.modules.lang.cmdGridColumnModuleName = 'Modulnamn',
-GO.modules.lang.cmdUninstallMessage = 'WARNING! All data i denna modul kommer att raderas! Är du säker på att du vill avinstallera dessa "{0}" moduler?',
-GO.modules.lang.cmdModulesCannotBeDeleted = 'Modulen "Modules" kan inte raderas!.'
+GO.modules.lang.cmdUninstallMessage = 'VARNING! All data i denna modul kommer raderas! Är du säker på att du vill avinstallera dessa "{0}" moduler?',
+GO.modules.lang.cmdModulesCannotBeDeleted = 'Modulen "Moduler" kan inte raderas!'

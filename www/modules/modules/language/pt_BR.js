@@ -2,6 +2,7 @@
  * Copy everything below for translations
  */
 
+GO.modules.lang.modules='Módulos';
 GO.modules.lang.cmdSaveChanges = 'Salvar mudanças',
 GO.modules.lang.cmdInstall = 'Instalar',
 GO.modules.lang.cmdUninstall = 'Desinstalar',

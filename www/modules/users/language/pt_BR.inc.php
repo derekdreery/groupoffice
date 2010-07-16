@@ -14,8 +14,20 @@ $lang['users']['error_username_exists']='Desculpe, esse nome já existe';
 $lang['users']['error_email_exists']='Desculpe, esse e-mail já está registrado.';
 $lang['users']['error_match_pass']='Senha não informada';
 $lang['users']['error_email']='Você informou um endereço de e-mail inválido';
+$lang['users']['error_user']='Usuário não pode ser criado';
 
 $lang['users']['imported']='Importados %s usuários';
 $lang['users']['failed']='Falhou';
 
 $lang['users']['incorrectFormat']='Arquivo não tem o formato CSV correto';
+
+$lang['users']['register_email_subject']='Detalhes de sua conta no Group-Office';
+$lang['users']['register_email_body']='Uma conta Group-Office foi criada para você em {url}
+Os deatalhes de seu login:
+
+Usuário: {username}
+Senha: {password}';
+
+
+$lang['users']['max_users_reached']='Este sistema atingiu o número máximo de usuários permitido.';
+

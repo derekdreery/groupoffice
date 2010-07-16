@@ -685,7 +685,7 @@ try {
 
 				$account_id = isset ($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 				$mailbox = isset ($_REQUEST['mailbox']) ? ($_REQUEST['mailbox']) : 'INBOX';
-				$query = isset($_POST['query']) ? ($_POST['query']) : '';
+				$query = isset($_POST['query']) ? trim($_POST['query']) : '';
 				$unread = isset($_POST['unread']) && ($_POST['unread'] == 'true') ? true : false;
 
 				if($unread) {

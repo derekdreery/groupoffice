@@ -16,6 +16,6 @@
 require($GO_LANGUAGE->get_fallback_language_file('modules'));
 
 	$lang['modules']['name'] = 'Moduler';
-	$lang['modules']['description'] = 'Admin modul; Hantera moduler.';
-	$lang['modules']['deleteModule'] = 'Modul "Moduler" kan inte raderas!';
+	$lang['modules']['description'] = 'Adminmodul för att hantera, installera resp. avinstallera moduler.';
+	$lang['modules']['deleteModule'] = 'Modulen "Moduler" kan inte raderas!';
 ?>

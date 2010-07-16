@@ -1,3 +1,7 @@
+2010/07/16 3.5.11
+- Updated Norwegian, Swedish and Brazilian Portugese translation
+- Important bug fixes
+
 2010/07/06 3.5.10
 - Search for companies only searched on name field. Now it searches on all again.
 

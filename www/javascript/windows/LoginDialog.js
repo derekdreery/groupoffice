@@ -214,7 +214,9 @@ Ext.extend(GO.dialog.LoginDialog, GO.Window, {
 				{
 					document.location=document.location;
 					return true;
-				}				
+				}
+
+				Ext.apply(GO.settings, action.result.settings);
 				
 				if(action.result.name=='')
 				{
@@ -295,7 +297,7 @@ Ext.extend(GO.dialog.LoginDialog, GO.Window, {
 
 		this.profileFormPanel = new Ext.form.FormPanel({
 			items: new GO.users.ProfilePanel({
-				title:GO.lang.completeProfile
+				header:false
 				}),
 			baseParams:{
 				task:'complete_profile'
@@ -307,6 +309,7 @@ Ext.extend(GO.dialog.LoginDialog, GO.Window, {
 
 		this.completeProfileDialog = new Ext.Window({
 			width: 900,
+			title:GO.lang.completeProfile,
 			autoHeight:true,
 			items: this.profileFormPanel,
 			closable:false,

@@ -177,14 +177,12 @@ GO.email.MessagesGrid = function(config){
 	
 	GO.email.MessagesGrid.superclass.constructor.call(this, config);
 
-	this.getBottomToolbar().onClick=function(which){
-		if(which== "refresh"){
-			this.store.baseParams.refresh=true;
-		}
-		Ext.PagingToolbar.prototype.onClick.call(this, which);
-		if(which== "refresh"){
-			delete this.store.baseParams.refresh;
-		}
+	var origRefreshHandler = this.getBottomToolbar().refresh.handler;
+
+	this.getBottomToolbar().refresh.handler=function(){
+		this.store.baseParams.refresh=true;
+		origRefreshHandler.call(this);
+		delete this.store.baseParams.refresh;
 	};
 
 	this.searchType.on('select', function(combo, record)

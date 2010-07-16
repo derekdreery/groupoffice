@@ -1143,7 +1143,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			uuencoded_partnumber: attachment.uuencoded_partnumber,
 			folder_id: folder_id,
 			filename: filename,
-			charset:attachment.charset
+			charset:attachment.charset,
+			sender:this.messagePanel.data.sender
 		    },
 		    callback: function(options, success, response)
 		    {
