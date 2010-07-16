@@ -105,5 +105,5 @@ GO.calendar.lang.daynames[6]='Zaterdag';
 
 GO.calendar.lang.categories='Categorieën';
 GO.calendar.lang.category='Categorie';
-GO.calendar.lang.globalCategory='Globale category';
+GO.calendar.lang.globalCategory='Globale categorie';
 GO.calendar.lang.selectCategory='Selecteer categorie';
