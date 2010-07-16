@@ -909,7 +909,7 @@ try {
 							}
 
 							$account_expanded = $email->is_account_expanded($email2->f('id'), $GO_SECURITY->user_id);
-							$children = get_mailbox_nodes($email2->f('id'), 0);
+							$children = ($account_expanded) ? get_mailbox_nodes($email2->f('id'), 0) : false;
 							
 							$imap->disconnect();
 						}else {
