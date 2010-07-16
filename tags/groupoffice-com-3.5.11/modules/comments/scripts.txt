@@ -1,4 +1,0 @@
-modules/comments/CommentDialog.js
-modules/comments/CommentsGrid.js
-modules/comments/CommentsTemplate.js
-modules/comments/CommentsBrowser.js
