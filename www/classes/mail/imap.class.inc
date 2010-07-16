@@ -1671,7 +1671,12 @@ class imap extends imap_bodystruct {
 		$this->clean($mailbox, 'mailbox');
 		$this->clean($new_mailbox, 'mailbox');
 
-		$children = $this->get_folders($mailbox);;
+		$delim = $this->get_mailbox_delimiter();
+
+		$children = $this->get_folders($mailbox.$delim);
+
+		//go_debug($children);
+		//throw new Exception('test');
 
 		$command = 'RENAME "'.$this->addslashes($this->utf7_encode($mailbox)).'" "'.
 						$this->addslashes($this->utf7_encode($new_mailbox)).'"'."\r\n";
