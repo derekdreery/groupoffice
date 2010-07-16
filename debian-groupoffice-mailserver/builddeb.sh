@@ -13,7 +13,7 @@ fi
 
 VERSION=`cat ../www/classes/base/config.class.inc.php | grep '$version' | sed -e 's/[^0-9\.]*//g'`
 
-if [[ $VERSION =~ ^([0-9]\.[0-9])\.[0-9]$ ]]; then
+if [[ $VERSION =~ ^([0-9]\.[0-9])\.[0-9]{1,2}$ ]]; then
 	MAJORVERSION=${BASH_REMATCH[1]}
 fi
 
