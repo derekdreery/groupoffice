@@ -347,7 +347,7 @@ class gnupg{
 
 		stream_set_blocking($this->pipes[GPGSTDIN], 0 );
 		//stream_set_blocking($this->pipes[GPGSTDOUT], 0 );
-		stream_set_blocking($this->pipes[GPGSTDERR], 2 );
+		stream_set_blocking($this->pipes[GPGSTDERR], 0 );
 		stream_set_blocking($this->pipes[STATUS_FD],0 );
 		stream_set_blocking($this->pipes[PASSPHRASE_FD], 0 );
 
