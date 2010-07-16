@@ -303,6 +303,10 @@ a.normal-link:hover{
 	background-image:url('images/16x16/filetypes/pdf.png') !important;
 }
 
+.filetype-asc, .filetype-gpg,.filetype-pgp{
+	background-image:url('images/16x16/filetypes/gnupg.png') !important;
+}
+
 .filetype-docx,.filetype-doc, .filetype-sxw, .filetype-odt {
 	background-image:url('images/16x16/filetypes/document.png') !important;
 }

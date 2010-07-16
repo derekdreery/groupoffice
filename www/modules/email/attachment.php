@@ -45,14 +45,38 @@ if($GO_MODULES->has_module('gnupg') && ($extension=='pgp' || $extension=='gpg'))
 	$gnupg = new gnupg();
 
 	$tmpfile = $GO_CONFIG->tmpdir.$_REQUEST['filename'];
+	
 	$_REQUEST['filename']=File::strip_extension($_REQUEST['filename']);
-	$file = $GO_CONFIG->tmpdir.$_REQUEST['filename'];
+	$file=$GO_CONFIG->tmpdir.$_REQUEST['filename'];
+	$fp = fopen($tmpfile, 'w+');
 
-	file_put_contents($tmpfile, $file);
+	if(!$fp)
+		die('Could not write to temp file');
+
+	$imap->get_message_part_start($_REQUEST['uid'], $_REQUEST['imap_id']);
+
+	while($line = $imap->get_message_part_line()){
+
+		switch(strtolower($_REQUEST['encoding'])) {
+			case 'base64':
+				$line=base64_decode($line);
+				break;
+			case 'quoted-printable':
+				$line= quoted_printable_decode($line);
+				break;
+		}
+
+		if(!fputs($fp, $line))
+			die('Could not write to temp file');
+	}
+
+	fclose($fp);
 
 	$passphrase=isset($_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$_REQUEST['sender']] : '';
 
 	$gnupg->decode_file($tmpfile, $file, $passphrase);
+	unlink($tmpfile);
+	
 
 	//$file = file_get_contents($outfile);
 }else
@@ -84,6 +108,7 @@ header('Content-Transfer-Encoding: binary');
 if(isset($file)){
 	//tmp file from gnupg
 	readfile($file);
+	unlink($file);
 }elseif(isset($data)){
 	echo $data;
 }else
