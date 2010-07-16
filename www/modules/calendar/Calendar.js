@@ -240,6 +240,7 @@ GO.calendar.MainPanel = function(config){
 			calendars: cal_ids,
 			calendar_name: records[0].data.name,
 			title:title,
+			merge:true,
 			owncolor:true
 		});
 		
