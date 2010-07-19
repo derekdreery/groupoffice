@@ -84,8 +84,13 @@ class groupoffice_connector {
 					'post_status' => 'publish'
 			);
 
+			if(!empty($record['post_id'])){
+				$existing_post = wp_get_single_post($record['post_id']);
+				var_dump($existing_post);
+			}
 
-			if (empty($record['post_id']) || !wp_get_single_post($record['post_id'])) {
+			if (empty($record['post_id']) || !$existing_post) {
+				
 				$post_id = wp_insert_post($post);
 			} else {
 				$post_id = $post['ID'] = $record['post_id'];
