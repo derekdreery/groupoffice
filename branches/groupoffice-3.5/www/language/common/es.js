@@ -103,7 +103,7 @@ GO.lang.locations = 'Path';
 GO.lang.folder = 'Carpeta';
 GO.lang.folders = 'Carpetas';
 
-GO.lang.up = 'Subir';
+GO.lang.up = 'Arriba';
 GO.lang.fileExists = 'El archivo existe';
 GO.lang.overwriteFile = '¿Desea sobrescribir el archivo \'{file}\'?';
 
@@ -130,7 +130,7 @@ GO.lang.cmdAddPlusNew = 'Adición + nuevos';
 GO.lang.cmdSavePlusNew='Guardar + nuevos';
 GO.lang.cmdSave = 'Guardar';
 GO.lang.cmdEdit = 'Editar';
-GO.lang.cmdLink = 'Vincular';
+GO.lang.cmdLink = 'Agregar vinculo';
 GO.lang.cmdUnlink = 'Eliminar el vinculo';
 GO.lang.cmdClose = 'Cerrar';
 GO.lang.cmdSettings = 'Opciones';
@@ -163,9 +163,9 @@ GO.lang.cut = 'Cortar';
 GO.lang.copy = 'Copiar';
 GO.lang.compress = 'Comprimir';
 GO.lang.decompress = 'Descomprimir';
-GO.lang.upload = 'Subir';
+GO.lang.upload = 'Subir archivo';
 GO.lang.download = 'Descargar';
-GO.lang.uploadFiles = 'Subir Archivios';
+GO.lang.uploadFiles = 'Subir Archivos';
 
 GO.lang.displayingItems = 'Viendo {0} - {1} de {2}';
 GO.lang.strNoItems = 'No hay artículos para mostrar';
@@ -270,8 +270,8 @@ GO.lang.strMax = 'Máximo';
 
 GO.lang.settings='Opciones';
 
-GO.lang.latestLinks='Último links'
-GO.lang.cmdBrowseLinks = 'Navegar links';
+GO.lang.latestLinks='Últimos vinculos';
+GO.lang.cmdBrowseLinks = 'Ver vinculos';
 
 GO.lang.administration='Administración';
 GO.lang.extra='Extras';
@@ -295,4 +295,37 @@ GO.lang.spellcheckNoErrors='El correo tiene [{1}] error(es)';
 GO.lang.spellcheckAsk='¿Enviar sin ejecutar el corrector?';
 
 GO.lang.today='Hoy';
+GO.lang.newFolder='Nueva carpeta';
+GO.lang.selectAll='Seleccionar todo';
+GO.lang.createdBy='Creado por';
 
+GO.lang.disabled='Deshabilitado';
+GO.lang.changesWillBeLost='Ud ha hecho cambios en esta ventana. Presione cancelar y guarde sus cambios o OK para continuar y perder los cambios.';
+GO.lang.strAddressFormat= 'Formato de dirección';
+GO.lang.cmdSaveAs= 'Guardar como';
+GO.lang.cmdInsert='Insertar';
+GO.lang.strRequestError= 'No se pudo conectar al servidor. Por favor verifique su conexión a internet.';
+GO.lang.selectWeek='Seleccione semana';
+GO.lang.strSelectFile='Seleccione archivo';
+GO.lang.value= 'Valor';
+GO.lang.displayingItemsShort='Total: {2}';
+GO.lang.image='Imagen';
+GO.lang.insertImage='Insertar imagen en el texto';
+GO.lang.item='item';
+GO.lang.items='items';
+GO.lang.more='Mas';
+GO.lang.totals='Totales';
+GO.lang.age='Edad';
+GO.lang.selectFolder= 'Seleccione una carpeta por favor';
+GO.lang.userGroups='Grupos de usuarios';
+GO.lang.firebugDetected="Atención! Firebug Add-on detectado";
+GO.lang.firebugWarning="El Firebug Add-on suele alentar esta aplicación. Por favor no lo use en producción.";
+GO.lang.removeFormatting='Quitar Formato';
+GO.lang.insertHorizontalRule='Insertar Regla Horizontal';
+GO.lang.insertHRtext='Ingrese el ancho de la Regla en porcentaje<br/> seguido por el signo de %, o para<br/> ingresar un ancho fijo omita el signo de %.';
+GO.lang.width='Ancho';
+GO.lang.thankyou='Gracias';
+GO.lang.applyMultiselect='Aplicar selección multipel';
+GO.lang.debugModeDetected="Atención! Modo debug activado";
+GO.lang.debugModeWarning="Use $config['debug']=true; solamente en desarrollo y para solucionar problemas. Esto hace Group-Office muy lento";
+GO.lang.noItemSelectedWarning='Seleccione al menos un ítem por favor';

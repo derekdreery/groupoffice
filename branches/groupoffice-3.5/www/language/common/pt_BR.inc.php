@@ -14,7 +14,7 @@ Para suporte entre em contato com o seu webmaster:
 Para mais informações sobre o Group-Office visite:
 http://www.group-office.com
 
-Group-Office é desenvolvido pela Intermesh. Para mais informa~ções sobre a Intermesh visite:
+O Group-Office é desenvolvido pela Intermesh. Para mais informações sobre a Intermesh visite:
 http://www.intermesh.nl/en/';
 
 $lang['common']['totals']='Totais';
@@ -30,8 +30,8 @@ $lang['common']['moduleRequired']='O módulo %s é necessário para esta funcion
 $lang['common']['loadingCore']= 'Carregando sistema';
 $lang['common']['loadingLogin'] = 'Carregando caixa de diálogo';
 $lang['common']['renderInterface']='Renderizando interface';
-$lang['common']['loadingModuleis'] = 'Carregando módulos';
 $lang['common']['loadingModule'] = 'Carregando módulo';
+$lang['common']['loadingModules'] = 'Carregando módulos';
 
 $lang['common']['loggedInAs'] = 'Logado como ';
 $lang['common']['search']='Procurar';
@@ -74,7 +74,7 @@ $lang['common']['postAddress'] = 'Endereço (postal)';
 $lang['common']['postAddressNo'] = 'Número da casa (postal)';
 $lang['common']['postCity'] = 'Cidade (postal)';
 $lang['common']['postState'] = 'Estado (postal)';
-$lang['common']['postCountry'] = 'Pais (postal)';
+$lang['common']['postCountry'] = 'País (postal)';
 $lang['common']['postZip'] = 'CEP (postal)';
 $lang['common']['visitAddress'] = 'Endereço de visita';
 $lang['common']['postAddressHead'] = 'Endereço postal';
@@ -83,7 +83,7 @@ $lang['common']['user'] = 'Usuário';
 $lang['common']['username'] = 'Usuário';
 $lang['common']['password'] = 'Senha';
 $lang['common']['authcode'] = 'Código de autorização';
-$lang['common']['country'] = 'Pais';
+$lang['common']['country'] = 'País';
 $lang['common']['address_format']='Formato do endereço';
 $lang['common']['state'] = 'Estado';
 $lang['common']['city'] = 'Cidade';
@@ -103,7 +103,7 @@ $lang['common']['workFax'] = 'Fax (trabalho)';
 $lang['common']['homepage'] = 'Homepage';
 $lang['common']['workAddress'] = 'Endereço (trabalho)';
 $lang['common']['workZip'] = 'CEP (trabalho)';
-$lang['common']['workCountry'] = 'Pais (trabalho)';
+$lang['common']['workCountry'] = 'País (trabalho)';
 $lang['common']['workState'] = 'Estado (trabalho)';
 $lang['common']['workCity'] = 'Cidade (trabalho)';
 $lang['common']['today'] = 'Hoje';
@@ -173,14 +173,14 @@ $lang['common']['admin']='Administrador';
 
 $lang['common']['beginning']='Saudações';
 
-$lang['common']['max_emails_reached']= "O número máximo de e-mail para o servidor SMTP %s de %s por dia foi atingido.";
-$lang['common']['usage_stats']='Uso de disco por %s';
+$lang['common']['max_emails_reached']= "O número máximo de e-mails para o servidor SMTP %s, que é de %s por dia, foi atingido.";
+$lang['common']['usage_stats']='Uso de disco em %s';
 $lang['common']['usage_text']='Esta instalação do Group-Office está utilizando';
 
 
 $lang['common']['database']='Banco de dados';
 $lang['common']['files']='Arquivos';
-$lang['common']['email']='E-mail';
+$lang['common']['email']='E-mails';
 $lang['common']['total']='Total';
 
 
@@ -200,7 +200,7 @@ $lang['common']['no']='Não';
 
 $lang['common']['system']='Sistema';
 
-$lang['common']['goAlreadyStarted']='O Group-Office já foi inicilizado. A janela requisitada está carregada no Group-Office. Você pode fechar esta janela ou continuar a trabalhar no Group-Office.';
+$lang['common']['goAlreadyStarted']='O Group-Office já foi inicializado. A janela requisitada está carregada no Group-Office. Você pode fechar esta janela ou continuar a trabalhar no Group-Office.';
 $lang['common']['no']='Não';
 
 $lang['commmon']['logFiles']='Arquivos de log';
@@ -229,23 +229,4 @@ $lang['common']['createdBy']='Criado por';
 $lang['common']['none']='Nenhum';
 $lang['common']['alert']='Alerta';
 $lang['common']['theFolderAlreadyExists']='Uma pasta com este nome já existe';
-
-
-
-$lang['common']['lost_password_subject']='Nova senha';
-$lang['common']['lost_password_body']='%s,<br />
-<br />
-Sua solicitação de uma nova senha para %s.<br />
-<br />
-Seus novos dados de login são:<br />
-<br />
-Username: %s<br />
-Password: %s';
-
-$lang['common']['lost_password_error']='E-mail fornecido não foi encontrado.';
-$lang['common']['lost_password_success']='Uma nova senha foi enviada para seu e-mail.';
-
-/* by alan hoffmeister */
-
-$lang['common']['loadingModules']='Carregando módulos';
 

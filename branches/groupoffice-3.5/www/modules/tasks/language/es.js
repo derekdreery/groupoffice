@@ -1,4 +1,3 @@
-GO.tasks.lang.reminder= 'Recordatorio';
 GO.tasks.lang.task = 'Tarea';
 GO.tasks.lang.noTask = 'No hay tareas para mostrar';
 GO.tasks.lang.tasks = 'Tareas';
@@ -21,7 +20,6 @@ GO.tasks.lang.atDays = 'Diaria';
 GO.tasks.lang.repeatUntil = 'Repetir hasta';
 GO.tasks.lang.repeatForever = 'Repetir para siempre';
 GO.tasks.lang.recurrence = 'Repetición';
-GO.tasks.lang.reminder = 'Recordatorio';
 GO.tasks.lang.options = 'Opciones';
 GO.tasks.lang.createLink = 'Crear un enlace';
 GO.tasks.lang.startsAt='Inicio';
@@ -31,3 +29,11 @@ GO.tasks.lang.scheduleCall='Agendar una llamada telefónica';
 GO.tasks.lang.call='Llamada telefónica';
 
 GO.tasks.lang.selectIcalendarFile='Seleccione un archivo de icalendar (*.ics)';
+
+GO.tasks.lang.completedAt='Completado el';
+GO.tasks.lang.taskDefaults='Seteos por defecto para las tareas';
+GO.tasks.lang.daysBeforeStart='Dias antes de comenzar';
+GO.tasks.lang.defaultTasklist='Lista de tareas por defecto';
+GO.tasks.lang.visibleTasklists='Listas de tareas visibles';
+GO.tasks.lang.visible='Visible';
+GO.tasks.lang.continueTask='Continuar tarea';

@@ -84,3 +84,13 @@ GO.users.lang.popupNotification='Mostrar ventana de notificación de tareas o cu
 
 GO.users.lang.lastName = 'Apellido';
 GO.users.lang.firstName = 'Nombre';
+
+GO.users.lang.sendInvitation='Enviar invitación';
+GO.users.lang.useModule= 'Usar';
+GO.users.lang.manageModule= 'Administrar';
+GO.users.lang.numberFormat='Formato de números';
+GO.users.lang.importExport='Importar / Exportar';
+GO.users.lang.listSeparator='Separador de lista';
+GO.users.lang.textSeparator='Separador de texto';
+GO.users.lang.deleteWarning='ATENCIÓN!!! Toda la información del usuario incluyendo lista de contactos, calendarios, etc. sera borrada';
+GO.users.lang.contactInfo='Información del contacto';

@@ -2,19 +2,12 @@
  * Copy everything below for translations
  */
 
-
-
-
-
-
-
-
 GO.tasks.lang.task = 'Tarefas';
 GO.tasks.lang.noTask = 'Sem tarefas para exibir';
 GO.tasks.lang.tasks = 'Tarefas';
 GO.tasks.lang.addTask = 'Adicionar tarefa...';
 GO.tasks.lang.tasklist = 'Lista de Tarefas'
-GO.tasks.lang.tasklists = 'Lista de Tarefas';
+GO.tasks.lang.tasklists = 'Listas de Tarefas';
 GO.tasks.lang.showCompletedTasks = 'Exibir tarefas concluídas';
 GO.tasks.lang.filter = 'Filtro';
 GO.tasks.lang.dueDate = 'Data finalização';
@@ -46,4 +39,5 @@ GO.tasks.lang.visible='Visivel';
 GO.tasks.lang.selectIcalendarFile='Selecione um arquivo icalendar (*.ics)';
 
 GO.tasks.lang.continueTask='Continuar tarefa';
+GO.tasks.lang.completedAt='Completado em';
 

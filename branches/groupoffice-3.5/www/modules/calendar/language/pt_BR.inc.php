@@ -51,7 +51,7 @@ $lang['calendar']['and']='e';
 $lang['calendar']['repeats'] = 'Repetir a cada %s';
 $lang['calendar']['repeats_at'] = 'Repetir a cada %s no %s';//eg. Repeats every month at the first monday
 $lang['calendar']['repeats_at_not_every'] = 'Repetir a cada %s %s no %s';//eg. Repeats every 2 weeks at monday
-$lang['calendar']['until']='até'; 
+$lang['calendar']['until']='até';
 
 $lang['calendar']['not_invited']='Você foi convidado para este evento. Você pode precisar se logar como um usuário diferente.';
 
@@ -84,3 +84,21 @@ $lang['calendar']['open_resource']='Recurso disponível';
 
 $lang['calendar']['resource_mail_subject']='Recurso \'%s\' agendado para \'%s\' em \'%s\'';//%s is resource name, %s is event name, %s is start date
 
+$lang['calendar']['resource_mail_body']='%s fez um agendamento para o recurso \'%s\'. Você é o mantenedor do recurso. Por favor abra o agendamento para aprovar ou reprová-lo.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['resource_modified_mail_subject']='Recurso \'%s\' agendado por \'%s\' para \'%s\'';//%s is resource name, %s is event name, %s is start date
+$lang['calendar']['resource_modified_mail_body']='%s modificou o agendamento para o recurso \'%s\'. Você é o mantenedor deste recurso. Por favor abra o agendamento para aprovar ou reprová-lo.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['your_resource_modified_mail_subject']='Seu agendamento para \'%s\' em \'%s\' com status \'%s\' foi modificado';//is resource name, %s is event name, %s is start date
+$lang['calendar']['your_resource_modified_mail_body']='%s alterou seu agendamento para o recurso \'%s\'.';
+$lang['calendar']['your_resource_accepted_mail_subject']='Seu agendamento para \'%s\' em \'%s\' foi aceito';//%s is resource name, %s is start date
+$lang['calendar']['your_resource_accepted_mail_body']='%s aceitou seu agendamento para o recurso \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['your_resource_declined_mail_subject']='Seu agendamento para \'%s\' em \'%s\' foi recusado';//%s is resource name, %s is start date
+$lang['calendar']['your_resource_declined_mail_body']='%s recusou seu agendamento para o recurso \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['birthday_name']='Aniversário: {NAME}';
+$lang['calendar']['birthday_desc']='{NAME} está fazendo {AGE} anos hoje';
+$lang['calendar']['unauthorized_participants_write']='Você não possui permissões suficientes para agentar um compromisso para os seguintes usuários:<br /><br />{NAMES}<br /><br />Você pode enviar um convite para eles, dessa forma eles poderão escolher se querem aceitar ou recusar o convite.';
+$lang['calendar']['noCalSelected']= 'Nenhum calendário foi selecionado para esta visualização. Selecione pelo menos um calendário na Administração.';
+$lang['calendar']['month_times'][1]='o primeiro';
+$lang['calendar']['month_times'][2]='o segundo';
+$lang['calendar']['month_times'][3]='o terceiro';
+$lang['calendar']['month_times'][4]='o quarto';
+$lang['calendar']['month_times'][5]='o quinto';

@@ -8,3 +8,4 @@ $lang['summary']['announcements']='Comunicaciones';
 $lang['summary']['announcement']='Comunicación';
 $lang['summary']['announcements']='Comunicaciones';
 
+$lang['summary']['default_rss_title']='Novedades';
