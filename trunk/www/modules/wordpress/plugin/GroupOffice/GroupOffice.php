@@ -88,7 +88,7 @@ class groupoffice_connector {
 				$existing_post = wp_get_single_post($record['post_id']);				
 			}
 
-			if (empty($record['post_id']) || !empty($existing_post->ID)) {				
+			if (empty($record['post_id']) || empty($existing_post->ID)) {				
 				$post_id = wp_insert_post($post);
 			} else {
 				$post_id = $post['ID'] = $record['post_id'];
