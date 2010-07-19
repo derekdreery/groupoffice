@@ -79,12 +79,13 @@ class groupoffice_connector {
 
 
 			$post = array(
-					'post_content' => $record['content'],
-					'post_title' => $record['title'],
+					'post_content' => mysql_escape_string($record['content']),
+					'post_title' => mysql_escape_string($record['title']),
 					'post_status' => 'publish'
 			);
 
-			if (empty($record['post_id'])) {
+
+			if (empty($record['post_id']) || !wp_get_single_post($record['post_id'])) {
 				$post_id = wp_insert_post($post);
 			} else {
 				$post_id = $post['ID'] = $record['post_id'];
