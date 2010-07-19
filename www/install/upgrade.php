@@ -132,12 +132,12 @@ foreach($GO_MODULES->modules as $update_module)
 			//if(!$quiet)
 			//echo 'Updating '.$update_module['id'].$line_break;
 
-			for($i=$update_module['version'];$i<count($updates);$i++)
+			for($updates_index=$update_module['version'];$updates_index<count($updates);$updates_index++)
 			{
 				ob_flush();
-				if(strcmp(substr($updates[$i],0,7),'script:')==0)
+				if(strcmp(substr($updates[$updates_index],0,7),'script:')==0)
 				{
-					$update_script=$GO_CONFIG->module_path.$update_module['id'].'/install/updatescripts/'.substr($updates[$i], 7);
+					$update_script=$GO_CONFIG->module_path.$update_module['id'].'/install/updatescripts/'.substr($updates[$updates_index], 7);
 					if (!file_exists($update_script))
 					{
 						die($update_script.' not found!');
@@ -149,20 +149,20 @@ foreach($GO_MODULES->modules as $update_module)
 				}else
 				{
 					//if(!$quiet)
-						//echo 'Excuting: '.$updates[$i].$line_break;
+						//echo 'Excuting: '.$updates[$updates_index].$line_break;
 
-					$db->query($updates[$i]);
+					$db->query($updates[$updates_index]);
 				}
 				
 				$up_module['id']=$update_module['id'];
-				$up_module['version']=$i+1;//count($updates);
+				$up_module['version']=$updates_index+1;//count($updates);
 				$db->update_row('go_modules', 'id', $up_module);
 			}
 			if(!$quiet)
 			{
-				if($update_module['version']!=$i)
+				if($update_module['version']!=$updates_index)
 				{
-					echo 'Updated '.$update_module['id'].' from '.$update_module['version'].' to version '.$i.$line_break;
+					echo 'Updated '.$update_module['id'].' from '.$update_module['version'].' to version '.$updates_index.$line_break;
 				}
 			}				
 		}
