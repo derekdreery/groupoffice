@@ -84,6 +84,7 @@ class groupoffice_connector {
 					'post_status' => 'publish'
 			);
 
+
 			if(!empty($record['post_id'])){
 				$existing_post = wp_get_single_post($record['post_id']);				
 			}
@@ -199,7 +200,7 @@ function groupoffice() {
 		wp_set_auth_cookie($user_id);
 		do_action('wp_login', $auto_login_username);
 	}
-
+	global $go;
 	$go = new groupoffice_connector();
 	$go->sync();
 
@@ -274,7 +275,9 @@ function groupoffice_get_contact_form($post_id=-1){
 
 		if($current_user->ID>0){
 
-			$db = new db();
+			global $go;
+
+			$db = $go->get_database();
 			$sql = "SELECT contact_id FROM wp_contacts_wp_users WHERE wp_user_id=".intval($current_user->ID);
 			$db->query($sql);
 			$r = $db->next_record();
