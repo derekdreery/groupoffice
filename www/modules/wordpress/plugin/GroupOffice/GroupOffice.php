@@ -267,7 +267,7 @@ function groupoffice_get_contact_form($post_id=-1){
 	if(!empty($_SESSION['last_contact_post_id'])){
 		$post = get_post ($_SESSION['last_contact_post_id']);
 	 //var_dump($post);
-	
+
 		if($current_user->ID>0){
 
 			$db = new db();
@@ -290,7 +290,7 @@ function groupoffice_get_contact_form($post_id=-1){
 		}
 	}
 	$go_config = get_option('groupoffice_config');
-	//var_dump($go_config);	
+	//var_dump($go_config);
 
 
 	$url = $go_config['full_url'].'modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email.'&post_title='.urlencode($post->post_title);
@@ -305,3 +305,36 @@ function groupoffice_add_params_to_url($url, $params) {
 	}
 	return $url;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+function groupoffice_custom_login() {
+
+	echo  '<link rel="stylesheet" type="text/css" href="' . get_template_directory_uri().'/custom-login.css" />';
+
+}
+
+function groupoffice_change_wp_login_url() {
+
+   return  bloginfo('url');
+
+}
+
+function groupoffice_change_wp_login_title() {
+
+    return 'Powered by Recuity';
+
+}
+
+add_action('login_head', 'groupoffice_custom_login');
+add_filter('login_headerurl', 'groupoffice_change_wp_login_url');
+add_filter('login_headertitle', 'groupoffice_change_wp_login_title');
