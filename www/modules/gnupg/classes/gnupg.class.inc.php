@@ -346,7 +346,11 @@ class gnupg{
 		$p = proc_open($complete_cmd,$this->fd, $this->pipes);
 
 		stream_set_blocking($this->pipes[GPGSTDIN], 0 );
-		//stream_set_blocking($this->pipes[GPGSTDOUT], 0 );
+
+		//don't know why but this is necessary sometimes
+		if(strpos($complete_cmd,' -d ')!==false)
+			stream_set_blocking($this->pipes[GPGSTDOUT], 0 );
+
 		stream_set_blocking($this->pipes[GPGSTDERR], 0 );
 		stream_set_blocking($this->pipes[STATUS_FD],0 );
 		stream_set_blocking($this->pipes[PASSPHRASE_FD], 0 );
