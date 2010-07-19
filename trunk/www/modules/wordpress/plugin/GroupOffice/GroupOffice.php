@@ -16,7 +16,7 @@
 //ini_set('error_reporting', E_ALL);
 
 
-$go_config = get_option('groupoffice_config');
+/*$go_config = get_option('groupoffice_config');
 if(isset($go_config['config_file'])){
 	require($go_config['config_file']);
 	define('NO_EVENTS', $go_config['config_file']);
@@ -24,8 +24,9 @@ if(isset($go_config['config_file'])){
 	require($config['root_path'].'Group-Office.php');
 	//ini_set('display_errors', 0);
 	ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-}
-
+}*/
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
 class groupoffice_connector {
 
@@ -137,13 +138,23 @@ function groupoffice() {
 
 	global $current_user;
 
+	$GO_SID = false;
+
+	if(isset($_REQUEST['GO_SID']))
+		$GO_SID=$_REQUEST['GO_SID'];
+	//elseif(isset($_SESSION['GO_SESSION']['GO_SID']))
+		//$GO_SID=$_SESSION['GO_SESSION']['GO_SID'];
+
+	//var_dump($GO_SID);
+
 //import Group-Office session data
-	if (isset($_REQUEST['GO_SID'])) {
-		$fname = session_save_path() . "/sess_" . $_REQUEST['GO_SID'];
+	if ($GO_SID) {
+		$fname = session_save_path() . "/sess_" . $GO_SID;
 		if (file_exists($fname)) {
 			$data = file_get_contents($fname);
 			$data = groupoffice_unserializesession($data);
 			$_SESSION['GO_SESSION'] = $data['GO_SESSION'];
+			$_SESSION['GO_SESSION']['GO_SID']=$GO_SID;
 
 			$site_data['full_url'] = $_SESSION['GO_SESSION']['full_url'];
 			$site_data['config_file'] = $_SESSION['GO_SESSION']['config_file'];
@@ -153,14 +164,24 @@ function groupoffice() {
 //var_dump($_SESSION['GO_SESSION']);
 		}else
 		{
-		exit("Can't read Group-Office session data");
+			exit("Can't read Group-Office session data");
 		}
 	}
 
+	$auto_login_username =  false;
+
+	//var_dump($_SESSION['GO_SESSION']);
+
+	if(isset($_SESSION['GO_SESSION']['wp_autologin_username']))
+		$auto_login_username=$_SESSION['GO_SESSION']['wp_autologin_username'];
+	elseif(isset($_SESSION['GO_SESSION']['username']))
+		$auto_login_username=$_SESSION['GO_SESSION']['username'];
+
+
 //Create and login Group-Office user
-	if (isset($_SESSION['GO_SESSION']['username']) && (!is_user_logged_in() || $current_user->user_login != $_SESSION['GO_SESSION']['username'])) {
+	if ($auto_login_username && (!is_user_logged_in() || $current_user->user_login != $auto_login_username)) {
 //get user's ID
-		$user = get_userdatabylogin($_SESSION['GO_SESSION']['username']);
+		$user = get_userdatabylogin($auto_login_username);
 
 		if ($user) {
 			$user_id = $user->ID;
@@ -170,15 +191,15 @@ function groupoffice() {
 
 #		var_dump($_SESSION['GO_SESSION']);
 
-		wp_set_current_user($user_id, $_SESSION['GO_SESSION']['username']);
+		wp_set_current_user($user_id, $auto_login_username);
 		wp_set_auth_cookie($user_id);
-		do_action('wp_login', $_SESSION['GO_SESSION']['username']);
+		do_action('wp_login', $auto_login_username);
 	}
 
 	$go = new groupoffice_connector();
 	$go->sync();
 
-	if (isset($_REQUEST['GO_SID'])) {
+	if (isset($_REQUEST['GO_SID']) && !isset($_REQUEST['no_admin_redirect'])) {
 //direct link to wp-admin didn't work so we go to the main page and redirect
 		wp_redirect(admin_url());
 		exit();
@@ -246,7 +267,7 @@ function groupoffice_get_contact_form($post_id=-1){
 	if(!empty($_SESSION['last_contact_post_id'])){
 		$post = get_post ($_SESSION['last_contact_post_id']);
 	 //var_dump($post);
-
+	
 		if($current_user->ID>0){
 
 			$db = new db();
@@ -269,9 +290,18 @@ function groupoffice_get_contact_form($post_id=-1){
 		}
 	}
 	$go_config = get_option('groupoffice_config');
-	//var_dump($go_config);
+	//var_dump($go_config);	
 
 
 	$url = $go_config['full_url'].'modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email.'&post_title='.urlencode($post->post_title);
 	return  '<iframe style="width:600px;height:800px" src="'.$url.'"></iframe>';
+}
+
+function groupoffice_add_params_to_url($url, $params) {
+	if (strpos($url, '?') === false) {
+		$url .= '?'.$params;
+	} else {
+		$url .= '&amp;'.$params;
+	}
+	return $url;
 }
