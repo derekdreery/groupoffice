@@ -1,12 +1,12 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -24,7 +24,7 @@ $lang['common']['addressbookAlreadyExists'] = 'O contato que você está criando
 $lang['addressbook']['notIncluded'] = 'Não importe';
 
 $lang['addressbook']['comment'] = 'Comentário';
-$lang['addressbook']['bankNo'] = 'Nº banco'; 
+$lang['addressbook']['bankNo'] = 'Nº banco';
 $lang['addressbook']['vatNo'] = 'Nº VAT';
 $lang['addressbook']['contactsGroup'] = 'Grupo';
 
@@ -46,6 +46,5 @@ $lang['addressbook']['clickHereToView']='Clique aqui para visulizar o contato';
 $lang['addressbook']['contactFromAddressbook']='%s';
 $lang['addressbook']['companyFromAddressbook']='%s';
 $lang['addressbook']['defaultSalutation']='Prezado [Sr./Sra.] {first_name} {last_name}';
-
 
 ?>

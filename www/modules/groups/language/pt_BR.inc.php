@@ -6,4 +6,5 @@ $lang['groups']['description'] = 'Módulo administração; Gerenciar grupos de u
 $lang['groups']['noDeleteAdmins'] = 'Você não pode apagar o grupo Admins';
 $lang['groups']['noDeleteEveryone'] = 'Você não pode apagar o grupo Everyone';
 $lang['groups']['groupNameAlreadyExists'] = 'O grupo que você quer criar já existe';
+$lang['groups']['dontRemoveAdmin']='Você não pode remover o administrador do grupo administradores';
 ?>

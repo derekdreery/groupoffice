@@ -13,4 +13,6 @@ $lang['tools']['index_files']='Indeixar todos os arquivos';
 
 $lang['tools']['buildsearchcache']='Criar índice de busca';
 $lang['tools']['checkmodules']='Verificar módulos';
+
+$lang['tools']['resetState']='Reiniciar o estado das janelas, grids, etc.';
 ?>
