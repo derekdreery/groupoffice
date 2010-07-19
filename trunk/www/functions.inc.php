@@ -185,6 +185,9 @@ function go_debug($text, $config=false)
 			$text = var_export($text, true);
 		}
 
+		if($text=='')
+			$text = '(empty string)';
+
 		if(PHP_SAPI=='cli')
 		{
 			echo 'DEBUG: '.$text."\n\n";

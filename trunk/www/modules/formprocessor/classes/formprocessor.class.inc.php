@@ -8,6 +8,9 @@ class formprocessor{
 	var $user_groups=array();
 	var $visible_user_groups=array();
 
+	//will be replaced on send of confirmation
+	var $confirmation_replacements=array();
+
 	function localize_dbfields($post_fields)
 	{
 		global $lang, $GO_LANGUAGE;
@@ -358,11 +361,21 @@ class formprocessor{
 				$email = file_get_contents($path);
 				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 				$swift = new GoSwiftImport($email);
+				$body=$swift->body;
+
+				foreach($this->confirmation_replacements as $key=>$value){
+					$body = str_replace('{'.$key.'}', $value, $body);
+				}
+
 				if(isset($GO_MODULES->modules['mailings'])){
 					require_once($GO_MODULES->modules['mailings']['path'].'classes/templates.class.inc.php');
 					$tp = new templates();
-					$swift->set_body($tp->replace_contact_data_fields($swift->body, $this->contact_id, false), 'html');
+
+					$body=$tp->replace_contact_data_fields($body, $this->contact_id, false);
 				}
+
+				$swift->set_body($body, 'html');
+
 				$swift->set_to($_POST['email']);
 				$swift->sendmail();
 			}

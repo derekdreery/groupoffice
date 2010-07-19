@@ -26,6 +26,8 @@
  * @access public
  */
 
+global $GO_THEME, $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_GROUPS, $GO_USERS;
+
 $root = dirname(__FILE__).'/';
 require_once($root.'functions.inc.php');
 require($root.'classes/base/config.class.inc.php');
