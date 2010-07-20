@@ -1418,7 +1418,19 @@ Ext.ux.form.SuperBoxSelect = Ext.extend(Ext.ux.form.SuperBoxSelect,Ext.form.Comb
 		}
 
 		Ext.each(values,function(val){
-			var record = this.findRecord(this.valueField, val);
+
+			/*
+			 * values stored in <valueField>:<displayField> format. Spit them
+			 * and create missing records.
+			 */
+			var d = {}
+			d[this.displayField]=val;
+			if(this.valueField!=this.displayField){
+				var arr = val.split(':');
+				d[this.valueField]=val;
+				d[this.displayField]=arr[1];
+			}
+			var record = this.findRecord(this.valueField, val) || this.createRecord(d);
 			if(record){
 				this.addRecord(record);
 			}else if(this.mode === 'remote'){
