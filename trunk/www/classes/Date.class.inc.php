@@ -105,9 +105,12 @@ class Date {
 	}
 
 
-	public static function format_long_date($time){
+	public static function format_long_date($time,$add_time=true){
 		global $lang;
-		return $lang['common']['full_days'][date('w', $time)].' '.date('d', $time).' '.$lang['common']['months'][date('n', $time)].' '.date('Y - G:i', $time);
+		if ($add_time)
+			return $lang['common']['full_days'][date('w', $time)].' '.date('d', $time).' '.$lang['common']['months'][date('n', $time)].' '.date('Y - G:i', $time);
+		else
+			return $lang['common']['full_days'][date('w', $time)].' '.date('d', $time).' '.$lang['common']['months'][date('n', $time)].' '.date('Y', $time);
 	}
 	/**
 	 * Converts a Group-Office date to unix time.
