@@ -12,7 +12,7 @@ Ext.ux.FieldHelp = Ext.extend(Object, (function(){
 			this.actionMode = 'wrap';
 			this.onResize = this.onResize.createSequence(syncInputSize);
 		}
-		this.wrap[this.helpAlign == 'top' ? 'insertFirst' : 'createChild']({
+		this.helpTextEl = this.wrap[this.helpAlign == 'top' ? 'insertFirst' : 'createChild']({
 			cls: 'x-form-helptext',
 			html: this.helpText
 		});
