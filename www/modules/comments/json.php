@@ -20,7 +20,7 @@ try{
 	switch($task)
 	{
 		case 'comment':
-			$comment = $comments->get_comment(($_REQUEST['comment_id']));
+			$comment = $comments->get_comment($_REQUEST['comment_id']);
 			$user = $GO_USERS->get_user($comment['user_id']);
 			$comment['user_name']=String::format_name($user);
 			$comment['mtime']=Date::get_timestamp($comment['mtime']);
