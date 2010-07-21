@@ -373,3 +373,5 @@ GO.lang.confirmSelectLotsOfItems='This action will select {count} items and migh
 
 GO.lang.captcha='Security code';
 GO.lang.captchaEmpty='Security code is empty';
+
+GO.lang.multiselectComboMaxItemsReachedWarning='You may select a maximum of {max} options';

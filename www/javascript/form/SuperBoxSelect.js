@@ -76,6 +76,8 @@ Ext.ux.form.SuperBoxSelect = function(config) {
  * @private hide from doc gen
  */
 Ext.ux.form.SuperBoxSelect = Ext.extend(Ext.ux.form.SuperBoxSelect,Ext.form.ComboBox,{
+
+	max : 0,
 	/**
      * @cfg {Boolean} allowAddNewData When set to true, allows items to be added (via the setValueEx and addItem methods) that do not already exist in the data store. Defaults to false.
      */
@@ -1496,6 +1498,11 @@ Ext.ux.form.SuperBoxSelect = Ext.extend(Ext.ux.form.SuperBoxSelect,Ext.form.Comb
 			var val = record.data[this.valueField];
 
 			if(this.preventDuplicates && this.hasValue(val)){
+				return;
+			}
+		
+			if(this.max && this.items.getCount()>=this.max){
+				alert(GO.lang.multiselectComboMaxItemsReachedWarning.replace('{max}', this.max));
 				return;
 			}
 

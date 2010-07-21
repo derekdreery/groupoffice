@@ -354,3 +354,5 @@ GO.lang.confirmSelectLotsOfItems='Deze actie zal {count} items selecteren en kan
 
 GO.lang.captcha='Beveiligings code';
 GO.lang.captchaEmpty='Beveiligings code ontbreekt';
+
+GO.lang.multiselectComboMaxItemsReachedWarning='U mag maximaal {max} opties selecteren';
