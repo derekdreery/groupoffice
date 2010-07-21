@@ -243,8 +243,8 @@ add_action('login_form', 'groupoffice_redirect_after_login');
 
 function groupoffice_redirect_after_login() {
 		global $redirect_to;
-		if (!isset($_GET['redirect_to'])) {
-				$redirect_to = isset($_SESSION['go_last_permalink']) ? $_SESSION['go_last_permalink'] : get_option('siteurl');
+		if (!isset($_REQUEST['redirect_to'])) {
+			$redirect_to = isset($_SESSION['go_last_permalink']) ? $_SESSION['go_last_permalink'] : get_option('siteurl');
 			//$redirect_to=groupoffice_get_permalink_by_name('Inschrijven');
 		}
 }
@@ -262,17 +262,39 @@ if(strpos(basename($_SERVER['PHP_SELF']),'wp-')===false)
 	$_SESSION['go_last_permalink']=the_permalink();
 
 
-function groupoffice_get_contact_form($post_id=-1){
+function groupoffice_get_contact_form($post_extra_info=false){
 
 	global $current_user;
 
-	if($post_id>-1)
-		$_SESSION['last_contact_post_id']=$post_id;
+	$post_title=false;
+	if($post_extra_info){
 
-	if(!empty($_SESSION['last_contact_post_id'])){
-		$post = get_post ($_SESSION['last_contact_post_id']);
+		if(!empty($_REQUEST['contact_post_id'])){
+			$_SESSION['last_contact_post_id']=$_REQUEST['contact_post_id'];
+			unset($_SESSION['last_contact_extra']);
+		}else if(!empty($_REQUEST['extra']))
+		{
+			if(substr($_REQUEST['extra'],0,3)=='b64'){
+				$_REQUEST['extra']=base64_decode(substr($_REQUEST['extra'],3));
+			}
+			$_SESSION['last_contact_extra']=$_REQUEST['extra'];
+			unset($_SESSION['last_contact_post_id']);
+		}
+
+		if(!empty($_SESSION['last_contact_post_id'])){
+			$post = get_post ($_SESSION['last_contact_post_id']);
+			$post_title=$post->post_title;
+		}elseif(!empty($_SESSION['last_contact_extra'])){
+			$post_title=$_SESSION['last_contact_extra'];
+		}
+
+		//var_dump($_SESSION['last_contact_extra']);
+	}
+
 	 //var_dump($post);
 
+	if(!empty($post_title)){
+		$post_title = date('d-m-Y').": reactie op ".$post_title;
 		if($current_user->ID>0){
 
 			global $go;
@@ -282,9 +304,16 @@ function groupoffice_get_contact_form($post_id=-1){
 			$db->query($sql);
 			$r = $db->next_record();
 
+
 			if(!empty($r['contact_id'])){
+				
+				$comment = "\n\n".mysql_escape_string($post_title);
+
+				$sql = "UPDATE ab_contacts SET comment=CONCAT(comment, '$comment') WHERE id=".intval($r['contact_id']);
+				$db->query($sql);
+
 				$to = get_option('admin_email');
-				$subject='Reactie op vacature '.$post->post_title;
+				$subject='Reactie op vacature '.$post_title;
 
 				$message='<a href="go:showContact('.$r['contact_id'].');">Bekijk gegevens van '.$current_user->first_name.' '.$current_user->last_name.' ('.$current_user->user_email.')</a>';
 				$headers="From: Keystaff (Recruity) <noreply@keystaff.nl>\n".
@@ -300,7 +329,7 @@ function groupoffice_get_contact_form($post_id=-1){
 	//var_dump($go_config);
 
 
-	$url = $go_config['full_url'].'modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email.'&post_title='.urlencode($post->post_title);
+	$url = $go_config['full_url'].'modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email.'&post_title='.urlencode($post_title);
 	return  '<iframe style="width:600px;height:800px" src="'.$url.'"></iframe>';
 }
 
@@ -337,9 +366,7 @@ function groupoffice_change_wp_login_url() {
 }
 
 function groupoffice_change_wp_login_title() {
-
     return 'Powered by Recuity';
-
 }
 
 add_action('login_head', 'groupoffice_custom_login');
