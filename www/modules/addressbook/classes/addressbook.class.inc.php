@@ -500,7 +500,7 @@ class addressbook extends db {
 		$search = new search();
 		$search->delete_search_result($company_id, 3);
 
-		$sql = "DELETE FROM ab_companies WHERE id='$company_id'";
+		$sql = "DELETE FROM ab_companies WHERE id='".$this->escape($company_id)."'";
 		if ($this->query($sql)) {
 			return true;
 		}
@@ -1418,13 +1418,13 @@ class addressbook extends db {
 	}
 
 	function get_sql($id) {
-		$this->query("SELECT * FROM ab_sql WHERE id='$id'");
+		$this->query("SELECT * FROM ab_sql WHERE id='".$this->$escape($id)."'");
 		return $this->next_record();
 	}
 
 	function delete_sql($sql_id) {
 
-		return $this->query("DELETE FROM ab_sql WHERE id='".$this->escape($sql_id)."'");
+		return $this->query("DELETE FROM ab_sql WHERE id='".$this->$escape($sql_id)."'");
 
 	}
 }
