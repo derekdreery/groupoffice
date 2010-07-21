@@ -189,7 +189,7 @@ class gnupg{
 
 	public function export($fingerprint)
 	{
-		$this->run_cmd('--armor --export '.$fingerprint, $key);
+		$this->run_cmd('--armor --export '.escapeshellarg($fingerprint), $key);
 
 		return $key;
 	}
