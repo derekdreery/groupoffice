@@ -46,13 +46,16 @@ class export_query
 
 class base_export_query{
 	var $db;
+	var $query_name;
 	var $q;
 	var $totals = array();
 	var $title='';
 	var $extension='';
 
 	function __construct(){
+
 		$this->db = new db();
+		$this->query_name=$_REQUEST['query'];
 		$this->q = $_SESSION['GO_SESSION']['export_queries'][$_REQUEST['query']];
 		$this->title = $_REQUEST['title'];
 	}
@@ -128,6 +131,8 @@ class base_export_query{
 			$params=array();
 		}
 
+		$GLOBALS['GO_EVENTS']->fire_event('export_before_query', array(&$this, &$sql, &$types, &$params));
+
 		$this->db->query($sql,$types,$params);
 	}
 
@@ -136,6 +141,8 @@ class base_export_query{
 		{
 			call_user_func_array(array($this->q['class'], $this->q['method']),array(&$record, $this->cf));
 		}
+		
+		$GLOBALS['GO_EVENTS']->fire_event('export_format_record', array(&$this, &$record));
 	}
 
 	function init_columns(){
@@ -160,6 +167,8 @@ class base_export_query{
 				$this->columns[]=$column['column'];
 			}
 		}
+
+		$GLOBALS['GO_EVENTS']->fire_event('export_init_columns', array(&$this));
 	}
 
 	function export($fp)

@@ -356,3 +356,5 @@ GO.lang.captcha='Beveiligings code';
 GO.lang.captchaEmpty='Beveiligings code ontbreekt';
 
 GO.lang.multiselectComboMaxItemsReachedWarning='U mag maximaal {max} opties selecteren';
+
+GO.lang.toScreen='Naar scherm';

@@ -41,25 +41,30 @@ class html_export_query extends base_export_query
 
 		global $GO_USERS, $lang, $GO_MODULES;
 
-		echo '<html><head><style>
-			body{
-				font:12px helvetica;
-			}
-			table{
-				border-collapse:collapse;
-			}
-			td, th{
-				margin:0px;
-				padding:1px 3px;
-			}
-			</style></head><body>';
+		fwrite($fp, '<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+<style>
+body{
+	font:12px helvetica;
+}
+table{
+	border-collapse:collapse;
+}
+td, th{
+	margin:0px;
+	padding:1px 3px;
+}
+</style>
+</head>
+<body>');
 
-		echo '<h1>'.$this->title.'</h1>';
+		fwrite($fp,'<h1>'.$this->title.'</h1>');
 
-		echo '<table border="1">';
+		fwrite($fp,'<table border="1">');
 
 		if(count($this->headers))
-			echo '<tr><th>'.implode('</th><th>', $this->headers).'</th></tr>';
+			fwrite($fp,'<tr><th>'.implode('</th><th>', $this->headers).'</th></tr>');
 
 
 		while($record = $this->db->next_record())
@@ -74,7 +79,7 @@ class html_export_query extends base_export_query
 					$this->headers[]=$key;
 				}
 				//$this->fputcsv($fp, $this->headers, $this->list_separator, $this->text_separator);
-				echo '<tr><th>'.implode('</th><th>', $this->headers).'</th></tr>';
+				fwrite($fp,'<tr><th>'.implode('</th><th>', $this->headers).'</th></tr>');
 			}
 
 			$this->format_record($record);
@@ -89,24 +94,25 @@ class html_export_query extends base_export_query
 			{
 				$values[] = $record[$index];
 			}
-			echo '<tr><td>'.implode('</td><td>', $values).'</td></tr>';
+			fwrite($fp, '<tr><td>'.implode('</td><td>', $values).'</td></tr>');
 		
 		}
 
 		if(isset($this->totals) && count($this->totals))
 		{
-			echo '<tr><td colspan="'.count($this->columns).'"><br /><b>'.$lang['common']['totals'].':</b></td></tr>';
-			echo '<tr>';
+			fwrite($fp, '<tr><td colspan="'.count($this->columns).'"><br /><b>'.$lang['common']['totals'].':</b></td></tr>');
+			fwrite($fp, '<tr>');
 			foreach($this->columns as $index)
 			{
 				$value = isset($this->totals[$index]) ? Number::format($this->totals[$index]) : '';
-				echo '<td>'.$value.'</td>';
+				fwrite($fp, '<td>'.$value.'</td>');
 			}
-			echo '</tr>';
+			fwrite($fp, '</tr>');
 		}
 
-		echo '</table>';
+		fwrite($fp, '</table>');
 
-		echo '</body></html>';
+		fwrite($fp, '</body></html>');
+		//fclose($fp);
 	}
 }

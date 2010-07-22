@@ -92,6 +92,8 @@ class csv_export_query extends base_export_query
 				$values[] = $record[$index];
 			}
 			$this->fputcsv($fp, $values,$this->list_separator, $this->text_separator);
+
+			//fclose($fp);
 		}
 	}
 }
