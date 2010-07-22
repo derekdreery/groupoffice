@@ -102,7 +102,7 @@ $lang['calendar']['birthday_desc']='{NAME} sai täna {AGE} aastaseks';
 
 $lang['calendar']['unauthorized_participants_write']='Sul ei ole piisavalt õigusi alljärgnevate kasutajate jaoks broneeringute tegemiseks:<br /><br />{NAMES}<br /><br />';
 
-$lang['calendar']['noCalSelected'] = 'Ülevaatamiseks ei ole valitud ühtegi kalendrit. Vali Administratsioonist vähemalt üks kalender.';
+$lang['calendar']['noCalSelected'] = 'Ülevaatamiseks ei ole valitud ühtegi kalendrit. Vali Seaded alt vähemalt üks kalender.';
 
 $lang['calendar']['month_times'][1]='esimene';
 $lang['calendar']['month_times'][2]='teine';

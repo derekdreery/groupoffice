@@ -184,7 +184,7 @@ $lang['common']['total']='Kokku';
 $lang['common']['confirm_leave']='Kui lahkud programmist, kaotad kõik salvestamata materjali';
 $lang['common']['dataSaved']='Andmed salvestatud';
 
-$lang['common']['uploadMultipleFiles'] = 'Failide arvutist valimiseks vajuta \'Browse\'. Failide üles laadimiseks vajuta \'LAE ÜLES\'. peale üles laadimist sulgub aken automaatselt.';
+$lang['common']['uploadMultipleFiles'] = 'Failide arvutist valimiseks vajuta \'Browse\'. Failide üles laadimiseks vajuta \'UPLOAD\'. Peale üles laadimist sulgub aken automaatselt.';
 
 
 $lang['common']['loginToGO']='Sisse logimiseks vajuta siia';
