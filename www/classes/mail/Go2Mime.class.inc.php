@@ -68,6 +68,11 @@ class Go2Mime
 	{
 		global $GO_CONFIG;
 
+		/*
+		 * Make sure temp dir exists
+		 */
+		File::mkdir($GO_CONFIG->tmpdir);
+
 		$message = Swift_Message::newInstance();
 		if($this->notification)
 		{
