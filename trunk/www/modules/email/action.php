@@ -474,6 +474,7 @@ try {
 
 					if(isset($_POST['attachments'])) {
 						$attachments = json_decode($_POST['attachments'],true);
+						$attachments_tmp_names = array();
 
 						foreach($attachments as $tmp_name) {
 							if(is_numeric($tmp_name)) {
@@ -483,6 +484,9 @@ try {
 									throw new FileNotFoundException();
 								}
 								$tmp_name = $GO_CONFIG->file_storage_path.$files->build_path($folder).'/'.$file['name'];
+							}else
+							{
+								$attachments_tmp_names[] = $tmp_name;
 							}
 
 							if(!file_exists($tmp_name)) {
@@ -557,13 +561,24 @@ try {
 						}
 
 
-						$response['success']=$swift->sendmail();
+						$response['success']=$swift->sendmail();				
 
 						if(!empty($_POST['link'])) {
 							$link_props = explode(':', $_POST['link']);
 							$swift->link_to(array(array('link_id'=>$link_props[1],'link_type'=>$link_props[0])));
 						}
 					}
+
+					if(isset($attachments_tmp_names))
+					{						
+						foreach($attachments_tmp_names as $tmp_name)
+						{						
+							if(file_exists($tmp_name))
+							{
+								unlink($tmp_name);
+							}
+						}
+					}			
 
 				} catch (Exception $e) {
 					$response['feedback'] = $lang['email']['feedbackSMTPProblem'] . '<br />'.nl2br($e->getMessage());
