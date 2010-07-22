@@ -57,6 +57,10 @@ class base_export_query{
 		$this->db = new db();
 		$this->query_name=$_REQUEST['query'];
 		$this->q = $_SESSION['GO_SESSION']['export_queries'][$_REQUEST['query']];
+
+		if(!isset($this->q['totalize_columns']))
+			$this->q['totalize_columns']=array();
+		
 		$this->title = $_REQUEST['title'];
 	}
 
