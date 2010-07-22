@@ -169,7 +169,7 @@ class GO_GROUPS extends db
 		$group['id'] = $this->nextid("go_groups");		
 		$group['user_id']=$user_id;
 		$group['name']=$name;
-				
+			
 		if($this->insert_row('go_groups', $group))
 		{
 			return $group['id'];
