@@ -59,8 +59,9 @@ class pdf_export_query extends base_export_query{
 		$this->pdf->cellWidth = $this->pdf->pageWidth/count($this->columns);
 		if(count($this->headers)){
 			for($i=0;$i<count($this->headers);$i++)
-			{				
-				$this->pdf->Cell($this->pdf->cellWidth, 20, $this->headers[$i], 1,0,'L', 1);
+			{
+				$align = in_array($this->columns[$i], $this->q['totalize_columns']) ? 'R' : 'L';
+				$this->pdf->Cell($this->pdf->cellWidth, 20, $this->headers[$i], 1,0,$align, 1);
 			}
 			$this->pdf->Ln();
 		}
@@ -142,7 +143,8 @@ class pdf_export_query extends base_export_query{
 
 			foreach($this->columns as $index)
 			{
-				$this->pdf->MultiCell($this->pdf->cellWidth,$lines*($this->pdf->font_size+2)+8, $record[$index],1,'L',$fill,0);
+				$align = in_array($index, $this->q['totalize_columns']) ? 'R' : 'L';
+				$this->pdf->MultiCell($this->pdf->cellWidth,$lines*($this->pdf->font_size+2)+8, $record[$index],1,$align,$fill,0);
 			}
 			$this->pdf->Ln();
 
@@ -162,7 +164,7 @@ class pdf_export_query extends base_export_query{
 			foreach($this->columns as $index)
 			{
 				$value = isset($this->totals[$index]) ? Number::format($this->totals[$index]) : '';
-				$this->pdf->Cell($this->pdf->cellWidth, 20, $value, 'T',0,'L');
+				$this->pdf->Cell($this->pdf->cellWidth, 20, $value, 'T',0,'R');
 			}
 		}
 
