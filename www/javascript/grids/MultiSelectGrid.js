@@ -44,13 +44,7 @@ GO.grid.MultiSelectGrid = function (config){
 			header:GO.lang.strName,
 			dataIndex: 'name',
 			id:'name'
-		}],
-		listeners:{
-			scope:this,
-			rowclick:function(grid, rowIndex){
-				this.applyFilter([grid.store.getAt(rowIndex).id]);
-			}
-		},
+		}],		
 		autoExpandColumn:'name',
 		view:new Ext.grid.GridView({
 			autoFill: true,
@@ -59,7 +53,13 @@ GO.grid.MultiSelectGrid = function (config){
 		})
 	});
 
+
+
 	GO.grid.MultiSelectGrid.superclass.constructor.call(this, config);
+
+	this.on('rowclick',function(grid, rowIndex){
+				this.applyFilter([grid.store.getAt(rowIndex).id]);
+			}, this);
 
 
 	this.store.on('load', function()
