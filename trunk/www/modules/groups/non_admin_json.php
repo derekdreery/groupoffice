@@ -43,6 +43,7 @@ switch ($_POST['task'])
 					} elseif($group_id == 2) {
 						throw new Exception($lang['groups']['noDeleteEveryone']);
 					} else {
+						$GO_EVENTS->fire_event('delete_group', array($group_id));
 						$GO_GROUPS->delete_group($group_id);
 					}
 				}

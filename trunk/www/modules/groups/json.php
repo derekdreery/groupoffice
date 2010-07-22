@@ -37,7 +37,7 @@ switch ($action)
 		{
 			try{
 				$response['deleteSuccess']=true;
-				$users = json_decode(($_POST['delete_keys']));
+				$users = json_decode($_POST['delete_keys'], true);
 
 				foreach($users as $user_id)
 				{
@@ -47,6 +47,8 @@ switch ($action)
 					}
 					$GO_GROUPS->delete_user_from_group($user_id, $group_id);
 				}
+
+				$GO_GROUPS->fire_event('delete_users_to_group', array($group_id, $users));
 			}catch(Exception $e)
 			{
 				$response['deleteSuccess']=false;
@@ -57,7 +59,7 @@ switch ($action)
 		
 		if(isset($_POST['add_users']))
 		{
-			$users = json_decode(($_POST['add_users']));
+			$users = json_decode($_POST['add_users'], true);
 
 			foreach($users as $user_id)
 			{
@@ -71,6 +73,7 @@ switch ($action)
 					}
 				}
 			}
+			$GO_GROUPS->fire_event('add_users_to_group', array($group_id, $users));
 		}
 
 
