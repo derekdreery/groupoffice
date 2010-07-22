@@ -21,6 +21,18 @@ require_once($GO_CONFIG->class_path."mail/mimeDecode.class.inc");
 //authenticate the user
 $GO_SECURITY->authenticate();
 
+$uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : 0;
+$imap_id = (isset($_REQUEST['imap_id'])) ? $_REQUEST['imap_id'] : 0;
+$tmp_dir = $GO_CONFIG->tmpdir.'attachments/';
+
+if(isset($_SESSION['GO_SESSION']['tmp_attachments']))
+{
+	$tmp_name = $tmp_dir.$uid.'_'.$imap_id.'.eml';
+	if((!in_array($tmp_name, $_SESSION['GO_SESSION']['tmp_attachments'])) || (!file_exists($tmp_name)))
+	{
+		unset($tmp_name);
+	}
+}
 
 if(isset($_REQUEST['path'])) {
 	$path = $GO_CONFIG->file_storage_path.$_REQUEST['path'];
@@ -30,19 +42,44 @@ if(isset($_REQUEST['path'])) {
 	}
 
 	$params['input'] = file_get_contents($path);
-}else {
+}else
+if(isset($tmp_name))
+{	
+	$params['input'] = file_get_contents($tmp_name);
+}else{	
 
 	require_once($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
 	require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 	$imap = new cached_imap();
 	$email = new email();
 
-	$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
+	$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);		
 
 	$charset = isset($_REQUEST['charset']) ? $_REQUEST['charset'] : false;
 	if ($account) {
-		$params['input'] = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $charset);
+		$params['input'] = $imap->get_message_part_decoded($uid, $imap_id, $_REQUEST['encoding'], $charset);
 		$imap->disconnect();
+
+		if($params['input'])
+		{
+			if(!file_exists($tmp_dir))
+			{
+				require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+				filesystem::mkdir_recursive($tmp_dir);
+			}
+
+			$tmp_name = $tmp_dir.$uid.'_'.$imap_id.'.eml';
+			file_put_contents($tmp_name, $params['input']);
+
+			if(!isset($_SESSION['GO_SESSION']['tmp_attachments']))
+			{
+				$_SESSION['GO_SESSION']['tmp_attachments'] = array();
+			}
+			if(!in_array($tmp_name, $_SESSION['GO_SESSION']['tmp_attachments']))
+			{
+				$_SESSION['GO_SESSION']['tmp_attachments'][] = $tmp_name;
+			}
+		}
 	}
 }
 
