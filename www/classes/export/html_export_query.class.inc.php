@@ -43,6 +43,7 @@ class html_export_query extends base_export_query
 
 		fwrite($fp, '<html>
 <head>
+<title>'.$this->title.'</title>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <style>
 body{
@@ -54,22 +55,35 @@ table{
 td, th{
 	margin:0px;
 	padding:1px 3px;
+	font:12px helvetica;
+}
+th{
+	font-weight:bold;
 }
 </style>
 </head>
 <body>');
 
-		fwrite($fp,'<h1>'.$this->title.'</h1>');
+		fwrite($fp,'<h1>'.htmlspecialchars($this->title, ENT_COMPAT, 'UTF-8').'</h1>');
 
 		fwrite($fp,'<table border="1">');
 
-		if(count($this->headers))
-			fwrite($fp,'<tr><th>'.implode('</th><th>', $this->headers).'</th></tr>');
+		if(count($this->headers)){
+			fwrite($fp,'<tr>');
+			for($i=0;$i<count($this->headers);$i++)
+			{
+				$align = in_array($this->columns[$i], $this->q['totalize_columns']) ? 'right' : 'left';
+				fwrite($fp, '<th align="'.$align.'">'.htmlspecialchars($this->headers[$i], ENT_COMPAT, 'UTF-8').'</th>');
+			}
+			fwrite($fp,'</tr>');
+		}
 
 
 		while($record = $this->db->next_record())
 		{
 			$this->increase_totals($record);
+
+
 			
 			if(!count($this->columns))
 			{
@@ -78,8 +92,14 @@ td, th{
 					$this->columns[]=$key;
 					$this->headers[]=$key;
 				}
-				//$this->fputcsv($fp, $this->headers, $this->list_separator, $this->text_separator);
-				fwrite($fp,'<tr><th>'.implode('</th><th>', $this->headers).'</th></tr>');
+
+				fwrite($fp,'<tr>');
+				for($i=0;$i<count($this->headers);$i++)
+				{
+					$align = in_array($this->columns[$i], $this->q['totalize_columns']) ? 'right' : 'left';
+					fwrite($fp, '<th align="'.$align.'">'.htmlspecialchars($this->headers[$i], ENT_COMPAT, 'UTF-8').'</th>');
+				}				
+				fwrite($fp,'</tr>');
 			}
 
 			$this->format_record($record);
@@ -89,13 +109,14 @@ td, th{
 				$user = $GO_USERS->get_user($record['user_id']);
 				$record['user_id']=$user['username'];
 			}
-			$values=array();
+			fwrite($fp,'<tr>');
 			foreach($this->columns as $index)
 			{
-				$values[] = $record[$index];
+				$align = in_array($index, $this->q['totalize_columns']) ? 'right' : 'left';
+				fwrite($fp, '<td align="'.$align.'">'.htmlspecialchars($record[$index], ENT_COMPAT, 'UTF-8').'</td>');
 			}
-			fwrite($fp, '<tr><td>'.implode('</td><td>', $values).'</td></tr>');
-		
+			fwrite($fp,'</tr>');
+			
 		}
 
 		if(isset($this->totals) && count($this->totals))
@@ -105,7 +126,7 @@ td, th{
 			foreach($this->columns as $index)
 			{
 				$value = isset($this->totals[$index]) ? Number::format($this->totals[$index]) : '';
-				fwrite($fp, '<td>'.$value.'</td>');
+				fwrite($fp, '<td align="right">'.htmlspecialchars($value, ENT_COMPAT, 'UTF-8').'</td>');
 			}
 			fwrite($fp, '</tr>');
 		}
