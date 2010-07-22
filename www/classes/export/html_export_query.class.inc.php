@@ -58,6 +58,7 @@ td, th{
 	font:12px helvetica;
 }
 th{
+	white-space:nowrap;
 	font-weight:bold;
 }
 </style>
