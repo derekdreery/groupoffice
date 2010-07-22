@@ -203,7 +203,7 @@ GO.lang.strRequestError= 'Serveriga ühendaimine ebaõnnestus. Kontrolli oma int
 GO.lang.strSelected = 'Valitud';
 GO.lang.noItemSelected= 'Sa ei valinud kirjet.';
 GO.lang.strDeleteSelectedItems= 'Oled kindel, et soovid need kirjed {count} kustutada ?';
-GO.lang.strDeleteSelectedItem= 'Oled kindle, et soovid valitud kirjet kustutada?';
+GO.lang.strDeleteSelectedItem= 'Oled kindel, et soovid valitud kirjet kustutada?';
 
 GO.lang.strNoWritePermissions = 'Selle kirje muutmiseks puuduvad õigused.';
 
@@ -282,9 +282,9 @@ GO.lang.noFilesModule = 'Selle funktsiooni jaoks on vajalik failide moodul';
 GO.lang.remindPassword='Jäta mind selles arvutis meelde seni, kuni ma vajutan VÄLJU.';
 
 GO.lang.reminders = 'Meeldetuletajad';
-GO.lang.dismiss='Vabasta';
+GO.lang.dismiss='Lõpeta';
 GO.lang.selectAll='Vali kõik';
-GO.lang.snooze='Tukastus';
+GO.lang.snooze='Ootel';
 
 GO.lang.strMax = 'Maksimum';
 
@@ -319,7 +319,7 @@ GO.lang.rightClickToClose='Sulgemiseks vajuta parema klahviga saki päisel.';
 
 GO.lang.adminMenu = 'Admini menüü';
 
-GO.lang.administration='Administratsioon';
+GO.lang.administration='Seaded';
 GO.lang.extra='Lisa';
 
 GO.lang.permissionsLevel='tase';

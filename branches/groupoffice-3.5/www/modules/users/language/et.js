@@ -108,3 +108,5 @@ GO.users.lang.firstName = 'Perekonnanimi';
 GO.users.lang.sendInvitation='Saata kutse';
 
 GO.users.lang.contactInfo='Kontakti info';
+
+GO.users.lang.popupNotification='Näita meeldetuletuse või saabunud e-kirja korral hüpikakent';

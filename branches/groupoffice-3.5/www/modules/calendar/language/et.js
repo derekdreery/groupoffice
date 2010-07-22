@@ -33,7 +33,7 @@ GO.calendar.lang.entireSeries = 'Terve seeria';
 GO.calendar.lang.calendar = 'Kalender';
 GO.calendar.lang.calendars = 'Kalendrid';
 GO.calendar.lang.views = 'Vaated';
-GO.calendar.lang.administration = 'Administratsioon';
+GO.calendar.lang.administration = 'Seaded';
 GO.calendar.lang.needsAction = 'Vajab tegevusi';
 GO.calendar.lang.accepted = 'Vastu võetud';
 GO.calendar.lang.declined = 'Tagasi lükatud';
@@ -81,7 +81,7 @@ GO.calendar.lang.resource_group='Ressursi grupp';
 GO.calendar.lang.resources='Ressursid';
 GO.calendar.lang.resource='Ressurss';
 GO.calendar.lang.calendar_group='Kalendri grupp';
-GO.calendar.lang.admins='Administraatorid';
+GO.calendar.lang.admins='Adminid';
 GO.calendar.lang.no_group_selected='Vead formularis. Pead valima ressursi jaoks grupi.';
 
 GO.calendar.lang.visibleCalendars='Nähtavad kalendrid';
