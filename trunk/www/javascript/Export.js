@@ -16,6 +16,10 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 			boxLabel : 'PDF',
 			name : 'type',
 			inputValue : 'pdf_export_query'
+		}, {
+			boxLabel : 'To screen',
+			name : 'type',
+			inputValue : 'html_export_query'
 		}];
 
 		if(this.query && GO.customexports[this.query]){

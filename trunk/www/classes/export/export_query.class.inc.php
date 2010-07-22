@@ -177,4 +177,14 @@ class base_export_query{
 		$this->query();
 		$this->init_columns();
 	}
+
+
+	function increase_totals($record){
+		if(isset($this->totals) && is_array($this->totals)){
+			foreach($this->totals as $field=>$value)
+			{
+				$this->totals[$field]+=$record[$field];
+			}
+		}
+	}
 }

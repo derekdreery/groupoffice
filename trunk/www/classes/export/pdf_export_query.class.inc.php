@@ -88,14 +88,7 @@ class pdf_export_query extends base_export_query{
 		$this->pdf->SetKeywords($_REQUEST['title']);
 	}
 
-	function increase_totals($record){
-		if(isset($this->totals) && is_array($this->totals)){
-			foreach($this->totals as $field=>$value)
-			{
-				$this->totals[$field]+=$record[$field];
-			}
-		}
-	}
+	
 
 	function export($fp){
 		parent::export($fp);
@@ -105,8 +98,7 @@ class pdf_export_query extends base_export_query{
 
 		$this->pdf->AddPage();
 		
-		$this->print_column_headers();
-		
+		$this->print_column_headers();	
 		
 
 		$fill=false;
