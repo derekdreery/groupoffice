@@ -17,7 +17,7 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 			name : 'type',
 			inputValue : 'pdf_export_query'
 		}, {
-			boxLabel : 'To screen',
+			boxLabel : GO.lang.toScreen,
 			name : 'type',
 			inputValue : 'html_export_query'
 		}];
@@ -36,8 +36,11 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 			this.formPanelItems[0].items.push(this.customTypes[i]);
 
 
+		if(!this.title)
+			this.title = GO.lang.cmdExport;
+		
 		Ext.apply(this, {
-			title : GO.lang.cmdExport,
+			
 			items : this.formPanel = new Ext.FormPanel({
 						items : this.formPanelItems,
 						bodyStyle : 'padding:5px'

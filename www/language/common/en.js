@@ -375,3 +375,5 @@ GO.lang.captcha='Security code';
 GO.lang.captchaEmpty='Security code is empty';
 
 GO.lang.multiselectComboMaxItemsReachedWarning='You may select a maximum of {max} options';
+
+GO.lang.toScreen='To screen';

@@ -167,6 +167,7 @@ class pdf_export_query extends base_export_query{
 		}
 
 		fwrite($fp, $this->pdf->Output('export.pdf', 'S'));
+		//fclose($fp);
 	}
 }
 
