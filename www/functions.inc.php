@@ -32,6 +32,12 @@ function get_multiselectgrid_selections($key){
 	return $ids;
 }
 
+function in_multiselectgrid_selection($target,$key) {
+	global $GO_CONFIG, $GO_SECURITY;
+	$array = get_multiselectgrid_selections($key);
+	return in_array($target,$array);
+}
+
 /**
  *
  * @global <type> $GO_CONFIG
