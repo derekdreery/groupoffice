@@ -12,6 +12,25 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+/*
+ * Get's and saves the selected id's from a MultiSelectGrid
+ */
+
+function get_multiselectgrid_selections($key){
+	global $GO_CONFIG, $GO_SECURITY;
+
+	
+	if(isset($_POST[$key]))
+	{
+		$ids = json_decode($_POST[$key], true);
+		$GO_CONFIG->save_setting('msg_'.$key,implode(',', $ids), $GO_SECURITY->user_id);
+	}else
+	{
+		$ids = $GO_CONFIG->get_setting('msg_'.$key, $GO_SECURITY->user_id);
+		$ids = $ids ? explode(',',$ids) : array();
+	}
+	return $ids;
+}
 
 /**
  *
@@ -22,6 +41,7 @@
  * @param <type> $loadevent Call this function before Group-Office renders with ready or after with render
  * @return <type> An URL that can call a Group-Office function directly
  */
+
 
 function create_direct_url($module, $function, $params, $loadevent='render'){
 	global $GO_CONFIG;
