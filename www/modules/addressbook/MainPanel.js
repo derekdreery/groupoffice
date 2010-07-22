@@ -356,7 +356,7 @@ GO.addressbook.MainPanel = function(config)
 				}
 
 
-				config.showAllFields=true;
+				//config.showAllFields=true;
 		
 		
 				this.exportDialogExtended.show(config);
