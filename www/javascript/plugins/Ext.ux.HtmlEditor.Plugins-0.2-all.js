@@ -420,9 +420,15 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
 	checkIfPaste: function(e){
 
 		var diffAt = 0;
-		this.curLength = this.cmp.getValue().length;
 
 		if (e.V == e.getKey() && e.ctrlKey && this.wordPasteEnabled){
+
+			//this.cmp.setValue(this.fixWordPaste(this.cmp.getValue()));
+			//return;
+
+			//console.log('ja');
+
+			this.curLength = this.cmp.getValue().length;
 
 			this.cmp.suspendEvents();
 
@@ -435,10 +441,12 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
 			this.cmp.setValue(parts.join(''));
 
 			this.cmp.resumeEvents();
+
+			this.lastLength = this.cmp.getValue().length;
+			this.lastValue = this.cmp.getValue();
 		}
 
-		this.lastLength = this.cmp.getValue().length;
-		this.lastValue = this.cmp.getValue();
+
 
 	},
 	// private
@@ -458,6 +466,8 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
      */
     fixWordPaste: function(wordPaste) {
 
+		//console.log('fix paste');
+
         var removals = [/&nbsp;/ig, /[\r\n]/g, /<(xml|style)[^>]*>.*?<\/\1>/ig, /<\/?(meta|object|span)[^>]*>/ig,
 			/<\/?[A-Z0-9]*:[A-Z]*[^>]*>/ig, /(lang|class|type|href|name|title|id|clear)=\"[^\"]*\"/ig, /style=(\'\'|\"\")/ig, /<![\[-].*?-*>/g,
 			/MsoNormal/g, /<\\?\?xml[^>]*>/g, /<\/?o:p[^>]*>/g, /<\/?v:[^>]*>/g, /<\/?o:[^>]*>/g, /<\/?st1:[^>]*>/g, /&nbsp;/g,
@@ -466,7 +476,7 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
             /<\/?o:p[^>]*>/g, /<\/?v:[^>]*>/g, /<\/?o:[^>]*>/g, /<\/?st1:[^>]*>/g, /style=\"[^\"]*\"/g, /style=\'[^\"]*\'/g, /lang=\"[^\"]*\"/g,
             /lang=\'[^\"]*\'/g, /class=\"[^\"]*\"/g, /class=\'[^\"]*\'/g, /type=\"[^\"]*\"/g, /type=\'[^\"]*\'/g, /href=\'#[^\"]*\'/g,
             /href=\"#[^\"]*\"/g, /name=\"[^\"]*\"/g, /name=\'[^\"]*\'/g, / clear=\"all\"/g, /id=\"[^\"]*\"/g, /title=\"[^\"]*\"/g,
-            /<span[^>]*>/g, /<\/?span[^>]*>/g, /class=/g];
+            /<span[^>]*>/g, /<\/?span[^>]*>/g, /class=/g,/<script[^>]*>.*<\/script>/ig];
 
         Ext.each(removals, function(s){
             wordPaste = wordPaste.replace(s, "");
@@ -483,15 +493,16 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
 
         this.cmp.getToolbar().add({
             iconCls: 'x-edit-wordpaste',
-            pressed: true,
+            /*pressed: true,*/
 						tabIndex:-1,
             handler: function(t){
-                t.toggle(!t.pressed);
-                this.wordPasteEnabled = !this.wordPasteEnabled;
+                //t.toggle(!t.pressed);
+                //this.wordPasteEnabled = !this.wordPasteEnabled;
+				this.cmp.setValue(this.fixWordPaste(this.cmp.getValue()));
             },
             scope: this,
             tooltip: {
-                text: 'Cleanse text pasted from Word or other Rich Text applications'
+                text: 'Cleans text pasted from Word or other Rich Text applications'
             }
         });
 
@@ -518,14 +529,14 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
 						tabIndex:-1,
             handler: function(){
                 if (!this.hrWindow){
-										
+
                     this.hrWindow = new Ext.Window({
 												width:400,
 												autoHeight:true,
 												resizable:false,
                         title: GO.lang.insertHorizontalRule,
                         closeAction: 'hide',
-												focus: function(){													
+												focus: function(){
 													this.items.get(0).form.findField('hrwidth').focus(true);
 												},
                         items: [{
@@ -539,7 +550,7 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
                                 xtype: 'label',
                                 html: GO.lang.insertHRtext+'<br/>&nbsp;'
                             }, {
-																
+
                                 xtype: 'textfield',
                                 maskRe: /[0-9]|%/,
                                 regex: /^[1-9][0-9%]{1,3}/,
