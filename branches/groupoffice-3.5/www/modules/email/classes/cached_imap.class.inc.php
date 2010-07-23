@@ -601,7 +601,7 @@ class cached_imap extends imap{
 			}
 		}
 
-		go_debug($message['attachments']);
+		//go_debug($message['attachments']);
 
 		if(isset($message['html_body'])){
 			$message['html_body']=$this->replace_inline_images($message['html_body'], $message['attachments']);
@@ -678,7 +678,7 @@ class cached_imap extends imap{
 
 		$struct = $this->get_message_structure($message['uid']);
 
-		
+		//go_debug($struct);
 
 		if(count($struct)==1) {
 			$header_ct = explode('/', $message['content-type']);
