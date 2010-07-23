@@ -550,7 +550,9 @@ class cached_imap extends imap{
 			//not needed
 			unset($message['attachments'][$i]['filename'], $message['attachments'][$i]['description']);
 
-			if(empty($message['attachments'][$i]['name'])){
+			//go_debug('NAME: '.$message['attachments'][$i]['name']);
+
+			if(empty($message['attachments'][$i]['name']) || $message['attachments'][$i]['name']=='false'){
 				if(!empty($message['attachments'][$i]['subject'])){
 					$message['attachments'][$i]['name']=File::strip_invalid_chars($this->mime_header_decode($message['attachments'][$i]['subject'])).'.eml';
 				}elseif($message['attachments'][$i]['type']=='message')
@@ -559,6 +561,14 @@ class cached_imap extends imap{
 				}elseif($message['attachments'][$i]['subtype']=='calendar')
 				{
 					$message['attachments'][$i]['name']=$lang['email']['event'].'.ics';
+				}else
+				{
+					if($message['attachments'][$i]['type']=='text'){
+						$message['attachments'][$i]['name']=$message['attachments'][$i]['subtype'].'.txt';
+					}else{
+						$message['attachments'][$i]['name']=$message['attachments'][$i]['type'].'-'.$message['attachments'][$i]['subtype'];
+					}
+
 				}
 			}else
 			{
