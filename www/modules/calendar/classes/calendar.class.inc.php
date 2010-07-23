@@ -184,7 +184,7 @@ class calendar extends db
 	
 	function get_settings($user_id)
 	{
-		$this->query("SELECT * FROM cal_settings WHERE user_id='".$this->escape($user_id)."'");
+		$this->query("SELECT * FROM cal_settings WHERE user_id='".intval($user_id)."'");
 		if ($record=$this->next_record(DB_ASSOC))
 		{
 			if(empty($record['background']))
@@ -193,7 +193,7 @@ class calendar extends db
 			return $record;
 		}else
 		{
-			$this->query("INSERT INTO cal_settings (user_id, background) VALUES ('".$this->escape($user_id)."', 'EBF1E2')");			
+			$this->query("INSERT INTO cal_settings (user_id, background) VALUES ('".intval($user_id)."', 'EBF1E2')");			
 			return $this->get_settings($user_id);
 		}
 	}
@@ -573,7 +573,7 @@ class calendar extends db
 
 	function get_user_views($user_id)
 	{
-		$sql = "SELECT * FROM cal_views WHERE user_id='".$this->escape($user_id)."'";
+		$sql = "SELECT * FROM cal_views WHERE user_id='".intval($user_id)."'";
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -584,15 +584,15 @@ class calendar extends db
 		"FROM cal_views ".
 		"INNER JOIN go_acl ON cal_views.acl_id = go_acl.acl_id ".
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-		"WHERE go_acl.user_id=".$this->escape($user_id)." ".
-		"OR go_users_groups.user_id=".$this->escape($user_id)." ".
+		"WHERE go_acl.user_id=".intval($user_id)." ".
+		"OR go_users_groups.user_id=".intval($user_id)." ".
 		" ORDER BY cal_views.name ASC";
 
 		$this->query($sql);
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -605,8 +605,8 @@ class calendar extends db
 		"FROM cal_views ".
 		"INNER JOIN go_acl ON (cal_views.acl_id = go_acl.acl_id AND level>1) ".
 		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-		"WHERE go_acl.user_id=".$this->escape($user_id)." ".
-		"OR go_users_groups.user_id=".$this->escape($user_id)." ".
+		"WHERE go_acl.user_id=".intval($user_id)." ".
+		"OR go_users_groups.user_id=".intval($user_id)." ".
 		" ORDER BY cal_views.".$this->escape($sort.' '.$dir);
 
 		$this->query($sql);
@@ -664,7 +664,7 @@ class calendar extends db
 
 	function get_view_by_name($user_id, $name)
 	{
-		$sql = "SELECT * FROM cal_views WHERE user_id='".$this->escape($user_id)."' AND name='".$this->escape($name)."'";
+		$sql = "SELECT * FROM cal_views WHERE user_id='".intval($user_id)."' AND name='".$this->escape($name)."'";
 		$this->query($sql);
 
 		if($this->next_record())
@@ -676,7 +676,7 @@ class calendar extends db
 
 	function user_has_calendar($user_id)
 	{
-		$sql = "SELECT id FROM cal_calendars WHERE user_id='".$this->escape($user_id)."'";
+		$sql = "SELECT id FROM cal_calendars WHERE user_id='".intval($user_id)."'";
 		$this->query($sql);
 		return $this->next_record();
 	}
@@ -696,7 +696,7 @@ class calendar extends db
 
 	function delete_other_participants($event_id, $keep_ids)
 	{			
-		$sql = "DELETE FROM cal_participants WHERE event_id=".$this->escape($event_id);
+		$sql = "DELETE FROM cal_participants WHERE event_id=".intval($event_id);
 
 		if(count($keep_ids))
 			$sql .= " AND id NOT IN (".$this->escape(implode(',', $keep_ids)).")";
@@ -726,7 +726,7 @@ class calendar extends db
 
 	function set_default_calendar($user_id, $calendar_id)
 	{
-		$sql = "UPDATE cal_settings SET default_cal_id='".$this->escape($calendar_id)."' WHERE user_id='".$this->escape($user_id)."'";
+		$sql = "UPDATE cal_settings SET default_cal_id='".$this->escape($calendar_id)."' WHERE user_id='".intval($user_id)."'";
 		return $this->query($sql);
 	}
 
@@ -916,7 +916,7 @@ class calendar extends db
 
 		if($user_id>0)
 		{
-			$sql .= " AND user_id=".$this->escape($user_id);
+			$sql .= " AND user_id=".intval($user_id);
 		}
 		$this->query($sql);
 		if ($this->next_record())
@@ -932,7 +932,7 @@ class calendar extends db
 	
 	function get_user_calendars($user_id,$start=0,$offset=0, $group_id=1)
 	{
-		$sql = "SELECT * FROM cal_calendars WHERE user_id=".$this->escape($user_id);
+		$sql = "SELECT * FROM cal_calendars WHERE user_id=".intval($user_id);
 
 		if($group_id>0){
 			$sql .= ' AND group_id='.$group_id;
@@ -944,7 +944,7 @@ class calendar extends db
 		
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -989,8 +989,8 @@ class calendar extends db
 
 		$sql .= "INNER JOIN go_acl a ON c.acl_id = a.acl_id ".
 		"LEFT JOIN go_users_groups ug ON a.group_id = ug.group_id ".
-		"WHERE (a.user_id=".$this->escape($user_id)." ".
-		"OR ug.user_id=".$this->escape($user_id).")";
+		"WHERE (a.user_id=".intval($user_id)." ".
+		"OR ug.user_id=".intval($user_id).")";
     
 		if($resources)
 		{
@@ -1008,7 +1008,7 @@ class calendar extends db
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -1025,8 +1025,8 @@ class calendar extends db
 
         if($groups)
             $sql .= "LEFT JOIN cal_groups ON cal_calendars.group_id = cal_groups.id ";
-        $sql .= "WHERE (go_acl.user_id=".$this->escape($user_id)." ".
-		"OR go_users_groups.user_id=".$this->escape($user_id).")";
+        $sql .= "WHERE (go_acl.user_id=".intval($user_id)." ".
+		"OR go_users_groups.user_id=".intval($user_id).")";
 
         if(!$show_all)
         {
@@ -1051,7 +1051,7 @@ class calendar extends db
 		$count= $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}        
 		return $count;
@@ -1371,10 +1371,10 @@ class calendar extends db
 			
 			$cal = new calendar();
 			/*if(!empty($old_event['participants_event_id'])){
-				$sql = "SELECT * FROM cal_events WHERE id!=".$this->escape($event['id'])." AND (participants_event_id=".$this->escape($old_event['participants_event_id'])." OR id=".$this->escape($old_event['participants_event_id']).")";
+				$sql = "SELECT * FROM cal_events WHERE id!=".$this->escape($event['id'])." AND (participants_event_id=".intval($old_event['participants_event_id'])." OR id=".intval($old_event['participants_event_id']).")";
 			}else
 			{
-				$sql = "SELECT * FROM cal_events WHERE participants_event_id=".$this->escape($event['id']);
+				$sql = "SELECT * FROM cal_events WHERE participants_event_id=".intval($event['id']);
 			 * $cal->query($sql);
 			}*/
 
@@ -1481,7 +1481,7 @@ class calendar extends db
 
 	function get_participants_events($participants_event_id, $skip_event_id=0){
 		$sql = "SELECT * FROM cal_events ".
-			"WHERE participants_event_id=".$this->escape($participants_event_id);
+			"WHERE participants_event_id=".intval($participants_event_id);
 
 		if(!empty($skip_event_id))
 			$sql .= " AND id!=".$this->escape($skip_event_id);
@@ -1684,7 +1684,7 @@ class calendar extends db
 			$this->query($sql);
 			$count = $this->num_rows();
 
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 
 			$this->query($sql);
 
@@ -1874,7 +1874,7 @@ class calendar extends db
 			if($delete_related && !empty($event_id))
 			{
 				$cal = new calendar();
-				$sql = "SELECT id FROM cal_events WHERE participants_event_id=".$this->escape($event_id);
+				$sql = "SELECT id FROM cal_events WHERE participants_event_id=".intval($event_id);
 				$cal->query($sql);
 				while($cal->next_record())
 				{
@@ -1932,7 +1932,7 @@ class calendar extends db
 	{
 		$sql = "SELECT cal_views_calendars.background FROM cal_events_calendars ".
 		"INNER JOIN cal_views_calendars ON cal_events_calendars.calendar_id=".
-		"cal_views_calendars.calendar_id WHERE cal_events_calendars.event_id=".$this->escape($event_id)." AND cal_views_calendars.view_id=".$this->escape($view_id);
+		"cal_views_calendars.calendar_id WHERE cal_events_calendars.event_id=".intval($event_id)." AND cal_views_calendars.view_id=".intval($view_id);
 
 		$this->query($sql);
 		if($this->num_rows() == 1 && $this->next_record())
