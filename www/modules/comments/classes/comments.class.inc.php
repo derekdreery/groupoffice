@@ -53,7 +53,7 @@ class comments extends db {
 	 */
 	function delete_comment($comment_id)
 	{
-		return $this->query("DELETE FROM co_comments WHERE id=".$this->escape($comment_id));
+		return $this->query("DELETE FROM co_comments WHERE id=".intval($comment_id));
 	}
 	/**
 	 * Gets a Comment record
@@ -65,7 +65,7 @@ class comments extends db {
 	 */
 	function get_comment($comment_id)
 	{
-		$this->query("SELECT * FROM co_comments WHERE id=".$this->escape($comment_id));
+		$this->query("SELECT * FROM co_comments WHERE id=".intval($comment_id));
 		if($this->next_record())
 		{
 			return $this->record;
@@ -114,7 +114,7 @@ class comments extends db {
 		$count = $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;

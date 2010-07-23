@@ -560,7 +560,21 @@ class GoSwiftImport extends GoSwift{
 					//var_dump($part);
 					//exit();
 
-					$tmp_file = $dir.$part->d_parameters['filename'];
+					if(!empty($part->ctype_parameters['name']))
+					{
+						$filename = $part->ctype_parameters['name'];
+					}elseif(!empty($part->d_parameters['filename']) )
+					{
+						$filename = $part->d_parameters['filename'];
+					}elseif(!empty($part->d_parameters['filename*']))
+					{
+						$filename=$part->d_parameters['filename*'];
+					}else
+					{
+						$filename=uniqid(time());
+					}
+
+					$tmp_file = $dir.$filename;
 					file_put_contents($tmp_file, $part->body);
 
 					$mime_type = $part->ctype_primary.'/'.$part->ctype_secondary;

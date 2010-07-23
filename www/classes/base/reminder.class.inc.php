@@ -155,7 +155,7 @@ class reminder extends db
 	{
 		$this->query("DELETE FROM go_reminders_users WHERE reminder_id=".$this->escape($reminder_id));
 
-		return $this->query("DELETE FROM go_reminders WHERE id=".$this->escape($reminder_id));
+		return $this->query("DELETE FROM go_reminders WHERE id=".intval($reminder_id));
 	}
 	
 	/**
@@ -169,7 +169,7 @@ class reminder extends db
 	
 	/*function delete_reminders($user_id)
 	{
-		return $this->query("DELETE FROM go_reminders WHERE user_id=".$this->escape($user_id));
+		return $this->query("DELETE FROM go_reminders WHERE user_id=".intval($user_id));
 	}*/
 	
 /**
@@ -202,7 +202,7 @@ class reminder extends db
 	
 	function get_reminder_by_link_id($user_id, $link_id, $link_type)
 	{
-		$this->query("SELECT r.*,u.time FROM go_reminders r INNER JOIN go_reminders_users u ON u.reminder_id=r.id WHERE user_id=".$this->escape($user_id)." AND link_id=".$this->escape($link_id)." AND link_type=".$this->escape($link_type));
+		$this->query("SELECT r.*,u.time FROM go_reminders r INNER JOIN go_reminders_users u ON u.reminder_id=r.id WHERE user_id=".intval($user_id)." AND link_id=".intval($link_id)." AND link_type=".intval($link_type));
 		return $this->next_record();
 	}
 	
@@ -217,7 +217,7 @@ class reminder extends db
 	
 	function get_reminders_by_link_id($link_id, $link_type)
 	{
-		$this->query("SELECT * FROM go_reminders WHERE link_id=".$this->escape($link_id)." AND link_type=".$this->escape($link_type));
+		$this->query("SELECT * FROM go_reminders WHERE link_id=".intval($link_id)." AND link_type=".$this->escape($link_type));
 		return $this->num_rows();
 	}
 	
@@ -235,7 +235,7 @@ class reminder extends db
 	
 	function get_reminder($reminder_id)
 	{
-		$this->query("SELECT * FROM go_reminders WHERE id=".$this->escape($reminder_id));
+		$this->query("SELECT * FROM go_reminders WHERE id=".intval($reminder_id));
 		return $this->next_record();
 	}
 	

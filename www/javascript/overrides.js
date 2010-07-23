@@ -231,6 +231,9 @@ Ext.override(Ext.Element, {
      */
 	,
 	print: function(config) {
+
+		config = config || {};
+
 		Ext.apply(this, config);
         
 		var el = Ext.get(this.id).dom;

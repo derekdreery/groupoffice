@@ -6,7 +6,7 @@ $lang['addressbook']['description'] = 'Módulo para gestionarlibretas de contact
 
 
 
-$lang['addressbook']['allAddressbooks'] = 'Todos las libretas';
+$lang['addressbook']['allAddressbooks'] = 'Todas las libretas';
 $lang['common']['addressbookAlreadyExists'] = 'La libreta que está intentando crear ya existe';
 $lang['addressbook']['notIncluded'] = 'No importar';
 

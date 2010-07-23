@@ -489,7 +489,7 @@ class GO_SECURITY extends db {
 		}
 
 		$sql = "SELECT go_users_groups.user_id FROM go_users_groups INNER JOIN go_acl ON ".
-				"go_acl.group_id=go_users_groups.group_id WHERE go_acl.acl_id=".$this->escape($acl_id)." AND go_users_groups.user_id!=0";
+				"go_acl.group_id=go_users_groups.group_id WHERE go_acl.acl_id=".intval($acl_id)." AND go_users_groups.user_id!=0";
 
 		if($level>0){
 			$sql .= " AND level=".$this->escape($level);
@@ -676,11 +676,11 @@ class GO_SECURITY extends db {
 		if ($user_id > 0 && $acl_id > 0) {
 			$sql = "SELECT a.acl_id, a.level FROM go_acl a ".
 				"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
-				"WHERE a.acl_id=".$this->escape($acl_id)." AND ".
-				"(ug.user_id=".$this->escape($user_id);
+				"WHERE a.acl_id=".intval($acl_id)." AND ".
+				"(ug.user_id=".intval($user_id);
 			
 			if(!$groups_only)
-				$sql .= " OR a.user_id=".$this->escape($user_id).") ORDER BY a.level DESC";
+				$sql .= " OR a.user_id=".intval($user_id).") ORDER BY a.level DESC";
 			else
 				$sql .= ")";
 

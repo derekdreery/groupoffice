@@ -40,7 +40,7 @@ class cached_imap extends imap{
 	 * You can disable the cache for debugging.
 	 * If enabled the message will be converted to safe HTML only once.
 	 */
-	var $disable_message_cache=false;
+	var $disable_message_cache=true;
 
 
 	public function __construct()
@@ -534,7 +534,8 @@ class cached_imap extends imap{
 		$message['attachments']=array();
 
 		$this->get_body_parts($plain_body_requested, $html_body_requested, $struct, $message, $peek);
-		
+
+		//go_debug($message['body_ids']);
 
 		//URL replacements for inline images
 		//$message['url_replacements']=array();
@@ -549,7 +550,9 @@ class cached_imap extends imap{
 			//not needed
 			unset($message['attachments'][$i]['filename'], $message['attachments'][$i]['description']);
 
-			if(empty($message['attachments'][$i]['name'])){
+			//go_debug('NAME: '.$message['attachments'][$i]['name']);
+
+			if(empty($message['attachments'][$i]['name']) || $message['attachments'][$i]['name']=='false'){
 				if(!empty($message['attachments'][$i]['subject'])){
 					$message['attachments'][$i]['name']=File::strip_invalid_chars($this->mime_header_decode($message['attachments'][$i]['subject'])).'.eml';
 				}elseif($message['attachments'][$i]['type']=='message')
@@ -558,6 +561,14 @@ class cached_imap extends imap{
 				}elseif($message['attachments'][$i]['subtype']=='calendar')
 				{
 					$message['attachments'][$i]['name']=$lang['email']['event'].'.ics';
+				}else
+				{
+					if($message['attachments'][$i]['type']=='text'){
+						$message['attachments'][$i]['name']=$message['attachments'][$i]['subtype'].'.txt';
+					}else{
+						$message['attachments'][$i]['name']=$message['attachments'][$i]['type'].'-'.$message['attachments'][$i]['subtype'];
+					}
+
 				}
 			}else
 			{
@@ -601,7 +612,7 @@ class cached_imap extends imap{
 			}
 		}
 
-		go_debug($message['attachments']);
+		//go_debug($message['attachments']);
 
 		if(isset($message['html_body'])){
 			$message['html_body']=$this->replace_inline_images($message['html_body'], $message['attachments']);
@@ -679,7 +690,7 @@ class cached_imap extends imap{
 
 		$struct = $this->get_message_structure($message['uid']);
 
-		
+		//go_debug($struct);
 
 		if(count($struct)==1) {
 			$header_ct = explode('/', $message['content-type']);

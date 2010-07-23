@@ -21,7 +21,7 @@
 
 
 GO.lang.exportHiddenColumns='Exportar colunas ocultas também';
-GO.lang.searchQuery='Busca';
+GO.lang.searchQuery='Pesquisar';
 GO.lang.pleaseApplyFirst='Salve primeiro clicando em \'Confirmar\'';
 GO.lang.passwordMatchError='As senhas são diferentes';
 GO.lang.serverError='Ocorreu um erro no servidor web. Entre em contato com o administrador do sistema e informe o erro.';
@@ -38,20 +38,20 @@ GO.lang.fullscreen='Tela cheia';
 GO.lang.popupBlocker = 'Seu browser está bloqueando um popup do Group-Office. Por favor, desabilite o bloqueador de popup para este site';
 GO.lang.color='Cor';
 GO.lang.browse='Procurar...';
-GO.lang.largeUpload='Arquivos grandes/pastas (requer Java)';
-GO.lang.smallUpload='Arquivos pequenos';
+GO.lang.largeUpload='Muitos arquivos/pastas (requer Java)';
+GO.lang.smallUpload='Poucos arquivos';
 
 
 GO.lang.lostPassword='Perdeu a senha?';
-GO.lang.lostPasswordText='Para recuperar sua senha você precisa ter acesso ao seu e-mail sem acessar ao Group-Office. Se você informar o e-mail, uma nova senha será enviada para ele.<br /><br />Informe seu e-mail:';
+GO.lang.lostPasswordText='Para recuperar sua senha você precisa ter acesso ao seu e-mail sem acessar o Group-Office. Se você informar o e-mail, uma nova senha será enviada para ele.<br /><br />Informe seu e-mail:';
 
 
-GO.lang.noJava='Java Webstart não instalado. Java habilita a edição e envio fácil de arquivos . Visite <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> para instalar.';
+GO.lang.noJava='Java Webstart não instalado. O Java habilita a edição e envio fácil de arquivos . Visite <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> para instalar.';
 
-GO.lang.strHelpContents='Conteúdo de ajuda';
+GO.lang.strHelpContents='Conteúdo da ajuda';
 GO.lang.strReportBug='Informar um erro';
-GO.lang.strAbout='Sobre Group-Office';
-GO.lang.strUsage='Estatística de uso';
+GO.lang.strAbout='Sobre o Group-Office';
+GO.lang.strUsage='Estatísticas de uso';
 
 GO.lang.strName = 'Nome';
 GO.lang.strDescription = 'Descrição';
@@ -66,7 +66,7 @@ GO.lang.strLanguage='Idioma';
 GO.lang.strOpenOffice = 'Documento OpenOffice.org';
 
 GO.lang.strDefault = 'Padrão';
-GO.lang.strUsername = 'e-mail';
+GO.lang.strUsername = 'Usuário';
 GO.lang.strPassword = 'Senha';
 
 GO.lang.strFirstName = 'Primeiro nome';
@@ -87,7 +87,7 @@ GO.lang.strAddressNo = 'Número da casa';
 GO.lang.strZip = 'CEP';
 GO.lang.strCity = 'Cidade';
 GO.lang.strState = 'Estado';
-GO.lang.strCountry = 'Pais';
+GO.lang.strCountry = 'País';
 GO.lang.strAddressFormat = 'Formato do endereço';
 GO.lang.strHomepage = 'Homepage';
 GO.lang.strCompany = 'Empresa';
@@ -100,14 +100,14 @@ GO.lang.strWorkAddressNo = 'Número da casa (trabalho)';
 GO.lang.strWorkZip = 'CEP (trabalho)';
 GO.lang.strWorkCity = 'Cidade (trabalho)';
 GO.lang.strWorkState = 'Estado (trabalho)';
-GO.lang.strWorkCountry = 'Pais (trabalho)',	
+GO.lang.strWorkCountry = 'País (trabalho)',	
 GO.lang.strWorkPhone = 'Telefone (trabalho)';
 GO.lang.strWorkFax = 'Fax (trabalho)';
 GO.lang.strPostAddress = 'Endereço (postal)';
 GO.lang.strPostAddressNo = 'Número da casa (postal)';
 GO.lang.strPostCity = 'Cidade (postal)';
 GO.lang.strPostState = 'Estado (postal)';
-GO.lang.strPostCountry = 'Pais (postal)';
+GO.lang.strPostCountry = 'País (postal)';
 GO.lang.strPostZip = 'CEP (postal)';
 
 GO.lang.locations = 'Localização';
@@ -147,7 +147,7 @@ GO.lang.cmdLink = 'Link';
 GO.lang.cmdUnlink = 'Unlink';
 GO.lang.cmdClose = 'Fechar';
 GO.lang.cmdSettings = 'Configurações';
-GO.lang.cmdReset = 'Reset';
+GO.lang.cmdReset = 'Limpar';
 GO.lang.cmdExport='Exportar';
 GO.lang.cmdPrint='Imprimir';
 GO.lang.cmdImport='Importar';
@@ -160,7 +160,7 @@ GO.lang.cmdPrevious='Anterior';
 
 GO.lang.cmdNew = 'Novo';
 GO.lang.cmdOk = 'Ok';
-GO.lang.cmdCancel = 'Cancela';
+GO.lang.cmdCancel = 'Cancelar';
 
 GO.lang.cmdApply = 'Aplicar';
 GO.lang.cmdRefresh = 'Atualizar';
@@ -186,8 +186,8 @@ GO.lang.displayingItems = 'Exibir itens {0} - {1} of {2}';
 GO.lang.strNoItems = 'Sem itens para exibir';
 
 GO.lang.strLinkItems = 'Procurar itens para o link';
-GO.lang.strSearchResults= 'Resultados da busca';
-GO.lang.strSearch= 'Busca';
+GO.lang.strSearchResults= 'Resultados da pesquisa';
+GO.lang.strSearch= 'Pesquisar';
 
 GO.lang.strPleaseSelect = 'Por favor selecione...';
 GO.lang.strProperties = 'Propriedades';
@@ -201,7 +201,7 @@ GO.lang.waitMsgUpload= 'Enviando...';
 GO.lang.strRequestError= 'Erro de conexão com o servidor. Por favor, verifique sua conexão com a Internet.';
 
 GO.lang.strSelected = 'Selecionado';
-GO.lang.noItemSelected= 'Você não pode selecionar um item.';
+GO.lang.noItemSelected= 'Nenhum item foi selecionado.';
 GO.lang.strDeleteSelectedItems= 'Você quer apagar o(s) {count} item(s)?';
 GO.lang.strDeleteSelectedItem= 'Você quer apagar o(s) item(s) selecionado(s)?';
 
@@ -270,7 +270,7 @@ GO.lang.value = 'Valor';
 
 GO.lang.customer = 'Cliente';
 
-GO.lang.strNoCountrySelected='Nenhum pais selecionado';
+GO.lang.strNoCountrySelected='Nenhum país selecionado';
 GO.lang.menu = 'Menu';
 GO.lang.root = 'Root';
 GO.lang.left = 'Esquerda';
@@ -279,7 +279,7 @@ GO.lang.right = 'Direita';
 GO.lang.noFilesModule = 'Os arquivos do módulo são necessários para essa função';
 
 
-GO.lang.remindPassword='Lembrar meu login neste computador';
+GO.lang.remindPassword='Lembrar meu login até eu pressionar o botão Sair';
 
 GO.lang.reminders = 'Lembretes';
 GO.lang.dismiss='Desistir';
@@ -298,7 +298,7 @@ GO.lang.today='Hoje';
 GO.lang.displayingItemsShort='Total: {2}';
 
 GO.lang.image='Imagem';
-GO.lang.insertImage='Inserir imagem no textot';
+GO.lang.insertImage='Inserir imagem no texto';
 
 GO.lang.item='item';
 GO.lang.items='itens';
@@ -350,8 +350,8 @@ GO.lang.firebugWarning="O Firebug Add-on tende a reduzir o desempenho desta apli
 GO.lang.indent='Aumentar recuo';
 GO.lang.outdent='Diminuir recuo';
 GO.lang.removeFormatting='Remover Formatação';
-GO.lang.insertHorizontalRule='Inserir Régua Horizontal';
-GO.lang.insertHRtext='Digite a largura da Régua em porcentagem<br/> seguida do sinal de % no fim, ou para<br/> configurar uma largura fiza, omita o símbolo de %.';
+GO.lang.insertHorizontalRule='Inserir Linha Horizontal';
+GO.lang.insertHRtext='Digite a largura da linha em porcentagem<br/> seguida do sinal de % no fim, ou para<br/> configurar uma largura fixa, omita o símbolo de %.';
 GO.lang.cmdInsert='Inserir';
 
 GO.lang.width='Largura';
@@ -364,5 +364,5 @@ GO.lang.createdBy='Criado por';
 GO.lang.debugModeDetected="Atenção! Modo de depuração habilitado";
 GO.lang.debugModeWarning="Utilize $config['debug']=true; apenas para desenvolvimento e resolução de problemas. Isto reduz o desempenho no Group-Office.";
 
-GO.lang.noItemSelectedWarning='Selecione pelo menos um item por favor.';
 
+GO.lang.noItemSelectedWarning='Selecione pelo menos um item por favor.';

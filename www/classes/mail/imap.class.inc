@@ -1192,126 +1192,132 @@ class imap extends imap_bodystruct {
 			$parts=array('text_found'=>false, 'parts'=>array());
 		}
 		foreach ($struct as $id => $vals) {
-			
-			if (isset($vals['type'])){
 
-				$vals['imap_id'] = $id;
-				//go_debug($vals);
-				
-				if ($vals['type'] == $type && $subtype == $vals['subtype'] && $vals['disposition']!='attachment') {
-					
-					$parts['text_found']=true;
-					$parts['parts'][] = $vals;
+			//go_debug($vals);
+			if(is_array($vals)){
+				if (isset($vals['type'])){
 
-				}elseif($vals['type']=='image' && in_array($vals['subtype'], array('jpg','jpeg','gif','png','bmp')) && $vals['disposition']=='inline' && empty($vals['id']))
-				{
-					//an inline image without ID. We'll display in the part order. Apple
-					//mail sends mail like this.
-					$parts['parts'][]=$vals;
+					$vals['imap_id'] = $id;
+					//go_debug($vals);
+
+					if ($vals['type'] == $type && $subtype == $vals['subtype'] && $vals['disposition']!='attachment') {
+
+						$parts['text_found']=true;
+						$parts['parts'][] = $vals;
+
+					}elseif($vals['type']=='image' && in_array($vals['subtype'], array('jpg','jpeg','gif','png','bmp')) && $vals['disposition']=='inline' && empty($vals['id']))
+					{
+						//an inline image without ID. We'll display in the part order. Apple
+						//mail sends mail like this.
+						$parts['parts'][]=$vals;
+					}
 				}
-			}
-			if (isset($vals['subs'])) {
-				$text_found_at_this_level = $parts['text_found'];
-				$this->find_body_parts($vals['subs'], $type, $subtype, $parts);
+			
+				//don't decent into message/RFC822 files. Sometimes they come nested in the body from the IMAP server.
+				if (isset($vals['subs']) && (!isset($vals['subtype']) || $vals['subtype']!='rfc822')){
 
-				//
+					$text_found_at_this_level = $parts['text_found'];
+					$this->find_body_parts($vals['subs'], $type, $subtype, $parts);
 
-				/*
-				 * If we found body parts for example 1.1 and 1.2 don't include a text
-				 * attachment with number 2 like in this sample structure
-				 *
-				 * array (
-  1 =>
-  array (
-    'subs' =>
-    array (
-      '1.1' =>
-      array (
-        'type' => 'text',
-        'subtype' => 'plain',
-        'charset' => 'iso-8859-1',
-        'format' => 'flowed',
-        'id' => false,
-        'description' => false,
-        'encoding' => '8bit',
-        'size' => '279',
-        'lines' => '15',
-        'md5' => false,
-        'disposition' => false,
-        'language' => false,
-        'location' => false,
-        'name' => false,
-        'filename' => false,
-      ),
-      '1.2' =>
-      array (
-        'subs' =>
-        array (
-          '1.2.1' =>
-          array (
-            'type' => 'text',
-            'subtype' => 'html',
-            'charset' => 'iso-8859-1',
-            'id' => false,
-            'description' => false,
-            'encoding' => '7bit',
-            'size' => '1028',
-            'lines' => '28',
-            'md5' => false,
-            'disposition' => false,
-            'language' => false,
-            'location' => false,
-            'name' => false,
-            'filename' => false,
-          ),
-          '1.2.2' =>
-          array (
-            'type' => 'image',
-            'subtype' => 'jpeg',
-            'name' => 'gass-sign.jpg',
-            'id' => '<part1.04070803.02030505@gassinstallasjon.no>',
-            'description' => false,
-            'encoding' => 'base64',
-            'size' => '19818',
-            'md5' => false,
-            'disposition' => 'inline',
-            'language' => '(',
-            'location' => 'filename',
-            'filename' => false,
-            'charset' => false,
-            'lines' => false,
-          ),
-          'type' => 'message',
-          'subtype' => 'related',
-        ),
-      ),
-      'type' => 'message',
-      'subtype' => 'alternative',
-    ),
-  ),
-  2 =>
-  array (
-    'type' => 'text',
-    'subtype' => 'plain',
-    'name' => 'gass-skriver.txt',
-    'charset' => 'us-ascii',
-    'id' => false,
-    'description' => false,
-    'encoding' => 'base64',
-    'size' => '32',
-    'lines' => '0',
-    'md5' => false,
-    'disposition' => 'inline',
-    'language' => '(',
-    'location' => 'filename',
-    'filename' => false,
-  ),
-  'type' => 'message',
-  'subtype' => 'mixed',
-)
-				 */
-				if(!$text_found_at_this_level && $parts['text_found'])
-					break;
+					//
+
+					/*
+					 * If we found body parts for example 1.1 and 1.2 don't include a text
+					 * attachment with number 2 like in this sample structure
+					 *
+					 * array (
+	  1 =>
+	  array (
+		'subs' =>
+		array (
+		  '1.1' =>
+		  array (
+			'type' => 'text',
+			'subtype' => 'plain',
+			'charset' => 'iso-8859-1',
+			'format' => 'flowed',
+			'id' => false,
+			'description' => false,
+			'encoding' => '8bit',
+			'size' => '279',
+			'lines' => '15',
+			'md5' => false,
+			'disposition' => false,
+			'language' => false,
+			'location' => false,
+			'name' => false,
+			'filename' => false,
+		  ),
+		  '1.2' =>
+		  array (
+			'subs' =>
+			array (
+			  '1.2.1' =>
+			  array (
+				'type' => 'text',
+				'subtype' => 'html',
+				'charset' => 'iso-8859-1',
+				'id' => false,
+				'description' => false,
+				'encoding' => '7bit',
+				'size' => '1028',
+				'lines' => '28',
+				'md5' => false,
+				'disposition' => false,
+				'language' => false,
+				'location' => false,
+				'name' => false,
+				'filename' => false,
+			  ),
+			  '1.2.2' =>
+			  array (
+				'type' => 'image',
+				'subtype' => 'jpeg',
+				'name' => 'gass-sign.jpg',
+				'id' => '<part1.04070803.02030505@gassinstallasjon.no>',
+				'description' => false,
+				'encoding' => 'base64',
+				'size' => '19818',
+				'md5' => false,
+				'disposition' => 'inline',
+				'language' => '(',
+				'location' => 'filename',
+				'filename' => false,
+				'charset' => false,
+				'lines' => false,
+			  ),
+			  'type' => 'message',
+			  'subtype' => 'related',
+			),
+		  ),
+		  'type' => 'message',
+		  'subtype' => 'alternative',
+		),
+	  ),
+	  2 =>
+	  array (
+		'type' => 'text',
+		'subtype' => 'plain',
+		'name' => 'gass-skriver.txt',
+		'charset' => 'us-ascii',
+		'id' => false,
+		'description' => false,
+		'encoding' => 'base64',
+		'size' => '32',
+		'lines' => '0',
+		'md5' => false,
+		'disposition' => 'inline',
+		'language' => '(',
+		'location' => 'filename',
+		'filename' => false,
+	  ),
+	  'type' => 'message',
+	  'subtype' => 'mixed',
+	)
+					 */
+					if(!$text_found_at_this_level && $parts['text_found'])
+						break;
+				}
 			}
 		}
 		return $parts;

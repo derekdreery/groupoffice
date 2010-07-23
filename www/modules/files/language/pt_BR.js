@@ -19,3 +19,17 @@ GO.files.lang.comments = 'Comentários';
 GO.files.lang.downloadGOTA = 'Baixar com GOTA';
 GO.files.lang.fileBrowser = 'Busca de arquivo';
 GO.files.lang.thumbnails = 'Miniaturas';
+GO.files.lang.saveFile='Salvar arquivo';
+GO.files.lang.confirmOverwrite='{filename} já existe, você quer sobrescrever o arquivo?';
+GO.files.lang.file='Arquivo';
+GO.files.lang.emptyList='Lista vazia';
+GO.files.lang.newFiles='Novo';
+
+GO.files.lang.olderVersions='Versões antigas';
+GO.files.lang.uploadProperties='Os comentários abaixo serão aplicados a todos os arquivos enviados com a opção "Poucos arquivos"';
+GO.files.lang.selectFiles = 'Arquivos selecionados';
+
+GO.files.lang.fitImage='Ajustar imagem';
+GO.files.lang.normalSize='Tamanho normal';
+GO.files.lang.imageViewer='Visualizar imagem';
+
