@@ -1194,26 +1194,27 @@ class imap extends imap_bodystruct {
 		foreach ($struct as $id => $vals) {
 
 			//go_debug($vals);
-			
-			if (isset($vals['type'])){
+			if(is_array($vals)){
+				if (isset($vals['type'])){
 
-				$vals['imap_id'] = $id;
-				//go_debug($vals);
-				
-				if ($vals['type'] == $type && $subtype == $vals['subtype'] && $vals['disposition']!='attachment') {
-					
-					$parts['text_found']=true;
-					$parts['parts'][] = $vals;
+					$vals['imap_id'] = $id;
+					//go_debug($vals);
 
-				}elseif($vals['type']=='image' && in_array($vals['subtype'], array('jpg','jpeg','gif','png','bmp')) && $vals['disposition']=='inline' && empty($vals['id']))
-				{
-					//an inline image without ID. We'll display in the part order. Apple
-					//mail sends mail like this.
-					$parts['parts'][]=$vals;
+					if ($vals['type'] == $type && $subtype == $vals['subtype'] && $vals['disposition']!='attachment') {
+
+						$parts['text_found']=true;
+						$parts['parts'][] = $vals;
+
+					}elseif($vals['type']=='image' && in_array($vals['subtype'], array('jpg','jpeg','gif','png','bmp')) && $vals['disposition']=='inline' && empty($vals['id']))
+					{
+						//an inline image without ID. We'll display in the part order. Apple
+						//mail sends mail like this.
+						$parts['parts'][]=$vals;
+					}
 				}
 			
 				//don't decent into message/RFC822 files. Sometimes they come nested in the body from the IMAP server.
-				if (isset($vals['subs']) && $vals['type']!='message') {
+				if (isset($vals['subs']) && (!isset($vals['subtype']) || $vals['subtype']!='rfc822')){
 
 					$text_found_at_this_level = $parts['text_found'];
 					$this->find_body_parts($vals['subs'], $type, $subtype, $parts);

@@ -40,7 +40,7 @@ class cached_imap extends imap{
 	 * You can disable the cache for debugging.
 	 * If enabled the message will be converted to safe HTML only once.
 	 */
-	var $disable_message_cache=false;
+	var $disable_message_cache=true;
 
 
 	public function __construct()
@@ -534,7 +534,8 @@ class cached_imap extends imap{
 		$message['attachments']=array();
 
 		$this->get_body_parts($plain_body_requested, $html_body_requested, $struct, $message, $peek);
-		
+
+		//go_debug($message['body_ids']);
 
 		//URL replacements for inline images
 		//$message['url_replacements']=array();
