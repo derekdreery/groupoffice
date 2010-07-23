@@ -45,7 +45,7 @@ class summary extends db{
 	function get_note($user_id)
 	{
 		
-		$sql = "SELECT * FROM su_notes WHERE user_id='".$this->escape($user_id)."'";
+		$sql = "SELECT * FROM su_notes WHERE user_id='".intval($user_id)."'";
 		$this->query($sql);
 		
 		if(!$this->next_record())
@@ -69,7 +69,7 @@ class summary extends db{
 	function get_feed($user_id)
 	{
 		
-		$sql = "SELECT * FROM su_rss_feeds WHERE user_id='".$this->escape($user_id)."'";
+		$sql = "SELECT * FROM su_rss_feeds WHERE user_id='".intval($user_id)."'";
 		$this->query($sql);
 		
 		$this->next_record();
@@ -79,7 +79,7 @@ class summary extends db{
 	function get_feeds($user_id)
 	{
 
-		$sql = "SELECT * FROM su_rss_feeds WHERE user_id='".$this->escape($user_id)."' ORDER BY id";
+		$sql = "SELECT * FROM su_rss_feeds WHERE user_id='".intval($user_id)."' ORDER BY id";
 		$this->query($sql);
 		$urls = array();
 
@@ -104,7 +104,7 @@ class summary extends db{
 
 	function delete_other_feeds($user_id, $ids)
 	{
-		$sql = "DELETE FROM su_rss_feeds WHERE user_id=".$this->escape($user_id);
+		$sql = "DELETE FROM su_rss_feeds WHERE user_id=".intval($user_id);
 		if(count($ids))
 		{
 			$sql .= " AND id NOT IN (".implode(',', $ids).")";

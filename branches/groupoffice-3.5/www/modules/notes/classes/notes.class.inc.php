@@ -161,7 +161,7 @@ class notes extends db {
 		}	
 		
 		$notes = new notes();
-		$this->query("SELECT * FROM no_notes WHERE category_id=".$this->escape($category_id));
+		$this->query("SELECT * FROM no_notes WHERE category_id=".intval($category_id));
 		while($note = $this->next_record())
 		{
 			$notes->delete_note($note['id']);
@@ -170,7 +170,7 @@ class notes extends db {
 		global $GO_SECURITY;
 		$GO_SECURITY->delete_acl($category['acl_id']);
 
-		return $this->query("DELETE FROM no_categories WHERE id=".$this->escape($category_id));
+		return $this->query("DELETE FROM no_categories WHERE id=".intval($category_id));
 	}
 	
 	/**
@@ -283,7 +283,7 @@ class notes extends db {
 			catch(Exception $e){}
 		}				
 		
-		return $this->query("DELETE FROM no_notes WHERE id=".$this->escape($note_id));
+		return $this->query("DELETE FROM no_notes WHERE id=".intval($note_id));
 	}
 	
 
@@ -301,7 +301,7 @@ class notes extends db {
 	{
 		if($category_id>0)
 		{
-			$this->query("SELECT * FROM no_categories WHERE id=".$this->escape($category_id));
+			$this->query("SELECT * FROM no_categories WHERE id=".intval($category_id));
 			return $this->next_record();
 
 		}else
@@ -343,7 +343,7 @@ class notes extends db {
 	
 	function get_default_category($user_id)
 	{
-		$sql = "SELECT * FROM no_categories WHERE user_id='".$this->escape($user_id)."' LIMIT 0,1";
+		$sql = "SELECT * FROM no_categories WHERE user_id='".intval($user_id)."' LIMIT 0,1";
 		$this->query($sql);
 		return $this->next_record();
 	}
@@ -395,7 +395,7 @@ class notes extends db {
 
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -418,7 +418,7 @@ class notes extends db {
 	 
 	function get_authorized_categories($auth_type, $user_id, $query, $sort='name', $direction='ASC', $start=0, $offset=0)
 	{
-		$user_id=$this->escape($user_id);
+		$user_id=intval($user_id);
 		
 		$sql = "SELECT DISTINCT no_categories.* FROM no_categories ".
  		"INNER JOIN go_acl a ON ";
@@ -452,7 +452,7 @@ class notes extends db {
 
 		if ($offset > 0)
 		{
-			$sql .=" LIMIT ".$this->escape($start.",".$offset);
+			$sql .=" LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 			return $count;
 		}else
@@ -472,7 +472,7 @@ class notes extends db {
 
 	function get_note($note_id)
 	{
-		$this->query("SELECT * FROM no_notes WHERE id=".$this->escape($note_id));
+		$this->query("SELECT * FROM no_notes WHERE id=".intval($note_id));
 		if($this->next_record())
 		{
 			return $this->record;
@@ -519,7 +519,7 @@ class notes extends db {
 		
 		if($category_id>0)
 		{
-			 $sql .= " WHERE n.category_id=".$this->escape($category_id);
+			 $sql .= " WHERE n.category_id=".intval($category_id);
 		}else
 		{
 			global $GO_SECURITY;
@@ -542,7 +542,7 @@ class notes extends db {
 
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;

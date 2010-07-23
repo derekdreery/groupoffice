@@ -255,7 +255,7 @@ class email extends db {
 						"WHERE type='imap'";
 
 		if($user_id > 0) {
-			$sql .= " AND user_id='".$this->escape($user_id)."'";
+			$sql .= " AND user_id='".intval($user_id)."'";
 			$sql .= " ORDER BY ".$this->escape($sort.' '.$dir);
 		}else {
 			$sql .= " ORDER BY ".$this->escape($sort.' '.$dir);
@@ -265,7 +265,7 @@ class email extends db {
 		$count =  $this->num_rows();
 
 		if($offset>0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -304,12 +304,12 @@ class email extends db {
 
 		@unlink($GO_CONFIG->file_storage_path.$message['path']);
 
-		$sql ="DELETE FROM em_links WHERE link_id=".$this->escape($link_id);
+		$sql ="DELETE FROM em_links WHERE link_id=".intval($link_id);
 		return $this->query($sql);
 	}
 
 	function get_linked_message($id) {
-		$sql = "SELECT * FROM em_links WHERE link_id=".$this->escape($id);
+		$sql = "SELECT * FROM em_links WHERE link_id=".intval($id);
 		$this->query($sql);
 		return $this->next_record();
 	}
@@ -325,7 +325,7 @@ class email extends db {
 	}
 
 	function get_settings($user_id) {
-		$this->query("SELECT * FROM em_settings WHERE user_id='".$this->escape($user_id)."'");
+		$this->query("SELECT * FROM em_settings WHERE user_id='".intval($user_id)."'");
 		if ($this->next_record()) {
 			return $this->record;
 		}else {
@@ -669,9 +669,9 @@ class email extends db {
 	function get_account($account_id, $alias_id=0) {
 		$sql = "SELECT a.*, al.name, al.email, al.signature, al.id AS default_alias_id FROM em_accounts a INNER JOIN em_aliases al ON ";
 		if(empty($alias_id)) {
-			$sql .= "(al.account_id=a.id AND al.`default`='1') WHERE a.id=".$this->escape($account_id);
+			$sql .= "(al.account_id=a.id AND al.`default`='1') WHERE a.id=".intval($account_id);
 		}else {
-			$sql .= "al.account_id=a.id WHERE al.id=".$this->escape($alias_id);
+			$sql .= "al.account_id=a.id WHERE al.id=".intval($alias_id);
 		}
 
 		$this->query($sql);
@@ -877,7 +877,7 @@ class email extends db {
 	}
 
 	function get_folder_by_id($folder_id) {
-		$sql = "SELECT * FROM em_folders WHERE id=".$this->escape($folder_id);
+		$sql = "SELECT * FROM em_folders WHERE id=".intval($folder_id);
 		$this->query($sql);
 		if($this->next_record(DB_ASSOC)) {
 			return $this->record;
@@ -1018,7 +1018,7 @@ class email extends db {
 
 
 	function get_total_unseen($user_id) {
-		$sql = "SELECT SUM(unseen) FROM em_folders INNER JOIN em_accounts ON em_folders.account_id=em_accounts.id WHERE user_id='".$this->escape($user_id)."'";
+		$sql = "SELECT SUM(unseen) FROM em_folders INNER JOIN em_accounts ON em_folders.account_id=em_accounts.id WHERE user_id='".intval($user_id)."'";
 		$this->query($sql);
 		$this->next_record();
 		return $this->f(0);
@@ -1249,7 +1249,7 @@ class email extends db {
 
 
 	function get_default_account_id($user_id) {
-		$sql = "SELECT id FROM em_accounts WHERE user_id='".$this->escape($user_id)."' AND standard=1";
+		$sql = "SELECT id FROM em_accounts WHERE user_id='".intval($user_id)."' AND standard=1";
 
 		$this->query($sql);
 
@@ -1422,7 +1422,7 @@ class email extends db {
 	 * @return Int Number of records found
 	 */
 	function get_aliases($account_id, $all=false) {
-		$sql = "SELECT * FROM em_aliases WHERE account_id=".$this->escape($account_id);
+		$sql = "SELECT * FROM em_aliases WHERE account_id=".intval($account_id);
 
 		if(!$all) {
 			$sql .= " AND `default`!='1'";
@@ -1446,7 +1446,7 @@ class email extends db {
 	 * @return Int Number of records found
 	 */
 	function get_all_aliases($user_id) {
-		$sql = "SELECT a.* FROM em_aliases a INNER JOIN em_accounts e ON e.id=a.account_id WHERE e.user_id=".$this->escape($user_id);
+		$sql = "SELECT a.* FROM em_aliases a INNER JOIN em_accounts e ON e.id=a.account_id WHERE e.user_id=".intval($user_id);
 		$sql .= " ORDER BY `standard` ASC, `default` DESC, name ASC";
 
 		$this->query($sql);
