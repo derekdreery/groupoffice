@@ -160,7 +160,7 @@ GO.email.EmailComposer = function(config) {
 
 
 	var spellcheckInsertPlugin = new GO.plugins.HtmlEditorSpellCheck(this);
-	//var wordPastePlugin = new Ext.ux.form.HtmlEditor.Word();
+	var wordPastePlugin = new Ext.ux.form.HtmlEditor.Word();
 	//var dividePlugin = new Ext.ux.form.HtmlEditor.Divider();
 	//var tablePlugin = new Ext.ux.form.HtmlEditor.Table();
 	var hrPlugin = new Ext.ux.form.HtmlEditor.HR();
@@ -304,7 +304,7 @@ GO.email.EmailComposer = function(config) {
 
 	var plugins = [
 		imageInsertPlugin,spellcheckInsertPlugin,
-		//wordPastePlugin, evil! makes it very slow because of a lot of getvalue calls.
+		wordPastePlugin,
 		hrPlugin,
 		ioDentPlugin,
 		rmFormatPlugin
