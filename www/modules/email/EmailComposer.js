@@ -730,11 +730,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				draft_uid : 0
 			};
 
-			this.showCC(false);
-			this.showBCC(false);
-			this.bccFieldCheck.setChecked(false);
-			this.ccFieldCheck.setChecked(false);	
-
+			this.showCC((GO.email.showCCfield == '1') ? true : false);
+			this.showBCC((GO.email.showBCCfield == '1') ? true : false);			
+			this.ccFieldCheck.setChecked((GO.email.showCCfield == '1') ? true : false);
+			this.bccFieldCheck.setChecked((GO.email.showBCCfield == '1') ? true : false);
+			
 			if (this.defaultAcccountId) {
 				this.fromCombo.setValue(this.defaultAcccountId);
 			}
@@ -772,7 +772,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	},
 	
 	showBCC : function(show){
-		this.bccCombo.getEl().up('.x-form-item').setDisplayed(show);
+		this.bccCombo.getEl().up('.x-form-item').setDisplayed(show);		
 		if(show)
 		{
 			this.bccCombo.onResize();
@@ -785,9 +785,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		//Ext.getBody().mask(GO.lang.waitMsgLoad);
 
 		delete this.link_config;
-		
-		this.showConfig=config;
 
+		this.showConfig=config;
+		
 		if (!this.rendered) {
 
 			var loadCb = function() {
@@ -847,7 +847,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			//keep attachments when switchting from text <> html
 			this.reset(config.keepEditingMode);
 
-
+			
 			//save the mail to a file location
 			if(config.saveToPath){
 				this.sendParams.save_to_path=config.saveToPath;
@@ -1389,8 +1389,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 			// extra sync to make sure all is in there.
 			this.htmlEditor.syncValue();
-			
-			
+
+			this.sendParams['email_show_cc'] = GO.email.showCCfield;
+			this.sendParams['email_show_bcc'] = GO.email.showBCCfield;
 
 			this.formPanel.form.submit({
 				url : this.sendURL,
@@ -1404,15 +1405,6 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					
 					if (action.result.account_id) {
 						this.account_id = action.result.account_id;
-					}
-
-					if(action.result.email_show_cc)
-					{
-					       GO.email.showCCfield = action.result.email_show_cc;
-					}
-					if(action.result.email_show_bcc)
-					{
-					       GO.email.showBCCfield = action.result.email_show_bcc;
 					}
 
 					if(!draft)
@@ -1481,10 +1473,12 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				break;
 
 			case this.ccFieldCheck.id :
-				this.showCC(checked);
+				GO.email.showCCfield = (checked) ? '1' : '0';
+				this.showCC(checked);				
 				break;
 
 			case this.bccFieldCheck.id :
+				GO.email.showBCCfield = (checked) ? '1' : '0';
 				this.showBCC(checked);
 				break;
 		}

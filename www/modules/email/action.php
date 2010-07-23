@@ -342,10 +342,10 @@ try {
 					}
 
 
-					$response['email_show_cc'] = empty($_POST['cc']) ? '0' : '1';
-					$response['email_show_bcc'] = empty($_POST['bcc']) ? '0' : '1';
-					$GO_CONFIG->save_setting('email_show_cc', $response['email_show_cc'], $GO_SECURITY->user_id);
-					$GO_CONFIG->save_setting('email_show_bcc', $response['email_show_bcc'], $GO_SECURITY->user_id);
+					$email_show_cc = (isset($_REQUEST['email_show_cc']) && $_REQUEST['email_show_cc']) ? 1 : 0;
+					$email_show_bcc = (isset($_REQUEST['email_show_bcc']) && $_REQUEST['email_show_bcc']) ? 1 : 0;
+					$GO_CONFIG->save_setting('email_show_cc', $email_show_cc, $GO_SECURITY->user_id);
+					$GO_CONFIG->save_setting('email_show_bcc', $email_show_bcc, $GO_SECURITY->user_id);
 
 					if(!empty($_POST['cc'])) 
 					{						
