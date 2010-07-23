@@ -82,3 +82,21 @@ $lang['calendar']['resource_mail_body']='%s ha reservado el recurso \'%s\'. Ud. 
 
 $lang['calendar']['resource_modified_mail_subject']='Recurso \'%s\' reservado para \'%s\' el \'%s\' fue modificado';//%s is resource name, %s is event name, %s is start date
 
+$lang['calendar']['unauthorized_participants_write']='Ud. no tiene permisos suficientes para agregar eventos en los calendarios de: <br /><br />{NAMES}<br /><br />Envie una invitación para que ellos la acepten.';
+
+$lang['calendar']['resource_modified_mail_body']='\'%s\' modificó el recurso \'%s\'. Ud es el administrador de este recurso. Por favor abra la reserva para aprobar o rechazar el pedido.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['your_resource_modified_mail_subject']='Su reserva del recurso \'%s\' para el \'%s\' con estado \'%s\' esta modificada'; //is resource name, %s is event name, %s is start date
+$lang['calendar']['your_resource_modified_mail_body']='%s modificó su reserva del recurso \'%s\'.';
+$lang['calendar']['your_resource_accepted_mail_subject']='Su reserva del recurso \'%s\' para el \'%s\' fue aceptada.';//%s is resource name, %s is start date
+$lang['calendar']['your_resource_accepted_mail_body']='%s ha aceptado su reserva para el recurso \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['your_resource_declined_mail_subject']='Su reserva del recurso \'%s\' para el \'%s\' fue rechazada';//%s is resource name, %s is start date
+$lang['calendar']['your_resource_declined_mail_body']='%s ha rechazado su reserva del recurso \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['birthday_name']='Cumpleaños: {NAME}';
+$lang['calendar']['birthday_desc']='{NAME} cumple {AGE} hoy';
+$lang['calendar']['month_times'][1]='el primer';
+$lang['calendar']['month_times'][2]='el segundo';
+$lang['calendar']['month_times'][3]='el tercer';
+$lang['calendar']['month_times'][4]='el cuarto';
+$lang['calendar']['month_times'][5]='el quinto';
+$lang['calendar']['open_resource']='Recurso abierto';
+$lang['calendar']['noCalSelected']='Ningún calendario fue seleccionado para esta vista. Seleccion al menos un clendario en el menu de Administración';

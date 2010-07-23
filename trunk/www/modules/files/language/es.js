@@ -26,3 +26,7 @@ GO.files.lang.newFiles='Nuevos';
 GO.files.lang.olderVersions='Versiones anteriores';
 GO.files.lang.uploadProperties='Las siguientes propiedades serán aplicadas a todos los archivos subidos que tengan la opcion "Small file" chequeada';
 GO.files.lang.selectFiles='Seleccione Archivos';
+
+GO.files.lang.fitImage='Ajustar imagen';
+GO.files.lang.normalSize='Tamaño normal';
+GO.files.lang.imageViewer='Visor de imagen';

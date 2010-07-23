@@ -102,7 +102,7 @@ class search extends db {
 			$sql .= "INNER JOIN go_links_$link_type l ON l.link_id=sc.id AND l.link_type=sc.link_type ";		
 		}		
 		
-		$sql .= "WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") ";
+		$sql .= "WHERE (a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).") ";
 		
 		/*
 		 * Verrrrry sloowwww
@@ -110,16 +110,16 @@ class search extends db {
 		$sql .=	"WHERE EXISTS (".
 				"SELECT acl_id FROM go_acl a ".
 				"LEFT JOIN go_users_groups ug ON ug.group_id=a.group_id ".
-				"WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") AND ".
+				"WHERE (a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).") AND ".
 				"(a.acl_id=sc.acl_read OR a.acl_id=sc.acl_write)) ";
 		*/
 		
 		if($link_folder_id>0)
 		{
-			$sql .= "AND l.folder_id=".$this->escape($link_folder_id)." ";
+			$sql .= "AND l.folder_id=".intval($link_folder_id)." ";
 		}elseif($link_id>0)
 		{
-			$sql .= "AND l.id=".$this->escape($link_id)." ";
+			$sql .= "AND l.id=".intval($link_id)." ";
 			
 			if($link_folder_id>-1)
 				$sql .= " AND l.folder_id=0 "; 
@@ -160,7 +160,7 @@ class search extends db {
 		
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);			
+			$sql .= " LIMIT ".intval($start).",".intval($offset);			
 		  $sql = substr_replace($sql, 'SELECT SQL_CALC_FOUND_ROWS',0,6);
 			
 			$this->query($sql);
@@ -196,11 +196,11 @@ class search extends db {
 		//WIth an offset the joins work faster then the subselects
 		if($offset>0)
 		{
-			$sql .= "WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") ";
+			$sql .= "WHERE (a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).") ";
 		}else
 		{		
-			$sql .=	"WHERE (sc.acl_read IN (SELECT acl_id FROM go_acl a INNER JOIN go_users_groups ug ON ug.group_id=a.group_id WHERE a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") OR ".
-				"sc.acl_write IN (SELECT acl_id FROM go_acl a INNER JOIN go_users_groups ug ON ug.group_id=a.group_id WHERE a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).")) ";
+			$sql .=	"WHERE (sc.acl_read IN (SELECT acl_id FROM go_acl a INNER JOIN go_users_groups ug ON ug.group_id=a.group_id WHERE a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).") OR ".
+				"sc.acl_write IN (SELECT acl_id FROM go_acl a INNER JOIN go_users_groups ug ON ug.group_id=a.group_id WHERE a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).")) ";
 		}
 
 
@@ -239,7 +239,7 @@ class search extends db {
 		
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);			
+			$sql .= " LIMIT ".intval($start).",".intval($offset);			
 		  $sql = substr_replace($sql, 'SELECT SQL_CALC_FOUND_ROWS',0,6);
 			
 			$this->query($sql);
@@ -365,7 +365,7 @@ class search extends db {
 	 */
 	function get_search_result($id, $type)
 	{
-		$sql = "SELECT * FROM go_search_cache WHERE id=".$this->escape($id)." AND link_type=".$this->escape($type);
+		$sql = "SELECT * FROM go_search_cache WHERE id=".intval($id)." AND link_type=".$this->escape($type);
 		$this->query($sql);
 		if($this->next_record())
 		{
@@ -411,7 +411,7 @@ class search extends db {
 		$sr = $this->get_search_result($id, $link_type);
 		if($sr)
 		{
-			$sql = "DELETE FROM go_search_cache WHERE id=".$this->escape($id)." AND link_type=".$this->escape($link_type);
+			$sql = "DELETE FROM go_search_cache WHERE id=".intval($id)." AND link_type=".$this->escape($link_type);
 			$this->query($sql);
 			
 			$this->log($id, $link_type, 'Deleted '.strip_tags($sr['name']));

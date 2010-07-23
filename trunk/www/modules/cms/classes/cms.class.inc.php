@@ -695,7 +695,7 @@ class cms extends db {
 	 * @return Array Record properties
 	 */
 	function get_site($site_id) {
-		$this->query("SELECT * FROM cms_sites WHERE id=".$this->escape($site_id));
+		$this->query("SELECT * FROM cms_sites WHERE id=".intval($site_id));
 		if($this->next_record()) {
 			return $this->record;
 		}else {
@@ -734,7 +734,7 @@ class cms extends db {
 		$this->query($sql);
 		$count = $this->num_rows();
 		if($offset>0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -757,7 +757,7 @@ class cms extends db {
 
 	function get_authorized_sites($user_id, $sort='name', $direction='ASC', $start=0, $offset=0) {
 
-		$user_id = $this->escape($user_id);
+		$user_id = intval($user_id);
 
 		$sql = "SELECT DISTINCT cms_sites.* FROM cms_sites ".
 						"INNER JOIN go_acl a ON (cms_sites.acl_write = a.acl_id) ";
@@ -770,7 +770,7 @@ class cms extends db {
 		$this->query($sql);
 		$count = $this->num_rows();
 		if ($offset > 0) {
-			$sql ." LIMIT ".$this->escape($start.",".$offset);
+			$sql ." LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 			return $count;
 		}else {
@@ -893,7 +893,7 @@ class cms extends db {
 	 * @return Array Record properties
 	 */
 	function get_folder($folder_id) {
-		$this->query("SELECT * FROM cms_folders WHERE id=".$this->escape($folder_id));
+		$this->query("SELECT * FROM cms_folders WHERE id=".intval($folder_id));
 		if($this->next_record()) {
 
 			return $this->record;
@@ -932,11 +932,11 @@ class cms extends db {
 	 * @return Int Number of records found
 	 */
 	function get_folders($folder_id, $sortfield='id', $sortorder='ASC', $start=0, $offset=0) {
-		$sql = "SELECT * FROM cms_folders WHERE parent_id=".$this->escape($folder_id)." ORDER BY ".$this->escape($sortfield." ".$sortorder);
+		$sql = "SELECT * FROM cms_folders WHERE parent_id=".intval($folder_id)." ORDER BY ".$this->escape($sortfield." ".$sortorder);
 		$this->query($sql);
 		$count = $this->num_rows();
 		if($offset>0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -1075,7 +1075,7 @@ class cms extends db {
 
 			}
 		}
-		return $this->query("DELETE FROM cms_files WHERE id=".$this->escape($file_id));
+		return $this->query("DELETE FROM cms_files WHERE id=".intval($file_id));
 	}
 
 	/**
@@ -1087,7 +1087,7 @@ class cms extends db {
 	 * @return Array Record properties
 	 */
 	function get_file($file_id, $convert_template_values=true) {
-		$this->query("SELECT * FROM cms_files WHERE id=".$this->escape($file_id));
+		$this->query("SELECT * FROM cms_files WHERE id=".intval($file_id));
 		if($this->next_record()) {
 			if($convert_template_values)
 				$this->record['option_values']=$this->get_template_values($this->record['option_values']);
@@ -1150,7 +1150,7 @@ class cms extends db {
 	 * @return Int Number of records found
 	 */
 	function get_files($folder_id, $sortfield='priority', $sortorder='ASC', $start=0, $offset=0, $only_visible=false) {
-		$sql = "SELECT * FROM cms_files WHERE folder_id=".$this->escape($folder_id);
+		$sql = "SELECT * FROM cms_files WHERE folder_id=".intval($folder_id);
 
 		if($only_visible) {
 			$sql .= " AND (show_until=0 OR show_until>".time().")";
@@ -1160,7 +1160,7 @@ class cms extends db {
 		$this->query($sql);
 		$count = $this->num_rows();
 		if($offset>0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;

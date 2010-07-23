@@ -68,7 +68,7 @@ class postfixadmin extends db {
 	{
 				
 		
-		return $this->query("DELETE FROM pa_aliases WHERE id=".$this->escape($alias_id));
+		return $this->query("DELETE FROM pa_aliases WHERE id=".intval($alias_id));
 	}
 
 	/**
@@ -81,7 +81,7 @@ class postfixadmin extends db {
 	 */
 	function get_alias($alias_id)
 	{
-		$this->query("SELECT * FROM pa_aliases WHERE id=".$this->escape($alias_id));
+		$this->query("SELECT * FROM pa_aliases WHERE id=".intval($alias_id));
 		if($this->next_record())
 		{
 			return $this->record;
@@ -140,7 +140,7 @@ class postfixadmin extends db {
 	 */
 	function get_aliases($domain_id, $query='', $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
-		$sql = "SELECT * FROM pa_aliases WHERE domain_id=".$this->escape($domain_id);
+		$sql = "SELECT * FROM pa_aliases WHERE domain_id=".intval($domain_id);
 		
 		if(!empty($query))
  		{
@@ -152,7 +152,7 @@ class postfixadmin extends db {
 		$count = $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -209,10 +209,10 @@ class postfixadmin extends db {
 	function delete_domain($domain_id)
 	{
 
-		$this->query("DELETE FROM pa_mailboxes WHERE domain_id=".$this->escape($domain_id));
-		$this->query("DELETE FROM pa_aliases WHERE domain_id=".$this->escape($domain_id));
+		$this->query("DELETE FROM pa_mailboxes WHERE domain_id=".intval($domain_id));
+		$this->query("DELETE FROM pa_aliases WHERE domain_id=".intval($domain_id));
 		
-		return $this->query("DELETE FROM pa_domains WHERE id=".$this->escape($domain_id));
+		return $this->query("DELETE FROM pa_domains WHERE id=".intval($domain_id));
 	}
 
 	/**
@@ -225,7 +225,7 @@ class postfixadmin extends db {
 	 */
 	function get_domain($domain_id)
 	{
-		$this->query("SELECT * FROM pa_domains WHERE id=".$this->escape($domain_id));
+		$this->query("SELECT * FROM pa_domains WHERE id=".intval($domain_id));
 		if($this->next_record())
 		{
 			return $this->record;
@@ -277,7 +277,7 @@ class postfixadmin extends db {
 		$count = $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -285,14 +285,14 @@ class postfixadmin extends db {
 	
 	function get_domain_info($domain_id)
 	{
-		$sql ="SELECT COUNT(*) AS count, SUM(`usage`) AS `usage` FROM pa_mailboxes WHERE domain_id=".$this->escape($domain_id);
+		$sql ="SELECT COUNT(*) AS count, SUM(`usage`) AS `usage` FROM pa_mailboxes WHERE domain_id=".intval($domain_id);
 		$this->query($sql);
 		$this->next_record();
 		
 		$domain['mailbox_count']=intval($this->f('count'));
 		$domain['usage']=intval($this->f('usage'));
 		
-		$sql ="SELECT COUNT(*) AS count FROM pa_aliases WHERE domain_id=".$this->escape($domain_id);
+		$sql ="SELECT COUNT(*) AS count FROM pa_aliases WHERE domain_id=".intval($domain_id);
 		$this->query($sql);
 		$this->next_record();
 		
@@ -318,7 +318,7 @@ class postfixadmin extends db {
 	 
 	function get_authorized_domains($auth_type, $user_id, $query, $sort='name', $direction='ASC', $start=0, $offset=0, $no_backup_mx_domains=false)
 	{
-		$user_id=$this->escape($user_id);
+		$user_id=intval($user_id);
 		
 		$sql = "SELECT DISTINCT pa_domains.* FROM pa_domains ".
  		"INNER JOIN go_acl a ON ";
@@ -353,7 +353,7 @@ class postfixadmin extends db {
 		$count = $this->num_rows();
 		if ($offset > 0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 			return $count;
 		}else
@@ -404,7 +404,7 @@ class postfixadmin extends db {
 	 */
 	function delete_fetchmail_config($fetchmail_config_id)
 	{		
-		return $this->query("DELETE FROM pa_fetchmail_configs WHERE id=".$this->escape($fetchmail_config_id));
+		return $this->query("DELETE FROM pa_fetchmail_configs WHERE id=".intval($fetchmail_config_id));
 	}
 
 	/**
@@ -417,7 +417,7 @@ class postfixadmin extends db {
 	 */
 	function get_fetchmail_config($fetchmail_config_id)
 	{
-		$this->query("SELECT * FROM pa_fetchmail_configs WHERE id=".$this->escape($fetchmail_config_id));
+		$this->query("SELECT * FROM pa_fetchmail_configs WHERE id=".intval($fetchmail_config_id));
 		if($this->next_record())
 		{
 			return $this->record;
@@ -469,7 +469,7 @@ class postfixadmin extends db {
 		$count = $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -539,7 +539,7 @@ class postfixadmin extends db {
 			$this->query($sql);
 		}
 		
-		return $this->query("DELETE FROM pa_mailboxes WHERE id=".$this->escape($mailbox_id));
+		return $this->query("DELETE FROM pa_mailboxes WHERE id=".intval($mailbox_id));
 	}
 
 	/**
@@ -552,7 +552,7 @@ class postfixadmin extends db {
 	 */
 	function get_mailbox($mailbox_id)
 	{
-		$this->query("SELECT * FROM pa_mailboxes WHERE id=".$this->escape($mailbox_id));
+		$this->query("SELECT * FROM pa_mailboxes WHERE id=".intval($mailbox_id));
 		if($this->next_record())
 		{
 			return $this->record;
@@ -607,7 +607,7 @@ class postfixadmin extends db {
 		if($domain_id>0)
 		{
 			$where=true;
-			$sql .= "WHERE domain_id=".$this->escape($domain_id);
+			$sql .= "WHERE domain_id=".intval($domain_id);
 		}
 		
 		if(!empty($query))
@@ -627,7 +627,7 @@ class postfixadmin extends db {
 		$count = $this->num_rows();
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;

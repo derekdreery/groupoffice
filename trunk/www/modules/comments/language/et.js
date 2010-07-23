@@ -7,7 +7,7 @@
  * Copy everything below for translations
  */
 
-GO.comments.lang.comment="Kommenteeri";
+GO.comments.lang.comment="Kommentaar";
 GO.comments.lang.comments="Kommentaarid";
 GO.comments.lang.recentComments='Viimased kommentaarid';
 GO.comments.lang.browseComments = 'Sirvi kommentaare';

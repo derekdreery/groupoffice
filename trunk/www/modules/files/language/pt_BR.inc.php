@@ -4,6 +4,8 @@ require($GO_LANGUAGE->get_fallback_language_file('files'));
 $lang['files']['name'] = 'Arquivos';
 $lang['files']['description'] = 'Módulo de arquivos; Módulo para compartilhar arquivos.';
 
+$lang['link_type'][6]='Arquivo';
+
 $lang['files']['fileNotFound'] = 'Arquivo não encontrado';
 $lang['files']['folderExists'] = 'Esta pasta já existe';
 $lang['files']['filenameExists'] = 'Nome de arquivo já existe';
@@ -18,7 +20,7 @@ $lang['files']['general']='Geral';
 
 
 $lang['files']['folder_modified_subject']='Mudar para pasta do Group-Office';
-$lang['files']['folder_modified_body']='Sua solicitação de mudança foi feita para:
+$lang['files']['folder_modified_body']='Você solicitou para ser notificado quando alterações fossem feitas para:
 
 %s
 
@@ -33,3 +35,5 @@ $lang['files']['deleted']='Apagado';
 
 $lang['files']['file']='Arquivo';
 $lang['files']['folder']='Pasta';
+$lang['files']['files']='Arquivos';
+

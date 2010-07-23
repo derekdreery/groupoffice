@@ -124,13 +124,13 @@ class tasks extends db
 	
 	function get_settings($user_id)
 	{
-		$this->query("SELECT * FROM ta_settings WHERE user_id='".$this->escape($user_id)."'");
+		$this->query("SELECT * FROM ta_settings WHERE user_id='".intval($user_id)."'");
 		if ($this->next_record(DB_ASSOC))
 		{
 			return $this->record;
 		}else
 		{			
-			$this->query("INSERT INTO ta_settings (user_id, reminder_time) VALUES ('".$this->escape($user_id)."', '".date($_SESSION['GO_SESSION']['time_format'],mktime(8,0))."')");
+			$this->query("INSERT INTO ta_settings (user_id, reminder_time) VALUES ('".intval($user_id)."', '".date($_SESSION['GO_SESSION']['time_format'],mktime(8,0))."')");
 			return $this->get_settings($user_id);
 		}
 	}
@@ -274,7 +274,7 @@ class tasks extends db
 	
 	function get_user_tasklists($user_id)
 	{
-		$sql = "SELECT * FROM ta_lists WHERE user_id='".$this->escape($user_id)."'";
+		$sql = "SELECT * FROM ta_lists WHERE user_id='".intval($user_id)."'";
 
 		$this->query($sql);
 		return $this->num_rows();
@@ -282,7 +282,7 @@ class tasks extends db
 	
 	function get_default_tasklist($user_id)
 	{
-		$sql = "SELECT * FROM ta_lists WHERE user_id='".$this->escape($user_id)."' LIMIT 0,1";
+		$sql = "SELECT * FROM ta_lists WHERE user_id='".intval($user_id)."' LIMIT 0,1";
 		$this->query($sql);
 		if($this->next_record())
 		{
@@ -352,7 +352,7 @@ class tasks extends db
 
 		if($user_id>0)
 		{
-			$sql .= " AND user_id=".$this->escape($user_id);
+			$sql .= " AND user_id=".intval($user_id);
 		}
 		$this->query($sql);
 		if ($this->next_record())
@@ -383,7 +383,7 @@ class tasks extends db
 			$sql .= "INNER JOIN go_acl a ON (l.acl_id=a.acl_id AND a.level>".GO_SECURITY::READ_PERMISSION.") ";
 		}
 		$sql .= "LEFT JOIN go_users_groups ug ON a.group_id = ug.group_id ".
-		"WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).")";
+		"WHERE (a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).")";
 		
 		
 		if(!empty($query))
@@ -674,7 +674,7 @@ class tasks extends db
 				$sql .= " WHERE ";
 				$where=true;
 			}
-			$sql .= "l.user_id='".$this->escape($user_id)."' ";
+			$sql .= "l.user_id='".intval($user_id)."' ";
 		}else {
 			if($where) {
 				$sql .= " AND ";
@@ -1272,13 +1272,13 @@ class tasks extends db
 				"FROM ta_lists ".
 				"	INNER JOIN go_acl ON (ta_lists.acl_id = go_acl.acl_id AND go_acl.level>1) ".
 				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-				"WHERE go_acl.user_id=".$this->escape($user_id)." ".
-				"OR go_users_groups.user_id=".$this->escape($user_id)." ".
+				"WHERE go_acl.user_id=".intval($user_id)." ".
+				"OR go_users_groups.user_id=".intval($user_id)." ".
 				" ORDER BY ta_lists.".$sort." ".$dir;
 		$this->query($sql);
 		$count= $this->num_rows();
 		if($offset>0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;

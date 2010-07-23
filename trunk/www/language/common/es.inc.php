@@ -148,18 +148,51 @@ $lang['common']['files']='Archivo';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Total';
 
-$lang['common']['lost_password_subject']='Nueva Contraseña';
-$lang['common']['lost_password_body']='%s,<br />
-<br />
-Ha solicitado una nueva contraseña para %s.<br />
-<br />
-Su nuevo ingreso es:<br />
-<br />
-Nombre de usuario: %s<br />
-Contraseña: %s';
-
-$lang['common']['lost_password_error']='No se puede encontrar su dirección de correo electrónico.';
-$lang['common']['lost_password_success']='Una nueva contraseña ha sido enviado a su e-mail.';
 
 $lang['common']['loadingModules']='Cargando modulos';
 $lang['common']['loadingModule'] = 'Cargando modulo';
+
+$lang['common']['about']='Versión: %s';
+$lang['common']['totals']='Totales';
+$lang['common']['printPage']='Página %s de %s';
+$lang['common']['quotaExceeded']='No tiene mas espacio en el disco. Por favor borre algunos archivos o contacte a su proveedor para aumentar su límite';
+$lang['common']['moduleRequired']='El módulo %s es necesario para esta función';
+$lang['common']['invalidEmailError']='La dirección de e-mail es inválida';
+$lang['common']['invalidDateError']='Ha ingresado una fecha inválida';
+$lang['common']['noFileUploaded']='No se ha recibido ningún archivo';
+$lang['common']['error']='Error';
+$lang['common']['fileCreateError']='No se pudo crear el archivo';
+$lang['common']['illegalCharsError']='El nombre contiene uno de los siguientes caracteres inválidos %s';
+$lang['common']['address_format']='Formato de la dirección';
+$lang['common']['default_salutation']['unknown']='Estimado/a Sr / Sra';
+$lang['common']['dear']='Estimado';
+$lang['common']['month']= 'mes';
+$lang['common']['strMonths']= 'meses';
+$lang['common']['confirm_leave']='Si abandone Group-Office perderá todos los cambios sin guardar';
+$lang['common']['dataSaved']='La información fue guardada exitosamente';
+$lang['common']['uploadMultipleFiles']= 'Haga click en \'Examinar\' para seleccionar los archivos y/o carpetas de su computadora. Haga click en \'Subir\' para transferir esos archivos a Group-Office. Esta ventana se cerrará automaticamente cuando finalice la transferencia.';
+$lang['common']['loginToGO']='Haga click aquí para loguearse a Group-Office';
+$lang['common']['links']='Enlaces';
+$lang['common']['GOwebsite']='Sitio de Group-Office';
+$lang['common']['GOisAProductOf']='<i>Group-Office</i> es un producto de <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+$lang['common']['yes']='Si';
+$lang['common']['no']='No';
+$lang['common']['system']='Sistema';
+$lang['common']['goAlreadyStarted']='Group-Office ya fue empezado. La pantalla requerida ya fue cargada en Group-Office. Ud puede cerrar esta ventana o pestaña y continuar trabajando con Group-Office.';
+$lang['commmon']['logFiles']='Archivos de log';
+$lang['common']['reminder']='Recordatorio';
+$lang['common']['unknown']='Desconocido';
+$lang['common']['time']='Tiempo';
+$lang['common']['dontChangeAdminsPermissions']='Ud no puede cambiar los permisos del grupo administrador';
+$lang['common']['dontChangeOwnersPermissions']='Ud no puede cambiar los permisos del usuario';
+$lang['common']['running_sys_upgrade']='Ejecutando actualización del sistema';
+$lang['common']['sys_upgrade_text']='Un momento por favor. Todo sera logueado.';
+$lang['common']['click_here_to_contine']='Haga click para continuar';
+$lang['common']['parentheses_invalid_error']='Los parentesis en su búsqueda son inválidos. Por favor corrijalos.';
+$lang['common']['nReminders']='%s recordatorios';
+$lang['common']['oneReminder']='1 recordatorio';
+$lang['common']['youHaveReminders']='Ud tiene %s en %s.';
+$lang['common']['createdBy']='Creado por';
+$lang['common']['none']='Ningúno';
+$lang['common']['alert']='Alerta';
+$lang['common']['theFolderAlreadyExists']='Ya existe una carpeta con ese nombre';

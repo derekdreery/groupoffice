@@ -31,6 +31,7 @@ GO.email.lang.compose='Componer';
 GO.email.lang.reply='Responder';
 GO.email.lang.replyAll='Responder a todos';
 GO.email.lang.forward='Reenviar';
+GO.email.lang.forwardTo='Reenviar e-mail a:';
 GO.email.lang.markAsRead='Marcar como leído';
 GO.email.lang.markAsUnread='Marcar como no leído';
 GO.email.lang.flag='Añadir marca';
@@ -138,3 +139,12 @@ GO.email.lang.searchCC='Destinatario (CC)';
 GO.email.lang.youHaveNewMails = 'Tiene {new} nuevo(s) correo(s)';
 
 GO.email.lang.addSendersTo='Agregar remitente a...';
+
+GO.email.lang.selectFolderRename='Seleccione la carpeta que quiere renombrar';
+GO.email.lang.cantRenameInboxFolder='No se puede renombrar la carpeta de Entrada';
+GO.email.lang.alias="Alias";
+GO.email.lang.aliases="Aliases";
+GO.email.lang.accountId="Id de cuenta";
+GO.email.lang.email="Email";
+GO.email.lang.manageAliases='Administrar aliases de remitentes';
+GO.email.lang.defaultTemplate='Usar el template seleccionado por defecto';

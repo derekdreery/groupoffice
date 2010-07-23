@@ -12,8 +12,6 @@ GO.addressbook.lang.btnAddContact = 'Añadir contacto'	;
 GO.addressbook.lang.btnAddCompany = 'Añadir empresa';
 GO.addressbook.lang.btnManage = 'Administrar';
 GO.addressbook.lang.btnDownload = 'Descargar archivo';
-GO.addressbook.lang.btnSearch = 'Buscar';
-GO.addressbook.lang.btnReset = 'Limpiar';
 GO.addressbook.lang.cmdFormSearchFirst = 'Buscar en= ';
 GO.addressbook.lang.cmdFormSearchSecond = ' on= ';
 GO.addressbook.lang.cmdFormSearchThird = ' por= ';
@@ -82,3 +80,15 @@ GO.addressbook.lang.searchOnSender='Buscar';
 GO.addressbook.lang.confirmCreate='El contacto no existe. Quiere crear un nuevo contacto?';
 
 GO.addressbook.lang.advancedSearch='Búsqueda avanzada';
+
+GO.addressbook.lang.defaultAddressFormat='Formato de dirección por defecto';
+GO.addressbook.lang.defaultSalutation='Saludo por defecto';
+GO.addressbook.lang.explanationSex='Saludo para Hombre y Mujer';
+GO.addressbook.lang.searchQueryName='Nombre de la búsqueda';
+GO.addressbook.lang.enterSearchQueryName='Ingrese el nombre de la búsqueda:';
+GO.addressbook.lang.photo= 'Foto';
+GO.addressbook.lang.deleteImage='Borrar imagen';
+GO.addressbook.lang.addAllSearchResults='Agregar todos los resultados de la búsqueda';
+GO.addressbook.lang.confirmAddAllSearchResults='¿Esta seguro que quiere agregar todos los resultados de la búsqueda a la lista de contactos?';
+GO.addressbook.lang.moveEmployees='Mover empleados';
+

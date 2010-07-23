@@ -772,10 +772,10 @@ try {
 
 					$email->get_folders_by_path($folder['account_id'], $folder['name']);
 					$folder_src_length = strlen($folder['name']);
-					while($record = $email->next_record()) {
-						$email2 = new email();
-
-						if($new_folder != $record['name']) {
+					$email2 = new email();
+					while($record = $email->next_record()) {						
+						if(($new_folder != $record['name']) && (strstr($record['name'], $folder['name'].'.')))
+						{
 							$folder_name = $new_folder.substr($record['name'], $folder_src_length);
 							$email2->rename_folder($folder['account_id'], $record['name'], $folder_name);
 						}

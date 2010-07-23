@@ -237,7 +237,7 @@ class files extends db {
 	}
 
 	function is_notified($folder_id, $user_id) {
-		$sql = "SELECT * FROM fs_notifications WHERE folder_id=".$this->escape($folder_id)." AND user_id=".$this->escape($user_id);
+		$sql = "SELECT * FROM fs_notifications WHERE folder_id=".intval($folder_id)." AND user_id=".intval($user_id);
 		$this->query($sql);
 		if($this->next_record()) {
 			return true;
@@ -248,7 +248,7 @@ class files extends db {
 
 
 	function get_users_to_notify($folder_id) {
-		$sql = "SELECT user_id FROM fs_notifications WHERE folder_id=".$this->escape($folder_id);
+		$sql = "SELECT user_id FROM fs_notifications WHERE folder_id=".intval($folder_id);
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -341,7 +341,7 @@ class files extends db {
 	 */
 
 	function delete_template($template_id) {
-		return $this->query("DELETE FROM fs_templates WHERE id=".$this->escape($template_id));
+		return $this->query("DELETE FROM fs_templates WHERE id=".intval($template_id));
 	}
 
 
@@ -360,7 +360,7 @@ class files extends db {
 		}else {
 			$fields = 'id, name, user_id, extension, acl_id';
 		}
-		$this->query("SELECT $fields FROM fs_templates WHERE id=".$this->escape($template_id));
+		$this->query("SELECT $fields FROM fs_templates WHERE id=".intval($template_id));
 		if($this->next_record()) {
 			return $this->record;
 		}
@@ -397,17 +397,17 @@ class files extends db {
 	 * @return Int Number of records found
 	 */
 	function get_authorized_templates($user_id, $start=0, $offset=0, $sortfield='id', $sortorder='ASC') {
-		$user_id = $this->escape($user_id);
+		$user_id = intval($user_id);
 		$sql = "SELECT DISTINCT t.id, t.user_id, t.name, t.extension FROM fs_templates t ".
 				"INNER JOIN go_acl a ON a.acl_id=t.acl_id ".
 				"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
-				"WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") ORDER BY ".$this->escape($sortfield." ".$sortorder);
+				"WHERE (a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).") ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
 		$this->query($sql);
 		$count = $this->num_rows();
 
 		if($offset>0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -426,18 +426,18 @@ class files extends db {
 	 * @return Int Number of records found
 	 */
 	function get_writable_templates($user_id, $start=0, $offset=0, $sortfield='id', $sortorder='ASC') {
-		$user_id = $this->escape($user_id);
+		$user_id = intval($user_id);
 
 		$sql = "SELECT DISTINCT t.id, t.user_id, t.name, t.extension FROM fs_templates t ".
 				"INNER JOIN go_acl a ON a.acl_id=t.acl_id AND a.level>".GO_SECURITY::READ_PERMISSION.' '.
 				"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
-				"WHERE (a.user_id=".$this->escape($user_id)." OR ug.user_id=".$this->escape($user_id).") ORDER BY ".$this->escape($sortfield." ".$sortorder);
+				"WHERE (a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).") ORDER BY ".$this->escape($sortfield." ".$sortorder);
 
 		$this->query($sql);
 		$count = $this->num_rows();
 
 		if($offset>0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -455,7 +455,7 @@ class files extends db {
 	}
 
 	function get_status_name($status_id) {
-		$sql = "SELECT name FROM fs_statuses WHERE id=".$this->escape($status_id);
+		$sql = "SELECT name FROM fs_statuses WHERE id=".intval($status_id);
 		$this->query($sql);
 		if($this->next_record()) {
 			return $this->f('name');
@@ -849,12 +849,12 @@ class files extends db {
 	 * @return int Number of shares found,
 	 */
 	function get_authorized_shares($user_id, $visible_only=true) {
-		$user_id=$this->escape($user_id);
+		$user_id=intval($user_id);
 		//ORDER BY PATH important so higher order shares come first
 		$sql = "SELECT DISTINCT f.* FROM fs_folders f ".
 				"INNER JOIN go_acl a ON f.acl_id=a.acl_id ".
 				"LEFT JOIN go_users_groups ug ON (a.group_id=ug.group_id) ".
-				"WHERE (ug.user_id=".$this->escape($user_id)." OR a.user_id=".$this->escape($user_id).") AND f.user_id!=$user_id ";
+				"WHERE (ug.user_id=".intval($user_id)." OR a.user_id=".intval($user_id).") AND f.user_id!=$user_id ";
 		if($visible_only) {
 			$sql .= "AND f.visible='1' ";
 		}
@@ -875,7 +875,7 @@ class files extends db {
 	 */
 	function get_user_shares($user_id) {
 	//ORDER BY PATH important so higher order shares come first
-		$sql = "SELECT * FROM fs_shares WHERE user_id='".$this->escape($user_id)."' ORDER BY path ASC";
+		$sql = "SELECT * FROM fs_shares WHERE user_id='".intval($user_id)."' ORDER BY path ASC";
 		$this->query($sql);
 		return $this->num_rows();
 	}
@@ -1089,7 +1089,7 @@ class files extends db {
 	}
 
 	function has_children($folder_id){
-		$sql = "SELECT * FROM fs_folders WHERE parent_id=".$this->escape($folder_id).' LIMIT 0,1';
+		$sql = "SELECT * FROM fs_folders WHERE parent_id=".intval($folder_id).' LIMIT 0,1';
 		$this->query($sql);
 		return $this->next_record();
 	}
@@ -1110,7 +1110,7 @@ class files extends db {
 		if($authenticate) {
 			$sql .= "LEFT JOIN go_acl a ON a.acl_id=f.acl_id ".
 					"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
-					"WHERE (a.user_id=".$this->escape($GO_SECURITY->user_id)." OR ug.user_id=".$this->escape($GO_SECURITY->user_id)." OR ISNULL(a.acl_id)) AND ";
+					"WHERE (a.user_id=".intval($GO_SECURITY->user_id)." OR ug.user_id=".intval($GO_SECURITY->user_id)." OR ISNULL(a.acl_id)) AND ";
 		}else {
 			$sql .= " WHERE ";
 		}

@@ -35,3 +35,5 @@ $lang['files']['deleted']='Eliminados';
 $lang['files']['file']='Archivo';
 $lang['files']['folder']='Carpeta';
 $lang['files']['files']='Archivos';
+
+$lang['link_type'][6]='Archivo';

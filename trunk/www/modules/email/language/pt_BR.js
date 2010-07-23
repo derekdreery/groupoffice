@@ -15,8 +15,8 @@ GO.email.lang.replyAll='Responder a todos';
 GO.email.lang.forward='Encaminhar';
 GO.email.lang.markAsRead='Marcar como lida';
 GO.email.lang.markAsUnread='Marcar como não lida';
-GO.email.lang.flag='Criar marcação';
-GO.email.lang.unflag='Remover marcação';
+GO.email.lang.flag='Adicionar sinalizador';
+GO.email.lang.unflag='Remover sinalizador';
 GO.email.lang.flagged='Marcado';
 GO.email.lang.unflagged='Desmarcado';
 GO.email.lang.root='Raiz';
@@ -25,7 +25,7 @@ GO.email.lang.filter='Filtro';
 GO.email.lang.filters='Filtros';
 GO.email.lang.selectFolderDelete='Selecione uma pasta para apagar';
 GO.email.lang.selectFolderAdd='Primeiro seleciona uma pasta da árvore onde você quer criar uma nova pasta. Depois clique em \'Criar\'';
-GO.email.lang.selectFolderRename='Selecione uma pasta para renomear por favor';
+GO.email.lang.selectFolderRename='Selecione uma pasta para renomear';
 GO.email.lang.forward='Encaminhar';
 GO.email.lang.resetSearch='Reiniciar busca';
 GO.email.lang.emailMessage='Mensagem de e-mail';
@@ -91,8 +91,8 @@ GO.email.lang.priority='Prioridade';
 GO.email.lang.read='Lido';
 GO.email.lang.NA='N/A';
 
-GO.email.lang.emptyFolder='Pasta vazia';
-GO.email.lang.emptyFolderConfirm='Deseja LIMPAR a pasta \'{name}\'?';
+GO.email.lang.emptyFolder='Limpar pasta';
+GO.email.lang.emptyFolderConfirm='Deseja limpar a pasta \'{name}\'?';
 GO.email.lang.addUnknownRecipients='Adicionar destinatários desconhecido';
 GO.email.lang.addUnknownRecipientsText='Você mandou um e-mail para um ou mais destinatários que não fazem parte dos seus contatos. Clique no nome se deseja adicionar ou feche essa janela.';
 GO.email.lang.attachFilesPC='Adicionar do Computador';
@@ -121,13 +121,13 @@ GO.email.lang.confirmEmptySubject='Você não preencheu o assunto. Deseja enviar
 
 GO.email.lang.usage='Uso de disco';
 GO.email.lang.searchGO='Buscar através do {product_name}';
-GO.email.lang.toggleWindowPosition = 'Inverter posição da janela de mensagens';
+GO.email.lang.toggleWindowPosition = 'Alternar posição da janela de mensagens';
 GO.email.lang.closeUploadDialog='Feche a caixa de diálogo de envio primeiro ou aguarde até a transferência terminar';
 
 GO.email.lang.signature='Assinatura';
 
 GO.email.defaultProgram='Programa de e-mail padrão';
-GO.email.defaultProgramInstructions ='<p>Para configurar o {product_name} como o seu programa padrão de e-mail, por favor <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">leia as instruções</a>.</p><p>Se você estiver utilizando Windows você deve baixar e executar <a class="normal-link" href="{url}">este arquivo de registro</a></p>';
+GO.email.defaultProgramInstructions ='<p>Para configurar o {product_name} como o seu programa padrão de e-mail, por favor <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">leia as instruções</a>.</p><p>Se você estiver utilizando Windows você deve baixar e executar <a class="normal-link" href="{url}">este arquivo de registro</a>.</p>';
 
 
 GO.email.lang.htmlMarkup = 'Escrever e-mail em HTML';
@@ -157,5 +157,4 @@ GO.email.lang.searchTo='Destinatário';
 GO.email.lang.searchCC='Destinatário (CC)';
 
 GO.email.lang.youHaveNewMails = 'Você tem {new} novo(s) e-mail(s)';
-
 

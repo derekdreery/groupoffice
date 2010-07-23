@@ -199,14 +199,14 @@ class addressbook extends db {
 				"FROM ab_addressbooks ".
 				"	INNER JOIN go_acl ON ab_addressbooks.acl_id = go_acl.acl_id ".
 				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-				"WHERE go_acl.user_id=".$this->escape($user_id)." ".
-				"OR go_users_groups.user_id=".$this->escape($user_id)." ".
+				"WHERE go_acl.user_id=".intval($user_id)." ".
+				"OR go_users_groups.user_id=".intval($user_id)." ".
 				" ORDER BY ab_addressbooks.".$sort." ".$dir;
 
 		$this->query($sql);
 		$count= $this->num_rows();
 		if($offset>0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -248,7 +248,7 @@ class addressbook extends db {
 		$this->query($sql);
 		$count =  $this->num_rows();
 		if ($offset != 0 && $count > $offset) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 
@@ -279,13 +279,13 @@ class addressbook extends db {
 				"FROM ab_addressbooks ".
 				"	INNER JOIN go_acl ON (ab_addressbooks.acl_id = go_acl.acl_id AND go_acl.level>1) ".
 				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-				"WHERE go_acl.user_id=".$this->escape($user_id)." ".
-				"OR go_users_groups.user_id=".$this->escape($user_id)." ".
+				"WHERE go_acl.user_id=".intval($user_id)." ".
+				"OR go_users_groups.user_id=".intval($user_id)." ".
 				" ORDER BY ab_addressbooks.".$sort." ".$dir;
 		$this->query($sql);
 		$count= $this->num_rows();
 		if($offset>0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -390,7 +390,7 @@ class addressbook extends db {
 		$count = $this->num_rows();
 
 		if ($offset != 0 && $count > $offset) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 		return $count;
@@ -462,7 +462,7 @@ class addressbook extends db {
 		$sql = "SELECT * FROM ab_contacts WHERE company_id='".$this->escape($company_id)."' ORDER BY $sort $direction";
 
 		if ($offset != 0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 
 			$sql2 = "SELECT * FROM ab_contacts WHERE company_id='".$this->escape($company_id)."'";
 
@@ -500,7 +500,7 @@ class addressbook extends db {
 		$search = new search();
 		$search->delete_search_result($company_id, 3);
 
-		$sql = "DELETE FROM ab_companies WHERE id='$company_id'";
+		$sql = "DELETE FROM ab_companies WHERE id='".$this->escape($company_id)."'";
 		if ($this->query($sql)) {
 			return true;
 		}
@@ -733,7 +733,7 @@ class addressbook extends db {
 		$this->query($sql);
 
 		if($offset > 0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
 
 		$this->query($sql);
@@ -885,7 +885,7 @@ class addressbook extends db {
 				'require'=>__FILE__);
 
 		if($offset > 0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
 
 		$this->query($sql);
@@ -1045,7 +1045,7 @@ class addressbook extends db {
 		$sql .= " ORDER BY $sort_index $sort_order";
 
 		if($offset > 0 ) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
 		$this->query($sql);
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
@@ -1388,7 +1388,7 @@ class addressbook extends db {
 		$sql .= " * FROM ab_contacts ";
 
 		if($addressbook_id>0) {
-			$sql .= "WHERE addressbook_id=".$addressbook_id." AND ";
+			$sql .= "WHERE addressbook_id=".intval($addressbook_id)." AND ";
 		}else {
 			$user_ab = $this->get_user_addressbook_ids($user_id);
 			if(count($user_ab) > 1) {
@@ -1402,7 +1402,7 @@ class addressbook extends db {
 		$sql .= " (email='$email' OR email2='$email' OR email3='$email')";
 
 		if($offset > 0) {
-			$sql .= " LIMIT ".$this->escape($start.",".$offset);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
 
 		$this->query($sql);
@@ -1415,18 +1415,18 @@ class addressbook extends db {
 	}
 
 	function get_sqls($user_id, $companies='0') {
-		$this->query("SELECT * FROM ab_sql WHERE user_id='".$this->escape($user_id)."' AND companies='".$this->escape($companies)."'");
+		$this->query("SELECT * FROM ab_sql WHERE user_id='".intval($user_id)."' AND companies='".$this->escape($companies)."'");
 		return $this->num_rows();
 	}
 
 	function get_sql($id) {
-		$this->query("SELECT * FROM ab_sql WHERE id='$id'");
+		$this->query("SELECT * FROM ab_sql WHERE id='".$this->$escape($id)."'");
 		return $this->next_record();
 	}
 
 	function delete_sql($sql_id) {
 
-		return $this->query("DELETE FROM ab_sql WHERE id='".$this->escape($sql_id)."'");
+		return $this->query("DELETE FROM ab_sql WHERE id='".$this->$escape($sql_id)."'");
 
 	}
 }

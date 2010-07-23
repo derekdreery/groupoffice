@@ -445,7 +445,8 @@ try {
 
 				$cal->update_event($event, $calendar, $old_event, $update_related, false);
 
-				$response['files_folder_id']=$event['files_folder_id'];
+				if(isset($event['files_folder_id']))
+					$response['files_folder_id']=$event['files_folder_id'];
 				$response['success']=true;
 			}else
 			{
