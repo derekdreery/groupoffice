@@ -6,6 +6,7 @@
  * var $mapping = array(
 		'5' => array( //projects
 				'post_title' => 'name',	//name is page title
+				'categories_from_column'=>false, //categories may also come from a posted value
 				'categories' => 'Vacatures', //categories
 				'custom' => array( //wordpress custom fields
 					'Korte beschrijving'=>'description',
@@ -19,6 +20,7 @@
 			),
 		'2' => array(
 				'post_title' => 'first_name',
+				* 'categories_from_column'=>false,
 				'categories' => 'Keystaffers',
 				'custom' => array()
 			)
@@ -63,21 +65,6 @@ class wordpress extends db{
 
 	public function save($values, $link_type){
 		if(isset($this->mapping[$link_type])){
-			$w['id']=$values['id'];
-			$w['link_type']=$link_type;
-			$w['publish']=isset($_POST['wp_publish']) ? '1' : '0';
-			$w['title']=$values[$this->mapping[$link_type]['post_title']];
-			$w['content']=$_POST['wp_content'];//$values[$this->mapping[$link_type]['post_content']];
-			$w['updated']=1;
-			$w['categories']=$this->mapping[$link_type]['categories'];
-
-
-			if($this->get_post($w['id'], $w['link_type'])){
-				$this->update_row('wp_posts',array('id','link_type'), $w);
-				$this->query('DELETE FROM wp_posts_custom WHERE id=? AND link_type=?', 'ii', array($values['id'], $link_type));
-			}else{
-				$this->insert_row('wp_posts', $w);
-			}
 
 			global $GO_MODULES;
 
@@ -89,6 +76,26 @@ class wordpress extends db{
 				$values = array_merge($values, $custom);
 				//go_debug($values);
 			}
+
+
+
+			$w['id']=$values['id'];
+			$w['link_type']=$link_type;
+			$w['publish']=isset($_POST['wp_publish']) ? '1' : '0';
+			$w['title']=$values[$this->mapping[$link_type]['post_title']];
+			$w['content']=$_POST['wp_content'];//$values[$this->mapping[$link_type]['post_content']];
+			$w['updated']=1;
+			$w['categories']=$this->mapping[$link_type]['categories_from_column'] ? $values[$this->mapping[$link_type]['categories']] : $this->mapping[$link_type]['categories'];
+
+
+			if($this->get_post($w['id'], $w['link_type'])){
+				$this->update_row('wp_posts',array('id','link_type'), $w);
+				$this->query('DELETE FROM wp_posts_custom WHERE id=? AND link_type=?', 'ii', array($values['id'], $link_type));
+			}else{
+				$this->insert_row('wp_posts', $w);
+			}
+
+			
 
 			foreach($this->mapping[$link_type]['custom'] as $wp_key=>$go_col){
 				if(isset($values[$go_col])){
