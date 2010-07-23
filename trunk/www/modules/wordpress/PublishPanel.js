@@ -1,8 +1,17 @@
 GO.wordpress.PublishPanel = function(config){
 	config = config || {};
 
-	config.title='Wordpress publish';
+	config.title=GO.wordpress.lang.websitePublish;
 	config.layout='form';
+
+	var spellcheckInsertPlugin = new GO.plugins.HtmlEditorSpellCheck(this);
+	var wordPastePlugin = new Ext.ux.form.HtmlEditor.Word();
+	//var dividePlugin = new Ext.ux.form.HtmlEditor.Divider();
+	//var tablePlugin = new Ext.ux.form.HtmlEditor.Table();
+	var hrPlugin = new Ext.ux.form.HtmlEditor.HR();
+	var ioDentPlugin = new Ext.ux.form.HtmlEditor.IndentOutdent();
+	//var ssScriptPlugin = new Ext.ux.form.HtmlEditor.SubSuperScript();
+	var rmFormatPlugin = new Ext.ux.form.HtmlEditor.RemoveFormat();
 
 	config.items=[
 		{
@@ -14,7 +23,14 @@ GO.wordpress.PublishPanel = function(config){
 			hideLabel:true,
 			xtype:'htmleditor',
 			anchor:'100% -50',
-			name:'wp_content'
+			name:'wp_content',
+			plugins: [
+				spellcheckInsertPlugin,
+				wordPastePlugin,// evil! makes it very slow because of a lot of getvalue calls.
+				hrPlugin,
+				ioDentPlugin,
+				rmFormatPlugin
+			]
 		}
 	];
 
