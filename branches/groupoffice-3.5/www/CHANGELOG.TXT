@@ -1,3 +1,8 @@
+2010/07/? 3.5.14
+- Small security issue fixed.
+- Print buttons in timeregistration and hoursapproval module
+- Updated Estonian translation
+
 2010/07/19 3.5.13
 - Hoursapproval view in chrome and safari fixed
 - Updated German Brazilian portugese and Spanish
