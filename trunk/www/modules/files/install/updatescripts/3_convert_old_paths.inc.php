@@ -122,7 +122,7 @@ $db->query("replace into go_db_sequence select 'fs_files', max(id) from fs_files
 
 $db->query("ALTER TABLE `fs_files` ADD `extension` VARCHAR( 4 ) NOT NULL ,ADD INDEX ( extension )");
 
-if(!isset($_REQUEST['skip_crawl']))
+/*if(!isset($_REQUEST['skip_crawl']))
 {
 	$db->query("ALTER TABLE `fs_files` ADD INDEX ( `path` ) ");
 	$db->query("ALTER TABLE `fs_folders` ADD INDEX ( `path` ) ");
@@ -135,7 +135,7 @@ if(!isset($_REQUEST['skip_crawl']))
 	}
 
 	$fsdb->query("DELETE FROM fs_folders WHERE name=''");
-}
+}*/
 
 
 if(isset($GO_MODULES->modules['addressbook']))
