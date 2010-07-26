@@ -1230,7 +1230,11 @@ class email extends db {
 			return false;
 		}
 
-		foreach($message['attachments'] as $a) {
+		go_debug($message['attachments']);
+
+		$message['attachments']=$imap->remove_inline_images($message['attachments']);
+
+		foreach($message['attachments'] as $index=>$a) {
 			$newpath = File::checkfilename($tmpdir.$a['name']);
 			$fs->move($a['tmp_file'], $newpath);
 		}
