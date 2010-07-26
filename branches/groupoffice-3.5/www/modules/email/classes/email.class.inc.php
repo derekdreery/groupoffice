@@ -1230,7 +1230,7 @@ class email extends db {
 			return false;
 		}
 
-		go_debug($message['attachments']);
+		//go_debug($message['attachments']);
 
 		$message['attachments']=$imap->remove_inline_images($message['attachments']);
 
