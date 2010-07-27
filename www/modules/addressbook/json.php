@@ -411,6 +411,8 @@ try
 					$ab->update_contact($contact);
 				}			
 			}
+
+			$field = isset($_REQUEST['field']) ? ($_REQUEST['field']) : 'name';
 				
 			$response['results'] = array();
 			$response['total'] = $ab->get_company_contacts($company_id, $field, $dir, $start, $limit);
