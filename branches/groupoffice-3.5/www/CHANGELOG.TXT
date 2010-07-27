@@ -1,5 +1,5 @@
-2010/07/? 3.5.14
-- Small security issue fixed.
+2010/07/27 3.5.14
+- Small security issue fixed and some bug fixes
 - Print buttons in timeregistration and hoursapproval module
 - Updated Estonian translation
 
