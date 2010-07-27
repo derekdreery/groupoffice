@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `wp_posts` (
   `post_id` int(11) NOT NULL,
   `updated` tinyint(1) NOT NULL,
   `publish` tinyint(1) NOT NULL,
-  `title` varchar(100) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `content` text NOT NULL,
   `categories` varchar(255) NOT NULL,
   KEY `id` (`id`,`link_type`),
