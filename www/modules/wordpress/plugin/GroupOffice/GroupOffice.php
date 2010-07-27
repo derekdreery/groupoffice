@@ -330,7 +330,7 @@ function groupoffice_get_contact_form($post_extra_info=false){
 
 
 	$url = $go_config['full_url'].'modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email.'&post_title='.urlencode($post_title);
-	return  '<iframe style="width:600px;height:800px" src="'.$url.'"></iframe>';
+	return  '<iframe frameborder="0" style="width:600px;height:800px" src="'.$url.'"></iframe>';
 }
 
 function groupoffice_add_params_to_url($url, $params) {
@@ -353,6 +353,12 @@ function groupoffice_add_params_to_url($url, $params) {
 
 
 
+/**
+ * Custom login part. Allows to set a custom login screen in the theme.
+ * Put the GroupOffice/customlogin/custom-login.css file in your theme.
+ * Use the sample images to create the screen.
+ */
+
 function groupoffice_custom_login() {
 
 	echo  '<link rel="stylesheet" type="text/css" href="' . get_template_directory_uri().'/custom-login.css" />';
@@ -372,3 +378,26 @@ function groupoffice_change_wp_login_title() {
 add_action('login_head', 'groupoffice_custom_login');
 add_filter('login_headerurl', 'groupoffice_change_wp_login_url');
 add_filter('login_headertitle', 'groupoffice_change_wp_login_title');
+
+
+
+/*
+ * Customize from address when Wordpress sends an e-mail.
+ */
+
+// new name
+function groupoffice_mail_from_name() {
+	$name = get_option('blogname');
+	$name = esc_attr($name);
+	return $name;
+}
+
+// new email-adress
+function groupoffice_mail_from() {
+	$email = 'noreply@'. trim(str_replace('www.','',strtolower($_SERVER['SERVER_NAME'])));
+
+	return $email;
+}
+add_filter( 'wp_mail_from', 'groupoffice_mail_from' );
+add_filter( 'wp_mail_from_name', 'groupoffice_mail_from_name');
+
