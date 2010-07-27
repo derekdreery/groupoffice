@@ -79,7 +79,7 @@ class groupoffice_connector {
 
 
 			$post = array(
-					'post_content' => mysql_escape_string($record['content']),
+					//'post_content' => mysql_escape_string($record['content']),
 					'post_title' => mysql_escape_string($record['title']),
 					'post_status' => 'publish'
 			);
@@ -206,7 +206,23 @@ function groupoffice() {
 
 	if (isset($_REQUEST['GO_SID']) && !isset($_REQUEST['no_admin_redirect'])) {
 //direct link to wp-admin didn't work so we go to the main page and redirect
-		wp_redirect(admin_url());
+
+		if(!empty($_REQUEST['link_id']) && !empty($_REQUEST['link_type'])){
+			$db = $go->get_database();
+			$sql = "SELECT post_id FROM wp_posts WHERE id=? AND link_type=?";
+			$db->query($sql, 'ii', array($_REQUEST['link_id'], $_REQUEST['link_type']));
+			$post = $db->next_record();
+			//http://localhost/wordpress/wp-admin/post.php?post=710&action=edit
+
+			if(!empty($post['post_id'])){
+				$redirect_to=admin_url().'post.php?post='.$post['post_id'].'&action=edit';
+			}
+
+		}
+		if(!isset($redirect_to))
+			$redirect_to = isset($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : admin_url();
+
+		wp_redirect($redirect_to);
 		exit();
 	}
 }
