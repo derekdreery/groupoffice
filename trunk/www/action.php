@@ -138,7 +138,9 @@ try{
 			require($GO_CONFIG->class_path.'base/reminder.class.inc.php');
 			$rm = new reminder();
 			
-			$reminders = json_decode($_POST['reminders']);
+
+			$reminders = json_decode($_POST['reminders'], true);
+			$snooze_time = intval($_POST['snooze_time']);
 			
 			foreach($reminders as $reminder_id)
 			{
