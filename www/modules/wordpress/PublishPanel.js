@@ -26,7 +26,7 @@ GO.wordpress.PublishPanel = function(config){
 			name:'wp_content',
 			plugins: [
 				spellcheckInsertPlugin,
-				wordPastePlugin,// evil! makes it very slow because of a lot of getvalue calls.
+				wordPastePlugin,
 				hrPlugin,
 				ioDentPlugin,
 				rmFormatPlugin
