@@ -11,4 +11,4 @@ GO.wordpress.lang={};
 
 GO.wordpress.lang.wordpress='Website';
 GO.wordpress.lang.wordpressAdmin='Admin panel';
-GO.wordpress.lang.websitePublish='Website publish';
+GO.wordpress.lang.publishToWebsite='Publish to website';

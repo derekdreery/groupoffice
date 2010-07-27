@@ -1,3 +1,3 @@
 GO.wordpress.lang.wordpress='Website';
 GO.wordpress.lang.wordpressAdmin='Beheer';
-GO.wordpress.lang.websitePublish='Website publicatie';
+GO.wordpress.lang.publishToWebsite='Publiceer naar website';
