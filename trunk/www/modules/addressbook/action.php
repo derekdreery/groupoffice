@@ -24,288 +24,267 @@ $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : null;
 
 try {
     switch($task) {
-	case 'move_employees':
+	 case 'move_employees':
 
-	    $to_company=$ab->get_company($_POST['to_company_id']);
+			$to_company = $ab->get_company($_POST['to_company_id']);
 
-	    $ab2 = new addressbook();
-	    $ab->get_company_contacts($_POST['from_company_id']);
-	    while($contact = $ab->next_record()) {
-		$up=array(
-			'id'=>$contact['id'],
-			'addressbook_id'=>$to_company['addressbook_id'],
-			'company_id'=>$to_company['id']
-		);
-		$ab2->update_contact($up, false, $contact);
-	    }
+			$ab2 = new addressbook();
+			$ab->get_company_contacts($_POST['from_company_id']);
+			while ($contact = $ab->next_record()) {
+				$up = array(
+					'id' => $contact['id'],
+					'addressbook_id' => $to_company['addressbook_id'],
+					'company_id' => $to_company['id']
+				);
+				$ab2->update_contact($up, false, $contact);
+			}
 
-	    $response['success']=true;
+			$response['success'] = true;
 
-	    echo json_encode($response);
+			echo json_encode($response);
 
-	    break;
+			break;
 
-	case 'save_contact':
-	    $contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : 0;
+		case 'save_contact':
+			$contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : 0;
 
-	    if(isset($_POST['delete_photo']) && strcmp($_POST['delete_photo'],'true')==0 && $contact_id>0) {
-		@unlink($GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$contact_id.'.jpg');
-		$response['image']='';
-	    }
+			if (isset($_POST['delete_photo']) && strcmp($_POST['delete_photo'], 'true') == 0 && $contact_id > 0) {
+				@unlink($GO_CONFIG->file_storage_path . 'contacts/contact_photos/' . $contact_id . '.jpg');
+				$response['image'] = '';
+			}
 
-	    $credentials = array (
-		    'first_name','middle_name','last_name','title','initials','sex','email',
-		    'email2','email3','home_phone','fax','cellular','comment','address','address_no',
-		    'zip','city','state','country', 'company','department','function','work_phone',
-		    'work_fax','addressbook_id','salutation', 'iso_address_format'
-	    );
+			$credentials = array(
+				'first_name', 'middle_name', 'last_name', 'title', 'initials', 'sex', 'email',
+				'email2', 'email3', 'home_phone', 'fax', 'cellular', 'comment', 'address', 'address_no',
+				'zip', 'city', 'state', 'country', 'company', 'department', 'function', 'work_phone',
+				'work_fax', 'addressbook_id', 'salutation', 'iso_address_format'
+			);
 
-	    $contact_credentials['email_allowed']=isset($_POST['email_allowed']) ? '1' : '0';
-	    foreach($credentials as $key) {
-		$contact_credentials[$key] = isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
-	    }
+			$contact_credentials['email_allowed'] = isset($_POST['email_allowed']) ? '1' : '0';
+			foreach ($credentials as $key) {
+				$contact_credentials[$key] = isset($_REQUEST[$key]) ? $_REQUEST[$key] : '';
+			}
 
-	    //added is_nummeric becuase extjs sends the text as hiddenName now when no record is found
-	    $contact_credentials['company_id'] = !empty($_REQUEST['company_id']) && is_numeric($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
+			//added is_nummeric becuase extjs sends the text as hiddenName now when no record is found
+			$contact_credentials['company_id'] = !empty($_REQUEST['company_id']) && is_numeric($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
 
 
-	    $addressbook = $ab->get_addressbook($contact_credentials['addressbook_id']);
-	    if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
-		throw new AccessDeniedException();
-	    }
+			$addressbook = $ab->get_addressbook($contact_credentials['addressbook_id']);
+			if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
+				throw new AccessDeniedException();
+			}
 
-	    $result['success'] = true;
-	    $result['feedback'] = $feedback;
+			$result['success'] = true;
+			$result['feedback'] = $feedback;
 
-	    if(!empty($contact_credentials['company']) && empty($contact_credentials['company_id'])) {
-		if(!$contact_credentials['company_id'] = $ab->get_company_id_by_name($contact_credentials['company'], $contact_credentials['addressbook_id'])) {
-		    $company['addressbook_id'] = $contact_credentials['addressbook_id'];
-		    $company['name'] = $contact_credentials['company']; // bedrijfsnaam
-		    $company['user_id'] = $GO_SECURITY->user_id;
-		    $contact_credentials['company_id'] = $ab->add_company($company);
-		}
-	    }
+			if (!empty($contact_credentials['company']) && empty($contact_credentials['company_id'])) {
+				if (!$contact_credentials['company_id'] = $ab->get_company_id_by_name($contact_credentials['company'], $contact_credentials['addressbook_id'])) {
+					$company['addressbook_id'] = $contact_credentials['addressbook_id'];
+					$company['name'] = $contact_credentials['company']; // bedrijfsnaam
+					$company['user_id'] = $GO_SECURITY->user_id;
+					$contact_credentials['company_id'] = $ab->add_company($company);
+				}
+			}
 
-	    $contact_credentials['birthday'] = Date::to_db_date($_POST['birthday'], false);
+			$contact_credentials['birthday'] = Date::to_db_date($_POST['birthday'], false);
 
 
-	    unset($contact_credentials['company']);
-	    if ($contact_id < 1) {
-		$contact_id = $ab->add_contact($contact_credentials, $addressbook);
+			unset($contact_credentials['company']);
+			if ($contact_id < 1) {
+				$contact_id = $ab->add_contact($contact_credentials, $addressbook);
 
-		if(!$contact_id) {
-		    $result['feedback'] = $lang['common']['saveError'];
-		    $result['success'] = false;
-		} else {
-		    $result['contact_id'] =  $contact_id;
-		}
+				if (!$contact_id) {
+					$result['feedback'] = $lang['common']['saveError'];
+					$result['success'] = false;
+				} else {
+					$result['contact_id'] = $contact_id;
+				}
 
 
-		$insert=true;
+				$insert = true;
+			} else {
+				$old_contact = $ab->get_contact($contact_id);
+				if (($old_contact['addressbook_id'] != $contact_credentials['addressbook_id']) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_contact['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
+					throw new AccessDeniedException();
+				}
 
-	    } else {
-		$old_contact = $ab->get_contact($contact_id);
-		if(($old_contact['addressbook_id'] != $contact_credentials['addressbook_id']) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_contact['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
-		    throw new AccessDeniedException();
-		}
+				$contact_credentials['id'] = $contact_id;
 
-		$contact_credentials['id'] = $contact_id;
+				if (!$ab->update_contact($contact_credentials, $addressbook, $old_contact)) {
+					$result['feedback'] = $lang['common']['saveError'];
+					$result['success'] = false;
+				}
 
-		if(!$ab->update_contact($contact_credentials, $addressbook, $old_contact)) {
-		    $result['feedback'] = $lang['common']['saveError'];
-		    $result['success'] = false;
-		}
+				$insert = false;
+			}
 
-		$insert=false;
-	    }
 
-	    if($contact_id > 0) {
-		if(isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
-		    $extension = File::get_extension($_FILES['image']['name'][0]);
 
-		    if($extension != 'jpg') {
-			throw new Exception('Only jpg images are supported.');
-		    }else {
+			if ($GO_MODULES->has_module('customfields')) {
+				require_once($GO_MODULES->modules['customfields']['class_path'] . 'customfields.class.inc.php');
+				$cf = new customfields();
 
-			$destination = $GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$contact_id.'.jpg';
+				$cf->update_fields($GO_SECURITY->user_id, $contact_id, 2, $_POST, $insert);
+			}
+
 
-			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-			filesystem::mkdir_recursive(dirname($destination));
-			move_uploaded_file($_FILES['image']['tmp_name'][0], $destination);
+			if ($GO_MODULES->has_module('mailings')) {
+				require_once($GO_MODULES->modules['mailings']['class_path'] . 'mailings.class.inc.php');
+				$ml = new mailings();
+				$ml2 = new mailings();
+
+				$ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id, 0, 0);
+				while ($ml->next_record()) {
+					$is_in_group = $ml2->contact_is_in_group($contact_id, $ml->f('id'));
+					$should_be_in_group = isset($_POST['mailing_' . $ml->f('id')]);
+
+					if ($is_in_group && !$should_be_in_group) {
+						$ml2->remove_contact_from_group($contact_id, $ml->f('id'));
+					}
+					if (!$is_in_group && $should_be_in_group) {
+						$ml2->add_contact_to_mailing_group($contact_id, $ml->f('id'));
+					}
+				}
+			}
 
-			$img = new Image($destination);
-			$img->zoomcrop(90,120);
-			$img->save($destination);
+			if ($contact_id > 0) {
+				if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
+					move_uploaded_file($_FILES['image']['tmp_name'][0], $GO_CONFIG->tmpdir . $_FILES['image']['name'][0]);
+					$tmp_file = $GO_CONFIG->tmpdir . $_FILES['image']['name'][0];
 
-			$result['image']=$GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id='.$contact_id;
+					$result['image'] = $ab->save_contact_photo($tmp_file, $contact_id);
+				}
+			}
 
-			//go_log(LOG_DEBUG, var_export($response, true));
-		    }
-		}
-	    }
+			$GO_EVENTS->fire_event('save_contact', array($contact_credentials));
 
-	    if($GO_MODULES->has_module('customfields')) {
-		require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-		$cf = new customfields();
 
-		$cf->update_fields($GO_SECURITY->user_id, $contact_id, 2, $_POST, $insert);
-	    }
+			echo json_encode($result);
+			break;
+		case 'save_company':
+			$company_id = isset($_REQUEST['company_id']) ? ($_REQUEST['company_id']) : 0;
 
+			$credentials = array(
+				'addressbook_id', 'name', 'address', 'address_no', 'zip', 'city', 'state', 'country', 'iso_address_format',
+				'post_address', 'post_address_no', 'post_city', 'post_state', 'post_country', 'post_zip', 'post_iso_address_format', 'phone',
+				'fax', 'email', 'homepage', 'bank_no', 'vat_no', 'comment'
+			);
 
-	    if($GO_MODULES->has_module('mailings')) {
-		require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
-		$ml = new mailings();
-		$ml2 = new mailings();
+			$company_credentials['email_allowed'] = isset($_POST['email_allowed']) ? '1' : '0';
+			foreach ($credentials as $key) {
+				$company_credentials[$key] = isset($_REQUEST[$key]) ? ($_REQUEST[$key]) : null;
+			}
 
-		$ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id, 0,0);
-		while($ml->next_record()) {
-		    $is_in_group = $ml2->contact_is_in_group($contact_id, $ml->f('id'));
-		    $should_be_in_group = isset($_POST['mailing_'.$ml->f('id')]);
+			if (!empty($company_credentials['homepage']) && !strpos($company_credentials['homepage'], '://')) {
+				$company_credentials['homepage'] = 'http://' . $company_credentials['homepage'];
+			}
 
-		    if($is_in_group && !$should_be_in_group) {
-			$ml2->remove_contact_from_group($contact_id, $ml->f('id'));
-		    }
-		    if(!$is_in_group && $should_be_in_group) {
-			$ml2->add_contact_to_mailing_group($contact_id, $ml->f('id'));
-		    }
-		}
-	    }
+			$addressbook = $ab->get_addressbook($company_credentials['addressbook_id']);
 
-	    $GO_EVENTS->fire_event('save_contact', array($contact_credentials));
+			if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
+				throw new AccessDeniedException();
+			}
 
+			if ($company_id > 0) {
+				$old_company = $ab->get_company($company_id);
 
-	    echo json_encode($result);
-	    break;
-	case 'save_company':
-	    $company_id = isset($_REQUEST['company_id']) ? ($_REQUEST['company_id']) : 0;
+				if (($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
+					throw new AccessDeniedException();
+				}
+			}
 
-	    $credentials = array (
-		    'addressbook_id','name','address','address_no','zip','city','state','country','iso_address_format',
-		    'post_address','post_address_no','post_city','post_state','post_country','post_zip','post_iso_address_format','phone',
-		    'fax','email','homepage','bank_no','vat_no','comment'
-	    );
 
-	    $company_credentials['email_allowed']=isset($_POST['email_allowed']) ? '1' : '0';
-	    foreach($credentials as $key) {
-		$company_credentials[$key] = isset($_REQUEST[$key]) ? ($_REQUEST[$key]) : null;
-	    }
+			$result['success'] = true;
+			$result['feedback'] = $feedback;
 
-	    if(!empty($company_credentials['homepage']) && !strpos($company_credentials['homepage'],'://')) {
-		$company_credentials['homepage']='http://'.$company_credentials['homepage'];
-	    }
+			if ($company_id < 1) {
+				# insert
+				$result['company_id'] = $company_id = $ab->add_company($company_credentials, $addressbook);
+				$insert = true;
+			} else {
+				# update
+				$company_credentials['id'] = $company_id;
 
-	    $addressbook = $ab->get_addressbook($company_credentials['addressbook_id']);
+				$ab->update_company($company_credentials, $addressbook, $old_company);
+				$insert = false;
+			}
 
-	    if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
-		throw new AccessDeniedException();
-	    }
+			if (isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission']) {
+				require_once($GO_MODULES->modules['customfields']['class_path'] . 'customfields.class.inc.php');
+				$cf = new customfields();
 
-	    if($company_id > 0) {
-		$old_company = $ab->get_company($company_id);
+				$cf->update_fields($GO_SECURITY->user_id, $company_id, 3, $_POST, $insert);
+			}
 
-		if(($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
-		    throw new AccessDeniedException();
-		}
-	    }
 
+			if ($GO_MODULES->has_module('mailings')) {
+				require_once($GO_MODULES->modules['mailings']['class_path'] . 'mailings.class.inc.php');
+				$ml = new mailings();
+				$ml2 = new mailings();
 
-	    $result['success'] = true;
-	    $result['feedback'] = $feedback;
+				$ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id, 0, 0);
+				while ($ml->next_record()) {
+					$is_in_group = $ml2->company_is_in_group($company_id, $ml->f('id'));
+					$should_be_in_group = isset($_POST['mailing_' . $ml->f('id')]);
 
-	    if ($company_id < 1) {
-		# insert
-		$result['company_id'] = $company_id = $ab->add_company($company_credentials, $addressbook);
-		$insert=true;
+					if ($is_in_group && !$should_be_in_group) {
+						$ml2->remove_company_from_group($company_id, $ml->f('id'));
+					}
+					if (!$is_in_group && $should_be_in_group) {
+						$ml2->add_company_to_mailing_group($company_id, $ml->f('id'));
+					}
+				}
+			}
 
-	    } else {
-		# update
-		$company_credentials['id'] = $company_id;
+			$GO_EVENTS->fire_event('save_company', array($company_credentials));
 
-		$ab->update_company($company_credentials, $addressbook, $old_company);
-		$insert=false;
 
-	    }
+			echo json_encode($result);
+			break;
 
-	    if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission']) {
-		require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-		$cf = new customfields();
+		case 'save_addressbook':
+			$addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
 
-		$cf->update_fields($GO_SECURITY->user_id, $company_id, 3, $_POST, $insert);
-	    }
+			$name = isset($_REQUEST['name']) ? ($_REQUEST['name']) : null;
 
+			$result['success'] = true;
+			$result['feedback'] = $feedback;
 
-	    if($GO_MODULES->has_module('mailings')) {
-		require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
-		$ml = new mailings();
-		$ml2 = new mailings();
+			if (empty($name)) {
+				throw new Exception($lang['common']['missingField']);
+			} else {
+				//$existing_ab = $ab->get_addressbook_by_name($name);
 
-		$ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id, 0,0);
-		while($ml->next_record()) {
-		    $is_in_group = $ml2->company_is_in_group($company_id, $ml->f('id'));
-		    $should_be_in_group = isset($_POST['mailing_'.$ml->f('id')]);
 
-		    if($is_in_group && !$should_be_in_group) {
-			$ml2->remove_company_from_group($company_id, $ml->f('id'));
-		    }
-		    if(!$is_in_group && $should_be_in_group) {
-			$ml2->add_company_to_mailing_group($company_id, $ml->f('id'));
-		    }
-		}
-	    }
+				if ($addressbook_id < 1) {
 
-	    $GO_EVENTS->fire_event('save_company', array($company_credentials));
+					if (!$GO_MODULES->modules['addressbook']['write_permission']) {
+						throw new AccessDeniedException();
+					}
 
+					$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GO_SECURITY->user_id;
 
-	    echo json_encode($result);
-	    break;
+					$addressbook = $ab->add_addressbook($user_id, $name, $_REQUEST['default_iso_address_format'], $_REQUEST['default_salutation']);
+					$result['addressbook_id'] = $addressbook['addressbook_id'];
+					$result['acl_id'] = $addressbook['acl_id'];
+				} else {
 
-	case 'save_addressbook':
-	    $addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
 
-	    $name = isset($_REQUEST['name']) ? ($_REQUEST['name']) : null;
+					$addressbook['id'] = $addressbook_id;
 
-	    $result['success'] = true;
-	    $result['feedback'] = $feedback;
+					if (isset($_REQUEST['user_id']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+						$addressbook['user_id'] = $_REQUEST['user_id'];
 
-	    if (empty($name)) {
-		throw new Exception($lang['common']['missingField']);
-	    } else {
-		//$existing_ab = $ab->get_addressbook_by_name($name);
+					$addressbook['default_salutation'] = $_REQUEST['default_salutation'];
+					$addressbook['default_iso_address_format'] = $_REQUEST['default_iso_address_format'];
 
+					$addressbook['name'] = $name;
+					$ab->update_addressbook($addressbook);
+				}
+			}
 
-		if ($addressbook_id < 1) {
-
-		    if(!$GO_MODULES->modules['addressbook']['write_permission']) {
-			throw new AccessDeniedException();
-		    }
-
-		    $user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GO_SECURITY->user_id;
-
-		    $addressbook = $ab->add_addressbook($user_id, $name, $_REQUEST['default_iso_address_format'], $_REQUEST['default_salutation']);
-		    $result['addressbook_id'] = $addressbook['addressbook_id'];
-		    $result['acl_id'] = $addressbook['acl_id'];
-		} else {
-		    #update
-		    /*if ($existing_ab && $existing_ab['id'] != $addressbook_id)
-					{
-						throw new Exception($lang['common']['addressbookAlreadyExists']);
-					}*/
-
-		    $addressbook['id']=$addressbook_id;
-
-		    if(isset($_REQUEST['user_id']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
-			$addressbook['user_id']=$_REQUEST['user_id'];
-
-		    $addressbook['default_salutation']=$_REQUEST['default_salutation'];
-		    $addressbook['default_iso_address_format']=$_REQUEST['default_iso_address_format'];
-
-		    $addressbook['name']=$name;
-		    $ab->update_addressbook($addressbook);
-		}
-	    }
-
-	    echo json_encode($result);
-	    break;
+			echo json_encode($result);
+			break;
 	case 'upload':
 	    $addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
 	    $import_filetype = isset($_REQUEST['import_filetype']) ? ($_REQUEST['import_filetype']) : null;
@@ -506,70 +485,70 @@ try {
 	    break;
 
 
-	case 'drop_contact':
+	   case 'drop_contact':
 
-	    $contacts = json_decode(($_POST['items']));
-	    $abook_id = isset($_REQUEST['book_id']) ? ($_REQUEST['book_id']) : 0;
+			$contacts = json_decode(($_POST['items']));
+			$abook_id = isset($_REQUEST['book_id']) ? ($_REQUEST['book_id']) : 0;
 
-	    $addressbook = $ab->get_addressbook($abook_id);
-	    if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id'])<3) {
-		throw new AccessDeniedException();
-	    }
+			$addressbook = $ab->get_addressbook($abook_id);
+			if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id']) < 3) {
+				throw new AccessDeniedException();
+			}
 
-	    $result['success'] = true;
-	    $result['feedback'] = $feedback;
+			$result['success'] = true;
+			$result['feedback'] = $feedback;
 
-	    for($i=0; $i<count($contacts); $i++) {
-		$contact['id'] = $contacts[$i];
-		if($contact['id'] > 0) {
-		    $old_contact = $ab->get_contact($contact['id']);
-		    if(($old_contact['addressbook_id'] != $abook_id) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_contact['acl_id'])<2) {
-			throw new AccessDeniedException();
-		    }
-		    $contact['addressbook_id'] = $abook_id;
-		    $contact['company_id'] = $old_contact['company_id'];
-		    $contact['last_name'] = $old_contact['last_name'];
+			for ($i = 0; $i < count($contacts); $i++) {
+				$contact['id'] = $contacts[$i];
+				if ($contact['id'] > 0) {
+					$old_contact = $ab->get_contact($contact['id']);
+					if (($old_contact['addressbook_id'] != $abook_id) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_contact['acl_id']) < 2) {
+						throw new AccessDeniedException();
+					}
+					$contact['addressbook_id'] = $abook_id;
+					$contact['company_id'] = $old_contact['company_id'];
+					$contact['last_name'] = $old_contact['last_name'];
 
-		    if(!$ab->update_contact($contact, $addressbook)) {
-			$result['feedback'] = $lang['common']['saveError'];
-			$result['success'] = false;
-		    }
-		}
-	    }
-	    echo json_encode($result);
-	    break;
+					if (!$ab->update_contact($contact, $addressbook)) {
+						$result['feedback'] = $lang['common']['saveError'];
+						$result['success'] = false;
+					}
+				}
+			}
+			echo json_encode($result);
+			break;
 
 	case 'drop_company':
 
-	    $companies = json_decode(($_POST['items']));
-	    $abook_id = isset($_REQUEST['book_id']) ? ($_REQUEST['book_id']) : 0;
+			$companies = json_decode(($_POST['items']));
+			$abook_id = isset($_REQUEST['book_id']) ? ($_REQUEST['book_id']) : 0;
 
-	    $addressbook = $ab->get_addressbook($abook_id);
-	    if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id'])<3) {
-		throw new AccessDeniedException();
-	    }
+			$addressbook = $ab->get_addressbook($abook_id);
+			if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id']) < 3) {
+				throw new AccessDeniedException();
+			}
 
-	    $result['success'] = true;
-	    $result['feedback'] = $feedback;
+			$result['success'] = true;
+			$result['feedback'] = $feedback;
 
-	    for($i=0; $i<count($companies); $i++) {
-		$company['id'] = $companies[$i];
-		if($company['id'] > 0) {
-		    $old_company = $ab->get_company($company['id']);
-		    if(($old_company['addressbook_id'] != $abook_id) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_id'])<3) {
-			throw new AccessDeniedException();
-		    }
+			for ($i = 0; $i < count($companies); $i++) {
+				$company['id'] = $companies[$i];
+				if ($company['id'] > 0) {
+					$old_company = $ab->get_company($company['id']);
+					if (($old_company['addressbook_id'] != $abook_id) && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_company['acl_id']) < 3) {
+						throw new AccessDeniedException();
+					}
 
-		    $company['addressbook_id'] = $abook_id;
-		    $company['name'] = $old_company['name'];
-		    if(!$ab->update_company($company, $addressbook)) {
-			$result['feedback'] = $lang['common']['saveError'];
-			$result['success'] = false;
-		    }
-		}
-	    }
-	    echo json_encode($result);
-	    break;
+					$company['addressbook_id'] = $abook_id;
+					$company['name'] = $old_company['name'];
+					if (!$ab->update_company($company, $addressbook)) {
+						$result['feedback'] = $lang['common']['saveError'];
+						$result['success'] = false;
+					}
+				}
+			}
+			echo json_encode($result);
+			break;
 
 	case 'save_sql':
 

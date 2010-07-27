@@ -17,10 +17,7 @@ $GO_SECURITY->json_authenticate('addressbook');
 
 
 
-$path = $GO_CONFIG->file_storage_path.'contacts/contact_photos/'.basename($_REQUEST['contact_id']).'.jpg';
-
-
-$public=false;
+$path = $GO_CONFIG->file_storage_path.'contacts/contact_photos/'.intval($_REQUEST['contact_id']).'.jpg';
 
 $browser = detect_browser();
 
@@ -33,28 +30,17 @@ header("Last-Modified: ".gmdate("D, d M Y H:i:s", filemtime($path))." GMT");
 header("ETag: ".md5_file($path));
 
 
-if($public) {
-	header("Expires: " . date("D, j M Y G:i:s ", time()+86400) . 'GMT');//expires in 1 day
-	header('Cache-Control: cache');
-	header('Pragma: cache');
-}
+header("Expires: " . date("D, j M Y G:i:s ", time()+86400) . 'GMT');//expires in 1 day
+header('Cache-Control: cache');
+header('Pragma: cache');
 
 if ($browser['name'] == 'MSIE') {
 	header('Content-Type: application/download');
 	header('Content-Disposition: inline; filename="'.basename($path).'"');
 
-	if(!$public) {
-		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		header('Pragma: public');
-	}
 }else {
 	header('Content-Type: '.File::get_mime($path));
-
 	header('Content-Disposition: inline; filename="'.basename($path).'"');
-
-	if(!$public) {
-		header('Pragma: no-cache');
-	}
 }
 
 readfile($path);

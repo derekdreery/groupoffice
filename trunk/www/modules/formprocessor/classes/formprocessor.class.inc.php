@@ -257,14 +257,16 @@ class formprocessor{
 
 				$full_path = $GO_CONFIG->file_storage_path.$path;				
 
-				while($file = array_shift($_FILES))
+				foreach($_FILES as $key=>$file)
 				{
-					if (is_uploaded_file($file['tmp_name']))
-					{
-						move_uploaded_file($file['tmp_name'], $full_path.'/'.$file['name']);
-						chmod($full_path.'/'.$file['name'], $GO_CONFIG->file_create_mode);
+					if($key!='photo'){//photo is handled later
+						if (is_uploaded_file($file['tmp_name']))
+						{
+							move_uploaded_file($file['tmp_name'], $full_path.'/'.$file['name']);
+							chmod($full_path.'/'.$file['name'], $GO_CONFIG->file_create_mode);
 
-						$fs->import_file($full_path.'/'.$file['name'], $files_folder_id);
+							$fs->import_file($full_path.'/'.$file['name'], $files_folder_id);
+						}
 					}
 				}
 			}
@@ -294,6 +296,16 @@ class formprocessor{
 						if(!$ml->contact_is_in_group($contact_id, $mailing['id']))
 						$ml->add_contact_to_mailing_group($contact_id, $mailing['id']);
 					}
+				}
+			}
+
+
+			if ($this->contact_id > 0) {
+				if (isset($_FILES['photo']['tmp_name']) && is_uploaded_file($_FILES['photo']['tmp_name'])) {
+					move_uploaded_file($_FILES['photo']['tmp_name'], $GO_CONFIG->tmpdir . $_FILES['photo']['name']);
+					$tmp_file = $GO_CONFIG->tmpdir . $_FILES['photo']['name'];
+
+					$result['image'] = $ab->save_contact_photo($tmp_file, $this->contact_id);
 				}
 			}
 
