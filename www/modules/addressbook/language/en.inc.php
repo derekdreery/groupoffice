@@ -51,6 +51,8 @@ $lang['addressbook']['multipleSelected']='Multiple addressbooks selected';
 $lang['addressbook']['incomplete_delete_contacts']='You don\'t have permission to delete all selected contacts';
 $lang['addressbook']['incomplete_delete_companies']='You don\'t have permission to delete all selected companies';
 
-$lang['addressbook']['emailAlreadyExists']='Emailadres is already added to this contact';
-$lang['addressbook']['emailDoesntExists']='Emailadres was not found';
+$lang['addressbook']['emailAlreadyExists']='E-mail aadress is already added to this contact';
+$lang['addressbook']['emailDoesntExists']='E-mail address wasn\'t found';
+
+$lang['addressbook']['imageNotSupported']='The image you uploaded is not supported. Only gif, png and jpg images are supported.';
 ?>

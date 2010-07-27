@@ -148,6 +148,25 @@ class addressbook extends db {
 		return $address_arr;
 	}
 
+	public function save_contact_photo($tmp_file, $contact_id){
+		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $lang;
+
+		$destination = $GO_CONFIG->file_storage_path.'contacts/contact_photos/'.$contact_id.'.jpg';
+
+		File::mkdir(dirname($destination));
+
+		$img = new Image();
+		if(!$img->load($tmp_file)){
+			$GO_LANGUAGE->require_language_file('addressbook');
+			throw new Exception($lang['addressbook']['imageNotSupported']);
+		}
+
+		$img->zoomcrop(90,120);
+		$img->save($destination, IMAGETYPE_JPEG);
+
+		return $GO_MODULES->modules['addressbook']['url'].'photo.php?contact_id='.$contact_id;
+	}
+
 	public static function add_user($user) {
 		$ab = new addressbook();
 		$ab->create_default_addressbook($user);

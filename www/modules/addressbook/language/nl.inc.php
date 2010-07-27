@@ -48,5 +48,7 @@ $lang['addressbook']['multipleSelected']='Meerdere adresboeken geselecteerd';
 $lang['addressbook']['incomplete_delete_contacts']='U heeft niet voldoende rechten om alle geselecteerde contacten te verwijderen';
 $lang['addressbook']['incomplete_delete_companies']='U heeft niet voldoende rechten om alle geselecteerde bedrijven te verwijderen';
 
-$lang['addressbook']['emailAlreadyExists']='Emailadres is al toegevoegd aan deze contactpersoon';
-$lang['addressbook']['emailDoesntExists']='Emailadres is niet gevonden';
+$lang['addressbook']['emailAlreadyExists']='E-mail adres is al toegevoegd aan deze contactpersoon';
+$lang['addressbook']['emailDoesntExists']='E-mail adres is niet gevonden';
+
+$lang['addressbook']['imageNotSupported']='De afbeelding die u stuurde wordt niet ondersteund. Alleen gif, png en jpg afbeeldingen worden ondersteund.';

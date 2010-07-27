@@ -29,7 +29,6 @@ GO.addressbook.ContactDialog = function(config)
 		{
 			var now = new Date();
 			if (this.el)
-				var src = contact_id ? GO.settings.modules.addressbook.url+'photo.php?contact_id='+contact_id+'&mtime='+now.format('U') : Ext.BLANK_IMAGE_URL;
 				this.el.set({
 					src: contact_id==0 ? Ext.BLANK_IMAGE_URL : GO.settings.modules.addressbook.url+'photo.php?contact_id='+contact_id+'&mtime='+now.format('U')
 				});

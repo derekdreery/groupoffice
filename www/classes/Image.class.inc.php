@@ -31,7 +31,11 @@ class Image {
 			$this->original_image = imagecreatefromgif($filename);
 		} elseif( $this->image_type == IMAGETYPE_PNG ) {
 			$this->original_image = imagecreatefrompng($filename);
+		}else
+		{
+			return false;
 		}
+		return true;
 	}
 	
 
