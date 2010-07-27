@@ -88,9 +88,7 @@ GO.addressbook.EmployeesPanel = function(config)
 		config.paging=true;
 		config.title= GO.addressbook.lang['cmdPanelEmployees'];
 		config.id= 'ab-employees-grid';
-		config.sm= new Ext.grid.RowSelectionModel({
-			singleSelect: true
-		});
+		config.sm= new Ext.grid.RowSelectionModel();
 		config.autoScroll=false;
 		config.trackMouseOver= true;
 		config.collapsible= false;
