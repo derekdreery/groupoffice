@@ -6,6 +6,7 @@ var wpConfig = {
 	iconCls : 'go-tab-icon-wordpress',
 	layout:'fit',
 	items:[wpIframe = new GO.panel.IFrameComponent({
+			itemId:'iframe',
 			url:GO.settings.modules.wordpress.url+'redirect.php'
 	})],
 	border:false,
@@ -13,7 +14,7 @@ var wpConfig = {
 			iconCls:'go-module-icon-wordpress',
 			text:GO.wordpress.lang.wordpressAdmin,
 			handler:function(){
-				wpIframe.el.dom.contentDocument.location=GO.settings.modules.wordpress.url+'redirect.php';
+				wpIframe.el.dom.src=GO.settings.modules.wordpress.url+'redirect.php';
 			},
 			scope:this
 	}]

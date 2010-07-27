@@ -83,7 +83,7 @@ class wordpress extends db{
 			$w['link_type']=$link_type;
 			$w['publish']=isset($_POST['wp_publish']) ? '1' : '0';
 			$w['title']=$values[$this->mapping[$link_type]['post_title']];
-			$w['content']=$_POST['wp_content'];//$values[$this->mapping[$link_type]['post_content']];
+			//$w['content']=$_POST['wp_content'];//$values[$this->mapping[$link_type]['post_content']];
 			$w['updated']=1;
 			$w['categories']=$this->mapping[$link_type]['categories_from_column'] ? $values[$this->mapping[$link_type]['categories']] : $this->mapping[$link_type]['categories'];
 

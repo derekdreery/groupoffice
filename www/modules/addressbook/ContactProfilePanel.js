@@ -372,6 +372,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 		};
 		this.items= [
 		{
+			itemId:'leftCol',
 			columnWidth: .5,
 			items: [
 			this.addressbookFieldset,
@@ -379,6 +380,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 			this.workFieldset
 			]				
 		},{
+			itemId:'rightCol',
 			columnWidth: .5,
 			style: 'margin-left: 5px;',
 			items: [
