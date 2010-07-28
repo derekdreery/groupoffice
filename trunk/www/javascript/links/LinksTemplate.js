@@ -19,7 +19,7 @@ GO.linksTemplate = '<tpl if="links.length">'+
 		'</tr>'+
 		
 		'<tr>'+
-			'<td style="width:16px" class="display-panel-links-header">&nbsp;</td>'+
+			'<td style="width:20px" class="display-panel-links-header">&nbsp;</td>'+
 			'<td style="width: 100%" class="table_header_links">' + GO.lang['strName'] + '</td>'+
 			/*'<td class="table_header_links">' + GO.lang['strType'] + '</td>'+*/
 			'<td class="table_header_links" style="white-space:nowrap">' + GO.lang['strMtime'] + '</td>'+
@@ -27,7 +27,7 @@ GO.linksTemplate = '<tpl if="links.length">'+
 							
 		'<tpl for="links">'+
 			'<tr class="display-panel-link">'+
-				'<td><div class="go-icon {iconCls}" ext:qtip="{type}"></div></td>'+
+				'<td><div class="display-panel-link-icon {iconCls}" ext:qtip="{type}">&nbsp;<sup>{link_count}</sup></div></td>'+
 				'<td><a href="#link_{[xindex-1]}">{name}</a><tpl if="link_description.length"><br />{link_description}</tpl></td>'+
 				'<td style="white-space:nowrap">{mtime}</td>'+
 			'</tr>'+
@@ -41,4 +41,3 @@ GO.linksTemplate = '<tpl if="links.length">'+
 	'</tpl>';
 	
 GO.linksTemplateConfig = {};
-

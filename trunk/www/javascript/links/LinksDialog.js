@@ -95,20 +95,20 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 		var selectionModel = this.grid.searchGrid.getSelectionModel();
 		var records = selectionModel.getSelections();
 
-		var tolinks = [];
+		this.tolinks = [];
 
 		for (var i = 0;i<records.length;i++)
 		{
-			tolinks.push({'link_id' : records[i].data['id'], 'link_type' : records[i].data['link_type']});
+			this.tolinks.push({'link_id' : records[i].data['id'], 'link_type' : records[i].data['link_type']});
 		}
 
-		if(tolinks.length==1){
+		if(this.tolinks.length==1){
 			if(!this.selectFolderWindow){
 
 				this.selectFolderTree = new GO.LinksTree();
 				this.selectFolderTree.on('dblclick', function(node){
 					var to_folder_id = parseInt(node.id.replace('lt-folder-',''));
-					this.sendLinkRequest(tolinks, to_folder_id);
+					this.sendLinkRequest(this.tolinks, to_folder_id);
 					this.selectFolderWindow.hide();
 				}, this);
 
@@ -131,7 +131,7 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 								}
 
 								var to_folder_id = parseInt(node.id.replace('lt-folder-',''));
-								this.sendLinkRequest(tolinks, to_folder_id);
+								this.sendLinkRequest(this.tolinks, to_folder_id);
 								this.selectFolderWindow.hide();
 							},
 							scope:this
@@ -140,16 +140,16 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 			}
 			this.selectFolderWindow.show();
 
-			this.selectFolderTree.loadLinks(tolinks[0]['link_id'], tolinks[0]['link_type'], function(rootNode){
+			this.selectFolderTree.loadLinks(this.tolinks[0]['link_id'], this.tolinks[0]['link_type'], function(rootNode){
 				if(!rootNode.childNodes.length){
 					this.selectFolderWindow.hide();
-					this.sendLinkRequest(tolinks);
+					this.sendLinkRequest(this.tolinks);
 				}
 			}, this);
 			
 		}else
 		{
-			this.sendLinkRequest(tolinks);
+			this.sendLinkRequest(this.tolinks);
 		}
 
 		

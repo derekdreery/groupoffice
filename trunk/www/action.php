@@ -235,10 +235,10 @@ try{
 
 		case 'link':
 
-			$fromLinks = json_decode(($_POST['fromLinks']),true);
-			$toLinks = json_decode(($_POST['toLinks']),true);
-			$from_folder_id=isset($_POST['folder_id']) ? ($_POST['folder_id']) : 0;
-			$to_folder_id=isset($_POST['to_folder_id']) ? ($_POST['to_folder_id']) : 0;
+			$fromLinks = json_decode($_POST['fromLinks'],true);
+			$toLinks = json_decode($_POST['toLinks'],true);
+			$from_folder_id=isset($_POST['folder_id']) ? $_POST['folder_id'] : 0;
+			$to_folder_id=isset($_POST['to_folder_id']) ? $_POST['to_folder_id'] : 0;
 
 			foreach($fromLinks as $fromLink)
 			{
