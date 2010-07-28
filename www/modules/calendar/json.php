@@ -474,6 +474,7 @@ try {
 				$response['results'][] = array(
 								'id'=>$response['count']++,
 								'event_id'=> $event['id'],
+								'link_count'=>$GO_LINKS->count_links($event['id'], 1),
 								'name'=> htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),
 								'time'=>date($date_format, $event['start_time']),
 								'calendar_name'=>isset($calendar_names[$event['calendar_id']]) ? $calendar_names[$event['calendar_id']] : '',
@@ -590,6 +591,7 @@ try {
 
 						$response['results'][] = array(
 										'id'=>$response['count']++,
+										'link_count'=>$GO_LINKS->count_links($task['id'], 12),
 										'name'=>$name,
 										'description'=>$description,
 										'time'=>'00:00',
@@ -761,6 +763,7 @@ try {
 
 					$response[$cal->f('id')]['events'][] = array(
 									'id'=>$count,
+									'link_count'=>$GO_LINKS->count_links($event['id'], 1),
 									'calendar_id'=>$cal->f('id'),
 									'event_id'=> $event['id'],
 									'name'=>htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),

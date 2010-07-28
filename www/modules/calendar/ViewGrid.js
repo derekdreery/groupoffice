@@ -541,11 +541,17 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				}				
 				text += eventData['name'];
 			
+				var cls = "x-viewGrid-event-container";
+
+				if(eventData.link_count>0){
+					cls +=' cal-has-links'
+				}
+
 				var event = Ext.DomHelper.append(col,
 				{
 					tag: 'div',
 					id: domId,
-					cls: "x-viewGrid-event-container",
+					cls: cls,
 					style:"background-color:#"+eventData.background,
 					html: text,
 					qtitle:eventData.name,

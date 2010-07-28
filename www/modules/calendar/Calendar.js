@@ -321,7 +321,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','all_day_event','username','duration']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','all_day_event','username','duration', 'link_count']
 	});
 	
 	this.monthGridStore = new GO.data.JsonStore({
@@ -332,7 +332,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','username','duration']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','username','duration', 'link_count']
 	});
 
 	this.daysGrid = new GO.grid.CalendarGrid(
@@ -1465,7 +1465,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	  
 	onDblClick : function(grid, event, actionData){
 
-		if(event.read_only && !event.contact_id)
+		if(event.read_only && !event.contact_id && !event.task_id)
 			return false;
 
 		if(event.repeats && actionData.singleInstance)
@@ -1490,7 +1490,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{		
 			if(event['task_id'])
 			{
-				GO.tasks.taskDialog.show({
+				GO.tasks.showTaskDialog({
 					task_id : event['task_id']
 				})				
 			}else

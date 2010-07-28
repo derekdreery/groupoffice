@@ -574,12 +574,17 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				}				
 				text += eventData['name'];
 
+				var cls = "x-calGrid-month-event-container";
+
+				if(eventData.link_count>0){
+					cls +=' cal-has-links'
+				}
 				
 				var event = Ext.DomHelper.append(col,
 				{
 					tag: 'div',
 					id: eventData.domId,
-					cls: "x-calGrid-month-event-container",
+					cls: cls,
 					style:"background-color:#"+eventData.background+';width:'+(this.eventWidth)+'px',
 					html: text,
 					qtip: GO.calendar.formatQtip(eventData),

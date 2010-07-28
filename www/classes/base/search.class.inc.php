@@ -88,7 +88,7 @@ class search extends db {
 	 */
 	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0, $link_folder_id=0, $conditions=array())
 	{
-		$sql = "SELECT DISTINCT sc.link_count, sc.acl_id, sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime";
+		$sql = "SELECT DISTINCT sc.acl_id, sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime";
 		if($link_id>0)
 		{
 			$sql .= ",l.description AS link_description";
@@ -323,7 +323,7 @@ class search extends db {
 			$response['results'][]=array(
 				'iconCls'=>'go-link-icon-'.$this->f('link_type'),
 				'id'=>$this->f('id'),
-				'link_count'=>$this->f('link_count'),
+				'link_count'=>$GO_LINKS->count_links($this->f('id'), $this->f('link_type')),
 				'link_type'=>$this->f('link_type'),
 				'link_and_type'=>$this->f('link_type').':'.$this->f('id'),
 				'type_name'=>'('.$this->f('type').') '.strip_tags($this->f('name')),
@@ -440,7 +440,7 @@ class search extends db {
 			$result['keywords']=substr($result['keywords'],0,255);
 		}
 
-		$result['link_count']=$GO_LINKS->count_links($result['id'], $result['link_type']);
+		//$result['link_count']=$GO_LINKS->count_links($result['id'], $result['link_type']);
 
 		$old_result = $this->get_search_result($result['id'], $result['link_type']);
 		if($old_result)
