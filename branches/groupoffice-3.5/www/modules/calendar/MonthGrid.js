@@ -361,7 +361,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
             		var dragTime = data.dragDate.format('U');
             		var dropTime = data.dropDate.format('U');
             		
-            		offsetDays = Math.round((dropTime-dragTime)/86400);
+            		var offsetDays = Math.round((dropTime-dragTime)/86400);
             		
             		var actionData = {offsetDays:offsetDays, dragDate: data.dragDate};
             		
@@ -524,13 +524,13 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 					text += eventData.startDate.format(GO.settings.time_format)+'&nbsp;';
 				}				
 				text += eventData['name'];
-
+				
 				
 				var event = Ext.DomHelper.append(col,
 					{
 						tag: 'div', 
 						id: eventData.domId, 
-						cls: "x-calGrid-month-event-container", 
+						cls: "x-calGrid-month-event-container",
 						style:"background-color:#"+eventData.background+';width:'+(this.eventWidth)+'px',
 						html: text, 						
 						qtip: GO.calendar.formatQtip(eventData),
