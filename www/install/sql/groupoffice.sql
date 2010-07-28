@@ -225,6 +225,7 @@ CREATE TABLE IF NOT EXISTS `go_search_cache` (
   `keywords` text,
   `mtime` int(11) NOT NULL default '0',
   `acl_id` int(11) NOT NULL,
+  `link_count` INT NOT NULL,
   PRIMARY KEY  (`id`,`link_type`),
   KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

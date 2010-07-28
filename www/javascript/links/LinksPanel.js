@@ -320,7 +320,7 @@ GO.grid.LinksPanel = function(config){
 				},
 				scope: this
 
-			},'-',this.deleteButton = new Ext.Button({
+			},/*'-',this.deleteButton = new Ext.Button({
 				iconCls: 'btn-delete',
 				text: GO.lang['cmdDelete'],
 				cls: 'x-btn-text-icon',
@@ -328,7 +328,7 @@ GO.grid.LinksPanel = function(config){
 					this.linksGrid.deleteSelected();
 				},
 				scope: this
-			})
+			})*/
 		];
 		
 	if(GO.links && GO.links.SettingsDialog)
@@ -522,7 +522,7 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 		this.linkButton.setDisabled(!writePermission);
 		this.unlinkButton.setDisabled(!writePermission);
 		this.newFolderButton.setDisabled(!writePermission);
-		this.deleteButton.setDisabled(!writePermission);		
+		//this.deleteButton.setDisabled(!writePermission);
 		
 		this.write_permission=writePermission;
 		this.linksGrid.write_permission=writePermission;

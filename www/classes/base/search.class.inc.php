@@ -88,7 +88,7 @@ class search extends db {
 	 */
 	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0, $link_folder_id=0, $conditions=array())
 	{
-		$sql = "SELECT DISTINCT sc.acl_id, sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime";
+		$sql = "SELECT DISTINCT sc.link_count, sc.acl_id, sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime";
 		if($link_id>0)
 		{
 			$sql .= ",l.description AS link_description";
@@ -296,15 +296,15 @@ class search extends db {
 		{
 			//$_folder_id = $folder_id>-1 ? $folder_id : 0;
 			$GO_LINKS->get_folders($link_id, $link_type, $folder_id);
-			while($GO_LINKS->next_record())
+			while($link=$GO_LINKS->next_record())
 			{
 				$response['results'][]=array(
-					'id'=>$GO_LINKS->f('id'),
+					'id'=>$link['id'],
 					'parent_link_id'=>$link_id, 
 					'parent_link_type'=>$link_type,
 					'link_type'=>'folder',
-					'link_and_type'=>'folder:'.$GO_LINKS->f('id'),					
-					'name'=>htmlspecialchars($GO_LINKS->f('name'),ENT_QUOTES, 'UTF-8'),
+					'link_and_type'=>'folder:'.$link['id'],
+					'name'=>htmlspecialchars($link['name'],ENT_QUOTES, 'UTF-8'),
 					'type'=>'Folder',
 					'description'=>'',
 					'link_description'=>'',					
@@ -323,6 +323,7 @@ class search extends db {
 			$response['results'][]=array(
 				'iconCls'=>'go-link-icon-'.$this->f('link_type'),
 				'id'=>$this->f('id'),
+				'link_count'=>$this->f('link_count'),
 				'link_type'=>$this->f('link_type'),
 				'link_and_type'=>$this->f('link_type').':'.$this->f('id'),
 				'type_name'=>'('.$this->f('type').') '.strip_tags($this->f('name')),
@@ -432,14 +433,17 @@ class search extends db {
 
 	function cache_search_result($result)
 	{
-		global $lang;
+		global $lang, $GO_LINKS;
 
 		if(isset($result['keywords']) && strlen($result['keywords'])>255)
 		{
 			$result['keywords']=substr($result['keywords'],0,255);
 		}
-		
-		if($this->get_search_result($result['id'], $result['link_type']))
+
+		$result['link_count']=$GO_LINKS->count_links($result['id'], $result['link_type']);
+
+		$old_result = $this->get_search_result($result['id'], $result['link_type']);
+		if($old_result)
  		{
  			$this->update_row('go_search_cache',array('id', 'link_type'), $result);
 			$this->log($result['id'], $result['link_type'], 'Updated '.strip_tags($result['name']));
