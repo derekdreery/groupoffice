@@ -1406,7 +1406,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	  
 	onDblClick : function(grid, event, actionData){
 
-		if(event.read_only && !event.contact_id)
+		if(event.read_only && !event.contact_id && !event.task_id)
 			return false;
 
 		if(event.repeats && actionData.singleInstance)
@@ -1431,7 +1431,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{		
 			if(event['task_id'])
 			{
-				GO.tasks.taskDialog.show({
+				GO.tasks.showTaskDialog({
 					task_id : event['task_id']
 				})				
 			}else
