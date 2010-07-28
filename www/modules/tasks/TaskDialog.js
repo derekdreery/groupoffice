@@ -581,7 +581,9 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
                 }
 
                 this.selectCategory.store.loadData(data);
-                this.selectCategory.setValue(this.selectCategory.store.getAt(0).data.id);
+				var r = this.selectCategory.store.getAt(0);
+				if(r)
+					this.selectCategory.setValue(r.data.id);
         },
 
 	changeRepeat : function(value) {
