@@ -202,7 +202,7 @@ class reminder extends db
 	
 	function get_reminder_by_link_id($user_id, $link_id, $link_type)
 	{
-		$this->query("SELECT r.*,u.time FROM go_reminders r INNER JOIN go_reminders_users u ON u.reminder_id=r.id WHERE user_id=".intval($user_id)." AND link_id=".intval($link_id)." AND link_type=".intval($link_type));
+		$this->query("SELECT r.*,u.time FROM go_reminders r INNER JOIN go_reminders_users u ON u.reminder_id=r.id WHERE u.user_id=".intval($user_id)." AND link_id=".intval($link_id)." AND link_type=".intval($link_type));
 		return $this->next_record();
 	}
 	
