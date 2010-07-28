@@ -951,11 +951,17 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			var domId = this.lastDomId = eventData.domId = Ext.id();
 			this.registerEvent(domId, eventData);
 			
+			var cls = "x-calGrid-all-day-event-container";
+
+			if(eventData.link_count>0){
+				cls +=' cal-has-links'
+			}
+			
 			var event = Ext.DomHelper.append(this.allDayColumns[i],
 			{
 				tag: 'div',
 				id: domId,
-				cls: "x-calGrid-all-day-event-container",
+				cls: cls,
 				style:"background-color:#"+eventData.background,
 				html: text,
 				qtip: GO.calendar.formatQtip(eventData),
@@ -1019,7 +1025,13 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	
 	addGridEvent : function (eventData, day, startRow, endRow, recalculateAppointments)
 	{
-		var text = '<span class="x-calGrid-event-time">'+eventData.startDate.format(GO.settings.time_format)+"</span>&nbsp;"+eventData.name;
+		var text = '<span class="x-calGrid-event-time';
+
+		if(eventData.link_count>0){
+			text +=' cal-has-links'
+		}
+
+		text += '">'+eventData.startDate.format(GO.settings.time_format)+"</span>&nbsp;"+eventData.name;
 		
 		if(eventData.location!='')
 		{

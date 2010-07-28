@@ -148,7 +148,7 @@ class GO_LINKS extends db
 			$this->update_row('go_links_'.$type, array('id', 'link_id','link_type'), $link);
 	}
 	
-	function add_link($id1, $type1, $id2, $type2, $folder_id1=0, $folder_id2=0, $description1='', $description2='', $update_link_count=true)
+	function add_link($id1, $type1, $id2, $type2, $folder_id1=0, $folder_id2=0, $description1='', $description2='')
 	{
 		if(!$this->link_exists($id1, $type1, $id2, $type2))
 		{
@@ -162,8 +162,8 @@ class GO_LINKS extends db
 			go_debug($link);
 	
 			$this->insert_row('go_links_'.$type1,$link);
-			if($update_link_count)
-				$this->update_link_count($id1, $type1);
+			//if($update_link_count)
+				//$this->update_link_count($id1, $type1);
 		}
 		
 		if(!$this->link_exists($id2, $type2, $id1, $type1))
@@ -177,18 +177,18 @@ class GO_LINKS extends db
 				
 			$this->insert_row('go_links_'.$type2,$link);
 
-			if($update_link_count)
-				$this->update_link_count($id2, $type2);
+			//if($update_link_count)
+				//$this->update_link_count($id2, $type2);
 		}		
 	}
 
-	function update_link_count($link_id, $link_type){
+	/*function update_link_count($link_id, $link_type){
 		$link['id']=$link_id;
 		$link['link_type']=$link_type;
 		$link['link_count']=$this->count_links($link_id, $link_type);
 
 		$this->update_row('go_search_cache', array('id', 'link_type'), $link);
-	}
+	}*/
 	
 	function link_exists($link_id1, $type1, $link_id2, $type2)
 	{
@@ -198,7 +198,7 @@ class GO_LINKS extends db
 		return $this->next_record();
 	}
 	
-	function delete_link($link_id1, $type1, $link_id2=0, $type2=0, $update_link_count=true)
+	function delete_link($link_id1, $type1, $link_id2=0, $type2=0)
 	{		
 		//if($link_id1>0)
 		//{
@@ -210,10 +210,10 @@ class GO_LINKS extends db
 				$sql = "DELETE FROM go_links_".intval($type2)." WHERE id=".intval($link_id2)." AND link_type=".$this->escape($type1)." AND link_id=".intval($link_id1);
 				$this->query($sql);
 
-				if($update_link_count){
+				/*if($update_link_count){
 					$this->update_link_count($link_id1, $type1);
 					$this->update_link_count($link_id2, $type2);
-				}
+				}*/
 			}else
 			{
 				$sql = "SELECT DISTINCT link_type FROM go_links_".intval($type1)." WHERE id=".intval($link_id1);
@@ -227,23 +227,23 @@ class GO_LINKS extends db
 				while($this->next_record())
 				{
 
-					$sql = "SELECT id FROM go_links_".intval($this->f('link_type'))." WHERE link_id=".intval($link_id1);
+					/*$sql = "SELECT id FROM go_links_".intval($this->f('link_type'))." WHERE link_id=".intval($link_id1);
 					
 					$touched_items=array();
 					$db->query($sql);
 					while($r=$db->next_record()){
 						$touched_items[]=$r['id'];
-					}
+					}*/
 					$db->query("DELETE FROM go_links_".intval($this->f('link_type'))." WHERE link_id=".intval($link_id1));
-					foreach($touched_items as $i){
+					/*foreach($touched_items as $i){
 						$l->update_link_count($i, intval($this->f('link_type')));
-					}
+					}*/
 					
 				}
 				$sql = "DELETE FROM go_links_".intval($type1)." WHERE id=".intval($link_id1);				
 				$this->query($sql);
 
-				$this->update_link_count($link_id1, $type1);
+				//$this->update_link_count($link_id1, $type1);
 			}
 		//}
 		return true;
@@ -251,13 +251,7 @@ class GO_LINKS extends db
 	
 	function has_links($link_id, $type)
 	{
-		if($link_id > 0)
-		{
-			$sql = "SELECT id FROM go_links_".intval($type)." WHERE id=".intval($link_id).' LIMIT 0,1';
-			$this->query($sql);
-			return $this->next_record();
-		}
-		return false;
+		return $this->count_links($link_id, $type);
 	}
 
 	function count_links($link_id, $type)
@@ -265,7 +259,6 @@ class GO_LINKS extends db
 		if($link_id > 0)
 		{
 			$sql = "SELECT count(*) AS count FROM go_links_".intval($type)." WHERE id=".intval($link_id);
-			go_debug($sql);
 			$this->query($sql);
 			$r =$this->next_record();
 			return $r['count'];

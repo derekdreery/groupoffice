@@ -1,3 +1,8 @@
+.cal-has-links{
+	background:url(../../../../themes/Default/images/attach.gif) no-repeat 0 1px;
+	padding-left:10px !important;
+}
+
 .cal-comment{
 	white-space:normal !important;
 }

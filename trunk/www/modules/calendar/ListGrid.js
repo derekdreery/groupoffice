@@ -37,7 +37,8 @@ GO.calendar.ListGrid = function(config)
 	    'background',
 	    'day',
 	    'task_id',
-	    'contact_id'
+	    'contact_id',
+		'link_count'
 	    ]
 	}),
 	baseParams: {
@@ -73,7 +74,13 @@ GO.calendar.ListGrid = function(config)
 	width:80,
 	renderer: function(v, metadata, record)
 	{
-	    return '<div style="border:1px solid #c0c0c0;padding:2px;margin:2px;background-color:#'+record.data.background+';">'+v+'</div>';
+		var html = '<div class="';
+		if(record.data.link_count>0)
+		{
+			html +='cal-has-links';
+		}
+		html +='" style="background-position:1px 3px !important;border:1px solid #c0c0c0;padding:2px;margin:2px;background-color:#'+record.data.background+';">'+v+'</div>';
+	    return html;
 	},
 	menuDisabled:true
     },
