@@ -22,3 +22,7 @@ modules/calendar/EventPanel.js
 modules/calendar/PermissionsDialog.js
 modules/calendar/CategoriesGrid.js
 modules/calendar/CategoryDialog.js
+modules/calendar/SelectDateDialog.js
+modules/calendar/RecurrenceDialog.js
+modules/calendar/ContextMenu.js
+modules/calendar/EventInfoDialog.js

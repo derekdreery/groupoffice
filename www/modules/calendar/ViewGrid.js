@@ -58,6 +58,8 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 	//a collection of all the gridcells
 	gridCells : Array(),
 
+	nextId : 0,
+
 	// private
 	initComponent : function(){
 		GO.grid.ViewGrid.superclass.initComponent.call(this);
@@ -263,7 +265,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					id: 'cal'+this.jsonData[calendar_id].id+'_day'+dt.format('Ymd'), 
 					cls: 'x-viewGrid-cell',
 					style:'width:'+columnWidth+'px'
-				}, true);				
+				}, true);
 			}			
 		}
 		
@@ -493,11 +495,81 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		}
 
 	},
+
+	showContextMenu : function(e, event)
+	{
+		if(!this.contextMenu)
+		{
+			this.contextMenu = new GO.calendar.ContextMenu();
+
+			this.contextMenu.on('deleteEvent', function()
+			{
+				this.fireEvent("deleteEvent", this);
+			},this);
+
+			this.contextMenu.on('updateEvent', function(obj, new_event_id, calendar_visible)
+			{
+				var event = obj.event;
+
+				if(obj.isCopy)
+				{
+					if(calendar_visible)
+					{
+						if(event.repeats)
+						{
+							this.reload();
+						}else
+						{
+							var newEvent = GO.util.clone(event);
+							delete(newEvent.id);
+							delete(newEvent.domId);
+
+							newEvent.event_id = new_event_id;
+							newEvent.startDate = Date.parseDate(newEvent.start_time, this.dateTimeFormat).add(Date.DAY, obj.offset);
+							newEvent.endDate = Date.parseDate(newEvent.end_time, this.dateTimeFormat).add(Date.DAY, obj.offset);
+							newEvent.start_time=newEvent.startDate.format(this.dateTimeFormat);
+							newEvent.end_time=newEvent.endDate.format(this.dateTimeFormat);
+
+							this.addViewGridEvent(newEvent);
+							
+						}
+					}
+				}else
+				{
+					if(obj.repeats)
+					{
+						this.reload();
+					}else
+					{
+						this.removeEvent(event.domId);
+						delete event.domId;
+
+						if(calendar_visible)
+						{
+							event.startDate = Date.parseDate(event.start_time, this.dateTimeFormat).add(Date.DAY, obj.offset);
+							event.endDate = Date.parseDate(event.end_time, this.dateTimeFormat).add(Date.DAY, obj.offset);
+							event.start_time=event.startDate.format(this.dateTimeFormat);
+							event.end_time=event.endDate.format(this.dateTimeFormat);
+
+							this.addViewGridEvent(event);
+						}
+					}				
+				}
+			},this);
+		}
+
+		e.stopEvent();
+		this.contextMenu.setEvent(event, this.view_id);
+		this.contextMenu.showAt(e.getXY());
+	},
 	
 	addViewGridEvent : function (eventData)
 	{
+		if(eventData.id  == undefined)
+		{
+			eventData.id = this.nextId++;
+		}		
 		
-	
 		//the start of the day the event starts
 		var eventStartDay = Date.parseDate(eventData.startDate.format('Ymd'),'Ymd');
 		var eventEndDay = Date.parseDate(eventData.endDate.format('Ymd'),'Ymd');
@@ -590,7 +662,13 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 						});
 					}
 					
-				}, this);	
+				}, this);
+
+				event.on('contextmenu', function(e, eventEl)
+				{										
+					var event = this.elementToEvent(this.clickedEventId);
+					this.showContextMenu(e, event);
+				}, this);
 			}
 		}
 		
@@ -632,62 +710,47 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		
 		if(!this.recurrenceDialog)
 		{
+			this.recurrenceDialog = new GO.calendar.RecurrenceDialog();
+
+			this.recurrenceDialog.on('single', function()
+			{
+				this.currentActionData.singleInstance=true;
+
+				var remoteEvent = this.currentRecurringEvent;
+				var newEvent = GO.util.clone(remoteEvent);
+				
+				var domIds=[];
+
+				if(this.currentActionData.offsetDays)
+				{
+					this.removeEvent(remoteEvent.domId);
+					newEvent.calendar_id=this.currentActionData.calendar_id;
+					newEvent.repeats=false;
+					newEvent.startDate = newEvent.startDate.add(Date.DAY, this.currentActionData.offsetDays);
+					newEvent.endDate = newEvent.endDate.add(Date.DAY, this.currentActionData.offsetDays);
+					newEvent.start_time = newEvent.startDate.format('U');
+					newEvent.end_time = newEvent.endDate.format('U');
+					this.addViewGridEvent(newEvent);
+				}
+
+				this.fireEvent(this.currentFireEvent, this, remoteEvent , this.currentActionData, domIds);
+		
+				this.recurrenceDialog.hide();
+			},this)
+
+			this.recurrenceDialog.on('entire', function()
+			{
+				this.currentActionData.singleInstance=false;
+
+				this.fireEvent(this.currentFireEvent, this, this.currentRecurringEvent, this.currentActionData);
+				this.recurrenceDialog.hide();
+			},this)
+
+			this.recurrenceDialog.on('cancel', function()
+			{
+				this.recurrenceDialog.hide();
+			},this)
 			
-			this.recurrenceDialog = new Ext.Window({				
-				width:400,
-				autoHeight:true,
-				closeable:false,
-				closeAction:'hide',
-				plain:true,
-				border: false,
-				title:GO.calendar.lang.recurringEvent,
-				modal:false,
-				html: GO.calendar.lang.deleteRecurringEvent,
-				focus : function(){
-					this.getFooterToolbar().items.get('single').focus();
-				},
-				buttons: [{
-					itemId:'single',
-					text: GO.calendar.lang.singleOccurence,
-					handler: function(){
-							
-						this.currentActionData.singleInstance=true;
-							
-						var remoteEvent = this.currentRecurringEvent;
-							
-						this.fireEvent(this.currentFireEvent, this, remoteEvent , this.currentActionData);
-							
-							
-						this.removeEvent(remoteEvent.domId);
-						remoteEvent.calendar_id=this.currentActionData.calendar_id;
-						remoteEvent.repeats=false;
-						remoteEvent.startDate = remoteEvent.startDate.add(Date.DAY, offsetDays);
-						remoteEvent.endDate = remoteEvent.endDate.add(Date.DAY, offsetDays);
-						remoteEvent.start_time = remoteEvent.startDate.format('U');
-						remoteEvent.end_time = remoteEvent.endDate.format('U');
-						this.addViewGridEvent(remoteEvent);
-							
-						this.recurrenceDialog.hide();
-					},
-					scope: this
-				},{
-					text: GO.calendar.lang.entireSeries,
-					handler: function(){
-							
-						this.currentActionData.singleInstance=false;
-							
-						this.fireEvent(this.currentFireEvent, this, this.currentRecurringEvent, this.currentActionData);
-						this.recurrenceDialog.hide();
-					},
-					scope: this
-				},{
-					text: GO.lang.cmdCancel,
-					handler: function(){
-						this.recurrenceDialog.hide();
-					},
-					scope: this
-				}]
-			});
 		}
 		this.recurrenceDialog.show();
 
@@ -810,6 +873,8 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 							}
 						}
 					}
+
+					this.nextId = total;					
 
 					this.fireEvent("storeload", this, total, mtime, params);
 				}

@@ -276,6 +276,8 @@ try {
 				$response['data']=array_merge($response['data'], $values);
 			}
 
+			$response['success'] = true;
+
 			break;
 
 
@@ -477,6 +479,7 @@ try {
 								'link_count'=>$GO_LINKS->count_links($event['id'], 1),
 								'name'=> htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),
 								'time'=>date($date_format, $event['start_time']),
+								'calendar_id'=>$event['calendar_id'],
 								'calendar_name'=>isset($calendar_names[$event['calendar_id']]) ? $calendar_names[$event['calendar_id']] : '',
 								'start_time'=> date('Y-m-d H:i', $event['start_time']),
 								'end_time'=> date('Y-m-d H:i', $event['end_time']),
@@ -765,6 +768,7 @@ try {
 									'id'=>$count,
 									'link_count'=>$GO_LINKS->count_links($event['id'], 1),
 									'calendar_id'=>$cal->f('id'),
+									'calendar_name'=>$cal->f('name'),
 									'event_id'=> $event['id'],
 									'name'=>htmlspecialchars($event['name'], ENT_COMPAT, 'UTF-8'),
 									'start_time'=> date('Y-m-d H:i', $event['start_time']),

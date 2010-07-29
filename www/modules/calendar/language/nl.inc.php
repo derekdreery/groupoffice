@@ -42,6 +42,7 @@ $lang['calendar']['and']='en';
 $lang['calendar']['repeats']= 'Herhaalt elke %s';
 $lang['calendar']['repeats_at']= 'Herhaalt elke %s op %s';//eg. Repeats every month at the first monday
 $lang['calendar']['repeats_at_not_every']= 'Herhaalt elke %s %s op %s';//eg. Repeats every 2 weeks at monday
+$lang['calendar']['repeats_not_every'] = 'Herhaalt elke %s %s';
 $lang['calendar']['until']='tot';
 $lang['calendar']['not_invited']='U bent niet uitgenodigd voor deze gebeurtenis. U moet wellicht inloggen als een andere gebruiker.';
 $lang['calendar']['accept_title']='Geaccepteerd';

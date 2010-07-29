@@ -205,7 +205,7 @@ try {
 				//an event is moved or resized
 				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_event['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new AccessDeniedException();
-				}
+				}				
 
 				if(isset($_POST['createException']) && $_POST['createException'] =='true') {
 
@@ -320,19 +320,24 @@ try {
 							while($resource = $cal->next_record()){
 								$resource_calendar=$cal2->get_calendar($resource['calendar_id']);
 								$group = $cal2->get_group($resource_calendar['group_id']);
-							
+
+								$update_resource = false;
 								$num_admins = $cal2->get_group_admins($resource_calendar['group_id']);
 								while($cal2->next_record())
 								{
 									if($cal2->f('user_id') != $GO_SECURITY->user_id)
 									{
-										$resource['status']='NEEDS-ACTION';
-										$resource['background']='FF6666';
-										$cal3->update_row('cal_events', 'id', $resource);
+										$update_resource = true;										
 
 										$user = $GO_USERS->get_user($cal2->f('user_id'));
 										$cal->send_resource_notification('modified_for_admin', $resource, $resource_calendar, $_SESSION['GO_SESSION']['name'], $user['email'], $group);
 									}
+								}
+								if($update_resource)
+								{
+									$resource['status']='NEEDS-ACTION';
+									$resource['background']='FF6666';
+									$cal3->update_row('cal_events', 'id', $resource);
 								}
 							}
 						}
@@ -344,6 +349,21 @@ try {
 						$cal->move_exceptions(($_POST['update_event_id']), $offset);
 					}*/
 				}
+
+				$view_id = (isset($_REQUEST['view_id']) && $_REQUEST['view_id']) ? $_REQUEST['view_id'] : 0;
+				if($view_id && $update_event['calendar_id'])
+				{
+					if($cal->get_view_calendars($view_id))
+					{
+						while($cal->next_record())
+						{
+							$calendars[] = $cal->f('id');
+						}
+
+						$response['is_visible'] = in_array($update_event['calendar_id'], $calendars);
+					}
+				}
+				
 				$response['success']=true;
 			}
 		break;
@@ -1129,6 +1149,47 @@ try {
 			}
 
 			$response['success'] = true;
+			break;
+
+
+		case 'copy_event':
+
+			$event_id = (isset($_REQUEST['event_id']) && $_REQUEST['event_id']) ? $_REQUEST['event_id'] : 0;
+			$view_id = (isset($_REQUEST['view_id']) && $_REQUEST['view_id']) ? $_REQUEST['view_id'] : 0;
+			$calendar_id = (isset($_REQUEST['calendar_id']) && $_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
+			$offset = (isset($_REQUEST['offset']) && $_REQUEST['offset']) ? $_REQUEST['offset'] : 0;
+
+			if($view_id)
+			{
+				if($cal->get_view_calendars($view_id))
+				{
+					while($cal->next_record())
+					{
+						$calendars[] = $cal->f('id');
+					}
+
+					$response['is_visible'] = in_array($calendar_id, $calendars);
+				}
+			}
+			
+			$response['success'] = false;
+			if($event_id && $offset)
+			{
+				$event = $cal->get_event($event_id);
+				if($event)
+				{
+					$new_event['calendar_id'] = ($calendar_id) ? $calendar_id : $event['calendar_id'];
+					$new_event['user_id'] = $GO_SECURITY->user_id;
+
+					$new_event['start_time'] = Date::date_add($event['start_time'], $offset);
+					$new_event['end_time'] = Date::date_add($event['end_time'], $offset);
+
+					$response['event_id'] = $cal->copy_event($event_id, $new_event);
+
+					$response['success'] = true;
+				}
+			}
+			
 			break;
 
 	}

@@ -121,3 +121,9 @@ GO.calendar.lang.globalCategory='Global category';
 GO.calendar.lang.selectCategory='Select category';
 
 GO.calendar.lang.duration='Timespan';
+
+GO.calendar.lang.move='Move';
+GO.calendar.lang.showInfo='Details';
+GO.calendar.lang.copyEvent='Copy event';
+GO.calendar.lang.moveEvent='Move event';
+GO.calendar.lang.eventInfo='Event details';
