@@ -622,7 +622,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		return Math.floor((x-gridPosition[0]-40)/snap["x"]);
 	},
 	startSelection : function (e){
-		//check if we are not dragging an event, check for left button
+		//check if we are not dragging an event, check for left button		
 		if(this.writePermission && !this.dragEvent && (e.button == '0'))
 		{
 			var coords = e.getXY();
@@ -1515,7 +1515,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			{
 				if(this.currentFireEvent == 'move')
 				{
-					//this.store.reload();
+					this.store.reload();
 					//console.debug(this.currentRecurringEvent);
 					//console.debug(this.currentActionData);
 
@@ -1890,7 +1890,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 
 	startEventDrag : function(e, eventId) {
 		//don't start dragging when a doubleclick is recorded
-		if(this.writePermission && !this.eventMouseUp)
+		if(this.writePermission && !this.eventMouseUp && e.button == '0')//button 0 is left click
 		{
 			this.dragClickEventPosition=e.getXY();
 
