@@ -2000,9 +2000,17 @@ GO.calendar.showEventDialog = function(config){
 
 GO.linkHandlers[1]=function(id){
 	
-	GO.calendar.showEventDialog({
-		event_id: id
-	});
+	if(!GO.calendar.eventLinkWindow){
+		var eventPanel = new GO.calendar.EventPanel();
+		GO.calendar.eventLinkWindow = new GO.LinkViewWindow({
+			title: GO.calendar.lang.appointment,
+			closeAction:'hide',
+			items: eventPanel,
+			eventPanel: eventPanel
+		});
+	}
+	GO.calendar.eventLinkWindow.eventPanel.load(id);
+	GO.calendar.eventLinkWindow.show();
 };
 GO.linkPreviewPanels[1]=function(config){
 	var config = config || {};

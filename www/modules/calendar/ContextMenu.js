@@ -102,14 +102,8 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 		this.selectDateDialog.show(this.event, isCopy, repeat, this.view_id);
 	},
 	showEventInfoDialog : function()
-	{		
-		if(!GO.calendar.eventInfoDialog)
-		{
-			GO.calendar.eventInfoDialog = new GO.calendar.EventInfoDialog();
-		}
-
-		GO.calendar.eventInfoDialog.show(this.event.event_id);
-
+	{
+		GO.linkHandlers[1].call(this, this.event.event_id);
 	},
 	menuHandler : function()
 	{
