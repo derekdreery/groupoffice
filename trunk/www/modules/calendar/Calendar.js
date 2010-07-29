@@ -314,28 +314,26 @@ GO.calendar.MainPanel = function(config){
 
 
 	this.daysGridStore = new GO.data.JsonStore({
-
 		url: GO.settings.modules.calendar.url+'json.php',
 		baseParams: {
 			task: 'events'
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','all_day_event','username','duration', 'link_count']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count']
 	});
 	
 	this.monthGridStore = new GO.data.JsonStore({
-
 		url: GO.settings.modules.calendar.url+'json.php',
 		baseParams: {
 			task: 'events'
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','username','duration', 'link_count']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count']
 	});
 
-	this.daysGrid = new GO.grid.CalendarGrid(
+	GO.calendar.daysGrid = this.daysGrid = new GO.grid.CalendarGrid(
 	{
 		id: 'days-grid',
 		store: this.daysGridStore, 
@@ -348,7 +346,7 @@ GO.calendar.MainPanel = function(config){
 				},
 				scope: this
 		}]
-	});
+	});	
 	
 	this.monthGrid = new GO.grid.MonthGrid({
 		id: 'month-grid',
@@ -363,7 +361,7 @@ GO.calendar.MainPanel = function(config){
 				},
 				scope: this
 		}]
-	});
+	});	
 	
 	this.viewGrid = new GO.grid.ViewGrid({
 		id: 'view-grid',
@@ -424,6 +422,23 @@ GO.calendar.MainPanel = function(config){
 	    GO.calendar.activePanel.mtime = mtime;
 	}, this);
 
+
+	this.daysGrid.on('deleteEvent', function()
+	{
+		this.deleteHandler();
+	},this);
+	this.monthGrid.on('deleteEvent', function()
+	{
+		this.deleteHandler();
+	},this);
+	this.listGrid.on('deleteEvent', function()
+	{
+		this.deleteHandler();
+	},this);
+	this.viewGrid.on('deleteEvent', function()
+	{
+		this.deleteHandler();
+	},this);
 
 	this.listStore = this.listGrid.store;
 
@@ -722,7 +737,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 					//var oldDomId = activeGrid.domIds[newEvent.event_id] ? activeGrid.domIds[newEvent.event_id][0] : false;
 					//reload grid if old or new event repeats. Do not reload if an occurence of a repeating event is modified
-					if(newEvent.repeats)//|| (activeGrid.remoteEvents[oldDomId] && activeGrid.remoteEvents[oldDomId].repeats && activeGrid.remoteEvents[oldDomId].event_id==newEvent.event_id))
+					if(newEvent.repeats || !oldDomId)//|| (activeGrid.remoteEvents[oldDomId] && activeGrid.remoteEvents[oldDomId].repeats && activeGrid.remoteEvents[oldDomId].event_id==newEvent.event_id))
 					{
 						activeGrid.store.reload();
 					}else
@@ -937,58 +952,36 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				
 			if(!this.recurrenceDialog)
 			{
-				
-				this.recurrenceDialog = new Ext.Window({				
-					width:400,
-					autoHeight: true,
-					closeable: false,
-					closeAction: 'hide',
-					plain: true,
-					border: false,
-					closable: false,
-					title: GO.calendar.lang.recurringEvent,
-					modal: true,
-					html: GO.calendar.lang.deleteRecurringEvent,
-					focus : function(){
-						this.getFooterToolbar().items.get('cancel').focus();
-					},
-					buttons: [{
-						text: GO.calendar.lang.singleOccurence,
-						handler: function(){
-								
-							var params={
-								task: 'delete_event',
-								create_exception: true,
-								exception_date: this.currentDeleteEvent.startDate.format(this.daysGrid.dateTimeFormat),
-								event_id: this.currentDeleteEvent.event_id
-							};
-							this.sendDeleteRequest(params, this.currentDeleteCallback, this.currentDeleteEvent);
-													
-							this.recurrenceDialog.hide();
-						},
-						scope: this
-					},{
-						text: GO.calendar.lang.entireSeries,
-						handler: function(){
-								
-							var params={
-								task: 'delete_event',
-								event_id: this.currentDeleteEvent.event_id
-							};
-							this.sendDeleteRequest(params, this.currentDeleteCallback, this.currentDeleteEvent, true);
-								
-							this.recurrenceDialog.hide();
-						},
-						scope: this
-					},{
-						itemId:'cancel',
-						text: GO.lang.cmdCancel,
-						handler: function(){
-							this.recurrenceDialog.hide();
-						},
-						scope: this
-					}]
-				});
+				this.recurrenceDialog = new GO.calendar.RecurrenceDialog();
+
+				this.recurrenceDialog.on('single', function()
+				{
+					var params={
+						task: 'delete_event',
+						create_exception: true,
+						exception_date: this.currentDeleteEvent.startDate.format(this.daysGrid.dateTimeFormat),
+						event_id: this.currentDeleteEvent.event_id
+					};
+					this.sendDeleteRequest(params, this.currentDeleteCallback, this.currentDeleteEvent);
+
+					this.recurrenceDialog.hide();
+				},this)
+
+				this.recurrenceDialog.on('entire', function()
+				{
+					var params={
+						task: 'delete_event',
+						event_id: this.currentDeleteEvent.event_id
+					};
+					this.sendDeleteRequest(params, this.currentDeleteCallback, this.currentDeleteEvent, true);
+
+					this.recurrenceDialog.hide();
+				},this)
+
+				this.recurrenceDialog.on('cancel', function()
+				{
+					this.recurrenceDialog.hide();
+				},this)
 			}
 		
 			this.recurrenceDialog.show();
@@ -1411,10 +1404,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		
 		this.monthGrid.on("move", this.onEventMove,this);
 		this.daysGrid.on("move", this.onEventMove,this);
-		
-	
+
 		this.viewGrid.on("move", function(grid, event, actionData, domIds){
-	    		
+
 			var params = {
 				task : 'update_grid_event',
 				update_event_id : event['event_id']
@@ -1451,7 +1443,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					{
 						if(event.repeats && !actionData.singleInstance)
 						{
-							grid.store.reload();
+							grid.reload();
 						}else if(responseParams.new_event_id)
 						{
 							grid.setNewEventId(domIds, responseParams.new_event_id);
@@ -1509,7 +1501,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
     
 	onEventMove : function(grid, event, actionData, domIds){
-		
+
 		var params = {
 			task : 'update_grid_event',
 			update_event_id : event['event_id']

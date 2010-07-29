@@ -51,6 +51,7 @@ $lang['calendar']['and']='and';
 $lang['calendar']['repeats'] = 'Repeats every %s';
 $lang['calendar']['repeats_at'] = 'Repeats every %s at %s';//eg. Repeats every month at the first monday
 $lang['calendar']['repeats_at_not_every'] = 'Repeats every %s %s at %s';//eg. Repeats every 2 weeks at monday
+$lang['calendar']['repeats_not_every'] = 'Repeats every %s %s';
 $lang['calendar']['until']='until'; 
 
 $lang['calendar']['not_invited']='You were not invited to this event. You might need to login as a different user.';

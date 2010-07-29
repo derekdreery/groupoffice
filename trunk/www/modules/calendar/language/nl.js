@@ -109,3 +109,9 @@ GO.calendar.lang.globalCategory='Globale categorie';
 GO.calendar.lang.selectCategory='Selecteer categorie';
 
 GO.calendar.lang.duration='Duur';
+
+GO.calendar.lang.move='Verplaatsen';
+GO.calendar.lang.showInfo='Informatie';
+GO.calendar.lang.copyEvent='Kopieer afspraak';
+GO.calendar.lang.moveEvent='Verplaats afspraak';
+GO.calendar.lang.eventInfo='Afspraak informatie';

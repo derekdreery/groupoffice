@@ -84,13 +84,15 @@ GO.util.nl2br = function (v)
 	return v.replace(/\n/g, '<br />');
 }
 
-GO.util.clone = function clone(obj){
+GO.util.clone = function (obj){
     if(obj == null || typeof(obj) != 'object')
         return obj;
     var temp = new obj.constructor(); // changed (twice)
 
+    //var temp = {};
+
     for(var key in obj)
-        temp[key] = clone(obj[key]);
+        temp[key] = obj[key];
 
     return temp;
 

@@ -47,6 +47,17 @@ width:6px;
 	background-image: url('images/16x16/availability.png') !important;
 }
 
+.btn-copy {
+	background-image:url('images/16x16/copy.png') !important;
+}
+
+.btn-cut {
+	background-image:url('images/16x16/cut.png') !important;
+}
+
+.btn-properties{
+	background-image:url('images/16x16/properties.png') !important;
+}
 
 .img-available {
 	background-image: url('images/16x16/available.png') !important;
