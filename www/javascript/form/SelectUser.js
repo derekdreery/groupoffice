@@ -38,7 +38,7 @@ GO.form.SelectUser = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
-		fields:['id','name','email','username','company','first_name', 'middle_name', 'last_name', 'address', 'address_no', 'zip', 'city', 'state', 'country'],
+		fields:['id','name','email','username','company','first_name', 'middle_name', 'last_name', 'address', 'address_no', 'zip', 'city', 'state', 'country','cf'],
 		remoteSort: true
 	});
 	this.store.setDefaultSort('name', 'asc');
@@ -50,11 +50,12 @@ GO.form.SelectUser = function(config){
 		this.setRemoteValue(GO.settings.user_id, GO.settings.name);
 		this.value=GO.settings.user_id;
 	}
+
+	if(!config.valueField)
+		config.valueField='id';
 	
 	GO.form.SelectUser.superclass.constructor.call(this,{
 		displayField: 'name',		
-		
-		valueField: 'id',
 		triggerAction: 'all',
 		selectOnFocus:true,
 		forceSelection: true,

@@ -24,6 +24,29 @@ Ext.TaskMgr.start({
 	interval: 1000
 });*/
 
+/*
+ * When idValuePair is true on a form field it will assume that the value is
+ * <valueField>:<displayField>. It will transform the value for correct display.
+ */
+Ext.override(Ext.FormPanel,{
+	initComponent : Ext.FormPanel.prototype.initComponent.createSequence(function(){
+		this.on('actioncomplete', function(form, action){
+			if(action.type=='load'){
+				form.items.each(function(field){
+					//check if this field is a tree select
+					if(field.idValuePair){
+						var v = field.getValue();
+						v=v.split(':');						
+						if(v.length==2){
+							field.setRawValue(v[1]);
+						}
+					}
+				});
+			}
+		});
+	})
+});
+
 
 if(Ext.version=="2.3.0"){
 
@@ -401,5 +424,4 @@ Ext.override(Ext.ToolTip,{
     return {x : x, y: y};
   }    
 }); */
-
 
