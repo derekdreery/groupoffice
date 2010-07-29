@@ -205,22 +205,25 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 		var tbar = this.getTopToolbar();
 		if(tbar)
 			tbar.setDisabled(false);
-	
-		this.editButton.setDisabled(!data.write_permission);
+
+		if(this.editButton)
+			this.editButton.setDisabled(!data.write_permission);
 		
-		if(data.write_permission)
-		{
-			this.newMenuButton.setLinkConfig({
-				id:this.data.id,
-				type:this.link_type,
-				text: this.getLinkName(),
-				callback:this.reload,
-				scope:this
-			});
-		}else
-		{
-			this.newMenuButton.setDisabled(true);
-		}		
+		if(this.newMenuButton){
+			if(data.write_permission)
+			{
+				this.newMenuButton.setLinkConfig({
+					id:this.data.id,
+					type:this.link_type,
+					text: this.getLinkName(),
+					callback:this.reload,
+					scope:this
+				});
+			}else
+			{
+				this.newMenuButton.setDisabled(true);
+			}
+		}
 		
 		if(this.fileBrowseButton)
 		{
