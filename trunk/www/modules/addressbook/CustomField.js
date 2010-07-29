@@ -5,10 +5,11 @@ GO.moduleManager.onModuleReady('customfields', function(){
 		getFormField : function(customfield, config){
 			return {
 				xtype: 'selectcontact',
-       	fieldLabel: customfield.name,
-        hiddenName:customfield.dataname,
+				idValuePair:true,
+				fieldLabel: customfield.name,
+				hiddenName:customfield.dataname,
 				forceSelection:true,
-        anchor:'-20',
+				anchor:'-20',
 				valueField:'cf'
 			}
 		}

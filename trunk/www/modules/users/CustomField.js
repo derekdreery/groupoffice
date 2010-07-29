@@ -5,6 +5,8 @@ GO.moduleManager.onModuleReady('customfields', function(){
 	getFormField : function(customfield, config){
 	    return {
 		xtype: 'selectuser',
+		idValuePair:true,
+		startBlank:true,
 		fieldLabel: customfield.name,
 		hiddenName:customfield.dataname,
 		forceSelection:true,

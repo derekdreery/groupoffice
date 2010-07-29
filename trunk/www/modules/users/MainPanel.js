@@ -199,7 +199,18 @@ GO.users.showUserDialog = function(user_id, config){
 
 
 GO.linkHandlers[8]=function(id){
-	GO.users.showUserDialog(id);
+	//GO.users.showUserDialog(id);
+	if(!GO.users.userLinkWindow){
+		var userPanel = new GO.users.UserPanel();
+		GO.users.userLinkWindow = new GO.LinkViewWindow({
+			title: GO.lang.strUser,
+			closeAction:'hide',
+			items: userPanel,
+			userPanel: userPanel
+		});
+	}
+	GO.users.userLinkWindow.userPanel.load(id);
+	GO.users.userLinkWindow.show();
 };
 
 GO.linkPreviewPanels[8]=function(config){

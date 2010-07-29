@@ -19,6 +19,13 @@ class users extends db
 		$events->add_listener('save_settings', __FILE__, 'users', 'save_settings');
 		$events->add_listener('build_search_index', __FILE__, 'users', 'build_search_index');
 		$events->add_listener('check_database', __FILE__, 'users', 'check_database');
+		$events->add_listener('init_customfields_types', __FILE__, 'users', 'init_customfields_types');
+	}
+
+	function init_customfields_types(){
+		global $GO_MODULES, $customfield_types;
+		require_once($GO_MODULES->modules['users']['class_path'].'user_customfield_type.class.inc.php');
+		$customfield_types['user']=new user_customfield_type(array());
 	}
 
 	public function get_register_email(){
