@@ -114,3 +114,5 @@ GO.addressbook.lang.confirmAddAllSearchResults='Weet u zeker dat u alle zoekresu
 GO.addressbook.lang.emailAdded='Emailadres succesvol toegevoegd aan contactpersoon';
 
 GO.addressbook.lang.exportWithCompanies='Met bedrijven';
+
+GO.addressbook.lang.id='ID';
