@@ -24,6 +24,14 @@
 
 class String {
 
+	public static function array_to_string($arr){
+		$s='';
+		foreach($arr as $key=>$value){
+			$s .= $key.': '.$value."\n";
+		}
+		return $s;
+	}
+
 	/*
 	 * Check if parenthesis are closed properly.
 	 */
