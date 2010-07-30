@@ -755,7 +755,7 @@ class addressbook extends db {
 			$sort_index='birthday';
 		}
 
-
+		
 
 		if(count($mailings_filter)) {
 			$sql = "SELECT DISTINCT ";
@@ -806,8 +806,9 @@ class addressbook extends db {
 
 		if(!empty($query)) {
 			$sql .= " AND ";
-
+			
 			if(!is_array($field)) {
+				unset($_SESSION['GO_SESSION']['addressbook_search_contact_fields']);
 				if($field == '') {
 					if(!isset($_SESSION['GO_SESSION']['addressbook_search_contact_fields'])) {
 						$fields=array('name');
@@ -824,7 +825,9 @@ class addressbook extends db {
 							while ($this->next_record()) {
 								$fields[]='cf_2.'.$this->f('Field');
 							}
-						}
+						}						
+						$fields[] = 'ab_companies.name';
+						
 						$_SESSION['GO_SESSION']['addressbook_search_contact_fields']=$fields;
 					}else {
 						$fields=$_SESSION['GO_SESSION']['addressbook_search_contact_fields'];
