@@ -832,11 +832,23 @@ class files extends db {
 
 		$this->insert_row('fs_folders', $folder);
 
-		return $folder['id'];
+		$this->cache_folder($folder);
+
+		return $folder['id'];			
 	}
 
 	function update_folder($folder) {
-		return $this->update_row('fs_folders', 'id', $folder);
+		
+		$result = $this->update_row('fs_folders', 'id', $folder);
+		
+		if(!isset($folder['user_id']) || !isset($folder['name']))
+		{
+			$folder = $this->get_folder($folder['id']);
+
+		}
+		$this->cache_folder($folder);
+
+		return $result;
 	}
 
 
@@ -1589,7 +1601,7 @@ class files extends db {
 		}
 	}
 
-	function cache_file($file) {
+	function cache_file($file, $is_folder=false) {
 		global $GO_CONFIG, $GO_LANGUAGE;
 		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 		$search = new search();
@@ -1597,33 +1609,45 @@ class files extends db {
 		require($GO_LANGUAGE->get_language_file('files'));
 
 		$fs = new files();
-
-		if(is_numeric($file)) {
+		
+		if(is_numeric($file) && !$is_folder) {
 			$file = $this->get_file($file);
+		}else
+		if(is_numeric($file) && $is_folder){		
+			$file = $this->get_folder($file);
 		}
 
 		if($file) {
 
-			$share = $fs->find_share($file['folder_id']);
+			$share_id = ($is_folder) ? $file['id'] : $file['folder_id'];
+			$share = $fs->find_share($share_id);
 
 			if(!isset($file['comments']))
 				$file['comments']='';
 
+			if($file['comments'])
+				$file['comments'].=',';
+
 			if($share) {
-				$cache['id']=$file['id'];
+				$cache['id']=$share_id;
 				$cache['user_id']=$file['user_id'];
 				$cache['name'] = htmlspecialchars($file['name'], ENT_QUOTES, 'utf-8');
-				$cache['link_type']=6;
+				$cache['link_type']=($is_folder) ? 17 : 6;
 				$cache['description']='';
-				$cache['type']=$lang['files']['file'];
+				$cache['type']=($is_folder) ? $lang['files']['folder'] : $lang['files']['file'];
 				$cache['module']='files';
-				$cache['keywords']=$file['comments'].','.$cache['name'].','.$cache['type'];
+				$cache['keywords']=$file['comments'].$cache['name'].','.$cache['type'];
 				$cache['mtime']=$file['mtime'];
 				$cache['acl_id']=$share['acl_id'];
 
 				$search->cache_search_result($cache);
 			}
 		}
+	}
+
+	function cache_folder($folder)
+	{
+		$this->cache_file($folder, true);
 	}
 
 	/**
@@ -1639,6 +1663,12 @@ class files extends db {
 		$fs1 = new files();
 		while($record = $fs->next_record()) {
 			$fs1->cache_file($record);
+		}
+
+		$sql = "SELECT * FROM fs_folders";
+		$fs->query($sql);
+		while($record = $fs->next_record()) {			
+			$fs1->cache_folder($record);
 		}
 	}
 }

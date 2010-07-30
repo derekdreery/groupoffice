@@ -645,19 +645,31 @@ GO.files.FileBrowser = function(config){
 
 
 	this.filePanel = new GO.files.FilePanel({
-		region:'east',
 		id:config.id+'-file-panel',
+		border:false
+	});
+
+	this.folderPanel = new GO.files.FolderPanel({
+		id:config.id+'-folder-panel',
+		border:false,
+		hidden:true
+	});
+
+	this.eastPanel = new Ext.Panel({
+		region:'east',
+		items:[this.filePanel, this.folderPanel],
 		collapsed:config.filePanelCollapsed,
 		width:450,
 		collapseMode:'mini',
 		collapsible:true,
 		split:true,
+		border:false,
 		title: '&nbsp;'
 	});
 
 	
 			
-	config['items']=[this.locationPanel, this.treePanel,this.cardPanel,this.filePanel];
+	config['items']=[this.locationPanel, this.treePanel,this.cardPanel,this.eastPanel];
 	
 	GO.files.FileBrowser.superclass.constructor.call(this, config);
 
@@ -669,8 +681,18 @@ GO.files.FileBrowser = function(config){
 
 	this.on('fileselected',function(grid, r){
 		if(r.data.extension!='folder'){
+			this.folderPanel.setVisible(false);
+			this.filePanel.setVisible(true);
+
 			this.filePanel.load(r.id.substr(2));
+		}else
+		{
+			this.filePanel.setVisible(false);
+			this.folderPanel.setVisible(true);
+
+			this.folderPanel.load(r.id.substr(2));
 		}
+			
 	}, this);
 }
 
@@ -1737,6 +1759,13 @@ GO.linkPreviewPanels[6]=function(config){
 	return new GO.files.FilePanel(config);
 }
 
+GO.linkHandlers[17]=function(id, record){
+	GO.files.showFolderPropertiesDialog(id+"");
+}
+GO.linkPreviewPanels[17]=function(config){
+	config = config || {};
+	return new GO.files.FolderPanel(config);
+}
 
 
 

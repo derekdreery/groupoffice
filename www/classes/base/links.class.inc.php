@@ -27,7 +27,7 @@
  * 3=ab_companies
  * 4=no_notes
  * 5=pm_projects
- * 6=folders & files
+ * 6=files
  * 7=bs_orders
  * 8=users
  * 9=em_links
@@ -38,6 +38,7 @@
  * 14=Project reports
  * 15=Custom database
  * 16=fs_docbundles
+ * 17=folders
  * 20=Tickets
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
