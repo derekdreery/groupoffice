@@ -70,9 +70,14 @@ class Date {
 	}
 
 
-	public static function format_long_date($time){
+	public static function format_long_date($time,$add_time=true){
 		global $lang;
-		return $lang['common']['full_days'][date('w', $time)].' '.date('d', $time).' '.$lang['common']['months'][date('n', $time)].' '.date('Y - G:i', $time);
+
+		$str  = $lang['common']['full_days'][date('w', $time)].' '.date('d', $time).' '.$lang['common']['months'][date('n', $time)].' ';
+		if ($add_time)
+			return $str.date('Y - '.$_SESSION['GO_SESSION']['time_format'], $time);
+		else
+			return $str.date('Y', $time);
 	}
 	/**
 	 * Converts a Group-Office date to unix time.
