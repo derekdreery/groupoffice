@@ -14,3 +14,4 @@ modules/files/SelectFile.js
 modules/files/CustomField.js
 modules/files/FileBrowser.js
 modules/files/FilePanel.js
+modules/files/FolderPanel.js

@@ -165,3 +165,23 @@ CREATE TABLE IF NOT EXISTS `go_links_6` (
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabel structuur voor tabel `go_links_17`
+--
+
+DROP TABLE IF EXISTS `go_links_17`;
+CREATE TABLE IF NOT EXISTS `go_links_17` (
+  `id` int(11) NOT NULL,
+  `folder_id` int(11) NOT NULL,
+  `link_id` int(11) NOT NULL,
+  `link_type` int(11) NOT NULL,
+  `description` varchar(100) NULL,
+  `ctime` int(11) NOT NULL,
+  KEY `link_id` (`link_id`,`link_type`),
+  KEY `id` (`id`,`folder_id`),
+  KEY `ctime` (`ctime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+

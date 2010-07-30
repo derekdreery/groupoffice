@@ -85,3 +85,16 @@ $updates[] = "CREATE TABLE IF NOT EXISTS `cf_6` (
 
 $updates[] = "script:5_convert_acl.inc.php";
 $updates[] = "script:6_create_empty_file_template.inc.php";
+
+$updates[] = "CREATE TABLE IF NOT EXISTS `go_links_17` (
+  `id` int(11) NOT NULL,
+  `folder_id` int(11) NOT NULL,
+  `link_id` int(11) NOT NULL,
+  `link_type` int(11) NOT NULL,
+  `description` varchar(100) NULL,
+  `ctime` int(11) NOT NULL,
+  KEY `link_id` (`link_id`,`link_type`),
+  KEY `id` (`id`,`folder_id`),
+  KEY `ctime` (`ctime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+

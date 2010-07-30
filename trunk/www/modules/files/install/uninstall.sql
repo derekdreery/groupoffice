@@ -6,4 +6,5 @@ DROP TABLE IF EXISTS `fs_status_history`;
 DROP TABLE IF EXISTS `fs_templates`;
 DROP TABLE IF EXISTS `fs_new_files`;
 DROP TABLE IF EXISTS `go_links_6`;
+DROP TABLE IF EXISTS `go_links_17`;
 DROP TABLE IF EXISTS `cf_6`;
