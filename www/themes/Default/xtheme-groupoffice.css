@@ -15,8 +15,8 @@
 .x-btn-left{width:3px;height:21px;background:url(images/extjs/button/btn-sprite.gif) no-repeat 0 0;}
 .x-btn-right{width:3px;height:21px;background:url(images/extjs/button/btn-sprite.gif) no-repeat 0 -21px;}
 .x-btn-center{background:url(images/extjs/button/btn-sprite.gif) repeat-x 0 -42px;vertical-align:middle;text-align:center;padding:0 5px;cursor:pointer;white-space:nowrap;}
-.x-btn-text-icon .x-btn-with-menu .x-btn-center em, .x-btn-mc em.x-btn-arrow {
-	background-image:url(images/extjs/button/arrow.gif) !important;
+.go-head-tb .x-btn-text-icon .x-btn-with-menu .x-btn-center em,.go-head-tb .x-btn-mc em.x-btn-arrow {
+	background-image:url(images/extjs/button/arrow-light.gif) !important;
 }
 	
 .x-btn-pressed .x-btn-left{background:url(images/extjs/button/btn-sprite.gif) no-repeat 0 -63px;}
