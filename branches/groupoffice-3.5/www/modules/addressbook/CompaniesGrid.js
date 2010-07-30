@@ -11,6 +11,11 @@ GO.addressbook.CompaniesGrid = function(config){
 		fields:['id','name','homepage','email','phone','fax','address','address_no','zip','city','state','country','post_address','post_address_no','post_city','post_state','post_country','post_zip','bank_no','vat_no','ctime','mtime'],
 		columns:[
 		  {
+			header: GO.addressbook.lang.id,
+			dataIndex: 'id',
+			width:20,
+			hidden:true
+		  },{
 		  	header: GO.lang['strName'], 
 		  	dataIndex: 'name'
 		  },
