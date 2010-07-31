@@ -645,18 +645,17 @@ GO.files.FileBrowser = function(config){
 
 
 	this.filePanel = new GO.files.FilePanel({
-		id:config.id+'-file-panel',
-		border:false
+		id:config.id+'-file-panel'
 	});
 
 	this.folderPanel = new GO.files.FolderPanel({
 		id:config.id+'-folder-panel',
-		border:false,
 		hidden:true
 	});
 
 	this.eastPanel = new Ext.Panel({
 		region:'east',
+		layout:'fit',
 		items:[this.filePanel, this.folderPanel],
 		collapsed:config.filePanelCollapsed,
 		width:450,
