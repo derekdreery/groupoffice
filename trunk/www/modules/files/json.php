@@ -839,6 +839,8 @@ try {
 
 			$params['response']=&$response;
 			$params['task']=$task;
+			$params['file']=$file;
+			$params['folder']=$folder;
 			$GO_EVENTS->fire_event('load_file_properties', $params);
 
 			break;
