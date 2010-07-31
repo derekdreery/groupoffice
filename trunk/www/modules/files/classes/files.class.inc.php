@@ -1629,7 +1629,7 @@ class files extends db {
 				$file['comments'].=',';
 
 			if($share) {
-				$cache['id']=$share_id;
+				$cache['id']=$file['id'];
 				$cache['user_id']=$file['user_id'];
 				$cache['name'] = htmlspecialchars($file['name'], ENT_QUOTES, 'utf-8');
 				$cache['link_type']=($is_folder) ? 17 : 6;
