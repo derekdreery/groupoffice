@@ -1,3 +1,7 @@
+2010/08/02 3.5.16
+- inefficient hoursapproval queries
+- Import PST script
+
 2010/07/27 3.5.14
 - Small security issue fixed and some bug fixes
 - Print buttons in timeregistration and hoursapproval module
