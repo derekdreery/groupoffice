@@ -282,13 +282,53 @@ class tasks extends db
 	
 	function get_default_tasklist($user_id)
 	{
-		$sql = "SELECT * FROM ta_lists WHERE user_id='".intval($user_id)."' LIMIT 0,1";
-		$this->query($sql);
-		if($this->next_record())
-		{
-			return $this->record;
+		$tasklist=false;
+		
+		$settings = $this->get_settings($user_id);
+
+		if(!empty($settings['default_tasklist_id'])){
+			$tasklist = $this->get_tasklist($settings['default_tasklist_id']);
 		}
-		return false;
+
+		if(!$tasklist){
+			$sql = "SELECT * FROM ta_lists WHERE user_id='".intval($user_id)."' LIMIT 0,1";
+			$this->query($sql);
+			$tasklist = $this->next_record();
+
+			if($tasklist){
+				$this->update_settings(array('user_id'=>$user_id, 'default_tasklist_id'=>$tasklist['id']));
+			}
+		}
+
+		if(!$tasklist){
+			global $GO_USERS, $GO_SECURITY;
+
+			$list['user_id']=$user_id;
+			$user = $GO_USERS->get_user($user_id);
+			if(!$user){
+				return false;
+			}
+			$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
+			$list['name'] = $task_name;
+			$list['acl_id']=$GO_SECURITY->get_new_acl('',$user_id);
+			$x = 1;
+			while($this->get_tasklist_by_name($list['name']))
+			{
+				$list['name'] = $task_name.' ('.$x.')';
+				$x++;
+			}
+
+			if (!$list_id = $this->add_tasklist($list))
+			{
+				return false;
+			}else
+			{
+				$this->update_settings(array('user_id'=>$GO_SECURITY->user_id, 'default_tasklist_id'=>$list_id));
+				$tasklist=$this->get_tasklist($list_id);
+			}
+		}
+
+		return $tasklist;
 		
 	}
 
