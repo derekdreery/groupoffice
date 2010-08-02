@@ -101,7 +101,7 @@ class formprocessor{
 
 		
 
-		if(isset($_POST['email']) && !String::validate_email($_POST['email']))
+		if(!empty($_POST['email']) && !String::validate_email($_POST['email']))
 		{
 			throw new Exception($lang['common']['invalidEmailError']);
 		}
