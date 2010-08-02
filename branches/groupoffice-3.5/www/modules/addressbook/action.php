@@ -364,6 +364,10 @@ try
 			switch($import_filetype)
 			{
 				case 'vcf':
+					ini_set('max_execution_time', 360);
+					ini_set('memory_limit', '256M');
+
+
 					require_once ($GO_MODULES->path."classes/vcard.class.inc.php");
 					$vcard = new vcard();
 					$result['success'] = $vcard->import($_SESSION['GO_SESSION']['addressbook']['import_file'], $GO_SECURITY->user_id, ($_POST['addressbook_id']));
@@ -403,6 +407,7 @@ try
 				case'import':
 
 					ini_set('max_execution_time', 360);
+					ini_set('memory_limit', '256M');
 
 					$addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
 					$separator	= isset($_REQUEST['separator']) ? ($_REQUEST['separator']) : ',';
