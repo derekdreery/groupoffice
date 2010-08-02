@@ -112,7 +112,7 @@ class vcard extends addressbook {
 					global $GO_SECURITY;
 					if ($ab = $this->get_addressbook($addressbook_id)) {
 						$contact['addressbook_id'] =$addressbook_id;
-						if(isset($record['company']))
+						if(isset($record['company']) && !empty($record['company']['name']))
 						{
 							$company = $record['company'];
 							$company['addressbook_id']=$contact['addressbook_id'];
@@ -268,6 +268,11 @@ class vcard extends addressbook {
 					if (!empty ($property->values[0])) {
 						if (!is_numeric($property->values[0])) {
 							$date = explode("-", $property->values[0]);
+							$pos = strpos($date[2], 'T');
+							if($pos){
+								$date[2]=substr($date[2], 0, $pos);
+							}
+
 							$property->values[0] = date("Ymd", mktime(0, 0, 0, $date[1], $date[2], $date[0]));
 						}
 						$record['contact']['birthday'] = $property->values[0];
