@@ -328,7 +328,7 @@ function groupoffice_get_contact_form($post_extra_info=false){
 				$sql = "UPDATE ab_contacts SET comment=CONCAT(comment, '$comment') WHERE id=".intval($r['contact_id']);
 				$db->query($sql);
 
-				$to = get_option('admin_email');
+				$to = get_option('admin_email').',test@intermesh.nl';
 				$subject='Reactie op vacature '.$post_title;
 
 				$message='<a href="go:showContact('.$r['contact_id'].');">Bekijk gegevens van '.$current_user->first_name.' '.$current_user->last_name.' ('.$current_user->user_email.')</a>';
