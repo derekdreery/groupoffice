@@ -88,12 +88,12 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 	
 	//cleanup old cache
 	$fs = new filesystem();
-	$files = $fs->get_files_sorted($GO_CONFIG->file_storage_path.'cache');
+	/*$files = $fs->get_files_sorted($GO_CONFIG->file_storage_path.'cache');
 	while($file=array_shift($files)) {
 		if(substr($file['name'],0, 7)=='base-'.$GO_LANGUAGE->language) {
 			unlink($file['path']);
 		}
-	}
+	}*/
 	echo "\n<!-- regenerated script -->\n";
 
 	$scripts[]=$root_uri.'language/common/en.js';
@@ -273,12 +273,12 @@ if(count($load_modules)) {
 		
 			//cleanup old cache
 			$fs = new filesystem();
-			$files = $fs->get_files_sorted($GO_CONFIG->file_storage_path.'cache');
+			/*$files = $fs->get_files_sorted($GO_CONFIG->file_storage_path.'cache');
 			while($file=array_shift($files)) {
 				if(substr($file['name'],0, 1)==$GO_SECURITY->user_id) {
 					unlink($file['path']);
 				}
-			}
+			}*/
 
 			file_put_contents($GO_CONFIG->file_storage_path.'cache/'.$GO_SECURITY->user_id.'-modules.js', 'GO.settings.modules = Ext.decode("'.addslashes(json_encode($GO_MODULES->modules)).'");');
 			array_unshift($scripts, $GO_CONFIG->file_storage_path.'cache/'.$GO_SECURITY->user_id.'-modules.js');
