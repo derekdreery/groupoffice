@@ -21,6 +21,13 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package go.utils
  * @since Group-Office 3.5.16
+ *
+ * Requires libpff : http://sourceforge.net/projects/libpff/
+ * And libpst with readpst: apt-get install libpst
+ *
+ * Usage:
+
+ sudo -u www-data pstimport.php --pst=/path/to/file.pst --username=gouser
  */
 
 $go = '../www/';
@@ -28,6 +35,9 @@ $go = '../www/';
 
 chdir(dirname(__FILE__));
 require($go.'cli-functions.inc.php');
+
+
+$default_addressbook_name='Kontakte';
 
 
 
@@ -59,7 +69,7 @@ function psti_import_task($props, $tasklist){
 	global $tasks;
 
 	//var_dump($props);
-	
+
 	$task['name']=$props['subject'];
 	$task['user_id']=$tasklist['user_id'];
 	$task['tasklist_id']=$tasklist['id'];
@@ -85,7 +95,7 @@ require_once($go."Group-Office.php");
 $user = $GO_USERS->get_user_by_username($args['username']);
 
 if(!$user)
-	die("User ".$args['username']. " not found!");
+	die("User ".$args['username']. " not found!\n");
 
 echo "Importing PST file for user ".$user['username']."\n";
 
@@ -162,10 +172,10 @@ $calendar = $cal->get_default_calendar($user['id']);
 if(!$calendar)
 	die("Failed to get user calendar\n");
 
-$addressbook  = $ab->get_addressbook();
+/*$addressbook  = $ab->get_addressbook();
 
 if(!$addressbook)
-	die("Failed to get user addressbook");
+	die("Failed to get user addressbook\n");*/
 
 
 
@@ -181,9 +191,24 @@ foreach($files as $file){
 		$cal->import_ical_string("BEGIN:VCALENDAR\n".$data."\nEND:VCALENDAR", $calendar['id']);
 	}elseif(strpos($data,'BEGIN:VCARD')!==false){
 
-		echo "Importing contacts to addressbook ".$addressbook['name']."\n";
+		$addressbook_name = File::strip_extension(basename($file));
 
-		//$vcard->import($file, $user['id'], $addressbook['id']);
+		if($addressbook_name==$default_addressbook_name){
+			$addressbook_name = String::format_name($user,'','','last_name');
+		}else
+		{
+			$addressbook_name = String::format_name($user,'','','last_name').' - '.$addressbook_name;
+		}
+
+		$user_addressbook = $ab->get_addressbook_by_name($addressbook_name);
+		if(!$user_addressbook || $user_addressbook['user_id']!=$user['id']){
+			$user_addressbook=$ab->add_addressbook($user['id'], $addressbook_name);
+		}
+		$addressbook_id=$user_addressbook['id'];
+		echo "Importing contacts to addressbook ".$user_addressbook['name']."\n";
+
+
+		$vcard->import($file, $user['id'], $addressbook_id);
 	}
 }
 
