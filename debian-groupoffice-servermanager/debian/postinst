@@ -14,6 +14,7 @@ chown -R www-data:www-data /home/govhosts
 invoke-rc.d apache2 restart 3> /dev/null || true
 
 #This will cause a permission error and installations will update automatically now so I disabled it.
+#Group-Office automatically updates on first access anyway.
 #php /usr/share/groupoffice-servermanager/upgradeinstallations.php
 
 #DEBHELPER#
