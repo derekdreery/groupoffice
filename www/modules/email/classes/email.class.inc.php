@@ -230,8 +230,14 @@ class email extends db {
 			$sc = new serverclient();
 
 			foreach($sc->domains as $domain) {
-				if(strpos($account['username'], '@'.$domain)) {
+				if(strpos($account['email'], '@'.$domain)) {
 					$sc->login();
+
+					//For LDAP auth with usernames without the domain in it.
+					if(!strpos('@',$account['username'])){
+						$arr= explode('@',$account['email']);
+						$account['username'] .= '@'.$arr[1];
+					}
 
 					$params=array(
 									'task'=>'serverclient_get_mailbox',
