@@ -1246,7 +1246,7 @@ class files extends db {
 		}
 
 		if(strlen($name)>240){
-			throw new Exception('Filename too long');
+			throw new Exception('Filename too long: '.$name);
 		}
 
 		$rel_path=$this->build_path($parent);
