@@ -78,6 +78,8 @@ while($email->next_record()) {
 				}
 			}
 
+			$subscribed =  $email->mail->get_folders($account['mbroot'], true);
+
 			$email->_synchronize_folders($account, $mailboxes, $subscribed);
 
 			$email->mail->disconnect();
