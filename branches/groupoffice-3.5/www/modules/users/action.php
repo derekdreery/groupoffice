@@ -124,6 +124,7 @@ try
 
 				if(isset($map['serverclient_domains']))
 				{
+					$_POST['serverclient_no_halt']=true;
 					$_POST['serverclient_domains']=array_map('trim', explode(',',$record[$map['serverclient_domains']]));
 					go_debug($_POST['serverclient_domains']);
 				}
