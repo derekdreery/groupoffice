@@ -94,7 +94,7 @@ class serverclient
 
 		$sc = new serverclient();
 
-		if(!empty($user['password']) && !empty($GO_CONFIG->serverclient_domains))
+		if(!empty($GO_CONFIG->serverclient_domains))
 		{
 			$new_password = $user['password'];
 			$domains = explode(',', $GO_CONFIG->serverclient_domains);
@@ -158,12 +158,13 @@ class serverclient
 			}
 	}*/
 
-	public static function add_user($user)
+	public static function add_user($user, $random_password)
 	{
 		global $GO_MODULES, $GO_CONFIG;
+		
+		go_debug(var_export($random_password, true));
 
-
-		if(!empty($user['password']) && isset($_POST['serverclient_domains']) && isset($GO_MODULES->modules['email']))
+		if(!$random_password && isset($_POST['serverclient_domains']) && isset($GO_MODULES->modules['email']))
 		{
 			require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
 
