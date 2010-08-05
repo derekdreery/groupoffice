@@ -119,7 +119,7 @@ class Go2Mime
 
 		$structure = Mail_mimeDecode::decode($params);
 
-		go_debug($structure);
+		//go_debug($structure);
 
 		if($part_number!='')
 		{
@@ -270,7 +270,7 @@ class Go2Mime
 
 				
 
-				if (!empty($filename) && empty($part->headers['content-id']))
+				if (!empty($part->body) && !empty($filename) && empty($part->headers['content-id']))
 				{
 					$mime_attachment['tmp_file']=false; //for compatibility with IMAP attachments which use this property.
 					$mime_attachment['index']=count($this->response['attachments']);
@@ -310,7 +310,8 @@ class Go2Mime
 						//$path = 'mimepart.php?path='.urlencode($path).'&part_number='.$part_number;
 						//replace inline images identified by a content id with the url to display the part by Group-Office
 						$url_replacement['id'] = $content_id;
-						//$url_replacement['part_number'] = $part_number_prefix.$part_number;
+						//part number is needed for e-mail templates
+						$url_replacement['part_number'] = $part_number_prefix.$part_number;
 						$url_replacement['url'] = String::add_params_to_url($this->inline_attachments_url, 'part_number='.$part_number_prefix.$part_number);
 
 						if($create_tmp_inline_attachments)
