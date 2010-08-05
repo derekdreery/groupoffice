@@ -873,7 +873,7 @@ try {
 								}
 
 								//go_log(LOG_DEBUG, $account['username'].' -> '.$domain);
-								if(strpos($account['username'], '@'.$domain)) {
+								if(strpos($account['email'], '@'.$domain)) {
 									$sc->login();
 
 									require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
@@ -882,6 +882,12 @@ try {
 									$forward_to=$RFC822->reformat_address_list($_POST['forward_to'],true);
 									if($forward_to===false) {
 										throw new Exception($lang['common']['invalidEmailError']);
+									}
+
+									//For LDAP auth with usernames without the domain in it.
+									if(!strpos('@',$account['username'])){
+										$arr= explode('@',$account['email']);
+										$account['username'] .= '@'.$arr[1];
 									}
 
 
