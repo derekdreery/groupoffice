@@ -1453,7 +1453,7 @@ class files extends db {
 		$results = array();
 		if($folder_id>0) {
 
-			$folders = $this->get_folders($folder_id, 'name', $dir);
+			$folders = $this->get_folders($folder_id, 'name', $dir,0,0,true);
 			while($folder=$this->next_record()) {
 				if($folder['acl_id']>0) {
 					$class='folder-shared';
