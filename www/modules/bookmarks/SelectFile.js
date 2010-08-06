@@ -39,5 +39,3 @@ GO.bookmarks.SelectFile = Ext.extend(Ext.form.TriggerField,{
 	}
 
 });
-
-Ext.ComponentMgr.registerType('selectfile', GO.bookmarks.SelectFile);
