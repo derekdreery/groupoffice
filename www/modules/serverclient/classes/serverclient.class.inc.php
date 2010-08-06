@@ -1,12 +1,12 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
- * 
+ *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
+ *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
+ *
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -19,7 +19,7 @@ class serverclient
 	var $server_password;
 	var $domains=array();
 	var $ch = false;
-	
+
 	public function __on_load_listeners($events){
 		$events->add_listener('before_add_user', __FILE__, 'serverclient', 'before_add_user');
 		$events->add_listener('update_user', __FILE__, 'serverclient', 'update_user');
@@ -37,19 +37,19 @@ class serverclient
 			$this->server_password = $GO_CONFIG->serverclient_password;
 			$this->ch = curl_init();
 		}
-		$this->domains = empty($GO_CONFIG->serverclient_domains) ? array() : explode(',',$GO_CONFIG->serverclient_domains);		
+		$this->domains = empty($GO_CONFIG->serverclient_domains) ? array() : explode(',',$GO_CONFIG->serverclient_domains);
 	}
 
 	public static function before_add_user($user)
 	{
 		global $GO_CONFIG, $GO_USERS;
-		
+
 		$sc = new serverclient();
 
 		if(isset($_POST['serverclient_domains']))
 		{
 			$sc->login();
-				
+
 			foreach($_POST['serverclient_domains'] as $domain)
 			{
 				$aliases='';
@@ -66,19 +66,23 @@ class serverclient
 					'aliases'=>$aliases,
 					'name'=>String::format_name($user),
 					'quota'=>0,
-					'active'=>'1',					
+					'active'=>'1',
 					'vacation_subject'=>'',
-					'vacation_body'=>''					
+					'vacation_body'=>''
 					);
+
+				go_debug('SERVERCLIENT: '.var_export($params, true));
 
 				$response = $sc->send_request($sc->server_url.'modules/postfixadmin/action.php', $params);
 				$response = json_decode($response, true);
-					
+
 				//go_debug($response, true);
 
 				if(!is_array($response) || !$response['success'])
 				{
-					throw new Exception($response['feedback']);
+					go_debug('SEVERCLIENT: Error while adding mailbox: '.$response['feedback']);
+					if(empty($_POST['serverclient_no_halt']))//Don't stop when mailbox wasn't created. Option is used in ldapauth module
+						throw new Exception($response['feedback']);
 				}
 			}
 		}
@@ -90,11 +94,11 @@ class serverclient
 
 		$sc = new serverclient();
 
-		if(!empty($user['password']) && !empty($GO_CONFIG->serverclient_domains))
+		if(!empty($GO_CONFIG->serverclient_domains))
 		{
 			$new_password = $user['password'];
 			$domains = explode(',', $GO_CONFIG->serverclient_domains);
-				
+
 			$user = $GO_USERS->get_user($user['id']);
 
 			if(isset($GO_MODULES->modules['servermanager']) && $user['username']==$sc->server_username){
@@ -102,7 +106,7 @@ class serverclient
 			}
 
 			$sc->login();
-				
+
 			foreach($domains as $domain)
 			{
 				$params=array(
@@ -110,7 +114,7 @@ class serverclient
 					'domain'=>$domain,
 					'username'=>$user['username'].'@'.$domain,
 					'password'=>$new_password);
-					
+
 				$response = $sc->send_request($sc->server_url.'modules/postfixadmin/action.php', $params);
 				$response = json_decode($response, true);
 
@@ -118,7 +122,7 @@ class serverclient
 				{
 					require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
 					$email = new email();
-						
+
 					$email->update_password($GO_CONFIG->serverclient_host,$user['username'].'@'.$domain,$new_password);
 				}
 			}
@@ -132,14 +136,14 @@ class serverclient
 
 		if(!empty($GO_CONFIG->serverclient_domains))
 		 {
-		 	
+
 			if(!$this->login())
 			{
 			throw new Exception('Could not connect to server manager! Authentication failed');
 			}
-				
+
 			$domains = explode(',', $GO_CONFIG->serverclient_domains);
-				
+
 			foreach($domains as $domain)
 			{
 			$params=array(
@@ -154,17 +158,18 @@ class serverclient
 			}
 	}*/
 
-	public static function add_user($user)
+	public static function add_user($user, $random_password)
 	{
 		global $GO_MODULES, $GO_CONFIG;
 		
+		go_debug(var_export($random_password, true));
 
-		if(isset($_POST['serverclient_domains']) && isset($GO_MODULES->modules['email']))
+		if(!$random_password && isset($_POST['serverclient_domains']) && isset($GO_MODULES->modules['email']))
 		{
 			require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
 
 			$email = new email();
-				
+
 			foreach($_POST['serverclient_domains'] as $domain)
 			{
 
@@ -175,7 +180,11 @@ class serverclient
 				$account['type']=$GO_CONFIG->serverclient_type;
 				$account['host']=$GO_CONFIG->serverclient_host;
 				$account['port']=$GO_CONFIG->serverclient_port;
-				$account['username']=$user['username'].'@'.$domain;
+
+				$account['username']=$user['username'];
+				if(empty($GO_CONFIG->serverclient_dont_add_domain_to_imap_username)){
+					$account['username'].='@'.$domain;
+				}
 				$account['password']=$user['password'];
 				$account['name']=String::format_name($user);
 				$account['email']=$user['email'];
@@ -236,9 +245,9 @@ class serverclient
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($this->ch, CURLOPT_COOKIEJAR, $GO_CONFIG->tmpdir.'cookie_'.$GO_SECURITY->user_id.'.txt');
 		curl_setopt($this->ch, CURLOPT_COOKIEFILE, $GO_CONFIG->tmpdir.'cookie_'.$GO_SECURITY->user_id.'.txt');
-		
+
 		//for self-signed certificates
-		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false); 
+		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
 
 

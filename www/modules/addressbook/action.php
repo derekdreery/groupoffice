@@ -308,6 +308,10 @@ try {
 
 	    switch($import_filetype) {
 		case 'vcf':
+
+			ini_set('max_execution_time', 360);
+			ini_set('memory_limit', '256M');
+
 		    require_once ($GO_MODULES->path."classes/vcard.class.inc.php");
 		    $vcard = new vcard();
 		    $result['success'] = $vcard->import($_SESSION['GO_SESSION']['addressbook']['import_file'], $GO_SECURITY->user_id, ($_POST['addressbook_id']));
@@ -317,22 +321,22 @@ try {
 		    $fp = fopen($_SESSION['GO_SESSION']['addressbook']['import_file'], 'r');
 
 		    if (!$fp || !$addressbook = $ab->get_addressbook($addressbook_id)) {
-			unlink($_SESSION['GO_SESSION']['addressbook']['import_file']);
-			throw new Exception($lang['comon']['selectError']);
+				unlink($_SESSION['GO_SESSION']['addressbook']['import_file']);
+				throw new Exception($lang['comon']['selectError']);
 		    } else {
-			//fgets($fp, 4096);
+				//fgets($fp, 4096);
 
-			if (!$record = fgetcsv($fp, 4096, $separator, $quote)) {
-			    throw new Exception('Could not read import file');
-			}
+				if (!$record = fgetcsv($fp, 4096, $separator, $quote)) {
+					throw new Exception('Could not read import file');
+				}
 
-			fclose($fp);
+				fclose($fp);
 
-			$result['list_keys'] = array();
-			$result['list_keys'][]=array('id' => -1, 'name' => $lang['addressbook']['notIncluded']);
-			for ($i = 0; $i < sizeof($record); $i++) {
-			    $result['list_keys'][]=array('id' => $i, 'name' => $record[$i]);
-			}
+				$result['list_keys'] = array();
+				$result['list_keys'][]=array('id' => -1, 'name' => $lang['addressbook']['notIncluded']);
+				for ($i = 0; $i < sizeof($record); $i++) {
+					$result['list_keys'][]=array('id' => $i, 'name' => $record[$i]);
+				}
 
 		    }
 		    break;
@@ -353,6 +357,7 @@ try {
 	    $import_filetype = isset($_REQUEST['import_filetype']) ? ($_REQUEST['import_filetype']) : '';
 
 	    $addressbook = $ab->get_addressbook($addressbook_id);
+					ini_set('memory_limit', '256M');
 
 	    $result['success'] = true;
 	    $result['feedback'] = $feedback;

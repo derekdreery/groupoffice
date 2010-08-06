@@ -1,9 +1,10 @@
 <?php
 require('Group-Office.php');
 
+$GO_SECURITY->html_authenticate();
+
 header('Content-Type: text/html; charset=UTF-8');
 
-$GO_THEME->set_theme('ExtJS');
 
 $icon = $GO_THEME->theme_path.'images/groupoffice.ico';
 if(!file_exists($icon))

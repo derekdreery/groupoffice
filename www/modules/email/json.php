@@ -327,9 +327,11 @@ try {
 					}
 				}
 
+				//go_debug($content['attachments']);
+
 				//reattach non-inline attachments
 				foreach($content['attachments'] as $attachment) {
-					if(empty($attachment['replacement_url'])){
+					if(empty($attachment['replacement_url']) && !empty($attachment['tmp_file'])){
 						$response['data']['attachments'][]=array(
 											'tmp_name'=>$attachment['tmp_file'],
 											'name'=>$attachment['name'],

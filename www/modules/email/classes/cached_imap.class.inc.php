@@ -401,10 +401,10 @@ class cached_imap extends imap{
 			go_debug('got cached message');		
 
 			$message =  unserialize($values['serialized_message_object']);
-
-			if($this->get_body_parts($plain_body_requested,$html_body_requested, $struct, $message, $peek))
+			$ret = $this->get_body_parts($plain_body_requested,$html_body_requested, $struct, $message, $peek);
+			if($ret['html_body_fetched'] || $ret['plain_body_fetched'])
 			{
-				if($html_body_requested){
+				if($ret['html_body_fetched']){
 					$message['html_body']=$this->replace_inline_images($message['html_body'], $message['attachments']);
 				}
 				//additional body part added
@@ -544,7 +544,7 @@ class cached_imap extends imap{
 
 		$message['attachments']=$this->find_message_attachments($struct, $message['body_ids']);
 
-		
+		//go_debug($message['attachments']);
 		for($i=0,$max=count($message['attachments']);$i<$max;$i++){
 
 			//not needed
@@ -647,6 +647,7 @@ class cached_imap extends imap{
 			if(isset($attachments[$i]['replacement_url'])){
 				$html_body = str_replace($attachments[$i]['id'], $attachments[$i]['replacement_url'],$html_body, $count);
 				if($count==0){
+					go_debug('Inline image with id: '.$attachments[$i]['id'].' not found in html body');
 					unset($attachments[$i]['replacement_url']);
 				}
 			}
@@ -678,6 +679,9 @@ class cached_imap extends imap{
 			go_debug('No parts needed');
 			return false;
 		}*/
+
+		$return['html_body_fetched']=false;
+		$return['plain_body_fetched']=false;
 
 		if(!$this->handle){
 			if(!$this->open($this->account, $this->folder['name'])){
@@ -760,6 +764,9 @@ class cached_imap extends imap{
 		$inline_images=array();
 
 		if(!isset($message['plain_body']) && $plain_parts['text_found'] && ($plain_body_requested || ($html_body_requested && !$html_parts['text_found']))){
+
+			$return['plain_body_fetched']=true;
+
 			$message['plain_body']='';
 			foreach($plain_parts['parts'] as $plain_part){
 				if($plain_part['type']=='text'){
@@ -802,6 +809,7 @@ class cached_imap extends imap{
 				}
 			}
 			$message['html_body']=String::convert_html($message['html_body']);
+			$return['html_body_fetched']=true;
 		}
 		if($html_body_requested){
 
@@ -824,7 +832,7 @@ class cached_imap extends imap{
 			}
 		}
 
-		return true;
+		return $return;
 	}
 
 	

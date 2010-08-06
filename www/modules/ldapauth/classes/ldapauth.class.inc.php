@@ -79,13 +79,17 @@ class ldapauth extends imapauth {
 			return false;
 		}
 
-		$ldap = new ldap(
-						$GO_CONFIG->ldap_host,
-						$GO_CONFIG->ldap_user,
-						$GO_CONFIG->ldap_pass,
-						$GO_CONFIG->ldap_basedn,
-						$GO_CONFIG->ldap_peopledn,
-						$GO_CONFIG->ldap_groupsdn);
+		$ldap = new ldap();
+		if(!$ldap->connect()){
+			go_debug('LDAPAUTH: Could not connect to server');
+			throw new Exception('LDAPAUTH: Could not connect to server');
+		}
+
+
+		/*if(!$ldap->bind()){
+			go_debug('LDAPAUTH: Could not bind to server');
+			throw new Exception('Could not bind to LDAP server');
+		}*/
 
 		$ldap->search('uid='.$username, $ldap->PeopleDN);
 
@@ -103,6 +107,8 @@ class ldapauth extends imapauth {
 			go_debug('LDAPAUTH: LDAP authentication failed for '.$username);
 			throw new Exception($GLOBALS['lang']['common']['badLogin']);
 		}else {
+			go_debug('LDAPAUTH: LDAP Authentication successfull');
+
 			$mail_username=false;
 			$gouser = $GO_USERS->get_user_by_username($username);
 
@@ -124,11 +130,12 @@ class ldapauth extends imapauth {
 				go_debug('LDAPAUTH: Group-Office user was found');
 
 				$user['id']=$gouser['id'];
+				$user['password']=$password;
 
 				//user exists. See if the password is accurate
 				if(crypt($password, $gouser['password']) != $gouser['password']) {
 					go_debug('LDAPAUTH: password on LDAP server has changed. Updating Group-Office database');
-					$user['password']=$password;
+
 
 					if($mail_username) {
 						require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
@@ -136,7 +143,34 @@ class ldapauth extends imapauth {
 						$email_client->update_password($config['host'], $mail_username, $password);
 					}
 				}
-				
+
+				if(!empty($GO_CONFIG->ldap_create_mailboxes_for_email_domain)){
+					$mail_username=false;
+
+					$_POST['serverclient_no_halt']=true;//Don't stop when mailbox wasn't created. Perhaps it already exists
+
+					$arr = explode('@', $user['email']);
+					if(!empty($arr[1])){
+						require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
+						$email_client = new email();
+
+						$account = $email_client->get_account_by_username($username, $gouser['id']);
+						if($account){
+							if(crypt($password, $gouser['password']) != $gouser['password'])
+								$email_client->update_password($account['host'], $username, $password);
+						}else
+						{
+							require_once($GO_MODULES->modules['serverclient']['class_path']."serverclient.class.inc.php");
+							//$sc = new serverclient();
+							go_debug('LDAPAUTH: Could not find e-mail account for LDAP user. It will be created now.');
+							$_POST['serverclient_domains']=array($arr[1]);
+							serverclient::add_user($user);
+						}
+
+					}
+				}
+
+
 				$GO_USERS->update_profile($user);
 
 			} else {
@@ -146,6 +180,21 @@ class ldapauth extends imapauth {
 				global $GO_GROUPS;
 
 				go_debug('LDAPAUTH: Group-Office user not found. Creating new user from LDAP profile');
+
+				if(!empty($GO_CONFIG->ldap_create_mailboxes_for_email_domain)){
+
+					$mail_username=false;
+
+					$_POST['serverclient_no_halt']=true;//Don't stop when mailbox wasn't created. Perhaps it already exists
+
+					$arr = explode('@', $user['email']);
+					if(!empty($arr[1])){
+						go_debug("LDAPAUTH: Sending ".$arr[1].
+						" to serverclient module to create mailboxes");
+
+						$_POST['serverclient_domains']=array($arr[1]);
+					}
+				}
 
 				if (!$user_id = $GO_USERS->add_user($user,
 				$GO_GROUPS->groupnames_to_ids(explode(',',$GO_CONFIG->register_user_groups)),
@@ -272,5 +321,4 @@ function ldap_mapping_username( $entry ) {
 function ldap_mapping_enabled( $entry ) {
 	return ( $entry['accountstatus'][0] == 'active' ) ? 1 : 0;
 }
-
 

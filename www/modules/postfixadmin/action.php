@@ -228,9 +228,10 @@ try{
 				$password = ($_POST['password']);
 				
 				$old_mailbox = $postfixadmin->get_mailbox_by_username($username);
-				
-				if(md5($password) != $old_mailbox['password'])
-					throw new AccessDeniedException();
+
+				//can't check password with ldap auth. Admin user should be safe anyway
+				//if(md5($password) != $old_mailbox['password'])
+					//throw new AccessDeniedException();
 					
 				$mailbox['id']=$old_mailbox['id'];				
 				$mailbox['vacation_active']=$_POST['vacation_active'];

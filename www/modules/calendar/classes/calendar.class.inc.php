@@ -202,8 +202,8 @@ class calendar extends db {
 		return $settings;
 	}
 
-
-	function get_settings($user_id) {
+	function get_settings($user_id)
+	{
 		$this->query("SELECT * FROM cal_settings WHERE user_id='".intval($user_id)."'");
 		if ($record=$this->next_record(DB_ASSOC)) {
 			if(empty($record['background']))
@@ -212,7 +212,7 @@ class calendar extends db {
 			return $record;
 		}else
 		{
-			$this->query("INSERT INTO cal_settings (user_id, background) VALUES ('".intval($user_id)."', 'EBF1E2')");			
+			$this->query("INSERT INTO cal_settings (user_id, background) VALUES ('".intval($user_id)."', 'EBF1E2')");
 			return $this->get_settings($user_id);
 		}
 	}
@@ -763,8 +763,8 @@ class calendar extends db {
 		return $this->update_row('cal_calendars','id', $calendar);
 	}
 
-
 	function get_default_import_calendar($user_id) {
+
 		$settings = $this->get_settings($user_id);
 		$calendar_id = $settings['calendar_id'];
 
@@ -845,9 +845,8 @@ class calendar extends db {
 		}
 	}
 
-
-
-	function get_user_calendars($user_id,$start=0,$offset=0, $group_id=1) {
+	function get_user_calendars($user_id,$start=0,$offset=0, $group_id=1)
+	{
 		$sql = "SELECT * FROM cal_calendars WHERE user_id=".intval($user_id);
 
 		if($group_id>0) {
@@ -901,7 +900,7 @@ class calendar extends db {
 		"LEFT JOIN go_users_groups ug ON a.group_id = ug.group_id ".
 		"WHERE (a.user_id=".intval($user_id)." ".
 		"OR ug.user_id=".intval($user_id).")";
-    
+
 		if($resources)
 		{
 				$sql .= " AND c.group_id > 1";
@@ -955,7 +954,6 @@ class calendar extends db {
 			$sql .= " ORDER BY cal_calendars.group_id ASC, cal_calendars.".$this->escape($sort.' '.$dir);
 		}
 
-
 		$this->query($sql);
 		$count= $this->num_rows();
 		if($offset>0) {
@@ -980,6 +978,10 @@ class calendar extends db {
 	function add_event(&$event, $calendar=false) {
 		if(empty($event['calendar_id'])) {
 			return false;
+		}
+
+		if(isset($event['name']) && strlen($event['name'])>150){
+			$event['name']=substr($event['name'],0,150);
 		}
 
 		if (empty($event['user_id'])) {
@@ -1113,6 +1115,9 @@ class calendar extends db {
 			$old_event = $this->get_event($event['id']);
 		}
 
+		if(isset($event['name']) && strlen($event['name'])>150){
+			$event['name']=substr($event['name'],0,150);
+		}
 
 		unset($event['read_permission'], $event['write_permission']);
 		if(empty($event['mtime'])) {
@@ -1657,7 +1662,6 @@ class calendar extends db {
 
 			global $GO_MODULES,$GO_CONFIG;
 			if(isset($GO_MODULES->modules['files'])) {
-
 				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 				$files = new files();
 				try {
@@ -1973,7 +1977,6 @@ class calendar extends db {
 
 	function get_conflicts($start_time, $end_time, $calendars) {
 		$conflicts = array();
-
 		$cal_events = $this->get_events_in_array($calendars, 0, $start_time, $end_time, false);
 		foreach($cal_events as $event) {
 			$conflicts[$event['id']]=$event;
@@ -2270,7 +2273,6 @@ class calendar extends db {
 		if($offset>0) {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
-
 		$this->query($sql);
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
@@ -2493,7 +2495,6 @@ class calendar extends db {
 		return $this->query("DELETE FROM cal_group_admins WHERE group_id=? AND user_id=?" , 'ii', array($group_id, $user_id));
 	}
 
-
 	public function get_visible_tasklists($calendar_id) {
 		$this->query("SELECT * FROM cal_visible_tasklists WHERE calendar_id = ?", 'i', $calendar_id);
 		return $this->num_rows();
@@ -2506,7 +2507,6 @@ class calendar extends db {
 	public function delete_visible_tasklist($calendar_id, $tasklist_id) {
 		return $this->query("DELETE FROM cal_visible_tasklists WHERE calendar_id = ? AND tasklist_id = ?", 'ii', array($calendar_id, $tasklist_id));
 	}
-
 		
 	/**
 	 * Add a Category

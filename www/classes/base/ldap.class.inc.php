@@ -49,6 +49,8 @@ class ldap {
 	var $BaseDN	= "";
 	var $PeopleDN	= "";
 	var $GroupsDN	= "";
+	var $Port = "";
+	var $tls=false;
 
 	/* public: result array and current row number */
 	var $Entry   = array();
@@ -75,26 +77,34 @@ class ldap {
 	var $Auto_Free = 0;
 
 	/* public: constructor */
-	function ldap($host='', $user='', $password='', $basedn='', $peopledn='', $groupsdn='') {
+	function ldap($host='', $user='', $password='', $basedn='', $peopledn='', $groupsdn='', $port="", $tls=false) {
 
 		global $GO_CONFIG;
-		
+
 		if($host)
 		{
 			$this->Host = $host;
+			$this->Port = $port;
 			$this->User = $user;
 			$this->Password = $password;
 			$this->BaseDN = $basedn;
 			$this->PeopleDN = $peopledn;
 			$this->GroupsDN = $groupsdn;
+			$this->tls = $tls;
 		}else
 		{
 			$this->Host = $GO_CONFIG->ldap_host;
+
+			if(isset($GO_CONFIG->ldap_port))
+				$this->Port = $GO_CONFIG->ldap_port;
+
 			$this->User = $GO_CONFIG->ldap_user;
 			$this->Password = $GO_CONFIG->ldap_pass;
 			$this->BaseDN = $GO_CONFIG->ldap_basedn;
 			$this->PeopleDN = $GO_CONFIG->ldap_peopledn;
 			$this->GroupsDN = $GO_CONFIG->ldap_groupsdn;
+
+			$this->tls = !empty($GO_CONFIG->ldap_tls);
 		}
 	}
 
@@ -108,19 +118,34 @@ class ldap {
 	}
 
 	/* public: connection management */
-	function connect($Host = "") {
+	function connect($Host = "", $Port="") {
 		/* Handle defaults */
 		if ("" == $Host)
 		$Host     = $this->Host;
 
+		if ("" == $Port)
+			$Port     = $this->Port;
+
 		/* establish connection, select database */
 		if ( 0 == $this->Link_ID ) {
-			$this->Link_ID=ldap_connect($Host);
+
+			go_debug("pconnect($Host, $Port)");
+
+			$this->Link_ID=ldap_connect($Host, $Port);
 			if (!$this->Link_ID) {
-				$this->halt("pconnect($Host) failed.");
+				go_debug("pconnect($Host, $Port) failed.");
+				$this->halt("pconnect($Host, $Port) failed.");
 				return 0;
 			}
-			@ldap_set_option($this->Link_ID,LDAP_OPT_PROTOCOL_VERSION,3);
+			ldap_set_option($this->Link_ID,LDAP_OPT_PROTOCOL_VERSION,3);
+
+			if($this->tls){
+				go_debug('Starting LDAP TLS');
+				ldap_start_tls($this->Link_ID);
+			}else
+			{
+				go_debug('No LDAP TLS');
+			}
 		}
 
 		return $this->Link_ID;
@@ -128,7 +153,7 @@ class ldap {
 
 	function disconnect() {
 		if ( $this->Link_ID ) {
-			@ldap_close( $this->Link_ID );
+			ldap_close( $this->Link_ID );
 		}
 	}
 
@@ -139,9 +164,11 @@ class ldap {
 		if ("" == $Password)
 		$Password = $this->Password;
 
+		go_debug("ldap_bind(,$User,$Password)");
+
 		if ( $this->Link_ID ) {
 			if ( $User != "" ) {
-				$this->Bind_ID = @ldap_bind( $this->Link_ID, $User, $Password );
+				$this->Bind_ID = ldap_bind( $this->Link_ID, $User, $Password );
 				if (!$this->Bind_ID) {
 					return 0;
 				}
@@ -160,7 +187,7 @@ class ldap {
 
 	/* public: discard the query result */
 	function free() {
-		@ldap_free_result($this->Search_ID);
+		ldap_free_result($this->Search_ID);
 		$this->Search_ID = 0;
 		$this->NumEntry = 0;
 		$this->NumValues = 0;
@@ -184,14 +211,16 @@ class ldap {
 			$this->free();
 		}
 
+go_debug('ldap_search: '.$Search_String.' '.$Base_DN.' '.$SearchThis);
+
 		if ($this->Debug)
 		printf("Debug: search = %s<br>\n", $Search_String);
 
 		if ( is_array( $SearchThis ) ) {
-			$this->Search_ID = @ldap_search( $this->Link_ID, $Base_DN, $Search_String,
+			$this->Search_ID = ldap_search( $this->Link_ID, $Base_DN, $Search_String,
 	  $SearchThis);
 		} else {
-			$this->Search_ID = @ldap_search( $this->Link_ID, $Base_DN, $Search_String );
+			$this->Search_ID = ldap_search( $this->Link_ID, $Base_DN, $Search_String );
 		}
 		$this->NumEntry = 0;
 		$this->Errno = ldap_errno( $this->Link_ID );
@@ -387,8 +416,8 @@ class ldap {
 	function fetch_entry( $dn, $attributes = null ) {
 		if ( $attributes == null ) {
 			$this->Search_ID = @ldap_read(
-			$this->Link_ID, $dn, 'objectclass=*' );			
-		} else {			
+			$this->Link_ID, $dn, 'objectclass=*' );
+		} else {
 			$this->Search_ID = @ldap_read(
 			$this->Link_ID, $dn, 'objectclass=*', $attributes );
 		}
@@ -480,7 +509,7 @@ class ldap {
 		$this->Error);
 	}
 
-	
+
 	/**
 	 * This function extends the ldap_mod_add function with an extra check if
 	 * the value to be added doesn't already exists on in the Directory
@@ -498,7 +527,7 @@ class ldap {
 		if($link_id)
 		{
 			while(list($attr, $values) = each($data))
-			{				
+			{
 				$values_to_add = array();
 
 				$this->fetch_entry($dn, array($attr));
@@ -541,7 +570,7 @@ class ldap {
 			{
 				$values_to_del = array();
 
-				$this->fetch_entry($dn, array($attr));				
+				$this->fetch_entry($dn, array($attr));
 				$saved_values = $this->get_values($attr);
 				for($i=0; $i<count($values); $i++)
 				{
@@ -560,5 +589,5 @@ class ldap {
 
 		return (count($values_to_del)) ? true : false;
 	}
-	
+
 }
