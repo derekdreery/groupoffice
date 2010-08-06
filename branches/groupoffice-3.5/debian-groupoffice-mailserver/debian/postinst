@@ -113,7 +113,7 @@ chown spamd:spamd /var/lib/spamassassin
 FILE=/etc/default/spamassassin
 if (  grep -q 'Group-Office' $FILE ); then
 	echo Spamassassin was already configured
-	FILE = $FILE.$2
+	FILE=$FILE.$2
 else
 	echo Spamassassin configured by Group-Office
 	cp /etc/default/spamassassin /etc/spamassassin/spamassassin.beforegroupoffice.$2
@@ -124,7 +124,7 @@ cp /usr/share/groupoffice-mailserver/tpl/etc/default/spamassassin $FILE
 FILE=/etc/spamassassin/local.cf
 if (  grep -q 'Group-Office' $FILE ); then
 	echo Spamassassin local.cf was already configured
-	FILE = $FILE.$2
+	FILE=$FILE.$2
 else
 	echo Spamassassin local.cf configured by Group-Office
 	cp /etc/spamassassin/local.cf /etc/spamassassin/local.cf.beforegroupoffice.$2
@@ -135,7 +135,7 @@ cp /usr/share/groupoffice-mailserver/tpl/etc/spamassassin/local.cf $FILE
 FILE=/etc/postfix/master.cf
 if (  grep -q 'Group-Office' $FILE ); then
 	echo Postfix master.cf was already configured
-	FILE = $FILE.$2
+	FILE=$FILE.$2
 else
 	echo Postfix master.cf configured by Group-Office
 	cp /etc/postfix/master.cf /etc/postfix/master.cf.beforegroupoffice.$2
