@@ -76,7 +76,7 @@ class imapauth
 		}else
 		{
 			go_debug($config);
-			
+
 			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_USERS, $GO_GROUPS,
 			$GO_MODULES;
 
@@ -94,7 +94,7 @@ class imapauth
 			go_debug('IMAPAUTH: Attempt IMAP login');
 
 			if ($imap->connect(
-			$config['host'],			
+			$config['host'],
 			$config['port'],
 			$mail_username,
 			$password,
@@ -112,7 +112,7 @@ class imapauth
 						go_debug('IMAPAUTH: IMAP password has changed. Updating Group-Office database');
 
 						$GO_USERS->update_profile(array('id'=>$user['id'], 'password'=>$password));
-						
+
 						if(isset($GO_MODULES->modules['email']))
 						{
 							require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
@@ -126,7 +126,7 @@ class imapauth
 					$user['email'] =$email;
 					$user['username'] = $go_username;
 					$user['password'] = $password;
-						
+
 
 					if ( !$user_id = $GO_USERS->add_user(
 					$user,
@@ -144,7 +144,7 @@ class imapauth
 			{
 				go_debug('IMAPAUTH: Authentication to IMAP server failed '.$imap->last_error());
 				$imap->clear_errors();
-				
+
 				throw new Exception($GLOBALS['lang']['common']['badLogin']);
 			}
 		}
@@ -193,23 +193,23 @@ class imapauth
 			}
 		}
 	}
-	
+
 	public static function add_user($user)
 	{
 		global $GO_MODULES;
-		
+
 		require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 		$email_client = new email();
-		
+
 		if(!empty($_SESSION['GO_SESSION']['imapauth']['new_account_id']))
 		{
 			go_debug('IMAPAUTH: updating e-mail account from user profile');
-			
+
 			$up_account['id']=$_SESSION['GO_SESSION']['imapauth']['new_account_id'];
 			$up_account['name']=String::format_name($user);
 			$email_client->_update_account($up_account);
-			
-			unset($_SESSION['GO_SESSION']['imapauth']['new_account_id']);			
+
+			unset($_SESSION['GO_SESSION']['imapauth']['new_account_id']);
 		}
 	}
 }

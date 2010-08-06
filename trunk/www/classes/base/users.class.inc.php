@@ -891,12 +891,16 @@ class GO_USERS extends db
 		
 		$user['registration_time'] = $user['mtime']=time();
 
+		$random_password=false;
 		$user['password_type']='crypt';
 		if(empty($user['password'])){
 			$user['password']=$this->random_password();
+			$random_password=true;
 		}	
-		
-		$GO_EVENTS->fire_event('before_add_user', array($user));
+
+		//random password is used by serverclient. It won't try to add an e-mail account
+		//with a random password
+		$GO_EVENTS->fire_event('before_add_user', array($user, $random_password));
 		
 		$unencrypted_password = $user['password'];
 		if(!empty($user['password']))
@@ -974,7 +978,7 @@ class GO_USERS extends db
 			//delay add user event because name must be supplied first.
 			if(!empty($user['first_name']))
 			{
-				$GO_EVENTS->fire_event('add_user', array($user));
+				$GO_EVENTS->fire_event('add_user', array($user, $random_password));
 			}
 
 			if($send_invitation){

@@ -1,3 +1,6 @@
+# leave this line or Group-Office will overwrite your config
+
+
 # This is the right place to customize your installation of SpamAssassin.
 #
 # See 'perldoc Mail::SpamAssassin::Conf' for details of what can be

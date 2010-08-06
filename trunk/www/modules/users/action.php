@@ -124,6 +124,7 @@ try
 
 				if(isset($map['serverclient_domains']))
 				{
+					$_POST['serverclient_no_halt']=true;
 					$_POST['serverclient_domains']=array_map('trim', explode(',',$record[$map['serverclient_domains']]));
 					go_debug($_POST['serverclient_domains']);
 				}
@@ -339,20 +340,21 @@ try
 
 					$email = $users->get_register_email();
 
+					if(!empty($email['register_email_body']) && !empty($email['register_email_subject'])){
+						require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+						$swift = new GoSwift($user['email'], $email['register_email_subject']);
+						foreach($user as $key=>$value){
+							$email['register_email_body'] = str_replace('{'.$key.'}', $value, $email['register_email_body']);
+						}
 
-					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-					$swift = new GoSwift($user['email'], $email['register_email_subject']);
-					foreach($user as $key=>$value){
-						$email['register_email_body'] = str_replace('{'.$key.'}', $value, $email['register_email_body']);
+						$email['register_email_body']= str_replace('{url}', $GO_CONFIG->full_url, $email['register_email_body']);
+						$email['register_email_body']= str_replace('{title}', $GO_CONFIG->title, $email['register_email_body']);
+						$email['register_email_body']= str_replace('{password}', $_POST["password1"], $email['register_email_body']);
+
+						$swift->set_body($email['register_email_body'],'plain');
+						$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+						$swift->sendmail();
 					}
-
-					$email['register_email_body']= str_replace('{url}', $GO_CONFIG->full_url, $email['register_email_body']);
-					$email['register_email_body']= str_replace('{title}', $GO_CONFIG->title, $email['register_email_body']);
-					$email['register_email_body']= str_replace('{password}', $_POST["password1"], $email['register_email_body']);
-
-					$swift->set_body($email['register_email_body'],'plain');
-					$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
-					$swift->sendmail();
 				}
 			}
 

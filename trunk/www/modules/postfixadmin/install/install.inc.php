@@ -52,6 +52,15 @@ if(!empty($GO_CONFIG->serverclient_domains))
 				$account['port']=$GO_CONFIG->serverclient_port;
 				$account['username']=$mailbox['username'];
 				$account['password']='admin';
+				require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
+				$c = new cryptastic();
+
+				$encrypted = $c->encrypt($account['password']);
+				if($encrypted){
+					$account['password']=$encrypted;
+					$account['password_encrypted']=2;
+				}
+				
 				$account['name']=String::format_name($user);
 				$account['email']=$mailbox['username'];
 				$account['smtp_host']=$GO_CONFIG->serverclient_smtp_host;
@@ -60,14 +69,18 @@ if(!empty($GO_CONFIG->serverclient_domains))
 				$account['smtp_username']=$GO_CONFIG->serverclient_smtp_username;
 				$account['smtp_password']=$GO_CONFIG->serverclient_smtp_password;
 
+				try{
+					$account['id'] = $email->add_account($account);
 
-				$account['id'] = $email->add_account($account);
-
-				if($account['id']>0)
-				{
-					//get the account because we need special folder info
-					$account = $email->get_account($account['id']);
-					$email->synchronize_folders($account);
+					if($account['id']>0)
+					{
+						//get the account because we need special folder info
+						$account = $email->get_account($account['id']);
+						$email->synchronize_folders($account);
+					}
+				}
+				catch(Exception $e){
+					go_debug('POSTFIXADMIN: '.$e->getMessage());
 				}
 			}
 		}

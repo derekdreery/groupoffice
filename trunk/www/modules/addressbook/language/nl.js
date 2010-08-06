@@ -109,6 +109,7 @@ GO.addressbook.lang.photo = 'Foto';
 GO.addressbook.lang.deleteImage='Verwijder afbeelding';
 
 GO.addressbook.lang.addAllSearchResults='Alle zoekresultaten toevoegen';
+
 GO.addressbook.lang.confirmAddAllSearchResults='Weet u zeker dat u alle zoekresultaten aan de adreslijst wilt toevoegen?';
 
 GO.addressbook.lang.emailAdded='Emailadres succesvol toegevoegd aan contactpersoon';
