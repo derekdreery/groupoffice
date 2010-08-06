@@ -2,4 +2,4 @@ groupoffice-mailserver (3.5.18) three; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Fri, 6 Aug 2010 17:37:50 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Fri, 6 Aug 2010 17:45:53 +0200
