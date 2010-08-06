@@ -1,0 +1,69 @@
+<?php
+//Uncomment this line in new translations!
+//require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
+
+$lang['filetypes']['unknown'] = 'Unkown filetype';
+$lang['filetypes']['txt'] = 'ไฟล์ข้อความ';//Textfile
+$lang['filetypes']['sxw'] = 'OpenOffice.Org text';
+$lang['filetypes']['ott'] = 'เิทมเพลท OpenOffice.Org ';
+$lang['filetypes']['odc']= 'OpenOffice.Org chart';
+$lang['filetypes']['odb']= 'ฐานข้อมูล OpenOffice.Org ';
+$lang['filetypes']['odf']= 'OpenOffice.Org formula';
+$lang['filetypes']['odg']= 'OpenOffice.Org graphics';
+$lang['filetypes']['otg']= 'OpenOffice.Org graphics template';
+$lang['filetypes']['odi']= 'OpenOffice.Org image';
+$lang['filetypes']['odp']= 'นำเสนอ OpenOffice.Org ';
+$lang['filetypes']['otp']= 'เทมเพลทนำเสนอ OpenOffice.Org ';
+$lang['filetypes']['ods']= 'OpenOffice.Org spreadsheet';
+$lang['filetypes']['ots']= 'เทมเพลท OpenOffice.Org spreadsheet';
+$lang['filetypes']['odt']= 'ข้อความ OpenOffice.Org ';//text
+$lang['filetypes']['odm']= 'OpenOffice.Org text master';
+$lang['filetypes']['oth']= 'เว็บเพจ OpenOffice.Org ';
+
+
+$lang['filetypes']['doc'] = 'เอกสาร Microsoft Word ';
+$lang['filetypes']['xls'] = 'เอกสาร Microsoft Excel ';
+$lang['filetypes']['mdb'] = 'ฐานข้อมูล Microsoft Access ';
+$lang['filetypes']['ppt'] = 'เอกสารนำเสนอ Microsoft Powerpoint ';
+$lang['filetypes']['pps'] = 'เอกสารนำเสนอ Microsoft Powerpoint ';
+$lang['filetypes']['sxc'] = 'OpenOffice.Org Calc spreadsheet';
+$lang['filetypes']['tar'] = 'Tar archive';
+$lang['filetypes']['zip'] = 'ไฟล์ ZIP ';//compressed archive
+$lang['filetypes']['rar'] = 'ไฟล์ RAR ';//compressed archive
+$lang['filetypes']['gz'] = 'ไฟล์ GZIP '; //compressed archive
+$lang['filetypes']['tgz'] = 'ไฟล์ GZIP ';//compressed archive
+$lang['filetypes']['bz2'] = 'ไฟล์ BZIP2 '; //compressed archive
+$lang['filetypes']['pdf'] = 'เอกสาร PDF';//PDF document
+$lang['filetypes']['exe'] = 'แฟ้มปฏิบัติการของ Windows';//Windows executable file
+$lang['filetypes']['ttf'] = 'True type font';
+$lang['filetypes']['html'] = 'เอกสาร HTML ';//document
+$lang['filetypes']['htm'] = 'เอกสาร HTML ';//document
+$lang['filetypes']['jpg'] = 'รูปภาพ JPG';//Image
+$lang['filetypes']['jpeg'] = 'รูปภาพ JPEG';//Image
+$lang['filetypes']['gif'] = 'รูปภาพ GIF';//Image
+$lang['filetypes']['bmp'] = 'รูปภาพ BMP';//Image
+$lang['filetypes']['tif'] = 'รูปภาพ TIF';//Image
+$lang['filetypes']['png'] = 'รูปภาพ PNG ';//Image
+$lang['filetypes']['php'] = 'PHP Script';
+$lang['filetypes']['ics'] = 'ข้อมูลปฏิทิน';//Calendar information
+$lang['filetypes']['vcf'] = 'ข้อมูลที่ติดต่อ';//Contact information
+$lang['filetypes']['wav'] = 'ไฟล์เสียง WAV';//Sound file
+$lang['filetypes']['ogg'] = 'ไฟล์เสียง OGG';//Sound file
+$lang['filetypes']['mp3'] = 'ไฟล์เสียง MP3';//Sound file
+$lang['filetypes']['wma'] = 'ไฟล์เสียง WMA';//Sound file
+$lang['filetypes']['mpg'] =  'ไฟล์วีดีโอ MPG';//Video clip
+$lang['filetypes']['mpeg'] =  'ไฟล์วีดีโอ MPEG';//Video clip
+$lang['filetypes']['avi'] =  'ไฟล์วีดีโอ AVI';//Video clip
+$lang['filetypes']['wmv'] = 'ไฟล์วีดีโอ WMV'; //Video clip
+$lang['filetypes']['wmf'] = 'ไฟล์วีดีโอ WMF';//Video clip
+$lang['filetypes']['pdf'] = 'เอกสาร Adobe Acrobat PDF';
+$lang['filetypes']['doc'] = 'เอกสาร Microsoft Word';
+$lang['filetypes']['dot'] = 'เอกสาร Microsoft Word';
+$lang['filetypes']['psd'] = 'ไฟล์ Adobe Photoshop';
+$lang['filetypes']['rtf'] = 'รูปแบบข้อความสำเร็จรูป';//Rich Text Format
+$lang['filetypes']['swf'] = 'Macromedia Flash Movie';
+$lang['filetypes']['fla'] = 'Macromedia Flash Document (Source)';
+$lang['filetypes']['xls'] = 'เอกสาร Microsoft Excel ';
+$lang['filetypes']['xlt'] = 'เอกสาร Microsoft Excel ';
+$lang['filetypes']['ai'] = 'ไฟล์ Adobe Illustrator';//Adobe Illustrator file
+$lang['filetypes']['eml'] = 'อีเมลข้อความ';//E-mail message
