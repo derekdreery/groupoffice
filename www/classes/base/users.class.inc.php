@@ -777,7 +777,7 @@ class GO_USERS extends db
 	{
 		global $GO_CONFIG, $GO_LANGUAGE, $GO_SECURITY, $GO_GROUPS, $GO_MODULES, $GO_EVENTS, $lang;
 
-		require_once($GO_LANGUAGE->get_language_file('users'));
+		$GO_LANGUAGE->require_language_file('users');
 
 		if(empty($user['username']) || empty($user['email']))
 		{
