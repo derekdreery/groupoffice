@@ -3,15 +3,18 @@ GO.moduleManager.onModuleReady('customfields', function(){
 	GO.customfields.dataTypes.contact={
 		label : GO.addressbook.lang.contact,
 		getFormField : function(customfield, config){
-			return {
+
+			var f = GO.customfields.dataTypes.text.getFormField(customfield, config);
+
+			delete f.name;
+
+			return Ext.apply(f, {
 				xtype: 'selectcontact',
 				idValuePair:true,
-				fieldLabel: customfield.name,
 				hiddenName:customfield.dataname,
-				forceSelection:true,
-				anchor:'-20',
+				forceSelection:true,				
 				valueField:'cf'
-			}
+			});
 		}
 	}
 
