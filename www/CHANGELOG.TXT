@@ -1,5 +1,8 @@
-TLS support for LDAP
-Automatically add e-mail account from LDAP credentials
+2010/08/06 3.5.17
+- TLS support for LDAP
+- Automatically add e-mail account from LDAP credentials
+- Bug with shifting days in timeregistration
+- Bug with invalid attachments in some e-mail templates.
 
 2010/08/02 3.5.16
 - inefficient hoursapproval queries
