@@ -25,7 +25,7 @@ domain="$RET"
 
 touch /etc/postfix/main.cf
 
-if (  grep 'mysql_virtual' /etc/postfix/main.cf ); then
+if (  grep -q 'mysql_virtual' /etc/postfix/main.cf ); then
 	echo Postfix is already configured for MySQL virtual hosts. Skipping Postfix configuration
 else
 	echo Configuring Postfix
@@ -111,7 +111,7 @@ fi
 chown spamd:spamd /var/lib/spamassassin
 
 FILE=/etc/default/spamassassin
-if (  grep 'Group-Office' $FILE ); then
+if (  grep -q 'Group-Office' $FILE ); then
 	echo Spamassassin was already configured
 	FILE = $FILE.$2
 else
@@ -122,7 +122,7 @@ cp /usr/share/groupoffice-mailserver/tpl/etc/default/spamassassin $FILE
 
 
 FILE=/etc/spamassassin/local.cf
-if (  grep 'Group-Office' $FILE ); then
+if (  grep -q 'Group-Office' $FILE ); then
 	echo Spamassassin local.cf was already configured
 	FILE = $FILE.$2
 else
@@ -133,7 +133,7 @@ cp /usr/share/groupoffice-mailserver/tpl/etc/spamassassin/local.cf $FILE
 
 
 FILE=/etc/postfix/master.cf
-if (  grep 'Group-Office' $FILE ); then
+if (  grep -q 'Group-Office' $FILE ); then
 	echo Postfix master.cf was already configured
 	FILE = $FILE.$2
 else
