@@ -82,6 +82,7 @@ class Go2Mime
 		//var_dump($this->inline_attachments);
 		foreach($this->inline_attachments as $inline_attachment)
 		{
+			//go_debug($inline_attachment);
 			if(isset($inline_attachment['data']))
 			{
 				$img = Swift_EmbeddedFile::newInstance($inline_attachment['data'],
@@ -247,6 +248,9 @@ class Go2Mime
 					continue;
 				}
 
+				if(!isset($part->ctype_primary))
+					continue;
+
 				if ($part->ctype_primary == 'text' && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename']))
 				{
 					$part->ctype_parameters['charset']=isset($part->ctype_parameters['charset']) ? $part->ctype_parameters['charset'] : 'UTF-8';
@@ -275,7 +279,7 @@ class Go2Mime
 					$filename=$part->d_parameters['filename*'];
 				}
 				
-				if (!empty($part->body) && !empty($filename) && empty($part->headers['content-id']))
+				if (!empty($filename) || !empty($part->headers['content-id']))
 				{
 					$mime_attachment['tmp_file']=false; //for compatibility with IMAP attachments which use this property.
 					$mime_attachment['index']=count($this->response['attachments']);
@@ -292,17 +296,16 @@ class Go2Mime
 
 					if($create_tmp_attachments)
 					{
+						if(empty($filename))$filename=uniquid(time());
+
 						$mime_attachment['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$filename;
 						filesystem::mkdir_recursive(dirname($mime_attachment['tmp_file']));
 
 						file_put_contents($mime_attachment['tmp_file'], $part->body);
 					}
 
-
-
-					if(isset($part->headers['content-id']))
+					if(!empty($part->headers['content-id']))
 					{
-
 						$content_id = trim($part->headers['content-id']);
 						if ($content_id != '')
 						{
