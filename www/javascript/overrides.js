@@ -36,9 +36,11 @@ Ext.override(Ext.FormPanel,{
 					//check if this field is a tree select
 					if(field.idValuePair){
 						var v = field.getValue();
-						v=v.split(':');						
-						if(v.length==2){
-							field.setRawValue(v[1]);
+						if(!GO.util.empty(v)){
+							v=v.split(':');
+							if(v.length==2){
+								field.setRawValue(v[1]);
+							}
 						}
 					}
 				});
