@@ -356,7 +356,8 @@ class go_ical extends calendar
 					case 'MONTHLY':
 						if (!isset($rrule['BYDAY']))
 						{
-							$line = 'RRULE:MD'.$event['repeat_every'].' '.date('j', $event['start_time']).'+';
+							//$line = 'RRULE:MD'.$event['repeat_every'].' '.date('j', $event['start_time']).'+';
+							$line = 'RRULE:MD'.$event['repeat_every'].' '.date('j', $event['start_time']);
 							//$line = 'RRULE:MD'.$event['repeat_every'].' ';
 
 							if ($event['repeat_forever'] == '0')
