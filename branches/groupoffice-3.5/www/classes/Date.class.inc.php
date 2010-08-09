@@ -783,6 +783,7 @@ class Date {
 			case REPEAT_MONTH_DATE:
 				$rrule = "RRULE:FREQ=MONTHLY;";
 				$rrule .= 'INTERVAL='.$interval.';';
+				$rrule .= 'BYMONTHDAY='.date('j').';';
 
 				break;
 
