@@ -139,13 +139,14 @@ try{
 				}
 				$servermanager->check_license($config, $old_installation['name']);
 
-				$report['professional']=0;
+				$installation['professional']=0;
 				$installation['billing']=strpos($config['allowed_modules'], 'billing')!==false ? 1 : 0;
 
 				$allowed_modules = explode(',', $config['allowed_modules']);
+				
 				foreach($servermanager->pro_modules as $pro_module) {
 					if(in_array($pro_module, $allowed_modules)) {
-						$report['professional']=1;
+						$installation['professional']=1;
 						break;
 					}
 				}
