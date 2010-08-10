@@ -16,7 +16,7 @@ class servermanager extends db {
 	/*
 	 * Don't change this variable or pro installations won't work anymore!
 	 */
-	var $pro_modules = array('mailings','projects','gota','sync','customfields');
+	var $pro_modules = array('mailings','projects','gota','sync','customfields','billing','tickets');
 
 	public function __on_load_listeners($events) {
 		$events->add_listener('update_user', __FILE__, 'servermanager', 'update_user');
@@ -326,12 +326,12 @@ class servermanager extends db {
 					break;
 				}
 			}
-			if(in_array('billing', $allowed_modules)) {
+			/*if(in_array('billing', $allowed_modules)) {
 				$available_billing_modules = $this->billing_modules_available($existing_installation_name);
 				if(!$available_billing_modules) {
 					throw new Exception('You don\'t have a billing module left');
 				}
-			}
+			}*/
 		}
 		if($pro) {
 			$available_users = $this->server_users_available($existing_installation_name);
@@ -346,13 +346,25 @@ class servermanager extends db {
 	}
 
 	function get_used_licenses() {
-		$sql = "SELECT SUM(max_users) AS total_users, SUM(billing) AS total_billing FROM sm_reports WHERE professional=1";
+		$sql = "SELECT SUM(max_users) AS total_users FROM sm_installations WHERE professional=1";
 		$this->query($sql);
 		return $this->next_record();
 	}
 
+	function get_max_server_users(){
+		$max_users=0;
+		if(isset($GLOBALS['GO_CONFIG']->test_servermanager)){
+			$max_users=2;
+		}else if(extension_loaded('ionCube Loader')){
+			$props = ioncube_license_properties();
+			if(isset($props['maxusers']))
+				$max_users=$props['maxusers'];
+		}
+		return $max_users;
+	}
+
 	function server_users_available($installation_name='') {
-		$sql = "SELECT SUM(max_users) AS total_users FROM sm_reports WHERE professional=1";
+		$sql = "SELECT SUM(max_users) AS total_users FROM sm_installations WHERE professional=1";
 
 		if(!empty($installation_name)) {
 			$sql .= " AND name!='".$this->escape($installation_name)."'";
@@ -361,16 +373,12 @@ class servermanager extends db {
 		$this->query($sql);
 		$report = $this->next_record();
 
-		if(file_exists('/etc/groupoffice/license.inc.php'))
-			require('/etc/groupoffice/license.inc.php');
-		else
-			$max['users']=0;
+		$max_users=$this->get_max_server_users();
 
-
-		return $max['users']-$report['total_users'];
+		return $max_users-$report['total_users'];
 	}
 
-	function billing_modules_available($installation_name='') {
+	/*function billing_modules_available($installation_name='') {
 		$sql = "SELECT SUM(billing) AS total_billing FROM sm_reports";
 
 		if(!empty($installation_name)) {
@@ -386,7 +394,7 @@ class servermanager extends db {
 			$max['billing']=0;
 
 		return $max['billing']-$report['total_billing'];
-	}
+	}*/
 
 	/**
 	 * Add a New trial

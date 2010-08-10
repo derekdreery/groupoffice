@@ -257,7 +257,7 @@ Ext.extend(GO.servermanager.InstallationDialog, Ext.Window,{
 								]
 
 						}),
-						value:'trial',
+						value:'ignore',
 						valueField:'value',
 						displayField:'text',
 						typeAhead: true,
