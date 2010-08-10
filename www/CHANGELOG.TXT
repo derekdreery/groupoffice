@@ -1,4 +1,4 @@
-2010/08/09 3.5.19
+2010/08/10 3.5.19
 - Sync supports latest Funambol clients for Outlook and TB3 beta client.
 - Sync supports SyncEvolution
 - Note sync supported
