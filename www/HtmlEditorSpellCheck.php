@@ -11,6 +11,10 @@ class spellchecker {
 	var $plink;
 	
 	function spellchecker(){
+
+		if(!function_exists('pspell_new'))
+			die('The spell check function requires the PHP pspell extension. Please ask your system administrator to install it with the right dictionaries.');
+		
 		$this->plink = pspell_new($_REQUEST['lang'],"","","",PSPELL_FAST);
 	}
 	

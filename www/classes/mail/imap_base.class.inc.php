@@ -204,6 +204,10 @@ class imap_base {
 				break;
 			}
 			$result[$n] = fgets($this->handle, $line_length);
+
+			if(!$result[$n])
+				break;
+
 			$current_size += strlen($result[$n]);
 			if ($max && $current_size > $max) {
 				$this->max_read = true;

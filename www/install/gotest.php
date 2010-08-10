@@ -93,6 +93,21 @@ function test_system(){
 
 	$tests[]=$test;
 
+	$test['name']='GD support';
+	$test['pass']=function_exists('getimagesize');
+	$test['feedback']='Warning: No GD extension for PHP found. Without GD Group-Office can\'t create thumbnails.';
+	$test['fatal']=false;
+
+	$tests[]=$test;
+
+	$test['name']='pspell support';
+	$test['pass']=function_exists('pspell_new');
+	$test['feedback']='Warning: No pspell extension for PHP found. The spellchecker in the e-mail composer won\'t work.';
+	$test['fatal']=false;
+
+	$tests[]=$test;
+
+
 	$test['name']='File upload support';
 	$test['pass']=ini_get('file_uploads') == '1';
 	$test['feedback']='Warning: File uploads are disabled. Please set file_uploads=On in php.ini.';
@@ -205,7 +220,7 @@ function test_system(){
 		$zip = whereis('zip') ? whereis('zip') : '/usr/bin/zip';
 	}
 	$test['pass']=@is_executable($zip);
-	$test['feedback']='Warning: zip is not installed or not executable.';
+	$test['feedback']='Warning: zip is not installed or not executable. Unpacking zip archives and using document templates for Microsoft Word and Open-Office.org won\'t be possible.';
 	$test['fatal']=false;
 
 	$tests[]=$test;

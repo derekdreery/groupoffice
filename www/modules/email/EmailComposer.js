@@ -630,6 +630,8 @@ GO.email.EmailComposer = function(config) {
 };
 
 Ext.extend(GO.email.EmailComposer, GO.Window, {
+
+	stateId : 'email-composer',
 	
 	showConfig : {},
 

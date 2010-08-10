@@ -58,11 +58,12 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 			<a href="#" id="help-link">
 				<?php echo $lang['common']['help']; ?></a>
 
-                        <?php if(!$GO_SECURITY->http_authenticated_session){?>
-                        <span class="top-menu-separator">|</span>
+			<?php
+			if(!$GO_SECURITY->http_authenticated_session){?>
+			<span class="top-menu-separator">|</span>
 			<a href="javascript:GO.mainLayout.logout();">
 				<?php echo $lang['common']['logout']; ?></a>
-                        <?php } ?>
+            <?php } ?>
 		</div>
 	</div>
 	
