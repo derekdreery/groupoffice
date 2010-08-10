@@ -359,6 +359,9 @@ class servermanager extends db {
 			$props = ioncube_license_properties();
 			if(isset($props['maxusers']))
 				$max_users=$props['maxusers'];
+		}else
+		{
+			$max_users=10000;
 		}
 		return $max_users;
 	}
