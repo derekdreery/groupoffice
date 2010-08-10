@@ -382,8 +382,8 @@ try{
 			{
 				$GO_CONFIG->save_setting('tasks_show_inactive', $_POST['show_inactive'], $GO_SECURITY->user_id);
 			}
-			$show_completed=$GO_CONFIG->get_setting('tasks_show_completed', $GO_SECURITY->user_id);
-			$show_inactive=$GO_CONFIG->get_setting('tasks_show_inactive', $GO_SECURITY->user_id);
+			$show_completed=empty($_POST['portlet']) && $GO_CONFIG->get_setting('tasks_show_completed', $GO_SECURITY->user_id);
+			$show_inactive=empty($_POST['portlet']) && $GO_CONFIG->get_setting('tasks_show_inactive', $GO_SECURITY->user_id);
 
 			$response['total'] = $tasks->get_tasks($tasklists,$user_id, $show_completed, $sort, $dir, $start, $limit,$show_inactive, $query);
 			$response['results']=array();
