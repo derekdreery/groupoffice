@@ -67,6 +67,7 @@ class GO_SECURITY extends db {
 		if (isset($_SESSION['GO_SESSION']['user_id']) &&
 				$_SESSION['GO_SESSION']['user_id'] > 0) {
 			$this->user_id=$_SESSION['GO_SESSION']['user_id'];
+
 			$this->http_authenticated_session=!empty($_SESSION['GO_SESSION']['http_authenticated_user']);
 
 		}
@@ -104,13 +105,19 @@ class GO_SECURITY extends db {
 						$this->logout();
 					}
 					return $res;
-				}elseif(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
+				}elseif(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW']) && empty($_SESSION['PHP_AUTH_USER_FAILED'])) {
 					$username = $_SERVER['PHP_AUTH_USER'];
 					$password = $_SERVER['PHP_AUTH_PW'];
 
 					if($GO_AUTH->login($username, $password)) {
+						go_debug('Logged in using http authentication');
 						$this->http_authenticated_session=$_SESSION['GO_SESSION']['http_authenticated_user']=true;
 						return true;
+					}else
+					{
+						go_debug('PHP_AUTH_USER is set but http authentication failed');
+						//if PHP_AUTH_USER fails we must remember that because otherwise it will endlessly loop.
+						$_SESSION['PHP_AUTH_USER_FAILED']=true;
 					}
 				}
 
