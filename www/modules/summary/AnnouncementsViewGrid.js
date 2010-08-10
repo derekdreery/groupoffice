@@ -67,6 +67,37 @@ GO.summary.AnnouncementsViewGrid = function(config){
 	//config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
 	config.disableSelection=true;
+
+	config.listeners={
+		rowclick : function( grid , rowIndex, e ) {		
+
+			if(e.target.tagName=='A')
+			{
+				e.preventDefault();
+				
+				var href=e.target.attributes['href'].value;
+				if(GO.email && href.substr(0,6)=='mailto')
+				{
+					var indexOf = href.indexOf('?');
+					if(indexOf>0)
+					{
+						var email = href.substr(7, indexOf-8);
+					}else
+					{
+						var email = href.substr(7);
+					}
+					GO.email.addressContextMenu.showAt(e.getXY(), email);
+				}else if(href!='#')
+				{
+					if(href.substr(0,6)=='callto')
+						document.location.href=href;
+					else
+						window.open(href);
+				}
+			}
+		},
+		scope:this
+	}
 	
 	GO.summary.AnnouncementsViewGrid.superclass.constructor.call(this, config);
 };
