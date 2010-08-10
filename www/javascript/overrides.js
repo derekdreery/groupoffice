@@ -256,7 +256,7 @@ Ext.override(Ext.form.BasicForm, {
                 field = f;    // field was found
                 return false;
               }
-              else if(f.items) {
+              else if(f.items && f.items.each) {
                 f.items.each(fn);   // iterate through child items
               }
             }
