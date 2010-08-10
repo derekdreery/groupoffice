@@ -509,6 +509,8 @@ class GoSwiftImport extends GoSwift{
 			}
 		}
 
+		go_debug($structure);
+
 
 		$this->get_parts($structure);
 
@@ -534,7 +536,7 @@ class GoSwiftImport extends GoSwift{
 				}
 
 
-				if ($part->ctype_primary == 'text' && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename']))
+				if ($part->ctype_primary == 'text' && ($part->ctype_secondary=='plain' || $part->ctype_secondary=='html') && (!isset($part->disposition) || $part->disposition != 'attachment') && empty($part->d_parameters['filename']))
 				{
 					if (stripos($part->ctype_secondary,'plain')!==false)
 					{

@@ -123,7 +123,7 @@ function file_contains($filename, $str){
 	if(!file_exists($filename))
 		return false;
 
-	return strpos(file_get_contents($filename),$str)===false;
+	return strpos(file_get_contents($filename),$str)!==false;
 }
 
 echo "Configuring Dovecot\n";

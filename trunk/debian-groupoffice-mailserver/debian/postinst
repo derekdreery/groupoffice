@@ -25,7 +25,7 @@ domain="$RET"
 
 touch /etc/postfix/main.cf
 
-if (  grep 'mysql_virtual' /etc/postfix/main.cf ); then
+if (  grep -q 'mysql_virtual' /etc/postfix/main.cf ); then
 	echo Postfix is already configured for MySQL virtual hosts. Skipping Postfix configuration
 else
 	echo Configuring Postfix
@@ -65,6 +65,9 @@ else
 	# dovecot handles delivery
 	postconf -e virtual_transport=dovecot
 	postconf -e dovecot_destination_recipient_limit=1
+
+	postconf -e 'message_size_limit = 20480000'
+
 fi
 
 #check if user vmail exists
@@ -111,9 +114,9 @@ fi
 chown spamd:spamd /var/lib/spamassassin
 
 FILE=/etc/default/spamassassin
-if (  grep 'Group-Office' $FILE ); then
+if (  grep -q 'Group-Office' $FILE ); then
 	echo Spamassassin was already configured
-	FILE = $FILE.$2
+	FILE=$FILE.$2
 else
 	echo Spamassassin configured by Group-Office
 	cp /etc/default/spamassassin /etc/spamassassin/spamassassin.beforegroupoffice.$2
@@ -122,9 +125,9 @@ cp /usr/share/groupoffice-mailserver/tpl/etc/default/spamassassin $FILE
 
 
 FILE=/etc/spamassassin/local.cf
-if (  grep 'Group-Office' $FILE ); then
+if (  grep -q 'Group-Office' $FILE ); then
 	echo Spamassassin local.cf was already configured
-	FILE = $FILE.$2
+	FILE=$FILE.$2
 else
 	echo Spamassassin local.cf configured by Group-Office
 	cp /etc/spamassassin/local.cf /etc/spamassassin/local.cf.beforegroupoffice.$2
@@ -133,9 +136,9 @@ cp /usr/share/groupoffice-mailserver/tpl/etc/spamassassin/local.cf $FILE
 
 
 FILE=/etc/postfix/master.cf
-if (  grep 'Group-Office' $FILE ); then
+if (  grep -q 'Group-Office' $FILE ); then
 	echo Postfix master.cf was already configured
-	FILE = $FILE.$2
+	FILE=$FILE.$2
 else
 	echo Postfix master.cf configured by Group-Office
 	cp /etc/postfix/master.cf /etc/postfix/master.cf.beforegroupoffice.$2

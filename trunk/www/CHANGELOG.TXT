@@ -1,3 +1,13 @@
+2010/08/10 3.5.19
+- Sync supports latest Funambol clients for Outlook and TB3 beta client.
+- Sync supports SyncEvolution
+- Note sync supported
+- Read only addressbooks,tasklists and note categories can be synced now too.
+- E-mail window remembers size
+
+2010/08/06 3.5.18
+- Update for Debian packages only because of invalid php_value in apache config.
+
 2010/08/06 3.5.17
 - TLS support for LDAP
 - Automatically add e-mail account from LDAP credentials

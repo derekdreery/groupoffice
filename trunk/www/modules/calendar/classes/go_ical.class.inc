@@ -157,12 +157,28 @@ class go_ical extends calendar
 			$lines[] ="CLASS:PUBLIC";
 		}
 
+
+		if($event['all_day_event']=='1'){
+			$DT_format = go_ical::date_format;
+
+			//changed this for funambol compatibility. Always send dates in local time for all day events
+
+			$start_date = date($DT_format , $event['start_time']);
+			$end_date = date($DT_format, $event['end_time']);
+		}else
+		{
+			$DT_format = $this->datetime_format;
+
+			$start_date = $this->utc ? gmdate($DT_format , $event['start_time']).'Z' : date($DT_format , $event['start_time']);
+			$end_date = $this->utc ? gmdate($DT_format , $event['end_time']).'Z' : date($DT_format, $event['end_time']);
+		}
+
 		
 
 		if($this->version == '1.0' && $event['all_day_event'] == '1')
 		{
-			$start_date = $this->utc ? gmdate($this->datetime_format, $event['start_time']).'Z' : date($this->datetime_format, $event['start_time']);
-			$end_date = $this->utc ? gmdate($this->datetime_format, $event['end_time']).'Z' : date($this->datetime_format, $event['end_time']);
+			//$start_date = $this->utc ? gmdate($this->datetime_format, $event['start_time']).'Z' : date($this->datetime_format, $event['start_time']);
+			//$end_date = $this->utc ? gmdate($this->datetime_format, $event['end_time']).'Z' : date($this->datetime_format, $event['end_time']);
 
 			$line = "DTSTART:".$start_date;
 			$lines[] = $line;
@@ -175,13 +191,7 @@ class go_ical extends calendar
 			//}
 
 		}else
-		{
-			$DT_format = $event['all_day_event'] == '1' ? go_ical::date_format : $this->datetime_format;
-
-			$start_date = $this->utc ? gmdate($DT_format , $event['start_time']).'Z' : date($DT_format , $event['start_time']);
-			$end_date = $this->utc ? gmdate($DT_format , $event['end_time']).'Z' : date($DT_format, $event['end_time']);
-
-
+		{	
 			$line = "DTSTART";
 
 			if ($event['all_day_event'] == '1')
@@ -227,7 +237,7 @@ class go_ical extends calendar
 			{
 				$rrule = $ical2array->parse_rrule($event['rrule']);
 
-				if(!$this->utc && isset($rrule['BYDAY'])){
+				if((!$this->utc || $event['all_day_event']=='1') && isset($rrule['BYDAY'])){
 					if($rrule['FREQ']=='MONTHLY'){
 						$month_time = $rrule['BYDAY'][0];
 						$day = substr($rrule['BYDAY'], 1);
@@ -308,6 +318,9 @@ class go_ical extends calendar
 						break;
 
 					case 'WEEKLY':
+
+						if(!$this->utc || $event['all_day_event']=='1')
+							$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
 							
 						$event_days = array();
 
@@ -340,6 +353,8 @@ class go_ical extends calendar
 							$event_days[] = "SA";
 						}
 
+
+
 							
 						$line = 'RRULE:W'.$event['repeat_every'].' ';
 						$line .= implode(' ', $event_days);
@@ -356,7 +371,8 @@ class go_ical extends calendar
 					case 'MONTHLY':
 						if (!isset($rrule['BYDAY']))
 						{
-							$line = 'RRULE:MD'.$event['repeat_every'].' '.date('j', $event['start_time']).'+';
+							//$line = 'RRULE:MD'.$event['repeat_every'].' '.date('j', $event['start_time']).'+';
+							$line = 'RRULE:MD'.$event['repeat_every'].' '.date('j', $event['start_time']);
 							//$line = 'RRULE:MD'.$event['repeat_every'].' ';
 
 							if ($event['repeat_forever'] == '0')

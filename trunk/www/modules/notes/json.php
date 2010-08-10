@@ -119,7 +119,7 @@ try{
 			
 			$response['data']=$note;
 			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']);
-			$response['data']['write_permission']=$response['data']['permission_level']>GO_SECURITY::WRITE_PERMISSION;
+			$response['data']['write_permission']=$response['data']['permission_level']>GO_SECURITY::READ_PERMISSION;
 			if(!$response['data']['permission_level'])
 			{
 				throw new AccessDeniedException();
