@@ -885,7 +885,7 @@ try {
 									}
 
 									//For LDAP auth with usernames without the domain in it.
-									if(!strpos('@',$account['username'])){
+									if(!strpos($account['username'],'@')){
 										$arr= explode('@',$account['email']);
 										$account['username'] .= '@'.$arr[1];
 									}
