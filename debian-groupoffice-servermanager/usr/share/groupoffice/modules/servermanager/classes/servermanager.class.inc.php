@@ -316,6 +316,10 @@ class servermanager extends db {
 	}
 
 	function check_license($config, $existing_installation_name='') {
+		if(!extension_loaded('ionCube Loader')){
+			return true;
+		}
+
 		$pro = 0;
 		if(isset($config['allowed_modules'])) {
 			$allowed_modules = explode(',', $config['allowed_modules']);
@@ -361,7 +365,7 @@ class servermanager extends db {
 				$max_users=$props['maxusers'];
 		}else
 		{
-			$max_users=10000;
+			$max_users=0;
 		}
 		return $max_users;
 	}
