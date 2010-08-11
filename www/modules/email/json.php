@@ -424,9 +424,8 @@ try {
 					throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));
 				}
 
-
 				$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
-				$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
+				$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding']);
 				$imap->disconnect();
 
 				require_once($GO_CONFIG->class_path.'Date.class.inc.php');
@@ -440,7 +439,7 @@ try {
 				$event=false;
 				while($object = array_shift($vcalendar[0]['objects'])) {
 					if($object['type'] == 'VEVENT') {
-						go_debug($object);
+						//go_debug($object);
 						$event = $cal->get_event_from_ical_object($object);
 						break;
 					}
