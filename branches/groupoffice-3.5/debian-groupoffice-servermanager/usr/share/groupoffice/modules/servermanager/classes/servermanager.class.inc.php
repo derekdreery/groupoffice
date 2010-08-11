@@ -321,7 +321,13 @@ class servermanager extends db {
 	}
 
 	function check_license($config, $existing_installation_name='') {
-		if(!extension_loaded('ionCube Loader')){
+
+		if(!function_exists('license_get_max_server_users')){
+			/*
+			 * Users can break the license mechanism easily in the servermanager
+			 * but that doesn't really matter because the installations will
+			 * check the license in a hacker proof way.
+			 */
 			return true;
 		}
 
