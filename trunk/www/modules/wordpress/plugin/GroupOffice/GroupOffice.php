@@ -316,7 +316,7 @@ function groupoffice_get_contact_form($post_extra_info=false){
 			global $go;
 
 			$db = $go->get_database();
-			$sql = "SELECT contact_id FROM wp_contacts_wp_users WHERE wp_user_id=".intval($current_user->ID);
+			$sql = "SELECT contact_id FROM wp_contacts_wp_users w INNER JOIN ab_contacts c ON c.id=w.contact_id WHERE wp_user_id=".intval($current_user->ID);
 			$db->query($sql);
 			$r = $db->next_record();
 
