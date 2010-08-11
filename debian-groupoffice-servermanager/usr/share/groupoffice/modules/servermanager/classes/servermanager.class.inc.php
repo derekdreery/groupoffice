@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
  *
  * This file is part of Group-Office. You should have received a copy of the
@@ -11,6 +11,11 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
+
+
+if(file_exists($GLOBALS['GO_CONFIG']->root_path.'modules/professional/check.php'))
+	require_once($GLOBALS['GO_CONFIG']->root_path.'modules/professional/check.php');
+
 class servermanager extends db {
 
 	/*
@@ -24,7 +29,7 @@ class servermanager extends db {
 
 	public function get_all_config_files($roots){
 		global $GO_CONFIG;
-		
+
 		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 
@@ -96,7 +101,7 @@ class servermanager extends db {
 		if($installation['name']=='servermanager'){
 			$installation['status']='ignore';
 		}
-		
+
 		$features=array();
 
 		$db2 = new db();
@@ -356,13 +361,13 @@ class servermanager extends db {
 	}
 
 	function get_max_server_users(){
+		global $GO_CONFIG;
+
 		$max_users=0;
-		if(isset($GLOBALS['GO_CONFIG']->test_servermanager)){
+		if(isset($GO_CONFIG->test_servermanager)){
 			$max_users=2;
-		}else if(extension_loaded('ionCube Loader')){
-			$props = ioncube_license_properties();
-			if(isset($props['maxusers']))
-				$max_users=$props['maxusers'];
+		}elseif(function_exists('license_get_max_server_users')){
+			$max_users=license_get_max_server_users();
 		}else
 		{
 			$max_users=0;
@@ -589,7 +594,7 @@ class servermanager extends db {
 
 		$installation['status_change_time']=time();
 
-		
+
 
 		$installation['id']=$this->nextid('sm_installations');
 		if($this->insert_row('sm_installations', $installation)) {
@@ -753,23 +758,5 @@ class servermanager extends db {
 
 
 	/* {CLASSFUNCTIONS} */
-
-
-	/**
-	 * When a an item gets deleted in a panel with links. Group-Office attempts
-	 * to delete the item by finding the associated module class and this function
-	 *
-	 * @param int $id The id of the linked item
-	 * @param int $link_type The link type of the item. See /classes/base/links.class.inc
-	 */
-
-	function __on_delete_link($id, $link_type) {
-
-		if($link_type==13) {
-			$this->delete_installation($id);
-		}
-
-		/* {ON_DELETE_LINK_FUNCTION} */	
-	}
 
 }
