@@ -545,11 +545,9 @@ class cached_imap extends imap{
 		$message['attachments']=$this->find_message_attachments($struct, $message['body_ids']);
 
 		//go_debug($message['attachments']);
+		
 		for($i=0,$max=count($message['attachments']);$i<$max;$i++){
-
-			//not needed
-			unset($message['attachments'][$i]['filename'], $message['attachments'][$i]['description']);
-
+			
 			//go_debug('NAME: '.$message['attachments'][$i]['name']);
 
 			if(empty($message['attachments'][$i]['name']) || $message['attachments'][$i]['name']=='false'){
@@ -557,7 +555,8 @@ class cached_imap extends imap{
 					$message['attachments'][$i]['name']=File::strip_invalid_chars($this->mime_header_decode($message['attachments'][$i]['subject'])).'.eml';
 				}elseif($message['attachments'][$i]['type']=='message')
 				{
-					$message['attachments'][$i]['name']='message.eml';
+					go_debug($message['attachments'][$i]);
+					$message['attachments'][$i]['name']=isset($message['attachments'][$i]['description']) ? File::strip_invalid_chars($message['attachments'][$i]['description']).'.eml' : 'message.eml';
 				}elseif($message['attachments'][$i]['subtype']=='calendar')
 				{
 					$message['attachments'][$i]['name']=$lang['email']['event'].'.ics';
@@ -574,6 +573,10 @@ class cached_imap extends imap{
 			{
 				$message['attachments'][$i]['name']=$this->mime_header_decode($message['attachments'][$i]['name']);
 			}
+
+			//not needed
+			unset($message['attachments'][$i]['filename'], $message['attachments'][$i]['description']);
+
 			$message['attachments'][$i]['extension']=File::get_extension($message['attachments'][$i]['name']);
 			$message['attachments'][$i]['human_size']=Number::format_size($message['attachments'][$i]['size']);
 

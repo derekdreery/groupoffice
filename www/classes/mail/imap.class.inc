@@ -1343,6 +1343,11 @@ class imap extends imap_bodystruct {
 
 			if(isset($vals['type'])){
 				$vals['imap_id'] = $id;
+				
+				//sometimes NIL is returned from Dovecot?!?
+				if($vals['id']=='NIL')
+					$vals['id']='';
+
 				$attachments[]=$vals;
 			}elseif(isset($vals['subs'])) {
 				$attachments = $this->find_message_attachments($vals['subs'],$skip_ids,	$attachments);
