@@ -457,9 +457,8 @@ try {
 					throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));
 				}
 
-
 				$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
-				$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
+				$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding']);
 				$imap->disconnect();
 
 				require_once($GO_CONFIG->class_path.'Date.class.inc.php');

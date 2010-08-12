@@ -197,8 +197,17 @@ try{
 				require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
 				$c = new cryptastic();
 
-				SetCookie("GO_UN",$c->encrypt($username),time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
-				SetCookie("GO_PW",$c->encrypt($password),time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
+				$enc_username = $c->encrypt($username);
+				if(empty($enc_username)){
+					$enc_username=$username;
+					$enc_password=$password;
+				}else
+				{
+					$enc_password=$c->encrypt($password);
+				}
+
+				SetCookie("GO_UN",$enc_username,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
+				SetCookie("GO_PW",$enc_password,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
 			}
 			
 			$fullscreen = isset($_POST['fullscreen']) ? '1' : '0';

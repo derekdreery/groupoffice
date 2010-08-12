@@ -1,3 +1,7 @@
+2010/08/12 3.5.20
+- Sync with Symbian phones was broken
+- Remind login didn't work without php mcrypt extension
+
 2010/08/10 3.5.19
 - Sync supports latest Funambol clients for Outlook and TB3 beta client.
 - Sync supports SyncEvolution

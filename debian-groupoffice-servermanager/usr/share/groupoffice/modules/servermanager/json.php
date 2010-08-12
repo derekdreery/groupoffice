@@ -213,18 +213,18 @@ try{
 				$response['results'][] = $installation;
 			}
 
-			if(file_exists('/etc/groupoffice/license.inc.php')){
-				require('/etc/groupoffice/license.inc.php');
-				$response['max_users']=$max['users'];
-				$response['max_billing']=$max['billing'];
+			//if(file_exists('/etc/groupoffice/license.inc.php')){
+				//require('/etc/groupoffice/license.inc.php');
+				$response['max_users']=$servermanager->get_max_server_users();
+				//$response['max_billing']=$max['billing'];
 				
 				$usage = $servermanager->get_used_licenses();
-				$response['total_users']=$usage['total_users'];
-				$response['total_billing']=$usage['total_billing'];
-			}else
+				$response['total_users']=intval($usage['total_users']);
+				//$response['total_billing']=$usage['total_billing'];
+			/*}else
 			{
 				$response['max_users']=0;
-			}
+			}*/
 
 			break;
 			/* {TASKSWITCH} */
