@@ -174,7 +174,7 @@ class ical2array {
 		}
 
 		if($this->version>1){
-			$data = preg_replace("/\n\s/",'', $data);
+			$data = preg_replace("/\n[ \t]{1}/",'', $data);
 
 			if(stripos($this->prodid, 'nexthaus')){
 				$description = preg_match('/DESCRIPTION:(.*)[A-Z]+(:|;)/Us', $data, $matches);

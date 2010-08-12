@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
  *
  * This file is part of Group-Office. You should have received a copy of the
@@ -11,12 +11,17 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
+
+
+if(file_exists($GLOBALS['GO_CONFIG']->root_path.'modules/professional/check.php'))
+	require_once($GLOBALS['GO_CONFIG']->root_path.'modules/professional/check.php');
+
 class servermanager extends db {
 
 	/*
 	 * Don't change this variable or pro installations won't work anymore!
 	 */
-	var $pro_modules = array('mailings','projects','gota','sync','customfields');
+	var $pro_modules = array('mailings','projects','gota','sync','customfields','billing','tickets');
 
 	public function __on_load_listeners($events) {
 		$events->add_listener('update_user', __FILE__, 'servermanager', 'update_user');
@@ -24,7 +29,7 @@ class servermanager extends db {
 
 	public function get_all_config_files($roots){
 		global $GO_CONFIG;
-		
+
 		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 
@@ -96,7 +101,7 @@ class servermanager extends db {
 		if($installation['name']=='servermanager'){
 			$installation['status']='ignore';
 		}
-		
+
 		$features=array();
 
 		$db2 = new db();
@@ -316,6 +321,16 @@ class servermanager extends db {
 	}
 
 	function check_license($config, $existing_installation_name='') {
+
+		if(!function_exists('license_get_max_server_users')){
+			/*
+			 * Users can break the license mechanism easily in the servermanager
+			 * but that doesn't really matter because the installations will
+			 * check the license in a hacker proof way.
+			 */
+			return true;
+		}
+
 		$pro = 0;
 		if(isset($config['allowed_modules'])) {
 			$allowed_modules = explode(',', $config['allowed_modules']);
@@ -326,12 +341,12 @@ class servermanager extends db {
 					break;
 				}
 			}
-			if(in_array('billing', $allowed_modules)) {
+			/*if(in_array('billing', $allowed_modules)) {
 				$available_billing_modules = $this->billing_modules_available($existing_installation_name);
 				if(!$available_billing_modules) {
 					throw new Exception('You don\'t have a billing module left');
 				}
-			}
+			}*/
 		}
 		if($pro) {
 			$available_users = $this->server_users_available($existing_installation_name);
@@ -346,13 +361,28 @@ class servermanager extends db {
 	}
 
 	function get_used_licenses() {
-		$sql = "SELECT SUM(max_users) AS total_users, SUM(billing) AS total_billing FROM sm_reports WHERE professional=1";
+		$sql = "SELECT SUM(max_users) AS total_users FROM sm_installations WHERE professional=1";
 		$this->query($sql);
 		return $this->next_record();
 	}
 
+	function get_max_server_users(){
+		global $GO_CONFIG;
+
+		$max_users=0;
+		if(isset($GO_CONFIG->test_servermanager)){
+			$max_users=2;
+		}elseif(function_exists('license_get_max_server_users')){
+			$max_users=license_get_max_server_users();
+		}else
+		{
+			$max_users=0;
+		}
+		return $max_users;
+	}
+
 	function server_users_available($installation_name='') {
-		$sql = "SELECT SUM(max_users) AS total_users FROM sm_reports WHERE professional=1";
+		$sql = "SELECT SUM(max_users) AS total_users FROM sm_installations WHERE professional=1";
 
 		if(!empty($installation_name)) {
 			$sql .= " AND name!='".$this->escape($installation_name)."'";
@@ -361,16 +391,12 @@ class servermanager extends db {
 		$this->query($sql);
 		$report = $this->next_record();
 
-		if(file_exists('/etc/groupoffice/license.inc.php'))
-			require('/etc/groupoffice/license.inc.php');
-		else
-			$max['users']=0;
+		$max_users=$this->get_max_server_users();
 
-
-		return $max['users']-$report['total_users'];
+		return $max_users-$report['total_users'];
 	}
 
-	function billing_modules_available($installation_name='') {
+	/*function billing_modules_available($installation_name='') {
 		$sql = "SELECT SUM(billing) AS total_billing FROM sm_reports";
 
 		if(!empty($installation_name)) {
@@ -386,7 +412,7 @@ class servermanager extends db {
 			$max['billing']=0;
 
 		return $max['billing']-$report['total_billing'];
-	}
+	}*/
 
 	/**
 	 * Add a New trial
@@ -574,7 +600,7 @@ class servermanager extends db {
 
 		$installation['status_change_time']=time();
 
-		
+
 
 		$installation['id']=$this->nextid('sm_installations');
 		if($this->insert_row('sm_installations', $installation)) {
@@ -738,23 +764,5 @@ class servermanager extends db {
 
 
 	/* {CLASSFUNCTIONS} */
-
-
-	/**
-	 * When a an item gets deleted in a panel with links. Group-Office attempts
-	 * to delete the item by finding the associated module class and this function
-	 *
-	 * @param int $id The id of the linked item
-	 * @param int $link_type The link type of the item. See /classes/base/links.class.inc
-	 */
-
-	function __on_delete_link($id, $link_type) {
-
-		if($link_type==13) {
-			$this->delete_installation($id);
-		}
-
-		/* {ON_DELETE_LINK_FUNCTION} */	
-	}
 
 }
