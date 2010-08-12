@@ -7,9 +7,7 @@
 
 
 #msg-div {
-    position:absolute;
-    left:35%;
-    top:10px;
+    position:absolute;    
     width:250px;
     z-index:20000;
 }
