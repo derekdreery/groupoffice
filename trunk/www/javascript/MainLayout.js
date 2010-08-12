@@ -577,7 +577,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 				this.msgCt.alignTo(this.tabPanel.el, 'tr-tr');
 			}else
 			{
-				this.msgCt.alignTo(Ext.getBody(), 'c-c', [350,0]);
+				this.msgCt.alignTo(Ext.getBody(), 't-t', [0,20]);
 			}
 			var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
 			var m = Ext.DomHelper.append(this.msgCt, {html:this.createBox(title, s, width)}, true);
