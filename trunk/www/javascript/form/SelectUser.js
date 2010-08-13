@@ -51,8 +51,8 @@ GO.form.SelectUser = function(config){
 		this.value=GO.settings.user_id;
 	}
 
-	if(!config.valueField)
-		config.valueField='id';
+	if(!this.valueField)
+		this.valueField='id';
 	
 	GO.form.SelectUser.superclass.constructor.call(this,{
 		displayField: 'name',		
