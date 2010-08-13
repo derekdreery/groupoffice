@@ -1721,7 +1721,7 @@ GO.email.showComposer = function(config){
 		
 		GO.email.composers.push(availableComposer);
 	}	
-	
+
 	availableComposer.show(config);
 	
 	return availableComposer;	
