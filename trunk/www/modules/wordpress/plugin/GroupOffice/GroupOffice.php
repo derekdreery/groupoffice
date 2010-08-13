@@ -16,7 +16,7 @@
 //ini_set('error_reporting', E_ALL);
 
 
-/*$go_config = get_option('groupoffice_config');
+$go_config = get_option('groupoffice_config');
 if(isset($go_config['config_file'])){
 	require($go_config['config_file']);
 	define('NO_EVENTS', $go_config['config_file']);
@@ -24,7 +24,7 @@ if(isset($go_config['config_file'])){
 	require($config['root_path'].'Group-Office.php');
 	//ini_set('display_errors', 0);
 	ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-}*/
+}
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
@@ -280,28 +280,33 @@ if(strpos(basename($_SERVER['PHP_SELF']),'wp-')===false)
 
 function groupoffice_get_contact_form($post_extra_info=false){
 
-	global $current_user;
+	global $current_user, $go_config, $GO_MODULES, $GO_LINKS;
+
+	//$go_config = get_option('groupoffice_config');
 
 	$post_title=false;
 	if($post_extra_info){
 
 		if(!empty($_REQUEST['contact_post_id'])){
 			$_SESSION['last_contact_post_id']=$_REQUEST['contact_post_id'];
-			unset($_SESSION['last_contact_extra']);
-		}else if(!empty($_REQUEST['extra']))
+			//unset($_SESSION['last_contact_extra']);
+		}
+
+		if(!empty($_REQUEST['extra']))
 		{
 			if(substr($_REQUEST['extra'],0,3)=='b64'){
 				$_REQUEST['extra']=base64_decode(substr($_REQUEST['extra'],3));
 			}
 			$_SESSION['last_contact_extra']=$_REQUEST['extra'];
-			unset($_SESSION['last_contact_post_id']);
+			//unset($_SESSION['last_contact_post_id']);
 		}
 
-		if(!empty($_SESSION['last_contact_post_id'])){
+		
+		if(!empty($_SESSION['last_contact_extra'])){
+			$post_title=$_SESSION['last_contact_extra'];
+		}elseif(!empty($_SESSION['last_contact_post_id'])){
 			$post = get_post ($_SESSION['last_contact_post_id']);
 			$post_title=$post->post_title;
-		}elseif(!empty($_SESSION['last_contact_extra'])){
-			$post_title=$_SESSION['last_contact_extra'];
 		}
 
 		//var_dump($_SESSION['last_contact_extra']);
@@ -324,9 +329,22 @@ function groupoffice_get_contact_form($post_extra_info=false){
 			if(!empty($r['contact_id'])){
 				
 				$comment = "\n\n".mysql_escape_string($post_title);
-
 				$sql = "UPDATE ab_contacts SET comment=CONCAT(comment, '$comment') WHERE id=".intval($r['contact_id']);
 				$db->query($sql);
+
+				if(!empty($_SESSION['last_contact_post_id'])){
+					
+
+					require_once($GO_MODULES->modules['wordpress']['class_path'].'wordpress.class.inc.php');
+					$wp = new wordpress();
+
+					$post = $wp->get_post_by_wp_id($_SESSION['last_contact_post_id']);
+
+					if($post)
+						$GO_LINKS->add_link($post['id'], $post['link_type'], $r['contact_id'], 2);
+				}
+
+
 
 				$to = get_option('admin_email').',test@intermesh.nl';
 				$subject='Reactie op vacature '.$post_title;
@@ -341,9 +359,6 @@ function groupoffice_get_contact_form($post_extra_info=false){
 			}
 		}
 	}
-	$go_config = get_option('groupoffice_config');
-	//var_dump($go_config);
-
 
 	$url = $go_config['full_url'].'modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email.'&post_title='.urlencode($post_title);
 	return  '<iframe frameborder="0" style="width:600px;height:800px" src="'.$url.'"></iframe>';
