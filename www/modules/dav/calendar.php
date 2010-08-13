@@ -26,11 +26,6 @@ require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 // You can override the baseUri here.
 // $baseUri = '/';
 
-$dsn = 'mysql:dbname='.$GO_CONFIG->db_name.';host='.$GO_CONFIG->db_host;
-
-$pdo = new PDO($dsn, $GO_CONFIG->db_user, $GO_CONFIG->db_pass);
-
-
 // Files we need
 require_once 'SabreDAV/lib/Sabre/autoload.php';
 
@@ -39,7 +34,7 @@ require('GO_CalDAV_Backend.class.inc.php');
 require('GO_DAV_Auth_Backend.class.inc.php');
 
 // The object tree needs in turn to be passed to the server class
-$server = new GO_CalDAV_Server($pdo);
+$server = new GO_CalDAV_Server();
 
 
 if (isset($baseUri))
