@@ -13,6 +13,34 @@
  */
 class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
 
+	 /**
+     * HTTP response helper
+     *
+     * @var Sabre_HTTP_Response
+     */
+    protected $httpResponse;
+
+
+    /**
+     * HTTP request helper
+     *
+     * @var Sabre_HTTP_Request
+     */
+    protected $httpRequest;
+
+	protected $realm;
+
+    /**
+     * __construct
+     *
+     */
+    public function __construct() {
+
+        $this->httpResponse = new Sabre_HTTP_Response();
+        $this->httpRequest = new Sabre_HTTP_Request();
+
+    }
+
 	/**
      * Authenticates the user based on the current request.
      *
@@ -22,8 +50,69 @@ class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
      * @return bool
      */
     public function authenticate(Sabre_DAV_Server $server,$realm){
-		return true;
+
+		$this->realm=$realm;
+
+		$cred = $this->getUserPass();		
+		if($cred){
+			global $GO_AUTH;
+
+			if ($GO_AUTH->login($cred[0], $cred[1], 'normal', false)) {
+				return true;
+			}
+		}
+
+		$this->requireLogin();
+
 	}
+
+	/**
+     * Returns the supplied username and password.
+     *
+     * The returned array has two values:
+     *   * 0 - username
+     *   * 1 - password
+     *
+     * If nothing was supplied, 'false' will be returned
+     *
+     * @return mixed
+     */
+    public function getUserPass() {
+
+        // Apache and mod_php
+        if (($user = $this->httpRequest->getRawServerValue('PHP_AUTH_USER')) && ($pass = $this->httpRequest->getRawServerValue('PHP_AUTH_PW'))) {
+
+            return array($user,$pass);
+
+        }
+
+        // Most other webservers
+        $auth = $this->httpRequest->getHeader('Authorization');
+
+        if (!$auth) return false;
+
+        if (strpos(strtolower($auth),'basic')!==0) return false;
+
+        return explode(':', base64_decode(substr($auth, 6)));
+
+    }
+
+    /**
+     * Returns an HTTP 401 header, forcing login
+     *
+     * This should be called when username and password are incorrect, or not supplied at all
+     *
+     * @return void
+     */
+    public function requireLogin() {
+
+        $this->httpResponse->setHeader('WWW-Authenticate','Basic realm="' . $this->realm . '"');
+        $this->httpResponse->sendStatus(401);
+
+		echo "Authentication required\n";
+		die();
+
+    }
 
     /**
      * Returns information about the currently logged in user.
@@ -34,7 +123,7 @@ class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
      */
     public function getCurrentUser(){
 		global $GO_USERS, $GO_SECURITY;
-		$user = $GO_USERS->get_user(1/*$GO_SECURITY->user_id*/);
+		$user = $GO_USERS->get_user($GO_SECURITY->user_id);
 		$user['uri']=$user['username'];
 		return $user;
 	}
