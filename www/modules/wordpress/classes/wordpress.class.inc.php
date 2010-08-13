@@ -146,6 +146,12 @@ class wordpress extends db{
 		return $this->next_record();
 	}
 
+	public function get_post_by_wp_id($id){
+		$sql = "SELECT * FROM wp_posts WHERE post_id=?";
+		$this->query($sql, 'i', array($id));
+		return $this->next_record();
+	}
+
 	public function set_contact_wp_user($r){
 		
 		return $this->replace_row('wp_contacts_wp_users', $r);
