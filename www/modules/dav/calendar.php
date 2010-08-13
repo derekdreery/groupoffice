@@ -10,6 +10,9 @@ This server features CalDAV and ACL support
 
 // settings
 require('../../Group-Office.php');
+
+//go_debug($_POST);
+
 require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
 require_once($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
 require_once($GO_CONFIG->class_path.'ical2array.class.inc');
@@ -39,7 +42,7 @@ if (isset($baseUri))
     $server->setBaseUri($baseUri);
 
 // Support for html frontend
-$browser = new Sabre_DAV_Browser_Plugin();
+$browser = new Sabre_DAV_Browser_Plugin(false);
 $server->addPlugin($browser);
 
 // And off we go!
