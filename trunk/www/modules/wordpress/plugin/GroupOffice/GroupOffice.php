@@ -280,7 +280,7 @@ if(strpos(basename($_SERVER['PHP_SELF']),'wp-')===false)
 
 function groupoffice_get_contact_form($post_extra_info=false){
 
-	global $current_user, $go_config, $GO_MODULES, $GO_LINKS;
+	global $current_user, $go_config, $GO_MODULES, $GO_LINKS, $GO_CONFIG;
 
 	//$go_config = get_option('groupoffice_config');
 
@@ -315,6 +315,9 @@ function groupoffice_get_contact_form($post_extra_info=false){
 	 //var_dump($post);
 
 	if(!empty($post_title)){
+
+		$replacements['vacature']=$post_title;
+
 		$post_title = date('d-m-Y').": reactie op ".$post_title;
 		if($current_user->ID>0){
 
@@ -354,6 +357,41 @@ function groupoffice_get_contact_form($post_extra_info=false){
 					"Content-Type: text/html";
 
 				wp_mail($to, $subject, $message, $headers);
+
+
+				//reactie naar klant
+
+				$path = $GO_CONFIG->file_storage_path.'users/admin/formulieren/reactie-vacature.eml';
+
+				if(file_exists($path)){
+					$email = file_get_contents($path);
+					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+					$swift = new GoSwiftImport($email);
+					$body=$swift->body;
+
+					foreach($replacements as $key=>$value){
+						$body = str_replace('{'.$key.'}', $value, $body);
+					}
+
+					require_once($GO_MODULES->modules['addressbook']['path'].'classes/addressbook.class.inc.php');
+					$ab = new addressbook();
+					$contact=$ab->get_contact($r['contact_id']);
+
+					if(isset($GO_MODULES->modules['mailings'])){
+						require_once($GO_MODULES->modules['mailings']['path'].'classes/templates.class.inc.php');
+						$tp = new templates();
+
+						$body=$tp->replace_contact_data_fields($body, $contact, false);
+					}
+
+					//echo $body;
+
+					$swift->set_body($body, 'html');
+
+					$swift->set_to($contact['email']);
+					$swift->sendmail();
+				}
+
 
 				return 'Hartelijk dank. Wij hebben uw reactie ontvangen en nemen spoedig contact met u op.';
 			}
