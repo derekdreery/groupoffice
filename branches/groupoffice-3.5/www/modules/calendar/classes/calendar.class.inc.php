@@ -2673,13 +2673,15 @@ class calendar extends db
 		$event['repeat_end_time'] = 0;
 		$event['month_time'] = 1;
 
-		if (!empty($event['rrule']) && $rrule = ical2array::parse_rrule($event['rrule']))
+		$ical2array = new ical2array();
+
+		if (!empty($event['rrule']) && $rrule = $ical2array->parse_rrule($event['rrule']))
 		{
 			if(isset($rrule['FREQ']))
 			{
 				if (isset($rrule['UNTIL']))
 				{
-					$event['repeat_end_time'] = ical2array::parse_date($rrule['UNTIL']);
+					$event['repeat_end_time'] = $ical2array->parse_date($rrule['UNTIL']);
 				}elseif(isset($rrule['COUNT']))
 				{
 					//go doesn't support this
