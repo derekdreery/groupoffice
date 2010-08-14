@@ -44,7 +44,7 @@ class GO_CalDAV_Server extends Sabre_DAV_Server {
 
 
         /* Server Plugins */
-        $authPlugin = new Sabre_DAV_Auth_Plugin($authBackend,'SabreDAV');
+        $authPlugin = new Sabre_DAV_Auth_Plugin($authBackend,'Group-Office');
         $this->addPlugin($authPlugin);
 
         $caldavPlugin = new Sabre_CalDAV_Plugin();
