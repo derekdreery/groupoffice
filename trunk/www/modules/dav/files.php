@@ -19,6 +19,9 @@ require('../../Group-Office.php');
 // You can override the baseUri here.
 // $baseUri = '/';
 
+if(!isset($GO_MODULES->modules['dav']))
+	die('dav module not installed');
+
 
 // Files we need
 require_once 'SabreDAV/lib/Sabre/autoload.php';
@@ -29,13 +32,20 @@ require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc.php")
 
 
 // Create the root node
-$root = new GO_DAV_Root_Directory('/');
+//$root = new GO_DAV_Root_Directory('/');
+
+$children = array();
+if($GO_SECURITY->logged_in()){
+	$children[] = new Sabre_DAV_FS_Directory($GO_CONFIG->file_storage_path . 'users/' . $_SESSION['GO_SESSION']['username']);
+	$children[] = new GO_DAV_Shared_Directory();
+}
+
+$root = new Sabre_DAV_SimpleDirectory('root',$children);
+
 
 // The rootnode needs in turn to be passed to the server class
 $server = new Sabre_DAV_Server($root);
-
-if (isset($baseUri))
-    $server->setBaseUri($baseUri);
+$server->setBaseUri($GO_MODULES->modules['dav']['url'].'files.php/');
 
 // Support for LOCK and UNLOCK
 $lockBackend = new Sabre_DAV_Locks_Backend_FS($GO_CONFIG->tmpdir);
