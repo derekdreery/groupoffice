@@ -74,3 +74,6 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cal_categories` (
 
 $updates[]="ALTER TABLE `cal_events` ADD `category_id` INT NOT NULL;";
 $updates[]="ALTER TABLE `cal_events` ADD INDEX ( `category_id` )";
+
+
+$updates[]="ALTER TABLE  `cal_events` ADD  `uuid` VARCHAR( 100 ) NOT NULL AFTER  `id` , ADD INDEX (  `uuid` )";

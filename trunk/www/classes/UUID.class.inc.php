@@ -101,6 +101,20 @@ class UUID {
     );
   }
 
+	public static function create($type, $name){
+		global $GO_CONFIG;
+
+		//get or create namespace uuid for Group-Office
+		$namespace = $GO_CONFIG->get_setting('uuid_namespace');
+		if(!$namespace){
+			$namespace = UUID::v4();
+			$GO_CONFIG->save_setting('uuid_namespace', $namespace);
+		}
+
+		return UUID::v5($namespace, $type.$name);
+
+	}
+
   public static function is_valid($uuid) {
     return preg_match('/^\{?[0-9a-f]{8}\-?[0-9a-f]{4}\-?[0-9a-f]{4}\-?'.
                       '[0-9a-f]{4}\-?[0-9a-f]{12}\}?$/i', $uuid) === 1;
