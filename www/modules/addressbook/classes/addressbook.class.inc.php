@@ -698,26 +698,27 @@ class addressbook extends db {
 			}
 		}
 
-		$fields = "c.id, c.addressbook_id, c.first_name, c.middle_name, c.last_name";
+		$fields = "c.id, c.addressbook_id, c.first_name, c.middle_name, c.last_name, co.name AS company_name";
 
 		if($query!='')
 			$query = '%'.$this->escape(str_replace(' ','%', $query)).'%';
 
-		$conditions = "WHERE email!='' ";
+		$conditions = "WHERE c.email!='' ";
 
 
 		$user_ab = $this->get_user_addressbook_ids($user_id);
 
 		if(count($user_ab) > 1) {
-			$conditions .= "AND addressbook_id IN (".implode(",",$user_ab).") ";
+			$conditions .= "AND c.addressbook_id IN (".implode(",",$user_ab).") ";
 		}elseif(count($user_ab)==1) {
-			$conditions .= "AND addressbook_id=".$user_ab[0]." ";
+			$conditions .= "AND c.addressbook_id=".$user_ab[0]." ";
 		}else {
 			return false;
 		}
 
-		if(!empty($query))
-			$conditions .= "AND (CONCAT(first_name,middle_name,last_name) LIKE '$query' OR email LIKE '$query')";
+		if(!empty($query)){
+			$conditions .= "AND (CONCAT(c.first_name,c.middle_name,c.last_name) LIKE '$query' OR c.email LIKE '$query' OR co.name LIKE '$query')";
+		}
 
 		$sql = "SELECT ";
 
@@ -725,9 +726,9 @@ class addressbook extends db {
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
 
-		$sql .= "$fields, email FROM ab_contacts c  $conditions ".
-			"UNION SELECT $fields, email2 AS email FROM ab_contacts c ".str_replace('email', 'email2', $conditions)." ".
-			"UNION SELECT $fields, email3 AS email FROM ab_contacts c ".str_replace('email', 'email3', $conditions)." ".
+		$sql .= "$fields, c.email FROM ab_contacts c LEFT JOIN ab_companies co ON co.id=c.company_id $conditions ".
+			"UNION SELECT $fields, email2 AS email FROM ab_contacts c LEFT JOIN ab_companies co ON co.id=c.company_id ".str_replace('email', 'email2', $conditions)." ".
+			"UNION SELECT $fields, email3 AS email FROM ab_contacts c LEFT JOIN ab_companies co ON co.id=c.company_id ".str_replace('email', 'email3', $conditions)." ".
 			"ORDER BY $sort_index $sort_order";
 
 		$this->query($sql);

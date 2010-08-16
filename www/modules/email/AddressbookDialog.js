@@ -182,7 +182,7 @@ GO.email.AddressbookDialog = function(config) {
 			root : 'results',
 			id : 'email',
 			totalProperty : 'total',
-			fields : ['id', 'name',  'email', 'ab_name'],
+			fields : ['id', 'name',  'email', 'ab_name', 'company_name'],
 			remoteSort : true
 		});
 
@@ -211,10 +211,15 @@ GO.email.AddressbookDialog = function(config) {
 				css : 'white-space:normal;',
 				sortable : true
 			}, {
+				header : GO.lang.strCompany,
+				dataIndex : 'company_name',
+				css : 'white-space:normal;',
+				sortable : true
+			}, {
 				header : GO.addressbook.lang.addressbook,
 				dataIndex : 'ab_name',
 				css : 'white-space:normal;',
-				sortable : true
+				sortable : false
 			}],
 			sm : new Ext.grid.RowSelectionModel(),
 			tbar : [GO.lang['strSearch'] + ': ', ' ',
