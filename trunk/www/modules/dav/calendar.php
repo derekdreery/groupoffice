@@ -31,7 +31,7 @@ require('GO_DAV_Auth_Backend.class.inc.php');
 
 // The object tree needs in turn to be passed to the server class
 $server = new GO_CalDAV_Server();
-$server->setBaseUri($GO_MODULES->modules['dav']['url'].'files.php/');
+$server->setBaseUri($GO_MODULES->modules['dav']['url'].'calendar.php/');
 
 
 // Support for html frontend
