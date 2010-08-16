@@ -2,4 +2,4 @@ groupoffice-com (3.5.21) three; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Mon, 16 Aug 2010 11:49:28 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Mon, 16 Aug 2010 11:52:27 +0200
