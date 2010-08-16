@@ -309,6 +309,12 @@ function groupoffice_get_contact_form($post_extra_info=false){
 			$post_title=$post->post_title;
 		}
 
+		$category='';
+		if(!empty($_SESSION['last_contact_post_id'])){
+			$categories = get_the_category($_SESSION['last_contact_post_id']);
+			$category=strtolower($categories[0]->name);
+		}
+
 		//var_dump($_SESSION['last_contact_extra']);
 	}
 
@@ -361,7 +367,11 @@ function groupoffice_get_contact_form($post_extra_info=false){
 
 				//reactie naar klant
 
-				$path = $GO_CONFIG->file_storage_path.'users/admin/formulieren/reactie-vacature.eml';
+				$dir = $GO_CONFIG->file_storage_path.'users/admin/formulieren/';
+
+				$path = $dir.'reactie-vacature-'.$category.'.eml';
+				if(!file_exists($path))
+					$path=$dir.'reactie-vacature.eml';
 
 				if(file_exists($path)){
 					$email = file_get_contents($path);
@@ -398,7 +408,11 @@ function groupoffice_get_contact_form($post_extra_info=false){
 		}
 	}
 
-	$url = $go_config['full_url'].'modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email.'&post_title='.urlencode($post_title);
+	$url = $go_config['full_url'].'modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email.'&post_title='.urlencode($post_title).'&category='.urlencode($category);
+
+	if(!empty($_SESSION['last_contact_post_id']))
+		$url .= '&post_id='.$_SESSION['last_contact_post_id'];
+
 	return  '<iframe frameborder="0" style="width:600px;height:800px" src="'.$url.'"></iframe>';
 }
 
