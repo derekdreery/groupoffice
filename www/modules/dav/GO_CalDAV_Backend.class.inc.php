@@ -92,8 +92,14 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		$this->cal->get_writable_calendars($this->get_user_id($principalUri));
 
+		$db = new db();
+
+
         $calendars = array();
         while($gocal = $this->cal->next_record()) {
+
+			$db->query("SELECT max(mtime) AS mtime, COUNT(*) AS count FROM cal_events WHERE calendar_id=?",'i', $gocal['id']);
+			$r=$db->next_record();
 
             //$components = explode(',',$row['components']);
 
@@ -101,7 +107,7 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
                 'id' => $gocal['id'],
                 'uri' => preg_replace('/[^\w]*/','',(strtolower(str_replace(' ','-',$gocal['name'])))),
                 'principaluri' => $principalUri,
-                '{' . Sabre_CalDAV_Plugin::NS_CALENDARSERVER . '}getctag' => '0',
+                '{' . Sabre_CalDAV_Plugin::NS_CALENDARSERVER . '}getctag' => $r['count'].':'.$r['mtime'],
                 '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VEVENT')),
 				'{DAV:}displayname'                          => $gocal['name'],
 				'{urn:ietf:params:xml:ns:caldav}calendar-description' => 'User calendar',
@@ -226,6 +232,8 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		go_debug("getCalendarObject($calendarId,$objectUri)");
 
+		//go_debug($_SESSION['GO_SESSION']['dav']['objectUriMap']);
+		
 		if(isset($_SESSION['GO_SESSION']['dav']['objectUriMap'][$objectUri])){
 			$objectUri=$_SESSION['GO_SESSION']['dav']['objectUriMap'][$objectUri];
 		}

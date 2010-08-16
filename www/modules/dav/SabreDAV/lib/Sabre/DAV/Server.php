@@ -1593,8 +1593,10 @@ class Sabre_DAV_Server {
             // If the entity-tag is '*' we are only allowed to make the
             // request succeed if a resource exists at that url.
             try {
+				go_debug($uri);
                 $node = $this->tree->getNodeForPath($uri);
             } catch (Sabre_DAV_Exception_FileNotFound $e) {
+				go_debug($e->getMessage());
                 throw new Sabre_DAV_Exception_PreconditionFailed('An If-Match header was specified and the resource did not exist','If-Match');
             }
 
