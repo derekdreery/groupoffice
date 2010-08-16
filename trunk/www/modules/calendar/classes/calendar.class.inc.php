@@ -232,7 +232,7 @@ class calendar extends db {
 
 		require($GO_LANGUAGE->get_language_file('calendar'));
 
-		go_debug($event);
+		//go_debug($event);
 
 		$html = '<table>'.
 						'<tr><td>'.$lang['calendar']['subject'].':</td>'.
@@ -1555,7 +1555,7 @@ class calendar extends db {
 		$interval_end_time,
 		'start_time','ASC',0,0,$only_busy_events)) {
 			while($record=$this->next_record()) {
-				go_debug($record);
+				//go_debug($record);
 				$this->calculate_event($record,
 								$interval_start_time,
 								$interval_end_time);
@@ -1577,7 +1577,7 @@ class calendar extends db {
 	function calculate_event($event, $interval_start_time, $interval_end_time) {
 		global $GO_SECURITY;
 
-		go_debug('interval: '.date('Ymd G:i', $interval_start_time).' - '.date('Ymd G:i', $interval_end_time));
+		//go_debug('interval: '.date('Ymd G:i', $interval_start_time).' - '.date('Ymd G:i', $interval_end_time));
 
 		if(empty($event['rrule'])) {
 			if($event['start_time'] < $interval_end_time && $event['end_time'] > $interval_start_time) {
@@ -1607,7 +1607,7 @@ class calendar extends db {
 
 				$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
 
-				go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
+				//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
 
 				if($calculated_event['start_time'] >= $interval_end_time || $calculated_event['end_time'] <= $interval_start_time)
 					break;
@@ -1940,6 +1940,29 @@ class calendar extends db {
 		}
 		return false;
 	}
+
+	function get_event_from_ical_string($ical_string){
+		global $GO_MODULES, $GO_CONFIG;
+
+		$count=0;
+
+		require_once($GO_CONFIG->class_path.'ical2array.class.inc');
+		$this->ical2array = new ical2array();
+
+		$vcalendar = $this->ical2array->parse_string($ical_string);
+
+		if(isset($vcalendar[0]['objects'])) {
+			while($object = array_shift($vcalendar[0]['objects'])) {
+				if($object['type'] == 'VEVENT') {
+					if($event = $this->get_event_from_ical_object($object)) {
+						return $event;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 
 	function import_ical_string($ical_string, $calendar_id=-1) {
 		global $GO_MODULES, $GO_CONFIG;
