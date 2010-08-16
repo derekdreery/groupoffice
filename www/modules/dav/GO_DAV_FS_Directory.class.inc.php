@@ -3,11 +3,15 @@
 class GO_DAV_Root_Directory extends Sabre_DAV_FS_Directory {
 
 	public function __construct($path='') {
-		global $GO_CONFIG;
+		global $GO_CONFIG, $GO_SECURITY;
 		$this->path = $GO_CONFIG->file_storage_path;
 
-		$this->children[$_SESSION['GO_SESSION']['username']] = new Sabre_DAV_FS_Directory($GO_CONFIG->file_storage_path . 'users/' . $_SESSION['GO_SESSION']['username']);
-		$this->children['Shared'] = new GO_DAV_Shared_Directory();
+		$this->children=array();
+
+		if($GO_SECURITY->logged_in()){
+			$this->children[$_SESSION['GO_SESSION']['username']] = new Sabre_DAV_FS_Directory($GO_CONFIG->file_storage_path . 'users/' . $_SESSION['GO_SESSION']['username']);
+			$this->children['Shared'] = new GO_DAV_Shared_Directory();
+		}
 	}
 
 	public function getChild($name) {

@@ -600,6 +600,8 @@ class Sabre_DAV_Server {
 
         // The requested path
         $path = $this->getRequestUri();
+
+		go_debug($path);
         
         $newProperties = $this->getPropertiesForPath($path,$requestedProperties,$depth);
 
