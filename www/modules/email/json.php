@@ -866,9 +866,13 @@ try {
 					$node_type=$node[0];
 					$node_id=$node[1];
 
-					if(!$email->is_folder_expanded($node_id, $GO_SECURITY->user_id))
+					if($node_type == 'folder' && !$email->is_folder_expanded($node_id, $GO_SECURITY->user_id))
 					{
 						$email->update_folder_state($node_id, $GO_SECURITY->user_id, true);
+					}
+					if($node_type == 'account' && !$email->is_account_expanded($node_id, $GO_SECURITY->user_id))
+					{
+						$email->update_account_state($node_id, $GO_SECURITY->user_id, true);
 					}
 				}else {
 					$node_type='root';
