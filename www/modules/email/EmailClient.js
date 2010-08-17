@@ -1784,7 +1784,7 @@ GO.email.showComposer = function(config){
 		
 		GO.email.composers.push(availableComposer);
 	}
-	
+
 	availableComposer.show(config);
 	
 	return availableComposer;
@@ -1812,9 +1812,10 @@ GO.linkHandlers[9] = function(id, remoteMessage){
 	if(!GO.email.linkedMessagePanel){
 		GO.email.linkedMessagePanel = new GO.email.LinkedMessagePanel();
 
-		GO.email.linkedMessageWin = new Ext.Window({
+		GO.email.linkedMessageWin = new GO.Window({
 			maximizable:true,
 			collapsible:true,
+			stateId:'em-linked-message-panel',
 			title: GO.email.lang.emailMessage,
 			height: 400,
 			width: 600,

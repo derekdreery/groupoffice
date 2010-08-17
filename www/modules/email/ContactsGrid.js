@@ -19,7 +19,7 @@ GO.email.ContactsGrid = function(config){
 		root : 'results',
 		id : 'email',
 		totalProperty : 'total',
-		fields : ['id', 'name',  'email', 'ab_name'],
+		fields : ['id', 'name',  'email', 'ab_name', 'company_name'],
 		remoteSort : true
 	});
 
@@ -34,9 +34,16 @@ GO.email.ContactsGrid = function(config){
 		}, {
 			header : GO.lang['strEmail'],
 			dataIndex : 'email'			
-		}, {
+		},{
+			header : GO.lang.strCompany,
+			dataIndex : 'company_name',
+			css : 'white-space:normal;',
+			sortable : true
+		},{
 			header : GO.addressbook.lang.addressbook,
-			dataIndex : 'ab_name'
+			dataIndex : 'ab_name',
+			css : 'white-space:normal;',
+			sortable : false
 		}]
 	});
 	config.cm=columnModel;
@@ -64,4 +71,4 @@ GO.email.ContactsGrid = function(config){
 
 Ext.extend(GO.email.ContactsGrid, GO.grid.GridPanel,{
 
-});
+	});

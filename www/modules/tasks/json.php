@@ -60,11 +60,14 @@ try {
 			$response['data']['repeat_end_time'] = 0;
 			$response['data']['month_time'] = 0;
 
-
-			if (!empty($response['data']['rrule']) && $rrule = ical2array::parse_rrule($response['data']['rrule'])) {
-				if(isset($rrule['FREQ'])) {
-					if (isset($rrule['UNTIL'])) {
-						$response['data']['repeat_end_time'] = ical2array::parse_date($rrule['UNTIL']);
+			$ical2array = new ical2array();
+			if (!empty($response['data']['rrule']) && $rrule = $ical2array->parse_rrule($response['data']['rrule']))
+			{
+				if(isset($rrule['FREQ']))
+				{
+					if (isset($rrule['UNTIL']))
+					{
+						$response['data']['repeat_end_time'] = $ical2array->parse_date($rrule['UNTIL']);
 					}elseif(isset($rrule['COUNT'])) {
 						//go doesn't support this
 					}else {
