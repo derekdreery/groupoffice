@@ -1,3 +1,9 @@
+2010/08/16 3.5.22
+- Time shift bug in timeregistration using alternative method fixed.
+
+2010/08/16 3.5.21
+- Task recurrence bug
+
 2010/08/12 3.5.20
 - Sync with Symbian phones was broken
 - Remind login didn't work without php mcrypt extension
