@@ -45,4 +45,7 @@ $updates[]="CREATE TABLE IF NOT EXISTS `ta_categories` (
 
 $updates[]="ALTER TABLE `ta_tasks` ADD `category_id` INT NOT NULL ";
 
+$updates[]="ALTER TABLE `ta_tasks` ADD `uuid` VARCHAR( 100 ) NOT NULL AFTER `id` ,
+ADD INDEX ( `uuid` ) ";
+
 ?>
