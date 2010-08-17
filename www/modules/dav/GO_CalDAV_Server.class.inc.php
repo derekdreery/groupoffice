@@ -23,17 +23,23 @@ class GO_CalDAV_Server extends Sabre_DAV_Server {
 
         /* Backends */
         $authBackend = new GO_DAV_Auth_Backend();
-        $calendarBackend = new GO_CalDAV_Backend();
+        $calendarBackend = new GO_CalDAV_Calendars_Backend();
+		$tasklistsBackend = new GO_CalDAV_Tasklists_Backend();
 
         /* Directory structure */
         $root = new Sabre_DAV_SimpleDirectory('root');
+		//$calendars = new Sabre_CalDAV_UserCalendars($authBackend, $calendarBackend, $_SESSION['GO_SESSION']['username']);
+		//$root->addChild($calendars);
+		
         $principals = new Sabre_DAV_Auth_PrincipalCollection($authBackend);
         $root->addChild($principals);
-        $calendars = new Sabre_CalDAV_CalendarRootNode($authBackend, $calendarBackend);
-		
-        $root->addChild($calendars);
 
-		
+        $calendars = new Sabre_CalDAV_CalendarRootNode($authBackend, $calendarBackend);
+		$root->addChild($calendars);
+
+		$tasklists = new GO_CalDAV_TasklistsRootNode($authBackend, $tasklistsBackend);
+		$root->addChild($tasklists);
+        
 
         $objectTree = new Sabre_DAV_ObjectTree($root);
 

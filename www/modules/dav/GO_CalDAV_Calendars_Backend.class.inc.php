@@ -12,29 +12,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
-
-	/**
-	 * pdo
-	 *
-	 * @var PDO
-	 */
-	private $pdo;
-	/**
-	 * List of CalDAV properties, and how they map to database fieldnames
-	 *
-	 * Add your own properties by simply adding on to this array
-	 *
-	 * @var array
-	 */
-	public $propertyMap = array(
-			'{DAV:}displayname' => 'name',
-			'{urn:ietf:params:xml:ns:caldav}calendar-description' => 'name',
-			'{urn:ietf:params:xml:ns:caldav}calendar-timezone' => 'timezone',
-			'{http://apple.com/ns/ical/}calendar-order' => 'calendarorder',
-			'{http://apple.com/ns/ical/}calendar-color' => 'calendarcolor',
-	);
-
+class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 	/**
 	 * Creates the backend
 	 *
@@ -65,20 +43,6 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
 		return $_SESSION['GO_SESSION']['dav']['principaluri_map'][$principalUri];
 	}
 
-	private function get_calendar_id($calendarUri) {
-		global $GO_USERS;
-
-		if (!isset($_SESSION['GO_SESSION']['dav']['principaluri_map']))
-			$_SESSION['GO_SESSION']['dav']['principaluri_map'] = array();
-
-		if (!isset($_SESSION['GO_SESSION']['dav']['principaluri_map'][$principalUri])) {
-			$user = $GO_USERS->get_user_by_username($principalUri);
-			$_SESSION['GO_SESSION']['dav']['principaluri_map'][$principalUri] = $user['id'];
-		}
-
-		return $_SESSION['GO_SESSION']['dav']['principaluri_map'][$principalUri];
-	}
-
 	/**
 	 * Returns a list of calendars for a principal
 	 *
@@ -87,11 +51,10 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
 	 */
 	public function getCalendarsForUser($principalUri) {
 
+		go_debug("c:getCalendarsForUser($principalUri)");
 
 		$this->cal->get_writable_calendars($this->get_user_id($principalUri));
-
 		$db = new db();
-
 
 		$calendars = array();
 		while ($gocal = $this->cal->next_record()) {
@@ -99,12 +62,12 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
 			$db->query("SELECT max(mtime) AS mtime, COUNT(*) AS count FROM cal_events WHERE calendar_id=?", 'i', $gocal['id']);
 			$r = $db->next_record();
 
-			//$components = explode(',',$row['components']);
-
 			$calendar = array(
 					'id' => $gocal['id'],
 					'uri' => preg_replace('/[^\w]*/', '', (strtolower(str_replace(' ', '-', $gocal['name'])))),
 					'principaluri' => $principalUri,
+					'size'=> $r['count'],
+					'mtime'=>$r['mtime'],
 					'{' . Sabre_CalDAV_Plugin::NS_CALENDARSERVER . '}getctag' => $r['count'] . ':' . $r['mtime'],
 					'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VEVENT')),
 					'{DAV:}displayname' => $gocal['name'],
@@ -113,7 +76,7 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
 					'{http://apple.com/ns/ical/}calendar-order' => '0',
 					'{http://apple.com/ns/ical/}calendar-color' => ''
 			);
-
+			
 			$calendars[] = $calendar;
 		}
 
@@ -133,7 +96,7 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
 	 */
 	public function createCalendar($principalUri, $calendarUri, array $properties) {
 
-		return false;
+		throw new Sabre_DAV_Exception_Forbidden();
 	}
 
 	/**
@@ -174,7 +137,7 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
 	 */
 	public function updateCalendar($calendarId, array $properties) {
 
-		return false;
+		throw new Sabre_DAV_Exception_Forbidden();
 	}
 
 	/**
@@ -185,7 +148,7 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
 	 */
 	public function deleteCalendar($calendarId) {
 
-		return false;
+		throw new Sabre_DAV_Exception_Forbidden();
 	}
 
 	/**
@@ -240,7 +203,7 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
 		 * client data in a separate table and if the mtime's match we use that.
 		 */
 
-		$sql = "SELECT e.uuid,e.id,e.mtime, d.mtime AS client_mtime, d.data  FROM cal_events e LEFT JOIN dav_events d ON d.uuid=e.uuid WHERE e.uuid=?";
+		$sql = "SELECT e.uuid,e.id,e.mtime, d.mtime AS client_mtime, d.data  FROM cal_events e LEFT JOIN dav_events d ON d.id=e.id WHERE e.uuid=?";
 		$this->cal->query($sql, 's', $objectUri);
 		$event = $this->cal->next_record();
 
@@ -277,15 +240,16 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
 		if (!$event)
 			return false;
 
-		$event['uuid']=$dav_event['uuid']=$objectUri;
+		$event['uuid']=$objectUri;
 		$event['calendar_id'] = $calendarId;
 	
 		$event['mtime']=$dav_event['mtime']=time();
+		
+		//store calendar data because we need to reply with the exact client
+		//data
+		$dav_event['id']=$this->cal->add_event($event);
 		$dav_event['data']=$calendarData;
-
 		$this->cal->insert_row('dav_events', $dav_event);
-
-		$this->cal->add_event($event);
 	}
 
 
@@ -308,15 +272,13 @@ class GO_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		$goevent = $this->cal->get_event_by_uuid($objectUri);
 
-		$event['id'] = $goevent['id'];
+		$event['id'] = $dav_event['id']= $goevent['id'];
 		$event['calendar_id'] = $calendarId;
-
-		$dav_event['uuid']=$objectUri;
 
 		$event['mtime']=$dav_event['mtime']=time();
 		$dav_event['data']=$calendarData;
 
-		$this->cal->update_row('dav_events', 'uuid', $dav_event);
+		$this->cal->update_row('dav_events', 'id', $dav_event);
 		$this->cal->update_event($event);
 	}
 
