@@ -47,26 +47,28 @@ CREATE TABLE IF NOT EXISTS `ta_lists` (
 DROP TABLE IF EXISTS `ta_tasks`;
 CREATE TABLE IF NOT EXISTS `ta_tasks` (
   `id` int(11) NOT NULL,
+  `uuid` varchar(100) NOT NULL,
   `tasklist_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
   `start_time` int(11) NOT NULL,
   `due_time` int(11) NOT NULL,
-  `completion_time` int(11) NOT NULL default '0',
-  `name` varchar(100) default NULL,
+  `completion_time` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(100) DEFAULT NULL,
   `description` text,
-  `status` varchar(20) default NULL,
+  `status` varchar(20) DEFAULT NULL,
   `repeat_end_time` int(11) NOT NULL,
   `reminder` int(11) NOT NULL,
   `rrule` varchar(50) NOT NULL,
-  `files_folder_id` INT NOT NULL,
+  `files_folder_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY (`id`),
   KEY `list_id` (`tasklist_id`),
   KEY `rrule` (`rrule`),
-  KEY `category_id` (`category_id`)
+  KEY `uuid` (`uuid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `go_links_12`;
 CREATE TABLE IF NOT EXISTS `go_links_12` (

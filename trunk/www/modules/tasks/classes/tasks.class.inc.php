@@ -811,6 +811,12 @@ class tasks extends db
 		return $this->next_record(DB_ASSOC);
 	}
 
+	function get_task_by_uuid($uuid){
+		$sql = "SELECT * FROM ta_tasks WHERE uuid=?";
+		$this->query($sql, 's', $uuid);
+		return $this->next_record();
+	}
+
 	function delete_task($task_id)
 	{
 		if($task = $this->get_task($task_id))
@@ -1015,7 +1021,33 @@ class tasks extends db
 		}
 		return false;
 	}
-	
+
+
+
+	function get_task_from_ical_string($ical_string)
+	{
+		global $GO_MODULES, $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'ical2array.class.inc');
+		$this->ical2array = new ical2array();
+
+		$vcalendar = $this->ical2array->parse_string($ical_string);
+
+		if(isset($vcalendar[0]['objects']))
+		{
+			while($object = array_shift($vcalendar[0]['objects']))
+			{
+				if($object['type'] == 'VTODO')
+				{
+					if($task = $this->get_task_from_ical_object($object))
+					{
+						return $task;
+					}
+				}
+			}
+		}
+		return false;
+	}
 	
 	
 
