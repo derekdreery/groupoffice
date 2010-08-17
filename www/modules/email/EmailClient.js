@@ -656,28 +656,35 @@ GO.email.EmailClient = function(config){
 		this.body.unmask();
 		if(node.childNodes[0])
 		{
-			var firstAccountNode = node.childNodes[0];
-			
+			var firstAccountNode=false;
+
 			this.updateNotificationEl();
-			
-			firstAccountNode.on('load', function(node){
-				
-				if(node.childNodes[0])
-				{
-					var firstInboxNode = node.childNodes[0];
-					
-					this.setAccount(
-						firstInboxNode.attributes.account_id,
-						firstInboxNode.attributes.folder_id,
-						firstInboxNode.attributes.mailbox,
-						firstInboxNode.parentNode.attributes.usage
-						);
-				//if(!this.checkMailStarted)
-				//this.checkMail.defer(this.checkMailInterval, this);
+
+			for(var i=0;i<node.childNodes.length;i++){
+				firstAccountNode = node.childNodes[i];
+
+				if(firstAccountNode.expanded){
+
+					firstAccountNode.on('load', function(node){
+
+						if(node.childNodes[0])
+						{
+							var firstInboxNode = node.childNodes[0];
+
+							this.setAccount(
+								firstInboxNode.attributes.account_id,
+								firstInboxNode.attributes.folder_id,
+								firstInboxNode.attributes.mailbox,
+								firstInboxNode.parentNode.attributes.usage
+								);
+						//if(!this.checkMailStarted)
+						//this.checkMail.defer(this.checkMailInterval, this);
+						}
+					},this, {
+						single: true
+					});
 				}
-			},this, {
-				single: true
-			});
+			}
 			
 			
 		}
