@@ -22,11 +22,16 @@ require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.
 require_once($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
 require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 
+require_once($GO_MODULES->modules['tasks']['class_path'].'tasks.class.inc.php');
+require_once($GO_MODULES->modules['tasks']['class_path'].'export_tasks.class.inc.php');
+
 // Files we need
 require_once 'SabreDAV/lib/Sabre/autoload.php';
 
 require('GO_CalDAV_Server.class.inc.php');
-require('GO_CalDAV_Backend.class.inc.php');
+require('GO_CalDAV_Calendars_Backend.class.inc.php');
+require('GO_CalDAV_Tasklists_Backend.class.inc.php');
+require('GO_CalDAV_TasklistsRootNode.class.inc.php');
 require('GO_DAV_Auth_Backend.class.inc.php');
 
 // The object tree needs in turn to be passed to the server class

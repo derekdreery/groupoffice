@@ -101,7 +101,7 @@ class GO_DAV_Shared_Directory extends GO_DAV_Root_Directory implements Sabre_DAV
 	 */
 	public function createFile($name, $data = null) {
 
-		return false;
+		throw new Sabre_DAV_Exception_Forbidden();
 	}
 
 	/**
@@ -112,7 +112,7 @@ class GO_DAV_Shared_Directory extends GO_DAV_Root_Directory implements Sabre_DAV
 	 */
 	public function createDirectory($name) {
 
-		return false;
+		throw new Sabre_DAV_Exception_Forbidden();
 	}
 
 	/**
@@ -122,7 +122,7 @@ class GO_DAV_Shared_Directory extends GO_DAV_Root_Directory implements Sabre_DAV
 	 */
 	public function delete() {
 
-		return false;
+		throw new Sabre_DAV_Exception_Forbidden();
 	}
 
 	/**
