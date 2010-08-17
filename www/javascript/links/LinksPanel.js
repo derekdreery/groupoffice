@@ -320,7 +320,7 @@ GO.grid.LinksPanel = function(config){
 				},
 				scope: this
 
-			},/*'-',this.deleteButton = new Ext.Button({
+			}/*'-',this.deleteButton = new Ext.Button({
 				iconCls: 'btn-delete',
 				text: GO.lang['cmdDelete'],
 				cls: 'x-btn-text-icon',
