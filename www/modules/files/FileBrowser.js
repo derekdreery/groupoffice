@@ -1241,11 +1241,15 @@ sendOverwrite : function(params){
 	}
 		
 	this.overwriteParams = params;
+
+	this.getEl().mask(GO.lang.waitMsgSave);
 		
 	Ext.Ajax.request({
 		url: GO.settings.modules.files.url+'action.php',
 		params:this.overwriteParams,
 		callback: function(options, success, response){
+
+			this.getEl().unmask();
 					
 			var pasteSources = Ext.decode(this.overwriteParams.paste_sources);
 			var pasteDestination = this.overwriteParams.paste_destination;
@@ -1271,8 +1275,7 @@ sendOverwrite : function(params){
 					Ext.MessageBox.alert(GO.lang['strError'], responseParams.feedback);
 					this.refresh();
 				}else
-				{
-						
+				{						
 					if(responseParams.file_exists)
 					{
 						if(!this.overwriteDialog)
