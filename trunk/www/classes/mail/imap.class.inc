@@ -1776,7 +1776,7 @@ class imap extends imap_bodystruct {
 	public function get_uidnext(){
 
 		if(empty($this->selected_mailbox['uidnext'])){			
-			$command = 'STATUS "'.$this->addslashes($this->utf7_encode($this->selected_mailbox['name'])).'"  (UIDNEXT)'."\r\n";
+			$command = 'STATUS "'.$this->addslashes($this->utf7_encode($this->selected_mailbox['name'])).'" (UIDNEXT)'."\r\n";
 			$this->send_command($command);
 			$result = $this->get_response(false, true);
 			
