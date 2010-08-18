@@ -37,7 +37,7 @@ GO.tasks.MainPanel = function(config){
 
 		if(records.length)
 		{
-			this.gridPanel.populateComboBox(records);
+			this.addTaskPanel.populateComboBox(records);
 
 			this.tasklist_id = records[0].data.id;
 			this.tasklist_name = records[0].data.name;
@@ -101,8 +101,12 @@ GO.tasks.MainPanel = function(config){
 		delete this.gridPanel.store.baseParams.categories;
 	}, this);
 
-	this.gridPanel = new GO.tasks.TasksPanel( {
-		title:GO.tasks.lang.tasks,
+
+	this.addTaskPanel = new GO.tasks.AddTaskPanel({
+		region:'north'
+	});
+
+	this.gridPanel = new GO.tasks.TasksPanel( {		
 		id:'ta-tasks-grid',
 		loadMask:true,
 		region:'center'
@@ -126,7 +130,7 @@ GO.tasks.MainPanel = function(config){
 		this.deleteButton.setDisabled(!store.reader.jsonData.data.write_permission);
 		this.addButton.setDisabled(!store.reader.jsonData.data.write_permission);
 
-		this.gridPanel.setTitle(store.reader.jsonData.grid_title);
+		this.gridPanel.ownerCt.setTitle(store.reader.jsonData.grid_title);
 
 		var found = false
 		for(var i=0; i<this.tasklist_ids.length; i++)
@@ -153,13 +157,7 @@ GO.tasks.MainPanel = function(config){
 
 			
 	config.layout='border';
-	//config.tbar=;
-	config.items=[
-	new Ext.Panel({
-		region:'north',
-		height:32,
-		baseCls:'x-plain',
-		tbar:new Ext.Toolbar({
+	config.tbar=new Ext.Toolbar({
 			cls:'go-head-tb',
 			items: [this.addButton = new Ext.Button({
 				iconCls: 'btn-add',
@@ -171,7 +169,7 @@ GO.tasks.MainPanel = function(config){
 						tasklist_id: this.tasklist_id,
 						tasklist_name: this.tasklist_name
 					});
-									
+
 				},
 				scope: this
 			}),this.deleteButton = new Ext.Button({
@@ -231,9 +229,8 @@ GO.tasks.MainPanel = function(config){
 				scope: this
 			}
 			]
-		})
-				
-	}),
+		});
+	config.items=[	
 	new Ext.Panel({
 		region:'west',
 		titlebar: false,
@@ -250,7 +247,13 @@ GO.tasks.MainPanel = function(config){
 		this.categoriesPanel
 		]
 	}),
-	this.gridPanel,
+	{
+		title:GO.tasks.lang.tasks,
+		region:'center',
+		border:false,
+		layout:'border',
+		items:[this.gridPanel, this.addTaskPanel]
+	},
 	this.taskPanel
 	];
 	
@@ -284,7 +287,7 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 
 			if(records.length)
 			{
-				this.gridPanel.populateComboBox(records);
+				this.addTaskPanel.populateComboBox(records);
 
 				this.tasklist_id = records[0].data.id;
 				this.tasklist_name = records[0].data.name;
