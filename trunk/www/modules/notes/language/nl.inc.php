@@ -20,3 +20,4 @@ $lang['notes']['notes']='Notes';
 
 $lang['notes']['general'] = 'General';
 $lang['notes']['incomplete_delete']='U heeft niet voldoende rechten om alle geselecteerde notities te verwijderen';
+$lang['notes']['multipleCategoriesSelected']='Meerdere categoriën geselecteerd';

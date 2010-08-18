@@ -202,12 +202,13 @@ try{
 				{
 					$category = $notes->get_category($category_id);
 
+					$category_names[]=$category['name'];
 					$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']);				
 					if($permission_level)
 					{
 						$readable_categories[] = $category_id;
 					}
-					if($permission_level >= GO_SECURITY::DELETE_PERMISSION)
+					if($permission_level >= GO_SECURITY::WRITE_PERMISSION)
 					{
 						$writable_categories[] = $category_id;
 					}
@@ -281,6 +282,12 @@ try{
 				$note['ctime']=Date::get_timestamp($note['ctime']);			
 								
 				$response['results'][] = $note;
+			}
+
+			if(count($category_names))
+			{
+				$GO_LANGUAGE->require_language_file('notes');
+				$response['grid_title'] = (count($category_names) > 1) ? $lang['notes']['multipleCategoriesSelected'] : $category_names[0];
 			}
 
 			break;

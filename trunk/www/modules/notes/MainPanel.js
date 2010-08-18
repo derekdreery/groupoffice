@@ -78,8 +78,10 @@ GO.notes.MainPanel = function(config){
 
 	this.centerPanel.store.on('load', function(){
 
-		northPanel.getTopToolbar().items.get('add').setDisabled(!this.centerPanel.store.reader.jsonData.data.write_permission);
-		northPanel.getTopToolbar().items.get('delete').setDisabled(!this.centerPanel.store.reader.jsonData.data.write_permission);
+		this.centerPanel.setTitle(this.centerPanel.store.reader.jsonData.grid_title);
+
+		this.getTopToolbar().items.get('add').setDisabled(!this.centerPanel.store.reader.jsonData.data.write_permission);
+		this.getTopToolbar().items.get('delete').setDisabled(!this.centerPanel.store.reader.jsonData.data.write_permission);
 
 		if(this.eastPanel.data.category_id!=this.category_id)
 		{
@@ -94,13 +96,7 @@ GO.notes.MainPanel = function(config){
 		border:true
 	});
 	
-	var northPanel = new Ext.Panel({
-		region: 'north',
-		
-		baseCls:'x-plain',
-		split: true,
-		resizable:false,
-		tbar: new Ext.Toolbar({		
+	config.tbar=new Ext.Toolbar({
 			cls:'go-head-tb',
 			items: [{
 			iconCls: 'btn-add',
@@ -141,11 +137,9 @@ GO.notes.MainPanel = function(config){
 				},
 				scope: this
 				
-			}]})
-	});
+			}]});
 
 	config.items=[
-		northPanel,
 		this.westPanel,
 		this.centerPanel,
 		this.eastPanel
