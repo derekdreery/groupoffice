@@ -61,7 +61,7 @@ GO.tasks.MainPanel = function(config){
 	
 	
 	var showInactiveCheck = new Ext.form.Checkbox({
-		boxLabel: GO.tasks.lang.showInactiveTasks,
+		boxLabel: GO.tasks.lang.showFutureTasks,
 		hideLabel: true,
 		checked:GO.tasks.showInactive
 	});
