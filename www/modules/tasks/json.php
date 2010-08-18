@@ -329,7 +329,7 @@ try {
 							$readable_tasklists[] = $tasklist_id;
 							$tasklist_names[] = $tasklist['name'];
 						}
-						if($permission_level >= GO_SECURITY::DELETE_PERMISSION) {
+						if($permission_level >= GO_SECURITY::WRITE_PERMISSION) {
 							$writable_tasklists[] = $tasklist_id;
 						}
 
