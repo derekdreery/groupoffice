@@ -676,7 +676,7 @@ class tasks extends db
 			$sort_order='ASC',
 			$start=0,
 			$offset=0,
-			$show_inactive=false,
+			$show_future=false,
 			$search_query='',
                         $categories=array(),
 			$start_time='',
@@ -726,7 +726,7 @@ class tasks extends db
 			$sql .= "t.tasklist_id IN (".$this->escape(implode(',',$lists)).")";
 		}
 
-		if(empty($show_inactive)) {
+		if(empty($show_future)) {
 			$now = mktime(0,0,0);
 			if($where) {
 				$sql .= " AND ";
@@ -734,7 +734,8 @@ class tasks extends db
 				$sql .= " WHERE ";
 				$where=true;
 			}
-			$sql .= "t.start_time<=".$now." AND (t.due_time>=".$now." OR t.completion_time=0)";
+			//$sql .= "t.start_time<=".$now." AND (t.due_time>=".$now." OR t.completion_time=0)";
+			$sql .= "t.start_time<=".$now;
 		}
 
 		if(!empty($search_query)) {
