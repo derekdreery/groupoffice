@@ -13,3 +13,5 @@ $lang['notes']['notes']='Notes';
 
 $lang['notes']['general'] = 'General';
 $lang['notes']['incomplete_delete']='You don\'t have permission to delete all selected notes';
+
+$lang['notes']['multipleCategoriesSelected']='Multiple categories selected';
