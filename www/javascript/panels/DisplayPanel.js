@@ -187,7 +187,9 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	
 	reset : function(){
 		//this.body.removeAllListeners();
-		this.body.update("");
+		if(this.body)
+			this.body.update("");
+		
 		this.data={};
 		this.link_id=this.collapsedLinkId=0;
 		var tbar = this.getTopToolbar();
