@@ -21,9 +21,8 @@
  * This class also allows you to generate custom xml data for your exceptions. This will be displayed
  * in the 'error' element in the failing response.
  */
-class Sabre_DAV_Exception extends Exception {
+class Sabre_DAV_Exception extends Exception { 
 
-	
     /**
      * Returns the HTTP statuscode for this exception 
      *
