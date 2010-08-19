@@ -2804,9 +2804,12 @@ class calendar extends db
 	}
 
 
-	public function get_visible_tasklists($calendar_id)
+	public function get_visible_tasklists($calendars)
 	{
-		$this->query("SELECT * FROM cal_visible_tasklists WHERE calendar_id = ?", 'i', $calendar_id);
+		if(!is_array($calendars))
+			$calendars = array($calendars);
+		
+		$this->query("SELECT DISTINCT tasklist_id FROM cal_visible_tasklists WHERE calendar_id IN (".implode(',', $calendars).")");
 		return $this->num_rows();
 	}
 

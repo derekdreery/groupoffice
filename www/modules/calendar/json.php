@@ -396,8 +396,11 @@ try {
 			$calendars=array();
 			$calendar_names=array();
 			$response['write_permission']=false;
+			
+			$calendar_props=array();
+
 			foreach($check_calendars as $calendar_id){
-				$calendar = $cal->get_calendar($calendar_id);
+				$calendar = $calendar_props[] = $cal->get_calendar($calendar_id);
 
 				$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
 				if($response['permission_level']>1){
@@ -485,7 +488,8 @@ try {
 
 			if(isset($GO_MODULES->modules['tasks'])) {
 				$visible_lists = array();
-				$cal->get_visible_tasklists($calendar['id']);
+
+				$cal->get_visible_tasklists($calendars);
 				while($cal->next_record()) {
 					$visible_lists[] = $cal->f('tasklist_id');
 				}
