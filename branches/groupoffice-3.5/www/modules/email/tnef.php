@@ -35,24 +35,49 @@ require_once ($GO_LANGUAGE->get_language_file('email'));
 
 $account = $email->get_account($_REQUEST['account_id']);
 
-$account = $imap->open_account($_POST['account_id'], $_POST['mailbox']);
-$file = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
+$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
+//$file = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
+$size = $imap->get_message_part_start($_REQUEST['uid'], $_REQUEST['imap_id']);
+
+$tmpdir = $GO_CONFIG->tmpdir.'winmail/';
+
+if(is_dir($tmpdir))
+	exec('rm -Rf '.$tmpdir);
+
+mkdir($tmpdir, $GO_CONFIG->folder_create_mode, true);
+$tmpfile  = $tmpdir.'winmail.dat';
+
+$fp = fopen($tmpfile, 'w+');
+
+if(!$fp)
+	die('Could not write to temp file');
+
+while($line = $imap->get_message_part_line()){
+	switch(strtolower($_REQUEST['encoding'])) {
+		case 'base64':
+			$line = base64_decode($line);
+			break;
+		case 'quoted-printable':
+			$line = quoted_printable_decode($line);
+			break;
+
+	}
+	if(!fputs($fp, $line))
+		die('Could not write to temp file');
+}
+fclose($fp);
 $imap->disconnect();
 
 
-$tmpdir = $GO_CONFIG->tmpdir.'groupoffice/'.$GO_SECURITY->user_id.'/mail/'.uniqid(time()).'/';
-mkdir($tmpdir, $GO_CONFIG->folder_create_mode, true);
-
-file_put_contents($tmpdir.'winmail.dat',$file);
 chdir($tmpdir);
 exec($GO_CONFIG->cmd_tnef.' winmail.dat');
-unlink($tmpdir.'winmail.dat');
+unlink($tmpfile);
 
-exec($GO_CONFIG->cmd_zip.' -r "tnef-attachments.zip" *.*');
+exec($GO_CONFIG->cmd_zip.' -r "tnef-attachments.zip" *');
 
 
 $browser = detect_browser();
-//header('Content-Length: '.strlen($file));
+header('Content-Length: '.filesize($tmpdir.'tnef-attachments.zip'));
 header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
 if ($browser['name'] == 'MSIE') {
 	header('Content-Type: application/download');
