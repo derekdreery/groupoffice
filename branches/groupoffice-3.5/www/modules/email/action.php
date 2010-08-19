@@ -397,23 +397,24 @@ try {
 								$file = $files->get_file($tmp_name);
 								$folder = $files->get_folder($file['folder_id']);
 								if(!$file || !$folder) {
-									throw new FileNotFoundException();
+									//throw new FileNotFoundException();
+									continue;
 								}
 								$tmp_name = $GO_CONFIG->file_storage_path.$files->build_path($folder).'/'.$file['name'];
 							}
 
-							if(!file_exists($tmp_name)) {
-								throw new FileNotFoundException();
+							if(file_exists($tmp_name)) {
+								//throw new FileNotFoundException();
+
+								$img = Swift_EmbeddedFile::fromPath($tmp_name);
+								$img->setContentType(File::get_mime($tmp_name));
+								$src_id = $swift->message->embed($img);
+
+								//Browsers reformat URL's so a pattern match
+								//$body = str_replace($inlineAttachment['url'], $src_id, $body);
+								$just_filename = utf8_basename($inlineAttachment['url']);
+								$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body);
 							}
-
-							$img = Swift_EmbeddedFile::fromPath($tmp_name);
-							$img->setContentType(File::get_mime($tmp_name));
-							$src_id = $swift->message->embed($img);
-
-							//Browsers reformat URL's so a pattern match
-							//$body = str_replace($inlineAttachment['url'], $src_id, $body);
-							$just_filename = utf8_basename($inlineAttachment['url']);
-							$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body);
 						}
 					}
 
