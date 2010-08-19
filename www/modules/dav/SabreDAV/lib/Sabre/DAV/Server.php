@@ -132,7 +132,7 @@ class Sabre_DAV_Server {
      *
      * @var bool 
      */
-    public $debugExceptions = true;
+    public $debugExceptions = false;
 
 
     /**
@@ -190,7 +190,6 @@ class Sabre_DAV_Server {
             $error->appendChild($DOM->createElement('s:exception',get_class($e)));
             $error->appendChild($DOM->createElement('s:message',$e->getMessage()));
             if ($this->debugExceptions) {
-
                 $error->appendChild($DOM->createElement('s:file',$e->getFile()));
                 $error->appendChild($DOM->createElement('s:line',$e->getLine()));
                 $error->appendChild($DOM->createElement('s:code',$e->getCode()));
@@ -216,9 +215,6 @@ class Sabre_DAV_Server {
             $this->httpResponse->sendStatus($httpCode);
             $this->httpResponse->setHeaders($headers);
             $this->httpResponse->sendBody($DOM->saveXML());
-
-			if(function_exists('go_debug'))
-				go_debug($DOM->saveXML());
 
         }
 
@@ -265,7 +261,7 @@ class Sabre_DAV_Server {
         $uri = $this->httpRequest->getRawServerValue('REQUEST_URI');
 
         // If PATH_INFO is not found, we just return /
-        if (!is_null($pathInfo)) {
+        if (!empty($pathInfo)) {
 
             // We need to make sure we ignore the QUERY_STRING part
             if ($pos = strpos($uri,'?'))
@@ -600,8 +596,6 @@ class Sabre_DAV_Server {
 
         // The requested path
         $path = $this->getRequestUri();
-
-		go_debug($path);
         
         $newProperties = $this->getPropertiesForPath($path,$requestedProperties,$depth);
 
@@ -1593,10 +1587,8 @@ class Sabre_DAV_Server {
             // If the entity-tag is '*' we are only allowed to make the
             // request succeed if a resource exists at that url.
             try {
-				go_debug($uri);
                 $node = $this->tree->getNodeForPath($uri);
             } catch (Sabre_DAV_Exception_FileNotFound $e) {
-				go_debug($e->getMessage());
                 throw new Sabre_DAV_Exception_PreconditionFailed('An If-Match header was specified and the resource did not exist','If-Match');
             }
 
@@ -1660,7 +1652,7 @@ class Sabre_DAV_Server {
             $lastMod = $node->getLastModified();
             if ($lastMod) {
                 $lastMod = new DateTime('@' . $lastMod);
-                if ($lastMod < $date) {
+                if ($lastMod <= $date) {
                     $this->httpResponse->sendStatus(304);
                     return false;
                 } 
@@ -1679,7 +1671,7 @@ class Sabre_DAV_Server {
             $lastMod = $node->getLastModified();
             if ($lastMod) {
                 $lastMod = new DateTime('@' . $lastMod);
-                if ($lastMod >= $date) {
+                if ($lastMod > $date) {
                     throw new Sabre_DAV_Exception_PreconditionFailed('An If-Unmodified-Since header was specified, but the entity has been changed since the specified date.','If-Unmodified-Since');
                 }
             }

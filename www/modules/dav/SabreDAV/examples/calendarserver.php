@@ -16,7 +16,7 @@ date_default_timezone_set('Canada/Eastern');
 // $baseUri = '/';
 
 /* Database */
-$pdo = new PDO('mysql:dbname=sabre;host=localhost','root','');
+$pdo = new PDO('sqlite:data/db.sqlite');
 $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
 //Mapping PHP errors to exceptions
@@ -26,7 +26,7 @@ function exception_error_handler($errno, $errstr, $errfile, $errline ) {
 set_error_handler("exception_error_handler");
 
 // Files we need
-require_once '../lib/Sabre/autoload.php';
+require_once 'lib/Sabre/autoload.php';
 
 // The object tree needs in turn to be passed to the server class
 $server = new Sabre_CalDAV_Server($pdo);
