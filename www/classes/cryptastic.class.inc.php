@@ -44,8 +44,8 @@ class cryptastic {
 	 */
 	public function encrypt( $msg, $k='', $base64 = true ) {
 
-		//Check if mcrypt is supported
-		if(!function_exists('mcrypt_module_open'))
+		//Check if mcrypt is supported. mbstring.func_overload will mess up substring with this function
+		if(!function_exists('mcrypt_module_open') || ini_get('mbstring.func_overload')>0)
 			return false;
 
 		if(empty($k)){
@@ -89,8 +89,8 @@ class cryptastic {
 	 */
 	public function decrypt( $msg, $k='', $base64 = true ) {
 
-		//Check if mcrypt is supported
-		if(!function_exists('mcrypt_module_open'))
+		//Check if mcrypt is supported. mbstring.func_overload will mess up substring with this function
+		if(!function_exists('mcrypt_module_open') || ini_get('mbstring.func_overload')>0)
 			return false;
 
 		if(empty($k)){
