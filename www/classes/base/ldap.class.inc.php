@@ -129,12 +129,16 @@ class ldap {
 		/* establish connection, select database */
 		if ( 0 == $this->Link_ID ) {
 
-			go_debug("pconnect($Host, $Port)");
+			go_debug("ldap_connect($Host, $Port)");
 
-			$this->Link_ID=ldap_connect($Host, $Port);
+			if($Port == "")
+				$this->Link_ID=ldap_connect($Host);
+			else
+				$this->Link_ID=ldap_connect($Host, $Port);
+
 			if (!$this->Link_ID) {
-				go_debug("pconnect($Host, $Port) failed.");
-				$this->halt("pconnect($Host, $Port) failed.");
+				go_debug("ldap_connect($Host, $Port) failed.");
+				$this->halt("ldap_connect($Host, $Port) failed.");
 				return 0;
 			}
 			ldap_set_option($this->Link_ID,LDAP_OPT_PROTOCOL_VERSION,3);
