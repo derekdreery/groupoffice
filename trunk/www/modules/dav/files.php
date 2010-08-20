@@ -48,7 +48,11 @@ $root = new Sabre_DAV_SimpleDirectory('root',$children);
 
 // The rootnode needs in turn to be passed to the server class
 $server = new Sabre_DAV_Server($root);
-$server->setBaseUri($GO_MODULES->modules['dav']['url'].'files.php/');
+
+//baseUri can also be /webdav/ with:
+//Alias /webdav/ /path/to/files.php
+$baseUri = strpos($_SERVER['REQUEST_URI'],'files.php') ? $GO_MODULES->modules['dav']['url'].'files.php/' : '/webdav/';
+$server->setBaseUri($baseUri);
 
 // Support for LOCK and UNLOCK
 $lockBackend = new Sabre_DAV_Locks_Backend_FS($GO_CONFIG->tmpdir);
