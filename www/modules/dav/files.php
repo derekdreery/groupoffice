@@ -27,6 +27,9 @@ if(!isset($GO_MODULES->modules['dav']))
 require_once 'SabreDAV/lib/Sabre/autoload.php';
 require('GO_DAV_Auth_Backend.class.inc.php');
 require('GO_DAV_FS_Directory.class.inc.php');
+//require('GO_DAV_Root_Directory.class.inc.php');
+require('GO_DAV_Shared_Directory.class.inc.php');
+require('GO_DAV_FS_File.class.inc.php');
 
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc.php");
 
@@ -36,7 +39,7 @@ require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc.php")
 
 $children = array();
 if($GO_SECURITY->logged_in()){
-	$children[] = new Sabre_DAV_FS_Directory($GO_CONFIG->file_storage_path . 'users/' . $_SESSION['GO_SESSION']['username']);
+	$children[] = new GO_DAV_FS_Directory('users/' . $_SESSION['GO_SESSION']['username']);
 	$children[] = new GO_DAV_Shared_Directory();
 }
 
