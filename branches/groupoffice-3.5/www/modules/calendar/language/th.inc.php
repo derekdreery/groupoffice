@@ -70,10 +70,32 @@ $lang['calendar']['private']='ส่วนบุคคล';
 $lang['calendar']['import_success']='%s การนำเข้าข้อมูลเรียบร้อย';
 
 $lang['calendar']['printTimeFormat']='จาก %s ถึง %s';
-$lang['calendar']['printLocationFormat']=' at location "%s"';
+$lang['calendar']['printLocationFormat']=' ณ สถานที่ "%s"';
 $lang['calendar']['printPage']='หน้า %s จาก %s';
 $lang['calendar']['printList']='รายการตารางนัดหมาย';
 
 $lang['calendar']['printAllDaySingle']='ทุกวัน';
 $lang['calendar']['printAllDayMultiple']='ทุกวันจาก %s จนถึง %s';
+
+$lang['calendar']['calendars']='ปฏิทิน';
+$lang['calendar']['open_resource']='เปิดการจอง';
+$lang['calendar']['resource_mail_subject']='ทรัพยากร \'%s\' ถูกจองแล้วจาก \'%s\' ในช่วง \'%s\'';//%s is resource name, %s is event name, %s is start date
+$lang['calendar']['resource_mail_body']='%s ได้จองทรัพยากร \'%s\' คุณคือผู้มีสิทธิ์ปรับปรุงแก้ไขเพิ่มเติมได้ กรุณาตรวจสอบเพื่อตอบรับหรือปฏิเสธการจอง'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['resource_modified_mail_subject']='ทรัพยากร \'%s\' ถูกจองจาก \'%s\' ช่วง \'%s\' ปรับปรุงเรียบร้อยแล้ว';//%s is resource name, %s is event name, %s is start date
+$lang['calendar']['resource_modified_mail_body']='%s ได้ปรับปรุงแก้ไขการจองสำหรับทรัพยากร \'%s\' คุณคือผู้มีสิทธิ์ปรับปรุงแก้ไขเพิ่มเติมได้ กรุณาตรวจสอบเพื่อตอบรับหรือปฏิเสธการจอง.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['your_resource_modified_mail_subject']='คุณจองการใช้งาน \'%s\' ช่วง \'%s\' สถานะ \'%s\' ถูกแก้ไขปรับปรุงแล้ว';//is resource name, %s is event name, %s is start date
+$lang['calendar']['your_resource_modified_mail_body']='%s ถูกปรับปรุงข้อมูลการจองใช้งานทรัพยากรของท่าน \'%s\'.';
+$lang['calendar']['your_resource_accepted_mail_subject']='คุณได้จอง \'%s\' ช่วง \'%s\' ถูกยอมรับแล้ว';//%s is resource name, %s is start date
+$lang['calendar']['your_resource_accepted_mail_body']='%s ได้ยอมรับการจองใช้งาน \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['your_resource_declined_mail_subject']='คุณได้จอง \'%s\' ช่วง \'%s\' ได้ถูกปฏิเสธ';//%s is resource name, %s is start date
+$lang['calendar']['your_resource_declined_mail_body']='%s ได้ปฏิเสธการจองใช้งาน  \'%s\'.'; //First %s is the name of the person who created the event. Second is the calendar name
+$lang['calendar']['birthday_name']='วันเกิด: {NAME}';
+$lang['calendar']['birthday_desc']='{NAME} ในวันนี้มีอายุ {AGE}';
+$lang['calendar']['unauthorized_participants_write']='คุณมีสิทธิ์เพียงพอที่จะกำหนดเวลาการนัดหมายสำหรับผู้ใช้:<br /><br />{NAMES}<br /><br />คุณอาจต้องการส่งคำเชิญเพื่อให้ผู้ถูกเชิญชวนตอบรับหรือกำหนดช่วงเวลานัดหมายเพิ่มเติมได้';
+$lang['calendar']['noCalSelected']= 'ปฏิทินยังไม่ได้ถูกเลือก กรุณาเลือกปฏิทินอย่างน้อยหนึ่งปฏิทินก่อนจากส่วนของการกำหนดค่าระบบ';
+$lang['calendar']['month_times'][1]='อันดับแรก';
+$lang['calendar']['month_times'][2]='อันดับที่สอง';
+$lang['calendar']['month_times'][3]='อันดับที่สาม';
+$lang['calendar']['month_times'][4]='อันดับที่สี่';
+$lang['calendar']['month_times'][5]='อันดับที่ห้า';
 

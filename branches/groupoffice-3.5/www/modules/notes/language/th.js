@@ -11,8 +11,8 @@ GO.notes.lang.category="หมวดหมู่";
 GO.notes.lang.categories="หมวดหมู่";
 
 /* new table: no_notes */
-GO.notes.lang.note="โน๊ต";
-GO.notes.lang.notes="โน๊ต";
+GO.notes.lang.note="บันทึกย่อ";
+GO.notes.lang.notes="บันทึกย่อ";
 GO.notes.lang.category_id="หมวดหมู่";
 GO.notes.lang.content="คำอธิบาย";
 
