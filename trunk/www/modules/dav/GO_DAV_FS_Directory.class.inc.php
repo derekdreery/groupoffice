@@ -1,151 +1,175 @@
 <?php
 
-class GO_DAV_Root_Directory extends Sabre_DAV_FS_Directory {
+/**
+ * Directory class
+ *
+ * @package Sabre
+ * @subpackage DAV
+ * @copyright Copyright (C) 2007-2010 Rooftop Solutions. All rights reserved.
+ * @author Evert Pot (http://www.rooftopsolutions.nl/)
+ * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ */
+class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollection, Sabre_DAV_IQuota {
 
-	public function __construct($path='') {
-		global $GO_CONFIG, $GO_SECURITY;
-		$this->path = $GO_CONFIG->file_storage_path;
+	protected $files;
+	protected $folder;
+	protected $write_permission;
+	protected $relpath;
 
-		$this->children=array();
+	public function __construct($path){
+		global $GO_CONFIG;
 
-		if($GO_SECURITY->logged_in()){
-			$this->children[$_SESSION['GO_SESSION']['username']] = new Sabre_DAV_FS_Directory($GO_CONFIG->file_storage_path . 'users/' . $_SESSION['GO_SESSION']['username']);
-			$this->children['Shared'] = new GO_DAV_Shared_Directory();
-		}
+		$this->relpath=$path;
+		$path = $GO_CONFIG->file_storage_path.$path;
+
+		parent::__construct($path);
+
+		/*
+		 * Group-Office files module class
+		 */
+		$this->files = new files();
+
+		
+		$this->folder=$this->files->resolve_path($this->relpath);
+
 	}
+    /**
+     * Creates a new file in the directory
+     *
+     * data is a readable stream resource
+     *
+     * @param string $name Name of the file
+     * @param resource $data Initial payload
+     * @return void
+     */
+    public function createFile($name, $data = null) {
+		
+		global $GO_SECURITY;
 
-	public function getChild($name) {
+		if(!$this->files->has_write_permission($GO_SECURITY->user_id, $this->folder))
+			throw new Sabre_DAV_Exception_Forbidden();
 
-		if (!isset($this->children[$name]))
-			throw new Sabre_DAV_Exception_FileNotFound('File with name ' . $name . ' could not be located');
+        $newPath = $this->path . '/' . $name;
+        file_put_contents($newPath,$data);
 
-		return $this->children[$name];
-	}
+    }
 
 	/**
-	 * Returns an array with all the child nodes
-	 *
-	 * @return Sabre_DAV_INode[]
-	 */
-	public function getChildren() {
+     * Renames the node
+     *
+     * @param string $name The new name
+     * @return void
+     */
+    public function setName($name) {
+		$this->checkWritePermission();
+
+        parent::setName($name);
+
+		$this->relpath = $this->files->strip_server_path($this->path);
+    }
+
+    /**
+     * Creates a new subdirectory
+     *
+     * @param string $name
+     * @return void
+     */
+    public function createDirectory($name) {
+
+		global $GO_SECURITY;
+
+		if(!$this->files->has_write_permission($GO_SECURITY->user_id, $this->folder))
+			throw new Sabre_DAV_Exception_Forbidden();
+
+        $newPath = $this->path . '/' . $name;
+        mkdir($newPath);
+
+    }
+
+    /**
+     * Returns a specific child node, referenced by its name
+     *
+     * @param string $name
+     * @throws Sabre_DAV_Exception_FileNotFound
+     * @return Sabre_DAV_INode
+     */
+    public function getChild($name) {
 
 		global $GO_CONFIG;
 
-		$nodes = array();
-		foreach ($this->children as $node) {
-			$nodes[] = $node;
+        $path = $this->path . '/' . $name;
+		
+        if (!file_exists($path)) throw new Sabre_DAV_Exception_FileNotFound('File with name ' . $path . ' could not be located');
+
+        if (is_dir($path)) {
+
+            return new GO_DAV_FS_Directory($this->relpath . '/' . $name);
+
+        } else {
+
+            return new GO_DAV_FS_File($this->relpath . '/' . $name);
+
+        }
+
+    }
+
+    /**
+     * Returns an array with all the child nodes
+     *
+     * @return Sabre_DAV_INode[]
+     */
+    public function getChildren() {
+
+        $nodes = array();
+        //foreach(scandir($this->path) as $node) if($node!='.' && $node!='..') $nodes[] = $this->getChild($node);
+
+		$this->files->check_folder_sync($this->folder, $this->relpath);
+		$this->files->get_folders($this->folder['id'],'name','ASC',0,0,true);
+
+		while($folder = $this->files->next_record()) {
+
+			$nodes[]=$this->getChild($folder['name']);
 		}
 
-		return $nodes;
-	}
-
-}
-
-class GO_DAV_Shared_Directory extends GO_DAV_Root_Directory implements Sabre_DAV_ICollection, Sabre_DAV_IQuota {
-
-	public function __construct($path='') {
-		global $GO_CONFIG;
-		$this->path = $path;
-
-
-		global $GO_SECURITY,$GO_CONFIG;
-
-		$nodes = array();
-
-		$files = new files();
-		$fs2 = new files();
-
-		$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
-
-		$nodes = array();
-
-		$count = 0;
-		while ($folder = $files->next_record()) {
-			$path = $fs2->build_path($folder);
-			$nodes[] = $GO_CONFIG->file_storage_path.$path;
-		}
-		sort($nodes);
-
-		//go_debug($nodes);
-
-		$fs = new filesystem();
-
-		$toplevel_nodes=array();
-
-		foreach ($nodes as $path) {
-			$is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
-			if (!$is_sub_dir) {
-				$this->children[utf8_basename($path)]=new Sabre_DAV_FS_Directory($path);
-
-				$last_path = $path;
-			}
+		$this->files->get_files($this->folder['id'], 'name', 'ASC', 0, 0);
+		while($file = $this->files->next_record()) {
+			$nodes[]=$this->getChild($file['name']);
 		}
 
-		return $toplevel_nodes;
+        return $nodes;
+
+    }
+
+    /**
+     * Deletes all files in this directory, and then itself
+     *
+     * @return void
+     */
+    public function delete() {
+
+		global $GO_SECURITY;
+
+		if(!$this->files->has_delete_permission($GO_SECURITY->user_id, $this->folder))
+			throw new Sabre_DAV_Exception_Forbidden();
 
 
-	}
+        foreach($this->getChildren() as $child) $child->delete();
+        rmdir($this->path);
 
-	public function getName() {
-		return 'Shared';
-	}
+    }
 
-	/**
-	 * Creates a new file in the directory
-	 *
-	 * data is a readable stream resource
-	 *
-	 * @param string $name Name of the file
-	 * @param resource $data Initial payload
-	 * @return void
-	 */
-	public function createFile($name, $data = null) {
+    /**
+     * Returns available diskspace information
+     *
+     * @return array
+     */
+    public function getQuotaInfo() {
 
-		throw new Sabre_DAV_Exception_Forbidden();
-	}
+        return array(
+            disk_total_space($this->path)-disk_free_space($this->path),
+            disk_free_space($this->path)
+            );
 
-	/**
-	 * Creates a new subdirectory
-	 *
-	 * @param string $name
-	 * @return void
-	 */
-	public function createDirectory($name) {
-
-		throw new Sabre_DAV_Exception_Forbidden();
-	}
-
-	/**
-	 * Deletes all files in this directory, and then itself
-	 *
-	 * @return void
-	 */
-	public function delete() {
-
-		throw new Sabre_DAV_Exception_Forbidden();
-	}
-
-	/**
-	 * Returns available diskspace information
-	 *
-	 * @return array
-	 */
-	public function getQuotaInfo() {
-
-		return array(
-				disk_total_space($this->path) - disk_free_space($this->path),
-				disk_free_space($this->path)
-		);
-	}
-
-	/**
-	 * Returns the last modification time, as a unix timestamp
-	 *
-	 * @return int
-	 */
-	public function getLastModified() {
-
-		return false;
-	}
+    }
 
 }
