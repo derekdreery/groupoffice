@@ -7,7 +7,7 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('modules'));
 
-	$lang['modules']['name'] = 'Moduły';
-	$lang['modules']['description'] = 'Moduł Admina; Zarządzanie modułami.';
-	$lang['modules']['deleteModule'] = 'Moduł "Moduły" nie może zostać usunięty!';
+$lang['modules']['name'] = 'Moduły';
+$lang['modules']['description'] = 'Moduł Admina; Zarządzanie modułami.';
+$lang['modules']['deleteModule'] = 'Moduł "Moduły" nie może zostać usunięty!';
 ?>

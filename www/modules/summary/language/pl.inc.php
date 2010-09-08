@@ -14,3 +14,4 @@ $lang['summary']['description']='Podsumowanie danych ze wszystkich modułów';
 $lang['summary']['default_rss_url']='http://www.e-polityka.pl/rss/rss.php?d=17';
 $lang['summary']['announcement']='Powiadomienie';
 $lang['summary']['announcements']='Powiadomienia';
+$lang['summary']['default_rss_title']='News';

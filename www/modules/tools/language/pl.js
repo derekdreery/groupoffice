@@ -1,5 +1,8 @@
 /**
  * Don't copy the next lines into a translation
+ * Polish Translation v1.1
+ * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
+ * Date : September, 05 2010
  */
 
 
@@ -9,8 +12,8 @@
  */
 
 
-GO.tools.lang.tools='Admin tools';
-GO.tools.lang.description='Click on one of the scripts below to execute it.';
+GO.tools.lang.tools='Narzędzia administracyjne';
+GO.tools.lang.description='Kliknij jeden z poniższych skryptów aby go wykonać.';
 
-GO.tools.lang.scripts='Scripts';
-GO.tools.lang.scriptOutput='Script output';
+GO.tools.lang.scripts='Skrypty';
+GO.tools.lang.scriptOutput='Wyjście skryptu';
