@@ -4,6 +4,9 @@
  * Polish Translation v1.0
  * Author : Robert GOLIAT info@robertgoliat.com  info@it-administrator.org
  * Date : January, 20 2009
+ * Polish Translation v1.1
+ * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
+ * Date : September, 05 2010
  */
 //
 //
@@ -30,3 +33,12 @@ GO.files.lang.fileBrowser = 'Przeglądarka plików';
 GO.files.lang.thumbnails = 'Miniatury';
 GO.files.lang.saveFile='Zapisz plik';
 GO.files.lang.confirmOverwrite='{filename} już istnieje, czy chcesz nadpisać ten plik?';
+GO.files.lang.file='Plik';
+GO.files.lang.emptyList='Pusta lista';
+GO.files.lang.newFiles='Nowy';
+GO.files.lang.olderVersions='Starsze wersje';
+GO.files.lang.uploadProperties='Właściwości podane niżej będą zastosowane do wszystkich pliów przesłąnych za pomocą opcji "Małe pliki"';
+GO.files.lang.selectFiles= 'Wybierz pliki';
+GO.files.lang.fitImage='Dopasuj obraz';
+GO.files.lang.normalSize='Normalny rozmiar';
+GO.files.lang.imageViewer='Przeglądarka obrazów';

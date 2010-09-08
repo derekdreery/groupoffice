@@ -16,9 +16,10 @@
  * Polish Translation v1.1
  * Author : Michał Kość michael12n@o2.pl
  * Date : September, 11 2009
+ * Polish Translation v1.2
+ * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
+ * Date : September, 03 2010
 */
-
-
 GO.lang.exportHiddenColumns='Eksportować także ukryte kolumny';
 GO.lang.searchQuery='szukaj';
 GO.lang.pleaseApplyFirst='Proszę zapisz poprzez naciśnięcie przycisku \'Zastosuj\'';
@@ -41,11 +42,10 @@ GO.lang.browse='Wybierz ...';
 GO.lang.largeUpload='Duże pliki/foldery (wymagana Java)';
 GO.lang.smallUpload='Małe pliki';
 
-
 GO.lang.lostPassword='Zapomiane hasło?';
-GO.lang.lostPasswordText='To recover your password you must be able to read your e-mail without access to Group-Office. If you enter your e-mail address a new password will be sent to your e-mail address.<br /><br />Enter your e-mail address:';
+GO.lang.lostPasswordText='Aby odzyskać wiadomość muszisz odebrać pocztę bez dostępu do {product_name}. Po wprowadzeniu adresu e-mail dostaniesz na te konto wiadomość z instrukcją zmiany hasła.<br /><br />Wprowadź swój adres e-mail:';
 
-GO.lang.noJava='Java Webstart is not installed. Java enables easier editing of files and easier file uploading. Please visit <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> to install it.';
+GO.lang.noJava='Java nie jest zainstalowana. Java umożliwia łatwiejszą edycję i wysyłanie plików. Wejdź na <a class="normal-link" href="http://www.java.com/download" target="_blank">http://www.java.com/download</a> aby zainstalować.';
 
 GO.lang.strHelpContents='Zasięgnij pomocy';
 GO.lang.strReportBug='Zgłoś błąd';
@@ -99,7 +99,7 @@ GO.lang.strWorkAddressNo = 'Nr domu (praca)';
 GO.lang.strWorkZip = 'Kod pocztowy (praca)';
 GO.lang.strWorkCity = 'Miasto (praca)';
 GO.lang.strWorkState = 'Województwo (praca)';
-GO.lang.strWorkCountry = 'Kraj (praca)',	
+GO.lang.strWorkCountry = 'Kraj (praca)',
 GO.lang.strWorkPhone = 'Telefon (praca)';
 GO.lang.strWorkFax = 'Fax (praca)';
 GO.lang.strPostAddress = 'Adres (poczta)';
@@ -140,7 +140,7 @@ GO.lang.cmdAdd = 'Dodaj';
 GO.lang.cmdAddPlusNew = 'Dodaj + nowy';
 GO.lang.cmdSavePlusNew='Zapisz + nowy';
 GO.lang.cmdSave = 'Zapisz';
-GO.lang.cmdSaveAs = 'Zapisz jako'; 
+GO.lang.cmdSaveAs = 'Zapisz jako';
 GO.lang.cmdEdit = 'Popraw';
 GO.lang.cmdLink = 'Połacz';
 GO.lang.cmdUnlink = 'Rozłącz';
@@ -150,6 +150,7 @@ GO.lang.cmdReset = 'Reset';
 GO.lang.cmdExport='Eksport';
 GO.lang.cmdPrint='Drukuj';
 GO.lang.cmdImport='Import';
+GO.lang.cmdInsert='Wstaw';
 
 GO.lang.cmdActions = 'Czynności';
 
@@ -223,10 +224,6 @@ GO.lang.strLoggedInAs= 'Zalogowano jako ';
 
 GO.lang.strErrorsInForm= 'Wystąpiły błędy w formularzu. Pola wypełnione nieprawidłowo zostały zaznaczone.';
 
-
-
-
-
 GO.lang.strMinute="Minuta";
 GO.lang.strMinutes="Minut";
 GO.lang.strHour="Godzina";
@@ -280,7 +277,6 @@ GO.lang.right = 'Prawo';
 
 GO.lang.noFilesModule = 'Dla tej operacji wymagane są pliki modułu';
 
-
 GO.lang.remindPassword='Zapamietaj mój login na tym komputerze';
 
 GO.lang.reminders = 'Przypomnienia';
@@ -310,10 +306,11 @@ GO.lang.more='Więcej';
 GO.lang.on ='Wł';
 GO.lang.off ='Wył';
 
-GO.lang.keyword='Keyword';
-
+GO.lang.keyword='Słowo kluczowe';
+GO.lang.keywords='Słowa kluczowe';
 
 GO.lang.total='Ogólnie';
+GO.lang.totals='Razem';
 
 GO.lang.closeApps='Zamknij aplikację';
 GO.lang.rightClickToClose='Kliknij prawym przyciskiem na zakładkę żeby ją zamknąć.';
@@ -321,4 +318,44 @@ GO.lang.rightClickToClose='Kliknij prawym przyciskiem na zakładkę żeby ją za
 GO.lang.adminMenu = 'Menu administratora';
 
 GO.lang.administration = 'Zarządzanie';
- 	  	 
+GO.lang.extra='Dodatki';
+
+GO.lang.permissionsLevel='Poziom';
+
+GO.lang.permissionRead='Tylko do odczytu';
+GO.lang.permissionWrite='Zapis';
+GO.lang.permissionDelete='Zapis i usuwanie';
+GO.lang.permissionManage='Zarządzanie';
+
+GO.lang.spellcheck= 'Sprawdź pisownię';
+GO.lang.spellcheckdetails= 'Sprawdzanie pisowni';
+GO.lang.spellcheckNoError= 'Nie znaleziono błędów';
+GO.lang.spellcheckServerError= 'Wystąpił problem ze sprawdzeniem pisowni. Jeżeli problem nadal występuje proszę się skontaktować ze wsparciem technicznym';
+GO.lang.spellcheckNoErrors= 'Treść emaila z [{1}] błędem(błędami)';
+GO.lang.spellcheckAsk= 'Wysłać bez sprawdzenia pisowni?';
+
+GO.lang.age='Wiek';
+
+GO.lang.selectFolder= 'Wybierz folder';
+
+GO.lang.userGroups='Grupy użytkownika';
+
+GO.lang.firebugDetected="Ostrzeżenie! Wykryto rozszeżenie Firebug";
+GO.lang.firebugWarning="Rozszeżenie Firebug może znacząco spowolnić pracę tej aplikacji. Prosze nie uzywać tego rozszeżenia podczas pracy.";
+
+GO.lang.indent='Zwiększ wcięcie';
+GO.lang.outdent='Zmniejsz wcięcie';
+GO.lang.removeFormatting='Usuń formatowanie';
+GO.lang.insertHorizontalRule='Wstaw poziomą linię';
+GO.lang.insertHRtext='Wprowadź szerokość lini w procentach<br/> wpisując znak % na końcu, albo<br/> ustaw szerokość stałą nie używając znaku %.';
+GO.lang.cmdInsert='Wstaw';
+
+GO.lang.width='Szerokość';
+GO.lang.thankyou='Dziękuję';
+GO.lang.applyMultiselect='Zastosuj multiselect';
+
+GO.lang.createdBy='Utworzony przez';
+
+GO.lang.debugModeDetected="Ostrzeżenie! Włączony tryb debugowania";
+
+GO.lang.noItemSelectedWarning='Wybierz conajmniej jedną opcję.';

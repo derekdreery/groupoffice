@@ -13,14 +13,15 @@
  * Polish Translation v1.0
  * Author : Robert GOLIAT info@robertgoliat.com  info@it-administrator.org
  * Date : January, 20 2009
+ * Polish Translation v1.1
+ * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
+ * Date : September, 05 2010
+ 
  */
 
 /**
  * Don't copy the next lines into a translation
  */
-//
-//
-//
 
 /**
  * Copy everything below for translations
@@ -36,8 +37,6 @@ GO.addressbook.lang.btnAddContact = 'Dodaj kontakt'	;
 GO.addressbook.lang.btnAddCompany = 'Dodaj firmę';
 GO.addressbook.lang.btnManage = 'Zarządzanie';
 GO.addressbook.lang.btnDownload = 'Pobierz plik';
-GO.addressbook.lang.btnSearch = 'Szukaj';
-GO.addressbook.lang.btnReset = 'Reset';
 GO.addressbook.lang.cmdFormSearchFirst = 'Szukaj w= ';
 GO.addressbook.lang.cmdFormSearchSecond = ' on= ';
 GO.addressbook.lang.cmdFormSearchThird = ' dla= ';
@@ -104,3 +103,21 @@ GO.addressbook.lang.sendMailing='Wyslij mailing';
 GO.addressbook.lang.importSuccess='Dane zaimportowane poprawnie';
 GO.addressbook.lang.searchOnSender='Szukaj w książce adresowej';
 GO.addressbook.lang.confirmCreate='Kontakt nie istnieje. Czy chcesz utworzyc nowy kontakt?';
+GO.addressbook.lang.newSearch='Nowe wyszukiwanie';
+GO.addressbook.lang.executeQuery='Wykonaj zapytanie';
+GO.addressbook.lang.savedQueries='Zapisane zapytania';
+GO.addressbook.lang.selectField= 'Wybierz pole';
+GO.addressbook.lang.matchFields='Dopasuj pola';
+GO.addressbook.lang.advancedSearch='Szukanie zaawansowane';
+GO.addressbook.lang.defaultAddressFormat='Domyślny format adresu';
+GO.addressbook.lang.defaultSalutation='Domyślne powitanie';
+GO.addressbook.lang.explanationVariables='Objaśnienie domyślnych zmiennych powitania';
+GO.addressbook.lang.explanationSex='Męska i żeńska forma powitania';
+GO.addressbook.lang.searchQueryName='Nazwa zapytania';
+GO.addressbook.lang.enterSearchQueryName='Wprowadź nazwę dla zapytania:';
+GO.addressbook.lang.photo= 'Zdjęcie';
+GO.addressbook.lang.deleteImage='Usuń obraz';
+GO.addressbook.lang.addAllSearchResults='Dodaj wyniki wyszukiwania';
+GO.addressbook.lang.confirmAddAllSearchResults='Czy napewno chcesz dodać wszystkie wyniki wyszukiwania do listy adresów?';
+GO.addressbook.lang.moveEmployees='Przenieś pracowników';
+GO.addressbook.lang.id='Identyfikator';

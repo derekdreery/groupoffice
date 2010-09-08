@@ -4,6 +4,9 @@
  * Polish Translation v1.0
  * Author : Robert GOLIAT info@robertgoliat.com  info@it-administrator.org
  * Date : January, 20 2009
+ * Polish Translation v1.1
+ * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
+ * Date : September, 05 2010
  */
 // 
 // 
@@ -23,7 +26,7 @@ GO.users.lang.cmdPanelPassword= 'Hasło';
 GO.users.lang.cmdPanelCompany = 'Firma';
 GO.users.lang.cmdPanelPermissions = 'Uprawnienia';
 GO.users.lang.cmdPanelLogin = 'Login';
-GO.users.lang.cmdPanelLookFeel = 'Look & Feel';
+GO.users.lang.cmdPanelLookFeel = 'Wygląd';
 GO.users.lang.cmdPanelSettings = 'Ustawienia';
 GO.users.lang.cmdPanelEnabledMail = 'Email dla nowo aktywowanych użytkowników';
 GO.users.lang.cmdPanelDisabledMail = 'Email dla deaktywowanych użytkowników';
@@ -82,7 +85,7 @@ GO.users.lang.monday = 'Poniedziałek';
 GO.users.lang.regionalSettings = 'Ustawienia regionalne';
 GO.users.lang.userSettings = 'Ustawienia użytkownika';
 
-GO.users.lang.maxUsersReached='The maximum number of users has been reached. Go to the service tab to extend your maximum number of users.';
+GO.users.lang.maxUsersReached='Maksymalna liczba użytkowników została osiągnięta. Przejdź do karty serwisowej aby zwiększyć liczbę użytkowników.';
 
 GO.users.lang.group='Grupa';
 
@@ -90,4 +93,18 @@ GO.users.lang.muteSound='Wcisz dźwięk';
 
 GO.users.lang.downloadSampleCSV='Wczytaj przykładowy plik CSV';
 
-GO.users.lang.importText='You can import users using a CSV file. To know how the CSV file should be formatted, download the sample file.<br />The first line must contain the column names. The following fields are required for each user:<br /><br />username, password, first_name, last_name, email';
+GO.users.lang.importText='Możesz zaimportować użytkowników z pliku CSV. Aby znać format pliku CSV, pobierz przykładowy plik.<br />Pierwsza linia musi zawierać nazwy kolumn. Wymagane są następujące pola dla każdego uzytkownika:<br /><br />nazwa użytkownika (username), hasło (password), imie (first_name), nazwisko (last_name), adres_e-mail(email)';
+GO.users.lang.profile='Profil';
+GO.users.lang.mailReminders='Przypomnienie o nowej wiadomości';
+GO.users.lang.useModule= 'Use';
+GO.users.lang.manageModule= 'Zarządzanie';
+GO.users.lang.numberFormat='Format liczb';
+GO.users.lang.importExport='Import / Eksport';
+GO.users.lang.listSeparator='Separator listy';
+GO.users.lang.textSeparator='Separator tekstu';
+GO.users.lang.deleteWarning='OSTRZEŻENIE!!! Wsystkie dane użytkownika, łącznie z książką adresową, projektami, kalendarzami itd. zostaną usunięte!';
+GO.users.lang.lastName= 'Nazwisko';
+GO.users.lang.firstName= 'Imię';
+GO.users.lang.sendInvitation='Wyślij zaproszenie';
+GO.users.lang.contactInfo='Informacje o kontakcie';
+GO.users.lang.popupNotification='Pokaż wyskakujące okienko kiedy przypomnienie jest aktywne lub dotrze wiadomość';
