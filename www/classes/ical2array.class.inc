@@ -140,7 +140,7 @@ class ical2array {
 			//echo "$regex\n";
 
 			preg_match_all($regex, $data, $matches);
-			$matches=$matches[1];
+			$matches=$matches[1];			
 			while($match=array_shift($matches)) {
 				$object = $this->parse_object_string($match, $children);
 
@@ -155,7 +155,7 @@ class ical2array {
 				$object['type'] = $type;
 
 				if(count($children))
-					$object['objects']  = $this->parse_icalendar_string($match, $children);
+					$object['objects']  = $this->parse_icalendar_string($match, $children);				
 
 				$objects[] = $object;
 
@@ -289,15 +289,35 @@ class ical2array {
 		$this->buffer = str_replace('\n', "\r\n", $this->buffer);
 		$this->buffer = stripslashes($this->buffer);
 		$this->buffer = trim($this->buffer);
-
+		
 		switch($this->buffer_type) {
 			case 'object_name':
-				$this->object[$this->buffer] = array();
-				$this->object_name = $this->buffer;
+				
+				if($this->buffer == 'ATTENDEE')
+				{
+					if(!isset($this->object['ATTENDEES']))
+					{
+						$this->object['ATTENDEES'] = array();
+					}
+					$count = count($this->object['ATTENDEES'])+1;
+					$this->object_name = $this->buffer.'_'.$count;
+					$this->object['ATTENDEES'][$this->object_name] = array();
+				}else
+				{
+					$this->object[$this->buffer] = array();
+					$this->object_name = $this->buffer;
+				}
 				break;
 
-			case 'param_name':
-				$this->object[$this->object_name]['params'][$this->buffer] = '';
+			case 'param_name':							
+
+				if(strpos($this->object_name, 'ATTENDEE') !== false)
+				{
+					$this->object['ATTENDEES'][$this->object_name]['params'][$this->buffer] = '';					
+				}else
+				{
+					$this->object[$this->object_name]['params'][$this->buffer] = '';				
+				}
 				$this->param_name = $this->buffer;
 				break;
 
@@ -309,11 +329,24 @@ class ical2array {
 					$this->buffer = substr($this->buffer,1,-1);
 				}
 
-				$this->object[$this->object_name]['params'][$this->param_name] = $this->buffer;
+				if(strpos($this->object_name, 'ATTENDEE') !== false)
+				{					
+					$this->object['ATTENDEES'][$this->object_name]['params'][$this->param_name] = $this->buffer;
+				}else
+				{
+					$this->object[$this->object_name]['params'][$this->param_name] = $this->buffer;
+				}
 				break;
 
 			case 'value':
-				$this->object[$this->object_name]['value'] = $this->buffer;
+				if(strpos($this->object_name, 'ATTENDEE') !== false)
+				{
+					$this->object['ATTENDEES'][$this->object_name]['value'] = $this->buffer;
+				}else
+				{
+					$this->object[$this->object_name]['value'] = $this->buffer;
+				}
+
 				unset($this->object_name,	$this->param_name);
 				break;
 		}
