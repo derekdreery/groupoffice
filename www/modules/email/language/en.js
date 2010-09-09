@@ -179,3 +179,8 @@ GO.email.lang.skipUnknownRecipientsAction='Don\'t show this window next time';
 GO.email.lang.skipUnknownRecipients='Don\'t show unknown recipients dialog';
 
 GO.email.lang.alwaysRequestNotification='Always request a read notification';
+
+GO.email.lang.icalendarUpdateEvent='Update Event';
+GO.email.lang.icalendarAcceptInvitation='Accept';
+GO.email.lang.icalendarDeclineInvitation='Decline';
+GO.email.lang.icalendarTentativeInvitation='Tentative';

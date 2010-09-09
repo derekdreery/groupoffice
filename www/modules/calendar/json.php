@@ -1037,6 +1037,7 @@ try {
 				$response['name']=String::format_name($calendar_user);
 				$response['email']=$calendar_user['email'];
 				$response['status']="1";
+				$response['is_organizer']="1";
 				$response['available']=$cal->is_available($response['user_id'], $_REQUEST['start_time'], $_REQUEST['end_time'], 0) ? '1' : '0';
 			}
 			break;

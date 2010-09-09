@@ -74,8 +74,24 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			'</tpl>'+
 			'<tpl if="blocked_images&gt;0">'+
 			'<div class="go-warning-msg em-blocked">'+GO.email.lang.blocked+' <a id="em-unblock" href="#" class="normal-link">'+GO.email.lang.unblock+'</a></div>'+
-			'</tpl>'+
+			'</tpl>'+			
 			'</div>'+
+			'<tpl if="iCalendar.feedback">'+
+				'<div class="message-icalendar">'+
+				'<span class="message-icalendar-icon go-link-icon-1"></span>'+
+				'{[values.iCalendar.feedback]}'+
+				'<span class="message-icalendar-actions">'+
+				'<tpl if="iCalendar.invitation_reply">'+
+					'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
+				'</tpl>'+
+				'<tpl if="iCalendar.invitation">'+
+					'<a class="normal-link" id="em-icalendar-accept-invitation" href="#">'+GO.email.lang.icalendarAcceptInvitation+'</a> '+
+					'<a class="normal-link" id="em-icalendar-decline-invitation" href="#">'+GO.email.lang.icalendarDeclineInvitation+'</a> '+
+					'<a class="normal-link" id="em-icalendar-tentative-invitation" href="#">'+GO.email.lang.icalendarTentativeInvitation+'</a> '+
+				'</tpl>'+
+				'</span>'+
+				'</div>'+
+			'</tpl>'+			
 			'<div id="'+this.bodyId+'" class="message-body go-html-formatted">{body}</div>';
 		
 		this.template = new Ext.XTemplate(templateStr,{
@@ -207,6 +223,40 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				this.loadMessage();
 			}, this);
 		}
+
+		var icalUpdateEventEl = Ext.get('em-icalendar-update-event');
+		if(icalUpdateEventEl)
+		{
+			icalUpdateEventEl.on('click', function()
+			{
+				this.updateEvent();
+			}, this);
+		}
+		var acceptInvitationEl = Ext.get('em-icalendar-accept-invitation');
+		if(acceptInvitationEl)
+		{
+			acceptInvitationEl.on('click', function()
+			{
+				this.processInvitation(1);
+			}, this);
+		}
+		var declineInvitationEl = Ext.get('em-icalendar-decline-invitation');
+		if(declineInvitationEl)
+		{
+			declineInvitationEl.on('click', function()
+			{
+				this.processInvitation(2);
+			}, this);
+		}
+		var tentativeInvitationEl = Ext.get('em-icalendar-tentative-invitation');
+		if(tentativeInvitationEl)
+		{
+			tentativeInvitationEl.on('click', function()
+			{
+				this.processInvitation(3);
+			}, this);
+		}
+		
 		
 		this.messageBodyEl = Ext.get(this.bodyId);		
 		this.messageBodyEl.on('click', this.onMessageBodyClick, this);
@@ -276,7 +326,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				this.fireEvent('zipOfAttachmentsClicked');				
 			}else
 			{
-				var attachment = this.data.attachments[attachment_no];				
+				var attachment = this.data.attachments[attachment_no];
 				this.fireEvent('attachmentClicked', attachment, this);
 			} 
 		}
@@ -354,5 +404,92 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				}
 			}
 		}		
+	},
+
+	updateEvent : function()
+	{
+		var reply = this.data.iCalendar.invitation_reply;
+
+		Ext.Ajax.request({
+			url: GO.settings.modules.calendar.url+'action.php',
+			params: {
+				event_id: reply.event_id,
+				email: reply.email,
+				last_modified: reply.last_modified,
+				status: reply.status,
+				task: 'icalendar_update_event'
+			},
+			scope: this,
+			callback: function(options, success, response)
+			{
+				var data = Ext.decode(response.responseText);
+				if(data.success)
+				{
+					this.loadMessage();
+				}else
+				{
+
+				}
+			}
+		});
+	},
+
+	cal_id : 0,
+	status_id : 0,
+	processInvitation : function(status_id)
+	{		
+		if(status_id)
+		{
+			this.status_id = status_id;
+		}
+
+		var invitation = this.data.iCalendar.invitation;
+
+		Ext.Ajax.request({
+			url: GO.settings.modules.email.url+'action.php',
+			params: {
+				account_id: invitation.account_id,
+				mailbox: invitation.mailbox,
+				uid: invitation.uid,
+				imap_id: invitation.imap_id,
+				encoding: invitation.encoding,
+				status_id: this.status_id,
+				email: invitation.email,
+				cal_id: this.cal_id,
+				task: 'icalendar_process_invitation'
+			},
+			scope: this,
+			callback: function(options, success, response)
+			{
+				var data = Ext.decode(response.responseText);
+				if(data.success)
+				{
+					this.loadMessage();
+					this.cal_id = 0;
+				}else
+				{					
+					this.showSelectCalendarWindow(data.calendars);
+				}
+			}
+		});
+	},
+
+	showSelectCalendarWindow : function(calendars)
+	{			
+		if(!this.selectCalendarDialog)
+		{
+			this.selectCalendarDialog = new GO.calendar.SelectCalendarDialog();
+
+			this.selectCalendarDialog.on('calendar_selected', function(cal_id)
+			{
+				this.cal_id = cal_id;
+				this.processInvitation();
+				
+			}, this);
+		}
+
+		this.selectCalendarDialog.populateComboBox(calendars);
+		this.selectCalendarDialog.show();		
 	}
+	
 });

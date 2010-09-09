@@ -28,22 +28,31 @@ class go_ical extends calendar
 
 	var $utc=false;
 
+	var $uid=true;
+
 	var $add_leading_space_to_qp_encoded_line_wraps=false;
 
 	var $dont_use_quoted_printable=false;
 
-	function go_ical($version='2.0', $utc=false)
+	function go_ical($version='2.0', $utc=false, $uid=false)
 	{
 		parent::__construct();
 
 		$this->version = $version;
 		$this->utc=$utc;
+		$this->uid=$uid;
 
+		$method = (!$this->uid) ? 'REQUEST' : 'REPLY';
 		$this->calendar_properties =
 			"VERSION:".$version.$this->line_break.
 			"PRODID:-//Intermesh//NONSGML Group-Office//EN".$this->line_break.
 			"CALSCALE:GREGORIAN".$this->line_break.
-			"METHOD:PUBLISH".$this->line_break;
+			"METHOD:".$method.$this->line_break;
+	}
+
+	function set_method($method)
+	{
+		$this->calendar_properties .= "METHOD:".$method.$this->line_break;
 	}
 
 	function export_calendar_header()
@@ -117,7 +126,7 @@ class go_ical extends calendar
 
 	function convert_event($event)
 	{
-		global $GO_CONFIG, $GO_SECURITY, $charset;
+		global $GO_CONFIG, $GO_SECURITY, $GO_USERS, $GO_MODULES, $charset;
 
 		if($this->timezone_id != '')
 		{
@@ -135,7 +144,8 @@ class go_ical extends calendar
 		}
 
 		$lines[] = "BEGIN:VEVENT";
-		$lines[] = "UID:".$event['id'];
+
+		$lines[] = (!$this->uid) ? "UID:".$event['id'] : "UID:".$this->uid;
 
 		$lines = array_merge($lines, String::format_vcard_line('SUMMARY', $event['name'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 		//if ($event['description'] != '')
@@ -146,8 +156,29 @@ class go_ical extends calendar
 		//{
 			$lines = array_merge($lines, String::format_vcard_line('LOCATION', $event['location'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 		//}
+			
+		$user = $GO_USERS->get_user($event['user_id']);
+	
 
-		$lines[] =	"STATUS:".$event['status'];
+		require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
+
+		$cal = new calendar();
+		$cal2 = new calendar();
+		$cal->get_participants($event['participants_event_id']);
+		while($cal->next_record())
+		{
+			if($cal->f('is_organizer'))
+			{
+				$lines = array_merge($lines, array('ORGANIZER;CN='.$cal->f('name').':mailto:'.$cal->f('email')));
+			}else
+			{
+				$status = $cal2->get_participant_status_name($cal->f('status'));
+				$rsvp = ($cal->f('status')) ? 'FALSE' : 'TRUE';
+				$lines = array_merge($lines, array('ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT='.$status.';RSVP='.$rsvp.';CN='.$cal->f('name').';LANGUAGE=en:MAILTO:'.$cal->f('email')));
+			}						
+		}
+
+		$lines[] = "STATUS:".$event['status'];
 			
 		if($event['private'] == '1')
 		{
@@ -496,7 +527,16 @@ class go_ical extends calendar
 			//$lines[] = 'DALARM:'.date($this->datetime_format, Date::gmt_to_local_time($remind_time)).';;'.$event['name'];
 		}
 
-		$lines[]= "DTSTAMP:".date($this->datetime_format, $event['ctime']);
+		$timestamp = date($this->datetime_format, $event['mtime']);
+		$lines[]= "DTSTAMP:".$timestamp;
+		$lines[]= "LAST-MODIFIED:".$timestamp;
+		//$lines[]= "CREATED:".$timestamp;
+
+		if(!$this->uid && $event['sequence'])
+		{
+			$lines[] = "SEQUENCE:".$event['sequence'];
+		}
+
 		$lines[] = "END:VEVENT";
 
 		/*$vevent = '';

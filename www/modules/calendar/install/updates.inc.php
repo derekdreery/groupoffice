@@ -77,3 +77,12 @@ $updates[]="ALTER TABLE `cal_events` ADD INDEX ( `category_id` )";
 
 
 $updates[]="ALTER TABLE  `cal_events` ADD  `uuid` VARCHAR( 100 ) NOT NULL AFTER  `id` , ADD INDEX (  `uuid` )";
+
+$updates[]="ALTER TABLE `cal_participants` ADD `last_modified` VARCHAR(20) NOT NULL";
+$updates[]="ALTER TABLE `cal_participants` ADD `is_organizer` TINYINT(1) NOT NULL default '0'";
+
+$updates[]="ALTER TABLE `cal_events` ADD `sequence` INT NOT NULL default '0'";
+
+$updates[]="ALTER TABLE `cal_participants` CHANGE `status` `status` enum('0','1','2','3') NOT NULL default '0'";
+
+$updates[]="ALTER TABLE `cal_events` ADD `uid` VARCHAR(255) NOT NULL";

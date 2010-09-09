@@ -85,6 +85,8 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   `files_folder_id` int(11) NOT NULL,
   `read_only` tinyint(1) NOT NULL DEFAULT '0',
   `category_id` int(11) NOT NULL,
+  `sequence` INT NOT NULL default '0',
+  `uid` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `start_time` (`start_time`),
   KEY `end_time` (`end_time`),
@@ -126,7 +128,9 @@ CREATE TABLE IF NOT EXISTS `cal_participants` (
   `name` varchar(50) default NULL,
   `email` varchar(100) default NULL,
   `user_id` int(11) NOT NULL default '0',
-  `status` enum('0','1','2') NOT NULL default '0',
+  `status` enum('0','1','2','3') NOT NULL default '0',
+  `last_modified` varchar(20) default NULL,
+  `is_organizer` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

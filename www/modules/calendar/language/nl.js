@@ -115,3 +115,5 @@ GO.calendar.lang.showInfo='Informatie';
 GO.calendar.lang.copyEvent='Kopieer afspraak';
 GO.calendar.lang.moveEvent='Verplaats afspraak';
 GO.calendar.lang.eventInfo='Afspraak informatie';
+
+GO.calendar.lang.isOrganizer='Organisator';

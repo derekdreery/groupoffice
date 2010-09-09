@@ -159,6 +159,33 @@ margin:5px 2px;
 	vertical-align:top;	
 }
 
+.message-icalendar{
+	background-color:#EBF0F2;
+	border-bottom:1px solid #d0d0d0;
+	padding: 0 8px 0 8px;
+	text-align:left;
+	line-height:20px;
+}
+.message-icalendar-icon{
+	background-repeat:no-repeat;	
+	background-position:0 2px;
+	padding:3px 5px 2px 18px;
+	white-space:nowrap;
+}
+.message-icalendar-actions{
+	float:right;
+	height:16px;
+}
+
+.message-icalendar a{
+	color: black;
+	text-decoration: none;
+}
+.message-icalendar a:hover{
+	color: black;
+	text-decoration: underline;
+}
+
 .message-body{
 	padding: 5px;	
 }
