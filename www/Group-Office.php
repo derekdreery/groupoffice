@@ -43,9 +43,11 @@ if ( isset( $GO_INCLUDES ) ) {
 	}
 }
 
-//start session
-session_name('groupoffice');
-session_start();
+if(!defined('GO_NO_SESSION')){
+	//start session
+	session_name('groupoffice');
+	session_start();
+}
 
 if(!isset($GO_CONFIG))
 	$GO_CONFIG = new GO_CONFIG();
