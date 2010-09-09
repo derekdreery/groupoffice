@@ -94,3 +94,6 @@ $lang['calendar']['month_times'][4]='de vierde';
 $lang['calendar']['month_times'][5]='de vijfde';
 
 $lang['calendar']['rightClickToCopy']='Gebruik de rechtermuisknop om de koppelingslocatie te kopiëren';
+
+$lang['calendar']['invitation']='Afspraak Uitnodiging';
+$lang['calendar']['invitation_reply']='Afspraak Uitnodiging Antwoord';

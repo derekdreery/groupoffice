@@ -71,7 +71,7 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 	$email2 = new email();
 
 	$response = array();
-	
+
 	$count = $email->get_subscribed($account_id, $folder_id);
 
 	if($account_id>0 && !$count){
@@ -81,12 +81,12 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 		global $account;
 		$email->synchronize_folders($account, $imap);
 		$count = $email->get_subscribed($account_id, $folder_id);
-	}	
+	}
 
 	while($record = $email->next_record())
 	{
 		unset($children);
-		
+
 		if($email->f('name') == 'INBOX') {
 			if($count==1 && $record['can_have_children']==1) {
 				$children=get_mailbox_nodes(0, $email->f('id'));
@@ -220,7 +220,7 @@ function find_alias_and_recipients() {
 				if(isset($aliases[$address])) {
 					$response['data']['alias_id']=$aliases[$address];
 				}
-				
+
 				if($fill_to && (!isset($aliases[$address]) || $task=='opendraft')) {
 					if (!$first) {
 						$first = true;
@@ -416,7 +416,7 @@ try {
 			$response['data']['attachments']=$content['attachments']=array();
 		}
 
-	
+
 
 		if(isset($_POST['template_id']) && $_POST['template_id']>0 && $task!='opendraft') {
 			$template_id = ($_POST['template_id']);
@@ -466,7 +466,7 @@ try {
 				$cal = new calendar();
 				require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 				$ical2array = new ical2array();
-				
+
 				$vcalendar = $ical2array->parse_string($data);
 
 				$event=false;
@@ -582,7 +582,7 @@ try {
 				}else {
 
 					$response['attachments']=$imap->remove_inline_images($response['attachments']);
-					
+
 					$response['body']=$response['html_body'];
 				}
 				unset($response['html_body'], $response['plain_body']);
@@ -612,6 +612,7 @@ try {
 					}
 				}
 
+				$email_sender = $response['sender'];
 				$response['date']=date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $response['udate']);
 				$response['blocked_images']=0;
 				$response['full_from']=htmlspecialchars($response['full_from'], ENT_COMPAT, 'UTF-8');
@@ -679,6 +680,123 @@ try {
 					$response['body'] = preg_replace("/<([^a]{1})([^>]*)https?:([^>]*)/iu", "<$1$2blocked:$3", $response['body'], -1, $response['blocked_images']);
 				}
 
+				$response['iCalendar'] = array();
+				for($i=0; $i<count($response['attachments']); $i++)
+				{
+					$attachment = $response['attachments'][$i];
+					if(($attachment['subtype'] == 'calendar') && ($attachment['extension'] == 'ics'))
+					{
+						if(!isset($GO_MODULES->modules['calendar']) || !$GO_MODULES->modules['calendar']['read_permission']) {
+							throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));
+						}
+
+						$data = $imap->get_message_part_decoded($uid, $attachment['imap_id'], $attachment['encoding']);
+
+						require_once($GO_CONFIG->class_path.'Date.class.inc.php');
+						require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
+						$cal = new calendar();
+						require_once($GO_CONFIG->class_path.'ical2array.class.inc');
+						$ical2array = new ical2array();
+
+						$vcalendar = $ical2array->parse_string($data);
+
+						$reply_to_invitation = isset($vcalendar[0]['METHOD']['value']) && ($vcalendar[0]['METHOD']['value'] == 'REPLY') ? true : false;
+						while($object = array_shift($vcalendar[0]['objects']))
+						{
+							if($object['type'] == 'VEVENT')
+							{
+								$cal_event = $cal->get_event_from_ical_object($object);
+								$last_modified = $object['DTSTAMP']['value'];
+							}
+						}
+
+						if(!isset($cal_event))
+						{
+							throw new Exception($lang['common']['selectError']);
+						}
+
+						if($reply_to_invitation)
+						{
+							$event_id = $cal_event['uid'];
+							$event = $cal->get_event($event_id);
+							if($event)
+							{
+								if(isset($cal_event['participants']))
+								{
+									$participant = $cal->is_participant($event_id, $cal_event['participants'][0]['email']);
+									if($last_modified > $participant['last_modified'])
+									{
+										$response['iCalendar']['invitation_reply'] = array(
+											'event_id' => $event_id,
+											'email' => $cal_event['participants'][0]['email'],
+											'status' => $cal_event['participants'][0]['status'],
+											'last_modified' => $last_modified
+										);
+
+										$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_available'];
+									}else
+									{
+										$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_old'];
+									}
+								}else
+								{
+									throw new Exception($lang['common']['selectError']);
+								}
+							}else
+							{
+								$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_not_found'];
+							}
+						}else
+						{							
+							$event = $cal->get_event_by_uid($cal_event['uid']);
+							if($event)
+							{
+								$event_id = $event['id'];
+								if(isset($cal_event['participants']))
+								{
+									for($i=0, $found=false; $i<count($cal_event['participants']) && !$found; $i++)
+									{
+										if($cal_event['participants'][$i]['email'] == $email_sender)
+										{
+											$participant = $cal_event['participants'][$i];
+											$found = true;
+										}
+									}
+
+									$saved_participant = $cal->is_participant($event_id, $participant['email']);
+									if($saved_participant && $last_modified > $saved_participant['last_modified'])
+									{
+										$response['iCalendar']['invitation_reply'] = array(
+											'event_id' => $event_id,
+											'email' => $participant['email'],
+											'status' => $cal->get_participant_status_name($participant['status']),
+											'last_modified' => $last_modified
+										);
+
+										$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_available'];
+									}else
+									{
+										$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_old'];
+									}
+								}else
+								{
+									throw new Exception($lang['common']['selectError']);
+								}
+							}else
+							{
+								$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_invitation'];
+								$response['iCalendar']['invitation'] = array(
+									'account_id' => $account_id,
+									'mailbox' => $mailbox,
+									'uid' => $uid,
+									'imap_id' => $attachment['imap_id'],
+									'encoding' => $attachment['encoding'],
+									'email' => $account['email']
+								);
+							}
+						}
+					}
+				}
 
 				break;
 
@@ -715,7 +833,7 @@ try {
 
 				if(isset($_POST['delete_keys'])) {
 					$messages = json_decode($_POST['delete_keys'], true);
-					
+
 					if($imap->is_imap() && !empty($account['trash']) && $mailbox != $account['trash']) {
 						$imap->set_message_flag($messages, "\Seen");
 						$response['deleteSuccess']=$imap->move($messages,$account['trash']);
@@ -786,7 +904,7 @@ try {
 				}
 
 				$day_start = mktime(0,0,0);
-				$day_end = mktime(0,0,0,date('m'),date('d')+1);				
+				$day_end = mktime(0,0,0,date('m'),date('d')+1);
 
 				$messages = $imap->get_message_headers_set($start, $limit, $sort_field , $sort_order, $query);
 
@@ -822,8 +940,8 @@ try {
 					}
 					$message['from']=implode(',', $readable_addresses);
 					$message['from']=htmlspecialchars($message['from'], ENT_QUOTES, 'UTF-8');
-					
-					$message['sender'] = empty($address[0]) ? '' : $address[0]['email'];				
+
+					$message['sender'] = empty($address[0]) ? '' : $address[0]['email'];
 					$message['subject']=htmlspecialchars($message['subject'], ENT_QUOTES, 'UTF-8');
 
 					if(empty($message['from'])) {
@@ -877,7 +995,7 @@ try {
 				}else {
 					$node_type='root';
 					$node_id=0;
-				}										
+				}
 
 				$response=array();
 				if($node_type=='root') {
@@ -890,7 +1008,7 @@ try {
 						} catch(Exception $e){
 							$account=false;
 							$error = $email->human_connect_error($e->getMessage());
-						}						
+						}
 
 						$usage = '';
 						$inbox_new=0;
@@ -915,14 +1033,14 @@ try {
 
 							$account_expanded = $email->is_account_expanded($email2->f('id'), $GO_SECURITY->user_id);
 							$children = ($account_expanded) ? get_mailbox_nodes($email2->f('id'), 0) : false;
-							
+
 							$imap->disconnect();
 						}else {
 							$text = $email2->f('email').' ('.$lang['common']['error'].')';
 							$children=array();
 							$account_expanded=true;
-						}						
-						
+						}
+
 						$node =  array(
 										'text'=>$text,
 										'name'=>$email2->f('email'),
@@ -933,7 +1051,7 @@ try {
 										'folder_id'=>0,
 										'mailbox'=>'INBOX',
 										'children'=>$children,
-										'canHaveChildren'=>$email2->f('type')=='imap',									
+										'canHaveChildren'=>$email2->f('type')=='imap',
 										'inbox_new'=>$inbox_new,
 										'usage'=>$usage,
 										'parentExpanded'=>$account_expanded

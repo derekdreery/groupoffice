@@ -463,6 +463,8 @@ try {
 				if($old_event['start_time'] != $event['start_time'] || $old_event['end_time'] != $event['end_time'])
 					$modified = true;
 
+				$event['sequence'] = $old_event['sequence'] + 1;
+
 				$cal->update_event($event, $calendar, $old_event, $update_related, false);
 
 				if(isset($event['files_folder_id']))
@@ -560,6 +562,7 @@ try {
 					$participant['email']=$p['email'];
 					$participant['user_id']=(isset($p['user_id'])) ? $p['user_id'] : 0;
 					$participant['status']=$p['status'] ;
+					$participant['is_organizer']=(isset($p['is_organizer'])) ? $p['is_organizer'] : 0;
 
 					if(substr($p['id'], 0,4)=='new_') {
 						if(isset($_POST['import']) && $participant['user_id'] > 0) {
@@ -599,7 +602,7 @@ try {
 										}
 										unset($event['files_folder_id']);
 										$cal->add_event($event, $calendar);										
-									}
+									}									
 									$cal->set_event_status($event_id, 1, $participant['email']);
 								}else
 								{
@@ -621,6 +624,7 @@ try {
 					$participant['name']=String::format_name($calendar_user);
 					$participant['email']=$calendar_user['email'];
 					$participant['status']=1;
+					$participant['is_organizer']=1;
 
 					$cal->add_participant($participant);
 				}
@@ -647,11 +651,11 @@ try {
 				}
 
 				//go_debug($participants);
-				if(count($participants)) {				
+				if(count($participants)) {
+					
 					$swift = new GoSwift(
 							implode(',', $participants),
-							$lang['calendar']['appointment'].$event['name']);
-
+							$lang['calendar']['invitation'].': '.$event['name']);
 
 					class Replacements implements Swift_Plugins_Decorator_Replacements {
 						function getReplacementsFor($address) {
@@ -661,12 +665,15 @@ try {
 					//Load the plugin with the extended replacements class
 					$swift->registerPlugin(new Swift_Plugins_DecoratorPlugin(new Replacements()));
 
+					/*
+					 * this part we will comment out, since we are going to do this the ics way.
 					$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
 							$cal->event_to_html($event).
 							'<p>'.$lang['calendar']['acccept_question'].'</p>'.
 							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$participants_event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
 							'&nbsp;|&nbsp;'.
 							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$participants_event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
+					 */
 
 					//create ics attachment
 					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
@@ -1191,6 +1198,30 @@ try {
 			}
 			
 			break;
+
+
+		case 'icalendar_update_event':
+
+			if(!isset($GO_MODULES->modules['calendar']) || !$GO_MODULES->modules['calendar']['read_permission']) {
+				throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));
+			}
+
+			$event_id = (isset($_REQUEST['event_id']) && $_REQUEST['event_id']) ? $_REQUEST['event_id'] : '';
+			$email = (isset($_REQUEST['email']) && $_REQUEST['email']) ? $_REQUEST['email'] : '';
+			$status = (isset($_REQUEST['status']) && $_REQUEST['status']) ? $_REQUEST['status'] : '';
+			$last_modified = (isset($_REQUEST['last_modified']) && $_REQUEST['last_modified']) ? $_REQUEST['last_modified'] : '';
+
+			if(!$email || !$status || !$last_modified)
+			{
+				throw new Exception($lang['common']['missingField']);
+			}
+
+			$new_status_id = $cal->get_participant_status_id($status);
+			$cal->set_event_status($event_id, $new_status_id, $email, $last_modified);
+			
+			$response['success'] = true;
+			
+			break;		
 
 	}
 }catch(Exception $e)

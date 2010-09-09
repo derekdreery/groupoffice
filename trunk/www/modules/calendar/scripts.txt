@@ -25,3 +25,4 @@ modules/calendar/CategoryDialog.js
 modules/calendar/SelectDateDialog.js
 modules/calendar/RecurrenceDialog.js
 modules/calendar/ContextMenu.js
+modules/calendar/SelectCalendarDialog.js

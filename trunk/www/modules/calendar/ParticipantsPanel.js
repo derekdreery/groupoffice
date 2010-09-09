@@ -29,6 +29,9 @@ GO.calendar.Participant = Ext.data.Record.create([
 }, {
 	name : 'status',
 	type : 'string'
+}, {
+	name : 'is_organizer',
+	type : 'int'
 }
 
 ]);
@@ -75,7 +78,7 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		},
 		root : 'results',
 		id : 'id',
-		fields : ['id', 'name', 'email', 'available','status', 'user_id']
+		fields : ['id', 'name', 'email', 'available','status', 'user_id', 'is_organizer']
 	});
 		
 	var tbar = [{
@@ -159,6 +162,10 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 			sortable : true,
 			renderer : function(v) {
 				switch (v) {
+					case '3' :
+						return GO.calendar.lang.tentative;
+						break;
+						
 					case '2' :
 						return GO.calendar.lang.declined;
 						break;
@@ -175,6 +182,25 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 		}, {
 			header : GO.lang.strAvailable,
 			dataIndex : 'available',
+			sortable : false,
+			renderer : function(v) {
+
+				var className = 'img-unknown';
+				switch (v) {
+					case '1' :
+						className = 'img-available';
+						break;
+
+					case '0' :
+						className = 'img-unavailable';
+						break;
+				}
+
+				return '<div class="' + className + '"></div>';
+			}
+		}, {
+			header : GO.calendar.lang.isOrganizer,
+			dataIndex : 'is_organizer',
 			sortable : false,
 			renderer : function(v) {
 
@@ -427,7 +453,8 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 						email : responseParams.email,
 						status :  responseParams.status,
 						user_id : responseParams.user_id,
-						available : responseParams.available
+						available : responseParams.available,
+						is_organizer : responseParams.is_organizer
 					});
 				}
 			},

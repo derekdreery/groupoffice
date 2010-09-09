@@ -159,3 +159,8 @@ GO.email.lang.skipUnknownRecipientsAction='Dit scherm in het vervolg niet tonen'
 GO.email.lang.skipUnknownRecipients='Toon onbekende ontvanger dialoog niet';
 
 GO.email.lang.alwaysRequestNotification='Altijd om een leesbevestiging vragen';
+
+GO.email.lang.icalendarUpdateEvent='Afspraak bijwerken';
+GO.email.lang.icalendarAcceptInvitation='Accepteren';
+GO.email.lang.icalendarDeclineInvitation='Weigeren';
+GO.email.lang.icalendarTentativeInvitation='Voorlopig';

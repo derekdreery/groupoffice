@@ -136,7 +136,7 @@ class calendar extends db {
 		if($event && !empty($event['rrule'])) {
 			$reminder['time'] = Date::get_next_recurrence_time($event['start_time'], time(),$event['end_time']-$event['start_time'],$event['rrule']);
 			$reminder['user_id']=$user_id;
-			
+
 			if($reminder['time']) {
 				$rm = new reminder();
 				$rm->add_reminder($reminder);
@@ -162,7 +162,7 @@ class calendar extends db {
 			        $calendars[] = $cal->f('id');
 			}
 		}
-		
+
 		if(count($calendars))
 		{
 			$events = $cal->get_events_in_array($calendars,0,$start_time,$end_time);
@@ -662,7 +662,7 @@ class calendar extends db {
 	}
 
 	function is_participant($event_id, $email) {
-		$sql = "SELECT id, user_id FROM cal_participants WHERE event_id='".$this->escape($event_id)."' AND email='".$this->escape($email)."'";
+		$sql = "SELECT * FROM cal_participants WHERE event_id='".$this->escape($event_id)."' AND email='".$this->escape($email)."'";
 		$this->query($sql);
 		return $this->next_record();
 	}
@@ -1203,7 +1203,7 @@ class calendar extends db {
 				}
 
 				$reminder['id']=$existing_reminder['id'];
-				
+
 				if(isset($event['name']))
 					$reminder['name']=$event['name'];
 
@@ -1644,6 +1644,12 @@ class calendar extends db {
 		return $this->next_record(DB_ASSOC);
 	}
 
+	function get_event_by_uid($uid) {
+		$sql = "SELECT e.*, c.acl_id FROM cal_events e LEFT JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.uid='".$this->escape($uid)."'";
+		$this->query($sql);
+		return $this->next_record(DB_ASSOC);
+	}
+	
 	function get_event_by_uuid($uuid) {
 		$sql = "SELECT e.* FROM cal_events e  WHERE e.uuid='".$this->escape($uuid)."'";
 		$this->query($sql);
@@ -1767,6 +1773,29 @@ class calendar extends db {
 			require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 			$this->ical2array = new ical2array();
 		}
+
+		$attendees = (isset($object['ATTENDEES']) && count($object['ATTENDEES'])) ? $object['ATTENDEES'] : array();		
+		foreach($attendees as $attendee)
+		{
+			$email = strtolower($attendee['value']);
+			$participant['email'] = (strpos($email, 'mailto') === 0) ? $email = substr($email, 7) : $email;
+			$participant['name'] = isset($attendee['params']['CN']) ? $attendee['params']['CN'] : $participant['email'];
+			$participant['status'] = $attendee['params']['PARTSTAT'];
+			$event['participants'][] = $participant;
+		}
+
+		$organizer = (isset($object['ORGANIZER']) && count($object['ORGANIZER'])) ? $object['ORGANIZER'] : '';
+		if($organizer)
+		{
+			$email = strtolower($organizer['value']);
+			$participant['email'] = (strpos($email, 'mailto') === 0) ? $email = substr($email, 7) : $email;
+			$participant['name'] = isset($organizer['params']['CN']) ? $organizer['params']['CN'] : $participant['email'];
+			$participant['status'] = 1;
+			$participant['is_organizer'] = true;
+			$event['participants'][] = $participant;
+		}
+
+		$event['uid'] = (isset($object['UID']['value']) && $object['UID']['value'] != '') ? trim($object['UID']['value']) : '';
 
 		$event['name'] = (isset($object['SUMMARY']['value']) && $object['SUMMARY']['value'] != '') ? trim($object['SUMMARY']['value']) : 'Unnamed';
 		if(isset($object['SUMMARY']['params']['ENCODING']) && $object['SUMMARY']['params']['ENCODING'] == 'QUOTED-PRINTABLE') {
@@ -2197,8 +2226,13 @@ class calendar extends db {
 	}
 
 
-	function set_event_status($event_id, $status, $email) {
-		$sql = "UPDATE cal_participants SET status='".$this->escape($status)."' WHERE email='".$this->escape($email)."' AND event_id='".$this->escape($event_id)."'";
+	function set_event_status($event_id, $status, $email, $last_modified=0) {
+		$sql = "UPDATE cal_participants SET status='".$this->escape($status)."'";
+		if($last_modified)
+		{
+			$sql .= ", last_modified='".$this->escape($last_modified)."'";
+		}
+		$sql .= " WHERE email='".$this->escape($email)."' AND event_id='".$this->escape($event_id)."'";
 		return $this->query($sql);
 	}
 
@@ -2540,7 +2574,7 @@ class calendar extends db {
 	public function delete_visible_tasklist($calendar_id, $tasklist_id) {
 		return $this->query("DELETE FROM cal_visible_tasklists WHERE calendar_id = ? AND tasklist_id = ?", 'ii', array($calendar_id, $tasklist_id));
 	}
-		
+
 	/**
 	 * Add a Category
 	 *
@@ -2596,7 +2630,7 @@ class calendar extends db {
 	{
 		$this->query("SELECT * FROM cal_categories WHERE id=?", 'i', $category_id);
 		return $this->next_record();
-	}	
+	}
 	/**
 	 * Gets all Categories
 	 *
@@ -2627,6 +2661,30 @@ class calendar extends db {
 
 		$this->query($sql, 'i', $user_id);
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
+	}
+
+	function get_participant_status_id($status_name)
+	{
+		$statuses = array(
+			'NEEDS-ACTION' => 0,
+			'ACCEPTED' => 1,
+			'DECLINED' => 2,
+			'TENTATIVE' => 3
+		);
+
+		return $statuses[$status_name];
+	}
+
+	function get_participant_status_name($status_id)
+	{
+		$statuses = array(
+			0 => 'NEEDS-ACTION',
+			1 => 'ACCEPTED',
+			2 => 'DECLINED',
+			3 => 'TENTATIVE'
+		);
+
+		return $statuses[$status_id];
 	}
 
 
