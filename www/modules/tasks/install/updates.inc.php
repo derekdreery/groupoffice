@@ -48,4 +48,6 @@ $updates[]="ALTER TABLE `ta_tasks` ADD `category_id` INT NOT NULL ";
 $updates[]="ALTER TABLE `ta_tasks` ADD `uuid` VARCHAR( 100 ) NOT NULL AFTER `id` ,
 ADD INDEX ( `uuid` ) ";
 
+$updates[]="ALTER TABLE `ta_tasks` ADD `priority` int(11) NOT NULL DEFAULT '1'";
+
 ?>

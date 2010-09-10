@@ -324,9 +324,9 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			editable:false,
 			selectOnFocus:true,
 			forceSelection:true
-                });
+                });		
 
-		
+		this.selectPriority = new GO.form.SelectPriority();
 
 		var propertiesPanel = new Ext.Panel({
 			hideMode : 'offsets',
@@ -342,11 +342,11 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			startDate,
 			dueDate,
 			taskStatus,
-			this.selectTaskList,this.selectCategory,{
+			this.selectTaskList,this.selectCategory,this.selectPriority,{
 				xtype:'textarea',
 				fieldLabel:GO.lang.strDescription,
 				name : 'description',
-				anchor:'-20 -190'
+				anchor:'-20 -220'
 			}]
 
 		});

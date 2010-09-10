@@ -31,7 +31,7 @@ GO.tasks.TasksPanel = function(config)
 		}, this);
 
 		var fields ={
-			fields:['id', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name'],
+			fields:['id', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name','priority'],
 			columns:[this.checkColumn,
 			{
 				id:'name',
@@ -52,6 +52,27 @@ GO.tasks.TasksPanel = function(config)
 				header:GO.tasks.lang.category,
 				dataIndex: 'category_name',
 				width:20
+			},{
+				header:GO.lang.priority,
+				dataIndex: 'priority',
+				width:70,
+				hidden:true,
+				renderer : function(value, cell, record) {
+					var str = '';
+					switch(value)
+					{
+						case '0':
+							str = GO.lang.priority_low;
+							break;
+						case '1':
+							str = GO.lang.priority_normal;
+							break;
+						case '2':
+							str = GO.lang.priority_high;
+							break;
+					}
+					return str;
+				}
 			},{
 				header:GO.tasks.lang.dueDate,
 				dataIndex: 'due_time',
