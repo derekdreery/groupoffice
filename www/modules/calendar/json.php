@@ -342,7 +342,7 @@ try {
 
 		//return all events for a given period
 			$view_id = isset($_REQUEST['view_id']) ? $_REQUEST['view_id'] : 0;
-			
+
 			$calendar_id=isset($_REQUEST['calendar_id']) && !isNaN($_REQUEST['calendar_id']) ? ($_REQUEST['calendar_id']) : 0;
 			//$view_id=isset($_REQUEST['view_id']) ? ($_REQUEST['view_id']) : 0;
 			$start_time=isset($_REQUEST['start_time']) ? strtotime($_REQUEST['start_time']) : 0;
@@ -361,7 +361,7 @@ try {
 					throw new Exception($lang['calendar']['noCalSelected']);
 				}
 
-				
+
 			} else {
 				$calendars=isset($_REQUEST['calendars']) ? json_decode($_REQUEST['calendars']) : array($calendar_id);
 
@@ -373,14 +373,14 @@ try {
 			$default_colors = array('F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
 							'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
 							'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
-							'C43B3B','996600','66FF99','999999','FFFFFF');			  	
+							'C43B3B','996600','66FF99','999999','FFFFFF');
 
 			$default_colors_count = count($default_colors);
 
 			$default_bg = array();
 			$index = 0;
 			foreach($calendars as $key=>$cal_id)
-			{				
+			{
 				if($index == $default_colors_count)
 				{
 					$index = 0;
@@ -391,12 +391,12 @@ try {
 			}
 
 			$calendar_id=$calendars[0];
-			
+
 			$check_calendars = $calendars;
 			$calendars=array();
 			$calendar_names=array();
 			$response['write_permission']=false;
-			
+
 			$calendar_props=array();
 
 			foreach($check_calendars as $calendar_id){
@@ -406,7 +406,7 @@ try {
 				if($response['permission_level']>1){
 					$response['write_permission']=true;
 				}
-				
+
 				if($response['permission_level']) {
 					$calendars[]=$calendar_id;
 					$calendar_names[$calendar_id]=$calendar['name'];
@@ -459,30 +459,40 @@ try {
 				);
 			}
 
-			if(isset($GO_MODULES->modules['addressbook']) && $calendar['show_bdays']) {
-				require_once ($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
-				$ab = new addressbook();
-				$abooks = $ab->get_user_addressbook_ids($calendar['user_id']);
+			if(isset($GO_MODULES->modules['addressbook']))
+			{
+				$contacts = array();
+				foreach($check_calendars as $calendar_id)
+				{
+					$calendar = $cal->get_calendar($calendar_id);
+					if($calendar['show_bdays'])
+					{
+						require_once ($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+						$ab = new addressbook();
+						$abooks = $ab->get_user_addressbook_ids($calendar['user_id']);
 
-				$cal->get_bdays($start_time, $end_time ,$abooks);
-				while($contact = $cal->next_record()) {
-					$name = String::format_name($contact['last_name'], $contact['first_name'], $contact['middle_name']);
+						$cal->get_bdays($start_time, $end_time ,$abooks);
+						while($contact = $cal->next_record()) {
+							$name = String::format_name($contact['last_name'], $contact['first_name'], $contact['middle_name']);
 
-					$start_time = $contact['upcoming'].' 00:00';
-					$end_time = $contact['upcoming'].' 23:59';
-
-					$response['results'][] = array(
-									'id'=>$response['count']++,
-									'name'=>htmlspecialchars(str_replace('{NAME}',$name,$lang['calendar']['birthday_name']), ENT_COMPAT, 'UTF-8'),
-									'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$contact['upcoming']-$contact['birthday']), $lang['calendar']['birthday_desc']), ENT_COMPAT, 'UTF-8'),
-									'time'=>'00:00',
-									'start_time'=>$start_time,
-									'end_time'=>$end_time,
-									'background'=>'EBF1E2',
-									'day'=>$lang['common']['full_days'][date('w', strtotime($start_time))].' '.date($_SESSION['GO_SESSION']['date_format'], strtotime($start_time)),
-									'read_only'=>true,
-									'contact_id'=>$contact['id']
-					);
+							if(!in_array($contact['id'], $contacts))
+							{
+								$contacts[] = $contact['id'];
+								$response['results'][] = array(
+												'id'=>$response['count']++,
+												'name'=>htmlspecialchars(str_replace('{NAME}',$name,$lang['calendar']['birthday_name']), ENT_COMPAT, 'UTF-8'),
+												'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$contact['upcoming']-$contact['birthday']), $lang['calendar']['birthday_desc']), ENT_COMPAT, 'UTF-8'),
+												'time'=>'00:00',
+												'start_time'=>$contact['upcoming'].' 00:00',
+												'end_time'=>$contact['upcoming'].' 23:59',
+												'background'=>'EBF1E2',
+												'day'=>$lang['common']['full_days'][date('w', $start_time)].' '.date($_SESSION['GO_SESSION']['date_format'], $start_time),
+												'read_only'=>true,
+												'contact_id'=>$contact['id']
+								);
+							}
+						}
+					}
 				}
 			}
 
@@ -654,7 +664,7 @@ try {
 			$cal->get_view_calendars($view_id);
 			while($view_calendar = $cal->next_record()) {
 
-		
+
 				$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $view_calendar['acl_id']);
 				if(!$permission_level)
 					continue;
@@ -714,7 +724,7 @@ try {
 		case 'calendars':
 
 			$resources = isset($_REQUEST['resources']) ? $_REQUEST['resources'] : 0;
-			
+
 			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources, 1);
 
 			$response['results']=array();
@@ -1060,7 +1070,7 @@ try {
 					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
-			
+
 			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'id';
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
