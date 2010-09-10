@@ -22,6 +22,13 @@ if(empty($always_request_notification))
 else
 	$GO_SCRIPTS_JS .= 'true;';
 
+$GO_SCRIPTS_JS .= 'GO.email.alwaysRespondToNotifications=';
+$always_respond_to_notifications = $GO_CONFIG->get_setting('email_always_respond_to_notifications', $GO_SECURITY->user_id);
+if(empty($always_respond_to_notifications))
+	$GO_SCRIPTS_JS .= 'false;';
+else
+	$GO_SCRIPTS_JS .= 'true;';
+
 if(isset($_GET['mail_to']))
 {
 	//$qs=strtolower(str_replace('mailto:','mail_to=', $_GET['mail_to']));

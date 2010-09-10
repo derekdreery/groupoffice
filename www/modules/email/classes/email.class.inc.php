@@ -222,6 +222,7 @@ class email extends db {
 			$GO_CONFIG->save_setting('email_use_plain_text_markup', isset($_POST['use_html_markup']) ? '0' : '1', $GO_SECURITY->user_id);
 			$GO_CONFIG->save_setting('email_skip_unknown_recipients', isset($_POST['skip_unknown_recipients']) ? '1' : '0', $GO_SECURITY->user_id);
 			$GO_CONFIG->save_setting('email_always_request_notification', isset($_POST['always_request_notification']) ? '1' : '0', $GO_SECURITY->user_id);
+			$GO_CONFIG->save_setting('email_always_respond_to_notifications', isset($_POST['always_respond_to_notifications']) ? '1' : '0', $GO_SECURITY->user_id);
 		}
 	}
 

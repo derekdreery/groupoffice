@@ -184,3 +184,5 @@ GO.email.lang.icalendarUpdateEvent='Update Event';
 GO.email.lang.icalendarAcceptInvitation='Accept';
 GO.email.lang.icalendarDeclineInvitation='Decline';
 GO.email.lang.icalendarTentativeInvitation='Tentative';
+
+GO.email.lang.alwaysRespondToNotifications='Always respond to a read notification';

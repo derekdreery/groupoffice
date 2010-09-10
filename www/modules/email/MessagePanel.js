@@ -277,7 +277,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		
 		if(this.data['new']=='1' && this.data.notification)
 		{
-			if(confirm(GO.email.lang.sendNotification.replace('%s', this.data.notification)))
+			if(GO.email.alwaysRespondToNotifications || confirm(GO.email.lang.sendNotification.replace('%s', this.data.notification)))
 			{
 				var params = {
 					task:'notification',
