@@ -377,3 +377,8 @@ GO.lang.captchaEmpty='Security code is empty';
 GO.lang.multiselectComboMaxItemsReachedWarning='You may select a maximum of {max} options';
 
 GO.lang.toScreen='To screen';
+
+GO.lang.priority='Priority';
+GO.lang.priority_low='Low';
+GO.lang.priority_normal='Normal';
+GO.lang.priority_high='High';

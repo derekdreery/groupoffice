@@ -322,3 +322,7 @@ GO.lang.adminMenu = 'Menu administratora';
 
 GO.lang.administration = 'Zarządzanie';
  	  	 
+GO.lang.priority='Priorytet';
+GO.lang.priority_low='Niski';
+GO.lang.priority_normal='Normalny';
+GO.lang.priority_high='Wysoki';

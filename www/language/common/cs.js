@@ -353,3 +353,8 @@ GO.lang.thankyou='Děkujeme';
 GO.lang.applyMultiselect='Použít vícenásobný výběr';
 
 GO.lang.createdBy='Vytvořil';
+
+GO.lang.priority='Priorita';
+GO.lang.priority_low='Nízká';
+GO.lang.priority_normal='Normalní';
+GO.lang.priority_high='Vysoká';

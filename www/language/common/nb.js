@@ -351,3 +351,8 @@ GO.lang.createdBy='Opprettet av';
 GO.lang.debugModeDetected="Advarsel! Debug mode aktivert";
 GO.lang.debugModeWarning="Du bør bare bruke $config['debug']=true; under utvikling og feilsøking. Group-Office kjører saktere i debug mode!";
 GO.lang.noItemSelectedWarning='Du må velge minst ett element.';
+
+GO.lang.priority='Prioritet';
+GO.lang.priority_low='Lav';
+GO.lang.priority_normal='Normal';
+GO.lang.priority_high='Høy';

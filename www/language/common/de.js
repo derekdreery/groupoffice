@@ -261,3 +261,7 @@ GO.lang.createdBy='Created by';
 GO.lang.debugModeDetected="Warnung! Debugmodus aktiv";
 GO.lang.debugModeWarning="Benutzen Sie $config['debug']=true; nur zur Entwicklungs- und Problemlösung, da es GroupOffice stark verlangsamt.";
 GO.lang.noItemSelectedWarning='Wählen Sie bitte mindestens einen Eintrag aus.';
+GO.lang.priority='Priorität';
+GO.lang.priority_low='Niedrig';
+GO.lang.priority_normal='Normal';
+GO.lang.priority_high='Hoch';
