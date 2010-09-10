@@ -362,3 +362,8 @@ GO.lang.debugModeDetected="Varning! Debug-läge aktiverat";
 GO.lang.debugModeWarning="Använd $config['debug']=true; endast vid utveckling och felsökning. Group-Office blir långsammare i debug-läge.";
 
 GO.lang.noItemSelectedWarning='Välj minst ett objekt.';
+
+GO.lang.priority='Prioritet';
+GO.lang.priority_low='Låg';
+GO.lang.priority_normal='Normal';
+GO.lang.priority_high='Hög';

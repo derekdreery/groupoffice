@@ -358,3 +358,8 @@ GO.lang.captchaEmpty='Beveiligings code ontbreekt';
 GO.lang.multiselectComboMaxItemsReachedWarning='U mag maximaal {max} opties selecteren';
 
 GO.lang.toScreen='Naar scherm';
+
+GO.lang.priority='Prioriteit';
+GO.lang.priority_low='Laag';
+GO.lang.priority_normal='Normaal';
+GO.lang.priority_high='Hoog';

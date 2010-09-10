@@ -320,3 +320,8 @@ GO.lang.rightClickToClose='Нажмите правой кнопкой мыши �
 GO.lang.adminMenu = 'Меню Администратора';
 
 GO.lang.administration='Настройки';
+
+GO.lang.priority='Приоритет';
+GO.lang.priority_low='Низкий';
+GO.lang.priority_normal='Нормальный';
+GO.lang.priority_high='Высокий';
