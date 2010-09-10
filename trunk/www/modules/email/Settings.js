@@ -32,6 +32,11 @@ GO.email.SettingsPanel = function(config) {
 		hideLabel:true,
 		checked:GO.email.alwaysRequestNotification,
 		name:'always_request_notification'
+	}),this.alwaysRespondToNotifications = new Ext.form.Checkbox({
+		boxLabel:GO.email.lang.alwaysRespondToNotifications,
+		hideLabel:true,
+		checked:GO.email.alwaysRespondToNotifications,
+		name:'always_respond_to_notifications'
 	})];
 
 
@@ -47,6 +52,7 @@ Ext.extend(GO.email.SettingsPanel, Ext.Panel, {
 		GO.email.useHtmlMarkup=this.useHtml.getValue();
 		GO.email.skipUnknownRecipients=this.skipUnknownRecipients.getValue();
 		GO.email.alwaysRequestNotification=this.alwaysRequestNotification.getValue();
+		GO.email.alwaysRespondToNotifications=this.alwaysRespondToNotifications.getValue();
 	}
 
 });
