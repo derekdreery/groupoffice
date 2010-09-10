@@ -815,6 +815,13 @@ class GO_CONFIG {
 
 	var $product_name='Group-Office';
 
+	/**
+	 * Full original URL to reach Group-Office with slash on end
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $orig_full_url = '';
 
 	/**
 	 * Constructor. Initialises all public variables.
@@ -839,6 +846,8 @@ class GO_CONFIG {
 		foreach($config as $key=>$value) {
 			$this->$key=$value;
 		}
+
+		$this->orig_full_url = $this->full_url;
 
 		$this->orig_tmpdir=$this->tmpdir;
 
