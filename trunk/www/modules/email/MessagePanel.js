@@ -81,7 +81,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				'<span class="message-icalendar-icon go-link-icon-1"></span>'+
 				'{[values.iCalendar.feedback]}'+
 				'<span class="message-icalendar-actions">'+
-				'<tpl if="iCalendar.invitation_reply">'+
+				'<tpl if="iCalendar.new_update">'+
 					'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
 				'</tpl>'+
 				'<tpl if="iCalendar.invitation">'+
@@ -136,7 +136,12 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				{
 					var data = Ext.decode(response.responseText);
 					
-					
+
+					if(this.updated)
+					{
+						data.iCalendar.feedback = GO.email.lang.icalendarEventUpdated;
+						this.updated = false;
+					}
 					
 					if(data.askPassphrase)
 					{
@@ -164,7 +169,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					if(data.feedback)
 					{
 						GO.errorDialog.show(data.feedback);
-					}
+					}					
 				}				
 			}
 		});
@@ -406,9 +411,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		}		
 	},
 
+	updated:false,
 	updateEvent : function()
 	{
-		var reply = this.data.iCalendar.invitation_reply;
+		var reply = this.data.iCalendar.new_update;
 
 		Ext.Ajax.request({
 			url: GO.settings.modules.calendar.url+'action.php',
@@ -425,10 +431,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				var data = Ext.decode(response.responseText);
 				if(data.success)
 				{
+					this.updated = true;
 					this.loadMessage();
-				}else
-				{
-
 				}
 			}
 		});
@@ -464,13 +468,15 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				var data = Ext.decode(response.responseText);
 				if(data.success)
 				{
+					this.updated = true;
 					this.loadMessage();
 					this.cal_id = 0;
 				}else
 				{					
 					this.showSelectCalendarWindow(data.calendars);
 				}
-			}
+			} 
+
 		});
 	},
 

@@ -145,7 +145,7 @@ class go_ical extends calendar
 
 		$lines[] = "BEGIN:VEVENT";
 
-		$lines[] = (!$this->uid) ? "UID:".$event['id'] : "UID:".$this->uid;
+		$lines[] = (!$this->uid) ? "UID:".$event['uuid'] : "UID:".$this->uid;
 
 		$lines = array_merge($lines, String::format_vcard_line('SUMMARY', $event['name'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 		//if ($event['description'] != '')
@@ -174,7 +174,7 @@ class go_ical extends calendar
 			{
 				$status = $cal2->get_participant_status_name($cal->f('status'));
 				$rsvp = ($cal->f('status')) ? 'FALSE' : 'TRUE';
-				$lines = array_merge($lines, array('ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT='.$status.';RSVP='.$rsvp.';CN='.$cal->f('name').';LANGUAGE=en:MAILTO:'.$cal->f('email')));
+				$lines = array_merge($lines, array('ATTENDEE;CUTYPE=INDIVIDUAL;ROLE='.$cal->f('role').';PARTSTAT='.$status.';RSVP='.$rsvp.';CN='.$cal->f('name').';LANGUAGE=en:MAILTO:'.$cal->f('email')));
 			}						
 		}
 

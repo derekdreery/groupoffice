@@ -65,7 +65,6 @@ $lang['email']['error_authentication']='Invalid username or password';
 $lang['email']['error_connection_refused']='The connection was refused. Please check the host and port number.';
 
 $lang['email']['iCalendar_event_invitation']='This message contains an invitation to an event.';
-$lang['email']['iCalendar_event_updated']='Event has been updated';
 $lang['email']['iCalendar_event_not_found']='This message contains an update to an event that doesn\'t exists anymore.';
 $lang['email']['iCalendar_update_available']='This message contains an update to an existing event.';
 $lang['email']['iCalendar_update_old']='This message containts an event that has already been processed.';

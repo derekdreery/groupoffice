@@ -166,3 +166,5 @@ GO.email.lang.icalendarDeclineInvitation='Weigeren';
 GO.email.lang.icalendarTentativeInvitation='Voorlopig';
 
 GO.email.lang.alwaysRespondToNotifications='Altijd antwoorden op een leesbevestiging';
+
+GO.email.lang.icalendarEventUpdated='Afspraak is bijgewerkt';
