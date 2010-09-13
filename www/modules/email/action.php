@@ -1135,7 +1135,7 @@ try {
 
 			require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 			$ical2array = new ical2array();
-
+			
 			$vcalendar = $ical2array->parse_string($data);
 
 			$event=false;
@@ -1158,28 +1158,28 @@ try {
 			unset($event['participants']);
 			if($event_id = $cal->add_event($event))
 			{
-				$organizer = false;
-				for($i=0; $i<count($participants); $i++)
-				{
-					$participant = $participants[$i];
+				$organizer_email = false;
+				foreach($participants as $participant_email=>$participant)
+				{			
 					$participant['event_id'] = $event_id;
-
-					$participant['status'] = ($participant['email'] == $email) ? $status_id : 0;
+					$participant['email'] = $participant_email;
+					$participant['status'] = ($participant['email'] == $email) ? $status_id : $participant['status'];
+					$participant['role']='REQ-PARTICIPANT';
 					
 					if(isset($participant['is_organizer']) && $participant['is_organizer'])
 					{												
 						$participant['last_modified'] = $last_modified;
-						$organizer = $participant;						
+						$organizer_email = $participant_email;
 					}
-
+				
 					$cal->add_participant($participant);
 				}
 
-				if($organizer)
+				if($organizer_email)
 				{
 					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 					$swift = new GoSwift(
-							$organizer['email'],
+							$organizer_email,
 							$lang['calendar']['invitation_reply'].': '.$event['name']);
 
 					//create ics attachment

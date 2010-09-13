@@ -86,3 +86,5 @@ $updates[]="ALTER TABLE `cal_events` ADD `sequence` INT NOT NULL default '0'";
 $updates[]="ALTER TABLE `cal_participants` CHANGE `status` `status` enum('0','1','2','3') NOT NULL default '0'";
 
 $updates[]="ALTER TABLE `cal_events` ADD `uid` VARCHAR(255) NOT NULL";
+
+$updates[]="ALTER TABLE `cal_participants` ADD `role` VARCHAR(100) NOT NULL";

@@ -62,7 +62,6 @@ $lang['email']['error_authentication']='Ongeldige gebruikersnaam of wachtwoord';
 $lang['email']['error_connection_refused']='De verbinding werd geweigerd. Controleer het host adres en port a.u.b.';
 
 $lang['email']['iCalendar_event_invitation']='Dit bericht bevat een uitnodiging voor een afspraak.';
-$lang['email']['iCalendar_event_updated']='Afspraak is bijgewerkt';
 $lang['email']['iCalendar_event_not_found']='Dit bericht bevat een update voor een niet bestaande afspraak.';
 $lang['email']['iCalendar_update_available']='Dit bericht bevat een update voor een bestaande afspraak.';
 $lang['email']['iCalendar_update_old']='Dit bericht bevat een afspraak die al is verwerkt.';

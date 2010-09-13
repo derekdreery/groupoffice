@@ -978,7 +978,7 @@ class calendar extends db {
 	function add_event(&$event, $calendar=false) {
 		if(empty($event['calendar_id'])) {
 			return false;
-		}
+		}		
 
 		if(isset($event['name']) && strlen($event['name'])>150){
 			$event['name']=substr($event['name'],0,150);
@@ -1026,6 +1026,10 @@ class calendar extends db {
 		}
 		$event['id'] = $this->nextid("cal_events");
 
+		if(empty($event['uuid']))
+		{
+			$event['uuid'] = UUID::create('event', $event['id']);
+		}
 
 		if(!isset($event['participants_event_id'])) {
 			$event['participants_event_id']=$event['id'];
@@ -1090,7 +1094,7 @@ class calendar extends db {
 			}
 
 			return $event['id'];
-		}
+		}				
 		return false;
 	}
 
@@ -1765,6 +1769,29 @@ class calendar extends db {
 		return 'FFFFCC';
 	}
 
+	function convert_attendees_to_participants($attendees)
+	{
+		$participants = array();
+		foreach($attendees as $attendee)
+		{
+			$email = strtolower($attendee['value']);
+			$email = (strpos($email, 'mailto') === 0) ? $email = substr($email, 7) : $email;
+			
+			if(!isset($participants[$email]))
+			{
+				$participants[$email] = array();
+			}
+			
+			$participant['name'] = isset($attendee['params']['CN']) ? $attendee['params']['CN'] : $email;
+			$status = isset($attendee['params']['PARTSTAT']) ? $attendee['params']['PARTSTAT'] : 'ACCEPTED';
+			$participant['status'] = $this->get_participant_status_id($status);
+			$participant['role'] = isset($attendee['params']['ROLE']) ? $attendee['params']['ROLE'] : '';
+
+			$participants[$email] = $participant;
+		}
+					
+		return $participants;
+	}
 
 	function get_event_from_ical_object($object) {
 		global $GO_MODULES, $GO_CONFIG;
@@ -1774,25 +1801,27 @@ class calendar extends db {
 			$this->ical2array = new ical2array();
 		}
 
-		$attendees = (isset($object['ATTENDEES']) && count($object['ATTENDEES'])) ? $object['ATTENDEES'] : array();		
-		foreach($attendees as $attendee)
+		$event['participants'] = array();
+		$attendees = (isset($object['ATTENDEES']) && count($object['ATTENDEES'])) ? $object['ATTENDEES'] : array();
+		if(count($attendees))
 		{
-			$email = strtolower($attendee['value']);
-			$participant['email'] = (strpos($email, 'mailto') === 0) ? $email = substr($email, 7) : $email;
-			$participant['name'] = isset($attendee['params']['CN']) ? $attendee['params']['CN'] : $participant['email'];
-			$participant['status'] = $attendee['params']['PARTSTAT'];
-			$event['participants'][] = $participant;
+			$event['participants'] = $this->convert_attendees_to_participants($attendees);
 		}
 
 		$organizer = (isset($object['ORGANIZER']) && count($object['ORGANIZER'])) ? $object['ORGANIZER'] : '';
 		if($organizer)
 		{
 			$email = strtolower($organizer['value']);
-			$participant['email'] = (strpos($email, 'mailto') === 0) ? $email = substr($email, 7) : $email;
-			$participant['name'] = isset($organizer['params']['CN']) ? $organizer['params']['CN'] : $participant['email'];
-			$participant['status'] = 1;
-			$participant['is_organizer'] = true;
-			$event['participants'][] = $participant;
+			$organizer_email = (strpos($email, 'mailto') === 0) ? $email = substr($email, 7) : $email;
+			if(array_key_exists($organizer_email, $event['participants']))
+			{
+				// existing attendee is organizer
+				$event['participants'][$organizer_email]['is_organizer']=true;
+			}else
+			{
+				// set organizer			
+				$event['participants'] = array_merge($event['participants'], $this->convert_attendees_to_participants(array($organizer)));
+			}
 		}
 
 		$event['uid'] = (isset($object['UID']['value']) && $object['UID']['value'] != '') ? trim($object['UID']['value']) : '';

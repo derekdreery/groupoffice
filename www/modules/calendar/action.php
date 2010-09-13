@@ -563,6 +563,7 @@ try {
 					$participant['user_id']=(isset($p['user_id'])) ? $p['user_id'] : 0;
 					$participant['status']=$p['status'] ;
 					$participant['is_organizer']=(isset($p['is_organizer'])) ? $p['is_organizer'] : 0;
+					$participant['role']='REQ-PARTICIPANT';
 
 					if(substr($p['id'], 0,4)=='new_') {
 						if(isset($_POST['import']) && $participant['user_id'] > 0) {
@@ -625,6 +626,7 @@ try {
 					$participant['email']=$calendar_user['email'];
 					$participant['status']=1;
 					$participant['is_organizer']=1;
+					$participant['role']='REQ-PARTICIPANT';
 
 					$cal->add_participant($participant);
 				}
@@ -1216,8 +1218,7 @@ try {
 				throw new Exception($lang['common']['missingField']);
 			}
 
-			$new_status_id = $cal->get_participant_status_id($status);
-			$cal->set_event_status($event_id, $new_status_id, $email, $last_modified);
+			$cal->set_event_status($event_id, $status, $email, $last_modified);
 			
 			$response['success'] = true;
 			

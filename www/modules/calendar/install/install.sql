@@ -131,6 +131,7 @@ CREATE TABLE IF NOT EXISTS `cal_participants` (
   `status` enum('0','1','2','3') NOT NULL default '0',
   `last_modified` varchar(20) default NULL,
   `is_organizer` tinyint(1) NOT NULL default '0',
+  `role` varchar(100) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
