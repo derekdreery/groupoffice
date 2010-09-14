@@ -8,7 +8,8 @@ Options -Indexes FollowSymLinks
 AllowOverride None
 </Directory>
 
-ServerName *.{domain}
+ServerName {domain}
+ServerAlias *.{domain}
 ErrorLog /var/log/apache2/groupoffice_error.log
 CustomLog /var/log/apache2/groupoffice_access.log combined
 VirtualDocumentRoot /home/govhosts/%0/groupoffice
