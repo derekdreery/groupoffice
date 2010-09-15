@@ -26,9 +26,15 @@
  * @access public
  */
 
+if(function_exists('debugLog'))
+	debugLog('GO start');
+
 $root = dirname(__FILE__).'/';
 require_once($root.'functions.inc.php');
 require($root.'classes/base/config.class.inc.php');
+
+if(function_exists('debugLog'))
+	debugLog('config included');
 
 //preload classes before session so they can be stored in the session
 if ( isset( $GO_INCLUDES ) ) {
@@ -52,6 +58,9 @@ if(!defined('GO_NO_SESSION')){
 if(!isset($GO_CONFIG))
 	$GO_CONFIG = new GO_CONFIG();
 
+if(function_exists('debugLog'))
+	debugLog('GO_CONFIG created');
+
 if(!$GO_CONFIG->enabled)
 {
 	die('<h1>Disabled</h1>This Group-Office installation has been disabled');
@@ -69,6 +78,9 @@ if($GO_CONFIG->debug)
 if(function_exists('mb_internal_encoding'))
 	mb_internal_encoding("UTF-8");
 
+if(function_exists('debugLog'))
+	debugLog('mb_internal_encoding set');
+
 
 if(!isset($_SESSION['DIR_CHECK']))
 {
@@ -82,28 +94,60 @@ if(!isset($_SESSION['DIR_CHECK']))
 	unset($_SESSION);
 }
 
+if(function_exists('debugLog'))
+	debugLog('dir check');
+
 
 
 require_once($GO_CONFIG->class_path.'base/exceptions.class.inc.php');
+if(function_exists('debugLog'))
+	debugLog('exceptions');
 require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
+if(function_exists('debugLog'))
+	debugLog('auth');
 require_once($GO_CONFIG->class_path.'base/security.class.inc.php');
+if(function_exists('debugLog'))
+	debugLog('security');
 require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+if(function_exists('debugLog'))
+	debugLog('groups');
 require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+if(function_exists('debugLog'))
+	debugLog('users');
 require_once($GO_CONFIG->class_path.'base/modules.class.inc.php');
+if(function_exists('debugLog'))
+	debugLog('modules');
 require_once($GO_CONFIG->class_path.'base/language.class.inc.php');
+if(function_exists('debugLog'))
+	debugLog('language');
 require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
+if(function_exists('debugLog'))
+	debugLog('theme');
+
 require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+if(function_exists('debugLog'))
+	debugLog('links');
 require_once($GO_CONFIG->class_path.'base/events.class.inc.php');
+if(function_exists('debugLog'))
+	debugLog('events');
 
 $GO_THEME = new GO_THEME();
+if(function_exists('debugLog'))
+	debugLog('GO_THEME');
 $GO_AUTH = new GO_AUTH();
+if(function_exists('debugLog'))
+	debugLog('GO_AUTH');
 $GO_USERS = new GO_USERS();
+if(function_exists('debugLog'))
+	debugLog('GO_USERS');
 
 if(!is_int($_SESSION['GO_SESSION']['timezone']))
 {
 	//set user timezone setting after user class is loaded
 	date_default_timezone_set($_SESSION['GO_SESSION']['timezone']);
 }
+if(function_exists('debugLog'))
+	debugLog('timezone');
 //after date_default_timezone otherwise date function might raise an error
 go_debug('['.date('Y-m-d G:i').'] Start of new request: '.$_SERVER['PHP_SELF']);
 //go_debug($_POST);
@@ -136,8 +180,14 @@ if($GO_CONFIG->debug){
 }
 
 $GO_GROUPS = new GO_GROUPS();
+if(function_exists('debugLog'))
+	debugLog('GO_GROUPS');
 $GO_LANGUAGE = new GO_LANGUAGE();
+if(function_exists('debugLog'))
+	debugLog('GO_LANGUAGE');
 $GO_MODULES = new GO_MODULES();
+if(function_exists('debugLog'))
+	debugLog('GO_MODULES');
 
 /*
  * License checking for pro modules. Don't remove it or Group-Office will fail
@@ -148,6 +198,8 @@ if(PHP_SAPI != 'cli' && file_exists($GO_CONFIG->root_path.'modules/professional/
 	check_license();
 }
 $GO_SECURITY = new GO_SECURITY();
+if(function_exists('debugLog'))
+	debugLog('GO_SECURITY');
 
 if($GO_CONFIG->session_inactivity_timeout>0){
 	$now = time();
@@ -168,12 +220,18 @@ if($GO_CONFIG->session_inactivity_timeout>0){
 
 
 $GO_LINKS = new GO_LINKS();
+if(function_exists('debugLog'))
+	debugLog('GO_LINKS');
 $GO_EVENTS = new GO_EVENTS();
+if(function_exists('debugLog'))
+	debugLog('GO_EVENTS');
 
 
 if (isset($_REQUEST['SET_LANGUAGE'])){
 	$GO_LANGUAGE->set_language($_REQUEST['SET_LANGUAGE']);
 }
+if(function_exists('debugLog'))
+	debugLog('language set');
 
 require($GO_LANGUAGE->get_base_language_file('common'));
 //require($GO_LANGUAGE->get_base_language_file('filetypes'));
@@ -185,6 +243,9 @@ if ( $GO_CONFIG->log ) {
 
 require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 $fs = new filesystem();
+
+if(function_exists('debugLog'))
+	debugLog('fs');
 
 if($GO_SECURITY->user_id>0)
 {
@@ -216,4 +277,10 @@ if (get_magic_quotes_gpc())
 	$_COOKIE=stripslashes_array($_COOKIE);
 }
 
+if(function_exists('debugLog'))
+	debugLog('umask');
+
 umask(0);
+
+if(function_exists('debugLog'))
+	debugLog('end');
