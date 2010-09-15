@@ -837,7 +837,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		this.viewsStore.load();	
 		this.resourcesStore.load();
 
-		GO.calendar.categoriesStore.load();
+		if(!GO.calendar.categoriesStore.loaded)
+			GO.calendar.categoriesStore.load();
 	},
 	
 	deleteHandler : function(){
