@@ -294,18 +294,13 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 			}
                        
 			this.gridPanel.store.load();
-			GO.tasks.categoriesStore.load();
+
+			if(!GO.tasks.categoriesStore.loaded)
+				GO.tasks.categoriesStore.load();
                        
 		},this);
 
-		GO.tasks.categoriesStore.on('load', function(){
-			if(GO.tasks.taskDialog)
-			{
-				GO.tasks.taskDialog.populateComboBox(GO.tasks.categoriesStore.data.items);
-			}
-		    
-		},this);
-
+		
 		this.taskListsStore.load();
                
 		
@@ -495,8 +490,6 @@ GO.tasks.showTaskDialog = function(config){
 		}
 		delete GO.tasks.taskDialogListeners;
 	}
-
-	GO.tasks.taskDialog.populateComboBox(GO.tasks.categoriesStore.data.items);
 
 	GO.tasks.taskDialog.show(config);
 }
