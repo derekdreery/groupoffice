@@ -79,7 +79,7 @@ class imap extends imap_bodystruct {
 			$this->server = 'ssl://'.$this->server;
 		}
 
-		$this->handle = fsockopen($this->server, $this->port, $errorno, $errorstr, 30);
+		$this->handle = @fsockopen($this->server, $this->port, $errorno, $errorstr, 30);
 		if (!is_resource($this->handle)) {
 			throw new Exception('Failed to open socket #'.$errorno.'. '.$errorstr);
 		}
