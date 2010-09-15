@@ -63,9 +63,6 @@ GO.tasks.TaskDialog = function() {
 
 Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
-	afterRender : function(){
-		GO.tasks.TaskDialog.superclass.afterRender.call(this);
-	},
 	
 	show : function(config) {
 
@@ -73,6 +70,9 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			config = {};
 		}
 
+		if(!GO.tasks.categoriesStore.loaded)
+			GO.tasks.categoriesStore.load();
+		
 		//tmpfiles on the server ({name:'Name',tmp_file:/tmp/name.ext} will be attached)
 		this.formPanel.baseParams.tmp_files = config.tmp_files ? Ext.encode(config.tmp_files) : '';
 		
@@ -107,14 +107,14 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 					this
 					.setWritePermission(action.result.data.write_permission);
 
-                                        if(action.result.data.category_id == 0)
-                                        {
-                                                this.selectCategory.setRemoteText(GO.tasks.lang.selectCategory);
-                                        }else
-                                        {
-                                                var category = GO.tasks.categoriesStore.getById(action.result.data.category_id);
-                                                this.selectCategory.setRemoteText(category.data.name);
-                                        }
+					if(action.result.data.category_id == 0)
+					{
+						this.selectCategory.setRemoteText(GO.tasks.lang.selectCategory);
+					}else
+					{
+						var category = GO.tasks.categoriesStore.getById(action.result.data.category_id);
+						this.selectCategory.setRemoteText(category.data.name);
+					}
 					
 				},
 				failure : function(form, action) {
@@ -310,21 +310,19 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			fieldLabel : GO.tasks.lang.tasklist
 		});
 
-                this.selectCategory = new GO.form.ComboBoxReset({
-                        hiddenName:'category_id',
+		this.selectCategory = new GO.form.ComboBoxReset({
+			hiddenName:'category_id',
 			fieldLabel:GO.tasks.lang.category,
 			valueField:'id',
 			displayField:'name',			
-			store: new Ext.data.ArrayStore({
-                                fields: ['id', 'name']
-                        }),
+			store: GO.tasks.categoriesStore,
 			mode:'local',
 			triggerAction:'all',
-                        emptyText:GO.tasks.lang.selectCategory,
+			emptyText:GO.tasks.lang.selectCategory,
 			editable:false,
 			selectOnFocus:true,
 			forceSelection:true
-                });		
+		});
 
 		this.selectPriority = new GO.form.SelectPriority();
 
@@ -567,24 +565,24 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		});
 	},
 
-	populateComboBox : function(records)
-        {
-                var data = [];		
+	/*populateComboBox : function(records)
+	{
+		var data = [];
 
-                for(var i=0; i<records.length; i++)
-                {
-                        var tasklist = []
-                        tasklist.push(records[i].id);
-                        tasklist.push(records[i].data.name);
+		for(var i=0; i<records.length; i++)
+		{
+			var tasklist = []
+			tasklist.push(records[i].id);
+			tasklist.push(records[i].data.name);
 
-                        data.push(tasklist);
-                }
+			data.push(tasklist);
+		}
 
-                this.selectCategory.store.loadData(data);
-				var r = this.selectCategory.store.getAt(0);
-				if(r)
-					this.selectCategory.setValue(r.data.id);
-        },
+		this.selectCategory.store.loadData(data);
+		var r = this.selectCategory.store.getAt(0);
+		if(r)
+			this.selectCategory.setValue(r.data.id);
+	},*/
 
 	changeRepeat : function(value) {
 
