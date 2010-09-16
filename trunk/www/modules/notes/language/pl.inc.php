@@ -7,8 +7,6 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('notes'));
 
-$modules['notes']['name']='Notatki';
-$modules['notes']['description']='Proszę wprowadzić opis';
 $lang['notes']['note']='Notatka';
 $lang['notes']['name']='Notatki';
 $lang['notes']['description']='Proszę wprowadzić opis';

@@ -1,6 +1,5 @@
-Ext.namespace('GO.currencies');
-GO.currencies.lang={};
-GO.currencies.lang.currencies='currencies';
+
+GO.currencies.lang.currencies='Waluty';
 
 /* table: cu_currencies */
 GO.currencies.lang.currency="Waluta";

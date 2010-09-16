@@ -118,14 +118,14 @@ class cached_imap extends imap{
 
 			$this->set_account($account, $mailbox);
 
-			parent::connect(
+			if(parent::connect(
 							$this->account['host'],
 							$this->account['port'],
 							$this->account['username'],
 							$this->account['password'],
-							$this->account['use_ssl']);
-
-			$this->select_mailbox($mailbox);
+							$this->account['use_ssl'])){
+				$this->select_mailbox($mailbox);
+			}
 		}
 		return $this->handle;
 	}

@@ -8,6 +8,6 @@ background-color:#f1f1f1;
 
 
 .mceItemHiddenSpellWord {
-background:url(../../../../../javascript/tiny_mce/plugins/spellchecker/img/wline.gif) repeat-x bottom left;
+background:url(../../javascript/tiny_mce/plugins/spellchecker/img/wline.gif) repeat-x bottom left;
 cursor:default;
 }

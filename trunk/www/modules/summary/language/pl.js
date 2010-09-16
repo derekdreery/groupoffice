@@ -4,6 +4,9 @@
  * Polish Translation v1.0
  * Author : Robert GOLIAT info@robertgoliat.com  info@it-administrator.org
  * Date : January, 20 2009
+ * Polish Translation v1.1
+ * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
+ * Date : September, 04 2010
  */
 // 
 // 
@@ -30,3 +33,9 @@ GO.summary.lang.title="Tytuł";
 
 
 GO.summary.lang.manageAnnouncements='Zarządzaj powiadomieniami';
+
+GO.summary.lang.webFeeds='Zarządzanie kanałami';
+GO.summary.lang.type='Typ';
+GO.summary.lang.summaryType='Streszczenie';
+GO.summary.lang.rssFeeds='Kanały RSS';
+GO.summary.lang.noRssFeeds='Kanały RSS nie zostały dodane.<br />Kliknij przycisk ustawień w górnym prawym rogu tego okna w celu dodania kanalów.';

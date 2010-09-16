@@ -43,7 +43,7 @@ GO.email.lang.novalidateCert='ไม่ตรวจสอบใบรับร�
 GO.email.lang.port='พอร์ต';
 GO.email.lang.rootMailbox='กล่องจดหมายเข้า';
 GO.email.lang.manageFolders='การจัดการโฟลเดอร์';
-GO.email.lang.sendItemsFolder='ส่งรายการโฟลเดอร์';
+GO.email.lang.sendItemsFolder='ส่งแล้ว';
 GO.email.lang.trashFolder='ถังขยะ';
 GO.email.lang.draftsFolder='ร่างจดหมาย';
 GO.email.lang.sender='ผู้ส่ง';
@@ -89,11 +89,11 @@ GO.email.lang.noEncryption='ไม่เข้ารหัส';
 GO.email.lang.noAccountTitle='ไม่มีชื่อผู้ใช้';
 GO.email.lang.priority='ลำดับความสำคัญ';
 
-GO.email.lang.read='อ่าน';
+GO.email.lang.read='อ่านแล้ว';
 GO.email.lang.NA='N/A';
 
-GO.email.lang.emptyFolder='โฟลเดอร์';//Empty folder
-GO.email.lang.emptyFolderConfirm='ต้องการย้ายไปยังโฟลเดอร์ \'{name}\'?';//Are you sure you want to EMPTY
+GO.email.lang.emptyFolder='ลบเมล์ในโพลเดอร์ทั้งหมด';//Empty folder
+GO.email.lang.emptyFolderConfirm='คุณแน่ใจหรือไม่ว่าต้องการจะลบข้อมูลใน \'{name}\' ทั้งหมด?';//Are you sure you want to EMPTY
 GO.email.lang.addUnknownRecipients='เพิ่มอีเมลอื่น';//Add unknown recipients
 GO.email.lang.addUnknownRecipientsText='สามารถทำการส่งจดหมายไปยังที่อยู่อีเมลเดียว หรือ หากต้องการเพิ่มเติมที่อยู่อีเมล พิมพ์ชื่อแล้วคลิกเลือกได้จากสมุดที่อยู่ผู้ติดต่อ หรือปิดหน้าต่างนี้่ ';//You just sent an e-mail to one or more recipients that are not in your addressbook. Click on a name if you want to add that person or close this window
 GO.email.lang.attachFilesPC='เพิ่มจากเครื่องคอมพิวเตอร์';
@@ -109,7 +109,7 @@ GO.email.lang.addToRecipients = 'เพิ่มผู้รับ';
 GO.email.lang.addToCC = 'เพิ่มสำเนา';
 GO.email.lang.addToBCC = 'เพิ่มสำเนาซ่อน';
 
-GO.email.lang.viewSource='View source';
+GO.email.lang.viewSource='แสดงเฮดเดอร์';
 
 GO.email.lang.sendNotification='ผู้ส่งอีเมลสามารถทราบผลการส่งอีเมลได้ จากคุณ : %s  . ต้องการส่งผลการแจ้งทันที?';//The sender of this messages likes a read notification by you at . Do you want to send a read notification now
 
@@ -151,7 +151,20 @@ GO.email.lang.signature="ลายเซ็น";
 
 GO.email.lang.manageAliases='กำหนดชื่อผู้ส่งเพิ่มเติม';
 
-GO.email.lang.addSendersTo='เพิ่มชื่อผู้ส่ง...';
+GO.email.lang.addSendersTo='ส่งอีเมล์...';
 
 GO.email.lang.defaultTemplate='เลือกรูปแบบที่ใช้ประจำ';
 GO.email.lang.moving='ย้าย...';
+
+GO.email.lang.forwardTo='ส่งต่อไปยัง';
+GO.email.lang.selectFolderRename='กรุณาเลือกโฟลเดอร์ที่จะเปลี่ยนชื่อ';
+GO.email.lang.cantRenameInboxFolder='คุณไม่สามารถเปลี่ยนชื่อนี้ได้';
+GO.email.lang.renameFolder='เปลี่ยนชื่อโฟลเดอร์';
+GO.email.lang.orderFilters='คุณสามารถแก้ไขลำดับของฟิลเตอร์โดยการลากเม้า';
+GO.email.lang.orderAccounts='คุณสามารถแก้ไขลำดับของชื่อบัญชีโดยการลากเม้า';
+GO.email.lang.groups='กลุ่ม';
+GO.email.lang.showUnread='แสดงอีเมล์ที่ยังไม่ได้อ่าน';
+GO.email.lang.searchFrom='ผู้ส่ง';
+GO.email.lang.searchTo='ผู้รับ';
+GO.email.lang.searchCC='ผู้รับ (สำเนา)';
+GO.email.lang.youHaveNewMails= 'คุณมีจดหมายใหม่ {new}';

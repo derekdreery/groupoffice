@@ -28,3 +28,4 @@ $lang['files']['deleted']='ลบ';
 
 $lang['files']['file']='ไฟล์';
 $lang['files']['folder']='โฟลเดอร์';
+$lang['files']['files']='ไฟล์';

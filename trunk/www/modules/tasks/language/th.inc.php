@@ -24,4 +24,9 @@ $lang['tasks']['import_success']='%s งานที่นำเข้า';
 $lang['tasks']['call']='เรียกใช้';
 
 $lang['tasks']['dueAtdate']='Due at %s';
+
+$lang['tasks']['list']='รายการงาน';
+$lang['tasks']['tasklistChanged']="* รายการงานเปลี่ยนจาก '%s' ถึง '%s'";
+$lang['tasks']['statusChanged']="* สถานะถูกเปลี่ยนจาก '%s' ถึง '%s'";
+
 ?>

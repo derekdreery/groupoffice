@@ -7,5 +7,5 @@
 
 GO.comments.lang.comment="คำอธิบาย";//Comment
 GO.comments.lang.comments="คำอธิบาย";//Comments
-GO.comments.lang.fiveLatestComments='5 คำอธิบายล่าสุด';//5 latest comments
 GO.comments.lang.browseComments = 'เปิดหน้าต่างคำอธิบาย';//Browse comments
+GO.comments.lang.recentComments='แสดงความคิดเห็นล่าสุด';
