@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `middle_name` varchar(50) default NULL,
   `last_name` varchar(50) default NULL,
   `initials` varchar(10) default NULL,
-  `title` varchar(10) default NULL,
+  `title` varchar(50) default NULL,
   `sex` enum('M','F') NOT NULL default 'M',
   `birthday` date default NULL,
   `email` varchar(100) default NULL,
