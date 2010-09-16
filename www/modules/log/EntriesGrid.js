@@ -83,7 +83,7 @@ GO.log.EntriesGrid = function(config) {
 					config.subtitle= GO.lang.searchQuery+': '+query;
 				}else
 				{
-					config.subtile='';
+					config.subtitle='';
 				}
 				
 				if(!this.exportDialog)
