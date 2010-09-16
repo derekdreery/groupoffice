@@ -34,7 +34,7 @@ require($root.'classes/base/config.class.inc.php');
 
 //preload classes before session so they can be stored in the session
 if ( isset( $GO_INCLUDES ) ) {
-	
+
 	//load configuration before session start because otherwise objects may be incomplete.
 	//We rather start the session before creating GO_CONFIG because we can save the location
 	//of config.php in the session. Otherwise we'll have to search for it every time.
@@ -45,9 +45,11 @@ if ( isset( $GO_INCLUDES ) ) {
 	}
 }
 
-//start session
-session_name('groupoffice');
-session_start();
+if(!defined('GO_NO_SESSION')){
+	//start session
+	session_name('groupoffice');
+	session_start();
+}
 
 if(!isset($GO_CONFIG))
 	$GO_CONFIG = new GO_CONFIG();
@@ -116,7 +118,7 @@ if($GO_CONFIG->debug){
 		 * if (error_reporting() == 0) {
         return;
     }*/
-		
+
 		$err_str = "PHP error: $errfile:$errline $errstr ($errno)";
 
 		global $GO_CONFIG;
@@ -128,10 +130,10 @@ if($GO_CONFIG->debug){
 
     go_debug($err_str);
 	}
-	
+
 	ini_set('error_reporting', E_ALL);
 	ini_set('display_errors', 1);
-	
+
 	//set_error_handler("groupoffice_error_handler", E_ALL);
 }
 

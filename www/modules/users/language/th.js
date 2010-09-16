@@ -15,7 +15,7 @@ GO.users.lang.userVisibleTo = 'ผู้ใช้ที่มองเห็น'
 
 GO.users.lang.cmdPanelPersonal = 'ส่วนบุคคล';
 GO.users.lang.cmdPanelPassword= 'รหัสผ่าน';
-GO.users.lang.cmdPanelCompany = 'บริษัท';
+GO.users.lang.cmdPanelCompany = 'หน่วยงาน';
 GO.users.lang.cmdPanelPermissions = 'สิทธิ์การเข้าถึง';
 GO.users.lang.cmdPanelLogin = 'เข้าสู่ระบบ';
 GO.users.lang.cmdPanelLookFeel = 'รูปแบบและการแสดงผล';//Look & Feel
@@ -43,7 +43,7 @@ GO.users.lang.numberOfLogins = 'จำนวนการล็อคอิน';
 GO.users.lang.cmdFormLabelTheme = 'รูปแบบการแสดงผล';
 GO.users.lang.cmdFormLabelStartModule = 'เริ่มต้นแสดงผลหน้าแรก';
 GO.users.lang.cmdFormLabelMaximunRows = 'จำนวนสูงสุดที่แสดง';
-GO.users.lang.cmdFormLabelSortNamesBy = 'นามสกุล';
+GO.users.lang.cmdFormLabelSortNamesBy = 'เรียงชื่อโดย';
 GO.users.lang.cmdFormLabelLanguage = 'ภาษา';
 GO.users.lang.cmdFormLabelTimezone = 'โซนเวลา';
 GO.users.lang.cmdFormLabelAdjustDaylight = 'ตั้งเวลาอัตโนมัติ';//Automatically adjust time to Daylight Savings Time
@@ -98,3 +98,9 @@ GO.users.lang.textSeparator='แยกตัวอักษรตามสัญ
 GO.users.lang.deleteWarning='ข้อความเตือน!!! ข้อมูลของผู้ใช้งานเช่น addressbooks, projects, calendars และอื่นๆ จะถูกลบทันที!';
 GO.users.lang.lastName= 'นามสกุล';
 GO.users.lang.firstName= 'ชื่อ';
+
+GO.users.lang.profile='โปรไฟล์';
+GO.users.lang.mailReminders='อีเมล์แจ้งเตือน';
+GO.users.lang.sendInvitation='ส่งคำเชิญ';
+GO.users.lang.contactInfo='ข้อมูลติดต่อ';
+GO.users.lang.popupNotification='แสดงหน้าต่างป๊อปอัปเมื่อเตือนเหตุการณ์หรืออีเมล์ใหม่เข้ามา';

@@ -410,35 +410,39 @@ try {
 								//throw new Exception(var_export($file, true));
 								$folder = $files->get_folder($file['folder_id']);
 								if(!$file || !$folder) {
-									throw new FileNotFoundException();
+									//throw new FileNotFoundException();
+									continue;
 								}
 								$tmp_name = $GO_CONFIG->file_storage_path.$files->build_path($folder).'/'.$file['name'];
 							}
 
-							if(!file_exists($tmp_name)) {
-								//throw new Exception($tmp_name);
-								throw new FileNotFoundException();
-							}
 
-							//Browsers reformat URL's so a pattern match
-							$just_filename = utf8_basename($inlineAttachment['url']);
-							if(preg_match('/="([^"]*'.preg_quote($just_filename).')"/',$body,$matches)){
-								go_debug($matches);
+							if(file_exists($tmp_name)) {
+
 								$img = Swift_EmbeddedFile::fromPath($tmp_name);
 								$img->setContentType(File::get_mime($tmp_name));
 								$src_id = $swift->message->embed($img);
 
 								//Browsers reformat URL's so a pattern match
-								$body = str_replace($matches[1], $src_id, $body);
+								$just_filename = utf8_basename($inlineAttachment['url']);
+								if(preg_match('/="([^"]*'.preg_quote($just_filename).')"/',$body,$matches)){
+									//go_debug($matches);
+									$img = Swift_EmbeddedFile::fromPath($tmp_name);
+									$img->setContentType(File::get_mime($tmp_name));
+									$src_id = $swift->message->embed($img);
 
-								//go_debug($body);
-								//go_debug(preg_quote($just_filename));
-								//go_debug($src_id);
+									//Browsers reformat URL's so a pattern match
+									$body = str_replace($matches[1], $src_id, $body);
 
-								//$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body, null, $count);
-								//go_debug($count);
-								//throw new Exception($just_filename);
+									//go_debug($body);
+									//go_debug(preg_quote($just_filename));
+									//go_debug($src_id);
 
+									//$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body, null, $count);
+									//go_debug($count);
+									//throw new Exception($just_filename);
+
+								}
 							}
 						}
 					}

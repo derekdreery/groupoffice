@@ -1,21 +1,12 @@
 /**
- * Don't copy the next line into a translation
- *
  * Polish Translation v1.0
  * Author : Robert GOLIAT info@robertgoliat.com  info@it-administrator.org
  * Date : January, 20 2009
+ * Polish Translation v1.1
+ * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
+ * Date : September, 04 2010
  */
-
-
-
-
-/**
- * Copy everything below for translations
- */
- 
-
 GO.calendar.lang.addressbook='Książka adresowa';
-
 GO.calendar.lang.appointment = 'Termin';
 GO.calendar.lang.appointments = 'Terminy';
 GO.calendar.lang.recurrence = 'Powtarzanie';
@@ -69,3 +60,29 @@ GO.calendar.lang.closeWindow = 'Termin został zaakceptowany i zaplanowany. Moż
 GO.calendar.lang.list='Lista';
 GO.calendar.lang.editRecurringEvent='Chcesz poprawiać tylko to wystapienie czy całą serię?';
 GO.calendar.lang.selectIcalendarFile='Wybierz plik typu icalendar (*.ics)';
+GO.calendar.lang.location='Lokalizacja';
+GO.calendar.lang.startsAt='Początek o';
+GO.calendar.lang.endsAt='Koniec o';
+GO.calendar.lang.eventDefaults='Domyślne ustawienia dla zdarzeń';
+GO.calendar.lang.importToCalendar='Dodaj termin bezpośrednio do kalendarzy';
+GO.calendar.lang.default_calendar='Domyślny kalendarz';
+GO.calendar.lang.status='Status';
+GO.calendar.lang.resources='Zasoby';
+GO.calendar.lang.resource='Zasób';
+GO.calendar.lang.admins='Administratorzy';
+GO.calendar.lang.no_group_selected='Masz błędy w formularzu. Należy wybrać grupę dla tego zasobu.';
+GO.calendar.lang.visibleCalendars='Widoczne kalendarze';
+GO.calendar.lang.visible='Widoczny';
+GO.calendar.lang.group='Grupa';
+GO.calendar.lang.no_status='Nowy';
+GO.calendar.lang.no_custom_fields='Nie ma żadnych dostępnych dodatkowych opcji.';
+GO.calendar.lang.show_bdays='Pokaż urodziny z książki adresów';
+GO.calendar.lang.show_tasks='Pokaż zadanie na liście zadań';
+GO.calendar.lang.myCalendar='Mój kalendarz';
+GO.calendar.lang.merge='Scal';
+GO.calendar.lang.ownColor= 'Ustaw każdemu kalendarzowi inny kolor';
+GO.calendar.lang.ignoreConflictsTitle= 'Zignorować konflikt?';
+GO.calendar.lang.ignoreConflictsMsg= 'Ten termin koliduje z innym terminem w Twoim kalendarzu. Czy mimo wszystko zapisać to zdarzenie?';
+GO.calendar.lang.resourceConflictTitle= 'Konflikt zasobów';
+GO.calendar.lang.resourceConflictMsg= 'Jeden lub więcej zasobów w tym zdarzeniu jest wykorzystywanych w tm samym czasie:</br>';
+GO.calendar.lang.view= 'Widok';

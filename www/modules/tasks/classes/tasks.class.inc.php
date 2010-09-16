@@ -448,7 +448,7 @@ class tasks extends db
 	{
 		if(empty($task['tasklist_id']))
 		{
-			throw new Exception();
+			return false;
 		}
 
 		if (!isset($task['user_id']) || $task['user_id'] == 0) {

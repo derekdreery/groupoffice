@@ -2591,8 +2591,12 @@ class calendar extends db {
 		return $this->query("DELETE FROM cal_group_admins WHERE group_id=? AND user_id=?" , 'ii', array($group_id, $user_id));
 	}
 
-	public function get_visible_tasklists($calendar_id) {
-		$this->query("SELECT * FROM cal_visible_tasklists WHERE calendar_id = ?", 'i', $calendar_id);
+	public function get_visible_tasklists($calendars)
+	{
+		if(!is_array($calendars))
+			$calendars = array($calendars);
+		
+		$this->query("SELECT DISTINCT tasklist_id FROM cal_visible_tasklists WHERE calendar_id IN (".implode(',', $calendars).")");
 		return $this->num_rows();
 	}
 

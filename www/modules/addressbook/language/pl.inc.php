@@ -15,6 +15,9 @@
 //Polish Translation v1.0
 //Author : Robert GOLIAT info@robertgoliat.com  info@it-administrator.org
 //Date : January, 20 2009
+//Polish Translation v1.1
+//Author : Paweł Dmitruk pawel.dmitruk@gmail.com
+//Date : September, 05 2010
 
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('addressbook'));
@@ -47,4 +50,7 @@ $lang['addressbook']['companies'] = 'Firmy';
 $lang['addressbook']['newContactAdded']='Nowy kontakt został dodany';
 $lang['addressbook']['newContactFromSite']='Nowy kontakt został dodany za pomocą formularza www.';
 $lang['addressbook']['clickHereToView']='Kliknij tutaj by obejrzeć kontakt';
+$lang['addressbook']['contactFromAddressbook']='Kontakt z %s';
+$lang['addressbook']['companyFromAddressbook']='Firma z %s';
+$lang['addressbook']['defaultSalutation']='Szanowny [Pan/Pani] {middle_name} {last_name}';
 ?>

@@ -49,11 +49,11 @@ function in_multiselectgrid_selection($target,$key) {
  */
 
 
-function create_direct_url($module, $function, $params, $loadevent='render'){
+function create_direct_url($module, $function, $params, $loadevent='render')
+{
 	global $GO_CONFIG;
 
-	return $GO_CONFIG->full_url.'dialog.php?e='.$loadevent.'&m='.$module.'&f='.$function.'&p='.urlencode(base64_encode(json_encode($params)));
-
+	return $GO_CONFIG->orig_full_url.'dialog.php?e='.$loadevent.'&m='.$module.'&f='.$function.'&p='.urlencode(base64_encode(json_encode($params)));
 }
 
 

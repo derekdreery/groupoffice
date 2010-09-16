@@ -2,8 +2,7 @@
 //Uncomment this line in new translations!
 
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
-$lang['common']['extjs_lang']='th-utf8'; 
-
+$lang['common']['extjs_lang']='th'; 
 $lang['common']['about']='เวอร์ชั่น: %s
 
 Copyright (c) 2003-%s, Intermesh
@@ -24,14 +23,14 @@ $lang['common']['htmldirection']= 'ltr';
 $lang['common']['quotaExceeded']='พื้นที่ฐานข้อมูลไม่เพียงพอ. กรุณาลบไฟล์ หรือ ติดต่อผู้ดูแลระบบเพื่อเพิ่มพื้นที่ฐานข้อมูล';
 $lang['common']['errorsInForm'] = 'เกิดข้อผิดพลาดในการทำรายการ. กรุณาตรวจสอบความถูกต้องและลองอีกครั้ง.';
 
-$lang['common']['moduleRequired']='เมนู %s มีกาีรเรียกใช้ฟังก์ชันที่ทำรายการ';//The %s module is required for this function
+$lang['common']['moduleRequired']='เมนู %s มีการเรียกใช้ฟังก์ชันที่ทำรายการ';//The %s module is required for this function
 
 $lang['common']['loadingCore']= 'กำลังตรวจสอบระบบ..';
 $lang['common']['loadingLogin'] = 'กำลังตรวจสอบการเข้าใช้งาน..';
 $lang['common']['renderInterface']='กำลังเข้าสู่ระบบ Group-office..';//Rendering interface
 $lang['common']['loadingModule'] = 'เข้าสู่ระบบ..';
 
-$lang['common']['loggedInAs'] = "เข้าสู่ระบบ ";
+$lang['common']['loggedInAs'] = 'เข้าสู่ระบบ ';
 $lang['common']['search']='ค้นหา';
 $lang['common']['settings']='การตั้งค่า';
 $lang['common']['adminMenu']='ผู้ดูแลระบบ';
@@ -84,7 +83,7 @@ $lang['common']['email'] = 'อีเมล';
 $lang['common']['phone'] = 'หมายเลขโทรศัพท์';
 $lang['common']['workphone'] = 'หมายเลขโทรศัพท์';// (ที่ทำงาน)
 $lang['common']['cellular'] = 'โทรศัพท์มือถือ';
-$lang['common']['company'] = 'บริษัท';
+$lang['common']['company'] = 'หน่วยงาน';
 $lang['common']['department'] = 'แผนก';
 $lang['common']['function'] = 'ตำแหน่ง';
 $lang['common']['question'] = 'คำถามลับ';//Secret question
@@ -118,22 +117,22 @@ $lang['common']['months'][10]='ตุลาคม';
 $lang['common']['months'][11]='พฤษภาคม';
 $lang['common']['months'][12]='ธันวาคม';
 
-$lang['common']['short_days'][0]="จ";
-$lang['common']['short_days'][1]="อ";
-$lang['common']['short_days'][2]="พ";
-$lang['common']['short_days'][3]="พฤ";
-$lang['common']['short_days'][4]="ศ";
-$lang['common']['short_days'][5]="ส";
-$lang['common']['short_days'][6]="อา";
+$lang['common']['short_days'][0]='จ';
+$lang['common']['short_days'][1]='อ';
+$lang['common']['short_days'][2]='พ';
+$lang['common']['short_days'][3]='พฤ';
+$lang['common']['short_days'][4]='ศ';
+$lang['common']['short_days'][5]='ส';
+$lang['common']['short_days'][6]='อา';
 
 
-$lang['common']['full_days'][0] = "จันทร์";
-$lang['common']['full_days'][1] = "อังคาร";
-$lang['common']['full_days'][2] = "พุธ";
-$lang['common']['full_days'][3] = "พฤหัสบดี";
-$lang['common']['full_days'][4] = "ศุกร์";
-$lang['common']['full_days'][5]= "เสาร์";
-$lang['common']['full_days'][6] = "อาทิตย์";
+$lang['common']['full_days'][0] = 'จันทร์';
+$lang['common']['full_days'][1] = 'อังคาร';
+$lang['common']['full_days'][2] = 'พุธ';
+$lang['common']['full_days'][3] = 'พฤหัสบดี';
+$lang['common']['full_days'][4] = 'ศุกร์';
+$lang['common']['full_days'][5]= 'เสาร์';
+$lang['common']['full_days'][6] = 'อาทิตย์';
 
 $lang['common']['default']='ค่าเริ่มต้น';
 $lang['common']['description']='คำอธิบาย';
@@ -159,7 +158,7 @@ $lang['common']['admin']='ผู้ดูแลระบบ';
 
 $lang['common']['beginning']='Salutation';
 
-$lang['common']['max_emails_reached']= "จำนวนสูงสุดของอีเมลจากโฮสต์  SMTP  %s รายการ จาก %s ในหนึ่งวัน.";//The maximum number of e-mail for SMTP host %s of %s per day have been reached
+$lang['common']['max_emails_reached']= 'จำนวนสูงสุดของอีเมลจากโฮสต์  SMTP  %s รายการ จาก %s ในหนึ่งวัน.';//The maximum number of e-mail for SMTP host %s of %s per day have been reached
 $lang['common']['usage_stats']='พื้นที่การใช้งาน %s';
 $lang['common']['usage_text']='การติดตั้งใช้งาน Group-office';//This Group-Office installation is using
 
@@ -167,12 +166,6 @@ $lang['common']['database']='ฐานข้อมูล';
 $lang['common']['files']='ไฟล์';
 $lang['common']['email']='อีเมล';
 $lang['common']['total']='รายการรวม';
-
-$lang['common']['lost_password_subject']='รหัสผ่านใหม่';
-$lang['common']['lost_password_body']='%s,<br /><br />คุณต้องการรหัสผ่านใหม่จาก %s.<br /><br />ข้อมูลการเข้าสู่ระบบใหม่:<br /><br />ผู้ใช้งาน: %s<br />รหัสผ่าน: %s';
-
-$lang['common']['lost_password_error']='ไม่พบที่อยู่อีเมล.';//Could not find the supplied e-mail address
-$lang['common']['lost_password_success']='รหัสผ่านใหม่ได้ถูกส่งไปยังอีเมลของท่านเรียบร้อยแล้ว.';
 
 $lang['common']['confirm_leave']='เมื่อออกจากระบบ Group-Office ข้อมูลอาจสูญหายหากไม่ทำการบันทึกการเปลี่ยนแปลง. ';
 //* Top แก้ 22-07-2009
@@ -194,3 +187,26 @@ $lang['common']['dear']='ถึง';
 $lang['common']['yes']='ตกลง';
 $lang['common']['no']='ปฏิเสธ';
 $lang['commmon']['logFiles']='ล็อคไฟล์';
+//* Top แก้ 6-08-2010 
+$lang['common']['fileCreateError']='ไม่สามารถสร้างไฟล์ได้';
+$lang['common']['illegalCharsError']='ชื่อมีข้อความหรืออักขระที่ไม่สามารถใช้งานได้ %s';
+$lang['common']['month']= 'เดือน';
+$lang['common']['strMonths']= 'เดือน';
+$lang['common']['system']='ระบบ';
+$lang['common']['goAlreadyStarted']='Group-Office ทำงานอยู่แล้ว ต้องการโหลดการทำงานของ Group-Office สามารถปิดหน้าต่างหรือแท็ปนี้ ระบบจะทำงานต่อไปตามปกติ';
+$lang['common']['reminder']='เตือนความจำ';
+$lang['common']['unknown']='ไม่ทราบ';
+$lang['common']['time']='เวลา';
+$lang['common']['dontChangeAdminsPermissions']='ไม่สามารถเปลี่ยนสิทธิ์ของกลุ่ม admin';
+$lang['common']['dontChangeOwnersPermissions']='ไม่สามารถเปลี่ยนสิทธิ์ของตัวเองได้';
+$lang['common']['running_sys_upgrade']='ระบบต้องการอับเดท';
+$lang['common']['sys_upgrade_text']='กรุณารอสักครู่ ระบบกำลังบันทึก Log';
+$lang['common']['click_here_to_contine']='คลิ๊กที่นี่เพื่อทำงานต่อไป';
+$lang['common']['parentheses_invalid_error']='ข้อมูลในวงเล็บไม่ถูกต้อง กรุณาแก้ไข';
+$lang['common']['nReminders']='%s แจ้งเตือน';
+$lang['common']['oneReminder']='1 แจ้งเตือน';
+$lang['common']['youHaveReminders']='คุณมี %s ใน %s.';
+$lang['common']['createdBy']='สร้างโดย';
+$lang['common']['none']='ไม่';
+$lang['common']['alert']='แจ้งเตือน';
+$lang['common']['theFolderAlreadyExists']='โพล์เดอร์ชื่อนี้มีอยู่แล้ว';

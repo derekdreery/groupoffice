@@ -3,12 +3,32 @@
 //Polish Translation v1.0
 //Author : Robert GOLIAT info@robertgoliat.com  info@it-administrator.org
 //Date : January, 20 2009
+//Polish Translation v1.1
+//Author : Paweł Dmitruk pawel.dmitruk@gmail.com
+//Date : September, 03 2010
 
-//Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
+$lang['common']['about']='Version: %s
+
+Copyright (c) 2003-%s, Intermesh
+All rights reserved.
+This program is protected by copyright law and the Group-Office license.
+
+For support questions contact your webmaster:
+%s
+
+For more information about Group-Office visit:
+http://www.group-office.com
+
+Group-Office is created by Intermesh. For more information about Intermesh visit:
+http://www.intermesh.nl/en/';
+
+$lang['common']['totals']='Razem';
+$lang['common']['printPage']='Strona %s z %s';
 
 $lang['common']['htmldirection']= 'ltr';
 
+$lang['common']['quotaExceeded']='Brak dostępnego miejscs. Usuń kilka plików lub skontaktuj się z administratorem w celu zwiększenia miejsca';
 $lang['common']['errorsInForm'] = 'Wystąpiły błedy w formularzu. Popraw je i spróbuj ponownie.';
 
 $lang['common']['moduleRequired']='Do wykonania tej operacji wymagany jest moduł %s';
@@ -16,12 +36,14 @@ $lang['common']['moduleRequired']='Do wykonania tej operacji wymagany jest modu�
 $lang['common']['loadingCore']= 'Ładowanie systemu podstawowego';
 $lang['common']['loadingLogin'] = 'Ładowanie okna dialogowego logowania';
 $lang['common']['renderInterface']='Renderowanie interfejsu';
+$lang['common']['loadingModules']='Ładowanie modułów';
 $lang['common']['loadingModule'] = 'Ładowanie modułu';
 
 $lang['common']['loggedInAs'] = "Zalogowano jako ";
 $lang['common']['search']='Szukaj';
 $lang['common']['settings']='Ustawienia';
 $lang['common']['adminMenu']='menu Admina';
+$lang['common']['startMenu']='Start menu';
 $lang['common']['help']='Pomoc';
 $lang['common']['logout']='Wyloguj';
 $lang['common']['badLogin'] = 'Niewłasciwy użytkownik lub hasło';
@@ -33,7 +55,12 @@ $lang['common']['saveError']='Bład podczas zapisywania danych';
 $lang['common']['deleteError']='Błąd podczas usuwania danych';
 $lang['common']['selectError']='Błąd podczas próby odczytu danych';
 $lang['common']['missingField'] = 'Nie wypełniono wszystkich wymaganych pól.';
+$lang['common']['invalidEmailError']='Adres e-mail jest nieprawidłowy';
+$lang['common']['invalidDateError']='Wprowadzono niepoprawną datę';
 $lang['common']['noFileUploaded']='Nie odebrano żadnych plików';
+$lang['common']['error']='Błąd';
+$lang['common']['fileCreateError']='Nie można utworzyć pliku';
+$lang['common']['illegalCharsError']='Nazwa zawiera jeden z niedozwolonych znaków %s';
 
 $lang['common']['salutation']='Powitanie';
 $lang['common']['firstName'] = 'Imię';
@@ -63,6 +90,7 @@ $lang['common']['username'] = 'Użytkownik';
 $lang['common']['password'] = 'Hasło';
 $lang['common']['authcode'] = 'Kod autoryzacji';
 $lang['common']['country'] = 'Kraj';
+$lang['common']['address_format']='Format adresu';
 $lang['common']['state'] = 'Województwo';
 $lang['common']['city'] = 'Miasto';
 $lang['common']['zip'] = 'Kod pocztowy';
@@ -91,7 +119,6 @@ $lang['common']['SearchAll'] = 'Wszystkie pola';
 $lang['common']['total'] = 'razem';
 $lang['common']['results'] = 'wyników';
 
-
 $lang['common']['months'][1]='Styczeń';
 $lang['common']['months'][2]='Luty';
 $lang['common']['months'][3]='Marzec';
@@ -113,7 +140,6 @@ $lang['common']['short_days'][4]="Cz";
 $lang['common']['short_days'][5]="Pt";
 $lang['common']['short_days'][6]="So";
 
-
 $lang['common']['full_days'][0] = "Niedziela";
 $lang['common']['full_days'][1] = "Poniedziałek";
 $lang['common']['full_days'][2] = "Wtorek";
@@ -129,6 +155,7 @@ $lang['common']['date']='Data';
 $lang['common']['default_salutation']['M']='Szanowny Pan';
 $lang['common']['default_salutation']['F']='Szanowna Pani';
 $lang['common']['default_salutation']['unknown']='Szanowna Pani/Pan';
+$lang['common']['dear']='Szanowny';
 
 $lang['common']['mins'] = 'Minut';
 $lang['common']['hour'] = 'godzina';
@@ -137,6 +164,8 @@ $lang['common']['day'] = 'dzień';
 $lang['common']['days'] = 'dni';
 $lang['common']['week'] = 'tydzień';
 $lang['common']['weeks'] = 'tygodni';
+$lang['common']['month']= 'miesiąc';
+$lang['common']['strMonths']= 'miesiące/miesięcy';
 
 $lang['common']['group_everyone']='Wszyscy';
 $lang['common']['group_admins']='Administratorzy';
@@ -155,16 +184,43 @@ $lang['common']['files']='Pliki';
 $lang['common']['email']='E-mail';
 $lang['common']['total']='Razem';
 
-$lang['common']['lost_password_subject']='Nowe hasło';
-$lang['common']['lost_password_body']='%s,<br />
-<br />
-Zażądano nowego hasła dla użytkownika %s.<br />
-<br />
-Twoje nowa dane do logowania są następujące: <br />
-<br />
-Użytkownik: %s<br />
-Hasło: %s';
+$lang['common']['confirm_leave']='Jeśli opuścisz Group-Office to stracisz niezapisane zmiany';
+$lang['common']['dataSaved']='Dane zostały zapisane';
 
-$lang['common']['lost_password_error']='Nie można odnaleźć podanego adresu e-mail.';
-$lang['common']['lost_password_success']='Nowa hasło zostało wysłane na Twój adres e-mail.';
+$lang['common']['uploadMultipleFiles']= 'Kliknij \'Przeglądaj\' aby wybrać pliki i/lub foldery z komputera. Kliknij \'Wyślij\' aby przesłać dane do Group-Office. To okno zamknie się automatycznie po zakończeniu transferu.';
 
+$lang['common']['loginToGO']='Kliknij aby się zalogować do Group-Office';
+$lang['common']['links']='Odnośniki';
+$lang['common']['GOwebsite']='Group-Office website';
+$lang['common']['GOisAProductOf']='<i>Group-Office</i> is a product of <a href="http://www.intermesh.nl/en/" target="_blank">Intermesh</a>';
+
+$lang['common']['yes']='Tak';
+$lang['common']['no']='Nie';
+
+$lang['common']['system']='System';
+
+$lang['common']['goAlreadyStarted']='Group-Office uruchomiony. Żądana operacja uruchomiona w Group-Office. Możesz już zamknąć te okno lub kartę i kontynuować pracę w Group-Office.';
+
+$lang['commmon']['logFiles']='Pliki logów';
+
+$lang['common']['reminder']='Przypomnienie';
+$lang['common']['unknown']='Nieznany';
+$lang['common']['time']='Czas';
+
+$lang['common']['dontChangeAdminsPermissions']='Nie możesz zmienić uprawnień dla grupy administratorów';
+$lang['common']['dontChangeOwnersPermissions']='Nie możesz zmienić uprawnień dla użytkownika';
+
+$lang['common']['running_sys_upgrade']='Uruchomienie wymaga aktualizacji systemu';
+$lang['common']['sys_upgrade_text']='Proszę czekać. Wszystkie operacje będą rejestrowane.';
+$lang['common']['click_here_to_contine']='Kliknij aby kontynuować';
+$lang['common']['parentheses_invalid_error']='Nawiasy w zapytaniu są nieprawidłowe. Proszę poprawić.';
+
+$lang['common']['nReminders']='%s przypomnień/nia';
+$lang['common']['oneReminder']='1 przypomnienie';
+
+$lang['common']['youHaveReminders']='Masz %s z %s.';
+
+$lang['common']['createdBy']='Utworzone przez';
+$lang['common']['none']='Brak';
+$lang['common']['alert']='Ostrzeżenie';
+$lang['common']['theFolderAlreadyExists']='Folder o tej nazwie istnieje';

@@ -3,12 +3,15 @@
 //Polish Translation v1.0
 //Author : Robert GOLIAT info@robertgoliat.com  info@it-administrator.org
 //Date : January, 20 2009
+//Polish Translation v1.1
+//Author : Paweł Dmitruk pawel.dmitruk@gmail.com
+//Date : September, 05 2010
 
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('files'));
 
 $lang['files']['name'] = 'Pliki';
-$lang['files']['description'] = 'Moduł Pliki; Module for sharing files.';
+$lang['files']['description'] = 'Moduł Pliki; Zarządzanie i udostępnianie plików.';
 
 $lang['files']['fileNotFound'] = 'Plik nie znaleziony';
 $lang['files']['folderExists'] = 'Folder już istnieje';
@@ -39,3 +42,5 @@ $lang['files']['deleted']='Usunięty';
 
 $lang['files']['file']='Plik';
 $lang['files']['folder']='Folder';
+$lang['link_type'][6]='Plik';
+$lang['files']['files']='Pliki';

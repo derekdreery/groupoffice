@@ -41,19 +41,19 @@ dbname = $dbname";
 
 if(!file_exists('/etc/postfix/mysql_virtual_alias_maps.cf')) {
 	$content="$DBCONN
-	table = pa_aliases
-	select_field = goto
-	where_field = address
-	additional_conditions = and active = '1'";
+table = pa_aliases
+select_field = goto
+where_field = address
+additional_conditions = and active = '1'";
 	file_put_contents('/etc/postfix/mysql_virtual_alias_maps.cf', $content);
 }
 
 if(!file_exists('/etc/postfix/mysql_virtual_domains_maps.cf')) {
 	$content="$DBCONN
-	table = pa_domains
-	select_field = domain
-	where_field = domain
-	additional_conditions = and backupmx = '0' and active = '1'";
+table = pa_domains
+select_field = domain
+where_field = domain
+additional_conditions = and backupmx = '0' and active = '1'";
 	file_put_contents('/etc/postfix/mysql_virtual_domains_maps.cf', $content);
 }
 

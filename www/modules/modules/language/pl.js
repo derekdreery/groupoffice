@@ -20,3 +20,4 @@ GO.modules.lang.cmdModuleDescription = 'Opis',
 GO.modules.lang.cmdGridColumnModuleName = 'Nazwa modułu',
 GO.modules.lang.cmdUninstallMessage = 'UWAGA! Wszystkie dane związane z tym modułem zostaną usuniete! Czy na pewno chcesz odinstalować moduł "{0}" ?',
 GO.modules.lang.cmdModulesCannotBeDeleted = 'Moduł "Moduły" nie może zostać usunięty!.'
+GO.modules.lang.modules='Moduły';

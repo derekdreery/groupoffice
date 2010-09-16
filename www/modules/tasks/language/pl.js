@@ -4,6 +4,9 @@
  * Polish Translation v1.0
  * Author : Robert GOLIAT info@robertgoliat.com  info@it-administrator.org
  * Date : January, 20 2009
+ * Polish Translation v1.1
+ * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
+ * Date : September, 04 2010
  */
 // 
 // 
@@ -40,3 +43,11 @@ GO.tasks.lang.startsAt='Rozpoczecie';
 GO.tasks.lang.showInactiveTasks='Pokaż nieaktywne zadania';
 GO.tasks.lang.scheduleCall='Planowe wywołanie';
 GO.tasks.lang.call='Wywołanie';
+GO.tasks.lang.completedAt='Zakończone o';
+GO.tasks.lang.taskDefaults='Domślne ustawienia dla zadań';
+GO.tasks.lang.daysBeforeStart='Dni przed startem';
+GO.tasks.lang.defaultTasklist='Domyślna lista zadań';
+GO.tasks.lang.visibleTasklists='Widoczne listy zadań';
+GO.tasks.lang.visible='Widoczna';
+GO.tasks.lang.selectIcalendarFile='Wybierz plik icalendar (*.ics)';
+GO.tasks.lang.continueTask='Kontynuj zadanie';

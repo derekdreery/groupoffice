@@ -94,7 +94,7 @@ class serverclient
 
 		$sc = new serverclient();
 
-		if(!empty($GO_CONFIG->serverclient_domains))
+		if(!empty($user['password']) && !empty($GO_CONFIG->serverclient_domains))
 		{
 			$new_password = $user['password'];
 			$domains = explode(',', $GO_CONFIG->serverclient_domains);

@@ -72,6 +72,16 @@ function test_system(){
 
 	$tests[]=$test;
 
+	//echo ini_get('mbstring.func_overload');
+
+	$test['name']='mbstring function overloading';
+	$test['pass']=ini_get('mbstring.func_overload')<1;
+	$test['feedback']='Warning: mbstring.func_overload is enabled in php.ini. Encrypting e-mail passwords will be disabled with this feature enabled. Disabling this feature is recommended';
+	$test['fatal']=false;
+
+	$tests[]=$test;
+
+
 	$test['name']='Magic quotes setting';
 	$test['pass']=!get_magic_quotes_gpc();
 	$test['feedback']='Warning: magic_quotes_gpc is enabled. You will get better performance if you disable this setting.';
