@@ -233,7 +233,9 @@ class summary extends db{
 	 */
 	function get_active_announcements($sortfield='id', $sortorder='ASC', $start=0, $offset=0)
 	{
-		$sql = "SELECT * FROM su_announcements WHERE due_time=0 OR due_time > UNIX_TIMESTAMP()";
+		$time = mktime(0,0,0);
+		
+		$sql = "SELECT * FROM su_announcements WHERE due_time=0 OR due_time >=$time";
 		$sql .= " ORDER BY ".$this->escape($sortfield)." ".$this->escape($sortorder)."";
 		$this->query($sql);
 		$count = $this->num_rows();
