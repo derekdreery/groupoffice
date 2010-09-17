@@ -353,6 +353,11 @@ GO.addressbook.MainPanel = function(config)
 							inputValue : 'with_companies_export_query'
 						}]
 					});
+
+					config.subtitle= GO.lang.searchQuery+': '+query;
+				}else
+				{
+					config.subtitle='';
 				}
 
 

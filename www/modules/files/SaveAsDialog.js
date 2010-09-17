@@ -18,24 +18,29 @@ GO.files.SaveAsDialog = Ext.extend(GO.Window, {
 				{
 					text: GO.lang.cmdOk,				        						
 					handler: function(){
-						
-						var files = this.fb.gridStore.getRange();
-						
-						for(var i=0;i<files.length;i++)
-						{
-							if(files[i].data.extension!='folder' && files[i].data.name==this.nameField.getValue())
+
+						if(this.nameField.isValid()){
+							var files = this.fb.gridStore.getRange();
+
+							for(var i=0;i<files.length;i++)
 							{
-								var t = new Ext.Template(GO.files.lang.confirmOverwrite);
-								
-								if(!confirm(t.apply({filename: files[i].data.name})))
+								if(files[i].data.extension!='folder' && files[i].data.name==this.nameField.getValue())
 								{
-									return false;
+									var t = new Ext.Template(GO.files.lang.confirmOverwrite);
+
+									if(!confirm(t.apply({filename: files[i].data.name})))
+									{
+										return false;
+									}
+									break;
 								}
-								break;
 							}
+
+							this.handler.call(this.scope, this, this.fb.folder_id, this.nameField.getValue());
+						}else
+						{
+							this.nameField.focus();
 						}
-						
-						this.handler.call(this.scope, this, this.fb.folder_id, this.nameField.getValue());
 					}, 
 					scope: this 
 				},{
