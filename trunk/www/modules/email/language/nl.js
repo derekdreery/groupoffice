@@ -152,8 +152,6 @@ GO.email.lang.searchFrom='Afzender';
 GO.email.lang.searchTo='Ontvanger';
 GO.email.lang.searchCC='Ontvanger (CC)';
 
-GO.email.lang.youHaveNewMails = 'U heeft {new} nieuwe e-mail bericht(en)';
-
 GO.email.lang.replaceEmailText='Deze contactpersoon heeft al drie email addressen in het profiel. U kunt 1 van de bestaande vervangen door te klikken op het email adres dat u wilt vervangen.';
 GO.email.lang.skipUnknownRecipientsAction='Dit scherm in het vervolg niet tonen';
 GO.email.lang.skipUnknownRecipients='Toon onbekende ontvanger dialoog niet';
@@ -166,6 +164,13 @@ GO.email.lang.icalendarDeleteEvent='Afspraak verwijderen';
 GO.email.lang.icalendarAcceptInvitation='Accepteren';
 GO.email.lang.icalendarDeclineInvitation='Weigeren';
 GO.email.lang.icalendarTentativeInvitation='Voorlopig';
+
+GO.email.lang.alwaysRespondToNotifications='Altijd antwoorden op een leesbevestiging';
+
+GO.email.lang.icalendarEventUpdated='Afspraak is bijgewerkt';
+GO.email.lang.youHaveNewMails = 'U heeft {new} nieuwe e-mail bericht(en)';
+GO.email.lang.anyField='Elk veld';
+
 GO.email.lang.icalendarEventUpdated='Afspraak is bijgewerkt.';
 GO.email.lang.icalendarEventCreated='Afspraak is aangemaakt.';
 GO.email.lang.icalendarEventDeleted='Afspraak is verwijderd.';

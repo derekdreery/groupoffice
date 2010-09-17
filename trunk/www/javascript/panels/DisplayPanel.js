@@ -142,7 +142,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 
 		this.on('expand', function(){
 			if(this.collapsedLinkId){
-				this.load(this.collapsedLinkId);
+				this.load(this.collapsedLinkId, true);
 				delete this.collapsedLinkId;
 			}
 		}, this);

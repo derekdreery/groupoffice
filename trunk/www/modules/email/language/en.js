@@ -186,6 +186,10 @@ GO.email.lang.icalendarDeleteEvent='Delete Event';
 GO.email.lang.icalendarAcceptInvitation='Accept';
 GO.email.lang.icalendarDeclineInvitation='Decline';
 GO.email.lang.icalendarTentativeInvitation='Tentative';
+
+GO.email.lang.alwaysRespondToNotifications='Always respond to a read notification';
+
+GO.email.lang.anyField='Any field';
 GO.email.lang.icalendarEventUpdated='Event has been updated.';
 GO.email.lang.icalendarEventCreated='Event has been created.';
 GO.email.lang.icalendarEventDeleted='Event has been deleted.';

@@ -843,6 +843,9 @@ class cached_imap extends imap{
 	{
 		$uids = $this->sort_mailbox($sort_field, $reverse, $query);
 
+		if(!is_array($uids))
+			return array();
+
 		if($limit>0)
 			$uids=array_slice($uids,$start, $limit);
 

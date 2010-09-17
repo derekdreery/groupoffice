@@ -479,6 +479,8 @@ class GO_SECURITY extends db {
 	 * Get's all authorized users from an ACL
 	 *
 	 * @param	int			$acl_id	The ACL ID
+	 * @param	int			$level The minimum permission level
+	 * 
 	 * @access public
 	 * @return Array			The user id's
 	 */
@@ -487,7 +489,7 @@ class GO_SECURITY extends db {
 		$sql = "SELECT user_id FROM go_acl WHERE acl_id='".$this->escape($acl_id)."' AND user_id!=0";
 
 		if($level>0){
-			$sql .= " AND level=".$this->escape($level);
+			$sql .= " AND level>=".$this->escape($level);
 		}
 
 		$this->query($sql);
@@ -499,7 +501,7 @@ class GO_SECURITY extends db {
 				"go_acl.group_id=go_users_groups.group_id WHERE go_acl.acl_id=".intval($acl_id)." AND go_users_groups.user_id!=0";
 
 		if($level>0){
-			$sql .= " AND level=".$this->escape($level);
+			$sql .= " AND level>=".$this->escape($level);
 		}
 
 		$this->query($sql);
