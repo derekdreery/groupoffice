@@ -320,7 +320,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'num_participants']
 	});
 	
 	this.monthGridStore = new GO.data.JsonStore({
@@ -330,7 +330,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count', 'num_participants']
 	});
 
 	GO.calendar.daysGrid = this.daysGrid = new GO.grid.CalendarGrid(
@@ -995,6 +995,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						task: 'delete_event',
 						event_id: event.event_id
 					};
+					
+					if(event.num_participants)
+					{
+						params.send_cancellation = (confirm(GO.calendar.lang.sendCancellation)) ? 1 : 0;
+					}
+					
 					this.sendDeleteRequest(params, callback, event);
 				}
 			}, this);

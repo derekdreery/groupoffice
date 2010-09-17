@@ -668,7 +668,7 @@ class calendar extends db {
 	}
 
 	function get_participants($event_id) {
-		$sql = "SELECT * FROM cal_participants WHERE event_id='".$this->escape($event_id)."' ORDER BY email ASC" ;
+		$sql = "SELECT * FROM cal_participants WHERE event_id='".$this->escape($event_id)."' ORDER BY is_organizer DESC, email ASC" ;
 		$this->query($sql);
 		return $this->num_rows();
 	}

@@ -1095,7 +1095,7 @@ try {
 		    $response['success'] = true;
 		    break;
 
-	    case 'icalendar_process_event':
+	    case 'icalendar_process_invitation':
 
 		if(!isset($GO_MODULES->modules['calendar']) || !$GO_MODULES->modules['calendar']['read_permission']) {
 			throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));
@@ -1223,11 +1223,11 @@ try {
 					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 					$swift = new GoSwift(
 							$organizer_email,
-							$lang['calendar']['invitation_reply'].' '.$lang['calendar']['statuses'][$status_name].': '.$event['name']);
+							$lang['calendar']['invitation'].' '.$lang['calendar']['statuses'][$status_name].': '.$event['name']);
 					
 					//create ics attachment
 					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
-					$ical = new go_ical('2.0', false, $event['uid']);
+					$ical = new go_ical('2.0', false, 'REPLY');
 					
 					$ics_string = $ical->export_event($event_id, $email);
 

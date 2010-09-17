@@ -40,7 +40,8 @@ GO.calendar.ListGrid = function(config)
 			'contact_id',
 			'link_count',
 			'calendar_id',
-			'calendar_name'
+			'calendar_name',
+			'num_participants'
 			]
 		}),
 		baseParams: {

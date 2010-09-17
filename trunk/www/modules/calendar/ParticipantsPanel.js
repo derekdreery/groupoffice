@@ -112,11 +112,13 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 	}];
 
 
+	/*
 	this.inviteCheckbox = new Ext.form.Checkbox({
 		name:'invitation',
 		boxLabel:GO.calendar.lang.sendInvitation,
 		hideLabel:true		
 	})
+	*/
 	this.importCheckbox = new Ext.form.Checkbox({
 		name:'import',
 		boxLabel:GO.calendar.lang.importToCalendar,
@@ -133,9 +135,6 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 			bodyStyle:'padding:5px'
 		},
 		items:[{
-			columnWidth:.5,
-			items:[this.inviteCheckbox]
-		},{
 			columnWidth:.5,
 			items:[this.importCheckbox]
 		}]
@@ -271,7 +270,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 			this.store.removeAll();
 		}
 		this.newId=0;		
-		this.inviteCheckbox.setValue(false);
+		//this.inviteCheckbox.setValue(false);
 		this.importCheckbox.setValue(false);
 
 		if(this.isVisible()){

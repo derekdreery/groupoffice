@@ -732,29 +732,41 @@ try {
 								{
 									if(isset($cal_event['participants']))
 									{
-										$saved_participant = false;
+										$saved_participant = false;										
 										foreach($cal_event['participants'] as $participant_email=>$participant)
 										{
 											if($participant_email == $email_sender)
 											{
 												$saved_participant = $cal->is_participant($event['id'], $participant_email);
+												$status_id = $participant['status'];
 											}
 										}
 
 										// check if event has to be updated
 										if($saved_participant && ($last_modified > $saved_participant['last_modified']))
-										{			
-											$response['iCalendar']['invitation'] = array(
-												'account_id' => $account_id,
-												'mailbox' => $mailbox,
-												'uid' => $uid,
-												'imap_id' => $attachment['imap_id'],
-												'encoding' => $attachment['encoding'],
-												'event_id' => $event['id'],
-												'email_sender' => $email_sender,
-												'email' => $account['email']
-												
-											);											
+										{
+											if($method == 'REQUEST')
+											{
+												$response['iCalendar']['invitation'] = array(
+													'account_id' => $account_id,
+													'mailbox' => $mailbox,
+													'uid' => $uid,
+													'imap_id' => $attachment['imap_id'],
+													'encoding' => $attachment['encoding'],
+													'event_id' => $event['id'],
+													'email_sender' => $email_sender,
+													'email' => $account['email']
+												);
+											}else
+											{												
+												$response['iCalendar']['response'] = array(
+													'event_id' => $event['id'],
+													'email_sender' => $email_sender,
+													'email' => $account['email'],
+													'last_modified' => $last_modified,
+													'status_id' => $status_id
+												);
+											}
 
 											$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_available'];
 										}else
@@ -778,8 +790,7 @@ try {
 											'imap_id' => $attachment['imap_id'],
 											'encoding' => $attachment['encoding'],
 											'email_sender' => $email_sender,
-											'email' => $account['email'],
-											'new_event' => true
+											'email' => $account['email']
 										);
 									}else
 									{
