@@ -61,6 +61,11 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 		return tbar;
 	},
 
+	reset : function(){
+		GO.files.FilePanel.superclass.reset.call(this);
+		this.setTitle('');
+	},
+
 	setData : function(data)
 	{
 		this.setTitle(data.name);
