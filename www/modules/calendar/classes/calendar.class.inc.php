@@ -634,7 +634,7 @@ class calendar extends db {
 		$sql = "SELECT id FROM cal_calendars WHERE user_id='".intval($user_id)."'";
 		$this->query($sql);
 		return $this->next_record();
-	}
+	}	
 
 	function add_participant($participant) {
 		$participant['id'] = $this->nextid("cal_participants");
@@ -1150,7 +1150,7 @@ class calendar extends db {
 			unset($event['exceptions']);
 		}
 
-
+		
 
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files'])) {
@@ -1769,7 +1769,7 @@ class calendar extends db {
 		return 'FFFFCC';
 	}
 
-	function convert_attendees_to_participants($attendees)
+	function convert_attendees_to_participants($attendees, $organizer=false)
 	{
 		$participants = array();
 		foreach($attendees as $attendee)
@@ -1786,6 +1786,11 @@ class calendar extends db {
 			$status = isset($attendee['params']['PARTSTAT']) ? $attendee['params']['PARTSTAT'] : 'ACCEPTED';
 			$participant['status'] = $this->get_participant_status_id($status);
 			$participant['role'] = isset($attendee['params']['ROLE']) ? $attendee['params']['ROLE'] : '';
+
+			if($organizer)
+			{
+				$participant['is_organizer'] = true;
+			}
 
 			$participants[$email] = $participant;
 		}
@@ -1816,15 +1821,17 @@ class calendar extends db {
 			if(array_key_exists($organizer_email, $event['participants']))
 			{
 				// existing attendee is organizer
-				$event['participants'][$organizer_email]['is_organizer']=true;
+				$event['participants'][$organizer_email]['is_organizer']=true;				
 			}else
 			{
-				// set organizer			
-				$event['participants'] = array_merge($event['participants'], $this->convert_attendees_to_participants(array($organizer)));
+				// set organizer
+				$event['participants'] = array_merge($event['participants'], $this->convert_attendees_to_participants(array($organizer), true));
 			}
 		}
 
 		$event['uid'] = (isset($object['UID']['value']) && $object['UID']['value'] != '') ? trim($object['UID']['value']) : '';
+
+		$event['sequence'] = (isset($object['SEQUENCE']['value']) && $object['SEQUENCE']['value'] != '') ? trim($object['SEQUENCE']['value']) : 0;
 
 		$event['name'] = (isset($object['SUMMARY']['value']) && $object['SUMMARY']['value'] != '') ? trim($object['SUMMARY']['value']) : 'Unnamed';
 		if(isset($object['SUMMARY']['params']['ENCODING']) && $object['SUMMARY']['params']['ENCODING'] == 'QUOTED-PRINTABLE') {
@@ -1844,7 +1851,6 @@ class calendar extends db {
 
 		$event['all_day_event'] = (isset($object['DTSTART']['params']['VALUE']) &&
 										strtoupper($object['DTSTART']['params']['VALUE']) == 'DATE') ? '1' : '0';
-
 
 		if(isset($object['DTSTART'])) {
 			$timezone_id = isset($object['DTSTART']['params']['TZID']) ? $object['DTSTART']['params']['TZID'] : '';

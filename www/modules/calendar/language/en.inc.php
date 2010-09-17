@@ -114,4 +114,4 @@ $lang['calendar']['month_times'][5]='the fifth';
 $lang['calendar']['rightClickToCopy']='Right click to copy link location';
 
 $lang['calendar']['invitation']='Event Invitation';
-$lang['calendar']['invitation_reply']='Event Invitation Reply';
+$lang['calendar']['invitation_reply']='Invitation';

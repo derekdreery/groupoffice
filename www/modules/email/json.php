@@ -712,59 +712,24 @@ try {
 							throw new Exception($lang['common']['selectError']);
 						}
 
-						$method = isset($vcalendar[0]['METHOD']['value']) ? $vcalendar[0]['METHOD']['value'] : '';
-						
+						$method = isset($vcalendar[0]['METHOD']['value']) ? $vcalendar[0]['METHOD']['value'] : '';											
 						switch($method)
 						{
 							case 'REPLY':
-
-								// reply to an invitation of an existing event
-								$event = $cal->get_event_by_uuid($cal_event['uid']);
-								if($event)
-								{
-									if(isset($cal_event['participants']))
-									{
-										$saved_participant = false;
-										foreach($cal_event['participants'] as $participant_email=>$participant)
-										{
-											if($participant_email == $email_sender)
-											{
-												$new_status = $participant['status'];
-												$saved_participant = $cal->is_participant($event['id'], $participant_email);
-											}
-										}
-
-										// check if event has to be updated
-										if($saved_participant && ($last_modified > $saved_participant['last_modified']))
-										{
-											$response['iCalendar']['new_update'] = array(
-												'event_id' => $event['id'],
-												'email' => $saved_participant['email'],
-												'status' => $new_status,
-												'last_modified' => $last_modified
-											);
-
-											$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_available'];
-										}else
-										{
-											$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_old'];
-										}
-									}else
-									{
-										throw new Exception($lang['common']['selectError']);
-									}
-								}else
-								{
-									$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_not_found'];
-								}
-								break;
-
 							case 'REQUEST':
 								
-								$event = $cal->get_event_by_uid($cal_event['uid']);
-								if($event)
+								if($method == 'REPLY')
+								{
+									// reply to an invitation of an existing event
+									$event = $cal->get_event_by_uuid($cal_event['uid']);
+								}else
 								{
 									// request to update an existing event 
+									$event = $cal->get_event_by_uid($cal_event['uid']);
+								}								
+								
+								if($event)
+								{
 									if(isset($cal_event['participants']))
 									{
 										$saved_participant = false;
@@ -772,20 +737,24 @@ try {
 										{
 											if($participant_email == $email_sender)
 											{
-												$new_status = $participant['status'];
 												$saved_participant = $cal->is_participant($event['id'], $participant_email);
 											}
 										}
 
 										// check if event has to be updated
 										if($saved_participant && ($last_modified > $saved_participant['last_modified']))
-										{
-											$response['iCalendar']['new_update'] = array(
+										{			
+											$response['iCalendar']['invitation'] = array(
+												'account_id' => $account_id,
+												'mailbox' => $mailbox,
+												'uid' => $uid,
+												'imap_id' => $attachment['imap_id'],
+												'encoding' => $attachment['encoding'],
 												'event_id' => $event['id'],
-												'email' => $saved_participant['email'],
-												'status' => $cal->get_participant_status_name($new_status),
-												'last_modified' => $last_modified
-											);
+												'email_sender' => $email_sender,
+												'email' => $account['email']
+												
+											);											
 
 											$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_available'];
 										}else
@@ -798,25 +767,51 @@ try {
 									}
 								}else
 								{
-									// invitation to a new event
-									$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_invitation'];
-									$response['iCalendar']['invitation'] = array(
-										'account_id' => $account_id,
-										'mailbox' => $mailbox,
-										'uid' => $uid,
-										'imap_id' => $attachment['imap_id'],
-										'encoding' => $attachment['encoding'],
-										'email' => $account['email']
-									);
+									if($method == 'REQUEST')
+									{
+										// invitation to a new event
+										$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_invitation'];
+										$response['iCalendar']['invitation'] = array(
+											'account_id' => $account_id,
+											'mailbox' => $mailbox,
+											'uid' => $uid,
+											'imap_id' => $attachment['imap_id'],
+											'encoding' => $attachment['encoding'],
+											'email_sender' => $email_sender,
+											'email' => $account['email'],
+											'new_event' => true
+										);
+									}else
+									{
+										$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_not_found'];
+									}
+								}
+								break;						
+
+							case 'CANCEL':
+
+								$event = $cal->get_event_by_uuid($cal_event['uid']);
+								if(!$event)
+								{
+									$event = $cal->get_event_by_uid($cal_event['uid']);
 								}
 
-								break;
-
-							case 'DELETE':
-
+								if($event)
+								{
+									$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_cancelled'];
+									$response['iCalendar']['cancellation'] = array(
+										'event_id' => $event['id']
+									);
+								}else
+								{
+									$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_not_found'];									
+								}
+							
 								break;
 
 							default:
+
+								$response['iCalendar']['feedback'] = 'No method given. OOPS!';
 
 								break;						
 						}

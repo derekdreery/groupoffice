@@ -179,12 +179,14 @@ GO.email.lang.skipUnknownRecipientsAction='Don\'t show this window next time';
 GO.email.lang.skipUnknownRecipients='Don\'t show unknown recipients dialog';
 
 GO.email.lang.alwaysRequestNotification='Always request a read notification';
+GO.email.lang.alwaysRespondToNotifications='Always respond to a read notification';
 
 GO.email.lang.icalendarUpdateEvent='Update Event';
+GO.email.lang.icalendarDeleteEvent='Delete Event';
 GO.email.lang.icalendarAcceptInvitation='Accept';
 GO.email.lang.icalendarDeclineInvitation='Decline';
 GO.email.lang.icalendarTentativeInvitation='Tentative';
-
-GO.email.lang.alwaysRespondToNotifications='Always respond to a read notification';
-
-GO.email.lang.icalendarEventUpdated='Event has been updated';
+GO.email.lang.icalendarEventUpdated='Event has been updated.';
+GO.email.lang.icalendarEventCreated='Event has been created.';
+GO.email.lang.icalendarEventDeleted='Event has been deleted.';
+GO.email.lang.icalendarDeleteEventConfirm='Are you sure you want to delete this event?';

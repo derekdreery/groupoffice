@@ -81,13 +81,13 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				'<span class="message-icalendar-icon go-link-icon-1"></span>'+
 				'{[values.iCalendar.feedback]}'+
 				'<span class="message-icalendar-actions">'+
-				'<tpl if="iCalendar.new_update">'+
-					'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
-				'</tpl>'+
 				'<tpl if="iCalendar.invitation">'+
 					'<a class="normal-link" id="em-icalendar-accept-invitation" href="#">'+GO.email.lang.icalendarAcceptInvitation+'</a> '+
 					'<a class="normal-link" id="em-icalendar-decline-invitation" href="#">'+GO.email.lang.icalendarDeclineInvitation+'</a> '+
 					'<a class="normal-link" id="em-icalendar-tentative-invitation" href="#">'+GO.email.lang.icalendarTentativeInvitation+'</a> '+
+				'</tpl>'+
+				'<tpl if="iCalendar.cancellation">'+
+					'<a class="normal-link" id="em-icalendar-delete-event" href="#">'+GO.email.lang.icalendarDeleteEvent+'</a>'+
 				'</tpl>'+
 				'</span>'+
 				'</div>'+
@@ -141,6 +141,16 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					{
 						data.iCalendar.feedback = GO.email.lang.icalendarEventUpdated;
 						this.updated = false;
+					}else
+					if(this.created)
+					{
+						data.iCalendar.feedback = GO.email.lang.icalendarEventCreated;
+						this.created = false;
+					}else
+					if(this.deleted)
+					{
+						data.iCalendar.feedback = GO.email.lang.icalendarEventDeleted;
+						this.deleted = false;
 					}
 					
 					if(data.askPassphrase)
@@ -229,20 +239,12 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			}, this);
 		}
 
-		var icalUpdateEventEl = Ext.get('em-icalendar-update-event');
-		if(icalUpdateEventEl)
-		{
-			icalUpdateEventEl.on('click', function()
-			{
-				this.updateEvent();
-			}, this);
-		}
 		var acceptInvitationEl = Ext.get('em-icalendar-accept-invitation');
 		if(acceptInvitationEl)
 		{
 			acceptInvitationEl.on('click', function()
 			{
-				this.processInvitation(1);
+				this.processEvent(1);
 			}, this);
 		}
 		var declineInvitationEl = Ext.get('em-icalendar-decline-invitation');
@@ -250,7 +252,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		{
 			declineInvitationEl.on('click', function()
 			{
-				this.processInvitation(2);
+				this.processEvent(2);
 			}, this);
 		}
 		var tentativeInvitationEl = Ext.get('em-icalendar-tentative-invitation');
@@ -258,7 +260,15 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		{
 			tentativeInvitationEl.on('click', function()
 			{
-				this.processInvitation(3);
+				this.processEvent(3);
+			}, this);
+		}
+		var icalDeleteEventEl = Ext.get('em-icalendar-delete-event');
+		if(icalDeleteEventEl)
+		{
+			icalDeleteEventEl.on('click', function()
+			{
+				this.deleteEvent();
 			}, this);
 		}
 		
@@ -411,56 +421,33 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		}		
 	},
 
+	cal_id:0,
+	status_id:0,
+	created:false,
 	updated:false,
-	updateEvent : function()
+	deleted:false,
+	processEvent : function(status_id)
 	{
-		var reply = this.data.iCalendar.new_update;
-
-		Ext.Ajax.request({
-			url: GO.settings.modules.calendar.url+'action.php',
-			params: {
-				event_id: reply.event_id,
-				email: reply.email,
-				last_modified: reply.last_modified,
-				status: reply.status,
-				task: 'icalendar_update_event'
-			},
-			scope: this,
-			callback: function(options, success, response)
-			{
-				var data = Ext.decode(response.responseText);
-				if(data.success)
-				{
-					this.updated = true;
-					this.loadMessage();
-				}
-			}
-		});
-	},
-
-	cal_id : 0,
-	status_id : 0,
-	processInvitation : function(status_id)
-	{		
 		if(status_id)
-		{
 			this.status_id = status_id;
-		}
-
+		
 		var invitation = this.data.iCalendar.invitation;
-
+		var event_id = (invitation.event_id) ? invitation.event_id : 0;
+		
 		Ext.Ajax.request({
 			url: GO.settings.modules.email.url+'action.php',
 			params: {
+				event_id: event_id,
+				cal_id: this.cal_id,
+				status_id: this.status_id,
 				account_id: invitation.account_id,
 				mailbox: invitation.mailbox,
 				uid: invitation.uid,
 				imap_id: invitation.imap_id,
 				encoding: invitation.encoding,
-				status_id: this.status_id,
+				email_sender: invitation.email_sender,
 				email: invitation.email,
-				cal_id: this.cal_id,
-				task: 'icalendar_process_invitation'
+				task: 'icalendar_process_event'
 			},
 			scope: this,
 			callback: function(options, success, response)
@@ -468,18 +455,50 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				var data = Ext.decode(response.responseText);
 				if(data.success)
 				{
-					this.updated = true;
+					if(event_id)
+					{
+						this.updated = true;
+					}else
+					{
+						this.created = true;
+					}
+					
 					this.loadMessage();
 					this.cal_id = 0;
 				}else
-				{					
+				{
 					this.showSelectCalendarWindow(data.calendars);
 				}
-			} 
-
+			}
 		});
 	},
 
+	deleteEvent : function()
+	{		
+		if(confirm(GO.email.lang.icalendarDeleteEventConfirm))
+		{
+			var cancellation = this.data.iCalendar.cancellation;
+			
+			Ext.Ajax.request({
+				url: GO.settings.modules.calendar.url+'action.php',
+				params: {
+					event_id: cancellation.event_id,
+					task: 'delete_event'
+				},
+				scope: this,
+				callback: function(options, success, response)
+				{
+					var data = Ext.decode(response.responseText);
+					if(data.success)
+					{
+						this.deleted = true;
+						this.loadMessage();
+					}
+				}
+			});
+		}
+	},
+	
 	showSelectCalendarWindow : function(calendars)
 	{			
 		if(!this.selectCalendarDialog)
@@ -489,8 +508,8 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			this.selectCalendarDialog.on('calendar_selected', function(cal_id)
 			{
 				this.cal_id = cal_id;
-				this.processInvitation();
-				
+				this.processEvent();
+
 			}, this);
 		}
 

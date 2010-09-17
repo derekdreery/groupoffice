@@ -68,10 +68,10 @@ class go_ical extends calendar
 	}
 
 
-	function export_event($event_id)
+	function export_event($event_id, $attendee_email='')
 	{
 		$ics = $this->export_calendar_header();
-		$ics .= $this->convert_event($this->get_event($event_id));
+		$ics .= $this->convert_event($this->get_event($event_id), $attendee_email);
 		$ics .= $this->export_calendar_footer();
 
 		return $ics;
@@ -124,7 +124,7 @@ class go_ical extends calendar
 		return array($name_part.$value_part);
 		}*/
 
-	function convert_event($event)
+	function convert_event($event, $attendee_email='')
 	{
 		global $GO_CONFIG, $GO_SECURITY, $GO_USERS, $GO_MODULES, $charset;
 
@@ -171,14 +171,16 @@ class go_ical extends calendar
 			{
 				$lines = array_merge($lines, array('ORGANIZER;CN='.$cal->f('name').':mailto:'.$cal->f('email')));
 			}else
+			if(!$attendee_email || ( $cal->f('email') == $attendee_email))
 			{
 				$status = $cal2->get_participant_status_name($cal->f('status'));
 				$rsvp = ($cal->f('status')) ? 'FALSE' : 'TRUE';
 				$lines = array_merge($lines, array('ATTENDEE;CUTYPE=INDIVIDUAL;ROLE='.$cal->f('role').';PARTSTAT='.$status.';RSVP='.$rsvp.';CN='.$cal->f('name').';LANGUAGE=en:MAILTO:'.$cal->f('email')));
-			}						
+			}
 		}
 
-		$lines[] = "STATUS:".$event['status'];
+		$lines[] = ($this->uid) ? "STATUS:CONFIRMED" : "STATUS:".$event['status'];
+		$lines[] = ($event['sequence'] > 0) ? "SEQUENCE:".$event['sequence'] : '';
 			
 		if($event['private'] == '1')
 		{
@@ -186,8 +188,7 @@ class go_ical extends calendar
 		}else
 		{
 			$lines[] ="CLASS:PUBLIC";
-		}
-
+		}		
 
 		if($event['all_day_event']=='1'){
 			$DT_format = go_ical::date_format;
