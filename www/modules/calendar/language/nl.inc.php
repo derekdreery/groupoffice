@@ -95,5 +95,6 @@ $lang['calendar']['month_times'][5]='de vijfde';
 
 $lang['calendar']['rightClickToCopy']='Gebruik de rechtermuisknop om de koppelingslocatie te kopiëren';
 
-$lang['calendar']['invitation']='Afspraak Uitnodiging';
-$lang['calendar']['invitation_reply']='Uitnodiging';
+$lang['calendar']['invitation']='Uitnodiging';
+$lang['calendar']['invitation_update']='Bijgewerkte uitnodiging';
+$lang['calendar']['cancellation']='Annulering';

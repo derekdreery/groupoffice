@@ -301,6 +301,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					
 					this.colorField.setDisabled(this.formPanel.form.baseParams['group_id']==1);
 
+					this.numParticipants=action.result.data.num_participants;
+
 				},
 				failure : function(form, action) {
 					Ext.Msg.alert(GO.lang.strError, action.result.feedback)
@@ -578,6 +580,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.formPanel.form.setValues(formValues);
 	},
 
+	numParticipants:0,
 	submitForm : function(hide, config) {
 
 		if(!config)
@@ -595,9 +598,26 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		if(this.participantsPanel.store.loaded)
 		{
-			params.participants=Ext.encode(this.participantsPanel.getGridData());
-		}
+			var gridData = this.participantsPanel.getGridData();
+			params.participants=Ext.encode(gridData);
 
+			this.numParticipants = 0;
+			for(var i=0; i<this.participantsPanel.store.data.items.length; i++)
+			{
+				if(this.participantsPanel.store.data.items[i].data.user_id != GO.settings.user_id)
+				{
+					this.numParticipants++;
+				}
+			}
+		}
+		
+		if(this.numParticipants)
+		{
+			var invitationMessage = (this.event_id) ? GO.calendar.lang.sendInvitationUpdate : GO.calendar.lang.sendInvitationInitial;
+		
+			params.send_invitation = (confirm(invitationMessage)) ? 1 : 0;
+		}
+		
 		this.formPanel.form.submit({
 			url : GO.settings.modules.calendar.url + 'action.php',
 			params : params,
@@ -610,7 +630,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				}
 
 				var startDate = this.getStartDate();
-				
+
 				var endDate = this.getEndDate();
 
 				var newEvent = {

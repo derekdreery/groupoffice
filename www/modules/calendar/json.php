@@ -309,6 +309,17 @@ try {
 				throw new AccessDeniedException();
 			}
 
+			$num_participants = 0;
+			$cal->get_participants($event['id']);
+			while($cal->next_record())
+			{
+				if($cal->f('user_id') != $GO_SECURITY->user_id)
+				{
+					$num_participants++;
+				}
+			}
+			$response['data']['num_participants'] = $num_participants;
+
 			$response['data']=array_merge($response['data'], $cal->event_to_json_response($event));
 
 			if(isset($GO_MODULES->modules['customfields'])) {
@@ -476,6 +487,16 @@ try {
 				$user = $GO_USERS->get_user($event['user_id']);
 				$username = String::format_name($user);
 
+				$num_participants = 0;
+				$cal->get_participants($event['id']);
+				while($cal->next_record())
+				{
+					if($cal->f('user_id') != $GO_SECURITY->user_id)
+					{
+						$num_participants++;
+					}
+				}
+
 				$response['results'][] = array(
 								'id'=>$response['count']++,
 								'event_id'=> $event['id'],
@@ -496,7 +517,8 @@ try {
 								'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time']),
 								'read_only'=> $event['read_only'] ? true : false,
 								'username' => $username,
-								'duration' => $duration
+								'duration' => $duration,
+								'num_participants' => $num_participants
 				);
 				
 				if($event['mtime'] > $response['mtime'])

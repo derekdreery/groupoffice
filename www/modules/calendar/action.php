@@ -123,6 +123,7 @@ try {
 				unlink($tmpfile);
 			}
 			break;
+			
 		case 'delete_event':
 
 			$event_id=$_POST['event_id'];
@@ -147,8 +148,44 @@ try {
 				$cal->add_exception_for_all_participants($exception_event['participants_event_id'], $exception);
 
 				//$cal->add_exception($exception);
-			}else {
-				$cal->delete_event($event_id);
+			}else
+			if(!empty($_REQUEST['send_cancellation']))
+			{
+				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');				
+				$RFC822 = new RFC822();				
+
+				$participants=array();
+				$cal->get_participants($event_id);
+				while($cal->next_record())
+				{
+					if($cal->f('user_id') != $GO_SECURITY->user_id)
+					{
+						$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
+					}
+				}								
+
+				if(count($participants))
+				{
+					$swift = new GoSwift(
+							implode(',', $participants),
+							$lang['calendar']['cancellation'].': '.$event['name']);
+
+					//create ics attachment
+					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
+					$ical = new go_ical('2.0', false, 'CANCEL');
+					$ics_string = $ical->export_event($event_id);
+
+					$name = File::strip_invalid_chars($event['name']).'.ics';
+					$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name, File::get_mime($name)));
+
+					$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
+
+					if(!$swift->sendmail(true)) {
+						throw new Exception('Could not send invitation');
+					}
+				}
+				
+				$cal->delete_event($event_id);				
 			}
 
 			$response['success']=true;
@@ -633,10 +670,10 @@ try {
 			}
 
 
-			if(!empty($_POST['invitation'])) {
+			if(!empty($_POST['send_invitation'])) {
 				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-				require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Plugins/DecoratorPlugin.php';
-				require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Plugins/Decorator/Replacements.php';
+				//require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Plugins/DecoratorPlugin.php';
+				//require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Plugins/Decorator/Replacements.php';
 
 				$RFC822 = new RFC822();
 				$participants_event_id=empty($old_event['participants_event_id']) ? $event_id : $old_event['participants_event_id'];
@@ -653,19 +690,23 @@ try {
 				}
 
 				//go_debug($participants);
-				if(count($participants)) {
-					
+				if(count($participants))
+				{
+					$subject = ($insert) ? $lang['calendar']['invitation'] : $lang['calendar']['invitation_update'];
 					$swift = new GoSwift(
 							implode(',', $participants),
-							$lang['calendar']['invitation'].': '.$event['name']);
+							$subject.': '.$event['name']);
 
+					/*
 					class Replacements implements Swift_Plugins_Decorator_Replacements {
 						function getReplacementsFor($address) {
 							return array('%email%'=>$address);
 						}
 					}
+					*/
+					
 					//Load the plugin with the extended replacements class
-					$swift->registerPlugin(new Swift_Plugins_DecoratorPlugin(new Replacements()));
+					//$swift->registerPlugin(new Swift_Plugins_DecoratorPlugin(new Replacements()));
 
 					/*
 					 * this part we will comment out, since we are going to do this the ics way.
@@ -1199,7 +1240,26 @@ try {
 				}
 			}
 			
-			break;		
+			break;
+
+			
+		case 'icalendar_process_response':
+
+			$event_id = (isset($_REQUEST['event_id']) && $_REQUEST['event_id']) ? $_REQUEST['event_id'] : '';
+			$email_sender = (isset($_REQUEST['email_sender']) && $_REQUEST['email_sender']) ? $_REQUEST['email_sender'] : '';
+			$status_id = (isset($_REQUEST['status_id']) && $_REQUEST['status_id']) ? $_REQUEST['status_id'] : '';
+			$last_modified = (isset($_REQUEST['last_modified']) && $_REQUEST['last_modified']) ? $_REQUEST['last_modified'] : '';
+
+			if(!$email_sender || !$status_id || !$last_modified)
+			{
+				throw new Exception($lang['common']['missingField']);
+			}
+			
+			$cal->set_event_status($event_id, $status_id, $email_sender, $last_modified);
+
+			$response['success'] = true;
+
+			break;	
 
 	}
 }catch(Exception $e)
