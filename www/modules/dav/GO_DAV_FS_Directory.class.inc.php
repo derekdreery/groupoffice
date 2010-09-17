@@ -71,6 +71,33 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		$this->relpath = $this->files->strip_server_path($this->path);
     }
 
+	public function getServerPath(){
+		return $this->path;
+	}
+
+	/**
+     * Movesthe node
+     *
+     * @param string $name The new name
+     * @return void
+     */
+    public function move($newPath) {
+
+		global $GO_SECURITY;
+
+		if(!$this->files->has_write_permission($GO_SECURITY->user_id, $this->folder))
+			throw new Sabre_DAV_Exception_Forbidden();
+
+		rename($this->path, $newPath);
+
+		$destFolder = $this->files->resolve_path($this->files->strip_server_path(dirname($newPath)));
+
+		$this->files->move_folder($this->folder, $destFolder);
+
+		$this->path = $newPath;
+		$this->relpath = $this->files->strip_server_path($this->path);
+    }
+
     /**
      * Creates a new subdirectory
      *

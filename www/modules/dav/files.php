@@ -30,6 +30,7 @@ require('GO_DAV_FS_Directory.class.inc.php');
 //require('GO_DAV_Root_Directory.class.inc.php');
 require('GO_DAV_Shared_Directory.class.inc.php');
 require('GO_DAV_FS_File.class.inc.php');
+require('GO_DAV_ObjectTree.class.inc.php');
 
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc.php");
 
@@ -45,9 +46,10 @@ if($GO_SECURITY->logged_in()){
 
 $root = new Sabre_DAV_SimpleDirectory('root',$children);
 
+$tree = new GO_DAV_ObjectTree($root);
 
 // The rootnode needs in turn to be passed to the server class
-$server = new Sabre_DAV_Server($root);
+$server = new Sabre_DAV_Server($tree);
 
 //baseUri can also be /webdav/ with:
 //Alias /webdav/ /path/to/files.php
