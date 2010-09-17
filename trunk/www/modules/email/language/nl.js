@@ -159,12 +159,14 @@ GO.email.lang.skipUnknownRecipientsAction='Dit scherm in het vervolg niet tonen'
 GO.email.lang.skipUnknownRecipients='Toon onbekende ontvanger dialoog niet';
 
 GO.email.lang.alwaysRequestNotification='Altijd om een leesbevestiging vragen';
+GO.email.lang.alwaysRespondToNotifications='Altijd antwoorden op een leesbevestiging';
 
 GO.email.lang.icalendarUpdateEvent='Afspraak bijwerken';
+GO.email.lang.icalendarDeleteEvent='Afspraak verwijderen';
 GO.email.lang.icalendarAcceptInvitation='Accepteren';
 GO.email.lang.icalendarDeclineInvitation='Weigeren';
 GO.email.lang.icalendarTentativeInvitation='Voorlopig';
-
-GO.email.lang.alwaysRespondToNotifications='Altijd antwoorden op een leesbevestiging';
-
-GO.email.lang.icalendarEventUpdated='Afspraak is bijgewerkt';
+GO.email.lang.icalendarEventUpdated='Afspraak is bijgewerkt.';
+GO.email.lang.icalendarEventCreated='Afspraak is aangemaakt.';
+GO.email.lang.icalendarEventDeleted='Afspraak is verwijderd.';
+GO.email.lang.icalendarDeleteEventConfirm='Weet u zeker dat u deze afspraak wilt verwijderen?';

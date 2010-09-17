@@ -1199,29 +1199,6 @@ try {
 				}
 			}
 			
-			break;
-
-
-		case 'icalendar_update_event':
-
-			if(!isset($GO_MODULES->modules['calendar']) || !$GO_MODULES->modules['calendar']['read_permission']) {
-				throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));
-			}
-
-			$event_id = (isset($_REQUEST['event_id']) && $_REQUEST['event_id']) ? $_REQUEST['event_id'] : '';
-			$email = (isset($_REQUEST['email']) && $_REQUEST['email']) ? $_REQUEST['email'] : '';
-			$status = (isset($_REQUEST['status']) && $_REQUEST['status']) ? $_REQUEST['status'] : '';
-			$last_modified = (isset($_REQUEST['last_modified']) && $_REQUEST['last_modified']) ? $_REQUEST['last_modified'] : '';
-
-			if(!$email || !$status || !$last_modified)
-			{
-				throw new Exception($lang['common']['missingField']);
-			}
-
-			$cal->set_event_status($event_id, $status, $email, $last_modified);
-			
-			$response['success'] = true;
-			
 			break;		
 
 	}
