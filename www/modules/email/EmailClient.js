@@ -114,8 +114,17 @@ GO.email.EmailClient = function(config){
 			this.searchDialog.hasSearch = false;
 			var search_type = (GO.email.search_type)
 			? GO.email.search_type : GO.email.search_type_default;
+		
+			var query;
 
-			this.messagesGrid.store.baseParams['query'] = search_type.toUpperCase() + ' "' + GO.email.search_query + '"';
+			if(search_type=='any'){
+				query='OR OR OR FROM "' + GO.email.search_query + '" SUBJECT "' + GO.email.search_query + '" TO "' + GO.email.search_query + '" CC "' + GO.email.search_query + '"';
+			}else
+			{
+				query=search_type.toUpperCase() + ' "' + GO.email.search_query + '"';
+			}
+
+			this.messagesGrid.store.baseParams['query'] = query;
 		}else
 		if(!this.searchDialog.hasSearch && this.messagesGrid.store.baseParams['query'])
 		{
@@ -1595,7 +1604,7 @@ GO.mainLayout.onReady(function(){
 	//contextmenu when an e-mail address is clicked
 	GO.email.addressContextMenu=new GO.email.AddressContextMenu();
 
-	GO.email.search_type_default = 'from';
+	GO.email.search_type_default = 'any';
 
 
 	//GO.checker is not available in some screens like accept invitation from calendar
