@@ -76,6 +76,29 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
 		$this->relpath = $this->files->strip_server_path($this->path);
     }
 
+	public function getServerPath(){
+		return $this->path;
+	}
+
+	/**
+     * Movesthe node
+     *
+     * @param string $name The new name
+     * @return void
+     */
+    public function move($newPath) {		
+		$this->checkWritePermission();
+
+		rename($this->path, $newPath);
+
+		$destFolder = $this->files->resolve_path($this->files->strip_server_path(dirname($newPath)));
+
+		$this->files->move_file($this->file, $destFolder);
+		
+		$this->path = $newPath;
+		$this->relpath = $this->files->strip_server_path($this->path);
+    }
+
     /**
      * Returns the data
      *
