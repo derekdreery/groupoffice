@@ -138,6 +138,7 @@ GO.email.MessagesGrid = function(config){
 		store: new Ext.data.SimpleStore({
 			fields: ['value', 'text'],
 			data : [
+			['any', GO.email.lang.anyField],
 			['from', GO.email.lang.searchFrom],
 			['subject', GO.email.lang.subject],
 			['to', GO.email.lang.searchTo],
@@ -159,10 +160,6 @@ GO.email.MessagesGrid = function(config){
 		paramName:'search',
 		emptyText:GO.lang['strSearch'],
 		width:this.searchfieldWidth
-	/*onTrigger1Click: function()
-                {alert('aa');}
-                */
-
 	});
         
 	this.showUnreadButton = new Ext.Button({
