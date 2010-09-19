@@ -233,6 +233,17 @@ class Go2Mime
 		return $this->response;
 	}
 
+	public function remove_inline_images($attachments){
+		$removed = array();
+
+		for($i=0;$i<count($attachments);$i++) {
+			if(empty($attachments[$i]['replacement_url'])){
+				$removed[]=$attachments[$i];
+			}
+		}
+		return $removed;
+	}
+
 	private function get_parts($structure, $part_number_prefix='', $create_tmp_attachments=false, $create_tmp_inline_attachments=false)
 	{
 		global $GO_CONFIG;
