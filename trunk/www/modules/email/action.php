@@ -565,19 +565,19 @@ try {
 						if(!empty($_POST['link'])) {
 							$link_props = explode(':', $_POST['link']);
 							$swift->link_to(array(array('link_id'=>$link_props[1],'link_type'=>$link_props[0])));
-						}
-					}
+						}				
 
-					if(isset($attachments_tmp_names))
-					{						
-						foreach($attachments_tmp_names as $tmp_name)
-						{						
-							if(file_exists($tmp_name))
+						if(isset($attachments_tmp_names))
+						{
+							foreach($attachments_tmp_names as $tmp_name)
 							{
-								unlink($tmp_name);
+								if(file_exists($tmp_name))
+								{
+									unlink($tmp_name);
+								}
 							}
 						}
-					}			
+					}
 
 				} catch (Exception $e) {
 					$response['feedback'] = $lang['email']['feedbackSMTPProblem'] . '<br />'.nl2br($e->getMessage());
