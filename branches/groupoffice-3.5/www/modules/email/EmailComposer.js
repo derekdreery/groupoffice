@@ -971,14 +971,14 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 							}, true);
 						}
 						
-						this.afterShowAndLoad(params.task!='opendraft');
+						this.afterShowAndLoad(params.task!='opendraft', config);
 					},
 					scope : this
 				});
 
 			}else
 			{
-				this.afterShowAndLoad(true);
+				this.afterShowAndLoad(true, config);
 			}
 			if (config.link_config) {
 				this.link_config = config.link_config;
@@ -1002,7 +1002,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.htmlEditor.setValue(v);		
 	},
 	
-	afterShowAndLoad : function(addSignature){
+	afterShowAndLoad : function(addSignature, config){
 		if(addSignature)
 		{
 			this.addSignature();
@@ -1028,6 +1028,13 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 		this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
 		this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
+
+		if(config.afterLoad)
+		{
+			if(!config.scope)
+				config.scope=this;
+			config.afterLoad.call(config.scope);
+		}
 
 		Ext.getBody().unmask();
 		GO.email.EmailComposer.superclass.show.call(this);
