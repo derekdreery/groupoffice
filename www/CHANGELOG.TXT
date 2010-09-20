@@ -1,3 +1,8 @@
+2010/09/20 3.5.26
+- Updated Norwegian translation
+- Added some tags to templates for e-mail.
+- Updated z-push config file in sync module.
+
 2010/09/17 3.5.25
 - Some fixes in z-push backend
 - Fixed password corruption in postfix module when updating settings
