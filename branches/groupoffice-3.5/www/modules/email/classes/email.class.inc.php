@@ -107,6 +107,10 @@ function load_template($template_id, $to='', $keep_tags=false) {
 					$link_id=$values['id'];*/
 
 					$response['data']['body']=$tp->replace_company_data_fields($response['data']['body'], $company['id'], true);
+				}else
+				{
+					//this will remove the tags
+					$tp->replace_fields($response['data']['body'],array());
 				}
 			}
 		}
