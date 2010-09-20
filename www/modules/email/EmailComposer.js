@@ -428,13 +428,13 @@ GO.email.EmailComposer = function(config) {
 		defaultType : 'textfield',
 		items : items,
 		keys:[{
-        key: Ext.EventObject.ENTER,
-				ctrl:true,
-        fn: function(key, e){					
-        	this.sendMail(false,false);
-        },
-        scope:this
-    }]
+			key: Ext.EventObject.ENTER,
+					ctrl:true,
+			fn: function(key, e){
+				this.sendMail(false,false);
+			},
+			scope:this
+		}]
 	});
 
 	//Set a long timeout for large attachments
@@ -616,7 +616,7 @@ GO.email.EmailComposer = function(config) {
 		maximizable : true,
 		collapsible : true,
 		animCollapse : false,
-		plain : true,
+		//plain : true,
 		closeAction : 'hide',
 		buttonAlign : 'center',
 		focus : focusFn.createDelegate(this),

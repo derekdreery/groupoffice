@@ -513,7 +513,6 @@ GO.email.AccountDialog = function(config) {
 		modal : false,
 		height : 400,
 		width : 650,
-		plain : true,
 		closeAction : 'hide',
 		title : GO.email.lang.account,
 
