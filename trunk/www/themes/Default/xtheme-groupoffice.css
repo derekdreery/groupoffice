@@ -35,6 +35,7 @@
 
 .x-toolbar .x-btn-mc .x-btn-text{
 	color: black;
+	border-color:#acbbc0 !important;
 }
 
 .x-btn-tl, .x-btn-tr, .x-btn-tc, .x-btn-ml, .x-btn-mr, .x-btn-mc, .x-btn-bl, .x-btn-br, .x-btn-bc {

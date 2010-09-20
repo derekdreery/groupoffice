@@ -28,7 +28,7 @@ GO.email.AccountsDialog = function(config){
 	config.layout='fit';
 	config.modal=false;
 	config.resizable=true;
-	config.border=false;
+	
 	config.width=600;
 	config.height=400;
 	config.closeAction='hide';
