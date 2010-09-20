@@ -76,25 +76,27 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			'<div class="go-warning-msg em-blocked">'+GO.email.lang.blocked+' <a id="em-unblock" href="#" class="normal-link">'+GO.email.lang.unblock+'</a></div>'+
 			'</tpl>'+			
 			'</div>'+
-			'<tpl if="iCalendar.feedback">'+
-				'<div class="message-icalendar">'+
-				'<span class="message-icalendar-icon go-link-icon-1"></span>'+
-				'{[values.iCalendar.feedback]}'+
-				'<span class="message-icalendar-actions">'+
-				'<tpl if="iCalendar.invitation">'+
-					'<a class="normal-link" id="em-icalendar-accept-invitation" href="#">'+GO.email.lang.icalendarAcceptInvitation+'</a> '+
-					'<a class="normal-link" id="em-icalendar-decline-invitation" href="#">'+GO.email.lang.icalendarDeclineInvitation+'</a> '+
-					'<a class="normal-link" id="em-icalendar-tentative-invitation" href="#">'+GO.email.lang.icalendarTentativeInvitation+'</a> '+
+			'<tpl if="!GO.util.empty(values.iCalendar)">'+
+				'<tpl if="iCalendar.feedback">'+
+					'<div class="message-icalendar">'+
+					'<span class="message-icalendar-icon go-link-icon-1"></span>'+
+					'{[values.iCalendar.feedback]}'+
+					'<span class="message-icalendar-actions">'+
+					'<tpl if="iCalendar.invitation">'+
+						'<a class="normal-link" id="em-icalendar-accept-invitation" href="#">'+GO.email.lang.icalendarAcceptInvitation+'</a> '+
+						'<a class="normal-link" id="em-icalendar-decline-invitation" href="#">'+GO.email.lang.icalendarDeclineInvitation+'</a> '+
+						'<a class="normal-link" id="em-icalendar-tentative-invitation" href="#">'+GO.email.lang.icalendarTentativeInvitation+'</a> '+
+					'</tpl>'+
+					'<tpl if="iCalendar.cancellation">'+
+						'<a class="normal-link" id="em-icalendar-delete-event" href="#">'+GO.email.lang.icalendarDeleteEvent+'</a>'+
+					'</tpl>'+
+					'<tpl if="iCalendar.response">'+
+						'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
+					'</tpl>'+
+					'</span>'+
+					'</div>'+
 				'</tpl>'+
-				'<tpl if="iCalendar.cancellation">'+
-					'<a class="normal-link" id="em-icalendar-delete-event" href="#">'+GO.email.lang.icalendarDeleteEvent+'</a>'+
-				'</tpl>'+
-				'<tpl if="iCalendar.response">'+
-					'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
-				'</tpl>'+
-				'</span>'+
-				'</div>'+
-			'</tpl>'+			
+			'</tpl>'+
 			'<div id="'+this.bodyId+'" class="message-body go-html-formatted">{body}</div>';
 		
 		this.template = new Ext.XTemplate(templateStr,{
