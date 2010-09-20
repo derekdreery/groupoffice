@@ -418,11 +418,6 @@ try {
 
 
 							if(file_exists($tmp_name)) {
-
-								$img = Swift_EmbeddedFile::fromPath($tmp_name);
-								$img->setContentType(File::get_mime($tmp_name));
-								$src_id = $swift->message->embed($img);
-
 								//Browsers reformat URL's so a pattern match
 								$just_filename = utf8_basename($inlineAttachment['url']);
 								if(preg_match('/="([^"]*'.preg_quote($just_filename).')"/',$body,$matches)){
