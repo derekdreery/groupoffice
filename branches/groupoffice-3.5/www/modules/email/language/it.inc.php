@@ -56,3 +56,9 @@ $lang['email']['aliases']='Aliases';
 $lang['email']['noUidNext']='Il server di posta non supporta UIDNEXT. La cartella \'Bozze\' e\' automaticamente disabilitata per questo account.';
 
 $lang['email']['disable_trash_folder']='Spostamento della e-mail nella cartella Cestino fallito. Questo potrebbe essere perche\' si e\' raggiunto lo spazio massimo consentito su disco. Puoi solo liberare spazio disabilitando la cartella Cestino da Administration -> Accounts -> Doppio click su account -> Cartelle';
+
+$lang['email']['error_move_folder']='Non puoi spostare la catella';
+
+$lang['email']['error_getaddrinfo']='Indirizzo host specificato non valido';
+$lang['email']['error_authentication']='Nome utente o password non valida';
+$lang['email']['error_connection_refused']='La connessione e\' stata rifiutata. Si prega di controllare l\'host ed il numero di porta.';
