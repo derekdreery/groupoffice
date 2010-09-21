@@ -184,9 +184,8 @@ try {
 						throw new Exception('Could not send invitation');
 					}
 				}
-				
-				$cal->delete_event($event_id);				
 			}
+			$cal->delete_event($event_id);				
 
 			$response['success']=true;
 			break;
