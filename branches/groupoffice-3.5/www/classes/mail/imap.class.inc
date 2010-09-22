@@ -1012,6 +1012,7 @@ class imap extends imap_bodystruct {
 					$message['subject']=$this->mime_header_decode($message['subject']);
 					$message['from']=$this->mime_header_decode($message['from']);
 					$message['to']=$this->mime_header_decode($message['to']);
+					$message['reply-to']=$this->mime_header_decode($message['reply-to']);
 					if(isset($message['cc']))
 						$message['cc']=$this->mime_header_decode($message['cc']);
 					$headers[$message['uid']] = $message;
