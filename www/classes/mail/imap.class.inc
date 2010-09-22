@@ -164,10 +164,15 @@ class imap extends imap_bodystruct {
 		}
 		$res = $this->get_response();
 
-
+//go_debug($res);
 		$authed = false;
 		if (is_array($res) && !empty($res)) {
 			$response = array_pop($res);
+
+			//Sometimes an extra empty line comes along
+			if(!$response && count($res)==2)
+				$response = array_pop($res);
+
 			$this->short_responses[$response] = getmicrotime();
 			if (!$this->auth) {
 				if (isset($res[1])) {
@@ -181,7 +186,7 @@ class imap extends imap_bodystruct {
 				$authed = true;
 				$this->state = 'authed';
 			}else
-			{
+			{				
 				throw new Exception($response);
 				//$this->errors[]=$response;
 			}
@@ -205,8 +210,6 @@ class imap extends imap_bodystruct {
 			$response = $this->get_response();
 			$this->capability = $_SESSION['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);
 		}
-
-		go_debug($this->capability);
 
 		return $this->capability;
 	}
@@ -1009,6 +1012,7 @@ class imap extends imap_bodystruct {
 					$message['subject']=$this->mime_header_decode($message['subject']);
 					$message['from']=$this->mime_header_decode($message['from']);
 					$message['to']=$this->mime_header_decode($message['to']);
+					$message['reply-to']=$this->mime_header_decode($message['reply-to']);
 					if(isset($message['cc']))
 						$message['cc']=$this->mime_header_decode($message['cc']);
 					$headers[$message['uid']] = $message;

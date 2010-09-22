@@ -1667,8 +1667,8 @@ GO.files.openFile = function(record, store)
 			if(GO.mailings)
 			{
 				GO.linkHandlers[9].call(this, 0, {
-					path: record.data.path
-				});
+					file_id: record.data.id
+					});
 				break;
 			}
 		

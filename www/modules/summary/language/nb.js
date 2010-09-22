@@ -18,7 +18,7 @@ GO.summary.lang.today = 'I dag ';
 /* table: su_announcements */
 GO.summary.lang.announcement="Kunngjøring";
 GO.summary.lang.announcements="Kunngjøringer";
-GO.summary.lang.dueTime="Fjernes dato";
+GO.summary.lang.dueTime="Vis til og med";
 GO.summary.lang.title="Tittel";
 
 
