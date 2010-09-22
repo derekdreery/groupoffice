@@ -855,6 +855,13 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					return record.get('account_id')==config.account_id;
 				});
 			}
+
+			//find by e-mail
+			if(config.from){
+				index = this.fromCombo.store.findBy(function(record, id){
+					return record.get('email')==config.from;
+				});
+			}
 			if(index==-1)
 			{
 				index=0;
