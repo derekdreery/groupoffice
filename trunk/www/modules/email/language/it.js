@@ -86,7 +86,6 @@ GO.email.lang.noEncryption='Nessuna codifica';
 GO.email.lang.noAccountTitle='Nessun account';
 GO.email.lang.priority='Priorita\'';
 
-
 GO.email.lang.read='Leggi';
 GO.email.lang.NA='N/A';
 
@@ -94,25 +93,28 @@ GO.email.lang.emptyFolder='Svuota Cartella';
 GO.email.lang.emptyFolderConfirm='Sei sicuro di voler SVUOTARE \'{name}\'?';
 GO.email.lang.addUnknownRecipients='Aggiungi destinatari sconosciuti';
 GO.email.lang.addUnknownRecipientsText='Hai appena inviato un\'e-mail a uno o piu\' destinatari non presenti nella tua rubrica. Clicca sul nome se vuoi aggiungere la persona o chiudi questa finestra.';
-
 GO.email.lang.attachFilesPC='Aggiungi dal PC';
 GO.email.lang.attachFilesGO='Aggiungi da Group-Office';
 GO.email.lang.renameFolder='Rinomina Cartella';
+
 
 GO.email.lang.vacation='Risposta automatica';
 GO.email.lang.vacationActive='Attiva la risposta automatica';
 GO.email.lang.vacationSubject='Oggetto';
 GO.email.lang.vacationBody='Corpo';
+
 GO.email.lang.addToRecipients = 'Aggiungi ai destinatari';
 GO.email.lang.addToCC = 'Aggiungi al CC';
 GO.email.lang.addToBCC = 'Aggiungi al BCC';
+
 GO.email.lang.viewSource='Vedi sorgente';
+
 GO.email.lang.sendNotification='Il mittente di questo messaggio ha richiesto una notifica di lettura per il messaggio: %s. Vuoi inviare una conferma?';
+
 GO.email.lang.searchOnSender='Visualizza i messaggi';
 
 GO.email.lang.blocked= '{blocked_images} immagini esterne bloccate per sicurezza.';
 GO.email.lang.unblock= 'Clicca qui per sbloccare';
-
 
 GO.email.lang.loadEmailFirst= 'Per usare questa funzione devi prima aprire l\'email cliccando sul tab e-mail';
 
@@ -122,10 +124,13 @@ GO.email.lang.usage='Utilizzo disco';
 GO.email.lang.searchGO='Cerca con Group-Office';
 GO.email.lang.toggleWindowPosition = 'Invertire la posizione della finestra di messaggio';
 GO.email.lang.closeUploadDialog='Chiudere la prima finestra di dialogo Carica o attendere per il caricamento per finire';
+
 GO.email.lang.signature='Firma';
 
 GO.email.defaultProgram='Programma e-mail di default';
 GO.email.defaultProgramInstructions ='<p>Per impostare Group-Office come programma di e-mail predefinito <a class="normal-link" href="http://www.group-office.com/wiki/E-mail#Set_Group-Office_as_your_default_e-mail_client" target="_blank">leggi le istruzioni</a>.</p><p>Poi, se utilizzi Windows e\' necessario scaricare ed eseguire <a class="normal-link" href="{url}">questo file di registro</a></p>';
+
+
 GO.email.lang.htmlMarkup = 'Utilizza HTML markup';
 GO.email.lang.confirmLostChanges = 'Le modifiche andranno perse. Sei sicuro?';
 /* table: em_aliases */
@@ -158,3 +163,6 @@ GO.email.lang.showUnread='Mostra non letti';
 GO.email.lang.searchFrom='Mittente';
 GO.email.lang.searchTo='Destinatario';
 GO.email.lang.searchCC='Destinatario (CC)';
+GO.email.lang.anyField='Qualsiasi campo';
+
+GO.email.lang.youHaveNewMails = 'Tu hai {new} nuova/e e-mail';

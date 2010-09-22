@@ -12,4 +12,5 @@ $lang['summary']['default_rss_url']='http://news.google.fr/nwshp?hl=fr&tab=wn&ou
 // 3.0-14
 $lang['summary']['announcement']='Annonce';
 $lang['summary']['announcements']='Annonces';
-?>
+
+$lang['summary']['default_rss_title']='Actualités';

@@ -87,31 +87,45 @@ function load_template($template_id, $to='', $keep_tags=false) {
 
 			if ($contact = $ab->get_contact_by_email($to, $GO_SECURITY->user_id)) {
 
-				$values = array_map('htmlspecialchars', $contact);
+				/*$values = array_map('htmlspecialchars', $contact);
 				$link_type = 2;
-				$link_id=$contact['id'];
+				$link_id=$contact['id'];*/
+
+				$response['data']['body']=$tp->replace_contact_data_fields($response['data']['body'], $contact['id'], true);
 
 
 			}elseif($user = $GO_USERS->get_user_by_email($to)) {
-				$values = array_map('htmlspecialchars', $user);
+
+				$response['data']['body']=$tp->replace_user_data_fields($response['data']['body'], $user['id'], true);
+				/*$values = array_map('htmlspecialchars', $user);
 				$link_type = 8;
-				$link_id=$user['id'];
+				$link_id=$user['id'];*/
 			}else {
 				$ab->search_companies($GO_SECURITY->user_id, $to, 'email',0,0,1);
-				if($ab->next_record()) {
-					$values = array_map('htmlspecialchars', $ab->record);
+				if($company= $ab->next_record()) {
+					/*$values = array_map('htmlspecialchars', $ab->record);
 					$link_type = 3;
-					$link_id=$values['id'];
+					$link_id=$values['id'];*/
+
+					$response['data']['body']=$tp->replace_company_data_fields($response['data']['body'], $company['id'], true);
+				}else
+				{					
+					//this will remove the tags
+					$tp->replace_fields($response['data']['body'],array());
 				}
 			}
+		}else
+		{
+			//this will remove the tags
+			$tp->replace_fields($response['data']['body'],array());
 		}
 
-		if($cf && !empty($link_id)) {
+		/*if($cf && !empty($link_id)) {
 			$cf_values = $cf->get_values($GO_SECURITY->user_id, $link_type, $link_id);
 			$values = array_merge($values, $cf_values);
 		}
 
-		$tp->replace_fields($response['data']['body'], $values);
+		$tp->replace_fields($response['data']['body'], $values);*/
 	}
 
 	if($_POST['content_type']=='plain') {
