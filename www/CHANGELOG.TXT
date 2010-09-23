@@ -1,3 +1,6 @@
+2010/09/23 3.5.27
+- Wrong config.php was included
+
 2010/09/22 3.5.26
 - Updated Norwegian translation
 - Added some tags to templates for e-mail.
