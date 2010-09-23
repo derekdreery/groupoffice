@@ -1,0 +1,30 @@
+<?php
+/**
+ * For more information visit: http://www.group-office.com/wiki/IMAP_or_LDAP_authentication
+ */
+ 
+$config[] = 
+	array(			
+	'proto' => 'imap',
+	'domains' => '*',
+	'host' => 'localhost',
+	'port' => '143',
+	'ssl' => false,
+	'novalidate_cert' => false,
+	'mbroot' => '',//you might have to change this to INBOX
+	'remove_domain_from_username' => false,
+	'create_email_account' => true,
+	'groups' => array('Internal'),
+	'visible_groups' => array('Everyone', 'Internal'),
+	'modules_read' => array('email', 'files', 'addressbook', 'calendar', 'tasks', 'notes', 'summary'),
+	'modules_write' => array(),
+	
+	'smtp_host'=>'localhost',
+	'smtp_port'=>'25',
+	'smtp_encryption'=>'',
+	'smtp_username'=>'',
+	'smtp_password'=>'',
+		
+	'ldap_use_email_as_imap_username'=>false
+	);
+?>
