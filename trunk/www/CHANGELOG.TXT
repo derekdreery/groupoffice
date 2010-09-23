@@ -1,3 +1,12 @@
+/*
+trunk updates:
+
+ALTER TABLE  `bs_orders` ADD INDEX (  `recurred_order_id` );
+ALTER TABLE  `pm_hours` ADD  `ctime` INT NOT NULL , ADD  `mtime` INT NOT NULL;
+ALTER TABLE  `pm_hours` ADD INDEX (  `payout_invoice_id` );
+*/
+
+
 2010/09/22 3.5.26
 - Updated Norwegian translation
 - Added some tags to templates for e-mail.
