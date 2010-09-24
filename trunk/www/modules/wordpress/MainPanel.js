@@ -9,19 +9,20 @@ var wpConfig = {
 			itemId:'iframe',
 			url:GO.settings.modules.wordpress.url+'redirect.php'
 	})],
-	border:false,
-	tbar:[{
+	border:false
+};
+
+var tbarItems = [{
 			iconCls:'go-module-icon-wordpress',
 			text:GO.wordpress.lang.wordpressAdmin,
 			handler:function(){
 				wpIframe.el.dom.src=GO.settings.modules.wordpress.url+'redirect.php';
 			},
 			scope:this
-	}]
-};
+	}];
 
 if(GO.settings.has_admin_permission){
-	wpConfig.tbar.push('-',{
+	tbarItems.push('-',{
 		iconCls:'btn-settings',
 		text:GO.lang.cmdSettings,
 		handler:function(){
@@ -32,5 +33,10 @@ if(GO.settings.has_admin_permission){
 		}
 	});
 }
+
+wpConfig.tbar= new Ext.Toolbar({
+		cls:'go-head-tb',
+		items:tbarItems
+	});
 
 GO.moduleManager.addModule('wordpress', Ext.Panel, wpConfig);
