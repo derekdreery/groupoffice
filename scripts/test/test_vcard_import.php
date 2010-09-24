@@ -7,57 +7,33 @@ require_once ($GO_CONFIG->class_path."ical2array.class.inc");
 
 $vcard_text='BEGIN:VCARD
 VERSION:2.1
-N:achternaam;voornaam;Tussen;Title;
-BDAY:19800911
-NOTE;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:=0D=0A
-TEL;WORK;FAX:fax werk
-TEL;VOICE;WORK:tel werk
-TEL;VOICE;WORK:
-TEL;CAR;VOICE:
-CATEGORIES:
-TEL;WORK;PREF:
-FN:voornaam achter
-EMAIL;INTERNET:email1@test.nl
-EMAIL;INTERNET;HOME:email3@test.nl
-EMAIL;INTERNET;WORK:email2@test.nl
-TITLE:Functi
-TEL;VOICE;HOME:tel
-TEL;VOICE;HOME:
-TEL;HOME;FAX:fax
-URL;HOME:
-PRIORITY:1
-TEL;CELL:mob
-NICKNAME:
-TEL;FAX:
-TEL;VOICE:
-TEL;PAGER:
-TEL;PREF;VOICE:
-ROLE:
-CLASS:PUBLIC
-URL:
-ORG:;afdeling;
-ADR;HOME:;;adres huisn;woonpl;prov;postcode;NL
+N:Schering;Merijn;;Title;
+TEL;VOICE;HOME:12345
+TEL;VOICE;WORK:#1+33242423
+TEL;PAGER:424213
+TEL;FAX;WORK:2342
+TEL;CELL:12334567
+TEL;VOICE:23
+ADR;HOME:;2;Hesselsstraat 97b;Den Bosch;State;ZIP;Country
+ADR;WORK:;2;Work address;City;State;ZIP;Country
 ADR:;;;;;;
-ADR;WORK:;;;;;;
+BDAY:1945-03-25
+EMAIL;INTERNET:
+EMAIL;INTERNET;HOME:mschering@intermesh.nl
+EMAIL;INTERNET;WORK:
+TITLE:Job title
+URL:
+ORG:Intermesh
+NOTE:Notes
 PHOTO:
-X-ANNIVERSARY:
-X-FUNAMBOL-BILLINGINFO:
-TEL;X-FUNAMBOL-CALLBACK:
-X-FUNAMBOL-CHILDREN:
-X-FUNAMBOL-COMPANIES:
-X-FUNAMBOL-FOLDER:DEFAULT_FOLDER
-X-FUNAMBOL-GENDER:0
-X-FUNAMBOL-HOBBIES:
-EMAIL;INTERNET;HOME;X-FUNAMBOL-INSTANTMESSENGER:
-X-FUNAMBOL-INITIALS:v.T.a.
-X-FUNAMBOL-LANGUAGES:
-X-MANAGER:
-X-FUNAMBOL-MILEAGE:
-X-FUNAMBOL-ORGANIZATIONALID:
+CATEGORIES:
 END:VCARD';
 
 $vcard = new vcard();
-$record = $vcard->vcf_to_go($vcard_text);
+//$record = $vcard->vcf_to_go($vcard_text);
 
-var_dump($record);
+//var_dump($record);
+
+$vcard->export_contact(1);
+echo $vcard->vcf;
 
