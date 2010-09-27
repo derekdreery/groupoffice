@@ -299,6 +299,7 @@ try {
 
 			$response['data']=array_merge($response['data'], $cal->event_to_json_response($event));
 
+
 			if(isset($GO_MODULES->modules['customfields'])) {
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
@@ -307,24 +308,28 @@ try {
 
 				$values = $cf->get_values($GO_SECURITY->user_id, 1, $event['id']);
 				$response['data']=array_merge($response['data'], $values);
+			}else
+			{
+				$cf = false;
+			}
 
-				if($calendar['group_id'] == 1) {
-					$cal->get_event_resources($response['data']['id']);
-					while($cal->next_record()) {
-						$values = $cf->get_values($GO_SECURITY->user_id, 1, $cal->f('id'));
-						$response['data']['resources'][$cal->f('calendar_id')] = $values;
-						$response['data']['status_'.$cal->f('calendar_id')] = $lang['calendar']['statuses'][$cal->f('status')];
-						$i = 0;
-						foreach($values as $key=>$value) {
-							$resource_options = 'resource_options['.$cal->f('calendar_id').']['.$key.']';
-							$response['data'][$resource_options] = $value;
-							$i++;
-						}
-						if($i > 0)
-							$response['data']['resources_checked'][] = $cal->f('calendar_id');
+			if($calendar['group_id'] == 1) {
+				$cal->get_event_resources($response['data']['id']);
+				while($cal->next_record()) {
+					$values = $cf ? $cf->get_values($GO_SECURITY->user_id, 1, $cal->f('id')) : array('link_id'=>$cal->f('id'));
+					$response['data']['resources'][$cal->f('calendar_id')] = $values;
+					$response['data']['status_'.$cal->f('calendar_id')] = $lang['calendar']['statuses'][$cal->f('status')];
+					$i = 0;
+					foreach($values as $key=>$value) {
+						$resource_options = 'resource_options['.$cal->f('calendar_id').']['.$key.']';
+						$response['data'][$resource_options] = $value;
+						$i++;
 					}
+					if($i > 0)
+						$response['data']['resources_checked'][] = $cal->f('calendar_id');
 				}
 			}
+			
 
 			$response['data']['calendar_name']=$calendar['name'];
 			$response['data']['group_id'] = $calendar['group_id'];
