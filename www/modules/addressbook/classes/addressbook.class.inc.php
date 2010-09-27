@@ -537,6 +537,9 @@ class addressbook extends db {
 			$contact['iso_address_format']=$addressbook['default_iso_address_format'];
 		}
 
+		if(!isset($contact['email_allowed']))
+			$contact['email_allowed']='1';
+
 		if(!isset($contact['files_folder_id']) && isset($GO_MODULES->modules['files'])) {
 			global $GO_CONFIG;
 
