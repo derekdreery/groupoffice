@@ -388,7 +388,8 @@ class servermanager extends db {
 			$max_users=license_get_max_server_users();
 		}else
 		{
-			$max_users=0;
+			//Ioncube not used. Must be a very reliable person working with unencoded pro files!
+			$max_users=9999999;
 		}
 		return $max_users;
 	}
