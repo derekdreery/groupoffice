@@ -58,3 +58,6 @@ GO.cms.lang.alwaysShow='Leave empty to show forever';
 GO.cms.lang.root='Root';
 GO.cms.lang.advancedPermissions='Advanced permissions';
 GO.cms.lang.enablePermissionsPerFolder='Enable permissions per folder for this user';
+
+GO.cms.lang.sortDate='Sort date';
+GO.cms.lang.unused='Does not apply to this page';
