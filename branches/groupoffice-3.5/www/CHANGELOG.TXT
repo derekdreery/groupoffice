@@ -1,3 +1,6 @@
+2010/09/27 3.5.28
+- Fixed Blackberry contacts field mapping
+
 2010/09/23 3.5.27
 - Wrong config.php was included
 
