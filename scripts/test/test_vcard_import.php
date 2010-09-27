@@ -14,7 +14,7 @@ TEL;PAGER:424213
 TEL;FAX;WORK:2342
 TEL;CELL:12334567
 TEL;VOICE:23
-ADR;HOME:;2;Hesselsstraat 97b;Den Bosch;State;ZIP;Country
+ADR;HOME:;2;Reitscheweg 37;Den Bosch;State;ZIP;Country
 ADR;WORK:;2;Work address;City;State;ZIP;Country
 ADR:;;;;;;
 BDAY:1945-03-25
@@ -31,7 +31,6 @@ END:VCARD';
 
 $vcard = new vcard();
 //$record = $vcard->vcf_to_go($vcard_text);
-
 //var_dump($record);
 
 $vcard->export_contact(1);
