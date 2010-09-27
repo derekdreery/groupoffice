@@ -224,4 +224,5 @@ GO.cms.TemplateOptionsPanel = Ext.extend(function(cfg) {
 				this.doLayout();
 			}
 
+
 		});
