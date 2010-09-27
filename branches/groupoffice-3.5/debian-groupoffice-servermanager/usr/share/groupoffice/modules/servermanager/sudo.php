@@ -139,7 +139,7 @@ switch($args['task'])
 			$password = crypt($args['password']);
 			
 			$db->query('USE `'.$db_name.'`');
-			$db->query("UPDATE go_users SET password='".$password."' WHERE id=1");
+			$db->query("UPDATE go_users SET password='".$password."', password_type='crypt' WHERE id=1");
 		}
 		
 		break;
@@ -153,7 +153,10 @@ switch($args['task'])
 			//set admin password
 			$db = new db();
 			$db->query('USE `'.$db_name.'`');
-			$db->query("UPDATE go_users SET password=crypt('".$argv[5]."'), password_type='crypt' WHERE id=1");
+
+			$password = crypt($args['password']);
+
+			$db->query("UPDATE go_users SET password='".$password."', password_type='crypt' WHERE id=1");
 		}
 		break;
 		

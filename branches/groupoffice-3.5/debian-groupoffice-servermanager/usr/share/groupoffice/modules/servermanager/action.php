@@ -169,7 +169,7 @@ try{
 				$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php --go_config='.$GO_CONFIG->get_config_file().' --task=move_config --name='.$old_installation['name'].' --tmp_config='.$tmp_config;
 				if(isset($admin_password))
 				{
-					$cmd .= ' "'.$admin_password.'"';
+					$cmd .= ' --password="'.$admin_password.'"';
 				}
 
 				exec($cmd, $output, $return_var);
