@@ -258,6 +258,7 @@ try {
 			$file['type']=isset($_POST['type']) ? $_POST['type'] : '';
 			$file['auto_meta']=isset($_POST['auto_meta']) ? '1' : '0';
 			$file['show_until']=Date::to_unixtime($_POST['show_until']);
+			$file['sort_time']=Date::to_unixtime($_POST['sort_date']);
 
 			if($file['auto_meta']=='1') {
 				$file['title']=$cms->get_title_from_html($file['content']);

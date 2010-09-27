@@ -19,4 +19,5 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cms_user_site_filter` (
   `site_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`user_id`,`site_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$updates[]="ALTER TABLE `cms_files` ADD `sort_time` int(11) NOT NULL default '0';";
 ?>

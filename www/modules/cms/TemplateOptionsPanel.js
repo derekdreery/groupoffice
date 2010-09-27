@@ -197,6 +197,16 @@ GO.cms.TemplateOptionsPanel = Ext.extend(function(cfg) {
 										value : value,
 										anchor : '-20'
 									}));
+						}else if(o.type=='date'){
+							value = this.optionValues[o.name]
+									? this.optionValues[o.name]
+									: '';
+							this.options.push(new Ext.form.DateField({
+										fieldLabel : o.fieldLabel,
+										name : o.name,
+										value : value,
+										anchor : '-20'
+									}));
 						}else {
 							value = this.optionValues[o.name]
 									? this.optionValues[o.name]

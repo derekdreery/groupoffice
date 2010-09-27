@@ -48,3 +48,6 @@ GO.cms.lang.alwaysShow='Laat leeg om altijd te tonen';
 GO.cms.lang.root='Root';
 GO.cms.lang.advancedPermissions='Geavanceeerde toegangsrechten';
 GO.cms.lang.enablePermissionsPerFolder='Schakel toegangsrechten per map in voor deze gebruiker';
+
+GO.cms.lang.sortDate='Sorteerdatum';
+GO.cms.lang.unused='Niet van toepassing op deze pagina';

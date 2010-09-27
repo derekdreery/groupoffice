@@ -14,7 +14,7 @@
 
 class cms extends db {
 
-	var $valid_tags=array('select', 'input', 'file', 'textarea', 'checkbox');
+	var $valid_tags=array('select', 'input', 'file', 'textarea', 'checkbox','date');
 
 	function get_field($fieldNode) {
 
@@ -80,6 +80,7 @@ class cms extends db {
 						//echo $fieldNode->nodeName."\n";
 
 						$option = $this->get_field($fieldNode);
+
 						if($option)
 							$type['options'][]=$option;
 					}
@@ -1052,6 +1053,7 @@ class cms extends db {
 	 */
 	function get_file($file_id, $convert_template_values=true) {
 		$this->query("SELECT * FROM cms_files WHERE id=".intval($file_id));
+
 		if($this->next_record()) {
 			if($convert_template_values)
 				$this->record['option_values']=$this->get_template_values($this->record['option_values']);
