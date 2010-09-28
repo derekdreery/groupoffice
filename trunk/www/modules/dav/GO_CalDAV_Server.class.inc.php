@@ -41,7 +41,7 @@ class GO_CalDAV_Server extends Sabre_DAV_Server {
 		$root->addChild($tasklists);
         
 
-        $objectTree = new Sabre_DAV_ObjectTree($root);
+        $objectTree = new GO_DAV_ObjectTree($root);
 
 		
 

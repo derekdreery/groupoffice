@@ -31,6 +31,8 @@ class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
 
 	protected $realm;
 
+	protected $users;
+
     /**
      * __construct
      *
@@ -141,14 +143,22 @@ class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
 
 		global $GO_USERS, $GO_SECURITY;
 
-		$users=array();
 		
-		$GO_USERS->get_users($GO_SECURITY->user_id);
-		while($user=$GO_USERS->next_record()){
-			$users[]=array('uri'=>$user['username']);
+
+		go_debug('GO_DAV_Auth_Backend::getUsers()');
+
+		if(!isset($this->users)){
+			$this->users=array();
+go_debug('Fetching users from database');
+			//$GO_USERS->get_authorized_users($GO_SECURITY->user_id, 'username');
+			$GO_USERS->get_users('username', 'asc',0,10);
+			while($user=$GO_USERS->next_record()){
+				
+				$this->users[]=array('uri'=>$user['username']);
+			}
 		}
 
-        return $users;
+        return $this->users;
 
     }
 
