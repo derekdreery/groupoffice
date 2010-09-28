@@ -23,7 +23,7 @@ if(!isset($GO_MODULES->modules['servermanager'])) {
 //require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 //$fs = new filesystem();
 
-$roots=array($sm_config['install_path']);
+$roots=array($sm_config['install_path'],'/etc/groupoffice');
 //$roots=array('/var/www/groupoffice');
 
 

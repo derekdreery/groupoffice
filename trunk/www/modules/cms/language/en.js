@@ -59,6 +59,9 @@ GO.cms.lang.root='Root';
 GO.cms.lang.advancedPermissions='Advanced permissions';
 GO.cms.lang.enablePermissionsPerFolder='Enable permissions per folder for this user';
 
+GO.cms.lang.sortDate='Sort date';
+GO.cms.lang.unused='Does not apply to this page';
+
 GO.cms.lang.feed='Offer items from this folder as feed';
 GO.cms.lang.enableRewrite='Enable friendly URL\'s with mod_rewrite. The webserver must be configured for this and it will only work on the domain set above.';
 GO.cms.lang.rewriteBase='mod_rewrite base path';

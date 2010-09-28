@@ -34,8 +34,11 @@ class servermanager extends db {
 		$fs = new filesystem();
 
 		$configs=array();
+		$config_files=array();
+
 		if(file_exists('/etc/groupoffice/config.php')){
 			$configs[]=array('name'=>'servermanager','conf'=>'/etc/groupoffice/config.php');
+			$config_files[]='/etc/groupoffice/config.php';
 		}
 		foreach($roots as $root) {
 			$folders = $fs->get_folders($root);
@@ -44,21 +47,30 @@ class servermanager extends db {
 
 			//var_dump($folders);
 
+			
+
 			foreach($folders as $folder) {
+
+				$config=false;
+
 				$conf = '/etc/groupoffice/'.$folder['name'].'/config.php';
 				if(file_exists($conf)) {
-					$configs[]=array('name'=>$folder['name'], 'conf'=>$conf);
+					$config=array('name'=>$folder['name'], 'conf'=>$conf);
 				}else {
 					$conf = $folder['path'].'/html/groupoffice/config.php';
 					if(file_exists($conf)) {
-						$configs[]=array('name'=>$folder['name'], 'conf'=>$conf);
+						$config=array('name'=>$folder['name'], 'conf'=>$conf);
 					}else
 					{
 						$conf = $folder['path'].'/config.php';
 						if(file_exists($conf)) {
-							$configs[]=array('name'=>$folder['name'], 'conf'=>$conf);
+							$config=array('name'=>$folder['name'], 'conf'=>$conf);
 						}
 					}
+				}
+				if($config && !in_array($config['conf'], $config_files)){
+					$config_files[]=$config['conf'];
+					$configs[]=$config;
 				}
 			}
 		}
@@ -376,7 +388,8 @@ class servermanager extends db {
 			$max_users=license_get_max_server_users();
 		}else
 		{
-			$max_users=0;
+			//Ioncube not used. Must be a very reliable person working with unencoded pro files!
+			$max_users=9999999;
 		}
 		return $max_users;
 	}

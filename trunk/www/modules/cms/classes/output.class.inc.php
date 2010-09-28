@@ -449,7 +449,7 @@ class cms_output extends cms {
 
 		if($random) {
 			shuffle($items);
-		}elseif($paging_id && $total > $max_items) {
+		} elseif($paging_id && $total > $max_items) {
 			$_SESSION['GO_SESSION']['cms']['paging_'.$paging_id]=isset($_SESSION['GO_SESSION']['cms']['paging_'.$paging_id]) ? $_SESSION['GO_SESSION']['cms']['paging_'.$paging_id] : $start;
 			if(isset($_REQUEST[$paging_id])) {
 				$start = $_SESSION['GO_SESSION']['cms']['paging_'.$paging_id]= $_REQUEST[$paging_id];

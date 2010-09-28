@@ -308,6 +308,7 @@ try {
 				$file['mtime']=Date::get_timestamp($file['mtime']);
 				$file['ctime']=Date::get_timestamp($file['ctime']);
 				$file['show_until']=Date::get_timestamp($file['show_until'],false);
+				$file['sort_date']=Date::get_timestamp($file['sort_time'],false);
 
 
 				$response['data']=$file;
