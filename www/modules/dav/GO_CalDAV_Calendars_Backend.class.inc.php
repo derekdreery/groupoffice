@@ -159,7 +159,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 	 */
 	public function getCalendarObjects($calendarId) {
 
-		go_debug("getCalendarObjects($calendarId)");
+		go_debug("c:getCalendarObjects($calendarId)");
 
 		$objects = array();
 		$this->cal->get_events(array($calendarId));
@@ -195,7 +195,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 	 */
 	public function getCalendarObject($calendarId, $objectUri) {
 
-		go_debug("getCalendarObject($calendarId,$objectUri)");
+		go_debug("c:getCalendarObject($calendarId,$objectUri)");
 
 		/*
 		 * When a client adds or updates an event, the server must return the
