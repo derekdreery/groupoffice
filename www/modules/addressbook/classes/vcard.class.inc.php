@@ -348,7 +348,12 @@ class vcard extends addressbook {
 					}
 					break;
 				case "EMAIL" :
-					if(isset($record['contact']['email3']))
+
+					if(in_array('HOME', $property->parm_types)){
+						$record['contact']['email'] = $property->values[0];
+					}elseif(in_array('WORK', $property->parm_types)){
+						$record['contact']['email2'] = $property->values[0];
+					}elseif(isset($record['contact']['email3']))
 					{
 						//we ran out of email addres storage sorry.
 					}elseif(isset($record['contact']['email2']))
@@ -671,8 +676,8 @@ class vcard extends addressbook {
 								case "BDAY" :
 
 									//if (intval($property->values[0]) > 0) {
-										//$lines[] = $property->name.DELIM_COLON.$property->values[0];
-										$lines = array_merge($lines, String::format_vcard_line($property->name, $property->values[0], $this->add_leading_space_to_qp_encoded_line_wraps));
+										$lines[] = $property->name.DELIM_COLON.$property->values[0];
+										//$lines = array_merge($lines, String::format_vcard_line($property->name, $property->values[0], $this->add_leading_space_to_qp_encoded_line_wraps));
 									//}
 									break;
 								default :
@@ -878,7 +883,8 @@ class vcard_property {
 				case "email" :
 					$this->name = "EMAIL";
 					$this->parm_types[0] = "INTERNET";
-					$this->parm_types[1] = "PREF";
+					//$this->parm_types[1] = "PREF";
+					$this->parm_types[1] = "HOME";
 					$this->values[0] = $value;
 					break;
 				case "email2":
@@ -890,7 +896,7 @@ class vcard_property {
 				case "email3":
 					$this->name = "EMAIL";
 					$this->parm_types[0] = "INTERNET";
-					$this->parm_types[1] = "HOME";
+					$this->parm_types[1] = "";
 					$this->values[0] = $value;
 				break;
 				case "function" :
@@ -900,12 +906,14 @@ class vcard_property {
 					break;
 				case "home_phone" :
 					$this->name = "TEL";
-					$this->parm_types[0] = "HOME";
+					$this->parm_types[0] = "VOICE";
+					$this->parm_types[1] = "HOME";
 					$this->values[0] = $value;
 					break;
 				case "work_phone" :
 					$this->name = "TEL";
-					$this->parm_types[0] = "WORK";
+					$this->parm_types[0] = "VOICE";
+					$this->parm_types[1] = "WORK";
 					$this->values[0] = $value;
 					break;
 				case "fax" :

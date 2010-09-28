@@ -6,6 +6,15 @@ ALTER TABLE  `pm_hours` ADD  `ctime` INT NOT NULL , ADD  `mtime` INT NOT NULL;
 ALTER TABLE  `pm_hours` ADD INDEX (  `payout_invoice_id` );
 */
 
+2010/09/27 3.5.28
+- Fixed Blackberry contacts field mapping
+- z-push checks changes every minute on the server now and not every 5 seconds
+  which is z-push's default.
+- Resources were only loaded when customfields module is installed.
+- Reset password with servermanager was broken
+
+2010/09/23 3.5.27
+- Wrong config.php was included
 
 2010/09/22 3.5.26
 - Updated Norwegian translation

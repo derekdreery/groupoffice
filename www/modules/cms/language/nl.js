@@ -49,6 +49,9 @@ GO.cms.lang.root='Root';
 GO.cms.lang.advancedPermissions='Geavanceeerde toegangsrechten';
 GO.cms.lang.enablePermissionsPerFolder='Schakel toegangsrechten per map in voor deze gebruiker';
 
+GO.cms.lang.sortDate='Sorteerdatum';
+GO.cms.lang.unused='Niet van toepassing op deze pagina';
+
 GO.cms.lang.feed='Biedt documenten uit deze map aan als RSS feed.';
 GO.cms.lang.enableRewrite='Schakel vriendelijke URL\'s in dmv mod_rewrite. De webserver moet hiervoor geconfigureerd zijn en het werkt alleen op het domein dat hierboven is ingesteld.';
 GO.cms.lang.rewriteBase='mod_rewrite base path';

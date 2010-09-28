@@ -115,6 +115,13 @@ GO.cms.EditorPanel = Ext.extend(
 							scope:this
 						}
 					},{
+						xtype:'datefield',
+						format:GO.settings.date_format,
+						fieldLabel:GO.cms.lang.sortDate,
+						name:'sort_date',
+						allowBlank:true,
+						emptyText:GO.cms.lang.unused
+					},{
 						fieldLabel:GO.cms.lang.title,
 						xtype:'textarea',
 						name:'title',
@@ -217,7 +224,7 @@ GO.cms.EditorPanel = Ext.extend(
 					}
 						
 					this.setAutoMeta(action.result.data.auto_meta=='1');
-						
+
 					this.optionsPanel.loadConfig(
 						action.result.data.config,
 						action.result.data.option_values,
