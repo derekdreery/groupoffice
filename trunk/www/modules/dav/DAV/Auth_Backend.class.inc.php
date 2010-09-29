@@ -150,8 +150,8 @@ class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
 		if(!isset($this->users)){
 			$this->users=array();
 go_debug('Fetching users from database');
-			//$GO_USERS->get_authorized_users($GO_SECURITY->user_id, 'username');
-			$GO_USERS->get_users('username', 'asc',0,10);
+			$GO_USERS->get_authorized_users($GO_SECURITY->user_id, 'username');
+			//$GO_USERS->get_users('username', 'asc',0,10);
 			while($user=$GO_USERS->next_record()){
 				
 				$this->users[]=array('uri'=>$user['username']);
@@ -162,5 +162,13 @@ go_debug('Fetching users from database');
 
     }
 
-    
+	public function getUser($name){
+		global $GO_USERS;
+
+		$user = $GO_USERS->get_user_by_username($name);
+		if(!$user)
+			return false;
+		else
+			return array('uri'=>$user['username']);
+	}    
 }
