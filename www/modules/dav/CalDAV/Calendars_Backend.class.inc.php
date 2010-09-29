@@ -53,18 +53,41 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		go_debug("c:getCalendarsForUser($principalUri)");
 
-		$this->cal->get_writable_calendars($this->get_user_id($principalUri));
-		$db = new db();
+		$this->cal->get_writable_calendars($this->get_user_id($principalUri));		
 
 		$calendars = array();
 		while ($gocal = $this->cal->next_record()) {
+			$calendar = $this->recordToDAVCalendar($gocal, $principalUri);
+			$calendars[] = $calendar;
+		}
 
-			$db->query("SELECT max(mtime) AS mtime, COUNT(*) AS count FROM cal_events WHERE calendar_id=?", 'i', $gocal['id']);
-			$r = $db->next_record();
+		return $calendars;
+	}
 
-			$calendar = array(
+	public function getCalendar($principalUri, $calendarUri){
+		go_debug("c:getCalendar($principalUri, $calendarUri)");
+		
+		$calendar = $this->cal->get_calendar_by_name($calendarUri);
+		if(!$calendar)
+			throw new Sabre_DAV_Exception_FileNotFound('File not found: ' . $calendarUri);
+		
+		global $GO_SECURITY;
+		if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+				throw new Sabre_DAV_Exception_Forbidden ('Access denied');
+
+		return $this->recordToDAVCalendar($calendar, $principalUri);
+	}
+
+	private function recordToDAVCalendar($gocal, $principalUri){
+
+		$db = new db();
+		$db->query("SELECT max(mtime) AS mtime, COUNT(*) AS count FROM cal_events WHERE calendar_id=?", 'i', $gocal['id']);
+		$r = $db->next_record();
+
+		return array(
 					'id' => $gocal['id'],
-					'uri' => preg_replace('/[^\w]*/', '', (strtolower(str_replace(' ', '-', $gocal['name'])))),
+					//'uri' => preg_replace('/[^\w]*/', '', (strtolower(str_replace(' ', '-', $gocal['name'])))),
+					'uri' => $gocal['name'],
 					'principaluri' => $principalUri,
 					'size'=> $r['count'],
 					'mtime'=>$r['mtime'],
@@ -76,11 +99,6 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 					'{http://apple.com/ns/ical/}calendar-order' => '0',
 					'{http://apple.com/ns/ical/}calendar-color' => ''
 			);
-			
-			$calendars[] = $calendar;
-		}
-
-		return $calendars;
 	}
 
 	/**
@@ -162,7 +180,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		go_debug("c:getCalendarObjects($calendarId)");
 
 		$objects = array();
-		$this->cal->get_events(array($calendarId));
+		$this->cal->get_events(array($calendarId),0, Date::date_add(time(), 0, -1));
 		while ($event = $this->cal->next_record()) {
 
 			if (empty($event['uuid'])) {
@@ -279,6 +297,9 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		$dav_event['data']=$calendarData;
 
 		$this->cal->update_row('dav_events', 'id', $dav_event);
+
+		unset($event['participants']);
+
 		$this->cal->update_event($event);
 	}
 

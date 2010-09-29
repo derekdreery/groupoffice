@@ -34,7 +34,7 @@ class GO_CalDAV_Server extends Sabre_DAV_Server {
         $principals = new Sabre_DAV_Auth_PrincipalCollection($authBackend);
         $root->addChild($principals);
 
-        $calendars = new Sabre_CalDAV_CalendarRootNode($authBackend, $calendarBackend);
+        $calendars = new GO_CalDAV_CalendarRootNode($authBackend, $calendarBackend);
 		$root->addChild($calendars);
 
 		$tasklists = new GO_CalDAV_TasklistsRootNode($authBackend, $tasklistsBackend);
