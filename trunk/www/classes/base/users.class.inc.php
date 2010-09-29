@@ -412,14 +412,14 @@ class GO_USERS extends db
 	 */
 	function get_authorized_users($user_id, $sort="name",$direction="ASC")
 	{
-		if ($sort == 'users.name' || $sort=='name')
+		if ($sort == 'go_users.name' || $sort=='name')
 		{
 			if($_SESSION['GO_SESSION']['sort_name'] == 'first_name')
 			{
-				$sort = 'users.first_name '.$direction.', go_users.last_name';
+				$sort = 'go_users.first_name '.$direction.', go_users.last_name';
 			}else
 			{
-				$sort = 'users.last_name '.$direction.', go_users.first_name';
+				$sort = 'go_users.last_name '.$direction.', go_users.first_name';
 			}
 			//      $sort = 'users.first_name '.$direction.', go_users.last_name';
 		}
