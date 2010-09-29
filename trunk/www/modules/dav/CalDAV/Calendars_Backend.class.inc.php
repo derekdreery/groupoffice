@@ -66,6 +66,8 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 	public function getCalendar($principalUri, $calendarUri){
 		go_debug("c:getCalendar($principalUri, $calendarUri)");
+
+		$calendarUri = rawurldecode($calendarUri);
 		
 		$calendar = $this->cal->get_calendar_by_name($calendarUri);
 		if(!$calendar)
@@ -297,8 +299,6 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		$dav_event['data']=$calendarData;
 
 		$this->cal->update_row('dav_events', 'id', $dav_event);
-
-		unset($event['participants']);
 
 		$this->cal->update_event($event);
 	}
