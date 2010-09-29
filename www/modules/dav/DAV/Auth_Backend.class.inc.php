@@ -154,13 +154,23 @@ go_debug('Fetching users from database');
 			//$GO_USERS->get_users('username', 'asc',0,10);
 			while($user=$GO_USERS->next_record()){
 				
-				$this->users[]=array('uri'=>$user['username']);
+				$this->users[]=$this->recordToDAVUser($user['username']);
 			}
 		}
 
         return $this->users;
 
     }
+
+	private function recordToDAVUser($record){
+
+		return array(
+			'uri'=>$record['username'],
+			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL'=>'principals/'.$record['username'].'/inbox',
+			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL'=>'principals/'.$record['username'].'/outbox'
+		);
+
+	}
 
 	public function getUser($name){
 		global $GO_USERS;
@@ -169,6 +179,6 @@ go_debug('Fetching users from database');
 		if(!$user)
 			return false;
 		else
-			return array('uri'=>$user['username']);
+			return $this->recordToDAVUser($user);
 	}    
 }

@@ -56,6 +56,10 @@ class GO_CalDAV_Server extends Sabre_DAV_Server {
         $caldavPlugin = new Sabre_CalDAV_Plugin();
         $this->addPlugin($caldavPlugin);
 
+
+		$freebusy = new GO_CalDAV_FreebusyPlugin();
+		$this->addPlugin($freebusy);
+
     }
 
 }

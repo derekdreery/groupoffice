@@ -253,7 +253,7 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
                      '{' . self::NS_CALDAV . '}calendar-multiget',
                      '{' . self::NS_CALDAV . '}calendar-query',
                 //     '{' . self::NS_CALDAV . '}supported-collation-set',
-                //     '{' . self::NS_CALDAV . '}free-busy-query',
+                     '{' . self::NS_CALDAV . '}free-busy-query',
                 ));
             }
         }
