@@ -1007,7 +1007,7 @@ class calendar extends db {
 			$event['status'] = 'ACCEPTED';
 		}
 
-		unset($event['acl_id']);
+		unset($event['acl_id'], $event['participants']);
 
 
 
@@ -1123,7 +1123,7 @@ class calendar extends db {
 			$event['name']=substr($event['name'],0,150);
 		}
 
-		unset($event['read_permission'], $event['write_permission']);
+		unset($event['read_permission'], $event['write_permission'], $event['participants']);
 		if(empty($event['mtime'])) {
 			$event['mtime']  = time();
 		}
