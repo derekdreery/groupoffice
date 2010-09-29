@@ -42,9 +42,9 @@ class reminder extends db
 		$reminder['id']=$this->nextid('go_reminders');
 
 		if(!empty($reminder['user_id'])){
-			$this->add_user_to_reminder($reminder['user_id'], $reminder['id'], $reminder['time']);
-			unset($reminder['user_id']);
+			$this->add_user_to_reminder($reminder['user_id'], $reminder['id'], $reminder['time']);			
 		}
+		unset($reminder['user_id']);
 
 		if(!isset($reminder['snooze_time']))
 			$reminder['snooze_time']=7200;
