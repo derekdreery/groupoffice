@@ -677,7 +677,8 @@ class tasks extends db
 			$start=0,
 			$offset=0,
 			$show_inactive=false,
-			$search_query='') {
+			$search_query='',
+			$search_field='') {
 
 		global $GO_MODULES;
 
@@ -746,7 +747,11 @@ class tasks extends db
 				$sql .= " WHERE ";
 			}
 			$query = $this->escape($search_query);
-			$sql .= "(t.name LIKE '".$query."' OR t.description LIKE '".$query."')";
+
+			if(empty($search_field))
+				$sql .= "(t.name LIKE '".$query."' OR t.description LIKE '".$query."')";
+			else
+				$sql .= "$search_field LIKE '".$query."'";
 		}
 
 		if($sort_field != '' && $sort_order != '') {
