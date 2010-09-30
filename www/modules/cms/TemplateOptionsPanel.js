@@ -214,10 +214,10 @@ GO.cms.TemplateOptionsPanel = Ext.extend(function(cfg) {
 					this.options.push(new Ext.form.ComboBox({
 						fieldLabel : o.fieldLabel,
 						name : o.name,
-						value : value,
-						displayField:'name',
+						//value : value,
+						displayField:o.name,
 						valueField: 'id',
-						hiddenName:'name',
+						hiddenName:o.name,
 						anchor : '-20',
 						mode:'local',
 						triggerAction:'all',
@@ -225,12 +225,13 @@ GO.cms.TemplateOptionsPanel = Ext.extend(function(cfg) {
 							url: GO.settings.modules.cms.url+ 'json.php',
 							baseParams: {
 								task: 'folder_files',
-								folder_id: o.folder_id
+								folder_id: o.folder_id,
+								name: o.name
 							},
 							root: 'results',
 							id: 'id',
 							totalProperty:'total',
-							fields: ['id','folder_id','extension','size','ctime','mtime','name','content','auto_meta','title','description','keywords','priority','hot_item','hot_item_text','template_item_id','acl','registered_comments','unregistered_comments'],
+							fields: ['id','folder_id','extension','size','ctime','mtime',o.name,'content','auto_meta','title','description','keywords','priority','hot_item','hot_item_text','template_item_id','acl','registered_comments','unregistered_comments'],
 							remoteSort: true,
 							autoLoad: true
 						})
