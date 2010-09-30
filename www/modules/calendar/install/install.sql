@@ -233,3 +233,13 @@ CREATE TABLE IF NOT EXISTS `cal_categories` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Tabelstructuur voor tabel `cal_events_declined`
+--
+
+CREATE TABLE IF NOT EXISTS `cal_events_declined` (
+  `uid` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  PRIMARY KEY (`uid`,`email`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

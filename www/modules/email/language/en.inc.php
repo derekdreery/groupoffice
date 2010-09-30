@@ -69,3 +69,4 @@ $lang['email']['iCalendar_event_not_found']='This message contains an update to 
 $lang['email']['iCalendar_update_available']='This message contains an update to an existing event.';
 $lang['email']['iCalendar_update_old']='This message containts an event that has already been processed.';
 $lang['email']['iCalendar_event_cancelled']='This message contains an event cancellation.';
+$lang['email']['iCalendar_event_invitation_declined']='This message contains a declined invitation to an event.';

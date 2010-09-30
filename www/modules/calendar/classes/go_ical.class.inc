@@ -71,7 +71,7 @@ class go_ical extends calendar
 	function export_event($event_id, $attendee_email='')
 	{
 		$ics = $this->export_calendar_header();
-		$ics .= $this->convert_event($this->get_event($event_id), $attendee_email);
+		$ics .= is_array($event_id) ? $this->generate_response($event_id, $attendee_email) : $this->convert_event($this->get_event($event_id), $attendee_email);
 		$ics .= $this->export_calendar_footer();
 
 		return $ics;
@@ -557,4 +557,52 @@ class go_ical extends calendar
 		}*/
 		return implode("\r\n", $lines)."\r\n";
 	}
+
+	function generate_response($object, $email)
+	{
+		$lines = array("BEGIN:VEVENT");
+		
+		foreach($object as $key => $value) 
+		{
+			if($key == 'ATTENDEES')
+			{
+				foreach($value as $attendee)
+				{
+					if(strtolower($attendee['value']) == 'mailto:'.$email)
+					{
+						$attendee['params']['PARTSTAT'] = 'DECLINED';
+						$params_str = 'ATTENDEE';
+						foreach($attendee['params'] as $k => $v)
+						{
+							$params_str .= ';'.$k.'='.$v;
+						}			
+						$lines[] = $params_str.':'.$attendee['value'];
+					}
+				}
+			}else
+			if((count($object[$key]) == 1) && is_array($value))
+			{
+				$lines[] = $key.':'.$value['value'];
+			}else
+			if(count($object[$key]) == 2 && is_array($value) && isset($value['params']))
+			{
+				$params_str = $key;
+				foreach($value['params'] as $k => $v)
+				{
+					$params_str .= ';'.$k.'='.$v;
+				}		
+				$lines[] = $params_str.':'.$value['value'];
+			}			
+		}
+
+		$timestamp = date($this->datetime_format, time());
+		$lines[]= "LAST-MODIFIED:".$timestamp;
+		$lines[] = "END:VEVENT";
+		
+		//var_dump($event);
+		
+		return implode("\r\n", $lines)."\r\n";
+
+	}
+	
 }

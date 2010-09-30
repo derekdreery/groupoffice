@@ -66,4 +66,4 @@ $lang['email']['iCalendar_event_not_found']='Dit bericht bevat een update voor e
 $lang['email']['iCalendar_update_available']='Dit bericht bevat een update voor een bestaande afspraak.';
 $lang['email']['iCalendar_update_old']='Dit bericht bevat een afspraak die al is verwerkt.';
 $lang['email']['iCalendar_event_cancelled']='Dit bericht bevat een annulering voor een afspraak.';
-
+$lang['email']['iCalendar_event_invitation_declined']='Dit bericht bevat een geweigerde uitnodiging voor een afspraak.';

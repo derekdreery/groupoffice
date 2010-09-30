@@ -2726,5 +2726,21 @@ class calendar extends db {
 		return $statuses[$status_id];
 	}
 
+	function add_declined_event_uid($declined_event)
+	{
+		return $this->insert_row('cal_events_declined',$declined_event);
+	}
+	
+	function delete_declined_event_uid($uid, $email)
+	{
+		$sql = "DELETE FROM cal_events_declined WHERE uid='".$this->escape($uid)."' AND email='".$this->escape($email)."'";
+		return $this->query($sql);
+	}
+
+	function is_event_declined($uid, $email)
+	{
+		$this->query("SELECT * FROM cal_events_declined WHERE uid='".$this->escape($uid)."' AND email='".$this->escape($email)."'");
+		return ($this->num_rows() > 0) ? true : false;
+	}
 
 }

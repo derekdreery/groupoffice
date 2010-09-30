@@ -494,11 +494,17 @@ try {
 
 				$num_participants = 0;
 				$cal->get_participants($event['id']);
-				while($cal->next_record())
+				$continue = true;
+				while($cal->next_record() && $continue)
 				{
 					if($cal->f('user_id') != $GO_SECURITY->user_id)
 					{
 						$num_participants++;
+					}else
+					if(!$cal->f('is_organizer'))
+					{
+						$num_participants = 0;
+						$continue = false;
 					}
 				}
 

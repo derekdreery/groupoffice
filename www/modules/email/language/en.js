@@ -193,4 +193,5 @@ GO.email.lang.anyField='Any field';
 GO.email.lang.icalendarEventUpdated='Event has been updated.';
 GO.email.lang.icalendarEventCreated='Event has been created.';
 GO.email.lang.icalendarEventDeleted='Event has been deleted.';
+GO.email.lang.icalendarInvitationDeclined='Invitation has been declined.';
 GO.email.lang.icalendarDeleteEventConfirm='Are you sure you want to delete this event?';
