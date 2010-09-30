@@ -750,7 +750,8 @@ try {
 												$response['iCalendar']['invitation'] = array(
 													'account_id' => $account_id,
 													'mailbox' => $mailbox,
-													'uid' => $uid,
+													'message_uid' => $uid,
+													'uid' => $cal_event['uid'],
 													'imap_id' => $attachment['imap_id'],
 													'encoding' => $attachment['encoding'],
 													'event_id' => $event['id'],
@@ -780,17 +781,20 @@ try {
 								}else
 								{
 									if($method == 'REQUEST')
-									{
+									{										
 										// invitation to a new event
-										$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_invitation'];
+										$event_declined = $cal->is_event_declined($cal_event['uid'], $email_sender);
+										$response['iCalendar']['feedback'] = ($event_declined) ? $lang['email']['iCalendar_event_invitation_declined'] : $lang['email']['iCalendar_event_invitation'];
 										$response['iCalendar']['invitation'] = array(
 											'account_id' => $account_id,
 											'mailbox' => $mailbox,
-											'uid' => $uid,
+											'message_uid' => $uid,
+											'uid' => $cal_event['uid'],
 											'imap_id' => $attachment['imap_id'],
 											'encoding' => $attachment['encoding'],
 											'email_sender' => $email_sender,
-											'email' => $account['email']
+											'email' => $account['email'],
+											'event_declined' => $event_declined
 										);
 									}else
 									{

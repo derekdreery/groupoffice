@@ -84,7 +84,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					'<span class="message-icalendar-actions">'+
 					'<tpl if="iCalendar.invitation">'+
 						'<a class="normal-link" id="em-icalendar-accept-invitation" href="#">'+GO.email.lang.icalendarAcceptInvitation+'</a> '+
-						'<a class="normal-link" id="em-icalendar-decline-invitation" href="#">'+GO.email.lang.icalendarDeclineInvitation+'</a> '+
+						'<tpl if="iCalendar.invitation.event_declined == false">'+
+							'<a class="normal-link" id="em-icalendar-decline-invitation" href="#">'+GO.email.lang.icalendarDeclineInvitation+'</a> '+
+						'</tpl>'+
 						'<a class="normal-link" id="em-icalendar-tentative-invitation" href="#">'+GO.email.lang.icalendarTentativeInvitation+'</a> '+
 					'</tpl>'+
 					'<tpl if="iCalendar.cancellation">'+
@@ -156,8 +158,13 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					{
 						data.iCalendar.feedback = GO.email.lang.icalendarEventDeleted;
 						this.deleted = false;
+					}else
+					if(this.declined)
+					{
+						data.iCalendar.feedback = GO.email.lang.icalendarInvitationDeclined;
+						this.declined = false;
 					}
-					
+
 					if(data.askPassphrase)
 					{
 						if(!this.gnupgPasswordDialog)
@@ -439,6 +446,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	created:false,
 	updated:false,
 	deleted:false,
+	declined:false,
 	processInvitation : function(status_id)
 	{
 		if(status_id)
@@ -455,6 +463,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 				status_id: this.status_id,
 				account_id: invitation.account_id,
 				mailbox: invitation.mailbox,
+				message_uid: invitation.message_uid,
 				uid: invitation.uid,
 				imap_id: invitation.imap_id,
 				encoding: invitation.encoding,
@@ -473,7 +482,14 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 						this.updated = true;
 					}else
 					{
-						this.created = true;
+						// check for declined invitations
+						if(this.status_id != 2)
+						{
+							this.created = true;
+						}else
+						{
+							this.declined = true;
+						}
 					}
 					
 					this.loadMessage();
