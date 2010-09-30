@@ -14,7 +14,7 @@
 
 class cms extends db {
 
-	var $valid_tags=array('select', 'input', 'file', 'textarea', 'checkbox','date');
+	var $valid_tags=array('select', 'input', 'file', 'textarea', 'checkbox','date','combobox');
 
 	function get_field($fieldNode) {
 
@@ -48,6 +48,15 @@ class cms extends db {
 
 				$filterLabelNode=$fieldNode->attributes->getNamedItem('files_filter');
 				$option['files_filter']=$filterLabelNode ? $filterLabelNode->nodeValue : '';
+			} elseif($option['type']=='combobox') {
+				$site_id = $fieldNode->attributes->getNamedItem('site_id')->nodeValue;
+				$path_array = explode('/',$fieldNode->attributes->getNamedItem('path')->nodeValue);
+				do {
+					$folder_name = end($path_array);
+					unset($path_array[count($path_array)-1]);
+				} while (empty($folder_name));
+				$folder = $this->get_folder_by_name($folder_name,$site_id);
+				$option['folder_id'] = $folder['id'];
 			}
 			return $option;
 		}
@@ -895,8 +904,13 @@ class cms extends db {
 	 * @access public
 	 * @return Array Record properties
 	 */
-	function get_folder_by_name($name) {
-		$this->query("SELECT * FROM cms_folders WHERE name='".$this->escape($name)."'");
+	function get_folder_by_name($name, $site_id=-1) {
+		$query = "SELECT * FROM cms_folders WHERE name='".$this->escape($name)."' ";
+
+		if ($site_id>0)
+			$query .= "AND site_id='$site_id'";
+
+		$this->query($query);
 		if($this->next_record()) {
 			return $this->record;
 		}
@@ -924,7 +938,6 @@ class cms extends db {
 		}
 		return $count;
 	}
-
 
 	function get_items($folder_id) {
 		$items = array();

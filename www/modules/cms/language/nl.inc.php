@@ -36,3 +36,5 @@ $lang['cms']['cant_move_into_itself']='Kan niet verplaatsen naar zichzelf';
 
 $lang['cms']['antispam_fail']='Het antispam antwoord was onjuist. Probeer het opnieuw a.u.b.';
 $lang['cms']['no_admin_rights']='Heeft niet de benodigde admin rechten om de sitefoldertoegang van gebruikers te wijzigen.';
+
+$lang['cms']['none'] = 'GEEN';

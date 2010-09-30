@@ -341,8 +341,6 @@ try {
 			$response['success']=true;
 			break;
 
-
-
 		case 'files':
 			$site_id=$_POST['site_id'];
 			$site = $cms->get_site($site_id);
@@ -501,6 +499,24 @@ try {
 			$response['success'] = true;
 
 			break;
+
+		case 'folder_files':
+			$folder_id=$_POST['folder_id'];
+			global $GO_LANGUAGE;
+			require_once($GO_LANGUAGE->get_language_file('cms'));
+			
+			$response['total'] = $cms->get_files($folder_id);
+			$response['results']=array();
+			$response['results'][] = array('id'=>0,'name'=>$lang['cms']['none']);
+			while($cms->next_record()) {
+				$file = $cms->record;
+				$file['mtime']=Date::get_timestamp($file['mtime']);
+				$file['ctime']=Date::get_timestamp($file['ctime']);
+
+				$response['results'][] = $file;
+			}
+			break;
+
 		/* {TASKSWITCH} */
 	}
 } catch(Exception $e) {
