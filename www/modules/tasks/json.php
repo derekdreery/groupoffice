@@ -193,13 +193,24 @@ try{
 
 					$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 12);
 				}
-			}
 
-			if(isset($GO_MODULES->modules['customfields'])) {
-				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-				$cf = new customfields();
-				$values = $cf->get_values($GO_SECURITY->user_id, 12, $response['data']['id']);
-				$response['data']=array_merge($response['data'], $values);
+				if(isset($GO_MODULES->modules['customfields']))
+				{
+					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+					$cf = new customfields();
+
+					$response['data']['customfields']=
+						$cf->get_all_fields_with_values(
+							$GO_SECURITY->user_id, 12, $response['data']['id']);
+				}
+			}else
+			{
+				if(isset($GO_MODULES->modules['customfields'])) {
+					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+					$cf = new customfields();
+					$values = $cf->get_values($GO_SECURITY->user_id, 12, $response['data']['id']);
+					$response['data']=array_merge($response['data'], $values);
+				}
 			}
 
 			$response['success']=true;
