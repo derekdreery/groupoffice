@@ -82,6 +82,11 @@ class reminder extends db
 
 	}
 
+	function remove_reminder_users($reminder_id){
+		$sql = "DELETE FROM go_reminders_users WHERE reminder_id=?";
+		return $this->query($sql, 'i', array($reminder_id));
+	}
+
 	function get_reminder_users($reminder_id, $with_user_info=false, $start=0,$offset=0){
 
 		$sql = "SELECT ";
