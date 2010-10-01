@@ -1,3 +1,5 @@
+2010/09/27 3.5.29
+
 2010/09/27 3.5.28
 - Fixed Blackberry contacts field mapping
 - z-push checks changes every minute on the server now and not every 5 seconds
