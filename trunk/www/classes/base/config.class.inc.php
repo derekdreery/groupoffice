@@ -848,6 +848,8 @@ class GO_CONFIG {
 			$this->$key=$value;
 		}
 
+		//this can be used in some cases where you don't want the dynamically
+		//determined full URL. This is done in set_full_url below.
 		$this->orig_full_url = $this->full_url;
 
 		$this->orig_tmpdir=$this->tmpdir;
@@ -1054,7 +1056,7 @@ class GO_CONFIG {
 		//full_url may be configured permanent in config.php. If not then 
 		//autodetect it and put it in the session. It can be used by wordpress for
 		//example.
-		if(empty($this->full_url)){
+		if(isset($_SERVER["HTTP_HOST"])) {
 			if(!isset($_SESSION['GO_SESSION']['full_url']) && isset($_SERVER["HTTP_HOST"])) {
 				$https = isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1");
 				$_SESSION['GO_SESSION']['full_url'] = 'http';
