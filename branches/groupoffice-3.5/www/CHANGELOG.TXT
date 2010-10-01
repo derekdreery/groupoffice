@@ -1,4 +1,5 @@
-2010/09/27 3.5.29
+2010/10/01 3.5.29
+- Some features required for a special import
 
 2010/09/27 3.5.28
 - Fixed Blackberry contacts field mapping
