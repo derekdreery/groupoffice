@@ -99,3 +99,6 @@ $updates[] = "ALTER TABLE `ab_sql` ADD `user_id` INT NOT NULL AFTER `id` , ADD I
 $updates[]="ALTER TABLE `ab_contacts` CHANGE `title` `title` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
 $updates[] = "ALTER TABLE `ab_sql` ADD `user_id` INT NOT NULL AFTER `id` , ADD INDEX ( `user_id` )";
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `comment` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ";
+
+$updates[] = "ALTER TABLE  `ab_companies` ADD INDEX (  `name` )";
+$updates[] = "ALTER TABLE  `ab_contacts` ADD INDEX (  `last_name` )";
