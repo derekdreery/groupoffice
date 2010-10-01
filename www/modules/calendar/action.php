@@ -450,7 +450,7 @@ try {
 
 				
 				foreach ($concurrent_resources as $key=>$value) {
-					if ($value['id'] != $event['id']) {
+					if ($value['participants_event_id'] != $event['id']) {
 						$cal2 = new calendar();
 						$resource = $cal2->get_calendar($value['calendar_id']);
 						$response['success'] = false;

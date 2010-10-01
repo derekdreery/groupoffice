@@ -11,11 +11,40 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
- GO.notes.NotesGrid = function(config){
+GO.notes.NotesGrid = function(config){
 	
 	if(!config)
 	{
 		config = {};
+	}
+
+
+	var fields ={
+		fields:['id','category_id','user_name','ctime','mtime','name','content'],
+		columns:[
+		{
+			header: GO.lang.strName,
+			dataIndex: 'name'
+		},
+		{
+			header: GO.lang.strOwner,
+			dataIndex: 'user_name',
+			sortable: false,
+			hidden:true
+		},		{
+			header: GO.lang.strCtime,
+			dataIndex: 'ctime',
+			hidden:true
+		},		{
+			header: GO.lang.strMtime,
+			dataIndex: 'mtime'
+		}
+		]
+	};
+
+	if(GO.customfields)
+	{
+		GO.customfields.addColumns(4, fields);
 	}
 	
 	config.title = GO.notes.lang.notes;
@@ -23,15 +52,16 @@
 	config.autoScroll=true;
 	config.split=true;
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.notes.url+ 'json.php',
-	    baseParams: {
-	    	task: 'notes'	
-	    	},
-	    root: 'results',
-	    id: 'id',
-	    totalProperty:'total',
-	    fields: ['id','category_id','user_name','ctime','mtime','name','content','category_name'],
-	    remoteSort: true
+
+		url: GO.settings.modules.notes.url+ 'json.php',
+		baseParams: {
+			task: 'notes'
+		},
+		root: 'results',
+		id: 'id',
+		totalProperty:'total',
+		fields: fields.fields,
+		remoteSort: true
 	});
 
 	config.store.on('load', function()
@@ -48,28 +78,7 @@
 		defaults:{
 			sortable:true
 		},
-		columns:[
-		{
-			header: GO.lang.strName, 
-			dataIndex: 'name'
-		},{
-			header: GO.lang.strOwner, 
-			dataIndex: 'user_name',
-		  sortable: false,
-			hidden:true
-		},{
-			header: GO.lang.strCtime, 
-			dataIndex: 'ctime',
-			hidden:true
-		},{
-			header: GO.lang.strMtime, 
-			dataIndex: 'mtime'
-		},{
-			header: GO.notes.lang.category,
-			dataIndex: 'category_name',
-			hidden:true
-		}
-	]
+		columns:fields.columns
 	});
 	
 	config.cm=columnModel;
@@ -86,9 +95,9 @@
 	this.searchField = new GO.form.SearchField({
 		store: config.store,
 		width:320
-  });	
+	});
 		    	
-  config.tbar = [GO.lang['strSearch'] + ':', this.searchField];
+	config.tbar = [GO.lang['strSearch'] + ':', this.searchField];
 	
 	GO.notes.NotesGrid.superclass.constructor.call(this, config);
 };
@@ -97,4 +106,4 @@
 Ext.extend(GO.notes.NotesGrid, GO.grid.GridPanel,{
 	
 
-});
+	});

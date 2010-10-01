@@ -164,7 +164,8 @@ class GO_CalDAV_Tasklists_Backend extends Sabre_CalDAV_Backend_Abstract {
 		go_debug("getTasklistObjects($tasklistId)");
 
 		$objects = array();
-		$this->tasks->get_tasks(array($tasklistId),
+		$lists=array($tasklistId);
+		$this->tasks->get_tasks($lists,
 			0,
 			true,
 			'due_time',
@@ -172,6 +173,7 @@ class GO_CalDAV_Tasklists_Backend extends Sabre_CalDAV_Backend_Abstract {
 			0,
 			0,
 			true,
+			'',
 			'',
             array(),
 			'',
