@@ -62,7 +62,8 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   PRIMARY KEY  (`id`),
   KEY `addressbook_id` (`addressbook_id`),
   KEY `link_id` (`link_id`),
-	KEY `email` (`email`)
+  KEY `email` (`email`),
+  KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -114,9 +115,10 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   PRIMARY KEY  (`id`),
   KEY `link_id` (`link_id`),
   KEY `addressbook_id` (`addressbook_id`),
-	KEY `email` (`email`),
-	KEY `email2` (`email2`),
-	KEY `email3` (`email3`)
+  KEY `email` (`email`),
+  KEY `email2` (`email2`),
+  KEY `email3` (`email3`),
+  KEY `last_name` (`last_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
