@@ -5,7 +5,7 @@ if (isset($argv[1])) {
 	define('CONFIG_FILE', $argv[1]);
 }
 
-ini_set('max_execution_time', 300);
+ini_set('max_execution_time', 0);
 
 require('../www/Group-Office.php');
 
@@ -351,7 +351,7 @@ if (true) {
 					'user_id'=>1,
 					'start_time'=>strtotime($record[$r_index_map['Start']]),
 					'due_time'=>strtotime($record[$r_index_map['Start']]),
-					'description'=>strtotime($record[$r_index_map['Remark']]),
+					'description'=>$record[$r_index_map['Remark']],
 					'status'=>$record[$r_index_map['Status']]=='OPEN' ? 'ACCEPTED' : 'COMPLETED'
 					);
 
@@ -479,11 +479,11 @@ if (true) {
 			if(!$existing_note){
 
 
-				echo "Importing [".$cf_values[$cf_fieldmap[4]['Event-ID']]."] ".$record[$r_index_map['Action-Type']]."\n";
+				echo "Importing [".$cf_values[$cf_fieldmap[4]['Event-ID']]."] ".$record[$r_index_map['Event-Type']]."\n";
 
 				$note=array(
 					'category_id'=>$category['id'],
-					'name'=>$record[$r_index_map['Action-Type']],
+					'name'=>$record[$r_index_map['Event-Type']],
 					'content'=>$record[$r_index_map['Remarks']]
 					);
 
@@ -518,7 +518,7 @@ if (true) {
 				
 				if(!empty($cf_values[$cf_fieldmap[4]['Action-ID']])){
 
-					$ta->get_tasks(array($tasklist['id']),1,
+					$ta->get_tasks(array(),0,
 						true,
 						'due_time',
 						'ASC',
@@ -630,7 +630,7 @@ if (true) {
 					$ab->search_contacts(1, $cf_values[$cf_fieldmap[4]['Person-ID']], $cf_fieldmap[2]['Person-ID'], $addressbook_id);
 					$contact = $ab->next_record();
 					if (!$contact) {
-						echo "Company with Person-ID " . $cf_values[$cf_fieldmap[4]['Person-ID']] . " not found!\n";
+						echo "Contact with Person-ID " . $cf_values[$cf_fieldmap[4]['Person-ID']] . " not found!\n";
 					} else {
 						$GO_LINKS->add_link($note_id, 4, $contact['id'], 2);
 					}
