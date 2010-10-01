@@ -715,7 +715,7 @@ class tasks extends db
 				$where=true;
 			}
 			$sql .= "l.user_id='".intval($user_id)."' ";
-		}else {
+		}else if(count($lists)){
 			if($where) {
 				$sql .= " AND ";
 			}else {
