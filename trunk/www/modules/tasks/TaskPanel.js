@@ -64,7 +64,11 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 				'</table>';																		
 				
 		this.template += GO.linksTemplate;
-												
+
+		if(GO.customfields)
+		{
+			this.template +=GO.customfields.displayPanelTemplate;
+		}
 				
 		if(GO.files)
 		{

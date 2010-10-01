@@ -37,3 +37,5 @@ $lang['cms']['done_with_cms']='Done with CMS';
 
 $lang['cms']['antispam_fail']='The antispam answer was incorrect. Please try again';
 $lang['cms']['no_admin_rights']="You do not have the admin rights to alter users' access to site folders.";
+
+$lang['cms']['none'] = 'NONE';

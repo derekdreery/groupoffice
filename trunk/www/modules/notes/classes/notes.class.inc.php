@@ -183,8 +183,12 @@ class notes extends db {
 	 */
 
 	function add_note($note, $category=false)
-	{	
-		$note['ctime']=$note['mtime']=time();		
+	{
+		if(!isset($note['ctime']))
+			$note['ctime']=time();
+		
+		if(!isset($note['mtime']))
+			$note['mtime']=time();
 		
 		global $GO_MODULES;
 		if(!isset($note['files_folder_id']) && isset($GO_MODULES->modules['files']))
@@ -229,7 +233,8 @@ class notes extends db {
 
 	function update_note($note, $category=false)
 	{		
-		$note['mtime']=time();
+		if(!isset($note['mtime']))
+			$note['mtime']=time();
 		
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['files']) && isset($note['category_id']))
@@ -513,10 +518,23 @@ class notes extends db {
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_notes($query, $categories=array(), $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
+
+	function get_notes($query, $categories=array(), $sortfield='id', $sortorder='ASC', $start=0, $offset=0, $search_field='')
 	{
-		$sql = "SELECT n.*, c.name AS category_name FROM no_notes n "
-		    . "INNER JOIN no_categories c ON n.category_id=c.id";
+		global $GO_MODULES;
+		
+		$sql = "SELECT n.*, c.name AS category_name";
+
+		if($GO_MODULES->has_module('customfields')) {
+			$sql .= " ,cf_4.*";
+		}
+
+		$sql .=  " FROM no_notes n";
+		$sql .= " INNER JOIN no_categories c ON n.category_id=c.id";
+
+		if($GO_MODULES->has_module('customfields')) {
+			$sql .= " LEFT JOIN cf_4 ON cf_4.link_id=n.id";
+		}
 		
 		if(count($categories))
 		{
@@ -533,7 +551,11 @@ class notes extends db {
 		if(!empty($query))
 		{
 			//$sql .= " AND (n.name LIKE '".$this->escape($query)."' OR MATCH (n.content) AGAINST ('".$this->escape($query)."')) ";
-			$sql .= " AND (n.name LIKE '".$this->escape($query)."' OR n.content LIKE '".$this->escape($query)."') ";
+			if(empty($search_field)){
+				$sql .= " AND (n.name LIKE '".$this->escape($query)."' OR n.content LIKE '".$this->escape($query)."') ";
+			}  else {
+				$sql .= " AND $search_field LIKE '".$this->escape($query)."' ";
+			}
 		}
 		$sql .= " ORDER BY ".$this->escape($sortfield." ".$sortorder);
 		

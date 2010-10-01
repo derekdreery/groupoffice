@@ -6,6 +6,9 @@ ALTER TABLE  `pm_hours` ADD  `ctime` INT NOT NULL , ADD  `mtime` INT NOT NULL;
 ALTER TABLE  `pm_hours` ADD INDEX (  `payout_invoice_id` );
 */
 
+2010/10/01 3.5.29
+- Some features required for a special import
+
 2010/09/27 3.5.28
 - Fixed Blackberry contacts field mapping
 - z-push checks changes every minute on the server now and not every 5 seconds

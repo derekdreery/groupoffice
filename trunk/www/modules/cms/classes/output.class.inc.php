@@ -388,6 +388,7 @@ class cms_output extends cms {
 		$random = !empty($params['random']);
 		$no_folder_links = !empty($params['no_folder_links']);
 		$search = !empty($params['search']);
+		$sort_time = !empty($params['sort_time']) ? $params['sort_time'] : '';
 
 		/*
 		 * lastfile is used to record the previous and next file of the currently viewed file
@@ -446,6 +447,26 @@ class cms_output extends cms {
 		}
 
 		$total = count($items);
+
+		// sort by sort_time
+
+		if (strtolower($sort_time)=='asc') {
+			function cmp_sort_time($a,$b) {
+				if ($a['sort_time']==$b['sort_time'])
+					return 0;
+				return $a['sort_time']<$b['sort_time'] ? -1 : 1;
+			}
+		} elseif (strtolower($sort_time)=='desc') {
+			function cmp_sort_time($a,$b) {
+				if ($a['sort_time']==$b['sort_time'])
+					return 0;
+				return $a['sort_time']>$b['sort_time'] ? -1 : 1;
+			}
+		}
+
+		if (strtolower($sort_time)=='asc' || strtolower($sort_time)=='desc') {
+			usort($items,'cmp_sort_time');
+		}
 
 		if($random) {
 			shuffle($items);
