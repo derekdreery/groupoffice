@@ -74,7 +74,7 @@ $addressbook_id = $addressbook['id'];
 
 create_custom_fields(3, $cf_category_name, array('Relatie-ID', 'Company-2', 'FirstContact', 'Employee-CD', 'KeySearch'));
 
-if (false) {
+if (true) {
 
 	//map the std fields to the csv file headers
 	$std_fieldmap['Company'] = 'name';
@@ -134,10 +134,12 @@ if (false) {
 				$existing_company = $ab->get_company_by_name($addressbook_id, $company['name']);
 				if (!$existing_company) {
 					$company_id = $ab->add_company($company);
-					$cf_values['link_id'] = $company_id;
-
-					$cf->insert_row('cf_3', $cf_values);
+					$cf_values['link_id'] = $company_id;					
+				}else
+				{
+					$cf_values['link_id'] = $existing_company['id'];
 				}
+				$cf->replace_row('cf_3', $cf_values);
 			} else {
 				echo "No company name found. Skipping:" . var_export($company, true) . "\n\n";
 			}
@@ -151,7 +153,7 @@ if (false) {
 create_custom_fields(2, $cf_category_name, array('Person-ID', 'Relatie-ID'));
 
 //START OF CONTACTS
-if (false) {
+if (true) {
 
 	$std_fieldmap['Family-Name'] = 'last_name';
 	$std_fieldmap['FirstName'] = 'first_name';
@@ -201,53 +203,55 @@ if (false) {
 		}
 
 
-		if (isset($contact['last_name'])) {
+		try {
 
-			try {
-
-				echo "Importing " . $contact['last_name'] . "\n";
-
-				$existing_contact = $ab->get_contact_by_email($addressbook_id, $contact['email']);
-
-				$ab->search_contacts(1, $cf_values[$cf_fieldmap[2]['Person-ID']], $cf_fieldmap[2]['Person-ID'], $addressbook_id);
-				$existing_contact = $ab->next_record();
-
-				if (!$existing_contact) {
-
-					//find company
-					if (!empty($cf_values[$cf_fieldmap[2]['Relatie-ID']])) {
-						$ab->search_companies(1, $cf_values[$cf_fieldmap[2]['Relatie-ID']], $cf_fieldmap[3]['Relatie-ID'], $addressbook_id);
-						$company = $ab->next_record();
-						if (!$company) {
-							echo "Company with Relatie-ID " . $cf_values[$cf_fieldmap[2]['Relatie-ID']] . " not found!";
-						} else {
-							$contact['company_id'] = $company['id'];
-						}
-					} else {
-						echo "No company set for Person-ID " . $cf_values[$cf_fieldmap[2]['Person-ID']] . "\n";
-					}
-
-					$contact['sex'] = $contact['sex'] == 2 ? 'F' : 'M';
-
-
-					$contact_id = $ab->add_contact($contact);
-
-					$cf_values['link_id'] = $contact_id;
-					$cf->insert_row('cf_2', $cf_values);
+			//find company
+			if (!empty($cf_values[$cf_fieldmap[2]['Relatie-ID']])) {
+				$ab->search_companies(1, $cf_values[$cf_fieldmap[2]['Relatie-ID']], $cf_fieldmap[3]['Relatie-ID'], $addressbook_id);
+				$company = $ab->next_record();
+				if (!$company) {
+					echo "Company with Relatie-ID " . $cf_values[$cf_fieldmap[2]['Relatie-ID']] . " not found!\n";
+				} else {
+					$contact['company_id'] = $company['id'];
 				}
-			} catch (Exception $e) {
-
+			} else {
+				echo "No company set for Person-ID " . $cf_values[$cf_fieldmap[2]['Person-ID']] . "\n";
 			}
-			//exit();
-		} else {
-			echo "No contact name found. Skipping:" . var_export($contact, true) . "\n\n";
+
+			
+
+			//$ab->search_contacts(1, $cf_values[$cf_fieldmap[2]['Person-ID']], $cf_fieldmap[2]['Person-ID'], $addressbook_id);
+			if($company){
+				$ab->search_contacts(1, $company['name'], 'ab_companies.name', $addressbook_id);
+				$existing_contact = $ab->next_record();
+			}
+			if (!$existing_contact) {
+				$ab->search_contacts(1, $contact['last_name'], 'last_name', $addressbook_id);
+				$existing_contact = $ab->next_record();
+			}
+
+			if ($existing_contact) {
+
+				echo "Updating [".$cf_values[$cf_fieldmap[2]['Person-ID']]."] ". $contact['last_name'] . "\n";
+
+				$contact['sex'] = $contact['sex'] == 2 ? 'F' : 'M';
+
+				$cf_values['link_id'] = $existing_contact['id'];
+				$cf->replace_row('cf_2', $cf_values);
+			}else
+			{
+				echo "NOT FOUND: [".$cf_values[$cf_fieldmap[2]['Person-ID']]."] ". $contact['last_name'] . "\n";
+			}
+		} catch (Exception $e) {
+
 		}
+		//exit();
+		
 	}
 	fclose($fp);
 }
 
 //START OF tasks
-
 create_custom_fields(12, $cf_category_name, array('Action-ID','Person-ID', 'Relatie-ID', 'Letter', 'PersonName','Employee'));
 
 
@@ -292,7 +296,7 @@ if (true) {
 	if (!$fp)
 		die('Failed to open tasks file');
 
-	$headers = fgetcsv($fp, null, $del, $enc);
+	$headers = fgetcsv($fp, null, '[', '|');
 
 	if (!$headers)
 		die("Failed to get headers from tasks file");
@@ -303,12 +307,7 @@ if (true) {
 		$r_index_map[$headers[$i]] = $i;
 	}
 
-	//var_dump($r_index_map);
-	
-
-	while ($record = fgetcsv($fp, null, $del, $enc,'"')) {
-		
-
+	while ($record = fgetcsv($fp, null, '[', '|')) {
 
 		if(!isset($record[$r_index_map['Employee']])){
 			var_dump($record);
@@ -343,6 +342,9 @@ if (true) {
 			$existing_task = $ta->next_record();
 
 			if(!$existing_task){
+
+				echo "Importing [".$cf_values[$cf_fieldmap[12]['Action-ID']]."] ".$record[$r_index_map['Action-Type']]."\n";
+
 				$task=array(
 					'tasklist_id'=>$tasklist['id'],
 					'name'=>$record[$r_index_map['Action-Type']],
@@ -381,12 +383,7 @@ if (true) {
 						$GO_LINKS->add_link($task_id, 12, $contact['id'], 2);
 					}
 				}
-
-				//break;
-				exit();
 			}
-
-
 		}else
 		{
 			echo "Skipping because of empty employee\n";
@@ -396,9 +393,7 @@ if (true) {
 	fclose($fp);
 }
 
-
 //START OF notes
-
 echo "Starting with notes\n";
 
 create_custom_fields(4, $cf_category_name, array('Event-ID','Person-ID', 'Relatie-ID', 'PersonName','Employee','Action-ID','Mark-ID'));
@@ -441,10 +436,10 @@ if (true) {
 	if (!$fp)
 		die('Failed to open notes file');
 
-	$headers = fgetcsv($fp, null, $del, $enc);
+	$headers = fgetcsv($fp, null, '[', '|');
 
 	if (!$headers)
-		die("Failed to get headers from notes file");
+		die("Failed to get headers from notes file\n");
 
 	$index_map = array();
 	for ($i = 0, $m = count($headers); $i < $m; $i++) {
@@ -454,7 +449,7 @@ if (true) {
 
 	//var_dump($r_index_map);
 
-	while ($record = fgetcsv($fp, null, $del, $enc)) {
+	while ($record = fgetcsv($fp, null, '[', '|')) {
 		$category_name=$record[$r_index_map['Employee']];
 
 		if(!empty($category_name)){
@@ -482,6 +477,10 @@ if (true) {
 			$existing_note = $no->next_record();
 
 			if(!$existing_note){
+
+
+				echo "Importing [".$cf_values[$cf_fieldmap[4]['Event-ID']]."] ".$record[$r_index_map['Action-Type']]."\n";
+
 				$note=array(
 					'category_id'=>$category['id'],
 					'name'=>$record[$r_index_map['Action-Type']],
@@ -511,7 +510,7 @@ if (true) {
 					$ab->search_contacts(1, $cf_values[$cf_fieldmap[4]['Person-ID']], $cf_fieldmap[2]['Person-ID'], $addressbook_id);
 					$contact = $ab->next_record();
 					if (!$contact) {
-						echo "Company with Person-ID " . $cf_values[$cf_fieldmap[4]['Person-ID']] . " not found!";
+						echo "Company with Person-ID " . $cf_values[$cf_fieldmap[4]['Person-ID']] . " not found!\n";
 					} else {
 						$GO_LINKS->add_link($note_id, 4, $contact['id'], 2);
 					}
@@ -531,7 +530,7 @@ if (true) {
 					$task = $ta->next_record();
 
 					if (!$task) {
-						echo "Task with Action-ID " . $cf_values[$cf_fieldmap[4]['Action-ID']] . " not found!";
+						echo "Task with Action-ID " . $cf_values[$cf_fieldmap[4]['Action-ID']] . " not found!\n";
 					} else {
 						$GO_LINKS->add_link($note_id, 4, $task['id'], 12);
 					}
@@ -620,7 +619,7 @@ if (true) {
 					$ab->search_companies(1, $cf_values[$cf_fieldmap[4]['Relatie-ID']], $cf_fieldmap[3]['Relatie-ID'], $addressbook_id);
 					$company = $ab->next_record();
 					if (!$company) {
-						echo "Company with Relatie-ID " . $cf_values[$cf_fieldmap[4]['Relatie-ID']] . " not found!";
+						echo "Company with Relatie-ID " . $cf_values[$cf_fieldmap[4]['Relatie-ID']] . " not found!\n";
 					} else {
 						$GO_LINKS->add_link($note_id, 4, $company['id'], 3);
 					}
@@ -631,7 +630,7 @@ if (true) {
 					$ab->search_contacts(1, $cf_values[$cf_fieldmap[4]['Person-ID']], $cf_fieldmap[2]['Person-ID'], $addressbook_id);
 					$contact = $ab->next_record();
 					if (!$contact) {
-						echo "Company with Person-ID " . $cf_values[$cf_fieldmap[4]['Person-ID']] . " not found!";
+						echo "Company with Person-ID " . $cf_values[$cf_fieldmap[4]['Person-ID']] . " not found!\n";
 					} else {
 						$GO_LINKS->add_link($note_id, 4, $contact['id'], 2);
 					}
@@ -651,7 +650,7 @@ if (true) {
 					$task = $ta->next_record();
 
 					if (!$task) {
-						echo "Task with Action-ID " . $cf_values[$cf_fieldmap[4]['Action-ID']] . " not found!";
+						echo "Task with Action-ID " . $cf_values[$cf_fieldmap[4]['Action-ID']] . " not found!\n";
 					} else {
 						$GO_LINKS->add_link($note_id, 4, $task['id'], 12);
 					}
