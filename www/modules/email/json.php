@@ -756,7 +756,8 @@ try {
 													'encoding' => $attachment['encoding'],
 													'event_id' => $event['id'],
 													'email_sender' => $email_sender,
-													'email' => $account['email']
+													'email' => $account['email'],
+													'event_declined' => false
 												);
 											}else
 											{												
