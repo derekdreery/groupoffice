@@ -1612,9 +1612,11 @@ class calendar extends db {
 				$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
 
 				//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
-
-				if($calculated_event['start_time'] >= $interval_end_time || $calculated_event['end_time'] <= $interval_start_time)
+				
+				if($calculated_event['start_time'] >= $interval_end_time || $calculated_event['end_time'] <= $interval_start_time || $calculated_event['start_time'] > $event['repeat_end_time'])
+				{
 					break;
+				}
 
 				if(!$cal->is_exception($calculated_event['id'],$calculated_event['start_time'])) {
 					//go_debug('Adding');
@@ -1899,7 +1901,7 @@ class calendar extends db {
 		}
 
 		if($event['name'] != '')// && $event['start_time'] > 0 && $event['end_time'] > 0)
-		{
+		{			
 			//$event['all_day_event'] = (isset($object['DTSTART']['params']['VALUE']) &&
 			//strtoupper($object['DTSTART']['params']['VALUE']) == 'DATE') ? true : false;
 
@@ -1932,13 +1934,17 @@ class calendar extends db {
 
 
 			if (isset($object['RRULE']['value']) && $rrule = $this->ical2array->parse_rrule($object['RRULE']['value'])) {
-				$event['rrule'] = $object['RRULE']['value'];
+				$event['rrule'] = $object['RRULE']['value'];				
 				if (isset($rrule['UNTIL'])) {
 					if($event['repeat_end_time'] = $this->ical2array->parse_date($rrule['UNTIL'])) {
 						$event['repeat_end_time'] = mktime(0,0,0, date('n', $event['repeat_end_time']), date('j', $event['repeat_end_time'])+1, date('Y', $event['repeat_end_time']));
 					}
+				}else
+				if(isset($rrule['COUNT']))
+				{
+					$event_count = $rrule['COUNT'];
 				}
-
+	
 				if(isset($rrule['BYDAY'])) {
 
 					$month_time=1;

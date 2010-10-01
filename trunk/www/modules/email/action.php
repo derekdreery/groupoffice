@@ -1182,6 +1182,11 @@ try {
 
 			if($create_event)
 			{
+				if($cal->is_event_declined($_REQUEST['uid'], $email_sender))
+				{
+					$cal->delete_declined_event_uid($_REQUEST['uid'], $email_sender);
+				}
+
 				if(!$calendar_id)
 				{
 					$calendar_id = $calendars[0]['id'];

@@ -310,12 +310,18 @@ try {
 			}
 
 			$num_participants = 0;
+			$continue = true;
 			$cal->get_participants($event['id']);
-			while($cal->next_record())
+			while($cal->next_record() && $continue)
 			{
 				if($cal->f('user_id') != $GO_SECURITY->user_id)
 				{
 					$num_participants++;
+				}else
+				if(!$cal->f('is_organizer'))
+				{
+					$num_participants = 0;
+					$continue = false;
 				}
 			}
 			$response['data']['num_participants'] = $num_participants;
@@ -493,8 +499,8 @@ try {
 				$username = String::format_name($user);
 
 				$num_participants = 0;
-				$cal->get_participants($event['id']);
 				$continue = true;
+				$cal->get_participants($event['id']);
 				while($cal->next_record() && $continue)
 				{
 					if($cal->f('user_id') != $GO_SECURITY->user_id)
@@ -506,7 +512,7 @@ try {
 						$num_participants = 0;
 						$continue = false;
 					}
-				}
+				}				
 
 				$response['results'][] = array(
 								'id'=>$response['count']++,
