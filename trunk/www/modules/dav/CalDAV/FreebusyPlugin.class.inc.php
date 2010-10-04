@@ -116,7 +116,7 @@ ATTENDEE:mailto:' . $email . '
 ';
 
 				foreach ($fb as $fbt) {
-					$data .="FREEBUSY;FBTYPE=BUSY:" . gmdate($timeFormat, $fbt['start']) . "/" . gmdate($timeFormat, $fbt['start']) . "\n";
+					$data .="FREEBUSY;FBTYPE=BUSY:" . gmdate($timeFormat, $fbt['start']) . "/" . gmdate($timeFormat, $fbt['end']) . "\n";
 				}
 
 //FREEBUSY;FBTYPE=BUSY:20101004T110000Z/20101004T120000Z
