@@ -211,13 +211,13 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		$user = $GO_USERS->get_user_by_email($email);
 
 		if(!$user)
-			throw new Exception('User not found');
+			return false;
 
-		$this->cal->get_events(0, $user['id'], $start, $end,'id','ASC',0,0,true);
+		$events = $this->cal->get_events_in_array(0, $user['id'], $start, $end,true);
 		
 		$fb=array();
 
-		while ($event = $this->cal->next_record()) {
+		while ($event = array_shift($events)) {
 			$fb[]=array('start'=>$event['start_time'],'end'=>$event['end_time']);
 		}
 		return $fb;

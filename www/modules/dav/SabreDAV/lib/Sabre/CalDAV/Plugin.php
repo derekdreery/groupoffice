@@ -251,9 +251,9 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
             if (array_key_exists('{DAV:}supported-report-set', $properties[200])) {
                 $properties[200]['{DAV:}supported-report-set']->addReport(array(
                      '{' . self::NS_CALDAV . '}calendar-multiget',
-                     '{' . self::NS_CALDAV . '}calendar-query',
+                     '{' . self::NS_CALDAV . '}calendar-query'
                 //     '{' . self::NS_CALDAV . '}supported-collation-set',
-                     '{' . self::NS_CALDAV . '}free-busy-query',
+                     //'{' . self::NS_CALDAV . '}free-busy-query',
                 ));
             }
         }

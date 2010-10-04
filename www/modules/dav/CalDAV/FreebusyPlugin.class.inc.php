@@ -31,7 +31,7 @@ class GO_CalDAV_FreebusyPlugin extends Sabre_DAV_ServerPlugin {
 
 		$this->server->subscribeEvent('unknownMethod', array($this, 'httpPOSTHandler'));
 
-		$server->xmlNamespaces[Sabre_CalDAV_Plugin::NS_CALDAV] = 'C';
+		//$server->xmlNamespaces[Sabre_CalDAV_Plugin::NS_CALDAV] = 'C';
 	}
 
 	/**
@@ -57,8 +57,10 @@ class GO_CalDAV_FreebusyPlugin extends Sabre_DAV_ServerPlugin {
 		go_debug("httpPOSTHandler($method)");
 
 		$body = $this->server->httpRequest->getBody(true);
-		$headers = $this->server->httpRequest->getHeaders();
 
+		go_debug($body);
+
+	
 		$node = $this->server->tree->getNodeForPath($this->server->getRequestUri());
 
 		$dom = new DOMDocument('1.0', 'utf-8');
@@ -69,6 +71,8 @@ class GO_CalDAV_FreebusyPlugin extends Sabre_DAV_ServerPlugin {
 		foreach ($this->server->xmlNamespaces as $namespace => $prefix) {
 			$scheduleResponse->setAttribute('xmlns:' . $prefix, $namespace);
 		}
+		$scheduleResponse->setAttribute('xmlns:C', Sabre_CalDAV_Plugin::NS_CALDAV);
+
 
 
 		$response = $dom->createElement('C:response');
@@ -103,6 +107,7 @@ VERSION:2.0
 PRODID:-//Intermesh Group-Office//CalDAV Server//EN
 METHOD:REPLY
 BEGIN:VFREEBUSY
+UID:'.$ical[0]['UID']['value'].'
 DTSTAMP:' . gmdate($timeFormat) . '
 DTSTART:' . gmdate($timeFormat, $start) . '
 DTEND:' . gmdate($timeFormat, $end) . '
@@ -121,11 +126,14 @@ END:VCALENDAR';
 
 				$data = $dom->createElement('C:calendar-data', $data);
 
+
 				$response->appendChild($data);
 			}
 		}
 
 		$r = $dom->saveXML();
+
+		go_debug($r);
 
 
 		/* $r = '<?xml version="1.0" encoding="utf-8" ?>
