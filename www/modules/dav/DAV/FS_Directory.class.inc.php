@@ -128,6 +128,8 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		global $GO_CONFIG;
 
         $path = $this->path . '/' . $name;
+
+		go_debug("FSD:getChild($name)");
 		
         if (!file_exists($path)) throw new Sabre_DAV_Exception_FileNotFound('File with name ' . $path . ' could not be located');
 
