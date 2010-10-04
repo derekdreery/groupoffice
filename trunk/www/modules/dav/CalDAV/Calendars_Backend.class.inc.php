@@ -201,9 +201,26 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			);
 		}
 
-		go_debug($objects);
-
 		return $objects;
+	}
+
+
+	public function getFreeBusy($email, $start, $end){
+		global $GO_USERS;
+
+		$user = $GO_USERS->get_user_by_email($email);
+
+		if(!$user)
+			throw new Exception('User not found');
+
+		$this->cal->get_events(0, $user['id'], $start, $end,'id','ASC',0,0,true);
+		
+		$fb=array();
+
+		while ($event = $this->cal->next_record()) {
+			$fb[]=array('start'=>$event['start_time'],'end'=>$event['end_time']);
+		}
+		return $fb;
 	}
 
 	/**
