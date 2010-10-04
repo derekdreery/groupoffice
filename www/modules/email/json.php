@@ -697,8 +697,9 @@ try {
 						$cal = new calendar();
 						require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 						$ical2array = new ical2array();
+						require_once($GO_LANGUAGE->get_language_file('calendar'));
 
-						$vcalendar = $ical2array->parse_string($data);												
+						$vcalendar = $ical2array->parse_string($data);
 						while($object = array_shift($vcalendar[0]['objects']))
 						{
 							if($object['type'] == 'VEVENT')
@@ -726,7 +727,7 @@ try {
 								{
 									// request to update an existing event 
 									$event = $cal->get_event_by_uid($cal_event['uid']);
-								}								
+								}																								
 								
 								if($event)
 								{
@@ -775,10 +776,12 @@ try {
 										{
 											$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_old'];
 										}
+										
+										$response['body'] = $cal->event_to_html($cal_event, false, true);
 									}else
 									{
 										throw new Exception($lang['common']['selectError']);
-									}
+									}									
 								}else
 								{
 									if($method == 'REQUEST')
@@ -801,6 +804,8 @@ try {
 									{
 										$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_not_found'];
 									}
+
+									$response['body'] = $cal->event_to_html($cal_event, false, true);
 								}
 								break;						
 
@@ -818,9 +823,13 @@ try {
 									$response['iCalendar']['cancellation'] = array(
 										'event_id' => $event['id']
 									);
+
+									$response['body'] = $cal->event_to_html($event, false, true);
 								}else
 								{
-									$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_not_found'];									
+									$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_not_found'];
+
+									$response['body'] = $cal->event_to_html($cal_event, false, true);
 								}
 							
 								break;

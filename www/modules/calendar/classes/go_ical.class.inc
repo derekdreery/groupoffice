@@ -575,14 +575,14 @@ class go_ical extends calendar
 						foreach($attendee['params'] as $k => $v)
 						{
 							$params_str .= ';'.$k.'='.$v;
-						}			
-						$lines[] = $params_str.':'.$attendee['value'];
+						}
+						$lines = array_merge($lines, String::format_vcard_line($params_str, $attendee['value'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 					}
 				}
 			}else
-			if((count($object[$key]) == 1) && is_array($value))
+			if((count($object[$key]) == 1) && is_array($value) && isset($value['value']))
 			{
-				$lines[] = $key.':'.$value['value'];
+				$lines = array_merge($lines, String::format_vcard_line($key, $value['value'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 			}else
 			if(count($object[$key]) == 2 && is_array($value) && isset($value['params']))
 			{
@@ -590,8 +590,8 @@ class go_ical extends calendar
 				foreach($value['params'] as $k => $v)
 				{
 					$params_str .= ';'.$k.'='.$v;
-				}		
-				$lines[] = $params_str.':'.$value['value'];
+				}
+				$lines = array_merge($lines, String::format_vcard_line($params_str, $value['value'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 			}			
 		}
 
