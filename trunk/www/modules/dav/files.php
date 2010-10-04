@@ -25,12 +25,14 @@ if(!isset($GO_MODULES->modules['dav']))
 
 // Files we need
 require_once 'SabreDAV/lib/Sabre/autoload.php';
-require('GO_DAV_Auth_Backend.class.inc.php');
+require('autoload.php');
+
+/*require('GO_DAV_Auth_Backend.class.inc.php');
 require('GO_DAV_FS_Directory.class.inc.php');
 //require('GO_DAV_Root_Directory.class.inc.php');
 require('GO_DAV_Shared_Directory.class.inc.php');
 require('GO_DAV_FS_File.class.inc.php');
-require('GO_DAV_ObjectTree.class.inc.php');
+require('GO_DAV_ObjectTree.class.inc.php');*/
 
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc.php");
 
