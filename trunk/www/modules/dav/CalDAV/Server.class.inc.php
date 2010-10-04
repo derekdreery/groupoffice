@@ -31,7 +31,7 @@ class GO_CalDAV_Server extends Sabre_DAV_Server {
 		//$calendars = new Sabre_CalDAV_UserCalendars($authBackend, $calendarBackend, $_SESSION['GO_SESSION']['username']);
 		//$root->addChild($calendars);
 		
-        $principals = new Sabre_DAV_Auth_PrincipalCollection($authBackend);
+        $principals = new GO_DAV_Auth_PrincipalCollection($authBackend);
         $root->addChild($principals);
 
         $calendars = new GO_CalDAV_CalendarRootNode($authBackend, $calendarBackend);
@@ -50,7 +50,7 @@ class GO_CalDAV_Server extends Sabre_DAV_Server {
 
 
         /* Server Plugins */
-        $authPlugin = new Sabre_DAV_Auth_Plugin($authBackend,'Group-Office');
+        $authPlugin = new Sabre_DAV_Auth_Plugin($authBackend,'Group-Office CalDAV server');
         $this->addPlugin($authPlugin);
 
         $caldavPlugin = new Sabre_CalDAV_Plugin();

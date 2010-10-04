@@ -154,7 +154,7 @@ go_debug('Fetching users from database');
 			//$GO_USERS->get_users('username', 'asc',0,10);
 			while($user=$GO_USERS->next_record()){
 				
-				$this->users[]=$this->recordToDAVUser($user['username']);
+				$this->users[]=$this->recordToDAVUser($user);
 			}
 		}
 
@@ -166,8 +166,9 @@ go_debug('Fetching users from database');
 
 		return array(
 			'uri'=>$record['username'],
-			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL'=>'principals/'.$record['username'].'/inbox',
-			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL'=>'principals/'.$record['username'].'/outbox'
+			'{http://sabredav.org/ns}email-address'=>$record['email'],
+			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$record['username'].'/inbox'),
+			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$record['username'].'/outbox')
 		);
 
 	}

@@ -27,16 +27,6 @@ require_once($GO_MODULES->modules['tasks']['class_path'].'export_tasks.class.inc
 
 // Files we need
 require_once 'SabreDAV/lib/Sabre/autoload.php';
-
-/*require('CalDAV/Server.class.inc.php');
-require('CalDAV/Calendars_Backend.class.inc.php');
-require('CalDAV/Tasklists_Backend.class.inc.php');
-require('CalDAV/TasklistsRootNode.class.inc.php');
-require('CalDAV/CalendarRootNode.class.inc.php');
-
-require('DAV/Auth_Backend.class.inc.php');
-require('DAV/ObjectTree.class.inc.php');*/
-
 require('autoload.php');
 
 

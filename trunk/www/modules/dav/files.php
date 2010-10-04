@@ -69,7 +69,7 @@ $server->addPlugin($browser);
 
 // Authentication backend
 $authBackend = new GO_DAV_Auth_Backend();
-$auth = new Sabre_DAV_Auth_Plugin($authBackend,'Group-Office');
+$auth = new Sabre_DAV_Auth_Plugin($authBackend,'Group-Office WebDAV server');
 $server->addPlugin($auth);
 
 // Temporary file filter

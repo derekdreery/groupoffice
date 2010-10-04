@@ -12,7 +12,7 @@
  * @author Evert Pot (http://www.rooftopsolutions.nl/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class GO_CalDAV_ScheduleInbox extends Sabre_DAV_Node implements Sabre_DAV_ICollection, Sabre_DAV_IProperties {
+class GO_CalDAV_ScheduleOutbox extends Sabre_DAV_Node implements Sabre_DAV_ICollection, Sabre_DAV_IProperties {
 
     /**
      * This is an array with calendar information
@@ -53,7 +53,7 @@ class GO_CalDAV_ScheduleInbox extends Sabre_DAV_Node implements Sabre_DAV_IColle
      */
     public function getName() {
 
-        return 'inbox';
+        return 'outbox';
 
     }
 
@@ -72,8 +72,8 @@ class GO_CalDAV_ScheduleInbox extends Sabre_DAV_Node implements Sabre_DAV_IColle
         foreach($requestedProperties as $prop) switch($prop) {
 
             case '{DAV:}resourcetype' :
-                $response[$prop] =  new Sabre_DAV_Property_ResourceType(array('{urn:ietf:params:xml:ns:caldav}schedule-inbox','{DAV:}collection'));
-                break;            
+                $response[$prop] =  new Sabre_DAV_Property_ResourceType(array('{urn:ietf:params:xml:ns:caldav}schedule-outbox','{DAV:}collection'));
+                break;
 
         }
         return $response;
