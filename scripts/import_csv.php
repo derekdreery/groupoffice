@@ -205,6 +205,7 @@ if (true) {
 
 		try {
 
+			/*
 			//find company
 			if (!empty($cf_values[$cf_fieldmap[2]['Relatie-ID']])) {
 				$ab->search_companies(1, $cf_values[$cf_fieldmap[2]['Relatie-ID']], $cf_fieldmap[3]['Relatie-ID'], $addressbook_id);
@@ -225,10 +226,13 @@ if (true) {
 				$ab->search_contacts(1, $company['name'], 'ab_companies.name', $addressbook_id);
 				$existing_contact = $ab->next_record();
 			}
-			if (!$existing_contact) {
-				$ab->search_contacts(1, $contact['last_name'], 'last_name', $addressbook_id);
+			if (!$existing_contact) {*/
+
+				$sql = "SELECT * FROM ab_contacts WHERE addressbook_id=$addressbook_id AND last_name=? AND first_name=? AND email=?";
+				$ab->query($sql, 'sss', array($contact['last_name'],$contact['first_name'],$contact['email']));
+				//$ab->search_contacts(1, $contact['last_name'], 'last_name', $addressbook_id);
 				$existing_contact = $ab->next_record();
-			}
+			//}
 
 			if ($existing_contact) {
 
