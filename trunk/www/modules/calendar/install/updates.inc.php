@@ -94,3 +94,5 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cal_events_declined` (
   `email` varchar(100) NOT NULL,
   PRIMARY KEY (`uid`,`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="ALTER TABLE `cal_events_declined` CHANGE `uid` `uid` VARCHAR(200) NOT NULL";

@@ -67,7 +67,7 @@ try {
 			$imap2 = new cached_imap();
 			$from_account = $imap->open_account($_POST['from_account_id'], $_POST['from_mailbox']);
 
-			
+
 			$to_account = $email->get_account($_POST['to_account_id']);
 
 			if(!$to_account)
@@ -97,7 +97,7 @@ try {
 				}
 
 				$delete_messages[]=$uid;
-				
+
 				$left = count($_SESSION['GO_SESSION']['email_move_messages']);
 
 				if($left && $start_time+10<time()) {
@@ -113,7 +113,7 @@ try {
 
 			$imap2->disconnect();
 			$imap->disconnect();
-			
+
 			$response['success']=true;
 
 			break;
@@ -182,7 +182,7 @@ try {
 			$account = $imap->open_account($account_id, $mailbox);
 			$sort = $imap->sort_mailbox();
 			$imap->delete($sort);
-			
+
 			$response['success']=true;
 			break;
 
@@ -333,7 +333,7 @@ try {
 					$skip_unknown_recipients = $GO_CONFIG->get_setting('email_skip_unknown_recipients', $GO_SECURITY->user_id);
 
 					//used for gpg encryption
-					$all_recipients = array();					
+					$all_recipients = array();
 
 					foreach($to_addresses as $address) {
 						$all_recipients[]=$address['email'];
@@ -347,8 +347,8 @@ try {
 					$GO_CONFIG->save_setting('email_show_cc', $email_show_cc, $GO_SECURITY->user_id);
 					$GO_CONFIG->save_setting('email_show_bcc', $email_show_bcc, $GO_SECURITY->user_id);
 
-					if(!empty($_POST['cc'])) 
-					{						
+					if(!empty($_POST['cc']))
+					{
 						$cc_addresses = $RFC822->parse_address_list($_POST['cc']);
 
 						$swift_addresses=array();
@@ -368,7 +368,7 @@ try {
 						$swift_addresses=array();
 						foreach($bcc_addresses as $address) {
 							$all_recipients[]=$address['email'];
-							
+
 							if(!$skip_unknown_recipients)
 							    add_unknown_recipient($address['email'], $address['personal']);
 							$swift_addresses[$address['email']]=$address['personal'];
@@ -560,12 +560,12 @@ try {
 						}
 
 
-						$response['success']=$swift->sendmail();				
+						$response['success']=$swift->sendmail();
 
 						if(!empty($_POST['link'])) {
 							$link_props = explode(':', $_POST['link']);
 							$swift->link_to(array(array('link_id'=>$link_props[1],'link_type'=>$link_props[0])));
-						}				
+						}
 
 						if(isset($attachments_tmp_names))
 						{
@@ -666,8 +666,8 @@ try {
 				$folder['subscribed']=1;
 				$folder['can_have_children']=1;
 				$folder['delimiter']=$delimiter;
-				
-				
+
+
 				if($email->add_folder($folder)) {
 					$response['success']=true;
 				}
@@ -772,7 +772,7 @@ try {
 					$email->get_folders_by_path($folder['account_id'], $folder['name']);
 					$folder_src_length = strlen($folder['name']);
 					$email2 = new email();
-					while($record = $email->next_record()) {						
+					while($record = $email->next_record()) {
 						if(($new_folder != $record['name']) && (strstr($record['name'], $folder['name'].'.')))
 						{
 							$folder_name = $new_folder.substr($record['name'], $folder_src_length);
@@ -1059,11 +1059,11 @@ try {
 
 		    $value = (isset($_POST['checked']) && $_POST['checked'] == 'true') ? '1' : '0';
 		    $GO_CONFIG->save_setting('email_skip_unknown_recipients', $value, $GO_SECURITY->user_id);
-		    
+
 		    $response['success'] = true;
 		    break;
 
-		
+
 		case 'update_state':
 
 		    $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
@@ -1085,7 +1085,7 @@ try {
 			    {
 				    $email->update_account_state($id, $GO_SECURITY->user_id, $new_state);
 			    }
-		    }			
+		    }
 
 		    $response['success'] = true;
 		    break;
@@ -1101,7 +1101,7 @@ try {
 		$cal = new calendar();
 
 		$status_id = (isset($_REQUEST['status_id']) && $_REQUEST['status_id']) ? $_REQUEST['status_id'] : 0;
-		$email_sender = (isset($_REQUEST['email_sender']) && $_REQUEST['email_sender']) ? $_REQUEST['email_sender'] : '';		
+		$email_sender = (isset($_REQUEST['email_sender']) && $_REQUEST['email_sender']) ? $_REQUEST['email_sender'] : '';
 
 		$create_event = true;
 		if($status_id == 2)
@@ -1121,7 +1121,7 @@ try {
 		$event_id = (isset($_REQUEST['event_id']) && $_REQUEST['event_id']) ? $_REQUEST['event_id'] : 0;
 		$calendar_id = (isset($_REQUEST['cal_id']) && $_REQUEST['cal_id']) ? $_REQUEST['cal_id'] : 0;
 		$calendars = array();
-		
+
 		if($create_event)
 		{
 			if($event_id && !$calendar_id)
@@ -1156,7 +1156,7 @@ try {
 
 			$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 			$data = $imap->get_message_part_decoded($_REQUEST['message_uid'], $_REQUEST['imap_id'], $_REQUEST['encoding']);
-			$imap->disconnect();			
+			$imap->disconnect();
 
 			require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 			$ical2array = new ical2array();
@@ -1191,7 +1191,7 @@ try {
 				{
 					$calendar_id = $calendars[0]['id'];
 				}
-				
+
 				$event['calendar_id'] = $calendar_id;
 				$participants = $event['participants'];
 				unset($event['participants']);
@@ -1209,6 +1209,8 @@ try {
 
 				if($event_id)
 				{
+					//$event = $cal->get_event($event_id);
+
 					$organizer_email = false;
 					$ids = array();
 					foreach($participants as $participant_email=>$participant)
@@ -1252,11 +1254,14 @@ try {
 						//create ics attachment
 						require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
 						$ical = new go_ical('2.0', false, 'REPLY');
-
+						$ical->dont_use_quoted_printable = true;
+						
 						$ics_string = $ical->export_event($event_id, $email);
 
-						$name = File::strip_invalid_chars($event['name']).'.ics';
-						$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name,File::get_mime($name)));
+						$swift->set_body($cal->event_to_html($event, false, true));
+						$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; METHOD="REPLY"'));
+						//$name = File::strip_invalid_chars($event['name']).'.ics';
+						//$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name,File::get_mime($name)));
 
 						$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
 
@@ -1275,7 +1280,7 @@ try {
 				$organizer_email = false;
 				$ids = array();
 				foreach($event['participants'] as $participant_email=>$participant)
-				{					
+				{
 					if(isset($participant['is_organizer']) && $participant['is_organizer'])
 					{
 						$organizer_email = $participant_email;
@@ -1296,12 +1301,14 @@ try {
 
 				//create ics attachment
 				require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
+
 				$ical = new go_ical('2.0', false, 'REPLY');
+				$ical->dont_use_quoted_printable = true;				
 
 				$ics_string = $ical->export_event($event_object, $email);
-
-				$name = File::strip_invalid_chars($event['name']).'.ics';
-				$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name,File::get_mime($name)));
+				
+				$swift->set_body($cal->event_to_html($event, false, true));
+				$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; METHOD="REPLY"'));
 
 				$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
 
@@ -1314,8 +1321,8 @@ try {
 		}
 
 		break;
-	
-		
+
+
 		/* {TASKSWITCH} */
 	}
 }catch(Exception $e) {

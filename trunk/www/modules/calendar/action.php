@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
  * Copyright Intermesh
  *
  * This file is part of Group-Office. You should have received a copy of the
@@ -123,7 +123,7 @@ try {
 				unlink($tmpfile);
 			}
 			break;
-			
+
 		case 'delete_event':
 
 			$event_id=$_POST['event_id'];
@@ -132,7 +132,7 @@ try {
 
 			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $event['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 				throw new AccessDeniedException();
-			}			
+			}
 
 			if(isset($_POST['create_exception']) && $_POST['create_exception'] =='true') {
 				$exceptionDate = strtotime(($_POST['exception_date']));
@@ -151,8 +151,8 @@ try {
 			}else
 			if(!empty($_REQUEST['send_cancellation']))
 			{
-				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');				
-				$RFC822 = new RFC822();				
+				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+				$RFC822 = new RFC822();
 
 				$participants=array();
 				$cal->get_participants($event_id);
@@ -162,10 +162,12 @@ try {
 					{
 						$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
 					}
-				}								
+				}				
 
 				if(count($participants))
 				{
+					$cal->update_event_sequence($event['id'], ++$event['sequence']);
+
 					$swift = new GoSwift(
 							implode(',', $participants),
 							$lang['calendar']['cancellation'].': '.$event['name']);
@@ -173,10 +175,15 @@ try {
 					//create ics attachment
 					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
 					$ical = new go_ical('2.0', false, 'CANCEL');
+					$ical->dont_use_quoted_printable = true;
+					
 					$ics_string = $ical->export_event($event_id);
 
-					$name = File::strip_invalid_chars($event['name']).'.ics';
-					$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name, File::get_mime($name)));
+					$swift->set_body($cal->event_to_html($event, false, true));
+
+					$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
+					//$name = File::strip_invalid_chars($event['name']).'.ics';
+					//$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name, File::get_mime($name)));
 
 					$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
 
@@ -185,7 +192,7 @@ try {
 					}
 				}
 			}
-			$cal->delete_event($event_id);				
+			$cal->delete_event($event_id);
 
 			$response['success']=true;
 			break;
@@ -226,7 +233,7 @@ try {
 			$body .= '<br /><br />'.$cal->event_to_html($event);
 
 			$swift->set_body($body);
-			$swift->sendmail();			
+			$swift->sendmail();
 
 			$response['success']=true;
 			break;
@@ -241,7 +248,7 @@ try {
 				//an event is moved or resized
 				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_event['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new AccessDeniedException();
-				}				
+				}
 
 				if(isset($_POST['createException']) && $_POST['createException'] =='true') {
 
@@ -339,7 +346,7 @@ try {
 						{
 							//a resource admin is updating a resource here
 							$group = $cal->get_group($calendar['group_id']);
-							$cal->get_group_admins($calendar['group_id']);							
+							$cal->get_group_admins($calendar['group_id']);
 							while($cal->next_record())
 							{
 								if($cal->f('user_id') != $GO_SECURITY->user_id)
@@ -363,7 +370,7 @@ try {
 								{
 									if($cal2->f('user_id') != $GO_SECURITY->user_id)
 									{
-										$update_resource = true;										
+										$update_resource = true;
 
 										$user = $GO_USERS->get_user($cal2->f('user_id'));
 										$cal->send_resource_notification('modified_for_admin', $resource, $resource_calendar, $_SESSION['GO_SESSION']['name'], $user['email'], $group);
@@ -399,19 +406,19 @@ try {
 						$response['is_visible'] = in_array($update_event['calendar_id'], $calendars);
 					}
 				}
-				
+
 				$response['success']=true;
 			}
 		break;
 
 		case 'save_event':
-		
+
 			$event = get_posted_event();
 			$event_id=$event['id'];
 			$group_id = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
 			$calendar_id = $event['calendar_id'];
 			$check_conflicts = isset($_POST['check_conflicts']) && !empty($_POST['busy']) ? $_POST['check_conflicts'] : 0;
-			
+
 
 			$date_format = $_SESSION['GO_SESSION']['date_format'];
 
@@ -448,7 +455,7 @@ try {
 				$cal = new calendar();
 				$concurrent_resources = $cal->get_events_in_array($resources,0, $event['start_time'], $event['end_time'], false);
 
-				
+
 				foreach ($concurrent_resources as $key=>$value) {
 					if ($value['participants_event_id'] != $event['id']) {
 						$cal2 = new calendar();
@@ -467,7 +474,7 @@ try {
 			/* Check for conflicts with other events in the calendar */
 			if ($check_conflicts) {
 				$conflict_events = $cal->get_events_in_array(array($event['calendar_id']), 0, $event['start_time'], $event['end_time'], true);
-				
+
 				while($conflict_event = array_shift($conflict_events)) {
 
 					if($conflict_event['id']!=$event_id && (empty($_POST['exception_event_id']) || $_POST['exception_event_id']!=$conflict_event['id'])){
@@ -486,7 +493,7 @@ try {
 			$modified = false;
 			$accepted = false;
 			$declined = false;
-			
+
 			if($event['id'] > 0)
 			{
 				$old_event = $cal->get_event($event_id);
@@ -552,7 +559,7 @@ try {
 					$values_old = array_values($cf->get_values($GO_SECURITY->user_id, 1, $event_id));
 				}
 
-				$cf->update_fields($GO_SECURITY->user_id, $event_id, 1, $_POST, $insert);								
+				$cf->update_fields($GO_SECURITY->user_id, $event_id, 1, $_POST, $insert);
 
 				if(!$insert && $calendar['group_id'] > 1) {
 					$values = array_values($cf->get_values($GO_SECURITY->user_id, 1, $event_id));
@@ -587,7 +594,7 @@ try {
 			 * that the user is unauthorized. We report those at the end of this switch case.
 			 */
 			$unauthorized_participants=array();
-			
+
 			if(!empty($_POST['participants'])) {
 
 				$ids=array();
@@ -606,11 +613,11 @@ try {
 							$calendar = $cal->get_default_import_calendar($participant['user_id']);
 
 							if($calendar_id != $calendar['id']) {
-								
+
 								if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])>=GO_SECURITY::WRITE_PERMISSION) {
 									$response['cal'] = $calendar;
 
-									$event['calendar_id'] = $calendar['id'];	
+									$event['calendar_id'] = $calendar['id'];
 									if(!isset($event['participants_event_id'])) {
 										$event['participants_event_id'] = $event_id;
 									}
@@ -638,8 +645,8 @@ try {
 											$event['participants_event_id'] = $event_id;
 										}
 										unset($event['files_folder_id']);
-										$cal->add_event($event, $calendar);										
-									}									
+										$cal->add_event($event, $calendar);
+									}
 									$cal->set_event_status($event_id, 1, $participant['email']);
 								}else
 								{
@@ -678,11 +685,11 @@ try {
 				$participants_event_id=empty($old_event['participants_event_id']) ? $event_id : $old_event['participants_event_id'];
 				//go_debug($participants_event_id);
 				$cal->clear_event_status($participants_event_id, $_SESSION['GO_SESSION']['email']);
-			
+
 				$participants=array();
 				$cal->get_participants($participants_event_id);
 				while($cal->next_record()) {
-	
+
 					if(/*$cal->f('status') !=1 && */$cal->f('email')!=$_SESSION['GO_SESSION']['email']) {
 						$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
 					}
@@ -692,41 +699,40 @@ try {
 				if(count($participants))
 				{
 					$subject = ($insert) ? $lang['calendar']['invitation'] : $lang['calendar']['invitation_update'];
+
+					// ics attachment
+					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
+					$ical = new go_ical();
+					$ical->dont_use_quoted_printable = true;
+					
+					$ics_string = $ical->export_event($participants_event_id);
+
 					$swift = new GoSwift(
 							implode(',', $participants),
 							$subject.': '.$event['name']);
 
-					/*
 					class Replacements implements Swift_Plugins_Decorator_Replacements {
 						function getReplacementsFor($address) {
 							return array('%email%'=>$address);
 						}
 					}
-					*/
-					
-					//Load the plugin with the extended replacements class
-					//$swift->registerPlugin(new Swift_Plugins_DecoratorPlugin(new Replacements()));
 
-					/*
-					 * this part we will comment out, since we are going to do this the ics way.
+					//Load the plugin with the extended replacements class
+					$swift->registerPlugin(new Swift_Plugins_DecoratorPlugin(new Replacements()));
+
 					$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
 							$cal->event_to_html($event).
 							'<p>'.$lang['calendar']['acccept_question'].'</p>'.
 							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$participants_event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
 							'&nbsp;|&nbsp;'.
 							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$participants_event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
-					 */
-
-					//create ics attachment
-					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
-					$ical = new go_ical();
-					$ics_string = $ical->export_event($participants_event_id);
-
-					$name = File::strip_invalid_chars($event['name']).'.ics';			
-					$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name,File::get_mime($name)));
+					
+					$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
+					//$name = File::strip_invalid_chars($event['name']).'.ics';
+					//$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
 
 					$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
-					
+
 					if(!$swift->sendmail(true)) {
 						throw new Exception('Could not send invitation');
 					}
@@ -741,10 +747,10 @@ try {
 
 				$num_admins = $cal->get_group_admins($calendar['group_id']);
 				if($num_admins && ($insert || $modified || $accepted || $declined))
-				{			
+				{
 					if(!$insert)
 					{
-						$message_type='modified_for_admin';						
+						$message_type='modified_for_admin';
 					}else
 					{
 						$message_type='new';
@@ -755,11 +761,11 @@ try {
 						if($cal->f('user_id') != $GO_SECURITY->user_id)
 						{
 							$user = $GO_USERS->get_user($cal->f('user_id'));
-							$cal->send_resource_notification($message_type, $event, $calendar, $_SESSION['GO_SESSION']['name'], $user['email'], $group);							
-						}	
-					}					
+							$cal->send_resource_notification($message_type, $event, $calendar, $_SESSION['GO_SESSION']['name'], $user['email'], $group);
+						}
+					}
 				}
-				
+
 				if($old_event['user_id'] != $GO_SECURITY->user_id)
 				{
 					$message_type=false;
@@ -794,24 +800,24 @@ try {
 
 				$num_resources = $cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 1);
 				if($num_resources > 0)
-				{					
+				{
 					while($resource_calendar = $cal->next_record())
 					{
 						$resource_id = $resource_calendar['id'];
-						
-						$existing_resource = $cal2->get_event_resource($event_id, $resource_id);					
+
+						$existing_resource = $cal2->get_event_resource($event_id, $resource_id);
 						if(isset($resources) && in_array($resource_id, $resources))
-						{							
+						{
 							$resource = $event_copy;
 							$resource['participants_event_id'] = $event_id;
-							$resource['calendar_id'] = $resource_id;							
-							
+							$resource['calendar_id'] = $resource_id;
+
 							if($existing_resource)
 							{
 								$resource['id'] = $resource_id = $existing_resource['id'];
 								$modified_resource = false;
-								
-								if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission']) 
+
+								if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 								{
 									require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 									$cf = new customfields();
@@ -820,17 +826,17 @@ try {
 
 									$custom_fields=isset($_POST['resource_options'][$resource_calendar['id']]) ? $_POST['resource_options'][$resource_calendar['id']] : array();
 									$cf->update_fields($GO_SECURITY->user_id, $resource_id, 1, $custom_fields, false);
-							
+
 									$values = array_values($cf->get_values($GO_SECURITY->user_id, 1, $resource_id));
 									for($i=0; $i<count($values_old); $i++) {
 										if($values_old[$i] != $values[$i]) {
 											$modified_resource = true;
 										}
-									}							
+									}
 								}
 
 								$group = $cal2->get_group($resource_calendar['group_id']);
-							
+
 								if($modified || $modified_resource)
 								{
 									$resource['status']='NEEDS-ACTION';
@@ -838,7 +844,7 @@ try {
 
 									$num_admins = $cal2->get_group_admins($resource_calendar['group_id']);
 									if($num_admins)
-									{		
+									{
 										while($cal2->next_record())
 										{
 											if($cal2->f('user_id') != $GO_SECURITY->user_id)
@@ -846,15 +852,15 @@ try {
 												$user = $GO_USERS->get_user($cal2->f('user_id'));
 												$cal->send_resource_notification('modified_for_admin', $resource, $resource_calendar, $_SESSION['GO_SESSION']['name'], $user['email'], $group);
 											}
-											
+
 											if($cal2->f('user_id') == $resource['user_id'])
 											{
 												$resource['status']='ACCEPTED';
 												$resource['background']='CCFFCC';
-											}																						
-										}										
+											}
+										}
 									}
-									
+
 									$cal3->update_event($resource, false, false, true, false);
 								}
 							}else
@@ -881,10 +887,10 @@ try {
 
 									$cf->update_fields($GO_SECURITY->user_id, $resource_id, 1, $custom_fields, true);
 								}
-															
+
 								$num_admins = $cal2->get_group_admins($resource_calendar['group_id']);
 								if($num_admins)
-								{								
+								{
 									while($cal2->next_record())
 									{
 										if($cal2->f('user_id') != $GO_SECURITY->user_id)
@@ -894,7 +900,7 @@ try {
 										}
 									}
 								}
-							}							
+							}
 						}elseif($existing_resource)
 						{
 							$cal3->delete_event($existing_resource['id']);
@@ -920,7 +926,7 @@ try {
 			$calendar['id']=$_POST['calendar_id'];
 			$calendar['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GO_SECURITY->user_id;
 			$calendar['group_id'] = isset($_POST['group_id']) ? ($_POST['group_id']) : 0;
-			$calendar['show_bdays'] = isset($_POST['show_bdays']) ? 1 : 0;                        
+			$calendar['show_bdays'] = isset($_POST['show_bdays']) ? 1 : 0;
 			if($calendar['group_id'] == 0) $calendar['group_id'] = 1;
 			$calendar['name']=$_POST['name'];
 
@@ -950,7 +956,7 @@ try {
 				if(!$GO_MODULES->modules['calendar']['write_permission']) {
 					throw new AccessDeniedException();
 				}
-				$response['acl_id'] = $calendar['acl_id'] = $GO_SECURITY->get_new_acl('calendar read: '.$calendar['name'], $calendar['user_id']);			
+				$response['acl_id'] = $calendar['acl_id'] = $GO_SECURITY->get_new_acl('calendar read: '.$calendar['name'], $calendar['user_id']);
 				$response['calendar_id']=$calendar['id']=$cal->add_calendar($calendar);
 
 				/*
@@ -963,13 +969,13 @@ try {
 						$GO_SECURITY->add_user_to_acl($group_admin['user_id'], $calendar['acl_id'], GO_SECURITY::MANAGE_PERMISSION);
 				}
 			}
-			
+
 			$tasklists = (isset($_REQUEST['tasklists'])) ? json_decode($_REQUEST['tasklists'], true) : array();
 			if(!is_array($tasklists))
 			{
 				$tasklists = array();
 			}
-			
+
 			foreach($tasklists as $tasklist)
 			{
 				if($tasklist['visible'] == 0)
@@ -1081,14 +1087,14 @@ try {
 				$cal->update_group($group);
 			}else
 			{
-				$group['user_id'] = $GO_SECURITY->user_id;				
-				$response['group_id'] = $cal->add_group($group);				
+				$group['user_id'] = $GO_SECURITY->user_id;
+				$response['group_id'] = $cal->add_group($group);
 			}
-			
+
 			if($group['id'] == 1)
 			{
 				$group = $cal->get_group(1);
-				$response['fields'] = $group['fields'];			
+				$response['fields'] = $group['fields'];
 			}
 
 			$response['success'] = true;
@@ -1121,7 +1127,7 @@ try {
 
 
 		case 'save_permissions':
-		    
+
 		    $acl_level = isset($_REQUEST['acl_id']) ? $_REQUEST['acl_id'] : 0;
 		    $group_id = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : 0;
 		    $calendars = isset($_REQUEST['calendars']) ? json_decode($_REQUEST['calendars'], true) : array();
@@ -1167,13 +1173,13 @@ try {
 				}
 			    }
 			}
-			
+
 			$response['success'] = true;
 		    }else
 		    {
 			$response['success'] = false;
 		    }
-		    
+
 		    break;
 
 
@@ -1220,7 +1226,7 @@ try {
 					$response['is_visible'] = in_array($calendar_id, $calendars);
 				}
 			}
-			
+
 			$response['success'] = false;
 			if($event_id && $offset)
 			{
@@ -1238,10 +1244,10 @@ try {
 					$response['success'] = true;
 				}
 			}
-			
+
 			break;
 
-			
+
 		case 'icalendar_process_response':
 
 			$event_id = (isset($_REQUEST['event_id']) && $_REQUEST['event_id']) ? $_REQUEST['event_id'] : '';
@@ -1253,12 +1259,12 @@ try {
 			{
 				throw new Exception($lang['common']['missingField']);
 			}
-			
+
 			$cal->set_event_status($event_id, $status_id, $email_sender, $last_modified);
 
 			$response['success'] = true;
 
-			break;	
+			break;
 
 	}
 }catch(Exception $e)

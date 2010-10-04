@@ -963,6 +963,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						exception_date: this.currentDeleteEvent.startDate.format(this.daysGrid.dateTimeFormat),
 						event_id: this.currentDeleteEvent.event_id
 					};
+
+					if(event.num_participants)
+					{
+						params.send_cancellation = (confirm(GO.calendar.lang.sendCancellation)) ? 1 : 0;
+					}
+					
 					this.sendDeleteRequest(params, this.currentDeleteCallback, this.currentDeleteEvent);
 
 					this.recurrenceDialog.hide();
@@ -974,6 +980,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 						task: 'delete_event',
 						event_id: this.currentDeleteEvent.event_id
 					};
+
+					if(event.num_participants)
+					{
+						params.send_cancellation = (confirm(GO.calendar.lang.sendCancellation)) ? 1 : 0;
+					}
+					
 					this.sendDeleteRequest(params, this.currentDeleteCallback, this.currentDeleteEvent, true);
 
 					this.recurrenceDialog.hide();

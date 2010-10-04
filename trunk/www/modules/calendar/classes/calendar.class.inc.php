@@ -227,7 +227,7 @@ class calendar extends db {
 
 
 
-	function event_to_html($event, $custom=false) {
+	function event_to_html($event, $custom=false, $ics=false) {
 		global $GO_LANGUAGE, $GO_CONFIG, $lang;
 
 		require($GO_LANGUAGE->get_language_file('calendar'));
@@ -236,10 +236,12 @@ class calendar extends db {
 
 		$html = '<table>'.
 						'<tr><td>'.$lang['calendar']['subject'].':</td>'.
-						'<td>'.$event['name'].'</td></tr>'.
-
-						'<tr><td>'.$lang['calendar']['status'].':</td>'.
-						'<td>'.$lang['calendar']['statuses'][$event['status']].'</td></tr>';
+						'<td>'.$event['name'].'</td></tr>';
+		if(!$ics)
+		{
+			$html .= '<tr><td>'.$lang['calendar']['status'].':</td>'.
+				'<td>'.$lang['calendar']['statuses'][$event['status']].'</td></tr>';
+		}
 
 		if (!empty($event['location'])) {
 			$html .= '<tr><td style="vertical-align:top">'.$lang['calendar']['location'].':</td>'.
@@ -1934,7 +1936,7 @@ class calendar extends db {
 
 
 			if (isset($object['RRULE']['value']) && $rrule = $this->ical2array->parse_rrule($object['RRULE']['value'])) {
-				$event['rrule'] = $object['RRULE']['value'];				
+				$event['rrule'] = 'RRULE:'.$object['RRULE']['value'];
 				if (isset($rrule['UNTIL'])) {
 					if($event['repeat_end_time'] = $this->ical2array->parse_date($rrule['UNTIL'])) {
 						$event['repeat_end_time'] = mktime(0,0,0, date('n', $event['repeat_end_time']), date('j', $event['repeat_end_time'])+1, date('Y', $event['repeat_end_time']));
@@ -1966,7 +1968,7 @@ class calendar extends db {
 
 					$days=Date::shift_days_to_gmt($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
 
-					$event['rrule']=Date::build_rrule(Date::ical_freq_to_repeat_type($rrule), $rrule['INTERVAL'], $event['repeat_end_time'], $days, $month_time);
+					$event['rrule']=Date::build_rrule(Date::ical_freq_to_repeat_type($rrule), $rrule['INTERVAL'], $event['repeat_end_time'], $days, $month_time);					
 				}
 			}
 
@@ -1993,7 +1995,7 @@ class calendar extends db {
 					$event['repeat_end_time']+=$event['end_time']-$event['start_time'];
 				}
 			}
-
+		
 			return $event;
 		}
 		return false;
@@ -2747,6 +2749,12 @@ class calendar extends db {
 	{
 		$this->query("SELECT * FROM cal_events_declined WHERE uid='".$this->escape($uid)."' AND email='".$this->escape($email)."'");
 		return ($this->num_rows() > 0) ? true : false;
+	}
+
+	function update_event_sequence($event_id, $sequence)
+	{
+		$sql = "UPDATE cal_events SET sequence='".$this->escape($sequence)."' WHERE id='".intval($event_id)."'";
+		return $this->query($sql);
 	}
 
 }
