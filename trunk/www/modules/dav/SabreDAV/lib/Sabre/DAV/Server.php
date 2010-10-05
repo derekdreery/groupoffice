@@ -132,7 +132,7 @@ class Sabre_DAV_Server {
      *
      * @var bool 
      */
-    public $debugExceptions = true;
+    public $debugExceptions = false;
 
 
     /**
@@ -211,8 +211,6 @@ class Sabre_DAV_Server {
 
             }
             $headers['Content-Type'] = 'application/xml; charset=utf-8';
-
-			go_debug($DOM->saveXML());
             
             $this->httpResponse->sendStatus($httpCode);
             $this->httpResponse->setHeaders($headers);
@@ -388,8 +386,7 @@ class Sabre_DAV_Server {
         $methods = $this->getAllowedMethods($this->getRequestUri());
 
         $this->httpResponse->setHeader('Allow',strtoupper(implode(', ',$methods)));
-		//MS: added 2 and access-control for testing
-        $features = array('1','3', 'access-control', 'extended-mkcol');
+        $features = array('1','3', 'extended-mkcol');
 
         foreach($this->plugins as $plugin) $features = array_merge($features,$plugin->getFeatures());
         
@@ -924,7 +921,6 @@ class Sabre_DAV_Server {
      */
     public function getAllowedMethods($uri) {
 
-		//MS added post
         $methods = array(
             'OPTIONS',
             'GET',
@@ -935,9 +931,7 @@ class Sabre_DAV_Server {
             'PROPPATCH',
             'COPY',
             'MOVE',
-            'REPORT',
-			'POST',
-			'ACL'
+            'REPORT'
         );
 
         // The MKCOL is only allowed on an unmapped uri
