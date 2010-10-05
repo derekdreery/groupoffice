@@ -1,4 +1,16 @@
 <?php
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
 class GO_DAV_Shared_Directory extends Sabre_DAV_FS_Directory implements Sabre_DAV_ICollection, Sabre_DAV_IQuota {
 
 	public function __construct($path='') {

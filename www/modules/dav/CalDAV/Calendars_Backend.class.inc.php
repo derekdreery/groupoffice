@@ -204,6 +204,14 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		return $objects;
 	}
 
+	/**
+	 * Get's an array with free busy info for a given time period.
+	 *
+	 * @param String $email
+	 * @param int $start Unix time stamp of the time period
+	 * @param int $end Unix time stamp of the time period
+	 * @return Array Free busy information
+	 */
 
 	public function getFreeBusy($email, $start, $end){
 		global $GO_USERS;
@@ -218,7 +226,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		$fb=array();
 
 		while ($event = array_shift($events)) {
-			$fb[]=array('start'=>$event['start_time'],'end'=>$event['end_time']);
+			$fb[]=array('start'=>$event['start_time'],'end'=>$event['end_time'], 'busyType'=>'BUSY');
 		}
 		return $fb;
 	}
