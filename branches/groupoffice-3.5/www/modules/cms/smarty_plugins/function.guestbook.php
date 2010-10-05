@@ -73,6 +73,7 @@ function smarty_function_guestbook($params, &$smarty)
 	$items_params['root_folder_id']=$params['root_folder_id'];
 	$items_params['wrap_div']='false';	
 	$items_params['reverse']='true';
+	$items_params['sort_time']=isset($params['sort_time']) ? $params['sort_time'] : '';
 	
 	
 	$html = $smarty->fetch('guestbook/guestbook_form.tpl');
