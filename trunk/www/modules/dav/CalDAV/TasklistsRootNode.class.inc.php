@@ -1,15 +1,15 @@
 <?php
-
 /**
- * Users collection
+ * Copyright Intermesh
  *
- * This object is responsible for generating a collection of users.
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
- * @package Sabre
- * @subpackage CalDAV
- * @copyright Copyright (C) 2007-2010 Rooftop Solutions. All rights reserved.
- * @author Evert Pot (http://www.rooftopsolutions.nl/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
  */
 class GO_CalDAV_TasklistsRootNode extends Sabre_CalDAV_CalendarRootNode {
     

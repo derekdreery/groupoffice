@@ -1,17 +1,15 @@
 <?php
-
 /**
- * Principal class
+ * Copyright Intermesh
  *
- * This class represents a user in the directory tree.
- * Many WebDAV specs require a user to show up in the directory
- * structure. The principal is defined in RFC 3744.
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
- * @package Sabre
- * @subpackage DAV
- * @copyright Copyright (C) 2007-2010 Rooftop Solutions. All rights reserved.
- * @author Evert Pot (http://www.rooftopsolutions.nl/)
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id$
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
  */
 class GO_DAV_Auth_Principal extends Sabre_DAV_Auth_Principal implements Sabre_DAV_ICollection, Sabre_DAV_IProperties {
 
