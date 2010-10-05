@@ -1444,6 +1444,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				form.findField('repeat_end_date').setDisabled(repeatForever);
 				form.findField('repeat_every').setDisabled(false);
 
+				var weekday = form.findField('start_date').getValue().getDay();
+				this.formPanel.form.findField('repeat_days_' + weekday).setValue(true);
+				
 				break;
 
 			case '3' :
