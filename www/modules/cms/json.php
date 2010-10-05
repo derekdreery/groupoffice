@@ -507,12 +507,11 @@ try {
 			
 			$response['total'] = $cms->get_files($folder_id);
 			$response['results']=array();
-			$response['results'][] = array('id'=>0,$_POST['name']=>$lang['cms']['none']);
+			$response['results'][] = array('id'=>0,'name'=>$lang['cms']['none']);
 			while($cms->next_record()) {
 				$file = $cms->record;
 				$file['mtime']=Date::get_timestamp($file['mtime']);
 				$file['ctime']=Date::get_timestamp($file['ctime']);
-				$file[$_POST['name']] = $file['name'];
 				$response['results'][] = $file;
 			}
 			break;

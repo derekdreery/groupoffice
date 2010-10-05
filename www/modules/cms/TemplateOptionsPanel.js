@@ -134,7 +134,7 @@ GO.cms.TemplateOptionsPanel = Ext.extend(function(cfg) {
 				break;
 			}
 		}
-		var value;
+		var value, o;
 		if (options.length) {
 			for (var i = 0; i < options.length; i++) {
 				o = options[i];
@@ -207,33 +207,31 @@ GO.cms.TemplateOptionsPanel = Ext.extend(function(cfg) {
 						value : value,
 						anchor : '-20'
 					}));
-				}else if(o.type=='combobox'){
+				}else if(o.type=='folderbox'){
 					value = this.optionValues[o.name]
 					? this.optionValues[o.name]
 					: '';
-					this.options.push(new Ext.form.ComboBox({
+
+					this.options.push(new GO.form.ComboBox({
 						fieldLabel : o.fieldLabel,
-						name : o.name,
-						//value : value,
-						displayField:o.name,
-						valueField: 'id',
-						hiddenName:o.name,
+						value : value,
+						displayField:'name',
+						valueField: 'name',
+						name:o.name,
 						anchor : '-20',
-						mode:'local',
+						mode:'remote',
 						triggerAction:'all',
 						store : new GO.data.JsonStore({
 							url: GO.settings.modules.cms.url+ 'json.php',
 							baseParams: {
 								task: 'folder_files',
-								folder_id: o.folder_id,
-								name: o.name
+								folder_id: o.folder_id
 							},
 							root: 'results',
 							id: 'id',
 							totalProperty:'total',
-							fields: ['id','folder_id','extension','size','ctime','mtime',o.name,'content','auto_meta','title','description','keywords','priority','hot_item','hot_item_text','template_item_id','acl','registered_comments','unregistered_comments'],
-							remoteSort: true,
-							autoLoad: true
+							fields: ['id','name']
+							,remoteSort: true
 						})
 					}));
 				}else {
