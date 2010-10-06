@@ -447,7 +447,7 @@ class GO_USERS extends db
 	function get_user_by_email($email)
 	{
 		$email = String::get_email_from_string($email);
-		$sql = "SELECT * FROM go_users WHERE email='".$this->escape($email)."'";
+		$sql = "SELECT * FROM go_users WHERE email LIKE '".$this->escape($email)."'";
 		$this->query($sql);
 		
 		//return false if there is more then one result
