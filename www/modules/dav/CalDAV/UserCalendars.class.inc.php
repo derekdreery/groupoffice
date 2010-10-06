@@ -12,6 +12,18 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 class GO_CalDAV_UserCalendars extends Sabre_CalDAV_UserCalendars{
+
+	/**
+     * Returns the name of this object
+     *
+     * @return string
+     */
+    /*public function getName() {
+
+        return 'calendars';
+
+    }*/
+
      /**
      * Returns a single calendar, by name
      *

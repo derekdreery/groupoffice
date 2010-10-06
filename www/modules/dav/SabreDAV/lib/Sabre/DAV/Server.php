@@ -132,7 +132,7 @@ class Sabre_DAV_Server {
      *
      * @var bool 
      */
-    public $debugExceptions = false;
+    public $debugExceptions = true;
 
 
     /**

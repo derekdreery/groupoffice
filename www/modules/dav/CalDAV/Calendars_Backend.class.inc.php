@@ -67,9 +67,18 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 	public function getCalendar($principalUri, $calendarUri){
 		go_debug("c:getCalendar($principalUri, $calendarUri)");
 
-		$calendarUri = rawurldecode($calendarUri);
+		//$calendarUri = rawurldecode($calendarUri);
+
+		$calendar=false;
+
+		preg_match('/-([0-9]+)$/', $calendarUri, $matches);
+
+
+		if($matches[1]){
+			$calendar = $this->cal->get_calendar($matches[1]);
+		}
 		
-		$calendar = $this->cal->get_calendar_by_name($calendarUri);
+		
 		if(!$calendar)
 			throw new Sabre_DAV_Exception_FileNotFound('File not found: ' . $calendarUri);
 		
@@ -88,8 +97,8 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		return array(
 					'id' => $gocal['id'],
-					//'uri' => preg_replace('/[^\w]*/', '', (strtolower(str_replace(' ', '-', $gocal['name'])))),
-					'uri' => $gocal['name'],
+					'uri' => preg_replace('/[^\w-]*/', '', (strtolower(str_replace(' ', '-', $gocal['name'])))).'-'.$gocal['id'],
+					//'uri' => $gocal['name'],
 					'principaluri' => 'principals/'.$principalUri,
 					'size'=> $r['count'],
 					'mtime'=>$r['mtime'],
