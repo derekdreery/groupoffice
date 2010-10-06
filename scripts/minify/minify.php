@@ -8,8 +8,8 @@ $delete = isset($argv[3]) && $argv[3]=='delete';
 $module = isset($argv[2]) ? $argv[2] : 'all';
 
 $full_path = dirname(__FILE__);
-$compressor="java -jar $full_path/yuicompressor-2.4.2.jar";
-
+//$compressor="java -jar $full_path/yuicompressor-2.4.2.jar";
+$compressor="java -jar \"$full_path/yuicompressor-2.4.2.jar\"";
 //chdir($full_path);
 
 if(!@chdir($argv[1])) {
@@ -42,7 +42,8 @@ if($module=='all') {
 	}
 	fclose($scripts_fp);
 
-	exec($compressor.' javascript/go-all.js -o javascript/go-all-min');
+	exec($compressor.' "'.getcwd().'/javascript/go-all.js" -o "'.getcwd().'/javascript/go-all-min"');
+	//exec($compressor.' "'.getcwd().'/'.$all_scripts_file.'" -o "'.getcwd().'/modules/'.$module.'/all-module-scripts-min"');
 	unlink('javascript/go-all.js');
 	if($delete) {
 		unlink('javascript/scripts.txt');
@@ -97,6 +98,7 @@ foreach($modules as $module) {
 
 
 		exec($compressor.' '.$all_scripts_file.' -o modules/'.$module.'/all-module-scripts-min');
+		exec($compressor.' "'.getcwd().'/'.$all_scripts_file.'" -o "'.getcwd().'/modules/'.$module.'/all-module-scripts-min"');
 		unlink($all_scripts_file);
 		//rename($all_scripts_file, 'modules/'.$module.'/all-module-scripts-min');
 		
