@@ -69,7 +69,7 @@ GO.ModuleManager = Ext.extend(function(){
 	
 	addModule : function(moduleName, panelClass, panelConfig)
 	{		
-		this.modules[moduleName]=true;
+		//this.modules[moduleName]=true;
 		if(panelClass)
 		{
 			panelConfig.moduleName = moduleName;
@@ -85,6 +85,7 @@ GO.ModuleManager = Ext.extend(function(){
 	
 	onAddModule : function(moduleName)
 	{
+		this.modules[moduleName]=true;
 		if(this.readyFunctions[moduleName])
 		{
 			for(var i=0;i<this.readyFunctions[moduleName].length;i++)
