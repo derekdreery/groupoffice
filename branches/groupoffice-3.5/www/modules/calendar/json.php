@@ -84,7 +84,7 @@ try {
 				$abooks = array_unique($abooks);
 
 				$response['books'] = $abooks;
-				$cal->get_bdays($interval_start_time, $interval_end_time, $abooks);
+				$cal->get_bdays($interval_start_time, $interval_end_time-1, $abooks);
 				while($contact = $cal->next_record()) {
 					$name = String::format_name($contact['last_name'], $contact['first_name'], $contact['middle_name']);
 
