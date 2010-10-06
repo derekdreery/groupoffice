@@ -37,3 +37,4 @@ $lang['cms']['done_with_cms']='CMS ferdig';
 
 $lang['cms']['antispam_fail']='Feil ved antispam svar! Vennligst forsøk igjen';
 $lang['cms']['no_admin_rights']="Du har ikke admin-rettigheter til å endre brukernes tilgang til nettstedmappene.";
+$lang['cms']['none']= 'INGEN';
