@@ -211,3 +211,4 @@ $lang['common']['createdBy']='Vytvořil';
 $lang['common']['none']='Žádné';
 
 $lang['common']['alert']='Upozornění';
+$lang['common']['theFolderAlreadyExists']='Složka s tímto názvem již existuje';

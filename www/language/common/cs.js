@@ -353,3 +353,8 @@ GO.lang.thankyou='Děkujeme';
 GO.lang.applyMultiselect='Použít vícenásobný výběr';
 
 GO.lang.createdBy='Vytvořil';
+
+GO.lang.debugModeDetected="Upozornění! Debug mód je povolený";
+GO.lang.debugModeWarning="Použijte $config['debug']=true; pouze pro vývoj a řešení problémů. Debug mód spomaluje práci v Group-Office.";
+
+GO.lang.noItemSelectedWarning='Prosím, vyberte alespoň jednu položku.';

@@ -32,7 +32,7 @@ GO.cms.lang.keywords="Nøkkelord";
 /* table: cms_templates */
 GO.cms.lang.template="Mal";
 
-GO.cms.lang.selectFolder="Du må velge en mappe i trestruktureb først";
+GO.cms.lang.selectFolder="Du må velge en mappe i trestrukturen først";
 GO.cms.lang.selectFolderAdd="Velg en mappe i trestrukturen før du legger til en fil";
 GO.cms.lang.authentication='Bruk Group-Office autensitering';
 GO.cms.lang.applyRecursive='Bruke innstillingene ovenfor rekursivt?';
@@ -55,4 +55,6 @@ GO.cms.lang.alwaysShow='La stå tomt for å vise for alltid.';
 
 GO.cms.lang.root='Rot';
 GO.cms.lang.advancedPermissions='Avanserte rettigheter';
-GO.cms.lang.enablePermissionsPerFolder='Aktiver rettigheter per mappe for denne brukeren';
+GO.cms.lang.enablePermissionsPerFolder='Aktiver rettigheter pr mappe for denne brukeren';
+GO.cms.lang.sortDate='Sorter dato';
+GO.cms.lang.unused='Brukes ikke på denne siden';
