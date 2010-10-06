@@ -228,8 +228,10 @@ class Sabre_CalDAV_Calendar implements Sabre_DAV_ICollection, Sabre_DAV_IPropert
      */
     protected function hasPrivilege() {
 
-        if (!$user = $this->authBackend->getCurrentUser()) return false;
-        if ($user['uri']!==$this->calendarInfo['principaluri']) return false;
+
+
+        //if (!$user = $this->authBackend->getCurrentUser()) return false;
+       // if ($user['uri']!==$this->calendarInfo['principaluri']) return false;
         return true;
 
     }
