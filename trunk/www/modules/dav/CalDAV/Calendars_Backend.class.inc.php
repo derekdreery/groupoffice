@@ -75,7 +75,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		
 		global $GO_SECURITY;
 		if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
-				throw new Sabre_DAV_Exception_Forbidden ('Access denied');
+				throw new Sabre_DAV_Exception_Forbidden ('Access denied for '.$calendarUri);
 
 		return $this->recordToDAVCalendar($calendar, $principalUri);
 	}
@@ -90,7 +90,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 					'id' => $gocal['id'],
 					//'uri' => preg_replace('/[^\w]*/', '', (strtolower(str_replace(' ', '-', $gocal['name'])))),
 					'uri' => $gocal['name'],
-					'principaluri' => $principalUri,
+					'principaluri' => 'principals/'.$principalUri,
 					'size'=> $r['count'],
 					'mtime'=>$r['mtime'],
 					'{' . Sabre_CalDAV_Plugin::NS_CALENDARSERVER . '}getctag' => $r['count'] . ':' . $r['mtime'],
