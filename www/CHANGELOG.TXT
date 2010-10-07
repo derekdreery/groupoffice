@@ -1,3 +1,7 @@
+2010/10/07 3.5.31
+- Export projects function
+- Bug where some folders where not available to users.
+
 2010/10/05 3.5.30
 - Z-push push function never pushed data anymore
 - Project reports gave an error on some mysql versions
