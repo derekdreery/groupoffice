@@ -331,6 +331,9 @@ class GO_SECURITY extends db {
 	 * @return bool		True on success
 	 */
 	function add_user_to_acl($user_id,$acl_id, $level=1) {
+		if($acl_id<1 || $user_id<1)
+			return false;
+
 		return $this->query("REPLACE INTO go_acl (acl_id,user_id,level) ".
 				"VALUES ('".$this->escape($acl_id)."','".$this->escape($user_id)."','".$this->escape($level)."')");
 	}
@@ -357,6 +360,9 @@ class GO_SECURITY extends db {
 	 * @return bool		True on success
 	 */
 	function add_group_to_acl($group_id,$acl_id, $level=1) {
+		if($acl_id<1 || $group_id<1)
+			return false;
+
 		return $this->query("REPLACE INTO go_acl (acl_id,group_id,level) ".
 				"VALUES ('".$this->escape($acl_id)."','".$this->escape($group_id)."','".$this->escape($level)."')");
 	}
