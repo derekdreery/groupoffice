@@ -561,7 +561,7 @@ class files extends db {
 
 
 
-	function move_file($sourcefile, $destfolder) {
+	function move_file($sourcefile, $destfolder, $log=true) {
 		$existing_file = $this->file_exists($destfolder['id'], $sourcefile['name']);
 		if($existing_file) {
 			//$this->delete_file($existing_file);
@@ -573,9 +573,18 @@ class files extends db {
 		$up_file['id']=$sourcefile['id'];
 		$up_file['folder_id']=$destfolder['id'];
 		$this->update_file($up_file);
+
+		if($log){
+			global $GO_CONFIG;
+			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+			$search = new search();
+
+			$search->log(6,$up_file['id'], 'Moved file '.$sourcefile['name'].' to '.$destfolder['name']);
+		}
+
 	}
 
-	function move_folder($sourcefolder, $destfolder) {
+	function move_folder($sourcefolder, $destfolder, $log=true) {
 		if($sourcefolder['parent_id']==$destfolder['id']) {
 			return $sourcefolder['id'];
 		}
@@ -589,16 +598,25 @@ class files extends db {
 
 			$this->get_files($existing_folder['id']);
 			while($file = $this->next_record()) {
-				$files->move_file($file, $sourcefolder);
+				$files->move_file($file, $sourcefolder, false);
 			}
 
 			$this->get_folders($existing_folder['id']);
 			while($folder = $this->next_record()) {
-				$files->move_folder($folder, $sourcefolder);
+				$files->move_folder($folder, $sourcefolder, false);
 			}
 
 			$sql = "DELETE FROM fs_folders WHERE id=?";
 			$this->query($sql, 'i', $existing_folder['id']);
+		}
+
+
+		if($log){
+			global $GO_CONFIG;
+			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+			$search = new search();
+
+			$search->log(6,$sourcefolder['id'], 'Moved folder '.$sourcefolder['name'].' to '.$destfolder['name']);
 		}
 
 		return $sourcefolder['id'];
