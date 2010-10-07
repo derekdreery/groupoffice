@@ -1126,7 +1126,7 @@ class files extends db {
 		if($authenticate) {
 			$sql .= "LEFT JOIN go_acl a ON a.acl_id=f.acl_id ".
 					"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
-					"WHERE (a.user_id=".intval($GO_SECURITY->user_id)." OR ug.user_id=".intval($GO_SECURITY->user_id)." OR ISNULL(a.acl_id)) AND ";
+					"WHERE (a.user_id=".intval($GO_SECURITY->user_id)." OR ug.user_id=".intval($GO_SECURITY->user_id)." OR ISNULL(a.acl_id) OR a.acl_id=0) AND ";
 		}else {
 			$sql .= " WHERE ";
 		}
