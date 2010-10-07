@@ -1102,13 +1102,14 @@ try {
 
 		$status_id = (isset($_REQUEST['status_id']) && $_REQUEST['status_id']) ? $_REQUEST['status_id'] : 0;
 		$email_sender = (isset($_REQUEST['email_sender']) && $_REQUEST['email_sender']) ? $_REQUEST['email_sender'] : '';
+		$email = (isset($_REQUEST['email']) && $_REQUEST['email']) ? $_REQUEST['email'] : '';
 
 		$create_event = true;
 		if($status_id == 2)
 		{
-			if(!$cal->is_event_declined($_REQUEST['uid'], $email_sender))
+			if(!$cal->is_event_declined($_REQUEST['uid'], $email))
 			{
-				$response['success'] = $cal->add_declined_event_uid(array('uid'=>$_REQUEST['uid'], 'email' => $email_sender));
+				$response['success'] = $cal->add_declined_event_uid(array('uid'=>$_REQUEST['uid'], 'email' => $email));
 			}else
 			{
 				$response['success'] = true;
@@ -1116,8 +1117,7 @@ try {
 
 			$create_event = false;
 		}
-
-		$email = (isset($_REQUEST['email']) && $_REQUEST['email']) ? $_REQUEST['email'] : '';
+		
 		$event_id = (isset($_REQUEST['event_id']) && $_REQUEST['event_id']) ? $_REQUEST['event_id'] : 0;
 		$calendar_id = (isset($_REQUEST['cal_id']) && $_REQUEST['cal_id']) ? $_REQUEST['cal_id'] : 0;
 		$calendars = array();
@@ -1182,9 +1182,9 @@ try {
 
 			if($create_event)
 			{
-				if($cal->is_event_declined($_REQUEST['uid'], $email_sender))
+				if($cal->is_event_declined($_REQUEST['uid'], $email))
 				{
-					$cal->delete_declined_event_uid($_REQUEST['uid'], $email_sender);
+					$cal->delete_declined_event_uid($_REQUEST['uid'], $email);
 				}
 
 				if(!$calendar_id)
@@ -1214,7 +1214,7 @@ try {
 					$organizer_email = false;
 					$ids = array();
 					foreach($participants as $participant_email=>$participant)
-					{
+					{												
 						$participant['event_id'] = $event_id;
 						$participant['email'] = $participant_email;
 						$participant['role']= ($participant['role']) ? $participant['role'] : 'REQ-PARTICIPANT';
@@ -1222,11 +1222,13 @@ try {
 						if($participant['email'] == $email)
 						{
 							$participant['status'] = $status_id;
-						}
-						if($participant['email'] == $email_sender)
-						{
 							$participant['last_modified'] = $last_modified;
+						}else
+						{
+							$saved_participant = $cal->is_participant($event_id, $participant_email);
+							$participant['last_modified'] = ($saved_participant) ? $saved_participant['last_modified'] : '';
 						}
+						
 						if(isset($participant['is_organizer']) && $participant['is_organizer'])
 						{
 							$organizer_email = $participant_email;

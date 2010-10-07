@@ -733,10 +733,12 @@ try {
 								{
 									if(isset($cal_event['participants']))
 									{
-										$saved_participant = false;										
+										$saved_participant = false;
+										//var_dump($account['email']);
+										//exit();
 										foreach($cal_event['participants'] as $participant_email=>$participant)
 										{
-											if($participant_email == $email_sender)
+											if($participant_email == $account['email'])
 											{
 												$saved_participant = $cal->is_participant($event['id'], $participant_email);
 												$status_id = $participant['status'];
@@ -787,7 +789,7 @@ try {
 									if($method == 'REQUEST')
 									{										
 										// invitation to a new event
-										$event_declined = $cal->is_event_declined($cal_event['uid'], $email_sender);
+										$event_declined = $cal->is_event_declined($cal_event['uid'], $account['email']);
 										$response['iCalendar']['feedback'] = ($event_declined) ? $lang['email']['iCalendar_event_invitation_declined'] : $lang['email']['iCalendar_event_invitation'];
 										$response['iCalendar']['invitation'] = array(
 											'account_id' => $account_id,
