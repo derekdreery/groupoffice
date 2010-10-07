@@ -244,7 +244,7 @@ class vcard extends addressbook {
 		//$record['contact'] = array ('source_id' => '0', 'first_name' => '', 'middle_name' => '', 'last_name' => '', 'title' => '', 'function' => '', 'birthday' => '', 'sex' => 'M', 'initials' => '', 'country' => '', 'state' => '', 'city' => '', 'zip' => '', 'address' => '', 'address_no' => '', 'fax' => '', 'home_phone' => '', 'work_fax' => '', 'work_phone' => '', 'cellular' => '', 'email' => '', 'company_id' => '0', 'company_name' => '', 'department' => '', 'comment' => '');
 		//$record['company'] = array ('name' => '', 'homepage' => '', 'country' => '', 'state' => '', 'city' => '', 'zip' => '', 'address' => '', 'address_no' => '', 'phone' => '', 'fax' => '', 'email' => '', 'bank_no' => '', 'vat_no' => '', 'post_address' => '', 'post_address_no' => '', 'post_state' => '', 'post_city' => '', 'post_zip' => '', 'post_country' => '');
 
-		$record['contact'] = array ('first_name' => '', 'middle_name' => '', 'last_name' => '', 'fax' => '', 'home_phone' => '', 'work_fax' => '', 'work_phone' => '', 'cellular' => '');
+		$record['contact'] = array ();//'first_name' => '', 'middle_name' => '', 'last_name' => '', 'fax' => '', 'home_phone' => '', 'work_fax' => '', 'work_phone' => '', 'cellular' => '');
 //go_log(LOG_DEBUG, var_export($vcard, true));
 
 		foreach ($vcard as $property) {
