@@ -241,7 +241,7 @@ class vcard extends addressbook {
 	*/
 	function _get_vcard_contact($vcard) {
 		$record = array ();
-		//$record['contact'] = array ('source_id' => '0', 'first_name' => '', 'middle_name' => '', 'last_name' => '', 'title' => '', 'function' => '', 'birthday' => '', 'sex' => 'M', 'initials' => '', 'country' => '', 'state' => '', 'city' => '', 'zip' => '', 'address' => '', 'address_no' => '', 'fax' => '', 'home_phone' => '', 'work_fax' => '', 'work_phone' => '', 'cellular' => '', 'email' => '', 'company_id' => '0', 'company_name' => '', 'department' => '', 'comment' => '');
+		$record['contact'] = array ('source_id' => '0', 'first_name' => '', 'middle_name' => '', 'last_name' => '', 'title' => '', 'function' => '', 'birthday' => '', 'sex' => 'M', 'initials' => '', 'country' => '', 'state' => '', 'city' => '', 'zip' => '', 'address' => '', 'address_no' => '', 'fax' => '', 'home_phone' => '', 'work_fax' => '', 'work_phone' => '', 'cellular' => '', 'email' => '', 'company_id' => '0', 'company_name' => '', 'department' => '', 'comment' => '');
 		//$record['company'] = array ('name' => '', 'homepage' => '', 'country' => '', 'state' => '', 'city' => '', 'zip' => '', 'address' => '', 'address_no' => '', 'phone' => '', 'fax' => '', 'email' => '', 'bank_no' => '', 'vat_no' => '', 'post_address' => '', 'post_address_no' => '', 'post_state' => '', 'post_city' => '', 'post_zip' => '', 'post_country' => '');
 
 		$record['contact'] = array ();//'first_name' => '', 'middle_name' => '', 'last_name' => '', 'fax' => '', 'home_phone' => '', 'work_fax' => '', 'work_phone' => '', 'cellular' => '');
@@ -327,19 +327,19 @@ class vcard extends addressbook {
 						}else
 						{
 							if (in_array('FAX', $property->parm_types)) {
-								if(!isset($record['contact']['fax']))
+								if(empty($record['contact']['fax']))
 								{
 									$record['contact']['fax'] = $property->values[0];
 								}
 							}
 							if (in_array('VOICE', $property->parm_types)) {
-								if(!isset($record['contact']['home_phone']))
+								if(empty($record['contact']['home_phone']))
 								{
 									$record['contact']['home_phone'] = $property->values[0];
 								}
 							}
 							if (!in_array('FAX', $property->parm_types) && !in_array('VOICE', $property->parm_types)) {
-								if(!isset($record['contact']['home_phone']))
+								if(empty($record['contact']['home_phone']))
 								{
 									$record['contact']['home_phone'] = $property->values[0];
 								}
