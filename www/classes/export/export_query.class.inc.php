@@ -149,15 +149,20 @@ class base_export_query{
 			{
 				$indexAndHeader = explode(':', $i);
 
-				$this->headers[]=$indexAndHeader[1];
-				$this->columns[]=$indexAndHeader[0];
+				if(!isset($this->q['hide_columns']) || !in_array($indexAndHeader[0], $this->q['hide_columns'])){
+					$this->headers[]=$indexAndHeader[1];
+					$this->columns[]=$indexAndHeader[0];
+				}
 			}
 		}
 
 		if(isset($this->q['extra_columns'])){
 			foreach($this->q['extra_columns'] as $column){
-				$this->headers[]=$column['header'];
-				$this->columns[]=$column['column'];
+				if(!isset($column['index']))
+					$column['index']=count($this->headers);
+
+				array_insert($this->headers,$column['header'], $column['index']);
+				array_insert($this->columns,$column['column'], $column['index']);
 			}
 		}
 	}
