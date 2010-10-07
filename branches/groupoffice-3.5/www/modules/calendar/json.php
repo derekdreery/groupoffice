@@ -723,6 +723,13 @@ try {
 					$count++;
 				}
 			}
+
+			function name_sort($a,$b) {
+				return strcmp($a['name'],$b['name']);
+			}
+
+			usort($response,'name_sort');
+
 			break;
 
 
