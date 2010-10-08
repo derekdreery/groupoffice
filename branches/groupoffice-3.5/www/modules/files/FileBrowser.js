@@ -1585,7 +1585,7 @@ GO.files.openFile = function(record, store)
 					window.open(GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]);
 				}else
 				{
-					window.open(GO.settings.modules.gota.url+'jnlp.php?'+index+'='+record.data['id']);
+					document.location=GO.settings.modules.gota.url+'jnlp.php?'+index+'='+record.data['id'];
 				}
 			}else
 			{
