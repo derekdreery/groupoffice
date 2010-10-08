@@ -538,9 +538,20 @@ class go_ical extends calendar
 			$remind_time = $event['start_time']-$event['reminder'];
 
 			$atime = date($this->datetime_format, $remind_time);
-			$lines[] = 'AALARM:'.$atime.';;0;'.$event['name'];
-			//Nokia crashes on DALARM at event replace
-			//$lines[] = 'DALARM:'.date($this->datetime_format, Date::gmt_to_local_time($remind_time)).';;'.$event['name'];
+			if($this->version != '1.0')
+			{
+
+				$lines[] = 'BEGIN:VALARM';
+				$lines[] = 'DESCRIPTION:';
+				$lines[] = 'ACTION:DISPLAY';
+				$lines[] = 'TRIGGER;VALUE=DURATION;RELATED=START:-PT'.($event['reminder']/60).'M';
+				$lines[] = 'END:VALARM';
+			}else
+			{
+				$lines[] = 'AALARM:'.$atime.';;0;'.$event['name'];
+				//Nokia crashes on DALARM at event replace
+				//$lines[] = 'DALARM:'.date($this->datetime_format, Date::gmt_to_local_time($remind_time)).';;'.$event['name'];
+			}
 		}
 
 		$timestamp = date($this->datetime_format, $event['mtime']);
