@@ -2605,9 +2605,9 @@ class calendar extends db
 		$end = date('Y-m-d',$end_time);
 
 		$sql = "SELECT DISTINCT id, birthday, first_name, middle_name, last_name, "
-			."IF (STR_TO_DATE(CONCAT(YEAR(?),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') >= ?, "
-			."STR_TO_DATE(CONCAT(YEAR(?),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') , "
-			."STR_TO_DATE(CONCAT(YEAR(?)+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "
+			."IF (STR_TO_DATE(CONCAT(YEAR('$start'),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') >= '$start', "
+			."STR_TO_DATE(CONCAT(YEAR('$start'),'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e') , "
+			."STR_TO_DATE(CONCAT(YEAR('$start')+1,'/',MONTH(birthday),'/',DAY(birthday)),'%Y/%c/%e')) "
 			."as upcoming FROM ab_contacts "
 			."WHERE birthday != '0000-00-00' ";
 
@@ -2617,9 +2617,9 @@ class calendar extends db
 			$sql .= "AND addressbook_id IN (".implode(',', $abooks).") ";
 		}
 
-		$sql .= "HAVING upcoming BETWEEN ? AND ? ORDER BY upcoming";
+		$sql .= "HAVING upcoming BETWEEN '$start' AND '$end' ORDER BY upcoming";
 
-		$this->query($sql, 'ssssss', array($start,$start,$start,$start,$start,$end));
+		$this->query($sql);//, 'ssssss', array($start,$start,$start,$start,$start,$end));
 
 		return $this->num_rows();
 	}
