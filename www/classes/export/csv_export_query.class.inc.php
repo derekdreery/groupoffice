@@ -55,6 +55,10 @@ class csv_export_query extends base_export_query
 
 	function export($fp){
 
+		//don't export with thousands separator
+		$old_sep = $_SESSION['GO_SESSION']['thousands_separator'];
+		$_SESSION['GO_SESSION']['thousands_separator']='';
+
 		parent::export($fp);
 
 		global $GO_USERS, $lang, $GO_MODULES;
@@ -95,5 +99,8 @@ class csv_export_query extends base_export_query
 
 			//fclose($fp);
 		}
+
+		//restore thousands separator
+		$_SESSION['GO_SESSION']['thousands_separator']=$old_sep;
 	}
 }
