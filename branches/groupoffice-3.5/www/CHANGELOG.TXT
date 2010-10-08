@@ -1,3 +1,8 @@
+2010/10/08 3.5.32
+- Removed thousands separator from export in CSV
+- Sync mappings for funambol outlook and blackberry improved
+- Sorting of view calendars
+
 2010/10/07 3.5.31
 - Export projects function
 - Bug where some folders where not available to users.
