@@ -674,15 +674,15 @@ try {
 				if(!$permission_level)
 					continue;
 
-				$response[$cal->f('id')] = $view_calendar;
-				$response[$cal->f('id')]['write_permission'] = $permission_level>GO_SECURITY::READ_PERMISSION;
+				//$response[$cal->f('id')] = $view_calendar;
+				$view_calendar['write_permission'] = $permission_level>GO_SECURITY::READ_PERMISSION;
 
 				$events = $cal2->get_events_in_array(array($cal->f('id')), 0,
 								$start_time,
 								$end_time
 				);
 
-				$response[$cal->f('id')]['events']=array();
+				$view_calendar['events']=array();
 
 				foreach($events as $event) {
 					if($event['all_day_event'] == '1') {
@@ -706,7 +706,7 @@ try {
 					}
 
 
-					$response[$cal->f('id')]['events'][] = array(
+					$view_calendar['events'][] = array(
 									'id'=>$count,
 									'calendar_id'=>$cal->f('id'),
 									'event_id'=> $event['id'],
@@ -718,17 +718,13 @@ try {
 									'background'=>$event['background'],
 									'repeats'=>!empty($event['rrule']),
 									'private'=>$private,
-									'write_permission'=>$response[$cal->f('id')]['write_permission']
+									'write_permission'=>$view_calendar['write_permission']
 					);
 					$count++;
 				}
-			}
 
-			function name_sort($a,$b) {
-				return strcmp($a['name'],$b['name']);
+				$response[]=$view_calendar;
 			}
-
-			usort($response,'name_sort');
 
 			break;
 
