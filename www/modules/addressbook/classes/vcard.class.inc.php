@@ -349,17 +349,19 @@ class vcard extends addressbook {
 					break;
 				case "EMAIL" :
 
-					if(in_array('HOME', $property->parm_types)){
+					/*if(in_array('HOME', $property->parm_types)){
 						$record['contact']['email'] = $property->values[0];
 					}elseif(in_array('WORK', $property->parm_types)){
 						$record['contact']['email2'] = $property->values[0];
-					}elseif(isset($record['contact']['email3']))
+					}else*/
+
+					if(!empty($record['contact']['email3']))
 					{
 						//we ran out of email addres storage sorry.
-					}elseif(isset($record['contact']['email2']))
+					}elseif(!empty($record['contact']['email2']))
 					{
 						$record['contact']['email3'] = $property->values[0];
-					}elseif(isset($record['contact']['email']))
+					}elseif(!empty($record['contact']['email']))
 					{
 						$record['contact']['email2'] = $property->values[0];
 					}else
@@ -884,19 +886,20 @@ class vcard_property {
 					$this->name = "EMAIL";
 					$this->parm_types[0] = "INTERNET";
 					//$this->parm_types[1] = "PREF";
-					$this->parm_types[1] = "HOME";
+					//$this->parm_types[1] = "HOME"; was set to home for blackberry
+					$this->parm_types[1] = "";
 					$this->values[0] = $value;
 					break;
 				case "email2":
 					$this->name = "EMAIL";
 					$this->parm_types[0] = "INTERNET";
-					$this->parm_types[1] = "WORK";
+					$this->parm_types[1] = "HOME";
 					$this->values[0] = $value;
 				break;
 				case "email3":
 					$this->name = "EMAIL";
 					$this->parm_types[0] = "INTERNET";
-					$this->parm_types[1] = "";
+					$this->parm_types[1] = "WORK";
 					$this->values[0] = $value;
 				break;
 				case "function" :
