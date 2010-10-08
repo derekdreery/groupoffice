@@ -302,7 +302,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $full_url = 'http://localhost/groupoffice/';
+	var $full_url = '';
 
 	/**
 	 * Title of Group-Office
@@ -643,7 +643,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.5.31';
+	var $version = '3.5.32';
 
 
 	/* The permissions mode to use when creating files
@@ -666,7 +666,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20101007';
+	var $mtime = '20101008';
 
 	#group configuration
 	/**
@@ -1065,6 +1065,10 @@ class GO_CONFIG {
 
 			$url .= '://'.$_SERVER["HTTP_HOST"].$this->host;
 			$this->full_url=$url;
+
+			if(empty($this->orig_full_url))
+				$this->orig_full_url=$this->full_url;
+
 		}
 	}
 
