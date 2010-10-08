@@ -573,14 +573,39 @@ class ical2array {
 	}
 
 	function parse_duration($duration) {
-		ereg ('^P([0-9]{1,3}[W])?([0-9]{1,3}[D])?([T]{0,3})?([0-9]{1,3}[H])?([0-9]{1,3}[M])?([0-9]{1,3}[S])?', $duration, $output);
+		preg_match('/(-?)P([0-9]+[WD])?T?([0-9]+H)?([0-9]+M)?([0-9]+S)?/', $duration, $matches);
+		//var_dump($matches);
 
-		$weeks 			= ereg_replace('W', '', $output[1]);
-		$days 			= ereg_replace('D', '', $output[2]);
-		$hours 			= ereg_replace('H', '', $output[4]);
-		$minutes 		= ereg_replace('M', '', $output[5]);
-		$seconds 		= ereg_replace('S', '', $output[6]);
-		return ($weeks * 60 * 60 * 24 * 7) + ($days * 60 * 60 * 24) + ($hours * 60 * 60) + ($minutes * 60) + ($seconds);
+
+		$negative = $matches[1]=='-' ? -1 : 1;
+
+		$days = 0;
+		$weeks = 0;
+		$hours=0;
+		$mins=0;
+		$secs = 0;
+		for($i=2;$i<count($matches);$i++){
+			$d = substr($matches[$i],-1);
+			switch($d){
+				case 'D':
+					$days += intval($matches[$i]);
+					break;
+				case 'W':
+					$weeks += intval($matches[$i]);
+					break;
+				case 'H':
+					$hours += intval($matches[$i]);
+					break;
+				case 'M':
+					$mins += intval($matches[$i]);
+					break;
+				case 'S':
+					$secs += intval($matches[$i]);
+					break;
+			}
+		}
+
+		return $negative*(($weeks * 60 * 60 * 24 * 7) + ($days * 60 * 60 * 24) + ($hours * 60 * 60) + ($mins * 60) + ($secs));
 	}
 
 

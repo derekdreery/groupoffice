@@ -142,30 +142,59 @@ END:VCALENDAR';
 
 
 $ical_str='BEGIN:VCALENDAR
-VERSION:1.0
+CALSCALE:GREGORIAN
+PRODID:-//Ximian//NONSGML Evolution Calendar//EN
+VERSION:2.0
+BEGIN:VTIMEZONE
+TZID:/freeassociation.sourceforge.net/Tzfile/Europe/Amsterdam
+X-LIC-LOCATION:Europe/Amsterdam
+BEGIN:STANDARD
+TZNAME:CET
+DTSTART:19701031T030000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+END:STANDARD
+BEGIN:DAYLIGHT
+TZNAME:CEST
+DTSTART:19700328T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+END:DAYLIGHT
+END:VTIMEZONE
 BEGIN:VEVENT
-SUMMARY:Budget meeting
+UID:20101008T112712Z-26890-1000-26849-2@Intermesh-1
+DTSTAMP:20101008T112712Z
+DTSTART;TZID=/freeassociation.sourceforge.net/Tzfile/Europe/Amsterdam:
+ 20101008T133000
+DTEND;TZID=/freeassociation.sourceforge.net/Tzfile/Europe/Amsterdam:
+ 20101008T163000
+TRANSP:OPAQUE
+SEQUENCE:2
+SUMMARY:test met alarm
+DESCRIPTION:test
 CLASS:PUBLIC
-DESCRIPTION;ENCODING=QUOTED-PRINTABLE:Tidspunkt: 13. mai 2010 test=
-=20met een erg lange regel. Ja er moet nog wat meer op denk ik. Ik=
-=20wil zeker weten dat de regel afbreekt.=0D=0A=
-=0D=0A=
-Ook nog een lege regel ja.
-DTSTART:20100513T060000Z
-DTEND:20100513T063000Z
-TRANSP:0
+CREATED:20101008T112734Z
+LAST-MODIFIED:20101008T112734Z
+BEGIN:VALARM
+X-EVOLUTION-ALARM-UID:20101008T112734Z-26895-1000-1-28@Intermesh-1
+DESCRIPTION:test met alarm
+ACTION:DISPLAY
+TRIGGER;VALUE=DURATION;RELATED=START:-PT15M
+END:VALARM
 END:VEVENT
 END:VCALENDAR';
 
 //$vcalendar = $ical->parse_file('/home/mschering/jos.ics');
 //
 $vcalendar = $ical->parse_icalendar_string($ical_str);
-var_dump($vcalendar);
-exit();
+//var_dump($vcalendar);
+//exit();
 
-while($object = array_shift($objects))
-{
-		var_dump($object);
+while($object = array_shift($vcalendar[0]['objects'])) {
+	if($object['type'] == 'VEVENT' || $object['type'] == 'VTODO') {
+		//var_dump($object);
 		$event = $cal->get_event_from_ical_object($object);
 		
 		echo 'Name: '.$event['name']."\n";
@@ -173,5 +202,6 @@ while($object = array_shift($objects))
 		echo 'End time: '.date('Ymd G:i', $event['end_time'])."\n";
 		echo "\n------------\n\n";
 		
-		//var_dump($event);
+		var_dump($event);
+	}
 }
