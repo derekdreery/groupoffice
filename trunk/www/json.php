@@ -94,6 +94,11 @@ try {
 							'size'=>filesize($tmp_file),
 							'type'=>File::get_filetype_description(strtolower($_POST['type']))
 			);
+
+			require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
+			$go2mime = new Go2Mime();
+			$response['data']['attachments']=$go2mime->remove_inline_images($response['data']['attachments']);
+
 			$response['success']=true;
 			break;
 
