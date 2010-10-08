@@ -1897,6 +1897,42 @@ class calendar extends db {
 			}
 		}
 
+		/*
+		 * ["TRIGGER"]=>
+            array(2) {
+              ["params"]=>
+              array(2) {
+                ["VALUE"]=>
+                string(8) "DURATION"
+                ["RELATED"]=>
+                string(5) "START"
+              }
+              ["value"]=>
+              string(6) "-PT15M"
+
+		 */
+
+		if(isset($object['objects'])) {
+			foreach($object['objects'] as $o){
+				if($o['type']=='VALARM'){
+					if(isset($o['TRIGGER'])){
+						//$offset_time = isset($o['TRIGGER']['RELATED']) && $o['TRIGGER']["RELATED"]=='END' ? $event['end_time'] : $event['start_time'];
+						
+						if($o['TRIGGER']['params']['VALUE']=='DURATION'){
+							$offset = $this->ical2array->parse_duration($o['TRIGGER']['value']);
+
+							$event['reminder']=$offset*-1;
+						}else
+						{
+							//todo
+						}
+
+					}
+				}
+			}
+		}
+
+
 		if(isset($event['reminder']) && $event['reminder']<0) {
 			//If we have a negative reminder value default to half an hour before
 			$event['reminder'] = 1800;
