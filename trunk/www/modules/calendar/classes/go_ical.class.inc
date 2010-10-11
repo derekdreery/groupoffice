@@ -34,9 +34,17 @@ class go_ical extends calendar
 
 	var $dont_use_quoted_printable=false;
 
+
+	var $reminder;
+
 	function go_ical($version='2.0', $utc=false, $method='REQUEST')
 	{
 		parent::__construct();
+
+		global $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'base/reminder.class.inc.php');
+		$this->reminder = new reminder();
 
 		$this->version = $version;
 		$this->utc=$utc;
@@ -535,22 +543,26 @@ class go_ical extends calendar
 		//alarm
 		if($event['reminder']>0)
 		{
-			$remind_time = $event['start_time']-$event['reminder'];
+			$this->reminder->get_reminders_by_link_id($event['id'], 1);
+			if($this->reminder->next_record()){
 
-			$atime = date($this->datetime_format, $remind_time);
-			if($this->version != '1.0')
-			{
+				$remind_time = $event['start_time']-$event['reminder'];
 
-				$lines[] = 'BEGIN:VALARM';
-				$lines[] = 'DESCRIPTION:';
-				$lines[] = 'ACTION:DISPLAY';
-				$lines[] = 'TRIGGER;VALUE=DURATION;RELATED=START:-PT'.($event['reminder']/60).'M';
-				$lines[] = 'END:VALARM';
-			}else
-			{
-				$lines[] = 'AALARM:'.$atime.';;0;'.$event['name'];
-				//Nokia crashes on DALARM at event replace
-				//$lines[] = 'DALARM:'.date($this->datetime_format, Date::gmt_to_local_time($remind_time)).';;'.$event['name'];
+				$atime = date($this->datetime_format, $remind_time);
+				if($this->version != '1.0')
+				{
+
+					$lines[] = 'BEGIN:VALARM';
+					$lines[] = 'DESCRIPTION:';
+					$lines[] = 'ACTION:DISPLAY';
+					$lines[] = 'TRIGGER;VALUE=DURATION;RELATED=START:-PT'.($event['reminder']/60).'M';
+					$lines[] = 'END:VALARM';
+				}else
+				{
+					$lines[] = 'AALARM:'.$atime.';;0;'.$event['name'];
+					//Nokia crashes on DALARM at event replace
+					//$lines[] = 'DALARM:'.date($this->datetime_format, Date::gmt_to_local_time($remind_time)).';;'.$event['name'];
+				}
 			}
 		}
 
