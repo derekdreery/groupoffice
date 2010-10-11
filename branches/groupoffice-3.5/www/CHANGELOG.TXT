@@ -1,3 +1,6 @@
+2010/10/08 3.5.33
+- Some messages couldn't be saved in Group-Office.
+
 2010/10/08 3.5.32
 - Removed thousands separator from export in CSV
 - Sync mappings for funambol outlook and blackberry improved
