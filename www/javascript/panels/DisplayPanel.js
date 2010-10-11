@@ -165,9 +165,12 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	
 	onSave : function(panel, saved_id)
 	{
-		if(saved_id > 0 && this.data.id == saved_id)
+		/*if(saved_id > 0 && this.data.id == saved_id)
 		{
 			this.reload();
+		}*/
+		if(saved_id > 0){
+			this.load(saved_id, true);
 		}
 	},
 	
