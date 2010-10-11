@@ -225,7 +225,8 @@ GO.addressbook.MainPanel = function(config)
 			text: GO.addressbook.lang['btnAddContact'], 
 			cls: 'x-btn-text-icon', 
 			handler: function(){
-				GO.addressbook.showContactDialog(0);
+				//GO.addressbook.showContactDialog(0);
+				this.contactEastPanel.editHandler();
 				this.tabPanel.setActiveTab('ab-contacts-grid');
 			}, 
 			scope: this
@@ -235,7 +236,8 @@ GO.addressbook.MainPanel = function(config)
 			text: GO.addressbook.lang['btnAddCompany'], 
 			cls: 'x-btn-text-icon',
 			handler: function(){
-				GO.addressbook.showCompanyDialog(0);
+				//GO.addressbook.showCompanyDialog(0);
+				this.companyEastPanel.editHandler();
 				this.tabPanel.setActiveTab('ab-company-grid');
 			},  
 			scope: this
