@@ -41,7 +41,10 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 
 	noFileBrowser : false,
 
-	
+	collapsibleSections : {},
+
+
+	hiddenSections : ['subprojects'],
 	
 	addSaveHandler : function(win, eventName)
 	{
@@ -237,22 +240,73 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 		
 		this.xtemplate.overwrite(this.body, data);
 
+		for(var id in this.collapsibleSections){
+			if(!this.data[this.collapsibleSections[id]]){
+				this.toggleSection(this.data[this.collapsibleSections[id]], true);
+			}
+		}
+
 		this.body.scrollTo('top', 0);
 		
 		//this.body.on('click', this.onBodyClick, this);
 	},
 
+	toggleSection : function(toggleId, collapse){
+		var el = Ext.get(toggleId);
+		var toggleBtn = Ext.get('toggle-'+toggleId);
+
+		if(typeof(collapse)=='undefined')
+			collapse = toggleBtn.dom.innerHTML=='-';
+
+		if(collapse){
+			//data not loaded yet
+			var hiddenSections = this.hiddenSections;
+			this.hiddenSections=[];
+
+			for(var i=0,max=hiddenSections.length;i<max;i++){
+				if(hiddenSections[i]!=this.collapsibleSections[toggleId]){
+					this.hiddenSections.push(hiddenSections[i]);
+				}
+			}
+		}else
+		{
+			this.hiddenSections.push(this.collapsibleSections[toggleId]);
+		}
+
+		if(!el && !collapse){
+			this.reload();
+		}else
+		{
+			if(el)
+				el.setDisplayed(collapse);
+
+			toggleBtn.dom.innerHTML = collapse ? '+' : '-';
+		}
+	},
+
+	collapsibleSectionHeader : function(title, id, dataKey){
+
+		this.collapsibleSections[id]=dataKey;
+
+		return '<div class="collapsible-display-panel-header">'+title+'<div style="float:right;cursor:pointer" id="toggle-'+id+'" title="'+title+'">-</div></div>';
+	},
+
 	
 	onBodyClick :  function(e, target){
+
+		if(target.id.substring(0,6)=='toggle'){
+			var toggleId = target.id.substring(7,target.id.length);
+			//console.log(toggleId);
+
+			this.toggleSection(toggleId);
+		}
 
 		if(target.tagName!='A')
 		{
 			target = Ext.get(target).findParent('A', 10);
 			if(!target)
 				return false;
-		}
-
-		
+		}	
 		
 		if(target.tagName=='A')
 		{
@@ -324,6 +378,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	
 	load : function(id, reload)
 	{
+		
 		if(this.collapsed){
 
 			//link_id is needed for editHandlers
@@ -331,6 +386,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 		}else if(this.link_id!=id || reload)
 		{
 			this.loadParams[this.idParam]=this.link_id=id;
+			this.loadParams['hidden_sections']=Ext.encode(this.hiddenSections)
 			
 			this.body.mask(GO.lang.waitMsgLoad);
 			Ext.Ajax.request({
