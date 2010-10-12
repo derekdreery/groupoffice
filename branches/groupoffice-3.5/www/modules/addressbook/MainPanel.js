@@ -226,6 +226,7 @@ GO.addressbook.MainPanel = function(config)
 			cls: 'x-btn-text-icon', 
 			handler: function(){
 				//GO.addressbook.showContactDialog(0);
+				this.contactEastPanel.reset();
 				this.contactEastPanel.editHandler();
 				this.tabPanel.setActiveTab('ab-contacts-grid');
 			}, 
@@ -237,6 +238,7 @@ GO.addressbook.MainPanel = function(config)
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				//GO.addressbook.showCompanyDialog(0);
+				this.companyEastPanel.reset();
 				this.companyEastPanel.editHandler();
 				this.tabPanel.setActiveTab('ab-company-grid');
 			},  
