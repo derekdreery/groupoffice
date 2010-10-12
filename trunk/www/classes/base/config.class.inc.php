@@ -667,7 +667,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20101001';
+	var $mtime = '20101013';
 
 	#group configuration
 	/**
@@ -1076,6 +1076,10 @@ class GO_CONFIG {
 		}else
 		{
 			$_SESSION['GO_SESSION']['full_url']=$this->full_url;
+
+			if(empty($this->orig_full_url))
+				$this->orig_full_url=$this->full_url;
+
 		}
 	}
 

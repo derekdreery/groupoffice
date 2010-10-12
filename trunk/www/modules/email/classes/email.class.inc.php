@@ -51,7 +51,7 @@
 
 }*/
 
-function load_template($template_id, $to='', $keep_tags=false) {
+function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $GO_USERS, $imap;
 
 	require_once ($GO_CONFIG->class_path.'mail/mimeDecode.class.inc');
@@ -81,32 +81,25 @@ function load_template($template_id, $to='', $keep_tags=false) {
 
 	if(!$keep_tags) {
 		$values=array();
-		$contact_id=0;
+		//$contact_id=0;
 		//if contact_id is not set but email is check if there's contact info available
-		if (!empty($to)) {
+		if (!empty($to) || !empty($contact_id)) {
 
-			if ($contact = $ab->get_contact_by_email($to, $GO_SECURITY->user_id)) {
+			if($contact_id>0){
+				$contact = $ab->get_contact($contact_id);
+			}else
+			{
+				$contact = $ab->get_contact_by_email($to, $GO_SECURITY->user_id);
+			}
 
-				/*$values = array_map('htmlspecialchars', $contact);
-				$link_type = 2;
-				$link_id=$contact['id'];*/
 
+			if ($contact) {
 				$response['data']['body']=$tp->replace_contact_data_fields($response['data']['body'], $contact['id'], true);
-
-
 			}elseif($user = $GO_USERS->get_user_by_email($to)) {
-
-				$response['data']['body']=$tp->replace_user_data_fields($response['data']['body'], $user['id'], true);
-				/*$values = array_map('htmlspecialchars', $user);
-				$link_type = 8;
-				$link_id=$user['id'];*/
+				$response['data']['body']=$tp->replace_user_data_fields($response['data']['body'], $user['id'], true);				
 			}else {
 				$ab->search_companies($GO_SECURITY->user_id, $to, 'email',0,0,1);
-				if($company= $ab->next_record()) {
-					/*$values = array_map('htmlspecialchars', $ab->record);
-					$link_type = 3;
-					$link_id=$values['id'];*/
-
+				if($company= $ab->next_record()) {					
 					$response['data']['body']=$tp->replace_company_data_fields($response['data']['body'], $company['id'], true);
 				}else
 				{					

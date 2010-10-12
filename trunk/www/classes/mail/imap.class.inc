@@ -1483,6 +1483,8 @@ class imap extends imap_bodystruct {
 		if (preg_match("/\{(\d+)\}\r\n/", $result, $matches)) {
 			$size = $matches[1];
 		}
+
+		$this->last_line=fgets($this->handle);
 		return $size;
 	}
 	/**
@@ -1491,20 +1493,21 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 	public function get_message_part_line() {
-		/*$res = fgets($this->handle, 1024);
-		while(substr($res, -2) != "\r\n") {
-			$res .= fgets($this->handle, 1024);
-		}*/
-
-		$res = fgets($this->handle);
-
-		if(substr(rtrim($res),-1, 1)==')')
-			$res = substr(rtrim($res),0,-1);
-
-		//go_debug($res);if($res && substr(trim($res),-1,1)==')'){
-		if ($this->check_response(array($res))) {
+		if (!$this->last_line) {
 			$res = false;
+		}else
+		{
+			$res = $this->last_line;
+			$this->last_line = fgets($this->handle);
+
+			if ($this->check_response(array($this->last_line))) {
+				$this->last_line = false;
+
+				if(substr(rtrim($res),-1, 1)==')')
+					$res = substr(rtrim($res),0,-1);
+			}
 		}
+
 		return $res;
 	}
 

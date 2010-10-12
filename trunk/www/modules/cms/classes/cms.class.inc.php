@@ -14,7 +14,7 @@
 
 class cms extends db {
 
-	var $valid_tags=array('select', 'input', 'file', 'textarea', 'checkbox','date','combobox');
+	var $valid_tags=array('select', 'input', 'file', 'textarea', 'checkbox','date','folderbox');
 
 	function get_field($fieldNode) {
 
@@ -48,7 +48,7 @@ class cms extends db {
 
 				$filterLabelNode=$fieldNode->attributes->getNamedItem('files_filter');
 				$option['files_filter']=$filterLabelNode ? $filterLabelNode->nodeValue : '';
-			} elseif($option['type']=='combobox') {
+			} elseif($option['type']=='folderbox') {
 				$site_id = $fieldNode->attributes->getNamedItem('site_id')->nodeValue;
 				$path_array = explode('/',$fieldNode->attributes->getNamedItem('path')->nodeValue);
 				do {

@@ -53,3 +53,6 @@ GO.cms.lang.alwaysShow='Zobrazit prázdné';
 GO.cms.lang.root='Kořenový adresář';
 GO.cms.lang.advancedPermissions='Rozšířená oprávnění';
 GO.cms.lang.enablePermissionsPerFolder='Povolit oprávnění pro tuto složku tomuto uživateli';
+
+GO.cms.lang.sortDate='Řadit podle data';
+GO.cms.lang.unused='Nelze použít pro tuto stránku';
