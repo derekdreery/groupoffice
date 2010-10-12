@@ -800,7 +800,7 @@ table.display-panel a:active
 	text-decoration: underline;
 }
 
-.display-panel-heading
+.display-panel-heading, .collapsible-display-panel-header
 {
 	/*width: 100%;*/
 	line-height: 16px;
@@ -808,6 +808,20 @@ table.display-panel a:active
 	font-weight: bold;
 	color:#333333;
 	background-color: #ebebeb;
+	border-top:1px solid #acbbc0;
+}
+.collapsible-display-panel-header{
+	padding:2px;
+}
+
+.display-panel-heading-collapsed{
+	line-height: 16px;
+	font-size: 11px;
+	font-weight: normal;
+	color:#333333;
+	background-color: #f1f1f1;
+	border-top:1px solid #acbbc0;
+	padding:2px;
 }
 
 .display-panel-links-header, .display-panel-description{
