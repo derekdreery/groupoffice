@@ -377,6 +377,12 @@ $updates[]="UPDATE go_users SET password_type='md5'";
 
 $updates[]='script:7_install_blacklist.inc.php';
 
+$updates[]="ALTER TABLE  `go_users` CHANGE  `home_phone`  `home_phone` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+$updates[]="ALTER TABLE  `go_users` CHANGE  `work_phone`  `work_phone` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+$updates[]="ALTER TABLE  `go_users` CHANGE  `fax`  `fax` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+$updates[]="ALTER TABLE  `go_users` CHANGE  `cellular`  `cellular` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+$updates[]="ALTER TABLE  `go_users` CHANGE  `work_fax`  `work_fax` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+
 $updates[]= "CREATE TABLE `go_holidays` (
   `id` int(11) NOT NULL default '0',
   `date` int(10) NOT NULL default '0',
@@ -410,4 +416,3 @@ $updates[]= "ALTER TABLE  `go_reminders` ADD  `text` TEXT NOT NULL";
 $updates[]= "ALTER TABLE `go_users` ADD `contact_id` INT NOT NULL";
 
 $updates[]= "ALTER TABLE `go_search_cache` ADD `link_count` INT NOT NULL ";
-

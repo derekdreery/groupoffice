@@ -6,6 +6,23 @@ ALTER TABLE  `pm_hours` ADD  `ctime` INT NOT NULL , ADD  `mtime` INT NOT NULL;
 ALTER TABLE  `pm_hours` ADD INDEX (  `payout_invoice_id` );
 */
 
+2010/10/08 3.5.33
+- Some messages couldn't be saved in Group-Office.
+
+2010/10/08 3.5.32
+- Removed thousands separator from export in CSV
+- Sync mappings for funambol outlook and blackberry improved
+- Sorting of view calendars
+
+2010/10/07 3.5.31
+- Export projects function
+- Bug where some folders where not available to users.
+
+2010/10/05 3.5.30
+- Z-push push function never pushed data anymore
+- Project reports gave an error on some mysql versions
+
+
 2010/10/01 3.5.29
 - Some features required for a special import
 

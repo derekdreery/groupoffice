@@ -126,105 +126,130 @@ GO.cms.TemplateOptionsPanel = Ext.extend(function(cfg) {
 
 		var options = [];
 
-		if(this.templateConfig.types){
-
-			for(var i=0;i<this.templateConfig.types.length;i++)
+		for(var i=0;i<this.templateConfig.types.length;i++)
+		{
+			if(this.templateConfig.types[i][0]==type)
 			{
-				if(this.templateConfig.types[i][0]==type)
-				{
-					options=this.templateConfig.types[i][1];
-					break;
-				}
+				options=this.templateConfig.types[i][1];
+				break;
 			}
-			var value;
-			if (options.length) {
-				for (var i = 0; i < options.length; i++) {
-					o = options[i];
-					if (o.type == 'select') {
-						value = this.optionValues[o.name]
-						? this.optionValues[o.name]
-						: o.options[0][0];
-
-						this.options.push(new GO.form.ComboBoxReset({
-							fieldLabel : o.fieldLabel,
-							hiddenName : o.name,
-							store : new Ext.data.SimpleStore({
-								fields : ['value', 'text'],
-								data : o.options
-							}),
-							value : value,
-							valueField : 'value',
-							displayField : 'text',
-							mode : 'local',
-							triggerAction : 'all',
-							editable : false,
-							forceSelection : true,
-							anchor : '-20'
-						}));
-
-
-					} else if(o.type=='file'){
-
-						value = this.optionValues[o.name]
-						? this.optionValues[o.name]
-						: '';
-
-						this.options.push(new GO.files.SelectFile({
-							fieldLabel : o.fieldLabel,
-							root_folder_id : this.ownerCt.ownerCt.ownerCt.root_folder_id,
-							name : o.name,
-							value : value,
-							anchor : '-20',
-							filesFilter : o.files_filter
-						}));
-
-					}else if(o.type=='checkbox'){
-						value = this.optionValues[o.name]
-						? this.optionValues[o.name]
-						: '';
-						this.options.push(new Ext.form.Checkbox({
-							boxLabel : o.fieldLabel,
-							hideLabel:true,
-							name : o.name,
-							checked : !GO.util.empty(value),
-							anchor : '-20'
-						}));
-					}else if(o.type=='textarea'){
-						value = this.optionValues[o.name]
-						? this.optionValues[o.name]
-						: '';
-						this.options.push(new Ext.form.TextArea({
-							fieldLabel : o.fieldLabel,
-							name : o.name,
-							value : value,
-							anchor : '-20'
-						}));
-					}else if(o.type=='date'){
-						value = this.optionValues[o.name]
-						? this.optionValues[o.name]
-						: '';
-						this.options.push(new Ext.form.DateField({
-							fieldLabel : o.fieldLabel,
-							name : o.name,
-							value : value,
-							anchor : '-20'
-						}));
-					}else {
-						value = this.optionValues[o.name]
-						? this.optionValues[o.name]
-						: '';
-						this.options.push(new Ext.form.TextField({
-							fieldLabel : o.fieldLabel,
-							name : o.name,
-							value : value,
-							anchor : '-20'
-						}));
-					}
-					this.add(this.options[this.options.length-1]);
-				}
-			}
-			this.doLayout();
 		}
+		var value, o;
+		if (options.length) {
+			for (var i = 0; i < options.length; i++) {
+				o = options[i];
+				if (o.type == 'select') {
+					value = this.optionValues[o.name]
+					? this.optionValues[o.name]
+					: o.options[0][0];
+
+					this.options.push(new GO.form.ComboBoxReset({
+						fieldLabel : o.fieldLabel,
+						hiddenName : o.name,
+						store : new Ext.data.SimpleStore({
+							fields : ['value', 'text'],
+							data : o.options
+						}),
+						value : value,
+						valueField : 'value',
+						displayField : 'text',
+						mode : 'local',
+						triggerAction : 'all',
+						editable : false,
+						forceSelection : true,
+						anchor : '-20'
+					}));
+
+
+				} else if(o.type=='file'){
+
+					value = this.optionValues[o.name]
+					? this.optionValues[o.name]
+					: '';
+
+					this.options.push(new GO.files.SelectFile({
+						fieldLabel : o.fieldLabel,
+						root_folder_id : this.ownerCt.ownerCt.ownerCt.root_folder_id,
+						name : o.name,
+						value : value,
+						anchor : '-20',
+						filesFilter : o.files_filter
+					}));
+
+				}else if(o.type=='checkbox'){
+					value = this.optionValues[o.name]
+					? this.optionValues[o.name]
+					: '';
+					this.options.push(new Ext.form.Checkbox({
+						boxLabel : o.fieldLabel,
+						hideLabel:true,
+						name : o.name,
+						checked : !GO.util.empty(value),
+						anchor : '-20'
+					}));
+				}else if(o.type=='textarea'){
+					value = this.optionValues[o.name]
+					? this.optionValues[o.name]
+					: '';
+					this.options.push(new Ext.form.TextArea({
+						fieldLabel : o.fieldLabel,
+						name : o.name,
+						value : value,
+						anchor : '-20'
+					}));
+				}else if(o.type=='date'){
+					value = this.optionValues[o.name]
+					? this.optionValues[o.name]
+					: '';
+					this.options.push(new Ext.form.DateField({
+						fieldLabel : o.fieldLabel,
+						name : o.name,
+						value : value,
+						anchor : '-20'
+					}));
+				}else if(o.type=='folderbox'){
+					value = this.optionValues[o.name]
+					? this.optionValues[o.name]
+					: '';
+
+					this.options.push(new GO.form.ComboBox({
+						fieldLabel : o.fieldLabel,
+						value : value,
+						displayField:'name',
+						valueField: 'name',
+						name:o.name,
+						anchor : '-20',
+						mode:'remote',
+						triggerAction:'all',
+						store : new GO.data.JsonStore({
+							url: GO.settings.modules.cms.url+ 'json.php',
+							baseParams: {
+								task: 'folder_files',
+								folder_id: o.folder_id
+							},
+							root: 'results',
+							id: 'id',
+							totalProperty:'total',
+							fields: ['id','name']
+							,remoteSort: true
+						})
+					}));
+				}else {
+					value = this.optionValues[o.name]
+					? this.optionValues[o.name]
+					: '';
+					this.options.push(new Ext.form.TextField({
+						fieldLabel : o.fieldLabel,
+						name : o.name,
+						value : value,
+						anchor : '-20'
+					}));
+				}
+				this.add(this.options[this.options.length-1]);
+			}
+		}
+		this.doLayout();
 	}
+
 
 });

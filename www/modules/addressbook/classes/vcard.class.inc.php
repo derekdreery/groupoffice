@@ -241,10 +241,10 @@ class vcard extends addressbook {
 	*/
 	function _get_vcard_contact($vcard) {
 		$record = array ();
-		//$record['contact'] = array ('source_id' => '0', 'first_name' => '', 'middle_name' => '', 'last_name' => '', 'title' => '', 'function' => '', 'birthday' => '', 'sex' => 'M', 'initials' => '', 'country' => '', 'state' => '', 'city' => '', 'zip' => '', 'address' => '', 'address_no' => '', 'fax' => '', 'home_phone' => '', 'work_fax' => '', 'work_phone' => '', 'cellular' => '', 'email' => '', 'company_id' => '0', 'company_name' => '', 'department' => '', 'comment' => '');
+		$record['contact'] = array ('source_id' => '0', 'first_name' => '', 'middle_name' => '', 'last_name' => '', 'title' => '', 'function' => '', 'birthday' => '', 'sex' => 'M', 'initials' => '', 'country' => '', 'state' => '', 'city' => '', 'zip' => '', 'address' => '', 'address_no' => '', 'fax' => '', 'home_phone' => '', 'work_fax' => '', 'work_phone' => '', 'cellular' => '', 'email' => '', 'company_id' => '0', 'company_name' => '', 'department' => '', 'comment' => '');
 		//$record['company'] = array ('name' => '', 'homepage' => '', 'country' => '', 'state' => '', 'city' => '', 'zip' => '', 'address' => '', 'address_no' => '', 'phone' => '', 'fax' => '', 'email' => '', 'bank_no' => '', 'vat_no' => '', 'post_address' => '', 'post_address_no' => '', 'post_state' => '', 'post_city' => '', 'post_zip' => '', 'post_country' => '');
 
-		$record['contact'] = array ('first_name' => '', 'middle_name' => '', 'last_name' => '', 'fax' => '', 'home_phone' => '', 'work_fax' => '', 'work_phone' => '', 'cellular' => '');
+		$record['contact'] = array ();//'first_name' => '', 'middle_name' => '', 'last_name' => '', 'fax' => '', 'home_phone' => '', 'work_fax' => '', 'work_phone' => '', 'cellular' => '');
 //go_log(LOG_DEBUG, var_export($vcard, true));
 
 		foreach ($vcard as $property) {
@@ -327,19 +327,19 @@ class vcard extends addressbook {
 						}else
 						{
 							if (in_array('FAX', $property->parm_types)) {
-								if(!isset($record['contact']['fax']))
+								if(empty($record['contact']['fax']))
 								{
 									$record['contact']['fax'] = $property->values[0];
 								}
 							}
 							if (in_array('VOICE', $property->parm_types)) {
-								if(!isset($record['contact']['home_phone']))
+								if(empty($record['contact']['home_phone']))
 								{
 									$record['contact']['home_phone'] = $property->values[0];
 								}
 							}
 							if (!in_array('FAX', $property->parm_types) && !in_array('VOICE', $property->parm_types)) {
-								if(!isset($record['contact']['home_phone']))
+								if(empty($record['contact']['home_phone']))
 								{
 									$record['contact']['home_phone'] = $property->values[0];
 								}
@@ -349,17 +349,19 @@ class vcard extends addressbook {
 					break;
 				case "EMAIL" :
 
-					if(in_array('HOME', $property->parm_types)){
+					/*if(in_array('HOME', $property->parm_types)){
 						$record['contact']['email'] = $property->values[0];
 					}elseif(in_array('WORK', $property->parm_types)){
 						$record['contact']['email2'] = $property->values[0];
-					}elseif(isset($record['contact']['email3']))
+					}else*/
+
+					if(!empty($record['contact']['email3']))
 					{
 						//we ran out of email addres storage sorry.
-					}elseif(isset($record['contact']['email2']))
+					}elseif(!empty($record['contact']['email2']))
 					{
 						$record['contact']['email3'] = $property->values[0];
-					}elseif(isset($record['contact']['email']))
+					}elseif(!empty($record['contact']['email']))
 					{
 						$record['contact']['email2'] = $property->values[0];
 					}else
@@ -884,19 +886,20 @@ class vcard_property {
 					$this->name = "EMAIL";
 					$this->parm_types[0] = "INTERNET";
 					//$this->parm_types[1] = "PREF";
-					$this->parm_types[1] = "HOME";
+					//$this->parm_types[1] = "HOME"; was set to home for blackberry
+					$this->parm_types[1] = "";
 					$this->values[0] = $value;
 					break;
 				case "email2":
 					$this->name = "EMAIL";
 					$this->parm_types[0] = "INTERNET";
-					$this->parm_types[1] = "WORK";
+					$this->parm_types[1] = "HOME";
 					$this->values[0] = $value;
 				break;
 				case "email3":
 					$this->name = "EMAIL";
 					$this->parm_types[0] = "INTERNET";
-					$this->parm_types[1] = "";
+					$this->parm_types[1] = "WORK";
 					$this->values[0] = $value;
 				break;
 				case "function" :

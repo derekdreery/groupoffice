@@ -10,4 +10,5 @@ $lang['tools']['index_files']='Indexovat všechny soubory';
 
 $lang['tools']['buildsearchcache']='Vytvořit vyhledávací index';
 $lang['tools']['checkmodules']='Zkontrolovat moduly';
+$lang['tools']['resetState']='Vymazat pozice oken, sloupců atp.';
 ?>

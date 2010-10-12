@@ -158,3 +158,4 @@ GO.email.lang.searchTo='Příjemce';
 GO.email.lang.searchCC='Příjemce (CC)';
 
 GO.email.lang.youHaveNewMails = 'Máte {new} e-mail(y/ů)';
+GO.email.lang.anyField='Kdekoliv';

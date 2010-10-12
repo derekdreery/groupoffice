@@ -12,6 +12,39 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+
+
+/**
+ * Function array_insert().
+ *
+ * Returns the new number of the elements in the array.
+ *
+ * @param array $array Array (by reference)
+ * @param mixed $value New element
+ * @param int $offset Position
+ * @return int
+ */
+function array_insert(&$array, $value, $offset)
+{
+    if (is_array($array)) {
+        $array  = array_values($array);
+        $offset = intval($offset);
+        if ($offset < 0 || $offset >= count($array)) {
+            array_push($array, $value);
+        } elseif ($offset == 0) {
+            array_unshift($array, $value);
+        } else {
+            $temp  = array_slice($array, 0, $offset);
+            array_push($temp, $value);
+            $array = array_slice($array, $offset);
+            $array = array_merge($temp, $array);
+        }
+    } else {
+        $array = array($value);
+    }
+    return count($array);
+}
+
 /*
  * Get's and saves the selected id's from a MultiSelectGrid
  */

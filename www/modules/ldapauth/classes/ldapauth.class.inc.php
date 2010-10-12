@@ -170,8 +170,8 @@ class ldapauth extends imapauth {
 					}
 				}
 
-
-				$GO_USERS->update_profile($user);
+				if(empty($GO_CONFIG->ldap_auth_dont_update_profiles))
+					$GO_USERS->update_profile($user);
 
 			} else {
 				$user['username'] = $username;
@@ -257,7 +257,7 @@ class ldapauth extends imapauth {
 			if ( !is_string( $ldapkey ) ) {
 
 				$value = $ldapkey->get_value($entry, $key);
-			}elseif ( isset( $entry[$ldapkey] ) ) {
+			}elseif ( !empty( $entry[$ldapkey] ) ) {
 				$value = $entry[$ldapkey][0];
 			} else {
 				continue;

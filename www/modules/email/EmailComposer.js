@@ -954,6 +954,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					task : config.task,
 					mailbox : config.mailbox
 				};
+
+				//for directly loading a contact in a template
+				if(config.contact_id)
+					params.contact_id=config.contact_id;
 				
 				if (config.mailing_group_id > 0) {
 					// so that template loading won't replace fields

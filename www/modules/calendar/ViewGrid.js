@@ -219,8 +219,10 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		}, true);
 		
 		this.gridCells = {};
-		for(var calendar_id in this.jsonData)
+		//for(var calendar_id in this.jsonData)
+		for(var i=0,max=this.jsonData.length;i<max;i++)
 		{
+			var calendar_id=this.jsonData[i].id;
 			var gridRow =  Ext.DomHelper.append(this.tbody,
 			{
 				tag: 'tr'
@@ -239,15 +241,17 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				id: 'view_cal_'+calendar_id,
 				href:'#',
 				cls:'normal-link',
-				html:this.jsonData[calendar_id].name				
+				html:this.jsonData[i].name
 			}, true);
 			
 			link.on('click', function(e, target){			
 				e.preventDefault();
 				var calendar_id = target.id.substring(9);
 
+				var calendar =this.getCalendar(calendar_id);
+
 				this.fireEvent('zoom', {
-					group_id: this.jsonData[calendar_id].group_id,
+					group_id: calendar.group_id,
 					calendar_id: calendar_id,
 					calendar_name:target.innerHTML,
 					title:target.innerHTML
@@ -262,7 +266,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				
 				this.gridCells[calendar_id][dt.format('Ymd')]= Ext.DomHelper.append(gridRow,{
 					tag: 'td', 
-					id: 'cal'+this.jsonData[calendar_id].id+'_day'+dt.format('Ymd'), 
+					id: 'cal'+calendar_id+'_day'+dt.format('Ymd'), 
 					cls: 'x-viewGrid-cell',
 					style:'width:'+columnWidth+'px'
 				}, true);
@@ -270,6 +274,14 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		}
 		
 		
+	},
+
+	getCalendar : function(id){		
+		for(var i=0;i<this.jsonData.length;i++){
+			if(this.jsonData[i].id==id)
+				return this.jsonData[i];
+		}
+		return false;
 	},
 
 	removeEventByRemoteId : function(remote_id){
@@ -853,10 +865,11 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					
 					var total=0;
 					var mtime=0;
-					for(var calendar_id in this.jsonData)
+					//for(var calendar_id in this.jsonData)
+					for(var n=0;n<this.jsonData.length;n++)
 					{
 						
-						var events = this.jsonData[calendar_id].events;
+						var events = this.jsonData[n].events;
 
 						total += events.length;
 						for(var i=0; i< events.length;i++)
@@ -1042,8 +1055,9 @@ Ext.extend(GO.calendar.dd.ViewDragZone, Ext.dd.DragZone, {
 	    
 			var dateIndex = td.id.indexOf('_day')+4;
 			var calendar_id = td.id.substr(3,dateIndex-7);
-	    
-			if(!this.viewGrid.remoteEvents[target.id]['private'] && this.viewGrid.jsonData[calendar_id].write_permission)
+			var calendar = this.viewGrid.getCalendar(calendar_id);
+			
+			if(!this.viewGrid.remoteEvents[target.id]['private'] && calendar.write_permission)
 			{
 				var dateStr = td.id.substr(dateIndex);
 				var dragDate = Date.parseDate(dateStr,'Ymd');
@@ -1076,8 +1090,9 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 		var dateIndex = td.id.indexOf('_day')+4;
 	 		 
 		var calendar_id = td.id.substr(3,dateIndex-7);
+		var calendar = this.scope.getCalendar(calendar_id);
 		    
-		if(!this.scope.jsonData[calendar_id] || !this.scope.jsonData[calendar_id].write_permission)
+		if(!calendar || !calendar.write_permission)
 		{
 			return false;
 		}
@@ -1114,8 +1129,10 @@ Ext.extend(GO.calendar.dd.ViewDropTarget, Ext.dd.DropTarget, {
 		{
 			var dateIndex = tdOver.id.indexOf('_day');
 			var calendar_id = tdOver.id.substr(3,dateIndex-3);
-			    
-			if(this.scope.jsonData[calendar_id] && this.scope.jsonData[calendar_id].write_permission)
+
+			var calendar = this.scope.getCalendar(calendar_id);
+
+			if(calendar && calendar.write_permission)
 			{
 				if(dd.lastTdOverId!=tdOver.id)
 				{

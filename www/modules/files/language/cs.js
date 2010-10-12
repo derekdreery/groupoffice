@@ -28,3 +28,7 @@ GO.files.lang.newFiles='Nový';
 GO.files.lang.olderVersions='Starší verze';
 GO.files.lang.uploadProperties='Vlastnosti uvedeny níže budou platit pro všechny soubory nahrané pomocí varianty "Malé soubory"';
 GO.files.lang.selectFiles = 'Vyberte soubory';
+
+GO.files.lang.fitImage='Přizpůsobit';
+GO.files.lang.normalSize='Normální velikost';
+GO.files.lang.imageViewer='Prohlížeč obrázků';

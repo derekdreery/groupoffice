@@ -503,8 +503,9 @@ try {
 			/*case 'template':
 				$template_id=$_REQUEST['template_id'];
 				$to=$_REQUEST['to'];
+				$contact_id = isset($_POST['contact_id']) ? $_POST['contact_id'] : 0;
 
-				$response = load_template($template_id, $to, isset($_POST['mailing_group_id']) && $_POST['mailing_group_id']>0);
+				$response = load_template($template_id, $to, isset($_POST['mailing_group_id']) && $_POST['mailing_group_id']>0,$contact_id);
 
 				if($_POST['content_type']=='plain') {
 					$response['data']['textbody']=$response['data']['body'];

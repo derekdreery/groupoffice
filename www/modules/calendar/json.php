@@ -84,7 +84,7 @@ try {
 				$abooks = array_unique($abooks);
 
 				$response['books'] = $abooks;
-				$cal->get_bdays($interval_start_time, $interval_end_time, $abooks);
+				$cal->get_bdays($interval_start_time, $interval_end_time-1, $abooks);
 				while($contact = $cal->next_record()) {
 					$name = String::format_name($contact['last_name'], $contact['first_name'], $contact['middle_name']);
 
@@ -776,15 +776,15 @@ try {
 				if(!$permission_level)
 					continue;
 
-				$response[$cal->f('id')] = $view_calendar;
-				$response[$cal->f('id')]['write_permission'] = $permission_level>GO_SECURITY::READ_PERMISSION;
+				//$response[$cal->f('id')] = $view_calendar;
+				$view_calendar['write_permission'] = $permission_level>GO_SECURITY::READ_PERMISSION;
 
 				$events = $cal2->get_events_in_array(array($cal->f('id')), 0,
 								$start_time,
 								$end_time
 				);
 
-				$response[$cal->f('id')]['events']=array();
+				$view_calendar['events']=array();
 
 				foreach($events as $event) {
 					if($event['all_day_event'] == '1') {
@@ -817,7 +817,7 @@ try {
 					}
 
 
-					$response[$cal->f('id')]['events'][] = array(
+					$view_calendar['events'][] = array(
 									'id'=>$count,
 									'link_count'=>$GO_LINKS->count_links($event['id'], 1),
 									'calendar_id'=>$cal->f('id'),
@@ -831,12 +831,15 @@ try {
 									'background'=>$event['background'],
 									'repeats'=>!empty($event['rrule']),
 									'private'=>$private,
-									'write_permission'=>$response[$cal->f('id')]['write_permission'],
+									'write_permission'=>$view_calendar['write_permission'],
 									'mtime' => $event['mtime']
 					);
 					$count++;
 				}
+
+				$response[]=$view_calendar;
 			}
+
 			break;
 
 

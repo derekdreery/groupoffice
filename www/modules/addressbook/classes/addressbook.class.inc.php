@@ -1101,6 +1101,8 @@ class addressbook extends db {
 	}
 
 	function _add_addressbook(&$addressbook) {
+		global $GO_MODULES;
+		
 		$addressbook['id'] = $this->nextid('ab_addressbooks');
 		if(isset($GO_MODULES->modules['files'])) {
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
