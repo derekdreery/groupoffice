@@ -43,6 +43,8 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 
 	collapsibleSections : {},
 
+	stateId : 'pm-project-panel',
+
 
 	hiddenSections : ['subprojects'],
 	
@@ -202,6 +204,10 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 		if(tbar)
 			tbar.setDisabled(true);
 	},
+
+	getState : function(){
+		return Ext.apply(GO.DisplayPanel.superclass.getState.call(this) || {}, {hiddenSections:this.hiddenSections});
+	},
 	
 	setData : function(data)
 	{
@@ -242,7 +248,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 
 		for(var id in this.collapsibleSections){
 			if(!this.data[this.collapsibleSections[id]]){
-				this.toggleSection(this.data[this.collapsibleSections[id]], true);
+				this.toggleSection(id, true);
 			}
 		}
 
@@ -252,25 +258,27 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	},
 
 	toggleSection : function(toggleId, collapse){
+
 		var el = Ext.get(toggleId);
 		var toggleBtn = Ext.get('toggle-'+toggleId);
 
-		if(typeof(collapse)=='undefined')
-			collapse = toggleBtn.dom.innerHTML=='-';
+		var saveState=false;
+		if(typeof(collapse)=='undefined'){
+			collapse = !toggleBtn.hasClass('go-tool-toggle-collapsed');// toggleBtn.dom.innerHTML=='-';
+			saveState=true;
+		}
 
+		
 		if(collapse){
-			//data not loaded yet
-			var hiddenSections = this.hiddenSections;
-			this.hiddenSections=[];
+			//data not loaded yet			
 
-			for(var i=0,max=hiddenSections.length;i<max;i++){
-				if(hiddenSections[i]!=this.collapsibleSections[toggleId]){
-					this.hiddenSections.push(hiddenSections[i]);
-				}
-			}
+			if(this.hiddenSections.indexOf(this.collapsibleSections[toggleId])==-1)
+				this.hiddenSections.push(this.collapsibleSections[toggleId]);
 		}else
 		{
-			this.hiddenSections.push(this.collapsibleSections[toggleId]);
+			var index = this.hiddenSections.indexOf(this.collapsibleSections[toggleId]);
+			if(index>-1)
+				this.hiddenSections.splice(index,1);
 		}
 
 		if(!el && !collapse){
@@ -278,17 +286,25 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 		}else
 		{
 			if(el)
-				el.setDisplayed(collapse);
+				el.setDisplayed(!collapse);
 
-			toggleBtn.dom.innerHTML = collapse ? '+' : '-';
+			if(collapse){
+				toggleBtn.addClass('go-tool-toggle-collapsed');
+			}else
+			{
+				toggleBtn.removeClass('go-tool-toggle-collapsed');
+			}
+			//dom.innerHTML = collapse ? '+' : '-';
 		}
+		if(saveState)
+			this.saveState();
 	},
 
 	collapsibleSectionHeader : function(title, id, dataKey){
 
 		this.collapsibleSections[id]=dataKey;
 
-		return '<div class="collapsible-display-panel-header">'+title+'<div style="float:right;cursor:pointer" id="toggle-'+id+'" title="'+title+'">-</div></div>';
+		return '<div class="collapsible-display-panel-header">'+title+'<div class="x-tool x-tool-toggle" style="float:right;cursor:pointer" id="toggle-'+id+'" title="'+title+'">&nbsp;</div></div>';
 	},
 
 	
