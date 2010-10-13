@@ -71,6 +71,18 @@ GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
 					'</tpl>'+
 				'</table>';
 
+		if(GO.customfields)
+		{
+			this.template +=GO.customfields.displayPanelTemplate;
+		}
+
+		if(GO.tasks)
+			this.template +=GO.tasks.TaskTemplate;
+
+		if(GO.calendar)
+			this.template += GO.calendar.EventTemplate;
+
+
 		this.template += GO.linksTemplate;	
 		
 		Ext.apply(this.templateConfig, GO.linksTemplateConfig);

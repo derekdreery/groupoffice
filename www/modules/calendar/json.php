@@ -249,32 +249,7 @@ try {
 			$response['data']=array_merge($response['data'], $event);
 			$response['data']['html_event']=$cal->event_to_html($event);
 
-			require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
-			$search = new search();
-
-			$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], 1);
-			$response['data']['links']=$links_json['results'];
-
-			if(isset($GO_MODULES->modules['files'])) {
-				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-				$files = new files();
-				$response['data']['files']=$files->get_content_json($response['data']['files_folder_id']);
-			}else {
-				$response['data']['files']=array();
-			}
-
-			if(isset($GO_MODULES->modules['comments'])) {
-				require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
-				$comments = new comments();
-
-				$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 1);
-			}
-			if(isset($GO_MODULES->modules['customfields'])) {
-				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-				$cf = new customfields();
-				$values = $cf->get_values($GO_SECURITY->user_id, 1, $response['data']['id']);
-				$response['data']=array_merge($response['data'], $values);
-			}
+			load_standard_info_panel_items($response, 1);
 
 			$response['success'] = true;
 

@@ -20,6 +20,8 @@ GO.calendar.EventPanel = Ext.extend(GO.DisplayPanel,{
 
 	loadUrl : GO.settings.modules.calendar.url+'json.php',
 
+	stateId : 'cal-event-panel',
+
 	editHandler : function(){		
 		GO.calendar.showEventDialog({event_id: this.link_id});
 		this.addSaveHandler(GO.calendar.eventDialog);
@@ -40,7 +42,18 @@ GO.calendar.EventPanel = Ext.extend(GO.DisplayPanel,{
 					'</tr>'+					
 				'</table>';
 
-		this.template += GO.linksTemplate;
+		if(GO.customfields)
+		{
+			this.template +=GO.customfields.displayPanelTemplate;
+		}
+
+		if(GO.tasks)
+			this.template +=GO.tasks.TaskTemplate;
+
+		if(GO.calendar)
+			this.template += GO.calendar.EventTemplate;
+
+		this.template +=GO.linksTemplate;		
 
 
 		if(GO.files)
