@@ -35,6 +35,8 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 			this.title=GO.lang.strPermissions;
 		}
 
+		this.showLevel = (this.hideLevel) ? false : true;			
+
 		var permissionLevelConfig ={
 					store : new Ext.data.SimpleStore({
 						id:0,
@@ -84,22 +86,28 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 			return r.get('text');
 		}
 
-		this.aclGroupsGrid = new GO.grid.EditorGridPanel({
-			anchor : '100% 50%',
-			title : GO.lang['strAuthorizedGroups'],
-			store : this.aclGroupsStore,
-			border : false,
-			columns : [{
-				header : GO.lang['strName'],
-				dataIndex : 'name',
-				menuDisabled:true
-			},{
+		var groupColumns = [{
+			header : GO.lang['strName'],
+			dataIndex : 'name',
+			menuDisabled:true
+		}];
+		if(this.showLevel)
+		{
+			groupColumns.push({
 				header : GO.lang.permissionsLevel,
 				dataIndex : 'level',
 				menuDisabled:true,
 				editor : selectUsersPermissionLevel,
 				renderer:renderLevel
-			}],
+			});
+		}
+
+		this.aclGroupsGrid = new GO.grid.EditorGridPanel({
+			anchor : '100% 50%',
+			title : GO.lang['strAuthorizedGroups'],
+			store : this.aclGroupsStore,
+			border : false,
+			columns : groupColumns,
 			view : new Ext.grid.GridView({
 				autoFill : true,
 				forceFit : true
@@ -172,22 +180,28 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 		});
 		this.aclUsersStore.setDefaultSort('name', 'ASC');
 
-		this.aclUsersGrid = new GO.grid.EditorGridPanel({
-			anchor : '100% 50%',
-			title : GO.lang['strAuthorizedUsers'],
-			store : this.aclUsersStore,
-			border : false,
-			columns : [{
-				header : GO.lang['strName'],
-				dataIndex : 'name',
-				menuDisabled:true
-			},{
+		var userColumns = [{
+			header : GO.lang['strName'],
+			dataIndex : 'name',
+			menuDisabled:true
+		}];
+		if(this.showLevel)
+		{
+			userColumns.push({
 				header : GO.lang.permissionsLevel,
 				dataIndex : 'level',
 				menuDisabled:true,
 				editor : selectGroupsPermissionLevel,
 				renderer:renderLevel
-			}],
+			})
+		}
+
+		this.aclUsersGrid = new GO.grid.EditorGridPanel({
+			anchor : '100% 50%',
+			title : GO.lang['strAuthorizedUsers'],
+			store : this.aclUsersStore,
+			border : false,
+			columns : userColumns,
 			view : new Ext.grid.GridView({
 				autoFill : true,
 				forceFit : true
