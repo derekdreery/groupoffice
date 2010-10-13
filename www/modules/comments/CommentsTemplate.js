@@ -1,9 +1,10 @@
-GO.comments.displayPanelTemplate = 
-	'<tpl if="comments.length">'+
-			'<table cellpadding="0" cellspacing="0" border="0" class="display-panel">'+			
-				'<tr>'+
-					'<td class="display-panel-heading" colspan="2">'+GO.comments.lang.recentComments+' (<a href="#" onclick="GO.comments.browseComments({id}, {link_type});" class="normal-link">'+GO.comments.lang.browseComments+'</a>)</td>'+
-				'</tr>'+
+GO.comments.displayPanelTemplate =
+	'{[this.collapsibleSectionHeader(GO.comments.lang.recentComments+\' (<a href="#" onclick="GO.comments.browseComments(\'+values.id+\', \'+values.link_type+\');" class="normal-link">\'+GO.comments.lang.browseComments+\'</a>)\', "comments-"+values.panelId, "comments")]}'+
+	'<tpl if="values.comments">'+
+			'<table cellpadding="0" cellspacing="0" border="0" class="display-panel" id="comments-{panelId}">'+
+				'<tpl if="!comments.length">'+
+					'<tr><td colspan="3">'+GO.lang.strNoItems+'</td></tr>'+
+				'</tpl>'+
 				'<tpl for="comments">'+					
 					'<tr>'+
 						'<td><i>{user_name}</i></td>'+										

@@ -20,6 +20,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	template : '',
 	
 	templateConfig : {
+
 		
 		notEmpty : function(v){
 			if(v && v.length)
@@ -140,6 +141,14 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 
 		this.initTemplate();
 
+		this.templateConfig.panel=this;
+
+		this.templateConfig.collapsibleSectionHeader = function(title, id, dataKey){
+			this.panel.collapsibleSections[id]=dataKey;
+
+			return '<div class="collapsible-display-panel-header">'+title+'<div class="x-tool x-tool-toggle" style="float:right;cursor:pointer" id="toggle-'+id+'">&nbsp;</div></div>';
+		}
+
 		this.xtemplate = new Ext.XTemplate(this.template, this.templateConfig);
 		this.xtemplate.compile();
 		
@@ -214,6 +223,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 		//this.body.removeAllListeners();
 		
 		data.link_type=this.link_type;
+		data.panelId=this.getId();
 		this.data=data;
 		
 		var tbar = this.getTopToolbar();
@@ -300,12 +310,12 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 			this.saveState();
 	},
 
-	collapsibleSectionHeader : function(title, id, dataKey){
+	/*collapsibleSectionHeader : function(title, id, dataKey){
 
 		this.collapsibleSections[id]=dataKey;
 
 		return '<div class="collapsible-display-panel-header">'+title+'<div class="x-tool x-tool-toggle" style="float:right;cursor:pointer" id="toggle-'+id+'" title="'+title+'">&nbsp;</div></div>';
-	},
+	},*/
 
 	
 	onBodyClick :  function(e, target){

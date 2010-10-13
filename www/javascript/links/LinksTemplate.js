@@ -11,35 +11,35 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
-GO.linksTemplate = '<tpl if="links.length">'+
-		'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
-		//LINK DETAILS
-		'<tr>'+
-			'<td colspan="4" class="display-panel-heading">'+GO.lang.latestLinks+'</td>'+
-		'</tr>'+
-		
-		'<tr>'+
-			'<td colspan="2" class="display-panel-links-header">&nbsp;</td>'+
-			'<td style="width: 100%" class="table_header_links">' + GO.lang['strName'] + '</td>'+
-			/*'<td class="table_header_links">' + GO.lang['strType'] + '</td>'+*/
-			'<td class="table_header_links" style="white-space:nowrap">' + GO.lang['strMtime'] + '</td>'+
-		'</tr>'+	
-							
-		'<tpl for="links">'+
-			'<tr class="display-panel-link">'+
-				//'<td><div class="display-panel-link-icon {iconCls}" ext:qtip="{type}">&nbsp;<sup>{link_count}</sup></div></td>'+
-				'<td style="padding-right:0px !important;"><div class="display-panel-link-icon {iconCls}" ext:qtip="{type}"></div></td>'+
-				'<td style="padding-right:0px !important;padding-left:0px !important;"><div class="display-panel-has-links <tpl if="link_count&gt;1">has-links</tpl>"></div></td>'+
-				'<td><a href="#link_{[xindex-1]}">{name}</a><tpl if="link_description.length"><br />{link_description}</tpl></td>'+
-				'<td style="white-space:nowrap">{mtime}</td>'+
+GO.linksTemplate = 		
+		'{[this.collapsibleSectionHeader(GO.lang.latestLinks, "latestlinks-"+values.panelId, "links")]}'+
+		'<tpl if="values.links">'+
+			'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="latestlinks-{panelId}">'+
+			'<tr>'+
+				'<td colspan="2" class="display-panel-links-header">&nbsp;</td>'+
+				'<td style="width: 100%" class="table_header_links">' + GO.lang['strName'] + '</td>'+
+				/*'<td class="table_header_links">' + GO.lang['strType'] + '</td>'+*/
+				'<td class="table_header_links" style="white-space:nowrap">' + GO.lang['strMtime'] + '</td>'+
 			'</tr>'+
-			'<tpl if="description.length">'+
-				'<tr class="display-panel-link-description">'+
-					'<td colspan="2">&nbsp;</td>'+
-					'<td colspan="3">{description}</td>'+
-			'</tr>'+
+			'<tpl if="!links.length">'+
+				'<tr><td colspan="4">'+GO.lang.strNoItems+'</td></tr>'+
 			'</tpl>'+
-		'</tpl>'+	
-	'</tpl>';
+			'<tpl for="links">'+
+				'<tr class="display-panel-link">'+
+					//'<td><div class="display-panel-link-icon {iconCls}" ext:qtip="{type}">&nbsp;<sup>{link_count}</sup></div></td>'+
+					'<td style="padding-right:0px !important;"><div class="display-panel-link-icon {iconCls}" ext:qtip="{type}"></div></td>'+
+					'<td style="padding-right:0px !important;padding-left:0px !important;"><div class="display-panel-has-links <tpl if="link_count&gt;1">has-links</tpl>"></div></td>'+
+					'<td><a href="#link_{[xindex-1]}">{name}</a><tpl if="link_description.length"><br />{link_description}</tpl></td>'+
+					'<td style="white-space:nowrap">{mtime}</td>'+
+				'</tr>'+
+				'<tpl if="description.length">'+
+					'<tr class="display-panel-link-description">'+
+						'<td colspan="2">&nbsp;</td>'+
+						'<td colspan="3">{description}</td>'+
+				'</tr>'+
+				'</tpl>'+
+			'</tpl>'+
+			'</table>'+
+		'</tpl>';
 	
 GO.linksTemplateConfig = {};
