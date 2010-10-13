@@ -816,25 +816,10 @@ try {
 
 				$response['data']['comment']=String::text_to_html($response['data']['comments']);
 
-				if($GO_MODULES->has_module('customfields')) {
-					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-					$cf = new customfields();
-					$response['data']['customfields']=$cf->get_all_fields_with_values($GO_SECURITY->user_id, 6, $response['data']['id']);
-				}
 
-				if($GO_MODULES->has_module('comments')) {
-					require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
-					$comments = new comments();
-
-					$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 6);
-				}
-				require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
-				$search = new search();
-
-				$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], 6);
-
-				$response['data']['links']=$links_json['results'];
-
+				//set files in array so they won't be loaded by load_standard_info_panel_items
+				$response['data']['files']=array();
+				load_standard_info_panel_items($response, 6);
 			}
 
 			$params['response']=&$response;
@@ -869,18 +854,9 @@ try {
 			$response['data']['location']=$path;
 			$response['data']['comment']=String::text_to_html($response['data']['comments']);			
 	
-			if($GO_MODULES->has_module('comments')) {
-				require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
-				$comments = new comments();
-
-				$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 17);
-			}
-			require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
-			$search = new search();
-
-			$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], 17);
-
-			$response['data']['links']=$links_json['results'];
+			//set files in array so they won't be loaded by load_standard_info_panel_items
+			$response['data']['files']=array();
+			load_standard_info_panel_items($response, 17);
 
 			break;
 

@@ -19,6 +19,8 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 	idParam : 'note_id',
 	
 	loadUrl : GO.settings.modules.notes.url+'json.php',
+
+	stateId : 'no-note-panel',
 	
 	editHandler : function(){
 		GO.notes.showNoteDialog(this.link_id);
@@ -37,12 +39,19 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 					'</tr>'+									
 				'</table>';																		
 				
-		this.template += GO.linksTemplate;
-										
 		if(GO.customfields)
 		{
 			this.template +=GO.customfields.displayPanelTemplate;
-		}	
+		}
+
+		if(GO.tasks)
+			this.template +=GO.tasks.TaskTemplate;
+
+		if(GO.calendar)
+			this.template += GO.calendar.EventTemplate;
+
+
+		this.template += GO.linksTemplate;	
 				
 		if(GO.files)
 		{

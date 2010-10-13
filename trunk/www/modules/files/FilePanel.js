@@ -22,6 +22,8 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 
 	noFileBrowser:true,
 
+	stateId : 'fs-file-panel',
+
 	/*
 	 *Can be filled by other modules to display extra info
 	 */
@@ -118,12 +120,18 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 					'</tpl>'+
 				'</table>';
 
-		this.template += GO.linksTemplate;
-
 		if(GO.customfields)
 		{
 			this.template +=GO.customfields.displayPanelTemplate;
 		}
+
+		if(GO.tasks)
+			this.template +=GO.tasks.TaskTemplate;
+
+		if(GO.calendar)
+			this.template += GO.calendar.EventTemplate;
+
+		this.template += GO.linksTemplate;
 		
 		Ext.apply(this.templateConfig, GO.linksTemplateConfig);
 
