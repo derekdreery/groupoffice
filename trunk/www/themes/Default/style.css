@@ -796,8 +796,8 @@ table.display-panel a:link,
 table.display-panel a:visited,
 table.display-panel a:active	
 {
-	color: blue;
-	text-decoration: underline;
+	color: #26687C;
+	text-decoration: none;
 }
 
 .display-panel-heading, .collapsible-display-panel-header

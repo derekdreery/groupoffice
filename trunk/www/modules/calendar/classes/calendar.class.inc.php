@@ -2792,4 +2792,29 @@ class calendar extends db {
 		return $this->query($sql);
 	}
 
+
+	function get_linked_events($user_id, $link_id, $link_type){
+		$sql = "SELECT e.*, c.name AS calendar_name FROM cal_events e ".
+			"INNER JOIN cal_calendars c ON c.id=e.calendar_id ".
+			"INNER JOIN go_links_$link_type l ON l.link_id=e.id AND l.link_type=1 ".
+			"WHERE l.id=? ORDER BY start_time DESC";
+
+		$this->query($sql, 'i', array($link_id));
+	}
+
+	function get_linked_events_json($link_id, $link_type){
+		global $GO_SECURITY;
+
+		$records=array();
+
+		$this->get_linked_events($GO_SECURITY->user_id, $link_id, $link_type);
+		while($e=$this->next_record()){
+			
+			$e['start_time']=Date::get_timestamp($e['start_time']);
+			$records[]=$e;
+		}
+
+		return $records;
+	}
+
 }
