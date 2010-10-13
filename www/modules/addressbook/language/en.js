@@ -127,3 +127,5 @@ GO.addressbook.lang.emailAdded='Email address succesfully added to contact';
 GO.addressbook.lang.exportWithCompanies='With companies';
 
 GO.addressbook.lang.id='ID';
+
+GO.addressbook.lang.exportPermission='Export permissions';

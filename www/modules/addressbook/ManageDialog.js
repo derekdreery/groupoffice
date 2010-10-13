@@ -18,7 +18,7 @@ GO.addressbook.ManageDialog = function(config)
 	{
 		config = {};
 	}	
-	this.addressbooksGrid = new GO.addressbook.ManageAddressbooksGrid();
+	this.addressbooksGrid = new GO.addressbook.ManageAddressbooksGrid();	
 	
 	var items = [
 			this.addressbooksGrid			
@@ -30,6 +30,15 @@ GO.addressbook.ManageDialog = function(config)
 		this.mailingsGrid = new GO.mailings.MailingsGrid();
 		items.push(this.templatesGrid);
 		items.push(this.mailingsGrid);
+	}
+
+	if(GO.settings.has_admin_permission)
+	{
+		this.exportPermissionsTab = new GO.grid.PermissionsPanel({
+			title:GO.addressbook.lang.exportPermission,
+			hideLevel:true
+		});
+		items.push(this.exportPermissionsTab);
 	}
 	
 	config.layout= 'fit';
@@ -58,4 +67,19 @@ GO.addressbook.ManageDialog = function(config)
 }
 	
 Ext.extend(GO.addressbook.ManageDialog, GO.Window,{
+
+	show : function()
+	{
+		if(!this.rendered)
+		{
+			this.render(Ext.getBody());
+		}
+
+		if(GO.settings.has_admin_permission)
+		{
+			this.exportPermissionsTab.setAcl(GO.addressbook.export_acl_id);
+		}
+		
+		GO.addressbook.ManageDialog.superclass.show.call(this);
+	}
 });	
