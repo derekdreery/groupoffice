@@ -20,6 +20,8 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	idParam : 'contact_id',
 	
 	loadUrl : GO.settings.modules.addressbook.url+'json.php',
+
+	stateId : 'ab-contact-panel',
 	
 	editHandler : function(){
 		GO.addressbook.showContactDialog(this.link_id);
@@ -231,13 +233,21 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 				'</tr>'+
 		
 				'</tpl>'+
-				'</table>'+
-				GO.linksTemplate;
+				'</table>';
 				
 				if(GO.customfields)
 				{
 					this.template +=GO.customfields.displayPanelTemplate;
 				}
+
+
+			if(GO.tasks)
+				this.template +=GO.tasks.TaskTemplate;
+
+			if(GO.calendar)
+				this.template += GO.calendar.EventTemplate;
+
+			this.template +=GO.linksTemplate;
 				
 			
 		Ext.apply(this.templateConfig, {

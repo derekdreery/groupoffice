@@ -44,10 +44,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 
 	collapsibleSections : {},
 
-	stateId : 'pm-project-panel',
-
-
-	hiddenSections : ['subprojects'],
+	hiddenSections : [],
 	
 	addSaveHandler : function(win, eventName)
 	{

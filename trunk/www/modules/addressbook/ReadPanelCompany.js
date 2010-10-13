@@ -20,6 +20,8 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 	idParam : 'company_id',
 	
 	loadUrl : GO.settings.modules.addressbook.url+'json.php',
+
+	stateId : 'ab-company-panel',
 	
 	editHandler : function(){
 		GO.addressbook.showCompanyDialog(this.link_id);
@@ -234,6 +236,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 						'<tr>'+
 							'<td width="16" class="display-panel-links-header">&nbsp;</td>'+
 							'<td class="table_header_links">' + GO.lang['strName'] + '</td>'+
+							'<td class="table_header_links">' + GO.lang['strFunction'] + '</td>'+
 							'<td class="table_header_links">' + GO.lang['strEmail'] + '</td>'+							
 						'</tr>'+	
 											
@@ -241,17 +244,25 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 							'<tr>'+
 								'<td><div class="go-icon go-link-icon-2"></div></td>'+
 								'<td><a href="#" onclick="GO.linkHandlers[2].call(this, {id});">{name}</a></td>'+
+								'<td>{function}</td>'+
 								'<td>{[this.mailTo(values.email, values.name)]}</td>'+
 							'</tr>'+							
-						'</tpl>'+	
-					'</tpl>'+
+						'</tpl>'+
+						'</table>'+
+					'</tpl>';
+
+			if(GO.customfields)
+			{
+				this.template +=GO.customfields.displayPanelTemplate;
+			}
 								
-			GO.linksTemplate;
-			
-		if(GO.customfields)
-		{
-			this.template +=GO.customfields.displayPanelTemplate;
-		}
+			if(GO.tasks)
+				this.template +=GO.tasks.TaskTemplate;
+
+			if(GO.calendar)
+				this.template += GO.calendar.EventTemplate;
+
+			this.template +=GO.linksTemplate;
 	    	
 	  Ext.apply(this.templateConfig,{
 		  addSlashes : function(str)
