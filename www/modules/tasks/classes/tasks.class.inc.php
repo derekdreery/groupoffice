@@ -685,7 +685,7 @@ class tasks extends db
 
 		global $GO_MODULES;
 
-		$sql  = "SELECT DISTINCT t.*";
+		$sql  = "SELECT DISTINCT t.*, l.name AS tasklist_name";
 
 		if($GO_MODULES->has_module('customfields')) {
 			$sql .= " ,cf_12.*";
@@ -1340,6 +1340,30 @@ class tasks extends db
 	 */
 	function delete_category($category_id) {
 		return $this->query("DELETE FROM ta_categories WHERE id=?", 'i', $category_id);
+	}
+
+
+	function get_linked_tasks($user_id, $link_id, $link_type){
+		$sql = "SELECT t.*, tl.name AS tasklist_name FROM ta_tasks t ".
+			"INNER JOIN ta_lists tl ON tl.id=t.tasklist_id ".
+			"INNER JOIN go_links_$link_type l ON l.link_id=t.id AND l.link_type=12 ".
+			"WHERE l.id=? ORDER BY due_time DESC";
+
+		$this->query($sql, 'i', array($link_id));
+	}
+
+	function get_linked_tasks_json($link_id, $link_type){
+		global $GO_SECURITY;
+
+		$records=array();
+
+		$this->get_linked_tasks($GO_SECURITY->user_id, $link_id, $link_type);
+		while($t=$this->next_record()){
+			$this->format_task_record($t);
+			$records[]=$t;
+		}
+
+		return $records;
 	}
         
 /*

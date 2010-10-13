@@ -1,3 +1,4 @@
+modules/calendar/EventTemplate.js
 modules/calendar/EventDialog.js
 modules/calendar/CalendarGrid.js
 modules/calendar/MonthGrid.js

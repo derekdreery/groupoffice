@@ -84,9 +84,10 @@ class search extends db {
 	 * @param int $link_id Search only in items linked to this id and type
 	 * @param int $link_type Search only in items linked to this id and type
 	 * @param int $link_folder_id Show results from this link folder
+	 * @param bool $omit_link_types select all but the selected array of link types
 	 * @return int The total records found
 	 */
-	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0, $link_folder_id=0, $conditions=array())
+	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0, $link_folder_id=0, $conditions=array(), $omit_link_types=false)
 	{
 		$sql = "SELECT DISTINCT sc.acl_id, sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime";
 		if($link_id>0)
@@ -144,7 +145,12 @@ class search extends db {
 		
 		if(count($selected_types))
 		{
-			$sql .= " AND sc.link_type IN (".implode(',', $selected_types).") ";
+			$sql .= " AND sc.link_type ";
+
+			if($omit_link_types)
+				$sql .= "NOT ";
+
+			$sql .= "IN (".implode(',', $selected_types).") ";
 		}
 		
 		foreach($conditions as $condition)
@@ -267,8 +273,9 @@ class search extends db {
 		/*$conditions = array(
 			'l.ctime>'.Date::date_add(time(), -90)
 		);*/
-		
-		return $this->get_links_json($user_id,'',0,15,'l.ctime', 'DESC',array(), $link_id,$link_type,-1);
+
+		//events and tasks are omitted because they are in separate tables
+		return $this->get_links_json($user_id,'',0,15,'l.ctime', 'DESC',array(1,12), $link_id,$link_type,-1, array(),true);
 	}
 	
 	/**
@@ -286,7 +293,7 @@ class search extends db {
 	 * @param unknown_type $folder_id
 	 * @return unknown
 	 */
-	function get_links_json($user_id, $query, $start, $limit, $sort,$dir, $link_types, $link_id, $link_type,$folder_id, $conditions=array()){
+	function get_links_json($user_id, $query, $start, $limit, $sort,$dir, $link_types, $link_id, $link_type,$folder_id, $conditions=array(), $omit_link_types=false){
 		
 		global $GO_LINKS;
 		
@@ -316,7 +323,7 @@ class search extends db {
 		
 		
 		
-		$response['total']=$this->global_search($user_id, $query, $start, $limit, $sort,$dir, $link_types, $link_id, $link_type,$folder_id, $conditions);
+		$response['total']=$this->global_search($user_id, $query, $start, $limit, $sort,$dir, $link_types, $link_id, $link_type,$folder_id, $conditions, $omit_link_types);
 
 		while($this->next_record())
 		{
