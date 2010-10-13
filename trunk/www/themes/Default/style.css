@@ -846,14 +846,14 @@ table.display-panel a:active
 }
 
 .display-panel-has-links{
-	width:6px;
+	width:9px;
 	height:16px;
 	padding:0px;
 	margin:0px;
 }
 
 .has-links{
-	background:url(images/attach.gif) no-repeat 0 2px;
+	background:url(images/links.png) no-repeat;
 }
 
 /* Ext grid addons */
