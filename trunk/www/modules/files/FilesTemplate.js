@@ -1,22 +1,23 @@
-GO.files.filesTemplate = '<tpl if="files.length">'+
+GO.files.filesTemplate =
 
-		'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
-		//LINK DETAILS
-		'<tr>'+
-			'<td colspan="4" class="display-panel-heading">'+GO.files.lang.files+'</td>'+
-		'</tr>'+
-		
+		'{[this.collapsibleSectionHeader(GO.files.lang.files, "files-"+values.panelId, "files")]}'+
+
+		'<tpl if="values.files">'+
+		'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="files-{panelId}">'+		
 		'<tr>'+							
 			'<td class="table_header_links" style="width:100%">' + GO.lang['strName'] + '</td>'+							
 			'<td class="table_header_links" style="white-space:nowrap">' + GO.lang['strMtime'] + '</td>'+
-		'</tr>'+	
-							
+		'</tr>'+
+		'<tpl if="!files.length">'+
+			'<tr><td colspan="4">'+GO.lang.strNoItems+'</td></tr>'+
+		'</tpl>'+
 		'<tpl for="files">'+
 			'<tr>'+											
 				'<td><a class="go-grid-icon filetype filetype-{extension}" href="#files_{[xindex-1]}">{name}</a></td>'+
 				'<td style="white-space:nowrap">{mtime}</td>'+
 			'</tr>'+
 		'</tpl>'+
+		'</table>'+
 	
 '</tpl>';
 GO.files.filesTemplateConfig={
