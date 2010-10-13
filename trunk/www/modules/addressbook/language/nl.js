@@ -117,3 +117,5 @@ GO.addressbook.lang.emailAdded='Emailadres succesvol toegevoegd aan contactperso
 GO.addressbook.lang.exportWithCompanies='Met bedrijven';
 
 GO.addressbook.lang.id='ID';
+
+GO.addressbook.lang.exportPermission='Export rechten';
