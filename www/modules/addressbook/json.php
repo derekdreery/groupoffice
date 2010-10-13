@@ -636,43 +636,9 @@ try
 
 				echo json_encode($response);
 				break;
-			}			
-			
-			if($GO_MODULES->has_module('customfields'))
-			{
-				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-				$cf = new customfields();
-				$response['data']['customfields']=$cf->get_all_fields_with_values($GO_SECURITY->user_id, 2, $contact_id);
 			}
-			
-			if($GO_MODULES->has_module('comments'))
-			{
-				require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
-				$comments = new comments();
-				
-				$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 2);
-			}
-				
-			$response['data']['links'] = array();
-			/* loadContactDetails - contact sidepanel */
-				
-				
-			require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
-			$search = new search();
-				
-			$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], 2);
-				
-			$response['data']['links']=$links_json['results'];
-			
-			if(isset($GO_MODULES->modules['files']))
-			{
-				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-				$fs = new files();						
-				$response['data']['files']=$fs->get_content_json($response['data']['files_folder_id']);
-			}else
-			{
-				$response['data']['files']=array();				
-			}
+
+			load_standard_info_panel_items($response, 2);
 			
 			if(!isset($response['data']['iso_address_format']) || $response['data']['iso_address_format'] == '')
 				$response['data']['iso_address_format'] = $response['data']['default_iso_address_format'];
@@ -735,7 +701,6 @@ try
 
 				$response['data']['post_google_maps_link']=google_maps_link($response['data']['post_address'], $response['data']['post_address_no'], $response['data']['post_city'], $response['data']['post_country']);
 				
-				$response['data']['links'] = array();
 				$response['success']=true;		
 			}		
 				
@@ -766,14 +731,7 @@ try
 				echo json_encode($response);
 				
 				break;
-			}			
-				
-			if($GO_MODULES->has_module('customfields'))
-			{
-				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-				$cf = new customfields();
-				$response['data']['customfields']=$cf->get_all_fields_with_values($GO_SECURITY->user_id, 3, $company_id);
-			}				
+			}						
 
 			$ab->get_company_contacts($response['data']['id']);
 			$response['data']['employees']=array();
@@ -782,38 +740,12 @@ try
 				$response['data']['employees'][]=array(
 					'id'=>$ab->f('id'),
 					'name'=>String::format_name($ab->record),
+					'function'=>$ab->f('function'),
 					'email'=>$ab->f('email')					
 				);
 			}				
 				
-			$response['data']['links'] = array();
-			/* loadCompanyDetails - company sidepanel */
-				
-				
-			require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
-			$search = new search();
-				
-			$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], 3);
-				
-			$response['data']['links']=$links_json['results'];
-			
-			if(isset($GO_MODULES->modules['files']))
-			{
-				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-				$fs = new files();	
-				$response['data']['files']=$fs->get_content_json($response['data']['files_folder_id']);
-			}else
-			{
-				$response['data']['files']=array();				
-			}			
-			
-			if($GO_MODULES->has_module('comments'))
-			{
-				require_once ($GO_MODULES->modules['comments']['class_path'].'comments.class.inc.php');
-				$comments = new comments();
-				
-				$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 3);
-			}
+			load_standard_info_panel_items($response, 3);
 
 			$GO_EVENTS->fire_event('load_company', array(&$response, $task));
 				

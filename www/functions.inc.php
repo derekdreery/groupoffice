@@ -14,6 +14,61 @@
 
 
 
+function load_standard_info_panel_items(&$response, $link_type) {
+	global $GO_CONFIG, $GO_MODULES, $GO_SECURITY;
+
+	$hidden_sections = json_decode($_POST['hidden_sections'], true);
+	
+	require_once($GO_CONFIG->class_path . '/base/search.class.inc.php');
+	$search = new search();
+
+	if (!in_array('links', $hidden_sections) && !isset($response['data']['links'])) {
+		$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], $link_type);
+		$response['data']['links'] = $links_json['results'];
+	}
+
+	if (isset($GO_MODULES->modules['tasks']) && !in_array('tasks', $hidden_sections) && !isset($response['data']['tasks'])) {
+		require_once($GO_MODULES->modules['tasks']['class_path'] . 'tasks.class.inc.php');
+		$tasks = new tasks();
+
+		$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $link_type);
+	}
+
+	if (isset($GO_MODULES->modules['calendar']) && !in_array('events', $hidden_sections)) {
+		require_once($GO_MODULES->modules['calendar']['class_path'] . 'calendar.class.inc.php');
+		$cal = new calendar();
+
+		$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $link_type);
+	}
+
+	if (!in_array('files', $hidden_sections) && !isset($response['data']['files'])) {
+		if (isset($GO_MODULES->modules['files'])) {
+			require_once($GO_MODULES->modules['files']['class_path'] . 'files.class.inc.php');
+			$files = new files();
+
+			$response['data']['files'] = $files->get_content_json($response['data']['files_folder_id']);
+		} else {
+			$response['data']['files'] = array();
+		}
+	}
+
+
+	if (!in_array('comments', $hidden_sections) && isset($GO_MODULES->modules['comments']) && !isset($response['data']['comments'])) {
+		require_once ($GO_MODULES->modules['comments']['class_path'] . 'comments.class.inc.php');
+		$comments = new comments();
+
+		$response['data']['comments'] = $comments->get_comments_json($response['data']['id'], $link_type);
+	}
+
+	if($GO_MODULES->has_module('customfields') && !isset($response['data']['customfields']))
+	{
+		require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+		$cf = new customfields();
+		$response['data']['customfields']=$cf->get_all_fields_with_values($GO_SECURITY->user_id, $link_type, $response['data']['id']);
+	}
+
+}
+
 /**
  * Function array_insert().
  *
