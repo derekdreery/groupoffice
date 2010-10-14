@@ -804,6 +804,9 @@ table.display-panel a:active
 	vertical-align: top;
 }
 
+.has-links{
+	background:url(images/links.png) no-repeat;
+}
 /* Ext grid addons */
 
 .go-grid3-hide-headers .x-grid3-header {
