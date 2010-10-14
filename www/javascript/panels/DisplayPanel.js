@@ -45,6 +45,8 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	collapsibleSections : {},
 
 	hiddenSections : [],
+
+	expandListenObject : false,
 	
 	addSaveHandler : function(win, eventName)
 	{
@@ -75,7 +77,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 				disabled : true
 			}));
 		
-		tbar.push(this.linkBrowseButton = new Ext.Button({
+		/*tbar.push(this.linkBrowseButton = new Ext.Button({
 			iconCls: 'btn-link', 
 			cls: 'x-btn-text-icon', 
 			text: GO.lang.cmdBrowseLinks,
@@ -102,7 +104,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 				scope: this,
 				disabled:true
 			}));
-		}
+		}*/
 		
 		tbar.push(this.newMenuButton);
 		
@@ -151,7 +153,11 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 		
 		GO.DisplayPanel.superclass.initComponent.call(this);
 
-		this.on('expand', function(){
+		if(!this.expandListenObject){
+			this.expandListenObject=this;
+		}
+
+		this.expandListenObject.on('expand', function(){
 			if(this.collapsedLinkId){
 				this.load(this.collapsedLinkId, true);
 				delete this.collapsedLinkId;
@@ -365,45 +371,67 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 					{
 						GO.linkHandlers[link.link_type].call(this, link.id, {data: link});
 					}
-				}else
+					return;
+				}
+
+				pos = href.indexOf('#files_');
+				if(pos>-1)
 				{
-					pos = href.indexOf('#files_');
-					if(pos>-1)
+					var index = href.substr(pos+7, href.length);
+					var file = this.data.files[index];
+					if(file.extension=='folder')
 					{
-						var index = href.substr(pos+7, href.length);		
-						var file = this.data.files[index];			
-						if(file.extension=='folder')
-						{
-							GO.files.openFolder(this.data.files_folder_id, file.id);							
+						GO.files.openFolder(this.data.files_folder_id, file.id);
+					}else
+					{
+						if(GO.files){
+							var record = new GO.files.FileRecord(file);
+							//GO.files.showFilePropertiesDialog(record.get('id'));
+							GO.files.openFile(record);
 						}else
 						{
-							if(GO.files){
-								var record = new GO.files.FileRecord(file);
-								//GO.files.showFilePropertiesDialog(record.get('id'));
-								GO.files.openFile(record);
-							}else
-							{
-								window.open(GO.settings.modules.files.url+'download.php?id='+file.id);
-							}
-
+							window.open(GO.settings.modules.files.url+'download.php?id='+file.id);
 						}
-					}else if(href!='#')
-					{
-						if(href.substr(0,6)=='callto')
-							document.location.href=href;
-						else
-							window.open(href);
+
 					}
+					return;
 				}
+
+				if(href=='#browselinks'){
+
+					if(!GO.linkBrowser){
+						GO.linkBrowser = new GO.LinkBrowser();
+					}
+					GO.linkBrowser.show({link_id: this.data.id,link_type: this.link_type,folder_id: "0"});
+					GO.linkBrowser.on('hide', this.reload, this,{single:true});
+
+					return;
+				}
+
+				if(href=='#browsefiles'){
+
+					GO.files.openFolder(this.data.files_folder_id);
+					GO.files.fileBrowserWin.on('hide', this.reload, this, {single:true});
+
+					return;
+				}
+
+
+				if(href!='#')
+				{
+					if(href.substr(0,6)=='callto')
+						document.location.href=href;
+					else
+						window.open(href);
+				}
+				
 			}
 		}		
 	},
 	
 	load : function(id, reload)
 	{
-		
-		if(this.collapsed){
-
+		if(this.expandListenObject.collapsed){
 			//link_id is needed for editHandlers
 			this.collapsedLinkId=this.link_id=id;
 		}else if(this.link_id!=id || reload)

@@ -805,7 +805,8 @@ table.display-panel a:active
 	/*width: 100%;*/
 	line-height: 16px;
 	font-size: 11px;
-	font-weight: bold;
+	/*font-weight: bold;*/
+	letter-spacing:0.5px;
 	color:#333333;
 	background-color: #ebebeb;
 	border-top:1px solid #acbbc0;
@@ -850,6 +851,10 @@ table.display-panel a:active
 	height:16px;
 	padding:0px;
 	margin:0px;
+}
+
+.display-panel-browse{
+	margin-top:5px;display:block;
 }
 
 .has-links{

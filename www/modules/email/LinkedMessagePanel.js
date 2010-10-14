@@ -61,7 +61,7 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 							saveToPath:this.remoteMessage.path
 						});
 
-						this.ownerCt.hide();
+						//this.ownerCt.hide();
 					},
 					scope: this
 				}];
