@@ -74,7 +74,7 @@ GO.calendar.ListGrid = function(config)
 	{
 		header:GO.lang.strTime,
 		dataIndex: 'time',
-		width:80,
+		width:90,
 		renderer: function(v, metadata, record)
 		{
 			var html = '<div class="';
@@ -148,7 +148,7 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 	/**
    * @cfg {Integer} amount of days to display
    */
-	days : 7,
+	days : 28,
 
 	nextId : 0,
 	
@@ -241,13 +241,14 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 	{
 		this.configuredDate = date;
 
-		if(this.days>4)
+		/*if(this.days>4)
 		{
 			this.startDate = this.getFirstDateOfWeek(date);
 		}else
 		{
 			this.startDate = date;
-		}
+		}*/
+		this.startDate = this.getFirstDateOfWeek(date);
 		this.endDate = this.startDate.add(Date.DAY, this.days);
 		this.setStoreBaseParams();
   	
