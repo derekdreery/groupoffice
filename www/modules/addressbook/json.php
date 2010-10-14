@@ -852,7 +852,7 @@ try
 					array('field'=>'ab_contacts.address_no', 'label'=>$lang['common']['addressNo'], 'type'=>$contact_types['address_no']),
 					array('field'=>'ab_contacts.home_phone', 'label'=>$lang['common']['phone'], 'type'=>$contact_types['home_phone']),
 					array('field'=>'ab_contacts.work_phone', 'label'=>$lang['common']['workphone'], 'type'=>$contact_types['work_phone']),
-					array('field'=>'ab_contacts.fax', 'label'=>$lang['common']['name'], 'fax'=>$contact_types['fax']),
+					array('field'=>'ab_contacts.fax', 'label'=>$lang['common']['fax'], 'fax'=>$contact_types['fax']),
 					array('field'=>'ab_contacts.work_fax', 'label'=>$lang['common']['workFax'], 'type'=>$contact_types['work_fax']),
 					array('field'=>'ab_contacts.cellular', 'label'=>$lang['common']['cellular'], 'type'=>$contact_types['cellular']),
 					array('field'=>'ab_companies.name', 'label'=>$lang['common']['company'], 'type'=>$company_types['name']),
