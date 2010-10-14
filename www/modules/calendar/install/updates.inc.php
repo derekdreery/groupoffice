@@ -90,7 +90,7 @@ $updates[]="ALTER TABLE `cal_events` ADD `uid` VARCHAR(255) NOT NULL";
 $updates[]="ALTER TABLE `cal_participants` ADD `role` VARCHAR(100) NOT NULL";
 
 $updates[]="CREATE TABLE IF NOT EXISTS `cal_events_declined` (
-  `uid` varchar(100) NOT NULL,
+  `uid` varchar(200) NOT NULL,
   `email` varchar(100) NOT NULL,
   PRIMARY KEY (`uid`,`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
