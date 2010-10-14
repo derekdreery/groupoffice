@@ -118,8 +118,7 @@ class Go2Mime
 		$params['input'] = $mime;
 
 		$structure = Mail_mimeDecode::decode($params);
-
-		//go_debug($structure);
+		
 
 		if($part_number!='')
 		{
@@ -268,9 +267,7 @@ class Go2Mime
 					$filename=$part->d_parameters['filename*'];
 				}
 
-				
-
-				if (!empty($part->body) && !empty($filename) && empty($part->headers['content-id']))
+				if (/*!empty($part->body) &&*/ !empty($filename)/* && empty($part->headers['content-id'])*/)
 				{
 					$mime_attachment['tmp_file']=false; //for compatibility with IMAP attachments which use this property.
 					$mime_attachment['index']=count($this->response['attachments']);
@@ -295,7 +292,9 @@ class Go2Mime
 						
 					$this->response['attachments'][] = $mime_attachment;
 
-				}elseif(isset($part->headers['content-id']))
+				}
+
+				if(isset($part->headers['content-id']))
 				{
 						
 					$content_id = trim($part->headers['content-id']);
