@@ -194,17 +194,24 @@ CREATE TABLE IF NOT EXISTS `go_reminders` (
   `link_id` int(11) NOT NULL,
   `link_type` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
   `name` varchar(100) DEFAULT NULL,
   `time` int(11) NOT NULL,
   `vtime` int(11) NOT NULL DEFAULT '0',
-  `mail_send` tinyint(4) NOT NULL DEFAULT '0',
   `snooze_time` int(11) NOT NULL,
   `manual` tinyint(1) NOT NULL,
   `text` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `group_id` (`group_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `go_reminders_users`;
+CREATE TABLE IF NOT EXISTS `go_reminders_users` (
+  `reminder_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `mail_sent` tinyint(1) NOT NULL,
+  PRIMARY KEY (`reminder_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
