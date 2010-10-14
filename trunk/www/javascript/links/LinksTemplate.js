@@ -39,6 +39,8 @@ GO.linksTemplate =
 				'</tr>'+
 				'</tpl>'+
 			'</tpl>'+
+			'<tr><td colspan="4"><a class="display-panel-browse" href="#browselinks">'+GO.lang.browse+'</a></td></tr>'+
+
 			'</table>'+
 		'</tpl>';
 	

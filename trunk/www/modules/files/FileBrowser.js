@@ -644,19 +644,12 @@ GO.files.FileBrowser = function(config){
 	});
 
 
-	this.filePanel = new GO.files.FilePanel({
-		id:config.id+'-file-panel'
-	});
-
-	this.folderPanel = new GO.files.FolderPanel({
-		id:config.id+'-folder-panel',
-		hidden:true
-	});
+	
 
 	this.eastPanel = new Ext.Panel({
 		region:'east',
 		layout:'fit',
-		items:[this.filePanel, this.folderPanel],
+		//items:[this.filePanel, this.folderPanel],
 		collapsed:config.filePanelCollapsed,
 		width:450,
 		collapseMode:'mini',
@@ -666,6 +659,19 @@ GO.files.FileBrowser = function(config){
 		title: '&nbsp;'
 	});
 
+
+	this.filePanel = new GO.files.FilePanel({
+		id:config.id+'-file-panel',
+		expandListenObject:this.eastPanel
+	});
+	this.eastPanel.add(this.filePanel);
+
+	this.folderPanel = new GO.files.FolderPanel({
+		id:config.id+'-folder-panel',
+		hidden:true,
+		expandListenObject:this.eastPanel
+	});
+	this.eastPanel.add(this.folderPanel);
 	
 			
 	config['items']=[this.locationPanel, this.treePanel,this.cardPanel,this.eastPanel];
@@ -1759,21 +1765,43 @@ GO.files.createSelectFileBrowser = function(){
 
 
 GO.linkHandlers[6]=function(id, record){
-	GO.files.showFilePropertiesDialog(id+"");
+	//GO.files.showFilePropertiesDialog(id+"");
+	if(!GO.files.linkFileWindow){
+		var filePanel = new GO.files.FilePanel();
+		GO.files.linkFileWindow= new GO.LinkViewWindow({
+			title: GO.files.lang.file,
+			items: filePanel,
+			filePanel: filePanel,
+			closeAction:"hide"
+		});
+	}
+	GO.files.linkFileWindow.filePanel.load(id);
+	GO.files.linkFileWindow.show();
 }
 GO.linkPreviewPanels[6]=function(config){
 	config = config || {};
 	return new GO.files.FilePanel(config);
 }
 
+
 GO.linkHandlers[17]=function(id, record){
-	GO.files.showFolderPropertiesDialog(id+"");
+	//GO.files.showFilePropertiesDialog(id+"");
+	if(!GO.files.linkFolderWindow){
+		var filePanel = new GO.files.FolderPanel();
+		GO.files.linkFolderWindow= new GO.LinkViewWindow({
+			title: GO.files.lang.folder,
+			items: filePanel,
+			filePanel: filePanel,
+			closeAction:"hide"
+		});
+	}
+	GO.files.linkFolderWindow.filePanel.load(id);
+	GO.files.linkFolderWindow.show();
 }
 GO.linkPreviewPanels[17]=function(config){
 	config = config || {};
 	return new GO.files.FolderPanel(config);
 }
-
 
 
 

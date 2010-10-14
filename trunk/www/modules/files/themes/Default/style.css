@@ -36,6 +36,15 @@ cursor:pointer;
 	background-image:url('images/upload.png') !important;
 }
 
+
+.fs-btn-download {
+	width:16px;
+	height:16px;
+	display:block;
+	background-image:url('images/download.png');
+	text-decoration:none;
+}
+
 /*
 .btn-download {
 	background-image:url('images/download.png') !important;
