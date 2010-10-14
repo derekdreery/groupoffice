@@ -188,6 +188,7 @@ CREATE TABLE IF NOT EXISTS `go_modules` (
 --
 
 DROP TABLE IF EXISTS `go_reminders`;
+
 CREATE TABLE IF NOT EXISTS `go_reminders` (
   `id` int(11) NOT NULL,
   `link_id` int(11) NOT NULL,
@@ -200,6 +201,7 @@ CREATE TABLE IF NOT EXISTS `go_reminders` (
   `mail_send` tinyint(4) NOT NULL DEFAULT '0',
   `snooze_time` int(11) NOT NULL,
   `manual` tinyint(1) NOT NULL,
+  `text` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `group_id` (`group_id`)
