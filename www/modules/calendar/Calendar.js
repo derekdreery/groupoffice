@@ -462,16 +462,16 @@ GO.calendar.MainPanel = function(config){
 			cls: 'x-btn-text-icon',
 			handler: function(){
 							
-				var displayDate = this.getActivePanel().configuredDate;
+				var displayDate = this.getActivePanel().startDate;
 				if(this.displayType=='month')
 				{
 					displayDate = displayDate.add(Date.MONTH, -1);
 				}else
 				{
-					var days = this.days > 4 ? 7 : 1;
+					var days = this.days < 8 ? 7 : this.days;
 					displayDate = displayDate.add(Date.DAY, -days);
 				}
-							
+
 				this.setDisplay({
 					date: displayDate
 				});
@@ -487,13 +487,13 @@ GO.calendar.MainPanel = function(config){
 			text: GO.lang.cmdNext,
 			cls: 'x-btn-text-icon',
 			handler: function(){
-				var displayDate = this.getActivePanel().configuredDate;
+				var displayDate = this.getActivePanel().startDate;
 				if(this.displayType=='month')
 				{
 					displayDate = displayDate.add(Date.MONTH, 1);
 				}else
 				{
-					var days = this.days > 4 ? 7 : 1;
+					var days = this.days < 8 ? 7 : this.days;
 					displayDate = displayDate.add(Date.DAY, days);
 				}
 							
@@ -617,7 +617,7 @@ GO.calendar.MainPanel = function(config){
 			
 			this.setDisplay({
 				displayType:'list',
-				days: 7,
+				days: 28,
 				calendar_name: this.calendar_name,
 				view_id : this.view_id
 			});
@@ -935,7 +935,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			html = displayDate.format('F, Y');
 		}else
 		{
-			html = GO.lang.strWeek+' '+displayDate.format('W');
+			if(this.days<8){
+				html = GO.lang.strWeek+' '+displayDate.format('W');
+			}else
+			{
+				html = displayDate.format('W')+' - '+displayDate.add(Date.DAY,this.days).format('W');
+			}
 		}
 		
 		this.periodInfoPanel.body.update(html);
