@@ -239,7 +239,7 @@ CREATE TABLE IF NOT EXISTS `cal_categories` (
 --
 
 CREATE TABLE IF NOT EXISTS `cal_events_declined` (
-  `uid` varchar(255) NOT NULL,
+  `uid` varchar(200) NOT NULL,
   `email` varchar(100) NOT NULL,
   PRIMARY KEY (`uid`,`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
