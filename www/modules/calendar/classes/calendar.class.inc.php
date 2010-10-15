@@ -1920,8 +1920,7 @@ class calendar extends db {
 				if($o['type']=='VALARM'){
 					if(isset($o['TRIGGER'])){
 						//$offset_time = isset($o['TRIGGER']['RELATED']) && $o['TRIGGER']["RELATED"]=='END' ? $event['end_time'] : $event['start_time'];
-						
-						if($o['TRIGGER']['params']['VALUE']=='DURATION'){
+						if(!isset($o['TRIGGER']['params']['VALUE']) || $o['TRIGGER']['params']['VALUE']=='DURATION'){
 							$offset = $this->ical2array->parse_duration($o['TRIGGER']['value']);
 
 							$event['reminder']=$offset*-1;
