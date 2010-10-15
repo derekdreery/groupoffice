@@ -19,12 +19,12 @@ GO.summary.Portlet = Ext.extend(Ext.Panel, {
     cls:'x-portlet',
     stateful:false,
     initComponent : function(){
-    	this.addEvents({'remove' : true});
+    	this.addEvents({'remove_portlet' : true});
     	GO.summary.Portlet.superclass.initComponent.call(this);
     },
     saveState : function(){},    
     removePortlet : function(){    	
-    	this.fireEvent('remove', this);    	  	
+    	this.fireEvent('remove_portlet', this);
     }
 });
 Ext.reg('portlet', GO.summary.Portlet);

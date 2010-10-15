@@ -103,7 +103,7 @@
   	if(typeof(GO.summary.portlets[p])=='object')
   	{
   		
-	  	GO.summary.portlets[p].on('remove', function(portlet){
+	  	GO.summary.portlets[p].on('remove_portlet', function(portlet){
 	  		portlet.ownerCt.remove(portlet, false);	 
 	  		portlet.hide(); 		
 	  		this.saveActivePortlets();
