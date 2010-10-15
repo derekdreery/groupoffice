@@ -1,3 +1,7 @@
+2010/10/15 3.5.34
+- Some small bugs were fixed
+- Margins in PDF reports for projects
+
 2010/10/08 3.5.33
 - Some messages couldn't be saved in Group-Office.
 
