@@ -148,7 +148,7 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 	/**
    * @cfg {Integer} amount of days to display
    */
-	days : 28,
+	days : 91,
 
 	nextId : 0,
 	
