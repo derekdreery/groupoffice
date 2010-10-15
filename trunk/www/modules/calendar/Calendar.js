@@ -614,7 +614,7 @@ GO.calendar.MainPanel = function(config){
 			
 			this.setDisplay({
 				displayType:'list',
-				days: 28,
+				days: 91,
 				calendar_name: this.calendar_name,
 				view_id : this.view_id
 			});
