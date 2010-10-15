@@ -60,6 +60,8 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `files_folder_id` int(11) NOT NULL,
   `iso_address_format` varchar(2) NOT NULL,
   `post_iso_address_format` varchar(2) NOT NULL,
+  `crn` varchar(50) NOT NULL,
+  `iban` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `addressbook_id` (`addressbook_id`),
   KEY `link_id` (`link_id`),

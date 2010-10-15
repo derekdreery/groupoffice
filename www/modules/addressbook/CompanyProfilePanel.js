@@ -295,7 +295,24 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	  		collapsed: false,
 	  		border: true,
 	    	defaults: { border: false, anchor: '100%' },
-				items: [this.formName,this.formPhone,this.formFax,this.formEmail,this.formHomepage,this.formBankNo,this.formVatNo]
+				items: [
+					this.formName,
+					this.formPhone,
+					this.formFax,
+					this.formEmail,
+					this.formHomepage,
+					this.formBankNo,
+					{
+						xtype:'textfield',
+						fieldLabel:GO.addressbook.lang.iban,
+						name:'iban'
+					},{
+						xtype:'textfield',
+						fieldLabel:GO.addressbook.lang.crn,
+						name:'crn'
+					},
+					this.formVatNo
+				]
 	  	}]
 		},{
   		columnWidth: .5,
