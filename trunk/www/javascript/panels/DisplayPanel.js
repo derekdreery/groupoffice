@@ -11,7 +11,16 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-GO.DisplayPanel=Ext.extend(Ext.Panel,{
+GO.DisplayPanel=function(config){
+	config = config || {};
+
+	this.templateConfig = {};
+	this.collapsibleSections = {};
+
+	GO.DisplayPanel.superclass.constructor.call(this, config);
+}
+
+Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	link_id: 0,
 	link_type : 0,
 	
@@ -19,16 +28,7 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 	
 	template : '',
 	
-	templateConfig : {
-
-		
-		notEmpty : function(v){
-			if(v && v.length)
-			{
-				return true;
-			}
-		}
-	},
+	templateConfig : {},
 	
 	loadParams : {},
 	
@@ -143,13 +143,12 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 		this.initTemplate();
 
 		this.templateConfig.panel=this;
-
+		
 		this.templateConfig.collapsibleSectionHeader = function(title, id, dataKey){
 			this.panel.collapsibleSections[id]=dataKey;
-
 			return '<div class="collapsible-display-panel-header">'+title+'<div class="x-tool x-tool-toggle" style="float:right;cursor:pointer" id="toggle-'+id+'">&nbsp;</div></div>';
 		}
-
+		
 		this.xtemplate = new Ext.XTemplate(this.template, this.templateConfig);
 		this.xtemplate.compile();
 		
@@ -327,7 +326,6 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 
 		if(target.id.substring(0,6)=='toggle'){
 			var toggleId = target.id.substring(7,target.id.length);
-			//console.log(toggleId);
 
 			this.toggleSection(toggleId);
 		}
