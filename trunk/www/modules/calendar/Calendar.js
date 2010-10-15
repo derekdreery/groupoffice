@@ -85,8 +85,7 @@ GO.calendar.MainPanel = function(config){
 		totalProperty: 'total',
 		id: 'id',
 		fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
-		remoteSort:true,
-		autoLoad:true
+		remoteSort:true
 	});
 
 	this.projectCalendarsStore = new GO.data.JsonStore({
@@ -99,8 +98,7 @@ GO.calendar.MainPanel = function(config){
 		totalProperty: 'total',
 		id: 'id',
 		fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
-		remoteSort:true,
-		autoLoad:true
+		remoteSort:true
 	});
 
 	this.viewsStore = new GO.data.JsonStore({
@@ -112,8 +110,7 @@ GO.calendar.MainPanel = function(config){
 		totalProperty: 'total',
 		id: 'id',
 		fields:['id','name','user_name','merge','owncolor'],
-		remoteSort:true,
-		autoLoad:true
+		remoteSort:true
 	});
 
 	GO.calendar.resourcesStore = this.resourcesStore = new Ext.data.GroupingStore({
@@ -135,8 +132,7 @@ GO.calendar.MainPanel = function(config){
 			direction: "ASC"
 		},
 		groupField:'group_name',
-		remoteSort:true,
-		autoLoad:true
+		remoteSort:true
 	});
 
 	this.calendarsStore.on('load', function(){
@@ -830,10 +826,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	
 	init : function(){
-		//this.calendarsStore.load();
-		//this.viewsStore.load();
-		//this.resourcesStore.load();
-		//this.projectCalendarsStore.load();
+		this.calendarsStore.load();
+		this.viewsStore.load();
+		this.resourcesStore.load();
+		this.projectCalendarsStore.load();
 
 		if(!GO.calendar.categoriesStore.loaded)
 			GO.calendar.categoriesStore.load();
