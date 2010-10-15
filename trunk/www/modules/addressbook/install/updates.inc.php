@@ -103,3 +103,5 @@ $updates[] = "ALTER TABLE  `ab_companies` ADD INDEX (  `name` )";
 $updates[] = "ALTER TABLE  `ab_contacts` ADD INDEX (  `last_name` )";
 
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `comment` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ";
+
+$updates[]= "ALTER TABLE `ab_companies` ADD `crn` VARCHAR( 50 ) NOT NULL ,ADD `iban` VARCHAR( 100 ) NOT NULL ";

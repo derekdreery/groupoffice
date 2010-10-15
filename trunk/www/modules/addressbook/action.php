@@ -167,7 +167,7 @@ try {
 			$credentials = array(
 				'addressbook_id', 'name', 'address', 'address_no', 'zip', 'city', 'state', 'country', 'iso_address_format',
 				'post_address', 'post_address_no', 'post_city', 'post_state', 'post_country', 'post_zip', 'post_iso_address_format', 'phone',
-				'fax', 'email', 'homepage', 'bank_no', 'vat_no', 'comment'
+				'fax', 'email', 'homepage', 'bank_no', 'vat_no', 'comment','iban','crn'
 			);
 
 			$company_credentials['email_allowed'] = isset($_POST['email_allowed']) ? '1' : '0';

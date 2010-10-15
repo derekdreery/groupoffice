@@ -117,5 +117,6 @@ GO.addressbook.lang.emailAdded='Emailadres succesvol toegevoegd aan contactperso
 GO.addressbook.lang.exportWithCompanies='Met bedrijven';
 
 GO.addressbook.lang.id='ID';
-
 GO.addressbook.lang.exportPermission='Export rechten';
+GO.addressbook.lang.crn='KvK nr.';
+GO.addressbook.lang.iban='IBAN';

@@ -184,7 +184,12 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 									'</tr>'+						
 								'</tpl>'+		
 								
-																							
+								//HOMEPAGE
+								'<tpl if="!GO.util.empty(homepage)">'+
+									'<tr>'+
+										'<td class="contactCompanyLabelWidth">' + GO.lang['strHomepage'] + ':</td><td><a href="{homepage}" target="_blank">{homepage}</a></td>'+
+									'</tr>'+
+								'</tpl>'+
 											
 																										
 							'</table>'+
@@ -198,23 +203,30 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 									//BANK_NO
 									'<tpl if="!GO.util.empty(bank_no)">'+
 										'<tr>'+
-											'<td>' + GO.addressbook.lang['cmdFormLabelBankNo'] + ':</td><td>&nbsp;{bank_no}</td>'+
+											'<td>' + GO.addressbook.lang['cmdFormLabelBankNo'] + ':</td><td>{bank_no}</td>'+
 										'</tr>'+						
 									'</tpl>'+
-		
-									//VAT_NO							
-									'<tpl if="!GO.util.empty(vat_no)">'+
+									
+									'<tpl if="!GO.util.empty(bank_no)">'+
 										'<tr>'+
-											'<td>' + GO.addressbook.lang['cmdFormLabelVatNo'] + ':</td><td> {vat_no}</td>'+
+											'<td>' + GO.addressbook.lang.iban+ ':</td><td>{iban}</td>'+
+										'</tr>'+						
+									'</tpl>'+
+									
+									'<tpl if="!GO.util.empty(crn)">'+
+										'<tr>'+
+											'<td>' + GO.addressbook.lang.crn+ ':</td><td>{crn}</td>'+
 										'</tr>'+						
 									'</tpl>'+
 
-									//HOMEPAGE
-									'<tpl if="!GO.util.empty(homepage)">'+
+									//VAT_NO							
+									'<tpl if="!GO.util.empty(vat_no)">'+
 										'<tr>'+
-											'<td class="contactCompanyLabelWidth">' + GO.lang['strHomepage'] + ':</td><td>&nbsp;<a href="{homepage}" target="_blank">{homepage}</a></td>'+
-										'</tr>'+
+											'<td>' + GO.addressbook.lang['cmdFormLabelVatNo'] + ':</td><td>{vat_no}</td>'+
+										'</tr>'+						
 									'</tpl>'+
+
+									
 								'</table>'+
 							'</td>'+
 						'</tpl>'+					
@@ -299,7 +311,8 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 			{
 				if(
 					this.isBankVat(values) ||
-					this.isAddressPost(values)
+					this.isAddressPost(values) ||
+					!GO.util.empty(values['homepage'])
 				)
 				{
 					return true;
@@ -312,7 +325,9 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 				if(
 					!GO.util.empty(values['bank_no']) ||
 					!GO.util.empty(values['vat_no']) 	||
-					!GO.util.empty(values['homepage'])
+					!GO.util.empty(values['iban']) 	||
+					!GO.util.empty(values['crn'])
+					
 				)
 				{
 					return true;

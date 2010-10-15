@@ -76,8 +76,10 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 				scope: this,
 				disabled : true
 			}));
+
+		tbar.push(this.newMenuButton);
 		
-		/*tbar.push(this.linkBrowseButton = new Ext.Button({
+		tbar.push(this.linkBrowseButton = new Ext.Button({
 			iconCls: 'btn-link', 
 			cls: 'x-btn-text-icon', 
 			text: GO.lang.cmdBrowseLinks,
@@ -104,9 +106,9 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 				scope: this,
 				disabled:true
 			}));
-		}*/
+		}
 		
-		tbar.push(this.newMenuButton);
+		
 		
 		tbar.push('-');
 		tbar.push({            
@@ -252,10 +254,10 @@ GO.DisplayPanel=Ext.extend(Ext.Panel,{
 			}
 		}
 		
-		/*if(this.fileBrowseButton)
+		if(this.fileBrowseButton)
 		{
 			this.fileBrowseButton.setDisabled(data.files_folder_id<1);
-		}*/
+		}
 		
 		this.xtemplate.overwrite(this.body, data);
 
