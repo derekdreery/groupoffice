@@ -1258,7 +1258,7 @@ class email extends db {
 		$zipfile = uniqid(time()).'.zip';
 
 		chdir($tmpdir);
-		$cmd =$GO_CONFIG->cmd_zip.' -r "../'.$zipfile.'" *.*';
+		$cmd =$GO_CONFIG->cmd_zip.' -r "../'.$zipfile.'" *';
 
 		exec($cmd);
 
