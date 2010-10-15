@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `ta_tasks` (
   `files_folder_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   `priority` int(11) NOT NULL DEFAULT '1',
+  `project_name` VARCHAR( 50 ) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `list_id` (`tasklist_id`),
   KEY `rrule` (`rrule`),

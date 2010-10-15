@@ -569,11 +569,8 @@ GO.linkPreviewPanels[12]=function(config){
 GO.newMenuItems.push({
 	text: GO.tasks.lang.task,
 	iconCls: 'go-link-icon-12',
+	itemId:'ta-new-task',
 	handler:function(item, e){
-		if(!GO.tasks.taskDialog)
-		{
-			GO.tasks.taskDialog = new GO.tasks.TaskDialog();
-		}
 
 		var taskShowConfig = item.parentMenu.taskShowConfig || {};
 		taskShowConfig.link_config=item.parentMenu.link_config

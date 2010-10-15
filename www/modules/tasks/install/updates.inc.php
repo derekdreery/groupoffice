@@ -50,4 +50,6 @@ ADD INDEX ( `uuid` ) ";
 
 $updates[]="ALTER TABLE `ta_tasks` ADD `priority` int(11) NOT NULL DEFAULT '1'";
 
+$updates[]="ALTER TABLE `ta_tasks` ADD `project_name` VARCHAR( 50 ) NOT NULL";
+
 ?>
