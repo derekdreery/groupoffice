@@ -2527,6 +2527,9 @@ class calendar extends db {
 		$event['repeat_end_time'] = 0;
 		$event['month_time'] = 1;
 
+		if(!isset($event['category_id']))
+			$event['category_id']='';
+		
 		if($event['category_id']==0)
 			$event['category_id']='';
 
