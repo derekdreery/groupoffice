@@ -2,8 +2,8 @@
 //Uncomment this line in new translations!
 require_once($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('notes'));
 
-$lang['notes']['category']='Categorie';
-$lang['notes']['categories']='Categorieën';
+$lang['notes']['category']='Notitieblok';
+$lang['notes']['categories']='Notitieblokken';
 $lang['link_type'][4]=$lang['notes']['note']='Notitie';
 $lang['notes']['notes']='Notities';
 

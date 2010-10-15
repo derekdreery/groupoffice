@@ -9,8 +9,8 @@ GO.notes.lang={};
  */
 
 /* new table: no_categories */
-GO.notes.lang.category="Category";
-GO.notes.lang.categories="Categories";
+GO.notes.lang.category="Note book";
+GO.notes.lang.categories="Note books";
 
 /* new table: no_notes */
 GO.notes.lang.note="Note";
