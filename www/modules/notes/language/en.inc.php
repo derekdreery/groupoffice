@@ -6,8 +6,8 @@ $lang['notes']['note']='Note';
 $lang['notes']['name']='Notes';
 $lang['notes']['description']='A module to make to notes';
 
-$lang['notes']['category']='Category';
-$lang['notes']['categories']='Categories';
+$lang['notes']['category']='Note book';
+$lang['notes']['categories']='Note books';
 $lang['link_type'][4]=$lang['notes']['note']='Note';
 $lang['notes']['notes']='Notes';
 

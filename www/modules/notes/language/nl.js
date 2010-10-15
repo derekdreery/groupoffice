@@ -1,6 +1,6 @@
 /* new table: no_categories */
-GO.notes.lang.category="Categorie";
-GO.notes.lang.categories="Categorieën";
+GO.notes.lang.category="Notitieblok";
+GO.notes.lang.categories="Notitieblokken";
 
 /* new table: no_notes */
 GO.notes.lang.note="Notitie";
