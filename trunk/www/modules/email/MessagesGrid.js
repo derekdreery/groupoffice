@@ -170,7 +170,10 @@ GO.email.MessagesGrid = function(config){
 		style:'margin-left:10px'
 	});
 
-	config.tbar = [this.searchType, this.searchField, this.showUnreadButton];
+	if(!config.hideSearch)
+	{
+		config.tbar = [this.searchType, this.searchField, this.showUnreadButton];
+	}	
 	
 	GO.email.MessagesGrid.superclass.constructor.call(this, config);
 
