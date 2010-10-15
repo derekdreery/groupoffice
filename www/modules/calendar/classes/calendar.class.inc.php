@@ -885,7 +885,7 @@ class calendar extends db {
 		return $this->num_rows();
 	}
 
-	function get_authorized_calendars($user_id, $start=0, $offset=0, $resources=0, $group_id=1) {
+	function get_authorized_calendars($user_id, $start=0, $offset=0, $resources=0, $group_id=1, $projects=false) {
 		$sql = "SELECT DISTINCT c.* ";
 
 		if($group_id<0) {
@@ -910,6 +910,9 @@ class calendar extends db {
 		{
 				$sql .= " AND c.group_id = ".$this->escape($group_id);
 		}
+
+		$sql .= " AND c.project_id";
+		$sql .= $projects ? ">0" : "=0";
 
 		$sql .= $group_id==-1 ? " ORDER BY g.id, c.name ASC" : " ORDER BY c.name ASC";
 
@@ -2524,6 +2527,9 @@ class calendar extends db {
 		$event['repeat_type'] = REPEAT_NONE;
 		$event['repeat_end_time'] = 0;
 		$event['month_time'] = 1;
+
+		if($event['category_id']==0)
+			$event['category_id']='';
 
 		$ical2array = new ical2array();
 		if (!empty($event['rrule']) && $rrule = $ical2array->parse_rrule($event['rrule']))

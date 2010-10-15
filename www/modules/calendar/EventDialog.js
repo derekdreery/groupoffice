@@ -299,7 +299,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						this.selectCategory.setValue(GO.calendar.lang.selectCategory);
 					}*/
 					
-					this.colorField.setDisabled(this.formPanel.form.baseParams['group_id']==1);
+					//this.colorField.setDisabled(this.formPanel.form.baseParams['group_id']==1);
 
 					this.numParticipants=action.result.data.num_participants;
 
@@ -396,7 +396,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			this.formPanel.form.baseParams['group_id'] = group_id;
 			this.initCustomFields(group_id);
 			
-			this.colorField.setDisabled(group_id==1);			
+			//this.colorField.setDisabled(group_id==1);
 			this.selectCategory.container.up('div.x-form-item').setDisplayed(group_id==1);
 
 			if(group_id == 1)
@@ -909,6 +909,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.selectCategory = new GO.form.ComboBoxReset({
 			hiddenName:'category_id',
 			fieldLabel:GO.calendar.lang.category,
+			value:'',
 			valueField:'id',
 			displayField:'name',
 			store: GO.calendar.categoriesStore,
@@ -1212,7 +1213,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				fieldLabel : GO.lang.color,
 				value : GO.calendar.defaultBackground,
 				name : 'background',
-				disabled:true,
 				colors : [
 				'EBF1E2',
 				'95C5D3',
