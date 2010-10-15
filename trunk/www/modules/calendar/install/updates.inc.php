@@ -96,3 +96,6 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cal_events_declined` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates[]="ALTER TABLE `cal_events_declined` CHANGE `uid` `uid` VARCHAR(200) NOT NULL";
+
+$updates[]="ALTER TABLE `cal_calendars` ADD `project_id` INT NOT NULL ,
+ADD INDEX ( `project_id` ) ";

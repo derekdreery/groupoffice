@@ -35,21 +35,23 @@ PRIMARY KEY ( `user_id` ),
 
 DROP TABLE IF EXISTS `cal_calendars`;
 CREATE TABLE IF NOT EXISTS `cal_calendars` (
-  `id` int(11) NOT NULL default '0',
-  `group_id` int(11) NOT NULL default '1',
-  `user_id` int(11) NOT NULL default '0',
-  `acl_id` int(11) NOT NULL default '0',
-  `name` varchar(100) default NULL,
-  `start_hour` tinyint(4) NOT NULL default '0',
-  `end_hour` tinyint(4) NOT NULL default '0',
-  `background` varchar(6) default NULL,
-  `time_interval` int(11) NOT NULL default '1800',
+  `id` int(11) NOT NULL DEFAULT '0',
+  `group_id` int(11) NOT NULL DEFAULT '1',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `acl_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(100) DEFAULT NULL,
+  `start_hour` tinyint(4) NOT NULL DEFAULT '0',
+  `end_hour` tinyint(4) NOT NULL DEFAULT '0',
+  `background` varchar(6) DEFAULT NULL,
+  `time_interval` int(11) NOT NULL DEFAULT '1800',
   `public` enum('0','1') NOT NULL,
-  `shared_acl` BOOL NOT NULL ,
+  `shared_acl` tinyint(1) NOT NULL,
   `show_bdays` tinyint(1) NOT NULL,
-	`comment` VARCHAR( 255 ) NOT NULL,
-  PRIMARY KEY  (`id`),
-  KEY `group_id` (`group_id`)
+  `comment` varchar(255) NOT NULL,
+  `project_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group_id` (`group_id`),
+  KEY `project_id` (`project_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 

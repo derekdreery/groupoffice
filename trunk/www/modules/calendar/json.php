@@ -822,7 +822,7 @@ try {
 
 			$resources = isset($_REQUEST['resources']) ? $_REQUEST['resources'] : 0;
 
-			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources, 1);
+			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources, 1, !empty($_POST['project_calendars']));
 
 			$response['results']=array();
 			while($record =$cal->next_record(DB_ASSOC)) {

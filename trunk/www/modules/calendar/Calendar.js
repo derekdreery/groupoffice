@@ -84,8 +84,23 @@ GO.calendar.MainPanel = function(config){
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
-		fields:['id','name','comment','user_name','group_id', 'group_name','checked'],
-		remoteSort:true
+		fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
+		remoteSort:true,
+		autoLoad:true
+	});
+
+	this.projectCalendarsStore = new GO.data.JsonStore({
+		url: GO.settings.modules.calendar.url+'json.php',
+		baseParams: {
+			'task': 'calendars',
+			'project_calendars':1
+		},
+		root: 'results',
+		totalProperty: 'total',
+		id: 'id',
+		fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
+		remoteSort:true,
+		autoLoad:true
 	});
 
 	this.viewsStore = new GO.data.JsonStore({
@@ -97,7 +112,8 @@ GO.calendar.MainPanel = function(config){
 		totalProperty: 'total',
 		id: 'id',
 		fields:['id','name','user_name','merge','owncolor'],
-		remoteSort:true
+		remoteSort:true,
+		autoLoad:true
 	});
 
 	GO.calendar.resourcesStore = this.resourcesStore = new Ext.data.GroupingStore({
@@ -119,7 +135,8 @@ GO.calendar.MainPanel = function(config){
 			direction: "ASC"
 		},
 		groupField:'group_name',
-		remoteSort:true
+		remoteSort:true,
+		autoLoad:true
 	});
 
 	this.calendarsStore.on('load', function(){
@@ -130,14 +147,14 @@ GO.calendar.MainPanel = function(config){
 			{
 				record = this.calendarsStore.getAt(0);				
 			}
-
-			/*this.state.calendar_name=this.state.title=record.data.name;
-			this.state.comment=record.data.comment;*/
 			this.state.calendars = [record.data.id];
 			this.state.applyFilter=true;
 			this.setDisplay(this.state);
-			//this.state.applyFilter=false;
 		}
+	}, this);
+
+	this.projectCalendarsStore.on('load', function(){
+		this.projectCalendarsList.setVisible(this.projectCalendarsStore.data.length);
 	}, this);
 
 	this.viewsStore.on('load', function(){
@@ -147,14 +164,6 @@ GO.calendar.MainPanel = function(config){
 		
 		if(this.state.displayType=='view' && this.viewsStore.data.length)
 		{
-			/*var record = this.viewsStore.getById(this.state.view_id);
-			if(!record)
-			{
-				record = this.viewsStore.getAt(0);
-				this.state.view_id = record.data.id;
-				//this.state.title = record.data.name;
-			}*/
-			//this.viewsList.getSelectionModel().selectRecords(new Array(record));
 			this.setDisplay(this.state);
 		}
 	}, this);
@@ -166,16 +175,6 @@ GO.calendar.MainPanel = function(config){
 
 		if(this.state.displayType!='view' && this.group_id>1 && this.resourcesStore.data.length)
 		{
-			
-			/*var record = this.resourcesStore.getById(this.state.calendars[0]);
-			if(!record)
-			{
-				record = this.resourcesStore.getAt(0);
-				this.state.calendars = [record.data.id];
-				this.state.title=record.data.name;
-				this.state.comment=record.data.comment;
-			}*/
-			//this.resourcesList.getSelectionModel().selectRecords(new Array(record));
 			this.setDisplay(this.state);
 		}
 	}, this);
@@ -185,6 +184,11 @@ GO.calendar.MainPanel = function(config){
 	this.calendarList = new GO.grid.MultiSelectGrid({
 		title:GO.calendar.lang.calendars,
 		store: this.calendarsStore
+	});
+
+	this.projectCalendarsList = new GO.grid.MultiSelectGrid({
+		title:GO.projects.lang.projectCalendars,
+		store: this.projectCalendarsStore
 	});
 
 	this.viewsList = new GO.grid.GridPanel({
@@ -232,8 +236,8 @@ GO.calendar.MainPanel = function(config){
 		}),
 		sm: new Ext.grid.RowSelectionModel({singleSelect:true})
 	});
-   
-	this.calendarList.on('change', function(grid, calendars, records)
+
+	var changeCalendar = function(grid, calendars, records)
 	{
 		var cal_ids = [];
 
@@ -241,22 +245,23 @@ GO.calendar.MainPanel = function(config){
 			cal_ids[i] = records[i].data.id;
 		}
 
-		var config = {			
+		var config = {
 			calendars: cal_ids,
 			group_id:1,
 			merge:true,
-			owncolor:true
+			owncolor:true,
+			project_id:records[0].data.project_id
 		};
-		
+
 		this.setDisplay(config);
-		
-	}, this);
+
+	}
+   
+	this.calendarList.on('change', changeCalendar, this);
+	this.projectCalendarsList.on('change', changeCalendar, this);
 	
 	this.viewsList.on('rowclick', function(grid, rowIndex)
 	{
-		//this.calendarList.getSelectionModel().clearSelections();
-		//this.resourcesList.getSelectionModel().clearSelections();
-
 		this.setDisplay({
 				view_id: grid.store.data.items[rowIndex].id	
 			});
@@ -264,8 +269,6 @@ GO.calendar.MainPanel = function(config){
 
 	this.resourcesList.on('rowclick', function(grid, rowIndex)
 	{
-		//this.calendarList.getSelectionModel().clearSelections();
-		//this.viewsList.getSelectionModel().clearSelections();
         
 		this.setDisplay({
 			calendars: [grid.store.data.items[rowIndex].id],
@@ -283,6 +286,7 @@ GO.calendar.MainPanel = function(config){
 			handler : function() {
 				this.setDisplay({
 					group_id: 1,
+					project_id:0,
 					applyFilter:true,
 					calendars: [GO.calendar.defaultCalendar['id']]					
 				});
@@ -298,20 +302,13 @@ GO.calendar.MainPanel = function(config){
 			},
 			scope : this
 		}],
-		/*layoutConfig:{
-			autoWidth : false,
-			titleCollapse:true,
-			animate:false,
-			activeOnTop:false
-		},*/
 		items: [
 		this.calendarList,
 		this.viewsList,
-		this.resourcesList
+		this.resourcesList,
+		this.projectCalendarsList 
 		]
 	});
-
-
 
 	this.daysGridStore = new GO.data.JsonStore({
 		url: GO.settings.modules.calendar.url+'json.php',
@@ -833,9 +830,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	
 	init : function(){
-		this.calendarsStore.load();
-		this.viewsStore.load();	
-		this.resourcesStore.load();
+		//this.calendarsStore.load();
+		//this.viewsStore.load();
+		//this.resourcesStore.load();
+		//this.projectCalendarsStore.load();
 
 		if(!GO.calendar.categoriesStore.loaded)
 			GO.calendar.categoriesStore.load();
@@ -1076,6 +1074,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.group_id=config.group_id;
 		}
 
+		if(typeof(config.project_id) !='undefined')
+		{
+			this.project_id=config.project_id;
+		}
+
 		config.title = '';
 		var record;
 		//determine title and comments
@@ -1085,7 +1088,14 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				
 				if (i>0)
 					config.title = config.title+' & ';
-				record = this.group_id > 1 ? this.resourcesStore.getById(config.calendars[i]) : this.calendarsStore.getById(config.calendars[i]);
+
+				if(this.group_id>1)
+					record =this.resourcesStore.getById(config.calendars[i]);
+				else if(this.project_id>0)
+					record = this.projectCalendarsStore.getById(config.calendars[i])
+				else
+					record = this.calendarsStore.getById(config.calendars[i]);
+				
 				if(!config.group_id)
 					config.group_id=record.get('group_id');
 
@@ -1278,34 +1288,38 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.saveState();
 		}		
 		
-		var selectGrid;
+		var selectGrid, clearGrids=[];
 		if(this.view_id>0){
 			selectGrid = this.viewsList;
 
 			selectGrid.expand();
 
 			this.resourcesList.getSelectionModel().clearSelections();
-			this.calendarList.allowNoSelection=true;
-			this.calendarList.applyFilter('clear', true);
-			this.calendarList.allowNoSelection=false;
+
+			clearGrids.push(this.calendarList);
+			clearGrids.push(this.projectCalendarsList);
 		}else
 		{
 			this.viewsList.getSelectionModel().clearSelections();
 			
 			if(this.group_id==1){
-				selectGrid = this.calendarList;
+				if(this.project_id>0){
+					clearGrids.push(this.calendarList);
+					selectGrid = this.projectCalendarsList;
+				}else {
+					clearGrids.push(this.projectCalendarsList);
+					selectGrid = this.calendarList;
+				}
 				this.resourcesList.getSelectionModel().clearSelections();
 
 				selectGrid.expand();
 
 				if(config.applyFilter)
-					selectGrid.applyFilter(this.calendars, true);			
-				
+					selectGrid.applyFilter(this.calendars, true);							
 			}else
 			{
-				this.calendarList.allowNoSelection=true;
-				this.calendarList.applyFilter('clear', true);
-				this.calendarList.allowNoSelection=false;
+				clearGrids.push(this.calendarList);
+				clearGrids.push(this.projectCalendarsList);
 
 				selectGrid = this.resourcesList;
 
@@ -1316,6 +1330,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				selectGrid.getSelectionModel().selectRecords(records);
 				selectGrid.expand();
 			}					
+		}
+
+		for(var i=0,max=clearGrids.length;i<max;i++){
+			clearGrids[i].allowNoSelection=true;
+			clearGrids[i].applyFilter('clear', true);
+			clearGrids[i].allowNoSelection=false;
 		}
 	},
 	
@@ -1921,6 +1941,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					this.viewsStore.reload();
 					this.resourcesStore.reload();
 					this.calendarsStore.reload();
+					this.projectCalendarsStore.reload();
 
 					if(GO.calendar.eventDialog){
 						GO.calendar.eventDialog.updateResourcePanel();
