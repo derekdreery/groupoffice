@@ -183,6 +183,10 @@ try{
 
 			//attempt login using security class inherited from index.php
 			//$params = isset( $auth_sources[$auth_source]) ?  $auth_sources[$auth_source] : false;
+
+			require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
+			$GO_AUTH = new GO_AUTH();
+
 			if (!$GO_AUTH->login($username, $password))
 			{
 				throw new Exception($lang['common']['badLogin']);

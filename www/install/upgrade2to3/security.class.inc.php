@@ -118,8 +118,7 @@ class UPGRADE_GO_SECURITY extends db {
 	 * @return void
 	 */
 	function authenticate($module='') {
-	//return 'NOTLOGGEDIN';
-		global $GO_CONFIG, $GO_AUTH, $auth_sources, $GO_MODULES;
+		global $GO_MODULES;
 
 		if (!$this->logged_in()) {
 			return 'NOTLOGGEDIN';

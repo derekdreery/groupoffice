@@ -89,7 +89,6 @@ class GO_SECURITY extends db {
 			$this->user_id = $user['id'];
 		}else {
 			if(empty($this->user_id)) {
-				global $GO_AUTH;
 
 				if(!empty($_COOKIE['GO_UN']) && !empty($_COOKIE['GO_PW'])) {
 
@@ -98,6 +97,9 @@ class GO_SECURITY extends db {
 
 					$username = $c->decrypt($_COOKIE['GO_UN']);
 					$password = $c->decrypt($_COOKIE['GO_PW']);
+
+					require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
+					$GO_AUTH = new GO_AUTH();
 
 					$res =  $GO_AUTH->login($username, $password);
 
@@ -182,8 +184,7 @@ class GO_SECURITY extends db {
 	 * @return void
 	 */
 	function authenticate($module='') {
-	//return 'NOTLOGGEDIN';
-		global $GO_CONFIG, $GO_AUTH, $auth_sources, $GO_MODULES;
+		global $GO_MODULES;
 
 		if (!$this->logged_in()) {
 			return 'NOTLOGGEDIN';

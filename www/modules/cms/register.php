@@ -210,7 +210,10 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 			$swift = new GoSwift($user['email'], $co->config['lang']['register_subject']);
 			$swift->set_from($co->site['webmaster'], $co->site['name']);
 			$swift->set_body($mail_body);
-			$swift->sendmail();			
+			$swift->sendmail();
+
+			require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
+			$GO_AUTH = new GO_AUTH();
 			
 			$GO_AUTH->login($user['username'], $user['password']);
 			

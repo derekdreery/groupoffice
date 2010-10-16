@@ -84,10 +84,11 @@ if(!isset($_SESSION['DIR_CHECK']))
 	unset($_SESSION);
 }
 
-
+//TODO
+//auth, links, language, theme, users and groups shouldn't be loaded always
 
 require_once($GO_CONFIG->class_path.'base/exceptions.class.inc.php');
-require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
+//require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/security.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
@@ -98,7 +99,7 @@ require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/events.class.inc.php');
 
 $GO_THEME = new GO_THEME();
-$GO_AUTH = new GO_AUTH();
+//$GO_AUTH = new GO_AUTH();
 $GO_USERS = new GO_USERS();
 
 if(!is_int($_SESSION['GO_SESSION']['timezone']))

@@ -15,6 +15,9 @@
 require_once("Group-Office.php");
 $GO_SECURITY->json_authenticate();
 
+//close writing to session so other concurrent requests won't be locked out.
+session_write_close();
+
 
 $values = json_decode($_POST['values'], true);
 
