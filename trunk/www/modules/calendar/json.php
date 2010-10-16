@@ -96,6 +96,13 @@ try {
 			}			
 			$response['resources']['total'] = $total;
 
+			$response['categories']['results']=array();
+			$response['categories']['total'] = $cal->get_categories('name', 'asc', 0, 0);
+			while($category = $cal->next_record())
+			{
+				$response['categories']['results'][] = $category;
+			}
+
 
 			break;
 
