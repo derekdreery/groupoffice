@@ -615,7 +615,6 @@ class tasks extends db
 
 
 	function copy_recurring_completed($task_id) {
-		global $GO_LINKS;
 		/*
 		 If a recurring task is completed we copy it to a new task and recur that again
 		 */

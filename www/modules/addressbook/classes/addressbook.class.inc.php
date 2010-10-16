@@ -501,7 +501,7 @@ class addressbook extends db {
 	}
 
 	function delete_company($company_id, $company=false) {
-		global $GO_CONFIG, $GO_LINKS,$GO_MODULES;
+		global $GO_CONFIG, $GO_MODULES;
 
 		if(isset($GO_MODULES->modules['files'])) {
 			$company=$company ? $company : $this->get_company($company_id);
@@ -681,11 +681,9 @@ class addressbook extends db {
 
 	function delete_contact($contact_id, $contact=false) {
 
-		global $GO_CONFIG,$GO_LINKS, $GO_MODULES;
+		global $GO_CONFIG, $GO_MODULES;
 
 		if(!$contact) $contact = $this->get_contact($contact_id);
-
-		#$GO_LINKS->delete_link($contact['link_id']);
 
 		if(isset($GO_MODULES->modules['files'])) {
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');

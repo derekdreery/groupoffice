@@ -420,7 +420,10 @@ class GoSwift extends Swift_Mailer{
 	 */
 	function link_to(Array $links)
 	{
-		global $GO_CONFIG, $GO_LINKS;
+		global $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+		$GO_LINKS = new GO_LINKS();
 
 
 		$link_message['path']='email/'.date('mY').'/sent_'.time().'.eml';

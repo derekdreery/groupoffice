@@ -61,6 +61,9 @@
 				
 			if(!empty($_POST['link']))
 			{
+				require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+				$GO_LINKS = new GO_LINKS();
+
 				$link_props = explode(':', $_POST['link']);
 				$GO_LINKS->add_link(
 				$link_props[1],

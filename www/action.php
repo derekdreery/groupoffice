@@ -248,6 +248,9 @@ try{
 
 		case 'link':
 
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
+
 			$fromLinks = json_decode($_POST['fromLinks'],true);
 			$toLinks = json_decode($_POST['toLinks'],true);
 			$from_folder_id=isset($_POST['folder_id']) ? $_POST['folder_id'] : 0;
@@ -263,7 +266,10 @@ try{
 
 			$response['success']=true;
 				break;
-		case 'updatelink': 
+		case 'updatelink':
+
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
 			
 			$link['id']=$_POST['link_id1'];
 			$link['link_id']=$_POST['link_id2'];
@@ -282,6 +288,9 @@ try{
 		break;
 		
 		case 'move_links':
+
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
 			
 			$move_links = json_decode(($_POST['selections']), true);
 			$target = json_decode(($_POST['target']), true);
@@ -321,6 +330,11 @@ try{
 			break;
 
 		case 'save_link_folder':
+
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
+
+			
 			$folder['id']=isset($_POST['folder_id']) ? ($_POST['folder_id']) : 0;
 			$folder['name']=$_POST['name'];
 			$folder['parent_id']=isset($_POST['parent_id']) ? ($_POST['parent_id']) : 0;

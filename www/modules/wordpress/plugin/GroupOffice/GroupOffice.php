@@ -280,7 +280,7 @@ if(strpos(basename($_SERVER['PHP_SELF']),'wp-')===false)
 
 function groupoffice_get_contact_form($post_extra_info=false){
 
-	global $current_user, $go_config, $GO_MODULES, $GO_LINKS, $GO_CONFIG;
+	global $current_user, $go_config, $GO_MODULES, $GO_CONFIG;
 
 	//$go_config = get_option('groupoffice_config');
 
@@ -342,7 +342,9 @@ function groupoffice_get_contact_form($post_extra_info=false){
 				$db->query($sql);
 
 				if(!empty($_SESSION['last_contact_post_id'])){
-					
+
+					require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+					$GO_LINKS = new GO_LINKS();
 
 					require_once($GO_MODULES->modules['wordpress']['class_path'].'wordpress.class.inc.php');
 					$wp = new wordpress();

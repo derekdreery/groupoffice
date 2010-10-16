@@ -103,6 +103,10 @@ try {
 			break;
 
 		case 'link_descriptions':
+
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
+
 			if(isset($_POST['delete_keys'])) {
 				try {
 					$response['deleteSuccess']=true;
@@ -486,6 +490,9 @@ try {
 
 		//ini_set('max_execution_time', 120);
 
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
+
 			require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
 			$search = new search();
 
@@ -604,12 +611,17 @@ try {
 
 
 		case 'link_folder':
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
 
-			$response['data']= $GO_LINKS->get_folder(($_REQUEST['folder_id']));
+			$response['data']= $GO_LINKS->get_folder($_REQUEST['folder_id']);
 			$response['success']=true;
 			break;
 
 		case 'link_folders':
+
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
 
 			$folder_id=isset($_POST['folder_id']) ? ($_POST['folder_id']) : 0;
 			$link_id=isset($_POST['link_id']) ? ($_POST['link_id']) : 0;
@@ -623,6 +635,9 @@ try {
 			break;
 
 		case 'link_folders_tree':
+
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
 
 			$folder_id=isset($_POST['node']) && substr($_POST['node'],0,10)=='lt-folder-' ? (substr($_POST['node'],10)) : 0;
 			$link_id=isset($_POST['link_id']) ? ($_POST['link_id']) : 0;

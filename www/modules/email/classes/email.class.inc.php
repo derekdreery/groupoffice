@@ -290,8 +290,7 @@ class email extends db {
 
 
 	function link_message($message) {
-		global $GO_LINKS;
-
+		
 		$message['link_id']=$this->nextid('em_links');
 
 		if(empty($message['subject'])) {
@@ -302,8 +301,6 @@ class email extends db {
 		}
 
 		$this->insert_row('em_links',$message);
-
-
 
 		$this->cache_message($message['link_id']);
 
@@ -1351,7 +1348,7 @@ class email extends db {
 
 	public static function check_database() {
 
-		global $GO_CONFIG, $GO_LINKS;
+		global $GO_CONFIG;
 
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();

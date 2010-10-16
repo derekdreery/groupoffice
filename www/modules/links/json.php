@@ -14,6 +14,9 @@
 require('../../Group-Office.php');
 $GO_SECURITY->json_authenticate();
 
+require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+$GO_LINKS = new GO_LINKS();
+
 $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 try{
 	switch($task)
