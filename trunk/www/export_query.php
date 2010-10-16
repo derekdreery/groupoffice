@@ -16,6 +16,8 @@ require('Group-Office.php');
 require_once($GO_CONFIG->class_path.'export/export_query.class.inc.php');
 
 
+//close writing to session so other concurrent requests won't be locked out.
+session_write_close();
 
 $type = basename($_REQUEST['type']);
 

@@ -23,6 +23,9 @@ require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 $files = new files();
 $fs = new filesystem();
 
+//close writing to session so other concurrent requests won't be locked out.
+session_write_close();
+
 
 
 if(!empty($_REQUEST['id']))

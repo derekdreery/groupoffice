@@ -1207,7 +1207,7 @@ class email extends db {
 
 
 
-	function register_attachment($tmp_file, $filename, $filesize, $filemime='',
+	/*function register_attachment($tmp_file, $filename, $filesize, $filemime='',
 					$disposition='attachment', $content_id='') {
 		global $GO_CONFIG;
 
@@ -1223,7 +1223,7 @@ class email extends db {
 		$attachment['content_id'] = $content_id;
 
 		$_SESSION['attach_array'][] = $attachment;
-	}
+	}*/
 
 	function get_zip_of_attachments($account_id, $uid, $mailbox='INBOX') {
 		global $GO_CONFIG, $GO_MODULES, $imap;

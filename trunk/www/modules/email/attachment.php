@@ -17,6 +17,9 @@ require_once("../../Group-Office.php");
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('email');
 
+//close writing to session so other concurrent requests won't be locked out.
+session_write_close();
+
 require_once($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
 require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 $imap = new cached_imap();

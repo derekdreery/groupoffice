@@ -139,6 +139,12 @@ try {
 
 
 		case 'checker':
+
+			//close writing to session or this checker process will lock out other
+			//requests until it's complete. With flaky IMAP connections this can
+			//be a big problem.
+			session_write_close();
+
 			$response=array();
 
 			foreach($GO_MODULES->modules as $module) {
