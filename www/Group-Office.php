@@ -92,7 +92,7 @@ require_once($GO_CONFIG->class_path.'base/language.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/events.class.inc.php');
 
 
-$GO_USERs = new GO_USERS();
+$GO_USERS = new GO_USERS();
 
 if(!is_int($_SESSION['GO_SESSION']['timezone']))
 {

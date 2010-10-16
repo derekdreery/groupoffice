@@ -242,6 +242,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						GO.calendar.groupsStore.loadData(jsonData.groups);
 						this.selectCalendar.store.loadData(jsonData.writable_calendars);
 						this.resourceGroupsStore.loadData(jsonData.resources);
+
+						if(!GO.calendar.categoriesStore.loaded)
+							GO.calendar.categoriesStore.loadData(jsonData.categories);
 						
 						this.win.getEl().unmask();
 
