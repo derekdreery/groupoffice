@@ -47,6 +47,9 @@ $GO_LANGUAGE->set_language($GO_CONFIG->language);
 
 $user['id'] = $GO_USERS->nextid("go_users");
 
+require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+$GO_GROUPS = new GO_GROUPS();
+
 $GO_GROUPS->query("DELETE FROM go_db_sequence WHERE seq_name='groups'");
 $GO_GROUPS->query("DELETE FROM go_groups");
 

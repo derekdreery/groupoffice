@@ -25,6 +25,9 @@ $users = new users();
 
 $_email = $users->get_register_email();
 
+require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+$GO_GROUPS = new GO_GROUPS();
+
 $exclude_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$exclude_groups)));
 
 $exclude_groups[]=1;

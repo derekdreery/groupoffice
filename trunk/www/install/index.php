@@ -251,6 +251,9 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 				//store the version number for future upgrades
 				$GO_CONFIG->save_setting('version', count($updates));
 
+				require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+				$GO_GROUPS = new GO_GROUPS();
+
 				
 
 				$GO_GROUPS->query("DELETE FROM go_db_sequence WHERE seq_name='groups'");
@@ -1522,6 +1525,9 @@ switch($task)
 
 		echo '<input type="hidden" name="task" value="default_groups" />';
 
+
+		require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+		$GO_GROUPS = new GO_GROUPS();
 
 
 		$GO_GROUPS->get_groups();

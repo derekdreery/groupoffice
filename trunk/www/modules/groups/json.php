@@ -16,6 +16,9 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('groups');
 
+require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+$GO_GROUPS = new GO_GROUPS();
+
 require_once ($GO_LANGUAGE->get_language_file('groups'));
 
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';

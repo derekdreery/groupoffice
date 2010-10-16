@@ -1465,8 +1465,8 @@ try {
 		case 'usergroups_participants':
 			$ids = json_decode($_POST['ids']);
 
-			//require_once ($GO_MODULES->modules['users']['class_path']."groups.class.inc.php");
-			//$groups = new groups();
+			require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+			$GO_GROUPS = new GO_GROUPS();
 
 			$response['results'] = array();
 

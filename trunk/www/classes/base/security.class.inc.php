@@ -419,7 +419,11 @@ class GO_SECURITY extends db {
 	 * @return bool		True on success
 	 */
 	function has_admin_permission($user_id) {
-		global $GO_CONFIG, $GO_GROUPS;
+		global $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+		$GO_GROUPS = new GO_GROUPS();
+
 		if(!isset($this->is_admin))
 			$this->is_admin = $GO_GROUPS->is_in_group($user_id, $GO_CONFIG->group_root);
 
@@ -605,7 +609,7 @@ class GO_SECURITY extends db {
 	 * @return void
 	 */
 	function copy_acl($sAcl, $dAcl=0) {
-		global $GO_CONFIG, $GO_GROUPS;
+		global $GO_CONFIG;
 
 		if($dAcl > 0) {
 			$this->clear_acl($dAcl);

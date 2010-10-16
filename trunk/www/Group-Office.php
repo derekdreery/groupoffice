@@ -26,7 +26,7 @@
  * @access public
  */
 
-global $GO_THEME, $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_GROUPS, $GO_USERS;
+global $GO_THEME, $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_USERS;
 
 $root = dirname(__FILE__).'/';
 require_once($root.'functions.inc.php');
@@ -88,9 +88,7 @@ if(!isset($_SESSION['DIR_CHECK']))
 //auth, links, language, theme, users and groups shouldn't be loaded always
 
 require_once($GO_CONFIG->class_path.'base/exceptions.class.inc.php');
-//require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/security.class.inc.php');
-require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/modules.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/language.class.inc.php');
@@ -138,7 +136,6 @@ if($GO_CONFIG->debug){
 	//set_error_handler("groupoffice_error_handler", E_ALL);
 }
 
-$GO_GROUPS = new GO_GROUPS();
 $GO_LANGUAGE = new GO_LANGUAGE();
 $GO_MODULES = new GO_MODULES();
 

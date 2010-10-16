@@ -70,6 +70,10 @@ $db->query("DELETE FROM go_users_groups where user_id NOT IN (SELECT id FROM go_
 
 $GO_USERS->get_users();
 
+
+require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+$GO_GROUPS = new GO_GROUPS();
+
 while($GO_USERS->next_record())
 {
 	if(!$GO_GROUPS->is_in_group($GO_USERS->f('id'), $GO_CONFIG->group_everyone))
