@@ -826,13 +826,47 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	},
 	
 	init : function(){
-		this.calendarsStore.load();
+
+
+		this.getEl().mask(GO.lang.waitMsgLoad);
+
+		Ext.Ajax.request({
+			url: GO.settings.modules.calendar.url+'json.php',
+			params:{
+				task:'startup'				
+			},
+			callback: function(options, success, response)
+			{
+
+				if(!success)
+				{
+					alert( GO.lang['strRequestError']);
+				}else
+				{
+					var jsonData = Ext.decode(response.responseText);
+
+					this.calendarsStore.loadData(jsonData.calendars);
+					this.viewsStore.loadData(jsonData.views);
+					this.resourcesStore.loadData(jsonData.resources);
+					this.projectCalendarsStore.loadData(jsonData.project_calendars);
+					GO.calendar.categoriesStore.loadData(jsonData.categories);
+
+					this.getEl().unmask();
+					
+				}
+			},
+			scope:this
+		});
+
+
+
+		/*this.calendarsStore.load();
 		this.viewsStore.load();
 		this.resourcesStore.load();
 		this.projectCalendarsStore.load();
 
 		if(!GO.calendar.categoriesStore.loaded)
-			GO.calendar.categoriesStore.load();
+			GO.calendar.categoriesStore.load();*/
 	},
 	
 	deleteHandler : function(){

@@ -2825,4 +2825,38 @@ class calendar extends db {
 		return $records;
 	}
 
+
+	function get_calendars_json(&$response, $resources=false, $project_calendars=false){
+
+		global $GO_SECURITY;
+		
+		$response['total'] = $this->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources, 1, $project_calendars);
+
+		$response['results']=array();
+
+		$cal2 = new calendar();
+
+		while($record =$this->next_record(DB_ASSOC)) {
+
+			$group = $cal2->get_group($record['group_id']);
+			$record['group_name'] = $group['name'];
+			$record['comment']=nl2br($record['comment']);
+			$response['results'][] = $record;
+		}
+	}
+
+	function get_views_json(&$response){
+
+		global $GO_SECURITY, $GO_USERS;
+
+		$response['total'] = $this->get_authorized_views($GO_SECURITY->user_id);
+		$response['results']=array();
+		while($record= $this->next_record(DB_ASSOC)) {
+			$user = $GO_USERS->get_user($record['user_id']);
+
+			$record['user_name'] = String::format_name($user);
+			$response['results'][] = $record;
+		}
+	}
+
 }

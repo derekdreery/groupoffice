@@ -213,11 +213,49 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			this.tabPanel.unhideTabStripItem('resources-panel');
 	},
 
+	initialized : false,
+
 	show : function(config) {
 
 		config = config || {};
 
-		if(!GO.calendar.groupsStore.loaded){
+		this.win.show();
+
+		if(!this.inititalized){
+
+			this.win.getEl().mask(GO.lang.waitMsgLoad);
+			Ext.Ajax.request({
+				url: GO.settings.modules.calendar.url+'json.php',
+				params:{
+					task:'init_event_window'
+				},
+				callback: function(options, success, response)
+				{
+
+					if(!success)
+					{
+						alert( GO.lang['strRequestError']);
+					}else
+					{
+						var jsonData = Ext.decode(response.responseText);
+
+						GO.calendar.groupsStore.loadData(jsonData.groups);
+						this.selectCalendar.store.loadData(jsonData.writable_calendars);
+						this.resourceGroupsStore.loadData(jsonData.resources);
+						
+						this.win.getEl().unmask();
+
+						this.inititalized=true;
+						this.show(config);
+
+					}
+				},
+				scope:this
+			});
+			return false;
+		}
+
+		/*if(!GO.calendar.groupsStore.loaded){
 			GO.calendar.groupsStore.load({
 				callback:function(){
 					this.show(config);
@@ -245,10 +283,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				scope:this
 			});
 			return false;
-		}
+		}*/
 
-		if(!GO.calendar.categoriesStore.loaded)
-			GO.calendar.categoriesStore.load();
+		/*if(!GO.calendar.categoriesStore.loaded)
+			GO.calendar.categoriesStore.load();*/
         
 		if (config.oldDomId) {
 			this.oldDomId = config.oldDomId;
@@ -278,7 +316,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				url : GO.settings.modules.calendar.url + 'json.php',
 				// waitMsg:GO.lang.waitMsgLoad,
 				success : function(form, action) {
-					this.win.show();
+					//this.win.show();
 					this.participantsPanel.setEventId(action.result.data.participants_event_id);
 					this.formPanel.form.baseParams['group_id'] = action.result.data.group_id;
 					this.initCustomFields(action.result.data.group_id);
@@ -319,7 +357,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				},
 				waitMsg : GO.lang.waitMsgLoad,
 				success : function(form, action) {
-					this.win.show();
+					//this.win.show();
 
 
 
@@ -351,7 +389,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			// this.participantsPanel.setDisabled(true);
 			this.setWritePermission(true);
 
-			this.win.show();
+			//this.win.show();
             
 
 
