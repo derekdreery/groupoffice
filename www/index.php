@@ -67,4 +67,8 @@ if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
 	}
 }
 
+require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
+$GO_THEME = new GO_THEME();
+
+
 require_once($GO_THEME->theme_path."layout.inc.php");

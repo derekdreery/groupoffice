@@ -112,7 +112,7 @@ class File
 		return strpos($path, '../') !== false || strpos($path, '..\\')!==false;
 	}
 
-	public static function get_filetype_image($extension=null) {
+	/*public static function get_filetype_image($extension=null) {
 
 		if(!isset($extension))
 		{
@@ -126,7 +126,7 @@ class File
 		} else {
 			return $GO_THEME->filetypes['unknown'];
 		}
-	}
+	}*/
 
 
 	public static function get_filetype_description_by_path($path)

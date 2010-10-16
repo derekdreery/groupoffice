@@ -27,6 +27,8 @@ require_once($GO_CONFIG->class_path.'smarty/Smarty.class.php');
 
 require($GO_LANGUAGE->get_base_language_file('lostpassword'));
 
+require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
+$GO_THEME = new GO_THEME();
 
 $theme = is_dir($GO_THEME->theme_path.'smarty') ? $GO_CONFIG->theme : 'Default';
 
