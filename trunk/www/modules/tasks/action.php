@@ -62,7 +62,10 @@ try {
 
 			$response['task_id']= $task_id = $tasks->add_task($task);
 
-			$links = json_decode(($_POST['links']), true);
+			$links = json_decode($_POST['links'], true);
+
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
 
 			foreach($links as $link) {
 				if($link['link_id']>0) {
@@ -257,6 +260,9 @@ try {
 			}
 
 			if(!empty($_POST['link'])) {
+				require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+				$GO_LINKS = new GO_LINKS();
+				
 				$link_props = explode(':', $_POST['link']);
 				$GO_LINKS->add_link(
 								($link_props[1]),

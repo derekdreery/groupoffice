@@ -414,6 +414,10 @@ try {
 			break;
 
 		case 'events':
+
+		require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+		$GO_LINKS = new GO_LINKS();
+
 		//setlocale(LC_ALL, 'nl_NL@euro');
 
 		//return all events for a given period
@@ -707,6 +711,9 @@ try {
 			break;
 
 		case 'view_events':
+
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
 
 			$view_id = ($_REQUEST['view_id']);
 			$start_time=isset($_REQUEST['start_time']) ? strtotime($_REQUEST['start_time']) : 0;

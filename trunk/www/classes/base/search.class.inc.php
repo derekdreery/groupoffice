@@ -295,7 +295,10 @@ class search extends db {
 	 */
 	function get_links_json($user_id, $query, $start, $limit, $sort,$dir, $link_types, $link_id, $link_type,$folder_id, $conditions=array(), $omit_link_types=false){
 		
-		global $GO_LINKS;
+		global $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+		$GO_LINKS = new GO_LINKS();
 		
 		
 		$response['results']=array();
@@ -414,7 +417,10 @@ class search extends db {
 	
 	function delete_search_result($id, $link_type)
 	{
-		global $GO_LINKS, $GO_MODULES;
+		global $GO_MODULES, $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+		$GO_LINKS = new GO_LINKS();
 
 		$sr = $this->get_search_result($id, $link_type);
 		if($sr)
@@ -440,7 +446,7 @@ class search extends db {
 
 	function cache_search_result($result)
 	{
-		global $lang, $GO_LINKS;
+		global $lang;
 
 		if(isset($result['keywords']) && strlen($result['keywords'])>255)
 		{
@@ -460,7 +466,10 @@ class search extends db {
  			$this->log($result['id'], $result['link_type'], 'Added '.strip_tags($result['name']));
 
 			//create default link folders
-			global $GO_CONFIG, $GO_LINKS;
+			global $GO_CONFIG;
+
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
 			
 			$default_folders = $GO_CONFIG->get_setting('default_link_folder_'.$result['link_type']);
 			if($default_folders){

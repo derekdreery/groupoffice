@@ -13,6 +13,9 @@ require('../www/Group-Office.php');
 $GO_SECURITY->logged_in($GO_USERS->get_user(1));
 $GO_MODULES->load_modules();
 
+require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+$GO_LINKS = new GO_LINKS();
+
 
 $del = ',';
 $enc = '"';

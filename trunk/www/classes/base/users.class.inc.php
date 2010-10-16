@@ -339,7 +339,10 @@ class GO_USERS extends db
 	
 	function get_linked_users($user_id, $link_id)
 	{
-		global $GO_LINKS;
+		global $GO_CONFIG;
+		require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+		$GO_LINKS = new GO_LINKS();
+
 		$links = $GO_LINKS->get_links($link_id, 8);
 		
 		if(count($links))

@@ -32,9 +32,14 @@ try{
 			$response['success']=true;
 
 			break;
-		case 'save_link_description':		
+		case 'save_link_description':
+
+			require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
+
 			$link_description_id=$link_description['id']=isset($_POST['link_description_id']) ? $_POST['link_description_id'] : 0;
-						$link_description['description']=$_POST['description'];
+			$link_description['description']=$_POST['description'];
+			
 			if($link_description['id']>0)
 			{
 				$GO_LINKS->update_link_description($link_description);

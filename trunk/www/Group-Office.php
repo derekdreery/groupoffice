@@ -84,15 +84,11 @@ if(!isset($_SESSION['DIR_CHECK']))
 	unset($_SESSION);
 }
 
-//TODO
-//auth, links, language, theme, users and groups shouldn't be loaded always
-
 require_once($GO_CONFIG->class_path.'base/exceptions.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/security.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/modules.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/language.class.inc.php');
-require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/events.class.inc.php');
 
 
@@ -157,8 +153,6 @@ if($GO_CONFIG->session_inactivity_timeout>0){
 	}
 }
 
-
-$GO_LINKS = new GO_LINKS();
 $GO_EVENTS = new GO_EVENTS();
 
 
