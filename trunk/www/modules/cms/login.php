@@ -29,6 +29,10 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	$password = ($_POST['password']);
 
 	try{
+
+		require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
+		$GO_AUTH = new GO_AUTH();
+
 		if (!$GO_AUTH->login($username, $password))
 		{
 			$smarty->assign('failed', true);

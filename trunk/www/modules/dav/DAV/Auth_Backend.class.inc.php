@@ -57,7 +57,9 @@ class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
 
 		$cred = $this->getUserPass();		
 		if($cred){
-			global $GO_AUTH;
+			global $GO_CONFIG;
+			require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
+			$GO_AUTH = new GO_AUTH();
 
 			if ($GO_AUTH->login($cred[0], $cred[1], 'normal', false)) {
 				return true;

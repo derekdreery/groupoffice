@@ -55,7 +55,7 @@ class formprocessor{
 
 	function process_form()
 	{
-		global $GO_AUTH,$GO_SECURITY, $GO_LANGUAGE, $GO_MODULES, $GO_USERS, $GO_CONFIG, $lang;
+		global $GO_SECURITY, $GO_LANGUAGE, $GO_MODULES, $GO_USERS, $GO_CONFIG, $lang;
 
 		$this->check_required();
 
@@ -94,6 +94,9 @@ class formprocessor{
 			$user_credentials['password']=$_POST['password1'];
 
 			$this->user_id=$user_id=$GO_USERS->add_user($user_credentials, $this->user_groups, $this->visible_user_groups);
+
+			require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
+			$GO_AUTH = new GO_AUTH();
 
 			$GO_AUTH->login($user_credentials['username'], $user_credentials['password']);
 		}

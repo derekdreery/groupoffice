@@ -244,7 +244,8 @@ class users extends db
 
 		if (!empty($_POST["password1"]) || !empty($_POST["password2"]))
 		{
-			global $GO_AUTH;
+			require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
+			$GO_AUTH = new GO_AUTH();
 			
 			if(!$GO_AUTH->authenticate($_SESSION['GO_SESSION']['username'], $_POST['current_password']))
 			{
