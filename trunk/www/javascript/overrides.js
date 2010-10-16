@@ -226,53 +226,6 @@ Ext.override(Ext.form.DateField, {
 	});
 }
 
-
-/*
- *Override for form load with checkboxgroup
- */
-
-Ext.override(Ext.form.BasicForm, {
-
-    findField : function(id){
-        var field = this.items.get(id);
-
-        if(!field){
-            // --------- It was: ---------
-            // //Iterate through children on first level
-            // this.items.each(function(f){
-            //     if(f.isFormField && (f.dataIndex == id || f.id == id || f.getName() == id)){
-            //         field = f;
-            //         return false;
-            //     }
-            // });
-
-            // --------- It is now: ---------
-            // Iterate through children on all levels
-            var fn = function(f) {
-              if(field)
-                return false;   //stop iteration, if field was found already
-
-              if(f.isFormField && (f.dataIndex == id || f.id == id || f.getName() == id)){
-                field = f;    // field was found
-                return false;
-              }
-              else if(f.items && f.items.each) {
-                f.items.each(fn);   // iterate through child items
-              }
-            }
-            this.items.each(fn);
-            // --------- End of my changes ---------
-
-        }
-
-        return field || null;
-    }
-
-});  
-
-
-
-
 /*
 * Print elements
 */
