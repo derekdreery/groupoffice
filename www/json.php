@@ -188,6 +188,9 @@ try {
 
 		//used by /javascript/dialog/SelectGroups.js
 		case 'groups':
+			require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+			$GO_GROUPS = new GO_GROUPS();
+
 			$user_id = $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) ? 0 : $GO_SECURITY->user_id;
 			$response['total']=$GO_GROUPS->get_groups($user_id, $start, $limit, $sort, $dir);
 

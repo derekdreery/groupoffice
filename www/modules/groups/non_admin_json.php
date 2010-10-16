@@ -16,6 +16,9 @@ require_once("../../Group-Office.php");
 
 require_once ($GO_LANGUAGE->get_language_file('groups'));
 
+require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+$GO_GROUPS = new GO_GROUPS();
+
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
 $dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 $start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';

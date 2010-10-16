@@ -29,6 +29,10 @@ try
 	switch($task)
 	{
 		case 'import':
+			require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+			$GO_GROUPS = new GO_GROUPS();
+
+
 			ini_set('max_execution_time', 3600);
 
 			$cols[]='username';
@@ -95,18 +99,6 @@ try
 				throw new Exception($lang['users']['incorrectFormat']);
 			}
 
-
-			/*$modules_read = array_map('trim', explode(',',$GO_CONFIG->register_modules_read));
-			$modules_write = array_map('trim', explode(',',$GO_CONFIG->register_modules_write));
-
-			//user groups the user will be added to.
-			$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GO_CONFIG->register_user_groups)));
-
-			//user groups that this user will be visible to
-			$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GO_CONFIG->register_visible_user_groups)));*/
-
-			
-
 			$failed = array();
 
 			$success_count = 0;
@@ -171,6 +163,10 @@ try
 
 
 		case 'save_user':
+
+			require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+			$GO_GROUPS = new GO_GROUPS();
+
 			$user['id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : 0;
 			if(isset($_POST['first_name']))
 			{

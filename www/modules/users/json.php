@@ -15,6 +15,9 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate();
 
+require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+$GO_GROUPS = new GO_GROUPS();
+
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'username';
 $dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 $start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
@@ -170,7 +173,7 @@ switch($task)
 		echo '({total:'.count($records).',results:'.json_encode($records).'})';
 		break;
 	case 'groups':
-		
+
 		if(empty($user_id))
 		{
 			$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GO_CONFIG->register_user_groups)));

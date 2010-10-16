@@ -91,52 +91,7 @@ class GO_AUTH extends db
 		
 		// There were not problems, so we can return the userid number.
 		return $user;
-	}
-
-
-	/**
-	 * This function adds a user to the user management system.
-	 * 
-	 * When the given user does not exist in the user management system he has
-	 * to be added. This function adds a user to the UM-database, using all
-	 * available user information that can be obtained from the user's LDAP
-	 * account. When finished, this function returns the new uidnumber of this
-	 * user.
-	 * 
-	 * @access private
-	 * 
-	 * @param string $username is the name of the user to add.
-	 * @param string $password is the password needed to connect to the directory.
-	 * @param array $params The authentication source specified in auth_sources.inc
-	 * 
-	 * @return int the userid number or null if the function has failed.
-	
-	function addToUM( $username, $password, $params ) {
-		// Query the database for the given username with the associated
-		// password.
-		$sql = 'SELECT id FROM go_users WHERE ' .
-				"username='".$this->escape($username)."' AND password='".md5($password)."' " .
-				"AND enabled='1'";
-		$this->query( $sql );
-
-		// Fetch the user array from the database
-		$this->next_record();
-		$user = $this->record;
-		
-		// We have to create a new id for this user, so that we can prevent
-		// different users (from different authenticateion backends) with the
-		// same ids.
-		unset( $user['id'] );
-
-		// Add the user to the user management system.
-		$user_id = $GO_USERS->add_user( $user, 
-				$GO_GROUPS->groupnames_to_ids($params['groups']), 
-				$GO_GROUPS->groupnames_to_ids($params['visible_groups']), 
-				$params['modules_read'], 
-				$params['modules_write'] );
-
-		return $user_id;
-	} */
+	}	
 	
 	/**
 	 * Actualise session, increment logins and check WebDAV status.

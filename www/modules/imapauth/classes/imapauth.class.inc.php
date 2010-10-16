@@ -77,8 +77,7 @@ class imapauth
 		{
 			go_debug($config);
 
-			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_USERS, $GO_GROUPS,
-			$GO_MODULES;
+			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_USERS, $GO_MODULES;
 
 
 			$GO_SECURITY->user_id = 0;
@@ -126,6 +125,9 @@ class imapauth
 					$user['email'] =$email;
 					$user['username'] = $go_username;
 					$user['password'] = $password;
+
+					require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+					$GO_GROUPS = new GO_GROUPS();
 
 
 					if ( !$user_id = $GO_USERS->add_user(

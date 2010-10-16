@@ -177,7 +177,8 @@ class ldapauth extends imapauth {
 				$user['username'] = $username;
 				$user['password'] = $password;
 
-				global $GO_GROUPS;
+				require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+				$GO_GROUPS = new GO_GROUPS();
 
 				go_debug('LDAPAUTH: Group-Office user not found. Creating new user from LDAP profile');
 

@@ -542,7 +542,10 @@ class GO_USERS extends db
 	$modules_read=null,
 	$modules_write=null)
 	{
-		global $GO_MODULES, $GO_SECURITY, $GO_GROUPS;
+		global $GO_MODULES, $GO_SECURITY, $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+		$GO_GROUPS = new GO_GROUPS();
 
 		if($this->update_profile($user))
 		{
@@ -775,7 +778,11 @@ class GO_USERS extends db
 	$send_invitation=false
 	)
 	{
-		global $GO_CONFIG, $GO_LANGUAGE, $GO_SECURITY, $GO_GROUPS, $GO_MODULES, $GO_EVENTS, $lang;
+
+		global $GO_CONFIG, $GO_LANGUAGE, $GO_SECURITY, $GO_MODULES, $GO_EVENTS, $lang;
+
+		require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+		$GO_GROUPS = new GO_GROUPS();
 
 		$GO_LANGUAGE->require_language_file('users');
 
@@ -1040,7 +1047,10 @@ class GO_USERS extends db
 	 */
 	function delete_user($user_id)
 	{
-		global $GO_CONFIG,$GO_SECURITY, $GO_EVENTS, $GO_GROUPS;
+		global $GO_CONFIG,$GO_SECURITY, $GO_EVENTS;
+
+		require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+		$GO_GROUPS = new GO_GROUPS();
 
 		if($user = $this->get_user($user_id))
 		{
