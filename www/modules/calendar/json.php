@@ -32,6 +32,73 @@ try {
 
 	switch($task) {
 
+		case 'startup':
+
+			session_write_close();
+			
+			$cal->get_views_json($response['views']);
+			$cal->get_calendars_json($response['calendars']);
+			$cal->get_calendars_json($response['resources'], true);
+			$cal->get_calendars_json($response['project_calendars'], false,true);
+
+			$response['categories']['results']=array();
+			$response['categories']['total'] = $cal->get_categories('name', 'asc', 0, 0);
+			while($category = $cal->next_record())
+			{
+				$response['categories']['results'][] = $category;
+			}
+
+			break;
+
+		case 'init_event_window':
+
+			$response['writable_calendars']['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, 0, 0, 1, 1, -1, 1, 'name', 'ASC');
+			
+			$cal2=new calendar();
+			$response['results']=array();
+			while($record =$cal->next_record()) {
+
+				$group = $cal2->get_group($record['group_id']);
+				$record['group_name'] = $group['name'];			
+
+				$response['writable_calendars']['results'][] = $record;
+			}
+
+
+			$response['groups']['total'] = $cal->get_groups();
+			$response['resources']['results']=array();
+			$total = 0;
+
+			while($group = $cal->next_record()) {
+
+				//for groupsStore
+				$user = $GO_USERS->get_user($group['user_id']);
+				$group['user_name']=String::format_name($user);
+				$response['groups']['results'][] = $group;
+
+
+
+				//for resources panel
+				$group['fields'] = explode(",", $group['fields']);
+				$group['resources'] = array();
+				$cal2->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 0, $group['id']);
+				while($resource = $cal2->next_record()) {
+					$user = $GO_USERS->get_user($resource['user_id']);
+					$resource['user_name']=String::format_name($user);
+					$group['resources'][] = $resource;
+				}
+
+				$num_resources = count($group['resources']);
+				if($num_resources > 0) {
+					$response['resources']['results'][] = $group;
+					$total+=$num_resources;
+				}
+			}			
+			$response['resources']['total'] = $total;
+
+
+			break;
+
 		case 'summary':
 		//get the local times
 			$local_time = time();
@@ -821,17 +888,10 @@ try {
 		case 'calendars':
 
 			$resources = isset($_REQUEST['resources']) ? $_REQUEST['resources'] : 0;
+			$project_calendars = isset($_REQUEST['project_calendars']) ? $_REQUEST['project_calendars'] : 0;
 
-			$response['total'] = $cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources, 1, !empty($_POST['project_calendars']));
+			$cal->get_calendars_json($response, $resources, $project_calendars);
 
-			$response['results']=array();
-			while($record =$cal->next_record(DB_ASSOC)) {
-	
-				$group = $cal2->get_group($record['group_id']);
-				$record['group_name'] = $group['name'];
-				$record['comment']=nl2br($record['comment']);
-				$response['results'][] = $record;
-			}
 			break;
 
 		case 'user_calendars':
@@ -920,14 +980,7 @@ try {
 			break;
 
 		case 'views':
-			$response['total'] = $cal->get_authorized_views($GO_SECURITY->user_id);
-			$response['results']=array();
-			while($record= $cal->next_record(DB_ASSOC)) {
-				$user = $GO_USERS->get_user($cal->f('user_id'));
-
-				$record['user_name'] = String::format_name($user);
-				$response['results'][] = $record;
-			}
+			$cal->get_views_json($response);
 			break;
 
 
@@ -1195,7 +1248,7 @@ try {
 
 			break;
 
-		case 'resources':
+		/*case 'resources':
 
 			$cal->get_groups();
 			$response['results']=array();
@@ -1218,7 +1271,7 @@ try {
 			}
 
 			$response['total'] = $total;
-			break;
+			break;*/
 
 
 		case 'settings':
