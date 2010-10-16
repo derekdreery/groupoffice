@@ -92,7 +92,7 @@ require_once($GO_CONFIG->class_path.'base/language.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/events.class.inc.php');
 
 
-$GO_USERS = new GO_USERS();
+$GO_USERs = new GO_USERS();
 
 if(!is_int($_SESSION['GO_SESSION']['timezone']))
 {
@@ -167,9 +167,6 @@ if ( $GO_CONFIG->log ) {
 	$username = isset($_SESSION['GO_SESSION']['username']) ? $_SESSION['GO_SESSION']['username'] : 'notloggedin';
 	openlog('[Group-Office]['.date('Ymd G:i').']['.$username.']', LOG_PERROR, LOG_USER);
 }
-
-require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-$fs = new filesystem();
 
 if($GO_SECURITY->user_id>0)
 {

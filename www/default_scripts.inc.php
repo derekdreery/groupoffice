@@ -87,6 +87,7 @@ $url = $GO_CONFIG->host.'compress.php?file='.$file;
 if($GO_CONFIG->debug || !file_exists($path)) {
 	
 	//cleanup old cache
+	require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 	$fs = new filesystem();
 	/*$files = $fs->get_files_sorted($GO_CONFIG->file_storage_path.'cache');
 	while($file=array_shift($files)) {
@@ -272,6 +273,7 @@ if(count($load_modules)) {
 		if(!file_exists($path)) {
 		
 			//cleanup old cache
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 			$fs = new filesystem();
 			/*$files = $fs->get_files_sorted($GO_CONFIG->file_storage_path.'cache');
 			while($file=array_shift($files)) {

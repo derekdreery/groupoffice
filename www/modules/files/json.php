@@ -24,6 +24,10 @@ require($GO_LANGUAGE->get_language_file('files'));
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 $response=array();
 
+//task grids may write to session
+if($task != 'grid')
+	session_write_close();
+
 try {
 
 	switch($task) {
@@ -363,6 +367,8 @@ try {
 
 				$_SESSION['GO_SESSION']['files']['jupload_new_files']=array();
 			}
+
+			session_write_close();
 
 			if($_POST['id'] == 'shared') {
 				$response['parent_id']=0;
