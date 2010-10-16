@@ -1355,6 +1355,10 @@ switch($task)
 		<td>
 		<select name="theme">
 			<?php
+			require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
+			$GO_THEME = new GO_THEME();
+
+
 			$themes = $GO_THEME->get_themes();
 			foreach($themes as $theme)
 			{

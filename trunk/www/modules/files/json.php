@@ -344,6 +344,10 @@ try {
 
 		case 'grid':
 
+			require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
+			$GO_THEME = new GO_THEME();
+
+
 			if(empty($_POST['id'])) {
 				throw new Exception('No location given');
 			}

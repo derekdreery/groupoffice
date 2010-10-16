@@ -5,6 +5,9 @@ $GO_SECURITY->html_authenticate();
 
 header('Content-Type: text/html; charset=UTF-8');
 
+require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
+$GO_THEME = new GO_THEME();
+
 
 $icon = $GO_THEME->theme_path.'images/groupoffice.ico';
 if(!file_exists($icon))

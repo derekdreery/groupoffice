@@ -26,7 +26,7 @@
  * @access public
  */
 
-global $GO_THEME, $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_USERS;
+global $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_USERS;
 
 $root = dirname(__FILE__).'/';
 require_once($root.'functions.inc.php');
@@ -92,12 +92,10 @@ require_once($GO_CONFIG->class_path.'base/security.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/modules.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/language.class.inc.php');
-require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/events.class.inc.php');
 
-$GO_THEME = new GO_THEME();
-//$GO_AUTH = new GO_AUTH();
+
 $GO_USERS = new GO_USERS();
 
 if(!is_int($_SESSION['GO_SESSION']['timezone']))

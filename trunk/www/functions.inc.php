@@ -356,7 +356,11 @@ function detect_browser() {
 }
 
 function get_thumb_dir(){
-	global $GO_THEME, $GO_CONFIG;
+	global $GO_CONFIG;
+
+	require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
+	$GO_THEME = new GO_THEME();
+
 
 	if(is_dir($GO_THEME->theme_path.'images/128x128/filetypes/')){
 		$dir = $GO_THEME->image_path.'128x128/filetypes/';
@@ -370,7 +374,11 @@ function get_thumb_dir(){
 }
 
 function get_thumb_url($path, $w=100,$h=100,$zc=1) {
-		global $GO_THEME, $GO_CONFIG;
+		global $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
+		$GO_THEME = new GO_THEME();
+
 
 		$extension = File::get_extension($path);
 

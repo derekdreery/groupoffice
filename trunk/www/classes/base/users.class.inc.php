@@ -93,7 +93,7 @@ class GO_USERS extends db
 	 * @return bool
 	 */
 	function update_session( $userdata , $update_language=false) {
-		global $GO_LANGUAGE, $GO_CONFIG, $GO_THEME;
+		global $GO_LANGUAGE, $GO_CONFIG;
 
 		if(!is_array($userdata)){
 			$userdata = $this->get_user($userdata);
@@ -143,6 +143,9 @@ class GO_USERS extends db
 		$_SESSION['GO_SESSION']['start_module'] = isset ($userdata['start_module']) ? $userdata['start_module'] : 'summary';
 
 		//$_SESSION['GO_SESSION']['language'] = $userdata['language'];
+
+		$theme_changed = !isset($_SESSION['GO_SESSION']['theme']) || $userdata['theme'] != $_SESSION['GO_SESSION']['theme'];
+
 		$_SESSION['GO_SESSION']['theme'] = $userdata['theme'];
 		$_SESSION['GO_SESSION']['mute_sound'] = $userdata['mute_sound'];
 		$_SESSION['GO_SESSION']['popup_reminders'] = $userdata['popup_reminders'];
@@ -154,7 +157,12 @@ class GO_USERS extends db
 
 		
 
-		if (isset($GO_THEME)) $GO_THEME->set_theme();
+		if($theme_changed){
+			require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
+			$GO_THEME = new GO_THEME();
+			$GO_THEME->set_theme();
+		}
+		
 
 		return true;
 	}

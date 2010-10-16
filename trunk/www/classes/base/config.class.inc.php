@@ -1164,7 +1164,11 @@ class GO_CONFIG {
 
 
 	function get_client_settings() {
-		global $GO_SECURITY, $GO_MODULES, $GO_THEME, $GO_LANGUAGE;
+		global $GO_SECURITY, $GO_MODULES, $GO_LANGUAGE;
+
+		require_once($this->class_path.'base/theme.class.inc.php');
+		$GO_THEME = new GO_THEME();
+
 
 		$response['state_index'] = 'go';
 
