@@ -17,6 +17,11 @@ require('../../Group-Office.php');
 
 $GO_SECURITY->json_authenticate('email');
 
+if(!isset($_POST['passphrase'])){
+	//close writing to session so other concurrent requests won't be locked out.
+	session_write_close();
+}
+
 require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
 require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 require_once ($GO_LANGUAGE->get_language_file('email'));

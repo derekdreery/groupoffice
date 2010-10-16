@@ -21,6 +21,7 @@ require_once($GO_CONFIG->class_path."mail/mimeDecode.class.inc");
 //authenticate the user
 $GO_SECURITY->authenticate();
 
+
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : 0;
 $imap_id = (isset($_REQUEST['imap_id'])) ? $_REQUEST['imap_id'] : 0;
 $tmp_dir = $GO_CONFIG->tmpdir.'attachments/';
@@ -82,6 +83,10 @@ if(isset($tmp_name))
 		}
 	}
 }
+
+
+//close writing to session so other concurrent requests won't be locked out.
+session_write_close();
 
 $params['include_bodies'] = true;
 $params['decode_bodies'] = true;

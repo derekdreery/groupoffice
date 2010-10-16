@@ -17,6 +17,10 @@ require_once("../../Group-Office.php");
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('email');
 
+
+//close writing to session so other concurrent requests won't be locked out.
+session_write_close();
+
 require_once($GO_CONFIG->class_path."mail/imap.class.inc");
 require_once($GO_MODULES->class_path."email.class.inc.php");
 $mail = new imap();
