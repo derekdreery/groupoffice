@@ -1,7 +1,10 @@
 <?php
 $module = $this->get_module('tasks');
 
-global $GO_USERS, $GO_SECURITY;
+global $GO_SECURITY, $GO_CONFIG;
+
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
 
 require_once($module['class_path'].'tasks.class.inc.php');
 $tasks = new tasks();

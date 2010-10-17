@@ -52,6 +52,9 @@ try {
 
 		case 'init_event_window':
 
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			$response['writable_calendars']['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, 0, 0, 1, 1, -1, 1, 'name', 'ASC');
 			
 			$cal2=new calendar();
@@ -72,8 +75,7 @@ try {
 			while($group = $cal->next_record()) {
 
 				//for groupsStore
-				$user = $GO_USERS->get_user($group['user_id']);
-				$group['user_name']=String::format_name($user);
+				$group['user_name'] =$GO_USERS->get_user_realname($group['user_id']);
 				$response['groups']['results'][] = $group;
 
 
@@ -83,8 +85,7 @@ try {
 				$group['resources'] = array();
 				$cal2->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 0, $group['id']);
 				while($resource = $cal2->next_record()) {
-					$user = $GO_USERS->get_user($resource['user_id']);
-					$resource['user_name']=String::format_name($user);
+					$resource['user_name'] =$GO_USERS->get_user_realname($resource['user_id']);
 					$group['resources'][] = $resource;
 				}
 
@@ -422,6 +423,9 @@ try {
 
 		case 'events':
 
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 		require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
 		$GO_LINKS = new GO_LINKS();
 
@@ -548,8 +552,7 @@ try {
 					}
 				}			
 
-				$user = $GO_USERS->get_user($event['user_id']);
-				$username = String::format_name($user);
+				$username = $GO_USERS->get_user_realname($event['user_id']);
 
 				$num_participants = 0;
 				$continue = true;
@@ -916,7 +919,10 @@ try {
 			}
 			break;
 
-		case 'writable_calendars':		
+		case 'writable_calendars':
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
 			if(isset($_REQUEST['delete_keys']))
 			{
@@ -962,8 +968,7 @@ try {
 				$group = $cal2->get_group($record['group_id']);
 				$record['group_name'] = $group['name'];
 
-				$user = $GO_USERS->get_user($record['user_id']);
-				$record['user_name'] = String::format_name($user);
+				$record['user_name'] =$GO_USERS->get_user_realname($record['user_id']);
 
 				$response['results'][] = $record;
 			}
@@ -971,6 +976,9 @@ try {
 
 
 		case 'view_calendars':
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
 			$view_id = ($_REQUEST['view_id']);
 
@@ -981,9 +989,7 @@ try {
 			}
 			$response['results']=array();
 			while($record = $cal->next_record(DB_ASSOC)) {
-				$user = $GO_USERS->get_user($cal->f('user_id'));
-
-				$record['user_name'] = String::format_name($user);
+				$record['user_name'] =$GO_USERS->get_user_realname($record['user_id']);
 				$record['selected']=$cal2->is_view_calendar($cal->f('id'), $view_id) ? '1' : '0';
 
 				$response['results'][] = $record;
@@ -999,6 +1005,9 @@ try {
 
 
 		case 'writable_views':
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
 			if(isset($_REQUEST['delete_keys'])) {
 				try {
@@ -1024,30 +1033,29 @@ try {
 
 			$response['total'] = $cal->get_writable_views($GO_SECURITY->user_id, $sort, $dir);
 			$response['results']=array();
-			while($cal->next_record(DB_ASSOC)) {
-				$user = $GO_USERS->get_user($cal->f('user_id'));
-
-				$cal->record['user_name'] = String::format_name($user);
-				$response['results'][] = $cal->record;
+			while($calendar=$cal->next_record(DB_ASSOC)) {
+				$calendar['user_name'] =$GO_USERS->get_user_realname($calendar['user_id']);
+				$response['results'][] =$calendar;
 			}
 			break;
 
 		case 'view':
 
-			$response['data']=$cal->get_view(($_REQUEST['view_id']));
-			$user = $GO_USERS->get_user($response['data']['user_id']);
-			$response['data']['user_name']=String::format_name($user);
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
+			$response['data']=$cal->get_view($_REQUEST['view_id']);
+			$response['data']['user_name'] =$GO_USERS->get_user_realname($response['data']['user_id']);
 			$response['success']=true;
-
-
-
 			break;
 
 		case 'calendar':
 
-			$response['data']=$cal->get_calendar(($_REQUEST['calendar_id']));
-			$user = $GO_USERS->get_user($response['data']['user_id']);
-			$response['data']['user_name']=String::format_name($user);
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
+			$response['data']=$cal->get_calendar($_REQUEST['calendar_id']);
+			$response['data']['user_name'] =$GO_USERS->get_user_realname($response['data']['user_id']);
 
 			$url = create_direct_url('calendar', 'openCalendar', array(array(
 				'calendars'=>array($response['data']['id']),
@@ -1060,6 +1068,9 @@ try {
 			break;
 
 		case 'participants':
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
 			$event_id=$_REQUEST['event_id'];
 
@@ -1117,12 +1128,15 @@ try {
 			}
 			break;
 		case 'get_default_participant':
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
-			$calendar_user = $GO_USERS->get_user($calendar['user_id']);
 
 			if($calendar_user) {
-				$response['user_id']=$calendar_user['id'];
-				$response['name']=String::format_name($calendar_user);
+				$response['user_id']=$calendar['user_id'];
+				$response['name']=$GO_USERS->get_user_realname($calendar['user_id']);
 				$response['email']=$calendar_user['email'];
 				$response['status']="1";
 				$response['is_organizer']="1";
@@ -1132,6 +1146,10 @@ try {
 
 
 		case 'check_availability':
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+			
 			$event_id = empty($_REQUEST['event_id']) ? 0 : $_REQUEST['event_id'];
 
 			$emails=explode(',', $_REQUEST['emails']);
@@ -1151,6 +1169,10 @@ try {
 			break;
 
 		case 'availability':
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+			
 			$event_id = empty($_REQUEST['event_id']) ? 0 : $_REQUEST['event_id'];
 			$date = Date::to_unixtime($_REQUEST['date']);
 			$emails = json_decode($_REQUEST['emails'], true);
@@ -1203,14 +1225,16 @@ try {
 		case 'group':
 
 			$group = $cal->get_group($_REQUEST['group_id']);
-			$user = $GO_USERS->get_user($group['user_id']);
-
+			
 			$fields = explode(',', $group['fields']);
 			foreach($fields as $field) {
 				$group['fields['.$field.']'] = true;
 			}
 
-			$group['user_name'] = String::format_name($user);
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
+			$group['user_name'] = $GO_USERS->get_user_realname($group['user_id']);
 			$response['data'] = $group;
 
 			$response['success'] = true;
@@ -1252,11 +1276,13 @@ try {
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
 
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			$response['results']=array();
 			$response['total'] = $cal->get_groups($sort, $dir, $start, $limit);
 			while($group = $cal->next_record()) {
-				$user = $GO_USERS->get_user($group['user_id']);
-				$group['user_name']=String::format_name($user);
+				$group['user_name'] = $GO_USERS->get_user_realname($group['user_id']);
 				$response['results'][] = $group;
 			}
 
@@ -1353,6 +1379,9 @@ try {
 						$response['deleteFeedback']=$e->getMessage();
 					}
 				}
+
+				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				$GO_USERS = new GO_USERS();
 
 				$response['total'] = $cal->get_group_admins($group_id);
 				while($cal->next_record()) {
@@ -1501,6 +1530,9 @@ try {
 
 		case 'permissions':
 
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			$resources = (isset($_REQUEST['resources']) && $_REQUEST['resources']) ? 1 : 0;
 			$group_id = (isset($_REQUEST['group_id']) && $_REQUEST['group_id']) ? $_REQUEST['group_id'] : 0;
 			$level_id = (isset($_REQUEST['level_id']) && $_REQUEST['level_id']) ? $_REQUEST['level_id'] : 0;
@@ -1513,10 +1545,8 @@ try {
 				$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, 0, 0, $resources);
 				while($cal->next_record())
 				{
-					$calendar = $cal->record;
-
-					$user = $GO_USERS->get_user($calendar['user_id']);
-					$calendar['user_name']=String::format_name($user);
+					$calendar = $cal->record;		
+					$calendar['user_name']=$GO_USERS->get_user_realname($calendar['user_id']);
 
 					$acl_level = $GO_SECURITY->group_in_acl($group_id, $calendar['acl_id']);
 					$calendar['checked'] = ($acl_level >= $level_id) ? true : false;
@@ -1565,10 +1595,13 @@ try {
 
 			$response['results']=array();
 			$response['total'] = $cal->get_categories($sort, $dir, $start, $limit);
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+			
 			while($category = $cal->next_record())
 			{
-				$user = $GO_USERS->get_user($category['user_id']);
-				$category['user_name']=String::format_name($user);
+				$category['user_name']=$GO_USERS->get_user_realname($category['user_id']);
 				$response['results'][] = $category;
 			}
 

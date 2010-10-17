@@ -134,7 +134,7 @@ class go_ical extends calendar
 
 	function convert_event($event, $attendee_email='')
 	{
-		global $GO_CONFIG, $GO_SECURITY, $GO_USERS, $GO_MODULES, $charset;
+		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES, $charset;
 
 		if($this->timezone_id != '')
 		{
@@ -165,7 +165,7 @@ class go_ical extends calendar
 			$lines = array_merge($lines, String::format_vcard_line('LOCATION', $event['location'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 		//}
 			
-		$user = $GO_USERS->get_user($event['user_id']);
+		//$user = $GO_USERS->get_user($event['user_id']);
 	
 
 		require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');

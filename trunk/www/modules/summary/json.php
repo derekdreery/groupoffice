@@ -37,8 +37,10 @@ try{
 			break;
 		case 'announcement':
 			$announcement = $summary->get_announcement(($_REQUEST['announcement_id']));
-			$user = $GO_USERS->get_user($announcement['user_id']);
-			$announcement['user_name']=String::format_name($user);
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
+			$announcement['user_name']=$GO_USERS->get_user_realname($announcement['user_id']);
 			$announcement['due_time']=Date::get_timestamp($announcement['due_time'], false);
 			$announcement['mtime']=Date::get_timestamp($announcement['mtime']);
 			$announcement['ctime']=Date::get_timestamp($announcement['ctime']);
@@ -73,12 +75,13 @@ try{
 			{
 				$response['total'] = $summary->get_announcements( $query, $sort, $dir, $start, $limit);
 			}
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 			$response['results']=array();
 			while($summary->next_record())
 			{
 				$announcement = $summary->record;
-				$user = $GO_USERS->get_user($announcement['user_id']);
-				$announcement['user_name']=String::format_name($user);
+				$announcement['user_name']=$GO_USERS->get_user_realname($announcement['user_id']);
 				$announcement['due_time']=!empty($announcement['due_time']) ? Date::get_timestamp($announcement['due_time'],false) : '-';
 				$announcement['mtime']=Date::get_timestamp($announcement['mtime']);
 				$announcement['ctime']=Date::get_timestamp($announcement['ctime']);
@@ -145,11 +148,16 @@ try{
 			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			$response['total'] = $summary->get_announcements( $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
+
+
 			while($summary->next_record())
 			{
 				$announcement = $summary->record;
-				$user = $GO_USERS->get_user($announcement['user_id']);
-				$announcement['user_name']=String::format_name($user);
+				$announcement['user_name']=$GO_USERS->get_user_realname($announcement['user_id']);
 				$announcement['due_time']=!empty($announcement['due_time']) ? Date::get_timestamp($announcement['due_time'],false) : '-';
 				$announcement['mtime']=Date::get_timestamp($announcement['mtime']);
 				$announcement['ctime']=Date::get_timestamp($announcement['ctime']);

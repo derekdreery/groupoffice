@@ -187,7 +187,7 @@ class addressbook extends db {
 
 	function get_addressbook($addressbook_id=0, $user_addressbook=false) {
 		if($addressbook_id == 0) {
-			global $GO_SECURITY, $GO_USERS;
+			global $GO_SECURITY;
 
 			if($user_addressbook) {
 				$sql = "SELECT * FROM ab_addressbooks WHERE user_id=".$GO_SECURITY->user_id." ORDER BY id ASC";
@@ -199,6 +199,10 @@ class addressbook extends db {
 			if($this->next_record()) {
 				$addressbook_id = $this->f('id');
 			}else {
+				global $GO_CONFIG;
+				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				$GO_USERS = new GO_USERS();
+
 				$user = $GO_USERS->get_user($GO_SECURITY->user_id);
 				$addressbook = $this->create_default_addressbook($user);
 				$addressbook_id=$addressbook['id'];

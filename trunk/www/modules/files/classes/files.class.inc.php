@@ -254,13 +254,15 @@ class files extends db {
 	}
 
 	function notify_users($folder, $modified_by_user_id, $modified=array(), $new=array(), $deleted=array()) {
-		global $GO_USERS, $GO_LANGUAGE, $GO_CONFIG, $GO_SECURITY;
+		global $GO_LANGUAGE, $GO_CONFIG, $GO_SECURITY;
 
 		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 		require($GO_LANGUAGE->get_language_file('files'));
 
-		$user = $GO_USERS->get_user($modified_by_user_id);
-		$modified_by_user_name = String::format_name($user);
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
+
+		$modified_by_user_name = $GO_USERS->get_user_realname($modified_by_user_id);
 
 
 		$changes = '';
@@ -1525,7 +1527,7 @@ class files extends db {
 
 
 	public static function check_database() {
-		global $GO_USERS, $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
+		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
 
 		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 

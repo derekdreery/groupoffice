@@ -1,7 +1,7 @@
 <?php
 $module = $GO_MODULES->get_module('files');
 
-global $GO_LANGUAGE, $lang, $GO_SECURITY, $GO_USERS, $GO_CONFIG;
+global $GO_LANGUAGE, $lang, $GO_SECURITY, $GO_CONFIG;
 
 require($GO_LANGUAGE->get_language_file('files'));
 

@@ -199,6 +199,9 @@ try {
 
 		case 'accept':
 
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			$event_id = ($_REQUEST['event_id']);
 			$calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
 
@@ -239,6 +242,8 @@ try {
 			break;
 
 		case 'update_grid_event':
+
+			
 
 			if(isset($_POST['update_event_id'])) {
 				$update_event_id=$_POST['update_event_id'];
@@ -339,6 +344,9 @@ try {
 
 					if(isset($update_event))
 					{
+						require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+						$GO_USERS = new GO_USERS();
+
 						$update_event['id']=$update_event_id;
 						$cal->update_event($update_event, $calendar, $old_event);
 
@@ -412,6 +420,8 @@ try {
 		break;
 
 		case 'save_event':
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
 			$event = get_posted_event();
 			$event_id=$event['id'];

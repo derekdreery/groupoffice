@@ -61,7 +61,10 @@ class csv_export_query extends base_export_query
 
 		parent::export($fp);
 
-		global $GO_USERS, $lang, $GO_MODULES;
+		global $lang, $GO_MODULES, $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
 
 		if(count($this->headers))
 			$this->fputcsv($fp, $this->headers, $this->list_separator, $this->text_separator);
@@ -87,8 +90,7 @@ class csv_export_query extends base_export_query
 
 			if(isset($record['user_id']) && isset($this->columns['user_id']))
 			{
-				$user = $GO_USERS->get_user($record['user_id']);
-				$record['user_id']=$user['username'];
+				$record['user_id']=$GO_USERS->get_user_realname($record['user_id']);
 			}
 			$values=array();
 			foreach($this->columns as $index)

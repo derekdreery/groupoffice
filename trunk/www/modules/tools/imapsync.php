@@ -64,6 +64,9 @@ $e = new email();
 require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 //make sure e-mail domain exists in database
 $domain = $postfixadmin->get_domain_by_domain($maildomain);
 if(!$domain)

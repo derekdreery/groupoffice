@@ -18,6 +18,9 @@ $GO_SECURITY->json_authenticate();
 require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'username';
 $dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 $start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';

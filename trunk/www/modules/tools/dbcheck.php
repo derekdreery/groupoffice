@@ -68,6 +68,9 @@ echo 'Adding everyone to the everyone group'.$line_break;
 
 $db->query("DELETE FROM go_users_groups where user_id NOT IN (SELECT id FROM go_users)");
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 $GO_USERS->get_users();
 
 

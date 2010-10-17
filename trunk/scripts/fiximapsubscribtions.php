@@ -19,6 +19,9 @@ require($go.'Group-Office.php');
 chdir(dirname(__FILE__));
 require($go.'cli-functions.inc.php');
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 $GO_SECURITY->logged_in($GO_USERS->get_user(1));
 
 require($GO_CONFIG->class_path.'mail/imap.class.inc');

@@ -107,7 +107,12 @@ class GO_AUTH extends db
 	 * authenticated successfully.
 	 */
 	function updateAfterLogin($user, $count_login=true) {
-		global $GO_SECURITY, $GO_MODULES, $GO_USERS,$GO_CONFIG;
+		global $GO_SECURITY, $GO_MODULES,$GO_CONFIG;
+
+
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
+
 		// Tell the security framework that a user has been logged in. The
 		// security framework takes care on setting the userid as active.
 		$GO_SECURITY->logged_in($user);
@@ -166,7 +171,7 @@ class GO_AUTH extends db
 	function login($username, $password, $type='normal', $count_login=true) {
 		// This variable is used to fetch the user's profile from the current
 		// user management backend database.
-		global $GO_USERS, $GO_EVENTS, $GO_SECURITY;
+		global $GO_EVENTS, $GO_SECURITY;
 
 		$args = array(&$username, &$password);
 		$GO_EVENTS->fire_event('before_login', $args);
@@ -220,7 +225,10 @@ class GO_AUTH extends db
 	 * @return bool true if the user is enabled, false otherwise.
 	 */
 	function is_enabled( $user_id ) {
-		global $GO_USERS;
+		
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
+
 		// The status of the user is stored inside the user management system,
 		// so we need to fetch the user's profile from the user manager.
 		$user = $GO_USERS->get_user( $user_id );

@@ -15,6 +15,9 @@
 header('Content-Type: text/html; charset=UTF-8');
 require_once("../../Group-Office.php");
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
 
 $cal = new calendar();

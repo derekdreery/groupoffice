@@ -4,6 +4,9 @@ require('../../../Group-Office.php');
 
 require('../classes/postfixadmin.class.inc.php');
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 $pa = new postfixadmin();
 $pa2 = new postfixadmin();
 $pa->get_domains();

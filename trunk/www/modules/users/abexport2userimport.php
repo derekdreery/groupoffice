@@ -134,6 +134,9 @@ if(!isset($mapping[$type]))
 	exit('abexport2userimport.php contacts contactexport.csv');
 }
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 $record = fgetcsv($fp, 4096, $list_sep, $text_sep);
 echo $text_sep.implode($text_sep.$list_sep.$text_sep, $cols).$text_sep."\n";
 while($record = fgetcsv($fp, 4096, $list_sep, $text_sep)){

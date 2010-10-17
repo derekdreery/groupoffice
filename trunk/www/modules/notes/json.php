@@ -27,9 +27,12 @@ try{
 	switch($task)
 	{
 		case 'category':
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			$category = $notes->get_category(($_REQUEST['category_id']));
-			$user = $GO_USERS->get_user($category['user_id']);
-			$category['user_name']=String::format_name($user);
+			$category['user_name']=$GO_USERS->get_user_realname($category['user_id']);
 			$category['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id'])>GO_SECURITY::READ_PERMISSION;
 			$response['data']=$category;
 			$response['success']=true;		
@@ -88,12 +91,15 @@ try{
 				$response['total'] = $notes->get_authorized_categories($auth_type, $GO_SECURITY->user_id, $query, $sort, $dir, $start, $limit);
 			}
 			$response['results']=array();
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+			
 			while($notes->next_record())
 			{
 				$category = $notes->record;			
 				
-				$user = $GO_USERS->get_user($category['user_id']);
-				$category['user_name']=String::format_name($user);
+				$category['user_name']=$GO_USERS->get_user_realname($category['user_id']);
 
 				$category['checked'] = in_array($category['id'], $categories);
 								
@@ -108,11 +114,13 @@ try{
 			$note = $notes->get_note(($_REQUEST['note_id']));
 			
 			$category = $notes->get_category($note['category_id']);
-			$note['category_name']=$category['name'];	
+			$note['category_name']=$category['name'];
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 			
 			
-			$user = $GO_USERS->get_user($note['user_id']);
-			$note['user_name']=String::format_name($user);			
+			$note['user_name']=$GO_USERS->get_user_realname($note['user_id']);
 			
 			$note['mtime']=Date::get_timestamp($note['mtime']);
 			$note['ctime']=Date::get_timestamp($note['ctime']);			
@@ -238,12 +246,15 @@ try{
 			$sort = ($sort == 'category_name') ? 'c.name' : 'n.'.$sort;
 			$response['total'] = $notes->get_notes($query, $readable_categories, $sort, $dir, $start, $limit);
 			$response['results']=array();
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+			
 			while($notes->next_record())
 			{
 				$note = $notes->record;				
 				
-				$user = $GO_USERS->get_user($note['user_id']);
-				$note['user_name']=String::format_name($user);
+				$note['user_name']=$GO_USERS->get_user_realname($note['user_id']);
 				$note['mtime']=Date::get_timestamp($note['mtime']);
 				$note['ctime']=Date::get_timestamp($note['ctime']);			
 								

@@ -2,6 +2,9 @@
 define('CONFIG_FILE', '/etc/groupoffice/servermanager.group-office.com/config.php');
 require('../../../Group-Office.php');
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 $doreal=false;
 $movefolders=true;
 

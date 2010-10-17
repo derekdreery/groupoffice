@@ -1,7 +1,10 @@
 <?php
 $module = $this->get_module('calendar');
 
-global $GO_USERS, $GO_LANGUAGE, $GO_SECURITY;
+global $GO_CONFIG, $GO_LANGUAGE, $GO_SECURITY;
+
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
 
 require_once($module['class_path'].'calendar.class.inc.php');
 $cal = new calendar();

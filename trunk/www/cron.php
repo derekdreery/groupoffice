@@ -25,6 +25,9 @@ require_once('Group-Office.php');
 require_once($GO_CONFIG->class_path.'base/reminder.class.inc.php');
 require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 $GO_USERS->get_users('id');
 while($user = $GO_USERS->next_record())
 {	

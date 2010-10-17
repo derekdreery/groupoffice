@@ -85,6 +85,9 @@ try{
 			$user['work_fax'] = isset($_POST["work_fax"]) ? $_POST["work_fax"] : '';
 			$user['homepage'] = isset($_POST["homepage"]) ? $_POST["homepage"] : '';
 
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			$GO_USERS->update_profile($user, true);
 			
 			$response['success']=true;
@@ -94,8 +97,11 @@ try{
 		case 'lost_password':
 
 			require($GO_LANGUAGE->get_base_language_file('lostpassword'));
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 			
-			if($user = $GO_USERS->get_user_by_email(($_POST['email'])))
+			if($user = $GO_USERS->get_user_by_email($_POST['email']))
 			{
 				$url = $GO_CONFIG->full_url.'change_lost_password.php?username='.$user['username'].'&code1='.md5($user['password']).'&code2='.md5($user['lastlogin'].$user['registration_time']);
 

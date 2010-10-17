@@ -1197,6 +1197,10 @@ try {
 				break;
 
 			case 'account':
+
+				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				$GO_USERS = new GO_USERS();
+
 				$email = new email();
 				$response['success']=false;
 				$response['data']=$email->get_account($_POST['account_id']);
@@ -1204,8 +1208,7 @@ try {
 				$response['data']=$email->decrypt_account($response['data']);
 
 				if($response['data']) {
-					$user = $GO_USERS->get_user($response['data']['user_id']);
-					$response['data']['user_name']=String::format_name($user['last_name'],$user['first_name'], $user['middle_name']);
+					$response['data']['user_name']=$GO_USERS->get_user_realname($response['data']['user_id']);
 
 					try {
 						$server_response = $email->get_servermanager_mailbox_info($response['data']);

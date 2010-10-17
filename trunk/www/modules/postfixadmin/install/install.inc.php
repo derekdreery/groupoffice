@@ -2,9 +2,12 @@
 
 if(!empty($GO_CONFIG->serverclient_domains))
 {
-	global $GO_CONFIG, $GO_MODULES, $GO_USERS;
+	global $GO_CONFIG, $GO_MODULES;
 
 	$domains = explode(',', $GO_CONFIG->serverclient_domains);
+
+	require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+	$GO_USERS = new GO_USERS();
 	
 	foreach($domains as $domain)
 	{
