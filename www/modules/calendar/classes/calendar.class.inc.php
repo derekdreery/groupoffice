@@ -786,11 +786,18 @@ class calendar extends db {
 	}
 
 	function get_default_calendar($user_id) {
+
+
+
 		$this->get_user_calendars($user_id, 0, 1);
 		if($this->next_record(DB_ASSOC)) {
 			return $this->record;
 		}else {
-			global $GO_USERS, $GO_SECURITY;
+			global $GO_SECURITY;
+
+			global $GO_CONFIG;
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
 			$calendar['user_id']=$user_id;
 			$user = $GO_USERS->get_user($user_id);
@@ -2499,11 +2506,13 @@ class calendar extends db {
 
 
 	function event_to_json_response($event) {
-		global $GO_USERS;
+
+		global $GO_CONFIG;
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
 
 		if(!empty($event['user_id'])) {
-			$user = $GO_USERS->get_user($event['user_id']);
-			$event['user_name']=String::format_name($user);
+			$event['user_name']=$GO_USERS->get_user_realname($event['user_id']);
 		}
 
 		//for IE
@@ -2847,14 +2856,15 @@ class calendar extends db {
 
 	function get_views_json(&$response){
 
-		global $GO_SECURITY, $GO_USERS;
+		global $GO_SECURITY, $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
 
 		$response['total'] = $this->get_authorized_views($GO_SECURITY->user_id);
 		$response['results']=array();
 		while($record= $this->next_record(DB_ASSOC)) {
-			$user = $GO_USERS->get_user($record['user_id']);
-
-			$record['user_name'] = String::format_name($user);
+			$record['user_name'] = $GO_USERS->get_user_realname($record['user_id']);
 			$response['results'][] = $record;
 		}
 	}

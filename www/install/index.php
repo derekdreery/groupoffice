@@ -21,6 +21,9 @@ header('Content-Type: text/html; charset=UTF-8');
 //config file exists now so require it to get the properties.
 require_once('../Group-Office.php');
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 
 $CONFIG_FILE = $GO_CONFIG->get_config_file();
 

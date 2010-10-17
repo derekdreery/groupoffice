@@ -1,7 +1,7 @@
 <?php
 $module = $this->get_module('backupmanager');
 
-global $GO_LANGUAGE, $GO_USERS, $GO_SECURITY, $GO_CONFIG;
+global $GO_LANGUAGE, $GO_SECURITY, $GO_CONFIG;
 
 require_once($module['class_path'].'backupmanager.class.inc.php');
 $backupmanager = new backupmanager();

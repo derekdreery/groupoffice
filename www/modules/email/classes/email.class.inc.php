@@ -52,7 +52,7 @@
 }*/
 
 function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
-	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $GO_USERS, $imap;
+	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $imap;
 
 	require_once ($GO_CONFIG->class_path.'mail/mimeDecode.class.inc');
 	require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
@@ -95,16 +95,22 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 
 			if ($contact) {
 				$response['data']['body']=$tp->replace_contact_data_fields($response['data']['body'], $contact['id'], true);
-			}elseif($user = $GO_USERS->get_user_by_email($to)) {
-				$response['data']['body']=$tp->replace_user_data_fields($response['data']['body'], $user['id'], true);				
-			}else {
-				$ab->search_companies($GO_SECURITY->user_id, $to, 'email',0,0,1);
-				if($company= $ab->next_record()) {					
-					$response['data']['body']=$tp->replace_company_data_fields($response['data']['body'], $company['id'], true);
-				}else
-				{					
-					//this will remove the tags
-					$tp->replace_fields($response['data']['body'],array());
+			}else
+			{
+				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				$GO_USERS = new GO_USERS();
+
+				if($user = $GO_USERS->get_user_by_email($to)) {
+					$response['data']['body']=$tp->replace_user_data_fields($response['data']['body'], $user['id'], true);
+				}else {
+					$ab->search_companies($GO_SECURITY->user_id, $to, 'email',0,0,1);
+					if($company= $ab->next_record()) {
+						$response['data']['body']=$tp->replace_company_data_fields($response['data']['body'], $company['id'], true);
+					}else
+					{
+						//this will remove the tags
+						$tp->replace_fields($response['data']['body'],array());
+					}
 				}
 			}
 		}else

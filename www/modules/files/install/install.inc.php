@@ -1,7 +1,7 @@
 <?php
 $module = $this->get_module('files');
 
-global $GO_LANGUAGE, $lang, $GO_SECURITY, $GO_USERS, $GO_CONFIG;
+global $GO_LANGUAGE, $lang, $GO_SECURITY, $GO_CONFIG;
 
 require($GO_LANGUAGE->get_language_file('files'));
 
@@ -38,6 +38,8 @@ $GO_SECURITY->add_group_to_acl($GO_CONFIG->group_internal, $template['acl_id']);
 
 $files->add_template($template);
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
 
 $GO_USERS->get_users();
 

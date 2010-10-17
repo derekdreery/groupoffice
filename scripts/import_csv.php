@@ -9,6 +9,9 @@ ini_set('max_execution_time', 0);
 
 require('../www/Group-Office.php');
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 //login as admin
 $GO_SECURITY->logged_in($GO_USERS->get_user(1));
 $GO_MODULES->load_modules();

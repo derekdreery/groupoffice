@@ -157,10 +157,10 @@ try {
 
 			if($_task!='task') {
 
-				$user = $GO_USERS->get_user($task['user_id']);
+				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				$GO_USERS = new GO_USERS();
 
-				$response['data']['user_name']=String::format_name($user);
-
+				$response['data']['user_name']=$GO_USERS->get_user_realname($task['user_id']);
 				$response['data']['description']=String::text_to_html($response['data']['description']);
 
 				load_standard_info_panel_items($response, 12);
@@ -180,10 +180,11 @@ try {
 
 
 		case 'tasklist':
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
 			$response['data']=$tasks->get_tasklist(($_POST['tasklist_id']));
-			$user = $GO_USERS->get_user($response['data']['user_id']);
-			$response['data']['user_name']=String::format_name($user);
+			$response['data']['user_name']=$GO_USERS->get_user_realname($response['data']['user_id']);
 			$response['success']=true;
 			break;
 
@@ -246,10 +247,13 @@ try {
 			}
 			$response['results']=array();
 			$tasklist_names = array();
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			while($tasklist = $tasks->next_record(DB_ASSOC)) {
 				$tasklist['dom_id']='tl-'.$tasks->f('id');
-				$user = $GO_USERS->get_user($tasklist['user_id']);
-				$tasklist['user_name']=String::format_name($user);
+				$tasklist['user_name']=$GO_USERS->get_user_realname($tasklist['user_id']);
 				$tasklist['checked'] = in_array($tasklist['id'], $tasklists);
 
 				$response['results'][] = $tasklist;
@@ -521,10 +525,13 @@ try {
 
 			$response['results'] = array();
 			$response['total'] = $tasks->get_categories();
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			while($category = $tasks->next_record())
 			{
-				$user = $GO_USERS->get_user($category['user_id']);
-				$category['user_name']=String::format_name($user);
+				$category['user_name']=$GO_USERS->get_user_realname($category['user_id']);
 
 				$category['checked'] = in_array($category['id'], $categories);
 

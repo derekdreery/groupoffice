@@ -43,7 +43,8 @@ $GO_CONFIG->save_setting('version', count($updates));
 
 $GO_LANGUAGE->set_language($GO_CONFIG->language);
 
-
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
 
 $user['id'] = $GO_USERS->nextid("go_users");
 

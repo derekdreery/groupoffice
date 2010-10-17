@@ -48,6 +48,9 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	{
 		//ok create a new_trial entry
 
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
+
 		$new_trial['password']=$GO_USERS->random_password();
 		$new_trial['key']=md5($new_trial['name']);
 		

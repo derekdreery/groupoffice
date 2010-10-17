@@ -141,8 +141,10 @@ try {
 
 		case 'category':
 			$category = $bookmarks->get_category(($_REQUEST['category_id']));
-			$user = $GO_USERS->get_user($category['user_id']);
-			$category['user_name'] = String::format_name($user);
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
+			$category['user_name']=$GO_USERS->get_user_realname($comment['user_id']);
 			$category['public'] = $category['acl_id'] > 0 ? '1' : '0';
 			$category['write_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']) > GO_SECURITY::READ_PERMISSION;
 			$response['data'] = $category;
@@ -160,13 +162,6 @@ try {
 
 					$delete_categories = json_decode($_POST['delete_keys']);
 					foreach ($delete_categories as $category_id) {
-
-						$cat = $bookmarks->get_category($category_id);
-						$usr = $GO_USERS->get_user($cat['user_id']);
-
-						if ($usr == $GO_SECURITY->user_id) {
-							throw new AccessDeniedException();
-						}
 						$bookmarks->delete_category($category_id);
 					}
 				} catch (Exception $e) {
@@ -192,12 +187,11 @@ try {
 
 			$response['results'] = array();
 
-			while ($bookmarks->next_record()) {
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
-				$category = $bookmarks->record;
-
-				$user = $GO_USERS->get_user($category['user_id']);
-				$category['user_name'] = String::format_name($user);
+			while ($category =$bookmarks->next_record()){
+				$category['user_name']=$GO_USERS->get_user_realname($category['user_id']);
 				$response['results'][] = $category;
 			}
 

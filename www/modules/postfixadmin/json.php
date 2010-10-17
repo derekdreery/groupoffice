@@ -90,10 +90,12 @@ try{
 		
 			
 			$domain = $postfixadmin->get_domain(($_REQUEST['domain_id']));
+
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 			
-			$user = $GO_USERS->get_user($domain['user_id']);
-			
-			$domain['user_name']=String::format_name($user);
+			$domain['user_name']= $GO_USERS->get_user_realname($domain['user_id']);
 			$domain['mtime']=Date::get_timestamp($domain['mtime']);
 			$domain['ctime']=Date::get_timestamp($domain['ctime']);	
 			$domain['quota']=Number::format($domain['quota']/1024);
@@ -136,14 +138,13 @@ try{
 			$response['results']=array();
 			
 			$pa2 = new postfixadmin();
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 			
-			while($postfixadmin->next_record())
-			{
-				$domain = $postfixadmin->record;
-				
-				
-				$user = $GO_USERS->get_user($domain['user_id']);
-				$domain['user_name']=String::format_name($user);				
+			while($domain = $postfixadmin->next_record())
+			{			
+				$domain['user_name']= $GO_USERS->get_user_realname($domain['user_id']);
 				
 				$domain['mtime']=Date::get_timestamp($domain['mtime']);			
 				$domain['ctime']=Date::get_timestamp($domain['ctime']);				

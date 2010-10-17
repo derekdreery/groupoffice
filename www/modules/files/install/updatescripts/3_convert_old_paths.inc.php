@@ -496,7 +496,9 @@ if(isset($GO_MODULES->modules['cms']))
 
 }
 
-global $GO_USERS;
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 $db->query("ALTER TABLE `go_users` ADD `files_folder_id` INT NOT NULL;");
 $GO_USERS->get_users();
 while($user = $GO_USERS->next_record())

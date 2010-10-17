@@ -809,6 +809,9 @@ try
 				
 			$books = $GO_CONFIG->get_setting('addressbook_books_filter', $GO_SECURITY->user_id);
 			$books = ($books) ? explode(',',$books) : array();
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 				
 			$first_record = true;
 			while($ab->next_record())
@@ -822,16 +825,13 @@ try
 					}
 
 					$first_record = false;
-				}
+				}				
 				
-				$user = $GO_USERS->get_user($ab->f('user_id'));
-				$user_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name']);
-
 				$record = array(
 					'id' => $ab->f('id'),
 					'user_id' => $ab->f('user_id'),
 					'name' => $ab->f('name'),
-					'owner' => $user_name,
+					'owner' => $GO_USERS->get_user_realname($ab->f('user_id')),
 					'acl_id' => $ab->f('acl_id'),
 					'default_iso_address_format' => $ab->f('default_iso_address_format'),
 					'default_salutation' => $ab->f('default_salutation'),

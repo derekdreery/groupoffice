@@ -122,14 +122,14 @@ class comments extends db {
 	
 	function get_comments_json($link_id, $link_type)
 	{
-		global $GO_USERS;
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
 		
 		$comments = array();
 		$this->get_comments($link_id, $link_type, '', 'ctime', 'DESC', 0, 5);
 		while($this->next_record())
 		{
-			$user = $GO_USERS->get_user($this->f('user_id'));
-			$this->record['user_name']=String::format_name($user);
+			$this->record['user_name']=$GO_USERS->get_user_realname($this->f('user_id'));
 			$this->record['ctime']=Date::get_timestamp($this->record['ctime']);
 			$this->record['comments']=String::text_to_html($this->record['comments']);
 			$comments[]=$this->record;

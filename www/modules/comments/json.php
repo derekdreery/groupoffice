@@ -21,8 +21,11 @@ try{
 	{
 		case 'comment':
 			$comment = $comments->get_comment($_REQUEST['comment_id']);
-			$user = $GO_USERS->get_user($comment['user_id']);
-			$comment['user_name']=String::format_name($user);
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
+			$comment['user_name']=$GO_USERS->get_user_realname($comment['user_id']);
 			$comment['mtime']=Date::get_timestamp($comment['mtime']);
 			$comment['ctime']=Date::get_timestamp($comment['ctime']);
 			$response['data']=$comment;
@@ -70,16 +73,16 @@ try{
 			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			
 			
-			
-			
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 			
 			$response['total'] = $comments->get_comments($link_id, $link_type, $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
 			while($comments->next_record())
 			{
 				$comment = $comments->record;
-				$user = $GO_USERS->get_user($comment['user_id']);
-				$comment['user_name']=String::format_name($user);
+
+				$comment['user_name']=$GO_USERS->get_user_realname($comment['user_id']);
 				$comment['mtime']=Date::get_timestamp($comment['mtime']);
 				$comment['ctime']=Date::get_timestamp($comment['ctime']);
 				$comment['comments']=String::text_to_html($comment['comments']);

@@ -77,7 +77,7 @@ class imapauth
 		{
 			go_debug($config);
 
-			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_USERS, $GO_MODULES;
+			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_MODULES;
 
 
 			$GO_SECURITY->user_id = 0;
@@ -101,6 +101,9 @@ class imapauth
 			{
 				go_debug('IMAPAUTH: IMAP login succesful');
 				$imap->disconnect();
+
+				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				$GO_USERS = new GO_USERS();
 
 				$user = $GO_USERS->get_user_by_username($go_username);
 				if ($user) {
