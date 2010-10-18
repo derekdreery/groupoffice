@@ -293,15 +293,37 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				this.tasklist_name = records[0].data.name;
 			}
                        
-			this.gridPanel.store.load();
-
-			if(!GO.tasks.categoriesStore.loaded)
-				GO.tasks.categoriesStore.load();
-                       
+			this.gridPanel.store.load();                       
 		},this);
 
 		
-		this.taskListsStore.load();
+		//this.taskListsStore.load();
+
+		this.getEl().mask(GO.lang.waitMsgLoad);
+		Ext.Ajax.request({
+			url: GO.settings.modules.tasks.url+'json.php',
+			params:{
+				task:'init'
+			},
+			callback: function(options, success, response)
+			{
+
+				if(!success)
+				{
+					alert( GO.lang['strRequestError']);
+				}else
+				{
+					var jsonData = Ext.decode(response.responseText);
+
+					GO.tasks.categoriesStore.loadData(jsonData.categories);
+					this.taskListsStore.loadData(jsonData.tasklists);
+
+					this.getEl().unmask();
+				}
+			},
+			scope:this
+		});
+
                
 		
 		GO.mainLayout.on('linksDeleted', function(deleteConfig, link_types){

@@ -25,6 +25,8 @@ $_task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 try {
 
 	switch($_task) {
+
+		
 		case 'task_with_items':
 		case 'task':
 
@@ -188,6 +190,24 @@ try {
 			$response['success']=true;
 			break;
 
+		case 'init':
+
+			$categories = $GO_CONFIG->get_setting('tasks_categories_filter', $GO_SECURITY->user_id);
+			$categories = ($categories) ? explode(',',$categories) : array();
+
+			$response['categories']['results'] = array();
+			$response['categories']['total'] = $tasks->get_categories();
+
+			while($category = $tasks->next_record())
+			{
+				$category['checked'] = in_array($category['id'], $categories);
+
+				$response['categories']['results'][] = $category;
+			}
+
+			$tasks->get_tasklists_json($response['tasklists']);
+		break;
+
 		case 'tasklists':
 
 			if(isset($_POST['delete_keys']))
@@ -223,41 +243,7 @@ try {
 
 			$auth_type = isset($_POST['auth_type']) ? $_POST['auth_type'] : 'read';
 
-			$tasklists = $GO_CONFIG->get_setting('tasks_tasklists_filter', $GO_SECURITY->user_id);
-			$tasklists = ($tasklists) ? explode(',',$tasklists) : array();
-			if(!count($tasklists)) {
-				$tasks->get_settings($GO_SECURITY->user_id);
-				$default_tasklist_id = $tasks->f('default_tasklist_id');
-
-				if(!$default_tasklist_id) {
-					$tasks->get_tasklist(0, $GO_SECURITY->user_id);
-					$default_tasklist_id = $tasks->f('id');
-				}
-
-				if($default_tasklist_id) {
-					$tasklists[] = $default_tasklist_id;
-					$GO_CONFIG->save_setting('tasks_tasklists_filter',$default_tasklist_id, $GO_SECURITY->user_id);
-				}
-			}
-
-			$response['total'] = $tasks->get_authorized_tasklists($auth_type, $query, $GO_SECURITY->user_id, $start, $limit, $sort, $dir);
-			if(!$response['total']) {
-				$response['new_default_tasklist']= $tasks->get_tasklist();
-				$response['total'] = $tasks->get_authorized_tasklists($auth_type, $query, $GO_SECURITY->user_id, $start, $limit, $sort, $dir);
-			}
-			$response['results']=array();
-			$tasklist_names = array();
-
-			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
-
-			while($tasklist = $tasks->next_record(DB_ASSOC)) {
-				$tasklist['dom_id']='tl-'.$tasks->f('id');
-				$tasklist['user_name']=$GO_USERS->get_user_realname($tasklist['user_id']);
-				$tasklist['checked'] = in_array($tasklist['id'], $tasklists);
-
-				$response['results'][] = $tasklist;
-			}
+			$tasks->get_tasklists_json($response, $auth_type, $query, $start, $limit, $sort, $dir);
 
 			break;
 

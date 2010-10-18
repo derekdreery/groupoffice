@@ -1370,6 +1370,47 @@ class tasks extends db
 
 		return $records;
 	}
+
+
+	function get_tasklists_json(&$response, $auth_type='read', $query='', $start=0, $limit=0, $sort='name', $dir='ASC'){
+		global $GO_CONFIG, $GO_SECURITY;
+		
+		$tasklists = $GO_CONFIG->get_setting('tasks_tasklists_filter', $GO_SECURITY->user_id);
+		$tasklists = ($tasklists) ? explode(',',$tasklists) : array();
+		if(!count($tasklists)) {
+			$tasks->get_settings($GO_SECURITY->user_id);
+			$default_tasklist_id = $tasks->f('default_tasklist_id');
+
+			if(!$default_tasklist_id) {
+				$tasks->get_tasklist(0, $GO_SECURITY->user_id);
+				$default_tasklist_id = $tasks->f('id');
+			}
+
+			if($default_tasklist_id) {
+				$tasklists[] = $default_tasklist_id;
+				$GO_CONFIG->save_setting('tasks_tasklists_filter',$default_tasklist_id, $GO_SECURITY->user_id);
+			}
+		}
+
+		$response['total'] = $this->get_authorized_tasklists($auth_type, $query, $GO_SECURITY->user_id, $start, $limit, $sort, $dir);
+		if(!$response['total']) {
+			$response['new_default_tasklist']= $this->get_tasklist();
+			$response['total'] = $this->get_authorized_tasklists($auth_type, $query, $GO_SECURITY->user_id, $start, $limit, $sort, $dir);
+		}
+		$response['results']=array();
+		$tasklist_names = array();
+
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
+
+		while($tasklist = $this->next_record(DB_ASSOC)) {
+			$tasklist['dom_id']='tl-'.$this->f('id');
+			$tasklist['user_name']=$GO_USERS->get_user_realname($tasklist['user_id']);
+			$tasklist['checked'] = in_array($tasklist['id'], $tasklists);
+
+			$response['results'][] = $tasklist;
+		}
+	}
         
 /*
 
