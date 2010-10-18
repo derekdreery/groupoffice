@@ -609,7 +609,14 @@ class XSSclean {
 	function _filter_attributes($str)
 	{
 		//put quotes around attributes without quotes.
-		$str = preg_replace('/(\s*[a-z\-]+\s*=\s*)([^"\'\s]+)/is', '\\1"\\2"', $str);
+		//$str = preg_replace('/(\s*[a-z\-]+\s*=\s*)([^"\'\s>]+)>/i', '\\1"\\2">', $str);
+
+		$str = trim($str);
+		$last_char=substr($str,-1);
+		if($last_char!='"' && $last_char!='\''){
+			$str =String::replace_once('=', '="', $str);
+			$str .= '"';
+		}
 
 		$out = '';
 
