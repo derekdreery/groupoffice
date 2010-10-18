@@ -30,7 +30,7 @@ $email = new email();
 
 
 function add_unknown_recipient($email, $name) {
-	global $GO_SECURITY, $ab, $response, $RFC822;
+	global $GO_SECURITY, $ab, $response, $RFC822, $GO_CONFIG;
 
 	require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 	$GO_USERS = new GO_USERS();
