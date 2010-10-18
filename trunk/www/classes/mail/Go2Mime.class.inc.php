@@ -221,16 +221,19 @@ class Go2Mime
 		$a = $this->response['attachments'];
 		$this->response['attachments']=array();
 
-		for ($i=0;$i<count($this->response['attachments']);$i++)
+		for ($i=0;$i<count($a);$i++)
 		{
 			$count=0;
-			if(!empty($a[$i]['replacement_url'])){
+
+			//go_debug($a[$i]);
+			if(!empty($a[$i]['replacement_url'])){				
 				$this->response['body'] = str_replace('cid:'.$a[$i]['id'], $a[$i]['replacement_url'], $this->response['body'], $count);
 			}
 
-			if(!$count){
-				$this->response['attachments'][]=$a[$i];
-			}
+			if(!$count)
+				unset($a[$i]['replacement_url']);
+
+			$this->response['attachments'][]=$a[$i];
 		}
 
 		//for compatibility with IMAP get_message_with_body
@@ -295,8 +298,8 @@ class Go2Mime
 				{
 					$filename=$part->d_parameters['filename*'];
 				}
-
-				if (!empty($filename) || !empty($part->headers['content-id']))
+				
+				if (!empty($part->body) && (!empty($filename) || !empty($part->headers['content-id'])))
 				{
 					$mime_attachment['tmp_file']=false; //for compatibility with IMAP attachments which use this property.
 					$mime_attachment['index']=count($this->response['attachments']);
@@ -346,7 +349,7 @@ class Go2Mime
 							}
 						}
 					}
-
+					//go_debug($mime_attachment);
 
 					$this->response['attachments'][] = $mime_attachment;
 				}
