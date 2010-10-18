@@ -56,3 +56,5 @@ GO.tasks.lang.selectAllTasklists='Select all tasklists';
 GO.tasks.lang.globalCategory='Global category';
 
 GO.tasks.lang.showFutureTasks='Show future tasks';
+
+GO.tasks.lang.incompleteTasks='Incomplete tasks';
