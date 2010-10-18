@@ -839,6 +839,7 @@ table.display-panel a:active
 	vertical-align: top;
 }
 
+<<<<<<< .working
 .display-panel-link-icon{
 	background-repeat: no-repeat;	
 	width:16px !important;
@@ -860,7 +861,6 @@ table.display-panel a:active
 .has-links{
 	background:url(images/links.png) no-repeat;
 }
-
 /* Ext grid addons */
 
 .go-grid3-hide-headers .x-grid3-header {

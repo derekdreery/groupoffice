@@ -176,11 +176,7 @@ GO.cms.EditorPanel = Ext.extend(
 			this.setDisabled(false);
 				
 			if(this.currentTemplate!=template)
-			{
-				//console.log(typeof(this.editor.reInit));
-				//if(this.editor.reInit)
-					//this.editor.reInit();
-					
+			{					
 				var t = tinyMCE.activeEditor.dom;
 					
 				this.currentTemplate = template;
