@@ -124,8 +124,7 @@ class Go2Mime
 		$params['input'] = $mime;
 
 		$structure = Mail_mimeDecode::decode($params);
-
-		//go_debug($structure);
+		
 
 		if($part_number!='')
 		{
@@ -215,16 +214,23 @@ class Go2Mime
 		$this->response['attachments']=array();
 		//$this->response['inline_attachments']=array();
 		$this->response['body']='';
-
 		
 
 		$this->get_parts($structure, '', $create_tmp_attachments, $create_tmp_inline_attachments);
 
+		$a = $this->response['attachments'];
+		$this->response['attachments']=array();
+
 		for ($i=0;$i<count($this->response['attachments']);$i++)
 		{
-			$a = $this->response['attachments'][$i];
-			if(!empty($a['replacement_url']))
-				$this->response['body'] = str_replace('cid:'.$a['id'], $a['replacement_url'], $this->response['body']);
+			$count=0;
+			if(!empty($a[$i]['replacement_url'])){
+				$this->response['body'] = str_replace('cid:'.$a[$i]['id'], $a[$i]['replacement_url'], $this->response['body'], $count);
+			}
+
+			if(!$count){
+				$this->response['attachments'][]=$a[$i];
+			}
 		}
 
 		//for compatibility with IMAP get_message_with_body
@@ -273,7 +279,7 @@ class Go2Mime
 					{
 						$content_part = String::convert_html($content_part);
 					}
-					
+
 					$this->response['body'] .= $content_part;
 				}
 				//store attachments in the attachments array
@@ -289,7 +295,7 @@ class Go2Mime
 				{
 					$filename=$part->d_parameters['filename*'];
 				}
-				
+
 				if (!empty($filename) || !empty($part->headers['content-id']))
 				{
 					$mime_attachment['tmp_file']=false; //for compatibility with IMAP attachments which use this property.
@@ -340,7 +346,7 @@ class Go2Mime
 							}
 						}
 					}
-				
+
 
 					$this->response['attachments'][] = $mime_attachment;
 				}

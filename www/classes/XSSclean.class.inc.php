@@ -102,7 +102,7 @@ class XSSclean {
 		}
 
 		//merijn remove HTML comments
-		$str = preg_replace('/<!.*>/U', '', $str);
+		//$str = preg_replace('/<!.*>/U', '', $str);
 		$str = preg_replace("/ on[a-z\w]+=[^\"'>\n]*/iU", " removed='' ", $str);
 
 		/*
@@ -608,6 +608,9 @@ class XSSclean {
 	*/
 	function _filter_attributes($str)
 	{
+		//put quotes around attributes without quotes.
+		$str = preg_replace('/(\s*[a-z\-]+\s*=\s*)([^"\'\s]+)/is', '\\1"\\2"', $str);
+
 		$out = '';
 
 		if (preg_match_all('#\s*[a-z\-]+\s*=\s*(\042|\047)([^\\1]*?)\\1#is', $str, $matches))
