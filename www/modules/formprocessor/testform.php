@@ -19,7 +19,7 @@ input, textarea{
 	
 	<input type="hidden" name="return_to" value="<?php echo $_SERVER['PHP_SELF']; ?>" />
 	<input type="hidden" name="addressbook" value="Klanten" />
-	<input type="hidden" name="mailings[]" value="test" />
+	<!-- <input type="hidden" name="mailings[]" value="test" /> -->
 	<!-- <input type="hidden" name="mailings[]" value="blabla" /> -->
 	<!--
 	Enable this input to send an e-mail confirmation. 
@@ -30,7 +30,7 @@ input, textarea{
 	<input type="hidden" name="confirmation_email" value="confirm.eml" />
 	-->
 
-	<input type="hidden" name="notify_users" value="1,2" />
+	<input type="hidden" name="notify_users" value="1" />
 	
 	<input type="hidden" name="notify_addressbook_owner" value="0" />
 	
