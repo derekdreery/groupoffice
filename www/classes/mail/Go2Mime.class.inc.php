@@ -213,9 +213,19 @@ class Go2Mime
 
 		$this->get_parts($structure, '', $create_tmp_attachments, $create_tmp_inline_attachments);
 
-		for ($i=0;$i<count($this->replacements);$i++)
+		$a = $this->response['attachments'];
+		$this->response['attachments']=array();
+		
+		for ($i=0;$i<count($a);$i++)
 		{
-			$this->response['body'] = str_replace('cid:'.$this->replacements[$i]['id'], $this->replacements[$i]['url'], $this->response['body']);
+			$count=0;
+			if(isset($a[$i]['replacement_url'])){
+				$this->response['body'] = str_replace('cid:'.$a[$i]['id'], $a[$i]['replacement_url'], $this->response['body'], $count);
+			}
+
+			if(!$count){
+				$this->response['attachments'][]=$a[$i];
+			}
 		}
 
 		//for compatibility with IMAP get_message_with_body
@@ -266,8 +276,8 @@ class Go2Mime
 				{
 					$filename=$part->d_parameters['filename*'];
 				}
-
-				if (/*!empty($part->body) &&*/ !empty($filename)/* && empty($part->headers['content-id'])*/)
+				
+				if (!empty($part->body) && (!empty($filename) || !empty($part->headers['content-id'])))
 				{
 					$mime_attachment['tmp_file']=false; //for compatibility with IMAP attachments which use this property.
 					$mime_attachment['index']=count($this->response['attachments']);
@@ -277,7 +287,7 @@ class Go2Mime
 					$mime_attachment['extension'] = File::get_extension($filename);
 					$mime_attachment['type'] = $part->ctype_primary;
 					$mime_attachment['subtype'] = $part->ctype_secondary;
-					$mime_attachment['encoding'] = $part->headers['content-transfer-encoding'];
+					$mime_attachment['encoding'] = isset($part->headers['content-transfer-encoding']) ? $part->headers['content-transfer-encoding'] : '';
 					$mime_attachment['imap_id'] = $part_number_prefix.$part_number;
 					$mime_attachment['disposition'] = isset($part->disposition) ? $part->disposition : '';
 					$mime_attachment['id'] = isset($part->headers['content-id']) ? $part->headers['content-id'] : '';
@@ -289,43 +299,77 @@ class Go2Mime
 
 						file_put_contents($mime_attachment['tmp_file'], $part->body);
 					}
-						
-					$this->response['attachments'][] = $mime_attachment;
-
-				}
-
-				if(isset($part->headers['content-id']))
-				{
-						
-					$content_id = trim($part->headers['content-id']);
-					if ($content_id != '')
+		
+					if(isset($part->headers['content-id']))
 					{
-						if (strpos($content_id,'>'))
+
+						$content_id = trim($part->headers['content-id']);
+						if ($content_id != '')
 						{
-							$content_id = substr($part->headers['content-id'], 1,strlen($part->headers['content-id'])-2);
+							if (strpos($content_id,'>'))
+							{
+								$content_id = substr($part->headers['content-id'], 1,strlen($part->headers['content-id'])-2);
+							}
+							$mime_attachment['id'] = $content_id;
+							$mime_attachment['part_number'] = $part_number_prefix.$part_number;
+							$mime_attachment['replacement_url'] = String::add_params_to_url($this->inline_attachments_url, 'part_number='.$part_number_prefix.$part_number);
+
+							//$path = 'mimepart.php?path='.urlencode($path).'&part_number='.$part_number;
+							//replace inline images identified by a content id with the url to display the part by Group-Office
+							$url_replacement['id'] = $content_id;
+							//part number is needed for e-mail templates
+							$url_replacement['part_number'] = $part_number_prefix.$part_number;
+							$url_replacement['url'] = String::add_params_to_url($this->inline_attachments_url, 'part_number='.$part_number_prefix.$part_number);
+
+							if($create_tmp_inline_attachments)
+							{
+								$url_replacement['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$part->d_parameters['filename'];
+								filesystem::mkdir_recursive(dirname($url_replacement['tmp_file']));
+
+								file_put_contents($url_replacement['tmp_file'], $part->body);
+							}
+
+							//$this->replacements[] = $url_replacement;
+							$this->response['inline_attachments'][]=$url_replacement;
 						}
-						$content_id = $content_id;
+					}				
 
-						//$path = 'mimepart.php?path='.urlencode($path).'&part_number='.$part_number;
-						//replace inline images identified by a content id with the url to display the part by Group-Office
-						$url_replacement['id'] = $content_id;
-						//part number is needed for e-mail templates
-						$url_replacement['part_number'] = $part_number_prefix.$part_number;
-						$url_replacement['url'] = String::add_params_to_url($this->inline_attachments_url, 'part_number='.$part_number_prefix.$part_number);
+					if(isset($part->headers['content-id']))
+					{
 
-						if($create_tmp_inline_attachments)
+						$content_id = trim($part->headers['content-id']);
+						if ($content_id != '')
 						{
-							$url_replacement['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$part->d_parameters['filename'];
-							filesystem::mkdir_recursive(dirname($url_replacement['tmp_file']));
-								
-							file_put_contents($url_replacement['tmp_file'], $part->body);
-						}
+							if (strpos($content_id,'>'))
+							{
+								$content_id = substr($part->headers['content-id'], 1,strlen($part->headers['content-id'])-2);
+							}
+							$mime_attachment['id'] = $content_id;
+							$mime_attachment['part_number'] = $part_number_prefix.$part_number;
+							$mime_attachment['replacement_url'] = String::add_params_to_url($this->inline_attachments_url, 'part_number='.$part_number_prefix.$part_number);
 
-						$this->replacements[] = $url_replacement;
-						$this->response['inline_attachments'][]=$url_replacement;
-					}
+							//$path = 'mimepart.php?path='.urlencode($path).'&part_number='.$part_number;
+							//replace inline images identified by a content id with the url to display the part by Group-Office
+							$url_replacement['id'] = $content_id;
+							//part number is needed for e-mail templates
+							$url_replacement['part_number'] = $part_number_prefix.$part_number;
+							$url_replacement['url'] = String::add_params_to_url($this->inline_attachments_url, 'part_number='.$part_number_prefix.$part_number);
+
+							if($create_tmp_inline_attachments)
+							{
+								$url_replacement['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$part->d_parameters['filename'];
+								filesystem::mkdir_recursive(dirname($url_replacement['tmp_file']));
+
+								file_put_contents($url_replacement['tmp_file'], $part->body);
+							}
+
+							//$this->replacements[] = $url_replacement;
+							$this->response['inline_attachments'][]=$url_replacement;
+						}
+					}				
+
+					$this->response['attachments'][] = $mime_attachment;
 				}
-
 				if(isset($part->parts))
 				{
 					$this->get_parts($part, $part_number_prefix.$part_number.'.',$create_tmp_attachments, $create_tmp_inline_attachments);
