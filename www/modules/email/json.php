@@ -457,6 +457,42 @@ try {
 
 	}else {
 		switch($_REQUEST['task']) {
+
+
+			case 'init_composer':
+
+				if($GO_MODULES->has_module('mailings')){
+					require_once($GO_MODULES->modules['mailings']['class_path'].'templates.class.inc.php');
+					$tp = new templates();
+
+					$response['templates']['total'] = $tp->get_authorized_templates($GO_SECURITY->user_id, 0,0, 'name','ASC', 0);
+					$response['templates']['results'] = array();
+					while($tp->next_record())
+					{
+						$record = array(
+							'id' => $tp->f('id'),
+							'name' => $tp->f('name'),
+							'default_template' => $tp->f('default_template')
+						);
+
+						$response['templates']['results'][] = $record;
+					}
+				}
+
+				$response['aliases']['total'] = $email->get_all_aliases($GO_SECURITY->user_id);
+				$response['aliases']['results']=array();
+				while($alias = $email->next_record()) {
+					$alias['name']='"'.$alias['name'].'" <'.$alias['email'].'>';
+					$alias['html_signature']=String::text_to_html($email->f('signature'));
+					$alias['plain_signature']=$email->f('signature');
+					unset($alias['signature']);
+					$response['aliases']['results'][] = $alias;
+				}
+
+				break;
+
+
+
 			case 'icalendar_attachment':
 				if(!isset($GO_MODULES->modules['calendar']) || !$GO_MODULES->modules['calendar']['read_permission']) {
 					throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));

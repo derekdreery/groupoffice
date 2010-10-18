@@ -791,44 +791,51 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.showConfig=config;
 		
 		if (!this.rendered) {
+				
+			Ext.Ajax.request({
+				url: GO.settings.modules.email.url+'json.php',
+				params:{
+					task:'init_composer'
+				},
+				callback: function(options, success, response)
+				{
 
-			var loadCb = function() {
-				var records = this.fromCombo.store.getRange();
-				if (records.length) {
-					if (!config.account_id) {
-						this.showConfig.account_id = records[0].data.account_id;
+					if(!success)
+					{
+						alert( GO.lang['strRequestError']);
+					}else
+					{
+						var jsonData = Ext.decode(response.responseText);
+
+
+						this.fromCombo.store.loadData(jsonData.aliases);
+
+						if(this.templatesStore)
+							this.templatesStore.loadData(jsonData.templates);
+
+						var records = this.fromCombo.store.getRange();
+						if (records.length) {
+							if (!config.account_id) {
+								this.showConfig.account_id = records[0].data.account_id;
+							}
+
+							this.render(Ext.getBody());
+							this.show(this.showConfig);
+
+							return;
+
+						} else {
+							Ext.getBody().unmask();
+							Ext.Msg.alert(GO.email.lang.noAccountTitle,
+								GO.email.lang.noAccount);
+						}
+
+
 					}
-
-					this.render(Ext.getBody());
-					this.show(this.showConfig);
-					
-					return;
-
-				} else {
-					Ext.getBody().unmask();
-					Ext.Msg.alert(GO.email.lang.noAccountTitle,
-						GO.email.lang.noAccount);
-				}
-			};
-
-			if (!GO.mailings) {
-				config.template_id = 0;
-				this.fromCombo.store.load({
-					callback:loadCb,
-					scope:this
-				});
-			} else {
-
-				this.templatesStore.load({
-					callback : function() {
-						this.fromCombo.store.load({
-							callback:loadCb,
-							scope:this
-						});
-					},
-					scope : this
-				});
-			}
+				},
+				scope:this
+			});
+			
 			this.htmlEditor.SpellCheck = false;
 		} else if (config.template_id == undefined && this.templatesStore
 			&& this.templatesStore.getTotalCount() > 1) {
