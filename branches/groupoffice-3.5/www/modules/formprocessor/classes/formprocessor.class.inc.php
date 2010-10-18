@@ -256,7 +256,8 @@ class formprocessor{
 			}
 			if(count($mail_to))
 			{
-				$body = $lang['addressbook']['newContactFromSite'].'<br /><a href="go:showContact('.$contact_id.');">'.$lang['addressbook']['clickHereToView'].'</a>';
+				$url = create_direct_url('addressbook', 'showContact', array($contact_id));
+				$body = $lang['addressbook']['newContactFromSite'].'<br /><a href="'.$url.'">'.$lang['addressbook']['clickHereToView'].'</a>';
 
 				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 				$swift = new GoSwift(implode(',', $mail_to), $lang['addressbook']['newContactAdded']);
