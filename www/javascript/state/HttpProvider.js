@@ -105,7 +105,7 @@ Ext.extend(GO.state.HttpProvider, Ext.state.Provider, {
     // private
     setValue : function(name, value, callback, scope){
 			if(!this.changedValues){
-				this.sendRequest.defer(1000, this, [callback, scope]);
+				this.sendRequest.defer(30000, this, [callback, scope]);
 				this.changedValues={};
 			}
 			this.changedValues[name]=this.encodeValue(value);			
