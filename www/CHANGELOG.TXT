@@ -1,3 +1,6 @@
+2010/10/18 3.5.35
+- Some debug code was left
+
 2010/10/15 3.5.34
 - Some small bugs were fixed
 - Margins in PDF reports for projects
