@@ -143,9 +143,12 @@ class users extends db
 
 	function load_settings($response)
 	{
-		global $GO_USERS, $GO_MODULES;
+		global $GO_MODULES, $GO_CONFIG;
 
 		$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : 0;
+
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
 
 		$user = $GO_USERS->get_user($user_id);
 		$response['data']=array_merge($response['data'], $user);
