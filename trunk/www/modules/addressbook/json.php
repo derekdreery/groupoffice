@@ -753,6 +753,53 @@ try
 			echo json_encode($response);
 			break;
 
+		case 'init':
+
+			$response['addressbooks']['total'] = $ab->get_user_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
+
+			if($response['addressbooks']['total']==0)
+			{
+				$ab->get_addressbook();
+				$response['addressbooks']['total'] = $ab->get_user_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
+			}
+
+			$books = $GO_CONFIG->get_setting('addressbook_books_filter', $GO_SECURITY->user_id);
+			$books = ($books) ? explode(',',$books) : array();
+
+			while($record = $ab->next_record())
+			{
+				$record['checked']=in_array($record['id'], $books);
+				$response['addressbooks']['results'][]=$record;
+			}
+
+			if($GO_MODULES->has_module('mailings')){
+
+				$selected_mailings = $GO_CONFIG->get_setting('mailings_filter', $GO_SECURITY->user_id);
+				$selected_mailings = empty($selected_mailings) ? array() : explode(',', $selected_mailings);
+
+				require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
+				$ml = new mailings();
+
+				$response['readable_addresslists']['total'] = $ml->get_authorized_mailing_groups('read', $GO_SECURITY->user_id);
+				$response['readable_addresslists']['results'] = array();
+
+				while($mailing = $ml->next_record()){
+					$mailing['checked']=in_array($mailing['id'], $selected_mailings);
+					$response['readable_addresslists']['results'][]=$mailing;
+				}
+
+				$response['writable_addresslists']['total'] = $ml->get_authorized_mailing_groups('write', $GO_SECURITY->user_id);
+				$response['writable_addresslists']['results'] = array();
+
+				while($mailing = $ml->next_record()){
+					$response['writable_addresslists']['results'][]=$mailing;
+				}
+			}
+
+			echo json_encode($response);
+
+			break;
+
 			/* get all readable addressbooks */
 		case 'addressbooks':
 
