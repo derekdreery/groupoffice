@@ -71,6 +71,12 @@ class log extends db {
 	function format_log_entry(&$entry)
 	{
 		global $lang, $GO_USERS;
+
+		if(!isset($GO_USERS)){
+			global $GO_CONFIG;
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+		}
 		
 		if(!isset($lang['link_type']))
 		{
@@ -78,8 +84,7 @@ class log extends db {
 			$GO_LANGUAGE->get_all();
 		}
 		
-		$user = $GO_USERS->get_user($entry['user_id']);
-		$entry['user_name']=String::format_name($user);
+		$entry['user_name']=$GO_USERS->get_user_realname($entry['user_id']);
 		$entry['time']=Date::get_timestamp($entry['time']);
 		$entry['link_type']=isset($lang['link_type'][$entry['link_type']]) ? $lang['link_type'][$entry['link_type']] : '-';
 	}

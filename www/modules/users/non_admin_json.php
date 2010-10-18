@@ -17,6 +17,9 @@ $GO_SECURITY->json_authenticate();
 
 $task = isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 switch($task)
 {
 	case 'users':

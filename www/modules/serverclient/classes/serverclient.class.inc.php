@@ -42,7 +42,7 @@ class serverclient
 
 	public static function before_add_user($user)
 	{
-		global $GO_CONFIG, $GO_USERS;
+		global $GO_CONFIG;
 
 		$sc = new serverclient();
 
@@ -90,7 +90,7 @@ class serverclient
 
 	public static function update_user($user)
 	{
-		global $GO_USERS, $GO_CONFIG, $GO_MODULES;
+		global $GO_CONFIG, $GO_MODULES;
 
 		$sc = new serverclient();
 
@@ -98,6 +98,9 @@ class serverclient
 		{
 			$new_password = $user['password'];
 			$domains = explode(',', $GO_CONFIG->serverclient_domains);
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
 			$user = $GO_USERS->get_user($user['id']);
 

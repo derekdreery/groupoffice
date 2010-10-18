@@ -93,7 +93,10 @@ class pdf_export_query extends base_export_query{
 
 	function export($fp){
 		parent::export($fp);
-		global $GO_USERS, $lang, $GO_MODULES;
+		global $GO_CONFIG, $lang, $GO_MODULES;
+
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
 
 		$this->init_pdf();
 
@@ -121,8 +124,7 @@ class pdf_export_query extends base_export_query{
 
 			if(isset($record['user_id']) && isset($this->columns['user_id']))
 			{
-				$user = $GO_USERS->get_user($record['user_id']);
-				$record['user_id']=$user['username'];
+				$record['user_id']=$GO_USERS->get_user_realname($record['user_id']);
 			}
 
 			$lines=1;

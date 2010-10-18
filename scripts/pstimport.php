@@ -91,7 +91,8 @@ $args = parse_cli_args($argv);
 
 require_once($go."Group-Office.php");
 
-
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
 $user = $GO_USERS->get_user_by_username($args['username']);
 
 if(!$user)

@@ -47,7 +47,7 @@ class users extends db
 	}
 
 	public static function check_database(){
-		global $GO_CONFIG, $GO_MODULES, $GO_USERS, $GO_SECURITY;
+		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY;
 
 		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 
@@ -57,6 +57,9 @@ class users extends db
 
 		if(isset($GO_MODULES->modules['files']))
 		{
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
@@ -154,9 +157,12 @@ class users extends db
 
 	function save_settings()
 	{		
-		global $GO_USERS, $lang, $GO_CONFIG, $GO_LANGUAGE;
+		global $lang, $GO_CONFIG, $GO_LANGUAGE;
 
-		$user['id'] = isset($_POST['user_id']) ? (trim($_POST['user_id'])) : 0;
+		$user['id'] = isset($_POST['user_id']) ? trim($_POST['user_id']) : 0;
+
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
 
 		if(isset($_POST['first_name']))
 		{
@@ -268,7 +274,9 @@ class users extends db
 
 	public function build_search_index()
 	{
-		global $GO_USERS;
+		global $GO_CONFIG;
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
 
 		$users = new users();
 

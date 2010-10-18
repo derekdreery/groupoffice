@@ -932,6 +932,27 @@ class GO_CONFIG {
 
 		if(isset($this->session_config_file))
 			go_debug('Used config file from session', $this);
+
+	}
+
+	/**
+	 * This function sets some default session variables. When a user logs in
+	 * they are overridden by the user settings.
+	 */
+	public function set_default_session(){
+
+		if(!isset($_SESSION['GO_SESSION']['timezone']))
+		{
+			$_SESSION['GO_SESSION']['decimal_separator'] = $this->default_decimal_separator;
+			$_SESSION['GO_SESSION']['thousands_separator'] = $this->default_thousands_separator;
+			$_SESSION['GO_SESSION']['date_separator'] = $this->default_date_separator;
+			$_SESSION['GO_SESSION']['date_format'] = Date::get_dateformat( $this->default_date_format, $_SESSION['GO_SESSION']['date_separator']);
+			$_SESSION['GO_SESSION']['time_format'] = $this->default_time_format;
+			$_SESSION['GO_SESSION']['currency'] = $this->default_currency;
+			$_SESSION['GO_SESSION']['timezone'] = $this->default_timezone;
+			$_SESSION['GO_SESSION']['country'] = $this->default_country;
+			$_SESSION['GO_SESSION']['sort_name'] = 'last_name';
+		}
 	}
 
 	function __destruct() {

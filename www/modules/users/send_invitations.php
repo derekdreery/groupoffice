@@ -20,6 +20,9 @@ if(isset($argv[1]))
 
 require('../../Group-Office.php');
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 require_once($GO_MODULES->modules['users']['class_path'].'users.class.inc.php');
 $users = new users();
 

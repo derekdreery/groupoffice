@@ -871,6 +871,10 @@ try {
 			break;
 
 		case 'templates':
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			if(isset($_POST['delete_keys'])) {
 				try {
 					$response['deleteSuccess']=true;
@@ -892,10 +896,7 @@ try {
 			}
 			$response['results']=array();
 			while($files->next_record(DB_ASSOC)) {
-				$user = $GO_USERS->get_user($files->f('user_id'));
-
-
-				$files->record['user_name'] = String::format_name($user);
+				$files->record['user_name'] = $GO_USERS->get_user_realname($files->f('user_id'));
 				$files->record['type'] = File::get_filetype_description($files->f('extension'));
 				$files->record['grid_display']='<div class="go-grid-icon filetype filetype-'.$files->f('extension').'">'.$files->f('name').'</div>';
 				$response['results'][] = $files->record;
@@ -904,9 +905,11 @@ try {
 			break;
 
 		case 'template':
-			$response['data']=$files->get_template(($_POST['template_id']));
-			$user = $GO_USERS->get_user($response['data']['user_id']);
-			$response['data']['user_name']=String::format_name($user);
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+			
+			$response['data']=$files->get_template($_POST['template_id']);			
+			$response['data']['user_name']=$GO_USERS->get_user_realname($response['data']['user_id']);
 			$response['success']=true;
 			break;
 

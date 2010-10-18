@@ -27,6 +27,9 @@ require_once('security.class.inc.php');
 $GO_MODULES = new UPGRADE_GO_MODULES();
 $GO_SECURITY = new UPGRADE_GO_SECURITY();
 
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+$GO_USERS = new GO_USERS();
+
 
 ini_set('max_execution_time', '360');
 ini_set('display_errors', 'On');

@@ -25,6 +25,9 @@ $smarty->assign('success_url', $success_url);
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
 
+	require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+	$GO_USERS = new GO_USERS();
+
 	require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
 	$GO_GROUPS = new GO_GROUPS();
 

@@ -51,6 +51,9 @@ switch($task)
 
 	case 'update_user':
 
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
+
 		$user_id = $argv[3];
 		$password = $argv[4];
 		$GO_USERS->get_user($user_id);

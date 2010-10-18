@@ -54,6 +54,9 @@ if(!defined('GO_NO_SESSION')){
 if(!isset($GO_CONFIG))
 	$GO_CONFIG = new GO_CONFIG();
 
+$GO_CONFIG->set_default_session();
+
+
 if(!$GO_CONFIG->enabled)
 {
 	die('<h1>Disabled</h1>This Group-Office installation has been disabled');

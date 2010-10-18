@@ -26,7 +26,11 @@ class with_companies_export_query extends csv_export_query{
 	}
 
 	function export($fp){
-		global $GO_USERS, $lang, $GO_MODULES, $GO_SECURITY;
+		global $lang, $GO_MODULES, $GO_SECURITY, $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
+
 
 		if($GO_MODULES->has_module('customfields')) {
 			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
@@ -58,8 +62,7 @@ class with_companies_export_query extends csv_export_query{
 
 				if(isset($record['user_id']) && isset($this->columns['user_id']))
 				{
-					$user = $GO_USERS->get_user($record['user_id']);
-					$record['user_id']=$user['username'];
+					$record['user_id']= $GO_USERS->get_user_realname($record['user_id']);
 				}
 				$values=array();
 				foreach($this->columns as $index)

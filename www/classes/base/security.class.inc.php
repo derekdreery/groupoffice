@@ -82,9 +82,13 @@ class GO_SECURITY extends db {
 	 * @return void
 	 */
 	function logged_in( $user=null ) {
-		global $GO_USERS, $GO_CONFIG;
+		global $GO_CONFIG;
 
 		if(isset($user)) {
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			$GO_USERS->update_session($user, true);
 			$this->user_id = $user['id'];
 		}else {
