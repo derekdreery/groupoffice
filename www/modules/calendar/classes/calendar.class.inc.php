@@ -2814,7 +2814,7 @@ class calendar extends db {
 		$sql = "SELECT e.*, c.name AS calendar_name FROM cal_events e ".
 			"INNER JOIN cal_calendars c ON c.id=e.calendar_id ".
 			"INNER JOIN go_links_$link_type l ON l.link_id=e.id AND l.link_type=1 ".
-			"WHERE l.id=? ORDER BY start_time DESC";
+			"WHERE l.id=? AND start_time>".time()." ORDER BY start_time ASC";
 
 		$this->query($sql, 'i', array($link_id));
 	}
