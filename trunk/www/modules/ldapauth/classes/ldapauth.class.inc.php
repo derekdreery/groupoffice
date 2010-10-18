@@ -72,7 +72,7 @@ class ldapauth extends imapauth {
 
 
 	public static function before_login($username, $password) {
-		global $GO_CONFIG, $GO_USERS, $GO_MODULES;
+		global $GO_CONFIG, $GO_MODULES;
 
 		if(!isset($GO_CONFIG->ldap_host)) {
 			go_debug('LDAPAUTH: module is installed but not configured');
@@ -108,6 +108,9 @@ class ldapauth extends imapauth {
 			throw new Exception($GLOBALS['lang']['common']['badLogin']);
 		}else {
 			go_debug('LDAPAUTH: LDAP Authentication successfull');
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
 			$mail_username=false;
 			$gouser = $GO_USERS->get_user_by_username($username);

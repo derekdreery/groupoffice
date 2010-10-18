@@ -15,8 +15,10 @@
 			${friendly_single}['{related_friendly_single}_name']=${related_friendly_single}['name'];
 			</gotpl>
 			<gotpl if="$user_id">
-			$user = $GO_USERS->get_user(${friendly_single}['user_id']);
-			${friendly_single}['user_name']=String::format_name($user);
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+			
+			${friendly_single}['user_name']= $GO_USERS->get_user_realname(${friendly_single}['user_id']);
 			</gotpl>
 			<gotpl if="$mtime">
 			${friendly_single}['mtime']=Date::get_timestamp(${friendly_single}['mtime']);
@@ -148,11 +150,14 @@
 			
 			$response['total'] = ${module}->get_<gotpl if="$authenticate">authorized_</gotpl>{friendly_multiple}(<gotpl if="$authenticate">$auth_type, $GO_SECURITY->user_id, </gotpl><gotpl if="$relation">${related_field_id}, </gotpl> $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			while(${friendly_single} = ${module}->next_record())
 			{
-				<gotpl if="$user_id">
-				$user = $GO_USERS->get_user(${friendly_single}['user_id']);
-				${friendly_single}['user_name']=String::format_name($user);
+				<gotpl if="$user_id">				
+				${friendly_single}['user_name']=$GO_USERS->get_user_realname(${friendly_single}['user_id']);
 				</gotpl>
 				<gotpl if="$mtime">
 				${friendly_single}['mtime']=Date::get_timestamp(${friendly_single}['mtime']);

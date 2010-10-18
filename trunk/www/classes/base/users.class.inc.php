@@ -27,62 +27,7 @@
  * @uses db
  */
 class GO_USERS extends db
-{
-	/**
-	 * The constructor initializes the SQL database connection.
-	 * 
-	 * Some functionality is global and therefore implemented in this class,
-	 * and not in the child classes. For this functions a database connection
-	 * is needed, so we initialize it in the constructor. There is no need to
-	 * do anything else here.
-	 * 
-	 * @access public
-	 */
-	function __construct()
-	{
-		global $GO_CONFIG;
-		
-		if(!isset($_SESSION['GO_SESSION']['decimal_separator']))
-		{		
-			$_SESSION['GO_SESSION']['decimal_separator'] = $GO_CONFIG->default_decimal_separator;
-		}		
-		if(!isset($_SESSION['GO_SESSION']['thousands_separator']))
-		{		
-			$_SESSION['GO_SESSION']['thousands_separator'] = $GO_CONFIG->default_thousands_separator;
-		}
-		if(!isset($_SESSION['GO_SESSION']['date_separator']))
-		{		
-			$_SESSION['GO_SESSION']['date_separator'] = $GO_CONFIG->default_date_separator;
-		}		
-		if(!isset($_SESSION['GO_SESSION']['date_format']))
-		{		
-			$_SESSION['GO_SESSION']['date_format'] = Date::get_dateformat( $GO_CONFIG->default_date_format, $_SESSION['GO_SESSION']['date_separator']);
-		}
-		if(!isset($_SESSION['GO_SESSION']['time_format']))
-		{		
-			$_SESSION['GO_SESSION']['time_format'] = $GO_CONFIG->default_time_format;
-		}
-		if(!isset($_SESSION['GO_SESSION']['currency']))
-		{		
-			$_SESSION['GO_SESSION']['currency'] = $GO_CONFIG->default_currency;
-		}
-		if(!isset($_SESSION['GO_SESSION']['timezone']))
-		{		
-			$_SESSION['GO_SESSION']['timezone'] = $GO_CONFIG->default_timezone;
-		}
-		if(!isset($_SESSION['GO_SESSION']['country']))
-		{	
-			$_SESSION['GO_SESSION']['country'] = $GO_CONFIG->default_country;
-		}
-		if(!isset($_SESSION['GO_SESSION']['sort_name']))
-		{		
-			$_SESSION['GO_SESSION']['sort_name'] = 'last_name';
-		}
-		
-		
-		parent::__construct();
-	}
-	
+{	
 /**
 	 * Updates the session data corresponding to the user_id.
 	 * 

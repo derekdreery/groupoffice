@@ -213,27 +213,6 @@ try {
 
 			break;
 
-
-		//used by /javascript/dialog/SelectUsers.js
-		/*case 'users':
-
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : null;
-			$search_field = isset($_REQUEST['search_field']) ? ($_REQUEST['search_field']) : null;
-
-			$GO_USERS->search($query, $search_field, 0, $start, $limit, $sort,$dir);
-
-			$response['results']=array();
-
-			while($GO_USERS->next_record(DB_ASSOC))
-			{
-			$response['results'][]=array(
-			'id'=>$GO_USERS->f('id'),
-			'name'=>String::format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name')),
-			'email' => $GO_USERS->f('email')
-			);
-			}
-			break;*/
-
 		case 'groups_in_acl':
 
 			$acl_id = ($_REQUEST['acl_id']);
@@ -427,6 +406,10 @@ try {
 			}
 
 			if(count($addresses)<10) {
+
+				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				$GO_USERS = new GO_USERS();
+
 				$GO_USERS->search($query,array('name','email'),$GO_SECURITY->user_id, 0,10);
 
 				while($GO_USERS->next_record(DB_ASSOC)) {

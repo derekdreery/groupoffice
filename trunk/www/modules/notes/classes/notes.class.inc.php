@@ -319,7 +319,10 @@ class notes extends db {
 				return $category;
 			}else
 			{
-				global $GO_USERS;
+				global $GO_CONFIG;
+
+				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				$GO_USERS = new GO_USERS();
 
 				$category['user_id']=$GO_SECURITY->user_id;
 				$user = $GO_USERS->get_user($GO_SECURITY->user_id);

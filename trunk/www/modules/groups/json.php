@@ -95,6 +95,10 @@ switch ($action)
 		echo json_encode($response);
 		break;
 	case 'users':
+
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
+
 		$GO_USERS->search($query, $search_field, 0, $start, $limit, $sort,$dir);
 
 		while($GO_USERS->next_record())

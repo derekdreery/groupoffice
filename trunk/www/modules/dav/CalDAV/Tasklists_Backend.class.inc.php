@@ -29,12 +29,15 @@ class GO_CalDAV_Tasklists_Backend extends Sabre_CalDAV_Backend_Abstract {
 	}
 
 	private function get_user_id($principalUri) {
-		global $GO_USERS;
-
 		if (!isset($_SESSION['GO_SESSION']['dav']['principaluri_map']))
 			$_SESSION['GO_SESSION']['dav']['principaluri_map'] = array();
 
 		if (!isset($_SESSION['GO_SESSION']['dav']['principaluri_map'][$principalUri])) {
+			global $GO_CONFIG;
+			
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			$user = $GO_USERS->get_user_by_username($principalUri);
 			$_SESSION['GO_SESSION']['dav']['principaluri_map'][$principalUri] = $user['id'];
 		}

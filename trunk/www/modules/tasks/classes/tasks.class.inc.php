@@ -301,7 +301,10 @@ class tasks extends db
 		}
 
 		if(!$tasklist){
-			global $GO_USERS, $GO_SECURITY;
+			global $GO_CONFIG, $GO_SECURITY;
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
 			$list['user_id']=$user_id;
 			$user = $GO_USERS->get_user($user_id);
@@ -357,7 +360,10 @@ class tasks extends db
 				return $tasklist;
 			}else
 			{
-				global $GO_USERS;
+				global $GO_CONFIG;
+
+				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				$GO_USERS = new GO_USERS();
 
 				$list['user_id']=$user_id;
 				$user = $GO_USERS->get_user($user_id);

@@ -181,10 +181,12 @@ try {
 				throw new AccessDeniedException();
 			}
 
-			$site = $cms->get_site(($_REQUEST['site_id']));
+			$site = $cms->get_site($_REQUEST['site_id']);
 
-			$user = $GO_USERS->get_user($site['user_id']);
-			$site['user_name']=String::format_name($user);
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
+			$site['user_name']=$GO_USERS->get_user_realname($site['user_id']);
 
 			$response['data']=$site;
 
@@ -214,11 +216,14 @@ try {
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 			$response['total'] = $cms->get_authorized_sites($GO_SECURITY->user_id, $sort, $dir, $start, $limit);
 			$response['results']=array();
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			while($cms->next_record()) {
 				$site = $cms->record;
 
-				$user = $GO_USERS->get_user($site['user_id']);
-				$site['user_name']=String::format_name($user);
+				$site['user_name']=$GO_USERS->get_user_realname($site['user_id']);
 				$response['results'][] = $site;
 			}
 			break;
@@ -392,10 +397,11 @@ try {
 		case 'comment':
 			$comment = $cms->get_comment(($_REQUEST['comment_id']));
 
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
 
-			$user = $GO_USERS->get_user($comment['user_id']);
-			$comment['user_name']=String::format_name($user);
 
+			$comment['user_name']=$GO_USERS->get_user_realname($comment['user_id']);
 			$comment['ctime']=Date::get_timestamp($comment['ctime']);
 			$response['data']=$comment;
 
@@ -423,12 +429,14 @@ try {
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 			$response['total'] = $cms->get_comments($sort, $dir, $start, $limit);
 			$response['results']=array();
+
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			while($cms->next_record()) {
 				$comment = $cms->record;
 
-				$user = $GO_USERS->get_user($comment['user_id']);
-				$comment['user_name']=String::format_name($user);
-
+				$comment['user_name']=$GO_USERS->get_user_realname($comment['user_id']);
 				$comment['ctime']=Date::get_timestamp($comment['ctime']);
 
 
