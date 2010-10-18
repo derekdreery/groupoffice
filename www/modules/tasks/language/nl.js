@@ -45,3 +45,4 @@ GO.tasks.lang.selectAllTasklists='Selecteer alle takenlijsten';
 GO.tasks.lang.globalCategory='Globale category';
 
 GO.tasks.lang.showFutureTasks='Toon toekomstige taken';
+GO.tasks.lang.incompleteTasks='Onvoltooide taken';

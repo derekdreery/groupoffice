@@ -1352,7 +1352,7 @@ class tasks extends db
 		$sql = "SELECT t.*, tl.name AS tasklist_name FROM ta_tasks t ".
 			"INNER JOIN ta_lists tl ON tl.id=t.tasklist_id ".
 			"INNER JOIN go_links_$link_type l ON l.link_id=t.id AND l.link_type=12 ".
-			"WHERE l.id=? ORDER BY due_time DESC";
+			"WHERE l.id=? AND t.completion_time=0 ORDER BY due_time ASC";
 
 		$this->query($sql, 'i', array($link_id));
 	}
