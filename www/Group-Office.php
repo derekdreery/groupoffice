@@ -54,7 +54,7 @@ if(!defined('GO_NO_SESSION')){
 if(!isset($GO_CONFIG))
 	$GO_CONFIG = new GO_CONFIG();
 
-$GO_CONFIG->set_default_session();
+
 
 
 if(!$GO_CONFIG->enabled)
@@ -86,6 +86,8 @@ if(!isset($_SESSION['DIR_CHECK']))
 	session_destroy();
 	unset($_SESSION);
 }
+
+$GO_CONFIG->set_default_session();
 
 require_once($GO_CONFIG->class_path.'base/exceptions.class.inc.php');
 require_once($GO_CONFIG->class_path.'base/security.class.inc.php');
