@@ -445,22 +445,42 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 		}
 	},
 
+	init : function(){
+		this.getEl().mask(GO.lang.waitMsgLoad);
+		Ext.Ajax.request({
+			url: GO.settings.modules.addressbook.url+'json.php',
+			params:{
+				task:'init'
+			},
+			callback: function(options, success, response)
+			{
+
+				if(!success)
+				{
+					alert( GO.lang['strRequestError']);
+				}else
+				{
+					var jsonData = Ext.decode(response.responseText);
+
+					GO.addressbook.readableAddressbooksStore.loadData(jsonData.addressbooks);
+					if(GO.mailings)
+					{
+						GO.mailings.readableMailingsStore.loadData(jsonData.readable_addresslists);
+						GO.mailings.writableMailingsStore.loadData(jsonData.writable_addresslists);
+					}
+
+					this.getEl().unmask();
+				}
+			},
+			scope:this
+		});
+	},
+
 	afterRender : function()
 	{
 		GO.addressbook.MainPanel.superclass.afterRender.call(this);
 
-		/*
-			GO.addressbook.readableAddressbooksStore.on('load', function(){
-					if(!this.addressbooksGrid.getSelectionModel().getSelected())
-						this.addressbooksGrid.getSelectionModel().selectFirstRow();
-				}, this);
-			*/
-		GO.addressbook.readableAddressbooksStore.load();
-
-		if(GO.mailings)
-		{
-			GO.mailings.readableMailingsStore.load();
-		}
+		this.init();
 
 		GO.addressbook.contactDialogListeners={
 			scope:this,
@@ -472,15 +492,6 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 				}
 			}
 		}
-
-		if(GO.mailings)
-		{
-			//must be loaded here otherwise the contact and company dialog
-			//don't send the selected mailing groups. Doing it on render
-			//time of the dialog didn;t work
-			GO.mailings.writableMailingsStore.load();
-		}
-
 
 		GO.addressbook.companyDialogListeners={
 			scope:this,
