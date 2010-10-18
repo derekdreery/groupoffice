@@ -120,3 +120,5 @@ GO.calendar.lang.isOrganizer='Organisator';
 GO.calendar.lang.sendInvitationInitial='Wilt u uitnodigingen voor de bijeenkomst naar de deelnemers sturen?';
 GO.calendar.lang.sendInvitationUpdate='Wilt u de vernieuwde informatie over de bijeenkomst naar de deelnemers sturen?';
 GO.calendar.lang.sendCancellation='Wilt u alle deelnemers een annuleringsbericht sturen?';
+
+GO.calendar.lang.forthcomingAppointments='Toekomstige afspraken';

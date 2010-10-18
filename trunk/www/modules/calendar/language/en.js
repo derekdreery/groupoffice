@@ -132,3 +132,5 @@ GO.calendar.lang.isOrganizer='Organizer';
 GO.calendar.lang.sendInvitationInitial='Would you like to send meeting invitations to participants?';
 GO.calendar.lang.sendInvitationUpdate='Would you like to send updated meeting information to participants?';
 GO.calendar.lang.sendCancellation='Would you like to send all the participants a cancelation notice?';
+
+GO.calendar.lang.forthcomingAppointments='Forthcomming appointments';
