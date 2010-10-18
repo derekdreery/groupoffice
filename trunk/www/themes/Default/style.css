@@ -803,9 +803,10 @@ table.display-panel a:active
 .display-panel-heading, .collapsible-display-panel-header
 {
 	/*width: 100%;*/
+	height:16px;
 	line-height: 16px;
 	font-size: 11px;
-	/*font-weight: bold;*/
+	font-weight: bold;
 	letter-spacing:0.5px;
 	color:#333333;
 	background-color: #ebebeb;
@@ -839,7 +840,6 @@ table.display-panel a:active
 	vertical-align: top;
 }
 
-<<<<<<< .working
 .display-panel-link-icon{
 	background-repeat: no-repeat;	
 	width:16px !important;

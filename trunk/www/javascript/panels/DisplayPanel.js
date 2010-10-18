@@ -146,7 +146,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		
 		this.templateConfig.collapsibleSectionHeader = function(title, id, dataKey){
 			this.panel.collapsibleSections[id]=dataKey;
-			return '<div class="collapsible-display-panel-header">'+title+'<div class="x-tool x-tool-toggle" style="float:right;cursor:pointer" id="toggle-'+id+'">&nbsp;</div></div>';
+			return '<div class="collapsible-display-panel-header"><div style="float:left">'+title+'</div><div class="x-tool x-tool-toggle" style="float:right;margin:0px;padding:0px;cursor:pointer" id="toggle-'+id+'">&nbsp;</div></div>';
 		}
 		
 		this.xtemplate = new Ext.XTemplate(this.template, this.templateConfig);
