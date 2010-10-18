@@ -820,9 +820,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		this.init();	
 		this.createDaysGrid();
 
-		this.on('show', function(){
+		/*this.on('show', function(){
 			this.refresh();
-		}, this);		
+		}, this);		*/
 	},
 	
 	init : function(){
