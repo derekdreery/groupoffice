@@ -97,7 +97,10 @@ $part = Mail_mimeDecode::decode($params);
 
 $parts_arr = explode('.',$_REQUEST['part_imap_id']);
 for($i=0;$i<count($parts_arr);$i++) {
-	$part = $part->parts[$parts_arr[$i]];
+	if(isset($part->parts[$parts_arr[$i]]))
+		$part = $part->parts[$parts_arr[$i]];
+	else
+		die('Part not found');
 }
 
 
