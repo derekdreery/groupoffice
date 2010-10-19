@@ -11,7 +11,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-class GO_CalDAV_TasklistsRootNode extends Sabre_CalDAV_CalendarRootNode {
+class GO_CalDAV_TasklistsRootNode extends GO_CalDAV_CalendarRootNode {
     
     /**
      * Returns the name of the node

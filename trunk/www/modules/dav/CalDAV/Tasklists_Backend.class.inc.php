@@ -56,36 +56,69 @@ class GO_CalDAV_Tasklists_Backend extends Sabre_CalDAV_Backend_Abstract {
 		go_debug("t:getCalendarsForUser($principalUri)");
 
 		$this->tasks->get_authorized_tasklists('read','', $this->get_user_id($principalUri));
-		$db = new db();
+		
 
 		$tasklists = array();
 		while ($gocal = $this->tasks->next_record()) {
 
-			$db->query("SELECT max(mtime) AS mtime, COUNT(*) AS count FROM ta_tasks WHERE tasklist_id=?", 'i', $gocal['id']);
-			$r = $db->next_record();
-
-			//$components = explode(',',$row['components']);
-
-			$tasklist = array(
-					'id' => $gocal['id'],
-					'uri' => preg_replace('/[^\w]*/', '', (strtolower(str_replace(' ', '-', $gocal['name'])))),
-					'principaluri' => $principalUri,
-					'size'=> $r['count'],
-					'mtime'=>$r['mtime'],
-					'{' . Sabre_CalDAV_Plugin::NS_CALENDARSERVER . '}getctag' => $r['count'] . ':' . $r['mtime'],
-					'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VTODO')),
-					'{DAV:}displayname' => $gocal['name'],
-					'{urn:ietf:params:xml:ns:caldav}calendar-description' => 'User Tasklist',
-					'{urn:ietf:params:xml:ns:caldav}calendar-timezone' => date_default_timezone_get(),
-					'{http://apple.com/ns/ical/}calendar-order' => '0',
-					'{http://apple.com/ns/ical/}calendar-color' => ''
-			);
-
+			
+			$tasklist = $this->recordToDAVCalendar($gocal, $principalUri);
 			$tasklists[] = $tasklist;
 		}
 
 		return $tasklists;
 	}
+
+	private function recordToDAVCalendar($gocal, $principalUri){
+		$db = new db();
+		$db->query("SELECT max(mtime) AS mtime, COUNT(*) AS count FROM ta_tasks WHERE tasklist_id=?", 'i', $gocal['id']);
+		$r = $db->next_record();
+
+		//$components = explode(',',$row['components']);
+
+		$tasklist = array(
+				'id' => $gocal['id'],
+				'uri' => preg_replace('/[^\w-]*/', '', (strtolower(str_replace(' ', '-', $gocal['name'])))).'-'.$gocal['id'],
+				'principaluri' => 'principals/'.$principalUri,
+				'size'=> $r['count'],
+				'mtime'=>$r['mtime'],
+				'{' . Sabre_CalDAV_Plugin::NS_CALENDARSERVER . '}getctag' => $r['count'] . ':' . $r['mtime'],
+				'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VTODO')),
+				'{DAV:}displayname' => $gocal['name'],
+				'{urn:ietf:params:xml:ns:caldav}calendar-description' => 'User Tasklist',
+				'{urn:ietf:params:xml:ns:caldav}calendar-timezone' => date_default_timezone_get(),
+				'{http://apple.com/ns/ical/}calendar-order' => '0',
+				'{http://apple.com/ns/ical/}calendar-color' => ''
+		);
+
+		return $tasklist;
+	}
+
+	public function getCalendar($principalUri, $calendarUri){
+		go_debug("c:getCalendar($principalUri, $calendarUri)");
+
+		//$calendarUri = rawurldecode($calendarUri);
+
+		$calendar=false;
+
+		preg_match('/-([0-9]+)$/', $calendarUri, $matches);
+
+
+		if($matches[1]){
+			$calendar = $this->tasks->get_tasklist($matches[1]);
+		}
+
+
+		if(!$calendar)
+			throw new Sabre_DAV_Exception_FileNotFound('File not found: ' . $calendarUri);
+
+		global $GO_SECURITY;
+		if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+				throw new Sabre_DAV_Exception_Forbidden ('Access denied for '.$calendarUri);
+
+		return $this->recordToDAVCalendar($calendar, $principalUri);
+	}
+
 
 	/**
 	 * Creates a new Tasklist for a principal.
@@ -166,21 +199,10 @@ class GO_CalDAV_Tasklists_Backend extends Sabre_CalDAV_Backend_Abstract {
 		go_debug("getTasklistObjects($tasklistId)");
 
 		$objects = array();
-		$lists=array($tasklistId);
-		$this->tasks->get_tasks($lists,
-			0,
-			true,
-			'due_time',
-			'ASC',
-			0,
-			0,
-			true,
-			'',
-			'',
-            array(),
-			'',
-			''
-				);
+		//$lists=array($tasklistId);
+
+		$sql = "SELECT * FROM ta_tasks WHERE tasklist_id=? AND (completion_time=0 OR due_time>?)";
+		$this->tasks->query($sql, 'ii', array($tasklistId, Date::date_add(time(),0,-1)));
 		while ($task = $this->tasks->next_record()) {
 
 			if (empty($task['uuid'])) {
@@ -198,8 +220,6 @@ class GO_CalDAV_Tasklists_Backend extends Sabre_CalDAV_Backend_Abstract {
 					'lastmodified' => date('Ymd H:i:s', $task['mtime'])
 			);
 		}
-
-		go_debug($objects);
 
 		return $objects;
 	}
