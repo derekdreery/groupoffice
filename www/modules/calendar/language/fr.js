@@ -10,15 +10,10 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
- * French Translation v1.0
+ * French Translation
  * Author : Lionel JULLIEN
- * Date : September, 04 2008
+ * Date : September, 27 2010
  */
-
-
-
-
-
 
 GO.calendar.lang.appointment = 'Rendez-vous';
 GO.calendar.lang.appointments = 'Rendez-vous';
@@ -26,7 +21,7 @@ GO.calendar.lang.recurrence = 'Récurrence';
 GO.calendar.lang.options = 'Options';
 GO.calendar.lang.repeatForever = 'Répéter pour toujours';
 GO.calendar.lang.repeatEvery = 'Répéter chaque';
-GO.calendar.lang.repeatUntil = 'Répéter jusqu\'à';
+GO.calendar.lang.repeatUntil = 'Répéter jusqu\'au';
 GO.calendar.lang.busy = 'Me montrer comme occupé';
 GO.calendar.lang.allDay = 'Evènement sur la journée';
 GO.calendar.lang.navigation = 'Navigation';
@@ -71,17 +66,34 @@ GO.calendar.lang.selectCalendar = 'Sélectionnez un calendrier';
 GO.calendar.lang.selectCalendarForAppointment = 'Sélectionnez le calendrier dans lequel ajouter le rendez-vous';
 GO.calendar.lang.closeWindow = 'Le rendez-vous a été accepté et programmé. Vous pouvez fermer cette fenêtre.';
 GO.calendar.lang.list='Liste';
-
-// 3.0-14
 GO.calendar.lang.editRecurringEvent='Voulez-vous éditer cette occurrence ou la série complète ?';
-
-// 3.02-stable-10
 GO.calendar.lang.selectIcalendarFile='Sélectionner un fichier icalendar (*.ics)';
-
 GO.calendar.lang.location='Lieu';
 GO.calendar.lang.startsAt='Débute à';
-GO.calendar.lang.endsAt='Termine à';
+GO.calendar.lang.endsAt='Se termine à';
 GO.calendar.lang.eventDefaults='Paramètres par défaut pour les rendez-vous';
-
 GO.calendar.lang.importToCalendar='Ajouter directement ce rendez-vous';
 GO.calendar.lang.default_calendar='Calendrier par défaut';
+GO.calendar.lang.status='Statut';
+GO.calendar.lang.resource_groups='Groupes de ressources';
+GO.calendar.lang.resource_group='Groupe de ressources';
+GO.calendar.lang.resources='Ressources';
+GO.calendar.lang.resource='Ressource';
+GO.calendar.lang.calendar_group='Groupe de calendriers';
+GO.calendar.lang.admins='Administrateurs';
+GO.calendar.lang.no_group_selected='Il y a des erreurs dans le formulaire. Vous devez selectionner un groupe pour cette ressource.';
+GO.calendar.lang.visibleCalendars='Calendriers visibles';
+GO.calendar.lang.visible='Visible';
+GO.calendar.lang.group='Groupe';
+GO.calendar.lang.no_status='Nouveau';
+GO.calendar.lang.no_custom_fields='Il n\'y a aucune option supplémentaire disponible.';
+GO.calendar.lang.show_bdays='Afficher les anniversaires';
+GO.calendar.lang.show_tasks='Afficher les tâches';
+GO.calendar.lang.myCalendar='Mon calendrier';
+GO.calendar.lang.merge='Fusionner';
+GO.calendar.lang.ownColor = 'Donner une couleur unique à chaque calendrier';
+GO.calendar.lang.ignoreConflictsTitle = 'Ignorer le conflit ?';
+GO.calendar.lang.ignoreConflictsMsg = 'Cet événement est en conflit avec un autre présent dans votre calendrier. Forcer l\'enregistrement ?';
+GO.calendar.lang.resourceConflictTitle = 'Conflit de ressource';
+GO.calendar.lang.resourceConflictMsg = 'Une ou plusieures ressources de cet événement sont déjà utilisées pendant la même période :</br>';
+GO.calendar.lang.view = 'Vue';

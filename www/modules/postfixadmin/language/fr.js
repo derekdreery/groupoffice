@@ -10,18 +10,16 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
- * French Translation v1.0
+ * French Translation
  * Author : Lionel JULLIEN
- * Date : September, 09 2008
+ * Date : September, 27 2010
  */
-
 
 /* table: pa_aliases */
 GO.postfixadmin.lang.alias="Alias";
-GO.postfixadmin.lang.aliases="Aliases";
+GO.postfixadmin.lang.aliases="Alias";
 GO.postfixadmin.lang.address="Addresse";
 GO.postfixadmin.lang.goto_address="Envoyé à";
-
 /* table: pa_domains */
 GO.postfixadmin.lang.domain="Domaine";
 GO.postfixadmin.lang.domains="Domaines";
@@ -32,7 +30,6 @@ GO.postfixadmin.lang.maxquota="Quota Max";
 GO.postfixadmin.lang.quota="Quota";
 GO.postfixadmin.lang.transport="Transport";
 GO.postfixadmin.lang.backupmx="Backupmx";
-
 /* table: pa_fetchmail */
 GO.postfixadmin.lang.fetchmailConfig="Configuration Fetchmail";
 GO.postfixadmin.lang.fetchmailConfigs="Configurations Fetchmail";
@@ -50,7 +47,6 @@ GO.postfixadmin.lang.extraOptions="Options - Extra";
 GO.postfixadmin.lang.returnedText="Texte retourné";
 GO.postfixadmin.lang.mda="Mda";
 GO.postfixadmin.lang.date="Date";
-
 /* table: pa_mailboxes */
 GO.postfixadmin.lang.mailbox="Boite aux lettres";
 GO.postfixadmin.lang.mailboxes="Boites aux lettres";
@@ -61,7 +57,6 @@ GO.postfixadmin.lang.maildir="Maildir";
 GO.postfixadmin.lang.quota="Quota";
 GO.postfixadmin.lang.domain="Domaine";
 GO.postfixadmin.lang.active="Actif";
-
 /* table: pa_vacation */
 GO.postfixadmin.lang.vacation="Réponse automatique";
 GO.postfixadmin.lang.vacationActive="Activer la réponse automatique"
@@ -70,5 +65,4 @@ GO.postfixadmin.lang.subject="Sujet";
 GO.postfixadmin.lang.body="Corps du message";
 GO.postfixadmin.lang.cache="Cache";
 GO.postfixadmin.lang.domain="Domaine";
-
-
+GO.postfixadmin.lang.defaultQuota='Quota par défaut (MB)';

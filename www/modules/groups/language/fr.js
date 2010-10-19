@@ -10,14 +10,10 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
- * French Translation v1.0
+ * French Translation
  * Author : Lionel JULLIEN
- * Date : September, 05 2008
+ * Date : September, 27 2010
  */
-
-
-
-
 
 GO.groups.lang.groups = 'Groupes';
 GO.groups.lang.owner = 'Propriétaire';

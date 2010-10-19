@@ -10,15 +10,11 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
- * French Translation v1.0
+ * French Translation
  * Author : Lionel JULLIEN
- * Date : September, 08 2008
+ * Date : September, 27 2010
  */
-
-
-
 GO.cms.lang.cms='Sites Web';
-
 /* table: cms_sites */
 GO.cms.lang.site="Site";
 GO.cms.lang.sites="Sites";
@@ -26,23 +22,18 @@ GO.cms.lang.allowProperties="Autoriser les propriétés";
 GO.cms.lang.domain="Domaine";
 GO.cms.lang.webmaster="Webmaster";
 GO.cms.lang.language="Langage";
-
 /* table: cms_folders */
 GO.cms.lang.folder="Dossier";
 GO.cms.lang.folders="Dossiers";
 GO.cms.lang.disabled="Cacher ce dossier";
-
 /* table: cms_files */
 GO.cms.lang.file="Fichier";
 GO.cms.lang.files="fichiers";
-
 GO.cms.lang.autoMeta="Générer les Meta Data automatiquement";
 GO.cms.lang.title="Titre";
 GO.cms.lang.keywords="Mots-clés";
-
 /* table: cms_templates */
 GO.cms.lang.template="Modèle";
-
 GO.cms.lang.selectFolder="Veuillez d'abord sélectionner un dossier dans le treeview";
 GO.cms.lang.selectFolderAdd="Veuillez d'abord sélectionner un dossier dans le treeview avant d\'ajouter un fichier";
 GO.cms.lang.authentication='Utiliser l\'authentification Group-Office';
@@ -52,7 +43,13 @@ GO.cms.lang.newPage='Nouvelle page';
 GO.cms.lang.newFolder='Nouveau dossier';
 GO.cms.lang.view='Voir';
 GO.cms.lang.folderProperties='Propriétés du dossier';
-
-// 3.0-14
 GO.cms.lang.siteId='ID du site';
 GO.cms.lang.saveChanges='Le document courant a été modifié. Voulez-vous sauvegarder les changements ?';
+GO.cms.lang.insertTemplate='Inserer le modèle';
+GO.cms.lang.selectTemplate='Sélectionner le modèle';
+GO.cms.lang.selectPage='Sélectionner la page';
+GO.cms.lang.showUntil='Aficher la page jusqu\'au';
+GO.cms.lang.alwaysShow='Laisser vide pour afficher pour toujours';
+GO.cms.lang.root='Racine';
+GO.cms.lang.advancedPermissions='Permissions avancées';
+GO.cms.lang.enablePermissionsPerFolder='Activer les permissions par dossier pour cet utilisateur';
