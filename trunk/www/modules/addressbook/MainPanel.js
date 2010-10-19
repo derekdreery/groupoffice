@@ -667,7 +667,7 @@ GO.moduleManager.addModule('addressbook', GO.addressbook.MainPanel, {
 	iconCls : 'go-tab-icon-addressbook'
 });
 
-GO.linkHandlers[2]=GO.mailFunctions.showContact=function(id){
+GO.linkHandlers[2]=GO.mailFunctions.showContact=GO.addressbook.showContact=function(id){
 	if(!GO.addressbook.linkContactWindow){
 		var contactPanel = new GO.addressbook.ContactReadPanel();
 		GO.addressbook.linkContactWindow = new GO.LinkViewWindow({

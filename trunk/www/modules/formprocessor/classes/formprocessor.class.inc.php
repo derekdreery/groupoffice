@@ -358,6 +358,9 @@ class formprocessor{
 					throw new Exception('Fatal error: No email given for confirmation e-mail!');
 				}
 
+				$url = create_direct_url('addressbook', 'showContact', array($contact_id));
+				$body = $lang['addressbook']['newContactFromSite'].'<br /><a href="'.$url.'">'.$lang['addressbook']['clickHereToView'].'</a>';
+
 				global $smarty;
 				$email = $smarty->fetch($_POST['confirmation_template']);
 
