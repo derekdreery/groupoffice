@@ -66,7 +66,30 @@ class GO_DAV_Auth_Principal extends Sabre_DAV_Auth_Principal implements Sabre_DA
                 return $child;
 
         }
-        throw new Sabre_DAV_Exception_FileNotFound('Calendar with name \'' . $name . '\' could not be found');
+        throw new Sabre_DAV_Exception_FileNotFound('Principal with name \'' . $name . '\' could not be found');
+
+    }
+
+	 /**
+     * Checks is a child-node exists.
+     *
+     * It is generally a good idea to try and override this. Usually it can be optimized.
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function childExists($name) {
+
+        try {
+
+            $this->getChild($name);
+            return true;
+
+        } catch(Sabre_DAV_Exception_FileNotFound $e) {
+
+            return false;
+
+        }
 
     }
 
