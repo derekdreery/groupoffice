@@ -965,8 +965,46 @@ class tasks extends db
 		if(isset($task['reminder']) && $task['reminder']<0)
 		{
 			//If we have a negative reminder value default to half an hour before
-			$task['reminder'] = 1800;
+			$task['reminder'] = $task['start_time']+(3600*9);
 		}
+
+
+
+		/*
+		 * ["TRIGGER"]=>
+            array(2) {
+              ["params"]=>
+              array(2) {
+                ["VALUE"]=>
+                string(8) "DURATION"
+                ["RELATED"]=>
+                string(5) "START"
+              }
+              ["value"]=>
+              string(6) "-PT15M"
+
+		 */
+
+		if(isset($object['objects'])) {
+			foreach($object['objects'] as $o){
+				if($o['type']=='VALARM'){
+					if(isset($o['TRIGGER'])){
+						//$offset_time = isset($o['TRIGGER']['RELATED']) && $o['TRIGGER']["RELATED"]=='END' ? $event['end_time'] : $event['start_time'];
+						if(!isset($o['TRIGGER']['params']['VALUE']) || $o['TRIGGER']['params']['VALUE']=='DURATION'){
+							$offset = $this->ical2array->parse_duration($o['TRIGGER']['value']);
+
+							$task['reminder']=$task['start_time']+$offset;
+						}else
+						{
+							$task['reminder']= $this->ical2array->parse_date($o['TRIGGER']['value']);
+						}
+
+					}
+				}
+			}
+		}
+
+
 
 		if($task['name'] != '')
 		{
