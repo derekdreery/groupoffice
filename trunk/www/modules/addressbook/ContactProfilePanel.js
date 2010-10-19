@@ -425,5 +425,13 @@ Ext.extend(GO.addressbook.ContactProfilePanel, Ext.Panel,{
 		this.formAddressBooks.setValue(addressbook_id);		
 		this.formCompany.store.baseParams['addressbook_id'] = addressbook_id;
 		this.formCompany.clearLastSearch();
+	},
+	setValues : function(record)
+	{
+		this.formFirstName.setValue(record.name);
+		this.formEmail.setValue(record.email);
+		this.formHomePhone.setValue(record.phone);
+		this.formCompany.setValue(record.company);
 	}
+
 });
