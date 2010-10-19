@@ -334,40 +334,6 @@ class Go2Mime
 						}
 					}				
 
-					if(isset($part->headers['content-id']))
-					{
-
-						$content_id = trim($part->headers['content-id']);
-						if ($content_id != '')
-						{
-							if (strpos($content_id,'>'))
-							{
-								$content_id = substr($part->headers['content-id'], 1,strlen($part->headers['content-id'])-2);
-							}
-							$mime_attachment['id'] = $content_id;
-							$mime_attachment['part_number'] = $part_number_prefix.$part_number;
-							$mime_attachment['replacement_url'] = String::add_params_to_url($this->inline_attachments_url, 'part_number='.$part_number_prefix.$part_number);
-
-							//$path = 'mimepart.php?path='.urlencode($path).'&part_number='.$part_number;
-							//replace inline images identified by a content id with the url to display the part by Group-Office
-							$url_replacement['id'] = $content_id;
-							//part number is needed for e-mail templates
-							$url_replacement['part_number'] = $part_number_prefix.$part_number;
-							$url_replacement['url'] = String::add_params_to_url($this->inline_attachments_url, 'part_number='.$part_number_prefix.$part_number);
-
-							if($create_tmp_inline_attachments)
-							{
-								$url_replacement['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$part->d_parameters['filename'];
-								filesystem::mkdir_recursive(dirname($url_replacement['tmp_file']));
-
-								file_put_contents($url_replacement['tmp_file'], $part->body);
-							}
-
-							//$this->replacements[] = $url_replacement;
-							$this->response['inline_attachments'][]=$url_replacement;
-						}
-					}				
-
 					$this->response['attachments'][] = $mime_attachment;
 				}
 				if(isset($part->parts))
