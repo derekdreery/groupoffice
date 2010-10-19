@@ -10,14 +10,10 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
- * French Translation v1.0
+ * French Translation
  * Author : Lionel JULLIEN
  * Date : September, 05 2008
  */
-
-
-
-
 
 GO.users.lang.cmdCheckColumnRead= 'Lecture';
 GO.users.lang.cmdCheckColumnWrite= 'Ecriture';
@@ -25,29 +21,25 @@ GO.users.lang.cmdHeaderColumnName= 'Nom du module';
 GO.users.lang.cmdHeaderGridUserHasAccess = 'L\'utilisateur a accès à';
 GO.users.lang.userIsMemberOf = 'L\'utilisateur est membre de';
 GO.users.lang.userVisibleTo = 'L\'utilisateur est visible par les groupes suivants';
-
 GO.users.lang.cmdPanelPersonal = 'Personnel';
 GO.users.lang.cmdPanelPassword= 'Mot de passe';
 GO.users.lang.cmdPanelCompany = 'Société';
 GO.users.lang.cmdPanelPermissions = 'Permissions';
 GO.users.lang.cmdPanelLogin = 'Identifiant';
-GO.users.lang.cmdPanelLookFeel = 'Look & Feel';
+GO.users.lang.cmdPanelLookFeel = 'Affichage';
 GO.users.lang.cmdPanelSettings = 'Paramètres';
 GO.users.lang.cmdPanelEnabledMail = 'E-mail pour les nouveau utilisateurs activés';
 GO.users.lang.cmdPanelDisabledMail = 'E-mail pour les nouveau utilisateurs désactivés';
-	
 GO.users.lang.cmdFieldSetPersonal = 'Personnel';	
 GO.users.lang.cmdUserWindowTitle= 'Editer l\'utilisateur';
 GO.users.lang.cmdNotificationWindowTitle= 'Editer l\'e-mail d\'invitation';
 GO.users.lang.cmdMaskSaving= 'Sauvegarde';
-	
 GO.users.lang.cmdFormLabelSubject = 'Sujet';
 GO.users.lang.cmdFormLabelUsername = 'Nom d\'utilisateur';
 GO.users.lang.cmdFormLabelName = 'Nom';
 GO.users.lang.cmdFormLabelPassword = 'Mot de passe';
 GO.users.lang.cmdFormLabelConfirm = 'Confirmer';
 GO.users.lang.cmdBoxLabelEnabled = 'Activé';
-	
 GO.users.lang.cmdFormLabelHomepage = 'Page web';
 GO.users.lang.cmdFormLabelRegistrationTime = 'Heure d\'enregistrement';
 GO.users.lang.cmdFormLabelLastLogin = 'Dernière connexion';
@@ -67,7 +59,6 @@ GO.users.lang.cmdFormLabelFirstWeekday = 'Premier jour de la semaine';
 GO.users.lang.cmdFormLabelThousandSeperator = 'Séparateur de millier';
 GO.users.lang.cmdFormLabelDecimalSeperator = 'Séparateur décimal';
 GO.users.lang.cmdFormLabelCurrency = 'Monnaie'
-
 GO.users.lang.account = 'Compte';
 GO.users.lang.confirmPassword = 'Confirmer le mot de passe';
 GO.users.lang.companyProfile = 'Profil société';
@@ -89,8 +80,21 @@ GO.users.lang.sunday = 'Dimanche';
 GO.users.lang.monday = 'Lundi';
 GO.users.lang.regionalSettings = 'Paramètres régionaux';
 GO.users.lang.userSettings = 'Paramètres utilisateur';
-
 GO.users.lang.maxUsersReached='Le nombre maximum d\'utilisateur a été atteint. Allez dans l\'onglet service afin d\'augmenter le nombre d\'utilisateur maximum.';
-
-// 3.0-14
 GO.users.lang.group='Groupe';
+GO.users.lang.muteSound='Mode muet (pas de son d\'alerte)';
+GO.users.lang.mailReminders='Rappels par email';
+GO.users.lang.downloadSampleCSV='Télécharger un exemple de CSV';
+GO.users.lang.importText='Vous pouvez importer des utilisateurs en utilisant un fichier CSV. Pour savoir comment le CSV doit être formaté, télécharger le fichier exemple.<br />La première ligne DOIT contenir les noms de colonnes. Les champs suivants sont obligatoires pour chaque utilisateur :<br /><br />username, password, first_name, last_name, email';
+GO.users.lang.useModule= 'Utiliser';
+GO.users.lang.manageModule= 'Gérer';
+GO.users.lang.numberFormat ='Format des nombres';
+GO.users.lang.importExport ='Import / Export';
+GO.users.lang.listSeparator='Séparateur de liste';
+GO.users.lang.textSeparator='Séparateur de texte';
+GO.users.lang.deleteWarning='ATTENTION !!! Toutes les données utilisateur (carnets d\'adresses, projets, calendriers, etc.) seront supprimées !';
+GO.users.lang.lastName = 'Nom';
+GO.users.lang.firstName = 'Prénom';
+GO.users.lang.sendInvitation='Envoyer une invitation';
+GO.users.lang.contactInfo='Informations de contact';
+GO.users.lang.popupNotification='Afficher une fenêtre popup quand un rappel est actif ou quand un email est reçu';

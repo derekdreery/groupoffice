@@ -10,9 +10,9 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
- * French Translation v1.0
+ * French Translation
  * Author : Lionel JULLIEN
- * Date : October, 20 2008
+ * Date : September, 27 2010
  */
 
 GO.comments.lang.comment="Commentaire";

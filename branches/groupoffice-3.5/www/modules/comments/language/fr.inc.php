@@ -11,14 +11,13 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
- * French Translation v1.0
+ * French Translation
  * Author : Lionel JULLIEN
- * Date : October, 20 2008
+ * Date : September, 27 2010
  */
 
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('comments'));
-
 $lang['comments']['name']='Commentaires';
 $lang['comments']['description']='Ajouter la fonctionnalité de commentaires aux autres modules';
 $lang['comments']['comment']='Commentaire';

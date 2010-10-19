@@ -10,18 +10,16 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
- * French Translation v1.0
+ * French Translation
  * Author : Lionel JULLIEN
- * Date : September, 04 2008
+ * Date : September, 27 2010
  */
-
-
-
-
-
-
+ 
+GO.addressbook.lang.newSearch='Nouvelle recherche';
+GO.addressbook.lang.executeQuery='Executer la recherche';
+GO.addressbook.lang.savedQueries='Sauver la recherche';
+GO.addressbook.lang.selectField = 'Sélectionner un champs';
 GO.addressbook.lang.selectMailingGroup='Selectionner un groupe de mailing';
-
 GO.addressbook.lang.cmdFormLabelAddressBooks = 'Carnet d\'adresses';
 GO.addressbook.lang.alphabet = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z';
 GO.addressbook.lang.cmdAllFields = 'Tous les champs';
@@ -57,13 +55,12 @@ GO.addressbook.lang.cmdLInkFieldset = 'Liens';
 GO.addressbook.lang.company= 'Sociétés';
 GO.addressbook.lang.cmdCompanyDetailsFor= 'Détails pour';
 GO.addressbook.lang.cmdPanelCompany = 'Détails de la société';
-//GO.addressbook.lang.cmdFormLabelBankNo = 'Numéro de banque';
-GO.addressbook.lang.cmdFormLabelBankNo = 'Numéro SIRET';
+GO.addressbook.lang.cmdFormLabelBankNo = 'Numéro de banque';
 GO.addressbook.lang.cmdFormLabelVatNo = 'Numéro de TVA';
 GO.addressbook.lang.cmdFieldsetCompanyDetails = 'Détails de la société';
 GO.addressbook.lang.cmdFieldsetVisitAddress = 'Adresse de visite';
 GO.addressbook.lang.cmdFieldsetPostAddress = 'Adresse Postale';
-GO.addressbook.lang.cmdCompanyDialog= 'Editer la société';
+GO.addressbook.lang.cmdCompanyDialog= 'Société';
 GO.addressbook.lang.cmdPanelEmployees = 'Employés';
 GO.addressbook.lang.cmdPanelEmployee = 'Employé';
 GO.addressbook.lang.cmdAllEmployeesForThisCompany= 'Tous les employés de cette société';
@@ -73,7 +70,7 @@ GO.addressbook.lang.cmdDeleteAddressbook= 'Supprimer un carnet d\'adresses';
 GO.addressbook.lang.cmdOwner= 'Propriétaire';
 GO.addressbook.lang.cmdPanelAddressbook= 'Carnets d\'adresses';
 GO.addressbook.lang.cmdPanelProperties= 'Propriétés';
-GO.addressbook.lang.cmdContactDialog= 'Editer le contact';
+GO.addressbook.lang.cmdContactDialog= 'Contact';
 GO.addressbook.lang.cmdFormLabelFileType= 'Type de fichier';
 GO.addressbook.lang.cmdFormLabelFile= 'Fichier';	
 GO.addressbook.lang.cmdFormLabelValueSeperated= 'Valeurs séparées par';
@@ -92,14 +89,21 @@ GO.addressbook.lang.noAddressbooks = 'Il n\'y a aucun carnet d\'adresses';
 GO.addressbook.lang.moveAll = 'La société ainsi que tous ses employés vont être déplacés dans le nouveau carnet d\'adresses.\nEtes-vous sûr de vouloir le faire ?';
 GO.addressbook.lang.addressbook = 'Carnet d\'adresses';
 GO.addressbook.lang.addressbooks = 'Carnets d\'adresses';
-GO.addressbook.lang.sendMailing='Envoyer un mailing';
-
-// 3.0-14
+GO.addressbook.lang.sendMailing= 'Envoyer un mailing';
 GO.addressbook.lang.importSuccess='Données importées avec succès';
 GO.addressbook.lang.searchOnSender='Rechercher dans le carnet d\'adresses';
 GO.addressbook.lang.confirmCreate='Ce contact n\'existe pas. Voulez-vous le créer ?';
-
-// 3.02-stable-10
 GO.addressbook.lang.matchFields='Correspond aux champs';
-
 GO.addressbook.lang.advancedSearch='Recherche avancée';
+GO.addressbook.lang.defaultAddressFormat='Format d\'adresse par défaut';
+GO.addressbook.lang.defaultSalutation='Salutation par défaut';
+GO.addressbook.lang.explanationVariables='Explanation default salutation variables';
+GO.addressbook.lang.explanationSex='Formatage de la salutation (homme/femme)';
+GO.addressbook.lang.searchQueryName='Nom de la recherche';
+GO.addressbook.lang.enterSearchQueryName='Entrer le nom de la recherche :';
+GO.addressbook.lang.photo = 'Photo';
+GO.addressbook.lang.deleteImage='Effacer l\'image';
+GO.addressbook.lang.addAllSearchResults='Ajouter tous les résultats de recherche';
+GO.addressbook.lang.confirmAddAllSearchResults='Etes-vous sûr de vouloir ajouter tous les résultats de recherche à la liste d\'adresse ?';
+GO.addressbook.lang.moveEmployees='Bouger les employés';
+GO.addressbook.lang.id='ID';

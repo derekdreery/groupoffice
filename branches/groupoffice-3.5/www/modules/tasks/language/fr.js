@@ -10,18 +10,18 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
- * French Translation v1.0
+ * French Translation
  * Author : Lionel JULLIEN
  * Date : September, 05 2008
  *
  * Update for 3.02-stable-10
  * Author : Cyril DUCHENOY
  * Date : July, 21 200
+ *
+ * Update for 3.5-stable-25
+ * Author : Lionel JULLIEN
+ * Date : September, 27 2010
  */
-
-
-
-
 
 GO.tasks.lang.task = 'Tâche';
 GO.tasks.lang.noTask = 'Aucune tâche à afficher';
@@ -55,3 +55,7 @@ GO.tasks.lang.call='Appel';
 GO.tasks.lang.taskDefaults='Paramètres par défaut pour les tâches';
 GO.tasks.lang.daysBeforeStart='Rappel en jours avant l\'échéance';
 GO.tasks.lang.defaultTasklist='Afficher par défaut les tâches de';
+GO.tasks.lang.visibleTasklists='Liste des tâches visible';
+GO.tasks.lang.visible='Visible';
+GO.tasks.lang.selectIcalendarFile='Sélectionner un fichier icalendar (*.ics)';
+GO.tasks.lang.continueTask='Continuer la tâche';
