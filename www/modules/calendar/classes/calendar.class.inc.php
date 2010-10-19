@@ -1933,7 +1933,8 @@ class calendar extends db {
 							$event['reminder']=$offset*-1;
 						}else
 						{
-							//todo
+							$time = $this->ical2array->parse_date($o['TRIGGER']['value']);
+							$event['reminder']=$event['start_time']-$time;
 						}
 
 					}
