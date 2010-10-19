@@ -541,10 +541,11 @@ class go_ical extends calendar
 
 
 		//alarm
-		if($event['reminder']>0)
+		if($event['reminder']>0 && $event['start_time']>time())
 		{
 			$this->reminder->get_reminders_by_link_id($event['id'], 1);
-			if($this->reminder->next_record()){
+			$reminder = $this->reminder->next_record();
+			if($reminder){
 
 				$remind_time = $event['start_time']-$event['reminder'];
 
