@@ -132,7 +132,7 @@ class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
 		$GO_USERS = new GO_USERS();
 
 		$user = $GO_USERS->get_user($GO_SECURITY->user_id);
-		$user['uri']=$user['username'];
+		$user['uri']='principals/'.$user['username'];
 		return $user;
 	}
 

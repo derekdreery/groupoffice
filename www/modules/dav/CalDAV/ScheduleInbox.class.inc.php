@@ -125,6 +125,29 @@ class GO_CalDAV_ScheduleInbox extends Sabre_DAV_Node implements Sabre_DAV_IColle
 
     }
 
+	 /**
+     * Checks is a child-node exists.
+     *
+     * It is generally a good idea to try and override this. Usually it can be optimized.
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function childExists($name) {
+
+        try {
+
+            $this->getChild($name);
+            return true;
+
+        } catch(Sabre_DAV_Exception_FileNotFound $e) {
+
+            return false;
+
+        }
+
+    }
+
 
 	public function getChildren(){
 		return array();

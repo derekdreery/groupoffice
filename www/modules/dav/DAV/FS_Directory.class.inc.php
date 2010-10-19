@@ -146,6 +146,28 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
         }
 
     }
+	 /**
+     * Checks is a child-node exists.
+     *
+     * It is generally a good idea to try and override this. Usually it can be optimized.
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function childExists($name) {
+
+        try {
+
+            $this->getChild($name);
+            return true;
+
+        } catch(Sabre_DAV_Exception_FileNotFound $e) {
+
+            return false;
+
+        }
+
+    }
 
     /**
      * Returns an array with all the child nodes
