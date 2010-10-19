@@ -109,7 +109,7 @@ class wordpress extends db{
 			}
 		}else
 		{
-			throw new Exception('No mapping found for link type '.$link_type);
+			//throw new Exception('No mapping found for link type '.$link_type);
 		}
 
 	}
