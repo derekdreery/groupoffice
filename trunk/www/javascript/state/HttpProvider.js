@@ -44,10 +44,10 @@
  * @param {Object} config The configuration object
  */
 GO.state.HttpProvider = function(config){
-    GO.state.HttpProvider.superclass.constructor.call(this);
-    this.url = BaseHref+"state.php";
+	GO.state.HttpProvider.superclass.constructor.call(this);
+	this.url = BaseHref+"state.php";
     
-    /*
+	/*
     if(!config.jsonState)
     {
     	config.jsonState={};
@@ -59,77 +59,86 @@ GO.state.HttpProvider = function(config){
     }
     this.index=config.index;*/
     
-    Ext.apply(this, config);
-    this.state = this.readValues();
+	Ext.apply(this, config);
+	this.state = this.readValues();
 };
 
 Ext.extend(GO.state.HttpProvider, Ext.state.Provider, {
 
-		changedValues : false,
-    // private
-    //only works when a component as an assigned ID passed to the constructor
-    set : function(name, value, callback, scope){
+	changedValues : false,
+	// private
+	//only works when a component as an assigned ID passed to the constructor
+	set : function(name, value, callback, scope){
     	
-    	if(name.substr(0,4)!='ext-')
-    	{
-	      if(typeof value == "undefined" || value === null){
-	          this.clear(name);
-	          return;
-	      }
-				
-	      this.setValue(name, value, callback, scope);
-	      GO.state.HttpProvider.superclass.set.call(this, name, value);
-    	}
-    },
-
-    // private
-    clear : function(name){
-      this.clearValue(name);
-      GO.state.HttpProvider.superclass.clear.call(this, name);
-    },
-
-    // private
-    readValues : function(){
-	    var state = {};
-	      
-	  	for (var name in GO.settings.state)
-	  	{
-	  		if(name!='remove')
-	  		{
-	          	state[name] = this.decodeValue(GO.settings.state[name]);
-	  		}
-      }        
-      return state;
-  	},
-
-    // private
-    setValue : function(name, value, callback, scope){
-			if(!this.changedValues){
-				this.sendRequest.defer(30000, this, [callback, scope]);
-				this.changedValues={};
+		if(name.substr(0,4)!='ext-')
+		{
+			if(typeof value == "undefined" || value === null){
+				this.clear(name);
+				return;
 			}
-			this.changedValues[name]=this.encodeValue(value);			
-    },
+				
+			this.setValue(name, value, callback, scope);
+			GO.state.HttpProvider.superclass.set.call(this, name, value);
+		}
+	},
 
-		sendRequest : function(callback, scope){
+	// private
+	clear : function(name){
+		this.clearValue(name);
+		GO.state.HttpProvider.superclass.clear.call(this, name);
+	},
+
+	// private
+	readValues : function(){
+		var state = {};
+	      
+		for (var name in GO.settings.state)
+		{
+			if(name!='remove')
+			{
+				state[name] = this.decodeValue(GO.settings.state[name]);
+			}
+		}
+		return state;
+	},
+
+	// private
+	setValue : function(name, value, callback, scope){
+		if(!this.changedValues){
+			if(GO.settings.config.debug){
+				this.sendRequest(callback, scope);
+			}else
+			{
+				this.sendRequest.defer(30000, this, [callback, scope]);
+			}
+			this.changedValues={};
+		}
+		this.changedValues[name]=this.encodeValue(value);
+	},
+
+	sendRequest : function(callback, scope){
 			
-			Ext.Ajax.request({
-				url: this.url,
-				params: {
-					task: 'set',
-					values:Ext.encode(this.changedValues)
-				},
-				callback : callback,
-				scope:scope
-			});
-			this.changedValues=false;
-		},
+		Ext.Ajax.request({
+			url: this.url,
+			params: {
+				task: 'set',
+				values:Ext.encode(this.changedValues)
+			},
+			callback : callback,
+			scope:scope
+		});
+		this.changedValues=false;
+	},
 
-    // private
-    clearValue : function(name){
-			Ext.Ajax.request({
-				url: this.url,
-				params: {task: 'set', 'name': name, 'value': 'null'}
-			});
-    }
+	// private
+	clearValue : function(name){
+		Ext.Ajax.request({
+			url: this.url,
+			params: {
+				task: 'set',
+				'name': name,
+				'value': 'null'
+			}
+		});
+	}
 });
