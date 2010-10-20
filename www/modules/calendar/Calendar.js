@@ -307,14 +307,15 @@ GO.calendar.MainPanel = function(config){
 			scope : this
 		}],
 		items: [
-		this.calendarList,
-		this.viewsList,
-		this.resourcesList		
+		this.calendarList
 		]
 	});
 
 	if(this.projectCalendarsList)
 		this.calendarListPanel.add(this.projectCalendarsList);
+
+	this.calendarListPanel.add(this.viewsList);
+	this.calendarListPanel.add(this.resourcesList);
 
 	this.daysGridStore = new GO.data.JsonStore({
 		url: GO.settings.modules.calendar.url+'json.php',
