@@ -483,10 +483,7 @@ class tasks extends db
 			}
 		}
 
-		if(empty($task['uuid']))
-		{
-			$task['uuid'] = UUID::create('task', $task['id']);
-		}
+		
 		
 		global $GO_MODULES;
 		if(!isset($task['files_folder_id']) && isset($GO_MODULES->modules['files']))
@@ -507,7 +504,12 @@ class tasks extends db
 			}
 		}
 
-		$task['id'] = $this->nextid("ta_tasks");		
+		$task['id'] = $this->nextid("ta_tasks");
+		if(empty($task['uuid']))
+		{
+			$task['uuid'] = UUID::create('task', $task['id']);
+		}
+		
 		$this->insert_row('ta_tasks', $task);		
 		
 		$this->cache_task($task['id']);
