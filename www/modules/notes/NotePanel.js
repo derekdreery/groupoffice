@@ -35,6 +35,10 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 						'<td colspan="2" class="display-panel-heading">{name}</td>'+
 					'</tr>'+
 					'<tr>'+
+						'<td>ID:</td>'+
+						'<td>{id}</td>'+
+					'</tr>'+
+					'<tr>'+
 						'<td colspan="2">{content}</td>'+
 					'</tr>'+									
 				'</table>';																		
