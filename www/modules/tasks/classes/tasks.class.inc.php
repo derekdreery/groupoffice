@@ -1401,13 +1401,17 @@ class tasks extends db
 	}
 
 	function get_linked_tasks_json($link_id, $link_type){
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+		$GO_LINKS = new GO_LINKS();
 
 		$records=array();
 
 		$this->get_linked_tasks($GO_SECURITY->user_id, $link_id, $link_type);
 		while($t=$this->next_record()){
 			$this->format_task_record($t);
+			$t['link_count']=$GO_LINKS->count_links($t['id'], 12);
 			$records[]=$t;
 		}
 
