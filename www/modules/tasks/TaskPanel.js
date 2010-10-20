@@ -35,6 +35,10 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 						'<td colspan="2" class="display-panel-heading">{name}</td>'+
 					'</tr>'+
 					'<tr>'+
+						'<td>ID:</td>'+
+						'<td>{id}</td>'+
+					'</tr>'+
+					'<tr>'+
 						'<td>'+GO.tasks.lang.tasklist+':</td>'+
 						'<td>{tasklist_name}</td>'+
 					'</tr>'+
