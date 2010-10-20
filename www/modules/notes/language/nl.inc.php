@@ -10,14 +10,8 @@ $lang['notes']['notes']='Notities';
 $lang['notes']['general'] = 'Algemeen';
 
 $lang['notes']['name']='Notities';
-$lang['notes']['description']='Een module om notities te maken in verschillende categorieën.';
-
-$lang['notes']['category']='Category';
-$lang['notes']['categories']='Categories';
-$lang['link_type'][4]=$lang['notes']['note']='Note';
-$lang['notes']['notes']='Notes';
-
+$lang['notes']['description']='Een module om notities te maken in verschillende notitieblokken.';
 
 $lang['notes']['general'] = 'General';
 $lang['notes']['incomplete_delete']='U heeft niet voldoende rechten om alle geselecteerde notities te verwijderen';
-$lang['notes']['multipleCategoriesSelected']='Meerdere categoriën geselecteerd';
+$lang['notes']['multipleCategoriesSelected']='Meerdere notitieblokken geselecteerd';
