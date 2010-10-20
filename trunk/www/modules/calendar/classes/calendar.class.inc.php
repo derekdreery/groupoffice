@@ -2821,13 +2821,16 @@ class calendar extends db {
 	}
 
 	function get_linked_events_json($link_id, $link_type){
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_CONFIG;
+
+		require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+		$GO_LINKS = new GO_LINKS();
 
 		$records=array();
 
 		$this->get_linked_events($GO_SECURITY->user_id, $link_id, $link_type);
 		while($e=$this->next_record()){
-			
+			$e['link_count']=$GO_LINKS->count_links($e['id'], 11);
 			$e['start_time']=Date::get_timestamp($e['start_time']);
 			$records[]=$e;
 		}
