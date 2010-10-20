@@ -29,6 +29,8 @@
  */
 require('../Group-Office.php');
 
+session_write_close();
+
 $path = $_REQUEST['src'];
 
 if(File::path_leads_to_parent($path))
