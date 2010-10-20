@@ -88,18 +88,20 @@ GO.calendar.MainPanel = function(config){
 		remoteSort:true
 	});
 
-	this.projectCalendarsStore = new GO.data.JsonStore({
-		url: GO.settings.modules.calendar.url+'json.php',
-		baseParams: {
-			'task': 'calendars',
-			'project_calendars':1
-		},
-		root: 'results',
-		totalProperty: 'total',
-		id: 'id',
-		fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
-		remoteSort:true
-	});
+	if(GO.projects){
+		this.projectCalendarsStore = new GO.data.JsonStore({
+			url: GO.settings.modules.calendar.url+'json.php',
+			baseParams: {
+				'task': 'calendars',
+				'project_calendars':1
+			},
+			root: 'results',
+			totalProperty: 'total',
+			id: 'id',
+			fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
+			remoteSort:true
+		});
+	}
 
 	this.viewsStore = new GO.data.JsonStore({
 		url: GO.settings.modules.calendar.url+'json.php',
@@ -149,12 +151,14 @@ GO.calendar.MainPanel = function(config){
 		}
 	}, this);
 
-	this.projectCalendarsStore.on('load', function(){
-		this.projectCalendarsList.setVisible(this.projectCalendarsStore.data.length);
-	}, this);
+	if(GO.projects){
+		this.projectCalendarsStore.on('load', function(){
+			this.projectCalendarsList.setVisible(this.projectCalendarsStore.data.length);
+			this.calendarListPanel.doLayout();
+		}, this);
+	}
 
 	this.viewsStore.on('load', function(){
-
 		this.viewsList.setVisible(this.viewsStore.data.length);
 		this.calendarListPanel.doLayout();
 		
@@ -182,10 +186,12 @@ GO.calendar.MainPanel = function(config){
 		store: this.calendarsStore
 	});
 
-	this.projectCalendarsList = new GO.grid.MultiSelectGrid({
-		title:GO.projects.lang.projectCalendars,
-		store: this.projectCalendarsStore
-	});
+	if(GO.projects){
+		this.projectCalendarsList = new GO.grid.MultiSelectGrid({
+			title:GO.projects.lang.projectCalendars,
+			store: this.projectCalendarsStore
+		});
+	}
 
 	this.viewsList = new GO.grid.GridPanel({
 		border: false,
@@ -254,7 +260,9 @@ GO.calendar.MainPanel = function(config){
 	}
    
 	this.calendarList.on('change', changeCalendar, this);
-	this.projectCalendarsList.on('change', changeCalendar, this);
+
+	if(this.projectCalendarsList)
+		this.projectCalendarsList.on('change', changeCalendar, this);
 	
 	this.viewsList.on('rowclick', function(grid, rowIndex)
 	{
@@ -301,10 +309,12 @@ GO.calendar.MainPanel = function(config){
 		items: [
 		this.calendarList,
 		this.viewsList,
-		this.resourcesList,
-		this.projectCalendarsList 
+		this.resourcesList		
 		]
 	});
+
+	if(this.projectCalendarsList)
+		this.calendarListPanel.add(this.projectCalendarsList);
 
 	this.daysGridStore = new GO.data.JsonStore({
 		url: GO.settings.modules.calendar.url+'json.php',
@@ -848,7 +858,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					this.calendarsStore.loadData(jsonData.calendars);
 					this.viewsStore.loadData(jsonData.views);
 					this.resourcesStore.loadData(jsonData.resources);
-					this.projectCalendarsStore.loadData(jsonData.project_calendars);
+					if(this.projectCalendarsList)
+						this.projectCalendarsStore.loadData(jsonData.project_calendars);
 					GO.calendar.categoriesStore.loadData(jsonData.categories);
 
 					this.getEl().unmask();
@@ -1327,7 +1338,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			this.resourcesList.getSelectionModel().clearSelections();
 
 			clearGrids.push(this.calendarList);
-			clearGrids.push(this.projectCalendarsList);
+			if(this.projectCalendarsList)
+				clearGrids.push(this.projectCalendarsList);
 		}else
 		{
 			this.viewsList.getSelectionModel().clearSelections();
@@ -1337,7 +1349,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					clearGrids.push(this.calendarList);
 					selectGrid = this.projectCalendarsList;
 				}else {
-					clearGrids.push(this.projectCalendarsList);
+					if(this.projectCalendarsList)
+						clearGrids.push(this.projectCalendarsList);
 					selectGrid = this.calendarList;
 				}
 				this.resourcesList.getSelectionModel().clearSelections();
@@ -1349,7 +1362,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			}else
 			{
 				clearGrids.push(this.calendarList);
-				clearGrids.push(this.projectCalendarsList);
+				if(this.projectCalendarsList)
+					clearGrids.push(this.projectCalendarsList);
 
 				selectGrid = this.resourcesList;
 
@@ -1971,7 +1985,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					this.viewsStore.reload();
 					this.resourcesStore.reload();
 					this.calendarsStore.reload();
-					this.projectCalendarsStore.reload();
+					if(this.projectCalendarsList)
+						this.projectCalendarsStore.reload();
 
 					if(GO.calendar.eventDialog){
 						GO.calendar.eventDialog.updateResourcePanel();
