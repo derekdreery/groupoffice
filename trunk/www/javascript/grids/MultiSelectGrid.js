@@ -12,9 +12,14 @@ GO.grid.MultiSelectGrid = function (config){
 		listeners:{
 			scope:this,
 			change:function(record){
+
 				record.commit();
 				this.lastRecordClicked = record;
-				this.applyFilter();
+
+				if(this.timeoutNumber)
+					clearTimeout(this.timeoutNumber);			
+				
+				this.timeoutNumber=this.applyFilter.defer(750, this,[]);
 			}
 		}
 	});
@@ -91,12 +96,19 @@ GO.grid.MultiSelectGrid = function (config){
 }
 
 Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
-
+	timeoutNumber : false,
+	
 	allowNoSelection : false,
+
 	lastRecordClicked : false,
+
 	lastSelectedIndex : -1,
+
 	selectedAll : false,
+
 	applyFilter : function(select_records, suppressEvent){
+
+		this.timeoutNumber=false;
 
 		this.lastSelectedIndex=-1;
 		var records = [], ids=[], checked, current_record_id, will_be_checked;
