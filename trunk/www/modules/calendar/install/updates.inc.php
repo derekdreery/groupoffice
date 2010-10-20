@@ -99,3 +99,5 @@ $updates[]="ALTER TABLE `cal_events_declined` CHANGE `uid` `uid` VARCHAR(200) NO
 
 $updates[]="ALTER TABLE `cal_calendars` ADD `project_id` INT NOT NULL ,
 ADD INDEX ( `project_id` ) ";
+
+$updates[]="ALTER TABLE `cal_events` CHANGE `uuid` `uuid` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
