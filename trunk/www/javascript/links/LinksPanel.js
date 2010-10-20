@@ -502,7 +502,7 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 		
 		if(!this.loaded && this.link_id>0)
 		{
-			this.linksGrid.store.baseParams.types = Ext.encode(this.linkTypeFilter.getSelectedTypes());
+			this.linksGrid.store.baseParams.types = Ext.encode(this.linkTypeFilter.getSelected());
 			this.linksGrid.store.load();
 			//delete this.linksGrid.store.baseParams.types;
 			
@@ -541,7 +541,7 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 		this.folder_id=folder_id;
 		this.linksGrid.store.baseParams["folder_id"]=folder_id;
 		if(!noload){
-			this.linksGrid.store.baseParams.types = Ext.encode(this.linkTypeFilter.getSelectedTypes());
+			this.linksGrid.store.baseParams.types = Ext.encode(this.linkTypeFilter.getSelected());
 			this.linksGrid.store.load();
 			//delete this.linksGrid.store.baseParams.types;
 		}

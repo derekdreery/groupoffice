@@ -106,6 +106,18 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 
 	selectedAll : false,
 
+	getSelected : function(){
+		var types = [];
+		for (var i = 0; i < this.store.data.items.length;  i++)
+		{
+			if( this.store.data.items[i].get('checked'))
+			{
+				types.push(this.store.data.items[i].get('id'));
+			}
+		}
+		return types;
+	},
+
 	applyFilter : function(select_records, suppressEvent){
 
 		this.timeoutNumber=false;

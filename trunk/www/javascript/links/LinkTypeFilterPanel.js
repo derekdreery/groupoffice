@@ -13,13 +13,9 @@ GO.LinkTypeFilterPanel = function(config)
 	config.collapsible=true;
 	config.header=false;
 	config.collapseMode='mini';
+	config.allowNoSelection=true;
 	
-	var checkColumn = new GO.grid.CheckColumn({
-		header: '&nbsp;',
-		dataIndex: 'checked',
-		width: 30
-	});
-	
+
 	//config.title=GO.lang.strType;
 
 	if(!GO.linkTypesStore){
@@ -30,65 +26,13 @@ GO.LinkTypeFilterPanel = function(config)
 				id:'id'
 			});
 	}
-	
-	this.filterGrid = new GO.grid.GridPanel({
-		cls:'go-grid3-hide-headers',
-		autoHeight:true,
-		border:false,
-		loadMask:true,
-		store: config.store || GO.linkTypesStore,
-		columns: [
-				checkColumn,
-				{
-					header: GO.lang.strName, 
-					dataIndex: 'name',
-					id:'name'
-				}				
-			],
-		plugins: [checkColumn],
-		autoExpandColumn:'name',
-		listeners:{
-			scope:this,
-			delayedrowselect:function(grid, rowIndex, r){
-				this.applyFilter(r.id);
-			}
-		}
-	});
 
+	config.store = config.store || GO.linkTypesStore;
 
-	config.tbar=[{
-		iconCls:'btn-save',
-		text:GO.lang.cmdApply,
-		handler:function(){
-			this.applyFilter(-1);
-		},
-		scope: this
-	},{
-		iconCls:'btn-delete',
-		text:GO.lang.cmdReset,
-		handler:function(){
-			this.applyFilter(0);
-		},
-		scope: this
-	}];
-	
-	config.items=[
-	this.filterGrid/*,
-	new Ext.Panel({
-		border:false,
-		cls:'go-form-panel',
-		items:[
-			new GO.form.HtmlComponent({html: '<br />'}), 
-			applyButton
-			]
-	})*/];
-	
 	GO.LinkTypeFilterPanel.superclass.constructor.call(this, config);
-	
-	this.addEvents({change : true});
 }
 
-Ext.extend(GO.LinkTypeFilterPanel, Ext.Panel,{
+Ext.extend(GO.LinkTypeFilterPanel, GO.grid.MultiSelectGrid,{
 
 	getSelectedTypes : function(type_id){
 
@@ -97,17 +41,17 @@ Ext.extend(GO.LinkTypeFilterPanel, Ext.Panel,{
 
 		var types = [], checked, current_type_id;
 
-		for (var i = 0; i < this.filterGrid.store.data.items.length;  i++)
+		for (var i = 0; i < this.store.data.items.length;  i++)
 		{
 			current_type_id = this.filterGrid.store.data.items[i].get('id');
 			if(type_id>-1 && type_id != current_type_id){
 				checked=false;
-				this.filterGrid.store.data.items[i].set('checked', "0");
+				this.store.data.items[i].set('checked', "0");
 			}else
 			{
 				if(type_id ==current_type_id){
 					checked="1";
-					this.filterGrid.store.data.items[i].set('checked', "1");
+					this.store.data.items[i].set('checked', "1");
 				}else
 				{
 					checked = this.filterGrid.store.data.items[i].get('checked');
@@ -119,15 +63,6 @@ Ext.extend(GO.LinkTypeFilterPanel, Ext.Panel,{
 			}
 		}
 		return types;
-	},
-	applyFilter : function(type_id){
-
-		var types = this.getSelectedTypes(type_id);
-
-		this.fireEvent('change', this, types);
-
-		this.filterGrid.store.commitChanges();
-		this.filterGrid.getSelectionModel().clearSelections();
 	}
 });
 
