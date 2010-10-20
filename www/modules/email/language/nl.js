@@ -169,10 +169,11 @@ GO.email.lang.alwaysRespondToNotifications='Altijd antwoorden op een leesbevesti
 
 GO.email.lang.icalendarEventUpdated='Afspraak is bijgewerkt';
 GO.email.lang.youHaveNewMails = 'U heeft {new} nieuwe e-mail bericht(en)';
-GO.email.lang.anyField='Elk veld';
 
 GO.email.lang.icalendarEventUpdated='Afspraak is bijgewerkt.';
 GO.email.lang.icalendarEventCreated='Afspraak is aangemaakt.';
 GO.email.lang.icalendarEventDeleted='Afspraak is verwijderd.';
 GO.email.lang.icalendarInvitationDeclined='Uitnodiging is geweigerd.';
 GO.email.lang.icalendarDeleteEventConfirm='Weet u zeker dat u deze afspraak wilt verwijderen?';
+
+GO.email.lang.sending='Verzenden...';

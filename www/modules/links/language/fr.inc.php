@@ -17,8 +17,8 @@
  */
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('comments'));
-$lang['comments']['name']='Commentaires';
-$lang['comments']['description']='Ajouter la fonctionnalité de commentaires aux autres modules';
-$lang['comments']['comment']='Commentaire';
-$lang['comments']['comments']='Commentaires';
+require($GO_LANGUAGE->get_fallback_language_file('links'));
+$lang['links']['name']='Descriptions des liens';
+$lang['links']['description']='Gérer les descriptions des liens';
+$lang['links']['link_description']='Description des liens';
+$lang['links']['link_descriptions']='Descriptions des liens';

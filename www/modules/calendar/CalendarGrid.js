@@ -261,22 +261,24 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			style: "width:"+(ctSize['width']-this.scrollOffset)+"px;"
 
 		},true);
+
 		var tbody = Ext.DomHelper.append(this.allDayTable,
 		{
 			tag: 'tbody'
 		}, true);
-		this.allDayRow = Ext.DomHelper.append(tbody,
-		{
-			tag: 'tr',
-			children:{
-				tag:'td',
-				style:'width:40px',
-				cls: "x-calGrid-all-day-first-col"
-			}
-		}, true);
 
-		var yearPos = GO.settings.date_format.indexOf('Y');
-		var dateFormat = 'D '+GO.settings.date_format.substring(0, yearPos-1);
+		this.allDayRow = Ext.DomHelper.append(tbody,
+			{
+				tag: 'tr',
+				children:{
+					tag:'td',
+					style:'width:40px',
+					cls: "x-calGrid-all-day-first-col"
+				}
+			}, true);
+
+		var re = new RegExp(GO.settings.date_separator+"?Y"+GO.settings.date_separator+"?");
+		var dateFormat = 'D '+GO.settings.date_format.replace(re, '');
 
 		var now = new Date();
 		var nowStr = now.format(dateFormat);

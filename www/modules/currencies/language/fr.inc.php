@@ -15,10 +15,10 @@
  * Author : Lionel JULLIEN
  * Date : September, 27 2010
  */
-
+ 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('comments'));
-$lang['comments']['name']='Commentaires';
-$lang['comments']['description']='Ajouter la fonctionnalité de commentaires aux autres modules';
-$lang['comments']['comment']='Commentaire';
-$lang['comments']['comments']='Commentaires';
+require($GO_LANGUAGE->get_fallback_language_file('currencies'));
+$lang['currencies']['name']='Monnaies';
+$lang['currencies']['description']='Module monnaies';
+$lang['currencies']['currency']='Monnaie';
+$lang['currencies']['currencies']='Monnaies';

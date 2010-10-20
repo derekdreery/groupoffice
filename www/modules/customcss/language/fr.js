@@ -1,4 +1,3 @@
-<?php
 /** 
  * Copyright Intermesh
  * 
@@ -16,9 +15,7 @@
  * Date : September, 27 2010
  */
 
-//Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('comments'));
-$lang['comments']['name']='Commentaires';
-$lang['comments']['description']='Ajouter la fonctionnalité de commentaires aux autres modules';
-$lang['comments']['comment']='Commentaire';
-$lang['comments']['comments']='Commentaires';
+Ext.namespace("GO.customcss");
+GO.customcss.lang={};
+GO.customcss.lang.customcss='Custom CSS';
+GO.customcss.lang.selectFile='Sélectionner un fichier';

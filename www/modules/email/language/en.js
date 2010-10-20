@@ -173,7 +173,6 @@ GO.email.lang.searchTo='Recipient';
 GO.email.lang.searchCC='Recipient (CC)';
 
 GO.email.lang.youHaveNewMails = 'You have {new} new e-mail(s)';
-
 GO.email.lang.replaceEmailText='This contact already has three email addresses in it\'s profile. You can replace one of the existing ones below by clicking on the email address you want replaced.';
 GO.email.lang.skipUnknownRecipientsAction='Don\'t show this window next time';
 GO.email.lang.skipUnknownRecipients='Don\'t show unknown recipients dialog';
@@ -195,3 +194,6 @@ GO.email.lang.icalendarEventCreated='Event has been created.';
 GO.email.lang.icalendarEventDeleted='Event has been deleted.';
 GO.email.lang.icalendarInvitationDeclined='Invitation has been declined.';
 GO.email.lang.icalendarDeleteEventConfirm='Are you sure you want to delete this event?';
+
+
+GO.email.lang.sending='Sending...';

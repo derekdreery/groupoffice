@@ -1,4 +1,3 @@
-<?php
 /** 
  * Copyright Intermesh
  * 
@@ -15,10 +14,13 @@
  * Author : Lionel JULLIEN
  * Date : September, 27 2010
  */
-
-//Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('comments'));
-$lang['comments']['name']='Commentaires';
-$lang['comments']['description']='Ajouter la fonctionnalité de commentaires aux autres modules';
-$lang['comments']['comment']='Commentaire';
-$lang['comments']['comments']='Commentaires';
+ 
+Ext.namespace('GO.currencies');
+GO.currencies.lang={};
+GO.currencies.lang.currencies='currencies';
+/* table: cu_currencies */
+GO.currencies.lang.currency="Monnaie";
+GO.currencies.lang.currencies="Monnaies";
+GO.currencies.lang.code="Code";
+GO.currencies.lang.symbol="Symbole";
+GO.currencies.lang.value="Valeur";

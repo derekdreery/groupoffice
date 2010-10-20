@@ -1,4 +1,3 @@
-<?php
 /** 
  * Copyright Intermesh
  * 
@@ -16,9 +15,7 @@
  * Date : September, 27 2010
  */
 
-//Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('comments'));
-$lang['comments']['name']='Commentaires';
-$lang['comments']['description']='Ajouter la fonctionnalité de commentaires aux autres modules';
-$lang['comments']['comment']='Commentaire';
-$lang['comments']['comments']='Commentaires';
+/* table: bl_ips */
+GO.blacklist.lang.ip="Addresse IP";
+GO.blacklist.lang.ips="Addresses IP";
+GO.blacklist.lang.count="Décompte";

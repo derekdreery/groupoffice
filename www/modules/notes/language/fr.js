@@ -10,23 +10,17 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
- * French Translation v1.0
+ * French Translation
  * Author : Lionel JULLIEN
- * Date : September, 05 2008
+ * Date : September, 27 2010
  */
-
-
-
-
 
 /* new table: no_categories */
 GO.notes.lang.category="Catégorie";
 GO.notes.lang.categories="Catégories";
-
 /* new table: no_notes */
 GO.notes.lang.note="Note";
 GO.notes.lang.notes="Notes";
 GO.notes.lang.category_id="ID de la catégorie";
 GO.notes.lang.content="Contenu";
-
 GO.notes.lang.manageCategories="Gérer les catégories";
