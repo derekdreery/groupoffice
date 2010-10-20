@@ -339,7 +339,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		
 		if(target.tagName=='A')
 		{
-			e.preventDefault();
+			
 			
 			var href=target.attributes['href'].value;
 			if(GO.email && href.substr(0,6)=='mailto')
@@ -353,7 +353,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					var email = href.substr(7);
 				}				
 
-				//e.preventDefault();
+				e.preventDefault();
 				
 				GO.email.addressContextMenu.showAt(e.getXY(), email);					
 				//this.fireEvent('emailClicked', email);			
@@ -371,6 +371,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					{
 						GO.linkHandlers[link.link_type].call(this, link.id, {data: link});
 					}
+					e.preventDefault();
 					return;
 				}
 
@@ -394,36 +395,39 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 						}
 
 					}
+					e.preventDefault();
 					return;
 				}
 
-				if(href=='#browselinks'){
+				if(href.indexOf('#browselinks')>-1){
 
 					if(!GO.linkBrowser){
 						GO.linkBrowser = new GO.LinkBrowser();
 					}
 					GO.linkBrowser.show({link_id: this.data.id,link_type: this.link_type,folder_id: "0"});
 					GO.linkBrowser.on('hide', this.reload, this,{single:true});
+					e.preventDefault();
 
 					return;
 				}
 
-				if(href=='#browsefiles'){
+				if(href.indexOf('#browsefiles')>-1){
 
 					GO.files.openFolder(this.data.files_folder_id);
 					GO.files.fileBrowserWin.on('hide', this.reload, this, {single:true});
+					e.preventDefault();
 
 					return;
 				}
 
 
-				if(href!='#')
+				/*if(href!='#')
 				{
 					if(href.substr(0,6)=='callto')
 						document.location.href=href;
 					else
 						window.open(href);
-				}
+				}*/
 				
 			}
 		}		
