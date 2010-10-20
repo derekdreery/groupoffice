@@ -347,8 +347,8 @@ background-color: #F1F1F1 !important;
 }
 
 .x-calGrid-event-container .x-resizable-handle-south, .x-calGrid-event-container .x-resizable-handle{
-	background:none;
-	background-image: none;
+	background:transparent;
+	background-image: url(../../../../ext/resources/images/default/s.gif);
 }
 
 .x-calGrid-all-day-event-container {
