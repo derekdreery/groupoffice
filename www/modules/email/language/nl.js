@@ -154,3 +154,5 @@ GO.email.lang.searchCC='Ontvanger (CC)';
 
 GO.email.lang.youHaveNewMails = 'U heeft {new} nieuwe e-mail bericht(en)';
 GO.email.lang.anyField='Elk veld';
+
+GO.email.lang.sending='Verzenden...';

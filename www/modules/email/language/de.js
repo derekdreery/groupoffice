@@ -132,3 +132,4 @@ GO.email.lang.searchTo='Empfänger';
 GO.email.lang.searchCC='Empfänger (CC)';
 GO.email.lang.youHaveNewMails = 'Sie haben {new} neue Nachricht(en)';
 GO.email.lang.anyField='Alle Felder';
+GO.email.lang.sending='Sende...';

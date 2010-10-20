@@ -697,7 +697,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			run: this.autoSave,
 			scope:this,
 			interval:120000
-		//interval:5000
+			//interval:5000
 		};
 		
 		this.on('hide', this.stopAutoSave, this);
@@ -1385,12 +1385,15 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			// extra sync to make sure all is in there.
 			this.htmlEditor.syncValue();
 			
+			var waitMsg=null;
+			if(!autoSave){
+				waitMsg = draft ? GO.lang.waitMsgSave : GO.email.lang.sending;
+			}
 			
-
 			this.formPanel.form.submit({
 				url : this.sendURL,
 				params : this.sendParams,
-				waitMsg : autoSave ? null : GO.lang.waitMsgSave,
+				waitMsg : waitMsg,
 				waitMsgTarget : autoSave ? null : this.formPanel.body,
 				success : function(form, action) {
 					
