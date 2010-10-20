@@ -3,9 +3,9 @@ GO.tasks.TaskTemplate =
 		'<tpl if="values.tasks">'+
 			'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="tasks-{panelId}">'+
 			'<tr>'+
-				'<td class="table_header_links">' + GO.lang['strName'] + '</a></td>'+
-				'<td class="table_header_links">' + GO.tasks.lang.dueDate + '</td>'+
-				'<td class="table_header_links">' + GO.tasks.lang.tasklist + '</td>'+
+				'<td class="table_header_links" width="40%">' + GO.lang['strName'] + '</a></td>'+
+				'<td class="table_header_links" width="20%">' + GO.tasks.lang.dueDate + '</td>'+
+				'<td class="table_header_links" width="40%">' + GO.tasks.lang.tasklist + '</td>'+
 			'</tr>'+
 			'<tpl if="!tasks.length">'+
 				'<tr><td colspan="4">'+GO.lang.strNoItems+'</td></tr>'+
