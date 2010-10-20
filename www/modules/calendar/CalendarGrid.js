@@ -237,9 +237,9 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					cls: "x-calGrid-all-day-first-col"
 				}
 			}, true);
-			
-		var yearPos = GO.settings.date_format.indexOf('Y');
-		var dateFormat = 'D '+GO.settings.date_format.substring(0, yearPos-1);
+
+		var re = new RegExp(GO.settings.date_separator+"?Y"+GO.settings.date_separator+"?");
+		var dateFormat = 'D '+GO.settings.date_format.replace(re, '');
 		
 		var now = new Date();
 		var nowStr = now.format(dateFormat);
