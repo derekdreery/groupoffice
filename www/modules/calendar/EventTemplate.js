@@ -3,9 +3,9 @@ GO.calendar.EventTemplate =
 		'<tpl if="values.events">'+
 			'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="events-{panelId}">'+
 			'<tr>'+
-				'<td class="table_header_links">' + GO.lang['strName'] + '</a></td>'+
-				'<td class="table_header_links">' + GO.calendar.lang.startsAt + '</td>'+
-				'<td class="table_header_links">' + GO.calendar.lang.calendar + '</td>'+
+				'<td class="table_header_links" width="40%">' + GO.lang['strName'] + '</a></td>'+
+				'<td class="table_header_links" width="20%">' + GO.calendar.lang.startsAt + '</td>'+
+				'<td class="table_header_links" width="40%">' + GO.calendar.lang.calendar + '</td>'+
 			'</tr>'+
 			'<tpl if="!events.length">'+
 				'<tr><td colspan="4">'+GO.lang.strNoItems+'</td></tr>'+
