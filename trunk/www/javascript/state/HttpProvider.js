@@ -105,12 +105,11 @@ Ext.extend(GO.state.HttpProvider, Ext.state.Provider, {
 	// private
 	setValue : function(name, value, callback, scope){
 		if(!this.changedValues){
+			var defer=30000;
 			if(GO.settings.config.debug){
-				this.sendRequest(callback, scope);
-			}else
-			{
-				this.sendRequest.defer(30000, this, [callback, scope]);
+				defer=100;
 			}
+			this.sendRequest.defer(defer, this, [callback, scope]);
 			this.changedValues={};
 		}
 		this.changedValues[name]=this.encodeValue(value);
