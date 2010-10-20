@@ -17,8 +17,6 @@
  */
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('comments'));
-$lang['comments']['name']='Commentaires';
-$lang['comments']['description']='Ajouter la fonctionnalité de commentaires aux autres modules';
-$lang['comments']['comment']='Commentaire';
-$lang['comments']['comments']='Commentaires';
+require($GO_LANGUAGE->get_fallback_language_file('ab2users'));
+$lang['ab2users']['name']='Addressbook2Users';
+$lang['cms']['description']='Ajoute un bouton permettant de créer rapidement un utilisateur depuis un contact ou une société';

@@ -34,35 +34,5 @@ GO.LinkTypeFilterPanel = function(config)
 
 Ext.extend(GO.LinkTypeFilterPanel, GO.grid.MultiSelectGrid,{
 
-	getSelectedTypes : function(type_id){
-
-		if(typeof(type_id)=='undefined')
-			type_id=-1;
-
-		var types = [], checked, current_type_id;
-
-		for (var i = 0; i < this.store.data.items.length;  i++)
-		{
-			current_type_id = this.filterGrid.store.data.items[i].get('id');
-			if(type_id>-1 && type_id != current_type_id){
-				checked=false;
-				this.store.data.items[i].set('checked', "0");
-			}else
-			{
-				if(type_id ==current_type_id){
-					checked="1";
-					this.store.data.items[i].set('checked', "1");
-				}else
-				{
-					checked = this.filterGrid.store.data.items[i].get('checked');
-				}
-			}
-			if(checked=="1")
-			{
-				types.push(this.filterGrid.store.data.items[i].get('id'));
-			}
-		}
-		return types;
-	}
 });
 

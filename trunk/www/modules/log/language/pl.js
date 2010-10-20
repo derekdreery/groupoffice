@@ -1,4 +1,4 @@
-E/**
+/**
  * Don't copy the next lines into a translation
  *
  * Polish Translation v1.1

@@ -15,10 +15,8 @@
  * Author : Lionel JULLIEN
  * Date : September, 27 2010
  */
-
+ 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('comments'));
-$lang['comments']['name']='Commentaires';
-$lang['comments']['description']='Ajouter la fonctionnalité de commentaires aux autres modules';
-$lang['comments']['comment']='Commentaire';
-$lang['comments']['comments']='Commentaires';
+require($GO_LANGUAGE->get_fallback_language_file('phpbb3'));
+$lang['phpbb3']['name'] = 'Liaison phpBB 3';
+$lang['phpbb3']['description'] = 'Module de liaison entre phpBB3 et Group-Office.';

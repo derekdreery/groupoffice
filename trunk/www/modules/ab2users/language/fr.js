@@ -1,4 +1,3 @@
-<?php
 /** 
  * Copyright Intermesh
  * 
@@ -15,10 +14,9 @@
  * Author : Lionel JULLIEN
  * Date : September, 27 2010
  */
+ 
+Ext.namespace('GO.ab2users');
 
-//Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('comments'));
-$lang['comments']['name']='Commentaires';
-$lang['comments']['description']='Ajouter la fonctionnalité de commentaires aux autres modules';
-$lang['comments']['comment']='Commentaire';
-$lang['comments']['comments']='Commentaires';
+GO.ab2users.lang={};
+GO.ab2users.lang.createUser='Créer l\'utilisateur';
+GO.ab2users.lang.companyUserFirstName='Société';

@@ -10,17 +10,12 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  *
- * French Translation v1.0
+ * French Translation
  * Author : Lionel JULLIEN
- * Date : September, 05 2008
+ * Date : September, 27 2010
  */
-
-
-
-
 
 GO.tools.lang.tools='Outils d\'administration';
 GO.tools.lang.description='Cliquez sur un des liens ci-dessous pour l\'exécuter.';
-
 GO.tools.lang.scripts='Scripts';
 GO.tools.lang.scriptOutput='Informations de sortie du script';
