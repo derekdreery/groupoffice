@@ -47,3 +47,4 @@ $lang['filetypes']['fla']='Macromedia Flash bronbestand';
 $lang['filetypes']['xlt']='Microsoft Excel spreadsheet';
 $lang['filetypes']['ai']='Adobe Illustrator bestand';
 $lang['filetypes']['eml']='E-mail bericht';
+$lang['filetypes']['xmind']='XMind bestand';

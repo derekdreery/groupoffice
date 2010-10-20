@@ -72,3 +72,4 @@ $lang['filetypes']['eml'] = 'E-mail message';
 $lang['filetypes']['csv'] = 'Comma Separated Values';
 $lang['filetypes']['js'] = 'Javascript';
 $lang['filetypes']['sql'] = 'SQL database export';
+$lang['filetypes']['xmind']='XMind file';
