@@ -803,7 +803,8 @@ try {
 			$response['success']=true;
 
 			$response['data'] = $file;
-			$path=$files->build_path($folder).'/'.$file['name'];
+			$relpath = $files->build_path($folder).'/';
+			$path=$relpath.$file['name'];
 			$response['data']['path']=$path;
 			$response['data']['name']=File::strip_extension($file['name']);
 			$response['data']['ctime']=Date::get_timestamp(filectime($GO_CONFIG->file_storage_path.$path));
@@ -812,6 +813,39 @@ try {
 			$response['data']['type']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.File::get_filetype_description($extension).'</div>';
 			$response['data']['size']=Number::format_size($file['size']);
 			$response['data']['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $folder);
+
+			switch($extension) {
+				case 'jpg':
+				case 'jpeg':
+				case 'gif':
+				case 'bmp':
+				case 'tif':
+				case 'png':
+					$src = $GO_MODULES->modules['files']['url'].'download.php?path='.urlencode($path);
+					$response['data']['image'] = "<img src='$src' height='100' />";
+					break;
+				case 'xmind':
+					if (!file_exists($GO_CONFIG->file_storage_path.'thumbcache/'.$file['name'].'jpeg') || filectime($GO_CONFIG->file_storage_path.'thumbcache/'.$file['name'].'jpeg')<filectime($GO_CONFIG->file_storage_path.$path)) {
+						$zipfile = zip_open($GO_CONFIG->file_storage_path.$path);
+						$response['data']['image'] = '';
+						while($entry = zip_read($zipfile)) {
+							if (zip_entry_name($entry)=='Thumbnails/thumbnail.jpg') {
+								require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+								zip_entry_open($zipfile,$entry,'r');
+								file_put_contents($GO_CONFIG->file_storage_path.'thumbcache/'.$file['name'].'.jpeg', zip_entry_read($entry,zip_entry_filesize($entry)));
+								zip_entry_close($entry);
+								break;
+							}
+						}
+					}
+					$src = $GO_CONFIG->control_url.'thumb.php?src='.urlencode('thumbcache/'.$file['name'].'.jpeg').'&h=100&zc=1';
+					$response['data']['image'] = "<img src='$src' />";
+					zip_close($zipfile);
+					break;
+				default:
+					$response['data']['image'] = '';
+				  break;
+			}
 
 			if($task == 'file_properties') {
 				if(isset($GO_MODULES->modules['customfields'])) {

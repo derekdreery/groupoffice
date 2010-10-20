@@ -81,26 +81,30 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
 						'<td>'+GO.lang.strLocation+':</td>'+
-						'<td>{location}</td>'+
+						'<td colspan="2">{location}</td>'+
 					'</tr>'+
 					'<tr>'+
 						'<td>'+GO.lang.strType+':</td>'+
-						'<td>{type}</td>'+
+						'<td colspan=>{type}</td>'+
+						'<td rowspan="4">'+'<tpl if="!GO.util.empty(image)">'+'{image}'+'</tpl>'+'</td>'+
 					'</tr>'+
 
 					'<tr>'+
 						'<td>'+GO.lang.strSize+':</td>'+
 						'<td>{size}</td>'+
+						'<td></td>'+
 					'</tr>'+
 
 					'<tr>'+
 						'<td>'+GO.lang.strCtime+':</td>'+
 						'<td>{ctime}</td>'+
+						'<td></td>'+
 					'</tr>'+
 
 					'<tr>'+
 						'<td>'+GO.lang.strMtime+':</td>'+
 						'<td>{mtime}</td>'+
+						'<td></td>'+
 					'</tr>'+
 
 					this.extraTemplateProperties +
@@ -112,10 +116,10 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 
 					'<tpl if="!GO.util.empty(comment)">'+
 						'<tr>'+
-							'<td colspan="2" class="display-panel-heading">'+GO.files.lang.comments+'</td>'+
+							'<td colspan="3" class="display-panel-heading">'+GO.files.lang.comments+'</td>'+
 						'</tr>'+
 						'<tr>'+
-							'<td colspan="2">{comment}</td>'+
+							'<td colspan="3">{comment}</td>'+
 						'</tr>'+
 					'</tpl>'+
 				'</table>';
