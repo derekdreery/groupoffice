@@ -41,6 +41,29 @@ $w = isset($_REQUEST['w']) ? intval($_REQUEST['w']) : 0;
 $h = isset($_REQUEST['h']) ? intval($_REQUEST['h']) : 0;
 $zc = !empty($_REQUEST['zc']) && !empty($w) && !empty($h);
 
+
+if(File::get_extension($path)=='xmind'){
+
+	$filename = File::strip_extension(basename($path)).'.jpeg';
+
+	if (!file_exists($GO_CONFIG->file_storage_path.'thumbcache/'.$filename) || filectime($GO_CONFIG->file_storage_path.'thumbcache/'.$filename)<filectime($GO_CONFIG->file_storage_path.$path)) {
+		$zipfile = zip_open($GO_CONFIG->file_storage_path.$path);
+
+		while($entry = zip_read($zipfile)) {
+			if (zip_entry_name($entry)=='Thumbnails/thumbnail.jpg') {
+				require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+				zip_entry_open($zipfile,$entry,'r');
+				file_put_contents($GO_CONFIG->file_storage_path.'thumbcache/'.$filename, zip_entry_read($entry,zip_entry_filesize($entry)));
+				zip_entry_close($entry);
+				break;
+			}
+		}
+		zip_close($zipfile);
+	}
+	$path = 'thumbcache/'.$filename;
+}
+
+
 $full_path = $GO_CONFIG->file_storage_path.$path;
 
 $cache_dir = $GO_CONFIG->file_storage_path.'thumbcache';

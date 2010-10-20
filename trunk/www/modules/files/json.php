@@ -420,7 +420,7 @@ try {
 			}elseif($_POST['id'] == 'new') {
 				$response['parent_id']=0;
 
-				require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
+				//require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
 
 				$sort = isset($_POST['sort']) ? $_POST['sort'] : 'mtime';
 				$dir = isset($_POST['dir']) ? $_POST['dir'] : 'DESC';
@@ -643,7 +643,7 @@ try {
 				$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
 				$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
 
-				require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
+				//require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
 
 				//$response['path']=$path;
 
@@ -821,26 +821,8 @@ try {
 				case 'bmp':
 				case 'tif':
 				case 'png':
-					$src = $GO_MODULES->modules['files']['url'].'download.php?path='.urlencode($path);
-					$response['data']['image'] = "<img src='$src' height='100' />";
-					break;
 				case 'xmind':
-					if (!file_exists($GO_CONFIG->file_storage_path.'thumbcache/'.$file['name'].'jpeg') || filectime($GO_CONFIG->file_storage_path.'thumbcache/'.$file['name'].'jpeg')<filectime($GO_CONFIG->file_storage_path.$path)) {
-						$zipfile = zip_open($GO_CONFIG->file_storage_path.$path);
-						$response['data']['image'] = '';
-						while($entry = zip_read($zipfile)) {
-							if (zip_entry_name($entry)=='Thumbnails/thumbnail.jpg') {
-								require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-								zip_entry_open($zipfile,$entry,'r');
-								file_put_contents($GO_CONFIG->file_storage_path.'thumbcache/'.$file['name'].'.jpeg', zip_entry_read($entry,zip_entry_filesize($entry)));
-								zip_entry_close($entry);
-								break;
-							}
-						}
-					}
-					$src = $GO_CONFIG->control_url.'thumb.php?src='.urlencode('thumbcache/'.$file['name'].'.jpeg').'&h=100&zc=1';
-					$response['data']['image'] = "<img src='$src' />";
-					zip_close($zipfile);
+					$response['data']['image'] = get_thumb_url($path,350,0,false);
 					break;
 				default:
 					$response['data']['image'] = '';
