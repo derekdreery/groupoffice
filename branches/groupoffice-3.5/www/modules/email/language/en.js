@@ -174,3 +174,5 @@ GO.email.lang.searchCC='Recipient (CC)';
 
 GO.email.lang.youHaveNewMails = 'You have {new} new e-mail(s)';
 GO.email.lang.anyField='Any field';
+
+GO.email.lang.sending='Sending...';
