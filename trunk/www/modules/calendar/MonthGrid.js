@@ -896,11 +896,11 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	},
 
 	nextDate : function(){
-		return this.startDate.add(Date.MONTH, 1);
+		return this.configuredDate.add(Date.MONTH, 1);
 	},
 
 	previousDate : function(){
-		return this.startDate.add(Date.MONTH, -1);
+		return this.configuredDate.add(Date.MONTH, -1);
 	},
 
 	reload : function()
