@@ -18,7 +18,7 @@ GO.blinkTitle={
 		run: function(){
 			document.title=document.title!=this.blinkTitle ? this.blinkTitle : this.originalDocTitle;
 		},
-		interval: 1000
+		interval: 2000
 	},
 	running : false,
 

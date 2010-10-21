@@ -92,10 +92,10 @@ GO.CheckerWindow = function(config){
 	config.listeners={
 		scope:this,
 		show:function(){
-		//GO.blinkTitle.blink(this.checkerGrid.store.getCount()+' reminders');
+			GO.blinkTitle.blink(this.checkerGrid.store.getCount()+' '+GO.lang.reminders);
 		},
 		hide: function(){
-		//GO.blinkTitle.blink(false);
+			GO.blinkTitle.blink(false);
 		}
 	};
 	
@@ -166,6 +166,8 @@ GO.CheckerPanel = Ext.extend(function(config){
 	action.on({
 		scope:this,
 		action:function(grid, record, action, row, col) {
+
+			grid.getSelectionModel().selectRow(row);
 
 			switch(action){
 				case 'btn-dismiss':
@@ -282,7 +284,7 @@ GO.CheckerPanel = Ext.extend(function(config){
 	}, this);
 	
 	
-},GO.grid.EditorGridPanel, {
+},Ext.grid.EditorGridPanel, {
 	doTask : function(task, seconds)
 	{
 		var selected = this.selModel.getSelections();

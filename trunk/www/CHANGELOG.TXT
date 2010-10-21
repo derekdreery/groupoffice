@@ -4,6 +4,7 @@
   little objects as possible.
 - New bookmarks module.
 - New calllog module for simple administration of phone calls.
+- New module to schedule popup reminders for users or groups with a text page.
 - WebDAV and CalDAV support with FreeBusy info.
 - Collapsible sections in all information panels.
 - Separated tasks and events from other links in the information panels.
@@ -19,6 +20,7 @@
 - Linked items show a link icon if they have links attached too.
 - Reminders can be snoozed more easily.
 - Add new link directly from "New" menu.
+
 
 Calendar and Tasks
 - Better support for calendar invitations from other clients such as Outlook and
