@@ -21,7 +21,7 @@ class GO_CalDAV_Tasklists_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		$this->tasks = new tasks();
 
-		$this->exporter = new export_tasks('2.0', true);
+		$this->exporter = new export_tasks('2.0', false);
 		$this->exporter->dont_use_quoted_printable = true;
 
 

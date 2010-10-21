@@ -30,6 +30,8 @@ class export_tasks
 
 	var $add_leading_space_to_qp_encoded_line_wraps=false;
 
+	var $dont_use_quoted_printable=false;
+
 	function __construct($version='2.0',$utc=false)
 	{
 
@@ -116,10 +118,10 @@ class export_tasks
 		$lines[] = "BEGIN:VTODO";
 		$lines[] = "UID:".$task['id'];
 
-		$lines = array_merge($lines, String::format_vcard_line('SUMMARY', $task['name'], $this->add_leading_space_to_qp_encoded_line_wraps));
+		$lines = array_merge($lines, String::format_vcard_line('SUMMARY', $task['name'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 		//if ($task['description'] != '')
 		//{
-			$lines = array_merge($lines, String::format_vcard_line('DESCRIPTION', $task['description'], $this->add_leading_space_to_qp_encoded_line_wraps));
+			$lines = array_merge($lines, String::format_vcard_line('DESCRIPTION', $task['description'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 		//}
 
 		$lines[] =	"STATUS:".$task['status'];
