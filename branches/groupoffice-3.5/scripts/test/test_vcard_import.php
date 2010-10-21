@@ -38,7 +38,7 @@ URL:
 ORG:Intermesh;;
 ADR;HOME:;;Hesselsstraat 97b;Den Bosch;State;ZIP;Country
 ADR:;;;;;;
-ADR;WORK:;;;;;;
+ADR;WORK;ENCODING=QUOTED-PRINTABLE;CHARSET=UTF-8:;;Address 1=0D=0Aadres 2;plaats;state;123134;Nederland
 PHOTO:
 X-ANNIVERSARY:
 X-FUNAMBOL-BILLINGINFO:
@@ -76,9 +76,9 @@ X-GO-SALUTATION:
 END:VCARD';
 
 $vcard = new vcard();
-//$record = $vcard->vcf_to_go($vcard_text);
-//var_dump($record);
+$record = $vcard->vcf_to_go($vcard_text);
+var_dump($record);
 
-$vcard->export_contact(3);
-echo $vcard->vcf;
+//$vcard->export_contact(3);
+//echo $vcard->vcf;
 
