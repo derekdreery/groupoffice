@@ -105,7 +105,9 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						'<td>{mtime}</td>'+						
 					'</tr>'+
 
-					'<tpl if="!GO.util.empty(image)"><tr><td colspan="2"><img src="{image}" /></td></tr></tpl>'+
+					'<tpl if="!GO.util.empty(image_src)"><tr><td colspan="2">'+
+						'<img style="cursor:pointer;" src="{image_src}" onclick="javascript:GO.files.openFile(new Ext.data.Record({\'name\':\'{image_name}\',\'path\':\'{image_path}\',\'extension\':\'{image_extension}\',\'download_path\':\'{download_path}\'}));" />'+
+					'</td></tr></tpl>'+
 
 					this.extraTemplateProperties +
 
