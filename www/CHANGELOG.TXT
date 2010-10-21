@@ -48,6 +48,8 @@ Billing
 - The scheduled call for quotes skips weekend and holidays.
 - Added a total column for rows and a markup function.
 
+Projects
+- Export function
 
 
 2010/10/19 3.5.36
