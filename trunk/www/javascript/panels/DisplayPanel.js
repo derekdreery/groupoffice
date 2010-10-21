@@ -143,6 +143,14 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		this.initTemplate();
 
 		this.templateConfig.panel=this;
+
+		/*
+		 * id is the dom id of the element that needs to hidden or showed
+		 * dataKey is a reference name for the data that needs to be fetched from
+		 * the server. The hidden sections will be sent as an array of dataKeys.
+		 * The server can use this array to check if particular data needs be
+		 * returned to the client.
+		 */
 		
 		this.templateConfig.collapsibleSectionHeader = function(title, id, dataKey){
 			this.panel.collapsibleSections[id]=dataKey;
@@ -261,7 +269,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		this.xtemplate.overwrite(this.body, data);
 
 		for(var id in this.collapsibleSections){
-			if(!this.data[this.collapsibleSections[id]]){
+			if(this.hiddenSections.indexOf(this.collapsibleSections[id])>-1){
 				this.toggleSection(id, true);
 			}
 		}
