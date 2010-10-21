@@ -197,6 +197,18 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		$objects = array();
 		$this->cal->get_events(array($calendarId),0, Date::date_add(time(), 0, -1));
 		while ($event = $this->cal->next_record()) {
+
+			if (empty($event['uuid'])) {
+
+				if(!isset($db))
+					$db = new db();
+
+				$event['uuid'] = $ue['uuid'] = UUID::create('event', $event['id']);
+				$ue['id'] = $event['id'];
+				$db->update_row('cal_events', 'id', $ue);
+			}
+
+
 			$objects[] = array(
 					'id' => $event['id'],
 					'uri' => $event['uuid'],
