@@ -24,7 +24,7 @@ GO.reminders.RemindersGrid = function(config){
 		columns:[{
 			header: GO.reminders.lang.time,
 			dataIndex: 'time',
-			width:80
+			width:120
 		},{
 			header: GO.lang.strName,
 			dataIndex: 'name',
@@ -58,23 +58,28 @@ GO.reminders.RemindersGrid = function(config){
 	config.autoExpandColumn='name';
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
-	config.tbar=[{
-		iconCls: 'btn-add',
-		text: GO.lang['cmdAdd'],
-		cls: 'x-btn-text-icon',
-		handler: function(){
-			this.showReminderDialog();
-		},
-		scope: this
-	},{
-		iconCls: 'btn-delete',
-		text: GO.lang['cmdDelete'],
-		cls: 'x-btn-text-icon',
-		handler: function(){
-			this.deleteSelected();
-		},
-		scope: this
-	}];
+
+	config.tbar=new Ext.Toolbar({
+		cls:'go-head-tb',
+		items:[{
+			iconCls: 'btn-add',
+			text: GO.lang['cmdAdd'],
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.showReminderDialog();
+			},
+			scope: this
+		},{
+			iconCls: 'btn-delete',
+			text: GO.lang['cmdDelete'],
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.deleteSelected();
+			},
+			scope: this
+		}]
+	});
+
 	config.listeners={
 		scope:this
 		,

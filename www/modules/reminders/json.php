@@ -73,6 +73,8 @@ try{
 
 			if(isset($_POST['add_groups']))
 			{
+				require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+				$GO_GROUPS = new GO_GROUPS();
 				$reminder = $reminders->get_reminder($_POST['reminder_id']);
 
 				$add_groups = json_decode($_POST['add_groups'], true);
