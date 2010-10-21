@@ -284,15 +284,42 @@ class vcard extends addressbook {
 						$record['company']['state'] = isset ($property->values[ADR_REGION]) ? $property->values[ADR_REGION] : "";
 						$record['company']['city'] = isset ($property->values[ADR_LOCALITY]) ? $property->values[ADR_LOCALITY] : "";
 						$record['company']['zip'] = isset ($property->values[ADR_POSTALCODE]) ? $property->values[ADR_POSTALCODE] : "";
-						$record['company']['address'] = isset ($property->values[ADR_STREET]) ? $this->_get_address($property->values[ADR_STREET]) : "";
-						$record['company']['address_no'] = isset ($property->values[ADR_STREET]) ? $this->_get_address_no($property->values[ADR_STREET]) : "";
+
+						if(!isset($property->values[ADR_STREET]))
+								$property->values[ADR_STREET]='';
+
+						$property->values[ADR_STREET]=str_replace("\r", '', $property->values[ADR_STREET]);
+
+						$lines = explode("\n", $property->values[ADR_STREET]);
+						if(count($lines)>1){
+							$record['company']['address']=$lines[0];
+							$record['company']['address_no']=$lines[1];
+						}else
+						{
+							$record['company']['address']=$this->_get_address($lines[0]);
+							$record['company']['address_no']=$this->_get_address_no($lines[0]);
+						}
 					} elseif(in_array('HOME', $property->parm_types)) {
 						$record['contact']['country'] = isset ($property->values[ADR_COUNTRY]) ? $property->values[ADR_COUNTRY] : "";
 						$record['contact']['state'] = isset ($property->values[ADR_REGION]) ? $property->values[ADR_REGION] : "";
 						$record['contact']['city'] = isset ($property->values[ADR_LOCALITY]) ? $property->values[ADR_LOCALITY] : "";
 						$record['contact']['zip'] = isset ($property->values[ADR_POSTALCODE]) ? $property->values[ADR_POSTALCODE] : "";
-						$record['contact']['address'] = isset ($property->values[ADR_STREET]) ? $this->_get_address($property->values[ADR_STREET]) : "";
-						$record['contact']['address_no'] = isset ($property->values[ADR_STREET]) ? $this->_get_address_no($property->values[ADR_STREET]) : "";
+					
+						if(!isset($property->values[ADR_STREET]))
+								$property->values[ADR_STREET]='';
+
+						$property->values[ADR_STREET]=str_replace("\r", '', $property->values[ADR_STREET]);
+
+						$lines = explode("\n", $property->values[ADR_STREET]);
+						if(count($lines)>1){
+							$record['contact']['address']=$lines[0];
+							$record['contact']['address_no']=$lines[1];
+						}else
+						{
+							$record['contact']['address']=$this->_get_address($lines[0]);
+							$record['contact']['address_no']=$this->_get_address_no($lines[0]);
+						}
+						
 					}
 					break;
 				case "TEL" :
