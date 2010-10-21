@@ -206,7 +206,10 @@ class GO_CalDAV_Tasklists_Backend extends Sabre_CalDAV_Backend_Abstract {
 		while ($task = $this->tasks->next_record()) {
 
 			if (empty($task['uuid'])) {
-				$db = new db();
+
+				if(!isset($db))
+					$db = new db();
+
 				$task['uuid'] = $ue['uuid'] = UUID::create('task', $task['id']);
 				$ue['id'] = $task['id'];
 				$db->update_row('ta_tasks', 'id', $ue);
