@@ -151,6 +151,8 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 	days : 91,
 
 	nextId : 0,
+
+	periodDisplay : '',
 	
 	renderName : function(grid, value, record)
 	{
@@ -248,19 +250,44 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 		{
 			this.startDate = date;
 		}*/
-		this.startDate = this.getFirstDateOfWeek(date);
-		this.endDate = this.startDate.add(Date.DAY, this.days);
+
+		var dateStr='';
+		
+		var year = date.getFullYear();
+
+		if(date.getMonth()>8){
+			dateStr=date.getFullYear()+'-10-01';
+			this.periodDisplay = '4 ';
+		}else if(date.getMonth()>5){
+			dateStr=year+'-07-01';
+			this.periodDisplay = '3 ';
+		}else if(date.getMonth()>2){
+			dateStr=year+'-04-01';
+			this.periodDisplay = '2 ';
+		}else
+		{
+			dateStr=year+'-01-01';
+			this.periodDisplay = '1 ';
+		}
+
+		this.periodDisplay = GO.calendar.lang.quarterShort+this.periodDisplay+year;
+		
+		this.startDate=Date.parseDate(dateStr, this.dateFormat);
+		this.endDate = this.nextDate();
 		this.setStoreBaseParams();
   	
 		if(load)
-		{
-		//if(!oldEndDate || !oldStartDate || oldEndDate.getElapsed(this.endDate)!=0 || oldStartDate.getElapsed(this.startDate)!=0)
-		{
-			this.store.reload();
-		}
-		}
+			this.store.reload();		
 	},
-  
+
+	nextDate : function(){
+		return this.startDate.add(Date.MONTH, 3);
+	},
+
+	previousDate : function(){
+		return this.startDate.add(Date.MONTH, -3);
+	},
+
 	setStoreBaseParams : function(){
 		this.store.baseParams['start_time']=this.startDate.format(this.dateTimeFormat);
 		this.store.baseParams['end_time']=this.endDate.format(this.dateTimeFormat);

@@ -122,3 +122,5 @@ GO.calendar.lang.sendInvitationUpdate='Wilt u de vernieuwde informatie over de b
 GO.calendar.lang.sendCancellation='Wilt u alle deelnemers een annuleringsbericht sturen?';
 
 GO.calendar.lang.forthcomingAppointments='Toekomstige afspraken';
+
+GO.calendar.lang.quarterShort = 'K';

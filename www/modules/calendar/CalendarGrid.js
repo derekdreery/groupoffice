@@ -134,6 +134,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	selected : Array(),
 
 	nextId: 0,
+
+	periodDisplay : '',
 	
 	// private
 	initComponent : function(){
@@ -1587,10 +1589,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 	},
 
 	setDate : function(date, days, load)
-	{
-		var oldStartDate = this.startDate;
-		var oldEndDate = this.endDate;
-
+	{		
 		if(days)
 		{
 			this.days=days;
@@ -1610,12 +1609,18 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		this.setStoreBaseParams();
 
 		if(load)
-		{
-			//if(!oldEndDate || !oldStartDate || oldEndDate.getElapsed(this.endDate)!=0 || oldStartDate.getElapsed(this.startDate)!=0)
-			//{
 			this.store.reload();
-		//}
-		}
+
+		this.periodDisplay = GO.lang.strWeek+' '+this.startDate.format('W');
+
+	},
+
+	nextDate : function(){
+		return this.startDate.add(Date.DAY, this.days>4 ? 7 : 1);
+	},
+
+	previousDate : function(){
+		return this.startDate.add(Date.DAY, this.days>4 ? -7 : -1);
 	},
 
 	reload : function()

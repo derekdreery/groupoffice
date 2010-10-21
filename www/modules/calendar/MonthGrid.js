@@ -70,6 +70,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	dayNameHeight : 16,
 
 	nextId : 0,
+
+	periodDisplay : '',
 	
 	// private
 	initComponent : function(){
@@ -878,6 +880,8 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		this.endDate = this.startDate.add(Date.DAY, this.days);
 		this.setStoreBaseParams();
 
+		this.periodDisplay=this.startDate.format('F, Y');
+
 
 		if(!oldEndDate || !oldStartDate || oldEndDate.getElapsed(this.endDate)!=0 || oldStartDate.getElapsed(this.startDate)!=0)
 		{
@@ -889,6 +893,14 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 				this.loadRequired=true;
 			}
 		}
+	},
+
+	nextDate : function(){
+		return this.startDate.add(Date.MONTH, 1);
+	},
+
+	previousDate : function(){
+		return this.startDate.add(Date.MONTH, -1);
 	},
 
 	reload : function()

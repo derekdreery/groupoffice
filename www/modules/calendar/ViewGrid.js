@@ -60,6 +60,8 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 
 	nextId : 0,
 
+	periodDisplay : '',
+
 	// private
 	initComponent : function(){
 		GO.grid.ViewGrid.superclass.initComponent.call(this);
@@ -785,20 +787,13 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 	},
 
 	setDate : function(date, days, load)
-	{
-  	
-		var oldStartDate = this.startDate;
-		var oldEndDate = this.endDate;
-  	
+	{  	
 		if(days)
 		{
 			this.days=days;
 		}
   	
-  	
-  	
-		this.configuredDate = date;
-    	
+		this.configuredDate = date;    	
 
 		if(this.days>4)
 		{
@@ -811,25 +806,23 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 	    	
 		this.endDate = this.startDate.add(Date.DAY, this.days);
 
+		this.periodDisplay = GO.lang.strWeek+' '+this.startDate.format('W');
+
 		if(load)
-		{
-			//if(!oldEndDate || !oldStartDate || oldEndDate.getElapsed(this.endDate)!=0 || oldStartDate.getElapsed(this.startDate)!=0)
-			//{
-			this.reload();
-		//}
-		}
- 
+			this.reload(); 
+	},
+
+	nextDate : function(){
+		return this.startDate.add(Date.DAY, this.days>4 ? 7 : 1);
+	},
+
+	previousDate : function(){
+		return this.startDate.add(Date.DAY, this.days>4 ? -7 : -1);
 	},
   
 	reload : function()
 	{
-		/*this.clearGrid();
-  	if(!this.viewView)
-  	{
-  		this.createHeadings();
-  	}    	*/
-		this.load();
-  	
+		this.load();  	
 	},
   
 	load : function(params)
