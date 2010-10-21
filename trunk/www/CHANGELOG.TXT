@@ -1,3 +1,52 @@
+? 3.6.1
+- Performance improvements in the new ExtJS 3.3 update.
+- Performance improvements by combining a lot requests to the server and load as
+  little objects as possible.
+- New bookmarks module.
+- New calllog module for simple administration of phone calls.
+- WebDAV and CalDAV support with FreeBusy info.
+- Collapsible sections in all information panels.
+- Separated tasks and events from other links in the information panels.
+- Instead of blocking a user after 5 bad logins it presents a CAPTCHA now.
+- Export of contacts can be disabled for users.
+- Many improvements to the custom fields:
+  1. Option to make a field required.
+  2. Add small help text to the fields.
+  3. Better editing of select fields and an import function for the options.
+  4. New option to allow a multiple selection with select fields.
+  5. New treeselect field. This can be multiple related select fields. The data
+     of the next select field depends on the selection of the other.
+- Linked items show a link icon if they have links attached too.
+- Reminders can be snoozed more easily.
+
+Calendar and Tasks
+- Better support for calendar invitations from other clients such as Outlook and
+  Thunderbird.
+- Drag and drop tasks in tasklists.
+- Project calendars.
+- Improved appearance.
+- List view shows quarters.
+- Show weekdays in the calender month view.
+- Added categories to tasks and events.
+- Automatic holidays to calendar.
+
+E-mail
+- Remind collapsed/expanded folders and accounts in the tree.
+* Easier adding of attachments and inline images.
+- Remind enabled CC/BCC fields.
+- Option to always reply to a read confirmation and always request a read
+  confirmation.
+- When a message is sent to an unknown recipient you can also add the e-mail
+  address to an existing contact. There's also an option to disable adding
+  unknown recipients.
+- New e-mail portlet that can display e-mail folders in different tabs.
+
+Billing
+- The scheduled call for quotes skips weekend and holidays.
+- Added a total column for rows and a markup function.
+
+
+
 2010/10/19 3.5.36
 - Duplicate inline attachment bug
 
