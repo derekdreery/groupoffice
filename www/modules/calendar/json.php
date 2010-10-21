@@ -1134,14 +1134,20 @@ try {
 
 			$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
 
-			if($calendar_user) {
-				$response['user_id']=$calendar['user_id'];
-				$response['name']=$GO_USERS->get_user_realname($calendar['user_id']);
-				$response['email']=$calendar_user['email'];
-				$response['status']="1";
-				$response['is_organizer']="1";
-				$response['available']=$cal->is_available($response['user_id'], $_REQUEST['start_time'], $_REQUEST['end_time'], 0) ? '1' : '0';
+			if($calendar)
+			{
+				$calendar_user = $GO_USERS->get_user($calendar['user_id']);
+				if($calendar_user)
+				{
+					$response['user_id']=$calendar['user_id'];
+					$response['name']=$GO_USERS->get_user_realname($calendar['user_id']);
+					$response['email']=$calendar_user['email'];
+					$response['status']="1";
+					$response['is_organizer']="1";
+					$response['available']=$cal->is_available($response['user_id'], $_REQUEST['start_time'], $_REQUEST['end_time'], 0) ? '1' : '0';
+				}
 			}
+			
 			break;
 
 
