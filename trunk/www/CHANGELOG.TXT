@@ -18,6 +18,7 @@
      of the next select field depends on the selection of the other.
 - Linked items show a link icon if they have links attached too.
 - Reminders can be snoozed more easily.
+- Add new link directly from "New" menu.
 
 Calendar and Tasks
 - Better support for calendar invitations from other clients such as Outlook and
