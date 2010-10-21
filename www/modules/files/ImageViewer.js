@@ -37,7 +37,7 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 			iconCls: 'btn-save',
 			text: GO.lang.download,
 			handler: function(){
-				document.location.replace(this.imgEl.dom.src);
+				document.location.replace(this.viewerImages[this.currentImgIndex].download_path);
 			},
 			scope: this
 		},'-',
@@ -79,18 +79,20 @@ GO.files.ImageViewer = Ext.extend(GO.Window, {
 		this.setTitle(this.viewerImages[index].name);
 		
 		this.currentImgIndex = index;
-		
+
 		if(this.imgEl)
 		{
 			this.imgEl.remove();
 		}
-		
 		this.originalImgSize=false;
 		this.imgEl = this.body.createChild({
 			tag:'img',
 			src: this.viewerImages[index].src,
 			cls:'fs-img-viewer'
 		});
+
+		if (!this.viewerImages[index].download_path)
+			this.viewerImages[index].download_path = this.viewerImages[index].src;
 
 		this.imgEl.initDD(null);
 		

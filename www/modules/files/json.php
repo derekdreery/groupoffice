@@ -822,10 +822,27 @@ try {
 				case 'tif':
 				case 'png':
 				case 'xmind':
-					$response['data']['image'] = get_thumb_url($path,350,0,false);
+					$response['data']['image_src'] = get_thumb_url($path,350,0,false);
+					$response['data']['image_path'] = $path;
+					$response['data']['image_name'] = basename($path);
+					$response['data']['image_extension'] = $extension;
+					if ($extension=='xmind')
+						$response['data']['download_path'] = $GO_MODULES->modules['files']['url'].'download.php?path='.$path;
+					else
+						$response['data']['download_path'] = '';
 					break;
+				/*
+				case 'xmind':
+					$filename_no_ext = substr(basename($path),0,-5);
+					$response['data']['image_src'] = get_thumb_url($path,350,0,false);
+					$response['data']['image_path'] = 'thumbcache/'.basename($filename_no_ext).'jpeg';
+					$response['data']['image_name'] = basename($filename_no_ext).'jpeg';
+					$response['data']['image_extension'] = 'jpeg';
+					break;
+				 *
+				 */
 				default:
-					$response['data']['image'] = '';
+					$response['data']['image_src'] = '';
 				  break;
 			}
 
