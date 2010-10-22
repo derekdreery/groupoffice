@@ -15,6 +15,8 @@
 // settings
 require('../../Group-Office.php');
 
+session_write_close();
+
 if(!isset($GO_MODULES->modules['dav']))
 	die('dav module not installed');
 

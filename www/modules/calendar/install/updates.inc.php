@@ -101,3 +101,6 @@ $updates[]="ALTER TABLE `cal_calendars` ADD `project_id` INT NOT NULL ,
 ADD INDEX ( `project_id` ) ";
 
 $updates[]="ALTER TABLE `cal_events` CHANGE `uuid` `uuid` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+
+$updates[]="ALTER TABLE `cal_calendars` ADD `tasklist_id` INT NOT NULL";
+$updates[]="update cal_calendars set tasklist_id=(SELECT default_tasklist_id  FROM ta_settings WHERE user_id=cal_calendars.user_id);";

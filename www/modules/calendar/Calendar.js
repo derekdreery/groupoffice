@@ -1982,15 +1982,18 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 			this.adminDialog.on('hide', function(){
 				if(this.adminDialog.madeChanges){
-					this.viewsStore.reload();
+					/*this.viewsStore.reload();
 					this.resourcesStore.reload();
 					this.calendarsStore.reload();
 					if(this.projectCalendarsList)
-						this.projectCalendarsStore.reload();
+						this.projectCalendarsStore.reload();*/
+
+					this.init();
 
 					if(GO.calendar.eventDialog){
-						GO.calendar.eventDialog.updateResourcePanel();
-						GO.calendar.eventDialog.selectCalendar.store.reload();
+						GO.calendar.eventDialog.initialized=false;
+						//GO.calendar.eventDialog.updateResourcePanel();
+						//GO.calendar.eventDialog.selectCalendar.store.reload();
 					}					
 					this.adminDialog.madeChanges=false;
 				}
