@@ -1427,12 +1427,12 @@ class tasks extends db
 		$tasklists = $GO_CONFIG->get_setting('tasks_tasklists_filter', $GO_SECURITY->user_id);
 		$tasklists = ($tasklists) ? explode(',',$tasklists) : array();
 		if(!count($tasklists)) {
-			$tasks->get_settings($GO_SECURITY->user_id);
-			$default_tasklist_id = $tasks->f('default_tasklist_id');
+			$this->get_settings($GO_SECURITY->user_id);
+			$default_tasklist_id = $this->f('default_tasklist_id');
 
 			if(!$default_tasklist_id) {
-				$tasks->get_tasklist(0, $GO_SECURITY->user_id);
-				$default_tasklist_id = $tasks->f('id');
+				$this->get_tasklist(0, $GO_SECURITY->user_id);
+				$default_tasklist_id = $this->f('id');
 			}
 
 			if($default_tasklist_id) {
