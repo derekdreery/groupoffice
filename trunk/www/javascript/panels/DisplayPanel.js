@@ -215,10 +215,9 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	},
 	
 	reset : function(){
-		//this.body.removeAllListeners();
 		if(this.body)
-			this.body.update("");
-		
+			this.body.update("");		
+
 		this.data={};
 		this.link_id=this.collapsedLinkId=0;
 		var tbar = this.getTopToolbar();
