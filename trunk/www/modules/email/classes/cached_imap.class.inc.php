@@ -381,7 +381,7 @@ class cached_imap extends imap{
 
 		go_debug("cached_imap::get_message_with_body($uid, $create_temporary_attachment_files, $create_temporary_inline_attachment_files, $peek, $plain_body_requested, $html_body_requested)");
 
-		require_once($GO_LANGUAGE->get_language_file('email'));
+		require($GO_LANGUAGE->get_language_file('email'));
 
 		if($create_temporary_attachment_files || $create_temporary_inline_attachment_files){
 			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
