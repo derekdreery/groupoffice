@@ -327,6 +327,8 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
+		go_debug('getting freebusy info for: '.$email);
+
 		$user = $GO_USERS->get_user_by_email($email);
 
 		if(!$user)
@@ -420,17 +422,16 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		go_debug("createCalendarObject($calendarId,$objectUri,$calendarData)");
 
-		$type = substr($calendarId,0,1);
-		$id = substr($calendarId,2);
+		if(strpos($calendarData, 'VEVENT')!==false){
 
-		if(strpos('VEVENT', $calendarData)){
+			go_debug('item is an event');
 
 			$event = $this->cal->get_event_from_ical_string($calendarData);
 			if (!$event)
 				return false;
 
 			$event['uuid']=$objectUri;
-			$event['calendar_id'] = $id;
+			$event['calendar_id'] = $calendarId;
 
 			$event['mtime']=$dav_event['mtime']=time();
 
@@ -441,22 +442,28 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			$this->cal->insert_row('dav_events', $dav_event);
 		}else
 		{
+			$calendar = $this->cal->get_calendar($calendarId);
+			go_debug('item is a task');
 			$task = $this->tasks->get_task_from_ical_string($calendarData);
 
+			go_debug($task);
+			
 			if (!$task)
 				throw new Sabre_CalDAV_Exception_InvalidICalendarObject ();
 
 			$task['uuid']=$objectUri;
-			$task['tasklist_id'] = $id;
+			$task['tasklist_id'] = $calendar['tasklist_id'];
 
 			$task['mtime']=$dav_task['mtime']=time();
+
+			
 
 			
 
 			//store Tasklist data because we need to reply with the exact client
 			//data
 			$dav_task['id']=$this->tasks->add_task($task);
-			$dav_task['data']=$tasklistData;
+			$dav_task['data']=$calendarData;
 			$this->tasks->insert_row('dav_tasks', $dav_task);
 		}
 	}
@@ -475,10 +482,10 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		go_debug("updateCalendarObject($calendarId,$objectUri,$calendarData)");
 
-		$type = substr($calendarId,0,1);
-		$id = substr($calendarId,2);
 
-		if(strpos('VEVENT', $calendarData)){
+		if(strpos($calendarData,'VEVENT')!==false){
+
+			go_debug('item is an event');
 
 			$event = $this->cal->get_event_from_ical_string($calendarData);
 			if (!$event)
@@ -487,7 +494,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			$goevent = $this->cal->get_event_by_uuid($objectUri);
 
 			$event['id'] = $dav_event['id']= $goevent['id'];
-			$event['calendar_id'] = $id;
+			$event['calendar_id'] = $calendarId;
 
 			$event['mtime']=$dav_event['mtime']=time();
 			$dav_event['data']=$calendarData;
@@ -497,6 +504,8 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			$this->cal->update_event($event);
 		}else
 		{
+			go_debug('item is a task');
+
 			$task = $this->tasks->get_task_from_ical_string($calendarData);
 			if (!$task)
 				return false;
@@ -504,7 +513,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			$gotask = $this->tasks->get_task_by_uuid($objectUri);
 
 			$task['id'] = $dav_task['id']= $gotask['id'];
-			$task['tasklist_id'] = $id;
+			//$task['tasklist_id'] = $id;
 
 			$task['mtime']=$dav_task['mtime']=time();
 			$dav_task['data']=$tasklistData;

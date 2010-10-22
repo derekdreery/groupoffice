@@ -66,9 +66,6 @@ class GO_CalDAV_FreebusyPlugin extends Sabre_DAV_ServerPlugin {
 
 		$body = $this->server->httpRequest->getBody(true);
 
-		go_debug($body);
-
-
 		$node = $this->server->tree->getNodeForPath($this->server->getRequestUri());
 
 		//go_debug($node);
@@ -111,7 +108,8 @@ class GO_CalDAV_FreebusyPlugin extends Sabre_DAV_ServerPlugin {
 
 				//The calendar backend must implement this function
 				$fb = $this->calendarBackend->getFreeBusy($email, $start, $end);
-				if (!$fb) {
+
+				if ($fb===false) {
 					//No freebusy information returned by the backend.
 					//this is usually because the email address did not correspond
 					//to any calendars
