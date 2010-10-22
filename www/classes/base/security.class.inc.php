@@ -115,6 +115,9 @@ class GO_SECURITY extends db {
 					$username = $_SERVER['PHP_AUTH_USER'];
 					$password = $_SERVER['PHP_AUTH_PW'];
 
+					require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
+					$GO_AUTH = new GO_AUTH();
+
 					if($GO_AUTH->login($username, $password)) {
 						go_debug('Logged in using http authentication');
 						$this->http_authenticated_session=$_SESSION['GO_SESSION']['http_authenticated_user']=true;
