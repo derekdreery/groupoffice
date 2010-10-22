@@ -382,3 +382,5 @@ GO.lang.priority='Priority';
 GO.lang.priority_low='Low';
 GO.lang.priority_normal='Normal';
 GO.lang.priority_high='High';
+
+GO.lang.none = 'None';

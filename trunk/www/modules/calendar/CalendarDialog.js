@@ -67,7 +67,44 @@ GO.calendar.CalendarDialog = function(config)
 			name:'comment',
 			anchor:'100%',
 			height:50
-		},{
+		}
+		]
+	});
+
+	if(GO.tasks)
+	{
+		this.tasklistsTab = new GO.calendar.TasklistsGrid({
+			title:GO.tasks.lang.visibleTasklists
+		});
+
+		this.selectTasklist = new GO.form.ComboBoxReset({
+			fieldLabel:'CalDAV '+GO.tasks.lang.tasklist,
+				store:new GO.data.JsonStore({
+				url: GO.settings.modules.tasks.url+'json.php',
+				baseParams: {'task': 'tasklists', 'auth_type':'write'},
+				root: 'results',
+				totalProperty: 'total',
+				id: 'id',
+				fields:['id','name','user_name'],
+				remoteSort:true
+			}),
+			displayField: 'name',
+			valueField: 'id',
+			triggerAction:'all',
+			hiddenName:'tasklist_id',
+			mode:'remote',
+			editable: true,
+			selectOnFocus:true,
+			forceSelection: true,
+			typeAhead: true,
+			emptyText:GO.lang.none,
+			pageSize: parseInt(GO.settings.max_rows_list)
+		});
+
+		this.propertiesTab.add(this.selectTasklist);
+	}
+
+	this.propertiesTab.add([{
 			xtype:'plainfield',
 			fieldLabel:'URL',
 			name:'url',
@@ -80,16 +117,7 @@ GO.calendar.CalendarDialog = function(config)
 				document.location=GO.settings.modules.calendar.url+'export.php?calendar_id='+this.calendar_id;
 			},
 			scope:this
-		})
-		]
-	});
-
-	if(GO.tasks)
-	{
-		this.tasklistsTab = new GO.calendar.TasklistsGrid({
-			title:GO.tasks.lang.visibleTasklists
-		});
-	}
+		})])
 
 	this.readPermissionsTab = new GO.grid.PermissionsPanel({	
 	});
@@ -289,6 +317,9 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 				this.readPermissionsTab.setAcl(action.result.data.acl_id);
 				this.exportButton.setDisabled(false);
 				this.importTab.setDisabled(false);
+
+				if(action.result.data.tasklist_name)
+					this.selectTasklist.setRemoteText(action.result.data.tasklist_name);
 
 				this.showGroups(action.result.data.group_id > 1);
 

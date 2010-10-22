@@ -363,3 +363,5 @@ GO.lang.priority='Prioriteit';
 GO.lang.priority_low='Laag';
 GO.lang.priority_normal='Normaal';
 GO.lang.priority_high='Hoog';
+
+GO.lang.none = 'Geen';

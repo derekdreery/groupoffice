@@ -26,6 +26,12 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		$this->exporter->dont_use_quoted_printable = true;
 
 
+		$this->tasks = new tasks();
+
+		$this->tasks_exporter = new export_tasks('2.0', false);
+		$this->tasks_exporter->dont_use_quoted_printable = true;
+
+
 		$this->importer = new ical2array();
 	}
 
@@ -38,15 +44,8 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
-		if (!isset($_SESSION['GO_SESSION']['dav']['principaluri_map']))
-			$_SESSION['GO_SESSION']['dav']['principaluri_map'] = array();
-
-		if (!isset($_SESSION['GO_SESSION']['dav']['principaluri_map'][$principalUri])) {
-			$user = $GO_USERS->get_user_by_username($principalUri);
-			$_SESSION['GO_SESSION']['dav']['principaluri_map'][$principalUri] = $user['id'];
-		}
-
-		return $_SESSION['GO_SESSION']['dav']['principaluri_map'][$principalUri];
+		$user = $GO_USERS->get_user_by_username($principalUri);
+		return $user['id'];
 	}
 
 	/**
@@ -59,13 +58,23 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		go_debug("c:getCalendarsForUser($principalUri)");
 
-		$this->cal->get_writable_calendars($this->get_user_id($principalUri));		
+		$user_id = $this->get_user_id($principalUri);
+
+		$this->cal->get_writable_calendars($user_id);
 
 		$calendars = array();
 		while ($gocal = $this->cal->next_record()) {
 			$calendar = $this->recordToDAVCalendar($gocal, $principalUri);
 			$calendars[] = $calendar;
 		}
+
+
+		/*$this->tasks->get_authorized_tasklists('read','', $user_id);
+
+		while ($gocal = $this->tasks->next_record()) {
+			$tasklist = $this->tasklistRecordToDAVCalendar($gocal, $principalUri);
+			$calendars[] = $tasklist;
+		}*/
 
 		return $calendars;
 	}
@@ -79,20 +88,32 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		preg_match('/-([0-9]+)$/', $calendarUri, $matches);
 
+		$id=$matches[1];
 
-		if($matches[1]){
-			$calendar = $this->cal->get_calendar($matches[1]);
-		}
+		//if(substr($calendarUri,0,8)=='calendar'){
+			$calendar = $this->cal->get_calendar($id);
+				
 		
-		
-		if(!$calendar)
-			throw new Sabre_DAV_Exception_FileNotFound('File not found: ' . $calendarUri);
-		
-		global $GO_SECURITY;
-		if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
-				throw new Sabre_DAV_Exception_Forbidden ('Access denied for '.$calendarUri);
+			if(!$calendar)
+				throw new Sabre_DAV_Exception_FileNotFound('File not found: ' . $calendarUri);
 
-		return $this->recordToDAVCalendar($calendar, $principalUri);
+			global $GO_SECURITY;
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+					throw new Sabre_DAV_Exception_Forbidden ('Access denied for '.$calendarUri);
+
+			return $this->recordToDAVCalendar($calendar, $principalUri);
+		/*}else
+		{
+			$tasklist = $this->tasks->get_tasklist($id);
+			if(!$tasklist)
+				throw new Sabre_DAV_Exception_FileNotFound('File not found: ' . $calendarUri);
+
+			global $GO_SECURITY;
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+					throw new Sabre_DAV_Exception_Forbidden ('Access denied for '.$calendarUri);
+
+			return $this->tasklistRecordToDAVCalendar($tasklist, $principalUri);
+		}*/
 	}
 
 	private function getTimezone(){
@@ -108,7 +129,10 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		$db->query("SELECT max(mtime) AS mtime, COUNT(*) AS count FROM cal_events WHERE calendar_id=?", 'i', $gocal['id']);
 		$r = $db->next_record();
 
+		$supportedComponents = array('VEVENT');
 
+		if($gocal['tasklist_id']>0)
+			$supportedComponents[]='VTODO';
 
 		return array(
 					'id' => $gocal['id'],
@@ -118,7 +142,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 					'size'=> $r['count'],
 					'mtime'=>$r['mtime'],
 					'{' . Sabre_CalDAV_Plugin::NS_CALENDARSERVER . '}getctag' => $r['count'] . ':' . $r['mtime'],
-					'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VEVENT')),
+					'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet($supportedComponents),
 					'{DAV:}displayname' => $gocal['name'],
 					'{urn:ietf:params:xml:ns:caldav}calendar-description' => 'User calendar',
 					'{urn:ietf:params:xml:ns:caldav}calendar-timezone' => $this->getTimezone(),
@@ -126,6 +150,31 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 					'{http://apple.com/ns/ical/}calendar-color' => '#2952A3'
 			);
 	}
+
+	/*private function tasklistRecordToDAVCalendar($gocal, $principalUri){
+		$db = new db();
+		$db->query("SELECT max(mtime) AS mtime, COUNT(*) AS count FROM ta_tasks WHERE tasklist_id=?", 'i', $gocal['id']);
+		$r = $db->next_record();
+
+		//$components = explode(',',$row['components']);
+
+		$tasklist = array(
+				'id' => 't:'.$gocal['id'],
+				'uri' =>
+				'principaluri' => $principalUri,
+				'size'=> $r['count'],
+				'mtime'=>$r['mtime'],
+				'{' . Sabre_CalDAV_Plugin::NS_CALENDARSERVER . '}getctag' => $r['count'] . ':' . $r['mtime'],
+				'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VTODO')),
+				'{DAV:}displayname' => '[T] '.$gocal['name'],
+				'{urn:ietf:params:xml:ns:caldav}calendar-description' => 'User Tasklist',
+				'{urn:ietf:params:xml:ns:caldav}calendar-timezone' => $this->getTimezone(),
+				'{http://apple.com/ns/ical/}calendar-order' => $gocal['id']+100,
+				'{http://apple.com/ns/ical/}calendar-color' => '#2952A3'
+		);
+
+		return $tasklist;
+	}*/
 
 	/**
 	 * Creates a new calendar for a principal.
@@ -206,6 +255,10 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		go_debug("c:getCalendarObjects($calendarId)");
 
 		$objects = array();
+
+
+		$calendar = $this->cal->get_calendar($calendarId);
+
 		$this->cal->get_events(array($calendarId),0, Date::date_add(time(), 0, -1));
 		while ($event = $this->cal->next_record()) {
 
@@ -224,9 +277,35 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 					'id' => $event['id'],
 					'uri' => $event['uuid'],
 					'calendardata' => $this->exporter->export_event($event['id']),
-					'calendarid' => $calendarId,
+					'calendarid' => 'c:'.$calendarId,
 					'lastmodified' => date('Ymd H:i:s', $event['mtime'])
 			);
+		}
+
+		if($calendar['tasklist_id']>0)
+		{
+			$sql = "SELECT * FROM ta_tasks WHERE tasklist_id=? AND (completion_time=0 OR due_time>?)";
+			$this->tasks->query($sql, 'ii', array($calendar['tasklist_id'], Date::date_add(time(),0,-1)));
+			while ($task = $this->tasks->next_record()) {
+
+				if (empty($task['uuid'])) {
+
+					if(!isset($db))
+						$db = new db();
+
+					$task['uuid'] = $ue['uuid'] = UUID::create('task', $task['id']);
+					$ue['id'] = $task['id'];
+					$db->update_row('ta_tasks', 'id', $ue);
+				}
+
+				$objects[] = array(
+						'id' => $task['id'],
+						'uri' => $task['uuid'],
+						'calendardata' => $this->tasks_exporter->export_task($task['id']),
+						'calendarid' => 't:'.$calendarId,
+						'lastmodified' => date('Ymd H:i:s', $task['mtime'])
+				);
+			}
 		}
 
 		return $objects;
@@ -280,6 +359,8 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		 * client data in a separate table and if the mtime's match we use that.
 		 */
 
+
+
 		$sql = "SELECT e.uuid,e.id,e.mtime, d.mtime AS client_mtime, d.data  FROM cal_events e LEFT JOIN dav_events d ON d.id=e.id WHERE e.uuid=?";
 		$this->cal->query($sql, 's', $objectUri);
 		$event = $this->cal->next_record();
@@ -288,6 +369,9 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		//$event = $this->cal->get_event_by_uuid($objectUri);
 		if ($event) {
+
+			go_debug('Found event');
+
 			$object = array(
 					'id' => $event['id'],
 					'uri' => $event['uuid'],
@@ -295,10 +379,33 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 					'calendarid' => $calendarId,
 					'lastmodified' => date('Ymd H:i:s', $event['mtime'])
 			);
-			go_debug($object);
+			//go_debug($object);
 			return $object;
+		} else {
+
+			$sql = "SELECT e.*, d.mtime AS client_mtime, d.data  FROM ta_tasks e LEFT JOIN dav_tasks d ON d.id=e.id WHERE e.uuid=?";
+			$this->tasks->query($sql, 's', $objectUri);
+			$task = $this->tasks->next_record();
+
+			//go_debug($task);
+
+			$data = ($task['mtime']==$task['client_mtime']) ? $task['data'] : $this->tasks_exporter->export_task($task);
+
+			//$task = $this->tasks->get_task_by_uuid($objectUri);
+			if ($task) {
+				go_debug('Found task');
+				$object = array(
+						'id' => $task['id'],
+						'uri' => $task['uuid'],
+						'calendardata' => $data,
+						'calendarid' => $calendarId,
+						'lastmodified' => date('Ymd H:i:s', $task['mtime'])
+				);
+				//go_debug($object);
+				return $object;
+			}
 		}
-		return false;
+		throw new Sabre_DAV_Exception_FileNotFound('File not found');
 	}
 
 	/**
@@ -313,20 +420,45 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		go_debug("createCalendarObject($calendarId,$objectUri,$calendarData)");
 
-		$event = $this->cal->get_event_from_ical_string($calendarData);
-		if (!$event)
-			return false;
+		$type = substr($calendarId,0,1);
+		$id = substr($calendarId,2);
 
-		$event['uuid']=$objectUri;
-		$event['calendar_id'] = $calendarId;
-	
-		$event['mtime']=$dav_event['mtime']=time();
-		
-		//store calendar data because we need to reply with the exact client
-		//data
-		$dav_event['id']=$this->cal->add_event($event);
-		$dav_event['data']=$calendarData;
-		$this->cal->insert_row('dav_events', $dav_event);
+		if(strpos('VEVENT', $calendarData)){
+
+			$event = $this->cal->get_event_from_ical_string($calendarData);
+			if (!$event)
+				return false;
+
+			$event['uuid']=$objectUri;
+			$event['calendar_id'] = $id;
+
+			$event['mtime']=$dav_event['mtime']=time();
+
+			//store calendar data because we need to reply with the exact client
+			//data
+			$dav_event['id']=$this->cal->add_event($event);
+			$dav_event['data']=$calendarData;
+			$this->cal->insert_row('dav_events', $dav_event);
+		}else
+		{
+			$task = $this->tasks->get_task_from_ical_string($calendarData);
+
+			if (!$task)
+				throw new Sabre_CalDAV_Exception_InvalidICalendarObject ();
+
+			$task['uuid']=$objectUri;
+			$task['tasklist_id'] = $id;
+
+			$task['mtime']=$dav_task['mtime']=time();
+
+			
+
+			//store Tasklist data because we need to reply with the exact client
+			//data
+			$dav_task['id']=$this->tasks->add_task($task);
+			$dav_task['data']=$tasklistData;
+			$this->tasks->insert_row('dav_tasks', $dav_task);
+		}
 	}
 
 
@@ -343,21 +475,43 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		go_debug("updateCalendarObject($calendarId,$objectUri,$calendarData)");
 
-		$event = $this->cal->get_event_from_ical_string($calendarData);
-		if (!$event)
-			return false;
+		$type = substr($calendarId,0,1);
+		$id = substr($calendarId,2);
 
-		$goevent = $this->cal->get_event_by_uuid($objectUri);
+		if(strpos('VEVENT', $calendarData)){
 
-		$event['id'] = $dav_event['id']= $goevent['id'];
-		$event['calendar_id'] = $calendarId;
+			$event = $this->cal->get_event_from_ical_string($calendarData);
+			if (!$event)
+				return false;
 
-		$event['mtime']=$dav_event['mtime']=time();
-		$dav_event['data']=$calendarData;
+			$goevent = $this->cal->get_event_by_uuid($objectUri);
 
-		$this->cal->update_row('dav_events', 'id', $dav_event);
+			$event['id'] = $dav_event['id']= $goevent['id'];
+			$event['calendar_id'] = $id;
 
-		$this->cal->update_event($event);
+			$event['mtime']=$dav_event['mtime']=time();
+			$dav_event['data']=$calendarData;
+
+			$this->cal->update_row('dav_events', 'id', $dav_event);
+
+			$this->cal->update_event($event);
+		}else
+		{
+			$task = $this->tasks->get_task_from_ical_string($calendarData);
+			if (!$task)
+				return false;
+
+			$gotask = $this->tasks->get_task_by_uuid($objectUri);
+
+			$task['id'] = $dav_task['id']= $gotask['id'];
+			$task['tasklist_id'] = $id;
+
+			$task['mtime']=$dav_task['mtime']=time();
+			$dav_task['data']=$tasklistData;
+
+			$this->tasks->update_row('dav_tasks', 'id', $dav_task);
+			$this->tasks->update_task($task);
+		}
 	}
 
 	/**
@@ -371,7 +525,11 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		go_debug("deleteCalendarObject($calendarId,$objectUri)");
 
 		$goevent = $this->cal->get_event_by_uuid($objectUri);
-		$this->cal->delete_event($goevent['id']);
+		if($goevent){
+			$this->cal->delete_event($goevent['id']);
+		}else{
+			$gotask = $this->tasks->get_task_by_uuid($objectUri);
+			$this->tasks->delete_task($gotask['id']);
+		}
 	}
-
 }

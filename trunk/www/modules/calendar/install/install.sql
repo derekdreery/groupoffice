@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
   `show_bdays` tinyint(1) NOT NULL,
   `comment` varchar(255) NOT NULL,
   `project_id` int(11) NOT NULL,
+  `tasklist_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   KEY `group_id` (`group_id`),
   KEY `project_id` (`project_id`)

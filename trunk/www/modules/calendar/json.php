@@ -1062,6 +1062,20 @@ try {
 				'group_id'=>$response['data']['group_id'])
 					),'ready');
 
+			if(isset($GO_MODULES->modules['tasks']) && $response['data']['tasklist_id']>0){
+				require_once ($GO_MODULES->modules['tasks']['class_path'].'tasks.class.inc.php');
+				$tasks = new tasks();
+
+				$tasklist = $tasks->get_tasklist($response['data']['tasklist_id']);
+				if($tasklist)
+					$response['data']['tasklist_name']=$tasklist['name'];
+				else
+					$response['data']['tasklist_id']='';
+			}else
+			{
+				$response['data']['tasklist_id']='';
+			}
+
 			$response['data']['url']='<a class="normal-link" target="_blank" href="'.$url.'">'.$lang['calendar']['rightClickToCopy'].'</a>';
 
 			$response['success']=true;
@@ -1429,6 +1443,7 @@ try {
 				$tasklist['id'] = $tasks->f('id');
 				$tasklist['name'] = $tasks->f('name');
 				$tasklist['visible'] = (in_array($tasklist['id'], $visible_lists));
+
 
 				$response['results'][] = $tasklist;
 			}

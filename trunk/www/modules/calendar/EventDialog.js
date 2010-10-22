@@ -221,7 +221,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		this.win.show();
 
-		if(!this.inititalized){
+		if(!this.initialized){
 
 			this.win.getEl().mask(GO.lang.waitMsgLoad);
 			Ext.Ajax.request({
@@ -248,7 +248,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						
 						this.win.getEl().unmask();
 
-						this.inititalized=true;
+						this.initialized=true;
 						this.show(config);
 
 					}

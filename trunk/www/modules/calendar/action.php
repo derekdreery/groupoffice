@@ -945,6 +945,7 @@ try {
 			$calendar['name']=$_POST['name'];
 
 			$calendar['comment']=$_POST['comment'];
+			$calendar['tasklist_id']=$_POST['tasklist_id'];
 
 
 			if(empty($calendar['name'])) {

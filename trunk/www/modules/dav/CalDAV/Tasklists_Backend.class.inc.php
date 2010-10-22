@@ -328,7 +328,7 @@ class GO_CalDAV_Tasklists_Backend extends Sabre_CalDAV_Backend_Abstract {
 		$gotask = $this->tasks->get_task_by_uuid($objectUri);
 
 		$task['id'] = $dav_task['id']= $gotask['id'];
-		$task['Tasklist_id'] = $tasklistId;
+		$task['tasklist_id'] = $tasklistId;
 
 		$task['mtime']=$dav_task['mtime']=time();
 		$dav_task['data']=$tasklistData;
