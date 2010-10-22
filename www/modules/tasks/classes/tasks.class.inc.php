@@ -329,6 +329,20 @@ class tasks extends db
 				$this->update_settings(array('user_id'=>$GO_SECURITY->user_id, 'default_tasklist_id'=>$list_id));
 				$tasklist=$this->get_tasklist($list_id);
 			}
+
+			global $GO_MODULES;
+			if($GO_MODULES->has_module('calendar')){
+				require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
+				$cal = new calendar();
+				$cal_settings = $cal->get_settings($user_id);
+
+				if($cal_settings['calendar_id']>0){
+					$up_calendar['id']=$cal_settings['calendar_id'];
+					$up_calendar['tasklist_id']=$tasklist['id'];
+					$this->update_row('cal_calendars', 'id', $up_calendar);
+				}
+
+			}
 		}
 
 		return $tasklist;
@@ -354,8 +368,8 @@ class tasks extends db
 
 			$user_id = !empty($user_id) ? $user_id : $GO_SECURITY->user_id;
 
-			$tasklist = $this->get_default_tasklist($user_id);
-			if ($tasklist)
+			return  $this->get_default_tasklist($user_id);
+			/*if ($tasklist)
 			{
 				return $tasklist;
 			}else
@@ -388,7 +402,7 @@ class tasks extends db
 					$this->update_settings(array('user_id'=>$GO_SECURITY->user_id, 'default_tasklist_id'=>$list_id));
 					return $this->get_tasklist($list_id);
 				}
-			}
+			}*/
 		}
 	}
 
@@ -1173,14 +1187,16 @@ class tasks extends db
 		
 		$tasks = new tasks();
 
-		$tasklist['name']=String::format_name($user);
-		$tasklist['user_id']=$user['id'];
-		$tasklist['acl_id']=$GO_SECURITY->get_new_acl('tasks', $user['id']);
+		//$tasklist['name']=String::format_name($user);
+		//$tasklist['user_id']=$user['id'];
+		//$tasklist['acl_id']=$GO_SECURITY->get_new_acl('tasks', $user['id']);
 
-		$tasklist_id = $tasks->add_tasklist($tasklist);
+		//$tasklist_id = $tasks->add_tasklist($tasklist);
+
+		$tasklist = $tasks->get_default_tasklist($user['id']);
 		
 		if(isset($GO_MODULES->modules['summary'])){
-			$tasks->add_visible_tasklist(array('user_id'=>$user['id'], 'tasklist_id'=>$tasklist_id));
+			$tasks->add_visible_tasklist(array('user_id'=>$user['id'], 'tasklist_id'=>$tasklist['id']));
 		}
 	}
 

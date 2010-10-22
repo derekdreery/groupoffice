@@ -787,11 +787,22 @@ class calendar extends db {
 
 	function get_default_calendar($user_id) {
 
+		$settings = $this->get_settings($user_id);
+
+		if(!empty($settings['calendar_id'])){
+			$calendar = $this->get_calendar($settings['calendar_id']);
+			if($calendar)
+				return $calendar;
+		}
+
 
 
 		$this->get_user_calendars($user_id, 0, 1);
-		if($this->next_record(DB_ASSOC)) {
-			return $this->record;
+		if($calendar = $this->next_record(DB_ASSOC)) {
+
+			$this->update_row('cal_settings', 'user_id', array('user_id'=>$user_id, 'calendar_id'=>$calendar['id']));
+
+			return $calendar;
 		}else {
 			global $GO_SECURITY;
 
@@ -806,7 +817,7 @@ class calendar extends db {
 			}
 			$calendar_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$calendar['name'] = $calendar_name;
-			$calendar['acl_id']=$GO_SECURITY->get_new_acl();
+			$calendar['acl_id']=$GO_SECURITY->get_new_acl($user_id);
 			$x = 1;
 			while($this->get_calendar_by_name($calendar['name'])) {
 				$calendar['name'] = $calendar_name.' ('.$x.')';
@@ -814,9 +825,22 @@ class calendar extends db {
 			}
 
 			$calendar['name'] = $calendar['name'];
+
+
+			global $GO_MODULES;
+			if($GO_MODULES->has_module('tasks')){
+				require_once($GO_MODULES->modules['tasks']['class_path'].'tasks.class.inc.php');
+				$tasks = new tasks();
+				$tasks_settings = $tasks->get_settings($user_id);
+				$calendar['tasklist_id']=$tasks_settings['default_tasklist_id'];
+			}
+
 			if (!$calendar_id = $this->add_calendar($calendar)) {
 				throw new DatabaseInsertException();
 			}else {
+
+				$this->update_row('cal_settings', 'user_id', array('user_id'=>$user_id, 'calendar_id'=>$calendar_id));
+
 				return $this->get_calendar($calendar_id);
 			}
 		}
@@ -1843,6 +1867,8 @@ class calendar extends db {
 			}
 		}
 
+		$event['busy']=true;
+
 		$event['uid'] = (isset($object['UID']['value']) && $object['UID']['value'] != '') ? trim($object['UID']['value']) : '';
 
 		$event['sequence'] = (isset($object['SEQUENCE']['value']) && $object['SEQUENCE']['value'] != '') ? trim($object['SEQUENCE']['value']) : 0;
@@ -2162,14 +2188,16 @@ class calendar extends db {
 
 		$cal = new calendar();
 
-		$calendar['name']=String::format_name($user,'','','last_name');
-		$calendar['user_id']=$user['id'];
-		$calendar['acl_id']=$GO_SECURITY->get_new_acl('calendar', $user['id']);
+		//$calendar['name']=String::format_name($user,'','','last_name');
+		//$calendar['user_id']=$user['id'];
+		//$calendar['acl_id']=$GO_SECURITY->get_new_acl('calendar', $user['id']);
+
+		$calendar = $cal->get_default_calendar($user['id']);
 
 
 		$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_internal, $calendar['acl_id'],2);
 
-		$calendar_id = $cal->add_calendar($calendar);
+		//$calendar_id = $cal->add_calendar($calendar);
 
 		require($GO_LANGUAGE->get_language_file('calendar'));
 
@@ -2181,11 +2209,11 @@ class calendar extends db {
 			$count = $cal2->get_view_calendars($view_id);
 
 			if($count<=20)
-				$cal2->add_calendar_to_view($calendar_id, '', $view_id);
+				$cal2->add_calendar_to_view($calendar['id'], '', $view_id);
 		}
 
 		if(isset($GO_MODULES->modules['summary'])) {
-			$cal2->add_visible_calendar(array('user_id'=>$user['id'], 'calendar_id'=>$calendar_id));
+			$cal2->add_visible_calendar(array('user_id'=>$user['id'], 'calendar_id'=>$calendar['id']));
 		}
 
 	}
