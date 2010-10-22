@@ -8,6 +8,8 @@ $cal = new calendar();
 $event_id=4166;
 
 $go_ical = new go_ical('2.0', true);
-$ical_event = $go_ical->export_event($event_id);
+//$ical_event = $go_ical->export_event($event_id);
+//var_dump($ical_event);
 
-var_dump($ical_event);
+echo $tz = $go_ical->export_timezone();
+

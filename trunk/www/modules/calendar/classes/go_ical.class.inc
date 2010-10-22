@@ -58,6 +58,44 @@ class go_ical extends calendar
 			"METHOD:".$method.$this->line_break;
 	}
 
+	function export_timezone($timezone=null){
+
+		if(!isset($timezone))
+			$timezone = date_default_timezone_get ();
+
+		$tz = new DateTimeZone($_SESSION['GO_SESSION']['timezone']);
+		$transitions = $tz->getTransitions();
+		$start_of_year = mktime(0,0,0,1,1);
+
+		for($i=0,$max=count($transitions);$i<$max;$i++) {
+			if($transitions[$i]['ts']>$start_of_year) {
+				$dst_end = $transitions[$i];
+				$dst_start = $transitions[$i+1];
+				break;
+			}
+		}
+		
+		$t="BEGIN:VTIMEZONE" . $this->line_break .
+				"TZID:" . $tz->getName() . $this->line_break .
+				"LAST-MODIFIED:19870101T000000Z" . $this->line_break .
+				"BEGIN:STANDARD" . $this->line_break .
+				"DTSTART:19671029T020000" . $this->line_break .
+				"RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=".date('n', $dst_end['ts']). $this->line_break .
+				"TZOFFSETFROM:-".date('H', $dst_start['ts'])."00" . $this->line_break .
+				"TZOFFSETTO:-".date('H', $dst_end['ts'])."00" . $this->line_break .
+				"TZNAME:".$tz->getName() ." Standard". $this->line_break .
+				"END:STANDARD" . $this->line_break .
+				"BEGIN:DAYLIGHT" . $this->line_break .
+				"DTSTART:19870405T020000" . $this->line_break .
+				"RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=".date('n', $dst_start['ts']). $this->line_break .
+				"TZOFFSETFROM:-".date('H', $dst_end['ts'])."00" . $this->line_break .
+				"TZOFFSETTO:-".date('H', $dst_start['ts'])."00" . $this->line_break .
+				"TZNAME:".$tz->getName() ." DST" . $this->line_break .
+				"END:DAYLIGHT" . $this->line_break .
+				"END:VTIMEZONE" . $this->line_break;
+		return $t;
+	}	
+
 	function set_method($method)
 	{
 		$this->calendar_properties .= "METHOD:".$method.$this->line_break;
