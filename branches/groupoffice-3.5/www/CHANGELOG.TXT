@@ -1,3 +1,8 @@
+2010/10/19 3.5.37
+- Bug in adding contacts
+- Better way of syncing the second address line with Outlook
+- GOTA uses home dir for temporary files now instead of the temp dir.
+
 2010/10/19 3.5.36
 - Duplicate inline attachment bug
 
