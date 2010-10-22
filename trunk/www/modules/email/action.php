@@ -1242,6 +1242,8 @@ try {
 							if(isset($participant['is_organizer']) && $participant['is_organizer'])
 							{
 								$organizer_email = $participant_email;
+								if(!String::validate_email($organizer_email))
+									$organizer_email=$_POST['email_sender'];
 							}
 
 							$user = $GO_USERS->get_user_by_email($participant['email']);
@@ -1296,8 +1298,12 @@ try {
 						if(isset($participant['is_organizer']) && $participant['is_organizer'])
 						{
 							$organizer_email = $participant_email;
+							break;
 						}
 					}
+
+					if(!String::validate_email($organizer_email))
+						$organizer_email=$_POST['email_sender'];
 
 					if(!isset($lang['calendar'])) {
 						global $GO_LANGUAGE;
