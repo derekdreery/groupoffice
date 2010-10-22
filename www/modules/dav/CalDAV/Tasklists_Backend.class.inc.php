@@ -29,6 +29,9 @@ class GO_CalDAV_Tasklists_Backend extends Sabre_CalDAV_Backend_Abstract {
 	}
 
 	private function get_user_id($principalUri) {
+
+		$principalUri = str_replace('principals/', '', $principalUri);
+		
 		if (!isset($_SESSION['GO_SESSION']['dav']['principaluri_map']))
 			$_SESSION['GO_SESSION']['dav']['principaluri_map'] = array();
 
@@ -69,6 +72,13 @@ class GO_CalDAV_Tasklists_Backend extends Sabre_CalDAV_Backend_Abstract {
 		return $tasklists;
 	}
 
+	private function getTimezone(){
+		if(!isset($this->timezone)){
+			$this->timezone=$this->exporter->export_timezone();
+		}
+		return $this->timezone;
+	}
+
 	private function recordToDAVCalendar($gocal, $principalUri){
 		$db = new db();
 		$db->query("SELECT max(mtime) AS mtime, COUNT(*) AS count FROM ta_tasks WHERE tasklist_id=?", 'i', $gocal['id']);
@@ -79,15 +89,15 @@ class GO_CalDAV_Tasklists_Backend extends Sabre_CalDAV_Backend_Abstract {
 		$tasklist = array(
 				'id' => $gocal['id'],
 				'uri' => preg_replace('/[^\w-]*/', '', (strtolower(str_replace(' ', '-', $gocal['name'])))).'-'.$gocal['id'],
-				'principaluri' => 'principals/'.$principalUri,
+				'principaluri' => $principalUri,
 				'size'=> $r['count'],
 				'mtime'=>$r['mtime'],
 				'{' . Sabre_CalDAV_Plugin::NS_CALENDARSERVER . '}getctag' => $r['count'] . ':' . $r['mtime'],
 				'{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VTODO')),
 				'{DAV:}displayname' => $gocal['name'],
 				'{urn:ietf:params:xml:ns:caldav}calendar-description' => 'User Tasklist',
-				'{urn:ietf:params:xml:ns:caldav}calendar-timezone' => date_default_timezone_get(),
-				'{http://apple.com/ns/ical/}calendar-order' => '0',
+				'{urn:ietf:params:xml:ns:caldav}calendar-timezone' => $this->getTimezone(),
+				'{http://apple.com/ns/ical/}calendar-order' => $gocal['id'],
 				'{http://apple.com/ns/ical/}calendar-color' => ''
 		);
 

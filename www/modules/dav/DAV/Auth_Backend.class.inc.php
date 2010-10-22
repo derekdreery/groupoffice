@@ -172,7 +172,7 @@ go_debug('Fetching users from database');
 	private function recordToDAVUser($record){
 
 		return array(
-			'uri'=>$record['username'],
+			'uri'=>'principals/'.$record['username'],
 			'{http://sabredav.org/ns}email-address'=>$record['email'],
 			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$record['username'].'/inbox'),
 			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$record['username'].'/outbox')
