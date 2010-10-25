@@ -133,6 +133,6 @@ GO.calendar.lang.sendInvitationInitial='Would you like to send meeting invitatio
 GO.calendar.lang.sendInvitationUpdate='Would you like to send updated meeting information to participants?';
 GO.calendar.lang.sendCancellation='Would you like to send all the participants a cancelation notice?';
 
-GO.calendar.lang.forthcomingAppointments='Forthcomming appointments';
+GO.calendar.lang.forthcomingAppointments='Forthcoming appointments';
 
 GO.calendar.lang.quarterShort = 'Q';
