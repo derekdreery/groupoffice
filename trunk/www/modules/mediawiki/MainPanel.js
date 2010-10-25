@@ -15,23 +15,40 @@ GO.mediawiki.MainPanel = function(config){
 				GO.mediawiki.iFrameComponent.setUrl(GO.mediawiki.settings.externalUrl);
 			},
 			scope: this
-		}),
-		'-',
-		this.settingsButton = new Ext.Button({
-			iconCls: 'btn-settings',
-			text: GO.lang.administration,
-			cls: 'x-btn-text-icon',
-			handler: function(){
-				if(!this.settingsDialog)
-				{
-					this.settingsDialog = new GO.mediawiki.SettingsDialog();
-				}
-				this.settingsDialog.show();
-			},
-			scope: this
 		})
 		]
 		});
+
+	if(GO.settings.has_admin_permission)
+	{
+		Ext.Ajax.request({
+			url: GO.settings.modules.mediawiki.url + 'json.php',
+			params: {task:'authenticate'},
+			scope: this,
+			success: function(response,options) {
+				var responseParams = Ext.decode(response.responseText);
+				if (responseParams.success) {
+					config.tbar.addItem('-');
+					this.settingsButton = new Ext.Button({
+						iconCls: 'btn-settings',
+						text: GO.lang.administration,
+						cls: 'x-btn-text-icon',
+						handler: function(){
+							if(!this.settingsDialog)
+							{
+								this.settingsDialog = new GO.mediawiki.SettingsDialog();
+							}
+							this.settingsDialog.show();
+						},
+						scope: this
+					});
+					config.tbar.addItem(this.settingsButton);
+				} else {
+					Ext.Msg.alert(GO.lang['strError'], responseParams.feedback);
+				}
+			}
+		});
+	}
 
 	GO.mediawiki.iFrameComponent = new GO.panel.IFrameComponent({
 		url: GO.mediawiki.settings.externalUrl
