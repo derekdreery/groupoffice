@@ -30,14 +30,14 @@ GO.calllog.CallDialog = function(config){
 			this.submitForm(true)
 		},
 		scope: this
-	},{
+	},/*{
 		text:GO.lang['cmdApply'],
 		handler: function()
 		{
 			this.submitForm(false)
 		},
 		scope: this
-	},{
+	},*/{
 		text:GO.lang['cmdClose'],
 		handler: function()
 		{

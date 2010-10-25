@@ -41,13 +41,13 @@ GO.notes.NoteDialog = function(config){
 			this.submitForm(true);
 		},
 		scope: this
-	},{
+	},/*{
 		text: GO.lang['cmdApply'],
 		handler: function(){
 			this.submitForm();
 		},
 		scope:this
-	},{
+	},*/{
 		text: GO.lang['cmdClose'],
 		handler: function(){
 			this.hide();
