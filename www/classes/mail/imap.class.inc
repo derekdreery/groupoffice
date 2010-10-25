@@ -889,20 +889,16 @@ class imap extends imap_bodystruct {
 						"DATE CONTENT-TYPE X-PRIORITY TO CC";
 
 		if($full_data)
-			$command .= " BCC REPLY-TO DISPOSITION-NOTIFICATION-TO CONTENT-TRANSFER-ENCODING";
+			$command .= " BCC REPLY-TO DISPOSITION-NOTIFICATION-TO CONTENT-TRANSFER-ENCODING MESSAGE-ID";
 
 		$command .= ")])\r\n";
-
-		//throw new Exception($command);
 		
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 
-		
-
 		$status = $this->check_response($res, true);
 		$tags = array('UID' => 'uid', 'FLAGS' => 'flags', 'RFC822.SIZE' => 'size', 'INTERNALDATE' => 'internal_date');
-		$junk = array('SUBJECT', 'FROM', 'CONTENT-TYPE', 'TO', 'CC','BCC', '(', ')', ']', 'X-PRIORITY', 'DATE','REPLY-TO','DISPOSITION-NOTIFICATION-TO','CONTENT-TRANSFER-ENCODING');
+		$junk = array('SUBJECT', 'FROM', 'CONTENT-TYPE', 'TO', 'CC','BCC', '(', ')', ']', 'X-PRIORITY', 'DATE','REPLY-TO','DISPOSITION-NOTIFICATION-TO','CONTENT-TRANSFER-ENCODING', 'MESSAGE-ID');
 		//$flds = array('uid','flags','size','internal_date','answered','seen','','reply-to', 'content-type','x-priority','disposition-notification-to');
 		$headers = array();
 		foreach ($res as $n => $vals) {
@@ -921,6 +917,7 @@ class imap extends imap_bodystruct {
 					'internal_udate'=>'',
 					'x-priority'=>3,
 					'reply-to'=>'',
+					'message-id'=>'',
 					'content-type'=>'',
 					'disposition-notification-to'=>'',
 					'content-transfer-encoding'=>'',
@@ -933,9 +930,6 @@ class imap extends imap_bodystruct {
 
 				$count = count($vals);
 				for ($i=0;$i<$count;$i++) {
-
-					//go_debug($vals[$i]);
-
 					if ($vals[$i] == 'BODY[HEADER.FIELDS') {
 						$i++;
 						while(isset($vals[$i]) && in_array($vals[$i], $junk)) {
@@ -946,9 +940,10 @@ class imap extends imap_bodystruct {
 						$header = preg_replace("/\n\s/", " ", $header);
 
 						$lines = explode("\n", $header);
+
 						foreach ($lines as $line) {
 							if(!empty($line)) {
-								$header = trim(strtolower(substr($line, 0, strpos($line, ':'))));	
+								$header = trim(strtolower(substr($line, 0, strpos($line, ':'))));
 
 								if (!$header && !empty($last_header)) {
 									$message[$last_header] .= "\n".trim($line);
@@ -1025,6 +1020,8 @@ class imap extends imap_bodystruct {
 				$final_headers[$v] = $headers[$v];
 			}
 		}
+
+		go_debug($final_headers);
 		return $final_headers;
 	}
 
@@ -1478,7 +1475,7 @@ class imap extends imap_bodystruct {
 		$this->send_command($command);
 		$result = fgets($this->handle);
 
-		go_debug($result);
+		//go_debug($result);
 		$size = false;
 		if (preg_match("/\{(\d+)\}\r\n/", $result, $matches)) {
 			$size = $matches[1];

@@ -328,7 +328,7 @@ try {
 					);
 
 					if(!empty($_POST['reply_uid']))
-						$swift->set_reply_to($_POST['reply_uid'],$_POST['reply_mailbox']);
+						$swift->set_reply_to($_POST['reply_uid'],$_POST['reply_mailbox'], $_POST['in_reply_to']);
 
 					if(!empty($_POST['forward_uid']))
 						$swift->set_forward_uid($_POST['forward_uid'],$_POST['forward_mailbox']);
