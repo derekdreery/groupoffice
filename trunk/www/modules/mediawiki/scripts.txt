@@ -1,2 +1,2 @@
 modules/mediawiki/MainPanel.js
-modules/mediawiki/SecureIframeComponent.js
+modules/mediawiki/SettingsDialog.js
