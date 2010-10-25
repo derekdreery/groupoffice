@@ -39,6 +39,10 @@ try{
 
 			break;
 
+		case 'authenticate':
+			$response['success'] = $GO_MODULES->modules['mediawiki']['write_permission'];
+			break;
+
 /* {TASKSWITCH} */
 	}
 }catch(Exception $e)
