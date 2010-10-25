@@ -450,6 +450,8 @@ class cached_imap extends imap{
 		
 		$headers = parent::get_message_header($uid, true);
 		$message=$this->imap_message_to_cache($headers, true);
+
+		go_debug($message['message-id']);
 		
 		if(!$message){
 			throw new Exception($lang['email']['errorGettingMessage']);
@@ -555,7 +557,7 @@ class cached_imap extends imap{
 					$message['attachments'][$i]['name']=File::strip_invalid_chars($this->mime_header_decode($message['attachments'][$i]['subject'])).'.eml';
 				}elseif($message['attachments'][$i]['type']=='message')
 				{
-					go_debug($message['attachments'][$i]);
+					//go_debug($message['attachments'][$i]);
 					$message['attachments'][$i]['name']=isset($message['attachments'][$i]['description']) ? File::strip_invalid_chars($message['attachments'][$i]['description']).'.eml' : 'message.eml';
 				}elseif($message['attachments'][$i]['subtype']=='calendar')
 				{
@@ -636,7 +638,7 @@ class cached_imap extends imap{
 
 	public function remove_inline_images($attachments){
 		$removed = array();
-		go_debug($attachments);
+		//go_debug($attachments);
 		for($i=0;$i<count($attachments);$i++) {
 			if(empty($attachments[$i]['replacement_url'])){
 				$removed[]=$attachments[$i];
@@ -942,6 +944,7 @@ class cached_imap extends imap{
 
 		if(!$keep_full_data){
 			unset(
+						$message['message-id'],
 						$message['seen'],
 						$message['recent'],
 						$message['disposition-notification-to'],

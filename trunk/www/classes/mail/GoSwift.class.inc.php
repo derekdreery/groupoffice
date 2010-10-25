@@ -268,10 +268,17 @@ class GoSwift extends Swift_Mailer{
 	 * @param String $reply_mailbox
 	 */
 
-	function set_reply_to($reply_uid, $reply_mailbox)
+	function set_reply_to($reply_uid, $reply_mailbox, $in_reply_to='')
 	{
+		//$this->in_reply_to=$in_reply_to;
 		$this->reply_uid=$reply_uid;
 		$this->reply_mailbox=$reply_mailbox;
+
+		if(!empty($in_reply_to)){
+			$headers = $this->message->getHeaders();
+			$headers->addTextHeader('In-Reply-To', $in_reply_to);
+			$headers->addTextHeader('References', $in_reply_to);
+		}
 	}
 
 	function set_forward_uid($forward_uid, $forward_mailbox)

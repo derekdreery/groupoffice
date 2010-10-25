@@ -309,6 +309,7 @@ try {
 		switch($task) {
 			case "reply":
 			case "reply_all":
+				$response['data']['in_reply_to']=$content['message-id'];
 				$response['data']['to'] = $content["reply-to"];
 				if(stripos($content['subject'],'Re:')===false) {
 					$response['data']['subject'] = 'Re: '.$content['subject'];
