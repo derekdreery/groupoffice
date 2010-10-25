@@ -149,7 +149,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					} );
 				},
 				scope : this
-			}, {
+			},/* {
 				text : GO.lang.cmdApply,
 				handler : function() {
 					this.submitForm(false, { 
@@ -157,7 +157,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					} );
 				},
 				scope : this
-			}, {
+			}, */{
 				text : GO.lang.cmdClose,
 				handler : function() {
 					this.win.hide();

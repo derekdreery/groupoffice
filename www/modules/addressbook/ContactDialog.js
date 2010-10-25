@@ -156,13 +156,13 @@ GO.addressbook.ContactDialog = function(config)
 		},
 		scope: this
 	},
-	{
+	/*{
 		text: GO.lang['cmdApply'],
 		handler: function(){
 			this.saveContact();
 		},
 		scope: this
-	},
+	},*/
 	{
 		text: GO.lang['cmdClose'],
 		handler: function()

@@ -37,13 +37,13 @@ GO.tasks.TaskDialog = function() {
 
 			},
 			scope : this
-		}, {
+		},/* {
 			text : GO.lang['cmdApply'],
 			handler : function() {
 				this.submitForm();
 			},
 			scope : this
-		}, {
+		}, */{
 			text : GO.lang['cmdClose'],
 			handler : function() {
 				this.win.hide();
