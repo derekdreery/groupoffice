@@ -128,14 +128,14 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 										//PHONE							
 										'<tpl if="!GO.util.empty(home_phone)">'+
 											'<tr>'+
-												'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="{[this.callTo(values.home_phone)]}">{home_phone}</a></td>'+
+												'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="{[GO.util.callToHref(values.home_phone)]}">{home_phone}</a></td>'+
 											'</tr>'+						
 										'</tpl>'+
 
 										//CELLULAR							
 										'<tpl if="!GO.util.empty(cellular)">'+
 											'<tr>'+
-												'<td class="contactCompanyLabelWidth">' + GO.lang['strCellular'] + ':</td><td><a href="{[this.callTo(values.cellular)]}">{cellular}</a></td>'+
+												'<td class="contactCompanyLabelWidth">' + GO.lang['strCellular'] + ':</td><td><a href="{[GO.util.callToHref(values.cellular)]}">{cellular}</a></td>'+
 											'</tr>'+						
 										'</tpl>'+
 													
@@ -159,7 +159,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 										//PHONE WORK							
 										'<tpl if="!GO.util.empty(work_phone)">'+
 											'<tr>'+
-												'<td class="contactCompanyLabelWidth">' + GO.lang['strWorkPhone'] + ':</td><td><a href="{[this.callTo(values.work_phone)]}">{work_phone}</a></td>'+
+												'<td class="contactCompanyLabelWidth">' + GO.lang['strWorkPhone'] + ':</td><td><a href="{[GO.util.callToHref(values.work_phone)]}">{work_phone}</a></td>'+
 											'</tr>'+						
 										'</tpl>'+
 			
@@ -258,9 +258,6 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 				}
 			},
 
-			callTo:function(phone){
-				return GO.calltoTemplate.replace('{phone}', phone);
-			},
 			
 			isContactFieldset: function(values){
 				if(!GO.util.empty(values['email']) ||

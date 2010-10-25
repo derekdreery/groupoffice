@@ -153,7 +153,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 								//PHONE							
 								'<tpl if="!GO.util.empty(phone)">'+
 									'<tr>'+
-										'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="{[this.callTo(values.phone)]}">{phone}</a></td>'+
+										'<td class="contactCompanyLabelWidth">' + GO.lang['strPhone'] + ':</td><td><a href="{[GO.util.callToHref(values.phone)]}">{phone}</a></td>'+
 									'</tr>'+						
 								'</tpl>'+
 
@@ -270,9 +270,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 					return '<a href="mailto:'+email+'">'+email+'</a>';
 				}
 			},
-			callTo:function(phone){
-				return GO.calltoTemplate.replace('{phone}', phone);
-			},
+			
 			isCompanySecondColumn : function(values)
 			{
 				if(
