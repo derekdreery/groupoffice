@@ -509,7 +509,7 @@ class GoSwiftImport extends GoSwift{
 			}
 		}
 
-		go_debug($structure);
+		//go_debug($structure);
 
 
 		$this->get_parts($structure);
@@ -532,7 +532,12 @@ class GoSwiftImport extends GoSwift{
 				if($structure->ctype_primary=='multipart' && $structure->ctype_secondary=='alternative' &&
 				$part->ctype_primary == 'text' && $part->ctype_secondary=='plain')
 				{
-					continue;
+					//check if html part is there
+					$nextpart = next($structure->parts);
+					if($nextpart && $nextpart->ctype_secondary=='html'){
+						prev($structure->parts);
+						continue;
+					}
 				}
 
 
