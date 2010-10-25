@@ -98,3 +98,4 @@ $updates[] = "CREATE TABLE IF NOT EXISTS `go_links_17` (
   KEY `ctime` (`ctime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
+$updates[] = "ALTER TABLE `fs_files` CHANGE `extension` `extension` VARCHAR( 5 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";

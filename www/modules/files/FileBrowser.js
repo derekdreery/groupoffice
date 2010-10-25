@@ -1592,6 +1592,8 @@ GO.files.openFile = function(record, store)
 {
 	var index = record.data.id ? 'id' : 'path';
 
+	console.log(record);
+
 	switch(record.data.extension)
 	{
 		case 'bmp':
@@ -1619,14 +1621,14 @@ GO.files.openFile = function(record, store)
 					if(r.extension=='jpg' || r.extension=='png' || r.extension=='gif' || r.extension=='bmp' || r.extension=='jpeg' )
 					{
 						images.push({
-							name: record.data['name'],
-							src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]
+							name: r['name'],
+							src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+r[index]
 						})
 					} else if (r.extension=='xmind') {
 						images.push({
-							name: record.data['name'],
-							src: GO.settings.config.host+'controls/thumb.php?src='+record.data.path+'&w=600',
-							download_path: record.data.download_path
+							name: r['name'],
+							src: GO.settings.config.host+'controls/thumb.php?src='+r.path+'&w=600',
+							download_path: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+r[index]
 						})
 					}
 					if(r[index]==record.data[index])
@@ -1640,7 +1642,7 @@ GO.files.openFile = function(record, store)
 					images.push({
 						name: record.data['name'],
 						src: GO.settings.config.host+'controls/thumb.php?src='+record.data.path+'&w=600',
-						download_path: record.data.download_path
+						download_path: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]
 					})
 				} else {
 					images.push({
