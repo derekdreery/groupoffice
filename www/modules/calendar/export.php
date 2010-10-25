@@ -22,6 +22,7 @@ require_once($GO_MODULES->class_path.'calendar.class.inc.php');
 require_once($GO_MODULES->class_path.'go_ical.class.inc');
 $ical = new go_ical();
 $ical->dont_use_quoted_printable=true;
+$ical->line_break="\r\n";
 
 if (isset($_REQUEST['calendar_id']) && $calendar = $ical->get_calendar($_REQUEST['calendar_id']))
 {
