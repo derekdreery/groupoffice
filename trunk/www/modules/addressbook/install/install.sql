@@ -27,56 +27,45 @@ CREATE TABLE IF NOT EXISTS `ab_addressbooks` (
 -- Tabel structuur voor tabel `ab_companies`
 --
 
-
-DROP TABLE IF EXISTS `ab_contacts`;
-CREATE TABLE IF NOT EXISTS `ab_contacts` (
+DROP TABLE IF EXISTS `ab_companies`;
+CREATE TABLE IF NOT EXISTS `ab_companies` (
   `id` int(11) NOT NULL DEFAULT '0',
   `link_id` int(11) DEFAULT NULL,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `addressbook_id` int(11) NOT NULL DEFAULT '0',
-  `source_id` int(11) NOT NULL DEFAULT '0',
-  `first_name` varchar(50) NOT NULL,
-  `middle_name` varchar(50) DEFAULT NULL,
-  `last_name` varchar(50) NOT NULL,
-  `initials` varchar(10) DEFAULT NULL,
-  `title` varchar(50) DEFAULT NULL,
-  `sex` enum('M','F') NOT NULL DEFAULT 'M',
-  `birthday` date DEFAULT NULL,
-  `email` varchar(100) NOT NULL,
-  `email2` varchar(100) NOT NULL,
-  `email3` varchar(100) NOT NULL,
-  `company_id` int(11) NOT NULL DEFAULT '0',
-  `department` varchar(50) DEFAULT NULL,
-  `function` varchar(50) DEFAULT NULL,
-  `home_phone` varchar(30) DEFAULT NULL,
-  `work_phone` varchar(30) DEFAULT NULL,
-  `fax` varchar(30) DEFAULT NULL,
-  `work_fax` varchar(30) DEFAULT NULL,
-  `cellular` varchar(30) DEFAULT NULL,
-  `country` varchar(50) DEFAULT NULL,
-  `state` varchar(50) DEFAULT NULL,
-  `city` varchar(50) DEFAULT NULL,
-  `zip` varchar(10) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
   `address` varchar(100) DEFAULT NULL,
   `address_no` varchar(100) DEFAULT NULL,
-  `comment` text NOT NULL,
+  `zip` varchar(10) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `state` varchar(50) DEFAULT NULL,
+  `country` varchar(50) DEFAULT NULL,
   `iso_address_format` varchar(2) NOT NULL,
-  `color` varchar(6) DEFAULT NULL,
-  `sid` varchar(32) DEFAULT NULL,
+  `post_address` varchar(100) DEFAULT NULL,
+  `post_address_no` varchar(100) DEFAULT NULL,
+  `post_city` varchar(50) DEFAULT NULL,
+  `post_state` varchar(50) DEFAULT NULL,
+  `post_country` varchar(50) DEFAULT NULL,
+  `post_zip` varchar(10) DEFAULT NULL,
+  `post_iso_address_format` varchar(2) NOT NULL,
+  `phone` varchar(30) DEFAULT NULL,
+  `fax` varchar(30) DEFAULT NULL,
+  `email` varchar(75) DEFAULT NULL,
+  `homepage` varchar(100) DEFAULT NULL,
+  `comment` text,
+  `bank_no` varchar(50) DEFAULT NULL,
+  `vat_no` varchar(30) DEFAULT NULL,
   `ctime` int(11) NOT NULL DEFAULT '0',
   `mtime` int(11) NOT NULL DEFAULT '0',
-  `salutation` varchar(50) DEFAULT NULL,
   `email_allowed` enum('0','1') NOT NULL,
   `files_folder_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `link_id` (`link_id`),
   KEY `addressbook_id` (`addressbook_id`),
+  KEY `link_id` (`link_id`),
   KEY `email` (`email`),
-  KEY `email2` (`email2`),
-  KEY `email3` (`email3`),
-  KEY `last_name` (`last_name`),
-  KEY `company_id` (`company_id`)
+  KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
