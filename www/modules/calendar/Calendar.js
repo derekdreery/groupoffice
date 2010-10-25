@@ -1070,7 +1070,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 		if (config.calendars) {
 			this.view_id=0;
-			this.calendar_id = config.calendars[0];
+			this.calendar_id = config.calendars.indexOf(GO.calendar.defaultCalendar.id)>-1 ? GO.calendar.defaultCalendar.id : config.calendars[0];
 			this.calendars=config.calendars;
 			this.daysGridStore.baseParams['calendars']=Ext.encode(config.calendars);
 			this.monthGridStore.baseParams['calendars']=Ext.encode(config.calendars);
