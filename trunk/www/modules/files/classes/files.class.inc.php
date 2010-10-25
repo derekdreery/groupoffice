@@ -739,6 +739,9 @@ class files extends db {
 		if($folder['mtime']<$filemtime)
 		{
 			//go_debug('Synced '.$path);
+
+
+			ini_set('memory_limit','1000M');
 			
 			$this->sync_folder($folder);
 
@@ -777,20 +780,25 @@ class files extends db {
 			$dbfolders_names[]=$dbfolder['name'];
 			$dbfolders[]=$dbfolder;
 		}
-		$fsfolders = $fs->get_folders($full_path);
-
-		foreach($fsfolders as $fsfolder)
+		
+		if($dir = @opendir($full_path))
 		{
-			$key = array_search($fsfolder['name'], $dbfolders_names);
-			if($key===false)
+			while($filename=readdir($dir))
 			{
-				$this->import_folder($fsfolder['path'], $folder['id'], !$recursive);
-			}elseif($recursive){
-				$this->sync_folder($dbfolders[$key], true);
+				$file_path = $full_path.'/'.$filename;
+				if (is_dir($file_path) && strpos($filename,".") !== 0){
+					$key = array_search($filename, $dbfolders_names);
+					if($key===false)
+					{
+						$this->import_folder($file_path, $folder['id'], !$recursive);
+					}elseif($recursive){
+						$this->sync_folder($dbfolders[$key], true);
+					}
+				}
 			}
-
 		}
 
+		
 		foreach($dbfolders as $dbfolder)
 		{
 			if(!is_dir($full_path.'/'.$dbfolder['name']))
@@ -807,15 +815,18 @@ class files extends db {
 			$dbfiles_names[]=$dbfile['name'];
 			$dbfiles[]=$dbfile;
 		}
-		$fsfiles = $fs->get_files($full_path);
-
-		foreach($fsfiles as $fsfile)
+		
+		if($dir = @opendir($full_path))
 		{
-			if(!in_array($fsfile['name'], $dbfiles_names))
+			while($filename=readdir($dir))
 			{
-				$this->import_file($fsfile['path'], $folder['id']);
+				$file_path = $full_path.'/'.$filename;
+				if (!is_dir($file_path) && strpos($filename,".") !== 0){					
+					$this->import_file($file_path, $folder['id']);
+				}
 			}
 		}
+		
 		foreach($dbfiles as $dbfile)
 		{
 			if(!file_exists($full_path.'/'.$dbfile['name']))
