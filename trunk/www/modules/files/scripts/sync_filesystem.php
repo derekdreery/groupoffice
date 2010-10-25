@@ -35,7 +35,9 @@ if(isset($argv[1]))
 	define('CONFIG_FILE', $argv[1]);
 }
 
-ini_set('max_execution_time', 3600);
+ini_set('max_execution_time', 0);
+ini_set('memory_limit','1000M');
+
 
 chdir(dirname(__FILE__));
 
@@ -50,6 +52,9 @@ if(php_sapi_name()!='cli' && !$GO_SECURITY->has_admin_permission($GO_SECURITY->u
 
 require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 $files = new files();
+
+require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+$fs = new filesystem();
 
 if(empty($path))
 {
