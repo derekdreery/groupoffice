@@ -1,0 +1,19 @@
+First, download and install Mediawiki using their installation instructions. In
+order for the integration of Mediawiki in Group-Office to work, Mediawiki MUST
+be installed at the same host as Group-Office. To integrate Mediawiki with
+Group-Office, do the following:
+
+1. Inside this module's subdirectory /plugin, you will find GO_Plugin.php and
+   iAuthPlugin.php. Copy these files inside the /extensions directory of your
+   Mediawiki installation.
+
+2. You will also find LocalSettings.php inside /plugin. Either overwrite the
+   existing LocalSettings.php in your Mediawiki root with it, or put the part
+   designated as necessary for Group-Office at the end of the existing
+   LocalSettings.php.
+
+3. Make sure the Mediawiki module is installed in Group-Office, and, as admin,
+   set the full Mediawiki URL in the Group-Office Mediawiki Administration. If
+   Group-Office and Mediawiki share the same host, and the URL is correct, you
+   should immediately see Mediawiki, where your GO user settings are
+   automatically transferred to Mediawiki.
