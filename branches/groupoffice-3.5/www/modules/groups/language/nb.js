@@ -6,8 +6,8 @@
  */
 
 
-GO.groups.lang.group = 'Gruppe';
-GO.groups.lang.groups = 'Grupper';
+GO.groups.lang.group = 'Brukergruppe';
+GO.groups.lang.groups = 'Brukergrupper';
 GO.groups.lang.owner = 'Eier';
 GO.groups.lang.lblNew = 'Ny';
 GO.groups.lang.newGroupName = 'Angi nytt gruppenavn';
