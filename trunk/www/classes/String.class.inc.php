@@ -1022,6 +1022,89 @@ class String {
 		return array($name_part.$value_part);
 	}
 
+		/**
+	 * This function generates a randomized password.
+	 *
+	 * @access static
+	 *
+	 * @param string $characters_allow
+	 * @param string $characters_disallow
+	 * @param int $password_length
+	 * @param int $repeat
+	 *
+	 * @return string
+	 */
+	static function random_password( $characters_allow = 'a-z,1-9', $characters_disallow = 'i,o', $password_length = 0, $repeat = 0 ) {
+
+		if($password_length==0)
+		{
+			global $GO_CONFIG;
+			$password_length=$GO_CONFIG->default_password_length;
+		}
+
+		// Generate array of allowable characters.
+		$characters_allow = explode(',', $characters_allow);
+
+		for ($i = 0; $i < count($characters_allow); $i ++) {
+			if (substr_count($characters_allow[$i], '-') > 0) {
+				$character_range = explode('-', $characters_allow[$i]);
+
+				for ($j = ord($character_range[0]); $j <= ord($character_range[1]); $j ++) {
+					$array_allow[] = chr($j);
+				}
+			} else {
+				$array_allow[] = $characters_allow[$i];
+			}
+		}
+
+		// Generate array of disallowed characters.
+		$characters_disallow = explode(',', $characters_disallow);
+
+		for ($i = 0; $i < count($characters_disallow); $i ++) {
+			if (substr_count($characters_disallow[$i], '-') > 0) {
+				$character_range = explode('-', $characters_disallow[$i]);
+
+				for ($j = ord($character_range[0]); $j <= ord($character_range[1]); $j ++) {
+					$array_disallow[] = chr($j);
+				}
+			} else {
+				$array_disallow[] = $characters_disallow[$i];
+			}
+		}
+
+		mt_srand(( double ) microtime() * 1000000);
+
+		// Generate array of allowed characters by removing disallowed
+		// characters from array.
+		$array_allow = array_diff($array_allow, $array_disallow);
+
+		// Resets the keys since they won't be consecutive after
+		// removing the disallowed characters.
+		reset($array_allow);
+		$new_key = 0;
+		while (list ($key, $val) = each($array_allow)) {
+			$array_allow_tmp[$new_key] = $val;
+			$new_key ++;
+		}
+
+		$array_allow = $array_allow_tmp;
+		$password = '';
+		while (strlen($password) < $password_length) {
+			$character = mt_rand(0, count($array_allow) - 1);
+
+			// If characters are not allowed to repeat,
+			// only add character if not found in partial password string.
+			if ($repeat == 0) {
+				if (substr_count($password, $array_allow[$character]) == 0) {
+					$password .= $array_allow[$character];
+				}
+			} else {
+				$password .= $array_allow[$character];
+			}
+		}
+		return $password;
+	}
+
 /*
 
 	function quoted_printable_encode($sText,$bEmulate_imap_8bit=false) {
