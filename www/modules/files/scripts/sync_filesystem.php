@@ -66,6 +66,8 @@ if(empty($path))
 		if($dbfolder){
 			echo 'Syncing '.$folder['path']."\n";
 			$files->sync_folder($dbfolder, true);
+			$files->touch_folder($dbfolder['id'], filemtime($folder['path']));
+
 		}
 	}
 }else
@@ -79,6 +81,7 @@ if(empty($path))
 
 	echo 'Syncing '.$path."\n";
 	$files->sync_folder($dbfolder, true);
+	$files->touch_folder($dbfolder['id'], filemtime($path));
 }
 
 echo "Done!\n";
