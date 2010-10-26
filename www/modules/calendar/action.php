@@ -175,6 +175,7 @@ try {
 					//create ics attachment
 					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
 					$ical = new go_ical('2.0', false, 'CANCEL');
+					$ical->line_break="\r\n";
 					$ical->dont_use_quoted_printable = true;
 					
 					$ics_string = $ical->export_event($event_id);
