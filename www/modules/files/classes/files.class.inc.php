@@ -738,8 +738,7 @@ class files extends db {
 		$filemtime=filemtime($GO_CONFIG->file_storage_path.$path);
 		if($folder['mtime']<$filemtime)
 		{
-			//go_debug('Synced '.$path);
-
+			go_debug('Timestamp on disk didn\'t match the database so starting sync for: '.$path);
 
 			ini_set('memory_limit','1000M');
 			
@@ -758,7 +757,8 @@ class files extends db {
 	function sync_folder($folder, $recursive=false){
 		global $GO_CONFIG;
 		$fs = new filesystem();
-		
+
+
 
 		if(!$folder)
 		{
@@ -771,6 +771,8 @@ class files extends db {
 			echo 'Not found: '.$full_path;
 			throw new FileNotFoundException();
 		}
+
+		go_debug("files::sync_folder ".$full_path);
 
 		$dbfolders=array();
 		$dbfolders_names=array();
@@ -821,7 +823,7 @@ class files extends db {
 			while($filename=readdir($dir))
 			{
 				$file_path = $full_path.'/'.$filename;
-				if (!is_dir($file_path) && strpos($filename,".") !== 0){					
+				if (!is_dir($file_path) && strpos($filename,".") !== 0 && !in_array($filename, $dbfiles_names)){
 					$this->import_file($file_path, $folder['id']);
 				}
 			}
