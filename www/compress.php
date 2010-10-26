@@ -16,6 +16,7 @@
  * Used for compressing the large Javascript and CSS
  */
 require('Group-Office.php');
+session_write_close();
 
 $file = $GO_CONFIG->file_storage_path.'cache/'.basename($_REQUEST['file']);
 
