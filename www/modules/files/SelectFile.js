@@ -15,7 +15,13 @@ GO.files.SelectFile = Ext.extend(Ext.form.TriggerField,{
 		GO.files.createSelectFileBrowser();
 
 		GO.selectFileBrowser.setFileClickHandler(function(r){
-			this.setValue(r.data.path);
+			if(r){
+				this.setValue(r.data.path);
+			}else
+			{
+				this.setValue(GO.selectFileBrowser.path);
+			}
+
 			GO.selectFileBrowserWindow.hide();
 		}, this);
 
