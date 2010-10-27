@@ -449,6 +449,9 @@ class cached_imap extends imap{
 		}
 		
 		$headers = parent::get_message_header($uid, true);
+		if(!$headers)
+			throw new Exception($lang['email']['errorGettingMessage']);
+
 		$message=$this->imap_message_to_cache($headers, true);
 		
 		if(!$message){
