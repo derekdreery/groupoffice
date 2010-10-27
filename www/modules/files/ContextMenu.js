@@ -194,6 +194,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 		 			this.gotaButton.show();
 		 			this.decompressButton.show();
 		 			this.compressButton.hide();
+					this.downloadLinkButton.show();
 		 		break;
 		 		
 		 		case '':
@@ -211,6 +212,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 		 			this.gotaButton.show();
 		 			this.compressButton.show();	
 		 			this.decompressButton.hide();
+					this.downloadLinkButton.show();
 		 		break;	 		
 		 	}
 		}else
