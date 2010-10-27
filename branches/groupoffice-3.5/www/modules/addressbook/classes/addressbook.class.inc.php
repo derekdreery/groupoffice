@@ -563,7 +563,7 @@ class addressbook extends db {
 
 	function build_contact_files_path($contact, $addressbook) {
 		$new_folder_name = File::strip_invalid_chars(String::format_name($contact));
-		$last_part = $this->get_index_char($contact['last_name']);
+		$last_part = empty($contact['last_name']) ? '' : $this->get_index_char($contact['last_name']);
 		$new_path = 'contacts/'.File::strip_invalid_chars($addressbook['name']);
 		if(!empty($last_part)) {
 			$new_path .= '/'.$last_part;
