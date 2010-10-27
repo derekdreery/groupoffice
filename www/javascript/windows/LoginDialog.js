@@ -66,7 +66,7 @@ GO.dialog.LoginDialog = function(config){
 	langCombo.on('select', function(){
 		document.location=BaseHref+'index.php?SET_LANGUAGE='+langCombo.getValue();
 	}, this);
-	
+
 	this.formPanel = new Ext.FormPanel({
 		labelWidth: 120, // label settings here cascade unless overridden
 		url:'action.php',
@@ -75,13 +75,17 @@ GO.dialog.LoginDialog = function(config){
 		waitMsgTarget:true,        
 		bodyStyle:'padding:5px 10px 5px 10px',
 		items: [new GO.LogoComponent(),
-		langCombo,
+		langCombo,		
 		{
+			itemId: 'username',
 			fieldLabel: GO.lang.strUsername,
 			name: 'username',
-			allowBlank:false,
-			anchor:'100%'
-		},{
+			allowBlank:false
+			,anchor:'100%'
+		}
+		
+	
+		,{
 			fieldLabel: GO.lang.strPassword,
 			name: 'password',
 			inputType: 'password',
@@ -179,7 +183,7 @@ GO.dialog.LoginDialog = function(config){
 	this.addEvents({
 		callbackshandled: true
 	});
-    
+
 };
 
 Ext.extend(GO.dialog.LoginDialog, GO.Window, {
