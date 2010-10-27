@@ -133,7 +133,7 @@ class ldapauth extends imapauth {
 				go_debug('LDAPAUTH: Group-Office user was found');
 
 				if(!empty($GO_CONFIG->ldap_auth_dont_update_profiles))
-					$user=array();
+					$user=array('email'=>$user['email']);
 
 
 				$user['id']=$gouser['id'];

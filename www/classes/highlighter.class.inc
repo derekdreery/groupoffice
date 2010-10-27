@@ -12,32 +12,31 @@ class highlight {
 	}
 	function highlighter($matches) {
 
-		//if (!in_array(strtoupper($matches[2]),$this -> hightlight_bad_tags)) {
+		
+			$regex = "/".$this->begin_boundary."(".$this -> keyword.")".$this->end_boundary."/sui";
 
-			$regex = "#".$this->begin_boundary."(".$this -> keyword.")".$this->end_boundary."#si";
+			//$proceed =  stripslashes(preg_replace($regex,str_replace("{keyword}",$matches[3],$this -> replacement),$matches[0]));
+			$proceed =  str_replace($this->keyword, str_replace("{keyword}",$matches[3],$this->replacement),$matches[0]);
+			go_debug($matches);
+			go_debug($proceed);
 
-			$proceed =  preg_replace($regex,str_replace("{keyword}",$matches[3],$this -> replacement),$matches[0]);
-		//}
-		//else {
-			//$proceed = $matches[0];
-		//}
-		return stripslashes($proceed);
+		return $proceed;
 	}
 
 	function replace_in_tags($matches){
-		//var_dump($matches);
 		return stripslashes(str_replace($matches[1], '{TEMP}', $matches[0]));
 	}
 
 	function process($text,$keyword = false,$replacement = false) {
 
 		//echo '/<[^>]*('.$keyword.')[^>]*>/is';
-		$text = preg_replace_callback('/<[^>]*('.$keyword.')[^>]*>/is',array(&$this, 'replace_in_tags'), $text);
+		
 
 		if($keyword != false) $this -> keyword = $keyword;
 		if($replacement != false) $this -> replacement = $replacement;
 
-		if((isset($this -> keyword)) AND (isset($this -> replacement))) {
+		if((isset($this -> keyword)) AND (isset($this -> replacement))) {			
+
 			if(substr($this->keyword,0,1)=='*') {
 				$this->keyword=substr($this->keyword,1);
 				$this->begin_boundary='';
@@ -51,11 +50,25 @@ class highlight {
 			}else {
 				$this->end_boundary='\\b';
 			}
-			$regex="#(<([A-Za-z]+)[^>]*[\>]*)*".$this->begin_boundary."(".$this -> keyword.")".$this->end_boundary."(.*?)(<\/\\2>)*#si";
-			$text =  preg_replace_callback($regex,array(&$this, 'highlighter'), $text);
 			
+			$text = preg_replace_callback('/<[^>]*('.$this->keyword.')[^>]*>/uis',array(&$this, 'replace_in_tags'), $text);
+			//$text = str_ireplace($this->keyword, str_replace('{keyword}', $this->keyword, $this->replacement), $text);
+
+			$regex = "/".$this->begin_boundary."(".$this -> keyword.")".$this->end_boundary."/sui";
+
+			$replacements = explode('{keyword}', $this->replacement);
+
+			$text = preg_replace($regex, $replacements[0].'\\1'.$replacements[1], $text);
+
+			go_debug($replacements);
+
+			//$regex="/(<([A-Za-z]+)[^>]*[\>]*)*".$this->begin_boundary."(".$this -> keyword.")".$this->end_boundary."(.*?)(<\/\\2>)*/sui";
+			//$text =  preg_replace_callback($regex,array(&$this, 'highlighter'), $text);
+
+			//go_debug(strlen($text));
+			$text = str_replace('{TEMP}', $this->keyword, $text);			
 		}
-		$text = str_replace('{TEMP}', $this->keyword, $text);
+		
 		return $text;
 	}
 }
