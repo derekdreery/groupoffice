@@ -994,30 +994,34 @@ try {
 						$server_response = $email->get_servermanager_mailbox_info($response['data']);
 
 					}catch(Exception $e) {
-						go_log(LOG_DEBUG, 'Connection to postfixadmin failed: '.$e->getMessage());
+						go_debug('Connection to postfixadmin failed: '.$e->getMessage());
 					}
 
-					if(is_array($server_response)) {
+					if(isset($server_response['data'])) {
 						$response['data']['vacation_active']=$server_response['data']['vacation_active'];
 						$response['data']['vacation_subject']=$server_response['data']['vacation_subject'];
 						$response['data']['vacation_body']=$server_response['data']['vacation_body'];
 						$response['data']['forward_to'] = $server_response['data']['forward_to'];
-					}elseif(isset($GO_MODULES->modules['systemusers'])) {
-						require_once($GO_MODULES->modules['systemusers']['class_path'].'systemusers.class.inc.php');
-						$su = new systemusers();
+					}else
+					{
+						go_debug($server_response['data']);
+						if(isset($GO_MODULES->modules['systemusers'])) {
+							require_once($GO_MODULES->modules['systemusers']['class_path'].'systemusers.class.inc.php');
+							$su = new systemusers();
 
-						$account_id	= $_POST['account_id'];
-						$vacation = $su->get_vacation($account_id);
+							$account_id	= $_POST['account_id'];
+							$vacation = $su->get_vacation($account_id);
 
-						$user_home_dirs = isset($GO_CONFIG->user_home_dirs) ? $GO_CONFIG->user_home_dirs : '/home/';
-						$homedir = $user_home_dirs.$response['data']['username'];
-						if(stripos($response['data']['host'],'localhost')===false || !file_exists($homedir)) {
-							$response['data']['hidetab'] = true;
-						}else {
-							$response['data']['vacation_active'] = ($vacation['vacation_active']) ? $vacation['vacation_active'] : 0;
-							$response['data']['vacation_subject'] = ($vacation['vacation_subject']) ? $vacation['vacation_subject'] : '';
-							$response['data']['vacation_body'] = ($vacation['vacation_body']) ? $vacation['vacation_body'] : '';
+							$user_home_dirs = isset($GO_CONFIG->user_home_dirs) ? $GO_CONFIG->user_home_dirs : '/home/';
+							$homedir = $user_home_dirs.$response['data']['username'];
+							if(stripos($response['data']['host'],'localhost')===false || !file_exists($homedir)) {
+								$response['data']['hidetab'] = true;
+							}else {
+								$response['data']['vacation_active'] = ($vacation['vacation_active']) ? $vacation['vacation_active'] : 0;
+								$response['data']['vacation_subject'] = ($vacation['vacation_subject']) ? $vacation['vacation_subject'] : '';
+								$response['data']['vacation_body'] = ($vacation['vacation_body']) ? $vacation['vacation_body'] : '';
 
+							}
 						}
 					}
 					$response['success']=true;
