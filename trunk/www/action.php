@@ -179,7 +179,7 @@ try{
 
 			$response['success']=false;
 
-			$username = $_POST['username'];
+			$username = !empty($_POST['domain']) ? $_POST['username'].$_POST['domain'] : $_POST['username'];
 			$password = $_POST['password'];
 
 			if (!$username || !$password)
