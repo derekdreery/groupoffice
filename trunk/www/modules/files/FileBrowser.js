@@ -1209,7 +1209,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			});
 		}
 
-		this.expireDateWindow.on('render', function(){
+		this.expireDateWindow.on('show', function(){
 			var myDate = new Date;
 			var unixtime_ms = myDate.setDate(myDate.getDate()+7);
 			var unixtime = parseInt(unixtime_ms/1000);
