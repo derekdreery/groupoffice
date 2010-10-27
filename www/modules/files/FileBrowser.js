@@ -1144,81 +1144,63 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		if (!this.expireDateWindow) {
 			this.expireForm = new Ext.form.FormPanel({
-				items: [new Ext.form.DateField({
+				items: [new Ext.DatePicker({
 					itemId: 'expire_time',
 					name : 'expire_time',
-					width : 100,
-					format : GO.settings['date_format'],
-					allowBlank : false,
-					fieldLabel : GO.files.lang.expireTime
-					//hideLabel : true
-				}), new Ext.form.Hidden({
-					itemId: 'expire_unixtime'
+					format: GO.settings.date_format,
+					hideLabel: true
 				})]
 			});
-
 			this.expireDateWindow = new GO.Window({
-				//title: GO.files.lang.expireTime,
-				height:100,
-				width:300,
+				title: GO.files.lang.expireTime,
+				height:218,
+				width:224,
 				layout:'fit',
 				border:false,
 				maximizable:true,
 				collapsible:true,
 				closeAction:'hide',
-				items: [this.expireForm],
-				buttons : [{
-					text : GO.lang.cmdOk,
-					handler : function() {
-						Ext.Ajax.request({
-							url: GO.settings.modules.files.url+'json.php',
-							params: {
-								task: 'file_download_link',
-								file_id: records[0].data.id,
-								expire_time: this.expireForm.items.get('expire_unixtime').value
-							},
-							scope: this,
-							success: function(response,options){
-								var response = Ext.decode(response.responseText);
-								if (response.success) {
-									var random_code = response.data.random_code;
-									var myDate = new Date(parseInt(response.data.expire_time)*1000);
-									GO.email.showComposer({
-										values: {
-											'subject': GO.files.lang.downloadLink+' '+records[0].data.name,
-											'body': GO.files.lang.clickHereToDownload+': <a href="'+GO.settings.modules.files.full_url+
-												'download.php?id='+records[0].data.id+'&random_code='+random_code+'">'+records[0].data.name+'</a> ('+
-												GO.files.lang.possibleUntil+' '+myDate.format(GO.settings.date_format)+')'
-										}
-									});
-								} else {
-									Ext.Msg.alert(GO.lang['strError'], response.feedback);
-								}
-							}
-						});
-						this.expireDateWindow.hide();
-					},
-					scope : this
-				},{
-					text : GO.lang.cmdClose,
-					handler : function() {
-						this.expireDateWindow.hide();
-					},
-					scope : this
-				}]
+				items: [this.expireForm]
 			});
 		}
-
+/*
 		this.expireDateWindow.on('show', function(){
 			var myDate = new Date;
 			var unixtime_ms = myDate.setDate(myDate.getDate()+7);
 			var unixtime = parseInt(unixtime_ms/1000);
 			this.expireForm.items.get('expire_time').setValue(myDate.format(GO.settings.date_format));
-			this.expireForm.items.get('expire_unixtime').setValue(unixtime);
+			//this.expireForm.items.get('expire_unixtime').setValue(unixtime);
 		}, this);
-
-		this.expireForm.items.get('expire_time').on('change', function(field,newValue,oldValue){
-			this.expireForm.items.get('expire_unixtime').setValue(parseInt(newValue.setDate(newValue.getDate())/1000));
+*/
+		this.expireForm.items.get('expire_time').on('select', function(field,date){
+			//this.expireForm.items.get('expire_unixtime').setValue(parseInt(date.setDate(date.getDate())/1000));
+			Ext.Ajax.request({
+				url: GO.settings.modules.files.url+'json.php',
+				params: {
+					task: 'file_download_link',
+					file_id: records[0].data.id,
+					expire_time: parseInt(date.setDate(date.getDate())/1000)//this.expireForm.items.get('expire_unixtime').value
+				},
+				scope: this,
+				success: function(response,options){
+					var response = Ext.decode(response.responseText);
+					if (response.success) {
+						var random_code = response.data.random_code;
+						var myDate = new Date(parseInt(response.data.expire_time)*1000);
+						GO.email.showComposer({
+							values: {
+								'subject': GO.files.lang.downloadLink+' '+records[0].data.name,
+								'body': GO.files.lang.clickHereToDownload+': <a href="'+GO.settings.modules.files.full_url+
+								'download.php?id='+records[0].data.id+'&random_code='+random_code+'">'+records[0].data.name+'</a> ('+
+								GO.files.lang.possibleUntil+' '+myDate.format(GO.settings.date_format)+')'
+							}
+						});
+					} else {
+						Ext.Msg.alert(GO.lang['strError'], response.feedback);
+					}
+				}
+			});
+			this.expireDateWindow.hide();
 		}, this);
 
 		this.expireDateWindow.show();
