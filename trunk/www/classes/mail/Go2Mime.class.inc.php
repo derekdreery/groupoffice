@@ -111,6 +111,9 @@ class Go2Mime
 	public function mime2GO($mime, $inline_attachments_url='', $create_tmp_attachments=false, $create_tmp_inline_attachments=false, $part_number=''){
 
 		global $lang, $GO_LANGUAGE;
+
+		//fix for strange Microsoft exports
+		$mime = str_replace("------=_NextPart", "\r\n------=_NextPart", $mime);
 		
 		require_once($GO_LANGUAGE->get_language_file('email'));
 		
@@ -148,10 +151,28 @@ class Go2Mime
 		$this->response['cc'] = isset($structure->headers['cc']) ? $structure->headers['cc'] : '';
 		$this->response['bcc'] = isset($structure->headers['bcc']) ? $structure->headers['bcc'] : '';
 		$this->response['reply-to']=isset($structure->headers['reply-to']) ? $structure->headers['reply-to'] : $this->response['sender'];
+
+		//in some cases decoding lead to
+		if(is_array($this->response['subject']))
+			$this->response['subject']=$this->response['subject'][0];
+		if(is_array($this->response['to'])){
+			$this->response['to']=implode(',', $this->response['to']);
+		}
+		if(is_array($this->response['cc'])){
+			$this->response['cc']=implode(',', $this->response['cc']);
+		}
+		if(is_array($this->response['bcc'])){
+			$this->response['bcc']=implode(',', $this->response['bcc']);
+		}
+
+		if(is_array($structure->headers['date']))
+				$structure->headers['date']=$structure->headers['date'][0];
 		
 		$this->response['to_string']='';
 		if(!empty($this->response['to']))
 		{
+			
+			//exit();
 			$addresses=$RFC822->parse_address_list($this->response['to']);
 			$to=array();
 			foreach($addresses as $address)

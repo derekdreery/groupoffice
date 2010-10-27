@@ -23,6 +23,8 @@ $tasks = new tasks();
 
 require_once($GO_MODULES->class_path.'export_tasks.class.inc.php');
 $ical = new export_tasks();
+$ical->dont_use_quoted_printable=true;
+$ical->line_break="\r\n";
 
 $tasklist = $tasks->get_tasklist($_REQUEST['tasklist_id']);
 $filename = $tasklist['name'].'.ics';
