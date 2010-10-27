@@ -114,7 +114,10 @@ try {
 			if($old_task['status'] != $_POST['status']){
 				$new_tasklist = $tasks->get_tasklist($_POST['tasklist_id']);
 
-				$_POST['description'].= sprintf("\n\n".$lang['tasks']['statusChanged'], $lang['tasks']['statuses'][$old_task['status']], $lang['tasks']['statuses'][$_POST['status']]);
+				$old_status_lang = isset( $lang['tasks']['statuses'][$old_task['status']]) ?  $lang['tasks']['statuses'][$old_task['status']] : $old_task['status'];
+				$new_status_lang = isset( $lang['tasks']['statuses'][$_POST['status']]) ?  $lang['tasks']['statuses'][$_POST['status']] : $_POST['status'];
+
+				$_POST['description'].= sprintf("\n\n".$lang['tasks']['statusChanged'], $old_status_lang, $new_status_lang);
 			}
 
 
