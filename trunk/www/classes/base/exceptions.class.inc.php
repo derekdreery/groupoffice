@@ -149,7 +149,10 @@ class MissingFieldException extends Exception
 
 class FileNotFoundException extends Exception
 {
-	public function __construct() {
-		parent::__construct('File not found');
+	public function __construct($path = '') {
+		$m = 'File not found';
+		if($path!='')
+			$m .= ': '.$path;
+		parent::__construct($m);
 	}
 }

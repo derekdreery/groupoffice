@@ -475,7 +475,7 @@ try {
 
 				$authenticate=!$files->is_owner($curfolder);
 
-				$path = $files->build_path($curfolder);
+				$path = $response['path']=$files->build_path($curfolder);
 
 
 				$response['refreshed']=$files->check_folder_sync($curfolder, $path);
@@ -687,39 +687,41 @@ try {
 					$extensions = explode(',',$_POST['files_filter']);
 				}
 
-				if($file_start>=0) {
+				if(!isset($extensions) || $extensions!='foldersonly'){
+					if($file_start>=0) {
 
-					if($GO_MODULES->has_module('customfields')) {
-						require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-						$cf = new customfields();
-					}else {
-						$cf=false;
-					}
-
-					$response['total']+=$files->get_files($curfolder['id'], $fsort, $dir, $file_start, $file_limit);
-
-
-					while($file = $files->next_record()) {
-
-						if(!isset($extensions) || in_array(File::get_extension($file['name']), $extensions)) {
-							$file['path']=$path.'/'.$file['name'];
-							$file['type_id']='f:'.$file['id'];
-							$file['thumb_url']=get_thumb_url($file['path']);
-							//$file['extension']=$extension;
-							$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$file['extension'].'">'.$file['name'].'</div>';
-							$file['type']=File::get_filetype_description($file['extension']);
-							$file['timestamp']=$file['mtime'];
-							$file['mtime']=Date::get_timestamp($file['mtime']);
-							//$file['size']=Number::format_size($file['size']);
-
-							if($cf)
-								$cf->format_record($file, 6);
-
-							$response['results'][]=$file;
+						if($GO_MODULES->has_module('customfields')) {
+							require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+							$cf = new customfields();
+						}else {
+							$cf=false;
 						}
+
+						$response['total']+=$files->get_files($curfolder['id'], $fsort, $dir, $file_start, $file_limit);
+
+
+						while($file = $files->next_record()) {
+
+							if(!isset($extensions) || in_array(File::get_extension($file['name']), $extensions)) {
+								$file['path']=$path.'/'.$file['name'];
+								$file['type_id']='f:'.$file['id'];
+								$file['thumb_url']=get_thumb_url($file['path']);
+								//$file['extension']=$extension;
+								$file['grid_display']='<div class="go-grid-icon filetype filetype-'.$file['extension'].'">'.$file['name'].'</div>';
+								$file['type']=File::get_filetype_description($file['extension']);
+								$file['timestamp']=$file['mtime'];
+								$file['mtime']=Date::get_timestamp($file['mtime']);
+								//$file['size']=Number::format_size($file['size']);
+
+								if($cf)
+									$cf->format_record($file, 6);
+
+								$response['results'][]=$file;
+							}
+						}
+					}else {
+						$files->get_files($curfolder['id'], $fsort, $dir, 0, 1);
 					}
-				}else {
-					$files->get_files($curfolder['id'], $fsort, $dir, 0, 1);
 				}
 
 			}

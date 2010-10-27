@@ -715,7 +715,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	 */
 	pasteMode : 'cut',
 
-
+	path : '',
 	
 	onStoreLoad : function(store){
 
@@ -723,6 +723,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		{
 			alert(store.reader.jsonData.feedback);
 		}
+
+		this.path = store.reader.jsonData.path;
 
 		this.setWritePermission(store.reader.jsonData.write_permission);
 		
