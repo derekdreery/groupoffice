@@ -323,7 +323,8 @@ class Go2Mime
 
 							if($create_tmp_inline_attachments)
 							{
-								$url_replacement['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$part->d_parameters['filename'];
+								$filename = empty($part->d_parameters['filename']) ? uniqid(time()) : $part->d_parameters['filename'];
+								$url_replacement['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$filename;
 								filesystem::mkdir_recursive(dirname($url_replacement['tmp_file']));
 
 								file_put_contents($url_replacement['tmp_file'], $part->body);
