@@ -32,7 +32,7 @@ class imap extends imap_bodystruct {
 
 	public function last_error(){
 		$count=count($this->errors);
-		go_debug($this->errors);
+		//go_debug($this->errors);
 		if($count)
 			return $this->errors[$count-1];
 		else
@@ -164,7 +164,6 @@ class imap extends imap_bodystruct {
 		}
 		$res = $this->get_response();
 
-//go_debug($res);
 		$authed = false;
 		if (is_array($res) && !empty($res)) {
 			$response = array_pop($res);
@@ -181,12 +180,12 @@ class imap extends imap_bodystruct {
 				if (isset($res[0])) {
 					$this->banner = $res[0];
 				}
-			}
+			}	
 			if (stristr($response, 'A'.$this->command_count.' OK')) {
 				$authed = true;
 				$this->state = 'authed';
 			}else
-			{				
+			{
 				throw new Exception($response);
 				//$this->errors[]=$response;
 			}
@@ -348,6 +347,8 @@ class imap extends imap_bodystruct {
 
 	public function select_mailbox($mailbox_name='INBOX') {
 
+		go_debug($this->selected_mailbox);
+
 		if($this->selected_mailbox && $this->selected_mailbox['name']==$mailbox_name)
 			return true;
 
@@ -443,8 +444,11 @@ class imap extends imap_bodystruct {
 
 	public function get_unseen($mailbox=false) {
 
-		if($mailbox)
-			$this->select_mailbox($mailbox);
+		if($mailbox){
+			if(!$this->select_mailbox($mailbox)){
+				return false;
+			}
+		}
 
 		$command = "UID SEARCH (UNSEEN) ALL\r\n";
 		$this->send_command($command);
