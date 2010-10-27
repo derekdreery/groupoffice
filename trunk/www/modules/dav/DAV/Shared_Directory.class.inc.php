@@ -128,8 +128,8 @@ class GO_DAV_Shared_Directory extends Sabre_DAV_FS_Directory implements Sabre_DA
 	public function getQuotaInfo() {
 
 		return array(
-				disk_total_space($this->path) - disk_free_space($this->path),
-				disk_free_space($this->path)
+				0,
+				0
 		);
 	}
 
