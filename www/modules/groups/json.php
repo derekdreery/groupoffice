@@ -51,7 +51,7 @@ switch ($action)
 					$GO_GROUPS->delete_user_from_group($user_id, $group_id);
 				}
 
-				$GO_GROUPS->fire_event('delete_users_to_group', array($group_id, $users));
+				$GO_EVENTS->fire_event('delete_users_to_group', array($group_id, $users));
 			}catch(Exception $e)
 			{
 				$response['deleteSuccess']=false;
@@ -76,7 +76,7 @@ switch ($action)
 					}
 				}
 			}
-			$GO_GROUPS->fire_event('add_users_to_group', array($group_id, $users));
+			$GO_EVENTS->fire_event('add_users_to_group', array($group_id, $users));
 		}
 
 
