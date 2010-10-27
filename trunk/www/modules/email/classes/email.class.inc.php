@@ -209,20 +209,16 @@ class email extends db {
 				if($account) {
 					$inbox = $email2->get_folder($email->f('id'), 'INBOX');
 
-					if($imap->select_mailbox('INBOX')){
+					$unseen =  $imap->get_unseen();
 
-						$unseen =  $imap->get_unseen();
-
-						$response['email_status'][$inbox['id']]['unseen'] = $unseen['count'];
-						$response['email_status'][$inbox['id']]['messages'] = $imap->selected_mailbox['messages'];
-					}
-
-					$imap->disconnect();
-				}else {
-					$imap->clear_errors();
+					$response['email_status'][$inbox['id']]['unseen'] = $unseen['count'];
+					$response['email_status'][$inbox['id']]['messages'] = $imap->selected_mailbox['messages'];
 				}
 			}
-			catch(Exception $e){}
+			catch(Exception $e){
+				go_debug($e->getMessage());
+				$imap->disconnect();
+			}
 		}
 	}
 
