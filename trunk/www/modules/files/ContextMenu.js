@@ -202,6 +202,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 		 			this.gotaButton.hide();
 		 			this.decompressButton.hide();
 		 			this.compressButton.show();
+					this.downloadLinkButton.hide();
 		 			
 		 		break;
 		 		
