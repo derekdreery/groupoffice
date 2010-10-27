@@ -72,6 +72,9 @@ class wbxml
 
 		//create temp file
 
+		if(!is_dir($GO_CONFIG->tmpdir))
+				mkdir($GO_CONFIG->tmpdir, 0755, true);
+
 		//file_put_contents did not work with nokia phones because the
 		//line ends got mixed up somehow.
 		$fp = fopen($this->wbxmlfile, 'w+');
