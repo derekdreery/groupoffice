@@ -52,7 +52,7 @@
 }*/
 
 function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
-	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $imap;
+	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $imap, $_POST;
 
 	require_once ($GO_CONFIG->class_path.'mail/mimeDecode.class.inc');
 	require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
@@ -65,7 +65,6 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 		$cf = false;
 	}
 
-
 	$ab = new addressbook();
 	$tp = new templates();
 
@@ -76,7 +75,17 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 	require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
 	$go2mime = new Go2Mime();
 	$response['data'] = $go2mime->mime2GO($template['content'], $GO_MODULES->modules['mailings']['url'].'mimepart.php?template_id='.$template_id, true, true);
-	
+
+	if (isset($_POST['body'])){
+		if(strpos($response['data']['body'],'{body}')==false){
+			$response['data']['body'] = $_POST['body'].'<br />'.$response['data']['body'];
+		}else
+		{
+			$response['data']['body'] = str_replace('{body}', $_POST['body'], $response['data']['body']);
+		}
+	}
+
+
 	unset($response['data']['to'],$response['data']['cc'], $response['data']['bcc'],$response['data']['subject']);
 
 	if(!$keep_tags) {
@@ -118,7 +127,7 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 			//this will remove the tags
 			$tp->replace_fields($response['data']['body'],array());
 		}
-
+		
 		/*if($cf && !empty($link_id)) {
 			$cf_values = $cf->get_values($GO_SECURITY->user_id, $link_type, $link_id);
 			$values = array_merge($values, $cf_values);

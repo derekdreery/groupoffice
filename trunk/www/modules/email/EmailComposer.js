@@ -984,6 +984,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				//sometimes this is somehow copied from the baseparams
 				delete params.content_type;
 
+				if (typeof(config.values)!='undefined' && typeof(config.values.body)!='undefined')
+					params.body = config.values.body;
+
 				this.formPanel.form.load({
 					url : url,
 					params : params,
