@@ -27,7 +27,6 @@ $fs = new filesystem();
 session_write_close();
 
 
-
 if(!empty($_REQUEST['id']))
 {
     $file = $files->get_file($_REQUEST['id']);
@@ -76,7 +75,10 @@ if(!isset($_REQUEST['mtime']))
     header('Location: '.$_SERVER['PHP_SELF'].'?path='.urlencode($_REQUEST['path']).'&mode='.$mode.'&mtime='.filemtime($path));
     exit();
 }*/
-if ($public || $files->has_read_permission($GO_SECURITY->user_id, $file['folder_id']))
+
+$random_code = isset($_REQUEST['random_code']) ? $_REQUEST['random_code'] : '';
+
+if ($public || $files->has_read_permission($GO_SECURITY->user_id, $file['folder_id']) || ($file['random_code']==$random_code && time()<$file['expire_time']))
 {
     /*
      * Remove new_filelink

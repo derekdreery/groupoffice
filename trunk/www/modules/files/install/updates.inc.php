@@ -99,3 +99,6 @@ $updates[] = "CREATE TABLE IF NOT EXISTS `go_links_17` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates[] = "ALTER TABLE `fs_files` CHANGE `extension` `extension` VARCHAR( 5 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+
+$updates[] = "ALTER TABLE `fs_files` ADD `expire_time` int(11) NOT NULL default '0'";
+$updates[] = "ALTER TABLE `fs_files` ADD `random_code` char(11) DEFAULT NULL";

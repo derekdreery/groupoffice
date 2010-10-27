@@ -26,3 +26,9 @@ GO.files.lang.selectFiles= 'Selecteer bestanden';
 
 GO.files.lang.fitImage='Passende grootte';
 GO.files.lang.normalSize='Normale grootte';
+
+GO.files.lang.emailDownloadLink = 'Downloadlink emailen';
+GO.files.lang.downloadLink = 'Downloadlink';
+GO.files.lang.clickHereToDownload = 'Klik hier om het bestand te downloaden via een beveiligde link';
+GO.files.lang.expireTime = 'Downloaden mogelijk tot';
+GO.files.lang.possibleUntil = 'mogelijk tot';

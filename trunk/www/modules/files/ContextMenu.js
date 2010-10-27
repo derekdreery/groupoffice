@@ -134,6 +134,19 @@ GO.files.FilesContextMenu = function(config)
 	config['items'].push(this.compressSeparator = new Ext.menu.Separator());
 	config['items'].push(this.compressButton);
 	config['items'].push(this.decompressButton);
+
+	if(GO.settings.modules.email) {
+		this.downloadLinkButton = new Ext.menu.Item({
+				iconCls: 'btn-email',
+				text: GO.files.lang.emailDownloadLink,
+				cls: 'x-btn-text-icon',
+				handler: function(){
+					this.fireEvent('download_link', this, this.records, this.clickedAt);
+				},
+				scope: this
+			});
+		config['items'].push(this.downloadLinkButton);
+	}
 				
 	GO.files.FilesContextMenu.superclass.constructor.call(this, config);
 	
@@ -145,7 +158,8 @@ GO.files.FilesContextMenu = function(config)
 		'copy' : true,
 		'delete' : true,
 		'compress' : true,
-		'decompress' : true
+		'decompress' : true,
+		'download_link' : true
 		
 	});
 	

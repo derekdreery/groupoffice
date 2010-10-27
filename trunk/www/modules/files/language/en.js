@@ -38,3 +38,9 @@ GO.files.lang.selectFiles = 'Select files';
 GO.files.lang.fitImage='Fit image';
 GO.files.lang.normalSize='Normal size';
 GO.files.lang.imageViewer='Image viewer';
+
+GO.files.lang.emailDownloadLink = 'Email download link';
+GO.files.lang.downloadLink = 'Download link';
+GO.files.lang.clickHereToDownload = 'Click here to download the file with a secure link';
+GO.files.lang.expireTime = 'Download link expire time';
+GO.files.lang.possibleUntil = 'possible until';

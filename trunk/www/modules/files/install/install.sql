@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS `fs_files` (
   `user_id` int(11) NOT NULL,
   `comments` text,
   `extension` varchar(5) NOT NULL,
+  `expire_time` int(11) NOT NULL default '0',
+	`random_code` char(11) DEFAULT NULL,
   PRIMARY KEY  (`id`),
   KEY `folder_id` (`folder_id`),
   KEY `name` (`name`),
