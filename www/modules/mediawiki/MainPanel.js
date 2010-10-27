@@ -102,6 +102,6 @@ Ext.extend(GO.mediawiki.MainPanel, Ext.Panel,{
 });
 
 GO.moduleManager.addModule('mediawiki', GO.mediawiki.MainPanel, {
-	title : 'mediaWiki',
+	title : GO.mediawiki.settings.title,
 	iconCls : 'go-tab-icon-tasks'
 });
