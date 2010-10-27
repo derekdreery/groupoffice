@@ -80,6 +80,7 @@ if(!isset($_SESSION['DIR_CHECK']))
 
 	session_destroy();
 	unset($_SESSION);
+	$_SESSION['timezone']=$GO_CONFIG->default_timezone;
 }
 
 
