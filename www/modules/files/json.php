@@ -789,6 +789,7 @@ try {
 
 		case 'file_with_items':
 		case 'file_properties':
+		case 'file_download_link':
 
 			$file = $files->get_file($_POST['file_id']);
 			$folder = $files->get_folder($file['folder_id']);
@@ -813,6 +814,14 @@ try {
 			$response['data']['type']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.File::get_filetype_description($extension).'</div>';
 			$response['data']['size']=Number::format_size($file['size']);
 			$response['data']['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $folder);
+
+			if ($task=='file_download_link') {
+				$response['data']['expire_time'] = $file['expire_time'] = isset($_POST['expire_time']) ? $_POST['expire_time'] : $file['expire_time'];
+				$response['data']['random_code'] = $file['random_code'] = isset($file['random_code']) ? $file['random_code'] : String::random_password('a-z,1-9','i,o',11);
+				$files->update_file($file);
+				$response['success'] = true;
+				break;
+			}
 
 			switch($extension) {
 				case 'jpg':
