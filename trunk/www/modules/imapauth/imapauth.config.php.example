@@ -2,9 +2,9 @@
 /**
  * For more information visit: http://www.group-office.com/wiki/IMAP_or_LDAP_authentication
  */
- 
-$config[] = 
-	array(			
+
+$config[] =
+	array(
 	'proto' => 'imap',
 	'domains' => '*',
 	'host' => 'localhost',
@@ -18,13 +18,15 @@ $config[] =
 	'visible_groups' => array('Everyone', 'Internal'),
 	'modules_read' => array('email', 'files', 'addressbook', 'calendar', 'tasks', 'notes', 'summary'),
 	'modules_write' => array(),
-	
+
 	'smtp_host'=>'localhost',
 	'smtp_port'=>'25',
 	'smtp_encryption'=>'',
 	'smtp_username'=>'',
 	'smtp_password'=>'',
-		
-	'ldap_use_email_as_imap_username'=>false
+
+	'ldap_use_email_as_imap_username'=>false,
+	'imapauth_combo_domains' => 'example.com,example2.com',
+	'imapauth_default_domain' => 'example.com'
 	);
 ?>
