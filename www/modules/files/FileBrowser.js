@@ -1144,6 +1144,8 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	onDownloadLink : function(records){
 
+		this.file_data = records[0].data;
+
 		if (!this.expireDateWindow) {
 			this.expireForm = new Ext.form.FormPanel({
 				items: [new Ext.DatePicker({
@@ -1164,23 +1166,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				closeAction:'hide',
 				items: [this.expireForm]
 			});
-		}
-/*
-		this.expireDateWindow.on('show', function(){
-			var myDate = new Date;
-			var unixtime_ms = myDate.setDate(myDate.getDate()+7);
-			var unixtime = parseInt(unixtime_ms/1000);
-			this.expireForm.items.get('expire_time').setValue(myDate.format(GO.settings.date_format));
-			//this.expireForm.items.get('expire_unixtime').setValue(unixtime);
-		}, this);
-*/
-		this.expireForm.items.get('expire_time').on('select', function(field,date){
+			this.expireForm.items.get('expire_time').on('select', function(field,date){
 			//this.expireForm.items.get('expire_unixtime').setValue(parseInt(date.setDate(date.getDate())/1000));
 			Ext.Ajax.request({
 				url: GO.settings.modules.files.url+'json.php',
 				params: {
 					task: 'file_download_link',
-					file_id: records[0].data.id,
+					file_id: this.file_data.id,
 					expire_time: parseInt(date.setDate(date.getDate())/1000)//this.expireForm.items.get('expire_unixtime').value
 				},
 				scope: this,
@@ -1191,10 +1183,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						var myDate = new Date(parseInt(response.data.expire_time)*1000);
 						GO.email.showComposer({
 							values: {
-								'subject': GO.files.lang.downloadLink+' '+records[0].data.name,
+								'subject': GO.files.lang.downloadLink+' '+this.file_data.name,
 								'body': GO.files.lang.clickHereToDownload+': <a href="'+GO.settings.modules.files.full_url+
-								'download.php?id='+records[0].data.id+'&random_code='+random_code+'">'+records[0].data.name+'</a> ('+
-								GO.files.lang.possibleUntil+' '+myDate.format(GO.settings.date_format)+')'
+									'download.php?id='+this.file_data.id+'&random_code='+random_code+'">'+this.file_data.name+'</a> ('+
+									GO.files.lang.possibleUntil+' '+myDate.format(GO.settings.date_format)+')'
 							}
 						});
 					} else {
@@ -1202,8 +1194,18 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					}
 				}
 			});
-			this.expireDateWindow.hide();
+				this.expireDateWindow.hide();
+			}, this);
+		}
+/*
+		this.expireDateWindow.on('show', function(){
+			var myDate = new Date;
+			var unixtime_ms = myDate.setDate(myDate.getDate()+7);
+			var unixtime = parseInt(unixtime_ms/1000);
+			this.expireForm.items.get('expire_time').setValue(myDate.format(GO.settings.date_format));
+			//this.expireForm.items.get('expire_unixtime').setValue(unixtime);
 		}, this);
+*/
 
 		this.expireDateWindow.show();
 	},
