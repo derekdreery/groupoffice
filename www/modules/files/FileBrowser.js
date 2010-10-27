@@ -1592,8 +1592,6 @@ GO.files.openFile = function(record, store)
 {
 	var index = record.data.id ? 'id' : 'path';
 
-	console.log(record);
-
 	switch(record.data.extension)
 	{
 		case 'bmp':
