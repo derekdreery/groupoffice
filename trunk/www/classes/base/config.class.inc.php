@@ -661,6 +661,13 @@ class GO_CONFIG {
 	 */
 	var $folder_create_mode = '0755';
 
+	/* The permissions mode to use when creating folders
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $file_change_group = '';
+
 	/**
 	 * Modification date
 	 *

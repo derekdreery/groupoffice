@@ -48,10 +48,7 @@ $GO_USERS->get_users();
 while($GO_USERS->next_record())
 {
 	$home_dir = $GO_CONFIG->file_storage_path.'users/'.$GO_USERS->f('username');
-	if(!is_dir($home_dir))
-	{
-		mkdir($home_dir, $GO_CONFIG->folder_create_mode,true);
-	}
+	File::mkdir($home_dir);
 
 	$folder = $files->get_folder($home_dir);
 
@@ -68,11 +65,7 @@ while($GO_USERS->next_record())
 
 
 $share_dir = $GO_CONFIG->file_storage_path.'users/admin/'.$lang['files']['general'];
-
-if(!is_dir($share_dir))
-{
-	mkdir($share_dir, $GO_CONFIG->folder_create_mode, true);
-}
+File::mkdir($share_dir);
 
 $folder = $files->get_folder('users/admin/'.$lang['files']['general']);
 

@@ -50,13 +50,7 @@ class filesystem extends db
 	 */
 	
 	function mkdir_recursive($path) {
-	  global $GO_CONFIG;
-	
-	  if(!is_dir($path))
-	  {
-	  	return mkdir($path, $GO_CONFIG->folder_create_mode, true);
-	  }
-	  return true;	  
+	  return File::mkdir($path);
 	}
 
 
@@ -211,12 +205,9 @@ class filesystem extends db
 		{
 			if (is_dir($source_path))
 			{
-				if (!file_exists($destination_path))
+				if (!File::mkdir($destination_path))
 				{
-					if (!mkdir($destination_path, $GO_CONFIG->folder_create_mode,true))
-					{
-						throw new Exception('Failed to create direcory');
-					}
+					throw new Exception('Failed to create direcory');					
 				}	
 				
 				$files = $this->get_files($source_path, true);

@@ -159,10 +159,7 @@ class files extends db {
 			$this->update_folder($up_folder);
 		}else
 		{
-			if(!is_dir($GO_CONFIG->file_storage_path.$current_path))
-			{
-				mkdir($GO_CONFIG->file_storage_path.$current_path, $GO_CONFIG->folder_create_mode, true);
-			}
+			File::mkdir($GO_CONFIG->file_storage_path.$current_path);
 		}
 		return $new_folder_id;
 	}
@@ -520,8 +517,7 @@ class files extends db {
 		global $GO_CONFIG;
 
 		$path = $GO_CONFIG->file_storage_path.'versioning/'.$file_id;
-		if(!is_dir($path))
-			mkdir($path, $GO_CONFIG->folder_create_mode,true);
+		File::mkdir($path);
 
 		return $path;
 
@@ -653,6 +649,12 @@ class files extends db {
 	}
 
 	function import_file($full_path, &$parent_id=false, $comments='') {
+		global $GO_CONFIG;
+		
+		chmod($full_path, $GO_CONFIG->file_create_mode);
+		if(!empty($GO_CONFIG->file_change_group))
+			chgrp($full_path, $GO_CONFIG->file_change_group);
+
 		if(!$parent_id) {
 			$parent = $this->resolve_path(dirname($this->strip_server_path($full_path)),true);
 			$parent_id=$parent['id'];

@@ -71,10 +71,7 @@ class users extends db
 			{
 				$home_dir = 'users/'.$GO_USERS->f('username');
 
-				if(!is_dir($GO_CONFIG->file_storage_path.$home_dir))
-				{
-					mkdir($GO_CONFIG->file_storage_path.$home_dir, $GO_CONFIG->folder_create_mode, true);
-				}
+				File::mkdir($home_dir);
 
 				$folder = $files->resolve_path($home_dir,true,1,'1');
 
@@ -105,10 +102,7 @@ class users extends db
 
 				$home_dir = 'adminusers/'.$GO_USERS->f('username');
 
-				if(!is_dir($GO_CONFIG->file_storage_path.$home_dir))
-				{
-					mkdir($GO_CONFIG->file_storage_path.$home_dir, $GO_CONFIG->folder_create_mode, true);
-				}
+				File::mkdir($GO_CONFIG->file_storage_path.$home_dir);
 
 				$folder = $files->resolve_path($home_dir,true,1,'1');
 

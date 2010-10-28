@@ -43,7 +43,15 @@ class File
 
 	  if(!is_dir($path))
 	  {
-	  	return mkdir($path, $GO_CONFIG->folder_create_mode, true);
+	  	if(mkdir($path, $GO_CONFIG->folder_create_mode, true)){
+			if(!empty($GO_CONFIG->file_change_group))
+				chgrp($path, $GO_CONFIG->file_change_group);
+			return true;
+		}else
+		{
+			return false;
+		}
+
 	  }
 	  return true;
 	}
