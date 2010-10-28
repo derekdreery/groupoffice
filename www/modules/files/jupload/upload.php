@@ -71,10 +71,7 @@ while($file = array_shift($_FILES))
 					$complete_dir .= str_replace('\\','/',$_POST['relpathinfo'][$count]).'/';
 				}
 
-				if(!is_dir($complete_dir))
-				{
-					mkdir($complete_dir,$GO_CONFIG->folder_create_mode,true);
-				}
+				File::mkdir($complete_dir);
 
 				$filepath = File::checkfilename($complete_dir.$file['name']);
 
@@ -125,11 +122,8 @@ while($file = array_shift($_FILES))
 				
 			$filepath = $dir.$file['name'];
 		}
-			
-		if(!is_dir($dir))
-		{
-			mkdir($dir,$GO_CONFIG->folder_create_mode,true);
-		}
+
+		File::mkdir($dir);
 
 		if(!isset($_POST['jupart']))
 		{

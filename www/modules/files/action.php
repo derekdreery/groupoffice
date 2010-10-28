@@ -193,6 +193,8 @@ try {
 					$tmp_file = $GO_CONFIG->tmpdir.'files_upload/'.$_FILES['attachments']['name'][$n];
 					move_uploaded_file($_FILES['attachments']['tmp_name'][$n], $tmp_file);
 					chmod($tmp_file, $GO_CONFIG->file_create_mode);
+					if(!empty($GO_CONFIG->file_change_group))
+						chgrp($tmp_file, $GO_CONFIG->file_change_group);
 
 					$_SESSION['GO_SESSION']['files']['uploaded_files'][]=$tmp_file;
 					$_SESSION['GO_SESSION']['files']['uploaded_files_props'][]=$_POST;
