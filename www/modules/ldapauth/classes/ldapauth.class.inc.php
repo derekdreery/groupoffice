@@ -86,10 +86,12 @@ class ldapauth extends imapauth {
 		}
 
 
-		/*if(!$ldap->bind()){
-			go_debug('LDAPAUTH: Could not bind to server');
-			throw new Exception('Could not bind to LDAP server');
-		}*/
+		if(!empty($GO_CONFIG->ldap_user) && !empty($GO_CONFIG->ldap_pass)){
+			if(!$ldap->bind()){
+				go_debug('LDAPAUTH: Could not bind to server');
+				throw new Exception('Could not bind to LDAP server');
+			}
+		}
 
 		$ldap->search('uid='.$username, $ldap->PeopleDN);
 
@@ -101,11 +103,12 @@ class ldapauth extends imapauth {
 		$la = new ldapauth();
 		$user = $la->convert_ldap_entry_to_groupoffice_record($entry[0]);
 
-		$authenticated = $ldap->bind($entry[0]['dn'], $password);
+		$authenticated = @$ldap->bind($entry[0]['dn'], $password);
 
 		if(!$authenticated) {
 			go_debug('LDAPAUTH: LDAP authentication failed for '.$username);
-			throw new Exception($GLOBALS['lang']['common']['badLogin']);
+			//throw new Exception($GLOBALS['lang']['common']['badLogin']);
+			return false;
 		}else {
 			go_debug('LDAPAUTH: LDAP Authentication successfull');
 
