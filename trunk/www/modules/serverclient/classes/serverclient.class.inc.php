@@ -161,7 +161,7 @@ class serverclient
 			}
 	}*/
 
-	public static function add_user($user, $random_password)
+	public static function add_user($user, $random_password=false)
 	{
 		global $GO_MODULES, $GO_CONFIG;
 		
