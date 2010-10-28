@@ -282,9 +282,12 @@ class imap_base {
 		else {
 			$command = 'A'.$this->command_number().' '.$command;
 		}
-		if (is_resource($this->handle)) {
-			fputs($this->handle, $command);
-		}
+		if (!is_resource($this->handle))
+				return false;
+
+		if(!fputs($this->handle, $command))
+				return false;
+		
 
 		//go_debug($command);
 		$this->commands[trim($command)] = getmicrotime();
