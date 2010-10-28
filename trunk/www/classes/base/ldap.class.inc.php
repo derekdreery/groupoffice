@@ -98,11 +98,20 @@ class ldap {
 			if(isset($GO_CONFIG->ldap_port))
 				$this->Port = $GO_CONFIG->ldap_port;
 
-			$this->User = $GO_CONFIG->ldap_user;
-			$this->Password = $GO_CONFIG->ldap_pass;
-			$this->BaseDN = $GO_CONFIG->ldap_basedn;
-			$this->PeopleDN = $GO_CONFIG->ldap_peopledn;
-			$this->GroupsDN = $GO_CONFIG->ldap_groupsdn;
+			if(isset($GO_CONFIG->ldap_user))
+				$this->User = $GO_CONFIG->ldap_user;
+
+			if(isset($GO_CONFIG->ldap_pass))
+				$this->Password = $GO_CONFIG->ldap_pass;
+
+			if(isset($GO_CONFIG->ldap_basedn))
+				$this->BaseDN = $GO_CONFIG->ldap_basedn;
+
+			if(isset($GO_CONFIG->ldap_peopledn))
+				$this->PeopleDN = $GO_CONFIG->ldap_peopledn;
+
+			if(isset($GO_CONFIG->ldap_groupsdn))
+				$this->GroupsDN = $GO_CONFIG->ldap_groupsdn;
 
 			$this->tls = !empty($GO_CONFIG->ldap_tls);
 		}

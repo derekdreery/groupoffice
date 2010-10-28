@@ -62,7 +62,7 @@ GO.lang.strPassword = 'Lösenord';
 
 GO.lang.strFirstName = 'Förnamn';
 GO.lang.strMiddleName = 'Mellannamn';
-GO.lang.strNo = 'Nej.';
+GO.lang.strNo = 'Nr.';
 GO.lang.strLastName = 'Efternamn';
 GO.lang.strTitle = 'Titel';
 GO.lang.strInitials = 'Initialer';
