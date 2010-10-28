@@ -202,6 +202,13 @@ try{
 			{
 				throw new Exception($lang['common']['saveError']);
 			}
+			/*if ($_REQUEST['language']=='00') {
+				global $GO_LANGUAGE, $GO_SECURITY;
+				$GO_USERS = new GO_USERS();
+				$user = $GO_USERS->get_user($GO_SECURITY->user_id);
+				$GO_LANGUAGE->set_language($user['language']);
+				require($GO_LANGUAGE->get_base_language_file('common'));
+			}*/
 			if (isset($_POST['remind']))
 			{
 				require_once($GO_CONFIG->class_path.'cryptastic.class.inc.php');
@@ -233,9 +240,7 @@ try{
 			//$response['fullscreen']=isset($_POST['fullscreen']);
 				
 			$response['settings'] = $GO_CONFIG->get_client_settings();
-			
-			
-			
+						
 			require_once($GO_CONFIG->class_path.'cache.class.inc.php');
 			$cache = new cache();
 			$cache->cleanup();

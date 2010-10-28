@@ -365,3 +365,5 @@ GO.lang.priority_normal='Normaal';
 GO.lang.priority_high='Hoog';
 
 GO.lang.none = 'Geen';
+
+GO.lang.userSelectedLanguage = 'Mijn geselecteerde taal';

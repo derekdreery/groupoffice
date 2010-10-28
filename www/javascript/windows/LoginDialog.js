@@ -45,7 +45,7 @@ GO.dialog.LoginDialog = function(config){
 	}
 	Ext.apply(this, config);
 	
-	var langCombo = new Ext.form.ComboBox({
+	var langCombo = new GO.form.ComboBoxReset({
 		fieldLabel: GO.lang.strLanguage,
 		name: 'language_text',
 		store:  new Ext.data.SimpleStore({
@@ -53,18 +53,20 @@ GO.dialog.LoginDialog = function(config){
 			data : GO.Languages
 		}),
 		anchor:'100%',
-		hiddenName: 'language',
+		hiddenName: 'login_language',
 		displayField:'language',
 		valueField: 'id',
 		mode:'local',
 		triggerAction:'all',
-		forceSelection: true,
+		forceSelection: false,
+		emptyText: GO.lang.userSelectedLanguage,
 		editable: false,
-		value: GO.settings.language
+		value: GO.loginSelectedLanguage || ""
 	});
 		
 	langCombo.on('select', function(){
-		document.location=BaseHref+'index.php?SET_LANGUAGE='+langCombo.getValue();
+		if(langCombo.getValue()!='')
+			document.location=BaseHref+'index.php?SET_LANGUAGE='+langCombo.getValue();
 	}, this);
 
 	this.formPanel = new Ext.FormPanel({
