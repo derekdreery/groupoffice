@@ -96,6 +96,8 @@ class GO_LANGUAGE extends db {
 	 * @return string	language code
 	 */
 	function set_language($language) {
+
+		go_debug($language);
 		if($this->language==$language)
 			return true;
 

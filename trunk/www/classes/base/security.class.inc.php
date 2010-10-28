@@ -89,7 +89,7 @@ class GO_SECURITY extends db {
 			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
-			$GO_USERS->update_session($user, true);
+			$GO_USERS->update_session($user, !empty($_POST['login_language']));
 			$this->user_id = $user['id'];
 		}else {
 			if(empty($this->user_id)) {

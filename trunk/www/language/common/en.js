@@ -384,3 +384,5 @@ GO.lang.priority_normal='Normal';
 GO.lang.priority_high='High';
 
 GO.lang.none = 'None';
+
+GO.lang.userSelectedLanguage = 'User-selected language';

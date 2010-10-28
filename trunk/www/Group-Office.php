@@ -158,8 +158,8 @@ if($GO_CONFIG->session_inactivity_timeout>0){
 $GO_EVENTS = new GO_EVENTS();
 
 
-if (isset($_REQUEST['SET_LANGUAGE'])){
-	$GO_LANGUAGE->set_language($_REQUEST['SET_LANGUAGE']);
+if (!empty($_REQUEST['SET_LANGUAGE'])){
+		$GO_LANGUAGE->set_language($_REQUEST['SET_LANGUAGE']);
 }
 
 require($GO_LANGUAGE->get_base_language_file('common'));

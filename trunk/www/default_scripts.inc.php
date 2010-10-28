@@ -51,6 +51,10 @@ if(isset($_REQUEST['after_login_url'])) {
 		$after_login_url .= '?'.implode('&', $params);
 	}
 }
+
+if(isset($_REQUEST['SET_LANGUAGE']))
+	echo 'GO.loginSelectedLanguage="'.$_REQUEST['SET_LANGUAGE'].'";';
+
 echo 'GO.afterLoginUrl="'.$after_login_url.'";';
 
 $fullscreen = isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1' ? 'true' : 'false';
@@ -119,6 +123,7 @@ if($GO_CONFIG->debug || !file_exists($path)) {
 	require($GO_CONFIG->root_path.'language/languages.inc.php');
 	$fp=fopen($GO_CONFIG->file_storage_path.'cache/languages.js','w');
 	fwrite($fp, "GO.Languages=[];\n");
+	//fwrite($fp,'GO.Languages.push(["",GO.lang.userSelectedLanguage]);');
 	foreach($languages as $code=>$language) {
 		fwrite($fp,'GO.Languages.push(["'.$code.'","'.$language.'"]);');
 	}
