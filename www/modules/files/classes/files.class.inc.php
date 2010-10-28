@@ -1305,7 +1305,7 @@ class files extends db {
 			throw new Exception($lang['files']['folderExists']);
 		}
 
-		if (!file_exists($full_path.'/'.$name) && !mkdir($full_path.'/'.$name, $GO_CONFIG->folder_create_mode,true)) {
+		if (!File::mkdir($full_path.'/'.$name)) {
 			throw new Exception($lang['common']['saveError'].$full_path.'/'.$name);
 		} else {
 			$folder['readonly']=$readonly;
