@@ -13,7 +13,6 @@
   Author URI: http://www.intermesh.nl/en/
  */
 
-//ini_set('error_reporting', E_ALL);
 
 
 $go_config = get_option('groupoffice_config');
@@ -23,10 +22,9 @@ if(isset($go_config['config_file'])){
 	define('CONFIG_FILE', $go_config['config_file']);
 	require($config['root_path'].'Group-Office.php');
 	//ini_set('display_errors', 0);
-	ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 }
 ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+ini_set('error_reporting', E_ALL & ~E_NOTICE);
 
 class groupoffice_connector {
 
@@ -281,6 +279,9 @@ if(strpos(basename($_SERVER['PHP_SELF']),'wp-')===false)
 function groupoffice_get_contact_form($post_extra_info=false){
 
 	global $current_user, $go_config, $GO_MODULES, $GO_CONFIG;
+
+require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+$GO_LINKS = new GO_LINKS();
 
 	//$go_config = get_option('groupoffice_config');
 
