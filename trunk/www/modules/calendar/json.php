@@ -69,6 +69,7 @@ try {
 
 
 			$response['groups']['total'] = $cal->get_groups();
+			$response['groups']['results']=array();
 			$response['resources']['results']=array();
 			$total = 0;
 
