@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `go_reminders` (
   `manual` tinyint(1) NOT NULL,
   `text` text NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `go_reminders_users`;
