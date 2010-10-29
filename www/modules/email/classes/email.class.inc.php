@@ -211,14 +211,15 @@ class email extends db {
 
 					$unseen =  $imap->get_unseen();
 
+					//$response['email_status'][$inbox['id']]=$account;
 					$response['email_status'][$inbox['id']]['unseen'] = $unseen['count'];
 					$response['email_status'][$inbox['id']]['messages'] = $imap->selected_mailbox['messages'];
 				}
 			}
 			catch(Exception $e){
 				go_debug($e->getMessage());
-				$imap->disconnect();
 			}
+			$imap->disconnect();
 		}
 	}
 
