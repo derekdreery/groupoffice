@@ -1,4 +1,4 @@
 <?php
 require($GO_LANGUAGE->get_fallback_language_file('mediawiki'));
-$lang['mediawiki']['name']='Mediawiki interface';
-$lang['mediawiki']['description']='This module integrates Mediawiki with Group-Office.';
+$lang['mediawiki']['name']='Mediawiki';
+$lang['mediawiki']['description']='Integreerd Mediawiki en logt Group-Office gebruikers automatisch in. Zie modules/mediawiki/INSTALL.TXT voor meer informatie.';

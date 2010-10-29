@@ -3,4 +3,4 @@
 require($GO_LANGUAGE->get_fallback_language_file('calllog'));
 
 $lang['calllog']['name']='Bellerslijst';
-$lang['calllog']['description']='Lijst met bellers ;).';
+$lang['calllog']['description']='Simpele invoer van telefoonnotities.';
