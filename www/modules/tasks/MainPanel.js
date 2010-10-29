@@ -164,7 +164,7 @@ GO.tasks.MainPanel = function(config){
 				text: GO.lang['cmdAdd'],
 				cls: 'x-btn-text-icon',
 				handler: function(){
-
+					this.taskPanel.reset();
 					GO.tasks.showTaskDialog({
 						tasklist_id: this.tasklist_id,
 						tasklist_name: this.tasklist_name
@@ -382,7 +382,7 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 					iconCls: 'btn-add',
 					text: GO.lang['cmdAdd'],
 					cls: 'x-btn-text-icon',
-					handler: function(){
+					handler: function(){						
 						this.tasklistDialog.show();
 					},
 					disabled: !GO.settings.modules.tasks.write_permission,
@@ -505,13 +505,6 @@ GO.tasks.showTaskDialog = function(config){
 
 	if(!GO.tasks.taskDialog)
 		GO.tasks.taskDialog = new GO.tasks.TaskDialog();
-
-	if(GO.tasks.taskDialogListeners){
-		for(var i=0;i<GO.tasks.taskDialogListeners.length;i++){
-			GO.tasks.taskDialog.on(GO.tasks.taskDialogListeners[i]);
-		}
-		delete GO.tasks.taskDialogListeners;
-	}
 
 	GO.tasks.taskDialog.show(config);
 }

@@ -168,12 +168,12 @@ Ext.extend(GO.users.MainPanel, GO.grid.GridPanel,{
 		this.store.load();
 
 
-		GO.users.userDialogListeners={
+		GO.dialogListeners.add('user',{
 			scope:this,
 			save:function(){
 				this.store.reload();
 			}
-		}
+		});
 	},			
 	
 	rowDoubleClick : function (grid, rowIndex, event)
@@ -188,11 +188,6 @@ GO.users.showUserDialog = function(user_id, config){
 
 	if(!GO.users.userDialog)
 		GO.users.userDialog = new GO.users.UserDialog();
-
-	if(GO.users.userDialogListeners){
-		GO.users.userDialog.on(GO.users.userDialogListeners);
-		delete GO.users.userDialogListeners;
-	}
 
 	GO.users.userDialog.show(user_id, config);
 }

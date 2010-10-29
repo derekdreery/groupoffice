@@ -249,7 +249,7 @@ GO.addressbook.MainPanel = function(config)
 			//GO.addressbook.showContactDialog(0);
 			this.contactEastPanel.reset();
 			this.contactEastPanel.editHandler();
-
+		
 			this.tabPanel.setActiveTab('ab-contacts-grid');
 		},
 		scope: this
@@ -482,7 +482,7 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 
 		this.init();
 
-		GO.addressbook.contactDialogListeners={
+		GO.dialogListeners.add('contact',{
 			scope:this,
 			'save':function(){
 				var panel = this.tabPanel.getActiveTab();
@@ -491,9 +491,9 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 					this.contactsGrid.store.reload();
 				}
 			}
-		}
+		});
 
-		GO.addressbook.companyDialogListeners={
+		GO.dialogListeners.add('company',{
 			scope:this,
 			'save':function(){
 				var panel = this.tabPanel.getActiveTab();
@@ -502,7 +502,7 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 					this.companiesGrid.store.reload();
 				}
 			}
-		}
+		});
 	},
 
 

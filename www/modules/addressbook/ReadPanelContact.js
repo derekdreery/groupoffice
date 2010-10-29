@@ -22,14 +22,14 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	loadUrl : GO.settings.modules.addressbook.url+'json.php',
 
 	stateId : 'ab-contact-panel',
+
+	editGoDialogId : 'contact',
 	
 	editHandler : function(){
-		GO.addressbook.showContactDialog(this.link_id);
-		this.addSaveHandler(GO.addressbook.contactDialog);
+		GO.addressbook.showContactDialog(this.link_id);		
 	},	
 	
-	initComponent : function(){
-		
+	initComponent : function(){	
 		
 		this.template = 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+

@@ -715,8 +715,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		GO.calendar.MainPanel.superclass.afterRender.call(this);
 
 		if(GO.tasks){
-			GO.tasks.taskDialogListeners= GO.tasks.taskDialogListeners || [];
-			GO.tasks.taskDialogListeners.push({
+			GO.dialogListeners.add('tasks',{
 				scope:this,
 				save:function(){
 					if(this.isVisible()){
@@ -726,8 +725,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			});
 		}		
 
-		GO.calendar.eventDialogListeners= GO.calendar.eventDialogListeners || [];
-		GO.calendar.eventDialogListeners.push({
+		GO.dialogListeners.add('event',{
 			scope:this,
 			save:function(newEvent, oldDomId){
 
@@ -2078,15 +2076,7 @@ GO.mainLayout.onReady(function(){
 GO.calendar.showEventDialog = function(config){
 
 	if(!GO.calendar.eventDialog)
-		GO.calendar.eventDialog = new GO.calendar.EventDialog();
-
-	if(GO.calendar.eventDialogListeners){
-		for(var i=0;i<GO.calendar.eventDialogListeners.length;i++){
-			GO.calendar.eventDialog.on(GO.calendar.eventDialogListeners[i]);
-		}
-		
-		delete GO.calendar.eventDialogListeners;
-	}
+		GO.calendar.eventDialog = new GO.calendar.EventDialog();	
 
 	GO.calendar.eventDialog.show(config);
 }

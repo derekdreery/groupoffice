@@ -19,6 +19,8 @@ GO.tasks.TaskDialog = function() {
 		this.nameField.focus();
 	};
 
+	this.goDialogId='task';
+
 	this.win = new GO.Window({
 		layout : 'fit',
 		modal : false,
@@ -69,6 +71,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		if (!config) {
 			config = {};
 		}
+
+		GO.dialogListeners.apply(this);
 
 		if(!GO.tasks.categoriesStore.loaded)
 			GO.tasks.categoriesStore.load();
@@ -222,6 +226,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				}
 
 				GO.tasks.tasksObservable.fireEvent('save', this, this.task_id);
+				this.fireEvent('save', this, this.task_id);
 
 				if (hide) {
 					this.win.hide();

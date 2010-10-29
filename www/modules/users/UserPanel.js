@@ -8,9 +8,10 @@ GO.users.UserPanel = Ext.extend(GO.DisplayPanel,{
 
 	loadUrl : GO.settings.modules.users.url+'json.php',
 
+	editGoDialogId : 'user',
+
 	editHandler : function(){
-		GO.users.showUserDialog(this.link_id);
-		this.addSaveHandler(GO.users.userDialog);
+		GO.users.showUserDialog(this.link_id);		
 	},
 
 	initComponent : function(){
