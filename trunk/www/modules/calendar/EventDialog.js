@@ -18,6 +18,8 @@ GO.calendar.EventDialog = function(calendar) {
 
 	this.beforeInit();
 
+	this.goDialogId='event';
+
 	this.resourceGroupsStore = new GO.data.JsonStore({
 		url: GO.settings.modules.calendar.url+ 'json.php',
 		baseParams: {
@@ -218,6 +220,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 	show : function(config) {
 
 		config = config || {};
+
+		GO.dialogListeners.apply(this);
 
 		this.win.show();
 

@@ -15,6 +15,8 @@
 GO.addressbook.ContactDialog = function(config)
 {
 	Ext.apply(this, config);
+
+	this.goDialogId = 'contact';
 	
 
 	this.personalPanel = new GO.addressbook.ContactProfilePanel();

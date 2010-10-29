@@ -119,8 +119,7 @@ Ext.extend(GO.calendar.SummaryGroupPanel, Ext.grid.GridPanel, {
 	{
 		GO.calendar.SummaryGroupPanel.superclass.afterRender.call(this);
 
-		GO.calendar.eventDialogListeners= GO.calendar.eventDialogListeners || [];
-		GO.calendar.eventDialogListeners.push({
+		GO.dialogListeners.add('event',{
 			save:function(){
 				this.store.reload()
 			},

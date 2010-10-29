@@ -105,9 +105,12 @@ GO.notes.MainPanel = function(config){
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){
-			GO.notes.showNoteDialog(0, {
-				category_id: this.category_id,
-				category_name: this.category_name});
+				this.eastPanel.reset();
+
+				GO.notes.showNoteDialog(0, {
+					category_id: this.category_id,
+					category_name: this.category_name});
+
 			},
 			scope: this
 		},{
@@ -153,12 +156,12 @@ GO.notes.MainPanel = function(config){
 Ext.extend(GO.notes.MainPanel, Ext.Panel, {
 	afterRender : function()
 	{
-		GO.notes.noteDialogListeners={
+		GO.dialogListeners.add('note',{
 			scope:this,
 			save:function(){
 				this.centerPanel.store.reload();
 			}
-		}
+		});
 
 		GO.notes.readableCategoriesStore.load();
 		
@@ -170,12 +173,7 @@ GO.notes.showNoteDialog = function(note_id, config){
 
 	if(!GO.notes.noteDialog)
 		GO.notes.noteDialog = new GO.notes.NoteDialog();
-
-	if(GO.notes.noteDialogListeners){
-		GO.notes.noteDialog.on(GO.notes.noteDialogListeners);
-		delete GO.notes.noteDialogListeners;
-	}
-
+	
 	GO.notes.noteDialog.show(note_id, config);
 }
 

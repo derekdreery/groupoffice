@@ -15,7 +15,9 @@ GO.notes.NoteDialog = function(config){
 	if(!config)
 	{
 		config={};
-	}	
+	}
+
+	config.goDialogId='note';
 	
 	this.buildForm();
 	

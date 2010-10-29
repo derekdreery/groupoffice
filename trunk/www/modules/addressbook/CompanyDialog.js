@@ -14,6 +14,8 @@
 GO.addressbook.CompanyDialog = function(config)
 {
 	Ext.apply(this, config);
+
+	this.goDialogId = 'company';
 	
 	this.personalPanel = new GO.addressbook.CompanyProfilePanel();	    
 		    

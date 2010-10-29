@@ -17,6 +17,8 @@ GO.users.UserDialog = function(config){
 	{
 		config={};
 	}
+
+	config.goDialogId='user';
 	
 	this.buildForm();
 
@@ -245,7 +247,7 @@ Ext.extend(GO.users.UserDialog,GO.Window,{
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 				
-				this.fireEvent('save', this);
+				this.fireEvent('save', this, action.result.user_id || this.user_id);
 
 				this.permissionsTab.commit();
 				

@@ -49,6 +49,12 @@ GO.Window = Ext.extend(Ext.Window,{
 		}
 	},
 
+	show : function(){		
+		GO.dialogListeners.apply(this);
+		
+		GO.Window.superclass.show.call(this);
+	},
+
 	hide : function(){
 		
 		for(var i=0;i<this.temporaryListeners.length;i++)

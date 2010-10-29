@@ -47,19 +47,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	hiddenSections : [],
 
 	expandListenObject : false,
-	
-	addSaveHandler : function(win, eventName)
-	{
-		if(!eventName)
-			eventName='save';
 
-		if(!this.saveHandlerAdded)
-		{
-			win.on(eventName, this.onSave, this);
-			this.saveHandlerAdded=true;
-		}
-	},
-	
+	editGoDialogId : false,
 	
 	createTopToolbar : function(){
 		
@@ -183,6 +172,13 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			tbar.setDisabled(true);
 
 		this.body.on('click', this.onBodyClick, this);
+
+		if(this.editGoDialogId){
+			GO.dialogListeners.add(this.editGoDialogId,{
+				scope:this,
+				save:this.onSave
+			});
+		}
 	},
 	
 	getLinkName : function(){
@@ -195,7 +191,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		{
 			this.reload();
 		}*/
-		if(saved_id > 0){
+		if(saved_id > 0 && (this.link_id == saved_id || this.link_id==0)){
 			this.load(saved_id, true);
 		}
 	},

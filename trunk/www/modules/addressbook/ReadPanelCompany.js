@@ -22,10 +22,11 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 	loadUrl : GO.settings.modules.addressbook.url+'json.php',
 
 	stateId : 'ab-company-panel',
+
+	editGoDialogId : 'company',
 	
 	editHandler : function(){
-		GO.addressbook.showCompanyDialog(this.link_id);
-		this.addSaveHandler(GO.addressbook.companyDialog);
+		GO.addressbook.showCompanyDialog(this.link_id);		
 	},	
 	
 	initComponent : function(){
