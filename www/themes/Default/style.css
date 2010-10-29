@@ -292,6 +292,11 @@ a.normal-link:hover{
 	background-repeat: no-repeat;
 }
 
+.filetype-xmind {
+	background-image:url('images/16x16/filetypes/xmind.png') !important;
+}
+
+
 .filetype-eml {
 	background-image:url('images/16x16/filetypes/mail.png') !important;
 }
