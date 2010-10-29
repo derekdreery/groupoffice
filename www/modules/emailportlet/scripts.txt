@@ -1,2 +1,2 @@
 modules/emailportlet/Plugin.js
-modules/emailportlet/MessageDialog.js
+

@@ -34,7 +34,7 @@ GO.mainLayout.onReady(function(){
 
 			if(!GO.emailportlet.messageDialog)
 			{
-				GO.emailportlet.messageDialog = new GO.emailportlet.MessageDialog({});
+				GO.emailportlet.messageDialog = new GO.email.MessageDialog({});
 			}
 			
 			GO.emailportlet.messageDialog.show(record.id, record.store.baseParams.mailbox, record.store.baseParams.account_id);

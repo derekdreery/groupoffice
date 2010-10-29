@@ -1103,9 +1103,10 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 					account_id: this.account_id
 				});
 			}else
-			{
-				this.messagesGrid.collapse();
-			}
+			{				
+				var messageDialog = new GO.email.MessageDialog();
+				messageDialog.show(this.messagePanel.uid, this.mailbox, this.account_id);
+			}			
 		}, this);
 
 		//this.messagesGrid.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
