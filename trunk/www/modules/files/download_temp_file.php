@@ -17,7 +17,7 @@ session_write_close();
 
 $name = (isset($_REQUEST['name']) && $_REQUEST['name']) ? $_REQUEST['name'] : '';
 
-$path = $GO_CONFIG->tmpdir;
+$path = $GO_CONFIG->tmpdir.'attachments/';;
 $file = $path.$name;
 
 if(File::path_leads_to_parent($file))
