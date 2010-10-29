@@ -224,3 +224,44 @@ margin:5px 2px;
 	background-repeat: no-repeat;
 }
 
+
+.attachment-wrap {
+	cursor: default;
+}
+.attachment-wrap.x-view-over, .attachment-wrap.x-view-selected{
+	border-top:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+	margin:-2px 0 0px 0;
+}
+.attachment-wrap.x-view-over{
+	background-color:#EBF0F2;
+}
+.attachment-wrap.x-view-selected{
+	background-color:#CFDCE0;
+}
+
+.email-upload-pc{
+	padding-left:13px;
+	cursor:pointer;
+	line-height:16px;
+	text-decoration:none;
+	white-space:nowrap;
+
+}
+.email-upload-pc td.x-btn-tl, .email-upload-pc td.x-btn-tc, .email-upload-pc td.x-btn-tr,
+.email-upload-pc td.x-btn-ml, .email-upload-pc td.x-btn-mc, .email-upload-pc td.x-btn-mr,
+.email-upload-pc td.x-btn-bl, .email-upload-pc td.x-btn-bc, .email-upload-pc td.x-btn-br {
+	background:transparent !important;	
+}
+
+.email-upload-pc button.x-btn-text
+{
+	color:#000000 !important;
+	font:12px tahoma,arial,helvetica,sans-serif;
+	white-space:nowrap;
+}
+
+.x-menu-list-item form
+{
+	background:transparent !important;
+}
