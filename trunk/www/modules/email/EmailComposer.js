@@ -1482,7 +1482,16 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			newRecord.id = selections[i].data.path;
 			this.attachmentsStore.add(newRecord);
 		}
+
+		if(!this.attachmentsView.isVisible() && this.attachmentsStore.data.length)
+		{
+			this.attachmentsView.show();
+			this.attachmentsEl = Ext.get(this.attachmentsId);
+			this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
+		}
+
 		this.setEditorHeight();
+		
 		GO.selectFileBrowserWindow.hide();
 
 	},
