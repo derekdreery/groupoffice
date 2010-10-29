@@ -783,8 +783,8 @@ Ext.ux.SwfUploadPanel = Ext.extend(Ext.grid.GridPanel, {
 	 */
 	removeFiles: function() {
 		if(this.debug) console.info('REMOVE FILES');
-		
-		var selRecords = this.getSelections();
+
+		var selRecords = this.getSelectionModel.getSelections();
 		for (var i=0; i < selRecords.length; i++) {
 			if (selRecords[i].data.status != 1) {
 				this.suo.cancelUpload(selRecords[i].id);

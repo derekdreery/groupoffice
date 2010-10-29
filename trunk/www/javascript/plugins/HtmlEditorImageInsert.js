@@ -21,7 +21,8 @@ GO.plugins.HtmlEditorImageInsert = function(config) {
 		this.editor = htmlEditor;
 		this.editor.on('render', this.onRender, this);
 	};
-    
+
+	this.filesFilter='jpg,png,gif,jpeg,bmp';
 	this.addEvents({
 		'insert' : true
 	});
@@ -33,21 +34,53 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 	root_folder_id : 0,
 	folder_id : 0,
 	onRender :  function() {
-			this.editor.tb.add({
-				itemId : 'htmlEditorImage',
-				cls : 'x-btn-icon go-edit-insertimage',
-				enableToggle: false,
-				scope: this,
-				handler:function(){
-					this.showFileBrowser();
-				},
-				clickEvent:'mousedown',
-				tabIndex:-1,
-				tooltip:{
-					title:GO.lang.image,
-					text:GO.lang.insertImage
-					}
+
+		var element={};
+
+		element.itemId='htmlEditorImage';
+		element.cls='x-btn-icon go-edit-insertimage';
+		element.enableToggle=false;
+		element.scope=this;
+		element.clickEvent='mousedown';
+		element.tabIndex=-1;
+		element.tooltip={
+			title:GO.lang.image,
+			text:GO.lang.insertImage
+		}
+		
+		if(GO.files)
+		{					
+			this.uploadForm = new GO.email.AttachmentPCForm({
+				baseParams:{
+					task:'upload_tmp_file'
+				}
 			});
+
+			this.uploadForm.on('upload', function(e, file)
+			{
+				this.selectTempImage(file.name);
+			},this);
+			
+			this.menu = element.menu = new Ext.menu.Menu({
+				items:[
+				this.uploadForm,
+				{
+					text : GO.email.lang.attachFilesGO.replace('{product_name}', GO.settings.config.product_name),
+					handler : function()
+					{
+						this.showFileBrowser();
+					},
+					scope : this
+				}]
+			})
+		}else
+		{
+			element.handler=function(){
+				this.showFileBrowser();
+			}
+		}
+		
+		this.editor.tb.add(element);
 	},
 	
 	showFileBrowser : function (){
@@ -67,6 +100,21 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 		GO.selectFileBrowserWindow.show();
 
 		GO.selectFileBrowserWindow.show.defer(200, GO.selectFileBrowserWindow);
+	},
+
+	selectTempImage : function(name)
+	{
+		this.selectedUrl = GO.settings.modules.files.url+'download_temp_file.php?name='+name;
+		this.name = name;		
+
+		var html = '<img src="'+this.selectedUrl+'" border="0" />';
+
+		this.fireEvent('insert_temp', this);
+		
+		this.menu.hide();
+
+		this.editor.focus();
+		this.editor.insertAtCursor(html);		
 	},
 	
 	selectImage : function(r){	

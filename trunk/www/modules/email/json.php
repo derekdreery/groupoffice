@@ -338,11 +338,15 @@ try {
 				//reattach non-inline attachments
 				foreach($content['attachments'] as $attachment) {
 					if(empty($attachment['replacement_url']) && !empty($attachment['tmp_file'])){
+						$extension = File::get_extension($attachment['name']);
 						$response['data']['attachments'][]=array(
 											'tmp_name'=>$attachment['tmp_file'],
 											'name'=>$attachment['name'],
 											'size'=>$attachment["size"],
-											'type'=>File::get_filetype_description(File::get_extension($attachment['name']))
+											'type'=>File::get_filetype_description($extension),
+											'extension'=>$extension,
+											'human_size'=>Number::format_size($attachment['size'])
+
 							);
 					}
 				}
