@@ -20,6 +20,11 @@ $name = (isset($_REQUEST['name']) && $_REQUEST['name']) ? $_REQUEST['name'] : ''
 $path = $GO_CONFIG->tmpdir;
 $file = $path.$name;
 
+if(File::path_leads_to_parent($file))
+{
+	die('File not found: '.$file);
+}
+
 if(!$path || !file_exists($file)) {
 	die('File not found: '.$file);
 }
