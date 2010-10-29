@@ -149,9 +149,97 @@ GO.email.EmailComposer = function(config) {
 		]
 	});
 
+
+	var uploadItems = [];
+	var version = deconcept.SWFObjectUtil.getPlayerVersion();
+	if(version.major > 0)
+	{
+		uploadItems.push({
+			text : GO.email.lang.attachFilesPC,
+			handler : function()
+			{
+				if(!this.uploadFlashDialog)
+				{
+					this.uploadFlashDialog = new GO.email.UploadFlashDialog({
+						uploadPanel: new Ext.ux.SwfUploadPanel({
+							post_params : {
+								"task" : 'upload_attachment'
+							},
+							upload_url : GO.settings.modules.email.url+ 'action.php',
+							labelWidth: 110,
+							file_size_limit:"100MB",
+							single_file_select: false, // Set to true if you only want to select one file from the FileDialog.
+							confirm_delete: false, // This will prompt for removing files from queue.
+							remove_completed: false // Remove file from grid after uploaded.
+						})
+					});
+
+					this.uploadFlashDialog.on('fileUploadSuccess', function(obj, file, data)
+					{
+						this.attachmentsStore.loadData({
+							'results' : data.file
+						}, true);
+					},this)
+				}
+
+				this.uploadFlashDialog.show();
+			},
+			scope:this
+		})
+	}else
+	{
+		this.uploadForm = new GO.email.AttachmentPCForm({
+			baseParams:{
+				task:'attach_file'
+			}
+		});
+		this.uploadForm.on('upload', function(e, file)
+		{
+			this.attachmentsStore.loadData({
+				'results' : file
+			}, true);
+
+			this.attachmentMenu.hide();
+			
+		},this);
+
+		uploadItems.push(this.uploadForm);
+	}
+
+	uploadItems.push({
+		text : GO.email.lang.attachFilesGO.replace('{product_name}', GO.settings.config.product_name),
+		handler : function()
+		{
+			if(GO.files)
+			{
+				GO.files.createSelectFileBrowser();
+
+				GO.selectFileBrowser.setFileClickHandler(this.addRemoteFiles, this);
+
+				GO.selectFileBrowser.setFilesFilter('');
+				GO.selectFileBrowser.setRootID(0,0);
+				GO.selectFileBrowserWindow.show();
+			}
+		},
+		scope : this
+	});
+	
+	this.attachmentMenu = new Ext.menu.Menu(
+	{
+		items:uploadItems
+	});
+	
+
 	var imageInsertPlugin = new GO.plugins.HtmlEditorImageInsert();
 
-	imageInsertPlugin.on('insert', function(plugin) {
+	imageInsertPlugin.on('insert_temp', function(plugin) {
+		this.inline_temp_attachments.push({
+			tmp_file : plugin.name,
+			url : plugin.selectedUrl
+		});
+	}, this);
+	
+	imageInsertPlugin.on('insert', function(plugin) {		
 		this.inline_attachments.push({
 			tmp_file : plugin.selectedRecord.get('id'),
 			url : plugin.selectedUrl
@@ -409,13 +497,68 @@ GO.email.EmailComposer = function(config) {
     }
 	}));
 
-				
+
 	items.push(this.textEditor = new Ext.form.TextArea({
 		name: 'textbody',
 		anchor : '100% '+anchor,
 		hideLabel : true
 	}));
-						
+
+
+	this.attachmentsId = Ext.id();
+
+	// store for attachments needs to be created here because a forward action
+	// might attachments
+	this.attachmentsStore = new Ext.data.JsonStore({
+		url : GO.settings.modules.email.url + 'json.php',
+		baseParams : {
+			task : 'attachments'
+		},
+		root : 'results',
+		fields : ['tmp_name', 'name', 'size', 'type', 'extension', 'human_size'],
+		id : 'tmp_name'
+	});
+
+
+	this.attachmentsStore.on('remove', function()
+	{
+		this.attachmentsView.setVisible(this.attachmentsStore.data.length);
+		this.setEditorHeight();
+	}, this);
+
+	this.attachmentsStore.on('load', function()
+	{
+		if(!this.attachmentsView.isVisible() && this.attachmentsStore.data.length)
+		{
+			this.attachmentsView.show();
+			this.attachmentsEl = Ext.get(this.attachmentsId);
+			this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
+		}
+		
+		this.setEditorHeight();
+	}, this);
+		
+	this.attachmentsView = new Ext.DataView({
+		store:this.attachmentsStore,
+		tpl: new Ext.XTemplate(
+			GO.email.lang.attachments+':'+
+			'<div style="overflow-x:hidden" id="'+this.attachmentsId+'">'+
+			'<tpl for=".">',
+			'<span class="filetype-link filetype-{extension} attachment-wrap x-unselectable" unselectable="on" style="float:left" id="'+'{tmp_name}'+'">{name} ({human_size})</span>'+
+			'</tpl>'+
+			'</div>',
+			'<div class="x-clear"></div>'
+		),
+		multiSelect:true,
+		autoHeight:true,
+		autoScroll:true,
+		overClass:'x-view-over',
+		hidden:true,
+		itemSelector:'span.attachment-wrap'
+	})
+	
+	items.push(this.attachmentsView);
+
 
 	this.formPanel = new Ext.form.FormPanel({
 		border : false,
@@ -450,21 +593,6 @@ GO.email.EmailComposer = function(config) {
 
 	
 		
-
-	// store for attachments needs to be created here because a forward action
-	// might attachments
-	this.attachmentsStore = new Ext.data.JsonStore({
-		url : GO.settings.modules.email.url + 'json.php',
-		baseParams : {
-			task : 'attachments'
-		},
-		root : 'results',
-		fields : ['tmp_name', 'name', 'size', 'type'],
-		id : 'tmp_name'
-	});
-
-	this.attachmentsStore.on('remove', this.updateAttachmentsButton, this);
-	this.attachmentsStore.on('load', this.updateAttachmentsButton, this);
 
 	if (GO.mailings) {
 		this.templatesStore = new GO.data.JsonStore({
@@ -563,9 +691,8 @@ GO.email.EmailComposer = function(config) {
 	// assign menu by instance
 	}), this.attachmentsButton = new Ext.Button({
 		text : GO.email.lang.attachments,
-		iconCls : 'btn-attach',
-		handler : this.showAttachmentsDialog,
-		scope : this
+		iconCls : 'btn-attach',		
+		menu : this.attachmentMenu
 	})];
 
 	if (GO.addressbook) {
@@ -658,7 +785,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		}else{
 			return false;
 		}
-	},
+	},	
 	
 	setContentTypeHtml : function(checked){
 		this.formPanel.baseParams.content_type = checked
@@ -702,6 +829,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		
 		this.on('hide', this.stopAutoSave, this);
 
+		this.on('resize', function()
+		{
+			this.setEditorHeight();
+		})
 	/*this[this.collapseEl].hideMode='offsets';
 
 		this.on('beforecollapse', function(){
@@ -712,21 +843,12 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 	toComboVisible : true,
 
-	updateAttachmentsButton : function() {
-
-		var text = this.attachmentsStore.getCount() > 0
-		? GO.email.lang.attachments + ' ('
-		+ this.attachmentsStore.getCount() + ')'
-		: GO.email.lang.attachments;
-
-		this.attachmentsButton.setText(text);
-	},
-
 	reset : function(keepAttachmentsAndOptions) {
 		if(!keepAttachmentsAndOptions){
 			this.sendParams = {
 				'task' : 'sendmail',
 				inline_attachments : {},
+				inline_temp_attachments : {},
 				notification : 'false',
 				priority : '3',
 				draft_uid : 0
@@ -743,13 +865,14 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.notifyCheck.setChecked(false);
 			this.normalPriorityCheck.setChecked(true);
 			this.attachmentsStore.removeAll();
-			this.updateAttachmentsButton();
+			this.setEditorHeight();
 		}else
 		{
 			//keep options when switching from text <> html
 			this.sendParams={
 				'task' : 'sendmail',
 				inline_attachments : {},
+				inline_temp_attachments : {},
 				notification : this.sendParams.notification,
 				priority : this.sendParams.priority,
 				draft_uid : this.sendParams.draft_uid,
@@ -762,6 +885,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			
 		}
 		this.inline_attachments = [];
+		this.inline_temp_attachments = [],
 		this.formPanel.form.reset();
 		this.htmlEditor.SpellCheck = false;
 	},
@@ -1072,7 +1196,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 		this.setEditorHeight();
 		this.startAutoSave();
-		this.bodyContentAtWindowOpen=this.editor.getValue();		
+		this.bodyContentAtWindowOpen=this.editor.getValue();
 
 		//this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
 		//this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
@@ -1336,22 +1460,29 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			name : 'type'
 		}, {
 			name : 'size'
+		}, {
+			name : 'extension'
+		}, {
+			name : 'human_size'
 		}]);
 
 		var selections = GO.selectFileBrowser.getSelectedGridRecords();
 
-		for (var i = 0; i < selections.length; i++) {
+		for (var i = 0; i < selections.length; i++)
+		{			
 			var newRecord = new AttachmentRecord({
 				id : selections[i].data.id,
 				tmp_name : selections[i].data.id,
 				name : selections[i].data.name,
 				type : selections[i].data.type,
-				size : selections[i].data.size
+				size : selections[i].data.size,
+				extension : selections[i].data.extension,
+				human_size : (selections[i].data.size=='-') ? selections[i].data.size : Ext.util.Format.fileSize(selections[i].data.size)
 			});
 			newRecord.id = selections[i].data.path;
 			this.attachmentsStore.add(newRecord);
 		}
-		this.updateAttachmentsButton();
+		this.setEditorHeight();
 		GO.selectFileBrowserWindow.hide();
 
 	},
@@ -1416,6 +1547,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 			this.sendParams['inline_attachments'] = Ext
 			.encode(this.inline_attachments);
+
+			this.sendParams['inline_temp_attachments'] = Ext
+			.encode(this.inline_temp_attachments);
 
 			this.sendParams.draft = draft;
 
@@ -1523,9 +1657,19 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	},
 
 	setEditorHeight : function() {
-		
+
 		var subjectEl = this.subjectField.getEl().up('.x-form-item');
 		var height = subjectEl.getHeight()+subjectEl.getMargins('tb');
+
+		var attachmentsEl = this.attachmentsView.getEl();
+		var attachmentsElHeight = attachmentsEl.getHeight();
+		
+		if(attachmentsElHeight > 89)
+		{
+			attachmentsElHeight = 89;
+			this.attachmentsView.getEl().setHeight(attachmentsElHeight);
+		}			
+		height += attachmentsElHeight+attachmentsEl.getMargins('tb');
 		
 		if(GO.mailings)
 		{
@@ -1563,6 +1707,37 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		
 		this.htmlEditor.syncSize();
 		this.formPanel.doLayout();
+	},
+
+	onAttachmentContextMenu : function(e, target)
+	{
+		if(!this.menu)
+		{
+			this.menu = new Ext.menu.Menu({
+				id:'email-attachmentsgrid-ctx',
+				items: [
+				{
+					text:GO.lang.cmdDelete,
+					scope:this,
+					handler: function()
+					{
+						var records = this.attachmentsView.getSelectedRecords();
+						for(var i=0;i<records.length;i++)
+						{							
+							this.attachmentsStore.remove(records[i]);
+						}						
+					}
+				}]
+			});
+		}
+
+		if(!this.attachmentsView.isSelected(target.id))
+		{
+			this.attachmentsView.select(target.id);
+		}		
+
+		e.preventDefault();
+		this.menu.showAt(e.getXY());		
 	}
 });
 

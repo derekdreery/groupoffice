@@ -12,6 +12,12 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+// check is needed for SWFUpload
+if(isset($_REQUEST['groupoffice']))
+{
+	session_id($_REQUEST['groupoffice']);
+}
+
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('email');
 
@@ -236,12 +242,69 @@ try {
 
 			break;
 
+		case 'upload_attachment':
+
+			$response['success']=true;
+		
+			$dir = $GO_CONFIG->tmpdir.'attachments/';			
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+			filesystem::mkdir_recursive($dir);
+
+			$file = $_FILES['Filedata'];
+			if(is_uploaded_file($file['tmp_name']))
+			{
+				$tmp_file = $dir.File::strip_invalid_chars($file['name']);
+				move_uploaded_file($file['tmp_name'], $tmp_file);
+
+				$extension = File::get_extension($file['name']);
+				$response['file'] = array(
+					'tmp_name'=>$tmp_file,
+					'name'=>utf8_basename($tmp_file),
+					'size'=>$file['size'],
+					'type'=>File::get_filetype_description($extension),
+					'extension'=>$extension,
+					'human_size'=>Number::format_size($file['size'])
+				);
+			}
+			
+			echo json_encode($response);
+			exit();
+
+			break;
+
+		case 'upload_tmp_file':
+
+			$response['success']=true;
+
+			$dir = $GO_CONFIG->tmpdir;
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+			//filesystem::mkdir_recursive($dir);			
+			$attachment = $_FILES['attachments'];
+
+			$response['file'] = array();
+			if(is_uploaded_file($attachment['tmp_name'][0]))
+			{
+				$tmp_file = $dir.File::strip_invalid_chars($attachment['name'][0]);
+				move_uploaded_file($attachment['tmp_name'][0], $tmp_file);
+
+				$extension = File::get_extension($attachment['name'][0]);
+				$response['file'] = array(
+					'tmp_name'=>$tmp_file,
+					'name'=>utf8_basename($tmp_file),
+					'size'=>$attachment['size'][0],
+					'type'=>File::get_filetype_description($extension),
+					'extension'=>$extension,
+					'human_size'=>Number::format_size($attachment['size'][0])
+				);
+			}
+			
+			break;
 
 		case 'attach_file':
 		//var_dump($_FILES);
 			$response['success']=true;
 
-			$response['files']=array();
+			$response['files']=array();		
 
 			//$response['debug']=$_FILES['attachments'];
 			$dir = $GO_CONFIG->tmpdir.'attachments/';
@@ -254,11 +317,14 @@ try {
 					$tmp_file = $dir.File::strip_invalid_chars($_FILES['attachments']['name'][$n]);
 					move_uploaded_file($_FILES['attachments']['tmp_name'][$n], $tmp_file);
 
+					$extension = File::get_extension($_FILES['attachments']['name'][$n]);
 					$response['files'][] = array(
-									'tmp_name'=>$tmp_file,
-									'name'=>utf8_basename($tmp_file),
-									'size'=>$_FILES['attachments']['size'][$n],
-									'type'=>File::get_filetype_description(File::get_extension($_FILES['attachments']['name'][$n]))
+						'tmp_name'=>$tmp_file,
+						'name'=>utf8_basename($tmp_file),
+						'size'=>$_FILES['attachments']['size'][$n],
+						'type'=>File::get_filetype_description($extension),
+						'extension'=>$extension,
+						'human_size'=>Number::format_size($_FILES['attachments']['size'][$n])
 					);
 				}
 			}
@@ -444,6 +510,27 @@ try {
 									//go_debug($count);
 									//throw new Exception($just_filename);
 
+								}
+							}
+						}
+
+						$inline_temp_attachments = json_decode($_POST['inline_temp_attachments'], true);
+						foreach($inline_temp_attachments as $inlineAttachment)
+						{
+							$tmp_name = $GO_CONFIG->tmpdir.$inlineAttachment['tmp_file'];
+							
+							if(file_exists($tmp_name))
+							{
+								//Browsers reformat URL's so a pattern match
+								$just_filename = utf8_basename($inlineAttachment['url']);
+								if(preg_match('/="([^"]*'.preg_quote($just_filename).')"/',$body,$matches))
+								{
+									$img = Swift_EmbeddedFile::fromPath($tmp_name);
+									$img->setContentType(File::get_mime($tmp_name));
+									$src_id = $swift->message->embed($img);
+
+									//Browsers reformat URL's so a pattern match
+									$body = str_replace($matches[1], $src_id, $body);
 								}
 							}
 						}

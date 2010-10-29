@@ -100,3 +100,7 @@ javascript/panels/GroupTabPanel.js
 javascript/panels/Portal.js
 javascript/panels/PortalColumn.js
 javascript/panels/Portlet.js
+
+javascript/SWFObject/swfobject.js
+javascript/SWFUpload/swfupload.js
+javascript/SWFUpload/SwfUploadPanel.js

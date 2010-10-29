@@ -33,6 +33,11 @@ GO.form.UploadFile = function(config) {
 	}
 	
 	this.inputs = new Ext.util.MixedCollection();
+
+	if(!config.createNoRows)
+	{
+		config.createNoRows  = false
+	}
 	
 	GO.form.UploadFile.superclass.constructor.call(this, config);
 	
@@ -167,7 +172,7 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 		});
 
 		// create table to hold the file queue list
-		if(!this.table) {
+		if(!this.table && !this.createNoRows) {
 			this.table =this.el.createChild({
 				tag:'table',
 				cls:'x-uf-table'
@@ -192,17 +197,24 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 
 		// uninstall event handler
 		inp.un('change', this.onFileAdded, this);
-
-		// append input to display queue table
-		this.appendRow(inp);
-		// create new input for future use
-		this.createUploadInput();
-	
-		if(this.max>0 && this.max<=this.inputs.getCount())
-		{
-			this.setDisabled(true);
-		}
 		
+		if(!this.createNoRows)
+		{
+			// append input to display queue table
+			this.appendRow(inp);
+
+			// create new input for future use
+			this.createUploadInput();
+
+			if(this.max>0 && this.max<=this.inputs.getCount())
+			{
+				this.setDisabled(true);
+			}
+		}else
+		{
+			this.createUploadInput();
+		}
+				
 		this.fireEvent('filesChanged',this, this.inputs);
 		this.fireEvent('fileAdded',this, inp);
 		

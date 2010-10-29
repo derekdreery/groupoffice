@@ -784,7 +784,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 	setFilesFilter : function(filter)
 	{
+		var old_filter = this.gridStore.baseParams['files_filter'];
 		this.gridStore.baseParams['files_filter']=filter;
+
+		if((old_filter != undefined) && old_filter != filter)
+		{
+			this.gridStore.reload();
+		}
 	},
 
 	
@@ -1537,7 +1543,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		this.folder_id = id;
 		//this.gridStore.baseParams['id']=this.thumbsStore.baseParams['id']=id;
 		this.gridStore.baseParams['id']=id;
-		
+	
 		this.getActiveGridStore().load({
 			callback:function(){
 				var activeNode = this.treePanel.getNodeById(id);
