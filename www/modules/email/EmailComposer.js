@@ -253,7 +253,7 @@ GO.email.EmailComposer = function(config) {
 	//var tablePlugin = new Ext.ux.form.HtmlEditor.Table();
 	var hrPlugin = new Ext.ux.form.HtmlEditor.HR();
 	var ioDentPlugin = new Ext.ux.form.HtmlEditor.IndentOutdent();
-	//var ssScriptPlugin = new Ext.ux.form.HtmlEditor.SubSuperScript();
+	var ssScriptPlugin = new Ext.ux.form.HtmlEditor.SubSuperScript();
 	var rmFormatPlugin = new Ext.ux.form.HtmlEditor.RemoveFormat();
 
 	var items = [
@@ -395,7 +395,8 @@ GO.email.EmailComposer = function(config) {
 		wordPastePlugin,
 		hrPlugin,
 		ioDentPlugin,
-		rmFormatPlugin
+		rmFormatPlugin,
+		ssScriptPlugin
 	];
 	
 	//if (Ext.version!='2.3.0')
@@ -445,6 +446,9 @@ GO.email.EmailComposer = function(config) {
         }
         this.fireEvent('activate', this);
     },
+	createToolbar : Ext.form.HtmlEditor.prototype.createToolbar.createSequence(function(editor){
+		this.tb.enableOverflow=true;
+	}),
 		updateToolbar: function(){
 
 				/*
