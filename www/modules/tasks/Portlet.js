@@ -8,11 +8,11 @@ GO.tasks.SimpleTasksPanel = function(config)
 		config.id='su-tasks-grid';
 		
 		var reader = new Ext.data.JsonReader({
-                        root: 'results',
-                        totalProperty: 'total',
+			root: 'results',
+			totalProperty: 'total',
 			fields:['id', 'name','completed','due_time','description','tasklist_name','late'],
-                        id: 'id'
-                });
+			id: 'id'
+		});
 	
 		config.store = new Ext.data.GroupingStore({
 			url: GO.settings.modules.tasks.url+'json.php',
@@ -23,7 +23,10 @@ GO.tasks.SimpleTasksPanel = function(config)
 				'portlet' : true
 			},
 			reader: reader,
-                        sortInfo: {field: 'name', direction: 'ASC'},
+			sortInfo: {
+				field: 'due_time',
+				direction: 'ASC'
+			},
 			groupField: 'tasklist_name',
 			remoteGroup:true,
 			remoteSort:true
@@ -84,17 +87,18 @@ GO.tasks.SimpleTasksPanel = function(config)
 		},{
 			header:GO.tasks.lang.tasklist,
 			dataIndex: 'tasklist_name',
-			sortable:true
+			sortable:true,
+			width:150
 		}];
 		config.view=new Ext.grid.GroupingView({
 			scrollOffset: 2,
-			forceFit:true,
+			//forceFit:true,
 			hideGroupedColumn:true,
 			emptyText: GO.tasks.lang.noTask,
 			getRowClass : function(record, rowIndex, p, store){
-					if(record.data.late){
-							return 'tasks-late';
-					}
+				if(record.data.late){
+					return 'tasks-late';
+				}
 			}
 		}),
 		config.sm=new Ext.grid.RowSelectionModel();
@@ -123,7 +127,9 @@ Ext.extend(GO.tasks.SimpleTasksPanel, GO.grid.GridPanel, {
 		}, this);
 			
 		Ext.TaskMgr.start({
-			run: function(){this.store.load();},
+			run: function(){
+				this.store.load();
+			},
 			scope:this,
 			interval:960000
 		});
@@ -156,7 +162,9 @@ GO.mainLayout.onReady(function(){
 							buttons:[{
 								text: GO.lang.cmdSave,
 								handler: function(){
-									var params={'task' : 'save_portlet'};
+									var params={
+										'task' : 'save_portlet'
+									};
 									if(this.PortletSettings.store.loaded){
 										params['tasklists']=Ext.encode(this.PortletSettings.getGridData());
 									}
