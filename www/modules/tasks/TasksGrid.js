@@ -51,7 +51,7 @@ GO.tasks.TasksPanel = function(config)
 			},{
 				header:GO.tasks.lang.category,
 				dataIndex: 'category_name',
-				width:20
+				width:150
 			},{
 				header:GO.lang.priority,
 				dataIndex: 'priority',
@@ -90,7 +90,6 @@ GO.tasks.TasksPanel = function(config)
 			},{
 				header: GO.lang.strStatus,
 				dataIndex: 'status',
-				hidden:true,
 				width:110
 			},{
 				header: GO.lang.strCtime,
@@ -151,7 +150,7 @@ GO.tasks.TasksPanel = function(config)
 
 		config.view=new Ext.grid.GroupingView({
 			scrollOffset: 2,
-			forceFit:true,
+			//forceFit:true,
 			hideGroupedColumn:true,
 			emptyText: GO.tasks.lang.noTask,
 			getRowClass : function(record, rowIndex, p, store){
