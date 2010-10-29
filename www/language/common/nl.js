@@ -366,4 +366,4 @@ GO.lang.priority_high='Hoog';
 
 GO.lang.none = 'Geen';
 
-GO.lang.userSelectedLanguage = 'Mijn geselecteerde taal';
+GO.lang.userSelectedLanguage = 'Mijn gekozen taal';
