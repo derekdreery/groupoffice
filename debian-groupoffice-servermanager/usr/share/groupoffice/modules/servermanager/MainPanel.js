@@ -29,29 +29,31 @@ GO.servermanager.MainPanel = function(config){
 		height:40,
 		split:true
 	});
-	config.tbar=[{
-		iconCls: 'btn-add',
-		text: GO.lang['cmdAdd'],
-		cls: 'x-btn-text-icon',
-		handler: function(){
-			GO.servermanager.installationDialog.show();
-		},
-		scope: this
-	},{
-		iconCls: 'btn-delete',
-		text: GO.lang['cmdDelete'],
-		cls: 'x-btn-text-icon',
-		handler: function(){
-			this.installationsGrid.deleteSelected();
-		},
-		scope: this
-	},'-',GO.lang['strSearch']+': ', ' ',this.installationsGrid.searchField],
-
+	config.tbar=new Ext.Toolbar({
+		cls:'go-head-tb',
+		items:[{
+			iconCls: 'btn-add',
+			text: GO.lang['cmdAdd'],
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				GO.servermanager.installationDialog.show();
+			},
+			scope: this
+		},{
+			iconCls: 'btn-delete',
+			text: GO.lang['cmdDelete'],
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.installationsGrid.deleteSelected();
+			},
+			scope: this
+		},'-',GO.lang['strSearch']+': ', ' ',this.installationsGrid.searchField]		
+	});
 
 	config.items=[
-	this.infoPanel,
-	this.installationsGrid
-	]
+		this.infoPanel,
+		this.installationsGrid
+		];
 	
 
 	this.xtemplate = new Ext.XTemplate(
