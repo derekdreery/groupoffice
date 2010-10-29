@@ -20,6 +20,3 @@ modules/email/EmailClient.js
 modules/email/ContactsGrid.js
 modules/email/FindContactDialog.js
 modules/email/ReplaceEmailDialog.js
-modules/email/UploadFlashDialog.js
-modules/email/UploadBrowserDialog.js
-modules/email/AttachmentPCForm.js

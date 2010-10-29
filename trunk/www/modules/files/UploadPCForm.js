@@ -1,12 +1,16 @@
-GO.email.AttachmentPCForm = function(config)
+GO.files.UploadPCForm = function(config)
 {
 	if (!config) {
 		config = {};
 	}
 
-
+	if(!config.addText)
+	{
+		config.addText = GO.email.lang.attachFilesPC;
+	}
+	
 	this.uploadFile = new GO.form.UploadFile({
-		addText:GO.email.lang.attachFilesPC,
+		addText:config.addText,
 		cls:'email-upload-pc',
 		inputName:'attachments',
 		createNoRows:true
@@ -22,19 +26,18 @@ GO.email.AttachmentPCForm = function(config)
 	
 	config.items=[this.uploadFile];
 
-	GO.email.AttachmentPCForm.superclass.constructor.call(this, config);
+	GO.files.UploadPCForm.superclass.constructor.call(this, config);
 
 	this.addEvents({
 		'upload' : true
 	});
 	
 }
-Ext.extend(GO.email.AttachmentPCForm, Ext.form.FormPanel, {
+Ext.extend(GO.files.UploadPCForm, Ext.form.FormPanel, {
 
 	uploadHandler : function(){
 
-		this.form.submit({
-			url:GO.settings.modules.email.url+'action.php',
+		this.form.submit({			
 			success:function(form, action){
 				this.uploadFile.clearQueue();
 				

@@ -397,27 +397,7 @@ GO.files.FileBrowser = function(config){
 		scope: this,
 		disabled:true
 	});
-				
-	this.uploadButton = new Ext.Button({
-		iconCls: 'btn-upload',
-		text: GO.lang.upload,
-		cls: 'x-btn-text-icon',
-		handler: function(){
-			if(!this.uploadDialog)
-			{
-				this.uploadDialog = new GO.files.UploadDialog();
-				this.uploadDialog.on('upload', function(){
-					this.sendOverwrite({
-						folder_id : this.folder_id,
-						task: 'overwrite'
-					});
-				},this);
-			}
-			GO.currentFilesStore=this.gridStore;
-			this.uploadDialog.show(this.folder_id);
-		},
-		scope: this
-	});
+					
 	this.deleteButton = new Ext.Button({
 		iconCls: 'btn-delete',
 		text: GO.lang.cmdDelete,
@@ -464,38 +444,114 @@ GO.files.FileBrowser = function(config){
 	var tbar = [];
 
 	tbar.push(this.newButton);
+
+
+	this.uploadMenu = new Ext.menu.Menu({
+		items: []
+	});
 	
+	this.uploadButton = new Ext.Button({
+		iconCls: 'btn-upload',
+		text: GO.lang.upload,
+		cls: 'x-btn-text-icon',
+		menu: this.uploadMenu		
+	});
+		
 	if(!config.hideActionButtons)
 	{		
 		tbar.push(this.uploadButton);
-		/*tbar.push({
-
-			text: 'SWF upload',
-			handler:function(){
-				var window = new Ext.Window({
-					title: 'SWF Upload (Max Filesize 1 MB)',
-					height:400,
-					width:600,
-					layout:'fit',
-					items:[
-			
-								new Ext.ux.SwfUploadPanel({
+		
+		var version = deconcept.SWFObjectUtil.getPlayerVersion();
+		if(version.major > 0)
+		{
+			this.uploadMenu.add({
+				text : GO.lang.smallUpload,
+				handler : function()
+				{
+					if(!this.uploadFlashDialog)
+					{
+						this.uploadFlashDialog = new GO.files.UploadFlashDialog({
+							uploadPanel: new Ext.ux.SwfUploadPanel({
 								post_params : {
-									"task" : 'upload'
+									"task" : 'upload_file'
 								},
-								upload_url : GO.settings.modules.files.url+'swfupload.php',
+								upload_url : GO.settings.modules.files.url+ 'action.php',
 								labelWidth: 110,
-								file_size_limit:"100MB"
-								})
-					]
-						
-				});
+								file_size_limit:"100MB",
+								single_file_select: false, // Set to true if you only want to select one file from the FileDialog.
+								confirm_delete: false, // This will prompt for removing files from queue.
+								remove_completed: false // Remove file from grid after uploaded.
+							}),
+							title:GO.files.lang.files
+						});
 
-				window.show();
-			}
-		});*/
+						this.uploadFlashDialog.on('fileUploadComplete', function(obj, file, data)
+						{
+							this.sendOverwrite({
+								folder_id : this.folder_id,
+								task: 'overwrite'
+							});
+						},this)												
+					}
+
+					this.uploadFlashDialog.show();
+				},
+				scope:this
+			})
+		}else
+		{
+			this.uploadForm = new GO.files.UploadPCForm({
+				baseParams:{
+					task:'attach_file'
+				},
+				url:GO.settings.modules.files.url+'action.php',
+				addText: GO.lang.smallUpload
+			});
+			this.uploadForm.on('upload', function(e, file)
+			{
+				this.attachmentsStore.loadData({
+					'results' : file
+				}, true);
+
+				this.attachmentMenu.hide();
+
+			},this);
+
+			this.uploadMenu.add(this.uploadForm);
+		}
+
+		this.uploadMenu.add({
+			text : GO.lang.largeUpload,
+			handler : function() {
+
+				GO.currentFilesStore=this.gridStore;
+				
+				if (!deployJava.isWebStartInstalled('1.5.0')) {
+					Ext.MessageBox.alert(GO.lang.strError,
+							GO.lang.noJava);
+				} else {
+					/*
+					 * var p = GO.util.popup({ url:
+					 * GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
+					 * width : 640, height: 500, target:
+					 * 'jupload' });
+					 */
+
+					window
+							.open(GO.settings.modules.files.url
+									+ 'jupload/index.php?id='
+									+ this.folder_id);
+
+					this.hide();
+				}
+			},
+			scope : this
+		});
+		
 		tbar.push('-');
 	}
+
+	
 	tbar.push(this.upButton);
 	tbar.push({            
 		iconCls: "btn-refresh",

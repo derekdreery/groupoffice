@@ -250,7 +250,16 @@ try {
 			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 			filesystem::mkdir_recursive($dir);
 
-			$file = $_FILES['Filedata'];
+			if(isset($_FILES['Filedata']))
+			{
+				$file = $_FILES['Filedata'];
+			}else
+			{
+				$file['name'] = $_FILES['attachments']['name'][0];
+				$file['tmp_name'] = $_FILES['attachments']['tmp_name'][0];
+				$file['size'] = $_FILES['attachments']['size'][0];
+			}
+
 			if(is_uploaded_file($file['tmp_name']))
 			{
 				$tmp_file = $dir.File::strip_invalid_chars($file['name']);
@@ -271,34 +280,7 @@ try {
 			exit();
 
 			break;
-
-		case 'upload_tmp_file':
-
-			$response['success']=true;
-
-			$dir = $GO_CONFIG->tmpdir;
-			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-			//filesystem::mkdir_recursive($dir);			
-			$attachment = $_FILES['attachments'];
-
-			$response['file'] = array();
-			if(is_uploaded_file($attachment['tmp_name'][0]))
-			{
-				$tmp_file = $dir.File::strip_invalid_chars($attachment['name'][0]);
-				move_uploaded_file($attachment['tmp_name'][0], $tmp_file);
-
-				$extension = File::get_extension($attachment['name'][0]);
-				$response['file'] = array(
-					'tmp_name'=>$tmp_file,
-					'name'=>utf8_basename($tmp_file),
-					'size'=>$attachment['size'][0],
-					'type'=>File::get_filetype_description($extension),
-					'extension'=>$extension,
-					'human_size'=>Number::format_size($attachment['size'][0])
-				);
-			}
-			
-			break;
+		
 
 		case 'attach_file':
 		//var_dump($_FILES);
