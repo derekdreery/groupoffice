@@ -12,6 +12,12 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+// check is needed for SWFUpload
+if(isset($_REQUEST['groupoffice']))
+{
+	session_id($_REQUEST['groupoffice']);
+}
+
 require('../../Group-Office.php');
 
 $GO_SECURITY->json_authenticate('files');
@@ -180,6 +186,46 @@ try {
 			$response['success']=true;
 			break;
 
+
+		case 'upload_file':
+
+			$response['success']=true;
+
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+			filesystem::mkdir_recursive($GO_CONFIG->tmpdir.'files_upload/');
+
+			if(!isset($_SESSION['GO_SESSION']['files']['uploaded_files']))
+				$_SESSION['GO_SESSION']['files']['uploaded_files']=array();
+			if(!isset($_SESSION['GO_SESSION']['files']['uploaded_files_props']))
+				$_SESSION['GO_SESSION']['files']['uploaded_files_props']=array();
+			
+			if(isset($_FILES['Filedata']))
+			{
+				$file = $_FILES['Filedata'];
+			}else
+			{
+				$file['name'] = $_FILES['attachments']['name'][0];
+				$file['tmp_name'] = $_FILES['attachments']['tmp_name'][0];
+				$file['size'] = $_FILES['attachments']['size'][0];
+			}
+
+			if(is_uploaded_file($file['tmp_name']))
+			{
+				$tmp_file = $GO_CONFIG->tmpdir.'files_upload/'.$file['name'];
+				move_uploaded_file($file['tmp_name'], $tmp_file);
+				chmod($tmp_file, $GO_CONFIG->file_create_mode);
+				if(!empty($GO_CONFIG->file_change_group))
+					chgrp($tmp_file, $GO_CONFIG->file_change_group);				
+
+				$_SESSION['GO_SESSION']['files']['uploaded_files'][]=$tmp_file;
+				$_SESSION['GO_SESSION']['files']['uploaded_files_props'][]=$_POST;
+			}
+
+			echo json_encode($response);
+			exit();
+
+			break;
+			
 		case 'upload':
 			$response['success']=true;
 			$fs = new filesystem();

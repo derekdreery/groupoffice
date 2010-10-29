@@ -1,4 +1,4 @@
-GO.email.UploadFlashDialog = function(config){
+GO.files.UploadFlashDialog = function(config){
 	
 	if(!config)
 	{
@@ -9,7 +9,6 @@ GO.email.UploadFlashDialog = function(config){
 
 	config.items=[this.uploadPanel];
 	config.layout='fit';
-	config.title=GO.email.lang.message;
 	config.maximizable=true;
 	config.modal=false;
 	config.width=500;
@@ -27,10 +26,11 @@ GO.email.UploadFlashDialog = function(config){
 		scope:this
 	}];
 	
-	GO.email.UploadFlashDialog.superclass.constructor.call(this, config);
+	GO.files.UploadFlashDialog.superclass.constructor.call(this, config);
 
 	this.addEvents({
-		'fileUploadSuccess' : true
+		'fileUploadSuccess' : true,
+		'fileUploadComplete' : true
 	});
 
 	this.uploadPanel.on('fileUploadSuccess', function(obj, file, data)
@@ -45,6 +45,8 @@ GO.email.UploadFlashDialog = function(config){
 	});
 	this.uploadPanel.on('fileUploadComplete', function()
 	{
+		this.fireEvent('fileUploadComplete');
+		
 		this.hide();
 	},this);
 
@@ -54,14 +56,14 @@ GO.email.UploadFlashDialog = function(config){
 	
 }
 
-Ext.extend(GO.email.UploadFlashDialog, Ext.Window,{
+Ext.extend(GO.files.UploadFlashDialog, Ext.Window,{
 		
 	show : function()
 	{
 		if(!this.rendered)
 			this.render(Ext.getBody());
 		
-		GO.email.UploadFlashDialog.superclass.show.call(this);
+		GO.files.UploadFlashDialog.superclass.show.call(this);
 	}
 	
 });

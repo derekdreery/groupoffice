@@ -50,10 +50,11 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 		
 		if(GO.files)
 		{					
-			this.uploadForm = new GO.email.AttachmentPCForm({
+			this.uploadForm = new GO.files.UploadPCForm({
 				baseParams:{
-					task:'upload_tmp_file'
-				}
+					task:'upload_attachment'
+				},
+				url:GO.settings.modules.email.url+'action.php'
 			});
 
 			this.uploadForm.on('upload', function(e, file)
