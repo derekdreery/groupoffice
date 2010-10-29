@@ -6,6 +6,8 @@ if(isset($_REQUEST['sid'])) {
 }
 require_once("../../Group-Office.php");
 
+$GO_SECURITY->json_authenticate('files');
+
 require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 $files = new files();
 $fs = new filesystem();
