@@ -47,6 +47,7 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 			title:GO.lang.image,
 			text:GO.lang.insertImage
 		}
+		element.overflowText=GO.lang.insertImage;
 		
 		if(GO.files)
 		{					

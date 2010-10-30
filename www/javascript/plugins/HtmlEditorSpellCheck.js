@@ -54,6 +54,7 @@ Ext.extend(GO.plugins.HtmlEditorSpellCheck, Ext.util.Observable, {
 						},
             clickEvent:'mousedown',
             tabIndex:-1,
+			overflowText: GO.lang.spellcheck,
             tooltip:{title:GO.lang.spellcheck, text:GO.lang.spellcheckdetails}
         });
     }
