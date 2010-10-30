@@ -502,6 +502,7 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
 				this.cmp.setValue(this.fixWordPaste(this.cmp.getValue()));
             },
             scope: this,
+			overflowText:'Word paste',
             tooltip: {
                 text: 'Cleans text pasted from Word or other Rich Text applications'
             }
