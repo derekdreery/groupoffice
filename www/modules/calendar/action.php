@@ -135,7 +135,7 @@ try {
 			}
 
 			if(isset($_POST['create_exception']) && $_POST['create_exception'] =='true') {
-				$exceptionDate = strtotime(($_POST['exception_date']));
+				$exceptionDate = strtotime($_POST['exception_date']);
 
 				//an instance of a recurring event was modified. We must create an exception for the
 				//recurring event.
@@ -144,56 +144,59 @@ try {
 				$event_start_time = $event['start_time'];
 				$exception['time'] = mktime(date('G', $event_start_time),date('i', $event_start_time), 0, date('n', $exceptionDate), date('j', $exceptionDate), date('Y', $exceptionDate));
 
-				$exception_event = $cal->get_event($event_id);
-				$cal->add_exception_for_all_participants($exception_event['participants_event_id'], $exception);
+				//$exception_event = $cal->get_event($event_id);
+				$cal->add_exception_for_all_participants($event['participants_event_id'], $exception);
 
 				//$cal->add_exception($exception);
 			}else
-			if(!empty($_REQUEST['send_cancellation']))
 			{
-				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-				$RFC822 = new RFC822();
-
-				$participants=array();
-				$cal->get_participants($event_id);
-				while($cal->next_record())
+				if(!empty($_REQUEST['send_cancellation']))
 				{
-					if($cal->f('user_id') != $GO_SECURITY->user_id)
+					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+					$RFC822 = new RFC822();
+
+					$participants=array();
+					$cal->get_participants($event_id);
+					while($cal->next_record())
 					{
-						$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
+						if($cal->f('user_id') != $GO_SECURITY->user_id)
+						{
+							$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
+						}
 					}
-				}				
 
-				if(count($participants))
-				{
-					$cal->update_event_sequence($event['id'], ++$event['sequence']);
+					if(count($participants))
+					{
+						$cal->update_event_sequence($event['id'], ++$event['sequence']);
 
-					$swift = new GoSwift(
-							implode(',', $participants),
-							$lang['calendar']['cancellation'].': '.$event['name']);
+						$swift = new GoSwift(
+								implode(',', $participants),
+								$lang['calendar']['cancellation'].': '.$event['name']);
 
-					//create ics attachment
-					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
-					$ical = new go_ical('2.0', false, 'CANCEL');
-					$ical->line_break="\r\n";
-					$ical->dont_use_quoted_printable = true;
-					
-					$ics_string = $ical->export_event($event_id);
+						//create ics attachment
+						require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
+						$ical = new go_ical('2.0', false, 'CANCEL');
+						$ical->line_break="\r\n";
+						$ical->dont_use_quoted_printable = true;
 
-					$swift->set_body($cal->event_to_html($event, false, true));
+						$ics_string = $ical->export_event($event_id);
 
-					$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
-					//$name = File::strip_invalid_chars($event['name']).'.ics';
-					//$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name, File::get_mime($name)));
+						$swift->set_body($cal->event_to_html($event, false, true));
 
-					$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
+						$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
+						//$name = File::strip_invalid_chars($event['name']).'.ics';
+						//$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name, File::get_mime($name)));
 
-					if(!$swift->sendmail(true)) {
-						throw new Exception('Could not send invitation');
+						$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
+
+						if(!$swift->sendmail(true)) {
+							throw new Exception('Could not send invitation');
+						}
 					}
 				}
+				$cal->delete_event($event_id);
 			}
-			$cal->delete_event($event_id);
+			
 
 			$response['success']=true;
 			break;
