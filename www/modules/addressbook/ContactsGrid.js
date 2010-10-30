@@ -18,11 +18,13 @@ GO.addressbook.ContactsGrid = function(config){
 			hidden:true
 		},{
 			header: GO.lang['strName'], 
-			dataIndex: 'name'
+			dataIndex: 'name',
+			width:200
 		},
 		{
 			header: GO.lang['strCompany'],
-			dataIndex: 'company_name'
+			dataIndex: 'company_name',
+			width:200
 		},
 		{
 			header: GO.lang['strFirstName'],
@@ -84,14 +86,12 @@ GO.addressbook.ContactsGrid = function(config){
 		{
 			header: GO.lang['strPhone'],
 			dataIndex: 'home_phone',
-			width: 100,
-			hidden:true
+			width: 100
 		},
 		{
 			header: GO.lang['strWorkPhone'],
 			dataIndex: 'work_phone',
-			width: 100,
-			hidden:true
+			width: 100
 		},
 		{
 			header: GO.lang['strWorkFax'],
@@ -102,8 +102,7 @@ GO.addressbook.ContactsGrid = function(config){
 		{
 			header: GO.lang['strCellular'],
 			dataIndex: 'cellular',
-			width: 100,
-			hidden:true
+			width: 100
 		},
 		{
 			header: GO.lang['strFax'],
@@ -207,8 +206,6 @@ GO.addressbook.ContactsGrid = function(config){
 	});
 	
 	config.view=new Ext.grid.GridView({
-		autoFill: true,
-		forceFit: true,
 		emptyText: GO.lang.strNoItems		
 	}),
 	config.sm=new Ext.grid.RowSelectionModel();

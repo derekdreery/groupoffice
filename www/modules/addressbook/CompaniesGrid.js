@@ -17,7 +17,8 @@ GO.addressbook.CompaniesGrid = function(config){
 			hidden:true
 		},{
 			header: GO.lang['strName'],
-			dataIndex: 'name'
+			dataIndex: 'name',
+			width:200
 		},
 		{
 			header: GO.lang['strEmail'],
@@ -60,7 +61,7 @@ GO.addressbook.CompaniesGrid = function(config){
 		{
 			header: GO.lang['strCity'],
 			dataIndex: 'city',
-			hidden:true
+			width:150
 		},
 		{
 			header: GO.lang['strState'],
@@ -173,8 +174,6 @@ GO.addressbook.CompaniesGrid = function(config){
 	config.cm=companiesColumnModel;
 	
 	config.view=new Ext.grid.GridView({
-		autoFill: true,
-		forceFit: true,
 		emptyText: GO.lang.strNoItems	
 	}),
 	config.sm=new Ext.grid.RowSelectionModel();
