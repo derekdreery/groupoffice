@@ -388,6 +388,9 @@ Ext.ux.SwfUploadPanel = Ext.extend(Ext.grid.GridPanel, {
 	},
 
 	formatProgressBar : function(_v, cellmeta, record){
+
+		var returnValue;
+
 		switch(record.data.fileState){
 			case SWFUpload.FILE_STATUS.COMPLETE:
 				if(Ext.isIE){
@@ -467,31 +470,6 @@ Ext.ux.SwfUploadPanel = Ext.extend(Ext.grid.GridPanel, {
 		result = Math.round(size) + " " + suffix[loop];
 
 		return result;
-
-		if(isNaN(bytes)) {
-			return ('');
-		}
-
-		var unit, val;
-
-		if(bytes < 999) {
-			unit = 'B';
-			val = (!bytes && this.progressRequestCount >= 1) ? '~' : bytes;
-		} else if(bytes < 999999) {
-			unit = 'kB';
-			val = Math.round(bytes/1000);
-		} else if(bytes < 999999999) {
-			unit = 'MB';
-			val = Math.round(bytes/100000) / 10;
-		} else if(bytes < 999999999999) {
-			unit = 'GB';
-			val = Math.round(bytes/100000000) / 10;
-		} else {
-			unit = 'TB';
-			val = Math.round(bytes/100000000000) / 10;
-		}
-
-		return (val + ' ' + unit);
 	},
 
 	/**
@@ -520,7 +498,7 @@ Ext.ux.SwfUploadPanel = Ext.extend(Ext.grid.GridPanel, {
 	fileQueue: function(file) {
 		if(this.debug) console.info('FILE QUEUE');		
 		file.status = 0;
-		r = new this.rec(file);
+		var r = new this.rec(file);
 		r.id = file.id;
 		this.store.add(r);
 		
@@ -575,9 +553,11 @@ Ext.ux.SwfUploadPanel = Ext.extend(Ext.grid.GridPanel, {
 	 */
 	fileDialogComplete: function(file_count) {
 		if(this.debug) console.info('FILE DIALOG COMPLETE');
+
+
 		
 		if (file_count > 0) {
-			this.uploadBtn.show();
+			//this.uploadBtn.show();
 		}
 		
 		this.addBtn.show();
@@ -793,7 +773,7 @@ Ext.ux.SwfUploadPanel = Ext.extend(Ext.grid.GridPanel, {
 		}
 		
 		if (this.suo.getStats().files_queued === 0) {
-			this.uploadBtn.hide();
+			//this.uploadBtn.hide();
 //			this.clearBtn.hide();
 		}
 		

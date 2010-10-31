@@ -470,7 +470,7 @@ GO.files.FileBrowser = function(config){
 				{
 					if(!this.uploadFlashDialog)
 					{
-						this.uploadFlashDialog = new GO.files.UploadFlashDialog({
+						this.uploadFlashDialog = new GO.UploadFlashDialog({
 							uploadPanel: new Ext.ux.SwfUploadPanel({
 								post_params : {
 									"task" : 'upload_file'
@@ -500,7 +500,7 @@ GO.files.FileBrowser = function(config){
 			})
 		}else
 		{
-			this.uploadForm = new GO.files.UploadPCForm({
+			this.uploadForm = new GO.UploadPCForm({
 				baseParams:{
 					task:'attach_file'
 				},
@@ -509,11 +509,11 @@ GO.files.FileBrowser = function(config){
 			});
 			this.uploadForm.on('upload', function(e, file)
 			{
-				this.attachmentsStore.loadData({
+				/*this.attachmentsStore.loadData({
 					'results' : file
 				}, true);
 
-				this.attachmentMenu.hide();
+				this.attachmentMenu.hide();*/
 
 			},this);
 

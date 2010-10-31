@@ -71,7 +71,7 @@ class users extends db
 			{
 				$home_dir = 'users/'.$GO_USERS->f('username');
 
-				File::mkdir($home_dir);
+				File::mkdir($GO_CONFIG->file_storage_path.$home_dir);
 
 				$folder = $files->resolve_path($home_dir,true,1,'1');
 

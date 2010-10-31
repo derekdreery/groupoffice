@@ -15,5 +15,3 @@ modules/files/CustomField.js
 modules/files/FileBrowser.js
 modules/files/FilePanel.js
 modules/files/FolderPanel.js
-modules/files/UploadFlashDialog.js
-modules/files/UploadPCForm.js

@@ -8,6 +8,7 @@ javascript/windows/Window.js
 javascript/DialogListeners.js
 javascript/Export.js
 
+
 javascript/WeekPicker.js
 
 modules/users/TimeZones.js
@@ -105,3 +106,5 @@ javascript/panels/Portlet.js
 javascript/SWFObject/swfobject.js
 javascript/SWFUpload/swfupload.js
 javascript/SWFUpload/SwfUploadPanel.js
+javascript/SWFUpload/UploadFlashDialog.js
+javascript/form/UploadPCForm.js

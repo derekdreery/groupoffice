@@ -49,6 +49,7 @@ class File
 			return true;
 		}else
 		{
+			go_debug('Failed creating: '.$path);
 			return false;
 		}
 

@@ -503,6 +503,13 @@ a.normal-link:hover{
 .btn-folder{
 	background-image:url('images/16x16/folder.png') !important;
 }
+
+.btn-computer {
+	background-image:url('images/16x16/computer.png') !important;
+}
+.btn-groupoffice {
+	background-image:url('images/favicon.gif') !important;
+}
 /* end buttons */
 
 /*start edit buttons */
