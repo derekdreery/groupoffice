@@ -332,7 +332,6 @@ background-color: #F1F1F1 !important;
 }
 
 .x-calGrid-event-container {
-
 	cursor:default;	
 	position:absolute;	
 	/*border:1px solid #669900;*/
@@ -344,6 +343,8 @@ background-color: #F1F1F1 !important;
 	padding:3px;
 	border-radius: 6px;
 	-moz-border-radius: 6px;
+	-moz-outline:none;
+	outline:none;
 }
 
 .x-calGrid-event-container .x-resizable-handle-south, .x-calGrid-event-container .x-resizable-handle{
@@ -359,6 +360,10 @@ background-color: #F1F1F1 !important;
 	border:1px solid #C0C0C0;
 	padding:1px 2px;
 	overflow: hidden;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-moz-outline:none;
+	outline:none;
 }
 
 .x-calGrid-selected {
@@ -480,6 +485,10 @@ a.x-monthGrid-cell-day-text:hover{
 	background-color:#ffffcc;
 	overflow: hidden;
 	padding:1px 2px;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-moz-outline:none;
+	outline:none;
 }
 
 .x-calGrid-month-event-proxy {
@@ -536,6 +545,10 @@ a.x-monthGrid-cell-day-text:hover{
 	border:1px solid #C0C0C0;
 	margin:1px;
 	padding:1px 2px;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-moz-outline:none;
+	outline:none;
 }
 
 .x-viewGrid-event-proxy {
