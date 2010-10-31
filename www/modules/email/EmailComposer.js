@@ -192,8 +192,7 @@ GO.email.EmailComposer = function(config) {
 			})
 		}else
 		{
-			this.uploadForm = new GO.UploadPCForm({
-				iconCls:'btn-computer',
+			this.uploadForm = new GO.UploadPCForm({				
 				baseParams:{
 					task:'attach_file'
 				},

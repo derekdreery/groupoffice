@@ -4,6 +4,8 @@ GO.UploadPCForm = function(config)
 		config = {};
 	}
 
+	config.iconCls='btn-computer go-upload-pc-form';
+
 	if(!config.addText)
 	{
 		config.addText = GO.email.lang.attachFilesPC;

@@ -510,6 +510,11 @@ a.normal-link:hover{
 .btn-groupoffice {
 	background-image:url('images/favicon.gif') !important;
 }
+
+.go-upload-pc-form{
+	top:8px !important;
+	left:7px !important;
+}
 /* end buttons */
 
 /*start edit buttons */
