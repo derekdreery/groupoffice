@@ -502,18 +502,17 @@ GO.files.FileBrowser = function(config){
 		{
 			this.uploadForm = new GO.UploadPCForm({
 				baseParams:{
-					task:'attach_file'
+					task:'upload_file'
 				},
 				url:GO.settings.modules.files.url+'action.php',
 				addText: GO.lang.smallUpload
 			});
 			this.uploadForm.on('upload', function(e, file)
 			{
-				/*this.attachmentsStore.loadData({
-					'results' : file
-				}, true);
-
-				this.attachmentMenu.hide();*/
+				this.sendOverwrite({
+					folder_id : this.folder_id,
+					task: 'overwrite'
+				});
 
 			},this);
 
