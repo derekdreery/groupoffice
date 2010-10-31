@@ -529,19 +529,18 @@ GO.files.FileBrowser = function(config){
 					Ext.MessageBox.alert(GO.lang.strError,
 							GO.lang.noJava);
 				} else {
-					/*
-					 * var p = GO.util.popup({ url:
-					 * GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
-					 * width : 640, height: 500, target:
-					 * 'jupload' });
-					 */
+					
+					 GO.util.popup({ url:
+						 GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
+						 width : 660, height: 500, target:
+						 'jupload' });
+					 
 
-					window
-							.open(GO.settings.modules.files.url
+					/*window.open(GO.settings.modules.files.url
 									+ 'jupload/index.php?id='
-									+ this.folder_id);
+									+ this.folder_id);*/
 
-					this.hide();
+					
 				}
 			},
 			scope : this

@@ -126,7 +126,9 @@ Ext.ux.SwfUploadPanel = Ext.extend(Ext.grid.GridPanel, {
 		
 	// private
 	initComponent: function() {
-		
+
+		Ext.apply(this.strings, GO.lang.swfUploadPanelStrings);
+
 		this.addEvents(
 			/**
 			 * @event swfUploadLoaded
