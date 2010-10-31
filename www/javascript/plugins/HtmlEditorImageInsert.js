@@ -49,51 +49,45 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 		}
 		element.overflowText=GO.lang.insertImage;
 		
-		if(GO.files)
-		{					
-			this.uploadForm = new GO.UploadPCForm({
-				iconCls:'btn-computer',
-				baseParams:{
-					task:'upload_attachment'
-				},
-				url:GO.settings.modules.email.url+'action.php'
-			});
+							
+		this.uploadForm = new GO.UploadPCForm({
+			baseParams:{
+				task:'upload_attachment'
+			},
+			url:GO.settings.modules.email.url+'action.php'
+		});
 
-			this.uploadForm.on('upload', function(e, file)
-			{
-				this.selectTempImage(file.name);
-			},this);
-			
-			this.menu = element.menu = new Ext.menu.Menu({
-				items:[
-				this.uploadForm,
-				{
-					iconCls:'btn-groupoffice',
-					text : GO.email.lang.attachFilesGO.replace('{product_name}', GO.settings.config.product_name),
-					handler : function()
-					{
-						this.showFileBrowser();
-					},
-					scope : this
-				}]
-			})
-		}else
+		this.uploadForm.on('upload', function(e, file)
 		{
-			element.handler=function(){
-				this.showFileBrowser();
-			}
+			this.selectTempImage(file.name);
+		},this);
+
+		var menuItems = [
+		this.uploadForm
+		];
+
+		if(GO.files){
+			menuItems.push({
+				iconCls:'btn-groupoffice',
+				text : GO.email.lang.attachFilesGO.replace('{product_name}', GO.settings.config.product_name),
+				handler : function()
+				{
+					this.showFileBrowser();
+				},
+				scope : this
+			});
 		}
+
+		this.menu = element.menu = new Ext.menu.Menu({
+			items:menuItems
+		});
+		
 		
 		this.editor.tb.add(element);
 	},
 	
 	showFileBrowser : function (){
-		
-		if(!GO.files)
-		{
-			alert(GO.lang.noFilesModule);
-			return false;
-		}
+	
 
 		GO.files.createSelectFileBrowser();
 
@@ -108,7 +102,7 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 
 	selectTempImage : function(name)
 	{
-		this.selectedUrl = GO.settings.modules.files.url+'download_temp_file.php?name='+name;
+		this.selectedUrl = BaseHref+'controls/download_temp_file.php?name='+name;
 		this.name = name;		
 
 		var html = '<img src="'+this.selectedUrl+'" border="0" />';

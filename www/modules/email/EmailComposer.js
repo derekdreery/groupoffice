@@ -195,7 +195,8 @@ GO.email.EmailComposer = function(config) {
 			this.uploadForm = new GO.UploadPCForm({				
 				baseParams:{
 					task:'attach_file'
-				},
+				},				
+				addText: GO.email.lang.attachFilesPC,
 				url:GO.settings.modules.email.url+'action.php'
 			});
 			this.uploadForm.on('upload', function(e, file)
@@ -535,8 +536,7 @@ GO.email.EmailComposer = function(config) {
 
 	this.attachmentsStore.on('remove', function()
 	{
-		this.attachmentsView.setVisible(this.attachmentsStore.data.length);
-		this.setEditorHeight();
+		
 	}, this);
 
 	this.attachmentsStore.on('load', function()
@@ -544,8 +544,8 @@ GO.email.EmailComposer = function(config) {
 		if(!this.attachmentsView.isVisible() && this.attachmentsStore.data.length)
 		{
 			this.attachmentsView.show();
-			this.attachmentsEl = Ext.get(this.attachmentsId);
-			this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
+			//this.attachmentsEl = Ext.get(this.attachmentsId);
+			//this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
 		}
 		
 		this.setEditorHeight();
@@ -555,7 +555,7 @@ GO.email.EmailComposer = function(config) {
 		store:this.attachmentsStore,
 		tpl: new Ext.XTemplate(
 			GO.email.lang.attachments+':'+
-			'<div style="overflow-x:hidden" id="'+this.attachmentsId+'">'+
+			'<div style="overflow-x:hidden" id="'+this.attachmentsId+'" tabindex="0" class="em-attachments-container">'+
 			'<tpl for=".">',
 			'<span class="filetype-link filetype-{extension} attachment-wrap x-unselectable" unselectable="on" style="float:left" id="'+'{tmp_name}'+'">{name} ({human_size})</span>'+
 			'</tpl>'+
@@ -567,7 +567,22 @@ GO.email.EmailComposer = function(config) {
 		autoScroll:true,
 		overClass:'x-view-over',
 		hidden:true,
-		itemSelector:'span.attachment-wrap'
+		itemSelector:'span.attachment-wrap',
+		
+		listeners:{
+			contextmenu:this.onAttachmentContextMenu,
+			scope:this,
+			render:function(){
+				this.attachmentsView.getEl().tabIndex=0;
+				var map = new Ext.KeyMap(this.attachmentsView.getEl(),{
+					 key: Ext.EventObject.DELETE,
+					 fn: function(key, e){
+						this.removeSelectedAttachments();
+					},
+					scope:this
+				});
+			}
+		}
 	})
 	
 	items.push(this.attachmentsView);
@@ -702,11 +717,16 @@ GO.email.EmailComposer = function(config) {
 		iconCls : 'btn-show',
 		menu : this.showMenu
 	// assign menu by instance
-	}), this.attachmentsButton = new Ext.Button({
-		text : GO.email.lang.attachments,
-		iconCls : 'btn-attach',		
-		menu : this.attachmentMenu
 	})];
+
+
+	this.attachmentsButton = new Ext.Button({
+		text : GO.email.lang.attachments,
+		iconCls : 'btn-attach',
+		menu : this.attachmentMenu
+	});
+
+	tbar.push(this.attachmentsButton);
 
 	if (GO.addressbook) {
 		tbar.push({
@@ -780,6 +800,16 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	lastAutoSave : false,
 	
 	bodyContentAtWindowOpen : false,
+
+	removeSelectedAttachments : function(){
+		var records = this.attachmentsView.getSelectedRecords();
+		for(var i=0;i<records.length;i++)
+		{
+			this.attachmentsStore.remove(records[i]);
+		}
+		this.attachmentsView.setVisible(this.attachmentsStore.data.length);
+		this.setEditorHeight();
+	},
 
 	/*
 	 *handles ctrl+enter from html editor
@@ -1684,6 +1714,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		var height = subjectEl.getHeight()+subjectEl.getMargins('tb');
 
 		var attachmentsEl = this.attachmentsView.getEl();
+		attachmentsEl.setHeight("auto");
 		var attachmentsElHeight = attachmentsEl.getHeight();
 		
 		if(attachmentsElHeight > 89)
@@ -1731,7 +1762,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.formPanel.doLayout();
 	},
 
-	onAttachmentContextMenu : function(e, target)
+	onAttachmentContextMenu : function(dv, index, node, e)
 	{
 		if(!this.menu)
 		{
@@ -1743,19 +1774,15 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					scope:this,
 					handler: function()
 					{
-						var records = this.attachmentsView.getSelectedRecords();
-						for(var i=0;i<records.length;i++)
-						{							
-							this.attachmentsStore.remove(records[i]);
-						}						
+						this.removeSelectedAttachments();
 					}
 				}]
 			});
 		}
 
-		if(!this.attachmentsView.isSelected(target.id))
+		if(!this.attachmentsView.isSelected(node))
 		{
-			this.attachmentsView.select(target.id);
+			this.attachmentsView.select(node);
 		}		
 
 		e.preventDefault();

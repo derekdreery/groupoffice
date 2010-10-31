@@ -367,3 +367,34 @@ GO.lang.priority_high='Hoog';
 GO.lang.none = 'Geen';
 
 GO.lang.userSelectedLanguage = 'Mijn gekozen taal';
+
+GO.lang.swfUploadPanelStrings = {
+		text_add: 'Bestand(en) toevoegen',
+		text_upload: 'Bestand(en) uploaden',
+		text_cancel: 'Uploaden annuleren',
+		text_clear: 'Lijst wissen',
+		text_progressbar: 'Voortgangs indicator',
+		text_remove: 'Verwijder bestand',
+		text_remove_sure: 'Weet u zeker dat u dit bestand van de lijst wilt verwijderen?',
+		text_error: 'Fout',
+		text_uploading: 'Bezig met het uploaden van: {0} ({1} of {2})',
+		header_filename: 'Bestandsnaam',
+		header_size: 'Grootte',
+		header_status: 'Status',
+		status: {
+			0: 'In de wachtrij',
+			1: 'Uploaden...',
+			2: 'Voltooid',
+			3: 'Fout',
+			4: 'Geanulleerd'
+		},
+		error_queue_exceeded: 'Het maximum van {0} aantal bestanden is overschreden.',
+		error_queue_slots_0: 'Er is geen plaats meer over',
+		error_queue_slots_1: 'Er is nog 1 plaats over',
+		error_queue_slots_2: 'Er zijn nog {0} plaatsen over',
+		error_size_exceeded: 'The selected files size exceeds the allowed limit of 1 MB.',
+		error_zero_byte_file: 'Zero byte file selected.',
+		error_invalid_filetype: 'Invalid filetype selected.',
+		error_file_not_found: 'File not found 404.',
+		error_security_error: 'Security Error. Not allowed to post to different url.'
+	};
