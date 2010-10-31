@@ -151,18 +151,18 @@ GO.email.EmailComposer = function(config) {
 
 
 	var uploadItems = [];
-	if(GO.files)
-	{
+	
 		var version = deconcept.SWFObjectUtil.getPlayerVersion();
 		if(version.major > 0)
 		{
 			uploadItems.push({
+				iconCls:'btn-computer',
 				text : GO.email.lang.attachFilesPC,
 				handler : function()
 				{
 					if(!this.uploadFlashDialog)
 					{
-						this.uploadFlashDialog = new GO.files.UploadFlashDialog({
+						this.uploadFlashDialog = new GO.UploadFlashDialog({
 							uploadPanel: new Ext.ux.SwfUploadPanel({
 								post_params : {
 									"task" : 'upload_attachment'
@@ -192,7 +192,8 @@ GO.email.EmailComposer = function(config) {
 			})
 		}else
 		{
-			this.uploadForm = new GO.files.UploadPCForm({
+			this.uploadForm = new GO.UploadPCForm({
+				iconCls:'btn-computer',
 				baseParams:{
 					task:'attach_file'
 				},
@@ -210,25 +211,28 @@ GO.email.EmailComposer = function(config) {
 
 			uploadItems.push(this.uploadForm);
 		}
-	}
-
-	uploadItems.push({
-		text : GO.email.lang.attachFilesGO.replace('{product_name}', GO.settings.config.product_name),
-		handler : function()
-		{
-			if(GO.files)
+	
+	if(GO.files)
+	{
+		uploadItems.push({
+			iconCls:'btn-groupoffice',
+			text : GO.email.lang.attachFilesGO.replace('{product_name}', GO.settings.config.product_name),
+			handler : function()
 			{
-				GO.files.createSelectFileBrowser();
+				if(GO.files)
+				{
+					GO.files.createSelectFileBrowser();
 
-				GO.selectFileBrowser.setFileClickHandler(this.addRemoteFiles, this);
+					GO.selectFileBrowser.setFileClickHandler(this.addRemoteFiles, this);
 
-				GO.selectFileBrowser.setFilesFilter('');
-				GO.selectFileBrowser.setRootID(0,0);
-				GO.selectFileBrowserWindow.show();
-			}
-		},
-		scope : this
-	});
+					GO.selectFileBrowser.setFilesFilter('');
+					GO.selectFileBrowser.setRootID(0,0);
+					GO.selectFileBrowserWindow.show();
+				}
+			},
+			scope : this
+		});
+	}
 	
 	this.attachmentMenu = new Ext.menu.Menu(
 	{

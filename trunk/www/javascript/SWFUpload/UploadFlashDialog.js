@@ -1,4 +1,4 @@
-GO.files.UploadFlashDialog = function(config){
+GO.UploadFlashDialog = function(config){
 	
 	if(!config)
 	{
@@ -18,15 +18,18 @@ GO.files.UploadFlashDialog = function(config){
 	config.closeAction='hide';	
 	config.html='items';
 	config.buttons=[{	
-		text: GO.lang['cmdClose'],
+		text: GO.lang.cmdOk,
 		handler: function()
 		{
-			this.hide();
+			if(this.uploadPanel.store.getCount()>0)
+				this.uploadPanel.startUpload();
+			else
+				this.hide();
 		},
 		scope:this
 	}];
 	
-	GO.files.UploadFlashDialog.superclass.constructor.call(this, config);
+	GO.UploadFlashDialog.superclass.constructor.call(this, config);
 
 	this.addEvents({
 		'fileUploadSuccess' : true,
@@ -56,14 +59,14 @@ GO.files.UploadFlashDialog = function(config){
 	
 }
 
-Ext.extend(GO.files.UploadFlashDialog, Ext.Window,{
+Ext.extend(GO.UploadFlashDialog, Ext.Window,{
 		
 	show : function()
 	{
 		if(!this.rendered)
 			this.render(Ext.getBody());
 		
-		GO.files.UploadFlashDialog.superclass.show.call(this);
+		GO.UploadFlashDialog.superclass.show.call(this);
 	}
 	
 });

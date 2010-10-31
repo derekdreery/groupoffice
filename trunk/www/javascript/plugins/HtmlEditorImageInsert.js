@@ -51,7 +51,8 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 		
 		if(GO.files)
 		{					
-			this.uploadForm = new GO.files.UploadPCForm({
+			this.uploadForm = new GO.UploadPCForm({
+				iconCls:'btn-computer',
 				baseParams:{
 					task:'upload_attachment'
 				},
@@ -67,6 +68,7 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 				items:[
 				this.uploadForm,
 				{
+					iconCls:'btn-groupoffice',
 					text : GO.email.lang.attachFilesGO.replace('{product_name}', GO.settings.config.product_name),
 					handler : function()
 					{

@@ -1,4 +1,4 @@
-GO.files.UploadPCForm = function(config)
+GO.UploadPCForm = function(config)
 {
 	if (!config) {
 		config = {};
@@ -26,14 +26,14 @@ GO.files.UploadPCForm = function(config)
 	
 	config.items=[this.uploadFile];
 
-	GO.files.UploadPCForm.superclass.constructor.call(this, config);
+	GO.UploadPCForm.superclass.constructor.call(this, config);
 
 	this.addEvents({
 		'upload' : true
 	});
 	
 }
-Ext.extend(GO.files.UploadPCForm, Ext.form.FormPanel, {
+Ext.extend(GO.UploadPCForm, Ext.form.FormPanel, {
 
 	uploadHandler : function(){
 
