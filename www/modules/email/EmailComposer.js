@@ -633,65 +633,8 @@ GO.email.EmailComposer = function(config) {
 			root : 'results',
 			totalProperty : 'total',
 			id : 'id',
-			fields : ['id', 'name', 'default_template'],
+			fields : ['id', 'name', 'group', 'text','template_id','checked'],
 			remoteSort : true
-		});
-
-		this.templatesList = new GO.email.TemplatesList({
-			store : this.templatesStore
-		});
-
-		this.templatesList.on('click', function(dataview, index){
-
-			this.showConfig.template_id = index > 0
-			? dataview.store.data.items[index - 1].id
-			: 0;
-					
-			if(this.templateDefault.checked)
-			{
-				this.templatesStore.baseParams.default_template_id=this.showConfig.template_id;
-				this.templatesStore.load();
-				delete this.templatesStore.baseParams.default_template_id;
-
-				this.templateDefault.setValue(false);
-			}
-			
-			this.show(this.showConfig);
-			this.templatesWindow.hide();
-			this.templatesList.clearSelections();
-		}, this);
-
-		
-				
-		
-		this.defaultTemplatePanel = new Ext.FormPanel({
-			autoHeight:true,
-			cls:'go-form-panel',
-			region:'south',
-			items:[
-			this.templateDefault = new Ext.form.Checkbox({
-				name:'templateDefault',
-				boxLabel:GO.email.lang.defaultTemplate,
-				anchor:'100%',
-				hideLabel:true,
-				checked:false
-			})]
-		});
-				
-		this.templatesWindow = new Ext.Window({
-			title : GO.email.lang.selectTemplate,
-			layout : 'border',
-			modal : false,
-			height : 400,
-			width : 600,
-			closable : true,
-			closeAction : 'hide',
-			items : [new Ext.Panel({
-				region:'center',
-				autoScroll : true,
-				items : [this.templatesList],
-				cls : 'go-form-panel'
-			}),this.defaultTemplatePanel]
 		});
 	}
 
@@ -730,6 +673,7 @@ GO.email.EmailComposer = function(config) {
 
 	tbar.push(this.attachmentsButton);
 
+
 	if (GO.addressbook) {
 		tbar.push({
 			text : GO.addressbook.lang.addressbook,
@@ -762,6 +706,30 @@ GO.email.EmailComposer = function(config) {
 			},
 			scope : this
 		});
+	}
+
+	if(GO.mailings){
+		tbar.push({
+			iconCls:'ml-btn-mailings',
+			text:GO.mailings.lang.emailTemplate,
+			menu:new GO.menu.JsonMenu({
+				store:this.templatesStore,
+				listeners:{
+					scope:this,
+					itemclick : function(item, e ) {
+						if(item.template_id=='default'){
+							this.templatesStore.baseParams.default_template_id=this.showConfig.template_id;
+							this.templatesStore.load();
+							delete this.templatesStore.baseParams.default_template_id;
+						}else
+						{
+							this.showConfig.template_id=item.template_id;
+							this.show(this.showConfig);
+						}
+					}
+				}
+			})
+		})
 	}
 
 	var focusFn = function() {
@@ -1007,17 +975,26 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			});
 			
 			this.htmlEditor.SpellCheck = false;
-		} else if (config.template_id == undefined && this.templatesStore
+		/*} else if (config.template_id == undefined && this.templatesStore
 			&& this.templatesStore.getTotalCount() > 1) {
 			//this.showConfig = config;
 			Ext.getBody().unmask();
-			this.templatesWindow.show();
+			this.templatesWindow.show();*/
 		} else {
 
-			if (config.template_id == undefined && this.templatesStore
+			/*if (config.template_id == undefined && this.templatesStore
 				&& this.templatesStore.getTotalCount() == 1) {
 				config.template_id = this.templatesStore.data.items[0]
 				.get('id');
+			}*/
+
+			if (config.template_id == undefined && this.templatesStore){
+				var templateRecordIndex = this.templatesStore.findBy(function(record,id){
+					return record.get('checked');
+				});
+
+				if(templateRecordIndex>-1)
+					config.template_id=this.templatesStore.getAt(templateRecordIndex).get('template_id');
 			}
 
 			

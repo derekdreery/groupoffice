@@ -219,3 +219,4 @@ $lang['common']['alert']='Attentie';
 $lang['common']['theFolderAlreadyExists']='Er bestaat al een map met deze naam';
 
 $lang['common']['other']='Overig';
+$lang['common']['none']='Geen';
