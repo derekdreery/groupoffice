@@ -880,7 +880,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		this.endDate = this.startDate.add(Date.DAY, this.days);
 		this.setStoreBaseParams();
 
-		this.periodDisplay=this.startDate.format('F, Y');
+		this.periodDisplay=this.configuredDate.format('F, Y');
 
 
 		if(!oldEndDate || !oldStartDate || oldEndDate.getElapsed(this.endDate)!=0 || oldStartDate.getElapsed(this.startDate)!=0)
@@ -896,11 +896,13 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 	},
 
 	nextDate : function(){
-		return this.configuredDate.add(Date.MONTH, 1);
+		var d=this.configuredDate.add(Date.MONTH, 1);
+		return d;
 	},
 
 	previousDate : function(){
-		return this.configuredDate.add(Date.MONTH, -1);
+		var d= this.configuredDate.add(Date.MONTH, -1);
+		return d;
 	},
 
 	reload : function()
