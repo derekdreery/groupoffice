@@ -401,16 +401,18 @@ GO.email.EmailComposer = function(config) {
 	}));
 
 	var plugins = [
-		imageInsertPlugin,spellcheckInsertPlugin,
+		imageInsertPlugin];
+	
+	if(GO.email.pspellSupport)
+		plugins.push(spellcheckInsertPlugin);
+
+	plugins.push(
 		wordPastePlugin,
 		hrPlugin,
 		ioDentPlugin,
 		rmFormatPlugin,
 		ssScriptPlugin
-	];
-	
-	//if (Ext.version!='2.3.0')
-		//plugins.push(tablePlugin);
+		);
 
 	items.push(this.htmlEditor = new Ext.form.HtmlEditor({
 		hideLabel : true,
