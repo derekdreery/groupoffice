@@ -34,8 +34,9 @@ GO.tasks.AddTaskPanel = function(config){
 	});
 
 	this.btnNewTask = new Ext.Button({
-		text: GO.lang['cmdAdd'],
-		width:100,
+		text: '<b>+</b>',
+		cls:'btn-new-task',
+		width:20,
 		handler:function()
 		{
 			this.userTriggered = true;
