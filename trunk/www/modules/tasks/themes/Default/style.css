@@ -12,6 +12,10 @@
 	height:16px;
 }
 
+.btn-new-task .x-btn-small .x-btn-text{
+	padding:0px !important;
+}
+
 #tasks-new-task-icon{
 	background-image: url('images/newtask.png') !important;
 	height:16px;
