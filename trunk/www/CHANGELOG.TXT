@@ -5,7 +5,7 @@
 - New bookmarks module.
 - New calllog module for simple administration of phone calls.
 - New module to schedule popup reminders for users or groups with a text page.
-- WebDAV and CalDAV support with FreeBusy info.
+- WebDAV and CalDAV support with FreeBusy info (http://www.group-office.com/wiki/CalDAV).
 - Collapsible sections in all information panels.
 - Separated tasks and events from other links in the information panels.
 - Instead of blocking a user after 5 bad logins it presents a CAPTCHA now.
