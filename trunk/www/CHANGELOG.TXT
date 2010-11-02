@@ -35,7 +35,7 @@ Calendar and Tasks
 
 E-mail
 - Remind collapsed/expanded folders and accounts in the tree.
-* Easier adding of attachments and inline images.
+- Easier adding of attachments and inline images.
 - Remind enabled CC/BCC fields.
 - Option to always reply to a read confirmation and always request a read
   confirmation.
@@ -51,6 +51,10 @@ Billing
 Projects
 - Export function
 
+2010/11/02 3.5.38
+- Mailings sent duplicate body
+- Escaping value problem in projects billing template
+- 0% VAT line with a manual page break
 
 2010/10/19 3.5.37
 - Bug in adding contacts
