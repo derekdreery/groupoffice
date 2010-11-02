@@ -69,44 +69,46 @@ GO.grid.GridPanel = function(config)
 	}
 	
 	config.keys.push({
-        key: Ext.EventObject.DELETE,
-        fn: function(key, e){
-        	//sometimes there's a search input in the grid, so dont delete when focus is on an input
-        	if(e.target.tagName!='INPUT')               	
-        		this.deleteSelected(this.deleteConfig);
-        },
-        scope:this
-    });	
+		key: Ext.EventObject.DELETE,
+		fn: function(key, e){
+			//sometimes there's a search input in the grid, so dont delete when focus is on an input
+			if(e.target.tagName!='INPUT')
+				this.deleteSelected(this.deleteConfig);
+		},
+		scope:this
+	});
     
 	if(config.paging)
-  {
-  	if(!config.bbar)
-  	{
+	{
+		if(!config.bbar)
+		{
 			if(typeof(config.paging)=='boolean')
 				config.paging=parseInt(GO.settings['max_rows_list']);
 			
-  		config.bbar = new Ext.PagingToolbar({
-  					cls: 'go-paging-tb',
-	          store: config.store,
-	          pageSize: config.paging,
-	          displayInfo: true,
-	          displayMsg: GO.lang['displayingItems'],
-	          emptyMsg: GO.lang['strNoItems']
-	      });
-  	}
+			config.bbar = new Ext.PagingToolbar({
+				cls: 'go-paging-tb',
+				store: config.store,
+				pageSize: config.paging,
+				displayInfo: true,
+				displayMsg: GO.lang['displayingItems'],
+				emptyMsg: GO.lang['strNoItems']
+			});
+		}
     
-    if(!config.store.baseParams)
-    {
-    	config.store.baseParams={};
-    }
-    config.store.baseParams['limit']=parseInt(GO.settings['max_rows_list']);
-  }
+		if(!config.store.baseParams)
+		{
+			config.store.baseParams={};
+		}
+		config.store.baseParams['limit']=config.paging;
+	}
     
 	GO.grid.GridPanel.superclass.constructor.call(this, config);
 
 	//create a delayed rowselect event so that when a user repeatedly presses the
 	//up and down button it will only load if it stays on the same record for 400ms
-	this.addEvents({'delayedrowselect':true});
+	this.addEvents({
+		'delayedrowselect':true
+	});
 
 
 
@@ -145,7 +147,9 @@ GO.grid.GridPanel = function(config)
 			}
 		}
 		this.rowClicked=false;
-	}, this, {delay:250});
+	}, this, {
+		delay:250
+	});
 }
 
 Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
@@ -196,19 +200,19 @@ Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 
 		if(config.callback)
 		{
-		  deleteItemsConfig['callback']=config.callback;
+			deleteItemsConfig['callback']=config.callback;
 		}
 		if(config.success)
 		{
-		  deleteItemsConfig['success']=config.success;
+			deleteItemsConfig['success']=config.success;
 		}
 		if(config.failure)
 		{
-		  deleteItemsConfig['failure']=config.failure;
+			deleteItemsConfig['failure']=config.failure;
 		}
 		if(config.scope)
 		{
-		  deleteItemsConfig['scope']=config.scope;
+			deleteItemsConfig['scope']=config.scope;
 		}
 
 
@@ -259,39 +263,41 @@ GO.grid.EditorGridPanel = function(config)
 	}
 
 	config.keys.push({
-        key: Ext.EventObject.DELETE,
-        fn: function(key, e){
-        	//sometimes there's a search input in the grid, so dont delete when focus is on an input
-        	if(e.target.tagName!='INPUT')
-        		this.deleteSelected(this.deleteConfig);
-        },
-        scope:this
-    });
+		key: Ext.EventObject.DELETE,
+		fn: function(key, e){
+			//sometimes there's a search input in the grid, so dont delete when focus is on an input
+			if(e.target.tagName!='INPUT')
+				this.deleteSelected(this.deleteConfig);
+		},
+		scope:this
+	});
 
 	if(config.paging)
-  {
-  	if(!config.bbar)
-  	{
-  		config.bbar = new Ext.PagingToolbar({
-  					cls: 'go-paging-tb',
-	          store: config.store,
-	          pageSize: parseInt(GO.settings['max_rows_list']),
-	          displayInfo: true,
-	          displayMsg: GO.lang['displayingItems'],
-	          emptyMsg: GO.lang['strNoItems']
-	      });
-  	}
+	{
+		if(!config.bbar)
+		{
+			config.bbar = new Ext.PagingToolbar({
+				cls: 'go-paging-tb',
+				store: config.store,
+				pageSize: parseInt(GO.settings['max_rows_list']),
+				displayInfo: true,
+				displayMsg: GO.lang['displayingItems'],
+				emptyMsg: GO.lang['strNoItems']
+			});
+		}
 
-    if(!config.store.baseParams)
-    {
-    	config.store.baseParams={};
-    }
-    config.store.baseParams['limit']=parseInt(GO.settings['max_rows_list']);
-  }
+		if(!config.store.baseParams)
+		{
+			config.store.baseParams={};
+		}
+		config.store.baseParams['limit']=parseInt(GO.settings['max_rows_list']);
+	}
 
 	GO.grid.EditorGridPanel.superclass.constructor.call(this, config);
 
-	this.addEvents({delayedrowselect:true});
+	this.addEvents({
+		delayedrowselect:true
+	});
 
 	this.on('rowclick', function(grid, rowIndex, e){
 		if(!e.ctrlKey && !e.shiftKey)
@@ -312,7 +318,9 @@ GO.grid.EditorGridPanel = function(config)
 			}
 		}
 		this.rowClicked=false;
-	}, this, {delay:250});
+	}, this, {
+		delay:250
+	});
 }
 
 Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, {
@@ -350,20 +358,20 @@ Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, {
 	 * @return {Boolean} true = valid, false = invalid
 	 */
 	isCellValid:function(col, row) {
-			if(!this.colModel.isCellEditable(col, row)) {
-					return true;
-			}
-			var ed = this.colModel.getCellEditor(col, row);
-			if(!ed) {
-					return true;
-			}
-			var record = this.store.getAt(row);
-			if(!record) {
-					return true;
-			}
-			var field = this.colModel.getDataIndex(col);
-			ed.field.setValue(record.data[field]);
-			return ed.field.isValid(true);
+		if(!this.colModel.isCellEditable(col, row)) {
+			return true;
+		}
+		var ed = this.colModel.getCellEditor(col, row);
+		if(!ed) {
+			return true;
+		}
+		var record = this.store.getAt(row);
+		if(!record) {
+			return true;
+		}
+		var field = this.colModel.getDataIndex(col);
+		ed.field.setValue(record.data[field]);
+		return ed.field.isValid(true);
 	} // end of function isCellValid
 
 	/**
@@ -371,25 +379,26 @@ Ext.extend(GO.grid.EditorGridPanel, Ext.grid.EditorGridPanel, {
 	 * @param {Boolean} editInvalid true to automatically start editing of the first invalid cell
 	 * @return {Boolean} true = valid, false = invalid
 	 */
-	,isValid:function(editInvalid) {
-			var cols = this.colModel.getColumnCount();
-			var rows = this.store.getCount();
-			var r, c;
-			var valid = true;
-			for(r = 0; r < rows; r++) {
-					for(c = 0; c < cols; c++) {
-							valid = this.isCellValid(c, r);
-							if(!valid) {
-									break;
-							}
-					}
-					if(!valid) {
-							break;
-					}
+	,
+	isValid:function(editInvalid) {
+		var cols = this.colModel.getColumnCount();
+		var rows = this.store.getCount();
+		var r, c;
+		var valid = true;
+		for(r = 0; r < rows; r++) {
+			for(c = 0; c < cols; c++) {
+				valid = this.isCellValid(c, r);
+				if(!valid) {
+					break;
+				}
 			}
-			if(editInvalid && !valid) {
-					this.startEditing(r, c);
+			if(!valid) {
+				break;
 			}
-			return valid;
+		}
+		if(editInvalid && !valid) {
+			this.startEditing(r, c);
+		}
+		return valid;
 	} // end of function isValid
 });
