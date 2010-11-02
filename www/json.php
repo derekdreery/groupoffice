@@ -92,7 +92,9 @@ try {
 							'tmp_name'=>$tmp_file,
 							'name'=>utf8_basename($tmp_file),
 							'size'=>filesize($tmp_file),
-							'type'=>File::get_filetype_description(strtolower($_POST['type']))
+							'type'=>File::get_filetype_description(strtolower($_POST['type'])),
+							'human_size'=>Number::format_size(filesize($tmp_file)),
+							'extension'=>$_POST['type']
 			);
 
 			require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
