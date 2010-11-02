@@ -519,6 +519,21 @@ class GoSwiftImport extends GoSwift{
 
 	}
 
+	private function has_html_part($structure){
+		if(isset($structure->parts)){
+			foreach($structure->parts as $part){
+				go_debug($part->ctype_primary.'/'.$part->ctype_secondary);
+				if($part->ctype_primary == 'text' && $part->ctype_secondary=='html')
+					return true;
+				else if($this->has_html_part($part)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+
 	private function get_parts($structure, $part_number_prefix='')
 	{
 		global $GO_CONFIG, $GO_MODULES;
@@ -532,10 +547,8 @@ class GoSwiftImport extends GoSwift{
 				if($structure->ctype_primary=='multipart' && $structure->ctype_secondary=='alternative' &&
 				$part->ctype_primary == 'text' && $part->ctype_secondary=='plain')
 				{
-					//check if html part is there
-					$nextpart = next($structure->parts);
-					if($nextpart && $nextpart->ctype_secondary=='html'){
-						prev($structure->parts);
+					//check if html part is there					
+					if($this->has_html_part($structure)){						
 						continue;
 					}
 				}
