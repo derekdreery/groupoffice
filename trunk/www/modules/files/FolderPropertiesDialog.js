@@ -11,82 +11,84 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
- GO.files.FolderPropertiesDialog = function(config){
+GO.files.FolderPropertiesDialog = function(config){
 	
 	if(!config)
 		config={};
-		
+
+	this.goDialogId='folder';
 
 	this.propertiesPanel = new Ext.Panel({
 		layout:'form',
 		title:GO.lang['strProperties'],
-    cls:'go-form-panel',waitMsgTarget:true,
-    defaultType: 'textfield',
+		cls:'go-form-panel',
+		waitMsgTarget:true,
+		defaultType: 'textfield',
 		labelWidth:100, 
 		border:false,   
-    items: [
-    		{
-          fieldLabel: GO.lang['strName'],
-          name: 'name',
-          anchor: '100%',
-					validator:function(v){
-						return !v.match(/[&\/:\*\?"<>|\\]/);
-					} 
-        },{
-        	xtype: 'plainfield',
-        	fieldLabel: GO.lang.strLocation,
-        	name: 'path'
-        },
-        new GO.form.HtmlComponent({
-        	html:'<hr />'        	
-        }),
-        {
-        	xtype: 'plainfield',
-        	fieldLabel: GO.lang.strCtime,
-        	name: 'ctime'
-        },
-        {
-        	xtype: 'plainfield',
-        	fieldLabel: GO.lang.strMtime,
-        	name: 'mtime'
-        },
-        {
-        	xtype: 'plainfield',
-        	fieldLabel: GO.lang.Atime,
-        	name: 'atime'
-        },
-        {
-        	xtype: 'htmlcomponent',
-        	html:'<hr />'        	
-        },
-        {
-        	xtype: 'plainfield',
-        	fieldLabel: GO.lang.strType,
-        	name: 'type'
-        },
-        {
-        	xtype: 'plainfield',
-        	fieldLabel: GO.lang.strSize,
-        	name: 'size'
-        },
-        new Ext.form.Checkbox({		                	
-            boxLabel: GO.files.lang.activateSharing,
-            name: 'share',
-            checked: false,
-	          hideLabel:true		   
-        }),
-        new Ext.form.Checkbox({		                	
-            boxLabel: GO.files.lang.notifyChanges,
-            name: 'notify',
-            checked: false,
-	          hideLabel:true		   
-        })
-    ]
+		items: [
+		{
+			fieldLabel: GO.lang['strName'],
+			name: 'name',
+			anchor: '100%',
+			validator:function(v){
+				return !v.match(/[&\/:\*\?"<>|\\]/);
+			}
+		},{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.strLocation,
+			name: 'path'
+		},
+		new GO.form.HtmlComponent({
+			html:'<hr />'
+		}),
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.strCtime,
+			name: 'ctime'
+		},
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.strMtime,
+			name: 'mtime'
+		},
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.Atime,
+			name: 'atime'
+		},
+		{
+			xtype: 'htmlcomponent',
+			html:'<hr />'
+		},
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.strType,
+			name: 'type'
+		},
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.strSize,
+			name: 'size'
+		},
+		new Ext.form.Checkbox({
+			boxLabel: GO.files.lang.activateSharing,
+			name: 'share',
+			checked: false,
+			hideLabel:true
+		}),
+		new Ext.form.Checkbox({
+			boxLabel: GO.files.lang.notifyChanges,
+			name: 'notify',
+			checked: false,
+			hideLabel:true
+		})
+		]
 	});
 	
 	this.readPermissionsTab = new GO.grid.PermissionsPanel({
 							
-	});
+		});
 	
 	this.commentsPanel = new Ext.Panel({
 		layout:'form',
@@ -103,13 +105,13 @@
 	});
 	
 	this.tabPanel =new Ext.TabPanel({
-			activeTab: 0,
-			deferredRender:false,
-		  border:false,
-		  anchor:'100% 100%',
-		  hideLabel:true,
-			items:[this.propertiesPanel, this.commentsPanel, this.readPermissionsTab]		
-		});
+		activeTab: 0,
+		deferredRender:false,
+		border:false,
+		anchor:'100% 100%',
+		hideLabel:true,
+		items:[this.propertiesPanel, this.commentsPanel, this.readPermissionsTab]
+	});
 
 	if(GO.workflow)
 	{
@@ -132,31 +134,39 @@
 		closeAction:'hide',
 		items:this.formPanel,
 		buttons:[
-			{
-				text:GO.lang['cmdOk'],
-				handler: function(){this.save(true)}, 
-				scope: this
-			},
-			{
-				text:GO.lang['cmdApply'],
-				handler: function(){this.save(false)}, 
-				scope: this
-			},
+		{
+			text:GO.lang['cmdOk'],
+			handler: function(){
+				this.save(true)
+				},
+			scope: this
+		},
+		{
+			text:GO.lang['cmdApply'],
+			handler: function(){
+				this.save(false)
+				},
+			scope: this
+		},
 			
-			{
-				text:GO.lang['cmdClose'],
-				handler: function(){this.hide()}, 
-				scope: this
-			}
-			]
+		{
+			text:GO.lang['cmdClose'],
+			handler: function(){
+				this.hide()
+				},
+			scope: this
+		}
+		]
 		
 		
 	});
 	
-	this.addEvents({'rename' : true});
+	this.addEvents({
+		'rename' : true
+	});
 }
 
-Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
+Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 	parent_id : 0,
 	show : function(folder_id)
 	{
@@ -184,12 +194,12 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 
 				this.tabPanel.setActiveTab(0);
 				
-		    GO.files.FolderPropertiesDialog.superclass.show.call(this);
-	    },
-	    failure: function(form, action) {
+				GO.files.FolderPropertiesDialog.superclass.show.call(this);
+			},
+			failure: function(form, action) {
 				Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
 			},
-	    scope: this
+			scope: this
 		});
 		
 		
@@ -225,6 +235,7 @@ Ext.extend(GO.files.FolderPropertiesDialog, Ext.Window, {
 					this.formPanel.form.findField('path').setValue(action.result.path);
 					this.fireEvent('rename', this, this.parent_id);				
 				}
+				this.fireEvent('save', this, this.folder_id);
 				
 				if(hide)
 				{
