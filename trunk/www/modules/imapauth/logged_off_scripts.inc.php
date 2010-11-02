@@ -1,7 +1,10 @@
 <?php
-require_once('imapauth.config.php');
-$domains = json_encode(explode(',',$config[0]['imapauth_combo_domains']));
-$default_domain = $config[0]['imapauth_default_domain'];
+$conf = str_replace('config.php', 'imapauth.config.php', $GLOBALS['GO_CONFIG']->get_config_file());
+if(file_exists($conf)){
+	require_once($conf);
+	$domains = json_encode(explode(',',$config[0]['imapauth_combo_domains']));
+	$default_domain = $config[0]['imapauth_default_domain'];
+}
 
 if(!empty($domains) && !empty($default_domain)){ ?>
 
@@ -50,11 +53,7 @@ Ext.override(GO.dialog.LoginDialog, {
 		})
 
 		this.formPanel.insert(2,this.usernameCompositeField);
-	}),
-	show : function(){
-		this.formPanel.load({	url : BaseHref+'modules/imapauth/get_domains.php?task=default_domain' });
-		GO.dialog.LoginDialog.superclass.show.call(this);
-	}
+	})
 });
 </script>
 
