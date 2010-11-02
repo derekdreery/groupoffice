@@ -384,7 +384,7 @@ class servermanager extends db {
 		$max_users=0;
 		if(isset($GO_CONFIG->test_servermanager)){
 			$max_users=2;
-		}elseif(function_exists('license_get_max_server_users')){
+		}elseif(extension_loaded('ionCube Loader') && function_exists('license_get_max_server_users')){
 			$max_users=license_get_max_server_users();
 		}else
 		{
