@@ -29,6 +29,8 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 	 */
 	extraTemplateProperties : '',
 
+	editGoDialogId : 'file',
+
 	editHandler : function(){
 
 			if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
@@ -56,7 +58,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				GO.files.showFilePropertiesDialog(this.link_id+"");
-				this.addSaveHandler(GO.files.filePropertiesDialog);
+				//this.addSaveHandler(GO.files.filePropertiesDialog);
 			},
 			scope: this
 		});

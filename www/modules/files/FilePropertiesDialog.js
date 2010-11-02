@@ -15,58 +15,61 @@ GO.files.FilePropertiesDialog = function(config){
 	
 	if(!config)
 		config={};
+
+	this.goDialogId='file';
 	
 	this.propertiesPanel = new Ext.Panel({
 		layout:'form',
 		title:GO.lang['strProperties'],
-    cls:'go-form-panel',waitMsgTarget:true,
-    labelWidth: 100,
-    defaultType: 'textfield',
-    items: [
-    		{
-          fieldLabel: GO.lang['strName'],
-          name: 'name',
-          anchor: '100%',
-					validator:function(v){
-						return !v.match(/[&\/:\*\?"<>|\\]/);
-					} 
-        },{
-        	xtype: 'plainfield',
-        	fieldLabel: GO.lang.strLocation,
-        	name: 'path'
-        },
-        new GO.form.HtmlComponent({
-        	html:'<hr />'        	
-        }),
-        {
-        	xtype: 'plainfield',
-        	fieldLabel: GO.lang.strCtime,
-        	name: 'ctime'
-        },
-        {
-        	xtype: 'plainfield',
-        	fieldLabel: GO.lang.strMtime,
-        	name: 'mtime'
-        },
-        {
-        	xtype: 'plainfield',
-        	fieldLabel: GO.lang.Atime,
-        	name: 'atime'
-        },
-        new GO.form.HtmlComponent({
-        	html:'<hr />'        	
-        }),
-        {
-        	xtype: 'plainfield',
-        	fieldLabel: GO.lang.strType,
-        	name: 'type'
-        },
-        {
-        	xtype: 'plainfield',
-        	fieldLabel: GO.lang.strSize,
-        	name: 'size'
-        }
-    ]
+		cls:'go-form-panel',
+		waitMsgTarget:true,
+		labelWidth: 100,
+		defaultType: 'textfield',
+		items: [
+		{
+			fieldLabel: GO.lang['strName'],
+			name: 'name',
+			anchor: '100%',
+			validator:function(v){
+				return !v.match(/[&\/:\*\?"<>|\\]/);
+			}
+		},{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.strLocation,
+			name: 'path'
+		},
+		new GO.form.HtmlComponent({
+			html:'<hr />'
+		}),
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.strCtime,
+			name: 'ctime'
+		},
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.strMtime,
+			name: 'mtime'
+		},
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.Atime,
+			name: 'atime'
+		},
+		new GO.form.HtmlComponent({
+			html:'<hr />'
+		}),
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.strType,
+			name: 'type'
+		},
+		{
+			xtype: 'plainfield',
+			fieldLabel: GO.lang.strSize,
+			name: 'size'
+		}
+		]
 	});
 		
 	this.commentsPanel = new Ext.Panel({
@@ -97,23 +100,23 @@ GO.files.FilePropertiesDialog = function(config){
 
 	if(GO.customfields && GO.customfields.types["6"])
 	{
-  	for(var i=0;i<GO.customfields.types["6"].panels.length;i++)
-  	{
-  		items.push(GO.customfields.types["6"].panels[i]);
-  	}
+		for(var i=0;i<GO.customfields.types["6"].panels.length;i++)
+		{
+			items.push(GO.customfields.types["6"].panels[i]);
+		}
 	}
 
 	
 	this.tabPanel =new Ext.TabPanel({
-			activeTab: 0,
-			deferredRender:false,
-			doLayoutOnTabChange:true,
-			enableTabScroll:true,
-		  border:false,
-		  anchor:'100% 100%',
-		  hideLabel:true,
-			items:items
-		});
+		activeTab: 0,
+		deferredRender:false,
+		doLayoutOnTabChange:true,
+		enableTabScroll:true,
+		border:false,
+		anchor:'100% 100%',
+		hideLabel:true,
+		items:items
+	});
 		
 	this.formPanel = new Ext.form.FormPanel(
 	{
@@ -125,49 +128,49 @@ GO.files.FilePropertiesDialog = function(config){
 
 
 	var tbar = [this.linkBrowseButton = new Ext.Button({
-			iconCls : 'btn-link',
-			cls : 'x-btn-text-icon',
-			text : GO.lang.cmdBrowseLinks,
-			disabled : true,
-			handler : function() {
-				if(!GO.linkBrowser){
-					GO.linkBrowser = new GO.LinkBrowser();
-				}
+		iconCls : 'btn-link',
+		cls : 'x-btn-text-icon',
+		text : GO.lang.cmdBrowseLinks,
+		disabled : true,
+		handler : function() {
+			if(!GO.linkBrowser){
+				GO.linkBrowser = new GO.LinkBrowser();
+			}
 				
-				GO.linkBrowser.show({
-					link_id : this.file_id,
-					link_type : "6",
-					folder_id : "0"
-				});
-			},
-			scope : this
-		}),{
-					iconCls: 'btn-save',
-					text: GO.lang.download,
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.file_id;
-					},
-					scope: this
-				}];
+			GO.linkBrowser.show({
+				link_id : this.file_id,
+				link_type : "6",
+				folder_id : "0"
+			});
+		},
+		scope : this
+	}),{
+		iconCls: 'btn-save',
+		text: GO.lang.download,
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.file_id;
+		},
+		scope: this
+	}];
 				
 	if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
 	{
 		tbar.push({
-					iconCls: 'btn-edit',
-					text: GO.files.lang.downloadGOTA,
-					cls: 'x-btn-text-icon',
-					handler: function(){
-						if(!deployJava.isWebStartInstalled('1.6.0'))
-						{
-							Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
-						}else
-						{		
-							window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+this.file_id;
-						}
-					},
-					scope: this
-				});
+			iconCls: 'btn-edit',
+			text: GO.files.lang.downloadGOTA,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				if(!deployJava.isWebStartInstalled('1.6.0'))
+				{
+					Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
+				}else
+				{
+					window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+this.file_id;
+				}
+			},
+			scope: this
+		});
 	}
 		
 	GO.files.FilePropertiesDialog.superclass.constructor.call(this,{
@@ -181,24 +184,33 @@ GO.files.FilePropertiesDialog = function(config){
 		collapsible:true,
 		tbar:tbar,
 		buttons:[
-			{
-				text:GO.lang['cmdOk'],
-				handler: function(){this.save(true)}, 
-				scope: this
-			},
-			{
-				text:GO.lang['cmdApply'],
-				handler: function(){this.save(false)}, 
-				scope: this
-			},			
-			{
-				text:GO.lang['cmdClose'],
-				handler: function(){this.hide()}, 
-				scope: this
-			}]
+		{
+			text:GO.lang['cmdOk'],
+			handler: function(){
+				this.save(true)
+				},
+			scope: this
+		},
+		{
+			text:GO.lang['cmdApply'],
+			handler: function(){
+				this.save(false)
+				},
+			scope: this
+		},
+		{
+			text:GO.lang['cmdClose'],
+			handler: function(){
+				this.hide()
+				},
+			scope: this
+		}]
 	});
 	
-	this.addEvents({'rename' : true, 'save':true});
+	this.addEvents({
+		'rename' : true,
+		'save':true
+	});
 }
 
 Ext.extend(GO.files.FilePropertiesDialog, GO.Window, {
@@ -216,9 +228,9 @@ Ext.extend(GO.files.FilePropertiesDialog, GO.Window, {
 		this.tabPanel.setActiveTab(0);
 		
 		var params = {
-				file_id: file_id, 
-				task: 'file_properties'
-			};
+			file_id: file_id,
+			task: 'file_properties'
+		};
 			
 		if(config.loadParams)
 		{
@@ -240,12 +252,12 @@ Ext.extend(GO.files.FilePropertiesDialog, GO.Window, {
 				
 				this.folder_id=action.result.data.folder_id;
 				
-		    GO.files.FilePropertiesDialog.superclass.show.call(this);
-	    },
-	    failure: function(form, action) {
+				GO.files.FilePropertiesDialog.superclass.show.call(this);
+			},
+			failure: function(form, action) {
 				Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
 			},
-	    scope: this
+			scope: this
 		});
 	},
 	
@@ -276,9 +288,11 @@ Ext.extend(GO.files.FilePropertiesDialog, GO.Window, {
 				if(action.result.path)
 				{
 					this.formPanel.form.findField('path').setValue(action.result.path);
-					this.fireEvent('rename', this, this.folder_id);
-					this.fireEvent('save', this, this.file_id, this.folder_id);
+					this.fireEvent('rename', this, this.folder_id);					
 				}
+				
+				this.fireEvent('save', this, this.file_id, this.folder_id);
+
 				if(hide)
 				{
 					this.hide();

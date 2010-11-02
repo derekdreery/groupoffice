@@ -8,6 +8,8 @@ GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
 	loadUrl : GO.settings.modules.files.url+'json.php',
 
 	noFileBrowser:true,
+	
+	editGoDialogId : 'folder',
 
 	editHandler : function(){	
 	},
@@ -21,7 +23,6 @@ GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				GO.files.showFolderPropertiesDialog(this.link_id+"");
-				this.addSaveHandler(GO.files.folderPropertiesDialog);
 			},
 			scope: this
 		});
