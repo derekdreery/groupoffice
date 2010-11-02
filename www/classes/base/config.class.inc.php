@@ -1114,7 +1114,7 @@ class GO_CONFIG {
 	 */
 	function save_setting( $name, $value, $user_id=0) {
 		if ( $this->get_setting($name, $user_id) === false ) {
-			return $this->db->query("INSERT INTO go_settings (name, value, user_id) VALUES ('$name', '$value', '$user_id')");
+			return $this->db->query("INSERT INTO go_settings (name, value, user_id) VALUES ('".$this->db->escape($name)."', '".$this->db->escape($value)."', ".intval($user_id).")");
 		} else {
 			return $this->db->query("UPDATE go_settings SET value='".$this->db->escape($value)."' WHERE name='".$this->db->escape($name)."' AND user_id='".$this->db->escape($user_id)."'");
 		}
