@@ -1,5 +1,5 @@
 GO.moduleManager.onModuleReady('customfields', function(){
-	GO.customfields.nonGridTypes.push('contact');
+	//GO.customfields.nonGridTypes.push('contact');
 	GO.customfields.dataTypes.contact={
 		label : GO.addressbook.lang.contact,
 		getFormField : function(customfield, config){
