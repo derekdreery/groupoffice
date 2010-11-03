@@ -26,21 +26,15 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
 		$path = $GO_CONFIG->file_storage_path.$path;
 
 		parent::__construct($path);
-
-		/*
-		 * Group-Office files module class
-		 */
-		$this->files = new files();		
-
 	}
 
 	public function checkWritePermission($delete=false){
-		global $GO_SECURITY;
+		global $GO_SECURITY, $files;
 		
-		$this->file=$this->files->resolve_path($this->relpath);
-		$this->folder=$this->files->get_folder($this->file['folder_id']);
+		$this->file=$files->resolve_path($this->relpath);
+		$this->folder=$files->get_folder($this->file['folder_id']);
 
-		if(!$this->files->has_write_permission($GO_SECURITY->user_id, $this->folder))
+		if(!$files->has_write_permission($GO_SECURITY->user_id, $this->folder))
 				throw new Sabre_DAV_Exception_Forbidden();
 
 		/*if($delete){
@@ -74,11 +68,12 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
      * @return void
      */
     public function setName($name) {
+		global $files;
 		$this->checkWritePermission();
 		
         parent::setName($name);
 
-		$this->relpath = $this->files->strip_server_path($this->path);
+		$this->relpath = $files->strip_server_path($this->path);
     }
 
 	public function getServerPath(){
@@ -91,17 +86,18 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
      * @param string $name The new name
      * @return void
      */
-    public function move($newPath) {		
+    public function move($newPath) {
+		global $files;
 		$this->checkWritePermission();
 
 		rename($this->path, $newPath);
 
-		$destFolder = $this->files->resolve_path($this->files->strip_server_path(dirname($newPath)));
+		$destFolder = $files->resolve_path($files->strip_server_path(dirname($newPath)));
 
-		$this->files->move_file($this->file, $destFolder);
+		$files->move_file($this->file, $destFolder);
 		
 		$this->path = $newPath;
-		$this->relpath = $this->files->strip_server_path($this->path);
+		$this->relpath = $files->strip_server_path($this->path);
     }
 
     /**
