@@ -516,7 +516,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			//$task['tasklist_id'] = $id;
 
 			$task['mtime']=$dav_task['mtime']=time();
-			$dav_task['data']=$tasklistData;
+			$dav_task['data']=$task;
 
 			$this->tasks->update_row('dav_tasks', 'id', $dav_task);
 			$this->tasks->update_task($task);
