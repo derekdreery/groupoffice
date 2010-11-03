@@ -332,26 +332,32 @@ class calendar extends db {
 
 
 					$days=array();
-					if($event['sun']=='1') {
-						$days[]=$lang['common']['full_days'][0];
-					}
-					if($event['mon']=='1') {
-						$days[]=$lang['common']['full_days'][1];
-					}
-					if($event['tue']=='1') {
-						$days[]=$lang['common']['full_days'][2];
-					}
-					if($event['wed']=='1') {
-						$days[]=$lang['common']['full_days'][3];
-					}
-					if($event['thu']=='1') {
-						$days[]=$lang['common']['full_days'][4];
-					}
-					if($event['fri']=='1') {
-						$days[]=$lang['common']['full_days'][5];
-					}
-					if($event['sat']=='1') {
-						$days[]=$lang['common']['full_days'][6];
+
+					if(isset($rrule['BYDAY'])) {
+						if($event['sun']=='1') {
+							$days[]=$lang['common']['full_days'][0];
+						}
+						if($event['mon']=='1') {
+							$days[]=$lang['common']['full_days'][1];
+						}
+						if($event['tue']=='1') {
+							$days[]=$lang['common']['full_days'][2];
+						}
+						if($event['wed']=='1') {
+							$days[]=$lang['common']['full_days'][3];
+						}
+						if($event['thu']=='1') {
+							$days[]=$lang['common']['full_days'][4];
+						}
+						if($event['fri']=='1') {
+							$days[]=$lang['common']['full_days'][5];
+						}
+						if($event['sat']=='1') {
+							$days[]=$lang['common']['full_days'][6];
+						}
+					}else
+					{
+						$days[]=$lang['common']['full_days'][date('w', $event['start_time'])];
 					}
 
 					if(count($days)==1) {
@@ -2037,6 +2043,7 @@ class calendar extends db {
 					$days['thu'] = in_array('TH', $days_arr) ? '1' : '0';
 					$days['fri'] = in_array('FR', $days_arr) ? '1' : '0';
 					$days['sat'] = in_array('SA', $days_arr) ? '1' : '0';
+
 
 					$days=Date::shift_days_to_gmt($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
 

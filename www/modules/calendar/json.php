@@ -25,6 +25,8 @@ $cal2 = new calendar();
 
 $max_description_length=800;
 
+session_write_close();
+
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
@@ -32,9 +34,7 @@ try {
 
 	switch($task) {
 
-		case 'startup':
-
-			session_write_close();
+		case 'startup':		
 			
 			$cal->get_views_json($response['views']);
 			$cal->get_calendars_json($response['calendars']);
