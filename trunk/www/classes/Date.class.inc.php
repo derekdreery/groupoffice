@@ -236,11 +236,24 @@ class Date {
 
 			case 'WEEKLY':
 
-				if(empty($rrule['BYDAY']))
-				return false;
-					
-				$days = Date::byday_to_days($rrule['BYDAY']);
-				$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
+				if(empty($rrule['BYDAY'])){
+					$days=array(
+						'mon'=>0,
+						'tue'=>0,
+						'wed'=>0,
+						'thu'=>0,
+						'fri'=>0,
+						'sat'=>0,
+						'sun'=>0
+					);
+
+					$days[$day_db_field[date('w', $event['start_time'])]]='1';
+				}else
+				{
+					$days = Date::byday_to_days($rrule['BYDAY']);
+					$days = Date::shift_days_to_local($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
+				}
+				
 
 				$interval = $start_time - $first_occurence_time;
 
