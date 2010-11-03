@@ -55,6 +55,10 @@ class csv_export_query extends base_export_query
 
 	function export($fp){
 
+		//don't export with thousands separator
+		$old_sep = $_SESSION['GO_SESSION']['thousands_separator'];
+		$_SESSION['GO_SESSION']['thousands_separator']='';
+
 		parent::export($fp);
 
 		global $GO_USERS, $lang, $GO_MODULES;
@@ -83,8 +87,7 @@ class csv_export_query extends base_export_query
 
 			if(isset($record['user_id']) && isset($this->columns['user_id']))
 			{
-				$user = $GO_USERS->get_user($record['user_id']);
-				$record['user_id']=$user['username'];
+				$record['user_id']=$GO_USERS->get_user_realname($record['user_id']);
 			}
 			$values=array();
 			foreach($this->columns as $index)
@@ -92,6 +95,11 @@ class csv_export_query extends base_export_query
 				$values[] = $record[$index];
 			}
 			$this->fputcsv($fp, $values,$this->list_separator, $this->text_separator);
+
+			//fclose($fp);
 		}
+
+		//restore thousands separator
+		$_SESSION['GO_SESSION']['thousands_separator']=$old_sep;
 	}
 }
