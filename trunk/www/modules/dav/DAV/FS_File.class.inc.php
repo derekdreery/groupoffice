@@ -40,13 +40,16 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
 		$this->file=$this->files->resolve_path($this->relpath);
 		$this->folder=$this->files->get_folder($this->file['folder_id']);
 
-		if($delete){
+		if(!$this->files->has_write_permission($GO_SECURITY->user_id, $this->folder))
+				throw new Sabre_DAV_Exception_Forbidden();
+
+		/*if($delete){
 			if(!$this->files->has_delete_permission($GO_SECURITY->user_id, $this->folder))
 				throw new Sabre_DAV_Exception_Forbidden();
 		}else {
 			if(!$this->files->has_write_permission($GO_SECURITY->user_id, $this->folder))
 				throw new Sabre_DAV_Exception_Forbidden();
-		}
+		}*/
 	}
 
     /**
