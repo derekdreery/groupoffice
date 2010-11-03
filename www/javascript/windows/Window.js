@@ -36,7 +36,6 @@ GO.Window = Ext.extend(Ext.Window,{
 		if(GO.viewport){
 			var vpH=GO.viewport.getEl().getHeight();
 			var vpW=GO.viewport.getEl().getWidth();
-			var center=false;
 
 			if (this.height > vpH){
 				this.setHeight(vpH);
@@ -44,10 +43,22 @@ GO.Window = Ext.extend(Ext.Window,{
 			if(this.width > vpW) {
 				this.setWidth(vpW);
 			}
-			if(center)
-				this.center();
+			
+			//this.center();
 		}
 	},
+
+	// private, we don't want to store the window position remote because
+	//screens may differ later.
+    getState : function(){
+        var s = GO.Window.superclass.getState.call(this);
+
+		delete s.x;
+		delete s.y;
+
+		return s;
+
+    },
 
 	show : function(){		
 		GO.dialogListeners.apply(this);
