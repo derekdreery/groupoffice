@@ -205,7 +205,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		global $GO_SECURITY;
 
-		if(!$this->files->has_delete_permission($GO_SECURITY->user_id, $this->folder))
+		if(!$this->files->has_write_permission($GO_SECURITY->user_id, $this->folder))
 			throw new Sabre_DAV_Exception_Forbidden();
 
 
