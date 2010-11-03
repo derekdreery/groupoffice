@@ -6,7 +6,6 @@ javascript/MainLayout.js
 javascript/ColumnFitLayout.js
 javascript/windows/Window.js
 javascript/DialogListeners.js
-javascript/Export.js
 javascript/JsonMenu.js
 
 
@@ -110,3 +109,4 @@ javascript/SWFUpload/swfupload.js
 javascript/SWFUpload/SwfUploadPanel.js
 javascript/SWFUpload/UploadFlashDialog.js
 javascript/form/UploadPCForm.js
+javascript/Export.js

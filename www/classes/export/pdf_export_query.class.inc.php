@@ -87,6 +87,9 @@ class pdf_export_query extends base_export_query{
 		$this->pdf->SetAuthor($_SESSION['GO_SESSION']['name']);
 		$this->pdf->SetCreator($GO_CONFIG->product_name.' '.$GLOBALS['GO_CONFIG']->version);
 		$this->pdf->SetKeywords($_REQUEST['title']);
+
+
+
 	}
 
 	
@@ -193,7 +196,9 @@ class export_pdf extends TCPDF
 			$this->font = $GO_CONFIG->tcpdf_font;
 		}
 
-		parent::__construct('L', 'pt', 'A4', true, 'UTF-8');
+		$orientation = isset($_REQUEST['orientation']) ? $_REQUEST['orientation'] : 'L';
+
+		parent::__construct($orientation, 'pt', 'A4', true, 'UTF-8');
 
 		$this->AliasNbPages();
 

@@ -417,3 +417,8 @@ GO.lang.swfUploadPanelStrings = {
 		error_file_not_found: 'File not found 404.',
 		error_security_error: 'Security Error. Not allowed to post to different url.'
 	};
+
+
+GO.lang.orientation='Orientation';
+GO.lang.portrait='Portrait';
+GO.lang.landscape='Landscape';
