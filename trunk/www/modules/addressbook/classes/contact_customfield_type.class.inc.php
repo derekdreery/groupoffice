@@ -3,10 +3,19 @@ class contact_customfield_type extends default_customfield_type {
 	function format_for_display($field, &$record, $fields) {
 		//global $GO_MODULES;
 
+
+
 		if(!empty($record[$field['dataname']])) {
-			$record[$field['dataname']]='<a href="#" onclick=\'GO.linkHandlers[2].call(this,'.
+
+			if(defined('EXPORTING')){
+				$record[$field['dataname']]=$this->get_name($record[$field['dataname']]);
+			}  else {
+				$record[$field['dataname']]='<a href="#" onclick=\'GO.linkHandlers[2].call(this,'.
 				$this->get_id($record[$field['dataname']]).');\' title="'.$this->get_name($record[$field['dataname']]).'">'.
 					$this->get_name($record[$field['dataname']]).'</a>';
+			}
+
+			
 		}
 	}
 

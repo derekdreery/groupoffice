@@ -20,6 +20,8 @@ class pdf_export_query extends base_export_query{
 
 	var $row_body_column=false;
 
+	var $html = '';
+	
 	function init_columns(){
 		parent::init_columns();
 
@@ -54,17 +56,24 @@ class pdf_export_query extends base_export_query{
 
 	function print_column_headers(){
 
+		$this->html .= '<thead><tr>';
+
 		//$this->pdf->SetFillColor(241,241,241);
 		//$this->pdf->SetTextColor(255,255,255);
 		$this->pdf->cellWidth = $this->pdf->pageWidth/count($this->columns);
 		if(count($this->headers)){
 			for($i=0;$i<count($this->headers);$i++)
 			{
-				$align = in_array($this->columns[$i], $this->q['totalize_columns']) ? 'R' : 'L';
-				$this->pdf->Cell($this->pdf->cellWidth, 20, $this->headers[$i], 1,0,$align, 1);
+				$align = in_array($this->columns[$i], $this->q['totalize_columns']) ? 'right' : '';
+				$this->html .= '<td style="background-color:rgb(248, 248, 248);" align="'.$align.'">'.$this->headers[$i].'</td>';
+
+				//$align = in_array($this->columns[$i], $this->q['totalize_columns']) ? 'R' : 'L';
+				//$this->pdf->Cell($this->pdf->cellWidth, 20, $this->headers[$i], 1,0,$align, 1);
+				//$this->pdf->MultiCell($this->pdf->cellWidth, 20, $this->headers[$i], 1,$align, 1,0);
 			}
-			$this->pdf->Ln();
+			//$this->pdf->Ln();
 		}
+		$this->html .= '</tr></thead><tbody>';
 	}
 
 	/*function format_record(&$record){
@@ -87,12 +96,7 @@ class pdf_export_query extends base_export_query{
 		$this->pdf->SetAuthor($_SESSION['GO_SESSION']['name']);
 		$this->pdf->SetCreator($GO_CONFIG->product_name.' '.$GLOBALS['GO_CONFIG']->version);
 		$this->pdf->SetKeywords($_REQUEST['title']);
-
-
-
 	}
-
-	
 
 	function export($fp){
 		parent::export($fp);
@@ -104,8 +108,14 @@ class pdf_export_query extends base_export_query{
 		$this->init_pdf();
 
 		$this->pdf->AddPage();
-		
-		$this->print_column_headers();	
+
+
+		$this->html = '<table border="1" cellpadding="2" cellspacing="0">';
+
+		if(count($this->columns))
+		{
+			$this->print_column_headers();
+		}
 		
 
 		$fill=false;
@@ -130,7 +140,7 @@ class pdf_export_query extends base_export_query{
 				$record['user_id']=$GO_USERS->get_user_realname($record['user_id']);
 			}
 
-			$lines=1;
+			/*$lines=1;
 			foreach($this->columns as $index)
 			{
 				$new_lines = $this->pdf->getNumLines($record[$index],$this->pdf->cellWidth);
@@ -156,22 +166,49 @@ class pdf_export_query extends base_export_query{
 			if($this->row_body_column){
 				$this->pdf->MultiCell($this->pdf->cellWidth*count($this->columns),$lines*($this->pdf->font_size+2)+8, $record[$this->row_body_column],1,'L',$fill,1);
 				$this->pdf->Ln(5);
+			}*/
+
+			$this->html .= '<tr nobr="true">';
+			foreach($this->columns as $index)
+			{
+				$align = in_array($index, $this->q['totalize_columns']) ? 'right' : '';
+				$this->html .= '<td align="'.$align.'">'.htmlspecialchars($record[$index], ENT_COMPAT, 'UTF-8').'</td>';
 			}
+			$this->html .= '</tr>';
+
+
+
 			//$fill=!$fill;
 		}
 
 
 		if(isset($this->totals) && count($this->totals))
 		{
-			$this->pdf->Ln();
+			/*$this->pdf->Ln();
 			$this->pdf->Cell($this->pdf->getPageWidth(),20,$lang['common']['totals'].':');
 			$this->pdf->Ln();
 			foreach($this->columns as $index)
 			{
 				$value = isset($this->totals[$index]) ? Number::format($this->totals[$index]) : '';
 				$this->pdf->Cell($this->pdf->cellWidth, 20, $value, 'T',0,'R');
+			}*/
+
+			$this->html .= '<tr><td colspan="'.count($this->columns).'"><br /><b>'.$lang['common']['totals'].':</b></td></tr>';
+			$this->html .= '<tr>';
+			foreach($this->columns as $index)
+			{
+				$value = isset($this->totals[$index]) ? Number::format($this->totals[$index]) : '';
+
+				$this->html .= '<td align="right">'.htmlspecialchars($value, ENT_COMPAT, 'UTF-8').'</td>';
 			}
+			$this->html .= '</tr>';
+
 		}
+
+		$this->html .= '</thead></table>';
+		//exit();
+
+		$this->pdf->writeHTML($this->html);
 
 		fwrite($fp, $this->pdf->Output('export.pdf', 'S'));
 		//fclose($fp);
