@@ -37,6 +37,9 @@ require('GO_DAV_FS_File.class.inc.php');
 require('GO_DAV_ObjectTree.class.inc.php');*/
 
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc.php");
+$files = new files();
+
+//ini_set('memory_limit','100M');
 
 
 // Create the root node
