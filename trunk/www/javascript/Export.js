@@ -15,7 +15,8 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 		}, {
 			boxLabel : 'PDF',
 			name : 'type',
-			inputValue : 'pdf_export_query'
+			inputValue : 'pdf_export_query',
+			supportsOrientation:true
 		}, {
 			boxLabel : GO.lang.toScreen,
 			name : 'type',
@@ -42,57 +43,57 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 		Ext.apply(this, {
 			
 			items : this.formPanel = new Ext.FormPanel({
-						items : this.formPanelItems,
-						bodyStyle : 'padding:5px'
-					}),
+				items : this.formPanelItems,
+				bodyStyle : 'padding:5px'
+			}),
 			autoHeight : true,
 			closeAction : 'hide',
 			closeable : true,
 			height : 400,
 			width : 400,
 			buttons : [{
-						text : GO.lang.strEmail,
-						handler : function() {
-							this.hide();
+				text : GO.lang.strEmail,
+				handler : function() {
+					this.hide();
 
-							this.beforeRequest();
-							GO.email.showComposer({
-										loadUrl : BaseHref + 'json.php',
-										loadParams : this.loadParams
-									});
-						},
-						scope : this
-					}, {
-						text : GO.lang.download,
-						handler : function() {
+					this.beforeRequest();
+					GO.email.showComposer({
+						loadUrl : BaseHref + 'json.php',
+						loadParams : this.loadParams
+					});
+				},
+				scope : this
+			}, {
+				text : GO.lang.download,
+				handler : function() {
 
-							this.beforeRequest();
+					this.beforeRequest();
 
-							var downloadUrl = '';
-							for (var name in this.loadParams) {
+					var downloadUrl = '';
+					for (var name in this.loadParams) {
 
-								if (downloadUrl == '') {
-									downloadUrl = BaseHref
-											+ 'export_query.php?';
-								} else {
-									downloadUrl += '&';
-								}
+						if (downloadUrl == '') {
+							downloadUrl = BaseHref
+							+ 'export_query.php?';
+						} else {
+							downloadUrl += '&';
+						}
 
-								downloadUrl += name
-										+ '='
-										+ encodeURIComponent(this.loadParams[name]);
-							}
-							window.open(downloadUrl);
-							this.hide();
-						},
-						scope : this
-					}, {
-						text : GO.lang['cmdClose'],
-						handler : function() {
-							this.hide();
-						},
-						scope : this
-					}]
+						downloadUrl += name
+						+ '='
+						+ encodeURIComponent(this.loadParams[name]);
+					}
+					window.open(downloadUrl);
+					this.hide();
+				},
+				scope : this
+			}, {
+				text : GO.lang['cmdClose'],
+				handler : function() {
+					this.hide();
+				},
+				scope : this
+			}]
 		});
 
 		GO.ExportQueryDialog.superclass.initComponent.call(this);
@@ -103,17 +104,42 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 	showAllFields:false,
 
 	formPanelItems : [{
-				autoHeight : true,
-				xtype : 'radiogroup',
-				fieldLabel : GO.lang.strType,
-				columns:2,
-				items:[]
-			},{
-				xtype:'checkbox',
-				name:'export_hidden',
-				hideLabel:true,
-				boxLabel:GO.lang.exportHiddenColumns
-			}],
+		autoHeight : true,
+		xtype : 'radiogroup',
+		fieldLabel : GO.lang.strType,
+		listeners:{
+			scope:this,
+			change:function(group, checkedRadio){
+				this.orientationCombo.setDisabled(!checkedRadio.supportsOrientation);
+			}
+		},
+		columns:2,
+		items:[]
+	},{
+		xtype:'checkbox',
+		name:'export_hidden',
+		hideLabel:true,
+		boxLabel:GO.lang.exportHiddenColumns
+	},this.orientationCombo = new GO.form.ComboBox({
+		xtype:'combo',
+		disabled:true,
+		fieldLabel : GO.lang.orientation,
+		hiddenName : 'orientation',
+		store : new Ext.data.SimpleStore({
+			fields : ['value', 'text'],
+			data : [['L', GO.lang.landscape],
+			['P', GO.lang.portrait]]
+
+		}),
+		value : 'landscape',
+		valueField : 'value',
+		displayField : 'text',
+		mode : 'local',
+		triggerAction : 'all',
+		editable : false,
+		selectOnFocus : true,
+		forceSelection : true
+	})],
 
 	show : function(config) {
 
