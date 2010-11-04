@@ -35,7 +35,9 @@ if(isset($argv[1]))
 	define('CONFIG_FILE', $argv[1]);
 }
 
-ini_set('max_execution_time', 3600);
+ini_set('max_execution_time', 0);
+ini_set('memory_limit','1000M');
+
 
 chdir(dirname(__FILE__));
 
@@ -51,6 +53,9 @@ if(php_sapi_name()!='cli' && !$GO_SECURITY->has_admin_permission($GO_SECURITY->u
 require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 $files = new files();
 
+require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+$fs = new filesystem();
+
 if(empty($path))
 {
 	$folders = $fs->get_folders($GO_CONFIG->file_storage_path);
@@ -61,12 +66,14 @@ if(empty($path))
 		if($dbfolder){
 			echo 'Syncing '.$folder['path']."\n";
 			$files->sync_folder($dbfolder, true);
+			$files->touch_folder($dbfolder['id'], filemtime($folder['path']));
+
 		}
 	}
 }else
 {
 	$dbfolder = $files->resolve_path($path);
-	
+
 	if(!$parent)
 	{
 		die('Fatal error! could not find database folder of '.$path.' in database. Try to sync without path parameter first.');
@@ -74,6 +81,7 @@ if(empty($path))
 
 	echo 'Syncing '.$path."\n";
 	$files->sync_folder($dbfolder, true);
+	$files->touch_folder($dbfolder['id'], filemtime($path));
 }
 
 echo "Done!\n";
