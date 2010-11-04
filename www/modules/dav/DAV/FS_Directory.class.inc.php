@@ -84,6 +84,11 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
      */
     public function move($newPath) {
 
+		go_debug("FSD::move($newPath)");
+
+		if(!is_dir(dirname($newPath)))
+				throw new Exception('Invalid move!');
+
 		global $GO_SECURITY, $files;
 
 		if(!$files->has_write_permission($GO_SECURITY->user_id, $this->getFolder()))
@@ -155,10 +160,13 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
      */
     public function childExists($name) {
 
-        try {
+		$path = $this->path . '/' . $name;
 
-            $this->getChild($name);
-            return true;
+        try {
+			if(!file_exists($path))
+				throw new Sabre_DAV_Exception_FileNotFound('File with name ' . $path . ' could not be located');
+
+			return true;
 
         } catch(Sabre_DAV_Exception_FileNotFound $e) {
 

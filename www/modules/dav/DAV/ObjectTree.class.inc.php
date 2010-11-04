@@ -20,10 +20,14 @@ class GO_DAV_ObjectTree extends Sabre_DAV_ObjectTree{
      * @return int
      */
     public function move($sourcePath, $destinationPath) {
+
+		go_debug("ObjectTree::move($sourcePath, $destinationPath)");
+
 		$moveable = $this->getNodeForPath($sourcePath);
 
-		$basePath = str_replace($sourcePath, '', $moveable->getServerPath());
+		$destination = $this->getNodeForPath(dirname($destinationPath));
+		$targetServerPath = $destination->getServerPath().'/'.utf8_basename($destinationPath);
 
-        $moveable->move($basePath.$destinationPath);
+        $moveable->move($targetServerPath);
     }
 }
