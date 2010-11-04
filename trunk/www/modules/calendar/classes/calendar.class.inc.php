@@ -486,7 +486,7 @@ class calendar extends db {
 		global $GO_SECURITY;
 
 		$src_event = $dst_event = $this->get_event($event_id);
-		unset($dst_event['id'], $dst_event['participants_event_id']);
+		unset($dst_event['id'], $dst_event['resource_event_id']);
 
 		foreach($new_values as $key=>$value) {
 			$dst_event[$key] = $value;
@@ -1017,6 +1017,30 @@ class calendar extends db {
 		return 'events/'.File::strip_invalid_chars($calendar['name']).'/'.date('Y', $event['start_time']).'/'.date('m', $event['start_time']).'/'.File::strip_invalid_chars($event['name']);
 	}
 
+	function add_participants($event, $participants) {
+
+		global $GO_CONFIG;
+
+		go_debug($participants);
+
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
+
+		$this->remove_participants($event['id']);
+
+		foreach ($participants as $participant_email => $participant) {
+			$participant['event_id'] = $event['id'];
+			$participant['email'] = $participant_email;
+			$participant['role'] = ($participant['role']) ? $participant['role'] : 'REQ-PARTICIPANT';
+			$participant['last_modified'] = $event['mtime'];
+
+			$user = $GO_USERS->get_user_by_email($participant['email']);
+			$participant['user_id'] = ($user) ? $user['id'] : 0;
+
+			$this->add_participant($participant);
+		}
+	}
+
 	function add_event(&$event, $calendar=false) {
 		if(empty($event['calendar_id'])) {
 			return false;
@@ -1049,6 +1073,9 @@ class calendar extends db {
 			$event['status'] = 'ACCEPTED';
 		}
 
+		if(isset($event['participants']))
+			$participants = $event['participants'];
+
 		unset($event['acl_id'], $event['participants']);
 
 
@@ -1073,8 +1100,8 @@ class calendar extends db {
 			$event['uuid'] = UUID::create('event', $event['id']);
 		}
 
-		if(!isset($event['participants_event_id'])) {
-			$event['participants_event_id']=$event['id'];
+		if(!isset($event['resource_event_id'])) {
+			$event['resource_event_id']=$event['id'];
 		}
 
 		global $GO_MODULES;
@@ -1135,6 +1162,10 @@ class calendar extends db {
 					$rm->add_reminder($reminder);
 			}
 
+			if(isset($participants)){
+				$this->add_participants($event,$participants);
+			}
+
 			return $event['id'];
 		}				
 		return false;
@@ -1157,6 +1188,10 @@ class calendar extends db {
 	}
 
 	function update_event(&$event, $calendar=false, $old_event=false, $update_related=true, $update_related_status=true) {
+
+		go_debug('calendar::update_event');
+
+		
 		if(!$old_event) {
 			$old_event = $this->get_event($event['id']);
 		}
@@ -1165,7 +1200,7 @@ class calendar extends db {
 			$event['name']=substr($event['name'],0,150);
 		}
 
-		unset($event['read_permission'], $event['write_permission'], $event['participants']);
+		unset($event['read_permission'], $event['write_permission']);
 		if(empty($event['mtime'])) {
 			$event['mtime']  = time();
 		}
@@ -1216,6 +1251,12 @@ class calendar extends db {
 			$new_path = $this->build_event_files_path($event, $calendar);
 			$event['files_folder_id']=$files->check_folder_location($old_event['files_folder_id'], $new_path);
 		}
+
+		if(isset($event['participants'])){
+			$participants = $event['participants'];
+			unset($event['participants']);
+		}
+
 
 		$r = $this->update_row('cal_events', 'id', $event);
 
@@ -1280,21 +1321,25 @@ class calendar extends db {
 			$this->move_exceptions($event['id'], $event['start_time']-$old_event['start_time']);
 		}
 
+		if(isset($participants)){
+			$this->add_participants($event,$participants);
+		}
+
 		if($update_related && !empty($event['id'])) {
 			$related_event = $event;
-			unset($related_event['user_id'], $related_event['calendar_id'], $related_event['participants_event_id']);
+			unset($related_event['user_id'], $related_event['calendar_id'], $related_event['resource_event_id']);
 
 			$cal = new calendar();
-			/*if(!empty($old_event['participants_event_id'])){
-				$sql = "SELECT * FROM cal_events WHERE id!=".$this->escape($event['id'])." AND (participants_event_id=".intval($old_event['participants_event_id'])." OR id=".intval($old_event['participants_event_id']).")";
+			/*if(!empty($old_event['resource_event_id'])){
+				$sql = "SELECT * FROM cal_events WHERE id!=".$this->escape($event['id'])." AND (resource_event_id=".intval($old_event['resource_event_id'])." OR id=".intval($old_event['resource_event_id']).")";
 			}else
 			{
-				$sql = "SELECT * FROM cal_events WHERE participants_event_id=".intval($event['id']);
+				$sql = "SELECT * FROM cal_events WHERE resource_event_id=".intval($event['id']);
 			 * $cal->query($sql);
 			}*/
 
-			$participants_event_id=!empty($old_event['participants_event_id']) ? $old_event['participants_event_id'] : $event['id'];
-			$cal->get_participants_events($participants_event_id, $event['id']);
+			$resource_event_id=!empty($old_event['resource_event_id']) ? $old_event['resource_event_id'] : $event['id'];
+			$cal->get_participants_events($resource_event_id, $event['id']);
 
 			while($old_event = $cal->next_record()) {
 				$related_event['id']=$cal->f('id');
@@ -1392,9 +1437,9 @@ class calendar extends db {
 		return $swift->sendmail();
 	}
 
-	function get_participants_events($participants_event_id, $skip_event_id=0) {
+	function get_participants_events($resource_event_id, $skip_event_id=0) {
 		$sql = "SELECT * FROM cal_events ".
-			"WHERE participants_event_id=".intval($participants_event_id);
+			"WHERE resource_event_id=".intval($resource_event_id);
 
 		if(!empty($skip_event_id))
 			$sql .= " AND id!=".$this->escape($skip_event_id);
@@ -1403,10 +1448,10 @@ class calendar extends db {
 		return $this->num_rows();
 	}
 
-	function add_exception_for_all_participants($participants_event_id, $exception) {
+	function add_exception_for_all_participants($resource_event_id, $exception) {
 		$cal = new calendar();
 
-		$this->get_participants_events($participants_event_id);
+		$this->get_participants_events($resource_event_id);
 		while($event = $this->next_record()) {
 			$exception['event_id']=$event['id'];
 
@@ -1680,9 +1725,9 @@ class calendar extends db {
 	}
 
 
-	function has_participants_event($participants_event_id, $calendar_id) {
-		$sql = "SELECT * FROM cal_events WHERE participants_event_id=? AND calendar_id=?";
-		$this->query($sql, 'ii', array($participants_event_id, $calendar_id));
+	function has_participants_event($resource_event_id, $calendar_id) {
+		$sql = "SELECT * FROM cal_events WHERE resource_event_id=? AND calendar_id=?";
+		$this->query($sql, 'ii', array($resource_event_id, $calendar_id));
 		return $this->next_record();
 	}
 
@@ -1692,11 +1737,29 @@ class calendar extends db {
 		return $this->next_record(DB_ASSOC);
 	}
 
-	function get_event_by_uid($uid) {
-		$sql = "SELECT e.*, c.acl_id FROM cal_events e LEFT JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.uid='".$this->escape($uid)."'";
+	/**
+	 * The inviation uuid is the uuid of the event that was sent to a person by
+	 * mail. This uuid can also be generated by another mail client like
+	 * Outlook or Thunderbird
+	 *
+	 * @param <type> $uuid
+	 * @param <type> $user_id
+	 * @return <type>
+	 */
+
+	function get_event_by_invitation_uuid($uuid, $user_id) {
+		$sql = "SELECT e.*, c.acl_id FROM cal_events e LEFT JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.invitation_uuid='".$this->escape($uuid)."' AND c.user_id=".intval($user_id);
 		$this->query($sql);
 		return $this->next_record(DB_ASSOC);
 	}
+
+	/**
+	 * The uuid field is a universal unique identifier for external programs.
+	 * It's used by CalDAV.
+	 * 
+	 * @param <type> $uuid
+	 * @return <type>
+	 */
 	
 	function get_event_by_uuid($uuid) {
 		$sql = "SELECT e.* FROM cal_events e  WHERE e.uuid='".$this->escape($uuid)."'";
@@ -1754,7 +1817,7 @@ class calendar extends db {
 
 			if($delete_related && !empty($event_id)) {
 				$cal = new calendar();
-				$sql = "SELECT id FROM cal_events WHERE participants_event_id=".intval($event_id);
+				$sql = "SELECT id FROM cal_events WHERE resource_event_id=".intval($event_id);
 				$cal->query($sql);
 				while($cal->next_record()) {
 					$this->delete_event($cal->f('id'),false);
@@ -1857,6 +1920,13 @@ class calendar extends db {
 			$event['participants'] = $this->convert_attendees_to_participants($attendees);
 		}
 
+		if(isset($object['DTSTAMP']['value'])){
+			$event['mtime']=$this->ical2array->parse_date($object['DTSTAMP']['value']);
+		}else
+		{
+			$event['mtime']=time();
+		}
+
 		$organizer = (isset($object['ORGANIZER']) && count($object['ORGANIZER'])) ? $object['ORGANIZER'] : '';
 		if($organizer)
 		{
@@ -1874,9 +1944,7 @@ class calendar extends db {
 		}
 
 		$event['busy']=true;
-
-		$event['uid'] = (isset($object['UID']['value']) && $object['UID']['value'] != '') ? trim($object['UID']['value']) : '';
-
+		
 		$event['sequence'] = (isset($object['SEQUENCE']['value']) && $object['SEQUENCE']['value'] != '') ? trim($object['SEQUENCE']['value']) : 0;
 
 		$event['name'] = (isset($object['SUMMARY']['value']) && $object['SUMMARY']['value'] != '') ? trim($object['SUMMARY']['value']) : 'Unnamed';
@@ -2275,13 +2343,13 @@ class calendar extends db {
 
 
 
-	function is_available($user_id, $start, $end, $ignore_event_id=0) {
+	function is_available($user_id, $start, $end, $ignore_event=false) {
 		$events = $this->get_events_in_array(array(), $user_id, $start, $end, true);
 
-		if($ignore_event_id>0) {
+		if($ignore_event) {
 			$newevents=array();
 			foreach($events as $event) {
-				if($event['id']!=$ignore_event_id && $event['participants_event_id']!=$ignore_event_id) {
+				if($event['id']!=$ignore_event['id'] && $event['uuid']!=$ignore_event['invitation_uuid'] && $ignore_event['uuid']!=$event['invitation_uuid']) {
 					$newevents[]=$event;
 				}
 			}
@@ -2473,7 +2541,7 @@ class calendar extends db {
 	 */
 	function get_event_resources($event_id) {
 		if($event_id>0) {
-			$sql = "SELECT cal_events.* FROM cal_events WHERE participants_event_id ='$event_id' AND id!='$event_id'";
+			$sql = "SELECT cal_events.* FROM cal_events WHERE resource_event_id ='$event_id' AND id!='$event_id'";
 			$this->query($sql);
 			return $this->num_rows();
 		}
@@ -2490,7 +2558,7 @@ class calendar extends db {
 	 */
 	function get_event_resource($event_id, $calendar_id) {
 		if($event_id>0 && $calendar_id>0) {
-			$sql = "SELECT cal_events.* FROM cal_events WHERE participants_event_id='$event_id' AND calendar_id='$calendar_id'";
+			$sql = "SELECT cal_events.* FROM cal_events WHERE resource_event_id='$event_id' AND calendar_id='$calendar_id'";
 
 			$this->query($sql);
 			if($this->next_record()) {
@@ -2601,8 +2669,34 @@ class calendar extends db {
 					case 'WEEKLY':
 						$event['repeat_type'] = REPEAT_WEEKLY;
 
-						$days = Date::byday_to_days($rrule['BYDAY']);
-						$days = Date::shift_days_to_local($days, date('G', $start_time), Date::get_timezone_offset($start_time));
+
+
+						if(empty($rrule['BYDAY'])){
+
+							$day_db_field[0] = 'sun';
+							$day_db_field[1] = 'mon';
+							$day_db_field[2] = 'tue';
+							$day_db_field[3] = 'wed';
+							$day_db_field[4] = 'thu';
+							$day_db_field[5] = 'fri';
+							$day_db_field[6] = 'sat';
+
+							$days=array(
+								'mon'=>0,
+								'tue'=>0,
+								'wed'=>0,
+								'thu'=>0,
+								'fri'=>0,
+								'sat'=>0,
+								'sun'=>0
+							);
+
+							$days[$day_db_field[date('w',$start_time)]]='1';
+						}else
+						{
+							$days = Date::byday_to_days($rrule['BYDAY']);
+							$days = Date::shift_days_to_local($days, date('G', $start_time), Date::get_timezone_offset($start_time));
+						}
 
 						$event['repeat_days_0'] = $days['sun'];
 						$event['repeat_days_1'] = $days['mon'];
@@ -2879,6 +2973,10 @@ class calendar extends db {
 		global $GO_SECURITY;
 		
 		$response['total'] = $this->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources, 1, $project_calendars);
+		if($response['total']==0 && $resources==false && $project_calendars==false){
+			$dc = $this->get_default_calendar($GO_SECURITY->user_id);
+			$response['total'] = $this->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources, 1, $project_calendars);
+		}
 
 		$response['results']=array();
 

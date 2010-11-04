@@ -324,7 +324,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				// waitMsg:GO.lang.waitMsgLoad,
 				success : function(form, action) {
 					//this.win.show();
-					this.participantsPanel.setEventId(action.result.data.participants_event_id);
+					
 					this.formPanel.form.baseParams['group_id'] = action.result.data.group_id;
 					this.initCustomFields(action.result.data.group_id);
 					this.changeRepeat(action.result.data.repeat_type);
@@ -366,9 +366,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				success : function(form, action) {
 					//this.win.show();
 
-
-
-					this.participantsPanel.setEventId(action.result.data.participants_event_id);
+					//this.participantsPanel.setEventId(0);
 					this.formPanel.form.baseParams['exception_event_id'] = config.exception_event_id;
 					this.formPanel.form.baseParams['exceptionDate'] = config.exceptionDate;
 
@@ -377,10 +375,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					this.changeRepeat(0);
 
 					this.setValues(config.values);
-					// this.participantsPanel.setDisabled(false);
-
-					//this.selectCalendar.setRemoteText(action.result.data.calendar_name);
-					//this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
 
 					this.setWritePermission(action.result.data.write_permission);
 				},
@@ -393,12 +387,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			delete this.formPanel.form.baseParams['exception_event_id'];
 			delete this.formPanel.form.baseParams['exceptionDate'];
 			delete this.formPanel.form.baseParams['group_id'];
-			// this.participantsPanel.setDisabled(true);
 			this.setWritePermission(true);
-
-			//this.win.show();
-            
-
 
 			config.values = config.values || {};
 
@@ -598,8 +587,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 	setEventId : function(event_id) {
 		this.formPanel.form.baseParams['event_id'] = event_id;
 		this.event_id = event_id;
-
-		// this.participantsStore.baseParams['event_id']=event_id;
 
 		this.participantsPanel.setEventId(event_id);
 
@@ -1225,15 +1212,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		this.participantsPanel = new GO.calendar.ParticipantsPanel(this);
 
-		/*
-		 * this.participantsPanel.on('show', function(){
-		 *
-		 * if(!this.loadedParticipantsEventId ||
-		 * this.loadedParticipantsEventId!=this.participants_event_id) {
-		 * this.participantsStore.baseParams['event_id']=this.participants_event_id;
-		 * this.loadedParticipantsEventId=this.participants_event_id;
-		 * this.participantsStore.load(); } },this);
-		 */
 
 		this.privateCB = new Ext.form.Checkbox({
 			boxLabel : GO.calendar.lang.privateEvent,

@@ -104,3 +104,9 @@ $updates[]="ALTER TABLE `cal_events` CHANGE `uuid` `uuid` VARCHAR( 100 ) CHARACT
 
 $updates[]="ALTER TABLE `cal_calendars` ADD `tasklist_id` INT NOT NULL";
 $updates[]="update cal_calendars set tasklist_id=(SELECT default_tasklist_id  FROM ta_settings WHERE user_id=cal_calendars.user_id);";
+
+$updates[]="ALTER TABLE `cal_events` CHANGE `uid` `invitation_uuid` VARCHAR( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+$updates[]="ALTER TABLE `cal_events` ADD INDEX ( `invitation_uuid` )";
+
+//ALTER TABLE `cal_events` DROP `event_id`
+//ALTER TABLE `cal_events` CHANGE `participants_event_id` `resource_event_id` INT( 11 ) NOT NULL 

@@ -191,7 +191,7 @@ class go_ical extends calendar
 
 		$lines[] = "BEGIN:VEVENT";
 
-		$lines[] = (($this->method == 'REPLY') && $event['uid']) ? "UID:".$event['uid']: "UID:".$event['uuid'];
+		$lines[] = (($this->method == 'REPLY') && $event['invitation_uuid']) ? "UID:".$event['invitation_uuid']: "UID:".$event['uuid'];
 
 		$lines = array_merge($lines, String::format_vcard_line('SUMMARY', $event['name'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 		//if ($event['description'] != '')
@@ -210,7 +210,7 @@ class go_ical extends calendar
 
 		$cal = new calendar();
 		$cal2 = new calendar();
-		$cal->get_participants($event['participants_event_id']);
+		$cal->get_participants($event['id']);
 		while($cal->next_record())
 		{
 			if($cal->f('is_organizer'))
