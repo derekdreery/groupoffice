@@ -764,7 +764,7 @@ try {
 								}else
 								{
 									// request to update an existing event 
-									$event = $cal->get_event_by_uid($cal_event['uid']);
+									$event = $cal->get_event_by_invitation_uuid($cal_event['uid'], $GO_SECURITY->user_id);
 								}																								
 								
 								if($event)
@@ -851,11 +851,11 @@ try {
 
 							case 'CANCEL':
 
-								$event = $cal->get_event_by_uuid($cal_event['uid']);
-								if(!$event)
-								{
-									$event = $cal->get_event_by_uid($cal_event['uid']);
-								}
+								//$event = $cal->get_event_by_uuid($cal_event['uid']);
+								//if(!$event)
+								//{
+									$event = $cal->get_event_by_invitation_uuid($cal_event['uid']);
+								//}
 
 								if($event)
 								{
