@@ -21,6 +21,16 @@ CREATE TABLE IF NOT EXISTS `cf_6` (
   PRIMARY KEY  (`link_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+
+DROP TABLE IF EXISTS `fs_shared_cache`;
+CREATE TABLE IF NOT EXISTS `fs_shared_cache` (
+  `user_id` int(11) NOT NULL,
+  `folder_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `path` text NOT NULL,
+  PRIMARY KEY (`user_id`,`folder_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 --
 -- Tabel structuur voor tabel `fs_files`
 --

@@ -100,3 +100,12 @@ $updates[] = "ALTER TABLE `fs_files` CHANGE `extension` `extension` VARCHAR( 5 )
 
 $updates[] = "ALTER TABLE `fs_files` ADD `expire_time` int(11) NOT NULL default '0'";
 $updates[] = "ALTER TABLE `fs_files` ADD `random_code` char(11) DEFAULT NULL";
+
+
+$updates[] = "CREATE TABLE IF NOT EXISTS `fs_shared_cache` (
+  `user_id` int(11) NOT NULL,
+  `folder_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `path` text NOT NULL,
+  PRIMARY KEY (`user_id`,`folder_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
