@@ -347,7 +347,7 @@ class imap extends imap_bodystruct {
 
 	public function select_mailbox($mailbox_name='INBOX') {
 
-		go_debug($this->selected_mailbox);
+		//go_debug($this->selected_mailbox);
 
 		if($this->selected_mailbox && $this->selected_mailbox['name']==$mailbox_name)
 			return true;
@@ -1025,7 +1025,7 @@ class imap extends imap_bodystruct {
 			}
 		}
 
-		go_debug($final_headers);
+		//go_debug($final_headers);
 		return $final_headers;
 	}
 
