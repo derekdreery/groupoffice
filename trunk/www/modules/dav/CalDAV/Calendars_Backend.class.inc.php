@@ -427,8 +427,13 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			go_debug('item is an event');
 
 			$event = $this->cal->get_event_from_ical_string($calendarData);
+
+			go_debug($event);
+			
 			if (!$event)
 				return false;
+
+			
 
 			$event['uuid']=$objectUri;
 			$event['calendar_id'] = $calendarId;
@@ -488,6 +493,9 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			go_debug('item is an event');
 
 			$event = $this->cal->get_event_from_ical_string($calendarData);
+
+			go_debug($event);
+			
 			if (!$event)
 				return false;
 
@@ -507,6 +515,9 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			go_debug('item is a task');
 
 			$task = $this->tasks->get_task_from_ical_string($calendarData);
+
+			go_debug($event);
+
 			if (!$task)
 				return false;
 
