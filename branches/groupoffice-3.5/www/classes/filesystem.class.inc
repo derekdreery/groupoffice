@@ -244,9 +244,14 @@ class filesystem extends db
 					}
 					return true;
 				}	else
-				{				
+				{
+					if(!rename($source_path, $destination_path)){
+						throw new Exception('Failed to rename file');
+					}
+					return true;
+
 					//rename fails when moving accross partitions
-					if(isset($_SESSION['GO_SESSION']['username']) && strstr($source_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/') &&
+					/*if(isset($_SESSION['GO_SESSION']['username']) && strstr($source_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/') &&
 					strstr($destination_path, $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/')
 					)
 					{
@@ -265,7 +270,7 @@ class filesystem extends db
 						{
 							throw new Exception('Failed to create file');
 						}
-					}
+					}*/
 				}
 			}
 		}
