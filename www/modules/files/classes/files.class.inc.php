@@ -912,6 +912,70 @@ class files extends db {
 
 	}
 
+	function get_cached_share($user_id, $name){
+		$sql = "SELECT * FROM fs_shared_cache WHERE user_id=".intval($user_id)." AND name=?";
+
+		$this->query($sql,'s', $name);
+		return $this->next_record();
+	}
+
+	function get_cached_shares($user_id, $join=false){
+
+		global $GO_CONFIG;
+
+		$last_build_time = $GO_CONFIG->get_setting('fs_shared_cache', $user_id);
+
+		if($last_build_time<(time()-86400)){
+
+			go_debug('Rebuilding fs_shared_cache');
+
+			$fs2 = new files();
+
+			$share_count = $this->get_authorized_shares($user_id);
+
+			while ($folder = $this->next_record()) {
+
+				$folder['path'] = $fs2->build_path($folder);
+				$folders[$folder['path']]=$folder;
+			}
+			ksort($folders);
+
+
+			$fs = new filesystem();
+
+			$sql = "DELETE FROM fs_shared_cache WHERE user_id=".intval($user_id);
+			$this->query($sql);
+
+			foreach ($folders as $path=>$folder) {
+				$is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
+				if (!$is_sub_dir) {
+
+					$c['folder_id']=$folder['id'];
+					$c['user_id']=$user_id;
+					$c['name']=$folder['name'];
+					$c['path']=$path;
+
+					$this->insert_row('fs_shared_cache', $c);
+
+					$last_path = $path;
+				}
+			}
+			$GO_CONFIG->save_setting('fs_shared_cache', time(), $user_id);
+		}
+
+
+		$sql = "SELECT * FROM fs_shared_cache c ";
+		
+		if($join)
+			$sql .= "INNER JOIN fs_folders f ON f.id=c.folder_id ";
+		
+		$sql .= "WHERE c.user_id=".intval($user_id)." ORDER BY c.name ASC";
+		$this->query($sql);
+
+		return $this->num_rows();
+
+	}
+
 	/**
 	 * Get the shares owned by a user.
 	 *
@@ -1045,22 +1109,25 @@ class files extends db {
 		return $this->num_rows();
 	}
 
-	public static function login($username, $password, $user) {
+	public static function login($username, $password, $user, $count_login) {
 	// Default timeout: 30 days
-		$timeout = 60*60*24*30;
-		$deltime = time() - $timeout;
 
-		$fs = new files();
+		if($count_login){
+			$timeout = 60*60*24*30;
+			$deltime = time() - $timeout;
 
-		$fs->query("SELECT ff.id FROM fs_new_files AS fn, fs_files AS ff
-			WHERE fn.file_id = ff.id AND ctime < ? AND fn.user_id = ?", 'ii', array($deltime, $user['id']));
+			$fs = new files();
 
-		$files = array();
-		if($fs->num_rows() > 0) {
-			while($file = $fs->next_record()) {
-				$files[] = $file['id'];
+			$fs->query("SELECT ff.id FROM fs_new_files AS fn, fs_files AS ff
+				WHERE fn.file_id = ff.id AND ctime < ? AND fn.user_id = ?", 'ii', array($deltime, $user['id']));
+
+			$files = array();
+			if($fs->num_rows() > 0) {
+				while($file = $fs->next_record()) {
+					$files[] = $file['id'];
+				}
+				$fs->query("DELETE FROM fs_new_files WHERE file_id IN (".implode(',', $files).") ");
 			}
-			$fs->query("DELETE FROM fs_new_files WHERE file_id IN (".implode(',', $files).") ");
 		}
 	}
 

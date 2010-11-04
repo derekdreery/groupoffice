@@ -35,6 +35,10 @@ try {
 			if(!empty($_POST['sync_folder_id']) && is_numeric($_POST['sync_folder_id'])) {
 				$folder = $files->get_folder($_POST['sync_folder_id']);
 				$files->sync_folder($folder);
+
+
+				//this will rebuild the cache folder
+				$GO_CONFIG->save_setting('fs_shared_cache', 0, $GO_SECURITY->user_id);
 			}
 
 			$fs2= new files();
@@ -129,53 +133,6 @@ try {
 							'notreloadable'=>true
 						);
 						$response[]=$node;
-
-
-
-
-
-
-						/*$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
-
-						$nodes=array();
-
-						$count = 0;
-						while ($folder = $files->next_record())
-						{
-								//$is_sub_dir = isset($last_folder) ? $files->is_sub_dir($share_id, $last_folder) : false;
-
-								$node = array(
-												'text'=>$folder['name'],
-												'id'=>$folder['id'],
-												'iconCls'=>'folder-default',
-												'notreloadable'=>true
-								);
-
-								$path = $fs2->build_path($folder);
-								$nodes[$path]=$node;
-						}
-						ksort($nodes);
-
-						$fs = new filesystem();
-
-						$children=array();
-
-						foreach($nodes as $path=>$node)
-						{
-								$is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
-								if(!$is_sub_dir)
-								{
-									//var_dump($node);
-										if(!$fs2->has_children($node['id']))
-										{
-												$node['children']=array();
-												$node['expanded']=true;
-										}
-										$children[]=$node;
-										$last_path=$path;
-								}
-						}*/
-
 
 						$node= array(
 							'text'=>$lang['files']['shared'],
@@ -282,44 +239,28 @@ try {
 
 				case 'shared':
 
-					$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
+					$share_count = $files->get_cached_shares($GO_SECURITY->user_id);
 
 					$nodes=array();
 
 					$count = 0;
-					while ($folder = $files->next_record()) {
+					while ($r = $files->next_record()) {
 						//$is_sub_dir = isset($last_folder) ? $files->is_sub_dir($share_id, $last_folder) : false;
 
 						$node = array(
-							'text'=>$folder['name'],
-							'id'=>$folder['id'],
+							'text'=>$r['name'],
+							'id'=>$r['folder_id'],
 							'iconCls'=>'folder-default',
 							'notreloadable'=>true
 						);
 
-						$path = $fs2->build_path($folder);
-						$nodes[$path]=$node;
+						if(!$fs2->has_children($node['id'])) {
+							$node['children']=array();
+							$node['expanded']=true;
+						}						
+						$response[]=$node;
 					}
-					ksort($nodes);
-
-					//go_debug($nodes);
-
-					$fs = new filesystem();
-
-
-					foreach($nodes as $path=>$node) {
-						$is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
-						if(!$is_sub_dir) {
-							//var_dump($node);
-							if(!$fs2->has_children($node['id'])) {
-								$node['children']=array();
-								$node['expanded']=true;
-							}
-							$response[]=$node;
-							$last_path=$path;
-						}
-					}
-
+					
 					break;
 
 				case 'new' :
@@ -378,43 +319,23 @@ try {
 				}
 				$response['write_permission']=false;
 
-				$fs2 = new files();
+				$share_count = $files->get_cached_shares($GO_SECURITY->user_id, true);
 
-
-				$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
-
-				$folders=array();
-
-				$count = 0;
-				while ($folder = $files->next_record()) {
-					$path = $fs2->build_path($folder);
-					$folders[$path]=$folder;
-				}
-				ksort($folders);
-
-				$fs = new filesystem();
-
-
-				foreach($folders as $path=>$folder) {
-					$is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
-					if(!$is_sub_dir) {
-						$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
-						$class='filetype-folder';
-
-						$folder['type_id']='d:'.$folder['id'];
-						$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
-						$folder['type']=$lang['files']['folder'];
-						$folder['timestamp']=$folder['ctime'];
-						$folder['mtime']=Date::get_timestamp($folder['ctime']);
-						$folder['size']='-';
-						$folder['extension']='folder';
-						if($folder['readonly']=='1') {
-							$folder['draggable']=false;
-						}
-						$response['results'][]=$folder;
-
-						$last_path=$path;
+				while($folder = $files->next_record()){
+					$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
+					$class='filetype-folder';
+					
+					$folder['type_id']='d:'.$folder['id'];
+					$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
+					$folder['type']=$lang['files']['folder'];
+					$folder['timestamp']=$folder['ctime'];
+					$folder['mtime']=Date::get_timestamp($folder['ctime']);
+					$folder['size']='-';
+					$folder['extension']='folder';
+					if($folder['readonly']=='1') {
+						$folder['draggable']=false;
 					}
+					$response['results'][]=$folder;
 				}
 
 			}elseif($_POST['id'] == 'new') {

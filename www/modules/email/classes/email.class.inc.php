@@ -223,13 +223,15 @@ class email extends db {
 		}
 	}
 
-	public static function login() {
+	public static function login($username, $password, $user, $count_login) {
 		global $GO_SECURITY;
 
-		//clear old cache
-		$db = new db();
-		$sql = "DELETE FROM em_messages_cache WHERE udate<".Date::date_add(time(),-21)." AND account_id IN (SELECT id FROM em_accounts WHERE user_id=".$GO_SECURITY->user_id.")";
-		$db->query($sql);
+		if($count_login){
+			//clear old cache
+			$db = new db();
+			$sql = "DELETE FROM em_messages_cache WHERE udate<".Date::date_add(time(),-21)." AND account_id IN (SELECT id FROM em_accounts WHERE user_id=".$GO_SECURITY->user_id.")";
+			$db->query($sql);
+		}
 	}
 
 	public static function save_settings() {

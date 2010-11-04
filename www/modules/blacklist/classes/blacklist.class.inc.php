@@ -21,33 +21,35 @@ class blacklist extends db {
 	/**
 	 * Check's if the IP is blacklisted
 	 */
-	public static function before_login($args){
-		
-		$bl = new blacklist();
+	public static function before_login($username, $password, $count_login){
 
-		$user_id = $bl->get_user_id($args);
-		$ip = $bl->get_ip($_SERVER['REMOTE_ADDR'], $user_id);
-		if($ip && $ip['count']>2)
-		{						
-			global $GO_LANGUAGE, $lang, $response, $GO_CONFIG;
-			$response['require_captcha'] = true;
-			$GO_LANGUAGE->require_language_file('blacklist');
+		if($count_login){
+			$bl = new blacklist();
 
-			if(isset($_REQUEST['captcha']) && $_REQUEST['captcha'])
+			$user_id = $bl->get_user_id($username);
+			$ip = $bl->get_ip($_SERVER['REMOTE_ADDR'], $user_id);
+			if($ip && $ip['count']>2)
 			{
-				require_once($GO_CONFIG->class_path.'securimage/securimage.php');
-				$securimage = new Securimage();
+				global $GO_LANGUAGE, $lang, $response, $GO_CONFIG;
+				$response['require_captcha'] = true;
+				$GO_LANGUAGE->require_language_file('blacklist');
 
-				if(!$securimage->check($_REQUEST['captcha']))
-				{					
-					throw new Exception($lang['blacklist']['captchaIncorrect']);
+				if(isset($_REQUEST['captcha']) && $_REQUEST['captcha'])
+				{
+					require_once($GO_CONFIG->class_path.'securimage/securimage.php');
+					$securimage = new Securimage();
+
+					if(!$securimage->check($_REQUEST['captcha']))
+					{
+						throw new Exception($lang['blacklist']['captchaIncorrect']);
+					}else
+					{
+						//$response['require_captcha'] = false;
+					}
 				}else
 				{
-					//$response['require_captcha'] = false;
+					throw new Exception($lang['blacklist']['captchaActivated']);
 				}
-			}else
-			{
-				throw new Exception($lang['blacklist']['captchaActivated']);
 			}
 		}
 	}
@@ -56,23 +58,25 @@ class blacklist extends db {
 	 * Increases the bad logins count
 	 */
 
-	public static function bad_login($args){
-	
-		$bl = new blacklist();
+	public static function bad_login($username, $password, $count_login){
 
-		$user_id = $bl->get_user_id($args);
-		$ip = $bl->get_ip($_SERVER['REMOTE_ADDR'], $user_id);
-		if($ip)
-		{
-			$ip['count']++;
-			$ip['userid']=$user_id;
-			$bl->update_ip($ip);
-		}else
-		{
-			$ip['ip']=$_SERVER['REMOTE_ADDR'];
-			$ip['count']=1;
-			$ip['userid']=$user_id;
-			$bl->add_ip($ip);
+		if($count_login){
+			$bl = new blacklist();
+
+			$user_id = $bl->get_user_id($username);
+			$ip = $bl->get_ip($_SERVER['REMOTE_ADDR'], $user_id);
+			if($ip)
+			{
+				$ip['count']++;
+				$ip['userid']=$user_id;
+				$bl->update_ip($ip);
+			}else
+			{
+				$ip['ip']=$_SERVER['REMOTE_ADDR'];
+				$ip['count']=1;
+				$ip['userid']=$user_id;
+				$bl->add_ip($ip);
+			}
 		}
 	}
 
@@ -80,11 +84,13 @@ class blacklist extends db {
 	 * Delete's an IP when login is succesful
 	 */
 
-	public static function login($args){
-		$bl = new blacklist();
+	public static function login($username, $password, $user, $count_login){
+		if($count_login){
+			$bl = new blacklist();
 
-		$user_id = $bl->get_user_id($args);
-		$bl->delete_ip($_SERVER['REMOTE_ADDR'], $user_id);
+			$user_id = $bl->get_user_id($username);
+			$bl->delete_ip($_SERVER['REMOTE_ADDR'], $user_id);
+		}
 	}
 	/**
 	 * Add a Ip
@@ -174,15 +180,15 @@ class blacklist extends db {
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
-	public function get_user_id($args='')
+	public function get_user_id($username='')
 	{
 		global $GO_CONFIG;
 		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
-		if($args)
+		if($username)
 		{
-			$user = $GO_USERS->get_user_by_username($args);
+			$user = $GO_USERS->get_user_by_username($username);
 			return ($user) ? $user['id'] : 0;
 		}else
 		{
