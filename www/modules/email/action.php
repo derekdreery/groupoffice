@@ -1232,7 +1232,7 @@ try {
 			}else
 			{
 				$status_name = $cal->get_participant_status_name($status_id);
-
+				
 				$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 				$data = $imap->get_message_part_decoded($_REQUEST['message_uid'], $_REQUEST['imap_id'], $_REQUEST['encoding']);
 				$imap->disconnect();
@@ -1243,14 +1243,14 @@ try {
 				$vcalendar = $ical2array->parse_string($data);
 
 				$event=false;
-				$event_object;
+				//$event_object;
 				while($object = array_shift($vcalendar[0]['objects']))
 				{
 					if($object['type'] == 'VEVENT')
 					{
-						$event_object = $object;
 						$event = $cal->get_event_from_ical_object($object);
-						$last_modified = $object['DTSTAMP']['value'];
+						$event['invitation_uuid'] = (isset($object['UID']['value']) && $object['UID']['value'] != '') ? trim($object['UID']['value']) : '';
+
 						break;
 					}
 				}
@@ -1261,6 +1261,7 @@ try {
 
 				if($create_event)
 				{
+
 					if($cal->is_event_declined($_REQUEST['uid'], $email))
 					{
 						$cal->delete_declined_event_uid($_REQUEST['uid'], $email);
@@ -1272,15 +1273,29 @@ try {
 					}
 
 					$event['calendar_id'] = $calendar_id;
-					$participants = $event['participants'];
-					unset($event['participants']);
+					//$participants = ;
 
-					$updated = false;
+					$organizer_email = false;
+					foreach($event['participants'] as $participant_email=>&$participant)
+					{
+						if($participant_email == $email)
+						{
+							$participant['status']=$status_id;
+						}
+
+						if(isset($participant['is_organizer']) && $participant['is_organizer'])
+						{
+							$organizer_email = $participant_email;
+							if(!String::validate_email($organizer_email))
+								$organizer_email=$_POST['email_sender'];
+
+						}
+					}
+					
 					if($event_id)
 					{
 						$event['id'] = $old_event['id'];
 						$cal->update_event($event, false, $old_event);
-						$updated = true;
 					}else
 					{
 						$event_id = $cal->add_event($event);
@@ -1288,43 +1303,7 @@ try {
 
 					if($event_id)
 					{
-						//$event = $cal->get_event($event_id);
-
-						$organizer_email = false;
-						$ids = array();
-						foreach($participants as $participant_email=>$participant)
-						{
-							$participant['event_id'] = $event_id;
-							$participant['email'] = $participant_email;
-							$participant['role']= ($participant['role']) ? $participant['role'] : 'REQ-PARTICIPANT';
-
-							if($participant['email'] == $email)
-							{
-								$participant['status'] = $status_id;
-								$participant['last_modified'] = $last_modified;
-							}else
-							{
-								$saved_participant = $cal->is_participant($event_id, $participant_email);
-								$participant['last_modified'] = ($saved_participant) ? $saved_participant['last_modified'] : '';
-							}
-
-							if(isset($participant['is_organizer']) && $participant['is_organizer'])
-							{
-								$organizer_email = $participant_email;
-								if(!String::validate_email($organizer_email))
-									$organizer_email=$_POST['email_sender'];
-							}
-
-							$user = $GO_USERS->get_user_by_email($participant['email']);
-							$participant['user_id'] = ($user) ? $user['id'] : 0;
-
-							$ids[] = $cal->add_participant($participant);
-						}
-
-						if($updated)
-						{
-							$cal->delete_other_participants($event['id'], $ids);
-						}
+						
 
 						if($organizer_email)
 						{
@@ -1343,9 +1322,7 @@ try {
 
 							$swift->set_body($cal->event_to_html($event, false, true));
 							$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; METHOD="REPLY"'));
-							//$name = File::strip_invalid_chars($event['name']).'.ics';
-							//$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name,File::get_mime($name)));
-
+							
 							$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
 
 							if(!$swift->sendmail(true)) {

@@ -743,7 +743,8 @@ try {
 							if($object['type'] == 'VEVENT')
 							{
 								$cal_event = $cal->get_event_from_ical_object($object);
-								$last_modified = $object['DTSTAMP']['value'];
+								$cal_event['invitation_uuid']= (isset($object['UID']['value']) && $object['UID']['value'] != '') ? trim($object['UID']['value']) : '';
+								//$last_modified = $object['DTSTAMP']['value'];
 							}
 						}
 						if(!isset($cal_event))
@@ -760,11 +761,11 @@ try {
 								if($method == 'REPLY')
 								{
 									// reply to an invitation of an existing event
-									$event = $cal->get_event_by_uuid($cal_event['uid']);
+									$event = $cal->get_event_by_uuid($cal_event['invitation_uuid']);
 								}else
 								{
 									// request to update an existing event 
-									$event = $cal->get_event_by_invitation_uuid($cal_event['uid'], $GO_SECURITY->user_id);
+									$event = $cal->get_event_by_invitation_uuid($cal_event['invitation_uuid'], $GO_SECURITY->user_id);
 								}																								
 								
 								if($event)
@@ -784,7 +785,7 @@ try {
 										}
 
 										// check if event has to be updated
-										if($saved_participant && ($last_modified > $saved_participant['last_modified']))
+										if($saved_participant && ($cal_event['mtime'] > $saved_participant['last_modified']))
 										{
 											if($method == 'REQUEST')
 											{
@@ -792,7 +793,7 @@ try {
 													'account_id' => $account_id,
 													'mailbox' => $mailbox,
 													'message_uid' => $uid,
-													'uid' => $cal_event['uid'],
+													'uid' => $cal_event['invitation_uuid'],
 													'imap_id' => $attachment['imap_id'],
 													'encoding' => $attachment['encoding'],
 													'event_id' => $event['id'],
@@ -806,7 +807,7 @@ try {
 													'event_id' => $event['id'],
 													'email_sender' => $email_sender,
 													'email' => $account['email'],
-													'last_modified' => $last_modified,
+													'last_modified' => $cal_event['mtime'],
 													'status_id' => $status_id
 												);
 											}
@@ -827,13 +828,13 @@ try {
 									if($method == 'REQUEST')
 									{										
 										// invitation to a new event
-										$event_declined = $cal->is_event_declined($cal_event['uid'], $account['email']);
+										$event_declined = $cal->is_event_declined($cal_event['invitation_uuid'], $account['email']);
 										$response['iCalendar']['feedback'] = ($event_declined) ? $lang['email']['iCalendar_event_invitation_declined'] : $lang['email']['iCalendar_event_invitation'];
 										$response['iCalendar']['invitation'] = array(
 											'account_id' => $account_id,
 											'mailbox' => $mailbox,
 											'message_uid' => $uid,
-											'uid' => $cal_event['uid'],
+											'uid' => $cal_event['invitation_uuid'],
 											'imap_id' => $attachment['imap_id'],
 											'encoding' => $attachment['encoding'],
 											'email_sender' => $email_sender,
@@ -854,7 +855,7 @@ try {
 								//$event = $cal->get_event_by_uuid($cal_event['uid']);
 								//if(!$event)
 								//{
-									$event = $cal->get_event_by_invitation_uuid($cal_event['uid']);
+									$event = $cal->get_event_by_invitation_uuid($cal_event['invitation_uuid']);
 								//}
 
 								if($event)

@@ -1122,17 +1122,14 @@ try {
 			if($event_id>0) {
 				$event = $cal->get_event($event_id);
 
-				if(!empty($event['participants_event_id'])) {
-					$event_id=$event['participants_event_id'];
-				}
-
 				$response['total'] = $cal->get_participants($event_id);
 				$response['results']=array();
 				while($participant =$cal->next_record(DB_ASSOC)) {
 					$participant['available']='?';
 					$user=$GO_USERS->get_user_by_email($participant['email']);
 					if($user) {
-						$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event_id) ? '1' : '0';
+						//$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event_id) ? '1' : '0';
+						$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event) ? '1' : '0';
 					}
 
 					$response['results'][]=$participant;
@@ -1159,7 +1156,7 @@ try {
 					$response['email']=$calendar_user['email'];
 					$response['status']="1";
 					$response['is_organizer']="1";
-					$response['available']=$cal->is_available($response['user_id'], $_REQUEST['start_time'], $_REQUEST['end_time'], 0) ? '1' : '0';
+					$response['available']=$cal->is_available($response['user_id'], $_REQUEST['start_time'], $_REQUEST['end_time'], false) ? '1' : '0';
 				}
 			}
 			
@@ -1171,7 +1168,8 @@ try {
 			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			
-			$event_id = empty($_REQUEST['event_id']) ? 0 : $_REQUEST['event_id'];
+
+			$event = empty($_REQUEST['event_id']) ? false : $cal->get_event($_REQUEST['event_id']);
 
 			$emails=explode(',', $_REQUEST['emails']);
 
@@ -1180,7 +1178,7 @@ try {
 				$user=$GO_USERS->get_user_by_email($email);
 
 				if($user) {
-					$response[$email]=$cal->is_available($user['id'], $_REQUEST['start_time'], $_REQUEST['end_time'], $event_id) ? '1' : '0';
+					$response[$email]=$cal->is_available($user['id'], $_REQUEST['start_time'], $_REQUEST['end_time'], $event) ? '1' : '0';
 				}
 				else {
 					$response[$email]='?';

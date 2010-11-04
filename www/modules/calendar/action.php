@@ -145,7 +145,7 @@ try {
 				$exception['time'] = mktime(date('G', $event_start_time),date('i', $event_start_time), 0, date('n', $exceptionDate), date('j', $exceptionDate), date('Y', $exceptionDate));
 
 				//$exception_event = $cal->get_event($event_id);
-				$cal->add_exception_for_all_participants($event['participants_event_id'], $exception);
+				$cal->add_exception_for_all_participants($event['resource_event_id'], $exception);
 
 				//$cal->add_exception($exception);
 			}else
@@ -222,7 +222,7 @@ try {
 			if(!$event_exists && !empty($calendar_id) && $event['calendar_id']!=$calendar_id) {
 				$new_event['user_id']=$GO_SECURITY->user_id;
 				$new_event['calendar_id']=$calendar_id;
-				//$new_event['participants_event_id']=$event_id;
+				//$new_event['resource_event_id']=$event_id;
 
 				$cal->copy_event($event_id, $new_event);
 			}
@@ -273,7 +273,7 @@ try {
 					//die(date('Ymd : G:i', $exception['time']));
 
 					//$cal->add_exception($exception);
-					$cal->add_exception_for_all_participants($old_event['participants_event_id'], $exception);
+					$cal->add_exception_for_all_participants($old_event['resource_event_id'], $exception);
 
 					//now we copy the recurring event to a new single event with the new time
 					$update_event['rrule']='';
@@ -471,7 +471,7 @@ try {
 
 
 				foreach ($concurrent_resources as $key=>$value) {
-					if ($value['participants_event_id'] != $event['id']) {
+					if ($value['resource_event_id'] != $event['id']) {
 						$cal2 = new calendar();
 						$resource = $cal2->get_calendar($value['calendar_id']);
 						$response['success'] = false;
@@ -555,7 +555,7 @@ try {
 
 						$exception_event = $cal->get_event($_REQUEST['exception_event_id']);
 
-						$cal->add_exception_for_all_participants($exception_event['participants_event_id'], $exception);
+						$cal->add_exception_for_all_participants($exception_event['resource_event_id'], $exception);
 
 						//for sync update the timestamp
 						$update_recurring_event=array();
@@ -636,8 +636,8 @@ try {
 									$response['cal'] = $calendar;
 
 									$event['calendar_id'] = $calendar['id'];
-									/*if(!isset($event['participants_event_id'])) {
-										$event['participants_event_id'] = $event_id;
+									/*if(!isset($event['resource_event_id'])) {
+										$event['resource_event_id'] = $event_id;
 									}*/
 									unset($event['files_folder_id']);
 									$cal->add_event($event, $calendar);
@@ -659,8 +659,8 @@ try {
 								if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])>=GO_SECURITY::WRITE_PERMISSION) {
 									if(!$cal->has_participants_event($event_id, $calendar['id'])){
 										$event['calendar_id'] = $calendar['id'];
-										/*if(!isset($event['participants_event_id'])) {
-											$event['participants_event_id'] = $event_id;
+										/*if(!isset($event['resource_event_id'])) {
+											$event['resource_event_id'] = $event_id;
 										}*/
 										unset($event['files_folder_id']);
 										$cal->add_event($event, $calendar);
@@ -700,12 +700,12 @@ try {
 				//require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Plugins/Decorator/Replacements.php';
 
 				$RFC822 = new RFC822();
-				$participants_event_id=empty($old_event['participants_event_id']) ? $event_id : $old_event['participants_event_id'];
-				//go_debug($participants_event_id);
-				$cal->clear_event_status($participants_event_id, $_SESSION['GO_SESSION']['email']);
+				$resource_event_id=empty($old_event['resource_event_id']) ? $event_id : $old_event['resource_event_id'];
+				//go_debug($resource_event_id);
+				$cal->clear_event_status($resource_event_id, $_SESSION['GO_SESSION']['email']);
 
 				$participants=array();
-				$cal->get_participants($participants_event_id);
+				$cal->get_participants($resource_event_id);
 				while($cal->next_record()) {
 
 					if(/*$cal->f('status') !=1 && */$cal->f('email')!=$_SESSION['GO_SESSION']['email']) {
@@ -723,7 +723,7 @@ try {
 					$ical = new go_ical();
 					$ical->dont_use_quoted_printable = true;
 					
-					$ics_string = $ical->export_event($participants_event_id);
+					$ics_string = $ical->export_event($resource_event_id);
 
 					$swift = new GoSwift(
 							implode(',', $participants),
@@ -741,9 +741,9 @@ try {
 					$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
 							$cal->event_to_html($event).
 							'<p>'.$lang['calendar']['acccept_question'].'</p>'.
-							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$participants_event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
+							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$resource_event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
 							'&nbsp;|&nbsp;'.
-							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$participants_event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
+							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$resource_event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
 					
 					$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
 					//$name = File::strip_invalid_chars($event['name']).'.ics';
@@ -827,7 +827,7 @@ try {
 						if(isset($resources) && in_array($resource_id, $resources))
 						{
 							$resource = $event_copy;
-							$resource['participants_event_id'] = $event_id;
+							$resource['resource_event_id'] = $event_id;
 							$resource['calendar_id'] = $resource_id;
 
 							if($existing_resource)
