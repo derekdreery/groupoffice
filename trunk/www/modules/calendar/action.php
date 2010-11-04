@@ -222,7 +222,7 @@ try {
 			if(!$event_exists && !empty($calendar_id) && $event['calendar_id']!=$calendar_id) {
 				$new_event['user_id']=$GO_SECURITY->user_id;
 				$new_event['calendar_id']=$calendar_id;
-				$new_event['participants_event_id']=$event_id;
+				//$new_event['participants_event_id']=$event_id;
 
 				$cal->copy_event($event_id, $new_event);
 			}
@@ -636,9 +636,9 @@ try {
 									$response['cal'] = $calendar;
 
 									$event['calendar_id'] = $calendar['id'];
-									if(!isset($event['participants_event_id'])) {
+									/*if(!isset($event['participants_event_id'])) {
 										$event['participants_event_id'] = $event_id;
-									}
+									}*/
 									unset($event['files_folder_id']);
 									$cal->add_event($event, $calendar);
 									$participant['status']=1;
@@ -659,9 +659,9 @@ try {
 								if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])>=GO_SECURITY::WRITE_PERMISSION) {
 									if(!$cal->has_participants_event($event_id, $calendar['id'])){
 										$event['calendar_id'] = $calendar['id'];
-										if(!isset($event['participants_event_id'])) {
+										/*if(!isset($event['participants_event_id'])) {
 											$event['participants_event_id'] = $event_id;
-										}
+										}*/
 										unset($event['files_folder_id']);
 										$cal->add_event($event, $calendar);
 									}
