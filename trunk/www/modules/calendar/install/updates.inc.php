@@ -108,5 +108,5 @@ $updates[]="update cal_calendars set tasklist_id=(SELECT default_tasklist_id  FR
 $updates[]="ALTER TABLE `cal_events` CHANGE `uid` `invitation_uuid` VARCHAR( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
 $updates[]="ALTER TABLE `cal_events` ADD INDEX ( `invitation_uuid` )";
 
-//ALTER TABLE `cal_events` DROP `event_id`
-//ALTER TABLE `cal_events` CHANGE `participants_event_id` `resource_event_id` INT( 11 ) NOT NULL 
+$updates[]="ALTER TABLE `cal_events` DROP `event_id`";
+$updates[]="ALTER TABLE `cal_events` CHANGE `participants_event_id` `resource_event_id` INT( 11 ) NOT NULL ";
