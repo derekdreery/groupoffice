@@ -175,6 +175,8 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
      */
     public function getChildren() {
 
+		go_debug('FSD::getChildren');
+
 		global $files;
         $nodes = array();
         //foreach(scandir($this->path) as $node) if($node!='.' && $node!='..') $nodes[] = $this->getChild($node);

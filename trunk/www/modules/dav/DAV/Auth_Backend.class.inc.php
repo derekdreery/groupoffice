@@ -53,6 +53,11 @@ class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
      */
     public function authenticate(Sabre_DAV_Server $server,$realm){
 
+		global $GO_SECURITY;
+
+		if($GO_SECURITY->logged_in()){
+			return true;
+		}
 		$this->realm=$realm;
 
 		$cred = $this->getUserPass();
@@ -65,6 +70,7 @@ class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
 				return true;
 			}
 		}
+
 
 		$this->requireLogin();
 

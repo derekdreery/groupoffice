@@ -13,47 +13,8 @@
  */
 class GO_DAV_Shared_Directory extends Sabre_DAV_FS_Directory implements Sabre_DAV_ICollection, Sabre_DAV_IQuota {
 
-	public function __construct($path='') {
-		global $GO_CONFIG;
+	public function __construct($path='') {		
 		$this->path = $path;
-
-
-		global $GO_SECURITY,$GO_CONFIG;
-
-		$nodes = array();
-
-		$files = new files();
-		$fs2 = new files();
-
-		$share_count = $files->get_authorized_shares($GO_SECURITY->user_id);
-
-		$nodes = array();
-
-		$count = 0;
-		while ($folder = $files->next_record()) {
-			$path = $fs2->build_path($folder);
-			$nodes[] = $path;
-		}
-		sort($nodes);
-
-		//go_debug($nodes);
-
-		$fs = new filesystem();
-
-		$toplevel_nodes=array();
-
-		foreach ($nodes as $path) {
-			$is_sub_dir = isset($last_path) ? $fs->is_sub_dir($path, $last_path) : false;
-			if (!$is_sub_dir) {
-				$this->children[utf8_basename($path)]=new GO_DAV_FS_Directory($path);
-
-				$last_path = $path;
-			}
-		}
-
-		return $toplevel_nodes;
-
-
 	}
 
 	public function getName() {
@@ -62,10 +23,16 @@ class GO_DAV_Shared_Directory extends Sabre_DAV_FS_Directory implements Sabre_DA
 
 	public function getChild($name) {
 
-		if (!isset($this->children[$name]))
+		go_debug('Shared::getChild('.$name.')');
+
+		global $files, $GO_SECURITY;
+
+		$r= $files->get_cached_share($GO_SECURITY->user_id, $name);
+		
+		if (!$r)
 			throw new Sabre_DAV_Exception_FileNotFound('File with name ' . $name . ' could not be located');
 
-		return $this->children[$name];
+		return new GO_DAV_FS_Directory($r['path']);
 	}
 
 	/**
@@ -75,11 +42,15 @@ class GO_DAV_Shared_Directory extends Sabre_DAV_FS_Directory implements Sabre_DA
 	 */
 	public function getChildren() {
 
-		global $GO_CONFIG;
+		go_debug('Shared::geChildren');
+		
+		global $GO_SECURITY,$GO_CONFIG, $files;
+
+		$files->get_cached_shares($GO_SECURITY->user_id);
 
 		$nodes = array();
-		foreach ($this->children as $node) {
-			$nodes[] = $node;
+		while($r=$files->next_record()){
+			$nodes[]=new GO_DAV_FS_Directory($r['path']);
 		}
 
 		return $nodes;
