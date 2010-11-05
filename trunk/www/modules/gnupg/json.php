@@ -28,7 +28,7 @@ try{
 			$data = $gnupg->export($_REQUEST['fingerprint']);
 			file_put_contents($tmp_file, $data);
 			
-			if($GO_MODULES->has_module('mailings'))
+			if($GO_MODULES->has_module('mailings') && isset($_REQUEST['template_id']))
 			{
 				$response = load_template($_REQUEST['template_id'], '');
 			}

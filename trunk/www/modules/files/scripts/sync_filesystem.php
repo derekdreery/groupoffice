@@ -73,7 +73,7 @@ if(empty($path))
 }else
 {
 	$dbfolder = $files->resolve_path($path);
-	
+
 	if(!$parent)
 	{
 		die('Fatal error! could not find database folder of '.$path.' in database. Try to sync without path parameter first.');
