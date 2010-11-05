@@ -530,10 +530,10 @@ GO.files.FileBrowser = function(config){
 							GO.lang.noJava);
 				} else {
 					
-					 GO.util.popup({ url:
+					 GO.util.popup({url:
 						 GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
 						 width : 660, height: 500, target:
-						 'jupload' });
+						 'jupload'});
 					 
 
 					/*window.open(GO.settings.modules.files.url
@@ -746,7 +746,7 @@ GO.files.FileBrowser = function(config){
 		if(r.data.extension!='folder'){
 			this.folderPanel.setVisible(false);
 			this.filePanel.setVisible(true);
-
+			
 			this.filePanel.load(r.id.substr(2));
 		}else
 		{
@@ -1576,7 +1576,14 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 				this.fileClickHandler.call(this.scope, record);
 			}else
 			{
-				GO.files.openFile(record, this.getActiveGridStore());
+				//browsers don't like loading a json request and download dialog at the same time.'
+				if(this.filePanel.loading)
+				{
+					this.onGridDoubleClick.defer(200, this, [grid, rowClicked, e]);
+				}else
+				{
+					GO.files.openFile(record, this.getActiveGridStore());
+				}
 			}
 		}
 	},
