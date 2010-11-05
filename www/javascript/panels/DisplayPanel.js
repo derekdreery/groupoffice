@@ -49,6 +49,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	expandListenObject : false,
 
 	editGoDialogId : false,
+
+	loading:false,
 	
 	createTopToolbar : function(){
 		
@@ -443,6 +445,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			this.collapsedLinkId=this.link_id=id;
 		}else if(this.link_id!=id || reload)
 		{
+			this.loading=true;
+
 			this.loadParams[this.idParam]=this.link_id=id;
 			this.loadParams['hidden_sections']=Ext.encode(this.hiddenSections)
 			
@@ -452,6 +456,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 				params:this.loadParams,
 				callback: function(options, success, response)
 				{
+					this.loading=false;
 					this.body.unmask();
 					if(!success)
 					{
