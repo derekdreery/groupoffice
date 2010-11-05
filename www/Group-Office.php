@@ -55,9 +55,16 @@ if(!defined('GO_NO_SESSION')){
 		session_id($_REQUEST['session_id']);
 	}
 	session_start();
-	if(isset($_REQUEST['auth_token']) && $_REQUEST['auth_token']!=$_SESSION['GO_SESSION']['auth_token']){
-		session_destroy();
-		die('Invalid auth_token supplied');
+	if(isset($_REQUEST['auth_token'])){
+		if($_REQUEST['auth_token']!=$_SESSION['GO_SESSION']['auth_token']){
+			session_destroy();
+			die('Invalid auth_token supplied');
+		}else
+		{
+			//redirect to URL without session_id
+			header('Location: '.$_SERVER['PHP_SELF']);
+			exit();
+		}
 	}
 }
 
