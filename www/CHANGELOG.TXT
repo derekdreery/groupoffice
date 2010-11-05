@@ -1,3 +1,7 @@
+2010/11/05 3.5.39
+- Faster moves in file manager
+- Fixed hangs in gnupg module
+
 2010/11/02 3.5.38
 - Mailings sent duplicate body
 - Escaping value problem in projects billing template
