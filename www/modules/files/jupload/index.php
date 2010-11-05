@@ -12,9 +12,9 @@ $GO_SECURITY->html_authenticate('files');
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <script type="text/javascript">
 function afterUpload(success){
-
+	var isSafari = <?php $browser = detect_browser(); echo $browser['name']=='SAFARI'?'true':'false'; ?>;
 	opener.GO.currentFilesStore.reload();
-	if(success){
+	if(success && !isSafari){
 		setTimeout("self.close();", 1000);
 	}
 }
