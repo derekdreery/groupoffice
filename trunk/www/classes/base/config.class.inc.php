@@ -958,6 +958,7 @@ class GO_CONFIG {
 			$_SESSION['GO_SESSION']['timezone'] = $this->default_timezone;
 			$_SESSION['GO_SESSION']['country'] = $this->default_country;
 			$_SESSION['GO_SESSION']['sort_name'] = 'last_name';
+			$_SESSION['GO_SESSION']['auth_token']=String::random_password('a-z,1-9', '', 30);
 		}
 	}
 
