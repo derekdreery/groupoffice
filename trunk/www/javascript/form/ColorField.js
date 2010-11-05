@@ -29,21 +29,7 @@ var cf = new Ext.form.ColorField({
 
 GO.form.ColorField =  Ext.extend(function(config){
 
-	this.menu = new Ext.menu.ColorMenu();
-	this.menu.palette.on('select', this.handleSelect, this );
-	this.menu.on('show', function(){
-		this.menu.palette.select(this.curColor);
-
-	}, this );
-
-	this.menu.on(Ext.apply({}, this.menuListeners, {
-		scope:this
-	}));
-
-	if(config.colors)
-	{
-		this.menu.palette.colors=config.colors;
-	}
+	
 
 	GO.form.ColorField.superclass.constructor.call(this, config);
 
@@ -182,6 +168,9 @@ GO.form.ColorField =  Ext.extend(function(config){
 					});
 				}
 			}
+
+			if(this.menu)
+				this.menu.palette.select(this.curColor);
 		}
 	},
 
@@ -212,6 +201,21 @@ GO.form.ColorField =  Ext.extend(function(config){
 	onTriggerClick : function(){
 		if(this.disabled){
 			return;
+		}
+
+		if(!this.menu){
+			this.menu = new Ext.menu.ColorMenu();
+			this.menu.palette.on('select', this.handleSelect, this );
+			this.menu.palette.value=this.curColor;
+			
+			this.menu.on(Ext.apply({}, this.menuListeners, {
+				scope:this
+			}));
+
+			if(this.colors)
+			{
+				this.menu.palette.colors=this.colors;
+			}
 		}
 
 		this.menu.show(this.el, "tl-bl");

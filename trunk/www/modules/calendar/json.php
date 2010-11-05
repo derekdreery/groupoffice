@@ -339,15 +339,6 @@ try {
 
 			$event = $cal->get_event($_REQUEST['event_id']);
 
-			if($event['category_id'])
-			{
-				$category = $cal->get_category($event['category_id']);
-				if($category)
-				{
-					$event['background'] = $category['color'];
-				}
-			}
-
 			if(!$event) {
 				throw new DatabaseSelectException();
 			}
@@ -543,7 +534,7 @@ try {
 				if ($owncolor)
 				{
 					$event['background'] = $default_bg[$event['calendar_id']];
-				}else
+				}/*else
 				if($event['category_id'])
 				{
 					$category = $cal->get_category($event['category_id']);
@@ -551,7 +542,7 @@ try {
 					{
 						$event['background'] = $category['color'];
 					}
-				}			
+				}*/
 
 				$username = $GO_USERS->get_user_realname($event['user_id']);
 
