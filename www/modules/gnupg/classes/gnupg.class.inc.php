@@ -131,7 +131,7 @@ class gnupg{
 			unlink($outfile);
 		}	
 
-		$command = '-o \''.$outfile.'\' -d \''.$file.'\' --passphrase-fd '.GPGSTDIN.' --yes --batch';
+		$command = '-o \''.$outfile.'\' --batch --yes --passphrase-fd '.GPGSTDIN.' -d \''.$file.'\' ';
 		$this->run_cmd($command, $unencrypted, $passphrase."\n");
 		
 		if(!file_exists($outfile))
@@ -175,7 +175,7 @@ class gnupg{
 			unlink($file.'.gpg');
 		}
 		
-		$command = '--always-trust -e -yes --batch --armor';
+		$command = '--always-trust -e --yes --batch';
 		
 		if(!is_array($recipient))
 		{
