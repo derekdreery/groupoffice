@@ -45,10 +45,20 @@ if ( isset( $GO_INCLUDES ) ) {
 	}
 }
 
+
+
 if(!defined('GO_NO_SESSION')){
 	//start session
 	session_name('groupoffice');
+	if(isset($_REQUEST['session_id']) && isset($_REQUEST['auth_token']))
+	{
+		session_id($_REQUEST['session_id']);
+	}
 	session_start();
+	if(isset($_REQUEST['auth_token']) && $_REQUEST['auth_token']!=$_SESSION['GO_SESSION']['auth_token']){
+		session_destroy();
+		die('Invalid auth_token supplied');
+	}
 }
 
 if(!isset($GO_CONFIG))

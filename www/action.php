@@ -235,7 +235,8 @@ try{
 			$response['name']=$_SESSION['GO_SESSION']['name'];
 			$response['email']=$_SESSION['GO_SESSION']['email'];
 			//$response['sid']=session_id();
-			
+
+			$response['auth_token']=$_SESSION['GO_SESSION']['auth_token'];			
 			
 			//$response['fullscreen']=isset($_POST['fullscreen']);
 				
