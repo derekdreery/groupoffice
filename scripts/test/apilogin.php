@@ -1,12 +1,12 @@
 <?php
 //full url to Group-Office
-$url = 'https://intermesh.group-office.com/groupoffice/';
+$url = 'https://localhost/groupoffice/';
 
 //put the right
 $params=array(
 	'task'=>'login',
-	'username'=>'mschering',
-	'password'=>'lhSkM08'
+	'username'=>'admin',
+	'password'=>'admin'
 );
 
 $ch = curl_init();
