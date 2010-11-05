@@ -22,9 +22,9 @@ class gnupg{
 	var $fd= array(
 	GPGSTDIN  => array( 'pipe', 'r' ),  // this is stdin for the child (We write to this one)
 	GPGSTDOUT => array( 'pipe', 'w' ),  // child writes here (stdout)
-	GPGSTDERR => array( 'pipe', 'w' ),  // stderr
-	STATUS_FD => array( 'pipe', 'w' ),
-	PASSPHRASE_FD => array( 'pipe', 'r' )
+	GPGSTDERR => array( 'pipe', 'w' )  // stderr
+	//STATUS_FD => array( 'pipe', 'w' ),
+	//PASSPHRASE_FD => array( 'pipe', 'r' )
 	);
 
 	var $pipes;
@@ -40,11 +40,14 @@ class gnupg{
 		
 		if(!isset($home) && isset($_SESSION['GO_SESSION']['username']))
 		{
-			$home = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'];
+			$home = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/.gnupg';
 		}
+
 		if(isset($home))
 		{
 			$this->set_home($home);
+			File::mkdir($home);
+			chmod($home, 0700);
 		}
 	}
 
@@ -101,10 +104,19 @@ class gnupg{
 
 		global $GO_CONFIG;
 
-		//go_debug($data);
+		// the text to decrypt from another platforms can has a bad sequence
+		// this line removes the bad date and converts to line returns
+		$data = preg_replace("/\x0D\x0D\x0A/s", "\n", $data);
 
-		$command = '-d';
-		$this->run_cmd($command, $unencrypted, $errorcode, $data, $passphrase);
+		// we generate an array and add a new line after the PGP header
+		$data = explode("\n", $data);
+		if (count($data) > 1) $data[1] .= "\n";
+		$data = implode("\n", $data);
+
+		$data = $passphrase."\n".$data;
+
+		$command = '-d --passphrase-fd '.GPGSTDIN.' --yes --batch';
+		$this->run_cmd($command, $unencrypted, $data);
 
 		return $unencrypted;
 	}
@@ -119,8 +131,8 @@ class gnupg{
 			unlink($outfile);
 		}	
 
-		$command = '-o \''.$outfile.'\' -d \''.$file.'\'';
-		$this->run_cmd($command, $unencrypted, $errorcode, null, $passphrase);
+		$command = '-o \''.$outfile.'\' -d \''.$file.'\' --passphrase-fd '.GPGSTDIN.' --yes --batch';
+		$this->run_cmd($command, $unencrypted, $passphrase."\n");
 		
 		if(!file_exists($outfile))
 		{
@@ -131,7 +143,7 @@ class gnupg{
 	}
 
 	public function encode($data, $recipient, $user=null){
-		$command = '--always-trust -a -e';
+		$command = '--always-trust -a -e --yes --batch --armor';
 		
 		go_debug($data);
 
@@ -145,7 +157,7 @@ class gnupg{
 		{
 			$command .= ' -u '.escapeshellcmd($user);
 		}
-		$this->run_cmd($command, $encrypted, $errorcode,$data);
+		$this->run_cmd($command, $encrypted, $data);
 
 		if(preg_match('/-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----/s',$encrypted))
 		{
@@ -163,7 +175,7 @@ class gnupg{
 			unlink($file.'.gpg');
 		}
 		
-		$command = '--always-trust  -e';
+		$command = '--always-trust -e -yes --batch --armor';
 		
 		if(!is_array($recipient))
 		{
@@ -177,7 +189,7 @@ class gnupg{
 		}
 		
 		$command .= ' '.escapeshellarg($file);
-		$this->run_cmd($command, $encrypted, $errorcode);
+		$this->run_cmd($command, $encrypted);
 
 
 		if(!file_exists($file.'.gpg'))
@@ -202,7 +214,7 @@ class gnupg{
 
 	function import($data)
 	{
-		$this->run_cmd('--armor --import', $output, $errorval, $data);
+		$this->run_cmd('--armor --status-fd '.GPGSTDOUT.' --import', $output, $data);
 		//go_debug($this->error);
 	}
 
@@ -304,156 +316,95 @@ class gnupg{
 		$data.="Expire-Date: ". $expiredate ."\n";
 		$data.="Passphrase: " . $passphrase . "\n";
 		$data.="%commit\n";
+		$data.="%echo done with success\n";
 
-		$tmp = $GLOBALS['GO_CONFIG']->tmpdir.'error.log';
-
+		
 		$cmd = '--gen-key --batch --armor';
 
-		$this->run_cmd($cmd, $ouput, $errorcode, $data);
+		//$this->run_cmd($cmd, $ouput, $errorcode, $data);
 
-		return empty($errorcode);
+		// initialize the output
+		$contents = '';
+
+		// execute the GPG command
+		if ( $this->run_cmd('--batch --status-fd 1 --gen-key',
+			$contents, $data) ) {
+			$matches = false;
+
+			go_debug('Key gen command finished');
+
+			if ( preg_match('/\[GNUPG:\]\sKEY_CREATED\s(\w+)\s(\w+)/', $contents, $matches) )
+				return $matches[2];
+			else
+				return true;
+		} else
+		{
+			go_debug('Key gen failed');
+			return false;
+		}
+
+		//return empty($errorcode);
 	}
 
-	private function run_cmd($cmd, &$output=null, &$errorcode=null, $data=null, $passphrase=null, $background=false)
+	
+
+	private function run_cmd($cmd, &$output=null, $input=null)
 	{
 		global $GO_CONFIG;
 
 		$this->error = '';
 
-		$complete_cmd = $this->gpg.' --no-use-agent --display-charset utf-8 --utf8-strings --no-tty';
+		//$complete_cmd = $this->gpg.' --no-use-agent --display-charset utf-8 --utf8-strings --no-tty';
 		//$complete_cmd = $this->gpg.' --display-charset utf-8 --utf8-strings';
 
-		if(isset($passphrase))
-		{
-			$complete_cmd .= ' --command-fd '.PASSPHRASE_FD;
-		}
-
-		$complete_cmd .= ' --status-fd '.STATUS_FD;
+		$complete_cmd = $this->gpg.' --homedir '.$this->home;
+		//$complete_cmd = $this->gpg;
 
 		$complete_cmd .= ' '.$cmd;
 
 		go_debug('CMD: '.$complete_cmd);
 		
 		
-		if(!empty($passphrase))
-		{
-			$this->passphrase=$passphrase;
-		}else
-		{
-			$this->passphrase='';
-		}
-
 		$p = proc_open($complete_cmd,$this->fd, $this->pipes);
 
-		stream_set_blocking($this->pipes[GPGSTDIN], 0 );
+		if(is_resource($p)){
+			// writes the input
+			if (!empty($input)) fwrite($this->pipes[GPGSTDIN], $input);
+			fclose($this->pipes[GPGSTDIN]);
 
-		//don't know why but this is necessary sometimes
-		if(strpos($complete_cmd,' -d ')!==false)
-			stream_set_blocking($this->pipes[GPGSTDOUT], 0 );
+			// reads the output
+			while (!feof($this->pipes[GPGSTDOUT])) {
+				$data = fread($this->pipes[GPGSTDOUT], 1024);
+				if (strlen($data) == 0) break;
+				$output .= $data;
+			}
+			fclose($this->pipes[GPGSTDOUT]);
 
-		stream_set_blocking($this->pipes[GPGSTDERR], 0 );
-		stream_set_blocking($this->pipes[STATUS_FD],0 );
-		stream_set_blocking($this->pipes[PASSPHRASE_FD], 0 );
+			// reads the error message
+			$result = '';
+			while (!feof($this->pipes[GPGSTDERR])) {
+				$data = fread($this->pipes[GPGSTDERR], 1024);
+				if (strlen($data) == 0) break;
+				$result .= $data;
+			}
+			fclose($this->pipes[GPGSTDERR]);
 
+			// close the process
+			$status = proc_close($p);
 
-		if(!is_resource($p))
-		{
-			throw new Exception('Could not open proc!');
-		}
+			// returns the contents
+			$this->error = $result;
 
-		$this->output='';
+			go_debug($output);
 
-		if(!empty($data))
-		{
-			$this->write_data($data, GPGSTDIN);
-		}
-		fclose($this->pipes[GPGSTDIN]);
+			go_debug($result);
 
-		$this->read_status();
-
-
-		$this->output .= stream_get_contents($this->pipes[GPGSTDOUT]);
-		
-		$output = $this->output;
-
-		go_debug('Output: '.$this->output);
-
-		$this->error = stream_get_contents($this->pipes[GPGSTDERR]);
-		if(!empty($this->error))
-			go_debug('Error :'.$this->error);
-		
-		
-
-
-
-		//fclose($this->pipes[STATUS_FD]);
-		//fclose($this->pipes[PASSPHRASE_FD]);
-		//fclose($this->pipes[GPGSTDOUT]);
-		//fclose($this->pipes[GPGSTDERR]);
-
-		$ret = proc_close($p);
-
-		go_debug('Exit status: '.$ret);
-
-		if($ret>0)
-		{
-			throw new Exception(nl2br($this->error));
+			return ($status == 0);
+		} else {
+			$this->error = 'Unable to fork the command';
+			return false;
 		}
 
 		return $ret;
-	}
-
-	function write_data($data, $pipe=GPGSTDIN)
-	{
-		go_debug('Writing '.$data.' to '.$pipe);
-
-		//this hangs sometimes
-		//$write_pipes = array($this->pipes[$pipe]);
-		//$numWrite=stream_select($read=NULL,$write_pipes,$except=NULL,5);
-		//go_debug($numWrite);
-		//if ($numWrite !==false) {
-			
-			fwrite($this->pipes[$pipe], $data);
-			fflush($this->pipes[$pipe]);
-			$this->read_status();
-		//}
-	}
-
-	function read_status(){
-		while(!feof($this->pipes[STATUS_FD])) {
-			$read_array = array($this->pipes[STATUS_FD], $this->pipes[GPGSTDOUT]);
-			$num_read = stream_select($read_array, $write=NULL, $except=NULL, 0, 10000);
-			if ($num_read == false) {
-				break;
-			}else
-			{
-				foreach ($read_array as $pipe) {
-
-					if ($this->pipes[STATUS_FD] == $pipe) {
-						stream_set_blocking($this->pipes[STATUS_FD],0);
-						
-						//go_debug('Reading status FD');
-					
-						$status = fgets( $this->pipes[ STATUS_FD ]);							
-						go_debug('Status :'.$status);
-
-						if(strpos($status, 'okay')!==false)
-						{
-							$this->write_data("Y\n", PASSPHRASE_FD);
-						}elseif(strpos($status, 'passphrase.enter'))
-						{
-							$this->write_data($this->passphrase."\n", PASSPHRASE_FD);
-						}
-					}
-
-					if ($this->pipes[GPGSTDOUT] == $pipe) {
-						go_debug('Read output');
-						stream_set_blocking($this->pipes[GPGSTDOUT],0);						
-						$this->output .= stream_get_contents($this->pipes[GPGSTDOUT]);
-
-					}
-				}
-			}
-		}
 	}
 }
