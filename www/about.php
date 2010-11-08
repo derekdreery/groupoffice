@@ -12,6 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require('Group-Office.php');
+$GO_SECURITY->html_authenticate();
 ?>
 <div style="padding:10px;line-height:16px">
 	<div class="go-about-logo"></div>

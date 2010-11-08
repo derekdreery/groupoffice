@@ -169,7 +169,8 @@ Ext.extend(GO.users.UserDialog,GO.Window,{
 			{				
 				this.serverclientFieldSet = new Ext.form.FieldSet({
 					title: GO.serverclient.lang.mailboxes, 
-					autoHeight:true,
+					height:100,
+					autoScroll:true,
 					items:new GO.form.HtmlComponent({
 						html:'<p class="go-form-text">'+GO.serverclient.lang.createMailbox+':</p>'
 					})
