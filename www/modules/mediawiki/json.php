@@ -13,14 +13,10 @@
  */
 require('../../Group-Office.php');
 
-$GO_SECURITY->json_authenticate('timeregistration');
+$GO_SECURITY->json_authenticate('mediawiki');
 
 require_once($GO_MODULES->modules['mediawiki']['class_path'].'mediawiki.class.inc.php');
 $mw = new mediawiki();
-
-//define('MW_PATH','/var/www/mediawiki/');
-//require_once(MW_PATH.'includes/User.php');
-//$User = new User();
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
@@ -37,10 +33,6 @@ try{
 				if (empty($response['data']['external_url'])) $response['data']['external_url'] = '';
 			$response['success'] = true;
 
-			break;
-
-		case 'authenticate':
-			$response['success'] = $GO_MODULES->modules['mediawiki']['write_permission'];
 			break;
 
 /* {TASKSWITCH} */
