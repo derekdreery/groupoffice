@@ -121,7 +121,7 @@ try{
 			
 			
 			$note['user_name']=$GO_USERS->get_user_realname($note['user_id']);
-			
+	
 			$note['mtime']=Date::get_timestamp($note['mtime']);
 			$note['ctime']=Date::get_timestamp($note['ctime']);			
 			
@@ -149,7 +149,8 @@ try{
 				break;
 			}else
 			{
-					
+				$note['content']=String::text_to_html($note['content']);
+				
 				load_standard_info_panel_items($response, 4);
 				break;
 			}
