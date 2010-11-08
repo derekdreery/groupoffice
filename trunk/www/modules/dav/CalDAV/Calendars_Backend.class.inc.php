@@ -355,6 +355,8 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		go_debug("c:getCalendarObject($calendarId,$objectUri)");
 
+		$objectUri = File::strip_extension($objectUri);
+
 		/*
 		 * When a client adds or updates an event, the server must return the
 		 * data identical to what the client sent. That's why we store the
@@ -420,6 +422,8 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 	 */
 	public function createCalendarObject($calendarId, $objectUri, $calendarData) {
 
+		$objectUri = File::strip_extension($objectUri);
+
 		go_debug("createCalendarObject($calendarId,$objectUri,$calendarData)");
 
 		if(strpos($calendarData, 'VEVENT')!==false){
@@ -431,9 +435,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			go_debug($event);
 			
 			if (!$event)
-				return false;
-
-			
+				return false;		
 
 			$event['uuid']=$objectUri;
 			$event['calendar_id'] = $calendarId;
@@ -461,10 +463,6 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 			$task['mtime']=$dav_task['mtime']=time();
 
-			
-
-			
-
 			//store Tasklist data because we need to reply with the exact client
 			//data
 			$dav_task['id']=$this->tasks->add_task($task);
@@ -486,6 +484,8 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 	public function updateCalendarObject($calendarId, $objectUri, $calendarData) {
 
 		go_debug("updateCalendarObject($calendarId,$objectUri,$calendarData)");
+
+		$objectUri = File::strip_extension($objectUri);
 
 
 		if(strpos($calendarData,'VEVENT')!==false){
@@ -543,6 +543,8 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 	 */
 	public function deleteCalendarObject($calendarId, $objectUri) {
 		go_debug("deleteCalendarObject($calendarId,$objectUri)");
+
+		$objectUri = File::strip_extension($objectUri);
 
 		$goevent = $this->cal->get_event_by_uuid($objectUri);
 		if($goevent){
