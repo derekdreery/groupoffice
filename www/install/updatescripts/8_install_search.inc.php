@@ -1,3 +1,3 @@
 <?php
 global $GO_MODULES;
-$GO_MODULES->add_module('blacklist');
+$GO_MODULES->add_module('search');
