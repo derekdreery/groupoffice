@@ -32,35 +32,23 @@ GO.mediawiki.MainPanel = function(config){
 		]
 		});
 
-	if(GO.settings.has_admin_permission)
+	if(GO.settings.modules.mediawiki.write_permission)
 	{
-		Ext.Ajax.request({
-			url: GO.settings.modules.mediawiki.url + 'json.php',
-			params: {task:'authenticate'},
-			scope: this,
-			success: function(response,options) {
-				var responseParams = Ext.decode(response.responseText);
-				if (responseParams.success) {
-					config.tbar.addItem('-');
-					this.settingsButton = new Ext.Button({
-						iconCls: 'btn-settings',
-						text: GO.lang.administration,
-						cls: 'x-btn-text-icon',
-						handler: function(){
-							if(!this.settingsDialog)
-							{
-								this.settingsDialog = new GO.mediawiki.SettingsDialog();
-							}
-							this.settingsDialog.show();
-						},
-						scope: this
-					});
-					config.tbar.addItem(this.settingsButton);
-				} else {
-					Ext.Msg.alert(GO.lang['strError'], responseParams.feedback);
+		config.tbar.addItem('-');
+		this.settingsButton = new Ext.Button({
+			iconCls: 'btn-settings',
+			text: GO.lang.administration,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				if(!this.settingsDialog)
+				{
+					this.settingsDialog = new GO.mediawiki.SettingsDialog();
 				}
-			}
+				this.settingsDialog.show();
+			},
+			scope: this
 		});
+		config.tbar.addItem(this.settingsButton);
 	}
 
 	GO.mediawiki.iFrameComponent = new GO.panel.IFrameComponent({
