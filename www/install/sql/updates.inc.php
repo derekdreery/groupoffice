@@ -416,3 +416,5 @@ $updates[]= "ALTER TABLE  `go_reminders` ADD  `text` TEXT NOT NULL";
 $updates[]= "ALTER TABLE `go_users` ADD `contact_id` INT NOT NULL";
 
 $updates[]= "ALTER TABLE `go_search_cache` ADD `link_count` INT NOT NULL ";
+
+$updates[]='script:8_install_search.inc.php';
