@@ -443,39 +443,41 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
    			Ext.get('notification-area').update(data.notification_area);
    		}
    	}, this);   	
-   	
-   	var searchField = new Ext.form.TextField({
-  		name:'search_query',
-  		enableKeyEvents:true,
-  		emptyText:GO.lang.strSearch+'...',
-  		listeners:{
-  			scope:this,
-  			keypress:function(field, e){
-		  		if(e.getKey()==Ext.EventObject.ENTER){
-		  			//this.addSearchPanel(field.getValue());
-						if(!this.searchPanel){
-							this.searchPanel = new GO.grid.SearchPanel(
-								{
-									query: field.getValue(),
-									id:'go-search-panel'
-								}
-							);
-							this.tabPanel.add(this.searchPanel);
-						}else
-						{
-							this.searchPanel.query=field.getValue();
-							this.searchPanel.load();
+
+		if (GO.settings.modules.search && GO.settings.modules.search.read_permission) {
+			var searchField = new Ext.form.TextField({
+				name:'search_query',
+				enableKeyEvents:true,
+				emptyText:GO.lang.strSearch+'...',
+				listeners:{
+					scope:this,
+					keypress:function(field, e){
+						if(e.getKey()==Ext.EventObject.ENTER){
+							//this.addSearchPanel(field.getValue());
+							if(!this.searchPanel){
+								this.searchPanel = new GO.grid.SearchPanel(
+									{
+										query: field.getValue(),
+										id:'go-search-panel'
+									}
+								);
+								this.tabPanel.add(this.searchPanel);
+							}else
+							{
+								this.searchPanel.query=field.getValue();
+								this.searchPanel.load();
+							}
+							this.tabPanel.unhideTabStripItem(this.searchPanel);
+							this.searchPanel.show();
 						}
-						this.tabPanel.unhideTabStripItem(this.searchPanel);
-						this.searchPanel.show();
-		  		}
-	  		},
-	  		blur:function(field){
-	  			field.reset();
-	  		}
-  		},
-  		renderTo:"search_query"  		
-   	});
+					},
+					blur:function(field){
+						field.reset();
+					}
+				},
+				renderTo:"search_query"
+			});
+		}
 
 		/*for(var i=0;i<items.length;i++){
 			var menuItem = this.startMenu.items.item('go-start-menu-'+items[i].moduleName);
