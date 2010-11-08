@@ -757,6 +757,9 @@ try {
 						{
 							case 'REPLY':
 							case 'REQUEST':
+
+								go_debug($method);
+								go_debug('UID: '.$cal_event['invitation_uuid']);
 								
 								if($method == 'REPLY')
 								{

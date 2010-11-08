@@ -1763,6 +1763,7 @@ class calendar extends db {
 	
 	function get_event_by_uuid($uuid) {
 		$sql = "SELECT e.* FROM cal_events e  WHERE e.uuid='".$this->escape($uuid)."'";
+		go_debug($sql);
 		$this->query($sql);
 		return $this->next_record(DB_ASSOC);
 	}
