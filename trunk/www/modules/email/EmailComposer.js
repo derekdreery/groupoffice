@@ -419,7 +419,7 @@ GO.email.EmailComposer = function(config) {
 		name : 'body',
 		anchor : '100% '+anchor,
 		plugins : plugins,
-		style:'font:12px arial";',
+		style:'font:12px arial;',
 		defaultFont:'arial',
 		listeners:{
 			activate:function(){
