@@ -430,6 +430,9 @@ class addressbook extends db {
 			$sql .= "addressbook_id IN (".implode(",",$user_ab).") ";
 		}elseif(count($user_ab)==1) {
 			$sql .= "addressbook_id=".$user_ab[0]." ";
+		}else
+		{
+			return false;
 		}
 		$sql .= "AND email='".$this->escape($email)."' LIMIT 0,1";
 		
