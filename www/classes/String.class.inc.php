@@ -24,6 +24,14 @@
 
 class String {
 
+	public static function get_first_letters($phrase) {
+		$words = explode(' ',$phrase);
+		for ($i=0;$i<count($words);$i++) {
+			$words[$i] = $words[$i][0];
+		}
+		return implode('',$words);
+	}
+
 	public static function array_to_string($arr){
 		$s='';
 		foreach($arr as $key=>$value){
