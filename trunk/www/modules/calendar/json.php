@@ -30,6 +30,16 @@ session_write_close();
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
+
+function get_first_letters($phrase) {
+	$words = explode(' ',$phrase);
+	for ($i=0;$i<count($words);$i++) {
+		$words[$i] = $words[$i][0];
+	}
+	return implode('.',$words).'.';
+}
+
+
 try {
 
 	switch($task) {
@@ -437,7 +447,7 @@ try {
 				$cal->get_view_calendars($view_id);
 				while($record = $cal->next_record()) {
 					$calendars[] = $record['id'];
-					//$calendar_names[$record['id']]=htmlspecialchars($record['name'], ENT_QUOTES, 'UTF-8');
+					$calendar_names[$record['id']]=htmlspecialchars($record['name'], ENT_QUOTES, 'UTF-8');
 				}
 
 				if (count($calendars)==0) {
@@ -455,7 +465,7 @@ try {
 			$default_colors = array('F0AE67','FFCC00','FFFF00','CCFF00','66FF00',
 							'00FFCC','00CCFF','0066FF','95C5D3','6704FB',
 							'CC00FF','FF00CC','CC99FF','FB0404','FF6600',
-							'C43B3B','996600','66FF99','999999','FFFFFF');
+							'C43B3B','996600','66FF99','999999','00FFFF');
 
 			$default_colors_count = count($default_colors);
 
@@ -499,7 +509,48 @@ try {
 			$response['results']=array();
 			$response['count']=0;
 			$response['mtime']=0;
+
+			$uuid_array = array();
+			$event_nr = 0;
+
+		//	$calmerg = new calendar();
+
+			$cal_count = count($calendars);
+
 			foreach($events as $event) {
+
+				// merge events having several participants in merged view
+				if ($cal_count>1) {
+					unset($uuid);
+					$uuid= !empty($event['invitation_uuid']) ? $event['invitation_uuid'] : $event['uuid'];
+					if (array_key_exists($uuid,$uuid_array)) {
+						//unset($up_event);
+						//unset($participating_calendar);
+						$uuid_array[$uuid][] = $event_nr;
+						if (count($uuid_array[$uuid])==2) {
+							$merged_event_nr = $uuid_array[$uuid][0];
+							//$participating_calendar = $calmerg->get_calendar($response['results'][$merged_event_nr]['calendar_id']);
+							$response['results'][$merged_event_nr]['background'] = 'FFFFFF';
+							$response['results'][$merged_event_nr]['username'] = $lang['calendar']['non_selected'];
+							//$response['results'][$merged_event_nr]['calendar_name'] .= ''.$calendar_names[$response['results'][$merged_event_nr]['calendar_id']];
+							$response['results'][$merged_event_nr]['name'] .= ' --- '.$lang['calendar']['calendars'].': '.get_first_letters($calendar_names[$response['results'][$merged_event_nr]['calendar_id']]);
+						}
+						if (count($uuid_array[$uuid])>=2) {
+							$merged_event_nr = $uuid_array[$uuid][0];
+							//$participating_calendar = $calmerg->get_calendar($event['calendar_id']);
+							$response['results'][$merged_event_nr]['calendar_name'] .= ', '.$calendar_names[$event['calendar_id']];
+							$response['results'][$merged_event_nr]['name'] .= ', '.get_first_letters($calendar_names[$event['calendar_id']]);
+							//$response['results'][$merged_event_nr]['name'] .= ', '.$participating_calendar['name'];
+							if ($event['invitation_uuid']=='') {
+								$response['results'][$merged_event_nr]['username'] = $GO_USERS->get_user_realname($event['user_id']);
+							}
+							continue;
+						}
+					} else {
+						$uuid_array[$uuid] = array($event_nr);
+					}
+				}
+
 				if($event['all_day_event'] == '1') {
 					$date_format = $_SESSION['GO_SESSION']['date_format'];
 				}
@@ -590,6 +641,8 @@ try {
 				{
 					$response['mtime'] = $event['mtime'];
 				}
+
+				$event_nr++;
 			}
 
 			$response['count_events_only'] = $response['count'];

@@ -116,3 +116,5 @@ $lang['calendar']['rightClickToCopy']='Right click to copy link location';
 $lang['calendar']['invitation']='Invitation';
 $lang['calendar']['invitation_update']='Updated invitation';
 $lang['calendar']['cancellation']='Cancellation';
+
+$lang['calendar']['non_selected'] = 'in non-selected calendar';
