@@ -31,15 +31,6 @@ session_write_close();
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
 
-function get_first_letters($phrase) {
-	$words = explode(' ',$phrase);
-	for ($i=0;$i<count($words);$i++) {
-		$words[$i] = $words[$i][0];
-	}
-	return implode('.',$words).'.';
-}
-
-
 try {
 
 	switch($task) {
@@ -506,6 +497,7 @@ try {
 			}
 
 			$events = $cal->get_events_in_array($calendars,0,$start_time,$end_time);
+
 			$response['results']=array();
 			$response['count']=0;
 			$response['mtime']=0;
@@ -521,35 +513,10 @@ try {
 
 				// merge events having several participants in merged view
 				if ($cal_count>1) {
-					unset($uuid);
-					$uuid= !empty($event['invitation_uuid']) ? $event['invitation_uuid'] : $event['uuid'];
-					if (array_key_exists($uuid,$uuid_array)) {
-						//unset($up_event);
-						//unset($participating_calendar);
-						$uuid_array[$uuid][] = $event_nr;
-						if (count($uuid_array[$uuid])==2) {
-							$merged_event_nr = $uuid_array[$uuid][0];
-							//$participating_calendar = $calmerg->get_calendar($response['results'][$merged_event_nr]['calendar_id']);
-							$response['results'][$merged_event_nr]['background'] = 'FFFFFF';
-							$response['results'][$merged_event_nr]['username'] = $lang['calendar']['non_selected'];
-							//$response['results'][$merged_event_nr]['calendar_name'] .= ''.$calendar_names[$response['results'][$merged_event_nr]['calendar_id']];
-							$response['results'][$merged_event_nr]['name'] .= ' --- '.$lang['calendar']['calendars'].': '.get_first_letters($calendar_names[$response['results'][$merged_event_nr]['calendar_id']]);
-						}
-						if (count($uuid_array[$uuid])>=2) {
-							$merged_event_nr = $uuid_array[$uuid][0];
-							//$participating_calendar = $calmerg->get_calendar($event['calendar_id']);
-							$response['results'][$merged_event_nr]['calendar_name'] .= ', '.$calendar_names[$event['calendar_id']];
-							$response['results'][$merged_event_nr]['name'] .= ', '.get_first_letters($calendar_names[$event['calendar_id']]);
-							//$response['results'][$merged_event_nr]['name'] .= ', '.$participating_calendar['name'];
-							if ($event['invitation_uuid']=='') {
-								$response['results'][$merged_event_nr]['username'] = $GO_USERS->get_user_realname($event['user_id']);
-							}
-							continue;
-						}
-					} else {
-						$uuid_array[$uuid] = array($event_nr);
-					}
+					//require_once('merge_events.php');
+					if ($cal->merge_events(&$response['results'],&$event,&$uuid_array,$event_nr,$calendar_names)) continue;
 				}
+				$event_nr++;
 
 				if($event['all_day_event'] == '1') {
 					$date_format = $_SESSION['GO_SESSION']['date_format'];
@@ -641,8 +608,6 @@ try {
 				{
 					$response['mtime'] = $event['mtime'];
 				}
-
-				$event_nr++;
 			}
 
 			$response['count_events_only'] = $response['count'];

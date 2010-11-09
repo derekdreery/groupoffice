@@ -646,7 +646,7 @@ GO.calendar.MainPanel = function(config){
 				l+='&view_id='+this.view_id;
 			}else
 			{
-				l+='&calendar_id='+this.calendar_id;
+				l+='&calendars='+Ext.encode(this.calendars);
 			}
 			document.location=l;
 		},

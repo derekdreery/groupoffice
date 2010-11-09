@@ -3006,5 +3006,57 @@ class calendar extends db {
 			$response['results'][] = $record;
 		}
 	}
+	
+	/* Function that MUST be used within a loop over events, that merges events in
+	 * the output event array $chosen_events if the input events (each passed as
+	 * $current_event) have the same uuid (the uuids are maintained in $uuid_array).
+	 *
+	 * $event_nr is the current event index over $chosen_events, and is to be
+	 * incremented within the loop after calling this function.
+	 *
+	 * The function returns true to let the calling loop know to continue, specifically
+	 * when an merged event shouldn't be put into the output array. False otherwise.
+	 *
+	 * See modules/calendar/json.php task 'events' for example of using this
+	 */
+	public function merge_events(&$chosen_events,&$current_event,&$uuid_array,$event_nr,$calendar_names,$GO_USERS=null) {
+		global $lang;
+		if (empty($GO_USERS)) global $GO_USERS;
+		unset($uuid);
+		$uuid= !empty($current_event['invitation_uuid']) ? $current_event['invitation_uuid'] : $current_event['uuid'];
+		if (empty($uuid)) return false;
+		if (array_key_exists($uuid,$uuid_array)) {
+			//unset($up_event);
+			//unset($participating_calendar);
+			$uuid_array[$uuid][] = $event_nr;
+			if (count($uuid_array[$uuid])==2) {
+				$merged_event_nr = $uuid_array[$uuid][0];
+				//$participating_calendar = $calmerg->get_calendar($chosen_events[$merged_event_nr]['calendar_id']);
+				$chosen_events[$merged_event_nr]['background'] = 'FFFFFF';
+				$chosen_events[$merged_event_nr]['username'] = $lang['calendar']['non_selected'];
+				//$chosen_events[$merged_event_nr]['calendar_name'] .= ''.$calendar_names[$chosen_events[$merged_event_nr]['calendar_id']];
+				$name_exploded = explode('(',$chosen_events[$merged_event_nr]['name']);
+				if (count($name_exploded)>1) array_pop($name_exploded);
+				$chosen_events[$merged_event_nr]['name'] = implode('(',$name_exploded);
+				$chosen_events[$merged_event_nr]['name'] .= ' ('.String::get_first_letters($calendar_names[$chosen_events[$merged_event_nr]['calendar_id']]).')';
+			}
+			if (count($uuid_array[$uuid])>=2) {
+				$merged_event_nr = $uuid_array[$uuid][0];
+				//$participating_calendar = $calmerg->get_calendar($event['calendar_id']);
+				$chosen_events[$merged_event_nr]['calendar_name'] .= ', '.$calendar_names[$current_event['calendar_id']];
+				$chosen_events[$merged_event_nr]['name'] = substr($chosen_events[$merged_event_nr]['name'],0,-1);
+				$chosen_events[$merged_event_nr]['name'] .= ','.String::get_first_letters($calendar_names[$current_event['calendar_id']]).')';
+				//$chosen_events[$merged_event_nr]['name'] .= ', '.$participating_calendar['name'];
+				if ($current_event['invitation_uuid']=='') {
+					$chosen_events[$merged_event_nr]['username'] = $GO_USERS->get_user_realname($current_event['user_id']);
+					$chosen_events[$merged_event_nr]['num_participants']++;
+				}
+				return true;
+			}
+		} else {
+			$uuid_array[$uuid] = array($event_nr);
+		}
+		return false;
+	}
 
 }
