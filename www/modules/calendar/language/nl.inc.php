@@ -98,3 +98,5 @@ $lang['calendar']['rightClickToCopy']='Gebruik de rechtermuisknop om de koppelin
 $lang['calendar']['invitation']='Uitnodiging';
 $lang['calendar']['invitation_update']='Bijgewerkte uitnodiging';
 $lang['calendar']['cancellation']='Annulering';
+
+$lang['calendar']['non_selected'] = 'in niet-geselecteerde agenda';
