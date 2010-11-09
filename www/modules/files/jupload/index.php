@@ -33,7 +33,7 @@ function afterUpload(success){
             <param name="lang" value="<?php 
             echo isset($lang['jupload_lang']) ? $lang['jupload_lang'] : $GO_LANGUAGE->language;            
             ?>" />
-            <param name="lookAndFeel" value="system" />
+            <!-- <param name="lookAndFeel" value="system" /> -->
             <param name="postURL" value="upload.php?id=<?php echo $_REQUEST['id']; ?>" />
             <param name="afterUploadURL" value="javascript:afterUpload(%success%);" />
             <param name="showLogWindow" value="true" />
