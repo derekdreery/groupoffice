@@ -26,6 +26,7 @@ if(!isset($_SESSION['GO_SESSION']['files']['jupload_new_files']))
 
 $count=0;
 
+
 try{
 
 
@@ -66,9 +67,9 @@ while($file = array_shift($_FILES))
 				move_uploaded_file($file['tmp_name'], $filepath);
 
 				$complete_dir = $path.'/';				
-				if(!empty($_POST['relpathinfo'][$count]))
+				if(!empty($_POST['relpathinfo'.$count]))
 				{
-					$complete_dir .= str_replace('\\','/',$_POST['relpathinfo'][$count]).'/';
+					$complete_dir .= str_replace('\\','/',$_POST['relpathinfo'.$count]).'/';
 				}
 
 				File::mkdir($complete_dir);
@@ -115,9 +116,9 @@ while($file = array_shift($_FILES))
 		}else
 		{
 			$dir = $path.'/';				
-			if(!empty($_POST['relpathinfo'][$count]))
+			if(!empty($_POST['relpathinfo'.$count]))
 			{
-				$dir .= str_replace('\\','/',$_POST['relpathinfo'][$count]).'/';
+				$dir .= str_replace('\\','/',$_POST['relpathinfo'.$count]).'/';
 			}
 				
 			$filepath = $dir.$file['name'];
