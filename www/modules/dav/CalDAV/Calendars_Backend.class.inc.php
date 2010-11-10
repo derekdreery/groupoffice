@@ -369,7 +369,9 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		$this->cal->query($sql, 's', $objectUri);
 		$event = $this->cal->next_record();
 
-		$data = ($event['mtime']==$event['client_mtime']) ? $event['data'] : $this->exporter->export_event($event['id']);
+		go_debug($event);
+
+		$data = ($event['mtime']==$event['client_mtime'] && !empty($event['data'])) ? $event['data'] : $this->exporter->export_event($event['id']);
 
 		//$event = $this->cal->get_event_by_uuid($objectUri);
 		if ($event) {
@@ -391,9 +393,9 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			$this->tasks->query($sql, 's', $objectUri);
 			$task = $this->tasks->next_record();
 
-			//go_debug($task);
+			go_debug($task);
 
-			$data = ($task['mtime']==$task['client_mtime']) ? $task['data'] : $this->tasks_exporter->export_task($task);
+			$data = ($task['mtime']==$task['client_mtime'] && !empty($task['data'])) ? $task['data'] : $this->tasks_exporter->export_task($task);
 
 			//$task = $this->tasks->get_task_by_uuid($objectUri);
 			if ($task) {
