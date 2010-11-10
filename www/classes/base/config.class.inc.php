@@ -57,6 +57,12 @@ class GO_CONFIG {
 	var $debug = false;
 
 	/**
+	 * Just enable the debug log.
+	 * @var bool
+	 */
+	var $debug_log = false;
+
+	/**
 	 * Output errors in debug mode
 	 *
 	 * @var     bool
