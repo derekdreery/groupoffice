@@ -292,7 +292,7 @@ function go_debug($text, $config=false)
 	if(!$config)
 	$config=$GLOBALS['GO_CONFIG'];
 
-	if($config->debug)
+	if($config->debug || $config->debug_log)
 	{
 		if(!is_string($text))
 		{
