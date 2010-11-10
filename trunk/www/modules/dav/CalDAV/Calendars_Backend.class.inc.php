@@ -518,7 +518,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 			$task = $this->tasks->get_task_from_ical_string($calendarData);
 
-			go_debug($event);
+			go_debug($task);
 
 			if (!$task)
 				return false;
@@ -529,7 +529,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			//$task['tasklist_id'] = $id;
 
 			$task['mtime']=$dav_task['mtime']=time();
-			$dav_task['data']=$task;
+			$dav_task['data']=$calendarData;
 
 			$this->tasks->update_row('dav_tasks', 'id', $dav_task);
 			$this->tasks->update_task($task);
