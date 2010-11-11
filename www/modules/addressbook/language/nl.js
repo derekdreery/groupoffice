@@ -120,3 +120,6 @@ GO.addressbook.lang.id='ID';
 GO.addressbook.lang.exportPermission='Export rechten';
 GO.addressbook.lang.crn='KvK nr.';
 GO.addressbook.lang.iban='IBAN';
+
+GO.addressbook.lang.unknownEmail = 'Onbekend emailadres';
+GO.addressbook.lang.strUnknownEmail = 'Dit emailadres is onbekend. Wilt u dit toevoegen bij een nieuw contact, verwerken in een bestaand contact, of annuleren?';

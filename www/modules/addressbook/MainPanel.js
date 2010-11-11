@@ -581,6 +581,70 @@ GO.addressbook.searchSender = function(sender, name){
 			switch(GO.addressbook.searchSenderStore.getCount())
 			{
 				case 0:
+					var names = name.split(' ');
+					var params = {
+						email:sender,
+						first_name: names[0]
+					};
+
+					if(names[2])
+					{
+						params.last_name=names[2];
+						params.middle_name=names[1];
+					}else if(names[1])
+					{
+						params.middle_name='';
+						params.last_name=names[1];
+					}
+
+					if(!GO.addressbook.unknownEmailWin)
+					{
+						GO.addressbook.unknownEmailWin=new GO.Window({
+							title:GO.addressbook.lang.unknownEmail,
+							items:{
+								autoScroll:true,
+								items: [{
+									xtype: 'plainfield',
+									hideLabel: true,
+									value: GO.addressbook.lang.strUnknownEmail
+								}],
+								cls:'go-form-panel'
+							},
+							layout:'fit',
+							autoScroll:true,
+							closeAction:'hide',
+							closeable:true,
+							height:120,
+							width:400,
+							buttons:[{
+								text: GO.lang.cmdAdd,
+								handler: function(){
+									GO.addressbook.showContactDialog();
+									GO.addressbook.contactDialog.formPanel.form.setValues(params);
+									GO.addressbook.unknownEmailWin.hide();
+								},
+								scope: this
+							},{
+								text: GO.lang.cmdEdit,
+								handler: function(){
+									if(!GO.email.findContactDialog)
+										GO.email.findContactDialog = new GO.email.FindContactDialog();
+
+									GO.email.findContactDialog.show(params);
+									GO.addressbook.unknownEmailWin.hide();
+								},
+								scope: this
+							},{
+								text: GO.lang['cmdCancel'],
+								handler: function(){
+									GO.addressbook.unknownEmailWin.hide();
+								}
+							}],
+						scope: this
+						});
+					}
+					GO.addressbook.unknownEmailWin.show();
+					/*
 					if(confirm(GO.addressbook.lang.confirmCreate))
 					{
 						GO.addressbook.showContactDialog();
@@ -611,7 +675,7 @@ GO.addressbook.searchSender = function(sender, name){
 						}
 
 						GO.addressbook.contactDialog.formPanel.form.setValues(params);
-					}
+					}*/
 
 					break;
 				case 1:
