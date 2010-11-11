@@ -131,3 +131,6 @@ GO.addressbook.lang.id='ID';
 GO.addressbook.lang.exportPermission='Export permissions';
 GO.addressbook.lang.crn='Company Reg. No.';
 GO.addressbook.lang.iban='IBAN';
+
+GO.addressbook.lang.unknownEmail = 'Unknown email address';
+GO.addressbook.lang.strUnknownEmail = 'This email address is unknown. Do you wish to add it to a new contact, integrate it in an existing contact, or cancel?';
