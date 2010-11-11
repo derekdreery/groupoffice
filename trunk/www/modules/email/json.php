@@ -760,10 +760,10 @@ try {
 
 								go_debug($method);
 								go_debug('UID: '.$cal_event['uuid']);
+
+								$event_declined = $cal->is_event_declined($cal_event['uuid'], $account['email']);
 							
-								// reply to an invitation of an existing event
-								
-								
+								// reply to an invitation of an existing event							
 								if($event)
 								{
 									if(isset($cal_event['participants']))
@@ -781,37 +781,31 @@ try {
 										}
 
 										// check if event has to be updated
-										if($saved_participant && ($cal_event['mtime'] > $saved_participant['last_modified']))
+										if($saved_participant)
 										{
-											if($method == 'REQUEST')
-											{
-												$response['iCalendar']['invitation'] = array(
-													'account_id' => $account_id,
-													'mailbox' => $mailbox,
-													'message_uid' => $uid,
-													'uid' => $cal_event['uuid'],
-													'imap_id' => $attachment['imap_id'],
-													'encoding' => $attachment['encoding'],
-													'event_id' => $event['id'],
-													'email_sender' => $email_sender,
-													'email' => $account['email'],
-													'event_declined' => false
-												);
-											}else
-											{												
-												$response['iCalendar']['response'] = array(
-													'event_id' => $event['id'],
-													'email_sender' => $email_sender,
-													'email' => $account['email'],
-													'last_modified' => $cal_event['mtime'],
-													'status_id' => $status_id
-												);
-											}
+											$response['iCalendar']['invitation'] = array(
+												'uuid' => $cal_event['uuid'],
+												'imap_id' => $attachment['imap_id'],
+												'encoding' => $attachment['encoding'],
+												'event_id' => $event['id'],
+												'email_sender' => $email_sender,
+												'email' => $account['email'],
+												'event_declined' => $event_declined,
+												'last_modified' => $cal_event['mtime'],
+												'status_id' => $status_id,
+												'is_update'=>$method != 'REQUEST',
+												'is_invitation'=>$method == 'REQUEST',
+												'is_cancellation'=>false
+											);
 
-											$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_available'];
+
+											if($cal_event['mtime'] > $saved_participant['last_modified'])
+												$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_available'];
+											else
+												$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_old'];
 										}else
 										{
-											$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_old'];
+											//$response['iCalendar']['invitation']=array();
 										}
 										
 										$response['body'] = $cal->event_to_html($cal_event, false, true);
@@ -823,19 +817,18 @@ try {
 								{
 									if($method == 'REQUEST')
 									{										
-										// invitation to a new event
-										$event_declined = $cal->is_event_declined($cal_event['uuid'], $account['email']);
+										// invitation to a new event										
 										$response['iCalendar']['feedback'] = ($event_declined) ? $lang['email']['iCalendar_event_invitation_declined'] : $lang['email']['iCalendar_event_invitation'];
 										$response['iCalendar']['invitation'] = array(
-											'account_id' => $account_id,
-											'mailbox' => $mailbox,
-											'message_uid' => $uid,
-											'uid' => $cal_event['uuid'],
+											'uuid' => $cal_event['uuid'],
 											'imap_id' => $attachment['imap_id'],
 											'encoding' => $attachment['encoding'],
 											'email_sender' => $email_sender,
 											'email' => $account['email'],
-											'event_declined' => $event_declined
+											'event_declined' => $event_declined,
+											'is_update'=>$method != 'REQUEST',
+											'is_invitation'=>$method == 'REQUEST',
+											'is_cancellation'=>false
 										);
 									}else
 									{
@@ -851,9 +844,20 @@ try {
 								if($event)
 								{
 									$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_cancelled'];
-									$response['iCalendar']['cancellation'] = array(
-										'event_id' => $event['id']
-									);
+									
+									$response['iCalendar']['invitation'] = array(
+											'uuid' => $cal_event['uuid'],
+											'imap_id' => $attachment['imap_id'],
+											'encoding' => $attachment['encoding'],
+											'event_id' => $event['id'],
+											'email_sender' => $email_sender,
+											'email' => $account['email'],
+											'event_declined' => false,
+											'last_modified' => $cal_event['mtime'],											
+											'is_update'=>false,
+											'is_invitation'=>false,
+											'is_cancellation'=>true
+										);
 
 									$response['body'] = $cal->event_to_html($event, false, true);
 								}else

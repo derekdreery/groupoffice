@@ -1267,7 +1267,7 @@ try {
 			break;
 
 
-		case 'icalendar_process_response':
+		/*case 'icalendar_process_response':
 
 			$event_id = (isset($_REQUEST['event_id']) && $_REQUEST['event_id']) ? $_REQUEST['event_id'] : '';
 			$email_sender = (isset($_REQUEST['email_sender']) && $_REQUEST['email_sender']) ? $_REQUEST['email_sender'] : '';
@@ -1283,7 +1283,7 @@ try {
 
 			$response['success'] = true;
 
-			break;
+			break;*/
 
 	}
 }catch(Exception $e)
