@@ -363,10 +363,12 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 		 * client data in a separate table and if the mtime's match we use that.
 		 */
 
+		//select on calendar id is necessary because somehow thunderbird tries
+		//to get an event that's an invitation. It must not return the organizers event.
+		
 
-
-		$sql = "SELECT e.uuid,e.id,e.mtime, d.mtime AS client_mtime, d.data  FROM cal_events e LEFT JOIN dav_events d ON d.id=e.id WHERE e.uuid=?";
-		$this->cal->query($sql, 's', $objectUri);
+		$sql = "SELECT e.uuid,e.id,e.mtime, d.mtime AS client_mtime, d.data FROM cal_events e LEFT JOIN dav_events d ON d.id=e.id WHERE e.uuid=? AND e.calendar_id=?";
+		$this->cal->query($sql, 'si', array($objectUri,$calendarId));
 		$event = $this->cal->next_record();
 
 		go_debug($event);
@@ -389,8 +391,10 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			return $object;
 		} else {
 
-			$sql = "SELECT e.*, d.mtime AS client_mtime, d.data  FROM ta_tasks e LEFT JOIN dav_tasks d ON d.id=e.id WHERE e.uuid=?";
-			$this->tasks->query($sql, 's', $objectUri);
+			//$calendar = $this->cal->get_calendar($calendarId);
+
+			$sql = "SELECT e.*, d.mtime AS client_mtime, d.data  FROM ta_tasks e LEFT JOIN dav_tasks d ON d.id=e.id WHERE e.uuid=?";// AND e.tasklist_id=?";
+			$this->tasks->query($sql, 's', array($objectUri));//,$calendar['tasklist_id']));
 			$task = $this->tasks->next_record();
 
 			go_debug($task);
@@ -501,7 +505,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 			if (!$event)
 				return false;
 
-			$goevent = $this->cal->get_event_by_uuid($objectUri);
+			$goevent = $this->cal->get_event_by_uuid($objectUri, 0, $calendarId);
 
 			$event['id'] = $dav_event['id']= $goevent['id'];
 			$event['calendar_id'] = $calendarId;
@@ -548,7 +552,7 @@ class GO_CalDAV_Calendars_Backend extends Sabre_CalDAV_Backend_Abstract {
 
 		$objectUri = File::strip_extension($objectUri);
 
-		$goevent = $this->cal->get_event_by_uuid($objectUri);
+		$goevent = $this->cal->get_event_by_uuid($objectUri, 0, $calendarId);
 		if($goevent){
 			$this->cal->delete_event($goevent['id']);
 		}else{

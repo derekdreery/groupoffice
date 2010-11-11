@@ -1249,8 +1249,6 @@ try {
 					if($object['type'] == 'VEVENT')
 					{
 						$event = $cal->get_event_from_ical_object($object);
-						$event['invitation_uuid'] = (isset($object['UID']['value']) && $object['UID']['value'] != '') ? trim($object['UID']['value']) : '';
-
 						break;
 					}
 				}
