@@ -1179,16 +1179,19 @@ try {
 			require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
 			$cal = new calendar();
 
-			$status_id = (isset($_REQUEST['status_id']) && $_REQUEST['status_id']) ? $_REQUEST['status_id'] : 0;
+			$status_id = (isset($_REQUEST['status_id']) && $_REQUEST['status_id']) ? $_REQUEST['status_id'] : -1;
 			$email_sender = (isset($_REQUEST['email_sender']) && $_REQUEST['email_sender']) ? $_REQUEST['email_sender'] : '';
 			$email = (isset($_REQUEST['email']) && $_REQUEST['email']) ? $_REQUEST['email'] : '';
 
 			$create_event = true;
 			if($status_id == 2)
 			{
-				if(!$cal->is_event_declined($_REQUEST['uid'], $email))
+				go_debug($_REQUEST['uuid'].' : '.$email);
+				
+				if(!$cal->is_event_declined($_REQUEST['uuid'], $email))
 				{
-					$response['success'] = $cal->add_declined_event_uid(array('uid'=>$_REQUEST['uid'], 'email' => $email));
+
+					$response['success'] = $cal->add_declined_event_uid(array('uid'=>$_REQUEST['uuid'], 'email' => $email));
 				}else
 				{
 					$response['success'] = true;
@@ -1231,8 +1234,6 @@ try {
 				$response['success']=false;
 			}else
 			{
-				$status_name = $cal->get_participant_status_name($status_id);
-				
 				$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 				$data = $imap->get_message_part_decoded($_REQUEST['message_uid'], $_REQUEST['imap_id'], $_REQUEST['encoding']);
 				$imap->disconnect();
@@ -1256,52 +1257,61 @@ try {
 				{
 					throw new Exception($lang['common']['selectError']);
 				}
+			}
+				
+			if($create_event)
+			{
 
-				if($create_event)
+				if($cal->is_event_declined($_REQUEST['uuid'], $email))
 				{
+					$cal->delete_declined_event_uid($_REQUEST['uuid'], $email);
+				}
 
-					if($cal->is_event_declined($_REQUEST['uid'], $email))
+				if(!$calendar_id)
+				{
+					$calendar_id = $calendars[0]['id'];
+				}
+
+				$event['calendar_id'] = $calendar_id;
+				//$participants = ;
+
+				$organizer_email = false;
+				foreach($event['participants'] as $participant_email=>&$participant)
+				{
+					if($status_id > -1 && $participant_email == $email)
 					{
-						$cal->delete_declined_event_uid($_REQUEST['uid'], $email);
+						$participant['status']=$status_id;
+
+						//touch timestamp so invitations will update the original event
+						$event['mtime']=time();
 					}
 
-					if(!$calendar_id)
+					if(isset($participant['is_organizer']) && $participant['is_organizer'])
 					{
-						$calendar_id = $calendars[0]['id'];
+						$organizer_email = $participant_email;
+						if(!String::validate_email($organizer_email))
+							$organizer_email=$_POST['email_sender'];
+
 					}
+				}
 
-					$event['calendar_id'] = $calendar_id;
-					//$participants = ;
-
-					$organizer_email = false;
-					foreach($event['participants'] as $participant_email=>&$participant)
-					{
-						if($participant_email == $email)
-						{
-							$participant['status']=$status_id;
-						}
-
-						if(isset($participant['is_organizer']) && $participant['is_organizer'])
-						{
-							$organizer_email = $participant_email;
-							if(!String::validate_email($organizer_email))
-								$organizer_email=$_POST['email_sender'];
-
-						}
-					}
+				if($event_id)
+				{
+					$event['id'] = $old_event['id'];
 					
-					if($event_id)
-					{
-						$event['id'] = $old_event['id'];
-						$cal->update_event($event, false, $old_event);
-					}else
-					{
-						$event_id = $cal->add_event($event);
-					}
+					$cal->update_event($event, false, $old_event);
+				}else
+				{
+					$event_id = $cal->add_event($event);
+				}
 
-					if($event_id)
-					{
-						
+
+
+
+				if($event_id)
+				{
+					if($status_id>-1){
+						$status_name = $cal->get_participant_status_name($status_id);
 
 						if($organizer_email)
 						{
@@ -1320,66 +1330,77 @@ try {
 
 							$swift->set_body($cal->event_to_html($event, false, true));
 							$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; METHOD="REPLY"'));
-							
+
 							$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
 
 							if(!$swift->sendmail(true)) {
 								throw new Exception('Could not send invitation');
 							}
 						}
-
-						$response['success']=true;
 					}else
 					{
-						$response['success']=false;
+						$response['updated']=true;
 					}
+
+					$response['success']=true;
 				}else
 				{
-					$organizer_email = false;
-					$ids = array();
-					foreach($event['participants'] as $participant_email=>$participant)
-					{
-						if(isset($participant['is_organizer']) && $participant['is_organizer'])
-						{
-							$organizer_email = $participant_email;
-							break;
-						}
-					}
-
-					if(!String::validate_email($organizer_email))
-						$organizer_email=$_POST['email_sender'];
-
-					if(!isset($lang['calendar'])) {
-						global $GO_LANGUAGE;
-						$GO_LANGUAGE->require_language_file('calendar');
-					}
-
-					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-					$swift = new GoSwift
-					(
-						$organizer_email,
-						$lang['calendar']['invitation'].' '.$lang['calendar']['statuses'][$status_name].': '.$event['name']
-					);
-
-					//create ics attachment
-					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
-
-					$ical = new go_ical('2.0', false, 'REPLY');
-					$ical->dont_use_quoted_printable = true;
-
-					$ics_string = $ical->export_event($event_object, $email);
-
-					$swift->set_body($cal->event_to_html($event, false, true));
-					$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; METHOD="REPLY"'));
-
-					$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
-
-					if(!$swift->sendmail(true)) {
-						throw new Exception('Could not send invitation');
-					}
-
-					$response['success'] = true;
+					$response['success']=false;
 				}
+			}else
+			{
+
+				go_debug($event);
+				
+				$status_name = $cal->get_participant_status_name($status_id);
+
+				$organizer_email = false;
+				$ids = array();
+				foreach($event['participants'] as $participant_email=>$participant)
+				{
+					if(isset($participant['is_organizer']) && $participant['is_organizer'])
+					{
+						$organizer_email = $participant_email;
+						break;
+					}
+				}
+
+				if(!String::validate_email($organizer_email))
+					$organizer_email=$_POST['email_sender'];
+
+				if(!isset($lang['calendar'])) {
+					global $GO_LANGUAGE;
+					$GO_LANGUAGE->require_language_file('calendar');
+				}
+
+				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+				$swift = new GoSwift
+				(
+					$organizer_email,
+					$lang['calendar']['invitation'].' '.$lang['calendar']['statuses'][$status_name].': '.$event['name']
+				);
+
+				//create ics attachment
+				require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
+
+				$ical = new go_ical('2.0', false, 'REPLY');
+				$ical->dont_use_quoted_printable = true;
+
+				$object['DTSTAMP']=date($ical->datetime_format);
+
+				$ics_string = $ical->export_event($object, $email);
+
+				$swift->set_body($cal->event_to_html($event, false, true));
+				$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; METHOD="REPLY"'));
+
+				$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
+
+				if(!$swift->sendmail(true)) {
+					throw new Exception('Could not send invitation');
+				}
+
+				$response['success'] = true;
+
 			}
 
 		break;
