@@ -88,7 +88,6 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   `read_only` tinyint(1) NOT NULL DEFAULT '0',
   `category_id` int(11) NOT NULL,
   `sequence` int(11) NOT NULL DEFAULT '0',
-  `invitation_uuid` varchar(200) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `start_time` (`start_time`),
   KEY `end_time` (`end_time`),
@@ -97,7 +96,6 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   KEY `calendar_id` (`calendar_id`),
   KEY `busy` (`busy`),
   KEY `category_id` (`category_id`),
-  KEY `invitation_uuid` (`invitation_uuid`),
   KEY `uuid` (`uuid`),
   KEY `resource_event_id` (`resource_event_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
