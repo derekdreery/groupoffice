@@ -61,6 +61,7 @@ if(!defined('GO_NO_SESSION')){
 			die('Invalid auth_token supplied');
 		}else
 		{
+			$_SESSION['GO_SESSION']['auth_token']=String::random_password('a-z,1-9', '', 30);
 			//redirect to URL without session_id
 			header('Location: '.$_SERVER['PHP_SELF']);
 			exit();
