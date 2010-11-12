@@ -1180,14 +1180,14 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			{
 				this.ccFieldCheck.setChecked(GO.email.showCCfield == '1');
 				this.bccFieldCheck.setChecked(GO.email.showBCCfield == '1');
-				if(GO.email.showCCfield == '1')
+				/*if(GO.email.showCCfield == '1')
 				{
 					this.showCC(true);
 				}
 				if(GO.email.showBCCfield == '1')
 				{
 					this.showBCC(true);
-				}
+				}*/
 			}
 
 			if (config.uid || config.template_id || config.loadUrl) {
@@ -1318,8 +1318,17 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.startAutoSave();
 		this.bodyContentAtWindowOpen=this.editor.getValue();
 
-		//this.bccFieldCheck.setChecked(this.bccCombo.getValue()!='');
-		//this.ccFieldCheck.setChecked(this.ccCombo.getValue()!='');
+		var oldShowCC=GO.email.showCCfield;
+		var oldShowBCC=GO.email.showBCCfield;
+		this.ccFieldCheck.setChecked(GO.email.showCCfield == '1' || this.ccCombo.getValue()!='');
+		this.bccFieldCheck.setChecked(GO.email.showBCCfield == '1' || this.bccCombo.getValue()!='');
+	
+		//we only want to send these settings when a user manually enables the cc field.
+		//when this is done automatically by loading the data we don't want to save that.
+		delete this.sendParams['email_show_cc'];
+		delete this.sendParams['email_show_bcc'];
+		GO.email.showCCfield=oldShowCC;
+		GO.email.showBCCfield=oldShowBCC;
 
 		if(config.afterLoad)
 		{
@@ -1690,8 +1699,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				waitMsg = draft ? GO.lang.waitMsgSave : GO.email.lang.sending;
 			}
 			
-			this.sendParams['email_show_cc'] = GO.email.showCCfield;
-			this.sendParams['email_show_bcc'] = GO.email.showBCCfield;
+			
 
 			this.formPanel.form.submit({
 				url : this.sendURL,
@@ -1774,11 +1782,13 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 			case this.ccFieldCheck.id :
 				GO.email.showCCfield = (checked) ? '1' : '0';
+				this.sendParams['email_show_cc'] = GO.email.showCCfield;
 				this.showCC(checked);				
 				break;
 
 			case this.bccFieldCheck.id :
 				GO.email.showBCCfield = (checked) ? '1' : '0';
+				this.sendParams['email_show_bcc'] = GO.email.showBCCfield;
 				this.showBCC(checked);
 				break;
 		}
