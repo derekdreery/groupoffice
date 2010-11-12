@@ -135,7 +135,7 @@ class GO_AUTH extends db
 		}
 		$fs->mkdir_recursive($GO_CONFIG->tmpdir.$user['id'].'/');
 		//reinitialise available modules
-		$GO_MODULES->load_modules();
+		$GO_MODULES->load_modules($user);
 	}
 
 

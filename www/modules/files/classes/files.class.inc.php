@@ -651,9 +651,9 @@ class files extends db {
 	function import_file($full_path, &$parent_id=false, $comments='') {
 		global $GO_CONFIG;
 		
-		chmod($full_path, $GO_CONFIG->file_create_mode);
+		@chmod($full_path, $GO_CONFIG->file_create_mode);
 		if(!empty($GO_CONFIG->file_change_group))
-			chgrp($full_path, $GO_CONFIG->file_change_group);
+			@chgrp($full_path, $GO_CONFIG->file_change_group);
 
 		if(!$parent_id) {
 			$parent = $this->resolve_path(dirname($this->strip_server_path($full_path)),true);

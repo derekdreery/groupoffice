@@ -29,27 +29,29 @@ if(!isset($GO_MODULES->modules['dav']))
 require_once 'SabreDAV/lib/Sabre/autoload.php';
 require('autoload.php');
 
-/*require('GO_DAV_Auth_Backend.class.inc.php');
-require('GO_DAV_FS_Directory.class.inc.php');
-//require('GO_DAV_Root_Directory.class.inc.php');
-require('GO_DAV_Shared_Directory.class.inc.php');
-require('GO_DAV_FS_File.class.inc.php');
-require('GO_DAV_ObjectTree.class.inc.php');*/
-
 require_once ($GO_MODULES->modules['files']['class_path']."files.class.inc.php");
 $files = new files();
 
 //ini_set('memory_limit','100M');
 
-
+//$_SESSION['GO_SESSION']['username']='admin';
+//$GO_SECURITY->user_id=1;
+//
+//
 // Create the root node
 //$root = new GO_DAV_Root_Directory('/');
 
+// Authentication backend
+$authBackend = new GO_DAV_Auth_Backend();
+$userpass = $authBackend->getUserPass();
+
+
 $children = array();
-if($GO_SECURITY->logged_in()){
-	$children[] = new GO_DAV_FS_Directory('users/' . $_SESSION['GO_SESSION']['username']);
-	$children[] = new GO_DAV_Shared_Directory();
-}
+//if($GO_SECURITY->logged_in()){
+$children[] = new GO_DAV_FS_Directory('users/' . $userpass[0]);
+$children[] = new GO_DAV_Shared_Directory();
+
+//}
 
 $root = new Sabre_DAV_SimpleDirectory('root',$children);
 
@@ -72,8 +74,6 @@ $server->addPlugin($lockPlugin);
 $browser = new Sabre_DAV_Browser_Plugin();
 $server->addPlugin($browser);
 
-// Authentication backend
-$authBackend = new GO_DAV_Auth_Backend();
 $auth = new Sabre_DAV_Auth_Plugin($authBackend,'Group-Office WebDAV server');
 $server->addPlugin($auth);
 
