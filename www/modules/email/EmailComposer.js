@@ -306,6 +306,104 @@ GO.email.EmailComposer = function(config) {
 		}
 	}),
 
+/*	this.toCombo = new Ext.ux.form.SuperBoxSelect({
+		allowAddNewData:true,
+		fieldLabel : GO.email.lang.sendTo,
+		resizable: true,
+		store: new Ext.data.JsonStore({
+			url : BaseHref + 'json.php',
+			baseParams : {
+				task : "email"
+			},
+			fields : ['full_email','info'],
+			root : 'persons'
+		}),
+		mode: 'remote',
+		valueField : 'full_email',
+		displayField : 'info',
+		displayFieldTpl: '{full_email}',
+		forceSelection : true,
+		valueDelimiter:',',
+		anchor:'100%',
+		queryDelay: 0,
+		triggerAction: 'all',
+		name:'to[]',
+		listeners: {
+			removeitem : function(){
+				this.setEditorHeight();
+			},
+			additem : function(){
+				this.setEditorHeight();
+			},
+			scope:this
+		}
+	}),
+	this.ccCombo = new Ext.ux.form.SuperBoxSelect({
+		allowAddNewData:true,
+		fieldLabel : GO.email.lang.cc,
+		resizable: true,
+		store: new Ext.data.JsonStore({
+			url : BaseHref + 'json.php',
+			baseParams : {
+				task : "email"
+			},
+			fields : ['full_email','info'],
+			root : 'persons'
+		}),
+		mode: 'remote',
+		valueField : 'full_email',
+		displayField : 'info',
+		displayFieldTpl: '{full_email}',
+		forceSelection : true,
+		valueDelimiter:',',
+		anchor:'100%',
+		queryDelay: 0,
+		triggerAction: 'all',
+		name:'cc[]',
+		listeners: {
+			removeitem : function(){
+				this.setEditorHeight();
+			},
+			additem : function(){
+				this.setEditorHeight();
+			},
+			scope:this
+		}
+	}),
+	this.bccCombo = new Ext.ux.form.SuperBoxSelect({
+		allowAddNewData:true,
+		fieldLabel : GO.email.lang.bcc,
+		resizable: true,
+		store: new Ext.data.JsonStore({
+			url : BaseHref + 'json.php',
+			baseParams : {
+				task : "email"
+			},
+			fields : ['full_email','info'],
+			root : 'persons'
+		}),
+		mode: 'remote',
+		valueField : 'full_email',
+		displayField : 'info',
+		displayFieldTpl: '{full_email}',
+		forceSelection : true,
+		valueDelimiter:',',
+		anchor:'100%',
+		queryDelay: 0,
+		triggerAction: 'all',
+		name:'bcc[]',
+		listeners: {
+			removeitem : function(){
+				this.setEditorHeight();
+			},
+			additem : function(){
+				this.setEditorHeight();
+			},
+			scope:this
+		}
+	}),*/
+
+
 	this.toCombo = new GO.form.ComboBoxMulti({
 		sep : ',',
 		fieldLabel : GO.email.lang.sendTo,
