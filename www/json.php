@@ -380,7 +380,7 @@ try {
 							$addresses[]=htmlspecialchars($rfc_email, ENT_COMPAT, 'UTF-8');
 							$results[]=array(
 											'info'=>htmlspecialchars($rfc_email.' ('.sprintf($lang['addressbook']['contactFromAddressbook'], $ab->f('addressbook_name')).')', ENT_COMPAT, 'UTF-8'),
-											'full_email'=>$rfc_email,
+											'full_email'=>htmlspecialchars($rfc_email, ENT_COMPAT, 'UTF-8'),
 											'name'=>$name,
 											'email'=>$ab->f('email3')
 							);
