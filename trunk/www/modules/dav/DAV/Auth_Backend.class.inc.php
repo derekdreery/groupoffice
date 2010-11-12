@@ -55,9 +55,9 @@ class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
 
 		global $GO_SECURITY;
 
-		if($GO_SECURITY->logged_in()){
-			return true;
-		}
+		if($GO_SECURITY->user_id>0)
+				return true;
+		
 		$this->realm=$realm;
 
 		$cred = $this->getUserPass();

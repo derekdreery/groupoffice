@@ -21,7 +21,6 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
 	public function __construct($path){
 		global $GO_CONFIG;
 
-
 		$this->relpath=$path;
 		$path = $GO_CONFIG->file_storage_path.$path;
 
@@ -143,9 +142,7 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
      * @return mixed
      */
     public function getETag() {
-
-        return null;
-
+        return '"' . md5_file($this->path) . '"';
     }
 
     /**
@@ -157,7 +154,9 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
      */
     public function getContentType() {
 
-        return null;
+		return File::get_mime($this->path);
+
+        //return null;
 
     }
 

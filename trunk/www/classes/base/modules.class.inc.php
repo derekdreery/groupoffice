@@ -191,9 +191,17 @@ class GO_MODULES extends db {
 	 *
 	 * @return void
 	 */
-	function load_modules()
+	function load_modules($user=false)
 	{
 		global $GO_SECURITY, $GO_LANGUAGE, $lang_modules;
+
+		if($user){
+			if($cache = unserialize($user['cache'])){
+				if($cache['modules_mtime']==$user['mtime'])
+					return $_SESSION['GO_SESSION']['modules']=$this->modules= $cache['modules'];
+
+			}
+		}
 		
 		$this->modules=array();
 		$_SESSION['GO_SESSION']['modules']=array();
@@ -228,6 +236,17 @@ class GO_MODULES extends db {
 				
 		}
 		$this->modules=$_SESSION['GO_SESSION']['modules'];
+
+		if(isset($cache))
+		{
+			$cache['modules_mtime']=$user['mtime'];
+			$cache['modules']=$this->modules;
+
+			$r['id']=$user['id'];
+			$r['cache']=serialize($cache);
+
+			$this->update_row('go_users','id', $r);
+		}
 	}
 
 
