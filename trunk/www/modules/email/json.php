@@ -1374,9 +1374,19 @@ try {
 }
 
 
+/*
+ *
+ * later for superboxselect implementation
+ * 
+if(isset($response['data']['to']))
+	$response['data']['to[]']=htmlspecialchars($response['data']['to'], ENT_COMPAT, 'UTF-8');
 
+if(isset($response['data']['cc']))
+	$response['data']['cc[]']=htmlspecialchars($response['data']['cc'], ENT_COMPAT, 'UTF-8');
 
-
+if(isset($response['data']['bcc']))
+	$response['data']['bcc[]']=htmlspecialchars($response['data']['bcc'], ENT_COMPAT, 'UTF-8');
+*/
 
 //var_dump($response);
 echo json_encode($response);
