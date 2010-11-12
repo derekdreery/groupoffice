@@ -1,3 +1,10 @@
+2010/11/12 3.5.40
+- GOTA bug in terminal server environment
+- Minor bug in ActiveSync fixed.
+- Upgraded jupload applet to v5 and fixed multiple folder upload
+- Authenticate on about.php
+- Autoscrolling on mailbox domains in add user dialog.
+
 2010/11/08 3.5.39
 - Faster moves in file manager
 - Fixed hangs in gnupg module
