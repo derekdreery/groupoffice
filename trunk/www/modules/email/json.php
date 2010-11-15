@@ -17,6 +17,14 @@ require('../../Group-Office.php');
 
 $GO_SECURITY->json_authenticate('email');
 
+
+if(!isset($_REQUEST['task']))
+{
+	$GO_CONFIG->log=true;
+	go_log(LOG_DEBUG, "No task param: ".var_export($_REQUEST, true));
+}
+
+
 if(!isset($_POST['passphrase'])){
 	//close writing to session so other concurrent requests won't be locked out.
 	session_write_close();
