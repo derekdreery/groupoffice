@@ -21,6 +21,10 @@
 - Reminders can be snoozed more easily.
 - Add new link directly from "New" menu.
 
+Files
+- New secure download link feature. Send a download link to someone by mail so
+  the receiver can download this file securely.
+
 
 Calendar and Tasks
 - Better support for calendar invitations from other clients such as Outlook and
