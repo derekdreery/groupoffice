@@ -21,10 +21,8 @@ if(isset($_REQUEST['groupoffice']))
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('email');
 
-if($_REQUEST['task']!='move'){
-	//close writing to session so other concurrent requests won't be locked out.
-	session_write_close();
-}
+//close writing to session so other concurrent requests won't be locked out.
+session_write_close();
 
 require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
 require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
@@ -70,11 +68,9 @@ try {
 		case 'move':
 
 			$start_time = time();
-
-			if(isset($_POST['messages'])) {
-				$_SESSION['GO_SESSION']['email_move_messages'] = json_decode($_POST['messages']);
-				$_SESSION['GO_SESSION']['email_move_messages_count']=count($_SESSION['GO_SESSION']['email_move_messages']);
-			}
+			
+			$messages= json_decode($_POST['messages'], true);
+			$total = $_POST['total'];
 
 			//move to another imap account
 			$imap2 = new cached_imap();
@@ -89,7 +85,7 @@ try {
 			$imap2->open($to_account, $_POST['to_mailbox']);
 
 			$delete_messages =array();
-			while($uid=array_shift($_SESSION['GO_SESSION']['email_move_messages'])) {
+			while($uid=array_shift($messages)) {
 				$source = $imap->get_message_part($uid);
 
 				$header = $imap->get_message_header($uid);
@@ -111,14 +107,15 @@ try {
 
 				$delete_messages[]=$uid;
 
-				$left = count($_SESSION['GO_SESSION']['email_move_messages']);
+				$left = count($messages);
 
-				if($left && $start_time+10<time()) {
+				if($left && $start_time-5<time()) {
 
-					$done = $_SESSION['GO_SESSION']['email_move_messages_count']-$left;
+					$done = $total-$left;
 
-					$response['progress']=number_format($done/$_SESSION['GO_SESSION']['email_move_messages_count'],2);
-					$response['continue']=true;
+					$response['messages']=$messages;
+					$response['progress']=number_format($done/$total,2);
+				
 					break;
 				}
 			}

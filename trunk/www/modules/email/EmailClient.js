@@ -564,11 +564,14 @@ GO.email.EmailClient = function(config){
 						timeout:300000
 					});
 
-					var moveRequest = function(continued){
+					var moveRequest = function(newMessages){
 
-						if(continued)
+						if(!newMessages)
 						{
-							delete params.messages;
+							params.total=messages.length;
+						}else
+						{
+							params.messages=Ext.encode(newMessages);
 						}
 
 						conn.request({
@@ -580,10 +583,10 @@ GO.email.EmailClient = function(config){
 								{
 									alert(responseParams.feedback);
 									Ext.MessageBox.hide();
-								}else if(responseParams['continue'])
+								}else if(responseParams.messages && responseParams.messages.length>0)
 								{
 									Ext.MessageBox.updateProgress(responseParams.progress, (responseParams.progress*100)+'%', '');
-									moveRequest.call(this, [true]);
+									moveRequest.call(this, responseParams.messages);
 								}else
 								{
 									this.messagesGrid.store.reload({

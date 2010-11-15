@@ -34,6 +34,9 @@ Calendar and Tasks
 - Automatic holidays to calendar.
 
 E-mail
+- When composing an e-mail the user is no longer asked to select a template each
+  time. It starts with the user selected default template and can be changed in
+  the composer if necessary.
 - Remind collapsed/expanded folders and accounts in the tree.
 - Easier adding of attachments and inline images.
 - Remind enabled CC/BCC fields.
@@ -43,6 +46,8 @@ E-mail
   address to an existing contact. There's also an option to disable adding
   unknown recipients.
 - New e-mail portlet that can display e-mail folders in different tabs.
+- Linking multiple messages is shown in a progress bar and handled in multiple
+  requests if this operation takes a long time.
 
 Billing
 - The scheduled call for quotes skips weekend and holidays.
