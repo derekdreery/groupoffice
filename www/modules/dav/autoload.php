@@ -14,12 +14,17 @@
 
 function GO_Sabre_autoload($className) {
 
+	global $GO_MODULES;
+
     if(strpos($className,'GO_')===0) {
 
 		$className = substr($className,3);
 		$className = String::replace_once('_', '/', $className);
 
-        include dirname(__FILE__) . '/' . $className . '.class.inc.php';
+		if(strpos($className, 'CalDAV')!==false)
+			include $GO_MODULES->modules['caldav']['path'].str_replace('CalDAV/','', $className).'.class.inc.php';
+		else
+			include $GO_MODULES->modules['dav']['path'] . $className . '.class.inc.php';
 
     }
 }
