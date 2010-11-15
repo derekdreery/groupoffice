@@ -15,6 +15,14 @@
 
 require('../../Group-Office.php');
 
+
+if(!isset($_REQUEST['task']))
+{
+	$GO_CONFIG->log=true;
+	go_log(LOG_DEBUG, "No task param: ".var_export($_REQUEST, true));
+}
+
+
 $GO_SECURITY->json_authenticate('email');
 
 require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
