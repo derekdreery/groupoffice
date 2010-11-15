@@ -584,6 +584,9 @@ class files extends db {
 
 	function move_folder($sourcefolder, $destfolder, $log=true) {
 		if($sourcefolder['parent_id']==$destfolder['id']) {
+
+			$this->update_folder($sourcefolder);
+
 			return $sourcefolder['id'];
 		}
 		$existing_folder = $this->folder_exists($destfolder['id'], $sourcefolder['name']);
@@ -1281,8 +1284,9 @@ class files extends db {
 		if(substr($path,-1)=='/') {
 			$path=substr($path,0,-1);
 		}
-		$parts = explode('/', $path);
+		$parts = explode('/', $path);		
 		$first_part = array_shift($parts);
+		
 
 		if(count($parts)) {
 			$folder = $this->folder_exists($folder_id, $first_part);

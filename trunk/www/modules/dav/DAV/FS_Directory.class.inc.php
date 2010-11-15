@@ -31,6 +31,10 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		global $files;
 		if(!isset($this->folder)){
 			$this->folder=$files->resolve_path($this->relpath);
+
+			if(!$this->folder){
+				throw new Sabre_DAV_Exception_FileNotFound('File not found: '.$this->relpath);
+			}
 		}
 		return $this->folder;
 	}
@@ -98,7 +102,10 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		$destFolder = $files->resolve_path($files->strip_server_path(dirname($newPath)));
 
-		$files->move_folder($this->getFolder(), $destFolder);
+		$sourceFolder = $this->getFolder();
+		$sourceFolder['name']=utf8_basename($newPath);
+
+		$files->move_folder($sourceFolder, $destFolder);
 
 		$this->path = $newPath;
 		$this->relpath = $files->strip_server_path($this->path);
@@ -117,9 +124,10 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		if(!$files->has_write_permission($GO_SECURITY->user_id, $this->getFolder()))
 			throw new Sabre_DAV_Exception_Forbidden();
 
-        $newPath = $this->path . '/' . $name;
-        mkdir($newPath);
+        //$newPath = $this->path . '/' . $name;
+        //mkdir($newPath);
 
+		$files->mkdir($this->getFolder(), $name);
     }
 
     /**
@@ -188,7 +196,12 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		$f = $this->getFolder();
 
-		$files->check_folder_sync($this->getFolder(), $this->relpath);
+		if(!$f)
+		{
+			go_debug($this->relpath);
+		}
+
+		$files->check_folder_sync($f, $this->relpath);
 		$files->get_folders($f['id'],'name','ASC',0,0,true);
 
 		while($folder = $files->next_record()) {
@@ -217,8 +230,10 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 			throw new Sabre_DAV_Exception_Forbidden();
 
 
-        foreach($this->getChildren() as $child) $child->delete();
-        rmdir($this->path);
+        //foreach($this->getChildren() as $child) $child->delete();
+       // rmdir($this->path);
+
+		$files->delete_folder($this->getFolder());
 
     }
 
