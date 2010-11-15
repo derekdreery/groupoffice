@@ -149,7 +149,7 @@ try{
 				break;
 			}else
 			{
-				$note['content']=String::text_to_html($note['content']);
+				$response['data']['content']=String::text_to_html($note['content']);
 				
 				load_standard_info_panel_items($response, 4);
 				break;
