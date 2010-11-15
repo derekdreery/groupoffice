@@ -131,7 +131,7 @@ function in_multiselectgrid_selection($target,$key) {
  * @global <type> $GO_CONFIG
  * @param <type> $module The name of the module
  * @param <type> $function the name of the function GO.<module>.<function> must be created
- * @param <type> $params Associative array of parameters
+ * @param <type> $params Array of parameters. The javascript function will be called like foo(arr[0],arr[1],arr[2], etc){}
  * @param <type> $loadevent Call this function before Group-Office renders with ready or after with render
  * @return <type> An URL that can call a Group-Office function directly
  */
