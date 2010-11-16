@@ -20,6 +20,8 @@
 - Linked items show a link icon if they have links attached too.
 - Reminders can be snoozed more easily.
 - Add new link directly from "New" menu.
+- New Wordpress bridge module.
+- New Mediawiki bridge module.
 
 Files
 - New secure download link feature. Send a download link to someone by mail so
