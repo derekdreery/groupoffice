@@ -215,14 +215,14 @@ class go_ical extends calendar
 		{
 			if($cal->f('is_organizer'))
 			{
-				$lines = array_merge($lines, array('ORGANIZER;CN='.$cal->f('name').':mailto:'.$cal->f('email')));
+				$lines = array_merge($lines, array('ORGANIZER;CN="'.$cal->f('name').'":mailto:'.$cal->f('email')));
 			}
 			
 			if(!$attendee_email || ( $cal->f('email') == $attendee_email))
 			{
 				$status = $cal2->get_participant_status_name($cal->f('status'));
 				$rsvp = ($cal->f('status')) ? 'FALSE' : 'TRUE';
-				$lines = array_merge($lines, array('ATTENDEE;CUTYPE=INDIVIDUAL;ROLE='.$cal->f('role').';PARTSTAT='.$status.';RSVP='.$rsvp.';CN='.$cal->f('name').';LANGUAGE=en:MAILTO:'.$cal->f('email')));
+				$lines = array_merge($lines, array('ATTENDEE;CUTYPE=INDIVIDUAL;ROLE='.$cal->f('role').';PARTSTAT='.$status.';RSVP='.$rsvp.';CN="'.$cal->f('name').'";LANGUAGE=en:MAILTO:'.$cal->f('email')));
 			}
 		}
 

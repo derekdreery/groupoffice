@@ -1751,13 +1751,15 @@ class calendar extends db {
 	function get_event_by_uuid($uuid, $user_id=0, $calendar_id=0) {		
 
 		if($user_id>0){
-			$sql = "SELECT e.*, c.acl_id FROM cal_events e LEFT JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.uuid='".$this->escape($uuid)."' AND c.user_id=".intval($user_id);
+			$sql = "SELECT e.*, c.acl_id FROM cal_events e ".
+				"LEFT JOIN cal_calendars c ON c.id=e.calendar_id ".
+				"WHERE e.uuid='".$this->escape($uuid)."' AND c.user_id=".intval($user_id);
 		}else
 		{
-			$sql = "SELECT e.* FROM cal_events e  WHERE e.uuid='".$this->escape($uuid)."' AND e.calendar_id=".intval($calendar_id);
+			$sql = "SELECT e.* FROM cal_events e ".
+				"WHERE e.uuid='".$this->escape($uuid)."' AND e.calendar_id=".intval($calendar_id);
 		}
 
-		go_debug($sql);
 		$this->query($sql);
 		return $this->next_record(DB_ASSOC);
 	}

@@ -1227,8 +1227,10 @@ try {
 
 			if($create_event && (count($calendars) > 1))
 			{
+				$response['status_id']=$status_id;
 				$response['calendars'] = $calendars;
 				$response['success']=false;
+				break;
 			}else
 			{
 				$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
@@ -1271,6 +1273,11 @@ try {
 
 				$event['calendar_id'] = $calendar_id;
 				//$participants = ;
+
+
+				go_debug($email);
+				go_debug($status_id);
+				go_debug($event['participants']);
 
 				$organizer_email = false;
 				foreach($event['participants'] as $participant_email=>&$participant)
@@ -1346,8 +1353,6 @@ try {
 				}
 			}else
 			{
-
-				go_debug($event);
 				
 				$status_name = $cal->get_participant_status_name($status_id);
 
