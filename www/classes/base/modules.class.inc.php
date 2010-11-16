@@ -385,7 +385,9 @@ class GO_MODULES extends db {
 			unlink($GO_CONFIG->file_storage_path.'cache/listeners.txt');
 
 		//clear cache for modules
+		$this->halt_on_error='no';
 		$this->query("update go_users set cache=''");
+		$this->halt_on_error='yes';
 
 		return true;
 	}
