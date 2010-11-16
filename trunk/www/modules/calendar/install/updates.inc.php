@@ -111,3 +111,5 @@ $updates[]="ALTER TABLE `cal_events` ADD INDEX ( `invitation_uuid` )";
 $updates[]="ALTER TABLE `cal_events` DROP `event_id`";
 $updates[]="ALTER TABLE `cal_events` CHANGE `participants_event_id` `resource_event_id` INT( 11 ) NOT NULL ";
 $updates[]="ALTER TABLE `cal_events` DROP `invitation_uuid`";
+
+$updates[]="ALTER TABLE `cal_events` CHANGE `uuid` `uuid` VARCHAR( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
