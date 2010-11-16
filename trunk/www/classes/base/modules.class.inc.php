@@ -382,7 +382,10 @@ class GO_MODULES extends db {
 		 * Remove listeners.txt. See classes/base/events.class.inc.php for more info
 		 */
 		if(file_exists($GO_CONFIG->file_storage_path.'cache/listeners.txt'))
-			unlink($GO_CONFIG->file_storage_path.'cache/listeners.txt');		
+			unlink($GO_CONFIG->file_storage_path.'cache/listeners.txt');
+
+		//clear cache for modules
+		$this->query("update go_users set cache=''");
 
 		return true;
 	}
@@ -445,6 +448,10 @@ class GO_MODULES extends db {
 			 */
 			if(file_exists($GO_CONFIG->file_storage_path.'cache/listeners.txt'))
 				unlink($GO_CONFIG->file_storage_path.'cache/listeners.txt');
+
+
+			//clear cache for modules
+			$this->query("update go_users set cache=''");
 			
 			return true;
 		}
