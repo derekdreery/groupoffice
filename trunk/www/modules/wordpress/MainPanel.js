@@ -13,7 +13,7 @@ var wpConfig = {
 };
 
 var tbarItems = [{
-			iconCls:'go-module-icon-wordpress',
+			iconCls:'btn-settings',
 			text:GO.wordpress.lang.wordpressAdmin,
 			handler:function(){
 				wpIframe.el.dom.src=GO.settings.modules.wordpress.url+'redirect.php';
