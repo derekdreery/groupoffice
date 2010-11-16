@@ -104,22 +104,22 @@ GO.wordpress.addPublishComponents = function(window, formPanel, link_type, id_na
 	});
 }
 
-GO.moduleManager.onModuleReady('projects',function(){
+GO.mainLayout.onReady(function(){
+	if(GO.projects && GO.wordpress.mapping["5"]){
+		Ext.override(GO.projects.ProjectDialog,{
+			initComponent : GO.projects.ProjectDialog.prototype.initComponent.createInterceptor(function(){
 
-	Ext.override(GO.projects.ProjectDialog,{
-		initComponent : GO.projects.ProjectDialog.prototype.initComponent.createInterceptor(function(){
-
-			GO.wordpress.addPublishComponents(this, this.propertiesPanel.items.item('leftCol'), 5, 'project_id');
-		})
-	});
-});
-
-GO.moduleManager.onModuleReady('addressbook',function(){
-
-	Ext.override(GO.addressbook.ContactDialog,{
-		initComponent : GO.addressbook.ContactDialog.prototype.initComponent.createInterceptor(function(){
-			//this.tabPanel.add(new GO.wordpress.PublishPanel());
-			GO.wordpress.addPublishComponents(this, this.personalPanel.items.item('leftCol'), 2, 'contact_id');
+				GO.wordpress.addPublishComponents(this, this.propertiesPanel.items.item('leftCol'), 5, 'project_id');
 			})
-	});
+		});
+	}
+
+	if(GO.addressbook && GO.wordpress.mapping["2"]){
+		Ext.override(GO.addressbook.ContactDialog,{
+			initComponent : GO.addressbook.ContactDialog.prototype.initComponent.createInterceptor(function(){
+				//this.tabPanel.add(new GO.wordpress.PublishPanel());
+				GO.wordpress.addPublishComponents(this, this.personalPanel.items.item('leftCol'), 2, 'contact_id');
+				})
+		});
+	}
 });

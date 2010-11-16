@@ -28,21 +28,23 @@
  */
 class wordpress extends db{
 
-	var $mapping = array();
+	var $mapping;
 
-	public function __construct(){
+	public function get_mapping(){
+		if(!isset($this->mapping)){
+			global $GO_CONFIG;
 
-		parent::__construct();
+			$config_dir = dirname($GO_CONFIG->get_config_file());
+			$wp_config = $config_dir.'/wp_config.inc.php';
 
-		global $GO_CONFIG;
-
-		$config_dir = dirname($GO_CONFIG->get_config_file());
-		$wp_config = $config_dir.'/wp_config.inc.php';
-
-		if(file_exists($wp_config)){
-			require($wp_config);
-			$this->mapping = $mapping;
+			$this->mapping=array();
+			if(file_exists($wp_config)){
+				require($wp_config);
+				if(isset($mapping))
+					$this->mapping = $mapping;
+			}
 		}
+		return $this->mapping;
 	}
 
 	public function __on_load_listeners($events){
@@ -64,6 +66,9 @@ class wordpress extends db{
 	}
 
 	public function save($values, $link_type){
+
+		$this->get_mapping();
+
 		if(isset($this->mapping[$link_type])){
 
 			global $GO_MODULES;
