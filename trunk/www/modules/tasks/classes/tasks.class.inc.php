@@ -1410,7 +1410,7 @@ class tasks extends db
 
 
 	function get_linked_tasks($user_id, $link_id, $link_type){
-		$sql = "SELECT t.*, tl.name AS tasklist_name FROM ta_tasks t ".
+		$sql = "SELECT DISTINCT t.*, tl.name AS tasklist_name FROM ta_tasks t ".
 			"INNER JOIN ta_lists tl ON tl.id=t.tasklist_id ".
 			"INNER JOIN go_links_$link_type l ON l.link_id=t.id AND l.link_type=12 ".
 			"WHERE l.id=? AND t.completion_time=0 ORDER BY due_time ASC";
