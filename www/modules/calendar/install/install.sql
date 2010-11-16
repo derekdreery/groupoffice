@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `cal_calendars` (
 DROP TABLE IF EXISTS `cal_events`;
 CREATE TABLE IF NOT EXISTS `cal_events` (
   `id` int(11) NOT NULL DEFAULT '0',
-  `uuid` varchar(100) NOT NULL,
+  `uuid` varchar(200) NOT NULL,
   `calendar_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `start_time` int(11) NOT NULL DEFAULT '0',
