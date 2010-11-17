@@ -59,8 +59,9 @@ GO.data.JsonStore = function(config) {
 
 			if(response.status==0)
 			{
-				GO.errorDialog.show(GO.lang.strRequestError, "");
-			}else	if(!this.reader.jsonData || GO.jsonAuthHandler(this.reader.jsonData, this.load, this))
+				//silently ignore because auto refreshing jobs often get here somehow??
+				//GO.errorDialog.show(GO.lang.strRequestError, "");
+			}else if(!this.reader.jsonData || GO.jsonAuthHandler(this.reader.jsonData, this.load, this))
 			{
 				switch(response.responseText.trim())
 				{
