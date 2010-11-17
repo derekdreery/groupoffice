@@ -758,7 +758,7 @@ class tasks extends db
 				$show_future=true;
 				break;
 
-			case portlet:
+			case 'portlet':
 				$start_time = 0;
 				$end_time = 0;
 				
