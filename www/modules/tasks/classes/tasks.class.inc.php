@@ -717,6 +717,7 @@ class tasks extends db
 		//$just_completed=false;
 
 		switch($show){
+
 			case 'today':
 				$start_time = mktime(0,0,0);
 				$end_time = Date::date_add($start_time, 1);
@@ -757,7 +758,7 @@ class tasks extends db
 				$show_future=true;
 				break;
 
-			default: //all
+			case'all':
 				$start_time=0;
 				$end_time=0;
 				unset($show_completed);
