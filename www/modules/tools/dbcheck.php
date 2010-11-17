@@ -27,6 +27,8 @@ chdir(dirname(__FILE__));
 
 require_once("../../Group-Office.php");
 
+session_write_close();
+
 if(php_sapi_name()!='cli')
 {
 	$GO_SECURITY->html_authenticate('tools');
