@@ -283,6 +283,7 @@ GO.calendar.MainPanel = function(config){
 	this.calendarListPanel = new Ext.Panel({
 		border:true,
 		region:'center',
+		layoutConfig:{hideCollapseTool:true},
 		layout:'accordion',
 		tbar:[{
 			iconCls:'cal-btn-home',
