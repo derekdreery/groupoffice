@@ -58,3 +58,8 @@ GO.tasks.lang.globalCategory='Global category';
 GO.tasks.lang.showFutureTasks='Show future tasks';
 
 GO.tasks.lang.incompleteTasks='Incomplete tasks';
+
+GO.tasks.lang.dueInSevenDays='Due in seven days';
+GO.tasks.lang.overDue='Overdue';
+GO.tasks.lang.futureTasks='Future tasks';
+GO.tasks.lang.all='All';

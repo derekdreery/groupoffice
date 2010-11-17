@@ -278,13 +278,15 @@ try {
 				$user_id = 0;
 			}else {
 				$response['data']['write_permission'] = false;
-				if(isset($_POST['tasklists'])) {
+				/*if(isset($_POST['tasklists'])) {
 					$tasklists = json_decode($_POST['tasklists'], true);
 					$GO_CONFIG->save_setting('tasks_tasklists_filter',implode(',', $tasklists), $GO_SECURITY->user_id);
 				}else {
 					$tasklists = $GO_CONFIG->get_setting('tasks_tasklists_filter', $GO_SECURITY->user_id);
 					$tasklists = ($tasklists) ? explode(',',$tasklists) : array();
-				}
+				}*/
+
+				$tasklists=get_multiselectgrid_selections('tasklists');
 
 				if(count($tasklists)) {
 					$user_id = 0;
@@ -401,16 +403,13 @@ try {
 			//$show_completed=isset($_POST['show_completed']) && $_POST['show_completed']=='true';
 			//$show_inactive=isset($_POST['show_inactive']) && $_POST['show_inactive']=='true';
 
-			if(isset($_POST['show_completed'])) {
-				$GO_CONFIG->save_setting('tasks_show_completed', $_POST['show_completed'], $GO_SECURITY->user_id);
+			if(isset($_POST['show'])) {
+				$GO_CONFIG->save_setting('tasks_filter', $_POST['show'], $GO_SECURITY->user_id);
 			}
-			if(isset($_POST['show_inactive'])) {
-				$GO_CONFIG->save_setting('tasks_show_inactive', $_POST['show_inactive'], $GO_SECURITY->user_id);
-			}
-			$show_completed=empty($_POST['portlet']) && $GO_CONFIG->get_setting('tasks_show_completed', $GO_SECURITY->user_id);
-			$show_inactive=empty($_POST['portlet']) && $GO_CONFIG->get_setting('tasks_show_inactive', $GO_SECURITY->user_id);
-
-			$response['total'] = $tasks->get_tasks($readable_tasklists,$user_id, $show_completed, $sort, $dir, $start, $limit,$show_inactive, $query,'', $show_categories);
+			
+			$show=empty($_POST['portlet']) ? $GO_CONFIG->get_setting('tasks_filter', $GO_SECURITY->user_id) : '';
+			
+			$response['total'] = $tasks->get_tasks($readable_tasklists,$user_id, null, $sort, $dir, $start, $limit,null, $query,'', $show_categories,0,0,$show);
 			$response['results']=array();
 
 
