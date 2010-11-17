@@ -762,7 +762,7 @@ class tasks extends db
 				$start_time = 0;
 				$end_time = 0;
 				
-				$show_completed=true;
+				$show_completed=false;
 				$show_future=false;
 			break;
 
