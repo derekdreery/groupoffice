@@ -1,10 +1,10 @@
 #!/usr/bin/php
 <?php
 if(!isset($argv[1])) {
-	exit('usage ./minify.php /path/to/group-office <optional module name or string all> <optional delete string to delete src scripts>');
+	exit('usage ./minify.php /path/to/group-office <optional module name or string all> <optional commit string to commit to svn>');
 }
 
-$delete = isset($argv[3]) && $argv[3]=='delete';
+$commit = isset($argv[3]) && $argv[3]=='commit';
 $module = isset($argv[2]) ? $argv[2] : 'all';
 
 $full_path = dirname(__FILE__);
@@ -45,9 +45,9 @@ if($module=='all') {
 	exec($compressor.' "'.getcwd().'/javascript/go-all.js" -o "'.getcwd().'/javascript/go-all-min"');
 	//exec($compressor.' "'.getcwd().'/'.$all_scripts_file.'" -o "'.getcwd().'/modules/'.$module.'/all-module-scripts-min"');
 	unlink('javascript/go-all.js');
-	if($delete) {
-		unlink('javascript/scripts.txt');
-	}
+
+	if($commit)
+		system('svn commit -m "minified" '.getcwd());
 
 
 	$modules=array();
@@ -85,9 +85,8 @@ foreach($modules as $module) {
 				}
 				file_put_contents($all_scripts_file, $contents.";\n", FILE_APPEND);
 
-				if($delete) {
-					unlink($script);
-				}
+				if($commit)
+					system("svn commit -m 'minified' modules/".$module);
 			}
 		}
 		fclose($scripts_fp);
