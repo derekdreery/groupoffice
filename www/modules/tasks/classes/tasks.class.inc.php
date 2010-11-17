@@ -707,9 +707,65 @@ class tasks extends db
 			$search_field='',
 			$categories=array(),
 			$start_time='',
-			$end_time='') {
+			$end_time='',
+			$show='') {
 
 		global $GO_MODULES;
+
+		go_debug($show);
+
+		//$just_completed=false;
+
+		switch($show){
+			case 'today':
+				$start_time = mktime(0,0,0);
+				$end_time = Date::date_add($start_time, 1);
+
+				unset($show_completed);
+				$show_future=false;
+				break;
+
+			case 'sevendays':
+				$start_time = mktime(0,0,0);
+				$end_time = Date::date_add($start_time, 7);
+
+				unset($show_completed);
+				$show_future=false;
+				break;
+
+			case 'overdue':
+				$start_time = 0;
+				$end_time = mktime(0,0,0);
+
+				$show_completed=false;
+				$show_future=false;
+				break;
+
+			case 'completed':
+				$start_time = 0;
+				$end_time = 0;
+
+				$show_completed=true;
+				$show_future=false;
+				break;
+
+			case 'future':
+				$start_time = 0;
+				$end_time = 0;
+
+				$show_completed=false;				
+				$show_future=true;
+				break;
+
+			default: //all
+				$start_time=0;
+				$end_time=0;
+				unset($show_completed);
+				unset($show_future);
+				break;
+
+		}
+
 
 		$sql  = "SELECT DISTINCT t.*, l.name AS tasklist_name";
 
@@ -727,12 +783,15 @@ class tasks extends db
 
 		$where=false;
 
-		if(empty($show_completed)) {
-			$where=true;
-			$sql .= ' WHERE completion_time=0';
-
+		if(isset($show_completed)){
+			if($show_completed) {
+				$where=true;
+				$sql .= ' WHERE completion_time>0';
+			}else {
+				$where=true;
+				$sql .= ' WHERE completion_time=0';
+			}
 		}
-
 		if($user_id > 0) {                    
 			if($where) {
 				$sql .= " AND ";
@@ -752,16 +811,27 @@ class tasks extends db
 			$sql .= "t.tasklist_id IN (".$this->escape(implode(',',$lists)).")";
 		}
 
-		if(empty($show_future)) {
-			$now = mktime(0,0,0);
-			if($where) {
-				$sql .= " AND ";
-			}else {
-				$sql .= " WHERE ";
-				$where=true;
+		if(isset($show_future)){
+			if(!$show_future) {
+				$now = Date::date_add(mktime(0,0,0),1);
+				if($where) {
+					$sql .= " AND ";
+				}else {
+					$sql .= " WHERE ";
+					$where=true;
+				}				
+				$sql .= "t.start_time<".$now;
+			}else
+			{
+				$now = Date::date_add(mktime(0,0,0),1);
+				if($where) {
+					$sql .= " AND ";
+				}else {
+					$sql .= " WHERE ";
+					$where=true;
+				}				
+				$sql .= "t.start_time>=".$now;
 			}
-			//$sql .= "t.start_time<=".$now." AND (t.due_time>=".$now." OR t.completion_time=0)";
-			$sql .= "t.start_time<=".$now;
 		}
 
 		if(!empty($search_query)) {
@@ -780,19 +850,19 @@ class tasks extends db
 				$sql .= "$search_field LIKE '".$query."'";
 		}
 
-                if(count($categories))
-                {
-                    if($where) {
-                            $sql .= " AND ";
-                    }
-                    else {
-                            $where=true;
-                            $sql .= " WHERE ";
-                    }                                           
-                    $sql .= "t.category_id IN (".implode(',', $categories).")";
-                }
+		if(count($categories))
+		{
+			if($where) {
+					$sql .= " AND ";
+			}
+			else {
+					$where=true;
+					$sql .= " WHERE ";
+			}
+			$sql .= "t.category_id IN (".implode(',', $categories).")";
+		}
 
-		if($start_time && $end_time)
+		if($start_time)
 		{		  
 		    if($where) {
 			    $sql .= " AND ";
@@ -800,12 +870,26 @@ class tasks extends db
 			    $where=true;
 			    $sql .= " WHERE ";
 		    }
-		    $sql .= "t.start_time >= ".intval($start_time). " AND t.due_time <= ".intval($end_time);
+		    $sql .= "t.due_time >= ".intval($start_time);//. " AND t.due_time <= ".intval($end_time);
 		}
+
+		if($end_time)
+		{
+		    if($where) {
+			    $sql .= " AND ";
+		    }else {
+			    $where=true;
+			    $sql .= " WHERE ";
+		    }
+		    $sql .= "t.due_time < ".intval($end_time);
+		}
+
 		if($sort_field != '' && $sort_order != '')
 		{			
 			$sql .= " ORDER BY ".$this->escape($sort_field)." ".$this->escape($sort_order);
 		}
+
+		go_debug($sql);
 
 		$_SESSION['GO_SESSION']['export_queries']['get_tasks']=array(
 				'query'=>$sql,

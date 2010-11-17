@@ -17,14 +17,13 @@ if(!$tasklist){
 	$tasklist=array('id'=>0, 'name'=>'');
 }
 
+$show = $GO_CONFIG->get_setting("tasks_filter", $GO_SECURITY->user_id);
+
+if(!$show)
+	$show='today';
+
 $GO_SCRIPTS_JS .='GO.tasks.defaultTasklist = {id: '.$tasklist['id'].', name: "'.$tasklist['name'].'"};
-GO.tasks.showInactive=';
-
-if($GO_CONFIG->get_setting("tasks_show_inactive", $GO_SECURITY->user_id)=='1') $GO_SCRIPTS_JS .= 'true'; else $GO_SCRIPTS_JS .= 'false';
-
-$GO_SCRIPTS_JS .= ';GO.tasks.showCompleted=';
-
-if($GO_CONFIG->get_setting('tasks_show_completed', $GO_SECURITY->user_id)=='1') $GO_SCRIPTS_JS .= 'true'; else $GO_SCRIPTS_JS .= 'false';
+GO.tasks.show="'.$show.'";';
 
 $GO_SCRIPTS_JS .= ';GO.tasks.remind="'.$settings['remind'].'";
 GO.tasks.reminderDaysBefore=parseInt('.$settings['reminder_days'].');

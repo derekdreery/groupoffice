@@ -45,43 +45,56 @@ GO.tasks.MainPanel = function(config){
 
 		delete this.gridPanel.store.baseParams.tasklists;
 	}, this);
-       
-				
-	var showCompletedCheck = new Ext.form.Checkbox({
-		boxLabel: GO.tasks.lang.showCompletedTasks,
-		hideLabel: true,
-		checked:GO.tasks.showCompleted
-	});
-	
-	showCompletedCheck.on('check', function(cb, checked){
-		this.gridPanel.store.baseParams['show_completed']=checked? '1' : '0';
-		this.gridPanel.store.reload();
-		delete this.gridPanel.store.baseParams['show_completed'];
-	}, this);
-	
-	
-	var showInactiveCheck = new Ext.form.Checkbox({
-		boxLabel: GO.tasks.lang.showFutureTasks,
-		hideLabel: true,
-		checked:GO.tasks.showInactive
-	});
-	
-	showInactiveCheck.on('check', function(cb, checked){
-		this.gridPanel.store.baseParams['show_inactive']=checked? '1' : '0';
-		this.gridPanel.store.reload();
-		delete this.gridPanel.store.baseParams['show_inactive'];
-	}, this);
-	
 				
 	var filterPanel = new Ext.form.FormPanel({
-		title:GO.tasks.lang.filter,
-		height:85,
+		//title:GO.tasks.lang.filter,
+		height:142,
 		cls:'go-form-panel',
 		waitMsgTarget:true,
 		region:'north',
 		border:true,
 		split:true,
-		items: [showCompletedCheck, showInactiveCheck]
+		items: [{
+				hideLabel:true,
+				anchor:'100%',
+				xtype:'radiogroup',
+				value:GO.tasks.show,
+				columns: 1,
+				listeners:{
+					change:function(radiogroup, checkedbox){
+						this.gridPanel.store.baseParams['show']=checkedbox.inputValue;
+						this.gridPanel.store.reload();
+						delete this.gridPanel.store.baseParams['show'];
+					},
+					scope:this
+				},
+				items: [{
+					boxLabel: GO.lang.today,
+					name: 'show',
+					inputValue: 'today',
+					checked:true
+				},{
+					boxLabel: GO.tasks.lang.dueInSevenDays,
+					name: 'show',
+					inputValue: 'sevendays'
+				},{
+					boxLabel: GO.tasks.lang.overDue,
+					name: 'show',
+					inputValue: 'overdue'
+				},{
+					boxLabel: GO.tasks.lang.completed,
+					name: 'show',
+					inputValue: 'completed'
+				},{
+					boxLabel: GO.tasks.lang.futureTasks,
+					name: 'show',
+					inputValue: 'future'
+				},{
+					boxLabel: GO.tasks.lang.all,
+					name: 'show',
+					inputValue: 'all'
+				}]
+			}]
 	});
       
 	this.categoriesPanel= new GO.grid.MultiSelectGrid({
@@ -89,7 +102,7 @@ GO.tasks.MainPanel = function(config){
 		title:GO.tasks.lang.categories,
 		region:'south',
 		loadMask:true,
-		height:220,
+		height:150,
 		allowNoSelection:true,
 		store:GO.tasks.categoriesStore
 	});
