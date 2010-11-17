@@ -758,7 +758,15 @@ class tasks extends db
 				$show_future=true;
 				break;
 
-			case'all':
+			case portlet:
+				$start_time = 0;
+				$end_time = 0;
+				
+				$show_completed=true;
+				$show_future=false;
+			break;
+
+			default:
 				$start_time=0;
 				$end_time=0;
 				unset($show_completed);
