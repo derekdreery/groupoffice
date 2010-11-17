@@ -29,9 +29,11 @@ GO.grid.MultiSelectGrid = function (config){
 
 	Ext.apply(config, {
 		plugins: [checkColumn],
-		tbar : [
+		tools : [
 		this.selectButton = new Ext.Button({
 			text:GO.lang.selectAll,
+			id:'plus',
+			qtip:'Select all',
 			handler:function()
 			{							
 				if(this.allowNoSelection || !this.selectedAll)
@@ -85,7 +87,7 @@ GO.grid.MultiSelectGrid = function (config){
 		if(this.allowNoSelection)
 		{
 			var text = (this.selectedAll) ? GO.lang.deselectAll : GO.lang.selectAll;
-			this.selectButton.setText(text);
+			//this.selectButton.setText(text);
 		}
 	    
 	},this);
