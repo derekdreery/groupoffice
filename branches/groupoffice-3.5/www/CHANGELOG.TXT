@@ -1,3 +1,7 @@
+2010/11/17 3.5.41
+- Fixed small bug in new Document from template feature when you had a company
+  and a contact linked to a project.
+
 2010/11/12 3.5.40
 - GOTA bug in terminal server environment
 - Minor bug in ActiveSync fixed.

@@ -59,7 +59,7 @@ GO.data.JsonStore = function(config) {
 
 			if(response.status==0)
 			{
-				GO.errorDialog.show(GO.lang.strRequestError, "");
+				//GO.errorDialog.show(GO.lang.strRequestError, "");
 			}else	if(!this.reader.jsonData || GO.jsonAuthHandler(this.reader.jsonData, this.load, this))
 			{
 				switch(response.responseText.trim())
