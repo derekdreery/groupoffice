@@ -98,7 +98,7 @@ if(!empty($_REQUEST['view_id'])) {//!empty($_REQUEST['view_id'])){
 	$view = $cal->get_view($_REQUEST['view_id']);
 	$title=$view['name'];
 	$pdf->setParams($title, $start_time, $end_time);
-	$pdf->AddPage();
+	
 	$cal->get_view_calendars($view['id']);
 	if(empty($view['merge'])) {
 		$cal2 = new calendar();
@@ -129,7 +129,7 @@ if(!empty($_REQUEST['view_id'])) {//!empty($_REQUEST['view_id'])){
 	}
 	$title = 'Multiple calendars: '.implode(', ',$calendar_names);
 	$pdf->setParams($title, $start_time, $end_time);
-	$pdf->AddPage();
+	
 	insert_events($calendars,$start_time,$end_time);
 } else {
 	$calendar = $cal->get_calendar($calendars[0]);
@@ -138,7 +138,7 @@ if(!empty($_REQUEST['view_id'])) {//!empty($_REQUEST['view_id'])){
 	$pdf->setParams($calendar['name'], $start_time, $end_time);
 	$events = $cal->get_events_in_array(array($calendars[0]), 0, $start_time, $end_time);
 	//var_dump($events);
-	$pdf->AddPage();
+	
 	$pdf->addCalendar($events);
 }
 
