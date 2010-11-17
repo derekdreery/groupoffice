@@ -406,8 +406,12 @@ try {
 			if(isset($_POST['show'])) {
 				$GO_CONFIG->save_setting('tasks_filter', $_POST['show'], $GO_SECURITY->user_id);
 			}
-			
-			$show=empty($_POST['portlet']) ? $GO_CONFIG->get_setting('tasks_filter', $GO_SECURITY->user_id) : '';
+			if(empty($_POST['portlet'])){
+				$show=$GO_CONFIG->get_setting('tasks_filter', $GO_SECURITY->user_id);
+			}else
+			{
+				$show='portlet';
+			}
 			
 			$response['total'] = $tasks->get_tasks($readable_tasklists,$user_id, null, $sort, $dir, $start, $limit,null, $query,'', $show_categories,0,0,$show);
 			$response['results']=array();
