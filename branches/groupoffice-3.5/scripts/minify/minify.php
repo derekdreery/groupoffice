@@ -17,6 +17,12 @@ if(!@chdir($argv[1])) {
 }
 echo getcwd()."\n";
 
+if($commit)
+{
+	echo "Updating sources...\n";
+	system('../scripts/updatepromodules.sh');
+}
+
 if($module=='all') {
 	echo "Processing main scripts\n";
 
@@ -34,10 +40,6 @@ if($module=='all') {
 				exit('Could not get contents from '.$script);
 			}
 			file_put_contents('javascript/go-all.js', $contents.';', FILE_APPEND);
-
-			if($delete) {
-				unlink($script);
-			}
 		}
 	}
 	fclose($scripts_fp);
@@ -46,8 +48,10 @@ if($module=='all') {
 	//exec($compressor.' "'.getcwd().'/'.$all_scripts_file.'" -o "'.getcwd().'/modules/'.$module.'/all-module-scripts-min"');
 	unlink('javascript/go-all.js');
 
-	if($commit)
+	if($commit){
+		echo "Committing to SVN...\n";
 		system('svn commit -m "minified" '.getcwd());
+	}
 
 
 	$modules=array();
@@ -62,7 +66,6 @@ if($module=='all') {
 }
 
 foreach($modules as $module) {
-	//echo $module."\n\n";
 	if(is_dir('modules/'.$module) && $module[0] != '.' && file_exists('modules/'.$module.'/scripts.txt')) {
 		echo "Processing $module\n";
 
@@ -76,33 +79,26 @@ foreach($modules as $module) {
 		$scripts_fp = fopen('modules/'.$module.'/scripts.txt', 'r');
 		while($script = fgets($scripts_fp)) {
 			$script = trim($script);
-			//echo $script."\n";
 
 			if(!empty($script)) {
 				$contents = file_get_contents($script);
 				if(!$contents) {
 					exit('Could not get contents from '.$script);
 				}
-				file_put_contents($all_scripts_file, $contents.";\n", FILE_APPEND);
-
-				if($commit)
-					system("svn commit -m 'minified' modules/".$module);
+				file_put_contents($all_scripts_file, $contents.";\n", FILE_APPEND);				
 			}
 		}
 		fclose($scripts_fp);
 
-		if($delete) {
-			unlink('modules/'.$module.'/scripts.txt');
-		}
-
-
 		exec($compressor.' '.$all_scripts_file.' -o modules/'.$module.'/all-module-scripts-min');
 		exec($compressor.' "'.getcwd().'/'.$all_scripts_file.'" -o "'.getcwd().'/modules/'.$module.'/all-module-scripts-min"');
 		unlink($all_scripts_file);
-		//rename($all_scripts_file, 'modules/'.$module.'/all-module-scripts-min');
-		
-	}
 
+		if($commit){
+			echo "Committing to SVN...\n";
+			system("svn commit -m 'minified' modules/".$module);
+		}
+	}
 }
 
 echo "Finished!\n";
