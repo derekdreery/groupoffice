@@ -31,6 +31,7 @@ Files
 Calendar and Tasks
 - Better support for calendar invitations from other clients such as Outlook and
   Thunderbird.
+* Invitation to newly added participant
 - Drag and drop tasks in tasklists.
 - Project calendars.
 - Improved appearance.
