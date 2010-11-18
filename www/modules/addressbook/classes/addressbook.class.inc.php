@@ -1295,8 +1295,12 @@ class addressbook extends db {
 			$cache['user_id']=$this->f('user_id');
 			$cache['module']='addressbook';
 			$cache['name'] = htmlspecialchars(String::format_name($this->f('last_name'),$this->f('first_name'),$this->f('middle_name')), ENT_QUOTES,'UTF-8');
+
+			if($record['company']!='')
+				$cache['name'] .= ' ('.htmlspecialchars($record['company'], ENT_QUOTES,'UTF-8').')';
+
 			$cache['link_type']=2;
-			$cache['description']=$this->f('addressbook_name').', '.$this->f('company');
+			$cache['description']=$this->f('addressbook_name');//.', '.$this->f('company');
 			$cache['type']=$lang['addressbook']['contact'];
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$lang['addressbook']['contact'];
 			$cache['mtime']=$this->f('mtime');
