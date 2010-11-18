@@ -671,7 +671,7 @@ class tasks extends db
 
 	function format_task_record(&$task, $cf=false){
 		global $lang;
-		$now=time();
+		$now=mktime(0,0,0);
 
 		if(!isset($lang['tasks'])){
 			global $GO_LANGUAGE;
@@ -718,6 +718,7 @@ class tasks extends db
 
 		switch($show){
 
+
 			case 'today':
 				$start_time = mktime(0,0,0);
 				$end_time = Date::date_add($start_time, 1);
@@ -758,6 +759,7 @@ class tasks extends db
 				$show_future=true;
 				break;
 
+			case 'active':
 			case 'portlet':
 				$start_time = 0;
 				$end_time = 0;

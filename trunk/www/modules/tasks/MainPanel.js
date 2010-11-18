@@ -69,9 +69,9 @@ GO.tasks.MainPanel = function(config){
 					scope:this
 				},
 				items: [{
-					boxLabel: GO.lang.today,
+					boxLabel:  GO.tasks.lang.active,
 					name: 'show',
-					inputValue: 'today',
+					inputValue: 'active',
 					checked:true
 				},{
 					boxLabel: GO.tasks.lang.dueInSevenDays,

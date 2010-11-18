@@ -47,7 +47,8 @@ GO.tasks.lang.globalCategory='Globale category';
 GO.tasks.lang.showFutureTasks='Toon toekomstige taken';
 GO.tasks.lang.incompleteTasks='Onvoltooide taken';
 
-GO.tasks.lang.dueInSevenDays='Voor komende week';
+GO.tasks.lang.dueInSevenDays='Eindigt komende week';
 GO.tasks.lang.overDue='Te laat';
 GO.tasks.lang.futureTasks='Toekomstige taken';
 GO.tasks.lang.all='Alles';
+GO.tasks.lang.active='Actieve';
