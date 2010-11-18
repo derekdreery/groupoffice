@@ -193,9 +193,9 @@ class GO_MODULES extends db {
 	 */
 	function load_modules($user=false)
 	{
-		global $GO_SECURITY, $GO_LANGUAGE, $lang_modules;
+		global $GO_SECURITY, $GO_LANGUAGE, $lang_modules, $GO_CONFIG;
 
-		if($user){
+		if($user && !$GO_CONFIG->debug){
 			if($cache = unserialize($user['cache'])){
 				if($cache['modules_mtime']==$user['mtime'])
 					return $_SESSION['GO_SESSION']['modules']=$this->modules= $cache['modules'];
