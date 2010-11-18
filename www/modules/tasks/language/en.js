@@ -63,3 +63,4 @@ GO.tasks.lang.dueInSevenDays='Due in seven days';
 GO.tasks.lang.overDue='Overdue';
 GO.tasks.lang.futureTasks='Future tasks';
 GO.tasks.lang.all='All';
+GO.tasks.lang.active='Active';
