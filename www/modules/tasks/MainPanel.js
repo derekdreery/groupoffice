@@ -143,7 +143,7 @@ GO.tasks.MainPanel = function(config){
 		this.deleteButton.setDisabled(!store.reader.jsonData.data.write_permission);
 		this.addButton.setDisabled(!store.reader.jsonData.data.write_permission);
 
-		this.gridPanel.ownerCt.setTitle(store.reader.jsonData.grid_title);
+		//this.gridPanel.ownerCt.setTitle(store.reader.jsonData.grid_title);
 
 		var found = false
 		for(var i=0; i<this.tasklist_ids.length; i++)
@@ -161,7 +161,7 @@ GO.tasks.MainPanel = function(config){
 	}, this);
 	
 	this.taskPanel = new GO.tasks.TaskPanel({
-		title:GO.tasks.lang.task,
+		//title:GO.tasks.lang.task,
 		region:'east',
 		width:400,
 		border:true
@@ -261,7 +261,7 @@ GO.tasks.MainPanel = function(config){
 		]
 	}),
 	{
-		title:GO.tasks.lang.tasks,
+		//title:GO.tasks.lang.tasks,
 		region:'center',
 		border:false,
 		layout:'border',
