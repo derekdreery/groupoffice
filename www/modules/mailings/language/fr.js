@@ -61,8 +61,3 @@ GO.mailings.lang.resumeMailing='Reprendre l\'envoi';
 GO.mailings.lang.unsubscribeLink='Lien de désabonnement';
 GO.mailings.lang.unsubscribeHref='Balise href de désabonnement';
 GO.mailings.lang.addDocumentTemplate='Ajouter un modèle de document';
-GO.mailings.lang.documentTemplate='Modèle de document';
-GO.mailings.lang.documentTemplateText='Vous pouvez envoyer n\'importe quel fichier OpenOffice.Org ou Microsoft Word 2007+. Le document peut contenir des champs qui seront remplacés avec les données de la base de données. Les champs sont documentés dans <a class="normal-link" target="_blank" href="http://www.group-office.com/wiki/Addressbook#Document_templates">le manuel</a>.';
-GO.mailings.lang.documentFromTemplate='Document depuis un modèle';
-GO.mailings.lang.selectDocumentTemplate='Sélectionner un modèle de document';
-GO.mailings.lang.selectRelevantResources='Sélectionner des ressources pertinentes';
