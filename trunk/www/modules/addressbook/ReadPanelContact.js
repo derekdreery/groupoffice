@@ -356,9 +356,9 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 		GO.addressbook.ContactReadPanel.superclass.initComponent.call(this);
 		
 		
-		if(GO.mailings)
+		if(GO.documenttemplates)
 		{	
-			this.newOODoc = new GO.mailings.NewOODocumentMenuItem();
+			this.newOODoc = new GO.documenttemplates.NewOODocumentMenuItem();
 			this.newOODoc.on('create', function(){this.reload();}, this);
 			
 			this.newMenuButton.menu.add(this.newOODoc);		
@@ -377,9 +377,9 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	{
 		GO.addressbook.ContactReadPanel.superclass.setData.call(this, data);
 		
-		if(GO.mailings && !GO.mailings.ooTemplatesStore.loaded)
-					GO.mailings.ooTemplatesStore.load();
-				
+		if(GO.documenttemplates && !GO.documenttemplates.ooTemplatesStore.loaded)
+			GO.documenttemplates.ooTemplatesStore.load();
+		
 		if(data.write_permission)
 		{
 			if(this.scheduleCallItem)
