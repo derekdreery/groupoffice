@@ -440,7 +440,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	
 	load : function(id, reload)
 	{
-		if(this.expandListenObject.collapsed){
+		if(this.expandListenObject.collapsed || !this.rendered){
 			//link_id is needed for editHandlers
 			this.collapsedLinkId=this.link_id=id;
 		}else if(this.link_id!=id || reload)
