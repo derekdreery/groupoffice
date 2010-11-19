@@ -1,4 +1,3 @@
-modules/mailings/TemplateDocumentDialog.js
 modules/mailings/TemplatesGrid.js
 modules/mailings/MailingsGrid.js
 modules/mailings/MailingDialog.js
