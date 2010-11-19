@@ -358,7 +358,7 @@ class Go2Mime
 
 							//$path = 'mimepart.php?path='.urlencode($path).'&part_number='.$part_number;
 							//replace inline images identified by a content id with the url to display the part by Group-Office
-							$mime_attachment['replacement_url']=String::add_params_to_url($this->inline_attachments_url, 'part_number='.$part_number_prefix.$part_number);
+							$mime_attachment['replacement_url']=String::add_params_to_url($this->inline_attachments_url, 'part_number='.$part_number_prefix.$part_number.'&amp;time='.time());
 
 							if($create_tmp_inline_attachments)
 							{
