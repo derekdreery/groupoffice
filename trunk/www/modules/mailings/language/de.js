@@ -45,7 +45,3 @@ GO.mailings.lang.unsubscribeLink='Link zur Abmeldung';
 GO.mailings.lang.unsubscribeHref='href für Abmeldung';
 GO.mailings.lang.addDocumentTemplate='Dokumentvorlage hinzufügen';
 GO.mailings.lang.documentTemplate='Dokumentvorlage';
-GO.mailings.lang.documentTemplateText='Sie können jedes OpenOffice oder Microsoft Word 2007+ Dokument hochladen. Das Dokument kann Tags enthalten die mit denen der Datenbank ersetzt werden. Diese Tags finden Sie <a class="normal-link" target="_blank" href="http://www.group-office.com/wiki/Addressbook#Document_templates">im Handbuch</a>.';
-GO.mailings.lang.documentFromTemplate='Dokument aus Vorlage';
-GO.mailings.lang.selectDocumentTemplate='Dokumentvorlage wählen';
-GO.mailings.lang.selectRelevantResources='Relevante Ressourcen wählen';

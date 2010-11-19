@@ -75,7 +75,4 @@ GO.mailings.lang.unsubscribeLink='Avmeldingslenke';
 GO.mailings.lang.unsubscribeHref='Avmelding href';
 GO.mailings.lang.addDocumentTemplate='Ny dokumentmal';
 GO.mailings.lang.documentTemplate='Dokumentmal';
-GO.mailings.lang.documentTemplateText='Du kan laste opp alle typer OpenOffice.org filer, eller Microsoft Word 2007+ dokumenter. Dokumentet kan inneholde felter som fylles ut fra databasen. Du finner en feltoversikt i <a class="normal-link" target="_blank" href="http://www.group-office.com/wiki/Addressbook#Document_templates">brukerveiledningen</a>.';
-GO.mailings.lang.documentFromTemplate='Dokument fra mal';
-GO.mailings.lang.selectDocumentTemplate='Velg dokumentmal';
-GO.mailings.lang.selectRelevantResources='Velg relevante ressurser';
+

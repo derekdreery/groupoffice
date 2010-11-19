@@ -80,8 +80,3 @@ GO.mailings.lang.unsubscribeHref='Odhlašovací odkaz';
 
 GO.mailings.lang.addDocumentTemplate='Přidat šablonu dokumentu';
 GO.mailings.lang.documentTemplate='Šablona dokumentu';
-
-GO.mailings.lang.documentTemplateText='Můžete nahrát jakoukoliv OpenOffice.Org nebo Microsoft Word 2007+ šablonu. Tento dokument může obsahovat značky, které jsou nahrazeny z databáze. Jejich znění najdete v <a class="normal-link" target="_blank" href="http://www.group-office.com/wiki/Addressbook#Document_templates">manuálu</a>.';
-GO.mailings.lang.documentFromTemplate='Dokument ze šablony';
-GO.mailings.lang.selectDocumentTemplate='Vyberte šablonu dokumentu';
-GO.mailings.lang.selectRelevantResources='Vyberte relevantní zdroje';

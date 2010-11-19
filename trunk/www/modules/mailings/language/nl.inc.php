@@ -13,8 +13,8 @@
  */
 
 require($GO_LANGUAGE->get_fallback_language_file('mailings'));
-$lang['mailings']['name'] = 'Sjablonen en adreslijsten';
-$lang['mailings']['description'] = 'Module om alle contacten te beheren.';
+$lang['mailings']['name'] = 'E-mail sjablonen en adreslijsten';
+$lang['mailings']['description'] = 'Voegt e-mail sjablonen en adreslijsten toe aan het adresboek.';
 
 
 $lang['mailings']['templateAlreadyExists'] = 'Het sjabloon dat u probeert te maken bestaat al';

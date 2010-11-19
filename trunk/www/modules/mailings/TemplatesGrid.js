@@ -137,7 +137,7 @@ Ext.extend(GO.mailings.TemplatesGrid, GO.grid.GridPanel,{
 	showOOTemplateDialog : function(template_id){
 
 		if(!GO.documenttemplates){
-			alert('You need to install the document templates module');
+			alert(GO.lang.moduleRequired.replace('{module}', 'Document templates'));
 			return false;
 		}
 

@@ -14,8 +14,8 @@
 
 //Uncomment this line in new translations!
 //require($GO_LANGUAGE->get_fallback_language_file('mailings'));
-$lang['mailings']['name'] = 'Templates and addresslists';
-$lang['mailings']['description'] = 'Module to manage all contacts.';
+$lang['mailings']['name'] = 'E-mail templates and addresslists';
+$lang['mailings']['description'] = 'Adds e-mail templates and addresslists for sending newsletters to the addressbook.';
 
 $lang['mailings']['templateAlreadyExists'] = 'The template you are trying to create already exists';
 $lang['mailings']['mailingAlreadyExists'] = 'The mailing you are trying to create already exists';

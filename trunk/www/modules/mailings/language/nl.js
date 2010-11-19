@@ -68,9 +68,4 @@ GO.mailings.lang.unsubscribeHref='Uitschrijf href';
 GO.mailings.lang.addDocumentTemplate='Documentsjabloon toevoegen';
 GO.mailings.lang.documentTemplate='Documentsjabloon';
 
-GO.mailings.lang.documentTemplateText='U kunt elk OpenOffice.Org of Microsoft Word 2007+ document uploaden. U kunt in het document verschillende velden van de database gebruiken. Deze kunt u vinden in  <a class="normal-link" target="_blank" href="http://www.group-office.com/wiki/Addressbook#Document_templates">de handleiding</a>.';
-GO.mailings.lang.documentFromTemplate='Document van sjabloon';
-GO.mailings.lang.selectDocumentTemplate='Selecteer documentsjabloon';
-GO.mailings.lang.selectRelevantResources='Selecteer relevante bronnen';
-
 GO.mailings.lang.copyingMessages='Bezig met kopiëren van berichten...';

@@ -81,9 +81,4 @@ GO.mailings.lang.unsubscribeHref='Unsubscribe href';
 GO.mailings.lang.addDocumentTemplate='Add document template';
 GO.mailings.lang.documentTemplate='Document template';
 
-GO.mailings.lang.documentTemplateText='You can upload any OpenOffice.Org or Microsoft Word 2007+ document. The document may contain tags that are replaced from the database. They can be found at <a class="normal-link" target="_blank" href="http://www.group-office.com/wiki/Addressbook#Document_templates">the manual</a>.';
-GO.mailings.lang.documentFromTemplate='Document from template';
-GO.mailings.lang.selectDocumentTemplate='Select document template';
-GO.mailings.lang.selectRelevantResources='Select relevant resources';
-
 GO.mailings.lang.copyingMessages='Copying messages...';

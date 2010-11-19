@@ -78,9 +78,4 @@ GO.mailings.lang.resumeMailing='ส่งใหม่อีกครั้ง';
 GO.mailings.lang.unsubscribeLink='ลิงค์ยกเลิกสมาชิกรับข่าว';
 GO.mailings.lang.unsubscribeHref='Unsubscribe href';
 GO.mailings.lang.addDocumentTemplate='เพิ่มรูปแบบของเอกสาร';
-GO.mailings.lang.documentTemplate='รูปแบบเอกสาร';
-GO.mailings.lang.documentTemplateText='คุณสามารถอับโหลดไฟล์ของ OpenOffice.Org หรือ Microsoft Word 2007+ โดยเอกสารนั้นอาจจะมีแท็กที่แทนที่ด้วยค่าในฐานข้อมูล คุณสามารถดูแท็คเหล่านั้นที่ <a class="normal-link" target="_blank" href="http://www.group-office.com/wiki/Addressbook#Document_templates">คู่มือ</a>.';
-GO.mailings.lang.documentFromTemplate='เอกสารจากรูปแบบเอกสาร';
-GO.mailings.lang.selectDocumentTemplate='เลือกรูปแบบของเอกสาร';
-GO.mailings.lang.selectRelevantResources='เลือกแหล่งข้อมูลที่เกี่ยวข้อง';
 
