@@ -24,6 +24,7 @@ $config[] =
 	'smtp_encryption'=>'',
 	'smtp_username'=>'',
 	'smtp_password'=>'',
+	'smtp_use_login_credentials'=>false, //set to true to use the login username and password for SMTP authentication too.
 
 	'ldap_use_email_as_imap_username'=>false,
 	'imapauth_combo_domains' => 'example.com,example2.com',

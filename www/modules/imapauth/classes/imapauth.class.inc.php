@@ -171,8 +171,15 @@ class imapauth
 				$account['smtp_host']=$config['smtp_host'];
 				$account['smtp_port']=$config['smtp_port'];
 				$account['smtp_encryption']=$config['smtp_encryption'];
-				$account['smtp_username']=$config['smtp_username'];
-				$account['smtp_password']=$config['smtp_password'];
+
+				if(!empty($config['smtp_use_login_credentials'])){
+					$account['smtp_username']=$username;
+					$account['smtp_password']=$password;
+				}else
+				{
+					$account['smtp_username']=$config['smtp_username'];
+					$account['smtp_password']=$config['smtp_password'];
+				}
 
 				$account['port']=$config['port'];
 				$account['use_ssl']=$config['ssl'];
