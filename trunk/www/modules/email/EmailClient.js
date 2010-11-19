@@ -929,7 +929,7 @@ GO.email.EmailClient = function(config){
 	})];
 				
 				
-	if(GO.mailings)
+	if(GO.email.saveAsItems && GO.email.saveAsItems.length)
 	{
 		tbar.push({
 			iconCls: 'btn-save',
