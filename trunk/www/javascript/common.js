@@ -354,7 +354,7 @@ GO.util.numberFormat = function (number, decimals, decimal_separator, thousands_
 		
 		var presentDecimals = numberFloat.length-dotIndex;
 		
-		for(i=presentDecimals;i<=decimals;i++)
+		for(var i=presentDecimals;i<=decimals;i++)
 		{
 			numberFloat = numberFloat+"0";
 		}
@@ -378,7 +378,7 @@ GO.util.numberFormat = function (number, decimals, decimal_separator, thousands_
 	
 
 	var counter=0;
-	for(i=dotIndex-1;i>=0;i--)
+	for(var i=dotIndex-1;i>=0;i--)
 	{		
 		if(counter==3 && numberFloat.substr(i,1)!='-')
 		{
@@ -394,6 +394,20 @@ GO.util.numberFormat = function (number, decimals, decimal_separator, thousands_
 		formattedNumber = GO.util.numberFormat('0', decimals, decimal_separator, thousands_separator);
 	}
 	return formattedNumber;
+}
+
+GO.util.round = function(value, roundInterval, roundDown){
+	roundInterval = parseFloat(roundInterval);
+	value= parseFloat(value);
+	if(roundInterval>0){
+
+		var divided = value/roundInterval;
+
+		divided = roundDown ? Math.floor(divided) : Math.ceil(divided);
+		value = divided*roundInterval;
+	}
+
+	return value;
 }
 
 GO.util.popup = function (c)
