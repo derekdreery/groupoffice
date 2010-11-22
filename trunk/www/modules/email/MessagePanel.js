@@ -86,20 +86,22 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					'<span class="message-icalendar-icon go-link-icon-1"></span>'+
 					'{[values.iCalendar.feedback]}'+
 					'<span class="message-icalendar-actions">'+
-					'<tpl if="iCalendar.invitation.is_invitation">'+
-						//'<tpl if="!iCalendar.invitation.event_id || iCalendar.invitation.event_declined == true">'+
-							'<a class="normal-link" id="em-icalendar-accept-invitation" href="#">'+GO.email.lang.icalendarAcceptInvitation+'</a> '+
-						//'</tpl>'+
-						'<tpl if="iCalendar.invitation.event_declined == false">'+
-							'<a class="normal-link" id="em-icalendar-decline-invitation" href="#">'+GO.email.lang.icalendarDeclineInvitation+'</a> '+
+					'<tpl if="iCalendar.invitation">'+
+						'<tpl if="iCalendar.invitation.is_invitation">'+
+							//'<tpl if="!iCalendar.invitation.event_id || iCalendar.invitation.event_declined == true">'+
+								'<a class="normal-link" id="em-icalendar-accept-invitation" href="#">'+GO.email.lang.icalendarAcceptInvitation+'</a> '+
+							//'</tpl>'+
+							'<tpl if="iCalendar.invitation.event_declined == false">'+
+								'<a class="normal-link" id="em-icalendar-decline-invitation" href="#">'+GO.email.lang.icalendarDeclineInvitation+'</a> '+
+							'</tpl>'+
+							'<a class="normal-link" id="em-icalendar-tentative-invitation" href="#">'+GO.email.lang.icalendarTentativeInvitation+'</a> '+
 						'</tpl>'+
-						'<a class="normal-link" id="em-icalendar-tentative-invitation" href="#">'+GO.email.lang.icalendarTentativeInvitation+'</a> '+
-					'</tpl>'+
-					'<tpl if="iCalendar.invitation.is_cancellation">'+
-						'<a class="normal-link" id="em-icalendar-delete-event" href="#">'+GO.email.lang.icalendarDeleteEvent+'</a>'+
-					'</tpl>'+
-					'<tpl if="iCalendar.invitation.is_update">'+
-						'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
+						'<tpl if="iCalendar.invitation.is_cancellation">'+
+							'<a class="normal-link" id="em-icalendar-delete-event" href="#">'+GO.email.lang.icalendarDeleteEvent+'</a>'+
+						'</tpl>'+
+						'<tpl if="iCalendar.invitation.is_update">'+
+							'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
+						'</tpl>'+
 					'</tpl>'+
 					'</span>'+
 					'</div>'+
