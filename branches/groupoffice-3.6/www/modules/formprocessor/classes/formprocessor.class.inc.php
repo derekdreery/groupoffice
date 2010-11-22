@@ -59,6 +59,10 @@ class formprocessor{
 
 		$this->check_required();
 
+
+		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
+
 		
 
 		if(isset($_POST['language']) && $_POST['language']!=$GO_LANGUAGE->language)
@@ -93,20 +97,13 @@ class formprocessor{
 			}
 			$user_credentials['password']=$_POST['password1'];
 
-
-			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
-
 			$this->user_id=$user_id=$GO_USERS->add_user($user_credentials, $this->user_groups, $this->visible_user_groups);
 
 			require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
 			$GO_AUTH = new GO_AUTH();
 
 			$GO_AUTH->login($user_credentials['username'], $user_credentials['password']);
-		}
-
-
-		
+		}		
 
 		if(!empty($_POST['email']) && !String::validate_email($_POST['email']))
 		{
@@ -128,9 +125,7 @@ class formprocessor{
 			$credentials = array ('first_name','middle_name','last_name','title','initials','sex','email',
 			'email2','email3','home_phone','fax','cellular','comment','address','address_no',
 			'zip','city','state','country','company','department','function','work_phone',
-			'work_fax','salutation');
-
-			
+			'work_fax','salutation');			
 
 			foreach($credentials as $key)
 			{
@@ -244,10 +239,6 @@ class formprocessor{
 					$user_id=$this->user_id=$GO_SECURITY->user_id;
 
 				if(!empty($user_id)){
-
-					require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
-					$GO_USERS = new GO_USERS();
-
 					$user['id']=$user_id;
 					$user['contact_id']=$contact_id;
 					$GO_USERS->update_profile($user);
