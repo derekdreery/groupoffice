@@ -1,4 +1,4 @@
-? 3.6.0
+22/11/2010 3.6.1
 - Performance improvements in the new ExtJS 3.3 update.
 - Performance improvements by combining a lot requests to the server and load as
   little objects as possible.
@@ -31,7 +31,6 @@ Files
 Calendar and Tasks
 - Better support for calendar invitations from other clients such as Outlook and
   Thunderbird.
-* Invitation to newly added participant
 - Drag and drop tasks in tasklists.
 - Project calendars.
 - Improved appearance.
