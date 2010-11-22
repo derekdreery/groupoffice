@@ -11,12 +11,12 @@ GO.LinkTypeFilterPanel = function(config)
 	config.resizable=true;
 	config.autoScroll=true;
 	config.collapsible=true;
-	config.header=false;
+	//config.header=false;
 	config.collapseMode='mini';
 	config.allowNoSelection=true;
 	
-
-	//config.title=GO.lang.strType;
+	if(!config.title)
+		config.title=GO.lang.strType;
 
 	if(!GO.linkTypesStore){
 		GO.linkTypesStore= new Ext.data.JsonStore({

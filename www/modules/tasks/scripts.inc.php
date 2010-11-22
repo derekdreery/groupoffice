@@ -20,7 +20,7 @@ if(!$tasklist){
 $show = $GO_CONFIG->get_setting("tasks_filter", $GO_SECURITY->user_id);
 
 if(!$show)
-	$show='today';
+	$show='active';
 
 $GO_SCRIPTS_JS .='GO.tasks.defaultTasklist = {id: '.$tasklist['id'].', name: "'.$tasklist['name'].'"};
 GO.tasks.show="'.$show.'";';
