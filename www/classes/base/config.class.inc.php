@@ -247,7 +247,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $register_modules_read = 'notes,email,summary,mailings,addressbook,calendar,files,tasks,sync,gota,comments,projects,customfields';
+	var $register_modules_read = '';
 
 	/**
 	 * Grant write permissions for these modules to new self-registered users.
