@@ -1,0 +1,16 @@
+GO.backupmanager.lang.backupmanager='Backup Beheer';
+GO.backupmanager.lang.rkey='Keyfile';
+GO.backupmanager.lang.rmachine='Doel host';
+GO.backupmanager.lang.rport='Poort';
+GO.backupmanager.lang.rtarget='Doelmap';
+GO.backupmanager.lang.sources='Bronmappen';
+GO.backupmanager.lang.rotations='Rotaties';
+GO.backupmanager.lang.quiet='Stil';
+GO.backupmanager.lang.emailaddresses='Email adressen';
+GO.backupmanager.lang.emailsubject='Email onderwerp';
+GO.backupmanager.lang.rhomedir='Doel homedir';
+GO.backupmanager.lang.rpassword='Wachtwoord';
+GO.backupmanager.lang.publish='Publiceer';
+GO.backupmanager.lang.publishkey='Publiceer publieke sleutel';
+GO.backupmanager.lang.publishSuccess='Publieke sleutel is succesvol geupload.';
+GO.backupmanager.lang.helpText='Deze module kan van alle bestanden en MySQL databases backups maken naar een externe server dmv. SSH. U dient de SSH sleutel te publiceren, te controleren of de doelmap op de backup server bestaat en vervolgens dient u eerst modules/backupmanager/cron.php handmatig uit te voeren. Daarna kunt u de opdracht als cronjob instellen.';
