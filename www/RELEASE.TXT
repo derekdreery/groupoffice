@@ -1,3 +1,13 @@
+2010/11/22 3.6.1
+This release focuses on interoperability with other systems. With WebDAV and
+CalDAV support the filesystem can be mounted like a network drive and you can
+access the calender data directly with a calendar application. It also supports
+meeting requests from other calendar applications now.
+We moved the HTML templates, addresslists and newsletters into the community
+version as we think these features belong to the community version.
+There are lots of other changes too, checkout the full changelog that's included
+with the package.
+
 2010/05/14 3.5.1
 We wrote a new fast IMAP library that doesn't require the php imap extension
 which could be very slow with remote IMAP servers. POP-3 support is no longer
