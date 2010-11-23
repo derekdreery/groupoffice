@@ -548,7 +548,6 @@ class cached_imap extends imap{
 		//go_debug($struct);
 
 		$message['attachments']=$this->find_message_attachments($struct, $message['body_ids']);
-
 		//go_debug($message['attachments']);
 		
 		for($i=0,$max=count($message['attachments']);$i<$max;$i++){
