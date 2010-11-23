@@ -634,10 +634,12 @@ class imap_bodystruct extends imap_base {
 			}
 			if (isset($vals[0]) && $vals[0] != ')') {
 				$res['disposition'] = array_shift($vals);
-				if (strtolower($res['disposition']) == 'attachment' && $vals[0] == '(') {
+
+				if ((strtolower($res['disposition']) == 'attachment' || strtolower($res['disposition']) == 'inline') && $vals[0] == '(') {
 					array_shift($vals);
 
 					$res['filename']='';
+
 					while (isset($vals[0]) && strtolower(substr($vals[0],0,8)) == 'filename' && isset($vals[1]) && $vals[1] != ')') {
 						array_shift($vals);
 						$res['filename'] .= array_shift($vals);
@@ -674,6 +676,7 @@ class imap_bodystruct extends imap_base {
 						$res[$v] = trim($res[$v]);
 					}
 				}
+//if ($v=='filename') var_dump($res);
 			}
 			if (!isset($res['name'])) {
 				$res['name'] = 'message';
