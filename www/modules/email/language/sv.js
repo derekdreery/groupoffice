@@ -76,7 +76,7 @@ GO.email.lang.show= 'Visa';
 GO.email.lang.noAccount='Du har inte konfigurerat ett e-postkonto än. Klicka på Administration och välj Konton för att lägga till ett e-postkonto';
 GO.email.lang.attachFiles= 'Bifoga filer från datorn';
 GO.email.lang.uploadAttachments= 'Ladda upp bilagor';
-GO.email.lang.startTransfer= 'Starta överföring';
+GO.email.lang.startTransfer= 'OK';
 GO.email.lang.cantEditFolder='Du kan inte ändra den här mappen';
 GO.email.lang.cantDeleteInboxFolder='Du kan inte radera mappen Inkorg';
 GO.email.lang.cantRenameInboxFolder='Du kan inte döpa om mappen Inkorg';
@@ -169,3 +169,4 @@ GO.email.lang.searchTo='Mottagare';
 GO.email.lang.searchCC='Mottagare (Kopia)';
 
 GO.email.lang.youHaveNewMails = 'Du har {new} olästa meddelande(n)';
+GO.email.lang.anyField='Alla fält';
