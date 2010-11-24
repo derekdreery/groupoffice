@@ -86,7 +86,7 @@ GO.addressbook.lang.noAddressbooks = 'Det finns inga adressböcker';
 GO.addressbook.lang.moveAll = 'Företaget, inklusive alla anställda, kommer att flyttas till den nya adressboken. Är du säker på att du vill göra detta?';
 GO.addressbook.lang.addressbook = 'Adressbok';
 GO.addressbook.lang.addressbooks = 'Adressböcker';
-GO.addressbook.lang.sendMailing= 'Skicka sändlista';
+GO.addressbook.lang.sendMailing= 'Skicka till sändlista';
 GO.addressbook.lang.importSuccess= 'Dataimport lyckades';
 GO.addressbook.lang.searchOnSender= 'Sök i adressbok';
 GO.addressbook.lang.confirmCreate='Kontakten existerar inte. Vill du skapa en ny kontakt?';
@@ -109,3 +109,5 @@ GO.addressbook.lang.addAllSearchResults='Lägg till alla sökträffar';
 GO.addressbook.lang.confirmAddAllSearchResults='Är du säker på att du vill lägga till alla sökträffar i sändlistan?';
 
 GO.addressbook.lang.moveEmployees='Flytta anställda';
+
+GO.addressbook.lang.id='ID';

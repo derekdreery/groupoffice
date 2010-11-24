@@ -70,3 +70,8 @@ GO.mailings.lang.unsubscribeHref='href för att avsluta prenumeration';
 
 GO.mailings.lang.addDocumentTemplate='Lägg till dokumentmall';
 GO.mailings.lang.documentTemplate='Dokumentmall';
+
+GO.mailings.lang.documentTemplateText='Du kan ladda upp ett OpenOffice.Org- eller Microsoft Word 2007+ dokument. Dokumentet kan innehålla taggar (etiketter) som hämtar data från Group-Officedatabasen. Information om dessa hittar du i <a class="normal-link" target="_blank" href="http://www.group-office.com/wiki/Addressbook#Document_templates">manualen</a>.';
+GO.mailings.lang.documentFromTemplate='Dokument från mall';
+GO.mailings.lang.selectDocumentTemplate='Välj dokumentmall';
+GO.mailings.lang.selectRelevantResources='Välj relevanta resurser';

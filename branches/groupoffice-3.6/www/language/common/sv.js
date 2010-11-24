@@ -30,8 +30,8 @@ GO.lang.popupBlocker = 'Din webbläsare blockerar ett popup-fönster från Group
 
 GO.lang.color= 'Färg';
 GO.lang.browse= 'Bläddra...';
-GO.lang.largeUpload= 'Stora filer / mappar (Java krävs)';
-GO.lang.smallUpload= 'Små filer';
+GO.lang.largeUpload= 'Avancerad uppladdning - <small>Markera flera filer <br />samtidigt med ctrl/shift som i Windows</small>';
+GO.lang.smallUpload= 'Enkel uppladdning - <small>Enstaka filer</small>';
 
 
 GO.lang.lostPassword= 'Glömt lösenord?';
@@ -62,7 +62,7 @@ GO.lang.strPassword = 'Lösenord';
 
 GO.lang.strFirstName = 'Förnamn';
 GO.lang.strMiddleName = 'Mellannamn';
-GO.lang.strNo = 'Nr.';
+GO.lang.strNo = 'Nej.';
 GO.lang.strLastName = 'Efternamn';
 GO.lang.strTitle = 'Titel';
 GO.lang.strInitials = 'Initialer';
@@ -76,14 +76,14 @@ GO.lang.strCellular = 'Mobil';
 GO.lang.strAddress = 'Adress';
 GO.lang.strAddressNo = 'Husnummer';
 GO.lang.strZip = 'Postnummer';
-GO.lang.strCity = 'Stad';
+GO.lang.strCity = 'Ort';
 GO.lang.strState = 'Län/Stat';
 GO.lang.strCountry = 'Land';
 GO.lang.strAddressFormat = 'Adressformat';
 GO.lang.strHomepage = 'Hemsida';
 GO.lang.strCompany = 'Företag';
 GO.lang.strDepartment = 'Avdelning';
-GO.lang.strFunction = 'Funktion';
+GO.lang.strFunction = 'Titel/funktion';
 GO.lang.strSalutation = 'Hälsning';
 GO.lang.strComment = 'Kommentar';
 GO.lang.strWorkAddress = 'Adress (arbete)';
@@ -91,12 +91,12 @@ GO.lang.strWorkAddressNo = 'Husnummer (arbete)';
 GO.lang.strWorkZip = 'Postnummer (arbete)';
 GO.lang.strWorkCity = 'Stad (arbete)';
 GO.lang.strWorkState = 'Län/stat (arbete)';
-GO.lang.strWorkCountry = 'Land (Arbete)',	
+GO.lang.strWorkCountry = 'Land (arbete)',	
 GO.lang.strWorkPhone = 'Telefon (arbete)';
 GO.lang.strWorkFax = 'Fax (arbete)';
 GO.lang.strPostAddress = 'Adress (post)';
 GO.lang.strPostAddressNo = 'Husnummer (post)';
-GO.lang.strPostCity = 'Stad (post)';
+GO.lang.strPostCity = 'Ort (post)';
 GO.lang.strPostState = 'Län/stat (post)';
 GO.lang.strPostCountry = 'Land (post)';
 GO.lang.strPostZip = 'Postnummer (post)';
@@ -362,8 +362,3 @@ GO.lang.debugModeDetected="Varning! Debug-läge aktiverat";
 GO.lang.debugModeWarning="Använd $config['debug']=true; endast vid utveckling och felsökning. Group-Office blir långsammare i debug-läge.";
 
 GO.lang.noItemSelectedWarning='Välj minst ett objekt.';
-
-GO.lang.priority='Prioritet';
-GO.lang.priority_low='Låg';
-GO.lang.priority_normal='Normal';
-GO.lang.priority_high='Hög';
