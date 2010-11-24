@@ -68,6 +68,8 @@ else
 
 	postconf -e 'message_size_limit = 20480000'
 
+	postconf -e 'content_filter=smtp-amavis:[127.0.0.1]:10024'
+
 fi
 
 #check if user vmail exists
@@ -75,6 +77,8 @@ if  ! id vmail 1>/dev/null 2>&1 ; then
 	echo Adding vmail user
 	useradd -r -u 150 -g mail -d /home/vmail -s /sbin/nologin -c "Virtual Mailbox" vmail
 fi
+
+adduser clamav amavis
 
 if [ ! -x /home/vmail ]; then
 	mkdir /home/vmail
@@ -152,6 +156,8 @@ php /usr/share/groupoffice-mailserver/installpostfixadmin.php
 invoke-rc.d spamassassin restart 3> /dev/null || true
 invoke-rc.d postfix restart 3> /dev/null || true
 invoke-rc.d dovecot restart 3> /dev/null || true
+invoke-rc.d clamav-daemon restart 3> /dev/null || true
+invoke-rc.d clamav-freshclam restart 3> /dev/null || true
 
 php /usr/share/groupoffice-mailserver/addadminaccount.php
 
