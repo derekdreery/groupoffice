@@ -11,11 +11,7 @@ Package: groupoffice-mailserver
 Architecture: all
 Depends: groupoffice-com,
 	amavisd-new,
-	rar,
-	unrar,
-	lha,
 	arj,
-	unzoo,
 	zip,
 	unzip,
 	bzip2,
