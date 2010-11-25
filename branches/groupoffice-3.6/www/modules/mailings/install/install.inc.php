@@ -14,7 +14,7 @@ require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
 
 $template_body = '&lt;gotpl if="salutation"&gt;{salutation},<br />&lt;/gotpl&gt;
 <br />
-<br />
+{body}<br />
 <br />
 '.$lang['mailings']['greet'].'<br />
 <br />
