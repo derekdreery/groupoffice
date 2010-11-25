@@ -38,3 +38,5 @@ $lang['cms']['antispam_fail']='Het antispam antwoord was onjuist. Probeer het op
 $lang['cms']['no_admin_rights']='Heeft niet de benodigde admin rechten om de sitefoldertoegang van gebruikers te wijzigen.';
 
 $lang['cms']['none'] = 'GEEN';
+
+$lang['cms']['template_not_found'] = 'Er is geen template gevonden voor deze site. Controleer of de site is gekoppeld aan een template en dat de gekozen template een directory heeft in modules/cms/template/...';
