@@ -244,7 +244,7 @@ try{
 				$category_id=0;
 			}
 
-			$sort = ($sort == 'category_name') ? 'c.name' : 'n.'.$sort;
+			//$sort = ($sort == 'category_name') ? 'c.name' : $sort;
 			$response['total'] = $notes->get_notes($query, $readable_categories, $sort, $dir, $start, $limit);
 			$response['results']=array();
 
