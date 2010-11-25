@@ -48,6 +48,10 @@
 	width:10px;
 }
 
+.go-html-formatted, .go-html-formatted p, .go-html-formatted li{
+	font: 12px Arial, Helvetica Sans-serif;
+}
+
 .go-html-formatted  blockquote {  
 	display: block;  
   margin: 1em 40px;  
