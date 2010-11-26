@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROMODULES="sync customfields gota mailings projects professional timeregistration billing tickets";
+PROMODULES="sync customfields gota caldav documenttemplates saveemailas projects professional timeregistration billing tickets";
 
 # useful: DEBCONF_DEBUG="developer"
 
@@ -52,7 +52,7 @@ cd groupoffice-pro-$VERSION
 if [ "$1" == "send" ]; then
 	debuild -rfakeroot
 	cd ..
-	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/pool/main/
+	scp *.deb mschering@imfoss.nl:/var/www/groupoffice/repos.groupoffice.eu/groupoffice/poolthreesix/main/
 
 	#ssh mschering@imfoss.nl "dpkg-scanpackages /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary /dev/null | gzip -9c > /var/www/groupoffice/repos.groupoffice.eu/groupoffice/binary/Packages.gz"
 else

@@ -228,6 +228,10 @@ GO.cms.EditorPanel = Ext.extend(
 
 					this.fireEvent('load', this);
 				},
+				failure: function(form, action) {
+					Ext.MessageBox.alert(GO.lang.strError, action.result.feedback);
+					this.fireEvent('load', this);
+				},
 				scope: this
 					
 			});

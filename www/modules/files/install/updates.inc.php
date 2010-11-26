@@ -109,3 +109,5 @@ $updates[] = "CREATE TABLE IF NOT EXISTS `fs_shared_cache` (
   `path` text NOT NULL,
   PRIMARY KEY (`user_id`,`folder_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[] = "ALTER TABLE `go_links_17` ADD `ctime` INT NOT NULL ;";
