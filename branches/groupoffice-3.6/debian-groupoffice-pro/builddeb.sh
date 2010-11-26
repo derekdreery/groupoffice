@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROMODULES="sync customfields gota mailings projects professional timeregistration billing tickets";
+PROMODULES="sync customfields gota caldav documenttemplates saveemailas projects professional timeregistration billing tickets";
 
 # useful: DEBCONF_DEBUG="developer"
 
