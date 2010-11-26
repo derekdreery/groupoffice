@@ -91,3 +91,8 @@
 .x-view-selected .msg-head{
 	background:transparent;
 }
+
+.email-upload-pc{
+	padding-left:0px !important;
+	margin-left:-3px;
+}

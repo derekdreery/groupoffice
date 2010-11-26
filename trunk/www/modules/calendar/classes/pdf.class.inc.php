@@ -114,6 +114,8 @@ class PDF extends TCPDF {
 		$this->SetFont($this->font, 'B', $this->font_size);
 		//	$this->SetDrawColor(90, 90, 90);
 		//$this->SetDrawColor(128, 128, 128);
+
+		//go_debug($title.' '.$this->getPageWidth().'-'.($this->lMargin - $this->rMargin));
 		$this->Cell($this->getPageWidth() - $this->lMargin - $this->rMargin, 14, $title, '', 1);
 		//$this->SetDrawColor(0,0,0);
 		$this->SetFont($this->font, '', $this->font_size);
@@ -158,6 +160,8 @@ class PDF extends TCPDF {
 				$cellEvents[$cellIndex][] = $event;
 			}
 		}
+
+	
 
 		$calendarPrinted=false;
 
@@ -312,7 +316,7 @@ class PDF extends TCPDF {
 			} else {
 				$this->w = 595.28;
 			}*/
-			if($calendarPrinted)
+			//if($calendarPrinted)
 				$this->AddPage();
 
 			$this->H1($lang['calendar']['printList']);
@@ -321,14 +325,17 @@ class PDF extends TCPDF {
 			for ($i = 0; $i < $this->days; $i++) {
 
 
+
 				if (count($cellEvents[$i])) {
+
+					
 					$this->ln(10);
 					$this->H3($lang['common']['full_days'][date('w', $time)] . ', ' . date($_SESSION['GO_SESSION']['date_format'], $time));
 
 
 					$this->SetFont($this->font, '', $this->font_size);
 					while ($event = array_shift($cellEvents[$i])) {
-
+						
 
 						$this->H4($event['name']);
 

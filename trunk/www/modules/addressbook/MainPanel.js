@@ -249,7 +249,7 @@ GO.addressbook.MainPanel = function(config)
 			//GO.addressbook.showContactDialog(0);
 			this.contactEastPanel.reset();
 			this.contactEastPanel.editHandler();
-		
+
 			this.tabPanel.setActiveTab('ab-contacts-grid');
 		},
 		scope: this
@@ -620,20 +620,18 @@ GO.addressbook.searchSender = function(sender, name){
 								text: GO.lang.cmdAdd,
 								handler: function(){
 									GO.addressbook.showContactDialog();
-									GO.addressbook.contactDialog.formPanel.form.setValues(params);
+									GO.addressbook.contactDialog.formPanel.form.setValues(GO.addressbook.unknownEmailWin.params);
 									GO.addressbook.unknownEmailWin.hide();
-								},
-								scope: this
+								}
 							},{
 								text: GO.lang.cmdEdit,
 								handler: function(){
 									if(!GO.email.findContactDialog)
 										GO.email.findContactDialog = new GO.email.FindContactDialog();
 
-									GO.email.findContactDialog.show(params);
+									GO.email.findContactDialog.show(GO.addressbook.unknownEmailWin.params);
 									GO.addressbook.unknownEmailWin.hide();
-								},
-								scope: this
+								}
 							},{
 								text: GO.lang['cmdCancel'],
 								handler: function(){
@@ -643,6 +641,7 @@ GO.addressbook.searchSender = function(sender, name){
 						scope: this
 						});
 					}
+					GO.addressbook.unknownEmailWin.params=params;
 					GO.addressbook.unknownEmailWin.show();
 					/*
 					if(confirm(GO.addressbook.lang.confirmCreate))

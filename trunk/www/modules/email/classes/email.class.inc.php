@@ -76,14 +76,14 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 	$go2mime = new Go2Mime();
 	$response['data'] = $go2mime->mime2GO($template['content'], $GO_MODULES->modules['mailings']['url'].'mimepart.php?template_id='.$template_id, true, true);
 
-	if (isset($_POST['body'])){
-		if(strpos($response['data']['body'],'{body}')==false){
-			$response['data']['body'] = $_POST['body'].'<br />'.$response['data']['body'];
-		}else
-		{
-			$response['data']['body'] = str_replace('{body}', $_POST['body'], $response['data']['body']);
-		}
+	$presetbody = isset($_POST['body']) ? $_POST['body'] : '';
+	if(!empty($body) && strpos($response['data']['body'],'{body}')==false){
+		$response['data']['body'] = $_POST['body'].'<br />'.$response['data']['body'];
+	}else
+	{
+		$response['data']['body'] = str_replace('{body}', $presetbody, $response['data']['body']);
 	}
+	
 
 
 	unset($response['data']['to'],$response['data']['cc'], $response['data']['bcc'],$response['data']['subject']);

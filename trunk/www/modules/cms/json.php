@@ -305,6 +305,9 @@ try {
 
 		case 'file':
 
+			global $GO_LANGUAGE;
+			require_once($GO_LANGUAGE->get_language_file('cms'));
+
 			if(!empty($_REQUEST['file_id'])) {
 				$file = $cms->get_file(($_REQUEST['file_id']));
 				$folder = $cms->get_folder($file['folder_id']);
@@ -343,6 +346,10 @@ try {
 					}
 				}
 				$response['data']['option_values']=$cms->get_template_values($folder['option_values']);
+			}
+
+			if (empty($response['data']['config'])) {
+				throw new Exception($lang['cms']['template_not_found']);
 			}
 
 			$response['success']=true;

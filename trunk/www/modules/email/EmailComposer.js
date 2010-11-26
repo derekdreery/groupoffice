@@ -515,9 +515,9 @@ GO.email.EmailComposer = function(config) {
 	items.push(this.htmlEditor = new Ext.form.HtmlEditor({
 		hideLabel : true,
 		name : 'body',
+		style: 'font: 12px Arial, Helvetica, sans-serif',
 		anchor : '100% '+anchor,
 		plugins : plugins,
-		style:'font:12px arial;',
 		defaultFont:'arial',
 		listeners:{
 			activate:function(){
@@ -536,6 +536,7 @@ GO.email.EmailComposer = function(config) {
 			},
 			scope:this
 		},
+
 		
 		onFirstFocus : function(){
         this.activated = true;
@@ -1307,7 +1308,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		}else
 		{
 			//if(this.htmlEditor.activated){
-				this.insertDefaultFont();
+				//this.insertDefaultFont();
 			/*}else
 			{
 				this.htmlEditor.on('activate', this.insertDefaultFont, this);

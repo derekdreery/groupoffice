@@ -63,15 +63,22 @@ function insert_events($calendars,$start_time,$end_time) {
 				}
 			}
 
+			$background = !empty($default_bg) && !empty($default_bg[$event['calendar_id']]) ? $default_bg[$event['calendar_id']] : $event['background'];
+
+			$name = $event['name'];
+
 			$username = $GO_USERS->get_user_realname($event['user_id']);
 
-			$background = !empty($default_bg) && !empty($default_bg[$event['calendar_id']]) ? $default_bg[$event['calendar_id']] : $event['background'];
+			if(count($calendars)>1){
+				$name .= ' ('.String::get_first_letters($calendar_names[$event['calendar_id']]).')';
+				
+			}
 
 			$output_events[] = array(
 							'id'=>$event_nr++,
 							'event_id'=> $event['id'],
 							//'link_count'=>$GO_LINKS->count_links($event['id'], 1),
-							'name'=> $event['name'].' ('.String::get_first_letters($calendar_names[$event['calendar_id']]).')',
+							'name'=> $name,
 							'time'=>date($date_format, $event['start_time']),
 							'calendar_id'=>$event['calendar_id'],
 							'calendar_name'=>isset($calendar_names[$event['calendar_id']]) ? $calendar_names[$event['calendar_id']] : '',
@@ -136,10 +143,12 @@ if(!empty($_REQUEST['view_id'])) {//!empty($_REQUEST['view_id'])){
 	$pdf->setCurrentCalendar($calendar);
 	$title=$calendar['name'];
 	$pdf->setParams($calendar['name'], $start_time, $end_time);
-	$events = $cal->get_events_in_array(array($calendars[0]), 0, $start_time, $end_time);
-	//var_dump($events);
+	//$events = $cal->get_events_in_array(array($calendars[0]), 0, $start_time, $end_time);
+	//go_debug($events);
+
+	insert_events($calendars,$start_time,$end_time);
 	
-	$pdf->addCalendar($events);
+	//$pdf->addCalendar($events);
 }
 
 $filename = File::strip_invalid_chars($lang['calendar']['name'].' '.$title);

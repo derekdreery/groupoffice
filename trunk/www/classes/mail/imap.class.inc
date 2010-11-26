@@ -990,13 +990,10 @@ class imap extends imap_bodystruct {
 						if (strpos($message['content-type'], 'charset=')!==false) {
 							if (preg_match("/charset\=([^\s]+)/", $message['content-type'], $matches)) {
 								$message['charset'] = trim(str_replace(array('"', "'", ';'), '', $matches[1]));
-							}
-							if(preg_match("/[^\/]*\/[^;]*/", $message['content-type'], $matches)){
-								$message['content-type']=$matches[0];
-							}
-						}else
-						{
-							$message['content-type']=str_replace(';', '', $message['content-type']);
+							}							
+						}
+						if(preg_match("/[^\/]*\/[^;]*/", $message['content-type'], $matches)){
+							$message['content-type']=$matches[0];
 						}
 					}
 

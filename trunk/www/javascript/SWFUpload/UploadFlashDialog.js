@@ -18,13 +18,21 @@ GO.UploadFlashDialog = function(config){
 	config.closeAction='hide';	
 	config.html='items';
 	config.buttons=[{	
-		text: GO.lang.cmdOk,
+		text: GO.lang.uploadFiles,
 		handler: function()
 		{
 			if(this.uploadPanel.store.getCount()>0)
 				this.uploadPanel.startUpload();
 			else
 				this.hide();
+		},
+		scope:this
+	},{
+		text: GO.lang.cmdCancel,
+		handler: function()
+		{
+			this.uploadPanel.removeAllFiles();
+			this.hide();
 		},
 		scope:this
 	}];

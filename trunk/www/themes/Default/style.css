@@ -48,6 +48,10 @@
 	width:10px;
 }
 
+.go-html-formatted, .go-html-formatted p, .go-html-formatted li{
+	font: 12px Arial, Helvetica Sans-serif;
+}
+
 .go-html-formatted  blockquote {  
 	display: block;  
   margin: 1em 40px;  
@@ -1775,4 +1779,24 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 
 .x-panel-header-text{
 	white-space:nowrap;
+}
+
+
+
+
+
+.SwfUploadPanel_iconAdd {
+	background-image:url(images/swfupload/add.png) !important;
+}
+
+.SwfUploadPanel_iconUpload {
+	background-image:url(images/swfupload/arrow_up.png) !important;
+}
+
+.SwfUploadPanel_iconCancel {
+	background-image:url(images/swfupload/delete.png) !important;
+}
+
+.SwfUploadPanel_iconDelete {
+	background-image:url(images/swfupload/delete.png) !important;
 }
