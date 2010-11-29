@@ -48,7 +48,7 @@ $queries = String::get_sql_queries($sql_file);
 //var_dump($queries);
 
 foreach($queries as $query){
-	echo "QUERY: $query\n";
+	//echo "QUERY: $query\n";
 	$pa->query($query);
 }
 
@@ -58,5 +58,8 @@ while($r = $pa->next_record()){
 	$r['acl_id']=$GO_SECURITY->get_new_acl();
 	$db->update_row('pa_domains', 'id', $r);
 }
+
+echo "Setting file permissions...\n\n";
+system('chown -R vmail:mail '.$vmail.'/'.$args['domain']);
 
 echo "Done!\n\n";
