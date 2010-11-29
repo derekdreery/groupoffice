@@ -1087,7 +1087,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				.get('id');
 			}*/
 
-			if (config.template_id == undefined && this.templatesStore){
+			if (typeof(config.template_id) == 'undefined' && this.templatesStore){
 				var templateRecordIndex = this.templatesStore.findBy(function(record,id){
 					return record.get('checked');
 				});
