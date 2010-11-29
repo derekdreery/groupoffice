@@ -281,6 +281,9 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		var el = Ext.get(toggleId);
 		var toggleBtn = Ext.get('toggle-'+toggleId);
 
+		if(!toggleBtn)
+			return false;
+		
 		var saveState=false;
 		if(typeof(collapse)=='undefined'){
 			collapse = !toggleBtn.hasClass('go-tool-toggle-collapsed');// toggleBtn.dom.innerHTML=='-';
