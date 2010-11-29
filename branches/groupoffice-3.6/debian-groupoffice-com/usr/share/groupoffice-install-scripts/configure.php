@@ -15,7 +15,7 @@ chdir(dirname(__FILE__));
 $replacements['db_name']=$dbname;
 $replacements['db_user']=$dbuser;
 $replacements['db_pass']=$dbpass;
-$replacements['domain']=$domain;
+//$replacements['domain']=$domain;
 $replacements['timezone']=trim(file_get_contents('/etc/timezone'));
 
 
