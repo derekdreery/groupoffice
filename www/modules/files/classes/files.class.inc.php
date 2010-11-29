@@ -1026,7 +1026,20 @@ class files extends db {
 			return false;
 		}
 
-		return $this->has_write_permission($user_id, $folder);
+
+		if(is_numeric($folder)) {
+			$folder = $this->get_folder($folder);
+		}
+
+		if(empty($folder['acl_id'])) {
+			if(empty($folder['parent_id'])) {
+				return $GO_SECURITY->has_admin_permission($user_id);
+			}
+			$parent = $this->get_folder($folder['parent_id']);
+			return $this->has_delete_permission($user_id, $parent);
+		}else {
+			return $GO_SECURITY->has_permission($user_id, $folder['acl_id'])>GO_SECURITY::WRITE_PERMISSION;
+		}
 	}
 
 	function has_read_permission($user_id, $folder) {
