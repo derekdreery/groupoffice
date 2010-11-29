@@ -1,13 +1,13 @@
 #!/usr/bin/php
 <?php
-require('/etc/groupoffice/config-mailserver.inc.php');
+require('/etc/groupoffice/config-servermanager.inc.php');
 
 chdir(dirname(__FILE__));
 
 $replacements['db_name']=$dbname;
 $replacements['db_user']=$dbuser;
 $replacements['db_pass']=$dbpass;
-$replacements['domain']=$domain;
+$replacements['domain']=$wildcarddomain;
 
 function create_file($file, $tpl, $replacements) {
 	$data = file_get_contents($tpl);
