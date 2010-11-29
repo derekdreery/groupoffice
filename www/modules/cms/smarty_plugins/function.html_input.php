@@ -15,6 +15,9 @@ function smarty_function_html_input($params, &$smarty)
 	
 	if(!isset($params['extra']))
 		$params['extra']='';
+
+	if(!isset($params['style']))
+		$params['style']='';
 		
 	if(!isset($params['class']))
 		$params['class']='textbox';
@@ -49,10 +52,23 @@ function smarty_function_html_input($params, &$smarty)
 		$params['type']='text';
 	}
 	 
-	$html = '<input class="'.$params['class'].'" type="'.$params['type'].'" name="'.$params['name'].'" value="'.$value.'" '.$params['extra'];
+	$html = '<input class="'.$params['class'].'" type="'.$params['type'].'" name="'.$params['name'].'" value="'.$value.'" style="'.$params['style'].'" '.$params['extra'];
 
 	if(!empty($params['empty_text'])){
-		$html .= ' onfocus="if(this.value==\''.$params['empty_text'].'\')this.value=\'\';" onblur="if(this.value==\'\')this.value=\''.$params['empty_text'].'\';"';
+		$html .= ' onfocus="if(this.value==\''.$params['empty_text'].'\'){this.value=\'\';';
+
+		if(!empty($params['empty_text_active_class'])){
+			$html .= 'this.className+=\' '.$params['empty_text_active_class'].'\'};"';
+		}else
+		{
+			$html .= '}"';
+		}
+
+		$html .= ' onblur="if(this.value==\'\'){this.value=\''.$params['empty_text'].'\';';
+		if(!empty($params['empty_text_active_class'])){
+			$html .= 'this.className=this.className.replace(\' '.$params['empty_text_active_class'].'\',\'\');';
+		}
+		$html .= '}"';
 	}
 
 	$html .= ' />';
