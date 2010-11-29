@@ -34,6 +34,7 @@ GO.Window = Ext.extend(Ext.Window,{
 		GO.Window.superclass.beforeShow.call(this);
 
 		if(GO.viewport){
+
 			var vpH=GO.viewport.getEl().getHeight();
 			var vpW=GO.viewport.getEl().getWidth();
 
@@ -43,8 +44,12 @@ GO.Window = Ext.extend(Ext.Window,{
 			if(this.width > vpW) {
 				this.setWidth(vpW);
 			}
-			
-			//this.center();
+
+			var pos = this.getPosition();
+
+			//center window if it's outside the viewport
+			if(pos[0]<0 || pos[0]+this.width>vpW || pos[1]<0 || pos[1]+this.height>vpH)
+				this.center();
 		}
 	},
 
