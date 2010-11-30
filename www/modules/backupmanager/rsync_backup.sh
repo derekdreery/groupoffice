@@ -47,7 +47,8 @@ MYSQL_PASS=${11}
 #######################################
 ########DO_NOT_EDIT_BELOW_THIS_POINT#########
 #######################################
-LOGFILE=/root/`date +"%m%d%Y_%s"`.log
+mkdir -p /var/log/gobackup
+LOGFILE=/var/log/gobackup/`date +"%m%d%Y_%s"`.log
 ####### Redirect Output to a logfile and screen - Couldnt get tee to work
 exec 3>&1                         # create pipe (copy of stdout)
 exec 1>$LOGFILE                   # direct stdout to file
