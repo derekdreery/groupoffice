@@ -193,6 +193,7 @@ class cached_imap extends imap{
 			if(isset($this->folder_sort_cache[$sort_type.'_'.$reverse]))
 			{
 				go_debug('Used cached sort info');
+				$this->sort_count=$this->selected_mailbox['messages'];
 				return $this->folder_sort_cache[$sort_type.'_'.$reverse];
 			}else
 			{
