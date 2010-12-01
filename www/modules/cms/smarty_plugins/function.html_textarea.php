@@ -10,16 +10,16 @@ function smarty_function_html_textarea($params, &$smarty)
 {
 	if(!isset($params['value']))
 		$params['value']='';
-		
+
 	$value = isset($_POST[$params['name']]) ? ($_POST[$params['name']]) : $params['value'];
-	
+
 	if(!isset($params['extra']))
 		$params['extra']='';
-		
+
 	if(!isset($params['class']))
 		$params['class']='textbox';
 
-	
+
 	if($pos = strpos($params['name'], '['))
 	{
 		$key1 = substr($params['name'],0,$pos);
@@ -33,7 +33,7 @@ function smarty_function_html_textarea($params, &$smarty)
 		$value = isset($_POST[$params['name']]) ? ($_POST[$params['name']]) : $params['value'];
 		$isset = isset($_POST[$params['name']]);
 	}
-		
+
 	if($isset && empty($value) && $params['required'])
 		$params['class'].=' error';
 
@@ -71,6 +71,6 @@ function smarty_function_html_textarea($params, &$smarty)
 		$html .= '<input type="hidden" name="empty_texts[]" value="'.$params['name'].':'.$params['empty_text'].'" />';
 	}
 	return $html;
-	
+
 }
 ?>

@@ -10,12 +10,12 @@ function smarty_function_html_input($params, &$smarty)
 {
 	if(!isset($params['value']))
 		$params['value']='';
-		
-	
-	
+
+
+
 	if(!isset($params['extra']))
 		$params['extra']='';
-		
+
 	if(!isset($params['class']))
 		$params['class']='textbox';
 
@@ -38,7 +38,7 @@ function smarty_function_html_input($params, &$smarty)
 			$isset = isset($_POST[$params['name']]);
 		}
 	}
-		
+
 	if($isset && empty($value) && $params['required'])
 		$params['class'].=' error';
 
@@ -48,7 +48,7 @@ function smarty_function_html_input($params, &$smarty)
 	if(empty($params['type'])){
 		$params['type']='text';
 	}
-	 
+
 	$html = '<input class="'.$params['class'].'" type="'.$params['type'].'" name="'.$params['name'].'" value="'.$value.'" '.$params['extra'];
 
 	if(!empty($params['empty_text'])){
@@ -69,7 +69,7 @@ function smarty_function_html_input($params, &$smarty)
 	}
 
 	$html .= ' />';
-	
+
 	if($params['required'] && ($params['required']=='true' || $params['required']=='1'))
 	{
 		$html .= '<input type="hidden" name="required[]" value="'.$params['name'].'" />';
@@ -78,7 +78,7 @@ function smarty_function_html_input($params, &$smarty)
 		$html .= '<input type="hidden" name="empty_texts[]" value="'.$params['name'].':'.$params['empty_text'].'" />';
 	}
 
-	
+
 	return $html;
 }
 
