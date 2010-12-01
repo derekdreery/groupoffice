@@ -592,7 +592,7 @@ class Date {
 
 
 	public static function to_unixtime($date_string) {
-		if(empty($date_string) || '0000-00-00')
+		if(empty($date_string) || $date_string=='0000-00-00')
 		{
 			return 0;
 		}
