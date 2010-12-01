@@ -921,13 +921,18 @@ try {
 
 		case 'save_accounts_sort_order':
 
-			$sort_order = json_decode($_POST['sort_order'], true);
+			$sort_order = json_decode($_POST['sort_order'], true);		
+			$count = count($sort_order);
 
-			for($i=0;$i<count($sort_order);$i++) {
-				$account['id']=$sort_order[$i];
-				$account['standard']=$i;
-				$email->_update_account($account);
+			for($i=0;$i<$count;$i++) {
+				
+				$as['account_id']=$sort_order[$i];
+				$as['user_id']=$GO_SECURITY->user_id;
+				$as['order']=$count-$i;
+
+				$email->update_account_order($as);
 			}
+
 			$response['success']=true;
 			break;
 
@@ -970,6 +975,12 @@ try {
 				if ($account['id'] > 0) {
 					if(isset($_REQUEST['user_id'])) {
 						$account['user_id']=$_REQUEST['user_id'];
+
+						$old_account = $email->get_account($account['id']);
+						if($old_account['user_id']!=$account['user_id']){
+							$GO_SECURITY->chown_acl($old_account['acl_id'], $account['user_id']);
+						}
+
 					}
 
 					$account['sent']=$_POST['sent'];
@@ -1083,6 +1094,7 @@ try {
 				}else {
 					$account['user_id']=isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GO_SECURITY->user_id;
 
+					$account['acl_id']=$response['acl_id']=$GO_SECURITY->get_new_acl('email', $account['user_id']);
 
 					$account['id'] = $email->add_account($account);
 					if(!$account['id']) {

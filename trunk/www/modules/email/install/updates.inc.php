@@ -97,3 +97,17 @@ $updates[]="CREATE TABLE IF NOT EXISTS `em_folders_expanded` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`folder_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="ALTER TABLE `em_accounts` ADD `acl_id` INT(11) NOT NULL";
+
+$updates[]="CREATE TABLE IF NOT EXISTS `em_accounts_sort` (
+`account_id` INT( 11 ) NOT NULL ,
+`user_id` INT( 11 ) NOT NULL ,
+`order` INT( 11 ) NOT NULL ,
+PRIMARY KEY ( `account_id` , `user_id` )
+) ENGINE = MYISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="script:2_add_acl.inc.php";
+
+$updates[]="INSERT INTO em_accounts_sort SELECT id,user_id,standard FROM `em_accounts`";
+$updates[]="ALTER TABLE `em_accounts` DROP `standard`";

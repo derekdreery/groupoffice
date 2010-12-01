@@ -304,9 +304,9 @@ class GO_SECURITY extends db {
 		$sql = "UPDATE go_acl_items SET user_id='".$this->escape($user_id)."' WHERE id='".$this->escape($acl_id)."'";
 		$this->query($sql);
 
-		if(!$this->user_in_acl($user_id, $acl_id)) {
-			$this->add_user_to_acl($user_id, $acl_id);
-		}
+		//if(!$this->user_in_acl($user_id, $acl_id)) {
+			$this->add_user_to_acl($user_id, $acl_id, GO_SECURITY::MANAGE_PERMISSION);
+		//}
 
 		return true;
 	}
