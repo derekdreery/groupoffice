@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `bm_settings` (
   `emailaddress` varchar(255) NOT NULL,
   `emailsubject` varchar(255) NOT NULL,
   `sources` varchar(255) NOT NULL DEFAULT '/etc /home',
+  `running` BOOLEAN NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 

@@ -38,7 +38,7 @@ if($settings && $settings['running'] == 1)
 			if(fsockopen($settings['rmachine'], $settings['rport']))
 			{
 					// key exists and server is ready, prepare backup
-					unset($settings['id']);
+					unset($settings['id'], $settings['running']);
 					$parameters = '';
 					$multivalues = array('emailaddress','emailsubject','sources');
 					foreach($settings as $key=>$val)
@@ -59,22 +59,22 @@ if($settings && $settings['running'] == 1)
 					}
 
 					// Check for first run
-					 //$GO_CONFIG->save_setting('backupmanager_first_run', true);
-
-					$firstRun = false;
+					$firstRun = 0;
 
 					if($GO_CONFIG->get_setting('backupmanager_first_run'))
 					{
-						$firstRun = true;
-						$GO_CONFIG->delete_setting('backupmanager_first_run');
+						$firstRun = 1;
 					}
 
 					$parameters .= ' '.$firstRun;
 
-					//echo $parameters."\n\n";
+					echo $parameters."\n\n";
 
 					// start backup
-					system($GO_MODULES->modules['backupmanager']['path'].'rsync_backup.sh '.$parameters);
+					system($GO_MODULES->modules['backupmanager']['path'].'rsync_backup.sh '.$parameters, $ret);
+
+					if(empty($ret) && $firstRun)
+						$GO_CONFIG->delete_setting('backupmanager_first_run');
 
 					exit();
 			}else
