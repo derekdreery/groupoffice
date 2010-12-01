@@ -1,4 +1,4 @@
-2010/11/22 3.6.1
+2010/12/01 3.6.4
 This release focuses on interoperability with other systems. With WebDAV and
 CalDAV support the filesystem can be mounted like a network drive and you can
 access the calender data directly with a calendar application. It also supports
