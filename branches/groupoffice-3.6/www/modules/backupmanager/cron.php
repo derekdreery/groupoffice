@@ -68,7 +68,7 @@ if($settings && $settings['running'] == 1)
 
 					$parameters .= ' '.$firstRun;
 
-					echo $parameters."\n\n";
+					//echo $parameters."\n\n";
 
 					// start backup
 					system($GO_MODULES->modules['backupmanager']['path'].'rsync_backup.sh '.$parameters, $ret);
