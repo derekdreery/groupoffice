@@ -1,4 +1,4 @@
-29/11/2010 3.6.3
+01/12/2010 3.6.4
 - Performance improvements in the new ExtJS 3.3 update.
 - Performance improvements by combining a lot requests to the server and load as
   little objects as possible.
