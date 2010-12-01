@@ -1308,7 +1308,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		}else
 		{
 			//if(this.htmlEditor.activated){
-				//this.insertDefaultFont();
+				this.insertDefaultFont();
 			/*}else
 			{
 				this.htmlEditor.on('activate', this.insertDefaultFont, this);
