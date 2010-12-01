@@ -62,26 +62,50 @@ GO.backupmanager.MainPanel = function(config){
         ],
         buttons:[
         {
-            text:GO.lang['cmdOk'],
+            text:GO.lang['cmdSave'],
             handler: function()
             {
                 this.submitForm();
             },
             scope: this
         },this.publishButton = new Ext.Button({
-            text:GO.backupmanager.lang.publishkey,
-            handler: function()
-            {
-                if(!this.publishDialog)
-                {
-                    this.publishDialog = new GO.backupmanager.PublishDialog();
-                }
-
-                var values = this.formPanel.getForm().getValues();
-
-                this.publishDialog.show(values);
-            },
+						text:GO.lang.waitMsgLoad,
             disabled:true,
+						handler: function()
+						{
+							this.submitForm();
+							if(this.publishButton.text == GO.backupmanager.lang.enablebackup)
+							{
+								if(!this.publishDialog)
+								{
+										this.publishDialog = new GO.backupmanager.PublishDialog();
+										this.publishDialog.on('publish', function(){
+											this.publishButton.setText(GO.backupmanager.lang.disablebackup);
+										},this);
+								}
+
+								var values = this.formPanel.getForm().getValues();
+
+								this.publishDialog.show(values);
+							}
+							else
+							{
+								Ext.Ajax.request({
+									url: GO.settings.modules.backupmanager.url+'action.php',
+									params: {
+										task: 'disable_running',
+										running: false
+									},
+									callback: function(options, success, response)
+									{
+										str = response.responseText;
+										this.publishButton.setText(GO.backupmanager.lang.enablebackup);
+										Ext.MessageBox.alert(GO.backupmanager.lang.disablebackup,GO.backupmanager.lang.successdisabledbackup);
+									},
+									scope:this
+								});
+							}
+						},
             scope: this
         })],
         buttonAlign:'left'
@@ -119,6 +143,15 @@ Ext.extend(GO.backupmanager.MainPanel, Ext.Panel,{
                 {
                     this.publishButton.enable();
                 }
+								
+								if(action.result.data.running == 1)
+								{
+									this.publishButton.setText(GO.backupmanager.lang.disablebackup);
+								}
+								else
+								{
+									this.publishButton.setText(GO.backupmanager.lang.enablebackup);
+								}
             },
             failure:function(form, action)
             {

@@ -14,6 +14,15 @@ try
 {
     switch($task)
     {
+				case 'disable_running':
+					$settings['id'] = 1;
+					$settings['running'] = (isset($_REQUEST['running'])) ? $_REQUEST['running']:'';
+					echo "disable running";
+					$response['success']=$backupmanager->save_settings($settings);
+
+					break;
+
+
         case 'save_settings':
 
             // TO-DO: check input before updating. Strip trailing slashes from folders.
@@ -60,7 +69,7 @@ try
             
             require_once($GO_MODULES->modules['backupmanager']['class_path'].'phpseclib/Net/SSH2.php');            
             $ssh = new Net_SSH2($rmachine, $rport);
-            
+            						
             if($ssh->login($ruser, $rpassword))
             {
                 if(!file_exists($GO_CONFIG->file_storage_path.'.ssh/id_rsa.pub'))
@@ -74,10 +83,19 @@ try
                 }
                 
                 $key_content = file_get_contents($GO_CONFIG->file_storage_path.'.ssh/id_rsa.pub');
+
+								// check of doelmap bestaat
+								$test_targetdir = trim($ssh->exec("test -d '".escapeshellarg($_REQUEST['rtarget'])."' || echo 'false'"));
+								//var_dump($test_targetdir);
+								if($test_targetdir=='false')
+								{
+										$response['feedback'] = $lang['backupmanager']['target_does_not_exist'];
+								}
+
                 if($key_content)
-                {
-                    echo $ssh->exec("umask 077; test -d .ssh || mkdir .ssh && touch .ssh/authorized_keys && chmod 600 .ssh/authorized_keys;");
-                    echo $ssh->exec('echo "'.$key_content.'" >> .ssh/authorized_keys');
+                {	
+                    $ssh->exec("umask 077; test -d .ssh || mkdir .ssh && touch .ssh/authorized_keys && chmod 600 .ssh/authorized_keys;");
+                    $ssh->exec('echo "'.$key_content.'" >> .ssh/authorized_keys');
                 }else
                 {
                     $response['feedback'] = $lang['backupmanager']['empty_key'];
@@ -87,10 +105,16 @@ try
                 $response['feedback'] = $lang['backupmanager']['connection_error'];
             }
 
-            $response['success'] = isset($response['feedback']) ? false : true;
+						if(!isset($response['feedback'])){
+							$settings['id'] = 1;
+							$settings['running'] = 1;
 
+							$response['success']=$backupmanager->save_settings($settings);
+						}else
+						{
+							$response['success']=false;
+						}
             break;
-
     }
 }catch(Exception $e)
 {
