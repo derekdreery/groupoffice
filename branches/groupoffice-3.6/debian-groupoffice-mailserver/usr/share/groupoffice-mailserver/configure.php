@@ -139,8 +139,8 @@ create_file($filename,'tpl/etc/dovecot/dovecot.conf', $replacements);
 
 
 echo "Configuring amavis\n";
-$filename = file_contains('/etc/amavis/60-groupoffice_defaults', 'Group-Office') ? '/etc/amavis/60-groupoffice_defaults.'.date('Ymd') : '/etc/amavis/60-groupoffice_defaults';
-create_file($filename,'tpl/etc/amavis/60-groupoffice_defaults', $replacements);
+$filename = file_contains('/etc/amavis/conf.d/60-groupoffice_defaults', 'Group-Office') ? '/etc/amavis/conf.d/60-groupoffice_defaults.'.date('Ymd') : '/etc/amavis/conf.d/60-groupoffice_defaults';
+create_file($filename,'tpl/etc/amavis/conf.d/60-groupoffice_defaults', $replacements);
 
 
 echo "Configuring vacation\n";
