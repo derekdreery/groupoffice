@@ -60,6 +60,7 @@ Ext.extend(GO.backupmanager.PublishDialog, Ext.Window,{
         this.formPanel.baseParams.rmachine = values.rmachine;
         this.formPanel.baseParams.rport = values.rport;
         this.formPanel.baseParams.ruser = values.ruser;
+				this.formPanel.baseParams.rtarget = values.rtarget;
         
         GO.backupmanager.PublishDialog.superclass.show.call(this);
     },    
@@ -78,6 +79,8 @@ Ext.extend(GO.backupmanager.PublishDialog, Ext.Window,{
                 {
                     this.hide();                 
                 }
+
+								this.fireEvent('publish');
 
                 Ext.MessageBox.alert(GO.lang['strSuccess'], GO.backupmanager.lang.publishSuccess);
             },

@@ -13,3 +13,4 @@ $lang['backupmanager']['no_mysql_config']='Group-Office heeft geen mysql config 
     $bm_config[\'mysql_pass\'] = \'\';<br />
     ?><br /><br />
     Zonder dit bestand worden de backups wel uitgevoerd, echter niet van de database.';
+$lang['backupmanager']['target_does_not_exist']='De doelmap bestaat niet!';

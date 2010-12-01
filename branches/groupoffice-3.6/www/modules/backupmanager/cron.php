@@ -28,44 +28,68 @@ $backupmanager = new backupmanager();
 
 $output = array();
 $settings = $backupmanager->get_settings();
-$settings['rkey'] = $GO_CONFIG->file_storage_path.'.ssh/id_rsa';
-if(file_exists($settings['rkey']))
-{    
-    if(fsockopen($settings['rmachine'], $settings['rport']))
-    {
-        // key exists and server is ready, prepare backup
-        unset($settings['id']);
-        $parameters = '';
-        $multivalues = array('emailaddress','emailsubject','sources');
-        foreach($settings as $key=>$val)
-        {
-            if(!in_array($key, $multivalues))
-            {
-                $parameters .= ' '.$val;
-            }else
-            {
-                $parameters .= ' "'.$val.'"';
-            }
-        }
 
-        $mysql_config = $backupmanager->get_mysql_config();
-        if(count($mysql_config))
-        {
-            $parameters .= ' '.$mysql_config['user'].' '.$mysql_config['pass'];            
-        }
-        //echo $parameters."\n\n";
-
-        // start backup
-        exec($GO_MODULES->modules['backupmanager']['path'].'rsync_backup.sh '.$parameters);
-        
-        exit();        
-    }else
-    {
-        echo "Target host seems to be down\n";
-    }
-}else
+// Check for settings to be available
+if($settings && $settings['running'] == 1)
 {
-    echo "Keyfile not found\n";
+	$settings['rkey'] = $GO_CONFIG->file_storage_path.'.ssh/id_rsa';
+	if(file_exists($settings['rkey']))
+	{
+			if(fsockopen($settings['rmachine'], $settings['rport']))
+			{
+					// key exists and server is ready, prepare backup
+					unset($settings['id']);
+					$parameters = '';
+					$multivalues = array('emailaddress','emailsubject','sources');
+					foreach($settings as $key=>$val)
+					{
+							if(!in_array($key, $multivalues))
+							{
+									$parameters .= ' '.$val;
+							}else
+							{
+									$parameters .= ' "'.$val.'"';
+							}
+					}
+
+					$mysql_config = $backupmanager->get_mysql_config();
+					if(count($mysql_config))
+					{
+							$parameters .= ' '.$mysql_config['user'].' '.$mysql_config['pass'];
+					}
+
+					// Check for first run
+					 //$GO_CONFIG->save_setting('backupmanager_first_run', true);
+
+					$firstRun = false;
+
+					if($GO_CONFIG->get_setting('backupmanager_first_run'))
+					{
+						$firstRun = true;
+						$GO_CONFIG->delete_setting('backupmanager_first_run');
+					}
+
+					$parameters .= ' '.$firstRun;
+
+					//echo $parameters."\n\n";
+
+					// start backup
+					system($GO_MODULES->modules['backupmanager']['path'].'rsync_backup.sh '.$parameters);
+
+					exit();
+			}else
+			{
+					echo "Target host seems to be down\n";
+			}
+
+	}else
+	{
+			echo "Keyfile not found\n";
+	}
+}
+else
+{
+	echo "No settings for backup found or not running!\n";
 }
 
 ?>
