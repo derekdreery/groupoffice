@@ -1058,7 +1058,7 @@ try {
 				}
 
 				$response['folder_id']=$imap->folder['id'];
-				$response['total'] = $imap->selected_mailbox['messages'];
+				$response['total'] = $imap->sort_count;//selected_mailbox['messages'];
 
 				foreach($imap->touched_folders as $touched_folder) {
 					if($touched_folder==$mailbox) {

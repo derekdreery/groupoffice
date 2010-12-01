@@ -21,6 +21,8 @@ class imap extends imap_bodystruct {
 	var $delimiter=false;
 
 	var $errors=array();
+
+	var $sort_count = false;
 	
 	public function __construct(){
 		
@@ -498,26 +500,38 @@ class imap extends imap_bodystruct {
 		if (($sort == 'THREAD_R' || $sort == 'THREAD_O')) {
 			if ($sort == 'THREAD_O') {
 				if (stristr($this->capability, 'ORDEREDSUBJECT')) {
-					return $this->thread_sort($sort, $filter);
+					$ret =  $this->thread_sort($sort, $filter);
+					$this->sort_count = $ret['total'];
+					return $ret;
 				}
 				else {
-					return $this->server_side_sort('ARRIVAL', false, $filter);
+					$uids=$this->server_side_sort('ARRIVAL', false, $filter);
+					$this->sort_count = count($uids);
+					return $uids;
 				}
 			}
 			if ($sort == 'THREAD_R') {
 				if (stristr($this->capability, 'THREAD')) {
-					return $this->thread_sort($sort, $filter);
+					$ret = $this->thread_sort($sort, $filter);
+					$this->sort_count = $ret['total'];
+					return $ret;
 				}
 				else {
-					return $this->server_side_sort('ARRIVAL', false, $filter);
+					$uids=$this->server_side_sort('ARRIVAL', false, $filter);
+					$this->sort_count = count($uids);
+					return $uids;
 				}
 			}
 		}
 		elseif (stristr($this->capability, 'SORT')) {
-			return $this->server_side_sort($sort, $reverse, $filter);
+			$uids=$this->server_side_sort($sort, $reverse, $filter);
+			$this->sort_count = count($uids);
+			return $uids;
 		}
 		else {
-			return $this->client_side_sort($sort, $reverse, $filter);
+			$uids=$this->client_side_sort($sort, $reverse, $filter);
+			$this->sort_count = count($uids);
+			return $uids;
 		}
 	}
 
