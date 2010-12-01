@@ -446,9 +446,13 @@ GO.email.AccountDialog = function(config) {
 
 	});
 
+	this.permissionsTab = new GO.grid.PermissionsPanel();
+
+	//this.permissionsTab.disabled = false;
+
 	var items = [propertiesTab,
 
-	this.foldersTab, this.filtersTab, this.vacationPanel];
+	this.foldersTab, this.filtersTab, this.vacationPanel, this.permissionsTab];
 
 	if (GO.settings.modules.email.write_permission) {
 		items.splice(1, 0, incomingTab, outgoingTab);
@@ -512,7 +516,7 @@ GO.email.AccountDialog = function(config) {
 		layout : 'fit',
 		modal : false,
 		height : 400,
-		width : 650,
+		width : 750,
 		closeAction : 'hide',
 		title : GO.email.lang.account,
 
@@ -647,6 +651,8 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 
 				this.foldersTab.setDisabled(action.result.data.type == 'pop3');
 				this.filtersTab.setDisabled(action.result.data.type == 'pop3');
+
+				this.permissionsTab.setAcl(action.result.data.acl_id);
 
 				var serverclient = (typeof(action.result.data.vacation_subject) != 'undefined');
 				this.vacationPanel.setDisabled((!serverclient && !GO.systemusers) || action.result.data.hidetab);

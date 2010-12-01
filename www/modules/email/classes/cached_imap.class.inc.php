@@ -64,9 +64,13 @@ class cached_imap extends imap{
 			throw new Exception($lang['common']['selectError']);
 		}
 
-		if($account['user_id']!=$GO_SECURITY->user_id && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
+		if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $account['acl_id']<GO_SECURITY::READ_PERMISSION) && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
+			//echo "<br>account_user_id: ".$account['user_id']." <br>security_user_id:".$GO_SECURITY->user_id."";
 			throw new AccessDeniedException();
 		}
+		/*if($account['user_id']!=$GO_SECURITY->user_id && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
+			throw new AccessDeniedException();
+		}*/
 		try {
 			if (!$this->open($account, $mailbox)) {
 				if(!$halt_on_error)

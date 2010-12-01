@@ -279,19 +279,43 @@ class email extends db {
 		return false;
 	}
 
-	function get_accounts($user_id=0, $start=0, $offset=0, $sort='standard', $dir='ASC') {
-		$sql = "SELECT al.name, al.email, al.signature, al.id AS default_alias_id, a.*,u.first_name, u.middle_name, u.last_name FROM em_accounts a ".
+	function get_accounts($user_id=0, $start=0, $offset=0, $sort='order', $dir='DESC', $auth_type='read') {
+		//$sql = "SELECT al.name, al.email, al.signature, al.id AS default_alias_id, a.*,u.first_name, u.middle_name, u.last_name FROM em_accounts a ".
+		//				"LEFT JOIN go_users u on u.id=a.user_id ".
+		//				"INNER JOIN em_aliases al ON (al.account_id=a.id AND al.`default`='1') ".
+		//				"WHERE type='imap'";
+
+		$user_id=intval($user_id);
+
+		$sql = "SELECT DISTINCT al.name, al.email, al.signature, al.id AS default_alias_id, a.*,u.first_name, u.middle_name, u.last_name FROM em_accounts a ".
 						"LEFT JOIN go_users u on u.id=a.user_id ".
 						"INNER JOIN em_aliases al ON (al.account_id=a.id AND al.`default`='1') ".
-						"WHERE type='imap'";
+						"LEFT JOIN em_accounts_sort so ON (so.account_id=a.id AND so.user_id=".$user_id.")"; // Join Sort table
 
 		if($user_id > 0) {
-			$sql .= " AND user_id='".intval($user_id)."'";
-			$sql .= " ORDER BY ".$this->escape($sort.' '.$dir);
-		}else {
-			$sql .= " ORDER BY ".$this->escape($sort.' '.$dir);
-		}
 
+			switch($auth_type)
+			{
+				case 'read':
+					$sql .= "INNER JOIN go_acl ac ON (a.acl_id = ac.acl_id)";
+					$sql .= "LEFT JOIN go_users_groups ug ON (ac.group_id = ug.group_id AND ug.group_id!=1) ";
+					break;
+
+				case 'write':
+					$sql .= "INNER JOIN go_acl ac ON (a.acl_id = ac.acl_id AND ac.level>1)";
+					$sql .= "LEFT JOIN go_users_groups ug ON (ac.group_id = ug.group_id) ";
+					break;
+			}
+			
+			$sql .= "WHERE (ug.user_id = ".$user_id." OR ac.user_id = ".$user_id.") ";
+			$sql .=	"AND type='imap'";
+		}else
+		{
+			$sql .= "WHERE type='imap'";
+		}
+		
+		$sql .= " ORDER BY `".$this->escape($sort)."` ".$this->escape($dir);
+		
 		$this->query($sql);
 		$count =  $this->num_rows();
 
@@ -489,6 +513,10 @@ class email extends db {
 	}
 
 
+
+	function update_account_order($account) {
+		$this->replace_row('em_accounts_sort', $account);
+	}
 
 
 	function _update_account($account) {
@@ -1283,7 +1311,7 @@ class email extends db {
 	}
 
 
-	function get_default_account_id($user_id) {
+	/*function get_default_account_id($user_id) {
 		$sql = "SELECT id FROM em_accounts WHERE user_id='".intval($user_id)."' AND standard=1";
 
 		$this->query($sql);
@@ -1295,7 +1323,7 @@ class email extends db {
 		} else {
 			return false;
 		}
-	}
+	}*/
 
 	function __on_delete_link($id, $link_type) {
 
@@ -1481,14 +1509,24 @@ class email extends db {
 	 * @return Int Number of records found
 	 */
 	function get_all_aliases($user_id) {
-		$sql = "SELECT a.* FROM em_aliases a INNER JOIN em_accounts e ON e.id=a.account_id WHERE e.user_id=".intval($user_id);
-		$sql .= " ORDER BY `standard` ASC, `default` DESC, name ASC";
 
+		$user_id = intval($user_id);
+		
+		$sql = "SELECT a.* FROM em_aliases a INNER JOIN em_accounts e ON (e.id=a.account_id) ";
+
+		$sql .= "INNER JOIN go_acl ac ON (e.acl_id = ac.acl_id) ";
+		$sql .= "LEFT JOIN go_users_groups ug ON (ac.group_id = ug.group_id AND ug.group_id!=1) ";
+		$sql .= "LEFT JOIN em_accounts_sort so ON (so.account_id=a.account_id AND so.user_id=".$user_id.")"; // Join Sort table
+		//$sql .= "WHERE e.user_id=".intval($user_id);
+		$sql .= "WHERE (ug.user_id = ".$user_id." OR ac.user_id = ".$user_id.") ";
+
+		$sql .= " ORDER BY `order` DESC";
 		$this->query($sql);
 		return $this->num_rows();
 	}
 	
-
+	//TODO this function could be removed if the collapsed info would be stored in
+	//the em_acounts_sort table.
 	function is_account_expanded($account_id, $user_id)
 	{
 	    $this->query("SELECT * FROM em_accounts_collapsed WHERE account_id=? AND user_id=?", 'ii', array($account_id, $user_id));

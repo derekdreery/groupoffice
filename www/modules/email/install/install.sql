@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS `em_accounts`;
 CREATE TABLE IF NOT EXISTS `em_accounts` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
+	`acl_id` int(11) NOT NULL default,
   `type` varchar(4) default NULL,
   `host` varchar(100) default NULL,
   `port` int(11) NOT NULL default '0',
@@ -25,7 +26,6 @@ CREATE TABLE IF NOT EXISTS `em_accounts` (
   `username` varchar(50) default NULL,
   `password` varchar(255) default NULL,
   `signature` text,
-  `standard` tinyint(4) NOT NULL default '0',
   `mbroot` varchar(30) default NULL,
   `sent` varchar(100) default NULL,
   `drafts` varchar(100) default NULL,
@@ -194,3 +194,15 @@ CREATE TABLE IF NOT EXISTS `em_folders_expanded` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`folder_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `em_accounts_sort`
+--
+CREATE TABLE IF NOT EXISTS `em_accounts_sort` (
+`account_id` INT( 11 ) NOT NULL ,
+`user_id` INT( 11 ) NOT NULL ,
+`order` INT( 11 ) NOT NULL ,
+PRIMARY KEY ( `account_id` , `user_id` )
+) ENGINE = MYISAM DEFAULT CHARSET=utf8 ;

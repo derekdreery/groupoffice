@@ -1219,14 +1219,16 @@ try {
 				}
 				$response['results']=array();
 
-				$user_id = !isset($_POST['personal_only']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) ? 0 : $GO_SECURITY->user_id;
+				//$user_id = !isset($_POST['personal_only']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) ? 0 : $GO_SECURITY->user_id;
 
+				
+				
 				$sort = isset ( $_POST['sort'] ) ? $_POST['sort'] : 'email';
 				$dir = isset ( $_POST['dir'] ) ? $_POST['dir'] : 'ASC';
 
 				$start = isset ( $_POST['start'] ) ? $_POST['start'] : 0;
 				$limit = isset ( $_POST['limit'] ) ? $_POST['limit'] : 0;
-				$response['total'] = $email->get_accounts($user_id,$start, $limit, $sort, $dir);
+				$response['total'] = $email->get_accounts($GO_SECURITY->user_id,$start, $limit, $sort, $dir,'write');
 
 				while($record = $email->next_record()) {
 					$response['results'][] = array(
