@@ -77,8 +77,8 @@ class groupoffice_connector {
 
 
 			$post = array(
-					//'post_content' => mysql_escape_string($record['content']),
-					'post_title' => mysql_escape_string($record['title']),
+					//'post_content' => mysql_real_escape_string ($record['content']),
+					'post_title' => mysql_real_escape_string($record['title']),
 					'post_status' => 'publish'
 			);
 
@@ -338,7 +338,7 @@ $GO_LINKS = new GO_LINKS();
 
 			if(!empty($r['contact_id'])){
 				
-				$comment = "\n\n".mysql_escape_string($post_title);
+				$comment = "\n\n".mysql_real_escape_string($post_title);
 				$sql = "UPDATE ab_contacts SET comment=CONCAT(comment, '$comment') WHERE id=".intval($r['contact_id']);
 				$db->query($sql);
 
