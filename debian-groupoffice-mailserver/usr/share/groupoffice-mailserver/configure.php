@@ -139,7 +139,7 @@ create_file($filename,'tpl/etc/dovecot/dovecot.conf', $replacements);
 
 
 echo "Configuring amavis\n";
-$filename = file_contains('/etc/amavis/conf.d/60-groupoffice_defaults', 'Group-Office') ? '/etc/amavis/conf.d/60-groupoffice_defaults.'.date('Ymd') : '/etc/amavis/conf.d/60-groupoffice_defaults';
+$filename =  '/etc/amavis/conf.d/60-groupoffice_defaults';
 create_file($filename,'tpl/etc/amavis/conf.d/60-groupoffice_defaults', $replacements);
 
 
