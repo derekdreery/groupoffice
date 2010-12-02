@@ -38,4 +38,4 @@ CREATE TABLE IF NOT EXISTS `bm_settings` (
 --
 
 INSERT INTO `bm_settings` (`id`, `rmachine`, `rport`, `ruser`, `rtarget`, `rotations`, `emailaddress`, `emailsubject`, `sources`) VALUES
-(1, '', 22, '', '', 14, '', '', '/etc /home/mysqlbackup /home/groupoffice');
+(1, '', 22, '', '', 14, '', '', '/etc /home');
