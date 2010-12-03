@@ -59,7 +59,12 @@ $lang['email']['noUidNext']='Din mailserver støtter ikke UIDNEXT. Mappen \'Utka
 $lang['email']['disable_trash_folder']='Feil ved flytting av e-post til papirkurv. Årsaken kan være at du ikke har mer diskplass. Du kan bare frigjøre plass ved å deaktivere mappen for papirkurv på: Administrasjon -> Kontoer -> Dobbeltklikk på din konto -> Mapper';
 
 $lang['email']['error_move_folder']='Kunne ikke flytte mappen';
-
 $lang['email']['error_getaddrinfo']='Ugyldig serveradresse angitt';
 $lang['email']['error_authentication']='Ugyldig brukernavn eller passord';
 $lang['email']['error_connection_refused']='Tilkoblingen ble avvist. Kontroller server og portnummer.';
+$lang['email']['iCalendar_event_invitation']='Meldingen inneholder en invitasjon til en hendelse.';
+$lang['email']['iCalendar_event_not_found']='Meldingen inneholder en oppdatering av en hendelse som ikke eksisterer lenger.';
+$lang['email']['iCalendar_update_available']='Meldingen inneholder en oppdatering av en eksisterende hendelse.';
+$lang['email']['iCalendar_update_old']='Meldingen inneholder en hendelse som allerede er behandlet.';
+$lang['email']['iCalendar_event_cancelled']='Meldingen inneholder kansellering av en hendelse.';
+$lang['email']['iCalendar_event_invitation_declined']='Meldingen inneholder en invitasjon til en hendelse du har avvist.';

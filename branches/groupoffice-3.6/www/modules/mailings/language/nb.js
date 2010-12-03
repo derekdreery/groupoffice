@@ -75,4 +75,4 @@ GO.mailings.lang.unsubscribeLink='Avmeldingslenke';
 GO.mailings.lang.unsubscribeHref='Avmelding href';
 GO.mailings.lang.addDocumentTemplate='Ny dokumentmal';
 GO.mailings.lang.documentTemplate='Dokumentmal';
-
+GO.mailings.lang.copyingMessages='Kopierer meldinger...';

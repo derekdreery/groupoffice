@@ -35,3 +35,9 @@ GO.files.lang.uploadProperties='Opplysningene nedenfor vil gjelde for alle filer
 GO.files.lang.fitImage='Tilpass bilde';
 GO.files.lang.normalSize='Normal størrelse';
 GO.files.lang.imageViewer='Bildevisning';
+
+GO.files.lang.emailDownloadLink= 'Send nedlastningslenke i e-post';
+GO.files.lang.downloadLink= 'Nedlastningslenke';
+GO.files.lang.clickHereToDownload= 'Klikk her for å laste ned filen via en sikker lenke';
+GO.files.lang.expireTime= 'Lenken utløper';
+GO.files.lang.possibleUntil= 'mulig til og med';

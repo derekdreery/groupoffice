@@ -23,3 +23,4 @@ $lang['mailings']['unsubscribe']='Meld deg av';
 $lang['mailings']['unsubscription']='Trykk her for å melde deg av dette nyhetsbrevet.';
 $lang['mailings']['r_u_sure']= 'Er du sikker på at du vil melde deg av nyhetsbrevet?';
 $lang['mailings']['delete_success']= 'Du er nå meldt av dette nyhetsbrevet!';
+$lang['mailings']['setCurrentTemplateAsDefault']='Sett gjeldende mal som standard';

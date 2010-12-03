@@ -351,7 +351,48 @@ GO.lang.createdBy='Opprettet av';
 GO.lang.debugModeDetected="Advarsel! Debug mode aktivert";
 GO.lang.debugModeWarning="Du bør bare bruke $config['debug']=true; under utvikling og feilsøking. Group-Office kjører saktere i debug mode!";
 GO.lang.noItemSelectedWarning='Du må velge minst ett element.';
-
+GO.lang.userGroup='Brukergruppe';
+GO.lang.deselectAll='Fjern alle valgte';
+GO.lang.confirmSelectLotsOfItems='Denne handlingen vil velge {count} elementer og kan føre til at Group-Office kjører tregt. Er du sikker på at du vil fortsette?';
+GO.lang.captcha='Sikkerhetskode';
+GO.lang.captchaEmpty='Sikkerhetskoden er tom';
+GO.lang.multiselectComboMaxItemsReachedWarning='Du kan velge maksimalt {max} elementer';
+GO.lang.toScreen='Til skjerm';
+GO.lang.none= 'Ingen';
+GO.lang.userSelectedLanguage= 'Mitt forhåndsvalgte språk';
+GO.lang.swfUploadPanelStrings = {
+		text_add: 'Legg til fil(er)',
+		text_upload: 'Last opp fil(er)',
+		text_cancel: 'Avbryt opplasting',
+		text_clear: 'Slett kø',
+		text_progressbar: 'Framdriftsviser',
+		text_remove: 'Fjern fil',
+		text_remove_sure: 'Er du sikker på at du ønsker å fjerne denne filen fra køen?',
+		text_error: 'Feil',
+		text_uploading: 'Laster opp: {0} ({1} av {2})',
+		header_filename: 'Filnavn',
+		header_size: 'Størrelse',
+		header_status: 'Status',
+		status: {
+			0: 'I kø',
+			1: 'Laster opp...',
+			2: 'Fullført',
+			3: 'Feil',
+			4: 'Avbrutt'
+		},
+		error_queue_exceeded: 'Valgte fil(er) overskrider maksgrensen på {0} filer i køen.',
+		error_queue_slots_0: 'Det er ingen plasser igjen',
+		error_queue_slots_1: 'Det er bare en plass igjen',
+		error_queue_slots_2: 'Det er bare {0} plasser igjen',
+		error_size_exceeded: 'Valgte filer overskrider den tillatten grensen på 1 MB.',
+		error_zero_byte_file: 'Valgte fil er tom.',
+		error_invalid_filetype: 'Valgte filtype er ugyldig.',
+		error_file_not_found: 'File not found 404.',
+		error_security_error: 'Sikkerhetsfeil. Det er ikke lov til å poste til fremmed url url.'
+	};
+GO.lang.orientation='Papirretning';
+GO.lang.portrait='Stående';
+GO.lang.landscape='Liggende';
 GO.lang.priority='Prioritet';
 GO.lang.priority_low='Lav';
 GO.lang.priority_normal='Normal';

@@ -47,4 +47,10 @@ $lang['addressbook']['companyFromAddressbook']='Firma fra %s';
 
 $lang['addressbook']['defaultSalutation']='Kjære [Hr./Fr.] {middle_name} {last_name}';
 
+$lang['addressbook']['multipleSelected']='Flere adressebøker er valgt';
+$lang['addressbook']['incomplete_delete_contacts']='Du har ikke rettigheter til å slette alle valgte kontaktpersoner';
+$lang['addressbook']['incomplete_delete_companies']='Du har ikke rettigheter til å slette alle valgte firmaer';
+$lang['addressbook']['emailAlreadyExists']='E-postadressen er allerede lagret på denne kontaktpersonen';
+$lang['addressbook']['emailDoesntExists']='Fant ikke e-postadressen';
+$lang['addressbook']['imageNotSupported']='Bildefilen du lastet opp er ikke støttet. Bare gif, png og jpg er gyldige filtyper.';
 ?>
