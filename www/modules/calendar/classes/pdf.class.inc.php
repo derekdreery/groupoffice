@@ -165,7 +165,7 @@ class PDF extends TCPDF {
 
 		$calendarPrinted=false;
 
-		if (($this->days > 1 && $this->days<40) || !$list) {
+		if (($this->days > 1 && $this->days<60) || !$list) {
 
 			$this->AddPage();
 

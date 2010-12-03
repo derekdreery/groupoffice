@@ -1087,7 +1087,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				.get('id');
 			}*/
 
-			if (config.template_id == undefined && this.templatesStore){
+			if (typeof(config.template_id) == 'undefined' && this.templatesStore){
 				var templateRecordIndex = this.templatesStore.findBy(function(record,id){
 					return record.get('checked');
 				});
@@ -1308,7 +1308,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		}else
 		{
 			//if(this.htmlEditor.activated){
-				//this.insertDefaultFont();
+				this.insertDefaultFont();
 			/*}else
 			{
 				this.htmlEditor.on('activate', this.insertDefaultFont, this);

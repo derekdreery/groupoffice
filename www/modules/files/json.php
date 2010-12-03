@@ -409,15 +409,16 @@ try {
 						$response['deleteSuccess']=true;
 						$delete_ids = json_decode($_POST['delete_keys']);
 
+						$folder_delete_permission = $files->has_delete_permission($GO_SECURITY->user_id, $curfolder);
+
 						$deleted = array();
 						foreach($delete_ids as $delete_type_id) {
 							$ti = explode(':',$delete_type_id);
 
 							if($ti[0]=='f') {
-								if(!$response['write_permission']) {
+								if(!$folder_delete_permission) {
 									throw new AccessDeniedException();
 								}
-								go_debug($ti[1]);
 								$file = $files->get_file($ti[1]);
 								$deleted[]=$file['name'];
 								$files->delete_file($file);

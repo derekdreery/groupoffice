@@ -11,6 +11,7 @@ Package: groupoffice-servermanager
 Architecture: all
 Depends: groupoffice-com,
 	php5-cli,
+	sudo,
 	${misc:Depends}
 Description:
  Create multiple Group-Office installations. It uses a virtual document root for

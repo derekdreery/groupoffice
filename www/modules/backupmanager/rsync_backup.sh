@@ -7,7 +7,7 @@ SOURCES="$8"
 # IP or FQDN of Remote Machine
 RMACHINE=$1
 RPORT=$2
-echo $RMACHINE
+#echo $RMACHINE
 
 # Remote username
 RUSER=$3
@@ -30,6 +30,15 @@ EMAILSUBJECT=$7
 MYSQL_USER=${10}
 MYSQL_PASS=${11}
 
+# First Run variable
+FIRST_RUN=${12}
+
+# function for checking exit
+function exitBackup {
+	cat $LOGFILE | mail -s "$EMAILSUBJECT" "$EMAILADDRESS"
+	exit $1
+}
+
 # Your EXCLUDE_FILE tells rsync what NOT to backup. Leave it unchanged, missing or
 # empty if you want to backup all files in your SOURCES. If performing a
 # FULL SYSTEM BACKUP, ie. Your SOURCES is set to "/", you will need to make
@@ -47,7 +56,8 @@ MYSQL_PASS=${11}
 #######################################
 ########DO_NOT_EDIT_BELOW_THIS_POINT#########
 #######################################
-LOGFILE=/root/`date +"%m%d%Y_%s"`.log
+mkdir -p /var/log/gobackup
+LOGFILE=/var/log/gobackup/`date +"%m%d%Y_%s"`.log
 ####### Redirect Output to a logfile and screen - Couldnt get tee to work
 exec 3>&1                         # create pipe (copy of stdout)
 exec 1>$LOGFILE                   # direct stdout to file
@@ -63,13 +73,19 @@ perl mysql_backup.pl $MYSQL_USER $MYSQL_PASS
 if [ ! -f $RKEY ]; then
 echo "Couldn't find ssh keyfile!"
 echo "Exiting..."
-exit 2
+exitBackup 2
+fi
+
+#check for hostKey
+if [ "$FIRST_RUN" == "1" ]; then
+ssh -o "StrictHostKeyChecking=no" -i $RKEY $RUSER@$RMACHINE -p $RPORT "test -x $RTARGET"
+echo "First Run Done!"
 fi
 
 if ! ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "test -x $RTARGET"; then
 echo "Target directory on remote machine doesn't exist or bad permissions."
 echo "Exiting..."
-exit 2
+exitBackup 2
 fi
 
 # Set name (date) of backup.
@@ -78,7 +94,7 @@ BACKUP_DATE="`date +%F_%H-%M`"
 if [ ! $ROTATIONS -gt 1 ]; then
 echo "You must set ROTATIONS to a number greater than 1!"
 echo "Exiting..."
-exit 2
+exitBackup 2
 fi
 
 #### BEGIN ROTATION SECTION ####
@@ -124,7 +140,7 @@ if ! ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "test -d $RTARGET/$BACKUP_DATE"; th
 	echo "Backup destination not available."
 	echo "Make sure you have write permission in RTARGET on Remote Machin  e."
 	echo "Exiting..."
-	exit 2
+	exitBackup 2
 fi
 
 echo "Verifying Sources..."
@@ -133,7 +149,7 @@ for source in $SOURCES; do
 	if [ ! -x $source ]; then
 		echo "Error with $source!"
 		echo "Directory either does not exist, or you do not have proper permissions."
-		exit 2
+		exitBackup 2
 	fi
 done
 
@@ -156,6 +172,4 @@ done
 #ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "chmod -R 777 $RTARGET/$BACKUP_DATE"
 #ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "du -sh $RTARGET";
 
-cat $LOGFILE | mail -s "$EMAILSUBJECT" "$EMAILADDRESS"
-
-exit 0
+exitBackup 0

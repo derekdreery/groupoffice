@@ -77,7 +77,7 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 	$response['data'] = $go2mime->mime2GO($template['content'], $GO_MODULES->modules['mailings']['url'].'mimepart.php?template_id='.$template_id, true, true);
 
 	$presetbody = isset($_POST['body']) ? $_POST['body'] : '';
-	if(!empty($body) && strpos($response['data']['body'],'{body}')==false){
+	if(!empty($presetbody) && strpos($response['data']['body'],'{body}')==false){
 		$response['data']['body'] = $_POST['body'].'<br />'.$response['data']['body'];
 	}else
 	{

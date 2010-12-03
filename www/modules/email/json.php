@@ -447,7 +447,9 @@ try {
 		if(isset($_POST['template_id']) && $_POST['template_id']>0 && $task!='opendraft') {
 			$template_id = ($_POST['template_id']);
 			$to = isset($response['data']['to']) ? $response['data']['to'] : '';
-			$template = load_template($template_id, $to);
+
+			$contact_id = isset($_POST['contact_id']) ? $_POST['contact_id'] : 0;
+			$template = load_template($template_id, $to, isset($_POST['mailing_group_id']) && $_POST['mailing_group_id']>0, $contact_id);
 
 			$response['data']['body'] = $template['data']['body'].$response['data']['body'];
 			$content['attachments']=array_merge($content['attachments'], $template['data']['attachments']);
@@ -1056,7 +1058,7 @@ try {
 				}
 
 				$response['folder_id']=$imap->folder['id'];
-				$response['total'] = $imap->selected_mailbox['messages'];
+				$response['total'] = $imap->sort_count;//selected_mailbox['messages'];
 
 				foreach($imap->touched_folders as $touched_folder) {
 					if($touched_folder==$mailbox) {
