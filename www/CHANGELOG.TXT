@@ -1,3 +1,6 @@
+03/12/2010 3.6.8
+- Timeregistration bug
+
 03/12/2010 3.6.7
 - Delete files was broken
 - Updated Norwegian translation
