@@ -6,7 +6,7 @@
 //
 // Description : Language module for TCPDF
 //               (contains translated texts)
-//               English
+//               Brazilian
 //
 // Author: Nicola Asuni
 //
@@ -23,7 +23,7 @@
 /**
  * TCPDF language file (contains translated texts).
  * @package com.tecnick.tcpdf
- * @abstract TCPDF language file: English
+ * @abstract TCPDF language file: Brazilian
  * @author Nicola Asuni
  * @copyright 2004-2010 Nicola Asuni - Tecnick.com S.r.l (www.tecnick.com) Via Della Pace, 11 - 09044 - Quartucciu (CA) - ITALY - www.tecnick.com - info@tecnick.com
  * @link http://tcpdf.sourceforge.net
@@ -31,7 +31,7 @@
  * @since 2004-03-03
  */
 
-// English
+// Brazilian
 
 global $l;
 $l = Array();
@@ -40,10 +40,10 @@ $l = Array();
 
 $l['a_meta_charset'] = 'UTF-8';
 $l['a_meta_dir'] = 'ltr';
-$l['a_meta_language'] = 'en';
+$l['a_meta_language'] = 'pt';
 
 // TRANSLATIONS --------------------------------------
-$l['w_page'] = 'page';
+$l['w_page'] = 'página';
 
 //============================================================+
 // END OF FILE
