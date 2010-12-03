@@ -58,3 +58,7 @@ GO.cms.lang.advancedPermissions='Avanserte rettigheter';
 GO.cms.lang.enablePermissionsPerFolder='Aktiver rettigheter pr mappe for denne brukeren';
 GO.cms.lang.sortDate='Sorter dato';
 GO.cms.lang.unused='Brukes ikke på denne siden';
+GO.cms.lang.feed='Vis elementer fra denne mappen som nyhetsstrøm';
+GO.cms.lang.enableRewrite='Aktiver friendly URLer med mod_rewrite. Webserveren må være satt opp for dette, og det vil bare virke på domenet angitt ovenfor.';
+GO.cms.lang.rewriteBase='mod_rewrite base path';
+

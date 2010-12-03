@@ -36,3 +36,6 @@ $lang['files']['deleted']='Slettet';
 $lang['files']['file']='Fil';
 $lang['files']['folder']='Mappe';
 $lang['files']['files']='Filer';
+
+$lang['link_type'][17]='Mappe';
+$lang['files']['emptyFile']='Tom fil';

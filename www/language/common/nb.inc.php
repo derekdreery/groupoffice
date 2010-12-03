@@ -216,3 +216,4 @@ $lang['common']['createdBy']='Opprettet av';
 $lang['common']['none']='Ingen';
 $lang['common']['alert']='Varsling';
 $lang['common']['theFolderAlreadyExists']='Det eksisterer allerede en mappe med dette navnet!';
+$lang['common']['other']='Andre';

@@ -1,3 +1,7 @@
+03/12/2010 3.6.7
+- Delete files was broken
+- Updated Norwegian translation
+
 02/12/2010 3.6.6
 - CalDAV didn't work on PHP 5.2.
 
