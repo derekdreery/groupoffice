@@ -514,7 +514,7 @@ try {
 				// merge events having several participants in merged view
 				if ($cal_count>1) {
 					//require_once('merge_events.php');
-					if ($cal->merge_events(&$response['results'],&$event,&$uuid_array,$event_nr,$calendar_names)) continue;
+					if ($cal->merge_events($response['results'],$event,$uuid_array,$event_nr,$calendar_names)) continue;
 				}
 				$event_nr++;
 
