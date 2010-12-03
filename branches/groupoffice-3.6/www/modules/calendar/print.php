@@ -49,7 +49,7 @@ function insert_events($calendars,$start_time,$end_time) {
 		$event_nr = 0;
 		$uuid_array = array();
 		foreach($events as $event) {
-			if ($cal->merge_events(&$output_events,&$event,&$uuid_array,$event_nr,$calendar_names,$GO_USERS)) continue;
+			if ($cal->merge_events($output_events,$event,$uuid_array,$event_nr,$calendar_names,$GO_USERS)) continue;
 
 			if($event['all_day_event'] == '1') {
 				$date_format = $_SESSION['GO_SESSION']['date_format'];
