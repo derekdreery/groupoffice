@@ -1018,18 +1018,22 @@ class files extends db {
 
 	function has_delete_permission($user_id, $folder){
 
+		global $GO_SECURITY;
+
 		if($folder['parent_id']==0){
 			return false;
 		}
 		$path = $this->build_path($folder);
-		if(strpos(dirname($path),'/')===false){
+		/*if(strpos(dirname($path),'/')===false){
 			return false;
-		}
+		}*/
 
 
 		if(is_numeric($folder)) {
 			$folder = $this->get_folder($folder);
 		}
+
+		//var_dump($folder);
 
 		if(empty($folder['acl_id'])) {
 			if(empty($folder['parent_id'])) {
@@ -1038,7 +1042,9 @@ class files extends db {
 			$parent = $this->get_folder($folder['parent_id']);
 			return $this->has_delete_permission($user_id, $parent);
 		}else {
-			return $GO_SECURITY->has_permission($user_id, $folder['acl_id'])>GO_SECURITY::WRITE_PERMISSION;
+			$level = $GO_SECURITY->has_permission($user_id, $folder['acl_id']);
+			//var_dump($level);
+			return $level>GO_SECURITY::WRITE_PERMISSION;
 		}
 	}
 
