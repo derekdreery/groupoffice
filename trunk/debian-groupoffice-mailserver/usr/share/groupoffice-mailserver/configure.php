@@ -100,7 +100,7 @@ if(strpos($transport, "autoreply.$domain vacation:")===false) {
 }
 
 
-$version=0;
+/*$version=0;
 $replacements['sieve']='cmusieve';
 exec("lsb_release -a", $output);
 foreach($output as $line) {
@@ -117,7 +117,10 @@ echo "Linux version: ".$version."\n\n";
 
 if($version > 9.10) {
 	$replacements['sieve']='sieve';
-}
+}*/
+
+//works with debian 6 now too
+$replacements['sieve']='sieve';
 
 function file_contains($filename, $str){
 	if(!file_exists($filename))
@@ -135,7 +138,9 @@ $filename = file_contains('/etc/dovecot/dovecot.conf', 'Group-Office') ? '/etc/d
 create_file($filename,'tpl/etc/dovecot/dovecot.conf', $replacements);
 
 
-
+echo "Configuring amavis\n";
+$filename =  '/etc/amavis/conf.d/60-groupoffice_defaults';
+create_file($filename,'tpl/etc/amavis/conf.d/60-groupoffice_defaults', $replacements);
 
 
 echo "Configuring vacation\n";

@@ -10,16 +10,16 @@ function smarty_function_html_textarea($params, &$smarty)
 {
 	if(!isset($params['value']))
 		$params['value']='';
-		
+
 	$value = isset($_POST[$params['name']]) ? ($_POST[$params['name']]) : $params['value'];
-	
+
 	if(!isset($params['extra']))
 		$params['extra']='';
-		
+
 	if(!isset($params['class']))
 		$params['class']='textbox';
 
-	
+
 	if($pos = strpos($params['name'], '['))
 	{
 		$key1 = substr($params['name'],0,$pos);
@@ -33,7 +33,7 @@ function smarty_function_html_textarea($params, &$smarty)
 		$value = isset($_POST[$params['name']]) ? ($_POST[$params['name']]) : $params['value'];
 		$isset = isset($_POST[$params['name']]);
 	}
-		
+
 	if($isset && empty($value) && $params['required'])
 		$params['class'].=' error';
 
@@ -42,8 +42,23 @@ function smarty_function_html_textarea($params, &$smarty)
 	}
 
 	$html ='<textarea class="'.$params['class'].'" name="'.$params['name'].'" '.$params['extra'];
+
+
 	if(!empty($params['empty_text'])){
-		$html .= ' onfocus="if(this.value==\''.$params['empty_text'].'\')this.value=\'\';" onblur="if(this.value==\'\')this.value=\''.$params['empty_text'].'\';"';
+		$html .= ' onfocus="if(this.value==\''.$params['empty_text'].'\'){this.value=\'\';';
+
+		if(!empty($params['empty_text_active_class'])){
+			$html .= 'this.className+=\' '.$params['empty_text_active_class'].'\'};"';
+		}else
+		{
+			$html .= '}"';
+		}
+
+		$html .= ' onblur="if(this.value==\'\'){this.value=\''.$params['empty_text'].'\';';
+		if(!empty($params['empty_text_active_class'])){
+			$html .= 'this.className=this.className.replace(\' '.$params['empty_text_active_class'].'\',\'\');';
+		}
+		$html .= '}"';
 	}
 
 	$html .= '>'.$value.'</textarea>';
@@ -56,6 +71,6 @@ function smarty_function_html_textarea($params, &$smarty)
 		$html .= '<input type="hidden" name="empty_texts[]" value="'.$params['name'].':'.$params['empty_text'].'" />';
 	}
 	return $html;
-	
+
 }
 ?>

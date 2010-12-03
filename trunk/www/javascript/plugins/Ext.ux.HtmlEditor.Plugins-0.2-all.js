@@ -407,17 +407,17 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
 	// private
 	onInit: function(){
 
-		Ext.EventManager.on(this.cmp.getDoc(), {
+		/*Ext.EventManager.on(this.cmp.getDoc(), {
             'keyup': this.checkIfPaste,
             scope: this
-        });
+        });*/
 		this.lastValue = this.cmp.getValue();
 		this.curLength = this.lastValue.length;
 		this.lastLength = this.lastValue.length;
 
 	},
 	// private
-	checkIfPaste: function(e){
+	/*checkIfPaste: function(e){
 
 		var diffAt = 0;
 
@@ -448,7 +448,7 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
 
 
 
-	},
+	},*/
 	// private
 	findValueDiffAt: function(val){
 

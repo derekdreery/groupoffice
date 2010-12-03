@@ -44,7 +44,7 @@ abstract class Sabre_CalDAV_Backend_Abstract {
      * @param array $properties
      * @return string|int 
      */
-    abstract function createCalendar($principalUri,$calendarUri,array $properties); 
+    abstract function createCalendar($principalUri,$calendarUri, $properties);
 
     /**
      * Updates properties on this node,
@@ -82,7 +82,7 @@ abstract class Sabre_CalDAV_Backend_Abstract {
      * @param array $properties
      * @return bool|array 
      */
-    public function updateCalendar($calendarId, array $properties) {
+    public function updateCalendar($calendarId, $properties) {
         
         return false; 
 

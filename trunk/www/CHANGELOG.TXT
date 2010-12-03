@@ -1,4 +1,7 @@
-26/11/2010 3.6.2
+02/12/2010 3.6.6
+- CalDAV didn't work on PHP 5.2.
+
+02/12/2010 3.6.5
 - Performance improvements in the new ExtJS 3.3 update.
 - Performance improvements by combining a lot requests to the server and load as
   little objects as possible.
