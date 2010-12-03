@@ -407,7 +407,7 @@ try {
 					try {
 
 						$response['deleteSuccess']=true;
-						$delete_ids = json_decode($_POST['delete_keys']);
+						$delete_ids = json_decode($_POST['delete_keys']);						
 
 						$folder_delete_permission = $files->has_delete_permission($GO_SECURITY->user_id, $curfolder);
 
@@ -425,7 +425,7 @@ try {
 							}else {
 
 								$folder = $files->get_folder($ti[1]);
-								if(!$files->has_delete_permission($GO_SECURITY->user_id, $folder)) {
+								if(!$folder_delete_permission) {
 									throw new AccessDeniedException();
 								}
 								$files->delete_folder($folder);
