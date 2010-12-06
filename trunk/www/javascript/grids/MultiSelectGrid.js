@@ -34,14 +34,7 @@ GO.grid.MultiSelectGrid = function (config){
 			text:GO.lang.selectAll,
 			id:'plus',
 			qtip:'Select all',
-			handler:function()
-			{							
-				if(this.allowNoSelection || !this.selectedAll)
-				{
-					var select_records = (this.selectedAll && this.allowNoSelection) ? 'clear' : 'all';
-					this.applyFilter(select_records);
-				}
-			},			
+			handler:this.selectAll,
 			scope: this
 		})],
 		layout:'fit',
@@ -107,6 +100,15 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 	lastSelectedIndex : -1,
 
 	selectedAll : false,
+
+	selectAll : function()
+	{	
+		if(this.allowNoSelection || !this.selectedAll)
+		{
+			var select_records = (this.selectedAll && this.allowNoSelection) ? 'clear' : 'all';
+			this.applyFilter(select_records);
+		}
+	},
 
 	getSelected : function(){
 		var types = [];
