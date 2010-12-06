@@ -18,6 +18,8 @@ GO.DisplayPanel=function(config){
 	this.collapsibleSections = {};
 
 	GO.DisplayPanel.superclass.constructor.call(this, config);
+
+	this.addEvents({bodyclick:true});
 }
 
 Ext.extend(GO.DisplayPanel, Ext.Panel,{
@@ -271,7 +273,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			}
 		}
 
-		this.body.scrollTo('top', 0);
+		//
 		
 		//this.body.on('click', this.onBodyClick, this);
 	},
@@ -331,6 +333,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 
 	
 	onBodyClick :  function(e, target){
+
+		this.fireEvent('bodyclick', this, target, e);
 
 		if(target.id.substring(0,6)=='toggle'){
 			var toggleId = target.id.substring(7,target.id.length);
@@ -472,6 +476,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 						}else
 						{
 							this.setData(responseParams.data);
+							if(!reload)
+								this.body.scrollTo('top', 0);
 						}
 					}				
 				},
