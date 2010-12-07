@@ -2081,15 +2081,29 @@ class calendar extends db {
 
 
 			if (isset($object['RRULE']['value']) && $rrule = $this->ical2array->parse_rrule($object['RRULE']['value'])) {
+
+				var_dump($rrule);
+
 				$event['rrule'] = 'RRULE:'.$object['RRULE']['value'];
 				if (isset($rrule['UNTIL'])) {
 					if($event['repeat_end_time'] = $this->ical2array->parse_date($rrule['UNTIL'])) {
 						$event['repeat_end_time'] = mktime(0,0,0, date('n', $event['repeat_end_time']), date('j', $event['repeat_end_time'])+1, date('Y', $event['repeat_end_time']));
 					}
-				}else
-				if(isset($rrule['COUNT']))
+				}elseif(isset($rrule['COUNT']))
 				{
 					$event_count = $rrule['COUNT'];
+
+					//figure out end time of event
+					if(isset($event_count)) {
+						$event['repeat_end_time']='0';
+						$start_time=$event['start_time'];
+						for($i=1;$i<$event_count;$i++) {
+							$event['repeat_end_time']=$start_time=Date::get_next_recurrence_time($event['start_time'], $start_time, $event['end_time']-$event['start_time'],$event['rrule']);
+						}
+						if($event['repeat_end_time']>0) {
+							$event['repeat_end_time']+=$event['end_time']-$event['start_time'];
+						}
+					}
 				}
 	
 				if(isset($rrule['BYDAY'])) {
@@ -2130,17 +2144,7 @@ class calendar extends db {
 				}
 			}
 
-			//figure out end time of event
-			if(isset($event_count)) {
-				$event['repeat_end_time']='0';
-				$start_time=$event['start_time'];
-				for($i=1;$i<$event_count;$i++) {
-					$event['repeat_end_time']=$start_time=Date::get_next_recurrence_time($event['start_time'], $start_time, $event['end_time']-$event['start_time'],$event['rrule']);
-				}
-				if($event['repeat_end_time']>0) {
-					$event['repeat_end_time']+=$event['end_time']-$event['start_time'];
-				}
-			}
+			
 		
 			return $event;
 		}
