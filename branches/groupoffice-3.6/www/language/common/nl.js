@@ -49,6 +49,7 @@ GO.lang.strReportBug='Meld een programmafout';
 GO.lang.strAbout='Over {product_name}';
 
 GO.lang.strName = 'Naam';
+GO.lang.strName2 = 'Naam 2';
 GO.lang.strDescription = 'Beschrijving';
 GO.lang.strEmail = 'E-mail';
 GO.lang.strUser = 'Gebruiker';

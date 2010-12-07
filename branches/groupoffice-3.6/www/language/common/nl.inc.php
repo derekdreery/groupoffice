@@ -51,6 +51,7 @@ $lang['common']['fileCreateError']='Kon het bestand niet aanmaken';
 $lang['common']['illegalCharsError']='De naam bevatte één van de volgende ongeldige tekens %s';
 
 $lang['common']['name']='Naam';
+$lang['common']['name2'] = 'Naam 2';
 $lang['common']['user']='Gebruiker';
 $lang['common']['username']='Gebruikersnaam';
 $lang['common']['password']='Wachtwoord';
