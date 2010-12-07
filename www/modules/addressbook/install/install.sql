@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `user_id` int(11) NOT NULL DEFAULT '0',
   `addressbook_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(100) DEFAULT NULL,
+	`name2` varchar(100) DEFAULT NULL,
   `address` varchar(100) DEFAULT NULL,
   `address_no` varchar(100) DEFAULT NULL,
   `zip` varchar(10) DEFAULT NULL,

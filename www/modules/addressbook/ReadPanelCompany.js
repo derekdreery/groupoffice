@@ -97,7 +97,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 							// LEGE REGEL
 							'<tr>'+
 								'<td>'+
-								'<b>{name}</b><br />'+
+								'<b>{name}</b><tpl if="!GO.util.empty(name2)"><br />{name2}</tpl><br />'+
 							//ADDRESS
 							'<tpl if="!GO.util.empty(google_maps_link)">'+
 								'<a href="{google_maps_link}" target="_blank">'+

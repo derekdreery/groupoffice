@@ -78,6 +78,7 @@ try
 			{
 				$response['results']=array(
 					array('field'=>'ab_companies.name', 'label'=>$lang['common']['name'], 'type'=>'text'),
+					array('field'=>'ab_companies.name2', 'label'=>$lang['common']['name2'], 'type'=>'text'),
 					array('field'=>'ab_companies.title', 'label'=>$lang['common']['title'], 'type'=>'text'),
 					array('field'=>'ab_companies.email', 'label'=>$lang['common']['email'], 'type'=>'text'),
 					array('field'=>'ab_companies.country', 'label'=>$lang['common']['country'], 'type'=>'country'),
@@ -580,8 +581,10 @@ try
 				if($response['data']['company_id'] > 0 && $company = $ab->get_company($response['data']['company_id']))
 				{					
 					$response['data']['company_name'] = $company['name'];
+					$response['data']['company_name2'] = $company['name2'];
 				} else {
 					$response['data']['company_name'] = '';
+					$response['data']['company_name2'] = '';
 				}
 
 				$values = array('address_no', 'address', 'zip', 'city', 'state', 'country');
@@ -968,6 +971,7 @@ try
 			{
 				$response['results']=array(
 					array('field'=>'ab_companies.name', 'label'=>$lang['common']['name'], 'type'=>$company_types['name']),
+					array('field'=>'ab_companies.name2', 'label'=>$lang['common']['name2'], 'type'=>$company_types['name2']),
 					//array('field'=>'ab_companies.title', 'label'=>$lang['common']['title'], 'type'=>$company_types['title']),
 					array('field'=>'ab_companies.email', 'label'=>$lang['common']['email'], 'type'=>$company_types['email']),
 					array('field'=>'ab_companies.country', 'label'=>$lang['common']['country'], 'type'=>$company_types['country']),

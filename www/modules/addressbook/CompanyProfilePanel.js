@@ -200,6 +200,12 @@ GO.addressbook.CompanyProfilePanel = function(config)
 		fieldLabel: GO.lang['strName'], 
 		name: 'name'
 	});
+
+	this.formName2 = new Ext.form.TextField(
+	{
+		fieldLabel: GO.lang['strName2'],
+		name: 'name2'
+	});
 		
 	this.formPhone = new Ext.form.TextField(
 	{
@@ -297,6 +303,7 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	    	defaults: { border: false, anchor: '100%' },
 				items: [
 					this.formName,
+					this.formName2,
 					this.formPhone,
 					this.formFax,
 					this.formEmail,
