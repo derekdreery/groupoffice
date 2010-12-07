@@ -67,7 +67,7 @@ while($user = $GO_USERS->next_record())
 				$swift->sendmail();
 
 				echo "Email send to: ".$user['email']." (subject: ".$subject.")\n";
-				$rm2->update_reminder(array('id'=>$rm->record['id'],'mail_send'=>'1'), false);
+				$rm2->reminder_mail_sent($user['id'], $rm->record['id']);
 			}
 		}
 	}

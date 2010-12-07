@@ -71,6 +71,11 @@ class reminder extends db
 		return $this->replace_row('go_reminders_users', $r);
 	}
 
+	function reminder_mail_sent($user_id, $reminder_id){
+		$sql = "UPDATE go_reminders_users SET mail_sent='1' WHERE user_id=? AND reminder_id=?";
+		return $this->query($sql, 'ii', array($user_id, $reminder_id));
+	}
+
 	function remove_user_from_reminder($user_id, $reminder_id, $delete_reminder_if_last_user=true){
 		$sql = "DELETE FROM go_reminders_users WHERE user_id=? AND reminder_id=?";
 		$this->query($sql, 'ii', array($user_id, $reminder_id));
