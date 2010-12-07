@@ -79,6 +79,7 @@ $lang['common']['postZip'] = 'ZIP/Postal (post)';
 $lang['common']['visitAddress'] = 'Visit address';
 $lang['common']['postAddressHead'] = 'Post address';
 $lang['common']['name'] = 'Name';
+$lang['common']['name2'] = 'Name 2';
 $lang['common']['user'] = 'User';
 $lang['common']['username'] = 'Username';
 $lang['common']['password'] = 'Password';
