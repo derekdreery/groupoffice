@@ -229,3 +229,4 @@ $lang['common']['alert']='Alert';
 $lang['common']['theFolderAlreadyExists']='A folder with that name already exists';
 
 $lang['common']['other']='Other';
+$lang['common']['copy']='copy';
