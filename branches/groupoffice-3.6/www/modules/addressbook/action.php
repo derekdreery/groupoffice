@@ -165,7 +165,7 @@ try {
 			$company_id = isset($_REQUEST['company_id']) ? ($_REQUEST['company_id']) : 0;
 
 			$credentials = array(
-				'addressbook_id', 'name', 'address', 'address_no', 'zip', 'city', 'state', 'country', 'iso_address_format',
+				'addressbook_id', 'name', 'name2', 'address', 'address_no', 'zip', 'city', 'state', 'country', 'iso_address_format',
 				'post_address', 'post_address_no', 'post_city', 'post_state', 'post_country', 'post_zip', 'post_iso_address_format', 'phone',
 				'fax', 'email', 'homepage', 'bank_no', 'vat_no', 'comment','iban','crn'
 			);
@@ -414,6 +414,7 @@ try {
 				$contact['address'] = isset ($record[$_POST['address']]) ? trim($record[$_POST['address']]) : '';
 				$contact['address_no'] = isset ($record[$_POST['address_no']]) ? trim($record[$_POST['address_no']]) : '';
 				$company_name = isset ($record[$_POST['company_name']]) ? trim($record[$_POST['company_name']]) : '';
+				$company_name2 = isset ($record[$_POST['company_name2']]) ? trim($record[$_POST['company_name2']]) : '';
 				$contact['department'] = isset ($record[$_POST['department']]) ? trim($record[$_POST['department']]) : '';
 				$contact['function'] = isset ($record[$_POST['function']]) ? trim($record[$_POST['function']]) : '';
 				$contact['salutation'] = isset ($record[$_POST['salutation']]) ? trim($record[$_POST['salutation']]) : '';
@@ -426,6 +427,7 @@ try {
 					$company=array();
 					$company['addressbook_id']=$addressbook_id;
 					$company['name']=$company_name;
+					$company['name2']=$company_name2;
 
 					$contact['company_id']=$ab->add_company($company);
 				    }
@@ -441,6 +443,7 @@ try {
 			    if (isset ($record[$_POST['name']]) && $record[$_POST['name']] != '') {
 				$company=array();
 				$company['name'] = trim($record[$_POST['name']]);
+				$company['name2'] = trim($record[$_POST['name2']]);
 
 				//if (!$ab->get_company_by_name($_POST['addressbook_id'], $company['name']))
 				{
