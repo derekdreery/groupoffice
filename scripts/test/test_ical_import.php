@@ -186,6 +186,39 @@ END:VALARM
 END:VEVENT
 END:VCALENDAR';
 
+
+$ical_str='BEGIN:VCALENDAR
+VERSION:1.0
+TZ:+0100
+DAYLIGHT:TRUE;+0200;20100328T020000;20101031T030000;;
+DAYLIGHT:TRUE;+0200;20110327T020000;20111030T030000;;
+BEGIN:VEVENT
+X-FUNAMBOL-FOLDER:DEFAULT_FOLDER
+X-FUNAMBOL-ALLDAY:0
+DTSTART:20101207T150000Z
+DTEND:20101207T153000Z
+X-MICROSOFT-CDO-BUSYSTATUS:BUSY
+CATEGORIES:
+DESCRIPTION:
+LOCATION:
+PRIORITY:2
+STATUS:0
+X-MICROSOFT-CDO-REPLYTIME:
+SUMMARY:Wekelijks
+CLASS:PUBLIC
+AALARM:20101207T144500Z;;0;
+RRULE:W1 TU 20110208T160000 #10
+EXDATE:
+RDATE:
+X-FUNAMBOL-BILLINGINFO:
+X-FUNAMBOL-COMPANIES:
+X-FUNAMBOL-MILEAGE:
+X-FUNAMBOL-NOAGING:0
+END:VEVENT
+END:VCALENDAR
+';
+
+
 //$vcalendar = $ical->parse_file('/home/mschering/jos.ics');
 //
 $vcalendar = $ical->parse_icalendar_string($ical_str);
@@ -194,7 +227,7 @@ $vcalendar = $ical->parse_icalendar_string($ical_str);
 
 while($object = array_shift($vcalendar[0]['objects'])) {
 	if($object['type'] == 'VEVENT' || $object['type'] == 'VTODO') {
-		//var_dump($object);
+		var_dump($object);
 		$event = $cal->get_event_from_ical_object($object);
 		
 		echo 'Name: '.$event['name']."\n";
