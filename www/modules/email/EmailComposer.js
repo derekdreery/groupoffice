@@ -1217,10 +1217,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					params.mailing_group_id = config.mailing_group_id;
 				}
 
-				if (config.template_id > 0) {
-					params.template_id=config.template_id;
-					params.to = this.toCombo.getValue();
-				}
+				//if (config.template_id>0) {
+				params.template_id=config.template_id;
+				params.to = this.toCombo.getValue();
+				//}
 
 				var url = config.loadUrl
 				? config.loadUrl
