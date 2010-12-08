@@ -313,7 +313,7 @@ class tasks extends db
 			}
 			$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$list['name'] = $task_name;
-			$list['acl_id']=$GO_SECURITY->get_new_acl('',$user_id);
+			$list['acl_id']=$GO_SECURITY->get_new_acl('tasks',$user_id);
 			$x = 1;
 			while($this->get_tasklist_by_name($list['name']))
 			{
