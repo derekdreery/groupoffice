@@ -1,0 +1,2 @@
+modules/backupmanager/MainPanel.js
+modules/backupmanager/PublishDialog.js
