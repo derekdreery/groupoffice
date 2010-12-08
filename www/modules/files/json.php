@@ -32,13 +32,7 @@ try {
 
 	switch($task) {
 		case 'sendfile':
-			if(!empty($_POST['template_id'])) {
-				require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
-				$response = load_template($_POST['template_id']);
-			}else
-			{
-				$response['data']['body']=$_POST['body'];
-			}
+			
 
 			$file = $files->get_file($_POST['file_id']);
 			$up_file['id'] = $file['id'];
@@ -51,12 +45,20 @@ try {
 					'<a href="'.$GO_MODULES->modules['files']['full_url']. 'download.php?id='.$_POST['file_id'].'&random_code='.$random_code.'">'.$file['name'].'</a> ';
 				$lb = "<br />";
 			} else {
-				$downloadLink = $lang['files']['copyPasteToDownload'].':'."\n" .
-					$GO_MODULES->modules['files']['full_url']. 'download.php?id='.$_POST['file_id'].'&random_code='.$random_code."\n";
+				$downloadLink = $lang['files']['copyPasteToDownload'].':'."\n\n" .
+					$GO_MODULES->modules['files']['full_url']. 'download.php?id='.$_POST['file_id'].'&random_code='.$random_code."\n\n";
 				$lb = "\n";
 			}
 
-			$response['data']['body'] = $downloadLink.'('.$lang['files']['possibleUntil'].' '.date($_SESSION['GO_SESSION']['date_format'],$expire_time).')'.$lb.$lb.$response['data']['body'];
+			$_POST['body'] = $downloadLink.'('.$lang['files']['possibleUntil'].' '.date($_SESSION['GO_SESSION']['date_format'],$expire_time).')'.$lb.$lb;
+
+			if(!empty($_POST['template_id'])) {
+				require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
+				$response = load_template($_POST['template_id']);
+			}else
+			{
+				$response['data']['body']=$_POST['body'];
+			}
 
 			if (empty($response['data']['subject']))
 				$response['data']['subject'] = $lang['files']['downloadLink'].' '.$file['name'];
