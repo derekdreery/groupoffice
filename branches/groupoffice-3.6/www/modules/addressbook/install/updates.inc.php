@@ -111,3 +111,5 @@ $updates[] = "ALTER TABLE `ab_contacts` CHANGE `email` `email` VARCHAR( 100 ) CH
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `email2` `email2` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates[] = "ALTER TABLE `ab_contacts` CHANGE `email3` `email3` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates[] = "ALTER TABLE `ab_companies` ADD `name2` VARCHAR( 100 ) NULL AFTER `name` ";
+//was missing from instal file
+$updates[]= "ALTER TABLE `ab_companies` ADD `crn` VARCHAR( 50 ) NOT NULL ,ADD `iban` VARCHAR( 100 ) NOT NULL ";

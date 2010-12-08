@@ -56,6 +56,8 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `comment` text,
   `bank_no` varchar(50) DEFAULT NULL,
   `vat_no` varchar(30) DEFAULT NULL,
+  `iban` varchar(100) DEFAULT NULL,
+  `crn` varchar(50) DEFAULT NULL,
   `ctime` int(11) NOT NULL DEFAULT '0',
   `mtime` int(11) NOT NULL DEFAULT '0',
   `email_allowed` enum('0','1') NOT NULL,
