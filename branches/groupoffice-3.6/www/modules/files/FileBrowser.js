@@ -462,7 +462,7 @@ GO.files.FileBrowser = function(config){
 		tbar.push(this.uploadButton);
 		
 		var version = deconcept.SWFObjectUtil.getPlayerVersion();
-		if(version.major > 0)
+		if(!GO.settings.config.disable_flash_upload && version.major > 0)
 		{
 			this.uploadMenu.add({
 				text : GO.lang.smallUpload,
@@ -509,6 +509,7 @@ GO.files.FileBrowser = function(config){
 			});
 			this.uploadForm.on('upload', function(e, file)
 			{
+				this.uploadMenu.hide();
 				this.sendOverwrite({
 					folder_id : this.folder_id,
 					task: 'overwrite'
