@@ -823,7 +823,7 @@ class calendar extends db {
 			}
 			$calendar_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$calendar['name'] = $calendar_name;
-			$calendar['acl_id']=$GO_SECURITY->get_new_acl($user_id);
+			$calendar['acl_id']=$GO_SECURITY->get_new_acl('calendar',$user_id);
 			$x = 1;
 			while($this->get_calendar_by_name($calendar['name'])) {
 				$calendar['name'] = $calendar_name.' ('.$x.')';
