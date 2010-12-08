@@ -1,3 +1,9 @@
+08/12/2010 3.6.9
+- New config.php option to turn off Flash uploader as it's not working with self-signed
+  certificates. The option is 'disable_flash_upload'.
+- Bug fix in outlook sync with recurrence rules.
+- Added second name field to companies.
+
 03/12/2010 3.6.8
 - Timeregistration bug
 
