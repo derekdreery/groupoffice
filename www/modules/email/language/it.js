@@ -166,3 +166,25 @@ GO.email.lang.searchCC='Destinatario (CC)';
 GO.email.lang.anyField='Qualsiasi campo';
 
 GO.email.lang.youHaveNewMails = 'Tu hai {new} nuova/e e-mail';
+
+O.email.lang.replaceEmailText='Questo contatto ha gia\' tre indirizzi e-mail nel suo profilo. E\' possibile sostituire uno di quelli esistenti al di sotto, cliccando sull\'indirizzo di posta elettronica che si desidera sostituire.';
+GO.email.lang.skipUnknownRecipientsAction='Non mostrare questa finestra la prossima volta';
+GO.email.lang.skipUnknownRecipients='Non mostrare destinatari sconosciuti';
+
+GO.email.lang.alwaysRequestNotification='Richiedi sempre una notifica di lettura';
+GO.email.lang.alwaysRespondToNotifications='Rispondere sempre ad una notifica di lettura';
+
+GO.email.lang.icalendarUpdateEvent='Aggiorna Evento';
+GO.email.lang.icalendarDeleteEvent='Cancella Evento';
+GO.email.lang.icalendarAcceptInvitation='Accetta';
+GO.email.lang.icalendarDeclineInvitation='Rifiuta';
+GO.email.lang.icalendarTentativeInvitation='Provvisorio';
+
+GO.email.lang.icalendarEventUpdated='L\'evento e\' stato aggiornato.';
+GO.email.lang.icalendarEventCreated='L\'evento e\' stato creato.';
+GO.email.lang.icalendarEventDeleted='L\'evento e\' stato cancellato.';
+GO.email.lang.icalendarInvitationDeclined='Invito e\' stato rifiutato.';
+GO.email.lang.icalendarDeleteEventConfirm='Sei sicuro di voler cancellare questo evento?';
+
+
+GO.email.lang.sending='Invio...';
