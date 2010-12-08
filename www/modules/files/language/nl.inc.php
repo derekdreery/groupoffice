@@ -38,3 +38,9 @@ $lang['files']['file']='Bestand';
 $lang['files']['folder']='Map';
 
 $lang['files']['emptyFile']='Leeg bestand';
+
+$lang['files']['downloadLink'] = 'Downloadlink';
+$lang['files']['clickHereToDownload'] = 'Klik hier om het bestand te downloaden via een beveiligde link';
+$lang['files']['copyPasteToDownload'] = 'Kopieer de volgende link naar de adresbalk van uw browser om het bestand te downloaden via een beveiligde connectie';
+$lang['files']['expireTime'] = 'Downloaden mogelijk tot';
+$lang['files']['possibleUntil'] = 'mogelijk tot';
