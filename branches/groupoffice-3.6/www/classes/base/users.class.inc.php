@@ -472,7 +472,7 @@ class GO_USERS extends db
 			if($record)
 				$this->cached_realnames[$user_id]=String::format_name($record);
 			else
-				$this->cached_realnames[$user_id]='';
+				$this->cached_realnames[$user_id]='Removed ID: '.$user_id;
 		}
 
 		return $this->cached_realnames[$user_id];
