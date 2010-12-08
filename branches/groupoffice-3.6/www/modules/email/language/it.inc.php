@@ -62,3 +62,10 @@ $lang['email']['error_move_folder']='Non puoi spostare la catella';
 $lang['email']['error_getaddrinfo']='Indirizzo host specificato non valido';
 $lang['email']['error_authentication']='Nome utente o password non valida';
 $lang['email']['error_connection_refused']='La connessione e\' stata rifiutata. Si prega di controllare l\'host ed il numero di porta.';
+
+$lang['email']['iCalendar_event_invitation']='Questo messaggio contiene un invito ad un evento.';
+$lang['email']['iCalendar_event_not_found']='Questo messaggio contiene un aggiornamento di un evento che non esiste piu\'.';
+$lang['email']['iCalendar_update_available']='Questo messaggio contiene un aggiornamento di un evento esistente.';
+$lang['email']['iCalendar_update_old']='Questo messaggio contiene un evento che e\' gia\' stato elaborato.';
+$lang['email']['iCalendar_event_cancelled']='Questo messaggio contiene un evento cancellato.';
+$lang['email']['iCalendar_event_invitation_declined']='Questo messaggio contiene un invito ad un evento che hai rifiutato.';
