@@ -208,7 +208,7 @@ GO.grid.LinksPanel = function(config){
 	this.linkTypeFilter = new GO.LinkTypeFilterPanel({
 		region:'south',
 		height:300,
-		store:new Ext.data.JsonStore({
+		store:new GO.data.JsonStore({
 			root: 'results',
 			data: {"results":GO.linkTypes}, //defined in /default_scripts.inc.php
 			fields: ['id','name', 'checked'],
