@@ -7,8 +7,7 @@ GO.mainLayout.onReady(function(){
 		this.store = new GO.data.JsonStore({
 			url: GO.settings.modules.email.url+'json.php',
 			baseParams: {
-				task: 'messages',
-				limit: parseInt(GO.settings['max_rows_list'])
+				task: 'messages'
 			},
 			root: 'results',
 			totalProperty: 'total',

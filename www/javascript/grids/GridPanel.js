@@ -80,11 +80,11 @@ GO.grid.GridPanel = function(config)
     
 	if(config.paging)
 	{
+		if(typeof(config.paging)=='boolean')
+			config.paging=parseInt(GO.settings['max_rows_list']);
+
 		if(!config.bbar)
 		{
-			if(typeof(config.paging)=='boolean')
-				config.paging=parseInt(GO.settings['max_rows_list']);
-			
 			config.bbar = new Ext.PagingToolbar({
 				cls: 'go-paging-tb',
 				store: config.store,
