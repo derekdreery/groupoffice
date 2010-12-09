@@ -33,6 +33,7 @@ try {
 	switch($task) {
 		case 'upload':
 			$response['success']=true;
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 			$fs = new filesystem();
 			$fs->mkdir_recursive($GO_CONFIG->tmpdir.'files_upload');
 
