@@ -35,7 +35,7 @@ GO.bookmarks.CategoryDialog = function(config){
 	config.width=500;
 	config.height=400;
 	config.closeAction='hide';
-	config.title= GO.notes.lang.category;					
+	config.title= GO.bookmarks.lang.category;
 	config.items= this.formPanel;
 	config.focus= focusFirstField.createDelegate(this);
 	config.buttons=[{
@@ -184,7 +184,7 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 		}
 		]
 
-		if (GO.settings.user_id==1) items.push({ // niet 1 maar 'admin-rights''
+		if (GO.settings.modules.bookmarks.write_permission) items.push({ // niet 1 maar 'admin-rights''
 			name: 'public',
 			xtype: 'checkbox',
 			boxLabel: GO.bookmarks.lang.sharedCategory,
