@@ -54,7 +54,7 @@ GO.email.ContactsGrid = function(config){
 		emptyText: GO.lang['strNoItems']		
 	});
 	config.sm=new Ext.grid.RowSelectionModel({
-		singleSelect:true
+		singleSelect:config.singleSelect
 	});
 	
 	
