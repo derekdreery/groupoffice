@@ -2082,7 +2082,7 @@ class calendar extends db {
 
 			if (isset($object['RRULE']['value']) && $rrule = $this->ical2array->parse_rrule($object['RRULE']['value'])) {
 
-				var_dump($rrule);
+				//var_dump($rrule);
 
 				$event['rrule'] = 'RRULE:'.$object['RRULE']['value'];
 				if (isset($rrule['UNTIL'])) {
@@ -3024,13 +3024,16 @@ class calendar extends db {
 	public function merge_events(&$chosen_events,&$current_event,&$uuid_array,$event_nr,$calendar_names,$GO_USERS=null) {
 		global $lang;
 		if (empty($GO_USERS)) global $GO_USERS;
+
+		//append start_time for recurring events.
+		$merge_index = $current_event['uuid'].'-'.$current_event['start_time'];
 		
-		if (empty($current_event['uuid'])) return false;
-		if (array_key_exists($current_event['uuid'],$uuid_array)) {
+		if (empty($merge_index)) return false;
+		if (array_key_exists($merge_index,$uuid_array)) {
 			
-			$uuid_array[$current_event['uuid']][] = $event_nr;
-			if (count($uuid_array[$current_event['uuid']])==2) {
-				$merged_event_nr = $uuid_array[$current_event['uuid']][0];
+			$uuid_array[$merge_index][] = $event_nr;
+			if (count($uuid_array[$merge_index])==2) {
+				$merged_event_nr = $uuid_array[$merge_index][0];
 				
 				$chosen_events[$merged_event_nr]['background'] = 'FFFFFF';
 				$chosen_events[$merged_event_nr]['username'] = '';//$lang['calendar']['non_selected'];
@@ -3040,8 +3043,8 @@ class calendar extends db {
 				$chosen_events[$merged_event_nr]['name'] = implode('(',$name_exploded);
 				$chosen_events[$merged_event_nr]['name'] .= ' ('.String::get_first_letters($calendar_names[$chosen_events[$merged_event_nr]['calendar_id']]).')';
 			}
-			if (count($uuid_array[$current_event['uuid']])>=2) {
-				$merged_event_nr = $uuid_array[$current_event['uuid']][0];
+			if (count($uuid_array[$merge_index])>=2) {
+				$merged_event_nr = $uuid_array[$merge_index][0];
 				
 				$chosen_events[$merged_event_nr]['calendar_name'] .= '; '.$calendar_names[$current_event['calendar_id']];
 				$chosen_events[$merged_event_nr]['name'] = substr($chosen_events[$merged_event_nr]['name'],0,-1);
@@ -3054,7 +3057,7 @@ class calendar extends db {
 				return true;
 			}
 		} else {
-			$uuid_array[$current_event['uuid']] = array($event_nr);
+			$uuid_array[$merge_index] = array($event_nr);
 		}
 		return false;
 	}
