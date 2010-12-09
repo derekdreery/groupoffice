@@ -29,7 +29,7 @@ GO.moduleManager.onModuleReady('addressbook',function(){
 					GO.users.showUserDialog();
 
 					var values = this.formPanel.form.getValues();
-					values.username=values.email;
+					values.username=values.last_name;
 					values.password1=values.password2=GO.ab2users.randomPassword(8);
 					values.company=this.formPanel.form.findField('company_id').getRawValue();
 
@@ -57,7 +57,7 @@ GO.moduleManager.onModuleReady('addressbook',function(){
 					var values={};
 					values.username=cv.email;
 					values.password1=values.password2=GO.ab2users.randomPassword(8);
-					values.email=cv.email;
+					values.email=cv.name;
 
 					values.first_name=GO.ab2users.lang.companyUserFirstName;
 					values.last_name=values.company=cv.name;
