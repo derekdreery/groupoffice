@@ -11,6 +11,7 @@ $lang['files']['name'] = 'Файлы';
 $lang['files']['description'] = 'Модуль Фалы; Модуль для совместного использования файлов.';
 
 $lang['link_type'][6]='Файл';
+$lang['link_type'][17]='Папка';
 
 $lang['files']['fileNotFound'] = 'Файл не найден';
 $lang['files']['folderExists'] = 'Папка уже существует';
@@ -42,3 +43,5 @@ $lang['files']['deleted']='Удален';
 $lang['files']['file']='Файл';
 $lang['files']['folder']='Папка';
 $lang['files']['files']='Файлы';
+
+$lang['files']['emptyFile']='Пустой файл';

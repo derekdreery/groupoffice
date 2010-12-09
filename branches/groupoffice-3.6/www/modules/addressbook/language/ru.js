@@ -28,7 +28,10 @@
  * Copy everything below for translations
  */
 
-
+GO.addressbook.lang.newSearch='Новый поиск';
+GO.addressbook.lang.executeQuery='Выполнить поисковый запрос';
+GO.addressbook.lang.savedQueries='Сохраненные поисковые запросы';
+GO.addressbook.lang.selectField = 'Выберите поле';
 GO.addressbook.lang.selectMailingGroup='Выберите группы рассылки';
 
 GO.addressbook.lang.cmdFormLabelAddressBooks = 'Адресная книга';
@@ -114,4 +117,27 @@ GO.addressbook.lang.explanationVariables='Пояснения к параметр
 GO.addressbook.lang.explanationSex='Форма приветствия для мужчины и женщины';
 GO.addressbook.lang.btnSearch = 'Поиск';
 GO.addressbook.lang.btnReset = 'Сбросить';
+GO.addressbook.lang.searchQueryName='Имя поискового запроса';
+GO.addressbook.lang.enterSearchQueryName='Введите имя поискового запроса:';
 
+GO.addressbook.lang.photo = 'Фото';
+GO.addressbook.lang.deleteImage='Удалить изображение';
+
+GO.addressbook.lang.addAllSearchResults='Добавить все найденные записи';
+GO.addressbook.lang.confirmAddAllSearchResults='Вы уверены что хотите добавить все найденные записи в адресный список?';
+
+
+GO.addressbook.lang.moveEmployees='Переместить сотрудников';
+
+GO.addressbook.lang.emailAdded='Email адреса добавлены к контакту';
+
+GO.addressbook.lang.exportWithCompanies='С компаниями';
+
+
+GO.addressbook.lang.id='№';
+GO.addressbook.lang.exportPermission='Права для экспорта';
+GO.addressbook.lang.crn='Регистрационный номер компании';
+GO.addressbook.lang.iban='IBAN';
+
+GO.addressbook.lang.unknownEmail = 'Неизвестный email адрес';
+GO.addressbook.lang.strUnknownEmail = 'Этот email адрес не найден в Контактах. Хотите добавить его в Контакты?';

@@ -57,6 +57,7 @@ $lang['calendar']['and']='и';
 $lang['calendar']['repeats'] = 'Повторять каждый %s';
 $lang['calendar']['repeats_at'] = 'Повторять каждый %s в %s';//eg. Repeats every month at the first monday
 $lang['calendar']['repeats_at_not_every'] = 'Повторять каждый %s %s в %s';//eg. Repeats every 2 weeks at monday
+$lang['calendar']['repeats_not_every'] = 'Повторять каждый %s %s';
 $lang['calendar']['until']='пока'; 
 
 $lang['calendar']['not_invited']='Вы не приглашены на это событие. Возможно Вам необходимо войти в систему под другим пользователем.';
@@ -107,3 +108,19 @@ $lang['calendar']['birthday_name']='День рождения: {NAME}';
 $lang['calendar']['birthday_desc']='{NAME} сегодня {AGE} лет';
 
 $lang['calendar']['unauthorized_participants_write']='У Вас недостаточно привелегий для планирования событий следующих пользователей:<br /><br />{NAMES}<br /><br />Вы можете выслать им приглашения и они могут принять и добавитьв свой календарь.';
+
+$lang['calendar']['noCalSelected'] = 'Вы не выбрали ни один календарь для просмотра. Выберине хотя бы один календарь в Настройках.';
+
+$lang['calendar']['month_times'][1]='первый';
+$lang['calendar']['month_times'][2]='второй';
+$lang['calendar']['month_times'][3]='третий';
+$lang['calendar']['month_times'][4]='четвертый';
+$lang['calendar']['month_times'][5]='пятый';
+
+$lang['calendar']['rightClickToCopy']='Нажмите праву кнопку мыши чтобы скопировать ссылку';
+
+$lang['calendar']['invitation']='Приглашение';
+$lang['calendar']['invitation_update']='Обновленные приглашения';
+$lang['calendar']['cancellation']='Отказ';
+
+$lang['calendar']['non_selected'] = 'в не выбранном календаре';
