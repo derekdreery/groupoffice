@@ -166,6 +166,8 @@ $lang['common']['day'] = 'день';
 $lang['common']['days'] = 'дней';
 $lang['common']['week'] = 'неделя';
 $lang['common']['weeks'] = 'недель';
+$lang['common']['month'] = 'месяц';
+$lang['common']['strMonths'] = 'месяцев';
 
 $lang['common']['group_everyone']='Все';
 $lang['common']['group_admins']='Администраторы';
@@ -200,7 +202,10 @@ $lang['common']['yes']='Да';
 $lang['common']['no']='Нет';
 
 $lang['commmon']['logFiles']='Журналы';
-$lang['common']['reminder']='Напоминание';
+
+$lang['common']['goAlreadyStarted']='Group-Office уже был запущен.  Вы можете закрыть это окно или вкладку и продолжить работать в Group-Office.';
+
+$lang['common']['reminder']='Напоминание';
 $lang['common']['unknown']='Неизвестно';
 $lang['common']['time']='Время';
 
@@ -211,3 +216,18 @@ $lang['common']['dontChangeOwnersPermissions']='Вы не можете изме�
 $lang['common']['running_sys_upgrade']='Выполняется обновление системы';
 $lang['common']['sys_upgrade_text']='Подождите. Дополнительная информация будет выведена на экран.';
 $lang['common']['click_here_to_contine']='Нажмите здесь для продолжения';
+$lang['common']['parentheses_invalid_error']='В запросе не верно указан верхний уровень.';
+
+
+$lang['common']['nReminders']='%s напоминания';
+$lang['common']['oneReminder']='Одно напоминание';
+
+//Example: you have 1 reminders in Group-Office.
+$lang['common']['youHaveReminders']='У Вас %s в %s.';
+
+$lang['common']['createdBy']='Создано';
+$lang['common']['none']='Нет';
+$lang['common']['alert']='Предупреждение';
+$lang['common']['theFolderAlreadyExists']='Папка с таким именем уже существует.';
+
+$lang['common']['other']='Разное';

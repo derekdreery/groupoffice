@@ -42,3 +42,8 @@ $lang['cms']['cant_move_into_itself']='Нельзя переместить в с
 //$lang['cms']['done_with_cms']='Done with CMS';
 
 $lang['cms']['antispam_fail']='Ответ на антиспам неверен. Попробуйте еще раз.';
+$lang['cms']['no_admin_rights']="У Вас нет админимтраторских прав для управления доступом к папкам сайта.";
+
+$lang['cms']['none'] = 'НЕТ';
+
+$lang['cms']['template_not_found'] = 'Шаблон сайте не найден. Убедитесь что шаблон применен к сайту и каталог с шаблоном находиться в modules/cms/template/...';

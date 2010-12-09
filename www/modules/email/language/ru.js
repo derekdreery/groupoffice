@@ -108,7 +108,8 @@ GO.email.lang.emptyFolderConfirm='Вы уверенны что хотите оч
 GO.email.lang.addUnknownRecipients='Добавить получателя';
 GO.email.lang.addUnknownRecipientsText='Только что Вы отправили письмо один из получателей которого отсутствует в адресной книге. Нажмите на его имени если Вы хотите добавить его в Адресную книгу или закройте это окно.';
 GO.email.lang.attachFilesPC='Присоеденить файлы с компьютера';
-GO.email.lang.attachFilesGO='Присоеденить файлы из Group-Office';
+GO.email.lang.attachFilesGO='Присоеденить файлы из {product_name}';
+GO.email.lang.renameFolder='Переименовать папку';
 
 
 GO.email.lang.vacation='Автоматический ответ';
@@ -176,3 +177,29 @@ GO.email.lang.showUnread='Показать непрочитанные';
 GO.email.lang.searchFrom='Отправитель';
 GO.email.lang.searchTo='Получатель';
 GO.email.lang.searchCC='Получатель (копия)';
+
+GO.email.lang.youHaveNewMails = 'У Вас {new} новых сообщений';
+GO.email.lang.replaceEmailText='У этого контакта уже добавлено три email адреса. Вы можете заменить один из уже записанных адресов кликнув на него.';
+GO.email.lang.skipUnknownRecipientsAction='Не показывать это окно в следующий раз';
+GO.email.lang.skipUnknownRecipients='Не показывать диалог "Неизвестный получатель"';
+
+GO.email.lang.alwaysRequestNotification='Всегда запрашивать подтверждение о прочтении письма';
+GO.email.lang.alwaysRespondToNotifications='Всегда отправлять уведомление о прочтении письма';
+
+GO.email.lang.icalendarUpdateEvent='Обновить событие';
+GO.email.lang.icalendarDeleteEvent='Удалить событие';
+GO.email.lang.icalendarAcceptInvitation='Принять';
+GO.email.lang.icalendarDeclineInvitation='Отклонить';
+GO.email.lang.icalendarTentativeInvitation='Предварительно';
+
+GO.email.lang.alwaysRespondToNotifications='Всегда отвечать на уведомление о прочтении письма';
+
+GO.email.lang.anyField='Все поля';
+GO.email.lang.icalendarEventUpdated='Событие обновлено.';
+GO.email.lang.icalendarEventCreated='Событие создано.';
+GO.email.lang.icalendarEventDeleted='Событие удалено.';
+GO.email.lang.icalendarInvitationDeclined='Приглашение отклонено.';
+GO.email.lang.icalendarDeleteEventConfirm='Вы уверены что хотите удалить это событие?';
+
+
+GO.email.lang.sending='Отправка...';

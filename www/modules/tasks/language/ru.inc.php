@@ -31,4 +31,8 @@ $lang['tasks']['call']='Позвонить';
 
 $lang['tasks']['dueAtdate']='До %s';
 $lang['tasks']['list']='Список задач';
+$lang['tasks']['tasklistChanged']="* Список задач изменен с '%s' - '%s'";
+$lang['tasks']['statusChanged']="* Статус изменен с '%s' на '%s'";
+$lang['tasks']['multipleSelected']='Выбрано несколько списков задач';
+$lang['tasks']['incomplete_delete']='У Вас недостаточно прав чтобы удалить все выбранные задачи';
 ?>
