@@ -2080,9 +2080,7 @@ class calendar extends db {
 			$event['repeat_end_time'] = 0;
 
 
-			if (isset($object['RRULE']['value']) && $rrule = $this->ical2array->parse_rrule($object['RRULE']['value'])) {
-
-				//var_dump($rrule);
+			if (!empty($object['RRULE']['value']) && $rrule = $this->ical2array->parse_rrule($object['RRULE']['value'])) {
 
 				$event['rrule'] = 'RRULE:'.$object['RRULE']['value'];
 				if (isset($rrule['UNTIL'])) {
@@ -2105,7 +2103,7 @@ class calendar extends db {
 						}
 					}
 				}
-	
+
 				if(isset($rrule['BYDAY'])) {
 
 					$month_time=1;
@@ -2128,9 +2126,10 @@ class calendar extends db {
 
 					$days=Date::shift_days_to_gmt($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
 
-					$event['rrule']=Date::build_rrule(Date::ical_freq_to_repeat_type($rrule), $rrule['INTERVAL'], $event['repeat_end_time'], $days, $month_time);					
+					$event['rrule']=Date::build_rrule(Date::ical_freq_to_repeat_type($rrule), $rrule['INTERVAL'], $event['repeat_end_time'], $days, $month_time);
 				}
 			}
+
 
 
 
