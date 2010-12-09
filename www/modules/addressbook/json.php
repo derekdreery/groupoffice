@@ -167,7 +167,8 @@ try
 			}elseif(isset($_POST['books']))
 			{
 				$books = json_decode($_POST['books'], true);
-				$GO_CONFIG->save_setting('addressbook_books_filter',implode(',', $books), $GO_SECURITY->user_id);
+				if(empty($_POST['disable_filter_save']))
+					$GO_CONFIG->save_setting('addressbook_books_filter',implode(',', $books), $GO_SECURITY->user_id);
 			}else
 			{
 				$books = $GO_CONFIG->get_setting('addressbook_books_filter', $GO_SECURITY->user_id);
