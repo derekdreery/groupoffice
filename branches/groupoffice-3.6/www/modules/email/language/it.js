@@ -167,7 +167,7 @@ GO.email.lang.anyField='Qualsiasi campo';
 
 GO.email.lang.youHaveNewMails = 'Tu hai {new} nuova/e e-mail';
 
-O.email.lang.replaceEmailText='Questo contatto ha gia\' tre indirizzi e-mail nel suo profilo. E\' possibile sostituire uno di quelli esistenti al di sotto, cliccando sull\'indirizzo di posta elettronica che si desidera sostituire.';
+GO.email.lang.replaceEmailText='Questo contatto ha gia\' tre indirizzi e-mail nel suo profilo. E\' possibile sostituire uno di quelli esistenti al di sotto, cliccando sull\'indirizzo di posta elettronica che si desidera sostituire.';
 GO.email.lang.skipUnknownRecipientsAction='Non mostrare questa finestra la prossima volta';
 GO.email.lang.skipUnknownRecipients='Non mostrare destinatari sconosciuti';
 
