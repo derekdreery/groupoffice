@@ -26,4 +26,9 @@ $lang['tasks']['call']='Telefonikõne';
 $lang['tasks']['dueAtdate']='Tähtaeg %s';
 
 $lang['tasks']['list']='Ülesannete nimekiri';
+
+$lang['tasks']['tasklistChanged']="* Nimekiri muudetud. Enne oli '%s', nüüd on '%s'";
+$lang['tasks']['statusChanged']="* Staatus muudetud. Enne oli '%s', nüüd on '%s'";
+$lang['tasks']['multipleSelected']='Mitu nimekirja valitud';
+$lang['tasks']['incomplete_delete']='Valitud ülesannete kustutamiseks puuduvad õigused';
 ?>

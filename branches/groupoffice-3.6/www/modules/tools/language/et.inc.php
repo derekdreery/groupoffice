@@ -13,4 +13,5 @@ $lang['tools']['index_files']='Indekseeri kõik failid';
 
 $lang['tools']['buildsearchcache']='Loo otsingu indeks';
 $lang['tools']['checkmodules']='Kontrolli mooduleid';
+$lang['tools']['resetState']='Taasta akna või võrgu olek';
 ?>

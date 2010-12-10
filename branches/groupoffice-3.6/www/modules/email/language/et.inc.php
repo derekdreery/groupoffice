@@ -59,3 +59,13 @@ $lang['email']['noUidNext']='Sinu meiliserver ei toeta UIDNEXT.  \'Mustandid\' k
 $lang['email']['disable_trash_folder']='Kirja liigutamine prügikasti ebaõnnestus. Selle võis põhjustada serveriruumi puudus. ruumi saad vabastada prügikasti välja lülitades, minnes Administratsioon -> Kontod -> Topletklikk kontol -> Kaustad';
 
 $lang['email']['error_move_folder']='Kausta liigutamine ebaõnnestus';
+
+$lang['email']['error_getaddrinfo']='Vigane hosti aadress';
+$lang['email']['error_authentication']='Vigane kasutajanimi või parool';
+$lang['email']['error_connection_refused']='Ühendust ei lubatud. Kontrolli hosti või pordi numbrit';
+$lang['email']['iCalendar_event_invitation']='See sõnum sisaldab mingisuguse sündmuse kutset';
+$lang['email']['iCalendar_event_not_found']='See sõnum sisaldab mingisuguse sündmuse, mida enam ei ole, kutset';
+$lang['email']['iCalendar_update_available']='See sõnum sisaldab mingisuguse sündmuse kutse uuendamise teadet.';
+$lang['email']['iCalendar_update_old']='See sõnum sisaldab mingisuguse juba käsitletud sündmuse kutset';
+$lang['email']['iCalendar_event_cancelled']='See sõnum sisaldab mingisuguse sündmuse kutse tühistamist';
+$lang['email']['iCalendar_event_invitation_declined']='See sõnum sisaldab mingisuguse sinu poolt tagasi lükatud sündmuse kutset';

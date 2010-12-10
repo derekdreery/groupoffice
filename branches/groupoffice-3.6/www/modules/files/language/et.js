@@ -34,3 +34,12 @@ GO.files.lang.newFiles='Uus';
 GO.files.lang.olderVersions='Vanemad versioonid';
 GO.files.lang.uploadProperties='All olevad atribuudid lisatakse kõikidele "Väikesed failid" valiku alt üles laetud failidele';
 GO.files.lang.selectFiles = 'Vali failid';
+
+GO.files.lang.fitImage='Sobita pilt';
+GO.files.lang.normalSize='Tavaline suurus';
+GO.files.lang.imageViewer='Pildi vaatamine';
+GO.files.lang.emailDownloadLink= 'Saada allalaadimise link postiga';
+GO.files.lang.downloadLink= 'Allalaadimise link';
+GO.files.lang.clickHereToDownload= 'Turvalise lingiga allalaadimiseks vajuta siia';
+GO.files.lang.expireTime= 'Lae alla lingi aegumise päev';
+GO.files.lang.possibleUntil= 'võimalik kuni';
