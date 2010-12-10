@@ -640,6 +640,14 @@ class GO_CONFIG {
 
 	var $callto_template='callto:{phone}';
 
+
+	/**
+	 * Don't use flash to upload. In some cases it doesn't work like when
+	 * using a self-signed certificate.
+	 */
+	var $disable_flash_upload=false;
+
+
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not touched by the installer   /////////////
 	 //////////////////////////////////////////////////////////////////////////////*/
@@ -650,7 +658,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.6.6';
+	var $version = '3.6.11';
 
 
 	/* The permissions mode to use when creating files
@@ -680,7 +688,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20101202-1';
+	var $mtime = '20101211';
 
 	#group configuration
 	/**
@@ -1237,6 +1245,7 @@ class GO_CONFIG {
 		$response['config']['max_users']=$this->max_users;
 
 		$response['config']['debug']=$this->debug;
+		$response['config']['disable_flash_upload']=$this->disable_flash_upload;
 
 
 		return $response;

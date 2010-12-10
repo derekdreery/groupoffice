@@ -8,4 +8,4 @@ $lang['blacklist']['ips']='IP adressen';
 
 $lang['blacklist']['blacklisted']='Uw IP adres [%s] wordt geblokkeerd omdat er vanaf dit adres 3 maal achter elkaar verkeerd is aangemeld. Neem contact op met de systeembeheerder om uw IP adres van de blacklist af te halen.';
 $lang['blacklist']['captchaIncorrect']='De door u ingevoerde beveilingscode is incorrect, probeer het nog eens.';
-$lang['blacklist']['captchaActivated']='Er zijn vijf foutieve inlogpogingen gesignaleerd. Om in te loggen dient u de beveiligingscode over te typen.';
+$lang['blacklist']['captchaActivated']='Er zijn drie foutieve inlogpogingen gesignaleerd. Om in te loggen dient u de beveiligingscode over te typen.';

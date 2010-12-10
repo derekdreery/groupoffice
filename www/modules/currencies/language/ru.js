@@ -1,6 +1,12 @@
-//Ext.namespace('GO.currencies');
-//GO.currencies.lang={};
-//GO.currencies.lang.currencies='currencies';
+/**
+ * Russian translation
+ * By Valery Yanchenko (utf-8 encoding)
+ * vajanchenko@hotmail.com
+ * 10 December 2008
+*/
+Ext.namespace('GO.currencies');
+GO.currencies.lang={};
+GO.currencies.lang.currencies='currencies';
 
 /* table: cu_currencies */
 GO.currencies.lang.currency="Валюта";

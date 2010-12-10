@@ -9,7 +9,8 @@ GO.addressbook.AddresbooksGrid = function(config){
 	config.layout='fit';
 	config.autoScroll=true;
 	config.split=true;
-	config.store = GO.addressbook.readableAddressbooksStore;
+	if(!config.store)
+		config.store = GO.addressbook.readableAddressbooksStore;
 	config.ddGroup='AddressBooksDD';
 	config.enableDD=true;
 	
@@ -22,7 +23,7 @@ Ext.extend(GO.addressbook.AddresbooksGrid, GO.grid.MultiSelectGrid, {
 	type: '',
 	afterRender : function()
 	{	
-		GO.addressbook.AddresbooksGrid.superclass.afterRender.call(this);		
+		GO.addressbook.AddresbooksGrid.superclass.afterRender.call(this);	
 
 		var DDtarget = new Ext.dd.DropTarget(this.getView().mainBody, {
 			ddGroup : 'AddressBooksDD',

@@ -85,12 +85,14 @@ GO.users.lang.sunday = 'Воскресенье';
 GO.users.lang.monday = 'Понедельник';
 GO.users.lang.regionalSettings = 'Региональные установки';
 GO.users.lang.userSettings = 'Пользовательские установки';
+GO.users.lang.profile='Профиль';
 
 GO.users.lang.maxUsersReached='В системе достигнуто максимальное количество пользователей. Перейдите на закладку "Сервис" и увеличьте максимальное количество пользователей в системе.';
 
 GO.users.lang.group='Группа';
 
 GO.users.lang.muteSound='Выключить звук';
+GO.users.lang.mailReminders='Уведомление по электронной почте';
 
 GO.users.lang.downloadSampleCSV='Загрузить пример CSV файла';
 
@@ -110,3 +112,7 @@ GO.users.lang.lastName = 'Фамилия';
 GO.users.lang.firstName = 'Имя';
 
 GO.users.lang.sendInvitation='Отправить приглашение';
+
+GO.users.lang.contactInfo='Информация о контакте';
+
+GO.users.lang.popupNotification='Показывать всплывающее окно когда срабатывает "непоминание" или при приходе новой почты';

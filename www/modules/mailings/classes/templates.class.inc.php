@@ -354,6 +354,7 @@ class templates extends db {
 			'birthday',
 			'beginning',
 			'name',
+			'name2',
 			'first_name',
 			'middle_name',
 			'last_name',

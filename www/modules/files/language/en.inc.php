@@ -40,3 +40,9 @@ $lang['files']['files']='Files';
 
 
 $lang['files']['emptyFile']='Empty file';
+
+$lang['files']['downloadLink'] = 'Download link';
+$lang['files']['clickHereToDownload'] = 'Click here to download the file with a secure link';
+$lang['files']['copyPasteToDownload'] = 'Click the secured link below or copy it to your browser\'s address bar to download the file.';
+$lang['files']['expireTime'] = 'Download link expire time';
+$lang['files']['possibleUntil'] = 'possible until';

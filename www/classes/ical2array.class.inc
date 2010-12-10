@@ -400,6 +400,12 @@ class ical2array {
 					if($count > 0) {
 						$rrule_arr['COUNT'] = $count;
 					}
+
+					if(strlen($expl_rrule[count($expl_rrule)-1])>2){
+						//this must be the end date
+						$rrule_arr['UNTIL'] = array_pop($expl_rrule);
+					}
+
 				}else {
 					$rrule_arr['UNTIL'] = $until;
 				}

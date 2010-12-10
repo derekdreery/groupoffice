@@ -265,3 +265,51 @@ GO.lang.priority='Priorität';
 GO.lang.priority_low='Niedrig';
 GO.lang.priority_normal='Normal';
 GO.lang.priority_high='Hoch';
+
+GO.lang.none = 'Keins';
+
+GO.lang.userSelectedLanguage = 'Meine gewählte Sprache';
+
+GO.lang.swfUploadPanelStrings = {
+		text_add: 'Datei(en) hinzufügen',
+		text_upload: 'Datei(en) übertragen',
+		text_cancel: 'Übertragung abbrechen',
+		text_clear: 'Warteschlange löschen',
+		text_progressbar: 'Fortschrittsbalken',
+		text_remove: 'Datei entfernen',
+		text_remove_sure: 'Soll diese Datei aus der Warteschlange entfernt werden?',
+		text_error: 'Fehler',
+		text_uploading: 'Datei wird übertragen: {0} ({1} of {2})',
+		header_filename: 'Dateiname',
+		header_size: 'Grösse',
+		header_status: 'Status',
+		status: {
+			0: 'Wartet',
+			1: 'Überträgt...',
+			2: 'Abgeschlossen',
+			3: 'Fehler',
+			4: 'Abgebrochen'
+		},
+		error_queue_exceeded: 'Die Maximalgrösse der Warteschlange von {0} Dateien wurde überschritten.',
+		error_queue_slots_0: 'Es ist kein Platz frei',
+		error_queue_slots_1: 'Es ist nur ein Platz frei',
+		error_queue_slots_2: 'Es sind nur {0} Plätze frei',
+		error_size_exceeded: 'Die ausgewählten Dateien überschreiten die Grösse von 1 MB.',
+		error_zero_byte_file: 'Ungültige Dateigrösse von 0 Byte.',
+		error_invalid_filetype: 'Ungültiger Dateityp ausgewählt.',
+		error_file_not_found: 'Datei nicht gefunden (Fehler 404).',
+		error_security_error: 'Sicherheitsfehler. Es darf nicht auf eine andere URL übertragen werden.'
+	};
+
+
+GO.lang.orientation='Ausrichtung';
+GO.lang.portrait='Hochformat';
+GO.lang.landscape='Querformat';
+GO.lang.totals='Summe';
+GO.lang.userGroup='Benutzergruppe';
+GO.lang.deselectAll='Alles abwählen';
+GO.lang.confirmSelectLotsOfItems='Diese Aktion wählt {count} Einträge aus und könnte Group-Office langsam werden lassen. Möchten Sie fortsetzen?';
+GO.lang.captcha='Sicherheitscode';
+GO.lang.captchaEmpty='Sicherheitscode ist leer';
+GO.lang.multiselectComboMaxItemsReachedWarning='Sie können maximal {max} Einträge auswählen';
+GO.lang.toScreen='Auf den Bildschirm';

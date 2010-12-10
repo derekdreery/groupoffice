@@ -40,3 +40,13 @@ GO.files.lang.newFiles='Новый';
 GO.files.lang.olderVersions='Старые версии';
 GO.files.lang.uploadProperties='Эти настройки будут применены для всех фалов загруженных с опцией "Маленькие файлы"';
 GO.files.lang.selectFiles = 'Выберите файлы';
+
+GO.files.lang.fitImage='Вписать изображение';
+GO.files.lang.normalSize='Нормальный размер';
+GO.files.lang.imageViewer='Просмотр изображений';
+
+GO.files.lang.emailDownloadLink = 'Ссылка на загрузку Email';
+GO.files.lang.downloadLink = 'Ссылка на загрузку';
+GO.files.lang.clickHereToDownload = 'Нажмите здесь чтобы загрузить файл';
+GO.files.lang.expireTime = 'Вермя жизни ссылки';
+GO.files.lang.possibleUntil = 'возможно до';

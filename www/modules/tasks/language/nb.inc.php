@@ -27,4 +27,6 @@ $lang['tasks']['dueAtdate']='Frist %s';
 $lang['tasks']['list']='Oppgaveliste';
 $lang['tasks']['tasklistChanged']="* Oppgaveliste endret fra '%s' til '%s'";
 $lang['tasks']['statusChanged']="* Status endret fra '%s' til '%s'";
+$lang['tasks']['multipleSelected']='Flere oppgavelister er valgt';
+$lang['tasks']['incomplete_delete']='Du har ikke rettigheter til å slette alle valgte oppgaver';
 ?>

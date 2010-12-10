@@ -58,7 +58,7 @@ Ext.extend(GO.form.SelectLink, GO.form.ComboBoxReset,{
 					this.selectLinkField.setRemoteText(record.get('type_name'));
 					this.hide();
 				}
-			})
+			});
 		}
 		GO.selectLinkDialog.show();
 		

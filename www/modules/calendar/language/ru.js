@@ -98,3 +98,47 @@ GO.calendar.lang.no_status='Новый';
 GO.calendar.lang.no_custom_fields='Нет дополнительной информации.';
 GO.calendar.lang.show_bdays='Отображать дни рождения из адресной книги';
 GO.calendar.lang.show_tasks='Отображать задачи из списка задач';
+
+GO.calendar.lang.myCalendar='Мой календарь';
+GO.calendar.lang.merge='Объеденить';
+GO.calendar.lang.ownColor = 'Задайте для каждого календаря свой уникальный цвет';
+
+GO.calendar.lang.ignoreConflictsTitle = 'Игнорировать конфликты?';
+GO.calendar.lang.ignoreConflictsMsg = 'Это событие конфликтует с другим событием в Вашем календаре. Сохранить это событие?';
+GO.calendar.lang.resourceConflictTitle = 'Конфликт ресурсов';
+GO.calendar.lang.resourceConflictMsg = 'Один или боле ресурсов в этом событии в указанное время уже занят:</br>';
+GO.calendar.lang.view = 'Вид';
+
+GO.calendar.lang.calendarsPermissions='Права на календари';
+GO.calendar.lang.resourcesPermissions='Права на ресурсы';
+
+GO.calendar.lang.daynames={};
+GO.calendar.lang.daynames[0]='Воскресенье';
+GO.calendar.lang.daynames[1]='Понедельник';
+GO.calendar.lang.daynames[2]='Вторник';
+GO.calendar.lang.daynames[3]='Среда';
+GO.calendar.lang.daynames[4]='Четверг';
+GO.calendar.lang.daynames[5]='Пятница';
+GO.calendar.lang.daynames[6]='Суббота';
+
+GO.calendar.lang.categories='Категории';
+GO.calendar.lang.category='Категория';
+GO.calendar.lang.globalCategory='Общая категория';
+GO.calendar.lang.selectCategory='Выберите категорию';
+
+GO.calendar.lang.duration='Промежуток';
+
+GO.calendar.lang.move='Переместить';
+GO.calendar.lang.showInfo='Подробности';
+GO.calendar.lang.copyEvent='Скопировать событие';
+GO.calendar.lang.moveEvent='Переместить событие';
+GO.calendar.lang.eventInfo='Подробности';
+
+GO.calendar.lang.isOrganizer='Органайзер';
+GO.calendar.lang.sendInvitationInitial='Хотите разослать собщения с приглашениями участникам?';
+GO.calendar.lang.sendInvitationUpdate='Хотите разослать собщения с изменениями участникам?';
+GO.calendar.lang.sendCancellation='Хотите разослать всем участникам уведомление о отмене события?';
+
+GO.calendar.lang.forthcomingAppointments='Предстоящие события';
+
+GO.calendar.lang.quarterShort = 'Q';

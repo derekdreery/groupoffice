@@ -288,42 +288,46 @@ try {
 
 				$tasklists=get_multiselectgrid_selections('tasklists');
 
-				if(count($tasklists)) {
-					$user_id = 0;
-					$readable_tasklists = array();
-					$writable_tasklists = array();
-					$response['data']['permission_level'] = $permission_level = 0;
-					$tasklist_names = array();
-					foreach($tasklists as $tasklist_id)
-					{
-						$tasklist = $tasks->get_tasklist($tasklist_id);
-
-						$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id']);
-						if($permission_level) {
-							$readable_tasklists[] = $tasklist_id;
-							$tasklist_names[] = $tasklist['name'];
-						}
-						if($permission_level >= GO_SECURITY::WRITE_PERMISSION) {
-							$writable_tasklists[] = $tasklist_id;
-						}
-
-						if($permission_level > $response['data']['permission_level']) {
-							$response['data']['permission_level'] = $permission_level;
-						}
-					}					
-
-					if(count($tasklist_names))
-					{
-						$response['grid_title'] = (count($tasklist_names) > 1) ? $lang['tasks']['multipleSelected'] : $tasklist_names[0];
-					}
-
-					$response['data']['write_permission']=$response['data']['permission_level']>1;
-					if(!$response['data']['permission_level']) {
-						throw new AccessDeniedException();
-					}
-				}else {
-					$user_id = $GO_SECURITY->user_id;
+				if(!count($tasklists)) {
+					$tasklist = $tasks->get_default_tasklist($GO_SECURITY->user_id);
+					$tasklists[] = $tasklist['id'];
 				}
+
+				$user_id = 0;
+				$readable_tasklists = array();
+				$writable_tasklists = array();
+				$response['data']['permission_level'] = $permission_level = 0;
+				$tasklist_names = array();
+				foreach($tasklists as $tasklist_id)
+				{
+					$tasklist = $tasks->get_tasklist($tasklist_id);
+
+					$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id']);
+					if($permission_level) {
+						$readable_tasklists[] = $tasklist_id;
+						$tasklist_names[] = $tasklist['name'];
+					}
+					if($permission_level >= GO_SECURITY::WRITE_PERMISSION) {
+						$writable_tasklists[] = $tasklist_id;
+					}
+
+					if($permission_level > $response['data']['permission_level']) {
+						$response['data']['permission_level'] = $permission_level;
+					}
+				}
+
+				if(count($tasklist_names))
+				{
+					$response['grid_title'] = (count($tasklist_names) > 1) ? $lang['tasks']['multipleSelected'] : $tasklist_names[0];
+				}
+
+				$response['data']['write_permission']=$response['data']['permission_level']>1;
+				if(!$response['data']['permission_level']) {
+					throw new AccessDeniedException();
+				}
+				/*}else {
+					$user_id = $GO_SECURITY->user_id;
+				}*/
 
 				if(isset($_POST['delete_keys'])) {
 					try {

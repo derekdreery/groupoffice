@@ -22,7 +22,7 @@ session_write_close();
 // $baseUri = '/';
 
 if(!isset($GO_MODULES->modules['dav']))
-	die('dav module not installed');
+	die('DAV module not installed. Install it at Start menu -> Modules');
 
 
 // Files we need

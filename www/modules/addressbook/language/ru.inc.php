@@ -48,4 +48,17 @@ $lang['addressbook']['companies'] = 'Компании';
 $lang['addressbook']['newContactAdded']='Добавлен новый контакт';
 $lang['addressbook']['newContactFromSite']='Добавлен новый контакт через WEB-форму.';
 $lang['addressbook']['clickHereToView']='Нажмите здесь для просмотра контакта';
+
+$lang['addressbook']['contactFromAddressbook']='Контакт из %s';
+$lang['addressbook']['companyFromAddressbook']='Компания из %s';
+$lang['addressbook']['defaultSalutation']='Уважаемый(ая) {middle_name} {last_name}';
+
+$lang['addressbook']['multipleSelected']='Выбрано несколько адресных книг';
+$lang['addressbook']['incomplete_delete_contacts']='У Вас не прав на удаление всех выбранных контактов';
+$lang['addressbook']['incomplete_delete_companies']='У Вас не прав на удаление всех выбранных компаний';
+
+$lang['addressbook']['emailAlreadyExists']='E-mail адрес уже добавлен к этому контакту';
+$lang['addressbook']['emailDoesntExists']='E-mail адрес не найден';
+
+$lang['addressbook']['imageNotSupported']='Рисунок который Вы загрузили не поддерживается системой. Поддерживаются только gif, png и jpg рисунки.';
 ?>

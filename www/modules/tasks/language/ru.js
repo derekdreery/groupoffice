@@ -51,3 +51,22 @@ GO.tasks.lang.defaultTasklist='Список задачь по умолчанию
 GO.tasks.lang.visibleTasklists='Видимые списки задач';
 GO.tasks.lang.visible='Видимый';
 GO.tasks.lang.selectIcalendarFile='Выберите (*.ics) файл';
+
+GO.tasks.lang.continueTask='Продолжить выполнять задачу';
+GO.tasks.lang.categories='Категории';
+GO.tasks.lang.category='Категория';
+GO.tasks.lang.selectCategory='Выберите категорию';
+GO.tasks.lang.noTasklistSelected='Вы долны выбрать хотябы один список задач.';
+GO.tasks.lang.selectAllTasklists='Выбрать все списки задач';
+
+GO.tasks.lang.globalCategory='Общая категория';
+
+GO.tasks.lang.showFutureTasks='Отображать будущие задачи';
+
+GO.tasks.lang.incompleteTasks='Невыполненные задачи';
+
+GO.tasks.lang.dueInSevenDays='В течении семи дней';
+GO.tasks.lang.overDue='Просроченео';
+GO.tasks.lang.futureTasks='Будущие задачи';
+GO.tasks.lang.all='Все';
+GO.tasks.lang.active='Активная(ые)';

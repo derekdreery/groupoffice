@@ -252,7 +252,11 @@ class go_ical extends calendar
 		}		
 
 		if($event['all_day_event']=='1'){
-			$DT_format = go_ical::date_format;
+
+			//Used to be: $DT_format = go_ical::date_format;
+			//Changed this for synthesis syncml client
+
+			$DT_format = $this->version=='1.0' ? $this->datetime_format : go_ical::date_format;
 
 			//changed this for funambol compatibility. Always send dates in local time for all day events
 

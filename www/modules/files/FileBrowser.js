@@ -462,7 +462,7 @@ GO.files.FileBrowser = function(config){
 		tbar.push(this.uploadButton);
 		
 		var version = deconcept.SWFObjectUtil.getPlayerVersion();
-		if(version.major > 0)
+		if(!GO.settings.config.disable_flash_upload && version.major > 0)
 		{
 			this.uploadMenu.add({
 				text : GO.lang.smallUpload,
@@ -509,6 +509,7 @@ GO.files.FileBrowser = function(config){
 			});
 			this.uploadForm.on('upload', function(e, file)
 			{
+				this.uploadMenu.hide();
 				this.sendOverwrite({
 					folder_id : this.folder_id,
 					task: 'overwrite'
@@ -1228,7 +1229,17 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			});
 			this.expireForm.items.get('expire_time').on('select', function(field,date){
 			//this.expireForm.items.get('expire_unixtime').setValue(parseInt(date.setDate(date.getDate())/1000));
-			Ext.Ajax.request({
+
+			GO.email.showComposer({
+							loadUrl:GO.settings.modules.files.url+'json.php',
+							loadParams:{
+								task:'sendfile',
+								file_id:this.file_data.id,
+								expire_time: parseInt(date.setDate(date.getDate())/1000)
+							}
+						});
+
+			/*Ext.Ajax.request({
 				url: GO.settings.modules.files.url+'json.php',
 				params: {
 					task: 'file_download_link',
@@ -1241,19 +1252,20 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					if (response.success) {
 						var random_code = response.data.random_code;
 						var myDate = new Date(parseInt(response.data.expire_time)*1000);
-						GO.email.showComposer({
-							values: {
-								'subject': GO.files.lang.downloadLink+' '+this.file_data.name,
-								'body': GO.files.lang.clickHereToDownload+': <a href="'+GO.settings.modules.files.full_url+
-									'download.php?id='+this.file_data.id+'&random_code='+random_code+'">'+this.file_data.name+'</a> ('+
-									GO.files.lang.possibleUntil+' '+myDate.format(GO.settings.date_format)+')'
-							}
-						});
+
+						if (GO.email.useHtmlMarkup)
+							var downloadLink = GO.files.lang.clickHereToDownload+': ' +
+								'<a href="'+GO.settings.modules.files.full_url+ 'download.php?id='+this.file_data.id+'&random_code='+random_code+'">'+this.file_data.name+'</a> ';
+						else
+							var downloadLink = GO.files.lang.copyPasteToDownload+':\n' +
+								GO.settings.modules.files.full_url+ 'download.php?id='+this.file_data.id+'&random_code='+random_code+'\n';
+
+						
 					} else {
 						Ext.Msg.alert(GO.lang['strError'], response.feedback);
 					}
 				}
-			});
+			});*/
 				this.expireDateWindow.hide();
 			}, this);
 		}
