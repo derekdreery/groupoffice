@@ -2,8 +2,11 @@
 $conf = str_replace('config.php', 'imapauth.config.php', $GLOBALS['GO_CONFIG']->get_config_file());
 if(file_exists($conf)){
 	require_once($conf);
-	$domains = json_encode(explode(',',$config[0]['imapauth_combo_domains']));
-	$default_domain = $config[0]['imapauth_default_domain'];
+
+	if(isset($config[0]['imapauth_combo_domains'])){
+		$domains = json_encode(explode(',',$config[0]['imapauth_combo_domains']));
+		$default_domain = $config[0]['imapauth_default_domain'];
+	}
 }
 
 if(!empty($domains) && !empty($default_domain)){ ?>
