@@ -46,4 +46,11 @@ $lang['addressbook']['clickHereToView']='Kontakti vaatamiseks vaata siia';
 $lang['addressbook']['contactFromAddressbook']='Kontakt %s';
 $lang['addressbook']['companyFromAddressbook']='Ettevõte %s';
 $lang['addressbook']['defaultSalutation']='Lugupeetud [hr./pr.] {middle_name} {last_name}';
+
+$lang['addressbook']['multipleSelected']='Mitu aadressiraamatut valitud';
+$lang['addressbook']['incomplete_delete_contacts']='Valitud kontaktide kustutamiseks puuduvad sul õigused';
+$lang['addressbook']['incomplete_delete_companies']='Valitud ettevõtete kostutamiseks puuduvad sul õigused';
+$lang['addressbook']['emailAlreadyExists']='E-posti aadress on sellele kontaktile juba lisatud';
+$lang['addressbook']['emailDoesntExists']='E-posti aadressi ei leitud';
+$lang['addressbook']['imageNotSupported']='Üles laetud pildi formaat ei ole lubatud. Ainult gif, png ja jpg on lubatud';
 ?>

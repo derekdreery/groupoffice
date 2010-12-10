@@ -60,22 +60,27 @@ class blacklist extends db {
 
 	public static function bad_login($username, $password, $count_login){
 
-		if($count_login){
-			$bl = new blacklist();
+		if(!function_exists('imagecreatetruecolor')){
+			go_debug('IP blacklist module is installed but the required php5-gd package is not. IP blacklist is not functional now. Please install php5-gd');
+		}else
+		{
+			if($count_login){
+				$bl = new blacklist();
 
-			$user_id = $bl->get_user_id($username);
-			$ip = $bl->get_ip($_SERVER['REMOTE_ADDR'], $user_id);
-			if($ip)
-			{
-				$ip['count']++;
-				$ip['userid']=$user_id;
-				$bl->update_ip($ip);
-			}else
-			{
-				$ip['ip']=$_SERVER['REMOTE_ADDR'];
-				$ip['count']=1;
-				$ip['userid']=$user_id;
-				$bl->add_ip($ip);
+				$user_id = $bl->get_user_id($username);
+				$ip = $bl->get_ip($_SERVER['REMOTE_ADDR'], $user_id);
+				if($ip)
+				{
+					$ip['count']++;
+					$ip['userid']=$user_id;
+					$bl->update_ip($ip);
+				}else
+				{
+					$ip['ip']=$_SERVER['REMOTE_ADDR'];
+					$ip['count']=1;
+					$ip['userid']=$user_id;
+					$bl->add_ip($ip);
+				}
 			}
 		}
 	}

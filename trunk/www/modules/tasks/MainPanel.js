@@ -63,7 +63,7 @@ GO.tasks.MainPanel = function(config){
 				listeners:{
 					change:function(radiogroup, checkedbox){
 						this.gridPanel.store.baseParams['show']=checkedbox.inputValue;
-						this.gridPanel.store.reload();
+						this.gridPanel.store.load();
 						delete this.gridPanel.store.baseParams['show'];
 					},
 					scope:this

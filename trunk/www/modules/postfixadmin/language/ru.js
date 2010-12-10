@@ -62,6 +62,7 @@ GO.postfixadmin.lang.subject="Тема";
 GO.postfixadmin.lang.body="Тело";
 GO.postfixadmin.lang.cache="Кэш";
 GO.postfixadmin.lang.domain="Домен";
+GO.postfixadmin.lang.usage="Использовано";
 
 GO.postfixadmin.lang.defaultQuota='Ограничение по умолчанию (MB)';
 

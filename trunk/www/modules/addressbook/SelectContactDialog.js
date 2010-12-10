@@ -39,13 +39,35 @@ GO.addressbook.SelectContactDialog = function(config){
 
 	this.addressbooksGrid = new GO.addressbook.AddresbooksGrid({
 		region:'west',
-		width:180
+		width:180,
+		store:new GO.data.JsonStore({
+			url: GO.settings.modules.addressbook.url+ 'json.php'	,
+			baseParams: {
+				
+				'task':'addressbooks',
+				'auth_type' : 'read'
+				},
+			root: 'results',
+			totalProperty: 'total',
+			id: 'id',
+			fields: ['id','name','owner','checked'],
+			remoteSort: true
+		})
 	});
 
-	this.addressbooksGrid.getSelectionModel().on('rowselect', function(sm, rowIndex, r){		
+	/*this.addressbooksGrid.getSelectionModel().on('rowselect', function(sm, rowIndex, r){
 		var record = this.addressbooksGrid.getStore().getAt(rowIndex);
 		this.grid.store.baseParams.addressbook_id=record.get("id");
 		this.grid.store.load();
+	}, this);*/
+
+	this.addressbooksGrid.on('change', function(grid, abooks, records)
+	{
+		var books = Ext.encode(abooks);
+		this.grid.store.baseParams.books=books;
+		this.grid.store.load();
+		//delete this.grid.store.baseParams.books;
+
 	}, this);
 
 
@@ -87,6 +109,9 @@ GO.addressbook.SelectContactDialog = function(config){
     
   //dont filter on address lists when selecting
   delete this.grid.store.baseParams.enable_mailings_filter;
+
+  //don't save filter but send it each time
+  this.grid.store.baseParams.disable_filter_save="1";
 		
 	this.searchField.store=this.grid.store;
 	
@@ -142,7 +167,18 @@ Ext.extend(GO.addressbook.SelectContactDialog, Ext.Window, {
 		
 		//if(!this.grid.store.loaded)
 		//{
+		if(!this.addressbooksGrid.store.loaded)
+			this.addressbooksGrid.store.load({
+				callback:function(){
+					var books = this.addressbooksGrid.getSelected();
+					this.grid.store.baseParams.books=Ext.encode(books);
+					this.grid.store.load();
+				},
+				scope:this
+			});
+		else
 			this.grid.store.load();
+		
 		//}
 	},
 	

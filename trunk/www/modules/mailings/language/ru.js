@@ -73,3 +73,18 @@ GO.mailings.lang.noTemplate='Нет шаблона';
 
 GO.mailings.lang.customContactFields='Допонительные поля для контакта';
 GO.mailings.lang.customCompanyFields='Дополнительные поля для компании';
+GO.mailings.lang.newsletters='Новости';
+
+GO.mailings.lang.addresslist='Адресный список';
+
+GO.mailings.lang.viewLog='Просмотреть журнал';
+GO.mailings.lang.viewMessage='Просмотреть сообщение';
+GO.mailings.lang.pauseMailing='Приостановить рассылку';
+GO.mailings.lang.resumeMailing='Возобновить рассылку';
+GO.mailings.lang.unsubscribeLink='Ссылка "отписаться"';
+GO.mailings.lang.unsubscribeHref='Href "отписаться"';
+
+GO.mailings.lang.addDocumentTemplate='Добавить шаблон документа';
+GO.mailings.lang.documentTemplate='Шаблон документа';
+
+GO.mailings.lang.copyingMessages='Копирование сообщений...';

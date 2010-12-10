@@ -214,3 +214,12 @@ $lang['common']['running_sys_upgrade']='Teostan süsteemi uuendamist';
 $lang['common']['sys_upgrade_text']='Üks hetk. Kõik väljundid logitakse';
 $lang['common']['click_here_to_contine']='Jätkamiseks vajuta siia';
 $lang['common']['parentheses_invalid_error']='Sinu päringu parenthese on vigane.';
+
+$lang['common']['nReminders']='%s meeldetuletust';
+$lang['common']['oneReminder']='1 meeldetuletus';
+$lang['common']['youHaveReminders']='Sul on %s ajal %s.';
+$lang['common']['createdBy']='Autor';
+$lang['common']['none']='Puuduvad';
+$lang['common']['alert']='Märguanne';
+$lang['common']['theFolderAlreadyExists']='Selle nimega kaust on juba olemas';
+$lang['common']['other']='Muud';

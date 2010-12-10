@@ -1,20 +1,17 @@
-Ext.namespace('GO.postfixadmin');
-GO.postfixadmin.lang={};
-GO.postfixadmin.lang.postfixadmin='E-mail domains';
 
 /* table: pa_aliases */
 GO.postfixadmin.lang.alias="Alias";
-GO.postfixadmin.lang.aliases="Aliases";
-GO.postfixadmin.lang.address="Address";
-GO.postfixadmin.lang.goto_address="Goto";
+GO.postfixadmin.lang.aliases="Aliaser";
+GO.postfixadmin.lang.address="Adresse";
+GO.postfixadmin.lang.goto_address="Går til";
 
 /* table: pa_domains */
-GO.postfixadmin.lang.domain="Domain";
-GO.postfixadmin.lang.domains="Domains";
-GO.postfixadmin.lang.domain="Domain";
-GO.postfixadmin.lang.aliases="Aliases";
-GO.postfixadmin.lang.mailboxes="Mailboxes";
-GO.postfixadmin.lang.maxquota="Max quota (MB)";
+GO.postfixadmin.lang.domain="Domene";
+GO.postfixadmin.lang.domains="Domener";
+GO.postfixadmin.lang.domain="Domene";
+GO.postfixadmin.lang.aliases="Aliaser";
+GO.postfixadmin.lang.mailboxes="Mailbokser";
+GO.postfixadmin.lang.maxquota="Maks kvote (MB)";
 GO.postfixadmin.lang.transport="Transport";
 GO.postfixadmin.lang.backupmx="Backup MX";
 
@@ -37,25 +34,27 @@ GO.postfixadmin.lang.mda="Mda";
 GO.postfixadmin.lang.date="Date";
 
 /* table: pa_mailboxes */
-GO.postfixadmin.lang.mailbox="Mailbox";
-GO.postfixadmin.lang.mailboxes="Mailboxes";
-GO.postfixadmin.lang.username="Username";
-GO.postfixadmin.lang.password="Password";
-GO.postfixadmin.lang.confirmPassword='Confirm password';
+GO.postfixadmin.lang.mailbox="Mailboks";
+GO.postfixadmin.lang.mailboxes="Mailbokser";
+GO.postfixadmin.lang.username="Brukernavn";
+GO.postfixadmin.lang.password="Passord";
+GO.postfixadmin.lang.confirmPassword='Bekreft passord';
 GO.postfixadmin.lang.maildir="Maildir";
-GO.postfixadmin.lang.quota="Quota (MB)";
-GO.postfixadmin.lang.domain="Domain";
-GO.postfixadmin.lang.active="Active";
+GO.postfixadmin.lang.quota="Kvote (MB)";
+GO.postfixadmin.lang.domain="Domene";
+GO.postfixadmin.lang.active="Aktiv";
 
 /* table: pa_vacation */
-GO.postfixadmin.lang.vacation="Automatic reply";
-GO.postfixadmin.lang.vacationActive="Enable automatic reply"
-GO.postfixadmin.lang.email="Email";
-GO.postfixadmin.lang.subject="Subject";
-GO.postfixadmin.lang.body="Body";
+GO.postfixadmin.lang.vacation="Automatisk svar";
+GO.postfixadmin.lang.vacationActive="Fjerne automatisk svar"
+GO.postfixadmin.lang.email="E-post";
+GO.postfixadmin.lang.subject="Emne";
+GO.postfixadmin.lang.body="Meldingstekst";
 GO.postfixadmin.lang.cache="Cache";
-GO.postfixadmin.lang.domain="Domain";
+GO.postfixadmin.lang.domain="Domene";
 
-GO.postfixadmin.lang.defaultQuota='Default quota (MB)';
+GO.postfixadmin.lang.defaultQuota='Standard kvote (MB)';
+GO.postfixadmin.lang.usage="Bruk";
+GO.postfixadmin.lang.postfixadmin='E-post domener';
 
 

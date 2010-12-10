@@ -12,7 +12,9 @@ GO.email.FindContactDialog = function(config) {
     config.closeAction='hide';
     config.title=GO.addressbook.lang.contacts;
 
-    this.contactsGrid = new GO.email.ContactsGrid();     
+    this.contactsGrid = new GO.email.ContactsGrid({
+		singleSelect:true
+	});
     config.items=[this.contactsGrid];
 
 

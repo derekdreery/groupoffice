@@ -35,3 +35,5 @@ GO.files.lang.uploadProperties='Opplysningene nedenfor vil gjelde for alle filer
 GO.files.lang.fitImage='Tilpass bilde';
 GO.files.lang.normalSize='Normal størrelse';
 GO.files.lang.imageViewer='Bildevisning';
+
+

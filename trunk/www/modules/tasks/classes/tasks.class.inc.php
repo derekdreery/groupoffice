@@ -313,7 +313,7 @@ class tasks extends db
 			}
 			$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$list['name'] = $task_name;
-			$list['acl_id']=$GO_SECURITY->get_new_acl('',$user_id);
+			$list['acl_id']=$GO_SECURITY->get_new_acl('tasks',$user_id);
 			$x = 1;
 			while($this->get_tasklist_by_name($list['name']))
 			{
@@ -708,11 +708,12 @@ class tasks extends db
 			$categories=array(),
 			$start_time='',
 			$end_time='',
-			$show='') {
+			$show='',
+			$join_custom_fields=true) {
 
 		global $GO_MODULES;
 
-		go_debug($show);
+		//go_debug($show);
 
 		//$just_completed=false;
 
@@ -769,10 +770,10 @@ class tasks extends db
 			break;
 
 			default:
-				$start_time=0;
-				$end_time=0;
-				unset($show_completed);
-				unset($show_future);
+				//$start_time=0;
+				//$end_time=0;
+				//unset($show_completed);
+				//unset($show_future);
 				break;
 
 		}
@@ -780,7 +781,7 @@ class tasks extends db
 
 		$sql  = "SELECT DISTINCT t.*, l.name AS tasklist_name";
 
-		if($GO_MODULES->has_module('customfields')) {
+		if($join_custom_fields && $GO_MODULES->has_module('customfields')) {
 			$sql .= " ,cf_12.*";
 		}
 
@@ -788,7 +789,7 @@ class tasks extends db
 			. "INNER JOIN ta_lists l ON (t.tasklist_id=l.id) "
 			. "LEFT JOIN ta_categories c ON (t.category_id=c.id)";
 
-		if($GO_MODULES->has_module('customfields')) {
+		if($join_custom_fields && $GO_MODULES->has_module('customfields')) {
 			$sql .= " LEFT JOIN cf_12 ON cf_12.link_id=t.id";
 		}
 

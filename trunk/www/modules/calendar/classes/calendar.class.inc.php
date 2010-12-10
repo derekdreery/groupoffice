@@ -823,7 +823,7 @@ class calendar extends db {
 			}
 			$calendar_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$calendar['name'] = $calendar_name;
-			$calendar['acl_id']=$GO_SECURITY->get_new_acl($user_id);
+			$calendar['acl_id']=$GO_SECURITY->get_new_acl('calendar',$user_id);
 			$x = 1;
 			while($this->get_calendar_by_name($calendar['name'])) {
 				$calendar['name'] = $calendar_name.' ('.$x.')';
@@ -2080,18 +2080,30 @@ class calendar extends db {
 			$event['repeat_end_time'] = 0;
 
 
-			if (isset($object['RRULE']['value']) && $rrule = $this->ical2array->parse_rrule($object['RRULE']['value'])) {
+			if (!empty($object['RRULE']['value']) && $rrule = $this->ical2array->parse_rrule($object['RRULE']['value'])) {
+
 				$event['rrule'] = 'RRULE:'.$object['RRULE']['value'];
 				if (isset($rrule['UNTIL'])) {
 					if($event['repeat_end_time'] = $this->ical2array->parse_date($rrule['UNTIL'])) {
 						$event['repeat_end_time'] = mktime(0,0,0, date('n', $event['repeat_end_time']), date('j', $event['repeat_end_time'])+1, date('Y', $event['repeat_end_time']));
 					}
-				}else
-				if(isset($rrule['COUNT']))
+				}elseif(isset($rrule['COUNT']))
 				{
 					$event_count = $rrule['COUNT'];
+
+					//figure out end time of event
+					if(isset($event_count)) {
+						$event['repeat_end_time']='0';
+						$start_time=$event['start_time'];
+						for($i=1;$i<$event_count;$i++) {
+							$event['repeat_end_time']=$start_time=Date::get_next_recurrence_time($event['start_time'], $start_time, $event['end_time']-$event['start_time'],$event['rrule']);
+						}
+						if($event['repeat_end_time']>0) {
+							$event['repeat_end_time']+=$event['end_time']-$event['start_time'];
+						}
+					}
 				}
-	
+
 				if(isset($rrule['BYDAY'])) {
 
 					$month_time=1;
@@ -2114,9 +2126,10 @@ class calendar extends db {
 
 					$days=Date::shift_days_to_gmt($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
 
-					$event['rrule']=Date::build_rrule(Date::ical_freq_to_repeat_type($rrule), $rrule['INTERVAL'], $event['repeat_end_time'], $days, $month_time);					
+					$event['rrule']=Date::build_rrule(Date::ical_freq_to_repeat_type($rrule), $rrule['INTERVAL'], $event['repeat_end_time'], $days, $month_time);
 				}
 			}
+
 
 
 
@@ -2130,17 +2143,7 @@ class calendar extends db {
 				}
 			}
 
-			//figure out end time of event
-			if(isset($event_count)) {
-				$event['repeat_end_time']='0';
-				$start_time=$event['start_time'];
-				for($i=1;$i<$event_count;$i++) {
-					$event['repeat_end_time']=$start_time=Date::get_next_recurrence_time($event['start_time'], $start_time, $event['end_time']-$event['start_time'],$event['rrule']);
-				}
-				if($event['repeat_end_time']>0) {
-					$event['repeat_end_time']+=$event['end_time']-$event['start_time'];
-				}
-			}
+			
 		
 			return $event;
 		}
@@ -3020,13 +3023,16 @@ class calendar extends db {
 	public function merge_events(&$chosen_events,&$current_event,&$uuid_array,$event_nr,$calendar_names,$GO_USERS=null) {
 		global $lang;
 		if (empty($GO_USERS)) global $GO_USERS;
+
+		//append start_time for recurring events.
+		$merge_index = $current_event['uuid'].'-'.$current_event['start_time'];
 		
-		if (empty($current_event['uuid'])) return false;
-		if (array_key_exists($current_event['uuid'],$uuid_array)) {
+		if (empty($merge_index)) return false;
+		if (array_key_exists($merge_index,$uuid_array)) {
 			
-			$uuid_array[$current_event['uuid']][] = $event_nr;
-			if (count($uuid_array[$current_event['uuid']])==2) {
-				$merged_event_nr = $uuid_array[$current_event['uuid']][0];
+			$uuid_array[$merge_index][] = $event_nr;
+			if (count($uuid_array[$merge_index])==2) {
+				$merged_event_nr = $uuid_array[$merge_index][0];
 				
 				$chosen_events[$merged_event_nr]['background'] = 'FFFFFF';
 				$chosen_events[$merged_event_nr]['username'] = '';//$lang['calendar']['non_selected'];
@@ -3036,8 +3042,8 @@ class calendar extends db {
 				$chosen_events[$merged_event_nr]['name'] = implode('(',$name_exploded);
 				$chosen_events[$merged_event_nr]['name'] .= ' ('.String::get_first_letters($calendar_names[$chosen_events[$merged_event_nr]['calendar_id']]).')';
 			}
-			if (count($uuid_array[$current_event['uuid']])>=2) {
-				$merged_event_nr = $uuid_array[$current_event['uuid']][0];
+			if (count($uuid_array[$merge_index])>=2) {
+				$merged_event_nr = $uuid_array[$merge_index][0];
 				
 				$chosen_events[$merged_event_nr]['calendar_name'] .= '; '.$calendar_names[$current_event['calendar_id']];
 				$chosen_events[$merged_event_nr]['name'] = substr($chosen_events[$merged_event_nr]['name'],0,-1);
@@ -3050,7 +3056,7 @@ class calendar extends db {
 				return true;
 			}
 		} else {
-			$uuid_array[$current_event['uuid']] = array($event_nr);
+			$uuid_array[$merge_index] = array($event_nr);
 		}
 		return false;
 	}

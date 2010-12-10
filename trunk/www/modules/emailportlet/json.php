@@ -20,6 +20,7 @@ try {
 			while($emailportlet->next_record())
 			{
 				$folder = $email->get_folder_by_id($emailportlet->f('folder_id'));
+				unset($folder['sort']);
 
 				$pos = strrpos($folder['name'], '.');
 				$pos = ($pos) ? ($pos)+1 : $pos;

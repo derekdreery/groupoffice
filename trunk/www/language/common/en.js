@@ -54,6 +54,7 @@ GO.lang.strAbout='About {product_name}';
 GO.lang.strUsage='Usage statistics';
 
 GO.lang.strName = 'Name';
+GO.lang.strName2 = 'Name 2';
 GO.lang.strDescription = 'Description';
 GO.lang.strEmail = 'E-mail';
 GO.lang.strUser = 'User';

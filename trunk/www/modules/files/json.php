@@ -31,6 +31,48 @@ if($task != 'grid')
 try {
 
 	switch($task) {
+		case 'sendfile':
+			
+
+			$file = $files->get_file($_POST['file_id']);
+			$up_file['id'] = $file['id'];
+			$expire_time = $up_file['expire_time'] = isset($_POST['expire_time']) ? $_POST['expire_time'] : $file['expire_time'];
+			$random_code = $up_file['random_code'] = isset($file['random_code']) ? $file['random_code'] : String::random_password('a-z,1-9','i,o',11);
+			$files->update_file($up_file);
+
+			if ($_POST['content_type']!='plain') {
+				$downloadLink = $lang['files']['clickHereToDownload'].':'." ".
+					'<a href="'.$GO_MODULES->modules['files']['full_url']. 'download.php?id='.$_POST['file_id'].'&random_code='.$random_code.'">'.$file['name'].'</a> ';
+				$lb = "<br />";
+			} else {
+				$downloadLink = $lang['files']['copyPasteToDownload'].':'."\n\n" .
+					$GO_MODULES->modules['files']['full_url']. 'download.php?id='.$_POST['file_id'].'&random_code='.$random_code."\n\n";
+				$lb = "\n";
+			}
+
+			$_POST['body'] = $downloadLink.'('.$lang['files']['possibleUntil'].' '.date($_SESSION['GO_SESSION']['date_format'],$expire_time).')'.$lb.$lb;
+
+			if(!empty($_POST['template_id'])) {
+				require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
+				$response = load_template($_POST['template_id']);
+			}else
+			{
+				$response['data']['body']=$_POST['body'];
+			}
+
+			if (empty($response['data']['subject']))
+				$response['data']['subject'] = $lang['files']['downloadLink'].' '.$file['name'];
+
+			if($_POST['content_type']=='plain') {
+				$response['data']['textbody']=$response['data']['body'];
+				unset($response['data']['body']);
+			}
+
+			$response['success']=true;
+
+			break;
+
+
 		case 'tree':
 			if(!empty($_POST['sync_folder_id']) && is_numeric($_POST['sync_folder_id'])) {
 				$folder = $files->get_folder($_POST['sync_folder_id']);
@@ -407,7 +449,7 @@ try {
 					try {
 
 						$response['deleteSuccess']=true;
-						$delete_ids = json_decode($_POST['delete_keys']);
+						$delete_ids = json_decode($_POST['delete_keys']);						
 
 						$folder_delete_permission = $files->has_delete_permission($GO_SECURITY->user_id, $curfolder);
 
@@ -425,7 +467,7 @@ try {
 							}else {
 
 								$folder = $files->get_folder($ti[1]);
-								if(!$files->has_delete_permission($GO_SECURITY->user_id, $folder)) {
+								if(!$folder_delete_permission) {
 									throw new AccessDeniedException();
 								}
 								$files->delete_folder($folder);
@@ -713,7 +755,6 @@ try {
 
 		case 'file_with_items':
 		case 'file_properties':
-		case 'file_download_link':
 
 			$file = $files->get_file($_POST['file_id']);
 			$folder = $files->get_folder($file['folder_id']);
@@ -738,14 +779,6 @@ try {
 			$response['data']['type']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.File::get_filetype_description($extension).'</div>';
 			$response['data']['size']=Number::format_size($file['size']);
 			$response['data']['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $folder);
-
-			if ($task=='file_download_link') {
-				$response['data']['expire_time'] = $file['expire_time'] = isset($_POST['expire_time']) ? $_POST['expire_time'] : $file['expire_time'];
-				$response['data']['random_code'] = $file['random_code'] = isset($file['random_code']) ? $file['random_code'] : String::random_password('a-z,1-9','i,o',11);
-				$files->update_file($file);
-				$response['success'] = true;
-				break;
-			}
 
 			switch($extension) {
 				case 'jpg':

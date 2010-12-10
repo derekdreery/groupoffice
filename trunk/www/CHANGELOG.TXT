@@ -1,3 +1,20 @@
+10/12/2010 3.6.11
+- Updated German, Norwegian, Italian and Estornian translations
+- Small bug fixes
+
+08/12/2010 3.6.9
+- New config.php option to turn off Flash uploader as it's not working with self-signed
+  certificates. The option is 'disable_flash_upload'.
+- Bug fix in outlook sync with recurrence rules.
+- Added second name field to companies.
+
+03/12/2010 3.6.8
+- Timeregistration bug
+
+03/12/2010 3.6.7
+- Delete files was broken
+- Updated Norwegian translation
+
 02/12/2010 3.6.6
 - CalDAV didn't work on PHP 5.2.
 
