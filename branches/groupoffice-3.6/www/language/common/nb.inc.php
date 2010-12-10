@@ -217,3 +217,5 @@ $lang['common']['none']='Ingen';
 $lang['common']['alert']='Varsling';
 $lang['common']['theFolderAlreadyExists']='Det eksisterer allerede en mappe med dette navnet!';
 $lang['common']['other']='Andre';
+$lang['common']['name2']= 'Navn 2';
+$lang['common']['copy']='kopi';

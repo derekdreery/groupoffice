@@ -65,3 +65,6 @@ $lang['filetypes']['xlt']='Microsoft Excel Tabellenvorlage';
 $lang['filetypes']['ai']='Adobe Illustrator Datei';
 $lang['filetypes']['eml']='E-Mail Nachricht';
 $lang['filetypes']['csv'] ='CSV (Trennzeichen-getrennt)';
+$lang['filetypes']['js']= 'Javascript';
+$lang['filetypes']['sql']= 'SQL Datenbank Export';
+$lang['filetypes']['xmind']='XMind Datei';
