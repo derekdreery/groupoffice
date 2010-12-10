@@ -36,3 +36,6 @@ $lang['files']['deleted']='Kustutatud';
 $lang['files']['file']='Fail';
 $lang['files']['folder']='Kaust';
 $lang['files']['files']='Failid';
+
+$lang['link_type'][17]='Kaust';
+$lang['files']['emptyFile']='Tühi fail';

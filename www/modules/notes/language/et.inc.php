@@ -12,3 +12,6 @@ $lang['link_type'][4]=$lang['notes']['note']='Märge';
 $lang['notes']['notes']='Märkmed';
 
 $lang['notes']['general'] = 'Üldine';
+
+$lang['notes']['incomplete_delete']='Valitud märgete kustutamiseks puuduvad sul õigused';
+$lang['notes']['multipleCategoriesSelected']='Mitu märget valitud';

@@ -70,3 +70,6 @@ $lang['filetypes']['fla'] = 'Macromedia Flash Dokument (Source)';
 $lang['filetypes']['ai'] = 'Adobe Illustrator fail';
 $lang['filetypes']['eml'] = 'E-kirja sõnum';
 $lang['filetypes']['csv'] = 'Comma Separated Values';
+$lang['filetypes']['js']= 'Javascript';
+$lang['filetypes']['sql']= 'SQL andmebaasi eksport';
+$lang['filetypes']['xmind']='XMind fail';

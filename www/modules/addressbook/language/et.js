@@ -118,3 +118,13 @@ GO.addressbook.lang.deleteImage='Kustuta pilt';
 
 GO.addressbook.lang.addAllSearchResults='Lisa kõik otsingutulemused';
 GO.addressbook.lang.confirmAddAllSearchResults='Oled kindel, et soovil kõiki otsingutulemusi aadresside nimekirja lisada?';
+
+GO.addressbook.lang.moveEmployees='Liiguta töötajad';
+GO.addressbook.lang.emailAdded='E-posti aadress kontaktile lisatud';
+GO.addressbook.lang.exportWithCompanies='Ettevõtetega';
+GO.addressbook.lang.id='ID';
+GO.addressbook.lang.exportPermission='Ekspordi õigused';
+GO.addressbook.lang.crn='Ettevõtte Reg. nr.';
+GO.addressbook.lang.iban='IBAN';
+GO.addressbook.lang.unknownEmail= 'Tundmatu e-posti aadress';
+GO.addressbook.lang.strUnknownEmail= 'E-posti aadress on tundmatu. Kas soovid lisada uut kontakti, integreerida seda olemasolevale kontaktile või tühistada?';

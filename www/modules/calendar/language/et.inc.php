@@ -109,3 +109,10 @@ $lang['calendar']['month_times'][2]='teine';
 $lang['calendar']['month_times'][3]='kolmas';
 $lang['calendar']['month_times'][4]='neljas';
 $lang['calendar']['month_times'][5]='viies';
+
+$lang['calendar']['repeats_not_every']= 'Kordub iga %s %s';
+$lang['calendar']['rightClickToCopy']='Asukoha kopeerimiseks tee paremklikk';
+$lang['calendar']['invitation']='Kutse';
+$lang['calendar']['invitation_update']='Uuendatud kutse';
+$lang['calendar']['cancellation']='Tühistamine';
+$lang['calendar']['non_selected']= 'mitte valitud kalendris';
