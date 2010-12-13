@@ -40,3 +40,4 @@ GO.files.lang.normalSize='Normal size';
 GO.files.lang.imageViewer='Image viewer';
 
 GO.files.lang.emailDownloadLink = 'Email download link';
+GO.files.lang.expireTime = 'Download link expire time';

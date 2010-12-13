@@ -42,5 +42,4 @@ $lang['files']['emptyFile']='Tom fil';
 $lang['files']['downloadLink']= 'Nedlastingslenke';
 $lang['files']['clickHereToDownload']= 'Klikk her for å laste ned filen via en sikker lenke';
 $lang['files']['copyPasteToDownload']= 'Klikk på den sikre lenken nedenfor eller kopier den inn i adressefeltet i nettleseren din for å laste ned filen.';
-$lang['files']['expireTime']= 'Lenken utløper den';
 $lang['files']['possibleUntil']= 'mulig fram til';
