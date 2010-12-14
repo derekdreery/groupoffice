@@ -62,4 +62,8 @@ while($r = $pa->next_record()){
 echo "Setting file permissions...\n\n";
 system('chown -R vmail:mail '.$vmail.'/'.$args['domain']);
 
+
+//todo
+//update `pa_aliases` set goto=replace(goto, 'autoreply.group-office.eu','autoreply.mx1.imfoss.nl')
+
 echo "Done!\n\n";

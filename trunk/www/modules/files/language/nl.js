@@ -28,3 +28,4 @@ GO.files.lang.fitImage='Passende grootte';
 GO.files.lang.normalSize='Normale grootte';
 
 GO.files.lang.emailDownloadLink = 'Downloadlink emailen';
+GO.files.lang.expireTime= 'Downloaden mogelijk tot';
