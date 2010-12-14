@@ -2,8 +2,6 @@
 require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
 $email = new email();
 
-$db = new db();
-
 $email->query("SELECT id,user_id FROM em_accounts WHERE acl_id=0");
 while($account = $email->next_record())
 {
