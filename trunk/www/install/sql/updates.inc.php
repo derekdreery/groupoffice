@@ -422,3 +422,13 @@ $updates[]='script:8_install_search.inc.php';
 $updates[]="ALTER TABLE `go_users` ADD `cache` TEXT NOT NULL";
 
 $updates[]='script:9_install_mailings.inc.php';
+
+$updates[]='CREATE TABLE `go_saved_search_queries` (
+`id` INT NOT NULL ,
+`user_id` INT NOT NULL ,
+`name` VARCHAR( 50 ) NOT NULL ,
+`sql` TEXT NOT NULL ,
+`type` VARCHAR( 50 ) NOT NULL ,
+PRIMARY KEY ( `id` ) ,
+INDEX ( `type` )
+) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;';
