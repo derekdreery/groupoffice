@@ -423,3 +423,7 @@ GO.lang.swfUploadPanelStrings = {
 GO.lang.orientation='Orientation';
 GO.lang.portrait='Portrait';
 GO.lang.landscape='Landscape';
+
+GO.lang.savedQueries='Saved queries';
+GO.lang.searchQueryName = 'Search query name';
+GO.lang.enterSearchQueryName = 'Enter search query name';

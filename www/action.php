@@ -22,6 +22,15 @@ try{
 
 	switch($_REQUEST['task'])
 	{
+		case 'save_advanced_query':
+
+		require_once($GO_CONFIG->class_path.'advanced_query.class.inc.php');
+		$aq = new advanced_query();
+
+	    $aq->add_search_query(array('user_id'=>$GO_SECURITY->user_id, 'sql'=>$_POST['sql'],'name'=>$_POST['name'],'type'=>$_POST['type']));
+	    $response['success']=true;
+
+	    break;
 
 		case 'update_level':
 
