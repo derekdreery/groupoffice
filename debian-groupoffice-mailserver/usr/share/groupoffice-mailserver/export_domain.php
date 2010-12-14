@@ -79,7 +79,10 @@ file_put_contents($sql_file, "\n---\n\n", FILE_APPEND);
 
 echo "Running rsync to sync mail\n\n";
 
-$rsync_cmd = 'rsync -v -rltD -e "ssh" '.$vmail.'/'.$args['domain'].' root@'.$args['targethost'].':/home/vmail';
+$rsync_cmd = 'rsync -v -rltD --delete -e "ssh" '.$vmail.'/'.$args['domain'].' root@'.$args['targethost'].':/home/vmail';
 system($rsync_cmd);
+
+$chown_cmd='ssh root@'.$args['targethost'].' "chown vmail:mail -R /home/vmail/'.$args['domain'].'"';
+system($chown_cmd);
 
 echo "Done! now run /usr/share/groupoffice-mailserver/import_domain.php to import it.\n\n";
