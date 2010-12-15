@@ -2087,21 +2087,21 @@ class calendar extends db {
 					if($event['repeat_end_time'] = $this->ical2array->parse_date($rrule['UNTIL'])) {
 						$event['repeat_end_time'] = mktime(0,0,0, date('n', $event['repeat_end_time']), date('j', $event['repeat_end_time'])+1, date('Y', $event['repeat_end_time']));
 					}
-				}elseif(isset($rrule['COUNT']))
+				}elseif(!empty($rrule['COUNT']))
 				{
 					$event_count = $rrule['COUNT'];
 
 					//figure out end time of event
-					if(isset($event_count)) {
-						$event['repeat_end_time']='0';
-						$start_time=$event['start_time'];
-						for($i=1;$i<$event_count;$i++) {
-							$event['repeat_end_time']=$start_time=Date::get_next_recurrence_time($event['start_time'], $start_time, $event['end_time']-$event['start_time'],$event['rrule']);
-						}
-						if($event['repeat_end_time']>0) {
-							$event['repeat_end_time']+=$event['end_time']-$event['start_time'];
-						}
+
+					$event['repeat_end_time']='0';
+					$start_time=$event['start_time'];
+					for($i=1;$i<$event_count;$i++) {
+						$event['repeat_end_time']=$start_time=Date::get_next_recurrence_time($event['start_time'], $start_time, $event['end_time']-$event['start_time'],$event['rrule']);
 					}
+					if($event['repeat_end_time']>0) {
+						$event['repeat_end_time']+=$event['end_time']-$event['start_time'];
+					}
+					
 				}
 
 				if(isset($rrule['BYDAY'])) {
