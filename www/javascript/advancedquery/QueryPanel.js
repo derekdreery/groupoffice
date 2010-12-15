@@ -23,18 +23,16 @@ GO.advancedquery.SearchQueryPanel = function(config)
 		},
 		root: 'results',
 		id: 'name',
-		fields: ['name','value','type','fields'],
+		fields: ['name','value','type','fields', 'custom'],
 		remoteSort: true
 	});
-
-	this.typesStore.on('load', function(){
-		this.typesBox.selectFirst();
-	},this);
 
 	config.border=false;
 	config.layout='form';
 	config.defaults={
-		hideLabel:true
+		hideLabel:true,
+		border:false,
+		bodyStyle:'padding-left:4px'
 	};
 	config.bodyStyle='padding:5px;';
 
@@ -43,18 +41,8 @@ GO.advancedquery.SearchQueryPanel = function(config)
 		anchor:'100%',
 		height : 130
 	});
-	
 
-	this.queryMakerPanel = new Ext.FormPanel({
-		//layout: 'form',
-		border:false,
-		defaults: {
-			// applied to each contained panel
-			bodyStyle:'padding-right:4px',
-			border:false
-		},
-
-		items: [{
+	config.items= [this.queryField,{
 			layout: 'table',
 			items:
 			[this.operatorBox = new GO.form.ComboBox({
@@ -68,14 +56,14 @@ GO.advancedquery.SearchQueryPanel = function(config)
 				value: 'AND',
 				valueField:'value',
 				displayField:'value',
+				name:'query_operator',
 				width: 60,
 				mode: 'local',
 				triggerAction: 'all',
 				editable: true,
 				selectOnFocus:true,
 				forceSelection:true
-			}),{
-				items:this.typesBox = new GO.form.ComboBox({
+			}),this.typesBox = new GO.form.ComboBox({
 					store: this.typesStore,
 					valueField:'value',
 					displayField:'name',
@@ -84,14 +72,15 @@ GO.advancedquery.SearchQueryPanel = function(config)
 					editable: true,
 					selectOnFocus:true,
 					forceSelection:true,
+					name:'query_type',
 					width:183
 				})
-			},{
-				items:this.comparatorBox = new Ext.form.ComboBox({
+			,this.comparatorBox = new Ext.form.ComboBox({
 					store: new Ext.data.SimpleStore({
 						fields: ['value'],
 						data : this.getComparators()
 					}),
+					name:'query_comparator',
 					valueField:'value',
 					displayField:'value',
 					width: 85,
@@ -101,7 +90,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 					selectOnFocus:true,
 					forceSelection:true
 				})
-			}]
+			]
 		},
 		{
 			layout: 'table',
@@ -123,8 +112,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 						mode: 'local',
 						triggerAction: 'all',
 						editable: true,
-						selectOnFocus:true,
-						forceSelection:true,
+						selectOnFocus:true,						
 						hideLabel: true
 					}),this.criteriumTextField = new Ext.form.TextField({
 						hidden: true,
@@ -152,8 +140,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 							GO.customfields.dataTypes.number.getFormField({dataname:''})
 						],
 						hidden:true
-					}),this.criteriumCheckboxPanel = new Ext.Panel({
-						name: 'checkbox',
+					}),this.criteriumCheckboxPanel = new Ext.Panel({						
 						border: false,
 						style: 'padding:0px;',
 						hidden: true,
@@ -168,6 +155,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 						hidden: true
 						//fieldLabel:GO.filesearch.lang.searchOneFolder
 					}),this.criteriumUserField = new GO.form.SelectUser({
+						allowBlank:true,
 						width: 295,
 						hidden: true,
 						listeners: {
@@ -228,61 +216,8 @@ GO.advancedquery.SearchQueryPanel = function(config)
 					scope: this
 				})
 			}]
-		}],
-		buttons: [{
-			text: GO.lang.strSearch,
-			handler: function(){
-				this.ownerCt.fireEvent('search', this.ownerCt, this.queryField.getValue());
-			},
-			scope: this
-		}]
-	});
-
-	config.tbar=[{
-		handler: function()
-		{
-			Ext.Msg.prompt(GO.lang.searchQueryName, GO.lang.enterSearchQueryName, function(btn, text){
-				Ext.Ajax.request({
-					url:BaseHref +'action.php',
-					params:{
-						task:'save_advanced_query',
-						sql: this.queryField.getValue(),
-						type: this.type,
-						name: text
-					},
-					success: function(response, options)
-					{
-						var responseParams = Ext.decode(response.responseText);
-						if(!responseParams.success)
-						{
-							alert(responseParams.feedback);
-						}else
-						{
-							this.ownerCt.savedQueryGrid.store.load();
-						}
-					},
-					scope:this
-				})
-			},this)
-		},
-		iconCls: 'btn-save',
-		cls: 'x-btn-text-icon',
-		text: GO.lang.cmdSave,
-		scope: this
-	},{
-		handler: function()
-		{
-			this.queryField.setValue('');
-		},
-		iconCls: 'btn-delete',
-		cls: 'x-btn-text-icon',
-		text: GO.lang.cmdReset,
-		scope: this
-	}
-	]
-
-	// 	config.defaults={border: false, cls:'ab-search-form-panel'};
-	config.items= [this.queryField,this.queryMakerPanel];
+		}];
+	
 
 	GO.advancedquery.SearchQueryPanel.superclass.constructor.call(this, config);
 
@@ -296,7 +231,12 @@ GO.advancedquery.SearchQueryPanel = function(config)
 
 	this.typesBox.store.on('load', function(){
 		this.typesBox.selectFirst();
+		
 		this.typeChange(this.typesBox.store.getAt(0));
+
+		//for the reset action
+		this.typesBox.originalValue=this.typesBox.getValue();
+		
 	},this);
 
 	this.on('render', function(){
@@ -307,6 +247,9 @@ GO.advancedquery.SearchQueryPanel = function(config)
 Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 
 	criteriumFields : {},
+	customCriteriumPanels : {},
+
+	dynamicCriteriumPanels : {},
 
 	typeChange : function(record){
 		if (record.data.type=='combobox') {
@@ -324,7 +267,11 @@ Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 		this.currentCriteriumField.show();
 		var comparators = this.getComparators(record.data);
 		this.comparatorBox.store.loadData(comparators);
-		this.comparatorBox.setValue(comparators[0]);
+
+		this.comparatorBox.setValue(comparators[0][0]);
+		
+		//for the reset action
+		this.comparatorBox.originalValue=this.comparatorBox.getValue();
 
 	},
 
@@ -435,8 +382,40 @@ Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 			case 'checkbox':
 				return this.criteriumCheckboxPanel;
 				break;
-			default: //textfield
+
+			case 'text':
 				return this.criteriumTextField;
+				break;
+
+			default: //textfield
+
+				if(type_data.custom){
+					
+					if(!this.customCriteriumPanels[type_data.type]){
+						this.customCriteriumPanels[type_data.type] = this.criteriumPanel.add(GO.customfields.dataTypes[type_data.type].getFormField({name:type_data.type,dataname:''}));
+						this.criteriumPanel.doLayout();
+					}
+
+					return this.customCriteriumPanels[type_data.type];
+				}else
+				{
+
+				console.log(type_data.type);
+				
+				if(!this.dynamicCriteriumPanels[type_data.type]){
+					this.dynamicCriteriumPanels[type_data.type] = this.criteriumPanel.add({
+						id:'pmselecttype',
+						items:{
+							xtype: type_data.type
+						}
+					});
+					this.criteriumPanel.doLayout();
+				}
+
+				return this.dynamicCriteriumPanels[type_data.type];
+				}
+
+				
 				break;
 		}
 	}
