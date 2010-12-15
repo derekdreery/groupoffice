@@ -1070,7 +1070,7 @@ class cached_imap extends imap{
 
 	public function add_cached_message($cached_message)
 	{
-		return $this->email->insert_row('em_messages_cache', $cached_message);
+		return $this->email->replace_row('em_messages_cache', $cached_message);
 	}
 
 
