@@ -19,7 +19,7 @@ class advanced_query extends db{
 		return $this->query("DELETE FROM go_saved_search_queries WHERE id='".$this->escape($sql_id)."'");
 	}
 
-	public function parse_advanced_query($query) {
+	public function parse_advanced_query($query, $link_type) {
 
 		// DATE SEARCH
 		preg_match_all("/[(][\s]*'([0-9]+)[-]([0-9]+)[-]([0-9]+)'/",$query,$matched_tags,PREG_SET_ORDER);
@@ -48,7 +48,7 @@ class advanced_query extends db{
 					//$buffer = str_replace('cf:','',$tag[0]);
 					//$category_pos = strpos($buffer,':');
 				try {
-					$category = $cf->get_category_by_name(6, $tag[1]);
+					$category = $cf->get_category_by_name($link_type, $tag[1]);
 					$field = $cf->get_field_by_name($category['id'], $tag[2]);
 				} catch (Exception $e) {
 					throw new Exception('Customfield not recognized: '.$tag[0]);
