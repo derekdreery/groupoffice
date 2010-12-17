@@ -44,6 +44,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 
 	config.items= [this.queryField,{
 			layout: 'table',
+			anchor:'100%',
 			items:
 			[this.operatorBox = new GO.form.ComboBox({
 				store: new Ext.data.SimpleStore({
@@ -73,6 +74,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 					selectOnFocus:true,
 					forceSelection:true,
 					name:'query_type',
+					//anchor:'100%'
 					width:183
 				})
 			,this.comparatorBox = new Ext.form.ComboBox({
