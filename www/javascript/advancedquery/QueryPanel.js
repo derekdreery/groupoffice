@@ -289,18 +289,18 @@ Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 			case 'file':
 			case 'user':
 			case 'contact':
-				return [['='],['!=']];
+				return [['INCLUDES'],['NOT INCLUDES']];
 				break;
 //			case 'textarea':
 //				return [['LIKE'],
 //					['NOT LIKE'],
 //					['='],
-//					['!=']];
+//					['NOT INCLUDES']];
 //				break;
 			case 'number':
 			return [
-				['='],
-				['!='],
+				['INCLUDES'],
+				['NOT INCLUDES'],
 				['>'],
 				['>='],
 				['<'],
@@ -317,8 +317,8 @@ Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 				return [
 				['LIKE'],
 				['NOT LIKE'],
-				['='],
-				['!=']
+				['INCLUDES'],
+				['NOT INCLUDES']
 				];
 				break;
 		}
