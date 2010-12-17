@@ -21,6 +21,30 @@ class advanced_query extends db{
 
 	public function parse_advanced_query($query, $link_type) {
 
+		preg_match_all("/`[\s]*(NOT INCLUDES)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
+		foreach($matched_tags as $tag) {
+			$tag_new = str_replace($tag[1],'!=',$tag[0]);
+			$query = str_replace($tag[0],$tag_new,$query);
+		}
+
+		preg_match_all("/`[\s]*(INCLUDES)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
+		foreach($matched_tags as $tag) {
+			$tag_new = str_replace($tag[1],'=',$tag[0]);
+			$query = str_replace($tag[0],$tag_new,$query);
+		}
+
+		preg_match_all("/`[\s]*(AT MOST)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
+		foreach($matched_tags as $tag) {
+			$tag_new = str_replace($tag[1],'<=',$tag[0]);
+			$query = str_replace($tag[0],$tag_new,$query);
+		}
+
+		preg_match_all("/`[\s]*(AT LEAST)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
+		foreach($matched_tags as $tag) {
+			$tag_new = str_replace($tag[1],'>=',$tag[0]);
+			$query = str_replace($tag[0],$tag_new,$query);
+		}
+
 		// DATE SEARCH
 		preg_match_all("/[(][\s]*'([0-9]+)[-]([0-9]+)[-]([0-9]+)'/",$query,$matched_tags,PREG_SET_ORDER);
 
