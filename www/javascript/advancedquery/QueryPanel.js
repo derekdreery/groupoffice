@@ -31,8 +31,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 	config.layout='form';
 	config.defaults={
 		hideLabel:true,
-		border:false,
-		bodyStyle:'padding-left:4px'
+		border:false
 	};
 	config.bodyStyle='padding:5px;';
 
@@ -43,11 +42,12 @@ GO.advancedquery.SearchQueryPanel = function(config)
 	});
 
 	config.items= [this.queryField,{
-			layout: 'table',
+			xtype:'compositefield',
 			anchor:'100%',
 			items:
 			[this.operatorBox = new GO.form.ComboBox({
-				store: new Ext.data.SimpleStore({
+				store: new Ext.data.ArrayStore({
+					idIndex:0,
 					fields: ['value'],
 					data : [
 					['AND'],
@@ -61,7 +61,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 				width: 60,
 				mode: 'local',
 				triggerAction: 'all',
-				editable: true,
+				editable: false,
 				selectOnFocus:true,
 				forceSelection:true
 			}),this.typesBox = new GO.form.ComboBox({
@@ -74,8 +74,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 					selectOnFocus:true,
 					forceSelection:true,
 					name:'query_type',
-					//anchor:'100%'
-					width:183
+					flex:1
 				})
 			,this.comparatorBox = new Ext.form.ComboBox({
 					store: new Ext.data.SimpleStore({
@@ -186,29 +185,32 @@ GO.advancedquery.SearchQueryPanel = function(config)
 						if (this.queryField.getValue() && this.operatorBox.value) text = text + '\r\n' + this.operatorBox.value;
 						if (this.typesBox.value) text = text + ' ' + this.typesBox.value;
 						if (this.comparatorBox.value) text = text + ' ' + this.comparatorBox.value;
-						if (this.currentCriteriumField.name=='textfield') {
-							var string = this.currentCriteriumField.getValue();
-							if (string.substring(string.length-1)!='%');
-								string = string+'%';
-							if (string.substring(0,1)!='%');
-								string = '%'+string;
-							this.currentCriteriumField.setValue(string);
-						}
-						if (typeof(this.currentCriteriumField.getValue)!='undefined') {
-							if (this.currentCriteriumField.value)
-								text = text + ' \'' + this.currentCriteriumField.value + '\'';
-							else
-								text = text + ' \'' + this.currentCriteriumField.items.items[0].getValue() + '\'';
-						} else if (this.currentCriteriumField.name=='checkbox') {
+
+						
+						if (this.currentCriteriumField.name=='checkbox') {
 							if (this.currentCriteriumField.items.items[0].getValue())
 								text = text + ' \'1\'';
 							else
 								text = text + ' \'0\'';
 						} else if (this.typesBox.getValue()=='`creation_time`' || this.typesBox.getValue()=='`last_modified_time`') {
 							text = text + ' unix_timestamp(\'' + this.currentCriteriumField.items.items[0].getValue().dateFormat('Y-m-d') + '\')';
-						} else if (this.currentCriteriumField.items.items[0].name=='date') {
+						} else if (this.currentCriteriumField.items && this.currentCriteriumField.items.items[0].name=='date') {
 							text = text + ' \'' + this.currentCriteriumField.items.items[0].getValue().dateFormat('Y-m-d') + '\'';
-						} else {
+						} else if (this.currentCriteriumField.name=='textfield') {
+
+							var string = this.currentCriteriumField.getValue();
+
+							if (string.substring(string.length-1)!='%');
+								string = string+'%';
+							if (string.substring(0,1)!='%');
+								string = '%'+string;
+
+							text = text + ' \'' + string + '\'';
+
+						}else if (typeof(this.currentCriteriumField.getValue)!='undefined') {
+							text = text + ' \'' + this.currentCriteriumField.value + '\'';
+						} else
+						{
 							text = text + ' \'' + this.currentCriteriumField.items.items[0].getValue() + '\'';
 						}
 						this.queryField.setValue(text);
@@ -406,10 +408,7 @@ Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 				
 				if(!this.dynamicCriteriumPanels[type_data.type]){
 					this.dynamicCriteriumPanels[type_data.type] = this.criteriumPanel.add({
-						id: type_data.type,
-						items:{
-							xtype: type_data.type
-						}
+						xtype: type_data.type						
 					});
 					this.criteriumPanel.doLayout();
 				}
