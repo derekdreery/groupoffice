@@ -383,11 +383,11 @@ Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 				return this.criteriumCheckboxPanel;
 				break;
 
-			case 'text':
+			case 'textfield':
 				return this.criteriumTextField;
 				break;
 
-			default: //textfield
+			default:
 
 				if(type_data.custom){
 					
@@ -399,12 +399,10 @@ Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 					return this.customCriteriumPanels[type_data.type];
 				}else
 				{
-
-				console.log(type_data.type);
 				
 				if(!this.dynamicCriteriumPanels[type_data.type]){
 					this.dynamicCriteriumPanels[type_data.type] = this.criteriumPanel.add({
-						id:'pmselecttype',
+						id: type_data.type,
 						items:{
 							xtype: type_data.type
 						}
