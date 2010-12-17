@@ -302,14 +302,14 @@ Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 				['INCLUDES'],
 				['NOT INCLUDES'],
 				['>'],
-				['>='],
+				['AT LEAST'],
 				['<'],
-				['<=']
+				['AT MOST']
 				];
 				break;
 			case 'date':
 				return [
-				['>='],
+				['AT LEAST'],
 				['<'],
 				];
 				break;
@@ -386,6 +386,8 @@ Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 				break;
 
 			case 'textfield':
+			case 'textarea':
+			case 'text':
 				return this.criteriumTextField;
 				break;
 
