@@ -22,7 +22,7 @@ $default_config['allow_password_change']=true;
 $default_config['serverclient_domains']='';
 #restrict outgoing e-mails
 $default_config['restrict_smtp_hosts']='127.0.0.1:10';
-$default_config['allowed_modules']='summary,email,calendar,tasks,addressbook,notes,files,modules,users,groups,tools,serverclient,links,comments,log';
+$default_config['allowed_modules']='summary,email,calendar,tasks,addressbook,notes,files,modules,users,groups,tools,serverclient,links,comments,log,mailings,calllog,gota,billing,projects,timeregistration,hoursapproval,sync';
 
 
 $static_config['debug']=false;
