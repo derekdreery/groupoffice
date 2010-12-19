@@ -899,12 +899,12 @@ if(in_array('addressbook', $module_ids))
 	}
 
 
-	$db->query("ALTER TABLE `tp_templates` ADD `content` LONGBLOB NOT NULL ;");
-	$db->query("UPDATE tp_templates t SET content = ( SELECT content
-FROM tp_templates_content
-WHERE id = t.id ) ;");
+	//$db->query("ALTER TABLE `tp_templates` ADD `content` LONGBLOB NOT NULL ;");
+	//$db->query("UPDATE tp_templates t SET content = ( SELECT content
+//FROM tp_templates_content
+//WHERE id = t.id ) ;");
 
-	$db->query("DROP TABLE `tp_templates_content`");
+	//$db->query("DROP TABLE `tp_templates_content`");
 
 	$db->query("RENAME TABLE `tp_mailing_companies`  TO `ab_mailing_companies` ;");
 	$db->query("RENAME TABLE `tp_mailing_contacts`  TO `ab_mailing_contacts` ;");
