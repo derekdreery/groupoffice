@@ -3,9 +3,10 @@ $conf = str_replace('config.php', 'imapauth.config.php', $GLOBALS['GO_CONFIG']->
 if(file_exists($conf)){
 	require_once($conf);
 
-	if(isset($config[0]['imapauth_combo_domains'])){
-		$domains = json_encode(explode(',',$config[0]['imapauth_combo_domains']));
-		$default_domain = $config[0]['imapauth_default_domain'];
+	if(!empty($config[0]['imapauth_combo_domains'])){
+		$arr = explode(',',$config[0]['imapauth_combo_domains']);
+		$domains = json_encode($arr);
+		$default_domain = empty($config[0]['imapauth_default_domain']) ? $arr[0] : $config[0]['imapauth_default_domain'];
 	}
 }
 
@@ -17,10 +18,10 @@ Ext.override(GO.dialog.LoginDialog, {
 		var domains = <?php echo $domains ?>;
 		domains.push('');
 		var domainData = new Array();
-		domainData[0] = ['no domain', domains[i]]
+		domainData[0] = ['-', domains[i]]
 		for (var i=0; i<domains.length; i++) {
 			if (domains[i]!='')
-				domainData[i+1] = [domains[i], domains[i]];
+				domainData[i+1] = ['@'+domains[i], '@'+domains[i]];
 		}
 
 		var usernameField = this.formPanel.items.get('username');
@@ -43,7 +44,7 @@ Ext.override(GO.dialog.LoginDialog, {
 					width : 144,
 					forceSelection : true,
 					mode : 'local',
-					//value : GO.monkeytown.roundMinutes,
+					value : '@<?php echo $default_domain; ?>',
 					hiddenName : 'domain',
 					valueField : 'value',
 					displayField : 'name',
