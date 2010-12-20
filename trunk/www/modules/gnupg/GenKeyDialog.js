@@ -117,6 +117,8 @@ Ext.extend(GO.gnupg.GenKeyDialog, Ext.Window,{
 			success:function(form, action){								
 				this.fireEvent('save', this);
 				this.hide();
+
+				Ext.MessageBox.alert(GO.gnupg.lang.generateKeyStarted, GO.gnupg.lang.generateKeyStartedText);
 			},		
 			failure: function(form, action) {
 				if(action.failureType == 'client')

@@ -49,7 +49,7 @@ GO.gnupg.KeysGrid = function(config){
 	
 	config.tbar=[{
 		iconCls: 'btn-add',							
-		text: GO.lang['cmdAdd'],
+		text: GO.gnupg.lang.genKey,
 		cls: 'x-btn-text-icon',
 		handler: function(){				
     		if(!this.genKeyDialog)
@@ -119,7 +119,15 @@ GO.gnupg.KeysGrid = function(config){
 				
 			},
 			scope:this						
-		}/*,{
+		},{
+		iconCls: 'btn-refresh',
+		text: GO.lang['cmdRefresh'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.store.load();
+		},
+		scope: this
+	}/*,{
 		iconCls:'btn-sign-key',
 		text:GO.gnupg.lang.signKey,
 		cls: 'x-btn-text-icon',

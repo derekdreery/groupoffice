@@ -29,3 +29,6 @@ GO.gnupg.lang.decryptPasswordRequired='A password is required to decrypt this me
 GO.gnupg.lang.sendPublicKey='Send public key';
 
 GO.gnupg.lang.importPublicKeyAttachment='This is a public key to encrypt e-mails to this sender. Only import this key when you are sure the key belongs to the sender. Do you want to import it?';
+
+GO.gnupg.lang.generateKeyStarted='Generating key in progress';
+GO.gnupg.lang.generateKeyStartedText='Your key is being generated. This process can take a long time. Please check if your key is generated in 10 minutes.';

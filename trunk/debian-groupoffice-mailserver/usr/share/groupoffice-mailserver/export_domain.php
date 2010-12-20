@@ -55,12 +55,16 @@ if(file_exists($sql_file))
 touch($sql_file);
 
 $domain['acl_id']=0;
+$domain['id']='{domain_id}';
 
 $sql = $sql_export->array_to_insert('pa_domains', $domain, 'INSERT IGNORE').";\n\n---\n\n";
 file_put_contents($sql_file, $sql, FILE_APPEND);
 
 $pa->get_mailboxes($domain['id']);
 while($record = $pa->next_record()){
+
+	$record['domain_id']='{domain_id}';
+
 	$sql = $sql_export->array_to_insert('pa_mailboxes', $record, 'INSERT IGNORE').";\n";
 	file_put_contents($sql_file, $sql, FILE_APPEND);
 }
@@ -77,12 +81,19 @@ while($record = $pa->next_record()){
 file_put_contents($sql_file, "\n---\n\n", FILE_APPEND);
 
 
-echo "Running rsync to sync mail\n\n";
+if(isset($args['targethost']))
+{
+	echo "Running rsync to sync mail\n\n";
 
-$rsync_cmd = 'rsync -v -rltD --delete -e "ssh" '.$vmail.'/'.$args['domain'].' root@'.$args['targethost'].':/home/vmail';
-system($rsync_cmd);
+	$rsync_cmd = 'rsync -v -rltD --delete -e "ssh" '.$vmail.'/'.$args['domain'].' root@'.$args['targethost'].':/home/vmail';
+	system($rsync_cmd);
 
-$chown_cmd='ssh root@'.$args['targethost'].' "chown vmail:mail -R /home/vmail/'.$args['domain'].'"';
-system($chown_cmd);
+	$chown_cmd='ssh root@'.$args['targethost'].' "chown vmail:mail -R /home/vmail/'.$args['domain'].'"';
+	system($chown_cmd);
+}
+else
+{
+	echo "No rsync command executed!";
+}
 
 echo "Done! now run /usr/share/groupoffice-mailserver/import_domain.php to import it.\n\n";

@@ -47,8 +47,12 @@ $sql = file_get_contents($sql_file);
 $queries = String::get_sql_queries($sql_file);
 //var_dump($queries);
 
+$domain_id = $pa->nextid('pa_domains');
+
+
 foreach($queries as $query){
 	//echo "QUERY: $query\n";
+	$query = str_replace('{domain_id}', $domain_id, $query);
 	$pa->query($query);
 }
 
