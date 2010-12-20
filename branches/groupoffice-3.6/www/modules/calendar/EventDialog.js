@@ -1253,6 +1253,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				'FFFF00',
 				'FF9966',
 				'FF9900',
+				'FF6666',
+				'CCFFCC',
 				/* Line 1 */
 				'FB0467',
 				'D52A6F',
