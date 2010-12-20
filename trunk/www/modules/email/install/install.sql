@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS `em_accounts`;
 CREATE TABLE IF NOT EXISTS `em_accounts` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
-	`acl_id` int(11) NOT NULL default,
+	`acl_id` int(11) NOT NULL default '0',
   `type` varchar(4) default NULL,
   `host` varchar(100) default NULL,
   `port` int(11) NOT NULL default '0',
