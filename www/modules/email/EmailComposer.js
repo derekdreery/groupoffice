@@ -823,6 +823,7 @@ GO.email.EmailComposer = function(config) {
 						}else
 						{
 							this.showConfig.template_id=item.template_id;
+							this.showConfig.keepEditingMode=true;
 							this.show(this.showConfig);
 						}
 					}
