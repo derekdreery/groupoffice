@@ -305,6 +305,8 @@ class gnupg{
 
 	public function gen_key($name, $email, $passphrase, $comment, $keylength=2048, $expiredate=0) {
 
+		global $GO_CONFIG;
+
 		$data='';
 		$data.="Key-Type: DSA\n";
 		$data.="Key-Length: 1024\n";
@@ -316,13 +318,17 @@ class gnupg{
 		$data.="Expire-Date: ". $expiredate ."\n";
 		$data.="Passphrase: " . $passphrase . "\n";
 		$data.="%commit\n";
-		$data.="%echo done with success\n";
+		$data.="%echo done with success\n";		
 
-		
-		$cmd = '--gen-key --batch --armor';
+		$tmpfile = $GO_CONFIG->tmpdir.md5($email).'-gen-key.batch';
 
-		//$this->run_cmd($cmd, $ouput, $errorcode, $data);
+		file_put_contents($tmpfile, $data);
 
+		$complete_cmd = 'cat '.$tmpfile.' | '.$this->gpg.' --homedir '.$this->home.' --status-fd 1 --gen-key --batch --armor  2>&1 &';
+		proc_close(proc_open ($complete_cmd, array(), $foo));
+		return true;
+
+		/*
 		// initialize the output
 		$contents = '';
 
@@ -341,7 +347,7 @@ class gnupg{
 		{
 			go_debug('Key gen failed');
 			return false;
-		}
+		}*/
 
 		//return empty($errorcode);
 	}

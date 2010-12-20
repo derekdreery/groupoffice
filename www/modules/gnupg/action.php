@@ -68,6 +68,7 @@ try{
 		
 		break;
 		case 'gen_key':
+			session_write_close();
 
 			require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
 			$email = new email();
@@ -82,6 +83,8 @@ try{
 			
 			break;
 		case 'import_key':
+
+			session_write_close();
 
 				if (!is_uploaded_file($_FILES['keys']['tmp_name'][0]))
 				{
