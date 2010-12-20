@@ -318,7 +318,7 @@ GO.lang.spellcheck = 'Spellingscontrole';
 GO.lang.spellcheckdetails = 'Controleer spelling';
 GO.lang.spellcheckNoError = 'Geen fouten gevonden';
 GO.lang.spellcheckServerError = 'Er is een onbekende fout opgetreden bij het uitvoeren van de spellingscontrole.';
-GO.lang.spellcheckNoErrors = 'E-mail bericth met [{1}] fout(en)';
+GO.lang.spellcheckNoErrors = 'Tekst met [{1}] fout(en)';
 GO.lang.spellcheckAsk = 'Bericht versturen zonder spellingscontrole?';
 
 
