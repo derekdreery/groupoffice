@@ -1316,7 +1316,7 @@ try {
 
 			break;
 
-		/*case 'resources':
+		case 'resources':
 
 			$cal->get_groups();
 			$response['results']=array();
@@ -1339,7 +1339,7 @@ try {
 			}
 
 			$response['total'] = $total;
-			break;*/
+			break;
 
 
 		case 'settings':
