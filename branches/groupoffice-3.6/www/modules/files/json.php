@@ -77,9 +77,10 @@ try {
 			if(!empty($_POST['sync_folder_id']) && is_numeric($_POST['sync_folder_id'])) {
 				$folder = $files->get_folder($_POST['sync_folder_id']);
 				$files->sync_folder($folder);
+			}
 
-
-				//this will rebuild the cache folder
+			if(!empty($_POST['sync_folder_id'])){
+				//this will rebuild the cached shares folder
 				$GO_CONFIG->save_setting('fs_shared_cache', 0, $GO_SECURITY->user_id);
 			}
 
