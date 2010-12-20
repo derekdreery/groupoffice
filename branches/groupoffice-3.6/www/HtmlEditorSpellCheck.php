@@ -7,6 +7,10 @@
  * @author Shaun Forsyth <shaun@rpm-solutions.co.uk>
  */
 
+require_once('Group-Office.php');
+
+header('Content-Type: text/html; charset=UTF-8');
+
 class spellchecker {
 	var $plink;
 	
@@ -119,7 +123,7 @@ function wraparray($before,$after,$sugestions){
 	$out = '';
 	if (is_array($sugestions) && !empty($sugestions)){
 		foreach ($sugestions as $sugestion){
-			$out .= $before.$sugestion.$after;
+			$out .= $before.String::to_utf8($sugestion).$after;
 		}
 	}else{
 		$out .= $before.'No Sugestions'.$after;	
