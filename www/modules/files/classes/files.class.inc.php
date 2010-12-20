@@ -1135,6 +1135,11 @@ class files extends db {
 	// Default timeout: 30 days
 
 		if($count_login){
+			global $GO_CONFIG;
+
+			//this will rebuild the cached shares folder
+			$GO_CONFIG->save_setting('fs_shared_cache', 0, $user['id']);
+
 			$timeout = 60*60*24*30;
 			$deltime = time() - $timeout;
 
