@@ -133,8 +133,8 @@ GO.calendar.MainPanel = function(config){
 			field: 'name',
 			direction: "ASC"
 		},
-		groupField:'group_name',
-		remoteSort:true
+		groupField:'group_name'
+//		,remoteSort:true
 	});
 
 	this.calendarsStore.on('load', function(){
