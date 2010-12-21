@@ -55,6 +55,10 @@ try {
 			if(!empty($_POST['template_id'])) {
 				require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
 				$response = load_template($_POST['template_id']);
+
+				require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
+				$go2mime = new Go2Mime();
+				$response['data']['attachments']=$go2mime->remove_inline_images($response['data']['attachments']);
 			}else
 			{
 				$response['data']['body']=$_POST['body'];
