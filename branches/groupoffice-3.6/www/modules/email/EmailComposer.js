@@ -192,7 +192,8 @@ GO.email.EmailComposer = function(config) {
 			})
 		}else
 		{
-			this.uploadForm = new GO.UploadPCForm({				
+			this.uploadForm = new GO.UploadPCForm({
+				waitMsgTarget:this.getId(),
 				baseParams:{
 					task:'attach_file'
 				},				

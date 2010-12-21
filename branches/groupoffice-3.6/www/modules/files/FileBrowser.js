@@ -501,6 +501,7 @@ GO.files.FileBrowser = function(config){
 		}else
 		{
 			this.uploadForm = new GO.UploadPCForm({
+				waitMsgTarget:config.id,
 				baseParams:{
 					task:'upload_file'
 				},

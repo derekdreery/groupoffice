@@ -41,7 +41,8 @@ Ext.extend(GO.UploadPCForm, Ext.form.FormPanel, {
 
 	uploadHandler : function(){
 
-		this.form.submit({			
+		this.form.submit({
+			waitMsg: GO.lang.waitMsgUpload,
 			success:function(form, action){
 				this.uploadFile.clearQueue();
 				
@@ -51,6 +52,8 @@ Ext.extend(GO.UploadPCForm, Ext.form.FormPanel, {
 			},
 			failure:function(form, action)
 			{
+				this.uploadFile.clearQueue();
+				
 				var error = '';
 				if(action.failureType=='client')
 				{
