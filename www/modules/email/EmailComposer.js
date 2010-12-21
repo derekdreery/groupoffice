@@ -491,7 +491,7 @@ GO.email.EmailComposer = function(config) {
 								
 	var anchor = -113;
 						
-	if(GO.mailings)
+	if(GO.settings.modules.savemailas && GO.settings.modules.savemailas.read_permission)
 	{
 		if (!this.selectLinkField) {
 			this.selectLinkField = new GO.form.SelectLink({
@@ -831,7 +831,8 @@ GO.email.EmailComposer = function(config) {
 	}
 
 	if(GO.mailings){
-		tbar.push({
+		tbar.push(this.templatesBtn = new Ext.Button({
+
 			iconCls:'ml-btn-mailings',
 			text:GO.mailings.lang.emailTemplate,
 			menu:new GO.menu.JsonMenu({
@@ -852,7 +853,7 @@ GO.email.EmailComposer = function(config) {
 					}
 				}
 			})
-		})
+		}));
 	}
 
 	var focusFn = function() {
@@ -880,6 +881,8 @@ GO.email.EmailComposer = function(config) {
 	this.addEvents({
 		'send' : true
 	});
+
+	//this.on('show', function(){this.templatesBtn.showMenu();},this);
 };
 
 Ext.extend(GO.email.EmailComposer, GO.Window, {
