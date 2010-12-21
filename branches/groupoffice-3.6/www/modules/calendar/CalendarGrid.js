@@ -1245,6 +1245,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 					//do last because orginal times will be lost after this.
 					var event = this.elementToEvent(eventEl.el.id);
 
+					this.remoteEvents[eventEl.el.id].endDate=times.endDate;
+
 					var elX = eventEl.el.getX();
 					this.clickedDay = this.getDayByX(elX);
 
