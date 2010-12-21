@@ -89,7 +89,12 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
 		global $files;
 		$this->checkWritePermission();
 
-		rename($this->path, $newPath);
+		go_debug('FSFile::move('.$this->path.' -> '.$newPath.')');
+
+		if(!rename($this->path, $newPath)){
+			go_debug('Failed to rename');
+			throw new Exception('Failed to rename!');
+		}
 
 		$destFolder = $files->resolve_path($files->strip_server_path(dirname($newPath)));
 
