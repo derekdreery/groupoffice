@@ -354,8 +354,8 @@ try {
 
 			$num_participants = 0;
 			$continue = true;
-			$cal->get_participants($event['id']);
-			while($cal->next_record() && $continue)
+			$num_participants=$cal->get_participants($event['id']);
+			/*while($cal->next_record() && $continue)
 			{
 				if($cal->f('user_id') != $GO_SECURITY->user_id)
 				{
@@ -366,7 +366,7 @@ try {
 					$num_participants = 0;
 					$continue = false;
 				}
-			}
+			}*/
 			$response['data']['num_participants'] = $num_participants;
 
 			$response['data']=array_merge($response['data'], $cal->event_to_json_response($event));

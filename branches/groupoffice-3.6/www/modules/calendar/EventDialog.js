@@ -633,17 +633,17 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			var gridData = this.participantsPanel.getGridData();
 			params.participants=Ext.encode(gridData);
 
-			this.numParticipants = 0;
-			for(var i=0; i<this.participantsPanel.store.data.items.length; i++)
-			{
-				if(this.participantsPanel.store.data.items[i].data.user_id != GO.settings.user_id)
-				{
-					this.numParticipants++;
-				}
-			}
+			this.numParticipants = this.participantsPanel.store.getCount();
+//			for(var i=0; i<this.participantsPanel.store.data.items.length; i++)
+//			{
+//				if(this.participantsPanel.store.data.items[i].data.user_id != GO.settings.user_id)
+//				{
+//					this.numParticipants++;
+//				}
+//			}
 		}
 		
-		if(this.numParticipants)
+		if(this.numParticipants>1)
 		{
 			var invitationMessage = (this.event_id) ? GO.calendar.lang.sendInvitationUpdate : GO.calendar.lang.sendInvitationInitial;
 		
