@@ -152,66 +152,66 @@ GO.email.EmailComposer = function(config) {
 
 	var uploadItems = [];
 	
-		var version = deconcept.SWFObjectUtil.getPlayerVersion();
-		if(!GO.settings.config.disable_flash_upload && version.major > 0)
-		{
-			uploadItems.push({
-				iconCls:'btn-computer',
-				text : GO.email.lang.attachFilesPC,
-				handler : function()
-				{
-					if(!this.uploadFlashDialog)
-					{
-						this.uploadFlashDialog = new GO.UploadFlashDialog({
-							uploadPanel: new Ext.ux.SwfUploadPanel({
-								post_params : {
-									"task" : 'upload_attachment'
-								},
-								upload_url : GO.settings.modules.email.url+ 'action.php',
-								labelWidth: 110,
-
-								file_size_limit:"100MB",
-								single_file_select: false, // Set to true if you only want to select one file from the FileDialog.
-								confirm_delete: false, // This will prompt for removing files from queue.
-								remove_completed: false // Remove file from grid after uploaded.
-							}),
-							title:GO.email.lang.attachments
-						});
-
-						this.uploadFlashDialog.on('fileUploadSuccess', function(obj, file, data)
-						{
-							this.attachmentsStore.loadData({
-								'results' : data.file
-							}, true);
-						},this)
-					}
-
-					this.uploadFlashDialog.show();
-				},
-				scope:this
-			})
-		}else
-		{
-			this.uploadForm = new GO.UploadPCForm({
-				waitMsgTarget:this.getId(),
-				baseParams:{
-					task:'attach_file'
-				},				
-				addText: GO.email.lang.attachFilesPC,
-				url:GO.settings.modules.email.url+'action.php'
-			});
-			this.uploadForm.on('upload', function(e, file)
+	var version = deconcept.SWFObjectUtil.getPlayerVersion();
+	if(!GO.settings.config.disable_flash_upload && version.major > 0)
+	{
+		uploadItems.push({
+			iconCls:'btn-computer',
+			text : GO.email.lang.attachFilesPC,
+			handler : function()
 			{
-				this.attachmentsStore.loadData({
-					'results' : file
-				}, true);
+				if(!this.uploadFlashDialog)
+				{
+					this.uploadFlashDialog = new GO.UploadFlashDialog({
+						uploadPanel: new Ext.ux.SwfUploadPanel({
+							post_params : {
+								"task" : 'upload_attachment'
+							},
+							upload_url : GO.settings.modules.email.url+ 'action.php',
+							labelWidth: 110,
 
-				this.attachmentMenu.hide();
+							file_size_limit:"100MB",
+							single_file_select: false, // Set to true if you only want to select one file from the FileDialog.
+							confirm_delete: false, // This will prompt for removing files from queue.
+							remove_completed: false // Remove file from grid after uploaded.
+						}),
+						title:GO.email.lang.attachments
+					});
 
-			},this);
+					this.uploadFlashDialog.on('fileUploadSuccess', function(obj, file, data)
+					{
+						this.attachmentsStore.loadData({
+							'results' : data.file
+						}, true);
+					},this)
+				}
 
-			uploadItems.push(this.uploadForm);
-		}
+				this.uploadFlashDialog.show();
+			},
+			scope:this
+		})
+	}else
+	{
+		this.uploadForm = new GO.UploadPCForm({
+			waitMsgTarget:this.getId(),
+			baseParams:{
+				task:'attach_file'
+			},
+			addText: GO.email.lang.attachFilesPC,
+			url:GO.settings.modules.email.url+'action.php'
+		});
+		this.uploadForm.on('upload', function(e, file)
+		{
+			this.attachmentsStore.loadData({
+				'results' : file
+			}, true);
+
+			this.attachmentMenu.hide();
+
+		},this);
+
+		uploadItems.push(this.uploadForm);
+	}
 	
 	if(GO.files)
 	{
@@ -234,6 +234,28 @@ GO.email.EmailComposer = function(config) {
 			scope : this
 		});
 	}
+
+	uploadItems.push('-');
+	uploadItems.push({
+		text : GO.email.lang.attachFilesPC+' (Java)',
+		handler : function() {
+
+			if (!deployJava.isWebStartInstalled('1.5.0')) {
+				Ext.MessageBox.alert(GO.lang.strError,
+						GO.lang.noJava);
+			} else {
+
+				//for updating attachments
+				GO.attachmentsStore = this.attachmentsStore;
+
+				 GO.util.popup({url:
+					 GO.settings.modules.email.url+'jupload/index.php',
+					 width : 660, height: 500, target:
+					 'jupload'});
+			}
+		},
+		scope : this
+	});
 	
 	this.attachmentMenu = new Ext.menu.Menu(
 	{
