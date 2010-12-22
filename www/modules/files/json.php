@@ -36,9 +36,13 @@ try {
 
 			$file = $files->get_file($_POST['file_id']);
 			$up_file['id'] = $file['id'];
-			$expire_time = $up_file['expire_time'] = isset($_POST['expire_time']) ? Date::date_add($_POST['expire_time'],1) : $file['expire_time'];
+			$expire_time = isset($_POST['expire_time']) ? $_POST['expire_time'] : $file['expire_time'];
 			$random_code = $up_file['random_code'] = isset($file['random_code']) ? $file['random_code'] : String::random_password('a-z,1-9','i,o',11);
+
+			$up_file['expire_time']=Date::date_add($expire_time, 1);
 			$files->update_file($up_file);
+
+
 
 			if ($_POST['content_type']!='plain') {
 				$downloadLink = $lang['files']['clickHereToDownload'].':'." ".
