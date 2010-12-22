@@ -881,8 +881,6 @@ GO.email.EmailComposer = function(config) {
 	this.addEvents({
 		'send' : true
 	});
-
-	//this.on('show', function(){this.templatesBtn.showMenu();},this);
 };
 
 Ext.extend(GO.email.EmailComposer, GO.Window, {
