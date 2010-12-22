@@ -88,6 +88,7 @@ if(!$new_trial)
 			//$config['local_url']='/sm-local/'.$installation['name'].'/';
 			$config['file_storage_path']=$sm_config['install_path'].$installation['name'].'/data/';
 			$config['db_name']=str_replace('.','_',$installation['name']);
+			$config['db_name']=str_replace('-','_',$config['db_name']);
 
 			$config=array_merge($static_config, $default_config, $config);
 				

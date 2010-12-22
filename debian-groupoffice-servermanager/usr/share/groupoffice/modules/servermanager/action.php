@@ -193,6 +193,7 @@ try{
 
 				$installation['name']=strtolower((trim($_POST['name'])));
 				$config['db_name']=str_replace('.','_',$installation['name']);
+				$config['db_name']=str_replace('-','_',$config['db_name']);
 
 				if(empty($installation['name']))
 				{
