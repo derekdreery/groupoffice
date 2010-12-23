@@ -516,7 +516,7 @@ GO.email.AccountDialog = function(config) {
 		layout : 'fit',
 		modal : false,
 		height : 400,
-		width : 750,
+		width : 800,
 		closeAction : 'hide',
 		title : GO.email.lang.account,
 
@@ -569,9 +569,9 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 				action.result.refreshNeeded = this.refreshNeeded
 				|| this.account_id == 0;
 				if (action.result.account_id) {
-					this.account_id = action.result.account_id;
+					//this.account_id = action.result.account_id;
 					// this.foldersTab.setDisabled(false);
-					this.loadAccount(this.account_id);
+					this.loadAccount(action.result.account_id);
 				}
 
 				this.refreshNeeded = false;
@@ -613,7 +613,7 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 		} else {
 			
 			this.propertiesPanel.form.reset();
-			this.account_id = 0;
+			this.setAccountId(0);
 			this.foldersTab.setDisabled(true);
 			this.filtersTab.setDisabled(true);
 			this.vacationPanel.setDisabled(true);
@@ -643,7 +643,9 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 			waitMsg : GO.lang.waitMsgLoad,
 			success : function(form, action) {
 				this.refreshNeeded = false;
-				this.account_id = account_id;
+
+				this.setAccountId(account_id);
+				
 				this.selectUser.setRemoteValue(action.result.data.user_id,
 					action.result.data.user_name);
 						
@@ -659,6 +661,10 @@ Ext.extend(GO.email.AccountDialog, GO.Window, {
 			},
 			scope : this
 		});
+	},
+
+	setAccountId : function(account_id){
+		this.account_id = account_id;
 	},
 
 	onNotifyDrop : function(dd, e, data)
@@ -706,7 +712,7 @@ var filter = function() {
 	return {
 		showDialog : function(filter_id, account_id, ds) {
 
-			this.account_id=account_id;
+			this.setAccountId(account_id);
 						
 			if (!this.win) {
 
