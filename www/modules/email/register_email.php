@@ -3,7 +3,7 @@ require('../../Group-Office.php');
 
 $filename='Group-Office_email.reg';
 
-$data = 'REGEDIT4
+$data = 'Windows Registry Editor Version 5.00
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail\Group-Office]
 @="Group-Office"
@@ -21,7 +21,11 @@ $data = 'REGEDIT4
 @="rundll32.exe url.dll,FileProtocolHandler '.$GO_MODULES->modules['email']['full_url'].'mailto.php?mail_to=%1"
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Clients\Mail]
-@="Group-Office"';
+@="Group-Office"
+
+[HKEY_CLASSES_ROOT\mailto\shell\open\command]
+@="rundll32.exe url.dll,FileProtocolHandler '.$GO_MODULES->modules['email']['full_url'].'mailto.php?mail_to=%1"
+';
 
 header('Content-Type: application/download');
 header('Content-Length: '.strlen($data));
