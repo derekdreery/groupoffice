@@ -37,6 +37,7 @@ $lang['calendar']['statuses']['TENTATIVE'] = 'Tentative';
 $lang['calendar']['statuses']['DELEGATED'] = 'Delegated';
 $lang['calendar']['statuses']['COMPLETED'] = 'Completed';
 $lang['calendar']['statuses']['IN-PROCESS'] = 'In process';
+$lang['calendar']['statuses']['CONFIRMED'] = 'Confirmed';
 
 
 $lang['calendar']['accept_mail_subject'] = 'Invitation for \'%s\' accepted';

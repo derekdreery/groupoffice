@@ -552,34 +552,13 @@ try {
 				if ($owncolor)
 				{
 					$event['background'] = $default_bg[$event['calendar_id']];
-				}/*else
-				if($event['category_id'])
-				{
-					$category = $cal->get_category($event['category_id']);
-					if($category)
-					{
-						$event['background'] = $category['color'];
-					}
-				}*/
-
+				}
+				
 				$username = $GO_USERS->get_user_realname($event['user_id']);
 
-				$num_participants = 0;
-				$continue = true;
-				$cal->get_participants($event['id']);
-				while($cal->next_record() && $continue)
-				{
-					if($cal->f('user_id') != $GO_SECURITY->user_id)
-					{
-						$num_participants++;
-					}else
-					if(!$cal->f('is_organizer'))
-					{
-						$num_participants = 0;
-						$continue = false;
-					}
-				}				
-
+				//TODO could be more efficient by doing these queries only when deleting or updating
+				$num_participants = $cal->count_participants($event['id']) > 1 ? 1 : 0;
+				
 				$response['results'][] = array(
 								'id'=>$response['count']++,
 								'event_id'=> $event['id'],

@@ -1407,6 +1407,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				update_event_id : event['event_id'],
 				end_time : actionData.end_time
 			};
+
+			if(event.num_participants)
+				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
 			
 			if(event.repeats && actionData.singleInstance)
 			{
@@ -1498,6 +1501,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				task : 'update_grid_event',
 				update_event_id : event['event_id']
 			};
+
+			if(event.num_participants)
+				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
 			
 			if(actionData.offset)
 				params['offset']=actionData.offset;
@@ -1611,6 +1617,11 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 			params['update_calendar_id']=actionData.calendar_id;
 		}
+
+		console.log(event);
+
+		if(event.num_participants)
+			params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
 
 		Ext.Ajax.request({
 			url: GO.settings.modules.calendar.url+'action.php',
