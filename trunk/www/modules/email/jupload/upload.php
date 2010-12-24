@@ -16,6 +16,7 @@ if(!is_dir($path))
 	mkdir($path, 0755, true);
 }
 
+
 $count=0;
 while($file = array_shift($_FILES))
 {
@@ -37,14 +38,14 @@ while($file = array_shift($_FILES))
 				
 			$_SESSION['GO_SESSION']['chunked_upload_size']+=$file['size'];
 				
-			if($_SESSION['GO_SESSION']['chunked_upload_size']>$GO_CONFIG->max_file_size)
+			if($_SESSION['GO_SESSION']['chunked_upload_size']>$GO_CONFIG->max_attachment_size)
 			{
 				for($i=1;$i<$_POST['jupart'];$i++)
 				{
 					$part = $dir.$file['name'].'.part'.$i;
 					unlink($part);
 				}
-				go_debug('Uploaded file too big: '.$_SESSION['GO_SESSION']['chunked_upload_size'].' -> '.$GO_CONFIG->max_file_size);
+				go_debug('Uploaded file too big: '.$_SESSION['GO_SESSION']['chunked_upload_size'].' -> '.$GO_CONFIG->max_attachment_size);
 				exit('ERROR: File is too big');
 			}
 

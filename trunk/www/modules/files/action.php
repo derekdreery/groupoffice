@@ -32,6 +32,11 @@ $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 $response=array();
 
 try {
+	if(empty($_REQUEST['task'])){
+		//probably too large upload
+		throw new Exception(sprintf($lang['common']['upload_file_to_big'], ini_get('upload_max_filesize')));
+	}
+
 	switch($task) {
 
 		case 'set_view':

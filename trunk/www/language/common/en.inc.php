@@ -230,3 +230,5 @@ $lang['common']['theFolderAlreadyExists']='A folder with that name already exist
 
 $lang['common']['other']='Other';
 $lang['common']['copy']='copy';
+
+$lang['common']['upload_file_to_big']='The file you tried to upload was larger then the maximum allowed size of %s.';

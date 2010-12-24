@@ -36,9 +36,13 @@ try {
 
 			$file = $files->get_file($_POST['file_id']);
 			$up_file['id'] = $file['id'];
-			$expire_time = $up_file['expire_time'] = isset($_POST['expire_time']) ? Date::date_add($_POST['expire_time'],1) : $file['expire_time'];
+			$expire_time = isset($_POST['expire_time']) ? $_POST['expire_time'] : $file['expire_time'];
 			$random_code = $up_file['random_code'] = isset($file['random_code']) ? $file['random_code'] : String::random_password('a-z,1-9','i,o',11);
+
+			$up_file['expire_time']=Date::date_add($expire_time, 1);
 			$files->update_file($up_file);
+
+
 
 			if ($_POST['content_type']!='plain') {
 				$downloadLink = $lang['files']['clickHereToDownload'].':'." ".
@@ -55,6 +59,10 @@ try {
 			if(!empty($_POST['template_id'])) {
 				require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
 				$response = load_template($_POST['template_id']);
+
+				require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
+				$go2mime = new Go2Mime();
+				$response['data']['attachments']=$go2mime->remove_inline_images($response['data']['attachments']);
 			}else
 			{
 				$response['data']['body']=$_POST['body'];

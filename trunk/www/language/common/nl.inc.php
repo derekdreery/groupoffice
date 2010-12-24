@@ -222,3 +222,5 @@ $lang['common']['theFolderAlreadyExists']='Er bestaat al een map met deze naam';
 $lang['common']['other']='Overig';
 $lang['common']['none']='Geen';
 $lang['common']['copy']='kopie';
+
+$lang['common']['upload_file_to_big']='Het bestand dat u probeerde te uploaden was groter dan de maximaal toegestane grootte van %s.';

@@ -143,7 +143,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
         $path = $this->path . '/' . $name;
 
-		go_debug("FSD:getChild($name)");	
+		//go_debug("FSD:getChild($name)");
     
         if (is_dir($path)) {
             return new GO_DAV_FS_Directory($this->relpath . '/' . $name);
@@ -188,7 +188,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
      */
     public function getChildren() {
 
-		go_debug('FSD::getChildren');
+		//go_debug('FSD::getChildren');
 
 		global $files;
         $nodes = array();
@@ -198,7 +198,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		if(!$f)
 		{
-			go_debug($this->relpath);
+			go_debug('Could not get: '.$this->relpath);
 		}
 
 		$files->check_folder_sync($f, $this->relpath);
