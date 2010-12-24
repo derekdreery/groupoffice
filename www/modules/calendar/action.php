@@ -395,6 +395,11 @@ try {
 									$cal3->update_row('cal_events', 'id', $resource);
 								}
 							}
+
+							if(!empty($_POST['send_invitation'])) {
+
+								$cal->send_invitation(array_merge($old_event, $update_event));
+							}
 						}
 					}
 /*
@@ -695,66 +700,12 @@ try {
 
 
 			if(!empty($_POST['send_invitation'])) {
-				require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
-				//require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Plugins/DecoratorPlugin.php';
-				//require_once $GO_CONFIG->class_path.'mail/swift/lib/classes/Swift/Plugins/Decorator/Replacements.php';
 
-				$RFC822 = new RFC822();
-				$resource_event_id=empty($old_event['resource_event_id']) ? $event_id : $old_event['resource_event_id'];
-				//go_debug($resource_event_id);
-				$cal->clear_event_status($resource_event_id, $_SESSION['GO_SESSION']['email']);
-
-				$participants=array();
-				$cal->get_participants($resource_event_id);
-				while($cal->next_record()) {
-
-					if(/*$cal->f('status') !=1 && */$cal->f('email')!=$_SESSION['GO_SESSION']['email']) {
-						$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
-					}
-				}
-
-				//go_debug($participants);
-				if(count($participants))
-				{
-					$subject = ($insert) ? $lang['calendar']['invitation'] : $lang['calendar']['invitation_update'];
-
-					// ics attachment
-					require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
-					$ical = new go_ical();
-					$ical->dont_use_quoted_printable = true;
-					
-					$ics_string = $ical->export_event($resource_event_id);
-
-					$swift = new GoSwift(
-							implode(',', $participants),
-							$subject.': '.$event['name']);
-
-					class Replacements implements Swift_Plugins_Decorator_Replacements {
-						function getReplacementsFor($address) {
-							return array('%email%'=>$address);
-						}
-					}
-
-					//Load the plugin with the extended replacements class
-					$swift->registerPlugin(new Swift_Plugins_DecoratorPlugin(new Replacements()));
-
-					$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
-							$cal->event_to_html($event).
-							'<p>'.$lang['calendar']['acccept_question'].'</p>'.
-							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$resource_event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
-							'&nbsp;|&nbsp;'.
-							'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$resource_event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
-					
-					$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
-					//$name = File::strip_invalid_chars($event['name']).'.ics';
-					//$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
-
-					$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
-
-					if(!$swift->sendmail(true)) {
-						throw new Exception('Could not send invitation');
-					}
-				}
+				//resource_event_id needed for resource mails
+				//if(!empty($old_event['resource_event_id']))
+					//$event['resource_event_id']=$old_event['resource_event_id'];
+				
+				$cal->send_invitation($event);
 			}
 
 			if($calendar['group_id'] > 1)

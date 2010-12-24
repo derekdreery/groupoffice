@@ -92,61 +92,68 @@ class imapauth
 
 			go_debug('IMAPAUTH: Attempt IMAP login');
 
-			if ($imap->connect(
-			$config['host'],
-			$config['port'],
-			$mail_username,
-			$password,
-			$config['ssl']))
-			{
-				go_debug('IMAPAUTH: IMAP login succesful');
-				$imap->disconnect();
+			try{
+				if ($imap->connect(
+				$config['host'],
+				$config['port'],
+				$mail_username,
+				$password,
+				$config['ssl']))
+				{
+					go_debug('IMAPAUTH: IMAP login succesful');
+					$imap->disconnect();
 
-				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
-				$GO_USERS = new GO_USERS();
+					require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+					$GO_USERS = new GO_USERS();
 
-				$user = $GO_USERS->get_user_by_username($go_username);
-				if ($user) {
+					$user = $GO_USERS->get_user_by_username($go_username);
+					if ($user) {
 
-					//user exists. See if the password is accurate
-					if(crypt($password, $user['password']) != $user['password'])
-					{
-						go_debug('IMAPAUTH: IMAP password has changed. Updating Group-Office database');
-
-						$GO_USERS->update_profile(array('id'=>$user['id'], 'password'=>$password));
-
-						if(isset($GO_MODULES->modules['email']))
+						//user exists. See if the password is accurate
+						if(crypt($password, $user['password']) != $user['password'])
 						{
-							require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
-							$email_client = new email();
-							$email_client->update_password($config['host'], $mail_username, $password);
+							go_debug('IMAPAUTH: IMAP password has changed. Updating Group-Office database');
+
+							$GO_USERS->update_profile(array('id'=>$user['id'], 'password'=>$password));
+
+							if(isset($GO_MODULES->modules['email']))
+							{
+								require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
+								$email_client = new email();
+								$email_client->update_password($config['host'], $mail_username, $password);
+							}
+						}
+
+					} else {
+						//user doesn't exist. create it now
+						$user['email'] =$email;
+						$user['username'] = $go_username;
+						$user['password'] = $password;
+
+						require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+						$GO_GROUPS = new GO_GROUPS();
+
+
+						if ( !$user_id = $GO_USERS->add_user(
+						$user,
+						$GO_GROUPS->groupnames_to_ids($config['groups']),
+						$GO_GROUPS->groupnames_to_ids($config['visible_groups']),
+						$config['modules_read'],
+						$config['modules_write']))
+						{
+							trigger_error('IMAPAUTH: Failed creating user '.$go_username.' and e-mail '.$email.' with imapauth. The e-mail address probably already existed at another user.', E_USER_WARNING);
+						} else {
+							$ia->create_email_account($config, $user_id, $mail_username, $password, $email);
 						}
 					}
+				}else
+				{
+					go_debug('IMAPAUTH: Authentication to IMAP server failed '.$imap->last_error());
+					$imap->clear_errors();
 
-				} else {
-					//user doesn't exist. create it now
-					$user['email'] =$email;
-					$user['username'] = $go_username;
-					$user['password'] = $password;
-
-					require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
-					$GO_GROUPS = new GO_GROUPS();
-
-
-					if ( !$user_id = $GO_USERS->add_user(
-					$user,
-					$GO_GROUPS->groupnames_to_ids($config['groups']),
-					$GO_GROUPS->groupnames_to_ids($config['visible_groups']),
-					$config['modules_read'],
-					$config['modules_write']))
-					{
-						trigger_error('IMAPAUTH: Failed creating user '.$go_username.' and e-mail '.$email.' with imapauth. The e-mail address probably already existed at another user.', E_USER_WARNING);
-					} else {
-						$ia->create_email_account($config, $user_id, $mail_username, $password, $email);
-					}
+					throw new Exception($GLOBALS['lang']['common']['badLogin']);
 				}
-			}else
-			{
+			}catch(Exception $e){
 				go_debug('IMAPAUTH: Authentication to IMAP server failed '.$imap->last_error());
 				$imap->clear_errors();
 

@@ -63,7 +63,13 @@ function add_unknown_recipient($email, $name) {
 $response =array('success'=>false);
 
 
+
 try {
+	if(!isset($_REQUEST['task'])){
+		//probably too large upload
+		throw new Exception(sprintf($lang['common']['upload_file_to_big'], ini_get('upload_max_filesize')));
+	}
+
 	switch($_REQUEST['task']) {
 		case 'move':
 

@@ -202,4 +202,30 @@ $input_holidays['fix']['ja']['05-05'] = 'ã"ã©ãã®æ¥';
 $input_holidays['fix']['ja']['11-03'] = 'æåã®æ¥';
 $input_holidays['fix']['ja']['11-23'] = 'å€åŽæè¬ã®æ¥';
 $input_holidays['fix']['ja']['12-23'] = 'å€©çèªç"æ¥';
+
+
+
+
+// holidays with fixed date
+
+$input_holidays['fix']['nb']['01-01'] = 'Nyttårsdag';
+$input_holidays['fix']['nb']['05-01'] = 'Off. høytidsdag';
+$input_holidays['fix']['nb']['05-17'] = 'Grunnlovsdag';
+$input_holidays['fix']['nb']['12-25'] = '1. juledag';
+$input_holidays['fix']['nb']['12-26'] = '2. juledag';
+
+
+
+// holidays with variable date (christian holidays computation is based on the date of easter day)
+
+
+
+$input_holidays['var']['nb']['-7'] = 'Palmesøndag';
+$input_holidays['var']['nb']['-3'] = 'Skjærtorsdag';
+$input_holidays['var']['nb']['-2'] = 'Langfredag';
+$input_holidays['var']['nb']['0'] = '1. påskedag';
+$input_holidays['var']['nb']['1'] = '2. påskedag';
+$input_holidays['var']['nb']['39'] = 'Kristi himmelfartsdag';
+$input_holidays['var']['nb']['49'] = '1. pinsedag';
+$input_holidays['var']['nb']['50'] = '2. pinsedag';
 ?>

@@ -34,6 +34,8 @@ $lang['calendar']['statuses']['TENTATIVE']= 'Voorlopig';
 $lang['calendar']['statuses']['DELEGATED']= 'Gedelegeerd';
 $lang['calendar']['statuses']['COMPLETED']= 'Afgerond';
 $lang['calendar']['statuses']['IN-PROCESS']= 'Bezig';
+$lang['calendar']['statuses']['CONFIRMED'] = 'Bevestigd';
+
 $lang['calendar']['accept_mail_subject']= 'Uitnodiging voor \'%s\' geaccepteerd';
 $lang['calendar']['accept_mail_body']= '%s heeft uw uitnodiging geaccepteerd voor:';
 $lang['calendar']['decline_mail_subject']= 'Uitnodiging voor \'%s\' afgewezen';

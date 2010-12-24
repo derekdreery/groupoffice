@@ -8,6 +8,7 @@ require('../../cli-functions.inc.php');
 $args = parse_cli_args($argv);
 
 $db_name = str_replace('.','_', $args['name']);
+$db_name = str_replace('-','_', $db_name);
 
 if($args['task']!='change_admin_password' && !preg_match('/^[a-z0-9-_\.]*$/',$args['name']))
 {
@@ -206,7 +207,7 @@ switch($args['task'])
 		system('rm -Rf /etc/groupoffice/'.$args['name']);
 		system('rm -Rf /tmp/'.$args['name']);
 		
-		$db_name = str_replace('.', '_', $args['name']);
+		//$db_name = str_replace('.', '_', $args['name']);
 		$db->query("DROP DATABASE `".$db_name."`");		
 		$db->query("DROP USER '".substr($db_name,0,16)."'");
 		

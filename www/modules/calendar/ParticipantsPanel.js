@@ -436,7 +436,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 			url : GO.settings.modules.calendar.url + 'json.php',
 			params : {
 				task : 'get_default_participant',
-				calendar_id : this.eventDialog.calendar_id,
+				calendar_id : this.eventDialog.selectCalendar.getValue(),
 				start_time : this.eventDialog.getStartDate().format('U'),
 				end_time : this.eventDialog.getEndDate().format('U')
 			},

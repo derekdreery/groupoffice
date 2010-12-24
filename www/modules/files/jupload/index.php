@@ -36,7 +36,7 @@ function afterUpload(success){
             <!-- <param name="lookAndFeel" value="system" /> -->
             <param name="postURL" value="upload.php?id=<?php echo $_REQUEST['id']; ?>" />
             <param name="afterUploadURL" value="javascript:afterUpload(%success%);" />
-            <param name="showLogWindow" value="true" />
+            <param name="showLogWindow" value="false" />
             <param name="maxChunkSize" value="1048576" />    
             <param name="maxFileSize" value="<?php echo intval($GO_CONFIG->max_file_size); ?>" />
             <param name="nbFilesPerRequest" value="5" />

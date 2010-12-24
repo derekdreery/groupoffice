@@ -33,7 +33,7 @@ if(!isset($_REQUEST['task']))
 }
 
 
-if(!isset($_POST['passphrase'])){
+if(!isset($_POST['passphrase']) && $_REQUEST['task']!='attachments'){
 	//close writing to session so other concurrent requests won't be locked out.
 	session_write_close();
 }
@@ -548,6 +548,8 @@ try {
 									'tmp_name'=>$file,
 									'name'=>utf8_basename($file),
 									'size'=>filesize($file),
+									'human_size'=>Number::format_size(filesize($file)),
+									'extension'=>File::get_extension($file),
 									'type'=>File::get_filetype_description(File::get_extension($file))
 					);
 				}
