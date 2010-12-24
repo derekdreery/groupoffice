@@ -310,6 +310,9 @@ try
 
 		case 'search_email_contacts':
 
+			//this case is used when adding an unknown e-mail address to a contact
+			//return writable only.
+
 			$response['total']=$ab->search_contacts_email(
 			$GO_SECURITY->user_id,
 			$query,
