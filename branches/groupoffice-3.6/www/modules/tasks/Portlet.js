@@ -34,7 +34,8 @@ GO.tasks.SimpleTasksPanel = function(config)
 
 		config.store.on('load', function(){
 			//do layout on Startpage
-			this.ownerCt.ownerCt.ownerCt.doLayout();
+			if(this.rendered)
+				this.ownerCt.ownerCt.ownerCt.doLayout();
 		}, this);
 	
 		var checkColumn = new GO.grid.CheckColumn({

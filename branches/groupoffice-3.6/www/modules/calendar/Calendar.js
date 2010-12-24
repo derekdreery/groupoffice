@@ -1618,8 +1618,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			params['update_calendar_id']=actionData.calendar_id;
 		}
 
-		console.log(event);
-
 		if(event.num_participants)
 			params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
 
