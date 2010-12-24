@@ -681,6 +681,13 @@ class calendar extends db {
 		return $this->num_rows();
 	}
 
+	function count_participants($event_id){
+		$sql = "SELECT count(*) AS c FROM cal_participants WHERE event_id='".$this->escape($event_id)."'";
+		$this->query($sql);
+		$r = $this->next_record();
+		return intval($r['c']);
+	}
+
 	function set_default_calendar($user_id, $calendar_id) {
 		$sql = "UPDATE cal_settings SET default_cal_id='".$this->escape($calendar_id)."' WHERE user_id='".intval($user_id)."'";
 		return $this->query($sql);
@@ -3061,4 +3068,68 @@ class calendar extends db {
 		return false;
 	}
 
+
+
+	function send_invitation($event, $insert=true){
+		global $GO_CONFIG, $GO_MODULES, $lang, $GO_LANGUAGE;
+
+		$GO_LANGUAGE->require_language_file('calendar');
+		
+		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+
+		$RFC822 = new RFC822();
+		//$event['id']=empty($event['resource_event_id']) ? $event_id : $event['resource_event_id'];
+		//go_debug($event['id']);
+		$this->clear_event_status($event['id'], $_SESSION['GO_SESSION']['email']);
+
+		$participants=array();
+		$this->get_participants($event['id']);
+		while($this->next_record()) {
+
+			if($this->f('status') !=1 || $this->f('email')!=$_SESSION['GO_SESSION']['email']) {
+				$participants[] = $RFC822->write_address($this->f('name'), $this->f('email'));
+			}
+		}
+
+		//go_debug($participants);
+		if(count($participants))
+		{
+			$subject = ($insert) ? $lang['calendar']['invitation'] : $lang['calendar']['invitation_update'];
+
+			// ics attachment
+			require_once ($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
+			$ical = new go_ical();
+			$ical->dont_use_quoted_printable = true;
+
+			$ics_string = $ical->export_event($event['id']);
+
+			$swift = new GoSwift(
+					implode(',', $participants),
+					$subject.': '.$event['name']);
+
+			require_once ($GO_MODULES->modules['calendar']['class_path'].'Replacements.class.inc.php');
+
+			//Load the plugin with the extended replacements class
+			$swift->registerPlugin(new Swift_Plugins_DecoratorPlugin(new Cal_Event_Replacements()));
+
+			$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
+					$this->event_to_html($event).
+					'<p>'.$lang['calendar']['acccept_question'].'</p>'.
+					'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event['id'].'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
+					'&nbsp;|&nbsp;'.
+					'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event['id'].'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
+
+			$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
+			//$name = File::strip_invalid_chars($event['name']).'.ics';
+			//$swift->message->attach(Swift_Attachment::newInstance($ics_string, $name, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
+
+			$swift->set_from($_SESSION['GO_SESSION']['email'], $_SESSION['GO_SESSION']['name']);
+
+			if(!$swift->sendmail(true)) {
+				throw new Exception('Could not send invitation');
+			}
+		}
+	}
+
 }
+
