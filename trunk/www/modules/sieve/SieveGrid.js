@@ -15,7 +15,7 @@ GO.sieve.SieveGrid = function(config){
 	
 	this.selectScript = new Ext.form.ComboBox({
 		hiddenName:'selectScript',
-		valueField:'name',
+		valueField:'value',
 		displayField:'name',
 		store: new GO.data.JsonStore({
 			url:GO.settings.modules.sieve.url+'fileIO.php',
@@ -23,7 +23,7 @@ GO.sieve.SieveGrid = function(config){
 				task: 'get_sieve_scripts',
 				account_id: 0
 			},
-			fields: ['name'],
+			fields: ['name', 'value'],
 			root: 'results'
 		}),
 		mode:'local',
@@ -34,12 +34,17 @@ GO.sieve.SieveGrid = function(config){
 		allowBlank:false,
 		width:140
 	});
-	
+
+	this.selectScript.on('select', function(combo, record){
+		this.setSelectedScript(record.json.value);
+		this.store.reload();
+	},this);
+
 	if(!config)
 	{
 		config = {};
 	}
-	config.title=GO.sieve.lang.activatedrules;
+	config.title=GO.sieve.lang.sieverules;
 	config.layout='fit';
 	config.region='center';
 	config.autoScroll=true;
@@ -62,26 +67,28 @@ GO.sieve.SieveGrid = function(config){
 	]
 	};
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.sieve.url+ 'fileIO.php',
-	    baseParams: {
-	    	task: 'get_sieve_rules'
-	    	},
-	    root: 'results',
-	    id: 'index',
-	    totalProperty:'total',
-	    fields: fields.fields,
-	    remoteSort: true
+		url: GO.settings.modules.sieve.url+ 'fileIO.php',
+		baseParams: {
+			task: 'get_sieve_rules',
+			script_name: ''
+			},
+		root: 'results',
+		id: 'index',
+		totalProperty:'total',
+		fields: fields.fields,
+		remoteSort: true
 	});
 	config.paging=true;
 	var columnModel =  new Ext.grid.ColumnModel({
 		defaults:{
-			sortable:true
+			sortable:true,
+			autoFill: true,
+			forceFit: true
 		},
 		columns:fields.columns
 	});
 
 	config.cm=columnModel;
-	//config.disabled=true;
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
 		forceFit: true,
@@ -94,7 +101,7 @@ GO.sieve.SieveGrid = function(config){
 	this.sieveDialog.on('save', function(){
 			this.store.reload();
 		}, this);
-
+		
 	config.tbar=[{
 			iconCls: 'btn-add',
 			text: GO.lang['cmdAdd'],
@@ -114,10 +121,9 @@ GO.sieve.SieveGrid = function(config){
 		},
 		this.selectScript,{
 			iconCls: 'btn-delete',
-			text: 'activate',
+			text: GO.sieve.lang.activate,
 			cls: 'x-btn-text-icon',
 			handler: function(){
-				// TODO: Activeer het huidige script in de combobox
 				Ext.Ajax.request({
 					 url: GO.settings.modules.sieve.url+ 'fileIO.php',
 					 scope:this,
@@ -128,6 +134,8 @@ GO.sieve.SieveGrid = function(config){
 					 },
 					 success: function(){
 						 this.selectScript.store.reload();
+						 this.setSelectedScript();
+						 this.selectScript.setRawValue(this.selectScript.getRawValue() + ' ('+GO.sieve.lang.active+')');
 						 this.store.reload();
 					 },
 					 failure: function(){
@@ -161,6 +169,11 @@ Ext.extend(GO.sieve.SieveGrid, GO.grid.GridPanel,{
 	setAccountId : function(account_id){
 		this.store.baseParams.account_id = account_id;
 		this.selectScript.store.baseParams.account_id = account_id;
+	},
+	setSelectedScript : function(name){
+		if(name)
+			this.store.baseParams.script_name = name;
+		else
+			this.store.baseParams.script_name = this.selectScript.getValue();
 	}
-
 });

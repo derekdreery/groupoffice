@@ -21,39 +21,159 @@ GO.sieve.TestsGrid = function(config){
 	config.style='margin: 5px;';
 	config.border=true;
 	var fields ={
-		fields:['test','not','type','arg','arg1','arg2'],
-		columns:[{
-			header: GO.sieve.lang.test,
-			dataIndex: 'test'			
-		},{
-			header: GO.sieve.lang.not,
-			dataIndex: 'not'
-		},{
-			header: GO.sieve.lang.type,
-			dataIndex: 'type'
-		},{
-			header: GO.sieve.lang.arg,
-			dataIndex: 'arg'
-		},{
-			header: GO.sieve.lang.arg1,
-			dataIndex: 'arg1'
-		}
+		fields:['test','not','type','arg','arg1','arg2','text'],
+		header: false,
+		columns:[
+//		{
+//			header: GO.sieve.lang.test,
+//			dataIndex: 'test'
+//		},{
+//			header: GO.sieve.lang.not,
+//			dataIndex: 'not'
+//		},{
+//			header: GO.sieve.lang.type,
+//			dataIndex: 'type'
+//		},{
+//			header: GO.sieve.lang.arg,
+//			dataIndex: 'arg'
+//		},{
+//			header: GO.sieve.lang.arg1,
+//			dataIndex: 'arg1'
+//		},{
+//			header: GO.sieve.lang.arg2,
+//			dataIndex: 'arg2'
+//		},
+		{
+			header:false,
+			dataIndex:'text',
+			renderer:function(value, metaData, record, rowIndex, colIndex, store){
 
-	/*
-	  {
-			header: GO.sieve.lang.arg1,
-			dataIndex: 'arg1',
-			renderer: function(v){
-				var r = GO.sieve.cmbFieldStore.getById(v);
-				return r ? r.get('field') : v;
+				var txtToDispxlay = '';
+
+				switch(record.data.test)
+				{
+					case 'header':
+						if(record.data.type == 'contains')
+						{
+							if(record.data.not)
+							{
+								if(record.data.arg1 == 'Subject')
+								{
+									txtToDisplay = 'Onderwerp bevat geen '+record.data.arg2;
+								}
+								else if(record.data.arg1 == 'From')
+								{
+									txtToDisplay = 'Afzender bevat geen '+record.data.arg2;
+								}
+								else if(record.data.arg1 == 'To')
+								{
+									txtToDisplay = 'Ontvanger bevat geen '+record.data.arg2;
+								}
+							}
+							else
+							{
+								if(record.data.arg1 == 'Subject')
+								{
+									txtToDisplay = 'Onderwerp bevat '+record.data.arg2;
+								}
+								else if(record.data.arg1 == 'From')
+								{
+									txtToDisplay = 'Afzender bevat '+record.data.arg2;
+								}
+								else if(record.data.arg1 == 'To')
+								{
+									txtToDisplay = 'Ontvanger bevat '+record.data.arg2;
+								}
+							}
+						}
+						else if(record.data.type == 'is')
+						{
+							if(record.data.not)
+							{
+								if(record.data.arg1 == 'Subject')
+								{
+									txtToDisplay = 'Onderwerp is niet gelijk aan '+record.data.arg2;
+								}
+								else if(record.data.arg1 == 'From')
+								{
+									txtToDisplay = 'Afzender is niet gelijk aan '+record.data.arg2;
+								}
+								else if(record.data.arg1 == 'To')
+								{
+									txtToDisplay = 'Ontvanger is niet gelijk aan '+record.data.arg2;
+								}
+							}
+							else
+							{
+								if(record.data.arg1 == 'Subject')
+								{
+									txtToDisplay = 'Onderwerp is gelijk aan '+record.data.arg2;
+								}
+								else if(record.data.arg1 == 'From')
+								{
+									txtToDisplay = 'Afzender is gelijk aan '+record.data.arg2;
+								}
+								else if(record.data.arg1 == 'To')
+								{
+									txtToDisplay = 'Ontvanger is gelijk aan '+record.data.arg2;
+								}
+							}
+						}
+						break;
+					case 'exists':
+						if(record.data.not)
+						{
+							if(record.data.arg == 'Subject')
+							{
+								txtToDisplay = 'Onderwerp bestaat niet';
+							}
+							else if(record.data.arg == 'From')
+							{
+								txtToDisplay = 'Afzender bestaat niet';
+							}
+							else if(record.data.arg == 'To')
+							{
+								txtToDisplay = 'Ontvanger bestaat niet';
+							}
+						}
+						else
+						{
+							if(record.data.arg == 'Subject')
+							{
+								txtToDisplay = 'Onderwerp bestaat';
+							}
+							else if(record.data.arg == 'From')
+							{
+								txtToDisplay = 'Afzender bestaat';
+							}
+							else if(record.data.arg == 'To')
+							{
+								txtToDisplay = 'Ontvanger bestaat';
+							}
+						}
+						break;
+					case 'true':	
+						txtToDisplay = 'Alle';
+						break;
+					case 'size':
+						if(record.data.type == 'under')
+						{
+							txtToDisplay = 'Grootte is kleiner dan '+record.data.arg;
+						}
+						else
+						{
+							txtToDisplay = 'Grootte is groter dan '+record.data.arg;
+						}
+						break;
+					default:
+						txtToDisplay = 'Fout in weergeven van test';
+						break;
+				}
+
+				return txtToDisplay;
 			}
 		}
-	*/
 
-		,{
-			header: GO.sieve.lang.arg2,
-			dataIndex: 'arg2'
-		}
 	]
 	};
 	config.store = new GO.data.JsonStore({
@@ -68,14 +188,10 @@ GO.sieve.TestsGrid = function(config){
 	    remoteSort: true
 	});
 	var columnModel =  new Ext.grid.ColumnModel({
-		defaults:{
-			sortable:true
-		},
 		columns:fields.columns
 	});
-
+	config.cls = 'go-grid3-hide-headers';
 	config.cm=columnModel;
-	//config.disabled=true;
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
 		forceFit: true,

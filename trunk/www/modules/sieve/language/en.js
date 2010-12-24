@@ -32,6 +32,8 @@ GO.sieve.lang.ruletext = 'For incoming emails';
 GO.sieve.lang.actiontext = '...apply the following actions';
 
 GO.sieve.lang.clear = 'Clear';
+GO.sieve.lang.active = 'active';
+GO.sieve.lang.activate = 'activate';
 
 GO.sieve.lang.days = 'days';
 GO.sieve.lang.addresses = 'addresses';
