@@ -274,10 +274,6 @@ Ext.extend(GO.sieve.ActionPanel, Ext.FormPanel,{
 			recVal = record.data.value;
 		}
 
-		console.log(record.data);
-  	console.log(record.data);
-		console.log(recVal);
-
 		switch(recVal)
 		{
 			case 'fileinto':

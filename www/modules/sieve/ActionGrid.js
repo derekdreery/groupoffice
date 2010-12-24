@@ -19,27 +19,79 @@ GO.sieve.ActionGrid = function(config){
 	config.height=180;
 	config.style='margin: 5px;';
 	config.border=true;
-	config.autoScroll=true;
+	config.cls = 'go-grid3-hide-headers';
 	var fields ={
-		fields:['type','copy','target','days','addresses','reason'],
-		columns:[{
-			header: GO.sieve.lang.type,
-			dataIndex: 'type'
-		},{
-			header: GO.sieve.lang.copy,
-			dataIndex: 'copy'
-		},{
-			header: GO.sieve.lang.target,
-			dataIndex: 'target'
-		},{
-			header: GO.sieve.lang.days,
-			dataIndex: 'days'
-		},{
-			header: GO.sieve.lang.addresses,
-			dataIndex: 'addresses'
-		},{
-			header: GO.sieve.lang.reason,
-			dataIndex: 'reason'
+		fields:['type','copy','target','days','addresses','reason','text'],
+		header: false,
+		columns:[
+//		{
+//			header: GO.sieve.lang.type,
+//			dataIndex: 'type'
+//		},{
+//			header: GO.sieve.lang.copy,
+//			dataIndex: 'copy'
+//		},{
+//			header: GO.sieve.lang.target,
+//			dataIndex: 'target'
+//		},{
+//			header: GO.sieve.lang.days,
+//			dataIndex: 'days'
+//		},{
+//			header: GO.sieve.lang.addresses,
+//			dataIndex: 'addresses'
+//		},{
+//			header: GO.sieve.lang.reason,
+//			dataIndex: 'reason'
+//		},
+		{
+			header:false,
+			dataIndex:'text',
+			renderer:function(value, metaData, record, rowIndex, colIndex, store){
+				
+				var txtToDisplay = '';
+
+				switch(record.data.type)
+				{
+					case 'fileinto':
+						if(record.data.copy)
+						{
+							txtToDisplay = 'Kopieer naar '+record.data.target;
+						}
+						else
+						{
+							txtToDisplay = 'Verplaats naar '+record.data.target;
+						}
+						break;
+					case 'redirect':
+						if(record.data.copy)
+						{
+							txtToDisplay = 'Stuur kopie door naar '+record.data.target;
+						}
+						else
+						{
+							txtToDisplay = 'Stuur door naar '+record.data.target;
+						}
+						break;
+					case 'vacation':
+							txtToDisplay = 'Vakantie: Stuur bericht iedere '+record.data.days+ ' dag(en) en naar de adres(sen) '+record.data.addresses+ ' Bericht: '+record.data.reason;
+						break;
+					case 'reject':
+						txtToDisplay = 'Weigeren met bericht: '+record.data.target;
+						break;
+					case 'discard':
+						txtToDisplay = 'Verwijderen';
+						break;
+					case 'stop':
+						txtToDisplay = 'Stop';
+						break;
+					default:
+						txtToDisplay = 'Fout in weergeven van test';
+						break;
+				}
+				
+				return txtToDisplay;
+
+			}
 		}]
 	};
 	config.store = new GO.data.JsonStore({
@@ -54,9 +106,6 @@ GO.sieve.ActionGrid = function(config){
 	    remoteSort: true
 	});
 	var columnModel =  new Ext.grid.ColumnModel({
-		defaults:{
-			sortable:true
-		},
 		columns:fields.columns
 	});
 
