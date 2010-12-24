@@ -26,9 +26,13 @@ class String {
 
 	public static function get_first_letters($phrase) {
 		$words = explode(' ',$phrase);
+
+		$func = function_exists('mb_substr') ? 'mb_substr' : 'substr';
+		
 		for ($i=0;$i<count($words);$i++) {
-			$words[$i] = $words[$i][0];
+			$words[$i] = $func($words[$i],0,1);
 		}
+		
 		return implode('',$words);
 	}
 
