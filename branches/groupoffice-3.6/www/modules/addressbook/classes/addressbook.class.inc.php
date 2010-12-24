@@ -714,6 +714,18 @@ class addressbook extends db {
 
 	}
 
+	/**
+	 *
+	 * Function used to lookup writable contacts
+	 *
+	 * @param <type> $user_id
+	 * @param string $query
+	 * @param <type> $start
+	 * @param <type> $offset
+	 * @param <type> $sort_index
+	 * @param <type> $sort_order
+	 * @return <type>
+	 */
 
 	function search_contacts_email($user_id, $query, $start=0, $offset=0, $sort_index='name', $sort_order='ASC'){
 
@@ -730,15 +742,20 @@ class addressbook extends db {
 		if($query!='')
 			$query = '%'.$this->escape(str_replace(' ','%', $query)).'%';
 
-		$conditions = "WHERE c.email!='' ";
+		$conditions = "WHERE ";
 
 
-		$user_ab = $this->get_user_addressbook_ids($user_id);
+		$user_ab = array();//$this->get_user_addressbook_ids($user_id);
+
+		$this->get_writable_addressbooks($user_id);
+		while($r=$this->next_record()){
+			$user_ab[]=$r['id'];
+		}
 
 		if(count($user_ab) > 1) {
-			$conditions .= "AND c.addressbook_id IN (".implode(",",$user_ab).") ";
+			$conditions .= " c.addressbook_id IN (".implode(",",$user_ab).") ";
 		}elseif(count($user_ab)==1) {
-			$conditions .= "AND c.addressbook_id=".$user_ab[0]." ";
+			$conditions .= " c.addressbook_id=".$user_ab[0]." ";
 		}else {
 			return false;
 		}
