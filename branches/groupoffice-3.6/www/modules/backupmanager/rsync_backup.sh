@@ -51,7 +51,7 @@ function exitBackup {
 #EXCLUDE_FILE="/root/scripts/exclude"
 
 # Comment out the following line to disable verbose output
-#VERBOSE="-vv"
+#VERBOSE="-v"
 
 #######################################
 ########DO_NOT_EDIT_BELOW_THIS_POINT#########
@@ -121,8 +121,8 @@ done
 if [ $OLDEST_BACKUP ]; then
 	# Set oldest backup to current one
 	echo Deleting $OLDEST_BACKUP
-	ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "find $OLDEST_BACKUP -type d -exec chmod +xw {} \;"
-	ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "rm -Rf $OLDEST_BACKUP"
+	#ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "find $OLDEST_BACKUP -type d -exec chmod +xw {} \;"
+	sshc -i $RKEY $RUSER@$RMACHINE -p $RPORT "rm -Rf $OLDEST_BACKUP"
 fi
 
 ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "mkdir $RTARGET/$BACKUP_DATE"
@@ -130,7 +130,7 @@ ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "mkdir $RTARGET/$BACKUP_DATE"
 # Update current backup using hard links from the most recent backup
 if [ $NEWEST_BACKUP ]; then
 	echo Copying all from $NEWEST_BACKUP to $RTARGET/$BACKUP_DATE
-	ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "cp -al $NEWEST_BACKUP. $RTARGET/$BACKUP_DATE"
+	ssh -o ServerAliveInterval=15 -o ServerAliveCountMax=5 -i $RKEY $RUSER@$RMACHINE -p $RPORT "cp -al $NEWEST_BACKUP. $RTARGET/$BACKUP_DATE"
 fi
 
 #### END ROTATION SECTION ####
@@ -166,7 +166,7 @@ for source in $SOURCES; do
 		ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "mkdir -p $RTARGET/$BACKUP_DATE/$source"
 	fi
 	#-rl was -a
-	rsync $VERBOSE $EXCLUDE -a --delete -e "ssh -i $RKEY -p$RPORT" $source/ $RUSER@$RMACHINE:$RTARGET/$BACKUP_DATE/$source/
+	rsync $VERBOSE $EXCLUDE -a --delete -e "ssh -i $RKEY -p$RPORT -o ServerAliveInterval=15 -o ServerAliveCountMax=5" $source/ $RUSER@$RMACHINE:$RTARGET/$BACKUP_DATE/$source/
 done
 
 #ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "chmod -R 777 $RTARGET/$BACKUP_DATE"
