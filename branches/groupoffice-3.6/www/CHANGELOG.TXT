@@ -1,3 +1,7 @@
+22/12/2010 3.6.14
+- Unicode bug with inititals in the calendar
+- Send invitation updates when changing events in grid.
+
 22/12/2010 3.6.13
 - Install bug in servermanager
 
