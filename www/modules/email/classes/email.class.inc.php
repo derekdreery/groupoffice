@@ -959,16 +959,16 @@ class email extends db {
 	/*
 	 Gets the parent_id from a folder path
 	*/
-	function get_parent_id($account, $path, $delimiter) {
+	function get_parent($account, $path, $delimiter) {
 		$mbroot = $account['mbroot'];
 
 		if ($pos = strrpos($path, $delimiter)) {
 			$parent_name = substr($path, 0, $pos);
 			if ($parent_folder = $this->get_folder($account['id'], $parent_name)) {
 				if($this->is_mbroot($parent_folder['name'],$delimiter, $account['mbroot'])) {
-					return 0;
+					return array('id'=>0);
 				}else {
-					return $parent_folder['id'];
+					return $parent_folder;
 				}
 			}
 		}else {
@@ -1065,14 +1065,26 @@ class email extends db {
 			$subscribed_names[]=$mailbox['name'];
 		}
 		
-		foreach($mailboxes as $mailbox) {			
+		foreach($mailboxes as $mailbox) {
+			go_debug($mailbox);
 			$mailbox_names[] = $mailbox['name'];
 			$folder['account_id'] = $account['id'];
-			$folder['parent_id'] = $this->get_parent_id($account, $mailbox['name'], $mailbox['delimiter']);
+			$parent = $this->get_parent($account, $mailbox['name'], $mailbox['delimiter']);
+			$folder['parent_id'] = $parent['id'];
 			$folder['can_have_children'] = $mailbox['can_have_children'];
 			$folder['name'] = $mailbox['name'];
 
 			$folder['subscribed']=in_array($mailbox['name'], $subscribed_names) ? '1' : '0';
+
+			//sometimes folders are unsubscribable but children are subscribed.
+			//in that case subscribe it in the GO database
+			if(!empty($parent['id']) && $parent['subscribed']=='0')
+			{
+				$p['id']=$parent['id'];
+				$p['subscribed']='1';
+				$this->update_folder($p);
+			}
+
 			$folder['delimiter'] = $mailbox['delimiter'];
 
 			switch($folder['name']) {
