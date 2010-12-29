@@ -1101,7 +1101,7 @@ class GO_CONFIG {
 		//example.
 		if(isset($_SERVER["HTTP_HOST"])) {
 			if(!isset($_SESSION['GO_SESSION']['full_url']) && isset($_SERVER["HTTP_HOST"])) {
-				$https = isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1");
+				$https = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == "1")) || !empty($_SERVER["HTTP_X_SSL_REQUEST"]);
 				$_SESSION['GO_SESSION']['full_url'] = 'http';
 				if ($https) {
 					$_SESSION['GO_SESSION']['full_url'] .= "s";
