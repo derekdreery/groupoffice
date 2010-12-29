@@ -7,10 +7,11 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: fileIO.php 0000 2010-12-15 16:08:54Z wsmits $
+ * @version $Id: fileIO.php 0000 2010-12-29 9:16:54 wsmits $
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
+
 require('../../Group-Office.php');
 require_once($GO_MODULES->modules['sieve']['class_path']."sieve.class.inc.php");
 require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
@@ -176,12 +177,8 @@ try
 
 					foreach($keys as $key)
 					{
-
 						if($sieve->script->delete_rule($key))
-						{
-							//print_r($sieve->error());
 							$sieve->save();
-						}
 					}
 					$response['deleteSuccess']=true;
 				}
@@ -192,7 +189,6 @@ try
 					$response['deleteFeedback']=$e->getMessage();
 				}
 			}
-
 
 			$index=0;
 
@@ -209,8 +205,6 @@ try
 			}
 
 			$response['success']=true;
-
-			
 			break;
 		
 		case 'save_sieve_rules':
@@ -222,7 +216,6 @@ try
 			$script				=		$_REQUEST['script_name'];
 			$join					=		$_REQUEST['join']; // allof, anyof, any
 
-			//print_r($join);
 			$account = $email->get_account($account_id);
 			$account = $email->decrypt_account($account);
 			if(!$sieve->connect($account['username'],
@@ -259,8 +252,17 @@ try
 			else
 			{
 				$rule['join'] = '';
+				if($rule['tests'][0]['test'] == 'true' &&
+					 $rule['tests'][0]['not'] == '' &&
+					 $rule['tests'][0]['type'] == '' &&
+					 $rule['tests'][0]['arg'] == '' &&
+					 $rule['tests'][0]['arg1'] == '' &&
+					 $rule['tests'][0]['arg2'] == '')
+				{
+					// Remove the first item from the array if it is an empty one where only TEST == true
+					array_shift($rule['tests']);
+				}
 			}
-
 			$response['results'] = array();
 
 			// Het script laden
@@ -268,7 +270,9 @@ try
 					
 			// Het script ophalen en terugzetten
 			if($script_index>-1 && isset($sieve->script->content[$script_index]))
+			{
 				$sieve->script->update_rule($script_index,$rule);
+			}
 			else
 				$sieve->script->add_rule($rule);
 
@@ -277,7 +281,30 @@ try
 				$response['success'] = true;
 			else
 				$response['success'] = false;
+			break;
 
+		case 'check_is_supported':
+			$account_id		=		$_REQUEST['account_id'];
+			$sieve_enabled = true;
+
+			$account = $email->get_account($account_id);
+			$account = $email->decrypt_account($account);
+			if(!$sieve->connect($account['username'],
+							$account['password'],
+							$account['host'],
+							2000,
+							null,
+							false,
+							array(),
+							true))
+			{
+				$sieve_enabled = false;
+			}
+
+			if($sieve_enabled)
+				$response['sieve_supported']=true;
+			else
+				$response['sieve_supported']=false;
 			break;
 	}
 }
@@ -287,5 +314,6 @@ catch(Exception $e)
 	$response['feedback']=$e->getMessage();
 	$response['success']=false;
 }
+
 echo json_encode($response);
 ?>

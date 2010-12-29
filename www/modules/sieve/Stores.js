@@ -1,3 +1,16 @@
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: Stores.js 0000 2010-12-29 09:13:00 wsmits $
+ * @copyright Copyright Intermesh
+ * @author Wesley Smits <wsmits@intermesh.nl>
+ */
+
 GO.sieve.cmbFieldStore = new Ext.data.ArrayStore({
 	idIndex: 1,
 	fields: ['field','value'],
@@ -6,7 +19,6 @@ GO.sieve.cmbFieldStore = new Ext.data.ArrayStore({
 	[GO.sieve.lang.from, 'From'],
 	[GO.sieve.lang.to, 'To'],
 	[GO.sieve.lang.size, 'size'],
-	//['...', 'Custom'],
 	]
 });
 

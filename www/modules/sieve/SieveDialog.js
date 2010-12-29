@@ -125,7 +125,10 @@ GO.sieve.SieveDialog = function(config) {
 	config.buttons = [{
 		text : GO.lang['cmdOk'],
 		handler : function() {
-			this.saveAll();
+			if(this.actionGrid.store.getCount() == 0 || this.testsGrid.store.getCount() == 0)
+				alert('Een of beide grids zijn leeg.');
+			else
+				this.saveAll();
 		},
 		scope : this
 	}, {
@@ -135,7 +138,9 @@ GO.sieve.SieveDialog = function(config) {
 		},
 		scope : this
 	}];
+
 	GO.sieve.SieveDialog.superclass.constructor.call(this, config);
+	
 	this.addEvents({
 		'save' : true
 	});
@@ -156,6 +161,7 @@ Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 					this.formPanel.load({
 						success:function(form, action)
 						{
+							this.rgMethod.setValue(action.result.data.join);
 							this.actionGrid.store.loadData(action.result);
 							this.testsGrid.store.loadData(action.result);
 						},
@@ -168,7 +174,7 @@ Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 			}
 			else
 			{
-				this.title = 'nieuwe sieve';
+				this.title = GO.sieve.lang.newsieverule;
 				this.resetForms();
 				this.resetGrids();
 				this.rgMethod.setValue('anyof');
@@ -182,13 +188,17 @@ Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 				'tests' : Ext.encode(this.testsGrid.getGridData()),
 				'actions' : Ext.encode(this.actionGrid.getGridData())
 			},
-			callback : function(options, success, response) {
-				if (!success) {
-					Ext.MessageBox.alert(GO.lang.strError,
-							response.result.feedback);
-				}
-				else
+			success : function(form, action) {
 					this.hide();
+					this.body.unmask();
+			},
+			failure: function(form, action) {
+				if(action.failureType == 'client')
+				{					
+					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
+				} else {
+					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
+				}
 				this.body.unmask();
 			},
 			scope : this
