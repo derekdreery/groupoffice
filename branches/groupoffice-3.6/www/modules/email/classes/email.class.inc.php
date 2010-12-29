@@ -861,7 +861,7 @@ class email extends db {
 
 
 	function update_folder($folder) {
-		return $this->update_row('em_folders','id', $folder);
+		return $this->update_row('em_folders','id', $folder, '', false);
 	}
 
 	function add_folder($folder) {
@@ -870,7 +870,7 @@ class email extends db {
 
 		$folder['id'] = $this->nextid("em_folders");
 		if ($folder['id'] > 0) {
-			if ($this->insert_row('em_folders', $folder)) {
+			if ($this->insert_row('em_folders', $folder,'',false)) {
 				return $folder['id'];
 			}
 		}
@@ -897,7 +897,7 @@ class email extends db {
 	}
 
 	function get_folder($account_id, $name) {
-		$sql = "SELECT * FROM em_folders WHERE name='".$this->escape($name)."' AND ".
+		$sql = "SELECT * FROM em_folders WHERE name='".$this->escape($name, false)."' AND ".
 						"account_id='".$this->escape($account_id)."'";
 		$this->query($sql);
 		if ($this->next_record(DB_ASSOC)) {
@@ -1065,7 +1065,7 @@ class email extends db {
 			$subscribed_names[]=$mailbox['name'];
 		}
 		
-		foreach($mailboxes as $mailbox) {
+		foreach($mailboxes as $mailbox) {			
 			$mailbox_names[] = $mailbox['name'];
 			$folder['account_id'] = $account['id'];
 			$folder['parent_id'] = $this->get_parent_id($account, $mailbox['name'], $mailbox['delimiter']);
