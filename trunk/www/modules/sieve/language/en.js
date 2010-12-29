@@ -44,6 +44,9 @@ GO.sieve.lang.somefollowingrules = 'die voldoen aan een van de volgende regels';
 GO.sieve.lang.allmessages = 'alle berichten';
 GO.sieve.lang.disablefilter = 'Schakel filter uit';
 
+GO.sieve.lang.newsieverule = 'new sieve rule';
+GO.sieve.lang.checksieveerror = 'Error while checking for sievesupport';
+
 // Stores.js
 GO.sieve.lang.subject = 'onderwerp';
 GO.sieve.lang.from = 'afzender';
@@ -70,3 +73,45 @@ GO.sieve.lang.under = 'Under';
 GO.sieve.lang.over = 'Over';
 
 GO.sieve.lang.disabled = 'Uitgeschakeld';
+
+//Messages in Testsgrid
+GO.sieve.lang.subjectcontainsnot = 'Onderwerp bevat geen';
+GO.sieve.lang.fromcontainsnot = 'Afzender bevat geen';
+GO.sieve.lang.tocontainsnot = 'Ontvanger bevat geen';
+
+GO.sieve.lang.subjectcontains = 'Onderwerp bevat';
+GO.sieve.lang.fromcontains = 'Afzender bevat';
+GO.sieve.lang.tocontains = 'Ontvanger bevat';
+
+GO.sieve.lang.subjectequalsnot = 'Onderwerp is niet gelijk aan';
+GO.sieve.lang.fromequalsnot = 'Afzender is niet gelijk aan';
+GO.sieve.lang.toequalsnot = 'Ontvanger is niet gelijk aan';
+
+GO.sieve.lang.subjectequals = 'Onderwerp is gelijk aan';
+GO.sieve.lang.fromequals = 'Afzender is gelijk aan';
+GO.sieve.lang.toequals = 'Ontvanger is gelijk aan';
+
+GO.sieve.lang.subjectexistsnot = 'Onderwerp bestaat niet';
+GO.sieve.lang.fromexistsnot = 'Afzender bestaat niet';
+GO.sieve.lang.toexistsnot = 'Ontvanger bestaat niet';
+
+GO.sieve.lang.subjectexists = 'Onderwerp bestaat';
+GO.sieve.lang.fromexists = 'Afzender bestaat';
+GO.sieve.lang.toexists = 'Ontvanger bestaat';
+
+GO.sieve.lang.sizesmallerthan = 'Grootte is kleiner dan';
+GO.sieve.lang.sizebiggerthan = 'Grootte is groter dan';
+GO.sieve.lang.errorshowtext = 'Fout in weergeven van test';
+
+//Messages in actionsGrid
+GO.sieve.lang.copyto = 'Kopieer naar';
+GO.sieve.lang.moveto = 'Verplaats naar';
+GO.sieve.lang.sendcopyto = 'Stuur kopie door naar';
+GO.sieve.lang.forwardto = 'Stuur door naar ';
+
+GO.sieve.lang.vacsendevery = 'Vakantie: Stuur bericht iedere';
+GO.sieve.lang.vacdaystoadresses = 'dag(en) en naar de adres(sen)';
+GO.sieve.lang.vacationmessage = 'Bericht:';
+
+GO.sieve.lang.refusewithmesssage = 'Weigeren met bericht:';
+GO.sieve.lang.discard = 'Verwijderen';

@@ -6,7 +6,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: ActionGrid.js 0000 2010-12-16 09:46:17Z wsmits $
+ * @version $Id: ActionGrid.js 0000 2010-12-16 08:57:17 wsmits $
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
@@ -54,63 +54,55 @@ GO.sieve.ActionGrid = function(config){
 				{
 					case 'fileinto':
 						if(record.data.copy)
-						{
-							txtToDisplay = 'Kopieer naar '+record.data.target;
-						}
+							txtToDisplay = GO.sieve.lang.copyto+' '+record.data.target;
 						else
-						{
-							txtToDisplay = 'Verplaats naar '+record.data.target;
-						}
+							txtToDisplay = GO.sieve.lang.moveto+' '+record.data.target;
 						break;
+
 					case 'redirect':
 						if(record.data.copy)
-						{
-							txtToDisplay = 'Stuur kopie door naar '+record.data.target;
-						}
+							txtToDisplay = GO.sieve.lang.sendcopyto+' '+record.data.target;
 						else
-						{
-							txtToDisplay = 'Stuur door naar '+record.data.target;
-						}
+							txtToDisplay = GO.sieve.lang.forwardto+' '+record.data.target;
 						break;
+
 					case 'vacation':
-							txtToDisplay = 'Vakantie: Stuur bericht iedere '+record.data.days+ ' dag(en) en naar de adres(sen) '+record.data.addresses+ ' Bericht: '+record.data.reason;
+							txtToDisplay = GO.sieve.lang.vacsendevery+' '+record.data.days+' '+GO.sieve.lang.vacdaystoadresses+' '+record.data.addresses+' '+GO.sieve.lang.vacationmessage+' '+record.data.reason;
 						break;
+
 					case 'reject':
-						txtToDisplay = 'Weigeren met bericht: '+record.data.target;
+							txtToDisplay = GO.sieve.lang.refusewithmesssage+' '+record.data.target;
 						break;
+
 					case 'discard':
-						txtToDisplay = 'Verwijderen';
+							txtToDisplay = GO.sieve.lang.discard;
 						break;
+
 					case 'stop':
-						txtToDisplay = 'Stop';
+							txtToDisplay = GO.sieve.lang.stop;
 						break;
+						
 					default:
-						txtToDisplay = 'Fout in weergeven van test';
+							txtToDisplay = GO.sieve.lang.errorshowtext;
 						break;
 				}
-				
 				return txtToDisplay;
-
 			}
-		}]
-	};
+		}
+	]};
+
+	var columnModel =  new Ext.grid.ColumnModel({
+		columns:fields.columns
+	});
+
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.sieve.url+ 'fileIO.php',
-	    baseParams: {
-	    	task: 'get_sieve_actions_json'
-	    	},
 	    root: 'actions',
 	    id: 'id',
 	    totalProperty:'total',
 	    fields: fields.fields,
 	    remoteSort: true
 	});
-	var columnModel =  new Ext.grid.ColumnModel({
-		columns:fields.columns
-	});
-
 	config.cm=columnModel;
-	//config.disabled=true;
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
 		forceFit: true,
@@ -118,30 +110,17 @@ GO.sieve.ActionGrid = function(config){
 	});
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
-
 	config.tbar=[{
 			iconCls: 'btn-delete',
 			text: GO.lang['cmdDelete'],
 			cls: 'x-btn-text-icon',
-			handler: function(){
-			this.store.remove(this.getSelectionModel().getSelections());
-			},
-			scope: this
+			handler: function(){ this.deleteSelected();},
+				scope: this
 		}];
 
 	GO.sieve.SieveGrid.superclass.constructor.call(this, config);
 };
 
 Ext.extend(GO.sieve.ActionGrid, GO.grid.GridPanel,{
-
-	setAccountId : function(account_id){
-		this.store.baseParams.account_id = account_id;
-	},
-	setScriptName : function(name){
-		this.store.baseParams.script_name = name;
-	},
-	setScriptIndex : function(index){
-		this.store.baseParams.script_index = index;
-	}
-
+	deleteSelected : function(){this.store.remove(this.getSelectionModel().getSelections());}
 });

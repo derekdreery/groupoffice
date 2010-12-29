@@ -6,7 +6,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: TestsPanel.php 0000 2010-12-16 09:40:00Z wsmits $
+ * @version $Id: TestsPanel.php 0000 2010-12-29 09:08:00 wsmits $
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
@@ -74,19 +74,18 @@ config = config || {};
 		width:150,
 		hidden: true,
 		items: [
-				{
-					items:{boxLabel: 'B', name: 'size', inputValue: 'B', style: 'margin-left: 4px; margin-right: -2px;'}
-				},
-				{
-					items:{boxLabel: 'KB', name: 'size', inputValue: 'K', style: 'margin-left: 4px; margin-right: -2px;', checked: true}
-				},
-				{
-					items:{boxLabel: 'MB', name: 'size', inputValue: 'M', style: 'margin-left: 4px; margin-right: -2px;'}
-				},
-				{
-					items:{boxLabel: 'GB', name: 'size', inputValue: 'G', style: 'margin-left: 4px; margin-right: -2px;'}
-				}
-		],
+		{
+			items:{boxLabel: 'B', name: 'size', inputValue: 'B', style: 'margin-left: 4px; margin-right: -2px;'}
+		},
+		{
+			items:{boxLabel: 'KB', name: 'size', inputValue: 'K', style: 'margin-left: 4px; margin-right: -2px;', checked: true}
+		},
+		{
+			items:{boxLabel: 'MB', name: 'size', inputValue: 'M', style: 'margin-left: 4px; margin-right: -2px;'}
+		},
+		{
+			items:{boxLabel: 'GB', name: 'size', inputValue: 'G', style: 'margin-left: 4px; margin-right: -2px;'}
+		}],
 		hideLabel:true
 	})
 
@@ -125,7 +124,6 @@ config = config || {};
 		text: GO.lang.cmdAdd,
 		handler : function() {
 			// Build up the data before adding the data to the grid.
-
 			var _test = '';
 			var _not = true;
 			var _type = '';
@@ -145,62 +143,45 @@ config = config || {};
 					_test = 'size';
 					_not = false;
 					_type	= this.cmbUnderOver.getValue();
-					if(this.rgSize.getValue().inputValue == 'B')
-					{
-						_arg = this.txtCondition.getValue();
-					}
-					else
-					{
-						_arg = this.txtCondition.getValue() + this.rgSize.getValue().inputValue;
-					}
 					_arg1 = '';
 					_arg2 = '';
+					
+					if(this.rgSize.getValue().inputValue == 'B')
+						_arg = this.txtCondition.getValue();
+					else
+						_arg = this.txtCondition.getValue() + this.rgSize.getValue().inputValue;
 				}
 				else
 				{
 					if(this.cmbOperator.getValue() == 'exists' || this.cmbOperator.getValue() == 'notexists')
 					{
 						_test = 'exists';
-						
-						if(this.cmbOperator.getValue() == 'notexists')
-						{
-							_not = true;
-						}
-						else
-						{
-							_not = false;
-						}
-
 						_type = '';
 						_arg = this.cmbField.getValue();
 						_arg1 = '';
 						_arg2 = '';
+						
+						if(this.cmbOperator.getValue() == 'notexists')
+							_not = true;
+						else
+							_not = false;
 					}
 					else
 					{
 						_test = 'header';
-
-						if(this.cmbOperator.getValue() == 'notcontains' || this.cmbOperator.getValue() == 'notis')
-						{
-							_not = true;
-						}
-						else
-						{
-							_not = false;
-						}
-
-						if(this.cmbOperator.getValue() == 'contains' ||this.cmbOperator.getValue() == 'notcontains')
-						{
-							_type = 'contains';
-						}
-						else if(this.cmbOperator.getValue() == 'is' ||this.cmbOperator.getValue() == 'notis')
-						{
-							_type = 'is';
-						}
-
 						_arg = '';
 						_arg1 = this.cmbField.getValue();
 						_arg2 = this.txtCondition.getValue();
+
+						if(this.cmbOperator.getValue() == 'notcontains' || this.cmbOperator.getValue() == 'notis')
+							_not = true;
+						else
+							_not = false;
+
+						if(this.cmbOperator.getValue() == 'contains' ||this.cmbOperator.getValue() == 'notcontains')
+							_type = 'contains';
+						else if(this.cmbOperator.getValue() == 'is' ||this.cmbOperator.getValue() == 'notis')
+							_type = 'is';
 					}
 				}
 				
@@ -216,8 +197,9 @@ config = config || {};
 
 				if(this.index==-1){
 					record = new rule_add(values)
-					this.grid.store.insert(0, record);
-				}else
+					this.grid.store.insert( this.grid.store.getCount(), record);
+				}
+				else
 				{
 					record = this.grid.store.getAt(this.index);
 					Ext.apply(record.data,values);
@@ -239,7 +221,6 @@ config = config || {};
 	})
 
 	config.bodyStyle='padding:5px';
-	//config.title=GO.sieve.lang.rules;
 	config.border=false;
 	config.autoHeight=true;
 	config.region='center';
@@ -270,10 +251,8 @@ config = config || {};
 }
 
 Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
-	
 	index : -1,
 	grid : false,
-
 
 	setFormValues : function (record,index){
 		this.index=typeof(index)=='undefined' ? -1 : index;
@@ -281,7 +260,6 @@ Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
 
 		if(record.data.test == 'size')
 		{
-
 			this.cmbField.setValue(record.data.test);
 			this.cmbUnderOver.setValue(record.data.type);
 
@@ -298,15 +276,10 @@ Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
 			this.rgSize.setValue(last);
 		}
 
-
 		if(record.data.type == 'contains' && record.data.not == true)
-		{
 			this.cmbOperator.setValue('notcontains');
-		}
 		else if(record.data.type == 'is' && record.data.not == true)
-		{
 			this.cmbOperator.setValue('notis');
-		}
 		else if(record.data.test == 'exists' && record.data.not == true)
 		{
 			this.cmbOperator.setValue('notexists');
@@ -321,18 +294,14 @@ Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
 		this.setVisibleFields();
 		this.btnAddRule.setText(GO.lang.cmdEdit);
 	},
-
 	toggleCondition : function(){
 		var type = this.cmbOperator.getValue();
 
-		if(this.cmbField.getValue() != 'size' &&  (type=='exists' || type=='notexists')){
+		if(this.cmbField.getValue() != 'size' &&  (type=='exists' || type=='notexists'))
 			this.txtCondition.hide();
-		}else
-		{
+		else
 			this.txtCondition.show();
-		}
 	},
-	
 	setVisibleFields : function(){
 
 		this.toggleCondition();
@@ -344,23 +313,25 @@ Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
 				this.cmbUnderOver.show();
 				this.rgSize.show();				
 				break;
+
 			case 'From':
 				this.cmbOperator.show();
 				this.cmbUnderOver.hide();
 				this.rgSize.hide();
 				break;
+
 			case 'To':
 				this.cmbOperator.show();
 				this.cmbUnderOver.hide();
 				this.rgSize.hide();				
 				break;
+				
 			case 'Subject':
 				this.cmbOperator.show();
 				this.cmbUnderOver.hide();
 				this.rgSize.hide();
 				break;
 		}
-
 		this.doLayout();
 	},
 	onShow : function(){
@@ -372,5 +343,4 @@ Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
 		this.setVisibleFields();
 		this.index=-1;
 	}
-
 });

@@ -6,7 +6,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: SieveGrid.js 0000 2010-12-15 09:38:17Z wsmits $
+ * @version $Id: SieveGrid.js 0000 2010-12-29 09:03:02 wsmits $
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
@@ -40,32 +40,33 @@ GO.sieve.SieveGrid = function(config){
 		this.store.reload();
 	},this);
 
-	if(!config)
-	{
-		config = {};
-	}
-	config.title=GO.sieve.lang.sieverules;
-	config.layout='fit';
-	config.region='center';
-	config.autoScroll=true;
-	config.border=false;
 	var fields ={
 		fields:['id','name', 'index', 'script_name','disabled'],
 		columns:[{
 			header: GO.sieve.lang.name,
 			dataIndex: 'name'
 		},{
-			header: GO.sieve.lang.index,
-			dataIndex: 'index'
-		},{
-			header: GO.sieve.lang.scriptname,
-			dataIndex: 'script_name'
-		},{
 			header: GO.sieve.lang.disabled,
-			dataIndex: 'disabled'
+			dataIndex: 'disabled',
+			renderer: function(value, metaData, record, rowIndex, colIndex, store) {
+				if(value == 'true')
+					value = GO.lang.cmdYes;
+				else
+					value = GO.lang.cmdNo;
+				return value;
+			}
 		}
-	]
-	};
+	]};
+
+	if(!config)
+	{
+		config = {};
+	}
+	config.title=GO.email.lang.filters;
+	config.layout='fit';
+	config.region='center';
+	config.autoScroll=true;
+	config.border=false;
 	config.store = new GO.data.JsonStore({
 		url: GO.settings.modules.sieve.url+ 'fileIO.php',
 		baseParams: {
@@ -87,7 +88,6 @@ GO.sieve.SieveGrid = function(config){
 		},
 		columns:fields.columns
 	});
-
 	config.cm=columnModel;
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
@@ -98,9 +98,9 @@ GO.sieve.SieveGrid = function(config){
 	config.loadMask=true;
 
 	this.sieveDialog = new GO.sieve.SieveDialog();
-	this.sieveDialog.on('save', function(){
-			this.store.reload();
-		}, this);
+	this.sieveDialog.on('hide', function(panel){
+		this.store.reload();
+	}, this);
 		
 	config.tbar=[{
 			iconCls: 'btn-add',
@@ -114,33 +114,32 @@ GO.sieve.SieveGrid = function(config){
 			iconCls: 'btn-delete',
 			text: GO.lang['cmdDelete'],
 			cls: 'x-btn-text-icon',
-			handler: function(){
-				this.deleteSelected();
-			},
-			scope: this
+			handler:function(){this.deleteSelected();},
+				scope: this
 		},
+		GO.sieve.lang.filterset,
 		this.selectScript,{
 			iconCls: 'btn-delete',
 			text: GO.sieve.lang.activate,
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				Ext.Ajax.request({
-					 url: GO.settings.modules.sieve.url+ 'fileIO.php',
-					 scope:this,
-					 params: { 
-						 task: 'set_active_script',
-						 script_name: this.selectScript.getValue(),
-						 account_id: this.store.baseParams.account_id
-					 },
-					 success: function(){
-						 this.selectScript.store.reload();
-						 this.setSelectedScript();
-						 this.selectScript.setRawValue(this.selectScript.getRawValue() + ' ('+GO.sieve.lang.active+')');
-						 this.store.reload();
-					 },
-					 failure: function(){
-						 
-					 }
+				 url: GO.settings.modules.sieve.url+ 'fileIO.php',
+				 scope:this,
+				 params: {
+					 task: 'set_active_script',
+					 script_name: this.selectScript.getValue(),
+					 account_id: this.store.baseParams.account_id
+				 },
+				 success: function(){
+					 this.selectScript.store.reload();
+					 this.setSelectedScript();
+					 this.selectScript.setRawValue(this.selectScript.getRawValue() + ' ('+GO.sieve.lang.active+')');
+					 this.store.reload();
+				 },
+				 failure: function(){
+					//TODO: nog een melding geven
+				 }
 				},this);
 			},
 			scope: this
@@ -153,7 +152,6 @@ GO.sieve.SieveGrid = function(config){
 		}, this);
 
 	this.on('show', function(){
-		//if(!this.store.loaded){
 		this.store.load();
 		this.selectScript.store.load({
 			callback:function(){
@@ -161,7 +159,6 @@ GO.sieve.SieveGrid = function(config){
 			},
 			scope:this
 		});
-		//}
 	}, this);
 };
 

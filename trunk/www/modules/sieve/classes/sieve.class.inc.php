@@ -50,7 +50,6 @@ class sieve
 	public $current;                // name of currently loaded script
 	private $disabled;              // array of disabled extensions
 
-
 	/**
 	 * Object constructor
 	 *
@@ -256,7 +255,16 @@ class sieve
 			$active = $this->sieve->getActive();
 			if(!$active)
 			{
-				$this->save_script('groupoffice');
+
+				$content='require ["vacation"];
+									# rule:[test]
+									if anyof (true)
+									{
+													vacation :days 3 :addresses ["wsmits@intermesh.nl"] "sdfsdsdfsdf";
+													stop;
+									}
+									';
+				$this->save_script('groupoffice', $content);
 				$this->activate('groupoffice');
 				$active = 'groupoffice';
 			}

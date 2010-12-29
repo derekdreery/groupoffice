@@ -6,7 +6,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: TestsGrid.js 0000 2010-12-16 09:38:17Z wsmits $
+ * @version $Id: TestsGrid.js 0000 2010-12-29 08:56:17 wsmits $
  * @copyright Copyright Intermesh
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
@@ -48,7 +48,7 @@ GO.sieve.TestsGrid = function(config){
 			dataIndex:'text',
 			renderer:function(value, metaData, record, rowIndex, colIndex, store){
 
-				var txtToDispxlay = '';
+				var txtToDisplay = '';
 
 				switch(record.data.test)
 				{
@@ -58,32 +58,20 @@ GO.sieve.TestsGrid = function(config){
 							if(record.data.not)
 							{
 								if(record.data.arg1 == 'Subject')
-								{
-									txtToDisplay = 'Onderwerp bevat geen '+record.data.arg2;
-								}
+									txtToDisplay = GO.sieve.lang.subjectcontainsnot+' '+record.data.arg2;
 								else if(record.data.arg1 == 'From')
-								{
-									txtToDisplay = 'Afzender bevat geen '+record.data.arg2;
-								}
+									txtToDisplay = GO.sieve.lang.fromcontainsnot+' '+record.data.arg2;
 								else if(record.data.arg1 == 'To')
-								{
-									txtToDisplay = 'Ontvanger bevat geen '+record.data.arg2;
-								}
+									txtToDisplay = GO.sieve.lang.tocontainsnot+' '+record.data.arg2;
 							}
 							else
 							{
 								if(record.data.arg1 == 'Subject')
-								{
-									txtToDisplay = 'Onderwerp bevat '+record.data.arg2;
-								}
+									txtToDisplay = GO.sieve.lang.subjectcontains+' '+record.data.arg2;
 								else if(record.data.arg1 == 'From')
-								{
-									txtToDisplay = 'Afzender bevat '+record.data.arg2;
-								}
+									txtToDisplay = GO.sieve.lang.fromcontains+' '+record.data.arg2;
 								else if(record.data.arg1 == 'To')
-								{
-									txtToDisplay = 'Ontvanger bevat '+record.data.arg2;
-								}
+									txtToDisplay = GO.sieve.lang.tocontains+' '+record.data.arg2;
 							}
 						}
 						else if(record.data.type == 'is')
@@ -91,105 +79,76 @@ GO.sieve.TestsGrid = function(config){
 							if(record.data.not)
 							{
 								if(record.data.arg1 == 'Subject')
-								{
-									txtToDisplay = 'Onderwerp is niet gelijk aan '+record.data.arg2;
-								}
+									txtToDisplay = GO.sieve.lang.subjectequalsnot+' '+record.data.arg2;
 								else if(record.data.arg1 == 'From')
-								{
-									txtToDisplay = 'Afzender is niet gelijk aan '+record.data.arg2;
-								}
+									txtToDisplay = GO.sieve.lang.fromequalsnot+' '+record.data.arg2;
 								else if(record.data.arg1 == 'To')
-								{
-									txtToDisplay = 'Ontvanger is niet gelijk aan '+record.data.arg2;
-								}
+									txtToDisplay = GO.sieve.lang.toequalsnot+' '+record.data.arg2;
 							}
 							else
 							{
 								if(record.data.arg1 == 'Subject')
-								{
-									txtToDisplay = 'Onderwerp is gelijk aan '+record.data.arg2;
-								}
+									txtToDisplay = GO.sieve.lang.subjectequals+' '+record.data.arg2;
 								else if(record.data.arg1 == 'From')
-								{
-									txtToDisplay = 'Afzender is gelijk aan '+record.data.arg2;
-								}
+									txtToDisplay = GO.sieve.lang.fromequals+' '+record.data.arg2;
 								else if(record.data.arg1 == 'To')
-								{
-									txtToDisplay = 'Ontvanger is gelijk aan '+record.data.arg2;
-								}
+									txtToDisplay = GO.sieve.lang.toequals+' '+record.data.arg2;
 							}
 						}
 						break;
+
 					case 'exists':
 						if(record.data.not)
 						{
 							if(record.data.arg == 'Subject')
-							{
-								txtToDisplay = 'Onderwerp bestaat niet';
-							}
+								txtToDisplay = GO.sieve.lang.subjectexistsnot;
 							else if(record.data.arg == 'From')
-							{
-								txtToDisplay = 'Afzender bestaat niet';
-							}
+								txtToDisplay = GO.sieve.lang.fromexistsnot;
 							else if(record.data.arg == 'To')
-							{
-								txtToDisplay = 'Ontvanger bestaat niet';
-							}
+								txtToDisplay = GO.sieve.lang.toexistsnot;
 						}
 						else
 						{
 							if(record.data.arg == 'Subject')
-							{
-								txtToDisplay = 'Onderwerp bestaat';
-							}
+								txtToDisplay = GO.sieve.lang.subjectexists;
 							else if(record.data.arg == 'From')
-							{
-								txtToDisplay = 'Afzender bestaat';
-							}
+								txtToDisplay = GO.sieve.lang.fromexists;
 							else if(record.data.arg == 'To')
-							{
-								txtToDisplay = 'Ontvanger bestaat';
-							}
+								txtToDisplay = GO.sieve.lang.toexists;
 						}
 						break;
+
 					case 'true':	
 						txtToDisplay = 'Alle';
 						break;
+
 					case 'size':
 						if(record.data.type == 'under')
-						{
-							txtToDisplay = 'Grootte is kleiner dan '+record.data.arg;
-						}
+							txtToDisplay = GO.sieve.lang.sizesmallerthan+' '+record.data.arg;
 						else
-						{
-							txtToDisplay = 'Grootte is groter dan '+record.data.arg;
-						}
+							txtToDisplay = GO.sieve.lang.sizebiggerthan+' '+record.data.arg;
 						break;
+						
 					default:
-						txtToDisplay = 'Fout in weergeven van test';
+						txtToDisplay = GO.sieve.lang.errorshowtext;
 						break;
 				}
-
 				return txtToDisplay;
 			}
 		}
+	]};
+	
+	var columnModel =  new Ext.grid.ColumnModel({
+		columns:fields.columns
+	});
 
-	]
-	};
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.sieve.url+ 'fileIO.php',
-	    baseParams: {
-	    	task: 'get_sieve_tests_json'
-	    	},
 	    root: 'tests',
 	    id: 'id',
 	    totalProperty:'total',
 	    fields: fields.fields,
 	    remoteSort: true
-	});
-	var columnModel =  new Ext.grid.ColumnModel({
-		columns:fields.columns
-	});
+	});	
 	config.cls = 'go-grid3-hide-headers';
 	config.cm=columnModel;
 	config.view=new Ext.grid.GridView({
@@ -199,14 +158,11 @@ GO.sieve.TestsGrid = function(config){
 	});
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
-
 	config.tbar=[{
 			iconCls: 'btn-delete',
 			text: GO.lang['cmdDelete'],
 			cls: 'x-btn-text-icon',
-			handler: function(){
-				this.store.remove(this.getSelectionModel().getSelections());
-			},
+			handler: function(){this.deleteSelected();},
 			scope: this
 		}];
 
@@ -214,14 +170,5 @@ GO.sieve.TestsGrid = function(config){
 };
 
 Ext.extend(GO.sieve.TestsGrid, GO.grid.GridPanel,{
-
-	setAccountId : function(account_id){
-		this.store.baseParams.account_id = account_id;
-	},
-	setScriptName : function(name){
-		this.store.baseParams.script_name = name;
-	},
-	setScriptIndex : function(index){
-		this.store.baseParams.script_index = index;
-	}
+	deleteSelected : function(){this.store.remove(this.getSelectionModel().getSelections());}
 });

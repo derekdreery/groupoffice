@@ -51,8 +51,8 @@ GO.sieve.ActionPanel = function(config){
 	this.txtEmailAddress = new Ext.form.TextField({
 		name: 'email',
 		hidden:true,
-		allowBlank:false,
-		width:150,
+		allowBlank:true,
+		width:180,
 		emptyText:GO.sieve.lang.addresses
 	});
 
@@ -75,8 +75,8 @@ GO.sieve.ActionPanel = function(config){
 	this.txtDays = new Ext.form.TextField({
 		name: 'days',
 		hidden:true,
-		allowBlank:false,
-		width:50,
+		allowBlank:true,
+		width:170,
 		emptyText:GO.sieve.lang.days
 	});
 
@@ -184,7 +184,9 @@ GO.sieve.ActionPanel = function(config){
 			{
 				record = new action_add(values)
 
-				this.grid.store.insert(0, record);
+				//todo find stop record. store.findBy
+
+				this.grid.store.insert(this.grid.store.getCount(), record);
 			}
 			else
 			{
@@ -192,9 +194,7 @@ GO.sieve.ActionPanel = function(config){
 				Ext.apply(record.data,values);
 				record.commit();
 			}
-
 			this.resetForm();
-
 		},
 		scope : this
 	})
@@ -218,7 +218,6 @@ GO.sieve.ActionPanel = function(config){
 		rule_name : '',
 		script_index : 0
 	};
-
 	config.items=[
 		{
 			xtype:'compositefield',
@@ -233,6 +232,7 @@ GO.sieve.ActionPanel = function(config){
 			hideLabel:true
 		},
 		this.txtMessage];
+	
 	GO.sieve.ActionPanel.superclass.constructor.call(this, config);
 }
 
@@ -241,7 +241,7 @@ Ext.extend(GO.sieve.ActionPanel, Ext.FormPanel,{
 	index : 0,
 
 	setVisibleFields : function(record, editmode, index){
-
+		
 		this.index=index ? index : 0;
 
 		var recVal = '';
@@ -335,22 +335,6 @@ Ext.extend(GO.sieve.ActionPanel, Ext.FormPanel,{
 		this.txtMessage.hide();
 		this.txtDays.hide();
 		this.doLayout();
-	},
-
-	setAccountId : function(account_id){
-		this.baseParams.account_id = account_id;
-	},
-	setScriptName : function(name){
-		this.baseParams.script_name = name;
-	},
-	setScriptIndex : function(index){
-		this.baseParams.script_index = index;
-	},
-	setRuleName : function(rulename){
-		this.baseParams.rule_name = rulename;
-	},
-	afterRender : function(){
-		GO.sieve.ActionPanel.superclass.afterRender.call(this);
 	},
 	onShow : function(){
 		GO.sieve.ActionPanel.superclass.onShow.call(this);
