@@ -49,7 +49,7 @@ GO.sieve.SieveGrid = function(config){
 			header: GO.sieve.lang.disabled,
 			dataIndex: 'disabled',
 			renderer: function(value, metaData, record, rowIndex, colIndex, store) {
-				if(value == 'true')
+				if(value)
 					value = GO.lang.cmdYes;
 				else
 					value = GO.lang.cmdNo;
@@ -101,7 +101,10 @@ GO.sieve.SieveGrid = function(config){
 	this.sieveDialog.on('hide', function(panel){
 		this.store.reload();
 	}, this);
-		
+
+	config.enableDragDrop=true;
+	config.ddGroup='SieveFilterDD';
+
 	config.tbar=[{
 			iconCls: 'btn-add',
 			text: GO.lang['cmdAdd'],
@@ -160,6 +163,16 @@ GO.sieve.SieveGrid = function(config){
 			scope:this
 		});
 	}, this);
+
+	this.on('render', function(){
+		//enable row sorting
+		var DDtarget = new Ext.dd.DropTarget(this.getView().mainBody,
+		{
+			ddGroup : 'SieveFilterDD',
+			copy:false,
+			notifyDrop : this.onNotifyDrop.createDelegate(this)
+		});
+	}, this);
 };
 
 Ext.extend(GO.sieve.SieveGrid, GO.grid.GridPanel,{
@@ -172,5 +185,42 @@ Ext.extend(GO.sieve.SieveGrid, GO.grid.GridPanel,{
 			this.store.baseParams.script_name = name;
 		else
 			this.store.baseParams.script_name = this.selectScript.getValue();
+	},
+	onNotifyDrop : function(dd, e, data)
+	{
+		var rows=this.selModel.getSelections();
+		var dragData = dd.getDragData(e);
+		var cindex=dragData.rowIndex;
+		if(cindex=='undefined')
+		{
+			cindex=this.store.data.length-1;
+		}
+
+		for(i = 0; i < rows.length; i++)
+		{
+			var rowData=this.store.getById(rows[i].id);
+
+			if(!this.copy){
+				this.store.remove(this.store.getById(rows[i].id));
+			}
+
+			this.store.insert(cindex,rowData);
+		}
+
+		//save sort order
+		var filters = {};
+
+		for (var i = 0; i < this.store.data.items.length;  i++)
+		{
+			filters[this.store.data.items[i].get('name')] = i;
+		}
+
+		Ext.Ajax.request({
+			url: GO.settings.modules.sieve.url+'fileIO.php',
+			params: {
+				task: 'save_scripts_sort_order',
+				sort_order: Ext.encode(filters)
+			}
+		});
 	}
 });

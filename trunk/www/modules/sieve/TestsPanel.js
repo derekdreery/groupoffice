@@ -293,6 +293,7 @@ Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
 
 		this.setVisibleFields();
 		this.btnAddRule.setText(GO.lang.cmdEdit);
+		this.btnClearRule.setText(GO.lang.cmdCancel);
 	},
 	toggleCondition : function(){
 		var type = this.cmbOperator.getValue();
@@ -339,6 +340,7 @@ Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
 	},
 	resetForm : function(){
 		this.btnAddRule.setText(GO.lang.cmdAdd);
+		this.btnClearRule.setText(GO.sieve.lang.clear);
 		this.form.reset();
 		this.setVisibleFields();
 		this.index=-1;
