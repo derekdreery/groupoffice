@@ -102,6 +102,8 @@ GO.sieve.ActionGrid = function(config){
 	    fields: fields.fields,
 	    remoteSort: true
 	});
+	config.enableDragDrop = true;
+	config.ddGroup = 'SieveActionDD';
 	config.cm=columnModel;
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
@@ -119,8 +121,48 @@ GO.sieve.ActionGrid = function(config){
 		}];
 
 	GO.sieve.SieveGrid.superclass.constructor.call(this, config);
+
+	this.on('render',function(){
+		//enable row sorting
+		var DDtarget = new Ext.dd.DropTarget(this.getView().mainBody,
+		{
+			ddGroup : 'SieveActionDD',
+			copy:false,
+			notifyDrop : this.onNotifyDrop.createDelegate(this)
+		});
+	}, this);
 };
 
 Ext.extend(GO.sieve.ActionGrid, GO.grid.GridPanel,{
-	deleteSelected : function(){this.store.remove(this.getSelectionModel().getSelections());}
+	deleteSelected : function(){this.store.remove(this.getSelectionModel().getSelections());},
+
+	onNotifyDrop : function(dd, e, data)
+	{
+		var rows=this.selModel.getSelections();
+		var dragData = dd.getDragData(e);
+		var cindex=dragData.rowIndex;
+		if(cindex=='undefined')
+		{
+			cindex=this.store.data.length-1;
+		}
+
+		for(i = 0; i < rows.length; i++)
+		{
+			var rowData=this.store.getById(rows[i].id);
+
+			if(!this.copy){
+				this.store.remove(this.store.getById(rows[i].id));
+			}
+
+			this.store.insert(cindex,rowData);
+		}
+
+		//save sort order
+		var filters = {};
+
+		for (var i = 0; i < this.store.data.items.length;  i++)
+		{
+			filters[this.store.data.items[i].get('id')] = i;
+		}
+	}
 });

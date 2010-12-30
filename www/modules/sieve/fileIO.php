@@ -306,6 +306,38 @@ try
 			else
 				$response['sieve_supported']=false;
 			break;
+			
+		case 'save_scripts_sort_order':
+
+			$sort_order = json_decode(($_POST['sort_order']), true);
+
+			foreach($sort_order as $filter_id=>$sort_index) {
+				$filter['id'] = $filter_id;
+				$filter['priority']=$sort_index;
+
+				/* Inkomende array
+					Array
+					(
+							[id] => dsafaff
+							[priority] => 0
+					)
+					Array
+					(
+							[id] => Standaard vakantieregel
+							[priority] => 1
+					)
+					Array
+					(
+							[id] => kopie
+							[priority] => 2
+					)
+				 */
+
+				//$sieve->update_rule();  TODO: De volgorde ook daadwerkelijk opslaan in de file
+			}
+
+			$response['success'] = true;
+			break;
 	}
 }
 catch(Exception $e)

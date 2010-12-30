@@ -182,11 +182,21 @@ GO.sieve.ActionPanel = function(config){
 
 			if(this.btnAddAction.getText() == GO.lang.cmdAdd)
 			{
-				record = new action_add(values)
+				record = new action_add(values);
 
-				//todo find stop record. store.findBy
+				var insertId = this.grid.store.getCount();
 
-				this.grid.store.insert(this.grid.store.getCount(), record);
+				// Let the Stop stay on the end of the grid
+				if(this.grid.store.getCount() > 0)
+				{
+					if(this.grid.store.getAt(this.grid.store.getCount()-1).data.type == 'stop')
+						insertId = this.grid.store.getCount()-1;
+				}
+
+				if(this.cmbAction.getValue() == 'vacation')
+					insertId = 0;
+
+				this.grid.store.insert(insertId, record);
 			}
 			else
 			{
@@ -244,18 +254,25 @@ Ext.extend(GO.sieve.ActionPanel, Ext.FormPanel,{
 		
 		this.index=index ? index : 0;
 
+		this.cmbFolder.reset();
+		this.txtEmailAddress.reset();
+		this.txtDays.reset();
+		this.txtMessage.reset();
+		
 		var recVal = '';
 		this.form.setValues(record.data);
 
 		if(editmode)
 		{
 			this.btnAddAction.setText(GO.lang.cmdEdit);
+			this.btnClearAction.setText(GO.lang.cmdCancel);
 			recVal = record.data.type;
 
 			if(record.data.type == 'redirect' && record.data.copy == true)
 			{
 				recVal = 'redirect_copy';
 				this.cmbAction.setValue(recVal);
+				this.txtEmailAddress.setValue(record.data.target);
 			}
 			else if(record.data.type == 'fileinto' && record.data.copy == true)
 			{
@@ -271,6 +288,7 @@ Ext.extend(GO.sieve.ActionPanel, Ext.FormPanel,{
 		else
 		{
 			this.btnAddAction.setText(GO.lang.cmdAdd);
+			this.btnClearAction.setText(GO.sieve.lang.clear);
 			recVal = record.data.value;
 		}
 
@@ -329,6 +347,7 @@ Ext.extend(GO.sieve.ActionPanel, Ext.FormPanel,{
 	},
 	resetForm : function(){
 		this.btnAddAction.setText(GO.lang.cmdAdd);
+		this.btnClearAction.setText(GO.sieve.lang.clear);
 		this.form.reset();
 		this.cmbFolder.show();
 		this.txtEmailAddress.hide();

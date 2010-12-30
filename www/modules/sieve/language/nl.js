@@ -47,6 +47,8 @@ GO.sieve.lang.disablefilter = 'Schakel filter uit';
 
 GO.sieve.lang.newsieverule = 'Nieuwe regel';
 GO.sieve.lang.checksieveerror = 'Er is iets fout gegaan met het checken voor de sievesupport';
+GO.sieve.lang.erroremptygrids = 'Een of beide grids zijn leeg.';
+GO.sieve.lang.errorineditmode = 'U bent momenteel een item aan het bewerken!\n Maak eerst de bewerking af voordat u alles op kunt slaan.';
 
 // Stores.js
 GO.sieve.lang.subject = 'onderwerp';

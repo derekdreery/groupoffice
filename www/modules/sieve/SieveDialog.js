@@ -126,7 +126,9 @@ GO.sieve.SieveDialog = function(config) {
 		text : GO.lang['cmdOk'],
 		handler : function() {
 			if(this.actionGrid.store.getCount() == 0 || this.testsGrid.store.getCount() == 0)
-				alert('Een of beide grids zijn leeg.');
+				alert(GO.sieve.lang.erroremptygrids);
+			if(this.actionPanel.btnAddAction.getText() == GO.lang.cmdEdit || this.testsPanel.btnAddRule.getText() == GO.lang.cmdEdit)
+				alert(GO.sieve.lang.errorineditmode);
 			else
 				this.saveAll();
 		},
@@ -212,5 +214,5 @@ Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 	resetGrids : function(){
 		this.actionGrid.store.removeAll();
 		this.testsGrid.store.removeAll();
-	}
+	}	
 });

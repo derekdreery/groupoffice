@@ -249,6 +249,10 @@ class sieve
 	 */
 	public function get_active()
 	{
+		global $GO_LANGUAGE, $lang;
+		
+			$GO_LANGUAGE->require_language_file('sieve');
+			
 			if (!$this->sieve)
 					return $this->_set_error(SIEVE_ERROR_INTERNAL);
 
@@ -257,13 +261,12 @@ class sieve
 			{
 
 				$content='require ["vacation"];
-									# rule:[test]
-									if anyof (true)
-									{
-													vacation :days 3 :addresses ["wsmits@intermesh.nl"] "sdfsdsdfsdf";
-													stop;
-									}
-									';
+# rule:['.$lang['sieve']['standardvacation'].']
+if false # anyof (true)
+{
+			vacation :days 3 "'.$lang['sieve']['standardvacationmessage'].'";
+}
+';
 				$this->save_script('groupoffice', $content);
 				$this->activate('groupoffice');
 				$active = 'groupoffice';
