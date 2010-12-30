@@ -503,7 +503,7 @@ GO.email.EmailComposer = function(config) {
 	}
 
 	try {
-		if(config.links)
+		if(config && config.links)
 		{
 			if (!this.selectLinkField) {
 				this.selectLinkField = new GO.form.SelectLink({
@@ -1837,7 +1837,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		}			
 		height += attachmentsElHeight+attachmentsEl.getMargins('tb');
 		
-		if(GO.mailings)
+		if(GO.settings.modules.savemailas && GO.settings.modules.savemailas.read_permission)
 		{
 			var slEl = this.selectLinkField.getEl().up('.x-form-item');
 			height += slEl.getHeight()+slEl.getMargins('tb');
