@@ -17,7 +17,7 @@ GO.mailings.createMailingGrids = function(){
 				root: 'results',
 				id: 'id',
 				totalProperty:'total',
-				fields: ['id', 'name', 'company_name', 'email', 'home_phone', 'work_phone', 'cellular'],
+				fields: ['id', 'name', 'email', 'company_name', 'home_phone', 'work_phone', 'cellular'],
 				remoteSort: true
 		});
 
