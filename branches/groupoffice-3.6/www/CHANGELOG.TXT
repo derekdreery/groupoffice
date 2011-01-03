@@ -1,3 +1,6 @@
+03/01/2011 3.6.16
+- Feature to specify a maximum number of users in the license
+
 31/12/2010 3.6.15
 - Templates bug in community version fixed
 
