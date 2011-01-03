@@ -208,18 +208,19 @@ Ext.extend(GO.sieve.SieveGrid, GO.grid.GridPanel,{
 		}
 
 		//save sort order
-		var filters = {};
+		var filters = [];
 
 		for (var i = 0; i < this.store.data.items.length;  i++)
 		{
-			filters[this.store.data.items[i].get('name')] = i;
+			filters.push(this.store.data.items[i].get('index'));
 		}
 
 		Ext.Ajax.request({
 			url: GO.settings.modules.sieve.url+'fileIO.php',
 			params: {
 				task: 'save_scripts_sort_order',
-				sort_order: Ext.encode(filters)
+				sort_order: Ext.encode(filters),
+				account_id: this.store.baseParams.account_id
 			}
 		});
 	}

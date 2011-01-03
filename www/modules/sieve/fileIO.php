@@ -308,34 +308,48 @@ try
 			break;
 			
 		case 'save_scripts_sort_order':
+			$account = $email->get_account($_REQUEST['account_id']);
+			$account = $email->decrypt_account($account);
+			if(!$sieve->connect($account['username'],
+							$account['password'],
+							$account['host'],
+							2000,
+							null,
+							false,
+							array(),
+							true))
+			{
+				throw new Exception('Login failed');
+				if($sieve->error() == $sieve(SIEVE_ERROR_CONNECTION))
+				{
 
-			$sort_order = json_decode(($_POST['sort_order']), true);
-
-			foreach($sort_order as $filter_id=>$sort_index) {
-				$filter['id'] = $filter_id;
-				$filter['priority']=$sort_index;
-
-				/* Inkomende array
-					Array
-					(
-							[id] => dsafaff
-							[priority] => 0
-					)
-					Array
-					(
-							[id] => Standaard vakantieregel
-							[priority] => 1
-					)
-					Array
-					(
-							[id] => kopie
-							[priority] => 2
-					)
-				 */
-
-				//$sieve->update_rule();  TODO: De volgorde ook daadwerkelijk opslaan in de file
+				}
 			}
 
+			$script = $sieve->get_script($_POST['script_name']);
+			$sort_order = json_decode($_POST['sort_order'], true);
+
+			$sieve->load($sieve->get_active());
+
+			$count=count($sort_order);
+
+			for($new_index=0;$new_index<$count;$new_index++){
+				$old_index = $sort_order[$new_index];
+
+				//oude script ophalen
+				$temp = $sieve->script->content[$old_index];
+				
+				//kopie toevoegen
+				$sieve->script->add_rule($temp);
+			}
+
+			//oude verwijderen
+			for($i=0;$i < $count; $i++)
+			{
+				$sieve->script->delete_rule($i);
+			}
+
+			$sieve->save();
 			$response['success'] = true;
 			break;
 	}

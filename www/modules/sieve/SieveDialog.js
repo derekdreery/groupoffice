@@ -44,6 +44,13 @@ GO.sieve.SieveDialog = function(config) {
 					}
 					else
 					{
+						if(this.testsGrid.store.getCount() > 0)
+						{
+							if(this.testsGrid.store.getAt(0).data.test == 'true')
+							{
+								this.testsGrid.store.removeAll();
+							}
+						}
 						this.testsGrid.show();
 						this.testsPanel.show();
 					}
@@ -125,9 +132,9 @@ GO.sieve.SieveDialog = function(config) {
 	config.buttons = [{
 		text : GO.lang['cmdOk'],
 		handler : function() {
-			if(this.actionGrid.store.getCount() == 0 || this.testsGrid.store.getCount() == 0)
+			if(this.actionGrid.store.getCount() == 0 || (this.testsGrid.store.getCount() == 0 && this.rgMethod.getValue().inputValue != 'any'))
 				alert(GO.sieve.lang.erroremptygrids);
-			if(this.actionPanel.btnAddAction.getText() == GO.lang.cmdEdit || this.testsPanel.btnAddRule.getText() == GO.lang.cmdEdit)
+			else if(this.actionPanel.btnAddAction.getText() == GO.lang.cmdEdit || this.testsPanel.btnAddRule.getText() == GO.lang.cmdEdit)
 				alert(GO.sieve.lang.errorineditmode);
 			else
 				this.saveAll();
