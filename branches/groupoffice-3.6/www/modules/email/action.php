@@ -1229,6 +1229,16 @@ try {
 						);
 					}
 				}
+
+				$defcal = $cal->get_default_calendar($GO_SECURITY->user_id);
+				if (!empty($defcal)) {
+					foreach ($calendars as $key=>$calendar) {
+						if ($calendar['id']==$defcal['id']) {
+							unset($calendars[$key]);
+							array_unshift($calendars,array('id'=>$calendar['id'],'name'=>$calendar['name']));
+						}
+					}
+				}
 			}
 
 			if($create_event && (count($calendars) > 1))
