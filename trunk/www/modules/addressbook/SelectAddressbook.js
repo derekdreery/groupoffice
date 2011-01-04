@@ -26,7 +26,7 @@ GO.addressbook.SelectAddressbook = function(config){
 
 	config.store = GO.addressbook.writableAddressbooksStore;
 
-	GO.addressbook.SelectAddressbook.superclass.constructor.call(this,{
+	Ext.apply(config, {
 		displayField: 'name',
 		valueField: 'id',
 		triggerAction:'all',
@@ -38,6 +38,8 @@ GO.addressbook.SelectAddressbook = function(config){
 		emptyText:GO.lang.strPleaseSelect,
 		pageSize: parseInt(GO.settings.max_rows_list)
 	});
+
+	GO.addressbook.SelectAddressbook.superclass.constructor.call(this,config);
 
 }
 Ext.extend(GO.addressbook.SelectAddressbook, GO.form.ComboBox, {
