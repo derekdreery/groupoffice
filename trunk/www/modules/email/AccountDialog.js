@@ -712,7 +712,7 @@ var filter = function() {
 	return {
 		showDialog : function(filter_id, account_id, ds) {
 
-			this.setAccountId(account_id);
+			this.account_id=account_id;
 						
 			if (!this.win) {
 
