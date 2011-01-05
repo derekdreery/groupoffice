@@ -369,7 +369,8 @@ class gnupg{
 		$complete_cmd .= ' '.$cmd;
 
 		go_debug('CMD: '.$complete_cmd);
-		
+
+		putenv("LANG=en_US.UTF-8");
 		
 		$p = proc_open($complete_cmd,$this->fd, $this->pipes);
 
