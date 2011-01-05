@@ -41,7 +41,7 @@ class File
 	public static function mkdir($path) {
 	  global $GO_CONFIG;
 
-	  if(!is_dir($path))
+	  if(!file_exists($path))
 	  {
 	  	if(mkdir($path, $GO_CONFIG->folder_create_mode, true)){
 			if(!empty($GO_CONFIG->file_change_group))
