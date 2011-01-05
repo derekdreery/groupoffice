@@ -145,6 +145,8 @@ switch($args['task'])
 			$db->query('USE `'.$db_name.'`');
 			$db->query("UPDATE go_users SET password='".$password."', password_type='crypt' WHERE id=1");
 		}
+
+		$sm->create_report($args['name'], $config_file);
 		
 		break;
 		
