@@ -1742,115 +1742,130 @@ GO.mainLayout.onReady(function(){
 	}
 });
 
+
+GO.files.FilesObservable = function(){
+	GO.files.FilesObservable.superclass.constructor.call(this);
+
+	this.addEvents({
+		'beforeopenfile':true
+	})
+}
+Ext.extend(GO.files.FilesObservable, Ext.util.Observable);
+
+GO.files.filesObservable = new GO.files.FilesObservable();
+
 GO.files.openFile = function(record, store)
 {
-	var index = record.data.id ? 'id' : 'path';
 
-	switch(record.data.extension)
-	{
-		case 'bmp':
-		case 'png':
-		case 'gif':
-		case 'jpg':
-		case 'jpeg':
-		case 'xmind':
-		
-			if(!this.imageViewer)
-			{
-				this.imageViewer = new GO.files.ImageViewer({
-					closeAction:'hide'
-				});
-			}
+	if(GO.files.filesObservable.fireEvent('beforeopenfile', record, store)){
+		var index = record.data.id ? 'id' : 'path';
 
-			var imgindex = 0;
-			var images = Array();
-			if(store)
-			{
-				for (var i = 0; i < store.data.items.length;  i++)
+		switch(record.data.extension)
+		{
+			case 'bmp':
+			case 'png':
+			case 'gif':
+			case 'jpg':
+			case 'jpeg':
+			case 'xmind':
+
+				if(!this.imageViewer)
 				{
-					var r = store.data.items[i].data;
-				
-					if(r.extension=='jpg' || r.extension=='png' || r.extension=='gif' || r.extension=='bmp' || r.extension=='jpeg' )
-					{
-						images.push({
-							name: r['name'],
-							src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+r[index]
-						})
-					} else if (r.extension=='xmind') {
-						images.push({
-							name: r['name'],
-							src: GO.settings.config.host+'controls/thumb.php?src='+r.path+'&w=600',
-							download_path: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+r[index]
-						})
-					}
-					if(r[index]==record.data[index])
-					{
-						imgindex=images.length-1;
-					}
+					this.imageViewer = new GO.files.ImageViewer({
+						closeAction:'hide'
+					});
 				}
-			}else
-			{
-				if (record.data.extension=='xmind') {
-					images.push({
-						name: record.data['name'],
-						src: GO.settings.config.host+'controls/thumb.php?src='+record.data.path+'&w=600',
-						download_path: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]
-					})
-				} else {
-					images.push({
-						name: record.data['name'],
-						src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]
-					})
-				}
-			}
 
-			this.imageViewer.show(images, imgindex);
-			
-			break;
-
-		case 'php':
-		case 'js':
-		case 'docx':
-		case 'xlsx':
-		case 'pptx':
-		case 'dwg':
-		case 'doc':
-		case 'odt':
-		case 'ods':
-		case 'xls':
-		case 'ppt':
-		case 'odp':
-		case 'txt':				
-			if(index == 'id' && GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
-			{
-				if(!GO.files.noJavaNotified && !deployJava.isWebStartInstalled('1.6.0'))
+				var imgindex = 0;
+				var images = Array();
+				if(store)
 				{
-					GO.files.noJavaNotified=true;
-					Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);					
-					window.open(GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]);
+					for (var i = 0; i < store.data.items.length;  i++)
+					{
+						var r = store.data.items[i].data;
+
+						if(r.extension=='jpg' || r.extension=='png' || r.extension=='gif' || r.extension=='bmp' || r.extension=='jpeg' )
+						{
+							images.push({
+								name: r['name'],
+								src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+r[index]
+							})
+						} else if (r.extension=='xmind') {
+							images.push({
+								name: r['name'],
+								src: GO.settings.config.host+'controls/thumb.php?src='+r.path+'&w=600',
+								download_path: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+r[index]
+							})
+						}
+						if(r[index]==record.data[index])
+						{
+							imgindex=images.length-1;
+						}
+					}
 				}else
 				{
-					document.location=GO.settings.modules.gota.url+'jnlp.php?'+index+'='+record.data['id'];
+					if (record.data.extension=='xmind') {
+						images.push({
+							name: record.data['name'],
+							src: GO.settings.config.host+'controls/thumb.php?src='+record.data.path+'&w=600',
+							download_path: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]
+						})
+					} else {
+						images.push({
+							name: record.data['name'],
+							src: GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]
+						})
+					}
 				}
-			}else
-			{
-				window.open(GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]);
-			}
-			break;
-		
-		case 'eml':
-			if(GO.mailings)
-			{
-				GO.linkHandlers[9].call(this, 0, {
-					file_id: record.data.id
-				});
+
+				this.imageViewer.show(images, imgindex);
+
 				break;
-			}
-		
-		default:
-			window.open(GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]);
-			break;
-	}	
+
+			case 'php':
+			case 'js':
+			case 'docx':
+			case 'xlsx':
+			case 'pptx':
+			case 'dwg':
+			case 'doc':
+			case 'odt':
+			case 'ods':
+			case 'xls':
+			case 'ppt':
+			case 'odp':
+			case 'txt':
+				if(index == 'id' && GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
+				{
+					if(!GO.files.noJavaNotified && !deployJava.isWebStartInstalled('1.6.0'))
+					{
+						GO.files.noJavaNotified=true;
+						Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
+						window.open(GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]);
+					}else
+					{
+						document.location=GO.settings.modules.gota.url+'jnlp.php?'+index+'='+record.data['id'];
+					}
+				}else
+				{
+					window.open(GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]);
+				}
+				break;
+
+			case 'eml':
+				if(GO.mailings)
+				{
+					GO.linkHandlers[9].call(this, 0, {
+						file_id: record.data.id
+					});
+					break;
+				}
+
+			default:
+				window.open(GO.settings.modules.files.url+'download.php?mode=download&'+index+'='+record.data[index]);
+				break;
+		}
+	}
 }
 
 
