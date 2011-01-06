@@ -11,7 +11,7 @@ $input_holidays['fix']['en-au']['12-25'] = 'Christmas Day';
 $input_holidays['fix']['en-au']['12-26'] = 'Boxing Day';
 
 $input_holidays['fix']['de']['01-01'] = 'Neujahr';
-$input_holidays['fix']['de']['01-06'] = 'Hl. 3 K&ouml;nige';
+$input_holidays['fix']['de']['01-06'] = 'Hl. 3 Könige';
 $input_holidays['fix']['de']['05-01'] = 'Maifeiertag';
 $input_holidays['fix']['de']['08-15'] = 'Maria Himmelfahrt';
 $input_holidays['fix']['de']['10-03'] = 'Tag d. D. Einheit';
@@ -31,7 +31,7 @@ $input_holidays['fix']['fr']['12-25'] = 'Noël';
 
 $input_holidays['fix']['de-ch']['01-01'] = 'Neujahr';
 $input_holidays['fix']['de-ch']['01-02'] = 'Berchtoldstag';
-$input_holidays['fix']['de-ch']['01-06'] = 'Dreik&ouml;nigstag';
+$input_holidays['fix']['de-ch']['01-06'] = 'Dreikönigstag';
 $input_holidays['fix']['de-ch']['03-19'] = 'St. Josephstag';
 $input_holidays['fix']['de-ch']['05-01'] = 'Tag der Arbeit';
 $input_holidays['fix']['de-ch']['06-29'] = 'Peter und Paul';
@@ -40,7 +40,7 @@ $input_holidays['fix']['de-ch']['08-15'] = 'Maria Himmelfahrt';
 $input_holidays['fix']['de-ch']['09-22'] = 'St. Mauritiustag';
 $input_holidays['fix']['de-ch']['09-25'] = 'Bruderklausenfest';
 $input_holidays['fix']['de-ch']['11-01'] = 'Allerheiligen';
-$input_holidays['fix']['de-ch']['12-08'] = 'Maria Empf&auml;ngnis';
+$input_holidays['fix']['de-ch']['12-08'] = 'Maria Empfängnis';
 $input_holidays['fix']['de-ch']['12-25'] = 'Christtag';
 $input_holidays['fix']['de-ch']['12-26'] = 'Stephanstag';
 
@@ -50,7 +50,7 @@ $input_holidays['fix']['de-at']['05-01'] = 'Staatsfeiertag';
 $input_holidays['fix']['de-at']['08-15'] = 'Maria Himmelfahrt';
 $input_holidays['fix']['de-at']['10-26'] = 'Nationalfeiertag';
 $input_holidays['fix']['de-at']['11-01'] = 'Allerheiligen';
-$input_holidays['fix']['de-at']['12-08'] = 'Maria Empf&auml;ngnis';
+$input_holidays['fix']['de-at']['12-08'] = 'Maria Empfängnis';
 $input_holidays['fix']['de-at']['12-25'] = 'Christtag';
 $input_holidays['fix']['de-at']['12-26'] = 'Stephanstag';
 
