@@ -1187,4 +1187,28 @@ class String {
 	}
 */
 
+	/**
+	 * This function generates the view with a template
+	 *
+	 * @access static
+	 *
+	 * @param string $template
+	 * @param string $objectarray
+	 *
+	 * @return $objectarray
+	 */
+	static function reformat_name_template($template, $name)
+	{
+		$keys = array_keys($name);
+
+		$editedKeys = array_map(array("String", "_addAccolades"), $keys);
+
+		return trim(preg_replace('/\s+/', ' ',str_replace($editedKeys, array_values($name),$template)));
+	}
+
+	function _addAccolades($string)
+	{
+		return '{'.$string.'}';
+	}
+
 }

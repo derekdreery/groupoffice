@@ -123,3 +123,7 @@ GO.addressbook.lang.iban='IBAN';
 
 GO.addressbook.lang.unknownEmail = 'Onbekend emailadres';
 GO.addressbook.lang.strUnknownEmail = 'Dit emailadres is onbekend. Wilt u dit toevoegen bij een nieuw contact, verwerken in een bestaand contact, of annuleren?';
+
+GO.addressbook.lang.globalsettings_templatelabel = 'Naam template';
+GO.addressbook.lang.globalsettings_allchangelabel = 'Bestaande veranderen?';
+GO.addressbook.lang.globalsettings_renameall = 'Weet u zeker dat u alles wilt hernoemen?';

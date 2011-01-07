@@ -34,6 +34,41 @@ class calendar extends db {
 		$events->add_listener('build_search_index', __FILE__, 'calendar', 'build_search_index');
 		$events->add_listener('check_database', __FILE__, 'calendar', 'check_database');
 		$events->add_listener('checker', __FILE__, 'calendar', 'check_unseen');
+		$events->add_listener('load_global_settings', __FILE__, 'calendar','load_global_settings');
+		$events->add_listener('save_global_settings', __FILE__, 'calendar','save_global_settings');
+	}
+
+	public static function load_global_settings(&$response)
+	{
+		global $GO_CONFIG;
+		$response['data']['calendar_name_template']=$GO_CONFIG->get_setting('calendar_name_template');
+		
+		if(!$response['data']['calendar_name_template'])
+			$response['data']['calendar_name_template']='{first_name} {middle_name} {last_name}';
+
+	}
+
+	public static function save_global_settings(&$response)
+	{
+		global $GO_CONFIG;
+		$GO_CONFIG->save_setting('calendar_name_template', $_POST['calendar_name_template']);
+		
+		if(isset($_POST['change_all_calendar_names']))
+		{
+			$cal = new calendar();
+			$db = new db();
+
+			$sql = 'SELECT cal.id AS calendar_id, usr.* FROM cal_calendars AS cal INNER JOIN cal_settings AS sett ON sett.calendar_id = cal.id INNER JOIN go_users AS usr ON sett.user_id = usr.id';
+			$db->query($sql);
+			
+			while($calendar = $db->next_record())
+			{
+				$uc['id']=$calendar['calendar_id'];
+				$uc['name']= String::reformat_name_template($_POST['calendar_name_template'],$calendar);
+
+				$cal->update_calendar($uc);
+			}
+		}
 	}
 
 	public static function check_database() {
@@ -774,7 +809,7 @@ class calendar extends db {
 		if(isset($calendar['user_id']) && $old_calendar['user_id'] != $calendar['user_id']) {
 			$GO_SECURITY->chown_acl($old_calendar['acl_id'], $calendar['user_id']);
 		}
-
+		
 		return $this->update_row('cal_calendars','id', $calendar);
 	}
 
@@ -798,6 +833,8 @@ class calendar extends db {
 		return false;
 	}
 
+	
+
 	function get_default_calendar($user_id) {
 
 		$settings = $this->get_settings($user_id);
@@ -807,8 +844,6 @@ class calendar extends db {
 			if($calendar)
 				return $calendar;
 		}
-
-
 
 		$this->get_user_calendars($user_id, 0, 1);
 		if($calendar = $this->next_record(DB_ASSOC)) {
@@ -828,7 +863,14 @@ class calendar extends db {
 			if(!$user) {
 				return false;
 			}
-			$calendar_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
+
+			$tpl = $GO_CONFIG->get_setting('calendar_name_template');
+			if(!$tpl)
+				$tpl = '{first_name} {middle_name} {last_name}';
+
+			$calendar_name = String::reformat_name_template($tpl,$user);
+			
+			//$calendar_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$calendar['name'] = $calendar_name;
 			$calendar['acl_id']=$GO_SECURITY->get_new_acl('calendar',$user_id);
 			$x = 1;
@@ -858,7 +900,6 @@ class calendar extends db {
 			}
 		}
 	}
-
 
 
 	function get_calendar($calendar_id=0, $user_id=0) {

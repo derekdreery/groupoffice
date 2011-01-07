@@ -134,3 +134,7 @@ GO.addressbook.lang.iban='IBAN';
 
 GO.addressbook.lang.unknownEmail = 'Unknown email address';
 GO.addressbook.lang.strUnknownEmail = 'This email address is unknown. Do you wish to add it to a new contact, integrate it in an existing contact, or cancel?';
+
+GO.addressbook.lang.globalsettings_templatelabel = 'Template';
+GO.addressbook.lang.globalsettings_allchangelabel = 'Change all?';
+GO.addressbook.lang.globalsettings_renameall = 'Rename all?';

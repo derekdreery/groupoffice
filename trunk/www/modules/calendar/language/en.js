@@ -136,3 +136,7 @@ GO.calendar.lang.sendCancellation='Would you like to send all the participants a
 GO.calendar.lang.forthcomingAppointments='Forthcoming appointments';
 
 GO.calendar.lang.quarterShort = 'Q';
+
+GO.calendar.lang.globalsettings_templatelabel = 'Template';
+GO.calendar.lang.globalsettings_allchangelabel = 'Change all?';
+GO.calendar.lang.globalsettings_renameall = 'Rename all?';

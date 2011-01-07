@@ -124,3 +124,7 @@ GO.calendar.lang.sendCancellation='Wilt u alle deelnemers een annuleringsbericht
 GO.calendar.lang.forthcomingAppointments='Toekomstige afspraken';
 
 GO.calendar.lang.quarterShort = 'K';
+
+GO.calendar.lang.globalsettings_templatelabel = 'Naam template';
+GO.calendar.lang.globalsettings_allchangelabel = 'Bestaande veranderen?';
+GO.calendar.lang.globalsettings_renameall = 'Weet u zeker dat u alles wilt hernoemen?';
