@@ -119,3 +119,5 @@ $lang['calendar']['invitation_update']='Updated invitation';
 $lang['calendar']['cancellation']='Cancellation';
 
 $lang['calendar']['non_selected'] = 'in non-selected calendar';
+
+$lang['calendar']['linkIfCalendarNotSupported']='Only use the links below if your mail client does not support calendaring functions.';

@@ -3114,6 +3114,7 @@ class calendar extends db {
 
 			$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
 					$this->event_to_html($event).
+					'<p><b>'.$lang['calendar']['linkIfCalendarNotSupported'].'</b></p>'.
 					'<p>'.$lang['calendar']['acccept_question'].'</p>'.
 					'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event['id'].'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
 					'&nbsp;|&nbsp;'.
