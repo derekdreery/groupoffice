@@ -81,9 +81,9 @@ try {
 			if(empty($name)) {
 				throw new MissingFieldException();
 			}
-			$extension = File::get_extension($file['name']);
-			if(!empty($extension)) {
-				$name .= '.'.$extension;
+			$up_file['extension'] = File::get_extension($file['name']);
+			if(!empty($up_file['extension'])) {
+				$name .= '.'.$up_file['extension'];
 			}
 
 			if($name != $file['name']) {
@@ -94,9 +94,9 @@ try {
 				$fs = new filesystem();
 				$fs->move($GO_CONFIG->file_storage_path.$oldpath, $GO_CONFIG->file_storage_path.$newpath);
 				$response['path']=$newpath;
-
-				$up_file['name']=$name;
 			}
+			$up_file['name']=$name;
+			$up_file['folder_id'] = $folder['id'];
 			$files->update_file($up_file);
 
 
