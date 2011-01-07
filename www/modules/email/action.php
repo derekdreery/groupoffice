@@ -1264,10 +1264,6 @@ try {
 				//$participants = ;
 
 
-				go_debug($email);
-				go_debug($status_id);
-				go_debug($event['participants']);
-
 				$organizer_email = false;
 				foreach($event['participants'] as $participant_email=>&$participant)
 				{

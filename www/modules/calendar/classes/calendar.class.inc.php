@@ -674,6 +674,9 @@ class calendar extends db {
 		$this->query($sql);
 		return $this->next_record();
 	}
+	function update_participant($participant) {
+		return $this->update_row('cal_participants', 'id', $participant);
+	}
 
 	function get_participants($event_id) {
 		$sql = "SELECT * FROM cal_participants WHERE event_id='".$this->escape($event_id)."' ORDER BY is_organizer DESC, email ASC" ;
@@ -1024,7 +1027,7 @@ class calendar extends db {
 		return 'events/'.File::strip_invalid_chars($calendar['name']).'/'.date('Y', $event['start_time']).'/'.date('m', $event['start_time']).'/'.File::strip_invalid_chars($event['name']);
 	}
 
-	function add_participants($event, $participants) {
+	function add_participants($event, $participants, $update=false) {
 
 		global $GO_CONFIG;
 
@@ -1033,7 +1036,8 @@ class calendar extends db {
 		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
-		$this->remove_participants($event['id']);
+		//if(!$update)
+			//$this->remove_participants($event['id']);
 
 		foreach ($participants as $participant_email => $participant) {
 			$participant['event_id'] = $event['id'];
@@ -1043,8 +1047,15 @@ class calendar extends db {
 
 			$user = $GO_USERS->get_user_by_email($participant['email']);
 			$participant['user_id'] = ($user) ? $user['id'] : 0;
-
-			$this->add_participant($participant);
+			
+			$existing_participant = $this->is_participant($event['id'], $participant['email']);
+			if(!$existing_participant)
+				$this->add_participant($participant);
+			else{
+				$participant['id']=$existing_participant['id'];
+				go_debug($participant);
+				$this->update_participant($participant);
+			}
 		}
 	}
 
@@ -1329,7 +1340,7 @@ class calendar extends db {
 		}
 
 		if(isset($participants)){
-			$this->add_participants($event,$participants);
+			$this->add_participants($event,$participants, true);
 		}
 
 		if($update_related && !empty($event['id'])) {
