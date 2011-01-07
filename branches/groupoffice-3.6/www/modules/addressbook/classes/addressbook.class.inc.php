@@ -22,7 +22,7 @@ class addressbook extends db {
 		$events->add_listener('check_database', __FILE__, 'addressbook', 'check_database');
 	}
 	public static function check_database() {
-		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY;
+		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
 
 		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 
@@ -48,10 +48,10 @@ class addressbook extends db {
 			}
 			flush();
 
-			$acl_id=$GO_SECURITY->get_global_read_only_acl();
+			//$acl_id=$GO_SECURITY->get_global_read_only_acl();
 
-			$files->check_share('contacts', 1,$acl_id, false);
-			$files->check_share('companies', 1, $acl_id, false);
+			$files->check_share('contacts', 1,$GO_MODULES->modules['addressbooks']['acl_id'], false);
+			$files->check_share('companies', 1, $GO_MODULES->modules['addressbooks']['acl_id'], false);
 
 			$db->query("SELECT c.*,a.name AS addressbook_name,a.acl_id FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
 			while($contact = $db->next_record()) {
