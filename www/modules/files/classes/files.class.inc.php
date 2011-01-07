@@ -182,6 +182,11 @@ class files extends db {
 		return $this->mkdir($parent_folder, $folder_name, false,1,true,'1');
 	}
 
+	/*
+	 * Read only is a little misleading. It means the sharing settings may not
+	 * be adjusted.
+	 */
+
 	function set_readonly($folder_id) {
 		$up_folder['readonly']='1';
 		$up_folder['id']=$folder_id;

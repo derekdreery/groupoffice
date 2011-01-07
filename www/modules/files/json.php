@@ -438,8 +438,7 @@ try {
 
 							}*/
 
-
-				$response['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $curfolder);
+				$response['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $curfolder);				
 
 				if(!$response['write_permission'] && !$files->has_read_permission($GO_SECURITY->user_id, $curfolder)) {
 					throw new AccessDeniedException();

@@ -383,12 +383,38 @@ class GO_SECURITY extends db {
 	 * @access public
 	 * @return bool		True on success
 	 */
-	function delete_group_from_acl($group_id, $acl_id) {
+	function delete_group_from_acl($group_id, $acl_id, $force_group_root=false) {
 		global $GO_CONFIG;
-		if($group_id != $GO_CONFIG->group_root) {
+		if($force_group_root || $group_id != $GO_CONFIG->group_root) {
 			$sql = "DELETE FROM go_acl WHERE group_id='".$this->escape($group_id)."' AND acl_id='".$this->escape($acl_id)."'";
 			return $this->query($sql);
 		}
+	}
+
+	function get_global_read_only_acl(){
+		global $GO_CONFIG;
+
+		$acl_id = $GO_CONFIG->get_setting('global_read_only_acl');
+		if(!$acl_id){
+			$acl_id = $this->get_new_acl('global', 1);
+
+			$this->set_read_only_acl_permissions($acl_id);
+
+			$GO_CONFIG->save_setting('global_read_only_acl', $acl_id);
+		}
+
+		return $acl_id;
+	}
+
+	function set_read_only_acl_permissions($acl_id=false){
+		global $GO_CONFIG;
+
+		if(!$acl_id)
+			$acl_id = $GO_CONFIG->get_setting('global_read_only_acl');
+		
+		$this->delete_group_from_acl($GO_CONFIG->group_root, $acl_id, true);
+		$this->add_group_to_acl($GO_CONFIG->group_everyone, $acl_id);
+		$this->delete_user_from_acl(1, $acl_id);
 	}
 
 	/**
