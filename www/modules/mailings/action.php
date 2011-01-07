@@ -69,7 +69,9 @@ try {
 						$files = new files();
 
 						$tmp_name = $inlineAttachment['tmp_file'];
-						if(is_numeric($tmp_name)) {
+						if(!empty($inlineAttachment['temp'])){
+							$tmp_name= $GO_CONFIG->tmpdir.'attachments/'.$tmp_name;
+						}elseif(is_numeric($tmp_name)) {
 							$file = $files->get_file($tmp_name);
 							$folder = $files->get_folder($file['folder_id']);
 							if(!$file || !$folder) {
@@ -263,7 +265,16 @@ try {
 							$new_inline_attachments[]=$inline_attachment;
 
 						}else if(!empty($inline_attachment['tmp_file'])){
-							$inline_attachment['tmp_file']=$GO_CONFIG->file_storage_path.$inline_attachment['tmp_file'];
+
+							
+							if(!empty($inline_attachment['temp'])){
+								$tmp_name= $GO_CONFIG->tmpdir.'attachments/'.$inline_attachment['tmp_file'];
+							}else
+							{
+								$tmp_name = $GO_CONFIG->file_storage_path.$inline_attachment['tmp_file'];
+							}
+
+							$inline_attachment['tmp_file']=$tmp_name;
 							$new_inline_attachments[]=$inline_attachment;
 						}
 					}

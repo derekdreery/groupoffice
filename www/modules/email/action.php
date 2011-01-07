@@ -460,7 +460,10 @@ try {
 						$inline_attachments = json_decode($_POST['inline_attachments'], true);
 						foreach($inline_attachments as $inlineAttachment) {
 							$tmp_name = $inlineAttachment['tmp_file'];
-							if(is_numeric($tmp_name)) {
+
+							if(!empty($inlineAttachment['temp'])){
+								$tmp_name= $GO_CONFIG->tmpdir.'attachments/'.$tmp_name;
+							}elseif(is_numeric($tmp_name)) {
 								require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 								$files = new files();
 
@@ -474,7 +477,6 @@ try {
 								$tmp_name = $GO_CONFIG->file_storage_path.$files->build_path($folder).'/'.$file['name'];
 							}
 
-
 							if(file_exists($tmp_name)) {
 								//Browsers reformat URL's so a pattern match
 								$just_filename = utf8_basename($inlineAttachment['url']);
@@ -486,39 +488,10 @@ try {
 
 									//Browsers reformat URL's so a pattern match
 									$body = str_replace($matches[1], $src_id, $body);
-
-									//go_debug($body);
-									//go_debug(preg_quote($just_filename));
-									//go_debug($src_id);
-
-									//$body = preg_replace('/="[^"]*'.preg_quote($just_filename).'"/', '="'.$src_id.'"', $body, null, $count);
-									//go_debug($count);
-									//throw new Exception($just_filename);
-
 								}
 							}
 						}
 
-						$inline_temp_attachments = json_decode($_POST['inline_temp_attachments'], true);
-						foreach($inline_temp_attachments as $inlineAttachment)
-						{
-							$tmp_name = $GO_CONFIG->tmpdir.$inlineAttachment['tmp_file'];
-							
-							if(file_exists($tmp_name))
-							{
-								//Browsers reformat URL's so a pattern match
-								$just_filename = utf8_basename($inlineAttachment['url']);
-								if(preg_match('/="([^"]*'.preg_quote($just_filename).')"/',$body,$matches))
-								{
-									$img = Swift_EmbeddedFile::fromPath($tmp_name);
-									$img->setContentType(File::get_mime($tmp_name));
-									$src_id = $swift->message->embed($img);
-
-									//Browsers reformat URL's so a pattern match
-									$body = str_replace($matches[1], $src_id, $body);
-								}
-							}
-						}
 					}
 
 					if(!empty($_POST['encrypt']) && !$draft) {
