@@ -339,7 +339,7 @@ class ical2array {
 				break;
 
 			case 'value':
-				if(strpos($this->object_name, 'ATTENDEE') !== false)
+				if(strpos($this->object_name, 'ATTENDEE') === 0)
 				{
 					$this->object['ATTENDEES'][$this->object_name]['value'] = $this->buffer;
 				}else
