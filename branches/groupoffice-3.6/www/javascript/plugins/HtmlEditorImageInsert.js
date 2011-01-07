@@ -103,11 +103,13 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 	selectTempImage : function(name)
 	{
 		this.selectedUrl = BaseHref+'controls/download_temp_file.php?name='+name;
-		this.name = name;		
+		this.name = name;
+		this.selectedPath = name;
+		this.temp=true;
 
 		var html = '<img src="'+this.selectedUrl+'" border="0" />';
 
-		this.fireEvent('insert_temp', this);
+		this.fireEvent('insert', this,  this.selectedPath, this.selectedUrl, this.temp);
 		
 		this.menu.hide();
 
@@ -120,10 +122,11 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 		this.selectedRecord = r;
 		this.selectedPath = r.data.path;
 		this.selectedUrl = GO.settings.modules.files.url+'download.php?id='+this.selectedRecord.get('id');
+		this.temp=false;
 				
 		var html = '<img src="'+this.selectedUrl+'" border="0" />';
 								
-		this.fireEvent('insert', this);
+		this.fireEvent('insert', this, this.selectedPath, this.selectedUrl, this.temp, r.data.id);
 
 		this.editor.focus();
 			

@@ -264,18 +264,12 @@ GO.email.EmailComposer = function(config) {
 	
 
 	var imageInsertPlugin = new GO.plugins.HtmlEditorImageInsert();
-
-	imageInsertPlugin.on('insert_temp', function(plugin) {
-		this.inline_temp_attachments.push({
-			tmp_file : plugin.name,
-			url : plugin.selectedUrl
-		});
-	}, this);
 	
-	imageInsertPlugin.on('insert', function(plugin) {		
+	imageInsertPlugin.on('insert', function(plugin, path, url,temp,id) {
 		this.inline_attachments.push({
-			tmp_file : plugin.selectedRecord.get('id'),
-			url : plugin.selectedUrl
+			tmp_file : id || path,
+			url : url,
+			temp:temp
 		});
 	}, this);
 
