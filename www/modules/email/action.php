@@ -1218,27 +1218,27 @@ try {
 					}
 				}
 
+				$defcal = $cal->get_default_calendar($GO_SECURITY->user_id);
+
+				$calendars[]=array(
+					'id' => $defcal['id'],
+					'name' => $defcal['name']
+				);
+
 				if(!$calendar_id)
 				{
 					$cal->get_authorized_calendars($GO_SECURITY->user_id);
 					while($cal->next_record())
 					{
-						$calendars[] = array(
-							'id' => $cal->f('id'),
-							'name' => $cal->f('name')
-						);
-					}
-				}
-
-				$defcal = $cal->get_default_calendar($GO_SECURITY->user_id);
-				if (!empty($defcal)) {
-					foreach ($calendars as $key=>$calendar) {
-						if ($calendar['id']==$defcal['id']) {
-							unset($calendars[$key]);
-							array_unshift($calendars,array('id'=>$calendar['id'],'name'=>$calendar['name']));
+						if($cal->f('id')!=$defcal['id']){
+							$calendars[] = array(
+								'id' => $cal->f('id'),
+								'name' => $cal->f('name')
+							);
 						}
 					}
 				}
+				
 			}
 
 			if($create_event && (count($calendars) > 1))
