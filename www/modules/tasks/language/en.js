@@ -64,3 +64,7 @@ GO.tasks.lang.overDue='Overdue';
 GO.tasks.lang.futureTasks='Future tasks';
 GO.tasks.lang.all='All';
 GO.tasks.lang.active='Active';
+
+GO.tasks.lang.globalsettings_templatelabel='Task template';
+GO.tasks.lang.globalsettings_allchangelabel='Change existing?';
+GO.tasks.lang.globalsettings_renameall = 'Rename all?';

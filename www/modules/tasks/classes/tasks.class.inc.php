@@ -21,6 +21,41 @@ class tasks extends db
 		$events->add_listener('add_user', __FILE__, 'tasks', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'tasks', 'build_search_index');
 		$events->add_listener('check_database', __FILE__, 'tasks', 'check_database');
+		$events->add_listener('load_global_settings', __FILE__, 'tasks','load_global_settings');
+		$events->add_listener('save_global_settings', __FILE__, 'tasks','save_global_settings');
+	}
+
+	public static function load_global_settings(&$response)
+	{
+		global $GO_CONFIG;
+		$response['data']['task_name_template']=$GO_CONFIG->get_setting('task_name_template');
+
+		if(!$response['data']['task_name_template'])
+			$response['data']['task_name_template']='{first_name} {middle_name} {last_name}';
+
+	}
+
+	public static function save_global_settings(&$response)
+	{
+		global $GO_CONFIG;
+		$GO_CONFIG->save_setting('task_name_template', $_POST['task_name_template']);
+
+		if(isset($_POST['change_all_task_names']))
+		{
+			$tsk = new tasks();
+			$db = new db();
+
+			$sql = 'SELECT tal.id AS tasklist_id, usr.* FROM ta_lists AS tal INNER JOIN ta_settings AS sett ON sett.default_tasklist_id = tal.id INNER JOIN go_users AS usr ON sett.user_id = usr.id';
+			$db->query($sql);
+
+			while($tasklist = $db->next_record())
+			{
+				$ut['id']=$tasklist['tasklist_id'];
+				$ut['name']= String::reformat_name_template($_POST['task_name_template'],$tasklist);
+		
+				$tsk->update_tasklist($ut);
+			}
+		}
 	}
 
 	public static function check_database(){
@@ -311,7 +346,14 @@ class tasks extends db
 			if(!$user){
 				return false;
 			}
-			$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
+
+			$tpl = $GO_CONFIG->get_setting('task_name_template');
+			if(!$tpl)
+				$tpl = '{first_name} {middle_name} {last_name}';
+
+			$task_name = String::reformat_name_template($tpl,$user);
+
+			//$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$list['name'] = $task_name;
 			$list['acl_id']=$GO_SECURITY->get_new_acl('tasks',$user_id);
 			$x = 1;

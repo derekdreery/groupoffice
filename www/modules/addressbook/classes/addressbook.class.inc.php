@@ -20,7 +20,42 @@ class addressbook extends db {
 		$events->add_listener('build_search_index', __FILE__, 'addressbook', 'build_search_index');
 		$events->add_listener('init_customfields_types', __FILE__, 'addressbook', 'init_customfields_types');
 		$events->add_listener('check_database', __FILE__, 'addressbook', 'check_database');
+		$events->add_listener('load_global_settings', __FILE__, 'addressbook','load_global_settings');
+		$events->add_listener('save_global_settings', __FILE__, 'addressbook','save_global_settings');
 	}
+
+	public static function load_global_settings(&$response)
+	{
+		global $GO_CONFIG;
+		$response['data']['addressbook_name_template']=$GO_CONFIG->get_setting('addressbook_name_template');
+
+		if(!$response['data']['addressbook_name_template'])
+			$response['data']['addressbook_name_template']='{first_name} {middle_name} {last_name}';
+	}
+
+	public static function save_global_settings(&$response)
+	{
+		global $GO_CONFIG;
+		$GO_CONFIG->save_setting('addressbook_name_template', $_POST['addressbook_name_template']);
+
+		if(isset($_POST['change_all_addressbook_names']))
+		{
+			$ab = new addressbook();
+			$db = new db();
+
+			$sql = 'select distinct a.id AS addressbook_id, a.name, u.* from ab_addressbooks a inner join go_users u on u.id=a.user_id WHERE user_id !=1 group by user_id';
+			$db->query($sql);
+
+			while($addrbook = $db->next_record())
+			{
+				$ua['id']=$addrbook['addressbook_id'];
+				$ua['name']= String::reformat_name_template($_POST['addressbook_name_template'],$addrbook);
+
+				$ab->update_addressbook($ua);
+			}
+		}
+	}
+
 	public static function check_database() {
 		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
 
@@ -173,7 +208,16 @@ class addressbook extends db {
 	}
 
 	function create_default_addressbook($user) {
-		$name = String::format_name($user, '','','last_name');
+		global $GO_CONFIG;
+		
+		$tpl = $GO_CONFIG->get_setting('task_name_template');
+
+		if(!$tpl)
+			$tpl = '{first_name} {middle_name} {last_name}';
+
+			$name = String::reformat_name_template($tpl,$user);
+
+		//$name = String::format_name($user, '','','last_name');
 		$new_ab_name = $name;
 		$x = 1;
 		while ($this->get_addressbook_by_name($new_ab_name)) {

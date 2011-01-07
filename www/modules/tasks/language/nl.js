@@ -52,3 +52,7 @@ GO.tasks.lang.overDue='Te laat';
 GO.tasks.lang.futureTasks='Toekomstige taken';
 GO.tasks.lang.all='Alles';
 GO.tasks.lang.active='Actieve';
+
+GO.tasks.lang.globalsettings_templatelabel='Naam template';
+GO.tasks.lang.globalsettings_allchangelabel='Bestaande veranderen?';
+GO.tasks.lang.globalsettings_renameall = 'Weet u zeker dat u alles wilt hernoemen?';

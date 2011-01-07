@@ -23,3 +23,4 @@ modules/addressbook/SavedQueryGrid.js
 modules/addressbook/MainPanel.js
 modules/addressbook/SelectAddressbook.js
 modules/addressbook/CustomField.js
+modules/addressbook/GlobalSettings.js
