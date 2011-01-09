@@ -1961,8 +1961,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			if(GO.settings.has_admin_permission)
 			{
 				items.push(this.groupsGrid);
+			}
+
+			if(GO.settings.modules.calendar.write_permission)
+			{
 				items.push(this.resourcesGrid);
-			}		
+			}
             
 			this.adminDialog = new Ext.Window({
 				title: GO.calendar.lang.administration,
