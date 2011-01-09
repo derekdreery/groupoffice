@@ -941,6 +941,8 @@ class files extends db {
 
 			$share_count = $this->get_authorized_shares($user_id);
 
+			$folders=array();
+
 			while ($folder = $this->next_record()) {
 
 				$folder['path'] = $fs2->build_path($folder);
