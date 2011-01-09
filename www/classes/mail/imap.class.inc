@@ -1184,6 +1184,34 @@ class imap extends imap_bodystruct {
 	}
 
 
+
+
+	public function has_alternative_body($struct){
+
+		go_debug($struct);
+
+		if (!is_array($struct) || empty($struct)) {
+			return false;
+		}
+
+		if(isset($struct['type']) && $struct['type']=='message' && $struct['subtype']=='alternative'){
+			return true;
+		}
+
+		foreach ($struct as $id => $vals) {
+			if(isset($vals['type']) && $vals['type']=='message' && $vals['subtype']=='alternative'){
+				return true;
+			}elseif (isset($vals['subs']) && (!isset($vals['subtype']) || $vals['subtype']!='rfc822')){
+				if($this->has_alternative_body($vals['subs'])){
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+
 	/**
 	 * Find's the first message part in a structure returned from
 	 * get_message_structure that matches the parameters given.
@@ -1238,7 +1266,7 @@ class imap extends imap_bodystruct {
 					//
 
 					/*
-					 * If we found body parts for example 1.1 and 1.2 don't include a text
+					 * If we found body parts for example 1.1 and 1.2 doesn't include a text
 					 * attachment with number 2 like in this sample structure
 					 *
 					 * array (
