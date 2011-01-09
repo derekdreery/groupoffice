@@ -759,16 +759,23 @@ class cached_imap extends imap{
 			$message['body_ids'][]=$plain_parts['parts'][$i]['imap_id'];
 		}
 
-		$html_parts = $this->find_body_parts($struct,'text', 'html');
-		//go_debug($html_parts);
-		for($i=0,$max=count($html_parts['parts']);$i<$max;$i++)
-		{
-			if(empty($html_parts['parts'][$i]['charset']))
-				$html_parts['parts'][$i]['charset']=$this->default_charset;
-			
-			$message['body_ids'][]=$html_parts['parts'][$i]['imap_id'];
-		}
+		
+		if(!count($plain_parts['parts']) || $this->has_alternative_body($struct)){
 
+			$html_parts = $this->find_body_parts($struct,'text', 'html');
+			//go_debug($html_parts);
+			for($i=0,$max=count($html_parts['parts']);$i<$max;$i++)
+			{
+				if(empty($html_parts['parts'][$i]['charset']))
+					$html_parts['parts'][$i]['charset']=$this->default_charset;
+
+				$message['body_ids'][]=$html_parts['parts'][$i]['imap_id'];
+			}			
+		}else
+		{
+			$html_parts=array('text_found'=>false, 'parts'=>array());
+		}
+		
 		$inline_images=array();
 
 		if(!isset($message['plain_body']) && $plain_parts['text_found'] && ($plain_body_requested || ($html_body_requested && !$html_parts['text_found']))){
