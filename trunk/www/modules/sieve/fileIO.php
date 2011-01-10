@@ -131,7 +131,6 @@ try
 			$response['results'] = array();
 			foreach($all_scripts as $script)
 			{
-				
 				$name = $script;
 			
 				if($script == $response['active'])
@@ -139,7 +138,7 @@ try
 
 				$response['results'][]=array('value'=>$script,'name'=>$name);
 			}
-
+			
 			$response['success'] = true;
 			break;
 
@@ -159,12 +158,10 @@ try
 				throw new Exception('Login failed');
 			}
 
-			if(!empty($_REQUEST['script_name'])){
+			if(!empty($_REQUEST['script_name']))
 				$script_name = $_REQUEST['script_name'];
-			}else
-			{
+			else
 				$script_name = $sieve->get_active();
-			}
 			
 			$response['results']=array();
 
@@ -191,8 +188,6 @@ try
 			}
 
 			$index=0;
-
-			//print_r($sieve);
 
 			foreach($sieve->script->content as $item)
 			{
@@ -272,9 +267,7 @@ try
 					
 			// Het script ophalen en terugzetten
 			if($script_index>-1 && isset($sieve->script->content[$script_index]))
-			{
 				$sieve->script->update_rule($script_index,$rule);
-			}
 			else
 				$sieve->script->add_rule($rule);
 
