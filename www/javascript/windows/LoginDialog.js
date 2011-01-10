@@ -134,7 +134,7 @@ GO.dialog.LoginDialog = function(config){
 
 						Ext.getBody().mask(GO.lang.waitMsgLoad);
 						Ext.Ajax.request({
-							url:'action.php',
+							url:BaseHref+'action.php',
 							scope:this,
 							params:{
 								task:'lost_password',
