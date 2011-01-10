@@ -228,4 +228,26 @@ $input_holidays['var']['nb']['1'] = '2. påskedag';
 $input_holidays['var']['nb']['39'] = 'Kristi himmelfartsdag';
 $input_holidays['var']['nb']['49'] = '1. pinsedag';
 $input_holidays['var']['nb']['50'] = '2. pinsedag';
+
+
+
+
+// Swedish holidays (sv) - According to law (1989:253)
+$input_holidays['fix']['sv']['01-01'] = 'Nyårsdagen';
+$input_holidays['fix']['sv']['01-06'] = 'Trettondedag jul';
+$input_holidays['fix']['sv']['05-01'] = 'Första maj';
+$input_holidays['fix']['sv']['06-06'] = 'Sveriges nationaldag';
+$input_holidays['fix']['sv']['12-25'] = 'Juldagen';
+$input_holidays['fix']['sv']['12-26'] = 'Annandag jul';
+
+$input_holidays['var']['sv']['-2'] = 'Långfredagen';
+$input_holidays['var']['sv']['0'] = 'Påskdagen';
+$input_holidays['var']['sv']['1'] = 'Annandag påsk';
+$input_holidays['var']['sv']['39'] = 'Kristi himmelsfärdsdag';
+$input_holidays['var']['sv']['49'] = 'Pingstdagen';
+
+// // Midsummers Day: the saturday between June 20 and 26
+// $input_holidays['var']['sv']['**'] = 'Midsommardagen';
+// // All hallows day: the saturday between October 31 and November 6
+// $input_holidays['var']['sv']['**'] = 'Alla helgons dag';
 ?>
