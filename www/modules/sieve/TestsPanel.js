@@ -53,6 +53,15 @@ config = config || {};
 		width:150
 	});
 
+	this.txtCustom = new Ext.form.TextField({
+		name: 'custom' ,
+		emptyText: GO.sieve.lang.custom,
+		fieldLabel:GO.sieve.lang.custom,
+		allowBlank:false,
+		width:140,
+		hidden: true
+	});
+
 	this.cmbUnderOver = new GO.form.ComboBox({
 		hiddenName:'underover',
 		hidden: true,
@@ -132,13 +141,47 @@ config = config || {};
 			var _arg2 = this.txtCondition.getValue();
 
 			// Workaround for _arg2 check
-			if(this.cmbOperator.getValue() == 'exists' || this.cmbOperator.getValue() == 'notexists')
+			if(this.cmbOperator.getValue() == 'exists' || this.cmbOperator.getValue() == 'notexists' || this.cmbField.getValue() == 'X-Spam-Flag')
 				_arg2 = 'sometext';
 			
 			// Check the input value of the txtBox
 			if(_arg2 != '')
 			{
-				if(this.cmbField.getValue() == 'size')
+				if(this.cmbField.getValue() == 'custom')
+				{
+					_test = 'header';
+					_arg = '';
+					_arg1 = this.txtCustom.getValue();
+					_arg2 = this.txtCondition.getValue();
+
+					if(this.cmbOperator.getValue() == 'exists' || this.cmbOperator.getValue() == 'notexists')
+					{
+						_test = 'exists';
+						_arg = this.txtCustom.getValue();
+						_arg1 = '';
+						_arg2 = '';
+					}
+
+					if(this.cmbOperator.getValue() == 'notcontains' || this.cmbOperator.getValue() == 'notis' || this.cmbOperator.getValue() == 'notexists')
+						_not = true;
+					else
+						_not = false;
+
+					if(this.cmbOperator.getValue() == 'contains' ||this.cmbOperator.getValue() == 'notcontains')
+						_type = 'contains';
+					else if(this.cmbOperator.getValue() == 'is' ||this.cmbOperator.getValue() == 'notis')
+						_type = 'is';
+				}
+				else if(this.cmbField.getValue() == 'X-Spam-Flag')
+				{
+					_test = 'header';
+					_not = false;
+					_type	= this.cmbOperator.getValue();
+					_arg = '';
+					_arg1 = 'X-Spam-Flag';
+					_arg2 = 'YES';
+				}
+				else if(this.cmbField.getValue() == 'size')
 				{
 					_test = 'size';
 					_not = false;
@@ -238,6 +281,7 @@ config = config || {};
 			xtype:'compositefield',
 			items:[
 				this.cmbField,
+				this.txtCustom,
 				this.cmbUnderOver,
 				this.cmbOperator, 
 				this.txtCondition,
@@ -276,6 +320,12 @@ Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
 			this.rgSize.setValue(last);
 		}
 
+		if(record.data.arg1 != 'Subject' && record.data.arg1 != 'From' && record.data.arg1 != 'To' && record.data.arg1 != 'size' && record.data.arg1 != 'X-Spam-Flag')
+		{
+			this.cmbField.setValue('custom');
+			this.txtCustom.setValue(record.data.arg1);
+		}
+
 		if(record.data.type == 'contains' && record.data.not == true)
 			this.cmbOperator.setValue('notcontains');
 		else if(record.data.type == 'is' && record.data.not == true)
@@ -283,12 +333,32 @@ Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
 		else if(record.data.test == 'exists' && record.data.not == true)
 		{
 			this.cmbOperator.setValue('notexists');
-			this.cmbField.setValue(record.data.arg);
+			
+			if(record.data.arg != '' && (record.data.arg == 'notis' || record.data.arg == 'is' || record.data.arg == 'notcontains' || record.data.arg == 'contains' || record.data.arg == 'exists' || record.data.arg == 'notexists'))
+				this.cmbField.setValue(record.data.arg);
+			else
+			{
+				this.cmbField.setValue('custom');
+				if(record.data.arg == 'notis' || record.data.arg == 'is' || record.data.arg == 'notcontains' || record.data.arg == 'contains' || record.data.arg == 'exists' || record.data.arg == 'notexists')
+					this.txtCustom.setValue(record.data.arg1);
+				else
+					this.txtCustom.setValue(record.data.arg);
+			}
 		}
 		else if(record.data.test == 'exists' && record.data.not == false)
 		{
 			this.cmbOperator.setValue('exists');
-			this.cmbField.setValue(record.data.arg);
+
+			if(record.data.arg != '' && (record.data.arg == 'notis' || record.data.arg == 'is' || record.data.arg == 'notcontains' || record.data.arg == 'contains' || record.data.arg == 'exists' || record.data.arg == 'notexists'))
+				this.cmbField.setValue(record.data.arg);
+			else
+			{
+				this.cmbField.setValue('custom');
+				if(record.data.arg == 'notis' || record.data.arg == 'is' || record.data.arg == 'notcontains' || record.data.arg == 'contains' || record.data.arg == 'exists' || record.data.arg == 'notexists')
+					this.txtCustom.setValue(record.data.arg1);
+				else
+					this.txtCustom.setValue(record.data.arg);
+			}
 		}
 
 		this.setVisibleFields();
@@ -310,25 +380,50 @@ Ext.extend(GO.sieve.TestsPanel, Ext.FormPanel,{
 		switch(this.cmbField.getValue())
 		{
 			case 'size':
+				this.txtCustom.hide();
 				this.cmbOperator.hide();
 				this.cmbUnderOver.show();
 				this.rgSize.show();				
 				break;
 
 			case 'From':
+				this.txtCustom.hide();
 				this.cmbOperator.show();
 				this.cmbUnderOver.hide();
 				this.rgSize.hide();
 				break;
 
 			case 'To':
+				this.txtCustom.hide();
 				this.cmbOperator.show();
 				this.cmbUnderOver.hide();
 				this.rgSize.hide();				
 				break;
 				
 			case 'Subject':
+				this.txtCustom.hide();
 				this.cmbOperator.show();
+				this.cmbUnderOver.hide();
+				this.rgSize.hide();
+				break;
+				
+			case 'X-Spam-Flag':
+				this.txtCustom.hide();
+				this.cmbOperator.hide();
+				this.txtCondition.hide();
+				this.cmbUnderOver.hide();
+				this.rgSize.hide();
+				break;
+				
+			case 'custom':
+				this.txtCustom.show();
+				this.cmbOperator.show();
+				
+				if(this.cmbOperator.getValue() == 'exists' || this.cmbOperator.getValue() == 'notexists')
+					this.txtCondition.hide();
+				else
+					this.txtCondition.show();
+				
 				this.cmbUnderOver.hide();
 				this.rgSize.hide();
 				break;
