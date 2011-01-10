@@ -29,3 +29,7 @@ GO.files.lang.normalSize='Normale grootte';
 
 GO.files.lang.emailDownloadLink = 'Downloadlink emailen';
 GO.files.lang.expireTime= 'Downloaden mogelijk tot';
+
+GO.files.lang.applyState = 'De tabelinstellingen voor de layout van deze map door de eigenaar/beheerder toepassen voor iedereen.';
+GO.files.lang.applyStateShort = 'Layoutinstellingen toepassen voor iedereen';
+GO.files.lang.stateLocked = 'Map layout vastgezet door eigenaar/beheerder';

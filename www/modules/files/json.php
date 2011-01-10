@@ -391,7 +391,7 @@ try {
 
 			}elseif($_POST['id'] == 'new') {
 				$response['parent_id']=0;
-
+				
 				//require_once($GO_CONFIG->control_path.'phpthumb/phpThumb.config.php');
 
 				$sort = isset($_POST['sort']) ? $_POST['sort'] : 'mtime';
@@ -427,7 +427,7 @@ try {
 
 				$response['thumbs']=$curfolder['thumbs'];
 				$response['parent_id']=$curfolder['parent_id'];
-
+				$response['current_id']=$_POST['id'];
 				/*if($db_folder['thumbs']=='0' && !empty($_POST['thumbs']))
 						 {
 							$up_folder['id']=$db_folder['id'];
@@ -440,6 +440,17 @@ try {
 
 
 				$response['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $curfolder);
+
+				$_usersfolder = $files->resolve_path('users');
+				$response['may_apply_state'] = $curfolder['apply_state']==1 && (
+						$response['write_permission'] ||
+						($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) || $files->is_owner($curfolder)) || // is_owner;
+						$curfolder['parent_id']==$_usersfolder['id'] || // is_home_dir
+						$curfolder['user_id']==$GO_SECURITY->user_id // user_id_match
+					);
+
+				$response['lock_state'] = $curfolder['apply_state']==1;
+				$response['cm_state'] = $curfolder['cm_state'];
 
 				if(!$response['write_permission'] && !$files->has_read_permission($GO_SECURITY->user_id, $curfolder)) {
 					throw new AccessDeniedException();
@@ -755,6 +766,7 @@ try {
 
 			$usersfolder = $files->resolve_path('users');
 			$response['data']['is_home_dir']=$folder['parent_id']==$usersfolder['id'];
+			$response['data']['user_id_match']=$folder['user_id']==$GO_SECURITY->user_id;
 			$response['data']['notify']=$files->is_notified($folder['id'], $GO_SECURITY->user_id);
 
 			$params['response']=&$response;
