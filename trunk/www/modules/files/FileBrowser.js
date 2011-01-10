@@ -219,12 +219,14 @@ GO.files.FileBrowser = function(config){
 				return '<div class="go-grid-icon '+cls+'">'+v+'</div>';
 			}
 		},{
+			id:'type',
 			header:GO.lang.strType,
 			dataIndex: 'type',
 			sortable:true,
 			hidden:true,
 			width:100
 		},{
+			id:'size',
 			header:GO.lang.strSize,
 			dataIndex: 'size',
 			renderer: function(v){
@@ -233,6 +235,7 @@ GO.files.FileBrowser = function(config){
 			hidden:true,
 			width:100
 		},{
+			id:'mtime',
 			header:GO.lang.strMtime,
 			dataIndex: 'mtime',
 			width:120
@@ -263,20 +266,9 @@ GO.files.FileBrowser = function(config){
 		this.setFilesFilter(config.filesFilter);
 	}
 
-	var cm =  new Ext.grid.ColumnModel({
-		defaults:{
-			sortable:true
-		},
-		columns:fields.columns
-	});
-	
-	
-	this.gridPanel = new GO.grid.GridPanel( {
-		layout:'fit',
+	this.gridPanel = new GO.files.FilesGrid({
 		id:config.id+'-fs-grid',
-		split:true,
 		store: this.gridStore,
-		paging:true,
 		deleteConfig: {
 			scope:this,
 			success:function(){
@@ -287,12 +279,12 @@ GO.files.FileBrowser = function(config){
 				}
 			}
 		},
-		cm:cm,
-		autoExpandColumn:'name',
-		sm: new Ext.grid.RowSelectionModel(),
-		loadMask: true,
-		enableDragDrop: true,
-		ddGroup : 'FilesDD'
+		cm:new Ext.grid.ColumnModel({
+			defaults:{
+				sortable:true
+			},
+			columns:fields.columns
+		})
 	});
 		
 	this.gridPanel.on('delayedrowselect', function (grid, rowIndex, r){
@@ -606,8 +598,17 @@ GO.files.FileBrowser = function(config){
 	{
 		tbar.push('-');
 		tbar.push(this.emptyListButton);
-			
+
 	}
+
+	tbar.push(this.stateLockedButton = new Ext.Button({
+		iconCls: 'btn-settings',
+		text: GO.files.lang.stateLocked,
+		cls: 'x-btn-text-icon',
+		hidden: true,
+		disabled: true,
+		scope: this
+	}));
 
 	config.keys=[{
 		ctrl:true,
@@ -759,6 +760,11 @@ GO.files.FileBrowser = function(config){
 		}
 			
 	}, this);
+
+	Ext.state.Manager.getProvider().on('statechange',function(provider,key,value){
+		if (this.gridStore.reader.jsonData.may_apply_state && key==config.id+'-fs-grid')
+			this.saveCMState();
+	},this);
 }
 
 Ext.extend(GO.files.FileBrowser, Ext.Panel,{
@@ -772,8 +778,26 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	pasteMode : 'cut',
 
 	path : '',
-	
+
+	saveCMState: function() {
+		Ext.Ajax.request({
+			url: GO.settings.modules.files.url + 'action.php',
+			params : {
+				'task' : 'save_state',
+				'folder_id' : this.folder_id,
+				'state' : Ext.encode(this.gridPanel.getState())
+			},
+			scope: this
+		})
+	},
+
 	onStoreLoad : function(store){
+
+		if (store.reader.jsonData.lock_state && store.reader.jsonData.cm_state!='') {
+			this.gridPanel.applyStoredState(store.reader.jsonData.cm_state);
+		}
+
+		this.stateLockedButton.setVisible(store.reader.jsonData.lock_state);
 
 		if(!GO.util.empty(store.reader.jsonData.feedback))
 		{

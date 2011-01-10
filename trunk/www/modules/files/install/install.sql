@@ -77,6 +77,8 @@ CREATE TABLE `fs_folders` (
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
   `readonly` enum('0','1') NOT NULL,
+	`cm_state` TEXT NOT NULL DEFAULT '',
+	`apply_state` TINYINT(1) NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`),
   KEY `name` (`name`),
   KEY `parent_id` (`parent_id`)

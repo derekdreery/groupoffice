@@ -158,6 +158,8 @@ try {
 					}
 				}
 
+				$up_folder['apply_state'] = !empty($_POST['apply_state']) ? 1 : 0;
+
 				//$files->update_folder($up_folder);
 
 				if(isset($_POST['name'])) {
@@ -485,6 +487,12 @@ try {
 			$response['success']=true;
 
 			break;
+
+		case 'save_state':
+			$folder['id'] = $_POST['folder_id'];
+			$folder['cm_state'] = $_POST['state'];
+			$files->update_folder($folder);
+			$response['success'] = true;
 	}
 }
 catch(Exception $e) {
