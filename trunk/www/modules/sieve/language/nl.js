@@ -101,6 +101,8 @@ GO.sieve.lang.subjectexists = 'Onderwerp bestaat';
 GO.sieve.lang.fromexists = 'Afzender bestaat';
 GO.sieve.lang.toexists = 'Ontvanger bestaat';
 
+GO.sieve.lang.markedasspam = 'Gemarkeerd als spam';
+
 GO.sieve.lang.sizesmallerthan = 'Grootte is kleiner dan';
 GO.sieve.lang.sizebiggerthan = 'Grootte is groter dan';
 GO.sieve.lang.errorshowtext = 'Fout in weergeven van test';
@@ -117,3 +119,8 @@ GO.sieve.lang.vacationmessage = 'Bericht:';
 
 GO.sieve.lang.refusewithmesssage = 'Weigeren met bericht:';
 GO.sieve.lang.discard = 'Verwijderen';
+
+GO.sieve.lang.spamflag = 'Spam vlag';
+GO.sieve.lang.custom = 'Custom';
+
+GO.sieve.langcustommailheader= 'Mailheader:';

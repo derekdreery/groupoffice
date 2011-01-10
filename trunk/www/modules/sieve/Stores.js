@@ -19,6 +19,8 @@ GO.sieve.cmbFieldStore = new Ext.data.ArrayStore({
 	[GO.sieve.lang.from, 'From'],
 	[GO.sieve.lang.to, 'To'],
 	[GO.sieve.lang.size, 'size'],
+	[GO.sieve.lang.spamflag, 'X-Spam-Flag'],
+	[GO.sieve.lang.custom, 'custom'],
 	]
 });
 

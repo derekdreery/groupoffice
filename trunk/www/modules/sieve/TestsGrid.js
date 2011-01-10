@@ -63,6 +63,8 @@ GO.sieve.TestsGrid = function(config){
 									txtToDisplay = GO.sieve.lang.fromcontainsnot+' '+record.data.arg2;
 								else if(record.data.arg1 == 'To')
 									txtToDisplay = GO.sieve.lang.tocontainsnot+' '+record.data.arg2;
+								else
+									txtToDisplay = GO.sieve.langcustommailheader+" "+record.data.arg1+" "+GO.sieve.lang.notcontains+" "+record.data.arg2;
 							}
 							else
 							{
@@ -72,6 +74,10 @@ GO.sieve.TestsGrid = function(config){
 									txtToDisplay = GO.sieve.lang.fromcontains+' '+record.data.arg2;
 								else if(record.data.arg1 == 'To')
 									txtToDisplay = GO.sieve.lang.tocontains+' '+record.data.arg2;
+								else if(record.data.arg1 == 'X-Spam-Flag')
+									txtToDisplay = GO.sieve.lang.markedasspam;
+								else
+									txtToDisplay = GO.sieve.langcustommailheader+" "+record.data.arg1+" "+GO.sieve.lang.contains+" "+record.data.arg2;
 							}
 						}
 						else if(record.data.type == 'is')
@@ -84,6 +90,8 @@ GO.sieve.TestsGrid = function(config){
 									txtToDisplay = GO.sieve.lang.fromequalsnot+' '+record.data.arg2;
 								else if(record.data.arg1 == 'To')
 									txtToDisplay = GO.sieve.lang.toequalsnot+' '+record.data.arg2;
+								else
+									txtToDisplay = GO.sieve.langcustommailheader+" "+record.data.arg1+" "+GO.sieve.lang.notis +" "+record.data.arg2;
 							}
 							else
 							{
@@ -93,6 +101,8 @@ GO.sieve.TestsGrid = function(config){
 									txtToDisplay = GO.sieve.lang.fromequals+' '+record.data.arg2;
 								else if(record.data.arg1 == 'To')
 									txtToDisplay = GO.sieve.lang.toequals+' '+record.data.arg2;
+								else
+									txtToDisplay = GO.sieve.langcustommailheader+" "+record.data.arg1+" "+GO.sieve.lang.is +" "+record.data.arg2;
 							}
 						}
 						break;
@@ -106,6 +116,8 @@ GO.sieve.TestsGrid = function(config){
 								txtToDisplay = GO.sieve.lang.fromexistsnot;
 							else if(record.data.arg == 'To')
 								txtToDisplay = GO.sieve.lang.toexistsnot;
+							else
+								txtToDisplay = GO.sieve.langcustommailheader+" "+record.data.arg+" "+GO.sieve.lang.notexists;
 						}
 						else
 						{
@@ -115,6 +127,8 @@ GO.sieve.TestsGrid = function(config){
 								txtToDisplay = GO.sieve.lang.fromexists;
 							else if(record.data.arg == 'To')
 								txtToDisplay = GO.sieve.lang.toexists;
+							else
+								txtToDisplay = GO.sieve.langcustommailheader+" "+record.data.arg+" "+GO.sieve.lang.notexists;
 						}
 						break;
 

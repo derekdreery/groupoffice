@@ -167,7 +167,7 @@ try
 			}
 			
 			$response['results']=array();
-			
+
 			$sieve->load($script_name);
 			if(isset($_POST['delete_keys']))
 			{
@@ -191,6 +191,8 @@ try
 			}
 
 			$index=0;
+
+			//print_r($sieve);
 
 			foreach($sieve->script->content as $item)
 			{

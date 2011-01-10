@@ -148,6 +148,21 @@ class sieve
 	}
 
 	/**
+	 * Creates a script for the spam filter
+	 */
+	public function createSpamScript($test)
+	{
+		$test['test']	=	'X-Spam-Flag';
+		$test['not']		=	'false';
+		$test['type']	=	'contains';
+		$test['arg']		=	'YES';
+		$test['arg1']	=	'';
+		$test['arg2']	=	'';
+
+		return $test;
+	}
+
+	/**
 	 * Activates specified script
 	 */
 	public function activate($name = null)
