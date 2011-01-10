@@ -75,10 +75,10 @@ GO.gnupg.GenKeyDialog = function(config){
 	config.layout='fit';
 	config.modal=false;
 	config.resizable=true;
-	config.width=600;
+	config.width=400;
 	config.autoHeight=true;
 	config.closeAction='hide';
-	config.title= GO.gnupg.lang.genKey;					
+	config.title= GO.gnupg.lang.genKey;
 	config.items=this.formPanel;
 	config.buttons=[{
 			text: GO.lang['cmdOk'],
