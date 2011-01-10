@@ -122,7 +122,7 @@ if [ $OLDEST_BACKUP ]; then
 	# Set oldest backup to current one
 	echo Deleting $OLDEST_BACKUP
 	#ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "find $OLDEST_BACKUP -type d -exec chmod +xw {} \;"
-	sshc -i $RKEY $RUSER@$RMACHINE -p $RPORT "rm -Rf $OLDEST_BACKUP"
+	ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "rm -Rf $OLDEST_BACKUP"
 fi
 
 ssh -i $RKEY $RUSER@$RMACHINE -p $RPORT "mkdir $RTARGET/$BACKUP_DATE"
