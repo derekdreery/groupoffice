@@ -1536,8 +1536,10 @@ class tasks extends db
 	function get_tasklists_json(&$response, $auth_type='read', $query='', $start=0, $limit=0, $sort='name', $dir='ASC'){
 		global $GO_CONFIG, $GO_SECURITY;
 		
-		$tasklists = $GO_CONFIG->get_setting('tasks_tasklists_filter', $GO_SECURITY->user_id);
-		$tasklists = ($tasklists) ? explode(',',$tasklists) : array();
+		//$tasklists = $GO_CONFIG->get_setting('tasks_tasklists_filter', $GO_SECURITY->user_id);
+		//$tasklists = ($tasklists) ? explode(',',$tasklists) : array();
+		$tasklists=get_multiselectgrid_selections('tasklists');
+
 		if(!count($tasklists)) {
 			$this->get_settings($GO_SECURITY->user_id);
 			$default_tasklist_id = $this->f('default_tasklist_id');
