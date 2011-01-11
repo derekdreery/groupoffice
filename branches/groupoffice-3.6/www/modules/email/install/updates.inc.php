@@ -97,3 +97,5 @@ $updates[]="CREATE TABLE IF NOT EXISTS `em_folders_expanded` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`folder_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="ALTER TABLE `em_folders` ADD `no_select` BOOLEAN NOT NULL AFTER `can_have_children`";
