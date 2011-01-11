@@ -829,7 +829,7 @@ GO.email.EmailComposer = function(config) {
 
 			iconCls:'ml-btn-mailings',
 			text:GO.mailings.lang.emailTemplate,
-			menu:new GO.menu.JsonMenu({
+			menu:this.templatesMenu = new GO.menu.JsonMenu({
 				store:this.templatesStore,
 				listeners:{
 					scope:this,
@@ -1113,6 +1113,14 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 				if(templateRecordIndex>-1)
 					config.template_id=this.templatesStore.getAt(templateRecordIndex).get('template_id');
+			}
+
+			//check the right template menu item.
+			if(this.templatesStore && config.template_id && this.templatesMenu.items){
+				var item = this.templatesMenu.items.find(function(item){
+					return item.template_id==config.template_id;
+				});
+				item.setChecked(true);
 			}
 
 			
