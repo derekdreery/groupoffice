@@ -541,7 +541,7 @@ class files extends db {
 			$versions_dir = $this->get_versions_dir($file['id']);
 			$filename = utf8_basename($path);
 
-			$version_filepath = $versions_dir.'/'.date('YmdGi',filectime($path)).'_'.$_SESSION['GO_SESSION']['username'].'_'.$filename;
+			$version_filepath = $versions_dir.'/'.date('YmdGis',filectime($path)).'_'.$_SESSION['GO_SESSION']['username'].'_'.$filename;
 			$fs->move($path, $version_filepath);
 
 			global $GO_CONFIG;
