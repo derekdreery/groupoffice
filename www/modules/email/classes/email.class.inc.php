@@ -752,7 +752,7 @@ class email extends db {
 	*/
 
 	function get_subscribed($account_id, $folder_id=-1) {
-		$sql = "SELECT id,account_id,name,delimiter,can_have_children,parent_id,unseen,msgcount FROM em_folders";
+		$sql = "SELECT id,account_id,name,delimiter,can_have_children,no_select,parent_id,unseen,msgcount FROM em_folders";
 
 		if($account_id>0) {
 			$sql .= " WHERE account_id='".$this->escape($account_id)."'".
@@ -1072,6 +1072,7 @@ class email extends db {
 			$parent = $this->get_parent($account, $mailbox['name'], $mailbox['delimiter']);
 			$folder['parent_id'] = $parent['id'];
 			$folder['can_have_children'] = $mailbox['can_have_children'];
+			$folder['no_select'] = $mailbox['noselect'];
 			$folder['name'] = $mailbox['name'];
 
 			$folder['subscribed']=in_array($mailbox['name'], $subscribed_names) ? '1' : '0';

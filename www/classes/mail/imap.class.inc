@@ -333,6 +333,33 @@ class imap extends imap_bodystruct {
 			}
 		}
 
+
+
+		
+
+		//sometimes shared folders like "Other user.shared" are in the folder list
+		//but there's no "Other user" parent folder. We create a dummy folder here.
+
+		foreach($folders as $name=>$folder){
+			$pos = strrpos($name, $delim);
+
+			if($pos){
+				$parent = substr($name,0,$pos);
+				if(!isset($folders[$parent]))
+				{
+					$folders[$parent]=array(
+								'delimiter' => $delim,
+								'name' => $parent,
+								'marked' => true,
+								'noselect' => true,
+								'can_have_children' => true,
+								'has_children' => true);
+				}
+			}
+
+			$last_folder = $name;
+		}
+
 		ksort($folders);
 
 		return $folders;
