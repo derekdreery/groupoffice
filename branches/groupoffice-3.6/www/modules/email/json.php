@@ -837,7 +837,7 @@ try {
 											//$response['iCalendar']['invitation']=array();
 										}
 										
-										$response['body'] = $cal->event_to_html($cal_event, false, true);
+										$response['body'] = $cal->event_to_html($cal_event, false, true).'<hr />'.$response['body'];
 									}else
 									{
 										throw new Exception($lang['common']['selectError']);
@@ -864,7 +864,7 @@ try {
 										$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_not_found'];
 									}
 
-									$response['body'] = $cal->event_to_html($cal_event, false, true);
+									$response['body'] = $cal->event_to_html($cal_event, false, true).'<hr />'.$response['body'];
 								}
 								break;						
 
@@ -888,12 +888,12 @@ try {
 											'is_cancellation'=>true
 										);
 
-									$response['body'] = $cal->event_to_html($event, false, true);
+									$response['body'] = $cal->event_to_html($event, false, true).'<hr />'.$response['body'];
 								}else
 								{
 									$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_not_found'];
 
-									$response['body'] = $cal->event_to_html($cal_event, false, true);
+									$response['body'] = $cal->event_to_html($cal_event, false, true).'<hr />'.$response['body'];
 								}
 							
 								break;
