@@ -762,6 +762,8 @@ class addressbook extends db {
 			return false;
 		}
 
+		$conditions .= "AND c.email != '' ";
+
 		if(!empty($query)){
 			$conditions .= "AND (CONCAT(c.first_name,c.middle_name,c.last_name) LIKE '$query' OR c.email LIKE '$query' OR co.name LIKE '$query')";
 		}
