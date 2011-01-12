@@ -13,4 +13,4 @@ $lang['backupmanager']['no_mysql_config']='Group-Office was not able to find a m
     $bm_config[\'mysql_pass\'] = \'\';<br />
     ?><br /><br />
     Without this file backups are still created, but not from the database.';
-$lang['backupmanager']['target_does_not_exist']='The target dir doesn\'t excist!';
+$lang['backupmanager']['target_does_not_exist']='The target directory doesn\'t exist!';

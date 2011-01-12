@@ -237,3 +237,15 @@ $countries['ZA'] = 'Afrique du Sud';
 $countries['ZM'] = 'Zambie';
 $countries['ZR'] = 'Zaïre';
 $countries['ZW'] = 'Zimbabwe';
+$countries['AE']= 'Émirats arabes unis';
+$countries['AX']= 'Åland, État libre associé d\'';
+$countries['CN']= 'Chine';
+$countries['TF']= 'French Southern Territories';
+$countries['GG']= 'Guernesey';
+$countries['IR']= 'Iran';
+$countries['IQ']= 'Iraq';
+$countries["MY"]= "Malaysie";
+$countries['CD']= 'République Démocratique du Congo';
+$countries['KP']= 'Corée, République populaire démocratique de';
+$countries['KR']= 'Corée, République de';
+?>

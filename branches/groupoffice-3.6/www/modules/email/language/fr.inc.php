@@ -60,3 +60,12 @@ $lang['email']['error_move_folder']='Impossible de déplacer le dossier';
 $lang['email']['error_getaddrinfo']='L\'adresse hôte spécifiée est invalide';
 $lang['email']['error_authentication']='Nom d\utilisateur ou mot de passe invalide';
 $lang['email']['error_connection_refused']='La connection a été refusée ! Vérifiez l\'adresse du serveur et le port.';
+$lang['email']['feedbackDeleteFolderFailed']= 'Echec lors de la suppression du dossier';
+$lang['email']['goAlreadyStarted']='Group-Office est déjà démarré. Le module email est maintenant chargé dans Group-Office. Fermez cette fenêtre et composez votre message dans Group-Office.';
+$lang['email']['iCalendar_event_invitation']='Ce message contient une invitation a un rendez-vous.';
+$lang['email']['iCalendar_event_not_found']='Ce message contient une mise à jour pour un rendez-vous qui n\'existe plus.';
+$lang['email']['iCalendar_update_available']='Ce message contient une mise à jour pour un rendez-vous existant.';
+$lang['email']['iCalendar_update_old']='Ce message contient un rendez-vous qui a déjà été traité.';
+$lang['email']['iCalendar_event_cancelled']='Ce message contient une annulation de rendez-vous.';
+$lang['email']['iCalendar_event_invitation_declined']='Ce message contient une invitation a un rendez-vous que vous avez décliné.';
+?>

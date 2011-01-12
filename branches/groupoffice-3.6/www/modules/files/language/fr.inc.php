@@ -53,3 +53,10 @@ $lang['files']['deleted']='Supprimé';
 $lang['files']['file']='Fichier';
 $lang['files']['folder']='Dossier';
 $lang['files']['files']='Fichiers';
+$lang['link_type'][17]='Dossier';
+$lang['files']['emptyFile']='Fichier vide';
+$lang['files']['downloadLink']= 'Lien de téléchargement';
+$lang['files']['clickHereToDownload']= 'Cliquez ici pour télécharger ce fichier de manière sécurisée';
+$lang['files']['copyPasteToDownload']= 'Cliquez sur le lien sécurisé ci-dessous ou copiez le dans la barre d\'adresse de votre navigateur pour télécharger le fichier.';
+$lang['files']['possibleUntil']= 'possible jusqu\'au';
+?>

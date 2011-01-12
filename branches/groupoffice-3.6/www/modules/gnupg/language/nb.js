@@ -25,3 +25,5 @@ GO.gnupg.lang.decryptPasswordRequired='Du må oppgi passord for å dekryptere me
 GO.gnupg.lang.sendPublicKey='Send offentlig nøkkel';
 
 GO.gnupg.lang.importPublicKeyAttachment='Dette er en offentlig nøkkel for å kunne kryptere e-poster til avsender. Du bør bare importere denne nøkkelen hvis du er sikker på at den tilhører avsenderen! Vil du importere nøkkelen?';
+GO.gnupg.lang.generateKeyStarted='Generering av nøkkel pågår';
+GO.gnupg.lang.generateKeyStartedText='Din nøkkel blir nå generert. Dette kan ta lang tid. Sjekk om nøkkelen er ferdig om 10 minutter.';
