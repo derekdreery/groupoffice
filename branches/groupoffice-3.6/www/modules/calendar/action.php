@@ -759,7 +759,7 @@ try {
 			else {
 			//copy event properties
 				$event_copy = $event;
-				unset($event_copy['id'], $event_copy['reminder'], $event_copy['files_folder_id'], $event_copy['calendar_id']);
+				unset($event_copy['id'], $event_copy['reminder'], $event_copy['files_folder_id'], $event_copy['calendar_id'], $event_copy['uuid']);
 
 				$event_copy['busy'] = '0';
 				$event_copy['user_id'] = (isset($event_copy['user_id']) && $event_copy['user_id'] > 0) ? $event_copy['user_id'] : $GO_SECURITY->user_id;
