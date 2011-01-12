@@ -17,5 +17,5 @@
 
 GO.comments.lang.comment="Commentaire";
 GO.comments.lang.comments="Commentaires";
-GO.comments.lang.fiveLatestComments='5 derniers commentaires';
 GO.comments.lang.browseComments = 'Parcourir les commentaires';
+GO.comments.lang.recentComments='Commentaires récents';

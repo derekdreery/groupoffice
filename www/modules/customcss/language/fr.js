@@ -15,7 +15,5 @@
  * Date : September, 27 2010
  */
 
-Ext.namespace("GO.customcss");
-GO.customcss.lang={};
-GO.customcss.lang.customcss='Custom CSS';
+GO.customcss.lang.customcss='Style CSS personnalisé';
 GO.customcss.lang.selectFile='Sélectionner un fichier';

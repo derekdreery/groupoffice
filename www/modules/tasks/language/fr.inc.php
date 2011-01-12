@@ -44,3 +44,6 @@ $lang['tasks']['dueAtdate']='Terminée le %s';
 $lang['tasks']['list']='Liste de tâches';
 $lang['tasks']['tasklistChanged']="* Liste de tâches modifiée de '%s' à '%s'";
 $lang['tasks']['statusChanged']="* Statut modifé de '%s' à '%s'";
+$lang['tasks']['multipleSelected']='Plusieurs listes de tâches sélectionnées';
+$lang['tasks']['incomplete_delete']='Vous n\'avez pas les droits nécessaires pour supprimer toutes les tâches sélectionnées';
+?>

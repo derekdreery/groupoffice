@@ -6,20 +6,6 @@
 
 require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 
-$ft_title = "Types de fichiers";
-$ft_text = "Les types de fichiers sont automatiquement ajoutés par Group-Office. Vous pouvez changer les icones et les noms ici.";
-$ft_icon = "Icone";
-$ft_extension = "Extension";
-$ft_friendly = "Surnom";
-$ft_content = "Type de contenu";
-$ft_no_filetypes = "Pas de type de fichier trouvé.";
-$ft_upload_text = "Choisissez l'icone du type de fichier à charger. Seuls les fichiers GIF sont acceptés.";
-$ft_no_file = "Aucun fichier reçu.";
-$ft_please_wait = "Patientez pendant que l'icone est téléchargée...";
-$ft_properties = "Propriétés";
-$ft_filename = "Nom de fichier";
-$ft_current_icon = "Icône courante";
-
 $lang['filetypes']['unknown'] = 'Type inconnu';
 $lang['filetypes']['txt'] = 'Fichier texte';
 $lang['filetypes']['sxw'] = 'Document OpenOffice.Org Writer';
@@ -73,4 +59,8 @@ $lang['filetypes']['swf'] = 'Animation Macromedia Flash';
 $lang['filetypes']['fla'] = 'Animation Macromedia Flash (Source)';
 $lang['filetypes']['ai'] = 'Fichier Adobe Illustrator';
 $lang['filetypes']['eml'] = 'Message E-mail';
+$lang['filetypes']['ppsx']= 'Présentation Microsoft Powerpoint';
+$lang['filetypes']['csv']= 'Fichier de valeur séparées pas de virgules';
+$lang['filetypes']['js']= 'Javascript';
+$lang['filetypes']['sql']= 'Export de base de données';
 ?>

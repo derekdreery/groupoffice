@@ -14,9 +14,6 @@
  * Author : Lionel JULLIEN
  * Date : September, 27 2010
  */
-
-Ext.namespace('GO.log');
-GO.log.lang={};
 GO.log.lang.log='Log';
 GO.log.lang.time="Date/heure";
 

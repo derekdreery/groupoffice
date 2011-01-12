@@ -219,3 +219,4 @@ $lang['common']['theFolderAlreadyExists']='Det eksisterer allerede en mappe med 
 $lang['common']['other']='Andre';
 $lang['common']['name2']= 'Navn 2';
 $lang['common']['copy']='kopi';
+$lang['common']['upload_file_to_big']='Filen du forsøker å laste opp er større enn maksimalt tillate størrelse på %s.';

@@ -28,3 +28,5 @@ GO.gnupg.lang.signKey='Clé de signature';
 GO.gnupg.lang.decryptPasswordRequired='Un mot de passe est requis pour décrypter ce message';
 GO.gnupg.lang.sendPublicKey='Envoyer la clé publique';
 GO.gnupg.lang.importPublicKeyAttachment='Ceci est une clé publique utilisée pour encrypter les emails pour cet expéditeur. N\'importez cette clé que si vous êtes sur qu\'elle appartient bien à cet expéditeur. Voulez vous l\'importer maintenant ?';
+GO.gnupg.lang.generateKeyStarted='Génération de la clé en cours';
+GO.gnupg.lang.generateKeyStartedText='Votre clé est en cours de génération. Cette opération peut être longue. Merci de vérifier si votre clé est prête dans 10 minutes.';

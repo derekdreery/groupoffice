@@ -61,3 +61,5 @@ GO.mailings.lang.resumeMailing='Reprendre l\'envoi';
 GO.mailings.lang.unsubscribeLink='Lien de désabonnement';
 GO.mailings.lang.unsubscribeHref='Balise href de désabonnement';
 GO.mailings.lang.addDocumentTemplate='Ajouter un modèle de document';
+GO.mailings.lang.documentTemplate='Modèle de document';
+GO.mailings.lang.copyingMessages='Copie des messages...';

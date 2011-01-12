@@ -423,3 +423,5 @@ GO.lang.orientation='Orientation';
 GO.lang.portrait='Portrait';
 GO.lang.landscape='Paysage';
 
+GO.lang.strName2= 'Nom 2';
+GO.lang.selectAll='Tout sélectionner';
