@@ -21,6 +21,35 @@ class advanced_query extends db{
 
 	public function parse_advanced_query($query, $link_type) {
 
+		// DATE SEARCH 1
+		preg_match_all("/unix_timestamp[(]'([0-9]+)[-]([0-9]+)[-]([0-9]+)'[)]/",$query,$matched_tags,PREG_SET_ORDER);
+
+		foreach($matched_tags as $tag) {
+			try {
+				$time = Date::to_unixtime($tag[1].'-'.$tag[2].'-'.$tag[3]);
+				
+				if (empty($time))
+					throw new Exception('Exception!');
+			} catch (Exception $e) {
+				throw new Exception('Error with date string: '.$tag[0]);
+			}
+			$query = str_replace($tag[0],'\''.$time.'\'',$query);
+		}
+
+		// DATE SEARCH 2
+		preg_match_all("/[(][\s]*'([0-9]+)[-]([0-9]+)[-]([0-9]+)'/",$query,$matched_tags,PREG_SET_ORDER);
+
+		foreach($matched_tags as $tag) {
+			try {
+				$time = mktime(0,0,0,$tag[2],$tag[3],$tag[1]);
+				if (empty($time))
+					throw new Exception('Exception!');
+			} catch (Exception $e) {
+				throw new Exception('Error with date string: '.$tag[0]);
+			}
+			$query = str_replace('('.$tag[0],$time,$query);
+		}
+
 		preg_match_all("/`[\s]*(NOT INCLUDES)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
 		foreach($matched_tags as $tag) {
 			$tag_new = str_replace($tag[1],'!=',$tag[0]);
@@ -43,20 +72,6 @@ class advanced_query extends db{
 		foreach($matched_tags as $tag) {
 			$tag_new = str_replace($tag[1],'>=',$tag[0]);
 			$query = str_replace($tag[0],$tag_new,$query);
-		}
-
-		// DATE SEARCH
-		preg_match_all("/[(][\s]*'([0-9]+)[-]([0-9]+)[-]([0-9]+)'/",$query,$matched_tags,PREG_SET_ORDER);
-
-		foreach($matched_tags as $tag) {
-			try {
-				$time = mktime(0,0,0,$tag[2],$tag[3],$tag[1]);
-				if (empty($time))
-					throw new Exception('Exception!');
-			} catch (Exception $e) {
-				throw new Exception('Error with date string: '.$tag[0]);
-			}
-			$query = str_replace('('.$tag[0],$time,$query);
 		}
 
 		global $GO_MODULES;
