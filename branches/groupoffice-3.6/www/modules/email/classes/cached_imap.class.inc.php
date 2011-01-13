@@ -702,7 +702,7 @@ class cached_imap extends imap{
 
 		$struct = $this->get_message_structure($message['uid']);
 
-		//go_debug($struct);
+		go_debug($struct);
 
 		if(count($struct)==1) {
 			$header_ct = explode('/', $message['content-type']);
@@ -749,8 +749,23 @@ class cached_imap extends imap{
 
 		go_debug('Default charset: '.$this->default_charset);
 
+		$has_alternative = $this->has_alternative_body($struct);
+
 		$plain_parts = $this->find_body_parts($struct,'text', 'plain');
-		//go_debug($plain_parts);
+		$html_parts = $this->find_body_parts($struct,'text', 'html');
+		
+		if(!$has_alternative && count($html_parts['parts']) && count($plain_parts['parts'])){
+			//this is not very neat but we found some text attachments as body parts. Let's correct that.
+
+			if($plain_parts['parts'][0]['imap_id']>$html_parts['parts'][0]['imap_id']){
+				$plain_parts=array('parts'=>array(), 'text_found'=>false);
+			}else
+			{
+				$html_parts=array('parts'=>array(), 'text_found'=>false);
+			}
+		}
+
+
 		for($i=0,$max=count($plain_parts['parts']);$i<$max;$i++)
 		{
 			if(empty($plain_parts['parts'][$i]['charset']))
@@ -758,24 +773,14 @@ class cached_imap extends imap{
 
 			$message['body_ids'][]=$plain_parts['parts'][$i]['imap_id'];
 		}
-
-		
-		if(!count($plain_parts['parts']) || $this->has_alternative_body($struct)){
-
-			$html_parts = $this->find_body_parts($struct,'text', 'html');
-			//go_debug($html_parts);
-			for($i=0,$max=count($html_parts['parts']);$i<$max;$i++)
-			{
-				if(empty($html_parts['parts'][$i]['charset']))
-					$html_parts['parts'][$i]['charset']=$this->default_charset;
-
-				$message['body_ids'][]=$html_parts['parts'][$i]['imap_id'];
-			}			
-		}else
+		for($i=0,$max=count($html_parts['parts']);$i<$max;$i++)
 		{
-			$html_parts=array('text_found'=>false, 'parts'=>array());
+			if(empty($html_parts['parts'][$i]['charset']))
+				$html_parts['parts'][$i]['charset']=$this->default_charset;
+
+			$message['body_ids'][]=$html_parts['parts'][$i]['imap_id'];
 		}
-		
+
 		$inline_images=array();
 
 		if(!isset($message['plain_body']) && $plain_parts['text_found'] && ($plain_body_requested || ($html_body_requested && !$html_parts['text_found']))){
