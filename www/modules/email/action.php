@@ -1287,7 +1287,10 @@ try {
 				if($event_id)
 				{
 					$event['id'] = $old_event['id'];
-					
+					$method = isset($vcalendar[0]['METHOD']['value']) ? $vcalendar[0]['METHOD']['value'] : '';
+					if($method=='REPLY'){
+						unset($event['name'],$event['location'], $event['description']);
+					}
 					$cal->update_event($event, false, $old_event);
 				}else
 				{
