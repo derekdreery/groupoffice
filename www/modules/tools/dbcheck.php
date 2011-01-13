@@ -92,7 +92,9 @@ if(!$GO_GROUPS->is_in_group(1, $GO_CONFIG->group_root))
 {
 	echo 'Adding admin to admins group'.$line_break;
 	$GO_GROUPS->add_user_to_group(1, $GO_CONFIG->group_root);
-} 
+}
+
+
 
 
 flush();
@@ -147,6 +149,12 @@ while($db->next_record())
 		$GO_SECURITY->add_user_to_acl($db->f('user_id'), $db->f('id'), GO_SECURITY::MANAGE_PERMISSION);
 	}
 }
+
+
+//special acl where admin does not have write permission
+$GO_SECURITY->set_read_only_acl_permissions();
+
+
 echo 'Done'.$line_break.$line_break;
 
 flush();

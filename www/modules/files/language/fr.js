@@ -50,3 +50,5 @@ GO.files.lang.selectFiles = 'Sélectionner des fichiers';
 GO.files.lang.fitImage='Adapter l\'image';
 GO.files.lang.normalSize='Taille normale';
 GO.files.lang.imageViewer='Visualiseur d\'images';
+GO.files.lang.emailDownloadLink= 'Envoyer un lien de téléchargement';
+GO.files.lang.expireTime= 'Date d\'expiration du lien';

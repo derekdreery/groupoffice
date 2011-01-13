@@ -199,3 +199,9 @@ CREATE TABLE IF NOT EXISTS `go_links_17` (
   KEY `ctime` (`ctime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+
+DROP TABLE IF EXISTS `cf_17`;
+CREATE TABLE IF NOT EXISTS `cf_17` (
+  `link_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`link_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -111,8 +111,10 @@ class export_tasks
 		$ics = $this->export_tasklist_header();
 
 		$tasks= new tasks();
+		
+		$lists = array($tasklist_id);
 
-		$tasks->get_tasks(array($tasklist_id),0,true,'id','ASC',0,0,true);
+		$tasks->get_tasks($lists,0,null,'id','ASC',0,0,null);
 		while($record = $tasks->next_record())
 		{
 			$ics .= $this->convert_task($record);

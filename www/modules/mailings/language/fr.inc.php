@@ -26,3 +26,6 @@ $lang['mailings']['unsubscribe']='Se désinscrire';
 $lang['mailings']['unsubscription']='Cliquez ici pour vous désinscrire de ce mailing.';
 $lang['mailings']['r_u_sure'] = 'Etes vous sûr de vouloir vous désinscrire de ce mailing ?';
 $lang['mailings']['delete_success'] = 'Vous avez été désinscrit de ce mailing !';
+$lang['mailings']['name']= 'Modèle d\'email et liste d\'adresses';
+$lang['mailings']['setCurrentTemplateAsDefault']='Définir le modèle actuel comme celui par défaut';
+?>

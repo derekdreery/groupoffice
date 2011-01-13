@@ -5,7 +5,7 @@ class systemusers extends db {
 	public function __on_load_listeners($events) {
 		$events->add_listener('before_add_user', __FILE__, 'systemusers', 'before_add_user');
 		$events->add_listener('update_user', __FILE__, 'systemusers', 'update_user');
-		$events->add_listener('user_delete', __FILE__, 'systemusers', 'user_delete');
+		//$events->add_listener('user_delete', __FILE__, 'systemusers', 'user_delete');
 		$events->add_listener('delete_email_account', __FILE__, 'systemusers', 'delete_vacation');
 	}
 

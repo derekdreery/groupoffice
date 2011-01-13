@@ -333,6 +333,33 @@ class imap extends imap_bodystruct {
 			}
 		}
 
+
+
+		
+
+		//sometimes shared folders like "Other user.shared" are in the folder list
+		//but there's no "Other user" parent folder. We create a dummy folder here.
+
+		foreach($folders as $name=>$folder){
+			$pos = strrpos($name, $delim);
+
+			if($pos){
+				$parent = substr($name,0,$pos);
+				if(!isset($folders[$parent]))
+				{
+					$folders[$parent]=array(
+								'delimiter' => $delim,
+								'name' => $parent,
+								'marked' => true,
+								'noselect' => true,
+								'can_have_children' => true,
+								'has_children' => true);
+				}
+			}
+
+			$last_folder = $name;
+		}
+
 		ksort($folders);
 
 		return $folders;
@@ -1184,6 +1211,34 @@ class imap extends imap_bodystruct {
 	}
 
 
+
+
+	public function has_alternative_body($struct){
+
+		go_debug($struct);
+
+		if (!is_array($struct) || empty($struct)) {
+			return false;
+		}
+
+		if(isset($struct['type']) && $struct['type']=='message' && $struct['subtype']=='alternative'){
+			return true;
+		}
+
+		foreach ($struct as $id => $vals) {
+			if(isset($vals['type']) && $vals['type']=='message' && $vals['subtype']=='alternative'){
+				return true;
+			}elseif (isset($vals['subs']) && (!isset($vals['subtype']) || $vals['subtype']!='rfc822')){
+				if($this->has_alternative_body($vals['subs'])){
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+
 	/**
 	 * Find's the first message part in a structure returned from
 	 * get_message_structure that matches the parameters given.
@@ -1238,7 +1293,7 @@ class imap extends imap_bodystruct {
 					//
 
 					/*
-					 * If we found body parts for example 1.1 and 1.2 don't include a text
+					 * If we found body parts for example 1.1 and 1.2 doesn't include a text
 					 * attachment with number 2 like in this sample structure
 					 *
 					 * array (

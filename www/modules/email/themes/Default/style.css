@@ -1,3 +1,8 @@
+.em-tree-node-noselect .x-tree-node-anchor span{
+	font-style:italic;
+	color:#666 !important;
+}
+
 .em-folder-status{
 	padding:0 !important;
 	margin:0 !important;

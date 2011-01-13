@@ -226,7 +226,7 @@ class templates extends db {
 
 		$contact['comment']=String::text_to_html($contact['comment']);
 
-		$this->replace_fields($input, $contact,$skip_empty);
+		$this->replace_fields($input, $contact,$skip_empty,'contact');
 		return $input;
 	}
 
@@ -288,7 +288,7 @@ class templates extends db {
 			$company=array();
 		}
 
-		$this->replace_fields($input, $company, $skip_empty);
+		$this->replace_fields($input, $company, $skip_empty, 'company');
 		return $input;
 	}
 
@@ -446,10 +446,19 @@ class templates extends db {
 		return $content;
 	}
 
-	function replace_fields(&$content, $values, $skip_empty=false) {
+	function replace_fields(&$content, $values, $skip_empty=false, $prefixtag='') {
 		global  $GO_CONFIG;
 
 		$fields = $this->get_replacements($values, $skip_empty);
+
+		if(!empty($prefixtag)){
+			foreach($fields as $value){
+				$fields[]=$prefixtag.':'.$value;
+				if(isset($values[$value]))
+					$values[$prefixtag.':'.$value]=$values[$value];
+					
+			}
+		}
 
 		require_once($GO_CONFIG->class_path.'go_template_parser.class.inc.php');
 		$tpl = new go_template_parser($fields,$values,$skip_empty);

@@ -105,7 +105,7 @@ Ext.extend(GO.state.HttpProvider, Ext.state.Provider, {
 	// private
 	setValue : function(name, value, callback, scope){
 		if(!this.changedValues){
-			var defer=10000;
+			var defer=3000;
 			if(GO.settings.config.debug){
 				defer=100;
 			}

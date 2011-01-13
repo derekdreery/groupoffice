@@ -20,3 +20,4 @@ GO.groups.lang.owner = 'Propriétaire';
 GO.groups.lang.lblNew = 'Nouveau';
 GO.groups.lang.newGroupName = 'Saisissez le nom du nouveau groupe';
 GO.groups.lang.searchAllUsers = 'Rechercher tous les utilisateurs';
+GO.groups.lang.group= 'Groupe';

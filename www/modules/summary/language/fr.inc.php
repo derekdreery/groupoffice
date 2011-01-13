@@ -22,4 +22,5 @@ $lang['summary']['description']='Module de démarrage. Organisation de la page d
 $lang['summary']['default_rss_url']='http://news.google.fr/nwshp?hl=fr&tab=wn&output=rss';
 $lang['summary']['announcement']='Annonce';
 $lang['summary']['announcements']='Annonces';
+$lang['summary']['default_rss_title']='Actualités';
 ?>

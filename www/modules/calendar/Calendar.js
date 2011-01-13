@@ -711,6 +711,14 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	onShow : function(){        
 		GO.calendar.MainPanel.superclass.onShow.call(this);
 		this.daysGrid.scrollToLastPosition();
+
+		if(GO.calendar.activePanel.id != 'view-grid')
+		{
+			GO.calendar.activePanel.store.reload();
+		}else
+		{
+			GO.calendar.activePanel.reload();
+		}
 	},
 	afterRender : function(){
 		GO.calendar.MainPanel.superclass.afterRender.call(this);
@@ -1961,8 +1969,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			if(GO.settings.has_admin_permission)
 			{
 				items.push(this.groupsGrid);
+			}
+
+			if(GO.settings.modules.calendar.write_permission)
+			{
 				items.push(this.resourcesGrid);
-			}		
+			}
             
 			this.adminDialog = new Ext.Window({
 				title: GO.calendar.lang.administration,

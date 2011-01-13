@@ -102,3 +102,5 @@ $lang['calendar']['invitation_update']='Bijgewerkte uitnodiging';
 $lang['calendar']['cancellation']='Annulering';
 
 $lang['calendar']['non_selected'] = 'in niet-geselecteerde agenda';
+
+$lang['calendar']['linkIfCalendarNotSupported']='Gebruik onderstaande links alleen wanneer uw mail programma geen agenda functies ondersteund.';

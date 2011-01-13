@@ -125,7 +125,7 @@ class users extends db
 			}
 		}
 
-		if($GO_MODULES->modules['customfields']){
+		if(isset($GO_MODULES->modules['customfields'])){
 			$db = new db();
 			echo "Deleting non existing custom field records.".$line_break.$line_break;
 			$db->query("delete from cf_8 where link_id not in (select id from go_users);");

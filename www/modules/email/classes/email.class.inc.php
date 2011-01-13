@@ -780,7 +780,7 @@ class email extends db {
 	*/
 
 	function get_subscribed($account_id, $folder_id=-1) {
-		$sql = "SELECT id,account_id,name,delimiter,can_have_children,parent_id,unseen,msgcount FROM em_folders";
+		$sql = "SELECT id,account_id,name,delimiter,can_have_children,no_select,parent_id,unseen,msgcount FROM em_folders";
 
 		if($account_id>0) {
 			$sql .= " WHERE account_id='".$this->escape($account_id)."'".
@@ -889,7 +889,7 @@ class email extends db {
 
 
 	function update_folder($folder) {
-		return $this->update_row('em_folders','id', $folder);
+		return $this->update_row('em_folders','id', $folder, '', false);
 	}
 
 	function add_folder($folder) {
@@ -898,7 +898,7 @@ class email extends db {
 
 		$folder['id'] = $this->nextid("em_folders");
 		if ($folder['id'] > 0) {
-			if ($this->insert_row('em_folders', $folder)) {
+			if ($this->insert_row('em_folders', $folder,'',false)) {
 				return $folder['id'];
 			}
 		}
@@ -925,7 +925,7 @@ class email extends db {
 	}
 
 	function get_folder($account_id, $name) {
-		$sql = "SELECT * FROM em_folders WHERE name='".$this->escape($name)."' AND ".
+		$sql = "SELECT * FROM em_folders WHERE name='".$this->escape($name, false)."' AND ".
 						"account_id='".$this->escape($account_id)."'";
 		$this->query($sql);
 		if ($this->next_record(DB_ASSOC)) {
@@ -987,16 +987,16 @@ class email extends db {
 	/*
 	 Gets the parent_id from a folder path
 	*/
-	function get_parent_id($account, $path, $delimiter) {
+	function get_parent($account, $path, $delimiter) {
 		$mbroot = $account['mbroot'];
 
 		if ($pos = strrpos($path, $delimiter)) {
 			$parent_name = substr($path, 0, $pos);
 			if ($parent_folder = $this->get_folder($account['id'], $parent_name)) {
 				if($this->is_mbroot($parent_folder['name'],$delimiter, $account['mbroot'])) {
-					return 0;
+					return array('id'=>0);
 				}else {
-					return $parent_folder['id'];
+					return $parent_folder;
 				}
 			}
 		}else {
@@ -1094,13 +1094,26 @@ class email extends db {
 		}
 		
 		foreach($mailboxes as $mailbox) {
+			go_debug($mailbox);
 			$mailbox_names[] = $mailbox['name'];
 			$folder['account_id'] = $account['id'];
-			$folder['parent_id'] = $this->get_parent_id($account, $mailbox['name'], $mailbox['delimiter']);
+			$parent = $this->get_parent($account, $mailbox['name'], $mailbox['delimiter']);
+			$folder['parent_id'] = $parent['id'];
 			$folder['can_have_children'] = $mailbox['can_have_children'];
+			$folder['no_select'] = $mailbox['noselect'];
 			$folder['name'] = $mailbox['name'];
 
 			$folder['subscribed']=in_array($mailbox['name'], $subscribed_names) ? '1' : '0';
+
+			//sometimes folders are unsubscribable but children are subscribed.
+			//in that case subscribe it in the GO database
+			if(!empty($parent['id']) && $parent['subscribed']=='0')
+			{
+				$p['id']=$parent['id'];
+				$p['subscribed']='1';
+				$this->update_folder($p);
+			}
+
 			$folder['delimiter'] = $mailbox['delimiter'];
 
 			switch($folder['name']) {
