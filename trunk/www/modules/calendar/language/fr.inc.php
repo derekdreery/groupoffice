@@ -39,7 +39,7 @@ $lang['calendar']['status']='Statut';
 $lang['calendar']['statuses']['NEEDS-ACTION'] = 'Action nécessaire';
 $lang['calendar']['statuses']['ACCEPTED'] = 'Accepté';
 $lang['calendar']['statuses']['DECLINED'] = 'Decliné';
-$lang['calendar']['statuses']['TENTATIVE'] = 'Tentative';
+$lang['calendar']['statuses']['TENTATIVE'] = 'Accepté sous réserve';
 $lang['calendar']['statuses']['DELEGATED'] = 'Délégué';
 $lang['calendar']['statuses']['COMPLETED'] = 'Terminé';
 $lang['calendar']['statuses']['IN-PROCESS'] = 'En cours';
@@ -89,3 +89,13 @@ $lang['calendar']['month_times'][2]='le deuxième';
 $lang['calendar']['month_times'][3]='le troisième';
 $lang['calendar']['month_times'][4]='le quatrième';
 $lang['calendar']['month_times'][5]='le cinquième';
+
+$lang['calendar']['statuses']['CONFIRMED']= 'Confirmé';
+$lang['calendar']['repeats_not_every']= 'Répéter tous les %s %s';
+$lang['calendar']['rightClickToCopy']='Clic droit pour copier le lien';
+$lang['calendar']['invitation']='Invitation';
+$lang['calendar']['invitation_update']='Invitation mise à jour';
+$lang['calendar']['cancellation']='Annulation';
+$lang['calendar']['non_selected']= 'dans les calendriers non sélectionnés';
+$lang['calendar']['linkIfCalendarNotSupported']='N\'utilisez les liens ci-dessous que si votre client email ne possède pas de fonctionnalité calendrier.';
+?>

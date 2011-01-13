@@ -106,3 +106,5 @@ $lang['calendar']['invitation']='Invitasjon';
 $lang['calendar']['invitation_update']='Oppdatert invitasjon';
 $lang['calendar']['cancellation']='Kansellering';
 $lang['calendar']['non_selected']= 'i ikke-valgt kalender';
+$lang['calendar']['statuses']['CONFIRMED']= 'Bekreftet';
+$lang['calendar']['linkIfCalendarNotSupported']='Bruk bare lenkene nedenfor hvis e-postprogrammet ditt ikke støtter kalenderfunksjoner.';

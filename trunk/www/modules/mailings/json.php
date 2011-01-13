@@ -17,6 +17,8 @@ $GO_SECURITY->json_authenticate('mailings');
 
 require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 $ml = new mailings();
+require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+$ab = new addressbook();
 
 require_once($GO_MODULES->modules['mailings']['class_path'].'templates.class.inc.php');
 $tp = new templates();
@@ -440,7 +442,15 @@ try
 			while($ml->next_record())
 			{
 				$record = $ml->record;
+
+				$contact = $ab->get_contact($ml->f('id'));
+				$company = $ab->get_company($contact['company_id']);
+
 				$record['name'] = String::format_name($ml->f('last_name'), $ml->f('first_name'), $ml->f('middle_name'));
+				$record['home_phone'] = $contact['home_phone'];
+				$record['work_phone'] = $contact['work_phone'];
+				$record['cellular']  = $contact['cellular'];
+				$record['company_name'] = !empty($company) ? $company['name'] : '';
 
 				$response['results'][] = $record;
 			}
@@ -526,10 +536,15 @@ try
 			while($ml->next_record())
 			{
 				$name = $ml->f('name');
+				$company = $ab->get_company($ml->f('id'));
 
 				$record = array(
 					'id' => $ml->f('id'),
-					'name' =>$name
+					'name' =>$name,
+					'email' => $ml->f('email'),
+					'homepage' => $company['homepage'],
+					'phone' => $company['phone'],
+					'fax' => $company['fax']
 				);
 
 				$response['results'][] = $record;
@@ -595,7 +610,8 @@ try
 
 				$record = array(
 					'id' => $ml->f('id'),
-					'name' =>$name
+					'name' =>$name,
+					'email' => $ml->f('email')
 				);
 
 				$response['results'][] = $record;

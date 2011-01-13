@@ -212,7 +212,7 @@ try {
 							);
 
 							if(in_array($projects_folder['id'], $expand_folder_ids)) {
-								$node['children']=get_node_children($projects_folder['id'], false, $expand_folder_ids);
+								$node['children']=get_node_children($projects_folder['id'], true, $expand_folder_ids);
 								$node['expanded']=true;
 							}
 							$response[]=$node;
@@ -231,7 +231,7 @@ try {
 								'notreloadable'=>true
 							);
 							if(in_array($contacts_folder['id'], $expand_folder_ids)) {
-								$node['children']=get_node_children($projects_folder['id'], false, $expand_folder_ids);
+								$node['children']=get_node_children($projects_folder['id'], true, $expand_folder_ids);
 								$node['expanded']=true;
 							}
 							$response[]=$node;
@@ -246,7 +246,7 @@ try {
 								'notreloadable'=>true
 							);
 							if(in_array($companies_folder['id'], $expand_folder_ids)) {
-								$node['children']=get_node_children($projects_folder['id'], false, $expand_folder_ids);
+								$node['children']=get_node_children($projects_folder['id'], true, $expand_folder_ids);
 								$node['expanded']=true;
 							}
 							$response[]=$node;
@@ -438,8 +438,7 @@ try {
 
 							}*/
 
-
-				$response['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $curfolder);
+				$response['write_permission']=$files->has_write_permission($GO_SECURITY->user_id, $curfolder);				
 
 				$_usersfolder = $files->resolve_path('users');
 				$response['may_apply_state'] = $curfolder['apply_state']==1 && (

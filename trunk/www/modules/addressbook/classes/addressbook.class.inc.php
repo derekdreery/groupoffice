@@ -57,7 +57,7 @@ class addressbook extends db {
 	}
 
 	public static function check_database() {
-		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY;
 
 		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 
@@ -83,8 +83,10 @@ class addressbook extends db {
 			}
 			flush();
 
-			$files->check_share('contacts', 1, $GO_MODULES->modules['addressbook']['acl_id'], false);
-			$files->check_share('companies', 1, $GO_MODULES->modules['addressbook']['acl_id'], false);
+			$acl_id=$GO_SECURITY->get_global_read_only_acl();
+
+			$files->check_share('contacts', 1,$acl_id, false);
+			$files->check_share('companies', 1, $acl_id, false);
 
 			$db->query("SELECT c.*,a.name AS addressbook_name,a.acl_id FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
 			while($contact = $db->next_record()) {
@@ -126,7 +128,7 @@ class addressbook extends db {
 
 		}
 
-		if($GO_MODULES->modules['customfields']){
+		if(isset($GO_MODULES->modules['customfields'])){
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
 			$db->query("delete from cf_2 where link_id not in (select id from ab_contacts);");
@@ -803,6 +805,8 @@ class addressbook extends db {
 		}else {
 			return false;
 		}
+
+		$conditions .= "AND c.email != '' ";
 
 		if(!empty($query)){
 			$conditions .= "AND (CONCAT(c.first_name,c.middle_name,c.last_name) LIKE '$query' OR c.email LIKE '$query' OR co.name LIKE '$query')";

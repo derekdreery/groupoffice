@@ -193,4 +193,14 @@ $lang['common']['none']='Aucun';
 $lang['common']['alert']='Alerte';
 $lang['common']['theFolderAlreadyExists']='Un dossier ayant le même nom existe déjà !';
 $lang['common']['startMenu']='Applications';
-
+$lang['common']['fileCreateError']='Impossible de créer le fichier';
+$lang['common']['illegalCharsError']='Le nom contient le caractère non supporté %s';
+$lang['common']['name2']= 'Nom 2';
+$lang['common']['address_format']='Format d\'adresse';
+$lang['common']['dear']='Cher/Chère';
+$lang['common']['month']= 'mois';
+$lang['common']['strMonths']= 'mois';
+$lang['common']['other']='Autre';
+$lang['common']['copy']='copier';
+$lang['common']['upload_file_to_big']='Le fichier que vous essayez d\'envoyer est plus gros que le maximum autorisé de %s.';
+?>

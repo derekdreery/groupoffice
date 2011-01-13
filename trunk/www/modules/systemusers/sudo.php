@@ -59,6 +59,10 @@ switch($task)
 		$GO_USERS->get_user($user_id);
 		$username = $GO_USERS->f('username');
 
+		//strip domain from username
+		$arr = explode('@', $username);
+		$username = $arr[0];
+
 		exec('echo '.$username.':'.$password.' | '.$GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->cmd_chpasswd.' 2>&1', $output, $status);
 		if($status)
 		{

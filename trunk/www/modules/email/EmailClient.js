@@ -716,6 +716,13 @@ GO.email.EmailClient = function(config){
 			return false;
 	}, this);
 
+	this.treePanel.on('beforeclick', function(node){
+			if(node.attributes.noSelect==1)
+			{
+				return false;
+			}
+	});
+
 	this.treePanel.on('click', function(node)	{
 		if(node.attributes.folder_id>0)
 		{

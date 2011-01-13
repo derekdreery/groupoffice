@@ -117,7 +117,7 @@ class calendar extends db {
 			}
 		}
 
-		if($GO_MODULES->modules['customfields']) {
+		if(isset($GO_MODULES->modules['customfields'])) {
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
 			$db->query("delete from cf_1 where link_id not in (select id from cal_events);");
@@ -521,7 +521,7 @@ class calendar extends db {
 		global $GO_SECURITY;
 
 		$src_event = $dst_event = $this->get_event($event_id);
-		unset($dst_event['id'], $dst_event['resource_event_id']);
+		unset($dst_event['id'], $dst_event['resource_event_id'],$dst_event['uuid']);
 
 		foreach($new_values as $key=>$value) {
 			$dst_event[$key] = $value;
@@ -708,6 +708,9 @@ class calendar extends db {
 		$sql = "SELECT * FROM cal_participants WHERE event_id='".$this->escape($event_id)."' AND email='".$this->escape($email)."'";
 		$this->query($sql);
 		return $this->next_record();
+	}
+	function update_participant($participant) {
+		return $this->update_row('cal_participants', 'id', $participant);
 	}
 
 	function get_participants($event_id) {
@@ -1065,7 +1068,7 @@ class calendar extends db {
 		return 'events/'.File::strip_invalid_chars($calendar['name']).'/'.date('Y', $event['start_time']).'/'.date('m', $event['start_time']).'/'.File::strip_invalid_chars($event['name']);
 	}
 
-	function add_participants($event, $participants) {
+	function add_participants($event, $participants, $update=false) {
 
 		global $GO_CONFIG;
 
@@ -1074,7 +1077,8 @@ class calendar extends db {
 		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
-		$this->remove_participants($event['id']);
+		//if(!$update)
+			//$this->remove_participants($event['id']);
 
 		foreach ($participants as $participant_email => $participant) {
 			$participant['event_id'] = $event['id'];
@@ -1084,8 +1088,15 @@ class calendar extends db {
 
 			$user = $GO_USERS->get_user_by_email($participant['email']);
 			$participant['user_id'] = ($user) ? $user['id'] : 0;
-
-			$this->add_participant($participant);
+			
+			$existing_participant = $this->is_participant($event['id'], $participant['email']);
+			if(!$existing_participant)
+				$this->add_participant($participant);
+			else{
+				$participant['id']=$existing_participant['id'];
+				go_debug($participant);
+				$this->update_participant($participant);
+			}
 		}
 	}
 
@@ -1370,7 +1381,7 @@ class calendar extends db {
 		}
 
 		if(isset($participants)){
-			$this->add_participants($event,$participants);
+			$this->add_participants($event,$participants, true);
 		}
 
 		if($update_related && !empty($event['id'])) {
@@ -3155,6 +3166,7 @@ class calendar extends db {
 
 			$swift->set_body('<p>'.$lang['calendar']['invited'].'</p>'.
 					$this->event_to_html($event).
+					'<p><b>'.$lang['calendar']['linkIfCalendarNotSupported'].'</b></p>'.
 					'<p>'.$lang['calendar']['acccept_question'].'</p>'.
 					'<a href="'.$GO_MODULES->modules['calendar']['full_url'].'invitation.php?event_id='.$event['id'].'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
 					'&nbsp;|&nbsp;'.

@@ -922,7 +922,7 @@ try {
 					foreach($calendars as $calendar_id)
 					{
 						$calendar = $cal->get_calendar($calendar_id);
-						if(($GO_MODULES->modules['calendar']['permission_level'] < GO_SECURITY::MANAGE_PERMISSION) || ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']) < GO_SECURITY::MANAGE_PERMISSION))
+						if(($GO_MODULES->modules['calendar']['permission_level'] < GO_SECURITY::WRITE_PERMISSION) || ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
 						{
 							throw new AccessDeniedException();
 						}
@@ -1252,7 +1252,7 @@ try {
 			if(isset($_POST['delete_keys']))
 			{
 				try {
-					if($GO_MODULES->modules['calendar']['permission_level'] != GO_SECURITY::MANAGE_PERMISSION)
+					if($GO_MODULES->modules['calendar']['permission_level'] != GO_SECURITY::WRITE_PERMISSION)
 					{
 						throw new AccessDeniedException();
 					}

@@ -182,6 +182,11 @@ class files extends db {
 		return $this->mkdir($parent_folder, $folder_name, false,1,true,'1');
 	}
 
+	/*
+	 * Read only is a little misleading. It means the sharing settings may not
+	 * be adjusted.
+	 */
+
 	function set_readonly($folder_id) {
 		$up_folder['readonly']='1';
 		$up_folder['id']=$folder_id;
@@ -536,8 +541,9 @@ class files extends db {
 			$versions_dir = $this->get_versions_dir($file['id']);
 			$filename = utf8_basename($path);
 
-			$version_filepath = $versions_dir.'/'.date('YmdGi',filectime($path)).'_'.$_SESSION['GO_SESSION']['username'].'_'.$filename;
-			$fs->move($path, $version_filepath);
+			$version_filepath = $versions_dir.'/'.date('YmdGis',filectime($path)).'_'.$_SESSION['GO_SESSION']['username'].'_'.$filename;
+			if(!file_exists($version_filepath))
+				$fs->move($path, $version_filepath);
 
 			global $GO_CONFIG;
 
@@ -935,6 +941,8 @@ class files extends db {
 			$fs2 = new files();
 
 			$share_count = $this->get_authorized_shares($user_id);
+
+			$folders=array();
 
 			while ($folder = $this->next_record()) {
 
@@ -1654,7 +1662,7 @@ class files extends db {
 			$fs2->update_row('fs_folders', 'path', $r);
 		}
 
-		if($GO_MODULES->modules['customfields']){
+		if(isset($GO_MODULES->modules['customfields'])){
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
 			$db->query("delete from cf_6 where link_id not in (select id from fs_files);");

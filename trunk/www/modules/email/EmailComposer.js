@@ -264,18 +264,12 @@ GO.email.EmailComposer = function(config) {
 	
 
 	var imageInsertPlugin = new GO.plugins.HtmlEditorImageInsert();
-
-	imageInsertPlugin.on('insert_temp', function(plugin) {
-		this.inline_temp_attachments.push({
-			tmp_file : plugin.name,
-			url : plugin.selectedUrl
-		});
-	}, this);
 	
-	imageInsertPlugin.on('insert', function(plugin) {		
+	imageInsertPlugin.on('insert', function(plugin, path, url,temp,id) {
 		this.inline_attachments.push({
-			tmp_file : plugin.selectedRecord.get('id'),
-			url : plugin.selectedUrl
+			tmp_file : id || path,
+			url : url,
+			temp:temp
 		});
 	}, this);
 
@@ -503,7 +497,7 @@ GO.email.EmailComposer = function(config) {
 	}
 
 	try {
-		if(config.links)
+		if(config && config.links)
 		{
 			if (!this.selectLinkField) {
 				this.selectLinkField = new GO.form.SelectLink({
@@ -835,7 +829,7 @@ GO.email.EmailComposer = function(config) {
 
 			iconCls:'ml-btn-mailings',
 			text:GO.mailings.lang.emailTemplate,
-			menu:new GO.menu.JsonMenu({
+			menu:this.templatesMenu = new GO.menu.JsonMenu({
 				store:this.templatesStore,
 				listeners:{
 					scope:this,
@@ -1119,6 +1113,14 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 				if(templateRecordIndex>-1)
 					config.template_id=this.templatesStore.getAt(templateRecordIndex).get('template_id');
+			}
+
+			//check the right template menu item.
+			if(this.templatesStore && config.template_id && this.templatesMenu.items){
+				var item = this.templatesMenu.items.find(function(item){
+					return item.template_id==config.template_id;
+				});
+				item.setChecked(true);
 			}
 
 			
@@ -1837,7 +1839,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		}			
 		height += attachmentsElHeight+attachmentsEl.getMargins('tb');
 		
-		if(GO.mailings)
+		if(GO.settings.modules.savemailas && GO.settings.modules.savemailas.read_permission)
 		{
 			var slEl = this.selectLinkField.getEl().up('.x-form-item');
 			height += slEl.getHeight()+slEl.getMargins('tb');

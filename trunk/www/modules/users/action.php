@@ -98,9 +98,21 @@ try
 					$map[$record[$i]]=$i;
 			}
 
-			if(!isset($map['username']) || !isset($map['first_name']) || !isset($map['last_name']) || !isset($map['email']))
+			if(!isset($map['username']))
 			{
-				throw new Exception($lang['users']['incorrectFormat']);
+				throw new Exception($lang['users']['incorrectFormat'].': username missing');
+			}
+			if(!isset($map['first_name']))
+			{
+				throw new Exception($lang['users']['incorrectFormat'].': first_name missing');
+			}
+			if(!isset($map['last_name']))
+			{
+				throw new Exception($lang['users']['incorrectFormat'].': last_name missing');
+			}
+			if(!isset($map['email']))
+			{
+				throw new Exception($lang['users']['incorrectFormat'].': email missing');
 			}
 
 			$failed = array();

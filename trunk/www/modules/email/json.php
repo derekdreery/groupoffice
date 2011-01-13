@@ -169,11 +169,13 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 							'account_id'=>$email->f('account_id'),
 							'folder_id'=>$email->f('id'),
 							'canHaveChildren'=>$email->f('can_have_children'),
+							'noSelect'=>$email->f('no_select'),
 							'unseen'=>$unseen['count'],
 							'mailbox'=>$email->f('name'),
 							'expanded'=>isset($children),
 							'children'=>isset($children) ? $children : null,
-							'parentExpanded'=>$parentExpanded
+							'parentExpanded'=>$parentExpanded,
+							'cls'=>$email->f('no_select')==1 ? 'em-tree-node-noselect' : null
 			);
 		}else {
 			$response[] = array(
@@ -185,10 +187,12 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 							'folder_id'=>$email->f('id'),
 							'mailbox'=>$email->f('name'),
 							'canHaveChildren'=>$email->f('can_have_children'),
+							'noSelect'=>$email->f('no_select'),
 							'unseen'=>$unseen['count'],
 							'expanded'=>true,
 							'children'=>isset($children) ? $children : array(),
-							'parentExpanded'=>$parentExpanded
+							'parentExpanded'=>$parentExpanded,
+							'cls'=>$email->f('no_select')==1 ? 'em-tree-node-noselect' : null
 			);
 		}
 	}
@@ -833,7 +837,7 @@ try {
 											//$response['iCalendar']['invitation']=array();
 										}
 										
-										$response['body'] = $cal->event_to_html($cal_event, false, true);
+										$response['body'] = $cal->event_to_html($cal_event, false, true).'<hr />'.$response['body'];
 									}else
 									{
 										throw new Exception($lang['common']['selectError']);
@@ -860,7 +864,7 @@ try {
 										$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_not_found'];
 									}
 
-									$response['body'] = $cal->event_to_html($cal_event, false, true);
+									$response['body'] = $cal->event_to_html($cal_event, false, true).'<hr />'.$response['body'];
 								}
 								break;						
 
@@ -884,12 +888,12 @@ try {
 											'is_cancellation'=>true
 										);
 
-									$response['body'] = $cal->event_to_html($event, false, true);
+									$response['body'] = $cal->event_to_html($event, false, true).'<hr />'.$response['body'];
 								}else
 								{
 									$response['iCalendar']['feedback'] = $lang['email']['iCalendar_event_not_found'];
 
-									$response['body'] = $cal->event_to_html($cal_event, false, true);
+									$response['body'] = $cal->event_to_html($cal_event, false, true).'<hr />'.$response['body'];
 								}
 							
 								break;

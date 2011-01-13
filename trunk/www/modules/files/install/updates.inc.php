@@ -110,7 +110,13 @@ $updates[] = "CREATE TABLE IF NOT EXISTS `fs_shared_cache` (
   PRIMARY KEY (`user_id`,`folder_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
+
 $updates[] = "ALTER TABLE `go_links_17` ADD `ctime` INT NOT NULL ;";
+
+$updates[] = "CREATE TABLE IF NOT EXISTS `cf_17` (
+  `link_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`link_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates[] = "ALTER TABLE `fs_folders` ADD `cm_state` TEXT NOT NULL DEFAULT '';";
 $updates[] = "ALTER TABLE `fs_folders` ADD `apply_state` TINYINT(1) NOT NULL DEFAULT '0';";
