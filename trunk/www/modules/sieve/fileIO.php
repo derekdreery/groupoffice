@@ -134,7 +134,9 @@ try
 				$name = $script;
 			
 				if($script == $response['active'])
+				{
 					$name = $script.' (' . $lang['sieve']['active'] . ')';
+				}
 
 				$response['results'][]=array('value'=>$script,'name'=>$name);
 			}

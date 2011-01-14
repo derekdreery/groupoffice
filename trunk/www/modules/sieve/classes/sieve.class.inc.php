@@ -282,6 +282,11 @@ if false # anyof (true)
 			vacation :days 3 "'.$lang['sieve']['standardvacationmessage'].'";
 }
 ';
+				$content .= '# rule:[Spam]
+if anyof (header :contains "X-Spam-Flag" "YES")
+{
+	fileinto "Spam";
+}';
 				$this->save_script('groupoffice', $content);
 				$this->activate('groupoffice');
 				$active = 'groupoffice';
