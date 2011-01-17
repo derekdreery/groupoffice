@@ -276,6 +276,7 @@ class sieve
 			{
 
 				$content='require ["vacation"];
+require ["fileinto"];
 # rule:['.$lang['sieve']['standardvacation'].']
 if false # anyof (true)
 {
