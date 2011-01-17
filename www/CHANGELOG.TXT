@@ -1,3 +1,9 @@
+17/01/2011 3.6.18
+- Bug fix in e-mail display
+- Bug fix with inline images in e-mail
+- Bug fix in contact synchronization
+- Translation updates
+
 03/01/2011 3.6.16
 - Feature to specify a maximum number of users in the license
 
