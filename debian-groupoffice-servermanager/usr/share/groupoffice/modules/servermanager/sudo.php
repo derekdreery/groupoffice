@@ -156,9 +156,11 @@ switch($args['task'])
 		
 		if(isset($args['password']))
 		{
+			require($config_file);
+
 			//set admin password
 			$db = new db();
-			$db->query('USE `'.$db_name.'`');
+			$db->query('USE `'.$config['db_name'].'`');
 
 			$password = crypt($args['password']);
 
@@ -206,14 +208,21 @@ switch($args['task'])
 		
 		system('rm -Rf '.$go_root);
 		//system('rm -Rf '.$sm_config['install_path'].'sm-local/'.$args['name']);
-		system('rm -Rf /etc/groupoffice/'.$args['name']);
+		
 		system('rm -Rf /tmp/'.$args['name']);
+
+
+		require($config_file);
 		
 		//$db_name = str_replace('.', '_', $args['name']);
-		$db->query("DROP DATABASE `".$db_name."`");		
-		$db->query("DROP USER '".substr($db_name,0,16)."'");
+		$db->query("DROP DATABASE `".$config['db_name']."`");
+
+		//do not drop db_user because it might be manually set to root or something like that.
+		$db->query("DROP USER '".substr($config['db_name'],0,16)."'");
 		
 		//unlink($apache_conf_file);
+
+		system('rm -Rf /etc/groupoffice/'.$args['name']);
 		
 		break;
 }
