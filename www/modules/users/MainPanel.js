@@ -20,7 +20,7 @@ GO.users.MainPanel = function(config)
 	}
 
 	var fields = {
-		fields:['id', 'username', 'name','company','logins','lastlogin','registration_time','address','address_no','zip','city','state','country','phone','email',
+		fields:['id', 'username', 'name','company','logins','lastlogin','registration_time','address','address_no','zip','city','state','country','home_phone','email',
 	    	'waddress','waddress_no','wzip','wcity','wstate','wcountry','wphone','enabled'],
 		columns:[
         {header: GO.lang['strUsername'], dataIndex: 'username'},
@@ -35,7 +35,7 @@ GO.users.MainPanel = function(config)
         {header: GO.lang['strCity'], dataIndex: 'city',  hidden: true},
         {header: GO.lang['strState'], dataIndex: 'state',  hidden: true},
         {header: GO.lang['strCountry'], dataIndex: 'country',  hidden: true},
-        {header: GO.lang['strPhone'], dataIndex: 'phone',  hidden: true},
+        {header: GO.lang['strPhone'], dataIndex: 'home_phone',  hidden: true},
         {header: GO.lang['strEmail'], dataIndex: 'email',  hidden: true},
         {header: GO.lang['strWorkAddress'], dataIndex: 'work_address',  hidden: true},
 				{header: GO.lang['strWorkAddressNo'], dataIndex: 'work_address_no',  hidden: true},
