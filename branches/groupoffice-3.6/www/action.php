@@ -23,6 +23,45 @@ try{
 	switch($_REQUEST['task'])
 	{
 
+		case 'upload_image':
+
+			$response['success']=true;
+
+			$dir = $GO_CONFIG->tmpdir.'attachments/';
+			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+			filesystem::mkdir_recursive($dir);
+
+			if(isset($_FILES['Filedata']))
+			{
+				$file = $_FILES['Filedata'];
+			}else
+			{
+				$file['name'] = $_FILES['attachments']['name'][0];
+				$file['tmp_name'] = $_FILES['attachments']['tmp_name'][0];
+				$file['size'] = $_FILES['attachments']['size'][0];
+			}
+
+			if(is_uploaded_file($file['tmp_name']))
+			{
+				$tmp_file = $dir.File::strip_invalid_chars($file['name']);
+				move_uploaded_file($file['tmp_name'], $tmp_file);
+
+				$extension = File::get_extension($file['name']);
+				$response['file'] = array(
+					'tmp_name'=>$tmp_file,
+					'name'=>utf8_basename($tmp_file),
+					'size'=>$file['size'],
+					'type'=>File::get_filetype_description($extension),
+					'extension'=>$extension,
+					'human_size'=>Number::format_size($file['size'])
+				);
+			}
+
+			echo json_encode($response);
+			exit();
+
+			break;
+
 		case 'update_level':
 
 			if(!$GO_SECURITY->has_permission_to_manage_acl($GO_SECURITY->user_id, $_POST['acl_id'])){
