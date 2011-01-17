@@ -1086,6 +1086,22 @@ class tasks extends db
 		}
 
 
+		if(isset($object['PRIORITY']['value']))
+		{
+			go_debug($object['PRIORITY']['value']);
+			
+			if($object['PRIORITY']['value']>5)
+			{
+				$task['priority']=0;
+			}elseif($object['PRIORITY']['value']==5)
+			{
+				$task['priority']=1;
+			}else
+			{
+				$task['priority']=2;
+			}
+		}
+
 
 		/*
 		 * ["TRIGGER"]=>
