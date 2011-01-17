@@ -123,4 +123,7 @@ GO.sieve.lang.discard = 'Verwijderen';
 GO.sieve.lang.spamflag = 'Spam flag';
 GO.sieve.lang.custom = 'Custom';
 
-GO.sieve.langcustommailheader= 'Mailheader:';
+GO.sieve.lang.custommailheader= 'Mailheader:';
+
+
+GO.sieve.lang.replyToMessage='Reply to message';
