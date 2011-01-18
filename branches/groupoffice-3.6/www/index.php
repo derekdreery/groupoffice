@@ -22,8 +22,9 @@ if(empty($GO_CONFIG->db_user))
 	exit();
 }
 
-//Redirect to correct login url if a force_login_url is set. Useful to foce ssl
+//Redirect to correct login url if a force_login_url is set. Useful to force ssl
 if($GO_CONFIG->force_login_url && strpos($GO_CONFIG->full_url,$GO_CONFIG->force_login_url)===false) {
+	unset($_SESSION['GO_SESSION']['full_url']);
 	header('Location: '.$GO_CONFIG->force_login_url);
 	exit();
 }
