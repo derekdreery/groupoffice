@@ -1116,8 +1116,12 @@ try {
 					$participant['available']='?';
 					$user=$GO_USERS->get_user_by_email($participant['email']);
 					if($user) {
-						//$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event_id) ? '1' : '0';
-						$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event) ? '1' : '0';
+
+						//Only show availability if user has access to the default calendar
+						$default_calendar = $cal2->get_default_calendar($user['id']);
+						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $default_calendar['acl_id'])){
+							$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event) ? '1' : '0';
+						}
 					}
 
 					$response['results'][]=$participant;
@@ -1165,13 +1169,15 @@ try {
 			foreach($emails as $email) {
 				$user=$GO_USERS->get_user_by_email($email);
 
-				if($user) {
-					$response[$email]=$cal->is_available($user['id'], $_REQUEST['start_time'], $_REQUEST['end_time'], $event) ? '1' : '0';
-				}
-				else {
-					$response[$email]='?';
-				}
+				$response[$email]='?';
 
+				if($user) {
+					//Only show availability if user has access to the default calendar
+					$default_calendar = $cal->get_default_calendar($user['id']);
+					if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $default_calendar['acl_id'])){
+						$response[$email]=$cal->is_available($user['id'], $_REQUEST['start_time'], $_REQUEST['end_time'], $event) ? '1' : '0';
+					}
+				}
 			}
 			break;
 
@@ -1199,14 +1205,20 @@ try {
 
 				$user = $GO_USERS->get_user_by_email($email);
 				if($user) {
-					$freebusy=$cal->get_free_busy($user['id'], $date, $event_id);
-					foreach($freebusy as $min=>$busy) {
-						if($busy=='1') {
-							$merged_free_busy[$min]=1;
+
+					//Only show availability if user has access to the default calendar
+					$default_calendar = $cal->get_default_calendar($user['id']);
+					if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $default_calendar['acl_id'])){
+
+						$freebusy=$cal->get_free_busy($user['id'], $date, $event_id);
+						foreach($freebusy as $min=>$busy) {
+							if($busy=='1') {
+								$merged_free_busy[$min]=1;
+							}
+							$participant['freebusy'][]=array(
+											'time'=>date('G:i', mktime(0,$min)),
+											'busy'=>$busy);
 						}
-						$participant['freebusy'][]=array(
-										'time'=>date('G:i', mktime(0,$min)),
-										'busy'=>$busy);
 					}
 				}
 				$response['participants'][]=$participant;
