@@ -166,7 +166,11 @@ class cms_output extends cms {
 				$this->folder=$item;
 				$this->find_file($this->folder['id']);
 				if($this->file) {
-					$this->file['path']=empty($path) ? $this->file['name'] : $path.'/'.$this->file['name'];
+
+					$this->folder=$this->get_folder($this->file['folder_id']);
+					$this->folder['path']=$this->build_path($this->file['folder_id'], true, $this->site['root_folder_id']);
+					$this->file['path']=$this->folder['path'].'/'.$this->file['name'];
+					$this->file['level']=count(explode('/', $this->file['path']))-1;
 				}
 			}else {
 				$this->file=$item;
