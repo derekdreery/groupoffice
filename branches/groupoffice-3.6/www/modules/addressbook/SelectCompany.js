@@ -16,12 +16,12 @@ GO.addressbook.SelectCompany = function(config){
 	
 	Ext.apply(this, config);
 		
-	this.displayField='name';
+	this.displayField='name_and_name2';
 
 	if (typeof(config.fields)=='undefined') {
 		config.fields = {
 			columns:[],
-			fields:['id', 'name', 'post_address', 'post_address_no', 'post_zip', 'post_city', 'post_state', 'post_country', 'vat_no', 'email']
+			fields:['id', 'name_and_name2', 'post_address', 'post_address_no', 'post_zip', 'post_city', 'post_state', 'post_country', 'vat_no', 'email']
 		};
 	}
 
