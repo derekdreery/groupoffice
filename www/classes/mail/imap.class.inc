@@ -1221,12 +1221,12 @@ class imap extends imap_bodystruct {
 			return false;
 		}
 
-		if(isset($struct['type']) && $struct['type']=='message' && $struct['subtype']=='alternative'){
+		if(isset($struct['type']) && $struct['type']=='message' && strtolower($struct['subtype'])=='alternative'){
 			return true;
 		}
 
 		foreach ($struct as $id => $vals) {
-			if(isset($vals['type']) && $vals['type']=='message' && $vals['subtype']=='alternative'){
+			if(isset($vals['type']) && $vals['type']=='message' && strtolower($struct['subtype'])=='alternative'){
 				return true;
 			}elseif (isset($vals['subs']) && (!isset($vals['subtype']) || $vals['subtype']!='rfc822')){
 				if($this->has_alternative_body($vals['subs'])){

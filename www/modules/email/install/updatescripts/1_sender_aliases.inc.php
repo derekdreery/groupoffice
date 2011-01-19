@@ -2,6 +2,7 @@
 require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
 $email = new email();
 $email2 = new email();
+$email2->halt_on_error='no';
 
 if(isset($GO_MODULES->modules['mailings']))
 {

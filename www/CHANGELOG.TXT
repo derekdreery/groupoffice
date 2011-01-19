@@ -1,3 +1,16 @@
+18/01/2011 3.6.20
+- RTF parsing bug
+- Fixed force_login_url
+
+17/01/2011 3.6.19
+- Attaching files was broken
+
+17/01/2011 3.6.18
+- Bug fix in e-mail display
+- Bug fix with inline images in e-mail
+- Bug fix in contact synchronization
+- Translation updates
+
 03/01/2011 3.6.16
 - Feature to specify a maximum number of users in the license
 

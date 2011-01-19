@@ -1,3 +1,4 @@
+<meta name="robots" content="noindex" />
 <link href="<?php echo $GO_CONFIG->theme_url; ?>Default/images/groupoffice.ico?" rel="shortcut icon" type="image/x-icon">
 <title><?php echo $GO_CONFIG->title; ?></title>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />

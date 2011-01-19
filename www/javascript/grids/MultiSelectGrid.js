@@ -47,8 +47,6 @@ GO.grid.MultiSelectGrid = function (config){
 		}],		
 		autoExpandColumn:'name',
 		view:new Ext.grid.GridView({
-			autoFill: true,
-			forceFit: true,
 			emptyText: GO.lang['strNoItems']
 		})
 	});

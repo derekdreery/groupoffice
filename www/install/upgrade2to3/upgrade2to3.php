@@ -661,6 +661,12 @@ if(in_array('projects', $module_ids))
 	echo 'Projects updates'.$line_break;
 	flush();
 
+	//on windows sometimes capitals are lost?!?
+	$db->query("RENAME TABLE `pmprojects`  TO `pmProjects` ;");
+	$db->query("RENAME TABLE `pmhours`  TO `pmHours` ;");
+	$db->query("RENAME TABLE `pmfees`  TO `pmFees` ;");
+	$db->query("RENAME TABLE `pmtimers`  TO `pmTimers` ;");
+
 	//update links
 	$sql = "SELECT id, link_id FROM pmProjects";
 	$db->query($sql);
@@ -898,11 +904,14 @@ if(in_array('addressbook', $module_ids))
 		update_link($db->f('link_id'),$db->f('id'), 3);
 	}
 
+	$sql = "SELECT * FROM tp_templates";
+	$db->query($sql);
+	$r = $db->next_record();
 
-	//$db->query("ALTER TABLE `tp_templates` ADD `content` LONGBLOB NOT NULL ;");
-	//$db->query("UPDATE tp_templates t SET content = ( SELECT content
-//FROM tp_templates_content
-//WHERE id = t.id ) ;");
+	if(!$r || !isset($r['content'])){
+		$db->query("ALTER TABLE `tp_templates` ADD `content` LONGBLOB NOT NULL ;");
+		$db->query("UPDATE tp_templates t SET content = ( SELECT content FROM tp_templates_content WHERE id = t.id ) ;");
+	}
 
 	//$db->query("DROP TABLE `tp_templates_content`");
 
@@ -970,6 +979,10 @@ if(in_array('email', $module_ids))
 	flush();
 
 	$db->query('ALTER TABLE `em_links` ADD `ctime` INT NOT NULL ;');
+
+	$db->query('RENAME TABLE `emaccounts`  TO `emAccounts` ;');
+	$db->query('RENAME TABLE `emfolders`  TO `emFolders` ;');
+	$db->query('RENAME TABLE `emfilters`  TO `emFilters` ;');
 
 	$db->query('RENAME TABLE `emAccounts`  TO `em_accounts` ;');
 	$db->query('RENAME TABLE `emFolders`  TO `em_folders` ;');

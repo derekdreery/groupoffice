@@ -13,17 +13,20 @@ class systemusers extends db {
 	public static function before_add_user($user)
 	{
 		global $GO_CONFIG, $GO_MODULES, $lang;
+
 		
 		if(!$user['username'] || !$user['password'])
 		{
 			throw new Exception($lang['common']['missingField']);
 		}
 
-		exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' add_user '.$user['username'].' '.$user['password'], $output);
-		if($output)
-		{
-			throw new Exception($output[0]);
-		}				
+		if(!strpos($user['username'],'@')){
+			exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' add_user '.$user['username'].' '.$user['password'], $output, $status);
+			if($status)
+			{
+				throw new Exception($output[0]);
+			}
+		}
 	}
 
     public static function update_user($user)
@@ -32,8 +35,8 @@ class systemusers extends db {
 
 		if(isset($user['password']) && $user['id'])
 		{
-			exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' update_user '.$user['id'].' '.$user['password'], $output);
-			if($output)
+			exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' update_user '.$user['id'].' '.$user['password'], $output, $status);
+			if($status)
 			{
 				throw new Exception($output[0]);
 			}
@@ -44,8 +47,8 @@ class systemusers extends db {
 	{
 		global $GO_CONFIG, $GO_MODULES;
 		
-		exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' delete_user '.$user['username'], $output);
-		if($output)
+		exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' delete_user '.$user['username'], $output, $status);
+		if($status)
 		{
 			throw new Exception(str_replace('<br />',"\n", $output[0]));
 		}
