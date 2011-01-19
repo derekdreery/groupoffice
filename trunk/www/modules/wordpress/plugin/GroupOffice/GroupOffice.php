@@ -352,8 +352,22 @@ $GO_LINKS = new GO_LINKS();
 
 					$post = $wp->get_post_by_wp_id($_SESSION['last_contact_post_id']);
 
-					if($post)
-						$GO_LINKS->add_link($post['id'], $post['link_type'], $r['contact_id'], 2);
+					#if($post)
+					#	$GO_LINKS->add_link($post['id'], $post['link_type'], $r['contact_id'], 2);
+	
+					//add to first fase
+					global $GO_MODULES;
+					require_once ($GO_MODULES->modules['recruity']['class_path']."fase.class.inc.php");
+					$fase = new fase();
+
+					$fase->get_fases('',0,1);
+					$fr = $fase->next_record();
+					$faseid = $fr['id'];
+
+					$var['project_id'] = $post['id'];
+					$var['contact_id'] = $r['contact_id'];
+					$var['fase_id'] = $faseid;
+					$fase->add_contact_project($var);
 				}
 
 
