@@ -23,7 +23,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 		},
 		root: 'results',
 		id: 'name',
-		fields: ['name','value','type','fields', 'custom'],
+		fields: ['name','value','type','fields', 'custom','id'],
 		remoteSort: true
 	});
 
@@ -395,14 +395,15 @@ Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 
 			default:
 
+	
 				if(type_data.custom){
 					
-					if(!this.customCriteriumPanels[type_data.type]){
-						this.customCriteriumPanels[type_data.type] = this.criteriumPanel.add(GO.customfields.dataTypes[type_data.type].getFormField({name:type_data.type,dataname:''}));
+					if(!this.customCriteriumPanels[type_data.id]){
+						this.customCriteriumPanels[type_data.id] = this.criteriumPanel.add(GO.customfields.dataTypes[type_data.type].getFormField({id: type_data.id, name:type_data.type,dataname:''}));
 						this.criteriumPanel.doLayout();
 					}
 
-					return this.customCriteriumPanels[type_data.type];
+					return this.customCriteriumPanels[type_data.id];
 				}else
 				{
 				
