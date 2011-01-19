@@ -1,17 +1,4 @@
 <?php
-/**
- * Copyright Intermesh
- *
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- *
- * If you have questions write an e-mail to info@intermesh.nl
- *
- * @version $Id:
- * @copyright Copyright Intermesh
- * @author Wilmar van Beusekom <wilmar@intermesh.nl>
- */
-
 function go_unserializesession($data) {
 	$vars = preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
 					$data, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
@@ -20,7 +7,16 @@ function go_unserializesession($data) {
 	return $result;
 }
 
-function go_auth($wgUser) {
+function go_auth() {
+
+	global $wgUser, $wgRequest;
+
+
+	// For a few special pages, don't do anything.
+	$title = $wgRequest->getVal('title');
+	if ($title == 'Special:Userlogout' || $title == 'Special:Userlogin') {
+		return;
+	}
 
 	// wiki user need setting?
 	if(!(isset($wgUser))) {
@@ -28,7 +24,7 @@ function go_auth($wgUser) {
 		$wgUser->newFromSession();
 		$wgUser->load();
 	}
-	
+
 	if($wgUser->IsAnon()) {
 
 		//import Group-Office session data
@@ -78,4 +74,6 @@ function go_auth($wgUser) {
 		return false;
 	}
 }
-$wgHooks['UserLoadFromSession'][] = 'go_auth';
+//$wgHooks['UserLoadFromSession'][] = 'go_auth';
+
+$wgExtensionFunctions[]='go_auth';
