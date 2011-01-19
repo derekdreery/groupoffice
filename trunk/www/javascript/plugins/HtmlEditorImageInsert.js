@@ -52,9 +52,9 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 							
 		this.uploadForm = new GO.UploadPCForm({
 			baseParams:{
-				task:'upload_attachment'
+				task:'upload_image'
 			},
-			url:GO.settings.modules.email.url+'action.php'
+			url:BaseHref+'action.php'
 		});
 
 		this.uploadForm.on('upload', function(e, file)
@@ -102,7 +102,8 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 
 	selectTempImage : function(name)
 	{
-		this.selectedUrl = BaseHref+'controls/download_temp_file.php?name='+name;
+		this.selectedUrl = BaseHref+'controls/download_temp_file.php?name='+encodeURIComponent(name);
+
 		this.name = name;
 		this.selectedPath = name;
 		this.temp=true;

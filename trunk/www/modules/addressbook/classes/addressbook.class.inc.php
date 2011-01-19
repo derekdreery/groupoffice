@@ -1022,6 +1022,11 @@ class addressbook extends db {
 	function format_company_record(&$record, $cf=false) {
 		$record['ctime']=Date::get_timestamp($record['ctime']);
 		$record['mtime']=Date::get_timestamp($record['mtime']);
+
+		$record['name_and_name2']=$record['name'];
+		if(!empty($record['name2']))
+			$record['name_and_name2'].= ' - '.$record['name2'];
+
 		if($cf)
 			$cf->format_record($record, 3, true);
 	}

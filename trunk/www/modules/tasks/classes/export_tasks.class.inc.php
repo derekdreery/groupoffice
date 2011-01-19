@@ -459,6 +459,21 @@ class export_tasks
 			//$lines[] = 'DALARM:'.date($this->datetime_format, Date::gmt_to_local_time($remind_time)).';;'.$task['name'];
 		}
 
+		switch($task['priority']){
+			case '2':
+				$prio='1';
+				break;
+			case '1':
+				$prio='5';
+				break;
+
+			default:
+				$prio='10';
+				break;
+		}
+
+		$lines[]= "PRIORITY:$prio";
+
 		$lines[]= "DTSTAMP:".date($this->datetime_format, $task['ctime']);
 		$lines[] = "END:VTODO";
 
