@@ -42,6 +42,5 @@ GO.files.lang.imageViewer='Image viewer';
 GO.files.lang.emailDownloadLink = 'Email download link';
 GO.files.lang.expireTime = 'Download link expire time';
 
-GO.files.lang.applyState = 'Apply the folder\'s grid layout settings by the owner/administrator for everybody.';
-GO.files.lang.applyStateShort = 'Apply layout settings for everybody';
-GO.files.lang.stateLocked = 'Folder layout locked by owner/admin';
+GO.files.lang.applyState = 'Apply the folder\'s display settings for everyone.';
+GO.files.lang.stateLocked = 'Folder display locked by owner/admin';
