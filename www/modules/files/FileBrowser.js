@@ -304,8 +304,21 @@ GO.files.FileBrowser = function(config){
 	}, this);	
 	
 	this.gridPanel.on('rowdblclick', this.onGridDoubleClick, this);
-	
 
+
+	/*
+	 * Handles saving of locked state by the admin of the folder.
+	 **/
+	this.gridPanel.on('beforestatesave',function(grid, state){
+		if(this.gridStore.reader.jsonData.lock_state){
+
+			if (this.gridStore.reader.jsonData.may_apply_state)
+				this.saveCMState(state);
+
+			//cancel regular state save
+			return false;
+		}
+	},this);
 	
 	this.filesContextMenu = new GO.files.FilesContextMenu();
 	
@@ -761,10 +774,7 @@ GO.files.FileBrowser = function(config){
 			
 	}, this);
 
-	Ext.state.Manager.getProvider().on('statechange',function(provider,key,value){
-		if (this.gridStore.reader.jsonData.may_apply_state && key==config.id+'-fs-grid')
-			this.saveCMState();
-	},this);
+	
 }
 
 Ext.extend(GO.files.FileBrowser, Ext.Panel,{
@@ -779,13 +789,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	path : '',
 
-	saveCMState: function() {
+	saveCMState: function(state) {
 		Ext.Ajax.request({
 			url: GO.settings.modules.files.url + 'action.php',
 			params : {
 				'task' : 'save_state',
 				'folder_id' : this.folder_id,
-				'state' : Ext.encode(this.gridPanel.getState())
+				'state' : Ext.encode(state)
 			},
 			scope: this
 		})
@@ -793,9 +803,20 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 	onStoreLoad : function(store){
 
+	
+
+		var state;
+
 		if (store.reader.jsonData.lock_state && store.reader.jsonData.cm_state!='') {
-			this.gridPanel.applyStoredState(store.reader.jsonData.cm_state);
+			state = Ext.decode(store.reader.jsonData.cm_state);
+		}else
+		{
+			state = Ext.state.Manager.get(this.gridPanel.id);
 		}
+
+		if(state)
+			this.gridPanel.applyStoredState(state);
+
 
 		this.stateLockedButton.setVisible(store.reader.jsonData.lock_state);
 
