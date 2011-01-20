@@ -673,6 +673,7 @@ class addressbook extends db {
 				"ab_companies.bank_no, ab_companies.email AS company_email, ".
 				"ab_companies.phone AS company_phone, ab_companies.fax AS company_fax, ".
 				"ab_companies.name AS company_name, ".
+				"ab_companies.name2 AS company_name2, ".
 				"ab_companies.post_address AS work_post_address, ab_companies.post_address_no AS work_post_address_no, ".
 				"ab_companies.post_zip AS work_post_zip, ab_companies.post_city AS work_post_city, ab_companies.post_state AS work_post_state, ".
 				"ab_companies.post_country AS work_post_country, ".
