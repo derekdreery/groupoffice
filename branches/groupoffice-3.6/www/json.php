@@ -484,13 +484,13 @@ try {
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0;
 
-			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'mtime';
+			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : '';
 			$dir= isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
 
 
 			if(isset($_REQUEST['delete_keys'])) {
 				try {
-					$delete_links = json_decode(($_REQUEST['delete_keys']), true);
+					$delete_links = json_decode($_REQUEST['delete_keys'], true);
 
 					foreach($delete_links as $delete_link) {
 						$link = explode(':',$delete_link);
