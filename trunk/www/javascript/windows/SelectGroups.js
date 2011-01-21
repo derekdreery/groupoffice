@@ -38,10 +38,19 @@ GO.dialog.SelectGroups = function(config){
         baseParams: {task: 'groups'}
     });
     
-   
-    
-	
+   var action = new Ext.ux.grid.RowActions({
+			header : '-',
+			autoWidth:true,
+			align : 'center',
+			actions : [{
+				iconCls : 'btn-users',
+				qtip: GO.lang.users
+			}]
+		});
+
 	this.grid = new GO.grid.GridPanel({
+			plugins : action,
+			clicksToEdit : 1,
 			paging:true,
 			border:false,
 		    store: this.store,
@@ -53,10 +62,25 @@ GO.dialog.SelectGroups = function(config){
 				dataIndex: 'name',
 				css: 'white-space:normal;',
 				sortable: true
-		    }],
+		    },action],
 		    sm: new Ext.grid.RowSelectionModel()			
 		});
-		
+
+	action.on({
+			scope:this,
+			action:function(grid, record, action, row, col) {
+
+				this.grid.getSelectionModel().selectRow(row);
+
+				switch(action){
+					case 'btn-users':
+						this.showUsersInGroupDialog(record.data.id);
+						break;
+				}
+			}
+		}, this);
+
+
 	this.grid.on('rowdblclick', function(){this.callHandler(true);}, this);
 		
 	this.store.load();
@@ -103,6 +127,16 @@ GO.dialog.SelectGroups = function(config){
 
 Ext.extend(GO.dialog.SelectGroups, Ext.Window, {
 
+
+	// private
+	showUsersInGroupDialog : function(groupId) {
+		if (!this.usersInGroupDialog) {
+			this.usersInGroupDialog = new GO.dialog.UsersInGroup();
+		}
+		this.usersInGroupDialog.setGroupId(groupId);
+		this.usersInGroupDialog.show();
+	},
+	
 	//private
 	callHandler : function(hide){
 		if(this.handler)

@@ -104,8 +104,9 @@ switch ($_POST['task'])
 	case 'users_in_group':
 		$response=array();
 
+		if(isset($_REQUEST['query'])){$query = $_REQUEST['query'];}else{$query = '';};
 		$group_id = $_REQUEST['group_id'];
-		$response['total'] = $GO_GROUPS->get_users_in_group($group_id, $start, $limit, $sort, $dir);
+		$response['total'] = $GO_GROUPS->get_users_in_group($group_id, $start, $limit, $sort, $dir, $query);
 		$response['results']=array();
 		while($GO_GROUPS->next_record())
 		{
@@ -113,7 +114,8 @@ switch ($_POST['task'])
 				'id' => $GO_GROUPS->f('id'),
 				'user_id' => $GO_GROUPS->f('user_id'),
 				'name' => String::format_name($GO_GROUPS->f('last_name'), $GO_GROUPS->f('first_name'), $GO_GROUPS->f('middle_name')),
-				'email' => $GO_GROUPS->f('email')
+				'email' => $GO_GROUPS->f('email'),
+				'username' => $GO_GROUPS->f('username')
 			);
 			$response['results'][] = $record;
 		}

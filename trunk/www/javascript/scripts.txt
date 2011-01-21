@@ -114,3 +114,5 @@ javascript/Export.js
 javascript/advancedquery/AdvancedQueryPanel.js
 javascript/advancedquery/QueryPanel.js
 javascript/advancedquery/SavedQueriesGrid.js
+
+javascript/windows/UsersInGroup.js
