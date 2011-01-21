@@ -1,5 +1,6 @@
 #!/usr/bin/php
 <?php
+chdir(dirname(__FILE__));
 define('CONFIG_FILE', $argv[1]);
 
 require_once('../../Group-Office.php');
@@ -40,11 +41,11 @@ switch($task)
 			exit(get_string($output, $status));
 		}
 			
-		exec('echo '.$username.':'.$password.' | '.$GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->cmd_chpasswd);
+		exec('echo '.$username.':'.$password.' | '.$GO_CONFIG->cmd_chpasswd);
 
 		if(!empty($GO_CONFIG->cmd_edquota) && !empty($GO_CONFIG->quota_protouser))
 		{
-			exec($GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->cmd_edquota.' -p '.$GO_CONFIG->quota_protouser.' '.$GO_CONFIG->id.'_'.$username);
+			exec($GO_CONFIG->cmd_edquota.' -p '.$GO_CONFIG->quota_protouser.' '.$GO_CONFIG->id.'_'.$username);
 		}
 
 		break;
@@ -63,10 +64,17 @@ switch($task)
 		$arr = explode('@', $username);
 		$username = $arr[0];
 
-		exec('echo '.$username.':'.$password.' | '.$GO_CONFIG->cmd_sudo.' '.$GO_CONFIG->cmd_chpasswd.' 2>&1', $output, $status);
+		exec('echo '.$username.':'.$password.' | '.$GO_CONFIG->cmd_chpasswd.' 2>&1', $output, $status);
 		if($status)
 		{
 			exit(get_string($output, $status));
+		}
+
+		if(isset($GO_MODULES->modules['email'])){
+			require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
+			$email = new email();
+
+			$email->update_password('localhost', $username, $password);
 		}
 		
 		break;
@@ -75,7 +83,7 @@ switch($task)
 
 		$username = $argv[3];
 		
-		exec($GO_CONFIG->cmd_sudo.' userdel '.$username.' 2>&1', $output, $status);
+		exec('userdel '.$username.' 2>&1', $output, $status);
 		if($status)
 		{
 			exit(get_string($output, $status));
