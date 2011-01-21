@@ -35,7 +35,7 @@ switch($task)
 		$username = $argv[3];
 		$password = $argv[4];
 
-		exec($GO_CONFIG->cmd_sudo.' useradd -m '.$username. ' 2>&1', $output, $status);	
+		exec('useradd -m '.$username. ' 2>&1', $output, $status);
 		if($status)
 		{		
 			exit(get_string($output, $status));
