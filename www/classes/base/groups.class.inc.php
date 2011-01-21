@@ -228,7 +228,7 @@ class GO_GROUPS extends db
 	 */
 
 	//$query, $field, $user_id=0, $start=0, $offset=0, $sort="name", $sort_direction='ASC'
-	function get_users_in_group($group_id, $start = 0, $offset = 0, $sort="name", $direction = "ASC")
+	function get_users_in_group($group_id, $start = 0, $offset = 0, $sort="name", $direction = "ASC", $query='')
 	{
 		if ($sort == 'name' || $sort == 'go_users.name')
 		{
@@ -241,10 +241,28 @@ class GO_GROUPS extends db
 			}
 		}
 
-		$sql = "SELECT go_users.id, go_users.email, go_users.first_name, go_users.middle_name , go_users.last_name FROM".
+		$sql = "SELECT go_users.id, go_users.email, go_users.first_name, go_users.middle_name , go_users.last_name, go_users.username FROM".
 			" go_users LEFT JOIN go_users_groups ON (go_users.id = go_users_groups.user_id)".
-			" WHERE go_users_groups.group_id='".$this->escape($group_id)."' ORDER BY ".		
-		$sort." ".$direction;
+			" WHERE go_users_groups.group_id='".$this->escape($group_id)."' ";
+
+		if(!empty($query))
+		{
+			$keywords = explode(' ', $query);
+
+			if(count($keywords)>1)
+			{
+				foreach($keywords as $keyword)
+				{
+					$sql_keywords[] = "go_users.last_name LIKE '%".$this->escape($keyword)."%'";
+				}
+
+				$sql .= 'AND ('.implode(' AND ', $sql_keywords).') ';
+			}else {
+				$sql .= "AND CONCAT(go_users.first_name,go_users.middle_name,go_users.last_name) LIKE '%".$this->escape($query)."%' ";
+			}
+		}
+
+		$sql .="ORDER BY ".$sort." ".$direction;
 
 		$this->query($sql);
 		$count = $this->num_rows();

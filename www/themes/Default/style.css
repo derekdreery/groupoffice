@@ -456,6 +456,10 @@ a.normal-link:hover{
 	background-image:url('images/16x16/actions.png') !important;
 }
 
+.btn-users {
+	background-image:url('images/16x16/forum.png') !important;
+}
+
 .btn-print{
 	background-image:url('images/16x16/print.png') !important;
 }

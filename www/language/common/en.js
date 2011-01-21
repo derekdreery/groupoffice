@@ -427,3 +427,5 @@ GO.lang.landscape='Landscape';
 GO.lang.savedQueries='Saved queries';
 GO.lang.searchQueryName = 'Search query name';
 GO.lang.enterSearchQueryName = 'Enter search query name';
+
+GO.lang.strUsersInGroup = 'Users in group';

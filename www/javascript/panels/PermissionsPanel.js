@@ -102,7 +102,21 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 			});
 		}
 
+		var action = new Ext.ux.grid.RowActions({
+			header : '-',
+			autoWidth:true,
+			align : 'center',
+			actions : [{
+				iconCls : 'btn-users',
+				qtip: GO.lang.users
+			}]
+		});
+
+		groupColumns.push(action);
+
 		this.aclGroupsGrid = new GO.grid.EditorGridPanel({
+			plugins : action,
+			clicksToEdit : 1,
 			anchor : '100% 50%',
 			title : GO.lang['strAuthorizedGroups'],
 			store : this.aclGroupsStore,
@@ -137,6 +151,20 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 			}]
 
 		});
+
+		action.on({
+			scope:this,
+			action:function(grid, record, action, row, col) {
+
+				this.aclGroupsGrid.getSelectionModel().selectRow(row);
+
+				switch(action){
+					case 'btn-users':
+						this.showUsersInGroupDialog(record.data.id);
+						break;
+				}
+			}
+		}, this);
 
 		this.aclGroupsGrid.on('afteredit', function(e) {
 
@@ -307,6 +335,15 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 			this.aclUsersStore.load();
 			this.loaded = true;
 		}
+	},
+
+	// private
+	showUsersInGroupDialog : function(groupId) {
+		if (!this.usersInGroupDialog) {
+			this.usersInGroupDialog = new GO.dialog.UsersInGroup();
+		}
+		this.usersInGroupDialog.setGroupId(groupId);
+		this.usersInGroupDialog.show();
 	},
 
 	// private
