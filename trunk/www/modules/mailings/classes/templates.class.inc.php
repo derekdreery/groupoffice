@@ -191,6 +191,7 @@ class templates extends db {
 		if (isset($contact) || ($contact_id > 0 && $contact = $ab->get_contact($contact_id))) {
 			$contact['hash']=md5($contact['id'].$contact['ctime']);
 			$contact['company']=$contact['company_name'];
+			$contact['company2']=$contact['company_name2'];
 
 			global $GO_MODULES;
 			if(isset($GO_MODULES->modules['customfields'])) {
@@ -373,6 +374,7 @@ class templates extends db {
 			'state',
 			'country',
 			'company',
+			'company2',
 			'department',
 			'function',
 			'work_phone',

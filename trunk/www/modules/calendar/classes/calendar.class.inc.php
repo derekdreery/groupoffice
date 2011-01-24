@@ -3083,10 +3083,12 @@ class calendar extends db {
 		global $lang;
 		if (empty($GO_USERS)) global $GO_USERS;
 
+		if (empty($current_event['uuid'])) return false;
+		
 		//append start_time for recurring events.
 		$merge_index = $current_event['uuid'].'-'.$current_event['start_time'];
 		
-		if (empty($merge_index)) return false;
+		
 		if (array_key_exists($merge_index,$uuid_array)) {
 			
 			$uuid_array[$merge_index][] = $event_nr;

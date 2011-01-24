@@ -1100,7 +1100,7 @@ class email extends db {
 			$parent = $this->get_parent($account, $mailbox['name'], $mailbox['delimiter']);
 			$folder['parent_id'] = $parent['id'];
 			$folder['can_have_children'] = $mailbox['can_have_children'];
-			$folder['no_select'] = $mailbox['noselect'];
+			$folder['no_select'] = $mailbox['noselect'] && $mailbox['name']!='INBOX';//sometimes INBOX has noselect flag!?!
 			$folder['name'] = $mailbox['name'];
 
 			$folder['subscribed']=in_array($mailbox['name'], $subscribed_names) ? '1' : '0';
