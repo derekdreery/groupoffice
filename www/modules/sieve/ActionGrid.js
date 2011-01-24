@@ -56,7 +56,7 @@ GO.sieve.ActionGrid = function(config){
 						if(record.data.copy)
 							txtToDisplay = GO.sieve.lang.copyto+' '+record.data.target;
 						else
-							txtToDisplay = GO.sieve.lang.moveto+' '+record.data.target;
+							txtToDisplay = GO.sieve.lang.fileinto+' '+record.data.target;
 						break;
 
 					case 'redirect':
