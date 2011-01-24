@@ -290,7 +290,7 @@ try {
 
 				case 'shared':
 
-					$share_count = $files->get_cached_shares($GO_SECURITY->user_id);
+					$share_count = $files->get_cached_shares($GO_SECURITY->user_id, false, 0,100);
 
 					$nodes=array();
 
@@ -370,7 +370,11 @@ try {
 				}
 				$response['write_permission']=false;
 
-				$share_count = $files->get_cached_shares($GO_SECURITY->user_id, true);
+				$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
+				$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
+
+
+				$response['total']= $share_count = $files->get_cached_shares($GO_SECURITY->user_id, true, $start, $limit);
 
 				while($folder = $files->next_record()){
 					$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
