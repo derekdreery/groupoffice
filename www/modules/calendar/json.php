@@ -59,7 +59,7 @@ try {
 			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
-			$response['writable_calendars']['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, 0, 0, 1, 1, -1, 1, 'name', 'ASC');
+			/*$response['writable_calendars']['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, 0, 0, 1, 1, -1, 1, 'name', 'ASC');
 			
 			$cal2=new calendar();
 			$response['results']=array();
@@ -69,7 +69,7 @@ try {
 				$record['group_name'] = $group['name'];			
 
 				$response['writable_calendars']['results'][] = $record;
-			}
+			}*/
 
 
 			$response['groups']['total'] = $cal->get_groups();
@@ -489,8 +489,11 @@ try {
 
 				$calendar = $calendar_props[] = $cal->get_calendar($calendar_id);
 
-				if(!isset($response['comment']))
+				if(!isset($response['calendar_id'])){
 					$response['comment']=$calendar['comment'];
+					$response['calendar_id']=$calendar['id'];
+					$response['calendar_name']=$calendar['name'];
+				}
 
 				$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
 				if($response['permission_level']>1){
@@ -834,6 +837,11 @@ try {
 			$count=0;
 			$cal->get_view_calendars($view_id);
 			while($view_calendar = $cal->next_record()) {
+
+				if(!isset($response['calendar_id'])){
+					$response['calendar_id']=$view_calendar['id'];
+					$response['calendar_name']=$view_calendar['name'];
+				}
 
 
 				$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $view_calendar['acl_id']);

@@ -244,7 +244,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 						var jsonData = Ext.decode(response.responseText);
 
 						GO.calendar.groupsStore.loadData(jsonData.groups);
-						this.selectCalendar.store.loadData(jsonData.writable_calendars);
+						//this.selectCalendar.store.loadData(jsonData.writable_calendars);
 						this.resourceGroupsStore.loadData(jsonData.resources);
 
 						if(!GO.calendar.categoriesStore.loaded)
@@ -418,15 +418,18 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 			this.setValues(config.values);
 
-			if (GO.util.empty(config.calendar_id) || !this.selectCalendar.store.getById(config.calendar_id)) {
+			var group_id=1;
+
+			if (GO.util.empty(config.calendar_id)){// || !this.selectCalendar.store.getById(config.calendar_id)) {
 				config.calendar_id = GO.calendar.defaultCalendar.id;
 				config.calendar_name = GO.calendar.defaultCalendar.name;
 			}
 
 			var calendarRecord = this.selectCalendar.store.getById(config.calendar_id);
 
-            
-			var group_id = calendarRecord.get('group_id');
+            if(calendarRecord){
+				group_id = calendarRecord.get('group_id');
+			}
 			this.formPanel.form.baseParams['group_id'] = group_id;
 			this.initCustomFields(group_id);
 			
@@ -436,7 +439,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			if(group_id == 1)
 				this.toggleFieldSets();
 
-			this.selectCalendar.setValue(config.calendar_id);			
+			this.selectCalendar.setValue(config.calendar_id);
+
+			if(config.calendar_name)
+				this.selectCalendar.setRemoteText(config.calendar_name);
 			
 		/*if (config.calendar_name) {
                 //this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
@@ -995,7 +1001,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				valueField : 'id',
 				displayField : 'name',
 				typeAhead : true,
-				mode : 'local',
 				triggerAction : 'all',
 				editable : false,
 				selectOnFocus : true,
