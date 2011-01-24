@@ -272,8 +272,8 @@ GO.email.AccountDialog = function(config) {
 		scope : this
 	})
 
-	if(GO.settings.modules.email.write_permission)
-		properties_items.push(this.aliasesButton);
+	//if(GO.settings.modules.email.write_permission)
+	properties_items.push(this.aliasesButton);
 
 	var propertiesTab = {
 		title : GO.lang.strProperties,
