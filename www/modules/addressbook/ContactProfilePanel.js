@@ -415,7 +415,7 @@ Ext.extend(GO.addressbook.ContactProfilePanel, Ext.Panel,{
 			sal = sal.replace('{last_name}', lastName);
 			sal = sal.replace('{initials}', initials);
 			sal = sal.replace('{title}', title);
-			sal = sal.replace('  ', ' ');
+			sal = sal.replace(/\s+/g, ' ');
 
 			this.formSalutation.setValue(sal);
 		}

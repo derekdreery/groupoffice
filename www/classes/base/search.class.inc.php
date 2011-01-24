@@ -101,19 +101,15 @@ class search extends db {
 		if($link_id>0)
 		{
 			$sql .= "INNER JOIN go_links_$link_type l ON l.link_id=sc.id AND l.link_type=sc.link_type ";		
-		}		
-		
+		}
+
 		$sql .= "WHERE (a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).") ";
-		
-		/*
-		 * Verrrrry sloowwww
 		 
-		$sql .=	"WHERE EXISTS (".
+		/*$sql .=	"WHERE EXISTS (".
 				"SELECT acl_id FROM go_acl a ".
 				"LEFT JOIN go_users_groups ug ON ug.group_id=a.group_id ".
 				"WHERE (a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).") AND ".
-				"(a.acl_id=sc.acl_read OR a.acl_id=sc.acl_write)) ";
-		*/
+				"(a.acl_id=sc.acl_id)) ";*/		
 		
 		if($link_folder_id>0)
 		{
@@ -159,24 +155,33 @@ class search extends db {
 		}
 		
 
-		$sql .= " ORDER BY $sort_index $sort_order";
-		
-
-		//go_debug($sql);
+		if(!empty($sort_index))
+			$sql .= " ORDER BY $sort_index $sort_order";
 		
 		if($offset>0)
 		{
-			$sql .= " LIMIT ".intval($start).",".intval($offset);			
-		  $sql = substr_replace($sql, 'SELECT SQL_CALC_FOUND_ROWS',0,6);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
+
+			if($start==0)
+				$sql = substr_replace($sql, 'SELECT SQL_CALC_FOUND_ROWS',0,6);
+
+
+			go_debug($sql);
 			
 			$this->query($sql);
-			$count=0;
+
+			if($start==0)
+				$count = $_SESSION['GO_SESSION']['global_search_count']=$this->found_rows();
+			else
+				$count = $_SESSION['GO_SESSION']['global_search_count'];
+
+			//$count=0;
 		}else
 		{
 			$this->query($sql);
 			$count = $this->num_rows();
 		}
-		return $offset>0 ? $this->found_rows() : $this->num_rows();
+		return $count;
 	}
 
 	
@@ -300,8 +305,14 @@ class search extends db {
 		require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
 		$GO_LINKS = new GO_LINKS();
 		
-		
 		$response['results']=array();
+		$response['total']=0;
+		if(empty($query) && empty($link_id)){
+			return $response;
+		}
+		
+		
+		
 		if($link_id>0)
 		{
 			//$_folder_id = $folder_id>-1 ? $folder_id : 0;

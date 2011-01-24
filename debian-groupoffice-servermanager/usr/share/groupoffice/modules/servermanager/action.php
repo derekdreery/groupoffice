@@ -244,6 +244,7 @@ try{
 				}
 				$installation['billing']=strpos($config['allowed_modules'], 'billing')!==false ? 1 : 0;
 
+				//$installation_id= $servermanager->add_installation($installation);
 			
 				$cmd = 'sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php --go_config='.$GO_CONFIG->get_config_file().' --task=install --name='.$installation['name'].' --tmp_config='.$tmp_config;
 				if(isset($admin_password))
@@ -257,12 +258,11 @@ try{
 				if($return_var!=0){
 					throw new Exception(implode('<br />', $output));
 				}
-				
-				$installation_id= $servermanager->add_installation($installation);
 
-				$response['installation_id']=$installation_id;
+				$installation = $servermanager->get_installation_by_name($installation['name']);		
+
+				$response['installation_id']=$installation['id'];
 				$response['success']=true;
-
 			}
 
 		

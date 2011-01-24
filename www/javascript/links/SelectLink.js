@@ -19,8 +19,7 @@ GO.form.SelectLink = function(config){
 		url: BaseHref+'json.php',
 		baseParams: {
 			query: '',
-			task:'links',
-			type_filter:'true'
+			task:'links'
 		},
 		root: 'results',
 		totalProperty: 'total',
@@ -38,7 +37,7 @@ GO.form.SelectLink = function(config){
 	config.width=400;
 	config.selectOnFocus=false;
 	config.fieldLabel=GO.lang.cmdLink;
-	config.pageSize=parseInt(GO.settings['max_rows_list']);
+	config.pageSize=20;//parseInt(GO.settings['max_rows_list']);
 	GO.form.SelectLink.superclass.constructor.call(this, config);
 	
 }
