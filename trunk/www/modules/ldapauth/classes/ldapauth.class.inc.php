@@ -25,8 +25,20 @@ class ldapauth extends imapauth {
 	 */
 	var $mapping = array();
 
-	public function __construct() {
-		$this->mapping = array(
+	public function get_mapping() {
+
+		global $GO_CONFIG;
+
+
+		$conf = str_replace('config.php', 'ldapauth.config.php', $GO_CONFIG->get_config_file());
+
+		if(file_exists($conf))
+		{
+			require($conf);
+			$this->mapping = $mapping;
+		}else
+		{
+			$this->mapping = array(
 						'username'	=> 'uid',
 						'password'	=> 'userpassword',
 						'first_name'	=> 'givenname',
@@ -39,7 +51,7 @@ class ldapauth extends imapauth {
 						'email'	=> 'mail',
 						'company'	=> 'o',
 						'department'	=> 'ou',
-						'function'	=> 'businessrole',	// TODO
+						'function'	=> 'businessrole',
 						'home_phone'	=> 'homephone',
 						'work_phone'	=> 'telephonenumber',
 						'fax'		=> 'homefacsimiletelephonenumber',
@@ -49,7 +61,7 @@ class ldapauth extends imapauth {
 						'city'	=> 'homelocalityname',
 						'zip'		=> 'homepostalcode',
 						'address'	=> 'homepostaladdress',
-						'homepage'	=> 'homeurl',	// TODO: homeurl, workurl, labeledURI
+						'homepage'	=> 'homeurl',
 						'work_address'=> 'postaladdress',
 						'work_zip'	=> 'postalcode',
 						'work_country'=> 'c',
@@ -62,7 +74,10 @@ class ldapauth extends imapauth {
 						'start_module'=> 'gostartmodule',
 						'theme'	=> 'gotheme',
 						'language'	=> 'golanguage',
-		);
+			);
+		}
+
+		return $this->mapping;
 
 	}
 
@@ -103,6 +118,9 @@ class ldapauth extends imapauth {
 			go_debug('LDAPAUTH: No LDAP user found');
 			return false;
 		}
+
+		go_debug('LDAPAUTH: entry found: '.var_export($entry,true));
+
 		$la = new ldapauth();
 		$user = $la->convert_ldap_entry_to_groupoffice_record($entry[0]);
 
@@ -253,7 +271,10 @@ class ldapauth extends imapauth {
 		 * Process each SQL/LDAP key pair of the mapping array, so that we can
 		 * fetch all values that are needed for each SQL key.
 		*/
-		foreach ( $this->mapping as $key => $ldapkey ) {
+
+		$mapping = $this->get_mapping();
+
+		foreach ( $mapping as $key => $ldapkey ) {
 			/*
 			 * If the ldapkey is undefined, we don't know any attributes that
 			 * match the specifiy SQL column, so we can leave it empty.
@@ -280,6 +301,12 @@ class ldapauth extends imapauth {
 			$row[$key] = $value;
 
 		}
+
+
+		global $GO_CONFIG;
+
+		if(!empty($GO_CONFIG->ldap_use_uid_with_email_domain))
+			$row['email']=$row['username'].'@'.$GO_CONFIG->ldap_use_uid_with_email_domain;
 
 		/*
 		 * We have processed all mapping fields and created our SQL result
