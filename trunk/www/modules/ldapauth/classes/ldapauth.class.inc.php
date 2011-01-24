@@ -92,8 +92,11 @@ class ldapauth extends imapauth {
 				throw new Exception('Could not bind to LDAP server');
 			}
 		}
+		
+		if(!isset($GO_CONFIG->ldap_search_template))
+			$GO_CONFIG->ldap_search_template='uid={username}';
 
-		$ldap->search('uid='.$username, $ldap->PeopleDN);
+		$ldap->search(str_replace('{username}',$username, $GO_CONFIG->ldap_search_template), $ldap->PeopleDN);
 
 		$entry = $ldap->get_entries();
 		if(!isset($entry[0])) {
