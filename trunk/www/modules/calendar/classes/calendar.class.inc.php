@@ -3032,11 +3032,14 @@ class calendar extends db {
 	function get_calendars_json(&$response, $resources=false, $project_calendars=false){
 
 		global $GO_SECURITY;
+
+		$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
+		$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 0;
 		
-		$response['total'] = $this->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources, 1, $project_calendars);
+		$response['total'] = $this->get_authorized_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, $project_calendars);
 		if($response['total']==0 && $resources==false && $project_calendars==false){
 			$dc = $this->get_default_calendar($GO_SECURITY->user_id);
-			$response['total'] = $this->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, $resources, 1, $project_calendars);
+			$response['total'] = $this->get_authorized_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, $project_calendars);
 		}
 
 		$response['results']=array();
