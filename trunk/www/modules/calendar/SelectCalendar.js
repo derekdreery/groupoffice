@@ -49,7 +49,9 @@ GO.calendar.SelectCalendar = function(config){
 		editable: true,
 		selectOnFocus:true,
 		forceSelection: true,
-		typeAhead: true,		
+		typeAhead: true,
+		pageSize:parseInt(GO.settings['max_rows_list']),
+		mode:'remote',
         tpl: new Ext.XTemplate(
             '<h1></h1>',
             '<tpl for=".">',

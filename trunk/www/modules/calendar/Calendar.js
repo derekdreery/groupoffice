@@ -309,7 +309,7 @@ GO.calendar.MainPanel = function(config){
 					group_id: 1,
 					project_id:0,
 					applyFilter:true,
-					calendars: [GO.calendar.defaultCalendar['id']]					
+					calendars: [GO.calendar.defaultCalendar['id']]
 				});
 			},
 			scope : this
@@ -418,6 +418,9 @@ GO.calendar.MainPanel = function(config){
 		this.calendarComments.setText(GO.calendar.activePanel.store.reader.jsonData.comment);
 		this.calendarTitle.setText(GO.calendar.activePanel.store.reader.jsonData.title);
 
+		this.calendar_name = GO.calendar.activePanel.store.reader.jsonData.calendar_name;
+		this.calendar_id = GO.calendar.activePanel.store.reader.jsonData.calendar_id;
+
 	},this);
 
 	this.monthGrid.store.on('load', function(){
@@ -429,6 +432,9 @@ GO.calendar.MainPanel = function(config){
 
 		this.calendarComments.setText(GO.calendar.activePanel.store.reader.jsonData.comment);
 		this.calendarTitle.setText(GO.calendar.activePanel.store.reader.jsonData.title);
+
+		this.calendar_name = GO.calendar.activePanel.store.reader.jsonData.calendar_name;
+		this.calendar_id = GO.calendar.activePanel.store.reader.jsonData.calendar_id;
 	},this);
 
 	this.listGrid.store.on('load', function(){
@@ -440,6 +446,9 @@ GO.calendar.MainPanel = function(config){
 
 		this.calendarComments.setText(GO.calendar.activePanel.store.reader.jsonData.comment);
 		this.calendarTitle.setText(GO.calendar.activePanel.store.reader.jsonData.title);
+
+		this.calendar_name = GO.calendar.activePanel.store.reader.jsonData.calendar_name;
+		this.calendar_id = GO.calendar.activePanel.store.reader.jsonData.calendar_id;
 	},this);
 
 	this.viewGrid.on('storeload', function(grid, count, mtime, params, response){
@@ -453,6 +462,9 @@ GO.calendar.MainPanel = function(config){
 
 		this.calendarComments.setText(grid.jsonData.comment);
 		this.calendarTitle.setText(grid.jsonData.title);
+
+		this.calendar_name = grid.jsonData.calendar_name;
+		this.calendar_id = grid.jsonData.calendar_id;
 	}, this);
 
 
@@ -549,8 +561,8 @@ GO.calendar.MainPanel = function(config){
 		handler: function(){
 							
 			GO.calendar.showEventDialog({
-				calendar_id: this.displayType != 'view' ? this.calendar_id : 0,
-				calendar_name_id: this.displayType != 'view' ? this.calendar_name : ''
+				calendar_id: this.calendar_id,
+				calendar_name: this.calendar_name
 			});
 										
 		},
