@@ -163,7 +163,7 @@ class imapauth
 	}
 
 	protected function create_email_account($config, $user_id, $username, $password, $email){
-		global $GO_MODULES, $GO_LANGUAGE;
+		global $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY;
 		if ($config['create_email_account'])
 		{
 			if(isset($GO_MODULES->modules['email']))
@@ -196,6 +196,7 @@ class imapauth
 				$account['password']=$password;
 				$account['name']=$email;
 				$account['email']=$email;
+				$account['acl_id']=$GO_SECURITY->get_new_acl('email', $account['user_id']);
 
 				if (!$account_id = $email_client->add_account($account))
 				{
