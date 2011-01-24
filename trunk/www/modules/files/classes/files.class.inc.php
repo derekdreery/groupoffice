@@ -928,7 +928,7 @@ class files extends db {
 		return $this->next_record();
 	}
 
-	function get_cached_shares($user_id, $join=false){
+	function get_cached_shares($user_id, $join=false, $start=0, $offset=0){
 
 		global $GO_CONFIG;
 
@@ -981,9 +981,18 @@ class files extends db {
 			$sql .= "INNER JOIN fs_folders f ON f.id=c.folder_id ";
 		
 		$sql .= "WHERE c.user_id=".intval($user_id)." ORDER BY c.name ASC";
+
+		if($offset>0) {
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
+			
+			$sql = str_replace('SELECT', 'SELECT SQL_CALC_FOUND_ROWS', $sql);
+		}
+
+
+
 		$this->query($sql);
 
-		return $this->num_rows();
+		return $offset>0 ? $this->found_rows() : $this->num_rows();
 
 	}
 
@@ -1146,7 +1155,8 @@ class files extends db {
 			global $GO_CONFIG;
 
 			//this will rebuild the cached shares folder
-			$GO_CONFIG->save_setting('fs_shared_cache', 0, $user['id']);
+			//disabled this because of slowdown with lots of users
+			//$GO_CONFIG->save_setting('fs_shared_cache', 0, $user['id']);
 
 			$timeout = 60*60*24*30;
 			$deltime = time() - $timeout;
