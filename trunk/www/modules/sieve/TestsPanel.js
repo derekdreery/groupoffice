@@ -47,8 +47,7 @@ config = config || {};
 
 	this.txtCondition = new Ext.form.TextField({
 		name: 'arg2' ,
-		emptyText: GO.sieve.lang.condition,
-		fieldLabel:GO.sieve.lang.condition,
+		emptyText: '...',
 		allowBlank:false,
 		width:150
 	});
