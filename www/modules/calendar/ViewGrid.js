@@ -222,9 +222,9 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 		
 		this.gridCells = {};
 		//for(var calendar_id in this.jsonData)
-		for(var i=0,max=this.jsonData.length;i<max;i++)
+		for(var i=0,max=this.jsonData.results.length;i<max;i++)
 		{
-			var calendar_id=this.jsonData[i].id;
+			var calendar_id=this.jsonData.results[i].id;
 			var gridRow =  Ext.DomHelper.append(this.tbody,
 			{
 				tag: 'tr'
@@ -243,7 +243,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 				id: 'view_cal_'+calendar_id,
 				href:'#',
 				cls:'normal-link',
-				html:this.jsonData[i].name
+				html:this.jsonData.results[i].name
 			}, true);
 			
 			link.on('click', function(e, target){			
@@ -279,9 +279,9 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 	},
 
 	getCalendar : function(id){		
-		for(var i=0;i<this.jsonData.length;i++){
-			if(this.jsonData[i].id==id)
-				return this.jsonData[i];
+		for(var i=0;i<this.jsonData.results.length;i++){
+			if(this.jsonData.results[i].id==id)
+				return this.jsonData.results[i];
 		}
 		return false;
 	},
@@ -859,10 +859,10 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					var total=0;
 					var mtime=0;
 					//for(var calendar_id in this.jsonData)
-					for(var n=0;n<this.jsonData.length;n++)
+					for(var n=0;n<this.jsonData.results.length;n++)
 					{
 						
-						var events = this.jsonData[n].events;
+						var events = this.jsonData.results[n].events;
 
 						total += events.length;
 						for(var i=0; i< events.length;i++)
@@ -882,7 +882,7 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 
 					this.nextId = total;					
 
-					this.fireEvent("storeload", this, total, mtime, params);
+					this.fireEvent("storeload", this, total, mtime, params, response);
 				}
 				this.unmask();
 			},

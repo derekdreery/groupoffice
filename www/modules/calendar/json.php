@@ -35,7 +35,10 @@ try {
 
 	switch($task) {
 
-		case 'startup':		
+		case 'startup':
+
+			$_REQUEST['start']=0;
+			$_REQUEST['limit']=$_SESSION['GO_SESSION']['max_rows_list'];
 			
 			$cal->get_views_json($response['views']);
 			$cal->get_calendars_json($response['calendars']);
@@ -483,7 +486,11 @@ try {
 			$calendar_props=array();
 
 			foreach($check_calendars as $calendar_id){
+
 				$calendar = $calendar_props[] = $cal->get_calendar($calendar_id);
+
+				if(!isset($response['comment']))
+					$response['comment']=$calendar['comment'];
 
 				$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
 				if($response['permission_level']>1){
@@ -495,6 +502,11 @@ try {
 					$calendar_names[$calendar_id]=$calendar['name'];
 				}
 			}
+
+
+			$response['title']=implode(' & ', $calendar_names);
+
+
 
 			$events = $cal->get_events_in_array($calendars,0,$start_time,$end_time);
 
@@ -718,6 +730,10 @@ try {
 			$start_time=isset($_REQUEST['start_time']) ? strtotime($_REQUEST['start_time']) : 0;
 			$end_time=isset($_REQUEST['end_time']) ? strtotime($_REQUEST['end_time']) : 0;
 
+			$view = $cal->get_view($view_id);
+
+			$response['title']=$view['name'];
+
 			if(isset($_REQUEST['update_event_id'])) {
 				//an event is moved or resized
 				$update_event_id=$_REQUEST['update_event_id'];
@@ -814,7 +830,7 @@ try {
 
 
 			$cal2 = new calendar();
-			$response=array();
+			$response['results']=array();
 			$count=0;
 			$cal->get_view_calendars($view_id);
 			while($view_calendar = $cal->next_record()) {
@@ -885,7 +901,7 @@ try {
 					$count++;
 				}
 
-				$response[]=$view_calendar;
+				$response['results'][]=$view_calendar;
 			}
 
 			break;
