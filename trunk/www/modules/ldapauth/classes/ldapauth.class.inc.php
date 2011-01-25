@@ -98,8 +98,12 @@ class ldapauth extends imapauth {
 
 		$ldap = $la->connect();
 
-		$entry = $la->get_entry($_SESSION['GO_SESSION']['username']);
+		if(!$ldap)
+			return false;
 
+		$entry = $la->get_entry($_SESSION['GO_SESSION']['username']);
+		if(!$entry)
+			return false;
 		
 		if(!$la->check_email($entry,$_POST['email'], $addresses)){
 			global $GO_LANGUAGE, $lang;
