@@ -472,9 +472,7 @@ class email extends db {
 
 	function set_default_folders($account) {
 
-		global $GO_LANGUAGE;
-
-		require($GO_LANGUAGE->get_language_file('email'));
+		
 
 		$mailboxes =  $this->mail->get_folders($account['mbroot']);
 		$subscribed =  $this->mail->get_folders($account['mbroot'], true);
@@ -489,20 +487,20 @@ class email extends db {
 			$subscribed_names[]=$mailbox['name'];
 		}
 
-		if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names)) {
-			$account['trash'] = $account['mbroot'].$lang['email']['trash'];
+		if($this->_add_folder($account['mbroot'].'Trash', $mailbox_names, $subscribed_names)) {
+			$account['trash'] = $account['mbroot'].'Trash';
 		}elseif($account['mbroot'] = $this->mail->check_mbroot($mailbox_names[0])) {
-			if($this->_add_folder($account['mbroot'].$lang['email']['trash'], $mailbox_names, $subscribed_names)) {
-				$account['trash'] = $account['mbroot'].$lang['email']['trash'];
+			if($this->_add_folder($account['mbroot'].'Trash', $mailbox_names, $subscribed_names)) {
+				$account['trash'] = $account['mbroot'].'Trash';
 			}
 		}
 
-		if($this->_add_folder($account['mbroot'].$lang['email']['sent'], $mailbox_names, $subscribed_names)) {
-			$account['sent'] = $account['mbroot'].$lang['email']['sent'];
+		if($this->_add_folder($account['mbroot'].'Sent', $mailbox_names, $subscribed_names)) {
+			$account['sent'] = $account['mbroot'].'Sent';
 		}
 
-		if($this->_add_folder($account['mbroot'].$lang['email']['drafts'], $mailbox_names, $subscribed_names)) {
-			$account['drafts'] = $account['mbroot'].$lang['email']['drafts'];
+		if($this->_add_folder($account['mbroot'].'Drafts', $mailbox_names, $subscribed_names)) {
+			$account['drafts'] = $account['mbroot'].'Drafts';
 		}
 
 		if($this->_add_folder($account['mbroot'].'Spam', $mailbox_names, $subscribed_names)) {

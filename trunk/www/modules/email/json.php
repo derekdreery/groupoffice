@@ -160,6 +160,18 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 			$status_html = '&nbsp;<span class="em-folder-status" id="status_'.$email->f('id').'"></span>';
 		}
 
+		switch($folder_name){
+			case 'Sent':
+				$folder_name=$lang['email']['sent'];
+				break;
+			case 'Trash':
+				$folder_name=$lang['email']['trash'];
+				break;
+			case 'Drafts':
+				$folder_name=$lang['email']['drafts'];
+				break;
+		}
+
 		if($email2->get_subscribed(0, $email->f('id'))) {
 			$response[] = array(
 							'text'=>$folder_name.$status_html,
