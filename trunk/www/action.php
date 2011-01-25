@@ -181,7 +181,9 @@ try{
 			
 			break;
 		
-		case 'save_settings':			
+		case 'save_settings':
+
+			$GO_EVENTS->fire_event('before_save_settings');
 
 			$GO_EVENTS->fire_event('save_settings');
 
