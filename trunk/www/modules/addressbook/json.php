@@ -21,7 +21,7 @@ $ab = new addressbook;
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
 $dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 $start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
-$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
+$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : $_SESSION['GO_SESSION']['max_rows_list'];
 $query = isset($_REQUEST['query']) ? ($_REQUEST['query']) : null;
 $field = isset($_REQUEST['field']) ? ($_REQUEST['field']) : '';
 
@@ -814,16 +814,18 @@ try
 
 			$auth_type = isset($_POST['auth_type']) ?$_POST['auth_type'] : 'read';
 
+			$query = !empty($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
+
 			$response['results'] = array();
 				
 			if($auth_type=='read')
 			{			
-				$response['total'] = $ab->get_user_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
+				$response['total'] = $ab->get_user_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir, $query);
 				
 				if($response['total']==0)
 				{
 					$ab->get_addressbook();
-					$response['total'] = $ab->get_user_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
+					$response['total'] = $ab->get_user_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir, $query);
 				}
 			}else
 			{

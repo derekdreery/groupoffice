@@ -16,7 +16,9 @@ GO.addressbook.readableAddressbooksStore = new GO.data.JsonStore({
 			url: GO.settings.modules.addressbook.url+ 'json.php'	,
 			baseParams: {
 				'task':'addressbooks',
-				'auth_type' : 'read'
+				'auth_type' : 'read',
+				limit:parseInt(GO.settings['max_rows_list'])
+
 				},
 			root: 'results', 
 			totalProperty: 'total', 
@@ -29,7 +31,8 @@ GO.addressbook.writableAddressbooksStore = new GO.data.JsonStore({
 			url: GO.settings.modules.addressbook.url+ 'json.php'	,
 			baseParams: {
 				'task':'addressbooks',
-				'auth_type' : 'write'
+				'auth_type' : 'write',
+				limit:parseInt(GO.settings['max_rows_list'])
 				},
 			root: 'results', 
 			totalProperty: 'total', 

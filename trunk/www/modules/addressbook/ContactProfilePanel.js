@@ -224,15 +224,9 @@ GO.addressbook.ContactProfilePanel = function(config)
 		});
 
 	
-		this.formAddressBooks = new GO.form.ComboBox({
+		this.formAddressBooks = new GO.addressbook.SelectAddressbook({
 			fieldLabel: GO.addressbook.lang['cmdFormLabelAddressBooks'],
-			store: GO.addressbook.writableAddressbooksStore,
-			displayField:'name',
-			valueField: 'id',
-			hiddenName:'addressbook_id',
-			mode:'local',
-			triggerAction:'all',
-			editable: false,
+			store: GO.addressbook.writableAddressbooksStore,			
 			selectOnFocus:true,
 			forceSelection: true,
 			allowBlank: false,
