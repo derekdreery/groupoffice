@@ -362,6 +362,12 @@ class ldapauth extends imapauth {
 		 * fetch all values that are needed for each SQL key.
 		*/
 
+		$lowercase_entry = array();
+
+		foreach($entry as $key=>$value){
+			$lowercase_entry[strtolower($key)]=$value;
+		}
+
 		$mapping = $this->get_mapping();
 
 		foreach ( $mapping as $key => $ldapkey ) {
@@ -381,9 +387,9 @@ class ldapauth extends imapauth {
 			*/
 			if ( !is_string( $ldapkey ) ) {
 
-				$value = $ldapkey->get_value($entry, $key);
-			}elseif ( !empty( $entry[$ldapkey] ) ) {
-				$value = $entry[$ldapkey][0];
+				$value = $ldapkey->get_value($lowercase_entry, $key);
+			}elseif ( !empty( $lowercase_entry[$ldapkey] ) ) {
+				$value = $lowercase_entry[$ldapkey][0];
 			} else {
 				continue;
 			}
