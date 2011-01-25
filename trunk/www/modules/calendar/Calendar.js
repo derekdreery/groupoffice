@@ -190,6 +190,11 @@ GO.calendar.MainPanel = function(config){
 		store: this.calendarsStore,
 		allowNoSelection:true,
 		bbar: new GO.SmallPagingToolbar({
+			items:[this.searchField = new GO.form.SearchField({
+				store: this.calendarsStore,
+				width:120,
+				emptyText: GO.lang.strSearch
+			})],
 			store:this.calendarsStore,
 			pageSize:parseInt(GO.settings['max_rows_list'])
 		})
@@ -1713,7 +1718,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				}
 			});
 			
-			this.writableCalendarsStore.load();
+			
 
 
 			
@@ -2060,7 +2065,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			}, this);
 			
 		}
-
+		this.writableCalendarsStore.load();
 		this.adminDialog.show();			
 	}
 });
