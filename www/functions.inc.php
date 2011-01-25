@@ -116,6 +116,13 @@ function array_insert(&$array, $value, $offset)
     return count($array);
 }
 
+function set_multiselectgrid_selections($key, $ids, $user_id){
+	global $GO_CONFIG;
+	$value = is_array($ids) ? implode(',', $ids) : $ids;
+
+	$GO_CONFIG->save_setting('msg_'.$key,$value, $user_id);
+}
+
 /*
  * Get's and saves the selected id's from a MultiSelectGrid
  */

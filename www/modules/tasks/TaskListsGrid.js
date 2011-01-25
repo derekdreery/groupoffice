@@ -10,6 +10,19 @@ GO.tasks.TaskListsGrid = function(config){
     config.split=true;
     config.ddGroup='TasklistsDD';
     config.enableDD=true;
+
+	Ext.apply(config, {
+		allowNoSelection:true,
+		bbar: new GO.SmallPagingToolbar({
+			items:[this.searchField = new GO.form.SearchField({
+				store: config.store,
+				width:120,
+				emptyText: GO.lang.strSearch
+			})],
+			store:config.store,
+			pageSize:parseInt(GO.settings['max_rows_list'])
+		})
+	});
 	
     GO.tasks.TaskListsGrid.superclass.constructor.call(this, config);
 };

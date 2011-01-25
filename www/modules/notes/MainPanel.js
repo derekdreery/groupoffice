@@ -25,7 +25,7 @@ GO.notes.MainPanel = function(config){
 		title:GO.notes.lang.categories,
 		loadMask:true,
 		store: GO.notes.readableCategoriesStore,
-		width: 220,
+		width: 210,
 		split:true,
 		allowNoSelection:true,
 		bbar: new GO.SmallPagingToolbar({

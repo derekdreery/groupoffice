@@ -452,19 +452,18 @@ class notes extends db {
  		}
 
 		$sql .= " ORDER BY ".$this->escape($sort." ".$direction);
-		
-		$this->query($sql);
-		$count = $this->num_rows();
-		
-		
-
+	
 		if ($offset > 0)
 		{
 			$sql .=" LIMIT ".intval($start).",".intval($offset);
+			$sql = str_replace('SELECT', 'SELECT SQL_CALC_FOUND_ROWS', $sql);
 			$this->query($sql);
+			$count = $this->found_rows();
 			return $count;
 		}else
 		{
+			$this->query($sql);
+			$count = $this->num_rows();
 			return $count;
 		}
 	}

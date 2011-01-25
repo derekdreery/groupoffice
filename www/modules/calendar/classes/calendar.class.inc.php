@@ -1009,14 +1009,19 @@ class calendar extends db {
 		$sql .= $group_id==-1 ? " ORDER BY g.id, c.name ASC" : " ORDER BY c.name ASC";
 
 
-		$this->query($sql);
-
-		$count= $this->num_rows();
-		if($offset>0) {
-			$sql .= " LIMIT ".intval($start).",".intval($offset);
+		if ($offset > 0)
+		{
+			$sql .=" LIMIT ".intval($start).",".intval($offset);
+			$sql = str_replace('SELECT', 'SELECT SQL_CALC_FOUND_ROWS', $sql);
 			$this->query($sql);
+			$count = $this->found_rows();
+			return $count;
+		}else
+		{
+			$this->query($sql);
+			$count = $this->num_rows();
+			return $count;
 		}
-		return $count;
 	}
 
 	function get_writable_calendars($user_id, $start=0, $offset=0, $resources=0, $groups=0, $group_id=-1, $show_all=0, $sort='name', $dir='ASC', $query='') {

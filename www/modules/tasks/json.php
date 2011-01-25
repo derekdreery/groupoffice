@@ -192,6 +192,8 @@ try {
 
 		case 'init':
 
+			$_REQUEST['limit']=$_SESSION['GO_SESSION']['max_rows_list'];
+
 			$categories = $GO_CONFIG->get_setting('tasks_categories_filter', $GO_SECURITY->user_id);
 			$categories = ($categories) ? explode(',',$categories) : array();
 
@@ -205,7 +207,7 @@ try {
 				$response['categories']['results'][] = $category;
 			}
 
-			$tasks->get_tasklists_json($response['tasklists']);
+			$tasks->get_tasklists_json($response['tasklists'],'read','',0,$_SESSION['GO_SESSION']['max_rows_list'],'name','ASC');
 		break;
 
 		case 'tasklists':
@@ -238,7 +240,7 @@ try {
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 
 
 			$auth_type = isset($_POST['auth_type']) ? $_POST['auth_type'] : 'read';
