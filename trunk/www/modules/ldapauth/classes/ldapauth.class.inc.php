@@ -89,11 +89,46 @@ class ldapauth extends imapauth {
 
 	public static function before_save_settings() {
 		//throw new Exception('test');
-		
+
+		global $GO_CONFIG;
+
+		$la = new ldapauth();
+
+		$ldap = $la->connect();
+
+		$entry = $la->get_entry($_SESSION['GO_SESSION']['username']);
+
+		$mapping = $la->get_mapping();
+
+		$val = $entry[$mapping['email']];
+
+		if(is_string($val)){
+			$val = array('count'=>1, '0'=>$val);
+		}
+
+		if(is_array($val)){
+			$addresses=array();
+			for($i=0;$i<$val['count'];$i++){
+				$addresses[]=$val[$i];
+			}
+
+			if(!empty($GO_CONFIG->ldap_use_uid_with_email_domain)){
+				$default = $_SESSION['GO_SESSION']['username'].'@'.$GO_CONFIG->ldap_use_uid_with_email_domain;
+				
+				if(!in_array($default, $addresses)){
+					$addresses[]=$default;
+				}
+			}
+
+			if(!in_array($_POST['email'], $addresses)){
+				global $GO_LANGUAGE, $lang;
+				$GO_LANGUAGE->require_language_file('ldapauth');
+				throw new Exception($lang['ldapauth']['invalid_email'].' '.implode(', ',$addresses));
+			}
+		}		
 	}
 
-
-	public static function before_login($username, $password) {
+	public function connect(){
 		global $GO_CONFIG, $GO_MODULES;
 
 		if(!isset($GO_CONFIG->ldap_host)) {
@@ -101,37 +136,58 @@ class ldapauth extends imapauth {
 			return false;
 		}
 
-		$ldap = new ldap();
-		if(!$ldap->connect()){
+		$this->ldap = new ldap();
+		if(!$this->ldap->connect()){
 			go_debug('LDAPAUTH: Could not connect to server');
 			throw new Exception('LDAPAUTH: Could not connect to server');
 		}
 
 
 		if(!empty($GO_CONFIG->ldap_user) && !empty($GO_CONFIG->ldap_pass)){
-			if(!$ldap->bind()){
+			if(!$this->ldap->bind()){
 				go_debug('LDAPAUTH: Could not bind to server');
 				throw new Exception('Could not bind to LDAP server');
 			}
 		}
-		
+
+		return $this->ldap;
+	}
+
+	public function get_entry($username){
+
+		global $GO_CONFIG;
+
 		if(!isset($GO_CONFIG->ldap_search_template))
 			$GO_CONFIG->ldap_search_template='uid={username}';
 
-		$ldap->search(str_replace('{username}',$username, $GO_CONFIG->ldap_search_template), $ldap->PeopleDN);
+		$this->ldap->search(str_replace('{username}',$username, $GO_CONFIG->ldap_search_template), $this->ldap->PeopleDN);
 
-		$entry = $ldap->get_entries();
+		$entry = $this->ldap->get_entries();
 		if(!isset($entry[0])) {
 			go_debug('LDAPAUTH: No LDAP user found');
 			return false;
 		}
 
-		go_debug('LDAPAUTH: entry found: '.var_export($entry,true));
+		go_debug('LDAPAUTH: entry found: '.var_export($entry[0],true));
+
+		return $entry[0];
+
+
+	}
+
+
+	public static function before_login($username, $password) {
+		global $GO_CONFIG, $GO_MODULES;
 
 		$la = new ldapauth();
-		$user = $la->convert_ldap_entry_to_groupoffice_record($entry[0]);
 
-		$authenticated = @$ldap->bind($entry[0]['dn'], $password);
+		$ldap = $la->connect();
+
+		$entry = $la->get_entry($username);
+		
+		$user = $la->convert_ldap_entry_to_groupoffice_record($entry);
+
+		$authenticated = @$ldap->bind($entry['dn'], $password);
 
 		if(!$authenticated) {
 			go_debug('LDAPAUTH: LDAP authentication failed for '.$username);
