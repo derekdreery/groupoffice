@@ -177,10 +177,11 @@ class ldapauth extends imapauth {
 
 		global $GO_CONFIG;
 
-		if(!isset($GO_CONFIG->ldap_search_attributes))
-			$GO_CONFIG->ldap_search_attributes='';
 
-		$this->ldap->search('uid='.$username, $this->ldap->PeopleDN, $GO_CONFIG->ldap_search_attributes);
+		if(!isset($GO_CONFIG->ldap_search_template))
+			$GO_CONFIG->ldap_search_template='uid={username}';
+
+		$this->ldap->search(str_replace('{username}',$username, $GO_CONFIG->ldap_search_template), $this->ldap->PeopleDN);
 
 		$entry = $this->ldap->get_entries();
 		if(!isset($entry[0])) {
@@ -203,7 +204,12 @@ class ldapauth extends imapauth {
 
 		$ldap = $la->connect();
 
+		if(!$ldap)
+			return false;
+
 		$entry = $la->get_entry($username);
+		if(!$entry)
+			return false;
 		
 		$user = $la->convert_ldap_entry_to_groupoffice_record($entry);
 
