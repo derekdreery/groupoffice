@@ -68,9 +68,6 @@ Ext.extend(GO.tasks.AddTaskPanel, Ext.FormPanel,{
 	populateComboBox : function(records)
 	{
 		var data = [];
-
-		console.log(records);
-
 		if(records.length){
 			for(var i=0; i<records.length; i++)
 			{
@@ -84,8 +81,6 @@ Ext.extend(GO.tasks.AddTaskPanel, Ext.FormPanel,{
 		{
 			data = [[GO.tasks.defaultTasklist.id, GO.tasks.defaultTasklist.name]]
 		}
-
-		console.log(data);
 
 		this.ntTasklist.store.loadData(data);
 		this.ntTasklist.setValue(this.ntTasklist.store.getAt(0).data.id);
