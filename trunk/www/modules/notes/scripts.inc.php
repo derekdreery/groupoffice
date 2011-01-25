@@ -13,3 +13,5 @@ $notes = new notes();
 
 $category = $notes->get_category();
 $GO_SCRIPTS_JS .= 'GO.notes.defaultCategory = {id: '.$category['id'].', name: "'.$category['name'].'"};';
+
+$GO_CONFIG->save_setting('notes_categories_filter',$category['id'], $GO_SECURITY->user_id);

@@ -15,6 +15,9 @@ $settings = $tasks->get_settings($GO_SECURITY->user_id);
 $tasklist = $tasks->get_tasklist($settings['default_tasklist_id']);
 if(!$tasklist){
 	$tasklist=array('id'=>0, 'name'=>'');
+}else
+{
+	set_multiselectgrid_selections('tasklists',$tasklist['id'], $GO_SECURITY->user_id);
 }
 
 $show = $GO_CONFIG->get_setting("tasks_filter", $GO_SECURITY->user_id);

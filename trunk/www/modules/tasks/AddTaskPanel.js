@@ -69,14 +69,23 @@ Ext.extend(GO.tasks.AddTaskPanel, Ext.FormPanel,{
 	{
 		var data = [];
 
-		for(var i=0; i<records.length; i++)
-		{
-			var tasklist = []
-			tasklist.push(records[i].id);
-			tasklist.push(records[i].data.name);
+		console.log(records);
 
-			data.push(tasklist);
+		if(records.length){
+			for(var i=0; i<records.length; i++)
+			{
+				var tasklist = []
+				tasklist.push(records[i].id);
+				tasklist.push(records[i].data.name);
+
+				data.push(tasklist);
+			}
+		}else
+		{
+			data = [[GO.tasks.defaultTasklist.id, GO.tasks.defaultTasklist.name]]
 		}
+
+		console.log(data);
 
 		this.ntTasklist.store.loadData(data);
 		this.ntTasklist.setValue(this.ntTasklist.store.getAt(0).data.id);

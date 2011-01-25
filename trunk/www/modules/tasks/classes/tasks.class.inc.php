@@ -470,10 +470,10 @@ class tasks extends db
 	
 	function get_authorized_tasklists($auth_type='read', $query='', $user_id=0, $start=0, $offset=0, $sort='name', $direction='ASC')
 	{
-                global $GO_SECURITY;
+		global $GO_SECURITY;
 
-                if(!$user_id)
-                        $user_id = $GO_SECURITY->user_id;
+		if(!$user_id)
+				$user_id = $GO_SECURITY->user_id;
         
 		$sql = "SELECT DISTINCT l.* ".
 		"FROM ta_lists l ";
@@ -496,12 +496,18 @@ class tasks extends db
 		$sql .= " ORDER BY ".$this->escape($sort." ".$direction);
 		
 
-		$this->query($sql);
-		$count= $this->num_rows();
+		
 		if($offset>0)
 		{
 			$sql .= " LIMIT ".$this->escape($start.','.$offset);
+			$sql = str_replace('SELECT', 'SELECT SQL_CALC_FOUND_ROWS', $sql);
 			$this->query($sql);
+			$count = $this->found_rows();
+			return $count;
+		}else
+		{
+			$this->query($sql);
+			$count= $this->num_rows();
 		}
 		return $count;
 	}
@@ -1612,7 +1618,7 @@ class tasks extends db
 		}
 
 		$response['total'] = $this->get_authorized_tasklists($auth_type, $query, $GO_SECURITY->user_id, $start, $limit, $sort, $dir);
-		if(!$response['total']) {
+		if(!$response['total'] && empty($query)) {
 			$response['new_default_tasklist']= $this->get_tasklist();
 			$response['total'] = $this->get_authorized_tasklists($auth_type, $query, $GO_SECURITY->user_id, $start, $limit, $sort, $dir);
 		}

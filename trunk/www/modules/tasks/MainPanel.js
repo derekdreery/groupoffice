@@ -8,7 +8,8 @@ GO.tasks.MainPanel = function(config){
 	this.taskListsStore = new GO.data.JsonStore({
 		url: GO.settings.modules.tasks.url+'json.php',
 		baseParams: {
-			'task': 'tasklists'
+			'task': 'tasklists',
+			limit:parseInt(GO.settings['max_rows_list'])
 		},
 		root: 'results',
 		totalProperty: 'total',
@@ -298,10 +299,10 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				}
 			}
 
+			this.addTaskPanel.populateComboBox(records);
+
 			if(records.length)
 			{
-				this.addTaskPanel.populateComboBox(records);
-
 				this.tasklist_id = records[0].data.id;
 				this.tasklist_name = records[0].data.name;
 			}
