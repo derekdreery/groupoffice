@@ -263,20 +263,33 @@ class addressbook extends db {
 		}
 	}
 
-	function get_user_addressbooks($user_id, $start=0, $offset=0, $sort='name', $dir='ASC') {
+	function get_user_addressbooks($user_id, $start=0, $offset=0, $sort='name', $dir='ASC', $query='') {
 		$sql = "SELECT DISTINCT ab_addressbooks.* ".
 				"FROM ab_addressbooks ".
 				"	INNER JOIN go_acl ON ab_addressbooks.acl_id = go_acl.acl_id ".
 				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-				"WHERE go_acl.user_id=".intval($user_id)." ".
-				"OR go_users_groups.user_id=".intval($user_id)." ".
-				" ORDER BY ab_addressbooks.".$sort." ".$dir;
+				"WHERE (go_acl.user_id=".intval($user_id)." ".
+				"OR go_users_groups.user_id=".intval($user_id).") ";
 
-		$this->query($sql);
-		$count= $this->num_rows();
-		if($offset>0) {
-			$sql .= " LIMIT ".intval($start).",".intval($offset);
+		if(!empty($query))
+ 		{
+ 			$sql .= " AND name LIKE '".$this->escape($query)."'";
+ 		}
+
+		$sql .=	" ORDER BY ab_addressbooks.".$sort." ".$dir;
+
+		if ($offset > 0)
+		{
+			$sql .=" LIMIT ".intval($start).",".intval($offset);
+			$sql = str_replace('SELECT', 'SELECT SQL_CALC_FOUND_ROWS', $sql);
 			$this->query($sql);
+			$count = $this->found_rows();
+			return $count;
+		}else
+		{
+			$this->query($sql);
+			$count = $this->num_rows();
+			return $count;
 		}
 		return $count;
 	}

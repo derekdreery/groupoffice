@@ -253,19 +253,14 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	 * 
 	 */					
 	
-	this.formAddressBooks = new GO.form.ComboBox({
-		fieldLabel: GO.addressbook.lang['cmdFormLabelAddressBooks'],
-		store: GO.addressbook.writableAddressbooksStore,
-    displayField:'name',
-    valueField: 'id',
-    hiddenName:'addressbook_id',
-    mode:'local',
-    triggerAction:'all',
-    editable: false,
-		selectOnFocus:true,
-    forceSelection: true,
-    anchor:'100%'
-	});
+	this.formAddressBooks = new GO.addressbook.SelectAddressbook({
+			fieldLabel: GO.addressbook.lang['cmdFormLabelAddressBooks'],
+			store: GO.addressbook.writableAddressbooksStore,
+			selectOnFocus:true,
+			forceSelection: true,
+			allowBlank: false,
+			anchor:'100%'
+		});
 	this.formAddressBooks.on('beforeselect', function(combo, record) 	
 	{
 		if(this.company_id>0)

@@ -17,7 +17,7 @@ GO.settings.MainPanel = function(config){
 		cls:'go-head-tb',
 		items: [{
 		iconCls: 'btn-save',
-		text: 'Opslaan',
+		text: GO.lang.cmdSave,
 		cls: 'x-btn-text-icon',
 		handler: function()
 		{
@@ -31,8 +31,8 @@ GO.settings.MainPanel = function(config){
 		},
 		scope: this
 	},{
-		iconCls: 'btn-cancel',
-		text: 'Annuleren',
+		iconCls: 'btn-delete',
+		text: GO.lang.cmdCancel,
 		cls: 'x-btn-text-icon',
 		handler: function()
 		{
@@ -51,6 +51,7 @@ Ext.extend(GO.settings.MainPanel, Ext.FormPanel, {
 	{
 		GO.settings.MainPanel.superclass.afterRender.call(this);
 		this.form.load();
+		this.formPanel.form.timeout=360;
 	}
 });
 

@@ -2,6 +2,10 @@
 
 require('../../Group-Office.php');
 
+session_write_close();
+
+ini_set('max_execution_time',360);
+
 switch($_REQUEST['task']){
 
 	case 'load_settings':
