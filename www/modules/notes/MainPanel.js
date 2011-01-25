@@ -25,23 +25,35 @@ GO.notes.MainPanel = function(config){
 		title:GO.notes.lang.categories,
 		loadMask:true,
 		store: GO.notes.readableCategoriesStore,
-		width: 150,
-		split:true
+		width: 220,
+		split:true,
+		allowNoSelection:true,
+		bbar: new GO.SmallPagingToolbar({
+			items:[this.searchField = new GO.form.SearchField({
+				store: GO.notes.readableCategoriesStore,
+				width:120,
+				emptyText: GO.lang.strSearch
+			})],
+			store:GO.notes.readableCategoriesStore,
+			pageSize:parseInt(GO.settings['max_rows_list'])
+		})
 	});
 
 	this.westPanel.on('change', function(grid, categories, records)
 	{
-                this.centerPanel.store.baseParams.categories = Ext.encode(categories);		
-                this.centerPanel.store.reload();
-                this.category_ids = categories;
+		if(records.length){
+			this.centerPanel.store.baseParams.categories = Ext.encode(categories);
+			this.centerPanel.store.reload();
+			this.category_ids = categories;
 
-		if(records.length)
-                {
-                        this.category_id = records[0].data.id;
-                        this.category_name = records[0].data.name;
-                }
-              
-                delete this.centerPanel.store.baseParams.categories;
+			if(records.length)
+			{
+				this.category_id = records[0].data.id;
+				this.category_name = records[0].data.name;
+			}
+
+			delete this.centerPanel.store.baseParams.categories;
+		}
 	}, this);
 	
 	this.westPanel.store.on('load', function()
@@ -74,7 +86,7 @@ GO.notes.MainPanel = function(config){
 
 	this.centerPanel.on('rowdblclick', function(grid, rowIndex){
 		this.eastPanel.editHandler();
-		}, this);
+	}, this);
 
 	this.centerPanel.store.on('load', function(){
 
@@ -97,8 +109,8 @@ GO.notes.MainPanel = function(config){
 	});
 	
 	config.tbar=new Ext.Toolbar({
-			cls:'go-head-tb',
-			items: [{
+		cls:'go-head-tb',
+		items: [{
 			iconCls: 'btn-add',
 			itemId:'add',
 			disabled:true,
@@ -109,7 +121,8 @@ GO.notes.MainPanel = function(config){
 
 				GO.notes.showNoteDialog(0, {
 					category_id: this.category_id,
-					category_name: this.category_name});
+					category_name: this.category_name
+					});
 
 			},
 			scope: this
@@ -127,25 +140,29 @@ GO.notes.MainPanel = function(config){
 			},
 			scope: this
 		},{
-				iconCls: 'no-btn-categories',
-				text: GO.notes.lang.manageCategories,
-				cls: 'x-btn-text-icon',
-				handler: function(){
-					if(!this.categoriesDialog)
-					{
-						this.categoriesDialog = new GO.notes.ManageCategoriesDialog();
-						this.categoriesDialog.on('change', function(){this.westPanel.store.reload();GO.notes.writableCategoriesStore.reload();}, this);
-					}
-					this.categoriesDialog.show();
-				},
-				scope: this
+			iconCls: 'no-btn-categories',
+			text: GO.notes.lang.manageCategories,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				if(!this.categoriesDialog)
+				{
+					this.categoriesDialog = new GO.notes.ManageCategoriesDialog();
+					this.categoriesDialog.on('change', function(){
+						this.westPanel.store.reload();
+						GO.notes.writableCategoriesStore.reload();
+					}, this);
+				}
+				this.categoriesDialog.show();
+			},
+			scope: this
 				
-			}]});
+		}]
+		});
 
 	config.items=[
-		this.westPanel,
-		this.centerPanel,
-		this.eastPanel
+	this.westPanel,
+	this.centerPanel,
+	this.eastPanel
 	];	
 	
 	config.layout='border';

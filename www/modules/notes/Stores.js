@@ -29,7 +29,8 @@ GO.notes.readableCategoriesStore = new GO.data.JsonStore({
 	    url: GO.settings.modules.notes.url+ 'json.php',
 	    baseParams: {
 	    	task: 'categories',
-	    	auth_type: 'read'
+	    	auth_type: 'read',
+			limit:parseInt(GO.settings['max_rows_list'])
 	    	},
 	    root: 'results',
 	    id: 'id',

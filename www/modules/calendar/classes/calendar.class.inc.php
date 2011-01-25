@@ -973,7 +973,7 @@ class calendar extends db {
 		return $this->num_rows();
 	}
 
-	function get_authorized_calendars($user_id, $start=0, $offset=0, $resources=0, $group_id=1, $projects=false) {
+	function get_authorized_calendars($user_id, $start=0, $offset=0, $resources=0, $group_id=1, $projects=false, $query='') {
 		$sql = "SELECT DISTINCT c.* ";
 
 		if($group_id<0) {
@@ -1001,6 +1001,10 @@ class calendar extends db {
 
 		$sql .= " AND c.project_id";
 		$sql .= $projects ? ">0" : "=0";
+
+		if(!empty($query)){
+			$sql .= " AND c.name LIKE '".$this->escape($query)."'";
+		}
 
 		$sql .= $group_id==-1 ? " ORDER BY g.id, c.name ASC" : " ORDER BY c.name ASC";
 
@@ -3035,9 +3039,10 @@ class calendar extends db {
 
 		$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
 		$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 0;
+		$query = !empty($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
 		
-		$response['total'] = $this->get_authorized_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, $project_calendars);
-		if($response['total']==0 && $resources==false && $project_calendars==false){
+		$response['total'] = $this->get_authorized_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, $project_calendars, $query);
+		if($response['total']==0 && $resources==false && $project_calendars==false && empty($query)){
 			$dc = $this->get_default_calendar($GO_SECURITY->user_id);
 			$response['total'] = $this->get_authorized_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, $project_calendars);
 		}
