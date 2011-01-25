@@ -83,6 +83,13 @@ class ldapauth extends imapauth {
 
 	public function __on_load_listeners($events) {
 		$events->add_listener('before_login', __FILE__, 'ldapauth', 'before_login');
+
+		$events->add_listener('before_save_settings', __FILE__, 'ldapauth', 'before_save_settings');
+	}
+
+	public static function before_save_settings() {
+		//throw new Exception('test');
+		
 	}
 
 
