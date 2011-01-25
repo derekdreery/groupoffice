@@ -330,7 +330,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					this.changeRepeat(action.result.data.repeat_type);
 					this.setValues(config.values);
 					this.setWritePermission(action.result.data.write_permission);
-					this.selectCalendar.setValue(action.result.data.calendar_id);
+					//this.selectCalendar.setValue(action.result.data.calendar_id);
+					this.selectCalendar.setRemoteText(action.result.data.calendar_name);
 					this.files_folder_id = action.result.data.files_folder_id;
 
 					if(action.result.data.group_id == 1)
