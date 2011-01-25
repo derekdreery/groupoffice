@@ -94,11 +94,25 @@ class ldapauth extends imapauth {
 
 		$la = new ldapauth();
 
+		$la = new ldapauth();
+
 		$ldap = $la->connect();
 
 		$entry = $la->get_entry($_SESSION['GO_SESSION']['username']);
 
-		$mapping = $la->get_mapping();
+		
+		if(!$la->check_email($entry,$_POST['email'], $addresses)){
+			global $GO_LANGUAGE, $lang;
+			$GO_LANGUAGE->require_language_file('ldapauth');
+			throw new Exception($lang['ldapauth']['invalid_email'].' '.implode(', ',$addresses));
+		}
+				
+	}
+
+	public function check_email($entry, $email, &$addresses=array()){
+		global $GO_CONFIG;		
+
+		$mapping = $this->get_mapping();
 
 		$val = $entry[$mapping['email']];
 
@@ -106,26 +120,32 @@ class ldapauth extends imapauth {
 			$val = array('count'=>1, '0'=>$val);
 		}
 
+		go_debug($val);
+
 		if(is_array($val)){
 			$addresses=array();
 			for($i=0;$i<$val['count'];$i++){
-				$addresses[]=$val[$i];
+				$addresses[]=strtolower($val[$i]);
 			}
 
 			if(!empty($GO_CONFIG->ldap_use_uid_with_email_domain)){
-				$default = $_SESSION['GO_SESSION']['username'].'@'.$GO_CONFIG->ldap_use_uid_with_email_domain;
-				
+				$default = strtolower($entry['uid'][0]).'@'.$GO_CONFIG->ldap_use_uid_with_email_domain;
+
 				if(!in_array($default, $addresses)){
 					$addresses[]=$default;
 				}
 			}
 
-			if(!in_array($_POST['email'], $addresses)){
-				global $GO_LANGUAGE, $lang;
-				$GO_LANGUAGE->require_language_file('ldapauth');
-				throw new Exception($lang['ldapauth']['invalid_email'].' '.implode(', ',$addresses));
+			go_debug($email);
+			go_debug($addresses);
+
+			if(!in_array(strtolower($email), $addresses)){
+				return false;
 			}
-		}		
+		}
+
+		return true;
+		
 	}
 
 	public function connect(){
@@ -157,10 +177,10 @@ class ldapauth extends imapauth {
 
 		global $GO_CONFIG;
 
-		if(!isset($GO_CONFIG->ldap_search_template))
-			$GO_CONFIG->ldap_search_template='uid={username}';
+		if(!isset($GO_CONFIG->ldap_search_attributes))
+			$GO_CONFIG->ldap_search_attributes='';
 
-		$this->ldap->search(str_replace('{username}',$username, $GO_CONFIG->ldap_search_template), $this->ldap->PeopleDN);
+		$this->ldap->search('uid='.$username, $this->ldap->PeopleDN, $GO_CONFIG->ldap_search_attributes);
 
 		$entry = $this->ldap->get_entries();
 		if(!isset($entry[0])) {
@@ -219,8 +239,15 @@ class ldapauth extends imapauth {
 			if ($gouser) {
 				go_debug('LDAPAUTH: Group-Office user was found');
 
-				if(!empty($GO_CONFIG->ldap_auth_dont_update_profiles))
+				if(!empty($GO_CONFIG->ldap_auth_dont_update_profiles)){
 					$user=array('email'=>$gouser['email'], 'username'=>$user['username']);
+				}else
+				{
+					//never update the e-mail address because the user
+					//can't change it to something invalid.
+					if($la->check_email($entry, $gouser['email']))
+						unset($user['email']);
+				}
 
 
 				$user['id']=$gouser['id'];
