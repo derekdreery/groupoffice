@@ -264,7 +264,7 @@ Ext.extend(GO.sieve.ActionPanel, Ext.FormPanel,{
 
 		if(editmode)
 		{
-			this.btnAddAction.setText(GO.lang.cmdEdit);
+			this.btnAddAction.setText(GO.lang.cmdSave);
 			this.btnClearAction.setText(GO.lang.cmdCancel);
 			recVal = record.data.type;
 

@@ -110,7 +110,7 @@ GO.sieve.SieveGrid = function(config){
 			text: GO.lang['cmdAdd'],
 			cls: 'x-btn-text-icon',
 			handler: function(){
-	    	this.sieveDialog.show(-1,'groupoffice',this.store.baseParams.account_id);
+	    	this.sieveDialog.show(-1,this.selectScript.getValue(),this.store.baseParams.account_id);
 			},
 			scope: this
 		},{
