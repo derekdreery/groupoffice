@@ -1626,9 +1626,9 @@ class imap extends imap_bodystruct {
 		$status=false;
 		$uid_strings = array();
 		if (!empty($uids)) {
-			if (count($uids) > 1000) {
-				while (count($uids) > 1000) {
-					$uid_strings[] = implode(',', array_splice($uids, 0, 1000));
+			if (count($uids) > 500) {
+				while (count($uids) > 500) {
+					$uid_strings[] = implode(',', array_splice($uids, 0, 500));
 				}
 				if (count($uids)) {
 					$uid_strings[] = implode(',', $uids);
