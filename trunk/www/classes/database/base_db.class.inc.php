@@ -148,14 +148,23 @@ class base_db{
 	 *
 	 * @var bool
 	 */
-	 var $suppress_errors=array();
+	var $suppress_errors=array();
 
 	 /**
 	  * Another db object that is used to calculate the number of found rows so
 	  * that it can be called immediately after a select and doesn't clear the
 	  * result set.
 	  */
-		var $helper_db;
+	var $helper_db;
+
+
+	/**
+	 * Can be set to 'odd' or 'even' to only increment to odd or even number.
+	 * Useful in clustering mode.
+	 *
+	 * @var
+	 */
+	var $increment_mode='normal';
 
 	/**
 	 * Constructor a config object with db_host, db_pass, db_user and db_name
@@ -187,6 +196,10 @@ class base_db{
 			
 		if(isset($config))
 		{
+			if (isset($config->db_increment_mode)) {
+				$this->increment_mode=$config->db_increment_mode;
+			}
+
 			if (isset($config->db_host)) {
 				$this->host = $config->db_host;
 			}
@@ -383,7 +396,27 @@ class base_db{
 		} else {
 			$currentid = $this->f("nextid");
 		}
-		$nextid = $currentid + 1;
+
+		switch($this->increment_mode){
+			
+			case 'odd':
+				$odd = $currentid%2;
+				$increment = $odd ? 2 : 1;			
+				break;
+			
+			case 'even':
+				$odd = $currentid%2;
+				$increment = $odd ? 1 : 2;				
+				break;
+
+			default:
+				$nextid = 1;
+				break;
+		}
+
+		$nextid = $currentid+$increment;
+
+
 		$q = sprintf("update %s set nextid = '%s' where seq_name = '%s'",
 		$this->seq_table,
 		$nextid,
