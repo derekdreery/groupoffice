@@ -415,6 +415,16 @@ class GO_CONFIG {
 	 */
 	var $db_socket = '';
 
+	/**
+	 * Can be set to 'odd' or 'even' to only increment to odd or even number.
+	 * Useful in clustering mode. Defaults to "normal".
+	 * 
+	 * @var string
+	 * @access public
+	 */
+
+	var $db_increment_mode='even';
+
 
 
 	#FILE BROWSER VARIABLES
