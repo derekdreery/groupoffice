@@ -1,3 +1,7 @@
+27/01/2011 3.6.21
+- Thunderbird SyncML bug fix
+- Small bug fixes
+
 18/01/2011 3.6.20
 - RTF parsing bug
 - Fixed force_login_url
