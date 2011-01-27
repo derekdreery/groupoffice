@@ -81,10 +81,11 @@ fi
 adduser clamav amavis
 
 if [ ! -x /home/vmail ]; then
-	mkdir /home/vmail
-	chmod 770 /home/vmail
-	chown -R vmail:mail /home/vmail
+	mkdir /home/vmail	
 fi
+
+chmod 770 /home/vmail
+chown vmail:mail /home/vmail
 
 
 echo setting up dovecot
