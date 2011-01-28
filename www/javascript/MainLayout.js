@@ -19,7 +19,8 @@ GO.MainLayout = function(){
 		'render' : true,
 		'linksDeleted' : true,
 		'focus' : true,
-		'blur' : true
+		'blur' : true,
+		'login' : true
 	});
 	
 	this.resumeEvents();
@@ -74,6 +75,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		{
 			this.msg(GO.lang.debugModeDetected, GO.lang.debugModeWarning, 4, 300);
 		}
+
+		this.fireEvent('login', this);
 	},
 
 	saveState : function(){
