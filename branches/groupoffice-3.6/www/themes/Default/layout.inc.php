@@ -82,6 +82,11 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 {
 
 	?>
+
+	<div id="go-powered-by" style="position:absolute;right:10px;bottom:10px">
+	Powered by Group-Office: <a target="_blank" class="normal-link" href="http://www.group-office.com">http://www.group-office.com</a>
+	</div>
+
 	<div id="checker-icon"></div>
 	<script type="text/javascript">Ext.get("load-status").update("<?php echo $lang['common']['loadingLogin']; ?>");</script>
 	<script type="text/javascript">	
@@ -100,9 +105,7 @@ if($GO_SECURITY->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !
 	?>
 	</script>
 	
-	<div style="position:absolute;right:10px;bottom:10px">
-	Powered by Group-Office: <a target="_blank" class="normal-link" href="http://www.group-office.com">http://www.group-office.com</a>	
-	</div>
+	
 	<?php	
 }
 
