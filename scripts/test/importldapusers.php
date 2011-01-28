@@ -14,6 +14,9 @@ require_once($GO_MODULES->modules['ldapauth']['class_path'].'ldapauth.class.inc.
 require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
+require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+$GO_GROUPS = new GO_GROUPS();
+
 $la = new ldapauth();
 
 $ldap = $la->connect();
@@ -32,7 +35,7 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 
 	//var_dump($entry);
 
-	$gouser = $GO_USERS->get_user_by_username($username);
+	$gouser = $GO_USERS->get_user_by_username($entry['uid']);
 
 	
 	if($gouser){

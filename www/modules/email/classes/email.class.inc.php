@@ -716,12 +716,12 @@ class email extends db {
 	function get_account_by_username($username, $user_id=0, $hostname=''){
 		$sql = "SELECT * FROM em_accounts WHERE username='".$this->escape($username)."'";
 		if($user_id>0){
-			$sql .= "AND user_id=".$user_id;
+			$sql .= " AND user_id=".$user_id;
 		}
 
 		if(!empty($hostname))
 		{
-			$sql .= ' AND host='.$this->escape($hostname);
+			$sql .= " AND host='".$this->escape($hostname)."'";
 		}
 
 		$this->query($sql);
