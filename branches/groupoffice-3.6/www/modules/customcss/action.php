@@ -16,6 +16,8 @@ $GO_SECURITY->json_authenticate('customcss');
 
 try{	
 	file_put_contents($GO_CONFIG->file_storage_path.'customcss/style.css', $_POST['css']);
+	file_put_contents($GO_CONFIG->file_storage_path.'customcss/javascript.js', $_POST['javascript']);
+
 	$response['success']=true;
 }catch(Exception $e)
 {
