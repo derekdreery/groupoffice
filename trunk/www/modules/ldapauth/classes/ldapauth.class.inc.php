@@ -260,6 +260,18 @@ class ldapauth extends imapauth {
 				}
 
 
+				require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
+				$email_client = new email();
+
+				//create e-mail account if it's missing
+				if($mail_username) {
+					if(!$email_client->get_account_by_username($username, $gouser['id'],$config['host'])){
+						go_debug('LDAPAUTH: E-mail account missing from account. Creating the default account now.');
+						$la->create_email_account($config, $gouser['id'], $mail_username, $password, $gouser['email']);
+					}
+				}
+
+
 				$user['id']=$gouser['id'];
 				$user['password']=$password;
 
@@ -267,16 +279,7 @@ class ldapauth extends imapauth {
 				if(crypt($password, $gouser['password']) != $gouser['password']) {
 					go_debug('LDAPAUTH: password on LDAP server has changed. Updating Group-Office database');
 
-
-					if($mail_username) {
-
-						require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
-						$email_client = new email();
-
-						if(!$email->get_account_by_username($username, $gouser['id'],$config['host'])){
-							$la->create_email_account($config, $user_id, $mail_username, $password,$user['email']);
-						}
-						
+					if($mail_username) {						
 						$email_client->update_password($config['host'], $mail_username, $password);
 					}
 				}
@@ -434,12 +437,13 @@ class ldap_mapping_type {
 	var $type;
 	var $value;
 
-	function mapping_type( $type, $value ) {
+	function __construct( $type, $value ) {
 		$this->type = $type;
 		$this->value = $value;
 	}
 
 	function get_value($entry, $key) {
+		
 		switch($this->type) {
 			case 'function':
 				$my_method = $this->value;
