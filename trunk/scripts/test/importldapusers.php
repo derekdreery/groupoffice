@@ -18,7 +18,7 @@ $la = new ldapauth();
 
 $ldap = $la->connect();
 
-$search_id=$ldap->search('uid=*', $ldap->PeopleDN);
+$search_id=$ldap->search('uid=testa', $ldap->PeopleDN);
 
 $count=0;
 for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
@@ -28,14 +28,25 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 	$entry = ldap_get_attributes ($ldap->Link_ID,$entryID);
 	//var_dump($entry);
 
-	//$user = $la->convert_ldap_entry_to_groupoffice_record($entry);
+	$user = $la->convert_ldap_entry_to_groupoffice_record($entry);
 
 	//var_dump($entry);
 
-	//$gouser = $GO_USERS->get_user_by_username($username);
+	$gouser = $GO_USERS->get_user_by_username($username);
 
-	ldapauth::before_login();
-
+	
+	if($gouser){
+		echo "User ".$gouser['username']." already exists\n";
+	}else
+	{
+		if (!$user_id = $GO_USERS->add_user($user,
+		$GO_GROUPS->groupnames_to_ids(explode(',',$GO_CONFIG->register_user_groups)),
+		$GO_GROUPS->groupnames_to_ids(explode(',',$GO_CONFIG->register_visible_user_groups)),
+		explode(',',$GO_CONFIG->register_modules_read),
+		explode(',',$GO_CONFIG->register_modules_write))) {
+			echo "Failed creating user ".$user['username']."\n";
+		}
+	}
 	
 
 	$count++;
