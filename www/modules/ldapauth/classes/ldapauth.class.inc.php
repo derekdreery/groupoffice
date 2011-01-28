@@ -269,8 +269,14 @@ class ldapauth extends imapauth {
 
 
 					if($mail_username) {
+
 						require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 						$email_client = new email();
+
+						if(!$email->get_account_by_username($username, $gouser['id'],$config['host'])){
+							$la->create_email_account($config, $user_id, $mail_username, $password,$user['email']);
+						}
+						
 						$email_client->update_password($config['host'], $mail_username, $password);
 					}
 				}
@@ -285,10 +291,10 @@ class ldapauth extends imapauth {
 						require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 						$email_client = new email();
 
-						$account = $email_client->get_account_by_username($username, $gouser['id']);
+						$account = $email_client->get_account_by_username($username, $gouser['id'], $GO_CONFIG->serverclient_host);
 						if($account){
 							if(crypt($password, $gouser['password']) != $gouser['password'])
-								$email_client->update_password($account['host'], $username, $password);
+								$email_client->update_password($GO_CONFIG->serverclient_host, $username, $password);
 						}else
 						{
 							require_once($GO_MODULES->modules['serverclient']['class_path']."serverclient.class.inc.php");
