@@ -15,5 +15,5 @@
  * Date : September, 27 2010
  */
 
-GO.customcss.lang.customcss='Style CSS personnalisé';
+GO.customcss.lang.customcss='Style CSS et Javascript personnalisé';
 GO.customcss.lang.selectFile='Sélectionner un fichier';
