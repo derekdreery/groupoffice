@@ -398,7 +398,7 @@ try {
 
 							if(!empty($_POST['send_invitation'])) {
 
-								$cal->send_invitation(array_merge($old_event, $update_event));
+								$cal->send_invitation(array_merge($old_event, $update_event), false);
 							}
 						}
 					}
