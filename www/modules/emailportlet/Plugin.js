@@ -2,7 +2,7 @@ Ext.namespace('GO.emailportlet');
 
 GO.mainLayout.onReady(function(){
 
-	if(GO.summary)
+	if(GO.summary && GO.email)
 	{
 		this.store = new GO.data.JsonStore({
 			url: GO.settings.modules.email.url+'json.php',
