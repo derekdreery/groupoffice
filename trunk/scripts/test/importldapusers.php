@@ -21,7 +21,7 @@ $la = new ldapauth();
 
 $ldap = $la->connect();
 
-$search_id=$ldap->search('uid=testa', $ldap->PeopleDN);
+$search_id=$ldap->search('uid=*', $ldap->PeopleDN);
 
 $count=0;
 for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
