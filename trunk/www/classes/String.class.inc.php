@@ -1203,7 +1203,11 @@ class String {
 
 		$editedKeys = array_map(array("String", "_addAccolades"), $keys);
 
-		return trim(preg_replace('/\s+/', ' ',str_replace($editedKeys, array_values($name),$template)));
+		$res = trim(preg_replace('/\s+/', ' ',str_replace($editedKeys, array_values($name),$template)));
+
+		$res = str_replace(array('()','[]'),'', $res);
+
+		return $res;
 	}
 
 	function _addAccolades($string)
