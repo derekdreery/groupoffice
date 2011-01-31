@@ -23,12 +23,15 @@ class ldapauth extends imapauth {
 	 * This mapping defines a mapping to the standard posixAccount objectclass,
 	 * which may be extended with our own groupofficeperson objectclass.
 	 */
-	var $mapping = array();
+	var $mapping = false;
 
 	public function get_mapping() {
 
 		global $GO_CONFIG;
 
+		if($this->mapping){
+			return $this->mapping;
+		}
 
 		$conf = str_replace('config.php', 'ldapauth.config.php', $GO_CONFIG->get_config_file());
 
