@@ -164,7 +164,15 @@ class base_db{
 	 *
 	 * @var
 	 */
-	var $increment_mode='normal';
+	var $auto_increment_increment=1;
+
+	/**
+	 * Can be set to 'odd' or 'even' to only increment to odd or even number.
+	 * Useful in clustering mode.
+	 *
+	 * @var
+	 */
+	var $auto_increment_offset=1;
 
 	/**
 	 * Constructor a config object with db_host, db_pass, db_user and db_name
@@ -196,8 +204,12 @@ class base_db{
 			
 		if(isset($config))
 		{
-			if (isset($config->db_increment_mode)) {
-				$this->increment_mode=$config->db_increment_mode;
+			if (isset($config->db_auto_increment_increment)) {
+				$this->auto_increment_increment=$config->db_auto_increment_increment;
+			}
+
+			if (isset($config->db_auto_increment_offset)) {
+				$this->auto_increment_offset=$config->db_auto_increment_offset;
 			}
 
 			if (isset($config->db_host)) {
@@ -397,7 +409,25 @@ class base_db{
 			$currentid = $this->f("nextid");
 		}
 
-		switch($this->increment_mode){
+
+		if($this->auto_increment_increment>1){
+
+			$div = $currentid/$this->auto_increment_increment;
+			$floored = floor($div);
+			
+			$nextid = $floored*$this->auto_increment_increment+$this->auto_increment_offset;
+
+			while($nextid<=$currentid){
+				$nextid +=$this->auto_increment_increment;
+			}
+
+			//$nextid = (ceil(($currentid-$this->auto_increment_offset)/$this->auto_increment_increment)*$this->auto_increment_increment)+$this->auto_increment_offset;
+		}else
+		{
+			$nextid = $currentid+1;
+		}
+
+		/*switch($this->increment_mode){
 			
 			case 'odd':
 				$odd = $currentid%2;
@@ -414,7 +444,7 @@ class base_db{
 				break;
 		}
 
-		$nextid = $currentid+$increment;
+		$nextid = $currentid+$increment;*/
 
 
 		$q = sprintf("update %s set nextid = '%s' where seq_name = '%s'",
