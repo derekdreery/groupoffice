@@ -74,12 +74,12 @@ function login_groupoffice(&$username, &$password)
 }
 
 function autologin_groupoffice()
-{	
+{
 	if(isset($_REQUEST['goauth']))
 	{
 		$file = base64_decode($_REQUEST['goauth']);
 
-		$_SESSION['groupoffice_to_phpbb_session_file']=$file;
+		//$_SESSION['groupoffice_to_phpbb_session_file']=$file;
 
 		$user_id = intval(file_get_contents($file));
 		//unlink($file);
@@ -249,9 +249,11 @@ function acp_groupoffice(&$new)
 *
 * @return boolean true if the given user is authenticated or false if the session should be closed
 */
-function validate_session_groupoffice(&$user)
+function validate_session_groupoffice(&$userrecord)
 {
-	return file_exists($_SESSION['groupoffice_to_phpbb_session_file']);
+	//if goauth is passed then a new session must be created
+	return !isset($_REQUEST['goauth']);
+
 }
 
 
