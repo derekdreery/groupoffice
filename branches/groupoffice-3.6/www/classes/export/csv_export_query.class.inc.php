@@ -44,13 +44,21 @@ class csv_export_query extends base_export_query
 
 	function fputcsv($fp, $record, $ls, $ts){
 
-		if(empty($ts)){
+		foreach($record as $key=>$value)
+			$record[$key]=str_replace($ts, '\\'.$ts, $value);
+
+		$data = $ts.implode($ts.$ls.$ts, $record).$ts."\r\n";
+
+		return fputs($fp, $data);
+
+		/*if(empty($ts)){
 			$data = implode($ls, $record)."\r\n";
 			return fputs($fp, $data);
 		}else
 		{
+			
 			return fputcsv($fp, $record, $ls, $ts);
-		}
+		}*/
 	}
 
 	function export($fp){
