@@ -439,13 +439,15 @@ try {
 			}
 
 			while($task = $tasks->next_record(DB_ASSOC)) {
-				$tasks->format_task_record($task, $cf);
+				
 
 				$tl_id = array_search($task['tasklist_id'], $readable_tasklists);
 				$task['tasklist_name'] = (isset($tasklist_names) && $tl_id !== false)? $tasklist_names[$tl_id]: '';
 
 				$cat_index = array_search($task['category_id'], $categories);
 				$task['category_name'] = ($cat_index !== false) ? $categories_name[$cat_index] : '';
+
+				$tasks->format_task_record($task, $cf);
 
 				//for disabling checkbox column
 				$task['disabled']=!$response['data']['write_permission'];

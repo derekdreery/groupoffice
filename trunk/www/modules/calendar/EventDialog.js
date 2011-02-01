@@ -649,8 +649,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 //				}
 //			}
 		}
-		
-		if(this.numParticipants>1)
+
+		//don't request invitation if import is enabled. TODO import is a bad name.
+		//it's for direct scheduling.
+		if(this.numParticipants>1 && !this.participantsPanel.importCheckbox.getValue())
 		{
 			var invitationMessage = (this.event_id) ? GO.calendar.lang.sendInvitationUpdate : GO.calendar.lang.sendInvitationInitial;
 		
@@ -690,7 +692,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					repeats : this.formPanel.form.findField('repeat_type')
 					.getValue() > 0,
 					'private' : false,
-					exception_event_id : this.formPanel.form.baseParams['exception_event_id']
+					exception_event_id : this.formPanel.form.baseParams['exception_event_id'],
+					num_participants: this.numParticipants
 				};
 
 

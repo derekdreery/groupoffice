@@ -287,6 +287,8 @@ GO.CheckerPanel = Ext.extend(function(config){
 },Ext.grid.EditorGridPanel, {
 	doTask : function(task, seconds)
 	{
+		this.stopEditing();
+		
 		var selected = this.selModel.getSelections();
 
 		if(!selected.length)
@@ -313,8 +315,12 @@ GO.CheckerPanel = Ext.extend(function(config){
 					{
 						this.store.remove(selected[i]);
 					}
-					if(!this.store.getRange().length){
+
+					GO.checker.lastCount=this.store.getCount();
+
+					if(!GO.checker.lastCount){
 						this.ownerCt.hide();
+						GO.checker.reminderIcon.setDisplayed(false);
 					}
 				},
 				scope: this

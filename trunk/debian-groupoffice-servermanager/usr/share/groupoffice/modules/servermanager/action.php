@@ -191,7 +191,7 @@ try{
 				$installation['status']=$_POST['status'];
 				$installation['status_change_time']=time();
 
-				$installation['name']=strtolower((trim($_POST['name'])));
+				$installation['name']=strtolower(trim($_POST['name']));
 				$config['db_name']=str_replace('.','_',$installation['name']);
 				$config['db_name']=str_replace('-','_',$config['db_name']);
 

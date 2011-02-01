@@ -25,6 +25,16 @@
 class String {
 
 	public static function get_first_letters($phrase) {
+
+		//remove all non word characters
+		$phrase = preg_replace('/[()\[\]\.<>\{\}]+/u','', $phrase);
+		$phrase = str_replace(',',' ', $phrase);
+
+		//remove double spaces
+		$phrase = preg_replace('/[\s]+/u',' ', $phrase);
+
+		//echo $phrase;
+
 		$words = explode(' ',$phrase);
 
 		$func = function_exists('mb_substr') ? 'mb_substr' : 'substr';

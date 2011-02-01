@@ -46,7 +46,6 @@ if(isset($_REQUEST['export_directory']) && file_exists($GO_CONFIG->root_path.$_R
 
 require_once($file);
 
-
 $eq = new $type();
 $eq->download_headers();
 

@@ -1,15 +1,20 @@
 GO.customcss.MainPanel = function(config){
 	config = config || {};
 
-	config.items={
+	config.items=[{
 		xtype:'textarea',
-		hideLabel:true,
+		fieldLabel:'CSS',
 		name:'css',
-		anchor:'100% 100%',
+		anchor:'100% 50%',
 		plugins: new GO.plugins.InsertAtCursorTextareaPlugin()
-	}
+	},{
+		xtype:'textarea',
+		fieldLabel:'Javascript',
+		name:'javascript',
+		anchor:'100% 50%'
+	}];
 
-
+	config.labelAlign='top';
 	config.waitMsgTarget=true;
 	
 	config.border= false;
