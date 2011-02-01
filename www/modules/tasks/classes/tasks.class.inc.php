@@ -737,6 +737,22 @@ class tasks extends db
 		$task['status']=isset($lang['tasks']['statuses'][$task['status']]) ? $lang['tasks']['statuses'][$task['status']] : '';
 		$task['description']=String::text_to_html(String::cut_string($task['description'],500));
 
+		$t = new tasks();
+		if(!isset($task['category_name'])){
+			$cat = false;
+			if($task['category_id']>0){
+				$cat = $t->get_category($task['category_id']);
+			}
+			if($cat)
+				$task['category_name']=$cat['name'];
+			else
+				$task['category_name']='';
+		}
+		if(!isset($task['tasklist_name'])){
+			$list = $t->get_tasklist($task['tasklist_id']);
+			$task['tasklist_name']=$list['name'];
+		}
+
 		if($cf)
 			$cf->format_record($record, 12, true);
 		

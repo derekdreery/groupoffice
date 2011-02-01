@@ -26,7 +26,11 @@ if($feed != '' && strpos($feed, 'http') === 0){
 		//for self-signed certificates
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+
+		//suppress warning:
+		//PHP Warning: curl_setopt() [<a href='function.curl-setopt'>function.curl-setopt</a>]:
+		//CURLOPT_FOLLOWLOCATION cannot be activated when in safe_mode or an open_basedir is set in feed_proxy.php on line 29
+		@curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 
 		$xml = curl_exec($ch);
 	}else

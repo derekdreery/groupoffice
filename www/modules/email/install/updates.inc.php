@@ -99,6 +99,7 @@ $updates[]="CREATE TABLE IF NOT EXISTS `em_folders_expanded` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $updates[]="ALTER TABLE `em_folders` ADD `no_select` BOOLEAN NOT NULL AFTER `can_have_children`";
+$updates[]="ALTER TABLE `em_folders` CHANGE `name` `name` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
 $updates[]="ALTER TABLE `em_accounts` ADD `acl_id` INT(11) NOT NULL";
 
 $updates[]="CREATE TABLE IF NOT EXISTS `em_accounts_sort` (

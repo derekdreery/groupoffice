@@ -592,7 +592,7 @@ try {
 								'repeats'=>!empty($event['rrule']),
 								'all_day_event'=>$event['all_day_event'],
 								'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time']),
-								'read_only'=> $event['read_only'] ? true : false,
+								'read_only'=> $event['read_only'] || ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']) ? true : false,
 								'username' => $username,
 								'duration' => $duration,
 								'num_participants' => $num_participants

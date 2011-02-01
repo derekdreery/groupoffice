@@ -209,21 +209,20 @@ try {
 			$event_id = ($_REQUEST['event_id']);
 			$calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
 
-			$event_exists= $cal->has_participants_event($event_id, $calendar_id);
+			$event = $cal->get_event($event_id);
+
+			$event_exists= $cal->get_event_by_uuid($event['uuid'], 0, $calendar_id);
 
 
 			if(!$cal->is_participant($event_id, $_SESSION['GO_SESSION']['email'])) {
 				throw new Exception($lang['calendar']['not_invited']);
-			}
-
-
-			$event = $cal->get_event($event_id);
+			}			
 
 			if(!$event_exists && !empty($calendar_id) && $event['calendar_id']!=$calendar_id) {
 				$new_event['user_id']=$GO_SECURITY->user_id;
 				$new_event['calendar_id']=$calendar_id;
-				//$new_event['resource_event_id']=$event_id;
-
+				$new_event['uuid']=$event['uuid'];
+			
 				$cal->copy_event($event_id, $new_event);
 			}
 
@@ -398,7 +397,7 @@ try {
 
 							if(!empty($_POST['send_invitation'])) {
 
-								$cal->send_invitation(array_merge($old_event, $update_event));
+								$cal->send_invitation(array_merge($old_event, $update_event), false);
 							}
 						}
 					}
