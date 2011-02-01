@@ -32,7 +32,7 @@ GO.tasks.MainPanel = function(config){
 	this.taskListsPanel.on('change', function(grid, tasklists, records)
 	{                		                
 		this.gridPanel.store.baseParams.tasklists = Ext.encode(tasklists);
-		this.gridPanel.store.reload();
+		this.gridPanel.store.load();
 		this.tasklist_ids = tasklists;
 
 		if(records.length)
