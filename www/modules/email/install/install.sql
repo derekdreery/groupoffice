@@ -89,7 +89,7 @@ DROP TABLE IF EXISTS `em_folders`;
 CREATE TABLE IF NOT EXISTS `em_folders` (
   `id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
-  `name` varchar(100) default NULL,
+  `name` varchar(255) default NULL,
   `subscribed` enum('0','1') NOT NULL default '0',
   `parent_id` int(11) NOT NULL default '0',
   `delimiter` char(1) NOT NULL default '',  
@@ -178,6 +178,7 @@ CREATE TABLE IF NOT EXISTS `go_links_9` (
 -- Tabelstructuur voor tabel `em_accounts_collapsed`
 --
 
+DROP TABLE IF EXISTS `em_accounts_collapsed`;
 CREATE TABLE IF NOT EXISTS `em_accounts_collapsed` (
   `account_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -189,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `em_accounts_collapsed` (
 --
 -- Tabelstructuur voor tabel `em_folders_expanded`
 --
-
+DROP TABLE IF EXISTS `em_folders_expanded`;
 CREATE TABLE IF NOT EXISTS `em_folders_expanded` (
   `folder_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
