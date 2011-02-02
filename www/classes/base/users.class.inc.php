@@ -107,6 +107,14 @@ class GO_USERS extends db
 			$GO_THEME = new GO_THEME();
 			$GO_THEME->set_theme();
 		}
+
+
+		$_SESSION['GO_SESSION']['user_groups']=array();
+
+		$this->query("SELECT group_id FROM go_users_groups WHERE user_id=?",'i',$userdata['id']);
+		while($r = $this->next_record()){
+			$_SESSION['GO_SESSION']['user_groups'][]=$r['group_id'];
+		}
 		
 
 		return true;
@@ -160,7 +168,7 @@ class GO_USERS extends db
 	
 	function search($query, $field, $user_id=0, $start=0, $offset=0, $sort="name", $sort_direction='ASC', $search_operator='LIKE')
 	{
-		global $GO_MODULES;
+		global $GO_MODULES;		
 		
 		if($sort == 'name')
 		{
@@ -181,7 +189,7 @@ class GO_USERS extends db
 			$sql .= ' SQL_CALC_FOUND_ROWS';
 		}
 
-		$sql .= " u.id,u.username,u.first_name,u.middle_name,u.company,u.logins,u.lastlogin,u.registration_time,u.address,u.address_no,u.zip,u.city,u.state,u.country,u.home_phone,u.email,u.work_address,u.work_address_no,u.work_zip,u.work_city,u.work_state,u.work_country,u.work_phone,u.enabled";
+		$sql .= " u.id,u.username,u.first_name,u.middle_name,u.last_name,u.company,u.logins,u.lastlogin,u.registration_time,u.address,u.address_no,u.zip,u.city,u.state,u.country,u.home_phone,u.email,u.work_address,u.work_address_no,u.work_zip,u.work_city,u.work_state,u.work_country,u.work_phone,u.enabled";
 
 		if($user_id > 0)
 		{
@@ -190,9 +198,7 @@ class GO_USERS extends db
 			{
 				$sql .= ", cf_8.* ";
 			}
-			$sql .=" FROM go_users u INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." or a.user_id=0))".
-			"LEFT JOIN go_users_groups ug ON (a.group_id = ug.group_id AND ug.user_id=".intval($user_id).")";
-			
+			$sql .=" FROM go_users u INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." or a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";	
 			
 			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{
@@ -271,7 +277,7 @@ class GO_USERS extends db
 			}
 		}	
 
-	 	$sql .= "GROUP BY u.id ORDER BY $sort $sort_direction";
+	 	$sql .= " ORDER BY $sort $sort_direction";
 		
 		if ($offset != 0)
 		{
@@ -279,7 +285,7 @@ class GO_USERS extends db
 		}
 		$this->query($sql);
 
-		//go_debug($sql);
+		go_debug($sql);
 
 		return $offset > 0 ? $this->found_rows() : $this->num_rows();
 	}
