@@ -89,13 +89,13 @@ class search extends db {
 	 */
 	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0, $link_folder_id=0, $conditions=array(), $omit_link_types=false)
 	{
-		$sql = "SELECT DISTINCT sc.acl_id, sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime";
+		$sql = "SELECT sc.acl_id, sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime";
 		if($link_id>0)
 		{
 			$sql .= ",l.description AS link_description";
 		}
 		$sql .= " FROM go_search_cache sc ".
-			"INNER JOIN go_acl a ON sc.acl_id=a.acl_id ".
+			"INNER JOIN go_acl a ON (sc.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." or a.user_id=0)) ".
 			"LEFT JOIN go_users_groups ug ON (ug.group_id=a.group_id) ";
 				
 		if($link_id>0)
@@ -103,7 +103,7 @@ class search extends db {
 			$sql .= "INNER JOIN go_links_$link_type l ON l.link_id=sc.id AND l.link_type=sc.link_type ";		
 		}
 
-		$sql .= "WHERE (a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).") ";
+		$sql .= "WHERE ug.user_id=".intval($user_id)." ";
 		 
 		/*$sql .=	"WHERE EXISTS (".
 				"SELECT acl_id FROM go_acl a ".
@@ -153,6 +153,8 @@ class search extends db {
 		{
 			$sql .= "AND $condition ";
 		}
+
+		$sql .= " GROUP BY sc.id, sc.link_type";
 		
 
 		if(!empty($sort_index))
