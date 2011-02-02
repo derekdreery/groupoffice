@@ -967,7 +967,7 @@ try {
 
 			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'name';
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'ASC';
-			$query = isset($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
 
 			$response['total'] = $cal->get_writable_calendars($GO_SECURITY->user_id, $start, $limit, $resources, 1, -1, $show_all, $sort, $dir, $query);
 			if(!$response['total']) {
@@ -1362,7 +1362,7 @@ try {
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 
 			$cal->get_visible_calendars($GO_SECURITY->user_id);
 			$visible_cals = array();

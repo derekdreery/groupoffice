@@ -67,7 +67,7 @@ try{
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			if(isset($_POST['active']) && $_POST['active']=='true')
 			{
 				$response['total'] = $summary->get_active_announcements($sort, $dir, $start, $limit);
@@ -108,7 +108,7 @@ try{
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 
 			if(isset($_POST['active']) && $_POST['active']=='true')
 			{
@@ -145,7 +145,7 @@ try{
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			$response['total'] = $summary->get_announcements( $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
 

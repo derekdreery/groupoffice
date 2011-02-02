@@ -390,7 +390,7 @@ try {
 
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
 			$groupBy = isset($_REQUEST['groupBy']) ? $_REQUEST['groupBy'] : '';
 			$groupDir = isset($_REQUEST['groupDir']) ? $_REQUEST['groupDir'] : '';
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'due_time ASC, ctime';
@@ -463,7 +463,7 @@ try {
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 
 			if($tasks->get_visible_tasklists($GO_SECURITY->user_id) == 0) {
 				$visible_tls = array('0');

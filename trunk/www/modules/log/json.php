@@ -25,7 +25,7 @@ try{
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
-			$query = isset($_REQUEST['query']) ? '%'.trim($_REQUEST['query']).'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.trim($_REQUEST['query']).'%' : '';
 			
 			$response['total']=$log->get_entries($query, $sort, $dir, $start, $limit);
 			

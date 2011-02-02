@@ -173,28 +173,33 @@ class GO_USERS extends db
 			}
 		}
 
+		$where=false;
+
+		$sql = "SELECT";
+
+		if($offset>0){
+			$sql .= ' SQL_CALC_FOUND_ROWS';
+		}
+
+		$sql .= " u.*";
+
 		if($user_id > 0)
 		{
-			$where=true;
-			$sql = "SELECT DISTINCT u.*";
+			
 			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{
 				$sql .= ", cf_8.* ";
 			}
-			$sql .=" FROM go_users u INNER JOIN go_acl a ON u.acl_id = a.acl_id ".
-			"LEFT JOIN go_users_groups ug ON a.group_id = ug.group_id ";
+			$sql .=" FROM go_users u INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." or a.user_id=0))".
+			"LEFT JOIN go_users_groups ug ON (a.group_id = ug.group_id AND ug.user_id=".intval($user_id).") ";
 			
 			
 			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{
 				$sql .= "LEFT JOIN cf_8 ON cf_8.link_id=u.id ";
 			}
-			
-			$sql .= "WHERE (a.user_id=".intval($user_id)." ".
-			"OR ug.user_id=".intval($user_id).")";
 		}else
-		{
-			$where=false;
+		{			
 			$sql = "SELECT u.* ";
 			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{
@@ -269,17 +274,15 @@ class GO_USERS extends db
 			}
 		}	
 
-	 	$sql .= " ORDER BY $sort $sort_direction";
-		$this->query($sql);
-		$count = $this->num_rows();
-
+	 	$sql .= "GROUP BY u.id ORDER BY $sort $sort_direction";
+		
 		if ($offset != 0)
 		{
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
 
-		return $count;
+		return $offset > 0 ? $this->found_rows() : $this->num_rows();
 	}
 	
 	function get_linked_users($user_id, $link_id)
