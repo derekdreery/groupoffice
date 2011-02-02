@@ -95,28 +95,27 @@ class search extends db {
 			$sql .= ",l.description AS link_description";
 		}
 		$sql .= " FROM go_search_cache sc ".
-			"INNER JOIN go_acl a ON (sc.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." or a.user_id=0)) ".
-			"LEFT JOIN go_users_groups ug ON (ug.group_id=a.group_id) ";
+			"INNER JOIN go_acl a ON (sc.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." or a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
 				
 		if($link_id>0)
 		{
 			$sql .= "INNER JOIN go_links_$link_type l ON l.link_id=sc.id AND l.link_type=sc.link_type ";		
 		}
-
-		$sql .= "WHERE ug.user_id=".intval($user_id)." ";
 		 
 		/*$sql .=	"WHERE EXISTS (".
 				"SELECT acl_id FROM go_acl a ".
 				"LEFT JOIN go_users_groups ug ON ug.group_id=a.group_id ".
 				"WHERE (a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).") AND ".
 				"(a.acl_id=sc.acl_id)) ";*/		
-		
+		$where = false;
 		if($link_folder_id>0)
 		{
-			$sql .= "AND l.folder_id=".intval($link_folder_id)." ";
+			$where = true;
+			$sql .= "WHERE l.folder_id=".intval($link_folder_id)." ";
 		}elseif($link_id>0)
 		{
-			$sql .= "AND l.id=".intval($link_id)." ";
+			$where = true;
+			$sql .= "WHERE l.id=".intval($link_id)." ";
 			
 			if($link_folder_id>-1)
 				$sql .= " AND l.folder_id=0 "; 
@@ -124,7 +123,12 @@ class search extends db {
 
 		if(!empty($query))
 		{
+			
+
 			$keywords = explode(' ', $query);
+
+			$sql .= $where ? ' AND ' : ' WHERE ';
+			$where = true;
 
 			if(count($keywords)>1)
 			{
@@ -133,15 +137,18 @@ class search extends db {
 					$sql_keywords[] = "keywords LIKE '%".$this->escape($keyword)."%'";
 				}
 
-				$sql .= ' AND ('.implode(' AND ', $sql_keywords).') ';
+				$sql .= '('.implode(' AND ', $sql_keywords).') ';
 			}else {
-				$sql .= " AND keywords LIKE '%".$this->escape($query)."%' ";
+				$sql .= "keywords LIKE '%".$this->escape($query)."%' ";
 			}
 		}
 		
 		if(count($selected_types))
 		{
-			$sql .= " AND sc.link_type ";
+			$sql .= $where ? ' AND ' : ' WHERE ';
+			$where = true;
+
+			$sql .= "sc.link_type ";
 
 			if($omit_link_types)
 				$sql .= "NOT ";
@@ -151,11 +158,12 @@ class search extends db {
 		
 		foreach($conditions as $condition)
 		{
-			$sql .= "AND $condition ";
+			$sql .= $where ? ' AND ' : ' WHERE ';
+			$where = true;
+			$sql .= $condition." ";
 		}
 
-		$sql .= " GROUP BY sc.id, sc.link_type";
-		
+		$sql .= " GROUP BY sc.id, sc.link_type";	
 
 		if(!empty($sort_index))
 			$sql .= " ORDER BY $sort_index $sort_order";
