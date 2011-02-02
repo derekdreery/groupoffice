@@ -172,7 +172,7 @@ class GO_USERS extends db
 				$sort = 'first_name '.$sort_direction.', last_name ';
 			}
 		}
-
+		
 		$where=false;
 
 		$sql = "SELECT";
@@ -181,7 +181,7 @@ class GO_USERS extends db
 			$sql .= ' SQL_CALC_FOUND_ROWS';
 		}
 
-		$sql .= " u.*";
+		$sql .= " u.id,u.username,u.first_name,u.middle_name,u.company,u.logins,u.lastlogin,u.registration_time,u.address,u.address_no,u.zip,u.city,u.state,u.country,u.home_phone,u.email,u.work_address,u.work_address_no,u.work_zip,u.work_city,u.work_state,u.work_country,u.work_phone,u.enabled";
 
 		if($user_id > 0)
 		{
@@ -191,7 +191,7 @@ class GO_USERS extends db
 				$sql .= ", cf_8.* ";
 			}
 			$sql .=" FROM go_users u INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." or a.user_id=0))".
-			"LEFT JOIN go_users_groups ug ON (a.group_id = ug.group_id AND ug.user_id=".intval($user_id).") ";
+			"LEFT JOIN go_users_groups ug ON (a.group_id = ug.group_id AND ug.user_id=".intval($user_id).")";
 			
 			
 			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
@@ -199,8 +199,7 @@ class GO_USERS extends db
 				$sql .= "LEFT JOIN cf_8 ON cf_8.link_id=u.id ";
 			}
 		}else
-		{			
-			$sql = "SELECT u.* ";
+		{		
 			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{
 				$sql .= ", cf_8.* ";
@@ -280,7 +279,7 @@ class GO_USERS extends db
 		}
 		$this->query($sql);
 
-		go_debug($sql);
+		//go_debug($sql);
 
 		return $offset > 0 ? $this->found_rows() : $this->num_rows();
 	}
