@@ -221,15 +221,13 @@ class GO_USERS extends db
 				$fields=array();
 				if($field == '')
 				{
-					$fields_sql = "SHOW FIELDS FROM go_users";
-					$this->query($fields_sql);
-					while($this->next_record())
-					{
-						if(stripos($this->f('Type'),'varchar')!==false)
-						{
-							$fields[]='u.'.$this->f('Field');
-						}
-					}
+					$fields[]='u.username';
+					$fields[]='name';
+					$fields[]='email';
+					$fields[]='company';
+					$fields[]='city';
+					
+					
 					if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 					{
 						$fields_sql = "SHOW FIELDS FROM cf_8";
@@ -278,9 +276,11 @@ class GO_USERS extends db
 		
 		if ($offset != 0)
 		{
-			$sql .= " LIMIT ".intval($start).",".intval($offset);
-			$this->query($sql);
+			$sql .= " LIMIT ".intval($start).",".intval($offset);			
 		}
+		$this->query($sql);
+
+		go_debug($sql);
 
 		return $offset > 0 ? $this->found_rows() : $this->num_rows();
 	}
