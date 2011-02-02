@@ -814,8 +814,14 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			state = Ext.state.Manager.get(this.gridPanel.id);
 		}
 
-		if(state)
+		if(state){
 			this.gridPanel.applyStoredState(state);
+
+			if(store.reader.jsonData.lock_state && store.reader.jsonData.cm_state==''){
+				//locked state is not stored yet do it now
+				this.saveCMState(state);
+			}
+		}
 
 
 		this.stateLockedButton.setVisible(store.reader.jsonData.lock_state);
@@ -910,11 +916,14 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		GO.files.folderPropertiesDialogListeners={
 			scope:this,
+			save:function(dlg, folder_id){
+				this.setFolderID(folder_id, true);
+			},
 			rename:function(dlg, parent_id){
-				if(parent_id==this.folder_id)
+				/*if(parent_id==this.folder_id)
 				{
 					this.setFolderID(parent_id);
-				}
+				}*/
 				var node = this.treePanel.getNodeById(parent_id);
 				if(node)
 				{
