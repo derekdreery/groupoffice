@@ -3,6 +3,10 @@
 <head>
 <?php
 require($GO_THEME->theme_path.'default_head.inc.php');
+
+if(isset($GO_MODULES->modules['customcss']) && file_exists($GO_CONFIG->file_storage_path.'customcss/style.css'))
+	echo '<style>'.file_get_contents($GO_CONFIG->file_storage_path.'customcss/style.css').'</style>'."\n";
+
 ?>
 </head>
 <body>
