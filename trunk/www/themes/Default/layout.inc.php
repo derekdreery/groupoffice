@@ -10,7 +10,12 @@ require($GO_THEME->theme_path.'default_head.inc.php');
 <div id="loading">
 	<div class="loading-indicator">
 	<img src="<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/grid/loading.gif" style="width:16px;height:16px;vertical-align:middle" />&#160;<span id="load-status"><?php echo $lang['common']['loadingCore']; ?></span>
-	<div style="font-size:10px; font-weight:normal;margin-top:15px;">Copyright &copy; Intermesh 2003-<?php echo date('Y'); ?></div>
+	<div id="copyright" style="font-size:10px; font-weight:normal;margin-top:15px;">Copyright &copy; <?php
+	if($GO_CONFIG->product_name!='Group-Office'){
+		echo $GO_CONFIG->product_name;
+	}else{ echo 'Intermesh BV';
+
+	} ?> 2003-<?php echo date('Y'); ?></div>
 	</div>
 </div>
 <!-- include everything after the loading indicator -->

@@ -38,6 +38,10 @@ background-image:url(/insert/url/here) !important;
 }';
 	}
 
+	if(file_exists($GO_CONFIG->file_storage_path.'customcss/javascript.js')){
+		$response['data']['javascript']=file_get_contents($GO_CONFIG->file_storage_path.'customcss/javascript.js');
+	}
+
 	
 	$response['success']=true;
 }catch(Exception $e)
