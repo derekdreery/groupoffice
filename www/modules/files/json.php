@@ -769,7 +769,7 @@ try {
 
 			$usersfolder = $files->resolve_path('users');
 			$response['data']['is_home_dir']=$folder['parent_id']==$usersfolder['id'];
-			$response['data']['user_id_match']=$folder['user_id']==$GO_SECURITY->user_id;
+			//$response['data']['user_id_match']=$folder['user_id']==$GO_SECURITY->user_id;
 			$response['data']['notify']=$files->is_notified($folder['id'], $GO_SECURITY->user_id);
 
 			$params['response']=&$response;
