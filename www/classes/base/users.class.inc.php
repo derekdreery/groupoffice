@@ -277,7 +277,7 @@ class GO_USERS extends db
 			}
 		}	
 
-	 	$sql .= " ORDER BY $sort $sort_direction";
+	 	$sql .= " GROUP BY u.id ORDER BY $sort $sort_direction";
 		
 		if ($offset != 0)
 		{
