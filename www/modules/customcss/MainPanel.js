@@ -19,38 +19,41 @@ GO.customcss.MainPanel = function(config){
 	
 	config.border= false;
 
-	config.tbar=[{
-			iconCls:'btn-save',
-			text:GO.lang.cmdSave,
+	config.tbar=new Ext.Toolbar({
+		cls:'go-head-tb',
+		items:[{
+				iconCls:'btn-save',
+				text:GO.lang.cmdSave,
+				handler:function(){
+					this.form.submit({
+						url: GO.settings.modules.customcss.url+'action.php',
+						waitMsg:GO.lang['waitMsgSave'],
+						callback:function(){
+
+						}
+					});
+				},
+				scope:this
+		},{
+			iconCls: 'btn-files',
+			text:GO.customcss.lang.selectFile,
 			handler:function(){
-				this.form.submit({
-					url: GO.settings.modules.customcss.url+'action.php',
-					waitMsg:GO.lang['waitMsgSave'],
-					callback:function(){
-						
-					}
-				});
+
+				GO.files.createSelectFileBrowser();
+
+				GO.selectFileBrowser.setFileClickHandler(function(r){
+					this.form.findField('css').insertAtCursor(GO.settings.modules.files.url+'download.php?id='+r.data.id);
+					GO.selectFileBrowserWindow.hide();
+				}, this);
+
+				GO.selectFileBrowser.setFilesFilter(this.filesFilter);
+				GO.selectFileBrowser.setRootID(GO.customcss.filesFolderId, GO.customcss.filesFolderId);
+				GO.selectFileBrowserWindow.show();
+
 			},
 			scope:this
-	},{
-		iconCls: 'btn-files',
-		text:GO.customcss.lang.selectFile,
-		handler:function(){
-
-			GO.files.createSelectFileBrowser();
-
-			GO.selectFileBrowser.setFileClickHandler(function(r){
-				this.form.findField('css').insertAtCursor(GO.settings.modules.files.url+'download.php?id='+r.data.id);
-				GO.selectFileBrowserWindow.hide();
-			}, this);
-
-			GO.selectFileBrowser.setFilesFilter(this.filesFilter);
-			GO.selectFileBrowser.setRootID(GO.customcss.filesFolderId, GO.customcss.filesFolderId);
-			GO.selectFileBrowserWindow.show();
-			
-		},
-		scope:this
-	}];
+		}]
+	});
 
 	GO.customcss.MainPanel.superclass.constructor.call(this,config);
 }
