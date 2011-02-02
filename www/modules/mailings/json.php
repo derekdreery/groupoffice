@@ -23,7 +23,7 @@ $ab = new addressbook();
 require_once($GO_MODULES->modules['mailings']['class_path'].'templates.class.inc.php');
 $tp = new templates();
 
-$query = isset($_REQUEST['query']) ? ($_REQUEST['query']) : null;
+$query = !empty($_REQUEST['query']) ? ($_REQUEST['query']) : null;
 $field = isset($_REQUEST['field']) ? ($_REQUEST['field']) : null;
 
 $task = isset($_REQUEST['task']) ? ($_REQUEST['task']) : 'null';

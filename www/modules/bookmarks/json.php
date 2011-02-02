@@ -108,7 +108,7 @@ try {
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 			$category = isset($_REQUEST['category']) ? ($_REQUEST['category']) : '0';
-			$query = isset($_REQUEST['query']) ? '%' . ($_REQUEST['query']) . '%' : '';
+			$query = !empty($_REQUEST['query']) ? '%' . ($_REQUEST['query']) . '%' : '';
 
 			$bookmarks->get_authorized_bookmarks($GO_SECURITY->user_id, $query, $start, $limit, $category);
 

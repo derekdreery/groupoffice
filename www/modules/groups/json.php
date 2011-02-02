@@ -28,7 +28,7 @@ $limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
 $action = isset($_REQUEST['action']) ? ($_REQUEST['action']) : 'null';
 $group_id = isset($_REQUEST['group_id']) ? ($_REQUEST['group_id']) : 'null';
-$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : null;
+$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : null;
 $search_field = isset($_REQUEST['search_field']) ? ($_REQUEST['search_field']) : null;
 
 switch ($action)

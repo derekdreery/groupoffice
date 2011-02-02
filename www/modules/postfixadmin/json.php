@@ -71,7 +71,7 @@ try{
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			$domain_id=$_POST['domain_id'];
 			$response['total'] = $postfixadmin->get_aliases($domain_id, $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
@@ -132,7 +132,7 @@ try{
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			
 			$response['total'] = $postfixadmin->get_authorized_domains($auth_type, $GO_SECURITY->user_id,  $query, $sort, $dir, $start, $limit,!$GO_MODULES->modules['postfixadmin']['write_permission']);
 			$response['results']=array();
@@ -190,7 +190,7 @@ try{
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			
 			$response['total'] = $postfixadmin->get_fetchmail_configs( $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
@@ -270,7 +270,7 @@ try{
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-			$query = isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			
 			$domain_id=$_POST['domain_id'];
 			

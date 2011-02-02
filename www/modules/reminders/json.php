@@ -120,7 +120,7 @@ try{
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'DESC';
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
-			$query = isset($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
+			$query = !empty($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
 
 			$response['total'] = $reminders->get_manual_reminders($query, $sort, $dir, $start, $limit);
 			$response['results']=array();

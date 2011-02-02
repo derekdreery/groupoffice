@@ -241,8 +241,8 @@ class GO_GROUPS extends db
 			}
 		}
 
-		$sql = "SELECT go_users.id, go_users.email, go_users.first_name, go_users.middle_name , go_users.last_name, go_users.username FROM".
-			" go_users LEFT JOIN go_users_groups ON (go_users.id = go_users_groups.user_id)".
+		$sql = "SELECT SQL_CALC_FOUND_ROWS go_users.id, go_users.email, go_users.first_name, go_users.middle_name , go_users.last_name, go_users.username FROM".
+			" go_users INNER JOIN go_users_groups ON (go_users.id = go_users_groups.user_id)".
 			" WHERE go_users_groups.group_id='".$this->escape($group_id)."' ";
 
 		if(!empty($query))
@@ -264,16 +264,14 @@ class GO_GROUPS extends db
 
 		$sql .="ORDER BY ".$sort." ".$direction;
 
-		$this->query($sql);
-		$count = $this->num_rows();
-
+		
 		if ($offset != 0)
 		{
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
-			$this->query($sql);
 		}
+		$this->query($sql);
 			
-		return $count;
+		return $this->found_rows();
 	}
 
 	/**
