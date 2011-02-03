@@ -174,6 +174,6 @@ Ext.extend(GO.calllog.MainPanel, GO.grid.GridPanel,{
 });
 
 GO.moduleManager.addModule('calllog', GO.calllog.MainPanel, {
-	title : GO.calllog.lang.calllog
-	//iconCls : 'go-tab-icon-users'
+	title : GO.calllog.lang.calllog,
+	iconCls : 'go-tab-icon-calllog'
 });
