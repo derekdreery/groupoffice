@@ -22,6 +22,8 @@
  */
 GO.form.ComboBox = Ext.extend(Ext.form.ComboBox, {
 
+	minChars : 3,
+
 	initComponent : function(){
 
 
