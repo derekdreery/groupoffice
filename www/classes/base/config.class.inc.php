@@ -327,6 +327,14 @@ class GO_CONFIG {
 	 */
 	var $webmaster_email = 'webmaster@example.com';
 
+	/**
+	 * The link in menu help -> contents
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $help_link = 'http://www.group-office.com/wiki/';
+
 
 	/**
 	 * The path to the root of Group-Office with slash on end
@@ -1267,6 +1275,8 @@ class GO_CONFIG {
 
 		$response['config']['debug']=$this->debug;
 		$response['config']['disable_flash_upload']=$this->disable_flash_upload;
+
+		$response['config']['help_link']=$this->help_link;
 
 
 		return $response;

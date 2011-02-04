@@ -361,9 +361,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
     		items:[{
 	    			iconCls:'btn-help',
 	    			text:GO.lang.strHelpContents,
-	    			handler:function(){
-	    				
-	    				var win = window.open('http://www.group-office.com/wiki/');
+	    			handler:function(){	    				
+	    				var win = window.open(GO.settings.config.help_link);
 	    				win.focus();
 	    			},
 	    			scope:this	    			
