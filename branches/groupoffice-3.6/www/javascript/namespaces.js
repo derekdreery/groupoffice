@@ -32,4 +32,5 @@ GO.linkPreviewPanels={};
 //Will be filled by modules with menu items for the new menu in various panels.
 GO.newMenuItems=[];
 
+
 //GO.settings = Ext.decode(GO.settings);
