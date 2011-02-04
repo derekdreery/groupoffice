@@ -146,7 +146,12 @@ function test_system(){
 
 	$tests[]=$test;
 	
-	
+	$test['name']='Register globals';
+	$test['pass']=ini_get('register_globals') != '1';
+	$test['feedback']='Warning: register_globals is enabled in php.ini. This causes a problem in the spell checker and probably in some other parts. It\'s recommended to disable this.';
+	$test['fatal']=false;
+
+	$tests[]=$test;	
 
 	$test['name']='zlib compression';
 	$test['pass']=extension_loaded('zlib');
