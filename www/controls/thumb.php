@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright Intermesh
  *
@@ -11,7 +12,6 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
-
 /**
  * Generates thumbnail.
  *
@@ -33,7 +33,7 @@ session_write_close();
 
 $path = $_REQUEST['src'];
 
-if(File::path_leads_to_parent($path))
+if (File::path_leads_to_parent($path))
 	die('Invalid request');
 
 
@@ -41,68 +41,83 @@ $w = isset($_REQUEST['w']) ? intval($_REQUEST['w']) : 0;
 $h = isset($_REQUEST['h']) ? intval($_REQUEST['h']) : 0;
 $zc = !empty($_REQUEST['zc']) && !empty($w) && !empty($h);
 
+$lw = isset($_REQUEST['lw']) ? intval($_REQUEST['lw']) : 0;
+$lh = isset($_REQUEST['lh']) ? intval($_REQUEST['lh']) : 0;
 
-if(File::get_extension($path)=='xmind'){
+$pw = isset($_REQUEST['pw']) ? intval($_REQUEST['pw']) : 0;
+$ph = isset($_REQUEST['ph']) ? intval($_REQUEST['ph']) : 0;
 
-	$filename = File::strip_extension(basename($path)).'.jpeg';
 
-	if (!file_exists($GO_CONFIG->file_storage_path.'thumbcache/'.$filename) || filectime($GO_CONFIG->file_storage_path.'thumbcache/'.$filename)<filectime($GO_CONFIG->file_storage_path.$path)) {
-		$zipfile = zip_open($GO_CONFIG->file_storage_path.$path);
+if (File::get_extension($path) == 'xmind') {
 
-		while($entry = zip_read($zipfile)) {
-			if (zip_entry_name($entry)=='Thumbnails/thumbnail.jpg') {
-				require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-				zip_entry_open($zipfile,$entry,'r');
-				file_put_contents($GO_CONFIG->file_storage_path.'thumbcache/'.$filename, zip_entry_read($entry,zip_entry_filesize($entry)));
+	$filename = File::strip_extension(basename($path)) . '.jpeg';
+
+	if (!file_exists($GO_CONFIG->file_storage_path . 'thumbcache/' . $filename) || filectime($GO_CONFIG->file_storage_path . 'thumbcache/' . $filename) < filectime($GO_CONFIG->file_storage_path . $path)) {
+		$zipfile = zip_open($GO_CONFIG->file_storage_path . $path);
+
+		while ($entry = zip_read($zipfile)) {
+			if (zip_entry_name($entry) == 'Thumbnails/thumbnail.jpg') {
+				require_once($GO_CONFIG->class_path . 'filesystem.class.inc');
+				zip_entry_open($zipfile, $entry, 'r');
+				file_put_contents($GO_CONFIG->file_storage_path . 'thumbcache/' . $filename, zip_entry_read($entry, zip_entry_filesize($entry)));
 				zip_entry_close($entry);
 				break;
 			}
 		}
 		zip_close($zipfile);
 	}
-	$path = 'thumbcache/'.$filename;
+	$path = 'thumbcache/' . $filename;
 }
 
 
-$full_path = $GO_CONFIG->file_storage_path.$path;
+$full_path = $GO_CONFIG->file_storage_path . $path;
 
-$cache_dir = $GO_CONFIG->file_storage_path.'thumbcache';
-if(!is_dir($cache_dir)){
+$cache_dir = $GO_CONFIG->file_storage_path . 'thumbcache';
+if (!is_dir($cache_dir)) {
 	mkdir($cache_dir, 0755, true);
 }
 $filename = basename($path);
 $file_mtime = filemtime($full_path);
 
-$cache_filename = str_replace(array('/','\\'),'_', dirname($path)).'_'.$w.'_'.$h.'_';
+$cache_filename = str_replace(array('/','\\'),'_', dirname($path)).'_'.$w.'_'.$h.'_'.$lw.'_'.$lh.'_'.$pw.'_'.$lw;
 if($zc)
 {
-	$cache_filename .= 'zc_';
+	$cache_filename .= '_zc';
 }
 $cache_filename .= $filename;
 
 
-if(!empty($_REQUEST['nocache']) || !file_exists($cache_dir.'/'.$cache_filename) || filemtime($cache_dir.'/'.$cache_filename)<$file_mtime){
+if (!empty($_REQUEST['nocache']) || !file_exists($cache_dir . '/' . $cache_filename) || filemtime($cache_dir . '/' . $cache_filename) < $file_mtime) {
 	$image = new Image($full_path);
-	if($zc){
-		$image->zoomcrop($w, $h);		
-	}else
-	{
-		if($w && $h){
+	if ($zc) {
+		$image->zoomcrop($w, $h);
+	} else {
+		if ($lw || $lh || $pw || $lw) {
+			//treat landscape and portrait differently
+			$landscape = $image->landscape();
+			if ($landscape) {
+				$w = $lw;
+				$h = $lh;
+			} else {
+				$w = $pw;
+				$h = $ph;
+			}
+		}
+
+		if ($w && $h) {
 			$image->resize($w, $h);
-		}elseif($w){
+		} elseif ($w) {
 			$image->resizeToWidth($w);
-		}else
-		{
+		} else {
 			$image->resizeToHeight($h);
 		}
 	}
 
-	$image->save($cache_dir.'/'.$cache_filename);
+	$image->save($cache_dir . '/' . $cache_filename);
 }
 
-$browser = detect_browser();
 
-header("Expires: " . date("D, j M Y G:i:s ", time()+(86400*365)) . 'GMT');//expires in 1 year
+header("Expires: " . date("D, j M Y G:i:s ", time() + (86400 * 365)) . 'GMT'); //expires in 1 year
 header('Cache-Control: cache');
 header('Pragma: cache');
 $mime = File::get_mime($full_path);
@@ -110,4 +125,4 @@ header('Content-Type: '.$mime);
 header('Content-Disposition: inline; filename="'.$cache_filename.'"');
 header('Content-Transfer-Encoding: binary');
 
-readfile($cache_dir.'/'.$cache_filename);
+readfile($cache_dir . '/' . $cache_filename);
