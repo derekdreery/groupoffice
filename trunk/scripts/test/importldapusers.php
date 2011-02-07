@@ -59,6 +59,14 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 	if($gouser){
 		$user_id=$gouser['id'];
 		echo "User ".$gouser['username']." already exists\n";
+
+		if($gouser['enabled']=='1' && $user['enabled']=='0'){
+			$args=array($gouser);
+			//$GO_EVENTS->fire_event('user_delete', $args);
+
+			echo 'Disabling user: '.$gouser['username']."\n";
+		}
+
 	}else
 	{
 		try{
