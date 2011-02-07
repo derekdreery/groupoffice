@@ -43,8 +43,8 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 	echo $count++;
 	echo ': ';
 
-	if($count==100)
-		break;
+	//if($count==100)
+		//break;
 
 
 	$entry = ldap_get_attributes ($ldap->Link_ID,$entryID);
