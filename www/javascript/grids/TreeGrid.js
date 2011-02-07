@@ -1,69 +1,42 @@
-/*
-Copyright (c) 2009, Maxim G. Bazhenov
-
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
-
- Redistributions of source code must retain the above copyright notice, this
- list of conditions and the following disclaimer.
-
- Redistributions in binary form must reproduce the above copyright notice, this
- list of conditions and the following disclaimer in the documentation and/or
- other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
 if (Ext.version == '3.0') {
     Ext.override(Ext.grid.GridView, {
         ensureVisible : function(row, col, hscroll) {
-        
+
             var resolved = this.resolveCell(row, col, hscroll);
             if(!resolved || !resolved.row){
                 return;
             }
 
-            var rowEl = resolved.row, 
+            var rowEl = resolved.row,
                 cellEl = resolved.cell,
                 c = this.scroller.dom,
                 ctop = 0,
-                p = rowEl, 
+                p = rowEl,
                 stop = this.el.dom;
-            
+
             var p = rowEl, stop = this.el.dom;
             while(p && p != stop){
                 ctop += p.offsetTop;
                 p = p.offsetParent;
             }
             ctop -= this.mainHd.dom.offsetHeight;
-        
+
             var cbot = ctop + rowEl.offsetHeight;
-        
+
             var ch = c.clientHeight;
             var stop = parseInt(c.scrollTop, 10);
             var sbot = stop + ch;
-    
+
             if(ctop < stop){
               c.scrollTop = ctop;
             }else if(cbot > sbot){
                 c.scrollTop = cbot-ch;
             }
-    
+
             if(hscroll !== false){
                 var cleft = parseInt(cellEl.offsetLeft, 10);
                 var cright = cleft + cellEl.offsetWidth;
-    
+
                 var sleft = parseInt(c.scrollLeft, 10);
                 var sright = sleft + c.clientWidth;
                 if(cleft < sleft){
@@ -90,32 +63,32 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
      * @cfg {String} is_leaf_field_name Record leaf flag field name.
      */
     leaf_field_name : '_is_leaf',
-    
+
     /**
      * Current page offset.
      *
      * @access private
      */
     page_offset : 0,
-    
+
     /**
-     * Current active node. 
+     * Current active node.
      *
      * @access private
      */
     active_node : null,
-    
+
     /**
      * @constructor
      */
     constructor : function(config)
     {
         Ext.ux.maximgb.tg.AbstractTreeStore.superclass.constructor.call(this, config);
-        
+
         if (!this.paramNames.active_node) {
             this.paramNames.active_node = 'anode';
         }
-        
+
         this.addEvents(
             /**
              * @event beforeexpandnode
@@ -136,7 +109,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
              * Fires when expand node operation is failed.
              * param {AbstractTreeStore} this
              * param {id} Record id
-             * param {Record} Record, may be undefined 
+             * param {Record} Record, may be undefined
              */
             'expandnodefailed',
             /**
@@ -170,10 +143,10 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
              */
             'activenodechange'
         );
-    },  
+    },
 
     // Store methods.
-    // -----------------------------------------------------------------------------------------------  
+    // -----------------------------------------------------------------------------------------------
     /**
      * Removes record and all its descendants.
      *
@@ -187,10 +160,10 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
             this.setActiveNode(null);
         }
         this.removeNodeDescendants(record);
-        // ----- End of modification        
+        // ----- End of modification
         Ext.ux.maximgb.tg.AbstractTreeStore.superclass.remove.call(this, record);
     },
-    
+
     /**
      * Removes node descendants.
      *
@@ -203,7 +176,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
             this.remove(children[i]);
         }
     },
-    
+
     /**
      * Loads current active record data.
      */
@@ -229,9 +202,9 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
             options.add = true;
         }
 
-        return Ext.ux.maximgb.tg.AbstractTreeStore.superclass.load.call(this, options); 
+        return Ext.ux.maximgb.tg.AbstractTreeStore.superclass.load.call(this, options);
     },
-    
+
     /**
      * Called as a callback by the Reader during load operation.
      *
@@ -248,12 +221,12 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
             }
             return;
         }
-    
-        var r = o.records, t = o.totalRecords || r.length,  
+
+        var r = o.records, t = o.totalRecords || r.length,
             page_offset = this.getPageOffsetFromOptions(options),
-            loaded_node_id = this.getLoadedNodeIdFromOptions(options), 
-            loaded_node, i, len, record, idx, updated, self = this;
-    
+            loaded_node_id = this.getLoadedNodeIdFromOptions(options),
+            loaded_node, i, len, prev_record, record, idx, updated, self = this;
+
         if (!options || options.add !== true/* || loaded_node_id === null*/) {
             if (this.pruneModifiedRecords) {
                 this.modified = [];
@@ -271,12 +244,13 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
             this.totalLength = t;
             this.applySort();
             this.fireEvent("datachanged", this);
-        } 
+        }
         else {
             if (loaded_node_id) {
                 loaded_node = this.getById(loaded_node_id);
             }
             if (loaded_node) {
+                this.setNodeLoaded(loaded_node, true);
                 this.setNodeChildrenOffset(loaded_node, page_offset);
                 this.setNodeChildrenTotalCount(loaded_node, Math.max(t, r.length));
                 this.removeNodeDescendants(loaded_node);
@@ -288,30 +262,33 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
                 idx = this.indexOfId(record.id);
                 if (idx == -1) {
                     updated[record.id] = false;
+                    this.add(record);
                 }
                 else {
                     updated[record.id] = true;
-                    this.setNodeExpanded(record, this.isExpandedNode(this.getAt(idx)));
+                    prev_record = this.getAt(idx);
+                    prev_record.reject();
+                    prev_record.data = record.data;
+                    r[i] = prev_record;
                 }
-                this.add(record);
             }
             this.applySort();
             this.resumeEvents();
-    
+
             r.sort(function(r1, r2) {
                 var idx1 = self.data.indexOf(r1),
                     idx2 = self.data.indexOf(r2),
-                    r;
-         
+                    result;
+
                 if (idx1 > idx2) {
-                   r = 1;
+                    result = 1;
                 }
                 else {
-                   r = -1;
+                    result = -1;
                 }
-                return r;
+                return result;
             });
-    
+
             for (i = 0, len = r.length; i < len; i++) {
                 record = r[i];
                 if (updated[record.id] == true) {
@@ -345,8 +322,8 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
             }
         }
 
-        return Ext.ux.maximgb.tg.AbstractTreeStore.superclass.sort.call(this, fieldName, dir);         
-    },    
+        return Ext.ux.maximgb.tg.AbstractTreeStore.superclass.sort.call(this, fieldName, dir);
+    },
 
     /**
      * Applyes current sort method.
@@ -365,13 +342,13 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
         }
         // ----- End of modification
     },
-    
+
     /**
      * Sorts data according to sort params and then applyes tree sorting.
      *
      * @access private
      */
-    sortData : function(f, direction) 
+    sortData : function(f, direction)
     {
         direction = direction || 'ASC';
         var st = this.fields.get(f).sortType;
@@ -387,12 +364,12 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
         this.applyTreeSort();
         // ----- End of modification
     },
-    
+
     // Tree support methods.
     // -----------------------------------------------------------------------------------------------
 
     /**
-     * Sorts store data with respect to nodes parent-child relation. Every child node will be 
+     * Sorts store data with respect to nodes parent-child relation. Every child node will be
      * positioned after its parent.
      *
      * @access public
@@ -400,32 +377,32 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     applyTreeSort : function()
     {
         var i, len, temp,
-                rec, records = [],
-                roots = this.getRootNodes();
-                
+               rec, records = [],
+               roots = this.getRootNodes();
+
         // Sorting data
         for (i = 0, len = roots.length; i < len; i++) {
             rec = roots[i];
             records.push(rec);
-            this.collectNodeChildrenTreeSorted(records, rec); 
+            this.collectNodeChildrenTreeSorted(records, rec);
         }
-        
+
         if (records.length > 0) {
             this.data.clear();
             this.data.addAll(records);
         }
-        
+
         // Sorting the snapshot if one present.
         if (this.snapshot && this.snapshot !== this.data) {
             temp = this.data;
             this.data = this.snapshot;
-            this.snapshot = null; 
+            this.snapshot = null;
             this.applyTreeSort();
             this.snapshot = this.data;
             this.data = temp;
         }
     },
-    
+
     /**
      * Recusively collects rec descendants and adds them to records[] array.
      *
@@ -436,19 +413,19 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     collectNodeChildrenTreeSorted : function(records, rec)
     {
         var i, len,
-            child, 
+            child,
             children = this.getNodeChildren(rec);
-                
+
         for (i = 0, len = children.length; i < len; i++) {
             child = children[i];
             records.push(child);
-            this.collectNodeChildrenTreeSorted(records, child); 
+            this.collectNodeChildrenTreeSorted(records, child);
         }
     },
-    
+
     /**
      * Returns current active node.
-     * 
+     *
      * @access public
      * @return {Record}
      */
@@ -456,12 +433,12 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     {
         return this.active_node;
     },
-    
+
     /**
      * Sets active node.
-     * 
+     *
      * @access public
-     * @param {Record} rc Record to set active. 
+     * @param {Record} rc Record to set active.
      */
     setActiveNode : function(rc)
     {
@@ -485,7 +462,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
             }
         }
     },
-     
+
     /**
      * Returns true if node is expanded.
      *
@@ -496,7 +473,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     {
         return rc.ux_maximgb_tg_expanded === true;
     },
-    
+
     /**
      * Sets node expanded flag.
      *
@@ -506,7 +483,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     {
         rc.ux_maximgb_tg_expanded = value;
     },
-    
+
     /**
      * Returns true if node's ancestors are all expanded - node is visible.
      *
@@ -518,17 +495,17 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
         var i, len,
                 ancestors = this.getNodeAncestors(rc),
                 result = true;
-        
+
         for (i = 0, len = ancestors.length; i < len; i++) {
             result = result && this.isExpandedNode(ancestors[i]);
             if (!result) {
                 break;
             }
         }
-        
+
         return result;
     },
-    
+
     /**
      * Returns true if node is a leaf.
      *
@@ -539,7 +516,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     {
         return rc.get(this.leaf_field_name) == true;
     },
-    
+
     /**
      * Returns true if node was loaded.
      *
@@ -549,7 +526,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     isLoadedNode : function(rc)
     {
         var result;
-        
+
         if (rc.ux_maximgb_tg_loaded !== undefined) {
             result = rc.ux_maximgb_tg_loaded;
         }
@@ -559,10 +536,10 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
         else {
             result = false;
         }
-        
+
         return result;
     },
-    
+
     /**
      * Sets node loaded state.
      *
@@ -574,31 +551,31 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     {
         rc.ux_maximgb_tg_loaded = value;
     },
-    
+
     /**
      * Returns node's children offset.
      *
      * @access public
      * @param {Record} rc
-     * @return {Integer} 
+     * @return {Integer}
      */
     getNodeChildrenOffset : function(rc)
     {
         return rc.ux_maximgb_tg_offset || 0;
     },
-    
+
     /**
      * Sets node's children offset.
      *
      * @access private
      * @param {Record} rc
-     * @parma {Integer} value 
+     * @parma {Integer} value
      */
     setNodeChildrenOffset : function(rc, value)
     {
         rc.ux_maximgb_tg_offset = value;
     },
-    
+
     /**
      * Returns node's children total count
      *
@@ -610,7 +587,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     {
         return rc.ux_maximgb_tg_total || 0;
     },
-    
+
     /**
      * Sets node's children total count.
      *
@@ -622,25 +599,25 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     {
         rc.ux_maximgb_tg_total = value;
     },
-    
+
     /**
      * Collapses node.
      *
      * @access public
      * @param {Record} rc
-     * @param {Record} rc Node to collapse. 
+     * @param {Record} rc Node to collapse.
      */
     collapseNode : function(rc)
     {
         if (
             this.isExpandedNode(rc) &&
-            this.fireEvent('beforecollapsenode', this, rc) !== false 
+            this.fireEvent('beforecollapsenode', this, rc) !== false
         ) {
             this.setNodeExpanded(rc, false);
             this.fireEvent('collapsenode', this, rc);
         }
     },
-    
+
     /**
      * Expands node.
      *
@@ -650,7 +627,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     expandNode : function(rc)
     {
         var params;
-        
+
         if (
             !this.isExpandedNode(rc) &&
             this.fireEvent('beforeexpandnode', this, rc) !== false
@@ -673,16 +650,15 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
             }
         }
     },
-    
+
     /**
      * @access private
      */
     expandNodeCallback : function(r, options, success)
     {
         var rc = this.getById(options.params[this.paramNames.active_node]);
-        
+
         if (success && rc) {
-            this.setNodeLoaded(rc, true);
             this.setNodeExpanded(rc, true);
             this.fireEvent('expandnode', this, rc);
         }
@@ -690,7 +666,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
             this.fireEvent('expandnodefailed', this, options.params[this.paramNames.active_node], rc);
         }
     },
-    
+
     /**
      * Expands all nodes.
      *
@@ -709,7 +685,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
         this.resumeEvents();
         this.fireEvent('datachanged', this);
     },
-    
+
     /**
      * Collapses all nodes.
      *
@@ -718,7 +694,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     collapseAll : function()
     {
         var r, i, len, records = this.data.getRange();
-        
+
         this.suspendEvents();
         for (i = 0, len = records.length; i < len; i++) {
             r = records[i];
@@ -729,7 +705,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
         this.resumeEvents();
         this.fireEvent('datachanged', this);
     },
-    
+
     /**
      * Returns loaded node id from the load options.
      *
@@ -743,7 +719,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
         }
         return result;
     },
-    
+
     /**
      * Returns start offset from the load options.
      */
@@ -758,46 +734,46 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
         }
         return result;
     },
-    
+
     // Public
     hasNextSiblingNode : function(rc)
     {
         return this.getNodeNextSibling(rc) !== null;
     },
-    
+
     // Public
     hasPrevSiblingNode : function(rc)
     {
         return this.getNodePrevSibling(rc) !== null;
     },
-    
+
     // Public
     hasChildNodes : function(rc)
     {
         return this.getNodeChildrenCount(rc) > 0;
     },
-    
+
     // Public
     getNodeAncestors : function(rc)
     {
         var ancestors = [],
             parent;
-        
+
         parent = this.getNodeParent(rc);
         while (parent) {
             ancestors.push(parent);
-            parent = this.getNodeParent(parent);    
+            parent = this.getNodeParent(parent);
         }
-        
+
         return ancestors;
     },
-    
+
     // Public
     getNodeChildrenCount : function(rc)
     {
         return this.getNodeChildren(rc).length;
     },
-    
+
     // Public
     getNodeNextSibling : function(rc)
     {
@@ -805,7 +781,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
             parent,
             index,
             result = null;
-                
+
         parent = this.getNodeParent(rc);
         if (parent) {
             siblings = this.getNodeChildren(parent);
@@ -813,16 +789,16 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
         else {
             siblings = this.getRootNodes();
         }
-        
+
         index = siblings.indexOf(rc);
-        
+
         if (index < siblings.length - 1) {
             result = siblings[index + 1];
         }
-        
+
         return result;
     },
-    
+
     // Public
     getNodePrevSibling : function(rc)
     {
@@ -830,7 +806,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
             parent,
             index,
             result = null;
-                
+
         parent = this.getNodeParent(rc);
         if (parent) {
             siblings = this.getNodeChildren(parent);
@@ -838,54 +814,54 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
         else {
             siblings = this.getRootNodes();
         }
-        
+
         index = siblings.indexOf(rc);
         if (index > 0) {
             result = siblings[index - 1];
         }
-        
+
         return result;
     },
-    
+
     // Abstract tree support methods.
     // -----------------------------------------------------------------------------------------------
-    
+
     // Public - Abstract
     getRootNodes : function()
     {
         throw 'Abstract method call';
     },
-    
+
     // Public - Abstract
     getNodeDepth : function(rc)
     {
         throw 'Abstract method call';
     },
-    
+
     // Public - Abstract
     getNodeParent : function(rc)
     {
         throw 'Abstract method call';
     },
-    
+
     // Public - Abstract
     getNodeChildren : function(rc)
     {
         throw 'Abstract method call';
     },
-    
+
     // Public - Abstract
     addToNode : function(parent, child)
     {
         throw 'Abstract method call';
     },
-    
+
     // Public - Abstract
     removeFromNode : function(parent, child)
     {
         throw 'Abstract method call';
     },
-    
+
     // Paging support methods.
     // -----------------------------------------------------------------------------------------------
     /**
@@ -898,7 +874,7 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     {
         return this.page_offset;
     },
-    
+
     /**
      * Returns active node page offset.
      *
@@ -908,17 +884,17 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     getActiveNodePageOffset : function()
     {
         var result;
-        
+
         if (this.active_node) {
             result = this.getNodeChildrenOffset(this.active_node);
         }
         else {
             result = this.getPageOffset();
         }
-        
+
         return result;
     },
-    
+
     /**
      * Returns active node children count.
      *
@@ -928,17 +904,17 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     getActiveNodeCount : function()
     {
         var result;
-        
+
         if (this.active_node) {
             result = this.getNodeChildrenCount(this.active_node);
         }
         else {
             result = this.getRootNodes().length;
         }
-        
+
         return result;
     },
-    
+
     /**
      * Returns active node total children count.
      *
@@ -948,15 +924,15 @@ Ext.ux.maximgb.tg.AbstractTreeStore = Ext.extend(Ext.data.Store,
     getActiveNodeTotalCount : function()
     {
         var result;
-        
+
         if (this.active_node) {
             result = this.getNodeChildrenTotalCount(this.active_node);
         }
         else {
             result = this.getTotalCount();
         }
-        
-        return result;  
+
+        return result;
     }
 });
 
@@ -969,55 +945,55 @@ Ext.ux.maximgb.tg.AdjacencyListStore = Ext.extend(Ext.ux.maximgb.tg.AbstractTree
      * @cfg {String} parent_id_field_name Record parent id field name.
      */
     parent_id_field_name : '_parent',
-    
+
     getRootNodes : function()
     {
-        var i, 
-            len, 
-            result = [], 
+        var i,
+            len,
+            result = [],
             records = this.data.getRange();
-        
+
         for (i = 0, len = records.length; i < len; i++) {
             if (records[i].get(this.parent_id_field_name) == null) {
                 result.push(records[i]);
             }
         }
-        
+
         return result;
     },
-    
+
     getNodeDepth : function(rc)
     {
         return this.getNodeAncestors(rc).length;
     },
-    
+
     getNodeParent : function(rc)
     {
         return this.getById(rc.get(this.parent_id_field_name));
     },
-    
+
     getNodeChildren : function(rc)
     {
-        var i, 
-            len, 
-            result = [], 
+        var i,
+            len,
+            result = [],
             records = this.data.getRange();
-        
+
         for (i = 0, len = records.length; i < len; i++) {
             if (records[i].get(this.parent_id_field_name) == rc.id) {
                 result.push(records[i]);
             }
         }
-        
+
         return result;
     },
-    
+
     addToNode : function(parent, child)
     {
         child.set(this.parent_id_field_name, parent.id);
         this.addSorted(child);
     },
-    
+
     removeFromNode : function(parent, child)
     {
         this.remove(child);
@@ -1035,43 +1011,43 @@ Ext.ux.maximgb.tg.NestedSetStore = Ext.extend(Ext.ux.maximgb.tg.AbstractTreeStor
      * @cfg {String} left_field_name Record NS-left bound field name.
      */
     left_field_name : '_lft',
-    
+
     /**
      * @cfg {String} right_field_name Record NS-right bound field name.
      */
     right_field_name : '_rgt',
-    
+
     /**
      * @cfg {String} level_field_name Record NS-level field name.
      */
     level_field_name : '_level',
-    
+
     /**
      * @cfg {Number} root_node_level Root node level.
      */
     root_node_level : 1,
-    
+
     getRootNodes : function()
     {
-        var i, 
-            len, 
-            result = [], 
+        var i,
+            len,
+            result = [],
             records = this.data.getRange();
-        
+
         for (i = 0, len = records.length; i < len; i++) {
             if (records[i].get(this.level_field_name) == this.root_node_level) {
                 result.push(records[i]);
             }
         }
-        
+
         return result;
     },
-    
+
     getNodeDepth : function(rc)
     {
         return rc.get(this.level_field_name) - this.root_node_level;
     },
-    
+
     getNodeParent : function(rc)
     {
         var result = null,
@@ -1080,17 +1056,17 @@ Ext.ux.maximgb.tg.NestedSetStore = Ext.extend(Ext.ux.maximgb.tg.AbstractTreeStor
             lft, r_lft,
             rgt, r_rgt,
             level, r_level;
-                
+
         lft = rc.get(this.left_field_name);
         rgt = rc.get(this.right_field_name);
         level = rc.get(this.level_field_name);
-        
+
         for (i = 0, len = records.length; i < len; i++) {
             rec = records[i];
             r_lft = rec.get(this.left_field_name);
             r_rgt = rec.get(this.right_field_name);
             r_level = rec.get(this.level_field_name);
-            
+
             if (
                 r_level == level - 1 &&
                 r_lft < lft &&
@@ -1100,10 +1076,10 @@ Ext.ux.maximgb.tg.NestedSetStore = Ext.extend(Ext.ux.maximgb.tg.AbstractTreeStor
                 break;
             }
         }
-        
+
         return result;
     },
-    
+
     getNodeChildren : function(rc)
     {
         var lft, r_lft,
@@ -1111,19 +1087,19 @@ Ext.ux.maximgb.tg.NestedSetStore = Ext.extend(Ext.ux.maximgb.tg.AbstractTreeStor
             level, r_level,
             records, rec,
             result = [];
-                
+
         records = this.data.getRange();
-        
+
         lft = rc.get(this.left_field_name);
         rgt = rc.get(this.right_field_name);
         level = rc.get(this.level_field_name);
-        
+
         for (i = 0, len = records.length; i < len; i++) {
             rec = records[i];
             r_lft = rec.get(this.left_field_name);
             r_rgt = rec.get(this.right_field_name);
             r_level = rec.get(this.level_field_name);
-            
+
             if (
                 r_level == level + 1 &&
                 r_lft > lft &&
@@ -1132,24 +1108,24 @@ Ext.ux.maximgb.tg.NestedSetStore = Ext.extend(Ext.ux.maximgb.tg.AbstractTreeStor
                 result.push(rec);
             }
         }
-        
+
         return result;
     }
 });
 
-Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView, 
-{   
+Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
+{
     expanded_icon_class : 'ux-maximgb-tg-elbow-minus',
     last_expanded_icon_class : 'ux-maximgb-tg-elbow-end-minus',
     collapsed_icon_class : 'ux-maximgb-tg-elbow-plus',
     last_collapsed_icon_class : 'ux-maximgb-tg-elbow-end-plus',
     skip_width_update_class: 'ux-maximgb-tg-skip-width-update',
-    
+
     // private - overriden
     initTemplates : function()
     {
         var ts = this.templates || {};
-        
+
         if (!ts.row) {
             ts.row = new Ext.Template(
                 '<div class="x-grid3-row ux-maximgb-tg-level-{level} {alt}" style="{tstyle} {display_style}">',
@@ -1157,13 +1133,13 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
                         '<tbody>',
                             '<tr>{cells}</tr>',
                             (
-                            this.enableRowBody ? 
+                            this.enableRowBody ?
                             '<tr class="x-grid3-row-body-tr" style="{bodyStyle}">' +
                                 '<td colspan="{cols}" class="x-grid3-body-cell" tabIndex="0" hidefocus="on">'+
                                     '<div class="x-grid3-row-body">{body}</div>'+
                                 '</td>'+
-                            '</tr>' 
-                                : 
+                            '</tr>'
+                                :
                             ''
                             ),
                         '</tbody>',
@@ -1171,7 +1147,7 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
                 '</div>'
             );
         }
-        
+
         if (!ts.mastercell) {
             ts.mastercell = new Ext.Template(
                 '<td class="x-grid3-col x-grid3-cell x-grid3-td-{id} {css}" style="{style}" tabIndex="0" {cellAttr}>',
@@ -1182,7 +1158,7 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
                 '</td>'
             );
         }
-        
+
         if (!ts.treeui) {
             ts.treeui = new Ext.Template(
                 '<div class="ux-maximgb-tg-uiwrap" style="width: {wrap_width}px">',
@@ -1191,17 +1167,17 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
                 '</div>'
             );
         }
-        
+
         if (!ts.elbow_line) {
             ts.elbow_line = new Ext.Template(
                 '<div style="left: {left}px" class="{cls}">&#160;</div>'
             );
         }
-        
+
         this.templates = ts;
         Ext.ux.maximgb.tg.GridView.superclass.initTemplates.call(this);
     },
-    
+
     // Private - Overriden
     doRender : function(cs, rs, ds, startRow, colCount, stripe)
     {
@@ -1212,16 +1188,16 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
         for (var j = 0, len = rs.length; j < len; j++) {
             r = rs[j]; cb = [];
             var rowIndex = (j+startRow);
-            
+
             var row_render_res = this.renderRow(r, rowIndex, colCount, ds, this.cm.getTotalWidth());
-            
+
             if (row_render_res === false) {
                 for (var i = 0; i < colCount; i++) {
                     c = cs[i];
                     p.id = c.id;
                     p.css = i == 0 ? 'x-grid3-cell-first ' : (i == last ? 'x-grid3-cell-last ' : '');
                     p.attr = p.cellAttr = "";
-                    p.value = c.renderer(r.data[c.name], p, r, rowIndex, i, ds);
+                    p.value = c.renderer.call(c.scope, r.data[c.name], p, r, rowIndex, i, ds);
                     p.style = c.style;
                     if(Ext.isEmpty(p.value)){
                         p.value = "&#160;";
@@ -1244,7 +1220,7 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
             else {
                 cb.push(row_render_res);
             }
-            
+
             var alt = [];
             if (stripe && ((rowIndex+1) % 2 == 0)) {
                 alt[0] = "x-grid3-row-alt";
@@ -1271,7 +1247,7 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
         }
         return buf.join("");
     },
-  
+
     renderCellTreeUI : function(record, store)
     {
         var tpl = this.templates.treeui,
@@ -1279,8 +1255,8 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
             tpl_data = {},
             rec, parent,
             depth = level = store.getNodeDepth(record);
-        
-        tpl_data.wrap_width = (depth + 1) * 16; 
+
+        tpl_data.wrap_width = (depth + 1) * 16;
         if (level > 0) {
             tpl_data.elbow_line = '';
             rec = record;
@@ -1289,15 +1265,15 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
                 parent = store.getNodeParent(rec);
                 if (parent) {
                     if (store.hasNextSiblingNode(parent)) {
-                        tpl_data.elbow_line = 
+                        tpl_data.elbow_line =
                             line_tpl.apply({
-                                left : level * 16, 
+                                left : level * 16,
                                 cls : 'ux-maximgb-tg-elbow-line'
-                            }) + 
+                            }) +
                             tpl_data.elbow_line;
                     }
                     else {
-                        tpl_data.elbow_line = 
+                        tpl_data.elbow_line =
                             line_tpl.apply({
                                 left : level * 16,
                                 cls : 'ux-maximgb-tg-elbow-empty'
@@ -1343,24 +1319,24 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
             }
         }
         tpl_data.left = 1 + depth * 16;
-            
+
         return tpl.apply(tpl_data);
     },
-    
+
     // Template method
     renderRow : function(record, index, col_count, ds, total_width)
     {
         return false;
     },
-    
+
     // private - overriden
     afterRender : function()
     {
         Ext.ux.maximgb.tg.GridView.superclass.afterRender.call(this);
         this.updateAllColumnWidths();
     },
-    
-    // private - overriden to support missing column td's case, if row is rendered by renderRow() 
+
+    // private - overriden to support missing column td's case, if row is rendered by renderRow()
     // method.
     updateAllColumnWidths : function()
     {
@@ -1379,7 +1355,7 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
             var hd = this.getHeaderCell(i);
             hd.style.width = ws[i];
         }
-    
+
         var ns = this.getRows(), row, trow;
         for(i = 0, len = ns.length; i < len; i++){
             row = ns[i];
@@ -1394,11 +1370,11 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
                 }
             }
         }
-    
+
         this.onAllColumnWidthsUpdated(ws, tw);
     },
 
-    // private - overriden to support missing column td's case, if row is rendered by renderRow() 
+    // private - overriden to support missing column td's case, if row is rendered by renderRow()
     // method.
     updateColumnWidth : function(col, width)
     {
@@ -1427,7 +1403,7 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
         this.onColumnWidthUpdated(col, w, tw);
     },
 
-    // private - overriden to support missing column td's case, if row is rendered by renderRow() 
+    // private - overriden to support missing column td's case, if row is rendered by renderRow()
     // method.
     updateColumnHidden : function(col, hidden)
     {
@@ -1458,12 +1434,12 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
         delete this.lastViewWidth; // force recalc
         this.layout();
     },
-    
+
     // private - overriden to skip hidden rows processing.
     processRows : function(startRow, skipStripe)
     {
         var processed_cnt = 0;
-        
+
         if(this.ds.getCount() < 1){
             return;
         }
@@ -1471,7 +1447,7 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
         startRow = startRow || 0;
         var rows = this.getRows();
         var processed_cnt = 0;
-        
+
         Ext.each(rows, function(row, idx){
             row.rowIndex = idx;
             row.className = row.className.replace(this.rowClsRe, ' ');
@@ -1482,15 +1458,15 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
                 processed_cnt++;
             }
         }, this);
-        
+
         Ext.fly(rows[0]).addClass(this.firstRowCls);
         Ext.fly(rows[rows.length - 1]).addClass(this.lastRowCls);
     },
-    
+
     ensureVisible : function(row, col, hscroll)
     {
         var ancestors, record = this.ds.getAt(row);
-        
+
         if (!this.ds.isVisibleNode(record)) {
             ancestors = this.ds.getNodeAncestors(record);
             while (ancestors.length > 0) {
@@ -1500,16 +1476,16 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
                 }
             }
         }
-        
+
         return Ext.ux.maximgb.tg.GridView.superclass.ensureVisible.call(this, row, col, hscroll);
     },
-    
+
     // Private
     expandRow : function(record, skip_process)
     {
         var ds = this.ds,
             i, len, row, pmel, children, index, child_index;
-        
+
         if (typeof record == 'number') {
             index = record;
             record = ds.getAt(index);
@@ -1517,9 +1493,9 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
         else {
             index = ds.indexOf(record);
         }
-        
+
         skip_process = skip_process || false;
-        
+
         row = this.getRow(index);
         pmel = Ext.fly(row).child('.ux-maximgb-tg-elbow-active');
         if (pmel) {
@@ -1550,12 +1526,12 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
         }
         //this.updateAllColumnWidths();
     },
-    
+
     collapseRow : function(record, skip_process)
     {
         var ds = this.ds,
             i, len, children, row, index, child_index;
-                
+
         if (typeof record == 'number') {
             index = record;
             record = ds.getAt(index);
@@ -1563,9 +1539,9 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
         else {
             index = ds.indexOf(record);
         }
-        
+
         skip_process = skip_process || false;
-        
+
         row = this.getRow(index);
         pmel = Ext.fly(row).child('.ux-maximgb-tg-elbow-active');
         if (pmel) {
@@ -1585,7 +1561,7 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
             child_index = ds.indexOf(children[i]);
             row = this.getRow(child_index);
             if (row.style.display != 'none') {
-                row.style.display = 'none'; 
+                row.style.display = 'none';
                 this.collapseRow(child_index, true);
             }
         }
@@ -1594,7 +1570,7 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
         }
         //this.updateAllColumnWidths();
     },
-    
+
     /**
      * @access private
      */
@@ -1610,14 +1586,14 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
             ds.on('collapsenode', this.onStoreCollapseNode, this);
         }
     },
-    
+
     onLoad : function(store, records, options)
     {
         var ridx;
-        
+
         if (
-            options && 
-            options.params && 
+            options &&
+            options.params &&
             (
                 options.params[store.paramNames.active_node] === null ||
                 store.indexOfId(options.params[store.paramNames.active_node]) == -1
@@ -1626,7 +1602,7 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
             Ext.ux.maximgb.tg.GridView.superclass.onLoad.call(this, store, records, options);
         }
     },
-    
+
     onAdd : function(ds, records, index)
     {
         Ext.ux.maximgb.tg.GridView.superclass.onAdd.call(this, ds, records, index);
@@ -1635,7 +1611,7 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
            this.processRows(0);
         }
     },
-    
+
     onRemove : function(ds, record, index, isUpdate)
     {
         Ext.ux.maximgb.tg.GridView.superclass.onRemove.call(this, ds, record, index, isUpdate);
@@ -1646,7 +1622,7 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
             }
         }
     },
-    
+
     onUpdate : function(ds, record)
     {
         Ext.ux.maximgb.tg.GridView.superclass.onUpdate.call(this, ds, record);
@@ -1655,26 +1631,26 @@ Ext.ux.maximgb.tg.GridView = Ext.extend(Ext.grid.GridView,
             this.processRows(0);
         }
     },
-    
+
     onStoreExpandNode : function(store, rc)
     {
         this.expandRow(rc);
     },
-    
+
     onStoreCollapseNode : function(store, rc)
     {
         this.collapseRow(rc);
     }
 });
 
-Ext.ux.maximgb.tg.GridPanel = Ext.extend(Ext.grid.GridPanel, 
+Ext.ux.maximgb.tg.GridPanel = Ext.extend(Ext.grid.GridPanel,
 {
     /**
      * @cfg {String|Integer} master_column_id Master column id. Master column cells are nested.
      * Master column cell values are used to build breadcrumbs.
      */
     master_column_id : 0,
-    
+
     /**
      * @cfg {Stirng} TreeGrid panel custom class.
      */
@@ -1688,11 +1664,11 @@ Ext.ux.maximgb.tg.GridPanel = Ext.extend(Ext.grid.GridPanel,
         this.getSelectionModel().on('selectionchange', this.onTreeGridSelectionChange, this);
         this.initComponentPostOverride();
     },
-    
+
     initComponentPreOverride : Ext.emptyFn,
-    
+
     initComponentPostOverride : Ext.emptyFn,
-    
+
     // Private
     onRender : function(ct, position)
     {
@@ -1713,7 +1689,7 @@ Ext.ux.maximgb.tg.GridPanel = Ext.extend(Ext.grid.GridPanel,
         }
         return this.view;
     },
-    
+
     /**
      * @access private
      */
@@ -1723,9 +1699,9 @@ Ext.ux.maximgb.tg.GridPanel = Ext.extend(Ext.grid.GridPanel,
             view = this.getView(),
             row = view.findRowIndex(target),
             store = this.getStore(),
-            sm = this.getSelectionModel(), 
+            sm = this.getSelectionModel(),
             record, record_id, do_default = true;
-        
+
         // Row click
         if (row !== false) {
             if (Ext.fly(target).hasClass('ux-maximgb-tg-elbow-active')) {
@@ -1756,7 +1732,7 @@ Ext.ux.maximgb.tg.GridPanel = Ext.extend(Ext.grid.GridPanel,
             Ext.ux.maximgb.tg.GridPanel.superclass.onMouseDown.call(this, e);
         }
     },
-    
+
     /**
      * @access private
      */
@@ -1786,7 +1762,7 @@ Ext.ux.maximgb.tg.GridPanel = Ext.extend(Ext.grid.GridPanel,
     }
 });
 
-Ext.ux.maximgb.tg.EditorGridPanel = Ext.extend(Ext.grid.EditorGridPanel, 
+Ext.ux.maximgb.tg.EditorGridPanel = Ext.extend(Ext.grid.EditorGridPanel,
 {
     /**
      * @cfg {String|Integer} master_column_id Master column id. Master column cells are nested.
@@ -1798,22 +1774,22 @@ Ext.ux.maximgb.tg.EditorGridPanel = Ext.extend(Ext.grid.EditorGridPanel,
     initComponent : function()
     {
         this.initComponentPreOverride();
-    
+
         Ext.ux.maximgb.tg.EditorGridPanel.superclass.initComponent.call(this);
-        
+
         this.getSelectionModel().on(
             'selectionchange',
             this.onTreeGridSelectionChange,
             this
         );
-        
+
         this.initComponentPostOverride();
     },
-    
+
     initComponentPreOverride : Ext.emptyFn,
-    
+
     initComponentPostOverride : Ext.emptyFn,
-    
+
     // Private
     onRender : function(ct, position)
     {
@@ -1834,7 +1810,7 @@ Ext.ux.maximgb.tg.EditorGridPanel = Ext.extend(Ext.grid.EditorGridPanel,
         }
         return this.view;
     },
-    
+
     /**
      * @access private
      */
@@ -1844,9 +1820,9 @@ Ext.ux.maximgb.tg.EditorGridPanel = Ext.extend(Ext.grid.EditorGridPanel,
             view = this.getView(),
             row = view.findRowIndex(target),
             store = this.getStore(),
-            sm = this.getSelectionModel(), 
+            sm = this.getSelectionModel(),
             record, record_id, do_default = true;
-        
+
         // Row click
         if (row !== false) {
             if (Ext.fly(target).hasClass('ux-maximgb-tg-elbow-active')) {
@@ -1877,7 +1853,7 @@ Ext.ux.maximgb.tg.EditorGridPanel = Ext.extend(Ext.grid.EditorGridPanel,
             Ext.ux.maximgb.tg.EditorGridPanel.superclass.onMouseDown.call(this, e);
         }
     },
-    
+
     /**
      * @access private
      */
@@ -1931,7 +1907,7 @@ Ext.ux.maximgb.tg.PagingToolbar = Ext.extend(Ext.PagingToolbar,
             pages :  total < this.pageSize ? 1 : Math.ceil(total / this.pageSize)
         };
     },
-    
+
     updateInfo : function()
     {
         var count = 0, cursor = 0, total = 0, msg;
@@ -1942,7 +1918,7 @@ Ext.ux.maximgb.tg.PagingToolbar = Ext.extend(Ext.PagingToolbar,
                 total = this.store.getActiveNodeTotalCount();
             }
             msg = count == 0 ?
-                this.emptyMsg 
+                this.emptyMsg
                     :
                 String.format(
                     this.displayMsg,
@@ -1951,14 +1927,14 @@ Ext.ux.maximgb.tg.PagingToolbar = Ext.extend(Ext.PagingToolbar,
             this.displayItem.setText(msg);
         }
     },
-    
+
     updateUI : function()
     {
         var d = this.getPageData(), ap = d.activePage, ps = d.pages;
-        
+
         this.afterTextItem.setText(String.format(this.afterPageText, d.pages));
         this.inputItem.setValue(ap);
-        
+
         this.first.setDisabled(ap == 1);
         this.prev.setDisabled(ap == 1);
         this.next.setDisabled(ap == ps);
@@ -1966,7 +1942,7 @@ Ext.ux.maximgb.tg.PagingToolbar = Ext.extend(Ext.PagingToolbar,
         this.refresh.enable();
         this.updateInfo();
     },
-    
+
     bindStore : function(store, initial)
     {
         if (!initial && this.store) {
@@ -1977,13 +1953,13 @@ Ext.ux.maximgb.tg.PagingToolbar = Ext.extend(Ext.PagingToolbar,
         }
         Ext.ux.maximgb.tg.PagingToolbar.superclass.bindStore.call(this, store, initial);
     },
-    
+
     beforeLoad : function(store, options)
     {
         var paramNames = this.getParams();
-        
+
         Ext.ux.maximgb.tg.PagingToolbar.superclass.beforeLoad.call(this, store, options);
-        
+
         if (options && options.params) {
             if(options.params[paramNames.start] === undefined) {
                 options.params[paramNames.start] = 0;
@@ -1993,7 +1969,7 @@ Ext.ux.maximgb.tg.PagingToolbar = Ext.extend(Ext.PagingToolbar,
             }
         }
     },
-    
+
     /**
      * Move to the first page, has the same effect as clicking the 'first' button.
      */
@@ -2009,7 +1985,7 @@ Ext.ux.maximgb.tg.PagingToolbar = Ext.extend(Ext.PagingToolbar,
     {
         var store = this.store,
             cursor = store ? store.getActiveNodePageOffset() : 0;
-            
+
         this.doLoad(Math.max(0, cursor - this.pageSize));
     },
 
@@ -2020,7 +1996,7 @@ Ext.ux.maximgb.tg.PagingToolbar = Ext.extend(Ext.PagingToolbar,
     {
         var store = this.store,
             cursor = store ? store.getActiveNodePageOffset() : 0;
-            
+
         this.doLoad(cursor + this.pageSize);
     },
 
@@ -2036,7 +2012,7 @@ Ext.ux.maximgb.tg.PagingToolbar = Ext.extend(Ext.PagingToolbar,
 
         this.doLoad(extra ? (total - extra) : total - this.pageSize);
     },
-    
+
     onStoreActiveNodeChange : function(store, old_rec, new_rec)
     {
         if (this.rendered) {
@@ -2048,4 +2024,3 @@ Ext.ux.maximgb.tg.PagingToolbar = Ext.extend(Ext.PagingToolbar,
 Ext.reg('Ext.ux.maximgb.tg.GridPanel', Ext.ux.maximgb.tg.GridPanel);
 Ext.reg('Ext.ux.maximgb.tg.EditorGridPanel', Ext.ux.maximgb.tg.EditorGridPanel);
 Ext.reg('Ext.ux.maximgb.tg.PagingToolbar', Ext.ux.maximgb.tg.PagingToolbar);
-
