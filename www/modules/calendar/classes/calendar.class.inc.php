@@ -589,36 +589,22 @@ class calendar extends db {
 		return $this->num_rows();
 	}
 
-	function get_authorized_views($user_id, $start=0, $offset=0) {
-		$sql = "SELECT DISTINCT cal_views . * ".
-		"FROM cal_views ".
-		"INNER JOIN go_acl ON cal_views.acl_id = go_acl.acl_id ".
-		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-		"WHERE go_acl.user_id=".intval($user_id)." ".
-		"OR go_users_groups.user_id=".intval($user_id)." ".
-		" ORDER BY cal_views.name ASC";
+	function get_authorized_views($user_id, $sort='name', $dir='ASC', $start=0, $offset=0, $auth_type='read') {
+		$sql = "SELECT v.* ".
+		"FROM cal_views v ".
+		"INNER JOIN go_acl a ON (v.acl_id = a.acl_id";
 
-		$this->query($sql);
-		$count= $this->num_rows();
-		if($offset>0) {
-			$sql .= " LIMIT ".intval($start).",".intval($offset);
-			$this->query($sql);
+		if($auth_type=='write'){
+			$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
 		}
-		return $count;
-	}
 
-	function get_writable_views($user_id, $sort='name', $dir='ASC') {
+		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ".
+		" GROUP BY v.id ORDER BY ".$this->escape($sort).' '.$this->escape($dir);
 
-		$sql = "SELECT DISTINCT cal_views . * ".
-		"FROM cal_views ".
-		"INNER JOIN go_acl ON (cal_views.acl_id = go_acl.acl_id AND level>1) ".
-		"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-		"WHERE go_acl.user_id=".intval($user_id)." ".
-		"OR go_users_groups.user_id=".intval($user_id)." ".
-		" ORDER BY cal_views.".$this->escape($sort.' '.$dir);
-
+		$sql = $this->add_limits_to_query($sql, $start, $offset);
 		$this->query($sql);
-		return $this->num_rows();
+		
+		return $this->limit_count();
 	}
 
 	function get_view($view_id) {
@@ -974,7 +960,7 @@ class calendar extends db {
 	}
 
 	function get_authorized_calendars($user_id, $start=0, $offset=0, $resources=0, $group_id=1, $projects=false, $query='') {
-		$sql = "SELECT DISTINCT c.* ";
+		$sql = "SELECT c.* ";
 
 		if($group_id<0) {
 			$sql .= ",g.name AS group_name ";
@@ -986,83 +972,76 @@ class calendar extends db {
 			$sql .= " LEFT JOIN cal_groups g ON g.id=c.group_id ";
 		}
 
-		$sql .= "INNER JOIN go_acl a ON c.acl_id = a.acl_id ".
-		"LEFT JOIN go_users_groups ug ON a.group_id = ug.group_id ".
-		"WHERE (a.user_id=".intval($user_id)." ".
-		"OR ug.user_id=".intval($user_id).")";
+		$sql .= "INNER JOIN go_acl a ON (c.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
+	
+		$where = false;
 
 		if($resources)
 		{
-				$sql .= " AND c.group_id > 1";
+			$sql .= $where ? ' AND ' : ' WHERE ';
+			$where=true;
+			$sql .= "c.group_id > 1";
 		}elseif($group_id>-1)
 		{
-				$sql .= " AND c.group_id = ".$this->escape($group_id);
+			$sql .= $where ? ' AND ' : ' WHERE ';
+			$where=true;
+			$sql .= "c.group_id = ".$this->escape($group_id);
 		}
 
-		$sql .= " AND c.project_id";
+		$sql .= $where ? ' AND ' : ' WHERE ';
+
+		$sql .= "c.project_id";
 		$sql .= $projects ? ">0" : "=0";
 
 		if(!empty($query)){
 			$sql .= " AND c.name LIKE '".$this->escape($query)."'";
 		}
 
+		$sql .= ' GROUP BY c.id';
+
 		$sql .= $group_id==-1 ? " ORDER BY g.id, c.name ASC" : " ORDER BY c.name ASC";
 
 
-		if ($offset > 0)
-		{
-			$sql .=" LIMIT ".intval($start).",".intval($offset);
-			$sql = str_replace('SELECT', 'SELECT SQL_CALC_FOUND_ROWS', $sql);
-			$this->query($sql);
-			$count = $this->found_rows();
-			return $count;
-		}else
-		{
-			$this->query($sql);
-			$count = $this->num_rows();
-			return $count;
-		}
+		$sql = $this->add_limits_to_query($sql, $start, $offset);
+		$this->query($sql);
+
+		return $this->limit_count();
 	}
 
 	function get_writable_calendars($user_id, $start=0, $offset=0, $resources=0, $groups=0, $group_id=-1, $show_all=0, $sort='name', $dir='ASC', $query='') {
-		$sql = "SELECT DISTINCT cal_calendars.* ";
+		$sql = "SELECT c.* ";
 		if($groups)
-			$sql .= ", cal_groups.fields ";
-		$sql .= "FROM cal_calendars ".
-						"INNER JOIN go_acl ON (cal_calendars.acl_id = go_acl.acl_id AND level>1) ".
-						"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ";
-        if($groups)
-            $sql .= "LEFT JOIN cal_groups ON cal_calendars.group_id = cal_groups.id ";
+			$sql .= ", g.fields ";
+		$sql .= "FROM cal_calendars c ";
 
-        $sql .= "WHERE (go_acl.user_id=".intval($user_id)." ".
-		"OR go_users_groups.user_id=".intval($user_id).")";
+		$sql .= "INNER JOIN go_acl a ON (c.acl_id = a.acl_id AND a.level>1 AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
+
+        if($groups)
+            $sql .= "LEFT JOIN cal_groups g ON c.group_id = g.id ";
 
 
 		if(!empty($query)){
-			$sql .= " AND cal_calendars.name LIKE '".$this->escape($query)."'";
+			$sql .= " AND c.name LIKE '".$this->escape($query)."'";
 		}
 
 		if(!$show_all) {
 			if($resources) {
-				$sql .= " AND cal_calendars.group_id > 1";
+				$sql .= " AND c.group_id > 1";
 			}else
 				$group_id = 1;
 
 			if($group_id>-1) {
-				$sql .= " AND cal_calendars.group_id = ".$this->escape($group_id);
+				$sql .= " AND c.group_id = ".$this->escape($group_id);
 			}
-			$sql .= " ORDER BY cal_calendars.".$this->escape($sort.' '.$dir);
+			$sql .= " GROUP BY c.id ORDER BY c.".$this->escape($sort.' '.$dir);
 		}else {
-			$sql .= " ORDER BY cal_calendars.group_id ASC, cal_calendars.".$this->escape($sort.' '.$dir);
+			$sql .= " GROUP BY c.id ORDER BY c.group_id ASC, c.".$this->escape($sort.' '.$dir);
 		}
 
+		$sql = $this->add_limits_to_query($sql, $start, $offset);
 		$this->query($sql);
-		$count= $this->num_rows();
-		if($offset>0) {
-			$sql .= " LIMIT ".intval($start).",".intval($offset);
-			$this->query($sql);
-		}
-		return $count;
+
+		return $this->limit_count();
 	}
 
 	function get_calendars_by_group_id($group_id) {

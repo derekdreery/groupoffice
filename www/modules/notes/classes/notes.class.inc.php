@@ -428,44 +428,26 @@ class notes extends db {
 	{
 		$user_id=intval($user_id);
 		
-		$sql = "SELECT DISTINCT no_categories.* FROM no_categories ".
- 		"INNER JOIN go_acl a ON ";
+		$sql = "SELECT no_categories.* FROM no_categories ".
 		
-		switch($auth_type)
-		{
-			case 'read':
-				$sql .= "no_categories.acl_id = a.acl_id ";
-				break;
-				
-			case 'write':
-				$sql .= "(no_categories.acl_id = a.acl_id AND a.level>1) ";
-				break;
+		"INNER JOIN go_acl a ON (no_categories.acl_id = a.acl_id";
+		if($auth_type=='write'){
+			$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
 		}
+		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
 		
-		
- 		$sql .= "LEFT JOIN go_users_groups ug ON (a.group_id = ug.group_id) WHERE ((".
- 		"ug.user_id = ".$user_id.") OR (a.user_id = ".$user_id.")) ";
  		
  		if(!empty($query))
  		{
  			$sql .= " AND name LIKE '".$this->escape($query)."'";
  		}
 
-		$sql .= " ORDER BY ".$this->escape($sort." ".$direction);
+		$sql .= " GROUP BY no_categories.id ORDER BY ".$this->escape($sort." ".$direction);
 	
-		if ($offset > 0)
-		{
-			$sql .=" LIMIT ".intval($start).",".intval($offset);
-			$sql = str_replace('SELECT', 'SELECT SQL_CALC_FOUND_ROWS', $sql);
-			$this->query($sql);
-			$count = $this->found_rows();
-			return $count;
-		}else
-		{
-			$this->query($sql);
-			$count = $this->num_rows();
-			return $count;
-		}
+		$sql = $this->add_limits_to_query($sql, $start, $offset);
+		$this->query($sql);
+
+		return $this->limit_count();
 	}
 
 	/**
@@ -544,10 +526,9 @@ class notes extends db {
 		}else
 		{
 			global $GO_SECURITY;
-			
-			$sql .= " INNER JOIN go_acl a ON c.acl_id = a.acl_id  ".
-				"LEFT JOIN go_users_groups ug ON (a.group_id = ug.group_id) WHERE ((".
- 				"ug.user_id = ".$GO_SECURITY->user_id.") OR (a.user_id = ".$GO_SECURITY->user_id."))";
+
+			$sql .= " INNER JOIN go_acl a ON (c.acl_id = a.acl_id";
+			$sql .= " AND (a.user_id=".$GO_SECURITY->user_id." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
 		}
 
 		if(!empty($query))

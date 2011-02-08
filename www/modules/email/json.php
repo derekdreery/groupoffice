@@ -1218,6 +1218,9 @@ try {
 
 			case 'accounts':
 
+				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				$GO_USERS = new GO_USERS();
+
 				if(isset($_POST['delete_keys'])) {
 					$response['deleteSuccess']=true;
 					try {
@@ -1255,7 +1258,7 @@ try {
 									'id'=>$email->f('id'),
 									'email'=>$email->f('email'),
 									'username'=>$email->f('username'),
-									'user_name'=>String::format_name($record),
+									'user_name'=>$GO_USERS->get_user_realname($record['user_id']),
 									'user_id'=>$email->f('user_id'),
 									'host'=>$email->f('host'),
 									'smtp_host'=>$email->f('smtp_host'),
