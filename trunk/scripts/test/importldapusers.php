@@ -1,7 +1,7 @@
 <?php
 if(!isset($argv[1]))
 {
-	die('No config! :: The first argument is empty!');
+	$argv[1]='/etc/groupoffice/config.php';
 }
 
 define('CONFIG_FILE', $argv[1]);
