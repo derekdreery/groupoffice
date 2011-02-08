@@ -11,7 +11,7 @@ GO.addressbook.ManageAddressbooksGrid = function(config){
 	config.split=true;
 	config.store = GO.addressbook.writableAddressbooksStore	
 	
-	config.paging=false;
+	config.paging=true;
 
 	var companiesColumnModel =  new Ext.grid.ColumnModel({
 		defaults:{
