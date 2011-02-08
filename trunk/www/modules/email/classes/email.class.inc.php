@@ -287,43 +287,25 @@ class email extends db {
 
 		$user_id=intval($user_id);
 
-		$sql = "SELECT DISTINCT al.name, al.email, al.signature, al.id AS default_alias_id, a.*,u.first_name, u.middle_name, u.last_name FROM em_accounts a ".
-						"LEFT JOIN go_users u on u.id=a.user_id ".
-						"INNER JOIN em_aliases al ON (al.account_id=a.id AND al.`default`='1') ".
-						"LEFT JOIN em_accounts_sort so ON (so.account_id=a.id AND so.user_id=".$user_id.")"; // Join Sort table
+		$sql = "SELECT al.name, al.email, al.signature, al.id AS default_alias_id, ac.* FROM em_accounts ac ".
+						"INNER JOIN em_aliases al ON (al.account_id=ac.id AND al.`default`='1') ".
+						"LEFT JOIN em_accounts_sort so ON (so.account_id=ac.id AND so.user_id=".$user_id.") "; // Join Sort table
 
 		if($user_id > 0) {
 
-			switch($auth_type)
-			{
-				case 'read':
-					$sql .= "INNER JOIN go_acl ac ON (a.acl_id = ac.acl_id)";
-					$sql .= "LEFT JOIN go_users_groups ug ON (ac.group_id = ug.group_id AND ug.group_id!=1) ";
-					break;
-
-				case 'write':
-					$sql .= "INNER JOIN go_acl ac ON (a.acl_id = ac.acl_id AND ac.level>1)";
-					$sql .= "LEFT JOIN go_users_groups ug ON (ac.group_id = ug.group_id) ";
-					break;
+			$sql .= "INNER JOIN go_acl a ON (ac.acl_id = a.acl_id";
+			if($auth_type=='write'){
+				$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
 			}
-			
-			$sql .= "WHERE (ug.user_id = ".$user_id." OR ac.user_id = ".$user_id.") ";
-			$sql .=	"AND type='imap'";
-		}else
-		{
-			$sql .= "WHERE type='imap'";
+			$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
 		}
 		
-		$sql .= " ORDER BY `".$this->escape($sort)."` ".$this->escape($dir);
+		$sql .= " GROUP BY ac.id ORDER BY `".$this->escape($sort)."` ".$this->escape($dir);
 		
+		$sql = $this->add_limits_to_query($sql, $start, $offset);
 		$this->query($sql);
-		$count =  $this->num_rows();
 
-		if($offset>0) {
-			$sql .= " LIMIT ".intval($start).",".intval($offset);
-			$this->query($sql);
-		}
-		return $count;
+		return $this->limit_count();
 	}
 
 
@@ -1528,15 +1510,13 @@ class email extends db {
 
 		$user_id = intval($user_id);
 		
-		$sql = "SELECT a.* FROM em_aliases a INNER JOIN em_accounts e ON (e.id=a.account_id) ";
+		$sql = "SELECT al.* FROM em_aliases al INNER JOIN em_accounts e ON (e.id=al.account_id) ";
 
-		$sql .= "INNER JOIN go_acl ac ON (e.acl_id = ac.acl_id) ";
-		$sql .= "LEFT JOIN go_users_groups ug ON (ac.group_id = ug.group_id AND ug.group_id!=1) ";
-		$sql .= "LEFT JOIN em_accounts_sort so ON (so.account_id=a.account_id AND so.user_id=".$user_id.")"; // Join Sort table
-		//$sql .= "WHERE e.user_id=".intval($user_id);
-		$sql .= "WHERE (ug.user_id = ".$user_id." OR ac.user_id = ".$user_id.") ";
+		$sql .= "INNER JOIN go_acl a ON (e.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
 
-		$sql .= " ORDER BY `order` DESC";
+		$sql .= "LEFT JOIN em_accounts_sort so ON (so.account_id=al.account_id AND so.user_id=".$user_id.")"; // Join Sort table
+
+		$sql .= " GROUP BY al.id ORDER BY `order` DESC";
 		$this->query($sql);
 		return $this->num_rows();
 	}

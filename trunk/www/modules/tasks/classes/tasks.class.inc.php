@@ -475,41 +475,27 @@ class tasks extends db
 		if(!$user_id)
 				$user_id = $GO_SECURITY->user_id;
         
-		$sql = "SELECT DISTINCT l.* ".
-		"FROM ta_lists l ";
-		if($auth_type=='read')
-		{
-			$sql .= "INNER JOIN go_acl a ON l.acl_id = a.acl_id ";
-		}else
-		{
-			$sql .= "INNER JOIN go_acl a ON (l.acl_id=a.acl_id AND a.level>".GO_SECURITY::READ_PERMISSION.") ";
+		$sql = "SELECT l.* ".
+		"FROM ta_lists l ".
+
+		"INNER JOIN go_acl a ON (l.acl_id = a.acl_id";
+		if($auth_type=='write'){
+			$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
 		}
-		$sql .= "LEFT JOIN go_users_groups ug ON a.group_id = ug.group_id ".
-		"WHERE (a.user_id=".intval($user_id)." OR ug.user_id=".intval($user_id).")";
-		
+		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
 		
 		if(!empty($query))
 		{
-			$sql .= " AND name LIKE '".$this->escape($query)."'";
+			$sql .= " WHERE l.name LIKE '".$this->escape($query)."'";
 		}
 		
-		$sql .= " ORDER BY ".$this->escape($sort." ".$direction);
-		
+		$sql .= " GROUP BY l.id ORDER BY ".$this->escape($sort." ".$direction);
 
 		
-		if($offset>0)
-		{
-			$sql .= " LIMIT ".$this->escape($start.','.$offset);
-			$sql = str_replace('SELECT', 'SELECT SQL_CALC_FOUND_ROWS', $sql);
-			$this->query($sql);
-			$count = $this->found_rows();
-			return $count;
-		}else
-		{
-			$this->query($sql);
-			$count= $this->num_rows();
-		}
-		return $count;
+		$sql = $this->add_limits_to_query($sql, $start, $offset);
+		$this->query($sql);
+
+		return $this->limit_count();
 	}
 
 	function add_task($task, $tasklist=false)
@@ -1652,24 +1638,4 @@ class tasks extends db
 			$response['results'][] = $tasklist;
 		}
 	}
-        
-/*
-
-	function get_writable_tasklists($user_id, $start=0, $offset=0, $sort='name', $dir='ASC') {
-		$sql = "SELECT DISTINCT ta_lists.* ".
-				"FROM ta_lists ".
-				"	INNER JOIN go_acl ON (ta_lists.acl_id = go_acl.acl_id AND go_acl.level>1) ".
-				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-				"WHERE go_acl.user_id=".intval($user_id)." ".
-				"OR go_users_groups.user_id=".intval($user_id)." ".
-				" ORDER BY ta_lists.".$sort." ".$dir;
-		$this->query($sql);
-		$count= $this->num_rows();
-		if($offset>0) {
-			$sql .= " LIMIT ".intval($start).",".intval($offset);
-			$this->query($sql);
-		}
-		return $count;
-	}
-}*/
 }

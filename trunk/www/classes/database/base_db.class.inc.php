@@ -174,6 +174,8 @@ class base_db{
 	 */
 	var $auto_increment_offset=1;
 
+	var $last_query_calculated_found_rows=false;
+
 	/**
 	 * Constructor a config object with db_host, db_pass, db_user and db_name
 	 * may be passed so it can connect to a different database then the default.
@@ -775,4 +777,23 @@ class base_db{
 		return in_array($table_name, $this->tables);
 	}
 
+	public function add_limits_to_query($sql, $start, $offset){
+
+		if($offset>0){
+
+			$this->last_query_calculated_found_rows=true;
+
+			$sql = preg_replace('/^SELECT /i', 'SELECT SQL_CALC_FOUND_ROWS ', $sql);
+			$sql .= ' LIMIT '.intval($start).','.intval($offset);
+		}else
+		{
+			$this->last_query_calculated_found_rows=false;
+		}
+
+		return $sql;
+	}
+
+	public function limit_count(){
+		return $this->last_query_calculated_found_rows ? $this->found_rows() : $this->num_rows();
+	}
 }

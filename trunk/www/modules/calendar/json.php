@@ -1041,10 +1041,12 @@ try {
 				}
 			}
 
+			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
+			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 0;
 			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'name';
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'ASC';
 
-			$response['total'] = $cal->get_writable_views($GO_SECURITY->user_id, $sort, $dir);
+			$response['total'] = $cal->get_authorized_views($GO_SECURITY->user_id, $sort, $dir, $start, $limit, 'write');
 			$response['results']=array();
 			while($calendar=$cal->next_record(DB_ASSOC)) {
 				$calendar['user_name'] =$GO_USERS->get_user_realname($calendar['user_id']);
