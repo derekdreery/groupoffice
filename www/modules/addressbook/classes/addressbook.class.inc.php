@@ -264,34 +264,24 @@ class addressbook extends db {
 	}
 
 	function get_user_addressbooks($user_id, $start=0, $offset=0, $sort='name', $dir='ASC', $query='') {
-		$sql = "SELECT DISTINCT ab_addressbooks.* ".
+		$sql = "SELECT ab_addressbooks.* ".
 				"FROM ab_addressbooks ".
-				"	INNER JOIN go_acl ON ab_addressbooks.acl_id = go_acl.acl_id ".
-				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-				"WHERE (go_acl.user_id=".intval($user_id)." ".
-				"OR go_users_groups.user_id=".intval($user_id).") ";
+
+		"INNER JOIN go_acl a ON (ab_addressbooks.acl_id = a.acl_id".
+		" AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
+
 
 		if(!empty($query))
  		{
- 			$sql .= " AND name LIKE '".$this->escape($query)."'";
+ 			$sql .= " WHERE name LIKE '".$this->escape($query)."'";
  		}
 
-		$sql .=	" ORDER BY ab_addressbooks.".$sort." ".$dir;
+		$sql .=	" GROUP BY ab_addressbooks.id ORDER BY ab_addressbooks.".$sort." ".$dir;
 
-		if ($offset > 0)
-		{
-			$sql .=" LIMIT ".intval($start).",".intval($offset);
-			$sql = str_replace('SELECT', 'SELECT SQL_CALC_FOUND_ROWS', $sql);
-			$this->query($sql);
-			$count = $this->found_rows();
-			return $count;
-		}else
-		{
-			$this->query($sql);
-			$count = $this->num_rows();
-			return $count;
-		}
-		return $count;
+		$sql = $this->add_limits_to_query($sql, $start, $offset);
+		$this->query($sql);
+
+		return $this->limit_count();
 	}
 
 	function get_contacts_for_export($addressbook_id, $user_id = 0) {
@@ -357,20 +347,18 @@ class addressbook extends db {
 	}
 
 	function get_writable_addressbooks($user_id, $start=0, $offset=0, $sort='name', $dir='ASC') {
-		$sql = "SELECT DISTINCT ab_addressbooks.* ".
+		$sql = "SELECT ab_addressbooks.* ".
 				"FROM ab_addressbooks ".
-				"	INNER JOIN go_acl ON (ab_addressbooks.acl_id = go_acl.acl_id AND go_acl.level>1) ".
-				"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-				"WHERE go_acl.user_id=".intval($user_id)." ".
-				"OR go_users_groups.user_id=".intval($user_id)." ".
-				" ORDER BY ab_addressbooks.".$sort." ".$dir;
+
+		"INNER JOIN go_acl a ON (ab_addressbooks.acl_id = a.acl_id";
+		$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
+		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ".
+		" GROUP BY ab_addressbooks.id ORDER BY ab_addressbooks.".$sort." ".$dir;
+
+		$sql = $this->add_limits_to_query($sql, $start, $offset);
 		$this->query($sql);
-		$count= $this->num_rows();
-		if($offset>0) {
-			$sql .= " LIMIT ".intval($start).",".intval($offset);
-			$this->query($sql);
-		}
-		return $count;
+
+		return $this->limit_count();
 	}
 
 	function add_company($company, $addressbook=false) {
