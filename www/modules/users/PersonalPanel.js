@@ -90,7 +90,7 @@ GO.users.PersonalPanel = function(config)
 						fieldLabel: GO.lang['strEmail'],
 						name: 'email',
 						allowBlank: false,
-						vtype:'email'
+						vtype:'emailAddress'
 					},
 					{
 						fieldLabel: GO.lang['strPhone'],
