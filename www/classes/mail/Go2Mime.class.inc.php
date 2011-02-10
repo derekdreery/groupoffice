@@ -165,7 +165,7 @@ class Go2Mime
 			$this->response['bcc']=implode(',', $this->response['bcc']);
 		}
 
-		if(is_array($structure->headers['date']))
+		if(isset($structure->headers['date']) && is_array($structure->headers['date']))
 				$structure->headers['date']=$structure->headers['date'][0];
 		
 		$this->response['to_string']='';

@@ -171,7 +171,7 @@ Ext.extend(GO.calllog.CallDialog, Ext.Window, {
 			},{
 				fieldLabel: GO.lang.strEmail,
 				name: 'email',
-				vtype:'email'
+				vtype:'emailAddress'
 			},{
 				fieldLabel: GO.lang.strDescription,
 				name: 'description',

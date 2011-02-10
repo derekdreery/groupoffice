@@ -172,6 +172,7 @@ try{
 			{
 				$readable_categories = array();
 				$writable_categories = array();
+				$deleteable_categories = array();
 				$response['data']['permission_level'] = $permission_level = 0;				
 				foreach($categories as $category_id)
 				{
@@ -186,6 +187,11 @@ try{
 					if($permission_level >= GO_SECURITY::WRITE_PERMISSION)
 					{
 						$writable_categories[] = $category_id;
+					}
+
+					if($permission_level >= GO_SECURITY::DELETE_PERMISSION)
+					{
+						$deleteable_categories[] = $category_id;
 					}
 
 					if($permission_level > $response['data']['permission_level'])
@@ -209,7 +215,7 @@ try{
 					foreach($delete_notes as $note_id)
 					{
 						$note = $notes->get_note($note_id);
-						if(in_array($note['category_id'], $writable_categories))
+						if(in_array($note['category_id'], $deleteable_categories))
 						{
 							$notes->delete_note($note_id);
 							$notes_deleted[] = $note_id;

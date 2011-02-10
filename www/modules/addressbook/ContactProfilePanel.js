@@ -93,7 +93,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 		{
 			fieldLabel: GO.lang['strEmail'],
 			name: 'email',
-			vtype:'email'
+			vtype:'emailAddress'
 		
 		});
 	
@@ -101,14 +101,14 @@ GO.addressbook.ContactProfilePanel = function(config)
 		{
 			fieldLabel: GO.lang['strEmail'] + ' 2',
 			name: 'email2',
-			vtype:'email'
+			vtype:'emailAddress'
 		});
 	
 		this.formEmail3 = new Ext.form.TextField(
 		{
 			fieldLabel: GO.lang['strEmail'] + ' 3',
 			name: 'email3',
-			vtype:'email'
+			vtype:'emailAddress'
 		});
 	
 		this.formHomePhone = new Ext.form.TextField(

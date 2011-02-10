@@ -403,6 +403,7 @@ GO.lang.swfUploadPanelStrings = {
 GO.lang.orientation='Orientatie';
 GO.lang.portrait='Staand';
 GO.lang.landscape='Liggend';
+GO.lang.link='Koppeling';
 
 GO.lang.savedQueries='Opgeslagen zoekopdrachten';
 GO.lang.searchQueryName = 'Naam zoekopdracht';

@@ -838,11 +838,14 @@ GO.email.EmailComposer = function(config) {
 							this.templatesStore.baseParams.default_template_id=this.showConfig.template_id;
 							this.templatesStore.load();
 							delete this.templatesStore.baseParams.default_template_id;
-						}else
+						}else if(this.bodyContentAtWindowOpen==this.editor.getValue() || confirm(GO.email.lang.confirmLostChanges))
 						{
 							this.showConfig.template_id=item.template_id;
 							this.showConfig.keepEditingMode=true;
 							this.show(this.showConfig);
+						}else
+						{
+							return false;							
 						}
 					}
 				}
@@ -1285,12 +1288,13 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 						if (action.result.data.inline_attachments) {
 							this.inline_attachments = action.result.data.inline_attachments;
 						}
-						if (action.result.data.attachments) {
+
+						if (!config.keepEditingMode && action.result.data.attachments) {
 							this.attachmentsStore.loadData({
 								results : action.result.data.attachments
 							}, true);
 						}
-						
+
 						this.afterShowAndLoad(params.task!='opendraft', config);
 					},
 					scope : this

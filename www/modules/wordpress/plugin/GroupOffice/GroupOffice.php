@@ -23,19 +23,22 @@ if(isset($go_config['config_file'])){
 	require($config['root_path'].'Group-Office.php');
 	//ini_set('display_errors', 0);
 }
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL & ~E_NOTICE);
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL & ~E_NOTICE);
 
 class groupoffice_connector {
 
 	function __construct() {
 
 		$this->wp_go_config = get_option('groupoffice_config');
-		require($this->wp_go_config['config_file']);
-		$this->go_config = $config;
 
-		require_once($config['root_path'] . 'classes/database/base_db.class.inc.php');
-		require_once($config['root_path'] . 'classes/database/mysql.class.inc.php');
+		if(file_exists($this->wp_go_config['config_file'])){
+			require($this->wp_go_config['config_file']);
+			$this->go_config = $config;
+
+			require_once($config['root_path'] . 'classes/database/base_db.class.inc.php');
+			require_once($config['root_path'] . 'classes/database/mysql.class.inc.php');
+		}
 	}
 
 	function get_database() {

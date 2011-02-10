@@ -226,7 +226,7 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	{
 		fieldLabel: GO.lang['strEmail'], 
 		name: 'email',
-		vtype:'email'
+		vtype:'emailAddress'
 	});				
 		
 	this.formHomepage = new Ext.form.TextField(

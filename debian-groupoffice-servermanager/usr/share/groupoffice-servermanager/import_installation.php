@@ -5,10 +5,10 @@
  *
  * Usage:
  * ((to use this file, type the next line in the console))
- * php import_installation.php --importdomain=[theimporteddomain]
+ * php import_installation.php --domain=[theimporteddomain]
  *
  * optional:
- * --importconfig=[theconfigfilepath]
+ * --go_config=[theconfigfilepath]
  * --importroot[thefolderwiththerootfiles]
  */
 
@@ -20,25 +20,25 @@ require('/usr/share/groupoffice/Group-Office.php');
 $args = parse_cli_args($argv);
 
 // Checken of het te importeren domein opgegeven is.
-if(!isset($args['importdomain']))
-	die("@#!&@! - No domain given as argument!\n\n");
+if(!isset($args['domain']))
+	die("The domain argument is required\n\n");
 
 // Checken of het te importeren domein opgegeven is.
 if(!isset($args['importroot']))
-		$args['importroot'] = "/home/govhosts/".$args['importdomain']."/data/";
+		$args['importroot'] = "/home/govhosts/".$args['domain']."/data/";
 
 // Checken of het te importeren domein opgegeven is.
-if(!isset($args['importconfig']))
-	$args['importconfig'] = '/etc/groupoffice/'.$args['importdomain'].'/config.php';
+if(!isset($args['go_config']))
+	$args['go_config'] = '/etc/groupoffice/'.$args['domain'].'/config.php';
 
 // Checken of de config file bestaat
-if(!file_exists($args['importconfig']))
-	die("@#!&@! - ".$args['importconfig']." not found!\n\n");
+if(!file_exists($args['go_config']))
+	die($args['go_config']." not found!\n\n");
 
 // Een symlink aanmaken in de map $args['importroot'] - data
-if(!is_dir('/home/govhosts/'.$args['importdomain'].'/groupoffice'))
+if(!is_dir('/home/govhosts/'.$args['domain'].'/groupoffice'))
 {
-	$symlink = 'ln -s /usr/share/groupoffice /home/govhosts/'.$args['importdomain'].'/groupoffice';
+	$symlink = 'ln -s /usr/share/groupoffice /home/govhosts/'.$args['domain'].'/groupoffice';
 	system($symlink, $status);
 
 	if($status!=0)
@@ -46,7 +46,7 @@ if(!is_dir('/home/govhosts/'.$args['importdomain'].'/groupoffice'))
 }
 
 // include de config zodat deze uitgelezen kan worden
-include_once($args['importconfig']);
+include_once($args['go_config']);
 
 // Maak een nieuwe instantie aan van config voor het geval er nog oude waardes nodig zijn.
 $newconfig = $config;
@@ -54,10 +54,10 @@ $newconfig = $config;
 // Set de nieuwe waardes in de nieuwe config array
 $newconfig['file_storage_path'] = $args['importroot'];
 $newconfig['host'] = '/';
-$newconfig['root_path'] = '/home/govhosts/'.$args['importdomain'].'/groupoffice/';
+$newconfig['root_path'] = '/home/govhosts/'.$args['domain'].'/groupoffice/';
 
 // Schrijf de nieuwe waardes in de config file.
-$handle = @fopen($args['importconfig'], 'w+');
+$handle = @fopen($args['go_config'], 'w+');
 fwrite($handle,"<?php\n");
 foreach($newconfig as $key => $value)
 {
@@ -71,7 +71,7 @@ foreach($newconfig as $key => $value)
 
 	// Text opbouwen
 	$text = '$config[\''.$key.'\']='.$value.';';
-	
+
 	// Text naar bestand schrijven
 	fwrite($handle,$text."\n");
 }
@@ -81,7 +81,7 @@ fclose($handle);
 system('chown www-data:www-data -R '.$args['importroot']);
 
 // De rechten van de config file aanpassen TODO: misschien beter met php
-system('chmod 644 '.$args['importconfig']);
+system('chmod 644 '.$args['go_config']);
 
 // Zorgen dat de config overeen komt met de nieuwe file.
 $config = $newconfig;
@@ -151,7 +151,7 @@ if($status==0)
 	echo "  **                             **\n";
 	echo "  *********************************\n";
 	echo "\n\n";
-	echo "The installation is now available at: ".$args['importdomain'].".\n";
+	echo "The installation is now available at: ".$args['domain'].".\n";
 	echo "Look in the server manager to see the created domain\n";
 	echo "\n\n";
 }
