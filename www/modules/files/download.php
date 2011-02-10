@@ -60,7 +60,8 @@ $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
 
 if(!$file || !file_exists($path))
 {
-    die('File not found: '.$path);
+	$GO_LANGUAGE->require_language_file('files');
+    die($lang['files']['fileNotFound']);
 }
 
 /*

@@ -44,3 +44,5 @@ $lang['files']['clickHereToDownload'] = 'Klik hier om het bestand te downloaden 
 $lang['files']['copyPasteToDownload'] = 'Klik op onderstaande beveiligde link of kopiëer hem naar de adresbalk van uw browser om het bestand te downloaden.';
 
 $lang['files']['possibleUntil'] = 'mogelijk tot';
+
+$lang['files']['fileNotFound']='Sorry, het bestand dat u probeerde te downloaden is niet gevonden.';
