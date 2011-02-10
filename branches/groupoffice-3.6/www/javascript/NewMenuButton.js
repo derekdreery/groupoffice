@@ -48,7 +48,7 @@
 
 GO.moduleManager.on('languageLoaded',function(){
 	GO.newMenuItems.push({
-		text: GO.links.lang.link,
+		text: GO.lang.link,
 		iconCls: 'has-links',
 		handler:function(item, e)
 		{
