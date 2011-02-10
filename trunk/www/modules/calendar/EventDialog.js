@@ -321,7 +321,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		if (config.event_id > 0) {
 			this.formPanel.load({
 				url : GO.settings.modules.calendar.url + 'json.php',
-				// waitMsg:GO.lang.waitMsgLoad,
+				waitMsg:GO.lang.waitMsgLoad,
 				success : function(form, action) {
 					//this.win.show();
 					

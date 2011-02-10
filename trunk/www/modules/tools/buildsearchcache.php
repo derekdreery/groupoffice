@@ -16,6 +16,8 @@ if(php_sapi_name()!='cli')
 	$GO_SECURITY->html_authenticate('tools');
 }
 
+session_write_close();
+
 $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 //$GO_SECURITY->html_authenticate('tools');
 

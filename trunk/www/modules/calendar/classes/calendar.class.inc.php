@@ -3008,7 +3008,7 @@ class calendar extends db {
 
 		$this->get_linked_events($GO_SECURITY->user_id, $link_id, $link_type);
 		while($e=$this->next_record()){
-			$e['link_count']=$GO_LINKS->count_links($e['id'], 11);
+			$e['link_count']=$GO_LINKS->count_links($e['id'], 1);
 			$e['start_time']=Date::get_timestamp($e['start_time']);
 			$records[]=$e;
 		}

@@ -3,7 +3,7 @@
 require('/etc/groupoffice/config.php');
 require($config['root_path'].'Group-Office.php');
 
-echo 'Adding admin e-mail accounts for '.$GO_CONFIG->serverclient_domains."\n";
+
 
 if(!empty($GO_CONFIG->serverclient_domains))
 {
@@ -55,10 +55,14 @@ if(!empty($GO_CONFIG->serverclient_domains))
 							//get the account because we need special folder info
 							$account = $email->get_account($account['id']);
 							$email->synchronize_folders($account);
+
+							echo 'Added admin e-mail accounts for '.$account['username']."\n";
 						}
 					}
 					catch(Exception $e){
-						echo 'Failed adding addmin account: '.$e->getMessage();
+
+						//ignore errors, user probably removed the admin account manually.
+						//echo 'Failed adding admin account: '.$e->getMessage()."\n";
 					}
 				}
 			}
