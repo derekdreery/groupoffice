@@ -6,4 +6,3 @@ modules/users/ImportDialog.js
 modules/users/SettingsDialog.js
 modules/users/MainPanel.js
 modules/users/UserPanel.js
-modules/users/CustomField.js
