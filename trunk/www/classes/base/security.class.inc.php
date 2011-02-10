@@ -744,4 +744,27 @@ class GO_SECURITY extends db {
 		}
 		return false;
 	}
+
+
+	function get_user_group_ids($user_id=0) {
+		if ($user_id == 0 || $user_id == $this->user_id) {
+			if (!isset($_SESSION['GO_SESSION']['user_groups'])) {
+				$_SESSION['GO_SESSION']['user_groups'] = array();
+
+				$this->query("SELECT group_id FROM go_users_groups WHERE user_id=?", 'i', $user_id);
+				while ($r = $this->next_record()) {
+					$_SESSION['GO_SESSION']['user_groups'][] = $r['group_id'];
+				}
+			}
+
+			return $_SESSION['GO_SESSION']['user_groups'];
+		} else {
+			$ids = array();
+			$this->query("SELECT group_id FROM go_users_groups WHERE user_id=?", 'i', $user_id);
+			while ($r = $this->next_record()) {
+				$ids[] = $r['group_id'];
+			}
+			return $ids;
+		}
+	}
 }

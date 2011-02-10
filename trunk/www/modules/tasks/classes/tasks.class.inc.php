@@ -482,7 +482,7 @@ class tasks extends db
 		if($auth_type=='write'){
 			$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
 		}
-		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
+		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 		
 		if(!empty($query))
 		{

@@ -598,7 +598,7 @@ class calendar extends db {
 			$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
 		}
 
-		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ".
+		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ".
 		" GROUP BY v.id ORDER BY ".$this->escape($sort).' '.$this->escape($dir);
 
 		$sql = $this->add_limits_to_query($sql, $start, $offset);
@@ -972,7 +972,7 @@ class calendar extends db {
 			$sql .= " LEFT JOIN cal_groups g ON g.id=c.group_id ";
 		}
 
-		$sql .= "INNER JOIN go_acl a ON (c.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
+		$sql .= "INNER JOIN go_acl a ON (c.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 	
 		$where = false;
 
@@ -1014,7 +1014,7 @@ class calendar extends db {
 			$sql .= ", g.fields ";
 		$sql .= "FROM cal_calendars c ";
 
-		$sql .= "INNER JOIN go_acl a ON (c.acl_id = a.acl_id AND a.level>1 AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
+		$sql .= "INNER JOIN go_acl a ON (c.acl_id = a.acl_id AND a.level>1 AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 
         if($groups)
             $sql .= "LEFT JOIN cal_groups g ON c.group_id = g.id ";

@@ -297,7 +297,7 @@ class email extends db {
 			if($auth_type=='write'){
 				$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
 			}
-			$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
+			$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 		}
 		
 		$sql .= " GROUP BY ac.id ORDER BY `".$this->escape($sort)."` ".$this->escape($dir);
@@ -1512,7 +1512,7 @@ class email extends db {
 		
 		$sql = "SELECT al.* FROM em_aliases al INNER JOIN em_accounts e ON (e.id=al.account_id) ";
 
-		$sql .= "INNER JOIN go_acl a ON (e.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
+		$sql .= "INNER JOIN go_acl a ON (e.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 
 		$sql .= "LEFT JOIN em_accounts_sort so ON (so.account_id=al.account_id AND so.user_id=".$user_id.")"; // Join Sort table
 
