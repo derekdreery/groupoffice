@@ -423,3 +423,5 @@ GO.lang.swfUploadPanelStrings = {
 GO.lang.orientation='Orientation';
 GO.lang.portrait='Portrait';
 GO.lang.landscape='Landscape';
+
+GO.lang.link='Link';
