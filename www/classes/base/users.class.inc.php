@@ -109,14 +109,6 @@ class GO_USERS extends db
 		}
 
 
-		$_SESSION['GO_SESSION']['user_groups']=array();
-
-		$this->query("SELECT group_id FROM go_users_groups WHERE user_id=?",'i',$userdata['id']);
-		while($r = $this->next_record()){
-			$_SESSION['GO_SESSION']['user_groups'][]=$r['group_id'];
-		}
-		
-
 		return true;
 	}
 
@@ -198,7 +190,7 @@ class GO_USERS extends db
 			{
 				$sql .= ", cf_8.* ";
 			}
-			$sql .=" FROM go_users u INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
+			$sql .=" FROM go_users u INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 			
 			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{

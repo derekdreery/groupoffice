@@ -95,7 +95,7 @@ class search extends db {
 			$sql .= ",l.description AS link_description";
 		}
 		$sql .= " FROM go_search_cache sc ".
-			"INNER JOIN go_acl a ON (sc.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." or a.group_id IN (".implode(',',$_SESSION['GO_SESSION']['user_groups'])."))) ";
+			"INNER JOIN go_acl a ON (sc.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." or a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 				
 		if($link_id>0)
 		{
