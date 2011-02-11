@@ -471,7 +471,7 @@ try {
 			/* Check for conflicts regarding resources */
 			if (isset($resources)) {
 				$cal = new calendar();
-				$concurrent_resources = $cal->get_events_in_array($resources,0, $event['start_time'], $event['end_time'], false);
+				$concurrent_resources = $cal->get_events_in_array($resources,0, $event['start_time'], $event['end_time'], true);
 
 
 				foreach ($concurrent_resources as $key=>$value) {
@@ -517,10 +517,19 @@ try {
 				$old_event = $cal->get_event($event_id);
 				$update_related = (isset($_POST['resources'])) ? false : true;
 
-				if(($old_event['status'] != 'ACCEPTED') && ($event['status'] == 'ACCEPTED'))
+				if(($old_event['status'] != 'ACCEPTED') && ($event['status'] == 'ACCEPTED')){
 					$accepted = true;
-				if(($old_event['status'] != 'DECLINED') && ($event['status'] == 'DECLINED'))
+
+					if($calendar['group_id'] > 1)//resource
+						$event['busy']='1';
+				}
+
+				if(($old_event['status'] != 'DECLINED') && ($event['status'] == 'DECLINED')){
 					$declined = true;
+					if($calendar['group_id'] > 1)//resource
+						$event['busy']='0';
+				}
+
 				if($old_event['start_time'] != $event['start_time'] || $old_event['end_time'] != $event['end_time'])
 					$modified = true;
 
@@ -580,7 +589,7 @@ try {
 				if(!$insert && $calendar['group_id'] > 1) {
 					$values_old = array_values($cf->get_values($GO_SECURITY->user_id, 1, $event_id));
 				}
-
+			
 				$cf->update_fields($GO_SECURITY->user_id, $event_id, 1, $_POST, $insert);
 
 				if(!$insert && $calendar['group_id'] > 1) {

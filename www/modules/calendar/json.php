@@ -1290,7 +1290,7 @@ try {
 			if(isset($_POST['delete_keys']))
 			{
 				try {
-					if($GO_MODULES->modules['calendar']['permission_level'] != GO_SECURITY::WRITE_PERMISSION)
+					if($GO_MODULES->modules['calendar']['permission_level'] < GO_SECURITY::WRITE_PERMISSION)
 					{
 						throw new AccessDeniedException();
 					}
