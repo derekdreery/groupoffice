@@ -977,7 +977,7 @@ try {
 						$sort_field='FROM';
 						break;
 					case 'date':
-						$sort_field='ARRIVAL';
+						$sort_field='DATE';
 						break;
 					case 'subject':
 						$sort_field='SUBJECT';
@@ -986,7 +986,7 @@ try {
 						$sort_field='SIZE';
 						break;
 					default:
-						$sort_field='ARRIVAL';
+						$sort_field='DATE';
 				}
 
 
