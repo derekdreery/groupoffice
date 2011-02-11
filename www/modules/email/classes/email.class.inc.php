@@ -280,11 +280,8 @@ class email extends db {
 	}
 
 	function get_accounts($user_id=0, $start=0, $offset=0, $sort='order', $dir='DESC', $auth_type='read') {
-		//$sql = "SELECT al.name, al.email, al.signature, al.id AS default_alias_id, a.*,u.first_name, u.middle_name, u.last_name FROM em_accounts a ".
-		//				"LEFT JOIN go_users u on u.id=a.user_id ".
-		//				"INNER JOIN em_aliases al ON (al.account_id=a.id AND al.`default`='1') ".
-		//				"WHERE type='imap'";
-
+		global $GO_CONFIG;
+		
 		$user_id=intval($user_id);
 
 		$sql = "SELECT al.name, al.email, al.signature, al.id AS default_alias_id, ac.* FROM em_accounts ac ".
@@ -293,12 +290,25 @@ class email extends db {
 
 		if($user_id > 0) {
 
+			$groups = $GLOBALS['GO_SECURITY']->get_user_group_ids($user_id);
+
+			//remove admin group because we don't want to show all e-mail accounts to the admin.
+			$g=array();
+			foreach($groups as $group_id)
+			{
+				if($group_id!=$GO_CONFIG->group_root){
+					$g[]=$group_id;
+				}
+			}
+
 			$sql .= "INNER JOIN go_acl a ON (ac.acl_id = a.acl_id";
 			if($auth_type=='write'){
 				$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
 			}
-			$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
+			$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$g)."))) ";
 		}
+
+		go_debug($sql);
 		
 		$sql .= " GROUP BY ac.id ORDER BY `".$this->escape($sort)."` ".$this->escape($dir);
 		
