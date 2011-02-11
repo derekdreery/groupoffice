@@ -453,7 +453,7 @@ class formprocessor{
 		}
 	}
 
-	function process_simple_contact_form($email){
+	function process_simple_contact_form($email, $from_email='', $from_name=''){
 		global $GO_CONFIG, $lang;
 
 		$this->check_required();
@@ -474,8 +474,12 @@ class formprocessor{
 					$body .= "\n\n".$name.":\n".$value;
 			}
 		}
-		
-		$name = isset($_POST['name']) ? $_POST['name'] : $_POST['email'];
+
+		if(empty($from_email))
+			$from_email = $_POST['email'];
+
+		if(empty($from_name))
+			$from_name = isset($_POST['name']) ? $_POST['name'].' (Via website)' : $from_email;		
 
 		if($this->no_urls && stripos($body, 'http')!==false){
 					throw new Exception('Sorry, but to prevent spamming we don\'t allow URL\'s in the message');
@@ -487,7 +491,7 @@ class formprocessor{
 		require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($email, $_POST['subject']);
 		$swift->set_body($body, 'plain');
-		$swift->set_from($_POST['email'], $name.' (Via website)');
+		$swift->set_from($from_email, $from_name);
 		return $swift->sendmail();
 	}
 }
