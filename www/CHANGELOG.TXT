@@ -1,3 +1,9 @@
+11/02/2011 3.6.23
+- ExtJS upgraded to 3.3.1 (Fixed grid state restore issue)
+- Z-push 1.5 compatibility
+- Invitations without e-mail module work better now
+- Various small bug fixes
+
 01/02/2011 3.6.22
 - Problem with adding tasks with ActiveSync fixed.
 - Reminders bug fixed. Some snoozed reminders wouldn't come up again.
