@@ -1,0 +1,8 @@
+modules/notes/CategoryDialog.js
+modules/notes/NotesGrid.js
+modules/notes/NoteDialog.js
+modules/notes/NotePanel.js
+modules/notes/ManageCategoriesGrid.js
+modules/notes/ManageCategoryDialog.js
+modules/notes/Stores.js
+modules/notes/MainPanel.js
