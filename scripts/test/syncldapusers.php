@@ -64,8 +64,7 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 			$args=array($gouser);
 
 			//for later
-			//$GO_EVENTS->fire_event('user_delete', $args);
-
+			$GO_EVENTS->fire_event('user_delete', $args);
 			echo 'Disabling user: '.$gouser['username']."\n";
 		}
 
@@ -107,9 +106,9 @@ $div = $db_count/$ldap_count;
 
 echo $div."\n";
 
-if($div>1.1)
+if($div>1.05)
 {
-	exit("Aborted because script was about to delete more then 10% of the users");
+	exit("Aborted because script was about to delete more then 5% of the users");
 }
 
 $sql = "SELECT id,username FROM go_users u LEFT JOIN ldap_sync l ON u.id=l.user_id WHERE ISNULL(l.user_id) ORDER BY username ASC";
