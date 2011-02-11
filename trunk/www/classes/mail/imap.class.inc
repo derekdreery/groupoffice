@@ -212,6 +212,8 @@ class imap extends imap_bodystruct {
 			$this->capability = $_SESSION['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);
 		}
 
+		go_debug('IMAP capability: '.$this->capability);
+
 		return $this->capability;
 	}
 
@@ -688,7 +690,7 @@ class imap extends imap_bodystruct {
 				break;
 		}
 		$command = $command1.$command2."\r\n";
-		//go_debug($command);
+		
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 		$status = $this->check_response($res, true);
@@ -704,7 +706,7 @@ class imap extends imap_bodystruct {
 			foreach ($vals as $i => $v) {
 				if ($body) {
 					if ($v == ']' && isset($vals[$i + 1])) {
-						if ($command2 == "BODY.PEEK[HEADER.FIELDS (DATE)]\r\n") {
+						if ($command2 == "BODY.PEEK[HEADER.FIELDS (DATE)]") {
 							$sort_key = strtotime(trim(substr($vals[$i + 1], 5)));
 						}
 						else {
@@ -737,6 +739,8 @@ class imap extends imap_bodystruct {
 				$sort_keys[$uid] = $sort_key;
 			}
 		}
+
+		go_debug($sort_keys);
 		if (count($sort_keys) != count($uids)) {
 			echo 'BUG: Client side sort array mismatch';
 			exit;

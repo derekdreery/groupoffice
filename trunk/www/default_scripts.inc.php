@@ -379,6 +379,7 @@ if(count($load_modules)) {
 	Ext.BLANK_IMAGE_URL = '<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/s.gif';
 
 	Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));
+	//Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 </script>
 <?php
 if(file_exists($GO_THEME->theme_path.'MainLayout.js')) {
