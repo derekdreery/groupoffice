@@ -24,24 +24,20 @@ GO.notes.ManageCategoriesDialog = function(config){
 	config.maximizable=true;
 	config.layout='fit';
 	config.modal=false;
-	config.resizable=false;
-	config.width=500;
-	config.height=300;
+	config.resizable=true;
+	config.width=600;
+	config.height=400;
 	config.closeAction='hide';
 	config.title= GO.notes.lang.manageCategories;					
 	config.items= this.categoriesGrid;
 	config.buttons=[{
 			text: GO.lang['cmdClose'],
-			handler: function(){
-				
-				this.hide();
-				
+			handler: function(){				
+				this.hide();				
 			},
 			scope:this
 		}					
 	];
-	
-
 	
 	GO.notes.ManageCategoriesDialog.superclass.constructor.call(this, config);
 
