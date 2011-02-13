@@ -862,8 +862,8 @@ try
 					}
 				}
 
-				$response['total'] = $ab->get_writable_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
-				if($response['total']==0)
+				$response['total'] = $ab->get_writable_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir, $query);
+				if($response['total']==0 && empty($query))
 				{
 					$ab->get_addressbook(0);
 					$response['total'] = $ab->get_writable_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir);

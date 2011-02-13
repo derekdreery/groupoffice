@@ -346,14 +346,19 @@ class addressbook extends db {
 		return $addressbooks;
 	}
 
-	function get_writable_addressbooks($user_id, $start=0, $offset=0, $sort='name', $dir='ASC') {
+	function get_writable_addressbooks($user_id, $start=0, $offset=0, $sort='name', $dir='ASC', $query='') {
 		$sql = "SELECT ab_addressbooks.* ".
 				"FROM ab_addressbooks ".
 
 		"INNER JOIN go_acl a ON (ab_addressbooks.acl_id = a.acl_id";
 		$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
-		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ".
-		" GROUP BY ab_addressbooks.id ORDER BY ab_addressbooks.".$sort." ".$dir;
+		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
+
+		if(!empty($query)){
+			$sql .= "WHERE ab_addressbooks.name LIKE '".$this->escape($query)."'";
+		}
+
+		$sql .= " GROUP BY ab_addressbooks.id ORDER BY ab_addressbooks.".$sort." ".$dir;
 
 		$sql = $this->add_limits_to_query($sql, $start, $offset);
 		$this->query($sql);
