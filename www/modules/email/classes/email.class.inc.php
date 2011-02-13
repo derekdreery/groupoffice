@@ -279,7 +279,7 @@ class email extends db {
 		return false;
 	}
 
-	function get_accounts($user_id=0, $start=0, $offset=0, $sort='order', $dir='DESC', $auth_type='read') {
+	function get_accounts($user_id=0, $start=0, $offset=0, $sort='order', $dir='DESC', $auth_type='read', $query='') {
 		global $GO_CONFIG;
 		
 		$user_id=intval($user_id);
@@ -308,9 +308,19 @@ class email extends db {
 			$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$g)."))) ";
 		}
 
+		if(!empty($query)){
+			$query = $this->escape($query);
+			$sql .= " WHERE ac.username LIKE '$query' OR al.email LIKE '$query' OR al.name LIKE '%query%'";
+		}
+
+
+		if($user_id>0){
+			$sql .= " GROUP BY ac.id ";
+		}
+
 		go_debug($sql);
 		
-		$sql .= " GROUP BY ac.id ORDER BY `".$this->escape($sort)."` ".$this->escape($dir);
+		$sql .= " ORDER BY `".$this->escape($sort)."` ".$this->escape($dir);
 		
 		$sql = $this->add_limits_to_query($sql, $start, $offset);
 		$this->query($sql);

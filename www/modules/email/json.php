@@ -1251,7 +1251,9 @@ try {
 
 				$start = isset ( $_POST['start'] ) ? $_POST['start'] : 0;
 				$limit = isset ( $_POST['limit'] ) ? $_POST['limit'] : 0;
-				$response['total'] = $email->get_accounts($GO_SECURITY->user_id,$start, $limit, $sort, $dir,'write');
+
+				$query = !empty($_POST['query']) ? '%'.$_POST['query'].'%' : '';
+				$response['total'] = $email->get_accounts($GO_SECURITY->user_id,$start, $limit, $sort, $dir,'write', $query);
 
 				while($record = $email->next_record()) {
 					$response['results'][] = array(

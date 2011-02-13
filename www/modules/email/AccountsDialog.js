@@ -22,8 +22,7 @@ GO.email.AccountsDialog = function(config){
 	this.accountsGrid = new GO.email.AccountsGrid({
 		region:'center'
 	});
-	this.accountDialog = new GO.email.AccountDialog();
-
+	
 	config.maximizable=true;
 	config.layout='fit';
 	config.modal=false;
@@ -35,35 +34,7 @@ GO.email.AccountsDialog = function(config){
 	config.title=GO.email.lang.accounts;	
 
 
-	config.tbar = [{
-		iconCls: 'btn-add',
-		text: GO.lang.cmdAdd,
-		cls: 'x-btn-text-icon',
-		handler: function(){
-			this.accountDialog.show();
-		},
-		scope: this,
-		disabled: !GO.settings.modules.email.write_permission
-	},{
-		iconCls: 'btn-delete',
-		text: GO.lang.cmdDelete,
-		cls: 'x-btn-text-icon',
-		handler: function(){
-			this.accountsGrid.deleteSelected({
-				callback: function(){
-					if(GO.email.aliasesStore.loaded)
-					{
-						GO.email.aliasesStore.reload();
-					}
-					this.accountsGrid.fireEvent('delete', this);
-				},
-				scope: this
-			});
-		},
-		scope:this,
-		disabled: !GO.settings.modules.email.write_permission
-	}];
-
+	
 	config.buttons=[{
 		text: GO.lang.cmdClose,
 		handler: function(){this.hide();},
@@ -72,20 +43,7 @@ GO.email.AccountsDialog = function(config){
 
 	config.items=this.accountsGrid;
 
-	this.accountDialog.on('save', function(){
-		this.accountsGrid.store.reload();
-		if(GO.email.aliasesStore.loaded)
-		{
-			GO.email.aliasesStore.reload();
-		}
-	}, this);
-
-	this.accountsGrid.on('rowdblclick', function(grid, rowIndex){
-		var record = grid.getStore().getAt(rowIndex);
-
-		this.accountDialog.show(record.data.id);
-
-	}, this);
+	
 
 	config.listeners={
 		render:function(){
