@@ -753,14 +753,19 @@ class email extends db {
 		$id = $this->escape($id);
 		$sql = "DELETE FROM em_accounts WHERE id='$id'";
 		if ($this->query($sql)) {
+			$sql = "DELETE FROM em_folders_expanded WHERE folder_id IN (SELECT id FROM em_folders WHERE account_id=$id);";
+
 			$sql = "DELETE FROM em_aliases WHERE account_id='$id'";
 			$this->query($sql);
 			$sql = "DELETE FROM em_folders WHERE account_id='$id'";
 			$this->query($sql);
 			$sql = "DELETE FROM em_filters WHERE account_id='$id'";
 			$this->query($sql);
-
 			$sql = "DELETE FROM em_messages_cache WHERE account_id='$id'";
+			$this->query($sql);
+			$sql = "DELETE FROM em_accounts_collapsed WHERE account_id='$id'";
+			$this->query($sql);
+			$sql = "DELETE FROM em_accounts_sort WHERE account_id='$id'";
 			$this->query($sql);
 
 			$params = array($id);
@@ -1346,7 +1351,7 @@ class email extends db {
 		go_debug($user);
 		$email = new email();
 		$del = new email();
-		$email->get_accounts($user['id']);
+		$email->query("SELECT id FROM em_accounts WHERE id=?", "i", $user['id']);
 		while ($email->next_record()) {
 			$del->delete_account($email->f("id"));
 		}
