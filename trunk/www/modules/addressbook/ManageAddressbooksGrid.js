@@ -60,7 +60,10 @@ GO.addressbook.ManageAddressbooksGrid = function(config){
 				}, 
 				disabled: !GO.settings.modules.addressbook.write_permission,
 				scope: this
-			}
+			},'-',new GO.form.SearchField({
+				store: config.store,
+				width:150
+			})
 		];
 	
 	GO.addressbook.ManageAddressbooksGrid.superclass.constructor.call(this, config);
