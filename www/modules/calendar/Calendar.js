@@ -1825,7 +1825,12 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					GO.calendar.permissionsDialog.show(0);
 				},
 				scope: this
-			}))
+			}));
+
+			tbar.push(new GO.form.SearchField({
+				store: this.writableCalendarsStore,
+				width:150
+			}));
 
 			this.calendarsGrid = new GO.grid.GridPanel( {
 				title: GO.calendar.lang.calendars,

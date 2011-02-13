@@ -1019,19 +1019,24 @@ class calendar extends db {
         if($groups)
             $sql .= "LEFT JOIN cal_groups g ON c.group_id = g.id ";
 
-
+		$where=false;
 		if(!empty($query)){
-			$sql .= " AND c.name LIKE '".$this->escape($query)."'";
+			$where = true;
+			$sql .= " WHERE c.name LIKE '".$this->escape($query)."'";
 		}
 
 		if(!$show_all) {
+
+			$sql .= $where ? ' AND ' : ' WHERE ';
+
+
 			if($resources) {
-				$sql .= " AND c.group_id > 1";
+				$sql .= " c.group_id > 1";
 			}else
 				$group_id = 1;
 
 			if($group_id>-1) {
-				$sql .= " AND c.group_id = ".$this->escape($group_id);
+				$sql .= " c.group_id = ".$this->escape($group_id);
 			}
 			$sql .= " GROUP BY c.id ORDER BY c.".$this->escape($sort.' '.$dir);
 		}else {
