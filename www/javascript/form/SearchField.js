@@ -43,6 +43,7 @@ GO.form.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
     width:180,
     hasSearch : false,
     paramName : 'query',
+	emptyText: GO.lang.strSearch,
 
     onTrigger1Click : function(){
         if(this.hasSearch){
