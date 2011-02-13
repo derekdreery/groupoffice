@@ -81,7 +81,10 @@ GO.notes.ManageCategoriesGrid = function(config){
 				this.changed=true;				
 			},
 			scope: this
-		}];
+		},'-',new GO.form.SearchField({
+			store: config.store,
+			width:150
+		})];
 	
 	
 	
