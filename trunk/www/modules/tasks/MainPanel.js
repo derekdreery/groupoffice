@@ -410,7 +410,10 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 						this.tasklistsGrid.deleteSelected();
 					},
 					scope:this
-				}]
+				},'-',new GO.form.SearchField({
+					store: GO.tasks.writableTasklistsStore,
+					width:150
+				})]
 			});
 
 			this.categoriesGrid = new GO.grid.GridPanel( {
