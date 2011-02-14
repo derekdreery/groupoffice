@@ -126,5 +126,8 @@ GO.calendar.lang.forthcomingAppointments='Toekomstige afspraken';
 GO.calendar.lang.quarterShort = 'K';
 
 GO.calendar.lang.globalsettings_templatelabel = 'Naam template';
-GO.calendar.lang.globalsettings_allchangelabel = 'Bestaande veranderen?';
+GO.calendar.lang.globalsettings_allchangelabel = 'Bestaande agenda\'s hernoemen?';
 GO.calendar.lang.globalsettings_renameall = 'Weet u zeker dat u alles wilt hernoemen?';
+
+
+GO.calendar.lang.publishICS='Publiceer iCalendar bestand voor afgelopen maand en toekomstige afspraken. Let op! De agenda wordt voor iedereen leesbaar.';

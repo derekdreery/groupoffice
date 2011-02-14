@@ -138,5 +138,7 @@ GO.calendar.lang.forthcomingAppointments='Forthcoming appointments';
 GO.calendar.lang.quarterShort = 'Q';
 
 GO.calendar.lang.globalsettings_templatelabel = 'Template';
-GO.calendar.lang.globalsettings_allchangelabel = 'Change all?';
-GO.calendar.lang.globalsettings_renameall = 'Rename all?';
+GO.calendar.lang.globalsettings_allchangelabel = 'Rename all existing';
+GO.calendar.lang.globalsettings_renameall = 'Are you sure you want to rename all default user calendars?';
+
+GO.calendar.lang.publishICS='Publish iCalendar file of last month and future events. Caution! The calendar will be readable to everyone.';

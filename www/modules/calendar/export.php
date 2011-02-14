@@ -15,15 +15,14 @@
 
 require_once("../../Group-Office.php");
 
-$GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('calendar');
-
-require_once($GO_MODULES->class_path.'calendar.class.inc.php');
-require_once($GO_MODULES->class_path.'go_ical.class.inc');
-$ical = new go_ical();
+require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
+require_once($GO_MODULES->modules['calendar']['class_path'].'go_ical.class.inc');
+$ical = new go_ical('2.0');
 $ical->line_break="\r\n";
 $ical->dont_use_quoted_printable=true;
 //$ical->line_break="\r\n";
+
+$months_in_past = isset($_REQUEST['months_in_past']) ? intval($_REQUEST['months_in_past']) : 0;
 
 if (isset($_REQUEST['calendar_id']) && $calendar = $ical->get_calendar($_REQUEST['calendar_id']))
 {
@@ -34,6 +33,14 @@ if (isset($_REQUEST['calendar_id']) && $calendar = $ical->get_calendar($_REQUEST
 	$calendar = false;
 	$filename = $event['name'].'.ics';
 }
+if(!$calendar || !$calendar['public']){
+	$GO_SECURITY->authenticate();
+	$GO_MODULES->authenticate('calendar');
+
+	if($calendar && !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])){
+		die('Access denied');
+	}
+}
 
 if (!isset($filename))
 {
@@ -42,7 +49,7 @@ if (!isset($filename))
 {
 	$browser = detect_browser();
 
-	header('Content-Type: text/calendar;charset=UTF-8');
+	header('Content-Type: text/plain;charset=UTF-8');
 	//header('Content-Length: '.filesize($path));
 	header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
 	if ($browser['name'] == 'MSIE')
@@ -59,7 +66,7 @@ if (!isset($filename))
 
 	if ($calendar)
 	{
-		echo $ical->export_calendar($_REQUEST['calendar_id']);
+		echo $ical->export_calendar($_REQUEST['calendar_id'], $months_in_past);
 	}elseif($event)
 	{
 		echo $ical->export_event($_REQUEST['event_id']);

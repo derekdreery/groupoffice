@@ -17,6 +17,8 @@ GO.calendar.CalendarDialog = function(config)
 	{
 		config = {};
 	}
+
+	
 	
 	this.propertiesTab = new Ext.form.FormPanel({
 		url: GO.settings.modules.calendar.url+'action.php',		
@@ -41,6 +43,10 @@ GO.calendar.CalendarDialog = function(config)
 			allowBlank:false,
 			anchor: '100%'
 		}),
+
+
+
+
 		this.selectGroup = new GO.form.ComboBox({
 			hiddenName:'group_id',
 			fieldLabel:GO.calendar.lang.group,
@@ -106,8 +112,18 @@ GO.calendar.CalendarDialog = function(config)
 
 	this.propertiesTab.add([{
 			xtype:'plainfield',
-			fieldLabel:'URL',
+			fieldLabel:'Direct URL',
 			name:'url',
+			anchor:'100%'
+		},{
+			xtype:'checkbox',
+			hideLabel:true,
+			boxLabel:GO.calendar.lang.publishICS,
+			name:'public'
+		},{
+			xtype:'plainfield',
+			fieldLabel:'iCalendar URL',
+			name:'ics_url',
 			anchor:'100%'
 		},
 		this.exportButton = new Ext.Button({

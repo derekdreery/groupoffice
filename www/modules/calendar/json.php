@@ -1092,6 +1092,7 @@ try {
 			}
 
 			$response['data']['url']='<a class="normal-link" target="_blank" href="'.$url.'">'.$lang['calendar']['rightClickToCopy'].'</a>';
+			$response['data']['ics_url']='<a class="normal-link" target="_blank" href="'.$GO_MODULES->modules['calendar']['full_url'].'export.php?calendar_id='.$response['data']['id'].'&months_in_past=1">'.$lang['calendar']['rightClickToCopy'].'</a>';
 
 			$response['success']=true;
 			break;
