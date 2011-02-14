@@ -911,6 +911,8 @@ try {
 			if(isset($_POST['tasklist_id']))
 				$calendar['tasklist_id']=$_POST['tasklist_id'];
 
+			$calendar['public']=isset($_POST['public']) ? '1' : '0';
+
 
 			if(empty($calendar['name'])) {
 				throw new Exception($lang['common']['missingField']);

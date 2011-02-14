@@ -58,39 +58,82 @@ class go_ical extends calendar
 			"METHOD:".$method.$this->line_break;
 	}
 
-	function export_timezone($timezone=null){
+	function format_transition_hour($hour){		
 
-		if(!isset($timezone))
+		if($hour<0){
+			$prefix = '-';
+			$hour = $hour*-1;
+		}else
+		{
+			$prefix = '+';
+		}
+
+		if($hour<10)
+			$hour = '0'.$hour;
+
+		$hour = $prefix.$hour;
+
+		return $hour;
+	}
+
+	function export_timezone($timezone=null, $set_timezone_id=false){
+
+		if(empty($timezone))
 			$timezone = date_default_timezone_get ();
 
 		$tz = new DateTimeZone($_SESSION['GO_SESSION']['timezone']);
 		$transitions = $tz->getTransitions();
 		$start_of_year = mktime(0,0,0,1,1);
 
+		$STANDARD_TZOFFSETFROM=$STANDARD_TZOFFSETTO=$DAYLIGHT_TZOFFSETFROM=$DAYLIGHT_TZOFFSETTO='+00';
+
+		$STANDARD_RRULE='';
+		$DAYLIGHT_RRULE='';
+
 		for($i=0,$max=count($transitions);$i<$max;$i++) {
 			if($transitions[$i]['ts']>$start_of_year) {
 				$dst_end = $transitions[$i];
-				$dst_start = $transitions[$i+1];
+				$dst_start = $transitions[$i+1];				
+
+				$STANDARD_TZOFFSETFROM=$this->format_transition_hour($dst_end['offset']/3600);
+				$STANDARD_TZOFFSETTO=$this->format_transition_hour($dst_start['offset']/3600);
+
+				$DAYLIGHT_TZOFFSETFROM=$this->format_transition_hour($dst_start['offset']/3600);
+				$DAYLIGHT_TZOFFSETTO=$this->format_transition_hour($dst_end['offset']/3600);
+
+				$DAYLIGHT_RRULE = "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=".date('n', $dst_end['ts']). $this->line_break;
+				$STANDARD_RRULE="RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=".date('n', $dst_start['ts']). $this->line_break ;
+
+
 				break;
 			}
 		}
+
+		$timezone_name = $tz->getName();
+		
+		//hack for outlook. It only treats recurring events right with this name. When a daily recurring event goes from daylight to standard time it shifts.
+		if($timezone_name=='Europe/Amsterdam' || $timezone_name=='Europe/Brussels' || $timezone_name=='Europe/Berlin')
+			$timezone_name = 'W. Europe Standard Time';
+
+		if($set_timezone_id)
+			$this->timezone_id = $timezone_name;
 		
 		$t="BEGIN:VTIMEZONE" . $this->line_break .
-				"TZID:" . $tz->getName() . $this->line_break .
+				"TZID:" . $timezone_name . $this->line_break .
 				"LAST-MODIFIED:19870101T000000Z" . $this->line_break .
 				"BEGIN:STANDARD" . $this->line_break .
-				"DTSTART:19671029T020000" . $this->line_break .
-				"RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=".date('n', $dst_end['ts']). $this->line_break .
-				"TZOFFSETFROM:-".date('H', $dst_start['ts'])."00" . $this->line_break .
-				"TZOFFSETTO:-".date('H', $dst_end['ts'])."00" . $this->line_break .
-				"TZNAME:".$tz->getName() ." Standard". $this->line_break .
+				"DTSTART:16010101T000000" . $this->line_break .
+				$STANDARD_RRULE.
+				"TZOFFSETFROM:".$STANDARD_TZOFFSETFROM."00" . $this->line_break .
+				"TZOFFSETTO:".$STANDARD_TZOFFSETTO."00" . $this->line_break .
+				//"TZNAME:".$timezone_name ." Standard". $this->line_break .
 				"END:STANDARD" . $this->line_break .
 				"BEGIN:DAYLIGHT" . $this->line_break .
-				"DTSTART:19870405T020000" . $this->line_break .
-				"RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=".date('n', $dst_start['ts']). $this->line_break .
-				"TZOFFSETFROM:-".date('H', $dst_end['ts'])."00" . $this->line_break .
-				"TZOFFSETTO:-".date('H', $dst_start['ts'])."00" . $this->line_break .
-				"TZNAME:".$tz->getName() ." DST" . $this->line_break .
+				"DTSTART:16010101T000000" . $this->line_break .
+				$DAYLIGHT_RRULE.
+				"TZOFFSETFROM:".$DAYLIGHT_TZOFFSETFROM."00" . $this->line_break .
+				"TZOFFSETTO:".$DAYLIGHT_TZOFFSETTO."00" . $this->line_break .
+				//"TZNAME:".$timezone_name ." DST" . $this->line_break .
 				"END:DAYLIGHT" . $this->line_break .
 				"END:VTIMEZONE" . $this->line_break;
 		return $t;
@@ -123,13 +166,17 @@ class go_ical extends calendar
 		return $ics;
 	}
 
-	function export_calendar($calendar_id)
+	function export_calendar($calendar_id, $months_in_past=0)
 	{
 		$ics = $this->export_calendar_header();
 
+		$ics .= $this->export_timezone('', true);
+
 		$cal = new calendar();
 
-		$cal->get_events(array($calendar_id));
+		$start_time = $months_in_past > 0 ? Date::date_add(time(),0,-$months_in_past) : 0;
+
+		$cal->get_events(array($calendar_id),0, $start_time);
 		while($cal->next_record())
 		{
 			$ics .= $this->convert_event($cal->record);
@@ -190,6 +237,14 @@ class go_ical extends calendar
 		}
 
 		$lines[] = "BEGIN:VEVENT";
+
+		if (empty($event['uuid'])) {
+
+			$db = new db();
+			$event['uuid'] = $ue['uuid'] = UUID::create('event', $event['id']);
+			$ue['id'] = $event['id'];
+			$db->update_row('cal_events', 'id', $ue);
+		}
 
 		$lines[] = "UID:".$event['uuid'];
 
@@ -297,7 +352,7 @@ class go_ical extends calendar
 			}
 			if($this->timezone_id != '')
 			{
-				$line .= ";TZID=".$this->timezone_id.":".$start_date;
+				$line .= ";TZID=\"".$this->timezone_id."\":".$start_date;
 			}else
 			{
 				$line .= ":".$start_date;
@@ -313,7 +368,7 @@ class go_ical extends calendar
 			}
 			if($this->timezone_id != '')
 			{
-				$line .= ";TZID=".$this->timezone_id.":".$end_date;
+				$line .= ";TZID=\"".$this->timezone_id."\":".$end_date;
 			}else
 			{
 				$line .= ":".$end_date;
@@ -609,7 +664,7 @@ class go_ical extends calendar
 			}
 		}
 
-		$timestamp = date($this->datetime_format, $event['mtime']);
+		$timestamp = gmdate($this->datetime_format, $event['mtime']).'Z';
 		$lines[]= "DTSTAMP:".$timestamp;
 		$lines[]= "LAST-MODIFIED:".$timestamp;
 		//$lines[]= "CREATED:".$timestamp;
