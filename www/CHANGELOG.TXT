@@ -1,3 +1,7 @@
+- Public icalendar file
+- Sieve support
+- Optimized for very large installations 20.000 users.
+
 11/02/2011 3.6.23
 - ExtJS upgraded to 3.3.1 (Fixed grid state restore issue)
 - Z-push 1.5 compatibility
