@@ -686,15 +686,15 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 				this.registerEvent(eventData.domId, eventData);
 
-				if(!eventData.read_only)
-				{
+				//if(!eventData.read_only)
+				//{
 					event.on('mousedown', function(e, eventEl){
 						eventEl = Ext.get(eventEl).findParent('div.x-calGrid-month-event-container', 2, true);
 
 						this.selectEventElement(eventEl);
 						this.clickedEventId=eventEl.id;
 					}, this);
-				}
+				//}
 
 				event.on('dblclick', function(e, eventEl){
 

@@ -485,6 +485,8 @@ try {
 
 			$calendar_props=array();
 
+			$permission_levels=array();
+
 			foreach($check_calendars as $calendar_id){
 
 				$calendar = $calendar_props[] = $cal->get_calendar($calendar_id);
@@ -496,6 +498,9 @@ try {
 				}
 
 				$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
+
+				$permission_levels[$calendar_id]=$response['permission_level'];
+
 				if($response['permission_level']>1){
 					$response['write_permission']=true;
 				}
@@ -592,7 +597,7 @@ try {
 								'repeats'=>!empty($event['rrule']),
 								'all_day_event'=>$event['all_day_event'],
 								'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time']),
-								'read_only'=> $event['read_only'] || ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']) ? true : false,
+								'read_only'=> $event['read_only'] || ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']) || $permission_levels[$event['calendar_id']]<GO_SECURITY::WRITE_PERMISSION ? true : false,
 								'username' => $username,
 								'duration' => $duration,
 								'num_participants' => $num_participants
@@ -904,6 +909,7 @@ try {
 									'repeats'=>!empty($event['rrule']),
 									'private'=>$private,
 									'write_permission'=>$view_calendar['write_permission'],
+									'read_only'=> ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']) || !$view_calendar['write_permission'] ? true : false,
 									'mtime' => $event['mtime']
 					);
 					$count++;

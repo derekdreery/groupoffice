@@ -1180,6 +1180,13 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			event.on('mouseup', function(){
 				this.eventMouseUp=true;
 			}, this);
+		}else
+		{
+			event.on('mousedown', function(e, eventEl){
+				eventEl = Ext.get(eventEl).findParent('div.x-calGrid-event-container', 4, true);
+				this.selectEventElement(eventEl);
+				this.clickedEventId=eventEl.id;
+			}, this);
 		}
 
 		event.on('dblclick', function(e, eventEl){
@@ -1216,7 +1223,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 			day: day
 		};
 
-		if(this.writePermission && !eventData['private'] && !eventData.noResize)
+		if(!eventData.read_only && !eventData['private'] && !eventData.noResize)
 		{
 			var resizer = new Ext.Resizable(event, {
 				handles: 's',
