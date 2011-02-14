@@ -1215,6 +1215,12 @@ try {
 				if($event)
 				{
 					$new_event['calendar_id'] = ($calendar_id) ? $calendar_id : $event['calendar_id'];
+
+					$calendar = $cal->get_calendar($new_event['calendar_id']);
+					if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION){
+						throw new AccessDeniedException();
+					}
+
 					$new_event['user_id'] = $GO_SECURITY->user_id;
 
 					$new_event['start_time'] = Date::date_add($event['start_time'], $offset);
