@@ -1247,6 +1247,9 @@ class GO_CONFIG {
 		$response['config']['debug']=$this->debug;
 		$response['config']['disable_flash_upload']=$this->disable_flash_upload;
 
+		$response['config']['max_attachment_size']=$this->max_attachment_size;
+		$response['config']['max_file_size']=$this->max_file_size;
+
 
 		return $response;
 	}
