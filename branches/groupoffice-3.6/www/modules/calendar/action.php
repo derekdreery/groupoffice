@@ -397,7 +397,7 @@ try {
 
 							if(!empty($_POST['send_invitation'])) {
 
-								$cal->send_invitation(array_merge($old_event, $update_event), false);
+								$cal->send_invitation(array_merge($old_event, $update_event),$calendar, false);
 							}
 						}
 					}
@@ -547,7 +547,8 @@ try {
 				$insert = true;
 				if($event_id) {
 
-					$response['files_folder_id']=$event['files_folder_id'];
+					if(isset($event['files_folder_id']))
+						$response['files_folder_id']=$event['files_folder_id'];
 					if(!empty($_POST['link'])) {
 
 						require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
@@ -706,14 +707,8 @@ try {
 				}
 			}
 
-
 			if(!empty($_POST['send_invitation'])) {
-
-				//resource_event_id needed for resource mails
-				//if(!empty($old_event['resource_event_id']))
-					//$event['resource_event_id']=$old_event['resource_event_id'];
-				
-				$cal->send_invitation($event);
+				$cal->send_invitation($event, $calendar);
 			}
 
 			if($calendar['group_id'] > 1)
