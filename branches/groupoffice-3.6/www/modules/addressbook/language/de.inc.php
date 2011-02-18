@@ -13,7 +13,7 @@ $lang['link_type'][2]=$lang['addressbook']['contact']='Kontakt';
 $lang['link_type'][3]=$lang['addressbook']['company']='Firma';
 $lang['addressbook']['customers']='Kunden';
 $lang['addressbook']['suppliers']='Lieferanten';
-$lang['addressbook']['prospects']='Aussichten';
+$lang['addressbook']['prospects']='Interessenten';
 $lang['addressbook']['contacts']='Kontakte';
 $lang['addressbook']['companies']='Firmen';
 $lang['addressbook']['newContactAdded']='Neuen Kontakt erstellt';
