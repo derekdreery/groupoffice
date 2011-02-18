@@ -740,7 +740,6 @@ class imap extends imap_bodystruct {
 			}
 		}
 
-		go_debug($sort_keys);
 		if (count($sort_keys) != count($uids)) {
 			echo 'BUG: Client side sort array mismatch';
 			exit;
