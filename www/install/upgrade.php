@@ -8,7 +8,6 @@ if(empty($SECOND_RUN)){
 	}
 	ini_set('display_errors', 'on');
 
-
 	$quiet=false;
 	$line_break="\n";
 
@@ -20,9 +19,19 @@ if(empty($SECOND_RUN)){
 	chdir(dirname(__FILE__));
 
 
-
 	require_once('../Group-Office.php');
 	ini_set('max_execution_time', '3600');
+
+	if(is_dir($GO_CONFIG->file_storage_path.'cache'))
+	{
+		echo 'Removing cached javascripts...'.$line_break;
+
+		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		$fs = new filesystem();
+
+		$fs->delete($GO_CONFIG->file_storage_path.'cache');
+	}
+	mkdir($GO_CONFIG->file_storage_path.'cache', 0755, true);
 
 	$log_dir = $GO_CONFIG->file_storage_path.'log/upgrade/';
 	if(!is_dir($log_dir)){
@@ -184,16 +193,7 @@ if(isset($RERUN_UPDATE))
 		$GO_EVENTS->fire_event('check_database');
 	}
 
-	if(is_dir($GO_CONFIG->file_storage_path.'cache'))
-	{
-		echo 'Removing cached javascripts...'.$line_break;
-
-		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-		$fs = new filesystem();
-
-		$fs->delete($GO_CONFIG->file_storage_path.'cache');
-	}
-	mkdir($GO_CONFIG->file_storage_path.'cache', 0755, true);
+	
 
 	echo 'Done!'.$line_break.$line_break;
 
