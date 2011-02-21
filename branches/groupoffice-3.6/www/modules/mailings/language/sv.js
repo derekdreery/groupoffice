@@ -75,3 +75,5 @@ GO.mailings.lang.documentTemplateText='Du kan ladda upp ett OpenOffice.Org- elle
 GO.mailings.lang.documentFromTemplate='Dokument från mall';
 GO.mailings.lang.selectDocumentTemplate='Välj dokumentmall';
 GO.mailings.lang.selectRelevantResources='Välj relevanta resurser';
+
+GO.mailings.lang.copyingMessages='Kopierar meddelanden...';

@@ -49,3 +49,20 @@ GO.tasks.lang.visible='Synliga';
 GO.tasks.lang.selectIcalendarFile='Välj en iCalendar(*.ics)-fil';
 
 GO.tasks.lang.continueTask='Återuppta uppgift';
+GO.tasks.lang.categories='Kategorier';
+GO.tasks.lang.category='Kategori';
+GO.tasks.lang.selectCategory='Välj kategori';
+GO.tasks.lang.noTasklistSelected='Du behöver välja minst en uppgiftslista.';
+GO.tasks.lang.selectAllTasklists='Välj alla uppgiftslistor';
+
+GO.tasks.lang.globalCategory='Global kategori';
+
+GO.tasks.lang.showFutureTasks='Visa framtida uppgifter';
+
+GO.tasks.lang.incompleteTasks='Ofärdiga uppgifter';
+
+GO.tasks.lang.dueInSevenDays='Klart inom sju dagar';
+GO.tasks.lang.overDue='Klart';
+GO.tasks.lang.futureTasks='Framtida uppgifter';
+GO.tasks.lang.all='Alla';
+GO.tasks.lang.active='Aktiv';

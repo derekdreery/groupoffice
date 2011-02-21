@@ -103,3 +103,37 @@ GO.calendar.lang.ignoreConflictsMsg = 'Den här händelsen sammanfaller med en a
 GO.calendar.lang.resourceConflictTitle = 'Resurskonflikt';
 GO.calendar.lang.resourceConflictMsg = 'En eller flera resurser i den här bokningen används redan vid den angivna tidpunkten:</br>';
 GO.calendar.lang.view = 'Vy';
+
+GO.calendar.lang.calendarsPermissions='Kalenderbehörigheter';
+GO.calendar.lang.resourcesPermissions='Resursbehörigheter';
+
+GO.calendar.lang.daynames={};
+GO.calendar.lang.daynames[0]='söndag';
+GO.calendar.lang.daynames[1]='måndag';
+GO.calendar.lang.daynames[2]='tisdag';
+GO.calendar.lang.daynames[3]='onsdag';
+GO.calendar.lang.daynames[4]='torsdag';
+GO.calendar.lang.daynames[5]='fredag';
+GO.calendar.lang.daynames[6]='lördag';
+
+GO.calendar.lang.categories='Kategorier';
+GO.calendar.lang.category='Kategori';
+GO.calendar.lang.globalCategory='Global kategori';
+GO.calendar.lang.selectCategory='Välj kategori';
+
+GO.calendar.lang.duration='Tidsutrymme';
+
+GO.calendar.lang.move='Flytta';
+GO.calendar.lang.showInfo='Detaljer';
+GO.calendar.lang.copyEvent='Kopiera händelse';
+GO.calendar.lang.moveEvent='Flytta händelse';
+GO.calendar.lang.eventInfo='Händelse detaljer';
+
+GO.calendar.lang.isOrganizer='Organisatör';
+GO.calendar.lang.sendInvitationInitial='Vill du skicka mötesinbjudan till deltagarna?';
+GO.calendar.lang.sendInvitationUpdate='Vill du skicka uppdaterad mötesinformation till deltagarna?';
+GO.calendar.lang.sendCancellation='Vill du skicka ett avbokningsmeddelande till alla deltagarna?';
+
+GO.calendar.lang.forthcomingAppointments='Kommande bokningar';
+
+GO.calendar.lang.quarterShort = 'Q';

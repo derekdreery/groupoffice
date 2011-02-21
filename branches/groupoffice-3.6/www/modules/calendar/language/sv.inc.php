@@ -37,6 +37,7 @@ $lang['calendar']['statuses']['TENTATIVE'] = 'Preliminär';
 $lang['calendar']['statuses']['DELEGATED'] = 'Delegerad';
 $lang['calendar']['statuses']['COMPLETED'] = 'Avslutad';
 $lang['calendar']['statuses']['IN-PROCESS'] = 'Pågående';
+$lang['calendar']['statuses']['CONFIRMED'] = 'Bekräftad';
 
 
 $lang['calendar']['accept_mail_subject'] = 'Inbjudan till \'%s\' accepterad';
@@ -51,6 +52,7 @@ $lang['calendar']['and']= 'och';
 $lang['calendar']['repeats'] = 'Upprepas varje %s';
 $lang['calendar']['repeats_at'] = 'Upprepas varje %s på %sen';//t.ex. Upprepas varje månad på den första Måndagen
 $lang['calendar']['repeats_at_not_every'] = 'Upprepas med %s %ss mellanrum på %sar';//t.ex. Upprepas med 2 veckors mellanrum på Måndagar
+$lang['calendar']['repeats_not_every'] = 'Upprepas varje %s %s';
 $lang['calendar']['until']= 'tills'; 
 
 $lang['calendar']['not_invited']= 'Du är inte inbjuden till den här händelsen. Du kanske behöver logga in som en annan användare.';
@@ -109,3 +111,13 @@ $lang['calendar']['month_times'][2]='den andra';
 $lang['calendar']['month_times'][3]='den tredje';
 $lang['calendar']['month_times'][4]='den fjärde';
 $lang['calendar']['month_times'][5]='den femte';
+
+$lang['calendar']['rightClickToCopy']='Högerklicka för att kopiera länkadressen';
+
+$lang['calendar']['invitation']='Inbjudan';
+$lang['calendar']['invitation_update']='Uppdaterad inbjudan';
+$lang['calendar']['cancellation']='Kancellering';
+
+$lang['calendar']['non_selected'] = 'i icke-vald kalender';
+
+$lang['calendar']['linkIfCalendarNotSupported']='Använd länkarna nedan endast om din mejlklient saknar stöd för kalenderfunktioner.';

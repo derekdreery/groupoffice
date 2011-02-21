@@ -5,6 +5,7 @@ $lang['files']['name'] = 'Filer';
 $lang['files']['description'] = 'Modul för att hantera filer i Group-Office. Filer kan delas mellan användare och grupper. Använd GOTA för att redigera filer från Group-Office lokalt och spara ändringarna till servern.';
 
 $lang['link_type'][6]= 'Fil';
+$lang['link_type'][17]='Mapp';
 
 $lang['files']['fileNotFound'] = 'Filen hittades inte';
 $lang['files']['folderExists'] = 'Mappen finns redan';
@@ -36,3 +37,11 @@ $lang['files']['deleted']= 'Raderad';
 $lang['files']['file']= 'Fil';
 $lang['files']['folder']= 'Mapp';
 $lang['files']['files']='Filer';
+
+
+$lang['files']['emptyFile']='Tom fil';
+
+$lang['files']['downloadLink'] = 'Länk för nedladdning';
+$lang['files']['clickHereToDownload'] = 'Klicka här för att ladda ner filen via en säker länk';
+$lang['files']['copyPasteToDownload'] = 'Klicka på den säkrade länken nedan eller kopiera den till adressfältet i din webbläsare för att ladda ner filen.';
+$lang['files']['possibleUntil'] = 'möjlig fram till';
