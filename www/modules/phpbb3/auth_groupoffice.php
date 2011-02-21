@@ -146,8 +146,6 @@ function user_row_groupoffice($username, $password, $user_id=false)
 {
 	global $db, $config, $user;
 	
-	$pw = $encrypted ? $password : md5($password);
-
 	// first retrieve default group id
 	$sql = 'SELECT group_id
 		FROM ' . GROUPS_TABLE . "
@@ -166,19 +164,27 @@ function user_row_groupoffice($username, $password, $user_id=false)
 	$godb=get_godb();
 	
 
-	$sql = "SELECT username,email,id FROM go_users WHERE ";
+	$sql = "SELECT username,email,id,password FROM go_users WHERE ";
 
 	if($user_id)	
 	{
 		$sql .= "id=".$user_id;		
 	}else
 	{
-		$sql .= "username= '" . $db->sql_escape(utf8_clean_string($username)) . "' AND password='".$pw."'"; 
+		$sql .= "username= '" . $db->sql_escape(utf8_clean_string($username)) . "'";
 	}
 
 	$result = $godb->sql_query($sql);
 	$gorow = $godb->sql_fetchrow($result);
 	$godb->sql_freeresult($result);
+
+	if(!$user_id){
+		$pw = crypt($password, $gorow['password']);		
+		if($gorow['password']!=$pw)
+			return false;
+	}
+
+	//var_dump($gorow);
 
 	if(!$gorow)
 	{
