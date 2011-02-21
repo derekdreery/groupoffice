@@ -169,4 +169,25 @@ GO.email.lang.searchTo='Mottagare';
 GO.email.lang.searchCC='Mottagare (Kopia)';
 
 GO.email.lang.youHaveNewMails = 'Du har {new} olästa meddelande(n)';
+GO.email.lang.replaceEmailText='Denna kontakt har redan tre mejladresser i sin profil. Du kan byta ut en av de befintliga adresserna nedan genom att klicka på mejladressen du vill byta.';
+GO.email.lang.skipUnknownRecipientsAction='Visa inte detta förnster nästa gång';
+GO.email.lang.skipUnknownRecipients='Visa inte dialogen för okända mottagare';
+
+GO.email.lang.alwaysRequestNotification='Begär alltid läsbekräftelse';
+GO.email.lang.alwaysRespondToNotifications='Svara alltid på en begäran om läsbekräftelse';
+
+GO.email.lang.icalendarUpdateEvent='Updatera händelse';
+GO.email.lang.icalendarDeleteEvent='Radera händelse';
+GO.email.lang.icalendarAcceptInvitation='Acceptera';
+GO.email.lang.icalendarDeclineInvitation='Avböj';
+GO.email.lang.icalendarTentativeInvitation='Preliminärt';
+
 GO.email.lang.anyField='Alla fält';
+GO.email.lang.icalendarEventUpdated='Händelsen har uppdaterats.';
+GO.email.lang.icalendarEventCreated='Händelsen har skapats.';
+GO.email.lang.icalendarEventDeleted='Händelsen har raderats.';
+GO.email.lang.icalendarInvitationDeclined='Inbjudan har avböjts.';
+GO.email.lang.icalendarDeleteEventConfirm='Är du säker på att du vill radera denna händelse?';
+
+
+GO.email.lang.sending='Skickar...';

@@ -45,6 +45,7 @@ GO.lang.strAbout= 'Om Group-Office';
 GO.lang.strUsage= 'Användningstatistik';
 
 GO.lang.strName = 'Namn';
+GO.lang.strName2 = 'Namn ';
 GO.lang.strDescription = 'Beskrivning';
 GO.lang.strEmail = 'E-post';
 GO.lang.strUser = 'Användare';
@@ -133,7 +134,7 @@ GO.lang.cmdAddPlusNew = 'Skapa + ny';
 GO.lang.cmdSavePlusNew= 'Spara + ny';
 GO.lang.cmdSave = 'Spara';
 GO.lang.cmdSaveAs = 'Spara som';
-GO.lang.cmdSaveToGO = 'Spara i Group-Office';
+// GO.lang.cmdSaveToGO = 'Spara i Group-Office';
 GO.lang.cmdEdit = 'Redigera';
 GO.lang.cmdLink = 'Länka';
 GO.lang.cmdUnlink = 'Avlänka';
@@ -361,4 +362,62 @@ GO.lang.createdBy='Skapad av';
 GO.lang.debugModeDetected="Varning! Debug-läge aktiverat";
 GO.lang.debugModeWarning="Använd $config['debug']=true; endast vid utveckling och felsökning. Group-Office blir långsammare i debug-läge.";
 
+GO.lang.userGroup='Användargrupp';
+
 GO.lang.noItemSelectedWarning='Välj minst ett objekt.';
+GO.lang.deselectAll='Deselektera alla';
+GO.lang.confirmSelectLotsOfItems='Detta kommando kommer att selektera {count} element och kan orsaka att Group-Office blir långsamt. Är du säker på att du vill fortsätta?';
+// This action will select {count} items and might cause Group-Office to become slow. Are you sure you want continue?
+
+GO.lang.captcha='Säkerhetskod';
+GO.lang.captchaEmpty='Säkerhetskoden är tom';
+
+GO.lang.multiselectComboMaxItemsReachedWarning='Du kan maximalt välja {max} alternativ';
+// You may select a maximum of {max} options
+
+GO.lang.toScreen='Till skärmen';
+
+GO.lang.priority='Prioritet';
+GO.lang.priority_low='Låg';
+GO.lang.priority_normal='Normal';
+GO.lang.priority_high='Hög';
+
+GO.lang.none = 'Inga';
+
+GO.lang.userSelectedLanguage = 'Mitt valda språk';
+
+GO.lang.swfUploadPanelStrings = {
+		text_add: 'Lägg till fil(er)',
+		text_upload: 'Ladda upp fil(er)',
+		text_cancel: 'Avbryt uppladdning',
+		text_clear: 'Rensa kön',
+		text_progressbar: 'Progress Bar',
+		text_remove: 'Radera fil',
+		text_remove_sure: 'Är du säker på att du vill radera denna fil från kön?',
+		text_error: 'Fel',
+		text_uploading: 'Laddar upp fil: {0} ({1} av {2})',
+		header_filename: 'Filnamn',
+		header_size: 'Storlek',
+		header_status: 'Status',
+		status: {
+			0: 'Köad',
+			1: 'Laddar upp...',
+			2: 'Slutförd',
+			3: 'Fel',
+			4: 'Avbruten'
+		},
+		error_queue_exceeded: 'De valda filerna är större än det maximala antalet {0} köade filer.',
+		error_queue_slots_0: 'Det finns inga platser kvar',
+		error_queue_slots_1: 'Det finns bara en plats kvar',
+		error_queue_slots_2: 'Det finns bara {0} platser kvar',
+		error_size_exceeded: 'Den valda filen är större än den maximalt tillåtna storleken: 1 MB.',
+		error_zero_byte_file: 'Tom fil vald.',
+		error_invalid_filetype: 'Ogiltig filtyp vald.',
+		error_file_not_found: 'Filen hittas inte 404.',
+		error_security_error: 'Säkerhetsfel. Ej tillåtet att posta till en annan url.'
+	};
+
+
+GO.lang.orientation='Orientering';
+GO.lang.portrait='Porträtt';
+GO.lang.landscape='Landskap';

@@ -25,3 +25,6 @@ $lang['link_type'][4]=$lang['notes']['note']= 'Anteckning';
 $lang['notes']['notes']= 'Anteckningar';
 
 $lang['notes']['general'] = 'Allmänt';
+$lang['notes']['incomplete_delete']='Du har inte behörighet att radera alla valda anteckningar';
+
+$lang['notes']['multipleCategoriesSelected']='Flera anteckningsböcker valda';

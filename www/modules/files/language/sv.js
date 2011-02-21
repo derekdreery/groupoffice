@@ -41,3 +41,6 @@ GO.files.lang.selectFiles = 'Välj filer';
 GO.files.lang.fitImage='Passa in bild';
 GO.files.lang.normalSize='Normal storlek';
 GO.files.lang.imageViewer='Bildvisare';
+
+GO.files.lang.emailDownloadLink = 'Länk för nedladdning av e-post';
+GO.files.lang.expireTime = 'Utgångstid för nedladdningslänk';

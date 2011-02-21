@@ -63,3 +63,10 @@ $lang['email']['error_move_folder']='Kunde inte flytta mappen';
 $lang['email']['error_getaddrinfo']='Ogiltig värdadress angiven';
 $lang['email']['error_authentication']='Ogiltigt användarnamn eller lösenord';
 $lang['email']['error_connection_refused']='Anslutningen nekades. Kontrollera värdadressen och portnumret.';
+
+$lang['email']['iCalendar_event_invitation']='Detta meddelande innehåller en inbjudan till en händelse.';
+$lang['email']['iCalendar_event_not_found']='Detta meddelande innehåller en uppdatering till en händelse som inte längre finns.';
+$lang['email']['iCalendar_update_available']='Detta meddelande innehåller en uppdatering till en befintlig händelse.';
+$lang['email']['iCalendar_update_old']='Detta meddelande innehåller en händelse som redan har blivit hanterat.';
+$lang['email']['iCalendar_event_cancelled']='Detta meddelande innehåller en kancellering av en händelse.';
+$lang['email']['iCalendar_event_invitation_declined']='Detta meddelande innehåller en inbjudan till en händelse som du har avböjt.';
