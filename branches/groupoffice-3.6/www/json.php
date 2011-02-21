@@ -562,12 +562,13 @@ try {
 				$unlinks = json_decode(($_REQUEST['unlinks']), true);
 				foreach($unlinks as $unlink) {
 					$link = explode(':', $unlink);
+
 					$unlink_type = $link[0];
 					$unlink_id = $link[1];
 
 					//echo $link_id.':'.$link_type.' '.$unlink_id.':'.$unlink_type;
-
-					$GO_LINKS->delete_link($link_id, $link_type, $unlink_id, $unlink_type);
+					if($unlink_type!='folder')
+						$GO_LINKS->delete_link($link_id, $link_type, $unlink_id, $unlink_type);
 				}
 			}
 
