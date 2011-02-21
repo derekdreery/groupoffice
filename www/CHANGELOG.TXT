@@ -1,3 +1,4 @@
+- Problem with logging in to the phpbb3 admin panel is fixed.
 - Custom fields in tickets weren't formatted.
 - User custom field is in the grids now.
 - Don't send invitation to the calendar user that the appointment is created in.
