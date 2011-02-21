@@ -29,3 +29,4 @@ GO.files.lang.normalSize='Normale grootte';
 
 GO.files.lang.emailDownloadLink = 'Downloadlink emailen';
 GO.files.lang.expireTime= 'Downloaden mogelijk tot';
+GO.files.lang.newFolder = 'Nieuwe map';
