@@ -741,8 +741,8 @@ class imap extends imap_bodystruct {
 		}
 
 		if (count($sort_keys) != count($uids)) {
-			echo 'BUG: Client side sort array mismatch';
-			exit;
+			//echo 'BUG: Client side sort array mismatch';
+			//exit;
 		}
 		unset($res);
 		natcasesort($sort_keys);
