@@ -2,7 +2,20 @@
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 
-$lang['common']['about']='Verze: %s';
+$lang['common']['about']='Verze: %s
+
+Copyright (c) 2003-%s, Intermesh
+Všechna práva vyhrazena.
+Tento program je chráněn autorským zákonem a Group-Office licencí.
+
+Pro Vaše dotazy kontaktujte správce systému:
+%s
+
+Pro více informací o Group-Office navštivte:
+http://www.group-office.com
+
+Group-Office je vytvořen společností Intermesh. Pro více informací navštivte:
+http://www.intermesh.nl/en';
 
 $lang['common']['totals']='Součty';
 $lang['common']['printPage']='Strana %s z %s';
@@ -67,6 +80,7 @@ $lang['common']['postZip'] = 'PSČ (poštovní)';
 $lang['common']['visitAddress'] = 'Přechodná adresa';
 $lang['common']['postAddressHead'] = 'Adresa (poštovní)';
 $lang['common']['name'] = 'Jméno';
+$lang['common']['name2'] = 'Jméno 2';
 $lang['common']['user'] = 'Uživatel';
 $lang['common']['username'] = 'Uživatelské jméno';
 $lang['common']['password'] = 'Heslo';
@@ -212,3 +226,8 @@ $lang['common']['none']='Žádné';
 
 $lang['common']['alert']='Upozornění';
 $lang['common']['theFolderAlreadyExists']='Složka s tímto názvem již existuje';
+
+$lang['common']['other']='Ostatní';
+$lang['common']['copy']='kopírovat';
+
+$lang['common']['upload_file_to_big']='Soubor, který jste se pokusili nahrát je větší než maximální povolená velikost %s.';

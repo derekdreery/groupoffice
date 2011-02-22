@@ -61,3 +61,10 @@ $lang['email']['error_move_folder']='Nepodařilo se přesunout složku';
 $lang['email']['error_getaddrinfo']='Neplatná adres hosta';
 $lang['email']['error_authentication']='Neplatné uživatelské jméno nebo heslo';
 $lang['email']['error_connection_refused']='Spojení bylo odmítnuto. Zkontrolujte prosím hosta a číslo portu.';
+
+$lang['email']['iCalendar_event_invitation']='Tato zpráva obsahuje pozvánku k události.';
+$lang['email']['iCalendar_event_not_found']='Tato zpráva obsahuje informaci o úpravě již neexistující události.';
+$lang['email']['iCalendar_update_available']='Tato zpráva obsahuje informaci o úpravě existující události.';
+$lang['email']['iCalendar_update_old']='Tato zpráva obsahuje informaci o již probíhající události.';
+$lang['email']['iCalendar_event_cancelled']='Tato zpráva obsahuje informaci o zrušení události.';
+$lang['email']['iCalendar_event_invitation_declined']='Tato zpráva obsahuje pozvánku k události, kterou jste odmítnul(odmítla).';

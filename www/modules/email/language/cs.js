@@ -158,4 +158,26 @@ GO.email.lang.searchTo='Příjemce';
 GO.email.lang.searchCC='Příjemce (CC)';
 
 GO.email.lang.youHaveNewMails = 'Máte {new} e-mail(y/ů)';
+
+GO.email.lang.replaceEmailText='Tento kontakt má již 3 e-mailové adresy ve svém profilu. Můžete nahradit jednu z nich kliknutím na níže uvedené e-mailové adresy.';
+GO.email.lang.skipUnknownRecipientsAction='Přístě nezobrazovat toto okno';
+GO.email.lang.skipUnknownRecipients='Nezobrazovat okno o neznámém příjemci po odeslání';
+
+GO.email.lang.alwaysRequestNotification='Vždy posílat výzvu o přečtení';
+GO.email.lang.alwaysRespondToNotifications='Vždy odpovídat na výzvu o přečtení';
+
+GO.email.lang.icalendarUpdateEvent='Upravit událost';
+GO.email.lang.icalendarDeleteEvent='Smazat událost';
+GO.email.lang.icalendarAcceptInvitation='Potvrdit';
+GO.email.lang.icalendarDeclineInvitation='Odmítnout';
+GO.email.lang.icalendarTentativeInvitation='Nezávazně';
+
 GO.email.lang.anyField='Kdekoliv';
+GO.email.lang.icalendarEventUpdated='Událost byla upravena.';
+GO.email.lang.icalendarEventCreated='Událost byla vytvořena.';
+GO.email.lang.icalendarEventDeleted='Událost byla smazána.';
+GO.email.lang.icalendarInvitationDeclined='Pozvánka byla odmítnuta.';
+GO.email.lang.icalendarDeleteEventConfirm='Opravdu chcete smazat tuto událost?';
+
+
+GO.email.lang.sending='Odesílání...';

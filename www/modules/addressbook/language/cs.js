@@ -114,4 +114,14 @@ GO.addressbook.lang.confirmAddAllSearchResults='Jste si jisti, že chcete přida
 
 GO.addressbook.lang.moveEmployees='Přesunout zaměstnance';
 
+GO.addressbook.lang.emailAdded='E-mailová adresa byla v pořádku přidána ke kontaktu';
+
+GO.addressbook.lang.exportWithCompanies='Včetně společností';
+
 GO.addressbook.lang.id='ID';
+GO.addressbook.lang.exportPermission='Oprávnění exportu';
+GO.addressbook.lang.crn='Společnost Reg. číslo';
+GO.addressbook.lang.iban='IBAN';
+
+GO.addressbook.lang.unknownEmail = 'Neznámá e-mailová adresa';
+GO.addressbook.lang.strUnknownEmail = 'Tato e-mailová adresa je neznámá. Opravdu ji chcete přidat k novému kontaktu, přiřadit ke stávajícímu nebo zrušit?';

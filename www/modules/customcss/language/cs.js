@@ -1,3 +1,3 @@
-GO.customcss.lang.customcss='Vlastní CSS & Javascript';
+GO.customcss.lang.customcss='Vlastní CSS a Javaskripty';
 
 GO.customcss.lang.selectFile='Vybrat soubor';
