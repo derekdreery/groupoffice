@@ -1843,8 +1843,6 @@ GO.email.showAddressMenu = function(e, email, name)
 }
 
 
-
-
 GO.linkHandlers[9] = function(id, remoteMessage){
 
 	if(!GO.email.linkedMessagePanel){
@@ -1916,7 +1914,7 @@ GO.newMenuItems.push({
 	iconCls: 'go-link-icon-9',
 	handler:function(item, e){
 		var taskShowConfig = item.parentMenu.taskShowConfig || {};
-		taskShowConfig.link_config=item.parentMenu.link_config
+		//taskShowConfig.link_config=item.parentMenu.link_config
 		taskShowConfig.values={};
 		if(item.parentMenu.panel.data.email){
 			var to='';
