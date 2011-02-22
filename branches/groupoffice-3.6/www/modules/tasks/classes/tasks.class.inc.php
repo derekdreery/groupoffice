@@ -647,16 +647,16 @@ class tasks extends db
 		 */
 
 		$task = $this->get_task($task_id);
-		$old_start_time = $task['start_time'];
+		$old_due_time = $task['due_time'];
 
-		if(!empty($task['rrule']) && $next_recurrence_time = Date::get_next_recurrence_time($task['start_time'], $task['start_time'], 0, $task['rrule'])) {
+		if(!empty($task['rrule']) && $next_recurrence_time = Date::get_next_recurrence_time($task['due_time'], $task['due_time'], 0, $task['rrule'])) {
 			$old_id = $task['id'];
 			unset($task['completion_time'], $task['id'], $task['acl_id']);
-			$task['start_time'] = $next_recurrence_time;
+			$task['due_time'] = $next_recurrence_time;
 
-			$diff = $next_recurrence_time-$old_start_time;
+			$diff = $next_recurrence_time-$old_due_time;
 
-			$task['due_time']+=$diff;
+			$task['start_time']=time();
 			$task['reminder']+=$diff;
 
 			$task['status']='IN-PROCESS';
