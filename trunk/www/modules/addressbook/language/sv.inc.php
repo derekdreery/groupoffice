@@ -46,4 +46,13 @@ $lang['addressbook']['clickHereToView']= 'Klicka här för att visa kontakten';
 $lang['addressbook']['contactFromAddressbook']='Kontakt från %s';
 $lang['addressbook']['companyFromAddressbook']='Företag från %s';
 $lang['addressbook']['defaultSalutation']='Bästa [Herr/Fru] {first_name} {last_name}';
+
+$lang['addressbook']['multipleSelected']='Flera addressböcker valda';
+$lang['addressbook']['incomplete_delete_contacts']='Du har inte behörighet att radera alla valda kontakter';
+$lang['addressbook']['incomplete_delete_companies']='Du har inte behörighet att radera alla valda företag';
+
+$lang['addressbook']['emailAlreadyExists']='Denna kontakt har redan en e-postadress';
+$lang['addressbook']['emailDoesntExists']='E-postadressen hittades inte';
+
+$lang['addressbook']['imageNotSupported']='Bilden som laddades upp stöds inte. Bara gif-, png- och jpg-bilder går att använda.';
 ?>

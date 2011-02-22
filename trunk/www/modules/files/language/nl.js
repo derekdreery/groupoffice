@@ -29,6 +29,7 @@ GO.files.lang.normalSize='Normale grootte';
 
 GO.files.lang.emailDownloadLink = 'Downloadlink emailen';
 GO.files.lang.expireTime= 'Downloaden mogelijk tot';
+GO.files.lang.newFolder = 'Nieuwe map';
 
 GO.files.lang.applyState = 'De weergaveinstellingen van deze map toepassen voor iedereen.';
 GO.files.lang.stateLocked = 'Map weergave vastgezet door eigenaar/beheerder';

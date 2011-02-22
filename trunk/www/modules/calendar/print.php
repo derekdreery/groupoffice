@@ -25,7 +25,7 @@ $pdf = new PDF();
 $calendars = isset($_REQUEST['calendars']) ? json_decode($_REQUEST['calendars']) : array();
 
 function insert_events($calendars,$start_time,$end_time) {
-	global $cal, $lang, $pdf, $calendar_names,$view;
+	global $cal, $lang, $pdf, $calendar_names,$view, $GO_SECURITY;
 	require_once('../../classes/base/users.class.inc.php');
 	$GO_USERS = new GO_USERS();
 

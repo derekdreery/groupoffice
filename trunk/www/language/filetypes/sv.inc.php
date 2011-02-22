@@ -83,3 +83,6 @@ $lang['filetypes']['fla'] = 'Macromedia Flashdokument (Källa)';
 $lang['filetypes']['ai'] = 'Adobe Illustrator-fil';
 $lang['filetypes']['eml'] = 'E-postmeddelande';
 $lang['filetypes']['csv'] = 'Kommaseparerad textfil';
+$lang['filetypes']['js'] = 'Javaskript';
+$lang['filetypes']['sql'] = 'SQL databas export';
+$lang['filetypes']['xmind']='XMind fil';

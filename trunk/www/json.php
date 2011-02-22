@@ -591,12 +591,13 @@ try {
 				$unlinks = json_decode(($_REQUEST['unlinks']), true);
 				foreach($unlinks as $unlink) {
 					$link = explode(':', $unlink);
+
 					$unlink_type = $link[0];
 					$unlink_id = $link[1];
 
 					//echo $link_id.':'.$link_type.' '.$unlink_id.':'.$unlink_type;
-
-					$GO_LINKS->delete_link($link_id, $link_type, $unlink_id, $unlink_type);
+					if($unlink_type!='folder')
+						$GO_LINKS->delete_link($link_id, $link_type, $unlink_id, $unlink_type);
 				}
 			}
 
@@ -683,15 +684,25 @@ try {
 			require_once ($GO_MODULES->modules['addressbook']['class_path']."addressbook.class.inc.php");
 			$ab = new addressbook();
 
+
 			$response['total'] = $GO_LANGUAGE->get_address_formats();
-			while($GO_LANGUAGE->next_record()) {
+
+			$formats = array();
+
+			while($record = $GO_LANGUAGE->next_record()) {
 				if(!empty($countries[$GO_LANGUAGE->f('iso')])) {
-					$response['results'][] = array( 'iso'=>$GO_LANGUAGE->f('iso'),
-									'address_format_id'=>$GO_LANGUAGE->f('address_format_id'),
-									'country_name'=>$countries[$GO_LANGUAGE->f('iso')]);
+					$formats[$countries[$GO_LANGUAGE->f('iso')]]=$record;
 				}
 			}
-			sort($response['results']);
+
+			ksort($formats);
+
+			foreach($formats as $name => $record){
+
+				$response['results'][] = array( 'iso'=>$record['iso'],
+									'address_format_id'=>$record['address_format_id'],
+									'country_name'=>$name);
+			}
 			break;
 	}
 

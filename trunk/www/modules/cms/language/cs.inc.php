@@ -36,3 +36,7 @@ $lang['cms']['cant_move_into_itself']='Nelze přesunout do sebe';
 
 $lang['cms']['antispam_fail']='Odpověď antispamu byla chybná. Prosím, zkuste to znovu';
 $lang['cms']['no_admin_rights']="Nemáte administrátorská oprávnění pro změnu uživatelských oprávnění do složek stránek.";
+
+$lang['cms']['none'] = "ŽÁDNÉ";
+
+$lang['cms']['template_not_found'] = 'Šablona stránky nebyla nalezena. Zkontrolujte jestli pro stránku byla vytvořena šablona a existuje složka pro danou šablonu v modules/cms/template/...';

@@ -92,6 +92,7 @@ $lang['common']['postZip'] = 'Postnummer (post)';
 $lang['common']['visitAddress'] = 'Besöksadress';
 $lang['common']['postAddressHead'] = 'Postadress';
 $lang['common']['name'] = 'Namn';
+$lang['common']['name2'] = 'Namn 2';
 $lang['common']['user'] = 'Användare';
 $lang['common']['username'] = 'Användarnamn';
 $lang['common']['password'] = 'Lösenord';
@@ -239,3 +240,8 @@ $lang['common']['createdBy']='Skapad av';
 $lang['common']['none']='Ingen';
 $lang['common']['alert']='Info';
 $lang['common']['theFolderAlreadyExists']='En mapp med det namnet finns redan';
+
+$lang['common']['other']='Övrigt';
+$lang['common']['copy']='kopia';
+
+$lang['common']['upload_file_to_big']='Filen du försöker ladda upp var större än den största tillåtna storleken: %s.';

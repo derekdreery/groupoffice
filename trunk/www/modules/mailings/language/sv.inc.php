@@ -26,3 +26,4 @@ $lang['mailings']['unsubscribe']='Avsluta prenumeration';
 $lang['mailings']['unsubscription']='Klicka här för att sluta prenumerera på det här nyhetsbrevet.';
 $lang['mailings']['r_u_sure'] = 'Är du säker på att du vill avsluta din prenumeration av nyhetsbrevet?';
 $lang['mailings']['delete_success'] = 'Din prenumeration av nyhetsbrevet har avslutats.';
+$lang['mailings']['setCurrentTemplateAsDefault']='Sätt nuvarande mall som förval';

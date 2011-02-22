@@ -3121,7 +3121,7 @@ class calendar extends db {
 
 
 
-	function send_invitation($event, $insert=true){
+	function send_invitation($event, $calendar, $insert=true){
 		global $GO_CONFIG, $GO_MODULES, $lang, $GO_LANGUAGE;
 
 		$GO_LANGUAGE->require_language_file('calendar');
@@ -3131,13 +3131,18 @@ class calendar extends db {
 		$RFC822 = new RFC822();
 		//$event['id']=empty($event['resource_event_id']) ? $event_id : $event['resource_event_id'];
 		//go_debug($event['id']);
-		$this->clear_event_status($event['id'], $_SESSION['GO_SESSION']['email']);
-
+		if(!$insert){
+			//if this is an update to the event reset the accepted status of everyone except for the logged in user and the calendar user this event is saved in.
+			$sql = "UPDATE cal_participants SET status='0' WHERE user_id!=? AND user_id!=? AND event_id=?";
+			$this->query($sql,'iii', $GO_SECURITY->user_id, $calendar['user_id'], $event_id);
+		}
+			
 		$participants=array();
 		$this->get_participants($event['id']);
-		while($this->next_record()) {
-
-			if($this->f('status') !=1 || $this->f('email')!=$_SESSION['GO_SESSION']['email']) {
+		while($p = $this->next_record()) {
+			//don't send invitation to the user that is doing this and don't send
+			//it to the user of the calendar in which this event is created.
+			if($this->f('status') !=1 || ($this->f('email')!=$_SESSION['GO_SESSION']['email'] && $calendar['user_id']!=$this->f('user_id'))) {
 				$participants[] = $RFC822->write_address($this->f('name'), $this->f('email'));
 			}
 		}

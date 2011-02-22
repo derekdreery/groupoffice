@@ -29,7 +29,7 @@ GO.mailings.lang.cmdTemplateDialog= 'Upravit šablonu';
 GO.mailings.lang.cmdFormLabelReadNotification= 'Vyžádat oznámení o přečtení';
 GO.mailings.lang.cmdAddMailing= 'Přidat seznam adres';
 GO.mailings.lang.cmdDeleteMailing= 'Smazat seznam adres';
-GO.mailings.lang.cmdPanelMailings= 'Seznam adres';
+GO.mailings.lang.cmdPanelMailings= 'Seznamy adres';
 GO.mailings.lang.cmdEditMailingWindow= 'Upravit seznam adres';
 GO.mailings.lang.SelectOODocument= 'Vybrat šablonu';
 GO.mailings.lang.SelectOODocumentWindowTitle= 'Vybrat OpenOffice dokument';
@@ -80,3 +80,5 @@ GO.mailings.lang.unsubscribeHref='Odhlašovací odkaz';
 
 GO.mailings.lang.addDocumentTemplate='Přidat šablonu dokumentu';
 GO.mailings.lang.documentTemplate='Šablona dokumentu';
+
+GO.mailings.lang.copyingMessages='Kopírování zpráv...';

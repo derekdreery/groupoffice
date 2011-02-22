@@ -110,4 +110,15 @@ GO.addressbook.lang.confirmAddAllSearchResults='Är du säker på att du vill l�
 
 GO.addressbook.lang.moveEmployees='Flytta anställda';
 
+GO.addressbook.lang.emailAdded='E-postadressen för kontakten lades till';
+
+GO.addressbook.lang.exportWithCompanies='Med företag';
+
+
 GO.addressbook.lang.id='ID';
+GO.addressbook.lang.exportPermission='Exportbehörigheter';
+GO.addressbook.lang.crn='Organisationsnummer';
+GO.addressbook.lang.iban='IBAN';
+
+GO.addressbook.lang.unknownEmail = 'Okänd e-postadress';
+GO.addressbook.lang.strUnknownEmail = 'Denna e-postadress är okänd. Vill du lägga till den och skapa en ny kontakt, addera den till en befintlig kontakt eller avbryta?';

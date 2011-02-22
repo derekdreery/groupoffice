@@ -41,6 +41,7 @@ GO.files.lang.imageViewer='Image viewer';
 
 GO.files.lang.emailDownloadLink = 'Email download link';
 GO.files.lang.expireTime = 'Download link expire time';
+GO.files.lang.newFolder = 'New folder';
 
 GO.files.lang.applyState = 'Apply the folder\'s display settings for everyone.';
 GO.files.lang.stateLocked = 'Folder display locked by owner/admin';
