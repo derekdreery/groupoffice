@@ -18,11 +18,11 @@ GO.files.lang.notifyChanges = 'Informuj mě o změnách v této složce';
 GO.files.lang.comments = 'Komentář';
 GO.files.lang.downloadGOTA = 'Stáhnout pomocí GOTA';
 GO.files.lang.fileBrowser = 'Prohlížení souborů';
-GO.files.lang.thumbnails = 'Miniatury';
+GO.files.lang.thumbnails = 'Náhledy';
 GO.files.lang.saveFile='Uložit soubor';
 GO.files.lang.confirmOverwrite='{filename} již existuje, chcete přepsat tento soubor?';
 GO.files.lang.file='Soubor';
-GO.files.lang.emptyList='Prázdný seznam';
+GO.files.lang.emptyList='Vyčistit seznam';
 GO.files.lang.newFiles='Nový';
 
 GO.files.lang.olderVersions='Starší verze';
@@ -32,3 +32,6 @@ GO.files.lang.selectFiles = 'Vyberte soubory';
 GO.files.lang.fitImage='Přizpůsobit';
 GO.files.lang.normalSize='Normální velikost';
 GO.files.lang.imageViewer='Prohlížeč obrázků';
+
+GO.files.lang.emailDownloadLink = 'Emailový odkaz pro stažení';
+GO.files.lang.expireTime = 'Expirační doba';

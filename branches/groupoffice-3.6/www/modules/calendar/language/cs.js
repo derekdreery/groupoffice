@@ -10,8 +10,8 @@ GO.calendar.lang.appointments = 'Činnosti';
 GO.calendar.lang.recurrence = 'Opakování';
 GO.calendar.lang.options = 'Nastavení';
 GO.calendar.lang.repeatForever = 'opakovat vždy';
-GO.calendar.lang.repeatEvery = 'Opakovat';
-GO.calendar.lang.repeatUntil = 'Opakovat, dokud';
+GO.calendar.lang.repeatEvery = 'Opakování';
+GO.calendar.lang.repeatUntil = 'Opakování do';
 GO.calendar.lang.busy = 'Zobrazit v činnosti';
 GO.calendar.lang.allDay = 'Celé dny';
 GO.calendar.lang.navigation = 'Navigace';
@@ -41,7 +41,7 @@ GO.calendar.lang.monthsByDay = 'Měsíce podle dnů';
 GO.calendar.lang.years = 'Roky';
 GO.calendar.lang.atDays = 'V dny';
 GO.calendar.lang.noReminder = 'Nepřipomínat';
-GO.calendar.lang.reminder='Připomínat';
+GO.calendar.lang.reminder='Připomínání';
 GO.calendar.lang.participants = 'Účastníci';
 GO.calendar.lang.checkAvailability = 'Ověřit dostupnost';
 GO.calendar.lang.sendInvitation = 'Poslat pozvánku';
@@ -60,8 +60,8 @@ GO.calendar.lang.editRecurringEvent='Přejete si upravit tuto událost nebo celo
 GO.calendar.lang.selectIcalendarFile='Vyberte icalendar (*.ics) soubor';
 
 GO.calendar.lang.location='Umístění';
-GO.calendar.lang.startsAt='Začátek v';
-GO.calendar.lang.endsAt='Konec v';
+GO.calendar.lang.startsAt='Začátek';
+GO.calendar.lang.endsAt='Konec';
 GO.calendar.lang.eventDefaults='Výchozí nastavení událostí';
 
 GO.calendar.lang.importToCalendar='Přidat činnost přímo do kalendářů';
@@ -91,8 +91,42 @@ GO.calendar.lang.merge='Sloučit';
 GO.calendar.lang.ownColor = 'Pro každý kalendář použít vlastní barvu';
 
 GO.calendar.lang.ignoreConflictsTitle = 'Ignorovat konflikty?';
-GO.calendar.lang.ignoreConflictsMsg = 'Tato událost koliduje s jinou údálostí ve Vašem kalendáři. Save this event anyway?';
+GO.calendar.lang.ignoreConflictsMsg = 'Tato událost koliduje s jinou údálostí ve Vašem kalendáři. Chcete tuto událost uložit kamkoliv?';
 GO.calendar.lang.resourceConflictTitle = 'Zdroj konfliktu';
 GO.calendar.lang.resourceConflictMsg = 'Jeden nebo více zdrojů v této události používá ve stejný čas:</br>';
 
 GO.calendar.lang.view = 'Zobrazení';
+
+GO.calendar.lang.calendarsPermissions='Oprávnění kalendářů';
+GO.calendar.lang.resourcesPermissions='Oprávnění prostředků';
+
+GO.calendar.lang.daynames={};
+GO.calendar.lang.daynames[0]='Sunday';
+GO.calendar.lang.daynames[1]='Monday';
+GO.calendar.lang.daynames[2]='Tuesday';
+GO.calendar.lang.daynames[3]='Wednesday';
+GO.calendar.lang.daynames[4]='Thursday';
+GO.calendar.lang.daynames[5]='Friday';
+GO.calendar.lang.daynames[6]='Saturday';
+
+GO.calendar.lang.categories='Kategorie';
+GO.calendar.lang.category='Kategorie';
+GO.calendar.lang.globalCategory='Globální kategorie';
+GO.calendar.lang.selectCategory='Vyberte kategorii';
+
+GO.calendar.lang.duration='Doba';
+
+GO.calendar.lang.move='Přesunout';
+GO.calendar.lang.showInfo='Podrobnosti';
+GO.calendar.lang.copyEvent='Kopírování události';
+GO.calendar.lang.moveEvent='Přesun události';
+GO.calendar.lang.eventInfo='Podrobnosti události';
+
+GO.calendar.lang.isOrganizer='Organizátor';
+GO.calendar.lang.sendInvitationInitial='Chcete všem účastníkům poslat oznámení?';
+GO.calendar.lang.sendInvitationUpdate='Chcete všem účastníkům poslat oznámení o úpravě?';
+GO.calendar.lang.sendCancellation='Chcete všem účastníkům poslat oznámení o zrušení?';
+
+GO.calendar.lang.forthcomingAppointments='Nadcházející události';
+
+GO.calendar.lang.quarterShort = 'Q';

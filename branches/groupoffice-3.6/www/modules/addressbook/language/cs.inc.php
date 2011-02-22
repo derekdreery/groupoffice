@@ -47,4 +47,13 @@ $lang['addressbook']['contactFromAddressbook']='Kontakt od %s';
 $lang['addressbook']['companyFromAddressbook']='Společnost od %s';
 $lang['addressbook']['defaultSalutation']='Milý/Milá [Pane/Paní] {middle_name} {last_name}';
 
+$lang['addressbook']['multipleSelected']='Vybráno více adresářů';
+$lang['addressbook']['incomplete_delete_contacts']='Nemáte oprávnění pro smazání všech vybraných kontaktů';
+$lang['addressbook']['incomplete_delete_companies']='Nemáte oprávnění pro smazání všech vybraných společností';
+
+$lang['addressbook']['emailAlreadyExists']='E-mailová adresa je již přidána k tomuto kontaktu';
+$lang['addressbook']['emailDoesntExists']='E-mailová adresa nebyla nalezena';
+
+$lang['addressbook']['imageNotSupported']='Nahraný typ obrázku není podporován. Podporovány jsou pouze obrázky typu: gif, png a jpg.';
+
 ?>

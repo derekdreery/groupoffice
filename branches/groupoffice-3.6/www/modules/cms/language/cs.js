@@ -56,3 +56,7 @@ GO.cms.lang.enablePermissionsPerFolder='Povolit oprávnění pro tuto složku to
 
 GO.cms.lang.sortDate='Řadit podle data';
 GO.cms.lang.unused='Nelze použít pro tuto stránku';
+
+GO.cms.lang.feed='Nabídnout položky z této složky jako zdroj RSS';
+GO.cms.lang.enableRewrite='Povolit přátelské URL adresy pomocí mod_rewrite. Webový sever však musí být správně nakonfigurován a toto nastavení bude funkční pouze pro uvedenou doménu výše.';
+GO.cms.lang.rewriteBase='mod_rewrite cesta';

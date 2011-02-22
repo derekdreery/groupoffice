@@ -41,10 +41,11 @@ GO.lang.noJava='Java Webstart není nainstalována. Java umožňuje snažší pr
 
 GO.lang.strHelpContents='Obsah nápovědy';
 GO.lang.strReportBug='Oznámit potíže';
-GO.lang.strAbout='O firmě Group-Office';
+GO.lang.strAbout='Informace o Group-Office';
 GO.lang.strUsage='Statistika využití ';
 
 GO.lang.strName = 'Jméno';
+GO.lang.strName2 = 'Jméno 2';
 GO.lang.strDescription = 'Popis';
 GO.lang.strEmail = 'E-mail';
 GO.lang.strUser = 'Uživatel';
@@ -173,7 +174,7 @@ GO.lang.upload = 'Nahrát';
 GO.lang.download = 'Stáhnout';
 GO.lang.uploadFiles = 'Nahrát soubory';
 
-GO.lang.displayingItems = 'Zobrazení položek {0} - {1} z {2}';
+GO.lang.displayingItems = 'Zobrazených položek {0} - {1} z {2}';
 GO.lang.strNoItems = 'Žádné položky k zobrazení';
 
 GO.lang.strLinkItems = 'Hledat v odkazech';
@@ -237,10 +238,10 @@ GO.lang.strTime='Čas';
 
 GO.lang.selectWeek='Vyberte týden';
 
-GO.lang.shortDays = ['Ne', 'Po', 'Ut', 'St', 'Ct', 'Pa','So'];
+GO.lang.shortDays = ['Ne', 'Po', 'Út', 'St', 'Čt', 'Pá','So'];
 
 GO.lang.noRecurrence = 'Žádné opakování';
-GO.lang.monthsByDate = 'Měsíce podle datumu';
+GO.lang.monthsByDate = 'Měsíce podle data';
 GO.lang.monthsByDay = 'Měsíce podle dnů';
 
 GO.lang.strSelectFiles='Vyberte soubory';
@@ -248,8 +249,8 @@ GO.lang.strSelectFile='Vyberte soubor';
 GO.lang.strFiles='Soubory';
 GO.lang.strSubject='Předmět';
 GO.lang.strLocation='Umístění';
-GO.lang.strStart='Začátek';
-GO.lang.strEnd='Konec';
+GO.lang.strStart='Od';
+GO.lang.strEnd='Do';
 
 GO.lang.strFirst='První';
 GO.lang.strSecond='Druhý';
@@ -286,7 +287,7 @@ GO.lang.strMax = 'Maximum';
 
 GO.lang.settings='Nastavení';
 
-GO.lang.latestLinks='Poslední odkaz'
+GO.lang.latestLinks='Poslední odkazy'
 GO.lang.cmdBrowseLinks = 'Procházet odkazy';
 
 GO.lang.today='Dnes';
@@ -357,4 +358,62 @@ GO.lang.createdBy='Vytvořil';
 GO.lang.debugModeDetected="Upozornění! Debug mód je povolený";
 GO.lang.debugModeWarning="Použijte $config['debug']=true; pouze pro vývoj a řešení problémů. Debug mód spomaluje práci v Group-Office.";
 
+GO.lang.userGroup='Uživatelská skupina';
+
 GO.lang.noItemSelectedWarning='Prosím, vyberte alespoň jednu položku.';
+GO.lang.deselectAll='Odznačit vše';
+GO.lang.confirmSelectLotsOfItems='Vybrali jste {count} položek a to může způsobit zpomalení Group-Office. Přejete si pokračovat?';
+
+GO.lang.captcha='Bezpečností kód';
+GO.lang.captchaEmpty='Bezpečností kód je prázdný';
+
+GO.lang.multiselectComboMaxItemsReachedWarning='Můžete vybrat maximálně {max} možností';
+
+GO.lang.toScreen='Na obrazovku';
+
+GO.lang.priority='Priorita';
+GO.lang.priority_low='Nízká';
+GO.lang.priority_normal='Normální';
+GO.lang.priority_high='Vysoká';
+
+GO.lang.none = 'Žádné';
+
+GO.lang.userSelectedLanguage = 'Váš vybraný jazyk';
+
+GO.lang.swfUploadPanelStrings = {
+		text_add: 'Přidat soubor(y)',
+		text_upload: 'Nahrát soubor(y)',
+		text_cancel: 'Zrušit nahrávání',
+		text_clear: 'Vymazat frontu',
+		text_progressbar: 'Stav nahrávání',
+		text_remove: 'Odstranit soubor',
+		text_remove_sure: 'Opravdu chcete vymazat tento soubor z fronty?',
+		text_error: 'Chyba',
+		text_uploading: 'Nahrávání souboru: {0} ({1} z {2})',
+		header_filename: 'Název souboru',
+		header_size: 'Velikost',
+		header_status: 'Stav',
+		status: {
+			0: 'Čeká',
+			1: 'Nahrávání...',
+			2: 'Hotovo',
+			3: 'Chyba',
+			4: 'Zrušeno'
+		},
+		error_queue_exceeded: 'Počet vybraných souborů přesáhl maximum z {0} souborů ve frontě.',
+		error_queue_slots_0: 'Není žádný volný slot',
+		error_queue_slots_1: 'Zbývá pouze 1 volný slot',
+		error_queue_slots_2: 'Zbývá {0} slotů',
+		error_size_exceeded: 'Vybrané soubory přesáhly povolenou velikost 1 MB.',
+		error_zero_byte_file: 'Vybraný soubor má nulovou velikost.',
+		error_invalid_filetype: 'Vybraný soubor má neznámý typ.',
+		error_file_not_found: 'Soubor nebyl nalezen.',
+		error_security_error: 'Bezpečnostní chyba. Není povoleno nahrávat z jiné adresy.'
+	};
+
+
+GO.lang.orientation='Orientace';
+GO.lang.portrait='Na výšku  ';
+GO.lang.landscape='Na šířku';
+
+GO.lang.link='Odkaz';

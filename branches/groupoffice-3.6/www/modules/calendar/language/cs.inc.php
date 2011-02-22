@@ -8,8 +8,8 @@ $lang['link_type'][1]='Činnost';
 
 $lang['calendar']['groupView'] = 'Skupiny';
 $lang['calendar']['event']='Událost';
-$lang['calendar']['startsAt']='Začátek v';
-$lang['calendar']['endsAt']='Konec v';
+$lang['calendar']['startsAt']='Od';
+$lang['calendar']['endsAt']='Do';
 
 $lang['calendar']['exceptionNoCalendarID'] = 'CHYBA: Kalendář nemá ID!';
 $lang['calendar']['appointment'] = 'Činnost: ';
@@ -37,6 +37,7 @@ $lang['calendar']['statuses']['TENTATIVE'] = 'Nezávazný';
 $lang['calendar']['statuses']['DELEGATED'] = 'Delegovaný';
 $lang['calendar']['statuses']['COMPLETED'] = 'Dokončený';
 $lang['calendar']['statuses']['IN-PROCESS'] = 'V procesu';
+$lang['calendar']['statuses']['CONFIRMED'] = 'Potvrzený';
 
 
 $lang['calendar']['accept_mail_subject'] = 'Pozvánka pro \'%s\' byla přijata';
@@ -51,6 +52,7 @@ $lang['calendar']['and']='a';
 $lang['calendar']['repeats'] = 'Opakovat vždy %s';
 $lang['calendar']['repeats_at'] = 'Opakovat %s v %s';//eg. Repeats every month at the first monday
 $lang['calendar']['repeats_at_not_every'] = 'Opakovat %s %s v %s';//eg. Repeats every 2 weeks at monday
+$lang['calendar']['repeats_not_every'] = 'Opakovat %s %s';
 $lang['calendar']['until']='do'; 
 
 $lang['calendar']['not_invited']='Nebyli jste pozváni na tuto akci. Budete se muset přihlásit jako jiný uživatel.';
@@ -104,3 +106,13 @@ $lang['calendar']['month_times'][2]='druhý';
 $lang['calendar']['month_times'][3]='třetí';
 $lang['calendar']['month_times'][4]='čtvrtý';
 $lang['calendar']['month_times'][5]='pátý';
+
+$lang['calendar']['rightClickToCopy']='Klikněte pravým tlačítkem pro zkopírování odkazu';
+
+$lang['calendar']['invitation']='Pozvánka';
+$lang['calendar']['invitation_update']='Změna pozvánky';
+$lang['calendar']['cancellation']='Zrušení';
+
+$lang['calendar']['non_selected'] = 'v nevybraném kalendáři';
+
+$lang['calendar']['linkIfCalendarNotSupported']='Používejte pouze odkazy níže, pokud Váš e-mailový klient nepodporuje funkce kalendáře.';

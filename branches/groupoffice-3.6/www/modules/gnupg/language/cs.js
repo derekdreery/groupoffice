@@ -29,3 +29,6 @@ GO.gnupg.lang.decryptPasswordRequired='Je potřebné heslo k dešifrování tét
 GO.gnupg.lang.sendPublicKey='Odeslat veřejný klíč';
 
 GO.gnupg.lang.importPublicKeyAttachment='Tento veřejný klíč slouží k dešifraci emailů tomuto odesílateli. Importujte pouze, když jste si jisti, že klíč opravdu patří k odesílateli. Chcete ho naimportovat?';
+
+GO.gnupg.lang.generateKeyStarted='Probíhá generování klíče';
+GO.gnupg.lang.generateKeyStartedText='Začalo generování Vašeho klíče. Tento proces může chvíli trvat (až 10 minut).';

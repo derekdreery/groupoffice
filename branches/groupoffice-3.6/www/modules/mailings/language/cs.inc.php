@@ -26,3 +26,4 @@ $lang['mailings']['unsubscribe']='Odhlásit';
 $lang['mailings']['unsubscription']='Klikněte zde pro odhlášení z tohoto doručování.';
 $lang['mailings']['r_u_sure'] = 'Opravdu se chcete odhlásit z tohoto doručování?';
 $lang['mailings']['delete_success'] = 'Byl jste úspěšně odhlášen z doručování.';
+$lang['mailings']['setCurrentTemplateAsDefault']='Nastavit tuto šablonu jako výchozí';
