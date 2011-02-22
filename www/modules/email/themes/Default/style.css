@@ -1,3 +1,16 @@
+.em-autolink-message{
+	padding:5px;
+	border:1px solid #ddd;
+	background-color:#f1f1f1;
+	margin-bottom:20px;
+}
+
+.em-autolink-link{
+	cursor:pointer;
+	text-decoration:underline;
+}
+
+
 .em-tree-node-noselect .x-tree-node-anchor span{
 	font-style:italic;
 	color:#666 !important;

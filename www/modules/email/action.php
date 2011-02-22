@@ -612,7 +612,6 @@ try {
 							$swift->set_draft($_POST['draft_uid']);
 						}
 
-
 						$response['success']=$swift->sendmail();
 
 						if(!empty($_POST['link'])) {

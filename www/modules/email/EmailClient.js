@@ -261,7 +261,6 @@ GO.email.EmailClient = function(config){
 		multiple:true
 	}];
 		
-		
 	
 	if(GO.email.saveAsItems && GO.email.saveAsItems.length)
 	{
@@ -1918,6 +1917,7 @@ GO.newMenuItems.push({
 	handler:function(item, e){
 		var taskShowConfig = item.parentMenu.taskShowConfig || {};
 		taskShowConfig.link_config=item.parentMenu.link_config
+		taskShowConfig.values={};
 		if(item.parentMenu.panel.data.email){
 			var to='';
 			if(item.parentMenu.panel.data.full_name){
@@ -1926,10 +1926,12 @@ GO.newMenuItems.push({
 				to='"'+item.parentMenu.panel.data.name+'" <'+item.parentMenu.panel.data.email+'>';
 			}
 
-			taskShowConfig.values={
-				to:to
-			};
+			taskShowConfig.values.to=to;
 		}
+
+		if(GO.savemailas)
+			taskShowConfig.values.subject='[id:'+item.parentMenu.link_config.type_id+'] ';
+
 		GO.email.showComposer(taskShowConfig);
 	}
 });

@@ -919,6 +919,25 @@ try {
 					}
 				}
 
+
+
+				//autolink
+				$path = 'email/'.$account['id'].'/'.$uid.'_'.$response['udate'].'.eml';
+				if(!file_exists($GO_CONFIG->file_storage_path.$path)){
+
+					preg_match('/\[id:([0-9]+):([0-9]+)\]/', $response['subject'],$matches);
+
+					if(isset($matches[1])){
+						$link_id=$matches[2];
+						$link_type=$matches[1];
+						$imap->save_to_file($uid, $GO_CONFIG->file_storage_path.$path);
+
+						$result = $email->link_message($response, $path, 0, array(array('link_id'=>$link_id,'link_type'=>$link_type)), '');
+
+						$response['body']='<div class="em-autolink-message">'.sprintf($lang['email']['autolinked'],'<span class="em-autolink-link" onclick="GO.linkHandlers['.$link_type.'].call(this, '.$link_id.');">'.$result['links'][0]['name'].'</div>').$response['body'];
+					}
+				}
+
 				break;
 
 			case 'messages':
