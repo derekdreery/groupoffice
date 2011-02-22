@@ -692,7 +692,7 @@ try {
 						$description = $lang['tasks']['list'].': '.htmlspecialchars($tasklists_names[$task['tasklist_id']], ENT_QUOTES, 'UTF-8');
 						$description .= ($task['description']) ? '<br /><br />'.htmlspecialchars($task['description'], ENT_QUOTES, 'UTF-8') : '';
 
-						$start_time = date('Y-m-d',$task['start_time']).' 00:00';
+						$start_time = date('Y-m-d',$task['due_time']).' 00:00';
 						$end_time = date('Y-m-d',$task['due_time']).' 23:59';
 
 						$response['results'][] = array(
