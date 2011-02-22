@@ -136,6 +136,8 @@ class GoSwift extends Swift_Mailer{
 
 			$this->account = $email->get_account($account_id, $alias_id);
 
+			$subject = str_replace('[id:', '['.$this->account['id'].':', $subject);
+
 			if(empty($transport))
 			{
 				$encryption = empty($this->account['smtp_encryption']) ? null : $this->account['smtp_encryption'];
@@ -453,29 +455,12 @@ class GoSwift extends Swift_Mailer{
 		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 		$search = new search();
 
-
 		$link_message['from']=$this->implodeSwiftAddressArray($this->message->getFrom());
 		$link_message['to']=$this->implodeSwiftAddressArray($this->message->getTo());
 		$link_message['subject']=$this->message->getSubject();
 		$link_message['ctime']=$link_message['time']=time();
 
-
-
-		foreach($links as $link)
-		{
-			$sr = $search->get_search_result($link['link_id'], $link['link_type']);
-			if($sr)
-			{
-				$link_message['acl_id']=$sr['acl_id'];
-				$link_message['link_id'] = $email->link_message($link_message);
-
-				$GO_LINKS->add_link(
-				$link['link_id'],
-				$link['link_type'],
-				$link_message['link_id'],
-				9);
-			}
-		}
+		$email->link_message($link_message, 0, $links, '');	
 	}
 }
 
