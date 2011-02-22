@@ -1808,6 +1808,24 @@ Ext.extend(GO.files.FilesObservable, Ext.util.Observable);
 
 GO.files.filesObservable = new GO.files.FilesObservable();
 
+GO.files.openFilePath = function (path){
+
+	var extension='';
+
+	var dotpos = path.lastIndexOf('.');
+	if(dotpos){
+		extension = path.substring(dotpos, path.length);
+	}
+
+	var record = {
+		data:{
+			path:path,
+			extension:extension
+		}
+	}
+	GO.files.openFile(record);
+}
+
 GO.files.openFile = function(record, store)
 {
 
