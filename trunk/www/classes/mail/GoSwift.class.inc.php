@@ -109,6 +109,7 @@ class GoSwift extends Swift_Mailer{
 
 	public $log;
 
+	private $subject;
 
 
 	/**
@@ -136,7 +137,13 @@ class GoSwift extends Swift_Mailer{
 
 			$this->account = $email->get_account($account_id, $alias_id);
 
+			//autolinking
 			$subject = str_replace('[id:', '['.$this->account['id'].':', $subject);
+			$this->subject = $subject;
+
+			
+
+			//end autolinking
 
 			if(empty($transport))
 			{
@@ -401,6 +408,14 @@ class GoSwift extends Swift_Mailer{
 				}
 			}
 		}
+
+		//auto link with tag in subject
+		preg_match('/\[([0-9]+):([0-9]+):([0-9]+)\]/', $this->subject,$matches);
+
+		if(isset($matches[1]) && $matches[1]==$this->account['id']){
+			$this->link_to(array(array("link_id"=>$matches[3],"link_type"=>$matches[2])));
+		}
+
 		return $send_success;
 	}
 
