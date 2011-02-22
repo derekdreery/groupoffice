@@ -12,7 +12,7 @@ $lang['tasks']['status']='Stav';
 $lang['tasks']['scheduled_call']='Plánované připomenutí %s';
 
 $lang['tasks']['statuses']['NEEDS-ACTION'] = 'Vyžaduje akci';
-$lang['tasks']['statuses']['ACCEPTED'] = 'Přijat';
+$lang['tasks']['statuses']['ACCEPTED'] = 'Přijatý';
 $lang['tasks']['statuses']['DECLINED'] = 'Odmítnutý';
 $lang['tasks']['statuses']['TENTATIVE'] = 'Nezávazný';
 $lang['tasks']['statuses']['DELEGATED'] = 'Delegovaný';
@@ -29,4 +29,6 @@ $lang['tasks']['list']='Přehled úkolů';
 
 $lang['tasks']['tasklistChanged']="* Seznam úkolů byl změněn z '%s' na '%s'";
 $lang['tasks']['statusChanged']="* Stav byl změněn z '%s' na '%s'";
+$lang['tasks']['multipleSelected']='Vybráno více přehledů úkolů';
+$lang['tasks']['incomplete_delete']='Nemáte oprávnění pro smazání všech vybraných úkolů';
 ?>

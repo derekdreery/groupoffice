@@ -41,3 +41,5 @@ $lang['tasks']['dueAtdate']='Förfaller vid %s';
 $lang['tasks']['list']='Uppgiftslista';
 $lang['tasks']['tasklistChanged']="* Uppgiftslista ändrad från '%s' till '%s'";
 $lang['tasks']['statusChanged']="* Status ändrad från '%s' till '%s'";
+$lang['tasks']['multipleSelected']='Flera uppgiftslistor valda';
+$lang['tasks']['incomplete_delete']='Du har inte behörighet att radera alla de valda uppgifterna';

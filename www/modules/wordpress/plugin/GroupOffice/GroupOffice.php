@@ -21,6 +21,8 @@ if(isset($go_config['config_file'])){
 	define('NO_EVENTS', $go_config['config_file']);
 	define('CONFIG_FILE', $go_config['config_file']);
 	require($config['root_path'].'Group-Office.php');
+	if(!WP_DEBUG)
+		ini_set('display_errors', 0);
 	//ini_set('display_errors', 0);
 }
 //ini_set('display_errors', 1);

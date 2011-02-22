@@ -687,7 +687,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.6.23';
+	var $version = '3.6.24';
 
 
 	/* The permissions mode to use when creating files
@@ -717,7 +717,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20110211';
+	var $mtime = '20110222';
 
 	#group configuration
 	/**
@@ -1274,8 +1274,10 @@ class GO_CONFIG {
 		$response['config']['max_users']=$this->max_users;
 
 		$response['config']['debug']=$this->debug;
-		$response['config']['disable_flash_upload']=$this->disable_flash_upload;
+		$response['config']['disable_flash_upload']=$this->disable_flash_upload;		
 
+		$response['config']['max_attachment_size']=$this->max_attachment_size;
+		$response['config']['max_file_size']=$this->max_file_size;
 		$response['config']['help_link']=$this->help_link;
 
 

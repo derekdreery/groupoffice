@@ -5,6 +5,8 @@ $lang['files']['name'] = 'Soubory';
 $lang['files']['description'] = 'Možnost sdílení souborů.';
 
 $lang['link_type'][6]='Soubor';
+$lang['link_type'][17]='Složka';
+
 
 $lang['files']['fileNotFound'] = 'Soubor nebyl nalezen';
 $lang['files']['folderExists'] = 'Složka již existuje';
@@ -36,3 +38,11 @@ $lang['files']['deleted']='Smazáno';
 $lang['files']['file']='Soubor';
 $lang['files']['folder']='Složka';
 $lang['files']['files']='Soubory';
+
+
+$lang['files']['emptyFile']='Prázdný soubor';
+
+$lang['files']['downloadLink'] = 'Odkaz pro stažení';
+$lang['files']['clickHereToDownload'] = 'Klikněte zde pro stažení souboru pomocí zabezpečeného odkazu';
+$lang['files']['copyPasteToDownload'] = 'Click the secured link below or copy it to your browser\'s address bar to download the file.';
+$lang['files']['possibleUntil'] = 'funkční do';

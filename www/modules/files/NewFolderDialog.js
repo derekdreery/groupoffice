@@ -19,7 +19,7 @@ GO.files.NewFolderDialog = function(config){
 	this.newFolderNameField = new Ext.form.TextField({	              	
 	      fieldLabel: GO.lang['strName'],
         name: 'name',
-        value: 'New folder',
+        value: GO.files.lang.newFolder,
         allowBlank:false,
         anchor:'100%',
 				validator:function(v){

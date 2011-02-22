@@ -707,7 +707,7 @@ try {
 						$description = $lang['tasks']['list'].': '.htmlspecialchars($tasklists_names[$task['tasklist_id']], ENT_QUOTES, 'UTF-8');
 						$description .= ($task['description']) ? '<br /><br />'.htmlspecialchars($task['description'], ENT_QUOTES, 'UTF-8') : '';
 
-						$start_time = date('Y-m-d',$task['start_time']).' 00:00';
+						$start_time = date('Y-m-d',$task['due_time']).' 00:00';
 						$end_time = date('Y-m-d',$task['due_time']).' 23:59';
 
 						$response['results'][] = array(
@@ -1151,8 +1151,15 @@ try {
 					if($user) {
 
 						//Only show availability if user has access to the default calendar
-						$default_calendar = $cal2->get_default_calendar($user['id']);
-						if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $default_calendar['acl_id'])){
+						if(!empty($GO_CONFIG->require_calendar_access_for_freebusy)){
+							$default_calendar = $cal2->get_default_calendar($user['id']);
+							$permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $default_calendar['acl_id']);
+						}else
+						{
+							$permission=true;
+						}
+
+						if($permission){
 							$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event) ? '1' : '0';
 						}
 					}

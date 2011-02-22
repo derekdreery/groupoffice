@@ -162,6 +162,8 @@ GO.email.EmailComposer = function(config) {
 			{
 				if(!this.uploadFlashDialog)
 				{
+					var max = Math.floor(GO.settings.config.max_attachment_size/1048576)+'MB';
+
 					this.uploadFlashDialog = new GO.UploadFlashDialog({
 						uploadPanel: new Ext.ux.SwfUploadPanel({
 							post_params : {
@@ -170,7 +172,7 @@ GO.email.EmailComposer = function(config) {
 							upload_url : GO.settings.modules.email.url+ 'action.php',
 							labelWidth: 110,
 
-							file_size_limit:"100MB",
+							file_size_limit:max,
 							single_file_select: false, // Set to true if you only want to select one file from the FileDialog.
 							confirm_delete: false, // This will prompt for removing files from queue.
 							remove_completed: false // Remove file from grid after uploaded.
