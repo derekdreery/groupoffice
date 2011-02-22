@@ -1929,9 +1929,9 @@ GO.newMenuItems.push({
 			taskShowConfig.values.to=to;
 		}
 
-		if(GO.savemailas)
+		if(GO.settings.modules.savemailas.read_permission)
 			taskShowConfig.values.subject='[id:'+item.parentMenu.link_config.type_id+'] ';
-
+		
 		GO.email.showComposer(taskShowConfig);
 	}
 });

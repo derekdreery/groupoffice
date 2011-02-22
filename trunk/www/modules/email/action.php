@@ -370,6 +370,7 @@ try {
 					}
 
 					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+					
 
 					$swift = new GoSwift(
 									$_POST['to'],
