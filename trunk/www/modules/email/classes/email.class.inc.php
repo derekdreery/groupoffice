@@ -329,22 +329,68 @@ class email extends db {
 	}
 
 
-	function link_message($message) {
+	function link_message($message, $filepath, $to_folder_id, $links, $link_description) {
+		global $GO_CONFIG, $lang;
+
+		$result = array('links');
+
+		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+		$search = new search();
+
+		require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+		$GO_LINKS = new GO_LINKS();
+
+		$link_message['from']=$message['from'];
+
+		$to='';
+		if (isset ($message["to"])) {
+			for ($i = 0; $i < sizeof($message["to"]); $i ++) {
+				if ($i != 0) {
+					$to .= ", ";
+				}
+				$to .= $message["to"][$i];
+			}
+
+			$RFC822 = new RFC822();
+
+			$to = $RFC822->reformat_address_list($to);
+		}
+
+		$link_message['to']=$to;
+		$link_message['subject']=!empty($message['subject']) ? $message['subject'] : $lang['email']['no_subject'];
+		$link_message['time']=$message['udate'];
+		$link_message['ctime']=time();
+		$link_message['path']=$filepath;
 		
-		$message['link_id']=$this->nextid('em_links');
+		$link_message['link_id']=$this->nextid('em_links');
 
 		if(empty($message['subject'])) {
 			global $GO_LANGUAGE, $lang;
 			$GO_LANGUAGE->require_language_file('email');
 
-			$message['subject']=$lang['email']['no_subject'];
-		}
+			$link_message['subject']=$lang['email']['no_subject'];
+		}		
 
-		$this->insert_row('em_links',$message);
+		foreach($links as $link) {
+			$sr = $search->get_search_result($link['link_id'], $link['link_type']);
 
-		$this->cache_message($message['link_id']);
+			$result['links'][]=$sr;
 
-		return $message['link_id'];
+			if($sr) {
+				$link_message['acl_id']=$sr['acl_id'];
+				$this->insert_row('em_links',$link_message);
+				$this->cache_message($link_message['link_id']);
+
+				$GO_LINKS->add_link($link['link_id'], $link['link_type'], $link_message['link_id'], 9,$to_folder_id,0, $link_description, $link_description);
+			}else {
+				$imap->disconnect();
+				throw new Exception('Cached record not found!');
+			}
+		}	
+
+		$result['link_message']=$link_message;
+
+		return $result;
 	}
 
 	function delete_linked_message($link_id) {
