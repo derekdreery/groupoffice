@@ -922,12 +922,12 @@ try {
 
 
 				//autolink
-				$path = 'email/'.$account['id'].'/'.$uid.'_'.$response['udate'].'.eml';
-				if(!file_exists($GO_CONFIG->file_storage_path.$path)){
+				preg_match('/\[id:([0-9]+):([0-9]+)\]/', $response['subject'],$matches);
 
-					preg_match('/\[id:([0-9]+):([0-9]+)\]/', $response['subject'],$matches);
+				if(isset($matches[1])){
+					$path = 'email/'.$account['id'].'/'.$uid.'_'.$response['udate'].'.eml';
 
-					if(isset($matches[1])){
+					if(!file_exists($GO_CONFIG->file_storage_path.$path)){
 						$link_id=$matches[2];
 						$link_type=$matches[1];
 						$imap->save_to_file($uid, $GO_CONFIG->file_storage_path.$path);
