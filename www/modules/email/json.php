@@ -922,17 +922,41 @@ try {
 
 
 				//autolink
-				preg_match('/\[id:([0-9]+):([0-9]+)\]/', $response['subject'],$matches);
+				preg_match('/\[([0-9]+):([0-9]+):([0-9]+)\]/', $response['subject'],$matches);
 
 				if(isset($matches[1])){
 					$path = 'email/'.$account['id'].'/'.$uid.'_'.$response['udate'].'.eml';
 
-					if(!file_exists($GO_CONFIG->file_storage_path.$path)){
-						$link_id=$matches[2];
-						$link_type=$matches[1];
+					$account_id=$matches[1];
+
+					if($account_id == $account['id'] && !file_exists($GO_CONFIG->file_storage_path.$path)){
+						$link_id=$matches[3];
+						$link_type=$matches[2];
 						$imap->save_to_file($uid, $GO_CONFIG->file_storage_path.$path);
 
-						$result = $email->link_message($response, $path, 0, array(array('link_id'=>$link_id,'link_type'=>$link_type)), '');
+
+						$to='';
+						if (isset ($response["to"])) {
+							for ($i = 0; $i < sizeof($response["to"]); $i ++) {
+								if ($i != 0) {
+									$to .= ", ";
+								}
+								$to .= $response["to"][$i];
+							}
+
+							$RFC822 = new RFC822();
+
+							$to = $RFC822->reformat_address_list($to);
+						}
+						$link_message['from']=$response['from'];
+						$link_message['to']=$to;
+						$link_message['subject']=!empty($response['subject']) ? $response['subject'] : $lang['email']['no_subject'];
+						$link_message['time']=$response['udate'];
+						$link_message['path']=$path;
+
+
+
+						$result = $email->link_message($link_message, 0, array(array('link_id'=>$link_id,'link_type'=>$link_type)), '');
 
 						$response['body']='<div class="em-autolink-message">'.sprintf($lang['email']['autolinked'],'<span class="em-autolink-link" onclick="GO.linkHandlers['.$link_type.'].call(this, '.$link_id.');">'.$result['links'][0]['name'].'</div>').$response['body'];
 					}
