@@ -1,3 +1,8 @@
+23/02/2011 3.6.25
+- Updated Norwegian
+- Console.log function was causing an error in projects.
+- Added some Czech translation files.
+
 22/02/2011 3.6.24
 - Tasks recur on due time and only the due date is shown in the calendar.
 - Problem with logging in to the phpbb3 admin panel is fixed.
