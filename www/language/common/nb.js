@@ -398,3 +398,4 @@ GO.lang.priority_low='Lav';
 GO.lang.priority_normal='Normal';
 GO.lang.priority_high='Høy';
 GO.lang.strName2= 'Navn 2';
+GO.lang.link='Lenke';
