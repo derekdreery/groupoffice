@@ -64,6 +64,12 @@ function test_system(){
 	$test['fatal']=true;
 
 	$tests[]=$test;
+	$test['name']='Session Cookies';
+	$test['pass']=ini_get('session.cookie_httponly')!=1;
+	$test['feedback']='Warning: session.cookie_httponly is set to 1. We recommend setting it to 0 because this can give problems with file uploads.';
+	$test['fatal']=false;
+
+	$tests[]=$test;
 
 	$test['name']='Output buffering';
 	$test['pass']=ini_get('output_buffering')!=1;
