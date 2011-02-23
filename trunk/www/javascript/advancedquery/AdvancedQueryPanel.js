@@ -51,13 +51,14 @@ GO.advancedquery.AdvancedQueryPanel = function (config){
 
 	this.searchQueryPanel = new GO.advancedquery.SearchQueryPanel({
 		region:'north',
-		height:250,
+		height:300,
+		autoScroll:true,
 		fieldsUrl:config.fieldsUrl,
 		type:config.type,
 		buttons: [{
 			text: GO.lang.strSearch,
 			handler: function(){		
-				this.fireEvent('search', this.ownerCt, this.searchQueryPanel.queryField.getValue());
+				this.fireEvent('search', this.ownerCt, this.searchQueryPanel.queryField.getValue(), this.searchQueryPanel.matchDuplicates.getValue());
 			},
 			scope: this
 		}]
