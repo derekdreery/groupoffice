@@ -29,6 +29,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 
 	config.border=false;
 	config.layout='form';
+	config.labelAlign='top';
 	config.defaults={
 		hideLabel:true,
 		border:false
@@ -37,13 +38,12 @@ GO.advancedquery.SearchQueryPanel = function(config)
 
 	this.queryField = new Ext.form.TextArea({
 		name: 'query',
-		anchor:'100%',
-		height : 130
+		anchor:'-20 -130'
 	});
 
 	config.items= [this.queryField,{
 			xtype:'compositefield',
-			anchor:'100%',
+			anchor:'-20',
 			items:
 			[this.operatorBox = new GO.form.ComboBox({
 				store: new Ext.data.ArrayStore({
@@ -94,6 +94,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 			]
 		},
 		{
+			anchor:'-20',
 			layout: 'table',
 			defaults:{border:false},
 			items:
@@ -109,7 +110,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 						}),
 						valueField:'value',
 						displayField:'value',
-						width: 295,
+						width: 275,
 						mode: 'local',
 						triggerAction: 'all',
 						editable: true,
@@ -120,13 +121,13 @@ GO.advancedquery.SearchQueryPanel = function(config)
 						name: 'textfield',
 						hideLabel: true,
 						emptyText: GO.lang.keyword,
-						width: 295,
+						width: 275,
 						panel: this
 					}),this.criteriumDatePanel = new Ext.Panel({
 						border: false,
 						style: 'padding:0px;',
 						hidden: true,
-						width: 295,
+						width: 275,
 						items: [GO.customfields.dataTypes.date.getFormField({
 							name:'',
 							dataname:'date'
@@ -136,7 +137,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 						border: false,
 						style: 'padding:0px;',
 						hidden: true,
-						width: 295,
+						width: 275,
 						items: [
 							GO.customfields.dataTypes.number.getFormField({dataname:''})
 						],
@@ -145,19 +146,19 @@ GO.advancedquery.SearchQueryPanel = function(config)
 						border: false,
 						style: 'padding:0px;',
 						hidden: true,
-						width: 295,
+						width: 275,
 						items: [
 							GO.customfields.dataTypes.checkbox.getFormField({dataname:'',name:'checked'})
 						],
 						hidden:true
 					}),this.criteriumFileField = new GO.files.SelectFile({
 						filesFilter:'foldersonly',
-						width: 295,
+						width: 275,
 						hidden: true
 						//fieldLabel:GO.filesearch.lang.searchOneFolder
 					}),this.criteriumUserField = new GO.form.SelectUser({
 						allowBlank:true,
-						width: 295,
+						width: 275,
 						hidden: true,
 						listeners: {
 							scope: this,
@@ -166,7 +167,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 								}
 						}
 					}),this.criteriumContactField = new GO.addressbook.SelectContact({
-						width: 295,
+						width: 275,
 						hidden: true,
 						listeners: {
 							scope: this,
@@ -220,7 +221,23 @@ GO.advancedquery.SearchQueryPanel = function(config)
 					scope: this
 				})
 			}]
-		}];
+		},this.matchDuplicates = new Ext.ux.form.SuperBoxSelect({
+			allowAddNewData:true, //otherwise every value will be looked up at the server. We don't want that.
+			xtype:'superboxselect',
+			resizable: true,
+			store: this.typesStore,
+			mode: 'remote',
+			valueField:'value',
+			displayField:'name',
+			forceSelection : true,
+			valueDelimiter:'|',
+			hiddenName:'duplicate_fields[]',
+			anchor:'-20',
+			fieldLabel:'Match duplicates',
+			hideLabel:false,
+			queryDelay: 0,
+			triggerAction: 'all'
+		})];
 	
 
 	GO.advancedquery.SearchQueryPanel.superclass.constructor.call(this, config);
