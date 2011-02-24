@@ -430,3 +430,6 @@ GO.lang.searchQueryName = 'Search query name';
 GO.lang.enterSearchQueryName = 'Enter search query name';
 
 GO.lang.strUsersInGroup = 'Users in group';
+
+GO.lang.matchDuplicates='Match duplicates';
+GO.lang.showFirstDuplicateOnly='Only show first duplicate';
