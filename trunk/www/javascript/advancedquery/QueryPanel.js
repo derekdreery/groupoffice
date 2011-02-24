@@ -31,18 +31,20 @@ GO.advancedquery.SearchQueryPanel = function(config)
 	config.layout='form';
 	config.labelAlign='top';
 	config.defaults={
-		hideLabel:true,
 		border:false
 	};
 	config.bodyStyle='padding:5px;';
 
 	this.queryField = new Ext.form.TextArea({
 		name: 'query',
-		anchor:'-20 -130'
+		anchor:'-20',
+		height:100,
+		hideLabel:true
 	});
 
 	config.items= [this.queryField,{
 			xtype:'compositefield',
+			hideLabel:true,
 			anchor:'-20',
 			items:
 			[this.operatorBox = new GO.form.ComboBox({
@@ -94,6 +96,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 			]
 		},
 		{
+			hideLabel:true,
 			anchor:'-20',
 			layout: 'table',
 			defaults:{border:false},
@@ -110,7 +113,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 						}),
 						valueField:'value',
 						displayField:'value',
-						width: 275,
+						width: 280,
 						mode: 'local',
 						triggerAction: 'all',
 						editable: true,
@@ -121,13 +124,13 @@ GO.advancedquery.SearchQueryPanel = function(config)
 						name: 'textfield',
 						hideLabel: true,
 						emptyText: GO.lang.keyword,
-						width: 275,
+						width: 280,
 						panel: this
 					}),this.criteriumDatePanel = new Ext.Panel({
 						border: false,
 						style: 'padding:0px;',
 						hidden: true,
-						width: 275,
+						width: 280,
 						items: [GO.customfields.dataTypes.date.getFormField({
 							name:'',
 							dataname:'date'
@@ -137,7 +140,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 						border: false,
 						style: 'padding:0px;',
 						hidden: true,
-						width: 275,
+						width: 280,
 						items: [
 							GO.customfields.dataTypes.number.getFormField({dataname:''})
 						],
@@ -146,19 +149,19 @@ GO.advancedquery.SearchQueryPanel = function(config)
 						border: false,
 						style: 'padding:0px;',
 						hidden: true,
-						width: 275,
+						width: 280,
 						items: [
 							GO.customfields.dataTypes.checkbox.getFormField({dataname:'',name:'checked'})
 						],
 						hidden:true
 					}),this.criteriumFileField = new GO.files.SelectFile({
 						filesFilter:'foldersonly',
-						width: 275,
+						width: 280,
 						hidden: true
 						//fieldLabel:GO.filesearch.lang.searchOneFolder
 					}),this.criteriumUserField = new GO.form.SelectUser({
 						allowBlank:true,
-						width: 275,
+						width: 280,
 						hidden: true,
 						listeners: {
 							scope: this,
@@ -167,7 +170,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 								}
 						}
 					}),this.criteriumContactField = new GO.addressbook.SelectContact({
-						width: 275,
+						width: 280,
 						hidden: true,
 						listeners: {
 							scope: this,
@@ -179,6 +182,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 					]
 				})
 			},{
+				bodyStyle:"padding-left:5px;",
 				items:new Ext.Button({
 					handler: function()
 					{
@@ -221,11 +225,25 @@ GO.advancedquery.SearchQueryPanel = function(config)
 					scope: this
 				})
 			}]
-		},this.matchDuplicates = new Ext.ux.form.SuperBoxSelect({
+		}];
+
+	if(config.matchDuplicates){
+		config.items.push(this.matchDuplicatesCombo = new Ext.ux.form.SuperBoxSelect({
 			allowAddNewData:true, //otherwise every value will be looked up at the server. We don't want that.
 			xtype:'superboxselect',
 			resizable: true,
-			store: this.typesStore,
+			store:  new GO.data.JsonStore({
+				url: config.fieldsUrl,
+				baseParams: {
+					task: 'advanced_query_fields',
+					match_duplicates:true
+				},
+				root: 'results',
+				id: 'name',
+				fields: ['name','value','type','fields', 'custom','id'],
+				remoteSort: true
+			}),
+			removeValuesFromStore : false,
 			mode: 'remote',
 			valueField:'value',
 			displayField:'name',
@@ -233,11 +251,18 @@ GO.advancedquery.SearchQueryPanel = function(config)
 			valueDelimiter:'|',
 			hiddenName:'duplicate_fields[]',
 			anchor:'-20',
-			fieldLabel:'Match duplicates',
+			fieldLabel:GO.lang.matchDuplicates,
 			hideLabel:false,
 			queryDelay: 0,
 			triggerAction: 'all'
-		})];
+		}));
+
+		config.items.push(this.showFirstDuplicateOnlyCheckbox = new Ext.form.Checkbox({
+			boxLabel:GO.lang.showFirstDuplicateOnly,
+			name:'show_first_duplicate_only',
+			hideLabel:true
+		}));
+	}
 	
 
 	GO.advancedquery.SearchQueryPanel.superclass.constructor.call(this, config);

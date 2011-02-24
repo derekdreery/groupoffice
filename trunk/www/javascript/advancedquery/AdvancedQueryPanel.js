@@ -51,14 +51,23 @@ GO.advancedquery.AdvancedQueryPanel = function (config){
 
 	this.searchQueryPanel = new GO.advancedquery.SearchQueryPanel({
 		region:'north',
-		height:300,
+		height:320,
 		autoScroll:true,
 		fieldsUrl:config.fieldsUrl,
+		matchDuplicates: config.matchDuplicates,
 		type:config.type,
 		buttons: [{
 			text: GO.lang.strSearch,
-			handler: function(){		
-				this.fireEvent('search', this.ownerCt, this.searchQueryPanel.queryField.getValue(), this.searchQueryPanel.matchDuplicates.getValue());
+			handler: function(){
+				var matchDuplicates="";
+				var showFirstDuplicateOnlyCheckbox=false;
+				if(this.matchDuplicates){
+					matchDuplicates=this.searchQueryPanel.matchDuplicatesCombo.getValue();
+					showFirstDuplicateOnlyCheckbox=this.searchQueryPanel.showFirstDuplicateOnlyCheckbox.getValue();
+				}
+
+
+				this.fireEvent('search', this.ownerCt, this.searchQueryPanel.queryField.getValue(), matchDuplicates,showFirstDuplicateOnlyCheckbox);
 			},
 			scope: this
 		}]

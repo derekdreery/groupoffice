@@ -74,6 +74,12 @@ class advanced_query extends db{
 			$query = str_replace('('.$tag[0],$time,$query);
 		}
 
+		$query = $this->parse_custom_fields($query, $link_type);
+
+		return $query;
+	}
+
+	public function parse_custom_fields($query, $link_type){
 		global $GO_MODULES;
 		if(isset($GO_MODULES->modules['customfields'])){
 			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
