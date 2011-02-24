@@ -167,7 +167,7 @@ try {
 
 					$start_time = $contact['upcoming'].' 00:00';
 					$end_time = $contact['upcoming'].' 23:59';
-					$start_timestamp = Date::to_unixtime($start_time);
+					$start_timestamp = strtotime($start_time);
 
 					$index = strtotime($start_time);
 					while(isset($unsorted[$index])) {
