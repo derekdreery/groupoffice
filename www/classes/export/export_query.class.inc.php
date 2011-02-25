@@ -52,6 +52,10 @@ class base_export_query{
 	var $title='';
 	var $extension='';
 
+	var $sql;
+	var $params;
+	var $types;
+
 	function __construct(){
 
 		$this->db = new db();
@@ -69,9 +73,9 @@ class base_export_query{
 
 	}
 
-	function query(){
-		$params = array();
-		$types='';
+	function prepare_query(){
+		$this->params = array();
+		$this->types='';
 
 		if(is_array($this->q))
 		{
@@ -92,22 +96,22 @@ class base_export_query{
 			}
 
 			$extra_sql=array();
-			$sql = $this->q['query'];
+			$this->sql = $this->q['query'];
 			if(isset($this->q['extra_params']))
 			{
-				foreach($this->q['extra_params'] as $param=>$sqlpart)
+				foreach($this->q['extra_params'] as $param=>$this->sqlpart)
 				{
 					if(!empty($_REQUEST[$param]))
 					{
-						$params[] = $_REQUEST[$param];
-						$extra_sql[]=$sqlpart;
+						$this->params[] = $_REQUEST[$param];
+						$extra_sql[]=$this->sqlpart;
 					}
 				}
 			}
-			if(count($params))
+			if(count($this->params))
 			{
 				$insert = ' ';
-				if(!strpos($sql, 'WHERE'))
+				if(!strpos($this->sql, 'WHERE'))
 				{
 					$insert .= 'WHERE ';
 				}else
@@ -116,28 +120,32 @@ class base_export_query{
 				}
 				$insert .= implode(' AND ', $extra_sql);
 
-				$pos = strpos($sql, 'ORDER');
+				$pos = strpos($this->sql, 'ORDER');
 
 				if(!$pos)
 				{
-					$sql .= $insert;
+					$this->sql .= $insert;
 				}else
 				{
-					$sql = substr($sql, 0, $pos).$insert.' '.substr($sql, $pos);
+					$this->sql = substr($this->sql, 0, $pos).$insert.' '.substr($this->sql, $pos);
 				}
 
-				$types=str_repeat('s',count($params));
+				$this->types=str_repeat('s',count($this->params));
 			}
 		}else
 		{
-			$sql = $this->q;
+			$this->sql = $this->q;
 
-			$params=array();
+			$this->params=array();
 		}
+	}
 
-		$GLOBALS['GO_EVENTS']->fire_event('export_before_query', array(&$this, &$sql, &$types, &$params));
+	function query(){
+		$this->prepare_query();
 
-		$this->db->query($sql,$types,$params);
+		$GLOBALS['GO_EVENTS']->fire_event('export_before_query', array(&$this, &$this->sql, &$this->types, &$this->params));
+
+		$this->db->query($this->sql,$this->types,$this->params);
 	}
 
 	function format_record(&$record){
