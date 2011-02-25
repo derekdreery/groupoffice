@@ -852,9 +852,11 @@ class String {
 
 		$html = preg_replace($to_removed_array, '', $html);
 				
-		require_once($GO_CONFIG->class_path.'XSSclean.class.inc.php');
-		$XSSclean = new XSSclean();
-		$html = $XSSclean->xss_clean($html);
+		//require_once($GO_CONFIG->class_path.'XSSclean.class.inc.php');
+		//$XSSclean = new XSSclean();
+		//$html = $XSSclean->xss_clean($html);
+
+		$html = String::xss_entity_decode($html);
 		
 		//debug($html);
 
@@ -863,17 +865,17 @@ class String {
 
 		//$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
 		
-		//$html = preg_replace('/<!.*>/U', '', $html);
-		//$html = preg_replace("/([\"']?.*)(script|xss|expression):/Uui", "$1removed", $html);
+		$html = preg_replace('/<!.*>/U', '', $html);
+		$html = preg_replace("/([\"']?.*)(script|xss|expression):/Uui", "$1removed", $html);
 
 
-		//$html = preg_replace("/([\"']?.*)xss:/Uui", "$1removed", $html);
-		//$html = preg_replace("/([\"']?.*)expression:/Uui", "$1removed", $html);
+		$html = preg_replace("/([\"']?.*)xss:/Uui", "$1removed", $html);
+		$html = preg_replace("/([\"']?.*)expression:/Uui", "$1removed", $html);
 
-		//$html = preg_replace("/([\"']?)vbscript:/ui", "$1removed_script:", $html);
+		$html = preg_replace("/([\"']?)vbscript:/ui", "$1removed_script:", $html);
 		
-		//$html = preg_replace("/(<.* )on[a-z]+\s*('|\")?=[^>]*/iU", "$1removed_event=", $html);
-		//$html = preg_replace("/(<.* )([\"']?\w*) on[a-z]+\s*('|\")?=[^>]*/iU", "$1removed_event=", $html);
+		$html = preg_replace("/(<.* )on[a-z]+\s*('|\")?=[^>]*/iU", "$1removed_event=", $html);
+		$html = preg_replace("/(<.* )([\"']?\w*) on[a-z]+\s*('|\")?=[^>]*/iU", "$1removed_event=", $html);
 
 
 		//not sure if this is needed
@@ -885,6 +887,33 @@ class String {
 		//debug($html);
 
 		return $html;
+	}
+
+	/**
+	 * Decode escaped entities used by known XSS exploits.
+	 * See http://downloads.securityfocus.com/vulnerabilities/exploits/26800.eml for examples
+	 *
+	 * @param string CSS content to decode
+	 * @return string Decoded string
+	 */
+	function xss_entity_decode($content)
+	{
+	  $out = html_entity_decode(html_entity_decode($content));
+	  $out = preg_replace_callback('/\\\([0-9a-f]{4})/i', 'String::xss_entity_decode_callback', $out);
+	  $out = preg_replace('#/\*.*\*/#Um', '', $out);
+	  return $out;
+	}
+
+
+	/**
+	 * preg_replace_callback callback for rcmail_xss_entity_decode_callback
+	 *
+	 * @param array matches result from preg_replace_callback
+	 * @return string decoded entity
+	 */
+	function xss_entity_decode_callback($matches)
+	{
+	  return chr(hexdec($matches[1]));
 	}
 
 	
