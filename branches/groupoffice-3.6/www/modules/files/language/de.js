@@ -25,4 +25,5 @@ GO.files.lang.selectFiles = 'Dateien auswählen';
 GO.files.lang.fitImage='Bild einpassen';
 GO.files.lang.normalSize='Normale Größe';
 GO.files.lang.imageViewer='Bildbetrachter';
-GO.files.lang.newFolder = 'Neuer Ordner';
+
+GO.files.lang.applyState = 'Anzeigeeinstellungen dieses Ordners für alle Nutzer übernehmen';
