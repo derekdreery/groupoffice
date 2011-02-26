@@ -856,7 +856,7 @@ class String {
 		//$XSSclean = new XSSclean();
 		//$html = $XSSclean->xss_clean($html);
 
-		$html = String::xss_entity_decode($html);
+		//$html = String::xss_entity_decode($html);
 		
 		//debug($html);
 
