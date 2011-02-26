@@ -899,23 +899,10 @@ class String {
 	function xss_entity_decode($content)
 	{
 	  $out = html_entity_decode(html_entity_decode($content));
-	  $out = preg_replace_callback('/\\\([0-9a-f]{4})/i', array('String','xss_entity_decode_callback'), $out);
+	  $out = preg_replace_callback('/\\\([0-9a-f]{4})/i', create_function('$matches', 'return chr(hexdec($matches[1]));'), $out);
 	  $out = preg_replace('#/\*.*\*/#Um', '', $out);
 	  return $out;
 	}
-
-
-	/**
-	 * preg_replace_callback callback for rcmail_xss_entity_decode_callback
-	 *
-	 * @param array matches result from preg_replace_callback
-	 * @return string decoded entity
-	 */
-	function xss_entity_decode_callback($matches)
-	{
-	  return chr(hexdec($matches[1]));
-	}
-
 	
 	/**
 	 * Change HTML links to Group-Office links. For example mailto: links will call
