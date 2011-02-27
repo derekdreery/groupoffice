@@ -118,4 +118,20 @@ while($r = $db->next_record()){
 	$GO_USERS->delete_user($r['id']);
 }
 
+
+
+
+
+echo "Setting calendar entries older then one month to private\n";
+
+$sql = <<<EOF
+UPDATE cal_events SET private =  "1" WHERE (
+start_time < UNIX_TIMESTAMP( NOW( ) - INTERVAL 1 MONTH ) AND rrule =  ''
+) OR (
+repeat_end_time >0 AND repeat_end_time < UNIX_TIMESTAMP( NOW( ) - INTERVAL 1 MONTH )
+);
+EOF;
+
+$db->query($sql);
+
 echo "Done!\n";
