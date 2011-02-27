@@ -1560,7 +1560,7 @@ class calendar extends db {
 					$offset=0,
 					$only_busy_events=false) {
 
-		$sql  = "SELECT DISTINCT e.* FROM cal_events e";
+		$sql  = "SELECT e.* FROM cal_events e";
 
 		if($user_id > 0) {
 			$sql .= " INNER JOIN cal_calendars c ON (e.calendar_id=c.id)";
@@ -1617,9 +1617,9 @@ class calendar extends db {
 			$sql .= "(e.repeat_end_time>'$interval_start' OR e.repeat_end_time=0)))";
 		}
 
-		if($sort_field != '' && $sort_order != '') {
-			$sql .=	" ORDER BY ".$this->escape($sort_field." ".$sort_order);
-		}
+		//if($sort_field != '' && $sort_order != '') {
+			//$sql .=	" ORDER BY ".$this->escape($sort_field." ".$sort_order);
+		//}
 
 		if($offset == 0) {
 			$this->query($sql);
