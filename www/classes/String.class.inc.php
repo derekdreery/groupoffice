@@ -865,14 +865,14 @@ class String {
 
 		//$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
 		
-		$html = preg_replace('/<!.*>/U', '', $html);
-		$html = preg_replace("/([\"']?.*)(script|xss|expression):/Uui", "$1removed", $html);
+		//$html = preg_replace('/<!.*>/U', '', $html);
+		$html = preg_replace("/([\"']?.*)(vbscript|script|xss|expression):/Uui", "$1removed", $html);
 
 
-		$html = preg_replace("/([\"']?.*)xss:/Uui", "$1removed", $html);
-		$html = preg_replace("/([\"']?.*)expression:/Uui", "$1removed", $html);
+		//$html = preg_replace("/([\"']?.*)xss:/Uui", "$1removed", $html);
+		//$html = preg_replace("/([\"']?.*)expression:/Uui", "$1removed", $html);
 
-		$html = preg_replace("/([\"']?)vbscript:/ui", "$1removed_script:", $html);
+		//$html = preg_replace("/([\"']?)vbscript:/ui", "$1removed_script:", $html);
 		
 		$html = preg_replace("/(<.* )on[a-z]+\s*('|\")?=[^>]*/iU", "$1removed_event=", $html);
 		$html = preg_replace("/(<.* )([\"']?\w*) on[a-z]+\s*('|\")?=[^>]*/iU", "$1removed_event=", $html);
