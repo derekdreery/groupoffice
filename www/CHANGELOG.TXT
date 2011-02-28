@@ -1,3 +1,8 @@
+28/02/2011 3.6.26
+- Availability check fix
+- Java upload applet upgrade to fix Czech translation issue.
+- Other small bug fixes.
+
 23/02/2011 3.6.25
 - Updated Norwegian
 - Console.log function was causing an error in projects.
