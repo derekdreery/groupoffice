@@ -866,7 +866,7 @@ class String {
 		//$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
 		
 		//$html = preg_replace('/<!.*>/U', '', $html);
-		$html = preg_replace("/([\"']?.*)(vbscript|script|xss|expression):/Uui", "$1removed", $html);
+		//$html = preg_replace("/([\"']?.*)(vbscript|script|xss|expression):/Uui", "$1removed", $html);
 
 
 		//$html = preg_replace("/([\"']?.*)xss:/Uui", "$1removed", $html);
