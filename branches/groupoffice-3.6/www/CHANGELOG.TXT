@@ -1,6 +1,7 @@
 28/02/2011 3.6.26
 - Availability check fix
 - Java upload applet upgrade to fix Czech translation issue.
+- Calendar entries could be corrupted by changing the end time of a recurring item.
 - Other small bug fixes.
 
 23/02/2011 3.6.25
