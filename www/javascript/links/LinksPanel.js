@@ -567,6 +567,14 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 
 			this.linksDialog.setSingleLink(this.link_id, this.link_type);
 			this.loaded=false;
+
+			//reset all preview panels
+			this.previewPanel.items.each(function(p){
+			if(p.reset){
+				p.reset();
+			}
+		});
+
 		}
 	}
 
