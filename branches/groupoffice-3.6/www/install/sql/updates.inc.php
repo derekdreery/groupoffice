@@ -422,3 +422,5 @@ $updates[]='script:8_install_search.inc.php';
 $updates[]="ALTER TABLE `go_users` ADD `cache` TEXT NOT NULL";
 
 $updates[]='script:9_install_mailings.inc.php';
+
+$updates[]="ALTER TABLE  `go_users` CHANGE  `address_no`  `address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";

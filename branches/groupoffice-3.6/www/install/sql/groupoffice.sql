@@ -313,7 +313,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `city` varchar(50) default NULL,
   `zip` varchar(10) default NULL,
   `address` varchar(100) default NULL,
-  `address_no` varchar(10) default NULL,
+  `address_no` varchar(100) default NULL,
   `homepage` varchar(100) default NULL,
   `work_address` varchar(100) default NULL,
   `work_address_no` varchar(10) default NULL,
