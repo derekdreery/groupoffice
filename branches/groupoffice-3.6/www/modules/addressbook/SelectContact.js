@@ -30,7 +30,7 @@ GO.addressbook.SelectContact = function(config){
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',	    
-        fields: ['id', 'cf', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular', 'company_id','company_name'],
+        fields: ['id', 'cf', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular', 'company_id','company_name','address','address_no','zip','city','state','country'],
 	    remoteSort: true
 	});
 	
