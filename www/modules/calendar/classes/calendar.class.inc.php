@@ -1708,20 +1708,27 @@ class calendar extends db {
 			//may start exactly on the start of display.
 			$calculated_event['start_time']=$interval_start_time-1-$duration;
 
-			//go_debug($calculated_event['name'].': '.date('Ymd G:i', $first_occurrence_time));
+			go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']));
 
+			$last_time = 0;
 			$loops = 0;
 			while($calculated_event['start_time'] = Date::get_next_recurrence_time($first_occurrence_time, $calculated_event['start_time'], $duration, $event['rrule'])) {
 				$loops++;
 
 				$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
 
-				//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
-				
+				go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
+
+
+				//outside display
 				if($calculated_event['start_time'] >= $interval_end_time || $calculated_event['end_time'] <= $interval_start_time || ($calculated_event['repeat_end_time'] && $calculated_event['start_time'] > $event['repeat_end_time']))
 				{
 					break;
 				}
+
+				//same as last
+				//if($calculated_event['start_time']==$last_time)
+					//break;
 
 				if(!$cal->is_exception($calculated_event['id'],$calculated_event['start_time'])) {
 					//go_debug('Adding');
@@ -1729,15 +1736,15 @@ class calendar extends db {
 					$this->events_sort[] = $calculated_event['start_time'].$calculated_event['name'];
 				}
 
-				if($loops==100) {
-					global $GO_MODULES;
-					echo '<a href="'.$GO_MODULES->modules['calendar']['url'].'event.php?event_id='.$calculated_event['id'].
-									'>Warning: event looped 100 times '.
+				if($loops==100) {					
+					throw new Exception('Warning: event looped 100 times '.
 									date('Ymd G:i', $calculated_event['start_time']).'  '.
-									$calculated_event['name'].' event_id='.$calculated_event['id'].'</a><br>';
-					exit();
+									$calculated_event['name'].' event_id='.$calculated_event['id']);					
 				}
+
+				//$last_time = $calculated_event['start_time'];
 			}
+			go_debug($this->events_sort);
 			//go_log(LOG_DEBUG, $calculated_event['name'].': eind');
 		}
 	}
