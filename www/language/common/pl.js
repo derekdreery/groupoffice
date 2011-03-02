@@ -19,6 +19,9 @@
  * Polish Translation v1.2
  * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
  * Date : September, 03 2010
+ * Polish Translation v1.3
+ * Author : rajmund
+ * Date : January, 26 2011
 */
 GO.lang.exportHiddenColumns='Eksportować także ukryte kolumny';
 GO.lang.searchQuery='szukaj';
@@ -364,3 +367,49 @@ GO.lang.createdBy='Utworzony przez';
 GO.lang.debugModeDetected="Ostrzeżenie! Włączony tryb debugowania";
 
 GO.lang.noItemSelectedWarning='Wybierz conajmniej jedną opcję.';
+GO.lang.strName2= 'Nazwa 2';
+GO.lang.debugModeWarning="Use $config['debug']=true; only with development and problem solving. It slows Group-Office down.";
+GO.lang.userGroup='Grupa użytkownika';
+GO.lang.deselectAll='Odznacz wszystkie';
+GO.lang.confirmSelectLotsOfItems='To działanie zaznaczy {count} elementów i może spowodować powolne działanie Group-Office. Czy chcesz kontynuować?';
+GO.lang.captcha='Kod captcha';
+GO.lang.captchaEmpty='Kod captcha jest pusty.';
+GO.lang.multiselectComboMaxItemsReachedWarning='Możesz wybrać maksymalnie {max} opcji';
+GO.lang.toScreen='Na ekran';
+GO.lang.none= 'Żaden';
+GO.lang.userSelectedLanguage= 'Mój wybrany język';
+GO.lang.swfUploadPanelStrings = {
+		text_add: 'Dodaj plik(i)',
+		text_upload: 'Prześlij plik(i)',
+		text_cancel: 'Anuluj przesyłanie',
+		text_clear: 'Wyczyść kolejkę',
+		text_progressbar: 'Pasek postępu',
+		text_remove: 'Usuń plik',
+		text_remove_sure: 'Czy na pewno chcesz usunąć ten plik z kolejki?',
+		text_error: 'Błąd',
+		text_uploading: 'Przesyłanie pliku: {0} ({1} z {2})',
+		header_filename: 'Nazwa pliku',
+		header_size: 'Rozmiar',
+		header_status: 'Status',
+		status: {
+			0: 'W kolejce',
+			1: 'Wysyłanie...',
+			2: 'Ukończone',
+			3: 'Błąd',
+			4: 'Anulowane'
+		},
+		error_queue_exceeded: 'Wybrane pliki przekraczają maksymalną liczbę {0} plików w kolejce.',
+		error_queue_slots_0: 'Nie ma już wolnego slotu',
+		error_queue_slots_1: 'Pozostał tylko jeden slot',
+		error_queue_slots_2: 'Pozostało tylko {0} slotów',
+		error_size_exceeded: 'Rozmar wybranych plików przekracza dozwolony rozmiar 1 MB.',
+		error_zero_byte_file: 'Wybrano plik o rozmiarze 0 bajów.',
+		error_invalid_filetype: 'Wybrano niewłaściwy typ pliku.',
+		error_file_not_found: 'Nie znaleziono pliku 404.',
+		error_security_error: 'Błąd bezpieczeństwa. Not allowed to post to different url.'
+	};
+
+GO.lang.orientation='Orientacja';
+GO.lang.portrait='Pionowa';
+GO.lang.landscape='Pozioma';
+GO.lang.link='Link';

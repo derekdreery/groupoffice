@@ -5,6 +5,9 @@
 //Polish Translation v1.1
 //Author : Paweł Dmitruk pawel.dmitruk@gmail.com
 //Date : September, 04 2010
+//Polish Translation v1.2
+//Author : rajmund
+//Date : January, 26 2011
 require($GO_LANGUAGE->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'kalendarz';
 $lang['calendar']['description'] = 'Moduł Kalendarz; Każdy użytkownik może dodawać, edytować lub usuwać terminy spotkań. Można także przeglądać terminy innych użytkowników i w razie potrzeby zmieniać je.';
@@ -77,3 +80,11 @@ $lang['calendar']['month_times'][2]='drugi';
 $lang['calendar']['month_times'][3]='trzeci';
 $lang['calendar']['month_times'][4]='czwarty';
 $lang['calendar']['month_times'][5]='piąty';
+$lang['calendar']['statuses']['CONFIRMED']= 'Potwierdzone';
+$lang['calendar']['repeats_not_every']= 'Powtarzanie co %s %s';
+$lang['calendar']['rightClickToCopy']='Kliknij prawym, aby skopiować adres odnośnika';
+$lang['calendar']['invitation']='Zaproszenie';
+$lang['calendar']['invitation_update']='Zaktualizowane zaproszenie';
+$lang['calendar']['cancellation']='Anulowanie';
+$lang['calendar']['non_selected']= 'w niezaznaczonym kalendarzu';
+$lang['calendar']['linkIfCalendarNotSupported']='Only use the links below if your mail client does not support calendaring functions.';

@@ -7,6 +7,9 @@
  * Polish Translation v1.1
  * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
  * Date : September, 05 2010
+ * Polish Translation v1.2
+ * Author : rajmund
+ * Date : January, 26 2011
  */
 // 
 // 
@@ -32,8 +35,8 @@ GO.users.lang.cmdPanelEnabledMail = 'Email dla nowo aktywowanych użytkowników'
 GO.users.lang.cmdPanelDisabledMail = 'Email dla deaktywowanych użytkowników';
 	
 GO.users.lang.cmdFieldSetPersonal = 'Osobiste';	
-GO.users.lang.cmdUserWindowTitle= 'Popraw użytkownika';
-GO.users.lang.cmdNotificationWindowTitle= 'Popraw email powitalny';
+GO.users.lang.cmdUserWindowTitle= 'Edytuj dane użytkownika';
+GO.users.lang.cmdNotificationWindowTitle= 'Edytuj treść zaproszenia';
 GO.users.lang.cmdMaskSaving= 'Zapisywanie';
 	
 GO.users.lang.cmdFormLabelSubject = 'Temat';
@@ -51,7 +54,7 @@ GO.users.lang.numberOfLogins = 'Liczba logowań';
 GO.users.lang.cmdFormLabelTheme = 'Szablon';
 GO.users.lang.cmdFormLabelStartModule = 'Start w module';
 GO.users.lang.cmdFormLabelMaximunRows = 'Maksymalna liczba wierszy w listach';
-GO.users.lang.cmdFormLabelSortNamesBy = 'Nazwisko';
+GO.users.lang.cmdFormLabelSortNamesBy = 'Sortuj wpisy wg';
 GO.users.lang.cmdFormLabelLanguage = 'Jezyk';
 GO.users.lang.cmdFormLabelTimezone = 'Strefa czasowa';
 GO.users.lang.cmdFormLabelAdjustDaylight = 'Automatycznie dostosuj czas do zmian czasu zimowego/letniego';
@@ -78,14 +81,14 @@ GO.users.lang.settings = 'Ustawienia osobiste';
 GO.users.lang.dmy = 'Dzień-Miesiąc-Rok';
 GO.users.lang.mdy = 'Miesiąc-Dzień-Rok';
 GO.users.lang.jmd = 'Rok-Miesiąc-Dzień';
-GO.users.lang.fullhourformat = 'format 24 godzinny';
-GO.users.lang.halfhourformat = 'format 12 godzinny';
+GO.users.lang.fullhourformat = 'Format 24-godzinny';
+GO.users.lang.halfhourformat = 'Format 12-godzinny';
 GO.users.lang.sunday = 'Niedziela';
 GO.users.lang.monday = 'Poniedziałek';
 GO.users.lang.regionalSettings = 'Ustawienia regionalne';
 GO.users.lang.userSettings = 'Ustawienia użytkownika';
 
-GO.users.lang.maxUsersReached='Maksymalna liczba użytkowników została osiągnięta. Przejdź do karty serwisowej aby zwiększyć liczbę użytkowników.';
+GO.users.lang.maxUsersReached='Maksymalna liczba użytkowników została osiągnięta. Skontaktuj się z administratorem, aby zwiększyć limit użytkowników.';
 
 GO.users.lang.group='Grupa';
 
@@ -93,10 +96,10 @@ GO.users.lang.muteSound='Wcisz dźwięk';
 
 GO.users.lang.downloadSampleCSV='Wczytaj przykładowy plik CSV';
 
-GO.users.lang.importText='Możesz zaimportować użytkowników z pliku CSV. Aby znać format pliku CSV, pobierz przykładowy plik.<br />Pierwsza linia musi zawierać nazwy kolumn. Wymagane są następujące pola dla każdego uzytkownika:<br /><br />nazwa użytkownika (username), hasło (password), imie (first_name), nazwisko (last_name), adres_e-mail(email)';
+GO.users.lang.importText='Możesz zaimportować użytkowników z pliku CSV. Pobierz przykładowy plik, aby poznać wymagany format pliku do importu.<br />Pierwsza linia musi zawierać nazwy kolumn. Następujące pola są wymagane dla każdego wpisu w pliku importu:<br /><br />nazwa użytkownika (username), hasło (password), imię (first_name), nazwisko (last_name), adres_e-mail(email)';
 GO.users.lang.profile='Profil';
-GO.users.lang.mailReminders='Przypomnienie o nowej wiadomości';
-GO.users.lang.useModule= 'Use';
+GO.users.lang.mailReminders='Przypomnienia o nowej wiadomości';
+GO.users.lang.useModule= 'Używanie';
 GO.users.lang.manageModule= 'Zarządzanie';
 GO.users.lang.numberFormat='Format liczb';
 GO.users.lang.importExport='Import / Eksport';
@@ -107,4 +110,4 @@ GO.users.lang.lastName= 'Nazwisko';
 GO.users.lang.firstName= 'Imię';
 GO.users.lang.sendInvitation='Wyślij zaproszenie';
 GO.users.lang.contactInfo='Informacje o kontakcie';
-GO.users.lang.popupNotification='Pokaż wyskakujące okienko kiedy przypomnienie jest aktywne lub dotrze wiadomość';
+GO.users.lang.popupNotification='Pokaż wyskakujące okienko, kiedy przypomnienie stanie się aktywne lub nadejdzie nowa wiadomość';

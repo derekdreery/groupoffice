@@ -2,6 +2,9 @@
 //Polish Translation v1.1
 //Author : Paweł Dmitruk pawel.dmitruk@gmail.com
 //Date : September, 03 2010
+//Polish Translation v1.2
+//Author : rajmund
+//Date : January, 26 2011
 
 require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
 $lang['filetypes']['unknown'] = 'Nieznany typ pliku';
@@ -69,3 +72,6 @@ $lang['filetypes']['xlsx']= 'Arkusz kalkulacyjny Microsoft Excel';
 $lang['filetypes']['pptx']= 'Prezentacja Microsoft Powerpoint';
 $lang['filetypes']['ppsx']= 'Prezentacja Microsoft Powerpoint';
 $lang['filetypes']['csv']= 'Comma Separated Values';
+$lang['filetypes']['js']= 'Plik Javascript';
+$lang['filetypes']['sql']= 'Eksport bazy danych SQL';
+$lang['filetypes']['xmind']='Plik XMind';
