@@ -1,3 +1,8 @@
+02/03/2011 3.6.27
+- Autocomplete for contacts in billing module works again.
+- Bug with monthly recurring event.
+- Updated Polish translation
+
 28/02/2011 3.6.26
 - Availability check fix
 - Java upload applet upgrade to fix Czech translation issue.
