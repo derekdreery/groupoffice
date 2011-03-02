@@ -6,6 +6,9 @@
 //Polish Translation v1.1
 //Author : Paweł Dmitruk pawel.dmitruk@gmail.com
 //Date : September, 03 2010
+//Polish Translation v1.2
+//Author : rajmund
+//Date : January, 26 2011
 
 require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 $lang['common']['about']='Version: %s
@@ -42,7 +45,7 @@ $lang['common']['loadingModule'] = 'Ładowanie modułu';
 $lang['common']['loggedInAs'] = "Zalogowano jako ";
 $lang['common']['search']='Szukaj';
 $lang['common']['settings']='Ustawienia';
-$lang['common']['adminMenu']='menu Admina';
+$lang['common']['adminMenu']='Menu Admina';
 $lang['common']['startMenu']='Start menu';
 $lang['common']['help']='Pomoc';
 $lang['common']['logout']='Wyloguj';
@@ -224,3 +227,7 @@ $lang['common']['createdBy']='Utworzone przez';
 $lang['common']['none']='Brak';
 $lang['common']['alert']='Ostrzeżenie';
 $lang['common']['theFolderAlreadyExists']='Folder o tej nazwie istnieje';
+$lang['common']['name2']= 'Nazwa 2';
+$lang['common']['other']='Inne';
+$lang['common']['copy']='kopiuj';
+$lang['common']['upload_file_to_big']='Plik, który próbowano przesłać na serwej był większy niż maksymalny dozwolony (obecny limit: %s).';

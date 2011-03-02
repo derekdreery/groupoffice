@@ -4,9 +4,9 @@
  * Polish Translation v1.0
  * Author : Robert GOLIAT info@robertgoliat.com  info@it-administrator.org
  * Date : January, 20 2009
- */
-// 
-// 
+ * Polish Translation v1.1
+ * Author : rajmund
+ * Date : January, 26 2011
 /**
  * Copy everything below for translations
  */

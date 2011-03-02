@@ -6,7 +6,9 @@
 //Polish Translation v1.1
 //Author : Paweł Dmitruk pawel.dmitruk@gmail.com
 //Date : September, 05 2010
-
+//Polish Translation v1.2
+//Author : rajmund
+//Date : January, 26 2011
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('tasks'));
 
@@ -34,4 +36,7 @@ $lang['tasks']['list']='Lista zadań';
 $lang['tasks']['tasklistChanged']="* Lista zadań zmieniona z '%s' na '%s'";
 $lang['tasks']['statusChanged']="* Status zmieniony z '%s' na '%s'";
 
+$lang['tasks']['dueAtdate']='Due at %s';
+$lang['tasks']['multipleSelected']='Wybrano wiele list zadań';
+$lang['tasks']['incomplete_delete']='Nie masz uprawnień do usunięcia wszystkich zaznaczonych zadań';
 ?>
