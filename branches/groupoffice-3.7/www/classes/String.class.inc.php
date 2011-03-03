@@ -851,42 +851,37 @@ class String {
 		);
 
 		$html = preg_replace($to_removed_array, '', $html);
-				
-		require_once($GO_CONFIG->class_path.'XSSclean.class.inc.php');
-		$XSSclean = new XSSclean();
-		$html = $XSSclean->xss_clean($html);
-		
-		//debug($html);
-
-		//$html = String::clean_utf8($html);
-
-
-		//$html = html_entity_decode($html, ENT_QUOTES, 'UTF-8');
-		
-		//$html = preg_replace('/<!.*>/U', '', $html);
-		//$html = preg_replace("/([\"']?.*)(script|xss|expression):/Uui", "$1removed", $html);
-
-
-		//$html = preg_replace("/([\"']?.*)xss:/Uui", "$1removed", $html);
-		//$html = preg_replace("/([\"']?.*)expression:/Uui", "$1removed", $html);
-
-		//$html = preg_replace("/([\"']?)vbscript:/ui", "$1removed_script:", $html);
-		
-		//$html = preg_replace("/(<.* )on[a-z]+\s*('|\")?=[^>]*/iU", "$1removed_event=", $html);
-		//$html = preg_replace("/(<.* )([\"']?\w*) on[a-z]+\s*('|\")?=[^>]*/iU", "$1removed_event=", $html);
-
-
-		//not sure if this is needed
-		//$html = preg_replace('/&#38;#(\d+);/me','chr(\\1)', $html);
-		//$html = preg_replace('/&#38;#x([a-f0-9]+);/mei','chr(0x\\1)', $html);
-		
-		
-		
-		//debug($html);
+		$html = String::xss_clean($html);
 
 		return $html;
 	}
 
+	function xss_clean($data)
+	{
+		// Fix &entity\n;
+		$data = str_replace(array('&amp;','&lt;','&gt;'), array('&amp;amp;','&amp;lt;','&amp;gt;'), $data);
+		$data = preg_replace('/(&#*\w+)[\x00-\x20]+;/u', '$1;', $data);
+		$data = preg_replace('/(&#x*[0-9A-F]+);*/iu', '$1;', $data);
+		$data = html_entity_decode($data, ENT_COMPAT, 'UTF-8');
+
+		// Remove any attribute starting with "on" or xmlns
+		$data = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $data);
+
+		// Remove javascript: and vbscript: protocols
+		$data = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2nojavascript...', $data);
+		$data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2novbscript...', $data);
+		$data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u', '$1=$2nomozbinding...', $data);
+
+		// Only works in IE: <span style="width: expression(alert('Ping!'));"></span>
+		$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?expression[\x00-\x20]*\([^>]*+>#i', '$1>', $data);
+		$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?behaviour[\x00-\x20]*\([^>]*+>#i', '$1>', $data);
+		$data = preg_replace('#(<[^>]+?)style[\x00-\x20]*=[\x00-\x20]*[`\'"]*.*?s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*+>#iu', '$1>', $data);
+
+		// Remove namespaced elements (we do not need them)
+		$data = preg_replace('#</*\w+:\w[^>]*+>#i', '', $data);
+
+		return $data;
+	}
 	
 	/**
 	 * Change HTML links to Group-Office links. For example mailto: links will call

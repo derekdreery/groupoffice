@@ -1,4 +1,5 @@
 <?php
+$languages['ca']='Català';
 $languages['cn']='Chinese Simplified';
 $languages['zh-tw']='Chinese Traditional';
 $languages['cs']='Čeština';

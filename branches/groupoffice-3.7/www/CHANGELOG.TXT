@@ -1,4 +1,3 @@
-
 - Public icalendar file
 - Sieve e-mail filtering support
 - Optimized for very large installations 20.000 users.
@@ -8,6 +7,23 @@
 - Standard timeregistration entries selectable from a list.
 - Custom fields for timeregistration entries in Multiple day mode.
 - Preset the folder view for other users. 
+
+
+02/03/2011 3.6.27
+- Autocomplete for contacts in billing module works again.
+- Bug with monthly recurring event.
+- Updated Polish translation
+
+28/02/2011 3.6.26
+- Availability check fix
+- Java upload applet upgrade to fix Czech translation issue.
+- Calendar entries could be corrupted by changing the end time of a recurring item.
+- Other small bug fixes.
+
+23/02/2011 3.6.25
+- Updated Norwegian
+- Console.log function was causing an error in projects.
+- Added some Czech translation files.
 
 22/02/2011 3.6.24
 - Tasks recur on due time and only the due date is shown in the calendar.

@@ -15,6 +15,9 @@
 //Polish Translation v1.0
 //Author: Grzegorz Szajuk    grzegorz.szajuk@gamil.com
 //Date: March, 30 2010/
+//Polish Translation v1.1
+//Author : rajmund
+//Date : January, 26 2011
 
 require($GO_LANGUAGE->get_fallback_language_file('mailings'));
 
@@ -26,3 +29,8 @@ $lang['mailings']['mailingAlreadyExists'] = 'Lista adresowa, którą próbujesz 
 
 $lang['mailings']['greet']='Z poważaniem';
 
+$lang['mailings']['unsubscribe']='Wypisz się z listy';
+$lang['mailings']['unsubscription']='Kliknij, aby wypisać się z tej listy.';
+$lang['mailings']['r_u_sure']= 'Czy na pewno chcesz wypisać się z tej listy?';
+$lang['mailings']['delete_success']= 'Wypisanie z listy zakończone powodzeniem.';
+$lang['mailings']['setCurrentTemplateAsDefault']='Ustaw obecny szablon jako domyślny';

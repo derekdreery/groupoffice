@@ -7,6 +7,9 @@
  * Polish Translation v1.1
  * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
  * Date : September, 04 2010
+ * Polish Translation v1.2
+ * Author : rajmund
+ * Date : January, 26 2011
  */
 // 
 // 
@@ -50,4 +53,17 @@ GO.tasks.lang.defaultTasklist='Domyślna lista zadań';
 GO.tasks.lang.visibleTasklists='Widoczne listy zadań';
 GO.tasks.lang.visible='Widoczna';
 GO.tasks.lang.selectIcalendarFile='Wybierz plik icalendar (*.ics)';
-GO.tasks.lang.continueTask='Kontynuj zadanie';
+GO.tasks.lang.continueTask='Kontynuuj zadanie';
+GO.tasks.lang.categories='Kategorie';
+GO.tasks.lang.category='Kategoria';
+GO.tasks.lang.selectCategory='Wybierz kategorię';
+GO.tasks.lang.noTasklistSelected='Proszę wybrać przynajmniej jedną listę zadań.';
+GO.tasks.lang.selectAllTasklists='Wybierz wszystkie listy zadań';
+GO.tasks.lang.globalCategory='Globala kategoria';
+GO.tasks.lang.showFutureTasks='Pokaż przyszłe zadania';
+GO.tasks.lang.incompleteTasks='Niedokończone zadania';
+GO.tasks.lang.dueInSevenDays='Następne 7 dni';
+GO.tasks.lang.overDue='Zaległe';
+GO.tasks.lang.futureTasks='Przyszłe';
+GO.tasks.lang.all='Wszystkie';
+GO.tasks.lang.active='Aktywne';
