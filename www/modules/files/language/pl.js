@@ -7,6 +7,9 @@
  * Polish Translation v1.1
  * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
  * Date : September, 05 2010
+ * Polish Translation v1.2
+ * Author : rajmund
+ * Date : January, 26 2011
  */
 //
 //
@@ -42,3 +45,6 @@ GO.files.lang.selectFiles= 'Wybierz pliki';
 GO.files.lang.fitImage='Dopasuj obraz';
 GO.files.lang.normalSize='Normalny rozmiar';
 GO.files.lang.imageViewer='Przeglądarka obrazów';
+GO.files.lang.emailDownloadLink= 'Wyślij link do pobierania';
+GO.files.lang.expireTime= 'Okres ważności linku do pobierania';
+GO.files.lang.newFolder= 'Nowy folder';

@@ -307,7 +307,11 @@ class ldapauth extends imapauth {
 							//$sc = new serverclient();
 							go_debug('LDAPAUTH: Could not find e-mail account for LDAP user. It will be created now.');
 							$_POST['serverclient_domains']=array($arr[1]);
-							serverclient::add_user($user);
+							try{
+								serverclient::add_user($user);
+							}catch(Exception $e){
+								go_debug('LDAPAUTH: Failed adding e-mail account: '.$e->getMessage());
+							}
 						}
 
 					}

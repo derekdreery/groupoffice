@@ -16,7 +16,9 @@
  * Polish Translation v1.1
  * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
  * Date : September, 05 2010
- 
+ * Polish Translation v1.2
+ * Author : rajmund
+ * Date : January, 26 2011
  */
 
 /**
@@ -64,7 +66,7 @@ GO.addressbook.lang.company= 'Firma';
 GO.addressbook.lang.cmdCompanyDetailsFor= 'Szczegóły o';
 GO.addressbook.lang.cmdPanelCompany = 'Dane szczegółowe firmy';
 GO.addressbook.lang.cmdFormLabelBankNo = 'Konto bankowe numer';
-GO.addressbook.lang.cmdFormLabelVatNo = 'Numer NIP';
+GO.addressbook.lang.cmdFormLabelVatNo = 'NIP';
 GO.addressbook.lang.cmdFieldsetCompanyDetails = 'Dane szczegółowe firmy';
 GO.addressbook.lang.cmdFieldsetVisitAddress = 'Adres miejsca prowadzenia działalności';
 GO.addressbook.lang.cmdFieldsetPostAddress = 'Adres do korespondecji';
@@ -121,3 +123,10 @@ GO.addressbook.lang.addAllSearchResults='Dodaj wyniki wyszukiwania';
 GO.addressbook.lang.confirmAddAllSearchResults='Czy napewno chcesz dodać wszystkie wyniki wyszukiwania do listy adresów?';
 GO.addressbook.lang.moveEmployees='Przenieś pracowników';
 GO.addressbook.lang.id='Identyfikator';
+GO.addressbook.lang.emailAdded='Adres e-mail został pomyślnie dodany do kontaktu';
+GO.addressbook.lang.exportWithCompanies='Z firmami';
+GO.addressbook.lang.exportPermission='Uprawnienia do eksportu';
+GO.addressbook.lang.crn='REGON';
+GO.addressbook.lang.iban='IBAN';
+GO.addressbook.lang.unknownEmail= 'Nieznany adres e-mail';
+GO.addressbook.lang.strUnknownEmail= 'Ten adres e-mail nie jest znany. Chcesz go dodać do nowego kontaktu, dodać do istniejącego kontaktu czy pominąć?';

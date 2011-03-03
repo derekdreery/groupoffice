@@ -174,8 +174,6 @@ class Date {
 			return false;
 		}
 
-
-
 		if(!isset($rrule['FREQ']))
 		{
 			return false;
@@ -343,9 +341,7 @@ class Date {
 
 					$test_time=mktime(date('H', $first_occurence_time), date('i', $first_occurence_time),0, date('n', $start_time), date('j', $start_time), date('Y', $start_time));
 					while($occurence_time==0)
-					{				
-						$test_time = Date::date_add($test_time, 1);
-
+					{	
 						//go_debug('*'.date('r', $test_time));
 
 						$weekday = date("w", $test_time);
@@ -363,7 +359,7 @@ class Date {
 							}else
 							{
 								//go_debug('**'.ceil(date('j',$test_time)/7).' = '.$event['month_time']);
-								if (ceil(date('j',$test_time)/7) == $event['month_time'])
+								if (ceil(date('j',$test_time)/7) == $event['month_time'] && $test_time>$start_time)
 								{
 									$occurence_time=$test_time;
 									//go_debug('found '.date('Ymd', $occurence_time));
@@ -377,6 +373,9 @@ class Date {
 						 */
 						if(date('j',$test_time)>($event['month_time']+1)*7){
 							$test_time = mktime(date('H', $test_time), date('i', $test_time),0, date('n', $test_time)+1, 1, date('Y', $test_time));
+						}else
+						{
+							$test_time = Date::date_add($test_time, 1);
 						}
 					}
 					

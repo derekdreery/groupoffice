@@ -5,6 +5,9 @@
  * Polish Translation v1.1
  * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
  * Date : September, 04 2010
+ * Polish Translation v1.2
+ * Author : rajmund
+ * Date : January, 26 2011
  */
 GO.email.lang.messages='Wiadomości';
 GO.email.lang.message='Wiadomość';
@@ -91,7 +94,7 @@ GO.email.lang.priority='Priorytet';
 GO.email.lang.read='Przeczytane';
 GO.email.lang.NA='Brak danych';
 GO.email.lang.emptyFolder='Wyczyść folder';
-GO.email.lang.emptyFolderConfirm='Czy na pewno chcesz WYCZYSCIĆ folder \'{mailbox}\'?';
+GO.email.lang.emptyFolderConfirm='Czy na pewno chcesz WYCZYŚCIĆ folder \'{mailbox}\'?';
 GO.email.lang.addUnknownRecipients='Dodaj nieznanego odbiorcę';
 GO.email.lang.addUnknownRecipientsText='Wysłałeś wiadomość do jednej lub kilku osób nie zapisanych w Twojej książce adresowej. Kliknij na nazwę, jeżeli chcesz dodać ta osobę do listy, lub zamknij to okno';
 GO.email.lang.attachFilesPC='Dodaj z PC';
@@ -138,3 +141,21 @@ GO.email.lang.searchFrom='Nadawca';
 GO.email.lang.searchTo='Odbiorca';
 GO.email.lang.searchCC='Odbiorca (DW)';
 GO.email.lang.youHaveNewMails= 'Masz {new} nową(e) wiadomość(i)';
+GO.email.lang.loadEmailFirst= 'Aby użyć tej funkcji, należy wcześniej otworzyć zakładkę E-mail';
+GO.email.lang.replaceEmailText='Ten kontakt ma już przypisane 3 adresy e-mail. Możesz zastąpić jeden z nich klikając na niego poniżej.';
+GO.email.lang.skipUnknownRecipientsAction='Nie pokazuj tego okna następnym razem';
+GO.email.lang.skipUnknownRecipients='Nie pokazuj tego okna dialogowego następnym razem';
+GO.email.lang.alwaysRequestNotification='Zawsze wymagaj potwierdzenia przeczytania';
+GO.email.lang.alwaysRespondToNotifications='Zawsze odpowiadaj na żądanie potwierdzenia przeczytania';
+GO.email.lang.icalendarUpdateEvent='Aktualizuj wydarzenie';
+GO.email.lang.icalendarDeleteEvent='Usuń wydarzenie';
+GO.email.lang.icalendarAcceptInvitation='Akceptuj';
+GO.email.lang.icalendarDeclineInvitation='Odrzuć';
+GO.email.lang.icalendarTentativeInvitation='Niepewny';
+GO.email.lang.anyField='Dowolne pole';
+GO.email.lang.icalendarEventUpdated='Wydarzenie zostało zaktualizowane.';
+GO.email.lang.icalendarEventCreated='Wydarzenie zostało stworzone.';
+GO.email.lang.icalendarEventDeleted='Wydarzenie zostało usunięte.';
+GO.email.lang.icalendarInvitationDeclined='Zaproszenie zostało odrzucone.';
+GO.email.lang.icalendarDeleteEventConfirm='Czy na pewno chcesz usunąć to wydarzenie?';
+GO.email.lang.sending='Wysyłanie...';

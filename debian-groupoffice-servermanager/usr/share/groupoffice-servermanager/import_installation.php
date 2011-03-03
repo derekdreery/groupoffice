@@ -23,6 +23,26 @@ $args = parse_cli_args($argv);
 if(!isset($args['domain']))
 	die("The domain argument is required\n\n");
 
+if(isset($args['rename_domain']))
+{
+	$old_dir = '/home/govhosts/'.$args['rename_domain'];
+
+	if(!is_dir($old_dir)){
+		die('Could not rename '.$old_dir.' because it does not exist!');
+	}
+	$cmd = 'mv "'.$old_dir.'" "/home/govhosts/'.$args['domain'].'"';
+	system($cmd);
+
+
+	$old_dir = '/etc/groupoffice/'.$args['rename_domain'];
+
+	if(!is_dir($old_dir)){
+		die('Could not rename '.$old_dir.' because it does not exist!');
+	}
+	$cmd = 'mv "'.$old_dir.'" "/etc/groupoffice/'.$args['domain'].'"';
+	system($cmd);
+}
+
 // Checken of het te importeren domein opgegeven is.
 if(!isset($args['importroot']))
 		$args['importroot'] = "/home/govhosts/".$args['domain']."/data/";

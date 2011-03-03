@@ -37,3 +37,4 @@ GO.files.lang.normalSize='Normal størrelse';
 GO.files.lang.imageViewer='Bildevisning';
 GO.files.lang.emailDownloadLink= 'Send nedlastingslenke';
 GO.files.lang.expireTime= 'Lenken utløper den:';
+GO.files.lang.newFolder= 'Ny mappe';

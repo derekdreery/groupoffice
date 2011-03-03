@@ -6,7 +6,9 @@
 //Polish Translation v1.1
 //Author : Paweł Dmitruk pawel.dmitruk@gmail.com
 //Date : September, 05 2010
-
+//Polish Translation v1.2
+//Author : rajmund
+//Date : January, 26 2011
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('files'));
 
@@ -44,3 +46,10 @@ $lang['files']['file']='Plik';
 $lang['files']['folder']='Folder';
 $lang['link_type'][6]='Plik';
 $lang['files']['files']='Pliki';
+
+$lang['link_type'][17]='Folder';
+$lang['files']['emptyFile']='Pusty plik';
+$lang['files']['downloadLink']= 'Pobierz link';
+$lang['files']['clickHereToDownload']= 'Kliknij tutaj, aby pobrać bezpieczy link do pliku';
+$lang['files']['copyPasteToDownload']= 'Aby pobrać plik, kliknij poniższy bezpieczny link lub skopuj go do przeglądarki.';
+$lang['files']['possibleUntil']= 'możliwe do';
