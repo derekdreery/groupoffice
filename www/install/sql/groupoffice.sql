@@ -656,3 +656,14 @@ INSERT INTO `go_iso_address_format` (`iso`, `address_format_id`) VALUES
 ('ZM', 1),
 ('AE', 1),
 ('ZW', 1);
+
+DROP TABLE IF EXISTS `go_saved_search_queries`;
+CREATE TABLE `go_saved_search_queries` (
+`id` INT NOT NULL ,
+`user_id` INT NOT NULL ,
+`name` VARCHAR( 50 ) NOT NULL ,
+`sql` TEXT NOT NULL ,
+`type` VARCHAR( 50 ) NOT NULL ,
+PRIMARY KEY ( `id` ) ,
+INDEX ( `type` )
+) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
