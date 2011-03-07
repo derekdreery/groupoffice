@@ -131,3 +131,5 @@ GO.calendar.lang.globalsettings_renameall = 'Weet u zeker dat u alles wilt herno
 
 
 GO.calendar.lang.publishICS='Publiceer iCalendar bestand voor afgelopen maand en toekomstige afspraken. Let op! De agenda wordt voor iedereen leesbaar.';
+
+GO.calendar.lang.addTimeRegistration='Invoeren als tijdsregistratie';
