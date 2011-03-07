@@ -142,3 +142,5 @@ GO.calendar.lang.globalsettings_allchangelabel = 'Rename all existing';
 GO.calendar.lang.globalsettings_renameall = 'Are you sure you want to rename all default user calendars?';
 
 GO.calendar.lang.publishICS='Publish iCalendar file of last month and future events. Caution! The calendar will be readable to everyone.';
+
+GO.calendar.lang.addTimeRegistration='Import into timeregistration';
