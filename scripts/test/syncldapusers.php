@@ -127,7 +127,7 @@ echo "Setting calendar entries older then one month to private\n";
 $sql = <<<EOF
 UPDATE cal_events INNER JOIN cal_calendars ON cal_calendars.id=cal_events.calendar_id
 SET private =  "1" 
-WHERE cal_calendars.name NOT LIKE 'gr_%' AND ((
+WHERE cal_calendars.name NOT LIKE 'gr\_%' AND ((
 start_time < UNIX_TIMESTAMP( NOW( ) - INTERVAL 1 MONTH ) AND rrule =  ''
 ) OR (
 repeat_end_time >0 AND repeat_end_time < UNIX_TIMESTAMP( NOW( ) - INTERVAL 1 MONTH )
