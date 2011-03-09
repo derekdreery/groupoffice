@@ -930,7 +930,7 @@ try {
 					$account_id=$matches[1];
 
 					//ensure dir is there
-					File::mkdir(dirname($path));
+					File::mkdir($GO_CONFIG->file_storage_path.dirname($path));
 
 					if($account_id == $account['id'] && !file_exists($GO_CONFIG->file_storage_path.$path)){
 						$link_id=$matches[3];
