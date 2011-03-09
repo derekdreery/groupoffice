@@ -42,25 +42,29 @@ try {
 			$response['success'] = true;
 			$response['feedback'] = $feedback;
 
+			$admin_only = isset($_POST['admin_only'])? 1 : 0;
+
 			if ($group_id < 1) {
 				//insert
 				if ($GO_GROUPS->get_group_by_name($name)) {
 					$response['feedback'] = $lang['groups']['groupNameAlreadyExists'];
 					$response['success'] = false;
 				} else {
-					$new_group_id = $GO_GROUPS->add_group($GO_SECURITY->user_id, $name);
+					$acl_id = $GO_SECURITY->get_new_acl('group', $GO_SECURITY->user_id);
+					$new_group_id = $GO_GROUPS->add_group($GO_SECURITY->user_id, $name, $admin_only, $acl_id);
 					if (!$new_group_id) {
+						$GO_SECURITY->delete_acl($acl_id);
 						throw new DatabaseInsertException();
 					} else {
 						$response['group_id'] = $new_group_id;
+						$response['acl_id']=$acl_id;
+						$response['admin_only']=$admin_only;
 					}
 				}
 			} else {
 				// update
-				if (!$GO_GROUPS->update_group($group_id, $name)) {
+				if (!$GO_GROUPS->update_group($group_id, $name, $admin_only)) {
 					throw new DatabaseUpdateException();
-				} else {
-					$response['group_id'] = $group_id;
 				}
 			}
 

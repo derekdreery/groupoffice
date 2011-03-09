@@ -12,10 +12,15 @@
  */
 
 /**
- //Polish Translation v1.0
-//Author: Grzegorz Szajuk    grzegorz.szajuk@gamil.com
-//Date: March, 30 2010/
-
+ * Polish Translation v1.0
+ * Author: Grzegorz Szajuk    grzegorz.szajuk@gamil.com
+ * Date: March, 30 2010
+ * Polish Translation v1.2
+ * Author : rajmund
+ * Date : January, 26 2011
+ * Polish Translation v1.1
+ * Author : rajmund
+ * Date : January, 26 2011
 /**
  * Copy everything below for translations
  */
@@ -37,8 +42,8 @@ GO.mailings.lang.autoDataMyName = 'Moje nazwisko';
 GO.mailings.lang.autoDataBeginning = 'Początek';
 GO.mailings.lang.emailTemplate = 'Szablon E-mail';
 
-GO.mailings.lang.sendingEmailAllowed = 'Dopuszczone jest wysyłanie e-maili';
-GO.mailings.lang.enabledMailingGroups = 'Udostępnione listy adresowe:';
+GO.mailings.lang.sendingEmailAllowed = 'Wysyłanie wiadomości na tą listę jest dozwolone';
+GO.mailings.lang.enabledMailingGroups = 'Dopisz do listy adresowej:';
 GO.mailings.lang.autoData = 'Autodata';
 GO.mailings.lang.selectMailingGroup='Wybierz listę adresową';
 GO.mailings.lang.noMailingGroups='Nie masz żadnych list adresowych';
@@ -75,3 +80,9 @@ GO.mailings.lang.viewLog='Przeglądaj log';
 GO.mailings.lang.viewMessage='Zobacz wiadomość';
 GO.mailings.lang.pauseMailing='Zatrzymaj wysyłanie';
 GO.mailings.lang.resumeMailing='Wznów wysyłanie';
+
+GO.mailings.lang.unsubscribeLink='Unsubscribe link';
+GO.mailings.lang.unsubscribeHref='Unsubscribe href';
+GO.mailings.lang.addDocumentTemplate='Dodaj szablon dokumentu';
+GO.mailings.lang.documentTemplate='Szablon dokumentu';
+GO.mailings.lang.copyingMessages='Kopiowanie wiadomości...';

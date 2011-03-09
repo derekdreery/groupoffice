@@ -57,9 +57,9 @@ switch ($_POST['task'])
 			}
 		}
 
-		$user_id = (!$GO_MODULES->modules['groups']['read_permission']) ? $GO_SECURITY->user_id : 0;
+		//$user_id = (!$GO_MODULES->modules['groups']['read_permission']) ? $GO_SECURITY->user_id : 0;
 		
-		$response['total'] = $GO_GROUPS->get_groups($user_id, $start, $limit, $sort, $dir);
+		$response['total'] = $GO_GROUPS->get_authorized_groups($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
 		$response['results']=array();
 		while($GO_GROUPS->next_record())
 		{
@@ -69,6 +69,8 @@ switch ($_POST['task'])
 					'id' => $GO_GROUPS->f('id'),
 					'name' => $GO_GROUPS->f('name'),
 					'user_id' => $GO_GROUPS->f('user_id'),
+					'acl_id' => $GO_GROUPS->f('acl_id'),
+					'admin_only' => $GO_GROUPS->f('admin_only'),
 					'user_name' => String::format_name($GO_GROUPS->f('last_name'), $GO_GROUPS->f('first_name'), $GO_GROUPS->f('middle_name'))
 				);
 				$response['results'][] = $record;
@@ -82,7 +84,7 @@ switch ($_POST['task'])
 		
 		$user_id = (!$GO_MODULES->modules['groups']['read_permission']) ? $GO_SECURITY->user_id : 0;
 
-		$response['total'] = $GO_GROUPS->get_groups($user_id, $start, $limit, $sort, $dir);
+		$response['total'] = $GO_GROUPS->get_authorized_groups($user_id, $start, $limit, $sort, $dir);
 		$response['results']=array();
 		while($GO_GROUPS->next_record())
 		{
@@ -92,6 +94,8 @@ switch ($_POST['task'])
 					'id' => $GO_GROUPS->f('id'),
 					'name' => $GO_GROUPS->f('name'),
 					'user_id' => $GO_GROUPS->f('user_id'),
+					'acl_id' => $GO_GROUPS->f('acl_id'),
+					'admin_only' => $GO_GROUPS->f('admin_only'),
 					'user_name' => String::format_name($GO_GROUPS->f('last_name'), $GO_GROUPS->f('first_name'), $GO_GROUPS->f('middle_name'))
 				);
 				$response['results'][] = $record;
@@ -113,6 +117,8 @@ switch ($_POST['task'])
 			$record = array(
 				'id' => $GO_GROUPS->f('id'),
 				'user_id' => $GO_GROUPS->f('user_id'),
+				'acl_id' => $GO_GROUPS->f('acl_id'),
+				'admin_only' => $GO_GROUPS->f('admin_only'),
 				'name' => String::format_name($GO_GROUPS->f('last_name'), $GO_GROUPS->f('first_name'), $GO_GROUPS->f('middle_name')),
 				'email' => $GO_GROUPS->f('email'),
 				'username' => $GO_GROUPS->f('username')

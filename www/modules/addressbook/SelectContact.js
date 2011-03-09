@@ -19,6 +19,13 @@ GO.addressbook.SelectContact = function(config){
 	
 	if(!config.valueField)
 		config.valueField='id';
+
+
+	var fields = {fields: ['id', 'cf', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular', 'company_id','company_name','address','address_no','zip','city','state','country'], columns:[]};
+	if(GO.customfields)
+	{
+		GO.customfields.addColumns(2, fields);
+	}
 	
 	config.store = new GO.data.JsonStore({
 	    url: GO.settings.modules.addressbook.url+ 'json.php',
@@ -30,7 +37,7 @@ GO.addressbook.SelectContact = function(config){
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',	    
-        fields: ['id', 'cf', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular', 'company_id','company_name'],
+      fields: fields.fields,
 	    remoteSort: true
 	});
 	

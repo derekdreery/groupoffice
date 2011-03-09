@@ -24,6 +24,8 @@ if(isset($go_config['config_file'])){
 	if(!WP_DEBUG)
 		ini_set('display_errors', 0);
 	//ini_set('display_errors', 0);
+
+	define('GROUPOFFICE_CONNECTED', true);
 }
 //ini_set('display_errors', 1);
 //ini_set('error_reporting', E_ALL & ~E_NOTICE);
@@ -144,6 +146,9 @@ function groupoffice_unserializesession($data) {
 
 function groupoffice() {
 
+	if(!defined('GROUPOFFICE_CONNECTED'))
+		return false;
+	
 	global $current_user;
 
 	$GO_SID = false;

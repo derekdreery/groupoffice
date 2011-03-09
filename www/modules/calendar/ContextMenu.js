@@ -4,7 +4,7 @@ GO.calendar.ContextMenu = function(config){
 	{
 		config = {};
 	}
-
+	
 	config.items=[
 	{
 		iconCls: 'btn-properties',
@@ -54,7 +54,24 @@ GO.calendar.ContextMenu = function(config){
 		{
 			this.fireEvent("deleteEvent", this);
 		}
-	})]
+	})
+	]
+
+	if(GO.timeregistration)
+	{
+		this.actionAddTimeRegistration = new Ext.menu.Item({
+			text: GO.calendar.lang.addTimeRegistration,
+			iconCls: 'go-menu-icon-timeregistration',
+			cls: 'x-btn-text-icon',
+			scope:this,
+			handler: function()
+			{
+				this.showAddTimeRegistrationDialog();
+			}
+		});
+
+		config.items.splice(1,0,this.actionAddTimeRegistration);
+	}
 
 /*
 	this.selectDateDialog = new GO.calendar.SelectDateDialog();
@@ -79,13 +96,21 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 	setEvent : function(event, view_id)
 	{
 		this.event = event;
-
+		
 		this.view_id = (view_id) ? view_id : 0;
 
 		this.actionCopy.setDisabled(this.event.read_only);
 		this.actionCut.setDisabled(this.event.read_only);
 		this.actionDelete.setDisabled(this.event.read_only);
-	},	
+	},
+	showAddTimeRegistrationDialog : function()
+	{
+		if(!this.addTimeRegistrationDialog)
+		{
+			this.addTimeRegistrationDialog = new GO.timeregistration.addTimeRegistrationDialog();
+		}
+		this.addTimeRegistrationDialog.show(this.event);
+	},
 	showSelectDateDialog : function(isCopy, repeat)
 	{
 		if(!this.selectDateDialog)

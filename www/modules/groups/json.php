@@ -87,6 +87,8 @@ switch ($action)
 			$record = array(
 				'id' => $GO_GROUPS->f('id'),
 				'user_id' => $GO_GROUPS->f('user_id'),
+				'acl_id' => $GO_GROUPS->f('acl_id'),
+				'admin_only' => $GO_GROUPS->f('admin_only'),
 				'name' => String::format_name($GO_GROUPS->f('last_name'), $GO_GROUPS->f('first_name'), $GO_GROUPS->f('middle_name')),
 				'email' => $GO_GROUPS->f('email')
 			);

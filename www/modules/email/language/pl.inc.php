@@ -5,6 +5,9 @@
 //Polish Translation v1.1
 //Author : Paweł Dmitruk pawel.dmitruk@gmail.com
 //Date : September, 04 2010
+//Polish Translation v1.2
+//Author : rajmund
+//Date : January, 26 2011
 require($GO_LANGUAGE->get_fallback_language_file('email'));
 $lang['email']['name'] = 'Email';
 $lang['email']['description'] = 'Moduł E-mail; Prosty klient e-mail przez www. Każdy użytkownik będzie mógł wysyłać, odbierać i przekazywać wiadomości email';
@@ -19,7 +22,7 @@ $lang['email']['feedbackUnsubscribeFolderFailed'] = 'Nie można wyłączyć subs
 $lang['email']['feedbackCannotConnect'] = 'Nie mogę połączyć się z %1$s po porcie %3$s<br /><br />Serwer pocztowy zwrócił odpoiwedź: %2$s';
 $lang['email']['inbox'] = 'Skrzynka odbiorcza';
 $lang['email']['spam']='Spam';
-$lang['email']['trash']='Trash';
+$lang['email']['trash']='Kosz';
 $lang['email']['sent']='Wysłane';
 $lang['email']['drafts']='Szkice';
 $lang['email']['no_subject']='Brak tematu';
@@ -50,4 +53,9 @@ $lang['email']['error_move_folder']='Nie można przenieść folderu';
 $lang['email']['error_getaddrinfo']='Podano nieprawidlowy adres hosta';
 $lang['email']['error_authentication']='Nieprawidłowy użytkownik lub hasło';
 $lang['email']['error_connection_refused']='Połączenie zostało odrzucone. Sprawdź host i numer portu.';
-
+$lang['email']['iCalendar_event_invitation']='Ta wiadomość zawiera zaproszenie na wydarzenie.';
+$lang['email']['iCalendar_event_not_found']='Ta wiadomość zawiera aktualizację wydarzenia, które już nie istnieje.';
+$lang['email']['iCalendar_update_available']='Ta wiadomość zawiera aktualizację istniejącego wydarzenia.';
+$lang['email']['iCalendar_update_old']='Ta wiadomość zawiera aktualizację wydarzenia, które zostało już przetworzone.';
+$lang['email']['iCalendar_event_cancelled']='Ta wiadomość zawiera odwołanie wydarzenia.';
+$lang['email']['iCalendar_event_invitation_declined']='Ta wiadomość zawiera zaproszenie na wydarzenie, które już odrzucono.';

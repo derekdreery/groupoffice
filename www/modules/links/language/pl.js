@@ -4,7 +4,11 @@
  * Polish Translation v1.1
  * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
  * Date : September, 05 2010
+ * Polish Translation v1.2
+ * Author : rajmund
+ * Date : January, 26 2011
  */
+GO.links.lang.link='Odnośnik';
 GO.links.lang.links='Odnośniki';
 
 /* table: go_link_descriptions */

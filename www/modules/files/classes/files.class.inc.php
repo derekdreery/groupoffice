@@ -1257,9 +1257,7 @@ class files extends db {
 		global $GO_SECURITY;
 
 		$sql = "SELECT ";
-		if($authenticate) {
-			$sql .= "DISTINCT ";
-		}
+
 		if($offset>0) {
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
@@ -1268,8 +1266,7 @@ class files extends db {
 
 		if($authenticate) {
 			$sql .= "LEFT JOIN go_acl a ON a.acl_id=f.acl_id ".
-					"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
-					"WHERE (a.user_id=".intval($GO_SECURITY->user_id)." OR ug.user_id=".intval($GO_SECURITY->user_id)." OR ISNULL(a.acl_id) OR a.acl_id=0) AND ";
+					"WHERE (a.user_id=".$GO_SECURITY->user_id." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($GO_SECURITY->user_id)).") OR ISNULL(a.acl_id) OR a.acl_id=0) AND ";
 		}else {
 			$sql .= " WHERE ";
 		}
@@ -1281,6 +1278,10 @@ class files extends db {
 		$sql .= "parent_id=? ";
 		$types .= 'i';
 		$params[]=$folder_id;
+
+		if($authenticate) {
+			$sql .= "GROUP BY f.id ";
+		}
 
 		$sql .= " ORDER BY ".$this->escape($sortfield.' '.$sortorder);
 		if($offset>0) {

@@ -18,6 +18,9 @@
 //Polish Translation v1.1
 //Author : Paweł Dmitruk pawel.dmitruk@gmail.com
 //Date : September, 05 2010
+//Polish Translation v1.2
+//Author : rajmund
+//Date : January, 26 2011
 
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('addressbook'));
@@ -53,4 +56,11 @@ $lang['addressbook']['clickHereToView']='Kliknij tutaj by obejrzeć kontakt';
 $lang['addressbook']['contactFromAddressbook']='Kontakt z %s';
 $lang['addressbook']['companyFromAddressbook']='Firma z %s';
 $lang['addressbook']['defaultSalutation']='Szanowny [Pan/Pani] {middle_name} {last_name}';
+
+$lang['addressbook']['multipleSelected']='Wybrano wiele książek adresowych';
+$lang['addressbook']['incomplete_delete_contacts']='Nie masz uprawnień do usunięcia wszystkich wybranych kontaktów';
+$lang['addressbook']['incomplete_delete_companies']='Nie masz uprawnień do usunięcia wszystkich wybranych firm';
+$lang['addressbook']['emailAlreadyExists']='Adres e-mail został już dodany do tego kontaktu';
+$lang['addressbook']['emailDoesntExists']='Adres e-mail nie został znaleziony';
+$lang['addressbook']['imageNotSupported']='Typ przesłanego obrazu nie jest obsługiwany. Obsługiwane formaty to: gif, png oraz jpg.';
 ?>

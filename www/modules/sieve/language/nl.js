@@ -1,7 +1,3 @@
-Ext.namespace('GO.sieve');
-
-GO.sieve.lang = {};
-
 GO.sieve.lang.name = 'Naam';
 GO.sieve.lang.scriptname = 'Scriptnaam';
 GO.sieve.lang.index = 'Index';
@@ -85,3 +81,10 @@ GO.sieve.lang.spamflag = 'Spam vlag';
 GO.sieve.lang.custom = 'Custom';
 GO.sieve.lang.custommailheader= 'Mailheader:';
 GO.sieve.lang.replyToMessage='Beantwoord bericht';
+
+GO.sieve.lang.subjectequals = 'Onderwerp is gelijk aan';
+GO.sieve.lang.subjectequalsnot = 'Onderwerp is niet gelijk aan';
+GO.sieve.lang.fromequals = 'Afzender is gelijk aan';
+GO.sieve.lang.fromequalsnot = 'Afzender is niet gelijk aan';
+GO.sieve.lang.toequals = 'Ontvanger is gelijk aan';
+GO.sieve.lang.toequalsnot = 'Ontvanger is niet gelijk aan';

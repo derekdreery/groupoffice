@@ -132,9 +132,9 @@ class GO_GROUPS extends db
 	 * @access public
 	 * @return mixed		Array with properties or false
 	 */
-	function update_group($group_id, $name)
+	function update_group($group_id, $name,$admin_only=0)
 	{
-		return $this->query("UPDATE go_groups SET name='".$this->escape($name)."' WHERE id='".$this->escape($group_id)."'");
+		return $this->query("UPDATE go_groups SET name='".$this->escape($name)."',admin_only='".$this->escape($admin_only)."' WHERE id='".$this->escape($group_id)."'");
 	}
 
 	/**
@@ -164,11 +164,15 @@ class GO_GROUPS extends db
 	 * @access public
 	 * @return int			The new group ID or false;
 	 */
-	function add_group($user_id, $name)
+	function add_group($user_id, $name, $admin_only=0, $acl_id=0)
 	{
+		GLOBAL $GO_SECURITY;
+
 		$group['id'] = $this->nextid("go_groups");		
 		$group['user_id']=$user_id;
 		$group['name']=$name;
+		$group['acl_id']=$acl_id ? $acl_id : $GO_SECURITY->get_new_acl('group', $group['user_id']);
+		$group['admin_only']=$admin_only;
 			
 		if($this->insert_row('go_groups', $group))
 		{
@@ -292,6 +296,30 @@ class GO_GROUPS extends db
 	 return false;
 	 }*/
 
+	function get_authorized_groups($user_id=0, $start = 0, $offset = 0, $sort="name", $direction = "ASC")
+	{
+		$sql = "SELECT g.*,u.username, u.first_name, u.middle_name, u.last_name FROM go_groups g ".
+  	"INNER JOIN go_users u ON g.user_id=u.id ";
+
+		if($user_id > 0)
+		{
+			$sql .= "INNER JOIN go_acl a ON (g.acl_id = a.acl_id AND (a.user_id=".$this->escape($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
+		}
+
+		$sql .= 'ORDER BY '.$sort.' '.$direction;
+		$this->query($sql);
+
+		$count = $this->num_rows();
+
+		if ($offset != 0)
+		{
+			$sql .= " LIMIT ".intval($start).",".intval($offset);
+			$this->query($sql);
+		}
+
+		return $count;
+	}
+
 	/**
 	 * Get's all go_groups. If a user ID is specified it returns only the go_groups
 	 *	that user is a member of.
@@ -310,10 +338,12 @@ class GO_GROUPS extends db
 			
 			$sql .= "INNER JOIN go_users_groups ON go_groups.id=go_users_groups.group_id ".
 							"AND go_users_groups.user_id='".$this->escape($user_id)."' ".
-							"AND go_groups.id!=".$GO_CONFIG->group_everyone." ";
+							"AND go_groups.id!=".$GO_CONFIG->group_everyone." ".
+							"AND go_groups.admin_only!='1'";
 		}
 
 		$sql .= 'ORDER BY '.$sort.' '.$direction;
+
 		$this->query($sql);
 
 		$count = $this->num_rows();

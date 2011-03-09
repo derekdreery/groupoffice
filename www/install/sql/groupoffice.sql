@@ -111,6 +111,8 @@ CREATE TABLE IF NOT EXISTS `go_groups` (
   `id` int(11) NOT NULL default '0',
   `name` varchar(50) default NULL,
   `user_id` int(11) NOT NULL default '0',
+  `acl_id` INT NOT NULL ,
+	`admin_only` BOOLEAN NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -313,7 +315,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `city` varchar(50) default NULL,
   `zip` varchar(10) default NULL,
   `address` varchar(100) default NULL,
-  `address_no` varchar(10) default NULL,
+  `address_no` varchar(100) default NULL,
   `homepage` varchar(100) default NULL,
   `work_address` varchar(100) default NULL,
   `work_address_no` varchar(10) default NULL,
