@@ -434,3 +434,7 @@ $updates[]='CREATE TABLE `go_saved_search_queries` (
 PRIMARY KEY ( `id` ) ,
 INDEX ( `type` )
 ) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;';
+
+$updates[]='ALTER TABLE `go_groups` ADD `acl_id` INT NOT NULL ,
+ADD `admin_only` BOOLEAN NOT NULL ';
+$updates[]='script:10_add_acl_to_groups.inc.php';
