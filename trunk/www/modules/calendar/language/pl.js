@@ -5,6 +5,9 @@
  * Polish Translation v1.1
  * Author : Paweł Dmitruk pawel.dmitruk@gmail.com
  * Date : September, 04 2010
+ * Polish Translation v1.2
+ * Author : rajmund
+ * Date : January, 26 2011
  */
 GO.calendar.lang.addressbook='Książka adresowa';
 GO.calendar.lang.appointment = 'Termin';
@@ -86,3 +89,31 @@ GO.calendar.lang.ignoreConflictsMsg= 'Ten termin koliduje z innym terminem w Two
 GO.calendar.lang.resourceConflictTitle= 'Konflikt zasobów';
 GO.calendar.lang.resourceConflictMsg= 'Jeden lub więcej zasobów w tym zdarzeniu jest wykorzystywanych w tm samym czasie:</br>';
 GO.calendar.lang.view= 'Widok';
+GO.calendar.lang.resource_groups='Grupy zasobów';
+GO.calendar.lang.resource_group='Grupa zasobów';
+GO.calendar.lang.calendar_group='Grupa kalendarza';
+GO.calendar.lang.calendarsPermissions='Uprawnienia do kalendarzy';
+GO.calendar.lang.resourcesPermissions='Uprawnienia do zasobów';
+GO.calendar.lang.daynames[0]='Niedziela';
+GO.calendar.lang.daynames[1]='Poniedziałek';
+GO.calendar.lang.daynames[2]='Wtorek';
+GO.calendar.lang.daynames[3]='Środa';
+GO.calendar.lang.daynames[4]='Czwartek';
+GO.calendar.lang.daynames[5]='Piątek';
+GO.calendar.lang.daynames[6]='Sobota';
+GO.calendar.lang.categories='Kategorie';
+GO.calendar.lang.category='Kategoria';
+GO.calendar.lang.globalCategory='Globalna kategoria';
+GO.calendar.lang.selectCategory='Wybierz kategorię';
+GO.calendar.lang.duration='Czas trwania';
+GO.calendar.lang.move='Przenieś';
+GO.calendar.lang.showInfo='Szczegóły';
+GO.calendar.lang.copyEvent='Skopiuj wydarzenie';
+GO.calendar.lang.moveEvent='Przenieś wydarzenie';
+GO.calendar.lang.eventInfo='Szczegóły wydarzenia';
+GO.calendar.lang.isOrganizer='Organizer';
+GO.calendar.lang.sendInvitationInitial='Czy chcesz wysłać uczestnikom zaproszenia na spotkanie?';
+GO.calendar.lang.sendInvitationUpdate='Czy chcesz wysłać uczestników zaktualizowane informacj?';
+GO.calendar.lang.sendCancellation='Czy chcesz wysłać uczestnikom informację o odwołaniu wydarzenia?';
+GO.calendar.lang.forthcomingAppointments='Nadchodzące spotkania';
+GO.calendar.lang.quarterShort= 'Kw';

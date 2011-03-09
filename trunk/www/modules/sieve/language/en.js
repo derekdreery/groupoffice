@@ -85,3 +85,10 @@ GO.sieve.lang.spamflag = 'Spam flag';
 GO.sieve.lang.custom = 'Custom';
 GO.sieve.lang.custommailheader= 'Mailheader:';
 GO.sieve.lang.replyToMessage='Reply to message';
+
+GO.sieve.lang.subjectequals = 'Subject equals';
+GO.sieve.lang.subjectequalsnot = 'Subject is not equal to';
+GO.sieve.lang.fromequals = 'From equals';
+GO.sieve.lang.fromequalsnot = 'From is not equal to';
+GO.sieve.lang.toequals = 'To equals';
+GO.sieve.lang.toequalsnot = 'To is not equal to';

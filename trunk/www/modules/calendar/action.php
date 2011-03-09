@@ -336,8 +336,13 @@ try {
 					//change duration
 						//$duration = ($_POST['duration']);
 
-						$update_event['start_time']=$old_event['start_time'];
-						$update_event['end_time']=$_POST['end_time'];//round_quarters($old_event['start_time']+$duration);
+						//$update_event['start_time']=$old_event['start_time'];
+						//$update_event['end_time']=$_POST['end_time'];//round_quarters($old_event['start_time']+$duration);
+
+						$old_end_date = getdate($old_event['end_time']);
+						$new_end_time = getdate($_POST['end_time']);
+
+						$update_event['end_time']=mktime($new_end_time['hours'],$new_end_time['minutes'], 0,$old_end_date['mon'],$old_end_date['mday'],$old_end_date['year']);
 					}
 
 					if(isset($_POST['update_calendar_id'])) {

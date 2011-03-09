@@ -423,6 +423,8 @@ $updates[]="ALTER TABLE `go_users` ADD `cache` TEXT NOT NULL";
 
 $updates[]='script:9_install_mailings.inc.php';
 
+$updates[]="ALTER TABLE  `go_users` CHANGE  `address_no`  `address_no` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+
 $updates[]='CREATE TABLE `go_saved_search_queries` (
 `id` INT NOT NULL ,
 `user_id` INT NOT NULL ,
@@ -432,3 +434,7 @@ $updates[]='CREATE TABLE `go_saved_search_queries` (
 PRIMARY KEY ( `id` ) ,
 INDEX ( `type` )
 ) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;';
+
+$updates[]='ALTER TABLE `go_groups` ADD `acl_id` INT NOT NULL ,
+ADD `admin_only` BOOLEAN NOT NULL ';
+$updates[]='script:10_add_acl_to_groups.inc.php';
