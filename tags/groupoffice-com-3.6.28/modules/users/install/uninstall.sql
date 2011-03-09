@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS `cf_8`;
+DROP TABLE IF EXISTS `go_links_8`;
