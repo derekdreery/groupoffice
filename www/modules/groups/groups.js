@@ -27,7 +27,7 @@
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',
-	    fields: ['id', 'name', 'user_id', 'user_name'],
+	    fields: ['id', 'name', 'user_id', 'user_name','acl_id','admin_only'],
 	    remoteSort: true
 	});			
 
@@ -37,7 +37,8 @@
 		},
 		columns:[
         {header: GO.groups.lang.groups, dataIndex: 'name', width: 300},
-        {header: GO.groups.lang.owner, dataIndex: 'user_name'}	        			        
+        {header: GO.groups.lang.owner, dataIndex: 'user_name'},
+				{header: GO.groups.lang.adminOnly, dataIndex: 'admin_only', renderer: function(value){return (value == 1)?GO.lang.cmdYes:GO.lang.cmdNo;}}
     ]
 	});  
     
@@ -118,6 +119,7 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 					
 			  this.userGrid = new GO.grid.GridPanel({
 			  	region:'center',
+					paging:true,
 		    	ds: this.userStore,
 	        cm: columnModel,
 	        sm: new Ext.grid.RowSelectionModel({singleSelect: false}),
@@ -175,44 +177,79 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
     					name: 'name',
     					anchor: '100%',
     					allowBlank: false
-    				}		
+    				}
     			]
-				});			
+				});
+
+				if(GO.settings.has_admin_permission) {
+					var adminOnlyCheckBox = new Ext.form.Checkbox({
+              name: 'admin_only',
+							checked: group.admin_only,
+							fieldLabel: GO.groups.lang.adminOnly
+          });
+					this.newFormPanel.height = 60;
+					this.newFormPanel.add(adminOnlyCheckBox);
+				}
 				
 				var buttons = [
-					{text: GO.lang['cmdOk'], handler: function(){this.saveNewGroup(true);}, scope: this },
-					{text: GO.lang['cmdApply'], handler: function(){this.saveNewGroup();}, scope: this },
-					{text: GO.lang['cmdClose'], handler: function(){this.new_dialog.hide();}, scope: this }
+					{text: GO.lang['cmdOk'], handler: function(){this.saveNewGroup(true);}, scope: this},
+					/*{text: GO.lang['cmdApply'], handler: function(){this.saveNewGroup();}, scope: this},*/
+					{text: GO.lang['cmdClose'], handler: function(){this.new_dialog.hide();}, scope: this}
 				];			
 				
 				var focusFirstField = function(){
 					this.newFormPanel.items.items[0].focus();
 				};
+
+				this.firstTab = new Ext.Panel({
+					layout: 'border',
+					title : GO.groups.lang.groups,
+					autoScroll : true,					
+					items : [this.newFormPanel,this.userGrid]
+				});
+
+				this.permissionsTab = new GO.grid.PermissionsPanel({
+					hideLevel:true
+				});
+
+				var items = [this.firstTab,this.permissionsTab];
+
+				this.tabPanel = new Ext.TabPanel({
+					activeTab : 0,
+					deferredRender : false,
+					border : false,
+					items : items
+				});
 				
 				this.new_dialog = new Ext.Window({
-					layout: 'border',
+				//	layout: 'border',
 					modal:false,
 					shadow: false,
-					height: 400,
+					height: 500,
 					width: 500,
+					layout:'fit',
 					plain: true,
 					closeAction: 'hide',
 					title: GO.groups.lang.group,					
-					items: [this.newFormPanel,this.userGrid],
+				//	items: [this.newFormPanel,this.userGrid],
+					items: [this.tabPanel],
 					buttons: buttons,
 					focus: focusFirstField.createDelegate(this)
 				});
 			}
+			this.tabPanel.setActiveTab(0);
 			this.new_dialog.show();
 			this.setGroup(group);
+			
 			
 		},
 		
 		setGroup : function(group)
 		{			
 			this.group_id = this.userStore.baseParams['group_id']=group.id;
-			
-			
+
+			var adminOnlyField = this.newFormPanel.form.findField('admin_only');
+						
 			if(this.group_id > 0)
 			{
 				this.userGrid.setDisabled(false);
@@ -222,15 +259,22 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 					},
 					scope: this
 				});
-				if(group && group.name)
+				if(group.name)
 				{
 					this.newFormPanel.form.findField('name').setValue(group.name);
+
+					if(adminOnlyField)
+						adminOnlyField.setValue(group.admin_only);
 				}
+				this.permissionsTab.setAcl(group.acl_id);
+				
 			}else
 			{
 				this.userGrid.setDisabled(true);
 				this.userStore.loadData({"total":0,"results":[]});
 				this.newFormPanel.form.findField('name').setRawValue('');
+				if(adminOnlyField)
+					adminOnlyField.setValue(0);
 				
 			}
 			
@@ -247,10 +291,13 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 					group_id : this.group_id
 				},
 				success:function(form, action){
-					var group = {id: action.result.group_id};
+					var group = {id: action.result.group_id, acl_id:action.result.acl_id};
 					this.setGroup(group);
 					this.storeAllGroups.reload();
-					if (hide)
+					if (action.result.group_id)
+					{
+						this.permissionsTab.show();
+					}else
 					{
 						this.new_dialog.hide();
 					}					
