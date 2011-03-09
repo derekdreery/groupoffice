@@ -1253,7 +1253,10 @@ try {
 				$limit = isset ( $_POST['limit'] ) ? $_POST['limit'] : 0;
 
 				$query = !empty($_POST['query']) ? '%'.$_POST['query'].'%' : '';
-				$response['total'] = $email->get_accounts($GO_SECURITY->user_id,$start, $limit, $sort, $dir,'write', $query);
+
+				$user_id = $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) ? 0 : $GO_SECURITY->user_id;
+
+				$response['total'] = $email->get_accounts($user_id,$start, $limit, $sort, $dir,'write', $query);
 
 				while($record = $email->next_record()) {
 					$response['results'][] = array(
