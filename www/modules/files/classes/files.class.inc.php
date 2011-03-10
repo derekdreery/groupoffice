@@ -1252,8 +1252,20 @@ class files extends db {
 		$this->query($sql);
 		return $this->next_record();
 	}
+	/**
+	 *
+	 * @global <type> $GO_SECURITY
+	 * @param <type> $folder_id
+	 * @param <type> $sortfield
+	 * @param <type> $sortorder
+	 * @param <type> $start
+	 * @param <type> $offset
+	 * @param <type> $authenticate
+	 * @param <type> $inherit_parent_permission When this is set to true it automatically authenticates when there's no acl id set for this folder.
+	 * @return <type>
+	 */
 
-	function get_folders($folder_id, $sortfield='name', $sortorder='ASC', $start=0, $offset=0, $authenticate=false) {
+	function get_folders($folder_id, $sortfield='name', $sortorder='ASC', $start=0, $offset=0, $authenticate=false, $inherit_parent_permission=true) {
 		global $GO_SECURITY;
 
 		$sql = "SELECT ";
@@ -1266,7 +1278,13 @@ class files extends db {
 
 		if($authenticate) {
 			$sql .= "LEFT JOIN go_acl a ON a.acl_id=f.acl_id ".
-					"WHERE (a.user_id=".$GO_SECURITY->user_id." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($GO_SECURITY->user_id)).") OR ISNULL(a.acl_id) OR a.acl_id=0) AND ";
+					"WHERE (a.user_id=".$GO_SECURITY->user_id." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($GO_SECURITY->user_id)).") ";
+
+			if($inherit_parent_permission){
+				$sql .= "OR ISNULL(a.acl_id) OR a.acl_id=0";
+			}
+
+			$sql .= ") AND ";
 		}else {
 			$sql .= " WHERE ";
 		}

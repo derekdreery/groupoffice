@@ -94,13 +94,15 @@ try {
 
 			$fs2= new files();
 
-			function get_node_children($folder_id, $authenticate=false, $expand_folder_ids=array()) {
+			function get_node_children($folder_id, $authenticate=false, $expand_folder_ids=array(), $inherit_parent_permissions=true) {
 				global $fs2;
+
+				go_debug("get_node_children($folder_id, $authenticate, $expand_folder_ids, $inherit_parent_permissions)");
 
 				$files = new files();
 
 				$children = array();
-				$files->get_folders($folder_id,'name','ASC', 0,200, $authenticate);
+				$files->get_folders($folder_id,'name','ASC', 0,200, $authenticate, $inherit_parent_permissions);
 				while($folder=$files->next_record()) {
 					$node= array(
 						'text'=>$folder['name'],
@@ -118,7 +120,11 @@ try {
 						$node['iconCls']='folder-default';
 					}
 					if(in_array($folder['id'], $expand_folder_ids)) {
-						$node['children']=get_node_children($folder['id'], $authenticate, $expand_folder_ids);
+
+						//this is an addressbook or projects folder and then we should not inherit permissions
+						$special_shared_folder = $folder['parent_id']==0;
+
+						$node['children']=get_node_children($folder['id'], true, $expand_folder_ids, !$special_shared_folder);
 						$node['expanded']=true;
 					}else	if(!$fs2->has_children($folder['id'])) {
 						$node['children']=array();
@@ -166,7 +172,7 @@ try {
 							'expanded'=>true,
 							'draggable'=>false,
 							'iconCls'=>'folder-default',
-							'children'=>get_node_children($folder['id'], true, $expand_folder_ids),
+							'children'=>get_node_children($folder['id'], true, $expand_folder_ids, true),
 							'notreloadable'=>true
 						);
 						$response[]=$node;
@@ -212,7 +218,7 @@ try {
 							);
 
 							if(in_array($projects_folder['id'], $expand_folder_ids)) {
-								$node['children']=get_node_children($projects_folder['id'], true, $expand_folder_ids);
+								$node['children']=get_node_children($projects_folder['id'], true, $expand_folder_ids, false);
 								$node['expanded']=true;
 							}
 							$response[]=$node;
@@ -231,7 +237,7 @@ try {
 								'notreloadable'=>true
 							);
 							if(in_array($contacts_folder['id'], $expand_folder_ids)) {
-								$node['children']=get_node_children($contacts_folder['id'], true, $expand_folder_ids);
+								$node['children']=get_node_children($contacts_folder['id'], true, $expand_folder_ids, false);
 								$node['expanded']=true;
 							}
 							$response[]=$node;
@@ -246,7 +252,7 @@ try {
 								'notreloadable'=>true
 							);
 							if(in_array($companies_folder['id'], $expand_folder_ids)) {
-								$node['children']=get_node_children($companies_folder['id'], true, $expand_folder_ids);
+								$node['children']=get_node_children($companies_folder['id'], true, $expand_folder_ids, false);
 								$node['expanded']=true;
 							}
 							$response[]=$node;
@@ -329,10 +335,10 @@ try {
 
 					$authenticate=!$files->is_owner($folder);
 
-					//$files->check_folder_sync($folder);
+					//this is an addressbook or projects folder and then we should not inherit permissions
+					$special_shared_folder = $folder['parent_id']==0;
 
-					$response = get_node_children($_POST['node'], $authenticate);
-
+					$response = get_node_children($_POST['node'], $authenticate, array(), !$special_shared_folder);
 					break;
 			}
 
@@ -634,7 +640,11 @@ try {
 
 				//$response['path']=$path;
 
-				$response['total']=$files->get_folders($curfolder['id'],$dsort,$dir,$start,$limit,true);
+				//this is an addressbook or projects folder and then we should not inherit permissions
+				$special_shared_folder = $curfolder['parent_id']==0;
+				$authenticate=strpos('users/'.$_SESSION['GO_SESSION']['username'], $path)===false;
+
+				$response['total']=$files->get_folders($curfolder['id'],$dsort,$dir,$start,$limit,$authenticate, !$special_shared_folder);
 
 				$thumb_location = get_thumb_dir();
 
