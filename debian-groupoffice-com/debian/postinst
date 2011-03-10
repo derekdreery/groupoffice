@@ -19,7 +19,11 @@ invoke-rc.d apache2 reload > /dev/null || true
 
 php /usr/share/groupoffice-install-scripts/configure.php
 
-find /home/groupoffice -maxdepth 2 -exec chown www-data:www-data {} \;
+#find runs too long on large systems
+#find /home/groupoffice -maxdepth 2 -exec chown www-data:www-data {} \;
+
+#cache dir is touched by root by this process
+chown -R www-data:www-data /home/groupoffice/cache
 
 #DEBHELPER#
 
