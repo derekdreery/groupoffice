@@ -1,4 +1,4 @@
-03/03/2011 3.7.0-beta
+10/03/2011 3.7.1
 - Public icalendar file
 - Sieve e-mail filtering support
 - Optimized for very large installations 20.000 users.
