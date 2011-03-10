@@ -72,10 +72,24 @@ try {
 			$type = $_REQUEST['type'];
 			$filename = $type.'.class.inc.php';
 
-			$file = $GO_CONFIG->class_path.'export/'.$filename;
-			if(!file_exists($file)){
-				$file = $GO_CONFIG->file_storage_path.'customexports/'.$filename;
+//			$file = $GO_CONFIG->class_path.'export/'.$filename;
+//			if(!file_exists($file)){
+//				$file = $GO_CONFIG->file_storage_path.'customexports/'.$filename;
+//			}
+
+			if(isset($_REQUEST['export_directory']) && file_exists($GO_CONFIG->root_path.$_REQUEST['export_directory'].$filename)){
+				$file = $GO_CONFIG->root_path.$_REQUEST['export_directory'].$filename;
+			}else
+			{
+				$file = $GO_CONFIG->class_path.'export/'.$filename;
+				if(!file_exists($file)){
+					$file = $GO_CONFIG->file_storage_path.'customexports/'.$filename;
+				}
+				if(!file_exists($file)){
+					die('Custom export class not found.');
+				}
 			}
+
 			if(!file_exists($file)){
 				die('Custom export class not found.');
 			}
@@ -94,7 +108,7 @@ try {
 							'size'=>filesize($tmp_file),
 							'type'=>File::get_filetype_description(strtolower($_POST['type'])),
 							'human_size'=>Number::format_size(filesize($tmp_file)),
-							'extension'=>$_POST['type']
+							'extension'=>$eq->extension
 			);
 
 			require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
