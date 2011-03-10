@@ -1,7 +1,7 @@
 <?php
 require('www/Group-Office.php');
 
-$tpl = '{package} ({version}) threesix; urgency=low
+$tpl = '{package} ({version}) threeseven; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
