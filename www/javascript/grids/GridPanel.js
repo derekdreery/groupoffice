@@ -67,16 +67,18 @@ GO.grid.GridPanel = function(config)
 	{
 		config.store=config.ds;
 	}
-	
-	config.keys.push({
-		key: Ext.EventObject.DELETE,
-		fn: function(key, e){
-			//sometimes there's a search input in the grid, so dont delete when focus is on an input
-			if(e.target.tagName!='INPUT')
-				this.deleteSelected(this.deleteConfig);
-		},
-		scope:this
-	});
+
+	if(!config.noDelete){
+		config.keys.push({
+			key: Ext.EventObject.DELETE,
+			fn: function(key, e){
+				//sometimes there's a search input in the grid, so dont delete when focus is on an input
+				if(e.target.tagName!='INPUT')
+					this.deleteSelected(this.deleteConfig);
+			},
+			scope:this
+		});
+	}
     
 	if(config.paging)
 	{
