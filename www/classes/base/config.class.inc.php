@@ -975,6 +975,9 @@ class GO_CONFIG {
 			$_SESSION['GO_SESSION']['sort_name'] = 'last_name';
 			$_SESSION['GO_SESSION']['auth_token']=String::random_password('a-z,1-9', '', 30);
 		}
+		//Store the http_host for a referrer check
+		if(PHP_SAPI!='cli' && !isset($_SESSION['GO_SESSION']['referer_check']))
+			$_SESSION['GO_SESSION']['referer_check']=$_SERVER['HTTP_HOST'];
 	}
 
 	function __destruct() {
