@@ -77,6 +77,8 @@ class GO_USERS extends db
 		$_SESSION['GO_SESSION']['home_phone'] = $userdata['home_phone'];
 
 		$_SESSION['GO_SESSION']['thousands_separator'] = $userdata['thousands_separator'];
+		if($_SESSION['GO_SESSION']['thousands_separator']=='')
+			$_SESSION['GO_SESSION']['thousands_separator']=' ';
 		$_SESSION['GO_SESSION']['decimal_separator'] = $userdata['decimal_separator'];
 		$_SESSION['GO_SESSION']['date_format'] = Date::get_dateformat($userdata['date_format'], $userdata['date_separator']);
 		$_SESSION['GO_SESSION']['date_separator'] = $userdata['date_separator'];
