@@ -339,11 +339,16 @@ class formprocessor{
 					foreach($values as $val)
 						$formatted_address = str_replace('{'.$val.'}', $new_contact[$val], $formatted_address);
 
-					$body = $lang['addressbook']['newContactFromSite'].'<br /><a href="'.$url.'">'.$lang['addressbook']['clickHereToView'].'</a>'."<br />";
-					$body .= "<br />".String::format_name($new_contact)."<br />";
-					$body .= $formatted_address."<br />";
-					$body .= "<br />".$company['name']."<br />";
-					$body .= $new_contact['work_phone'];
+					$body = $lang['addressbook']['newContactFromSite'].':<br />';
+
+					$body .= "<br />".String::format_name($new_contact);
+					$body .= "<br />".$formatted_address;
+					if (!empty($new_contact['home_phone'])) $body .= "<br />".$lang['common']['phone'].': '.$new_contact['home_phone'];
+					if (!empty($new_contact['cellular'])) $body .= "<br />".$lang['common']['cellular'].': '.$new_contact['cellular'];
+					if (!empty($company['name'])) $body .= "<br /><br />".$company['name'];
+					if (!empty($new_contact['work_phone'])) $body .= "<br />".$lang['common']['workphone'].': '.$new_contact['work_phone'];
+
+					$body .= '<br /><a href="'.$url.'">'.$lang['addressbook']['clickHereToView'].'</a>'."<br />";
 
 					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 					$swift = new GoSwift(implode(',', $mail_to), $lang['addressbook']['newContactAdded']);
