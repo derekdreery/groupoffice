@@ -350,10 +350,12 @@ class formprocessor{
 
 					$body .= '<br /><a href="'.$url.'">'.$lang['addressbook']['clickHereToView'].'</a>'."<br />";
 
+					$mail_from = !empty($_POST['mail_from']) ? $_POST['mail_from'] : $GO_CONFIG->webmaster_email;
+
 					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 					$swift = new GoSwift(implode(',', $mail_to), $lang['addressbook']['newContactAdded']);
 					$swift->set_body($body);
-					$swift->set_from($GO_CONFIG->webmaster_email, $GO_CONFIG->title);
+					$swift->set_from($mail_from, $GO_CONFIG->title);
 					try{
 						$swift->sendmail();
 					}
