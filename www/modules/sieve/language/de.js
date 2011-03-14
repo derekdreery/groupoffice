@@ -41,7 +41,7 @@ GO.sieve.lang.size = 'Größe';
 GO.sieve.lang.contains = 'enhält';
 GO.sieve.lang.notcontains = 'enthält nicht';
 GO.sieve.lang.is = 'gleich';
-GO.sieve.lang.notis = 'nicht gleich';
+GO.sieve.lang.notis = 'ungleich';
 GO.sieve.lang.exists = 'ist vorhanden';
 GO.sieve.lang.notexists = 'ist nicht vorhanden';
 GO.sieve.lang.fileinto = 'Verschiebe nach';
@@ -81,3 +81,10 @@ GO.sieve.lang.spamflag = 'Spamflag';
 GO.sieve.lang.custom = 'Selbstdefiniert';
 GO.sieve.lang.custommailheader= 'E-Mailheader:';
 GO.sieve.lang.replyToMessage='Abwesenheitsnotiz';
+
+GO.sieve.lang.subjectequalsnot = 'Betreff ungleich';
+GO.sieve.lang.fromequals = 'Absender gleich';
+GO.sieve.lang.fromequalsnot = 'Absender ungleich';
+GO.sieve.lang.toequals = 'Empfänger gleich';
+GO.sieve.lang.toequalsnot = 'Empfänger ungleich';
+
