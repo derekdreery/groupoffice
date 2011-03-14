@@ -235,6 +235,14 @@ try
 			$rule['tests'] = json_decode($_REQUEST['tests'], true);
 			$rule['actions'] = json_decode($_REQUEST['actions'], true);
 
+			for($i=0,$c=count($rule['actions']);$i<$c;$i++)
+			{
+				if(isset($rule['actions'][$i]['addresses']) && !is_array($rule['actions'][$i]['addresses'])){
+					$rule['actions'][$i]['addresses']=explode(',',$rule['actions'][$i]['addresses']);
+					$rule['actions'][$i]['addresses']=array_map('trim', $rule['actions'][$i]['addresses']);
+				}
+			}
+
 			if($join == 'allof')
 				$rule['join'] = 1;
 			else if($join == 'any')
