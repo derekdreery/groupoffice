@@ -9,3 +9,4 @@ $lang['mailings']['unsubscribe']='Abmelden';
 $lang['mailings']['unsubscription']='Klicken Sie hier für eine Abmeldung von dieser Verteilerliste.';
 $lang['mailings']['r_u_sure'] = 'Wollen Sie sich wirklich von dieser Verteilerliste abmelden?';
 $lang['mailings']['delete_success'] = 'Sie wurden erfolgreich aus der Verteilerliste ausgetragen.';
+$lang['mailings']['setCurrentTemplateAsDefault'] = 'Aktuelle Vorlage als Standard verwenden';
