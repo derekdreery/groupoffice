@@ -326,7 +326,24 @@ class formprocessor{
 				}
 				if(count($mail_to))
 				{
-					$body = $lang['addressbook']['newContactFromSite'].'<br /><a href="go:showContact('.$contact_id.');">'.$lang['addressbook']['clickHereToView'].'</a>';
+
+					$url = create_direct_url('addressbook', 'showContact', array($contact_id));
+					$new_contact = $ab->get_contact($contact_id);
+					$company = !empty($new_contact['company_id']) ? $ab->get_company($new_contact['company_id']) : array('name'=>'');
+
+					$values = array('address_no', 'address', 'zip', 'city', 'state', 'country');
+					$formatted_address = str_replace(' ','<br />',$new_contact['address_format']);
+					$formatted_address = str_replace('{address}<br />{address_no}','{address} {address_no}',$formatted_address);
+					$formatted_address = str_replace('{address_no}<br />{address}','{address_no} {address}',$formatted_address);
+
+					foreach($values as $val)
+						$formatted_address = str_replace('{'.$val.'}', $new_contact[$val], $formatted_address);
+
+					$body = $lang['addressbook']['newContactFromSite'].'<br /><a href="'.$url.'">'.$lang['addressbook']['clickHereToView'].'</a>'."<br />";
+					$body .= "<br />".String::format_name($new_contact)."<br />";
+					$body .= $formatted_address."<br />";
+					$body .= "<br />".$company['name']."<br />";
+					$body .= $new_contact['work_phone'];
 
 					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
 					$swift = new GoSwift(implode(',', $mail_to), $lang['addressbook']['newContactAdded']);
