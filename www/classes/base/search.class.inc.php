@@ -167,6 +167,8 @@ class search extends db {
 
 		if(!empty($sort_index))
 			$sql .= " ORDER BY $sort_index $sort_order";
+
+		go_debug($sql);
 		
 		if($offset>0)
 		{
@@ -175,9 +177,6 @@ class search extends db {
 			if($start==0)
 				$sql = substr_replace($sql, 'SELECT SQL_CALC_FOUND_ROWS',0,6);
 
-
-			go_debug($sql);
-			
 			$this->query($sql);
 
 			if($start==0)

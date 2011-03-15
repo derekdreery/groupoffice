@@ -69,12 +69,15 @@ $tasks[] = 'userdir';
 	}
 }*/
 
+$db = new db();
+$db->halt_on_error = 'no';
+
 $tasks[] = 'theme';
 $tasks[] = 'new_database';
 $tasks[] = 'create_database';
 $tasks[] = 'database_connection';
 $tasks[] = 'database_structure';
-if ($task != 'database_structure' && !empty($GO_CONFIG->db_name) && !$GO_USERS->get_user(1))
+if ($task != 'database_structure' && !empty($GO_CONFIG->db_name) && $db->connect() && !$GO_USERS->get_user(1))
 {
 	$tasks[] = 'administrator';
 	//$tasks[] = 'send_info';
