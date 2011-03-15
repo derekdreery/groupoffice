@@ -490,7 +490,7 @@ class files extends db {
 		$this->insert_row('fs_status_history',$status);
 	}
 
-	function get_users_in_share($folder_id) {
+	function get_users_in_share($folder_id, &$share) {
 		global $GO_SECURITY;
 
 		$users=array();
@@ -641,7 +641,7 @@ class files extends db {
 
 		$this->cache_file($file);
 
-		$this->add_new_filelink($file);
+		//$this->add_new_filelink($file);
 
 		$GO_EVENTS->fire_event('add_file', $params=array($file));
 
@@ -1079,11 +1079,14 @@ class files extends db {
 
 
 	function add_new_filelink($file) {
-		$users = $this->get_users_in_share($file['folder_id']);
+		$users = $this->get_users_in_share($file['folder_id'], $share);
 
-		for($i=0; $i<count($users); $i++) {
-			if($users[$i] != $file['user_id']) {
-				$this->insert_row('fs_new_files', array('file_id' => $file['id'], 'user_id' => $users[$i]));
+		//Don't do this for the parent shares contacts, projects, companies, users etc.
+		if($share['parent_id']>0){
+			for($i=0; $i<count($users); $i++) {
+				if($users[$i] != $file['user_id']) {
+					$this->insert_row('fs_new_files', array('file_id' => $file['id'], 'user_id' => $users[$i]));
+				}
 			}
 		}
 	}
@@ -1148,21 +1151,21 @@ class files extends db {
 			//this will rebuild the cached shares folder
 			$GO_CONFIG->save_setting('fs_shared_cache', 0, $user['id']);
 
-			$timeout = 60*60*24*30;
-			$deltime = time() - $timeout;
-
-			$fs = new files();
-
-			$fs->query("SELECT ff.id FROM fs_new_files AS fn, fs_files AS ff
-				WHERE fn.file_id = ff.id AND ctime < ? AND fn.user_id = ?", 'ii', array($deltime, $user['id']));
-
-			$files = array();
-			if($fs->num_rows() > 0) {
-				while($file = $fs->next_record()) {
-					$files[] = $file['id'];
-				}
-				$fs->query("DELETE FROM fs_new_files WHERE file_id IN (".implode(',', $files).") ");
-			}
+//			$timeout = 60*60*24*30;
+//			$deltime = time() - $timeout;
+//
+//			$fs = new files();
+//
+//			$fs->query("SELECT ff.id FROM fs_new_files AS fn, fs_files AS ff
+//				WHERE fn.file_id = ff.id AND ctime < ? AND fn.user_id = ?", 'ii', array($deltime, $user['id']));
+//
+//			$files = array();
+//			if($fs->num_rows() > 0) {
+//				while($file = $fs->next_record()) {
+//					$files[] = $file['id'];
+//				}
+//				$fs->query("DELETE FROM fs_new_files WHERE file_id IN (".implode(',', $files).") ");
+//			}
 		}
 	}
 
