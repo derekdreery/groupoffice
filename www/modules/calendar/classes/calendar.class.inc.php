@@ -3091,7 +3091,7 @@ class calendar extends db {
 
 
 	function send_invitation($event, $calendar, $insert=true){
-		global $GO_CONFIG, $GO_MODULES, $lang, $GO_LANGUAGE;
+		global $GO_CONFIG, $GO_MODULES, $lang, $GO_LANGUAGE, $GO_SECURITY;
 
 		$GO_LANGUAGE->require_language_file('calendar');
 		
@@ -3103,7 +3103,7 @@ class calendar extends db {
 		if(!$insert){
 			//if this is an update to the event reset the accepted status of everyone except for the logged in user and the calendar user this event is saved in.
 			$sql = "UPDATE cal_participants SET status='0' WHERE user_id!=? AND user_id!=? AND event_id=?";
-			$this->query($sql,'iii', array($GO_SECURITY->user_id, $calendar['user_id'], $event_id));
+			$this->query($sql,'iii', array($GO_SECURITY->user_id, $calendar['user_id'], $event['id']));
 		}
 			
 		$participants=array();
