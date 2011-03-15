@@ -101,7 +101,8 @@ GO.dialog.SelectEmail = function(config) {
 		this.contactsStore = new GO.data.JsonStore({
 			url : GO.settings.modules.addressbook.url + 'json.php',
 			baseParams : {
-				task : 'contacts'
+				task : 'contacts',
+				no_addressbooks_filter: true
 			},
 			root : 'results',
 			id : 'id',
