@@ -314,6 +314,9 @@ class tasks extends db
 			$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$list['name'] = $task_name;
 			$list['acl_id']=$GO_SECURITY->get_new_acl('tasks',$user_id);
+
+			$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_internal, $list['acl_id'],2);
+
 			$x = 1;
 			while($this->get_tasklist_by_name($list['name']))
 			{
