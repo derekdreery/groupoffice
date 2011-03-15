@@ -749,7 +749,7 @@ class tasks extends db
 				$end_time = Date::date_add($start_time, 7);
 
 				unset($show_completed);
-				$show_future=false;
+				unset($show_future);
 				break;
 
 			case 'overdue':
