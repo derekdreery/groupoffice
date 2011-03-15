@@ -2,6 +2,9 @@
 require('../../../Group-Office.php');
 header('Content-Type: text/html; charset=UTF-8');
 
+//referer is empty here
+$GO_CONFIG->disable_referer_check=true;
+
 if(!$GO_SECURITY->logged_in())
 {
 	die('Unauthorized');

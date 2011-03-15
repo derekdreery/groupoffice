@@ -271,18 +271,18 @@ try {
 
 
 
-						$num_new_files = $files->get_num_new_files($GO_SECURITY->user_id);
-
-						$node= array(
-							'text'=>$lang['files']['new'].' ('.$num_new_files.')',
-							'id'=>'new',
-							'allowDrop'=>false,
-							'children'=>array(),
-							'expanded'=>true,
-							'draggable'=>false,
-							'iconCls'=>'folder-new'
-						);
-						$response[]=$node;
+//						$num_new_files = $files->get_num_new_files($GO_SECURITY->user_id);
+//
+//						$node= array(
+//							'text'=>$lang['files']['new'].' ('.$num_new_files.')',
+//							'id'=>'new',
+//							'allowDrop'=>false,
+//							'children'=>array(),
+//							'expanded'=>true,
+//							'draggable'=>false,
+//							'iconCls'=>'folder-new'
+//						);
+//						$response[]=$node;
 					}
 
 					break;
