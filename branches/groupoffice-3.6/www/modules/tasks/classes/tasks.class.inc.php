@@ -642,6 +642,8 @@ class tasks extends db
 
 
 	function copy_recurring_completed($task_id) {
+
+		go_debug("copy_recurring_completed($task_id)");
 		/*
 		 If a recurring task is completed we copy it to a new task and recur that again
 		 */
@@ -663,7 +665,10 @@ class tasks extends db
 
 			$task=array_map('addslashes',$task);
 			if($new_task_id = $this->add_task($task)) {
-			//$GO_LINKS->copy_links($old_id, $new_task_id, 11, 11);
+				global $GO_CONFIG;
+				require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+				$GO_LINKS = new GO_LINKS();
+				$GO_LINKS->copy_links($old_id, 12, $new_task_id, 12);
 			}
 		}
 		return true;
