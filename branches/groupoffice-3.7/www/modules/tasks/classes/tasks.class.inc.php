@@ -356,6 +356,9 @@ class tasks extends db
 			//$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$list['name'] = $task_name;
 			$list['acl_id']=$GO_SECURITY->get_new_acl('tasks',$user_id);
+
+			$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_internal, $list['acl_id'],2);
+
 			$x = 1;
 			while($this->get_tasklist_by_name($list['name']))
 			{
@@ -676,6 +679,8 @@ class tasks extends db
 
 
 	function copy_recurring_completed($task_id) {
+
+		go_debug("copy_recurring_completed($task_id)");
 		/*
 		 If a recurring task is completed we copy it to a new task and recur that again
 		 */
@@ -697,7 +702,10 @@ class tasks extends db
 
 			$task=array_map('addslashes',$task);
 			if($new_task_id = $this->add_task($task)) {
-			//$GO_LINKS->copy_links($old_id, $new_task_id, 11, 11);
+				global $GO_CONFIG;
+				require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+				$GO_LINKS = new GO_LINKS();
+				$GO_LINKS->copy_links($old_id, 12, $new_task_id, 12);
 			}
 		}
 		return true;
@@ -783,7 +791,7 @@ class tasks extends db
 				$end_time = Date::date_add($start_time, 7);
 
 				unset($show_completed);
-				$show_future=false;
+				unset($show_future);
 				break;
 
 			case 'overdue':

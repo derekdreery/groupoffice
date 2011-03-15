@@ -287,9 +287,11 @@ GO.util.unlocalizeNumber = function (number, decimal_separator, thousands_separa
 	}
 	
 	number = number+"";
-		
-	var re = new RegExp('['+thousands_separator+']', 'g');	
-	number = number.replace(re, "");
+
+	if(thousands_separator!=""){
+		var re = new RegExp('['+thousands_separator+']', 'g');
+		number = number.replace(re, "");
+	}
 	return parseFloat(number.replace(decimal_separator, "."));
 }
 
@@ -373,22 +375,18 @@ GO.util.numberFormat = function (number, decimals, decimal_separator, thousands_
 		var formattedNumber = "";
 		var dotIndex = numberFloat.length;
 	}
-	
-
-	
 
 	var counter=0;
 	for(var i=dotIndex-1;i>=0;i--)
-	{		
+	{
 		if(counter==3 && numberFloat.substr(i,1)!='-')
 		{
-			formattedNumber= thousands_separator+formattedNumber; 
+			formattedNumber= thousands_separator+formattedNumber;
 			counter=0;
 		}
 		formattedNumber = numberFloat.substr(i,1)+formattedNumber;
-		counter++;
-		
-	}	
+		counter++;		
+	}
 	if(formattedNumber==',NaN')
 	{
 		formattedNumber = GO.util.numberFormat('0', decimals, decimal_separator, thousands_separator);

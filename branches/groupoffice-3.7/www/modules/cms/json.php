@@ -165,7 +165,7 @@ try {
 					$folder = $cms->get_folder($folder_id);
 					$site = $cms->get_site($folder['site_id']);
 
-					$path = $cms->build_path($folder_id, $site['root_folder_id']);
+					$path = $cms->build_path($folder_id, true, $site['root_folder_id']);
 
 					$response = get_folder_nodes($folder_id, $site, $path);
 				}
