@@ -198,17 +198,20 @@ class GO_SECURITY extends db {
 		}else
 		{
 			//check if this request comes from us
-			if(empty($GO_CONFIG->disable_referer_check) && PHP_SAPI!='cli'){
-				if(!preg_match('#http(s)?://'.preg_quote($_SESSION['GO_SESSION']['referer_check']).'/#i',$_SERVER['HTTP_REFERER']))
-				{
-					$this->logout();
-					go_debug('Referer check failed. If this is an error then you can disable this check with $config[\'disable_referer_check\']=true;');
-					return 'NOTLOGGEDIN';
-				}else
-				{
-					go_debug('Referer ok');
-				}
-			}
+			//
+			//Disabled because it doesn't work in IE.
+			//
+//			if(empty($GO_CONFIG->disable_referer_check) && PHP_SAPI!='cli'){
+//				if(!preg_match('#http(s)?://'.preg_quote($_SESSION['GO_SESSION']['referer_check']).'/#i',$_SERVER['HTTP_REFERER']))
+//				{
+//					$this->logout();
+//					go_debug('Referer check failed. If this is an error then you can disable this check with $config[\'disable_referer_check\']=true;');
+//					return 'NOTLOGGEDIN';
+//				}else
+//				{
+//					go_debug('Referer ok');
+//				}
+//			}
 
 		}
 
