@@ -1,5 +1,5 @@
-groupoffice-com (3.6.29) threesix; urgency=low
+groupoffice-com (3.6.30) threesix; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Tue, 15 Mar 2011 17:22:03 +0100
+ -- Merijn Schering <mschering@intermesh.nl>  Wed, 16 Mar 2011 17:23:00 +0100
