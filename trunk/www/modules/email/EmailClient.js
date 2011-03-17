@@ -1933,3 +1933,67 @@ GO.newMenuItems.push({
 		GO.email.showComposer(taskShowConfig);
 	}
 });
+
+
+GO.newMenuItems.push({
+	text: GO.email.lang.emailFiles,
+	iconCls: 'go-link-icon-9',
+	handler:function(item, e)
+        {               
+                var taskShowConfig = item.parentMenu.taskShowConfig || {};
+                //taskShowConfig.link_config=item.parentMenu.link_config
+                taskShowConfig.values={};
+                if(item.parentMenu.panel.data.email){
+                        var to='';
+                        if(item.parentMenu.panel.data.full_name){
+                                to='"'+item.parentMenu.panel.data.full_name+'" <'+item.parentMenu.panel.data.email+'>';
+                        }else if(item.parentMenu.panel.data.name){
+                                to='"'+item.parentMenu.panel.data.name+'" <'+item.parentMenu.panel.data.email+'>';
+                        }
+
+                        taskShowConfig.values.to=to;
+                }
+
+                if(GO.settings.modules.savemailas.read_permission)
+                        taskShowConfig.values.subject='[id:'+item.parentMenu.link_config.type_id+'] ';               
+
+                if(!GO.files.selectFilesDialog)
+                {
+                    GO.files.selectFilesDialog = new GO.files.SelectFilesDialog();
+
+                    GO.files.selectFilesDialog.on('save', function(obj, files)
+                    {
+                            var availableComposer = GO.email.showComposer(taskShowConfig);
+
+                            for(var i=0; i<files.length; i++)
+                            {
+                                    files[i] = files[i].substr(2);
+                            }                          
+
+                            Ext.Ajax.request({
+                                    url:GO.settings.modules.files.url+'json.php',
+                                    params:{
+                                            task:'attachments',
+                                            file_ids: Ext.encode(files)
+                                    },
+                                    callback:function(options, success, response){
+
+                                            var data = Ext.decode(response.responseText);
+
+                                            if(!data.success)
+                                            {
+                                                    Ext.Msg.alert(GO.lang['strError'], data.feedback);
+                                            }else
+                                            {                                                                                                        
+                                                    availableComposer.addAttachments(data.results);
+                                            }
+                                    },
+                                    scope:this
+                            });
+                    },this)
+                }
+
+                GO.files.selectFilesDialog.show(item.parentMenu.panel.data.files_folder_id);
+        }
+
+});

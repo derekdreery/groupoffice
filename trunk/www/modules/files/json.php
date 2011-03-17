@@ -936,6 +936,19 @@ try {
 			$response['success']=true;
 			break;
 
+                case 'attachments':
+
+                        $file_ids = isset($_REQUEST['file_ids']) ? json_decode($_REQUEST['file_ids']) : array();
+                        $response['results'] = array();
+                        for($i=0; $i<count($file_ids); $i++)
+                        {
+                                $response['results'][] = $files->get_file($file_ids[$i]);
+                        }                  
+
+                        $response['success'] = true;
+                        
+                        break;
+
 	}
 
 }catch(Exception $e) {

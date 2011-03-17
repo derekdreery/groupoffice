@@ -1642,7 +1642,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				extension : selections[i].data.extension,
 				human_size : (selections[i].data.size=='-') ? selections[i].data.size : Ext.util.Format.fileSize(selections[i].data.size)
 			});
-			newRecord.id = selections[i].data.path;
+			//newRecord.id = selections[i].data.path;
 			this.attachmentsStore.add(newRecord);
 		}
 
@@ -1657,6 +1657,49 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		
 		GO.selectFileBrowserWindow.hide();
 
+	},
+
+        addAttachments : function(selections)
+        {
+		var AttachmentRecord = Ext.data.Record.create([{
+			name : 'tmp_name'
+		},{
+			name : 'id'
+		}, {
+			name : 'name'
+		}, {
+			name : 'type'
+		}, {
+			name : 'size'
+		}, {
+			name : 'extension'
+		}, {
+			name : 'human_size'
+		}]);
+		
+		for (var i = 0; i < selections.length; i++)
+		{
+			var newRecord = new AttachmentRecord({
+				id : selections[i].id,
+				tmp_name : selections[i].id,
+				name : selections[i].name,
+				type : selections[i].type,
+				size : selections[i].size,
+				extension : selections[i].extension,
+				human_size : (selections[i].size=='-') ? selections[i].size : Ext.util.Format.fileSize(selections[i].size)
+			});
+			//newRecord.id = selections[i].path;
+			this.attachmentsStore.add(newRecord);
+		}
+
+		if(!this.attachmentsView.isVisible() && this.attachmentsStore.data.length)
+		{
+			this.attachmentsView.show();
+			this.attachmentsEl = Ext.get(this.attachmentsId);
+			this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
+		}
+
+		this.setEditorHeight();
 	},
 
 	HandleResult : function (btn){
