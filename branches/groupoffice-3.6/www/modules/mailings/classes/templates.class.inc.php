@@ -351,6 +351,7 @@ class templates extends db {
 			'unsubscribe_href',
 			'my_name',
 			'date',
+			'sex',
 			'salutation',
 			'birthday',
 			'beginning',
