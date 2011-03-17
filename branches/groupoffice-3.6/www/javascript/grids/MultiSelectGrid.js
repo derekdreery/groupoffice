@@ -33,7 +33,7 @@ GO.grid.MultiSelectGrid = function (config){
 		this.selectButton = new Ext.Button({
 			text:GO.lang.selectAll,
 			id:'plus',
-			qtip:'Select all',
+			qtip:GO.lang.selectAll,
 			handler:function()
 			{							
 				if(this.allowNoSelection || !this.selectedAll)
