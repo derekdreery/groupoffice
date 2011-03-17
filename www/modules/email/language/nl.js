@@ -177,3 +177,5 @@ GO.email.lang.icalendarInvitationDeclined='Uitnodiging is geweigerd.';
 GO.email.lang.icalendarDeleteEventConfirm='Weet u zeker dat u deze afspraak wilt verwijderen?';
 
 GO.email.lang.sending='Verzenden...';
+
+GO.email.lang.emailFiles='E-mail bestanden';
