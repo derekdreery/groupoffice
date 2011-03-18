@@ -1767,10 +1767,11 @@ GO.email.aliasesStore = new GO.data.JsonStore({
 GO.email.showComposer = function(config){
 	
 	config = config || {};
-	
+               
 	GO.email.composers = GO.email.composers || [];
 	
 	var availableComposer;
+        this.selectFiles = config.selectFilesFromFolderID;
 
 	for(var i=0;i<GO.email.composers.length;i++)
 	{
@@ -1780,6 +1781,7 @@ GO.email.showComposer = function(config){
 			break;
 		}
 	}
+
 	
 	if(!availableComposer)
 	{
@@ -1818,6 +1820,14 @@ GO.email.showComposer = function(config){
 				GO.email.messagesGrid.store.reload();
 			}
 		});
+
+                availableComposer.on('dialog_ready', function(composer)
+                {
+                        if(this.selectFiles)
+                        {                              
+                                GO.files.selectFilesDialog.show(this.selectFiles);
+                        }
+                },this);
 		
 		GO.email.composers.push(availableComposer);
 	}
@@ -1955,16 +1965,17 @@ GO.newMenuItems.push({
                 }
 
                 if(GO.settings.modules.savemailas.read_permission)
-                        taskShowConfig.values.subject='[id:'+item.parentMenu.link_config.type_id+'] ';               
+                        taskShowConfig.values.subject='[id:'+item.parentMenu.link_config.type_id+'] ';
 
+                taskShowConfig.selectFilesFromFolderID = item.parentMenu.panel.data.files_folder_id;
+                var availableComposer = GO.email.showComposer(taskShowConfig);
+                
                 if(!GO.files.selectFilesDialog)
                 {
                     GO.files.selectFilesDialog = new GO.files.SelectFilesDialog();
 
                     GO.files.selectFilesDialog.on('save', function(obj, files)
                     {
-                            var availableComposer = GO.email.showComposer(taskShowConfig);
-
                             for(var i=0; i<files.length; i++)
                             {
                                     files[i] = files[i].substr(2);
@@ -1981,9 +1992,9 @@ GO.newMenuItems.push({
                                             var data = Ext.decode(response.responseText);
 
                                             if(!data.success)
-                                            {
-                                                    Ext.Msg.alert(GO.lang['strError'], data.feedback);
-                                            }else
+                                                {
+                                                        Ext.Msg.alert(GO.lang['strError'], data.feedback);
+                                                }else
                                             {                                                                                                        
                                                     availableComposer.addAttachments(data.results);
                                             }
@@ -1991,9 +2002,7 @@ GO.newMenuItems.push({
                                     scope:this
                             });
                     },this)
-                }
-
-                GO.files.selectFilesDialog.show(item.parentMenu.panel.data.files_folder_id);
+                }                
         }
 
 });

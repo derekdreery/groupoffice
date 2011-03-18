@@ -7,7 +7,7 @@ GO.files.SelectFilesDialog = function(config){
 	}
 
 	config.layout='border';
-	config.modal=true;
+	config.modal=false;
 	config.resizable=true;
 	config.maximizable=true;
 	config.width=600;
