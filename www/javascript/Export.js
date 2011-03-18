@@ -5,7 +5,9 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 	 */
 	customTypes : [],
 
-	initComponent : function() {		
+	initComponent : function() {
+
+
 
 		this.formPanelItems[0].items = [{
 			boxLabel : 'CSV',
@@ -21,7 +23,10 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 			boxLabel : GO.lang.toScreen,
 			name : 'type',
 			inputValue : 'html_export_query'
-		}];
+		},
+		this.hiddenParamsField = new Ext.form.Hidden({
+			name:'params'
+		})];
 
 		if(this.query && GO.customexports[this.query]){
 			for(var i=0;i<GO.customexports[this.query].length;i++){
@@ -43,6 +48,7 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 		Ext.apply(this, {
 			
 			items : this.formPanel = new Ext.FormPanel({
+				url:BaseHref+'export_query.php',
 				items : this.formPanelItems,
 				bodyStyle : 'padding:5px'
 			}),
@@ -69,21 +75,33 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 
 					this.beforeRequest();
 
-					var downloadUrl = '';
-					for (var name in this.loadParams) {
+					this.formPanel.form.standardSubmit=true;
 
-						if (downloadUrl == '') {
-							downloadUrl = BaseHref
-							+ 'export_query.php?';
-						} else {
-							downloadUrl += '&';
-						}
 
-						downloadUrl += name
-						+ '='
-						+ encodeURIComponent(this.loadParams[name]);
-					}
-					window.open(downloadUrl);
+					this.hiddenParamsField.setValue(Ext.encode(this.loadParams));
+
+						this.formPanel.form.submit({
+						url:BaseHref+'export_query.php',
+						params:this.loadParams
+					});
+
+//					var downloadUrl = '';
+//					for (var name in this.loadParams) {
+//
+//						if (downloadUrl == '') {
+//							downloadUrl = BaseHref
+//							+ 'export_query.php?';
+//						} else {
+//							downloadUrl += '&';
+//						}
+//
+//						downloadUrl += name
+//						+ '='
+//						+ encodeURIComponent(this.loadParams[name]);
+//					}
+//					alert(downloadUrl.length);
+//					alert(downloadUrl);
+//					window.open(downloadUrl);
 					this.hide();
 				},
 				scope : this

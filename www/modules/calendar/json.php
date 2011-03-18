@@ -1254,8 +1254,15 @@ try {
 				if($user) {
 
 					//Only show availability if user has access to the default calendar
-					$default_calendar = $cal->get_default_calendar($user['id']);
-					if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $default_calendar['acl_id'])){
+					if(!empty($GO_CONFIG->require_calendar_access_for_freebusy)){
+						$default_calendar = $cal2->get_default_calendar($user['id']);
+						$permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $default_calendar['acl_id']);
+					}else
+					{
+						$permission=true;
+					}
+
+					if($permission){
 
 						$freebusy=$cal->get_free_busy($user['id'], $date, $event_id);
 						foreach($freebusy as $min=>$busy) {

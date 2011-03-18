@@ -1,4 +1,8 @@
-03/03/2011 3.7.0-beta
+15/03/2011 3.7.2
+- Various small bug fixes reported at Sourceforge.
+- Prevent Cross-site request forgeries: http://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
+
+10/03/2011 3.7.1
 - Public icalendar file
 - Sieve e-mail filtering support
 - Optimized for very large installations 20.000 users.
@@ -9,6 +13,15 @@
 - Custom fields for timeregistration entries in Multiple day mode.
 - Preset the folder view for other users. 
 
+16/03/2011 3.6.30
+- Removed cross site request security measure because it causes problems in IE.
+
+15/03/2011 3.6.29
+- Various small bug fixes reported at Sourceforge.
+- Prevent Cross-site request forgeries: http://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
+
+08/03/2011 3.6.28
+- Corrected corrupt Thai translation file.
 
 02/03/2011 3.6.27
 - Autocomplete for contacts in billing module works again.

@@ -132,9 +132,14 @@ class GO_GROUPS extends db
 	 * @access public
 	 * @return mixed		Array with properties or false
 	 */
-	function update_group($group_id, $name,$admin_only=0)
+	function update_group($group_id, $name,$admin_only=-1)
 	{
-		return $this->query("UPDATE go_groups SET name='".$this->escape($name)."',admin_only='".$this->escape($admin_only)."' WHERE id='".$this->escape($group_id)."'");
+		$group['id']=$group_id;
+		$group['name']=$name;
+		if($admin_only>-1)
+			$group['admin_only']=$admin_only;
+
+		return $this->update_row('go_groups', 'id', $group);
 	}
 
 	/**

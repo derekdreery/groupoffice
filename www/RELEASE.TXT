@@ -1,3 +1,11 @@
+10/03/2011 3.7.1
+This release has a lot of enhancements under the hood. Everything has been
+optimized to work well in very large environments such as more then 20.000 users.
+There are also some interesting new features such as Sieve mail filtering
+support, Public icalendar files for calendars, Shared IMAP accounts and better
+LDAP authentication connectivity.
+
+
 2010/12/01 3.6.4
 This release focuses on interoperability with other systems. With WebDAV and
 CalDAV support the filesystem can be mounted like a network drive and you can

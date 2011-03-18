@@ -37,6 +37,7 @@ function launchGO(){
 
 	}else
 	{
+		//the parameters will be handled in default_scripts.inc.php
 		win.location.href="<?php echo $GO_CONFIG->host; ?>?<?php echo $_SERVER['QUERY_STRING']; ?>";
 	}
 

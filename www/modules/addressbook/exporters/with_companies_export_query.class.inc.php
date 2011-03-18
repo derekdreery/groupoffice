@@ -2,12 +2,6 @@
 require($GO_CONFIG->class_path.'export/csv_export_query.class.inc.php');
 class with_companies_export_query extends csv_export_query{
 
-	function __construct(){
-		parent::__construct();
-
-		$this->q['query']=preg_replace('/DISTINCT.*FROM/', 'DISTINCT fs.* FROM', $this->q['query']);
-	}
-
 	function init_company_columns()
 	{
 		$this->company_columns=array();
