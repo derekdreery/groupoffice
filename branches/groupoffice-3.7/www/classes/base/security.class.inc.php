@@ -74,6 +74,21 @@ class GO_SECURITY extends db {
 	}
 
 	/**
+	 * All URL's from the ExtJS requests contain an extra parameter called
+	 * "auth_token". This token can be compared with the stored session variable
+	 * to prevent Cross-site request forgeries:
+	 * http://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
+	 */
+
+	function check_token(){
+		if($_REQUEST['security_token']!=$_SESSION['GO_SESSION']['security_token']){
+			$this->logout();
+			go_log(LOG_ERR, 'Fatal error: Security token mismatch. Possible cross site request forgery attack!');
+			die('Fatal error: Security token mismatch. Possible cross site request forgery attack!');
+		}
+	}
+
+	/**
 	 * Set's a user as logged in. This does NOT log a user in. $GO_AUTH->login()
 	 * does that.
 	 *

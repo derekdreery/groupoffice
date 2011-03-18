@@ -16,6 +16,8 @@ require_once("Group-Office.php");
 
 $GO_SECURITY->json_authenticate();
 
+$GO_SECURITY->check_token();
+
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
 $dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
 $start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';

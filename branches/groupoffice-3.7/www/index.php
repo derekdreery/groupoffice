@@ -65,6 +65,10 @@ if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
 		</script>
 		<?php
 		exit();
+	}else
+	{
+		header('Location: '.$GO_CONFIG->host);
+		exit();
 	}
 }
 
