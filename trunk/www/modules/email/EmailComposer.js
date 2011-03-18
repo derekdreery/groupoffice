@@ -878,7 +878,8 @@ GO.email.EmailComposer = function(config) {
 	});
 
 	this.addEvents({
-		'send' : true
+		'send' : true,
+                'dialog_ready' :true
 	});
 };
 
@@ -1072,7 +1073,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 						this.fromCombo.store.loadData(jsonData.aliases);
 
 						if(this.templatesStore)
-							this.templatesStore.loadData(jsonData.templates);
+							this.templatesStore.loadData(jsonData.templates);                                                
 
 						var records = this.fromCombo.store.getRange();
 						if (records.length) {
@@ -1298,12 +1299,14 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 						}
 
 						this.afterShowAndLoad(params.task!='opendraft', config);
+
+                                                this.fireEvent('dialog_ready', this);
 					},
 					scope : this
 				});
 
 			}else
-			{
+			{console.debug('2');
 				this.afterShowAndLoad(true, config);
 			}
 			if (config.link_config) {
