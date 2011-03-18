@@ -15,6 +15,9 @@
 
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('users');
+
+$GO_SECURITY->check_token();
+
 require_once($GO_LANGUAGE->get_language_file('users'));
 
 require_once($GO_CONFIG->class_path.'base/users.class.inc.php');

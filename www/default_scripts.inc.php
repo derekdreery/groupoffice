@@ -60,7 +60,6 @@ echo 'GO.afterLoginUrl="'.$after_login_url.'";';
 $fullscreen = isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1' ? 'true' : 'false';
 echo 'GO.fullscreen='.$fullscreen.';';
 
-
 /*
  * If fullscreen mode is enabled and the user is already logged in we set $popup_groupoffice with the URL to load Group-Office
  * in.
@@ -380,6 +379,13 @@ if(count($load_modules)) {
 
 	Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));
 	//Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+
+
+	//some functions require extra security
+	<?php
+	if(isset($_SESSION['GO_SESSION']['security_token']))		
+		echo 'Ext.Ajax.extraParams={security_token:"'.$_SESSION['GO_SESSION']['security_token'].'"};';
+	?>
 </script>
 <?php
 if(file_exists($GO_THEME->theme_path.'MainLayout.js')) {
