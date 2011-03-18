@@ -942,17 +942,29 @@ try {
 			$response['success']=true;
 			break;
 
+                case 'get_all_file_ids':
+
+                        $folder_id = (isset($_REQUEST['folder_id']) && $_REQUEST['folder_id']) ? $_REQUEST['folder_id'] : 0;                        
+
+                        $response['results'] = $files->get_file_ids_recursively($folder_id);
+                        $response['total'] = count($response['results']);
+                        
+                        $response['success'] = true;
+                        
+                        break;
+
+
                 case 'attachments':
 
                         $file_ids = isset($_REQUEST['file_ids']) ? json_decode($_REQUEST['file_ids']) : array();
                         $response['results'] = array();
                         for($i=0; $i<count($file_ids); $i++)
                         {
-                            $file = $files->get_file($file_ids[$i]);
-                            $path = $files->build_path($file['folder_id']);
-                            $file['path']=$path.'/'.$file['name'];
+                                $file = $files->get_file($file_ids[$i]);
+                                $path = $files->build_path($file['folder_id']);
+                                $file['path']=$path.'/'.$file['name'];
 
-                            $response['results'][] = $file;
+                                $response['results'][] = $file;
                         }                  
 
                         $response['success'] = true;

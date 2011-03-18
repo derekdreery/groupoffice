@@ -108,9 +108,6 @@ GO.files.SelectFilesGrid = function(config){
                         if(this.fileSelected(record.id))
                         {
                                 record.set('checked', '1');
-                        }else
-                        {
-                                
                         }
                 }
         }, this)
@@ -134,12 +131,10 @@ Ext.extend(GO.files.SelectFilesGrid, GO.grid.EditorGridPanel,{
         selectFile: function(id)
         {
                 var type = id.substr(0, 1);
-                if(type != 'f')
+                if(type == 'f')
                 {
-                        return false;
-                }
-                
-                this.selectedFiles.push(id);
+                        this.selectedFiles.push(id);
+                }                               
         },
         deselectFile: function(id)
         {
@@ -196,6 +191,27 @@ Ext.extend(GO.files.SelectFilesGrid, GO.grid.EditorGridPanel,{
                 this.selectedFiles = [];
 
                 this.store.rejectChanges();
+        },
+
+        selectAllFiles: function(folder_id)
+        {
+                Ext.Ajax.request({
+                    url:GO.settings.modules.files.url+'json.php',
+                    params:{
+                        task:'get_all_file_ids',
+                        folder_id: folder_id
+                    },
+                    callback:function(options, success, response){
+
+                        var data = Ext.decode(response.responseText);
+                        if(data.success && data.results)
+                        {
+                                this.selectedFiles = data.results;
+                                this.store.reload();
+                        }
+                    },
+                    scope:this
+                });
         },
 
 	iconRenderer : function(src,cell,record){

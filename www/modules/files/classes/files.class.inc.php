@@ -1247,6 +1247,32 @@ class files extends db {
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
+        function get_file_ids_recursively($folder_id)
+        {
+                $items = array();
+                $files = new files();
+
+                $folders = $this->get_folders($folder_id);
+                if($folders)
+                {
+                        while($this->next_record())
+                        {
+                                $items = array_merge($items, $files->get_file_ids_recursively($this->f('id')));
+                        }                                                
+                }
+                
+                $files = $this->get_files($folder_id);
+                if(count($files))
+                {
+                        while($this->next_record())
+                        {
+                                $items[] = 'f:'.$this->record['id'];
+                        }
+                }
+
+                return $items;
+        }
+
 	function has_children($folder_id){
 		$sql = "SELECT * FROM fs_folders WHERE parent_id=".intval($folder_id).' LIMIT 0,1';
 		$this->query($sql);
