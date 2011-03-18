@@ -1150,11 +1150,9 @@ class GO_CONFIG {
 		}else
 		{
 			$_SESSION['GO_SESSION']['full_url']=$this->full_url;
-
-			if(empty($this->orig_full_url))
-				$this->orig_full_url=$this->full_url;
-
 		}
+		if(empty($this->orig_full_url))
+			$this->orig_full_url=$this->full_url;
 	}
 
 
