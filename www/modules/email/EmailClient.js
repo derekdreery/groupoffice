@@ -1968,7 +1968,7 @@ GO.newMenuItems.push({
                         taskShowConfig.values.subject='[id:'+item.parentMenu.link_config.type_id+'] ';
 
                 taskShowConfig.selectFilesFromFolderID = item.parentMenu.panel.data.files_folder_id;
-                var availableComposer = GO.email.showComposer(taskShowConfig);
+                this.availableComposer = GO.email.showComposer(taskShowConfig);
                 
                 if(!GO.files.selectFilesDialog)
                 {
@@ -1995,9 +1995,9 @@ GO.newMenuItems.push({
                                                 {
                                                         Ext.Msg.alert(GO.lang['strError'], data.feedback);
                                                 }else
-                                            {                                                                                                        
-                                                    availableComposer.addAttachments(data.results);
-                                            }
+                                                {
+                                                        this.availableComposer.addAttachments(data.results);
+                                                }
                                     },
                                     scope:this
                             });
