@@ -657,12 +657,13 @@ try {
 					$folder['extension']='folder';
 					$response['results'][]=$folder;
 				}
-				$count = count($response['results']);
-
+				
                                 if(isset($_REQUEST['show_files_only']))
                                 {
                                         $response['results'] = array();
+                                        $response['total'] = 0;
                                 }
+                                $count = count($response['results']);
 
 
 				$folder_pages = floor($response['total']/$limit);
