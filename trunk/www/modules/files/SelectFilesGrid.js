@@ -62,7 +62,8 @@ GO.files.SelectFilesGrid = function(config){
         config.store = new GO.data.JsonStore({
 		url: GO.settings.modules.files.url+'json.php',
 		baseParams: {
-			'task': 'grid'
+			'task': 'grid',
+                        'show_files_only':1
 		},
 		root: 'results',
 		totalProperty: 'total',

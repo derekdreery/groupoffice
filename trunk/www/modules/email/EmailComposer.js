@@ -1642,7 +1642,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				extension : selections[i].data.extension,
 				human_size : (selections[i].data.size=='-') ? selections[i].data.size : Ext.util.Format.fileSize(selections[i].data.size)
 			});
-			//newRecord.id = selections[i].data.path;
+			newRecord.id = selections[i].data.path;
 			this.attachmentsStore.add(newRecord);
 		}
 
@@ -1688,7 +1688,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				extension : selections[i].extension,
 				human_size : (selections[i].size=='-') ? selections[i].size : Ext.util.Format.fileSize(selections[i].size)
 			});
-			//newRecord.id = selections[i].path;
+			newRecord.id = selections[i].path;
 			this.attachmentsStore.add(newRecord);
 		}
 
