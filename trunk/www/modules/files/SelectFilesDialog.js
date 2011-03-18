@@ -13,8 +13,7 @@ GO.files.SelectFilesDialog = function(config){
 	config.width=600;
 	config.height=400;
 	config.closeAction='hide';
-	config.title=GO.files.lang.selectFiles;
-
+	config.title=GO.files.lang.selectFiles;        
 
         this.filesGrid = new GO.files.SelectFilesGrid({
 		region:'center',
@@ -91,6 +90,17 @@ GO.files.SelectFilesDialog = function(config){
 	config.items=[this.treePanel, this.filesGrid];
 
 
+        config.tbar=[
+	{
+		text: GO.lang.selectAll,
+		handler: function()
+                {
+                        this.filesGrid.selectAllFiles(this.root_id);
+
+		},
+		scope: this
+	}];
+
         config.buttons=[{
 		text: GO.lang['cmdOk'],
 		handler: function(){
@@ -130,6 +140,8 @@ Ext.extend(GO.files.SelectFilesDialog, Ext.Window,{
         setRootID : function(rootID, folder_id)
 	{
                 this.folder_id=folder_id;
+                this.root_id = rootID;
+                
                 this.treeLoader.baseParams.root_folder_id=rootID;
                 this.treeLoader.baseParams.expand_folder_id=folder_id;
                 this.rootNode.reload({
