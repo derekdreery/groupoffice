@@ -659,6 +659,11 @@ try {
 				}
 				$count = count($response['results']);
 
+                                if(isset($_REQUEST['show_files_only']))
+                                {
+                                        $response['results'] = array();
+                                }
+
 
 				$folder_pages = floor($response['total']/$limit);
 				$folders_on_last_page = $response['total']-($folder_pages*$limit);
@@ -942,7 +947,11 @@ try {
                         $response['results'] = array();
                         for($i=0; $i<count($file_ids); $i++)
                         {
-                                $response['results'][] = $files->get_file($file_ids[$i]);
+                            $file = $files->get_file($file_ids[$i]);
+                            $path = $files->build_path($file['folder_id']);
+                            $file['path']=$path.'/'.$file['name'];
+
+                            $response['results'][] = $file;
                         }                  
 
                         $response['success'] = true;

@@ -26,7 +26,7 @@ GO.files.SelectFilesDialog = function(config){
 		dataUrl:GO.settings.modules.files.url+'json.php',
 		baseParams:{
 			task: 'tree',
-			root_folder_id:0,
+			root_folder_id:0,                        
 			expand_folder_id:0
 		},
 		preloadChildren:true
