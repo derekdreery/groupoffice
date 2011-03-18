@@ -422,7 +422,7 @@ GO.email.EmailClient = function(config){
 			}
 		},
 		scope:this
-	}),'-',{
+	}),'-',this.emptyFolderButton = new Ext.menu.Item({
 		iconCls: 'btn-delete',
 		text: GO.email.lang.emptyFolder,
 		handler: function(){
@@ -459,7 +459,7 @@ GO.email.EmailClient = function(config){
 			}, this);
 		},
 		scope:this
-	},{
+	}),this.deleteFolderButton = new Ext.menu.Item({
 		iconCls: 'btn-delete',
 		text: GO.lang.cmdDelete,
 		cls: 'x-btn-text-icon',
@@ -501,7 +501,7 @@ GO.email.EmailClient = function(config){
 				});
 			}
 		}
-	}];
+	})];
 
 	
 	for(i=0;i<GO.email.extraTreeContextMenuItems.length;i++)

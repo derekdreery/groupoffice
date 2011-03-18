@@ -270,17 +270,23 @@ class GO_LINKS extends db
 	/*
 	 * 
 	 * todo
-	 
+	 */
 	function copy_links($src_link_id, $src_link_type, $dst_link_id, $dst_link_type)
 	{
-		$GO_LINKS2 = new GO_LINKS();
+		global $GO_CONFIG;
 		
-		$links = $this->get_links($src_link_id, $src_link_type);
-		foreach($links as $link)
+		require_once($GO_CONFIG->class_path . '/base/search.class.inc.php');
+		$search = new search();
+		
+		$search->global_search(1, "", 0, 0, 'id','ASC', array(), $src_link_id, $src_link_type,0);
+
+		go_debug("copy_links($src_link_id, $src_link_type, $dst_link_id, $dst_link_type)");
+
+		while($link = $search->next_record())
 		{
-			$GO_LINKS2->add_link($dst_link_id, $src_link_type, $dst_link_type, $link['link_id'], $link['type']);
+			$this->add_link($dst_link_id, $src_link_type, $link['id'], $link['link_type']);
 		}
-	}*/
+	}
 	
 	
 	

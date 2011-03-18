@@ -18,6 +18,11 @@ require_once($GO_CONFIG->class_path.'export/export_query.class.inc.php');
 ini_set('memory_limit', '200M');
 define('EXPORTING', true);
 
+if(!empty($_POST['params']))
+{
+	$_REQUEST=array_merge($_REQUEST, json_decode($_POST['params'], true));
+}
+
 
 //close writing to session so other concurrent requests won't be locked out.
 session_write_close();

@@ -42,9 +42,18 @@ try {
 			$response['success'] = true;
 			$response['feedback'] = $feedback;
 
-			$admin_only = isset($_POST['admin_only'])? 1 : 0;
+			if(!$GO_MODULES->modules['groups']['write_permission'])
+				$admin_only=-1;
+			else
+				$admin_only = isset($_POST['admin_only'])? 1 : 0;
 
 			if ($group_id < 1) {
+
+				if(!$GO_MODULES->modules['groups']['write_permission'])
+				{
+					throw new AccessDeniedException();
+				}
+
 				//insert
 				if ($GO_GROUPS->get_group_by_name($name)) {
 					$response['feedback'] = $lang['groups']['groupNameAlreadyExists'];
@@ -73,6 +82,7 @@ try {
 
 			break;
 	}
+	
 } catch (Exception $e) {
 	$response['feedback'] = $e->getMessage();
 	$response['success'] = false;

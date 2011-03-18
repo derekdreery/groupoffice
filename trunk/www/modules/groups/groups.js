@@ -41,25 +41,27 @@
 				{header: GO.groups.lang.adminOnly, dataIndex: 'admin_only', renderer: function(value){return (value == 1)?GO.lang.cmdYes:GO.lang.cmdNo;}}
     ]
 	});  
-    
-	var tbar = new Ext.Toolbar({		
-			cls:'go-head-tb',
-			items: [
-    	{
-    		iconCls: 'btn-add', 
-    		text: GO.lang['cmdAdd'], 
-    		cls: 'x-btn-text-icon', 
-    		handler: function(){this.showGroupDialog(0);},
-    		scope: this
-    	},
-    	{
-    		iconCls: 'btn-delete', 
-				text: GO.lang['cmdDelete'], 
-				cls: 'x-btn-text-icon', 
-				handler: function(){this.deleteSelected();},  
-				scope: this
-			}
-      ]});
+
+	var tbar = new Ext.Toolbar({
+		cls:'go-head-tb',
+		items: [
+		{
+			iconCls: 'btn-add',
+			text: GO.lang['cmdAdd'],
+			cls: 'x-btn-text-icon',
+			handler: function(){this.showGroupDialog(0);},
+			scope: this,
+			disabled: !GO.settings.modules.groups.write_permission
+		},
+		{
+			iconCls: 'btn-delete',
+			text: GO.lang['cmdDelete'],
+			cls: 'x-btn-text-icon',
+			handler: function(){this.deleteSelected();},
+			scope: this,
+			disabled: !GO.settings.modules.groups.write_permission
+		}
+		]});
       
   config.layout='fit';
   config.id='groups-grid-overview-groups';
@@ -68,6 +70,7 @@
   config.sm=new Ext.grid.RowSelectionModel({singleSelect: false});
   config.tbar=tbar;
   config.paging=true;
+	config.noDelete= !GO.settings.modules.groups.write_permission;
   config.viewConfig={
   	autoFill:true,
   	forceFit:true

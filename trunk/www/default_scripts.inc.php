@@ -389,7 +389,6 @@ if(file_exists($GO_THEME->theme_path.'MainLayout.js')) {
 ?>
 <script type="text/javascript">
 <?php
-
 //these parameter are passed by dialog.php. These are used to directly link to
 //a dialog.
 if(isset($_REQUEST['m']) || isset($_REQUEST['module']))
@@ -409,7 +408,7 @@ if(isset($_REQUEST['m']) || isset($_REQUEST['module']))
 
 	$module = isset($_REQUEST['m']) ? $_REQUEST['m'] : false;
 	$function = isset($_REQUEST['f']) ? $_REQUEST['f'] : false;
-	$params = isset($_REQUEST['params']) ? ($_REQUEST['p']) : false;
+	$params = isset($_REQUEST['p']) ? ($_REQUEST['p']) : false;
 	$loadevent = isset($_REQUEST['e']) ? $_REQUEST['e'] : 'render';
 
 	if($module && $function && $params)

@@ -18,6 +18,8 @@ $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 echo "Converting old paths...".$line_break;
 flush();
 
+require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+
 $fs = new filesystem();
 
 require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');

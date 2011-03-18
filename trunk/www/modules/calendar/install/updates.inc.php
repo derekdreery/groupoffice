@@ -114,3 +114,5 @@ $updates[]="ALTER TABLE `cal_events` DROP `invitation_uuid`";
 
 $updates[]="ALTER TABLE `cal_events` CHANGE `uuid` `uuid` VARCHAR( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
 $updates[]="script:4_add_calendar_name_template.inc.php";
+
+$updates[]="ALTER TABLE  `cal_calendars` ADD  `public` BOOL NOT NULL ;";
