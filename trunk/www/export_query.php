@@ -21,6 +21,9 @@ define('EXPORTING', true);
 if(!empty($_POST['params']))
 {
 	$_REQUEST=array_merge($_REQUEST, json_decode($_POST['params'], true));
+	$_POST=array_merge($_POST, json_decode($_POST['params'], true));
+	unset($_POST['params']);
+	unset($_REQUEST['params']);
 }
 
 
