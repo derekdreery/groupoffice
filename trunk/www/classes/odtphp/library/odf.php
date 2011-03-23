@@ -83,9 +83,10 @@ class Odf
             //throw new OdfException("var $key not found in the document");
         }else
         {
-            $value = $encode ? htmlspecialchars($value) : $value;
+            $value = $encode ? htmlspecialchars($value, ENT_COMPAT, 'UTF-8') : $value;
             $value = ($charset == 'ISO-8859') ? utf8_encode($value) : $value;
             $this->vars[$this->config['DELIMITER_LEFT'] . $key . $this->config['DELIMITER_RIGHT']] = str_replace("\n", "<text:line-break/>", $value);
+			//$this->vars[ $key ] = str_replace("\n", "<text:line-break/>", $value);
             return $this;
         }
     }
@@ -152,7 +153,74 @@ IMG;
     private function _parse()
     {
         $this->contentXml = str_replace(array_keys($this->vars), array_values($this->vars), $this->contentXml);
+		//$this->contentXml = preg_replace('/{([^}]*)}/Ue', "odf::replacetag('$1', \$this->vars)", $this->contentXml);
     }
+
+
+	function replacetag($tag, $record) {
+
+		//Sometimes people change styles within a {autodata} tag.
+		//Then there are XML tags inside the GO template tag.
+		//We place them outside the tag.
+		//go_debug($tag);
+
+		//echo '----<br />';
+
+
+		$tag = stripslashes($tag);
+		preg_match_all('/<[^>]*>/',$tag,$matches);
+
+		$garbage_tags = implode('', $matches[0]);
+
+		$tag = strip_tags($tag);
+
+
+
+		$arr = explode('|', $tag);
+
+
+		$math=false;
+		$ops = array('/','*','+','-');
+		foreach($ops as $op){
+			if(strpos($arr[0], $op))
+			{
+				$math=true;
+				break;
+			}
+		}
+
+		if(!$math){
+			$v=isset($record[$arr[0]]) ? $record[$arr[0]] : '';
+		}else
+		{
+			$v=$arr[0];
+			foreach($record as $key=>$value){
+				$v=str_replace($key,$value, $v);
+			}
+
+			$GLOBALS['GO_CONFIG']->debug_display_errors=false;
+			@eval("\$result_string=".$v.";");
+			$GLOBALS['GO_CONFIG']->debug_display_errors=true;
+
+			$v = isset($result_string) ? $result_string : 'invalid math expression!';
+		}
+
+		if(isset($arr[1])) {
+			$args = explode(':',$arr[1]);
+
+			//first value = function name
+			$func = array_shift($args);
+
+			//add value as first argument
+			array_unshift($args, $v);
+
+			//var_dump($args);
+
+			$v = call_user_func_array(array('odf_renderers',$func),$args);
+		}
+		return $garbage_tags.$v;
+	}
+
     /**
      * Add the merged segment to the document
      *
@@ -310,4 +378,19 @@ IMG;
     }
 }
 
+
+class odf_renderers {
+
+	function number($v, $decimals=2) {
+		return Number::format($v, $decimals);
+	}
+
+	function from_unixtime($v, $with_time=true) {
+		return Date::get_timestamp($v, $with_time);
+	}
+
+	function from_unixdate($v) {
+		return Date::get_timestamp($v, false);
+	}
+}
 ?>

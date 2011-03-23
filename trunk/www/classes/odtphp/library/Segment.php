@@ -85,7 +85,11 @@ class Segment implements IteratorAggregate, Countable
      */
     public function merge()
     {
+//		var_dump($this->vars);
+//		var_dump($this->xml);
+
         $this->xmlParsed .= str_replace(array_keys($this->vars), array_values($this->vars), $this->xml);
+		//$this->xmlParsed.=preg_replace('/{([^}]*)}/Ue', "odf::replacetag('$1', \$this->vars)", $this->xml);
         if ($this->hasChildren()) {
             foreach ($this->children as $child) {
                 $this->xmlParsed = str_replace($child->xml, ($child->xmlParsed=="")?$child->merge():$child->xmlParsed, $this->xmlParsed);
@@ -100,7 +104,8 @@ class Segment implements IteratorAggregate, Countable
 				$this->file->addFile($imageKey, 'Pictures/' . $imageValue);
 			}
         }
-        $this->file->close();		
+        $this->file->close();
+		//var_dump($this->xmlParsed);
         return $this->xmlParsed;
     }
     /**
@@ -132,13 +137,14 @@ class Segment implements IteratorAggregate, Countable
      * @return Segment
      */
     public function setVars($key, $value, $encode = true, $charset = 'ISO-8859')
-    {
+    {		
         if (strpos($this->xml, $this->odf->getConfig('DELIMITER_LEFT') . $key . $this->odf->getConfig('DELIMITER_RIGHT')) === false) {
-            throw new SegmentException("var $key not found in {$this->getName()}");
+            //throw new SegmentException("var $key not found in {$this->getName()}");
         }
 		$value = $encode ? htmlspecialchars($value) : $value;
 		$value = ($charset == 'ISO-8859') ? utf8_encode($value) : $value;
         $this->vars[$this->odf->getConfig('DELIMITER_LEFT') . $key . $this->odf->getConfig('DELIMITER_RIGHT')] = str_replace("\n", "<text:line-break/>", $value);
+		//$this->vars[ $key ] = str_replace("\n", "<text:line-break/>", $value);
         return $this;
     }
     /**
