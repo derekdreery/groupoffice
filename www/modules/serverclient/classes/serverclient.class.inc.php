@@ -175,7 +175,7 @@ class serverclient
 
 			foreach($_POST['serverclient_domains'] as $domain)
 			{
-
+				$account = array();
 				$account['user_id']=$user['id'];
 				$account['mbroot'] = $GO_CONFIG->serverclient_mbroot;
 				$account['use_ssl'] = $GO_CONFIG->serverclient_use_ssl;
