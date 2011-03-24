@@ -186,14 +186,11 @@ try {
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
-			$account = $imap->open_account($_POST['account_id'], $_POST['mailbox']);
-			$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], false);
+			
 
-			$imap->disconnect();
-
-			if(empty($data)) {
-				throw new Exception('Could not fetch message from IMAP server');
-			}
+//			if(empty($data)) {
+//				throw new Exception('Could not fetch message from IMAP server');
+//			}
 			$folder = $files->get_folder($_POST['folder_id']);
 			$path = $files->build_path($folder);
 			if(!$path) {
@@ -202,9 +199,38 @@ try {
 
 			$path.='/'.$_POST['filename'];
 
-			if(!file_put_contents($GO_CONFIG->file_storage_path.$path, $data)) {
+			$account = $imap->open_account($_POST['account_id'], $_POST['mailbox']);
+			//$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], false);
+
+			$size = $imap->get_message_part_start($_REQUEST['uid'], $_REQUEST['imap_id']);
+
+			$fp = fopen($GO_CONFIG->file_storage_path.$path, 'w+');
+			if(!$fp)
 				throw new Exception('Could not create file');
+
+			//read from IMAP server
+			while($line = $imap->get_message_part_line()){
+				switch(strtolower($_REQUEST['encoding'])) {
+					case 'base64':
+						$r = fputs($fp,base64_decode($line));
+						break;
+					case 'quoted-printable':
+						$r = fputs($fp, quoted_printable_decode($line));
+						break;
+					default:
+						$r = fputs($fp, $line);
+						break;
+				}
+				
+				if(!$r)
+					throw new Exception('Could not create file');
 			}
+			fclose($fp);
+			$imap->disconnect();
+
+//			if(!file_put_contents($GO_CONFIG->file_storage_path.$path, $data)) {
+//				throw new Exception('Could not create file');
+//			}
 			$files->import_file($GO_CONFIG->file_storage_path.$path,$folder['id']);
 
 			$response['success']=true;

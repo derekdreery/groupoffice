@@ -1568,7 +1568,7 @@ class imap extends imap_bodystruct {
 		}else
 		{
 			$res = $this->last_line;
-			$this->last_line = fgets($this->handle);
+			$this->last_line = fgets($this->handle,1024);
 
 			if ($this->check_response(array($this->last_line))) {
 				$this->last_line = false;
