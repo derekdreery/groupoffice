@@ -1,3 +1,6 @@
+25/03/2011 3.7.4
+- Merged all bug fixes from 3.6 into 3.7
+
 15/03/2011 3.7.2
 - Various small bug fixes reported at Sourceforge.
 - Prevent Cross-site request forgeries: http://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)
