@@ -533,7 +533,15 @@ GO.email.EmailClient = function(config){
 		this.treeContextMenu.showAt([coords[0], coords[1]]);
 	}, this);
 
-	
+	this.treePanel.on('startdrag', function(tree, node, e){
+		if(node.id.indexOf('account')>-1){
+			tree.dropZone.appendOnly=false;
+		}else
+		{
+			tree.dropZone.appendOnly=true;
+		}
+	//console.log(tree.dropZone.appendOnly);
+	}, this);
 
 	this.treePanel.on('beforenodedrop', function(e){
 		if(!e.dropNode)
@@ -666,6 +674,8 @@ GO.email.EmailClient = function(config){
 				this.treePanel.moveFolder(e.target.attributes['account_id'], e.target.id , e.data.node);
 			}
 		}
+
+		this.treePanel.dropZone.appendOnly=true;
 	},
 	this);
 
