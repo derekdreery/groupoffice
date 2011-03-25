@@ -687,7 +687,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.7.3';
+	var $version = '3.7.4';
 
 
 	/* The permissions mode to use when creating files
@@ -717,7 +717,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20110318';
+	var $mtime = '20110323';
 
 	#group configuration
 	/**
@@ -1003,10 +1003,11 @@ class GO_CONFIG {
 			$_SESSION['GO_SESSION']['country'] = $this->default_country;
 			$_SESSION['GO_SESSION']['sort_name'] = 'last_name';
 			$_SESSION['GO_SESSION']['auth_token']=String::random_password('a-z,1-9', '', 30);
+			//some url's require this token to be appended
+			$_SESSION['GO_SESSION']['security_token']=String::random_password('a-z,1-9', '', 10);
 		}
-		//Store the http_host for a referrer check
-		if(PHP_SAPI!='cli' && !isset($_SESSION['GO_SESSION']['referer_check']))
-			$_SESSION['GO_SESSION']['referer_check']=$_SERVER['HTTP_HOST'];
+
+		
 	}
 
 	function __destruct() {
