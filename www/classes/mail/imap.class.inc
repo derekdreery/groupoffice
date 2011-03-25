@@ -689,7 +689,7 @@ class imap extends imap_bodystruct {
 				$key = "INTERNALDATE";
 				break;
 		}
-		$command = $command1.$command2."\r\n";
+		$command = $command1.'('.$command2.")\r\n";
 		
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
