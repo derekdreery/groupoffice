@@ -224,6 +224,16 @@ try {
 				$new_event['uuid']=$event['uuid'];
 			
 				$cal->copy_event($event_id, $new_event);
+			}else
+			{
+				$up_event=$event;
+				$up_event['id']=$event_exists['id'];
+				$up_event['user_id']=$GO_SECURITY->user_id;
+				$up_event['calendar_id']=$calendar_id;
+				unset($up_event['resource_event_id'], $up_event['acl_id']);
+
+				$cal->update_event($up_event);
+				
 			}
 
 			$cal->set_event_status($event_id, '1', $_SESSION['GO_SESSION']['email']);
