@@ -16,6 +16,8 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('groups');
 
+$GO_SECURITY->check_token();
+
 require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 

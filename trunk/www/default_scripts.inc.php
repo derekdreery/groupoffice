@@ -17,13 +17,15 @@ $root_uri = $GO_CONFIG->debug ? $GO_CONFIG->host : $GO_CONFIG->root_path;
 $scripts=array();
 //important to load focus first
 $scripts[]=$root_uri.'javascript/focus.js';
-$scripts[]=$root_uri.'ext/adapter/ext/ext-base.js';
 
-if($GO_CONFIG->debug) {
+
+//if($GO_CONFIG->debug) {
+	$scripts[]=$root_uri.'ext/adapter/ext/ext-base-debug.js';
 	$scripts[]=$root_uri.'ext/ext-all-debug.js';
-}else {
-	$scripts[]=$root_uri.'ext/ext-all.js';
-}
+//}else {
+//	$scripts[]=$root_uri.'ext/adapter/ext/ext-base.js';
+//	$scripts[]=$root_uri.'ext/ext-all.js';
+//}
 
 $scripts[]=$root_uri.'javascript/namespaces.js';
 ?>
@@ -59,7 +61,6 @@ echo 'GO.afterLoginUrl="'.$after_login_url.'";';
 
 $fullscreen = isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1' ? 'true' : 'false';
 echo 'GO.fullscreen='.$fullscreen.';';
-
 
 /*
  * If fullscreen mode is enabled and the user is already logged in we set $popup_groupoffice with the URL to load Group-Office
@@ -380,6 +381,13 @@ if(count($load_modules)) {
 
 	Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));
 	//Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+
+
+	//some functions require extra security
+	<?php
+	if(isset($_SESSION['GO_SESSION']['security_token']))		
+		echo 'Ext.Ajax.extraParams={security_token:"'.$_SESSION['GO_SESSION']['security_token'].'"};';
+	?>
 </script>
 <?php
 if(file_exists($GO_THEME->theme_path.'MainLayout.js')) {

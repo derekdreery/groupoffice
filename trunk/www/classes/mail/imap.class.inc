@@ -689,7 +689,7 @@ class imap extends imap_bodystruct {
 				$key = "INTERNALDATE";
 				break;
 		}
-		$command = $command1.$command2."\r\n";
+		$command = $command1.'('.$command2.")\r\n";
 		
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
@@ -1568,7 +1568,7 @@ class imap extends imap_bodystruct {
 		}else
 		{
 			$res = $this->last_line;
-			$this->last_line = fgets($this->handle);
+			$this->last_line = fgets($this->handle,1024);
 
 			if ($this->check_response(array($this->last_line))) {
 				$this->last_line = false;

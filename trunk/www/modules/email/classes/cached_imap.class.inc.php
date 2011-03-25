@@ -862,8 +862,10 @@ class cached_imap extends imap{
 	
 	public function get_message_headers_set($start, $limit, $sort_field , $reverse=false, $query='ALL')
 	{
+		go_debug("get_message_headers_set($start, $limit, $sort_field , $reverse, $query)");
+		
 		$uids = $this->sort_mailbox($sort_field, $reverse, $query);
-
+		
 		if(!is_array($uids))
 			return array();
 

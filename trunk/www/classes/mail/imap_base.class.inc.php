@@ -301,7 +301,6 @@ class imap_base {
 			if (!empty($data)) {
 				$vals = $data[(count($data) - 1)];
 				if ($vals[0] == 'A'.$this->command_count) {
-					$this->short_responses[implode(' ', $vals)] = microtime();
 					if (strtoupper($vals[1]) == 'OK') {
 						$result = true;
 					}
@@ -310,7 +309,6 @@ class imap_base {
 		}
 		else {
 			$line = array_pop($data);
-			$this->short_responses[$line] = microtime();
 			if (preg_match("/^A".$this->command_count." OK/i", $line)) {
 				$result = true;
 			}
