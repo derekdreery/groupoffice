@@ -361,7 +361,7 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 																name : responseParams.results[i].name,
 																email : responseParams.results[i].email,
 																status : "0",
-																user_id : type=='usergroups' ? responseParams.results[i].id : 0,
+																user_id : responseParams.results[i].user_id,
 																available : responseParams2[responseParams.results[i].email]
 															});
 														}

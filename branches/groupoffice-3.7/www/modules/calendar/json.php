@@ -1554,21 +1554,30 @@ try {
 
 			$response['results'] = array();
 
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			foreach($ids as $mailing_id) {
 				$mailings->get_contacts_from_mailing_group($mailing_id);
 				while ($mailings->next_record()) {
+
+					$user = $GO_USERS->get_user_by_email($mailings->record['email']);
+
+					$participant['user_id'] = $user ? $user['id'] : 0;
 					$participant['email'] = $mailings->record['email'];
 					$participant['name'] = String::format_name($mailings->record);
 					$response['results'][] = $participant;
 				}
 				$mailings->get_companies_from_mailing_group($mailing_id);
 				while ($mailings->next_record()) {
+					$company['user_id'] = 0;
 					$company['email'] = $mailings->record['email'];
 					$company['name'] = $mailings->record['name'];
 					$response['results'][] = $company;
 				}
 				$mailings->get_users_from_mailing_group($mailing_id);
 				while ($mailings->next_record()) {
+					$participant['user_id'] = $mailings->record['id'];
 					$participant['email'] = $mailings->record['email'];
 					$participant['name'] = String::format_name($mailings->record);
 					$response['results'][] = $participant;
@@ -1590,7 +1599,7 @@ try {
 			foreach($ids as $ug_id) {
 				$GO_GROUPS->get_users_in_group($ug_id);
 				while ($record = $GO_GROUPS->next_record()) {
-					$participant['id'] = $record['id'];
+					$participant['user_id'] = $record['id'];
 					$participant['email'] = $record['email'];
 					$participant['name'] = String::format_name($record);
 					$response['results'][] = $participant;
