@@ -182,7 +182,7 @@ IMG;
         if (array_key_exists($prop, $this->children)) {
             return $this->children[$prop];
         } else {
-            throw new SegmentException('child ' . $prop . ' does not exist');
+            //throw new SegmentException('child ' . $prop . ' does not exist');
         }
     }
     /**
