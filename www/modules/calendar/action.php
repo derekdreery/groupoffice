@@ -409,8 +409,8 @@ try {
 									$cal3->update_row('cal_events', 'id', $resource);
 								}
 							}
-
-							if(!empty($_POST['send_invitation'])) {
+							
+							if($_POST['send_invitation']=='true') {
 
 								$cal->send_invitation(array_merge($old_event, $update_event),$calendar, false);
 							}
