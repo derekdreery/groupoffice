@@ -55,12 +55,13 @@ if(file_exists($sql_file))
 touch($sql_file);
 
 $domain['acl_id']=0;
+$domain_id = $domain['id'];
 $domain['id']='{domain_id}';
 
 $sql = $sql_export->array_to_insert('pa_domains', $domain, 'INSERT IGNORE').";\n\n---\n\n";
 file_put_contents($sql_file, $sql, FILE_APPEND);
 
-$pa->get_mailboxes($domain['id']);
+$pa->get_mailboxes($domain_id);
 while($record = $pa->next_record()){
 
 	$record['domain_id']='{domain_id}';
@@ -72,7 +73,7 @@ while($record = $pa->next_record()){
 file_put_contents($sql_file, "\n---\n\n", FILE_APPEND);
 
 
-$pa->get_aliases($domain['id']);
+$pa->get_aliases($domain_id);
 while($record = $pa->next_record()){
 	$sql = $sql_export->array_to_insert('pa_aliases', $record, 'INSERT IGNORE').";\n";
 	file_put_contents($sql_file, $sql, FILE_APPEND);
