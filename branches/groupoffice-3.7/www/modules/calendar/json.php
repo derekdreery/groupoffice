@@ -1363,6 +1363,9 @@ try {
 
 		case 'resources':
 
+			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			$GO_USERS = new GO_USERS();
+
 			$cal->get_groups();
 			$response['results']=array();
 			$total = 0;
@@ -1371,7 +1374,7 @@ try {
 				$group['resources'] = array();
 				$cal2->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 0, $group['id']);
 				while($resource = $cal2->next_record()) {
-					$user = $GO_USERS->get_user($resource['user_id']);
+					$user = $GO_USERS->get_user_realname($group['user_id']);
 					$resource['user_name']=String::format_name($user);
 					$group['resources'][] = $resource;
 				}
