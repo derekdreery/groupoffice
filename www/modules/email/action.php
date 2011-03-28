@@ -20,11 +20,6 @@ if(isset($_REQUEST['groupoffice']))
 
 require_once("../../Group-Office.php");
 
-if(!empty($_REQUEST['task']) && $_REQUEST['task']=='upload_attachment'){
-	//referer is empty here
-	$GO_CONFIG->disable_referer_check=true;
-}
-
 $GO_SECURITY->json_authenticate('email');
 
 //close writing to session so other concurrent requests won't be locked out.
