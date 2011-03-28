@@ -19,10 +19,6 @@ if(isset($_REQUEST['groupoffice']))
 }
 
 require('../../Group-Office.php');
-if(!empty($_REQUEST['task']) && $_REQUEST['task']=='upload_file'){
-	//referer is empty here
-	$GO_CONFIG->disable_referer_check=true;
-}
 
 $GO_SECURITY->json_authenticate('files');
 
