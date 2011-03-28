@@ -14,7 +14,9 @@
 - Automatic project name with id number
 - Standard timeregistration entries selectable from a list.
 - Custom fields for timeregistration entries in Multiple day mode.
-- Preset the folder view for other users. 
+- Preset the folder view for other users.
+- Standard e-mail folders are created in English on the IMAP server and are
+  translated by Group-Office. This provides better consistency.
 
 16/03/2011 3.6.30
 - Removed cross site request security measure because it causes problems in IE.
