@@ -102,6 +102,10 @@ function get_calendar($username){
 	return $cal->get_default_calendar($user['id']);	
 }
 
+$count['imported'] = 0;
+$count['updated'] = 0;
+$count['deleted'] = 0;
+
 if (true) {
 
 /*
@@ -121,10 +125,10 @@ if (true) {
  */
 
 
-	File::convert_to_utf8($dir . '/agenda_import.csv');
+	File::convert_to_utf8($dir . 'agenda_import.csv');
 
 	//Import companies
-	$fp = fopen($dir . '/agenda_import.csv', "r");
+	$fp = fopen($dir . 'agenda_import.csv', "r");
 	if (!$fp)
 		die('Failed to open tasks file');
 
@@ -164,49 +168,64 @@ if (true) {
 				}
 			}
 			$cals = array($calendar['id']);
-//			$cal->get_events($cals,
-//			1,
-//			0,
-//			0,
-//			'name',
-//			'ASC',
-//			0,
-//			0,
-//			false,
-//			$cf_fieldmap[1]['AfspraakID'],
-//			$cf_values[$cf_fieldmap[1]['AfspraakID']]
-//			);
+			$cal->get_events($cals,
+			1,
+			0,
+			0,
+			'name',
+			'ASC',
+			0,
+			0,
+			false,
+			$cf_fieldmap[1]['AfspraakID'],
+			$cf_values[$cf_fieldmap[1]['AfspraakID']]
+			);
 			
-//			$existing_event = $cal->next_record();
-			$existing_event=false;
+			$existing_event = $cal->next_record();
+			
+			$deleted = strpos($record[$r_index_map['Opmerkingen']], 'Verwijderd')!==false;
+
+			$event=array(
+						'calendar_id'=>$calendar['id'],
+						'name'=>empty($record[$r_index_map['Onderwerp']]) ? 'Geen onderwerp' : $record[$r_index_map['Onderwerp']],
+						'user_id'=>$calendar['user_id'],
+						'start_time'=>strtotime($record[$r_index_map['BeginDatum']]),
+						'end_time'=>strtotime($record[$r_index_map['EindDatum']]),
+						'ctime'=>strtotime($record[$r_index_map['InVoerDatum']]),
+						'mtime'=>strtotime($record[$r_index_map['GewijzigdDatum']]),
+						'description'=>$record[$r_index_map['Opmerkingen']],
+						'status'=>'CONFIRMED'
+						);
 
 			if(!$existing_event){
 
-				echo "Importing [".$cf_values[$cf_fieldmap[1]['AfspraakID']]."] ".$record[$r_index_map['Onderwerp']]."\n";
+				$count['imported']++;
 
-				$event=array(
-					'calendar_id'=>$calendar['id'],
-					'name'=>empty($record[$r_index_map['Onderwerp']]) ? 'Geen onderwerp' : $record[$r_index_map['Onderwerp']],
-					'user_id'=>$calendar['user_id'],
-					'start_time'=>strtotime($record[$r_index_map['BeginDatum']]),
-					'end_time'=>strtotime($record[$r_index_map['EindDatum']]),
-					'ctime'=>strtotime($record[$r_index_map['InVoerDatum']]),
-					'mtime'=>strtotime($record[$r_index_map['GewijzigdDatum']]),
-					'description'=>$record[$r_index_map['Opmerkingen']],
-					'status'=>'CONFIRMED'
-					);
+				if(!$deleted){
+					echo '.';
+					//echo "Importing [".$cf_values[$cf_fieldmap[1]['AfspraakID']]."] ".$record[$r_index_map['Onderwerp']]."\n";
+					$event_id=$cal->add_event($event);
 
-
-				$event_id=$cal->add_event($event);
-
-
-				$cf_values['link_id'] = $event_id;
-				$cf->insert_row('cf_1', $cf_values);				
+					$cf_values['link_id'] = $event_id;
+					$cf->insert_row('cf_1', $cf_values);
+				}
+			}elseif($deleted)
+			{
+				$count['deleted']++;
+				$cal->delete_event($existing_event['id']);
+			}else
+			{
+				$event['id']=$existing_event['id'];
+				$count['updated']++;
+				$cal->update_event($event);
 			}
 	}
 	fclose($fp);
 }
 
+echo "\n\n";
+
+var_dump($count);
 
 echo 'Done!';
 echo "\n\n";
