@@ -160,7 +160,7 @@ class GO_LINKS extends db
 			$link['description'] = $description1;
 			$link['ctime']=time();
 
-			go_debug($link);
+			//go_debug($link);
 	
 			$this->insert_row('go_links_'.$type1,$link);
 			//if($update_link_count)
