@@ -5,7 +5,7 @@ if(isset($GO_MODULES->modules['customfields']))
 	require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 	$cf = new customfields();
 	$GO_SCRIPTS_JS .= $cf->get_javascript(1, $lang['calendar']['name'].' '.strtolower($lang['calendar']['event']));
-	$GO_SCRIPTS_JS .= $cf->get_javascript(18, $lang['calendar']['name']);
+	$GO_SCRIPTS_JS .= $cf->get_javascript(21, $lang['calendar']['name']);
 }
 
 require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
