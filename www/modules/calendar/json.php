@@ -91,6 +91,20 @@ try {
 				$cal2->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 0, $group['id']);
 				while($resource = $cal2->next_record()) {
 					$resource['user_name'] =$GO_USERS->get_user_realname($resource['user_id']);
+					if(isset($GO_MODULES->modules['customfields']))
+					{
+						require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+						$cf = new customfields();
+
+						$values = $cf->get_values($GO_SECURITY->user_id, 18, $resource['id'],true);
+
+						foreach($values as $k => $v) {
+							if (substr($k,0,4)=='col_' && empty($v)) {
+								unset($values[$k]);
+							}
+						}
+						$resource=array_merge($resource, $values);
+					}
 					$group['resources'][] = $resource;
 				}
 
@@ -396,15 +410,38 @@ try {
 					$response['data']['status_'.$cal->f('calendar_id')] = $lang['calendar']['statuses'][$cal->f('status')];
 					$i = 0;
 					foreach($values as $key=>$value) {
-						$resource_options = 'resource_options['.$cal->f('calendar_id').']['.$key.']';
+						$resource_cal_id = $cal->f('calendar_id');
+						$resource_options = 'resource_options['.$resource_cal_id.']['.$key.']';
 						$response['data'][$resource_options] = $value;
 						$i++;
 					}
 					if($i > 0)
 						$response['data']['resources_checked'][] = $cal->f('calendar_id');
 				}
+//				if(isset($GO_MODULES->modules['customfields'])) {
+//					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+//					$cf = new customfields();
+//					$cf2 = new customfields();
+//					$cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 1);
+//					while($values = $cal->next_record()) {
+//						$resource_cal_id = $cal->f('id');
+//						$values = $cf ? $cf->get_values($GO_SECURITY->user_id, 18, $resource_cal_id) : array('link_id'=>$resource_cal_id);
+//						foreach($values as $key=>$value) {
+//							$addressbook_cf_values = $cf->get_values($GO_SECURITY->user_id, 18, $resource_cal_id);
+//							$cf->get_categories(18);
+//							while($category = $cf->next_record()) {
+//								$resource_plainfields = 'resource_plainfields['.$resource_cal_id.'][\''.$category['name'].'\']';
+//								$response['data'][$resource_plainfields.'[\'category_name\']'] = $category['name'];
+//								$cf2->get_fields($category['id']);
+//								while ($field = $cf2->next_record()) {
+//									$response['data'][$resource_plainfields.'[\'col_'.$field['id'].'\']'] = $addressbook_cf_values['col_'.$field['id']];
+//								}
+//							}
+//						}
+//					}
+//				}
 			}
-			
+
 
 			$response['data']['calendar_name']=$calendar['name'];
 			$response['data']['group_id'] = $calendar['group_id'];
@@ -1100,6 +1137,14 @@ try {
 			$response['data']['url']='<a class="normal-link" target="_blank" href="'.$url.'">'.$lang['calendar']['rightClickToCopy'].'</a>';
 			$response['data']['ics_url']='<a class="normal-link" target="_blank" href="'.$GO_MODULES->modules['calendar']['full_url'].'export.php?calendar_id='.$response['data']['id'].'&months_in_past=1">'.$lang['calendar']['rightClickToCopy'].'</a>';
 
+			if(isset($GO_MODULES->modules['customfields']))
+			{
+				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+				$cf = new customfields();
+				$values = $cf->get_values($GO_SECURITY->user_id, 18, $response['data']['id'], false);
+				$response['data']=array_merge($response['data'], $values);
+			}
+
 			$response['success']=true;
 			break;
 
@@ -1373,6 +1418,15 @@ try {
 				while($resource = $cal2->next_record()) {
 					$user = $GO_USERS->get_user($resource['user_id']);
 					$resource['user_name']=String::format_name($user);
+
+//					if(isset($GO_MODULES->modules['customfields']))
+//					{
+//						require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+//						$cf = new customfields();
+//						$values = $cf->get_values($GO_SECURITY->user_id, 18, $resource['id'], true);
+//						$resource=array_merge($resource, $values);
+//					}
+
 					$group['resources'][] = $resource;
 				}
 
@@ -1689,6 +1743,8 @@ try {
 			}
 
 			break;
+
+
 
 	}
 }

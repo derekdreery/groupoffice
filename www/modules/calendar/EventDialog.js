@@ -1435,35 +1435,67 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				{
 					var field = record.fields[k];
 
-					if(field && GO.customfields && GO.customfields.types["1"])
+					if(field && GO.customfields)
 					{
-						for(var l=0; l<GO.customfields.types["1"].panels.length; l++)
-						{
-							var cfield = 'cf_category_'+GO.customfields.types["1"].panels[l].category_id;
-							if(cfield == field)
+						if (GO.customfields.types["18"]) {
+							for(var l=0; l<GO.customfields.types["18"].panels.length; l++)
 							{
-								var cf = GO.customfields.types["1"].panels[l].customfields;
-								for(var m=0; m<cf.length; m++)
+									var cf = GO.customfields.types["18"].panels[l].customfields;
+									var formFields = [new GO.form.PlainField({
+											hideLabel: true,
+											value: '<b>'+GO.customfields.types["18"].panels[l].title+'</b>'
+										})];
+									for(var m=0; m<cf.length; m++)
+									{
+										if (typeof(resources[j][cf[m].dataname])!='undefined') {
+											newFormField = new GO.form.PlainField({
+												fieldLabel: cf[m].name,
+												value: resources[j][cf[m].dataname]
+											});
+
+											formFields.push(newFormField);
+										}
+									}
+									if (formFields.length>1) {
+										for (var n=0; n<formFields.length; n++) {
+											resourceOptions.push(formFields[n]);
+										}
+									}
+							}
+						}
+						if (GO.customfields.types["1"]) {
+							resourceOptions.push({
+								xtype: 'plainfield',
+								value: '<br />'
+							});
+							for(var l=0; l<GO.customfields.types["1"].panels.length; l++)
+							{
+								var cfield = 'cf_category_'+GO.customfields.types["1"].panels[l].category_id;
+								if(cfield == field)
 								{
-									newFormField = GO.customfields.getFormField(cf[m],{
-										name:'resource_options['+resources[j].id+']['+cf[m].dataname+']',
-										id:'resource_options['+resources[j].id+']['+cf[m].dataname+']'
-									});
+									var cf = GO.customfields.types["1"].panels[l].customfields;
+									for(var m=0; m<cf.length; m++)
+									{
+										newFormField = GO.customfields.getFormField(cf[m],{
+											name:'resource_options['+resources[j].id+']['+cf[m].dataname+']',
+											id:'resource_options['+resources[j].id+']['+cf[m].dataname+']'
+										});
 
 
-									/*
-									 * Customfields might return a simple object instead of an Ext.component.
-									 * So check if it has events otherwise create the Ext component.
-									 */
-									if(!newFormField.events){
-										newFormField=Ext.ComponentMgr.create(newFormField, 'textfield');
+										/*
+										 * Customfields might return a simple object instead of an Ext.component.
+										 * So check if it has events otherwise create the Ext component.
+										 */
+										if(!newFormField.events){
+											newFormField=Ext.ComponentMgr.create(newFormField, 'textfield');
+										}
+
+										resourceOptions.push(newFormField);
+										this.formPanel.form.add(newFormField);
 									}
 
-									resourceOptions.push(newFormField);
-									this.formPanel.form.add(newFormField);
+									l = GO.customfields.types["1"].panels.length;
 								}
-
-								l = GO.customfields.types["1"].panels.length;
 							}
 						}
 					}
