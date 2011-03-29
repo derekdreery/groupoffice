@@ -682,7 +682,7 @@ GO.files.FileBrowser = function(config){
 				this.fileClickHandler.call(this.scope, record);
 			}else
 			{
-				GO.files.openFile(record, this.getActiveGridStore());
+				GO.files.openFile(record, this.getActiveGridStore(), e);
 			}			
 		}
 	}, this);
@@ -1650,7 +1650,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 					this.onGridDoubleClick.defer(200, this, [grid, rowClicked, e]);
 				}else
 				{
-					GO.files.openFile(record, this.getActiveGridStore());
+					GO.files.openFile(record, this.getActiveGridStore(), e);
 				}
 			}
 		}
@@ -1827,10 +1827,10 @@ GO.files.openFilePath = function (path){
 	GO.files.openFile(record);
 }
 
-GO.files.openFile = function(record, store)
+GO.files.openFile = function(record, store,e)
 {
 
-	if(GO.files.filesObservable.fireEvent('beforeopenfile', record, store)){
+	if(GO.files.filesObservable.fireEvent('beforeopenfile', record, store,e)){
 		var index = record.data.id ? 'id' : 'path';
 
 		switch(record.data.extension)
