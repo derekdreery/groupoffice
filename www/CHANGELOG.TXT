@@ -1,4 +1,7 @@
-25/03/2011 3.7.5
+29/03/2011 3.7.6
+- Timeregistration and calllog had the same link id for customefields.
+
+29/03/2011 3.7.5
 - Fixed problem with adding mail accounts to the postfixmanager.
 - Small bug fixes
 
