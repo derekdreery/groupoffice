@@ -96,7 +96,7 @@ try {
 						require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 						$cf = new customfields();
 
-						$values = $cf->get_values($GO_SECURITY->user_id, 18, $resource['id'],true);
+						$values = $cf->get_values($GO_SECURITY->user_id, 21, $resource['id'],true);
 
 						foreach($values as $k => $v) {
 							if (substr($k,0,4)=='col_' && empty($v)) {
@@ -418,28 +418,6 @@ try {
 					if($i > 0)
 						$response['data']['resources_checked'][] = $cal->f('calendar_id');
 				}
-//				if(isset($GO_MODULES->modules['customfields'])) {
-//					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-//					$cf = new customfields();
-//					$cf2 = new customfields();
-//					$cal->get_authorized_calendars($GO_SECURITY->user_id, 0, 0, 1);
-//					while($values = $cal->next_record()) {
-//						$resource_cal_id = $cal->f('id');
-//						$values = $cf ? $cf->get_values($GO_SECURITY->user_id, 18, $resource_cal_id) : array('link_id'=>$resource_cal_id);
-//						foreach($values as $key=>$value) {
-//							$addressbook_cf_values = $cf->get_values($GO_SECURITY->user_id, 18, $resource_cal_id);
-//							$cf->get_categories(18);
-//							while($category = $cf->next_record()) {
-//								$resource_plainfields = 'resource_plainfields['.$resource_cal_id.'][\''.$category['name'].'\']';
-//								$response['data'][$resource_plainfields.'[\'category_name\']'] = $category['name'];
-//								$cf2->get_fields($category['id']);
-//								while ($field = $cf2->next_record()) {
-//									$response['data'][$resource_plainfields.'[\'col_'.$field['id'].'\']'] = $addressbook_cf_values['col_'.$field['id']];
-//								}
-//							}
-//						}
-//					}
-//				}
 			}
 
 
@@ -1141,7 +1119,7 @@ try {
 			{
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
-				$values = $cf->get_values($GO_SECURITY->user_id, 18, $response['data']['id'], false);
+				$values = $cf->get_values($GO_SECURITY->user_id, 21, $response['data']['id'], false);
 				$response['data']=array_merge($response['data'], $values);
 			}
 

@@ -986,7 +986,7 @@ try {
 			{
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
-				$cf->update_fields($GO_SECURITY->user_id, $calendar['id'], 18, $_POST, $insert);
+				$cf->update_fields($GO_SECURITY->user_id, $calendar['id'], 21, $_POST, $insert);
 			}
 
 			$response['success']=true;

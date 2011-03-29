@@ -247,11 +247,11 @@ CREATE TABLE IF NOT EXISTS `cal_events_declined` (
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `cf_18` (addressbook custom field)
+-- Tabel structuur voor tabel `cf_21` (addressbook custom field)
 --
 
-DROP TABLE IF EXISTS `cf_18`;
-CREATE TABLE IF NOT EXISTS `cf_18` (
+DROP TABLE IF EXISTS `cf_21`;
+CREATE TABLE IF NOT EXISTS `cf_21` (
   `link_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`link_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -259,11 +259,11 @@ CREATE TABLE IF NOT EXISTS `cf_18` (
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `go_links_18` (addressbook custom field)
+-- Tabel structuur voor tabel `go_links_21` (addressbook custom field)
 --
 
-DROP TABLE IF EXISTS `go_links_18`;
-CREATE TABLE IF NOT EXISTS `go_links_18` (
+DROP TABLE IF EXISTS `go_links_21`;
+CREATE TABLE IF NOT EXISTS `go_links_21` (
   `id` int(11) NOT NULL,
   `folder_id` int(11) NOT NULL,
   `link_id` int(11) NOT NULL,

@@ -1437,13 +1437,13 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 					if(field && GO.customfields)
 					{
-						if (GO.customfields.types["18"]) {
-							for(var l=0; l<GO.customfields.types["18"].panels.length; l++)
+						if (GO.customfields.types["21"]) {
+							for(var l=0; l<GO.customfields.types["21"].panels.length; l++)
 							{
-									var cf = GO.customfields.types["18"].panels[l].customfields;
+									var cf = GO.customfields.types["21"].panels[l].customfields;
 									var formFields = [new GO.form.PlainField({
 											hideLabel: true,
-											value: '<b>'+GO.customfields.types["18"].panels[l].title+'</b>'
+											value: '<b>'+GO.customfields.types["21"].panels[l].title+'</b>'
 										})];
 									for(var m=0; m<cf.length; m++)
 									{
