@@ -1,3 +1,7 @@
+25/03/2011 3.7.5
+- Fixed problem with adding mail accounts to the postfixmanager.
+- Small bug fixes
+
 25/03/2011 3.7.4
 - Merged all bug fixes from 3.6 into 3.7
 
