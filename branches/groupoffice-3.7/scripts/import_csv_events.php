@@ -76,7 +76,8 @@ function get_calendar($username){
 	global $GO_USERS, $cal;
 
 	if(empty($username)){
-		die('Empty username!');
+		return false;
+		//die('Empty username!');
 	}
 
 	$calendar = $cal->get_calendar_by_name($username);
@@ -154,8 +155,10 @@ if (true) {
 		$username=$record[$r_index_map['GebruikersNaam']];
 
 		$calendar = get_calendar($username);
-		if(!$calendar)
-			die('Could not get calendar for '.$username);
+		if(!$calendar){
+			echo 'Could not get calendar for '.$username;
+			continue;
+		}
 
 				
 			$cf_values = array();
@@ -183,7 +186,7 @@ if (true) {
 			
 			$existing_event = $cal->next_record();
 			
-			$deleted = strpos($record[$r_index_map['Opmerkingen']], 'Verwijderd')!==false;
+			$deleted = strpos($record[$r_index_map['Opmerkingen']], 'VERWIJDERD')!==false;
 
 			$event=array(
 						'calendar_id'=>$calendar['id'],
@@ -194,7 +197,8 @@ if (true) {
 						'ctime'=>strtotime($record[$r_index_map['InVoerDatum']]),
 						'mtime'=>strtotime($record[$r_index_map['GewijzigdDatum']]),
 						'description'=>$record[$r_index_map['Opmerkingen']],
-						'status'=>'CONFIRMED'
+						'status'=>'ACCEPTED',
+						'busy'=>"1"
 						);
 
 			if(!$existing_event){
@@ -219,7 +223,8 @@ if (true) {
 				$count['updated']++;
 				$cal->update_event($event);
 			}
-	}
+		}
+	
 	fclose($fp);
 }
 
