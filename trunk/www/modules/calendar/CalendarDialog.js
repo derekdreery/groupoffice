@@ -17,17 +17,11 @@ GO.calendar.CalendarDialog = function(config)
 	{
 		config = {};
 	}
-
 	
-	
-	this.propertiesTab = new Ext.form.FormPanel({
-		url: GO.settings.modules.calendar.url+'action.php',		
-		defaultType: 'textfield',
-		waitMsgTarget:true,
+	this.propertiesTab = new Ext.Panel({	
 		title:GO.lang['strProperties'],
 		layout:'form',
 		anchor: '100% 100%',		
-		autoHeight:true,
 		cls:'go-form-panel',
 		labelWidth: 120,
 		items: [
@@ -43,10 +37,6 @@ GO.calendar.CalendarDialog = function(config)
 			allowBlank:false,
 			anchor: '100%'
 		}),
-
-
-
-
 		this.selectGroup = new GO.form.ComboBox({
 			hiddenName:'group_id',
 			fieldLabel:GO.calendar.lang.group,
@@ -148,21 +138,21 @@ GO.calendar.CalendarDialog = function(config)
 	}, this);
 	
 
-	this.importTab = new Ext.form.FormPanel({
-		fileUpload:true,
+	this.importTab = new Ext.Panel({		
+		layout:'form',
 		waitMsgTarget:true,
 		disabled:true,
 		title:GO.lang.cmdImport,
 		items: [{
 			xtype: 'panel',
 			html: GO.calendar.lang.selectIcalendarFile,
-			border:false	
+			border:false
 		},uploadFile,this.importButton = new Ext.Button({
 			xtype:'button',
 			disabled:true,
 			text:GO.lang.cmdImport,
 			handler: function(){
-				this.importTab.form.submit({
+				this.formPanel.form.submit({
 					waitMsg:GO.lang.waitMsgUpload,
 					url:GO.settings.modules.calendar.url+'action.php',
 					params: {
@@ -204,14 +194,33 @@ GO.calendar.CalendarDialog = function(config)
 	items.push(this.readPermissionsTab);
 	items.push(this.importTab);
 
+	if(GO.customfields && GO.customfields.types["18"])
+	{
+		for(var i=0;i<GO.customfields.types["18"].panels.length;i++)
+		{
+			var panel = GO.customfields.types["18"].panels[i];
+			panel.autoScroll = true;
+			items.push(panel);
+		}
+	}
+
 	this.tabPanel = new Ext.TabPanel({
-		hideLabel:true,	
+		hideLabel:true,
 		deferredRender:false,
 		xtype:'tabpanel',
 		activeTab: 0,
 		border:false,
 		anchor: '100% 100%',
+		enableTabScroll: true,
 		items:items
+	});
+
+	this.formPanel = new Ext.FormPanel({
+		fileUpload:true,
+		url: GO.settings.modules.calendar.url+'action.php',
+		defaultType: 'textfield',
+		waitMsgTarget:true,
+		items:this.tabPanel
 	});
 
 	
@@ -220,9 +229,9 @@ GO.calendar.CalendarDialog = function(config)
 		layout:'fit',
 		modal:false,
 		height:500,
-		width:500,
+		width:700,
 		closeAction:'hide',
-		items: this.tabPanel,
+		items: this.formPanel,
 		buttons:[
 		{
 			text:GO.lang.cmdOk,
@@ -293,7 +302,7 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 		}else
 		{
 			this.calendar_id=0;
-			this.propertiesTab.form.reset();
+			this.formPanel.form.reset();
 
 			if(resource){
 				this.selectGroup.selectFirst();
@@ -320,7 +329,7 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 			this.tasklistsTab.store.baseParams.calendar_id = calendar_id;
 		}
 
-		this.propertiesTab.form.load({
+		this.formPanel.form.load({
 			url: GO.settings.modules.calendar.url+'json.php',
 			params: {
 				calendar_id:calendar_id,
@@ -357,7 +366,7 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 		{
 			var tasklists = (GO.tasks && !this.resource) ? Ext.encode(this.tasklistsTab.getGridData()) : '';
 		
-			this.propertiesTab.form.submit({
+			this.formPanel.form.submit({
 				url:GO.settings.modules.calendar.url+'action.php',
 				params: {
 					'task' : 'save_calendar',
@@ -409,10 +418,10 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 	},
 	showGroups : function(resource)
 	{
-		var f = this.propertiesTab.form.findField('resource_groups');
+		var f = this.formPanel.form.findField('resource_groups');
 		f.container.up('div.x-form-item').setDisplayed(resource);
 
-		f = this.propertiesTab.form.findField('show_bdays');
+		f = this.formPanel.form.findField('show_bdays');
 		f.container.up('div.x-form-item').setDisplayed(!resource);
 
 		if(GO.tasks)

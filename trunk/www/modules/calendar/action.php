@@ -110,6 +110,7 @@ try {
 			if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
 				throw new Exception($lang['common']['noFileUploaded']);
 			}else {
+				File::mkdir($GO_CONFIG->tmpdir);
 				$tmpfile = $GO_CONFIG->tmpdir.uniqid(time());
 				move_uploaded_file($_FILES['ical_file']['tmp_name'][0], $tmpfile);
 				File::convert_to_utf8($tmpfile);
@@ -935,6 +936,7 @@ try {
 
 			if($calendar['id']>0) {
 				$old_calendar = $cal->get_calendar($calendar['id']);
+				$insert = false;
 				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_calendar['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new AccessDeniedException();
 				}
@@ -949,6 +951,7 @@ try {
 				}
 				$response['acl_id'] = $calendar['acl_id'] = $GO_SECURITY->get_new_acl('calendar read: '.$calendar['name'], $calendar['user_id']);
 				$response['calendar_id']=$calendar['id']=$cal->add_calendar($calendar);
+				$insert = true;
 
 				/*
 				 * Automatically add resource admins to manage permission. Resources have a group id higher then 1
@@ -976,6 +979,14 @@ try {
 				{
 					$cal->add_visible_tasklist(array('calendar_id'=>$calendar['id'], 'tasklist_id'=>$tasklist['id']));
 				}
+			}
+
+
+			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+			{
+				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+				$cf = new customfields();
+				$cf->update_fields($GO_SECURITY->user_id, $calendar['id'], 18, $_POST, $insert);
 			}
 
 			$response['success']=true;

@@ -243,3 +243,34 @@ CREATE TABLE IF NOT EXISTS `cal_events_declined` (
   `email` varchar(100) NOT NULL,
   PRIMARY KEY (`uid`,`email`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabel structuur voor tabel `cf_18` (addressbook custom field)
+--
+
+DROP TABLE IF EXISTS `cf_18`;
+CREATE TABLE IF NOT EXISTS `cf_18` (
+  `link_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`link_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabel structuur voor tabel `go_links_18` (addressbook custom field)
+--
+
+DROP TABLE IF EXISTS `go_links_18`;
+CREATE TABLE IF NOT EXISTS `go_links_18` (
+  `id` int(11) NOT NULL,
+  `folder_id` int(11) NOT NULL,
+  `link_id` int(11) NOT NULL,
+  `link_type` int(11) NOT NULL,
+  `description` varchar(100) NULL,
+  `ctime` int(11) NOT NULL,
+  KEY `link_id` (`link_id`,`link_type`),
+  KEY `id` (`id`,`folder_id`),
+  KEY `ctime` (`ctime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
