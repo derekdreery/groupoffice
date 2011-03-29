@@ -39,8 +39,10 @@
  * 15=Custom database
  * 16=fs_docbundles
  * 17=folders
- * 18=ab_calendars
+ * 18=calllog
+ * 19=timeregistration
  * 20=Tickets
+ * 21=Calendars
  * 
  * @author Merijn Schering <mschering@intermesh.nl>
  * @version $Id$
