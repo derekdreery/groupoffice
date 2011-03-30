@@ -235,7 +235,7 @@ if(true)
 			}
 
 			if(isset($company['name']))
-                        {
+                        {                                
 				echo "Importing " . $company['name'] . "\n";
 
                                 if(!$company['post_address'])
@@ -244,6 +244,12 @@ if(true)
                                     $company['post_zip'] = $company['zip'];
                                     $company['post_city'] = $company['city'];
                                 }
+
+                                require_once($GO_LANGUAGE->get_base_language_file('countries'));
+
+                                $arr = array_keys($countries, $company['country']);                                
+                                $company['country'] = isset($arr[0]) ? $arr[0] : $company['country'];
+
                                 $company['post_country'] = $company['country'];
 
                                 $company_id = $ab->add_company($company);
