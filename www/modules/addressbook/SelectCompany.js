@@ -39,7 +39,8 @@ GO.addressbook.SelectCompany = function(config){
 			url: GO.settings.modules.addressbook.url+ 'json.php',
 			baseParams: {
 				task: 'companies',
-				'addressbook_id' : this.addressbook_id
+				'addressbook_id' : this.addressbook_id,
+				no_addressbooks_filter:'1'
 			},
 			root: 'results',
 			id: 'id',
