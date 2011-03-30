@@ -320,7 +320,8 @@ try {
 
 				if(count($tasklist_names))
 				{
-					$response['grid_title'] = (count($tasklist_names) > 1) ? $lang['tasks']['multipleSelected'] : $tasklist_names[0];
+					//$response['grid_title'] = (count($tasklist_names) > 1) ? $lang['tasks']['multipleSelected'] : $tasklist_names[0];
+					//$response['grid_title'] = implode(' & ', $tasklist_names);
 				}
 
 				$response['data']['write_permission']=$response['data']['permission_level']>1;

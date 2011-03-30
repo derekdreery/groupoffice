@@ -1,9 +1,6 @@
 <?php
 require('../../../Group-Office.php');
 
-//referer is empty here
-$GO_CONFIG->disable_referer_check=true;
-
 if(!$GO_SECURITY->logged_in())
 {
 	die();

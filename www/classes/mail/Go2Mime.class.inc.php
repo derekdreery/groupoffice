@@ -337,7 +337,7 @@ class Go2Mime
 
 					if($create_tmp_attachments)
 					{
-						if(empty($filename))$filename=uniquid(time());
+						if(empty($filename))$filename=uniqid(time());
 
 						$mime_attachment['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$filename;
 						filesystem::mkdir_recursive(dirname($mime_attachment['tmp_file']));

@@ -13,9 +13,6 @@
  */
 require_once("../../Group-Office.php");
 
-//referer is empty here
-$GO_CONFIG->disable_referer_check=true;
-
 $GO_SECURITY->json_authenticate('postfixadmin');
 require_once ($GO_MODULES->modules['postfixadmin']['class_path']."postfixadmin.class.inc.php");
 //require_once ($GO_LANGUAGE->get_language_file('postfixadmin'));

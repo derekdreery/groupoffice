@@ -7,6 +7,8 @@ $verbose=true;
 
 $GO_SECURITY->html_authenticate('tools');
 
+session_write_close();
+
 ini_set('max_exection_time','360');
 
 $db = new db();

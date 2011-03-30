@@ -1592,12 +1592,18 @@ class calendar extends db {
 					$sort_order='ASC',
 					$start=0,
 					$offset=0,
-					$only_busy_events=false) {
+					$only_busy_events=false,
+					$query_field='',
+					$query_param='') {
 
 		$sql  = "SELECT e.* FROM cal_events e";
 
 		if($user_id > 0) {
 			$sql .= " INNER JOIN cal_calendars c ON (e.calendar_id=c.id)";
+		}
+
+		if(!empty($query_param) && substr($query_field,0,4)=='col_'){
+			$sql .= " LEFT JOIN cf_1 ON cf_1.link_id=e.id";
 		}
 
 		$where=false;
@@ -1654,6 +1660,10 @@ class calendar extends db {
 		//if($sort_field != '' && $sort_order != '') {
 			//$sql .=	" ORDER BY ".$this->escape($sort_field." ".$sort_order);
 		//}
+
+		if(!empty($query_param)){
+			$sql .= " AND $query_field='".$this->escape($query_param)."'";
+		}
 
 		if($offset == 0) {
 			$this->query($sql);

@@ -12,20 +12,8 @@ Ioncube loaders. Download them from:
 http://www.ioncube.com/loaders.php
 
 
-
-
-UPGRADING FROM VERSION 3.0 TO FUTURE VERSIONS
-
-Take following steps:
-1. Backup your database
-2. Move away your old source files.
-3. Put the new files at the right location.
-4. If exists copy your old config.php to the new files.
-5. Launch Group-Office in your browser and it will perform a system upgrade.
-
-!!! READ THE RELEASE NOTES !!!
-
-
+UPGRADE FROM VERSION 3.0 TO FUTURE VERSIONS:
+http://www.group-office.com/wiki/Upgrading
  
 
 UPGRADING FROM VERSION 2.x

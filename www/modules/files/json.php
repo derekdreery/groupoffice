@@ -810,8 +810,11 @@ try {
 
 			$response['data'] = $file;
 			$relpath = $files->build_path($folder).'/';
-			$path=$relpath.$file['name'];
-			$response['data']['path']=$path;
+			$pdf_path=$path=$relpath.$file['name'];
+
+			$GO_EVENTS->fire_event('file_extension_and_path_known',array(&$files,$extension,$path,&$pdf_path,$file,$folder));
+
+			$response['data']['path']=$pdf_path;
 			$response['data']['name']=File::strip_extension($file['name']);
 			$response['data']['ctime']=Date::get_timestamp(filectime($GO_CONFIG->file_storage_path.$path));
 			$response['data']['mtime']=Date::get_timestamp(fileatime($GO_CONFIG->file_storage_path.$path));
