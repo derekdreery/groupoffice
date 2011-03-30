@@ -76,6 +76,21 @@ class GO_EVENTS
 		
 		//go_debug('Adding listener: '.$class.'::'.$method);
 	}
+
+	public function remove_listener($event, $class, $method){
+
+		$found = false;
+		$new_listeners = array();
+		foreach($this->listeners[$event] as $l){
+			if($l['class']!=$class || $l['method']!=$method)
+				$new_listeners[]=$l;
+			else
+				$found=true;
+		}
+		$this->listeners[$event]=$new_listeners;
+
+		return $found;
+	}
 	
 	public function fire_event($event, $args=array())
 	{		
