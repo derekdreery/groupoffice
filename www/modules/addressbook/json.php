@@ -346,19 +346,16 @@ try
 			require_once($GO_LANGUAGE->get_language_file('addressbook'));
 
 			$response['data']['write_permission'] = false;
-			if(isset($_POST['books']))
+			if(!empty($_POST['addressbook_id'])){
+				$books[]=$_POST['addressbook_id'];
+			}else	if(isset($_POST['books']))
 			{
 				$books = json_decode($_POST['books'], true);
 				$GO_CONFIG->save_setting('addressbook_books_filter',implode(',', $books), $GO_SECURITY->user_id);
 			} elseif (!empty($_POST['no_addressbooks_filter'])) {
-				$ab->query("SELECT ab.id FROM ab_addressbooks ab ".
-						"INNER JOIN go_acl ON go_acl.acl_id = ab.acl_id ".
-						"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
-						"WHERE go_acl.user_id='".$GO_SECURITY->user_id."' OR go_users_groups.user_id='".$GO_SECURITY->user_id."' ".
-						" GROUP BY ab.id");
+			
 				$books = array();
-				while ($book = $ab->next_record())
-					$books[] = $book['id'];
+				
 			} else {
 				$books = $GO_CONFIG->get_setting('addressbook_books_filter', $GO_SECURITY->user_id);
 				$books = ($books) ? explode(',',$books) : array();
