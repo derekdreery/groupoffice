@@ -168,6 +168,8 @@ try{
 				$categories = ($categories) ? explode(',',$categories) : array();
 			}
 
+			
+			$response['data']['header']='';
 			if(count($categories))
 			{
 				$readable_categories = array();
@@ -197,7 +199,8 @@ try{
 					if($permission_level > $response['data']['permission_level'])
 					{
 						$response['data']['permission_level'] = $permission_level;
-					}					
+					}
+					
 				}
 
 				$response['data']['write_permission']=$response['data']['permission_level']>1;
@@ -270,8 +273,8 @@ try{
 
 			if(count($category_names))
 			{
-				$GO_LANGUAGE->require_language_file('notes');
-				$response['grid_title'] = (count($category_names) > 1) ? $lang['notes']['multipleCategoriesSelected'] : $category_names[0];
+				//$GO_LANGUAGE->require_language_file('notes');
+				$response['grid_title'] = implode(' & ',$category_names);
 			}
 
 			break;

@@ -30,13 +30,13 @@ GO.grid.MultiSelectGrid = function (config){
 	Ext.apply(config, {
 		plugins: [checkColumn],
 		tools : [
-		this.selectButton = new Ext.Button({
+		{
 			text:GO.lang.selectAll,
 			id:'plus',
 			qtip:GO.lang.selectAll,
-			handler:this.selectAll,
+			handler:function(){this.selectAll();},
 			scope: this
-		})],
+		}],
 		layout:'fit',
 		cls: 'go-grid3-hide-headers',
 		autoScroll:true,
@@ -62,8 +62,6 @@ GO.grid.MultiSelectGrid = function (config){
 
 	this.store.on('load', function()
 	{
-		this.selectButton.setDisabled(!this.store.data.items.length);
-
 		var num_selected = 0;
 		for(var i=0; i<this.store.data.items.length; i++)
 		{
@@ -75,11 +73,11 @@ GO.grid.MultiSelectGrid = function (config){
 
 		this.selectedAll = (num_selected == this.store.data.items.length) ? true : false;
 
-		if(this.allowNoSelection)
-		{
-			var text = (this.selectedAll) ? GO.lang.deselectAll : GO.lang.selectAll;
-			//this.selectButton.setText(text);
-		}
+//		if(this.allowNoSelection)
+//		{
+//			var text = (this.selectedAll) ? GO.lang.deselectAll : GO.lang.selectAll;
+//			this.selectButton.setText(text);
+//		}
 	    
 	},this);
 
@@ -208,7 +206,7 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 		if(this.allowNoSelection)
 		{						
 			var text = (this.selectedAll) ? GO.lang.deselectAll : GO.lang.selectAll;			
-			this.selectButton.setText(text);		
+			//this.selectButton.setText(text);
 		}
 		
 	}

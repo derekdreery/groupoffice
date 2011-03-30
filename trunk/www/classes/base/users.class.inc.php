@@ -204,7 +204,7 @@ class GO_USERS extends db
 			{
 				$sql .= ", cf_8.* ";
 			}
-			$sql .= "FROM go_users u";
+			$sql .= " FROM go_users u ";
 			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
 			{
 				$sql .= " LEFT JOIN cf_8 ON cf_8.link_id=u.id ";

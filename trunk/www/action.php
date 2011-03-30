@@ -15,7 +15,8 @@
 require_once("Group-Office.php");
 $GO_SECURITY->authenticate();
 
-$GO_SECURITY->check_token();
+if($_REQUEST['task']!='login')
+	$GO_SECURITY->check_token();
 
 
 
