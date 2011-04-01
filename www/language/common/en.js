@@ -433,3 +433,5 @@ GO.lang.strUsersInGroup = 'Users in group';
 
 GO.lang.matchDuplicates='Match duplicates';
 GO.lang.showFirstDuplicateOnly='Only show first duplicate';
+
+GO.lang.advancedSearch='Advanced search';
