@@ -85,6 +85,9 @@ class Segment implements IteratorAggregate, Countable
      */
     public function merge()
     {
+			if(!count($this->vars)){
+				return '';
+			}
         //$this->xmlParsed .= str_replace(array_keys($this->vars), array_values($this->vars), $this->xml);
 			$this->xmlParsed.=preg_replace('/{([^}]*)}/Ue', "odf::replacetag('$1', \$this->vars)", $this->xml);
         if ($this->hasChildren()) {
@@ -102,7 +105,10 @@ class Segment implements IteratorAggregate, Countable
 			}
         }
         $this->file->close();
-				//var_dump($this->xmlParsed);
+			//	go_debug($this->xmlParsed);
+
+
+				$this->vars=array();
 		    return $this->xmlParsed;
     }
     /**
