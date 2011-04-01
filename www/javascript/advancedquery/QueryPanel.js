@@ -108,11 +108,11 @@ GO.advancedquery.SearchQueryPanel = function(config)
 					items: [this.currentCriteriumField =
 					this.criteriumComboBox = new GO.form.ComboBox({
 						store: new Ext.data.SimpleStore({
-							fields: ['value'],
+							fields: ['value','text'],
 							data: new Array()
 						}),
 						valueField:'value',
-						displayField:'value',
+						displayField:'text',
 						width: 280,
 						mode: 'local',
 						triggerAction: 'all',
@@ -300,11 +300,11 @@ Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 	typeChange : function(record){
 		if (record.data.type=='combobox') {
 			this.criteriumComboBox.store = new Ext.data.SimpleStore({
-				fields: ['value'],
+				fields: ['value','text'],
 				data: record.data.fields
 			});
 
-			this.criteriumComboBox.setValue(record.data.fields[0]);
+			this.criteriumComboBox.setValue(record.data.fields[0][0]);
 		}
 		this.currentCriteriumField.hide();
 		this.currentCriteriumField = this.getCriteriumField(record.data);
