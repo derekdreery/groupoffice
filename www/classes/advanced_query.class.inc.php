@@ -19,7 +19,7 @@ class advanced_query extends db{
 		return $this->query("DELETE FROM go_saved_search_queries WHERE id='".$this->escape($sql_id)."'");
 	}
 
-	public function parse_advanced_query($query, $link_type) {
+	public function parse_advanced_query($query, $link_type=0) {
 
 		// DATE SEARCH 1
 		preg_match_all("/unix_timestamp[(]'([0-9]+)[-]([0-9]+)[-]([0-9]+)'[)]/",$query,$matched_tags,PREG_SET_ORDER);
@@ -74,9 +74,10 @@ class advanced_query extends db{
 			$query = str_replace('('.$tag[0],$time,$query);
 		}
 
-		$query = $this->parse_custom_fields($query, $link_type);
+		if($link_type)
+			$query = $this->parse_custom_fields($query, $link_type);
 
-		return $query;
+		return ' '.$query;
 	}
 
 	public function parse_custom_fields($query, $link_type){
