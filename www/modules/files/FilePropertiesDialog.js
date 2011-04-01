@@ -244,6 +244,8 @@ Ext.extend(GO.files.FilePropertiesDialog, GO.Window, {
 			params: params,			
 			success: function(form, action) {				
 				this.setWritePermission(action.result.data.write_permission);		
+
+				this.fireEvent('fileCommentsEdit',this);
 				
 				if(action.result.data.file_id)
 				{
