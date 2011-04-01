@@ -39,19 +39,27 @@ class log extends db {
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_entries($query, $sortfield='id', $sortorder='ASC', $start=0, $offset=0)
+	function get_entries($query, $sortfield='id', $sortorder='ASC', $start=0, $offset=0, $advanced_query='')
 	{
+		global $GO_CONFIG;
+		
 		$sql = "SELECT ";		
 		if($offset>0)
 		{
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}		
-		$sql .= "gl.* FROM go_log gl, go_users gu WHERE gl.user_id = gu.id";
- 		if(!empty($query))
+		$sql .= "gl.* FROM go_log gl INNER JOIN go_users gu ON (gl.user_id = gu.id) ";
+ 		if(!empty($advanced_query)){
+			require_once($GO_CONFIG->class_path.'advanced_query.class.inc.php');
+			$aq = new advanced_query();
+
+			$sql .= ' WHERE'.$aq->parse_advanced_query($advanced_query);
+		}elseif(!empty($query))
  		{
- 			$sql .= " AND (text LIKE '".$this->escape($query)."' OR first_name LIKE '".$this->escape($query)."' OR middle_name LIKE '".$this->escape($query)."' OR last_name LIKE '".$this->escape($query)."' "
+ 			$sql .= " WHERE (text LIKE '".$this->escape($query)."' OR first_name LIKE '".$this->escape($query)."' OR middle_name LIKE '".$this->escape($query)."' OR last_name LIKE '".$this->escape($query)."' "
  					. "OR CONCAT(first_name, middle_name, last_name) LIKE '".$this->escape($query)."') ";
- 		}		
+ 		}
+		
 		$sql .= " ORDER BY ".$this->escape("gl.".$sortfield.' '.$sortorder);	
 		
 		$_SESSION['GO_SESSION']['export_queries']['log']=array(
