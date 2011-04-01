@@ -66,7 +66,11 @@ class Odf
         $tmp = tempnam($this->config['PATH_TO_TMP'], md5(uniqid()));
         copy($filename, $tmp);
         $this->tmpfile = $tmp;
+
+				$this->_fix_segments();
         $this->_moveRowSegments();
+
+				
     }
     /**
      * Assing a template variable
@@ -155,6 +159,26 @@ IMG;
       //  $this->contentXml = str_replace(array_keys($this->vars), array_values($this->vars), $this->contentXml);
 			$this->contentXml = preg_replace('/{([^}]*)}/Ue', "odf::replacetag('$1', \$this->vars)", $this->contentXml);
     }
+
+		private function _fix_segments(){
+
+			$reg = '@\[!--\sBEGIN\s[^\]]*--\]@smUe';
+			$this->contentXml = preg_replace($reg, "odf::_fix_segments_callback('$0')", $this->contentXml);
+			$reg = '@\[!--\sEND\s[^\]]*--\]@smUe';
+			$this->contentXml = preg_replace($reg, "odf::_fix_segments_callback('$0')", $this->contentXml);
+		}
+
+		public static function _fix_segments_callback($tag){
+			//Sometimes people change styles within a {autodata} tag.
+			//Then there are XML tags inside the GO template tag.
+			//We place them outside the tag.
+			$tag = stripslashes($tag);
+			preg_match_all('/<[^>]*>/',$tag,$matches);
+			$garbage_tags = implode('', $matches[0]);
+
+			$tag = strip_tags($tag);
+			return $tag.$garbage_tags;
+		}
 
 
 	function replacetag($tag, $record) {
