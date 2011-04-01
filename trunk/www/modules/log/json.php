@@ -26,8 +26,10 @@ try{
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
 			$query = !empty($_REQUEST['query']) ? '%'.trim($_REQUEST['query']).'%' : '';
+
+			$advanced_query = !empty($_POST['advanced_query']) ? $_POST['advanced_query'] : '';
 			
-			$response['total']=$log->get_entries($query, $sort, $dir, $start, $limit);
+			$response['total']=$log->get_entries($query, $sort, $dir, $start, $limit, $advanced_query);
 			
 			$response['results']=array();
 			while($entry = $log->next_record())
@@ -37,6 +39,27 @@ try{
 			}
 			
 			break;
+
+		case 'advanced_query_fields':
+			$response['results'] = array();
+
+			foreach($GO_MODULES->modules as $module) {
+				$GO_LANGUAGE->require_language_file($module['id']);
+			}
+
+
+			foreach($lang['link_type'] as $id=>$name) {				
+				$link_types[] = array($id, $name);
+			}
+
+			$response['results'][] = array('name' => 'Type', 'value' => '`link_type`', 'type' => 'combobox', 'fields' => $link_types);
+			$response['results'][] = array('name' => 'Text', 'value' => '`text`', 'type' => 'textfield');	
+			$response['results'][] = array('name' => 'Time', 'value' => '`time`', 'type' => 'date');
+			$response['results'][] = array('name' => 'User', 'value' => '`user`', 'type' => 'user');			
+			
+			$response['total'] = count($response['results']);
+			$response['success'] = true;
+		break;
 			
 /* {TASKSWITCH} */
 	}

@@ -65,10 +65,18 @@ GO.log.EntriesGrid = function(config) {
 
 	this.searchField = new GO.form.SearchField({
 			store : config.store,
-			width : 320
+			width : 320,
+			listeners : {
+				reset: function(searchField){
+					delete this.store.baseParams.advanced_query;
+				},
+				search:function(searchField){
+					delete this.store.baseParams.advanced_query;
+				}
+			}
 		});
 		
-	config.tbar=[GO.lang['strSearch'] + ':', this.searchField,'-',{
+	config.tbar=new Ext.Toolbar({cls:'go-head-tb', items: [GO.lang['strSearch'] + ':', this.searchField,'-',{
 			iconCls: 'btn-export', 
 			text: GO.lang.cmdExport, 
 			cls: 'x-btn-text-icon', 
@@ -95,7 +103,25 @@ GO.log.EntriesGrid = function(config) {
 				this.exportDialog.show(config);
 			},  
 			scope: this		
-		}];
+		},{
+			text:GO.lang.advancedSearch,
+			handler:function(){
+				if(!this.advancedQueryWindow){
+					this.advancedQueryWindow= new GO.log.AdvancedSearchWindow();
+					
+					this.advancedQueryWindow.queryPanel.on("search",function(panel, query, matchDuplicates, matchFirstDuplicateOnly){
+						this.store.baseParams.advanced_query=query;
+						this.store.load();
+						this.searchField.setValue('['+GO.lang.advancedSearch+']');
+						this.advancedQueryWindow.hide();
+					}, this);
+				}
+
+				this.advancedQueryWindow.show();
+			},
+			iconCls:'btn-search',
+			scope:this
+		}]});
 			
 	GO.log.EntriesGrid.superclass.constructor.call(this, config);
 };
