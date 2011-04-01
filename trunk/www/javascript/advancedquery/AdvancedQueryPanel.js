@@ -46,31 +46,33 @@ GO.advancedquery.AdvancedQueryPanel = function (config){
 		cls: 'x-btn-text-icon',
 		text: GO.lang.cmdReset,
 		scope: this
+	},'-',{
+		iconCls:'btn-search',
+		text: GO.lang.strSearch,
+		handler: function(){
+			var matchDuplicates="";
+			var showFirstDuplicateOnlyCheckbox=false;
+			if(this.matchDuplicates){
+				matchDuplicates=this.searchQueryPanel.matchDuplicatesCombo.getValue();
+				showFirstDuplicateOnlyCheckbox=this.searchQueryPanel.showFirstDuplicateOnlyCheckbox.getValue();
+			}
+
+
+			this.fireEvent('search', this.ownerCt, this.searchQueryPanel.queryField.getValue(), matchDuplicates,showFirstDuplicateOnlyCheckbox);
+		},
+		scope: this
 	}
 	];
 
+	var height = config.matchDuplicates ? 270 : 190;
+
 	this.searchQueryPanel = new GO.advancedquery.SearchQueryPanel({
 		region:'north',
-		height:320,
+		height:height,
 		autoScroll:true,
 		fieldsUrl:config.fieldsUrl,
 		matchDuplicates: config.matchDuplicates,
-		type:config.type,
-		buttons: [{
-			text: GO.lang.strSearch,
-			handler: function(){
-				var matchDuplicates="";
-				var showFirstDuplicateOnlyCheckbox=false;
-				if(this.matchDuplicates){
-					matchDuplicates=this.searchQueryPanel.matchDuplicatesCombo.getValue();
-					showFirstDuplicateOnlyCheckbox=this.searchQueryPanel.showFirstDuplicateOnlyCheckbox.getValue();
-				}
-
-
-				this.fireEvent('search', this.ownerCt, this.searchQueryPanel.queryField.getValue(), matchDuplicates,showFirstDuplicateOnlyCheckbox);
-			},
-			scope: this
-		}]
+		type:config.type
 	});
 
 	config.items = [this.searchQueryPanel];

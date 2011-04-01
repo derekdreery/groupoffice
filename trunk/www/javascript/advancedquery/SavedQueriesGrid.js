@@ -19,7 +19,7 @@ GO.advancedquery.SavedQueriesGrid = function(config)
 		}
 
 		config.title = GO.lang.savedQueries;
-		config.paging=true;
+		//config.paging=true;
 		config.border=true;
 
 
