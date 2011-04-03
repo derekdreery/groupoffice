@@ -41,10 +41,12 @@ GO.email.MessagesGrid = function(config){
 			},{
 				header: GO.email.lang.from,
 				dataIndex: 'from',
-				id:'from'
+				id:'from',
+				width:200
 			},{
 				header: GO.email.lang.subject,
-				dataIndex: 'subject'
+				dataIndex: 'subject',
+				width:200
 			},{
 				header: GO.lang.strDate,
 				dataIndex: 'date',
@@ -60,8 +62,6 @@ GO.email.MessagesGrid = function(config){
 			}]
 		});
 		config.view=new Ext.grid.GridView({
-			autoFill: true,
-			forceFit: true,
 			emptyText: GO.lang['strNoItems'],
 			getRowClass:function(row, index) {
 				if (row.data['new'] == '1') {
