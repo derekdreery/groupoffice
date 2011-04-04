@@ -107,21 +107,24 @@ class ldapauth extends imapauth {
 		$entry = $la->get_entry($_SESSION['GO_SESSION']['username']);
 		if(!$entry)
 			return false;
-		
+
 		if(!$la->check_email($entry,$_POST['email'], $addresses)){
 			global $GO_LANGUAGE, $lang;
 			$GO_LANGUAGE->require_language_file('ldapauth');
 			throw new Exception($lang['ldapauth']['invalid_email'].' '.implode(', ',$addresses));
 		}
-				
+
 	}
 
 	public function check_email($entry, $email, &$addresses=array()){
-		global $GO_CONFIG;		
+		global $GO_CONFIG;
 
 		$mapping = $this->get_mapping();
 
-		$val = $entry[$mapping['email']];
+		if (isset($entry[$mapping['email']]))
+			$val = $entry[$mapping['email']];
+		else
+			return false;
 
 		if(is_string($val)){
 			$val = array('count'=>1, '0'=>$val);
@@ -217,7 +220,7 @@ class ldapauth extends imapauth {
 		$entry = $la->get_entry($username);
 		if(!$entry)
 			return false;
-		
+
 		$user = $la->convert_ldap_entry_to_groupoffice_record($entry);
 
 		$authenticated = @$ldap->bind($entry['dn'], $password);
@@ -244,7 +247,7 @@ class ldapauth extends imapauth {
 				if($config) {
 					go_debug('LDAPAUTH: E-mail configuration found. Creating e-mail account');
 					$mail_username = empty($config['ldap_use_email_as_imap_username']) ? $username : $user['email'];
-				}
+					}
 			}else {
 				go_debug('LDAPAUTH: Warning! no E-mail address found in profile.');
 			}
@@ -282,7 +285,7 @@ class ldapauth extends imapauth {
 				if(crypt($password, $gouser['password']) != $gouser['password']) {
 					go_debug('LDAPAUTH: password on LDAP server has changed. Updating Group-Office database');
 
-					if($mail_username) {						
+					if($mail_username) {
 						$email_client->update_password($config['host'], $mail_username, $password);
 					}
 				}
@@ -450,7 +453,7 @@ class ldap_mapping_type {
 	}
 
 	function get_value($entry, $key) {
-		
+
 		switch($this->type) {
 			case 'function':
 				$my_method = $this->value;

@@ -22,6 +22,12 @@ try {
 				$folder = $email->get_folder_by_id($emailportlet->f('folder_id'));
 				unset($folder['sort']);
 
+				if(!$folder){
+					$emailportlet->delete_on_summary($GO_SECURITY->user_id, $emailportlet->f('folder_id'));					
+					$response['total']--;
+					continue;
+				}
+
 				$pos = strrpos($folder['name'], '.');
 				$pos = ($pos) ? ($pos)+1 : $pos;
 				$folder['title'] = substr($folder['name'], $pos);

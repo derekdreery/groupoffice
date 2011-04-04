@@ -127,6 +127,11 @@ Ext.extend(GO.mailings.EmailTemplateDialog, Ext.Window,{
 	},
 	
 	submitForm : function(hide){
+
+		//won't toggle if not done twice...
+		this.emailHtmlEditor.toggleSourceEdit(false);
+		this.emailHtmlEditor.toggleSourceEdit(false);
+
 		this.formPanel.form.submit(
 		{
 			url:GO.settings.modules.mailings.url+'action.php',

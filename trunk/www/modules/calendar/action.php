@@ -411,7 +411,7 @@ try {
 								}
 							}
 							
-							if($_POST['send_invitation']=='true') {
+							if(isset($_POST['send_invitation']) && $_POST['send_invitation']=='true') {
 
 								$cal->send_invitation(array_merge($old_event, $update_event),$calendar, false);
 							}
