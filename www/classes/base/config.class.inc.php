@@ -687,7 +687,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.7.5';
+	var $version = '3.7.6';
 
 
 	/* The permissions mode to use when creating files
@@ -717,7 +717,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20110330';
+	var $mtime = '20110401';
 
 	#group configuration
 	/**
@@ -892,7 +892,8 @@ class GO_CONFIG {
 
 		$config_file = $this->get_config_file();
 
-		@include($config_file);
+		if($config_file)
+			include($config_file);
 
 		foreach($config as $key=>$value) {
 			$this->$key=$value;
@@ -1116,6 +1117,9 @@ class GO_CONFIG {
 			if(@file_exists($config_file)) {
 				$_SESSION['GO_SESSION']['config_file']=$config_file;
 				return $config_file;
+			}else
+			{
+				return false;
 			}
 		}
 	}

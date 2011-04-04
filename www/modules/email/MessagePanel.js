@@ -549,7 +549,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			Ext.Ajax.request({
 				url: GO.settings.modules.calendar.url+'action.php',
 				params: {
-					event_id: cancellation.event_id,
+					event_id: this.data.iCalendar.invitation.event_id,
 					task: 'delete_event'
 				},
 				scope: this,

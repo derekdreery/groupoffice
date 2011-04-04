@@ -853,6 +853,15 @@ class String {
 		$html = preg_replace($to_removed_array, '', $html);
 		$html = String::xss_clean($html);
 
+		//remove high z-indexes
+		$matched_tags = array();
+		preg_match_all( "/(z-index)[\s]*:[\s]*([0-9]+)[\s]*;/", $html, $matched_tags, PREG_SET_ORDER );
+		foreach ($matched_tags as $tag) {
+			if ($tag[2]>8000) {
+				$html = str_replace($tag[0],'z-index:8000;',$html);
+			}
+		}
+
 		return $html;
 	}
 

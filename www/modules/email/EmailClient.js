@@ -491,6 +491,10 @@ GO.email.EmailClient = function(config){
 							if(node.attributes.mailbox==this.messagesGrid.store.baseParams.mailbox){
 								this.messagesGrid.store.removeAll();
 							}
+
+							if(GO.emailportlet){
+								GO.emailportlet.foldersStore.load();
+							}
 						}else
 						{
 							Ext.MessageBox.alert(GO.lang.strError,responseParams.feedback);
@@ -539,7 +543,6 @@ GO.email.EmailClient = function(config){
 		{
 			tree.dropZone.appendOnly=true;
 		}
-	//console.log(tree.dropZone.appendOnly);
 	}, this);
 
 	this.treePanel.on('beforenodedrop', function(e){
@@ -1155,7 +1158,6 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	},
 	
 	updateNotificationEl : function(){
-		//console.log('updateNotificationEl');
 		var node = this.treePanel.getRootNode();
 
 		GO.email.totalUnseen=0;
@@ -1523,12 +1525,14 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			this.accountsDialog = new GO.email.AccountsDialog();
 			this.accountsDialog.accountsGrid.accountDialog.on('save', function(dialog, result){
 				if(result.refreshNeeded){
-					this.refresh();
+					this.refresh();					
 				}
 			}, this);
 				
 			this.accountsDialog.accountsGrid.on('delete', function(){
 				this.refresh();
+				if(GO.emailportlet)
+					GO.emailportlet.foldersStore.load();
 			}, this);
 		}
 		this.accountsDialog.show();
