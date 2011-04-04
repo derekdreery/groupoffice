@@ -1,3 +1,0 @@
-modules/log/AdvancedSearchWindow.js
-modules/log/EntriesGrid.js
-modules/log/MainPanel.js
