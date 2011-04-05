@@ -1,1 +1,1 @@
-GO.settings.lang.title = 'Instellingen';
+GO.settingsmodule.lang.title = 'Instellingen';
