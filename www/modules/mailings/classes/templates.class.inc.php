@@ -220,12 +220,16 @@ class templates extends db {
 			$contact=array();
 		}
 
-		$ab->format_contact_record($contact, $cf);
+                if(count($contact))
+                {
+                        $ab->format_contact_record($contact, $cf);
+                }
 
 		if($htmlspecialchars)
 			$contact = array_map('htmlspecialchars', $contact);
 
-		$contact['comment']=String::text_to_html($contact['comment']);
+                if(isset($contact['comment']))
+                        $contact['comment']=String::text_to_html($contact['comment']);
 
 		$this->replace_fields($input, $contact,$skip_empty,'contact');
 		return $input;
