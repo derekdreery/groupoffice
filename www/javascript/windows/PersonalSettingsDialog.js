@@ -24,7 +24,7 @@ GO.PersonalSettingsDialog = function(config){
 	
 	//config.iconCls='go-module-icon-users';
 	config.layout='fit';
-	config.modal=false;
+	config.modal=true;
 	config.resizable=true;
   config.maxizable=true;
 	config.width=900;
@@ -162,13 +162,15 @@ Ext.extend(GO.PersonalSettingsDialog, GO.Window,{
 
 				GO.settings.mute_sound=this.formPanel.form.findField('mute_sound').getValue();
 				GO.settings.popup_reminders=this.formPanel.form.findField('popup_reminders').getValue();
+
+				document.location=GO.settings.config.host;
 				
-				if(this.reload)
-				{
-					document.location=GO.settings.config.host;
-				}else if(hide){
-					this.hide();
-				}
+//				if(this.reload)
+//				{
+//					document.location=GO.settings.config.host;
+//				}else if(hide){
+//					this.hide();
+//				}
 			},		
 			failure: function(form, action) {
 				if(action.failureType == 'client')

@@ -11,6 +11,7 @@ GO.email.SettingsPanel = function(config) {
 	config.hideMode = 'offsets';
 	config.layout = 'form';
 	config.bodyStyle = 'padding:5px';
+	config.labelWidth=150;
 	
 	config.items=[{
 		xtype:'fieldset',
@@ -37,6 +38,39 @@ GO.email.SettingsPanel = function(config) {
 		hideLabel:true,
 		checked:GO.email.alwaysRespondToNotifications,
 		name:'always_respond_to_notifications'
+	}),this.fontSize = new GO.form.ComboBox({
+			fieldLabel:GO.email.lang.defaultFontSize,
+			name:'font_size',
+			store : new Ext.data.SimpleStore({
+				fields : ['value'],
+				data : [
+					['10px'],
+					['11px'],
+					['12px'],
+					['13px'],
+					['14px'],
+					['15px'],
+					['16px'],
+					['17px'],
+					['18px'],
+					['19px'],
+					['20px'],
+					['21px'],
+					['22px'],
+					['23px'],
+					['24px']
+				]
+			}),
+			width:70,
+			value : GO.email.fontSize,
+			valueField : 'value',
+			displayField : 'value',
+			mode : 'local',
+			triggerAction : 'all',
+			editable : false,
+			selectOnFocus : true,
+			forceSelection : true
+
 	})];
 
 
