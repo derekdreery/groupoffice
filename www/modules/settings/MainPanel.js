@@ -1,4 +1,4 @@
-GO.settings.MainPanel = function(config){
+GO.settingsmodule.MainPanel = function(config){
 
 	if(!config)
 	{
@@ -43,20 +43,20 @@ GO.settings.MainPanel = function(config){
 	}]
 	});
 
-	GO.settings.MainPanel.superclass.constructor.call(this, config);
+	GO.settingsmodule.MainPanel.superclass.constructor.call(this, config);
 };
 
-Ext.extend(GO.settings.MainPanel, Ext.FormPanel, {
+Ext.extend(GO.settingsmodule.MainPanel, Ext.FormPanel, {
 	afterRender : function()
 	{
-		GO.settings.MainPanel.superclass.afterRender.call(this);
+		GO.settingsmodule.MainPanel.superclass.afterRender.call(this);
 		this.form.load();
-		this.formPanel.form.timeout=360;
+		this.form.timeout=360;
 	}
 });
 
-GO.moduleManager.addModule('settings', GO.settings.MainPanel, {
-	title : GO.settings.lang.title,
+GO.moduleManager.addModule('settings', GO.settingsmodule.MainPanel, {
+	title : GO.settingsmodule.lang.title,
 	iconCls : 'go-tab-icon-settings',
 	admin :true
 });
