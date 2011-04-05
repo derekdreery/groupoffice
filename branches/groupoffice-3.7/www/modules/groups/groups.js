@@ -214,6 +214,7 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 				});
 
 				this.permissionsTab = new GO.grid.PermissionsPanel({
+					title:GO.groups.lang.managePermissions,
 					hideLevel:true
 				});
 
