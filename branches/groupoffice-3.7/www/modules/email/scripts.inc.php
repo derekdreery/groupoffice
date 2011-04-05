@@ -29,6 +29,13 @@ if(empty($always_respond_to_notifications))
 else
 	$GO_SCRIPTS_JS .= 'true;';
 
+
+$font_size = $GO_CONFIG->get_setting('email_font_size', $GO_SECURITY->user_id);
+if(empty($font_size))
+	$GO_SCRIPTS_JS .= 'GO.email.fontSize="12px";';
+else
+	$GO_SCRIPTS_JS .= 'GO.email.fontSize="'.$font_size.'";';
+
 if(isset($_GET['mail_to']))
 {
 	//$qs=strtolower(str_replace('mailto:','mail_to=', $_GET['mail_to']));
