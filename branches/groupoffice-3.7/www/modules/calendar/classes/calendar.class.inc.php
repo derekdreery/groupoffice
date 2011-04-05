@@ -3205,5 +3205,28 @@ class calendar extends db {
 		}
 	}
 
+
+
+	public function has_freebusy_access($requesting_user_id, $target_user_id){
+
+		global $GO_EVENTS;
+
+		//Only show availability if user has access to the default calendar
+//		if(!empty($GO_CONFIG->require_calendar_access_for_freebusy)){
+//			$default_calendar = $cal2->get_default_calendar($user['id']);
+//			$permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $default_calendar['acl_id']);
+//		}else
+//		{
+//			$permission=true;
+//		}
+
+		$permission=true;
+
+		$GO_EVENTS->fire_event('has_freebusy_access', array($requesting_user_id, $target_user_id, &$permission));
+
+		return $permission;
+
+	}
+
 }
 

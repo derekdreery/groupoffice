@@ -319,21 +319,25 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 		GO.grid.PermissionsPanel.superclass.onShow.call(this);
 
 		if (!this.loaded) {
-			this.aclGroupsStore.load();
-			this.aclUsersStore.load();
-			this.loaded = true;
+			this.loadAcl();
 		}
 
+	},
+
+	loadAcl : function(){
+		this.aclGroupsStore.load();
+		this.aclUsersStore.load();
+		this.loaded = true;
 	},
 
 	afterRender : function() {
 
 		GO.grid.PermissionsPanel.superclass.afterRender.call(this);
 
-		if (this.isVisible() && !this.loaded) {
-			this.aclGroupsStore.load();
-			this.aclUsersStore.load();
-			this.loaded = true;
+		var v = this.isVisible();
+
+		if (v && !this.loaded) {
+			this.loadAcl();
 		}
 	},
 
