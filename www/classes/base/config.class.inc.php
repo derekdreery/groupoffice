@@ -676,6 +676,14 @@ class GO_CONFIG {
 	 */
 	var $disable_flash_upload=false;
 
+	/**
+	 * Disable security check for cross domain forgeries
+	 *
+	 * @var <type>
+	 */
+
+	var $disable_security_token_check=false;
+
 
 	/*//////////////////////////////////////////////////////////////////////////////
 	 //////////      Variables that are not touched by the installer   /////////////
