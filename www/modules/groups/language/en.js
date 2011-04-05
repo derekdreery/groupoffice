@@ -20,3 +20,4 @@ GO.groups.lang.searchAllUsers = 'Search all users';
 GO.groups.lang.adminOnly = 'Admin only';
 GO.groups.lang.adminOnlyLabel = 'Only administrators may use this group to grant permissions to for example calendars.';
 GO.groups.lang.groupMembers='Group members';
+GO.groups.lang.managePermissions = 'Manage permissions';
