@@ -69,11 +69,11 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 		if(window.console && window.console.firebug)
 		{
-			this.msg(GO.lang.firebugDetected, GO.lang.firebugWarning, 4, 300);
+			this.msg(GO.lang.firebugDetected, GO.lang.firebugWarning, 4, 400);
 		}
 		if(GO.settings.config.debug)
 		{
-			this.msg(GO.lang.debugModeDetected, GO.lang.debugModeWarning, 4, 300);
+			this.msg(GO.lang.debugModeDetected, GO.lang.debugModeWarning, 4, 400);
 		}
 
 		this.fireEvent('login', this);
@@ -572,7 +572,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			if(!time){
 				time=4;
 			}
-
+		
 			if(!this.msgCt){
 					this.msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
 			}
@@ -585,7 +585,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			}
 			var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
 			var m = Ext.DomHelper.append(this.msgCt, {html:this.createBox(title, s, width)}, true);
-			m.slideIn('t').pause(4).ghost("t", {remove:true});
+			m.slideIn('t').pause(time).ghost("t", {remove:true});
 	},
 	onLinksDeletedHandler : function(link_types, modulePanel, store){
 		if(link_types){

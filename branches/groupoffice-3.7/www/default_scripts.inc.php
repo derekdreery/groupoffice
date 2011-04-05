@@ -359,9 +359,7 @@ if(count($load_modules)) {
 		}
 	}
 
-
-	
-	
+	$GO_EVENTS->fire_event('load_scripts', array(&$GO_SCRIPTS_JS));	
 
 	$filename = $GO_SECURITY->user_id.'-scripts.js';
 	$path = $GO_CONFIG->file_storage_path.'cache/'.$filename;
@@ -377,6 +375,10 @@ if(count($load_modules)) {
 }
 ?>
 <script type="text/javascript">
+
+
+	<?php $GO_EVENTS->fire_event('inline_scripts');	?>
+
 	Ext.BLANK_IMAGE_URL = '<?php echo $GO_CONFIG->host; ?>ext/resources/images/default/s.gif';
 
 	Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));

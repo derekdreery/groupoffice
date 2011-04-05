@@ -13,6 +13,16 @@ GO.settingsmodule.MainPanel = function(config){
 				save: false
 			};
 
+		config.items={
+			xtype:'fieldset',
+			title:'Login screen text',
+			items:{
+				xtype:'htmleditor',
+				hideLabel:true,
+				name:'login_screen_text'
+			}
+		}
+
 	config.tbar=new Ext.Toolbar({
 		cls:'go-head-tb',
 		items: [{

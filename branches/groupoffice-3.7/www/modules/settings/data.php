@@ -13,11 +13,17 @@ switch($_REQUEST['task']){
 		// Triggered when saving
 		if(isset($_REQUEST['save']) && $_REQUEST['save'] == 'true')
 		{
+			$GO_CONFIG->save_setting('login_screen_text', $_POST['login_screen_text']);
+
 			$GO_EVENTS->fire_event('save_global_settings', array(&$response));
 			$response['saved'] = true;
 		}
 
 		$response['data']=array();
+
+		$t = $GO_CONFIG->get_setting('login_screen_text');
+
+		$response['data']['login_screen_text']=$t ? $t : '';
 
 		$GO_EVENTS->fire_event('load_global_settings',array(&$response));
 
