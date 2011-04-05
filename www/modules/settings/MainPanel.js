@@ -13,15 +13,25 @@ GO.settingsmodule.MainPanel = function(config){
 				save: false
 			};
 
-		config.items={
-			xtype:'fieldset',
-			title:'Login screen text',
-			items:{
-				xtype:'htmleditor',
-				hideLabel:true,
-				name:'login_screen_text'
-			}
-		}
+	config.items={
+		xtype:'fieldset',
+		labelAlign:'top',
+		title:GO.settingsmodule.lang.loginScreenText,
+		items:[{
+			fieldLabel:GO.settingsmodule.lang.title,
+			xtype:'textfield',
+			hideLabel:true,
+			name:'login_screen_text_title',
+			anchor:"100%"
+		},{
+			fieldLabel:GO.settingsmodule.lang.text,
+			xtype:'htmleditor',
+			hideLabel:true,
+			name:'login_screen_text',
+			anchor:"100%",
+			height:100
+		}]
+	}
 
 	config.tbar=new Ext.Toolbar({
 		cls:'go-head-tb',
@@ -66,7 +76,7 @@ Ext.extend(GO.settingsmodule.MainPanel, Ext.FormPanel, {
 });
 
 GO.moduleManager.addModule('settings', GO.settingsmodule.MainPanel, {
-	title : GO.settingsmodule.lang.title,
+	title : GO.settingsmodule.lang.mainTitle,
 	iconCls : 'go-tab-icon-settings',
 	admin :true
 });
