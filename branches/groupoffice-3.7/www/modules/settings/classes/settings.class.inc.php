@@ -26,9 +26,10 @@ class settings // extends db
 		global $GO_CONFIG;
 
 		$login_screen_text = $GO_CONFIG->get_setting('login_screen_text');
+		$login_screen_text_title = $GO_CONFIG->get_setting('login_screen_text_title');
 
 		if(!empty($login_screen_text))
-			echo 'GO.mainLayout.on("login", function(mainLayout){mainLayout.msg("", "'.String::escape_javascript ($login_screen_text).'", 3600, 400);});';
+			echo 'GO.mainLayout.on("login", function(mainLayout){mainLayout.msg("'.String::escape_javascript ($login_screen_text_title).'", "'.String::escape_javascript ($login_screen_text).'", 3600, 400);});';
 	}
 
 	//private $db;

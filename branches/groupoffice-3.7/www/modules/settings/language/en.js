@@ -8,4 +8,8 @@ GO.settingsmodule.lang={};
  * Copy everything below for translations
  */
 
-GO.settingsmodule.lang.title = 'Settings';
+GO.settingsmodule.lang.mainTitle = 'Settings';
+
+GO.settingsmodule.lang.loginScreenText='Login screen text';
+GO.settingsmodule.lang.text='Text';
+GO.settingsmodule.lang.title='Title';
