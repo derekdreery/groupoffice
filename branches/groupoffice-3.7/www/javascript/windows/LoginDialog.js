@@ -313,12 +313,15 @@ Ext.extend(GO.dialog.LoginDialog, GO.Window, {
 			border:false
 		});
 
-		this.completeProfileDialog = new Ext.Window({
+		this.completeProfileDialog = new GO.Window({
 			width: 900,
+			height:560,
 			title:GO.lang.completeProfile,
-			autoHeight:true,
+			autoScroll:true,
+			resizable:true,
 			items: this.profileFormPanel,
 			closable:false,
+			layout:'fit',
 			focus:focusFirstField.createDelegate(this),
 			buttons:[{
 				text: GO.lang['cmdOk'],
