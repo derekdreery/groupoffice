@@ -66,31 +66,31 @@ switch($task)
 
 		$response['results']=array();
 		$response['total']=0;
-		if($user_id==0 || !empty($query)){
+		//if($user_id==0 || !empty($query)){
 			
-			$response['total'] = $GO_USERS->search($query, $search_field, $user_id, $start, $limit, $sort,$dir);
+		$response['total'] = $GO_USERS->search($query, $search_field, $user_id, $start, $limit, $sort,$dir);
 
-			if($GO_MODULES->has_module('customfields')) {
-				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-				$cf = new customfields();
-			}
-
-
-
-			while($user=$GO_USERS->next_record())
-			{
-				$user['name'] = String::format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'));
-				$user['lastlogin']=Date::get_timestamp($user['lastlogin']);
-				$user['registration_time']=Date::get_timestamp($user['registration_time']);
-				$user['cf']=$user['id'].':'.$user['name'];//special field used by custom fields. They need an id an value in one.
-
-				if(isset($cf)){
-					$cf->format_record($user, 8, true);
-				}
-
-				$response['results'][]=$user;
-			}
+		if($GO_MODULES->has_module('customfields')) {
+			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+			$cf = new customfields();
 		}
+
+
+
+		while($user=$GO_USERS->next_record())
+		{
+			$user['name'] = String::format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'));
+			$user['lastlogin']=Date::get_timestamp($user['lastlogin']);
+			$user['registration_time']=Date::get_timestamp($user['registration_time']);
+			$user['cf']=$user['id'].':'.$user['name'];//special field used by custom fields. They need an id an value in one.
+
+			if(isset($cf)){
+				$cf->format_record($user, 8, true);
+			}
+
+			$response['results'][]=$user;
+		}
+		//}
 
 		echo json_encode($response);
 		break;
