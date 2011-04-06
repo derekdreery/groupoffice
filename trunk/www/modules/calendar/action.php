@@ -536,13 +536,13 @@ try {
 				if(($old_event['status'] != 'ACCEPTED') && ($event['status'] == 'ACCEPTED')){
 					$accepted = true;
 
-					if($calendar['group_id'] > 1)//resource
-						$event['busy']='1';
+					if($calendar['group_id'] > 1)//resource                                                
+                                                $event['busy']='1';						
 				}
 
 				if(($old_event['status'] != 'DECLINED') && ($event['status'] == 'DECLINED')){
 					$declined = true;
-					if($calendar['group_id'] > 1)//resource
+					if($calendar['group_id'] > 1)//resource                                               
 						$event['busy']='0';
 				}
 
@@ -557,7 +557,7 @@ try {
 					$response['files_folder_id']=$event['files_folder_id'];
 				$response['success']=true;
 			}else
-			{
+			{                                
 				$event_id= $cal->add_event($event, $calendar);
 				$old_event = $cal->get_event($event_id);
 				$insert = true;
@@ -863,6 +863,8 @@ try {
 									$resource['status']='NEEDS-ACTION';
 								}
 								$resource['background']=$resource['status']=='ACCEPTED' ? 'CCFFCC' : 'FF6666';
+                                                               
+                                                                $resource['busy'] = ($group['show_not_as_busy']) ? '0' : '1';
 
 								$resource_id = $resource['id'] = $cal3->add_event($resource);
 
@@ -1061,6 +1063,7 @@ try {
 		case 'save_group':
 
 			$group_id = $group['id'] = isset($_POST['group_id']) ? $_POST['group_id'] : 0;
+                        $group['show_not_as_busy'] = isset($_REQUEST['show_not_as_busy']) ? 1 : 0;
 
 			if(!$GO_MODULES->modules['calendar']['write_permission'])
 			{

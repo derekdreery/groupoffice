@@ -1,11 +1,15 @@
 /**
  * Don't copy the next lines into a translation
  */
-Ext.namespace('GO.settings');
+Ext.namespace('GO.settingsmodule');
 
-GO.settings.lang={};
+GO.settingsmodule.lang={};
 /**
  * Copy everything below for translations
  */
 
-GO.settings.lang.title = 'Settings';
+GO.settingsmodule.lang.mainTitle = 'Settings';
+
+GO.settingsmodule.lang.loginScreenText='Login screen text';
+GO.settingsmodule.lang.text='Text';
+GO.settingsmodule.lang.title='Title';

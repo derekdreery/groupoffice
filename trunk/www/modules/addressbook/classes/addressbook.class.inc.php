@@ -1540,7 +1540,7 @@ class addressbook extends db {
 
 	function delete_sql($sql_id) {
 
-		return $this->query("DELETE FROM ab_sql WHERE id='".$this->$escape($sql_id)."'");
+		return $this->query("DELETE FROM ab_sql WHERE id='".$this->escape($sql_id)."'");
 
 	}
 }

@@ -144,3 +144,5 @@ GO.calendar.lang.globalsettings_renameall = 'Are you sure you want to rename all
 GO.calendar.lang.publishICS='Publish iCalendar file of last month and future events. Caution! The calendar will be readable to everyone.';
 
 GO.calendar.lang.addTimeRegistration='Import into timeregistration';
+
+GO.calendar.lang.showNotBusy='Don\'t show new reservations as busy';

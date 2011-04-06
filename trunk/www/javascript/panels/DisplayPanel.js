@@ -19,7 +19,7 @@ GO.DisplayPanel=function(config){
 
 	GO.DisplayPanel.superclass.constructor.call(this, config);
 
-	this.addEvents({bodyclick:true});
+	this.addEvents({bodyclick:true,afterbodyclick:true});
 }
 
 Ext.extend(GO.DisplayPanel, Ext.Panel,{
@@ -431,6 +431,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 
 					return;
 				}
+
+				this.fireEvent('afterbodyclick', this, target, e, href);
 
 
 				/*if(href!='#')

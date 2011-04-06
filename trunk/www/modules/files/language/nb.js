@@ -38,3 +38,5 @@ GO.files.lang.imageViewer='Bildevisning';
 GO.files.lang.emailDownloadLink= 'Send nedlastingslenke';
 GO.files.lang.expireTime= 'Lenken utløper den:';
 GO.files.lang.newFolder= 'Ny mappe';
+GO.files.lang.applyState= 'Lås mappens visningmodus for alle brukere.';
+GO.files.lang.stateLocked= 'Mappens visningsmodus er låst av eier/admin';

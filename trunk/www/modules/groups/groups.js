@@ -121,6 +121,7 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 			  
 					
 			  this.userGrid = new GO.grid.GridPanel({
+					title:GO.groups.lang.groupMembers,
 			  	region:'center',
 					paging:true,
 		    	ds: this.userStore,
@@ -176,7 +177,7 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
     			border: false,
     			items:[
     				{
-    					fieldLabel: GO.groups.lang.lblNew, 
+    					fieldLabel: GO.lang.strName,
     					name: 'name',
     					anchor: '100%',
     					allowBlank: false
@@ -188,9 +189,10 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 					var adminOnlyCheckBox = new Ext.form.Checkbox({
               name: 'admin_only',
 							checked: group.admin_only,
-							fieldLabel: GO.groups.lang.adminOnly
+							boxLabel: GO.groups.lang.adminOnlyLabel,
+							hideLabel:true
           });
-					this.newFormPanel.height = 60;
+					this.newFormPanel.height = 80;
 					this.newFormPanel.add(adminOnlyCheckBox);
 				}
 				
@@ -206,12 +208,13 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 
 				this.firstTab = new Ext.Panel({
 					layout: 'border',
-					title : GO.groups.lang.groups,
+					title : GO.lang.strProperties,
 					autoScroll : true,					
 					items : [this.newFormPanel,this.userGrid]
 				});
 
 				this.permissionsTab = new GO.grid.PermissionsPanel({
+					title:GO.groups.lang.managePermissions,
 					hideLevel:true
 				});
 

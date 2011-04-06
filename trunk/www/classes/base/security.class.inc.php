@@ -81,7 +81,9 @@ class GO_SECURITY extends db {
 	 */
 
 	function check_token(){
-		if($_REQUEST['security_token']!=$_SESSION['GO_SESSION']['security_token']){
+		global $GO_CONFIG;
+
+		if(!$GO_CONFIG->disable_security_token_check && $_REQUEST['security_token']!=$_SESSION['GO_SESSION']['security_token']){
 			$this->logout();
 			go_log(LOG_ERR, 'Fatal error: Security token mismatch. Possible cross site request forgery attack!');
 			die('Fatal error: Security token mismatch. Possible cross site request forgery attack!');

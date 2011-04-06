@@ -15,6 +15,23 @@
 class settings // extends db
 {
 
+	public function __on_load_listeners($events) {
+
+		$events->add_listener('inline_scripts', __FILE__, 'settings','inline_scripts');
+
+	}
+
+	public static function inline_scripts(){
+
+		global $GO_CONFIG;
+
+		$login_screen_text = $GO_CONFIG->get_setting('login_screen_text');
+		$login_screen_text_title = $GO_CONFIG->get_setting('login_screen_text_title');
+
+		if(!empty($login_screen_text))
+			echo 'GO.mainLayout.on("login", function(mainLayout){mainLayout.msg("'.String::escape_javascript ($login_screen_text_title).'", "'.String::escape_javascript ($login_screen_text).'", 3600, 400);});';
+	}
+
 	//private $db;
 
 	public function settings()

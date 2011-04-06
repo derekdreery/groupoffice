@@ -9,4 +9,6 @@ $GO_THEME->add_stylesheet($GO_CONFIG->root_path.'themes/Default/xtheme-groupoffi
 $GO_THEME->add_stylesheet($GO_CONFIG->root_path.'themes/Default/style.css', $GO_CONFIG->host.'themes/Default/');
 $GO_THEME->load_module_stylesheets();
 $GO_THEME->get_cached_css();
+
+$GO_EVENTS->fire_event('head');
 ?>

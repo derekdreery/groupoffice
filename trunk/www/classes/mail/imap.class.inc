@@ -103,7 +103,7 @@ class imap extends imap_bodystruct {
 			$this->send_command($command);
 			$this->state = 'disconnected';
 			$result = $this->get_response();
-			go_debug($this->commands);
+			//go_debug($this->commands);
 
 			//go_debug($this->responses);
 
@@ -1218,7 +1218,7 @@ class imap extends imap_bodystruct {
 
 	public function has_alternative_body($struct){
 
-		go_debug($struct);
+		//go_debug($struct);
 
 		if (!is_array($struct) || empty($struct)) {
 			return false;
