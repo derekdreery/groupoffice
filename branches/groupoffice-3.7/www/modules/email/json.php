@@ -1302,7 +1302,6 @@ try {
 						$response['data']['forward_to'] = $server_response['data']['forward_to'];
 					}else
 					{
-						go_debug($server_response['data']);
 						if(isset($GO_MODULES->modules['systemusers'])) {
 							require_once($GO_MODULES->modules['systemusers']['class_path'].'systemusers.class.inc.php');
 							$su = new systemusers();
