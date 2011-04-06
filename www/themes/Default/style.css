@@ -1041,10 +1041,10 @@ table.display-panel a:active
 }
 
 /* styles for groups */
-.x-grid-group-hd div {
+/*.x-grid-group-hd div {
 	position:relative;
 	height:16px;
-}
+}*/
 .ux-grow-action-item {
 	min-width:16px;
 	height:16px;
