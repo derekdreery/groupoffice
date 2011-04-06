@@ -546,22 +546,20 @@ class imap_base {
 				$fld = str_replace('_', '=20', $fld);
 				if (strtoupper($encoding) == 'B') {
 					$fld = base64_decode($fld);
-					$fld = String::to_utf8($fld, $charset);
 				}
 				elseif (strtoupper($encoding) == 'Q') {
 					$fld = quoted_printable_decode($fld);
-					$fld = String::to_utf8($fld, $charset);
-				}else {
-					$fld = String::to_utf8($fld, $charset);
 				}
+				$fld = String::to_utf8($fld, $charset);
 
 				$string = str_replace($v, $fld, $string);
 			}
 		}else
-		{
+		{			
 			//go_debug('Using default charset for '.$string.': '.$this->default_charset);
 			$string=String::to_utf8($string, $this->default_charset);
 		}
+		$string=String::clean_utf8($string);
 		return str_replace(array('\\\\', '\\(', '\\)'), array('\\','(', ')'), $string);
 	}
 }
