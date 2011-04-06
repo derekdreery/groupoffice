@@ -1000,7 +1000,7 @@ class GO_CONFIG {
 	 */
 	public function set_default_session(){
 
-		if(!isset($_SESSION['GO_SESSION']['timezone']))
+		if(!isset($_SESSION['GO_SESSION']['security_token']))
 		{
 			$_SESSION['GO_SESSION']['decimal_separator'] = $this->default_decimal_separator;
 			$_SESSION['GO_SESSION']['thousands_separator'] = $this->default_thousands_separator;
@@ -1014,6 +1014,8 @@ class GO_CONFIG {
 			$_SESSION['GO_SESSION']['auth_token']=String::random_password('a-z,1-9', '', 30);
 			//some url's require this token to be appended
 			$_SESSION['GO_SESSION']['security_token']=String::random_password('a-z,1-9', '', 10);
+
+			go_debug('Setup new session '.$_SESSION['GO_SESSION']['security_token']);
 		}
 
 		
