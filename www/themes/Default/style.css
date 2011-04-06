@@ -8,7 +8,6 @@
 
 #msg-div {
     position:absolute;    
-    width:250px;
     z-index:20000;
 }
 
@@ -48,7 +47,7 @@
 	width:10px;
 }
 
-.go-html-formatted, .go-html-formatted p, .go-html-formatted li{
+.go-html-formatted, .go-html-formatted p, .go-html-formatted li, .go-html-formatted td{
 	font: 12px Arial, Helvetica Sans-serif;
 }
 
@@ -1042,10 +1041,10 @@ table.display-panel a:active
 }
 
 /* styles for groups */
-.x-grid-group-hd div {
+/*.x-grid-group-hd div {
 	position:relative;
 	height:16px;
-}
+}*/
 .ux-grow-action-item {
 	min-width:16px;
 	height:16px;

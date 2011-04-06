@@ -368,7 +368,7 @@ background-color: #F1F1F1 !important;
 
 .x-calGrid-selected {
 	background-color: #deebca !important;
-	z-index:30010 !important;
+	z-index:3001 !important;
 	border:1px solid #669900 !important;
 }
 
@@ -511,7 +511,7 @@ a.x-monthGrid-cell-day-text:hover{
 	position:absolute;
 	top:0pt;
 	width:100%;
-	z-index:30020;
+	z-index:3002;
 }
 
 

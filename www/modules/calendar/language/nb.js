@@ -116,3 +116,11 @@ GO.calendar.lang.sendInvitationUpdate='Vil du sende oppdatert møteinformasjon t
 GO.calendar.lang.sendCancellation='Vil du sende melding om avlysning til alle deltagere?';
 GO.calendar.lang.forthcomingAppointments='Kommende avtaler';
 GO.calendar.lang.quarterShort= 'KV';
+
+
+
+GO.calendar.lang.globalsettings_templatelabel= 'Mal';
+GO.calendar.lang.globalsettings_allchangelabel= 'Gi nytt navn til alle eksisterende';
+GO.calendar.lang.globalsettings_renameall= 'Er du sikker på at du vil gi nytt navn til alle brukernes standarkalendere?';
+GO.calendar.lang.publishICS='Publiser en iCalendarfil med forrige måned og alle framridige hendelser. ADVARSEL! Kalenderen vil være lesbar for alle.';
+GO.calendar.lang.addTimeRegistration='Importer til timeregistrering';

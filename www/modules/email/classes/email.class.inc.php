@@ -157,6 +157,20 @@ class email extends db {
 		$events->add_listener('login', __FILE__, 'email', 'login');
 		$events->add_listener('checker', __FILE__, 'email', 'check_mail');
 		$events->add_listener('key_changed', __FILE__, 'email', 'key_changed');
+		$events->add_listener('head', __FILE__, 'email', 'head');
+	}
+
+	public function head(){
+		global $GO_CONFIG, $GO_SECURITY;
+
+		$font_size = $GO_SECURITY->logged_in() ? $GO_CONFIG->get_setting('email_font_size', $GO_SECURITY->user_id) : false;
+		if(!$font_size)
+			$font_size='12px';
+
+		echo'<style>'.
+		'.message-body,.message-body p, .message-body li, .go-html-formatted td{'.
+			'font-size: '.$font_size.'; !important'.
+		'}</style>';
 	}
 
 	/**
@@ -244,6 +258,7 @@ class email extends db {
 			$GO_CONFIG->save_setting('email_skip_unknown_recipients', isset($_POST['skip_unknown_recipients']) ? '1' : '0', $GO_SECURITY->user_id);
 			$GO_CONFIG->save_setting('email_always_request_notification', isset($_POST['always_request_notification']) ? '1' : '0', $GO_SECURITY->user_id);
 			$GO_CONFIG->save_setting('email_always_respond_to_notifications', isset($_POST['always_respond_to_notifications']) ? '1' : '0', $GO_SECURITY->user_id);
+			$GO_CONFIG->save_setting('email_font_size', $_POST['font_size'], $GO_SECURITY->user_id);
 		}
 	}
 
@@ -270,7 +285,7 @@ class email extends db {
 									'password'=>$account['password']
 					);
 					$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/json.php', $params);
-					go_debug($server_response);
+					//go_debug($server_response);
 					//go_log(LOG_DEBUG, var_export($server_response, true));
 					return json_decode($server_response, true);
 				}
@@ -318,7 +333,7 @@ class email extends db {
 			$sql .= " GROUP BY ac.id ";
 		}
 
-		go_debug($sql);
+		//go_debug($sql);
 		
 		$sql .= " ORDER BY `".$this->escape($sort)."` ".$this->escape($dir);
 		

@@ -154,7 +154,7 @@ class imapauth
 					throw new Exception($GLOBALS['lang']['common']['badLogin']);
 				}
 			}catch(Exception $e){
-				go_debug('IMAPAUTH: Authentication to IMAP server failed '.$imap->last_error());
+				go_debug('IMAPAUTH: Authentication to IMAP server failed with Exception: '.$e->getMessage().' IMAP error:'.$imap->last_error());
 				$imap->clear_errors();
 
 				throw new Exception($GLOBALS['lang']['common']['badLogin']);
