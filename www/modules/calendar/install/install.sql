@@ -199,6 +199,7 @@ CREATE TABLE IF NOT EXISTS `cal_groups` (
   `user_id` int(11) NOT NULL default '0',
   `name` varchar(50) default NULL,
   `fields` varchar(255) NOT NULL,
+  `show_not_as_busy` tinyint(1) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
