@@ -285,7 +285,7 @@ class email extends db {
 									'password'=>$account['password']
 					);
 					$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/json.php', $params);
-					go_debug($server_response);
+					//go_debug($server_response);
 					//go_log(LOG_DEBUG, var_export($server_response, true));
 					return json_decode($server_response, true);
 				}
@@ -333,7 +333,7 @@ class email extends db {
 			$sql .= " GROUP BY ac.id ";
 		}
 
-		go_debug($sql);
+		//go_debug($sql);
 		
 		$sql .= " ORDER BY `".$this->escape($sort)."` ".$this->escape($dir);
 		
