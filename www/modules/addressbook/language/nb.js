@@ -121,3 +121,6 @@ GO.addressbook.lang.crn='CRN';
 GO.addressbook.lang.iban='IBAN';
 GO.addressbook.lang.unknownEmail= 'Ukjent e-postadresse';
 GO.addressbook.lang.strUnknownEmail= 'Ukjent e-postadresse. Vil du legge den til en ny kontaktperson, oppdatere en eksisterende kontaktperson, eller avbryte?';
+GO.addressbook.lang.globalsettings_templatelabel= 'Mal';
+GO.addressbook.lang.globalsettings_allchangelabel= 'Endre alle?';
+GO.addressbook.lang.globalsettings_renameall= 'Gi nytt navn til alle?';

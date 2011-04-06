@@ -55,3 +55,6 @@ GO.tasks.lang.overDue='Forsinkede';
 GO.tasks.lang.futureTasks='Framtidige';
 GO.tasks.lang.all='Alle';
 GO.tasks.lang.active='Aktive';
+GO.tasks.lang.globalsettings_templatelabel='Oppgavemal';
+GO.tasks.lang.globalsettings_allchangelabel='Endre eksisterende?';
+GO.tasks.lang.globalsettings_renameall= 'Gi nytt navn til alle?';

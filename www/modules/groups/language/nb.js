@@ -12,3 +12,4 @@ GO.groups.lang.owner = 'Eier';
 GO.groups.lang.lblNew = 'Ny';
 GO.groups.lang.newGroupName = 'Angi nytt gruppenavn';
 GO.groups.lang.searchAllUsers = 'Søk alle brukere';
+GO.groups.lang.adminOnly= 'Kun admin';
