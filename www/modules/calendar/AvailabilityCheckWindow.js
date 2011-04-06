@@ -125,7 +125,7 @@ GO.calendar.AvailabilityCheckWindow = function(config) {
 				layout : 'fit',
 				modal : false,
 				height : 400,
-				width : 800,
+				width : 900,
 				closeAction : 'hide',
 				title : GO.lang.strAvailability,
 				items : {
