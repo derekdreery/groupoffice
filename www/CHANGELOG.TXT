@@ -1,3 +1,18 @@
+06/04/2011 3.7.7
+- Resource busy status for unconfirmed booking is configurable per group
+- Fixed security token mismatch error in IE.
+- Fixed bug in saving statuses displayed in the Projects portlet on the summary page.
+- Maintenance text on login screen can be added in the settings module.
+- File versioning on Windows servers didn't work right.
+- Some e-mail messages containing garbage characters didn't display for the second time.
+- Small misalignment of amount in pdf invoices fixed.
+- Clicking on links in ticket dialog works now
+- Updated Norwegian translation
+- Change default font size in e-mail
+- New module to limit freebusy info access
+- Bug with shared accounts and inaccessible attachments fixed
+- Option to disable security token check $config['disable_security_token_check']=true;
+
 01/04/2011 3.7.6
 - Timeregistration and calllog had the same link id for customfields.
 - Small bug fixes
