@@ -1448,11 +1448,16 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 									for(var m=0; m<cf.length; m++)
 									{
 										if (typeof(resources[j][cf[m].dataname])!='undefined') {
+											if (cf[m].datatype=='checkbox' && resources[j][cf[m].dataname]==GO.lang.cmdNo) {
+												continue;
+											}
+											if (cf[m].datatype=='html' && resources[j][cf[m].dataname]=='<br>') {
+												continue;
+											}
 											newFormField = new GO.form.PlainField({
 												fieldLabel: cf[m].name,
 												value: resources[j][cf[m].dataname]
 											});
-
 											formFields.push(newFormField);
 										}
 									}
