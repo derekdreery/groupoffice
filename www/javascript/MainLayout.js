@@ -558,9 +558,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	createBox : function (t, s, width){
 
 			if(!width){
-				width=250;
+				width=400;
 			}
-			return ['<div class="msg" style="width:'+width+'px">',
+			return ['<div class="msg" style="width:'+width+'px;position:relative;margin:auto">',
 							'<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>',
 							'<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc"><h3>', t, '</h3>', s, '</div></div></div>',
 							'<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
