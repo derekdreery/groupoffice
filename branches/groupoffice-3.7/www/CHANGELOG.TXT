@@ -1,3 +1,6 @@
+07/04/2011 3.7.8
+- Small bug fixes
+
 06/04/2011 3.7.7
 - Resource busy status for unconfirmed booking is configurable per group
 - Fixed security token mismatch error in IE.
