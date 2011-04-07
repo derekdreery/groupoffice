@@ -40,7 +40,7 @@ try {
 				//for self-signed certificates
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-				curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+				@curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
 
 				$html = curl_exec($ch);
 			} else {
