@@ -7,7 +7,18 @@ if (isset($argv[1])) {
 
 ini_set('max_execution_time', 0);
 
-require('../www/Group-Office.php');
+//change the path to Group-Office.php if necessary
+require('Group-Office.php');
+
+//We'll import custom fields to this category
+$cf_category_name = 'Import';
+
+//path to csv file
+$path = './export__text.csv';
+
+$del = ',';
+$enc = '"';
+
 
 require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
@@ -19,14 +30,6 @@ $GO_MODULES->load_modules();
 require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
 $GO_LINKS = new GO_LINKS();
 
-
-$del = ',';
-$enc = '"';
-
-//We'll import custom fields to this category
-$cf_category_name = 'Import';
-
-$dir = '/home/sjmeut/Desktop';
 
 require_once($GO_MODULES->modules['addressbook']['class_path'] . 'addressbook.class.inc.php');
 $ab = new addressbook();
@@ -122,7 +125,7 @@ if (true)
 
 	//File::convert_to_utf8($dir . '/export_test.csv');
         
-	$fp = fopen($dir . '/export_test.csv', "r");
+	$fp = fopen($path, "r");
 	if (!$fp)
 		die('Failed to open import file');
 
