@@ -845,7 +845,7 @@ try
 						{
 							$addressbook = $ab->get_addressbook($book_id);
 							
-							if(($GO_MODULES->modules['addressbook']['permission_level'] < GO_SECURITY::MANAGE_PERMISSION) || ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
+							if(($GO_MODULES->modules['addressbook']['permission_level'] < GO_SECURITY::WRITE_PERMISSION) || ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
 							{
 								throw new AccessDeniedException();
 							}
