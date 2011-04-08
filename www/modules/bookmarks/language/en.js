@@ -17,5 +17,5 @@ GO.bookmarks.lang.clearLogo='Clear Logo';
 GO.bookmarks.lang.uploadLogo='Upload Logo';
 GO.bookmarks.lang.showAll='Show all';
 GO.bookmarks.lang.sharedCategory='Shared category';
-GO.bookmarks.lang.behaveAsModule='Behave as a module';
+GO.bookmarks.lang.behaveAsModule='Behave as a module (Browser reload required)';
 GO.bookmarks.lang.confirmDelete='Are you sure you want to delete this bookmark?';
