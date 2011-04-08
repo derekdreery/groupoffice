@@ -362,6 +362,8 @@ class imap extends imap_bodystruct {
 			$last_folder = $name;
 		}
 
+		//go_debug($folders);
+
 		ksort($folders);
 
 		return $folders;

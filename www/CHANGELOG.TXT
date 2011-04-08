@@ -1,4 +1,8 @@
 07/04/2011 3.7.8
+- Upgraded TCPDF to version 5.9.065
+- Bug where ID of a permission type was shown instead of name in the projects module.
+- German translation updated.
+- Norwegian translation updated.
 - Small bug fixes
 
 06/04/2011 3.7.7
