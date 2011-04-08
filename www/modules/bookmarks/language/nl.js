@@ -14,4 +14,4 @@ GO.bookmarks.lang.uploadLogo='Upload Logo';
 GO.bookmarks.lang.showAll='Toon alles';
 GO.bookmarks.lang.sharedCategory='Gedeelde categorie';
 GO.bookmarks.lang.behaveAsModule='Gedraag als een module';
-GO.bookmarks.lang.confirmDelete='Weet je zeker dat je deze bladwijzer wil verwijderen?';
+GO.bookmarks.lang.confirmDelete='Weet je zeker dat je deze bladwijzer wilt verwijderen?';
