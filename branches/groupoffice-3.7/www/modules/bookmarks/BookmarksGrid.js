@@ -102,10 +102,8 @@ Ext.extend(GO.bookmarks.BookmarksGrid, Ext.grid.GridPanel,{
 	// een bookmark geopend moet worden, intern of extern (javascript:GO.bookmarks.openBookmark)
 
 	urlrenderer: function(value, css, record, row, column,ds) {
-		var extern = record.data.open_extern;
-		var name = record.data.name;
-		var content = record.data.content;
-		return ('<a class=normal-link href="javascript:GO.bookmarks.openBookmark(\''+ name +'\',\''+ content +'\',\''+ extern +'\');" target="">' + value + "</a>") ;
+                return ('<a class=normal-link href="javascript:GO.bookmarks.openBookmark(\''+ record +'\');" target="">' + value + "</a>") ;
+		//return ('<a class=normal-link href="javascript:GO.bookmarks.openBookmark(\''+ name +'\',\''+ content +'\',\''+ extern +'\');" target="">' + value + "</a>") ;
 	}
 
 
