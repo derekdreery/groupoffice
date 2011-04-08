@@ -811,6 +811,9 @@ class String {
 	public static function convert_html($html) {
 		global $GO_CONFIG;
 
+		//needed for very large strings when data is embedded in the html with an img tag
+		ini_set('pcre.backtrack_limit', (int)ini_get( 'pcre.backtrack_limit' )+ 1000000 );
+
 		//don't do this because it will mess up <pre></pre> tags
 		//$html = str_replace("\r", '', $html);
 		//$html = str_replace("\n",' ', $html);

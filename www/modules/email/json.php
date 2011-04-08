@@ -754,9 +754,6 @@ try {
 
 					$block_url = 'about:blank';//$GO_CONFIG->host.'ext/resources/images/default/s.gif';
 					$response['body'] = preg_replace("/<([^a]{1})([^>]*)(https?:[^>'\"]*)/iu", "<$1$2".$block_url, $response['body'], -1, $response['blocked_images']);
-
-					//$response['body'] = preg_replace("/<([^a]{1})([^>]*)https?:([^>]*)/iu", "<$1$2blocked:$3", $response['body'], -1, $response['blocked_images']);
-
 				}
 
 				$response['iCalendar'] = array();
