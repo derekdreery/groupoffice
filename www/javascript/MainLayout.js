@@ -509,16 +509,22 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		if(!this.tabPanel.items.map[panelId])
 		{
 			panel = GO.moduleManager.getPanel(moduleName);
-			panel.id = panelId;
-			this.tabPanel.add(panel);
+                        if(panel)
+                        {
+                                panel.id = panelId;
+                                this.tabPanel.add(panel);
 
-			/*if(!this.hintShown)
-			{
-				this.msg(GO.lang.closeApps, GO.lang.rightClickToClose);
-				this.hintShown=true;
-			}*/
+                                /*if(!this.hintShown)
+                                {
+                                        this.msg(GO.lang.closeApps, GO.lang.rightClickToClose);
+                                        this.hintShown=true;
+                                }*/
 
-			this.saveState();
+                                this.saveState();
+                        }else
+                        {
+                                return false;
+                        }
 
 		}else{
 			panel = this.tabPanel.items.map[panelId];
@@ -530,9 +536,15 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 	openModule : function(moduleName){
 
-		var panel = this.initModule(moduleName);		
-		panel.show();
-		return panel;		
+		var panel = this.initModule(moduleName);
+                if(panel)
+                {
+                        panel.show();
+                        return panel;
+                }else
+                {
+                        return false;
+                }
 	},
 	
 	removeLoadMask : function()

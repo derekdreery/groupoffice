@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `bm_bookmarks` (
   `logo` varchar(255) DEFAULT NULL,
   `public_icon` tinyint(1) NOT NULL,
   `open_extern` tinyint(1) NOT NULL,
+  `behave_as_module` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `category_id` (`category_id`),
