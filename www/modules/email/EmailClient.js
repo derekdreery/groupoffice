@@ -506,7 +506,22 @@ GO.email.EmailClient = function(config){
 				});
 			}
 		}
-	})];
+	}),{
+		iconCls:'btn-share',
+		text: GO.email.lang.shareFolder,
+		handler:function(){
+			if(!this.imapAclDialog)
+				this.imapAclDialog = new GO.email.ImapAclDialog();
+
+			var sm = this.treePanel.getSelectionModel();
+			var node = sm.getSelectedNode();
+
+			this.imapAclDialog.setParams(node.attributes.account_id,node.attributes.mailbox);
+			this.imapAclDialog.show();
+		},
+		scope:this
+
+	}];
 
 	
 	for(i=0;i<GO.email.extraTreeContextMenuItems.length;i++)
