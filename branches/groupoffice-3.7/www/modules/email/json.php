@@ -1412,6 +1412,28 @@ try {
 				}
 				break;
 
+
+			case 'getacl':
+
+				$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
+
+				if(isset($_POST['delete_keys'])) {
+					try {
+						$response['deleteSuccess']=true;
+						$delete_ids = json_decode($_POST['delete_keys']);
+						foreach($delete_ids as $id) {
+							$imap->delete_acl($_REQUEST['mailbox'], $id);
+						}
+					}catch(Exception $e) {
+						$response['deleteSuccess']=false;
+						$response['deleteFeedback']=$e->getMessage();
+					}
+				}
+
+				
+				$response['results']=$imap->get_acl($_REQUEST['mailbox']);
+				break;
+
 			/* {TASKSWITCH} */
 		}
 	}

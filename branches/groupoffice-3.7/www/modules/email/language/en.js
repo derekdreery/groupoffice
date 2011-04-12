@@ -199,3 +199,5 @@ GO.email.lang.icalendarDeleteEventConfirm='Are you sure you want to delete this 
 GO.email.lang.sending='Sending...';
 
 GO.email.lang.defaultFontSize = 'Default font size';
+
+GO.email.lang.shareFolder = 'Share folder';
