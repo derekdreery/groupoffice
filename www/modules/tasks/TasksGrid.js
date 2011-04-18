@@ -31,9 +31,16 @@ GO.tasks.TasksPanel = function(config)
 		}, this);
 
 		var fields ={
-			fields:['id', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name','priority','project_name'],
+			fields:['id', 'icon', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name','priority','project_name'],
 			columns:[this.checkColumn,
 			{
+				header:"&nbsp;",
+				width:23,
+				dataIndex: 'icon',
+				renderer: this.renderIcon,
+				hideable:false,
+				sortable:false
+			},{
 				id:'name',
 				header:GO.lang['strName'],
 				dataIndex: 'name',
@@ -201,8 +208,17 @@ GO.tasks.TasksPanel = function(config)
 
 Ext.extend(GO.tasks.TasksPanel, GO.grid.GridPanel, {
 
-	saveListenerAdded : true
+	saveListenerAdded : true,
 
-	
+	renderIcon : function(src, p, record) {
+		if(record.data['priority'])
+		{
+			if(record.data['priority'] > 1)
+				return '<div class="email-grid-icon btn-high-priority"></div>';
+
+			if(record.data['priority'] < 1)
+				return '<div class="email-grid-icon btn-low-priority"></div>';
+		}
+	}
 });
 
