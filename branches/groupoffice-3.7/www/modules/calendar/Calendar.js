@@ -10,7 +10,7 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
- 
+
 GO.calendar.formatQtip = function(data)
 {
 	var df = 'Y-m-d H:i';
@@ -425,7 +425,6 @@ GO.calendar.MainPanel = function(config){
 
 		this.calendar_name = GO.calendar.activePanel.store.reader.jsonData.calendar_name;
 		this.calendar_id = GO.calendar.activePanel.store.reader.jsonData.calendar_id;
-
 	},this);
 
 	this.monthGrid.store.on('load', function(){
@@ -556,9 +555,20 @@ GO.calendar.MainPanel = function(config){
 		
 		items: [this.daysGrid, this.monthGrid, this.viewGrid, this.listGrid]
 	});
-	
 
-						
+	this.daysGrid.store.on('load',function(store){
+		GO.calendar.calendar_bgs = store.reader.jsonData.calendar_bgs;
+		this.changeCalendarColors();
+	},this);
+	this.monthGrid.store.on('load',function(store){
+		GO.calendar.calendar_bgs = store.reader.jsonData.calendar_bgs;
+		this.changeCalendarColors();
+	},this);
+	this.listGrid.store.on('load',function(store){
+		GO.calendar.calendar_bgs = store.reader.jsonData.calendar_bgs;
+		this.changeCalendarColors();
+	},this);
+	
 	var tbar = [{
 		iconCls: 'btn-add',
 		text: GO.lang['cmdAdd'],
@@ -1141,6 +1151,21 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		});
 	},
 
+	changeCalendarColors : function() {
+		if (this.view_id>0 && this.owncolor) {
+			for (var i=0; i<this.calendarList.store.getAt(0).store.data.length; i++) {
+				if (i>0) {
+					this.calendarList.getView().getCell(i,1).style.backgroundColor = "#"+GO.calendar.calendar_bgs[i-1];
+				}
+			}
+		} else {
+			for (var i=0; i<this.calendarList.store.getAt(0).store.data.length; i++) {
+				var style = this.calendarList.getView().getCell(i,1).style;
+					this.calendarList.getView().getCell(i,1).style.backgroundColor = null;
+			}
+		}
+	},
+
 	/*
 	 * 
 	 * displayType: 'days', 'month', 'view'
@@ -1238,7 +1263,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		
 		
 		this.state.displayType=this.displayType;
-			
+
 		if(this.displayType!='view')
 		{
 			this.lastCalendarDisplayType=this.displayType;
