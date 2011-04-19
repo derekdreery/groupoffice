@@ -14,7 +14,7 @@ try{
 			{
 				try
 				{
-					if($GO_MODULES->modules['calllog']['permission_level'] < GO_SECURITY::MANAGE_PERMISSION)
+					if($GO_MODULES->modules['calllog']['permission_level'] < GO_SECURITY::WRITE_PERMISSION)
 					{
 						throw new AccessDeniedException();
 					}
