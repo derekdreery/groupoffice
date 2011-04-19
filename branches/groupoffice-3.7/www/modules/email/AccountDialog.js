@@ -446,7 +446,7 @@ GO.email.AccountDialog = function(config) {
 
 	});
 
-	this.permissionsTab = new GO.grid.PermissionsPanel();
+	this.permissionsTab = new GO.grid.PermissionsPanel({hideLevel:true});
 
 	//this.permissionsTab.disabled = false;
 
