@@ -221,7 +221,7 @@ try {
 					foreach($tasklists as $tasklist_id)
 					{
 						$tasklist = $tasks->get_tasklist($tasklist_id);
-						if($GO_MODULES->modules['tasks']['permission_level'] < GO_SECURITY::MANAGE_PERMISSION || $GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id']) < GO_SECURITY::DELETE_PERMISSION)
+						if($GO_MODULES->modules['tasks']['permission_level'] < GO_SECURITY::WRITE_PERMISSION || $GO_SECURITY->has_permission($GO_SECURITY->user_id, $tasklist['acl_id']) < GO_SECURITY::DELETE_PERMISSION)
 						{
 							throw new AccessDeniedException();
 						}
