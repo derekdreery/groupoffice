@@ -82,7 +82,7 @@ GO.calllog.MainPanel = function(config)
 		scope: this
 	}];
 
-	if(GO.settings.has_admin_permission)
+	if(GO.settings.modules.calllog.write_permission)
 	{
 		tbar.push({
 			iconCls: 'btn-delete',
