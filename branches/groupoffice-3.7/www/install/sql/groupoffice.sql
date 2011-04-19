@@ -20,7 +20,7 @@ CREATE TABLE `go_holidays` (
   `region` varchar(4) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `region` (`region`)
-) TYPE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `go_link_descriptions`;
 CREATE TABLE IF NOT EXISTS `go_link_descriptions` (
