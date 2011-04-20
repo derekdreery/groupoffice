@@ -239,6 +239,11 @@ GO.calendar.MainPanel = function(config){
 		store: this.resourcesStore,
 		cls: 'go-grid3-hide-headers',
 		autoScroll:true,
+    paging:true,
+    bbar: new GO.SmallPagingToolbar({
+			store:this.resourcesStore,
+			pageSize:parseInt(GO.settings['max_rows_list'])
+		}),
 		columns:[{
 			header:GO.lang.strName,
 			dataIndex: 'name',
