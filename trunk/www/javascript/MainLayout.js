@@ -509,16 +509,22 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 		if(!this.tabPanel.items.map[panelId])
 		{
 			panel = GO.moduleManager.getPanel(moduleName);
-			panel.id = panelId;
-			this.tabPanel.add(panel);
+                        if(panel)
+                        {
+                                panel.id = panelId;
+                                this.tabPanel.add(panel);
 
-			/*if(!this.hintShown)
-			{
-				this.msg(GO.lang.closeApps, GO.lang.rightClickToClose);
-				this.hintShown=true;
-			}*/
+                                /*if(!this.hintShown)
+                                {
+                                        this.msg(GO.lang.closeApps, GO.lang.rightClickToClose);
+                                        this.hintShown=true;
+                                }*/
 
-			this.saveState();
+                                this.saveState();
+                        }else
+                        {
+                                return false;
+                        }
 
 		}else{
 			panel = this.tabPanel.items.map[panelId];
@@ -530,9 +536,15 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 
 	openModule : function(moduleName){
 
-		var panel = this.initModule(moduleName);		
-		panel.show();
-		return panel;		
+		var panel = this.initModule(moduleName);
+                if(panel)
+                {
+                        panel.show();
+                        return panel;
+                }else
+                {
+                        return false;
+                }
 	},
 	
 	removeLoadMask : function()
@@ -558,9 +570,9 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	createBox : function (t, s, width){
 
 			if(!width){
-				width=250;
+				width=400;
 			}
-			return ['<div class="msg" style="width:'+width+'px">',
+			return ['<div class="msg" style="width:'+width+'px;position:relative;margin:auto">',
 							'<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>',
 							'<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc"><h3>', t, '</h3>', s, '</div></div></div>',
 							'<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',

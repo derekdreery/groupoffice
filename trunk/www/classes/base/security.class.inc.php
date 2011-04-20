@@ -119,6 +119,12 @@ class GO_SECURITY extends db {
 					$username = $c->decrypt($_COOKIE['GO_UN']);
 					$password = $c->decrypt($_COOKIE['GO_PW']);
 
+					//decryption might fail if mcrypt is not installed
+					if(!$username){
+						$username = $_COOKIE['GO_UN'];
+						$password = $_COOKIE['GO_PW'];
+					}
+
 					require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
 					$GO_AUTH = new GO_AUTH();
 

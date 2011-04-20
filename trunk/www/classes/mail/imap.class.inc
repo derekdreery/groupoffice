@@ -217,6 +217,38 @@ class imap extends imap_bodystruct {
 		return $this->capability;
 	}
 
+
+	public function get_acl($mailbox){
+
+		$mailbox = $this->utf7_encode(str_replace('"', '\"', $mailbox));
+		$this->clean($mailbox, 'mailbox');
+
+		$command = "GETACL $mailbox\r\n";
+		$this->send_command($command);
+		$response = $this->get_response(false, true);
+		
+		$ret = array();
+
+		foreach($response as $line)
+		{
+			if($line[0]=='*' && $line[1]=='ACL' && count($line)>3){
+				for($i=3,$max=count($line);$i<$max;$i+=2){
+					$ret[]=array('identifier'=>$line[$i],'permissions'=>$line[$i+1]);
+				}
+			}
+		}
+		
+		return $ret;
+	}
+
+	public function delete_acl($mailbox, $identifier){
+		$command = "DELETEACL $mailbox $identifier\r\n";
+		$this->send_command($command);
+		$response = $this->get_response();
+
+		return $this->check_response($response);
+	}
+
 	/**
 		* Get the delimiter that is used to delimit Mailbox names
 		*
@@ -361,6 +393,8 @@ class imap extends imap_bodystruct {
 
 			$last_folder = $name;
 		}
+
+		//go_debug($folders);
 
 		ksort($folders);
 

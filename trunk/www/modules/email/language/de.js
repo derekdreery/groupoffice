@@ -148,4 +148,4 @@ GO.email.lang.icalendarEventCreated='Termin wurde erstellt.';
 GO.email.lang.icalendarEventDeleted='Termin wurde gelöscht.';
 GO.email.lang.icalendarInvitationDeclined='Einladung wurde abgelehnt.';
 GO.email.lang.icalendarDeleteEventConfirm='Sind Sie sicher, dass Sie diesen Termin löschen wollen?';
-
+GO.email.lang.defaultFontSize = 'Standardschriftgröße';

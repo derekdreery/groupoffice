@@ -89,7 +89,7 @@ GO.bookmarks.BookmarksView = function(config){
 
 	this.DV.on('click',function( DV, index, node, e) {
 		var record = this.DV.getRecord(node); // waar hebben we op geklikt?
-		GO.bookmarks.openBookmark(record.get('name'),record.get('content'),record.get('open_extern'));
+		GO.bookmarks.openBookmark(record);
 	},this)
 
 	/*

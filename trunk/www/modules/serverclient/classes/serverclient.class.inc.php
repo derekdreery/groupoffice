@@ -163,7 +163,7 @@ class serverclient
 
 	public static function add_user($user, $random_password=false)
 	{
-		global $GO_MODULES, $GO_CONFIG;
+		global $GO_MODULES, $GO_CONFIG, $GO_SECURITY;
 		
 		go_debug(var_export($random_password, true));
 
@@ -196,6 +196,7 @@ class serverclient
 				$account['smtp_encryption']=$GO_CONFIG->serverclient_smtp_encryption;
 				$account['smtp_username']=$GO_CONFIG->serverclient_smtp_username;
 				$account['smtp_password']=$GO_CONFIG->serverclient_smtp_password;
+				$account['acl_id']=$GO_SECURITY->get_new_acl('email', $account['user_id']);
 
 				//go_debug(var_export($account, true));
 

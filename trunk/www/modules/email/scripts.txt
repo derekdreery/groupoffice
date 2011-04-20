@@ -21,3 +21,4 @@ modules/email/ContactsGrid.js
 modules/email/FindContactDialog.js
 modules/email/ReplaceEmailDialog.js
 modules/email/MessageDialog.js
+modules/email/ImapAclDialog.js

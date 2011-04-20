@@ -13,7 +13,13 @@ switch($_REQUEST['task']){
 		// Triggered when saving
 		if(isset($_REQUEST['save']) && $_REQUEST['save'] == 'true')
 		{
-			$GO_CONFIG->save_setting('login_screen_text', $_POST['login_screen_text']);
+
+			$text = $_POST['login_screen_text'];
+
+			if(preg_match("/^<br[^>]*>$/", $text))
+				$text="";
+
+			$GO_CONFIG->save_setting('login_screen_text', $text);
 			$GO_CONFIG->save_setting('login_screen_text_title', $_POST['login_screen_text_title']);
 
 			$GO_EVENTS->fire_event('save_global_settings', array(&$response));

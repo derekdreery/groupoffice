@@ -17,7 +17,7 @@ GO.bookmarks.groupingStore = new Ext.data.GroupingStore({
 			totalProperty: "total",
 			root: "results",
 			id: "id",
-		fields: ['id','category_id','category_name','user_id','name','content','description','logo','open_extern','write_permission','index','public_icon','thumb']
+		fields: ['id','category_id','category_name','user_id','name','content','description','logo','open_extern','write_permission','index','public_icon','thumb','behave_as_module']
 		}),
 		baseParams: {
 			task:'get_bookmarks'

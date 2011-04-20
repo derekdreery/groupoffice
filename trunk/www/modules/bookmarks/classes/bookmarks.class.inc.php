@@ -7,6 +7,37 @@
 
 class bookmarks extends db {
 
+        public function __on_load_listeners($events) {
+
+		$events->add_listener('inline_scripts', __FILE__, 'bookmarks','inline_scripts');
+
+	}
+
+	public static function inline_scripts()
+        {
+                global $GO_SECURITY;
+
+		$bookmarks = new bookmarks();
+
+                $bookmarks->get_authorized_bookmarks($GO_SECURITY->user_id);
+                while($bookmarks->next_record())
+                {
+                        $bookmark = $bookmarks->record;
+                        if($bookmark['behave_as_module'])
+                        {
+                                if(strlen($bookmark['name']) > 20)
+                                {
+                                        $name = substr($bookmark['name'], 0, 18).'..';
+                                }else
+                                {
+                                        $name = $bookmark['name'];
+                                }
+                                
+                                echo 'GO.moduleManager.addModule(\'bookmarks-id-'.$bookmark['id'].'\', GO.panel.IFrameComponent, {title : \''.String::escape_javascript($name).'\', url : \''.String::escape_javascript($bookmark['content']).'\'});';
+                        }
+                }
+	}
+
 	function thumbdir_images() {
 		$handler = opendir("icons");
 		$images = array();
@@ -75,7 +106,7 @@ class bookmarks extends db {
 		return $this->query("DELETE FROM bm_categories WHERE id=" . $this->escape($category_id));
 	}
 
-	function get_authorized_bookmarks($user_id, $query, $start=0, $offset=0, $category=0) {
+	function get_authorized_bookmarks($user_id, $query='', $start=0, $offset=0, $category=0) {
 
 		$sql = "SELECT ";
 		if ($offset > 0) {

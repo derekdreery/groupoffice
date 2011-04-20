@@ -9,6 +9,7 @@
 #msg-div {
     position:absolute;    
     z-index:20000;
+		width:800px;
 }
 
 

@@ -20,7 +20,7 @@ CREATE TABLE `go_holidays` (
   `region` varchar(4) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `region` (`region`)
-) TYPE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `go_link_descriptions`;
 CREATE TABLE IF NOT EXISTS `go_link_descriptions` (
@@ -295,7 +295,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `password` varchar(64) default NULL,
   `password_type` VARCHAR( 20 ) default NULL,
   `enabled` enum('0','1') NOT NULL default '1',
-  `first_name` varchar(50) default NULL,
+  `first_name` varchar(50) NOT NULL,
   `middle_name` varchar(50) default NULL,
   `last_name` varchar(100) default NULL,
   `initials` varchar(10) default NULL,

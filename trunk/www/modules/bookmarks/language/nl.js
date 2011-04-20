@@ -13,3 +13,5 @@ GO.bookmarks.lang.clearLogo='Wis logo';
 GO.bookmarks.lang.uploadLogo='Upload Logo';
 GO.bookmarks.lang.showAll='Toon alles';
 GO.bookmarks.lang.sharedCategory='Gedeelde categorie';
+GO.bookmarks.lang.behaveAsModule='Gedraag als een module (Browser herladen vereist)';
+GO.bookmarks.lang.confirmDelete='Weet je zeker dat je deze bladwijzer wilt verwijderen?';

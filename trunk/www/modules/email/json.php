@@ -754,9 +754,6 @@ try {
 
 					$block_url = 'about:blank';//$GO_CONFIG->host.'ext/resources/images/default/s.gif';
 					$response['body'] = preg_replace("/<([^a]{1})([^>]*)(https?:[^>'\"]*)/iu", "<$1$2".$block_url, $response['body'], -1, $response['blocked_images']);
-
-					//$response['body'] = preg_replace("/<([^a]{1})([^>]*)https?:([^>]*)/iu", "<$1$2blocked:$3", $response['body'], -1, $response['blocked_images']);
-
 				}
 
 				$response['iCalendar'] = array();
@@ -1459,6 +1456,28 @@ try {
 					unset($alias['signature']);
 					$response['results'][] = $alias;
 				}
+				break;
+
+
+			case 'getacl':
+
+				$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
+
+				if(isset($_POST['delete_keys'])) {
+					try {
+						$response['deleteSuccess']=true;
+						$delete_ids = json_decode($_POST['delete_keys']);
+						foreach($delete_ids as $id) {
+							$imap->delete_acl($_REQUEST['mailbox'], $id);
+						}
+					}catch(Exception $e) {
+						$response['deleteSuccess']=false;
+						$response['deleteFeedback']=$e->getMessage();
+					}
+				}
+
+				
+				$response['results']=$imap->get_acl($_REQUEST['mailbox']);
 				break;
 
 			/* {TASKSWITCH} */
