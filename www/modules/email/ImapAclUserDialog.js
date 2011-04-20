@@ -3,71 +3,112 @@ GO.email.ImapAclUserDialog = Ext.extend(GO.Window, {
 	initComponent : function(){
 
 		this.formPanel = new Ext.form.FormPanel({
+			autoHeight:true,
 			waitMsgTarget : true,
 			url : GO.settings.modules.email.url + 'action.php',
 			border : false,
 			baseParams : {
 				task : 'setacl',
 				account_id : 0,
-				mailbox:'',
-				identifier:''
+				mailbox:''
 			},
 			cls : 'go-form-panel',
-			items : []
+			items : [{
+					xtype:'textfield',
+					fieldLabel:GO.lang.strUsername,
+					name:'identifier',
+					anchor:'100%'
+			},{
+				xtype:'checkboxgroup',
+				fieldLabel:GO.lang.strPermissions,				
+				anchor:'100%',
+				columns:1,
+				items:[{
+						boxLabel:GO.email.lang.readPerm,
+						name:'read',
+						checked:true
+				},{
+						boxLabel:GO.email.lang.writePerm,
+						name:'write'
+				},{
+						boxLabel:GO.email.lang.deletePerm,
+						name:'delete'
+				},{
+						boxLabel:GO.email.lang.createMailboxPerm,
+						name:'createmailbox'
+				},{
+						boxLabel:GO.email.lang.deleteMailboxPerm,
+						name:'deletemailbox'
+				},{
+						boxLabel:GO.email.lang.adminPerm,
+						name:'admin'
+				}
+				]
+			}]
+			
 		});
 
 
 		Ext.apply(this, {
-			width:500,
-			height:400,
+			width:400,
+			autoHeight:true,
 			title:GO.email.lang.shareFolder,
-			layout:'fit',
-			items:[this.formPanel]
-		});
-		GO.email.ImapAclDialog.superclass.initComponent.call(this);
-	},
-
-	show : function(identifier) {
-		if (!this.rendered) {
-			this.render(Ext.getBody());
-		}
-		this.formPanel.form.reset();
-
-
-		if (this.alias_id > 0) {
-			this.formPanel.load({
-				url : GO.settings.modules.email.url
-				+ 'json.php',
-				waitMsg : GO.lang['waitMsgLoad'],
-				success : function(form, action) {
-					GO.email.ImapAclUserDialog.superclass.show
-					.call(this);
-				},
-				failure : function(form, action) {
-					Ext.Msg.alert(GO.lang['strError'],
-						action.result.feedback)
+			items:[this.formPanel],
+			buttons:[{
+				text : GO.lang['cmdOk'],
+				handler : function() {
+					this.submitForm();
 				},
 				scope : this
-			});
-		} else {
-			GO.email.ImapAclUserDialog.superclass.show.call(this);
+			},{
+				text : GO.lang['cmdClose'],
+				handler : function() {
+					this.hide();
+				},
+				scope : this
+			}]
+		});
+		GO.email.ImapAclDialog.superclass.initComponent.call(this);
+		this.addEvents({
+			save:true
+		});
+	},
+
+	focus : function(){
+		var f = this.formPanel.form.findField('identifier');
+		f.focus();
+	},
+	
+	setData : function(mailbox, account_id, record){
+		this.formPanel.baseParams.mailbox=mailbox;
+		this.formPanel.baseParams.account_id=account_id;
+
+		var f = this.formPanel.form.findField('identifier');
+		
+		if(record){
+			this.formPanel.form.setValues(record.json);			
+			f.setDisabled(true);
+			this.formPanel.baseParams.identifier=f.getValue();
+		}else{
+			this.formPanel.form.reset();
+			delete this.formPanel.baseParams.identifier;
+			f.setDisabled(false);
+			f.focus();
 		}
 	},
+
+
 	submitForm : function(hide) {
 		this.formPanel.form.submit({
 			url : GO.settings.modules.email.url + 'action.php',
 			params : {
-				'task' : 'save_alias'
+				'task' : 'setacl'
 			},
 			waitMsg : GO.lang['waitMsgSave'],
 			success : function(form, action) {
-				if (action.result.alias_id) {
-					this.setAliasId(action.result.alias_id);
-				}
-				this.fireEvent('save', this, this.alias_id);
-				if (hide) {
-					this.hide();
-				}
+
+				this.fireEvent('save', this);
+				this.hide();
 			},
 			failure : function(form, action) {
 				if (action.failureType == 'client') {

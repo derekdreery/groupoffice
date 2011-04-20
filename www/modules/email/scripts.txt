@@ -22,3 +22,4 @@ modules/email/FindContactDialog.js
 modules/email/ReplaceEmailDialog.js
 modules/email/MessageDialog.js
 modules/email/ImapAclDialog.js
+modules/email/ImapAclUserDialog.js

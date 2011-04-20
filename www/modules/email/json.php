@@ -93,6 +93,8 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 
 	$response = array();
 
+	
+
 	$count = $email->get_subscribed($account_id, $folder_id);
 
 	if($account_id>0 && !$count){
@@ -103,6 +105,8 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 		$email->synchronize_folders($account, $imap);
 		$count = $email->get_subscribed($account_id, $folder_id);
 	}
+
+	$cap = $imap->get_capability();
 
 	while($record = $email->next_record())
 	{
@@ -187,7 +191,8 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 							'expanded'=>isset($children),
 							'children'=>isset($children) ? $children : null,
 							'parentExpanded'=>$parentExpanded,
-							'cls'=>$email->f('no_select')==1 ? 'em-tree-node-noselect' : null
+							'cls'=>$email->f('no_select')==1 ? 'em-tree-node-noselect' : null,
+							'aclSupported'=>strpos($cap, 'ACL')
 			);
 		}else {
 			$response[] = array(
@@ -204,7 +209,8 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 							'expanded'=>true,
 							'children'=>isset($children) ? $children : array(),
 							'parentExpanded'=>$parentExpanded,
-							'cls'=>$email->f('no_select')==1 ? 'em-tree-node-noselect' : null
+							'cls'=>$email->f('no_select')==1 ? 'em-tree-node-noselect' : null,
+							'aclSupported'=>strpos($cap, 'ACL')
 			);
 		}
 	}
@@ -1432,6 +1438,15 @@ try {
 
 				
 				$response['results']=$imap->get_acl($_REQUEST['mailbox']);
+
+				foreach($response['results'] as &$record){
+					$record['read']=strpos($record['permissions'],'r')!==false;
+					$record['write']=strpos($record['permissions'],'w')!==false;
+					$record['delete']=strpos($record['permissions'],'t')!==false;
+					$record['createmailbox']=strpos($record['permissions'],'k')!==false;
+					$record['deletemailbox']=strpos($record['permissions'],'x')!==false;
+					$record['admin']=strpos($record['permissions'],'a')!==false;
+				}
 				break;
 
 			/* {TASKSWITCH} */

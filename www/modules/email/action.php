@@ -1435,6 +1435,39 @@ try {
 
 		break;
 
+	case 'setacl':
+
+				$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
+
+				$perms='';
+
+				//lrwstipekxacd
+
+				if(isset($_POST['read'])){
+					$perms .='lrs';
+				}
+
+				if(isset($_POST['write'])){
+					$perms .='wip';
+				}
+
+				if(isset($_POST['delete'])){
+					$perms .='te';
+				}
+
+				if(isset($_POST['createmailbox'])){
+					$perms .='k';
+				}
+				if(isset($_POST['deletemailbox'])){
+					$perms .='x';
+				}
+				if(isset($_POST['admin'])){
+					$perms .='a';
+				}
+
+				$response['success']=$imap->set_acl($_REQUEST['mailbox'], $_REQUEST['identifier'], $perms);
+				break;
+
 
 		/* {TASKSWITCH} */
 	}
