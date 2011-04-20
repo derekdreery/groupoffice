@@ -202,7 +202,7 @@ class imap extends imap_bodystruct {
 	 * @return <type>
 	 */
 
-	private function get_capability() {
+	public function get_capability() {
 		if (isset($_SESSION['GO_IMAP'][$this->server]['imap_capability'])) {
 			$this->capability=$_SESSION['GO_IMAP'][$this->server]['imap_capability'];
 		}else {
@@ -241,11 +241,22 @@ class imap extends imap_bodystruct {
 		return $ret;
 	}
 
+	public function set_acl($mailbox, $identifier, $permissions){
+
+		$mailbox = $this->utf7_encode(str_replace('"', '\"', $mailbox));
+		$this->clean($mailbox, 'mailbox');
+
+		$command = "SETACL $mailbox $identifier $permissions\r\n";
+		$this->send_command($command);
+
+		$response = $this->get_response();
+		return $this->check_response($response);
+	}
+
 	public function delete_acl($mailbox, $identifier){
 		$command = "DELETEACL $mailbox $identifier\r\n";
 		$this->send_command($command);
 		$response = $this->get_response();
-
 		return $this->check_response($response);
 	}
 
