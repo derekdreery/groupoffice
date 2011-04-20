@@ -122,6 +122,10 @@ margin:5px 2px;
 	background-image:url('images/16x16/show.png') !important;
 }
 
+.em-btn-share-mailbox {
+	background-image:url('images/16x16/share_mailbox.png') !important;
+}
+
 
 .ml-icon-attach {
 	background-image:url('images/16x16/attach.png') !important;

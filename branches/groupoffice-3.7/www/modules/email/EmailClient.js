@@ -506,8 +506,8 @@ GO.email.EmailClient = function(config){
 				});
 			}
 		}
-	}),{
-		iconCls:'btn-share',
+	}),this.shareBtn = new Ext.menu.Item({
+		iconCls:'em-btn-share-mailbox ',
 		text: GO.email.lang.shareFolder,
 		handler:function(){
 			if(!this.imapAclDialog)
@@ -516,12 +516,12 @@ GO.email.EmailClient = function(config){
 			var sm = this.treePanel.getSelectionModel();
 			var node = sm.getSelectedNode();
 
-			this.imapAclDialog.setParams(node.attributes.account_id,node.attributes.mailbox);
+			this.imapAclDialog.setParams(node.attributes.account_id,node.attributes.mailbox, node.text);
 			this.imapAclDialog.show();
 		},
 		scope:this
 
-	}];
+	})];
 
 	
 	for(i=0;i<GO.email.extraTreeContextMenuItems.length;i++)
@@ -549,6 +549,7 @@ GO.email.EmailClient = function(config){
 		var coords = e.getXY();
 
 		this.addFolderButton.setDisabled(!node.attributes.canHaveChildren);
+		this.shareBtn.setVisible(node.attributes.aclSupported);
 		this.treeContextMenu.showAt([coords[0], coords[1]]);
 	}, this);
 

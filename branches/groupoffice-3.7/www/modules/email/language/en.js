@@ -201,3 +201,10 @@ GO.email.lang.sending='Sending...';
 GO.email.lang.defaultFontSize = 'Default font size';
 
 GO.email.lang.shareFolder = 'Share folder';
+
+GO.email.lang.readPerm='Read';
+GO.email.lang.writePerm='Write';
+GO.email.lang.deletePerm='Delete';
+GO.email.lang.createMailboxPerm='Create mailbox';
+GO.email.lang.deleteMailboxPerm='Delete mailbox';
+GO.email.lang.adminPerm='Administrate';
