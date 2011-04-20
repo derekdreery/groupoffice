@@ -208,14 +208,20 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 				fieldLabel: GO.bookmarks.lang.title, 
 				anchor: '100%',
 				allowBlank: false
-			},{
+			},this.externCheck = new Ext.form.Checkbox({
 				name: 'open_extern',
 				xtype: 'checkbox',
 				boxLabel: GO.bookmarks.lang.extern,
 				hideLabel:true,
 				anchor: '100%',
 				checked:true
-			},
+			}),this.moduleCheck = new Ext.form.Checkbox({
+				name: 'behave_as_module',
+				xtype: 'checkbox',
+				boxLabel: GO.bookmarks.lang.behaveAsModule,
+				hideLabel:true,
+				anchor: '100%'
+			}),
 			{
 				name: 'description',
 				xtype: 'textarea',
@@ -238,6 +244,14 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 			})
 			]
 		});
+
+                this.moduleCheck.on('check', function(cb, checked)
+                {
+                        this.externCheck.setValue(0);
+                        this.externCheck.setDisabled(checked);
+
+                },this)
+                
 		this.items = [this.bookmarkPanel];
 		this.formPanel = new Ext.form.FormPanel({
 			baseParams : {

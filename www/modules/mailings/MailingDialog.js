@@ -201,8 +201,8 @@ Ext.extend(GO.mailings.MailingDialog, Ext.Window,{
 			  fieldLabel: GO.addressbook.lang.cmdFormLabelSalutation,
 			  value: GO.addressbook.lang.cmdSalutation+' '+GO.addressbook.lang.cmdSir+'/'+GO.addressbook.lang.cmdMadam
 			},this.selectUser = new GO.form.SelectUser({
-				fieldLabel: GO.lang['strUser'],
-				disabled: !GO.settings.modules['addressbook']['write_permission'],
+				fieldLabel:GO.lang.strOwner,
+				disabled: !GO.settings.has_admin_permission,
 				value: GO.settings.user_id,
 				anchor: '100%'
 			})]

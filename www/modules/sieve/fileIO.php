@@ -22,6 +22,9 @@ $email = new email();
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
+$GO_CONFIG->sieve_port = empty($GO_CONFIG->sieve_port) ? 2000 : $GO_CONFIG->sieve_port;
+$GO_CONFIG->sieve_usetls = empty($GO_CONFIG->sieve_usetls) ? false : $GO_CONFIG->sieve_usetls;
+
 try
 {
 	switch($task)
@@ -32,9 +35,9 @@ try
 			if(!$sieve->connect($account['username'],
 							$account['password'],
 							$account['host'],
-							2000,
+							$GO_CONFIG->sieve_port,
 							null,
-							false,
+							$GO_CONFIG->sieve_usetls,
 							array(),
 							true))
 			{
@@ -87,9 +90,9 @@ try
 			if(!$sieve->connect($account['username'],
 							$account['password'],
 							$account['host'],
-							2000,
+							$GO_CONFIG->sieve_port,
 							null,
-							false,
+							$GO_CONFIG->sieve_usetls,
 							array(),
 							true))
 			{
@@ -111,9 +114,9 @@ try
 			if(!$sieve->connect($account['username'],
 							$account['password'],
 							$account['host'],
-							2000,
+							$GO_CONFIG->sieve_port,
 							null,
-							false,
+							$GO_CONFIG->sieve_usetls,
 							array(),
 							true))
 			{
@@ -151,9 +154,9 @@ try
 			if(!$sieve->connect($account['username'], 
 							$account['password'],
 							$account['host'],
-							2000,
+							$GO_CONFIG->sieve_port,
 							null,
-							false,
+							$GO_CONFIG->sieve_usetls,
 							array(),
 							true))
 			{
@@ -220,9 +223,9 @@ try
 			if(!$sieve->connect($account['username'],
 							$account['password'],
 							$account['host'],
-							2000,
+							$GO_CONFIG->sieve_port,
 							null,
-							false,
+							$GO_CONFIG->sieve_usetls,
 							array(),
 							true))
 			{
@@ -297,9 +300,9 @@ try
 			if(!$sieve->connect($account['username'],
 							$account['password'],
 							$account['host'],
-							2000,
+							$GO_CONFIG->sieve_port,
 							null,
-							false,
+							$GO_CONFIG->sieve_usetls,
 							array(),
 							true))
 			{
@@ -318,9 +321,9 @@ try
 			if(!$sieve->connect($account['username'],
 							$account['password'],
 							$account['host'],
-							2000,
+							$GO_CONFIG->sieve_port,
 							null,
-							false,
+							$GO_CONFIG->sieve_usetls,
 							array(),
 							true))
 			{

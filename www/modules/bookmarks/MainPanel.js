@@ -225,12 +225,21 @@ GO.bookmarks.showBookmarksDialog = function(config){
 }
 
 // Bookmark hyperlink openen, in GO tab of in browser tab
-GO.bookmarks.openBookmark = function(name,content,extern)
+GO.bookmarks.openBookmark = function(record)
 {
-	if (extern==0){
+        if(record.data.behave_as_module == '1')
+        {
+                var panel = GO.mainLayout.openModule('bookmarks-id-'+record.id);
+                if(panel)
+                {
+                        return true;
+                }
+        }
+
+	if(record.data.open_extern==0){
 		var websiteTab = new GO.panel.IFrameComponent( {
-			title : name,
-			url:    content,
+			title : record.data.name,
+			url:    record.data.content,
 			border:false,
 			closable:true
 		})
@@ -238,9 +247,8 @@ GO.bookmarks.openBookmark = function(name,content,extern)
 		GO.mainLayout.tabPanel.add(websiteTab) // open nieuwe tab in group-office
 		websiteTab.show();
 	}
-
 	else{
-		window.open(content) // open in nieuw browser tab
+		window.open(record.data.content) // open in nieuw browser tab
 	}
 	
 }
@@ -248,27 +256,30 @@ GO.bookmarks.openBookmark = function(name,content,extern)
 // bookmark verwijderen
 GO.bookmarks.removeBookmark = function(record)
 {
-	Ext.Ajax.request({
-		url: GO.settings.modules.bookmarks.url+'action.php',
-		params: {
-			'task':'delete_bookmark',
-			'bm_id': record.data.id,
-			'usr_id': record.data.user_id
-		},
-		scope:this,
+        if(confirm(GO.bookmarks.lang.confirmDelete))
+        {
+                Ext.Ajax.request({
+                        url: GO.settings.modules.bookmarks.url+'action.php',
+                        params: {
+                                'task':'delete_bookmark',
+                                'bm_id': record.data.id,
+                                'usr_id': record.data.user_id
+                        },
+                        scope:this,
 
-		callback: function(options, success, response){
-			var responseParams = Ext.decode(response.responseText);
-			if(!responseParams.deleteSuccess) 
-			{
-				Ext.MessageBox.alert(GO.lang['strError'],responseParams.deleteFeedback);
-			}
-			else
-			{
-				GO.bookmarks.groupingStore.remove(record);
-			}
-		}
-	})
+                        callback: function(options, success, response){
+                                var responseParams = Ext.decode(response.responseText);
+                                if(!responseParams.deleteSuccess)
+                                {
+                                        Ext.MessageBox.alert(GO.lang['strError'],responseParams.deleteFeedback);
+                                }
+                                else
+                                {
+                                        GO.bookmarks.groupingStore.remove(record);
+                                }
+                        }
+                })
+        }
 }
 
 // bookmark module toevoegen aan modulemanager

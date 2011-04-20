@@ -1147,7 +1147,7 @@ class email extends db {
 		}
 		
 		foreach($mailboxes as $mailbox) {
-			go_debug($mailbox);
+			//go_debug($mailbox);
 			$mailbox_names[] = $mailbox['name'];
 			$folder['account_id'] = $account['id'];
 			$parent = $this->get_parent($account, $mailbox['name'], $mailbox['delimiter']);
@@ -1160,7 +1160,7 @@ class email extends db {
 
 			//sometimes folders are unsubscribable but children are subscribed.
 			//in that case subscribe it in the GO database
-			if(!empty($parent['id']) && $parent['subscribed']=='0')
+			if($folder['subscribed'] && !empty($parent['id']) && $parent['subscribed']=='0')
 			{
 				$p['id']=$parent['id'];
 				$p['subscribed']='1';

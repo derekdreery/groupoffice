@@ -365,25 +365,18 @@ Ext.extend(GO.mailings.EmailTemplateDialog, Ext.Window,{
 			},
 			cls:'go-form-panel',			
 			layout:'form',
-			items:[this.selectUser = new GO.form.SelectUser({
-				fieldLabel: GO.lang['strUser'],
-				disabled: !GO.settings.modules['addressbook']['write_permission'],
-				value: GO.settings.user_id,
-				anchor: '100%'
-			}),{
+			items:[{
 				xtype: 'textfield',
 				name: 'name',
 				anchor: '100%',
 				allowBlank:false,
 				fieldLabel: GO.lang.strName
-			}/*,{
-				xtype:'checkbox',
-				boxLabel: GO.mailings.lang['cmdFormLabelReadNotification'],
-				hideLabel:true,
-				name: 'notification',
-				autoCreate:  { tag: "input", type: "checkbox", autocomplete: "off", value: '1' },
-				allowBlank: true
-			}*/,
+			},this.selectUser = new GO.form.SelectUser({
+				fieldLabel:GO.lang.strOwner,
+				disabled: !GO.settings.modules['addressbook']['write_permission'],
+				value: GO.settings.user_id,
+				anchor: '100%'
+			}),
 
 			this.emailHtmlEditor = new Ext.form.HtmlEditor({
 				hideLabel: true,

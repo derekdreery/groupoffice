@@ -691,6 +691,7 @@ GO.email.EmailComposer = function(config) {
 		
 		listeners:{
 			contextmenu:this.onAttachmentContextMenu,
+//			dblclick:this.openAttachment,
 			scope:this,
 			render:function(){
 				this.attachmentsView.getEl().tabIndex=0;
@@ -878,8 +879,11 @@ GO.email.EmailComposer = function(config) {
 	});
 
 	this.addEvents({
-		'send' : true,
-                'dialog_ready' :true
+    'dialog_ready' :true,
+//		attachmentDblClicked : true,
+		zipOfAttachmentsDblClicked : true,
+		'send' : true
+
 	});
 };
 
@@ -1654,6 +1658,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.attachmentsView.show();
 			this.attachmentsEl = Ext.get(this.attachmentsId);
 			this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
+//			this.attachmentsEl.on('dblclick', this.openAttachment, this);
 		}
 
 		this.setEditorHeight();
@@ -1704,6 +1709,23 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 		this.setEditorHeight();
 	},
+
+//	openAttachment :  function(e, item_id, target)
+//	{
+//		if(target.id.substr(0,this.attachmentsId.length)==this.attachmentsId)
+//		{
+//			var attachment_no = target.id.substr(this.attachmentsId.length+1);
+//
+//			if(attachment_no=='zipofall')
+//			{
+//				this.fireEvent('zipOfAttachmentsDblClicked');
+//			}else
+//			{
+//				var attachment = this.data.attachments[attachment_no];
+//				this.fireEvent('attachmentDblClicked', attachment, this);
+//			}
+//		}
+//	},
 
 	HandleResult : function (btn){
 		if (btn == 'yes'){

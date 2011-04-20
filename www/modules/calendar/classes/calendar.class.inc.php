@@ -1752,7 +1752,7 @@ class calendar extends db {
 			//may start exactly on the start of display.
 			$calculated_event['start_time']=$interval_start_time-1-$duration;
 
-			go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']));
+			//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']));
 
 			$last_time = 0;
 			$loops = 0;
@@ -1761,7 +1761,7 @@ class calendar extends db {
 
 				$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
 
-				go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
+				//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
 
 
 				//outside display
@@ -1788,7 +1788,7 @@ class calendar extends db {
 
 				//$last_time = $calculated_event['start_time'];
 			}
-			go_debug($this->events_sort);
+			//go_debug($this->events_sort);
 			//go_log(LOG_DEBUG, $calculated_event['name'].': eind');
 		}
 	}

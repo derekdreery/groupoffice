@@ -82,6 +82,7 @@ try {
 			$bookmark['content']=$_POST['content'];
 			$bookmark['description']=$_POST['description'];
 			$bookmark['open_extern']=isset($_POST['open_extern']) ? '1' : '0';
+                        $bookmark['behave_as_module']=isset($_POST['behave_as_module']) ? '1' : '0';
       $bookmark['logo']=$_POST['logo'];
 			$bookmark['public_icon']=$_POST['public_icon'];
 

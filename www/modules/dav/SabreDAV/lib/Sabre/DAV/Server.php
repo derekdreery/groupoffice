@@ -132,7 +132,7 @@ class Sabre_DAV_Server {
      *
      * @var bool 
      */
-    public $debugExceptions = true;
+    public $debugExceptions = false;
 
 
     /**
@@ -209,8 +209,6 @@ class Sabre_DAV_Server {
 
             }
             $headers['Content-Type'] = 'application/xml; charset=utf-8';
-
-			go_debug($DOM->saveXML());
             
             $this->httpResponse->sendStatus($httpCode);
             $this->httpResponse->setHeaders($headers);
