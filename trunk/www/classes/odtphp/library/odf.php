@@ -167,6 +167,10 @@ IMG;
 		//  $this->contentXml = str_replace(array_keys($this->vars), array_values($this->vars), $this->contentXml);
 		$this->contentXml = preg_replace('/{([^}]*)}/Ue', "odf::replacetag('$1', \$this->vars)", $this->contentXml);
 		$this->stylesXml = preg_replace('/{([^}]*)}/Ue', "odf::replacetag('$1', \$this->vars)", $this->stylesXml);
+
+		//clean up unprocessed tags
+		$this->stylesXml=preg_replace('/{([^}]*)}/U',"",$this->stylesXml);
+		$this->contentXml=preg_replace('/{([^}]*)}/U',"",$this->contentXml);
 	}
 
 	private function _fix_segments($xml) {
