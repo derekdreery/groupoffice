@@ -82,7 +82,7 @@ GO.tasks.TasksPanel = function(config)
 //					return str;
 //				}
 //			}
-			,{
+			{
 				header:GO.tasks.lang.dueDate,
 				dataIndex: 'due_time',
 				width:100
