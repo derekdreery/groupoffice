@@ -7,35 +7,59 @@
 
 class bookmarks extends db {
 
-        public function __on_load_listeners($events) {
+	public function __on_load_listeners($events) {
 
-		$events->add_listener('inline_scripts', __FILE__, 'bookmarks','inline_scripts');
-
+		$events->add_listener('inline_scripts', __FILE__, 'bookmarks', 'inline_scripts');
+		$events->add_listener('head', __FILE__, 'bookmarks', 'head');
 	}
 
-	public static function inline_scripts()
-        {
-                global $GO_SECURITY;
+	public static function head(){
+		//go-start-menu-bookmarks-id-5
+
+		global $GO_SECURITY, $GO_MODULES;
+
+		if($GO_SECURITY->logged_in()){
+			echo '<style>';
+
+			$bookmarks = new bookmarks();
+
+			$bookmarks->get_authorized_bookmarks($GO_SECURITY->user_id);
+			while ($bookmarks->next_record()) {
+				$bookmark = $bookmarks->record;
+				if ($bookmark['behave_as_module']) {
+
+					if ($bookmark['public_icon'] == '1') {
+						$bookmark['thumb'] = $GO_MODULES->modules['bookmarks']['url'].$bookmark['logo'];
+					} else {
+						$bookmark['thumb'] = get_thumb_url($bookmark['logo'], 16, 16, 0);
+					}
+
+					echo '.go-menu-icon-bookmarks-id-'.$bookmark['id'].'{background-image:url('.$bookmark['thumb'].')}';
+				}
+			}
+
+			echo '</style>';
+		}
+	}
+
+	public static function inline_scripts() {
+		global $GO_SECURITY;
 
 		$bookmarks = new bookmarks();
 
-                $bookmarks->get_authorized_bookmarks($GO_SECURITY->user_id);
-                while($bookmarks->next_record())
-                {
-                        $bookmark = $bookmarks->record;
-                        if($bookmark['behave_as_module'])
-                        {
-                                if(strlen($bookmark['name']) > 20)
-                                {
-                                        $name = substr($bookmark['name'], 0, 18).'..';
-                                }else
-                                {
-                                        $name = $bookmark['name'];
-                                }
-                                
-                                echo 'GO.moduleManager.addModule(\'bookmarks-id-'.$bookmark['id'].'\', GO.panel.IFrameComponent, {title : \''.String::escape_javascript($name).'\', url : \''.String::escape_javascript($bookmark['content']).'\'});';
-                        }
-                }
+		$bookmarks->get_authorized_bookmarks($GO_SECURITY->user_id);
+		while ($bookmarks->next_record()) {
+			$bookmark = $bookmarks->record;
+			if ($bookmark['behave_as_module']) {
+				if (strlen($bookmark['name']) > 30) {
+					$name = substr($bookmark['name'], 0, 28) . '..';
+				} else {
+					$name = $bookmark['name'];
+				}
+
+				echo 'GO.moduleManager.addModule(\'bookmarks-id-' . $bookmark['id'] . '\', GO.panel.IFrameComponent, {title : \'' . String::escape_javascript($name) . '\', url : \'' . String::escape_javascript($bookmark['content']) . '\'});';
+			}
+		}
 	}
 
 	function thumbdir_images() {

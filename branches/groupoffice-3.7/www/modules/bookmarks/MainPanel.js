@@ -16,7 +16,7 @@ Ext.namespace('GO.bookmarks');
 GO.bookmarks.getThumbUrl= function(logo, pub){
 	
 	if(GO.util.empty(pub)){
-		return BaseHref+"controls/thumb.php?src="+logo+"&h=32&w=32&pub=0";
+		return BaseHref+"controls/thumb.php?src="+logo+"&h=16&w=16&pub=0";
 	}else
 	{
 		return GO.settings.modules.bookmarks.url+logo;
@@ -64,7 +64,7 @@ GO.bookmarks.MainPanel = function(config){
 			select: function(combo,record) {
 				GO.bookmarks.groupingStore.baseParams['category']=record.data.id;
 				GO.bookmarks.groupingStore.load();
-				//this.setValue(record.data[this.displayField]);
+			//this.setValue(record.data[this.displayField]);
 			}
 		}
 	});
@@ -111,19 +111,19 @@ GO.bookmarks.MainPanel = function(config){
 	//------------------------------------------------------------------------------
 
 	config.tbar=new Ext.Toolbar({
-			cls:'go-head-tb',
-			items: [ 
-			{  //  bookmark toevoegen
-				iconCls: 'btn-add',
-				text: GO.lang['cmdAdd'],
-				cls: 'x-btn-text-icon',
-				handler: function(){
-					GO.bookmarks.showBookmarksDialog({
-						edit:0
-					});
-				},
-				scope:this
-			},/*,
+		cls:'go-head-tb',
+		items: [
+		{  //  bookmark toevoegen
+			iconCls: 'btn-add',
+			text: GO.lang['cmdAdd'],
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				GO.bookmarks.showBookmarksDialog({
+					edit:0
+				});
+			},
+			scope:this
+		},/*,
 			{ //  bookmark verwijderen (alleen in grid)
 				iconCls: 'btn-delete',
 				text: GO.lang['cmdDelete'],
@@ -137,28 +137,28 @@ GO.bookmarks.MainPanel = function(config){
 				scope:this
 			},*/
 
-			// categorieen beheren
-			{
-				iconCls: 'no-btn-categories',
-				text: GO.bookmarks.lang.administrateCategories,
-				cls: 'x-btn-text-icon',
-				handler: function(){
-					if(!this.categoriesDialog)
-					{
-						this.categoriesDialog = new GO.bookmarks.ManageCategoriesDialog({
-							listeners:{
-								close:function(){
-								},
-								scope:this
-							}
-						});
-						this.categoriesDialog.on('change', function(){
-							}, this);
-					}
-					this.categoriesDialog.show();
-				},
-				scope: this
-			}/*,
+		// categorieen beheren
+		{
+			iconCls: 'no-btn-categories',
+			text: GO.bookmarks.lang.administrateCategories,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				if(!this.categoriesDialog)
+				{
+					this.categoriesDialog = new GO.bookmarks.ManageCategoriesDialog({
+						listeners:{
+							close:function(){
+							},
+							scope:this
+						}
+					});
+					this.categoriesDialog.on('change', function(){
+						}, this);
+				}
+				this.categoriesDialog.show();
+			},
+			scope: this
+		}/*,
 			{ // schakelen tussen dataview en grid
 				text: GO.bookmarks.lang.thumbnails,
 				iconCls: 'btn-thumbnails',
@@ -169,7 +169,7 @@ GO.bookmarks.MainPanel = function(config){
 				},
 				scope:this
 			}*/
-			]
+		]
 	});
  
 	config.layout='fit';
@@ -221,20 +221,20 @@ GO.bookmarks.showBookmarksDialog = function(config){
 			}
 		});
 	}
-  this.bookmarksDialog.show(config);
+	this.bookmarksDialog.show(config);
 }
 
 // Bookmark hyperlink openen, in GO tab of in browser tab
 GO.bookmarks.openBookmark = function(record)
 {
-        if(record.data.behave_as_module == '1')
-        {
-                var panel = GO.mainLayout.openModule('bookmarks-id-'+record.id);
-                if(panel)
-                {
-                        return true;
-                }
-        }
+	if(record.data.behave_as_module == '1')
+	{
+		var panel = GO.mainLayout.openModule('bookmarks-id-'+record.id);
+		if(panel)
+		{
+			return true;
+		}
+	}
 
 	if(record.data.open_extern==0){
 		var websiteTab = new GO.panel.IFrameComponent( {
@@ -256,30 +256,30 @@ GO.bookmarks.openBookmark = function(record)
 // bookmark verwijderen
 GO.bookmarks.removeBookmark = function(record)
 {
-        if(confirm(GO.bookmarks.lang.confirmDelete))
-        {
-                Ext.Ajax.request({
-                        url: GO.settings.modules.bookmarks.url+'action.php',
-                        params: {
-                                'task':'delete_bookmark',
-                                'bm_id': record.data.id,
-                                'usr_id': record.data.user_id
-                        },
-                        scope:this,
+	if(confirm(GO.bookmarks.lang.confirmDelete))
+	{
+		Ext.Ajax.request({
+			url: GO.settings.modules.bookmarks.url+'action.php',
+			params: {
+				'task':'delete_bookmark',
+				'bm_id': record.data.id,
+				'usr_id': record.data.user_id
+			},
+			scope:this,
 
-                        callback: function(options, success, response){
-                                var responseParams = Ext.decode(response.responseText);
-                                if(!responseParams.deleteSuccess)
-                                {
-                                        Ext.MessageBox.alert(GO.lang['strError'],responseParams.deleteFeedback);
-                                }
-                                else
-                                {
-                                        GO.bookmarks.groupingStore.remove(record);
-                                }
-                        }
-                })
-        }
+			callback: function(options, success, response){
+				var responseParams = Ext.decode(response.responseText);
+				if(!responseParams.deleteSuccess)
+				{
+					Ext.MessageBox.alert(GO.lang['strError'],responseParams.deleteFeedback);
+				}
+				else
+				{
+					GO.bookmarks.groupingStore.remove(record);
+				}
+			}
+		})
+	}
 }
 
 // bookmark module toevoegen aan modulemanager
