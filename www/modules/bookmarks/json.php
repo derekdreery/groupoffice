@@ -37,6 +37,10 @@ try {
 				curl_setopt($ch, CURLOPT_HEADER, 0);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
+				//pretend to be ff4
+				$useragent="Mozilla/5.0 (X11; Linux x86_64; rv:2.0) Gecko/20100101 Firefox/4.0";
+				curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+
 				//for self-signed certificates
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
@@ -87,6 +91,21 @@ try {
 				$response['title'] = $match ? preg_replace('/\s+/', ' ', trim($match[1])) : '';
 			}
 
+			$contents = @file_get_contents($_POST['url'].'/favicon.ico');
+
+			if(!empty($contents)){
+				$relpath = 'public/bookmarks/';
+				$path = $GO_CONFIG->file_storage_path.$relpath;
+				if(!is_dir($path))
+					mkdir($path,0755, true);
+
+				$filename = str_replace('.','_',preg_replace('/https?:\/\//','', $_POST['url'])).'.ico';
+
+				file_put_contents($path.$filename, $contents);
+
+				$response['logo']=$relpath.$filename;
+			}
+
 			break;
 
 		case 'thumbdir':
@@ -129,7 +148,7 @@ try {
 					if ($bookmark['public_icon'] == '1') {
 						$bookmark['thumb'] = $GO_MODULES->modules['bookmarks']['url'] . $bookmark['logo'];
 					} else {
-						$bookmark['thumb'] = get_thumb_url($bookmark['logo'], 32, 32, 0);
+						$bookmark['thumb'] = get_thumb_url($bookmark['logo'], 16, 16, 0);
 					}
 				}
 				$bookmark['index'] = $index;

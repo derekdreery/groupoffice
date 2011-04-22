@@ -17,15 +17,17 @@ class Image {
 	var $original_image;
 	var $resized_image;
 	var $image_type;
+	var $load_success;
 
 	public function __construct($filename=false) {
 		if ($filename)
-			$this->load($filename);
+			$this->load_success=$this->load($filename);
 	}
 
 	public function load($filename) {
 		$image_info = getimagesize($filename);
 		$this->image_type = $image_info[2];
+		go_debug($this->image_type);
 		if ($this->image_type == IMAGETYPE_JPEG) {
 			$this->original_image = imagecreatefromjpeg($filename);
 		} elseif ($this->image_type == IMAGETYPE_GIF) {
