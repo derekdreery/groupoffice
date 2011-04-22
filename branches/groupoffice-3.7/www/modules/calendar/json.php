@@ -465,7 +465,6 @@ try {
 
 			$default_bg = array();
 			$index = 0;
-			$response = array('calendar_bgs'=>array());
 			foreach($calendars as $key=>$cal_id)
 			{
 				if($index == $default_colors_count)
@@ -474,7 +473,6 @@ try {
 				}
 
 				$default_bg[$cal_id] = $default_colors[$index];
-				$response['calendar_bgs'][] = $default_colors[$index];
 				$index++;
 			}
 
