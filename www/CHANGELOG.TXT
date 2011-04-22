@@ -1,3 +1,8 @@
+22/04/2011 3.7.10
+- Group-Office wouldn't start if local_listeners.php wasn't there.
+- Bookmarks module imports favicons and it uses 16x16 icons now so we can use
+  those in the start menu too.
+
 22/04/2011 3.7.9
 - IMAP ACL support
 - New local_listeners.php script that can be put into the config directory to add
