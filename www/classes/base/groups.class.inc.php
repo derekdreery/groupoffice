@@ -86,7 +86,7 @@ class GO_GROUPS extends db
 	{
 		if ( $user_id )
 		{
-			return $this->query("INSERT INTO go_users_groups (user_id,group_id)".
+			return $this->query("INSERT IGNORE INTO go_users_groups (user_id,group_id)".
 	 			 " VALUES ($user_id, $group_id)");
 		}
 		return false;
