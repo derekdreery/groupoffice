@@ -9,7 +9,8 @@ class modules {
 
 		$config_dir = dirname($config_file);
 
-		require_once $config_dir.'/local_listeners.php';
+		if(file_exists($config_dir.'/local_listeners.php'))
+			require_once $config_dir.'/local_listeners.php';
 
 	}
 }
