@@ -38,7 +38,7 @@ try {
 		case 'startup':
 
 			$_REQUEST['start']=0;
-			$_REQUEST['limit']=$_SESSION['GO_SESSION']['max_rows_list'];
+			$_REQUEST['limit']=50;
 			
 			$cal->get_views_json($response['views']);
 			$cal->get_calendars_json($response['calendars']);
