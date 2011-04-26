@@ -60,12 +60,36 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 		$user_id=$gouser['id'];
 		echo "User ".$gouser['username']." already exists\n";
 
-		if($gouser['enabled']=='1' && $user['enabled']=='0'){
-			$args=array($gouser);
+//		if($gouser['enabled']=='1' && $user['enabled']=='0'){
+//			$args=array($gouser);
+//
+//			//for later
+//			//$GO_EVENTS->fire_event('user_delete', $args);
+//			//echo 'Disabling user: '.$gouser['username']."\n";
+//		}
 
-			//for later
-			//$GO_EVENTS->fire_event('user_delete', $args);
-			//echo 'Disabling user: '.$gouser['username']."\n";
+		if(!isset($entry['UniHGW-ServiceAgreement']) || $entry['UniHGW-ServiceAgreement']!="groupware"){
+			echo 'Disabling user: '.$gouser['username']."\n";
+
+//			require($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
+//			$cal = new calendar();
+//			$cal->user_delete($gouser);
+//
+//			require($GO_MODULES->modules['tasks']['class_path'].'tasks.class.inc.php');
+//			$t = new tasks();
+//			$t->user_delete($gouser);
+//
+//			require($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+//			$files = new files();
+//			$folder = $files->resolve_path('users/'.$gouser['username']);
+//			if($folder) {
+//				$files->delete_folder($folder);
+//
+//				$files->resolve_path('users/'.$gouser['username'], true);
+//			}
+
+
+			
 		}
 
 	}else
