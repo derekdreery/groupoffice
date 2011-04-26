@@ -136,6 +136,15 @@ class GO_CONFIG {
 	var $default_time_format='G:i';
 
 	/**
+	 * Default name formatting and sorting. Can be last_name or first_name
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $default_sort_name = "last_name";
+
+
+	/**
 	 * Default first day of the week 0=sunday 1=monday
 	 *
 	 * @var     string

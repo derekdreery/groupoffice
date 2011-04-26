@@ -849,7 +849,7 @@ class GO_USERS extends db
 			$user['sex'] = 'M';
 
 		if(!isset($user['sort_name']))
-			$user['sort_name'] = 'last_name';
+			$user['sort_name'] = $GO_CONFIG->default_sort_name;
 
 
 
