@@ -1,11 +1,11 @@
 /** ************************************************************
-	Ext.ux.TinyMCE v0.7-b1
+	Ext.ux.TinyMCE v0.8.5
 	ExtJS form field containing TinyMCE v3.
 
 	Author: Andrew Mayorov et al.
 	http://blogs.byte-force.com/xor
 
-	Copyright (c)2008 BYTE-force
+	Copyright (c)2008-2010 BYTE-force
 	www.byte-force.com
 
 	License: LGPLv2.1 or later
@@ -17,35 +17,20 @@
 
 	var tmceInitialized = false;
 
+	// Lazy references to classes. To be filled in the initTinyMCE method.
+	var WindowManager;
+	var ControlManager;
+
+	// Create a new Windows Group for the dialogs
+	/*var windowGroup = new Ext.WindowGroup();
+	windowGroup.zseed = 12000;*/
+
+
 	/** ----------------------------------------------------------
 	Ext.ux.TinyMCE
 	*/
-	Ext.ux.TinyMCE = Ext.extend(
+	Ext.ux.TinyMCE = Ext.extend( Ext.form.Field, {
 
-	// Constructor
-		function(cfg) {
-
-			var config = {
-				tinymceSettings: {
-					accessibility_focus: false
-				}
-			};
-
-			Ext.apply(config, cfg);
-
-			// Add events
-			this.addEvents({
-				"editorcreated": true
-			});
-
-			Ext.ux.TinyMCE.superclass.constructor.call(this, config);
-		},
-
-	// Base class
-		Ext.form.Field,
-
-	// Members
-		{
 		// TinyMCE Settings specified for this instance of the editor.
 		tinymceSettings: null,
 
@@ -67,6 +52,26 @@
 
 		/** ----------------------------------------------------------
 		*/
+		constructor: function(cfg) {
+
+			var config = {
+				tinymceSettings: {
+					accessibility_focus: false
+				}
+			};
+
+			Ext.apply(config, cfg);
+
+			// Add events
+			this.addEvents({
+				"editorcreated": true
+			});
+
+			Ext.ux.TinyMCE.superclass.constructor.call(this, config);
+		},
+
+		/** ----------------------------------------------------------
+		*/
 		initComponent: function() {
 			this.tinymceSettings = this.tinymceSettings || {};
 			Ext.ux.TinyMCE.initTinyMCE({ language: this.tinymceSettings.language });
@@ -84,7 +89,6 @@
 			Ext.ux.TinyMCE.superclass.onRender.call(this, ct, position);
 
 			// Fix size if it was specified in config
-			var el = this.getEl();
 			if (Ext.type(this.width) == "number") {
 				this.tinymceSettings.width = this.width;
 			}
@@ -105,7 +109,7 @@
 			}
 			this.wrapEl = this.el.wrap({ style: wrapElStyle });
 			this.actionMode = "wrapEl"; // Set action element to the new wrapper
-
+			this.positionEl = this.wrapEl;
 
 			var id = this.getId();
 
@@ -140,16 +144,19 @@
 				}
 
 				// Change window manager
-				ed.windowManager = new WindowManager(this.ed);
+				ed.windowManager = new WindowManager({
+					editor: this.ed,
+					manager: this.manager
+				});
 				// Patch css-style for validation body like ExtJS
 				Ext.get(ed.getContentAreaContainer()).addClass('patch-content-body');
 
 				// Event of focused body
-				Ext.Element.fly(s.content_editable ? ed.getBody() : (tinymce.isGecko ? ed.getDoc() : ed.getWin()))
+				Ext.Element.fly(s.content_editable ? ed.getBody() : ed.getWin())
 					.on("focus", this.onFocus, this);
 
 				// Event of blur body
-				Ext.Element.fly(s.content_editable ? ed.getBody() : (tinymce.isGecko ? ed.getDoc() : ed.getWin()))
+				Ext.Element.fly(s.content_editable ? ed.getBody() : ed.getWin())
 					.on("blur", this.onBlur, this,
 						this.inEditor && Ext.isWindows && Ext.isGecko ? { buffer: 10} : null
 					);
@@ -181,11 +188,11 @@
 				var size = this.getSize();
 				this.withEd( function() {
 					this._setEditorSize( size.width, size.height );
+
+					// Indicate that editor is created
+					this.fireEvent("editorcreated");
 				});
 			}).call( this );
-
-			// Indicate that editor is created
-			this.fireEvent("editorcreated");
 		},
 
 		/** ----------------------------------------------------------
@@ -224,8 +231,9 @@
 		/** ----------------------------------------------------------
 		*/
 		beforeDestroy: function() {
-			if (this.ed) tinyMCE.remove(this.ed);
-			Ext.ux.TinyMCE.superclass.beforeDestroy.call(this);
+			if( this.ed ) tinyMCE.remove( this.ed );
+			if( this.wrapEl ) Ext.destroy( this.wrapEl );
+			Ext.ux.TinyMCE.superclass.beforeDestroy.call( this );
 		},
 
 		/** ----------------------------------------------------------
@@ -288,9 +296,7 @@
 			if (this.disabled || !this.rendered) {
 				return false;
 			}
-			this.withEd(function() {
-				return this.ed.isDirty();
-			});
+			return this.ed && this.ed.initialized && this.ed.isDirty();
 		},
 
 		/** ----------------------------------------------------------
@@ -346,7 +352,7 @@
 			if (aw == 0 || ah == 0)
 				return;
 
-			if (this.rendered) {
+			if( this.rendered && this.isVisible() ) {
 				this.withEd(function() { this._setEditorSize( aw, ah ); });
 			}
 		},
@@ -356,14 +362,44 @@
 		*/
 		_setEditorSize: function( width, height ) {
 
-			if( height < 100 ) height = 100;
+			// We currently support only advanced theme resize
+			if( !this.ed.theme.AdvancedTheme ) return;
+
+			// Minimal width and height for advanced theme
+			if( width < 100 ) width = 100;
+			if( height < 129 ) height = 129;
 
 			// Set toolbar div width
-			var div = Ext.get(this.ed.id + "_xtbar");
-			if( div )
-				div.setWidth( width - 2 );
+			var edTable = Ext.get(this.ed.id + "_tbl"),
+				edIframe = Ext.get(this.ed.id + "_ifr"),
+				edToolbar = Ext.get(this.ed.id + "_xtbar");
 
-			this.ed.theme.resizeTo( width, height );
+			var toolbarWidth = width;
+			if( edTable )
+				toolbarWidth = width - edTable.getFrameWidth( "lr" );
+
+			var toolbarHeight = 0;
+			if( edToolbar ) {
+				toolbarHeight = edToolbar.getHeight();
+				var toolbarTd = edToolbar.findParent( "td", 5, true );
+				toolbarHeight += toolbarTd.getFrameWidth( "tb" );
+				edToolbar.setWidth( toolbarWidth );
+			}
+
+			var edStatusbarTd = edTable.child( ".mceStatusbar" );
+			var statusbarHeight = 0;
+			if( edStatusbarTd ) {
+				statusbarHeight += edStatusbarTd.getHeight();
+			}
+
+			var iframeHeight = height - toolbarHeight - statusbarHeight;
+			var iframeTd = edIframe.findParent( "td", 5, true );
+			if( iframeTd )
+				iframeHeight -= iframeTd.getFrameWidth( "tb" );
+
+			// Resize iframe and container
+			edTable.setSize( width, height );
+			edIframe.setSize( toolbarWidth, iframeHeight );
 		},
 
 		/** ----------------------------------------------------------
@@ -459,11 +495,220 @@
 		Should be set before first component would be created.
 		@static
 		*/
-		tinymcePlugins: "safari,pagebreak,style,layer,table,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
+		tinymcePlugins: "pagebreak,style,layer,table,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
 
+		/** ----------------------------------------------------------
+			Inits TinyMCE and other necessary dependencies.
+		*/
 		initTinyMCE: function(settings) {
 			if (!tmceInitialized) {
 
+				// Create lazy classes
+				/** ----------------------------------------------------------
+				WindowManager
+				*/
+				WindowManager = Ext.extend( tinymce.WindowManager, {
+
+					/** ----------------------------------------------------------
+						Config parameters:
+						editor - reference to TinyMCE intstance.
+						mangager - WindowGroup to use for the popup window. Could be empty.
+					*/
+					constructor: function( cfg ) {
+						WindowManager.superclass.constructor.call(this, cfg.editor);
+
+						// Set window group
+						this.manager = cfg.manager;
+					},
+
+					/** ----------------------------------------------------------
+					*/
+					alert: function(txt, cb, s) {
+						Ext.MessageBox.alert("", txt, function() {
+							if (!Ext.isEmpty(cb)) {
+								cb.call(this);
+							}
+						}, s);
+					},
+
+					/** ----------------------------------------------------------
+					*/
+					confirm: function(txt, cb, s) {
+						Ext.MessageBox.confirm("", txt, function(btn) {
+							if (!Ext.isEmpty(cb)) {
+								cb.call(this, btn == "yes");
+							}
+						}, s);
+					},
+
+					/** ----------------------------------------------------------
+					*/
+					open: function(s, p) {
+
+						s = s || {};
+						p = p || {};
+
+						if (!s.type)
+							this.bookmark = this.editor.selection.getBookmark('simple');
+
+						s.width = parseInt(s.width || 320);
+						s.height = parseInt(s.height || 240) + (tinymce.isIE ? 8 : 0);
+						s.min_width = parseInt(s.min_width || 150);
+						s.min_height = parseInt(s.min_height || 100);
+						s.max_width = parseInt(s.max_width || 2000);
+						s.max_height = parseInt(s.max_height || 2000);
+						s.movable = true;
+						s.resizable = true;
+						p.mce_width = s.width;
+						p.mce_height = s.height;
+						p.mce_inline = true;
+
+						this.features = s;
+						this.params = p;
+
+						var win = new Ext.Window(
+						{
+							title: s.name,
+							width: s.width,
+							height: s.height,
+							minWidth: s.min_width,
+							minHeight: s.min_height,
+							resizable: true,
+							maximizable: s.maximizable,
+							minimizable: s.minimizable,
+							modal: true,
+							stateful: false,
+							constrain: true,
+							manager: this.manager,
+							layout: "fit",
+							items: [
+								new Ext.BoxComponent({
+									autoEl: {
+										tag: 'iframe',
+										src: s.url || s.file
+									},
+									style : 'border-width: 0px;'
+								})
+							]
+						});
+
+						p.mce_window_id = win.getId();
+
+						win.show(null,
+							function() {
+								if (s.left && s.top)
+									win.setPagePosition(s.left, s.top);
+								var pos = win.getPosition();
+								s.left = pos[0];
+								s.top = pos[1];
+								this.onOpen.dispatch(this, s, p);
+							},
+							this
+						);
+
+						return win;
+					},
+
+					/** ----------------------------------------------------------
+					*/
+					close: function(win) {
+
+						// Probably not inline
+						if (!win.tinyMCEPopup || !win.tinyMCEPopup.id) {
+							WindowManager.superclass.close.call(this, win);
+							return;
+						}
+
+						var w = Ext.getCmp(win.tinyMCEPopup.id);
+						if (w) {
+							this.onClose.dispatch(this);
+							w.close();
+						}
+					},
+
+					/** ----------------------------------------------------------
+					*/
+					setTitle: function(win, ti) {
+
+						// Probably not inline
+						if (!win.tinyMCEPopup || !win.tinyMCEPopup.id) {
+							WindowManager.superclass.setTitle.call(this, win, ti);
+							return;
+						}
+
+						var w = Ext.getCmp(win.tinyMCEPopup.id);
+						if (w) w.setTitle(ti);
+					},
+
+					/** ----------------------------------------------------------
+					*/
+					resizeBy: function(dw, dh, id) {
+
+						var w = Ext.getCmp(id);
+						if (w) {
+							var size = w.getSize();
+							w.setSize(size.width + dw, size.height + dh);
+						}
+					},
+
+					/** ----------------------------------------------------------
+					*/
+					focus: function(id) {
+						var w = Ext.getCmp(id);
+						if (w) w.setActive(true);
+					}
+
+				});
+
+				/** ----------------------------------------------------------
+				ControlManager
+				*/
+				ControlManager = Ext.extend( tinymce.ControlManager, {
+
+					// Reference to ExtJS control Ext.ux.TinyMCE.
+					control: null,
+
+					/** ----------------------------------------------------------
+					*/
+					constructor: function(control, ed, s) {
+						this.control = control;
+						ControlManager.superclass.constructor.call(this, ed, s);
+					},
+
+					/** ----------------------------------------------------------
+					*/
+					createDropMenu: function(id, s) {
+						// Call base method
+						var res = ControlManager.superclass.createDropMenu.call(this, id, s);
+
+						// Modify returned result
+						var orig = res.showMenu;
+						res.showMenu = function(x, y, px) {
+							orig.call(this, x, y, px);
+							Ext.fly('menu_' + this.id).setStyle("z-index", 200001);
+						};
+
+						return res;
+					},
+
+					/** ----------------------------------------------------------
+					*/
+					createColorSplitButton: function(id, s) {
+						// Call base method
+						var res = ControlManager.superclass.createColorSplitButton.call(this, id, s);
+
+						// Modify returned result
+						var orig = res.showMenu;
+						res.showMenu = function(x, y, px) {
+							orig.call(this, x, y, px);
+							Ext.fly(this.id + '_menu').setStyle("z-index", 200001);
+						};
+
+						return res;
+					}
+				});
+
+				// Init TinyMCE
 				var s = {
 					mode: "none",
 					plugins: Ext.ux.TinyMCE.tinymcePlugins,
@@ -482,190 +727,4 @@
 
 	Ext.ComponentMgr.registerType("tinymce", Ext.ux.TinyMCE);
 
-
-	/** ----------------------------------------------------------
-	WindowManager
-	*/
-	var WindowManager = Ext.extend(
-
-		function(editor) {
-			WindowManager.superclass.constructor.call(this, editor);
-		},
-
-		tinymce.WindowManager,
-
-		{
-			// Override WindowManager methods
-			alert: function(txt, cb, s) {
-				Ext.MessageBox.alert("", txt, function() {
-					if (!Ext.isEmpty(cb)) {
-						cb.call(this);
-					}
-				}, s);
-			},
-
-			confirm: function(txt, cb, s) {
-				Ext.MessageBox.confirm("", txt, function(btn) {
-					if (!Ext.isEmpty(cb)) {
-						cb.call(this, btn == "yes");
-					}
-				}, s);
-			},
-
-			open: function(s, p) {
-
-				s = s || {};
-				p = p || {};
-
-				if (!s.type)
-					this.bookmark = this.editor.selection.getBookmark('simple');
-
-				s.width = parseInt(s.width || 320);
-				s.height = parseInt(s.height || 240) + (tinymce.isIE ? 8 : 0);
-				s.min_width = parseInt(s.min_width || 150);
-				s.min_height = parseInt(s.min_height || 100);
-				s.max_width = parseInt(s.max_width || 2000);
-				s.max_height = parseInt(s.max_height || 2000);
-				s.movable = true;
-				s.resizable = true;
-				p.mce_width = s.width;
-				p.mce_height = s.height;
-				p.mce_inline = true;
-
-				this.features = s;
-				this.params = p;
-
-				var win = new Ext.Window(
-				{
-					title: s.name,
-					width: s.width,
-					height: s.height,
-					minWidth: s.min_width,
-					minHeight: s.min_height,
-					resizable: true,
-					maximizable: s.maximizable,
-					minimizable: s.minimizable,
-					modal: true,
-					stateful: false,
-					constrain: true,
-					layout: "fit",
-					items: [
-					new Ext.BoxComponent({
-						autoEl: {
-							tag: 'iframe',
-							src: s.url || s.file
-						},
-						style : 'border-width: 0px;'
-					})
-					]
-				});
-
-				p.mce_window_id = win.getId();
-
-				win.show(null,
-					function() {
-						if (s.left && s.top)
-							win.setPagePosition(s.left, s.top);
-						var pos = win.getPosition();
-						s.left = pos[0];
-						s.top = pos[1];
-						this.onOpen.dispatch(this, s, p);
-					},
-					this
-				);
-
-				return win;
-			},
-
-			close: function(win) {
-
-				// Probably not inline
-				if (!win.tinyMCEPopup || !win.tinyMCEPopup.id) {
-					WindowManager.superclass.close.call(this, win);
-					return;
-				}
-
-				var w = Ext.getCmp(win.tinyMCEPopup.id);
-				if (w) {
-					this.onClose.dispatch(this);
-					w.close();
-				}
-			},
-
-			setTitle: function(win, ti) {
-
-				// Probably not inline
-				if (!win.tinyMCEPopup || !win.tinyMCEPopup.id) {
-					WindowManager.superclass.setTitle.call(this, win, ti);
-					return;
-				}
-
-				var w = Ext.getCmp(win.tinyMCEPopup.id);
-				if (w) w.setTitle(ti);
-			},
-
-			resizeBy: function(dw, dh, id) {
-
-				var w = Ext.getCmp(id);
-				if (w) {
-					var size = w.getSize();
-					w.setSize(size.width + dw, size.height + dh);
-				}
-			},
-
-			focus: function(id) {
-				var w = Ext.getCmp(id);
-				if (w) w.setActive(true);
-			}
-
-		}
-	);
-
-	/** ----------------------------------------------------------
-	ControlManager
-	*/
-	var ControlManager = Ext.extend(
-
-	// Constructor
-		function(control, ed, s) {
-			this.control = control;
-			ControlManager.superclass.constructor.call(this, ed, s);
-		},
-
-	// Base class
-		tinymce.ControlManager,
-
-	// Members
-		{
-		// Reference to ExtJS control Ext.ux.TinyMCE.
-		control: null,
-
-		createDropMenu: function(id, s) {
-			// Call base method
-			var res = ControlManager.superclass.createDropMenu.call(this, id, s);
-
-			// Modify returned result
-			var orig = res.showMenu;
-			res.showMenu = function(x, y, px) {
-				orig.call(this, x, y, px);
-				Ext.fly('menu_' + this.id).setStyle("z-index", 200001);
-			};
-
-			return res;
-		},
-
-		createColorSplitButton: function(id, s) {
-			// Call base method
-			var res = ControlManager.superclass.createColorSplitButton.call(this, id, s);
-
-			// Modify returned result
-			var orig = res.showMenu;
-			res.showMenu = function(x, y, px) {
-				orig.call(this, x, y, px);
-				Ext.fly(this.id + '_menu').setStyle("z-index", 200001);
-			};
-
-			return res;
-		}
-	});
 })();
