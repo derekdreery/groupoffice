@@ -88,7 +88,7 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 
 	if($user_id>1){
 		$rec['user_id']=$user_id;
-		$db->insert_row('ldap_sync',$rec);
+		$db->replace_row('ldap_sync',$rec);
 	}
 
 }
