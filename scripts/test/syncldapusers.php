@@ -40,22 +40,22 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
             $entryID=ldap_next_entry($ldap->Link_ID,$entryID))
 {
 
-	echo $count++;
-	echo ': ';
+	#echo $count++;
+	#echo ': ';
 
 	//if($count==100)
 		//break;
 
 
 	$entry = ldap_get_attributes ($ldap->Link_ID,$entryID);
-	
-	
+
+
 
 	$user = $la->convert_ldap_entry_to_groupoffice_record($entry);
 
 	$gouser = $GO_USERS->get_user_by_username($user['username']);
 
-	
+
 	if($gouser){
 		$user_id=$gouser['id'];
 		echo "User ".$gouser['username']." already exists\n";
@@ -64,8 +64,8 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 			$args=array($gouser);
 
 			//for later
-			$GO_EVENTS->fire_event('user_delete', $args);
-			echo 'Disabling user: '.$gouser['username']."\n";
+			//$GO_EVENTS->fire_event('user_delete', $args);
+			//echo 'Disabling user: '.$gouser['username']."\n";
 		}
 
 	}else
@@ -86,11 +86,11 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 		}
 	}
 
-	if($user_id){
+	if($user_id>1){
 		$rec['user_id']=$user_id;
 		$db->insert_row('ldap_sync',$rec);
 	}
-	
+
 }
 
 $db_count = $GO_USERS->get_users();
@@ -113,7 +113,7 @@ if($div>1.05)
 
 $sql = "SELECT id,username FROM go_users u LEFT JOIN ldap_sync l ON u.id=l.user_id WHERE ISNULL(l.user_id) ORDER BY username ASC";
 $db->query($sql);
-while($r = $db->next_record()){	
+while($r = $db->next_record()){
 	echo "Deleting ".$r['username']." (id: ".$r['id'].")\n";
 	$GO_USERS->delete_user($r['id']);
 }
@@ -126,7 +126,7 @@ echo "Setting calendar entries older then one month to private\n";
 
 $sql = <<<EOF
 UPDATE cal_events INNER JOIN cal_calendars ON cal_calendars.id=cal_events.calendar_id
-SET private =  "1" 
+SET private =  "1"
 WHERE cal_calendars.name NOT LIKE 'gr\_%' AND ((
 start_time < UNIX_TIMESTAMP( NOW( ) - INTERVAL 1 MONTH ) AND rrule =  ''
 ) OR (
