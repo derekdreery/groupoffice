@@ -1,3 +1,7 @@
+.em-message p{
+	margin:0px;
+}
+
 .em-tree-node-noselect .x-tree-node-anchor span{
 	font-style:italic;
 	color:#666 !important;

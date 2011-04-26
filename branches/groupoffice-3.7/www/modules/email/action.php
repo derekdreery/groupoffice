@@ -543,6 +543,11 @@ try {
 								 $textpart->setMaxLineLength(1000);
 								 $swift->message->attach($textpart);*/
 					}else {
+
+						if($_POST['content_type']=='html') {
+							$body = '<html><head><style>.em-message p{margin:0px}</style></head><body>'.$body.'</body></html>';
+						}
+
 						$swift->set_body($body, $_POST['content_type']);
 					}
 
