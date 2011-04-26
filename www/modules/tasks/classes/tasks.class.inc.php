@@ -371,7 +371,7 @@ class tasks extends db
 				return false;
 			}else
 			{
-				$this->update_settings(array('user_id'=>$GO_SECURITY->user_id, 'default_tasklist_id'=>$list_id));
+				$this->update_settings(array('user_id'=>$user_id, 'default_tasklist_id'=>$list_id));
 				$tasklist=$this->get_tasklist($list_id);
 			}
 
