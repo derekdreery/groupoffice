@@ -13,6 +13,8 @@
 
 GO.email.EmailComposer = function(config) {
 	Ext.apply(config);
+
+	this.cls='em-composer';
 	
 	var priorityGroup = Ext.id();
 	
@@ -635,7 +637,8 @@ GO.email.EmailComposer = function(config) {
 	items.push(this.textEditor = new Ext.form.TextArea({
 		name: 'textbody',
 		anchor : '100% '+anchor,
-		hideLabel : true
+		hideLabel : true,
+		cls:'em-plaintext-body-field'
 	}));
 
 
