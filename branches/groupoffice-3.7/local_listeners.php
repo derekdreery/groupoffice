@@ -5,12 +5,14 @@
  */
 
 //Register the listener. This will be fired when a user is added
-$events->add_listener('add_user', __FILE__, '', 'local_add_user_listener');
+if(isset($events)){
+	$events->add_listener('add_user', __FILE__, '', 'local_add_user_listener');
+}
 
 //The function to be called. This example adds a user to the user group
 //domain.com. Where domain.com is the domain part of the user's e-mail address.
 
-function local_add_user_listener($user, $password){
+function local_add_user_listener($user){
 
 	global $GO_CONFIG, $GO_SECURITY;
 
