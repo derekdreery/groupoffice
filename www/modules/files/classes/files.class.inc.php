@@ -1671,7 +1671,7 @@ class files extends db {
 			}
 
 
-			$files = $this->get_files($folder_id, $sort, $dir);
+			$files = $this->get_files($folder_id, "mtime", $dir);
 			while($file=$this->next_record()) {
 				$extension = File::get_extension($file['name']);
 
