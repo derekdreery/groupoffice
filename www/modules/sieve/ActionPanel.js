@@ -11,6 +11,32 @@
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
 
+GO.sieve.ActionRecord = Ext.data.Record.create([
+	{
+		name: 'type',
+		type: 'string'
+	},
+	{
+		name: 'copy',
+		type: 'string'
+	},
+	{
+		name: 'target',
+		type: 'string'
+	},
+	{
+		name: 'days',
+		type: 'string'
+	},
+	{
+		name: 'addresses',
+		type: 'string'
+	},
+	{
+		name: 'reason',
+		type: 'string'
+	}]);
+
 GO.sieve.ActionPanel = function(config){
 	config = config || {};
 
@@ -84,31 +110,7 @@ GO.sieve.ActionPanel = function(config){
 		this.setVisibleFields(record, false);
 	},this);
 
-	var action_add = Ext.data.Record.create([
-	{
-		name: 'type',
-		type: 'string'
-	},
-	{
-		name: 'copy',
-		type: 'string'
-	},
-	{
-		name: 'target',
-		type: 'string'
-	},
-	{
-		name: 'days',
-		type: 'string'
-	},
-	{
-		name: 'addresses',
-		type: 'string'
-	},
-	{
-		name: 'reason',
-		type: 'string'
-	}]);
+	
 
 	this.btnAddAction = new Ext.Button({
 		text: GO.lang.cmdAdd,
@@ -182,16 +184,36 @@ GO.sieve.ActionPanel = function(config){
 
 			if(this.btnAddAction.getText() == GO.lang.cmdAdd)
 			{
-				record = new action_add(values);
+				record = new GO.sieve.ActionRecord(values);
 
 				var insertId = this.grid.store.getCount();
 
 				// Let the Stop stay on the end of the grid
-				if(this.grid.store.getCount() > 0)
-				{
-					if(this.grid.store.getAt(this.grid.store.getCount()-1).data.type == 'stop')
+//				if(this.grid.store.getCount() > 0)
+//				{
+					if(this.grid.store.getCount() > 0 && this.grid.store.getAt(this.grid.store.getCount()-1).data.type == 'stop'){
 						insertId = this.grid.store.getCount()-1;
-				}
+          }else
+          {
+            switch(this.cmbAction.getValue()){
+              case 'redirect_copy':
+              case 'vacation':
+              break;
+              default:
+                var stopRecord = new GO.sieve.ActionRecord({
+                      type:"stop",
+                      copy: false,
+                      target:"",
+                      days:"",
+                      addresses:"",
+                      reason:""
+                    });
+
+                this.grid.store.insert(insertId, stopRecord);
+                break;
+            }
+          }
+				//}
 
 				if(this.cmbAction.getValue() == 'vacation')
 					insertId = 0;

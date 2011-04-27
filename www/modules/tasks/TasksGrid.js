@@ -34,13 +34,6 @@ GO.tasks.TasksPanel = function(config)
 			fields:['id', 'icon', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name','priority','project_name'],
 			columns:[this.checkColumn,
 			{
-				header:"&nbsp;",
-				width:23,
-				dataIndex: 'icon',
-				renderer: this.renderIcon,
-				hideable:false,
-				sortable:false
-			},{
 				id:'name',
 				header:GO.lang['strName'],
 				dataIndex: 'name',
@@ -52,6 +45,13 @@ GO.tasks.TasksPanel = function(config)
 					return value;
 				}
 			},{
+				header:"&nbsp;",
+				width:23,
+				dataIndex: 'icon',
+				renderer: this.renderIcon,
+				hideable:false,
+				sortable:false
+			},{
 				header:GO.tasks.lang.tasklist,
 				dataIndex: 'tasklist_name',
 				width:60
@@ -59,28 +59,30 @@ GO.tasks.TasksPanel = function(config)
 				header:GO.tasks.lang.category,
 				dataIndex: 'category_name',
 				width:150
-			},{
-				header:GO.lang.priority,
-				dataIndex: 'priority',
-				width:70,
-				hidden:true,
-				renderer : function(value, cell, record) {
-					var str = '';
-					switch(value)
-					{
-						case '0':
-							str = GO.lang.priority_low;
-							break;
-						case '1':
-							str = GO.lang.priority_normal;
-							break;
-						case '2':
-							str = GO.lang.priority_high;
-							break;
-					}
-					return str;
-				}
-			},{
+			},
+//			{
+//				header:GO.lang.priority,
+//				dataIndex: 'priority',
+//				width:70,
+//				hidden:true,
+//				renderer : function(value, cell, record) {
+//					var str = '';
+//					switch(value)
+//					{
+//						case '0':
+//							str = GO.lang.priority_low;
+//							break;
+//						case '1':
+//							str = GO.lang.priority_normal;
+//							break;
+//						case '2':
+//							str = GO.lang.priority_high;
+//							break;
+//					}
+//					return str;
+//				}
+//			}
+			{
 				header:GO.tasks.lang.dueDate,
 				dataIndex: 'due_time',
 				width:100

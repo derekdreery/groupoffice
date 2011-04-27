@@ -136,6 +136,15 @@ class GO_CONFIG {
 	var $default_time_format='G:i';
 
 	/**
+	 * Default name formatting and sorting. Can be last_name or first_name
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $default_sort_name = "last_name";
+
+
+	/**
 	 * Default first day of the week 0=sunday 1=monday
 	 *
 	 * @var     string
@@ -695,7 +704,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.7.8';
+	var $version = '3.7.12';
 
 
 	/* The permissions mode to use when creating files
@@ -725,7 +734,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20110426';
+	var $mtime = '20110427';
 
 	#group configuration
 	/**

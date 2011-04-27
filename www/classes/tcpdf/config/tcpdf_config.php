@@ -26,6 +26,10 @@
  * @since 2004-10-27
  */
 
+
+//require Group-Office config
+require_once('../../Group-Office.php');
+
 // If you define the constant K_TCPDF_EXTERNAL_CONFIG, the following settings will be ignored.
 
 if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
@@ -81,13 +85,18 @@ if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
 	/**
 	 * cache directory for temporary files (full path)
 	 */
-	define ('K_PATH_CACHE', K_PATH_MAIN.'cache/');
+	//define ('K_PATH_CACHE', K_PATH_MAIN.'cache/');
+	define ('K_PATH_CACHE', $GO_CONFIG->file_storage_path.'tcpdfcache/');
+	
+	//Ensures dir exits
+	File::mkdir(K_PATH_CACHE);
 
 	/**
 	 * cache directory for temporary files (url path)
 	 */
 	define ('K_PATH_URL_CACHE', K_PATH_URL.'cache/');
-
+	//MS: Might be a problem for GO because cache folder is not public
+	
 	/**
 	 *images directory
 	 */

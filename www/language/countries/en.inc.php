@@ -234,6 +234,7 @@ $countries['VA'] = 'Vatican City State (Holy See)';
 $countries['VE'] = 'Venezuela';
 $countries['VG'] = 'Virgin Islands (British)';
 $countries['VI'] = 'Virgin Islands (U.S.)';
+$countries['VN'] = 'Vietnam';
 $countries['WF'] = 'Wallis and Futuna Islands';
 $countries['EH'] = 'Western Sahara';
 $countries['YE'] = 'Yemen';

@@ -79,41 +79,50 @@ if (!is_dir($cache_dir)) {
 $filename = basename($path);
 $file_mtime = filemtime($full_path);
 
-$cache_filename = str_replace(array('/','\\'),'_', dirname($path)).'_'.$w.'_'.$h.'_'.$lw.'_'.$lh.'_'.$pw.'_'.$lw;
-if($zc)
-{
+$cache_filename = str_replace(array('/', '\\'), '_', dirname($path)) . '_' . $w . '_' . $h . '_' . $lw . '_' . $lh . '_' . $pw . '_' . $lw;
+if ($zc) {
 	$cache_filename .= '_zc';
 }
 $cache_filename .= $filename;
 
+$readfile = $cache_dir . '/' . $cache_filename;
 
 if (!empty($_REQUEST['nocache']) || !file_exists($cache_dir . '/' . $cache_filename) || filemtime($cache_dir . '/' . $cache_filename) < $file_mtime) {
 	$image = new Image($full_path);
-	if ($zc) {
-		$image->zoomcrop($w, $h);
+	if (!$image->load_success) {
+		//failed. Stream original image
+		$readfile=$full_path;
 	} else {
-		if ($lw || $lh || $pw || $lw) {
-			//treat landscape and portrait differently
-			$landscape = $image->landscape();
-			if ($landscape) {
-				$w = $lw;
-				$h = $lh;
+
+
+		if ($zc) {
+			$image->zoomcrop($w, $h);
+		} else {
+			if ($lw || $lh || $pw || $lw) {
+				//treat landscape and portrait differently
+				$landscape = $image->landscape();
+				if ($landscape) {
+					$w = $lw;
+					$h = $lh;
+				} else {
+					$w = $pw;
+					$h = $ph;
+				}
+			}
+
+			if ($w && $h) {
+				$image->resize($w, $h);
+			} elseif ($w) {
+				$image->resizeToWidth($w);
 			} else {
-				$w = $pw;
-				$h = $ph;
+				$image->resizeToHeight($h);
 			}
 		}
 
-		if ($w && $h) {
-			$image->resize($w, $h);
-		} elseif ($w) {
-			$image->resizeToWidth($w);
-		} else {
-			$image->resizeToHeight($h);
-		}
-	}
+		$image->save($cache_dir . '/' . $cache_filename);
 
-	$image->save($cache_dir . '/' . $cache_filename);
+		
+	}
 }
 
 
@@ -121,8 +130,8 @@ header("Expires: " . date("D, j M Y G:i:s ", time() + (86400 * 365)) . 'GMT'); /
 header('Cache-Control: cache');
 header('Pragma: cache');
 $mime = File::get_mime($full_path);
-header('Content-Type: '.$mime);
-header('Content-Disposition: inline; filename="'.$cache_filename.'"');
+header('Content-Type: ' . $mime);
+header('Content-Disposition: inline; filename="' . $cache_filename . '"');
 header('Content-Transfer-Encoding: binary');
 
-readfile($cache_dir . '/' . $cache_filename);
+readfile($readfile);
