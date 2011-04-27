@@ -92,6 +92,12 @@ echo setting up dovecot
 chmod 600 /etc/dovecot/*.conf
 chown vmail /etc/dovecot/*.conf
 
+
+#For IMAP ACL support
+chown vmail:mail /var/lib/dovecot
+touch /var/lib/dovecot/shared-mailboxes.db
+chown vmail:mail /var/lib/dovecot/shared-mailboxes.db
+
 #check if user vacation exists. Exit code 0 means it exists
 if  ! id vacation 1>/dev/null 2>&1 ; then
 	echo setting up vacation
