@@ -1,3 +1,10 @@
+27/04/2011 3.7.11
+- E-mail editor was behaving strange in Internet Explorer
+- Sorting in projects detailed report grid.
+- New TCPDF version required cache folder for PNG files.
+- IMAP ACL enabled in Debian packages
+- Small bug fixes
+
 22/04/2011 3.7.10
 - Group-Office wouldn't start if local_listeners.php wasn't there.
 - Bookmarks module imports favicons and it uses 16x16 icons now so we can use
