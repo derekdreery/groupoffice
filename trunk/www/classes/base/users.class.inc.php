@@ -643,8 +643,8 @@ class GO_USERS extends db
 			{
 				$user['password']=$params[0]['password'];
 			}
-			$params = array($user);
-			$GO_EVENTS->fire_event('add_user', $params);						
+			$params = array($user, $user['password']);
+			$GO_EVENTS->fire_event('add_user', $params);
 		}else
 		{
 			$GO_EVENTS->fire_event('update_user', $params);
@@ -849,7 +849,7 @@ class GO_USERS extends db
 			$user['sex'] = 'M';
 
 		if(!isset($user['sort_name']))
-			$user['sort_name'] = 'last_name';
+			$user['sort_name'] = $GO_CONFIG->default_sort_name;
 
 
 

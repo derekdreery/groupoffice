@@ -104,7 +104,9 @@ class GO_EVENTS
 			{
 				require_once($listener['file']);
 				go_debug('Firing listener: '.$listener['class'].'::'.$listener['method']);
-				call_user_func_array(array($listener['class'], $listener['method']),$args);
+
+				$method = !empty($listener['class']) ? array($listener['class'], $listener['method']) : $listener['method'];
+				call_user_func_array($method,$args);
 			}		
 		}		
 	}

@@ -168,8 +168,8 @@ class email extends db {
 			$font_size='12px';
 
 		echo'<style>'.
-		'.message-body,.message-body p, .message-body li, .go-html-formatted td{'.
-			'font-size: '.$font_size.'; !important'.
+		'.message-body,.message-body p, .message-body li, .go-html-formatted td, .em-composer .em-plaintext-body-field{'.
+			'font-size: '.$font_size.';!important'.
 		'}</style>';
 	}
 

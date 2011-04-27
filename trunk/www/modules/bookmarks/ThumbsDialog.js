@@ -38,7 +38,7 @@ GO.bookmarks.ThumbsDialog = function(config){
 			
 			this.iconfield.setValue(this.chosenlogo); // pad naar logo
 			
-			config.dialog.formPanel.baseParams.public_icon=this.is_publiclogo; // public logo
+			//config.dialog.formPanel.baseParams.public_icon=this.is_publiclogo; // public logo
 			config.dialog.setIcon(this.chosenlogo, this.is_publiclogo);
 			this.hide();
 		},

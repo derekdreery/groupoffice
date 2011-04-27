@@ -345,17 +345,20 @@ if anyof (header :contains "X-Spam-Flag" "YES")
 		}
 
 		// replace all elsif with if+stop, we support only ifs
-		foreach ($script->content as $idx => $rule) {
-			if (!isset($script->content[$idx + 1])
-					|| preg_match('/^else|elsif$/', $script->content[$idx + 1]['type'])) {
-				// 'stop' not found?
-				if (!preg_match('/^(stop|vacation)$/', $rule['actions'][count($rule['actions']) - 1]['type'])) {
-					$script->content[$idx]['actions'][] = array(
-						'type' => 'stop'
-					);
-				}
-			}
-		}
+    //
+    // Stop rule is inserted client side now
+    // 
+//		foreach ($script->content as $idx => $rule) {
+//			if (!isset($script->content[$idx + 1])
+//					|| preg_match('/^else|elsif$/', $script->content[$idx + 1]['type'])) {
+//				// 'stop' not found?
+//				if (!preg_match('/^(stop|vacation)$/', $rule['actions'][count($rule['actions']) - 1]['type'])) {
+//					$script->content[$idx]['actions'][] = array(
+//						'type' => 'stop'
+//					);
+//				}
+//			}
+//		}
 
 		return $script;
 	}

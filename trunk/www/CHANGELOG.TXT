@@ -1,3 +1,21 @@
+27/04/2011 3.7.12
+- E-mail editor was behaving strange in Internet Explorer
+- Sorting in projects detailed report grid.
+- New TCPDF version required cache folder for PNG files.
+- IMAP ACL enabled in Debian packages
+- Small bug fixes
+
+22/04/2011 3.7.10
+- Group-Office wouldn't start if local_listeners.php wasn't there.
+- Bookmarks module imports favicons and it uses 16x16 icons now so we can use
+  those in the start menu too.
+
+22/04/2011 3.7.9
+- IMAP ACL support
+- New local_listeners.php script that can be put into the config directory to add
+  custom listeners. See: http://www.group-office.com/w/index.php/Event_handling#Adding_event_listeners_in_a_simple_way
+- Several bug fixes
+
 07/04/2011 3.7.8
 - Upgraded TCPDF to version 5.9.065
 - Bug where ID of a permission type was shown instead of name in the projects module.

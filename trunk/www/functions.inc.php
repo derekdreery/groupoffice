@@ -412,12 +412,13 @@ function get_thumb_url($path, $w=100,$h=100,$zc=1) {
 		
 
 		switch($extension) {
+			case 'ico':
 			case 'jpg':
 			case 'jpeg':
 			case 'png':
 			case 'gif':
 			case 'xmind':
-				return $GO_CONFIG->control_url.'thumb.php?src='.urlencode($path).'&w='.$w.'&h='.$h.'&zc='.$zc.'&filemtime='.filemtime($GO_CONFIG->file_storage_path.$path);
+				return $GO_CONFIG->control_url.'thumb.php?src='.urlencode($path).'&w='.$w.'&h='.$h.'&zc='.$zc.'&filemtime='.@filemtime($GO_CONFIG->file_storage_path.$path);
 				break;
 
 			case 'pdf':

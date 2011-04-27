@@ -93,7 +93,7 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 			this.formPanel.baseParams.id=0;
 			this.formPanel.form.reset();
 			this.selectCategory.selectFirst();
-			// leeg voorbeeld
+		// leeg voorbeeld
 		}
 
 		this.setIcon(logo, this.formPanel.baseParams.public_icon);
@@ -141,11 +141,13 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 			url += '&amp;time='+now.format('U');
 		}
 
+		this.formPanel.baseParams.public_icon=pub;
+
 		this.thumbExample.getEl().update(GO.bookmarks.thumbTpl.apply({
-				logo:url,
-				title:GO.bookmarks.lang.title,
-				description:GO.bookmarks.lang.description
-			}));		
+			logo:url,
+			title:GO.bookmarks.lang.title,
+			description:GO.bookmarks.lang.description
+		}));
 	},
 
 	buildForm : function (config) {
@@ -193,6 +195,11 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 
 								if(!GO.util.empty(result.title))
 									this.formPanel.form.findField('name').setValue(result.title);
+
+								if(result.logo){
+									this.setIcon(result.logo);
+									this.selectFile.setValue(result.logo);
+								}
 
 								this.el.unmask();
 							},
@@ -245,12 +252,12 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 			]
 		});
 
-                this.moduleCheck.on('check', function(cb, checked)
-                {
-                        this.externCheck.setValue(0);
-                        this.externCheck.setDisabled(checked);
+		this.moduleCheck.on('check', function(cb, checked)
+		{
+			this.externCheck.setValue(0);
+			this.externCheck.setDisabled(checked);
 
-                },this)
+		},this)
                 
 		this.items = [this.bookmarkPanel];
 		this.formPanel = new Ext.form.FormPanel({

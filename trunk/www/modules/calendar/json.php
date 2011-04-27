@@ -38,7 +38,7 @@ try {
 		case 'startup':
 
 			$_REQUEST['start']=0;
-			$_REQUEST['limit']=$_SESSION['GO_SESSION']['max_rows_list'];
+			$_REQUEST['limit']=50;
 			
 			$cal->get_views_json($response['views']);
 			$cal->get_calendars_json($response['calendars']);
@@ -480,7 +480,6 @@ try {
 
 			$default_bg = array();
 			$index = 0;
-			$response = array('calendar_bgs'=>array());
 			foreach($calendars as $key=>$cal_id)
 			{
 				if($index == $default_colors_count)
@@ -489,7 +488,6 @@ try {
 				}
 
 				$default_bg[$cal_id] = $default_colors[$index];
-				$response['calendar_bgs'][] = $default_colors[$index];
 				$index++;
 			}
 

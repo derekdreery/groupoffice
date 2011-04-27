@@ -188,8 +188,10 @@ class ldapauth extends imapauth {
 		global $GO_CONFIG;
 
 
+		$mapping = $this->get_mapping();
+
 		if(!isset($GO_CONFIG->ldap_search_template))
-			$GO_CONFIG->ldap_search_template='uid={username}';
+			$GO_CONFIG->ldap_search_template=$mapping['username'].'={username}';
 
 		$this->ldap->search(str_replace('{username}',$username, $GO_CONFIG->ldap_search_template), $this->ldap->PeopleDN);
 
