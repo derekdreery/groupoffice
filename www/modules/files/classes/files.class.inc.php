@@ -1645,11 +1645,11 @@ class files extends db {
 		return @unlink($path);
 	}
 
-	function get_content_json($folder_id, $sort='name', $dir='ASC', $filter=null) {
+	function get_content_json($folder_id, $sort='mtime', $dir='DESC', $filter=null) {
 		$results = array();
 		if($folder_id>0) {
 
-			$folders = $this->get_folders($folder_id, 'name', $dir,0,0,true);
+			$folders = $this->get_folders($folder_id, $sort, $dir,0,0,true);
 			while($folder=$this->next_record()) {
 				if($folder['acl_id']>0) {
 					$class='folder-shared';
@@ -1671,7 +1671,7 @@ class files extends db {
 			}
 
 
-			$files = $this->get_files($folder_id, "mtime", $dir);
+			$files = $this->get_files($folder_id, $sort, $dir);
 			while($file=$this->next_record()) {
 				$extension = File::get_extension($file['name']);
 
