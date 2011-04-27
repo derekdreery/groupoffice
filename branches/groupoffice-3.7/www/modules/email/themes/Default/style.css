@@ -1,7 +1,3 @@
-.em-message p{
-	margin:0px;
-}
-
 .em-tree-node-noselect .x-tree-node-anchor span{
 	font-style:italic;
 	color:#666 !important;
@@ -202,6 +198,10 @@ margin:5px 2px;
 .message-body{
 	padding: 5px;	
 }
+.message-body p, .em-composer p{
+	margin:0px;
+}
+
 
 .message-body a:link,.message-body a:active,.message-body a:visited{
 	color: blue;

@@ -1,4 +1,4 @@
-27/04/2011 3.7.11
+27/04/2011 3.7.12
 - E-mail editor was behaving strange in Internet Explorer
 - Sorting in projects detailed report grid.
 - New TCPDF version required cache folder for PNG files.
