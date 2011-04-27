@@ -246,16 +246,20 @@ GO.email.EmailComposer = function(config) {
 
 			if (!deployJava.isWebStartInstalled('1.5.0')) {
 				Ext.MessageBox.alert(GO.lang.strError,
-						GO.lang.noJava);
+					GO.lang.noJava);
 			} else {
 
 				//for updating attachments
 				GO.attachmentsStore = this.attachmentsStore;
 
-				 GO.util.popup({url:
-					 GO.settings.modules.email.url+'jupload/index.php',
-					 width : 660, height: 500, target:
-					 'jupload'});
+				GO.util.popup({
+					url:
+					GO.settings.modules.email.url+'jupload/index.php',
+					width : 660,
+					height: 500,
+					target:
+					'jupload'
+				});
 			}
 		},
 		scope : this
@@ -327,7 +331,7 @@ GO.email.EmailComposer = function(config) {
 		}
 	}),
 
-/*	this.toCombo = new Ext.ux.form.SuperBoxSelect({
+	/*	this.toCombo = new Ext.ux.form.SuperBoxSelect({
 		allowAddNewData:true,
 		fieldLabel : GO.email.lang.sendTo,
 		resizable: true,
@@ -520,7 +524,7 @@ GO.email.EmailComposer = function(config) {
 	}));
 
 	var plugins = [
-		imageInsertPlugin];
+	imageInsertPlugin];
 	
 	if(GO.email.pspellSupport)
 		plugins.push(spellcheckInsertPlugin);
@@ -536,7 +540,7 @@ GO.email.EmailComposer = function(config) {
 	items.push(this.htmlEditor = new Ext.form.HtmlEditor({
 		hideLabel : true,
 		name : 'body',
-		style: 'font: 12px Arial, Helvetica, sans-serif',
+		style: 'font: 12px Arial, Helvetica, sans-serif;',
 		anchor : '100% '+anchor,
 		plugins : plugins,
 		defaultFont:'arial',
@@ -560,10 +564,10 @@ GO.email.EmailComposer = function(config) {
 
 		
 		onFirstFocus : function(){
-        this.activated = true;
-        this.disableItems(this.readOnly);
-        if(Ext.isGecko){ // prevent silly gecko errors
-            /*this.win.focus();
+			this.activated = true;
+			this.disableItems(this.readOnly);
+			if(Ext.isGecko){ // prevent silly gecko errors
+				/*this.win.focus();
             var s = this.win.getSelection();
             if(!s.focusNode || s.focusNode.nodeType != 3){
                 var r = s.getRangeAt(0);
@@ -571,118 +575,123 @@ GO.email.EmailComposer = function(config) {
                 r.collapse(true);
                 this.deferFocus();
             }*/
-            try{
-                this.execCmd('useCSS', true);
-                this.execCmd('styleWithCSS', false);
-            }catch(e){}
-        }
-        this.fireEvent('activate', this);
-    },
-	createToolbar : Ext.form.HtmlEditor.prototype.createToolbar.createSequence(function(editor){
-		this.tb.enableOverflow=true;
-	}),
-	fixKeys : function(){ // load time branching for fastest keydown performance
-        if(Ext.isIE){
-            return function(e){
-                var k = e.getKey(),
-                    doc = this.getDoc(),
-                        r;
-                if(k == e.TAB){
-                    e.stopEvent();
-                    r = doc.selection.createRange();
-                    if(r){
-                        r.collapse(true);
-                        r.pasteHTML('&nbsp;&nbsp;&nbsp;&nbsp;');
-                        this.deferFocus();
-                    }
-                }else if(k == e.ENTER){
-//                    r = doc.selection.createRange();
-//                    if(r){
-//                        var target = r.parentElement();
-//                        if(!target || target.tagName.toLowerCase() != 'li'){
-//                            e.stopEvent();
-//                            r.pasteHTML('<br />');
-//                            r.collapse(false);
-//                            r.select();
-//                        }
-//                    }
-                }
-            };
-        }else if(Ext.isOpera){
-            return function(e){
-                var k = e.getKey();
-                if(k == e.TAB){
-                    e.stopEvent();
-                    this.win.focus();
-                    this.execCmd('InsertHTML','&nbsp;&nbsp;&nbsp;&nbsp;');
-                    this.deferFocus();
-                }
-            };
-        }else if(Ext.isWebKit){
-            return function(e){
-                var k = e.getKey();
-                if(k == e.TAB){
-                    e.stopEvent();
-                    this.execCmd('InsertText','\t');
-                    this.deferFocus();
-                }else if(k == e.ENTER){
-//                    e.stopEvent();
-//                    this.execCmd('InsertHtml','<br /><br />');
-//                    this.deferFocus();
-                }
-             };
-        }
-    }(),
+				try{
+					this.execCmd('useCSS', true);
+					this.execCmd('styleWithCSS', false);
+				}catch(e){}
+			}
+			this.fireEvent('activate', this);
+		},
+		createToolbar : Ext.form.HtmlEditor.prototype.createToolbar.createSequence(function(editor){
+			this.tb.enableOverflow=true;
+		}),
+
+		getDocMarkup : function(){
+			var h = Ext.fly(this.iframe).getHeight() - this.iframePad * 2;
+			return String.format('<html><head><style type="text/css">body{border: 0; margin: 0; padding: {0}px; height: {1}px; cursor: text}body p{margin:0px;}</style></head><body></body></html>', this.iframePad, h);
+		},
+		fixKeys : function(){ // load time branching for fastest keydown performance
+			if(Ext.isIE){
+				return function(e){
+					var k = e.getKey(),
+					doc = this.getDoc(),
+					r;
+					if(k == e.TAB){
+						e.stopEvent();
+						r = doc.selection.createRange();
+						if(r){
+							r.collapse(true);
+							r.pasteHTML('&nbsp;&nbsp;&nbsp;&nbsp;');
+							this.deferFocus();
+						}
+					}else if(k == e.ENTER){
+				//                    r = doc.selection.createRange();
+				//                    if(r){
+				//                        var target = r.parentElement();
+				//                        if(!target || target.tagName.toLowerCase() != 'li'){
+				//                            e.stopEvent();
+				//                            r.pasteHTML('<br />');
+				//                            r.collapse(false);
+				//                            r.select();
+				//                        }
+				//                    }
+				}
+				};
+			}else if(Ext.isOpera){
+				return function(e){
+					var k = e.getKey();
+					if(k == e.TAB){
+						e.stopEvent();
+						this.win.focus();
+						this.execCmd('InsertHTML','&nbsp;&nbsp;&nbsp;&nbsp;');
+						this.deferFocus();
+					}
+				};
+			}else if(Ext.isWebKit){
+				return function(e){
+					var k = e.getKey();
+					if(k == e.TAB){
+						e.stopEvent();
+						this.execCmd('InsertText','\t');
+						this.deferFocus();
+					}else if(k == e.ENTER){
+				//                    e.stopEvent();
+				//                    this.execCmd('InsertHtml','<br /><br />');
+				//                    this.deferFocus();
+				}
+				};
+			}
+		}(),
 		updateToolbar: function(){
 
-				/*
+			/*
 				 * I override the default function here to increase performance.
 				 * ExtJS syncs value every 100ms while typing. This is slow with large
 				 * html documents. I manually call syncvalue when the message is sent
 				 * so it's certain the right content is submitted.
 				 */
 
-        if(this.readOnly){
-            return;
-        }
+			if(this.readOnly){
+				return;
+			}
 
-        if(!this.activated){
-            this.onFirstFocus();
-            return;
-        }
+			if(!this.activated){
+				this.onFirstFocus();
+				return;
+			}
 
-        var btns = this.tb.items.map,
-            doc = this.getDoc();
+			var btns = this.tb.items.map,
+			doc = this.getDoc();
 
-        if(this.enableFont && !Ext.isSafari2){
-            var name = (doc.queryCommandValue('FontName')||this.defaultFont).toLowerCase();
-            if(name != this.fontSelect.dom.value){
-                this.fontSelect.dom.value = name;
-            }
-        }
-        if(this.enableFormat){
-            btns.bold.toggle(doc.queryCommandState('bold'));
-            btns.italic.toggle(doc.queryCommandState('italic'));
-            btns.underline.toggle(doc.queryCommandState('underline'));
-        }
-        if(this.enableAlignments){
-            btns.justifyleft.toggle(doc.queryCommandState('justifyleft'));
-            btns.justifycenter.toggle(doc.queryCommandState('justifycenter'));
-            btns.justifyright.toggle(doc.queryCommandState('justifyright'));
-        }
-        if(!Ext.isSafari2 && this.enableLists){
-            btns.insertorderedlist.toggle(doc.queryCommandState('insertorderedlist'));
-            btns.insertunorderedlist.toggle(doc.queryCommandState('insertunorderedlist'));
-        }
+			if(this.enableFont && !Ext.isSafari2){
+				var name = (doc.queryCommandValue('FontName')||this.defaultFont).toLowerCase();
+				if(name != this.fontSelect.dom.value){
+					this.fontSelect.dom.value = name;
+				}
+			}
+			if(this.enableFormat){
+				btns.bold.toggle(doc.queryCommandState('bold'));
+				btns.italic.toggle(doc.queryCommandState('italic'));
+				btns.underline.toggle(doc.queryCommandState('underline'));
+			}
+			if(this.enableAlignments){
+				btns.justifyleft.toggle(doc.queryCommandState('justifyleft'));
+				btns.justifycenter.toggle(doc.queryCommandState('justifycenter'));
+				btns.justifyright.toggle(doc.queryCommandState('justifyright'));
+			}
+			if(!Ext.isSafari2 && this.enableLists){
+				btns.insertorderedlist.toggle(doc.queryCommandState('insertorderedlist'));
+				btns.insertunorderedlist.toggle(doc.queryCommandState('insertunorderedlist'));
+			}
 
-        Ext.menu.MenuMgr.hideAll();
+			Ext.menu.MenuMgr.hideAll();
 
-				//This property is set in javascript/focus.js. When the mouse goes into
-				//the editor iframe it thinks it has lost the focus.
-				GO.hasFocus=true;
+			//This property is set in javascript/focus.js. When the mouse goes into
+			//the editor iframe it thinks it has lost the focus.
+			GO.hasFocus=true;
 
-        //this.syncValue();
-    }
+		//this.syncValue();
+		}
 	}));
 
 
@@ -712,15 +721,15 @@ GO.email.EmailComposer = function(config) {
 	this.attachmentsStore.on('remove', function()
 	{
 		
-	}, this);
+		}, this);
 
 	this.attachmentsStore.on('load', function()
 	{
 		if(!this.attachmentsView.isVisible() && this.attachmentsStore.data.length)
 		{
 			this.attachmentsView.show();
-			//this.attachmentsEl = Ext.get(this.attachmentsId);
-			//this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
+		//this.attachmentsEl = Ext.get(this.attachmentsId);
+		//this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
 		}
 		
 		this.setEditorHeight();
@@ -736,7 +745,7 @@ GO.email.EmailComposer = function(config) {
 			'</tpl>'+
 			'</div>',
 			'<div class="x-clear"></div>'
-		),
+			),
 		multiSelect:true,
 		autoHeight:true,
 		autoScroll:true,
@@ -746,13 +755,13 @@ GO.email.EmailComposer = function(config) {
 		
 		listeners:{
 			contextmenu:this.onAttachmentContextMenu,
-//			dblclick:this.openAttachment,
+			//			dblclick:this.openAttachment,
 			scope:this,
 			render:function(){
 				this.attachmentsView.getEl().tabIndex=0;
 				var map = new Ext.KeyMap(this.attachmentsView.getEl(),{
-					 key: Ext.EventObject.DELETE,
-					 fn: function(key, e){
+					key: Ext.EventObject.DELETE,
+					fn: function(key, e){
 						this.removeSelectedAttachments();
 					},
 					scope:this
@@ -776,7 +785,7 @@ GO.email.EmailComposer = function(config) {
 		items : items,
 		keys:[{
 			key: Ext.EventObject.ENTER,
-					ctrl:true,
+			ctrl:true,
 			fn: function(key, e){
 				this.sendMail(false,false);
 			},
@@ -934,7 +943,7 @@ GO.email.EmailComposer = function(config) {
 	});
 
 	this.addEvents({
-//		attachmentDblClicked : true,
+		//		attachmentDblClicked : true,
 		zipOfAttachmentsDblClicked : true,
 		'send' : true
 	});
@@ -966,10 +975,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	 *handles ctrl+enter from html editor
 	 */
 	fireSubmit : function(e) {
-			if (e.ctrlKey && Ext.EventObject.ENTER == e.getKey()) {
-				//e.stopEvent();
-				this.sendMail(false, false);
-			}
+		if (e.ctrlKey && Ext.EventObject.ENTER == e.getKey()) {
+			//e.stopEvent();
+			this.sendMail(false, false);
+		}
 	},
 
 
@@ -1018,7 +1027,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			run: this.autoSave,
 			scope:this,
 			interval:120000
-			//interval:5000
+		//interval:5000
 		};
 		
 		this.on('hide', this.stopAutoSave, this);
@@ -1271,7 +1280,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			{
 				this.ccFieldCheck.setChecked(GO.email.showCCfield == '1');
 				this.bccFieldCheck.setChecked(GO.email.showBCCfield == '1');
-				/*if(GO.email.showCCfield == '1')
+			/*if(GO.email.showCCfield == '1')
 				{
 					this.showCC(true);
 				}
@@ -1384,10 +1393,6 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			v='<font face="'+font+'">'+v+'</font>'
 		}
 
-		if(v.indexOf("em-message")==-1){
-			v= '<div class="em-message">'+v+'</div>';
-		}
-
 		this.htmlEditor.setValue(v);		
 	},
 	
@@ -1404,8 +1409,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		}else
 		{
 			//if(this.htmlEditor.activated){
-				this.insertDefaultFont();
-			/*}else
+			this.insertDefaultFont();
+		/*}else
 			{
 				this.htmlEditor.on('activate', this.insertDefaultFont, this);
 			}*/
@@ -1496,7 +1501,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 						GO.selectFileBrowser.setRootID(0,0);
 						GO.selectFileBrowserWindow.show();
 
-						/*if (!this.fileBrowser) {
+					/*if (!this.fileBrowser) {
 							this.fileBrowser = new GO.files.FileBrowser({
 								border : false,
 								fileClickHandler : this.addRemoteFiles,
@@ -1714,7 +1719,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.attachmentsView.show();
 			this.attachmentsEl = Ext.get(this.attachmentsId);
 			this.attachmentsEl.on('contextmenu', this.onAttachmentContextMenu, this);
-//			this.attachmentsEl.on('dblclick', this.openAttachment, this);
+		//			this.attachmentsEl.on('dblclick', this.openAttachment, this);
 		}
 
 		this.setEditorHeight();
@@ -1723,22 +1728,22 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 	},
 
-//	openAttachment :  function(e, item_id, target)
-//	{
-//		if(target.id.substr(0,this.attachmentsId.length)==this.attachmentsId)
-//		{
-//			var attachment_no = target.id.substr(this.attachmentsId.length+1);
-//
-//			if(attachment_no=='zipofall')
-//			{
-//				this.fireEvent('zipOfAttachmentsDblClicked');
-//			}else
-//			{
-//				var attachment = this.data.attachments[attachment_no];
-//				this.fireEvent('attachmentDblClicked', attachment, this);
-//			}
-//		}
-//	},
+	//	openAttachment :  function(e, item_id, target)
+	//	{
+	//		if(target.id.substr(0,this.attachmentsId.length)==this.attachmentsId)
+	//		{
+	//			var attachment_no = target.id.substr(this.attachmentsId.length+1);
+	//
+	//			if(attachment_no=='zipofall')
+	//			{
+	//				this.fireEvent('zipOfAttachmentsDblClicked');
+	//			}else
+	//			{
+	//				var attachment = this.data.attachments[attachment_no];
+	//				this.fireEvent('attachmentDblClicked', attachment, this);
+	//			}
+	//		}
+	//	},
 
 	HandleResult : function (btn){
 		if (btn == 'yes'){
