@@ -220,6 +220,6 @@ Ext.extend(GO.sieve.SieveDialog, GO.Window, {
 	},
 	resetGrids : function(){
 		this.actionGrid.store.removeAll();
-		this.testsGrid.store.removeAll();
+		this.testsGrid.store.removeAll();   
 	}	
 });
