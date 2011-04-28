@@ -36,46 +36,55 @@ class advanced_query extends db{
 			$query = str_replace($tag[0],'\''.$time.'\'',$query);
 		}
 
-		preg_match_all("/`[\s]*(NOT INCLUDES)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
+		preg_match_all("/[`)]{1}[\s]*(NOT INCLUDES)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
 		foreach($matched_tags as $tag) {
 			$tag_new = str_replace($tag[1],'!=',$tag[0]);
 			$query = str_replace($tag[0],$tag_new,$query);
 		}
 
-		preg_match_all("/`[\s]*(INCLUDES)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
+		preg_match_all("/[`)]{1}[\s]*(INCLUDES)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
 		foreach($matched_tags as $tag) {
 			$tag_new = str_replace($tag[1],'=',$tag[0]);
 			$query = str_replace($tag[0],$tag_new,$query);
 		}
 
-		preg_match_all("/`[\s]*(AT MOST)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
+		preg_match_all("/[`)]{1}[\s]*(AT MOST)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
 		foreach($matched_tags as $tag) {
 			$tag_new = str_replace($tag[1],'<=',$tag[0]);
 			$query = str_replace($tag[0],$tag_new,$query);
 		}
 
-		preg_match_all("/`[\s]*(AT LEAST)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
+		preg_match_all("/[`)]{1}[\s]*(AT LEAST)[\s]*'/",$query,$matched_tags,PREG_SET_ORDER);
 		foreach($matched_tags as $tag) {
 			$tag_new = str_replace($tag[1],'>=',$tag[0]);
 			$query = str_replace($tag[0],$tag_new,$query);
 		}
 
 		// DATE SEARCH 2
-		preg_match_all("/[(][\s]*'([0-9]+)[-]([0-9]+)[-]([0-9]+)'/",$query,$matched_tags,PREG_SET_ORDER);
-
-		foreach($matched_tags as $tag) {
-			try {
-				$time = mktime(0,0,0,$tag[2],$tag[3],$tag[1]);
-				if (empty($time))
-					throw new Exception('Exception!');
-			} catch (Exception $e) {
-				throw new Exception('Error with date string: '.$tag[0]);
-			}
-			$query = str_replace('('.$tag[0],$time,$query);
-		}
+//		preg_match_all("/[(][\s]*'([0-9]+)-([0-9]+)-([0-9]+)'/",$query,$matched_tags,PREG_SET_ORDER);
+//
+//		foreach($matched_tags as $tag) {
+//			try {
+//				$time = mktime(0,0,0,$tag[2],$tag[3],$tag[1]);
+//				if (empty($time))
+//					throw new Exception('Exception!');
+//			} catch (Exception $e) {
+//				throw new Exception('Error with date string: '.$tag[0]);
+//			}
+//			$query = str_replace('('.$tag[0],$time,$query);
+//		}
 
 		if($link_type)
 			$query = $this->parse_custom_fields($query, $link_type);
+
+		preg_match_all("/'([0-9]+):(.+)'/i",$query,$matched_tags, PREG_SET_ORDER);
+		foreach($matched_tags as $tag) {
+			try {
+				$query = str_replace($tag[0],$tag[1],$query);
+			} catch (Exception $e) {
+				throw new Exception('Incorrect user/contact field: '.$tag[0]);
+			}
+		}
 
 		return ' '.$query;
 	}
@@ -101,15 +110,6 @@ class advanced_query extends db{
 				}
 
 				$query = str_replace($tag[0],'col_'.$field['id'],$query);
-			}
-
-			preg_match_all("/'([0-9]+):(.+)'/i",$query,$matched_tags, PREG_SET_ORDER);
-			foreach($matched_tags as $tag) {
-				try {
-					$query = str_replace($tag[0],$tag[1],$query);
-				} catch (Exception $e) {
-					throw new Exception('Incorrect user/contact field: '.$tag[0]);
-				}
 			}
 		}
 

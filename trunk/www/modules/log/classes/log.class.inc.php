@@ -60,7 +60,9 @@ class log extends db {
  					. "OR CONCAT(first_name, middle_name, last_name) LIKE '".$this->escape($query)."') ";
  		}
 		
-		$sql .= " ORDER BY ".$this->escape("gl.".$sortfield.' '.$sortorder);	
+		$sql .= " ORDER BY ".$this->escape("gl.".$sortfield.' '.$sortorder);
+
+		go_debug($sql);
 		
 		$_SESSION['GO_SESSION']['export_queries']['log']=array(
 			'query'=>$sql,
