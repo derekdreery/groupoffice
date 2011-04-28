@@ -54,7 +54,8 @@ GO.calendar.ContextMenu = function(config){
 		{
 			this.fireEvent("deleteEvent", this);
 		}
-	})
+	}),'-',
+	this.newMenuItem = new GO.NewMenuItem()
 	]
 
 	if(GO.timeregistration)
@@ -102,6 +103,11 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 		this.actionCopy.setDisabled(this.event.read_only);
 		this.actionCut.setDisabled(this.event.read_only);
 		this.actionDelete.setDisabled(this.event.read_only);
+
+		this.newMenuItem.setLinkConfig({
+			type:1,
+			id:event.event_id
+		});
 	},
 	showAddTimeRegistrationDialog : function()
 	{
