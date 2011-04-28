@@ -28,7 +28,9 @@
 
 
 //require Group-Office config
-require_once('../../Group-Office.php');
+$dir = dirname(dirname(dirname(dirname(__FILE__))));
+require_once($dir.'/Group-Office.php');
+
 
 // If you define the constant K_TCPDF_EXTERNAL_CONFIG, the following settings will be ignored.
 
