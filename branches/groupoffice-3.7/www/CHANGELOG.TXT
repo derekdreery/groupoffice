@@ -1,7 +1,10 @@
+28/04/2011 3.7.13
+- Hide empty sections in information panels
 - IE9 and Chrome style issues fixed
 - Project reports depended on Custom fields
 - Delete permission is respected in the calendar
 - Participants status copied when using the links from an external mail client.
+- Bug in PDF printing
 
 27/04/2011 3.7.12
 - E-mail editor was behaving strange in Internet Explorer

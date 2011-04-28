@@ -11,9 +11,10 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
-GO.linksTemplate = 		
+GO.linksTemplate =
+	'<tpl if="values.links && values.links.length">'+
 		'{[this.collapsibleSectionHeader(GO.lang.latestLinks, "latestlinks-"+values.panelId, "links")]}'+
-		'<tpl if="values.links">'+
+		
 			'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="latestlinks-{panelId}">'+
 			'<tr>'+
 				'<td colspan="2" class="display-panel-links-header">&nbsp;</td>'+

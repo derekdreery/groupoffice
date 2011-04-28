@@ -1,8 +1,10 @@
 GO.files.filesTemplate =
 
+		'<tpl if="values.files && values.files.length">'+
+		
 		'{[this.collapsibleSectionHeader(GO.files.lang.files, "files-"+values.panelId, "files")]}'+
 
-		'<tpl if="values.files">'+
+		
 		'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="files-{panelId}">'+		
 		'<tr>'+							
 			'<td class="table_header_links" style="width:100%">' + GO.lang['strName'] + '</td>'+							
