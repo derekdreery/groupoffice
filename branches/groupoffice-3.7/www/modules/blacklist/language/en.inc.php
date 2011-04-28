@@ -2,7 +2,7 @@
 //Uncomment this line in new translations!
 //require($GO_LANGUAGE->get_fallback_language_file('blacklist'));
 $lang['blacklist']['name']='IP blacklist';
-$lang['blacklist']['description']='A module that blocks IP addresses after 5 login failures in a row.';
+$lang['blacklist']['description']='A module that will require the user to enter a captcha after 3 consecutive login failures.';
 $lang['blacklist']['ip']='IP';
 $lang['blacklist']['ips']='IP addresses';
 
