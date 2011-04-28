@@ -130,7 +130,7 @@ try {
 
 			$event = $cal->get_event($event_id);
 
-			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $event['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
+			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $event['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
 				throw new AccessDeniedException();
 			}
 
