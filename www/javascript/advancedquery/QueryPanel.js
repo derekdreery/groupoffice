@@ -354,7 +354,7 @@ Ext.extend(GO.advancedquery.SearchQueryPanel, Ext.Panel, {
 			case 'date':
 				return [
 				['AT LEAST'],
-				['<'],
+				['AT MOST'],
 				];
 				break;
 			default: //textfield

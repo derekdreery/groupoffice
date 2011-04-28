@@ -54,8 +54,8 @@ try{
 
 			$response['results'][] = array('name' => 'Type', 'value' => '`link_type`', 'type' => 'combobox', 'fields' => $link_types);
 			$response['results'][] = array('name' => 'Text', 'value' => '`text`', 'type' => 'textfield');	
-			$response['results'][] = array('name' => 'Time', 'value' => '`time`', 'type' => 'date');
-			$response['results'][] = array('name' => 'User', 'value' => '`user`', 'type' => 'user');			
+			$response['results'][] = array('name' => 'Time', 'value' => 'FROM_UNIXTIME(`time`)', 'type' => 'date');
+			$response['results'][] = array('name' => 'User', 'value' => '`user_id`', 'type' => 'user');
 			
 			$response['total'] = count($response['results']);
 			$response['success'] = true;
