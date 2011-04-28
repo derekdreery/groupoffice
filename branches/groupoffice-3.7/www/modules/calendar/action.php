@@ -223,7 +223,8 @@ try {
 				$new_event['calendar_id']=$calendar_id;
 				$new_event['uuid']=$event['uuid'];
 			
-				$cal->copy_event($event_id, $new_event);
+				$target_event_id=$cal->copy_event($event_id, $new_event);
+				
 			}else
 			{
 				$up_event=$event;
@@ -233,10 +234,14 @@ try {
 				unset($up_event['resource_event_id'], $up_event['acl_id']);
 
 				$cal->update_event($up_event);
+				$cal->remove_participants($event_exists['id']);
+				$target_event_id=$event_exists['id'];
 				
 			}
 
 			$cal->set_event_status($event_id, '1', $_SESSION['GO_SESSION']['email']);
+
+			$cal->copy_participants($event_id, $target_event_id);
 
 			$owner = $GO_USERS->get_user($event['user_id']);
 
