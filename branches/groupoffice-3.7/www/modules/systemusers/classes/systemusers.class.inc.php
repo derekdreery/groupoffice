@@ -24,7 +24,7 @@ class systemusers extends db {
 			exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' add_user '.$user['username'].' '.$user['password'], $output, $status);
 			if($status)
 			{
-				throw new Exception($output[0]);
+				throw new Exception("Adding a system user failed. Did you configure sudo for the systemusers module?".implode("\n",$output));
 			}
 		}
 	}
@@ -38,7 +38,7 @@ class systemusers extends db {
 			exec($GO_CONFIG->cmd_sudo.' '.$GO_MODULES->modules['systemusers']['path'].'sudo.php '.$GO_CONFIG->get_config_file().' update_user '.$user['id'].' '.$user['password'], $output, $status);
 			if($status)
 			{
-				throw new Exception($output[0]);
+				throw new Exception("Updating the system user failed. Did you configure sudo for the systemusers module?".$output[0]);
 			}
 		}
     }
