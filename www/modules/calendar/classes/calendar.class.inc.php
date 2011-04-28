@@ -515,6 +515,17 @@ class calendar extends db {
 		return $html;
 	}
 
+	function copy_participants($src_event_id, $target_event_id){
+
+		$cal = new calendar();
+
+		$this->get_participants($src_event_id);
+		while($r = $this->next_record()){
+
+			$r['event_id']=$target_event_id;
+			$cal->add_participant($r);
+		}
+	}
 
 
 	function copy_event($event_id, $new_values=array()) {
@@ -1065,8 +1076,6 @@ class calendar extends db {
 
 		global $GO_CONFIG;
 
-		go_debug($participants);
-
 		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
@@ -1087,7 +1096,6 @@ class calendar extends db {
 				$this->add_participant($participant);
 			else{
 				$participant['id']=$existing_participant['id'];
-				go_debug($participant);
 				$this->update_participant($participant);
 			}
 		}
