@@ -37,7 +37,7 @@ try{
 
 			while($module = array_shift($folders))
 			{
-				if($GO_MODULES->module_is_allowed($module['name']))
+				if($GO_MODULES->module_is_allowed($module['name']) && $module['name']!='professional')
 				{
 					$installed_module = $GO_MODULES->get_module($module['name']);
 
