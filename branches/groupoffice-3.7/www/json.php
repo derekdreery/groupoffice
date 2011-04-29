@@ -264,10 +264,12 @@ try {
 
 			$acl_id = ($_REQUEST['acl_id']);
 
+			$response['manage_permission']=$GO_SECURITY->has_permission_to_manage_acl($GO_SECURITY->user_id, $acl_id);
+
 			if(isset($_REQUEST['delete_keys'])) {
 				try {
 
-					if(!$GO_SECURITY->has_permission_to_manage_acl($GO_SECURITY->user_id, $acl_id)) {
+					if(!$response['manage_permission']) {
 						throw new AccessDeniedException();
 					}
 
@@ -289,7 +291,7 @@ try {
 			if(isset($_REQUEST['add_groups'])) {
 				try {
 
-					if(!$GO_SECURITY->has_permission_to_manage_acl($GO_SECURITY->user_id, $acl_id)) {
+					if(!$response['manage_permission']) {
 						throw new AccessDeniedException();
 					}
 
@@ -318,9 +320,11 @@ try {
 		case 'users_in_acl':
 			$acl_id = ($_REQUEST['acl_id']);
 
+			$response['manage_permission']=$GO_SECURITY->has_permission_to_manage_acl($GO_SECURITY->user_id, $acl_id);
+
 			if(isset($_REQUEST['delete_keys'])) {
 				try {
-					if(!$GO_SECURITY->has_permission_to_manage_acl($GO_SECURITY->user_id, $acl_id)) {
+					if(!$response['manage_permission']) {
 						throw new AccessDeniedException();
 					}
 
@@ -343,7 +347,7 @@ try {
 			if(isset($_REQUEST['add_users'])) {
 				try {
 
-					if(!$GO_SECURITY->has_permission_to_manage_acl($GO_SECURITY->user_id, $acl_id)) {
+					if(!$response['manage_permission']) {
 						throw new AccessDeniedException();
 					}
 
