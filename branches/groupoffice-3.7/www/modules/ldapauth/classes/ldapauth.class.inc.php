@@ -288,7 +288,7 @@ class ldapauth extends imapauth {
 					go_debug('LDAPAUTH: password on LDAP server has changed. Updating Group-Office database');
 
 					if($mail_username) {
-						$email_client->update_password($config['host'], $mail_username, $password);
+						$email_client->update_password($config['host'], $mail_username, $password, $config['smtp_use_login_credentials']);
 					}
 				}
 

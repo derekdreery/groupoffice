@@ -1,3 +1,8 @@
+- Unpacked archives didn't show contents in the file manager
+- Users with manage permissions for a file folder can manage the permissions now.
+- SMTP password wasn't updated if LDAP or IMAP password changed and
+  'smtp_use_login_credentials'=>true in imapauth.config.php
+
 28/04/2011 3.7.13
 - Hide empty sections in information panels
 - IE9 and Chrome style issues fixed
