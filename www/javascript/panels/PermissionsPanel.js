@@ -27,6 +27,7 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 
 	changed : false,
 	loaded : false,
+	managePermission : false,
 
 	// private
 	initComponent : function() {
@@ -114,6 +115,15 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 
 		groupColumns.push(action);
 
+
+		this.aclGroupsStore.on("load", function(){
+			this.managePermission = this.aclGroupsStore.reader.jsonData.manage_permission;
+
+			this.aclGroupsGrid.getTopToolbar().setDisabled(!this.managePermission);
+			this.aclUsersGrid.getTopToolbar().setDisabled(!this.managePermission);
+
+		}, this);
+
 		this.aclGroupsGrid = new GO.grid.EditorGridPanel({
 			plugins : action,
 			clicksToEdit : 1,
@@ -165,6 +175,10 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 				}
 			}
 		}, this);
+
+		this.aclGroupsGrid.on('beforeedit', function(e) {
+			return this.managePermission;
+		},this);
 
 		this.aclGroupsGrid.on('afteredit', function(e) {
 
@@ -260,6 +274,10 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 
 		});
 
+		this.aclUsersGrid.on('beforeedit', function(e) {
+			return this.managePermission;
+		},this);
+		
 		this.aclUsersGrid.on('afteredit', function(e) {
 
 			Ext.Ajax.request({

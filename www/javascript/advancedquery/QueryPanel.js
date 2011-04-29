@@ -42,6 +42,89 @@ GO.advancedquery.SearchQueryPanel = function(config)
 		hideLabel:true
 	});
 
+	var criteriumItems = [this.currentCriteriumField =
+					this.criteriumComboBox = new GO.form.ComboBox({
+						store: new Ext.data.SimpleStore({
+							fields: ['value'],
+							data: new Array()
+						}),
+						valueField:'value',
+						displayField:'value',
+						width: 295,
+						mode: 'local',
+						triggerAction: 'all',
+						editable: true,
+						selectOnFocus:true,
+						hideLabel: true
+					}),this.criteriumTextField = new Ext.form.TextField({
+						hidden: true,
+						name: 'textfield',
+						hideLabel: true,
+						emptyText: GO.lang.keyword,
+						width: 295,
+						panel: this
+					}),this.criteriumFileField = new GO.files.SelectFile({
+						filesFilter:'foldersonly',
+						width: 295,
+						hidden: true
+						//fieldLabel:GO.filesearch.lang.searchOneFolder
+					}),this.criteriumUserField = new GO.form.SelectUser({
+						allowBlank:true,
+						width: 295,
+						hidden: true,
+						listeners: {
+							scope: this,
+							select: function(combobox,record){
+									combobox.setValue(record.data.id+':'+record.data.name);
+								}
+						}
+					}),this.criteriumContactField = new GO.addressbook.SelectContact({
+						width: 295,
+						hidden: true,
+						listeners: {
+							scope: this,
+							select: function(combobox,record){
+									combobox.setValue(record.data.id+':'+record.data.name);
+								}
+						}
+					}),this.criteriumDatePanel = new Ext.Panel({
+						border: false,
+						style: 'padding:0px;',
+						hidden: true,
+						width: 295,
+						items: [{
+							name:'date',
+							dataname:'date',
+							xtype:'datefield',
+							format: GO.settings.date_format,
+							width : 100
+						}],
+						hidden:true
+					}),this.criteriumNumberPanel = new Ext.Panel({
+						border: false,
+						style: 'padding:0px;',
+						hidden: true,
+						width: 295,
+						items: [{
+							xtype: 'numberfield',
+							hideLabel: true,							
+							width: 295
+						}],
+						hidden:true
+					}),this.criteriumCheckboxPanel = new Ext.Panel({
+						border: false,
+						style: 'padding:0px;',
+						hidden: true,
+						width: 295,
+						items: [{
+							name:'checkbox',
+							xtype: 'xcheckbox',
+							hideLabel: true
+						}],
+						hidden:true
+					})
+					];
+
 	config.items= [this.queryField,{
 			xtype:'compositefield',
 			hideLabel:true,
@@ -105,81 +188,7 @@ GO.advancedquery.SearchQueryPanel = function(config)
 				defaults:{border:false},
 				items:this.criteriumPanel = new Ext.Panel({
 					border: false,
-					items: [this.currentCriteriumField =
-					this.criteriumComboBox = new GO.form.ComboBox({
-						store: new Ext.data.SimpleStore({
-							fields: ['value','text'],
-							data: new Array()
-						}),
-						valueField:'value',
-						displayField:'text',
-						width: 280,
-						mode: 'local',
-						triggerAction: 'all',
-						editable: true,
-						selectOnFocus:true,						
-						hideLabel: true
-					}),this.criteriumTextField = new Ext.form.TextField({
-						hidden: true,
-						name: 'textfield',
-						hideLabel: true,
-						emptyText: GO.lang.keyword,
-						width: 280,
-						panel: this
-					}),this.criteriumDatePanel = new Ext.Panel({
-						border: false,
-						style: 'padding:0px;',
-						hidden: true,
-						width: 280,
-						items: [GO.customfields.dataTypes.date.getFormField({
-							name:'',
-							dataname:'date'
-						})],
-						hidden:true
-					}),this.criteriumNumberPanel = new Ext.Panel({
-						border: false,
-						style: 'padding:0px;',
-						hidden: true,
-						width: 280,
-						items: [
-							GO.customfields.dataTypes.number.getFormField({dataname:''})
-						],
-						hidden:true
-					}),this.criteriumCheckboxPanel = new Ext.Panel({						
-						border: false,
-						style: 'padding:0px;',
-						hidden: true,
-						width: 280,
-						items: [
-							GO.customfields.dataTypes.checkbox.getFormField({dataname:'',name:'checked'})
-						],
-						hidden:true
-					}),this.criteriumFileField = new GO.files.SelectFile({
-						filesFilter:'foldersonly',
-						width: 280,
-						hidden: true
-						//fieldLabel:GO.filesearch.lang.searchOneFolder
-					}),this.criteriumUserField = new GO.form.SelectUser({
-						allowBlank:true,
-						width: 280,
-						hidden: true,
-						listeners: {
-							scope: this,
-							select: function(combobox,record){
-									combobox.setValue(record.data.id+':'+record.data.name);
-								}
-						}
-					}),this.criteriumContactField = new GO.addressbook.SelectContact({
-						width: 280,
-						hidden: true,
-						listeners: {
-							scope: this,
-							select: function(combobox,record){
-									combobox.setValue(record.data.id+':'+record.data.name);
-								}
-						}
-					})
-					]
+					items: criteriumItems
 				})
 			},{
 				bodyStyle:"padding-left:5px;",

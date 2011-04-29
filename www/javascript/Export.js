@@ -80,7 +80,9 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 
 					this.hiddenParamsField.setValue(Ext.encode(this.loadParams));
 
-						this.formPanel.form.submit({
+					this.formPanel.form.el.dom.target='_blank';
+
+					this.formPanel.form.submit({
 						url:BaseHref+'export_query.php',
 						params:this.loadParams
 					});

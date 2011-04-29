@@ -592,8 +592,6 @@ try {
 							while ($file = array_shift($decompress_sources)) {
 								switch(File::get_extension($file)) {
 									case 'zip':
-
-
 										exec($GO_CONFIG->cmd_unzip.' "'.$GO_CONFIG->file_storage_path.$file.'"');
 										break;
 
@@ -610,7 +608,7 @@ try {
 							}
 
 							//TODO sync only missing files
-							$files->import_folder($full_path, $curfolder['parent_id']);
+							$files->import_folder($full_path, $curfolder['parent_id'], true);
 
 							//TODO error handling
 							$response['decompress_success']=true;
