@@ -120,7 +120,7 @@ class imapauth
 							{
 								require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
 								$email_client = new email();
-								$email_client->update_password($config['host'], $mail_username, $password);
+								$email_client->update_password($config['host'], $mail_username, $password, $config['smtp_use_login_credentials']);
 							}
 						}
 

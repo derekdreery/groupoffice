@@ -38,26 +38,26 @@ function load_standard_info_panel_items(&$response, $link_type) {
 	require_once($GO_CONFIG->class_path . '/base/search.class.inc.php');
 	$search = new search();
 
-	if (!in_array('links', $hidden_sections) && !isset($response['data']['links'])) {
+	if (/*!in_array('links', $hidden_sections) && */!isset($response['data']['links'])) {
 		$links_json = $search->get_latest_links_json($GO_SECURITY->user_id, $response['data']['id'], $link_type);
 		$response['data']['links'] = $links_json['results'];
 	}
 
-	if (isset($GO_MODULES->modules['tasks']) && !in_array('tasks', $hidden_sections) && !isset($response['data']['tasks'])) {
+	if (/*isset($GO_MODULES->modules['tasks']) && !in_array('tasks', $hidden_sections) &&*/ !isset($response['data']['tasks'])) {
 		require_once($GO_MODULES->modules['tasks']['class_path'] . 'tasks.class.inc.php');
 		$tasks = new tasks();
 
 		$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $link_type);
 	}
 
-	if (isset($GO_MODULES->modules['calendar']) && !in_array('events', $hidden_sections)) {
+	if (isset($GO_MODULES->modules['calendar'])/* && !in_array('events', $hidden_sections)*/) {
 		require_once($GO_MODULES->modules['calendar']['class_path'] . 'calendar.class.inc.php');
 		$cal = new calendar();
 
 		$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $link_type);
 	}
 
-	if (!in_array('files', $hidden_sections) && !isset($response['data']['files'])) {
+	if (/*!in_array('files', $hidden_sections) && */!isset($response['data']['files'])) {
 		if (isset($GO_MODULES->modules['files'])) {
 			require_once($GO_MODULES->modules['files']['class_path'] . 'files.class.inc.php');
 			$files = new files();
@@ -69,7 +69,7 @@ function load_standard_info_panel_items(&$response, $link_type) {
 	}
 
 
-	if (!in_array('comments', $hidden_sections) && isset($GO_MODULES->modules['comments']) && !isset($response['data']['comments'])) {
+	if (/*!in_array('comments', $hidden_sections) && */isset($GO_MODULES->modules['comments']) && !isset($response['data']['comments'])) {
 		require_once ($GO_MODULES->modules['comments']['class_path'] . 'comments.class.inc.php');
 		$comments = new comments();
 

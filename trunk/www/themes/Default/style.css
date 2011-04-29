@@ -232,7 +232,7 @@ display:block;margin-bottom:15px;
 	border:1px solid #dedede !important;
 	padding-left:2px !important;	
 	vertical-align:middle !important;
-	height:15px !important;
+/*	height:15px !important;*/
 }
 
 #checker-loading{
@@ -256,7 +256,7 @@ display:block;margin-bottom:15px;
 
 body{
 	/*font:normal 10px "Lucida Sans Unicode","Lucida Grande","Mukti Narrow", sans-serif;*/
-	font: 11px tahoma,arial,helvetica,sans-serif;
+	font: 11px arial,helvetica,sans-serif;
 	color:#000;
 	background-color:#f1f1f1;
 }

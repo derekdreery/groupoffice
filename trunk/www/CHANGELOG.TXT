@@ -1,3 +1,16 @@
+29/04/2011 3.7.13
+- Unpacked archives didn't show contents in the file manager
+- Users with manage permissions for a file folder can manage the permissions now.
+- SMTP password wasn't updated if LDAP or IMAP password changed and
+  'smtp_use_login_credentials'=>true in imapauth.config.php
+- Add billing order was broken in IE
+- Hide empty sections in information panels
+- IE9 and Chrome style issues fixed
+- Project reports depended on Custom fields
+- Delete permission is respected in the calendar
+- Participants status copied when using the links from an external mail client.
+- Bug in PDF printing
+
 27/04/2011 3.7.12
 - E-mail editor was behaving strange in Internet Explorer
 - Sorting in projects detailed report grid.

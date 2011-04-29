@@ -1,6 +1,7 @@
 GO.calendar.EventTemplate =
+		'<tpl if="values.events && values.events.length">'+
 		'{[this.collapsibleSectionHeader(GO.calendar.lang.forthcomingAppointments, "events-"+values.panelId, "events")]}'+
-		'<tpl if="values.events">'+
+		
 			'<table class="display-panel" cellpadding="0" cellspacing="0" border="0" id="events-{panelId}">'+
 			'<tr>'+
 				'<td class="table_header_links" width="16px;"></td>'+

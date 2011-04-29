@@ -40,9 +40,43 @@
 			this.menu.link_config.callback=this.menu.link_config.callback.createDelegate(this.menu.link_config.scope);
 		}
 		
-		this.setDisabled(false);
+		this.setDisabled(GO.util.empty(config.id));
 	}	
 	
+});
+
+
+ GO.NewMenuItem = Ext.extend(Ext.menu.Item, {
+	initComponent : function(){
+
+		this.menu = new Ext.menu.Menu({
+				items:GO.newMenuItems
+			});
+		this.text=GO.lang.cmdNew;
+		this.iconCls='btn-add';
+		this.disabled=true;
+		this.hidden=GO.newMenuItems.length==0;
+
+		GO.NewMenuButton.superclass.initComponent.call(this);
+	},
+
+	setLinkConfig : function(config){
+		this.menu.link_config=config;
+		this.menu.link_config.type_id=config.type+':'+config.id;
+
+		if(!this.menu.link_config.scope)
+		{
+			this.menu.link_config.scope=this;
+		}
+
+		if(this.menu.link_config.callback)
+		{
+			this.menu.link_config.callback=this.menu.link_config.callback.createDelegate(this.menu.link_config.scope);
+		}
+
+		this.setDisabled(GO.util.empty(config.id));
+	}
+
 });
 
 
@@ -57,7 +91,8 @@ GO.moduleManager.on('languageLoaded',function(){
 				this.linksDialog = new GO.dialog.LinksDialog();
 				this.linksDialog.on('link', function()
 				{
-					item.parentMenu.panel.reload();
+					if(item.parentMenu.panel)
+						item.parentMenu.panel.reload();
 				});
 			}
 
