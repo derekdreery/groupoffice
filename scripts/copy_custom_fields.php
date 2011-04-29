@@ -41,6 +41,7 @@ while($r = $db->next_record()){
 
 		$ur[$ab_col]=$addressbook['name'];
 		$ur[$birthday_file_col]=$custom[$birthday_contact_col];
+		$ur['col_324']=$custom['col_398'];
 		$ur['link_id']=$r['id'];
 
 		//var_dump($ur);
