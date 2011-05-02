@@ -188,3 +188,5 @@ GO.email.lang.deletePerm='Verwijderen';
 GO.email.lang.createMailboxPerm='Mailbox aanmaken';
 GO.email.lang.deleteMailboxPerm='Mailbox verwijderen';
 GO.email.lang.adminPerm='Beheren';
+
+GO.email.lang.anyField='Alle velden';
