@@ -198,7 +198,7 @@ margin:5px 2px;
 .message-body{
 	padding: 5px;	
 }
-.message-body p, .em-composer p{
+.em-message p, .em-composer p{
 	margin:0px;
 }
 
