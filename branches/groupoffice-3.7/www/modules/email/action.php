@@ -545,7 +545,7 @@ try {
 					}else {
 
 						if($_POST['content_type']=='html') {
-							$body = '<html><head><style>.em-message p{margin:0px}</style></head><body class="em-message">'.$body.'</body></html>';
+							$body = '<html><head><style>.em-message p{margin:0px}</style></head><body><div class="em-message">'.$body.'</div></body></html>';
 						}
 
 						$swift->set_body($body, $_POST['content_type']);
