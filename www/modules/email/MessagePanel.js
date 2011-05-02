@@ -147,14 +147,11 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			params: this.params,
 			scope: this,
 			callback: function(options, success, response)
-			{					
-				this.fireEvent('load', options, success, response);
-				
+			{									
 				if(success)					
 				{
 					var data = Ext.decode(response.responseText);
-					
-
+					                                    
 					if(this.updated)
 					{
 						data.iCalendar.feedback = GO.email.lang.icalendarEventUpdated;
@@ -202,7 +199,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					if(data.feedback)
 					{
 						GO.errorDialog.show(data.feedback);
-					}					
+					}	
+                                        
+                                        this.fireEvent('load', options, success, response, data);
 				}				
 			}
 		});
