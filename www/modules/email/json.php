@@ -654,7 +654,6 @@ try {
 
 				$response = $imap->get_message_with_body($uid, !empty($_POST['create_temporary_attachments']),false,false,!empty($_POST['plaintext']),empty($_POST['plaintext']));
 
-
 				//go_debug($response);
 
 				if(!empty($_POST['plaintext'])) {

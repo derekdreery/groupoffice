@@ -15,13 +15,30 @@ GO.moduleManager.onModuleReady('email',function(){
 	Ext.override(GO.email.MessagePanel, {
             initComponent : GO.email.MessagePanel.prototype.initComponent.createSequence(function(){
                 this.on('load',function(options, success, response, data){
-                    this.messageBodyEl.down(".message-header").createChild({
-                        tag:'a',
-                        target:'_blank',
-                        href:GO.settings.modules.smime.url+'verify.php?uid='+data.uid+'&account_id='+data.account_id+'&mailbox='+encodeURIComponent(data.mailbox),
-                        html:"verify"
-                    });
-                })
+									if(data.smime_signed){
+										var el = this.body.down(".message-header").createChild({													
+													html:"This message is signed. Click here to verify the signature.",
+													style:"cursor:pointer;text-decoration:underline"
+											});
+											
+											el.on('click', function(){
+												if(!this.certWin){
+													this.certWin = new GO.Window({
+														title:'SMIME Certificate',
+														width:500,
+														height:300,
+														closeAction:'hide',
+														layout:'fit',
+														items:[this.certPanel = new Ext.Panel({bodyStyle:'padding:10px'})]
+													});
+												}
+												
+												this.certWin.show();
+												this.certPanel.load(GO.settings.modules.smime.url+'verify.php?uid='+													
+													this.uid+'&account_id='+this.account_id+'&mailbox='+encodeURIComponent(this.mailbox));
+											}, this)
+									}
+								})
             })
         })
 });
