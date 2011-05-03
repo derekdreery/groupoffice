@@ -554,11 +554,20 @@ class cached_imap extends imap{
 
 		$message['attachments']=$this->find_message_attachments($struct, $message['body_ids']);
 		//go_debug($message['attachments']);
+		$message['smime_signed']=false;
+		foreach($message['attachments'] as $key=>$a){
+			if($a['name']=='smime.p7s'){
+				unset($message['attachments'][$key]);
+				$message['smime_signed']=true;
+				break;
+			}
+				
+		}
 		
 		for($i=0,$max=count($message['attachments']);$i<$max;$i++){
 			
 			//go_debug('NAME: '.$message['attachments'][$i]['name']);
-
+			
 			if(empty($message['attachments'][$i]['name']) || $message['attachments'][$i]['name']=='false'){
 				if(!empty($message['attachments'][$i]['subject'])){
 					$message['attachments'][$i]['name']=File::strip_invalid_chars($this->mime_header_decode($message['attachments'][$i]['subject'])).'.eml';
