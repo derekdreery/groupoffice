@@ -99,7 +99,7 @@ class Swift_SmimeSigned_Message extends Swift_Message
 		$pkcs12 = file_get_contents($this->pkcs12_path);
 		
 		openssl_pkcs12_read ($pkcs12, $certs, $this->passphrase);
-		openssl_pkcs7_sign($this->unsigned, $this->signed,$certs['cert'], array($certs['pkey'], $pass), NULL);
+		openssl_pkcs7_sign($this->unsigned, $this->signed,$certs['cert'], array($certs['pkey'], $this->passphrase), NULL);
 		unlink($this->unsigned);
 	}
   
