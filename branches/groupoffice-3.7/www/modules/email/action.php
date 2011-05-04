@@ -404,7 +404,7 @@ try {
 									0,
 									$_POST['alias_id'],
 									$_POST['priority']
-					);
+					);					
 
 					if(!empty($_POST['reply_uid']))
 						$swift->set_reply_to($_POST['reply_uid'],$_POST['reply_mailbox'], $_POST['in_reply_to']);
@@ -643,6 +643,9 @@ try {
 						if(!empty($_POST['draft_uid'])) {
 							$swift->set_draft($_POST['draft_uid']);
 						}
+						
+						
+						$GO_EVENTS->fire_event("sendmail",array(&$swift));
 
 
 						$response['success']=$swift->sendmail();
