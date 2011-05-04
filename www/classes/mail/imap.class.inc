@@ -526,7 +526,11 @@ class imap extends imap_bodystruct {
 			}
 		}
 
-		$command = "UID SEARCH (UNSEEN) ALL\r\n";
+		#some servers don't seem to support brackets
+		#$command = "UID SEARCH (UNSEEN) ALL\r\n";
+		
+		$command = "UID SEARCH UNSEEN ALL\r\n";
+		
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 		$status = $this->check_response($res, true);
