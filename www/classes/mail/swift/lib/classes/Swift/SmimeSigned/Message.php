@@ -1,7 +1,7 @@
 <?php
 
 /*
-Signed Message for SwiftMailer
+tempout Message for SwiftMailer
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -16,17 +16,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
 /**
-* Signed Message Special Message where we can apply signatures
+* tempout Message Special Message where we can apply signatures
 * @package Swift
 * @subpackage Signatures
 * @author Xavier De Cock <xdecock@gmail.com>
 */
 class Swift_SmimeSigned_Message extends Swift_Message
 { 
-	protected $signed;
-	protected $unsigned;
+	protected $tempout;
+	protected $tempin;
 	protected $pkcs12_path;
 	protected $passphrase;
+	
+	protected $recipcerts;
 	
 	 /**
    * Create a new Message.
@@ -51,23 +53,40 @@ class Swift_SmimeSigned_Message extends Swift_Message
 	 */
 	
 	public function setSignParams($pkcs12_path, $passphrase){
-		global $GO_CONFIG;
-		
-		$this->unsigned = $GO_CONFIG->tmpdir."smime_unsigned.txt";
-		$this->signed=$GO_CONFIG->tmpdir."smime_signed.txt";
+	
 		
 		$this->pkcs12_path=$pkcs12_path;
 		$this->passphrase=$passphrase;
 	}
 	
-	private function do_sign(){		
+	public function setEncryptParams($recipcerts){
+		
+		$this->recipcerts=$recipcerts;	
+	}
+	
+	private function save_headers(){
+		go_debug('save_headers');	
+		
+			global $GO_CONFIG;			
 		
 		
-		if(file_exists($this->unsigned))
-			unlink($this->unsigned);
+		$this->tempin = $GO_CONFIG->tmpdir."smime_tempin.txt";
+		$this->tempout=$GO_CONFIG->tmpdir."smime_tempout.txt";
+		if(file_exists($this->tempin))
+			unlink($this->tempin);
 		
-		if(file_exists($this->signed))
-			unlink($this->signed);
+		if(file_exists($this->tempout))
+			unlink($this->tempout);
+		
+		/*
+		 * This class will stream the MIME structure to the tempin text file in 
+		 * a memory efficient way.
+		 */
+		$fbs = new Swift_ByteStream_FileByteStream($this->tempin, true);		
+		parent::toByteStream($fbs);
+		
+		if(!filesize($this->tempin))
+			throw new Exception('Could not write temporary message for signing');
 		
 		/*
 		 * Store the headers of the current message because the PHP function
@@ -84,36 +103,41 @@ class Swift_SmimeSigned_Message extends Swift_Message
 		foreach($h as $header){
 			$headers->removeAll($header->getFieldName());
 		}
+	}
+	
+	private function do_sign(){		
 		
-		/*
-		 * This class will stream the MIME structure to the unsigned text file in 
-		 * a memory efficient way.
-		 */
-		
-		$fbs = new Swift_ByteStream_FileByteStream($this->unsigned, true);		
-		parent::toByteStream($fbs);
-		
-		if(!filesize($this->unsigned))
-			throw new Exception('Could not write temporary message for signing');
+		go_debug('do_sign');	
 		
 		$pkcs12 = file_get_contents($this->pkcs12_path);
 		
 		openssl_pkcs12_read ($pkcs12, $certs, $this->passphrase);
-		openssl_pkcs7_sign($this->unsigned, $this->signed,$certs['cert'], array($certs['pkey'], $this->passphrase), NULL);
-		unlink($this->unsigned);
+		openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), NULL);
+	}
+	
+	private function do_encrypt(){		
+		go_debug('do_encrypt');		
+		
+		openssl_pkcs7_encrypt($this->tempin, $this->tempout,$this->recipcerts[0], array());	
 	}
   
 	
 	public function toString(){
 		
-		if(empty($this->pkcs12_path)){
-			//no sign parameters. Do parent method
+		if(empty($this->pkcs12_path) && empty($this->recipcerts)){
+			//no sign or encrypt parameters. Do parent method.
 			return parent::toString();
 		}
 		
-		$this->do_sign();
+		if(!empty($this->pkcs12_path)){
+			$this->do_sign();
+		}
 		
-		return file_get_contents($this->signed);
+		if(!empty($this->recipcerts)){
+			$this->do_encrypt();
+		}
+		
+		return $this->saved_headers.file_get_contents($this->tempout);
 	}
 	
   /**
@@ -122,23 +146,36 @@ class Swift_SmimeSigned_Message extends Swift_Message
 */
   public function toByteStream(Swift_InputByteStream $is)
   {
-		if(empty($this->pkcs12_path)){
-			//no sign parameters. Do parent method
+		
+		go_debug('toByteStream');
+		
+		if(empty($this->pkcs12_path) && empty($this->recipcerts)){
+			//no sign or encrypt parameters. Do parent method.
 			return parent::toByteStream($is);
 		}
 		
-		$this->do_sign();
+		$this->save_headers();
+		
+		if(!empty($this->pkcs12_path)){
+			$this->do_sign();
+		}
+		
+		if(!empty($this->recipcerts)){
+			$this->do_encrypt();
+		}
 		
 		$is->write($this->saved_headers);
 		
-		$fp = fopen($this->signed, 'r');
+		$fp = fopen($this->tempout, 'r');
 		if(!$fp)
-			throw new Exception('Could not read signed file');
+			throw new Exception('Could not read tempout file');
 		while($line = fgets($fp)){			
 			$is->write($line);
 		}
 		fclose($fp);		
-		unlink($this->signed);
+		
+		unlink($this->tempout);
+		unlink($this->tempin);
 		
     return;
   }

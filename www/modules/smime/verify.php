@@ -50,6 +50,17 @@ $valid = openssl_pkcs7_verify($src_filename, PKCS7_NOVERIFY, $cert_filename);
 $cert = file_get_contents($cert_filename);
 
 $arr = openssl_x509_parse($cert);
+
+
+$email = String::get_email_from_string($arr['extensions']['subjectAltName']);
+
+require_once($GO_MODULES->modules['smime']['class_path'].'smime.class.inc.php');
+$smime = new smime();
+if(!$smime->get_certificate($GO_SECURITY->user_id, $email))
+	$smime->add_certificate($GO_SECURITY->user_id, $email, $cert);
+
+//require()
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -69,6 +80,7 @@ if (!$valid) {
 
 	echo '<table>';
 	echo '<tr><td width="100">Name:</td><td>' . $arr['name'] . '</td></tr>';
+	echo '<tr><td width="100">E-mail:</td><td>' . $email. '</td></tr>';
 	echo '<tr><td>Hash:</td><td>'.$arr['hash'].'</td></tr>';
 	echo '<tr><td>Serial number:</td><td>'.$arr['serialNumber'].'</td></tr>';
 	echo '<tr><td>Version:</td><td>'.$arr['version'].'</td></tr>';
