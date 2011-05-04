@@ -23,6 +23,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 class Swift_SmimeSigned_Message extends Swift_Message
 { 
+	protected $signed;
+	protected $unsigned;
+	protected $pkcs12_path;
+	protected $passphrase;
+	
 	 /**
    * Create a new Message.
    * @param string $subject
@@ -36,27 +41,79 @@ class Swift_SmimeSigned_Message extends Swift_Message
   {
     return new self($subject, $body, $contentType, $charset);
   }
+	
+	/**
+	 * Call this function to sign a message with a pkcs12 certificate.
+	 * 
+	 * @global type $GO_CONFIG
+	 * @param type $pkcs12_path
+	 * @param type $passphrase 
+	 */
+	
+	public function setSignParams($pkcs12_path, $passphrase){
+		global $GO_CONFIG;
+		
+		$this->unsigned = $GO_CONFIG->tmpdir."smime_unsigned.txt";
+		$this->signed=$GO_CONFIG->tmpdir."smime_signed.txt";
+		
+		$this->pkcs12_path=$pkcs12_path;
+		$this->passphrase=$passphrase;
+	}
+	
+	private function do_sign(){		
+		
+		
+		if(file_exists($this->unsigned))
+			unlink($this->unsigned);
+		
+		if(file_exists($this->signed))
+			unlink($this->signed);
+		
+		/*
+		 * Store the headers of the current message because the PHP function
+		 * openssl_pkcs7_sign will rebuilt the MIME structure and will put the main
+		 * headers in a nested mimepart. We don't want that so we remove them now 
+		 * and add them to the new structure later.
+		 */
+		$headers = $this->getHeaders();
+		$headers->removeAll('MIME-Version');
+		$headers->removeAll('Content-Type');
+		$this->saved_headers = $headers->toString();
+
+		$h= $headers->getAll();
+		foreach($h as $header){
+			$headers->removeAll($header->getFieldName());
+		}
+		
+		/*
+		 * This class will stream the MIME structure to the unsigned text file in 
+		 * a memory efficient way.
+		 */
+		
+		$fbs = new Swift_ByteStream_FileByteStream($this->unsigned, true);		
+		parent::toByteStream($fbs);
+		
+		if(!filesize($this->unsigned))
+			throw new Exception('Could not write temporary message for signing');
+		
+		$pkcs12 = file_get_contents($this->pkcs12_path);
+		
+		openssl_pkcs12_read ($pkcs12, $certs, $this->passphrase);
+		openssl_pkcs7_sign($this->unsigned, $this->signed,$certs['cert'], array($certs['pkey'], $pass), NULL);
+		unlink($this->unsigned);
+	}
   
 	
 	public function toString(){
-		$s = parent::toString();
 		
-		$unsigned = "/tmp/unsigned.txt";
-		$signed="/tmp/signed.txt";
+		if(empty($this->pkcs12_path)){
+			//no sign parameters. Do parent method
+			return parent::toString();
+		}
 		
-		file_put_contents($unsigned, $s);
+		$this->do_sign();
 		
-		$pkcs12 = file_get_contents( "/home/mschering/smime_cert_mschering.p12" );
-		
-		$pass="test";
-		
-		openssl_pkcs12_read ( $pkcs12, $certs, $pass);
-
-		openssl_pkcs7_sign($unsigned, $signed,$certs['cert'], array($certs['pkey'], $pass), NULL);
-		
-		//throw new Exception(file_get_contents($signed));
-		
-		return file_get_contents($signed);
+		return file_get_contents($this->signed);
 	}
 	
   /**
@@ -64,8 +121,25 @@ class Swift_SmimeSigned_Message extends Swift_Message
 * @param Swift_InputByteStream $is
 */
   public function toByteStream(Swift_InputByteStream $is)
-  {		
-		$is->write($this->toString());
+  {
+		if(empty($this->pkcs12_path)){
+			//no sign parameters. Do parent method
+			return parent::toByteStream($is);
+		}
+		
+		$this->do_sign();
+		
+		$is->write($this->saved_headers);
+		
+		$fp = fopen($this->signed, 'r');
+		if(!$fp)
+			throw new Exception('Could not read signed file');
+		while($line = fgets($fp)){			
+			$is->write($line);
+		}
+		fclose($fp);		
+		unlink($this->signed);
+		
     return;
   }
   
