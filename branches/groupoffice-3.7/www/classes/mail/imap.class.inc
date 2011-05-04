@@ -705,12 +705,13 @@ class imap extends imap_bodystruct {
 		$this->clean($sort, 'keyword');
 		$command1 = 'UID FETCH '.$uid_string.' ';
 		switch ($sort) {
-			case 'DATE':
-			case 'R_DATE':
-				$command2 = "BODY.PEEK[HEADER.FIELDS (DATE)]";
-				$key = "BODY[HEADER.FIELDS";
-				break;
-			case 'SIZE':
+//			Doesn't work on some servers. Use internal date for these.
+//			case 'DATE':
+//			case 'R_DATE':
+//				$command2 = "BODY.PEEK[HEADER.FIELDS (DATE)]";
+//				$key = "BODY[HEADER.FIELDS";
+//				break;
+//			case 'SIZE':
 			case 'R_SIZE':
 				$command2 = "RFC822.SIZE";
 				$key = "RFC822.SIZE";
