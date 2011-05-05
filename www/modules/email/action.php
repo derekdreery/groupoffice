@@ -1121,6 +1121,8 @@ try {
 						$response['account_id']=$account['id'];
 					}
 				}
+				
+				$GO_EVENTS->fire_event('save_email_account', array(&$account, $email, &$response));
 			}
 			break;
 		case 'save_alias':

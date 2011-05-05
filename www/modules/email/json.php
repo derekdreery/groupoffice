@@ -1323,6 +1323,9 @@ try {
 							}
 						}
 					}
+					
+					$GO_EVENTS->fire_event('load_email_account', array(&$response));
+					
 					$response['success']=true;
 				}
 				break;

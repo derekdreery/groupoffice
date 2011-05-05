@@ -27,6 +27,7 @@ require_once($GO_MODULES->modules['email']['class_path'] . "email.class.inc.php"
 $imap = new cached_imap();
 $email = new email();
 
+//if(empty($_REQUEST['filepath']))
 $account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 
 if (!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $account['acl_id'])) {
@@ -37,12 +38,17 @@ if (!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $account['acl_id'])) {
 $tmpdir = $GO_CONFIG->tmpdir . 'smime/verify/';
 File::mkdir($tmpdir);
 
-$src_filename = $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.eml';
+$src_filename = !empty($_REQUEST['filepath']) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.eml';
 $cert_filename = $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.crt';
 
 
-if (!file_exists($src_filename))
+if (empty($_REQUEST['filepath']) && !file_exists($src_filename))
 	$imap->save_to_file($uid, $src_filename);
+
+if(!file_exists($src_filename))
+{
+	die('Could not get message to verify the signature');
+}
 
 //if (!file_exists($cert_filename))
 $valid = openssl_pkcs7_verify($src_filename, PKCS7_NOVERIFY, $cert_filename);

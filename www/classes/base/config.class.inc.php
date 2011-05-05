@@ -973,7 +973,7 @@ class GO_CONFIG {
 		
 
 
-		if($this->debug) {			
+		if($this->debug_log) {			
 			list ($usec, $sec) = explode(" ", microtime());
 			$this->loadstart = ((float) $usec + (float) $sec);
 		}
@@ -992,7 +992,7 @@ class GO_CONFIG {
 			$this->folder_create_mode=octdec($this->folder_create_mode);
 		}
 
-		if($this->debug) {
+		if($this->debug_log) {
 			$this->log=true;
 		}
 		
@@ -1031,7 +1031,7 @@ class GO_CONFIG {
 	}
 
 	function __destruct() {
-		if($this->debug) {
+		if($this->debug_log) {
 			go_debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
 
 			go_debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
