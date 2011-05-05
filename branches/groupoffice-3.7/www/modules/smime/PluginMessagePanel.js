@@ -8,7 +8,7 @@
  *
  * @version $Id: Overrides.js 0000 2010-12-29 08:59:17 wsmits $
  * @copyright Copyright Intermesh
- * @author Wesley Smits <wsmits@intermesh.nl>
+ * @author Merijn Schering <mschering@intermesh.nl>
  */
 
 GO.moduleManager.onModuleReady('email',function(){
@@ -17,7 +17,7 @@ GO.moduleManager.onModuleReady('email',function(){
                 this.on('load',function(options, success, response, data){
 									if(data.smime_signed){
 										var el = this.body.down(".message-header").createChild({													
-													html:"This message is signed. Click here to verify the signature.",
+													html:"This message is digitally signed. Click here to verify the signature and import the certificate.",
 													style:"cursor:pointer;text-decoration:underline"
 											});
 											
@@ -34,8 +34,11 @@ GO.moduleManager.onModuleReady('email',function(){
 												}
 												
 												this.certWin.show();
+												
+												if(!this.data.path)
+													this.data.path="";
 												this.certPanel.load(GO.settings.modules.smime.url+'verify.php?uid='+													
-													this.uid+'&account_id='+this.account_id+'&mailbox='+encodeURIComponent(this.mailbox));
+													this.uid+'&account_id='+this.account_id+'&mailbox='+encodeURIComponent(this.mailbox)+'&filepath='+this.data.path);
 											}, this)
 									}
 								})

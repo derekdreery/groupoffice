@@ -1,1 +1,2 @@
-modules/smime/Plugin.js
+modules/smime/PluginMessagePanel.js
+modules/smime/PluginAccountDialog.js
