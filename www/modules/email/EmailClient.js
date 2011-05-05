@@ -1210,7 +1210,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						folder_id: folder_id,
 						filename: filename,
 						charset:attachment.charset,
-						sender:this.messagePanel.data.sender
+						sender:this.messagePanel.data.sender,
+						filepath:this.messagePanel.data.path//smime message are cached on disk
 					},
 					callback: function(options, success, response)
 					{
@@ -1251,7 +1252,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 			subtype: attachment.subtype,
 			filename:attachment.name,
 			charset:attachment.charset,
-			sender:this.messagePanel.data.sender //for gnupg
+			sender:this.messagePanel.data.sender, //for gnupg,
+			filepath:this.messagePanel.data.path //In some cases encrypted messages are temporary stored on disk so the handlers must use that to fetch the data.
 		}
 
 		var url_params = '?';
@@ -1391,7 +1393,8 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 										type: r.type,
 										subtype: r.subtype,
 										filename:r.name,
-										charset:r.charset
+										charset:r.charset,
+										filepath:this.messagePanel.data.path
 									}
 
 									url_params = '?';

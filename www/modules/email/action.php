@@ -181,11 +181,6 @@ try {
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
-			
-
-//			if(empty($data)) {
-//				throw new Exception('Could not fetch message from IMAP server');
-//			}
 			$folder = $files->get_folder($_POST['folder_id']);
 			$path = $files->build_path($folder);
 			if(!$path) {
@@ -193,39 +188,43 @@ try {
 			}
 
 			$path.='/'.$_POST['filename'];
+			
+			
+			require_once($GO_CONFIG->class_path."mail/mimeDecode.class.inc");
+			if(!empty($_REQUEST['filepath'])){
+				//message is cached on disk
+				$msgpath = $GO_CONFIG->file_storage_path.$_REQUEST['filepath'];
 
-			$account = $imap->open_account($_POST['account_id'], $_POST['mailbox']);
-			//$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], false);
-
-			$size = $imap->get_message_part_start($_REQUEST['uid'], $_REQUEST['imap_id']);
-
-			$fp = fopen($GO_CONFIG->file_storage_path.$path, 'w+');
-			if(!$fp)
-				throw new Exception('Could not create file');
-
-			//read from IMAP server
-			while($line = $imap->get_message_part_line()){
-				switch(strtolower($_REQUEST['encoding'])) {
-					case 'base64':
-						$r = fputs($fp,base64_decode($line));
-						break;
-					case 'quoted-printable':
-						$r = fputs($fp, quoted_printable_decode($line));
-						break;
-					default:
-						$r = fputs($fp, $line);
-						break;
+				if(File::path_leads_to_parent($msgpath) || !file_exists($msgpath)){
+					die('Invalid request');
 				}
-				
-				if(!$r)
-					throw new Exception('Could not create file');
-			}
-			fclose($fp);
-			$imap->disconnect();
+				$params['input'] = file_get_contents($msgpath);
+				$params['include_bodies'] = true;
+				$params['decode_bodies'] = true;
+				$params['decode_headers'] = false;
 
-//			if(!file_put_contents($GO_CONFIG->file_storage_path.$path, $data)) {
-//				throw new Exception('Could not create file');
-//			}
+				$part = Mail_mimeDecode::decode($params);
+
+				$parts_arr = explode('.',$_REQUEST['imap_id']);
+				for($i=0;$i<count($parts_arr);$i++) {
+					if(isset($part->parts[$parts_arr[$i]])){
+						$part = $part->parts[$parts_arr[$i]];
+					}else{
+						go_debug('Mime part not found!');
+						go_debug($_REQUEST);
+						die('Part not found');
+					}
+				}	
+				file_put_contents($GO_CONFIG->file_storage_path.$path,$part->body);
+				
+
+			}else
+			{
+				$account = $imap->open_account($_POST['account_id'], $_POST['mailbox']);
+				$imap->save_to_file($_REQUEST['uid'], $GO_CONFIG->file_storage_path.$path, $_REQUEST['imap_id'], $_REQUEST['encoding']);			
+				$imap->disconnect();
+			}
+
 			$files->import_file($GO_CONFIG->file_storage_path.$path,$folder['id']);
 
 			$response['success']=true;
