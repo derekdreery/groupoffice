@@ -1557,11 +1557,24 @@ class email extends db {
 	 */
 	function get_all_aliases($user_id) {
 
+		global $GO_CONFIG;
+		
 		$user_id = intval($user_id);
+		
+		$groups = $GLOBALS['GO_SECURITY']->get_user_group_ids($user_id);
+
+		//remove admin group because we don't want to show all e-mail accounts to the admin.
+		$g=array();
+		foreach($groups as $group_id)
+		{
+			if($group_id!=$GO_CONFIG->group_root){
+				$g[]=$group_id;
+			}
+		}
 		
 		$sql = "SELECT al.* FROM em_aliases al INNER JOIN em_accounts e ON (e.id=al.account_id) ";
 
-		$sql .= "INNER JOIN go_acl a ON (e.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
+		$sql .= "INNER JOIN go_acl a ON (e.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$g)."))) ";
 
 		$sql .= "LEFT JOIN em_accounts_sort so ON (so.account_id=al.account_id AND so.user_id=".$user_id.")"; // Join Sort table
 
