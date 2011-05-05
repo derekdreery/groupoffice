@@ -62,8 +62,8 @@ $email = String::get_email_from_string($arr['extensions']['subjectAltName']);
 
 require_once($GO_MODULES->modules['smime']['class_path'].'smime.class.inc.php');
 $smime = new smime();
-if(!$smime->get_certificate($GO_SECURITY->user_id, $email))
-	$smime->add_certificate($GO_SECURITY->user_id, $email, $cert);
+if(!$smime->get_public_certificate($GO_SECURITY->user_id, $email))
+	$smime->add_public_certificate($GO_SECURITY->user_id, $email, $cert);
 
 //require()
 

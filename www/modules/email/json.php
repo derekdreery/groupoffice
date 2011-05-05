@@ -524,6 +524,8 @@ try {
 					unset($alias['signature']);
 					$response['aliases']['results'][] = $alias;
 				}
+				
+				$GO_EVENTS->fire_event('init_composer', array(&$response, $email));
 
 				break;
 
