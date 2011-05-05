@@ -43,10 +43,11 @@ class smime extends db{
 			$imap->save_to_file($message['uid'], $infilename);//,, $att['imap_id'], $att['encoding']);
 			
 			$pkcs12 = file_get_contents("/home/mschering/smime_cert_mschering.p12");
+			$password = file_get_contents("/home/mschering/password.txt");
 		
-			openssl_pkcs12_read ($pkcs12, $certs, "test");
+			openssl_pkcs12_read ($pkcs12, $certs, $password);
 			
-			openssl_pkcs7_decrypt($infilename, $outfilename, $certs['cert'], array($certs['pkey'], "test"));
+			openssl_pkcs7_decrypt($infilename, $outfilename, $certs['cert'], array($certs['pkey'], $password));
 			
 			require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 			$ml = new mailings();
@@ -60,7 +61,9 @@ class smime extends db{
 	public function sendmail(&$swift){
 		global $GO_SECURITY;
 		
-		$swift->message->setSignParams("/home/mschering/smime_cert_mschering.p12", "test");
+		$password = file_get_contents("/home/mschering/password.txt");
+		
+		$swift->message->setSignParams("/home/mschering/smime_cert_mschering.p12", $password);
 		
 		$smime = new smime();
 		$cert = $smime->get_certificate($GO_SECURITY->user_id, 'mschering@intermesh.nl');
