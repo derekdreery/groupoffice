@@ -21,11 +21,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 * @subpackage Signatures
 * @author Xavier De Cock <xdecock@gmail.com>
 */
-class Swift_SmimeSigned_Message extends Swift_Message
+class Swift_Smime_Message extends Swift_Message
 { 
 	protected $tempout;
 	protected $tempin;
-	protected $pkcs12_path;
+	protected $pkcs12_data;
 	protected $passphrase;
 	
 	protected $recipcerts;
@@ -48,14 +48,14 @@ class Swift_SmimeSigned_Message extends Swift_Message
 	 * Call this function to sign a message with a pkcs12 certificate.
 	 * 
 	 * @global type $GO_CONFIG
-	 * @param type $pkcs12_path
+	 * @param type $pkcs12_data
 	 * @param type $passphrase 
 	 */
 	
-	public function setSignParams($pkcs12_path, $passphrase){
+	public function setSignParams($pkcs12_data, $passphrase){
 	
 		
-		$this->pkcs12_path=$pkcs12_path;
+		$this->pkcs12_data=$pkcs12_data;
 		$this->passphrase=$passphrase;
 	}
 	
@@ -110,10 +110,14 @@ class Swift_SmimeSigned_Message extends Swift_Message
 	private function do_sign(){		
 		
 		go_debug('do_sign');	
+	
+		openssl_pkcs12_read ($this->pkcs12_data, $certs, $this->passphrase);
 		
-		$pkcs12 = file_get_contents($this->pkcs12_path);
+		if(!is_array($certs)){
+			throw new Exception("Could not decrypt key");
+		}
 		
-		openssl_pkcs12_read ($pkcs12, $certs, $this->passphrase);
+		
 		openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), NULL);
 	}
 	
@@ -142,13 +146,13 @@ class Swift_SmimeSigned_Message extends Swift_Message
 	
 	public function toString(){
 		
-		if(empty($this->pkcs12_path) && empty($this->recipcerts)){
+		if(empty($this->pkcs12_data) && empty($this->recipcerts)){
 			//no sign or encrypt parameters. Do parent method.
 			return parent::toString();
 		}
 		
 		
-		if(!empty($this->pkcs12_path)){
+		if(!empty($this->pkcs12_data)){
 			$this->do_sign();
 		}
 		
@@ -168,14 +172,14 @@ class Swift_SmimeSigned_Message extends Swift_Message
 		
 		go_debug('toByteStream');
 		
-		if(empty($this->pkcs12_path) && empty($this->recipcerts)){
+		if(empty($this->pkcs12_data) && empty($this->recipcerts)){
 			//no sign or encrypt parameters. Do parent method.
 			return parent::toByteStream($is);
 		}
 		
 		$this->save_headers();
 		
-		if(!empty($this->pkcs12_path)){
+		if(!empty($this->pkcs12_data)){
 			$this->do_sign();
 		}
 		
@@ -208,8 +212,12 @@ class Swift_SmimeSigned_Message extends Swift_Message
 	public function __destruct(){
 		parent::__destruct();
 		
-		unlink($this->tempout);
-		unlink($this->tempin);
+		if(file_exists($this->tempout))
+			unlink($this->tempout);
+		
+		if(file_exists($this->tempin))
+			unlink($this->tempin);
+
 	}
   
  

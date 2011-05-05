@@ -19,8 +19,25 @@ class smime extends db{
 		$events->add_listener('get_message_with_body', __FILE__, 'smime','decrypt_message');
 		$events->add_listener('save_email_account', __FILE__, 'smime','save_certificate');
 		$events->add_listener('load_email_account', __FILE__, 'smime','load_certificate');
+		$events->add_listener('init_composer', __FILE__, 'smime','init_composer');
+	}
+	
+	public function init_composer(&$response){
 		
+		$account_certs=array();
 		
+		$smime = new smime();
+		
+		foreach($response['aliases']['results'] as &$alias){
+	
+			if(!isset($account_certs[$alias['account_id']])){
+				$account_certs[$alias['account_id']]=$smime->get_pkcs12_certificate($alias['account_id']);
+			}
+			if($account_certs[$alias['account_id']]){
+				$alias['has_smime_cert']=true;
+				$alias['always_sign']=$account_certs[$alias['account_id']]['always_sign'];
+			}
+		}
 	}
 	
 	public function load_certificate(&$response){
@@ -93,11 +110,14 @@ class smime extends db{
 			
 			$imap->save_to_file($message['uid'], $infilename);//,, $att['imap_id'], $att['encoding']);
 			
-			$pkcs12 = file_get_contents("/home/mschering/smime_cert_mschering.p12");
+			//$pkcs12 = file_get_contents("/home/mschering/smime_cert_mschering.p12");
 			$password = trim(file_get_contents("/home/mschering/password.txt"));
+			
+			$smime = new smime();
+			$cert = $smime->get_pkcs12_certificate($message['account_id']);
 		
 			go_debug("read certificate");
-			openssl_pkcs12_read ($pkcs12, $certs, $password);
+			openssl_pkcs12_read ($cert['cert'], $certs, $password);
 			
 			go_debug("Decrypt message");
 			openssl_pkcs7_decrypt($infilename, $outfilename, $certs['cert'], array($certs['pkey'], $password));
@@ -120,18 +140,28 @@ class smime extends db{
 		}
 	}
 	
-	public function sendmail(&$swift){
+	public function sendmail(GoSwift &$swift){
 		global $GO_SECURITY;
 		
-		$password = file_get_contents("/home/mschering/password.txt");
-		
-		$swift->message->setSignParams("/home/mschering/smime_cert_mschering.p12", $password);
-		
 		$smime = new smime();
-		$cert = $smime->get_public_certificate($GO_SECURITY->user_id, 'mschering@intermesh.nl');
 		
-		if($cert)
-			$swift->message->setEncryptParams(array($cert['cert']));
+		if(!empty($_POST['sign_smime'])){			
+		
+			$password = trim(file_get_contents("/home/mschering/password.txt"));
+
+			$cert = $smime->get_pkcs12_certificate($swift->account['id']);
+
+			$swift->message->setSignParams($cert['cert'], $password);
+		}
+		
+		if(!empty($_POST['encrypt_smime'])){			
+			
+			//TODO lookup all participants
+			$cert = $smime->get_public_certificate($GO_SECURITY->user_id, 'mschering@intermesh.nl');
+
+			if($cert)
+				$swift->message->setEncryptParams(array($cert['cert']));
+		}
 
 	}
 	
@@ -182,9 +212,7 @@ class smime extends db{
 		
 		$this->query($sql);
 		
-		return $this->next_record();
-		
-		
+		return $this->next_record();		
 	}
 	
 	

@@ -945,7 +945,9 @@ GO.email.EmailComposer = function(config) {
 	this.addEvents({
 		//		attachmentDblClicked : true,
 		zipOfAttachmentsDblClicked : true,
-		'send' : true
+		'send' : true,
+		'reset' : true,
+		afterShowAndLoad:true
 	});
 };
 
@@ -1091,6 +1093,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.inline_temp_attachments = [],
 		this.formPanel.form.reset();
 		this.htmlEditor.SpellCheck = false;
+		
+		this.fireEvent("reset", this);
 	},
 
 	showCC : function(show){
@@ -1448,6 +1452,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		} else {
 			this.editor.focus();
 		}
+		
+		this.fireEvent('afterShowAndLoad',this);
 	},
 	
 	addSignature : function(accountRecord){
