@@ -26,9 +26,6 @@ class mailings extends db
 
 		if(!empty($path))
 		{
-			//if($path[0]!='/')
-				//$path = $GO_CONFIG->file_storage_path.$path;
-
 			$data = file_get_contents($GO_CONFIG->file_storage_path.$path);
 			$inline_url = $GO_MODULES->modules['mailings']['url'].'mimepart.php?path='.urlencode($path);
 			$response['path']=$path;
