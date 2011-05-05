@@ -1631,7 +1631,7 @@ class imap extends imap_bodystruct {
 		return $res;
 	}
 
-	public function save_to_file($uid, $path){
+	public function save_to_file($uid, $path, $imap_part_id=-1, $encoding=''){
 
 		$fp = fopen($path, 'w+');
 
@@ -1644,14 +1644,28 @@ class imap extends imap_bodystruct {
 		 *
 		 * That's why I first fetch the header and then the text.
 		 */
-		$header = $this->get_message_part($uid, 'HEADER')."\r\n\r\n";
+		if($imap_part_id==-1){
+			$header = $this->get_message_part($uid, 'HEADER')."\r\n\r\n";
 
-		if(!fputs($fp, $header))
-			return false;
+			if(!fputs($fp, $header))
+				return false;
+			
+			$imap_part_id='TEXT';
+		}
 
-		$size = $this->get_message_part_start($uid,'TEXT');
+		$size = $this->get_message_part_start($uid,$imap_part_id);
 
 		while($line = $this->get_message_part_line()){
+			
+			switch(strtolower($encoding)) {
+				case 'base64':
+					$line=base64_decode($line);
+					break;
+				case 'quoted-printable':
+					$line= quoted_printable_decode($line);
+					break;
+			}
+			
 			if(!fputs($fp, $line))
 				return false;
 		}

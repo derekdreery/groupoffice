@@ -78,6 +78,8 @@ class Swift_SmimeSigned_Message extends Swift_Message
 		if(file_exists($this->tempout))
 			unlink($this->tempout);
 		
+		File::mkdir($GO_CONFIG->tmpdir);
+		
 		/*
 		 * This class will stream the MIME structure to the tempin text file in 
 		 * a memory efficient way.
@@ -118,6 +120,22 @@ class Swift_SmimeSigned_Message extends Swift_Message
 	private function do_encrypt(){		
 		go_debug('do_encrypt');		
 		
+		if(file_exists($this->tempout)){
+			//message was signed. Create new input file.
+		
+			file_put_contents($this->tempin, $this->saved_headers);
+			
+			$fp = fopen($this->tempout, 'r');
+			if(!$fp)
+				throw new Exception('Could not read tempout file');
+			
+			while($line = fgets($fp)){			
+				file_put_contents($this->tempin, $line, FILE_APPEND);
+			}
+			fclose($fp);			
+			unlink($this->tempout);
+		}
+		
 		openssl_pkcs7_encrypt($this->tempin, $this->tempout,$this->recipcerts[0], array());	
 	}
   
@@ -128,6 +146,7 @@ class Swift_SmimeSigned_Message extends Swift_Message
 			//no sign or encrypt parameters. Do parent method.
 			return parent::toString();
 		}
+		
 		
 		if(!empty($this->pkcs12_path)){
 			$this->do_sign();
@@ -169,16 +188,29 @@ class Swift_SmimeSigned_Message extends Swift_Message
 		$fp = fopen($this->tempout, 'r');
 		if(!$fp)
 			throw new Exception('Could not read tempout file');
-		while($line = fgets($fp)){			
+		
+		$still_in_headers=true;
+		
+		while($line = fgets($fp)){				
+			if($still_in_headers && substr($line,0,19)=='Content-Disposition')
+				continue;
+			
+			if(empty($line))
+				$still_in_headers=false;
+			
 			$is->write($line);
 		}
-		fclose($fp);		
-		
-		unlink($this->tempout);
-		unlink($this->tempin);
+		fclose($fp);	
 		
     return;
   }
+	
+	public function __destruct(){
+		parent::__destruct();
+		
+		unlink($this->tempout);
+		unlink($this->tempin);
+	}
   
  
 }

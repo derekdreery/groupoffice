@@ -241,6 +241,8 @@ class Go2Mime
 
 		$a = $this->response['attachments'];
 		$this->response['attachments']=array();
+		
+		$this->response['smime_signed']=false;
 
 		for ($i=0;$i<count($a);$i++)
 		{
@@ -252,7 +254,14 @@ class Go2Mime
 			}
 
 			if(!$count)
-				unset($a[$i]['replacement_url']);
+				unset($a[$i]['replacement_url']);	
+			
+			
+			if($a[$i]['name']=='smime.p7s'){					
+				$this->response['smime_signed']=true;
+				continue;
+			}
+
 
 			$this->response['attachments'][]=$a[$i];
 		}
