@@ -10,7 +10,7 @@ GO.gnupg.lang.genKey='Generar un nou parell de claus';
 GO.gnupg.lang.importKey='Generar nova clau';
 GO.gnupg.lang.selectKeyFile='Seleccionar arxiu de clau';
 
-GO.gnupg.lang.encryptMessage='Encriptar missatge';
+GO.gnupg.lang.encryptMessage='Encriptar missatge (GPG)';
 GO.gnupg.lang.confirmChangeToText='L\'encriptació només pot ser utilitzada en e-mails de text pla. Els canvis fets en l\'actual e-mail es perdran si continueu en el mode de text pla. Esteu segurs que voleu canviar al mode d\'edició de text pla?';
 
 GO.gnupg.lang.key='Clau';

@@ -13,7 +13,7 @@ GO.gnupg.lang.genKey='Opprett nytt nøkkelpar';
 GO.gnupg.lang.importKey='Opprett ny nøkkel';
 GO.gnupg.lang.selectKeyFile='Velg nøkkelfil';
 
-GO.gnupg.lang.encryptMessage='Krypter e-post';
+GO.gnupg.lang.encryptMessage='Krypter e-post (GPG)';
 GO.gnupg.lang.confirmChangeToText='Kryptering kan bare brukes på e-poster i ren tekst. Du vil miste endringer i denne e-posten hvis du bytter til ren tekstmodus nå. Er du sikker på at du vil bytte til ren tekstmodus nå?';
 
 GO.gnupg.lang.key='Nøkkel';

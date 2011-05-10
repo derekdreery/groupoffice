@@ -17,7 +17,7 @@ GO.gnupg.lang.genKey='Vygenerovat nový klíč';
 GO.gnupg.lang.importKey='Vygenerovaný nový klíč';
 GO.gnupg.lang.selectKeyFile='Vybrat soubor s klíčem';
 
-GO.gnupg.lang.encryptMessage='Šifrovací zpráva';
+GO.gnupg.lang.encryptMessage='Šifrovací zpráva (GPG)';
 GO.gnupg.lang.confirmChangeToText='Šifrování může být použito pouze pro emaily, které používají holý text. Změny, které jste provedli v tomtom emailu mohou být ztraceny pokud bude pokračovat v použítí změny na holý text. Jste si jisti. že chcete změnit upravovací režim na holý text?';
 
 GO.gnupg.lang.key='Klíč';

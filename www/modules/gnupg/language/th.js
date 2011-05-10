@@ -15,7 +15,7 @@ GO.gnupg.lang.genKey='การสร้างคีย์คู่ใหม่'
 GO.gnupg.lang.importKey='การสร้างคีย์ใหม่';//Generate new key
 GO.gnupg.lang.selectKeyFile='เลือกไฟล์คีย์';//Select key file
 
-GO.gnupg.lang.encryptMessage='เข้ารหัสข้อความ';//Encrypt message
+GO.gnupg.lang.encryptMessage='เข้ารหัสข้อความ (GPG)';//Encrypt message
 GO.gnupg.lang.confirmChangeToText='การเข้ารหัสการส่งข้อความอีเมล.หากคุณดำเนินการต่อข้อความอีเมลในปัจจุบันจะหายไป ต้องการโหมดข้อความเดี่ยวนี้.แน่ใจหรือไม่ที่จะสลับจากโหมดแก้ไขไปเป็นโหมดข้อความ?';//Encryption can only be used with plain text e-mails.Changes made in the current e-mail will be lost if you continue to plain text mode now. Are you sure you want to switch to plain text editing mode now
 
 GO.gnupg.lang.key='คีย์';//Key
