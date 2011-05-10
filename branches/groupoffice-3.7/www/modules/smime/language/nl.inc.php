@@ -10,3 +10,6 @@ $lang['smime']['noPrivateKeyForDecrypt']="Dit bericht is versleuteld en u heeft 
 $lang['smime']['badGoLogin']="Het Group-Office wachtwoord was onjuist.";
 $lang['smime']['smime_pass_matches_go']="Uw SMIME sleutelwachtwoord komt overeen met uw Group-Office wachtwoord. Dit is uit beveiligingsoogpunt niet toegestaan!";
 $lang['smime']['smime_pass_empty']="Uw SMIME sleutel heeft geen wachtwoord. Dit is uit beveiligingsoogpunt niet toegestaan!";
+
+$lang['smime']['invalidCert']="Dit certificaat is ongeldig!";
+$lang['smime']['validCert']="Geldig certificaat";

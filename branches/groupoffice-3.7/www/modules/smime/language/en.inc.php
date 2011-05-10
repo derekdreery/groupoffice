@@ -10,3 +10,6 @@ $lang['smime']['noPrivateKeyForDecrypt']="This message is encrypted and you don'
 $lang['smime']['badGoLogin']="The Group-Office password was incorrect.";
 $lang['smime']['smime_pass_matches_go']="Your SMIME key password matches your Group-Office password. This is prohibited for security reasons!";
 $lang['smime']['smime_pass_empty']="Your SMIME key has no password. This is prohibited for security reasons!";
+
+$lang['smime']['invalidCert']="The certificate is invalid!";
+$lang['smime']['validCert']="Valid certificate";
