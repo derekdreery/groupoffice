@@ -13,55 +13,71 @@
 
 GO.moduleManager.onModuleReady('email',function(){
 	Ext.override(GO.email.AccountDialog, {
-            initComponent : GO.email.AccountDialog.prototype.initComponent.createInterceptor(function(){
+		initComponent : GO.email.AccountDialog.prototype.initComponent.createInterceptor(function(){
 							
-								this.propertiesPanel.fileUpload=true;
-								this.propertiesPanel.bodyCfg.enctype="multipart/form-data";
+			this.propertiesPanel.fileUpload=true;
+			this.propertiesPanel.bodyCfg.enctype="multipart/form-data";
 								
-								this.smimePanel=new Ext.Panel({
-									cls:'go-form-panel',
-									title:GO.smime.lang.settings,
-									disabled:true,
-									items:[
-										this.deleteCert = new Ext.form.Checkbox({
-											boxLabel:GO.smime.lang.deleteCert,
-											labelSeparator: '',
-											name: 'delete_cert',
-											allowBlank: true,
-											hideLabel:true,
-											disabled:true
-										}),
-										this.uploadFile = new GO.form.UploadFile({
-											addText:GO.smime.lang.selectPkcs12Cert,
-											inputName : 'cert',
-											max: 1
-										}),{
-											xtype:'checkbox',
-											hideLabel:true,
-											boxLabel:GO.smime.lang.alwaysSign,
-											name:'always_sign'
-										}
-									]
-								});
+			this.smimePanel=new Ext.Panel({
+				cls:'go-form-panel',
+				title:GO.smime.lang.settings,
+				disabled:true,
+				items:[{
+					xtype:'fieldset',
+					title:GO.smime.lang.pkcs12Cert,
+					items:[
+						{
+							xtype:'label',
+							html:GO.smime.lang.pkcs12CertInfo
+						},{
+							xtype:'textfield',
+							fieldLabel:GO.lang.strPassword,
+							inputType:'password',
+							name:'smime_password',
+							width:200
+						},
+						
+						this.uploadFile = new GO.form.UploadFile({
+							addText:GO.smime.lang.selectPkcs12Cert,
+							inputName : 'cert',
+							max: 1
+						}),
+						this.deleteCert = new Ext.form.Checkbox({						
+							boxLabel:GO.smime.lang.deleteCert,
+							labelSeparator: '',
+							name: 'delete_cert',
+							allowBlank: true,
+							hideLabel:true,
+							disabled:true
+						})]
+				},
+				{
+					xtype:'checkbox',
+					hideLabel:true,
+					boxLabel:GO.smime.lang.alwaysSign,
+					name:'always_sign'
+				}
+				]
+			});
 							
-                this.tabPanel.add(this.smimePanel);
+			this.tabPanel.add(this.smimePanel);
 								
 								
-								this.on('show', function(){
-									this.smimePanel.setDisabled(true);
-								}, this)
+			this.on('show', function(){
+				this.smimePanel.setDisabled(true);
+			}, this)
 								
-								this.propertiesPanel.form.on("actioncomplete", function(form, action){													
-									if(action.type=='submit'){
-										this.uploadFile.clearQueue();
-										this.deleteCert.setDisabled(!action.result.cert);
-									}else
-									{
-										this.smimePanel.setDisabled(false);
-										this.deleteCert.setDisabled(!action.result.data.cert);
-									}
-								}, this);
-            })
-        })
+			this.propertiesPanel.form.on("actioncomplete", function(form, action){													
+				if(action.type=='submit'){
+					this.uploadFile.clearQueue();
+					this.deleteCert.setDisabled(!action.result.cert);
+				}else
+				{
+					this.smimePanel.setDisabled(false);
+					this.deleteCert.setDisabled(!action.result.data.cert);
+				}
+			}, this);
+		})
+	})
 });
         

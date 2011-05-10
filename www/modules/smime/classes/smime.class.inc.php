@@ -52,9 +52,35 @@ class smime extends db{
 	}
 	
 	public function save_certificate(&$account, $email, &$response){
+		global $GO_CONFIG, $GO_LANGUAGE, $lang;
+		
+		
+		
 		
 		if (isset($_FILES['cert']['tmp_name'][0]) && is_uploaded_file($_FILES['cert']['tmp_name'][0])) {
+			
+			$GO_LANGUAGE->require_language_file('smime');
+			
+			
+			require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
+			$GO_AUTH = new GO_AUTH();
+			if(!$GO_AUTH->login($_SESSION['GO_SESSION']['username'], $_POST['smime_password'])){
+				throw new Exception($lang['smime']['badGoLogin']);
+			}
+			
 			$cert = file_get_contents($_FILES['cert']['tmp_name'][0]);
+			
+			
+			openssl_pkcs12_read ($cert, $certs, $_POST['smime_password']);
+			if(!empty($certs)){
+				throw new Exception($lang['smime']['smime_pass_matches_go']);
+			}
+			
+			openssl_pkcs12_read ($cert, $certs, "");
+			if(!empty($certs)){
+				throw new Exception($lang['smime']['smime_pass_empty']);
+			}
+			
 		}
 		if(isset($_POST['delete_cert']))
 			$cert = '';
