@@ -180,7 +180,7 @@ GO.email.lang.sending='Verzenden...';
 
 GO.email.lang.defaultFontSize = 'Standaard lettergrootte';
 
-GO.email.lang.shareFolder = 'Map delen';
+GO.email.lang.shareFolder = 'Delen';
 
 GO.email.lang.readPerm='Lezen';
 GO.email.lang.writePerm='Schrijven';
