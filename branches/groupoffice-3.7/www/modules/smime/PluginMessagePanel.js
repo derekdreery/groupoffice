@@ -14,17 +14,30 @@
 GO.moduleManager.onModuleReady('email',function(){
 	Ext.override(GO.email.MessagePanel, {
             initComponent : GO.email.MessagePanel.prototype.initComponent.createSequence(function(){
-                this.on('load',function(options, success, response, data){
+                this.on('load',function(options, success, response, data, password){
+									
+									if(password)
+									{
+										GO.smime.passwordsInSession[data.account_id]=true;
+									}
+									
+									if(data.smime_encrypted){
+										var el = this.body.down(".message-header").createChild({													
+													html:GO.smime.lang.messageEncrypted,
+													style:"margin:4px 0px"
+											});
+									}
+									
 									if(data.smime_signed){
 										var el = this.body.down(".message-header").createChild({													
-													html:"This message is digitally signed. Click here to verify the signature and import the certificate.",
-													style:"cursor:pointer;text-decoration:underline"
+													html:GO.smime.lang.messageSigned,
+													style:"cursor:pointer;text-decoration:underline;margin:4px 0px"
 											});
 											
 											el.on('click', function(){
 												if(!this.certWin){
 													this.certWin = new GO.Window({
-														title:'SMIME Certificate',
+														title:GO.smime.lang.smimeCert,
 														width:500,
 														height:300,
 														closeAction:'hide',

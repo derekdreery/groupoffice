@@ -75,10 +75,26 @@ class smime extends db{
 	
 	public function decrypt_message(&$message, cached_imap $imap){
 		
-		global $GO_MODULES, $GO_CONFIG, $GO_SECURITY;
-
+		global $GO_MODULES, $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $lang;
 		
 		if(!$message['from_cache'] && $message['content-type']=='application/pkcs7-mime'){
+			
+			
+			$smime = new smime();
+			$cert = $smime->get_pkcs12_certificate($message['account_id']);
+			
+			if(!$cert)
+				throw new Exception("No key was found to decrypt the message!");
+			
+			
+			if(isset($_POST['password']))
+				$_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']]=$_POST['password'];
+			
+			if(!isset($_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']])){
+				$message['askPassword']=true;
+				return false;
+			}				
+			
 			$att = $message['attachments'][0];
 			
 //			array (
@@ -110,57 +126,96 @@ class smime extends db{
 			
 			$imap->save_to_file($message['uid'], $infilename);//,, $att['imap_id'], $att['encoding']);
 			
-			//$pkcs12 = file_get_contents("/home/mschering/smime_cert_mschering.p12");
-			$password = trim(file_get_contents("/home/mschering/password.txt"));
+			if(!file_exists($infilename)){
+				throw new Exception("Could not save IMAP message to file for decryption");
+			}
 			
-			$smime = new smime();
-			$cert = $smime->get_pkcs12_certificate($message['account_id']);
-		
-			go_debug("read certificate");
+			//$pkcs12 = file_get_contents("/home/mschering/smime_cert_mschering.p12");
+			//$password = trim(file_get_contents("/home/mschering/password.txt"));
+			$password = $_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']];
+			
+			
 			openssl_pkcs12_read ($cert['cert'], $certs, $password);
 			
-			go_debug("Decrypt message");
+			if(empty($certs)){
+				//password invalid
+				$message['askPassword']=true;
+				return false;
+			}
+			
 			openssl_pkcs7_decrypt($infilename, $outfilename, $certs['cert'], array($certs['pkey'], $password));
 			
+			unlink($infilename);
+			
 			if(!file_exists($outfilename) || !filesize($outfilename)){
-				throw new Exception("Could not decrypt message");
+				//throw new Exception("Could not decrypt message");
+				$GO_LANGUAGE->require_language_file('smime');
+				$message['html_body']=$lang['smime']['noPrivateKeyForDecrypt'];
+				return false;
 			}
 			
 			require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
-			$ml = new mailings();
-			
-			go_debug("Reading decrypted file");
+			$ml = new mailings();		
 			
 			$decrypted_message = $ml->get_message_for_client(0, $reldir.'unencrypted.txt','');
+			
+			unlink($reldir.'unencrypted.txt');
 			
 			$message['html_body']=$decrypted_message['body'];
 			$message['attachments']=$decrypted_message['attachments'];
 			$message['path']=$decrypted_message['path'];
 			$message['smime_signed']=$decrypted_message['smime_signed'];	
+			$message['smime_encrypted']=true;
 		}
 	}
 	
 	public function sendmail(GoSwift &$swift){
-		global $GO_SECURITY;
+		global $GO_SECURITY, $GO_LANGUAGE, $lang;
 		
 		$smime = new smime();
 		
 		if(!empty($_POST['sign_smime'])){			
 		
-			$password = trim(file_get_contents("/home/mschering/password.txt"));
+			//$password = trim(file_get_contents("/home/mschering/password.txt"));
+			$password = $_SESSION['GO_SESSION']['smime']['passwords'][$swift->account['id']];
 
 			$cert = $smime->get_pkcs12_certificate($swift->account['id']);
 
 			$swift->message->setSignParams($cert['cert'], $password);
 		}
 		
-		if(!empty($_POST['encrypt_smime'])){			
+		if(!empty($_POST['encrypt_smime'])){		
 			
-			//TODO lookup all participants
-			$cert = $smime->get_public_certificate($GO_SECURITY->user_id, 'mschering@intermesh.nl');
+			$to = $swift->message->getTo();
+			
+			$cc = $swift->message->getCc();
+			
+			$bcc = $swift->message->getBcc();
+			
+			if(is_array($cc))
+				$to = array_merge($to, $cc);
+			
+			if(is_array($bcc))
+				$to = array_merge($to, $bcc);
+			
+			//lookup all recipients
+			$failed=array();
+			$public_certs=array();
+			foreach($to as $email=>$name){
+				$cert = $smime->get_public_certificate($GO_SECURITY->user_id, $email);				
+				if(!$cert){
+					$failed[]=$email;
+				}				
+				$public_certs[]=$cert['cert'];
+			}
+			
+			if(count($failed)){
+				$GO_LANGUAGE->require_language_file('smime');
+				throw new Exception(sprintf($lang['smime']['noPublicCertForEncrypt'], implode(', ',$failed)));
+			}
 
 			if($cert)
-				$swift->message->setEncryptParams(array($cert['cert']));
+				$swift->message->setEncryptParams($public_certs);
 		}
 
 	}
