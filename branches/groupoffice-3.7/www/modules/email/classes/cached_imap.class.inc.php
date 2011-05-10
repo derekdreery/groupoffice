@@ -560,7 +560,7 @@ class cached_imap extends imap{
 		//go_debug($message['attachments']);
 		$message['smime_signed']=false;
 		foreach($message['attachments'] as $key=>$a){
-			if($a['name']=='smime.p7s'){
+			if(isset($a['name']) && $a['name']=='smime.p7s'){
 				unset($message['attachments'][$key]);
 				$message['smime_signed']=true;
 				break;
@@ -645,7 +645,7 @@ class cached_imap extends imap{
 		
 		
 		$GO_EVENTS->fire_event('get_message_with_body', array(&$message, $this));
-
+		
 		$cached_message['uid']=$uid;
 		$cached_message['folder_id']=$this->folder['id'];
 		$cached_message['serialized_message_object']=serialize($message);		
