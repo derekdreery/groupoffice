@@ -667,7 +667,7 @@ try {
 					}
 
 				} catch (Exception $e) {
-					$response['feedback'] = $lang['email']['feedbackSMTPProblem'] . '<br />'.nl2br($e->getMessage());
+					$response['feedback'] = nl2br($e->getMessage());
 				}
 			}
 			break;

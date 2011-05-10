@@ -33,7 +33,7 @@ if(!isset($_REQUEST['task']))
 }
 
 
-if(!isset($_POST['passphrase']) && $_REQUEST['task']!='attachments'){
+if(!isset($_POST['password']) && $_REQUEST['task']!='attachments'){
 	//close writing to session so other concurrent requests won't be locked out.
 	session_write_close();
 }
@@ -726,8 +726,8 @@ try {
 					require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 					$gnupg = new gnupg();
 					$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']] : '';
-					if(isset($_POST['passphrase'])) {
-						$passphrase=$_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']]=$_POST['passphrase'];
+					if(isset($_POST['password'])) {
+						$passphrase=$_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']]=$_POST['password'];
 						//$passphrase=$_POST['passphrase'];
 					}
 					try {
@@ -737,9 +737,9 @@ try {
 						$m = $e->getMessage();
 
 						if(strpos($m, 'bad passphrase')) {
-							$response['askPassphrase']=true;
-							if(isset($_POST['passphrase'])) {
-								throw new Exception('Wrong passphrase!');
+							$response['askPassword']=true;
+							if(isset($_POST['password'])) {
+								throw new Exception('Wrong password!');
 							}
 						}else {
 							throw new Exception($m);

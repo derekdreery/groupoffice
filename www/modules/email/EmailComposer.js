@@ -947,7 +947,8 @@ GO.email.EmailComposer = function(config) {
 		zipOfAttachmentsDblClicked : true,
 		'send' : true,
 		'reset' : true,
-		afterShowAndLoad:true
+		afterShowAndLoad:true,
+		beforesendmail:true
 	});
 };
 
@@ -1775,6 +1776,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			Ext.MessageBox.confirm(GO.lang.strConfirm, GO.lang.spellcheckAsk, function (btn){self.HandleResult(btn,self);});
 			return false;
 		}*/
+		
+		
+		if(!draft && !autoSave && !this.fireEvent('beforesendmail', this))
+			return false;
+		
 
 		if (this.uploadDialog && this.uploadDialog.isVisible()) {
 
