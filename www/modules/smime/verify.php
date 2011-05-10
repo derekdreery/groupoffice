@@ -65,6 +65,8 @@ $smime = new smime();
 if(!$smime->get_public_certificate($GO_SECURITY->user_id, $email))
 	$smime->add_public_certificate($GO_SECURITY->user_id, $email, $cert);
 
+$GO_LANGUAGE->require_language_file('smime');
+
 //require()
 
 ?>
@@ -79,13 +81,13 @@ if(!$smime->get_public_certificate($GO_SECURITY->user_id, $email))
 
 <?php
 if (!$valid) {
-	echo '<h1>The cerificate is invalid!</h1>';
+	echo '<h1>'.$lang['smime']['invalidCert'].'</h1>';
 } else {
-	echo '<h1>Valid certificate</h1>';
+	echo '<h1>'.$lang['smime']['validCert'].'</h1>';
 
 
 	echo '<table>';
-	echo '<tr><td width="100">Name:</td><td>' . $arr['name'] . '</td></tr>';
+	echo '<tr><td width="100">'.$lang['common']['name'].':</td><td>' . $arr['name'] . '</td></tr>';
 	echo '<tr><td width="100">E-mail:</td><td>' . $email. '</td></tr>';
 	echo '<tr><td>Hash:</td><td>'.$arr['hash'].'</td></tr>';
 	echo '<tr><td>Serial number:</td><td>'.$arr['serialNumber'].'</td></tr>';
