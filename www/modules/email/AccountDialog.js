@@ -473,7 +473,8 @@ GO.email.AccountDialog = function(config) {
 			activeTab : 0,
 			border : false,
 			anchor : '100% 100%',
-			items : items
+			items : items,
+			enableTabScroll:true
 		})]
 
 	});
@@ -516,7 +517,7 @@ GO.email.AccountDialog = function(config) {
 		layout : 'fit',
 		modal : false,
 		height : 400,
-		width : 800,
+		width : 900,
 		closeAction : 'hide',
 		title : GO.email.lang.account,
 
