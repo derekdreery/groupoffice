@@ -13,12 +13,28 @@ GO.email.ImapAclUserDialog = Ext.extend(GO.Window, {
 				mailbox:''
 			},
 			cls : 'go-form-panel',
-			items : [{
+			items : [new GO.form.ComboBox({
 					xtype:'textfield',
 					fieldLabel:GO.lang.strUsername,
 					name:'identifier',
-					anchor:'100%'
-			},{
+					anchor:'100%',
+					displayField: 'username',		
+					valueField: 'username',
+					triggerAction: 'all',
+					selectOnFocus:true,					
+					pageSize: parseInt(GO.settings['max_rows_list']),
+					store: new GO.data.JsonStore({
+						url: GO.settings.modules.email.url+'json.php',
+						baseParams: {
+							'task':'usernames'
+						},
+						root: 'results',
+						totalProperty: 'total',
+						id: 'username',
+						fields:['username','email'],
+						remoteSort: true
+					})
+			}),{
 				xtype:'checkboxgroup',
 				fieldLabel:GO.lang.strPermissions,				
 				anchor:'100%',
