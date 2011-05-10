@@ -1616,6 +1616,23 @@ class email extends db {
 		    return $this->query("DELETE FROM em_folders_expanded WHERE folder_id=? AND user_id=?", 'ii', array($folder_id, $user_id));
 	    }
 	}
+	
+	
+	function get_usernames($user_id, $query='', $start=0, $limit=10){
+		
+		$sql = "SELECT SQL_CALC_FOUND_ROWS ac.username FROM em_accounts ac ".
+			"INNER JOIN go_users u ON (u.id=ac.user_id) ".
+			"INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
+		if(!empty($query))
+			$sql .= "WHERE ac.username LIKE '".$this->escape($query)."' ";
+		
+		$sql .= "GROUP BY ac.username ORDER BY ac.username ASC LIMIT ".intval($start).", ".intval($limit)."";
+
+		$this->query($sql);
+		
+		return $this->found_rows();
+		
+	}
 
 	/* {CLASSFUNCTIONS} */
 

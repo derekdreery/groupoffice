@@ -502,6 +502,21 @@ try {
 
 	}else {
 		switch($_REQUEST['task']) {
+			
+			case 'usernames':
+				
+				$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
+				$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 30;
+				$query = !empty($_POST['query']) ? '%'.trim($_POST['query']).'%' : '';
+				
+				$response['total']=$email->get_usernames($GO_SECURITY->user_id, $query, $start, $limit);
+				$response['results']=array();
+				
+				while($r=$email->next_record()){
+					$response['results'][]=$r;
+				}				
+				
+				break;
 
 
 			case 'init_composer':
