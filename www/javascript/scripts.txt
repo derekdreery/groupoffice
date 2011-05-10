@@ -5,6 +5,7 @@ javascript/DeployJava.js
 javascript/MainLayout.js
 javascript/ColumnFitLayout.js
 javascript/windows/Window.js
+javascript/windows/PasswordDialog.js
 javascript/DialogListeners.js
 javascript/JsonMenu.js
 javascript/SmallPagingToolbar.js
