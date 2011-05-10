@@ -18,7 +18,7 @@ GO.gnupg.lang.genKey='Generuj nową parę kluczy';
 GO.gnupg.lang.importKey='Generuj nowy klucz';
 GO.gnupg.lang.selectKeyFile='Wybierz plik klucza';
 
-GO.gnupg.lang.encryptMessage='Szyfrowanie wiadomości';
+GO.gnupg.lang.encryptMessage='Szyfrowanie wiadomości (GPG)';
 GO.gnupg.lang.confirmChangeToText='Zaszyfrować można tylko wiadomości tekstowe. Zmiany wprowadzone w tej wiadomości zostaną utacone jeżeli przejdziesz na tryb tekstowy. Czy napewno chcesz się przełączyć na tryb tekstowy?';
 
 GO.gnupg.lang.key='Klucz';

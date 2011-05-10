@@ -5,7 +5,7 @@ GO.gnupg.lang.genKey='Genereer nieuw sleutelpaar';
 GO.gnupg.lang.importKey='Genereer nieuwe sleutel';
 GO.gnupg.lang.selectKeyFile='Selecteer sleutelbestand';
 
-GO.gnupg.lang.encryptMessage='Versleutel bericht';
+GO.gnupg.lang.encryptMessage='Versleutel bericht met GPG';
 GO.gnupg.lang.confirmChangeToText='Versleuteling is alleen mogelijk bij platte tekst berichten. Wijzignen aan het huidige bericht gaan verloren als u nu doorgaat. Weet u zeker dat u wilt overschakelen naar platte tekst modus?';
 GO.gnupg.lang.key='Sleutel';
 
