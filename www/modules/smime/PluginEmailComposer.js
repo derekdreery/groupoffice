@@ -11,11 +11,16 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+Ext.ns("GO.smime");
+
+GO.smime.passwordsInSession = {};
+
 GO.moduleManager.onModuleReady('email',function(){
 	Ext.override(GO.email.EmailComposer, {
+		
 		initComponent : GO.email.EmailComposer.prototype.initComponent.createSequence(function(){
 			this.optionsMenu.add(['-',this.signCheck = new Ext.menu.CheckItem({
-				text:"Sign with SMIME",
+				text:GO.smime.lang.sign,
 				checked: false,
 				listeners : {
 					checkchange: function(check, checked) {	
@@ -27,7 +32,7 @@ GO.moduleManager.onModuleReady('email',function(){
 					scope:this
 				}
 			}),this.encryptCheck = new Ext.menu.CheckItem({
-				text:"Encrypt with SMIME",
+				text:GO.smime.lang.encrypt,
 				checked: false,
 				listeners : {
 					checkchange: function(check, checked) {						
@@ -52,8 +57,61 @@ GO.moduleManager.onModuleReady('email',function(){
 			this.fromCombo.on('change',function(){
 				this.checkSmimeSupport();
 			}, this);
+			
+			
+			this.on('beforesendmail',this.askPassword,this);
+			
 		}),	
 		
+		
+		askPassword : function(){				
+				
+			if(!GO.smime.passwordsInSession[this.fromCombo.getValue()] && this.sendParams['sign_smime']=="1"){
+				
+				
+				if(!this.passwordDialog)
+				{
+					this.passwordDialog = new GO.dialog.PasswordDialog({
+						title:GO.smime.lang.enterPassword,
+						fn:function(btn, password){
+					
+							if(btn=="cancel")
+								return false;
+
+							Ext.Ajax.request({
+								url: GO.settings.modules.smime.url+ 'checkpassword.php',
+								success: function(response){
+									var res = Ext.decode(response.responseText);
+
+									if(res.success)
+									{
+										GO.smime.passwordsInSession[this.fromCombo.getValue()]=true;
+										this.sendMail();
+									}else
+									{
+										this.askPassword();							
+									}
+								},
+								params: {
+									account_id: this.fromCombo.getValue(),
+									password:password
+								},
+								scope:this
+							});
+
+						},
+						scope:this
+					});
+				}
+				this.passwordDialog.show();
+				
+				return false;
+			}else
+			{
+				return true;
+			}			
+		},
+
 		checkSmimeSupport : function(){
 			var current_id = this.fromCombo.getValue();			
 			var record = this.fromCombo.store.getById(current_id);
