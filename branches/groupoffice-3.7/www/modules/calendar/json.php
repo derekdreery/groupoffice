@@ -38,7 +38,7 @@ try {
 		case 'startup':
 
 			$_REQUEST['start']=0;
-			$_REQUEST['limit']=50;
+			$_REQUEST['limit']=$GO_CONFIG->nav_page_size;
 			
 			$cal->get_views_json($response['views']);
 			$cal->get_calendars_json($response['calendars']);

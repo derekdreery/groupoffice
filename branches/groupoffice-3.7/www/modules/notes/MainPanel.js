@@ -35,7 +35,7 @@ GO.notes.MainPanel = function(config){
 				emptyText: GO.lang.strSearch
 			})],
 			store:GO.notes.readableCategoriesStore,
-			pageSize:parseInt(GO.settings['max_rows_list'])
+			pageSize:GO.settings.config.nav_page_size
 		})
 	});
 

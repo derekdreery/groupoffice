@@ -192,7 +192,7 @@ try {
 
 		case 'init':
 
-			$_REQUEST['limit']=$_SESSION['GO_SESSION']['max_rows_list'];
+			$_REQUEST['limit']=$GO_CONFIG->nav_page_size;
 
 			$categories = $GO_CONFIG->get_setting('tasks_categories_filter', $GO_SECURITY->user_id);
 			$categories = ($categories) ? explode(',',$categories) : array();
@@ -207,7 +207,7 @@ try {
 				$response['categories']['results'][] = $category;
 			}
 
-			$tasks->get_tasklists_json($response['tasklists'],'read','',0,$_SESSION['GO_SESSION']['max_rows_list'],'name','ASC');
+			$tasks->get_tasklists_json($response['tasklists'],'read','',0,$GO_CONFIG->nav_page_size,'name','ASC');
 		break;
 
 		case 'tasklists':

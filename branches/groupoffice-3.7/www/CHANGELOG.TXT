@@ -1,3 +1,11 @@
+10/05/2011 3.7.14
+- When using the timer in the timeregistration it now adds the time to existing 
+  entries.
+- New module for SMIME signing and encryption
+- Template and permission type can only be changed if you have manage permission.
+- Projects couldn't be dragged to the top level
+- Created new config option nav_page_size to set the number of displayed calendars, notebooks, tasklists etc. per page.
+
 29/04/2011 3.7.13
 - Unpacked archives didn't show contents in the file manager
 - Users with manage permissions for a file folder can manage the permissions now.

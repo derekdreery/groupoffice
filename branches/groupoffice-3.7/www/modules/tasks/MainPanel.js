@@ -9,7 +9,7 @@ GO.tasks.MainPanel = function(config){
 		url: GO.settings.modules.tasks.url+'json.php',
 		baseParams: {
 			'task': 'tasklists',
-			limit:parseInt(GO.settings['max_rows_list'])
+			limit:GO.settings.config.nav_page_size
 		},
 		root: 'results',
 		totalProperty: 'total',

@@ -692,6 +692,15 @@ class GO_CONFIG {
 	 */
 
 	var $disable_security_token_check=false;
+	
+	/**
+	 * The number of items displayed in the navigation panels (Calendars, addressbooks etc.)
+	 * Don't set this number too high because it may slow the browser and server down.
+	 * 
+	 * @var type 
+	 */
+	
+	var $nav_page_size=50;
 
 
 	/*//////////////////////////////////////////////////////////////////////////////
@@ -1304,6 +1313,7 @@ class GO_CONFIG {
 		$response['config']['max_attachment_size']=$this->max_attachment_size;
 		$response['config']['max_file_size']=$this->max_file_size;
 		$response['config']['help_link']=$this->help_link;
+		$response['config']['nav_page_size']=intval($this->nav_page_size);
 
 
 		return $response;
