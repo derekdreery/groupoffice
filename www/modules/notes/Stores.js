@@ -26,15 +26,15 @@ GO.notes.writableAdminCategoriesStore = new GO.data.JsonStore({
 
 
 GO.notes.readableCategoriesStore = new GO.data.JsonStore({
-	    url: GO.settings.modules.notes.url+ 'json.php',
-	    baseParams: {
-	    	task: 'categories',
-	    	auth_type: 'read',
-			limit:parseInt(GO.settings['max_rows_list'])
-	    	},
-	    root: 'results',
-	    id: 'id',
-	    totalProperty:'total',
-	    fields: ['id','user_name','acl_id','name','checked'],
-	    remoteSort: true
-	});
+	url: GO.settings.modules.notes.url+ 'json.php',
+	baseParams: {
+		task: 'categories',
+		auth_type: 'read',
+		limit:GO.settings.config.nav_page_size
+	},
+	root: 'results',
+	id: 'id',
+	totalProperty:'total',
+	fields: ['id','user_name','acl_id','name','checked'],
+	remoteSort: true
+});
