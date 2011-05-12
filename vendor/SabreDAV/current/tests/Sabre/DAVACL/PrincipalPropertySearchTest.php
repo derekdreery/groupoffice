@@ -1,58 +1,48 @@
 <?php
 
 require_once 'Sabre/HTTP/ResponseMock.php';
+require_once 'Sabre/DAV/Auth/MockBackend.php';
+require_once 'Sabre/DAVACL/MockPrincipalBackend.php';
 
-class Sabre_DAV_Auth_PrincipalSearchPropertySetTest extends PHPUnit_Framework_TestCase {
-
+class Sabre_DAVACL_PrincipalPropertySearchTest extends PHPUnit_Framework_TestCase {
+    
     function getServer() {
 
-        $backend = new Sabre_DAV_Auth_MockBackend();
+        $backend = new Sabre_DAVACL_MockPrincipalBackend();
 
         $dir = new Sabre_DAV_SimpleDirectory('root');
-        $principals = new Sabre_DAV_Auth_PrincipalCollection($backend);
+        $principals = new Sabre_DAVACL_PrincipalCollection($backend);
         $dir->addChild($principals);
 
         $fakeServer = new Sabre_DAV_Server(new Sabre_DAV_ObjectTree($dir));
         $fakeServer->httpResponse = new Sabre_HTTP_ResponseMock();
-        $plugin = new Sabre_DAV_Auth_Plugin($backend,'realm');
-        $this->assertTrue($plugin instanceof Sabre_DAV_Auth_Plugin);
+        $fakeServer->debugExceptions = true;
+        $plugin = new Sabre_DAVACL_MockPlugin($backend,'realm');
+        $plugin->allowAccessToNodesWithoutACL = true;
+
+        $this->assertTrue($plugin instanceof Sabre_DAVACL_Plugin);
         $fakeServer->addPlugin($plugin);
-        $this->assertEquals($plugin, $fakeServer->getPlugin('Sabre_DAV_Auth_Plugin'));
+        $this->assertEquals($plugin, $fakeServer->getPlugin('acl'));
 
         return $fakeServer;
 
     }
-
-    function testUnsupportedUri() {
-
-        $xml = '<?xml version="1.0"?>
-<d:principal-search-property-set xmlns:d="DAV:" />';
-
-        $serverVars = array(
-            'REQUEST_METHOD' => 'REPORT',
-            'HTTP_DEPTH'     => '0',
-            'REQUEST_URI'    => '/',
-        );
-
-        $request = new Sabre_HTTP_Request($serverVars);
-        $request->setBody($xml);
-
-        $server = $this->getServer();
-        $server->httpRequest = $request;
-
-        $server->exec();
-
-        $this->assertEquals('HTTP/1.1 501 Not Implemented', $server->httpResponse->status);
-        $this->assertEquals(array(
-            'Content-Type' => 'application/xml; charset=utf-8',
-        ), $server->httpResponse->headers);
-
-    }
-
+    
     function testDepth1() {
 
         $xml = '<?xml version="1.0"?>
-<d:principal-search-property-set xmlns:d="DAV:" />';
+<d:principal-property-search xmlns:d="DAV:">
+  <d:property-search>
+     <d:prop>
+       <d:displayname />
+     </d:prop>
+     <d:match>user</d:match>
+  </d:property-search>
+  <d:prop>
+    <d:displayname />
+    <d:getcontentlength />
+  </d:prop>
+</d:principal-property-search>';
 
         $serverVars = array(
             'REQUEST_METHOD' => 'REPORT',
@@ -75,10 +65,22 @@ class Sabre_DAV_Auth_PrincipalSearchPropertySetTest extends PHPUnit_Framework_Te
 
     }
 
-    function testDepthIncorrectXML() {
+    
+    function testUnknownSearchField() {
 
         $xml = '<?xml version="1.0"?>
-<d:principal-search-property-set xmlns:d="DAV:"><d:ohell /></d:principal-search-property-set>';
+<d:principal-property-search xmlns:d="DAV:">
+  <d:property-search>
+     <d:prop>
+       <d:yourmom />
+     </d:prop>
+     <d:match>user</d:match>
+  </d:property-search>
+  <d:prop>
+    <d:displayname />
+    <d:getcontentlength />
+  </d:prop>
+</d:principal-property-search>';
 
         $serverVars = array(
             'REQUEST_METHOD' => 'REPORT',
@@ -94,7 +96,7 @@ class Sabre_DAV_Auth_PrincipalSearchPropertySetTest extends PHPUnit_Framework_Te
 
         $server->exec();
 
-        $this->assertEquals('HTTP/1.1 400 Bad request', $server->httpResponse->status, $server->httpResponse->body);
+        $this->assertEquals('HTTP/1.1 207 Multi-Status', $server->httpResponse->status);
         $this->assertEquals(array(
             'Content-Type' => 'application/xml; charset=utf-8',
         ), $server->httpResponse->headers);
@@ -104,7 +106,18 @@ class Sabre_DAV_Auth_PrincipalSearchPropertySetTest extends PHPUnit_Framework_Te
     function testCorrect() {
 
         $xml = '<?xml version="1.0"?>
-<d:principal-search-property-set xmlns:d="DAV:"/>';
+<d:principal-property-search xmlns:d="DAV:">
+  <d:property-search>
+     <d:prop>
+       <d:displayname />
+     </d:prop>
+     <d:match>user</d:match>
+  </d:property-search>
+  <d:prop>
+    <d:displayname />
+    <d:getcontentlength />
+  </d:prop>
+</d:principal-property-search>';
 
         $serverVars = array(
             'REQUEST_METHOD' => 'REPORT',
@@ -120,18 +133,21 @@ class Sabre_DAV_Auth_PrincipalSearchPropertySetTest extends PHPUnit_Framework_Te
 
         $server->exec();
 
-        $this->assertEquals('HTTP/1.1 200 Ok', $server->httpResponse->status, $server->httpResponse->body);
+        $this->assertEquals('HTTP/1.1 207 Multi-Status', $server->httpResponse->status, $server->httpResponse->body);
         $this->assertEquals(array(
             'Content-Type' => 'application/xml; charset=utf-8',
         ), $server->httpResponse->headers);
 
         
         $check = array(
-            '/d:principal-search-property-set',
-            '/d:principal-search-property-set/d:principal-search-property',
-            '/d:principal-search-property-set/d:principal-search-property/d:prop',
-            '/d:principal-search-property-set/d:principal-search-property/d:prop/d:displayname',
-            '/d:principal-search-property-set/d:principal-search-property/d:description',
+            '/d:multistatus',
+            '/d:multistatus/d:response' => 1,
+            '/d:multistatus/d:response/d:href' => 1,
+            '/d:multistatus/d:response/d:propstat' => 2,
+            '/d:multistatus/d:response/d:propstat/d:prop' => 2,
+            '/d:multistatus/d:response/d:propstat/d:prop/d:displayname' => 1,
+            '/d:multistatus/d:response/d:propstat/d:prop/d:getcontentlength' => 1,
+            '/d:multistatus/d:response/d:propstat/d:status' => 2,
         );
 
         $xml = simplexml_load_string($server->httpResponse->body);
@@ -150,4 +166,17 @@ class Sabre_DAV_Auth_PrincipalSearchPropertySetTest extends PHPUnit_Framework_Te
         }
 
     }
+}
+
+class Sabre_DAVACL_MockPlugin extends Sabre_DAVACL_Plugin {
+
+    function getCurrentUserPrivilegeSet($node) {
+
+        return array(
+            '{DAV:}read',
+            '{DAV:}write',
+        );
+
+    }
+
 }
