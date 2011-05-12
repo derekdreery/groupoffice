@@ -1348,9 +1348,6 @@ try {
 
 				if($event_id)
 				{
-					
-					go_debug('Exception date: '.Date::get_timestamp($exception_date));
-					
 					if(!empty($exception_date)){
 						
 						$old_event = $cal->get_event($event_id);

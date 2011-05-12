@@ -3155,7 +3155,7 @@ class calendar extends db {
 
 
 
-	function send_invitation($event, $calendar, $insert=true, $recurrence_id_time=false){
+	function send_invitation($event, $calendar, $insert=true){
 		global $GO_CONFIG, $GO_MODULES, $lang, $GO_LANGUAGE, $GO_SECURITY;
 		
 		go_debug("send_invitation");
