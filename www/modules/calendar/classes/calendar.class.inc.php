@@ -532,7 +532,7 @@ class calendar extends db {
 		global $GO_SECURITY;
 
 		$src_event = $dst_event = $this->get_event($event_id);
-		unset($dst_event['id'], $dst_event['resource_event_id'],$dst_event['uuid']);
+		unset($dst_event['id'], $dst_event['resource_event_id'],$dst_event['uuid'],$dst_event['files_folder_id']);
 
 		foreach($new_values as $key=>$value) {
 			$dst_event[$key] = $value;
