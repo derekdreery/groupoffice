@@ -5,6 +5,7 @@
 - Template and permission type can only be changed if you have manage permission.
 - Projects couldn't be dragged to the top level
 - Created new config option nav_page_size to set the number of displayed calendars, notebooks, tasklists etc. per page.
+- Added report parameters to PDF export at Projects report
 
 29/04/2011 3.7.13
 - Unpacked archives didn't show contents in the file manager

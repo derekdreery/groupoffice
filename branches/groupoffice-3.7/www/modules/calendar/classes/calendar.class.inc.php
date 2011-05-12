@@ -1823,9 +1823,7 @@ class calendar extends db {
 	 * @return <type>
 	 */
 
-	//TODO is UUID unique????
-
-	function get_event_by_uuid($uuid, $user_id=0, $calendar_id=0) {		
+	function get_event_by_uuid($uuid, $user_id=0, $calendar_id=0, $recurrense_exception_time=0) {		
 
 		if($user_id>0){
 			$sql = "SELECT e.*, c.acl_id FROM cal_events e ".
@@ -1835,6 +1833,17 @@ class calendar extends db {
 		{
 			$sql = "SELECT e.* FROM cal_events e ".
 				"WHERE e.uuid='".$this->escape($uuid)."' AND e.calendar_id=".intval($calendar_id);
+		}
+		
+		if($recurrense_exception_time>0){
+			
+			$start_of_day = Date::clear_time($recurrense_exception_time);
+			$end_of_day = Date::date_add($start_of_day, 1);
+			
+			$sql .= " AND e.exception_for_event_id>0 AND (e.start_time>=$start_of_day AND e.start_time<$end_of_day)";
+		}else
+		{
+			$sql .= " AND e.exception_for_event_id=0";
 		}
 
 		$this->query($sql);
@@ -3146,8 +3155,10 @@ class calendar extends db {
 
 
 
-	function send_invitation($event, $calendar, $insert=true){
+	function send_invitation($event, $calendar, $insert=true, $recurrence_id_time=false){
 		global $GO_CONFIG, $GO_MODULES, $lang, $GO_LANGUAGE, $GO_SECURITY;
+		
+		go_debug("send_invitation");
 
 		$GO_LANGUAGE->require_language_file('calendar');
 		
@@ -3172,7 +3183,7 @@ class calendar extends db {
 			}
 		}
 
-		//go_debug($participants);
+		go_debug($participants);
 		if(count($participants))
 		{
 			$subject = ($insert) ? $lang['calendar']['invitation'] : $lang['calendar']['invitation_update'];

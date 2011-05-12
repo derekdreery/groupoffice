@@ -1211,6 +1211,7 @@ try {
 			$create_event = true;
 			if($status_id == 2)
 			{
+				//User wants to decline
 				go_debug($_REQUEST['uuid'].' : '.$email);
 				
 				if(!$cal->is_event_declined($_REQUEST['uuid'], $email))
@@ -1265,6 +1266,8 @@ try {
 
 			if($create_event && (count($calendars) > 1))
 			{
+				
+				//present calendar selection dialog
 				$response['status_id']=$status_id;
 				$response['calendars'] = $calendars;
 				$response['success']=false;
@@ -1287,6 +1290,14 @@ try {
 					if($object['type'] == 'VEVENT')
 					{
 						$event = $cal->get_event_from_ical_object($object);
+						
+						
+						//this might be an update for a specific recurrence ID
+						if(!empty($object['RECURRENCE-ID']['value'])){
+							$timezone_id = isset($object['RECURRENCE-ID']['params']['TZID']) ? $object['RECURRENCE-ID']['params']['TZID'] : '';
+							$exception_date = $cal->ical2array->parse_date($object['RECURRENCE-ID']['value'],$timezone_id);
+						}
+						
 						break;
 					}
 				}
@@ -1332,15 +1343,48 @@ try {
 
 					}
 				}
+				
+				go_debug("Existing event id: ".$event_id);
 
 				if($event_id)
 				{
-					$event['id'] = $old_event['id'];
-					$method = isset($vcalendar[0]['METHOD']['value']) ? $vcalendar[0]['METHOD']['value'] : '';
-					if($method=='REPLY'){
-						unset($event['name'],$event['location'], $event['description']);
+					
+					go_debug('Exception date: '.Date::get_timestamp($exception_date));
+					
+					if(!empty($exception_date)){
+						
+						$old_event = $cal->get_event($event_id);
+						
+						$exception_date=getdate($exception_date);
+						$old_date = getdate($old_event['start_time']);					
+			
+						$exception['time']= mktime($old_date['hours'],$old_date['minutes'], 0,$exception_date['mon'],$exception_date['mday'],$exception_date['year']);						
+						
+						if(!$cal->is_exception($event_id, $exception['time'])){
+							$exception['event_id']=$event_id;						
+							$cal->add_exception($exception);
+
+							$event['exception_for_event_id']=$event_id;
+							$event['uuid']=$old_event['uuid'];
+							$event_id = $cal->add_event($event);
+						}else
+						{
+							//get the specific recurring item
+							$recurrence_event = $cal->get_event_by_uuid($old_event['uuid'], $GO_SECURITY->user_id, $calendar_id, $exception['time']);
+							$event['id'] = $recurrence_event['id'];
+							$cal->update_event($event, false, $recurrence_event);
+						}
+						
+					}else
+					{
+					
+						$event['id'] = $event_id;
+						$method = isset($vcalendar[0]['METHOD']['value']) ? $vcalendar[0]['METHOD']['value'] : '';
+						if($method=='REPLY'){
+							unset($event['name'],$event['location'], $event['description']);
+						}
+						$cal->update_event($event, false, $old_event);
 					}
-					$cal->update_event($event, false, $old_event);
 				}else
 				{
 					$event_id = $cal->add_event($event);

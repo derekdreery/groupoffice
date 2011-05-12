@@ -118,3 +118,5 @@ $updates[]="script:4_add_calendar_name_template.inc.php";
 $updates[]="ALTER TABLE  `cal_calendars` ADD  `public` BOOL NOT NULL ;";
 
 $updates[]="ALTER TABLE  `cal_groups` ADD `show_not_as_busy` BOOL NOT NULL ;";
+
+$updates[]="ALTER TABLE `cal_events` ADD `exception_for_event_id` INT NOT NULL";
