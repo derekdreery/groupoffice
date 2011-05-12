@@ -2254,7 +2254,7 @@ class calendar extends db {
 		return false;
 	}
 
-	function get_event_from_ical_string($ical_string){
+	function get_event_from_ical_string($ical_string, $multiple=false, &$vcalendar_objects=array()){
 		global $GO_MODULES, $GO_CONFIG;
 
 		$count=0;
@@ -2263,17 +2263,29 @@ class calendar extends db {
 		$this->ical2array = new ical2array();
 
 		$vcalendar = $this->ical2array->parse_string($ical_string);
+		
+		$events = array();
 
 		if(isset($vcalendar[0]['objects'])) {
 			while($object = array_shift($vcalendar[0]['objects'])) {
 				if($object['type'] == 'VEVENT') {
+					
+					$vcalendar_objects[]=$object;
+						
 					if($event = $this->get_event_from_ical_object($object)) {
-						return $event;
+						if($multiple)
+							$events[]=$event;
+						else
+							return $event;
 					}
 				}
 			}
 		}
-		return false;
+		
+		if($multiple)
+			return $events;
+		else
+			return false;
 	}
 
 
