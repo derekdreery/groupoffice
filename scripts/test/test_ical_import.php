@@ -269,11 +269,59 @@ END:VEVENT
 END:VCALENDAR';
 
 
+$ical_str="BEGIN:VCALENDAR
+CALSCALE:GREGORIAN
+PRODID:-//Ximian//NONSGML Evolution Calendar//EN
+VERSION:2.0
+METHOD:REQUEST
+BEGIN:VTIMEZONE
+TZID:/freeassociation.sourceforge.net/Tzfile/Europe/Amsterdam
+X-LIC-LOCATION:Europe/Amsterdam
+BEGIN:STANDARD
+TZNAME:CET
+DTSTART:19701030T030000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+END:STANDARD
+BEGIN:DAYLIGHT
+TZNAME:CEST
+DTSTART:19700327T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+END:DAYLIGHT
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:20110512T084134Z-2128-1000-1-3@Intermesh-1
+DTSTAMP:20110512T084341Z
+DTSTART;TZID=/freeassociation.sourceforge.net/Tzfile/Europe/Amsterdam:
+ 20110514T120000
+DTEND;TZID=/freeassociation.sourceforge.net/Tzfile/Europe/Amsterdam:
+ 20110514T123000
+TRANSP:OPAQUE
+SEQUENCE:4
+SUMMARY:evo2
+CLASS:PUBLIC
+ORGANIZER;CN=Merijn Schering:MAILTO:admin@intermesh.dev
+CREATED:20110512T084155Z
+LAST-MODIFIED:20110512T084242Z
+RECURRENCE-ID;
+ TZID=/freeassociation.sourceforge.net/Tzfile/Europe/Amsterdam:
+ 20110514T103000
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;
+ RSVP=TRUE;CN=Merijn Schering;LANGUAGE=en:MAILTO:admin@intermesh.dev
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;
+ RSVP=TRUE;LANGUAGE=en:MAILTO:test@intermesh.dev
+END:VEVENT
+END:VCALENDAR";
+
+
 //$vcalendar = $ical->parse_file('/home/mschering/jos.ics');
 //
 $vcalendar = $ical->parse_icalendar_string($ical_str);
-//var_dump($vcalendar);
-//exit();
+var_dump($vcalendar);
+exit();
 
 while($object = array_shift($vcalendar[0]['objects'])) {
 	if($object['type'] == 'VEVENT' || $object['type'] == 'VTODO') {

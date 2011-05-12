@@ -647,6 +647,11 @@ class Date {
 		$date=getdate($time);
 		return mktime($date['hours'],$date['minutes'], $date['seconds'],$date['mon']+$months,$date['mday']+$days,$date['year']+$years);
 	}
+	
+	public static function clear_time($time){
+		$date=getdate($time);
+		return mktime(0,0,0,$date['mon'],$date['mday'],$date['year']);
+	}
 
 
 
