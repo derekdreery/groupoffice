@@ -35,7 +35,7 @@ class GO_DAV_Auth_PrincipalCollection extends Sabre_DAV_Directory {
      *
      * @param Sabre_DAV_Auth_Backend_Abstract $authBackend
      */
-    public function __construct(Sabre_DAV_Auth_Backend_Abstract $authBackend) {
+    public function __construct(Sabre_DAV_Auth_IBackend $authBackend) {
 
         $this->authBackend = $authBackend;
 

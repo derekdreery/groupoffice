@@ -1,0 +1,27 @@
+Thank you for purchasing Group-Office Professional! 
+We hope you will enjoy it.
+
+INSTALLATION
+
+If this is a fresh installation simply follow the instructions written in
+groupoffice-pro-x/INSTALL.TXT
+
+To install ActiveSync support read:
+
+groupoffice-pro-x/modules/sync/z-push/INSTALL.TXT
+
+
+UPGRADE COMMUNITY TO PROFESSIONAL VERSION
+
+If you already run the community version simply replace the files and run Group-Office. The system update should complete without errors.
+
+After that login as admin to install the professional modules at: 
+
+Start menu -> Modules -> Install 
+
+
+Note: if you installed using the Debian packages you should not use this package. Instead put the license files in /usr/share/groupoffice and run:
+
+apt-get install groupoffice-pro
+
+

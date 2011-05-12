@@ -8,7 +8,7 @@
  *
  * @package Sabre
  * @subpackage CalDAV
- * @copyright Copyright (C) 2007-2010 Rooftop Solutions. All rights reserved.
+ * @copyright Copyright (C) 2007-2011 Rooftop Solutions. All rights reserved.
  * @author Evert Pot (http://www.rooftopsolutions.nl/) 
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
@@ -83,7 +83,44 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
      */
     public function getFeatures() {
 
-        return array('calendar-access');
+        return array('calendar-access', 'calendar-proxy');
+
+    }
+
+    /**
+     * Returns a plugin name.
+     * 
+     * Using this name other plugins will be able to access other plugins
+     * using Sabre_DAV_Server::getPlugin 
+     * 
+     * @return string 
+     */
+    public function getPluginName() {
+
+        return 'caldav';
+
+    }
+
+    /**
+     * Returns a list of reports this plugin supports.
+     *
+     * This will be used in the {DAV:}supported-report-set property.
+     * Note that you still need to subscribe to the 'report' event to actually 
+     * implement them 
+     * 
+     * @param string $uri
+     * @return array 
+     */
+    public function getSupportedReportSet($uri) {
+
+        $node = $this->server->tree->getNodeForPath($uri);
+        if ($node instanceof Sabre_CalDAV_Calendar || $node instanceof Sabre_CalDAV_CalendarObject) {
+            return array(
+                 '{' . self::NS_CALDAV . '}calendar-multiget',
+                 '{' . self::NS_CALDAV . '}calendar-query',
+            );
+        }
+        return array();
 
     }
 
@@ -106,6 +143,10 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
 
         $server->propertyMap['{' . self::NS_CALDAV . '}supported-calendar-component-set'] = 'Sabre_CalDAV_Property_SupportedCalendarComponentSet';
 
+        $server->resourceTypeMapping['Sabre_CalDAV_Calendar'] = '{urn:ietf:params:xml:ns:caldav}calendar';
+        $server->resourceTypeMapping['Sabre_CalDAV_Principal_ProxyRead'] = '{http://calendarserver.org/ns/}calendar-proxy-read';
+        $server->resourceTypeMapping['Sabre_CalDAV_Principal_ProxyWrite'] = '{http://calendarserver.org/ns/}calendar-proxy-write';
+
         array_push($server->protectedProperties,
 
             '{' . self::NS_CALDAV . '}supported-calendar-component-set',
@@ -119,7 +160,12 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
             '{' . self::NS_CALDAV . '}supported-collation-set',
 
             // scheduling extension
-            '{' . self::NS_CALDAV . '}calendar-user-address-set'
+            '{' . self::NS_CALDAV . '}calendar-user-address-set',
+
+            // CalendarServer extensions
+            '{' . self::NS_CALENDARSERVER . '}getctag',
+            '{' . self::NS_CALENDARSERVER . '}calendar-proxy-read-for',
+            '{' . self::NS_CALENDARSERVER . '}calendar-proxy-write-for'
 
         );
     }
@@ -156,8 +202,6 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
             case '{'.self::NS_CALDAV.'}calendar-query' :
                 $this->calendarQueryReport($dom);
                 return false;
-            default :
-                return true;
 
         }
 
@@ -181,16 +225,21 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
         //}
 
         $body = $this->server->httpRequest->getBody(true);
-        $dom = Sabre_DAV_XMLUtil::loadDOMDocument($body);
-
         $properties = array();
-        foreach($dom->firstChild->childNodes as $child) {
 
-            if (Sabre_DAV_XMLUtil::toClarkNotation($child)!=='{DAV:}set') continue;
-            foreach(Sabre_DAV_XMLUtil::parseProperties($child,$this->server->propertyMap) as $k=>$prop) {
-                $properties[$k] = $prop;
+        if ($body) {
+
+            $dom = Sabre_DAV_XMLUtil::loadDOMDocument($body);
+
+
+            foreach($dom->firstChild->childNodes as $child) {
+
+                if (Sabre_DAV_XMLUtil::toClarkNotation($child)!=='{DAV:}set') continue;
+                foreach(Sabre_DAV_XMLUtil::parseProperties($child,$this->server->propertyMap) as $k=>$prop) {
+                    $properties[$k] = $prop;
+                }
+            
             }
-        
         }
 
         $resourceType = array('{DAV:}collection','{urn:ietf:params:xml:ns:caldav}calendar');
@@ -216,7 +265,8 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
 
         // Find out if we are currently looking at a principal resource
         $currentNode = $this->server->tree->getNodeForPath($path);
-        if ($currentNode instanceof Sabre_DAV_Auth_Principal) {
+
+        if ($currentNode instanceof Sabre_DAVACL_IPrincipal) {
 
             // calendar-home-set property
             $calHome = '{' . self::NS_CALDAV . '}calendar-home-set';
@@ -227,37 +277,54 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
                 $properties[200][$calHome] = new Sabre_DAV_Property_Href($calendarHomePath);
             }
 
+            
             // calendar-user-address-set property
             $calProp = '{' . self::NS_CALDAV . '}calendar-user-address-set';
             if (array_key_exists($calProp,$properties[404])) {
 
-                // Do we have an email address?
-                $props = $currentNode->getProperties(array('{http://sabredav.org/ns}email-address'));
-                if (isset($props['{http://sabredav.org/ns}email-address'])) {
-                    $email = $props['{http://sabredav.org/ns}email-address'];
-                } else {
-                    // We're going to make up an emailaddress
-                    $email = $currentNode->getName() . '.sabredav@' . $this->server->httpRequest->getHeader('host');
-                }
-                $properties[200][$calProp] = new Sabre_DAV_Property_Href('mailto:' . $email, false);
+                $addresses = $currentNode->getAlternateUriSet();
+                $addresses[] = $this->server->getBaseUri() . $currentNode->getPrincipalUrl();
+                $properties[200][$calProp] = new Sabre_DAV_Property_HrefList($addresses, false);
                 unset($properties[404][$calProp]);
 
             }
 
+            // These two properties are shortcuts for ical to easily find 
+            // other principals this principal has access to.
+            $propRead = '{' . self::NS_CALENDARSERVER . '}calendar-proxy-read-for';
+            $propWrite = '{' . self::NS_CALENDARSERVER . '}calendar-proxy-write-for';
+            if (array_key_exists($propRead,$properties[404]) || array_key_exists($propWrite,$properties[404])) {
+                $membership = $currentNode->getGroupMembership();
+                $readList = array();
+                $writeList = array();
 
-        }
+                foreach($membership as $group) {
 
-        if ($currentNode instanceof Sabre_CalDAV_Calendar || $currentNode instanceof Sabre_CalDAV_CalendarObject) {
-            if (array_key_exists('{DAV:}supported-report-set', $properties[200])) {
-                $properties[200]['{DAV:}supported-report-set']->addReport(array(
-                     '{' . self::NS_CALDAV . '}calendar-multiget',
-                     '{' . self::NS_CALDAV . '}calendar-query',
-                //     '{' . self::NS_CALDAV . '}supported-collation-set',
-                //     '{' . self::NS_CALDAV . '}free-busy-query',
-                ));
+                    $groupNode = $this->server->tree->getNodeForPath($group);
+
+                    // If the node is either ap proxy-read or proxy-write 
+                    // group, we grab the parent principal and add it to the 
+                    // list.
+                    if ($groupNode instanceof Sabre_CalDAV_Principal_ProxyRead) {
+                        list($readList[]) = Sabre_DAV_URLUtil::splitPath($group);
+                    }
+                    if ($groupNode instanceof Sabre_CalDAV_Principal_ProxyWrite) {
+                        list($writeList[]) = Sabre_DAV_URLUtil::splitPath($group);
+                    }
+
+                }
+                if (array_key_exists($propRead,$properties[404])) {
+                    unset($properties[404][$propRead]);
+                    $properties[200][$propRead] = new Sabre_DAV_Property_HrefList($readList);
+                }
+                if (array_key_exists($propWrite,$properties[404])) {
+                    unset($properties[404][$propWrite]);
+                    $properties[200][$propWrite] = new Sabre_DAV_Property_HrefList($writeList);
+                }
+
             }
-        }
 
+        }
         
     }
 
@@ -391,23 +458,27 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
                         if ($result===false) return false;
                         break;
                     case 'vjournal' :
+                    case 'vfreebusy' :
+                    case 'valarm' :
                         // TODO: not implemented
                         break;
+
+                    /*
+
+                    case 'vjournal' :
                         $result = $this->validateTimeRangeFilterForJournal($xml,$xpath,$filter);
                         if ($result===false) return false;
                         break;
                     case 'vfreebusy' :
-                        // TODO: not implemented
-                        break;
                         $result = $this->validateTimeRangeFilterForFreeBusy($xml,$xpath,$filter);
                         if ($result===false) return false;
                         break;
                     case 'valarm' :
-                        // TODO: not implemented
-                        break;
                         $result = $this->validateTimeRangeFilterForAlarm($xml,$xpath,$filter);
                         if ($result===false) return false;
                         break;
+
+                        */
 
                 }
 
@@ -427,6 +498,14 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
         
     }
 
+    /**
+     * Checks whether a time-range filter matches an event.
+     * 
+     * @param SimpleXMLElement $xml Event as xml object 
+     * @param string $currentXPath XPath to check 
+     * @param array $currentFilter Filter information 
+     * @return void
+     */
     private function validateTimeRangeFilterForEvent(SimpleXMLElement $xml,$currentXPath,array $currentFilter) {
 
         // Grabbing the DTSTART property
@@ -467,7 +546,7 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
                 $tz = null;
             }
 
-            // Since the VALUE parameter of both DTSTART and DTEND must be the same
+            // Since the VALUE prameter of both DTSTART and DTEND must be the same
             // we can assume we don't need to check the VALUE paramter of DTEND.
             if ($isDateTime) {
                 $dtend = Sabre_CalDAV_XMLUtil::parseICalendarDateTime((string)$xdtend[0],$tz);
@@ -510,9 +589,13 @@ class Sabre_CalDAV_Plugin extends Sabre_DAV_ServerPlugin {
                 $dtend->modify('+1 day');
             }
         }
+        // TODO: we need to properly parse RRULE's, but it's very difficult.
+        // For now, we're always returning events if they have an RRULE at all.
+        $rrule = $xml->xpath($currentXPath.'/c:rrule');
+        $hasRrule = (count($rrule))>0; 
        
         if (!is_null($currentFilter['time-range']['start']) && $currentFilter['time-range']['start'] >= $dtend)  return false;
-        if (!is_null($currentFilter['time-range']['end'])   && $currentFilter['time-range']['end']   <= $dtstart) return false;
+        if (!is_null($currentFilter['time-range']['end'])   && $currentFilter['time-range']['end']   <= $dtstart && !$hasRrule) return false;
         return true;
     
     }
