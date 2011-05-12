@@ -146,8 +146,10 @@ try {
 
 				//$exception_event = $cal->get_event($event_id);
 				$cal->add_exception_for_all_participants($event['resource_event_id'], $exception);
-
-				//$cal->add_exception($exception);
+				
+				$calendar = $cal->get_calendar($event['calendar_id']);
+				
+				$cal->send_invitation($event, $calendar, false);
 			}else
 			{
 				if(!empty($_REQUEST['send_cancellation']))
@@ -438,10 +440,8 @@ try {
 				
 				if(isset($_POST['send_invitation']) && $_POST['send_invitation']=='true') {
 					
-					$invitation_event = $cal->get_event($invitation_event_id);
-//					$invitation_event['uuid']=$old_event['uuid'];
-					
-					$cal->send_invitation($invitation_event,$calendar, false, !empty($exception['time']) ? $exception['time'] : false, $old_event['uuid']);
+					$invitation_event = $cal->get_event($invitation_event_id);					
+					$cal->send_invitation($invitation_event,$calendar, false);
 				}
 
 				$view_id = (isset($_REQUEST['view_id']) && $_REQUEST['view_id']) ? $_REQUEST['view_id'] : 0;
@@ -750,7 +750,7 @@ try {
 			}
 
 			if(!empty($_POST['send_invitation'])) {
-				$cal->send_invitation($event, $calendar, true, !empty($exception['time']) ? $exception['time'] : false);
+				$cal->send_invitation($event, $calendar, true);
 			}
 
 			if($calendar['group_id'] > 1)
