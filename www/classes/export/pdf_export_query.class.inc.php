@@ -292,7 +292,17 @@ class export_pdf extends TCPDF
 			$this->SetFont($this->font,'',$this->font_size);
 			$this->Ln(20);
 			$this->MultiCell($this->getPageWidth(), 12, $_REQUEST['text']);
-		}else
+		}
+		
+		if(!empty($_REQUEST['html']))
+		{
+			$this->SetFont($this->font,'',$this->font_size);
+			$this->Ln(20);
+			
+			$this->writeHTML($_REQUEST['html']);
+		}
+		
+		if(empty($_REQUEST['text']) && empty($_REQUEST['html']))
 		{
 			$this->Ln();
 		}
