@@ -214,7 +214,8 @@ class GO_AUTH extends db
 
 		go_debug('LOGIN Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 		
-		go_infolog("LOGIN SUCCESS for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
+		if($count_login)
+			go_infolog("LOGIN SUCCESS for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 		
 		$args=array($username, $password, $user, $count_login);
 		$GO_EVENTS->fire_event('login', $args);
