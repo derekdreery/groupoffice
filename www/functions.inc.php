@@ -292,6 +292,27 @@ function go_log($level, $message) {
 	}
 }
 
+function go_infolog($message){
+	global $GO_CONFIG;
+	if ($GO_CONFIG->log) {
+		
+		if(empty($_SESSION['GO_SESSION']['logdircheck'])){
+			File::mkdir($GO_CONFIG->file_storage_path.'log');
+			$_SESSION['GO_SESSION']['logdircheck']=true;
+		}
+		
+		$msg = '['.date('Y-m-dm G:i').']';
+		
+		if(!empty($_SESSION['GO_SESSION']['username'])){
+			$msg .= '['.$_SESSION['GO_SESSION']['username'].'] ';
+		}
+		
+		$msg.= $message;
+		
+		@file_put_contents($GO_CONFIG->file_storage_path.'log/info.log', $msg."\n", FILE_APPEND);
+	}
+}
+
 /**
  * Set's the debug log location
  *
@@ -325,11 +346,11 @@ function go_debug($text, $config=false)
 		if($text=='')
 			$text = '(empty string)';
 
-		if(PHP_SAPI=='cli')
-		{
-			echo 'DEBUG: '.$text."\n\n";
-			return;
-		}
+//		if(PHP_SAPI=='cli')
+//		{
+//			echo 'DEBUG: '.$text."\n\n";
+//			return;
+//		}
 
 		if(!isset($_SESSION['GO_SESSION']['debug_log']))
 		$_SESSION['GO_SESSION']['debug_log']=$config->file_storage_path.'debug.log';
