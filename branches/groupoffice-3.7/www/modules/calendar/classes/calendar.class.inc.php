@@ -1793,11 +1793,7 @@ class calendar extends db {
 									date('Ymd G:i', $calculated_event['start_time']).'  '.
 									$calculated_event['name'].' event_id='.$calculated_event['id']);					
 				}
-
-				//$last_time = $calculated_event['start_time'];
 			}
-			//go_debug($this->events_sort);
-			//go_log(LOG_DEBUG, $calculated_event['name'].': eind');
 		}
 	}
 
@@ -2508,9 +2504,6 @@ class calendar extends db {
 
 				$start_minutes = $minutes+($event_start['hours']*60);
 				$end_minutes = $event_end['minutes']+($event_end['hours']*60);
-
-				//echo $start_minutes.' -> '.$end_minutes.'<br>';
-				//go_log(LOG_DEBUG, $event['name'].' '.Date::get_timestamp($event['start_time']).' -> '.$end_minutes);
 
 				for($i=$start_minutes;$i<$end_minutes;$i+=15) {
 					$freebusy[$i]=1;

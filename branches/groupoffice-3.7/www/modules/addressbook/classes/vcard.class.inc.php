@@ -103,9 +103,6 @@ class vcard extends addressbook {
 			if ($this->_set_vcard($content, "file")) {
 				foreach ($this->instance as $vcard) {
 					$record = $this->_get_vcard_contact($vcard);
-
-				//	go_log(LOG_DEBUG, var_export($record, true));
-
 					$contact = $record['contact'];
 
 
@@ -245,8 +242,6 @@ class vcard extends addressbook {
 		//$record['company'] = array ('name' => '', 'homepage' => '', 'country' => '', 'state' => '', 'city' => '', 'zip' => '', 'address' => '', 'address_no' => '', 'phone' => '', 'fax' => '', 'email' => '', 'bank_no' => '', 'vat_no' => '', 'post_address' => '', 'post_address_no' => '', 'post_state' => '', 'post_city' => '', 'post_zip' => '', 'post_country' => '');
 
 		$record['contact'] = array ();//'first_name' => '', 'middle_name' => '', 'last_name' => '', 'fax' => '', 'home_phone' => '', 'work_fax' => '', 'work_phone' => '', 'cellular' => '');
-//go_log(LOG_DEBUG, var_export($vcard, true));
-
 		foreach ($vcard as $property) {
 
 			switch ($property->name) {

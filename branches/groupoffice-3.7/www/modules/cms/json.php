@@ -142,7 +142,7 @@ try {
 				$response=array();
 				if($folder_id==0) {
 					$cms->get_authorized_sites($GO_SECURITY->user_id);
-					//go_log(LOG_DEBUG, $count);
+
 					while($cms->next_record()) {
 						$response[] = array(
 										'text'=>$cms->f('name'),

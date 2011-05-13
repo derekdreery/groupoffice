@@ -25,11 +25,6 @@ $addressbook_id = isset($_REQUEST['addressbook_id']) ? $_REQUEST['addressbook_id
 $export_type = isset($_POST['export_type']) ? " - ".$_POST['export_type'] : '';
 $file_type = isset($_REQUEST['export_filetype']) ? $_REQUEST['export_filetype'] : 'csv';
 
-#go_log(LOG_DEBUG, $_REQUEST);
-#echo '<pre>';
-#print_r($_REQUEST);
-#echo '</pre>';
-
 $addressbook = $ab->get_addressbook($addressbook_id);
 $browser = detect_browser();
 

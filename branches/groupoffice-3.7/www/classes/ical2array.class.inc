@@ -324,9 +324,7 @@ class ical2array {
 				break;
 
 			case 'param_value':
-				if(!isset($this->param_name)) {
-					//go_log(LOG_DEBUG, $this->buffer);
-				}
+
 				if(substr($this->buffer,0,1)=='"' && substr($this->buffer,-1,1)=='"'){
 					$this->buffer = substr($this->buffer,1,-1);
 				}
@@ -499,8 +497,6 @@ class ical2array {
 				$rrule_arr['INTERVAL']=1;
 			}
 		}
-
-		//go_log(LOG_DEBUG, var_export($rrule_arr,true));
 
 		return $rrule_arr;
 	}

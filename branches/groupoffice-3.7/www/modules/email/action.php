@@ -1027,7 +1027,6 @@ try {
 									$account = $email->decrypt_account($account);
 								}
 
-								//go_log(LOG_DEBUG, $account['username'].' -> '.$domain);
 								if(strpos($account['email'], '@'.$domain)) {
 									$sc->login();
 
@@ -1056,8 +1055,6 @@ try {
 													'vacation_body'=>$_POST['vacation_body'],
 													'forward_to'=>$_POST['forward_to']
 									);
-
-									//go_log(LOG_DEBUG, var_export($params, true));
 
 									$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/action.php', $params);
 
