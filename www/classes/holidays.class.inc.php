@@ -137,7 +137,7 @@ class holidays extends db {
 
 
 		$sql = "SELECT * FROM go_holidays WHERE region='$region'".
-						" AND date>=$start AND date<$end";
+						" AND date>=$start AND date<$end ORDER BY date ASC";
 		$this->query($sql);
 		return $this->num_rows();
 	}
