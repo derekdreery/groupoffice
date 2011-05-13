@@ -1669,7 +1669,7 @@ class calendar extends db {
 			//$sql .=	" ORDER BY ".$this->escape($sort_field." ".$sort_order);
 		//}
 
-		if(!empty($query_param)){
+		if(!empty($query_field)){
 			$sql .= " AND $query_field='".$this->escape($query_param)."'";
 		}
 
