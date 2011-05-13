@@ -165,6 +165,16 @@ class go_ical extends calendar
 
 		return $ics;
 	}
+	
+	function export_events($events, $with_exceptions=false){
+		$ics = $this->export_calendar_header();
+		foreach($events as $event){
+			$ics .=  $this->convert_event($event,'',$with_exceptions);
+		}
+		$ics .= $this->export_calendar_footer();
+
+		return $ics;
+	}
 
 	function export_calendar($calendar_id, $months_in_past=0)
 	{
@@ -217,7 +227,7 @@ class go_ical extends calendar
 		return array($name_part.$value_part);
 		}*/
 
-	function convert_event($event, $attendee_email='')
+	function convert_event($event, $attendee_email='', $with_exceptions=true)
 	{
 		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES, $charset;
 
@@ -249,13 +259,33 @@ class go_ical extends calendar
 		$lines[] = "UID:".$event['uuid'];
 		
 		if(!empty($event['exception_for_event_id'])){
-			$line = "RECURRENCE-ID;VALUE=DATE";			
+//			$line = "RECURRENCE-ID;VALUE=DATE";			
+//			if($this->timezone_id != '')
+//			{
+//				$line .= ";TZID=\"".$this->timezone_id."\"";
+//			}
+//			$line .= ":".date(go_ical::date_format,$event['start_time']);
+//
+//			$lines[]=$line;
+			
+			$cal = new calendar();
+			$exception_for_event = $cal->get_event($event['exception_for_event_id']);
+			
+			$exception_date=getdate($event['start_time']);
+			$old_date = getdate($exception_for_event['start_time']);					
+
+			$exception_time= mktime($old_date['hours'],$old_date['minutes'], 0,$exception_date['mon'],$exception_date['mday'],$exception_date['year']);						
+			
+			//$line = "RECURRENCE-ID;VALUE=DATE";			
+			$line = "RECURRENCE-ID";			
 			if($this->timezone_id != '')
 			{
 				$line .= ";TZID=\"".$this->timezone_id."\"";
 			}
-			$line .= ":".date(go_ical::date_format,$event['start_time']);
-
+			
+			$date = $this->utc ? gmdate($this->datetime_format , $exception_time).'Z' : date($this->datetime_format, $exception_time);
+			
+			$line .= ":".$date;
 			$lines[]=$line;
 		}
 
@@ -613,37 +643,39 @@ class go_ical extends calendar
 				}
 			}
 
-			$cal = new calendar();
-			if($cal->get_exceptions($event['id']))
-			{
-				while($cal->next_record())
+			if($with_exceptions){
+				$cal = new calendar();
+				if($cal->get_exceptions($event['id']))
 				{
-					$exception = $this->utc ? gmdate($this->datetime_format , $cal->f('time')).'Z' : date($this->datetime_format , $cal->f('time'));
-					//$exception = date($this->datetime_format, $cal->f('time'));
-					$exceptions[]=$exception;
-				}
-				$line = 'EXDATE:';
-
-				//$count=1;
-				$exception_count = count($exceptions);
-				for($i=0;$i<$exception_count;$i++)
-				{
-					$line.=$exceptions[$i];
-					if($i!=$exception_count-1)
+					while($cal->next_record())
 					{
-						$line .=';';
+						$exception = $this->utc ? gmdate($this->datetime_format , $cal->f('time')).'Z' : date($this->datetime_format , $cal->f('time'));
+						//$exception = date($this->datetime_format, $cal->f('time'));
+						$exceptions[]=$exception;
 					}
-					/*$count++;
-					 if($count=='3')
-					 {
+					$line = 'EXDATE:';
+
+					//$count=1;
+					$exception_count = count($exceptions);
+					for($i=0;$i<$exception_count;$i++)
+					{
+						$line.=$exceptions[$i];
+						if($i!=$exception_count-1)
+						{
+							$line .=';';
+						}
+						/*$count++;
+						 if($count=='3')
+						 {
+							$lines[]=$line;
+							$line='  ';
+							$count=0;
+							}*/
+					}
+					if(!empty($line))
+					{
 						$lines[]=$line;
-						$line='  ';
-						$count=0;
-						}*/
-				}
-				if(!empty($line))
-				{
-					$lines[]=$line;
+					}
 				}
 			}
 		}

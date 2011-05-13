@@ -1849,6 +1849,15 @@ class calendar extends db {
 		$this->query($sql);
 		return $this->next_record(DB_ASSOC);
 	}
+	
+	
+	function get_events_by_uuid($uuid, $calendar_id){
+		$sql = "SELECT e.* FROM cal_events e ".
+			"WHERE e.uuid='".$this->escape($uuid)."' AND e.calendar_id=".intval($calendar_id);
+			
+		$this->query($sql);
+		return $this->num_rows();
+	}
 
 	function get_events_for_period($user_id, $start_offset, $days, $index_hour=false) {
 		$interval_end = mktime(0, 0, 0, date("m", $start_offset)  , date("d", $start_offset)+$days, date("Y", $start_offset));
