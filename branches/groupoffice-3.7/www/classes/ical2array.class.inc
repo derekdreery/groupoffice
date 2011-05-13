@@ -304,7 +304,9 @@ class ical2array {
 					$this->object['ATTENDEES'][$this->object_name] = array();
 				}else
 				{
-					$this->object[$this->buffer] = array();
+					if(!isset($this->object[$this->buffer]))
+						$this->object[$this->buffer] = array();
+					
 					$this->object_name = $this->buffer;
 				}
 				break;
@@ -344,7 +346,13 @@ class ical2array {
 					$this->object['ATTENDEES'][$this->object_name]['value'] = $this->buffer;
 				}else
 				{
-					$this->object[$this->object_name]['value'] = $this->buffer;
+					
+					if($this->object_name=='EXDATE' && isset($this->object[$this->object_name]['value'])){
+						$this->object[$this->object_name]['value'] .= ';'.$this->buffer;
+					}else
+					{
+						$this->object[$this->object_name]['value'] = $this->buffer;
+					}
 				}
 
 				unset($this->object_name,	$this->param_name);

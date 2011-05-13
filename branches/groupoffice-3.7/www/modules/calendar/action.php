@@ -379,6 +379,14 @@ try {
 
 						$update_event['id']=$update_event_id;
 						$cal->update_event($update_event, $calendar, $old_event);
+						
+						if($old_event['exception_for_event_id']>0){
+							//for sync and caldav update the timestamp
+							$update_recurring_event=array();
+							$update_recurring_event['id']=$old_event['exception_for_event_id'];
+							$update_recurring_event['mtime']=time();
+							$cal->update_row('cal_events', 'id', $update_recurring_event);
+						}
 
 						if($calendar['group_id'] > 1)
 						{
