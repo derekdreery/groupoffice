@@ -357,7 +357,8 @@ try {
 
 			$num_participants = 0;
 			$continue = true;
-			$num_participants=$cal->get_participants($event['id']);
+			//$num_participants=$cal->get_participants($event['id']);
+			$num_participants = $cal->count_participants($event['id']) > 1 ? 1 : 0;
 			/*while($cal->next_record() && $continue)
 			{
 				if($cal->f('user_id') != $GO_SECURITY->user_id)
