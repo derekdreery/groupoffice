@@ -328,7 +328,6 @@ class String {
 
 	public static function trim_lines($text)
 	{
-		//go_log(LOG_DEBUG, $text);
 		str_replace("\r\n","\n", $text);
 
 		$trimmed='';

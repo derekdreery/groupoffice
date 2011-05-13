@@ -334,12 +334,7 @@ function go_debug($text, $config=false)
 		if(!isset($_SESSION['GO_SESSION']['debug_log']))
 		$_SESSION['GO_SESSION']['debug_log']=$config->file_storage_path.'debug.log';
 
-		//$text = '['.date('Y-m-d G:i').'] '.$text;
-
-
 		file_put_contents($_SESSION['GO_SESSION']['debug_log'], $text."\n", FILE_APPEND);
-
-		//go_log(LOG_DEBUG, $text);
 	}
 }
 
