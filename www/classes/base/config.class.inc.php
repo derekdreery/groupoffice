@@ -61,6 +61,12 @@ class GO_CONFIG {
 	 * @var bool
 	 */
 	var $debug_log = false;
+	
+	/**
+	 * Info log location. If empty it will be in <file_storage_path>/log/info.log
+	 * @var bool
+	 */
+	var $info_log = "";
 
 	/**
 	 * Output errors in debug mode
@@ -924,6 +930,9 @@ class GO_CONFIG {
 		foreach($config as $key=>$value) {
 			$this->$key=$value;
 		}
+		
+		if($this->info_log=="")
+			$this->info_log =$this->file_storage_path.'log/info.log';
 
 		//this can be used in some cases where you don't want the dynamically
 		//determined full URL. This is done in set_full_url below.

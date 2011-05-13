@@ -297,7 +297,7 @@ function go_infolog($message){
 	if ($GO_CONFIG->log) {
 		
 		if(empty($_SESSION['GO_SESSION']['logdircheck'])){
-			File::mkdir($GO_CONFIG->file_storage_path.'log');
+			File::mkdir(dirname($GO_CONFIG->info_log));
 			$_SESSION['GO_SESSION']['logdircheck']=true;
 		}
 		
@@ -309,7 +309,7 @@ function go_infolog($message){
 		
 		$msg.= $message;
 		
-		@file_put_contents($GO_CONFIG->file_storage_path.'log/info.log', $msg."\n", FILE_APPEND);
+		@file_put_contents($GO_CONFIG->info_log, $msg."\n", FILE_APPEND);
 	}
 }
 
