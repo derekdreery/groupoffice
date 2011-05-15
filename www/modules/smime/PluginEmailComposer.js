@@ -117,7 +117,7 @@ GO.moduleManager.onModuleReady('email',function(){
 			var record = this.fromCombo.store.getById(current_id);
 			
 			this.signCheck.setDisabled(!record.json.has_smime_cert);			
-			if(record.json.has_smime_cert && record.json.always_sign){
+			if(record.json.has_smime_cert && record.json.always_sign=="1"){
 				this.signCheck.setChecked(true);
 				this.sendParams['sign_smime'] ="1";	
 			}
