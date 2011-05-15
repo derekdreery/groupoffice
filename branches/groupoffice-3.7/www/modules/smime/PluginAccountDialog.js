@@ -24,6 +24,7 @@ GO.moduleManager.onModuleReady('email',function(){
 				disabled:true,
 				items:[{
 					xtype:'fieldset',
+					labelWidth:160,
 					title:GO.smime.lang.pkcs12Cert,
 					items:[
 						{
@@ -31,7 +32,7 @@ GO.moduleManager.onModuleReady('email',function(){
 							html:GO.smime.lang.pkcs12CertInfo
 						},{
 							xtype:'textfield',
-							fieldLabel:GO.lang.strPassword,
+							fieldLabel:GO.settings.config.product_name+' '+GO.lang.strPassword,
 							inputType:'password',
 							name:'smime_password',
 							width:200

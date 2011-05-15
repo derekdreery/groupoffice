@@ -1435,6 +1435,8 @@ try {
 					unset($alias['signature']);
 					$response['results'][] = $alias;
 				}
+				
+				$GO_EVENTS->fire_event('all_aliases', array(&$response, $email));
 				break;
 
 

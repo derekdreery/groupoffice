@@ -19,16 +19,24 @@ class smime extends db{
 		$events->add_listener('get_message_with_body', __FILE__, 'smime','decrypt_message');
 		$events->add_listener('save_email_account', __FILE__, 'smime','save_certificate');
 		$events->add_listener('load_email_account', __FILE__, 'smime','load_certificate');
-		$events->add_listener('init_composer', __FILE__, 'smime','init_composer');
+		$events->add_listener('init_composer', __FILE__, 'smime','add_smime_info_to_aliases');
+		$events->add_listener('all_aliases', __FILE__, 'smime','add_smime_info_to_aliases');
 	}
 	
-	public function init_composer(&$response){
+	public function add_smime_info_to_aliases(&$response){
 		
 		$account_certs=array();
 		
 		$smime = new smime();
 		
-		foreach($response['aliases']['results'] as &$alias){
+		if(isset($response['aliases'])){
+			$arr = &$response['aliases'];
+		}else
+		{
+			$arr = &$response['results'];
+		}
+		
+		foreach($arr as &$alias){
 	
 			if(!isset($account_certs[$alias['account_id']])){
 				$account_certs[$alias['account_id']]=$smime->get_pkcs12_certificate($alias['account_id']);
@@ -86,10 +94,9 @@ class smime extends db{
 			$cert = '';
 		
 		$smime = new smime();
-	
-		if(isset($cert)){			
-			$smime->set_pkcs12_certificate($account['id'], $cert, isset($_POST['always_sign']));			
-		}
+			
+		$smime->set_pkcs12_certificate($account['id'], isset($cert) ? $cert : null, isset($_POST['always_sign']));			
+		
 		
 		$cert = $smime->get_pkcs12_certificate($account['id']);
 		
@@ -281,10 +288,16 @@ class smime extends db{
 	
 	public function set_pkcs12_certificate($account_id, $cert, $always_sign){
 		$up['account_id']=$account_id;
-		$up['cert']=$cert;
+		
+		$types='ii';
+		if(isset($cert)){
+			$up['cert']=$cert;
+			$types='ibi';
+		}
+		
 		$up['always_sign']=$always_sign;
 		
-		return $this->replace_row('smi_pkcs12',$up,'ibi',false);		
+		return $this->replace_row('smi_pkcs12',$up,$types,false);		
 	}
 	
 	public function get_pkcs12_certificate($account_id){
