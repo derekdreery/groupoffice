@@ -28,8 +28,15 @@ GO.moduleManager.onModuleReady('email',function(){
 					title:GO.smime.lang.pkcs12Cert,
 					items:[
 						{
+							id:'smimeHasCert',
 							xtype:'label',
-							html:GO.smime.lang.pkcs12CertInfo
+							style:'display:block;margin-bottom:15px',
+							html:GO.smime.lang.youHaveAcert
+						},
+						{
+							xtype:'label',
+							html:GO.smime.lang.pkcs12CertInfo,
+							style:'display:block;margin-bottom:10px'
 						},{
 							xtype:'textfield',
 							fieldLabel:GO.settings.config.product_name+' '+GO.lang.strPassword,
@@ -76,6 +83,11 @@ GO.moduleManager.onModuleReady('email',function(){
 				{
 					this.smimePanel.setDisabled(false);
 					this.deleteCert.setDisabled(!action.result.data.cert);
+					
+					if(!action.result.data.cert)
+						Ext.getCmp('smimeHasCert').hide();
+					else
+						Ext.getCmp('smimeHasCert').show();
 				}
 			}, this);
 		})
