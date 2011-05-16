@@ -112,6 +112,7 @@ GO.moduleManager.onModuleReady('email',function(){
 	Ext.override(GO.email.EmailClient, {
 		initComponent : GO.email.EmailClient.prototype.initComponent.createSequence(function(){
 			this.settingsMenu.add({
+				iconCls:'btn-pub-certs',
 				text:GO.smime.lang.pubCerts,
 				handler:function(){
 					if(!this.pubCertsWin)

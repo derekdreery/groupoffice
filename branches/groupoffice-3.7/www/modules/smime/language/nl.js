@@ -1,13 +1,3 @@
-/**
- * Don't copy the next lines into a translation
- */
-Ext.namespace('GO.smime');
-
-GO.smime.lang = {};
-
-/**
- * Copy everything below for translations
- */
 GO.smime.lang.enterPassword="Voer aub het wachtwoord in voor uw SMIME certificaat.";
 GO.smime.lang.messageEncrypted="Dit bericht is versleuteld aan u verstuurd.";
 GO.smime.lang.messageSigned="Dit bericht is digitaal ondertekend. Klik hier om de handtekening te verifiëren en het publieke certificaat te importeren.";
