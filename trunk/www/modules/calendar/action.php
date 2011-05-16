@@ -147,8 +147,10 @@ try {
 
 				//$exception_event = $cal->get_event($event_id);
 				$cal->add_exception_for_all_participants($event['resource_event_id'], $exception);
-
-				//$cal->add_exception($exception);
+				
+				$calendar = $cal->get_calendar($event['calendar_id']);
+				
+				$cal->send_invitation($event, $calendar, false);
 			}else
 			{
 				if(!empty($_REQUEST['send_cancellation']))
@@ -322,8 +324,13 @@ try {
 						$update_event['calendar_id']=$_POST['update_calendar_id'];
 					}
 
-
+					$update_event['exception_for_event_id']=$exception['event_id'];
+					$update_event['uuid']=$old_event['uuid'];
+					
 					$response['new_event_id'] = $cal->copy_event($exception['event_id'], $update_event);
+					$cal->copy_participants($exception['event_id'], $response['new_event_id']);
+					
+					$invitation_event_id= $response['new_event_id'];
 
 					//for sync update the timestamp
 					$update_recurring_event=array();
@@ -373,6 +380,14 @@ try {
 
 						$update_event['id']=$update_event_id;
 						$cal->update_event($update_event, $calendar, $old_event);
+						
+						if($old_event['exception_for_event_id']>0){
+							//for sync and caldav update the timestamp
+							$update_recurring_event=array();
+							$update_recurring_event['id']=$old_event['exception_for_event_id'];
+							$update_recurring_event['mtime']=time();
+							$cal->update_row('cal_events', 'id', $update_recurring_event);
+						}
 
 						if($calendar['group_id'] > 1)
 						{
@@ -416,18 +431,26 @@ try {
 								}
 							}
 							
-							if(isset($_POST['send_invitation']) && $_POST['send_invitation']=='true') {
-
-								$cal->send_invitation(array_merge($old_event, $update_event),$calendar, false);
-							}
+							
 						}
+						
+						$invitation_event_id= $old_event['id'];
 					}
+					
+					
 /*
 					//move the exceptions if a recurrent event is moved
 					if(!empty($old_event['rrule']) && isset($offset))
 					{
 						$cal->move_exceptions(($_POST['update_event_id']), $offset);
 					}*/
+				}
+				
+				
+				if(isset($_POST['send_invitation']) && $_POST['send_invitation']=='true') {
+					
+					$invitation_event = $cal->get_event($invitation_event_id);					
+					$cal->send_invitation($invitation_event,$calendar, false);
 				}
 
 				$view_id = (isset($_REQUEST['view_id']) && $_REQUEST['view_id']) ? $_REQUEST['view_id'] : 0;
@@ -562,7 +585,28 @@ try {
 					$response['files_folder_id']=$event['files_folder_id'];
 				$response['success']=true;
 			}else
-			{                                
+			{            
+				
+				if(isset($_REQUEST['exception_event_id']) && $_REQUEST['exception_event_id'] > 0) {
+						//$exception['event_id'] = ($_REQUEST['exception_event_id']);
+						$exception['time'] = strtotime($_POST['exceptionDate']);
+						//$cal->add_exception($exception);
+
+						$exception_event = $cal->get_event($_REQUEST['exception_event_id']);
+						
+						//UUID of recurrence exceptions stays the same. Events are unique based on UUID and RECURRENCE-ID in icalendar specs.
+						$event['exception_for_event_id']=$_REQUEST['exception_event_id'];
+						$event['uuid']=$exception_event['uuid'];
+
+						$cal->add_exception_for_all_participants($exception_event['resource_event_id'], $exception);
+
+						//for sync update the timestamp
+						$update_recurring_event=array();
+						$update_recurring_event['id']=$_REQUEST['exception_event_id'];
+						$update_recurring_event['mtime']=time();
+						$cal->update_row('cal_events', 'id', $update_recurring_event);
+					}
+				
 				$event_id= $cal->add_event($event, $calendar);
 				$old_event = $cal->get_event($event_id);
 				$insert = true;
@@ -583,21 +627,7 @@ try {
 								1);
 					}
 
-					if(isset($_REQUEST['exception_event_id']) && $_REQUEST['exception_event_id'] > 0) {
-						//$exception['event_id'] = ($_REQUEST['exception_event_id']);
-						$exception['time'] = strtotime(($_POST['exceptionDate']));
-						//$cal->add_exception($exception);
-
-						$exception_event = $cal->get_event($_REQUEST['exception_event_id']);
-
-						$cal->add_exception_for_all_participants($exception_event['resource_event_id'], $exception);
-
-						//for sync update the timestamp
-						$update_recurring_event=array();
-						$update_recurring_event['id']=$_REQUEST['exception_event_id'];
-						$update_recurring_event['mtime']=time();
-						$cal->update_row('cal_events', 'id', $update_recurring_event);
-					}
+					
 
 					$response['event_id']=$event_id;
 					$response['success']=true;
@@ -729,7 +759,7 @@ try {
 			}
 
 			if(!empty($_POST['send_invitation'])) {
-				$cal->send_invitation($event, $calendar);
+				$cal->send_invitation($event, $calendar, true);
 			}
 
 			if($calendar['group_id'] > 1)

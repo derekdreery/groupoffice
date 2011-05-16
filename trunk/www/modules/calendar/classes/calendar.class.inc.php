@@ -532,7 +532,7 @@ class calendar extends db {
 		global $GO_SECURITY;
 
 		$src_event = $dst_event = $this->get_event($event_id);
-		unset($dst_event['id'], $dst_event['resource_event_id'],$dst_event['uuid']);
+		unset($dst_event['id'], $dst_event['resource_event_id'],$dst_event['uuid'],$dst_event['files_folder_id']);
 
 		foreach($new_values as $key=>$value) {
 			$dst_event[$key] = $value;
@@ -1669,7 +1669,7 @@ class calendar extends db {
 			//$sql .=	" ORDER BY ".$this->escape($sort_field." ".$sort_order);
 		//}
 
-		if(!empty($query_param)){
+		if(!empty($query_field)){
 			$sql .= " AND $query_field='".$this->escape($query_param)."'";
 		}
 
@@ -1793,11 +1793,7 @@ class calendar extends db {
 									date('Ymd G:i', $calculated_event['start_time']).'  '.
 									$calculated_event['name'].' event_id='.$calculated_event['id']);					
 				}
-
-				//$last_time = $calculated_event['start_time'];
 			}
-			//go_debug($this->events_sort);
-			//go_log(LOG_DEBUG, $calculated_event['name'].': eind');
 		}
 	}
 
@@ -1823,9 +1819,7 @@ class calendar extends db {
 	 * @return <type>
 	 */
 
-	//TODO is UUID unique????
-
-	function get_event_by_uuid($uuid, $user_id=0, $calendar_id=0) {		
+	function get_event_by_uuid($uuid, $user_id=0, $calendar_id=0, $recurrense_exception_time=0) {		
 
 		if($user_id>0){
 			$sql = "SELECT e.*, c.acl_id FROM cal_events e ".
@@ -1836,9 +1830,29 @@ class calendar extends db {
 			$sql = "SELECT e.* FROM cal_events e ".
 				"WHERE e.uuid='".$this->escape($uuid)."' AND e.calendar_id=".intval($calendar_id);
 		}
+		
+		if($recurrense_exception_time>0){
+			
+			$start_of_day = Date::clear_time($recurrense_exception_time);
+			$end_of_day = Date::date_add($start_of_day, 1);
+			
+			$sql .= " AND e.exception_for_event_id>0 AND (e.start_time>=$start_of_day AND e.start_time<$end_of_day)";
+		}else
+		{
+			$sql .= " AND e.exception_for_event_id=0";
+		}
 
 		$this->query($sql);
 		return $this->next_record(DB_ASSOC);
+	}
+	
+	
+	function get_events_by_uuid($uuid, $calendar_id){
+		$sql = "SELECT e.* FROM cal_events e ".
+			"WHERE e.uuid='".$this->escape($uuid)."' AND e.calendar_id=".intval($calendar_id);
+			
+		$this->query($sql);
+		return $this->num_rows();
 	}
 
 	function get_events_for_period($user_id, $start_offset, $days, $index_hour=false) {
@@ -2245,7 +2259,7 @@ class calendar extends db {
 		return false;
 	}
 
-	function get_event_from_ical_string($ical_string){
+	function get_event_from_ical_string($ical_string, $multiple=false, &$vcalendar_objects=array()){
 		global $GO_MODULES, $GO_CONFIG;
 
 		$count=0;
@@ -2254,17 +2268,29 @@ class calendar extends db {
 		$this->ical2array = new ical2array();
 
 		$vcalendar = $this->ical2array->parse_string($ical_string);
+		
+		$events = array();
 
 		if(isset($vcalendar[0]['objects'])) {
 			while($object = array_shift($vcalendar[0]['objects'])) {
 				if($object['type'] == 'VEVENT') {
+					
+					$vcalendar_objects[]=$object;
+						
 					if($event = $this->get_event_from_ical_object($object)) {
-						return $event;
+						if($multiple)
+							$events[]=$event;
+						else
+							return $event;
 					}
 				}
 			}
 		}
-		return false;
+		
+		if($multiple)
+			return $events;
+		else
+			return false;
 	}
 
 
@@ -2478,9 +2504,6 @@ class calendar extends db {
 
 				$start_minutes = $minutes+($event_start['hours']*60);
 				$end_minutes = $event_end['minutes']+($event_end['hours']*60);
-
-				//echo $start_minutes.' -> '.$end_minutes.'<br>';
-				//go_log(LOG_DEBUG, $event['name'].' '.Date::get_timestamp($event['start_time']).' -> '.$end_minutes);
 
 				for($i=$start_minutes;$i<$end_minutes;$i+=15) {
 					$freebusy[$i]=1;
@@ -3148,6 +3171,8 @@ class calendar extends db {
 
 	function send_invitation($event, $calendar, $insert=true){
 		global $GO_CONFIG, $GO_MODULES, $lang, $GO_LANGUAGE, $GO_SECURITY;
+		
+		go_debug("send_invitation");
 
 		$GO_LANGUAGE->require_language_file('calendar');
 		
@@ -3172,7 +3197,7 @@ class calendar extends db {
 			}
 		}
 
-		//go_debug($participants);
+		go_debug($participants);
 		if(count($participants))
 		{
 			$subject = ($insert) ? $lang['calendar']['invitation'] : $lang['calendar']['invitation_update'];

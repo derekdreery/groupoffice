@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   `read_only` tinyint(1) NOT NULL DEFAULT '0',
   `category_id` int(11) NOT NULL,
   `sequence` int(11) NOT NULL DEFAULT '0',
+	`exception_for_event_id` INT NOT NULL,
   PRIMARY KEY (`id`),
   KEY `start_time` (`start_time`),
   KEY `end_time` (`end_time`),

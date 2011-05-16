@@ -179,9 +179,10 @@ GO.email.lang.icalendarDeleteEventConfirm='Weet u zeker dat u deze afspraak wilt
 GO.email.lang.sending='Verzenden...';
 GO.email.lang.defaultFontSize = 'Standaard lettergrootte';
 
+
 GO.email.lang.emailFiles='E-mail bestanden';
 
-GO.email.lang.shareFolder = 'Map delen';
+GO.email.lang.shareFolder = 'Delen';
 
 GO.email.lang.readPerm='Lezen';
 GO.email.lang.writePerm='Schrijven';
@@ -189,3 +190,5 @@ GO.email.lang.deletePerm='Verwijderen';
 GO.email.lang.createMailboxPerm='Mailbox aanmaken';
 GO.email.lang.deleteMailboxPerm='Mailbox verwijderen';
 GO.email.lang.adminPerm='Beheren';
+
+GO.email.lang.anyField='Alle velden';

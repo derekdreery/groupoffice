@@ -328,7 +328,6 @@ class String {
 
 	public static function trim_lines($text)
 	{
-		//go_log(LOG_DEBUG, $text);
 		str_replace("\r\n","\n", $text);
 
 		$trimmed='';
@@ -512,7 +511,7 @@ class String {
 	 * @return	string
 	 */
 	public static function get_email_validation_regex() {
-		return "/^[a-z0-9\._\-]+@[a-z0-9\.\-_]+\.[a-z]{2,6}$/i";
+		return "/^[a-z0-9\._\-+]+@[a-z0-9\.\-_]+\.[a-z]{2,6}$/i";
 	}
 
 

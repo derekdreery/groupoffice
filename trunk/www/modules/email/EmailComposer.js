@@ -946,7 +946,10 @@ GO.email.EmailComposer = function(config) {
 		'dialog_ready' :true,
 		//		attachmentDblClicked : true,
 		zipOfAttachmentsDblClicked : true,
-		'send' : true
+		'send' : true,
+		'reset' : true,
+		afterShowAndLoad:true,
+		beforesendmail:true
 
 	});
 };
@@ -1093,6 +1096,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		this.inline_temp_attachments = [],
 		this.formPanel.form.reset();
 		this.htmlEditor.SpellCheck = false;
+		
+		this.fireEvent("reset", this);
 	},
 
 	showCC : function(show){
@@ -1453,6 +1458,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		} else {
 			this.editor.focus();
 		}
+		
+		this.fireEvent('afterShowAndLoad',this);
 	},
 	
 	addSignature : function(accountRecord){
@@ -1816,6 +1823,11 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			Ext.MessageBox.confirm(GO.lang.strConfirm, GO.lang.spellcheckAsk, function (btn){self.HandleResult(btn,self);});
 			return false;
 		}*/
+		
+		
+		if(!draft && !autoSave && !this.fireEvent('beforesendmail', this))
+			return false;
+		
 
 		if (this.uploadDialog && this.uploadDialog.isVisible()) {
 

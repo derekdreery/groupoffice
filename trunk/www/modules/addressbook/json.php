@@ -766,13 +766,13 @@ try
 			break;
 
 		case 'init':
-
-			$response['addressbooks']['total'] = $ab->get_user_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
+			
+			$response['addressbooks']['total'] = $ab->get_user_addressbooks($GO_SECURITY->user_id, $start, $GO_CONFIG->nav_page_size, $sort, $dir);
 
 			if($response['addressbooks']['total']==0)
 			{
 				$ab->get_addressbook();
-				$response['addressbooks']['total'] = $ab->get_user_addressbooks($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
+				$response['addressbooks']['total'] = $ab->get_user_addressbooks($GO_SECURITY->user_id, $start, $GO_CONFIG->nav_page_size, $sort, $dir);
 			}
 
 			$books = $GO_CONFIG->get_setting('addressbook_books_filter', $GO_SECURITY->user_id);

@@ -33,7 +33,7 @@ if(!isset($_REQUEST['task']))
 }
 
 
-if(!isset($_POST['passphrase']) && $_REQUEST['task']!='attachments'){
+if(!isset($_POST['password']) && $_REQUEST['task']!='attachments'){
 	//close writing to session so other concurrent requests won't be locked out.
 	session_write_close();
 }
@@ -502,6 +502,21 @@ try {
 
 	}else {
 		switch($_REQUEST['task']) {
+			
+			case 'usernames':
+				
+				$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : 0;
+				$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 30;
+				$query = !empty($_POST['query']) ? '%'.trim($_POST['query']).'%' : '';
+				
+				$response['total']=$email->get_usernames($GO_SECURITY->user_id, $query, $start, $limit);
+				$response['results']=array();
+				
+				while($r=$email->next_record()){
+					$response['results'][]=$r;
+				}				
+				
+				break;
 
 
 			case 'init_composer':
@@ -524,6 +539,8 @@ try {
 					unset($alias['signature']);
 					$response['aliases']['results'][] = $alias;
 				}
+				
+				$GO_EVENTS->fire_event('init_composer', array(&$response, $email));
 
 				break;
 
@@ -654,7 +671,6 @@ try {
 
 				$response = $imap->get_message_with_body($uid, !empty($_POST['create_temporary_attachments']),false,false,!empty($_POST['plaintext']),empty($_POST['plaintext']));
 
-
 				//go_debug($response);
 
 				if(!empty($_POST['plaintext'])) {
@@ -725,8 +741,8 @@ try {
 					require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 					$gnupg = new gnupg();
 					$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']] : '';
-					if(isset($_POST['passphrase'])) {
-						$passphrase=$_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']]=$_POST['passphrase'];
+					if(isset($_POST['password'])) {
+						$passphrase=$_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']]=$_POST['password'];
 						//$passphrase=$_POST['passphrase'];
 					}
 					try {
@@ -736,9 +752,9 @@ try {
 						$m = $e->getMessage();
 
 						if(strpos($m, 'bad passphrase')) {
-							$response['askPassphrase']=true;
-							if(isset($_POST['passphrase'])) {
-								throw new Exception('Wrong passphrase!');
+							$response['askPassword']=true;
+							if(isset($_POST['password'])) {
+								throw new Exception('Wrong password!');
 							}
 						}else {
 							throw new Exception($m);
@@ -1370,6 +1386,9 @@ try {
 							}
 						}
 					}
+					
+					$GO_EVENTS->fire_event('load_email_account', array(&$response));
+					
 					$response['success']=true;
 				}
 				break;
@@ -1462,6 +1481,8 @@ try {
 					unset($alias['signature']);
 					$response['results'][] = $alias;
 				}
+				
+				$GO_EVENTS->fire_event('all_aliases', array(&$response, $email));
 				break;
 
 

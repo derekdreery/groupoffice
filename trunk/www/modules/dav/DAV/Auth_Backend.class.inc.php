@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
+class GO_DAV_Auth_Backend implements Sabre_DAV_Auth_IBackend  {
 
 	 /**
      * HTTP response helper
@@ -151,30 +151,30 @@ class GO_DAV_Auth_Backend extends Sabre_DAV_Auth_Backend_Abstract {
      *
      * @return array
      */
-    public function getUsers() {
-
-		global $GO_SECURITY, $GO_CONFIG;
-
-		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
-		$GO_USERS = new GO_USERS();
-
-		go_debug('GO_DAV_Auth_Backend::getUsers()');
-
-		if(!isset($this->users)){
-
-			$this->users=array($this->recordToDAVUser($GO_USERS->get_user($GO_SECURITY->user_id)));
-			go_debug('Fetching users from database');
-			/*$GO_USERS->get_authorized_users($GO_SECURITY->user_id, 'username');
-			//$GO_USERS->get_users('username', 'asc',0,10);
-			while($user=$GO_USERS->next_record()){
-				
-				$this->users[]=$this->recordToDAVUser($user);
-			}*/
-		}
-
-        return $this->users;
-
-    }
+//    public function getUsers() {
+//
+//		global $GO_SECURITY, $GO_CONFIG;
+//
+//		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+//		$GO_USERS = new GO_USERS();
+//
+//		go_debug('GO_DAV_Auth_Backend::getUsers()');
+//
+//		if(!isset($this->users)){
+//
+//			$this->users=array($this->recordToDAVUser($GO_USERS->get_user($GO_SECURITY->user_id)));
+//			go_debug('Fetching users from database');
+//			/*$GO_USERS->get_authorized_users($GO_SECURITY->user_id, 'username');
+//			//$GO_USERS->get_users('username', 'asc',0,10);
+//			while($user=$GO_USERS->next_record()){
+//				
+//				$this->users[]=$this->recordToDAVUser($user);
+//			}*/
+//		}
+//
+//        return $this->users;
+//
+//    }
 
 	private function recordToDAVUser($record){
 

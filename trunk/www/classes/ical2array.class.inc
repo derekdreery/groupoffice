@@ -304,7 +304,9 @@ class ical2array {
 					$this->object['ATTENDEES'][$this->object_name] = array();
 				}else
 				{
-					$this->object[$this->buffer] = array();
+					if(!isset($this->object[$this->buffer]))
+						$this->object[$this->buffer] = array();
+					
 					$this->object_name = $this->buffer;
 				}
 				break;
@@ -322,9 +324,7 @@ class ical2array {
 				break;
 
 			case 'param_value':
-				if(!isset($this->param_name)) {
-					//go_log(LOG_DEBUG, $this->buffer);
-				}
+
 				if(substr($this->buffer,0,1)=='"' && substr($this->buffer,-1,1)=='"'){
 					$this->buffer = substr($this->buffer,1,-1);
 				}
@@ -344,7 +344,13 @@ class ical2array {
 					$this->object['ATTENDEES'][$this->object_name]['value'] = $this->buffer;
 				}else
 				{
-					$this->object[$this->object_name]['value'] = $this->buffer;
+					
+					if($this->object_name=='EXDATE' && isset($this->object[$this->object_name]['value'])){
+						$this->object[$this->object_name]['value'] .= ';'.$this->buffer;
+					}else
+					{
+						$this->object[$this->object_name]['value'] = $this->buffer;
+					}
 				}
 
 				unset($this->object_name,	$this->param_name);
@@ -491,8 +497,6 @@ class ical2array {
 				$rrule_arr['INTERVAL']=1;
 			}
 		}
-
-		//go_log(LOG_DEBUG, var_export($rrule_arr,true));
 
 		return $rrule_arr;
 	}

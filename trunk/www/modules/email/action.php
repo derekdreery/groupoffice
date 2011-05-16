@@ -181,11 +181,6 @@ try {
 			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
-			
-
-//			if(empty($data)) {
-//				throw new Exception('Could not fetch message from IMAP server');
-//			}
 			$folder = $files->get_folder($_POST['folder_id']);
 			$path = $files->build_path($folder);
 			if(!$path) {
@@ -193,39 +188,43 @@ try {
 			}
 
 			$path.='/'.$_POST['filename'];
+			
+			
+			require_once($GO_CONFIG->class_path."mail/mimeDecode.class.inc");
+			if(!empty($_REQUEST['filepath'])){
+				//message is cached on disk
+				$msgpath = $GO_CONFIG->file_storage_path.$_REQUEST['filepath'];
 
-			$account = $imap->open_account($_POST['account_id'], $_POST['mailbox']);
-			//$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], false);
-
-			$size = $imap->get_message_part_start($_REQUEST['uid'], $_REQUEST['imap_id']);
-
-			$fp = fopen($GO_CONFIG->file_storage_path.$path, 'w+');
-			if(!$fp)
-				throw new Exception('Could not create file');
-
-			//read from IMAP server
-			while($line = $imap->get_message_part_line()){
-				switch(strtolower($_REQUEST['encoding'])) {
-					case 'base64':
-						$r = fputs($fp,base64_decode($line));
-						break;
-					case 'quoted-printable':
-						$r = fputs($fp, quoted_printable_decode($line));
-						break;
-					default:
-						$r = fputs($fp, $line);
-						break;
+				if(File::path_leads_to_parent($msgpath) || !file_exists($msgpath)){
+					die('Invalid request');
 				}
-				
-				if(!$r)
-					throw new Exception('Could not create file');
-			}
-			fclose($fp);
-			$imap->disconnect();
+				$params['input'] = file_get_contents($msgpath);
+				$params['include_bodies'] = true;
+				$params['decode_bodies'] = true;
+				$params['decode_headers'] = false;
 
-//			if(!file_put_contents($GO_CONFIG->file_storage_path.$path, $data)) {
-//				throw new Exception('Could not create file');
-//			}
+				$part = Mail_mimeDecode::decode($params);
+
+				$parts_arr = explode('.',$_REQUEST['imap_id']);
+				for($i=0;$i<count($parts_arr);$i++) {
+					if(isset($part->parts[$parts_arr[$i]])){
+						$part = $part->parts[$parts_arr[$i]];
+					}else{
+						go_debug('Mime part not found!');
+						go_debug($_REQUEST);
+						die('Part not found');
+					}
+				}	
+				file_put_contents($GO_CONFIG->file_storage_path.$path,$part->body);
+				
+
+			}else
+			{
+				$account = $imap->open_account($_POST['account_id'], $_POST['mailbox']);
+				$imap->save_to_file($_REQUEST['uid'], $GO_CONFIG->file_storage_path.$path, $_REQUEST['imap_id'], $_REQUEST['encoding']);			
+				$imap->disconnect();
+			}
+
 			$files->import_file($GO_CONFIG->file_storage_path.$path,$folder['id']);
 
 			$response['success']=true;
@@ -405,7 +404,7 @@ try {
 									0,
 									$_POST['alias_id'],
 									$_POST['priority']
-					);
+					);					
 
 					if(!empty($_POST['reply_uid']))
 						$swift->set_reply_to($_POST['reply_uid'],$_POST['reply_mailbox'], $_POST['in_reply_to']);
@@ -546,7 +545,7 @@ try {
 					}else {
 
 						if($_POST['content_type']=='html') {
-							$body = '<html><head><style>.em-message p{margin:0px}</style></head><body class="em-message">'.$body.'</body></html>';
+							$body = '<html><head><style>.em-message p{margin:0px}</style></head><body><div class="em-message">'.$body.'</div></body></html>';
 						}
 
 						$swift->set_body($body, $_POST['content_type']);
@@ -644,6 +643,9 @@ try {
 						if(!empty($_POST['draft_uid'])) {
 							$swift->set_draft($_POST['draft_uid']);
 						}
+						
+						
+						$GO_EVENTS->fire_event("sendmail",array(&$swift));
 
 						$response['success']=$swift->sendmail();
 
@@ -665,7 +667,7 @@ try {
 					}
 
 				} catch (Exception $e) {
-					$response['feedback'] = $lang['email']['feedbackSMTPProblem'] . '<br />'.nl2br($e->getMessage());
+					$response['feedback'] = nl2br($e->getMessage());
 				}
 			}
 			break;
@@ -1025,7 +1027,6 @@ try {
 									$account = $email->decrypt_account($account);
 								}
 
-								//go_log(LOG_DEBUG, $account['username'].' -> '.$domain);
 								if(strpos($account['email'], '@'.$domain)) {
 									$sc->login();
 
@@ -1054,8 +1055,6 @@ try {
 													'vacation_body'=>$_POST['vacation_body'],
 													'forward_to'=>$_POST['forward_to']
 									);
-
-									//go_log(LOG_DEBUG, var_export($params, true));
 
 									$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/action.php', $params);
 
@@ -1119,6 +1118,8 @@ try {
 						$response['account_id']=$account['id'];
 					}
 				}
+				
+				$GO_EVENTS->fire_event('save_email_account', array(&$account, $email, &$response));
 			}
 			break;
 		case 'save_alias':
@@ -1207,6 +1208,7 @@ try {
 			$create_event = true;
 			if($status_id == 2)
 			{
+				//User wants to decline
 				go_debug($_REQUEST['uuid'].' : '.$email);
 				
 				if(!$cal->is_event_declined($_REQUEST['uuid'], $email))
@@ -1261,6 +1263,8 @@ try {
 
 			if($create_event && (count($calendars) > 1))
 			{
+				
+				//present calendar selection dialog
 				$response['status_id']=$status_id;
 				$response['calendars'] = $calendars;
 				$response['success']=false;
@@ -1283,6 +1287,14 @@ try {
 					if($object['type'] == 'VEVENT')
 					{
 						$event = $cal->get_event_from_ical_object($object);
+						
+						
+						//this might be an update for a specific recurrence ID
+						if(!empty($object['RECURRENCE-ID']['value'])){
+							$timezone_id = isset($object['RECURRENCE-ID']['params']['TZID']) ? $object['RECURRENCE-ID']['params']['TZID'] : '';
+							$exception_date = $cal->ical2array->parse_date($object['RECURRENCE-ID']['value'],$timezone_id);
+						}
+						
 						break;
 					}
 				}
@@ -1328,15 +1340,45 @@ try {
 
 					}
 				}
+				
+				go_debug("Existing event id: ".$event_id);
 
 				if($event_id)
 				{
-					$event['id'] = $old_event['id'];
-					$method = isset($vcalendar[0]['METHOD']['value']) ? $vcalendar[0]['METHOD']['value'] : '';
-					if($method=='REPLY'){
-						unset($event['name'],$event['location'], $event['description']);
+					if(!empty($exception_date)){
+						
+						$old_event = $cal->get_event($event_id);
+						
+						$exception_date=getdate($exception_date);
+						$old_date = getdate($old_event['start_time']);					
+			
+						$exception['time']= mktime($old_date['hours'],$old_date['minutes'], 0,$exception_date['mon'],$exception_date['mday'],$exception_date['year']);						
+						
+						if(!$cal->is_exception($event_id, $exception['time'])){
+							$exception['event_id']=$event_id;						
+							$cal->add_exception($exception);
+
+							$event['exception_for_event_id']=$event_id;
+							$event['uuid']=$old_event['uuid'];
+							$event_id = $cal->add_event($event);
+						}else
+						{
+							//get the specific recurring item
+							$recurrence_event = $cal->get_event_by_uuid($old_event['uuid'], $GO_SECURITY->user_id, $calendar_id, $exception['time']);
+							$event['id'] = $recurrence_event['id'];
+							$cal->update_event($event, false, $recurrence_event);
+						}
+						
+					}else
+					{
+					
+						$event['id'] = $event_id;
+						$method = isset($vcalendar[0]['METHOD']['value']) ? $vcalendar[0]['METHOD']['value'] : '';
+						if($method=='REPLY'){
+							unset($event['name'],$event['location'], $event['description']);
+						}
+						$cal->update_event($event, false, $old_event);
 					}
-					$cal->update_event($event, false, $old_event);
 				}else
 				{
 					$event_id = $cal->add_event($event);

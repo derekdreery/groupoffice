@@ -201,6 +201,10 @@ GO.ExportQueryDialog = Ext.extend(Ext.Window, {
 		if (this.text) {
 			this.loadParams.text = this.text;
 		}
+		
+		if (this.html) {
+			this.loadParams.html = this.html;
+		}
 
 		var values = this.formPanel.form.getValues();
 		Ext.apply(this.loadParams, values);

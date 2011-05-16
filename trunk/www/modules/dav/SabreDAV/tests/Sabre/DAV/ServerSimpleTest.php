@@ -6,6 +6,40 @@ require_once 'Sabre/DAV/Exception.php';
 
 class Sabre_DAV_ServerSimpleTest extends Sabre_DAV_AbstractServer{
 
+    function testConstructArray() {
+
+        $nodes = array(
+            new Sabre_DAV_SimpleDirectory('hello')
+        ); 
+
+        $server = new Sabre_DAV_Server($nodes);
+        $this->assertEquals($nodes[0], $server->tree->getNodeForPath('hello'));
+
+    }
+
+    /**
+     * @expectedException Sabre_DAV_Exception
+     */
+    function testConstructIncorrectObj() {
+
+        $nodes = array(
+            new Sabre_DAV_SimpleDirectory('hello'),
+            new STDClass(),
+        ); 
+
+        $server = new Sabre_DAV_Server($nodes);
+
+    }
+
+    /**
+     * @expectedException Sabre_DAV_Exception
+     */
+    function testConstructInvalidArg() {
+
+        $server = new Sabre_DAV_Server(1);
+
+    }
+
     function testGet() {
         
         $serverVars = array(
@@ -519,23 +553,20 @@ class Sabre_DAV_ServerSimpleTest extends Sabre_DAV_AbstractServer{
 
     }
 
-    /**
-     * @expectedException Sabre_DAV_Exception
-     */
-    function testGuessBaseUriIncorrectPathInfo() {
+    function testGuessBaseUriNoPathInfo2() {
 
         $serverVars = array(
-            'REQUEST_URI' => '/index.php/root',
-            'PATH_INFO'   => '/incorrect',
+            'REQUEST_URI' => '/a/b/c/test.php',
         );
 
         $httpRequest = new Sabre_HTTP_Request($serverVars);
         $server = new Sabre_DAV_Server();
         $server->httpRequest = $httpRequest;
 
-        $server->guessBaseUri();
+        $this->assertEquals('/', $server->guessBaseUri());
 
     }
+
 
     /**
      * @covers Sabre_DAV_Server::guessBaseUri
@@ -555,7 +586,7 @@ class Sabre_DAV_ServerSimpleTest extends Sabre_DAV_AbstractServer{
         $this->assertEquals('/index.php/', $server->guessBaseUri());
 
     }
-
+   
     function testTriggerException() {
         
         $this->server->subscribeEvent('beforeMethod',array($this,'exceptionTrigger'));

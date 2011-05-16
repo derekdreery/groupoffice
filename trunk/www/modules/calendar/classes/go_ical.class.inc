@@ -165,6 +165,23 @@ class go_ical extends calendar
 
 		return $ics;
 	}
+	
+	function export_events($events){
+		$ics = $this->export_calendar_header();
+		
+		$recurrence_alternative_days=array();
+		foreach($events as $event){
+			if($event['rrule']=='')
+				$recurrence_alternative_days[]=date('Ymd',$event['start_time']);
+		}
+		
+		foreach($events as $event){
+			$ics .=  $this->convert_event($event,'',$recurrence_alternative_days);
+		}
+		$ics .= $this->export_calendar_footer();
+
+		return $ics;
+	}
 
 	function export_calendar($calendar_id, $months_in_past=0)
 	{
@@ -217,7 +234,18 @@ class go_ical extends calendar
 		return array($name_part.$value_part);
 		}*/
 
-	function convert_event($event, $attendee_email='')
+	/**
+	 *
+	 * @global type $GO_CONFIG
+	 * @global type $GO_SECURITY
+	 * @global type $GO_MODULES
+	 * @global type $charset
+	 * @param type $event
+	 * @param type $attendee_email
+	 * @param type $recurrence_alternative_times //exception dates shouldn't be exported if a related event with the same UUID and recurrence-id is set. This contains an array of dates with YYYYMMDD values of those events
+	 * @return string 
+	 */
+	function convert_event($event, $attendee_email='', $recurrence_alternative_days=array())
 	{
 		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES, $charset;
 
@@ -237,7 +265,7 @@ class go_ical extends calendar
 		}
 
 		$lines[] = "BEGIN:VEVENT";
-
+		
 		if (empty($event['uuid'])) {
 
 			$db = new db();
@@ -247,6 +275,47 @@ class go_ical extends calendar
 		}
 
 		$lines[] = "UID:".$event['uuid'];
+		
+		if(!empty($event['exception_for_event_id'])){
+//			$line = "RECURRENCE-ID;VALUE=DATE";			
+//			if($this->timezone_id != '')
+//			{
+//				$line .= ";TZID=\"".$this->timezone_id."\"";
+//			}
+//			$line .= ":".date(go_ical::date_format,$event['start_time']);
+//
+//			$lines[]=$line;
+			
+			
+			
+			$cal = new calendar();
+			$exception_for_event = $cal->get_event($event['exception_for_event_id']);
+			
+			$exception_date=getdate($event['start_time']);
+			$old_date = getdate($exception_for_event['start_time']);					
+
+			$exception_time= mktime($old_date['hours'],$old_date['minutes'], 0,$exception_date['mon'],$exception_date['mday'],$exception_date['year']);						
+			
+			
+			//$line = "RECURRENCE-ID;VALUE=DATE";			
+			$line = "RECURRENCE-ID";			
+			if ($event['all_day_event'] == '1')
+			{
+				$line .= ";VALUE=DATE";
+				$date = date(go_ical::date_format, $exception_time);
+				
+			}else
+			{
+				$date = $this->utc ? gmdate($this->datetime_format , $exception_time).'Z' : date($this->datetime_format, $exception_time);
+			}
+			if($this->timezone_id != '')
+			{
+				$line .= ";TZID=\"".$this->timezone_id."\"";
+			}
+				
+			$line .= ":".$date;
+			$lines[]=$line;
+		}
 
 		$lines = array_merge($lines, String::format_vcard_line('SUMMARY', $event['name'], $this->add_leading_space_to_qp_encoded_line_wraps, $this->dont_use_quoted_printable));
 		//if ($event['description'] != '')
@@ -602,43 +671,68 @@ class go_ical extends calendar
 				}
 			}
 
-			$cal = new calendar();
-			if($cal->get_exceptions($event['id']))
-			{
-				while($cal->next_record())
+		
+				$cal = new calendar();
+				if($cal->get_exceptions($event['id']))
 				{
-					$exception = date($this->datetime_format, $cal->f('time'));
-					$exceptions[]=$exception;
-				}
-				$line = 'EXDATE:';
-
-				//$count=1;
-				$exception_count = count($exceptions);
-				for($i=0;$i<$exception_count;$i++)
-				{
-					$line.=$exceptions[$i];
-					if($i!=$exception_count-1)
+					while($cal->next_record())
 					{
-						$line .=';';
+						//exception dates shouldn't be exported if a related event with the same UUID
+						//and recurrence-id is set.
+						if(!in_array(date('Ymd', $cal->f('time')), $recurrence_alternative_days)){
+							$exception_time=$cal->f('time');
+							$line = 'EXDATE';
+							if ($event['all_day_event'] == '1')
+							{
+								$line .= ";VALUE=DATE";
+								$date = date(go_ical::date_format, $exception_time);
+
+							}else
+							{
+								$date = $this->utc ? gmdate($this->datetime_format , $exception_time).'Z' : date($this->datetime_format, $exception_time);
+							}
+							
+							//$exception = date($this->datetime_format, $cal->f('time'));
+							$lines[]=$line.':'.$date;
+						}
 					}
-					/*$count++;
-					 if($count=='3')
-					 {
-						$lines[]=$line;
-						$line='  ';
-						$count=0;
-						}*/
-				}
-				if(!empty($line))
-				{
-					$lines[]=$line;
+					
+//					while($cal->next_record())
+//					{
+//						$exception = $this->utc ? gmdate($this->datetime_format , $cal->f('time')).'Z' : date($this->datetime_format , $cal->f('time'));
+//						//$exception = date($this->datetime_format, $cal->f('time'));
+//						$exceptions[]=$exception;
+//					}
+//					$line = 'EXDATE:';
+//
+//					//$count=1;
+//					$exception_count = count($exceptions);
+//					for($i=0;$i<$exception_count;$i++)
+//					{
+//						$line.=$exceptions[$i];
+//						if($i!=$exception_count-1)
+//						{
+//							$line .=';';
+//						}
+//						/*$count++;
+//						 if($count=='3')
+//						 {
+//							$lines[]=$line;
+//							$line='  ';
+//							$count=0;
+//							}*/
+//					}
+//					if(!empty($line))
+//					{
+//						$lines[]=$line;
+//					}
 				}
 			}
-		}
+		
 
 
 		//alarm
-		if($event['reminder']>0 && $event['start_time']>time())
+		if(!empty($event['reminder']) && $event['start_time']>time())
 		{
 			$this->reminder->get_reminders_by_link_id($event['id'], 1);
 			$reminder = $this->reminder->next_record();
@@ -664,6 +758,9 @@ class go_ical extends calendar
 			}
 		}
 
+		if(!isset($event['mtime']))
+			$event['mtime']=time();
+		
 		$timestamp = gmdate($this->datetime_format, $event['mtime']).'Z';
 		$lines[]= "DTSTAMP:".$timestamp;
 		$lines[]= "LAST-MODIFIED:".$timestamp;
@@ -676,7 +773,9 @@ class go_ical extends calendar
 		 preg_match_all( '/.{1,73}([^=]{0,2})?/', $line, $matches);
 		 $vevent .= implode( '=' . chr(13).chr(10).' ', $matches[0] )."\r\n"; // add soft crlf's
 		}*/
-		return implode($this->line_break, $lines).$this->line_break;
+		$vevent = implode($this->line_break, $lines).$this->line_break;
+		//go_debug($vevent);
+		return $vevent;
 	}
 
 	function generate_response($object, $email)
@@ -717,6 +816,18 @@ class go_ical extends calendar
 		}
 
 		$timestamp = date($this->datetime_format, time());
+		
+//		if($recurrence_id_time){
+//			$line = "RECURRENCE-ID";			
+//			if($this->timezone_id != '')
+//			{
+//				$line .= ";TZID=\"".$this->timezone_id."\"";
+//			}
+//			$line .= ":".date($this->datetime_format,$recurrence_id_time);
+//
+//			$lines[]=$line;
+//		}
+		
 		$lines[]= "LAST-MODIFIED:".$timestamp;
 		$lines[] = "END:VEVENT";
 		

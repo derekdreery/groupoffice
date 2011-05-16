@@ -168,7 +168,7 @@ XML;
   <C:comp-filter name="VCALENDAR">
     <C:comp-filter name="VEVENT">
         <C:prop-filter name="ATTENDEE">
-            <C:text-match collation="i;ascii-casemap">mailto:lisa@example.com</C:text-match>
+            <C:text-match collation="default">mailto:lisa@example.com</C:text-match>
             <C:param-filter name="PARTSTAT">
                 <C:text-match collation="i;ascii-casemap">needs-action</C:text-match>
             </C:param-filter>
@@ -275,6 +275,18 @@ XML;
         $dateTime = Sabre_CalDAV_XMLUtil::parseICalendarDateTime('20100316T141405Z');
 
         $compare = new DateTime('2010-03-16 14:14:05',new DateTimeZone('UTC'));
+        $this->assertEquals($compare, $dateTime);
+
+    }
+
+    /** 
+     * @depends testParseICalendarDateTime
+     */
+    function testParseICalendarDateTimeUTC2() {
+
+        $dateTime = Sabre_CalDAV_XMLUtil::parseICalendarDateTime('20101211T160000Z');
+
+        $compare = new DateTime('2010-12-11 16:00:00',new DateTimeZone('UTC'));
         $this->assertEquals($compare, $dateTime);
 
     }

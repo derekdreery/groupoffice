@@ -9,6 +9,17 @@
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
+DROP TABLE IF EXISTS `go_saved_search_queries`;
+CREATE TABLE `go_saved_search_queries` (
+`id` INT NOT NULL ,
+`user_id` INT NOT NULL ,
+`name` VARCHAR( 50 ) NOT NULL ,
+`sql` TEXT NOT NULL ,
+`type` VARCHAR( 50 ) NOT NULL ,
+PRIMARY KEY ( `id` ) ,
+INDEX ( `type` )
+) ENGINE = MYISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
+
 -- 
 -- Database: `imfoss_nl`
 --

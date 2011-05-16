@@ -31,8 +31,9 @@ $email = new email();
 
 $account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 
-if($account['user_id']!=$GO_SECURITY->user_id)
-	exit($lang['common']['access_denied']);
+if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id,$account['acl_id'])) {
+	die($lang['common']['accessDenied']);
+}
 
 header("Content-type: text/plain; charset: US-ASCII");
 header('Content-Disposition: inline; filename="message_source.txt"');

@@ -38,7 +38,7 @@ try {
 		case 'startup':
 
 			$_REQUEST['start']=0;
-			$_REQUEST['limit']=50;
+			$_REQUEST['limit']=$GO_CONFIG->nav_page_size;
 			
 			$cal->get_views_json($response['views']);
 			$cal->get_calendars_json($response['calendars']);
@@ -371,7 +371,8 @@ try {
 
 			$num_participants = 0;
 			$continue = true;
-			$num_participants=$cal->get_participants($event['id']);
+			//$num_participants=$cal->get_participants($event['id']);
+			$num_participants = $cal->count_participants($event['id']) > 1 ? 1 : 0;
 			/*while($cal->next_record() && $continue)
 			{
 				if($cal->f('user_id') != $GO_SECURITY->user_id)
@@ -649,7 +650,7 @@ try {
 												'id'=>$response['count']++,
 												'name'=>htmlspecialchars(str_replace('{NAME}',$name,$lang['calendar']['birthday_name']), ENT_COMPAT, 'UTF-8'),
 												'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$contact['upcoming']-$contact['birthday']), $lang['calendar']['birthday_desc']), ENT_COMPAT, 'UTF-8'),
-												'time'=>'00:00',
+												'time'=>date($_SESSION['GO_SESSION']['date_format'],$contact['upcoming']),												
 												'start_time'=>$contact['upcoming'].' 00:00',
 												'end_time'=>$contact['upcoming'].' 23:59',
 												'background'=>'EBF1E2',
@@ -672,7 +673,8 @@ try {
 						'id'=>$response['count']++,
 						'name'=>htmlspecialchars($record['name'], ENT_COMPAT, 'UTF-8'),
 						'description'=>'',
-						'time'=>'00:00',
+						'time'=>date($_SESSION['GO_SESSION']['date_format'],$record['date']),
+						'all_day_event'=>1,
 						'start_time'=>date('Y-m-d',$record['date']).' 00:00',
 						'end_time'=>date('Y-m-d',$record['date']).' 23:59',
 						'background'=>'f1f1f1',

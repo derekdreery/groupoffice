@@ -1,6 +1,13 @@
+/**
+ * Don't copy the next lines into a translation
+ */
 Ext.namespace('GO.sieve');
 
 GO.sieve.lang = {};
+
+/**
+ * Copy everything below for translations
+ */
 
 GO.sieve.lang.name = 'Name';
 GO.sieve.lang.scriptname = 'Script name';

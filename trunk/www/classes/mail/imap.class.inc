@@ -526,7 +526,11 @@ class imap extends imap_bodystruct {
 			}
 		}
 
-		$command = "UID SEARCH (UNSEEN) ALL\r\n";
+		#some servers don't seem to support brackets
+		#$command = "UID SEARCH (UNSEEN) ALL\r\n";
+		
+		$command = "UID SEARCH UNSEEN ALL\r\n";
+		
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 		$status = $this->check_response($res, true);
@@ -701,12 +705,13 @@ class imap extends imap_bodystruct {
 		$this->clean($sort, 'keyword');
 		$command1 = 'UID FETCH '.$uid_string.' ';
 		switch ($sort) {
-			case 'DATE':
-			case 'R_DATE':
-				$command2 = "BODY.PEEK[HEADER.FIELDS (DATE)]";
-				$key = "BODY[HEADER.FIELDS";
-				break;
-			case 'SIZE':
+//			Doesn't work on some servers. Use internal date for these.
+//			case 'DATE':
+//			case 'R_DATE':
+//				$command2 = "BODY.PEEK[HEADER.FIELDS (DATE)]";
+//				$key = "BODY[HEADER.FIELDS";
+//				break;
+//			case 'SIZE':
 			case 'R_SIZE':
 				$command2 = "RFC822.SIZE";
 				$key = "RFC822.SIZE";
@@ -1626,7 +1631,7 @@ class imap extends imap_bodystruct {
 		return $res;
 	}
 
-	public function save_to_file($uid, $path){
+	public function save_to_file($uid, $path, $imap_part_id=-1, $encoding=''){
 
 		$fp = fopen($path, 'w+');
 
@@ -1639,14 +1644,28 @@ class imap extends imap_bodystruct {
 		 *
 		 * That's why I first fetch the header and then the text.
 		 */
-		$header = $this->get_message_part($uid, 'HEADER')."\r\n\r\n";
+		if($imap_part_id==-1){
+			$header = $this->get_message_part($uid, 'HEADER')."\r\n\r\n";
 
-		if(!fputs($fp, $header))
-			return false;
+			if(!fputs($fp, $header))
+				return false;
+			
+			$imap_part_id='TEXT';
+		}
 
-		$size = $this->get_message_part_start($uid,'TEXT');
+		$size = $this->get_message_part_start($uid,$imap_part_id);
 
 		while($line = $this->get_message_part_line()){
+			
+			switch(strtolower($encoding)) {
+				case 'base64':
+					$line=base64_decode($line);
+					break;
+				case 'quoted-printable':
+					$line= quoted_printable_decode($line);
+					break;
+			}
+			
 			if(!fputs($fp, $line))
 				return false;
 		}
