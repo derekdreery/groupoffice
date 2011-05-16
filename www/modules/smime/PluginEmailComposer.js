@@ -65,8 +65,10 @@ GO.moduleManager.onModuleReady('email',function(){
 		
 		
 		askPassword : function(){				
+
+			var record = this.fromCombo.store.getById(this.fromCombo.getValue());
 				
-			if(!GO.smime.passwordsInSession[this.fromCombo.getValue()] && this.sendParams['sign_smime']=="1"){
+			if(!GO.smime.passwordsInSession[record.data.account_id] && this.sendParams['sign_smime']=="1"){
 				
 				
 				if(!this.passwordDialog)
@@ -74,6 +76,8 @@ GO.moduleManager.onModuleReady('email',function(){
 					this.passwordDialog = new GO.dialog.PasswordDialog({
 						title:GO.smime.lang.enterPassword,
 						fn:function(btn, password){
+							
+							var record = this.fromCombo.store.getById(this.fromCombo.getValue());
 					
 							if(btn=="cancel")
 								return false;
@@ -85,6 +89,7 @@ GO.moduleManager.onModuleReady('email',function(){
 
 									if(res.success)
 									{
+										
 										GO.smime.passwordsInSession[this.fromCombo.getValue()]=true;
 										this.sendMail();
 									}else
@@ -93,7 +98,7 @@ GO.moduleManager.onModuleReady('email',function(){
 									}
 								},
 								params: {
-									account_id: this.fromCombo.getValue(),
+									account_id: record.data.account_id,
 									password:password
 								},
 								scope:this
