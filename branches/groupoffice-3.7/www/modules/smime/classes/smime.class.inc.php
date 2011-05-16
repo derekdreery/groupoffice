@@ -23,6 +23,42 @@ class smime extends db{
 		$events->add_listener('all_aliases', __FILE__, 'smime','add_smime_info_to_aliases');
 	}
 	
+	
+	public function get_root_certificates(){
+		
+		global $GO_CONFIG;
+		
+		$certs=array();
+		
+//		if(isset($GO_CONFIG->smime_root_cert_location)){
+//			
+//			$GO_CONFIG->smime_root_cert_location=rtrim($GO_CONFIG->smime_root_cert_location, '/');		
+//			
+//			if(is_dir($GO_CONFIG->smime_root_cert_location)){				
+//							
+//				$dir = opendir($GO_CONFIG->smime_root_cert_location);
+//				if ($dir) {
+//					while ($item = readdir($dir)) {
+//						if ($item != '.' && $item != '..') {
+//							$certs[] = $GO_CONFIG->smime_root_cert_location.'/'.$item;
+//						}
+//					}
+//					closedir($dir);
+//				}
+//			}elseif(file_exists($GO_CONFIG->smime_root_cert_location)){
+//				$certs[]=$GO_CONFIG->smime_root_cert_location;
+//			}
+//		}
+//		
+		if(file_exists($GO_CONFIG->smime_root_cert_location)){
+				$certs[]=$GO_CONFIG->smime_root_cert_location;
+			}
+		
+		//var_dump($certs);
+		
+		return $certs;
+	}
+	
 	public function add_smime_info_to_aliases(&$response){
 		
 		$account_certs=array();
@@ -30,11 +66,12 @@ class smime extends db{
 		$smime = new smime();
 		
 		if(isset($response['aliases'])){
-			$arr = &$response['aliases'];
+			$arr = &$response['aliases']['results'];
 		}else
 		{
 			$arr = &$response['results'];
 		}
+	
 		
 		foreach($arr as &$alias){
 	
