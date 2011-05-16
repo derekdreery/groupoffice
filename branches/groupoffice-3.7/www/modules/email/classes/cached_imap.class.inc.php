@@ -51,8 +51,6 @@ class cached_imap extends imap{
 		global $GO_CONFIG;
 		
 		$this->disable_message_cache=$GO_CONFIG->debug;
-		go_debug("WARNING: IMAP message cache is disabled");
-
 	}
 
 	public function is_imap(){
