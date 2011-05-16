@@ -1,3 +1,7 @@
+16/05/2011 3.7.16
+- Downloading attachments was broken
+- Changing the smime preferences didn't work properly.
+
 13/05/2011 3.7.15
 - Removed nagging about adding new customer to addressbook in the billing modules
 - Minified script of smime was missing.
