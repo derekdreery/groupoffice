@@ -27,6 +27,9 @@ require_once($GO_MODULES->modules['email']['class_path'] . "email.class.inc.php"
 $imap = new cached_imap();
 $email = new email();
 
+require_once($GO_MODULES->modules['smime']['class_path'].'smime.class.inc.php');
+$smime = new smime();
+
 //if(empty($_REQUEST['filepath']))
 $account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 
@@ -50,9 +53,7 @@ if(!file_exists($src_filename))
 	die('Could not get message to verify the signature');
 }
 
-//if (!file_exists($cert_filename))
-$valid = openssl_pkcs7_verify($src_filename, PKCS7_NOVERIFY, $cert_filename);
-
+$valid = openssl_pkcs7_verify($src_filename, null, $cert_filename, $smime->get_root_certificates());
 $cert = file_get_contents($cert_filename);
 
 $arr = openssl_x509_parse($cert);
@@ -60,8 +61,6 @@ $arr = openssl_x509_parse($cert);
 
 $email = String::get_email_from_string($arr['extensions']['subjectAltName']);
 
-require_once($GO_MODULES->modules['smime']['class_path'].'smime.class.inc.php');
-$smime = new smime();
 if(!$smime->get_public_certificate($GO_SECURITY->user_id, $email))
 	$smime->add_public_certificate($GO_SECURITY->user_id, $email, $cert);
 
