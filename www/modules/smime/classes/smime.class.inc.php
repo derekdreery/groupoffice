@@ -304,21 +304,52 @@ class smime extends db{
 		return $id;
 	}
 	
-	public function get_public_certificates($user_id, $email=''){
+	public function update_public_certificate($id, $cert){		
+		return $this->update_row('smi_certs', array(
+				'id'=>$id,
+				'cert'=>$cert
+				));
+	}
+	
+	public function get_public_certificates($user_id, $query='',$start=0, $limit=0){
 		
-		$sql = "SELECT * FROM smi_certs WHERE user_id=".intval($user_id);
+		$sql = "SELECT ";
 		
-		if($email!=''){
-			$sql .= " AND email='".$this->escape($email)."'";
+		if($limit>0)
+			$sql .= " SQL_CALC_FOUND_ROWS";
+		
+		$sql .= "* FROM smi_certs WHERE user_id=".intval($user_id);
+		
+		if($query!=''){
+			$sql .= " AND email LIKE '".$this->escape($query)."'";
 		}
+		
+		$sql .= ' ORDER BY email ASC';
+		
+		if($limit>0)
+		{
+			$sql .= ' LIMIT '.intval($start).','.intval($limit);
+		}
+		
 		$this->query($sql);
 		
-		return $this->num_rows();		
+		return $limit > 0 ? $this->found_rows() : $this->num_rows();		
 	}
 	
 	public function get_public_certificate($user_id, $email){
 		$this->get_public_certificates($user_id, $email);
 		return $this->next_record();
+	}
+	
+	public function get_public_certificate_by_id($cert_id){
+		$sql = "SELECT * FROM smi_certs WHERE id=".intval($cert_id);
+		$this->query($sql);
+		return $this->next_record();
+	}
+	
+	public function delete_public_certificate($id){
+		$sql = "DELETE FROM smi_certs WHERE id=".intval($id);
+		return $this->query($sql);
 	}
 	
 	

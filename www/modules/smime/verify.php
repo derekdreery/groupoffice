@@ -15,10 +15,6 @@ require_once("../../Group-Office.php");
 
 $GO_SECURITY->html_authenticate();
 
-$account_id = ($_REQUEST['account_id']);
-$mailbox = ($_REQUEST['mailbox']);
-$uid = ($_REQUEST['uid']);
-
 require_once($GO_LANGUAGE->get_language_file('email'));
 require_once($GO_CONFIG->class_path . "mail/imap.class.inc");
 require_once($GO_MODULES->modules['email']['class_path'] . "cached_imap.class.inc.php");
@@ -31,43 +27,55 @@ require_once($GO_MODULES->modules['smime']['class_path'].'smime.class.inc.php');
 $smime = new smime();
 
 //if(empty($_REQUEST['filepath']))
-$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
+if(!empty($_REQUEST['account_id'])){
+	$account_id = $_REQUEST['account_id'];
+	$mailbox = $_REQUEST['mailbox'];
+	$uid = $_REQUEST['uid'];
 
-if (!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $account['acl_id'])) {
-	die($lang['common']['accessDenied']);
-}
+	$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 
-
-$tmpdir = $GO_CONFIG->tmpdir . 'smime/verify/';
-File::mkdir($tmpdir);
-
-$src_filename = !empty($_REQUEST['filepath']) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.eml';
-$cert_filename = $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.crt';
+	if (!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $account['acl_id'])) {
+		die($lang['common']['accessDenied']);
+	}
 
 
-if (empty($_REQUEST['filepath']) && !file_exists($src_filename))
-	$imap->save_to_file($uid, $src_filename);
+	$tmpdir = $GO_CONFIG->tmpdir . 'smime/verify/';
+	File::mkdir($tmpdir);
 
-if(!file_exists($src_filename))
+	$src_filename = !empty($_REQUEST['filepath']) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.eml';
+	$cert_filename = $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.crt';
+
+
+	if (empty($_REQUEST['filepath']) && !file_exists($src_filename))
+		$imap->save_to_file($uid, $src_filename);
+
+	if(!file_exists($src_filename))
+	{
+		die('Could not get message to verify the signature');
+	}
+
+	$valid = openssl_pkcs7_verify($src_filename, null, $cert_filename, $smime->get_root_certificates());
+	$cert = file_get_contents($cert_filename);
+
+}else
 {
-	die('Could not get message to verify the signature');
+	$cert = $smime->get_public_certificate_by_id($_REQUEST['cert_id']);
+	$cert = $cert['cert'];
 }
-
-$valid = openssl_pkcs7_verify($src_filename, null, $cert_filename, $smime->get_root_certificates());
-$cert = file_get_contents($cert_filename);
 
 $arr = openssl_x509_parse($cert);
 
 
 $email = String::get_email_from_string($arr['extensions']['subjectAltName']);
 
-if(!$smime->get_public_certificate($GO_SECURITY->user_id, $email))
+$existing_cert = $smime->get_public_certificate($GO_SECURITY->user_id, $email);
+if(!$existing_cert)
 	$smime->add_public_certificate($GO_SECURITY->user_id, $email, $cert);
+else if($existing_cert['cert']!=$cert){
+	$smime->update_public_certificate($id, $cert);
+}
 
 $GO_LANGUAGE->require_language_file('smime');
-
-//require()
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -79,12 +87,15 @@ $GO_LANGUAGE->require_language_file('smime');
 	<body>
 
 <?php
-if (!$valid) {
-	echo '<h1>'.$lang['smime']['invalidCert'].'</h1>';
-} else {
-	echo '<h1>'.$lang['smime']['validCert'].'</h1>';
+if(isset($_REQUEST['account_id'])){
+	if (!$valid) {
+		echo '<h1>'.$lang['smime']['invalidCert'].'</h1>';
+	} else {
+		echo '<h1>'.$lang['smime']['validCert'].'</h1>';
+	}
+}
 
-
+if(!isset($_REQUEST['account_id']) || $valid){
 	echo '<table>';
 	echo '<tr><td width="100">'.$lang['common']['name'].':</td><td>' . $arr['name'] . '</td></tr>';
 	echo '<tr><td width="100">E-mail:</td><td>' . $email. '</td></tr>';
