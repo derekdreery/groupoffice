@@ -49,7 +49,9 @@ class cached_imap extends imap{
 		//parent::__construct();
 
 		global $GO_CONFIG;
-		//$this->disable_message_cache=$GO_CONFIG->debug;
+		
+		$this->disable_message_cache=$GO_CONFIG->debug;
+		go_debug("WARNING: IMAP message cache is disabled");
 
 	}
 
@@ -382,7 +384,7 @@ class cached_imap extends imap{
 
 
 	public function get_message_with_body($uid, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false, $peek=false, $plain_body_requested=true, $html_body_requested=true) {
-		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $lang;
+		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_EVENTS, $lang;
 
 		go_debug("cached_imap::get_message_with_body($uid, $create_temporary_attachment_files, $create_temporary_inline_attachment_files, $peek, $plain_body_requested, $html_body_requested)");
 
@@ -441,7 +443,7 @@ class cached_imap extends imap{
 				}
 			}
 			
-		
+			$GO_EVENTS->fire_event('get_message_with_body', array(&$message, $this));
 
 			//go_debug($message);
 			return $message;
@@ -458,6 +460,8 @@ class cached_imap extends imap{
 			throw new Exception($lang['email']['errorGettingMessage']);
 
 		$message=$this->imap_message_to_cache($headers, true);
+		
+		$message['from_cache']=false;
 
 		go_debug($message['message-id']);
 		
@@ -554,11 +558,20 @@ class cached_imap extends imap{
 
 		$message['attachments']=$this->find_message_attachments($struct, $message['body_ids']);
 		//go_debug($message['attachments']);
+		$message['smime_signed']=false;
+		foreach($message['attachments'] as $key=>$a){
+			if(isset($a['name']) && $a['name']=='smime.p7s'){
+				unset($message['attachments'][$key]);
+				$message['smime_signed']=true;
+				break;
+			}
+				
+		}
 		
 		for($i=0,$max=count($message['attachments']);$i<$max;$i++){
 			
 			//go_debug('NAME: '.$message['attachments'][$i]['name']);
-
+			
 			if(empty($message['attachments'][$i]['name']) || $message['attachments'][$i]['name']=='false'){
 				if(!empty($message['attachments'][$i]['subject'])){
 					$message['attachments'][$i]['name']=File::strip_invalid_chars($this->mime_header_decode($message['attachments'][$i]['subject'])).'.eml';
@@ -629,7 +642,10 @@ class cached_imap extends imap{
 		if(isset($message['html_body'])){
 			$message['html_body']=$this->replace_inline_images($message['html_body'], $message['attachments']);
 		}
-
+		
+		
+		$GO_EVENTS->fire_event('get_message_with_body', array(&$message, $this));
+		
 		$cached_message['uid']=$uid;
 		$cached_message['folder_id']=$this->folder['id'];
 		$cached_message['serialized_message_object']=serialize($message);		
@@ -639,7 +655,8 @@ class cached_imap extends imap{
 		//
 
 		
-
+		
+		
 		return $message;
 	}
 

@@ -128,6 +128,9 @@ class ldap {
 
 	/* public: connection management */
 	function connect($Host = "", $Port="") {
+		
+		global $GO_CONFIG;
+		
 		/* Handle defaults */
 		if ("" == $Host)
 		$Host     = $this->Host;
@@ -144,6 +147,9 @@ class ldap {
 				$this->Link_ID=ldap_connect($Host);
 			else
 				$this->Link_ID=ldap_connect($Host, $Port);
+			
+			if($GO_CONFIG->ldap_network_timeout) //only works in php 5.3
+				ldap_set_option($this->Link_ID, LDAP_OPT_NETWORK_TIMEOUT, $GO_CONFIG->ldap_network_timeout);
 
 			if (!$this->Link_ID) {
 				go_debug("ldap_connect($Host, $Port) failed.");

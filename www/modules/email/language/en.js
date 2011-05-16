@@ -200,7 +200,7 @@ GO.email.lang.sending='Sending...';
 GO.email.lang.defaultFontSize = 'Default font size';
 GO.email.lang.emailFiles='Email files';
 
-GO.email.lang.shareFolder = 'Share folder';
+GO.email.lang.shareFolder = 'Share';
 
 GO.email.lang.readPerm='Read';
 GO.email.lang.writePerm='Write';

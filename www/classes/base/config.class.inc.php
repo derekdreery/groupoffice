@@ -61,6 +61,12 @@ class GO_CONFIG {
 	 * @var bool
 	 */
 	var $debug_log = false;
+	
+	/**
+	 * Info log location. If empty it will be in <file_storage_path>/log/info.log
+	 * @var bool
+	 */
+	var $info_log = "";
 
 	/**
 	 * Output errors in debug mode
@@ -692,6 +698,15 @@ class GO_CONFIG {
 	 */
 
 	var $disable_security_token_check=false;
+	
+	/**
+	 * The number of items displayed in the navigation panels (Calendars, addressbooks etc.)
+	 * Don't set this number too high because it may slow the browser and server down.
+	 * 
+	 * @var type 
+	 */
+	
+	var $nav_page_size=50;
 
 
 	/*//////////////////////////////////////////////////////////////////////////////
@@ -704,7 +719,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.7.13';
+	var $version = '3.7.16';
 
 
 	/* The permissions mode to use when creating files
@@ -734,7 +749,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20110429';
+	var $mtime = '20110516';
 
 	#group configuration
 	/**
@@ -915,6 +930,9 @@ class GO_CONFIG {
 		foreach($config as $key=>$value) {
 			$this->$key=$value;
 		}
+		
+		if($this->info_log=="")
+			$this->info_log =$this->file_storage_path.'log/info.log';
 
 		//this can be used in some cases where you don't want the dynamically
 		//determined full URL. This is done in set_full_url below.
@@ -973,7 +991,7 @@ class GO_CONFIG {
 		
 
 
-		if($this->debug) {			
+		if($this->debug_log) {			
 			list ($usec, $sec) = explode(" ", microtime());
 			$this->loadstart = ((float) $usec + (float) $sec);
 		}
@@ -992,7 +1010,7 @@ class GO_CONFIG {
 			$this->folder_create_mode=octdec($this->folder_create_mode);
 		}
 
-		if($this->debug) {
+		if($this->debug_log) {
 			$this->log=true;
 		}
 		
@@ -1031,7 +1049,7 @@ class GO_CONFIG {
 	}
 
 	function __destruct() {
-		if($this->debug) {
+		if($this->debug_log) {
 			go_debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
 
 			go_debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
@@ -1304,6 +1322,7 @@ class GO_CONFIG {
 		$response['config']['max_attachment_size']=$this->max_attachment_size;
 		$response['config']['max_file_size']=$this->max_file_size;
 		$response['config']['help_link']=$this->help_link;
+		$response['config']['nav_page_size']=intval($this->nav_page_size);
 
 
 		return $response;

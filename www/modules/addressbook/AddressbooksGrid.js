@@ -23,7 +23,7 @@ GO.addressbook.AddresbooksGrid = function(config){
 				emptyText: GO.lang.strSearch
 			})],
 			store:config.store,
-			pageSize:parseInt(GO.settings['max_rows_list'])
+			pageSize:GO.settings.config.nav_page_size
 		})
 	});
 	

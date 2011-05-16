@@ -20,6 +20,8 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 	public function __construct($path){
 		global $GO_CONFIG;
+		
+		$path = rtrim($path, '/');
 
 		$this->relpath=$path;
 		$path = $GO_CONFIG->file_storage_path.$path;
@@ -30,6 +32,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 	private function getFolder(){
 		global $files;
 		if(!isset($this->folder)){
+			
 			$this->folder=$files->resolve_path($this->relpath);
 
 			if(!$this->folder){
@@ -141,12 +144,12 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		global $GO_CONFIG;
 
-        $path = $this->path . '/' . $name;
+        $path = $this->path.'/'.$name;
 
-		//go_debug("FSD:getChild($name)");
+		go_debug("FSD:getChild($path)");
     
         if (is_dir($path)) {
-            return new GO_DAV_FS_Directory($this->relpath . '/' . $name);
+            return new GO_DAV_FS_Directory($this->relpath . '/'. $name);
         } else if(file_exists($path)) {
             return new GO_DAV_FS_File($this->relpath . '/' . $name);
         }else

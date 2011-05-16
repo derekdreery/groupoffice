@@ -293,10 +293,6 @@ try {
 	    $quote	= isset($_REQUEST['quote']) ? ($_REQUEST['quote']) : '"';
 
 	    $result['success'] = true;
-	    //$result['feedback'] = $feedback;
-
-	    //go_log(LOG_DEBUG, var_export($_FILES,true));
-	    //go_log(LOG_DEBUG, var_export($_POST,true));
 
 	    $_SESSION['GO_SESSION']['addressbook']['import_file'] = $GO_CONFIG->tmpdir.uniqid(time());
 	    go_debug($import_file);

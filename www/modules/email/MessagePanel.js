@@ -38,76 +38,76 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		this.attachmentsId = Ext.id();
 		
 		var templateStr = '<div class="message-header">'+
-			'<table class="message-header-table">'+
-			'<tr><td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+			
-			'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{[this.addSlashes(values.from)]}\');">{sender}</a>&gt;</td></tr>'+
-			'<tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>'+
-			'<tr><td><b>'+GO.lang.strDate+'</b></td><td>: {date}</td></tr>'+
-			//'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>'+
-			'<tr><td><b>'+GO.email.lang.to+'</b></td><td>: '+
-			'<tpl for="to">'+
-			'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
-			'</tpl>'+
-			'</td></tr>'+
-			'<tpl if="cc.length">'+
-				'<tr><td><b>'+GO.email.lang.cc+'</b></td><td>: '+
-				'<tpl for="cc">'+
-				'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
-				'</tpl>'+
-				'</td></tr>'+
-			'</tpl>'+
-			'<tpl if="bcc.length">'+
-				'<tr><td><b>'+GO.email.lang.bcc+'</b></td><td>: '+
-				'<tpl for="bcc">'+
-				'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
-				'</tpl>'+
-				'</td></tr>'+
-			'</tpl>'+
-			'</table>'+
-			'<tpl if="attachments.length">'+
-				'<table style="padding-top:5px;">'+
-				'<tr><td><b>'+GO.email.lang.attachments+':</b></td></tr><tr><td id="'+this.attachmentsId+'">'+
-					'<tpl for="attachments">'+
-							'<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="#">{name} ({human_size})</a> '+
-					'</tpl>'+
-					'<tpl if="attachments.length&gt;1">'+
-						'<a class="filetype-link filetype-zip" id="'+this.attachmentsId+'_zipofall" href="#">'+GO.email.lang.downloadAllAsZip+'</a>'+
-					'</tpl>'+
-				'</td></tr>'+
-				'</table>'+
-			'</tpl>'+
-			'<tpl if="blocked_images&gt;0">'+
-			'<div class="go-warning-msg em-blocked">'+GO.email.lang.blocked+' <a id="em-unblock" href="#" class="normal-link">'+GO.email.lang.unblock+'</a></div>'+
-			'</tpl>'+			
-			'</div>'+
-			'<tpl if="!GO.util.empty(values.iCalendar)">'+
-				'<tpl if="iCalendar.feedback">'+
-					'<div class="message-icalendar">'+
-					'<span class="message-icalendar-icon go-link-icon-1"></span>'+
-					'{[values.iCalendar.feedback]}'+
-					'<span class="message-icalendar-actions">'+
-					'<tpl if="iCalendar.invitation">'+
-						'<tpl if="iCalendar.invitation.is_invitation">'+
-							//'<tpl if="!iCalendar.invitation.event_id || iCalendar.invitation.event_declined == true">'+
-								'<a class="normal-link" id="em-icalendar-accept-invitation" href="#">'+GO.email.lang.icalendarAcceptInvitation+'</a> '+
-							//'</tpl>'+
-							'<tpl if="iCalendar.invitation.event_declined == false">'+
-								'<a class="normal-link" id="em-icalendar-decline-invitation" href="#">'+GO.email.lang.icalendarDeclineInvitation+'</a> '+
-							'</tpl>'+
-							'<a class="normal-link" id="em-icalendar-tentative-invitation" href="#">'+GO.email.lang.icalendarTentativeInvitation+'</a> '+
-						'</tpl>'+
-						'<tpl if="iCalendar.invitation.is_cancellation">'+
-							'<a class="normal-link" id="em-icalendar-delete-event" href="#">'+GO.email.lang.icalendarDeleteEvent+'</a>'+
-						'</tpl>'+
-						'<tpl if="iCalendar.invitation.is_update">'+
-							'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
-						'</tpl>'+
-					'</tpl>'+
-					'</span>'+
-					'</div>'+
-				'</tpl>'+
-			'</tpl>'+
-			'<div id="'+this.bodyId+'" class="message-body go-html-formatted">{body}</div>';
+		'<table class="message-header-table">'+
+		'<tr><td style="width:70px"><b>'+GO.email.lang.from+'</b></td>'+			
+		'<td>: {from} &lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{sender}\', \'{[this.addSlashes(values.from)]}\');">{sender}</a>&gt;</td></tr>'+
+		'<tr><td><b>'+GO.email.lang.subject+'</b></td><td>: {subject}</td></tr>'+
+		'<tr><td><b>'+GO.lang.strDate+'</b></td><td>: {date}</td></tr>'+
+		//'<tr><td><b>'+GO.lang.strSize+'</b></td><td>: {size}</td></tr>'+
+		'<tr><td><b>'+GO.email.lang.to+'</b></td><td>: '+
+		'<tpl for="to">'+
+		'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
+		'</tpl>'+
+		'</td></tr>'+
+		'<tpl if="cc.length">'+
+		'<tr><td><b>'+GO.email.lang.cc+'</b></td><td>: '+
+		'<tpl for="cc">'+
+		'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
+		'</tpl>'+
+		'</td></tr>'+
+		'</tpl>'+
+		'<tpl if="bcc.length">'+
+		'<tr><td><b>'+GO.email.lang.bcc+'</b></td><td>: '+
+		'<tpl for="bcc">'+
+		'{name} <tpl if="email.length">&lt;<a class="normal-link" href="#" onclick="GO.email.showAddressMenu(event, \'{email}\', \'{[this.addSlashes(values.name)]}\');">{email}</a>&gt;; </tpl>'+	
+		'</tpl>'+
+		'</td></tr>'+
+		'</tpl>'+
+		'</table>'+
+		'<tpl if="attachments.length">'+
+		'<table style="padding-top:5px;">'+
+		'<tr><td><b>'+GO.email.lang.attachments+':</b></td></tr><tr><td id="'+this.attachmentsId+'">'+
+		'<tpl for="attachments">'+
+		'<a class="filetype-link filetype-{extension}" id="'+this.attachmentsId+'_{[xindex-1]}" href="#">{name} ({human_size})</a> '+
+		'</tpl>'+
+		'<tpl if="attachments.length&gt;1">'+
+		'<a class="filetype-link filetype-zip" id="'+this.attachmentsId+'_zipofall" href="#">'+GO.email.lang.downloadAllAsZip+'</a>'+
+		'</tpl>'+
+		'</td></tr>'+
+		'</table>'+
+		'</tpl>'+
+		'<tpl if="blocked_images&gt;0">'+
+		'<div class="go-warning-msg em-blocked">'+GO.email.lang.blocked+' <a id="em-unblock" href="#" class="normal-link">'+GO.email.lang.unblock+'</a></div>'+
+		'</tpl>'+			
+		'</div>'+
+		'<tpl if="!GO.util.empty(values.iCalendar)">'+
+		'<tpl if="iCalendar.feedback">'+
+		'<div class="message-icalendar">'+
+		'<span class="message-icalendar-icon go-link-icon-1"></span>'+
+		'{[values.iCalendar.feedback]}'+
+		'<span class="message-icalendar-actions">'+
+		'<tpl if="iCalendar.invitation">'+
+		'<tpl if="iCalendar.invitation.is_invitation">'+
+		//'<tpl if="!iCalendar.invitation.event_id || iCalendar.invitation.event_declined == true">'+
+		'<a class="normal-link" id="em-icalendar-accept-invitation" href="#">'+GO.email.lang.icalendarAcceptInvitation+'</a> '+
+		//'</tpl>'+
+		'<tpl if="iCalendar.invitation.event_declined == false">'+
+		'<a class="normal-link" id="em-icalendar-decline-invitation" href="#">'+GO.email.lang.icalendarDeclineInvitation+'</a> '+
+		'</tpl>'+
+		'<a class="normal-link" id="em-icalendar-tentative-invitation" href="#">'+GO.email.lang.icalendarTentativeInvitation+'</a> '+
+		'</tpl>'+
+		'<tpl if="iCalendar.invitation.is_cancellation">'+
+		'<a class="normal-link" id="em-icalendar-delete-event" href="#">'+GO.email.lang.icalendarDeleteEvent+'</a>'+
+		'</tpl>'+
+		'<tpl if="iCalendar.invitation.is_update">'+
+		'<a class="normal-link" id="em-icalendar-update-event" href="#">'+GO.email.lang.icalendarUpdateEvent+'</a>'+
+		'</tpl>'+
+		'</tpl>'+
+		'</span>'+
+		'</div>'+
+		'</tpl>'+
+		'</tpl>'+
+		'<div id="'+this.bodyId+'" class="message-body go-html-formatted">{body}</div>';
 		
 		this.template = new Ext.XTemplate(templateStr,{
 			addSlashes : function(str)
@@ -121,7 +121,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 		this.template.compile();	
 	},
 	
-	loadMessage : function(uid, mailbox, account_id, passphrase)
+	loadMessage : function(uid, mailbox, account_id, password)
 	{		
 		if(uid)
 		{
@@ -130,14 +130,14 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			this.mailbox=mailbox;
 			
 			this.params = {
-					uid: uid,
-					mailbox: mailbox,
-					account_id: account_id,
-					task:'message'
-				};
-			if(passphrase)
+				uid: uid,
+				mailbox: mailbox,
+				account_id: account_id,
+				task:'message'
+			};
+			if(password)
 			{
-				this.params.passphrase=passphrase;
+				this.params.password=password;
 			}
 		}
 				
@@ -147,14 +147,11 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			params: this.params,
 			scope: this,
 			callback: function(options, success, response)
-			{					
-				this.fireEvent('load', options, success, response);
-				
+			{									
 				if(success)					
 				{
 					var data = Ext.decode(response.responseText);
-					
-
+					                                    
 					if(this.updated)
 					{
 						data.iCalendar.feedback = GO.email.lang.icalendarEventUpdated;
@@ -175,24 +172,30 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 						data.iCalendar.feedback = GO.email.lang.icalendarInvitationDeclined;
 						this.declined = false;
 					}
+					
+					data.mailbox=mailbox;
 
-					if(data.askPassphrase)
+					if(data.askPassword)
 					{
-						if(!this.gnupgPasswordDialog)
+						if(!this.passwordDialog)
 						{
-							this.gnupgPasswordDialog = new GO.gnupg.PasswordDialog();							
+							this.passwordDialog = new GO.dialog.PasswordDialog({
+								title:GO.smime.lang.enterPassword,
+								fn:function(button, password, passwordDialog){
+									if(button=='cancel')
+									{
+										this.reset();
+										this.el.unmask();
+									}else
+									{									
+										this.loadMessage(passwordDialog.data.uid, passwordDialog.data.mailbox, passwordDialog.data.account_id, password);
+									}
+								},
+								scope:this
+							});							
 						}
-						this.gnupgPasswordDialog.on('buttonpressed', function(button, passphrase){
-							if(button=='cancel')
-							{
-								this.reset();
-								this.el.unmask();
-							}else
-							{									
-								this.loadMessage(uid, mailbox, account_id, passphrase);
-							}
-						},this, {single:true});
-						this.gnupgPasswordDialog.show();
+						this.passwordDialog.data=data;
+						this.passwordDialog.show();
 					}else
 					{						
 						this.setMessage(data);						
@@ -202,7 +205,9 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					if(data.feedback)
 					{
 						GO.errorDialog.show(data.feedback);
-					}					
+					}	
+                                        
+					this.fireEvent('load', options, success, response, data, password);
 				}				
 			}
 		});
@@ -351,7 +356,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			
 			if(attachment_no=='zipofall')
 			{
-				//this.fireEvent('zipOfAttachmentsClicked');				
+			//this.fireEvent('zipOfAttachmentsClicked');				
 			}else
 			{
 				e.preventDefault();
@@ -442,7 +447,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 			}else
 			{
 				if (target.href && target.href.indexOf('#') != -1 && target.pathname == document.location.pathname){
-					//internal link, do default
+				//internal link, do default
 					
 				}else
 				{

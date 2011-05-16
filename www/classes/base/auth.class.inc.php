@@ -204,6 +204,7 @@ class GO_AUTH extends db
 		if(!$user)
 		{
 			//sleep for 3 seconds to slow down brute force attacks
+			go_infolog("LOGIN FAILED for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 			sleep(3);
 			return false;
 		}
@@ -212,6 +213,10 @@ class GO_AUTH extends db
 		$this->updateAfterLogin($user,$count_login);
 
 		go_debug('LOGIN Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
+		
+		if($count_login)
+			go_infolog("LOGIN SUCCESS for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
+		
 		$args=array($username, $password, $user, $count_login);
 		$GO_EVENTS->fire_event('login', $args);
 

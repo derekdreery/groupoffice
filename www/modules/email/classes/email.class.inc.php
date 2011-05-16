@@ -285,8 +285,6 @@ class email extends db {
 									'password'=>$account['password']
 					);
 					$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/json.php', $params);
-					//go_debug($server_response);
-					//go_log(LOG_DEBUG, var_export($server_response, true));
 					return json_decode($server_response, true);
 				}
 			}
@@ -1585,11 +1583,24 @@ class email extends db {
 	 */
 	function get_all_aliases($user_id) {
 
+		global $GO_CONFIG;
+		
 		$user_id = intval($user_id);
+		
+		$groups = $GLOBALS['GO_SECURITY']->get_user_group_ids($user_id);
+
+		//remove admin group because we don't want to show all e-mail accounts to the admin.
+		$g=array();
+		foreach($groups as $group_id)
+		{
+			if($group_id!=$GO_CONFIG->group_root){
+				$g[]=$group_id;
+			}
+		}
 		
 		$sql = "SELECT al.* FROM em_aliases al INNER JOIN em_accounts e ON (e.id=al.account_id) ";
 
-		$sql .= "INNER JOIN go_acl a ON (e.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
+		$sql .= "INNER JOIN go_acl a ON (e.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$g)."))) ";
 
 		$sql .= "LEFT JOIN em_accounts_sort so ON (so.account_id=al.account_id AND so.user_id=".$user_id.")"; // Join Sort table
 
@@ -1630,6 +1641,23 @@ class email extends db {
 	    {
 		    return $this->query("DELETE FROM em_folders_expanded WHERE folder_id=? AND user_id=?", 'ii', array($folder_id, $user_id));
 	    }
+	}
+	
+	
+	function get_usernames($user_id, $query='', $start=0, $limit=10){
+		
+		$sql = "SELECT SQL_CALC_FOUND_ROWS ac.username FROM em_accounts ac ".
+			"INNER JOIN go_users u ON (u.id=ac.user_id) ".
+			"INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
+		if(!empty($query))
+			$sql .= "WHERE ac.username LIKE '".$this->escape($query)."' ";
+		
+		$sql .= "GROUP BY ac.username ORDER BY ac.username ASC LIMIT ".intval($start).", ".intval($limit)."";
+
+		$this->query($sql);
+		
+		return $this->found_rows();
+		
 	}
 
 	/* {CLASSFUNCTIONS} */

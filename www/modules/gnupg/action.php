@@ -63,7 +63,7 @@ try{
 		
 		case 'sign_key':
 
-			$gnupg->sign_key($_POST['private_key'], String::get_email_from_string($_POST['public_key']), $_POST['passphrase']);
+			$gnupg->sign_key($_POST['private_key'], String::get_email_from_string($_POST['public_key']), $_POST['password']);
 			$response['success']=true;
 		
 		break;

@@ -196,7 +196,7 @@ GO.calendar.MainPanel = function(config){
 				emptyText: GO.lang.strSearch
 			})],
 			store:this.calendarsStore,
-			pageSize:50
+			pageSize:GO.settings.config.nav_page_size
 		})
 	});
 
@@ -207,7 +207,7 @@ GO.calendar.MainPanel = function(config){
 			allowNoSelection:true,
 			bbar: new GO.SmallPagingToolbar({
 				store:this.calendarsStore,
-				pageSize:50
+				pageSize:GO.settings.config.nav_page_size
 			})
 		});
 	}
@@ -239,10 +239,10 @@ GO.calendar.MainPanel = function(config){
 		store: this.resourcesStore,
 		cls: 'go-grid3-hide-headers',
 		autoScroll:true,
-    paging:50,
+    paging:GO.settings.config.nav_page_size,
     bbar: new GO.SmallPagingToolbar({
 			store:this.resourcesStore,
-			pageSize:50
+			pageSize:GO.settings.config.nav_page_size
 		}),
 		columns:[{
 			header:GO.lang.strName,

@@ -1,3 +1,26 @@
+16/05/2011 3.7.16
+- Downloading attachments was broken
+- Changing the smime preferences didn't work properly.
+
+13/05/2011 3.7.15
+- Removed nagging about adding new customer to addressbook in the billing modules
+- Minified script of smime was missing.
+
+13/05/2011 3.7.14
+- When using the timer in the timeregistration it now adds the time to existing 
+  entries.
+- New module for SMIME signing and encryption
+- Template and permission type can only be changed if you have manage permission.
+- Projects couldn't be dragged to the top level
+- Created new config option nav_page_size to set the number of displayed 
+  calendars, notebooks, tasklists etc. per page.
+- Added report parameters to PDF export at Projects report
+- Invitations for occurences of a recurring event didn't work right.
+- Problems with CalDAV and recurring events fixed.
+- Upgrade SabreDAV vendor software to version 1.4.3
+- New log/info.log in home directory that currently logs logouts, successful- 
+  and failed logins.
+
 29/04/2011 3.7.13
 - Unpacked archives didn't show contents in the file manager
 - Users with manage permissions for a file folder can manage the permissions now.

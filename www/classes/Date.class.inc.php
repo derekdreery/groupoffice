@@ -163,8 +163,6 @@ class Date {
 	{
 		global $GO_CONFIG;
 
-		//go_log(LOG_DEBUG, date('r',$start_time));
-
 		require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 		$ical2array = new ical2array();
 
@@ -387,12 +385,9 @@ class Date {
 			$devided = $interval_years/$event['repeat_every'];
 			$rounded = ceil($devided);
 
-			//go_log(LOG_DEBUG, $rounded);
 			while($occurence_time<=$start_time)
 			{
 				$new_year = date('Y', $first_occurence_time)+($event['repeat_every']*$rounded);
-
-
 
 				$occurence_time=mktime(
 				date('H', $first_occurence_time),
@@ -401,9 +396,6 @@ class Date {
 				date('n', $first_occurence_time),
 				date('j', $first_occurence_time),
 				$new_year);
-
-
-				//	go_log(LOG_DEBUG, date('r', $occurence_time).' -> '.date('r', $start_time));
 
 				if(!$occurence_time)
 				break;
@@ -647,6 +639,11 @@ class Date {
 		$date=getdate($time);
 		return mktime($date['hours'],$date['minutes'], $date['seconds'],$date['mon']+$months,$date['mday']+$days,$date['year']+$years);
 	}
+	
+	public static function clear_time($time){
+		$date=getdate($time);
+		return mktime(0,0,0,$date['mon'],$date['mday'],$date['year']);
+	}
 
 
 
@@ -713,21 +710,6 @@ class Date {
 
 		return date($date_format, strtotime($time));
 	}
-
-	/*public static function local_to_gmt_time($utime)
-	 {
-		$d = new DateTime('@'.$utime, new DateTimeZone(date_default_timezone_get()));
-		$d->setTimezone(new DateTimeZone('GMT'));
-		return $d->format('U');
-		}
-
-		public static function gmt_to_local_time($utime)
-		{
-		$d = new DateTime('@'.$utime, new DateTimeZone('GMT'));
-		//go_log(LOG_DEBUG, date_default_timezone_get());
-		$d->setTimezone(new DateTimeZone(date_default_timezone_get()));
-		return $d->format('U');
-		}*/
 
 	public static function get_timezone_offset($utime)
 	{

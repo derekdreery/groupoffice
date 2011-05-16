@@ -97,8 +97,6 @@ class ldapauth extends imapauth {
 
 		$la = new ldapauth();
 
-		$la = new ldapauth();
-
 		$ldap = $la->connect();
 
 		if(!$ldap)
