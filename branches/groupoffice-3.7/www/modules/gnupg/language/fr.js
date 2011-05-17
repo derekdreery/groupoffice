@@ -15,7 +15,7 @@
  * Date : September, 27 2010
  */
 
-GO.gnupg.lang.encryptionSettings='Paramètres du cryptage';
+GO.gnupg.lang.encryptionSettings='GPG Paramètres du cryptage';
 GO.gnupg.lang.keys='Clés';
 GO.gnupg.lang.comment='Commentaire';
 GO.gnupg.lang.genKey='Générer une nouvelle paire de clé';

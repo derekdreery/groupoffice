@@ -17,7 +17,7 @@
  */
 
 
-GO.gnupg.lang.encryptionSettings='Настройки шифрования';
+GO.gnupg.lang.encryptionSettings='GPG Настройки шифрования';
 GO.gnupg.lang.keys='Ключи';
 GO.gnupg.lang.comment='Коментарии';
 GO.gnupg.lang.genKey='Сгенерировать новую ключевую пару';

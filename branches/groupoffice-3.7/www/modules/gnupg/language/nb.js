@@ -6,7 +6,7 @@
  */
 
 
-GO.gnupg.lang.encryptionSettings='Krypteringsinstillinger';
+GO.gnupg.lang.encryptionSettings='GPG Krypteringsinstillinger';
 GO.gnupg.lang.keys='Nøkler';
 GO.gnupg.lang.comment='Kommentar';
 GO.gnupg.lang.genKey='Opprett nytt nøkkelpar';

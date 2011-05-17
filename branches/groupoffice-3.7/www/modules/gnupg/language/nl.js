@@ -1,4 +1,4 @@
-GO.gnupg.lang.encryptionSettings='Instellingen voor versleuteling';
+GO.gnupg.lang.encryptionSettings='GPG Instellingen voor versleuteling';
 GO.gnupg.lang.keys='Sleutels';
 GO.gnupg.lang.comment='Opmerking';
 GO.gnupg.lang.genKey='Genereer nieuw sleutelpaar';

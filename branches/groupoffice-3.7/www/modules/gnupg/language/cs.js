@@ -10,7 +10,7 @@
  */
 
 
-GO.gnupg.lang.encryptionSettings='Šifrování';
+GO.gnupg.lang.encryptionSettings='GPG Šifrování';
 GO.gnupg.lang.keys='Klíče';
 GO.gnupg.lang.comment='Komentář';
 GO.gnupg.lang.genKey='Vygenerovat nový klíč';
