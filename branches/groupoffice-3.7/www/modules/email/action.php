@@ -746,7 +746,7 @@ try {
 			}
 
 			if($imap->create_folder($new_folder_name)) {
-
+				$folder=array();
 				$folder['account_id']=$account['id'];
 				$folder['name']=$new_folder_name;
 				$folder['parent_id']=$parent_id;
