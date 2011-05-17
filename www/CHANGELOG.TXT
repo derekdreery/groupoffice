@@ -1,3 +1,8 @@
+17/05/2011 3.7.17
+- SMIME didn't work on some MySQL servers
+- SMIME enhancements and bug fixes.
+- Other small bug fixes.
+
 16/05/2011 3.7.16
 - Downloading attachments was broken
 - Changing the smime preferences didn't work properly.
