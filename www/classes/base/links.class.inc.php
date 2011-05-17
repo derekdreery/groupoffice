@@ -153,6 +153,11 @@ class GO_LINKS extends db
 	
 	function add_link($id1, $type1, $id2, $type2, $folder_id1=0, $folder_id2=0, $description1='', $description2='')
 	{
+		if(empty($id1) || empty($id2) || empty($type1) || empty($type2)){
+			return false;			
+		}
+		
+		
 		if(!$this->link_exists($id1, $type1, $id2, $type2))
 		{
 			$link['id'] = $id1;
