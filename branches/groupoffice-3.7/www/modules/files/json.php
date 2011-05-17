@@ -824,11 +824,11 @@ try {
 				case 'png':
 				case 'xmind':
 					$response['data']['image_src'] = get_thumb_url($path,350,0,false);
-					$response['data']['image_path'] = $path;
+					$response['data']['image_path'] = urlencode($path);
 					$response['data']['image_name'] = basename($path);
 					$response['data']['image_extension'] = $extension;
 					if ($extension=='xmind')
-						$response['data']['download_path'] = $GO_MODULES->modules['files']['url'].'download.php?path='.$path;
+						$response['data']['download_path'] = $GO_MODULES->modules['files']['url'].'download.php?path='.urlencode($path);
 					else
 						$response['data']['download_path'] = '';
 					break;
