@@ -360,7 +360,7 @@ try {
 			case "forward":
 
 				if($task == 'opendraft') {
-					$response['data']['to']=$content['to_string'];
+					$response['data']['to']='';//$content['to_string'];
 					$response['data']['subject'] = $content['subject'];
 
 				}else {
