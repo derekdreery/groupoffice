@@ -1831,7 +1831,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				waitMsg = draft ? GO.lang.waitMsgSave : GO.email.lang.sending;
 			}
 			
-			
+			if(!autoSave && !draft){
+				this.stopAutoSave();
+			}
 
 			this.formPanel.form.submit({
 				url : this.sendURL,
