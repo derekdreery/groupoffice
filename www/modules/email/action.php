@@ -606,9 +606,6 @@ try {
 						{
 							//save e-mail in IMAP drafts folder
 
-							if($swift->account['type']!='imap') {
-								throw new Exception($lang['email']['noSaveWithPop3']);
-							}
 							if(empty($swift->account['drafts'])) {
 								throw new Exception($lang['email']['draftsDisabled']);
 							}
@@ -641,8 +638,7 @@ try {
 
 						if(!empty($_POST['draft_uid'])) {
 							$swift->set_draft($_POST['draft_uid']);
-						}
-						
+						}						
 						
 						$GO_EVENTS->fire_event("sendmail",array(&$swift));
 
