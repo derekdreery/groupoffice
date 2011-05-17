@@ -162,6 +162,7 @@ if(PHP_SAPI != 'cli' && file_exists($GO_CONFIG->root_path.'modules/professional/
 	check_license();
 }
 $GO_SECURITY = new GO_SECURITY();
+$GO_EVENTS = new GO_EVENTS();
 
 if($GO_CONFIG->session_inactivity_timeout>0){
 	$now = time();
@@ -172,8 +173,6 @@ if($GO_CONFIG->session_inactivity_timeout>0){
 		$_SESSION['last_activity']=$now;
 	}
 }
-
-$GO_EVENTS = new GO_EVENTS();
 
 
 if (!empty($_REQUEST['SET_LANGUAGE'])){
