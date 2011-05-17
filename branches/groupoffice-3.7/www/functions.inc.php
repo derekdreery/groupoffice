@@ -301,7 +301,7 @@ function go_infolog($message){
 			$_SESSION['GO_SESSION']['logdircheck']=true;
 		}
 		
-		$msg = '['.date('Y-m-dm G:i').']';
+		$msg = '['.date('Y-m-d G:i:s').']';
 		
 		if(!empty($_SESSION['GO_SESSION']['username'])){
 			$msg .= '['.$_SESSION['GO_SESSION']['username'].'] ';
