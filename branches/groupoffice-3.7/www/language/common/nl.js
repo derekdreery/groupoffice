@@ -408,3 +408,4 @@ GO.lang.link='Koppeling';
 GO.lang.savedQueries='Opgeslagen zoekopdrachten';
 GO.lang.searchQueryName = 'Naam zoekopdracht';
 GO.lang.enterSearchQueryName = 'Voer de naam in';
+GO.lang.pleaseEnterASearchTerm='Voer een zoekterm in aub.';
