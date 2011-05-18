@@ -355,17 +355,30 @@ class smime extends db{
 	
 	
 	public function set_pkcs12_certificate($account_id, $cert, $always_sign){
-		$up['account_id']=$account_id;
 		
-		$types='ii';
+		//the code below doesn't work due to bug: http://bugs.php.net/bug.php?id=53483
+//		$up['account_id']=$account_id;
+//		
+//		$types='ii';
+//		if(isset($cert)){
+//			$up['cert']=$cert;
+//			$types='ibi';
+//		}
+//		
+//		$up['always_sign']=$always_sign;	
+//		
+//		return $this->replace_row('smi_pkcs12',$up,$types,false);		
+		
+		$sql = "REPLACE INTO smi_pkcs12 (account_id,";
 		if(isset($cert)){
-			$up['cert']=$cert;
-			$types='ibi';
+			$sql .= "cert,";
 		}
-		
-		$up['always_sign']=$always_sign;
-		
-		return $this->replace_row('smi_pkcs12',$up,$types,false);		
+		$sql .= 'always_sign) VALUES ('.intval($account_id).',';
+		if(isset($cert)){
+			$sql .= '"'.addslashes($cert).'",';
+		}
+		$sql .= intval($always_sign).')';
+		return $this->query($sql);
 	}
 	
 	public function get_pkcs12_certificate($account_id){
