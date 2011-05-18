@@ -159,7 +159,7 @@ class smime extends db{
 			
 			if(isset($_POST['password']))
 				$_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']]=$_POST['password'];
-			
+
 			if(!isset($_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']])){
 				$message['askPassword']=true;
 				return false;
