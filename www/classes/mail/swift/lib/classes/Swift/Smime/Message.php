@@ -30,6 +30,9 @@ class Swift_Smime_Message extends Swift_Message
 	
 	protected $recipcerts;
 	
+	private $encrypted=false;
+	private $signed=false;
+	
 	 /**
    * Create a new Message.
    * @param string $subject
@@ -110,38 +113,45 @@ class Swift_Smime_Message extends Swift_Message
 	
 	private function do_sign(){		
 		
+		
 		go_debug('do_sign');	
-	
-		openssl_pkcs12_read ($this->pkcs12_data, $certs, $this->passphrase);
 		
-		if(!is_array($certs)){
-			throw new Exception("Could not decrypt key");
+		if(!$this->signed){	
+			openssl_pkcs12_read ($this->pkcs12_data, $certs, $this->passphrase);
+
+			if(!is_array($certs)){
+				throw new Exception("Could not decrypt key");
+			}
+
+
+			openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers);
+			$this->signed=true;
 		}
-		
-		
-		openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers);
 	}
 	
 	private function do_encrypt(){		
 		go_debug('do_encrypt');		
 		
-		if(file_exists($this->tempout)){
-			//message was signed. Create new input file.
-		
-			file_put_contents($this->tempin, $this->saved_headers);
-			
-			$fp = fopen($this->tempout, 'r');
-			if(!$fp)
-				throw new Exception('Could not read tempout file');
-			
-			while($line = fgets($fp)){			
-				file_put_contents($this->tempin, $line, FILE_APPEND);
+		if(!$this->encrypted){
+			if(file_exists($this->tempout)){
+				//message was signed. Create new input file.
+
+				file_put_contents($this->tempin, $this->saved_headers);
+
+				$fp = fopen($this->tempout, 'r');
+				if(!$fp)
+					throw new Exception('Could not read tempout file');
+
+				while($line = fgets($fp)){			
+					file_put_contents($this->tempin, $line, FILE_APPEND);
+				}
+				fclose($fp);			
+				unlink($this->tempout);
 			}
-			fclose($fp);			
-			unlink($this->tempout);
+
+			openssl_pkcs7_encrypt($this->tempin, $this->tempout,$this->recipcerts[0], $this->saved_headers);	
+			$this->encrypted=true;
 		}
-		
-		openssl_pkcs7_encrypt($this->tempin, $this->tempout,$this->recipcerts[0], $this->saved_headers);	
 	}
   
 	
