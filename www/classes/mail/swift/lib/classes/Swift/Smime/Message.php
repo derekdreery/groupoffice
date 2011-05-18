@@ -99,10 +99,11 @@ class Swift_Smime_Message extends Swift_Message
 		$headers = $this->getHeaders();
 		$headers->removeAll('MIME-Version');
 		$headers->removeAll('Content-Type');
-		$this->saved_headers = $headers->toString();
+		$this->saved_headers = array();//$headers->toString();
 
 		$h= $headers->getAll();
 		foreach($h as $header){
+			$this->saved_headers[$header->getFieldName()]=$header->getFieldBody();
 			$headers->removeAll($header->getFieldName());
 		}
 	}
@@ -118,7 +119,7 @@ class Swift_Smime_Message extends Swift_Message
 		}
 		
 		
-		openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), NULL);
+		openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers);
 	}
 	
 	private function do_encrypt(){		
@@ -140,7 +141,7 @@ class Swift_Smime_Message extends Swift_Message
 			unlink($this->tempout);
 		}
 		
-		openssl_pkcs7_encrypt($this->tempin, $this->tempout,$this->recipcerts[0], array());	
+		openssl_pkcs7_encrypt($this->tempin, $this->tempout,$this->recipcerts[0], $this->saved_headers);	
 	}
   
 	
@@ -159,8 +160,8 @@ class Swift_Smime_Message extends Swift_Message
 		if(!empty($this->recipcerts)){
 			$this->do_encrypt();
 		}
-		
-		return $this->saved_headers.file_get_contents($this->tempout);
+
+		return file_get_contents($this->tempout);
 	}
 	
   /**
@@ -187,7 +188,7 @@ class Swift_Smime_Message extends Swift_Message
 			$this->do_encrypt();
 		}
 		
-		$is->write($this->saved_headers);
+		//$is->write($this->saved_headers);
 		
 		$fp = fopen($this->tempout, 'r');
 		if(!$fp)
