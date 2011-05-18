@@ -153,7 +153,7 @@ class smime extends db{
 			$smime = new smime();
 			$cert = $smime->get_pkcs12_certificate($message['account_id']);
 			
-			if(!$cert)
+			if(!$cert || empty($cert['cert']))
 				throw new Exception("No key was found to decrypt the message!");
 			
 			
