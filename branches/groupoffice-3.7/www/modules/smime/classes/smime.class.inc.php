@@ -305,7 +305,7 @@ class smime extends db{
 	}
 	
 	public function update_public_certificate($id, $cert){		
-		return $this->update_row('smi_certs', array(
+		return $this->update_row('smi_certs', 'id', array(
 				'id'=>$id,
 				'cert'=>$cert
 				));

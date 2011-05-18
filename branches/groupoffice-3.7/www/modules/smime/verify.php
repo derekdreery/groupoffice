@@ -58,7 +58,6 @@ if(!empty($_REQUEST['account_id'])){
 	unlink($src_filename);
 	if(!file_exists($cert_filename))
 	{
-		var_dump($valid);
 		die('Could not get certificate from signature');
 	}
 	$cert = file_get_contents($cert_filename);
