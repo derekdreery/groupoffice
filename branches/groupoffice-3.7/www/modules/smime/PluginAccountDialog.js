@@ -57,6 +57,14 @@ GO.moduleManager.onModuleReady('email',function(){
 							allowBlank: true,
 							hideLabel:true,
 							disabled:true
+						}),
+						this.downloadButton = new Ext.Button({
+							handler:function(){
+								window.open(GO.settings.modules.smime.url+'download_pkcs12.php?account_id='+this.account_id);
+							},
+							text:GO.smime.lang.downloadCert,
+							disabled:true,
+							scope:this
 						})]
 				},
 				{
@@ -79,10 +87,12 @@ GO.moduleManager.onModuleReady('email',function(){
 				if(action.type=='submit'){
 					this.uploadFile.clearQueue();
 					this.deleteCert.setDisabled(!action.result.cert);
+					this.downloadButton.setDisabled(!action.result.data.cert);
 				}else
 				{
 					this.smimePanel.setDisabled(false);
 					this.deleteCert.setDisabled(!action.result.data.cert);
+					this.downloadButton.setDisabled(!action.result.data.cert);
 					
 					if(!action.result.data.cert)
 						Ext.getCmp('smimeHasCert').hide();

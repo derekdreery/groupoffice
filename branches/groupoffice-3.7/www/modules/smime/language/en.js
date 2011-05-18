@@ -22,3 +22,4 @@ GO.smime.lang.pkcs12Cert="PKCS12 certificate";
 GO.smime.lang.pkcs12CertInfo="To upload a new PCSK12 certificate you must enter your Group-Office password. The Group-Office password must be different than your PCSK12 certificate for security reasons. No password is also prohibited.";
 GO.smime.lang.pubCerts="Public SMIME certificates";
 GO.smime.lang.youHaveAcert='You have uploaded a certificate already. SMIME support is enabled for this account.';
+GO.smime.lang.downloadCert='Download certificate';

@@ -12,3 +12,4 @@ GO.smime.lang.pkcs12Cert="PKCS12 certificaat";
 GO.smime.lang.pkcs12CertInfo="Om een nieuw PCSK12 certificaat te uploaden, moet u uw Group-Office wachtwoord invoeren. Uit beveiligingsoogpunt mag dit wachtwoord niet overeenkomen met die van uw PCSK12 certificaat. Geen wachtwoord is ook niet toegestaan.";
 GO.smime.lang.pubCerts="Openbare SMIME certificaten";
 GO.smime.lang.youHaveAcert='U heeft al een certificaat opgeslagen. SMIME ondersteuning is ingeschakeld voor deze account.';
+GO.smime.lang.downloadCert='Download certificaat';
