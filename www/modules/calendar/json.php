@@ -406,6 +406,12 @@ try {
 				}
 			}
 			
+			if($response['data']['category_id']>0){
+				$category = $cal->get_category($response['data']['category_id']);
+				if($category)
+					$response['data']['category_name']=$category['name'];
+			}
+			
 
 			$response['data']['calendar_name']=$calendar['name'];
 			$response['data']['group_id'] = $calendar['group_id'];
