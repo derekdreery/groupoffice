@@ -217,7 +217,7 @@ class smime extends db{
 			
 			unlink($infilename);
 			
-			if($return || !file_exists($outfilename) || !filesize($outfilename)){
+			if(!$return || !file_exists($outfilename) || !filesize($outfilename)){
 				//throw new Exception("Could not decrypt message");
 				$GO_LANGUAGE->require_language_file('smime');
 				$message['html_body']=$lang['smime']['noPrivateKeyForDecrypt'];
