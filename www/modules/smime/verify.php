@@ -55,7 +55,15 @@ if(!empty($_REQUEST['account_id'])){
 	}
 
 	$valid = openssl_pkcs7_verify($src_filename, null, $cert_filename, $smime->get_root_certificates());
+	unlink($src_filename);
+	if(!file_exists($cert_filename))
+	{
+		var_dump($valid);
+		die('Could not get certificate from signature');
+	}
 	$cert = file_get_contents($cert_filename);
+	unlink($cert_filename);
+	
 	
 	if(empty($cert))
 		die('Could not get certificate from signature');
