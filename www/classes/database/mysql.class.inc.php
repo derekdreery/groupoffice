@@ -170,10 +170,11 @@ class db extends base_db{
 			while($pos = strpos($types,'b', $pos+1))
 			{
 				//go_debug('Send long data:'.$keys[$pos]);
-				foreach(str_split($params[$keys[$pos]], 8192) as $packet )
-					$this->result->send_long_data($pos, $packet);
+				//foreach(str_split($params[$keys[$pos]], 8192) as $packet )
+					$this->result->send_long_data($pos, $params[$keys[$pos]]);
+					$params[$keys[$pos]]=NULL;
 			}
-
+			
 			$ret = $this->result->execute();
 			if(!$ret)
 			{
