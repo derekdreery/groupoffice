@@ -715,7 +715,8 @@ try {
 							}
 						}
 					}else {
-						$files->get_files($curfolder['id'], $fsort, $dir, 0, 1);
+						//$files->get_files($curfolder['id'], $fsort, $dir, 0, 1);
+						$response['total']+=$files->count_files($curfolder['id']);
 					}
 				}
 

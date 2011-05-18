@@ -1249,6 +1249,13 @@ class files extends db {
 		$this->query($sql, $types, $params);
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
+	
+	function count_files($folder_id){
+		$sql = "SELECT count(*) AS count FROM fs_files WHERE folder_id=".intval($folder_id);		
+		$this->query($sql);
+		$r = $this->next_record();
+		return $r['count'];
+	}
 
 	function has_children($folder_id){
 		$sql = "SELECT * FROM fs_folders WHERE parent_id=".intval($folder_id).' LIMIT 0,1';
