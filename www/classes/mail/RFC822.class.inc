@@ -114,7 +114,7 @@ class RFC822
 				break;
 			
 
-				default:
+				default:					
 					$this->buffer .= $char;
 				break;
 			}			
@@ -211,6 +211,7 @@ class RFC822
 		$this->buffer = '';
 		$this->personal = false;
 		$this->email_found=false;
+		$this->quote=false;
 	}
 	
 	/**
@@ -221,7 +222,7 @@ class RFC822
 	*/
 	function handle_quote($char)
 	{
-		if(!$this->quote)
+		if(!$this->quote && trim($this->buffer)=="")
 		{
 			$this->quote = $char;
 		}elseif($char == $this->quote)
