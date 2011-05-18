@@ -84,16 +84,6 @@ class Swift_Smime_Message extends Swift_Message
 		File::mkdir($GO_CONFIG->tmpdir);
 		
 		/*
-		 * This class will stream the MIME structure to the tempin text file in 
-		 * a memory efficient way.
-		 */
-		$fbs = new Swift_ByteStream_FileByteStream($this->tempin, true);		
-		parent::toByteStream($fbs);
-		
-		if(!filesize($this->tempin))
-			throw new Exception('Could not write temporary message for signing');
-		
-		/*
 		 * Store the headers of the current message because the PHP function
 		 * openssl_pkcs7_sign will rebuilt the MIME structure and will put the main
 		 * headers in a nested mimepart. We don't want that so we remove them now 
@@ -109,6 +99,18 @@ class Swift_Smime_Message extends Swift_Message
 			$this->saved_headers[$header->getFieldName()]=$header->getFieldBody();
 			$headers->removeAll($header->getFieldName());
 		}
+		
+		/*
+		 * This class will stream the MIME structure to the tempin text file in 
+		 * a memory efficient way.
+		 */
+		$fbs = new Swift_ByteStream_FileByteStream($this->tempin, true);		
+		parent::toByteStream($fbs);
+		
+		if(!filesize($this->tempin))
+			throw new Exception('Could not write temporary message for signing');
+		
+	
 	}
 	
 	private function do_sign(){		
@@ -123,8 +125,7 @@ class Swift_Smime_Message extends Swift_Message
 				throw new Exception("Could not decrypt key");
 			}
 
-
-			openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers);
+			openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers, PKCS7_DETACHED);
 			$this->signed=true;
 		}
 	}
@@ -207,12 +208,6 @@ class Swift_Smime_Message extends Swift_Message
 		$still_in_headers=true;
 		
 		while($line = fgets($fp)){				
-			if($still_in_headers && substr($line,0,19)=='Content-Disposition')
-				continue;
-			
-			if(empty($line))
-				$still_in_headers=false;
-			
 			$is->write($line);
 		}
 		fclose($fp);	
