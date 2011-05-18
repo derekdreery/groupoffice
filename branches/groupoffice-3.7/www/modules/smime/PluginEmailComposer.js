@@ -89,8 +89,8 @@ GO.moduleManager.onModuleReady('email',function(){
 
 									if(res.success)
 									{
-										
-										GO.smime.passwordsInSession[this.fromCombo.getValue()]=true;
+										var record = this.fromCombo.store.getById(this.fromCombo.getValue());
+										GO.smime.passwordsInSession[record.data.account_id]=true;
 										this.sendMail();
 									}else
 									{
