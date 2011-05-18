@@ -72,7 +72,7 @@ $existing_cert = $smime->get_public_certificate($GO_SECURITY->user_id, $email);
 if(!$existing_cert)
 	$smime->add_public_certificate($GO_SECURITY->user_id, $email, $cert);
 else if($existing_cert['cert']!=$cert){
-	$smime->update_public_certificate($id, $cert);
+	$smime->update_public_certificate($existing_cert['id'], $cert);
 }
 
 $GO_LANGUAGE->require_language_file('smime');
