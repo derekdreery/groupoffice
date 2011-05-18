@@ -213,11 +213,11 @@ class smime extends db{
 				return false;
 			}
 			
-			openssl_pkcs7_decrypt($infilename, $outfilename, $certs['cert'], array($certs['pkey'], $password));
+			$return = openssl_pkcs7_decrypt($infilename, $outfilename, $certs['cert'], array($certs['pkey'], $password));
 			
 			unlink($infilename);
 			
-			if(!file_exists($outfilename) || !filesize($outfilename)){
+			if($return || !file_exists($outfilename) || !filesize($outfilename)){
 				//throw new Exception("Could not decrypt message");
 				$GO_LANGUAGE->require_language_file('smime');
 				$message['html_body']=$lang['smime']['noPrivateKeyForDecrypt'];
@@ -229,7 +229,9 @@ class smime extends db{
 			
 			$decrypted_message = $ml->get_message_for_client(0, $reldir.'unencrypted.txt','');
 			
-			unlink($reldir.'unencrypted.txt');
+			//unlink($dir.'unencrypted.txt');
+			
+			//go_debug($decrypted_message);
 			
 			$message['html_body']=$decrypted_message['body'];
 			$message['attachments']=$decrypted_message['attachments'];
