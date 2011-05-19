@@ -161,7 +161,7 @@ $input_holidays['var']['it']['1'] = "Luned&igrave; dell'Angelo";
 $input_holidays['var']['nl']['-2'] = 'Goede vrijdag';
 $input_holidays['var']['nl']['0'] = '1e Paasdag';
 $input_holidays['var']['nl']['1'] = '2e Paasdag';
-$input_holidays['var']['nl']['39'] = 'Hemelvaarstdag';
+$input_holidays['var']['nl']['39'] = 'Hemelvaartsdag';
 $input_holidays['var']['nl']['49'] = '1e pinksterdag';
 $input_holidays['var']['nl']['50'] = '2e pinksterdag';
 
