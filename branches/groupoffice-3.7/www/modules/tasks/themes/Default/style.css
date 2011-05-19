@@ -1,3 +1,15 @@
+#ta-notify, #ta-notify:hover{
+	float:left;
+	padding-left:20px;
+	line-height:16px;
+	background: url(images/tasks) no-repeat;
+	height:16px;
+	vertical-align:middle;
+	color:white;
+	font-size: 10px;
+	margin-top:3px;
+}
+
 .go-module-icon-tasks , .go-menu-icon-tasks {
 	background-image: url('images/tasks.png') !important;
 }

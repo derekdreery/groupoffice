@@ -273,6 +273,10 @@ GO.tasks.MainPanel = function(config){
 	
 	GO.tasks.MainPanel.superclass.constructor.call(this, config);
 	
+	this.on('show', function(){
+		GO.tasks.notificationEl.setDisplayed(false);
+	},this);
+	
 }
  
 Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
@@ -608,5 +612,43 @@ GO.newMenuItems.push({
 		taskShowConfig.link_config=item.parentMenu.link_config
 
 		GO.tasks.showTaskDialog(taskShowConfig);
+	}
+});
+
+
+
+
+GO.mainLayout.onReady(function(){
+
+	//GO.checker is not available in some screens like accept invitation from calendar
+	if(GO.checker){
+		//create notify icon
+		var notificationArea = Ext.get('notification-area');
+		if(notificationArea)
+		{
+			GO.tasks.notificationEl = notificationArea.createChild({
+				id: 'ta-notify',
+				tag:'a',
+				href:'#',
+				style:'display:none'
+			});
+			GO.tasks.notificationEl.on('click', function(){
+				GO.mainLayout.openModule('tasks');
+			}, this);
+		}
+
+		GO.checker.on('check', function(checker, data){
+			var tp = GO.mainLayout.getModulePanel('tasks');
+
+			if(data.tasks.active!=GO.tasks.last_active && data.tasks.active>0)
+			{
+				
+				if(!tp || !tp.isVisible())
+					GO.tasks.notificationEl.setDisplayed(true);
+			}
+
+			GO.tasks.notificationEl.update(data.tasks.active);			
+			GO.tasks.last_active=data.tasks.active;			
+		});
 	}
 });
