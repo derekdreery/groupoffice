@@ -777,9 +777,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			var rowIndex;
 			
 			for(var cal_id in store.reader.jsonData.backgrounds){							
-				rowIndex = store.indexOfId(parseInt(cal_id));		
-				if(rowIndex){
-					var rowEl = Ext.get(view.getRow(rowIndex-1));		
+				rowIndex = this.calendarList.store.indexOfId(cal_id);		
+				if(rowIndex>-1){
+					var rowEl = Ext.get(view.getRow(rowIndex));		
 					if(rowEl)
 						rowEl.applyStyles("background-color: #"+store.reader.jsonData.backgrounds[cal_id]);				
 				}
