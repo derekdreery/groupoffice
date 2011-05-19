@@ -1867,4 +1867,34 @@ class files extends db {
 			$fs1->cache_folder($record);
 		}
 	}
+
+	function get_user_folders($user_id, $start=0, $offset=0, $sort='name', $dir='ASC', $query='') {
+		$sql = "SELECT fs_folders.* ".
+				"FROM fs_folders ".
+
+		"INNER JOIN go_acl a ON (fs_folders.acl_id = a.acl_id".
+		" AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
+
+
+		if(!empty($query))
+ 		{
+ 			$sql .= " WHERE name LIKE '".$this->escape($query)."'";
+ 		}
+
+		$sql .=	" GROUP BY fs_folders.id ORDER BY fs_folders.".$sort." ".$dir;
+
+		$sql = $this->add_limits_to_query($sql, $start, $offset);
+		$this->query($sql);
+
+		return $this->limit_count();
+	}
+
+	function get_user_folder_ids($user_id) {
+		$folders=array();
+		$this->get_user_folders($user_id);
+		while($this->next_record()) {
+			$folders[] = $this->f('id');
+		}
+		return $folders;
+	}
 }
