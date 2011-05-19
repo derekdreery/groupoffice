@@ -482,6 +482,9 @@ try {
 				$default_bg[$cal_id] = $default_colors[$index];
 				$index++;
 			}
+			
+			if(count($calendars)>1)
+				$response['backgrounds']=$default_bg;
 
 			$calendar_id=$calendars[0];
 
