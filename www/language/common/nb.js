@@ -403,3 +403,4 @@ GO.lang.savedQueries='Lagrede spørringer';
 GO.lang.searchQueryName= 'Navn på spørring';
 GO.lang.enterSearchQueryName= 'Angi navn for spørring';
 GO.lang.strUsersInGroup= 'Brukere i gruppen';
+GO.lang.pleaseEnterASearchTerm='Angi et søkebegrep';
