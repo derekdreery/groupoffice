@@ -508,6 +508,27 @@ class GoSwiftImport extends GoSwift{
 
 
 		parent::__construct($to, $subject,0,$alias_id,'3',null, $transport);
+		
+		
+		$RFC822 = new RFC822();
+		$cc_addresses = $RFC822->parse_address_list($cc);
+		$recipients=array();
+		foreach($cc_addresses as $address)
+		{
+			$recipients[$address['email']]=$address['personal'];
+		}
+
+		$this->message->setCc($recipients);
+		
+		
+		$bcc_addresses = $RFC822->parse_address_list($bcc);
+		$recipients=array();
+		foreach($bcc_addresses as $address)
+		{
+			$recipients[$address['email']]=$address['personal'];
+		}
+
+		$this->message->setBcc($recipients);
 
 
 		if(empty($alias_id) && isset($structure->headers['from']) )
