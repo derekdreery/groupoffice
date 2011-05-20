@@ -19,6 +19,22 @@ require('/usr/share/groupoffice/cli-functions.inc.php');
 
 $args = parse_cli_args($argv);
 
+if(empty($args['domain'])){
+	
+	echo 'Usage:
+  ((to use this file, type the next line in the console))
+  php export_installation.php --domain=[sourcedomain] --targethost=[remotehost]
+ 
+  optional:
+ 	--go_config=[pathtoconfigfile]
+ 	--targetpath=[destinationpath]
+  --targethostport=[portoftargethostssh]
+
+';
+	
+	exit();
+}
+
 // Checken of het domein is meegegeven als argument.
 if(!isset($args['domain']))
 	die("The domain argument is required!\n\n");
