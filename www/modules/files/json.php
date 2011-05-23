@@ -982,6 +982,50 @@ try {
                         
                         break;
 
+		case 'folder_cf_categories':
+
+//			This script emulates the settings of the files inside a folder. First
+//			checks which file customfield categories are allowed for the user, then
+//			it checks which of these customfields are turned on for the files in the
+//			folder.
+
+			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+			$customfields = new customfields();
+
+			if (empty($_REQUEST['folder_id'])) {
+				throw new Exception($lang['files']['no_folder_id']);
+			}
+			$folder_id = $_REQUEST['folder_id'];
+
+			$response = array('data'=>array());
+
+			$authorized_categories = array();
+			$customfields->get_authorized_categories(6, $GO_SECURITY->user_id);
+			while ($record = $customfields->next_record()) {
+				$authorized_categories[] = $record['id'];
+			}
+
+			$response['data']['limit'] = $files->check_folder_content_category_limit($folder_id);
+			$files->get_allowed_categories_for_files_in_folder($folder_id);
+			while ($record = $files->next_record()) {
+				if (in_array($record['category_id'],$authorized_categories)) {
+					$response['data']['cat_'.$record['category_id']] = 'on';
+				}
+			}
+
+			$response['data']['folder_id'] = $folder_id;
+
+			$response['success'] = true;
+
+			break;
+
+		case 'is_admin':
+
+			$response['has_admin'] = $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id);//$GO_MODULES->modules['files']['write_permission'] && $GO_MODULES->modules['customfields']['write_permission'];
+			$response['success'] = true;
+
+			break;
+
 	}
 
 }catch(Exception $e) {
