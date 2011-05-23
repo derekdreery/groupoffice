@@ -74,6 +74,12 @@ GO.addressbook.ManageAddressbooksGrid = function(config){
 		this.addressbookDialog.show(record);
 		
 		}, this);
+
+	// Moved here from Stores.js to let this event only fire from within the
+	// administration grid.
+	this.store.on('load', function(){
+		GO.addressbook.readableAddressbooksStore.load();
+	}, this);
 };
 
 

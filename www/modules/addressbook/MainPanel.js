@@ -146,9 +146,8 @@ GO.addressbook.MainPanel = function(config)
 
 		if(records.length)
 		{
-			GO.addressbook.defaultAddressbook = records[0].data.id;
+			GO.addressbook.defaultAddressbook = records[0];
 		}
-
 	}, this);
 
 	/*this.addressbooksGrid.on('rowclick', function(grid, rowIndex){

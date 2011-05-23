@@ -1543,4 +1543,232 @@ class addressbook extends db {
 		return $this->query("DELETE FROM ab_sql WHERE id='".$this->escape($sql_id)."'");
 
 	}
+
+	/**
+	 * Checks whether the addressbook's customfield categories should be managed
+	 * seperately (return true) or all the categories should be shown (return false).
+	 * Possible values for the second paramater are 2 (for contacts) and 3 (for companies).
+	 * @param Int $addressbook_id
+	 * @param Int $cf_type
+	 * @return Boolean
+	 */
+	function check_addressbook_category_limit($addressbook_id,$cf_type=2) {
+		$sql = "SELECT * FROM cf_addressbook_limits WHERE addressbook_id='".$this->escape($addressbook_id)."'; ";
+		$this->query($sql);
+		if ($this->num_rows()>0) {
+			$record = $this->next_record();
+			switch ($cf_type) {
+				case '3':
+					$typestring = 'companies';
+					break;
+				default:
+					$typestring = 'contacts';
+					break;
+			}
+			return !empty($record['limit_'.$typestring.'_cf_categories']);
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Gets the customfield categories associated with an addressbook that can be
+	 * shown. Possible values for the second paramater are 2 (for contacts) and 3
+	 * (for companies).
+	 * @param Int $addressbook_id
+	 * @param Int $cf_type
+	 * @return Int num_rows
+	 */
+	function get_allowed_categories($addressbook_id,$cf_type=2) {
+		switch ($cf_type) {
+			case '3':
+				$typestring = 'companies';
+				break;
+			default:
+				$typestring = 'contacts';
+				break;
+		}
+		$sql = "SELECT * FROM cf_".$typestring."_cf_categories WHERE addressbook_id='".$this->escape($addressbook_id)."'; ";
+
+		$this->query($sql);
+		return $this->num_rows();
+	}
+
+	/**
+	 * Clears all associations of customfield categories with contacts (cf_type 2)
+	 * or companies (cf_type 3), given the addressbook id.
+	 * @param Int $addressbook_id
+	 * @param Int $cf_type
+	 * @return Boolean true on success
+	 */
+	function clear_addressbook_cf_categories($addressbook_id,$cf_type=2) {
+		switch ($cf_type) {
+			case '3':
+				$typestring = 'companies';
+				break;
+			default:
+				$typestring = 'contacts';
+				break;
+		}
+		$sql = "DELETE FROM `cf_".$typestring."_cf_categories` WHERE addressbook_id='".$this->escape($addressbook_id)."'; ";
+		return $this->query($sql);
+	}
+
+	/**
+	 * Associates a customfield category with an addressbook. Possible values for
+	 * the third paramater are 2 (for contacts) and 3 (for companies).
+	 * @param Int $addressbook_id
+	 * @param Int $category_id
+	 * @param Int $cf_type
+	 * @return Boolean true on success
+	 */
+	function add_addressbook_cf_category($addressbook_id,$category_id,$cf_type=2) {
+		switch ($cf_type) {
+			case '3':
+				$typestring = 'companies';
+				break;
+			default:
+				$typestring = 'contacts';
+				break;
+		}
+		$record['addressbook_id'] = $this->escape($addressbook_id);
+		$record['category_id'] = $this->escape($category_id);
+		return $this->insert_row("cf_".$typestring."_cf_categories",$record);
+	}
+
+	function toggle_addressbook_limit($addressbook_id,$enable=false,$cf_type=2) {
+		switch ($cf_type) {
+			case '3':
+				$typestring = 'companies';
+				break;
+			default:
+				$typestring = 'contacts';
+				break;
+		}
+		$check_exists = "SELECT * FROM `cf_addressbook_limits` WHERE addressbook_id='".$this->escape($addressbook_id)."'; ";
+		$this->query($check_exists);
+		if ($this->num_rows()>0) {
+			$up_record['addressbook_id'] = $this->escape($addressbook_id);
+			$up_record['limit_'.$typestring.'_cf_categories'] = $enable ? 1 : 0;
+			return $this->update_row('cf_addressbook_limits','addressbook_id',$up_record);
+		} elseif ($enable) {
+			$up_record['addressbook_id'] = $this->escape($addressbook_id);
+			$up_record['limit_'.$typestring.'_cf_categories'] = 1;
+			return $this->insert_row('cf_addressbook_limits',$up_record);
+		}
+		return true;
+	}
+
+	function get_addressbooks_limits_array($user_id) {
+		global $GO_MODULES;
+		require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+		$ab = new addressbook();
+		$addressbook_ids = $ab->get_user_addressbook_ids($user_id);
+		$out_array = array();
+		foreach ($addressbook_ids as $ab_id) {
+			$record['limit_contacts'] = $this->check_addressbook_category_limit($ab_id, 2);
+			$record['limit_companies'] = $this->check_addressbook_category_limit($ab_id, 3);
+			$record['companies_categories'] = array();
+			$record['contacts_categories'] = array();
+			$this->get_allowed_categories($ab_id,2);
+			while ($record2 = $this->next_record())
+				$record['contacts_categories'][] = $record2['category_id'];
+			$this->get_allowed_categories($ab_id,3);
+			while ($record2 = $this->next_record())
+				$record['companies_categories'][] = $record2['category_id'];
+			$out_array[$ab_id] = $record;
+		}
+		return $out_array;
+	}
+
+	function get_addressbook_cf_category_permissions(&$response) {
+		global $GO_MODULES,$GO_SECURITY;
+		require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+		require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+		$cf = new customfields();
+		$ab = new addressbook();
+		$response['data']['cf_permissions'] = array();
+		$cf->get_authorized_categories(2,$GO_SECURITY->user_id);
+		while ($cat = $cf->next_record()) {
+			$response['data']['cf_permissions']['contact_categories_allowed_from_cf_module'] = true;
+		}
+		$cf->get_authorized_categories(3,$GO_SECURITY->user_id);
+		while ($cat = $cf->next_record()) {
+			$response['data']['cf_permissions']['company_categories_allowed_from_cf_module'] = true;
+		}
+		$folder_cf_data = $ab->get_addressbooks_limits_array($GO_SECURITY->user_id);
+		$response['data']['cf_permissions']['allowed_for_addressbook'] = $folder_cf_data[$response['data']['addressbook_id']];
+		return $response['data']['cf_permissions'];
+	}
+
+	/**
+	 * For use with the script that forwards contact / company details to the
+	 * front-end. This function adds the customfield category ids that the current
+	 * user may see in the front-end to the record.
+	 * @global Object $GO_MODULES
+	 * @global Object $GO_SECURITY
+	 * @param Array $record The contact or company record.
+	 * @param String $identifier
+	 * @return Array $record The record updated with the
+	 */
+	function cf_categories_to_record($record, $identifier='id') {
+		global $GO_MODULES;
+		if($GO_MODULES->has_module('customfields'))
+		{
+			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+			require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+			$customfields = new customfields();
+			$ab = new addressbook();
+
+			global $GO_SECURITY;
+
+			$record['allowed_cf_categories'] = array();
+
+			$authorized_contact_categories = array();
+			$customfields->get_authorized_categories(2, $GO_SECURITY->user_id);
+			while ($record2 = $customfields->next_record()) {
+				$authorized_contact_categories[] = $record2['id'];
+				unset($record2);
+			}
+
+			$contacts_limit = $ab->check_addressbook_category_limit($record[$identifier],2);
+
+			if (!empty($contacts_limit)) {
+				$ab->get_allowed_categories($record[$identifier],2);
+				while ($record2 = $ab->next_record()) {
+//							if (in_array($record2['category_id'],$authorized_contact_categories)) {
+						$record['allowed_cf_categories'][] = $record2['category_id'];
+//							}
+					unset($record2);
+				}
+			} else {
+				$record['allowed_cf_categories'] = array_merge($record['allowed_cf_categories'],$authorized_contact_categories);
+			}
+
+			$authorized_company_categories = array();
+			$customfields->get_authorized_categories(3, $GO_SECURITY->user_id);
+			while ($record2 = $customfields->next_record()) {
+				$authorized_company_categories[] = $record2['id'];
+				unset($record2);
+			}
+
+			$companies_limit = $ab->check_addressbook_category_limit($record[$identifier],3);
+
+			if (!empty($companies_limit)) {
+				$ab->get_allowed_categories($record[$identifier],3);
+				while ($record2 = $ab->next_record()) {
+//							if (in_array($record2['category_id'],$authorized_company_categories)) {
+						$record['allowed_cf_categories'][] = $record2['category_id'];
+//							}
+					unset($record2);
+				}
+			} else {
+				$record['allowed_cf_categories'] = array_merge($record['allowed_cf_categories'],$authorized_company_categories);
+			}
+
+			$record['allowed_cf_categories'] = implode(',',$record['allowed_cf_categories']);
+
+			return $record;
+		}
+	}
 }
