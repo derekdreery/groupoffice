@@ -56,8 +56,6 @@ $lang['addressbook']['emailDoesntExists']='E-mail address wasn\'t found';
 
 $lang['addressbook']['imageNotSupported']='The image you uploaded is not supported. Only gif, png and jpg images are supported.';
 
-$lang['addressbook']['no_folder_id'] = 'Invalid folder id has been passed with the request to the server!';
-
 $lang['addressbook']['no_addressbook_id'] = 'Invalid addressbook id has been passed with the request to the server!';
 $lang['addressbook']['undefined'] = '-';
 ?>
