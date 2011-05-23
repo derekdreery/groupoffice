@@ -107,7 +107,6 @@ try
 			
 			if($GO_MODULES->has_module('customfields'))
 			{
-				
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 				
@@ -608,6 +607,12 @@ try
 
 				$response['data']['google_maps_link']=google_maps_link($response['data']['address'], $response['data']['address_no'], $response['data']['city'], $response['data']['country']);
 
+				if($GO_MODULES->has_module('customfields'))
+				{
+					$ab2 = new addressbook();
+					$response['data'] = $ab2->cf_categories_to_record($response['data'],'addressbook_id');
+				}
+
 				$response['success']=true;	
 			}
 
@@ -712,7 +717,13 @@ try
 				$response['data']['post_formatted_address'] = preg_replace("/(\r\n)+|(\n|\r)+/", "<br />", $response['data']['post_formatted_address']);
 
 				$response['data']['post_google_maps_link']=google_maps_link($response['data']['post_address'], $response['data']['post_address_no'], $response['data']['post_city'], $response['data']['post_country']);
-				
+
+				if($GO_MODULES->has_module('customfields'))
+				{
+					$ab2 = new addressbook();
+					$response['data'] = $ab2->cf_categories_to_record($response['data'],'addressbook_id');
+				}
+
 				$response['success']=true;		
 			}		
 				
@@ -781,6 +792,13 @@ try
 			while($record = $ab->next_record())
 			{
 				$record['checked']=in_array($record['id'], $books);
+
+				if($GO_MODULES->has_module('customfields'))
+				{
+					$ab2 = new addressbook();
+					$record = $ab2->cf_categories_to_record($record);
+				}
+
 				$response['addressbooks']['results'][]=$record;
 			}
 
@@ -898,7 +916,13 @@ try
 					'default_salutation' => $ab->f('default_salutation'),
 					'checked' => in_array($ab->f('id'), $books)
 				);
-					
+
+				if($GO_MODULES->has_module('customfields'))
+				{
+					$ab2 = new addressbook();
+					$record = $ab2->cf_categories_to_record($record);
+				}
+
 				$response['results'][] = $record;
 			}
 
@@ -1072,6 +1096,50 @@ try
 			echo json_encode($response);
 			break;
 
+		case 'addressbook_cf_categories':
+
+			$GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php';
+			$cf = new customfields();
+
+			if (empty($_REQUEST['addressbook_id'])) {
+				require_once($GO_LANGUAGE->get_language_file('addressbook'));
+				throw new Exception($lang['addressbook']['no_addressbook_id']);
+			}
+			$addressbook_id = $_REQUEST['addressbook_id'];
+
+			$response = array('data'=>array());
+
+			$authorized_contact_categories = array();
+			$cf->get_authorized_categories(2, $GO_SECURITY->user_id);
+			while ($record = $cf->next_record()) {
+				$authorized_contact_categories[] = $record['id'];
+			}
+			$response['data']['limit_contacts'] = $ab->check_addressbook_category_limit($addressbook_id,2);
+			$ab->get_allowed_categories($addressbook_id,2);
+			while ($record = $ab->next_record()) {
+				if (in_array($record['category_id'],$authorized_contact_categories)) {
+					$response['data']['cat_2_'.$record['category_id']] = 'on';
+				}
+			}
+
+			$authorized_company_categories = array();
+			$cf->get_authorized_categories(3, $GO_SECURITY->user_id);
+			while ($record = $cf->next_record()) {
+				$authorized_company_categories[] = $record['id'];
+			}
+			$response['data']['limit_companies'] = $ab->check_addressbook_category_limit($addressbook_id,3);
+			$ab->get_allowed_categories($addressbook_id,3);
+			while ($record = $ab->next_record()) {
+				if (in_array($record['category_id'],$authorized_company_categories)) {
+					$response['data']['cat_3_'.$record['category_id']] = 'on';
+				}
+			}
+
+			$response['data']['addressbook_id'] = $addressbook_id;
+			$response['success'] = true;
+			echo json_encode($response);
+			break;
+			
 	}
 }
 catch(Exception $e)
@@ -1086,5 +1154,4 @@ function getSimpleType($type) {
 	$pos = strpos($type,"(");
 	return substr($type,0,$pos);
 }
-
 ?>

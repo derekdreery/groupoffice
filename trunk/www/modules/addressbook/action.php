@@ -612,6 +612,32 @@ try {
 
 	    echo json_encode($response);	    
 	    break;
+
+		case 'save_addressbook_limits':
+
+			if (!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+				throw AccessDeniedException();
+
+			if (empty($_REQUEST['addressbook_id'])) {
+				require_once($GO_LANGUAGE->get_language_file('addressbook'));
+				throw new Exception($lang['addressbook']['no_addressbook_id']);
+			}
+
+			$addressbook_id = $_REQUEST['addressbook_id'];
+
+			$ab->toggle_addressbook_limit($addressbook_id, !empty($_POST['limit_contacts']), 2);
+			$ab->toggle_addressbook_limit($addressbook_id, !empty($_POST['limit_companies']), 3);
+
+			$ab->clear_addressbook_cf_categories($addressbook_id,2);
+			$ab->clear_addressbook_cf_categories($addressbook_id,3);
+
+			foreach($_POST as $k=>$v)
+				if (substr($k,0,4)=='cat_')
+					$ab->add_addressbook_cf_category($addressbook_id,substr($k,6),substr($k,4,1));
+
+			$response['success']=true;
+
+			break;
     }
 }
 catch(Exception $e) {

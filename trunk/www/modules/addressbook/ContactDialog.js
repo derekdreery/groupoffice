@@ -187,6 +187,13 @@ GO.addressbook.ContactDialog = function(config)
 	this.addEvents({
 		'save':true
 	});
+
+	if (GO.customfields) {
+		this.personalPanel.formAddressBooks.on('select',function(combo,record,index){
+			var allowed_cf_categories = record.data.allowed_cf_categories.split(',');
+			this.updateCfTabs(allowed_cf_categories);
+		},this);
+	}
 }
 
 Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
@@ -240,8 +247,17 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 				this.contact_id = 0;
 			}
 
-			if(!GO.util.empty(GO.addressbook.defaultAddressbook) && this.personalPanel.formAddressBooks.store.getById(GO.addressbook.defaultAddressbook)){
-				this.personalPanel.setAddressbookID(GO.addressbook.defaultAddressbook);
+			if(GO.addressbook.defaultAddressbook){
+
+				var store = this.personalPanel.formAddressBooks.store;
+				//add record to store if not loaded
+				var r = store.getById(GO.addressbook.defaultAddressbook.id);
+				if(!r)
+				{					
+					store.add(GO.addressbook.defaultAddressbook);
+				}
+
+				this.personalPanel.setAddressbookID(GO.addressbook.defaultAddressbook.id);
 			}else if(tempAddressbookID>0 && this.personalPanel.formAddressBooks.store.getById(tempAddressbookID))
 			{
 				this.personalPanel.setAddressbookID(tempAddressbookID);
@@ -262,9 +278,21 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 			this.personalPanel.formAddressFormat.setValue(abRecord.get('default_iso_address_format'));
 			//var sal = this.personalPanel.setSalutation();
 			//this.personalPanel.formSalutation.setValue(sal);
-			this.tabPanel.setActiveTab(0);			
+			this.tabPanel.setActiveTab(0);
 		}
 
+	},
+
+	updateCfTabs : function(allowed_cf_categories) {
+		for (var i=0; i<this.tabPanel.items.items.length; i++) {
+			if (typeof(this.tabPanel.items.items[i].category_id)!='undefined') {
+				this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
+				if(allowed_cf_categories.indexOf(this.tabPanel.items.items[i].category_id.toString())>=0)
+					this.tabPanel.unhideTabStripItem(this.tabPanel.items.items[i]);
+				else
+					this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
+			}
+		}
 	},
 
 	/*setAddressbookId : function(addressbook_id)
@@ -293,7 +321,10 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 					this.formPanel.form.findField('company_id').setRemoteText(action.result.data.company_name);
 					if(!GO.util.empty(action.result.data.photo_src))
 						this.setPhoto(id);
-					
+
+					if (GO.customfields) {
+						this.updateCfTabs(action.result.data.allowed_cf_categories);
+					}
 					GO.addressbook.ContactDialog.superclass.show.call(this);
 				}
 			},

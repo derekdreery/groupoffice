@@ -183,10 +183,22 @@ GO.addressbook.CompanyDialog = function(config)
 	this.addEvents({
 		'save':true
 	});
+	
+	if (GO.customfields) {
+		this.personalPanel.formAddressBooks.on('select',function(combo,record,index){
+			var allowed_cf_categories = record.data.allowed_cf_categories.split(',');
+			this.updateCfTabs(allowed_cf_categories);
+		},this);
+		this.companyForm.form.on('actioncomplete',function(form, action){
+			if(action.type=='load'){
+				
+			}
+		},this);
+	}
 }
 	
 Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
-		
+
 	show : function(company_id)
 	{
 		if(!GO.addressbook.writableAddressbooksStore.loaded)
@@ -221,7 +233,16 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 			}	
 
 			if(!GO.util.empty(GO.addressbook.defaultAddressbook)){
-				this.personalPanel.formAddressBooks.setValue(GO.addressbook.defaultAddressbook);
+				var store = this.personalPanel.formAddressBooks.store;
+				//add record to store if not loaded
+				var r = store.getById(GO.addressbook.defaultAddressbook.id);
+				if(!r)
+				{
+					store.add(GO.addressbook.defaultAddressbook);
+				}
+
+				this.personalPanel.setAddressbookID(GO.addressbook.defaultAddressbook.id);
+				//this.personalPanel.formAddressBooks.setValue(GO.addressbook.defaultAddressbook);
 			}
 			this.moveEmployeesButton.setDisabled(true);
 		
@@ -246,11 +267,28 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				var abRecord = this.personalPanel.formAddressBooks.store.getById(this.personalPanel.formAddressBooks.getValue());
 				this.personalPanel.formAddressFormat.setValue(abRecord.get('default_iso_address_format'));
 				this.personalPanel.formPostAddressFormat.setValue(abRecord.get('default_iso_address_format'));
-				
+
+				if (GO.customfields) {
+					var allowed_cf_categories = abRecord.data.allowed_cf_categories.split(',');
+					this.updateCfTabs(allowed_cf_categories);
+				}
+
 				GO.addressbook.CompanyDialog.superclass.show.call(this);
 			}		
 		}
 	},	
+
+	updateCfTabs : function(allowed_cf_categories) {
+		for (var i=0; i<this.tabPanel.items.items.length; i++) {
+			if (typeof(this.tabPanel.items.items[i].category_id)!='undefined') {
+				this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
+				if(allowed_cf_categories.indexOf(this.tabPanel.items.items[i].category_id.toString())>=0)
+					this.tabPanel.unhideTabStripItem(this.tabPanel.items.items[i]);
+				else
+					this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
+			}
+		}
+	},
 
 	loadCompany : function(id)
 	{
@@ -271,6 +309,10 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 					this.employeePanel.setCompanyId(action.result.data['id']);
 					this.personalPanel.setCompanyId(action.result.data['id']);
 					this.moveEmployeesButton.setDisabled(false);
+					
+					if (GO.customfields) {
+						this.updateCfTabs(action.result.data.allowed_cf_categories);
+					}
 					
 					GO.addressbook.CompanyDialog.superclass.show.call(this);
 				}						

@@ -11,6 +11,11 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
+GO.addressbook.addressbooksStoreFields = new Array('id','name','owner', 'acl_id','user_id','default_iso_address_format','default_salutation');
+
+if (GO.customfields) {
+	GO.addressbook.addressbooksStoreFields.push('allowed_cf_categories');
+}
 
 GO.addressbook.readableAddressbooksStore = new GO.data.JsonStore({
 			url: GO.settings.modules.addressbook.url+ 'json.php'	,
@@ -23,10 +28,10 @@ GO.addressbook.readableAddressbooksStore = new GO.data.JsonStore({
 			root: 'results', 
 			totalProperty: 'total', 
 			id: 'id',
-			fields: ['id','name','owner','checked'],
+			fields: GO.addressbook.addressbooksStoreFields,
 			remoteSort: true
-		});			
-		
+		});
+
 GO.addressbook.writableAddressbooksStore = new GO.data.JsonStore({
 			url: GO.settings.modules.addressbook.url+ 'json.php'	,
 			baseParams: {
@@ -37,15 +42,6 @@ GO.addressbook.writableAddressbooksStore = new GO.data.JsonStore({
 			root: 'results', 
 			totalProperty: 'total', 
 			id: 'id',
-			fields: ['id','name','owner', 'acl_id','user_id','default_iso_address_format','default_salutation'],
+			fields: GO.addressbook.addressbooksStoreFields,
 			remoteSort: true
 		});
-
-
-		
-GO.addressbook.writableAddressbooksStore.on('load', function(){	
-	GO.addressbook.writableAddressbooksStore.on('load', function(){
-		GO.addressbook.readableAddressbooksStore.load();
-	}, this);
-}, this, {single:true});
-
