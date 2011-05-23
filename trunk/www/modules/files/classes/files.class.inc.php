@@ -49,6 +49,7 @@ class files extends db {
 		$events->add_listener('build_search_index', __FILE__, 'files', 'build_search_index');
 		$events->add_listener('login', __FILE__, 'files', 'login');
 		$events->add_listener('init_customfields_types', __FILE__, 'files', 'init_customfields_types');
+		$events->add_listener('load_file_properties', __FILE__, 'files', 'get_file_cf_category_permissions');
 	}
 
 	function init_customfields_types(){
@@ -1896,5 +1897,109 @@ class files extends db {
 			$folders[] = $this->f('id');
 		}
 		return $folders;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Checks whether the folder's customfield categories should be managed
+	 * seperately (return true) or all the categories should be shown (return false).
+	 * Possible values for the second paramater are 2 (for contacts) and 3 (for companies).
+	 * @param Int $folder_id
+	 * @param Int $cf_type
+	 * @return Boolean
+	 */
+	function check_folder_content_category_limit($folder_id) {
+		$sql = "SELECT * FROM cf_folder_limits WHERE folder_id='".$this->escape($folder_id)."'; ";
+		$this->query($sql);
+		if ($this->num_rows()>0) {
+			$record = $this->next_record();
+			return !empty($record['limit']);
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Gets the customfield categories associated with all the files in the
+	 * specified folder.
+	 * @param Int $folder_id
+	 * @return Int num_rows
+	 */
+	function get_allowed_categories_for_files_in_folder($folder_id) {
+		$sql = "SELECT * FROM cf_folder_content_cf_categories WHERE folder_id='".$this->escape($folder_id)."'; ";
+		$this->query($sql);
+		return $this->num_rows();
+	}
+
+	function toggle_folder_limit($folder_id,$enable=false) {
+		$check_exists = "SELECT * FROM `cf_folder_limits` WHERE folder_id='".$this->escape($folder_id)."'; ";
+		$this->query($check_exists);
+		if ($this->num_rows()>0) {
+			$up_record['folder_id'] = $this->escape($folder_id);
+			$up_record['limit'] = $enable ? 1 : 0;
+			return $this->update_row('cf_folder_limits','folder_id',$up_record);
+		} elseif ($enable) {
+			$up_record['folder_id'] = $this->escape($folder_id);
+			$up_record['limit'] = 1;
+			return $this->insert_row('cf_folder_limits',$up_record);
+		}
+		return true;
+	}
+
+	/**
+	 * Clears all associations of file customfield categories with the specified folder
+	 * @param Int $folder_id
+	 * @return Boolean true on success
+	 */
+	function clear_folder_content_cf_categories($folder_id) {
+		$sql = "DELETE FROM `cf_folder_content_cf_categories` WHERE folder_id='".$this->escape($folder_id)."'; ";
+		return $this->query($sql);
+	}
+
+	/**
+	 * Associates a file customfield category with the specified folder.
+	 * @param Int $folder_id
+	 * @param Int $category_id
+	 * @return Boolean true on success
+	 */
+	function add_folder_content_cf_category($folder_id,$category_id) {
+		$record['folder_id'] = $this->escape($folder_id);
+		$record['category_id'] = $this->escape($category_id);
+		return $this->insert_row("cf_folder_content_cf_categories",$record);
+	}
+
+	function get_folder_limits_array($user_id,$folder_id=false) {
+		if ($folder_id===false) {
+			$folder_ids = $this->get_user_folder_ids($user_id);
+		} else {
+			$folder_ids = array($folder_id);
+		}
+		$out_array = array();
+		foreach ($folder_ids as $folder_id) {
+			$record['limit'] = $this->check_folder_content_category_limit($folder_id);
+			$record['categories'] = array();
+			$this->get_allowed_categories_for_files_in_folder($folder_id);
+			while ($record2 = $this->next_record())
+				$record['categories'][] = $record2['category_id'];
+			$out_array[$folder_id] = $record;
+		}
+		return $out_array;
+	}
+
+	function get_file_cf_category_permissions(&$response) {
+		global $GO_MODULES,$GO_SECURITY;
+		require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+		require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+		$cf = new customfields();
+		$fs = new files();
+		$response['data']['cf_permissions'] = array();
+		$cf->get_authorized_categories(6,$GO_SECURITY->user_id);
+		while ($cat = $cf->next_record()) {
+			$response['data']['cf_permissions']['allowed_from_cf_module'] = true;
+		}
+		$folder_cf_data = $fs->get_folder_limits_array($GO_SECURITY->user_id,$response['data']['folder_id']);
+		$response['data']['cf_permissions']['allowed_for_folder'] = $folder_cf_data[$response['data']['folder_id']];
+		return $response['data']['cf_permissions'];
 	}
 }

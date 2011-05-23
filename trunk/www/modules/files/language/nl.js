@@ -33,3 +33,13 @@ GO.files.lang.newFolder = 'Nieuwe map';
 
 GO.files.lang.applyState = 'De weergaveinstellingen van deze map toepassen voor iedereen.';
 GO.files.lang.stateLocked = 'Map weergave vastgezet door eigenaar/beheerder';
+
+GO.files.lang.categoriesFiles = 'Extra velden van bestanden';
+GO.files.lang.applyToCurrentFolder = 'Bovenstaande instellingen toepassen op de inhoud van alleen de huidige map';
+GO.files.lang.applyRecursively = 'Bovenstaande instellingen toepassen op de inhoud van de huidige en alle onderliggende mappen';
+GO.files.lang.applyRecursivelyRUSure = 'Weet u het zeker dat u de gekozen instellingen wilt toepassen op ALLE onderliggende mappen? Merk op dat deze bewerking een grote invloed heeft als de gekozen folder zeer veel subfolders in zijn boomstructuur heeft.';
+GO.files.lang.pleaseConfirm = 'A.u.b. bevestigen';
+
+GO.files.lang.applyLimits = 'Niet alle extra veld categorieën tonen';
+
+GO.files.lang.undef = '-';

@@ -206,7 +206,13 @@ GO.files.FilePropertiesDialog = function(config){
 			scope: this
 		}]
 	});
-	
+
+	this.formPanel.form.on('actioncomplete',function(form, action){
+		if(action.type=='load'){
+			this.updateCfTabs(action.result.data.folder_id,action.result.data.cf_permissions);
+		}
+	},this);
+
 	this.addEvents({
 		'rename' : true,
 		'save':true
@@ -314,5 +320,26 @@ Ext.extend(GO.files.FilePropertiesDialog, GO.Window, {
 			},
 			scope:this			
 		});			
+	},
+	
+	updateCfTabs : function(folder_id,permissions) {
+		for (var i=0; i<this.tabPanel.items.items.length; i++) {
+			var cat_id = this.tabPanel.items.items[i].category_id;
+			if(cat_id>0){
+				if (permissions.allowed_from_cf_module
+					&& typeof(permissions.allowed_for_folder)!='undefined'
+					&& permissions.allowed_for_folder.limit) {
+					var visible = permissions.allowed_for_folder.categories.indexOf(this.tabPanel.items.items[i].category_id.toString())>=0;
+					if (visible)
+						this.tabPanel.unhideTabStripItem(this.tabPanel.items.items[i]);
+					else
+						this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
+				} else if (typeof(permissions.allowed_for_folder)=='undefined') {
+					this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
+				} else {
+					this.tabPanel.unhideTabStripItem(this.tabPanel.items.items[i]);
+				}
+			}
+		}
 	}
 });

@@ -45,3 +45,13 @@ GO.files.lang.newFolder = 'New folder';
 
 GO.files.lang.applyState = 'Apply the folder\'s display settings for everyone.';
 GO.files.lang.stateLocked = 'Folder display locked by owner/admin';
+
+GO.files.lang.categoriesFiles = 'Custom fields for files';
+GO.files.lang.applyToCurrentFolder = 'Apply above changes to contents of only the current folder';
+GO.files.lang.applyRecursively = 'Apply above changes to contents of the current and all underlying folders';
+GO.files.lang.applyRecursivelyRUSure = 'Are you sure to apply the file customfield settings to the contents of ALL of the underlying folders? Note that this can have a great impact if you have many subfolders in this folder\'s tree structure.';
+GO.files.lang.pleaseConfirm = 'Please confirm';
+
+GO.files.lang.applyLimits = 'Do not show all custom field categories';
+
+GO.files.lang.undef = '-';

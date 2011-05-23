@@ -46,3 +46,5 @@ $lang['files']['copyPasteToDownload'] = 'Klik op onderstaande beveiligde link of
 $lang['files']['possibleUntil'] = 'mogelijk tot';
 
 $lang['files']['fileNotFound']='Sorry, het bestand dat u probeerde te downloaden is niet gevonden.';
+
+$lang['files']['no_folder_id'] = 'Onjuiste folder-id werd naar de server gestuurd!';

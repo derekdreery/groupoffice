@@ -31,6 +31,20 @@ $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
 $response=array();
 
+function get_child_folders($folder_id) {
+	global $GO_MODULES;
+	require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+	$fs = new files();
+	$folder_ids = array();
+	$fs->get_folders($folder_id);
+	while ($folder = $fs->next_record()) {
+		$folder_ids[] = $folder['id'];
+		$child_folders = get_child_folders($folder['id']);
+		$folder_ids = array_merge($folder_ids,$child_folders);
+	}
+	return $folder_ids;
+}
+
 try {
 	if(empty($_REQUEST['task'])){
 		//probably too large upload
@@ -493,6 +507,39 @@ try {
 			$folder['cm_state'] = $_POST['state'];
 			$files->update_folder($folder);
 			$response['success'] = true;
+
+			break;
+		
+		case 'save_folder_limits':
+
+			if (!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+				throw AccessDeniedException();
+
+			if (empty($_REQUEST['folder_id'])) {
+				throw new Exception($lang['files']['no_folder_id']);
+			}
+
+			$folder_ids = array(intval($_REQUEST['folder_id']));
+
+			if (!empty($_REQUEST['recursive'])) {
+				$underlying_folders = get_child_folders($_REQUEST['folder_id']);
+				$folder_ids = array_merge($folder_ids,$underlying_folders);
+			}
+
+			$response['updated_folder_ids'] = $folder_ids;
+
+			while ($folder_id = array_shift($folder_ids)) {
+				$files->toggle_folder_limit($folder_id, !empty($_POST['limit']));
+				$files->clear_folder_content_cf_categories($folder_id);
+				foreach($_POST as $k=>$v)
+					if (substr($k,0,4)=='cat_') {
+						$files->add_folder_content_cf_category($folder_id,substr($k,4));
+					}
+			}
+
+			$response['success'] = true;
+
+			break;
 	}
 }
 catch(Exception $e) {

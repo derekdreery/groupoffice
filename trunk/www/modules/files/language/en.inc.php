@@ -47,3 +47,5 @@ $lang['files']['copyPasteToDownload'] = 'Click the secured link below or copy it
 $lang['files']['possibleUntil'] = 'possible until';
 
 $lang['files']['fileNotFound']='Sorry, the file you tried to download is not found.';
+
+$lang['files']['no_folder_id'] = 'Invalid folder id has been passed with the request to the server!';
