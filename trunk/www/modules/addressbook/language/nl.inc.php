@@ -53,7 +53,5 @@ $lang['addressbook']['emailDoesntExists']='E-mail adres is niet gevonden';
 
 $lang['addressbook']['imageNotSupported']='De afbeelding die u stuurde wordt niet ondersteund. Alleen gif, png en jpg afbeeldingen worden ondersteund.';
 
-$lang['addressbook']['no_folder_id'] = 'Onjuiste folder-id werd naar de server gestuurd!';
-
 $lang['addressbook']['no_addressbook_id'] = 'Onjuiste adresboek-id werd naar de server gestuurd!';
 $lang['addressbook']['undefined'] = '-';
