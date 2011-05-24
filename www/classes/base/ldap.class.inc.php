@@ -148,7 +148,7 @@ class ldap {
 			else
 				$this->Link_ID=ldap_connect($Host, $Port);
 			
-			if($GO_CONFIG->ldap_network_timeout) //only works in php 5.3
+			if(!empty($GO_CONFIG->ldap_network_timeout)) //only works in php 5.3
 				ldap_set_option($this->Link_ID, LDAP_OPT_NETWORK_TIMEOUT, $GO_CONFIG->ldap_network_timeout);
 
 			if (!$this->Link_ID) {
