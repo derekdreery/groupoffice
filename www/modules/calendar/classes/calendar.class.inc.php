@@ -1910,6 +1910,12 @@ class calendar extends db {
 				while($cal->next_record()) {
 					$this->delete_event($cal->f('id'),false);
 				}
+
+				$sql = "SELECT id FROM cal_events WHERE exception_for_event_id=".intval($event_id);
+				$cal->query($sql);
+				while($cal->next_record()) {
+					$this->delete_event($cal->f('id'),false);
+				}
 			}
 
 			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission']) {
