@@ -256,6 +256,9 @@ class serverclient
 
 
 		$response = curl_exec ($this->ch);
+		
+		if(empty($response))
+			throw new Exception(curl_error($this->ch));
 
 
 		return $response;

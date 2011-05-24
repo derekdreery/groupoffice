@@ -1054,10 +1054,13 @@ try {
 
 									$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/action.php', $params);
 
-									$server_response = json_decode($server_response, true);
+									$decoded = json_decode($server_response, true);
+									
+									if(!isset($decoded['success']))
+										throw new Exception('Serverclient Could not connect to '.$GO_CONFIG->serverclient_server_url.': '.$server_response);
 
-									if(!$server_response['success']) {
-										throw new Exception($server_response['feedback']);
+									if(!$decoded['success']) {
+										throw new Exception($decoded['feedback']);
 									}
 									break;
 								}
