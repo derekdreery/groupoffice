@@ -1776,7 +1776,7 @@ class calendar extends db {
 					$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
 				}else
 				{
-					$calculated_event['end_time'] = Date::date_add($calculated_event['start_time'], $duration_days);
+					$calculated_event['end_time'] = Date::date_add($calculated_event['start_time'], $duration_days)-60;
 				}
 
 				//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
