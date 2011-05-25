@@ -100,7 +100,7 @@ class smime extends db{
 		global $GO_CONFIG, $GO_LANGUAGE, $lang;
 		
 		
-		
+		$cert = '';
 		
 		if (isset($_FILES['cert']['tmp_name'][0]) && is_uploaded_file($_FILES['cert']['tmp_name'][0])) {
 			
@@ -127,12 +127,10 @@ class smime extends db{
 			}
 			
 		}
-		if(isset($_POST['delete_cert']))
-			$cert = '';
-		
+				
 		$smime = new smime();
 			
-		$smime->set_pkcs12_certificate($account['id'], isset($cert) ? $cert : null, isset($_POST['always_sign']));			
+		$smime->set_pkcs12_certificate($account['id'], $cert, isset($_POST['always_sign']), isset($_POST['delete_cert']));			
 		
 		
 		$cert = $smime->get_pkcs12_certificate($account['id']);
@@ -356,7 +354,7 @@ class smime extends db{
 	
 	
 	
-	public function set_pkcs12_certificate($account_id, $cert, $always_sign){
+	public function set_pkcs12_certificate($account_id, $cert, $always_sign, $delete_cert){
 		
 		//the code below doesn't work due to bug: http://bugs.php.net/bug.php?id=53483
 //		$up['account_id']=$account_id;
@@ -371,15 +369,15 @@ class smime extends db{
 //		
 //		return $this->replace_row('smi_pkcs12',$up,$types,false);		
 		
-		$sql = "REPLACE INTO smi_pkcs12 (account_id,";
-		if(isset($cert)){
-			$sql .= "cert,";
+		$sql = "INSERT IGNORE INTO smi_pkcs12 (account_id) VALUES (".intval($account_id).")";
+		$this->query($sql);
+		
+		$sql = "UPDATE smi_pkcs12 SET ";
+		if(!empty($cert) || $delete_cert){
+			$sql .= 'cert="'.addslashes($cert).'",';
 		}
-		$sql .= 'always_sign) VALUES ('.intval($account_id).',';
-		if(isset($cert)){
-			$sql .= '"'.addslashes($cert).'",';
-		}
-		$sql .= intval($always_sign).')';
+		$sql .= 'always_sign='.intval($always_sign).' WHERE account_id='.intval($account_id);
+		
 		return $this->query($sql);
 	}
 	

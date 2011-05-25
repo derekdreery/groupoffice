@@ -87,7 +87,7 @@ GO.moduleManager.onModuleReady('email',function(){
 				if(action.type=='submit'){
 					this.uploadFile.clearQueue();
 					this.deleteCert.setDisabled(!action.result.cert);
-					this.downloadButton.setDisabled(!action.result.data.cert);
+					this.downloadButton.setDisabled(!action.result.cert);
 				}else
 				{
 					this.smimePanel.setDisabled(false);
