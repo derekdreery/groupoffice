@@ -227,7 +227,7 @@ class smime extends db{
 			
 			$decrypted_message = $ml->get_message_for_client(0, $reldir.'unencrypted.txt','');
 			
-			//unlink($dir.'unencrypted.txt');
+			unlink($dir.'unencrypted.txt');
 			
 			//go_debug($decrypted_message);
 			
