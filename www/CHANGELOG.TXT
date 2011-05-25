@@ -1,3 +1,7 @@
+25/05/2011 3.7.19
+- Fixed SMIME bugs and enhanced it with icons.
+- Small bug fixes.
+
 19/05/2011 3.7.18
 - SMIME didn't work with attachments.
 - Other small SMIME bug fixes.
