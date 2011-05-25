@@ -24,7 +24,7 @@ GO.moduleManager.onModuleReady('email',function(){
 									if(data.smime_encrypted){
 										var el = this.body.down(".message-header").createChild({													
 													html:GO.smime.lang.messageEncrypted,													
-													cls:'smi-sign-notification'
+													cls:'smi-encrypt-notification'
 											});
 									}
 									
