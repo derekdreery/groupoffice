@@ -2940,7 +2940,14 @@ class calendar extends db {
 	 */
 	function update_category($category)
 	{
+		
+		
 		$r = $this->update_row('cal_categories', 'id', $category);
+		
+		if($r && isset($category['color'])){
+			$sql = "UPDATE cal_events SET background='".$this->escape($category['color'])."' WHERE category_id=".intval($category['id']);
+			$this->query($sql);
+		}
 		return $r;
 	}
 	/**
