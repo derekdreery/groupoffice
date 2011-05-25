@@ -1,3 +1,6 @@
+25/05/2011 3.7.20
+- All day events that repeated were shown with one day too much.
+
 25/05/2011 3.7.19
 - Fixed SMIME bugs and enhanced it with icons.
 - Problem with CalDAV not sending some appointments to the client.
