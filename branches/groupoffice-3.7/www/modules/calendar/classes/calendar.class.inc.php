@@ -1749,6 +1749,11 @@ class calendar extends db {
 			$cal = new calendar();
 			$duration = $event['end_time'] - $event['start_time'];
 			if($duration == 0) $duration = 3600;
+			
+			if(!empty($event['all_day_event'])){				
+				//For DST offsets
+				$duration_days = round($duration/86400);
+			}
 
 			$calculated_event=$event;
 
@@ -1767,7 +1772,12 @@ class calendar extends db {
 			while($calculated_event['start_time'] = Date::get_next_recurrence_time($first_occurrence_time, $calculated_event['start_time'], $duration, $event['rrule'])) {
 				$loops++;
 
-				$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
+				if(empty($event['all_day_event'])){
+					$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
+				}else
+				{
+					$calculated_event['end_time'] = Date::date_add($calculated_event['start_time'], $duration_days);
+				}
 
 				//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
 
