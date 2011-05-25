@@ -1,5 +1,5 @@
-groupoffice-mailserver (3.7.19) threeseven; urgency=low
+groupoffice-mailserver (3.7.20) threeseven; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Wed, 25 May 2011 16:26:17 +0200
+ -- Merijn Schering <mschering@intermesh.nl>  Wed, 25 May 2011 16:44:13 +0200
