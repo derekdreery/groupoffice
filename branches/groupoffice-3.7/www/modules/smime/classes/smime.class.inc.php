@@ -211,6 +211,7 @@ class smime extends db{
 				return false;
 			}
 			
+			
 			$return = openssl_pkcs7_decrypt($infilename, $outfilename, $certs['cert'], array($certs['pkey'], $password));
 			
 			unlink($infilename);
@@ -227,7 +228,8 @@ class smime extends db{
 			
 			$decrypted_message = $ml->get_message_for_client(0, $reldir.'unencrypted.txt','');
 			
-			unlink($dir.'unencrypted.txt');
+			
+			unlink($outfilename);
 			
 			//go_debug($decrypted_message);
 			
@@ -256,6 +258,16 @@ class smime extends db{
 		
 		if(!empty($_POST['encrypt_smime'])){		
 			
+			if(!isset($cert)){
+				$cert = $smime->get_pkcs12_certificate($swift->account['id']);
+			}
+			$password = $_SESSION['GO_SESSION']['smime']['passwords'][$swift->account['id']];
+			openssl_pkcs12_read ($cert['cert'], $certs, $password);
+
+			if(!isset($certs['cert']))
+				throw new Exception("Failed to get your public key for encryption");				
+
+			
 			$to = $swift->message->getTo();
 			
 			$cc = $swift->message->getCc();
@@ -270,7 +282,7 @@ class smime extends db{
 			
 			//lookup all recipients
 			$failed=array();
-			$public_certs=array();
+			$public_certs=array($certs['cert']);
 			foreach($to as $email=>$name){
 				$cert = $smime->get_public_certificate($GO_SECURITY->user_id, $email);				
 				if(!$cert){

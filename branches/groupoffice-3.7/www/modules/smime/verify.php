@@ -42,30 +42,54 @@ if(!empty($_REQUEST['account_id'])){
 	$tmpdir = $GO_CONFIG->tmpdir . 'smime/verify/';
 	File::mkdir($tmpdir);
 
-	$src_filename = !empty($_REQUEST['filepath']) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.eml';
+	$src_filename = !empty($_REQUEST['filepath']) && empty($uid) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.eml';
 	$cert_filename = $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.crt';
-
-
-	if (empty($_REQUEST['filepath']) && !file_exists($src_filename))
+	
+	//if (empty($_REQUEST['filepath']) && !file_exists($src_filename))
+	if($uid>0){
 		$imap->save_to_file($uid, $src_filename);
+		
+		$data = file_get_contents($src_filename);
+		if(strpos($data, "application/pkcs7-mime")) {		
+			
+			$cert = $smime->get_pkcs12_certificate($account_id);
+			$password = $_SESSION['GO_SESSION']['smime']['passwords'][$account_id];			
+			openssl_pkcs12_read ($cert['cert'], $certs, $password);
+			
+			$reldir='smimetmp/'.$GO_SECURITY->user_id.'/';
+			$dir = $GO_CONFIG->file_storage_path.$reldir;
+			File::mkdir($dir);
+
+			$outfilename=$dir.'unencrypted.txt';
+
+			$ret = openssl_pkcs7_decrypt($src_filename, $outfilename, $certs['cert'], array($certs['pkey'], $password));
+			
+			rename($outfilename, $src_filename);			
+		}
+		
+	}
 
 	if(!file_exists($src_filename))
 	{
-		die('Could not get message to verify the signature');
+		die('Could not get message from IMAP server to verify the signature');
 	}
-
+	//go_debug(file_get_contents($src_filename));
+	
 	$valid = openssl_pkcs7_verify($src_filename, null, $cert_filename, $smime->get_root_certificates());
 	unlink($src_filename);
-	if(!file_exists($cert_filename))
-	{
-		die('Could not get certificate from signature');
+//	if(!file_exists($cert_filename))
+//	{
+//		die('Could not get certificate from signature');
+//	}
+	if($valid){
+		if(file_exists($cert_filename)){
+			$cert = file_get_contents($cert_filename);
+			unlink($cert_filename);
+		}
+		
+		if(empty($cert))
+			die('Could not get certificate from signature');
 	}
-	$cert = file_get_contents($cert_filename);
-	unlink($cert_filename);
-	
-	
-	if(empty($cert))
-		die('Could not get certificate from signature');
 
 }else
 {
@@ -73,16 +97,17 @@ if(!empty($_REQUEST['account_id'])){
 	$cert = $cert['cert'];
 }
 
-$arr = openssl_x509_parse($cert);
+if(isset($cert)){
+	$arr = openssl_x509_parse($cert);
 
+	$email = String::get_email_from_string($arr['extensions']['subjectAltName']);
 
-$email = String::get_email_from_string($arr['extensions']['subjectAltName']);
-
-$existing_cert = $smime->get_public_certificate($GO_SECURITY->user_id, $email);
-if(!$existing_cert)
-	$smime->add_public_certificate($GO_SECURITY->user_id, $email, $cert);
-else if($existing_cert['cert']!=$cert){
-	$smime->update_public_certificate($existing_cert['id'], $cert);
+	$existing_cert = $smime->get_public_certificate($GO_SECURITY->user_id, $email);
+	if(!$existing_cert)
+		$smime->add_public_certificate($GO_SECURITY->user_id, $email, $cert);
+	else if($existing_cert['cert']!=$cert){
+		$smime->update_public_certificate($existing_cert['id'], $cert);
+	}
 }
 
 $GO_LANGUAGE->require_language_file('smime');
@@ -99,9 +124,9 @@ $GO_LANGUAGE->require_language_file('smime');
 <?php
 if(isset($_REQUEST['account_id'])){
 	if (!$valid) {
-		echo '<h1>'.$lang['smime']['invalidCert'].'</h1>';
+		echo '<h1 class="smi-invalid">'.$lang['smime']['invalidCert'].'</h1>';
 	} else {
-		echo '<h1>'.$lang['smime']['validCert'].'</h1>';
+		echo '<h1 class="smi-valid">'.$lang['smime']['validCert'].'</h1>';
 	}
 }
 

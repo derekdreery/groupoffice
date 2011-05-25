@@ -17,3 +17,13 @@
 	margin-top:4px;
 	padding:0px 0px 4px 20px;
 }
+
+.smi-valid{
+	background:url(images/valid.png) no-repeat;
+	padding:0px 0px 10px 20px;
+}
+
+.smi-invalid{
+	background:url(images/invalid.png) no-repeat;
+	padding:0px 0px 10px 20px;
+}

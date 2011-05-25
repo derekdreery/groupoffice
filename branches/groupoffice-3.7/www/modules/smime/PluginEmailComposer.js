@@ -68,8 +68,7 @@ GO.moduleManager.onModuleReady('email',function(){
 
 			var record = this.fromCombo.store.getById(this.fromCombo.getValue());
 				
-			if(!GO.smime.passwordsInSession[record.data.account_id] && this.sendParams['sign_smime']=="1"){
-				
+			if(!GO.smime.passwordsInSession[record.data.account_id] && (this.sendParams['sign_smime']=="1" || this.sendParams['encrypt_smime']=="1")){
 				
 				if(!this.passwordDialog)
 				{
