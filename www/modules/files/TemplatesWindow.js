@@ -227,7 +227,7 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 			},
 			
 			success: function(form, action) {
-				this.selectUser.setRemoteText(action.result.data.user_name);
+				//this.selectUser.setRemoteText(action.result.data.user_name);
 				this.readPermissionsTab.setAcl(action.result.data.acl_id);
 				this.downloadButton.setDisabled(false);										
 			},
