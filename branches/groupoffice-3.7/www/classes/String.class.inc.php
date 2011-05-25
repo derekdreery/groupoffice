@@ -822,6 +822,8 @@ class String {
 		$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u","</$1>", $html);
 		
 		$to_removed_array = array (
+		"'<!DOCTYPE[^>]*>'usi",
+		"'<!--.*-->'Uusi",
 		"'<html[^>]*>'usi",
 		"'</html>'usi",
 		"'<body[^>]*>'usi",
