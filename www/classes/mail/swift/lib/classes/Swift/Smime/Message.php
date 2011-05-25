@@ -90,15 +90,23 @@ class Swift_Smime_Message extends Swift_Message
 		 * and add them to the new structure later.
 		 */
 		$headers = $this->getHeaders();
+		
 		$headers->removeAll('MIME-Version');
-		$headers->removeAll('Content-Type');
+//		$headers->removeAll('Content-Type');
+		
 		$this->saved_headers = array();//$headers->toString();
 
 		$h= $headers->getAll();
 		foreach($h as $header){
-			$this->saved_headers[$header->getFieldName()]=$header->getFieldBody();
-			$headers->removeAll($header->getFieldName());
+			$name = $header->getFieldName();
+			
+			if($name != 'Content-Transfer-Encoding' && $name != 'Content-Type'){
+				$this->saved_headers[$name]=$header->getFieldBody();							
+				$headers->removeAll($name);
+			}
 		}
+		
+		
 		
 		/*
 		 * This class will stream the MIME structure to the tempin text file in 
