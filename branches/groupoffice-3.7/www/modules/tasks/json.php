@@ -146,6 +146,13 @@ try {
 
 			$response['data']['repeat_end_date']=$response['data']['repeat_end_time']>0 ? date($_SESSION['GO_SESSION']['date_format'], $response['data']['repeat_end_time']) : '';
 
+			if($response['data']['category_id']==0){
+				$response['data']['category_id']="";
+			}else
+			{
+				$category = $tasks->get_category($response['data']['category_id']);
+				$response['data']['category_name']=$category['name'];
+			}
 
 			$response['data']['remind']=$response['data']['reminder']>0;
 
