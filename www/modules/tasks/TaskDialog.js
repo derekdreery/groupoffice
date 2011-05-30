@@ -118,11 +118,10 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 					if(action.result.data.category_id == 0)
 					{
-						this.selectCategory.setRemoteText(GO.tasks.lang.selectCategory);
+						//this.selectCategory.setRemoteText(GO.tasks.lang.selectCategory);
 					}else
 					{
-						var category = GO.tasks.categoriesStore.getById(action.result.data.category_id);
-						this.selectCategory.setRemoteText(category.data.name);
+						this.selectCategory.setRemoteText(action.result.data.category_name);
 					}
 					
 				},
