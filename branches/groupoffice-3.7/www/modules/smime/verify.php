@@ -45,12 +45,12 @@ if(!empty($_REQUEST['account_id'])){
 	$src_filename = !empty($_REQUEST['filepath']) && empty($uid) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.eml';
 	$cert_filename = $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.crt';
 	
-	//if (empty($_REQUEST['filepath']) && !file_exists($src_filename))
-	if($uid>0){
+	if (empty($_REQUEST['filepath']) && !file_exists($src_filename) && $uid>0){
+	//if($uid>0){
 		$imap->save_to_file($uid, $src_filename);
 		
 		$data = file_get_contents($src_filename);
-		if(strpos($data, "application/pkcs7-mime")) {		
+		if(strpos($data, "application/pkcs7-mime") || strpos($data, "application/x-pkcs7-mime")) {		
 			
 			$cert = $smime->get_pkcs12_certificate($account_id);
 			$password = $_SESSION['GO_SESSION']['smime']['passwords'][$account_id];			
@@ -75,7 +75,7 @@ if(!empty($_REQUEST['account_id'])){
 	}
 	//go_debug(file_get_contents($src_filename));
 	
-	$valid = openssl_pkcs7_verify($src_filename, null, $cert_filename, $smime->get_root_certificates());
+	$valid = openssl_pkcs7_verify($src_filename, null, $cert_filename, smime::get_root_certificates());
 	unlink($src_filename);
 //	if(!file_exists($cert_filename))
 //	{
