@@ -1,4 +1,5 @@
 <?php
+$languages['ko']='한국어';
 $languages['ca']='Català';
 $languages['cn']='Chinese Simplified';
 $languages['zh-tw']='Chinese Traditional';
