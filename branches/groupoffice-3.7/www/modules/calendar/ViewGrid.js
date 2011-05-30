@@ -640,8 +640,8 @@ GO.grid.ViewGrid = Ext.extend(Ext.Panel, {
 					cls: cls,
 					style:"background-color:#"+eventData.background,
 					html: text,
-					qtitle:eventData.name,
-					qtip: GO.calendar.formatQtip(eventData),
+					"ext:qtitle":eventData.name,
+					"ext:qtip": GO.calendar.formatQtip(eventData),
 					tabindex:0//tabindex is needed for focussing and events
 				}, true);
 					

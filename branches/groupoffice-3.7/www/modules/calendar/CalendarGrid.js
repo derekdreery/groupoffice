@@ -1054,8 +1054,8 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				cls: cls,
 				style:"background-color:#"+eventData.background,
 				html: text,
-				qtip: GO.calendar.formatQtip(eventData),
-				qtitle:eventData.name,
+				"ext:qtip": GO.calendar.formatQtip(eventData),
+				"ext:qtitle":eventData.name,
 				tabindex:0//tabindex is needed for focussing and events
 			}, true);
 
@@ -1136,15 +1136,15 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		if(endRow>(this.scale-1))
 		{
 			endRow=this.scale-1;
-		}
+		}		
 		var event = this.gridContainer.insertFirst(
 		{
 			tag: 'div',
 			id: domId,
 			cls: "x-calGrid-event-container",
 			style:"background-color:#"+eventData.background,
-			qtip: GO.calendar.formatQtip(eventData),
-			qtitle:eventData.name,
+			"ext:qtip": GO.calendar.formatQtip(eventData),
+			"ext:qtitle":eventData.name,
 			html:text,
 			tabindex:0//tabindex is needed for focussing and events
 		});
