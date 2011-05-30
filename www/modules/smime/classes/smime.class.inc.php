@@ -24,7 +24,7 @@ class smime extends db{
 	}
 	
 	
-	public function get_root_certificates(){
+	public static function get_root_certificates(){
 		
 		global $GO_CONFIG;
 		
@@ -144,8 +144,10 @@ class smime extends db{
 	public function decrypt_message(&$message, cached_imap $imap){
 		
 		global $GO_MODULES, $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $lang;
-		
-		if(!$message['from_cache'] && $message['content-type']=='application/pkcs7-mime'){
+			
+		go_debug('decrypt_message');
+
+		if(!$message['from_cache'] && ($message['content-type']=='application/pkcs7-mime' || $message['content-type']=='application/x-pkcs7-mime')){
 			
 			
 			$smime = new smime();
@@ -228,8 +230,8 @@ class smime extends db{
 			
 			$decrypted_message = $ml->get_message_for_client(0, $reldir.'unencrypted.txt','');
 			
-			
-			unlink($outfilename);
+			//can't unlink the file here because we need it for showing inline images etc.
+			//unlink($outfilename);
 			
 			//go_debug($decrypted_message);
 			
