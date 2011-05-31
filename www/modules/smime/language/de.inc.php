@@ -1,5 +1,5 @@
 <?php
-//require($GO_LANGUAGE->get_fallback_language_file('smime'));
+require($GO_LANGUAGE->get_fallback_language_file('smime'));
 
 $lang['smime']['name']='SMIME Unterstützung';
 $lang['smime']['description']='Erweitert das E-Mailmodul mith SMIME-Signatur und -Verschlüsselung.';
@@ -11,5 +11,5 @@ $lang['smime']['badGoLogin']="Das Group-Office-Kennwort war nicht korrekt.";
 $lang['smime']['smime_pass_matches_go']="Ihr SMIME-Schlüsselkennwort entspricht Ihrem Group-Office-Kennwort. Dies widerspricht den Sicherheitsrichtlinien!";
 $lang['smime']['smime_pass_empty']="Ihr SMIME-Schlüssel ist nicht durch ein Kennwort geschützt. Dies widerspricht den Sicherheitsrichtlinien!";
 
-$lang['smime']['invalidCert']="Das Zentrifikat ist ungültig!";
+$lang['smime']['invalidCert']="Das Zertifikat ist ungültig!";
 $lang['smime']['validCert']="Gültiges Zertifikat";
