@@ -255,7 +255,7 @@ class smime extends db{
 
 			$cert = $smime->get_pkcs12_certificate($swift->account['id']);
 
-			$swift->message->setSignParams($cert['cert'], $password);
+			$swift->message->setSignParams($cert['cert'], $password, isset($GO_CONFIG->smime_sign_extra_certs) ? $GO_CONFIG->smime_sign_extra_certs : "");
 		}
 		
 		if(!empty($_POST['encrypt_smime'])){		
