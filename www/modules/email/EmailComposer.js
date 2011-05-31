@@ -734,13 +734,13 @@ GO.email.EmailComposer = function(config) {
 		
 		this.setEditorHeight();
 	}, this);
-		
+
 	this.attachmentsView = new Ext.DataView({
 		store:this.attachmentsStore,
 		tpl: new Ext.XTemplate(
 			GO.email.lang.attachments+':'+
-			'<div style="overflow-x:hidden" id="'+this.attachmentsId+'" tabindex="0" class="em-attachments-container">'+
 			'<tpl for=".">',
+			'<div style="overflow-x:hidden" id="'+this.attachmentsId+'" tabindex="0" class="em-attachments-container" >'+
 			'<span class="filetype-link filetype-{extension} attachment-wrap x-unselectable" unselectable="on" style="float:left" id="'+'{tmp_name}'+'">{name} ({human_size})</span>'+
 			'</tpl>'+
 			'</div>',
@@ -755,7 +755,7 @@ GO.email.EmailComposer = function(config) {
 		
 		listeners:{
 			contextmenu:this.onAttachmentContextMenu,
-			//			dblclick:this.openAttachment,
+			dblclick:this.downloadTemporaryAttachment,
 			scope:this,
 			render:function(){
 				this.attachmentsView.getEl().tabIndex=0;
@@ -1981,6 +1981,32 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		
 		this.htmlEditor.syncSize();
 		this.formPanel.doLayout();
+	},
+
+	downloadTemporaryAttachment : function(dv, index, node, e ) {
+
+		var record = dv.store.getAt(index);
+
+		Ext.Ajax.request({
+				url: GO.settings.modules.email.url+'json.php',
+				params:{
+					task: 'create_download_hash',
+					filename: record.data.name
+				},
+				callback: function(options, success, response)
+				{
+					if(!success)
+					{
+						alert( GO.lang['strRequestError']);
+					}else
+					{
+						var jsonData = Ext.decode(response.responseText);
+						var code = jsonData.code;
+						document.location=GO.settings.modules.email.url+'download_file.php?filename='+encodeURIComponent(record.data.name)+'&code='+code;
+					}
+				},
+				scope:this
+			});
 	},
 
 	onAttachmentContextMenu : function(dv, index, node, e)
