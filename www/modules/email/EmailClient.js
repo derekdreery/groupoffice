@@ -808,28 +808,30 @@ GO.email.EmailClient = function(config){
 		store:this.messagesGrid.store
 	});
 	
-	var settingsMenu = [{
-		iconCls: 'btn-accounts',
-		text: GO.email.lang.accounts,
-		cls: 'x-btn-text-icon',
-		handler: function(){
-			this.showAccountsDialog();
-		},
-		scope: this
-	},{
-		iconCls:'btn-toggle-window',
-		text: GO.email.lang.toggleWindowPosition,
-		cls: 'x-btn-text-icon',
-		handler: function(){
-			this.moveGrid();
-		},
-		scope: this
-	}];
+	this.settingsMenu = new Ext.menu.Menu({
+		items:[{
+			iconCls: 'btn-accounts',
+			text: GO.email.lang.accounts,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.showAccountsDialog();
+			},
+			scope: this
+		},{
+			iconCls:'btn-toggle-window',
+			text: GO.email.lang.toggleWindowPosition,
+			cls: 'x-btn-text-icon',
+			handler: function(){
+				this.moveGrid();
+			},
+			scope: this
+		}]
+	});
 	
 	if(GO.gnupg)
 	{
-		settingsMenu.push('-');
-		settingsMenu.push({
+		this.settingsMenu.add('-');
+		this.settingsMenu.add({
 			iconCls:'gpg-btn-settings',
 			cls: 'x-btn-text-icon',
 			text:GO.gnupg.lang.encryptionSettings,
@@ -867,9 +869,7 @@ GO.email.EmailClient = function(config){
 	{
 		iconCls: 'btn-settings',
 		text:GO.lang.administration,
-		menu: {
-			items: settingsMenu
-		}
+		menu: this.settingsMenu
 	},{
 		iconCls: 'btn-refresh',
 		text: GO.lang.cmdRefresh,

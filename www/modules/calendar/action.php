@@ -1268,7 +1268,7 @@ try {
 			}
 
 			$response['success'] = false;
-			if($event_id && $offset)
+			if($event_id)
 			{
 				$event = $cal->get_event($event_id);
 				if($event)

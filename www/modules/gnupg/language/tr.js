@@ -1,6 +1,6 @@
 
 
-GO.gnupg.lang.encryptionSettings='Şifreleme ayarları';
+GO.gnupg.lang.encryptionSettings='GPG Şifreleme ayarları';
 GO.gnupg.lang.keys='Anahtarlar';
 GO.gnupg.lang.comment='Görüş';
 GO.gnupg.lang.genKey='Yeni anahtar çifti oluştur';

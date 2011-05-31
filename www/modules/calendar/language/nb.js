@@ -124,3 +124,4 @@ GO.calendar.lang.globalsettings_allchangelabel= 'Gi nytt navn til alle eksistere
 GO.calendar.lang.globalsettings_renameall= 'Er du sikker på at du vil gi nytt navn til alle brukernes standarkalendere?';
 GO.calendar.lang.publishICS='Publiser en iCalendarfil med forrige måned og alle framridige hendelser. ADVARSEL! Kalenderen vil være lesbar for alle.';
 GO.calendar.lang.addTimeRegistration='Importer til timeregistrering';
+GO.calendar.lang.showNotBusy='Ikke sett nye reservasjoner som opptatt';

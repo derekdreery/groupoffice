@@ -113,3 +113,6 @@ $updates[] = "ALTER TABLE `ab_contacts` CHANGE `email3` `email3` VARCHAR( 100 ) 
 $updates[] = "ALTER TABLE `ab_companies` ADD `name2` VARCHAR( 100 ) NULL AFTER `name` ";
 //was missing from instal file
 $updates[]= "ALTER TABLE `ab_companies` ADD `crn` VARCHAR( 50 ) NOT NULL ,ADD `iban` VARCHAR( 100 ) NOT NULL ";
+
+$updates[]="DELETE FROM go_links_2 WHERE link_id=0 OR id=0;";
+$updates[]="DELETE FROM go_links_3 WHERE link_id=0 OR id=0;";

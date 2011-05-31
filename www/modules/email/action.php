@@ -607,9 +607,6 @@ try {
 						{
 							//save e-mail in IMAP drafts folder
 
-							if($swift->account['type']!='imap') {
-								throw new Exception($lang['email']['noSaveWithPop3']);
-							}
 							if(empty($swift->account['drafts'])) {
 								throw new Exception($lang['email']['draftsDisabled']);
 							}
@@ -642,8 +639,7 @@ try {
 
 						if(!empty($_POST['draft_uid'])) {
 							$swift->set_draft($_POST['draft_uid']);
-						}
-						
+						}						
 						
 						$GO_EVENTS->fire_event("sendmail",array(&$swift));
 
@@ -746,7 +742,7 @@ try {
 			}
 
 			if($imap->create_folder($new_folder_name)) {
-
+				$folder=array();
 				$folder['account_id']=$account['id'];
 				$folder['name']=$new_folder_name;
 				$folder['parent_id']=$parent_id;
@@ -1058,10 +1054,13 @@ try {
 
 									$server_response = $sc->send_request($GO_CONFIG->serverclient_server_url.'modules/postfixadmin/action.php', $params);
 
-									$server_response = json_decode($server_response, true);
+									$decoded = json_decode($server_response, true);
+									
+									if(!isset($decoded['success']))
+										throw new Exception('Serverclient Could not connect to '.$GO_CONFIG->serverclient_server_url.': '.$server_response);
 
-									if(!$server_response['success']) {
-										throw new Exception($server_response['feedback']);
+									if(!$decoded['success']) {
+										throw new Exception($decoded['feedback']);
 									}
 									break;
 								}

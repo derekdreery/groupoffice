@@ -226,6 +226,7 @@ $countries['UZ'] = 'Usbekistan';
 $countries['VU'] = 'Vanuatu';
 $countries['VA'] = 'Vatikanstaten';
 $countries['VE'] = 'Venezuela';
+$countries['VN']= 'Vietnam';
 $countries['VG'] = 'De britiske jomfruøyene';
 $countries['VI'] = 'De amerikanske jomfruøyene';
 $countries['WF'] = 'Wallis og Futuna';

@@ -340,6 +340,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					}
 
 					this.selectCategory.container.up('div.x-form-item').setDisplayed(this.formPanel.form.baseParams['group_id']==1);
+					
+					if(action.result.data.category_name)
+						this.selectCategory.setRemoteText(action.result.data.category_name);
 					/*if(this.formPanel.form.baseParams['group_id'] == 1)
 					{
 						this.selectCategory.setValue(GO.calendar.lang.selectCategory);

@@ -335,6 +335,16 @@ try {
 			$id = isset($_REQUEST['id']) ? ($_REQUEST['id']) : 0;
 			$path = isset($_REQUEST['path']) ? ($_REQUEST['path']) : "";
 			$part_number = isset($_REQUEST['part_number']) ? ($_REQUEST['part_number']) : "";
+			
+			
+			if(isset($_REQUEST['file_id'])){
+				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+				$files = new files();
+				$file = $files->get_file($_REQUEST['file_id']);
+				$path = $files->build_path($file['folder_id']).'/'.$file['name'];
+				
+			}
+				
 
 			require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 			$ml = new mailings();
@@ -346,8 +356,9 @@ try {
 
 		switch($task) {
 			case "reply":
-			case "reply_all":
+			case "reply_all":				
 				$response['data']['in_reply_to']=$content['message-id'];
+				
 				$response['data']['to'] = $content["reply-to"];
 				if(stripos($content['subject'],'Re:')===false) {
 					$response['data']['subject'] = 'Re: '.$content['subject'];
@@ -360,7 +371,7 @@ try {
 			case "forward":
 
 				if($task == 'opendraft') {
-					$response['data']['to']=$content['to_string'];
+					$response['data']['to']='';//$content['to_string'];
 					$response['data']['subject'] = $content['subject'];
 
 				}else {

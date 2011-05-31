@@ -333,7 +333,12 @@ try {
 
 					foreach($users as $user_id) {
 						if($GO_SECURITY->user_owns_acl($user_id, $acl_id)) {
-							throw new Exception($lang['common']['dontChangeOwnersPermissions']);
+							if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)){
+								$GO_SECURITY->chown_acl($GO_SECURITY->user_id, $GO_SECURITY->user_id);
+							}else
+							{
+								throw new Exception($lang['common']['dontChangeOwnersPermissions']);
+							}
 						}
 						$GO_SECURITY->delete_user_from_acl($user_id, $acl_id);
 

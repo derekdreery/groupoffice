@@ -1749,6 +1749,11 @@ class calendar extends db {
 			$cal = new calendar();
 			$duration = $event['end_time'] - $event['start_time'];
 			if($duration == 0) $duration = 3600;
+			
+			if(!empty($event['all_day_event'])){				
+				//For DST offsets
+				$duration_days = round($duration/86400);
+			}
 
 			$calculated_event=$event;
 
@@ -1767,7 +1772,12 @@ class calendar extends db {
 			while($calculated_event['start_time'] = Date::get_next_recurrence_time($first_occurrence_time, $calculated_event['start_time'], $duration, $event['rrule'])) {
 				$loops++;
 
-				$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
+				if(empty($event['all_day_event'])){
+					$calculated_event['end_time'] = $calculated_event['start_time']+$duration;
+				}else
+				{
+					$calculated_event['end_time'] = Date::date_add($calculated_event['start_time'], $duration_days)-60;
+				}
 
 				//go_debug($calculated_event['name'].': '.date('Ymd G:i', $calculated_event['start_time']).' - '.date('Ymd G:i', $calculated_event['end_time']));
 
@@ -1906,6 +1916,12 @@ class calendar extends db {
 			if($delete_related && !empty($event_id)) {
 				$cal = new calendar();
 				$sql = "SELECT id FROM cal_events WHERE resource_event_id=".intval($event_id);
+				$cal->query($sql);
+				while($cal->next_record()) {
+					$this->delete_event($cal->f('id'),false);
+				}
+
+				$sql = "SELECT id FROM cal_events WHERE exception_for_event_id=".intval($event_id);
 				$cal->query($sql);
 				while($cal->next_record()) {
 					$this->delete_event($cal->f('id'),false);
@@ -2934,7 +2950,14 @@ class calendar extends db {
 	 */
 	function update_category($category)
 	{
+		
+		
 		$r = $this->update_row('cal_categories', 'id', $category);
+		
+		if($r && isset($category['color'])){
+			$sql = "UPDATE cal_events SET background='".$this->escape($category['color'])."' WHERE category_id=".intval($category['id']);
+			$this->query($sql);
+		}
 		return $r;
 	}
 	/**

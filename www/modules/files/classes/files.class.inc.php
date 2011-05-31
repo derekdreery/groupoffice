@@ -1250,6 +1250,13 @@ class files extends db {
 		$this->query($sql, $types, $params);
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
+	
+	function count_files($folder_id){
+		$sql = "SELECT count(*) AS count FROM fs_files WHERE folder_id=".intval($folder_id);		
+		$this->query($sql);
+		$r = $this->next_record();
+		return $r['count'];
+	}
 
         function get_file_ids_recursively($folder_id)
         {
