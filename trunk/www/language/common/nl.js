@@ -408,5 +408,12 @@ GO.lang.link='Koppeling';
 GO.lang.savedQueries='Opgeslagen zoekopdrachten';
 GO.lang.searchQueryName = 'Naam zoekopdracht';
 GO.lang.enterSearchQueryName = 'Voer de naam in';
+GO.lang.pleaseEnterASearchTerm='Voer een zoekterm in aub.';
+GO.lang.advancedSearch='Geavanceerd zoeken';
+
+GO.lang.strUsersInGroup = 'Gebruikers in groep';
+
+GO.lang.matchDuplicates='Zoek naar duplicaten';
+GO.lang.showFirstDuplicateOnly='Toon alleen het eerste duplicaat';
 
 GO.lang.advancedSearch='Geavanceerd zoeken';

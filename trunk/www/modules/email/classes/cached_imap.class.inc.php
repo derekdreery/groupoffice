@@ -51,8 +51,6 @@ class cached_imap extends imap{
 		global $GO_CONFIG;
 		
 		$this->disable_message_cache=$GO_CONFIG->debug;
-		go_debug("WARNING: IMAP message cache is disabled");
-
 	}
 
 	public function is_imap(){
@@ -462,8 +460,6 @@ class cached_imap extends imap{
 		$message=$this->imap_message_to_cache($headers, true);
 		
 		$message['from_cache']=false;
-
-		go_debug($message['message-id']);
 		
 		if(!$message){
 			throw new Exception($lang['email']['errorGettingMessage']);
@@ -477,7 +473,7 @@ class cached_imap extends imap{
 
 		$message['sender']=isset($address[0]['email']) ? $address[0]['email'] : '';
 		$message['from']=isset($address[0]['personal']) ? $address[0]['personal'] : '';
-
+		
 		$message['reply-to']=empty($message['reply-to']) ? $message['full_from'] : $RFC822->reformat_address_list($message['reply-to']);
 
 		if(isset($message['disposition-notification-to'])){
@@ -723,7 +719,7 @@ class cached_imap extends imap{
 
 		$struct = $this->get_message_structure($message['uid']);
 
-		//go_debug($struct);
+		go_debug($struct);
 
 		if(count($struct)==1) {
 			$header_ct = explode('/', $message['content-type']);

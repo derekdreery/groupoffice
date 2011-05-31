@@ -20,6 +20,19 @@ require('/usr/share/groupoffice/cli-functions.inc.php');
 
 $args = parse_cli_args($argv);
 
+if(empty($args['domain'])){
+	
+	echo 'Usage : php export_domain.php --domain=example.com --targethost="newmailserver.com
+		
+	Optional: 
+	--go_config=/etc/groupoffice/config.php
+	--go_root=/usr/share/groupoffice	
+
+';
+	
+	exit();
+}
+
 $vmail = is_dir('/vmail') ? '/vmail' : '/home/vmail';
 
 if(!isset($args['go_root']))
@@ -75,6 +88,9 @@ file_put_contents($sql_file, "\n---\n\n", FILE_APPEND);
 
 $pa->get_aliases($domain_id);
 while($record = $pa->next_record()){
+	
+	$record['domain_id']='{domain_id}';
+	
 	$sql = $sql_export->array_to_insert('pa_aliases', $record, 'INSERT IGNORE').";\n";
 	file_put_contents($sql_file, $sql, FILE_APPEND);
 }

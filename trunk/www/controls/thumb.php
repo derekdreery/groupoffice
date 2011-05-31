@@ -79,15 +79,18 @@ if (!is_dir($cache_dir)) {
 $filename = basename($path);
 $file_mtime = filemtime($full_path);
 
+
 $cache_filename = str_replace(array('/', '\\'), '_', dirname($path)) . '_' . $w . '_' . $h . '_' . $lw . '_' . $lh . '_' . $pw . '_' . $lw;
 if ($zc) {
 	$cache_filename .= '_zc';
 }
+//$cache_filename .= '_'.filesize($full_path);
 $cache_filename .= $filename;
 
 $readfile = $cache_dir . '/' . $cache_filename;
+$thumb_mtime = filemtime($cache_dir . '/' . $cache_filename);
 
-if (!empty($_REQUEST['nocache']) || !file_exists($cache_dir . '/' . $cache_filename) || filemtime($cache_dir . '/' . $cache_filename) < $file_mtime) {
+if (!empty($_REQUEST['nocache']) || !file_exists($cache_dir . '/' . $cache_filename) || $thumb_mtime < $file_mtime || $thumb_mtime < filectime($full_path)) {
 	$image = new Image($full_path);
 	if (!$image->load_success) {
 		//failed. Stream original image

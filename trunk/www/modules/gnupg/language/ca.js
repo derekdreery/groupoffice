@@ -3,7 +3,7 @@
  */
 
 
-GO.gnupg.lang.encryptionSettings='Configuració d\'encriptació';
+GO.gnupg.lang.encryptionSettings='GPG Configuració d\'encriptació';
 GO.gnupg.lang.keys='Claus';
 GO.gnupg.lang.comment='Comentari';
 GO.gnupg.lang.genKey='Generar un nou parell de claus';

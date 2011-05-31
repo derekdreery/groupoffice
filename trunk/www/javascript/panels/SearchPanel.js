@@ -109,6 +109,14 @@ GO.grid.SearchPanel = function(config){
 			enableRowBody:true,
 			showPreview:true,			
 			emptyText:GO.lang.strNoItems,	
+			applyEmptyText : function() {
+					if (this.emptyText && !this.hasRows()) {
+
+							this.emptyText = this.ds.baseParams.query=='' ? GO.lang.pleaseEnterASearchTerm : GO.lang.strNoItems;
+
+							this.mainBody.update('<div class="x-grid-empty">' + this.emptyText + '</div>');
+					}
+			},
 			getRowClass : function(record, rowIndex, p, store){
 				if(this.showPreview && record.data.description.length){
 					p.body = '<div class="go-links-panel-description">'+record.data.description+'</div>';

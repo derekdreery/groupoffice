@@ -30,6 +30,10 @@ class Swift_Smime_Message extends Swift_Message
 	
 	protected $recipcerts;
 	
+	private $encrypted=false;
+	private $signed=false;
+	private $saved_headers=false;
+	
 	 /**
    * Create a new Message.
    * @param string $subject
@@ -64,83 +68,96 @@ class Swift_Smime_Message extends Swift_Message
 		$this->recipcerts=$recipcerts;	
 	}
 	
-	private function save_headers(){
-		go_debug('save_headers');	
-		
+	private function save_headers(){	
+		if(!$this->saved_headers){		
 			global $GO_CONFIG;			
-		
-		
-		$this->tempin = $GO_CONFIG->tmpdir."smime_tempin.txt";
-		$this->tempout=$GO_CONFIG->tmpdir."smime_tempout.txt";
-		if(file_exists($this->tempin))
-			unlink($this->tempin);
-		
-		if(file_exists($this->tempout))
-			unlink($this->tempout);
-		
-		File::mkdir($GO_CONFIG->tmpdir);
-		
-		/*
-		 * This class will stream the MIME structure to the tempin text file in 
-		 * a memory efficient way.
-		 */
-		$fbs = new Swift_ByteStream_FileByteStream($this->tempin, true);		
-		parent::toByteStream($fbs);
-		
-		if(!filesize($this->tempin))
-			throw new Exception('Could not write temporary message for signing');
-		
-		/*
-		 * Store the headers of the current message because the PHP function
-		 * openssl_pkcs7_sign will rebuilt the MIME structure and will put the main
-		 * headers in a nested mimepart. We don't want that so we remove them now 
-		 * and add them to the new structure later.
-		 */
-		$headers = $this->getHeaders();
-		$headers->removeAll('MIME-Version');
-		$headers->removeAll('Content-Type');
-		$this->saved_headers = $headers->toString();
 
-		$h= $headers->getAll();
-		foreach($h as $header){
-			$headers->removeAll($header->getFieldName());
-		}
+			$this->tempin = $GO_CONFIG->tmpdir."smime_tempin.txt";
+			$this->tempout=$GO_CONFIG->tmpdir."smime_tempout.txt";
+			if(file_exists($this->tempin))
+				unlink($this->tempin);
+
+			if(file_exists($this->tempout))
+				unlink($this->tempout);
+
+			File::mkdir($GO_CONFIG->tmpdir);
+
+			/*
+			 * Store the headers of the current message because the PHP function
+			 * openssl_pkcs7_sign will rebuilt the MIME structure and will put the main
+			 * headers in a nested mimepart. We don't want that so we remove them now 
+			 * and add them to the new structure later.
+			 */
+			$headers = $this->getHeaders();
+
+			$headers->removeAll('MIME-Version');
+	//		$headers->removeAll('Content-Type');
+
+			$this->saved_headers = array();//$headers->toString();
+
+			$ignored_headers = array('Content-Transfer-Encoding','Content-Type');
+
+			$h= $headers->getAll();
+			foreach($h as $header){
+				$name = $header->getFieldName();
+
+				if(!in_array($name, $ignored_headers)){
+					$this->saved_headers[$name]=$header->getFieldBody();							
+					$headers->removeAll($name);
+				}
+			}
+
+			/*
+			 * This class will stream the MIME structure to the tempin text file in 
+			 * a memory efficient way.
+			 */
+			$fbs = new Swift_ByteStream_FileByteStream($this->tempin, true);		
+			parent::toByteStream($fbs);
+
+			if(!file_exists($this->tempin))
+				throw new Exception('Could not write temporary message for signing');
+		}	
 	}
 	
 	private function do_sign(){		
 		
-		go_debug('do_sign');	
-	
-		openssl_pkcs12_read ($this->pkcs12_data, $certs, $this->passphrase);
-		
-		if(!is_array($certs)){
-			throw new Exception("Could not decrypt key");
+		if(!$this->signed){					
+			openssl_pkcs12_read ($this->pkcs12_data, $certs, $this->passphrase);
+			if(!is_array($certs)){
+				throw new Exception("Could not decrypt key");
+			}
+			
+			if(!file_exists($this->tempin))
+				throw new Exception('Failed to sign. Temp file disappeared');
+
+			openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers, PKCS7_DETACHED);
+			$this->signed=true;
 		}
-		
-		
-		openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), NULL);
 	}
 	
 	private function do_encrypt(){		
 		go_debug('do_encrypt');		
 		
-		if(file_exists($this->tempout)){
-			//message was signed. Create new input file.
-		
-			file_put_contents($this->tempin, $this->saved_headers);
-			
-			$fp = fopen($this->tempout, 'r');
-			if(!$fp)
-				throw new Exception('Could not read tempout file');
-			
-			while($line = fgets($fp)){			
-				file_put_contents($this->tempin, $line, FILE_APPEND);
+		if(!$this->encrypted){
+			if(file_exists($this->tempout)){
+				//message was signed. Create new input file.
+
+				file_put_contents($this->tempin, $this->saved_headers);
+
+				$fp = fopen($this->tempout, 'r');
+				if(!$fp)
+					throw new Exception('Could not read tempout file');
+
+				while($line = fgets($fp)){			
+					file_put_contents($this->tempin, $line, FILE_APPEND);
+				}
+				fclose($fp);			
+				unlink($this->tempout);
 			}
-			fclose($fp);			
-			unlink($this->tempout);
+
+			openssl_pkcs7_encrypt($this->tempin, $this->tempout,$this->recipcerts[0], $this->saved_headers);	
+			$this->encrypted=true;
 		}
-		
-		openssl_pkcs7_encrypt($this->tempin, $this->tempout,$this->recipcerts[0], array());	
 	}
   
 	
@@ -151,6 +168,7 @@ class Swift_Smime_Message extends Swift_Message
 			return parent::toString();
 		}
 		
+		$this->save_headers();
 		
 		if(!empty($this->pkcs12_data)){
 			$this->do_sign();
@@ -159,8 +177,8 @@ class Swift_Smime_Message extends Swift_Message
 		if(!empty($this->recipcerts)){
 			$this->do_encrypt();
 		}
-		
-		return $this->saved_headers.file_get_contents($this->tempout);
+
+		return file_get_contents($this->tempout);
 	}
 	
   /**
@@ -187,20 +205,16 @@ class Swift_Smime_Message extends Swift_Message
 			$this->do_encrypt();
 		}
 		
-		$is->write($this->saved_headers);
+		//$is->write($this->saved_headers);
 		
 		$fp = fopen($this->tempout, 'r');
 		if(!$fp)
 			throw new Exception('Could not read tempout file');
-		
-		$still_in_headers=true;
-		
-		while($line = fgets($fp)){				
-			if($still_in_headers && substr($line,0,19)=='Content-Disposition')
-				continue;
 			
-			if(empty($line))
-				$still_in_headers=false;
+		while($line = fgets($fp)){				
+			
+			//fix header name bug in php
+			$line = str_replace('application/x-pkcs7','application/pkcs7',$line);
 			
 			$is->write($line);
 		}
@@ -217,9 +231,6 @@ class Swift_Smime_Message extends Swift_Message
 		
 		if(file_exists($this->tempin))
 			unlink($this->tempin);
-
-	}
-  
- 
+	} 
 }
 

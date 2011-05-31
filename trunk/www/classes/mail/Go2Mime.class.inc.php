@@ -151,6 +151,8 @@ class Go2Mime
 		$this->response['cc'] = isset($structure->headers['cc']) ? $structure->headers['cc'] : '';
 		$this->response['bcc'] = isset($structure->headers['bcc']) ? $structure->headers['bcc'] : '';
 		$this->response['reply-to']=isset($structure->headers['reply-to']) ? $structure->headers['reply-to'] : $this->response['sender'];
+		
+		$this->response['message-id']=isset($structure->headers['message-id']) ? $structure->headers['message-id'] : "";
 
 		//in some cases decoding lead to
 		if(is_array($this->response['subject']))

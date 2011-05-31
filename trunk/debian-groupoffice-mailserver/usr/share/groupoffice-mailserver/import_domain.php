@@ -13,12 +13,25 @@
  */
 
 /**
- * Usage : php export_domain.php --domain=example.com"
+ * Usage : php import_domain.php --domain=example.com"
  */
 chdir(dirname(__FILE__));
 require('/usr/share/groupoffice/cli-functions.inc.php');
 
 $args = parse_cli_args($argv);
+
+if(empty($args['domain'])){
+	
+	echo 'Usage : php import_domain.php --domain=example.com
+		
+	Optional: 
+	--go_config=/etc/groupoffice/config.php
+	--go_root=/usr/share/groupoffice	
+
+';
+	
+	exit();
+}
 
 $vmail = is_dir('/vmail') ? '/vmail' : '/home/vmail';
 

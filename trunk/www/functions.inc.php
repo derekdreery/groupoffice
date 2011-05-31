@@ -301,7 +301,7 @@ function go_infolog($message){
 			$_SESSION['GO_SESSION']['logdircheck']=true;
 		}
 		
-		$msg = '['.date('Y-m-dm G:i').']';
+		$msg = '['.date('Y-m-d G:i:s').']';
 		
 		if(!empty($_SESSION['GO_SESSION']['username'])){
 			$msg .= '['.$_SESSION['GO_SESSION']['username'].'] ';
@@ -434,7 +434,7 @@ function get_thumb_url($path, $w=100,$h=100,$zc=1) {
 			case 'png':
 			case 'gif':
 			case 'xmind':
-				return $GO_CONFIG->control_url.'thumb.php?src='.urlencode($path).'&w='.$w.'&h='.$h.'&zc='.$zc.'&filemtime='.@filemtime($GO_CONFIG->file_storage_path.$path);
+				return $GO_CONFIG->control_url.'thumb.php?src='.urlencode($path).'&w='.$w.'&h='.$h.'&zc='.$zc.'&filemtime='.@filemtime($GO_CONFIG->file_storage_path.$path).'&filectime='.@filectime($GO_CONFIG->file_storage_path.$path);
 				break;
 
 			case 'pdf':

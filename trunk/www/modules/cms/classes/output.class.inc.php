@@ -157,6 +157,18 @@ class cms_output extends cms {
 		$item = $this->resolve_url($path,$this->site['root_folder_id']);
 
 		if(!$item) {
+			
+			header("HTTP/1.0 404 Not Found");
+      header("Status: 404 Not Found");
+			
+			echo '<h1>404 Not found</h1>';
+			echo '<p>Sorry the page you requested was not found on this server.</p>';
+			
+			echo '<a href="'.$this->create_href_by_path("").'">Go to the website</a>';
+			
+			exit();
+			
+			
 			$this->find_file($this->site['root_folder_id']);
 			if($this->file) {
 				$this->file['path']=$this->file['name'];
@@ -440,7 +452,7 @@ class cms_output extends cms {
 		//When we start with a level or root_folder_id we don't
 		//know the current path yet. If rewrte is enabled we need to know
 		//the path for mod_rewrite to work.
-		if(!isset($path) && $this->site['enable_rewrite']=='1') {
+		if(!isset($path)){// && $this->site['enable_rewrite']=='1') {
 			$path = $this->build_path($folder_id, true, $this->site['root_folder_id']);
 		}
 

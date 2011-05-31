@@ -37,7 +37,7 @@ try {
 			$file = $files->get_file($_POST['file_id']);
 			$up_file['id'] = $file['id'];
 			$expire_time = isset($_POST['expire_time']) ? $_POST['expire_time'] : $file['expire_time'];
-			$random_code = $up_file['random_code'] = isset($file['random_code']) ? $file['random_code'] : String::random_password('a-z,1-9','i,o',11);
+			$random_code = $up_file['random_code'] = !empty($file['random_code']) ? $file['random_code'] : String::random_password('a-z,1-9','i,o',11);
 
 			$up_file['expire_time']=Date::date_add($expire_time, 1);
 			$files->update_file($up_file);
@@ -721,7 +721,8 @@ try {
 							}
 						}
 					}else {
-						$files->get_files($curfolder['id'], $fsort, $dir, 0, 1);
+						//$files->get_files($curfolder['id'], $fsort, $dir, 0, 1);
+						$response['total']+=$files->count_files($curfolder['id']);
 					}
 				}
 
@@ -830,11 +831,11 @@ try {
 				case 'png':
 				case 'xmind':
 					$response['data']['image_src'] = get_thumb_url($path,350,0,false);
-					$response['data']['image_path'] = $path;
+					$response['data']['image_path'] = urlencode($path);
 					$response['data']['image_name'] = basename($path);
 					$response['data']['image_extension'] = $extension;
 					if ($extension=='xmind')
-						$response['data']['download_path'] = $GO_MODULES->modules['files']['url'].'download.php?path='.$path;
+						$response['data']['download_path'] = $GO_MODULES->modules['files']['url'].'download.php?path='.urlencode($path);
 					else
 						$response['data']['download_path'] = '';
 					break;

@@ -23,6 +23,42 @@ class smime extends db{
 		$events->add_listener('all_aliases', __FILE__, 'smime','add_smime_info_to_aliases');
 	}
 	
+	
+	public static function get_root_certificates(){
+		
+		global $GO_CONFIG;
+		
+		$certs=array();
+		
+//		if(isset($GO_CONFIG->smime_root_cert_location)){
+//			
+//			$GO_CONFIG->smime_root_cert_location=rtrim($GO_CONFIG->smime_root_cert_location, '/');		
+//			
+//			if(is_dir($GO_CONFIG->smime_root_cert_location)){				
+//							
+//				$dir = opendir($GO_CONFIG->smime_root_cert_location);
+//				if ($dir) {
+//					while ($item = readdir($dir)) {
+//						if ($item != '.' && $item != '..') {
+//							$certs[] = $GO_CONFIG->smime_root_cert_location.'/'.$item;
+//						}
+//					}
+//					closedir($dir);
+//				}
+//			}elseif(file_exists($GO_CONFIG->smime_root_cert_location)){
+//				$certs[]=$GO_CONFIG->smime_root_cert_location;
+//			}
+//		}
+//		
+		if(file_exists($GO_CONFIG->smime_root_cert_location)){
+				$certs[]=$GO_CONFIG->smime_root_cert_location;
+			}
+		
+		//var_dump($certs);
+		
+		return $certs;
+	}
+	
 	public function add_smime_info_to_aliases(&$response){
 		
 		$account_certs=array();
@@ -30,11 +66,12 @@ class smime extends db{
 		$smime = new smime();
 		
 		if(isset($response['aliases'])){
-			$arr = &$response['aliases'];
+			$arr = &$response['aliases']['results'];
 		}else
 		{
 			$arr = &$response['results'];
 		}
+	
 		
 		foreach($arr as &$alias){
 	
@@ -63,7 +100,7 @@ class smime extends db{
 		global $GO_CONFIG, $GO_LANGUAGE, $lang;
 		
 		
-		
+		$cert = '';
 		
 		if (isset($_FILES['cert']['tmp_name'][0]) && is_uploaded_file($_FILES['cert']['tmp_name'][0])) {
 			
@@ -90,12 +127,10 @@ class smime extends db{
 			}
 			
 		}
-		if(isset($_POST['delete_cert']))
-			$cert = '';
-		
+				
 		$smime = new smime();
 			
-		$smime->set_pkcs12_certificate($account['id'], isset($cert) ? $cert : null, isset($_POST['always_sign']));			
+		$smime->set_pkcs12_certificate($account['id'], $cert, isset($_POST['always_sign']), isset($_POST['delete_cert']));			
 		
 		
 		$cert = $smime->get_pkcs12_certificate($account['id']);
@@ -109,20 +144,22 @@ class smime extends db{
 	public function decrypt_message(&$message, cached_imap $imap){
 		
 		global $GO_MODULES, $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $lang;
-		
-		if(!$message['from_cache'] && $message['content-type']=='application/pkcs7-mime'){
+			
+		go_debug('decrypt_message');
+
+		if(!$message['from_cache'] && ($message['content-type']=='application/pkcs7-mime' || $message['content-type']=='application/x-pkcs7-mime')){
 			
 			
 			$smime = new smime();
 			$cert = $smime->get_pkcs12_certificate($message['account_id']);
 			
-			if(!$cert)
+			if(!$cert || empty($cert['cert']))
 				throw new Exception("No key was found to decrypt the message!");
 			
 			
 			if(isset($_POST['password']))
 				$_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']]=$_POST['password'];
-			
+
 			if(!isset($_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']])){
 				$message['askPassword']=true;
 				return false;
@@ -176,11 +213,12 @@ class smime extends db{
 				return false;
 			}
 			
-			openssl_pkcs7_decrypt($infilename, $outfilename, $certs['cert'], array($certs['pkey'], $password));
+			
+			$return = openssl_pkcs7_decrypt($infilename, $outfilename, $certs['cert'], array($certs['pkey'], $password));
 			
 			unlink($infilename);
 			
-			if(!file_exists($outfilename) || !filesize($outfilename)){
+			if(!$return || !file_exists($outfilename) || !filesize($outfilename)){
 				//throw new Exception("Could not decrypt message");
 				$GO_LANGUAGE->require_language_file('smime');
 				$message['html_body']=$lang['smime']['noPrivateKeyForDecrypt'];
@@ -192,7 +230,10 @@ class smime extends db{
 			
 			$decrypted_message = $ml->get_message_for_client(0, $reldir.'unencrypted.txt','');
 			
-			unlink($reldir.'unencrypted.txt');
+			//can't unlink the file here because we need it for showing inline images etc.
+			//unlink($outfilename);
+			
+			//go_debug($decrypted_message);
 			
 			$message['html_body']=$decrypted_message['body'];
 			$message['attachments']=$decrypted_message['attachments'];
@@ -219,6 +260,16 @@ class smime extends db{
 		
 		if(!empty($_POST['encrypt_smime'])){		
 			
+			if(!isset($cert)){
+				$cert = $smime->get_pkcs12_certificate($swift->account['id']);
+			}
+			$password = $_SESSION['GO_SESSION']['smime']['passwords'][$swift->account['id']];
+			openssl_pkcs12_read ($cert['cert'], $certs, $password);
+
+			if(!isset($certs['cert']))
+				throw new Exception("Failed to get your public key for encryption");				
+
+			
 			$to = $swift->message->getTo();
 			
 			$cc = $swift->message->getCc();
@@ -233,7 +284,7 @@ class smime extends db{
 			
 			//lookup all recipients
 			$failed=array();
-			$public_certs=array();
+			$public_certs=array($certs['cert']);
 			foreach($to as $email=>$name){
 				$cert = $smime->get_public_certificate($GO_SECURITY->user_id, $email);				
 				if(!$cert){
@@ -267,16 +318,36 @@ class smime extends db{
 		return $id;
 	}
 	
-	public function get_public_certificates($user_id, $email=''){
+	public function update_public_certificate($id, $cert){		
+		return $this->update_row('smi_certs', 'id', array(
+				'id'=>$id,
+				'cert'=>$cert
+				));
+	}
+	
+	public function get_public_certificates($user_id, $query='',$start=0, $limit=0){
 		
-		$sql = "SELECT * FROM smi_certs WHERE user_id=".intval($user_id);
+		$sql = "SELECT ";
 		
-		if($email!=''){
-			$sql .= " AND email='".$this->escape($email)."'";
+		if($limit>0)
+			$sql .= " SQL_CALC_FOUND_ROWS";
+		
+		$sql .= "* FROM smi_certs WHERE user_id=".intval($user_id);
+		
+		if($query!=''){
+			$sql .= " AND email LIKE '".$this->escape($query)."'";
 		}
+		
+		$sql .= ' ORDER BY email ASC';
+		
+		if($limit>0)
+		{
+			$sql .= ' LIMIT '.intval($start).','.intval($limit);
+		}
+		
 		$this->query($sql);
 		
-		return $this->num_rows();		
+		return $limit > 0 ? $this->found_rows() : $this->num_rows();		
 	}
 	
 	public function get_public_certificate($user_id, $email){
@@ -284,20 +355,44 @@ class smime extends db{
 		return $this->next_record();
 	}
 	
+	public function get_public_certificate_by_id($cert_id){
+		$sql = "SELECT * FROM smi_certs WHERE id=".intval($cert_id);
+		$this->query($sql);
+		return $this->next_record();
+	}
+	
+	public function delete_public_certificate($id){
+		$sql = "DELETE FROM smi_certs WHERE id=".intval($id);
+		return $this->query($sql);
+	}
 	
 	
-	public function set_pkcs12_certificate($account_id, $cert, $always_sign){
-		$up['account_id']=$account_id;
+	
+	public function set_pkcs12_certificate($account_id, $cert, $always_sign, $delete_cert){
 		
-		$types='ii';
-		if(isset($cert)){
-			$up['cert']=$cert;
-			$types='ibi';
+		//the code below doesn't work due to bug: http://bugs.php.net/bug.php?id=53483
+//		$up['account_id']=$account_id;
+//		
+//		$types='ii';
+//		if(isset($cert)){
+//			$up['cert']=$cert;
+//			$types='ibi';
+//		}
+//		
+//		$up['always_sign']=$always_sign;	
+//		
+//		return $this->replace_row('smi_pkcs12',$up,$types,false);		
+		
+		$sql = "INSERT IGNORE INTO smi_pkcs12 (account_id) VALUES (".intval($account_id).")";
+		$this->query($sql);
+		
+		$sql = "UPDATE smi_pkcs12 SET ";
+		if(!empty($cert) || $delete_cert){
+			$sql .= 'cert="'.addslashes($cert).'",';
 		}
+		$sql .= 'always_sign='.intval($always_sign).' WHERE account_id='.intval($account_id);
 		
-		$up['always_sign']=$always_sign;
-		
-		return $this->replace_row('smi_pkcs12',$up,$types,false);		
+		return $this->query($sql);
 	}
 	
 	public function get_pkcs12_certificate($account_id){

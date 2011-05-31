@@ -23,6 +23,25 @@ class tasks extends db
 		$events->add_listener('check_database', __FILE__, 'tasks', 'check_database');
 		$events->add_listener('load_global_settings', __FILE__, 'tasks','load_global_settings');
 		$events->add_listener('save_global_settings', __FILE__, 'tasks','save_global_settings');
+		$events->add_listener('checker', __FILE__, 'tasks', 'notification_icon');
+
+	}
+	
+	public static function notification_icon(&$response) {
+		global $GO_SECURITY, $GO_MODULES;
+		
+		$now = Date::date_add(mktime(0,0,0),1);
+
+		$db = new db();
+		
+		$sql = "SELECT count(*) AS active FROM ta_tasks t INNER JOIN ta_lists l ON l.id=t.tasklist_id ".
+			"WHERE t.user_id=".$GO_SECURITY->user_id." AND t.completion_time=0 AND t.start_time<".$now;
+						
+		$db->query($sql);
+		$r = $db->next_record();
+
+		$response['tasks']['active'] =  $r['active'];
+
 	}
 
 	public static function load_global_settings(&$response)

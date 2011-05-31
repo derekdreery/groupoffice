@@ -1,4 +1,4 @@
-GO.gnupg.lang.encryptionSettings='Krypteringsinställningar';
+GO.gnupg.lang.encryptionSettings='GPG Krypteringsinställningar';
 GO.gnupg.lang.keys='Nycklar';
 GO.gnupg.lang.comment='Kommentar';
 GO.gnupg.lang.genKey='Skapa nytt nyckelpar';

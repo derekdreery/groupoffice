@@ -354,6 +354,8 @@ GO.calendar.MainPanel = function(config){
 		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'num_participants']
 	});
 	
+	this.daysGridStore.on('load', this.setCalendarBackgroundColors, this);
+	
 	this.monthGridStore = new GO.data.JsonStore({
 		url: GO.settings.modules.calendar.url+'json.php',
 		baseParams: {
@@ -363,6 +365,8 @@ GO.calendar.MainPanel = function(config){
 		id: 'id',
 		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count', 'num_participants']
 	});
+	
+	this.monthGridStore.on('load', this.setCalendarBackgroundColors, this);
 
 	GO.calendar.daysGrid = this.daysGrid = new GO.grid.CalendarGrid(
 	{
@@ -417,6 +421,8 @@ GO.calendar.MainPanel = function(config){
 		border: false,
 		firstWeekday: parseInt(GO.settings.first_weekday)
 	});
+	
+	this.listGrid.store.on('load', this.setCalendarBackgroundColors, this);
 
 	this.daysGrid.store.on('load', function(){
 	    GO.checker.params.calendar_calendars = this.daysGrid.store.baseParams.calendars;
@@ -756,6 +762,30 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	calendarId : 0,
 	viewId : 0,
 	group_id: 1,
+	
+	setCalendarBackgroundColors : function(){
+
+		
+		var view = this.calendarList.getView();
+		view.refresh();
+		
+		var store = this.getActivePanel().store;
+		
+		if(store.reader.jsonData.backgrounds){
+			
+			
+			var rowIndex;
+			
+			for(var cal_id in store.reader.jsonData.backgrounds){							
+				rowIndex = this.calendarList.store.indexOfId(cal_id);		
+				if(rowIndex>-1){
+					var rowEl = Ext.get(view.getRow(rowIndex));		
+					if(rowEl)
+						rowEl.applyStyles("background-color: #"+store.reader.jsonData.backgrounds[cal_id]);				
+				}
+			}
+		}
+	},
 
 
 	onShow : function(){        

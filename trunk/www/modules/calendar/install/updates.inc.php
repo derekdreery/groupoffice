@@ -120,6 +120,7 @@ $updates[]="ALTER TABLE  `cal_groups` ADD `show_not_as_busy` BOOL NOT NULL ;";
 $updates[]="ALTER TABLE  `cal_calendars` ADD  `public` BOOL NOT NULL ;";
 
 $updates[]="ALTER TABLE `cal_events` ADD `exception_for_event_id` INT NOT NULL";
+$updates[]="ALTER TABLE `cal_events` ADD INDEX ( `exception_for_event_id` ) ";
 $updates[]= "CREATE TABLE IF NOT EXISTS `cf_21` (
   `link_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`link_id`)
@@ -136,3 +137,4 @@ $updates[] = "CREATE TABLE IF NOT EXISTS `go_links_21` (
   KEY `id` (`id`,`folder_id`),
   KEY `ctime` (`ctime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+

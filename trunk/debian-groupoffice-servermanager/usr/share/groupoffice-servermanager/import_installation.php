@@ -19,6 +19,22 @@ require('/usr/share/groupoffice/Group-Office.php');
 
 $args = parse_cli_args($argv);
 
+if(empty($args['domain'])){
+	
+	echo 'Usage:
+  ((to use this file, type the next line in the console))
+  php import_installation.php --domain=[sourcedomain] --targethost=[remotehost]
+ 
+  optional:
+ 	--go_config=[pathtoconfigfile]
+ 	--targetpath=[destinationpath]
+  --targethostport=[portoftargethostssh]
+	--rename_domain=[olddomainname]
+';
+	
+	exit();
+}
+
 // Checken of het te importeren domein opgegeven is.
 if(!isset($args['domain']))
 	die("The domain argument is required\n\n");
