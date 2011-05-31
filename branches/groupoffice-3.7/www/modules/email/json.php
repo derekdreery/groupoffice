@@ -1481,6 +1481,15 @@ try {
 				}
 				break;
 
+			case 'create_download_hash':
+				global $GO_SECURITY;
+				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				$GO_USERS = new GO_USERS();
+				$user = $GO_USERS->get_user($GO_SECURITY->user_id);
+				$response['code'] = md5($user['username'].$user['password'].$_REQUEST['filename']);
+				$response['success'] = true;
+				break;
+
 			/* {TASKSWITCH} */
 		}
 	}
