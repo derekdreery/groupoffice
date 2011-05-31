@@ -27,6 +27,7 @@ class Swift_Smime_Message extends Swift_Message
 	protected $tempin;
 	protected $pkcs12_data;
 	protected $passphrase;
+	protected $extra_certs=array();
 	
 	protected $recipcerts;
 	
@@ -56,11 +57,12 @@ class Swift_Smime_Message extends Swift_Message
 	 * @param type $passphrase 
 	 */
 	
-	public function setSignParams($pkcs12_data, $passphrase){
+	public function setSignParams($pkcs12_data, $passphrase, $extra_certs=array()){
 	
 		
 		$this->pkcs12_data=$pkcs12_data;
 		$this->passphrase=$passphrase;
+		$this->extra_certs=$extra_certs;
 	}
 	
 	public function setEncryptParams($recipcerts){
@@ -130,7 +132,12 @@ class Swift_Smime_Message extends Swift_Message
 			if(!file_exists($this->tempin))
 				throw new Exception('Failed to sign. Temp file disappeared');
 
-			openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers, PKCS7_DETACHED);
+			if(empty($this->extra_certs)){
+				openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers, PKCS7_DETACHED);
+			}else
+			{
+				openssl_pkcs7_sign($this->tempin, $this->tempout,$certs['cert'], array($certs['pkey'], $this->passphrase), $this->saved_headers, PKCS7_DETACHED, $this->extra_certs);
+			}
 			$this->signed=true;
 		}
 	}
