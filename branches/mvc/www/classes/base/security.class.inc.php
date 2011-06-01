@@ -739,7 +739,7 @@ class GO_SECURITY extends db {
 
 	/**
 	 * Checks if a user has permission for a ACL
-	 *
+	 * @deprecated
 	 * @param	int			$user_id	The user that needs authentication
 	 * @param	int			$acl_id	The ACL to check
 	 * @param bool 		$groups_only only check user groups and no individual access
@@ -768,6 +768,32 @@ class GO_SECURITY extends db {
 		}
 		return false;
 	}
+	
+	function hasPermission($acl_id, $groups_only=false, $user_id=0) {
+		global $GO_CONFIG;
+		
+		if($user_id==0)
+			$user_id=$this->user_id;
+
+		if ($user_id > 0 && $acl_id > 0) {
+			$sql = "SELECT a.acl_id, a.level FROM go_acl a ".
+				"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ".
+				"WHERE a.acl_id=".intval($acl_id)." AND ".
+				"(ug.user_id=".intval($user_id);
+			
+			if(!$groups_only)
+				$sql .= " OR a.user_id=".intval($user_id).") ORDER BY a.level DESC";
+			else
+				$sql .= ")";
+
+		$this->query($sql);
+			if($this->next_record()) {
+				return $this->f('level');
+			}
+		}
+		return false;
+	}
+
 
 
 	function get_user_group_ids($user_id=0) {

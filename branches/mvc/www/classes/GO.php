@@ -3,9 +3,9 @@
 class GO {
 
 	private static $_classes = array(
-			'Module' => 'classes/classes/base/Module.php',
-			'Controller' => 'classes/classes/base/Controller.php',
-			'Router' => 'classes/classes/base/Router.php',
+			'Module' => 'classes/base/Module.php',
+			'BaseController' => 'classes/base/BaseController.php',
+			'Router' => 'classes/base/Router.php',
 			'File' => 'classes/File.class.inc.php',
 			'String' => 'classes/String.class.inc.php',
 			'Number' => 'classes/Number.class.inc.php',
