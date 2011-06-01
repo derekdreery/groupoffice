@@ -244,7 +244,7 @@ class smime extends db{
 	}
 	
 	public function sendmail(GoSwift &$swift){
-		global $GO_SECURITY, $GO_LANGUAGE, $lang;
+		global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $lang;
 		
 		$smime = new smime();
 		
