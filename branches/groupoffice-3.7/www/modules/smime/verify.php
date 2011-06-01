@@ -42,7 +42,7 @@ if(!empty($_REQUEST['account_id'])){
 	$tmpdir = $GO_CONFIG->tmpdir . 'smime/verify/';
 	File::mkdir($tmpdir);
 
-	$src_filename = !empty($_REQUEST['filepath']) && empty($uid) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.eml';
+	$src_filename = !empty($_REQUEST['filepath']) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.eml';
 	$cert_filename = $tmpdir . $uid . '_' . $mailbox . '_' . $account_id . '.crt';
 	
 	if (empty($_REQUEST['filepath']) && !file_exists($src_filename) && $uid>0){
