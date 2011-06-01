@@ -18,13 +18,13 @@
 require('Group-Office.php');
 session_write_close();
 
-$file = $GO_CONFIG->file_storage_path.'cache/'.basename($_REQUEST['file']);
+$file = GO::config()->file_storage_path.'cache/'.basename($_REQUEST['file']);
 
 $ext = File::get_extension($file);
 
 $type = $ext =='js' ? 'text/javascript' : 'text/css';
 
-$use_compression = $GO_CONFIG->use_zlib_compression();
+$use_compression = GO::config()->use_zlib_compression();
 
 if($use_compression){
 	ob_start();

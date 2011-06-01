@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-require($GO_LANGUAGE->get_fallback_language_file('mailings'));
+require(GO::language()->get_fallback_language_file('mailings'));
 $lang['mailings']['name'] = 'E-mail sjablonen en adreslijsten';
 $lang['mailings']['description'] = 'Voegt e-mail sjablonen en adreslijsten toe aan het adresboek.';
 

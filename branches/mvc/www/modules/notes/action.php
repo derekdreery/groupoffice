@@ -14,10 +14,10 @@
 
 
 require_once("../../Group-Office.php");
-$GO_SECURITY->json_authenticate('notes');
+GO::security()->json_authenticate('notes');
 
-require_once ($GO_MODULES->modules['notes']['class_path']."notes.class.inc.php");
-//require_once ($GO_LANGUAGE->get_language_file('notes'));
+require_once (GO::modules()->modules['notes']['class_path']."notes.class.inc.php");
+//require_once (GO::language()->get_language_file('notes'));
 
 $notes = new notes();
 
@@ -30,19 +30,19 @@ try{
 		case 'save_category':
 				
 			$category_id=$category['id']=isset($_POST['category_id']) ? ($_POST['category_id']) : 0;
-			$category['user_id'] = (isset($_REQUEST['user_id']) && $_REQUEST['user_id']) ? $_REQUEST['user_id'] : $GO_SECURITY->user_id;
+			$category['user_id'] = (isset($_REQUEST['user_id']) && $_REQUEST['user_id']) ? $_REQUEST['user_id'] : GO::security()->user_id;
 			$category['name']=$_POST['name'];
 
 			if($category['id']>0)
 			{
 				$old_category = $notes->get_category($category['id']);
 				
-				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $old_category['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+				if(GO::security()->has_permission(GO::security()->user_id, $old_category['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 				{
 					throw new AccessDeniedException();
 				}
 
-				if(!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+				if(!GO::security()->has_admin_permission(GO::security()->user_id))
 				{
 					unset($category['user_id']);
 				}
@@ -52,7 +52,7 @@ try{
 
 			}else
 			{				
-				$response['acl_id']=$category['acl_id']=$GO_SECURITY->get_new_acl('notes', $category['user_id']);
+				$response['acl_id']=$category['acl_id']=GO::security()->get_new_acl('notes', $category['user_id']);
 				
 				$category_id= $notes->add_category($category);							
 
@@ -66,7 +66,7 @@ try{
 			
 			$category = $notes->get_category((trim($_POST['category_id'])));
 			
-			if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+			if(GO::security()->has_permission(GO::security()->user_id, $category['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 			{
 				throw new AccessDeniedException();
 			}
@@ -82,7 +82,7 @@ try{
 				$insert=false;
 			}else
 			{
-				$note['user_id']=$GO_SECURITY->user_id;
+				$note['user_id']=GO::security()->user_id;
 				
 				$note_id= $notes->add_note($note, $category);
 
@@ -92,16 +92,16 @@ try{
 			}
 			
 			
-			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission'])
+			if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission'])
 			{
-				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
-				$cf->update_fields($GO_SECURITY->user_id, $note_id, 4, $_POST, $insert);
+				$cf->update_fields(GO::security()->user_id, $note_id, 4, $_POST, $insert);
 			}			
 			
-			if(!empty($_POST['tmp_files']) && $GO_MODULES->has_module('files'))
+			if(!empty($_POST['tmp_files']) && GO::modules()->has_module('files'))
 			{
-				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+				require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
 				$files = new files();
 				$fs = new filesystem();
 				
@@ -112,7 +112,7 @@ try{
 				while($tmp_file = array_shift($tmp_files))
 				{
 					if(!empty($tmp_file['tmp_file'])){
-						$new_path = $GO_CONFIG->file_storage_path.$path.'/'.$tmp_file['name'];
+						$new_path = GO::config()->file_storage_path.$path.'/'.$tmp_file['name'];
 						$fs->move($tmp_file['tmp_file'], $new_path);
 						$files->import_file($new_path, $note['files_folder_id']);
 					}
@@ -121,7 +121,7 @@ try{
 				
 			if(!empty($_POST['link']))
 			{
-				require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+				require_once(GO::config()->class_path.'base/links.class.inc.php');
 				$GO_LINKS = new GO_LINKS();
 				
 				$link_props = explode(':', $_POST['link']);

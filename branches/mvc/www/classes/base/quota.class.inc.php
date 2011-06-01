@@ -7,8 +7,8 @@ class quota {
 	function __construct(){
 		global $GO_CONFIG;
 		
-		$this->quota=$GO_CONFIG->quota;
-		$this->usage = intval($GO_CONFIG->get_setting('file_storage_usage'));
+		$this->quota=GO::config()->quota;
+		$this->usage = intval(GO::config()->get_setting('file_storage_usage'));
 		
 	}
 	
@@ -19,14 +19,14 @@ class quota {
 	function set($usage){
 		global $GO_CONFIG;
 		$this->usage=$usage;
-		return $GO_CONFIG->save_setting('file_storage_usage', $usage);		
+		return GO::config()->save_setting('file_storage_usage', $usage);		
 	}
 	
 	function reset(){
 		global $GO_CONFIG;
 		
-		$this->usage = ceil(File::get_directory_size($GO_CONFIG->file_storage_path));
-		return $GO_CONFIG->save_setting('file_storage_usage', $this->usage);
+		$this->usage = ceil(File::get_directory_size(GO::config()->file_storage_path));
+		return GO::config()->save_setting('file_storage_usage', $this->usage);
 	}
 	
 	function check($usage)

@@ -1,3 +1,10 @@
+Replace
+
+$GLOBALS['GO_SECURITY']->
+$GO_SECURITY->
+GO::security()->
+
+
 31/05/2011 3.7.21
 - Worked around PHP bug in smime functions for older php versions.
 - Calendar tooltip was broken due to ExtJS upgrade

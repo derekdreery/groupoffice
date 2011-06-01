@@ -1,5 +1,5 @@
 <?php
-require($GO_LANGUAGE->get_fallback_base_language_file('common'));
+require(GO::language()->get_fallback_base_language_file('common'));
 $lang['common']['about']='Version: %s
 
 Copyright (c) 2003-%s, Intermesh

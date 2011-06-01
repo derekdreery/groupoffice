@@ -13,12 +13,12 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once("../../Group-Office.php");
-$GO_SECURITY->json_authenticate('groups');
-require_once($GO_LANGUAGE->get_language_file('groups'));
+GO::security()->json_authenticate('groups');
+require_once(GO::language()->get_language_file('groups'));
 
-$GO_SECURITY->check_token();
+GO::security()->check_token();
 
-require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+require_once(GO::config()->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 
 $action = isset($_REQUEST['action']) ? ($_REQUEST['action']) : null;
@@ -44,14 +44,14 @@ try {
 			$response['success'] = true;
 			$response['feedback'] = $feedback;
 
-			if(!$GO_MODULES->modules['groups']['write_permission'])
+			if(!GO::modules()->modules['groups']['write_permission'])
 				$admin_only=-1;
 			else
 				$admin_only = isset($_POST['admin_only'])? 1 : 0;
 
 			if ($group_id < 1) {
 
-				if(!$GO_MODULES->modules['groups']['write_permission'])
+				if(!GO::modules()->modules['groups']['write_permission'])
 				{
 					throw new AccessDeniedException();
 				}
@@ -61,10 +61,10 @@ try {
 					$response['feedback'] = $lang['groups']['groupNameAlreadyExists'];
 					$response['success'] = false;
 				} else {
-					$acl_id = $GO_SECURITY->get_new_acl('group', $GO_SECURITY->user_id);
-					$new_group_id = $GO_GROUPS->add_group($GO_SECURITY->user_id, $name, $admin_only, $acl_id);
+					$acl_id = GO::security()->get_new_acl('group', GO::security()->user_id);
+					$new_group_id = $GO_GROUPS->add_group(GO::security()->user_id, $name, $admin_only, $acl_id);
 					if (!$new_group_id) {
-						$GO_SECURITY->delete_acl($acl_id);
+						GO::security()->delete_acl($acl_id);
 						throw new DatabaseInsertException();
 					} else {
 						$response['group_id'] = $new_group_id;
@@ -79,7 +79,7 @@ try {
 				}
 			}
 
-			$GO_EVENTS->fire_event('save_group', array($group_id, $name, &$response));
+			GO::events()->fire_event('save_group', array($group_id, $name, &$response));
 
 
 			break;

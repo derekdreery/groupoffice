@@ -15,7 +15,7 @@
 header('Content-Type: text/html; charset=UTF-8');
 require('Group-Office.php');
 
-require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+require_once(GO::config()->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 $user = $GO_USERS->get_user_by_username($_REQUEST['username']);
@@ -26,27 +26,27 @@ if(!$user || $_REQUEST['code1']!=md5($user['password']) || $_REQUEST['code2']!=m
 }
 
 
-require_once($GO_CONFIG->class_path.'smarty/Smarty.class.php');
+require_once(GO::config()->class_path.'smarty/Smarty.class.php');
 
-require($GO_LANGUAGE->get_base_language_file('lostpassword'));
+require(GO::language()->get_base_language_file('lostpassword'));
 
-require_once($GO_CONFIG->class_path.'base/theme.class.inc.php');
+require_once(GO::config()->class_path.'base/theme.class.inc.php');
 $GO_THEME = new GO_THEME();
 
-$theme = is_dir($GO_THEME->theme_path.'smarty') ? $GO_CONFIG->theme : 'Default';
+$theme = is_dir($GO_THEME->theme_path.'smarty') ? GO::config()->theme : 'Default';
 
 $smarty = new Smarty();
-$smarty->template_dir=$GO_CONFIG->root_path.'themes/'.$theme.'/smarty';
-$smarty->compile_dir=$GO_CONFIG->tmpdir.'templates_c';
+$smarty->template_dir=GO::config()->root_path.'themes/'.$theme.'/smarty';
+$smarty->compile_dir=GO::config()->tmpdir.'templates_c';
 if(!is_dir($smarty->compile_dir))
 	mkdir($smarty->compile_dir,0755, true);
 
-$smarty->assign('title', $GO_CONFIG->title);
+$smarty->assign('title', GO::config()->title);
 
 $smarty->assign('subtitle', $lang['lostpassword']['lost_password']);
 
-$smarty->assign('go_url', $GO_CONFIG->host);
-$smarty->assign('theme_url', $GO_CONFIG->host.'themes/'.$theme.'/');
+$smarty->assign('go_url', GO::config()->host);
+$smarty->assign('theme_url', GO::config()->host.'themes/'.$theme.'/');
 $smarty->assign('lang', $lang);
 
 

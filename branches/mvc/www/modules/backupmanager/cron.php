@@ -15,15 +15,15 @@ if(isset($argv[1]))
 chdir(dirname(__FILE__));
 require_once('../../Group-Office.php');
 
-//echo $GO_CONFIG->get_config_file();
+//echo GO::config()->get_config_file();
 
-if(!isset($GO_MODULES->modules['backupmanager']))
+if(!isset(GO::modules()->modules['backupmanager']))
 {
     echo "Backupmanager is not installed\n";
     exit();
 }
 
-require_once($GO_MODULES->modules['backupmanager']['class_path'].'backupmanager.class.inc.php');
+require_once(GO::modules()->modules['backupmanager']['class_path'].'backupmanager.class.inc.php');
 $backupmanager = new backupmanager();
 
 $output = array();
@@ -32,7 +32,7 @@ $settings = $backupmanager->get_settings();
 // Check for settings to be available
 if($settings && $settings['running'] == 1)
 {
-	$settings['rkey'] = $GO_CONFIG->file_storage_path.'.ssh/id_rsa';
+	$settings['rkey'] = GO::config()->file_storage_path.'.ssh/id_rsa';
 	if(file_exists($settings['rkey']))
 	{
 			if(fsockopen($settings['rmachine'], $settings['rport']))
@@ -61,7 +61,7 @@ if($settings && $settings['running'] == 1)
 					// Check for first run
 					$firstRun = 0;
 
-					if($GO_CONFIG->get_setting('backupmanager_first_run'))
+					if(GO::config()->get_setting('backupmanager_first_run'))
 					{
 						$firstRun = 1;
 					}
@@ -71,10 +71,10 @@ if($settings && $settings['running'] == 1)
 					//echo $parameters."\n\n";
 
 					// start backup
-					system($GO_MODULES->modules['backupmanager']['path'].'rsync_backup.sh '.$parameters, $ret);
+					system(GO::modules()->modules['backupmanager']['path'].'rsync_backup.sh '.$parameters, $ret);
 
 					if(empty($ret) && $firstRun)
-						$GO_CONFIG->delete_setting('backupmanager_first_run');
+						GO::config()->delete_setting('backupmanager_first_run');
 
 					exit();
 			}else

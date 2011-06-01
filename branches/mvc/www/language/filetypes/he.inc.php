@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
+require(GO::language()->get_fallback_base_language_file('filetypes'));
 $htmldirection='rtl';
 $charset='UTF-8';
 

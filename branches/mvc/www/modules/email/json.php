@@ -18,17 +18,17 @@ require('../../Group-Office.php');
 
 if(!isset($_REQUEST['task']))
 {
-	$GO_CONFIG->log=true;
+	GO::config()->log=true;
 	go_log(LOG_DEBUG, "No task param: ".var_export($_REQUEST, true));
 }
 
 
-$GO_SECURITY->json_authenticate('email');
+GO::security()->json_authenticate('email');
 
 
 if(!isset($_REQUEST['task']))
 {
-	$GO_CONFIG->log=true;
+	GO::config()->log=true;
 	go_log(LOG_DEBUG, "No task param: ".var_export($_REQUEST, true));
 }
 
@@ -38,10 +38,10 @@ if(!isset($_POST['password']) && $_REQUEST['task']!='attachments'){
 	session_write_close();
 }
 
-require_once ($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
-require_once ($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
-require_once ($GO_LANGUAGE->get_language_file('email'));
-require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+require_once (GO::modules()->modules['email']['class_path']."cached_imap.class.inc.php");
+require_once (GO::modules()->modules['email']['class_path']."email.class.inc.php");
+require(GO::language()->get_language_file('email'));
+require_once(GO::config()->class_path.'filesystem.class.inc');
 
 $imap = new cached_imap();
 $email = new email();
@@ -85,7 +85,7 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 
 	if(!$user_id)
 	{
-	    $user_id = $GO_SECURITY->user_id;
+	    $user_id = GO::security()->user_id;
 	}
 
 	$email = new email();
@@ -221,7 +221,7 @@ function get_mailbox_nodes($account_id, $folder_id, $user_id=0) {
 function find_alias_and_recipients() {
 	global $GO_CONFIG, $email, $account_id, $response, $content, $task;
 
-	require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
+	require_once(GO::config()->class_path.'mail/RFC822.class.inc');
 	$RFC822 = new RFC822();
 
 	$aliases = array();
@@ -338,7 +338,7 @@ try {
 			
 			
 			if(isset($_REQUEST['file_id'])){
-				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+				require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
 				$files = new files();
 				$file = $files->get_file($_REQUEST['file_id']);
 				$path = $files->build_path($file['folder_id']).'/'.$file['name'];
@@ -346,7 +346,7 @@ try {
 			}
 				
 
-			require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
+			require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
 			$ml = new mailings();
 
 			$content = $ml->get_message_for_client($id, $path, $part_number, $task=='forward', true);
@@ -408,8 +408,8 @@ try {
 		if(isset($content)){
 			$response['data']['body']=$content['body'];
 
-			if($GO_MODULES->has_module('gnupg')) {
-				require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+			if(GO::modules()->has_module('gnupg')) {
+				require_once(GO::modules()->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 				$gnupg = new gnupg();
 				$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$content['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$content['sender']] : '';
 				$response['data']['body'] = $gnupg->replace_encoded($response['data']['body'],$passphrase,false);
@@ -520,7 +520,7 @@ try {
 				$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 30;
 				$query = !empty($_POST['query']) ? '%'.trim($_POST['query']).'%' : '';
 				
-				$response['total']=$email->get_usernames($GO_SECURITY->user_id, $query, $start, $limit);
+				$response['total']=$email->get_usernames(GO::security()->user_id, $query, $start, $limit);
 				$response['results']=array();
 				
 				while($r=$email->next_record()){
@@ -532,8 +532,8 @@ try {
 
 			case 'init_composer':
 
-				if($GO_MODULES->has_module('mailings')){
-					require_once($GO_MODULES->modules['mailings']['class_path'].'templates.class.inc.php');
+				if(GO::modules()->has_module('mailings')){
+					require_once(GO::modules()->modules['mailings']['class_path'].'templates.class.inc.php');
 					$tp = new templates();
 
 					$tp->get_templates_json($response['templates']);
@@ -541,7 +541,7 @@ try {
 
 				
 
-				$response['aliases']['total'] = $email->get_all_aliases($GO_SECURITY->user_id);
+				$response['aliases']['total'] = $email->get_all_aliases(GO::security()->user_id);
 				$response['aliases']['results']=array();
 				while($alias = $email->next_record()) {
 					$alias['name']='"'.$alias['name'].'" <'.$alias['email'].'>';
@@ -551,14 +551,14 @@ try {
 					$response['aliases']['results'][] = $alias;
 				}
 				
-				$GO_EVENTS->fire_event('init_composer', array(&$response, $email));
+				GO::events()->fire_event('init_composer', array(&$response, $email));
 
 				break;
 
 
 
 			case 'icalendar_attachment':
-				if(!isset($GO_MODULES->modules['calendar']) || !$GO_MODULES->modules['calendar']['read_permission']) {
+				if(!isset(GO::modules()->modules['calendar']) || !GO::modules()->modules['calendar']['read_permission']) {
 					throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));
 				}
 
@@ -566,10 +566,10 @@ try {
 				$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding']);
 				$imap->disconnect();
 
-				require_once($GO_CONFIG->class_path.'Date.class.inc.php');
-				require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
+				require_once(GO::config()->class_path.'Date.class.inc.php');
+				require_once(GO::modules()->modules['calendar']['class_path'].'calendar.class.inc.php');
 				$cal = new calendar();
-				require_once($GO_CONFIG->class_path.'ical2array.class.inc');
+				require_once(GO::config()->class_path.'ical2array.class.inc');
 				$ical2array = new ical2array();
 
 				$vcalendar = $ical2array->parse_string($data);
@@ -654,9 +654,9 @@ try {
 				$data = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
 
 				$response=array();
-				$inline_url = $GO_MODULES->modules['email']['url'].'mimepart.php?account_id='.$_REQUEST['account_id'].'&mailbox='.urlencode(($_REQUEST['mailbox'])).'&uid='.($_REQUEST['uid']).'&imap_id='.$_REQUEST['imap_id'].'&encoding='.urlencode($_REQUEST['encoding']);
+				$inline_url = GO::modules()->modules['email']['url'].'mimepart.php?account_id='.$_REQUEST['account_id'].'&mailbox='.urlencode(($_REQUEST['mailbox'])).'&uid='.($_REQUEST['uid']).'&imap_id='.$_REQUEST['imap_id'].'&encoding='.urlencode($_REQUEST['encoding']);
 
-				require_once($GO_CONFIG->class_path.'mail/Go2Mime.class.inc.php');
+				require_once(GO::config()->class_path.'mail/Go2Mime.class.inc.php');
 				$go2mime = new Go2Mime();
 
 				$response['blocked_images']=0;
@@ -667,7 +667,7 @@ try {
 
 			case 'message':
 
-				require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
+				require_once(GO::config()->class_path.'mail/RFC822.class.inc');
 				$RFC822 = new RFC822();
 
 				$account_id = $_REQUEST['account_id'];
@@ -705,11 +705,11 @@ try {
 				$response['account_id']=$account_id;
 
 				$response['sender_contact_id']=0;
-				if(!empty($_POST['get_contact_id']) && $GO_MODULES->has_module('addressbook')) {
-					require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+				if(!empty($_POST['get_contact_id']) && GO::modules()->has_module('addressbook')) {
+					require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 					$ab = new addressbook();
 
-					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
+					$contact = $ab->get_contact_by_email($response['sender'], GO::security()->user_id);
 					$response['company']= $contact['company_id'] > 0 ? $ab->get_company($contact['company_id']) : false;
 					$response['sender_contact_id']=intval($contact['id']);
 
@@ -748,8 +748,8 @@ try {
 
 				//$response['size']=Number::format_size($response['size']);
 
-				if($GO_MODULES->has_module('gnupg')) {
-					require_once($GO_MODULES->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+				if(GO::modules()->has_module('gnupg')) {
+					require_once(GO::modules()->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 					$gnupg = new gnupg();
 					$passphrase = !empty($_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']]) ? $_SESSION['GO_SESSION']['gnupg']['passwords'][$response['sender']] : '';
 					if(isset($_POST['password'])) {
@@ -775,17 +775,17 @@ try {
 				$block_images=true;
 				if(!empty($_POST['unblock'])) {
 					$block_images=false;
-				}elseif($GO_MODULES->has_module('addressbook')) {
-					require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+				}elseif(GO::modules()->has_module('addressbook')) {
+					require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 					$ab = new addressbook();
 
-					$contact = $ab->get_contact_by_email($response['sender'], $GO_SECURITY->user_id);
+					$contact = $ab->get_contact_by_email($response['sender'], GO::security()->user_id);
 					$block_images = !is_array($contact);
 				}
 
 				if($block_images) {
 
-					$block_url = 'about:blank';//$GO_CONFIG->host.'ext/resources/images/default/s.gif';
+					$block_url = 'about:blank';//GO::config()->host.'ext/resources/images/default/s.gif';
 					$response['body'] = preg_replace("/<([^a]{1})([^>]*)(https?:[^>'\"]*)/iu", "<$1$2".$block_url, $response['body'], -1, $response['blocked_images']);
 				}
 
@@ -795,18 +795,18 @@ try {
 					$attachment = $response['attachments'][$i];
 					if(($attachment['subtype'] == 'calendar') && ($attachment['extension'] == 'ics'))
 					{
-						if(!isset($GO_MODULES->modules['calendar']) || !$GO_MODULES->modules['calendar']['read_permission']) {
+						if(!isset(GO::modules()->modules['calendar']) || !GO::modules()->modules['calendar']['read_permission']) {
 							throw new Exception(sprintf($lang['common']['moduleRequired'], $lang['email']['calendar']));
 						}
 
 						$data = $imap->get_message_part_decoded($uid, $attachment['imap_id'], $attachment['encoding']);
 
-						require_once($GO_CONFIG->class_path.'Date.class.inc.php');
-						require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
+						require_once(GO::config()->class_path.'Date.class.inc.php');
+						require_once(GO::modules()->modules['calendar']['class_path'].'calendar.class.inc.php');
 						$cal = new calendar();
-						require_once($GO_CONFIG->class_path.'ical2array.class.inc');
+						require_once(GO::config()->class_path.'ical2array.class.inc');
 						$ical2array = new ical2array();
-						require_once($GO_LANGUAGE->get_language_file('calendar'));
+						require_once(GO::language()->get_language_file('calendar'));
 
 						$vcalendar = $ical2array->parse_string($data);
 						while($object = array_shift($vcalendar[0]['objects']))
@@ -821,7 +821,7 @@ try {
 							throw new Exception($lang['common']['selectError']);
 						}
 
-						$event = $cal->get_event_by_uuid($cal_event['uuid'], $GO_SECURITY->user_id);
+						$event = $cal->get_event_by_uuid($cal_event['uuid'], GO::security()->user_id);
 
 						$method = isset($vcalendar[0]['METHOD']['value']) ? $vcalendar[0]['METHOD']['value'] : '';											
 						switch($method)
@@ -960,12 +960,12 @@ try {
 					$account_id=$matches[1];
 
 					//ensure dir is there
-					File::mkdir($GO_CONFIG->file_storage_path.dirname($path));
+					File::mkdir(GO::config()->file_storage_path.dirname($path));
 
-					if($account_id == $account['id'] && !file_exists($GO_CONFIG->file_storage_path.$path)){
+					if($account_id == $account['id'] && !file_exists(GO::config()->file_storage_path.$path)){
 						$link_id=$matches[3];
 						$link_type=$matches[2];
-						$imap->save_to_file($uid, $GO_CONFIG->file_storage_path.$path);
+						$imap->save_to_file($uid, GO::config()->file_storage_path.$path);
 
 
 						$to='';
@@ -1107,7 +1107,7 @@ try {
 
 				$response['results']=array();
 
-				require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
+				require_once(GO::config()->class_path.'mail/RFC822.class.inc');
 				$RFC822 = new RFC822();
 
 				foreach($messages as $message) {
@@ -1181,13 +1181,13 @@ try {
 					$node_type=$node[0];
 					$node_id=$node[1];
 
-					if($node_type == 'folder' && !$email->is_folder_expanded($node_id, $GO_SECURITY->user_id))
+					if($node_type == 'folder' && !$email->is_folder_expanded($node_id, GO::security()->user_id))
 					{
-						$email->update_folder_state($node_id, $GO_SECURITY->user_id, true);
+						$email->update_folder_state($node_id, GO::security()->user_id, true);
 					}
-					if($node_type == 'account' && !$email->is_account_expanded($node_id, $GO_SECURITY->user_id))
+					if($node_type == 'account' && !$email->is_account_expanded($node_id, GO::security()->user_id))
 					{
-						$email->update_account_state($node_id, $GO_SECURITY->user_id, true);
+						$email->update_account_state($node_id, GO::security()->user_id, true);
 					}
 				}else {
 					$node_type='root';
@@ -1197,7 +1197,7 @@ try {
 				$response=array();
 				if($node_type=='root') {
 					$email2 = new email();
-					$count = $email2->get_accounts($GO_SECURITY->user_id);
+					$count = $email2->get_accounts(GO::security()->user_id);
 					//go_log(LOG_DEBUG, $count);
 					while($email2->next_record()) {
 						try{
@@ -1228,7 +1228,7 @@ try {
 								}
 							}
 
-							$account_expanded = $email->is_account_expanded($email2->f('id'), $GO_SECURITY->user_id);
+							$account_expanded = $email->is_account_expanded($email2->f('id'), GO::security()->user_id);
 							$children = ($account_expanded) ? get_mailbox_nodes($email2->f('id'), 0) : false;
 
 							$imap->disconnect();
@@ -1294,7 +1294,7 @@ try {
 
 			case 'accounts':
 
-				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				require_once(GO::config()->class_path.'base/users.class.inc.php');
 				$GO_USERS = new GO_USERS();
 
 				if(isset($_POST['delete_keys'])) {
@@ -1305,7 +1305,7 @@ try {
 						foreach($deleteAccounts as $account_id) {
 							$account = $email->get_account($account_id);
 
-							if(!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) && (!$GO_MODULES->modules['email']['write_permission'] || $account['user_id']!=$GO_SECURITY->user_id)) {
+							if(!GO::security()->has_admin_permission(GO::security()->user_id) && (!GO::modules()->modules['email']['write_permission'] || $account['user_id']!=GO::security()->user_id)) {
 								throw new AccessDeniedException();
 							}
 
@@ -1318,7 +1318,7 @@ try {
 				}
 				$response['results']=array();
 
-				//$user_id = !isset($_POST['personal_only']) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) ? 0 : $GO_SECURITY->user_id;
+				//$user_id = !isset($_POST['personal_only']) && GO::security()->has_admin_permission(GO::security()->user_id) ? 0 : GO::security()->user_id;
 
 				
 				
@@ -1330,7 +1330,7 @@ try {
 
 				$query = !empty($_POST['query']) ? '%'.$_POST['query'].'%' : '';
 
-				$user_id = $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) ? 0 : $GO_SECURITY->user_id;
+				$user_id = GO::security()->has_admin_permission(GO::security()->user_id) ? 0 : GO::security()->user_id;
 
 				$response['total'] = $email->get_accounts($user_id,$start, $limit, $sort, $dir,'write', $query);
 
@@ -1352,7 +1352,7 @@ try {
 
 			case 'account':
 
-				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				require_once(GO::config()->class_path.'base/users.class.inc.php');
 				$GO_USERS = new GO_USERS();
 
 				$email = new email();
@@ -1378,14 +1378,14 @@ try {
 						$response['data']['forward_to'] = $server_response['data']['forward_to'];
 					}else
 					{
-						if(isset($GO_MODULES->modules['systemusers'])) {
-							require_once($GO_MODULES->modules['systemusers']['class_path'].'systemusers.class.inc.php');
+						if(isset(GO::modules()->modules['systemusers'])) {
+							require_once(GO::modules()->modules['systemusers']['class_path'].'systemusers.class.inc.php');
 							$su = new systemusers();
 
 							$account_id	= $_POST['account_id'];
 							$vacation = $su->get_vacation($account_id);
 
-							$user_home_dirs = isset($GO_CONFIG->user_home_dirs) ? $GO_CONFIG->user_home_dirs : '/home/';
+							$user_home_dirs = isset(GO::config()->user_home_dirs) ? GO::config()->user_home_dirs : '/home/';
 							$homedir = $user_home_dirs.$response['data']['username'];
 							if(stripos($response['data']['host'],'localhost')===false || !file_exists($homedir)) {
 								$response['data']['hidetab'] = true;
@@ -1398,7 +1398,7 @@ try {
 						}
 					}
 					
-					$GO_EVENTS->fire_event('load_email_account', array(&$response));
+					GO::events()->fire_event('load_email_account', array(&$response));
 					
 					$response['success']=true;
 				}
@@ -1483,7 +1483,7 @@ try {
 				break;
 			case 'all_aliases':
 
-				$response['total'] = $email->get_all_aliases($GO_SECURITY->user_id);
+				$response['total'] = $email->get_all_aliases(GO::security()->user_id);
 				$response['results']=array();
 				while($alias = $email->next_record()) {
 					$alias['name']='"'.$alias['name'].'" <'.$alias['email'].'>';
@@ -1493,7 +1493,7 @@ try {
 					$response['results'][] = $alias;
 				}
 				
-				$GO_EVENTS->fire_event('all_aliases', array(&$response, $email));
+				GO::events()->fire_event('all_aliases', array(&$response, $email));
 				break;
 
 

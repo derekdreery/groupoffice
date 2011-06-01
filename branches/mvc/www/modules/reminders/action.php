@@ -12,8 +12,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once("../../Group-Office.php");
-$GO_SECURITY->json_authenticate('reminders');
-require_once ($GO_CONFIG->class_path."base/reminder.class.inc.php");
+GO::security()->json_authenticate('reminders');
+require_once (GO::config()->class_path."base/reminder.class.inc.php");
 $reminders = new reminder();
 
 try{

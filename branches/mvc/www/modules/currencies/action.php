@@ -12,9 +12,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once("../../Group-Office.php");
-$GO_SECURITY->json_authenticate('currencies');
-require_once ($GO_MODULES->modules['currencies']['class_path']."currencies.class.inc.php");
-//require_once ($GO_LANGUAGE->get_language_file('currencies'));
+GO::security()->json_authenticate('currencies');
+require_once (GO::modules()->modules['currencies']['class_path']."currencies.class.inc.php");
+//require_once (GO::language()->get_language_file('currencies'));
 $currencies = new currencies();
 try {
 	switch($_REQUEST['task']) {

@@ -1,5 +1,5 @@
 <?php
-$conf = str_replace('config.php', 'imapauth.config.php', $GLOBALS['GO_CONFIG']->get_config_file());
+$conf = str_replace('config.php', 'imapauth.config.php', GO::config()->get_config_file());
 if(file_exists($conf)){
 	require_once($conf);
 

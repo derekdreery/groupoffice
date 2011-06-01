@@ -12,15 +12,15 @@ class GO_EVENTS
 			 * Cache listerner in a file because scanning all the modules for
 			 * listeners is a heavy job.
 			 */
-			$cache_file = $GO_CONFIG->file_storage_path.'cache/listeners.txt';
-			if(!$GO_CONFIG->debug && file_exists($cache_file)){
+			$cache_file = GO::config()->file_storage_path.'cache/listeners.txt';
+			if(!GO::config()->debug && file_exists($cache_file)){
 				$this->listeners = unserialize(file_get_contents($cache_file));
 			}
 
-			if(!$this->listeners)// || $GO_CONFIG->debug))
+			if(!$this->listeners)// || GO::config()->debug))
 			{
 				$this->load_listeners();
-				if(!empty($GO_CONFIG->db_user)){
+				if(!empty(GO::config()->db_user)){
 					File::mkdir(dirname($cache_file));
 					file_put_contents($cache_file, serialize($this->listeners));
 				}
@@ -38,7 +38,7 @@ class GO_EVENTS
 		
 		$this->listeners = array();
 					
-		foreach($GO_MODULES->modules as $module)
+		foreach(GO::modules()->modules as $module)
 		{			
 			/*$file = $module['class_path'].$module['id'].'.class.inc';
 

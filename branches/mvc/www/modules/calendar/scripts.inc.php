@@ -1,18 +1,18 @@
 <?php
-if(isset($GO_MODULES->modules['customfields']))
+if(isset(GO::modules()->modules['customfields']))
 {
-	require($GO_LANGUAGE->get_language_file('calendar'));
-	require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+	require(GO::language()->get_language_file('calendar'));
+	require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
 	$cf = new customfields();
 	$GO_SCRIPTS_JS .= $cf->get_javascript(1, $lang['calendar']['name'].' '.strtolower($lang['calendar']['event']));
 	$GO_SCRIPTS_JS .= $cf->get_javascript(21, $lang['calendar']['name']);
 }
 
-require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
+require_once(GO::modules()->modules['calendar']['class_path'].'calendar.class.inc.php');
 $cal = new calendar();
 
 
-$settings = $cal->get_settings($GO_SECURITY->user_id);
+$settings = $cal->get_settings(GO::security()->user_id);
 $calendar = $cal->get_calendar($settings['calendar_id']);
 if(!$calendar){
 	$calendar=array('id'=>0,'name'=>'');

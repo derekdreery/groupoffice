@@ -22,18 +22,18 @@ if(empty($SECOND_RUN)){
 	require_once('../Group-Office.php');
 	ini_set('max_execution_time', '3600');
 
-	if(is_dir($GO_CONFIG->file_storage_path.'cache'))
+	if(is_dir(GO::config()->file_storage_path.'cache'))
 	{
 		echo 'Removing cached javascripts...'.$line_break;
 
-		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		require_once(GO::config()->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 
-		$fs->delete($GO_CONFIG->file_storage_path.'cache');
+		$fs->delete(GO::config()->file_storage_path.'cache');
 	}
-	mkdir($GO_CONFIG->file_storage_path.'cache', 0755, true);
+	mkdir(GO::config()->file_storage_path.'cache', 0755, true);
 
-	$log_dir = $GO_CONFIG->file_storage_path.'log/upgrade/';
+	$log_dir = GO::config()->file_storage_path.'log/upgrade/';
 	if(!is_dir($log_dir)){
 		mkdir($log_dir,0750,true);
 	}
@@ -75,9 +75,9 @@ unset($RERUN_UPDATE, $CHECK_MODULES);
 
 
 if(!$quiet)
-echo 'Updating Group-Office database: '.$GO_CONFIG->db_name.$line_break;
+echo 'Updating Group-Office database: '.GO::config()->db_name.$line_break;
 
-$GO_MODULES->load_modules();
+GO::modules()->load_modules();
 
 $db = new db();
 $db->halt_on_error = 'report';
@@ -85,13 +85,13 @@ $db->halt_on_error = 'report';
 //suppress duplicate and drop errors
 $db->suppress_errors=array(1060, 1091);
 
-$old_version = $GO_CONFIG->get_setting('version');
+$old_version = GO::config()->get_setting('version');
 if(!$old_version)
 $old_version=0;
 
 //if(!$quiet)
 //echo 'Updating framework version: '.$old_version.$line_break;
-require_once($GO_CONFIG->root_path.'install/sql/updates.inc.php');
+require_once(GO::config()->root_path.'install/sql/updates.inc.php');
 
 
 for($i=$old_version;$i<count($updates);$i++)
@@ -99,7 +99,7 @@ for($i=$old_version;$i<count($updates);$i++)
 	ob_flush();
 	if(substr($updates[$i], 0, 7)=='script:')
 	{
-		$update_script=$GO_CONFIG->root_path.'install/updatescripts/'.substr($updates[$i], 7);
+		$update_script=GO::config()->root_path.'install/updatescripts/'.substr($updates[$i], 7);
 		if (!file_exists($update_script))
 		{
 			die($update_script.' not found!');
@@ -115,7 +115,7 @@ for($i=$old_version;$i<count($updates);$i++)
 		$db->query($updates[$i]);		
 	}
 
-	$GO_CONFIG->save_setting('version', $i+1);
+	GO::config()->save_setting('version', $i+1);
 }
 
 if(!$quiet)
@@ -128,10 +128,10 @@ if(!$quiet)
 
 
 //Upgrade modules
-foreach($GO_MODULES->modules as $update_module)
+foreach(GO::modules()->modules as $update_module)
 {
 	unset($updates);
-	$update_file = $GO_CONFIG->module_path.$update_module['id'].'/install/updates.inc.php';
+	$update_file = GO::config()->module_path.$update_module['id'].'/install/updates.inc.php';
 	if(file_exists($update_file))
 	{
 		require($update_file);
@@ -146,7 +146,7 @@ foreach($GO_MODULES->modules as $update_module)
 				ob_flush();
 				if(strcmp(substr($updates[$updates_index],0,7),'script:')==0)
 				{
-					$update_script=$GO_CONFIG->module_path.$update_module['id'].'/install/updatescripts/'.substr($updates[$updates_index], 7);
+					$update_script=GO::config()->module_path.$update_module['id'].'/install/updatescripts/'.substr($updates[$updates_index], 7);
 					if (!file_exists($update_script))
 					{
 						die($update_script.' not found!');
@@ -190,14 +190,14 @@ if(isset($RERUN_UPDATE))
 	if(isset($CHECK_MODULES))
 	{
 		echo 'Checking modules'.$line_break.$line_break;
-		$GO_EVENTS->fire_event('check_database');
+		GO::events()->fire_event('check_database');
 	}
 
 	
 
 	echo 'Done!'.$line_break.$line_break;
 
-	$GO_CONFIG->save_setting('upgrade_mtime', $GO_CONFIG->mtime);
+	GO::config()->save_setting('upgrade_mtime', GO::config()->mtime);
 	
 }
 
