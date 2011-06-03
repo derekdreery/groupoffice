@@ -570,9 +570,9 @@ try {
 				require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
 				$cal = new calendar();
 				require_once($GO_CONFIG->class_path.'ical2array.class.inc');
-				$ical2array = new ical2array();
+				$cal->ical2array = new ical2array();
 
-				$vcalendar = $ical2array->parse_string($data);
+				$vcalendar = $cal->ical2array->parse_string($data);
 
 				$event=false;
 				while($object = array_shift($vcalendar[0]['objects'])) {
