@@ -3,6 +3,9 @@
 class GO_Router{
 	
 	public function despatch(){
+		
+		//router.php?r=notes/Note/get&note_id=1
+		
 		$r = explode('/', $_REQUEST['r']);
 		
 		$module=strtolower($r[0]);

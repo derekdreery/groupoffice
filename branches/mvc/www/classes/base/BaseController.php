@@ -1,4 +1,5 @@
 <?php
+
 abstract class GO_BaseController {
 
 	/**
@@ -16,7 +17,12 @@ abstract class GO_BaseController {
 	protected function addPermissionCheck($aclId, $requiredPermissionLevel, $action='*'){
 		$this->requiredPermissionLevels[$action]=array('aclId'=>$aclId, 'requiredPermissionLevel'=>$requiredPermissionLevel);
 	}
-	
+	/**
+	 * Checks 
+	 * 
+	 * @param type $action
+	 * @return type boolean
+	 */
 	public function checkPermissions($action){
 		if(isset($this->requiredPermissionLevels[$action])){
 			return GO::security()->hasPermission($this->requiredPermissionLevels[$action]['aclId'])>=$this->requiredPermissionLevels[$action]['requiredPermissionLevel'];
@@ -73,5 +79,14 @@ abstract class GO_BaseController {
 		}
 		$method->invokeArgs($this,$ps);
 		return true;
+	}
+	
+	
+	protected function returnGridJson($db){
+		
+		while($record = $this->next_record()){
+			$record = $this->formatRecord();
+		}
+		
 	}
 }

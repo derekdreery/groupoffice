@@ -36,6 +36,7 @@ class calendar extends db {
 		$events->add_listener('checker', __FILE__, 'calendar', 'check_unseen');
 		$events->add_listener('load_global_settings', __FILE__, 'calendar','load_global_settings');
 		$events->add_listener('save_global_settings', __FILE__, 'calendar','save_global_settings');
+		
 	}
 
 	public static function load_global_settings(&$response)
