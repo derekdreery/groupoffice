@@ -1,6 +1,12 @@
 <?php
-class GO_ActiveRecord extends db{
+class GO_ActiveRecord {
 	
+	public static $db;
+	
+	/**
+	 *
+	 * @var boolean Is this model new? 
+	 */
 	public $isNew = true;
 	
 	/**
@@ -13,32 +19,47 @@ class GO_ActiveRecord extends db{
 		);
 	}
 	
+	/**
+	 * 
+	 * @var string The database table name
+	 */
+	
 	protected $tableName;
 	
 	/**
-	 * ACL to check for permissions.
 	 * 
-	 * @var type int
+	 * @var int ACL to check for permissions.
 	 */
 	public $aclId;
 	
 	/**
-	 * Primary key of database table
 	 * 
-	 * @var type mixed string or array of strings
+	 * 
+	 * @var mixed Primary key of database table. Can be a field name string or an array of fieldnames
 	 */
 	protected $primaryKey='id'; //TODO can also be array('user_id','group_id') for example.
 	
+	/**
+	 * Constructor for the model
+	 * 
+	 * @param int $primaryKey integer The primary key of the database table
+	 */
 	public function __construct($primaryKey=0){
 		
 		if($primaryKey!=0)
 			$this->load($primaryKey);
 	}
 	
+	/**
+	 * Loads the model attributes from the database
+	 * 
+	 * @param int $primaryKey 
+	 */
+	
 	protected function load($primaryKey){
 		$sql = "SELECT * FROM `".$this->tableName."` WHERE `".$this->primaryKey.'`='.intval($primaryKey);
-		$this->query($sql);
-		$atrributes = $this->next_record();
+		$this->db->query($sql);
+		$atrributes = $this->db->next_record();
 		
 		$this->setAttributes($attributes);
 		
@@ -117,10 +138,10 @@ class GO_ActiveRecord extends db{
 		if($this->checkPermissions()){		
 			if($this->isNew){
 
-				return $this->insert_row($this->tableName, $attributes);
+				return $this->db->insert_row($this->tableName, $attributes);
 			}else
 			{
-				return $this->update_row($this->tableName, $this->primaryKey, $attributes);
+				return $this->db->update_row($this->tableName, $this->primaryKey, $attributes);
 			}
 		}else
 		{
