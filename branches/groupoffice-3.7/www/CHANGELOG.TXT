@@ -1,3 +1,6 @@
+02/06/2011 3.7.22
+- Timer in timeregistration didn't add values
+
 31/05/2011 3.7.21
 - Worked around PHP bug in smime functions for older php versions.
 - Calendar tooltip was broken due to ExtJS upgrade

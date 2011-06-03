@@ -1017,6 +1017,7 @@ class imap extends imap_bodystruct {
 					'reply-to'=>'',
 					'message-id'=>'',
 					'content-type'=>'',
+					'content-type-attributes'=>array(),
 					'disposition-notification-to'=>'',
 					'content-transfer-encoding'=>'',
 					'charset'=>'',
@@ -1086,8 +1087,18 @@ class imap extends imap_bodystruct {
 								$message['charset'] = trim(str_replace(array('"', "'", ';'), '', $matches[1]));
 							}							
 						}
-						if(preg_match("/[^\/]*\/[^;]*/", $message['content-type'], $matches)){
-							$message['content-type']=$matches[0];
+						if(preg_match("/([^\/]*\/[^;]*)(.*)/", $message['content-type'], $matches)){
+							$message['content-type']=$matches[1];
+							$atts = trim($matches[2], ' ;');							
+							$atts=explode(';', $atts);
+							
+							for($i=0;$i<count($atts);$i++){
+								$keyvalue=explode('=', $atts[$i]);
+								if(isset($keyvalue[1]) && $keyvalue[0]!='boundary')
+									$message['content-type-attributes'][trim($keyvalue[0])]=trim($keyvalue[1],' "');
+							}
+							
+							//$message['content-type-attributes']=$atts;
 						}
 					}
 

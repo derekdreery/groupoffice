@@ -42,15 +42,16 @@ if(!empty($_REQUEST['account_id'])){
 	$tmpdir = $GO_CONFIG->tmpdir . 'smime/verify/';
 	File::mkdir($tmpdir);
 
-	$src_filename = !empty($_REQUEST['filepath']) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . File::strip_invalid_chars($mailbox) . '_' . $account_id . '.eml';
+	//$src_filename = !empty($_REQUEST['filepath']) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . File::strip_invalid_chars($mailbox) . '_' . $account_id . '.eml';
+	$src_filename = !empty($_REQUEST['filepath']) && empty($uid) ? $GO_CONFIG->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . File::strip_invalid_chars($mailbox) . '_' . $account_id . '.eml';
 	$cert_filename = $tmpdir . $uid . '_' . File::strip_invalid_chars($mailbox) . '_' . $account_id . '.crt';
 	
-	if (empty($_REQUEST['filepath']) && !file_exists($src_filename) && $uid>0){
-	//if($uid>0){
+	//if (empty($_REQUEST['filepath']) && !file_exists($src_filename) && $uid>0){
+	if($uid>0){
 		$imap->save_to_file($uid, $src_filename);
 		
 		$data = file_get_contents($src_filename);
-		if(strpos($data, "application/pkcs7-mime") || strpos($data, "application/x-pkcs7-mime")) {		
+		if(strpos($data, "enveloped-data")) {		
 			
 			$cert = $smime->get_pkcs12_certificate($account_id);
 			$password = $_SESSION['GO_SESSION']['smime']['passwords'][$account_id];			
@@ -68,6 +69,9 @@ if(!empty($_REQUEST['account_id'])){
 		}
 		
 	}
+	
+//	echo $src_filename;
+//	exit();
 
 	if(!file_exists($src_filename))
 	{
@@ -85,10 +89,16 @@ if(!empty($_REQUEST['account_id'])){
 		if(file_exists($cert_filename)){
 			$cert = file_get_contents($cert_filename);
 			unlink($cert_filename);
+		}else
+		{
+			
+			echo openssl_error_string();
+			
+			throw new Exception('Certificate appears to be valid but could not get certificate from signature.');
 		}
 		
 		if(empty($cert))
-			die('Could not get certificate from signature');
+			die('Certificate appears to be valid but could not get certificate from signature.');
 	}
 
 }else
@@ -97,6 +107,9 @@ if(!empty($_REQUEST['account_id'])){
 	$cert = $cert['cert'];
 }
 
+//var_dump($valid);
+//var_dump($cert);
+//exit();
 if(isset($cert)){
 	$arr = openssl_x509_parse($cert);
 
@@ -125,6 +138,10 @@ $GO_LANGUAGE->require_language_file('smime');
 if(isset($_REQUEST['account_id'])){
 	if (!$valid) {
 		echo '<h1 class="smi-invalid">'.$lang['smime']['invalidCert'].'</h1>';
+		echo '<p>';
+		while ($msg = openssl_error_string())
+			echo $msg . "<br />\n";
+		echo '</p>';
 	} else {
 		echo '<h1 class="smi-valid">'.$lang['smime']['validCert'].'</h1>';
 	}
