@@ -839,6 +839,7 @@ try {
 								{
 									if(isset($cal_event['participants']))
 									{
+										$status_id=0;
 										$saved_participant = false;
 										//var_dump($account['email']);
 										//exit();
@@ -852,8 +853,8 @@ try {
 										}
 
 										// check if event has to be updated
-										if($saved_participant)
-										{
+//										if($saved_participant)
+//										{
 											$response['iCalendar']['invitation'] = array(
 												'uuid' => $cal_event['uuid'],
 												'imap_id' => $attachment['imap_id'],
@@ -870,14 +871,15 @@ try {
 											);
 
 
-											if($cal_event['mtime'] > $saved_participant['last_modified'])
+											if($saved_participant && $cal_event['mtime'] > $saved_participant['last_modified'])
 												$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_available'];
 											else
 												$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_old'];
-										}else
-										{
-											//$response['iCalendar']['invitation']=array();
-										}
+											
+//										}else
+//										{
+//											//$response['iCalendar']['invitation']=array();
+//										}
 										
 										$response['body'] = $cal->event_to_html($cal_event, false, true).'<hr />'.$response['body'];
 									}else
