@@ -149,21 +149,23 @@ class smime extends db{
 
 		if(!$message['from_cache'] && ($message['content-type']=='application/pkcs7-mime' || $message['content-type']=='application/x-pkcs7-mime')){
 			
-			
-			$smime = new smime();
-			$cert = $smime->get_pkcs12_certificate($message['account_id']);
-			
-			if(!$cert || empty($cert['cert']))
-				throw new Exception("No key was found to decrypt the message!");
-			
-			
-			if(isset($_POST['password']))
-				$_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']]=$_POST['password'];
+			$encrypted = isset($message['content-type-attributes']['smime-type']) && $message['content-type-attributes']['smime-type']=='enveloped-data';
+			if($encrypted){
+				$smime = new smime();
+				$cert = $smime->get_pkcs12_certificate($message['account_id']);
 
-			if(!isset($_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']])){
-				$message['askPassword']=true;
-				return false;
-			}				
+				if(!$cert || empty($cert['cert']))
+					throw new Exception("No key was found to decrypt the message!");
+
+
+				if(isset($_POST['password']))
+					$_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']]=$_POST['password'];
+
+				if(!isset($_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']])){
+					$message['askPassword']=true;
+					return false;
+				}				
+			}
 			
 			$att = $message['attachments'][0];
 			
@@ -194,41 +196,64 @@ class smime extends db{
 			$infilename=$dir.'encrypted.txt';
 			$outfilename=$dir.'unencrypted.txt';
 			
-			$imap->save_to_file($message['uid'], $infilename);//,, $att['imap_id'], $att['encoding']);
-			
-			if(!file_exists($infilename)){
-				throw new Exception("Could not save IMAP message to file for decryption");
-			}
-			
-			//$pkcs12 = file_get_contents("/home/mschering/smime_cert_mschering.p12");
-			//$password = trim(file_get_contents("/home/mschering/password.txt"));
-			$password = $_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']];
+			$outfilerel = $reldir.'unencrypted.txt';
 			
 			
-			openssl_pkcs12_read ($cert['cert'], $certs, $password);
 			
-			if(empty($certs)){
-				//password invalid
-				$message['askPassword']=true;
-				return false;
-			}
+			if($encrypted){
+				
+				$imap->save_to_file($message['uid'], $infilename);//,, $att['imap_id'], $att['encoding']);
 			
-			
-			$return = openssl_pkcs7_decrypt($infilename, $outfilename, $certs['cert'], array($certs['pkey'], $password));
-			
-			unlink($infilename);
-			
-			if(!$return || !file_exists($outfilename) || !filesize($outfilename)){
-				//throw new Exception("Could not decrypt message");
-				$GO_LANGUAGE->require_language_file('smime');
-				$message['html_body']=$lang['smime']['noPrivateKeyForDecrypt'];
-				return false;
+				if(!file_exists($infilename)){
+					throw new Exception("Could not save IMAP message to file for decryption");
+				}
+
+				//$pkcs12 = file_get_contents("/home/mschering/smime_cert_mschering.p12");
+				//$password = trim(file_get_contents("/home/mschering/password.txt"));
+				$password = $_SESSION['GO_SESSION']['smime']['passwords'][$message['account_id']];
+
+
+				openssl_pkcs12_read ($cert['cert'], $certs, $password);
+
+				if(empty($certs)){
+					//password invalid
+					$message['askPassword']=true;
+					return false;
+				}
+
+
+				$return = openssl_pkcs7_decrypt($infilename, $outfilename, $certs['cert'], array($certs['pkey'], $password));
+
+				unlink($infilename);
+
+				if(!$return || !file_exists($outfilename) || !filesize($outfilename)){
+					//throw new Exception("Could not decrypt message");
+					$GO_LANGUAGE->require_language_file('smime');
+					$message['html_body']=$lang['smime']['noPrivateKeyForDecrypt'];
+					return false;
+				}
+
+			}else
+			{
+				$imap->save_to_file($message['uid'], $outfilename, $att['imap_id'], $att['encoding']);
+				//$outfilerel=$reldir.'encrypted.txt';
+				
+				//file_put_contents($outfilename, String::clean_utf8(file_get_contents($outfilename)));
+				
+				//Outlook mime files contain strange binary data. We want to get rid of that.
+				$content = file_get_contents($outfilename);
+				//$content = String::clean_utf8($content);
+				//$content= preg_replace('/[\x00-\x09\x0B\x0C\x0E-\x1F\x7F]/', '', $content);
+
+				//$content= preg_replace('/[\x82]/', '', $content);
+				$pos = strpos($content, 'Content-Type');
+				file_put_contents($outfilename, substr($content, $pos));
 			}
 			
 			require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
 			$ml = new mailings();		
 			
-			$decrypted_message = $ml->get_message_for_client(0, $reldir.'unencrypted.txt','');
+			$decrypted_message = $ml->get_message_for_client(0, $outfilerel,'');
 			
 			//can't unlink the file here because we need it for showing inline images etc.
 			//unlink($outfilename);
@@ -238,8 +263,8 @@ class smime extends db{
 			$message['html_body']=$decrypted_message['body'];
 			$message['attachments']=$decrypted_message['attachments'];
 			$message['path']=$decrypted_message['path'];
-			$message['smime_signed']=$decrypted_message['smime_signed'];	
-			$message['smime_encrypted']=true;
+			$message['smime_signed']=$decrypted_message['smime_signed'] || isset($message['content-type-attributes']['smime-type']) && $message['content-type-attributes']['smime-type']=='signed-data';	
+			$message['smime_encrypted']=$encrypted;
 		}
 	}
 	
