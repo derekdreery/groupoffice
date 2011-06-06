@@ -819,6 +819,16 @@ class String {
 
 		//remove strange white spaces in tags first
 		//sometimes things like this happen <style> </ style >
+		
+		$body_startpos = stripos($html, '<body');
+		$body_endpos = stripos($html, '</body');
+		if($body_startpos){
+			if($body_endpos)
+				$html = substr($html, $body_startpos, $body_endpos-$body_startpos);
+			else
+				$html = substr($html, $body_startpos);
+		}
+		
 		$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u","</$1>", $html);
 		
 		$to_removed_array = array (

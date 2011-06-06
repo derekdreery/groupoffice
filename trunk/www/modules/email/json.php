@@ -570,9 +570,9 @@ try {
 				require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
 				$cal = new calendar();
 				require_once($GO_CONFIG->class_path.'ical2array.class.inc');
-				$ical2array = new ical2array();
+				$cal->ical2array = new ical2array();
 
-				$vcalendar = $ical2array->parse_string($data);
+				$vcalendar = $cal->ical2array->parse_string($data);
 
 				$event=false;
 				while($object = array_shift($vcalendar[0]['objects'])) {
@@ -839,6 +839,7 @@ try {
 								{
 									if(isset($cal_event['participants']))
 									{
+										$status_id=0;
 										$saved_participant = false;
 										//var_dump($account['email']);
 										//exit();
@@ -852,8 +853,8 @@ try {
 										}
 
 										// check if event has to be updated
-										if($saved_participant)
-										{
+//										if($saved_participant)
+//										{
 											$response['iCalendar']['invitation'] = array(
 												'uuid' => $cal_event['uuid'],
 												'imap_id' => $attachment['imap_id'],
@@ -870,14 +871,15 @@ try {
 											);
 
 
-											if($cal_event['mtime'] > $saved_participant['last_modified'])
+											if($saved_participant && $cal_event['mtime'] > $saved_participant['last_modified'])
 												$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_available'];
 											else
 												$response['iCalendar']['feedback'] = $lang['email']['iCalendar_update_old'];
-										}else
-										{
-											//$response['iCalendar']['invitation']=array();
-										}
+											
+//										}else
+//										{
+//											//$response['iCalendar']['invitation']=array();
+//										}
 										
 										$response['body'] = $cal->event_to_html($cal_event, false, true).'<hr />'.$response['body'];
 									}else
@@ -1525,6 +1527,15 @@ try {
 					$record['deletemailbox']=strpos($record['permissions'],'x')!==false;
 					$record['admin']=strpos($record['permissions'],'a')!==false;
 				}
+				break;
+
+			case 'create_download_hash':
+				global $GO_SECURITY;
+				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				$GO_USERS = new GO_USERS();
+				$user = $GO_USERS->get_user($GO_SECURITY->user_id);
+				$response['code'] = md5($user['username'].$user['password'].$_REQUEST['filename']);
+				$response['success'] = true;
 				break;
 
 			/* {TASKSWITCH} */

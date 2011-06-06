@@ -401,6 +401,7 @@ GO.lang.swfUploadPanelStrings = {
 		header_filename: 'Filename',
 		header_size: 'Size',
 		header_status: 'Status',
+		header_progress: "Progress",
 		status: {
 			0: 'Queued',
 			1: 'Uploading...',

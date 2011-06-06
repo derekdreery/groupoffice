@@ -40,6 +40,7 @@ Ext.ux.SwfUploadPanel = Ext.extend(Ext.grid.GridPanel, {
 		header_filename: 'Filename',
 		header_size: 'Size',
 		header_status: 'Status',
+		header_progress: "Progress",
 		status: {
 			0: 'Queued',
 			1: 'Uploading...',
@@ -226,7 +227,7 @@ Ext.ux.SwfUploadPanel = Ext.extend(Ext.grid.GridPanel, {
 			renderer: this.formatStatus.createDelegate(this)
 		},{
 			id:'progress', 
-			header: 'Progess', 
+			header: this.strings.header_progress, 
 			width: 150,  
 			renderer: this.formatProgressBar
 		}
