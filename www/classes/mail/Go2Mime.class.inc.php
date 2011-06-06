@@ -128,6 +128,8 @@ class Go2Mime
 
 		$structure = Mail_mimeDecode::decode($params);
 		
+		go_debug($structure);
+		
 
 		if($part_number!='')
 		{

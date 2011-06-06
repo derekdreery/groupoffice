@@ -454,6 +454,7 @@ class cached_imap extends imap{
 		}
 		
 		$headers = parent::get_message_header($uid, true);
+		//go_debug($headers);
 		if(!$headers)
 			throw new Exception($lang['email']['errorGettingMessage']);
 
@@ -553,11 +554,15 @@ class cached_imap extends imap{
 		//go_debug($struct);
 
 		$message['attachments']=$this->find_message_attachments($struct, $message['body_ids']);
-		//go_debug($message['attachments']);
+
 		$message['smime_signed']=false;
 		foreach($message['attachments'] as $key=>$a){
-			if(isset($a['name']) && $a['name']=='smime.p7s'){
-				unset($message['attachments'][$key]);
+			if((isset($a['smime-type']) && $a['smime-type']=='signed-data') || $a['subtype']=='pkcs7-signature'){
+				
+				if($a['subtype']=='pkcs7-signature')
+					unset($message['attachments'][$key]);
+		
+				
 				$message['smime_signed']=true;
 				break;
 			}
@@ -719,7 +724,7 @@ class cached_imap extends imap{
 
 		$struct = $this->get_message_structure($message['uid']);
 
-		go_debug($struct);
+		//go_debug($struct);
 
 		if(count($struct)==1) {
 			$header_ct = explode('/', $message['content-type']);
@@ -982,6 +987,7 @@ class cached_imap extends imap{
 						$message['seen'],
 						$message['recent'],
 						$message['disposition-notification-to'],
+						$message['content-type-attributes'],
 						$message['content-transfer-encoding'],
 						$message['reply-to'],
 						$message['date'],

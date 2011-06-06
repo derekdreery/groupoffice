@@ -382,12 +382,13 @@ GO.lang.swfUploadPanelStrings = {
 		header_filename: 'Bestandsnaam',
 		header_size: 'Grootte',
 		header_status: 'Status',
+		header_progress: "Voortgang",
 		status: {
 			0: 'In de wachtrij',
 			1: 'Uploaden...',
 			2: 'Voltooid',
 			3: 'Fout',
-			4: 'Geanulleerd'
+			4: 'Geannuleerd'
 		},
 		error_queue_exceeded: 'Het maximum van {0} aantal bestanden is overschreden.',
 		error_queue_slots_0: 'Er is geen plaats meer over',
