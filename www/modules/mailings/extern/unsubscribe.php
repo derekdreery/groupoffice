@@ -41,7 +41,7 @@ if (!isset($GO_MODULES->modules['mailings'])) {
 			$GO_USERS = new GO_USERS();
 
 			$user=$GO_USERS->get_user($data['recipient_id']);
-			if($tp->get_unsubscribe_hash($user['ctime'], $data['mailing_group_id'],'user', $user['id'])!=$data['hash']){
+			if($tp->get_unsubscribe_hash($user['registration_time'], $data['mailing_group_id'],'user', $user['id'])!=$data['hash']){
 				die('Invalid request');
 			}
 
