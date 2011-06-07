@@ -126,6 +126,10 @@ class GO_MODULES extends db {
 		}	
 	}
 	
+	function __get($name){
+		return $this->modules[$name];
+	}
+	
 	/**
 	 * Checks if the current logged in user has access to a module
 	 * 

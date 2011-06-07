@@ -6,6 +6,7 @@ class GO {
 			'Module' => 'classes/base/Module.php',
 			'BaseController' => 'classes/base/BaseController.php',
 			'Router' => 'classes/base/Router.php',
+			'ActiveRecord' => 'classes/base/ActiveRecord.php',
 			'File' => 'classes/File.class.inc.php',
 			'String' => 'classes/String.class.inc.php',
 			'Number' => 'classes/Number.class.inc.php',
@@ -73,8 +74,21 @@ class GO {
 	public static function autoload($className) {
 		$className = str_replace('GO_','', $className);
 
-		
-		require_once(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
+		if(isset(self::$_classes[$className])){
+			require_once(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
+		}else
+		{
+			$arr = explode('_', $className);
+			
+			echo $module = strtolower(array_shift($arr));
+			$type = strtolower(array_shift($arr));
+			$file = ucfirst(array_shift($arr));
+			
+			
+			
+			$file = self::modules()->modules[$module]['path'].$type.'/'.$file.'.php';
+			require_once($file);
+		}
 	}
 
 	public static function init() {

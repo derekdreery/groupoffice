@@ -1,7 +1,18 @@
 <?php
 class GO_ActiveRecord {
 	
+	/**
+	 * TODO: How to handle multiple connections?
+	 * 
+	 * @var GO_Database  
+	 */
 	public static $db;
+	
+	/**
+	 *
+	 * @var int Link type of this Model used for the link system. See also the linkTo function
+	 */
+	protected $link_type=0;
 	
 	/**
 	 *
@@ -14,9 +25,11 @@ class GO_ActiveRecord {
 	 */
 	public function relations()
 	{
-		return array(
-				'pages' => array(self::BELONGS_TO, 'Course', 'course_id')
-		);
+//		return array(
+//				'category' => array(self::BELONGS_TO, 'Category', 'category_id')
+//		);
+		
+		return array();
 	}
 	
 	/**
@@ -30,7 +43,7 @@ class GO_ActiveRecord {
 	 * 
 	 * @var int ACL to check for permissions.
 	 */
-	public $aclId;
+	public $aclField=false;
 	
 	/**
 	 * 
@@ -46,8 +59,24 @@ class GO_ActiveRecord {
 	 */
 	public function __construct($primaryKey=0){
 		
+		$this->db = new db();
+		
 		if($primaryKey!=0)
 			$this->load($primaryKey);
+	}
+
+	
+	public static function findByAttribute($attribute, $value){
+		$sql = "SELECT * FROM `".$this->tableName."` WHERE `".$attribute.'`='.$this->db->escape($value);
+		$this->db->query($sql);
+		
+		return new GO_Model_Iterator($this);
+	}
+
+	public static function findAuthorizedBy($params){
+		
+		//todo joins acl tables and finds stuff by parameters
+		
 	}
 	
 	/**
@@ -59,7 +88,7 @@ class GO_ActiveRecord {
 	protected function load($primaryKey){
 		$sql = "SELECT * FROM `".$this->tableName."` WHERE `".$this->primaryKey.'`='.intval($primaryKey);
 		$this->db->query($sql);
-		$atrributes = $this->db->next_record();
+		$attributes = $this->db->next_record();
 		
 		$this->setAttributes($attributes);
 		
@@ -154,6 +183,18 @@ class GO_ActiveRecord {
 	}
 	
 	public function __get($name){
+		
+	}
+	
+	
+	/**
+	 * Pass another model to this function and they will be linked with the
+	 * Group-Office link system.
+	 * 
+	 * @param mixed $model 
+	 */
+	
+	public function linkTo($model){
 		
 	}
 

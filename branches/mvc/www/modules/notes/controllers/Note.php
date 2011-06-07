@@ -9,12 +9,14 @@ class GO_Controller_Note extends GO_BaseController{
 	
 	public function actionGet($note_id){
 		
-		$note = Note::model()->findByPk($note_id);
+		$note = new GO_Notes_Model_Note($note_id);
 		
-		$note->setAttributes($_POST);
-		$note->date = $note->formatdate($_POST['date']);
-		$note->save();
+		var_dump($note);
 		
+//		$note->setAttributes($_POST);
+//		$note->date = $note->formatdate($_POST['date']);
+//		$note->save();
+//		
 		
 		
 		

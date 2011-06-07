@@ -35,6 +35,10 @@ $scripts[]=$root_uri.'javascript/namespaces.js';
 	GO = {};
 	GO.settings=<?php echo json_encode(GO::config()->get_client_settings()); ?>;
 	GO.calltoTemplate = '<?php echo GO::config()->callto_template; ?>';
+	
+	GO.url = function(relativeUrl){
+		return BaseHref+'router.php?r='+relativeUrl
+	}
 
 <?php
 if(isset($_REQUEST['after_login_url'])) {
