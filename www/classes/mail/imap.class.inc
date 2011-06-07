@@ -1501,7 +1501,7 @@ class imap extends imap_bodystruct {
 	 */
 
 	public function decode_message_part($str, $encoding, $charset=false) {
-
+		
 		switch(strtolower($encoding)) {
 			case 'base64':
 				$str = base64_decode($str);
@@ -1516,7 +1516,7 @@ class imap extends imap_bodystruct {
 			//some clients don't send the charset.
 			if($charset=='us-ascii')
 				$charset = 'windows-1252';
-
+			
 			$str = String::clean_utf8($str, $charset);
 			if($charset != 'utf-8') {
 				$str = str_replace($charset, 'utf-8', $str);
