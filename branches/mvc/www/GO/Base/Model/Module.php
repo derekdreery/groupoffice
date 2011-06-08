@@ -1,8 +1,6 @@
 <?php
  class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord{
 	 
-	protected $primaryKey='name';
-	
 	protected $aclField='acl_id';
 	
 	protected $tableName='go_modules';

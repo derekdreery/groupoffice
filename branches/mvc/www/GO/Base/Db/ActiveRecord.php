@@ -125,7 +125,7 @@ class GO_Base_Db_ActiveRecord {
 		$sql = "SELECT t.* FROM `".$this->tableName."` t ";
 		
 		if($this->aclField){
-			"INNER JOIN go_acl ON (t.`".$this->aclField."` = go_acl.acl_id";
+			$sql .= "INNER JOIN go_acl ON (t.`".$this->aclField."` = go_acl.acl_id";
 			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_SECURITY::READ_PERMISSION){
 				$sql .= " AND go_acl.level>=".intval($params['permissionLevel']);
 			}
@@ -146,7 +146,7 @@ class GO_Base_Db_ActiveRecord {
 		//$sql .= "WHERE `".$this->primaryKey.'`='.intval($primaryKey);
 		$result = $this->getDbConnection()->query($sql);
 		
-		$result->setFetchMode(PDO::FETCH_OBJ, $this->className());
+		$result->setFetchMode(PDO::FETCH_CLASS, $this->className());
 		
 		return $result;
 		

@@ -44,10 +44,10 @@ abstract class GO_Base_Controller_AbstractController {
 	 */
 	protected function render($viewName){
 		if($this->module=='Base'){
-			require(GO::config()->root_path.'views/'.GO::view().'/'.$viewName.'.php');
+			require(GO::config()->root_path.'themes/'.GO::view().'/'.$viewName.'.php');
 		}else
 		{
-			require(GO::modules()->modules[$this->module].'views/'.GO::view().'/'.$viewName.'.php');
+			require(GO::modules()->modules[$this->module].'themes/'.GO::view().'/'.$viewName.'.php');
 		}
 	}
 	
