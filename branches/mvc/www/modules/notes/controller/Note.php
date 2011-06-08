@@ -1,5 +1,5 @@
 <?php
-class GO_Controller_Note extends GO_Base_Controller_AbstractController{
+class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractController{
 	function init($output){
 		parent::init($output);
 		

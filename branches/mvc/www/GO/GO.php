@@ -37,6 +37,10 @@ class GO {
 		
 		return self::$db;
 	}
+	
+	public static function view(){
+		return 'Default';
+	}
 
 	public static function modules() {
 		if (!isset(self::$_modules)) {

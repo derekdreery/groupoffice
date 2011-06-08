@@ -2,29 +2,32 @@
 
 class GO_Base_Router{
 	
-	public function despatch(){
+	/**
+	 * Analyzes the request URL and finds the controller.
+	 * 
+	 * URL Should be like index.php?r=module/controller/method&param=value
+	 */
+	public function run(){
 		
-		//router.php?r=notes/Note/get&note_id=1
+		$r = isset($_REQUEST['r']) ? explode('/', $_REQUEST['r']) :array();
 		
-		$r = explode('/', $_REQUEST['r']);
-		
-		$module=strtolower($r[0]);
-		$controller=ucfirst($r[1]);
-		$action=ucfirst($r[2]);
+		$module=isset($r[0]) ? strtolower($r[0]) : 'Base';;
+		$controller=isset($r[1]) ? ucfirst($r[1]) : 'Main';
+		$action=isset($r[2]) ? ucfirst($r[2]) : 'Index';
 		
 		//$module = GO::modules()->modules[$r[0]];
 		
 		//if($module)
 		
-		$controllerFile = GO::config()->root_path.'modules/'.$module.'/controller/'.$controller.'.php';		
-		require_once($controllerFile);
+		//$controllerFile = GO::config()->root_path.'modules/'.$module.'/controller/'.$controller.'.php';		
+		//require_once($controllerFile);
 		
-		$controller='GO_Controller_'.$controller;
+		$controller='GO_'.ucfirst($module).'_Controller_'.$controller;
 		
 		$output=empty($_REQUEST['output']) ? 'json' : $_REQUEST['output'];
 		
 		$controller = new $controller;
-		$controller->init($output);
+		$controller->init($module,$output);
 		$controller->run($action);	
 	}	
 }

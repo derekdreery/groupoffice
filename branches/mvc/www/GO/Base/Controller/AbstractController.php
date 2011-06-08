@@ -3,25 +3,61 @@
 abstract class GO_Base_Controller_AbstractController {
 	
 	protected $outputStream;
+	
+	protected $module;
 
 	/**
 	 *
-	 * @var type 
+	 * @var array See method addPermissionLevel
 	 */
 	protected $requiredPermissionLevels=array(
 			
 	);
 	
-	protected function init($output){
+	/**
+	 * Inititalizes the controller
+	 * 
+	 * @param string $module Name of the module this controller belongs too
+	 * @param string $output Type of output eg. json or html
+	 */
+	public function init($module, $output){
 		//header('Content-Type: text/plain');
+		$this->module=$module;
+		
 		$outputClass = 'GO_Base_OutputStream_OutputStream'.ucfirst($output);
 		$this->outputStream = new $outputClass;
 	}
 	
+	/**
+	 * Outputs data directly to the standard output
+	 * 
+	 * @param mixed $str 
+	 */
 	protected function output($str){
 		$this->outputStream->write($str);
 	}
 	
+	/**
+	 * Includes the file from the views folder
+	 * 
+	 * @param string $viewName 
+	 */
+	protected function render($viewName){
+		if($this->module=='Base'){
+			require(GO::config()->root_path.'views/'.GO::view().'/'.$viewName.'.php');
+		}else
+		{
+			require(GO::modules()->modules[$this->module].'views/'.GO::view().'/'.$viewName.'.php');
+		}
+	}
+	
+	/**
+	 * Adds a permission check on an acl ID.
+	 * 
+	 * @param int $aclId
+	 * @param int $requiredPermissionLevel See GO_SECURITY constants
+	 * @param string $action 
+	 */
 	protected function addPermissionCheck($aclId, $requiredPermissionLevel, $action='*'){
 		$this->requiredPermissionLevels[$action]=array('aclId'=>$aclId, 'requiredPermissionLevel'=>$requiredPermissionLevel);
 	}
@@ -42,6 +78,12 @@ abstract class GO_Base_Controller_AbstractController {
 		}
 	}
 	
+	/**
+	 * Runs a method of this controller. If $action is save then it will run
+	 * actionSave of your extended class.
+	 * 
+	 * @param string $action 
+	 */
 	public function run($action){
 		
 		if(!$this->checkPermissions($action)){
@@ -52,9 +94,9 @@ abstract class GO_Base_Controller_AbstractController {
 
 		$method=new ReflectionMethod($this, $methodName);
 		if($method->getNumberOfParameters()>0)
-			return $this->runWithParams($method, $_REQUEST);
+			$this->runWithParams($method, $_REQUEST);
 		else
-			return $this->$methodName();
+			$this->$methodName();
 	}
 	
 	/**
@@ -88,4 +130,9 @@ abstract class GO_Base_Controller_AbstractController {
 		$method->invokeArgs($this,$ps);
 		return true;
 	}
+	
+	/**
+	 * This default action should be overrriden
+	 */
+	abstract protected function actionIndex();
 }

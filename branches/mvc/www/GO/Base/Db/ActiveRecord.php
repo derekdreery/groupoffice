@@ -44,7 +44,7 @@ class GO_Base_Db_ActiveRecord {
 	 * 
 	 * @var int ACL to check for permissions.
 	 */
-	public $aclField=false;
+	protected $aclField=false;
 	
 	
 	private $_attributes;
@@ -108,10 +108,57 @@ class GO_Base_Db_ActiveRecord {
 		return new GO_Model_Iterator($this);
 	}
 
-	public static function findAuthorizedBy($params){
+	/**
+	 * Finds model objects 
+	 * 
+	 * @param array $params
+	 * @return PDOStatement
+	 */
+	public function find($params=array()){
 		
 		//todo joins acl tables and finds stuff by parameters
 		
+		if(!isset($params['userId'])){
+			$params['userId']=GO::security()->user_id;
+		}
+		
+		$sql = "SELECT t.* FROM `".$this->tableName."` t ";
+		
+		if($this->aclField){
+			"INNER JOIN go_acl ON (t.`".$this->aclField."` = go_acl.acl_id";
+			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_SECURITY::READ_PERMISSION){
+				$sql .= " AND go_acl.level>=".intval($params['permissionLevel']);
+			}
+			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',GO::security()->get_user_group_ids($params['userId']))."))) ";
+		}
+		
+		if($this->aclField){
+			$sql .= "GROUP BY `".$this->primaryKey."` ";
+		}
+		
+		if(isset($params['orderField'])){
+			$sql .= 'ORDER BY `'.$params['orderField'].'`' ;
+			if(isset($params['orderDirection'])){
+				$sql .= $params['orderDirection'].' ';
+			}
+		}
+		
+		//$sql .= "WHERE `".$this->primaryKey.'`='.intval($primaryKey);
+		$result = $this->getDbConnection()->query($sql);
+		
+		$result->setFetchMode(PDO::FETCH_OBJ, $this->className());
+		
+		return $result;
+		
+	}
+	
+	/**
+	 * Returns the name of this ActiveRecord derrived class
+	 * 
+	 * @return string Name
+	 */
+	public function className(){
+		return get_class($this);
 	}
 	
 	/**
