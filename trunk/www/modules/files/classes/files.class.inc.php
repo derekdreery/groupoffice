@@ -1996,17 +1996,18 @@ class files extends db {
 
 	function get_file_cf_category_permissions(&$response) {
 		global $GO_MODULES,$GO_SECURITY;
-		require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
-		require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
-		$cf = new customfields();
-		$fs = new files();
-		$response['data']['cf_permissions'] = array();
-		$cf->get_authorized_categories(6,$GO_SECURITY->user_id);
-		while ($cat = $cf->next_record()) {
-			$response['data']['cf_permissions']['allowed_from_cf_module'] = true;
+		if(isset($GO_MODULES->modules['customfields'])){
+			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$cf = new customfields();
+			$fs = new files();
+			$response['data']['cf_permissions'] = array();
+			$cf->get_authorized_categories(6,$GO_SECURITY->user_id);
+			while ($cat = $cf->next_record()) {
+				$response['data']['cf_permissions']['allowed_from_cf_module'] = true;
+			}
+			$folder_cf_data = $fs->get_folder_limits_array($GO_SECURITY->user_id,$response['data']['folder_id']);
+			$response['data']['cf_permissions']['allowed_for_folder'] = $folder_cf_data[$response['data']['folder_id']];			
 		}
-		$folder_cf_data = $fs->get_folder_limits_array($GO_SECURITY->user_id,$response['data']['folder_id']);
-		$response['data']['cf_permissions']['allowed_for_folder'] = $folder_cf_data[$response['data']['folder_id']];
-		return $response['data']['cf_permissions'];
 	}
 }
