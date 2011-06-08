@@ -1,6 +1,8 @@
 <?php
 
-abstract class GO_BaseController {
+abstract class GO_Base_Controller_AbstractController {
+	
+	protected $outputStream;
 
 	/**
 	 *
@@ -10,8 +12,14 @@ abstract class GO_BaseController {
 			
 	);
 	
-	protected function init(){
-		
+	protected function init($output){
+		//header('Content-Type: text/plain');
+		$outputClass = 'GO_Base_OutputStream_OutputStream'.ucfirst($output);
+		$this->outputStream = new $outputClass;
+	}
+	
+	protected function output($str){
+		$this->outputStream->write($str);
 	}
 	
 	protected function addPermissionCheck($aclId, $requiredPermissionLevel, $action='*'){
@@ -79,14 +87,5 @@ abstract class GO_BaseController {
 		}
 		$method->invokeArgs($this,$ps);
 		return true;
-	}
-	
-	
-	protected function returnGridJson($db){
-		
-		while($record = $this->next_record()){
-			$record = $this->formatRecord();
-		}
-		
 	}
 }

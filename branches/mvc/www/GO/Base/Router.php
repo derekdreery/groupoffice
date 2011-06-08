@@ -1,6 +1,6 @@
 <?php
 
-class GO_Router{
+class GO_Base_Router{
 	
 	public function despatch(){
 		
@@ -16,13 +16,15 @@ class GO_Router{
 		
 		//if($module)
 		
-		$controllerFile = GO::config()->root_path.'modules/'.$module.'/controllers/'.$controller.'.php';		
+		$controllerFile = GO::config()->root_path.'modules/'.$module.'/controller/'.$controller.'.php';		
 		require_once($controllerFile);
 		
 		$controller='GO_Controller_'.$controller;
 		
+		$output=empty($_REQUEST['output']) ? 'json' : $_REQUEST['output'];
+		
 		$controller = new $controller;
-		$controller->init();
+		$controller->init($output);
 		$controller->run($action);	
 	}	
 }

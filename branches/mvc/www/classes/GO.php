@@ -3,10 +3,6 @@
 class GO {
 
 	private static $_classes = array(
-			'Module' => 'classes/base/Module.php',
-			'BaseController' => 'classes/base/BaseController.php',
-			'Router' => 'classes/base/Router.php',
-			'ActiveRecord' => 'classes/base/ActiveRecord.php',
 			'File' => 'classes/File.class.inc.php',
 			'String' => 'classes/String.class.inc.php',
 			'Number' => 'classes/Number.class.inc.php',
@@ -30,6 +26,17 @@ class GO {
 	private static $_language;
 	private static $_modules;
 	private static $_events;
+	
+	public static $db;
+	
+	public static function getDbConnection(){
+		if(!isset(self::$db)){
+			self::$db = new PDO("mysql:host=localhost;dbname=branch", "root", "");
+			self::$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+		}
+		
+		return self::$db;
+	}
 
 	public static function modules() {
 		if (!isset(self::$_modules)) {
@@ -72,22 +79,31 @@ class GO {
 	}
 
 	public static function autoload($className) {
-		$className = str_replace('GO_','', $className);
+		
+		
+		$baseClassFile = dirname(dirname(__FILE__)) . '/'.str_replace('_','/', $className).'.php';
+		if(file_exists($baseClassFile)){
+			require($baseClassFile);
+		}  else {
 
-		if(isset(self::$_classes[$className])){
-			require_once(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
-		}else
-		{
-			$arr = explode('_', $className);
-			
-			echo $module = strtolower(array_shift($arr));
-			$type = strtolower(array_shift($arr));
-			$file = ucfirst(array_shift($arr));
-			
-			
-			
-			$file = self::modules()->modules[$module]['path'].$type.'/'.$file.'.php';
-			require_once($file);
+
+			$className = str_replace('GO_','', $className);
+
+			if(isset(self::$_classes[$className])){
+				require_once(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
+			}else
+			{
+				$arr = explode('_', $className);
+
+				$module = strtolower(array_shift($arr));
+				$type = strtolower(array_shift($arr));
+				$file = ucfirst(array_shift($arr));
+
+
+
+				$file = self::modules()->modules[$module]['path'].$type.'/'.$file.'.php';
+				require_once($file);
+			}
 		}
 	}
 

@@ -1,5 +1,5 @@
 <?php
-abstract class Module{
+abstract class GO_Base_Module_AbstractModule{
 	public $id;
 	
 	public function init(){
