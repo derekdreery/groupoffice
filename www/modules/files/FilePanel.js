@@ -33,6 +33,12 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 
 	editHandler : function(){
 
+		//browsers don't like loading a json request and download dialog at the same time.'
+		if(this.loading)
+		{
+			this.editHandler.defer(200, this);
+		}else
+		{				
 			if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
 			{
 				if(!deployJava.isWebStartInstalled('1.6.0'))
@@ -47,6 +53,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 			{
 				window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.link_id;
 			}
+		}
 	},
 
 	createTopToolbar : function(){
