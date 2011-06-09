@@ -51,13 +51,13 @@
 	 * Installs the module's tables etc
 	 */
 	protected function afterSave(){
-		
+		return parent::afterSave();
 	}
 	
 	/**
 	 * Delete's the module's tables etc.
 	 */	
 	public function afterDelete(){
-		
+		return parent::afterDelete();
 	}
 }

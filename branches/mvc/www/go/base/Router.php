@@ -11,9 +11,9 @@ class GO_Base_Router{
 		
 		$r = isset($_REQUEST['r']) ? explode('/', $_REQUEST['r']) :array();
 		
-		$module=isset($r[0]) ? strtolower($r[0]) : 'Base';;
-		$controller=isset($r[1]) ? ucfirst($r[1]) : 'Main';
-		$action=isset($r[2]) ? ucfirst($r[2]) : 'Index';
+		$module=isset($r[0]) ? strtolower($r[0]) : '';;
+		$controller=isset($r[1]) ? ucfirst($r[1]) : 'Default';
+		$action=isset($r[2]) ? $r[2] : '';
 		
 		//$module = GO::modules()->modules[$r[0]];
 		
@@ -22,11 +22,16 @@ class GO_Base_Router{
 		//$controllerFile = GO::config()->root_path.'modules/'.$module.'/controller/'.$controller.'.php';		
 		//require_once($controllerFile);
 		
-		$controller='GO_'.ucfirst($module).'_Controller_'.$controller;
+		$controllerClass='GO_';
 		
+		if(!empty($module))
+			$controllerClass.=ucfirst($module).'_';
+		
+		$controllerClass.='Controller_'.$controller;
+	
 		$output=empty($_REQUEST['output']) ? 'json' : $_REQUEST['output'];
 		
-		$controller = new $controller;
+		$controller = new $controllerClass;
 		$controller->init($module,$output);
 		$controller->run($action);	
 	}	

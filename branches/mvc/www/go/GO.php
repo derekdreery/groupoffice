@@ -96,12 +96,15 @@ class GO {
 	public static function autoload($className) {
 		
 		
-		$baseClassFile = dirname(dirname(__FILE__)) . '/'.str_replace('_','/', $className).'.php';
-		if(file_exists($baseClassFile)){
+		if(substr($className,0,7)=='GO_Base'){		
+			$arr = explode('_', $className);		
+			$file = array_pop($arr).'.php';		
+			
+			$path = strtolower(implode('/', $arr));
+			$baseClassFile = $path.'/'.$file;
 			require($baseClassFile);
 		}  else {
-
-
+			
 			$className = str_replace('GO_','', $className);
 
 			if(isset(self::$_classes[$className])){
@@ -110,13 +113,21 @@ class GO {
 			{
 				$arr = explode('_', $className);
 
-				$module = strtolower(array_shift($arr));
+				if(count($arr)==3)
+					$module = strtolower(array_shift($arr));
+				else
+					$module=false;
+				
 				$type = strtolower(array_shift($arr));
 				$file = ucfirst(array_shift($arr));
 
-
-
-				$file = self::modules()->modules[$module]['path'].$type.'/'.$file.'.php';
+				if($module){
+					$file = self::modules()->modules[$module]['path'].$type.'/'.$file.'.php';
+				}else
+				{
+					$file = self::config()->root_path.$type.'/'.$file.'.php';
+				}
+				
 				if(!file_exists($file))
 					throw new Exception('Class '.$className.' not found!');
 				

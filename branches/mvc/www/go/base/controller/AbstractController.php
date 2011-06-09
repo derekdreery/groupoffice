@@ -5,6 +5,8 @@ abstract class GO_Base_Controller_AbstractController {
 	protected $outputStream;
 	
 	protected $module;
+	
+	protected $defaultAction='Index';
 
 	/**
 	 *
@@ -43,7 +45,7 @@ abstract class GO_Base_Controller_AbstractController {
 	 * @param string $viewName 
 	 */
 	protected function render($viewName){
-		if($this->module=='Base'){
+		if(empty($this->module)){
 			require(GO::config()->root_path.'themes/'.GO::view().'/'.$viewName.'.php');
 		}else
 		{
@@ -89,6 +91,11 @@ abstract class GO_Base_Controller_AbstractController {
 		if(!$this->checkPermissions($action)){
 			throw new AccessDeniedException();
 		}
+		
+		if(empty($action))
+			$action=$this->defaultAction;
+		else
+			$action=ucfirst($action);
 
 		$methodName='action'.$action;
 
@@ -134,5 +141,7 @@ abstract class GO_Base_Controller_AbstractController {
 	/**
 	 * This default action should be overrriden
 	 */
-	abstract protected function actionIndex();
+	protected function actionIndex(){
+		
+	}
 }

@@ -131,7 +131,7 @@ class GO_Base_Db_ActiveRecord {
 		
 		$sql = "SELECT t.* FROM `".$this->tableName."` t ";
 		
-		if($this->aclField){
+		if($this->aclField && empty($params['ignoreAcl'])){
 			$sql .= "INNER JOIN go_acl ON (t.`".$this->aclField."` = go_acl.acl_id";
 			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_SECURITY::READ_PERMISSION){
 				$sql .= " AND go_acl.level>=".intval($params['permissionLevel']);
@@ -139,7 +139,7 @@ class GO_Base_Db_ActiveRecord {
 			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',GO::security()->get_user_group_ids($params['userId']))."))) ";
 		}
 		
-		if($this->aclField){
+		if($this->aclField && empty($params['ignoreAcl'])){
 			$sql .= "GROUP BY `".$this->primaryKey."` ";
 		}
 		
