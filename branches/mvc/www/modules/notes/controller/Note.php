@@ -9,7 +9,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractController{
 		
 	}
 	
-	public function actionTest($note_id=0){
+	public function actionDefault($note_id=0){
 		
 		$note = new GO_Notes_Model_Note($note_id);
 	

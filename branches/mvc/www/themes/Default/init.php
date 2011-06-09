@@ -1,5 +1,5 @@
 <?php
-$webCache = new GO_Web_Cache();
+//$webCache = new GO_Web_Cache();
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -11,13 +11,13 @@ $webCache = new GO_Web_Cache();
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <meta name="description" content="Take your office online. Share projects, calendars, files and e-mail online with co-workers and clients. Easy to use and fully customizable, Group-Office takes online colaboration to the next level." />
 <?php
-$webCache->addStylesheet(GO::config()->root_path.'ext/resources/css/ext-all.css', GO::config()->host.'ext/resources/css/');
-$webCache->addStylesheet(GO::config()->root_path.'themes/Default/xtheme-groupoffice.css', GO::config()->host.'themes/Default/');
-$webCache->addStylesheet(GO::config()->root_path.'themes/Default/style.css', GO::config()->host.'themes/Default/');
-//$webCache->load_module_stylesheets();
-				
-
-$webCache->getCachedCss();
+//$webCache->addStylesheet(GO::config()->root_path.'ext/resources/css/ext-all.css', GO::config()->host.'ext/resources/css/');
+//$webCache->addStylesheet(GO::config()->root_path.'themes/Default/xtheme-groupoffice.css', GO::config()->host.'themes/Default/');
+//$webCache->addStylesheet(GO::config()->root_path.'themes/Default/style.css', GO::config()->host.'themes/Default/');
+////$webCache->load_module_stylesheets();
+//				
+//
+//$webCache->getCachedCss();
 
 GO::events()->fire_event('head');
 
