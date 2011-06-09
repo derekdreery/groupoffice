@@ -160,7 +160,7 @@ class email extends db {
 		$events->add_listener('head', __FILE__, 'email', 'head');
 	}
 
-	public function head(){
+	public static function head(){
 		global $GO_CONFIG, $GO_SECURITY;
 
 		$font_size = GO::security()->logged_in() ? GO::config()->get_setting('email_font_size', GO::security()->user_id) : false;

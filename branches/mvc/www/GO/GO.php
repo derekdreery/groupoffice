@@ -42,9 +42,15 @@ class GO {
 		return 'Default';
 	}
 
+	/**
+	 * Returns a collection of Group-Office Module objects
+	 * 
+	 * @return GO_Base_Model_ModelCollection
+	 * 
+	 */
 	public static function modules() {
-		if (!isset(self::$_modules)) {
-			self::$_modules = new GO_MODULES();
+		if (!isset(self::$_modules)) {			
+			self::$_modules=new GO_Base_ModuleCollection();
 		}
 		return self::$_modules;
 	}
@@ -82,6 +88,11 @@ class GO {
 		self::$_classes[$className] = $path;
 	}
 
+	/**
+	 * The automatic class loader for Group-Office.
+	 * 
+	 * @param string $className 
+	 */
 	public static function autoload($className) {
 		
 		
@@ -106,7 +117,10 @@ class GO {
 
 
 				$file = self::modules()->modules[$module]['path'].$type.'/'.$file.'.php';
-				require_once($file);
+				if(!file_exists($file))
+					throw new Exception('Class '.$className.' not found!');
+				
+				require($file);
 			}
 		}
 	}
@@ -220,7 +234,7 @@ class GO {
 			die('<h1>Disabled</h1>This Group-Office installation has been disabled');
 		}
 		
-		self::modules()->load_modules();
+		//self::modules()->load_modules();
 
 
 

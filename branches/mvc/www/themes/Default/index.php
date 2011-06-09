@@ -15,12 +15,6 @@ $webCache->addStylesheet(GO::config()->root_path.'ext/resources/css/ext-all.css'
 $webCache->addStylesheet(GO::config()->root_path.'themes/Default/xtheme-groupoffice.css', GO::config()->host.'themes/Default/');
 $webCache->addStylesheet(GO::config()->root_path.'themes/Default/style.css', GO::config()->host.'themes/Default/');
 //$webCache->load_module_stylesheets();
-
-$model = new GO_Base_Model_Module();
-$stmt = $model->find();
-
-while($module = $stmt->fetch())
-				var_dump($module);
 				
 
 $webCache->getCachedCss();

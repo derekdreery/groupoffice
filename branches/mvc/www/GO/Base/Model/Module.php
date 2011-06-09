@@ -1,5 +1,30 @@
 <?php
  class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord{
+	
+	/**
+	 *
+	 * @var String The absolute filesystem path to this module 
+	 */
+	public $path;
+	
+	/**
+	 *
+	 * @var String The absolute URL to this module. This is autodetected or manually set in config.php.
+	 */
+	public $full_url;
+	
+	/**
+	 *
+	 * @var string The relative URL to this module. 
+	 */
+	public $url;
+	
+	/**
+	 * @deprecated
+	 * @var String the absolute path to the classes folder of this module.
+	 */
+	public $class_path;
+	
 	 
 	protected $aclField='acl_id';
 	
@@ -12,4 +37,27 @@
 		'sort_order'=>array('type'=>PDO::PARAM_INT),
 		'acl_id'=>array('type'=>PDO::PARAM_INT)
 	);	
+	
+	protected function afterLoad() {
+		parent::afterLoad();
+		
+		$this->path = GO::config()->root_path.'modules/'.$this->id.'/';
+		$this->full_url = GO::config()->full_url.'modules/'.$this->id.'/';
+		$this->url = GO::config()->host.'modules/'.$this->id.'/';
+		$this->class_path = $this->path.'classes/';
+	}
+	
+	/**
+	 * Installs the module's tables etc
+	 */
+	protected function afterSave(){
+		
+	}
+	
+	/**
+	 * Delete's the module's tables etc.
+	 */	
+	public function afterDelete(){
+		
+	}
 }

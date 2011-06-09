@@ -3,7 +3,7 @@
 class GO_Web_Cache {
 
 	private function replaceUrl($css, $baseurl) {
-		return preg_replace('/url[\s]*\(([^\)]*)\)/ieU', "GO_Base_View_Web::replaceUrlCallback('$1', \$baseurl)", $css);
+		return preg_replace('/url[\s]*\(([^\)]*)\)/ieU', "GO_Web_Cache::replaceUrlCallback('$1', \$baseurl)", $css);
 	}
 
 	public static function replaceUrlCallback($url, $baseurl) {
@@ -38,7 +38,7 @@ class GO_Web_Cache {
 		}
 	}
 
-	function get_cached_css() {
+	function getCachedCss() {
 		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
 
 		$mods = '';
@@ -48,7 +48,7 @@ class GO_Web_Cache {
 
 		$hash = md5(GO::config()->file_storage_path . GO::config()->host . GO::config()->mtime . $mods);
 
-		$relpath = 'cache/' . $hash . '-' . $this->theme . '-style.css';
+		$relpath = 'cache/' . $hash . '-' . GO::view() . '-style.css';
 		$cssfile = GO::config()->file_storage_path . $relpath;
 
 		if (!file_exists($cssfile) || GO::config()->debug) {
@@ -60,7 +60,7 @@ class GO_Web_Cache {
 
 				$baseurl = str_replace(GO::config()->root_path, GO::config()->host, dirname($s)) . '/';
 
-				fputs($fp, $this->replace_url(file_get_contents($s), $baseurl));
+				fputs($fp, $this->replaceUrl(file_get_contents($s), $baseurl));
 			}
 			fclose($fp);
 		}

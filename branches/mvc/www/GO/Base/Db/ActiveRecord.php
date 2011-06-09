@@ -3,7 +3,7 @@
 class GO_Base_Db_ActiveRecord {
 	
 	/**
-	 * TODO: How to handle multiple connections?
+	 * The database connection of this record
 	 * 
 	 * @var GO_Database  
 	 */
@@ -72,6 +72,8 @@ class GO_Base_Db_ActiveRecord {
 	 */
 	protected $primaryKey='id'; //TODO can also be array('user_id','group_id') for example.
 	
+	public $pk;
+	
 	/**
 	 * Constructor for the model
 	 * 
@@ -80,6 +82,11 @@ class GO_Base_Db_ActiveRecord {
 	public function __construct($primaryKey=0){			
 		if($primaryKey!=0)
 			$this->load($primaryKey);
+		else
+			$this->afterLoad();
+		
+		if(isset($this->_attributes[$this->primaryKey]))
+				$this->pk=$this->_attributes[$this->primaryKey];
 	}
 
 	
@@ -177,6 +184,15 @@ class GO_Base_Db_ActiveRecord {
 		
 		$this->isNew=false;
 		
+		$this->afterLoad();
+		
+	}
+	
+	/**
+	 * May be overriden to do stuff after the model was loaded from the database
+	 */
+	protected function afterLoad(){
+		
 	}
 	
 		
@@ -204,18 +220,16 @@ class GO_Base_Db_ActiveRecord {
 		return $this->_attributes;		
 	}
 	
+	/**
+	 * Checks all the permissions
+	 * 
+	 * @return boolean 
+	 */
 	private function _checkPermissions(){
 		return true;
 	}
 	
-	protected function beforeSave(){
-		if(isset($this->_columns['mtime']))
-			$this->mtime=time();
-		if(isset($this->_columns['ctime']) && !isset($this->ctime)){
-			$this->ctime=time();
-		}
-		return true;
-	}
+	
 	
 	public function validate(){
 		foreach($this->_columns as $field=>$attributes){
@@ -243,21 +257,57 @@ class GO_Base_Db_ActiveRecord {
 	public function save(){
 		
 		if($this->_checkPermissions() && $this->beforeSave() && $this->validate()){		
+		
+			/*
+			 * Set some common column values
+			*/
+			
+			if(isset($this->_columns['mtime']))
+				$this->mtime=time();
+			if(isset($this->_columns['ctime']) && !isset($this->ctime)){
+				$this->ctime=time();
+			}
+			
 			if($this->isNew){
 
-				$this->_attributes[$this->primaryKey] = $this->dbInsert();
-				return true;
+				$this->_attributes[$this->primaryKey] = $this->_dbInsert();
+				
+				if(!$this->_attributes[$this->primaryKey])
+					return false;
 			}else
 			{
-				return $this->dbUpdate();
+				if(!$this->_dbUpdate())
+					return false;
 			}
+			
+			return $this->afterSave();
+			
 		}else
 		{
 			return false;
 		}
 	}
 	
-	private function dbInsert(){		
+	protected function beforeSave(){
+		
+		return true;
+	}
+	
+	/**
+	 * May be overridden to do stuff after save
+	 * 
+	 * @return boolean 
+	 */
+	protected function afterSave(){
+		return true;
+	}
+	
+	/**
+	 * Inserts the model into the database
+	 * 
+	 * @return boolean 
+	 */
+	private function _dbInsert(){		
 		
 		$fieldNames = array_keys($this->_columns);
 		
@@ -278,7 +328,7 @@ class GO_Base_Db_ActiveRecord {
 		
 	}
 	
-	private function dbUpdate(){
+	private function _dbUpdate(){
 		
 		$updates=array();
 		foreach($this->_columns as $field => $value)
