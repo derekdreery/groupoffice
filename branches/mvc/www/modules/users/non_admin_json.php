@@ -122,7 +122,7 @@ switch($task)
 		$GO_THEME = new GO_THEME();
 
 
-		$themes = $GO_THEME->get_themes();
+		$themes = GO::theme()->get_themes();
 		foreach($themes as $theme)
 		{
 			$record = array(

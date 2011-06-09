@@ -45,6 +45,8 @@ abstract class GO_Base_Controller_AbstractController {
 	 * @param string $viewName 
 	 */
 	protected function render($viewName){
+		global $lang;
+		
 		if(empty($this->module)){
 			require(GO::config()->root_path.'themes/'.GO::view().'/'.$viewName.'.php');
 		}else

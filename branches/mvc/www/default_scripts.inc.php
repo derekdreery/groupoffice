@@ -224,6 +224,9 @@ if(!isset($default_scripts_load_modules)){
 }
 
 
+//var_dump($load_modules);
+
+
 if(count($load_modules)) {
 	//load language first so it can be overridden
 	foreach($load_modules as $module) {
@@ -396,8 +399,8 @@ if(count($load_modules)) {
 	?>
 </script>
 <?php
-if(file_exists($GO_THEME->theme_path.'MainLayout.js')) {
-	echo '<script src="'.$GO_THEME->theme_url.'MainLayout.js" type="text/javascript"></script>';
+if(file_exists(GO::theme()->theme_path.'MainLayout.js')) {
+	echo '<script src="'.GO::theme()->theme_url.'MainLayout.js" type="text/javascript"></script>';
 	echo "\n";
 }
 ?>

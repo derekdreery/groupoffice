@@ -307,10 +307,10 @@ if (isset(GO::modules()->modules['customcss']) && file_exists(GO::config()->file
 if (GO::security()->logged_in() && empty($_SESSION['GO_SESSION']['mute_sound'])) {
 	?>
 						<object width="0" height="0" id="alarmSound">
-							<param name="movie" value="<?php echo $GO_THEME->theme_url; ?>reminder.swf" />
+							<param name="movie" value="<?php echo GO::theme()->theme_url; ?>reminder.swf" />
 							<param name="loop" value="false" />
 							<param name="autostart" value="false" />
-							<embed src="<?php echo $GO_THEME->theme_url; ?>reminder.swf" autostart=false loop="false" width="0" height="0" name="alarmSound"></embed>
+							<embed src="<?php echo GO::theme()->theme_url; ?>reminder.swf" autostart=false loop="false" width="0" height="0" name="alarmSound"></embed>
 						</object>
 						<?php
 					}

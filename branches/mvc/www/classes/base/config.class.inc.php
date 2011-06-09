@@ -1302,8 +1302,8 @@ class GO_CONFIG {
 		}
 
 		//$response['modules']=GO::modules()->modules;
-		$response['config']['theme_url']=$GO_THEME->theme_url;
-		$response['config']['theme']=$GO_THEME->theme;
+		$response['config']['theme_url']=GO::theme()->theme_url;
+		$response['config']['theme']=GO::theme()->theme;
 		$response['config']['product_name']=$this->product_name;
 		$response['config']['product_version']=$this->version;
 		$response['config']['host']=$this->host;

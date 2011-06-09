@@ -76,4 +76,4 @@ require_once(GO::config()->class_path.'base/theme.class.inc.php');
 $GO_THEME = new GO_THEME();
 
 
-require_once($GO_THEME->theme_path."layout.inc.php");
+require_once(GO::theme()->theme_path."layout.inc.php");

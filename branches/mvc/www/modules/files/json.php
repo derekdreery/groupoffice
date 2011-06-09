@@ -383,7 +383,7 @@ try {
 				$response['total']= $share_count = $files->get_cached_shares(GO::security()->user_id, true, $start, $limit);
 
 				while($folder = $files->next_record()){
-					$folder['thumb_url']=$GO_THEME->image_url.'128x128/filetypes/folder.png';
+					$folder['thumb_url']=GO::theme()->image_url.'128x128/filetypes/folder.png';
 					$class='filetype-folder';
 					
 					$folder['type_id']='d:'.$folder['id'];

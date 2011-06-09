@@ -107,7 +107,7 @@ class GO_USERS extends db
 		if($theme_changed){
 			require_once(GO::config()->class_path.'base/theme.class.inc.php');
 			$GO_THEME = new GO_THEME();
-			$GO_THEME->set_theme();
+			GO::theme()->set_theme();
 		}
 
 

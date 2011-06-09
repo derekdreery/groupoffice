@@ -11,21 +11,21 @@ $GO_THEME = new GO_THEME();
 ////////////////////////////////
 // checking shortcut icon
 ////////////////////////////////
-$icon = $GO_THEME->theme_path.'images/groupoffice.ico';
+$icon = GO::theme()->theme_path.'images/groupoffice.ico';
 if(!file_exists($icon))
 	$icon = GO::config()->theme_url.'Default/images/groupoffice.ico';
 else
-	$icon = $GO_THEME->theme_url.'images/groupoffice.ico';
+	$icon = GO::theme()->theme_url.'images/groupoffice.ico';
 ////////////////////////////////
 
 ////////////////////////////////
 // checking reminder CSS
 ////////////////////////////////
-$style = $GO_THEME->theme_path.'/reminder.css';
+$style = GO::theme()->theme_path.'/reminder.css';
 if(!file_exists($style))
 	$style = GO::config()->theme_url.'Default/reminder.css';
 else
-	$style = $GO_THEME->theme_url.'reminder.css';
+	$style = GO::theme()->theme_url.'reminder.css';
 ////////////////////////////////
 
 $title=$lang['common']['alert'].' - '.GO::config()->product_name;

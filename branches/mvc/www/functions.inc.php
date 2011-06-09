@@ -401,9 +401,9 @@ function get_thumb_dir(){
 	$GO_THEME = new GO_THEME();
 
 
-	if(is_dir($GO_THEME->theme_path.'images/128x128/filetypes/')){
-		$dir = $GO_THEME->image_path.'128x128/filetypes/';
-		$url = $GO_THEME->image_url.'128x128/filetypes/';
+	if(is_dir(GO::theme()->theme_path.'images/128x128/filetypes/')){
+		$dir = GO::theme()->image_path.'128x128/filetypes/';
+		$url = GO::theme()->image_url.'128x128/filetypes/';
 	}else{
 		$dir = GO::config()->theme_path.'Default/images/128x128/filetypes/';
 		$url = GO::config()->theme_url.'Default/images/128x128/filetypes/';

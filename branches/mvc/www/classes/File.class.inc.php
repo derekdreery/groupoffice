@@ -130,10 +130,10 @@ class File
 
 		global $GO_THEME;
 
-		if (isset ($GO_THEME->filetypes[$extension])) {
-			return $GO_THEME->filetypes[$extension];
+		if (isset (GO::theme()->filetypes[$extension])) {
+			return GO::theme()->filetypes[$extension];
 		} else {
-			return $GO_THEME->filetypes['unknown'];
+			return GO::theme()->filetypes['unknown'];
 		}
 	}*/
 

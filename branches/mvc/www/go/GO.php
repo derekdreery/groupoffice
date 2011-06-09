@@ -26,6 +26,7 @@ class GO {
 	private static $_language;
 	private static $_modules;
 	private static $_events;
+	private static $_theme;
 	
 	public static $db;
 	
@@ -77,6 +78,13 @@ class GO {
 		return self::$_events;
 	}
 	
+	public static function theme() {
+		if (!isset(self::$_theme)) {
+			self::$_theme = new GO_THEME();
+		}
+		return self::$_theme;
+	}
+	
 	public static function security() {
 		if (!isset(self::$_security)) {
 			self::$_security = new GO_SECURITY();
@@ -101,7 +109,7 @@ class GO {
 			$file = array_pop($arr).'.php';		
 			
 			$path = strtolower(implode('/', $arr));
-			$baseClassFile = $path.'/'.$file;
+			$baseClassFile = GO::config()->root_path.$path.'/'.$file;
 			require($baseClassFile);
 		}  else {
 			

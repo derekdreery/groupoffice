@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="x-ua-compatible" content="IE=8">
 <?php
-require($GO_THEME->theme_path.'default_head.inc.php');
+require(GO::theme()->theme_path.'default_head.inc.php');
 
 if(isset(GO::modules()->modules['customcss']) && file_exists(GO::config()->file_storage_path.'customcss/style.css'))
 	echo '<style>'.file_get_contents(GO::config()->file_storage_path.'customcss/style.css').'</style>'."\n";
@@ -124,10 +124,10 @@ if(GO::security()->logged_in() && empty($_SESSION['GO_SESSION']['mute_sound']))
 {
 ?>
 	<object width="0" height="0" id="alarmSound">
-	<param name="movie" value="<?php echo $GO_THEME->theme_url; ?>reminder.swf" />
+	<param name="movie" value="<?php echo GO::theme()->theme_url; ?>reminder.swf" />
 	<param name="loop" value="false" />
 	<param name="autostart" value="false" />
-	<embed src="<?php echo $GO_THEME->theme_url; ?>reminder.swf" autostart=false loop="false" width="0" height="0" name="alarmSound"></embed>
+	<embed src="<?php echo GO::theme()->theme_url; ?>reminder.swf" autostart=false loop="false" width="0" height="0" name="alarmSound"></embed>
 	</object>
 <?php
 } 

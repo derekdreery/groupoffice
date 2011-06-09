@@ -367,7 +367,17 @@ class GO_Base_Db_ActiveRecord {
 	 */
 	public function __get($name)
 	{
-		return $this->_attributes[$name];
+		if(isset($this->attributes[$name])){
+			return $this->_attributes[$name];
+		}else{
+			
+			$getter = 'get'.ucfirst($name);
+			
+			if(method_exists($this,$getter)){
+				return $this->$getter();
+			}
+		}
+			
 	}
 
 	/**

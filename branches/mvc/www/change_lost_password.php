@@ -33,7 +33,7 @@ require(GO::language()->get_base_language_file('lostpassword'));
 require_once(GO::config()->class_path.'base/theme.class.inc.php');
 $GO_THEME = new GO_THEME();
 
-$theme = is_dir($GO_THEME->theme_path.'smarty') ? GO::config()->theme : 'Default';
+$theme = is_dir(GO::theme()->theme_path.'smarty') ? GO::config()->theme : 'Default';
 
 $smarty = new Smarty();
 $smarty->template_dir=GO::config()->root_path.'themes/'.$theme.'/smarty';

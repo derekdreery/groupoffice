@@ -49,7 +49,7 @@ if($user)
 require_once(GO::config()->class_path.'base/theme.class.inc.php');
 $GO_THEME = new GO_THEME();
 
-require($GO_THEME->theme_path.'default_head.inc.php');
+require(GO::theme()->theme_path.'default_head.inc.php');
 ?>
 </head>
 <body>
