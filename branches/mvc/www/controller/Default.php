@@ -1,4 +1,11 @@
 <?php
+/**
+ * TODO
+ * 
+ * The whole init process of Group-Office has to be remodelled.
+ * The default_scripts.inc.php file is ugly and bad design. Instead all init
+ * views in modules should register client scripts and css files.
+ */
 class GO_Controller_Default extends GO_Base_Controller_AbstractController{
 	
 	protected $defaultAction='Init';
@@ -7,7 +14,9 @@ class GO_Controller_Default extends GO_Base_Controller_AbstractController{
 		$this->render('init');
 	}
 	
-	
+	/**
+	 * Todo replace compress.php with this action
+	 */
 	protected function actionCompress(){
 		
 	}
