@@ -37,7 +37,7 @@ $scripts[]=$root_uri.'javascript/namespaces.js';
 	GO.calltoTemplate = '<?php echo GO::config()->callto_template; ?>';
 	
 	GO.url = function(relativeUrl){
-		return BaseHref+'router.php?r='+relativeUrl
+		return BaseHref+'index.php?r='+relativeUrl
 	}
 
 <?php

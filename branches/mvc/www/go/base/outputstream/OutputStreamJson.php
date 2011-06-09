@@ -2,15 +2,18 @@
 
 class GO_Base_OutputStream_OutputStreamJson implements GO_Base_OutputStream_OutputStreamInterface{
 	
+	private $_headersSent=false;
+	
 	public function __construct(){
-		$this->getHeaders();
+		$this->sendHeaders();
 	}
 	
-	public function getHeaders(){
-		header('Content-Type','text/plain');
+	public function sendHeaders(){
+		header('Content-Type: text/json; charset=UTF-8');
 	}
 	
 	public function write($data){
+		
 		echo json_encode($data);
 	}
 	

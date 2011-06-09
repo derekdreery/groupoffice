@@ -58,4 +58,11 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		}
 		return !count($this->allowed_modules) || in_array($module, $this->allowed_modules);
 	}
+	
+	/**
+	 * @deprecated
+	 */
+	public function load_modules(){
+		
+	}
 }

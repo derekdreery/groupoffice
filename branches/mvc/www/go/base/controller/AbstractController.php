@@ -1,7 +1,7 @@
 <?php
 
 abstract class GO_Base_Controller_AbstractController {
-	
+		
 	protected $outputStream;
 	
 	protected $module;
@@ -22,12 +22,11 @@ abstract class GO_Base_Controller_AbstractController {
 	 * @param string $module Name of the module this controller belongs too
 	 * @param string $output Type of output eg. json or html
 	 */
-	public function init($module, $output){
+	public function init($module){
 		//header('Content-Type: text/plain');
 		$this->module=$module;
 		
-		$outputClass = 'GO_Base_OutputStream_OutputStream'.ucfirst($output);
-		$this->outputStream = new $outputClass;
+		
 	}
 	
 	/**
@@ -36,6 +35,12 @@ abstract class GO_Base_Controller_AbstractController {
 	 * @param mixed $str 
 	 */
 	protected function output($str){
+		
+		if(!isset($this->outputStream)){
+			$output=empty($_REQUEST['output']) ? 'Json' : ucfirst($_REQUEST['output']);
+			$outputClass = 'GO_Base_OutputStream_OutputStream'.$output;
+			$this->outputStream = new $outputClass;
+		}
 		$this->outputStream->write($str);
 	}
 	
@@ -46,6 +51,8 @@ abstract class GO_Base_Controller_AbstractController {
 	 */
 	protected function render($viewName){
 		global $lang;
+		
+		header('Content-Type: text/html; charset=UTF-8');
 		
 		if(empty($this->module)){
 			require(GO::config()->root_path.'themes/'.GO::view().'/'.$viewName.'.php');

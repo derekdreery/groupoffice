@@ -869,7 +869,7 @@ class String {
 		return $html;
 	}
 
-	function xss_clean($data)
+	public static function xss_clean($data)
 	{
 		// Fix &entity\n;
 		$data = str_replace(array('&amp;','&lt;','&gt;'), array('&amp;amp;','&amp;lt;','&amp;gt;'), $data);

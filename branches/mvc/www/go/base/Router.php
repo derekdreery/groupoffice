@@ -9,18 +9,20 @@ class GO_Base_Router{
 	 */
 	public function run(){
 		
-		$r = isset($_REQUEST['r']) ? explode('/', $_REQUEST['r']) :array();
+		$arr = isset($_REQUEST['r']) ? explode('/', $_REQUEST['r']) :array();
 		
-		$module=isset($r[0]) ? strtolower($r[0]) : '';;
-		$controller=isset($r[1]) ? ucfirst($r[1]) : 'Default';
-		$action=isset($r[2]) ? $r[2] : '';
+		if(count($arr)==3)
+			$module = strtolower(array_shift($arr));
+		else
+			$module=false;
 		
-		//$module = GO::modules()->modules[$r[0]];
+		$controller = array_shift($arr);
+		if($controller)
+			$controller=ucfirst($controller);
+		else
+			$controller='Default';
 		
-		//if($module)
-		
-		//$controllerFile = GO::config()->root_path.'modules/'.$module.'/controller/'.$controller.'.php';		
-		//require_once($controllerFile);
+		$action = array_shift($arr);
 		
 		$controllerClass='GO_';
 		
@@ -29,10 +31,10 @@ class GO_Base_Router{
 		
 		$controllerClass.='Controller_'.$controller;
 	
-		$output=empty($_REQUEST['output']) ? 'json' : $_REQUEST['output'];
+		//$output=empty($_REQUEST['output']) ? 'json' : $_REQUEST['output'];
 		
 		$controller = new $controllerClass;
-		$controller->init($module,$output);
+		$controller->init($module);
 		$controller->run($action);	
 	}	
 }

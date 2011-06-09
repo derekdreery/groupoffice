@@ -175,9 +175,12 @@
 //
 //
 ////CSS
-$this->registerCssFile('ext/resources/css/ext-all.css');
-$this->registerCssFile('themes/Default/xtheme-groupoffice.css');
-$this->registerCssFile('themes/Default/style.css');
+$this->registerCssFile(GO::config()->root_path.'ext/resources/css/ext-all.css');
+$this->registerCssFile(GO::config()->root_path.'themes/Default/xtheme-groupoffice.css');
+$this->registerCssFile(GO::config()->root_path.'themes/Default/style.css');
+
+$this->loadModuleStylesheets();
+
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>

@@ -14,6 +14,23 @@ class GO_Controller_Default extends GO_Base_Controller_AbstractController{
 		$this->render('init');
 	}
 	
+	protected function actionLogout(){
+		GO::security()->logout();	
+		if(isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1')
+		{
+			?>
+			<script type="text/javascript">
+			window.close();
+			</script>
+			<?php
+			exit();
+		}else
+		{
+			header('Location: '.GO::config()->host);
+			exit();
+		}
+	}
+	
 	/**
 	 * Todo replace compress.php with this action
 	 */
@@ -36,14 +53,36 @@ class GO_Controller_Default extends GO_Base_Controller_AbstractController{
 	public static function replaceUrlCallback($url, $baseurl) {
 		return 'url(' . $baseurl . trim(stripslashes($url), '\'" ') . ')';
 	}
+	
+	function loadModuleStylesheets($derrived_theme=false){
+		global $GO_MODULES;
 
-	protected function registerCssFile($url) {
+		foreach(GO::modules()->getAll() as $module)
+		{
+			if(file_exists($module->path.'themes/Default/style.css')){
+				$this->registerCssFile($module->path.'themes/Default/style.css');
+			}
+
+			if(GO::view()!='Default'){
+				
+				//todo
+				if($derrived_theme && file_exists($module['path'].'themes/'.$derrived_theme.'/style.css')){
+					$this->registerCssFile($module['path'].'themes/'.$derrived_theme.'/style.css');
+				}
+				if(file_exists($module['path'].'themes/'.$this->theme.'/style.css')){
+					$this->registerCssFile('themes/'.$this->theme.'/style.css');
+				}
+			}
+		}
+	}
+
+	protected function registerCssFile($path) {
 
 		//echo '<!-- '.$path.' -->'."\n";
 
-		go_debug('Adding stylesheet: ' . $url);
+		go_debug('Adding stylesheet: ' . $path);
 
-		$this->stylesheets[] = $url;
+		$this->stylesheets[] = $path;
 	}
 
 //	function loadModuleStylesheets($derrived_theme=false) {
@@ -85,9 +124,9 @@ class GO_Controller_Default extends GO_Base_Controller_AbstractController{
 			$fp = fopen($cssfile, 'w+');
 			foreach ($this->stylesheets as $s) {
 
-				$baseurl = GO::config()->host.dirname($s) . '/';
+				$baseurl = str_replace(GO::config()->root_path, GO::config()->host, dirname($s)) . '/';
 
-				fputs($fp, $this->replaceUrl(file_get_contents(GO::config()->root_path.$s), $baseurl));
+				fputs($fp, $this->replaceUrl(file_get_contents($s), $baseurl));
 			}
 			fclose($fp);
 		}

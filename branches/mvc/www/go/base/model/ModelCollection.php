@@ -21,4 +21,8 @@ class GO_Base_Model_ModelCollection{
 	public function __get($name){
 		return $this->_models[$name];
 	}
+	
+	public function getAll(){
+		return $this->_models;
+	}
 }
