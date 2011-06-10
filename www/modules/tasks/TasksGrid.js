@@ -32,8 +32,15 @@ GO.tasks.TasksPanel = function(config)
 
 		var fields ={
 			fields:['id', 'icon', 'name','completed','due_time', 'late', 'description', 'status', 'ctime', 'mtime', 'start_time', 'completion_time','disabled','tasklist_name','category_name','priority','project_name'],
-			columns:[this.checkColumn,
-			{
+			columns:[this.checkColumn,{
+				header:"&nbsp;",
+				width:23,
+				dataIndex: 'icon',
+				renderer: this.renderIcon,
+				hideable:false,
+				fixed: true,
+				sortable:false
+			},{
 				id:'name',
 				header:GO.lang['strName'],
 				dataIndex: 'name',
@@ -44,13 +51,6 @@ GO.tasks.TasksPanel = function(config)
 					}
 					return value;
 				}
-			},{
-				header:"&nbsp;",
-				width:23,
-				dataIndex: 'icon',
-				renderer: this.renderIcon,
-				hideable:false,
-				sortable:false
 			},{
 				header:GO.tasks.lang.tasklist,
 				dataIndex: 'tasklist_name',
@@ -204,7 +204,7 @@ GO.tasks.TasksPanel = function(config)
 		this.addEvents({
 			checked : true
 		});
-
+		
 	};
 
 
