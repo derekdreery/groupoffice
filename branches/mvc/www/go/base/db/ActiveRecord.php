@@ -107,14 +107,6 @@ class GO_Base_Db_ActiveRecord {
 		return self::$db;
 	}
 
-	
-	public static function findByAttribute($attribute, $value){
-		$sql = "SELECT * FROM `".$this->tableName."` WHERE `".$attribute.'`='.$this->db->escape($value);
-		$this->_db->query($sql);
-		
-		return new GO_Model_Iterator($this);
-	}
-
 	/**
 	 * Finds model objects 
 	 * 
@@ -138,6 +130,21 @@ class GO_Base_Db_ActiveRecord {
 			}
 			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',GO::security()->get_user_group_ids($params['userId']))."))) ";
 		}
+		
+		if(!empty($params['criteriaSql']))
+			$sql .= $params['criteriaSql'];
+		
+		if(!empty($params['by'])){
+			foreach($params['by'] as $arr){
+				
+				$field = $arr[0];
+				$value= $arr[1];
+				$op=isset($arr[2]) ? $arr[2] : '=';
+								
+				$sql .= "AND `$field` $op '".$this->getDbConnection()->quote($value)."' ";
+			}
+		}
+
 		
 		if($this->aclField && empty($params['ignoreAcl'])){
 			$sql .= "GROUP BY `".$this->primaryKey."` ";
@@ -186,6 +193,10 @@ class GO_Base_Db_ActiveRecord {
 		
 		$this->afterLoad();
 		
+		/**
+		 * Useful event for modules. For example custom fields can be loaded or a files folder.
+		 */
+		GO::events()->fire_event('loadactiverecord',array(&$this));
 	}
 	
 	/**
@@ -280,7 +291,15 @@ class GO_Base_Db_ActiveRecord {
 					return false;
 			}
 			
-			return $this->afterSave();
+			if(!$this->afterSave())
+							return false;
+			
+			/**
+			 * Useful event for modules. For example custom fields can be loaded or a files folder.
+			 */
+			GO::events()->fire_event('saveactiverecord',array(&$this));
+			
+			return true;
 			
 		}else
 		{
