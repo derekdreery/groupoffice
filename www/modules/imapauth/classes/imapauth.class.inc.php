@@ -106,8 +106,16 @@ class imapauth
 					require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 					$GO_USERS = new GO_USERS();
 
+          require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
+          $email_client = new email();
+
 					$user = $GO_USERS->get_user_by_username($go_username);
 					if ($user) {
+
+            if(!$email_client->get_account_by_username($username, $user['id'],$config['host'])){
+              go_debug('IMAPAUTH: E-mail account not found. Creating it now.');
+              $ia->create_email_account($config, $user['id'], $mail_username, $password, $email);
+            }
 
 						//user exists. See if the password is accurate
 						if(crypt($password, $user['password']) != $user['password'])
@@ -118,8 +126,7 @@ class imapauth
 
 							if(isset($GO_MODULES->modules['email']))
 							{
-								require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
-								$email_client = new email();
+								
 								$email_client->update_password($config['host'], $mail_username, $password, $config['smtp_use_login_credentials']);
 							}
 						}
