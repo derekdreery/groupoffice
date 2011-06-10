@@ -9,21 +9,24 @@ class GO_Base_Router{
 	 */
 	public function run(){
 		
-		$arr = isset($_REQUEST['r']) ? explode('/', $_REQUEST['r']) :array();
+		$r = isset($_REQUEST['r']) ? explode('/', $_REQUEST['r']) :array();
 		
-		if(count($arr)==3)
-			$module = strtolower(array_shift($arr));
-		else
-			$module=false;
+		$first = isset($r[0]) ? ucfirst($r[0]) : 'Core';
 		
-		$controller = array_shift($arr);
-		if($controller)
-			$controller=ucfirst($controller);
-		else
-			$controller='Default';
-		
-		$action = array_shift($arr);
-		
+		if(file_exists(GO::config()->root_path.'controller/'.$first.'.php')){
+			//this is a controller name that belongs to the Group-Office framework
+			$module='';
+			$controller=$first;
+			$action = isset($r[1]) ? $r[1] : '';
+			
+		}else
+		{
+			//it must be pointing to a module
+			$module=strtolower($r[0]);
+			$controller=isset($r[1]) ? $r[1] : 'Default';
+			$action = isset($r[2]) ? $r[2] : '';
+		}
+				
 		$controllerClass='GO_';
 		
 		if(!empty($module))
