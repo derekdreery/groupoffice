@@ -648,6 +648,10 @@ class addressbook extends db {
 		}else {
 			$new_path .= '/0 no last name';
 		}
+		
+		if(empty($new_folder_name))
+			$new_folder_name='unnamed';
+			
 		$new_path .= '/'.$new_folder_name;
 		return $new_path;
 	}
@@ -660,6 +664,10 @@ class addressbook extends db {
 			$new_path .= '/'.$last_part;
 		}
 		$new_path .= '/'.$new_folder_name;
+		
+		if(empty($new_folder_name))
+			$new_folder_name='unnamed';
+		
 		return $new_path;
 	}
 
