@@ -30,7 +30,7 @@
 	 
 	protected $aclField='acl_id';
 	
-	protected $tableName='go_modules';
+	public $tableName='go_modules';
 
 	protected $_columns=array(
 		'id'=>array('type'=>PDO::PARAM_STR),
@@ -50,6 +50,7 @@
 	}
 	
 	protected function getPermissionLevel(){
+	
 		if(!isset($this->_permissionLevel)){
 			$this->_permissionLevel=GO::security()->hasPermission($this->acl_id);
 		}

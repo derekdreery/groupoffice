@@ -15,7 +15,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
 	serverId : 0,
 	
-	serverIdName : 'item_id',
+	serverIdName : 'id',
 	
 	formControllerUrl : 'undefined',
 	

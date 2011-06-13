@@ -2,6 +2,9 @@
 
 class GO_Base_Db_ActiveRecord {
 	
+	const BELONGS_TO=1;	
+	const HAS_MANY=1;
+	
 	/**
 	 * The database connection of this record
 	 * 
@@ -22,23 +25,16 @@ class GO_Base_Db_ActiveRecord {
 	public $isNew = true;
 	
 	/**
-	 * @return array relational rules.
+	 * @var array relational rules.
 	 */
-	public function relations()
-	{
-//		return array(
-//				'category' => array(self::BELONGS_TO, 'Category', 'category_id')
-//		);
-		
-		return array();
-	}
+	protected $relations;
 	
 	/**
 	 * 
 	 * @var string The database table name
 	 */
 	
-	protected $tableName;
+	public $tableName;
 	
 	/**
 	 * 
@@ -46,8 +42,12 @@ class GO_Base_Db_ActiveRecord {
 	 */
 	protected $aclField=false;
 	
+	protected $aclFieldJoin=false;
 	
-	private $_attributes;
+	private $_relatedCache;
+	
+	
+	private $_attributes=array();
 	
 	/**
 	 *
@@ -70,7 +70,7 @@ class GO_Base_Db_ActiveRecord {
 	 * 
 	 * @var mixed Primary key of database table. Can be a field name string or an array of fieldnames
 	 */
-	protected $primaryKey='id'; //TODO can also be array('user_id','group_id') for example.
+	public $primaryKey='id'; //TODO can also be array('user_id','group_id') for example.
 	
 	public $pk;
 	
@@ -85,8 +85,14 @@ class GO_Base_Db_ActiveRecord {
 		else
 			$this->afterLoad();
 		
+		
+	}
+	
+	public function getPk(){
 		if(isset($this->_attributes[$this->primaryKey]))
-				$this->pk=$this->_attributes[$this->primaryKey];
+			return $this->_attributes[$this->primaryKey];
+		else
+			return null;
 	}
 
 	
@@ -106,6 +112,34 @@ class GO_Base_Db_ActiveRecord {
 		}
 		return self::$db;
 	}
+	
+	private function _joinAclTable(){
+		$arr = explode('.',$this->aclField);
+		if(count($arr)==2){
+			//we need to join a table for the acl field
+			
+			$model = new $this->relations[$arr[0]][1];
+			
+			$ret['relation']=$arr[0];
+			$ret['aclField']=$arr[1];
+			$ret['join']='INNER JOIN `'.$model->tableName.'` '.$ret['relation'].' ON ('.$ret['relation'].'.`'.$model->primaryKey.'`=t.`'.$this->relations[$arr[0]][2].'`) ';
+			$ret['fields']='';
+			
+			$cols = $model->getColumns();
+			
+			foreach($cols as $field=>$props){
+				$ret['fields'].=', '.$ret['relation'].'.`'.$field.'` AS `'.$ret['relation'].'@'.$field.'`';
+			}
+			$ret['table']=$ret['relation'];
+			
+		}else
+		{
+			return false;
+		}
+		
+		return $ret;
+	}
+	
 
 	/**
 	 * Finds model objects 
@@ -121,10 +155,23 @@ class GO_Base_Db_ActiveRecord {
 			$params['userId']=GO::security()->user_id;
 		}
 		
-		$sql = "SELECT t.* FROM `".$this->tableName."` t ";
+		$aclJoin['relation']='';
+		$aclJoin['aclField']=$this->aclField;
+		$aclJoin['table']='t';
+		$aclJoin['join']='';
+		$aclJoin['fields']='';
 		
 		if($this->aclField && empty($params['ignoreAcl'])){
-			$sql .= "INNER JOIN go_acl ON (t.`".$this->aclField."` = go_acl.acl_id";
+			$ret = $this->_joinAclTable();
+			if($ret)
+				$aclJoin=$ret;
+		}
+		
+		$sql = "SELECT t.*".$aclJoin['fields']." FROM `".$this->tableName."` t ".$aclJoin['join'];
+		
+		if($this->aclField && empty($params['ignoreAcl'])){			
+			
+			$sql .= "INNER JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
 			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_SECURITY::READ_PERMISSION){
 				$sql .= " AND go_acl.level>=".intval($params['permissionLevel']);
 			}
@@ -141,7 +188,7 @@ class GO_Base_Db_ActiveRecord {
 				$value= $arr[1];
 				$op=isset($arr[2]) ? $arr[2] : '=';
 								
-				$sql .= "AND `$field` $op '".$this->getDbConnection()->quote($value)."' ";
+				$sql .= "AND `$field` $op ".$this->getDbConnection()->quote($value)." ";
 			}
 		}
 
@@ -156,6 +203,7 @@ class GO_Base_Db_ActiveRecord {
 				$sql .= $params['orderDirection'].' ';
 			}
 		}
+		
 		
 		//$sql .= "WHERE `".$this->primaryKey.'`='.intval($primaryKey);
 		$result = $this->getDbConnection()->query($sql);
@@ -182,12 +230,15 @@ class GO_Base_Db_ActiveRecord {
 	 */
 	
 	protected function load($primaryKey){
+		
+		go_debug("AR:load($primaryKey)");
+		
 		$sql = "SELECT * FROM `".$this->tableName."` WHERE `".$this->primaryKey.'`='.intval($primaryKey);
 		$result = $this->getDbConnection()->query($sql);
 		
 		$result->setFetchMode(PDO::FETCH_ASSOC);
 				
-		$this->setAttributes($result->fetch());
+		$this->setAttributes($result->fetch(), false);
 		
 		$this->isNew=false;
 		
@@ -203,32 +254,140 @@ class GO_Base_Db_ActiveRecord {
 	 * May be overriden to do stuff after the model was loaded from the database
 	 */
 	protected function afterLoad(){
-		
+			//go_debug($this);
 	}
 	
 		
 	protected function getRelated($name){
 		 //$name::findByPk($hit-s)
+		if(!isset($this->relations[$name])){
+			return false;			
+		}
+		
+		/**
+		 * Related stuff can be put in the relatedCache array for when a relation is
+		 * accessed multiple times.
+		 * 
+		 * Related stuff can also be joined in a query and be passed to the __set 
+		 * function as relation@relation_attribute. This array will be used here to
+		 * construct the related model.
+		 */
+		if(isset($this->_relatedCache[$name])){
+			
+			$model = $this->relations[$name][1];
+			
+			
+			if(is_array($this->_relatedCache[$name])){
+				$attr = $this->_relatedCache[$name];
+				
+				$this->_relatedCache[$name]=new $model;
+				$this->_relatedCache[$name]->setAttributes($attr, false);
+				
+			}
+			return $this->_relatedCache[$name];
+		}else
+		{
+			$joinAttribute = $this->relations[$name][2];
+			return new $model($this->_attributes[$joinAttribute]);
+		}
 	}
 	
-	public function setAttributes($attr){
-		foreach($attr as $key=>$value){
-			$this->$key=$value;
+	private function _formatInputValues($attributes){
+		$formatted = array();
+		foreach($attributes as $key=>$value){
+			if(isset($this->_columns[$key]['gotype'])){
+				switch($this->_columns[$key]['gotype']){
+					case 'unixtimestamp':
+						$formatted[$key] = Date::to_unixtime($value);
+						break;					
+				}
+			}else
+			{
+				$formatted[$key] = $value;
+			}
 		}
+		return $formatted;
+	}
+	
+	private function _formatOutputValues($attributes, $html=false){
+		
+		$formatted = array();
+		foreach($attributes as $key=>$value){
+			if(isset($this->_columns[$key]['gotype'])){
+				switch($this->_columns[$key]['gotype']){
+					case 'unixtimestamp':
+						$formatted[$key] = Date::get_timestamp($value);
+						break;	
+
+					case 'textarea':
+						if($html){
+							$formatted[$key] = String::text_to_html($value);
+						}
+						break;
+				}
+			}else
+			{
+				$formatted[$key] = $value;
+			}
+		}
+		
+		return $formatted;
+	}
+	
+	/**
+	 * This function is used to set attributes of this model from a controller.
+	 * Input may be in regional format and the model will translate it to the
+	 * database format.
+	 * 
+	 * @param array $attributes attributes to set on this object
+	 */
+	
+	public function setAttributes($attributes, $format=true){		
+		$related=array();
+		
+		if($format)
+			$attributes = $this->_formatInputValues($attributes);
+		
+		foreach($attributes as $key=>$value){
+			if(isset($this->_columns[$key])){
+				$this->$key=$value;
+			}		
+		}		
 	}
 	
 	/**
 	 * Returns all column attribute values.
 	 * Note, related objects are not returned.
-	 * @param mixed $names names of attributes whose value needs to be returned.
-	 * If this is true (default), then all attribute values will be returned, including
-	 * those that are not loaded from DB (null will be returned for those attributes).
-	 * If this is null, all attributes except those that are not loaded from DB will be returned.
+	 * @param string $outputType Can be 
+	 * 
+	 * raw: return values as they are stored in the db
+	 * formatted: return the values formatted for an input form
+	 * html: Return the values formatted for HTML display
+	 * 
 	 * @return array attribute values indexed by attribute names.
 	 */
-	public function getAttributes()
+	public function getAttributes($outputType='formatted')
 	{
-		return $this->_attributes;		
+		if($outputType=='raw')
+			return $this->_attributes;
+		
+		return $this->_formatOutputValues($this->_attributes, $outputType=='html');		
+	}
+	
+	/**
+	 * Returns all column attribute values.
+	 * Note, related objects are not returned.
+	 * @param string $outputType Can be 
+	 * 
+	 * raw: return values as they are stored in the db
+	 * formatted: return the values formatted for an input form
+	 * html: Return the values formatted for HTML display
+	 * 
+	 * @return array attribute values indexed by attribute names.
+	 */
+	public function getColumns()
+	{
+		return $this->_columns;
 	}
 	
 	/**
@@ -394,6 +553,9 @@ class GO_Base_Db_ActiveRecord {
 			
 			if(method_exists($this,$getter)){
 				return $this->$getter();
+			}elseif(isset($this->relations[$name]))
+			{
+				return $this->getRelated($name);
 			}
 		}
 			
@@ -407,6 +569,8 @@ class GO_Base_Db_ActiveRecord {
 	 */
 	public function __set($name,$value)
 	{
+		
+		go_debug($name);
 		$this->setAttribute($name,$value);
 	}
 	
@@ -422,8 +586,13 @@ class GO_Base_Db_ActiveRecord {
 	{
 		if(property_exists($this,$name))
 			$this->$name=$value;
-		else
-			$this->_attributes[$name]=$value;
+		elseif(isset($this->_columns[$name]))
+			$this->_attributes[$name]=$value;		
+		else{
+			$arr = explode('@',$name);
+			if(count($arr)>1)
+				$this->_relatedCache[$arr[0]][$arr[1]]=$value;				
+		}	
 
 		return true;
 	}

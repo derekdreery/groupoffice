@@ -14,8 +14,9 @@ class GO_Base_Model_ModelCollection{
 		$findParams['ignoreAcl']=true;
 		$stmt = $model->find($findParams);
 		
-		while($m = $stmt->fetch())
-			$this->_models[$m->pk]=$m;		
+		while($m = $stmt->fetch()){
+			$this->_models[$m->pk]=$m;
+		}
 	}
 	
 	public function __get($name){

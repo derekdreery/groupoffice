@@ -27,12 +27,13 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 				$this->modules[$module->id]['class_path']=$module->class_path;
 				$this->modules[$module->id]['url']=$module->url;
 				$this->modules[$module->id]['full_url']=$module->full_url;
-
-				$this->modules[$module->id]['read_permission']=$module->permissionLevel>=GO_SECURITY::READ_PERMISSION;;
+				
+				$this->modules[$module->id]['read_permission']=$module->permissionLevel>=GO_SECURITY::READ_PERMISSION;
 				$this->modules[$module->id]['write_permission']=$module->permissionLevel>GO_SECURITY::READ_PERMISSION;
 			}
 
 		}
+		
 	}
 	
 	

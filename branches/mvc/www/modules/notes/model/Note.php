@@ -5,10 +5,12 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord{
 	
 	protected $_columns=array(
 		'id'=>array('type'=>PDO::PARAM_INT),
+		'category_id'=>array('type'=>PDO::PARAM_INT, 'gotype'=>'belongsToRelation'),
+		'user_id'=>array('type'=>PDO::PARAM_INT),
 		'name'=>array('type'=>PDO::PARAM_STR,'required'=>true,'length'=>100),
-		'content'=>array('type'=>PDO::PARAM_STR),
-		'ctime'=>array('type'=>PDO::PARAM_INT),
-		'mtime'=>array('type'=>PDO::PARAM_INT),
+		'content'=>array('type'=>PDO::PARAM_STR,'gotype'=>'textarea'),
+		'ctime'=>array('type'=>PDO::PARAM_INT,'gotype'=>'unixtimestamp'),
+		'mtime'=>array('type'=>PDO::PARAM_INT,'gotype'=>'unixtimestamp'),
 	);
 	
 	protected $link_type=4;
@@ -18,18 +20,14 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord{
 	 * @var string The database table name
 	 */
 	
-	protected $tableName='no_notes';
+	public $tableName='no_notes';
 	
+	/*
+	 * Points to a relation here
+	 */
+	protected $aclField='category.acl_id';	
 	
-	
-	
-	public function relations()
-	{
-//		return array(
-//				'category' => array(self::BELONGS_TO, 'Category', 'category_id')
-//		);
-		
-		return array();
-	}
-
+	protected $relations=array(
+				'category' => array(self::BELONGS_TO, 'GO_Notes_Model_Category', 'category_id')
+		);
 }
