@@ -1,9 +1,9 @@
 <?php
 
-class GO_Base_Db_ActiveRecord {
+class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	const BELONGS_TO=1;	
-	const HAS_MANY=1;
+	const HAS_MANY=2;
 	
 	/**
 	 * The database connection of this record
@@ -71,9 +71,7 @@ class GO_Base_Db_ActiveRecord {
 	 * @var mixed Primary key of database table. Can be a field name string or an array of fieldnames
 	 */
 	public $primaryKey='id'; //TODO can also be array('user_id','group_id') for example.
-	
-	public $pk;
-	
+
 	/**
 	 * Constructor for the model
 	 * 
@@ -138,6 +136,36 @@ class GO_Base_Db_ActiveRecord {
 		}
 		
 		return $ret;
+	}
+	
+	private $_permissionLevel;
+	
+	
+	/**
+	 * Returns the permission level if an aclField is defined in the model. Otherwise
+	 * it returns -1;
+	 * 
+	 * @return int GO_SECURITY::*_PERMISSION 
+	 */
+	
+	public function getPermissionLevel(){
+		
+		if(empty($this->aclField))
+			return -1;	
+	
+		if(!isset($this->_permissionLevel)){
+			$arr = explode('.',$this->aclField);
+			if(count($arr)==2){
+				$relation = $arr[0];
+				$aclField = $arr[1];
+				$acl_id = $this->$relation->$aclField;
+			}else
+			{
+				$acl_id = $this->{$this->aclField};
+			}
+			$this->_permissionLevel=GO::security()->hasPermission($acl_id);
+		}
+		return $this->_permissionLevel;
 	}
 	
 
@@ -264,6 +292,8 @@ class GO_Base_Db_ActiveRecord {
 			return false;			
 		}
 		
+		$model = $this->relations[$name][1];
+		
 		/**
 		 * Related stuff can be put in the relatedCache array for when a relation is
 		 * accessed multiple times.
@@ -272,39 +302,44 @@ class GO_Base_Db_ActiveRecord {
 		 * function as relation@relation_attribute. This array will be used here to
 		 * construct the related model.
 		 */
-		if(isset($this->_relatedCache[$name])){
-			
-			$model = $this->relations[$name][1];
-			
+		if(isset($this->_relatedCache[$name])){			
 			
 			if(is_array($this->_relatedCache[$name])){
 				$attr = $this->_relatedCache[$name];
 				
 				$this->_relatedCache[$name]=new $model;
-				$this->_relatedCache[$name]->setAttributes($attr, false);
-				
+				$this->_relatedCache[$name]->setAttributes($attr, false);				
 			}
-			return $this->_relatedCache[$name];
+			
 		}else
 		{
 			$joinAttribute = $this->relations[$name][2];
-			return new $model($this->_attributes[$joinAttribute]);
+			$this->_relatedCache[$name]= new $model($this->_attributes[$joinAttribute]);
 		}
+		
+		return $this->_relatedCache[$name];
 	}
 	
 	private function _formatInputValues($attributes){
 		$formatted = array();
 		foreach($attributes as $key=>$value){
-			if(isset($this->_columns[$key]['gotype'])){
-				switch($this->_columns[$key]['gotype']){
-					case 'unixtimestamp':
-						$formatted[$key] = Date::to_unixtime($value);
-						break;					
-				}
-			}else
-			{
-				$formatted[$key] = $value;
+			if(!isset($this->_columns[$key])){
+				//don't process unknown columns.
+				continue;
 			}
+			if(!isset($this->_columns[$key]['gotype'])){
+				$this->_columns[$key]['gotype']='string';
+			}
+			switch($this->_columns[$key]['gotype']){
+				case 'unixtimestamp':
+					$formatted[$key] = Date::to_unixtime($value);
+					break;			
+
+				default:
+					$formatted[$key] = $value;
+					break;
+			}
+			
 		}
 		return $formatted;
 	}
@@ -313,21 +348,25 @@ class GO_Base_Db_ActiveRecord {
 		
 		$formatted = array();
 		foreach($attributes as $key=>$value){
-			if(isset($this->_columns[$key]['gotype'])){
-				switch($this->_columns[$key]['gotype']){
-					case 'unixtimestamp':
-						$formatted[$key] = Date::get_timestamp($value);
-						break;	
+			if(!isset($this->_columns[$key]['gotype'])){
+				$this->_columns[$key]['gotype']='string';
+			}
+			switch($this->_columns[$key]['gotype']){
+				case 'unixtimestamp':
+					$formatted[$key] = Date::get_timestamp($value);
+					break;	
 
-					case 'textarea':
-						if($html){
-							$formatted[$key] = String::text_to_html($value);
-						}
-						break;
-				}
-			}else
-			{
-				$formatted[$key] = $value;
+				case 'textarea':
+					if($html){
+						$formatted[$key] = String::text_to_html($value);
+					}else
+					{
+						$formatted[$key] = $value;
+					}
+					break;
+				default:
+					$formatted[$key] = $value;
+					break;
 			}
 		}
 		
@@ -395,8 +434,11 @@ class GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return boolean 
 	 */
-	private function _checkPermissions(){
-		return true;
+	private function _checkPermissionLevel($level){
+		if(empty($this->aclField))
+			return true;
+		
+		return $this->getPermissionLevel()>=$level;
 	}
 	
 	
@@ -426,7 +468,10 @@ class GO_Base_Db_ActiveRecord {
 	
 	public function save(){
 		
-		if($this->_checkPermissions() && $this->beforeSave() && $this->validate()){		
+		if(!$this->_checkPermissionLevel(GO_SECURITY::WRITE_PERMISSION))
+			throw new AccessDeniedException();
+		
+		if($this->beforeSave() && $this->validate()){		
 		
 			/*
 			 * Set some common column values
@@ -438,7 +483,16 @@ class GO_Base_Db_ActiveRecord {
 				$this->ctime=time();
 			}
 			
-			if($this->isNew){
+			if(isset($this->_columns['user_id']) && !isset($this->user_id)){
+				$this->user_id=GO::security()->user_id;
+			}
+			
+			if($this->isNew){				
+				
+				if(strpos($this->aclField, '.')===false){
+					//generate acl id
+					$this->{$this->aclField}=GO::security()->get_new_acl($this->tableName);
+				}				
 
 				$this->_attributes[$this->primaryKey] = $this->_dbInsert();
 				
@@ -456,7 +510,7 @@ class GO_Base_Db_ActiveRecord {
 			/**
 			 * Useful event for modules. For example custom fields can be loaded or a files folder.
 			 */
-			GO::events()->fire_event('saveactiverecord',array(&$this));
+			$this->fireEvent('save',array(&$this));
 			
 			return true;
 			
@@ -545,7 +599,7 @@ class GO_Base_Db_ActiveRecord {
 	 */
 	public function __get($name)
 	{
-		if(isset($this->attributes[$name])){
+		if(isset($this->_attributes[$name])){
 			return $this->_attributes[$name];
 		}else{
 			
@@ -569,8 +623,6 @@ class GO_Base_Db_ActiveRecord {
 	 */
 	public function __set($name,$value)
 	{
-		
-		go_debug($name);
 		$this->setAttribute($name,$value);
 	}
 	

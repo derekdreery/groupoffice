@@ -9,7 +9,7 @@ class GO_Base_OutputStream_OutputStreamJson implements GO_Base_OutputStream_Outp
 	}
 	
 	public function sendHeaders(){
-		header('Content-Type: text/json; charset=UTF-8');
+		header('Content-Type: text/plain; charset=UTF-8');
 	}
 	
 	public function write($data){

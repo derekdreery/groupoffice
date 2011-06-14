@@ -1,6 +1,6 @@
 <?php
 
-class GO {
+class GO{
 
 	private static $_classes = array(
 			'File' => 'classes/File.class.inc.php',

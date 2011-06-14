@@ -171,6 +171,16 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				url:this.formControllerUrl+'/load',
 				success:function(form, action)
 				{
+					if(action.result.remoteComboTexts){
+						var t = action.result.remoteComboTexts;
+						for(var fieldName in t){
+
+							var f = this.formPanel.form.findField(fieldName);
+							if(f)
+								f.setRemoteText(t[fieldName]);
+						}
+					}
+					
 					this.afterLoad(action, config);
 					GO.dialog.TabbedFormDialog.superclass.show.call(this);
 				},

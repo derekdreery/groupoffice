@@ -17,35 +17,48 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractController{
 	}
 	
 	public function actionLoad(){
-		$note = new GO_Notes_Model_Note($_POST['id']);
+		$note = new GO_Notes_Model_Note($_REQUEST['id']);
 		
 		go_debug($note);
 		
-		$response['data']=$note->getAttributes();
+		$response['data']=$note->getAttributes();		
 		$response['success']=true;
+		
+		$response=$this->_loadComboTexts($response, $note);
 		
 		$this->output($response);		
 	}
 	
-	public function actionTest(){
-		$note = new GO_Notes_Model_Note();
-		$stmt = $note->find(array('by'=>array(array('category_id','1'))));
-		
-		while($o = $stmt->fetch()){
-			var_dump($o->category);
-		}
-		
-	}
+	/**
+	 * List all fields that require a remote text to load for a remote combobox.
+	 * eg. with a note you want to provide the category name so that that the
+	 * category combo store does not need to be loaded to show it.
+	 * 
+	 * You would list that like this:
+	 * 
+	 * 'category_id'=>array('category','name')
+	 * 
+	 * The category name would be looked up in the note model ->category->name.
+	 * A relation for this must be defined. See ActiveRecord->relations.
+	 * 
+	 * 
+	 * @var array remote combo mappings 
+	 */
 	
 	protected $remoteComboFields=array(
-			//'user_id'=>'user->name',
-			'category_id'=>'category->name'
-	);
+			'category_id'=>array('category','name')
+	);	
 	
-	private function loadComboTexts(){
+	
+	private function _loadComboTexts($response, $model){
+		
+		$response['remoteComboTexts']=array();
+		
 		foreach($this->remoteComboFields as $property=>$map){
-			
+			$response['remoteComboTexts'][$property]=$model->{$map[0]}->{$map[1]};
 		}
+		
+		return $response;
 		
 	}
 }

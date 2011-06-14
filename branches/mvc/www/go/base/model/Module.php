@@ -25,7 +25,7 @@
 	 */
 	public $class_path;
 	
-	private $_permissionLevel;
+	
 		
 	 
 	protected $aclField='acl_id';
@@ -49,13 +49,7 @@
 		$this->class_path = $this->path.'classes/';
 	}
 	
-	protected function getPermissionLevel(){
 	
-		if(!isset($this->_permissionLevel)){
-			$this->_permissionLevel=GO::security()->hasPermission($this->acl_id);
-		}
-		return $this->_permissionLevel;
-	}
 	
 	/**
 	 * Installs the module's tables etc
