@@ -81,11 +81,14 @@ class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($primaryKey!=0)
 			$this->load($primaryKey);
 		else
-			$this->afterLoad();
-		
-		
+			$this->afterLoad();	
 	}
 	
+	/**
+	 * Get's the primary key value. Can also be accessed with $model->pk.
+	 * 
+	 * @return mixed The primary key value 
+	 */
 	public function getPk(){
 		if(isset($this->_attributes[$this->primaryKey]))
 			return $this->_attributes[$this->primaryKey];

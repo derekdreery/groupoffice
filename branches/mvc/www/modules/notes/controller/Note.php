@@ -29,6 +29,10 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractController{
 		$this->output($response);		
 	}
 	
+	public function actionTest(){
+		echo GO_Notes_Model_Note::addListener('test','test');
+	}
+	
 	/**
 	 * List all fields that require a remote text to load for a remote combobox.
 	 * eg. with a note you want to provide the category name so that that the
