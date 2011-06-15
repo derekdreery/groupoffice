@@ -121,6 +121,9 @@ class String {
 	}
 
 	public static function clean_utf8($str, $source_charset='UTF-8') {
+		
+		//must use html_entity_decode here other wise some weird utf8 might be decoded later
+		$str = html_entity_decode($str, ENT_COMPAT, $source_charset);			
 
 		//Does not always work. We suppress the:
 		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31
@@ -869,7 +872,7 @@ class String {
 
 		//remove high z-indexes
 		$matched_tags = array();
-		preg_match_all( "/(z-index)[\s]*:[\s]*([0-9]+)[\s]*;/", $html, $matched_tags, PREG_SET_ORDER );
+		preg_match_all( "/(z-index)[\s]*:[\s]*([0-9]+)[\s]*;/u", $html, $matched_tags, PREG_SET_ORDER );
 		foreach ($matched_tags as $tag) {
 			if ($tag[2]>8000) {
 				$html = str_replace($tag[0],'z-index:8000;',$html);
@@ -886,10 +889,9 @@ class String {
 		$data = preg_replace('/(&#*\w+)[\x00-\x20]+;/u', '$1;', $data);
 		$data = preg_replace('/(&#x*[0-9A-F]+);*/iu', '$1;', $data);
 		$data = html_entity_decode($data, ENT_COMPAT, 'UTF-8');
-
+		
 		// Remove any attribute starting with "on" or xmlns
 		$data = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $data);
-
 		// Remove javascript: and vbscript: protocols
 		$data = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2nojavascript...', $data);
 		$data = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2novbscript...', $data);

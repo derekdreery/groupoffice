@@ -68,7 +68,9 @@ abstract class Sabre_DAVACL_AbstractPrincipalCollection extends Sabre_DAV_Direct
      * @param array $principalInfo 
      * @return Sabre_DAVACL_IPrincipal
      */
-    abstract function getChildForPrincipal(array $principalInfo);
+		
+		//Merijn removed array before argument because it doesn't work in combination with ioncube
+    abstract function getChildForPrincipal($principalInfo);
 
     /**
      * Returns the name of this collection. 
