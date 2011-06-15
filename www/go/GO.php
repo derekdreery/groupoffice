@@ -47,6 +47,15 @@ class GO{
 	public static function view(){
 		return 'Default';
 	}
+	
+	/**
+	 * Get the logged in user
+	 * 
+	 * @return GO_Base_Model_User The logged in user model
+	 */
+	public static function user(){
+		return new GO_Base_Model_User($_SESSION['GO_SESSION']['user_id']);
+	}
 
 	/**
 	 * Returns a collection of Group-Office Module objects

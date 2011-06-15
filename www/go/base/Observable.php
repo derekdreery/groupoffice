@@ -8,27 +8,9 @@ class GO_Base_Observable{
 		if(!is_dir($dir)){
 			mkdir($dir, 0755,true);
 			
-			foreach(GO::modules()->modules as $module)
-			{			
-				/*$file = $module['class_path'].$module['id'].'.class.inc';
-
-				if(!file_exists($file))
-				{*/
-					$file = $module['class_path'].$module['id'].'.class.inc.php';
-				//}
-				if(file_exists($file))
-				{
-					require_once($file);
-					if(class_exists($module['id'], false))
-					{				
-						$class = new $module['id'];
-						$method = '__on_load_listeners';
-						if(method_exists($class, $method))
-						{						
-							$class->$method($this);						
-						}
-					}
-				}
+			foreach(GO::modules()->getAll() as $module)
+			{	
+				//todo load listeners
 			}
 		}
 		
@@ -46,7 +28,10 @@ class GO_Base_Observable{
 			
 			//listeners array will be loaded from a file. Because addListener is only called once when there is no cache.
 			$listeners=array();
-			require(GO::config()->file_storage_path.'cache/listeners/'.get_class($this).'.php');
+			
+			$cacheFile = GO::config()->file_storage_path.'cache/listeners/'.get_class($this).'.php';
+			if(file_exists($cacheFile))
+				require($cacheFile);
 			
 			$this->_listeners=$listeners;
 		}
