@@ -39,7 +39,8 @@ while($field = $stmt->fetch()){
 			break;
 	}	
 	
-	$cols .= "id'=>array('type'=>$pdoType, 'required'=>false";
+	
+	$cols .= "'".$field['Field']."'=>array('type'=>$pdoType, 'required'=>false";
 	
 	if($length)
 		$cols .= ",'length'=>$length";
@@ -63,7 +64,9 @@ class ReplaceMe extends GO_Base_Db_ActiveRecord{
 	protected $_columns=array(
 		'.$cols.'
 	);	
-}';
+}
+
+';
 				
 
 
