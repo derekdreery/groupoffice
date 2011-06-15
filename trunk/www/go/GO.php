@@ -32,7 +32,12 @@ class GO{
 	
 	public static function getDbConnection(){
 		if(!isset(self::$db)){
-			self::$db = new PDO("mysql:host=localhost;dbname=branch", "root", "");
+			
+			$dbname = GO::config()->db_name;
+			$dbuser = GO::config()->db_user;
+			$dbpass = GO::config()->db_pass;
+			
+			self::$db = new PDO("mysql:host=localhost;dbname=$dbname", $dbuser, $dbpass);
 			self::$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 		}
 		
