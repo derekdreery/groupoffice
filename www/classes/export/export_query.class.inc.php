@@ -143,7 +143,7 @@ class base_export_query{
 	function query(){
 		$this->prepare_query();
 
-		$GLOBALS['GO_EVENTS']->fire_event('export_before_query', array(&$this, &$this->sql, &$this->types, &$this->params));
+		GO::events()->fire_event('export_before_query', array(&$this, &$this->sql, &$this->types, &$this->params));
 
 		$this->db->query($this->sql,$this->types,$this->params);
 	}
@@ -154,7 +154,7 @@ class base_export_query{
 			call_user_func_array(array($this->q['class'], $this->q['method']),array(&$record, $this->cf));
 		}
 		
-		$GLOBALS['GO_EVENTS']->fire_event('export_format_record', array(&$this, &$record));
+		GO::events()->fire_event('export_format_record', array(&$this, &$record));
 	}
 
 	function init_columns(){
@@ -185,7 +185,7 @@ class base_export_query{
 			}
 		}
 
-		$GLOBALS['GO_EVENTS']->fire_event('export_init_columns', array(&$this));
+		GO::events()->fire_event('export_init_columns', array(&$this));
 	}
 
 	function export($fp)
