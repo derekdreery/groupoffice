@@ -773,8 +773,11 @@ try {
 			$response['data']['type']='<div class="go-grid-icon filetype-folder">'.$lang['files']['folder'].'</div>';
 			$response['data']['size']='-';
 
-			$response['data']['write_permission']=empty($response['data']['readonly']) && $files->has_write_permission($GO_SECURITY->user_id, $folder);
-			$response['data']['is_owner']=$admin || $files->is_owner($folder);
+      $permission_level = $files->get_permission_level($GO_SECURITY->user_id, $folder);
+
+      $response['data']['manage_permission']=$permission_level==  GO_SECURITY::MANAGE_PERMISSION;
+      $response['data']['write_permission']=empty($response['data']['readonly']) && $permission_level>GO_SECURITY::READ_PERMISSION;
+			//$response['data']['is_owner']=$admin || $files->is_owner($folder);
 
 			$usersfolder = $files->resolve_path('users');
 			$response['data']['is_home_dir']=$folder['parent_id']==$usersfolder['id'];
