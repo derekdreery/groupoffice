@@ -13,18 +13,18 @@ require_once("../../Group-Office.php");
 
 if(php_sapi_name()!='cli')
 {
-	$GO_SECURITY->html_authenticate('tools');
+	GO::security()->html_authenticate('tools');
 }
 
 session_write_close();
 
 $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
-//$GO_SECURITY->html_authenticate('tools');
+//GO::security()->html_authenticate('tools');
 
 ini_set('max_execution_time', 3600);
 echo 'Clearing search cache'.$line_break;
 
-require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+require_once(GO::config()->class_path.'base/search.class.inc.php');
 $search = new search();
 
 $search->reset();
@@ -32,7 +32,7 @@ flush();
 
 echo 'Building search cache'.$line_break;
 
-$GO_EVENTS->fire_event('build_search_index');
+GO::events()->fire_event('build_search_index');
 
 /*
  * Dangerous if search cache is not built correctly.

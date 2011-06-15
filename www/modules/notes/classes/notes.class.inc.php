@@ -28,12 +28,12 @@ class notes extends db {
 
 		echo 'Note folders'.$line_break;
 
-		if(isset($GO_MODULES->modules['files']))
+		if(isset(GO::modules()->modules['files']))
 		{
 			$notes = new notes();
 			$db = new db();
 
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$sql = "SELECT * FROM no_categories";
@@ -67,7 +67,7 @@ class notes extends db {
 			}
 		}
 
-		if(isset($GO_MODULES->modules['customfields'])){
+		if(isset(GO::modules()->modules['customfields'])){
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
 			$db->query("delete from cf_4 where link_id not in (select id from no_notes);");
@@ -90,9 +90,9 @@ class notes extends db {
 		$category['id']=$this->nextid('no_categories');
 		
 		global $GO_MODULES;
-		if(isset($GO_MODULES->modules['files']))
+		if(isset(GO::modules()->modules['files']))
 		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();			
 			$files->check_share('notes/'.File::strip_invalid_chars($category['name']),$category['user_id'], $category['acl_id']);
 		}		
@@ -116,9 +116,9 @@ class notes extends db {
 	function update_category($category, $old_category)
 	{		
 		global $GO_MODULES;
-		if(isset($GO_MODULES->modules['files']) && $category['name']!=$old_category['name'])
+		if(isset(GO::modules()->modules['files']) && $category['name']!=$old_category['name'])
 		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();			
 			$files->move_by_paths('notes/'.File::strip_invalid_chars($old_category['name']), 'notes/'.File::strip_invalid_chars($category['name']));
 		}
@@ -127,7 +127,7 @@ class notes extends db {
 		//user id of the category changed. Change the owner of the ACL as well
 		if(isset($category['user_id']) && $old_category['user_id'] != $category['user_id'])
 		{
-			$GO_SECURITY->chown_acl($old_category['acl_id'], $category['user_id']);
+			GO::security()->chown_acl($old_category['acl_id'], $category['user_id']);
 		}
 		
 		return $this->update_row('no_categories', 'id', $category);
@@ -149,9 +149,9 @@ class notes extends db {
 		$category = $this->get_category($category_id);
 		
 		global $GO_MODULES;
-		if(isset($GO_MODULES->modules['files']))
+		if(isset(GO::modules()->modules['files']))
 		{
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			
 			$folder = $files->resolve_path('notes/'.File::strip_invalid_chars($category['name']));			
@@ -168,7 +168,7 @@ class notes extends db {
 		}
 
 		global $GO_SECURITY;
-		$GO_SECURITY->delete_acl($category['acl_id']);
+		GO::security()->delete_acl($category['acl_id']);
 
 		return $this->query("DELETE FROM no_categories WHERE id=".intval($category_id));
 	}
@@ -191,13 +191,13 @@ class notes extends db {
 			$note['mtime']=time();
 		
 		global $GO_MODULES;
-		if(!isset($note['files_folder_id']) && isset($GO_MODULES->modules['files']))
+		if(!isset($note['files_folder_id']) && isset(GO::modules()->modules['files']))
 		{
 			if(!$category)
 			{
 				$category = $this->get_category($note['category_id']);				
 			}
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();			
 
 			$new_path = $this->build_note_files_path($note, $category);			
@@ -237,13 +237,13 @@ class notes extends db {
 			$note['mtime']=time();
 		
 		global $GO_MODULES;
-		if(isset($GO_MODULES->modules['files']) && isset($note['category_id']))
+		if(isset(GO::modules()->modules['files']) && isset($note['category_id']))
 		{			
 			if(!$category)
 			{
 				$category = $this->get_category($note['category_id']);				
 			}
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();			
 			
 			$old_note = $this->get_note($note['id']);
@@ -272,15 +272,15 @@ class notes extends db {
 	{		
 		global $GO_CONFIG;
 		
-		require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+		require_once(GO::config()->class_path.'base/search.class.inc.php');
 		$search = new search();
 		$search->delete_search_result($note_id, 4);		
 		
 		global $GO_MODULES;
-		if(isset($GO_MODULES->modules['files']))
+		if(isset(GO::modules()->modules['files']))
 		{
 			$note = $this->get_note($note_id);
-			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			try{
 				$files->delete_folder($note['files_folder_id']);
@@ -313,7 +313,7 @@ class notes extends db {
 		{
 			global $GO_SECURITY;
 
-			$category = $this->get_default_category($GO_SECURITY->user_id);
+			$category = $this->get_default_category(GO::security()->user_id);
 			if ($category)
 			{
 				return $category;
@@ -321,14 +321,14 @@ class notes extends db {
 			{
 				global $GO_CONFIG;
 
-				require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+				require_once(GO::config()->class_path.'base/users.class.inc.php');
 				$GO_USERS = new GO_USERS();
 
-				$category['user_id']=$GO_SECURITY->user_id;
-				$user = $GO_USERS->get_user($GO_SECURITY->user_id);
+				$category['user_id']=GO::security()->user_id;
+				$user = $GO_USERS->get_user(GO::security()->user_id);
 				$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 				$category['name'] = $task_name;
-				$category['acl_id']=$GO_SECURITY->get_new_acl();
+				$category['acl_id']=GO::security()->get_new_acl();
 
 				$x = 1;
 				while($this->get_category_by_name($category['name']))
@@ -434,7 +434,7 @@ class notes extends db {
 		if($auth_type=='write'){
 			$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
 		}
-		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
+		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
 		
  		
  		if(!empty($query))
@@ -509,14 +509,14 @@ class notes extends db {
 		
 		$sql = "SELECT n.*, c.name AS category_name";
 
-		if($GO_MODULES->has_module('customfields')) {
+		if(GO::modules()->has_module('customfields')) {
 			$sql .= " ,cf_4.*";
 		}
 
 		$sql .=  " FROM no_notes n";
 		$sql .= " INNER JOIN no_categories c ON n.category_id=c.id";
 
-		if($GO_MODULES->has_module('customfields')) {
+		if(GO::modules()->has_module('customfields')) {
 			$sql .= " LEFT JOIN cf_4 ON cf_4.link_id=n.id";
 		}
 		
@@ -528,7 +528,7 @@ class notes extends db {
 			global $GO_SECURITY;
 
 			$sql .= " INNER JOIN go_acl a ON (c.acl_id = a.acl_id";
-			$sql .= " AND (a.user_id=".$GO_SECURITY->user_id." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
+			$sql .= " AND (a.user_id=".GO::security()->user_id." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
 		}
 
 		if(!empty($query))
@@ -603,7 +603,7 @@ class notes extends db {
 		{			
 			$category['name']=String::format_name($user);
 			$category['user_id']=$user['id'];
-			$category['acl_id']=$GO_SECURITY->get_new_acl('category',$user['id']);
+			$category['acl_id']=GO::security()->get_new_acl('category',$user['id']);
 			
 			$notes->add_category($category);
 		}
@@ -619,10 +619,10 @@ class notes extends db {
 	{
 		global $GO_CONFIG, $GO_LANGUAGE;
 		
-		require_once($GO_CONFIG->class_path.'/base/search.class.inc.php');
+		require_once(GO::config()->class_path.'/base/search.class.inc.php');
 		$search = new search();
 		
-		require($GO_LANGUAGE->get_language_file('notes'));
+		require(GO::language()->get_language_file('notes'));
 		
 		$sql = "SELECT i.*,r.acl_id FROM no_notes i ".
 			"INNER JOIN no_categories r ON r.id=i.category_id WHERE i.id=?";

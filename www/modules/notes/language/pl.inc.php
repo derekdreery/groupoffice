@@ -7,7 +7,7 @@
 //Author : rajmund
 //Date : January, 26 2011
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('notes'));
+require(GO::language()->get_fallback_language_file('notes'));
 
 $lang['notes']['note']='Notatka';
 $lang['notes']['name']='Notatki';

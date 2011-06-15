@@ -13,9 +13,9 @@
  */
 require_once("../../Group-Office.php");
 
-$GO_SECURITY->json_authenticate('smime');
+GO::security()->json_authenticate('smime');
 
-require_once($GO_MODULES->modules['smime']['class_path'].'smime.class.inc.php');
+require_once(GO::modules()->modules['smime']['class_path'].'smime.class.inc.php');
 $smime = new smime();
 
 $start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
@@ -41,7 +41,7 @@ if(isset($_POST['delete_keys']))
 	}
 }
 
-$response['count']=$smime->get_public_certificates($GO_SECURITY->user_id, $query, $start, $limit);
+$response['count']=$smime->get_public_certificates(GO::security()->user_id, $query, $start, $limit);
 $response['results']=array();
 
 while($r=$smime->next_record()){

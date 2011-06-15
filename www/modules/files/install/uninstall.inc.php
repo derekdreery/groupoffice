@@ -2,9 +2,9 @@
 
 global $GO_MODULES;
 
-if(isset($GO_MODULES->modules['customfields']))
+if(isset(GO::modules()->modules['customfields']))
 {
-    require_once ($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+    require_once (GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
 
     $cf = new customfields();
 

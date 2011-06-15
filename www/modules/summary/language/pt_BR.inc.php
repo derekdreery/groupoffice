@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('summary'));
+require(GO::language()->get_fallback_language_file('summary'));
 
 $lang['summary']['name']='Resumo';
 $lang['summary']['description']='Coloque uma descrição aqui';

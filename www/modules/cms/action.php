@@ -12,9 +12,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once("../../Group-Office.php");
-$GO_SECURITY->json_authenticate('cms');
-require_once ($GO_MODULES->modules['cms']['class_path']."cms.class.inc.php");
-//require_once ($GO_LANGUAGE->get_language_file('cms'));
+GO::security()->json_authenticate('cms');
+require_once (GO::modules()->modules['cms']['class_path']."cms.class.inc.php");
+//require_once (GO::language()->get_language_file('cms'));
 $cms = new cms();
 
 try {
@@ -33,7 +33,7 @@ try {
 						throw new Exception($lang['cms']['cant_delete_site_treeview']);
 
 					$site = $cms->get_site($folder['site_id']);
-					if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $site['acl_write']))
+					if(!GO::security()->has_permission(GO::security()->user_id, $site['acl_write']))
 						throw new AccessDeniedException();
 
 					$cms->delete_folder($folder['id']);
@@ -43,7 +43,7 @@ try {
 					$folder = $cms->get_folder($file['folder_id']);
 					$site = $cms->get_site($folder['site_id']);
 
-					if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $site['acl_write']))
+					if(!GO::security()->has_permission(GO::security()->user_id, $site['acl_write']))
 						throw new AccessDeniedException();
 
 					$cms->delete_file($file['id']);
@@ -57,7 +57,7 @@ try {
 			break;
 
 		case 'save_site':
-			if(!$GO_MODULES->modules['cms']['write_permission']) {
+			if(!GO::modules()->modules['cms']['write_permission']) {
 				throw new AccessDeniedException();
 			}
 
@@ -84,9 +84,9 @@ try {
 				$cms->update_site($site);
 				$response['success']=true;
 			}else {
-				$site['user_id']=$GO_SECURITY->user_id;
+				$site['user_id']=GO::security()->user_id;
 
-				$response['acl_write']=$site['acl_write']=$GO_SECURITY->get_new_acl('site');
+				$response['acl_write']=$site['acl_write']=GO::security()->get_new_acl('site');
 
 				$site_id= $cms->add_site($site);
 
@@ -102,7 +102,7 @@ try {
 			/*
 			$site = $cms->get_site((trim($_POST['site_id'])));
 				
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $site['acl_write']))
+			if(!GO::security()->has_permission(GO::security()->user_id, $site['acl_write']))
 			{
 				throw new AccessDeniedException();
 			}*/
@@ -145,10 +145,10 @@ try {
 
 			if($folder['id']>0) {
 				if(isset($_POST['authentication']) && empty($old_folder['acl']))
-					$folder['acl']=$response['acl']=$GO_SECURITY->get_new_acl('cms');
+					$folder['acl']=$response['acl']=GO::security()->get_new_acl('cms');
 				elseif(!isset($_POST['authentication']) && !empty($old_folder['acl'])) {
 					$folder['acl']=$response['acl']=0;
-					$GO_SECURITY->delete_acl($old_folder['acl']);
+					GO::security()->delete_acl($old_folder['acl']);
 				}
 
 				$cms->update_folder($folder);
@@ -156,7 +156,7 @@ try {
 			}else {
 
 				if(isset($_POST['authentication']))
-					$folder['acl']=$response['acl']=$GO_SECURITY->get_new_acl('cms');
+					$folder['acl']=$response['acl']=GO::security()->get_new_acl('cms');
 
 				$folder['site_id']=$_POST['site_id'];
 				$folder['parent_id']=$_POST['parent_id'];
@@ -181,7 +181,7 @@ try {
 
 			foreach($folders as $folder_id) {
 				if($cms->is_in_path($folder_id, $destination_folder_id)) {
-					require_once($GO_LANGUAGE->get_language_file('cms'));
+					require_once(GO::language()->get_language_file('cms'));
 					throw new Exception($lang['cms']['cant_move_into_itself']);
 				}else {
 					$cms->copy_folder($folder_id, $destination_folder_id);
@@ -258,7 +258,7 @@ try {
 
 			//$site = $cms->get_site((trim($_POST['site_id'])));
 
-			/*if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $site['acl_write']))
+			/*if(!GO::security()->has_permission(GO::security()->user_id, $site['acl_write']))
 			 {
 				throw new AccessDeniedException();
 				}*/
@@ -299,7 +299,7 @@ try {
 			$folder = $cms->get_folder($folder_id);
 			$site = $cms->get_site($folder['site_id']);
 
-			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $site['acl_write'])) {
+			if(!GO::security()->has_permission(GO::security()->user_id, $site['acl_write'])) {
 				throw new AccessDeniedException();
 			}
 			
@@ -343,7 +343,7 @@ try {
 				$cms->update_comment($comment);
 				$response['success']=true;
 			}else {
-				$comment['user_id']=$GO_SECURITY->user_id;
+				$comment['user_id']=GO::security()->user_id;
 
 
 				$comment_id= $cms->add_comment($comment);

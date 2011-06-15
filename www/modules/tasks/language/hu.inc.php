@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('tasks'));
+require(GO::language()->get_fallback_language_file('tasks'));
 
 $lang['tasks']['name']='Feladatok';
 $lang['tasks']['description']='Put a description here';

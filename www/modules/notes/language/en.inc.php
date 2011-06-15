@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-//require($GO_LANGUAGE->get_fallback_language_file('notes'));
+//require(GO::language()->get_fallback_language_file('notes'));
 
 $lang['notes']['name']='Notes';
 $lang['notes']['description']='A module to make to notes';

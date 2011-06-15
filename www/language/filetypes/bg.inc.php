@@ -1,5 +1,5 @@
 <?php
-require($GO_LANGUAGE->get_fallback_base_language_file('filetypes'));
+require(GO::language()->get_fallback_base_language_file('filetypes'));
 
 $ft_title = "������ �������";
 $ft_text = "�������� ������� �� �������� ����������� ��� Group-Office. ���� �� ��������� ����� � ����� ���.";

@@ -2,13 +2,13 @@
 require('../../../Group-Office.php');
 require('/etc/groupoffice/servermanager.inc.php');
 
-$GO_LANGUAGE->set_language('en');
+GO::language()->set_language('en');
 
-require_once ($GO_MODULES->modules['servermanager']['class_path']."servermanager.class.inc.php");
+require_once (GO::modules()->modules['servermanager']['class_path']."servermanager.class.inc.php");
 $sm = new servermanager();
 
-require($GO_LANGUAGE->get_language_file('servermanager'));
-require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+require(GO::language()->get_language_file('servermanager'));
+require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
 
 require('header.inc.php');
 
@@ -48,7 +48,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	{
 		//ok create a new_trial entry
 
-		require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+		require_once(GO::config()->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		$new_trial['password']=$GO_USERS->random_password();
@@ -61,7 +61,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 		$_body = str_replace('{url}', $url, $body);
 		$_body = str_replace('{name}', $new_trial['first_name'].' '.$new_trial['last_name'], $_body);
-		$_body = str_replace('{link}',$GO_MODULES->modules['servermanager']['full_url'].basename(dirname(__FILE__)).'/create.php?key='.$new_trial['key'], $_body);
+		$_body = str_replace('{link}',GO::modules()->modules['servermanager']['full_url'].basename(dirname(__FILE__)).'/create.php?key='.$new_trial['key'], $_body);
 		$_body = str_replace('{password}', stripslashes($new_trial['password']), $_body);
 
 		$swift = new GoSwift($new_trial['email'], $lang['servermanager']['new_trial_subject'],0,0,'3',$_body);

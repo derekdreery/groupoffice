@@ -15,13 +15,13 @@
 
 require_once("../../Group-Office.php");
 
-$GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('tasks');
+GO::security()->authenticate();
+GO::modules()->authenticate('tasks');
 
-require_once($GO_MODULES->class_path.'tasks.class.inc.php');
+require_once(GO::modules()->class_path.'tasks.class.inc.php');
 $tasks = new tasks();
 
-require_once($GO_MODULES->class_path.'export_tasks.class.inc.php');
+require_once(GO::modules()->class_path.'export_tasks.class.inc.php');
 $ical = new export_tasks();
 $ical->dont_use_quoted_printable=true;
 //$ical->line_break="\r\n";

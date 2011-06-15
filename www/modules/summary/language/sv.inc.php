@@ -13,7 +13,7 @@
  */
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('summary'));
+require(GO::language()->get_fallback_language_file('summary'));
 
 $lang['summary']['name']= 'Översikt';
 $lang['summary']['description']= 'Visar en översikt från utvalda moduler.';

@@ -199,9 +199,9 @@ class base_db{
 	{
 		global $GO_CONFIG;
 			
-		if(!isset($config) && isset($GO_CONFIG))
+		if(!isset($config))
 		{
-			$config = $GO_CONFIG;
+			$config = GO::config();
 		}
 			
 		if(isset($config))

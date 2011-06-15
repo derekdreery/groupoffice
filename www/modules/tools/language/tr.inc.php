@@ -1,5 +1,5 @@
 <?php
-require($GO_LANGUAGE->get_fallback_language_file('tools'));
+require(GO::language()->get_fallback_language_file('tools'));
 
 $lang['tools']['name']='Araçlar';
 $lang['tools']['description']='Yönetici işlemlerini yapmak için kullanılan modül.';

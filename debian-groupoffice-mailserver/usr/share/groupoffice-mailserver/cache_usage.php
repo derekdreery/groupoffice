@@ -4,26 +4,26 @@ if(isset($argv[1]))
 
 require('/usr/share/groupoffice/Group-Office.php');
 
-if(!isset($GO_MODULES->modules['postfixadmin'])) {
+if(!isset(GO::modules()->modules['postfixadmin'])) {
 	die('Fatal error: postfixadmin module must be installed');
 }
 
-if(!isset($GO_CONFIG->postfixadmin_vmail_root)) {
+if(!isset(GO::config()->postfixadmin_vmail_root)) {
 	if(is_dir('/home/vmail')) {
-		$GO_CONFIG->postfixadmin_vmail_root='/home/vmail/';
+		GO::config()->postfixadmin_vmail_root='/home/vmail/';
 	}elseif(is_dir('/vmail')) {
-		$GO_CONFIG->postfixadmin_vmail_root='/vmail/';
+		GO::config()->postfixadmin_vmail_root='/vmail/';
 	}
 }
 
-require_once($GO_MODULES->modules['postfixadmin']['class_path'].'postfixadmin.class.inc.php');
+require_once(GO::modules()->modules['postfixadmin']['class_path'].'postfixadmin.class.inc.php');
 $pa = new postfixadmin();
 $pa2 = new postfixadmin();
 
 $pa->get_mailboxes();
 while($pa->next_record()) {
 	$arr = explode('@', $pa->f('username'));
-	$path = $GO_CONFIG->postfixadmin_vmail_root.$arr[1].'/'.$arr[0];
+	$path = GO::config()->postfixadmin_vmail_root.$arr[1].'/'.$arr[0];
 	echo 'Calculating size of '.$path."\n";
 
 	$mailbox['id']=$pa->f('id');
