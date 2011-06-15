@@ -1,10 +1,10 @@
 <?php
 //Uncomment this line in new translations!
-//require($GO_LANGUAGE->get_fallback_language_file('groups'));
+//require(GO::language()->get_fallback_language_file('groups'));
 $lang['groups']['name'] = 'Csoportok';
-$lang['groups']['description'] = 'Admin modul; csoportok kezelése.';
-$lang['groups']['noDeleteAdmins'] = 'Az Admin csoport nem törölhetõ';
-$lang['groups']['noDeleteEveryone'] = 'A "Mindenki" csoport nem törölhetõ';
-$lang['groups']['groupNameAlreadyExists'] = 'Ilyen nevû csoport már létezik';
-$lang['groups']['dontRemoveAdmin']='Nem távolíthatoid el a fõadminisztrátort az admin csoportból!';
+$lang['groups']['description'] = 'Admin modul; csoportok kezelï¿½se.';
+$lang['groups']['noDeleteAdmins'] = 'Az Admin csoport nem tï¿½rï¿½lhetï¿½';
+$lang['groups']['noDeleteEveryone'] = 'A "Mindenki" csoport nem tï¿½rï¿½lhetï¿½';
+$lang['groups']['groupNameAlreadyExists'] = 'Ilyen nevï¿½ csoport mï¿½r lï¿½tezik';
+$lang['groups']['dontRemoveAdmin']='Nem tï¿½volï¿½thatoid el a fï¿½adminisztrï¿½tort az admin csoportbï¿½l!';
 ?>

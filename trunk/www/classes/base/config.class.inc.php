@@ -1287,13 +1287,13 @@ class GO_CONFIG {
 
 		$response['state_index'] = 'go';
 
-		$response['language']=$GO_LANGUAGE->language;
+		$response['language']=GO::language()->language;
 		$response['state']=array();
-		if($GO_SECURITY->logged_in()) {
+		if(GO::security()->logged_in()) {
 			//state for Ext components
-			$response['state'] = $this->get_state($GO_SECURITY->user_id, $response['state_index']);
+			$response['state'] = $this->get_state(GO::security()->user_id, $response['state_index']);
 
-			$response['has_admin_permission']=$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id);
+			$response['has_admin_permission']=GO::security()->has_admin_permission(GO::security()->user_id);
 		}
 		foreach($_SESSION['GO_SESSION'] as $key=>$value) {
 			if(!is_array($value)) {
@@ -1301,9 +1301,9 @@ class GO_CONFIG {
 			}
 		}
 
-		//$response['modules']=$GO_MODULES->modules;
-		$response['config']['theme_url']=$GO_THEME->theme_url;
-		$response['config']['theme']=$GO_THEME->theme;
+		//$response['modules']=GO::modules()->modules;
+		$response['config']['theme_url']=GO::theme()->theme_url;
+		$response['config']['theme']=GO::theme()->theme;
 		$response['config']['product_name']=$this->product_name;
 		$response['config']['product_version']=$this->version;
 		$response['config']['host']=$this->host;

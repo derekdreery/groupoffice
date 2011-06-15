@@ -14,9 +14,9 @@
 
 require('../../Group-Office.php');
 
-$GO_SECURITY->json_authenticate('notes');
+GO::security()->json_authenticate('notes');
 
-require_once ($GO_MODULES->modules['notes']['class_path'].'notes.class.inc.php');
+require_once (GO::modules()->modules['notes']['class_path'].'notes.class.inc.php');
 $notes = new notes();
 
 
@@ -28,12 +28,12 @@ try{
 	{
 		case 'category':
 
-			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			require_once(GO::config()->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$category = $notes->get_category($_REQUEST['category_id']);
 			$category['user_name']=$GO_USERS->get_user_realname($category['user_id']);
-			$category['write_permission']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id'])>GO_SECURITY::READ_PERMISSION;
+			$category['write_permission']=GO::security()->has_permission(GO::security()->user_id, $category['acl_id'])>GO_SECURITY::READ_PERMISSION;
 			$response['data']=$category;
 			$response['success']=true;		
 			break;
@@ -51,7 +51,7 @@ try{
 					foreach($delete_categories as $category_id)
 					{
 						$category = $notes->get_category($category_id);
-						if(($GO_MODULES->modules['notes']['permission_level'] < GO_SECURITY::MANAGE_PERMISSION) || ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']) < GO_SECURITY::MANAGE_PERMISSION))
+						if((GO::modules()->modules['notes']['permission_level'] < GO_SECURITY::MANAGE_PERMISSION) || (GO::security()->has_permission(GO::security()->user_id, $category['acl_id']) < GO_SECURITY::MANAGE_PERMISSION))
 						{
 							throw new AccessDeniedException();
 						}
@@ -65,7 +65,7 @@ try{
 				}
 			}
 
-			$categories = $GO_CONFIG->get_setting('notes_categories_filter', $GO_SECURITY->user_id);
+			$categories = GO::config()->get_setting('notes_categories_filter', GO::security()->user_id);
 			$categories = ($categories) ? explode(',',$categories) : array();
 
 			if(!count($categories))
@@ -74,7 +74,7 @@ try{
 				$default_category_id = $notes->f('id');
 			       
 				$categories[] = $default_category_id;
-				$GO_CONFIG->save_setting('notes_categories_filter',$default_category_id, $GO_SECURITY->user_id);
+				GO::config()->save_setting('notes_categories_filter',$default_category_id, GO::security()->user_id);
 			}
 
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
@@ -84,15 +84,15 @@ try{
 			
 			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			
-			$response['total'] = $notes->get_authorized_categories($auth_type, $GO_SECURITY->user_id, $query, $sort, $dir, $start, $limit);
+			$response['total'] = $notes->get_authorized_categories($auth_type, GO::security()->user_id, $query, $sort, $dir, $start, $limit);
 			if(!$response['total'] && !empty($query))
 			{
 				$notes->get_category();
-				$response['total'] = $notes->get_authorized_categories($auth_type, $GO_SECURITY->user_id, $query, $sort, $dir, $start, $limit);
+				$response['total'] = $notes->get_authorized_categories($auth_type, GO::security()->user_id, $query, $sort, $dir, $start, $limit);
 			}
 			$response['results']=array();
 
-			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			require_once(GO::config()->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			
 			while($notes->next_record())
@@ -116,7 +116,7 @@ try{
 			$category = $notes->get_category($note['category_id']);
 			$note['category_name']=$category['name'];
 
-			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			require_once(GO::config()->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			
 			
@@ -126,7 +126,7 @@ try{
 			$note['ctime']=Date::get_timestamp($note['ctime']);			
 			
 			$response['data']=$note;
-			$response['data']['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']);
+			$response['data']['permission_level']=GO::security()->has_permission(GO::security()->user_id, $category['acl_id']);
 			$response['data']['write_permission']=$response['data']['permission_level']>GO_SECURITY::READ_PERMISSION;
 			if(!$response['data']['permission_level'])
 			{
@@ -139,11 +139,11 @@ try{
 			
 			if($task=='note')
 			{
-				if(isset($GO_MODULES->modules['customfields']))
+				if(isset(GO::modules()->modules['customfields']))
 				{
-					require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+					require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
-					$values = $cf->get_values($GO_SECURITY->user_id, 4, $response['data']['id']);				
+					$values = $cf->get_values(GO::security()->user_id, 4, $response['data']['id']);				
 					$response['data']=array_merge($response['data'], $values);			
 				}
 				break;
@@ -161,10 +161,10 @@ try{
 			if(isset($_POST['categories']))
 			{
 				$categories = json_decode($_POST['categories'], true);
-				$GO_CONFIG->save_setting('notes_categories_filter',implode(',', $categories), $GO_SECURITY->user_id);
+				GO::config()->save_setting('notes_categories_filter',implode(',', $categories), GO::security()->user_id);
 			}else
 			{
-				$categories = $GO_CONFIG->get_setting('notes_categories_filter', $GO_SECURITY->user_id);
+				$categories = GO::config()->get_setting('notes_categories_filter', GO::security()->user_id);
 				$categories = ($categories) ? explode(',',$categories) : array();
 			}
 
@@ -181,7 +181,7 @@ try{
 					$category = $notes->get_category($category_id);
 
 					$category_names[]=$category['name'];
-					$permission_level = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $category['acl_id']);				
+					$permission_level = GO::security()->has_permission(GO::security()->user_id, $category['acl_id']);				
 					if($permission_level)
 					{
 						$readable_categories[] = $category_id;
@@ -230,7 +230,7 @@ try{
 					}					
 					if(count($delete_notes) != count($notes_deleted))
 					{
-						require_once($GO_LANGUAGE->get_language_file('notes'));
+						require_once(GO::language()->get_language_file('notes'));
 						$response['feedback'] = $lang['notes']['incomplete_delete'];
 					}
 					$response['deleteSuccess']=true;
@@ -257,7 +257,7 @@ try{
 			$response['total'] = $notes->get_notes($query, $readable_categories, $sort, $dir, $start, $limit);
 			$response['results']=array();
 
-			require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
+			require_once(GO::config()->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			
 			while($notes->next_record())
@@ -273,7 +273,7 @@ try{
 
 			if(count($category_names))
 			{
-				//$GO_LANGUAGE->require_language_file('notes');
+				//GO::language()->require_language_file('notes');
 				$response['grid_title'] = implode(' & ',$category_names);
 			}
 

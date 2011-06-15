@@ -12,15 +12,15 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once("../../Group-Office.php");
-$GO_SECURITY->json_authenticate('customcss');
+GO::security()->json_authenticate('customcss');
 
 try{
 
-	if(!is_dir($GO_CONFIG->file_storage_path.'customcss')){
-		mkdir($GO_CONFIG->file_storage_path.'customcss', 0755, true);
+	if(!is_dir(GO::config()->file_storage_path.'customcss')){
+		mkdir(GO::config()->file_storage_path.'customcss', 0755, true);
 	}
-	if(file_exists($GO_CONFIG->file_storage_path.'customcss/style.css')){
-		$response['data']['css']=file_get_contents($GO_CONFIG->file_storage_path.'customcss/style.css');
+	if(file_exists(GO::config()->file_storage_path.'customcss/style.css')){
+		$response['data']['css']=file_get_contents(GO::config()->file_storage_path.'customcss/style.css');
 	}else
 	{
 		$response['data']['css']='/*
@@ -38,8 +38,8 @@ background-image:url(/insert/url/here) !important;
 }';
 	}
 
-	if(file_exists($GO_CONFIG->file_storage_path.'customcss/javascript.js')){
-		$response['data']['javascript']=file_get_contents($GO_CONFIG->file_storage_path.'customcss/javascript.js');
+	if(file_exists(GO::config()->file_storage_path.'customcss/javascript.js')){
+		$response['data']['javascript']=file_get_contents(GO::config()->file_storage_path.'customcss/javascript.js');
 	}
 
 	

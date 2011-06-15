@@ -30,28 +30,28 @@ class smime extends db{
 		
 		$certs=array();
 		
-//		if(isset($GO_CONFIG->smime_root_cert_location)){
+//		if(isset(GO::config()->smime_root_cert_location)){
 //			
-//			$GO_CONFIG->smime_root_cert_location=rtrim($GO_CONFIG->smime_root_cert_location, '/');		
+//			GO::config()->smime_root_cert_location=rtrim(GO::config()->smime_root_cert_location, '/');		
 //			
-//			if(is_dir($GO_CONFIG->smime_root_cert_location)){				
+//			if(is_dir(GO::config()->smime_root_cert_location)){				
 //							
-//				$dir = opendir($GO_CONFIG->smime_root_cert_location);
+//				$dir = opendir(GO::config()->smime_root_cert_location);
 //				if ($dir) {
 //					while ($item = readdir($dir)) {
 //						if ($item != '.' && $item != '..') {
-//							$certs[] = $GO_CONFIG->smime_root_cert_location.'/'.$item;
+//							$certs[] = GO::config()->smime_root_cert_location.'/'.$item;
 //						}
 //					}
 //					closedir($dir);
 //				}
-//			}elseif(file_exists($GO_CONFIG->smime_root_cert_location)){
-//				$certs[]=$GO_CONFIG->smime_root_cert_location;
+//			}elseif(file_exists(GO::config()->smime_root_cert_location)){
+//				$certs[]=GO::config()->smime_root_cert_location;
 //			}
 //		}
 //		
-		if(file_exists($GO_CONFIG->smime_root_cert_location)){
-				$certs[]=$GO_CONFIG->smime_root_cert_location;
+		if(file_exists(GO::config()->smime_root_cert_location)){
+				$certs[]=GO::config()->smime_root_cert_location;
 			}
 		
 		//var_dump($certs);
@@ -104,10 +104,10 @@ class smime extends db{
 		
 		if (isset($_FILES['cert']['tmp_name'][0]) && is_uploaded_file($_FILES['cert']['tmp_name'][0])) {
 			
-			$GO_LANGUAGE->require_language_file('smime');
+			GO::language()->require_language_file('smime');
 			
 			
-			require_once($GO_CONFIG->class_path.'base/auth.class.inc.php');
+			require_once(GO::config()->class_path.'base/auth.class.inc.php');
 			$GO_AUTH = new GO_AUTH();
 			if(!$GO_AUTH->login($_SESSION['GO_SESSION']['username'], $_POST['smime_password'])){
 				throw new Exception($lang['smime']['badGoLogin']);
@@ -141,7 +141,7 @@ class smime extends db{
 		
 	}
 	
-	public function decrypt_message(&$message, cached_imap $imap){
+	public static function decrypt_message(&$message, cached_imap $imap){
 		
 		global $GO_MODULES, $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $lang;
 			
@@ -194,8 +194,8 @@ class smime extends db{
 //      'tmp_file' => false,
 //    )
 			
-			$reldir='smimetmp/'.$GO_SECURITY->user_id.'/';
-			$dir = $GO_CONFIG->file_storage_path.$reldir;
+			$reldir='smimetmp/'.GO::security()->user_id.'/';
+			$dir = GO::config()->file_storage_path.$reldir;
 			File::mkdir($dir);
 			
 			$infilename=$dir.'encrypted.txt';
@@ -258,7 +258,19 @@ class smime extends db{
 				file_put_contents($outfilename, substr($content, $pos));
 			}
 			
-			require_once($GO_MODULES->modules['mailings']['class_path'].'mailings.class.inc.php');
+
+			$return = openssl_pkcs7_decrypt($infilename, $outfilename, $certs['cert'], array($certs['pkey'], $password));
+			
+			unlink($infilename);
+			
+			if(!$return || !file_exists($outfilename) || !filesize($outfilename)){
+				//throw new Exception("Could not decrypt message");
+				GO::language()->require_language_file('smime');
+				$message['html_body']=$lang['smime']['noPrivateKeyForDecrypt'];
+				return false;
+			}
+			
+			require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
 			$ml = new mailings();		
 			
 			$decrypted_message = $ml->get_message_for_client(0, $outfilerel,'');
@@ -319,7 +331,7 @@ class smime extends db{
 			$failed=array();
 			$public_certs=array($certs['cert']);
 			foreach($to as $email=>$name){
-				$cert = $smime->get_public_certificate($GO_SECURITY->user_id, $email);				
+				$cert = $smime->get_public_certificate(GO::security()->user_id, $email);				
 				if(!$cert){
 					$failed[]=$email;
 				}				
@@ -327,7 +339,7 @@ class smime extends db{
 			}
 			
 			if(count($failed)){
-				$GO_LANGUAGE->require_language_file('smime');
+				GO::language()->require_language_file('smime');
 				throw new Exception(sprintf($lang['smime']['noPublicCertForEncrypt'], implode(', ',$failed)));
 			}
 

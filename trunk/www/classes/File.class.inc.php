@@ -43,9 +43,9 @@ class File
 
 	  if(!file_exists($path))
 	  {
-	  	if(mkdir($path, $GO_CONFIG->folder_create_mode, true)){
-			if(!empty($GO_CONFIG->file_change_group))
-				chgrp($path, $GO_CONFIG->file_change_group);
+	  	if(mkdir($path, GO::config()->folder_create_mode, true)){
+			if(!empty(GO::config()->file_change_group))
+				chgrp($path, GO::config()->file_change_group);
 			return true;
 		}else
 		{
@@ -130,10 +130,10 @@ class File
 
 		global $GO_THEME;
 
-		if (isset ($GO_THEME->filetypes[$extension])) {
-			return $GO_THEME->filetypes[$extension];
+		if (isset (GO::theme()->filetypes[$extension])) {
+			return GO::theme()->filetypes[$extension];
 		} else {
-			return $GO_THEME->filetypes['unknown'];
+			return GO::theme()->filetypes['unknown'];
 		}
 	}*/
 
@@ -147,7 +147,7 @@ class File
 	public static function get_filetype_description($extension) {
 		global $lang, $GO_LANGUAGE;
 
-		require_once($GO_LANGUAGE->get_base_language_file('filetypes'));
+		require_once(GO::language()->get_base_language_file('filetypes'));
 
 	
 
@@ -164,7 +164,7 @@ class File
 	{
 		global $GO_CONFIG;
 
-		$types = file_get_contents($GO_CONFIG->root_path.'mime.types');
+		$types = file_get_contents(GO::config()->root_path.'mime.types');
 
 		$extension = File::get_extension($path);
 

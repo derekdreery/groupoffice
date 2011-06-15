@@ -1,5 +1,5 @@
 <?php
-require($GO_LANGUAGE->get_fallback_language_file('files'));
+require(GO::language()->get_fallback_language_file('files'));
 $lang['files']['name']='Dateien';
 $lang['files']['description']='Modul zum Verwalten und Freigeben von Dateien';
 $lang['link_type'][6]='Datei';

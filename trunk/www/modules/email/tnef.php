@@ -13,24 +13,24 @@
  */
 
 require_once("../../Group-Office.php");
-$GO_SECURITY->authenticate();
-$GO_MODULES->authenticate('email');
+GO::security()->authenticate();
+GO::modules()->authenticate('email');
 
-require_once($GO_MODULES->modules['email']['class_path']."cached_imap.class.inc.php");
-require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
+require_once(GO::modules()->modules['email']['class_path']."cached_imap.class.inc.php");
+require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
 $imap = new cached_imap();
 $email = new email();
 
-if(!is_executable($GO_CONFIG->cmd_zip)) {
+if(!is_executable(GO::config()->cmd_zip)) {
 	exit('Fatal error: ZIP compression not configured');
 }
 
 
-if(!is_executable($GO_CONFIG->cmd_tnef)) {
+if(!is_executable(GO::config()->cmd_tnef)) {
 	exit('Fatal error: TNEF extraction not configured');
 }
 
-require_once ($GO_LANGUAGE->get_language_file('email'));
+require_once (GO::language()->get_language_file('email'));
 
 
 $account = $email->get_account($_REQUEST['account_id']);
@@ -39,12 +39,12 @@ $account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 //$file = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
 $size = $imap->get_message_part_start($_REQUEST['uid'], $_REQUEST['imap_id']);
 
-$tmpdir = $GO_CONFIG->tmpdir.'winmail/';
+$tmpdir = GO::config()->tmpdir.'winmail/';
 
 if(is_dir($tmpdir))
 	exec('rm -Rf '.$tmpdir);
 
-mkdir($tmpdir, $GO_CONFIG->folder_create_mode, true);
+mkdir($tmpdir, GO::config()->folder_create_mode, true);
 $tmpfile  = $tmpdir.'winmail.dat';
 
 $fp = fopen($tmpfile, 'w+');
@@ -70,10 +70,10 @@ $imap->disconnect();
 
 
 chdir($tmpdir);
-exec($GO_CONFIG->cmd_tnef.' winmail.dat');
+exec(GO::config()->cmd_tnef.' winmail.dat');
 unlink($tmpfile);
 
-exec($GO_CONFIG->cmd_zip.' -r "tnef-attachments.zip" *');
+exec(GO::config()->cmd_zip.' -r "tnef-attachments.zip" *');
 
 
 $browser = detect_browser();

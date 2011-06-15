@@ -13,7 +13,7 @@
  */
 
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('addressbook'));
+require(GO::language()->get_fallback_language_file('addressbook'));
 $lang['addressbook']['name'] = 'Adressebog';
 $lang['addressbook']['description'] = 'Modul til håndtering af alle kontakter.';
 

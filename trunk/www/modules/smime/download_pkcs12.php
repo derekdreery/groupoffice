@@ -15,17 +15,17 @@ require_once("../../Group-Office.php");
 
 session_write_close();
 
-$GO_SECURITY->json_authenticate('smime');
+GO::security()->json_authenticate('smime');
 
-require_once($GO_MODULES->modules['smime']['class_path'].'smime.class.inc.php');
+require_once(GO::modules()->modules['smime']['class_path'].'smime.class.inc.php');
 $smime = new smime();
 
-require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
+require_once(GO::modules()->modules['email']['class_path'].'email.class.inc.php');
 $email = new email();
 
 $account = $email->get_account($_REQUEST['account_id']);
 
-if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id,$account['acl_id'])) {
+if(!GO::security()->has_permission(GO::security()->user_id,$account['acl_id'])) {
 	die($lang['common']['accessDenied']);
 }
 

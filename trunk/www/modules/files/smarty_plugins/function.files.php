@@ -4,7 +4,7 @@ function smarty_function_files($params, &$smarty)
 {	
 	global $co, $GO_CONFIG, $GO_MODULES;
 	
-	require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+	require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
 	$fsdb = new files();
 
 	if(empty($params['path']))
@@ -19,7 +19,7 @@ function smarty_function_files($params, &$smarty)
 		}		
 	}else
 	{
-		//$path = $GO_CONFIG->file_storage_path.$params['path'];
+		//$path = GO::config()->file_storage_path.$params['path'];
 		$path = $params['path'];
 	}
 

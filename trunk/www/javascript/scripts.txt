@@ -117,3 +117,5 @@ javascript/advancedquery/QueryPanel.js
 javascript/advancedquery/SavedQueriesGrid.js
 
 javascript/windows/UsersInGroup.js
+
+javascript/windows/TabbedFormDialog.js

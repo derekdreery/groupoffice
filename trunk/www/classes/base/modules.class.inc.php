@@ -126,6 +126,10 @@ class GO_MODULES extends db {
 		}	
 	}
 	
+	function __get($name){
+		return $this->modules[$name];
+	}
+	
 	/**
 	 * Checks if the current logged in user has access to a module
 	 * 
@@ -144,7 +148,7 @@ class GO_MODULES extends db {
 		if(!$this->allowed_modules)
 		{
 			global $GO_CONFIG;
-			$this->allowed_modules=empty($GO_CONFIG->allowed_modules) ? array() : explode(',', $GO_CONFIG->allowed_modules);
+			$this->allowed_modules=empty(GO::config()->allowed_modules) ? array() : explode(',', GO::config()->allowed_modules);
 		}
 		return !count($this->allowed_modules) || in_array($module, $this->allowed_modules);
 	}
@@ -195,7 +199,7 @@ class GO_MODULES extends db {
 	{
 		global $GO_SECURITY, $GO_LANGUAGE, $lang_modules, $GO_CONFIG;
 
-		if($user && !$GO_CONFIG->debug){
+		if($user && !GO::config()->debug){
 			if($cache = unserialize($user['cache'])){
 				if($cache['modules_mtime']==$user['mtime'])
 					return $_SESSION['GO_SESSION']['modules']=$this->modules= $cache['modules'];
@@ -213,9 +217,9 @@ class GO_MODULES extends db {
 			if($this->module_is_allowed($modules_props[$i]['id']))
 			{
 				$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']] = $modules_props[$i];
-				if (isset($GO_SECURITY) &&  $GO_SECURITY->logged_in() ) {
+				if (GO::security()->logged_in() ) {
 
-					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['permission_level'] =$GO_SECURITY->has_permission($_SESSION['GO_SESSION']['user_id'], $modules_props[$i]['acl_id']);
+					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['permission_level'] =GO::security()->has_permission($_SESSION['GO_SESSION']['user_id'], $modules_props[$i]['acl_id']);
 					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] = $_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['permission_level']>GO_SECURITY::READ_PERMISSION;
 					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['read_permission'] = $_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['permission_level']>0;
 
@@ -224,7 +228,7 @@ class GO_MODULES extends db {
 					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] = $_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['read_permission'] = false;
 				}
 
-				$language_file = $GO_LANGUAGE->get_language_file($modules_props[$i]['id']);
+				$language_file = GO::language()->get_language_file($modules_props[$i]['id']);
 				if(file_exists($language_file))
 				{
 					require($language_file);
@@ -267,13 +271,13 @@ class GO_MODULES extends db {
 		if ( isset( $this->modules[$module_id] ) ) {
 			$module = $this->modules[$module_id];
 			$_SESSION['GO_SESSION']['active_module'] = $module_id;
-			$this->path = $GO_CONFIG->root_path.'modules/'.$module_id.'/';
+			$this->path = GO::config()->root_path.'modules/'.$module_id.'/';
 			$this->class_path = $this->path.'classes/';
 			$this->read_permission = $module['read_permission'];
 			$this->write_permission = $module['write_permission'];
 			$this->id = $module_id;
-			$this->full_url = $GO_CONFIG->full_url.'modules/'.$module_id.'/';
-			$this->url = $GO_CONFIG->host.'modules/'.$module_id.'/';
+			$this->full_url = GO::config()->full_url.'modules/'.$module_id.'/';
+			$this->url = GO::config()->host.'modules/'.$module_id.'/';
 
 			if ( $this->read_permission || $this->write_permission ) {
 				if ( $admin ) {
@@ -284,7 +288,7 @@ class GO_MODULES extends db {
 					return true;
 				}
 			}
-			header( 'Location: '.$GO_CONFIG->host);
+			header( 'Location: '.GO::config()->host);
 			exit();
 		} else {
 			exit( 'Invalid module specified' );
@@ -310,11 +314,11 @@ class GO_MODULES extends db {
 		$this->query($sql);
 		if ( $this->next_record(DB_ASSOC) ) {
 			$this->record['full_url'] =
-			$GO_CONFIG->full_url.'modules/'.$module_id.'/';
+			GO::config()->full_url.'modules/'.$module_id.'/';
 			$this->record['url'] =
-			$GO_CONFIG->host.'modules/'.$module_id.'/';
+			GO::config()->host.'modules/'.$module_id.'/';
 			$this->record['path'] =
-			$GO_CONFIG->root_path.'modules/'.$module_id.'/';
+			GO::config()->root_path.'modules/'.$module_id.'/';
 			$this->record['class_path'] =
 			$this->record['path'].'classes/';
 			return $this->record;
@@ -340,24 +344,24 @@ class GO_MODULES extends db {
 	function add_module($module_id) {
 		global $GO_CONFIG, $GO_SECURITY;
 		
-		if(!is_dir($GO_CONFIG->root_path.'modules/'.$module_id))
+		if(!is_dir(GO::config()->root_path.'modules/'.$module_id))
 		{
 			return false;
 		}
 
 		$module['id']=$module_id;
 		$module['sort_order'] = count($this->modules)+1;
-		$module['acl_id']=$GO_SECURITY->get_new_acl();
+		$module['acl_id']=GO::security()->get_new_acl();
 		
 		$module['version']=0;
-		$updates_file = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/updates.inc.php';		
+		$updates_file = GO::config()->root_path.'modules/'.$module_id.'/install/updates.inc.php';		
 		if(file_exists($updates_file))
 		{
 			require($updates_file);			
 			$module['version']=isset($updates) ? count($updates) : 0;
 		}
 
-		$install_sql_file = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/install.sql';
+		$install_sql_file = GO::config()->root_path.'modules/'.$module_id.'/install/install.sql';
 
 		if ( file_exists( $install_sql_file ) ) {
 			if ( $queries = String::get_sql_queries($install_sql_file)) {
@@ -370,7 +374,7 @@ class GO_MODULES extends db {
 		$this->insert_row('go_modules', $module);
 		$this->load_modules();
 
-		$install_script = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/install.inc.php';
+		$install_script = GO::config()->root_path.'modules/'.$module_id.'/install/install.inc.php';
 		if(file_exists($install_script))
 		{
 			require($install_script);
@@ -381,8 +385,8 @@ class GO_MODULES extends db {
 		/*
 		 * Remove listeners.txt. See classes/base/events.class.inc.php for more info
 		 */
-		if(file_exists($GO_CONFIG->file_storage_path.'cache/listeners.txt'))
-			unlink($GO_CONFIG->file_storage_path.'cache/listeners.txt');
+		if(file_exists(GO::config()->file_storage_path.'cache/listeners.txt'))
+			unlink(GO::config()->file_storage_path.'cache/listeners.txt');
 
 		//clear cache for modules
 		$this->halt_on_error='no';
@@ -425,16 +429,16 @@ class GO_MODULES extends db {
 		global $GO_SECURITY, $GO_CONFIG;
 		if ( $module = $this->get_module($module_id)) {
 						
-			$uninstall_script = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/uninstall.inc.php';
+			$uninstall_script = GO::config()->root_path.'modules/'.$module_id.'/install/uninstall.inc.php';
 			if(file_exists($uninstall_script))
 			{
 				require($uninstall_script);
 			}			
 						
-			$GO_SECURITY->delete_acl($module['acl_id']);
+			GO::security()->delete_acl($module['acl_id']);
 			$sql = "DELETE FROM go_modules WHERE id='".$module_id."'";
 			if ( $this->query( $sql ) ) {
-				$uninstall_sql_file = $GO_CONFIG->root_path.'modules/'.$module_id.'/install/uninstall.sql';
+				$uninstall_sql_file = GO::config()->root_path.'modules/'.$module_id.'/install/uninstall.sql';
 
 				if (file_exists($uninstall_sql_file)) {
 					if ( $queries = String::get_sql_queries( $uninstall_sql_file ) ) {
@@ -448,8 +452,8 @@ class GO_MODULES extends db {
 			/*
 			 * Remove listeners.txt. See classes/base/events.class.inc.php for more info
 			 */
-			if(file_exists($GO_CONFIG->file_storage_path.'cache/listeners.txt'))
-				unlink($GO_CONFIG->file_storage_path.'cache/listeners.txt');
+			if(file_exists(GO::config()->file_storage_path.'cache/listeners.txt'))
+				unlink(GO::config()->file_storage_path.'cache/listeners.txt');
 
 
 			//clear cache for modules
@@ -499,15 +503,15 @@ class GO_MODULES extends db {
 		$this->get_modules($admin_menu);
 		while ( $this->next_record(DB_ASSOC) ) {
 				
-			$this->record['path'] = $GO_CONFIG->root_path.'modules/'.$this->f('id').'/';
-			$this->record['full_url'] =	$GO_CONFIG->full_url.'modules/'.$this->f('id').'/';
-			$this->record['url'] = $GO_CONFIG->host.'modules/'.$this->f('id').'/';
+			$this->record['path'] = GO::config()->root_path.'modules/'.$this->f('id').'/';
+			$this->record['full_url'] =	GO::config()->full_url.'modules/'.$this->f('id').'/';
+			$this->record['url'] = GO::config()->host.'modules/'.$this->f('id').'/';
 			$this->record['legacy']=false;
 			if(!file_exists($this->record['path']))
 			{
-				$this->record['path'] = $GO_CONFIG->root_path.'legacy/modules/'.$this->f('id').'/';
-				$this->record['full_url'] =	$GO_CONFIG->full_url.'legacy/modules/'.$this->f('id').'/';
-				$this->record['url'] = $GO_CONFIG->host.'legacy/modules/'.$this->f('id').'/';
+				$this->record['path'] = GO::config()->root_path.'legacy/modules/'.$this->f('id').'/';
+				$this->record['full_url'] =	GO::config()->full_url.'legacy/modules/'.$this->f('id').'/';
+				$this->record['url'] = GO::config()->host.'legacy/modules/'.$this->f('id').'/';
 				$this->record['legacy']=true;
 			}
 			if(file_exists($this->record['path']))
@@ -517,6 +521,8 @@ class GO_MODULES extends db {
 				$modules[] = $this->record;
 			}
 		}
+		
+		
 		return $modules;
 	}
 }

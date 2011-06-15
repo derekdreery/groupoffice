@@ -15,11 +15,11 @@
 
 
 
-$go_config = get_option('groupoffice_config');
-if(isset($go_config['config_file'])){
-	require($go_config['config_file']);
-	define('NO_EVENTS', $go_config['config_file']);
-	define('CONFIG_FILE', $go_config['config_file']);
+$GO_CONFIG = get_option('groupoffice_config');
+if(isset($GO_CONFIG['config_file'])){
+	require($GO_CONFIG['config_file']);
+	define('NO_EVENTS', $GO_CONFIG['config_file']);
+	define('CONFIG_FILE', $GO_CONFIG['config_file']);
 	require($config['root_path'].'Group-Office.php');
 	if(!WP_DEBUG)
 		ini_set('display_errors', 0);
@@ -288,12 +288,12 @@ if(strpos(basename($_SERVER['PHP_SELF']),'wp-')===false)
 
 function groupoffice_get_contact_form($post_extra_info=false){
 
-	global $current_user, $go_config, $GO_MODULES, $GO_CONFIG;
+	global $current_user, $GO_CONFIG, $GO_MODULES, $GO_CONFIG;
 
-require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+require_once(GO::config()->class_path.'base/links.class.inc.php');
 $GO_LINKS = new GO_LINKS();
 
-	//$go_config = get_option('groupoffice_config');
+	//$GO_CONFIG = get_option('groupoffice_config');
 
 	$post_title=false;
 	if($post_extra_info){
@@ -354,10 +354,10 @@ $GO_LINKS = new GO_LINKS();
 
 				if(!empty($_SESSION['last_contact_post_id'])){
 
-					require_once($GO_CONFIG->class_path.'base/links.class.inc.php');
+					require_once(GO::config()->class_path.'base/links.class.inc.php');
 					$GO_LINKS = new GO_LINKS();
 
-					require_once($GO_MODULES->modules['wordpress']['class_path'].'wordpress.class.inc.php');
+					require_once(GO::modules()->modules['wordpress']['class_path'].'wordpress.class.inc.php');
 					$wp = new wordpress();
 
 					$post = $wp->get_post_by_wp_id($_SESSION['last_contact_post_id']);
@@ -367,7 +367,7 @@ $GO_LINKS = new GO_LINKS();
 	
 					//add to first fase
 					global $GO_MODULES;
-					require_once ($GO_MODULES->modules['recruity']['class_path']."fase.class.inc.php");
+					require_once (GO::modules()->modules['recruity']['class_path']."fase.class.inc.php");
 					$fase = new fase();
 
 					$fase->get_fases('',0,1);
@@ -394,7 +394,7 @@ $GO_LINKS = new GO_LINKS();
 
 				//reactie naar klant
 
-				$dir = $GO_CONFIG->file_storage_path.'users/admin/formulieren/';
+				$dir = GO::config()->file_storage_path.'users/admin/formulieren/';
 
 				$path = $dir.'reactie-vacature-'.$category.'.eml';
 				if(!file_exists($path))
@@ -402,7 +402,7 @@ $GO_LINKS = new GO_LINKS();
 
 				if(file_exists($path)){
 					$email = file_get_contents($path);
-					require_once($GO_CONFIG->class_path.'mail/GoSwift.class.inc.php');
+					require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
 					$swift = new GoSwiftImport($email);
 					$body=$swift->body;
 
@@ -410,12 +410,12 @@ $GO_LINKS = new GO_LINKS();
 						$body = str_replace('{'.$key.'}', $value, $body);
 					}
 
-					require_once($GO_MODULES->modules['addressbook']['path'].'classes/addressbook.class.inc.php');
+					require_once(GO::modules()->modules['addressbook']['path'].'classes/addressbook.class.inc.php');
 					$ab = new addressbook();
 					$contact=$ab->get_contact($r['contact_id']);
 
-					if(isset($GO_MODULES->modules['mailings'])){
-						require_once($GO_MODULES->modules['mailings']['path'].'classes/templates.class.inc.php');
+					if(isset(GO::modules()->modules['mailings'])){
+						require_once(GO::modules()->modules['mailings']['path'].'classes/templates.class.inc.php');
 						$tp = new templates();
 
 						$body=$tp->replace_contact_data_fields($body, $contact, false);
@@ -435,7 +435,7 @@ $GO_LINKS = new GO_LINKS();
 		}
 	}
 
-	$url = $go_config['full_url'].'modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email.'&post_title='.urlencode($post_title).'&category='.urlencode($category);
+	$url = $GO_CONFIG['full_url'].'modules/recruity/inschrijven.php?wp_user_id='.intval($current_user->ID).'&email='.$current_user->user_email.'&post_title='.urlencode($post_title).'&category='.urlencode($category);
 
 	if(!empty($_SESSION['last_contact_post_id']))
 		$url .= '&post_id='.$_SESSION['last_contact_post_id'];

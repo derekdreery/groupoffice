@@ -12,8 +12,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once('../../Group-Office.php');
-$GO_SECURITY->json_authenticate('blacklist');
-require_once ($GO_MODULES->modules['blacklist']['class_path'].'blacklist.class.inc.php');
+GO::security()->json_authenticate('blacklist');
+require_once (GO::modules()->modules['blacklist']['class_path'].'blacklist.class.inc.php');
 $blacklist = new blacklist();
 $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 try{

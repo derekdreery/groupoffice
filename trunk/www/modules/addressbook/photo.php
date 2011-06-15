@@ -13,11 +13,11 @@
  */
 
 require_once("../../Group-Office.php");
-$GO_SECURITY->json_authenticate('addressbook');
+GO::security()->json_authenticate('addressbook');
 
 
 
-$path = $GO_CONFIG->file_storage_path.'contacts/contact_photos/'.intval($_REQUEST['contact_id']).'.jpg';
+$path = GO::config()->file_storage_path.'contacts/contact_photos/'.intval($_REQUEST['contact_id']).'.jpg';
 
 $browser = detect_browser();
 

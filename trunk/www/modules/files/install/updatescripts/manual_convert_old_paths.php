@@ -10,8 +10,8 @@ require('../../../../Group-Office.php');
 
 if(php_sapi_name()!='cli')
 {
-	$GO_SECURITY->authenticate();
-	if(!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+	GO::security()->authenticate();
+	if(!GO::security()->has_admin_permission(GO::security()->user_id))
 	{
 		die('You must be logged in as admin or run it from the command line');
 	}

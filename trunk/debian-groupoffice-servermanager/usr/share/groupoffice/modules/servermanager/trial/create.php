@@ -2,14 +2,14 @@
 require('../../../Group-Office.php');
 require('/etc/groupoffice/servermanager.inc.php');
 
-require_once ($GO_MODULES->modules['servermanager']['class_path']."servermanager.class.inc.php");
+require_once (GO::modules()->modules['servermanager']['class_path']."servermanager.class.inc.php");
 $sm = new servermanager();
 
-require($GO_LANGUAGE->get_language_file('servermanager'));
+require(GO::language()->get_language_file('servermanager'));
 
 $key = ($_REQUEST['key']);
 
-require($GO_CONFIG->class_path.'html/select.class.inc.php');
+require(GO::config()->class_path.'html/select.class.inc.php');
 
 
 require('header.inc.php');
@@ -25,12 +25,12 @@ if(!$new_trial)
 	<?php
 }else
 {
-	$timezone = isset($_POST['timezone']) ? ($_POST['timezone']) : $GO_CONFIG->default_timezone;
-	$language = isset($_POST['language']) ? ($_POST['language']) : $GO_LANGUAGE->language;
+	$timezone = isset($_POST['timezone']) ? ($_POST['timezone']) : GO::config()->default_timezone;
+	$language = isset($_POST['language']) ? ($_POST['language']) : GO::language()->language;
 	$date_format = isset($_POST['date_format']) ? ($_POST['date_format']) : 'dd-mm-yyyy';
 	$time_format = isset($_POST['time_format']) ? ($_POST['time_format']) : 'G:i';
-	$country = isset($_POST['country']) ? ($_POST['country']) : $GO_CONFIG->default_country;
-	$currency = isset($_POST['currency']) ? ($_POST['currency']) : $GO_CONFIG->default_currency;
+	$country = isset($_POST['country']) ? ($_POST['country']) : GO::config()->default_country;
+	$currency = isset($_POST['currency']) ? ($_POST['currency']) : GO::config()->default_currency;
 	$number_format = isset($_POST['number_format']) ? ($_POST['number_format']) : '1.000,00';
 	$first_weekday = isset($_POST['first_weekday']) ? ($_POST['first_weekday']) : '1';
 	
@@ -94,11 +94,11 @@ if(!$new_trial)
 				
 			$config['id']=$installation['name'];
 			
-			$tmp_config = $GO_CONFIG->tmpdir.uniqid();
+			$tmp_config = GO::config()->tmpdir.uniqid();
 			touch($tmp_config);
 			$sm->write_config($tmp_config, $config);
 
-			exec('sudo '.$GO_MODULES->modules['servermanager']['path'].'sudo.php --go_config='.$GO_CONFIG->get_config_file().' --task=install --name='.$installation['name'].' --tmp_config='.$tmp_config.' --password='.$new_trial['password']);		
+			exec('sudo '.GO::modules()->modules['servermanager']['path'].'sudo.php --go_config='.GO::config()->get_config_file().' --task=install --name='.$installation['name'].' --tmp_config='.$tmp_config.' --password='.$new_trial['password']);		
 			$sm->delete_new_trial($new_trial['name']);
 			?>
 			<h1>Trial installation complete!</h1>
@@ -146,7 +146,7 @@ if(!$new_trial)
 			<td><?php
 			$select = new select('country', $country);
 			
-			require($GO_LANGUAGE->get_base_language_file('countries'));			
+			require(GO::language()->get_base_language_file('countries'));			
 			foreach($countries as $code=>$desc)
 			{
 				$select->add_value($code, $desc);
@@ -159,7 +159,7 @@ if(!$new_trial)
 			<td><?php
 			$select = new select('language', $language);
 			
-			require($GO_CONFIG->root_path.'language/languages.inc.php');			
+			require(GO::config()->root_path.'language/languages.inc.php');			
 			foreach($languages as $language=>$desc)
 			{
 				$select->add_value($language, $desc);

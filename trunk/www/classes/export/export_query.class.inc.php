@@ -20,12 +20,12 @@ class export_query
 	function find_custom_exports(){
 		global $GO_CONFIG;
 
-		require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+		require_once(GO::config()->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 
 		$ce=array();
-		if(is_dir($GO_CONFIG->file_storage_path.'customexports')){
-			$files = $fs->get_files($GO_CONFIG->file_storage_path.'customexports');
+		if(is_dir(GO::config()->file_storage_path.'customexports')){
+			$files = $fs->get_files(GO::config()->file_storage_path.'customexports');
 			while($file = array_shift($files)){
 				require_once($file['path']);
 
@@ -192,8 +192,8 @@ class base_export_query{
 	{
 		global $GO_MODULES;
 
-		if($GO_MODULES->has_module('customfields')) {
-			require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
+		if(GO::modules()->has_module('customfields')) {
+			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$this->cf = new customfields();
 		}else
 		{

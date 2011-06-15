@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require($GO_LANGUAGE->get_fallback_language_file('tasks'));
+require(GO::language()->get_fallback_language_file('tasks'));
 
 $lang['tasks']['name']='Activitate';
 $lang['tasks']['description']='Intrudu aici o descriere';

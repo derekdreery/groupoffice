@@ -1,6 +1,6 @@
 <?php
 
-require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc');
+require_once(GO::config()->class_path.'mail/imap.class.inc');
 class cached_imap extends imap{
 
 	/**
@@ -50,7 +50,7 @@ class cached_imap extends imap{
 
 		global $GO_CONFIG;
 		
-		$this->disable_message_cache=$GO_CONFIG->debug;
+		$this->disable_message_cache=GO::config()->debug;
 	}
 
 	public function is_imap(){
@@ -64,11 +64,11 @@ class cached_imap extends imap{
 			throw new Exception($lang['common']['selectError']);
 		}
 
-		if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $account['acl_id']<GO_SECURITY::READ_PERMISSION) && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
-			//echo "<br>account_user_id: ".$account['user_id']." <br>security_user_id:".$GO_SECURITY->user_id."";
+		if(GO::security()->has_permission(GO::security()->user_id, $account['acl_id']<GO_SECURITY::READ_PERMISSION) && !GO::security()->has_admin_permission(GO::security()->user_id)) {
+			//echo "<br>account_user_id: ".$account['user_id']." <br>security_user_id:".GO::security()->user_id."";
 			throw new AccessDeniedException();
 		}
-		/*if($account['user_id']!=$GO_SECURITY->user_id && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
+		/*if($account['user_id']!=GO::security()->user_id && !GO::security()->has_admin_permission(GO::security()->user_id)) {
 			throw new AccessDeniedException();
 		}*/
 		try {
@@ -227,10 +227,10 @@ class cached_imap extends imap{
 		* @return void
 		*/
 
-	public function delete($messages) {
+	public function delete($messages, $expunge=true) {
 		if(count($messages))
 		{
-			if(parent::delete($messages))
+			if(parent::delete($messages, $expunge))
 			{
 				$this->delete_cached_messages($messages);
 				return true;
@@ -247,10 +247,10 @@ class cached_imap extends imap{
 		* @access public
 		* @return bool True on success
 		*/
-	public function move($uids, $mailbox) {
+	public function move($uids, $mailbox, $expunge=true) {
 		if(count($uids))
 		{
-			if(parent::move($uids, $mailbox))
+			if(parent::move($uids, $mailbox, $expunge))
 			{
 				$this->delete_cached_messages($uids);
 				return true;
@@ -356,7 +356,7 @@ class cached_imap extends imap{
 	}
 
 
-	public function get_message_part($uid, $message_part=0, $peek=false) {
+	public function get_message_part($uid, $message_part=0, $peek=false, $max=false) {
 		
 		go_debug("imap::get_message_part($uid, $message_part, $peek)");
 
@@ -366,17 +366,17 @@ class cached_imap extends imap{
 			}
 		}
 
-		return parent::get_message_part($uid, $message_part, $peek);
+		return parent::get_message_part($uid, $message_part, $peek, $max);
 	}
 
-	public function get_message_header($uid){
+	public function get_message_header($uid, $full_data=false){
 		$this->get_cached_messages($this->folder['id'], array($uid));
 		$record = $this->email->next_record();
 
 		if($record)
 			return $record;
 		else
-			return parent::get_message_header($uid);
+			return parent::get_message_header($uid, $full_data);
 	}
 
 
@@ -386,13 +386,13 @@ class cached_imap extends imap{
 
 		go_debug("cached_imap::get_message_with_body($uid, $create_temporary_attachment_files, $create_temporary_inline_attachment_files, $peek, $plain_body_requested, $html_body_requested)");
 
-		require($GO_LANGUAGE->get_language_file('email'));
+		require(GO::language()->get_language_file('email'));
 
 		if($create_temporary_attachment_files || $create_temporary_inline_attachment_files){
-			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+			require_once(GO::config()->class_path.'filesystem.class.inc');
 			$fs = new filesystem();
 			
-			$fs->mkdir_recursive($GO_CONFIG->tmpdir.'attachments');
+			$fs->mkdir_recursive(GO::config()->tmpdir.'attachments');
 		}
 
 
@@ -427,7 +427,7 @@ class cached_imap extends imap{
 
 			for ($i = 0; $i < count($message['attachments']); $i ++) {
 				if(($create_temporary_attachment_files && empty($message['attachments'][$i]['replacement_url'])) || ($create_temporary_inline_attachment_files && !empty($message['attachments'][$i]['replacement_url']))){
-					$tmp_file = File::checkfilename($GO_CONFIG->tmpdir.'attachments/'.$message['attachments'][$i]['name']);
+					$tmp_file = File::checkfilename(GO::config()->tmpdir.'attachments/'.$message['attachments'][$i]['name']);
 					$data = $this->get_message_part_decoded(
 									$uid,
 									$message['attachments'][$i]['imap_id'],
@@ -441,7 +441,7 @@ class cached_imap extends imap{
 				}
 			}
 			
-			$GO_EVENTS->fire_event('get_message_with_body', array(&$message, $this));
+			GO::events()->fire_event('get_message_with_body', array(&$message, $this));
 
 			//go_debug($message);
 			return $message;
@@ -466,7 +466,7 @@ class cached_imap extends imap{
 			throw new Exception($lang['email']['errorGettingMessage']);
 		}
 
-		require_once($GO_CONFIG->class_path.'mail/RFC822.class.inc');
+		require_once(GO::config()->class_path.'mail/RFC822.class.inc');
 		$RFC822 = new RFC822();
 		$address = $RFC822->parse_address_list($message['from']);
 
@@ -610,7 +610,7 @@ class cached_imap extends imap{
 			$message['attachments'][$i]['tmp_file']=false;
 
 			if(($create_temporary_attachment_files && empty($message['attachments'][$i]['id'])) || ($create_temporary_inline_attachment_files && !empty($message['attachments'][$i]['id']))) {
-				$tmp_file = File::checkfilename($GO_CONFIG->tmpdir.'attachments/'.$message['attachments'][$i]['name']);
+				$tmp_file = File::checkfilename(GO::config()->tmpdir.'attachments/'.$message['attachments'][$i]['name']);
 				$data = $this->get_message_part_decoded(
 								$uid, 
 								$message['attachments'][$i]['imap_id'],
@@ -645,7 +645,7 @@ class cached_imap extends imap{
 		}
 		
 		
-		$GO_EVENTS->fire_event('get_message_with_body', array(&$message, $this));
+		GO::events()->fire_event('get_message_with_body', array(&$message, $this));
 		
 		$cached_message['uid']=$uid;
 		$cached_message['folder_id']=$this->folder['id'];
@@ -689,7 +689,7 @@ class cached_imap extends imap{
 	private function get_attachment_url($uid, $part){
 		global $GO_MODULES;
 		
-		return  $GO_MODULES->modules['email']['url']."attachment.php?".
+		return  GO::modules()->modules['email']['url']."attachment.php?".
 			"account_id=".$this->account['id'].
 			"&amp;mailbox=".urlencode($this->selected_mailbox['name']).
 			"&amp;uid=".$uid.
