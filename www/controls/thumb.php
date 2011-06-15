@@ -88,9 +88,10 @@ if ($zc) {
 $cache_filename .= $filename;
 
 $readfile = $cache_dir . '/' . $cache_filename;
-$thumb_mtime = filemtime($cache_dir . '/' . $cache_filename);
+$thumb_exists = file_exists($cache_dir . '/' . $cache_filename);
+$thumb_mtime = $thumb_exists ? filemtime($cache_dir . '/' . $cache_filename) : 0;
 
-if (!empty($_REQUEST['nocache']) || !file_exists($cache_dir . '/' . $cache_filename) || $thumb_mtime < $file_mtime || $thumb_mtime < filectime($full_path)) {
+if (!empty($_REQUEST['nocache']) || !$thumb_exists || $thumb_mtime < $file_mtime || $thumb_mtime < filectime($full_path)) {
 	$image = new Image($full_path);
 	if (!$image->load_success) {
 		//failed. Stream original image

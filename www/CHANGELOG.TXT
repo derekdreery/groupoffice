@@ -1,4 +1,6 @@
-02/06/2011 3.7.22
+- Fixed bug with etags in caldav
+
+06/06/2011 3.7.22
 - Timer in timeregistration didn't add values.
 - You can now download attached file from the composer.
 - Small bug fixes

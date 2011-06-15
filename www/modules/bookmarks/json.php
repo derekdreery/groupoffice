@@ -99,7 +99,10 @@ try {
 				if(!is_dir($path))
 					mkdir($path,0755, true);
 
-				$filename = str_replace('.','_',preg_replace('/https?:\/\//','', $_POST['url'])).'.ico';
+				$filename = str_replace('.','_',preg_replace('/^https?:\/\//','', $_POST['url'])).'.ico';
+        $filename = rtrim(str_replace('/','_',$filename),'_ ');
+
+        //var_dump($filename);
 
 				file_put_contents($path.$filename, $contents);
 

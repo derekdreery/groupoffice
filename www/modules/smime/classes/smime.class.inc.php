@@ -155,7 +155,12 @@ class smime extends db{
 				$cert = $smime->get_pkcs12_certificate($message['account_id']);
 
 				if(!$cert || empty($cert['cert']))
-					throw new Exception("No key was found to decrypt the message!");
+				{
+					$GO_LANGUAGE->require_language_file('smime');
+					go_debug('SMIME: No private key at all found for this account');
+					$message['html_body']=$lang['smime']['noPrivateKeyForDecrypt'];
+					return false;
+				}
 
 
 				if(isset($_POST['password']))
@@ -196,11 +201,10 @@ class smime extends db{
 			$infilename=$dir.'encrypted.txt';
 			$outfilename=$dir.'unencrypted.txt';
 			
-			$outfilerel = $reldir.'unencrypted.txt';
-			
-			
+			$outfilerel = $reldir.'unencrypted.txt';	
 			
 			if($encrypted){
+				go_debug('Message is encrypted');
 				
 				$imap->save_to_file($message['uid'], $infilename);//,, $att['imap_id'], $att['encoding']);
 			
@@ -229,7 +233,11 @@ class smime extends db{
 				if(!$return || !file_exists($outfilename) || !filesize($outfilename)){
 					//throw new Exception("Could not decrypt message");
 					$GO_LANGUAGE->require_language_file('smime');
-					$message['html_body']=$lang['smime']['noPrivateKeyForDecrypt'];
+					$message['html_body']=$lang['smime']['decryptionFailed'].'<br />';
+					
+					while($str = openssl_error_string()){
+						$message['html_body'].='<br />'.$str;
+					}
 					return false;
 				}
 
