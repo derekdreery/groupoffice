@@ -1,6 +1,6 @@
 <?php
 
-abstract class GO_Base_Controller_AbstractController {
+abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable {
 		
 	protected $outputStream;
 	
