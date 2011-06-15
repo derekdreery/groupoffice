@@ -13,6 +13,8 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	public $modules;
 	
 	public function __construct($model='GO_Base_Model_Module', $findParams=array()){
+		
+		$findParams['orderField']='sort_order';
 		parent::__construct($model, $findParams);
 		
 		foreach($this->_models as $module){
