@@ -1,7 +1,7 @@
 Replace
 
-$GLOBALS['GO_SECURITY']->
-$GO_SECURITY->
+GO::security()->
+GO::security()->
 GO::security()->
 
 
