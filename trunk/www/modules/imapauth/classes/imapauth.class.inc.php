@@ -106,7 +106,7 @@ class imapauth
 					require_once(GO::config()->class_path.'base/users.class.inc.php');
 					$GO_USERS = new GO_USERS();
 
-          require_once($GO_MODULES->modules['email']['class_path']."email.class.inc.php");
+          require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
           $email_client = new email();
 
 					$user = $GO_USERS->get_user_by_username($go_username);
