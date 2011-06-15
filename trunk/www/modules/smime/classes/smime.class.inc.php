@@ -156,7 +156,7 @@ class smime extends db{
 
 				if(!$cert || empty($cert['cert']))
 				{
-					$GO_LANGUAGE->require_language_file('smime');
+					GO::language()->require_language_file('smime');
 					go_debug('SMIME: No private key at all found for this account');
 					$message['html_body']=$lang['smime']['noPrivateKeyForDecrypt'];
 					return false;
@@ -232,7 +232,7 @@ class smime extends db{
 
 				if(!$return || !file_exists($outfilename) || !filesize($outfilename)){
 					//throw new Exception("Could not decrypt message");
-					$GO_LANGUAGE->require_language_file('smime');
+					GO::language()->require_language_file('smime');
 					$message['html_body']=$lang['smime']['decryptionFailed'].'<br />';
 					
 					while($str = openssl_error_string()){
@@ -300,7 +300,7 @@ class smime extends db{
 
 			$cert = $smime->get_pkcs12_certificate($swift->account['id']);
 
-			$swift->message->setSignParams($cert['cert'], $password, isset($GO_CONFIG->smime_sign_extra_certs) ? $GO_CONFIG->smime_sign_extra_certs : "");
+			$swift->message->setSignParams($cert['cert'], $password, isset(GO::config()->smime_sign_extra_certs) ? GO::config()->smime_sign_extra_certs : "");
 		}
 		
 		if(!empty($_POST['encrypt_smime'])){		
