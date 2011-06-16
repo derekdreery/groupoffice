@@ -18,22 +18,49 @@
  */
 class GO_Base_Observable{
 	
-	public static function addListener($eventName,$listenerClass, $listenerFunction){
-		$class = get_called_class();
+	
+	public static function cacheListeners(){
+		
+		go_debug("GO_Base_Observable::cacheListeners");
 		
 		$dir = GO::config()->file_storage_path.'cache/listeners/';
-		if(!is_dir($dir)){
+		if(GO::config()->debug){
+			exec('rm -Rf '.$dir);
+		}
+		$dirExists = is_dir($dir);
+		if(!$dirExists){
 			mkdir($dir, 0755,true);
 			
 			foreach(GO::modules()->getAll() as $module)
 			{	
+				$file = $module->path.ucfirst($module->id).'Module.php';
 				//todo load listeners
+				if(file_exists($file)){
+					require($file);
+					$class='GO_'.ucfirst($module->id).'_'.ucfirst($module->id).'Module';
+					$object = new $class;
+					if(method_exists($object, 'initListeners')){
+						$object->initListeners();
+					}
+				}
 			}
 		}
+	}
+	
+	public static function addListener($eventName,$listenerClass, $listenerFunction){
+		$class = get_called_class();		
 		
-		$line = '$listeners[]=array("'.$eventName.'", "'.$listenerClass.'", "'.$listenerClass.'");';
+		$line = '$listeners["'.$eventName.'"][]=array("'.$listenerClass.'", "'.$listenerFunction.'");'."\n";
 		
-		file_put_contents($dir.get_called_class().'.php', $line, FILE_APPEND);	
+		$dir = GO::config()->file_storage_path.'cache/listeners/';
+		$file = $dir.get_called_class().'.php';
+		
+		if(!file_exists($file))
+			file_put_contents($file, "<?php\n", FILE_APPEND);	
+		
+		file_put_contents($file, $line, FILE_APPEND);	
+		
+	
 	}	
 	
 	public static function removeListener($eventName,$listenerClass,$listenerFunction){
@@ -51,7 +78,28 @@ class GO_Base_Observable{
 				require($cacheFile);
 			
 			$this->_listeners=$listeners;
+			
+//			$cacheFile = GO::config()->file_storage_path.'cache/listeners/'.get_parent_class($this).'.php';
+//			if(file_exists($cacheFile)){
+//				require($cacheFile);
+//				$this->_listeners=array_merge($this->_listeners,$listeners);
+//			}
 		}
+		
+		go_debug("fireEvent($eventName) class:".get_class($this));
+		
+		if(isset($this->_listeners[$eventName])){
+			foreach($this->_listeners[$eventName] as $listener)
+			{
+				go_debug('Firing listener: '.$listener[0].'::'.$listener[1]);
+
+				$method = !empty($listener[0]) ? array($listener[0], $listener[1]) : $listener[1];
+				call_user_func_array($method, $params);
+			}
+		}
+		
+		//recurse up.
+		//parent::fireEvent($eventName, $params);
 	}
 	
 	

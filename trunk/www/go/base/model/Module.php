@@ -64,4 +64,12 @@
 	public function afterDelete(){
 		return parent::afterDelete();
 	}
+	
+	/**
+	 * This class can be overriden by a module class to add listeners to objects
+	 * that extend the GO_Base_Observable class.
+	 */
+	public function initListeners(){
+		
+	}
 }
