@@ -40,14 +40,20 @@ class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * @var int ACL to check for permissions.
 	 */
-	protected $aclField=false;
-	
-	protected $aclFieldJoin=false;
+	public $aclField=false;
 	
 	private $_relatedCache;
 	
 	
 	private $_attributes=array();
+
+	/**
+	 *
+	 * @return <type> Call $model->aclFieldJoin to check if the aclfield is joined.
+	 */
+	private function getAclFieldJoin (){
+		return strpos($this->aclField,'.')!==false;
+	}
 	
 	/**
 	 *
@@ -165,6 +171,7 @@ class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}else
 			{
 				$acl_id = $this->{$this->aclField};
+				
 			}
 			$this->_permissionLevel=GO::security()->hasPermission($acl_id);
 		}
@@ -438,14 +445,18 @@ class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @return boolean 
 	 */
 	private function _checkPermissionLevel($level){
+
+		//TODO
+		return true;
+
 		if(empty($this->aclField))
 			return true;
-		
+
 		return $this->getPermissionLevel()>=$level;
 	}
 	
-	
-	
+
+
 	public function validate(){
 		foreach($this->_columns as $field=>$attributes){
 			if(!empty($attributes['required']) && !isset($this->_attributes[$field])){
@@ -461,8 +472,8 @@ class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * Saves the model to the database
 	 * 
@@ -473,7 +484,7 @@ class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		if(!$this->_checkPermissionLevel(GO_SECURITY::WRITE_PERMISSION))
 			throw new AccessDeniedException();
-		
+				
 		if($this->beforeSave() && $this->validate()){		
 		
 			/*
@@ -492,14 +503,14 @@ class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			if($this->isNew){				
 				
-				if(strpos($this->aclField, '.')===false){
+				if($this->aclField && !$this->joinAclField){
 					//generate acl id
 					$this->{$this->aclField}=GO::security()->get_new_acl($this->tableName);
 				}				
 
-				$this->_attributes[$this->primaryKey] = $this->_dbInsert();
+				$this->{$this->primaryKey} = $this->_dbInsert();
 				
-				if(!$this->_attributes[$this->primaryKey])
+				if(!$this->pk)
 					return false;
 			}else
 			{
@@ -508,7 +519,7 @@ class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 			
 			if(!$this->afterSave())
-							return false;
+				return false;
 			
 			/**
 			 * Useful event for modules. For example custom fields can be loaded or a files folder.
@@ -639,11 +650,11 @@ class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function setAttribute($name,$value)
 	{
-		if(property_exists($this,$name))
+		if(property_exists($this,$name)){
 			$this->$name=$value;
-		elseif(isset($this->_columns[$name]))
+		}elseif(isset($this->_columns[$name])){
 			$this->_attributes[$name]=$value;		
-		else{
+		}else{
 			$arr = explode('@',$name);
 			if(count($arr)>1)
 				$this->_relatedCache[$arr[0]][$arr[1]]=$value;				
