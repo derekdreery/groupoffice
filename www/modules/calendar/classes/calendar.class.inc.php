@@ -1603,6 +1603,10 @@ class calendar extends db {
 					$only_busy_events=false,
 					$query_field='',
 					$query_param='') {
+		
+		$interval_start=intval($interval_start);
+		$interval_end=intval($interval_end);
+		$user_id=intval($user_id);
 
 		$sql  = "SELECT e.* FROM cal_events e";
 
@@ -1642,6 +1646,9 @@ class calendar extends db {
 				$sql .= " WHERE ";
 				$where=true;
 			}
+			
+			$calendars=array_map('intval', $calendars);
+			
 			$sql .= "e.calendar_id IN (".implode(',', $calendars).")";
 		}
 
@@ -2700,6 +2707,9 @@ class calendar extends db {
 			."WHERE birthday != '0000-00-00' ";
 
 		if(count($abooks)) {
+			
+			$abooks=array_map('intval', $abooks);
+			
 			$sql .= "AND addressbook_id IN (".implode(',', $abooks).") ";
 		}
 
@@ -2909,6 +2919,8 @@ class calendar extends db {
 	{
 		if(!is_array($calendars))
 			$calendars = array($calendars);
+		
+		$calendars=array_map('intval', $calendars);
 		
 		$this->query("SELECT DISTINCT tasklist_id FROM cal_visible_tasklists WHERE calendar_id IN (".implode(',', $calendars).")");
 		return $this->num_rows();
