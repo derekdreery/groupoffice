@@ -187,8 +187,8 @@ class GO_SECURITY extends db {
 		}
 
 
-		SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
-		SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
+		SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false, true);
+		SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false, true);
 
 		$old_session = $_SESSION;
 
