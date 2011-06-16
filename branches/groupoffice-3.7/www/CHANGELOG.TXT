@@ -1,4 +1,7 @@
+16/06/2011 3.7.23
 - Fixed bug with etags in caldav
+- New ticket message template tags and attach files when saving an e-mail as ticket
+- Check if SMIME certificate address matches the sender address
 
 06/06/2011 3.7.22
 - Timer in timeregistration didn't add values.

@@ -277,13 +277,13 @@ try{
 					$enc_password=$c->encrypt($password);
 				}
 
-				SetCookie("GO_UN",$enc_username,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
-				SetCookie("GO_PW",$enc_password,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
+				SetCookie("GO_UN",$enc_username,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false, true);
+				SetCookie("GO_PW",$enc_password,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false, true);
 			}
 			
 			$fullscreen = isset($_POST['fullscreen']) ? '1' : '0';
 			
-			SetCookie("GO_FULLSCREEN",$fullscreen,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
+			SetCookie("GO_FULLSCREEN",$fullscreen,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false, true);
 				
 			$response['user_id']=$GO_SECURITY->user_id;
 			$response['name']=$_SESSION['GO_SESSION']['name'];
