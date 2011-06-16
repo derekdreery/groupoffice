@@ -806,12 +806,14 @@ class addressbook extends db {
 		$conditions = "WHERE ";
 
 
-		$user_ab = array();//$this->get_user_addressbook_ids($user_id);
-
-		$this->get_writable_addressbooks($user_id);
-		while($r=$this->next_record()){
-			$user_ab[]=$r['id'];
-		}
+//		$user_ab = array();//$this->get_user_addressbook_ids($user_id);
+//
+//		$this->get_writable_addressbooks($user_id);
+//		while($r=$this->next_record()){
+//			$user_ab[]=$r['id'];
+//		}
+		
+		$user_ab = $this->get_user_addressbook_ids($user_id);
 
 		if(count($user_ab) > 1) {
 			$conditions .= " c.addressbook_id IN (".implode(",",$user_ab).") ";
