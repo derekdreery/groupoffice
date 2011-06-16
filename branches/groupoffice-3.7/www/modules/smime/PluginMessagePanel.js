@@ -52,7 +52,7 @@ GO.moduleManager.onModuleReady('email',function(){
 												if(!this.data.path)
 													this.data.path="";
 												this.certPanel.load(GO.settings.modules.smime.url+'verify.php?uid='+													
-													this.uid+'&account_id='+this.account_id+'&mailbox='+encodeURIComponent(this.mailbox)+'&filepath='+this.data.path);
+													this.uid+'&account_id='+this.account_id+'&mailbox='+encodeURIComponent(this.mailbox)+'&filepath='+this.data.path+'&email='+encodeURIComponent(this.data.sender));
 											}, this)
 									}
 								})
