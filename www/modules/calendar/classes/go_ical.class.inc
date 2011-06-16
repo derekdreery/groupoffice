@@ -82,10 +82,24 @@ class go_ical extends calendar
 			$timezone = date_default_timezone_get ();
 
 		$tz = new DateTimeZone($_SESSION['GO_SESSION']['timezone']);
+    //$tz = new DateTimeZone("Europe/Amsterdam");
 		$transitions = $tz->getTransitions();
+
 		$start_of_year = mktime(0,0,0,1,1);
 
-		$STANDARD_TZOFFSETFROM=$STANDARD_TZOFFSETTO=$DAYLIGHT_TZOFFSETFROM=$DAYLIGHT_TZOFFSETTO='+00';
+    $to = Date::get_timezone_offset(time());
+    if($to<0){
+      if(strlen($to)==2)
+        $to='-0'.($to*-1);
+    }else
+    {
+      if(strlen($to)==1)
+        $to='0'.$to;
+
+      $to='+'.$to;
+    }
+
+		$STANDARD_TZOFFSETFROM=$STANDARD_TZOFFSETTO=$DAYLIGHT_TZOFFSETFROM=$DAYLIGHT_TZOFFSETTO=$to;
 
 		$STANDARD_RRULE='';
 		$DAYLIGHT_RRULE='';
