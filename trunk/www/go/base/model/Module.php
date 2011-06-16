@@ -28,7 +28,7 @@
 	
 		
 	 
-	protected $aclField='acl_id';
+	public $aclField='acl_id';
 	
 	public $tableName='go_modules';
 
