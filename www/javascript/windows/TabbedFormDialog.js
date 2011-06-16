@@ -9,17 +9,39 @@
  * @version $Id: NoteDialog.js 7429 2011-05-16 13:15:10Z mschering $
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
+ *
+ * If you extend this class, you MUST use the addPanel method to add at least
+ * one panel to this dialog. A tabPanel is automatically created if and only if
+ * more than one panel is added to the dialog in this way.
  */
  
 GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
-	serverId : 0,
-	
-	serverIdName : 'id',
-	
+	remoteModelId : 0,
+
+	/**
+	 * The controller will be called with this post parameter.
+	 *
+	 * $_POST['id'];
+	 *
+	 * This should not be changed.
+	 */
+	remoteModelIdName : 'id',
+
+	/**
+	 * This variable must point to a Form controller on the remoteModel that will be
+	 * called with /load and /submit.
+	 *
+	 * eg. GO.url('notes/note');
+	 */
 	formControllerUrl : 'undefined',
-	
+
+	/**
+	 * Set this if your item supports custom fields.
+	 */
 	customFieldType : 0,
+
+	_panels : Array(),
 	
 	initComponent : function(){
 		
@@ -53,26 +75,32 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			}
 			]
 		});
-		
-		this.tabPanel = new Ext.TabPanel({
-			activeTab: 0,
-			deferredRender: false,
-			border: false,
-			anchor: '100% 100%'
-		});
-    
-		this.formPanel = new Ext.form.FormPanel({
-			waitMsgTarget:true,
-			url: GO.settings.modules.notes.url+'action.php',
-			border: false,
-			baseParams: {
-				task: 'note'
-			},
-			items:this.tabPanel				
-		});  
-		
+
 		this.buildForm();
+
+		this.formPanel = new Ext.form.FormPanel({
+			waitMsgTarget:true,			
+			border: false,
+			baseParams : {}
+		});
+
 		this.addCustomFields();
+		
+		if(this._panels.length>1) {
+			this._tabPanel = new Ext.TabPanel({
+				activeTab: 0,
+				deferredRender: false,
+				border: false,
+				anchor: '100% 100%',
+				items: this._panels
+			});
+
+			this.formPanel.add(this._tabPanel);
+		} else {
+			this.formPanel.add(this._panels[0]);			
+		}
+		
+		
 		
 		this.items=this.formPanel;
 		
@@ -80,26 +108,24 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		GO.dialog.TabbedFormDialog.superclass.initComponent.call(this); 
 		
 		this.addEvents({
-			'save' : true
+			'submit' : true
 		});
 	},
 	focus : function(){
-		var firstTab = this.tabPanel.items.items[0];
+		var firstTab = this._tabPanel ? this._tabPanel.items.items[0] : this.formPanel;
 		if(firstTab){
 			var firstField = firstTab.items.items[0];
 			if(firstField)
 				firstField.focus();
 		}
 	},
-	
-	buildForm : function(){},
-	
+
 	addCustomFields : function(){
 		if(this.customFieldType && GO.customfields && GO.customfields.types[this.customFieldType])
 		{
 			for(var i=0;i<GO.customfields.types[this.customFieldType].panels.length;i++)
 			{			  	
-				this.tabPanel.add(GO.customfields.types[this.customFieldType].panels[i]);
+				this.addPanel(GO.customfields.types[this.customFieldType].panels[i]);
 			}
 		}
 	},
@@ -107,21 +133,21 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	submitForm : function(hide){
 		this.formPanel.form.submit(
 		{
-			url:this.formControllerUrl+'/save',
+			url:this.formControllerUrl+'/submit',
 			
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){		
 				
-				this.setServerId(action.result[this.serverIdName]);	
+				this.setRemoteModelId(action.result[this.remoteModelIdName]);
 				
-				this.afterSave(action);
+				this.afterSubmit(action);
 				
 				if(hide)
 				{
 					this.hide();	
 				}
 				
-				this.fireEvent('save', this, this.serverId);
+				this.fireEvent('submit', this, this.remoteModelId);
 				
 				if(this.link_config && this.link_config.callback)
 				{					
@@ -141,36 +167,37 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	},
 	afterLoad : function(action, config){},
 	afterLoadNew : function(config){},
-	afterSave : function(action){},
+	afterSubmit : function(action){},
 	
-	show : function (serverId, config) {
+	show : function (remoteModelId, config) {
 
 		config = config || {};
-		
-		//tmpfiles on the server ({name:'Name',tmp_file:/tmp/name.ext} will be attached)
+
+		//tmpfiles on the remoteModel ({name:'Name',tmp_file:/tmp/name.ext} will be attached)
 		this.formPanel.baseParams.tmp_files = config.tmp_files ? Ext.encode(config.tmp_files) : '';
 				
 		if(!this.rendered)
 			this.render(Ext.getBody());
 		
-		if(!serverId)
+		if(!remoteModelId)
 		{
-			serverId=0;			
+			remoteModelId=0;
 		}
 		
 		delete this.link_config;
 		this.formPanel.form.reset();	
-		
-		this.tabPanel.items.items[0].show();
+
+		if(this._tabPanel)
+			this._tabPanel.items.items[0].show();
 			
-		this.setServerId(serverId);
+		this.setRemoteModelId(remoteModelId);
 		
-		if(this.serverId>0)
+		if(this.remoteModelId>0)
 		{
 			this.formPanel.load({
 				url:this.formControllerUrl+'/load',
 				success:function(form, action)
-				{
+				{					
 					if(action.result.remoteComboTexts){
 						var t = action.result.remoteComboTexts;
 						for(var fieldName in t){
@@ -180,7 +207,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 								f.setRemoteText(t[fieldName]);
 						}
 					}
-					
+
 					this.afterLoad(action, config);
 					GO.dialog.TabbedFormDialog.superclass.show.call(this);
 				},
@@ -202,7 +229,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		//if the newMenuButton from another passed a linkTypeId then set this value in the select link field
 		if(this.selectLinkField && config && config.link_config)
 		{
-			this.selectLinkField.container.up('div.x-form-item').setDisplayed(serverId==0);
+			this.selectLinkField.container.up('div.x-form-item').setDisplayed(remoteModelId==0);
 			
 			this.link_config=config.link_config;
 			if(config.link_config.type_id)
@@ -213,12 +240,24 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		}
 	},
 
-	setServerId : function(serverId)
+	setRemoteModelId : function(remoteModelId)
 	{
-		this.formPanel.form.baseParams[this.serverIdName]=serverId;
-		this.serverId=serverId;
+		this.formPanel.form.baseParams[this.remoteModelIdName]=remoteModelId;
+		this.remoteModelId=remoteModelId;
 	},
-	
-	
-	buildForm : function () {}
+
+	/**
+	 * Use this function to add panels to the window.
+	 */
+	addPanel : function(panel){
+		this._panels.push(panel);
+	},
+
+
+	/**
+	 * Override this function to build your form. Call addPanel to add panels.
+	 */
+	buildForm : function () {
+
+	}
 });
