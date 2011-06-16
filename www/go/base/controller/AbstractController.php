@@ -1,11 +1,39 @@
 <?php
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
 
+
+/**
+ * Abstract class for al Group-Office controllers.
+ */
 abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable {
-		
+	
+	/**
+	 *
+	 * @var mixed A JSON outputstream for example. 
+	 */
 	protected $outputStream;
 	
+	/**
+	 *
+	 * @var string The module the controller belongs too. 
+	 */
 	protected $module;
 	
+	/**
+	 *
+	 * @var string The default action when none is specified. 
+	 */
 	protected $defaultAction='Index';
 
 	/**
@@ -67,7 +95,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * 
 	 * @param int $aclId
 	 * @param int $requiredPermissionLevel See GO_SECURITY constants
-	 * @param string $action 
+	 * @param string $action By default it applies to all actions but you may specify a specific action here.
 	 */
 	protected function addPermissionCheck($aclId, $requiredPermissionLevel, $action='*'){
 		$this->requiredPermissionLevels[$action]=array('aclId'=>$aclId, 'requiredPermissionLevel'=>$requiredPermissionLevel);

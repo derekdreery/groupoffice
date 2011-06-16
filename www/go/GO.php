@@ -1,5 +1,21 @@
 <?php
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
 
+/**
+ * The main Group-Office application class. This class only contains static 
+ * classes to access commonly used application data like the configuration or the logged in user.
+ */
 class GO{
 
 	private static $_classes = array(
@@ -30,6 +46,11 @@ class GO{
 
 	public static $db;
 	
+	/**
+	 * Get's the global database connection object.
+	 * 
+	 * @return PDO Database connection object
+	 */
 	public static function getDbConnection(){
 		if(!isset(self::$db)){
 			
@@ -44,6 +65,12 @@ class GO{
 		return self::$db;
 	}
 	
+	/**
+	 *
+	 * @return string Returns the currently selected theme. 
+	 * 
+	 * TODO SHould be changed to theme().
+	 */
 	public static function view(){
 		return 'Default';
 	}
@@ -159,6 +186,11 @@ class GO{
 		}
 	}
 
+	/**
+	 * This function inititalizes Group-Office.
+	 * 
+	 * @global type $lang 
+	 */
 	public static function init() {
 		global $lang;
 
@@ -277,10 +309,4 @@ class GO{
 			$_SESSION['query_count'] = 0;
 		}
 	}
-	
-	
-	public static function registerClientScript($src){
-		
-	}
-
 }
