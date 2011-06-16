@@ -25,7 +25,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord{
 	/*
 	 * Points to a relation here
 	 */
-	protected $aclField='category.acl_id';	
+	public $aclField='category.acl_id';	
 	
 	protected $relations=array(
 				'category' => array(self::BELONGS_TO, 'GO_Notes_Model_Category', 'category_id')

@@ -86,7 +86,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 
 		this.addCustomFields();
 		
-		if(this._panels.length>1) {
+		if(this._panels.length) {
 			this._tabPanel = new Ext.TabPanel({
 				activeTab: 0,
 				deferredRender: false,
@@ -96,14 +96,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			});
 
 			this.formPanel.add(this._tabPanel);
-		} else {
-			this.formPanel.add(this._panels[0]);			
 		}
 		
-		
-		
-		this.items=this.formPanel;
-		
+		this.items=this.formPanel;		
 		
 		GO.dialog.TabbedFormDialog.superclass.initComponent.call(this); 
 		
