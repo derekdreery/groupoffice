@@ -27,7 +27,7 @@ class GO{
 	private static $_modules;
 	private static $_events;
 	private static $_theme;
-	
+
 	public static $db;
 	
 	public static function getDbConnection(){
@@ -116,7 +116,8 @@ class GO{
 	 * @param string $className 
 	 */
 	public static function autoload($className) {
-		
+
+		$orgClassName = $className;
 		
 		if(substr($className,0,7)=='GO_Base'){		
 			$arr = explode('_', $className);		
@@ -151,7 +152,7 @@ class GO{
 				}
 				
 				if(!file_exists($file))
-					throw new Exception('Class '.$className.' not found!');
+					throw new Exception('Class '.$orgClassName.' not found!');
 				
 				require($file);
 			}
