@@ -6,6 +6,9 @@ class GO_Base_Router{
 	 * Analyzes the request URL and finds the controller.
 	 * 
 	 * URL Should be like index.php?r=module/controller/method&param=value
+	 * 
+	 * If a controller consist of two words then the second word should start with
+	 * a capital letter.
 	 */
 	public function run(){
 		
