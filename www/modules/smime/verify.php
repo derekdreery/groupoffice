@@ -142,7 +142,10 @@ if(isset($_REQUEST['account_id'])){
 		while ($msg = openssl_error_string())
 			echo $msg . "<br />\n";
 		echo '</p>';
-	} else {
+	} else if($email!=$_REQUEST['email']){
+		echo '<h1 class="smi-certemailmismatch">'.$lang['smime']['certEmailMismatch'].'</h1>';
+	}else
+	{
 		echo '<h1 class="smi-valid">'.$lang['smime']['validCert'].'</h1>';
 	}
 }

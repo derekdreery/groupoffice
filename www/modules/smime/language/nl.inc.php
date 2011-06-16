@@ -13,5 +13,6 @@ $lang['smime']['smime_pass_empty']="Uw SMIME sleutel heeft geen wachtwoord. Dit 
 
 $lang['smime']['invalidCert']="Dit certificaat is ongeldig!";
 $lang['smime']['validCert']="Geldig certificaat";
+$lang['smime']['certEmailMismatch']="Geldig certificaat maar het e-mail adres van het certificaat komt niet overeen met de afzender van deze e-mail.";
 
 $lang['smime']['decryptionFailed']='SMIME decodering van dit bericht is mislukt.';

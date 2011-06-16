@@ -13,5 +13,6 @@ $lang['smime']['smime_pass_empty']="Your SMIME key has no password. This is proh
 
 $lang['smime']['invalidCert']="The certificate is invalid!";
 $lang['smime']['validCert']="Valid certificate";
+$lang['smime']['certEmailMismatch']="Valid certificate but the e-mail of the certificate does not match the sender address of the e-mail.";
 
 $lang['smime']['decryptionFailed']='SMIME Decryption of this message failed.';
