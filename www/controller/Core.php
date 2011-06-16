@@ -11,6 +11,9 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController{
 	protected $defaultAction='Init';
 	
 	protected function actionInit(){
+		
+		GO_Base_Observable::cacheListeners();
+		
 		$this->render('init');
 	}
 	

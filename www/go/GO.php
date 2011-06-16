@@ -179,7 +179,7 @@ class GO{
 				}
 				
 				if(!file_exists($file))
-					throw new Exception('Class '.$orgClassName.' not found!');
+					throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
 				
 				require($file);
 			}
@@ -299,14 +299,12 @@ class GO{
 		if (!GO::config()->enabled) {
 			die('<h1>Disabled</h1>This Group-Office installation has been disabled');
 		}
-		
-		//self::modules()->load_modules();
-
-
 
 		if (GO::config()->debug) {
 			$_SESSION['connect_count'] = 0;
 			$_SESSION['query_count'] = 0;
 		}
+		
+		
 	}
 }

@@ -30,4 +30,5 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord{
 	protected $relations=array(
 				'category' => array(self::BELONGS_TO, 'GO_Notes_Model_Category', 'category_id')
 		);
+
 }
