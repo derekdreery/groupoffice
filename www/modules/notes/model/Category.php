@@ -1,7 +1,7 @@
 <?php
  class GO_Notes_Model_Category extends GO_Base_Db_ActiveRecord{
 		 
-	protected $aclField='acl_id';
+	public $aclField='acl_id';
 	
 	public $tableName='no_categories';
 

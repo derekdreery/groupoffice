@@ -83,6 +83,6 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			}]				
 		});
 
-		this.tabPanel.add(this.propertiesPanel);
+		this.addPanel(this.propertiesPanel);
 	}
 });
