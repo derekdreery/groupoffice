@@ -26,7 +26,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	/**
 	 * The database connection of this record
 	 * 
-	 * @var GO_Database  
+	 * @var PDO  
 	 */
 	public static $db;
 	
@@ -34,7 +34,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
 	 */
-	protected $link_type=0;
+	public $linkType=0;
 	
 	/**
 	 *
@@ -102,11 +102,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @param int $primaryKey integer The primary key of the database table
 	 */
 	public function __construct($primaryKey=0){			
+		
+		$this->init();
+		
 		if($primaryKey!=0)
 			$this->load($primaryKey);
 		else
-			$this->afterLoad();	
+			$this->afterLoad();		
 	}
+	
+	protected function init(){}
 	
 	/**
 	 * Get's the primary key value. Can also be accessed with $model->pk.
@@ -114,10 +119,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @return mixed The primary key value 
 	 */
 	public function getPk(){
-		if(isset($this->_attributes[$this->primaryKey]))
-			return $this->_attributes[$this->primaryKey];
-		else
-			return null;
+		
+		$ret = null;
+		
+		if(is_array($this->primaryKey)){
+			foreach($this->primaryKey as $field){
+				if(isset($this->_attributes[$field])){
+					$ret[$field]=$this->_attributes[$field];
+				}
+			}
+		}elseif(isset($this->_attributes[$this->primaryKey]))
+			$ret =  $this->_attributes[$this->primaryKey];
+		
+		return $ret;
 	}
 
 	
@@ -125,7 +139,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * Returns the database connection used by active record.
 	 * By default, the "db" application component is used as the database connection.
 	 * You may override this method if you want to use a different database connection.
-	 * @return CDbConnection the database connection used by active record.
+	 * @return PDO the database connection used by active record.
 	 */
 	public function getDbConnection()
 	{
@@ -167,7 +181,27 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	private $_permissionLevel;
 	
+	private $_acl_id;
 	
+	
+	public function findAclId() {
+		if (empty($this->aclField))
+			return false;
+		
+		if(!isset($this->_acl_id)){
+			$arr = explode('.', $this->aclField);
+			if (count($arr) == 2) {
+				$relation = $arr[0];
+				$aclField = $arr[1];
+				$this->_acl_id = $this->$relation->$aclField;
+			} else {
+				$this->_acl_id = $this->{$this->aclField};
+			}
+		}
+		
+		return $this->_acl_id;		
+	}
+
 	/**
 	 * Returns the permission level if an aclField is defined in the model. Otherwise
 	 * it returns -1;
@@ -181,17 +215,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			return -1;	
 	
 		if(!isset($this->_permissionLevel)){
-			$arr = explode('.',$this->aclField);
-			if(count($arr)==2){
-				$relation = $arr[0];
-				$aclField = $arr[1];
-				$acl_id = $this->$relation->$aclField;
-			}else
-			{
-				$acl_id = $this->{$this->aclField};
-				
-			}
-			$this->_permissionLevel=GO::security()->hasPermission($acl_id);
+			$this->_permissionLevel=GO::security()->hasPermission($this->findAclId());
 		}
 		return $this->_permissionLevel;
 	}
@@ -250,7 +274,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 		
 		if($this->aclField && empty($params['ignoreAcl'])){
-			$sql .= "GROUP BY `".$this->primaryKey."` ";
+			
+			$pk = is_array($this->primaryKey) ? $this->primaryKey : array($this->primaryKey);
+			
+			$sql .= "GROUP BY `".implode('`,`', $this->primaryKey)."` ";
 		}
 		
 		if(isset($params['orderField'])){
@@ -285,16 +312,43 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @param int $primaryKey 
 	 */
 	
-	protected function load($primaryKey){
+	public function load($primaryKey){
 		
-		go_debug("AR:load($primaryKey)");
+		//go_debug($this->className().":load($primaryKey)");
 		
-		$sql = "SELECT * FROM `".$this->tableName."` WHERE `".$this->primaryKey.'`='.intval($primaryKey);
+		$sql = "SELECT * FROM `".$this->tableName."` WHERE ";
+		
+		if(is_array($this->primaryKey)){
+			$first = true;
+			foreach($primaryKey as $field=>$value){
+				$this->$field=$value;
+				if(!$first)
+					$sql .= ' AND ';
+				else
+					$first=false;
+				
+				$sql .= "`".$field.'`='.$this->getDbConnection()->quote($value, $this->_columns[$field]['type']);
+			}
+		}else
+		{
+			$this->{$this->primaryKey}=$primaryKey;
+			
+			$sql .= "`".$this->primaryKey.'`='.intval($primaryKey);
+		}		
+		
+		//go_debug($sql);
+			
 		$result = $this->getDbConnection()->query($sql);
 		
 		$result->setFetchMode(PDO::FETCH_ASSOC);
+		
+		$record = $result->fetch();
+		//go_debug($record);
+		
+		if(!$record)
+			return false;
 				
-		$this->setAttributes($result->fetch(), false);
+		$this->setAttributes($record, false);
 		
 		$this->isNew=false;
 		
@@ -348,7 +402,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return $this->_relatedCache[$name];
 	}
 	
-	private function _formatInputValues($attributes){
+	protected function formatInputValues($attributes){
 		$formatted = array();
 		foreach($attributes as $key=>$value){
 			if(!isset($this->_columns[$key])){
@@ -372,7 +426,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return $formatted;
 	}
 	
-	private function _formatOutputValues($attributes, $html=false){
+	protected function formatOutputValues($attributes, $html=false){
 		
 		$formatted = array();
 		foreach($attributes as $key=>$value){
@@ -413,7 +467,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$related=array();
 		
 		if($format)
-			$attributes = $this->_formatInputValues($attributes);
+			$attributes = $this->formatInputValues($attributes);
 		
 		foreach($attributes as $key=>$value){
 			if(isset($this->_columns[$key])){
@@ -438,7 +492,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($outputType=='raw')
 			return $this->_attributes;
 		
-		return $this->_formatOutputValues($this->_attributes, $outputType=='html');		
+		return $this->formatOutputValues($this->_attributes, $outputType=='html');		
 	}
 	
 	/**
@@ -519,6 +573,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				$this->user_id=GO::security()->user_id;
 			}
 			
+			
+			/**
+			 * Useful event for modules. For example custom fields can be loaded or a files folder.
+			 */
+			$this->fireEvent('beforesave',array(&$this));
+			
 			if($this->isNew){				
 				
 				if($this->aclField && !$this->joinAclField){
@@ -526,7 +586,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					$this->{$this->aclField}=GO::security()->get_new_acl($this->tableName);
 				}				
 
-				$this->{$this->primaryKey} = $this->_dbInsert();
+				$this->_dbInsert();
+				
+				if(!is_array($this->primaryKey))
+					$this->{$this->primaryKey} = $this->getDbConnection()->lastInsertId();
 				
 				if(!$this->pk)
 					return false;
@@ -544,12 +607,75 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			 */
 			$this->fireEvent('save',array(&$this));
 			
+			
+			$this->_cacheSearchRecord();
+			
 			return true;
 			
 		}else
 		{
 			return false;
 		}
+	}
+	
+	private function getModule(){
+		$arr = explode('_', $this->className());
+		
+		return strtolower($arr[1]);
+	}
+	
+	private function _cacheSearchRecord(){
+		
+		$attr = $this->getCacheAttributes();
+		
+		if($attr){
+
+			$model = new GO_Base_Model_SearchCacheRecord(array('id'=>$this->pk,'link_type'=>$this->linkType));
+			
+			//go_debug($model);
+
+			$autoAttr = array(
+				'user_id'=>isset($this->user_id) ? $this->user_id : $_SESSION['GO_SESSION']['user_id'],
+				'module'=>$this->module,
+				'name' => '',
+				'link_type'=>$this->linkType,
+				'description'=>'',		
+				'type'=>'',
+				'keywords'=>$this->_getSearchCacheKeywords($this->record).','.$attr['type'],
+				'mtime'=>$this->mtime,
+				'acl_id'=>$this->findAclId()
+			);
+			
+			$attr = array_merge($autoAttr, $attr);
+
+			$model->setAttributes($attr);
+			return $model->save();
+		}
+		return true;
+	}
+	
+	/**
+	 * Override this function if you want to put your model in the search cache.
+	 * 
+	 * @return array cache parameters with at least 'name', 'description' and 'type'. All are strings.
+	 */
+	protected function getCacheAttributes(){
+		return false;
+	}
+	
+	private function _getSearchCacheKeywords(){
+		$keywords=array();
+
+		foreach($this->_columns as $key=>$attr)
+		{
+			$value = $this->$key;
+			if($attr['type']==PDO::PARAM_STR && !in_array($value,$keywords)){
+				$keywords[]=$value;
+			}
+		}
+		$keywords =  implode(',',$keywords);
+		
+		return substr($keywords,0,255);
 	}
 	
 	protected function beforeSave(){
@@ -586,25 +712,47 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
 		}
-		$stmt->execute();
+		return $stmt->execute();
 		
-		return $this->getDbConnection()->lastInsertId();
+		
 		
 	}
 	
 	private function _dbUpdate(){
 		
 		$updates=array();
+		
+		$pks = is_array($this->primaryKey) ? $this->primaryKey : array($this->primaryKey);
 		foreach($this->_columns as $field => $value)
 		{
-			if($field!=$this->primaryKey)
+			if(!in_array($field,$pks))
 			{
 				$updates[] = "`$field`=:".$field;
 			}
 		}
 		
-		$sql = "UPDATE `{$this->tableName}` SET ".implode(',',$updates)." WHERE `".$this->primaryKey."`=:id";	  		
-
+		if(!count($updates))
+			return true;
+		
+		$sql = "UPDATE `{$this->tableName}` SET ".implode(',',$updates)." WHERE ";
+		
+		if(is_array($this->primaryKey)){
+			
+			$first=true;
+			foreach($this->primaryKey as $field){
+				if(!$first)
+					$sql .= ' AND ';
+				else
+					$first=false;
+			
+				$sql .= "`".$field."`=:".$field;
+			}
+			
+		}else
+			$sql .= "`".$this->primaryKey."`=:".$this->primaryKey;
+		
+		//go_debug($sql);
+		//go_debug($this->_attributes);
 		
 		$stmt = $this->getDbConnection()->prepare($sql);
 		
