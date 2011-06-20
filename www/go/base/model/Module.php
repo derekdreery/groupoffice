@@ -46,7 +46,27 @@
 		$this->path = GO::config()->root_path.'modules/'.$this->id.'/';
 		$this->full_url = GO::config()->full_url.'modules/'.$this->id.'/';
 		$this->url = GO::config()->host.'modules/'.$this->id.'/';
-		$this->class_path = $this->path.'classes/';
+		$this->class_path = $this->path.'classes/';		
+	}
+	
+	protected function getHumanName(){
+		global $lang;
+		
+		$file = GO::language()->get_language_file($this->id);
+		if($file)
+			require($file);
+		
+		return isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;
+	}
+	
+	protected function getDescription(){
+		global $lang;
+		
+		$file = GO::language()->get_language_file($this->id);
+		if($file)
+			require($file);
+		
+		return isset($lang[$this->id]['description']) ? $lang[$this->id]['description'] : "";
 	}
 	
 	

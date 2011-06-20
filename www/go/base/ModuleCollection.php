@@ -30,10 +30,17 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 				$this->modules[$module->id]['url']=$module->url;
 				$this->modules[$module->id]['full_url']=$module->full_url;
 				
+				$this->modules[$module->id]['humanName']=$module->humanName;
+				$this->modules[$module->id]['description']=$module->description;
+				
 				$this->modules[$module->id]['read_permission']=$module->permissionLevel>=GO_SECURITY::READ_PERMISSION;
 				$this->modules[$module->id]['write_permission']=$module->permissionLevel>GO_SECURITY::READ_PERMISSION;
 			}
 		}		
+	}
+	
+	public function get_module( $module_id ) {
+		return $this->modules[$module_id];
 	}
 	
 	
@@ -65,5 +72,47 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	 */
 	public function load_modules(){
 		
+	}
+	
+	
+	/**
+	 * Checks if the currently active user is permissioned for a module
+	 *
+	 * TODO long description
+	 *
+	 * @deprecated
+	 *
+	 * @param string $module_id The name of the module
+	 * @param bool $admin Admin permissions required
+	 *
+	 * @return bool
+	 */
+	function authenticate( $module_id, $admin = false ) {
+		global $GO_CONFIG, $GO_SECURITY;
+		if ( isset( $this->modules[$module_id] ) ) {
+			$module = $this->modules[$module_id];
+			$_SESSION['GO_SESSION']['active_module'] = $module_id;
+			$this->path = GO::config()->root_path.'modules/'.$module_id.'/';
+			$this->class_path = $this->path.'classes/';
+			$this->read_permission = $module['read_permission'];
+			$this->write_permission = $module['write_permission'];
+			$this->id = $module_id;
+			$this->full_url = GO::config()->full_url.'modules/'.$module_id.'/';
+			$this->url = GO::config()->host.'modules/'.$module_id.'/';
+
+			if ( $this->read_permission || $this->write_permission ) {
+				if ( $admin ) {
+					if ( $this->write_permission ) {
+						return true;
+					}
+				} else {
+					return true;
+				}
+			}
+			header( 'Location: '.GO::config()->host);
+			exit();
+		} else {
+			exit( 'Invalid module specified' );
+		}
 	}
 }
