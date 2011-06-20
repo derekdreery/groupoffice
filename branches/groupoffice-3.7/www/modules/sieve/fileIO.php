@@ -241,6 +241,9 @@ try
 			for($i=0,$c=count($rule['actions']);$i<$c;$i++)
 			{
 				if(isset($rule['actions'][$i]['addresses']) && !is_array($rule['actions'][$i]['addresses'])){
+          if($rule['actions'][$i]['type']=='vacation' && !empty($GO_CONFIG->sieve_vacation_subject))
+            $rule['actions'][$i]['subject']=$GO_CONFIG->sieve_vacation_subject;
+
 					$rule['actions'][$i]['addresses']=explode(',',$rule['actions'][$i]['addresses']);
 					$rule['actions'][$i]['addresses']=array_map('trim', $rule['actions'][$i]['addresses']);
 				}
