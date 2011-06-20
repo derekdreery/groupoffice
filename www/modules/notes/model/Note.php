@@ -56,19 +56,56 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord{
 	}
 	
 	protected function beforeSave() {
-		parent::beforeSave();
 		
 		
-		if(empty($this->files_folder_id) && isset(GO::modules()->files))
+		
+		if(empty($this->files_folder_id) && isset(GO::modules()->files)){
 			$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this, $this->_buildFilesPath());
+		}
+		
+		
+		
+		if(!empty($_POST['tmp_files']) && GO::modules()->has_module('files'))
+		{
+			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			$fs = new filesystem();
+
+			$path = $files->build_path($this->files_folder_id);
+
+			$tmp_files = json_decode($_POST['tmp_files'], true);
+			while($tmp_file = array_shift($tmp_files))
+			{
+				if(!empty($tmp_file['tmp_file'])){
+					$new_path = GO::config()->file_storage_path.$path.'/'.$tmp_file['name'];
+					$fs->move($tmp_file['tmp_file'], $new_path);
+					$files->import_file($new_path, $this->files_folder_id);
+				}
+			}
+		}
+		
+		
+		
+		if(isset(GO::modules()->customfields))
+			GO_Customfields_Controller_Item::saveCustomFields($this);
+		
+		return parent::beforeSave();
+	}
+	
+	protected function afterSave() {
+		
+		
+		
+		
+		
+		return parent::afterSave();
 	}
 	
 	/**
 	 * The files module will use this function.
 	 */
-	public function getFilesFolderId()
+	private function _buildFilesPath()
 	{
-		$this->category->getFilesFolderId();
 		
 		return 'notes/'.File::strip_invalid_chars($this->category->name).'/'.date('Y', $this->ctime).'/'.File::strip_invalid_chars($this->name);
 	}

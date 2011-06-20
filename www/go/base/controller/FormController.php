@@ -45,6 +45,22 @@ class GO_Base_Controller_FormController extends GO_Base_Controller_AbstractContr
 		if($model->aclField && !$model->aclFieldJoin){
 			$response[$model->aclField]=$model->{$model->aclField};
 		}	
+		
+		
+		if(!empty($_POST['link']))
+		{		
+			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			$GO_LINKS = new GO_LINKS();
+				
+			//todo link type should be handled better.
+			//Nicer would be $model->linkTo($othermodel);
+			$link_props = explode(':', $_POST['link']);
+			$GO_LINKS->add_link(
+			($link_props[1]),
+			($link_props[0]),
+			$model->pk,
+			$model->linkType);
+		}
 
 		$this->afterSubmit(&$response, &$model);
 

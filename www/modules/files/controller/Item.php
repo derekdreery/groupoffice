@@ -6,7 +6,8 @@ class GO_Files_Controller_Item{
 		require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
 		$files = new files();			
 
-		if($folder=$files->create_unique_folder($path))
+		$folder=$files->create_unique_folder($path);
+		if($folder)
 		{
 			return $folder['id'];
 		}else
