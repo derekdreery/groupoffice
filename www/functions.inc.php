@@ -13,7 +13,7 @@
  */
 
 
-if ( function_exists( 'get_called_class' ) ) {
+if ( !function_exists( 'get_called_class' ) ) {
     function get_called_class ()
     {
         $t = debug_backtrace(); $t = $t[0];
