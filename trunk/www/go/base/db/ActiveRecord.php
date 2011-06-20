@@ -222,7 +222,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 
 	/**
-	 * Finds model objects 
+	 * Finds model objects
+	 *
+	 *
+	 * params=array(
+	 *	"by"=> array(array('field','value','=')),
+	 *  "byOperator"=>[AND / OR]
+	 *
+	 *
+	 * TODO:
+	 *	"byGroups"=> array(
+	 *			array('operator=>'AND','criteria'=>array('field','value','=')),
+	 *			array('operator=>'OR','criteria'=>array('field','value','='))
+	 *	)
+	 *  "ignoreAcl"=>true,
+	 * };
 	 * 
 	 * @param array $params
 	 * @return PDOStatement
@@ -262,14 +276,28 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$sql .= $params['criteriaSql'];
 		
 		if(!empty($params['by'])){
+
+			if(!isset($params['byOperator']))
+				$params['byOperator']='AND';
+
+			$first=true;
+			$sql .= 'AND (';
 			foreach($params['by'] as $arr){
 				
 				$field = $arr[0];
 				$value= $arr[1];
-				$op=isset($arr[2]) ? $arr[2] : '=';
+				$comparator=isset($arr[2]) ? $arr[2] : '=';
+
+				if($first)
+				{
+					$first=false;
+					$sql .= $params['byOperator'];
+				}
 								
-				$sql .= "AND `$field` $op ".$this->getDbConnection()->quote($value)." ";
+				$sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value)." ";
 			}
+
+			$sql .= ') ';
 		}
 
 		
