@@ -143,6 +143,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				}
 				
 				this.fireEvent('submit', this, this.remoteModelId);
+				this.fireEvent('save', this, this.remoteModelId);
 				
 				if(this.link_config && this.link_config.callback)
 				{					
