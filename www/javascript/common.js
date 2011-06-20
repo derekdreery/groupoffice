@@ -18,6 +18,31 @@ GO.util.callToHref = function(phone){
 	return GO.calltoTemplate.replace('{phone}', phone);
 }
 
+GO.request = function(config){
+
+	var url = GO.url(config.url);
+	delete config.url;
+	
+	if(!config.scope)
+		config.scope=this;
+	
+	var p = Ext.apply({
+		url:url,
+		success: function(response, options)
+		{
+			var responseParams = Ext.decode(response.responseText);
+			if(!responseParams.success)
+			{
+				alert(responseParams.feedback);
+			}else if(config.success){					
+				config.success.call(config.scope, response, options);
+			}
+		}
+	}, config);
+	
+	Ext.Ajax.request(p)
+}
+
 
 GO.util.empty = function(v)
 {
