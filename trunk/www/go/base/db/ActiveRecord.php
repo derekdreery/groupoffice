@@ -794,6 +794,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 			
 	}
+	
+	
+	/**
+	 * Calls the named method which is not a class method.
+	 * Do not call this method. This is a PHP magic method that we override
+	 * to implement the named scope feature.
+	 * 
+	 * @param string $name the method name
+	 * @param array $parameters method parameters
+	 * @return mixed the method return value
+	 */
+	public function __call($name,$parameters)
+	{
+		//todo find relation
+		
+		return parent::__call($name,$parameters);
+	}
 
 	/**
 	 * PHP setter magic method.
