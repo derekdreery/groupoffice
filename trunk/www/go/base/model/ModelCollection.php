@@ -23,6 +23,10 @@ class GO_Base_Model_ModelCollection{
 		return $this->_models[$name];
 	}
 	
+	public function __isset($name){
+		return $this->_models[$name];
+	}
+	
 	public function getAll(){
 		return $this->_models;
 	}
