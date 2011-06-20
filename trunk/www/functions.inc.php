@@ -13,6 +13,17 @@
  */
 
 
+if ( function_exists( 'get_called_class' ) ) {
+    function get_called_class ()
+    {
+        $t = debug_backtrace(); $t = $t[0];
+        if ( isset( $t['object'] ) && $t['object'] instanceof $t['class'] )
+            return get_class( $t['object'] );
+        return false;
+    }
+} 
+
+
 function ini_return_bytes($val) {
     $val = trim($val);
     $last = strtolower($val[strlen($val)-1]);
