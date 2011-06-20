@@ -22,6 +22,10 @@
 	public $aclField='acl_id';
 	
 	public $tableName='no_categories';
+	
+	protected $relations=array(
+				'notes' => array(self::HAS_MANY, 'GO_Notes_Model_Note', 'category_id')
+		);
 
 	protected $_columns=array(
 		'id'=>array('type'=>PDO::PARAM_STR),
