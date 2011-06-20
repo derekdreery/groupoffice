@@ -4,7 +4,9 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_FormController{
 	protected $model = 'GO_Notes_Model_Note';
 	
 	public function actionTest(){
-		echo GO_Notes_Model_Note::addListener('test','test');
+		
+				
+		
 	}
 	
 	/**
