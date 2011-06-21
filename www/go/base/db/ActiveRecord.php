@@ -236,6 +236,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 *			array('operator=>'OR','criteria'=>array('field','value','='))
 	 *	)
 	 *  "ignoreAcl"=>true,
+	 * 
+	 *  query=>"String"
 	 * };
 	 * 
 	 * @param array $params
@@ -375,18 +377,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return get_class($this);
 	}
 	
-	/**
-	 * Loads the model attributes from the database
-	 * 
-	 * @param int $primaryKey 
-	 */
-	
-	public function load($primaryKey){
-		
-		//go_debug($this->className().":load($primaryKey)");
-		
-		$sql = "SELECT * FROM `".$this->tableName."` WHERE ";
-		
+	private function _appendPkSQL($sql){
 		if(is_array($this->primaryKey)){
 			$first = true;
 			foreach($primaryKey as $field=>$value){
@@ -403,7 +394,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$this->{$this->primaryKey}=$primaryKey;
 			
 			$sql .= "`".$this->primaryKey.'`='.intval($primaryKey);
-		}		
+		}
+		return $sql;
+	}
+	
+	/**
+	 * Loads the model attributes from the database
+	 * 
+	 * @param int $primaryKey 
+	 */
+	
+	public function load($primaryKey){
+		
+		//go_debug($this->className().":load($primaryKey)");
+		
+		$sql = "SELECT * FROM `".$this->tableName."` WHERE ";
+		
+		$sql = $this->_appendPkSQL($sql);
 		
 		//go_debug($sql);
 			
@@ -835,8 +842,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 	}
 	
+	/**
+	 * Delete's the model from the database
+	 * @return PDOStatement 
+	 */
 	public function delete(){
-		
+		$sql = "DELELTE FROM `".$this->tableName."` WHERE ";
+		$sql = $this->_appendPkSQL($sql);
+		return $this->getDbConnection()->query($sql);		
 	}
 	
 	/**
