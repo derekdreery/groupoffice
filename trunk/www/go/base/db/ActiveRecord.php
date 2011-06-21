@@ -241,7 +241,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @param array $params
 	 * @return PDOStatement
 	 */
-	public function find($params=array()){
+	public function find($params=array(), &$foundRows=false){
 		
 		//todo joins acl tables and finds stuff by parameters
 		
@@ -261,7 +261,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				$aclJoin=$ret;
 		}
 		
-		$sql = "SELECT t.*".$aclJoin['fields']." FROM `".$this->tableName."` t ".$aclJoin['join'];
+		$sql = "SELECT ";
+		
+		if($foundRows!==false && !empty($params['limit'])){
+			
+			//TODO: This is MySQL only code
+			
+			$sql .= "SQL_CALC_FOUND_ROWS ";
+		}
+		
+		$sql .= "t.*".$aclJoin['fields']." FROM `".$this->tableName."` t ".$aclJoin['join'];
 		
 		if($this->aclField && empty($params['ignoreAcl'])){			
 			
@@ -291,10 +300,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				if($first)
 				{
 					$first=false;
-					$sql .= $params['byOperator'];
+				}else
+				{
+					$sql .= $params['byOperator'].' ';
 				}
-								
-				$sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value)." ";
+				
+				if($comparator=='IN'){
+					for($i=0;$i<count($value);$i++)
+						$value[$i]=$this->getDbConnection()->quote($value[$i], $this->_columns[$field]['type']);
+					
+					$sql .= "`$field` $comparator (".implode(',',$value).") ";
+				}else
+				{							
+					$sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value, $this->_columns[$field]['type'])." ";
+				}
 			}
 
 			$sql .= ') ';
@@ -305,7 +324,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			$pk = is_array($this->primaryKey) ? $this->primaryKey : array($this->primaryKey);
 			
-			$sql .= "GROUP BY `".implode('`,`', $this->primaryKey)."` ";
+			$sql .= "GROUP BY `".implode('`,`', $pk)."` ";
 		}
 		
 		if(isset($params['orderField'])){
@@ -315,9 +334,31 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 		}
 		
-		
+		if(!empty($params['limit'])){
+			if(!isset($params['start']))
+				$params['start']=0;
+			
+			$sql .= 'LIMIT '.intval($params['start']).','.intval($params['limit']);
+		}
+
 		//$sql .= "WHERE `".$this->primaryKey.'`='.intval($primaryKey);
 		$result = $this->getDbConnection()->query($sql);
+		
+		
+		if($foundRows!==false){			
+			if(!empty($params['limit'])){
+				//TODO: This is MySQL only code
+				$sql = "SELECT FOUND_ROWS() as found;";			
+				$r2 = $this->getDbConnection()->query($sql);
+				$record = $r2->fetch(PDO::FETCH_ASSOC);
+
+				$foundRows = intval($record['found']);			
+			}else
+			{
+				$foundRows = $result->rowCount();
+			}			
+		}
+		
 		
 		$result->setFetchMode(PDO::FETCH_CLASS, $this->className());
 		
