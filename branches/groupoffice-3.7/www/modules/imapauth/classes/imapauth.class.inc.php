@@ -112,9 +112,8 @@ class imapauth
 					$user = $GO_USERS->get_user_by_username($go_username);
 					if ($user) {
 
-            go_debug("IMAPAUTH: Group-Office user already exists.");
-
-            if(!$email_client->get_account_by_username($username, $user['id'],$config['host'])){
+						go_debug("IMAPAUTH: Group-Office user already exists.");
+            if(!$email_client->get_account_by_username($mail_username, $user['id'],$config['host'])){
               go_debug('IMAPAUTH: E-mail account not found. Creating it now.');
               $ia->create_email_account($config, $user['id'], $mail_username, $password, $email);
             }
