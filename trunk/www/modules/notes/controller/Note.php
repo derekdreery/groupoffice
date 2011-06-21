@@ -3,8 +3,27 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_FormController{
 	
 	protected $model = 'GO_Notes_Model_Note';
 	
-	public function actionGrid(){
-		$note = new GO_Notes_Model_Note();
+	public function actionGrid(){	
+		
+		
+		if(isset($_POST['delete_keys']))
+		{				
+			try{
+				$deleteIds = json_decode($_POST['delete_keys']);
+				$notes_deleted = array();
+				foreach($deleteIds as $note_id)
+				{
+					$note = new GO_Notes_Model_Note($note_id);
+					$note->delete();
+				}
+				$response['deleteSuccess']=true;
+
+			}catch(Exception $e)
+			{
+				$response['deleteSuccess']=false;
+				$response['deleteFeedback']=$e->getMessage();
+			}
+		}
 		
 		
 		if(isset($_POST['categories']))
@@ -17,11 +36,13 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_FormController{
 			$categories = $categories ? explode(',',$categories) : array();
 		}
 		
-		
+		$note = new GO_Notes_Model_Note();
 		$stmt = $note->find(array(
 			'by'=>array(array('category_id', $categories, 'IN')),
 			'limit'=>isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0,
 			'start'=>isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
+			'orderField'=>isset($_REQUEST['orderField']) ? $_REQUEST['orderField'] : '',
+			'orderDirection'=>isset($_REQUEST['orderDirection']) ? $_REQUEST['orderDirection'] : '',
 		), $response['total']);
 		
 		$response['results']=array();
