@@ -329,9 +329,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$sql .= "GROUP BY `".implode('`,`', $pk)."` ";
 		}
 		
-		if(isset($params['orderField'])){
+		if(!empty($params['orderField'])){
 			$sql .= 'ORDER BY `'.$params['orderField'].'`' ;
-			if(isset($params['orderDirection'])){
+			if(!empty($params['orderDirection'])){
 				$sql .= $params['orderDirection'].' ';
 			}
 		}
