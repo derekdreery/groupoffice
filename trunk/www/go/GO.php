@@ -46,6 +46,8 @@ class GO{
 
 	public static $db;
 	
+	private static $_modelCache;
+	
 	/**
 	 * Get's the global database connection object.
 	 * 
@@ -95,6 +97,17 @@ class GO{
 			self::$_modules=new GO_Base_ModuleCollection();
 		}
 		return self::$_modules;
+	}
+	
+	/**
+	 *
+	 * @return GO_Base_Model_ModelCache 
+	 */
+	public static function modelCache() {
+		if (!isset(self::$_modelCache)) {			
+			self::$_modelCache=new GO_Base_Model_ModelCache();
+		}
+		return self::$_modelCache;
 	}
 
 	public static function config() {
