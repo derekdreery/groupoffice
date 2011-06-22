@@ -18,7 +18,6 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		parent::__construct($model, $findParams);
 		
 		foreach($this->_models as $module){
-			
 			if(!is_dir($module->path)){
 				unset($this->_models[$module->id]);
 			}else

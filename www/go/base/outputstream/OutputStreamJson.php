@@ -2,7 +2,7 @@
 
 class GO_Base_OutputStream_OutputStreamJson implements GO_Base_OutputStream_OutputStreamInterface{
 	
-	private $_headersSent=false;
+	//private $_headersSent=false;
 	
 	public function __construct(){
 		$this->sendHeaders();

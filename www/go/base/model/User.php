@@ -70,5 +70,9 @@
 		'cache'=>array('type'=>PDO::PARAM_STR, 'required'=>false, 'gotype'=>'textarea'),
 		
 	);	
+	
+	public function getName(){
+		return String::format_name($this->last_name, $this->first_name, $this->middle_name);
+	}
 }
 
