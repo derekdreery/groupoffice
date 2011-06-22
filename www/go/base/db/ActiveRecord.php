@@ -440,7 +440,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	public function findByPk($primaryKey){
 		
-		//go_debug($this->className().":load($primaryKey)");
+		//Use cache so identical findByPk calls are only executed once per script request
+		$cachedModel = GO::modelCache()->get($this->className(), $primaryKey);
+		if($cachedModel)
+			return $cachedModel;
 		
 		$sql = "SELECT * FROM `".$this->tableName."` WHERE ";
 		
@@ -455,7 +458,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$result->setFetchMode(PDO::FETCH_CLASS, $this->className());
 		
-		return $result->fetch();
+		$model =  $result->fetch();
+		
+		GO::modelCache()->add($this->className(), $model);
+		
+		return $model;
 		
 		/**
 		 * Useful event for modules. For example custom fields can be loaded or a files folder.
