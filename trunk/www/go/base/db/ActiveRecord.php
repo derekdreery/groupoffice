@@ -62,6 +62,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	
 	private $_attributes=array();
+	
+	private $_debugSql=true;
 
 	/**
 	 *
@@ -365,6 +367,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			$sql .= 'LIMIT '.intval($params['start']).','.intval($params['limit']);
 		}
+		
+		if($this->_debugSql)
+				go_debug($sql);
 
 		//$sql .= "WHERE `".$this->primaryKey.'`='.intval($primaryKey);
 		$result = $this->getDbConnection()->query($sql);
@@ -440,6 +445,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$sql = "SELECT * FROM `".$this->tableName."` WHERE ";
 		
 		$sql = $this->_appendPkSQL($sql, $primaryKey);
+		
+		if($this->_debugSql)
+				go_debug($sql);
 		
 		//go_debug($sql);
 			
@@ -612,9 +620,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @return boolean 
 	 */
 	private function _checkPermissionLevel($level){
-
-		//TODO
-		return true;
 
 		if(empty($this->aclField))
 			return true;
@@ -803,7 +808,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$sql = "INSERT INTO `{$this->tableName}` (`".implode('`,`', $fieldNames)."`) VALUES ".
 					"(:".implode(',:', $fieldNames).")";
 
-		go_debug($sql);
+		if($this->_debugSql)
+			go_debug($sql);
 		
 		$stmt = $this->getDbConnection()->prepare($sql);
 		
@@ -851,6 +857,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 		}else
 			$sql .= "`".$this->primaryKey."`=:".$this->primaryKey;
+		
+		if($this->_debugSql)
+			go_debug($sql);
 
 		$stmt = $this->getDbConnection()->prepare($sql);
 		
@@ -869,9 +878,27 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @return PDOStatement 
 	 */
 	public function delete(){
-		$sql = "DELELTE FROM `".$this->tableName."` WHERE ";
+		
+		if(!$this->_checkPermissionLevel(GO_SECURITY::DELETE_PERMISSION))
+						throw new AccessDeniedException ();
+		
+		$sql = "DELETE FROM `".$this->tableName."` WHERE ";
 		$sql = $this->_appendPkSQL($sql);
-		return $this->getDbConnection()->query($sql);		
+		
+		
+		if($this->_debugSql)
+			go_debug($sql);
+		
+		$success = $this->getDbConnection()->query($sql);		
+		
+		$attr = $this->getCacheAttributes();
+		
+		if($attr){
+			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkType));
+			$model->delete();
+		}
+		
+		return $success;			
 	}
 	
 	/**

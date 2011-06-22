@@ -168,7 +168,7 @@ class search extends db {
 		if(!empty($sort_index))
 			$sql .= " ORDER BY $sort_index $sort_order";
 
-		go_debug($sql);
+		//go_debug($sql);
 		
 		if($offset>0)
 		{
