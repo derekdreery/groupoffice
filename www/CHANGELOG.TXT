@@ -1,5 +1,8 @@
 3.7.24
 - New config variable to set subject for sieve vacation messages.
+- Worked around php smime header bug.
+- Made a checkbox to enable the login screen text at the settings module. 
+  Don't forget to check this when you already have a text setup.
 
 16/06/2011 3.7.23
 - Fixed bug with etags in caldav

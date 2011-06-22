@@ -21,12 +21,17 @@ switch($_REQUEST['task']){
 
 			$GO_CONFIG->save_setting('login_screen_text', $text);
 			$GO_CONFIG->save_setting('login_screen_text_title', $_POST['login_screen_text_title']);
+			
+			$GO_CONFIG->save_setting('login_screen_text_enabled', !empty($_POST['login_screen_text_enabled']) ? '1' : '0');
 
 			$GO_EVENTS->fire_event('save_global_settings', array(&$response));
 			$response['saved'] = true;
 		}
 
 		$response['data']=array();
+		
+		$t = $GO_CONFIG->get_setting('login_screen_text_enabled');
+		$response['data']['login_screen_text_enabled']=!empty($t);
 
 		$t = $GO_CONFIG->get_setting('login_screen_text');
 		$response['data']['login_screen_text']=$t ? $t : '';
