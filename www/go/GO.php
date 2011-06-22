@@ -170,6 +170,9 @@ class GO{
 				
 				$type = strtolower(array_shift($arr));
 				$file = ucfirst(array_shift($arr));
+				
+				if($type=='controller')
+					$file .= 'Controller';
 
 				if($module){
 					$file = self::modules()->modules[$module]['path'].$type.'/'.$file.'.php';

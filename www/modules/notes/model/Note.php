@@ -46,7 +46,8 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord{
 	
 	protected $relations=array(
 				'category' => array(self::BELONGS_TO, 'GO_Notes_Model_Category', 'category_id'),
-				'user' => array(self::BELONGS_TO, 'GO_Base_Model_User', 'user_id')
+				'user' => array(self::BELONGS_TO, 'GO_Base_Model_User', 'user_id'),
+				'customfieldRecord' => array(self::BELONGS_TO, 'GO_Notes_Model_CustomFieldsRecord', 'id')
 		);
 
 	protected function getCacheAttributes(){
@@ -87,18 +88,15 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord{
 		
 		
 		
-		if(isset(GO::modules()->customfields))
-			GO_Customfields_Controller_Item::saveCustomFields($this);
 		
 		return parent::beforeSave();
 	}
 	
-	protected function afterSave() {
+	protected function afterSave() {	
 		
-		
-		
-		
-		
+		if(isset(GO::modules()->customfields))
+			GO_Customfields_Controller_Item::saveCustomFields($this, "GO_Notes_Model_CustomFieldsRecord");
+
 		return parent::afterSave();
 	}
 	

@@ -52,11 +52,7 @@ GO.notes.NotesGrid = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	config.store = new GO.data.JsonStore({
-
-		url: GO.settings.modules.notes.url+ 'json.php',
-		baseParams: {
-			task: 'notes'
-		},
+		url: GO.url('notes/note/grid'),		
 		root: 'results',
 		id: 'id',
 		totalProperty:'total',
