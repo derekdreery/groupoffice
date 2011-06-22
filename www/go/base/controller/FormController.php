@@ -174,7 +174,8 @@ class GO_Base_Controller_FormController extends GO_Base_Controller_AbstractContr
 				$deleteIds = json_decode($_POST['delete_keys']);
 				foreach($deleteIds as $model_id)
 				{
-					$model = new $this->model($model_id);
+					$modelName=$this->model;
+					$model = $modelName::model()->findByPk($model_id);
 					$model->delete();
 				}
 				$response['deleteSuccess']=true;
