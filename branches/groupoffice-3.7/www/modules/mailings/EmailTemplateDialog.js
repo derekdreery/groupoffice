@@ -319,7 +319,7 @@ Ext.extend(GO.mailings.EmailTemplateDialog, Ext.Window,{
 				{
 					var p = GO.customfields.types["3"].panels[i];
 					for(var c=0;c<p.customfields.length;c++){
-						autodata.push(['{'+p.customfields[c].name+'}',p.customfields[c].label]);
+						autodata.push(['{'+p.customfields[c].dataname+'}',p.customfields[c].name]);
 					}
 				}
 			}
@@ -327,6 +327,40 @@ Ext.extend(GO.mailings.EmailTemplateDialog, Ext.Window,{
 				items.push(new Ext.Panel({
 					autoScroll:true,
 					title:GO.mailings.lang.customCompanyFields,
+					items:new GO.grid.SimpleSelectList({
+						store:  new Ext.data.SimpleStore({
+							fields: ['value', 'name'],
+							data : autodata
+						}),
+						listeners:{
+							scope:this,
+							click:function(dataview, index){
+								this.emailHtmlEditor.insertAtCursor(dataview.store.data.items[index].data.value);
+								this.emailHtmlEditor.deferFocus();
+								dataview.clearSelections();
+							}
+						}
+					})
+				}));
+			}
+			
+			
+			
+			autodata=[];
+			if(GO.customfields.types["8"] && GO.customfields.types["8"].panels.length)
+			{
+				for(var i=0;i<GO.customfields.types["8"].panels.length;i++)
+				{
+					var p = GO.customfields.types["8"].panels[i];
+					for(var c=0;c<p.customfields.length;c++){
+						autodata.push(['{my_'+p.customfields[c].dataname+'}',p.customfields[c].name]);
+					}
+				}
+			}
+			if(autodata.length){
+				items.push(new Ext.Panel({
+					autoScroll:true,
+					title:GO.mailings.lang.customUserFields,
 					items:new GO.grid.SimpleSelectList({
 						store:  new Ext.data.SimpleStore({
 							fields: ['value', 'name'],
