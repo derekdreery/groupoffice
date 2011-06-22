@@ -557,9 +557,9 @@ class cached_imap extends imap{
 
 		$message['smime_signed']=false;
 		foreach($message['attachments'] as $key=>$a){
-			if((isset($a['smime-type']) && $a['smime-type']=='signed-data') || $a['subtype']=='pkcs7-signature'){
+			if((isset($a['smime-type']) && $a['smime-type']=='signed-data') || $a['subtype']=='pkcs7-signature' || $a['subtype']=='x-pkcs7-signature'){
 				
-				if($a['subtype']=='pkcs7-signature')
+				if($a['subtype']=='pkcs7-signature' || $a['subtype']=='x-pkcs7-signature')
 					unset($message['attachments'][$key]);
 		
 				
