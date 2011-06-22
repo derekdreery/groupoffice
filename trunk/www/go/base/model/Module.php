@@ -40,8 +40,8 @@
 		'acl_id'=>array('type'=>PDO::PARAM_INT)
 	);	
 	
-	protected function afterLoad() {
-		parent::afterLoad();
+	protected function init() {
+		parent::init();
 		
 		$this->path = GO::config()->root_path.'modules/'.$this->id.'/';
 		$this->full_url = GO::config()->full_url.'modules/'.$this->id.'/';

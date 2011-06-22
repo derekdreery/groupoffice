@@ -31,7 +31,12 @@ class GO_Base_Controller_FormController extends GO_Base_Controller_AbstractContr
 	 */
 	public function actionSubmit(){
 
-		$model = new $this->model($_POST['id']);
+		$modelName = $this->model;
+		if(!empty($_REQUEST['id']))
+			$model = $modelName::model()->findByPk($_REQUEST['id']);
+		else
+			$model = $modelName::model();
+		
 		$model->setAttributes($_POST);
 
 		$this->beforeSubmit($response, $model);
@@ -85,7 +90,11 @@ class GO_Base_Controller_FormController extends GO_Base_Controller_AbstractContr
 	protected function afterSubmit(&$response, &$model){}
 
 	public function actionLoad(){
-		$model = new $this->model($_REQUEST['id']);
+		//$model = new $this->model();
+		
+		$modelName = $this->model;
+		$model = $modelName::model()->findByPk($_REQUEST['id']);
+		
 
 		$response['data']=$model->getAttributes();
 		$response['success']=true;
@@ -121,7 +130,6 @@ class GO_Base_Controller_FormController extends GO_Base_Controller_AbstractContr
 			//'category_id'=>array('category','name')
 	);
 
-
 	private function _loadComboTexts($response, $model){
 
 		$response['remoteComboTexts']=array();
@@ -132,6 +140,80 @@ class GO_Base_Controller_FormController extends GO_Base_Controller_AbstractContr
 
 		return $response;
 
+	}
+	
+	
+	
+	/**
+	 * Override this function to supplie additional parameters to the 
+	 * GO_Base_Db_ActiveRecord->find() function
+	 * 
+	 * @return array parameters for the GO_Base_Db_ActiveRecord->find() function 
+	 */
+	protected function getGridParams(){		
+		return array();
+	}
+	
+	/**
+	 * Override this function to format the grid record data.
+	 * 
+	 * @param array $record The grid record returned from the GO_Base_Db_ActiveRecord->getAttributes
+	 * @param GO_Base_Db_ActiveRecord $model
+	 * @return array The grid record data
+	 */
+	protected function formatModelForGrid($record, $model){
+		return $record;
+	}
+	
+	public function actionGrid(){	
+		
+		
+		if(isset($_POST['delete_keys']))
+		{				
+			try{
+				$deleteIds = json_decode($_POST['delete_keys']);
+				foreach($deleteIds as $model_id)
+				{
+					$model = new $this->model($model_id);
+					$model->delete();
+				}
+				$response['deleteSuccess']=true;
+
+			}catch(Exception $e)
+			{
+				$response['deleteSuccess']=false;
+				$response['deleteFeedback']=$e->getMessage();
+			}
+		}
+		
+		
+		
+		$defaultParams = array(			
+			'limit'=>isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0,
+			'start'=>isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
+			'orderField'=>isset($_REQUEST['orderField']) ? $_REQUEST['orderField'] : '',
+			'orderDirection'=>isset($_REQUEST['orderDirection']) ? $_REQUEST['orderDirection'] : '',
+		);
+		
+		$modelName = $this->model;
+		$model = $modelName::model();
+		
+		$params = array_merge($defaultParams, $this->getGridParams());
+		
+		
+		$stmt = $model->find($params, $response['total']);
+		
+		$response['results']=array();
+		
+		while($model = $stmt->fetch()){
+			$response['results'][]=$this->formatModelForGrid($model->getAttributes(), $model);
+		}		
+		
+		$this->output($response);
+		
+		
+		//var_dump(GO_Notes_Model_Note::$_models);
+		
 	}
 }
 

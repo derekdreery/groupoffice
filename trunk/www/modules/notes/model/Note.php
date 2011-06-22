@@ -45,7 +45,8 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord{
 	public $aclField='category.acl_id';	
 	
 	protected $relations=array(
-				'category' => array(self::BELONGS_TO, 'GO_Notes_Model_Category', 'category_id')
+				'category' => array(self::BELONGS_TO, 'GO_Notes_Model_Category', 'category_id'),
+				'user' => array(self::BELONGS_TO, 'GO_Base_Model_User', 'user_id')
 		);
 
 	protected function getCacheAttributes(){

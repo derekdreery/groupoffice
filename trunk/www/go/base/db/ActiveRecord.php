@@ -36,11 +36,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public $linkType=0;
 	
-	/**
-	 *
-	 * @var boolean Is this model new? 
-	 */
-	public $isNew = true;
 	
 	/**
 	 * @var array relational rules.
@@ -61,6 +56,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public $aclField=false;
 	
 	private $_relatedCache;
+	
+	
+	private static $_models=array();			// class name => model
 	
 	
 	private $_attributes=array();
@@ -101,14 +99,27 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * @param int $primaryKey integer The primary key of the database table
 	 */
-	public function __construct($primaryKey=0){			
+	public function __construct(){			
 		
 		$this->init();
+	}
+	
+	
+	/**
+	 * Returns the static model of the specified AR class.
+	 * @return Course the static model class
+	 */
+	public static function model()
+	{
+		$className=  get_called_class();
 		
-		if($primaryKey!=0)
-			$this->load($primaryKey);
+		if(isset(self::$_models[$className]))
+			return self::$_models[$className];
 		else
-			$this->afterLoad();		
+		{
+			$model=self::$_models[$className]=new $className(null);
+			return $model;
+		}
 	}
 	
 	protected function init(){}
@@ -132,6 +143,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$ret =  $this->_attributes[$this->primaryKey];
 		
 		return $ret;
+	}
+	
+	public function getIsNew(){
+		$pk = $this->getPk();
+		
+		return !empty($pk);
 	}
 
 	
@@ -377,7 +394,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return get_class($this);
 	}
 	
-	private function _appendPkSQL($sql){
+	private function _appendPkSQL($sql, $primaryKey=false){
+		
+		if(!$primaryKey)
+			$primaryKey=$this->pk;
+		
+					
 		if(is_array($this->primaryKey)){
 			$first = true;
 			foreach($primaryKey as $field=>$value){
@@ -404,36 +426,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @param int $primaryKey 
 	 */
 	
-	public function load($primaryKey){
+	public function findByPk($primaryKey){
 		
 		//go_debug($this->className().":load($primaryKey)");
 		
 		$sql = "SELECT * FROM `".$this->tableName."` WHERE ";
 		
-		$sql = $this->_appendPkSQL($sql);
+		$sql = $this->_appendPkSQL($sql, $primaryKey);
 		
 		//go_debug($sql);
 			
 		$result = $this->getDbConnection()->query($sql);
 		
-		$result->setFetchMode(PDO::FETCH_ASSOC);
+		$result->setFetchMode(PDO::FETCH_CLASS, $this->className());
 		
-		$record = $result->fetch();
-		//go_debug($record);
-		
-		if(!$record)
-			return false;
-				
-		$this->setAttributes($record, false);
-		
-		$this->isNew=false;
-		
-		$this->afterLoad();
+		return $result->fetch();
 		
 		/**
 		 * Useful event for modules. For example custom fields can be loaded or a files folder.
 		 */
-		GO::events()->fire_event('loadactiverecord',array(&$this));
+		//GO::events()->fire_event('loadactiverecord',array(&$this));
 	}
 	
 	/**
@@ -472,7 +484,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}else
 		{
 			$joinAttribute = $this->relations[$name][2];
-			$this->_relatedCache[$name]= new $model($this->_attributes[$joinAttribute]);
+			$this->_relatedCache[$name]= $model::model()->findByPk($this->_attributes[$joinAttribute]);
 		}
 		
 		return $this->_relatedCache[$name];

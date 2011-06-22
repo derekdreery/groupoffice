@@ -9,10 +9,9 @@ class GO_Base_Model_ModelCollection{
 	protected $_models;
 	
 	public function __construct($model, $findParams=array()){
-		$model = new $model;
 		
 		$findParams['ignoreAcl']=true;
-		$stmt = $model->find($findParams);
+		$stmt = $model::model()->find($findParams);
 		
 		while($m = $stmt->fetch()){
 			$this->_models[$m->pk]=$m;

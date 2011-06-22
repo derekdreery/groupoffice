@@ -178,6 +178,8 @@ class GO{
 					$file = self::config()->root_path.$type.'/'.$file.'.php';
 				}
 				
+				
+				
 				if(!file_exists($file))
 					throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
 				
