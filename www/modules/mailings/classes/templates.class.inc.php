@@ -437,6 +437,12 @@ class templates extends db {
 			while($cf->next_record()) {
 				$fields[]='col_'.$cf->f('id');
 			}
+			
+			$cf_values=$cf->get_values($user_id, 8, $user_id);
+			foreach($cf_values as $field=>$value) {
+				$fields[]='my_'.$field;
+				$values['my_'.$field]=$value;
+			}
 		}
 
 		return $fields;
