@@ -67,7 +67,7 @@ class GO_Base_Controller_FormController extends GO_Base_Controller_AbstractContr
 			$model->linkType);
 		}
 
-		$this->afterSubmit(&$response, &$model);
+		$this->afterSubmit($response, $model);
 
 		$this->output($response);
 	}
@@ -96,7 +96,7 @@ class GO_Base_Controller_FormController extends GO_Base_Controller_AbstractContr
 		$model = $modelName::model()->findByPk($_REQUEST['id']);
 		
 
-		$response['data']=$model->getAttributes();
+		$response['data']=array_merge($model->getAttributes(), $model->customfieldRecord->getAttributes());
 		$response['success']=true;
 
 		$response=$this->_loadComboTexts($response, $model);

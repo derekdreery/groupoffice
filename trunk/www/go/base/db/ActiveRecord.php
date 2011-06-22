@@ -93,6 +93,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @var mixed Primary key of database table. Can be a field name string or an array of fieldnames
 	 */
 	public $primaryKey='id'; //TODO can also be array('user_id','group_id') for example.
+	
+	private $_new=true;
 
 	/**
 	 * Constructor for the model
@@ -101,6 +103,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function __construct(){			
 		
+		$this->setIsNew(empty($this->pk));
 		$this->init();
 	}
 	
@@ -146,9 +149,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	}
 	
 	public function getIsNew(){
-		$pk = $this->getPk();
 		
-		return !empty($pk);
+		return $this->_new;
+	}
+	public function setIsNew($new){
+		
+		$this->_new=$new;
 	}
 
 	
@@ -379,6 +385,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 		
 		
+		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
 		$result->setFetchMode(PDO::FETCH_CLASS, $this->className());
 		
 		return $result;
@@ -718,11 +725,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		if($attr){
 
-			$model = new GO_Base_Model_SearchCacheRecord(array('id'=>$this->pk,'link_type'=>$this->linkType));
+			$model =GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkType));
+			if(!$model)
+				$model = GO_Base_Model_SearchCacheRecord::model();
 			
 			//go_debug($model);
 
 			$autoAttr = array(
+				'id'=>$this->pk,
+				'link_type'=>$this->linkType,
 				'user_id'=>isset($this->user_id) ? $this->user_id : $_SESSION['GO_SESSION']['user_id'],
 				'module'=>$this->module,
 				'name' => '',
@@ -791,6 +802,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$sql = "INSERT INTO `{$this->tableName}` (`".implode('`,`', $fieldNames)."`) VALUES ".
 					"(:".implode(',:', $fieldNames).")";
+
+		go_debug($sql);
 		
 		$stmt = $this->getDbConnection()->prepare($sql);
 		
@@ -838,10 +851,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 		}else
 			$sql .= "`".$this->primaryKey."`=:".$this->primaryKey;
-		
-		//go_debug($sql);
-		//go_debug($this->_attributes);
-		
+
 		$stmt = $this->getDbConnection()->prepare($sql);
 		
 		foreach($this->_columns as $field => $value){
@@ -935,7 +945,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$arr = explode('@',$name);
 			if(count($arr)>1)
 				$this->_relatedCache[$arr[0]][$arr[1]]=$value;				
-		}	
+			else		
+				$this->_attributes[$name]=$value; //this attribute is unsafe but we may want to use it in the contructor anyway. For example the customfield record doesn't know the columns until after the constructor.
+		}
 
 		return true;
 	}

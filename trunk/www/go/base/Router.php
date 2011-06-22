@@ -34,7 +34,7 @@ class GO_Base_Router{
 		
 		$first = isset($r[0]) ? ucfirst($r[0]) : 'Core';
 		
-		if(file_exists(GO::config()->root_path.'controller/'.$first.'.php')){
+		if(file_exists(GO::config()->root_path.'controller/'.$first.'Controller.php')){
 			//this is a controller name that belongs to the Group-Office framework
 			$module='';
 			$controller=$first;
