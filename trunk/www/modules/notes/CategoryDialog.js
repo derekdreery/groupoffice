@@ -31,18 +31,18 @@ GO.notes.CategoryDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			cls:'go-form-panel',waitMsgTarget:true,			
 			layout:'form',
 			autoScroll:true,
-			items:[this.selectUser = new GO.form.SelectUser({
-				fieldLabel: GO.lang['strUser'],
-				disabled : !GO.settings.has_admin_permission,
-				value: GO.settings.user_id,
-				anchor: '100%'
-			}),{
+			items:[{
 				xtype: 'textfield',
 			  name: 'name',
 				anchor: '100%',
 			  allowBlank:false,
 			  fieldLabel: GO.lang.strName
-			}]
+			},this.selectUser = new GO.form.SelectUser({
+				fieldLabel: GO.lang['strUser'],
+				disabled : !GO.settings.has_admin_permission,
+				value: GO.settings.user_id,
+				anchor: '100%'
+			})]
 				
 		});
 

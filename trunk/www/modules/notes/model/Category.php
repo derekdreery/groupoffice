@@ -29,7 +29,7 @@
 		);
 
 	protected $_columns=array(
-		'id'=>array('type'=>PDO::PARAM_STR),
+		'id'=>array('type'=>PDO::PARAM_INT),
 		'user_id'=>array('type'=>PDO::PARAM_INT),
 		'name'=>array('type'=>PDO::PARAM_STR,'required'=>true,'length'=>100),
 		'acl_id'=>array('type'=>PDO::PARAM_INT)

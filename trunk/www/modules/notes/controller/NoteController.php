@@ -17,7 +17,13 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 			$categories = $categories ? explode(',',$categories) : array();
 		}
 		
-		return array('by'=>array(array('category_id', $categories, 'IN')));
+		//todo category acl's should be checked for read permission here.
+		
+		return array(
+				'ignoreAcl'=>true,
+				'joinCustomFields'=>true,
+				'by'=>array(array('category_id', $categories, 'IN'))
+				);
 	}
 	
 	protected function formatModelForGrid($record, $model) {

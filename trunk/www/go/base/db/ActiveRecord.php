@@ -284,8 +284,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 *	)
 	 *  "ignoreAcl"=>true,
 	 * 
-	 *  searchQuery=>"String"
+	 *  searchQuery=>"String",
+	 *  joinCustomFields=>true
 	 * };
+	 * 
 	 * 
 	 * @param array $params
 	 * @return PDOStatement
@@ -321,7 +323,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
 		
-		$sql .= "t.*".$aclJoin['fields']." FROM `".$this->tableName."` t ".$aclJoin['join'];
+		$sql .= "t.*".$aclJoin['fields'].' ';
+		
+		
+		$joinCf = !empty($params['joinCustomFields']) && $this->linkType>0 && GO::modules()->has_module('customfields');
+		
+		if($joinCf)			
+			$sql .= ",cf_".$this->linkType.".* ";
+		
+		
+		$sql .= "FROM `".$this->tableName."` t ".$aclJoin['join'];
+		
+		if($joinCf)			
+			$sql .= "LEFT JOIN cf_".$this->linkType." ON cf_".$this->linkType.".link_id=t.id ";
 		
 		if($this->aclField && empty($params['ignoreAcl'])){			
 			
@@ -457,12 +471,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	}
 	
 	/**
-	 * Override this method to support a searchQuery argument in the find function.
+	 * Override this method to supply the fields that the searchQuery argument 
+	 * will usein the find function.
 	 * 
+	 * By default all fields with type PDO::PARAM_STR are returned
+	 * 
+	 * @todo implement custom fields
 	 * @return array Field names that should be used for the search query.
 	 */
 	protected function getFindSearchQueryParamFields(){
-		throw new Exception('Error: you supplied a searchQuery parameter to find but getFindSearchQueryParamFields() should be overriden in '.$this->className());
+		//throw new Exception('Error: you supplied a searchQuery parameter to find but getFindSearchQueryParamFields() should be overriden in '.$this->className());
+		$fields = array();
+		foreach($this->_columns as $field=>$attributes){
+			if($attributes['type']==PDO::PARAM_STR){
+				$fields[]=$field;
+			}
+		}
+		return $fields;		
 	}
 	
 	/**
@@ -694,13 +719,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	/**
 	 * Checks all the permissions
 	 * 
+	 * @todo new item's which don't have ACL should check different ACL for adding new items.
 	 * @return boolean 
 	 */
 	private function _checkPermissionLevel($level){
 
 		if(empty($this->aclField))
 			return true;
-		
+
 		if($this->getPermissionLevel()==-1)
 			return true;
 
@@ -708,6 +734,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	}
 	
 
+	/**
+	 * Validates all attributes of this model
+	 * 
+	 * @todo Implement unique fields. eg. Name of addresbook must be unique
+	 * @return boolean 
+	 */
 
 	public function validate(){
 		foreach($this->_columns as $field=>$attributes){
