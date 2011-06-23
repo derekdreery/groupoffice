@@ -34,7 +34,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	
 	loadParams : {},
 	
-	idParam : '',
+	idParam : 'id',
 	
 	loadUrl : '',
 	
