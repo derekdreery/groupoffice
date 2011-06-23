@@ -777,7 +777,8 @@ class GO_SECURITY extends db {
 
 				$this->query("SELECT group_id FROM go_users_groups WHERE user_id=?", 'i', $user_id);
 				while ($r = $this->next_record()) {
-					$_SESSION['GO_SESSION']['user_groups'][] = $r['group_id'];
+					if(!empty($r['group_id']))
+						$_SESSION['GO_SESSION']['user_groups'][] = $r['group_id'];
 				}
 			}
 
@@ -786,7 +787,8 @@ class GO_SECURITY extends db {
 			$ids = array();
 			$this->query("SELECT group_id FROM go_users_groups WHERE user_id=?", 'i', $user_id);
 			while ($r = $this->next_record()) {
-				$ids[] = $r['group_id'];
+				if(!empty($r['group_id']))
+					$ids[] = $r['group_id'];
 			}
 			return $ids;
 		}
