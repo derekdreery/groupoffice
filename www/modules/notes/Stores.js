@@ -1,39 +1,24 @@
 GO.notes.writableCategoriesStore = new GO.data.JsonStore({
-	url: GO.settings.modules.notes.url+ 'json.php',
+	url: GO.url('notes/category/grid'),
 	baseParams: {
-		auth_type:'write',
-		task: 'categories'
-	},
-	root: 'results',
-	id: 'id',
-	totalProperty:'total',
-	fields: ['id', 'name', 'user_name'],
-	remoteSort: true
+		permissionLevel:GO.permissionLevels.write
+	},	
+	fields: ['id', 'name', 'user_name']	
 });
 
 GO.notes.writableAdminCategoriesStore = new GO.data.JsonStore({
 	url: GO.url('notes/category/grid'),
 	baseParams: {
 		permissionLevel:GO.permissionLevels.write
-	},
-	root: 'results',
-	id: 'id',
-	totalProperty:'total',
-	fields: ['id', 'name', 'user_name'],
-	remoteSort: true
+	},	
+	fields: ['id', 'name', 'user_name']
 });
 
 
 GO.notes.readableCategoriesStore = new GO.data.JsonStore({
-	url: GO.settings.modules.notes.url+ 'json.php',
+	url: GO.url('notes/category/grid'),
 	baseParams: {
-		task: 'categories',
-		auth_type: 'read',
 		limit:GO.settings.config.nav_page_size
 	},
-	root: 'results',
-	id: 'id',
-	totalProperty:'total',
-	fields: ['id','user_name','acl_id','name','checked'],
-	remoteSort: true
+	fields: ['id','user_name','acl_id','name','checked']
 });

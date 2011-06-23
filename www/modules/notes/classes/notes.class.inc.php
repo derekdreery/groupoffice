@@ -173,124 +173,124 @@ class notes extends db {
 		return $this->query("DELETE FROM no_categories WHERE id=".intval($category_id));
 	}
 	
-	/**
-	 * Add a Note
-	 *
-	 * @param Array $note Associative array of record fields
-	 *
-	 * @access public
-	 * @return int New record ID created
-	 */
-
-	function add_note($note, $category=false)
-	{
-		if(!isset($note['ctime']))
-			$note['ctime']=time();
-		
-		if(!isset($note['mtime']))
-			$note['mtime']=time();
-		
-		global $GO_MODULES;
-		if(!isset($note['files_folder_id']) && isset(GO::modules()->modules['files']))
-		{
-			if(!$category)
-			{
-				$category = $this->get_category($note['category_id']);				
-			}
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
-			$files = new files();			
-
-			$new_path = $this->build_note_files_path($note, $category);			
-			if($folder=$files->create_unique_folder($new_path))
-			{
-				$note['files_folder_id']=$folder['id'];
-			}
-		}
-		
-		$note['id']=$this->nextid('no_notes');
-		if($this->insert_row('no_notes', $note))
-		{
-			$this->cache_note($note['id']);
-			
-			return $note['id'];
-		}
-		return false;
-	}
-	
-	function build_note_files_path($note, $category)
-	{
-		return 'notes/'.File::strip_invalid_chars($category['name']).'/'.date('Y', $note['ctime']).'/'.File::strip_invalid_chars($note['name']);
-	}
-	
-	/**
-	 * Update a Note
-	 *
-	 * @param Array $note Associative array of record fields
-	 *
-	 * @access public
-	 * @return bool True on success
-	 */
-
-	function update_note($note, $category=false)
-	{		
-		if(!isset($note['mtime']))
-			$note['mtime']=time();
-		
-		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files']) && isset($note['category_id']))
-		{			
-			if(!$category)
-			{
-				$category = $this->get_category($note['category_id']);				
-			}
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
-			$files = new files();			
-			
-			$old_note = $this->get_note($note['id']);
-			$note['ctime']=$old_note['ctime'];
-			$new_path = $this->build_note_files_path($note, $category);			
-			$note['files_folder_id']=$files->check_folder_location($old_note['files_folder_id'], $new_path);			
-		}
-		
-		$r = $this->update_row('no_notes', 'id', $note);
-		
-		$this->cache_note($note['id']);
-		
-		return $r;
-	}
-	
-	/**
-	 * Delete a Note
-	 *
-	 * @param Int $note_id ID of the note
-	 *
-	 * @access public
-	 * @return bool True on success
-	 */
-
-	function delete_note($note_id)
-	{		
-		global $GO_CONFIG;
-		
-		require_once(GO::config()->class_path.'base/search.class.inc.php');
-		$search = new search();
-		$search->delete_search_result($note_id, 4);		
-		
-		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files']))
-		{
-			$note = $this->get_note($note_id);
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
-			$files = new files();
-			try{
-				$files->delete_folder($note['files_folder_id']);
-			}
-			catch(Exception $e){}
-		}				
-		
-		return $this->query("DELETE FROM no_notes WHERE id=".intval($note_id));
-	}
-	
+//	/**
+//	 * Add a Note
+//	 *
+//	 * @param Array $note Associative array of record fields
+//	 *
+//	 * @access public
+//	 * @return int New record ID created
+//	 */
+//
+//	function add_note($note, $category=false)
+//	{
+//		if(!isset($note['ctime']))
+//			$note['ctime']=time();
+//		
+//		if(!isset($note['mtime']))
+//			$note['mtime']=time();
+//		
+//		global $GO_MODULES;
+//		if(!isset($note['files_folder_id']) && isset(GO::modules()->modules['files']))
+//		{
+//			if(!$category)
+//			{
+//				$category = $this->get_category($note['category_id']);				
+//			}
+//			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+//			$files = new files();			
+//
+//			$new_path = $this->build_note_files_path($note, $category);			
+//			if($folder=$files->create_unique_folder($new_path))
+//			{
+//				$note['files_folder_id']=$folder['id'];
+//			}
+//		}
+//		
+//		$note['id']=$this->nextid('no_notes');
+//		if($this->insert_row('no_notes', $note))
+//		{
+//			$this->cache_note($note['id']);
+//			
+//			return $note['id'];
+//		}
+//		return false;
+//	}
+//	
+//	function build_note_files_path($note, $category)
+//	{
+//		return 'notes/'.File::strip_invalid_chars($category['name']).'/'.date('Y', $note['ctime']).'/'.File::strip_invalid_chars($note['name']);
+//	}
+//	
+//	/**
+//	 * Update a Note
+//	 *
+//	 * @param Array $note Associative array of record fields
+//	 *
+//	 * @access public
+//	 * @return bool True on success
+//	 */
+//
+//	function update_note($note, $category=false)
+//	{		
+//		if(!isset($note['mtime']))
+//			$note['mtime']=time();
+//		
+//		global $GO_MODULES;
+//		if(isset(GO::modules()->modules['files']) && isset($note['category_id']))
+//		{			
+//			if(!$category)
+//			{
+//				$category = $this->get_category($note['category_id']);				
+//			}
+//			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+//			$files = new files();			
+//			
+//			$old_note = $this->get_note($note['id']);
+//			$note['ctime']=$old_note['ctime'];
+//			$new_path = $this->build_note_files_path($note, $category);			
+//			$note['files_folder_id']=$files->check_folder_location($old_note['files_folder_id'], $new_path);			
+//		}
+//		
+//		$r = $this->update_row('no_notes', 'id', $note);
+//		
+//		$this->cache_note($note['id']);
+//		
+//		return $r;
+//	}
+//	
+//	/**
+//	 * Delete a Note
+//	 *
+//	 * @param Int $note_id ID of the note
+//	 *
+//	 * @access public
+//	 * @return bool True on success
+//	 */
+//
+//	function delete_note($note_id)
+//	{		
+//		global $GO_CONFIG;
+//		
+//		require_once(GO::config()->class_path.'base/search.class.inc.php');
+//		$search = new search();
+//		$search->delete_search_result($note_id, 4);		
+//		
+//		global $GO_MODULES;
+//		if(isset(GO::modules()->modules['files']))
+//		{
+//			$note = $this->get_note($note_id);
+//			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+//			$files = new files();
+//			try{
+//				$files->delete_folder($note['files_folder_id']);
+//			}
+//			catch(Exception $e){}
+//		}				
+//		
+//		return $this->query("DELETE FROM no_notes WHERE id=".intval($note_id));
+//	}
+//	
 
 
 	/**
@@ -459,36 +459,36 @@ class notes extends db {
 	 * @return Array Record properties
 	 */
 
-	function get_note($note_id)
-	{
-		$this->query("SELECT * FROM no_notes WHERE id=".intval($note_id));
-		if($this->next_record())
-		{
-			return $this->record;
-		}else
-		{
-			throw new DatabaseSelectException();
-		}
-	}
-
-	/**
-	 * Gets a Note record by the name field
-	 *
-	 * @param String $name Name of the note
-	 *
-	 * @access public
-	 * @return Array Record properties
-	 */
-
-	function get_note_by_name($name)
-	{
-		$this->query("SELECT * FROM no_notes WHERE name='".$this->escape($name)."'");
-		if($this->next_record())
-		{
-			return $this->record;
-		}
-		return false;
-	}
+//	function get_note($note_id)
+//	{
+//		$this->query("SELECT * FROM no_notes WHERE id=".intval($note_id));
+//		if($this->next_record())
+//		{
+//			return $this->record;
+//		}else
+//		{
+//			throw new DatabaseSelectException();
+//		}
+//	}
+//
+//	/**
+//	 * Gets a Note record by the name field
+//	 *
+//	 * @param String $name Name of the note
+//	 *
+//	 * @access public
+//	 * @return Array Record properties
+//	 */
+//
+//	function get_note_by_name($name)
+//	{
+//		$this->query("SELECT * FROM no_notes WHERE name='".$this->escape($name)."'");
+//		if($this->next_record())
+//		{
+//			return $this->record;
+//		}
+//		return false;
+//	}
 
 
 	/**
@@ -503,56 +503,56 @@ class notes extends db {
 	 * @return Int Number of records found
 	 */
 
-	function get_notes($query, $categories=array(), $sortfield='id', $sortorder='ASC', $start=0, $offset=0, $search_field='')
-	{
-		global $GO_MODULES;
-		
-		$sql = "SELECT n.*, c.name AS category_name";
-
-		if(GO::modules()->has_module('customfields')) {
-			$sql .= " ,cf_4.*";
-		}
-
-		$sql .=  " FROM no_notes n";
-		$sql .= " INNER JOIN no_categories c ON n.category_id=c.id";
-
-		if(GO::modules()->has_module('customfields')) {
-			$sql .= " LEFT JOIN cf_4 ON cf_4.link_id=n.id";
-		}
-		
-		if(count($categories))
-		{
-			 $sql .= " WHERE n.category_id IN (".implode(',', $categories).")";
-		}else
-		{
-			global $GO_SECURITY;
-
-			$sql .= " INNER JOIN go_acl a ON (c.acl_id = a.acl_id";
-			$sql .= " AND (a.user_id=".GO::security()->user_id." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
-		}
-
-		if(!empty($query))
-		{
-			//$sql .= " AND (n.name LIKE '".$this->escape($query)."' OR MATCH (n.content) AGAINST ('".$this->escape($query)."')) ";
-			if(empty($search_field)){
-				$sql .= " AND (n.name LIKE '".$this->escape($query)."' OR n.content LIKE '".$this->escape($query)."') ";
-			}  else {
-				$sql .= " AND $search_field LIKE '".$this->escape($query)."' ";
-			}
-		}
-		$sql .= " ORDER BY ".$this->escape($sortfield." ".$sortorder);
-		
-		$this->query($sql);
-		$count = $this->num_rows();
-
-		if($offset>0)
-		{
-			$sql .= " LIMIT ".intval($start).",".intval($offset);
-			$this->query($sql);
-		}
-		return $count;
-	}
-	
+//	function get_notes($query, $categories=array(), $sortfield='id', $sortorder='ASC', $start=0, $offset=0, $search_field='')
+//	{
+//		global $GO_MODULES;
+//		
+//		$sql = "SELECT n.*, c.name AS category_name";
+//
+//		if(GO::modules()->has_module('customfields')) {
+//			$sql .= " ,cf_4.*";
+//		}
+//
+//		$sql .=  " FROM no_notes n";
+//		$sql .= " INNER JOIN no_categories c ON n.category_id=c.id";
+//
+//		if(GO::modules()->has_module('customfields')) {
+//			$sql .= " LEFT JOIN cf_4 ON cf_4.link_id=n.id";
+//		}
+//		
+//		if(count($categories))
+//		{
+//			 $sql .= " WHERE n.category_id IN (".implode(',', $categories).")";
+//		}else
+//		{
+//			global $GO_SECURITY;
+//
+//			$sql .= " INNER JOIN go_acl a ON (c.acl_id = a.acl_id";
+//			$sql .= " AND (a.user_id=".GO::security()->user_id." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
+//		}
+//
+//		if(!empty($query))
+//		{
+//			//$sql .= " AND (n.name LIKE '".$this->escape($query)."' OR MATCH (n.content) AGAINST ('".$this->escape($query)."')) ";
+//			if(empty($search_field)){
+//				$sql .= " AND (n.name LIKE '".$this->escape($query)."' OR n.content LIKE '".$this->escape($query)."') ";
+//			}  else {
+//				$sql .= " AND $search_field LIKE '".$this->escape($query)."' ";
+//			}
+//		}
+//		$sql .= " ORDER BY ".$this->escape($sortfield." ".$sortorder);
+//		
+//		$this->query($sql);
+//		$count = $this->num_rows();
+//
+//		if($offset>0)
+//		{
+//			$sql .= " LIMIT ".intval($start).",".intval($offset);
+//			$this->query($sql);
+//		}
+//		return $count;
+//	}
+//	
 	
 
 	

@@ -50,6 +50,14 @@ GO.data.JsonStore = function(config) {
 
 	GO.data.JsonStore.superclass.constructor.call (this, config);
 	
+	
+	Ext.applyIf(config,{
+		root: 'results',	
+		id: 'id',
+		totalProperty:'total',
+		remoteSort: true
+	});
+	
 	this.on('load', function(){
 		this.loaded=true;
 	}, this);

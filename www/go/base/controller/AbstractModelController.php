@@ -175,7 +175,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	}
 
 	/**
-	 * The default action for loading a grid
+	 * The default action for loading a grid. This function shouldn't be overridden.
+	 * You can override formatModelForGrid and getGridParams.
 	 */
 	public function actionGrid() {
 
