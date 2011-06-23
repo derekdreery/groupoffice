@@ -953,6 +953,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	/**
 	 * PHP setter magic method.
 	 * This method is overridden so that AR attributes can be accessed like properties.
+	 * 
+	 * //TODO record changed attributes here for smarter saving.
+	 * 
+	 * 
 	 * @param string $name property name
 	 * @param mixed $value property value
 	 */
