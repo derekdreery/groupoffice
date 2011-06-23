@@ -1009,6 +1009,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkType));
 			$model->delete();
 		}
+				
+		if($this->aclField && !$this->joinAclField){
+			GO::security()->delete_acl($this->{$this->aclField});
+		}	
 		
 		return $success;			
 	}

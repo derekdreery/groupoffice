@@ -365,15 +365,15 @@ class notes extends db {
 	 * @return Array Record properties
 	 */
 
-	function get_category_by_name($name)
-	{
-		$this->query("SELECT * FROM no_categories WHERE name='".$this->escape($name)."'");
-		if($this->next_record())
-		{
-			return $this->record;
-		}
-		return false;
-	}
+//	function get_category_by_name($name)
+//	{
+//		$this->query("SELECT * FROM no_categories WHERE name='".$this->escape($name)."'");
+//		if($this->next_record())
+//		{
+//			return $this->record;
+//		}
+//		return false;
+//	}
 
 
 	/**
@@ -387,27 +387,27 @@ class notes extends db {
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_categories($sortfield='id', $sortorder='ASC', $start=0, $offset=0, $user_id=0)
-	{
-		$sql = "SELECT * FROM no_categories ";
-		
-		if($user_id>0)
-		{
-			$sql .= "WHERE user_id=$user_id ";
-		}
-		
-		$sql .= "ORDER BY ".$this->escape($sortfield." ".$sortorder);
-
-		$this->query($sql);
-		$count = $this->num_rows();
-
-		if($offset>0)
-		{
-			$sql .= " LIMIT ".intval($start).",".intval($offset);
-			$this->query($sql);
-		}
-		return $count;
-	}
+//	function get_categories($sortfield='id', $sortorder='ASC', $start=0, $offset=0, $user_id=0)
+//	{
+//		$sql = "SELECT * FROM no_categories ";
+//		
+//		if($user_id>0)
+//		{
+//			$sql .= "WHERE user_id=$user_id ";
+//		}
+//		
+//		$sql .= "ORDER BY ".$this->escape($sortfield." ".$sortorder);
+//
+//		$this->query($sql);
+//		$count = $this->num_rows();
+//
+//		if($offset>0)
+//		{
+//			$sql .= " LIMIT ".intval($start).",".intval($offset);
+//			$this->query($sql);
+//		}
+//		return $count;
+//	}
 	
 	
 	/**
@@ -424,31 +424,31 @@ class notes extends db {
 	 * @return Int Number of records found
 	 */
 	 
-	function get_authorized_categories($auth_type, $user_id, $query='', $sort='name', $direction='ASC', $start=0, $offset=0)
-	{
-		$user_id=intval($user_id);
-		
-		$sql = "SELECT no_categories.* FROM no_categories ".
-		
-		"INNER JOIN go_acl a ON (no_categories.acl_id = a.acl_id";
-		if($auth_type=='write'){
-			$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
-		}
-		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
-		
- 		
- 		if(!empty($query))
- 		{
- 			$sql .= " AND name LIKE '".$this->escape($query)."'";
- 		}
-
-		$sql .= " GROUP BY no_categories.id ORDER BY ".$this->escape($sort." ".$direction);
-	
-		$sql = $this->add_limits_to_query($sql, $start, $offset);
-		$this->query($sql);
-
-		return $this->limit_count();
-	}
+//	function get_authorized_categories($auth_type, $user_id, $query='', $sort='name', $direction='ASC', $start=0, $offset=0)
+//	{
+//		$user_id=intval($user_id);
+//		
+//		$sql = "SELECT no_categories.* FROM no_categories ".
+//		
+//		"INNER JOIN go_acl a ON (no_categories.acl_id = a.acl_id";
+//		if($auth_type=='write'){
+//			$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
+//		}
+//		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
+//		
+// 		
+// 		if(!empty($query))
+// 		{
+// 			$sql .= " AND name LIKE '".$this->escape($query)."'";
+// 		}
+//
+//		$sql .= " GROUP BY no_categories.id ORDER BY ".$this->escape($sort." ".$direction);
+//	
+//		$sql = $this->add_limits_to_query($sql, $start, $offset);
+//		$this->query($sql);
+//
+//		return $this->limit_count();
+//	}
 
 	/**
 	 * Gets a Note record
