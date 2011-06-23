@@ -14,9 +14,12 @@
  */
 
 /**
- * Extend this class if you want to use your model in a form.
+ * Extend this class for your models. It implements default actions for
+ * 1. The grid
+ * 2. The edit dialog
+ * 3. The display panel
  */
-class GO_Base_Controller_FormController extends GO_Base_Controller_AbstractController {
+class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_AbstractController {
 
 	/**
 	 *

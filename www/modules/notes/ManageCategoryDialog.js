@@ -52,6 +52,6 @@ GO.notes.ManageCategoriesDialog = function(config){
 	this.addEvents({'change':true});
 }
 
-Ext.extend(GO.notes.ManageCategoriesDialog, Ext.Window,{
+Ext.extend(GO.notes.ManageCategoriesDialog, GO.Window,{
 
 });

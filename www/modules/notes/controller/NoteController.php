@@ -1,5 +1,5 @@
 <?php
-class GO_Notes_Controller_Note extends GO_Base_Controller_FormController{
+class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelController{
 	
 	protected $model = 'GO_Notes_Model_Note';
 	
