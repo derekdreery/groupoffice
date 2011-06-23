@@ -40,8 +40,15 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	 * Set this if your item supports custom fields.
 	 */
 	customFieldType : 0,
+	
+	
+	/**
+	 * If set this panel will automatically listen to an acl_id field in the model.
+	 */
+	permissionsPanel : false,
+	
 
-	_panels : Array(),
+	_panels : false,
 	
 	initComponent : function(){
 		
@@ -75,6 +82,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			}
 			]
 		});
+		
+		this._panels=[];
 
 		this.buildForm();
 
@@ -85,7 +94,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		});
 
 		this.addCustomFields();
-		
+				
 		if(this._panels.length) {
 			this._tabPanel = new Ext.TabPanel({
 				activeTab: 0,
@@ -135,6 +144,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				
 				this.setRemoteModelId(action.result[this.remoteModelIdName]);
 				
+				if(this.permissionsPanel && action.result[this.permissionsPanel.fieldName])
+					this.permissionsPanel.setAclId(action.result[this.permissionsPanel.fieldName]);
+				
 				this.afterSubmit(action);
 				
 				if(hide)
@@ -161,8 +173,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			scope: this
 		});		
 	},
-	afterLoad : function(action, config){},
-	afterLoadNew : function(config){},
+	afterLoad : function(remoteModelId, config, action){},
 	afterSubmit : function(action){},
 	
 	show : function (remoteModelId, config) {
@@ -203,8 +214,11 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 								f.setRemoteText(t[fieldName]);
 						}
 					}
+					
+					if(this.permissionsPanel && action.result.data[this.permissionsPanel.fieldName])
+						this.permissionsPanel.setAcl(action.result.data[this.permissionsPanel.fieldName]);
 
-					this.afterLoad(action, config);
+					this.afterLoad(remoteModelId, config, action);
 					GO.dialog.TabbedFormDialog.superclass.show.call(this);
 				},
 				failure:function(form, action)
@@ -217,7 +231,10 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		{			
 			this.formPanel.form.setValues(config.values);
 			
-			this.afterLoadNew(config);
+			if(this.permissionsPanel)
+				this.permissionsPanel.setAcl(0);
+			
+			this.afterLoad(remoteModelId, config);
 			
 			GO.dialog.TabbedFormDialog.superclass.show.call(this);
 		}
@@ -247,6 +264,14 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	 */
 	addPanel : function(panel){
 		this._panels.push(panel);
+	},
+	
+	/**
+	 * Use this function add an GO.panels.PermissionPanel to the form.
+	 */
+	addPermissionsPanel : function(panel){
+		this.permissionsPanel = panel;
+		this.addPanel(panel);
 	},
 
 

@@ -39,6 +39,13 @@ $scripts[]=$root_uri.'javascript/namespaces.js';
 	GO.url = function(relativeUrl){
 		return BaseHref+'index.php?r='+relativeUrl
 	}
+	
+	GO.permissionLevels={
+		read:1,
+		write:2,
+		writeAndDelete:3,
+		manage:4		
+	};
 
 <?php
 if(isset($_REQUEST['after_login_url'])) {
