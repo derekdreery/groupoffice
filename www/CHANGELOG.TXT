@@ -5,6 +5,7 @@
   Don't forget to check this when you already have a text setup.
 - User groups list was showing less rows then it should.
 - User groups are searchable
+- Bug in calendar with removing a single instance from a recurring event.
 
 16/06/2011 3.7.23
 - Fixed bug with etags in caldav
