@@ -14,12 +14,6 @@
 GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 	link_type : 4,
 	
-	loadParams : {task: 'note_with_items'},
-	
-	idParam : 'note_id',
-	
-	loadUrl : GO.settings.modules.notes.url+'json.php',
-
 	stateId : 'no-note-panel',
 
 	editGoDialogId : 'note',
@@ -29,6 +23,9 @@ GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
 	},	
 		
 	initComponent : function(){	
+		
+		this.loadUrl=GO.url('notes/note/display');
+		
 		this.template = 
 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+

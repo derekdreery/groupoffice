@@ -989,7 +989,8 @@ class GO_CONFIG {
 		$this->configuration_url = $this->host.$this->configuration_url.'/';
 
 		
-
+		if($this->debug)
+			$this->debug_log=true;
 
 		if($this->debug_log) {			
 			list ($usec, $sec) = explode(" ", microtime());
