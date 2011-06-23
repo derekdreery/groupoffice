@@ -245,6 +245,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return $this->_permissionLevel;
 	}
 	
+	/**
+	 * Returns an unique ID string for a find query. That is used to store the 
+	 * total number of rows in session. This way we don't need to calculate the 
+	 * total on each pagination page when limit 0,n is used.
+	 * 
+	 * @param array $params
+	 * @return string  
+	 */
+	private function _getFindQueryUid($params){
+		//create unique query id
+		unset($params['start']);
+		return md5(serialize($params).$this->className());
+	}
+	
 
 	/**
 	 * Finds model objects
@@ -262,7 +276,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 *	)
 	 *  "ignoreAcl"=>true,
 	 * 
-	 *  query=>"String"
+	 *  searchQuery=>"String"
 	 * };
 	 * 
 	 * @param array $params
@@ -271,6 +285,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function find($params=array(), &$foundRows=false){
 		
 		//todo joins acl tables and finds stuff by parameters
+		
+		
 		
 		if(!isset($params['userId'])){
 			$params['userId']=GO::security()->user_id;
@@ -290,7 +306,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$sql = "SELECT ";
 		
-		if($foundRows!==false && !empty($params['limit'])){
+		if($foundRows!==false && !empty($params['limit']) && empty($params['start'])){
 			
 			//TODO: This is MySQL only code
 			
@@ -306,6 +322,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				$sql .= " AND go_acl.level>=".intval($params['permissionLevel']);
 			}
 			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',GO::security()->get_user_group_ids($params['userId']))."))) ";
+		}  else {
+			//quick and dirty way to use and in next sql build blocks
+			$sql .= 'WHERE 1 ';
 		}
 		
 		if(!empty($params['criteriaSql']))
@@ -347,6 +366,29 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 
 		
+		if(!empty($params['searchQuery'])){
+			$sql .= ' AND (';
+			
+			$fields = $this->getFindSearchQueryParamFields();
+			
+			//`name` LIKE "test" OR `content` LIKE "test"
+			
+			$first = true;
+			foreach($fields as $field){
+				if($first){
+					$first=false;
+				}else
+				{
+					$sql .= ' OR ';
+				}
+				$sql .= 't.`'.$field.'` LIKE '.$this->getDbConnection()->quote($params['searchQuery'], PDO::PARAM_STR);
+			}			
+			
+			
+			$sql .= ') ';
+		}
+		
+		
 		if($this->aclField && empty($params['ignoreAcl'])){
 			
 			$pk = is_array($this->primaryKey) ? $this->primaryKey : array($this->primaryKey);
@@ -377,12 +419,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		if($foundRows!==false){			
 			if(!empty($params['limit'])){
-				//TODO: This is MySQL only code
-				$sql = "SELECT FOUND_ROWS() as found;";			
-				$r2 = $this->getDbConnection()->query($sql);
-				$record = $r2->fetch(PDO::FETCH_ASSOC);
-
-				$foundRows = intval($record['found']);			
+				
+				$queryUid = $this->_getFindQueryUid($params);
+				
+				//Total numbers are cached in session when browsing through pages.
+				if(empty($params['start'])){
+					//TODO: This is MySQL only code
+					$sql = "SELECT FOUND_ROWS() as found;";			
+					$r2 = $this->getDbConnection()->query($sql);
+					$record = $r2->fetch(PDO::FETCH_ASSOC);
+					$foundRows = $_SESSION['GO_SESSION'][$queryUid]=intval($record['found']);	
+				}else
+				{
+					$foundRows=$_SESSION['GO_SESSION'][$queryUid];
+				}
+						
 			}else
 			{
 				$foundRows = $result->rowCount();
@@ -395,6 +446,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		return $result;
 		
+	}
+	
+	/**
+	 * Override this method to support a searchQuery argument in the find function.
+	 * 
+	 * @return array Field names that should be used for the search query.
+	 */
+	protected function getFindSearchQueryParamFields(){
+		throw new Exception('Error: you supplied a searchQuery parameter to find but getFindSearchQueryParamFields() should be overriden in '.$this->className());
 	}
 	
 	/**

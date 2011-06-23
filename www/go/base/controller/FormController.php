@@ -185,24 +185,21 @@ class GO_Base_Controller_FormController extends GO_Base_Controller_AbstractContr
 				$response['deleteSuccess']=false;
 				$response['deleteFeedback']=$e->getMessage();
 			}
-		}
-		
-		
+		}		
 		
 		$defaultParams = array(			
+			'searchQuery'=>!empty($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '',
 			'limit'=>isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0,
 			'start'=>isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
 			'orderField'=>isset($_REQUEST['orderField']) ? $_REQUEST['orderField'] : '',
 			'orderDirection'=>isset($_REQUEST['orderDirection']) ? $_REQUEST['orderDirection'] : '',
+			'ignoreAcl'=>true//Categories are already checked.
 		);
-		
-		$modelName = $this->model;
-		$model = $modelName::model();
 		
 		$params = array_merge($defaultParams, $this->getGridParams());
 		
-		
-		$stmt = $model->find($params, $response['total']);
+		$modelName = $this->model;
+		$stmt = $modelName::model()->find($params, $response['total']);
 		
 		$response['results']=array();
 		
