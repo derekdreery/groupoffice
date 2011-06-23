@@ -69,6 +69,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 			GO_Customfields_Controller_Item::saveCustomFields($this, "GO_Notes_Model_CustomFieldsRecord");
 
 		
+		//Does this belong in the controller?
 		if (!empty($_POST['tmp_files']) && GO::modules()->has_module('files')) {
 			require_once(GO::modules()->modules['files']['class_path'] . 'files.class.inc.php');
 			$files = new files();

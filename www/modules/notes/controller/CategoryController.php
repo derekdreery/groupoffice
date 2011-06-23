@@ -47,7 +47,6 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 	
 	protected $remoteComboFields=array(
 			'user_id'=>array('user','name')
-	);	
-
+	);
 }
 

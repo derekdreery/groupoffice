@@ -202,7 +202,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
 				'orderField' => isset($_REQUEST['orderField']) ? $_REQUEST['orderField'] : '',
 				'orderDirection' => isset($_REQUEST['orderDirection']) ? $_REQUEST['orderDirection'] : ''				
-				//'ignoreAcl' => true//Categories are already checked.
 		);
 		
 		if(isset($_POST['permissionLevel'])){
@@ -213,7 +212,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$modelName = $this->model;
 		$stmt = $modelName::model()->find($params, $response['total']);
-
+		
 		$response['results'] = array();
 
 		while ($model = $stmt->fetch()) {
@@ -225,6 +224,24 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		//var_dump(GO_Notes_Model_Note::$_models);
 	}
+	
+	/**
+	 * @todo should create a default model if actionGrid doesn't find anything.
+	 */
+	protected function createDefaultModel(){
+		return false;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * The default action for displaying a model in a DisplayPanel.
