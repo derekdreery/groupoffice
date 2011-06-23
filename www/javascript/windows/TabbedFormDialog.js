@@ -145,7 +145,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				this.setRemoteModelId(action.result[this.remoteModelIdName]);
 				
 				if(this.permissionsPanel && action.result[this.permissionsPanel.fieldName])
-					this.permissionsPanel.setAclId(action.result[this.permissionsPanel.fieldName]);
+					this.permissionsPanel.setAcl(action.result[this.permissionsPanel.fieldName]);
 				
 				this.afterSubmit(action);
 				

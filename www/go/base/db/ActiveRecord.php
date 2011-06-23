@@ -529,7 +529,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$model =  $result->fetch();
 		
-		if(!is_array($primaryKey) )
+		if(!is_array($primaryKey) && $model)
 			GO::modelCache()->add($this->className(), $model);
 		
 		return $model;
