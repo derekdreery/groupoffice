@@ -50,111 +50,148 @@
  * @constructor
  * @param {Object} config The config object
  */
- 
-GO.grid.GridPanel = function(config)
-{	
-	if(!config)
-	{
-		config={};
-	}
-	
-	if(!config.keys)
-	{
-		config.keys=[];
-	}
-	
-	if(!config.store)
-	{
-		config.store=config.ds;
-	}
 
-	if(!config.noDelete){
-		config.keys.push({
-			key: Ext.EventObject.DELETE,
-			fn: function(key, e){
-				//sometimes there's a search input in the grid, so dont delete when focus is on an input
-				if(e.target.tagName!='INPUT')
-					this.deleteSelected(this.deleteConfig);
-			},
-			scope:this
-		});
-	}
-    
-	if(config.paging)
-	{
-		if(typeof(config.paging)=='boolean')
-			config.paging=parseInt(GO.settings['max_rows_list']);
 
-		if(!config.bbar)
+GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
+	
+	initComponent : function(){
+		
+
+		if(!this.keys)
 		{
-			config.bbar = new Ext.PagingToolbar({
-				cls: 'go-paging-tb',
-				store: config.store,
-				pageSize: config.paging,
-				displayInfo: true,
-				displayMsg: GO.lang['displayingItems'],
-				emptyMsg: GO.lang['strNoItems']
+			this.keys=[];
+		}
+	
+		if(!this.store)
+		{
+			this.store=this.ds;
+		}
+
+		if(!this.noDelete){
+			this.keys.push({
+				key: Ext.EventObject.DELETE,
+				fn: function(key, e){
+					//sometimes there's a search input in the grid, so dont delete when focus is on an input
+					if(e.target.tagName!='INPUT')
+						this.deleteSelected(this.deletethis);
+				},
+				scope:this
 			});
 		}
     
-		if(!config.store.baseParams)
+		if(this.paging)
 		{
-			config.store.baseParams={};
-		}
-		config.store.baseParams['limit']=config.paging;
-	}
+			if(typeof(this.paging)=='boolean')
+				this.paging=parseInt(GO.settings['max_rows_list']);
+
+			if(!this.bbar)
+			{
+				this.bbar = new Ext.PagingToolbar({
+					cls: 'go-paging-tb',
+					store: this.store,
+					pageSize: this.paging,
+					displayInfo: true,
+					displayMsg: GO.lang['displayingItems'],
+					emptyMsg: GO.lang['strNoItems']
+				});
+			}
     
-	GO.grid.GridPanel.superclass.constructor.call(this, config);
-
-	//create a delayed rowselect event so that when a user repeatedly presses the
-	//up and down button it will only load if it stays on the same record for 400ms
-	this.addEvents({
-		'delayedrowselect':true
-	});
-
-
-
-	this.on("rowcontextmenu", function(grid, rowIndex, e) {
-		e.stopEvent();
-
-		this.rowClicked=true;
-
-		var sm =this.getSelectionModel();
-		if(sm.isSelected(rowIndex) !== true) {
-			sm.clearSelections();
-			sm.selectRow(rowIndex);
+			if(!this.store.baseParams)
+			{
+				this.store.baseParams={};
+			}
+			this.store.baseParams['limit']=this.paging;
 		}
-	}, this);
+	
+		this.loadMask=true;
+	
+		if(!this.sm)
+			this.sm=new Ext.grid.RowSelectionModel();
 
-	this.on('rowclick', function(grid, rowIndex, e){
-		var record = this.getSelectionModel().getSelected();
+  
+		if(this.standardTbar){
+			this.tbar = this.tbar ? this.tbar : [];
 
-		if(!e.ctrlKey && !e.shiftKey)
-		{
-			if(record)
-				this.fireEvent('delayedrowselect', this, rowIndex, record);
+			this.tbar.push({
+				itemId:'add',
+				iconCls: 'btn-add',							
+				text: GO.lang['cmdAdd'],
+				cls: 'x-btn-text-icon',
+				handler: this.btnAdd,
+				disabled:this.standardTbarDisabled,
+				scope: this
+			},{
+				itemId:'delete',
+				iconCls: 'btn-delete',
+				text: GO.lang['cmdDelete'],
+				cls: 'x-btn-text-icon',
+				disabled:this.standardTbarDisabled,
+				handler: function(){
+					this.deleteSelected();
+				},
+				scope: this
+			},'-',new GO.form.SearchField({
+				store: this.store,
+				width:150
+			}));
 		}
 		
-		if(record)
+		GO.grid.GridPanel.superclass.initComponent.call(this);
+		
+		
+		//create a delayed rowselect event so that when a user repeatedly presses the
+		//up and down button it will only load if it stays on the same record for 400ms
+		this.addEvents({
+			'delayedrowselect':true
+		});
+
+
+
+		this.on("rowcontextmenu", function(grid, rowIndex, e) {
+			e.stopEvent();
+
 			this.rowClicked=true;
-	}, this);
 
-	this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
-		if(!this.rowClicked)
-		{
-			var record = this.getSelectionModel().getSelected();
-			if(record==r)
-			{
-				this.fireEvent('delayedrowselect', this, rowIndex, r);
+			var sm =this.getSelectionModel();
+			if(sm.isSelected(rowIndex) !== true) {
+				sm.clearSelections();
+				sm.selectRow(rowIndex);
 			}
-		}
-		this.rowClicked=false;
-	}, this, {
-		delay:250
-	});
-}
+		}, this);
 
-Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
+		this.on('rowclick', function(grid, rowIndex, e){
+			var record = this.getSelectionModel().getSelected();
+
+			if(!e.ctrlKey && !e.shiftKey)
+			{
+				if(record)
+					this.fireEvent('delayedrowselect', this, rowIndex, record);
+			}
+		
+			if(record)
+				this.rowClicked=true;
+		}, this);
+
+		this.getSelectionModel().on("rowselect",function(sm, rowIndex, r){
+			if(!this.rowClicked)
+			{
+				var record = this.getSelectionModel().getSelected();
+				if(record==r)
+				{
+					this.fireEvent('delayedrowselect', this, rowIndex, r);
+				}
+			}
+			this.rowClicked=false;
+		}, this, {
+			delay:250
+		});
+	
+		this.on('rowdblclick', function(grid, rowIndex){
+			var record = grid.getStore().getAt(rowIndex);			
+			this.dblClick(grid, record, rowIndex)		
+		}, this);
+	
+	},
 
 	deleteConfig : {},
 
@@ -243,7 +280,14 @@ Ext.extend(GO.grid.GridPanel, Ext.grid.GridPanel, {
 	numberRenderer : function(v)
 	{
 		return GO.util.numberFormat(v);
+	},
+	
+	btnAdd : function(){},
+	
+	dblClick : function(grid, record, rowIndex){
+	
 	}
+	
 });
 
 

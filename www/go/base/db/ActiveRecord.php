@@ -105,7 +105,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function __construct(){			
 		
-		$this->setIsNew(empty($this->pk));
+		$pk = $this->pk;
+		
+		$this->setIsNew(empty($pk));
 		$this->init();
 	}
 	
@@ -240,7 +242,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			return -1;	
 	
 		if(!isset($this->_permissionLevel)){
-			$this->_permissionLevel=GO::security()->hasPermission($this->findAclId());
+			
+			$acl_id = $this->findAclId();
+			if(!$acl_id){
+				return -1;
+			}
+			
+			$this->_permissionLevel=GO::security()->hasPermission($acl_id);
 		}
 		return $this->_permissionLevel;
 	}
@@ -502,7 +510,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function findByPk($primaryKey){
 		
 		//Use cache so identical findByPk calls are only executed once per script request
-		$cachedModel = GO::modelCache()->get($this->className(), $primaryKey);
+		$cachedModel = !is_array($primaryKey) ? GO::modelCache()->get($this->className(), $primaryKey) : false;
 		if($cachedModel)
 			return $cachedModel;
 		
@@ -521,7 +529,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$model =  $result->fetch();
 		
-		GO::modelCache()->add($this->className(), $model);
+		if(!is_array($primaryKey) )
+			GO::modelCache()->add($this->className(), $model);
 		
 		return $model;
 		
@@ -690,6 +699,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	private function _checkPermissionLevel($level){
 
 		if(empty($this->aclField))
+			return true;
+		
+		if($this->getPermissionLevel()==-1)
 			return true;
 
 		return $this->getPermissionLevel()>=$level;

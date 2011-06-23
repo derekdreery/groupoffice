@@ -44,6 +44,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		else
 			$model = $modelName::model();
 
+
 		$model->setAttributes($_POST);
 
 		$this->beforeSubmit($response, $model);
@@ -106,7 +107,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['data'] = $model->getAttributes();
 		
 		//todo custom fields should be in a subarray.
-		if(GO::modules()->has_module('customfields'))
+		if(GO::modules()->has_module('customfields') && $model->customfieldRecord)
 			$response['data'] = array_merge($response['data'], $model->customfieldRecord->getAttributes());	
 						
 		$response['success'] = true;
@@ -199,9 +200,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				'limit' => isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0,
 				'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
 				'orderField' => isset($_REQUEST['orderField']) ? $_REQUEST['orderField'] : '',
-				'orderDirection' => isset($_REQUEST['orderDirection']) ? $_REQUEST['orderDirection'] : '',
-				'ignoreAcl' => true//Categories are already checked.
+				'orderDirection' => isset($_REQUEST['orderDirection']) ? $_REQUEST['orderDirection'] : ''				
+				//'ignoreAcl' => true//Categories are already checked.
 		);
+		
+		if(isset($_POST['permissionLevel'])){
+			$defaultParams['permissionLevel']=$_POST['permissionLevel'];
+		}
 
 		$params = array_merge($defaultParams, $this->getGridParams());
 

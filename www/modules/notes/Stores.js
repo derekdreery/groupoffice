@@ -12,10 +12,9 @@ GO.notes.writableCategoriesStore = new GO.data.JsonStore({
 });
 
 GO.notes.writableAdminCategoriesStore = new GO.data.JsonStore({
-	url: GO.settings.modules.notes.url+ 'json.php',
+	url: GO.url('notes/category/grid'),
 	baseParams: {
-		auth_type:'write',
-		task: 'categories'
+		permissionLevel:GO.permissionLevels.write
 	},
 	root: 'results',
 	id: 'id',

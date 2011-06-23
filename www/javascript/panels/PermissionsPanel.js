@@ -25,6 +25,8 @@
 
 GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 
+	fieldName:'acl_id',
+	
 	changed : false,
 	loaded : false,
 	managePermission : false,
