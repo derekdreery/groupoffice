@@ -56,12 +56,14 @@ switch ($_POST['task'])
 				$response['deleteFeedback']=$e->getMessage();
 			}
 		}
+		
+		$query = isset($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
 
 		//$user_id = (!$GO_MODULES->modules['groups']['read_permission']) ? $GO_SECURITY->user_id : 0;
 		if(!empty($_POST['for_managing']))
-			$response['total'] = $GO_GROUPS->get_authorized_groups($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
+			$response['total'] = $GO_GROUPS->get_authorized_groups($GO_SECURITY->user_id, $start, $limit, $sort, $dir, $query);
 		else
-			$response['total'] = $GO_GROUPS->get_groups($GO_SECURITY->user_id, $start, $limit, $sort, $dir);
+			$response['total'] = $GO_GROUPS->get_groups($GO_SECURITY->user_id, $start, $limit, $sort, $dir,$query);
 		
 		$response['results']=array();
 		while($GO_GROUPS->next_record())
