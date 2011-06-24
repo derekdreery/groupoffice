@@ -308,7 +308,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return md5(serialize($params).$this->className());
 	}
 	
-	
+	/**
+	 * Finds a single model by an attribute name and value.
+	 * 
+	 * @param string $attributeName
+	 * @param mixed $value
+	 * @param array $findParams Extra parameters to send to the find function.
+	 * @return GO_Base_Db_ActiveRecord 
+	 */
 	public function findSingleByAttribute($attributeName, $value, $findParams=array()){
 		
 		$params = array_merge(array(
