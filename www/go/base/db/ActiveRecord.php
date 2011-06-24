@@ -63,6 +63,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	private $_attributes=array();
 	
+	private $_oldAttributes=array();
+	
 	private $_debugSql=true;
 
 	/**
@@ -107,14 +109,34 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$pk = $this->pk;
 		
+		$this->_setOldAttributes();		
+		
 		$this->setIsNew(empty($pk));
 		$this->init();
+	}
+	
+	/**
+	 * Save original attributes so we can check the modifications later.
+	 */
+	private function _setOldAttributes(){
+		$this->_oldAttributes = $this->_attributes;
+	}
+	
+	
+	/**
+	 * Get's the attribute value of this model as it is saved in the database.
+	 * 
+	 * @param string $name Attribute name
+	 * @return string Database value
+	 */
+	public function getOldAttribute($name){
+		return $this->_oldAttributes[$name];
 	}
 	
 	
 	/**
 	 * Returns the static model of the specified AR class.
-	 * @return Course the static model class
+	 * @return GO_Base_Db_ActiveRecord the static model class
 	 */
 	public static function model()
 	{
@@ -206,6 +228,25 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return $ret;
 	}
 	
+	/**
+	 * Makes an attribute unique in the table by adding a number behind the name.
+	 * eg. Name becomes Name (1) if it already exists.
+	 * 
+	 * @param String $attributeName 
+	 */
+	public function makeAttributeUnique($attributeName){
+		$x = 1;
+		
+		$value = $this->$attributeName;
+		
+		while($this->findSingleByAttribute($attributeName, $value))
+		{			
+			$value = $value.' ('.$x.')';
+			$x++;
+		}
+		$this->$attributeName=$value;
+	}
+	
 	private $_permissionLevel;
 	
 	private $_acl_id;
@@ -267,6 +308,22 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return md5(serialize($params).$this->className());
 	}
 	
+	
+	public function findSingleByAttribute($attributeName, $value, $findParams=array()){
+		
+		$params = array_merge(array(
+				"by"=>array(array($attributeName,$value,'=')),
+				"ignoreAcl"=>true,
+				"limit"=>1
+		), $findParams);		
+				
+		$stmt = $this->find($params);
+		
+		$model = $stmt->fetch();
+		
+		return $model;		
+	}
+	
 
 	/**
 	 * Finds model objects
@@ -285,7 +342,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 *  "ignoreAcl"=>true,
 	 * 
 	 *  searchQuery=>"String",
-	 *  joinCustomFields=>true
+	 *  joinCustomFields=>false
 	 * };
 	 * 
 	 * 
@@ -743,7 +800,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 	public function validate(){
 		foreach($this->_columns as $field=>$attributes){
-			if(!empty($attributes['required']) && !isset($this->_attributes[$field])){
+			if(!empty($attributes['required']) && empty($this->_attributes[$field])){
 				throw new Exception($field.' is required');
 			}elseif(!empty($attributes['length']) && strlen($this->_attributes[$field])>$attributes['length'])
 			{
@@ -769,7 +826,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!$this->_checkPermissionLevel(GO_SECURITY::WRITE_PERMISSION))
 			throw new AccessDeniedException();
 				
-		if($this->beforeSave() && $this->validate()){		
+		if($this->validate()){		
 		
 			/*
 			 * Set some common column values
@@ -797,6 +854,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					//generate acl id
 					$this->{$this->aclField}=GO::security()->get_new_acl($this->tableName);
 				}				
+				
+				if(!$this->beforeSave())
+					return false;				
 
 				$this->_dbInsert();
 				
@@ -807,6 +867,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					return false;
 			}else
 			{
+				if(!$this->beforeSave())
+					return false;
+				
+				
 				if(!$this->_dbUpdate())
 					return false;
 			}
@@ -821,6 +885,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			
 			$this->_cacheSearchRecord();
+			
+			$this->_setOldAttributes();
 			
 			return true;
 			
@@ -985,6 +1051,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 	}
 	
+	protected function beforeDelete(){
+		return true;
+	}
+	protected function afterDelete(){
+		return true;
+	}
+	
 	/**
 	 * Delete's the model from the database
 	 * @return PDOStatement 
@@ -993,6 +1066,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		if(!$this->_checkPermissionLevel(GO_SECURITY::DELETE_PERMISSION))
 						throw new AccessDeniedException ();
+		
+		
+		if(!$this->beforeDelete())
+				return false;
 		
 		$sql = "DELETE FROM `".$this->tableName."` WHERE ";
 		$sql = $this->_appendPkSQL($sql);
@@ -1013,8 +1090,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($this->aclField && !$this->joinAclField){
 			GO::security()->delete_acl($this->{$this->aclField});
 		}	
-		
-		return $success;			
+
+		return $this->afterDelete();			
 	}
 	
 	/**
@@ -1072,6 +1149,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function __set($name,$value)
 	{
 		$this->setAttribute($name,$value);
+	}
+	
+	public function __isset($name){
+		$var = $this->$name;
+		return isset($var);
 	}
 	
 	/**

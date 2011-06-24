@@ -12,7 +12,16 @@ class GO_Notes_NotesModule extends GO_Base_Model_Module{
 	 * is created for this user.
 	 * 
 	 */
-	public function initUser($userId){
+	public function initUser($userId){		
 		
+		$category = GO_Notes_Model_Category::model()->findSingleByAttribute('user_id', $userId);
+		if (!$category){
+			$category = GO_Notes_Model_Category::model();
+			
+			$category->user_id=GO::user()->id;
+			$category->name=GO::user()->name;
+			$category->makeAttributeUnique('name');
+			$category->save();
+		}		
 	}
 }

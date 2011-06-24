@@ -83,7 +83,7 @@ class GO{
 	 * @return GO_Base_Model_User The logged in user model
 	 */
 	public static function user(){
-		return new GO_Base_Model_User($_SESSION['GO_SESSION']['user_id']);
+		return GO_Base_Model_User::model()->findByPk($_SESSION['GO_SESSION']['user_id']);
 	}
 
 	/**

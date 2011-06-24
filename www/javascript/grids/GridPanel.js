@@ -106,9 +106,8 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		this.loadMask=true;
 	
 		if(!this.sm)
-			this.sm=new Ext.grid.RowSelectionModel();
-
-  
+			this.sm=this.selModel=new Ext.grid.RowSelectionModel();
+	
 		if(this.standardTbar){
 			this.tbar = this.tbar ? this.tbar : [];
 
@@ -136,8 +135,8 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 			}));
 		}
 		
-		GO.grid.GridPanel.superclass.initComponent.call(this);
 		
+		GO.grid.GridPanel.superclass.initComponent.call(this);
 		
 		//create a delayed rowselect event so that when a user repeatedly presses the
 		//up and down button it will only load if it stays on the same record for 400ms
