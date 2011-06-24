@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TODO
  * 
@@ -6,51 +7,87 @@
  * The default_scripts.inc.php file is ugly and bad design. Instead all init
  * views in modules should register client scripts and css files.
  */
-class GO_Controller_Core extends GO_Base_Controller_AbstractController{
-	
-	protected $defaultAction='Init';
-	
-	protected function actionInit(){
-		
+class GO_Controller_Core extends GO_Base_Controller_AbstractController {
+
+	protected $defaultAction = 'Init';
+
+	protected function actionInit() {
+
 		GO_Base_Observable::cacheListeners();
-		
-		GO::modules()->callModuleMethod('initUser', array(GO::security()->user_id));
-		
+
+		if (GO::security()->logged_in())
+			GO::modules()->callModuleMethod('initUser', array(GO::security()->user_id));
+
+		//$config_file = $GO_CONFIG->get_config_file();
+		if (empty(GO::config()->db_user)) {
+			header('Location: install/');
+			exit();
+		}
+
+		//Redirect to correct login url if a force_login_url is set. Useful to force ssl
+		if (GO::config()->force_login_url && strpos(GO::config()->full_url, GO::config()->force_login_url) === false) {
+			unset($_SESSION['GO_SESSION']['full_url']);
+			header('Location: ' . GO::config()->force_login_url);
+			exit();
+		}
+
+		$mtime = GO::config()->get_setting('upgrade_mtime');
+
+		if ($mtime != GO::config()->mtime) {
+			
+			global $lang;
+			
+			if (GO::security()->logged_in())
+				GO::security()->logout();
+
+			echo '<html><head><style>body{font-family:arial;}</style></head><body>';
+			echo '<h1>' . $lang['common']['running_sys_upgrade'] . '</h1><p>' . $lang['common']['sys_upgrade_text'] . '</p>';
+			require($GO_CONFIG->root_path . 'install/upgrade.php');
+			echo '<a href="#" onclick="document.location.reload();">' . $lang['common']['click_here_to_contine'] . '</a>';
+			echo '</body></html>';
+			exit();
+		}
+
+
+//will do autologin here before theme is loaded.
+		try {
+			GO::security()->logged_in();
+		} catch (Exception $e) {
+			
+		}
+
 		$this->render('init');
 	}
-	
-	protected function actionLogout(){
-		GO::security()->logout();	
-		if(isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1')
-		{
+
+	protected function actionLogout() {
+		GO::security()->logout();
+		if (isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN'] == '1') {
 			?>
 			<script type="text/javascript">
-			window.close();
+				window.close();
 			</script>
 			<?php
+
 			exit();
-		}else
-		{
-			header('Location: '.GO::config()->host);
+		} else {
+			header('Location: ' . GO::config()->host);
 			exit();
 		}
 	}
-	
+
 	/**
 	 * Todo replace compress.php with this action
 	 */
-	protected function actionCompress(){
+	protected function actionCompress() {
 		
 	}
-	
-	
-	private $clientScripts=array();
-	
-	protected function registerClientScript($url, $type='url'){
-		$this->clientScripts[]=array($type, $url);
+
+	private $clientScripts = array();
+
+	protected function registerClientScript($url, $type='url') {
+		$this->clientScripts[] = array($type, $url);
 	}
-	
-		
+
 	private function replaceUrl($css, $baseurl) {
 		return preg_replace('/url[\s]*\(([^\)]*)\)/ieU', "self::replaceUrlCallback('$1', \$baseurl)", $css);
 	}
@@ -58,24 +95,23 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController{
 	public static function replaceUrlCallback($url, $baseurl) {
 		return 'url(' . $baseurl . trim(stripslashes($url), '\'" ') . ')';
 	}
-	
-	function loadModuleStylesheets($derrived_theme=false){
+
+	function loadModuleStylesheets($derrived_theme=false) {
 		global $GO_MODULES;
 
-		foreach(GO::modules()->getAll() as $module)
-		{
-			if(file_exists($module->path.'themes/Default/style.css')){
-				$this->registerCssFile($module->path.'themes/Default/style.css');
+		foreach (GO::modules()->getAll() as $module) {
+			if (file_exists($module->path . 'themes/Default/style.css')) {
+				$this->registerCssFile($module->path . 'themes/Default/style.css');
 			}
 
-			if(GO::view()!='Default'){
-				
+			if (GO::view() != 'Default') {
+
 				//todo
-				if($derrived_theme && file_exists($module['path'].'themes/'.$derrived_theme.'/style.css')){
-					$this->registerCssFile($module['path'].'themes/'.$derrived_theme.'/style.css');
+				if ($derrived_theme && file_exists($module['path'] . 'themes/' . $derrived_theme . '/style.css')) {
+					$this->registerCssFile($module['path'] . 'themes/' . $derrived_theme . '/style.css');
 				}
-				if(file_exists($module['path'].'themes/'.$this->theme.'/style.css')){
-					$this->registerCssFile('themes/'.$this->theme.'/style.css');
+				if (file_exists($module['path'] . 'themes/' . $this->theme . '/style.css')) {
+					$this->registerCssFile('themes/' . $this->theme . '/style.css');
 				}
 			}
 		}
@@ -139,4 +175,5 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController{
 		$cssurl = GO::config()->host . 'compress.php?file=' . basename($relpath);
 		echo '<link href="' . $cssurl . '" type="text/css" rel="stylesheet" />';
 	}
+
 }

@@ -22,6 +22,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	const BELONGS_TO=1;	
 	const HAS_MANY=2;
+	const HAS_ONE=3;
 	
 	/**
 	 * The database connection of this record
