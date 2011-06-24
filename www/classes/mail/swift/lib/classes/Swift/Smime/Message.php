@@ -156,6 +156,9 @@ class Swift_Smime_Message extends Swift_Message
 					throw new Exception('Could not read tempout file');
 
 				while($line = fgets($fp)){			
+					//fix header name bug in php
+					$line = str_replace('application/x-pkcs7','application/pkcs7',$line);
+					
 					file_put_contents($this->tempin, $line, FILE_APPEND);
 				}
 				fclose($fp);			
@@ -218,11 +221,7 @@ class Swift_Smime_Message extends Swift_Message
 		if(!$fp)
 			throw new Exception('Could not read tempout file');
 			
-		while($line = fgets($fp)){				
-			
-			//fix header name bug in php
-			$line = str_replace('application/x-pkcs7','application/pkcs7',$line);
-			
+		while($line = fgets($fp)){			
 			$is->write($line);
 		}
 		fclose($fp);	
