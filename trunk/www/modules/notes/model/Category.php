@@ -32,18 +32,29 @@
 		'id'=>array('type'=>PDO::PARAM_INT),
 		'user_id'=>array('type'=>PDO::PARAM_INT),
 		'name'=>array('type'=>PDO::PARAM_STR,'required'=>true,'length'=>100),
-		'acl_id'=>array('type'=>PDO::PARAM_INT)
+		'acl_id'=>array('type'=>PDO::PARAM_INT),
+		'files_folder_id' => array('type' => PDO::PARAM_INT) //For implemting a file folder
 	);
 	
-	public function getFilesFolder(){
-		$path = 'notes/'.File::strip_invalid_chars($this->name);
-		
-		require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
-		$files = new files();			
-
-		if($folder=$files->create_unique_folder($path))
-		{
-			return $folder['id'];
+	protected function afterDelete() {		
+		if(isset(GO::modules()->files)){
+			GO_Files_Controller_Item::deleteFilesFolder($this->files_folder_id);	
+		}		
+		return parent::afterDelete();
+	}
+	
+	protected function beforeSave(){
+		if (empty($this->files_folder_id) && isset(GO::modules()->files)) {
+			$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this, $this->_buildFilesPath());
 		}
+		return parent::beforeSave();
+	}
+	
+	/**
+	 * The files module will use this function.
+	 */
+	private function _buildFilesPath() {
+
+		return 'notes/' . File::strip_invalid_chars($this->name);
 	}
 }

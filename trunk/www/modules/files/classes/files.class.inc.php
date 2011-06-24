@@ -1349,9 +1349,19 @@ class files extends db {
 
 	function move_by_paths($sourcepath, $destpath) {
 		global $GO_CONFIG;
+		
+		go_debug("move_by_paths($sourcepath, $destpath)");
+		
+		go_debug(GO::config()->file_storage_path.$sourcepath);
+		
 
 		$destination = dirname($destpath);
+		
+		go_debug(GO::config()->file_storage_path.$destination);
 		if(file_exists(GO::config()->file_storage_path.$sourcepath) && file_exists(GO::config()->file_storage_path.$destination)) {
+			
+			go_debug(GO::config()->file_storage_path.$destpath);
+			
 			$fs = new filesystem();
 			$fs->move(GO::config()->file_storage_path.$sourcepath, GO::config()->file_storage_path.$destpath);
 

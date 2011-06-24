@@ -14,6 +14,8 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController{
 		
 		GO_Base_Observable::cacheListeners();
 		
+		GO::modules()->callModuleMethod('initUser', array(GO::security()->user_id));
+		
 		$this->render('init');
 	}
 	

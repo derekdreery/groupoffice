@@ -91,6 +91,16 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 
 		return parent::afterSave();
 	}
+	
+	protected function afterDelete() {
+		
+		if(isset(GO::modules()->files)){
+			GO_Files_Controller_Item::deleteFilesFolder($this->files_folder_id);	
+		}
+		
+		return parent::afterDelete();
+	}
+	
 
 	/**
 	 * The files module will use this function.

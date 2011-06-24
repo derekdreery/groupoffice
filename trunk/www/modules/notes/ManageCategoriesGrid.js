@@ -69,7 +69,7 @@ GO.notes.ManageCategoriesGrid = Ext.extend(GO.grid.GridPanel,{
 		this.categoryDialog.show(id);	  
 	},
 	deleteSelected : function(){
-		GO.notes.ManageCategoriesGrid.superclass.deleteSelected.call();
+		GO.notes.ManageCategoriesGrid.superclass.deleteSelected.call(this);
 		this.changed=true;
 	}
 });
