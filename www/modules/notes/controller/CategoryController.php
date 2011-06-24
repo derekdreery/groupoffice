@@ -9,15 +9,6 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 		
 		$this->selectedCategories = GO::config()->get_setting('notes_categories_filter', GO::security()->user_id);
 		$this->selectedCategories  = $this->selectedCategories ? explode(',',$this->selectedCategories) : array();
-
-		if(!count($this->selectedCategories))
-		{			
-//			$notes->get_category();
-//			$default_category_id = $notes->f('id');
-//
-//			$categories[] = $default_category_id;
-//			GO::config()->save_setting('notes_categories_filter',$default_category_id, GO::security()->user_id);
-		}
 		
 		return array();
 	}

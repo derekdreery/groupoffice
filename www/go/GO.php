@@ -110,6 +110,10 @@ class GO{
 		return self::$_modelCache;
 	}
 
+	/**
+	 *
+	 * @return GO_CONFIG
+	 */
 	public static function config() {
 		if (!isset(self::$_config)) {
 			self::$_config = new GO_CONFIG();
@@ -117,6 +121,11 @@ class GO{
 		return self::$_config;
 	}
 
+	/**
+	 *
+	 * @global type $lang
+	 * @return GO_LANGUAGE 
+	 */
 	public static function language() {
 		global $lang;
 		if (!isset(self::$_language)) {
@@ -125,6 +134,10 @@ class GO{
 		return self::$_language;
 	}
 
+	/**
+	 *
+	 * @return GO_EVENTS 
+	 */
 	public static function events() {
 		if (!isset(self::$_events)) {
 			self::$_events = new GO_EVENTS();
@@ -139,6 +152,10 @@ class GO{
 		return self::$_theme;
 	}
 	
+	/**
+	 *
+	 * @return GO_SECURITY
+	 */
 	public static function security() {
 		if (!isset(self::$_security)) {
 			self::$_security = new GO_SECURITY();
