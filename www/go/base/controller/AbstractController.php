@@ -124,23 +124,30 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @param string $action 
 	 */
 	public function run($action){
-		
-		if(!$this->checkPermissions($action)){
-			throw new AccessDeniedException();
+
+		try {
+			if(!$this->checkPermissions($action)){
+				throw new AccessDeniedException();
+			}
+
+			if(empty($action))
+				$action=$this->defaultAction;
+			else
+				$action=ucfirst($action);
+
+			$methodName='action'.$action;
+
+			$method=new ReflectionMethod($this, $methodName);
+			if($method->getNumberOfParameters()>0)
+				$this->runWithParams($method, $_REQUEST);
+			else
+				$this->$methodName();
+		} catch (Exception $e) {
+			$response['success'] = false;
+			$response['feedback'] = !empty($response['feedback']) ? $response['feedback'] : '';
+			$response['feedback'] .= "\r\n\r\n".$e->getMessage();
+			echo json_encode($response);exit();
 		}
-		
-		if(empty($action))
-			$action=$this->defaultAction;
-		else
-			$action=ucfirst($action);
-
-		$methodName='action'.$action;
-
-		$method=new ReflectionMethod($this, $methodName);
-		if($method->getNumberOfParameters()>0)
-			$this->runWithParams($method, $_REQUEST);
-		else
-			$this->$methodName();
 	}
 	
 	/**
