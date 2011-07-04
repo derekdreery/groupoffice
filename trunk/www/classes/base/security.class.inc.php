@@ -744,7 +744,7 @@ class GO_SECURITY extends db {
 	 * @param	int			$acl_id	The ACL to check
 	 * @param bool 		$groups_only only check user groups and no individual access
 	 * @access private
-	 * @return bool	 True on success
+	 * @return Int	 permission level on success, false otherwise
 	 */
 
 	function has_permission($user_id, $acl_id, $groups_only=false) {
