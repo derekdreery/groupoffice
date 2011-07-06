@@ -131,23 +131,55 @@ GO.users.LookAndFeelPanel = function(config)
 			forceSelection: true,
 			value: GO.settings.sort_name
 		});
-		
+
+    this.cbMuteReminderSound = new Ext.form.Checkbox({
+      hideLabel:true,
+      boxLabel: GO.users.lang.muteReminderSound,
+			name: 'mute_reminder_sound'
+    });
+
+    this.cbMuteNewMailSound = new Ext.form.Checkbox({
+      hideLabel: true,
+			boxLabel: GO.users.lang.muteNewMailSound,
+			name: 'mute_new_mail_sound'
+    });
+
 		config.items.push({
 			xtype:'checkbox',
 			hideLabel: true,
 			boxLabel: GO.users.lang.muteSound,
-			name: 'mute_sound'
-		},{
-			xtype:'checkbox',
-			hideLabel: true,
-			boxLabel: GO.users.lang.muteReminderSound,
-			name: 'mute_reminder_sound'
-		},{
-			xtype:'checkbox',
-			hideLabel: true,
-			boxLabel: GO.users.lang.muteNewMailSound,
-			name: 'mute_new_mail_sound'
-		},{
+			name: 'mute_sound',
+      listeners:{
+        check: function(cb, val){
+          if(val)
+          {
+            this.cbMuteNewMailSound.disable();
+            this.cbMuteReminderSound.disable();
+          }
+          else
+          {
+            this.cbMuteNewMailSound.enable();
+            this.cbMuteReminderSound.enable();
+          }
+        },scope:this
+      }
+		},
+    this.cbMuteReminderSound,
+//    {
+//			xtype:'checkbox',
+//			hideLabel: true,
+//			boxLabel: GO.users.lang.muteReminderSound,
+//			name: 'mute_reminder_sound'
+//		}
+//    ,{
+//			xtype:'checkbox',
+//			hideLabel: true,
+//			boxLabel: GO.users.lang.muteNewMailSound,
+//			name: 'mute_new_mail_sound'
+//		},
+
+    this.cbMuteNewMailSound,
+    {
 			xtype:'checkbox',
 			hideLabel: true,
 			boxLabel: GO.users.lang.popupNotification,
