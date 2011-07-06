@@ -1767,7 +1767,12 @@ GO.mainLayout.onReady(function(){
 
 			if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
 			{
-				data.alarm=true;
+        // Check for muting of new mail sound
+        if(GO.util.empty(GO.settings.mute_new_mail_sound))
+          data.alarm=true;
+        else
+          data.alarm=false;
+        
 				data.reminderText+='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', totalUnseen)+'</p>';
 
 				if(!ep || !ep.isVisible())

@@ -408,7 +408,11 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 
 										this.checkerWindow.show();
 										this.reminderIcon.setDisplayed(true);
-										data.alarm=true;
+
+                    if(GO.util.empty(GO.settings.mute_reminder_sound))
+                      data.alarm=true;
+                    else
+                      data.alarm=false;
 									}									
 								}else
 								{
