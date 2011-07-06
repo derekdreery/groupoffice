@@ -146,3 +146,5 @@ GO.calendar.lang.publishICS='Publish iCalendar file of last month and future eve
 GO.calendar.lang.addTimeRegistration='Import into timeregistration';
 
 GO.calendar.lang.showNotBusy='Don\'t show new reservations as busy';
+
+GO.calendar.lang.sendEmailParticipants = 'Create email for participants';

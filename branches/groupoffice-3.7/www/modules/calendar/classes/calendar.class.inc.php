@@ -723,6 +723,18 @@ class calendar extends db {
 		return intval($r['c']);
 	}
 
+	function get_participant_user($participant_id) {
+		$sql = "SELECT u.* FROM go_users u ".
+			"INNER JOIN cal_participants p ON p.user_id=u.id ".
+			"WHERE p.id='".intval($participant_id)."' ";
+		$this->query($sql);
+		if ($user = $this->next_record()) {
+			return $user;
+		} else {
+			return false;
+		}
+	}
+
 	function set_default_calendar($user_id, $calendar_id) {
 		$sql = "UPDATE cal_settings SET default_cal_id='".$this->escape($calendar_id)."' WHERE user_id='".intval($user_id)."'";
 		return $this->query($sql);
