@@ -866,22 +866,7 @@ GO.email.EmailComposer = function(config) {
 					this.addressbookDialog = new GO.email.AddressbookDialog();
 					this.addressbookDialog.on('addrecipients',
 						function(fieldName, selections) {
-							var field = this.formPanel.form.findField(fieldName);
-										
-							var currentVal = field.getValue();
-							if (currentVal != '' && currentVal.substring(currentVal.length-1,currentVal.length) != ',' && currentVal.substring(currentVal.length-2,currentVal.length-1)!=',')
-								currentVal += ', ';
-
-							currentVal += selections;
-
-							field.setValue(currentVal);
-
-							if (fieldName == 'cc') {
-								this.ccFieldCheck.setChecked(true);
-							} else if (fieldName == 'bcc') {
-								this.bccFieldCheck.setChecked(true);
-							}
-
+							this.addRecipients(fieldName,selections);
 						}, this);
 				}
 
@@ -1112,6 +1097,30 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		{
 			this.bccCombo.onResize();
 		}
+	},
+
+	addRecipients : function(fieldName,selections) {
+		var field = this.formPanel.form.findField(fieldName);
+
+		var currentVal = field.getValue();
+		if (currentVal != '' && currentVal.substring(currentVal.length-1,currentVal.length) != ',' && currentVal.substring(currentVal.length-2,currentVal.length-1)!=',')
+			currentVal += ', ';
+
+		currentVal += selections;
+
+		field.setValue(currentVal);
+
+		if (fieldName == 'cc') {
+			this.ccFieldCheck.setChecked(true);
+		} else if (fieldName == 'bcc') {
+			this.bccFieldCheck.setChecked(true);
+		}
+	},
+
+	setRecipients : function(fieldName,selections) {
+		var field = this.formPanel.form.findField(fieldName);
+		field.setValue(selections);
+		field.store.load();
 	},
 
 	show : function(config) {
