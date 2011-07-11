@@ -98,6 +98,7 @@ class GO_USERS extends db
     $_SESSION['GO_SESSION']['mute_reminder_sound'] = $userdata['mute_reminder_sound'];
     $_SESSION['GO_SESSION']['mute_new_mail_sound'] = $userdata['mute_new_mail_sound'];
 		$_SESSION['GO_SESSION']['popup_reminders'] = $userdata['popup_reminders'];
+    $_SESSION['GO_SESSION']['show_smilies'] = $userdata['show_smilies'];
 		$_SESSION['GO_SESSION']['first_weekday'] = $userdata['first_weekday'];
 		$_SESSION['GO_SESSION']['sort_name'] = !empty($userdata['sort_name']) ? $userdata['sort_name'] : 'last_name';
 

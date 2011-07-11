@@ -358,6 +358,7 @@ CREATE TABLE IF NOT EXISTS `go_users` (
   `mute_sound` enum('0','1') NOT NULL,
   `mute_reminder_sound` enum('0','1') NOT NULL,
   `mute_new_mail_sound` enum('0','1') NOT NULL,
+  `show_smilies` enum('0','1') NOT NULL default '1',
   `list_separator` char(3) NOT NULL default ';',
   `text_separator` char(3) NOT NULL default '"',
   `files_folder_id` INT NOT NULL,

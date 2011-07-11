@@ -189,6 +189,11 @@ GO.users.LookAndFeelPanel = function(config)
 			hideLabel: true,
 			boxLabel: GO.users.lang.mailReminders,
 			name: 'mail_reminders'
+		},{
+			xtype:'checkbox',
+			hideLabel: true,
+			boxLabel: GO.users.lang.showSmilies,
+			name: 'show_smilies'
 		});
 	
 	

@@ -791,8 +791,80 @@ class String {
 		$text = str_replace("{lt}", "<", $text);
 		$text = str_replace("{gt}", ">", $text);
 
-		return ($text);
+    // Replace emoticons
+    $text = String::text_replace_emoticons($text);
+
+    return ($text);
 	}
+
+
+  /**
+   * Convert text to emoticons
+   *
+   * @param string $string String without emoticons
+   * @return string String with emoticons
+   */
+  public static function text_replace_emoticons($string)
+  {
+    // Check for smilies to be enabled by the user (settings->Look & Feel-> Show Smilies)
+    if(!empty($_SESSION['GO_SESSION']['show_smilies']))
+    {
+
+      global $GO_CONFIG;
+
+      $emoticons = array(
+          ":@"=>"angry.gif",
+          ":d"=>"bigsmile.gif",
+          ":brb"=>"brb.gif",
+          ":clock"=>"clock.gif",
+          ":coffee"=>"coffee.gif",
+          ":pc"=>"computer.gif",
+          ":s"=>"confused.gif",
+          ":'("=>"cry.gif",
+          ":'|"=>"dissapointed.gif",
+          ":^)"=>"dontknow.gif",
+          ":mail"=>"email.gif",
+          "+o("=>"ill.gif",
+          ":kiss("=>"kiss.gif",
+          ":love"=>"love.gif",
+          ":mobile"=>"mobile.gif",
+          ":money"=>"money.gif",
+          ":yes"=>"notok.gif",
+          ":no"=>"ok.gif",
+          "<:o"=>"party.gif",
+          ":present"=>"present.gif",
+          ":("=>"sad.gif",
+          "^o"=>"sarcasm.gif",
+          ":$"=>"shy.gif",
+          "|-)"=>"sleepy.gif",
+          ":)"=>"smile.gif",
+          ":*"=>"star.gif",
+          ":sunglasses"=>"sunglasses.gif",
+          ":o"=>"surprised.gif",
+          ":phone"=>"telephone.gif",
+          "*-)"=>"thinking.gif",
+          ":p"=>"tongue.gif",
+          ";)"=>"wink.gif",
+          );
+
+      $keys = array();
+      $replace = array();
+      $i = 0;
+      foreach($emoticons as $emoticon=>$img)
+      {
+        $keys[$i]=$emoticon;
+
+        $imgpath = $GO_CONFIG->full_url.'themes/'.$GO_CONFIG->theme.'/images/emoticons/normal/'.$img;
+        $imgstring = '<img src="'.$imgpath.'" alt="'.$emoticon.'">';
+        $replace[$i]=$imgstring;
+        $i++;
+      }
+
+      $string = str_replace($keys, $replace, $string);
+    }
+    
+    return $string;
+  }
 
 	function html_to_text($text, $link_list=true){
 		global $GO_CONFIG;
@@ -879,6 +951,9 @@ class String {
 				$html = str_replace($tag[0],'z-index:8000;',$html);
 			}
 		}
+
+    // Replace emoticons
+    $html = String::text_replace_emoticons($html);
 
 		return $html;
 	}

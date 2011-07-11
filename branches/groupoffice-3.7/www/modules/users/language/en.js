@@ -113,3 +113,5 @@ GO.users.lang.popupNotification='Show a popup window when a reminder becomes act
 
 GO.users.lang.muteNewMailSound='Mute new mail sounds';
 GO.users.lang.muteReminderSound='Mute reminder sounds';
+
+GO.users.lang.showSmilies='Show smilies';
