@@ -164,6 +164,7 @@ Ext.extend(GO.PersonalSettingsDialog, GO.Window,{
         GO.settings.mute_reminder_sound=this.formPanel.form.findField('mute_reminder_sound').getValue();
         GO.settings.mute_new_mail_sound=this.formPanel.form.findField('mute_new_mail_sound').getValue();
 				GO.settings.popup_reminders=this.formPanel.form.findField('popup_reminders').getValue();
+        GO.settings.show_smilies=this.formPanel.form.findField('show_smilies').getValue();
 
 				document.location=GO.settings.config.host;
 				

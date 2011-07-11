@@ -225,6 +225,7 @@ class users extends db
 			$user['mute_sound'] = isset($_POST["mute_sound"]) ? '1' : '0';
       $user['mute_reminder_sound'] = isset($_POST["mute_reminder_sound"]) ? '1' : '0';
       $user['mute_new_mail_sound'] = isset($_POST["mute_new_mail_sound"]) ? '1' : '0';
+      $user['show_smilies'] = isset($_POST["show_smilies"]) ? '1' : '0';
       $user['mute_sound'] = isset($_POST["mute_sound"]) ? '1' : '0';
 			$user['mail_reminders'] = isset($_POST["mail_reminders"]) ? '1' : '0';
 			$user['popup_reminders'] = isset($_POST["popup_reminders"]) ? '1' : '0';

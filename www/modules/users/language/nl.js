@@ -101,3 +101,5 @@ GO.users.lang.popupNotification='Toon een popup scherm wanneer een herinnering a
 
 GO.users.lang.muteNewMailSound='Demp geluid bij inkomende mail';
 GO.users.lang.muteReminderSound='Demp geluid bij herinneringen';
+
+GO.users.lang.showSmilies='Toon smilies';
