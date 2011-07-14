@@ -3215,8 +3215,10 @@ class calendar extends db {
 	}
 
 
-
-	function send_invitation($event, $calendar, $insert=true){
+/*
+ * (optional)param $new_added = array of participant id's that are newly added to this event.
+ */
+	function send_invitation($event, $calendar, $insert=true,$new_added = false){
 		global $GO_CONFIG, $GO_MODULES, $lang, $GO_LANGUAGE, $GO_SECURITY;
 		
 		go_debug("send_invitation");
@@ -3240,7 +3242,11 @@ class calendar extends db {
 			//don't send invitation to the user that is doing this and don't send
 			//it to the user of the calendar in which this event is created.
 			if($this->f('status') !=1 || ($this->f('email')!=$_SESSION['GO_SESSION']['email'] && $calendar['user_id']!=$this->f('user_id'))) {
-				$participants[] = $RFC822->write_address($this->f('name'), $this->f('email'));
+
+        // Also don't send invitation to users that allready had one.
+        // TODO: find out which ones are new users
+        if($new_added === false || in_array($this->f('id'), $new_added))
+          $participants[] = $RFC822->write_address($this->f('name'), $this->f('email'));
 			}
 		}
 
