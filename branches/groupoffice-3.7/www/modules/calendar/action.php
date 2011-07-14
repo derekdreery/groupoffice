@@ -680,6 +680,8 @@ try {
 			if(!empty($_POST['participants'])) {
 
 				$ids=array();
+        $newAddedIds=array();
+        
 				$participants = json_decode($_POST['participants'], true);
 				foreach($participants as $p) {
 					$participant['event_id']=$event_id;
@@ -712,7 +714,12 @@ try {
 								}
 							}
 						}
-						$ids[]=$cal->add_participant($participant);
+            
+            $participant_id = $cal->add_participant($participant);
+            
+						$ids[]= $participant_id;
+            $newAddedIds[]= $participant_id;
+            
 					}else {
 						$ids[]=$p['id'];
 
@@ -758,7 +765,11 @@ try {
 			}
 
 			if(!empty($_POST['send_invitation'])) {
-				$cal->send_invitation($event, $calendar, true);
+        // Check if there are newly added participants
+        if(!empty($newAddedIds))
+          $cal->send_invitation($event, $calendar, true, $newAddedIds);
+        else
+          $cal->send_invitation($event, $calendar, true);
 			}
 
 			if($calendar['group_id'] > 1)
