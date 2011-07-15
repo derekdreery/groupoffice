@@ -300,13 +300,6 @@ try {
 			$folder = $cms->get_folder($folder_id);
 			$site = $cms->get_site($folder['site_id']);
 
-			$file['permalink']=$cms->build_path($folder['id']).'/'.$file['name'];
-			$file['permalink']=substr($file['permalink'],5);
-			$file['permalink']=str_replace('^',' ',$file['permalink']);
-			$file['permalink']=preg_replace('/[^0-9^a-z^A-Z^\s^\/]/','',$file['permalink']);
-			$file['permalink']=preg_replace('/[\s]+/',' ',$file['permalink']);
-			$file['permalink']=strtolower(str_replace(' ','-',$file['permalink']));
-
 			if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $site['acl_write'])) {
 				throw new AccessDeniedException();
 			}

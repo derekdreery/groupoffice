@@ -39,7 +39,6 @@ CREATE TABLE IF NOT EXISTS `cms_files` (
   `files_folder_id` int(11) NOT NULL,
   `show_until` int(11) NOT NULL,
 	`sort_time` int(11) NOT NULL default '0',
-	`permalink` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `folder_id` (`folder_id`),
   KEY `name` (`name`),
