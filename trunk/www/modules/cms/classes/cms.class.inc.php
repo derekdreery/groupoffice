@@ -1311,6 +1311,15 @@ class cms extends db {
 						"user_id=$user_id AND site_id=$site_id");
 	}
 
+	public function to_permalink_style($str,$remove_first_count=false) {
+		if (!empty($remove_first_count))
+			$str=substr($str,$remove_first_count);
+		$str=str_replace('^',' ',$str);
+		$str=preg_replace('/[^0-9^a-z^A-Z^\s^\/]/','',$str);
+		$str=preg_replace('/[\s]+/',' ',$str);
+		return strtolower(str_replace(' ','-',$str));
+	}
+
 	private function get_XML_folder_tree(&$xmlwriter,$folder_id) {
 		$items = $this->get_items($folder_id);
 		foreach ($items as $k => $item) {
