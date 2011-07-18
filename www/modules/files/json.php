@@ -810,6 +810,19 @@ try {
 
 			$GO_EVENTS->fire_event('file_extension_and_path_known',array(&$files,$extension,$path,&$pdf_path,$file,$folder));
 
+
+      if(!empty($file['random_code']) && time()<$file['expire_time'])
+      {
+        $response['data']['expire_time']=Date::get_timestamp($file['expire_time'],false);
+        $response['data']['download_link']=$GO_MODULES->modules['files']['full_url'].'download.php?id='.$file['id'].'&random_code='.$file['random_code'];
+      }
+      else
+      {
+        $response['data']['expire_time']=null;
+        $response['data']['download_link']=null;
+      }
+
+      
 			$response['data']['path']=$pdf_path;
 			$response['data']['name']=File::strip_extension($file['name']);
 			$response['data']['ctime']=Date::get_timestamp(filectime($GO_CONFIG->file_storage_path.$path));

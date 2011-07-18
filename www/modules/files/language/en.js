@@ -45,3 +45,8 @@ GO.files.lang.newFolder = 'New folder';
 
 GO.files.lang.applyState = 'Apply the folder\'s display settings for everyone.';
 GO.files.lang.stateLocked = 'Folder display locked by owner/admin';
+
+GO.files.lang.strDownloadInactive = 'Download is not active!';
+GO.files.lang.strDownloadActive = 'Download is active till';
+GO.files.lang.strClickHere = 'Click here';
+
