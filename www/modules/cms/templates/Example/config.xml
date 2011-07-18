@@ -7,7 +7,9 @@
 	    <file name="image" field_label="Image" />
 	</type>
 	<type name="contact">
+		<input name="gerrit" field_label="Gerrit" />
 		<input name="addressbook" field_label="Addressbook" />
+		<input name="dekker" field_label="Decker" />
 	</type>
 	<type name="test"></type>
 
