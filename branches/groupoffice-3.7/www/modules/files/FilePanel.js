@@ -114,6 +114,16 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						'<td>{mtime}</td>'+						
 					'</tr>'+
 
+          '<tpl if="!GO.util.empty(expire_time)"><tr>'+
+            '<td>'+GO.files.lang.strDownloadActive+':</td>'+
+            '<td>{expire_time} (<a href="{download_link}">'+GO.files.lang.strClickHere+'</a>)</td>'+
+          '</tpl>'+
+
+//          '<tpl if="GO.util.empty(expire_time)"><tr>'+
+//            '<td colspan="2">'+GO.files.lang.strDownloadInactive+'</td>'+
+////            '<td>{expire_time} (<a href="{download_link}">'+GO.files.lang.strClickHere+'</a>)</td>'+
+//          '</tpl>'+
+
 					'<tpl if="!GO.util.empty(image_src)"><tr><td colspan="2">'+
 						'<img style="cursor:pointer;" src="{image_src}" onclick="javascript:GO.files.openFile(new Ext.data.Record({\'name\':\'{image_name}\',\'path\':\'{image_path}\',\'extension\':\'{image_extension}\',\'download_path\':\'{download_path}\'}));" />'+
 					'</td></tr></tpl>'+
