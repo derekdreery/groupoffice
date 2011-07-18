@@ -1311,4 +1311,113 @@ class cms extends db {
 						"user_id=$user_id AND site_id=$site_id");
 	}
 
+	private function get_XML_folder_tree(&$xmlwriter,$folder_id) {
+		$items = $this->get_items($folder_id);
+		foreach ($items as $k => $item) {
+			if ($item['fstype']=='folder') {
+				$xmlwriter->startElement('folder');
+				$xmlwriter->writeAttribute('id',$item['id']);
+				$xmlwriter->writeAttribute('name',$item['name']);
+				$xmlwriter->writeAttribute('disabled',$item['disabled']);
+				$xmlwriter->writeAttribute('parent_id',$item['parent_id']);
+				$xmlwriter->writeAttribute('priority',$item['priority']);
+				$xmlwriter->writeAttribute('ctime',$item['ctime']);
+				$xmlwriter->writeAttribute('mtime',$item['mtime']);
+				$xmlwriter->writeAttribute('acl',$item['acl']);
+				$xmlwriter->writeAttribute('site_id',$item['site_id']);
+				$xmlwriter->writeAttribute('default_template',$item['default_template']);
+				$xmlwriter->writeAttribute('type',$item['type']);
+				$xmlwriter->writeAttribute('feed',$item['feed']);
+					$xmlwriter->startElement('option_values');
+					$option_values = simplexml_load_string($item['option_values']);
+					if (isset($option_values->option)) {
+						foreach($option_values->option as $k=>$v) {
+							$attributes = $v->attributes();
+							$xmlwriter->writeAttribute($attributes[0],$attributes[1]);
+						}
+					}
+					$xmlwriter->endElement(); //option_values
+
+					$xmlwriter->startElement('contents');
+					$this->get_XML_folder_tree(&$xmlwriter,$item['id']);
+					$xmlwriter->endElement(); //contents
+				$xmlwriter->endElement(); //folder
+			} else {
+				$xmlwriter->startElement('file');
+				$xmlwriter->writeAttribute('id',$item['id']);
+				$xmlwriter->writeAttribute('name',$item['name']);
+				$xmlwriter->writeAttribute('folder_id',$item['folder_id']);
+				$xmlwriter->writeAttribute('size',$item['size']);
+				$xmlwriter->writeAttribute('priority',$item['priority']);
+				$xmlwriter->writeAttribute('ctime',$item['ctime']);
+				$xmlwriter->writeAttribute('mtime',$item['mtime']);
+				$xmlwriter->writeAttribute('content',$item['content']);
+				$xmlwriter->writeAttribute('auto_meta',$item['auto_meta']);
+				$xmlwriter->writeAttribute('title',$item['title']);
+				$xmlwriter->writeAttribute('description',$item['description']);
+				$xmlwriter->writeAttribute('keywords',$item['keywords']);
+					$xmlwriter->startElement('option_values');
+					$option_values = simplexml_load_string($item['option_values']);
+					if (isset($option_values->option)) {
+						foreach($option_values->option as $k=>$v) {
+							$attributes = $v->attributes();
+							$xmlwriter->writeAttribute($attributes[0],$attributes[1]);
+						}
+					}
+					$xmlwriter->endElement(); //option_values
+				$xmlwriter->writeAttribute('plugin',$item['plugin']);
+				$xmlwriter->writeAttribute('type',$item['type']);
+				$xmlwriter->writeAttribute('files_folder_id',$item['files_folder_id']);
+				$xmlwriter->writeAttribute('show_until',$item['show_until']);
+				$xmlwriter->writeAttribute('sort_time',$item['sort_time']);
+				$xmlwriter->endElement(); //file
+			}
+		}
+	}
+
+	public function get_XML_sitemap($site_id,$destination_file=false) {
+		$xmlwriter = new XMLWriter();
+		$xmlwriter->openMemory();
+		$xmlwriter->startDocument('1.0', 'UTF-8');
+			$site = $this->get_site($site_id);
+			$root_folder = $this->get_folder($site['root_folder_id']);
+			$xmlwriter->startElement('folder');
+				$xmlwriter->writeAttribute('id',$root_folder['id']);
+				$xmlwriter->writeAttribute('name',$root_folder['name']);
+				$xmlwriter->writeAttribute('disabled',$root_folder['disabled']);
+				$xmlwriter->writeAttribute('parent_id',$root_folder['parent_id']);
+				$xmlwriter->writeAttribute('priority',$root_folder['priority']);
+				$xmlwriter->writeAttribute('ctime',$root_folder['ctime']);
+				$xmlwriter->writeAttribute('mtime',$root_folder['mtime']);
+				$xmlwriter->writeAttribute('acl',$root_folder['acl']);
+				$xmlwriter->writeAttribute('site_id',$root_folder['site_id']);
+				$xmlwriter->writeAttribute('default_template',$root_folder['default_template']);
+				$xmlwriter->writeAttribute('type',$root_folder['type']);
+				$xmlwriter->writeAttribute('feed',$root_folder['feed']);
+					$xmlwriter->startElement('option_values');
+					$option_values = simplexml_load_string($root_folder['option_values']);
+					if (isset($option_values->option)) {
+						foreach($option_values->option as $k=>$v) {
+							$attributes = $v->attributes();
+							$xmlwriter->writeAttribute($attributes[0],$attributes[1]);
+						}
+					}
+					$xmlwriter->endElement(); //option_values
+				$xmlwriter->startElement('contents');
+				$this->get_XML_folder_tree(&$xmlwriter,$root_folder['id']);
+				$xmlwriter->endElement(); //contents
+			$xmlwriter->endElement(); //folder
+		$xmlwriter->endDocument();
+
+		if (!empty($destination_file)) {
+			if ($out = fopen($destination_file,'w')) {
+				fwrite($out,$xmlwriter->outputMemory());
+				fclose($out);
+			} else {
+				throw new Exception('Unable to open file '.$destination_file.' for the site map. Please notify the site administrator.');
+			}
+		} else {
+			return $xmlwriter->outputMemory();
+		}
+	}
 }
