@@ -47,3 +47,5 @@ $lang['files']['copyPasteToDownload'] = 'Click the secured link below or copy it
 $lang['files']['possibleUntil'] = 'possible until';
 
 $lang['files']['fileNotFound']='Sorry, the file you tried to download is not found.';
+$lang['files']['expired'] = 'Expired';
+$lang['files']['clickHere'] = 'Click here';
