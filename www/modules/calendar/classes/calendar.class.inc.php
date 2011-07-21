@@ -2086,7 +2086,7 @@ class calendar extends db {
 			$event['location'] = quoted_printable_decode($event['location']);
 		}
 
-		$event['status'] = isset($object['STATUS']['value']) ? $object['STATUS']['value'] : 'NEEDS-ACTION';
+		$event['status'] = isset($object['STATUS']['value']) ? $object['STATUS']['value'] : 'ACCEPTED';
 
 		$event['all_day_event'] = (isset($object['DTSTART']['params']['VALUE']) &&
 										strtoupper($object['DTSTART']['params']['VALUE']) == 'DATE') ? '1' : '0';

@@ -54,8 +54,10 @@ class go_ical extends calendar
 		$this->calendar_properties =
 			"VERSION:".$version.$this->line_break.
 			"PRODID:-//Intermesh//NONSGML Group-Office//EN".$this->line_break.
-			"CALSCALE:GREGORIAN".$this->line_break.
-			"METHOD:".$method.$this->line_break;
+			"CALSCALE:GREGORIAN".$this->line_break;
+		
+		if(!empty($method))
+			$this->calendar_properties .= "METHOD:".$method.$this->line_break;
 	}
 
 	function format_transition_hour($hour){		
