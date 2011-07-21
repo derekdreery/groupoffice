@@ -398,6 +398,7 @@ class templates extends db {
 			'id',
 			'comment',
 			'crn',
+			'vat_no',
 			'iban');
 		
 		
