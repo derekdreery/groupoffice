@@ -1,3 +1,5 @@
+- Caldav iphone status bug. Imported status defaults to accepted now. iphone doesn't like the status needs-action.
+
 23-06-2011 3.7.24
 - New config variable to set subject for sieve vacation messages.
 - Worked around php smime header bug.
