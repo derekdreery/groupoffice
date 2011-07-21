@@ -855,7 +855,7 @@ class String {
         $keys[$i]=$emoticon;
 
         $imgpath = $GO_CONFIG->full_url.'themes/'.$GO_CONFIG->theme.'/images/emoticons/normal/'.$img;
-        $imgstring = '<img src="'.$imgpath.'" alt="'.$emoticon.'">';
+        $imgstring = '<img src="'.$imgpath.'" alt="'.$emoticon.'" />';
         $replace[$i]=$imgstring;
         $i++;
       }
