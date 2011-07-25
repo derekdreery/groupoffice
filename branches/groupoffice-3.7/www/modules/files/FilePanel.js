@@ -114,9 +114,21 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						'<td>{mtime}</td>'+						
 					'</tr>'+
 
-          '<tpl if="!GO.util.empty(expire_time)"><tr>'+
-            '<td>'+GO.files.lang.strDownloadActive+':</td>'+
-            '<td>{expire_time} ({download_link})</td>'+
+          '<tpl if="!GO.util.empty(expire_time)">'+
+						'<tr>'+
+							'<td colspan="2" class="display-panel-heading">'+GO.files.lang.strDownloadActive+'</td>'+
+						'</tr>'+
+						'<tr>'+
+            '<td style="white-space:nowrap">'+GO.files.lang.downloadExpireTime+':</td>'+
+            '<td>{expire_time}</td>'+
+						'</tr>'+
+						
+						'<tr>'+
+            '<td>'+GO.files.lang.downloadUrl+':</td>'+
+            '<td>{download_link}</td>'+
+						'</tr>'+
+	
+					
           '</tpl>'+
 
 //          '<tpl if="GO.util.empty(expire_time)"><tr>'+
