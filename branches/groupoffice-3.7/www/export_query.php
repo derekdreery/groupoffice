@@ -37,6 +37,10 @@ $filename = $type.'.class.inc.php';
 //$GO_CONFIG->root_path.$_REQUEST['export_directory'].$filename;
 
 if(isset($_REQUEST['export_directory']) && file_exists($GO_CONFIG->root_path.$_REQUEST['export_directory'].$filename)){
+	
+	if(File::path_leads_to_parent($_REQUEST['export_directory']))
+					die('Invalid request');
+	
 	$file = $GO_CONFIG->root_path.$_REQUEST['export_directory'].$filename;
 }else
 {

@@ -47,6 +47,11 @@ if(!empty($_REQUEST['id']))
         $file = $files->resolve_path($_REQUEST['path']);
     }
 }
+
+if(File::path_leads_to_parent($path))
+	die('Invalid request');
+
+
 $public = substr($path,0,6)=='public';
 
 if($public && !$file)
