@@ -42,7 +42,7 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController {
 
 			echo '<html><head><style>body{font-family:arial;}</style></head><body>';
 			echo '<h1>' . $lang['common']['running_sys_upgrade'] . '</h1><p>' . $lang['common']['sys_upgrade_text'] . '</p>';
-			require($GO_CONFIG->root_path . 'install/upgrade.php');
+			require(GO::config()->root_path . 'install/upgrade.php');
 			echo '<a href="#" onclick="document.location.reload();">' . $lang['common']['click_here_to_contine'] . '</a>';
 			echo '</body></html>';
 			exit();

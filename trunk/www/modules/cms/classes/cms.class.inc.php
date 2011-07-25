@@ -1348,7 +1348,7 @@ class cms extends db {
 					$xmlwriter->endElement(); //option_values
 
 					$xmlwriter->startElement('contents');
-					$this->get_XML_folder_tree(&$xmlwriter,$item['id']);
+					$this->get_XML_folder_tree($xmlwriter,$item['id']);
 					$xmlwriter->endElement(); //contents
 				$xmlwriter->endElement(); //folder
 			} else {
@@ -1413,7 +1413,7 @@ class cms extends db {
 					}
 					$xmlwriter->endElement(); //option_values
 				$xmlwriter->startElement('contents');
-				$this->get_XML_folder_tree(&$xmlwriter,$root_folder['id']);
+				$this->get_XML_folder_tree($xmlwriter,$root_folder['id']);
 				$xmlwriter->endElement(); //contents
 			$xmlwriter->endElement(); //folder
 		$xmlwriter->endDocument();
