@@ -190,10 +190,10 @@ class GO {
 
 		if (self::config()->session_inactivity_timeout > 0) {
 			$now = time();
-			if (isset($_SESSION['last_activity']) && $_SESSION['last_activity'] + GO::config()->session_inactivity_timeout < $now) {
-				GO::security()->logout();
+			if (isset(GO::session()->last_activity) && GO::session()->last_activity + GO::config()->session_inactivity_timeout < $now) {
+				GO::session()->logout();
 			} elseif ($_POST['task'] != 'checker') {//don't update on the automatic checker function that runs every 2 mins.
-				$_SESSION['last_activity'] = $now;
+				GO::session()->last_activity = $now;
 			}
 		}
 
@@ -239,8 +239,8 @@ class GO {
 		}
 
 		if (GO::config()->debug) {
-			$_SESSION['connect_count'] = 0;
-			$_SESSION['query_count'] = 0;
+			GO::session()->connect_count = 0;
+			GO::session()->query_count = 0;
 		}
 	}
 
