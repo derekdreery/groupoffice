@@ -58,6 +58,18 @@ class String {
 	 * Check if parenthesis are closed properly.
 	 */
 	public static function check_parentheses($str){
+		
+		if(preg_match('/SELECT.*FROM/i', $str))
+			return false;
+		
+		if(preg_match('/DELETE.*FROM/i', $str))
+			return false;
+		
+		if(preg_match('/INSERT.*INTO/i', $str))
+			return false;
+		
+		if(preg_match('/update.*set/i', $str))
+			return false;
 
 		//remove escaped slashes
 		$str = str_replace("\'", "", $str);
