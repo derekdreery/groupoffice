@@ -627,19 +627,26 @@ GO.email.EmailComposer = function(config) {
 						this.deferFocus();
 					}
 				};
-			}else if(Ext.isWebKit){
-				return function(e){
-					var k = e.getKey();
-					if(k == e.TAB){
-						e.stopEvent();
-						this.execCmd('InsertText','\t');
-						this.deferFocus();
-					}else if(k == e.ENTER){
-				//                    e.stopEvent();
-				//                    this.execCmd('InsertHtml','<br /><br />');
-				//                    this.deferFocus();
-				}
-				};
+			}else if(Ext.isWebKit){ 
+            return function(e){
+                var k = e.getKey();
+                if(k == e.TAB){
+                    e.stopEvent();
+                    this.execCmd('InsertText','\t');
+                    this.deferFocus();
+                }else if(k == e.ENTER){
+                    e.stopEvent();
+                    var doc = this.getDoc();
+                    if (doc.queryCommandState('insertorderedlist') ||
+                        doc.queryCommandState('insertunorderedlist')) {
+                      this.execCmd('InsertHTML', '</li><br /><li>');
+                   } else {
+                      this.execCmd('InsertHtml','<br />&nbsp;');
+											this.execCmd('delete');
+                   }
+                    this.deferFocus();
+                }
+             };
 			}
 		}(),
 		updateToolbar: function(){
