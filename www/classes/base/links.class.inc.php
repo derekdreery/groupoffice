@@ -72,7 +72,7 @@ class GO_LINKS extends db
 			$sql .= " WHERE parent_id=".intval($parent_id);
 		}else
 		{
-			$sql .= " WHERE link_id=".intval($link_id)." AND link_type=".$this->escape($link_type)." AND parent_id=0";
+			$sql .= " WHERE link_id=".intval($link_id)." AND link_type=".intval($link_type)." AND parent_id=0";
 		}
 
 		$sql .= " AND name='".$this->escape($name)."'";
