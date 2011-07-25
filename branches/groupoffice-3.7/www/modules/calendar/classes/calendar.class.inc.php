@@ -702,7 +702,7 @@ class calendar extends db {
 	}
 
 	function is_participant($event_id, $email) {
-		$sql = "SELECT * FROM cal_participants WHERE event_id='".$this->escape($event_id)."' AND email='".$this->escape($email)."'";
+		$sql = "SELECT * FROM cal_participants WHERE event_id='".intval($event_id)."' AND email='".$this->escape($email)."'";
 		$this->query($sql);
 		return $this->next_record();
 	}
@@ -1834,7 +1834,7 @@ class calendar extends db {
 	}
 
 	function get_event($event_id) {
-		$sql = "SELECT e.*, c.acl_id FROM cal_events e LEFT JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.id='".$this->escape($event_id)."'";
+		$sql = "SELECT e.*, c.acl_id FROM cal_events e LEFT JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.id='".intval($event_id)."'";
 		$this->query($sql);
 		return $this->next_record(DB_ASSOC);
 	}
@@ -1965,7 +1965,7 @@ class calendar extends db {
 	}
 
 	function move_exceptions($event_id, $diff) {
-		$event_id = $this->escape($event_id);
+		$event_id = intval($event_id);
 
 		$sql = "UPDATE cal_exceptions SET time=time+".$this->escape($diff)." WHERE event_id=$event_id";
 		return $this->query($sql);
@@ -2695,7 +2695,7 @@ class calendar extends db {
 	 */
 	function get_event_resource($event_id, $calendar_id) {
 		if($event_id>0 && $calendar_id>0) {
-			$sql = "SELECT cal_events.* FROM cal_events WHERE resource_event_id='$event_id' AND calendar_id='$calendar_id'";
+			$sql = "SELECT cal_events.* FROM cal_events WHERE resource_event_id='".intval($event_id)."' AND calendar_id='".intval($calendar_id)."'";
 
 			$this->query($sql);
 			if($this->next_record()) {
@@ -2887,7 +2887,7 @@ class calendar extends db {
 	}
 
 	public function get_visible_calendars($user_id) {
-		$this->query("SELECT * FROM su_visible_calendars WHERE user_id = $user_id");
+		$this->query("SELECT * FROM su_visible_calendars WHERE user_id = ".intval($user_id));
 		return $this->num_rows();
 	}
 

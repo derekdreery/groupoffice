@@ -232,7 +232,7 @@ class reminder extends db
 	
 	function get_reminders_by_link_id($link_id, $link_type)
 	{
-		$this->query("SELECT * FROM go_reminders WHERE link_id=".intval($link_id)." AND link_type=".$this->escape($link_type));
+		$this->query("SELECT * FROM go_reminders WHERE link_id=".intval($link_id)." AND link_type=".intval($link_type));
 		return $this->num_rows();
 	}
 	
