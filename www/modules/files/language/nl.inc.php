@@ -46,6 +46,3 @@ $lang['files']['copyPasteToDownload'] = 'Klik op onderstaande beveiligde link of
 $lang['files']['possibleUntil'] = 'mogelijk tot';
 
 $lang['files']['fileNotFound']='Sorry, het bestand dat u probeerde te downloaden is niet gevonden.';
-
-$lang['files']['expired'] = 'Verlopen';
-$lang['files']['clickHere'] = 'Klik hier';

@@ -811,13 +811,11 @@ try {
 			$GO_EVENTS->fire_event('file_extension_and_path_known',array(&$files,$extension,$path,&$pdf_path,$file,$folder));
 
 
-      if(!empty($file['random_code']))
+      if(!empty($file['random_code']) && time()<$file['expire_time'])
       {
         $response['data']['expire_time']=Date::get_timestamp($file['expire_time'],false);
-        if(time()<$file['expire_time'])         
-          $response['data']['download_link']='<a href="'.$GO_MODULES->modules['files']['full_url'].'download.php?id='.$file['id'].'&random_code='.$file['random_code'].'">'.$lang['files']['clickHere'].'</a>';
-        else
-          $response['data']['download_link']='<font color="red">'.$lang['files']['expired'].'</font>';
+        $response['data']['download_link']='<a href="'.$GO_MODULES->modules['files']['full_url'].'download.php?id='.$file['id'].'&random_code='.$file['random_code'].'">'.$GO_MODULES->modules['files']['full_url'].'download.php?id='.$file['id'].'&random_code='.$file['random_code'].'</a>';
+
       }
       else
       {

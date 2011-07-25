@@ -34,5 +34,7 @@ GO.files.lang.newFolder = 'Nieuwe map';
 GO.files.lang.applyState = 'De weergaveinstellingen van deze map toepassen voor iedereen.';
 GO.files.lang.stateLocked = 'Map weergave vastgezet door eigenaar/beheerder';
 
-GO.files.lang.strDownloadInactive = 'Download is niet beschikbaar!';
-GO.files.lang.strDownloadActive = 'Download is beschikbaar tot';
+
+GO.files.lang.strDownloadActive = 'Externe download link ingeschakeld';
+GO.files.lang.downloadExpireTime='Link verloopt na';
+GO.files.lang.downloadUrl='URL';
