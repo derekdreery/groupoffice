@@ -1005,7 +1005,7 @@ class addressbook extends db {
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
-	public static function format_contact_record(&$record, $cf=false) {
+	public static function format_contact_record(&$record, $cf=false, $html=true) {
 		$record['name'] = String::format_name($record['last_name'], $record['first_name'], $record['middle_name']);
 		$record['ctime']=Date::get_timestamp($record['ctime']);
 		$record['mtime']=Date::get_timestamp($record['mtime']);
@@ -1032,11 +1032,11 @@ class addressbook extends db {
 		$record['birthday'] = Date::format($record['birthday'], false);
 
 		if($cf)
-			$cf->format_record($record, 2, true);
+			$cf->format_record($record, 2, $html);
 	}
 
 
-	function format_company_record(&$record, $cf=false) {
+	function format_company_record(&$record, $cf=false, $html=true) {
 		$record['ctime']=Date::get_timestamp($record['ctime']);
 		$record['mtime']=Date::get_timestamp($record['mtime']);
 
@@ -1045,7 +1045,7 @@ class addressbook extends db {
 			$record['name_and_name2'].= ' - '.$record['name2'];
 
 		if($cf)
-			$cf->format_record($record, 3, true);
+			$cf->format_record($record, 3, $html);
 	}
 
 	function search_companies($user_id, $query, $field = 'name', $addressbooks=array(), $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $query_type='LIKE', $mailings_filter=array(), $advanced_query='') {
