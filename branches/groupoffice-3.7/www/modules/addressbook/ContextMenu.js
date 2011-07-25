@@ -43,7 +43,7 @@ Ext.extend(GO.addressbook.ContextMenu, Ext.menu.Menu, {
 			var emails = [];
 			var selected = this.getSelected();
 			for (var i = 0; i < selected.length; i++) {
-				if (typeof(selected[i].data.email)=='string')
+				if (typeof(selected[i].data.email)=='string' && !GO.util.empty(selected[i].data.email))
 					emails.push('"' + selected[i].data.name + '" <' + selected[i].data.email + '>');
 			}
 
@@ -52,11 +52,12 @@ Ext.extend(GO.addressbook.ContextMenu, Ext.menu.Menu, {
 			else
 				var str = '';
 
-			var composer = GO.email.showComposer({
-				account_id: GO.moduleManager.getPanel('email').account_id
+			GO.email.showComposer({
+				account_id: GO.moduleManager.getPanel('email').account_id,
+				values:{
+					to: str
+				}				
 			});
-
-			composer.setRecipients('to',str);
 		}
 	}
 });
