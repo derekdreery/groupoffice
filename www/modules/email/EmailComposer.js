@@ -1123,12 +1123,12 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.bccFieldCheck.setChecked(true);
 		}
 	},
-
-	setRecipients : function(fieldName,selections) {
-		var field = this.formPanel.form.findField(fieldName);
-		field.setValue(selections);
-		field.store.load();
-	},
+//
+//	setRecipients : function(fieldName,selections) {
+//		var field = this.formPanel.form.findField(fieldName);
+//		field.setValue(selections);
+//		field.store.load();
+//	},
 
 	show : function(config) {
 

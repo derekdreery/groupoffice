@@ -153,16 +153,12 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 						var str = '';
 
 					var composer = GO.email.showComposer({
-						account_id: GO.moduleManager.getPanel('email').account_id
+						account_id: GO.moduleManager.getPanel('email').account_id,
+						values:{
+							to:str
+						}
 					});
 
-					composer.addRecipients('to',str);
-//					var field = composer.formPanel.form.findField('to');
-//					field.setValue(str);
-//					console.log(composer.formPanel.form.findField('to').getValue());
-//					console.log(field.getValue());
-//					console.log(GO.email.composers.length);
-//					composer.formPanel.doLayout();
 				},
 				scope : this
 			});

@@ -1,4 +1,7 @@
 - Caldav iphone status bug. Imported status defaults to accepted now. iphone doesn't like the status needs-action.
+- Fixed SQL and command injections after extensive security testing.
+- New caldav_max_months_old config.php parameter to control the maximum age of synced events.
+- E-mail composer HTML editor fix for Chrome.
 
 23-06-2011 3.7.24
 - New config variable to set subject for sieve vacation messages.
