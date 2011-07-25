@@ -1154,13 +1154,13 @@ class addressbook extends db {
 			$sql .= ' AND ('.$advanced_query.')';
 		}
 
+		$sql .= " ORDER BY $sort_index $sort_order";
+		
 		$_SESSION['GO_SESSION']['export_queries']['search_companies']=array(
 				'query'=>$sql,
 				'method'=>'format_company_record',
 				'class'=>'addressbook',
 				'require'=>__FILE__);
-
-		$sql .= " ORDER BY $sort_index $sort_order";
 
 		if($offset > 0 ) {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
