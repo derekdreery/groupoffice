@@ -27,8 +27,8 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	}
 	
 	protected function formatModelForGrid($record, $model) {
-		
-		$record['user_name']=$model->user->name;
+		if($model->user)
+			$record['user_name']=$model->user->name;
 		return $record;
 	}
 

@@ -646,6 +646,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$model = $this->relations[$name][1];
 		
+		//if($this->relations[$name][0]==self::BELONGS_TO)
+		
 		/**
 		 * Related stuff can be put in the relatedCache array for when a relation is
 		 * accessed multiple times.
@@ -1098,6 +1100,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($this->aclField && !$this->joinAclField){
 			GO::security()->delete_acl($this->{$this->aclField});
 		}	
+		
+		foreach($this->relations as $name => $attr){
+			if($attr[0]==self::HAS_MANY){
+				$this->name();
+			}
+		}
 
 		return $this->afterDelete();			
 	}
