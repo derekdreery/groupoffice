@@ -2002,27 +2002,33 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	downloadTemporaryAttachment : function(dv, index, node, e ) {
 
 		var record = dv.store.getAt(index);
-
-		Ext.Ajax.request({
-				url: GO.settings.modules.email.url+'json.php',
-				params:{
-					task: 'create_download_hash',
-					filename: record.data.name
-				},
-				callback: function(options, success, response)
-				{
-					if(!success)
+		
+			
+		if(!record.data.id){
+			Ext.Ajax.request({
+					url: GO.settings.modules.email.url+'json.php',
+					params:{
+						task: 'create_download_hash',
+						filename: record.data.name
+					},
+					callback: function(options, success, response)
 					{
-						alert( GO.lang['strRequestError']);
-					}else
-					{
-						var jsonData = Ext.decode(response.responseText);
-						var code = jsonData.code;
-						document.location=GO.settings.modules.email.url+'download_file.php?filename='+encodeURIComponent(record.data.name)+'&code='+code;
-					}
-				},
-				scope:this
-			});
+						if(!success)
+						{
+							alert( GO.lang['strRequestError']);
+						}else
+						{
+							var jsonData = Ext.decode(response.responseText);
+							var code = jsonData.code;						
+							document.location=GO.settings.modules.email.url+'download_file.php?filename='+encodeURIComponent(record.data.name)+'&code='+code;
+						}
+					},
+					scope:this
+				});
+		}else
+		{
+			GO.files.openFile(record);
+		}
 	},
 
 	onAttachmentContextMenu : function(dv, index, node, e)
