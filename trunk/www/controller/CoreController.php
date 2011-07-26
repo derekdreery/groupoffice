@@ -26,7 +26,7 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController {
 
 		//Redirect to correct login url if a force_login_url is set. Useful to force ssl
 		if (GO::config()->force_login_url && strpos(GO::config()->full_url, GO::config()->force_login_url) === false) {
-			unset($_SESSION['GO_SESSION']['full_url']);
+			unset(GO::session()->values['full_url']);
 			header('Location: ' . GO::config()->force_login_url);
 			exit();
 		}

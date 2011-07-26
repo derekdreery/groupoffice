@@ -84,12 +84,13 @@ class GO{
 	 * @return GO_Base_Model_User The logged in user model
 	 */
 	public static function user(){
-		return GO_Base_Model_User::model()->findByPk($_SESSION['GO_SESSION']['user_id']);
+		return GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id']);
 	}
 
 	/**
 	 * Returns a collection of Group-Office Module objects
 	 * 
+	 * @deprecated
 	 * @return GO_Base_Model_ModelCollection
 	 * 
 	 */
@@ -135,6 +136,7 @@ class GO{
 
 	/**
 	 *
+	 * @deprecated
 	 * @global type $lang
 	 * @return GO_LANGUAGE 
 	 */
@@ -147,7 +149,7 @@ class GO{
 	}
 
 	/**
-	 *
+	 * @deprecated
 	 * @return GO_EVENTS 
 	 */
 	public static function events() {
@@ -157,6 +159,10 @@ class GO{
 		return self::$_events;
 	}
 	
+	/**
+	 * @deprecated
+	 * @return GO_THEME 
+	 */
 	public static function theme() {
 		if (!isset(self::$_theme)) {
 			self::$_theme = new GO_THEME();
@@ -165,7 +171,7 @@ class GO{
 	}
 	
 	/**
-	 *
+	 * @deprecated
 	 * @return GO_SECURITY
 	 */
 	public static function security() {
@@ -175,10 +181,7 @@ class GO{
 		return self::$_security;
 	}
 
-	public static function import($className, $path) {
-		self::$_classes[$className] = $path;
-	}
-
+	
 	/**
 	 * The automatic class loader for Group-Office.
 	 * 
@@ -193,7 +196,7 @@ class GO{
 			$file = array_pop($arr).'.php';		
 			
 			$path = strtolower(implode('/', $arr));
-			$baseClassFile = GO::config()->root_path.$path.'/'.$file;
+			$baseClassFile = dirname(dirname(__FILE__)) . '/'.$path.'/'.$file;
 			require($baseClassFile);
 		}  else {
 			
@@ -247,47 +250,31 @@ class GO{
 		
 
 
-		if (!defined('GO_NO_SESSION')) {
-			//start session
-			session_name('groupoffice');
-			if (isset($_REQUEST['session_id']) && isset($_REQUEST['auth_token'])) {
-				session_id($_REQUEST['session_id']);
-			}
-			session_start();
-			if (isset($_REQUEST['auth_token'])) {
-				if ($_REQUEST['auth_token'] != $_SESSION['GO_SESSION']['auth_token']) {
-					session_destroy();
-					die('Invalid auth_token supplied');
-				} else {
-					$_SESSION['GO_SESSION']['auth_token'] = String::random_password('a-z,1-9', '', 30);
-					//redirect to URL without session_id
-					header('Location: ' . $_SERVER['PHP_SELF']);
-					exit();
-				}
-			}
-		}
+//		if (!defined('GO_NO_SESSION')) {
+//			//start session
+//			session_name('groupoffice');
+//			if (isset($_REQUEST['session_id']) && isset($_REQUEST['auth_token'])) {
+//				session_id($_REQUEST['session_id']);
+//			}
+//			session_start();
+//			if (isset($_REQUEST['auth_token'])) {
+//				if ($_REQUEST['auth_token'] != GO::session()->values['auth_token']) {
+//					session_destroy();
+//					die('Invalid auth_token supplied');
+//				} else {
+//					GO::session()->values['auth_token'] = String::random_password('a-z,1-9', '', 30);
+//					//redirect to URL without session_id
+//					header('Location: ' . $_SERVER['PHP_SELF']);
+//					exit();
+//				}
+//			}
+//		}
 		
+	
+		//go_debug('[' . date('Y-m-d G:i') . '] Start of new request: ' . $_SERVER['PHP_SELF']);
+
+
 		
-
-		self::config()->set_default_session();
-
-		if (!is_int($_SESSION['GO_SESSION']['timezone'])) {
-			//set user timezone setting after user class is loaded
-			date_default_timezone_set($_SESSION['GO_SESSION']['timezone']);
-		}
-
-		go_debug('[' . date('Y-m-d G:i') . '] Start of new request: ' . $_SERVER['PHP_SELF']);
-
-
-		if (self::config()->session_inactivity_timeout > 0) {
-			$now = time();
-			if (isset($_SESSION['last_activity']) && $_SESSION['last_activity'] + GO::config()->session_inactivity_timeout < $now) {
-				GO::security()->logout();
-			} elseif ($_POST['task'] != 'checker') {//don't update on the automatic checker function that runs every 2 mins.
-				$_SESSION['last_activity'] = $now;
-			}
-		}
-
 
 		if (!empty($_REQUEST['SET_LANGUAGE'])) {
 			self::language()->set_language($_REQUEST['SET_LANGUAGE']);
@@ -331,7 +318,7 @@ class GO{
 		require(GO::language()->get_base_language_file('common'));
 
 		if (GO::config()->log) {
-			$username = isset($_SESSION['GO_SESSION']['username']) ? $_SESSION['GO_SESSION']['username'] : 'notloggedin';
+			$username = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
 			openlog('[Group-Office][' . date('Ymd G:i') . '][' . $username . ']', LOG_PERROR, LOG_USER);
 		}
 
@@ -351,6 +338,8 @@ class GO{
 			$_SESSION['connect_count'] = 0;
 			$_SESSION['query_count'] = 0;
 		}
+		
+		GO::session()->setDefaults();
 		
 		
 	}
