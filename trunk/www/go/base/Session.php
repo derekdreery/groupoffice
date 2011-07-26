@@ -8,7 +8,7 @@ class GO_Base_Session{
 		session_name('groupoffice');
 		session_start();
 		
-		$this->values = &$_SESSION;
+		$this->values = &$_SESSION['GO_SESSION'];
 		
 		//$this->setDefaults();
 		
@@ -37,22 +37,22 @@ class GO_Base_Session{
 			self::$values['decimal_separator'] = $GLOBALS['GO_CONFIG']->default_decimal_separator;
 			self::$values['thousands_separator'] = $GLOBALS['GO_CONFIG']->default_thousands_separator;
 			self::$values['date_separator'] = $GLOBALS['GO_CONFIG']->default_date_separator;
-			self::$values['date_format'] = Date::get_dateformat( $GLOBALS['GO_CONFIG']->default_date_format, self::$values['date_separator']);
+			self::$values['date_format'] = GO_Base_Util_Date::get_dateformat( $GLOBALS['GO_CONFIG']->default_date_format, self::$values['date_separator']);
 			self::$values['time_format'] = $GLOBALS['GO_CONFIG']->default_time_format;
 			self::$values['currency'] = $GLOBALS['GO_CONFIG']->default_currency;
 			self::$values['timezone'] = $GLOBALS['GO_CONFIG']->default_timezone;
 			self::$values['country'] = $GLOBALS['GO_CONFIG']->default_country;
 			self::$values['sort_name'] = 'last_name';
-			self::$values['auth_token']=String::random_password('a-z,1-9', '', 30);
+			self::$values['auth_token']=GO_Base_Util_String::random_password('a-z,1-9', '', 30);
 			//some url's require this token to be appended
-			self::$values['security_token']=String::random_password('a-z,1-9', '', 10);
+			self::$values['security_token']=GO_Base_Util_String::random_password('a-z,1-9', '', 10);
 			
 			if (!is_int($this->values['timezone'])) {
 				//set user timezone setting after user class is loaded
 				date_default_timezone_set(self::$values['timezone']);
 			}
 
-			go_debug('Setup new session '.self::$values['security_token']);
+			GO::debug('Setup new session '.self::$values['security_token']);
 		}
 
 		

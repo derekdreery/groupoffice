@@ -29,8 +29,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	
 	function init($output) {
 		parent::init($output);
-		$this->addPermissionCheck($GLOBALS['GO_MODULES']->{$this->module}->acl_id, GO_SECURITY::READ_PERMISSION);
-		//$this->addPermissionCheck($GLOBALS['GO_MODULES']->modules['models']['acl_id'], GO_SECURITY::DELETE_PERMISSION,'delete');
+		$this->addPermissionCheck(GO::modules()->{$this->module}->acl_id, GO_Base_Model_Acl::READ_PERMISSION);
+		//$this->addPermissionCheck(GO::modules()->modules['models']['acl_id'], GO_Base_Model_Acl::DELETE_PERMISSION,'delete');
 	}
 
 	/**
@@ -107,7 +107,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['data'] = $model->getAttributes();
 		
 		//todo custom fields should be in a subarray.
-		if($GLOBALS['GO_MODULES']->has_module('customfields') && $model->customfieldRecord)
+		if(GO::modules()->has_module('customfields') && $model->customfieldRecord)
 			$response['data'] = array_merge($response['data'], $model->customfieldRecord->getAttributes());	
 						
 		$response['success'] = true;
@@ -253,7 +253,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['data'] = $model->getAttributes();
 		$response['success'] = true;
 		$response['data']['permission_level']=$model->getPermissionLevel();
-		$response['data']['write_permission']=$response['data']['permission_level']>GO_SECURITY::READ_PERMISSION;
+		$response['data']['write_permission']=$response['data']['permission_level']>GO_Base_Model_Acl::READ_PERMISSION;
 
 
 
@@ -265,23 +265,23 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$response['data']['links'] = $links_json['results'];
 		}
 
-		if (/* isset($GLOBALS['GO_MODULES']->modules['tasks']) && !in_array('tasks', $hidden_sections) && */!isset($response['data']['tasks'])) {
-			require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'] . 'tasks.class.inc.php');
+		if (/* isset(GO::modules()->modules['tasks']) && !in_array('tasks', $hidden_sections) && */!isset($response['data']['tasks'])) {
+			require_once(GO::modules()->modules['tasks']['class_path'] . 'tasks.class.inc.php');
 			$tasks = new tasks();
 
 			$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $model->linkType);
 		}
 
-		if (isset($GLOBALS['GO_MODULES']->modules['calendar'])/* && !in_array('events', $hidden_sections) */) {
-			require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'] . 'calendar.class.inc.php');
+		if (isset(GO::modules()->modules['calendar'])/* && !in_array('events', $hidden_sections) */) {
+			require_once(GO::modules()->modules['calendar']['class_path'] . 'calendar.class.inc.php');
 			$cal = new calendar();
 
 			$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $model->linkType);
 		}
 
 		if (/* !in_array('files', $hidden_sections) && */!isset($response['data']['files'])) {
-			if (isset($GLOBALS['GO_MODULES']->modules['files'])) {
-				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'] . 'files.class.inc.php');
+			if (isset(GO::modules()->modules['files'])) {
+				require_once(GO::modules()->modules['files']['class_path'] . 'files.class.inc.php');
 				$files = new files();
 
 				$response['data']['files'] = $files->get_content_json($response['data']['files_folder_id']);
@@ -291,15 +291,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 
 
-		if (/* !in_array('comments', $hidden_sections) && */isset($GLOBALS['GO_MODULES']->modules['comments']) && !isset($response['data']['comments'])) {
-			require_once ($GLOBALS['GO_MODULES']->modules['comments']['class_path'] . 'comments.class.inc.php');
+		if (/* !in_array('comments', $hidden_sections) && */isset(GO::modules()->modules['comments']) && !isset($response['data']['comments'])) {
+			require_once (GO::modules()->modules['comments']['class_path'] . 'comments.class.inc.php');
 			$comments = new comments();
 
 			$response['data']['comments'] = $comments->get_comments_json($response['data']['id'], $model->linkType);
 		}
 
-		if ($GLOBALS['GO_MODULES']->has_module('customfields') && !isset($response['data']['customfields'])) {
-			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'] . 'customfields.class.inc.php');
+		if (GO::modules()->has_module('customfields') && !isset($response['data']['customfields'])) {
+			require_once(GO::modules()->modules['customfields']['class_path'] . 'customfields.class.inc.php');
 			$cf = new customfields();		
 			
 			$response['data']['customfields'] = $cf->get_all_fields_with_values($GLOBALS['GO_SECURITY']->user_id, $model->linkType, $response['data']['id']);

@@ -275,7 +275,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * Returns the permission level if an aclField is defined in the model. Otherwise
 	 * it returns -1;
 	 * 
-	 * @return int GO_SECURITY::*_PERMISSION 
+	 * @return int GO_Base_Model_Acl::*_PERMISSION 
 	 */
 	
 	public function getPermissionLevel(){
@@ -290,7 +290,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				return -1;
 			}
 			
-			$this->_permissionLevel=$GLOBALS['GO_SECURITY']->hasPermission($acl_id);
+			$this->_permissionLevel=GO_Base_Model_Acl::model()->findByPk($acl_id)->getUserPermissionLevel();
 		}
 		return $this->_permissionLevel;
 	}
@@ -364,7 +364,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		
 		if(!isset($params['userId'])){
-			$params['userId']=GO::session()->values->user_id;
+			$params['userId']=GO::session()->values['user_id'];
 		}
 		
 		$aclJoin['relation']='';
@@ -391,7 +391,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$sql .= "t.*".$aclJoin['fields'].' ';
 		
 		
-		$joinCf = !empty($params['joinCustomFields']) && $this->linkType>0 && $GLOBALS['GO_MODULES']->has_module('customfields');
+		$joinCf = !empty($params['joinCustomFields']) && $this->linkType>0 && GO::modules()->customfields->permissionLevel;
 		
 		if($joinCf)			
 			$sql .= ",cf_".$this->linkType.".* ";
@@ -405,10 +405,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($this->aclField && empty($params['ignoreAcl'])){			
 			
 			$sql .= "INNER JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
-			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_SECURITY::READ_PERMISSION){
+			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
 				$sql .= " AND go_acl.level>=".intval($params['permissionLevel']);
 			}
-			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($params['userId']))."))) ";
+			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',GO_Base_Model_User::getGroupIds($params['userId']))."))) ";
 		}  else {
 			//quick and dirty way to use and in next sql build blocks
 			$sql .= 'WHERE 1 ';
@@ -498,7 +498,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 		
 		if($this->_debugSql)
-				go_debug($sql);
+				GO::debug($sql);
 
 		//$sql .= "WHERE `".$this->primaryKey.'`='.intval($primaryKey);
 		$result = $this->getDbConnection()->query($sql);
@@ -585,7 +585,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		{
 			$this->{$this->primaryKey}=$primaryKey;
 			
-			$sql .= "`".$this->primaryKey.'`='.intval($primaryKey);
+			$sql .= "`".$this->primaryKey.'`='.$this->getDbConnection()->quote($primaryKey, $this->_columns[$this->primaryKey]['type']);
 		}
 		return $sql;
 	}
@@ -607,11 +607,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$sql = "SELECT * FROM `".$this->tableName."` WHERE ";
 		
 		$sql = $this->_appendPkSQL($sql, $primaryKey);
+	
 		
 		if($this->_debugSql)
-				go_debug($sql);
+				GO::debug($sql);
 		
-		//go_debug($sql);
+		//GO::debug($sql);
 			
 		$result = $this->getDbConnection()->query($sql);
 		
@@ -634,7 +635,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * May be overriden to do stuff after the model was loaded from the database
 	 */
 	protected function afterLoad(){
-			//go_debug($this);
+			//GO::debug($this);
 	}
 	
 		
@@ -686,7 +687,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 			switch($this->_columns[$key]['gotype']){
 				case 'unixtimestamp':
-					$formatted[$key] = Date::to_unixtime($value);
+					$formatted[$key] = GO_Base_Util_Date::to_unixtime($value);
 					break;			
 
 				default:
@@ -707,12 +708,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 			switch($this->_columns[$key]['gotype']){
 				case 'unixtimestamp':
-					$formatted[$key] = Date::get_timestamp($value);
+					$formatted[$key] = GO_Base_Util_Date::get_timestamp($value);
 					break;	
 
 				case 'textarea':
 					if($html){
-						$formatted[$key] = String::text_to_html($value);
+						$formatted[$key] = GO_Base_Util_String::text_to_html($value);
 					}else
 					{
 						$formatted[$key] = $value;
@@ -833,7 +834,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	public function save(){
 		
-		if(!$this->_checkPermissionLevel(GO_SECURITY::WRITE_PERMISSION))
+		if(!$this->_checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new AccessDeniedException();
 				
 		if($this->validate()){		
@@ -862,7 +863,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				
 				if($this->aclField && !$this->joinAclField){
 					//generate acl id
-					$this->{$this->aclField}=$GLOBALS['GO_SECURITY']->get_new_acl($this->tableName);
+					
+					$acl = new GO_Base_Model_Acl();
+					$acl->description=$this->tableName.'.'.$this->aclField;
+					$acl->user_id=GO::session()->values['user_id'];
+					$acl->save();
+					
+					$this->{$this->aclField}=$acl->id;
 				}				
 				
 				if(!$this->beforeSave())
@@ -922,7 +929,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			if(!$model)
 				$model = GO_Base_Model_SearchCacheRecord::model();
 			
-			//go_debug($model);
+			//GO::debug($model);
 
 			$autoAttr = array(
 				'id'=>$this->pk,
@@ -997,7 +1004,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					"(:".implode(',:', $fieldNames).")";
 
 		if($this->_debugSql)
-			go_debug($sql);
+			GO::debug($sql);
 		
 		$stmt = $this->getDbConnection()->prepare($sql);
 		
@@ -1047,7 +1054,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$sql .= "`".$this->primaryKey."`=:".$this->primaryKey;
 		
 		if($this->_debugSql)
-			go_debug($sql);
+			GO::debug($sql);
 
 		$stmt = $this->getDbConnection()->prepare($sql);
 		
@@ -1074,7 +1081,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function delete(){
 		
-		if(!$this->_checkPermissionLevel(GO_SECURITY::DELETE_PERMISSION))
+		if(!$this->_checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
 						throw new AccessDeniedException ();
 		
 		
@@ -1086,7 +1093,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		
 		if($this->_debugSql)
-			go_debug($sql);
+			GO::debug($sql);
 		
 		$success = $this->getDbConnection()->query($sql);		
 		
