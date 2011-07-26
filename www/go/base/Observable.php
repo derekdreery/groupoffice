@@ -21,17 +21,17 @@ class GO_Base_Observable{
 	
 	public static function cacheListeners(){
 		
-		go_debug("GO_Base_Observable::cacheListeners");
+		GO::debug("GO_Base_Observable::cacheListeners");
 		
-		$dir = $GLOBALS['GO_CONFIG']->file_storage_path.'cache/listeners/';
-		if($GLOBALS['GO_CONFIG']->debug){
+		$dir = GO::config()->file_storage_path.'cache/listeners/';
+		if(GO::config()->debug){
 			exec('rm -Rf '.$dir);
 		}
 		$dirExists = is_dir($dir);
 		if(!$dirExists){
 			mkdir($dir, 0755,true);
 			
-			$GLOBALS['GO_MODULES']->callModuleMethod('initListeners');
+			GO::modules()->callModuleMethod('initListeners');
 			
 		}
 	}
@@ -41,7 +41,7 @@ class GO_Base_Observable{
 		
 		$line = '$listeners["'.$eventName.'"][]=array("'.$listenerClass.'", "'.$listenerFunction.'");'."\n";
 		
-		$dir = $GLOBALS['GO_CONFIG']->file_storage_path.'cache/listeners/';
+		$dir = GO::config()->file_storage_path.'cache/listeners/';
 		$file = $dir.get_called_class().'.php';
 		
 		if(!file_exists($file))
@@ -62,25 +62,25 @@ class GO_Base_Observable{
 			//listeners array will be loaded from a file. Because addListener is only called once when there is no cache.
 			$listeners=array();
 			
-			$cacheFile = $GLOBALS['GO_CONFIG']->file_storage_path.'cache/listeners/'.get_class($this).'.php';
+			$cacheFile = GO::config()->file_storage_path.'cache/listeners/'.get_class($this).'.php';
 			if(file_exists($cacheFile))
 				require($cacheFile);
 			
 			$this->_listeners=$listeners;
 			
-//			$cacheFile = $GLOBALS['GO_CONFIG']->file_storage_path.'cache/listeners/'.get_parent_class($this).'.php';
+//			$cacheFile = GO::config()->file_storage_path.'cache/listeners/'.get_parent_class($this).'.php';
 //			if(file_exists($cacheFile)){
 //				require($cacheFile);
 //				$this->_listeners=array_merge($this->_listeners,$listeners);
 //			}
 		}
 		
-		go_debug("fireEvent($eventName) class:".get_class($this));
+		GO::debug("fireEvent($eventName) class:".get_class($this));
 		
 		if(isset($this->_listeners[$eventName])){
 			foreach($this->_listeners[$eventName] as $listener)
 			{
-				go_debug('Firing listener: '.$listener[0].'::'.$listener[1]);
+				GO::debug('Firing listener: '.$listener[0].'::'.$listener[1]);
 
 				$method = !empty($listener[0]) ? array($listener[0], $listener[1]) : $listener[1];
 				call_user_func_array($method, $params);

@@ -153,8 +153,8 @@ class GO{
 				if($type=='controller')
 					$file .= 'Controller';
 
-				if($module){
-					$file = self::modules()->modules[$module]['path'].$type.'/'.$file.'.php';
+				if($module){					
+					$file = self::modules()->$module->path.$type.'/'.$file.'.php';
 				}else
 				{
 					$file = self::config()->root_path.$type.'/'.$file.'.php';
@@ -195,7 +195,7 @@ class GO{
 //					session_destroy();
 //					die('Invalid auth_token supplied');
 //				} else {
-//					GO::session()->values['auth_token'] = String::random_password('a-z,1-9', '', 30);
+//					GO::session()->values['auth_token'] = GO_Base_Util_String::random_password('a-z,1-9', '', 30);
 //					//redirect to URL without session_id
 //					header('Location: ' . $_SERVER['PHP_SELF']);
 //					exit();
@@ -204,7 +204,7 @@ class GO{
 //		}
 		
 	
-		//go_debug('[' . date('Y-m-d G:i') . '] Start of new request: ' . $_SERVER['PHP_SELF']);
+		//GO::debug('[' . date('Y-m-d G:i') . '] Start of new request: ' . $_SERVER['PHP_SELF']);
 
 
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
@@ -293,7 +293,7 @@ class GO{
 		if (self::config()->log) {
 
 			if (empty(GO::session()->logdircheck)) {
-				File::mkdir(dirname(self::config()->info_log));
+				GO_Base_Util_File::mkdir(dirname(self::config()->info_log));
 				GO::session()->logdircheck = true;
 			}
 

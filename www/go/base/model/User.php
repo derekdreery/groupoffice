@@ -71,8 +71,39 @@
 		
 	);	
 	
+	/**
+	 *
+	 * @return String Full formatted name of the user
+	 */
 	public function getName(){
-		return String::format_name($this->last_name, $this->first_name, $this->middle_name);
+		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name);
+	}
+	
+	/**
+	 * Returns an array of user group id's
+	 * 
+	 * @return Array 
+	 */
+	public static function getGroupIds($userId) {
+		if ($userId == GO::session()->values['user_id']) {
+			if (!isset(GO::session()->values['user_groups'])) {
+				GO::session()->values['user_groups'] = array();
+
+				$stmt = $this->getDbConnection()->query("SELECT group_id FROM go_users_groups WHERE user_id=".intval($userId));
+				while ($r = $this->next_record()) {
+					GO::session()->values['user_groups'][] = $r['group_id'];
+				}
+			}
+
+			return GO::session()->values['user_groups'];
+		} else {
+			$ids = array();
+			$stmt = $this->getDbConnection()->query("SELECT group_id FROM go_users_groups WHERE user_id=".intval($userId));
+			while ($r = $stmt->fetch()) {
+				$ids[] = $r['group_id'];
+			}
+			return $ids;
+		}
 	}
 }
 
