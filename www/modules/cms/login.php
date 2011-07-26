@@ -1,9 +1,9 @@
 <?php
 require_once('../../Group-Office.php');
 
-require_once(GO::modules()->modules['cms']['class_path'].'cms.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'output.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'cms_smarty.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'output.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms_smarty.class.inc.php');
 $cms = new cms();
 $co = new cms_output();
 
@@ -30,7 +30,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 	try{
 
-		require_once(GO::config()->class_path.'base/auth.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/auth.class.inc.php');
 		$GO_AUTH = new GO_AUTH();
 
 		if (!$GO_AUTH->login($username, $password))
@@ -40,7 +40,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 			if (isset($_POST['remind']))
 			{
-				require_once(GO::config()->class_path.'cryptastic.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'cryptastic.class.inc.php');
 				$c = new cryptastic();
 
 				SetCookie("GO_UN",$c->encrypt($username),time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
@@ -48,7 +48,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 			}
 
 			if(strpos($success_url, 'login.php') || strpos($success_url, 'logout.php')){
-				require_once(GO::modules()->modules['cms']['path'].'smarty_plugins/function.cms_href.php');
+				require_once($GLOBALS['GO_MODULES']->modules['cms']['path'].'smarty_plugins/function.cms_href.php');
 				$success_url = str_replace('&amp;', '&', smarty_function_cms_href(array('path'=>''), $smarty));
 			}
 

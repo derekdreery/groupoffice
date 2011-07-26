@@ -1,7 +1,7 @@
 <?php
 $module = $this->get_module('cms');
 global $GO_SECURITY, $GO_LANGUAGE, $lang, $GO_CONFIG;
-require(GO::language()->get_language_file('cms'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('cms'));
 
 
 $addressbook_name = 'Website contacts';
@@ -21,11 +21,11 @@ $cms = new cms();
 
 $site['domain']='example.com';
 $site['webmaster']='webmaster@example.com';
-$site['language']=GO::language()->language;
+$site['language']=$GLOBALS['GO_LANGUAGE']->language;
 $site['template']='Example';
 $site['name']='Example website';
 $site['user_id']=1;
-$site['acl_write']=GO::security()->get_new_acl('site');
+$site['acl_write']=$GLOBALS['GO_SECURITY']->get_new_acl('site');
 
 $site_id = $cms->add_site($site);
 
@@ -156,7 +156,7 @@ if(!empty($foto_album_files_folder_id))
 	require_once($this->modules['files']['class_path'].'files.class.inc.php');
 	$files = new files();
 
-	$path = GO::config()->file_storage_path.$files->build_path($foto_album_files_folder_id);
+	$path = $GLOBALS['GO_CONFIG']->file_storage_path.$files->build_path($foto_album_files_folder_id);
 
 	$fs = new filesystem();
 	$fs->copy($module['path'].'install/photoalbum/Sunny highlands.jpg', $path.'/Sunny highlands.jpg');
@@ -165,9 +165,9 @@ if(!empty($foto_album_files_folder_id))
 	//$files->sync_folder($foto_album_files_folder_id);
 
 	$fs = new filesystem();
-	$fs->copy($module['path'].'install/portfolio/calendar.jpg', GO::config()->file_storage_path.'public/cms/Example website/data/portfolio/Calendar/calendar.jpg');
-	$fs->copy($module['path'].'install/portfolio/crm.jpg', GO::config()->file_storage_path.'public/cms/Example website/data/portfolio/CRM/crm.jpg');
-	$fs->copy($module['path'].'install/portfolio/email.jpg', GO::config()->file_storage_path.'public/cms/Example website/data/portfolio/E-mail/email.jpg');
+	$fs->copy($module['path'].'install/portfolio/calendar.jpg', $GLOBALS['GO_CONFIG']->file_storage_path.'public/cms/Example website/data/portfolio/Calendar/calendar.jpg');
+	$fs->copy($module['path'].'install/portfolio/crm.jpg', $GLOBALS['GO_CONFIG']->file_storage_path.'public/cms/Example website/data/portfolio/CRM/crm.jpg');
+	$fs->copy($module['path'].'install/portfolio/email.jpg', $GLOBALS['GO_CONFIG']->file_storage_path.'public/cms/Example website/data/portfolio/E-mail/email.jpg');
 	
 
 	

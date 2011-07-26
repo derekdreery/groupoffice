@@ -20,12 +20,12 @@ if(isset($_REQUEST['groupoffice']))
 
 require('../../Group-Office.php');
 
-GO::security()->json_authenticate('files');
+$GLOBALS['GO_SECURITY']->json_authenticate('files');
 
-require_once (GO::modules()->modules['files']['class_path']."files.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['files']['class_path']."files.class.inc.php");
 $files = new files();
 
-require(GO::language()->get_language_file('files'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('files'));
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
@@ -33,7 +33,7 @@ $response=array();
 
 function get_child_folders($folder_id) {
 	global $GO_MODULES;
-	require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+	require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 	$fs = new files();
 	$folder_ids = array();
 	$fs->get_folders($folder_id);
@@ -68,11 +68,11 @@ try {
 
 			$folder =$files->get_folder($_POST['id']);
 
-			if(!$files->has_delete_permission(GO::security()->user_id, $folder)) {
+			if(!$files->has_delete_permission($GLOBALS['GO_SECURITY']->user_id, $folder)) {
 				throw new AccessDeniedException();
 			}
 
-			$files->notify_users($folder, GO::security()->user_id, array(), array(), array($folder['name']));
+			$files->notify_users($folder, $GLOBALS['GO_SECURITY']->user_id, array(), array(), array($folder['name']));
 
 			$response['success']=$files->delete_folder($folder);
 			break;
@@ -81,7 +81,7 @@ try {
 			$folder = $files->get_folder($file['folder_id']);
 			if(!$folder) {
 				throw new FileNotFoundException();
-			}elseif(!$files->has_write_permission(GO::security()->user_id, $folder)) {
+			}elseif(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $folder)) {
 				throw new AccessDeniedException();
 			}
 
@@ -106,7 +106,7 @@ try {
 				$newpath = $path.'/'.$name;
 
 				$fs = new filesystem();
-				$fs->move(GO::config()->file_storage_path.$oldpath, GO::config()->file_storage_path.$newpath);
+				$fs->move($GLOBALS['GO_CONFIG']->file_storage_path.$oldpath, $GLOBALS['GO_CONFIG']->file_storage_path.$newpath);
 				$response['path']=$newpath;
 			}
 			$up_file['name']=$name;
@@ -114,14 +114,14 @@ try {
 			$files->update_file($up_file);
 
 
-			if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission']) {
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission']) {
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 				$cf->insert_cf_row(6,$up_file['id']);
-				$cf->update_fields(GO::security()->user_id, $up_file['id'], 6, $_POST, false, true);
+				$cf->update_fields($GLOBALS['GO_SECURITY']->user_id, $up_file['id'], 6, $_POST, false, true);
 			}
 
-			GO::events()->fire_event('save_file_properties', array(&$response,$up_file));
+			$GLOBALS['GO_EVENTS']->fire_event('save_file_properties', array(&$response,$up_file));
 
 			$response['success']=true;
 
@@ -133,21 +133,21 @@ try {
 				throw new FileNotFoundException();
 			}
 
-			if(!$files->has_read_permission(GO::security()->user_id, $folder)) {
+			if(!$files->has_read_permission($GLOBALS['GO_SECURITY']->user_id, $folder)) {
 				throw new AccessDeniedException();
 			}
 
 			$new_notify = isset($_POST['notify']);
-			$old_notify = $files->is_notified($_POST['folder_id'], GO::security()->user_id);
+			$old_notify = $files->is_notified($_POST['folder_id'], $GLOBALS['GO_SECURITY']->user_id);
 
 			if($new_notify && !$old_notify) {
-				$files->add_notification($_POST['folder_id'], GO::security()->user_id);
+				$files->add_notification($_POST['folder_id'], $GLOBALS['GO_SECURITY']->user_id);
 			}
 			if(!$new_notify && $old_notify) {
-				$files->remove_notification($_POST['folder_id'], GO::security()->user_id);
+				$files->remove_notification($_POST['folder_id'], $GLOBALS['GO_SECURITY']->user_id);
 			}
 			
-      $permission_level=$files->has_write_permission(GO::security()->user_id, $folder);
+      $permission_level=$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $folder);
 			if($permission_level) {
 				if(isset($_POST['name']) && empty($_POST['name'])) {
 					throw new MissingFieldException();
@@ -162,7 +162,7 @@ try {
 
 					if (isset($_POST['share']) && $folder['acl_id']==0) {
 
-						$up_folder['acl_id']=GO::security()->get_new_acl();
+						$up_folder['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl();
 						$up_folder['visible']='1';
 
 						$response['acl_id']=$up_folder['acl_id'];
@@ -170,7 +170,7 @@ try {
 					if (!isset ($_POST['share']) && $folder['acl_id']) {
 						$up_folder['acl_id']=0;
 
-						GO::security()->delete_acl($folder['acl_id']);
+						$GLOBALS['GO_SECURITY']->delete_acl($folder['acl_id']);
 					}
 				}
 
@@ -185,10 +185,10 @@ try {
 						$newpath = dirname($path).'/'.$name;
 
 						$fs = new filesystem();
-						$fs->move(GO::config()->file_storage_path.$path, GO::config()->file_storage_path.$newpath);
+						$fs->move($GLOBALS['GO_CONFIG']->file_storage_path.$path, $GLOBALS['GO_CONFIG']->file_storage_path.$newpath);
 
 						$up_folder['name']=$name;
-						$up_folder['mtime']=filemtime(GO::config()->file_storage_path.$newpath);
+						$up_folder['mtime']=filemtime($GLOBALS['GO_CONFIG']->file_storage_path.$newpath);
 
 						$response['path']=$newpath;
 					}
@@ -196,7 +196,7 @@ try {
 
 				$files->update_folder($up_folder);
 
-				GO::events()->fire_event('save_folder_properties', array(&$response,$up_folder));
+				$GLOBALS['GO_EVENTS']->fire_event('save_folder_properties', array(&$response,$up_folder));
 			}
 
 			$response['success']=true;
@@ -214,8 +214,8 @@ try {
 
 			$response['success']=true;
 
-			require_once(GO::config()->class_path.'filesystem.class.inc');
-			filesystem::mkdir_recursive(GO::config()->tmpdir.'files_upload/');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
+			filesystem::mkdir_recursive($GLOBALS['GO_CONFIG']->tmpdir.'files_upload/');
 
 			if(!isset($_SESSION['GO_SESSION']['files']['uploaded_files']))
 				$_SESSION['GO_SESSION']['files']['uploaded_files']=array();
@@ -234,11 +234,11 @@ try {
 
 			if(is_uploaded_file($file['tmp_name']))
 			{
-				$tmp_file = GO::config()->tmpdir.'files_upload/'.$file['name'];
+				$tmp_file = $GLOBALS['GO_CONFIG']->tmpdir.'files_upload/'.$file['name'];
 				move_uploaded_file($file['tmp_name'], $tmp_file);
-				chmod($tmp_file, GO::config()->file_create_mode);
-				if(!empty(GO::config()->file_change_group))
-					chgrp($tmp_file, GO::config()->file_change_group);				
+				chmod($tmp_file, $GLOBALS['GO_CONFIG']->file_create_mode);
+				if(!empty($GLOBALS['GO_CONFIG']->file_change_group))
+					chgrp($tmp_file, $GLOBALS['GO_CONFIG']->file_change_group);				
 
 				$_SESSION['GO_SESSION']['files']['uploaded_files'][]=$tmp_file;
 				$_SESSION['GO_SESSION']['files']['uploaded_files_props'][]=$_POST;
@@ -252,18 +252,18 @@ try {
 		case 'upload':
 			$response['success']=true;
 			$fs = new filesystem();
-			$fs->mkdir_recursive(GO::config()->tmpdir.'files_upload');
+			$fs->mkdir_recursive($GLOBALS['GO_CONFIG']->tmpdir.'files_upload');
 
 			$_SESSION['GO_SESSION']['files']['uploaded_files']=array();
 			$_SESSION['GO_SESSION']['files']['uploaded_files_props']=array();
 
 			for ($n = 0; $n < count($_FILES['attachments']['tmp_name']); $n ++) {
 				if (is_uploaded_file($_FILES['attachments']['tmp_name'][$n])) {
-					$tmp_file = GO::config()->tmpdir.'files_upload/'.$_FILES['attachments']['name'][$n];
+					$tmp_file = $GLOBALS['GO_CONFIG']->tmpdir.'files_upload/'.$_FILES['attachments']['name'][$n];
 					move_uploaded_file($_FILES['attachments']['tmp_name'][$n], $tmp_file);
-					chmod($tmp_file, GO::config()->file_create_mode);
-					if(!empty(GO::config()->file_change_group))
-						chgrp($tmp_file, GO::config()->file_change_group);
+					chmod($tmp_file, $GLOBALS['GO_CONFIG']->file_create_mode);
+					if(!empty($GLOBALS['GO_CONFIG']->file_change_group))
+						chgrp($tmp_file, $GLOBALS['GO_CONFIG']->file_change_group);
 
 					$_SESSION['GO_SESSION']['files']['uploaded_files'][]=$tmp_file;
 					$_SESSION['GO_SESSION']['files']['uploaded_files_props'][]=$_POST;
@@ -274,7 +274,7 @@ try {
 
 		case 'overwrite':
 
-			require_once(GO::config()->class_path.'base/quota.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/quota.class.inc.php');
 			$quota = new quota();
 
 			$fs = new filesystem();
@@ -288,12 +288,12 @@ try {
 			if(!$folder) {
 				throw new FileNotFoundException();
 			}
-			if(!$files->has_write_permission(GO::security()->user_id, $folder)) {
+			if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $folder)) {
 				throw new AccessDeniedException();
 			}
 
 			$rel_path = $files->build_path($folder);
-			$full_path = GO::config()->file_storage_path.$rel_path;
+			$full_path = $GLOBALS['GO_CONFIG']->file_storage_path.$rel_path;
 
 			while($tmp_file = array_shift($_SESSION['GO_SESSION']['files']['uploaded_files'])) {
 				
@@ -339,17 +339,17 @@ try {
 
 					$file_id = $files->import_file($new_path, $folder['id'], $comments);
 
-					if($props && GO::modules()->has_module('customfields')) {
-						require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+					if($props && $GLOBALS['GO_MODULES']->has_module('customfields')) {
+						require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 						$cf = new customfields();
 
 						$cf->insert_cf_row(6, $file_id);
-						$cf->update_fields(GO::security()->user_id, $file_id, 6, $props, false);
+						$cf->update_fields($GLOBALS['GO_SECURITY']->user_id, $file_id, 6, $props, false);
 					}
 
 
-					if(!$existing_file && GO::modules()->has_module('workflow')) {
-						require_once(GO::modules()->modules['workflow']['class_path'].'workflow.class.inc.php');
+					if(!$existing_file && $GLOBALS['GO_MODULES']->has_module('workflow')) {
+						require_once($GLOBALS['GO_MODULES']->modules['workflow']['class_path'].'workflow.class.inc.php');
 						$wf = new workflow();
 
 						$wf_folder = $wf->get_folder($folder['id']);
@@ -365,7 +365,7 @@ try {
 
 			$files->touch_folder($folder['id']);
 
-			$files->notify_users($folder, GO::security()->user_id, $modified, $new);
+			$files->notify_users($folder, $GLOBALS['GO_SECURITY']->user_id, $modified, $new);
 
 			$response['success']=true;
 
@@ -383,23 +383,23 @@ try {
 			if(isset($_SESSION['GO_SESSION']['files']['paste_sources']) && count($_SESSION['GO_SESSION']['files']['paste_sources'])) {
 				$response['success']=true;
 
-				if(!$files->has_write_permission(GO::security()->user_id, $_SESSION['GO_SESSION']['files']['paste_destination'])) {
+				if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $_SESSION['GO_SESSION']['files']['paste_destination'])) {
 					throw new AccessDeniedException();
 				}
 
 				while($paste_source = array_shift($_SESSION['GO_SESSION']['files']['paste_sources'])) {
 					$destfolder = $files->get_folder($_SESSION['GO_SESSION']['files']['paste_destination']);
-					$destpath = GO::config()->file_storage_path.$files->build_path($destfolder);
+					$destpath = $GLOBALS['GO_CONFIG']->file_storage_path.$files->build_path($destfolder);
 
 					$type_id = explode(':',$paste_source);
 
 					if($type_id[0]=='d') {
 						$sourcefolder = $files->get_folder($type_id[1]);
-						$sourcepath = GO::config()->file_storage_path.$files->build_path($sourcefolder);
+						$sourcepath = $GLOBALS['GO_CONFIG']->file_storage_path.$files->build_path($sourcefolder);
 						$destpath .= '/'.$sourcefolder['name'];
 					}else {
 						$sourcefile = $files->get_file($type_id[1]);
-						$sourcepath = GO::config()->file_storage_path.$files->build_path($sourcefile['folder_id']).'/'.$sourcefile['name'];
+						$sourcepath = $GLOBALS['GO_CONFIG']->file_storage_path.$files->build_path($sourcefile['folder_id']).'/'.$sourcefile['name'];
 						$destpath .= '/'.$sourcefile['name'];
 					}
 
@@ -435,14 +435,14 @@ try {
 					}else {
 						if($_POST['paste_mode']=='cut') {
 							if($type_id[0]=='d') {
-								if(!$files->has_write_permission(GO::security()->user_id, $sourcefolder)) {
+								if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $sourcefolder)) {
 									throw new AccessDeniedException();
 								}
 
 								$fs->move($sourcepath, $destpath);
 								$files->move_folder($sourcefolder, $destfolder);
 							}else {
-								if(!$files->has_write_permission(GO::security()->user_id, $sourcefile['folder_id'])) {
+								if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $sourcefile['folder_id'])) {
 									throw new AccessDeniedException();
 								}
 
@@ -493,9 +493,9 @@ try {
 				$response['success']=true;
 			}else {
 				//if(empty($template['user_id'])) {
-				$template['user_id']=GO::security()->user_id;
+				$template['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 				//}
-				$response['acl_id']=$template['acl_id']=GO::security()->get_new_acl();
+				$response['acl_id']=$template['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl();
 
 				$types .= 'ii';
 				$response['template_id']=$files->add_template($template, $types);
@@ -514,7 +514,7 @@ try {
 		
 		case 'save_folder_limits':
 
-			if (!GO::security()->has_admin_permission(GO::security()->user_id))
+			if (!$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id))
 				throw AccessDeniedException();
 
 			if (empty($_REQUEST['folder_id'])) {

@@ -30,25 +30,25 @@ $db->query("SHOW TABLES");
 if($db->num_rows()>0)
 exit("Automatic installation of Group-Office aborted because database is not empty");
 
-$queries = String::get_sql_queries(GO::config()->root_path."install/sql/groupoffice.sql");
-//$queries = get_sql_queries(GO::config()->root_path."lib/sql/groupoffice.sql");
+$queries = String::get_sql_queries($GLOBALS['GO_CONFIG']->root_path."install/sql/groupoffice.sql");
+//$queries = get_sql_queries($GLOBALS['GO_CONFIG']->root_path."lib/sql/groupoffice.sql");
 while ($query = array_shift($queries))
 {
 	$db->query($query);
 }
 
-require(GO::config()->root_path."install/sql/updates.inc.php");
+require($GLOBALS['GO_CONFIG']->root_path."install/sql/updates.inc.php");
 //store the version number for future upgrades
-GO::config()->save_setting('version', count($updates));
+$GLOBALS['GO_CONFIG']->save_setting('version', count($updates));
 
-GO::language()->set_language(GO::config()->language);
+$GLOBALS['GO_LANGUAGE']->set_language($GLOBALS['GO_CONFIG']->language);
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 $user['id'] = $GO_USERS->nextid("go_users");
 
-require_once(GO::config()->class_path.'base/groups.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 
 $GO_GROUPS->query("DELETE FROM go_db_sequence WHERE seq_name='groups'");
@@ -71,7 +71,7 @@ if(isset($argv[2]))
 }else
 {
 	$modules = array();
-	$module_folders = $fs->get_folders(GO::config()->root_path.'modules/');
+	$module_folders = $fs->get_folders($GLOBALS['GO_CONFIG']->root_path.'modules/');
 
 	$available_modules=array();
 	foreach($module_folders as $folder)
@@ -101,25 +101,25 @@ if(isset($argv[2]))
 
 foreach($modules as $module)
 {
-	GO::modules()->add_module($module);
+	$GLOBALS['GO_MODULES']->add_module($module);
 }
 
 
-GO::modules()->load_modules();
+$GLOBALS['GO_MODULES']->load_modules();
 
-$user['language'] = GO::language()->language;
+$user['language'] = $GLOBALS['GO_LANGUAGE']->language;
 $user['first_name']=$lang['common']['system'];
 $user['middle_name']='';
 $user['last_name']=$lang['common']['admin'];
 $user['username'] = 'admin';
 $user['password'] = 'admin';
-$user['email'] = GO::config()->webmaster_email;
+$user['email'] = $GLOBALS['GO_CONFIG']->webmaster_email;
 $user['sex'] = 'M';
-$user['country']=GO::config()->default_country;
-$user['work_country']=GO::config()->default_country;
+$user['country']=$GLOBALS['GO_CONFIG']->default_country;
+$user['work_country']=$GLOBALS['GO_CONFIG']->default_country;
 $user['enabled']='1';
 
-$GO_USERS->add_user($user,$user_groups,array(GO::config()->group_everyone));
+$GO_USERS->add_user($user,$user_groups,array($GLOBALS['GO_CONFIG']->group_everyone));
 
 
-GO::config()->save_setting('upgrade_mtime', GO::config()->mtime);
+$GLOBALS['GO_CONFIG']->save_setting('upgrade_mtime', $GLOBALS['GO_CONFIG']->mtime);

@@ -35,7 +35,7 @@ class tasks extends db
 		$db = new db();
 		
 		$sql = "SELECT count(*) AS active FROM ta_tasks t INNER JOIN ta_lists l ON l.id=t.tasklist_id ".
-			"WHERE t.user_id=".GO::security()->user_id." AND t.completion_time=0 AND t.start_time<".$now;
+			"WHERE t.user_id=".$GLOBALS['GO_SECURITY']->user_id." AND t.completion_time=0 AND t.start_time<".$now;
 						
 		$db->query($sql);
 		$r = $db->next_record();
@@ -47,7 +47,7 @@ class tasks extends db
 	public static function load_global_settings(&$response)
 	{
 		global $GO_CONFIG;
-		$response['data']['task_name_template']=GO::config()->get_setting('task_name_template');
+		$response['data']['task_name_template']=$GLOBALS['GO_CONFIG']->get_setting('task_name_template');
 
 		if(!$response['data']['task_name_template'])
 			$response['data']['task_name_template']='{first_name} {middle_name} {last_name}';
@@ -57,7 +57,7 @@ class tasks extends db
 	public static function save_global_settings(&$response)
 	{
 		global $GO_CONFIG;
-		GO::config()->save_setting('task_name_template', $_POST['task_name_template']);
+		$GLOBALS['GO_CONFIG']->save_setting('task_name_template', $_POST['task_name_template']);
 
 		if(isset($_POST['change_all_task_names']))
 		{
@@ -84,12 +84,12 @@ class tasks extends db
 
 		echo 'Task folders'.$line_break;
 
-		if(isset(GO::modules()->modules['files']))
+		if(isset($GLOBALS['GO_MODULES']->modules['files']))
 		{
 			$ta = new tasks();
 			$db = new db();
 
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$sql = "SELECT * FROM ta_lists";
@@ -124,7 +124,7 @@ class tasks extends db
 			}
 		}
 
-		if(isset(GO::modules()->modules['customfields'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
 			$db->query("delete from cf_12 where link_id not in (select id from ta_lists);");
@@ -137,7 +137,7 @@ class tasks extends db
 	{
 		global $GO_MODULES;
 
-		if(GO::modules()->has_module('tasks'))
+		if($GLOBALS['GO_MODULES']->has_module('tasks'))
 		{
 			$tasks = new tasks();
 			
@@ -158,7 +158,7 @@ class tasks extends db
 
 		global $GO_MODULES;
 
-		if(GO::modules()->has_module('tasks'))
+		if($GLOBALS['GO_MODULES']->has_module('tasks'))
 		{
 			$tasks = new tasks();
 			
@@ -194,7 +194,7 @@ class tasks extends db
 		if(!isset($settings['user_id']))
 		{
 			global $GO_SECURITY;
-			$settings['user_id'] = GO::security()->user_id;
+			$settings['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
 		}
 		return $this->update_row('ta_settings', 'user_id', $settings);
 	}
@@ -242,9 +242,9 @@ class tasks extends db
 	function add_tasklist($list)
 	{
 		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files']))
+		if(isset($GLOBALS['GO_MODULES']->modules['files']))
 		{
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			
 			$files->check_share('tasks/'.File::strip_invalid_chars($list['name']),$list['user_id'], $list['acl_id']);
@@ -274,21 +274,21 @@ class tasks extends db
 		$this->query($sql);
 
 		if(empty($tasklist['shared_acl'])){
-			GO::security()->delete_acl($tasklist['acl_id']);
+			$GLOBALS['GO_SECURITY']->delete_acl($tasklist['acl_id']);
 		}
 
-		if(isset(GO::modules()->modules['calendar']))
+		if(isset($GLOBALS['GO_MODULES']->modules['calendar']))
 		{
 			$this->query("DELETE FROM cal_visible_tasklists WHERE tasklist_id=?", 'i', $list_id);
 		}
-		if(isset(GO::modules()->modules['summary']))
+		if(isset($GLOBALS['GO_MODULES']->modules['summary']))
 		{
 			$this->query("DELETE FROM su_visible_lists WHERE tasklist_id=?", 'i', $list_id);
 		}		
 			
-		if(isset(GO::modules()->modules['files']))
+		if(isset($GLOBALS['GO_MODULES']->modules['files']))
 		{
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			
 			$folder = $files->resolve_path('tasks/'.File::strip_invalid_chars($tasklist['name']));			
@@ -297,7 +297,7 @@ class tasks extends db
 			}
 		}
 
-		if(isset(GO::modules()->modules['sync'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['sync'])) {
 			$sql = "DELETE FROM sync_tasklist_user WHERE tasklist_id='".$this->escape($list_id)."'";
 			$this->query($sql);
 		}
@@ -309,9 +309,9 @@ class tasks extends db
 		if(!$old_tasklist)$old_tasklist=$this->get_tasklist($tasklist['id']);
 
 		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files']) && $old_tasklist &&  $tasklist['name']!=$old_tasklist['name'])
+		if(isset($GLOBALS['GO_MODULES']->modules['files']) && $old_tasklist &&  $tasklist['name']!=$old_tasklist['name'])
 		{
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();			
 			$files->move_by_paths('tasks/'.File::strip_invalid_chars($old_tasklist['name']), 'tasks/'.File::strip_invalid_chars($tasklist['name']));
 		}
@@ -320,7 +320,7 @@ class tasks extends db
 		//user id of the tasklist changed. Change the owner of the ACL as well
 		if(isset($tasklist['user_id']) && $old_tasklist['user_id'] != $tasklist['user_id'])
 		{
-			GO::security()->chown_acl($old_tasklist['acl_id'], $tasklist['user_id']);
+			$GLOBALS['GO_SECURITY']->chown_acl($old_tasklist['acl_id'], $tasklist['user_id']);
 		}
 		
 		return $this->update_row('ta_lists','id', $tasklist);
@@ -357,7 +357,7 @@ class tasks extends db
 		if(!$tasklist){
 			global $GO_CONFIG, $GO_SECURITY;
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$list['user_id']=$user_id;
@@ -366,7 +366,7 @@ class tasks extends db
 				return false;
 			}
 
-			$tpl = GO::config()->get_setting('task_name_template');
+			$tpl = $GLOBALS['GO_CONFIG']->get_setting('task_name_template');
 			if(!$tpl)
 				$tpl = '{first_name} {middle_name} {last_name}';
 
@@ -374,9 +374,9 @@ class tasks extends db
 
 			//$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$list['name'] = $task_name;
-			$list['acl_id']=GO::security()->get_new_acl('tasks',$user_id);
+			$list['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('tasks',$user_id);
 
-			GO::security()->add_group_to_acl(GO::config()->group_internal, $list['acl_id'],2);
+			$GLOBALS['GO_SECURITY']->add_group_to_acl($GLOBALS['GO_CONFIG']->group_internal, $list['acl_id'],2);
 
 			$x = 1;
 			while($this->get_tasklist_by_name($list['name']))
@@ -395,8 +395,8 @@ class tasks extends db
 			}
 
 			global $GO_MODULES;
-			if(GO::modules()->has_module('calendar')){
-				require_once(GO::modules()->modules['calendar']['class_path'].'calendar.class.inc.php');
+			if($GLOBALS['GO_MODULES']->has_module('calendar')){
+				require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'calendar.class.inc.php');
 				$cal = new calendar();
 				$cal_settings = $cal->get_settings($user_id);
 
@@ -430,7 +430,7 @@ class tasks extends db
 		{
 			global $GO_SECURITY;
 
-			$user_id = !empty($user_id) ? $user_id : GO::security()->user_id;
+			$user_id = !empty($user_id) ? $user_id : $GLOBALS['GO_SECURITY']->user_id;
 
 			return  $this->get_default_tasklist($user_id);
 			/*if ($tasklist)
@@ -440,7 +440,7 @@ class tasks extends db
 			{
 				global $GO_CONFIG;
 
-				require_once(GO::config()->class_path.'base/users.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 				$GO_USERS = new GO_USERS();
 
 				$list['user_id']=$user_id;
@@ -450,7 +450,7 @@ class tasks extends db
 				}
 				$task_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 				$list['name'] = $task_name;
-				$list['acl_id']=GO::security()->get_new_acl('',$user_id);
+				$list['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('',$user_id);
 				$x = 1;
 				while($this->get_tasklist_by_name($list['name']))
 				{
@@ -463,7 +463,7 @@ class tasks extends db
 					throw new DatabaseInsertException();
 				}else
 				{
-					$this->update_settings(array('user_id'=>GO::security()->user_id, 'default_tasklist_id'=>$list_id));
+					$this->update_settings(array('user_id'=>$GLOBALS['GO_SECURITY']->user_id, 'default_tasklist_id'=>$list_id));
 					return $this->get_tasklist($list_id);
 				}
 			}*/
@@ -495,7 +495,7 @@ class tasks extends db
 		global $GO_SECURITY;
 
 		if(!$user_id)
-				$user_id = GO::security()->user_id;
+				$user_id = $GLOBALS['GO_SECURITY']->user_id;
         
 		$sql = "SELECT l.* ".
 		"FROM ta_lists l ".
@@ -504,7 +504,7 @@ class tasks extends db
 		if($auth_type=='write'){
 			$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
 		}
-		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
+		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 		
 		if(!empty($query))
 		{
@@ -529,7 +529,7 @@ class tasks extends db
 
 		if (!isset($task['user_id']) || $task['user_id'] == 0) {
 			global $GO_SECURITY;
-			$task['user_id'] = GO::security()->user_id;
+			$task['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
 		}
 
 		if(!isset($task['ctime']) || $task['ctime'] == 0)
@@ -556,7 +556,7 @@ class tasks extends db
 		
 		
 		global $GO_MODULES;
-		if(!isset($task['files_folder_id']) && isset(GO::modules()->modules['files']))
+		if(!isset($task['files_folder_id']) && isset($GLOBALS['GO_MODULES']->modules['files']))
 		{
 			global $GO_CONFIG;
 			
@@ -564,7 +564,7 @@ class tasks extends db
 			{
 				$tasklist = $this->get_tasklist($task['tasklist_id']);				
 			}
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();			
 
 			$new_path = $this->build_task_files_path($task,$tasklist);			
@@ -594,7 +594,7 @@ class tasks extends db
 
 		$tasklist = $this->get_tasklist($task['tasklist_id']);
 
-		require_once(GO::config()->class_path.'base/reminder.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/reminder.class.inc.php');
 		$rm = new reminder();
 		$existing_reminder = $rm->get_reminder_by_link_id($tasklist['user_id'], $task['id'], 12);
 
@@ -666,10 +666,10 @@ class tasks extends db
 		}
 
 		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
 			
 
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			if(!isset($task['due_time'])) {
@@ -722,7 +722,7 @@ class tasks extends db
 			$task=array_map('addslashes',$task);
 			if($new_task_id = $this->add_task($task)) {
 				global $GO_CONFIG;
-				require_once(GO::config()->class_path.'base/links.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 				$GO_LINKS = new GO_LINKS();
 				$GO_LINKS->copy_links($old_id, 12, $new_task_id, 12);
 			}
@@ -736,7 +736,7 @@ class tasks extends db
 
 		if(!isset($lang['tasks'])){
 			global $GO_LANGUAGE;
-			GO::language()->require_language_file('tasks');
+			$GLOBALS['GO_LANGUAGE']->require_language_file('tasks');
 		}
 		
 		$task['completed']=$task['completion_time']>0;
@@ -858,7 +858,7 @@ class tasks extends db
 
 		$sql  = "SELECT DISTINCT t.*, l.name AS tasklist_name";
 
-		if($join_custom_fields && GO::modules()->has_module('customfields')) {
+		if($join_custom_fields && $GLOBALS['GO_MODULES']->has_module('customfields')) {
 			$sql .= " ,cf_12.*";
 		}
 
@@ -866,7 +866,7 @@ class tasks extends db
 			. "INNER JOIN ta_lists l ON (t.tasklist_id=l.id) "
 			. "LEFT JOIN ta_categories c ON (t.category_id=c.id)";
 
-		if($join_custom_fields && GO::modules()->has_module('customfields')) {
+		if($join_custom_fields && $GLOBALS['GO_MODULES']->has_module('customfields')) {
 			$sql .= " LEFT JOIN cf_12 ON cf_12.link_id=t.id";
 		}
 
@@ -1027,9 +1027,9 @@ class tasks extends db
 		{
 			global $GO_CONFIG,$GO_MODULES;
 
-			if(isset(GO::modules()->modules['files']))
+			if(isset($GLOBALS['GO_MODULES']->modules['files']))
 			{
-				require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 				$files = new files();
 				try{
 					$files->delete_folder($task['files_folder_id']);
@@ -1042,7 +1042,7 @@ class tasks extends db
 			
 			global $GO_CONFIG;
 				
-			require_once(GO::config()->class_path.'base/reminder.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/reminder.class.inc.php');
 			$rm = new reminder();
 			$rm2 = new reminder();
 			$rm->get_reminders_by_link_id($task_id, 12);
@@ -1051,7 +1051,7 @@ class tasks extends db
 				$rm2->delete_reminder($r['id']);
 			}
 						
-			require_once(GO::config()->class_path.'base/search.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 			$search = new search();
 			$search->delete_search_result($task_id, 12);
 		}
@@ -1065,7 +1065,7 @@ class tasks extends db
 
 		if(!isset($this->ical2array))
 		{
-			require_once(GO::config()->class_path.'ical2array.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
 			$this->ical2array = new ical2array();
 		}
 
@@ -1284,7 +1284,7 @@ class tasks extends db
 	{
 		global $GO_MODULES, $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'ical2array.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
 		$this->ical2array = new ical2array();
 
 		$vcalendar = $this->ical2array->parse_string($ical_string);
@@ -1311,7 +1311,7 @@ class tasks extends db
 	{
 		global $GO_MODULES;
 
-		require_once(GO::modules()->modules['task']['class_path'].'ical2array.class.inc');
+		require_once($GLOBALS['GO_MODULES']->modules['task']['class_path'].'ical2array.class.inc');
 		$this->ical2array = new ical2array();
 
 		$vtask = $this->ical2array->parse_file($ical_file);
@@ -1334,7 +1334,7 @@ class tasks extends db
 		global $GO_MODULES, $GO_CONFIG;
 		$count = 0;
 
-		require_once(GO::config()->class_path.'ical2array.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
 		$this->ical2array = new ical2array();
 
 		$vcalendar = $this->ical2array->parse_string($ical_string);
@@ -1376,13 +1376,13 @@ class tasks extends db
 
 		//$tasklist['name']=String::format_name($user);
 		//$tasklist['user_id']=$user['id'];
-		//$tasklist['acl_id']=GO::security()->get_new_acl('tasks', $user['id']);
+		//$tasklist['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('tasks', $user['id']);
 
 		//$tasklist_id = $tasks->add_tasklist($tasklist);
 
 		$tasklist = $tasks->get_default_tasklist($user['id']);
 		
-		if(isset(GO::modules()->modules['summary'])){
+		if(isset($GLOBALS['GO_MODULES']->modules['summary'])){
 			$tasks->add_visible_tasklist(array('user_id'=>$user['id'], 'tasklist_id'=>$tasklist['id']));
 		}
 	}
@@ -1440,9 +1440,9 @@ class tasks extends db
 	{
 		global $GO_CONFIG, $GO_LANGUAGE;
 		
-		require_once(GO::config()->class_path.'/base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
 		$search = new search();
-		require(GO::language()->get_language_file('tasks'));
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('tasks'));
 
 		$sql  = "SELECT DISTINCT t.*, tl.acl_id FROM ta_tasks t ".
 		"INNER JOIN ta_lists tl ON t.tasklist_id=tl.id ".
@@ -1533,7 +1533,7 @@ class tasks extends db
         {
 		global $GO_SECURITY;
 
-		$user_id = !empty($user_id) ? $user_id : GO::security()->user_id;
+		$user_id = !empty($user_id) ? $user_id : $GLOBALS['GO_SECURITY']->user_id;
 		
 		$sql = "SELECT ";
 		if($offset > 0)
@@ -1608,12 +1608,12 @@ class tasks extends db
 	function get_linked_tasks_json($link_id, $link_type){
 		global $GO_SECURITY, $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/links.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 		$GO_LINKS = new GO_LINKS();
 
 		$records=array();
 
-		$this->get_linked_tasks(GO::security()->user_id, $link_id, $link_type);
+		$this->get_linked_tasks($GLOBALS['GO_SECURITY']->user_id, $link_id, $link_type);
 		while($t=$this->next_record()){
 			$this->format_task_record($t);
 			$t['link_count']=$GO_LINKS->count_links($t['id'], 12);
@@ -1627,34 +1627,34 @@ class tasks extends db
 	function get_tasklists_json(&$response, $auth_type='read', $query='', $start=0, $limit=0, $sort='name', $dir='ASC'){
 		global $GO_CONFIG, $GO_SECURITY;
 		
-		//$tasklists = GO::config()->get_setting('tasks_tasklists_filter', GO::security()->user_id);
+		//$tasklists = $GLOBALS['GO_CONFIG']->get_setting('tasks_tasklists_filter', $GLOBALS['GO_SECURITY']->user_id);
 		//$tasklists = ($tasklists) ? explode(',',$tasklists) : array();
 		$tasklists=get_multiselectgrid_selections('tasklists');
 
 		if(!count($tasklists)) {
-			$this->get_settings(GO::security()->user_id);
+			$this->get_settings($GLOBALS['GO_SECURITY']->user_id);
 			$default_tasklist_id = $this->f('default_tasklist_id');
 
 			if(!$default_tasklist_id) {
-				$this->get_tasklist(0, GO::security()->user_id);
+				$this->get_tasklist(0, $GLOBALS['GO_SECURITY']->user_id);
 				$default_tasklist_id = $this->f('id');
 			}
 
 			if($default_tasklist_id) {
 				$tasklists[] = $default_tasklist_id;
-				GO::config()->save_setting('tasks_tasklists_filter',$default_tasklist_id, GO::security()->user_id);
+				$GLOBALS['GO_CONFIG']->save_setting('tasks_tasklists_filter',$default_tasklist_id, $GLOBALS['GO_SECURITY']->user_id);
 			}
 		}
 
-		$response['total'] = $this->get_authorized_tasklists($auth_type, $query, GO::security()->user_id, $start, $limit, $sort, $dir);
+		$response['total'] = $this->get_authorized_tasklists($auth_type, $query, $GLOBALS['GO_SECURITY']->user_id, $start, $limit, $sort, $dir);
 		if(!$response['total'] && empty($query)) {
 			$response['new_default_tasklist']= $this->get_tasklist();
-			$response['total'] = $this->get_authorized_tasklists($auth_type, $query, GO::security()->user_id, $start, $limit, $sort, $dir);
+			$response['total'] = $this->get_authorized_tasklists($auth_type, $query, $GLOBALS['GO_SECURITY']->user_id, $start, $limit, $sort, $dir);
 		}
 		$response['results']=array();
 		$tasklist_names = array();
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		while($tasklist = $this->next_record(DB_ASSOC)) {

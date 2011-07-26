@@ -1,10 +1,10 @@
 <?php
 require('../../Group-Office.php');
 
-require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'cms.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'output.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'cms_smarty.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'output.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms_smarty.class.inc.php');
 $cms = new cms();
 $co = new cms_output();
 $ab = new addressbook();
@@ -16,7 +16,7 @@ switch($_GET['type'])
 {
 	case 'user':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$user = $GO_USERS->get_user($_GET['id']);

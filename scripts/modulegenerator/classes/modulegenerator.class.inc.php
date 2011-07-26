@@ -259,7 +259,7 @@ class modulegenerator extends db
 		$this->tables=$tables;
 		
 		
-		$this->module_dir = GO::config()->root_path.'modules/'.$module.'/';
+		$this->module_dir = $GLOBALS['GO_CONFIG']->root_path.'modules/'.$module.'/';
 		
 		mkdir($this->module_dir);
 		mkdir($this->module_dir.'classes/');
@@ -276,7 +276,7 @@ class modulegenerator extends db
 	
 		if(!file_exists($this->module_dir.'themes/Default/images/'.$this->module.'.png'))
 		{
-			copy(GO::config()->root_path.'themes/Default/images/16x16/icon-help.png', $this->module_dir.'themes/Default/images/'.$this->module.'.png');
+			copy($GLOBALS['GO_CONFIG']->root_path.'themes/Default/images/16x16/icon-help.png', $this->module_dir.'themes/Default/images/'.$this->module.'.png');
 		}
 
 		$this->create_file($this->module_dir.'classes/'.$this->module.'.class.inc.php', 'class.tpl');		
@@ -293,7 +293,7 @@ class modulegenerator extends db
 		
 		if(!file_exists($this->module_dir.'scripts.inc.php'))
 		{
-			file_put_contents($this->module_dir.'scripts.inc.php', "<?php\nrequire(".'GO::language()->get_language_file(\''.$this->module.'\')'.");\n\n");
+			file_put_contents($this->module_dir.'scripts.inc.php', "<?php\nrequire(".'$GLOBALS['GO_LANGUAGE']->get_language_file(\''.$this->module.'\')'.");\n\n");
 		}
 		
 		

@@ -7,16 +7,16 @@ require_once('/etc/groupoffice/config.php');
 
 require($config['root_path'].'Group-Office.php');
 
-require_once (GO::modules()->modules['servermanager']['class_path']."servermanager.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['servermanager']['class_path']."servermanager.class.inc.php");
 $servermanager = new servermanager();
 
 
-if(!isset(GO::modules()->modules['servermanager']))
+if(!isset($GLOBALS['GO_MODULES']->modules['servermanager']))
 {
 	die('Fatal error: servermanager module must be installed');
 }
 
-require_once(GO::config()->class_path.'filesystem.class.inc');
+require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 $fs = new filesystem();
 
 //$roots=array('/var/www/groupoffice', '/var/www');

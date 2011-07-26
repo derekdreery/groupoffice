@@ -14,22 +14,22 @@
 
 
 require_once("../../Group-Office.php");
-GO::security()->authenticate();
-GO::modules()->authenticate('email');
+$GLOBALS['GO_SECURITY']->authenticate();
+$GLOBALS['GO_MODULES']->authenticate('email');
 
 //close writing to session so other concurrent requests won't be locked out.
 session_write_close();
 
-require_once(GO::modules()->modules['email']['class_path']."cached_imap.class.inc.php");
-require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
-require_once(GO::config()->class_path."mail/mimeDecode.class.inc");
+require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."cached_imap.class.inc.php");
+require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
+require_once($GLOBALS['GO_CONFIG']->class_path."mail/mimeDecode.class.inc");
 $imap = new cached_imap();
 $email = new email();
 
 
 if(!empty($_REQUEST['filepath'])){
 	//message is cached on disk
-	$path = GO::config()->file_storage_path.$_REQUEST['filepath'];
+	$path = $GLOBALS['GO_CONFIG']->file_storage_path.$_REQUEST['filepath'];
 
 	if(File::path_leads_to_parent($path) || !file_exists($path)){
 		die('Invalid request');
@@ -58,7 +58,7 @@ if(!empty($_REQUEST['filepath'])){
 {
 	$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 
-	if(!GO::security()->has_permission(GO::security()->user_id,$account['acl_id'])) {
+	if(!$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id,$account['acl_id'])) {
 		die($lang['common']['accessDenied']);
 	}
 
@@ -74,14 +74,14 @@ if(!empty($_REQUEST['filepath'])){
 
 	$extension = File::get_extension($_REQUEST['filename']);
 
-	if(GO::modules()->has_module('gnupg') && ($extension=='pgp' || $extension=='gpg')) {
-		require_once (GO::modules()->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+	if($GLOBALS['GO_MODULES']->has_module('gnupg') && ($extension=='pgp' || $extension=='gpg')) {
+		require_once ($GLOBALS['GO_MODULES']->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 		$gnupg = new gnupg();
 
-		$tmpfile = GO::config()->tmpdir.$_REQUEST['filename'];
+		$tmpfile = $GLOBALS['GO_CONFIG']->tmpdir.$_REQUEST['filename'];
 
 		$_REQUEST['filename']=File::strip_extension($_REQUEST['filename']);
-		$file=GO::config()->tmpdir.$_REQUEST['filename'];
+		$file=$GLOBALS['GO_CONFIG']->tmpdir.$_REQUEST['filename'];
 		$fp = fopen($tmpfile, 'w+');
 
 		if(!$fp)

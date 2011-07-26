@@ -1,6 +1,6 @@
 <?php
 
-require_once(GO::config()->class_path . 'tcpdf/tcpdf.php');
+require_once($GLOBALS['GO_CONFIG']->class_path . 'tcpdf/tcpdf.php');
 
 //ini_set('display_errors', 'off');
 
@@ -15,8 +15,8 @@ class PDF extends TCPDF {
 	function __construct() {
 		global $GO_CONFIG;
 
-		if (!empty(GO::config()->tcpdf_font)) {
-			$this->font = GO::config()->tcpdf_font;
+		if (!empty($GLOBALS['GO_CONFIG']->tcpdf_font)) {
+			$this->font = $GLOBALS['GO_CONFIG']->tcpdf_font;
 		}
 
 		parent::__construct('L', 'pt', 'A4', true, 'UTF-8');
@@ -35,7 +35,7 @@ class PDF extends TCPDF {
 		//$this->SetTitle($order['order_id']);
 		$this->SetSubject('Calendar print');
 		$this->SetAuthor($_SESSION['GO_SESSION']['name']);
-		$this->SetCreator(GO::config()->product_name . ' ' . GO::config()->version);
+		$this->SetCreator($GLOBALS['GO_CONFIG']->product_name . ' ' . $GLOBALS['GO_CONFIG']->version);
 		$this->SetKeywords('Calendar print');
 	}
 
@@ -46,7 +46,7 @@ class PDF extends TCPDF {
 		$this->SetFont($this->font, '', $this->font_size);
 		$this->SetY(-20);
 		$pW = $this->getPageWidth();
-		$this->Cell($pW / 2, 10, GO::config()->product_name . ' ' . GO::config()->version, 0, 0, 'L');
+		$this->Cell($pW / 2, 10, $GLOBALS['GO_CONFIG']->product_name . ' ' . $GLOBALS['GO_CONFIG']->version, 0, 0, 'L');
 		$this->Cell(($pW / 2) - $this->rMargin, 10, sprintf($lang['calendar']['printPage'], $this->getAliasNumPage(), $this->getAliasNbPages()), 0, 0, 'R');
 	}
 
@@ -148,7 +148,7 @@ class PDF extends TCPDF {
 			$date = getdate($event['start_time']);
 			$index_time = mktime(0, 0, 0, $date['mon'], $date['mday'], $date['year']);
 			while ($index_time <= $event['end_time'] && $index_time < $this->end_time) {
-				if ($this->calendar['user_id'] != GO::security()->user_id && !empty($event['private'])) {
+				if ($this->calendar['user_id'] != $GLOBALS['GO_SECURITY']->user_id && !empty($event['private'])) {
 					$event['name'] = $lang['calendar']['private'];
 					$event['description'] = '';
 					$event['location'] = '';

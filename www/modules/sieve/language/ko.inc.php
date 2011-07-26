@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('sieve'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('sieve'));
 
 $lang['sieve']['name']='Sieve';
 $lang['sieve']['description']='메일 필터링 규칙 관리';

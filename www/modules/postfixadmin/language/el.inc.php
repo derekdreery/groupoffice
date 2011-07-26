@@ -1,6 +1,6 @@
 <?php
 /* Translator for the Greek Language: Konstantinos Georgakopoulos (kgeorga@uom.gr)*/
-require(GO::language()->get_fallback_language_file('postfixadmin'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('postfixadmin'));
 $lang['postfixadmin']['name']='Διαχείριση Postfix';
 $lang['postfixadmin']['description']='Άρθρωμα για την διαχείριση των εικονικών χρηστών του postfix στην βάση δεδομένων του Group-Office';
 $lang['postfixadmin']['alias']='Ψευδώνυμο';

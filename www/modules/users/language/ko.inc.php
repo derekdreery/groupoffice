@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('users'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('users'));
 $lang['users']['name'] = '사용자';
 $lang['users']['description'] = 'Admin module. Managing system users.';
 

@@ -74,15 +74,15 @@ class Swift_Smime_Message extends Swift_Message
 		if(!$this->saved_headers){		
 			global $GO_CONFIG;			
 
-			$this->tempin = GO::config()->tmpdir."smime_tempin.txt";
-			$this->tempout=GO::config()->tmpdir."smime_tempout.txt";
+			$this->tempin = $GLOBALS['GO_CONFIG']->tmpdir."smime_tempin.txt";
+			$this->tempout=$GLOBALS['GO_CONFIG']->tmpdir."smime_tempout.txt";
 			if(file_exists($this->tempin))
 				unlink($this->tempin);
 
 			if(file_exists($this->tempout))
 				unlink($this->tempout);
 
-			File::mkdir(GO::config()->tmpdir);
+			File::mkdir($GLOBALS['GO_CONFIG']->tmpdir);
 
 			/*
 			 * Store the headers of the current message because the PHP function

@@ -1,9 +1,9 @@
 <?php
 require('../../Group-Office.php');
 
-require_once(GO::modules()->modules['cms']['class_path'].'cms.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'output.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'cms_smarty.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'output.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms_smarty.class.inc.php');
 $cms = new cms();
 $co = new cms_output();
 
@@ -25,10 +25,10 @@ $smarty->assign('success_url', $success_url);
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
 
-	require_once(GO::config()->class_path.'base/users.class.inc.php');
+	require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 	$GO_USERS = new GO_USERS();
 
-	require_once(GO::config()->class_path.'base/groups.class.inc.php');
+	require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 	$GO_GROUPS = new GO_GROUPS();
 
 	function check_fields($required_fields)
@@ -45,19 +45,19 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 		return true;
 	}
 
-	require(GO::language()->get_language_file('users'));
+	require($GLOBALS['GO_LANGUAGE']->get_language_file('users'));
 
 
 	$fields = explode(',', 'sex,address,home_phone,cellular,company,department,function');
 
-	$modules_read = array_map('trim', explode(',',GO::config()->register_modules_read));
-	$modules_write = array_map('trim', explode(',',GO::config()->register_modules_write));
+	$modules_read = array_map('trim', explode(',',$GLOBALS['GO_CONFIG']->register_modules_read));
+	$modules_write = array_map('trim', explode(',',$GLOBALS['GO_CONFIG']->register_modules_write));
 
 	//user groups the user will be added to.
-	$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',GO::config()->register_user_groups)));
+	$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GLOBALS['GO_CONFIG']->register_user_groups)));
 
 	//user groups that this user will be visible to
-	$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',GO::config()->register_visible_user_groups)));
+	$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GLOBALS['GO_CONFIG']->register_visible_user_groups)));
 
 
 	$user['first_name'] = isset($_POST['first_name']) ?  (trim($_POST['first_name'])) : '';
@@ -96,7 +96,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	}
 	if(in_array('address', $fields))
 	{
-		$user['country'] = isset($_POST['country']) ? ($_POST["country"]) : GO::config()->default_country;
+		$user['country'] = isset($_POST['country']) ? ($_POST["country"]) : $GLOBALS['GO_CONFIG']->default_country;
 		$user['state'] = isset($_POST['state']) ? ($_POST["state"]) : '';
 		$user['city'] = isset($_POST['city']) ? ($_POST["city"]) : '';
 		$user['zip'] = isset($_POST['zip']) ? ($_POST["zip"]) : '';
@@ -106,7 +106,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 	if(in_array('work_address', $fields))
 	{
-		$user['work_country'] = isset($_POST['work_country']) ? ($_POST["work_country"]) : GO::config()->default_country;
+		$user['work_country'] = isset($_POST['work_country']) ? ($_POST["work_country"]) : $GLOBALS['GO_CONFIG']->default_country;
 		$user['work_state'] = isset($_POST['work_state']) ? ($_POST["work_state"]) : '';
 		$user['work_city'] = isset($_POST['work_city']) ? ($_POST["work_city"]) : '';
 		$user['work_zip'] = isset($_POST['work_zip']) ? ($_POST["work_zip"]) : '';
@@ -136,9 +136,9 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 		$user['homepage'] = isset($_POST['homepage']) ? ($_POST["homepage"]) : '';
 	}
 
-	$user['language'] = isset($_POST['SET_LANGUAGE']) ? $_POST['SET_LANGUAGE'] : GO::language()->language['code'];
+	$user['language'] = isset($_POST['SET_LANGUAGE']) ? $_POST['SET_LANGUAGE'] : $GLOBALS['GO_LANGUAGE']->language['code'];
 
-	$user['theme'] = GO::config()->theme;
+	$user['theme'] = $GLOBALS['GO_CONFIG']->theme;
 	$user['username'] = isset($_POST['username']) ? ($_POST['username']) : '';
 	$user['enabled'] = '1';
 
@@ -163,7 +163,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	$required_fields[]='last_name';
 
 
-	//if(GO::config()->auto_activate_accounts)
+	//if($GLOBALS['GO_CONFIG']->auto_activate_accounts)
 	//{
 		$pass1 = ($_POST["pass1"]);
 		$pass2 = ($_POST["pass2"]);
@@ -174,7 +174,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 	//$user = array_map('addslashes',$user);
 
-	if (!check_fields($required_fields) || (GO::config()->auto_activate_accounts && (empty($pass1) || empty ($pass2))))
+	if (!check_fields($required_fields) || ($GLOBALS['GO_CONFIG']->auto_activate_accounts && (empty($pass1) || empty ($pass2))))
 	{
 		$feedback = $lang['common']['missingField'];
 	}elseif(!$GO_USERS->check_username($user['username']))
@@ -186,10 +186,10 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	}elseif($GO_USERS->get_user_by_username($user['username']))
 	{
 		$feedback = $lang['users']['error_username_exists'];
-	}elseif(!GO::config()->allow_duplicate_email && $GO_USERS->email_exists($user['email']))
+	}elseif(!$GLOBALS['GO_CONFIG']->allow_duplicate_email && $GO_USERS->email_exists($user['email']))
 	{
 		$feedback = $lang['users']['error_email_exists'];
-	}elseif(GO::config()->auto_activate_accounts && $pass1 != $pass2)
+	}elseif($GLOBALS['GO_CONFIG']->auto_activate_accounts && $pass1 != $pass2)
 	{
 		$feedback = $lang['users']['error_match_pass'];
 	}else
@@ -212,13 +212,13 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 	
 			$mail_body = $smarty->fetch('auth/register_email.tpl');
 			
-			require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 			$swift = new GoSwift($user['email'], $co->config['lang']['register_subject']);
 			$swift->set_from($co->site['webmaster'], $co->site['name']);
 			$swift->set_body($mail_body);
 			$swift->sendmail();
 
-			require_once(GO::config()->class_path.'base/auth.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/auth.class.inc.php');
 			$GO_AUTH = new GO_AUTH();
 			
 			$GO_AUTH->login($user['username'], $user['password']);
@@ -234,7 +234,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 }
 
-require(GO::language()->get_base_language_file('countries'));
+require($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
 asort($countries);
 $smarty->assign('countries', $countries);
 

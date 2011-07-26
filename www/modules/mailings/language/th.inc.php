@@ -13,7 +13,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('mailings'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('mailings'));
 $lang['mailings']['name'] = 'เทมเพลท และ รายการที่อยู่';//Templates and addresslists
 $lang['mailings']['description'] = 'สำหรับงานจัดการการติดต่อทั้งหมด.';//Module to manage all contacts
 

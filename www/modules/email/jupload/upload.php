@@ -1,7 +1,7 @@
 <?php
 require('../../../Group-Office.php');
 
-if(!GO::security()->logged_in())
+if(!$GLOBALS['GO_SECURITY']->logged_in())
 {
 	die();
 }
@@ -9,7 +9,7 @@ if(!GO::security()->logged_in())
 if(!isset($_SESSION['GO_SESSION']['just_uploaded_attachments']))
 	$_SESSION['GO_SESSION']['just_uploaded_attachments']=array();
 
-$path = GO::config()->tmpdir.'/attachments';
+$path = $GLOBALS['GO_CONFIG']->tmpdir.'/attachments';
 if(!is_dir($path))
 {
 	mkdir($path, 0755, true);
@@ -26,7 +26,7 @@ while($file = array_shift($_FILES))
 		{
 				
 				
-			$dir = GO::config()->tmpdir.'chunked_upload/';
+			$dir = $GLOBALS['GO_CONFIG']->tmpdir.'chunked_upload/';
 			$filepath = $dir.$file['name'].'.part'.$_POST['jupart'];
 				
 				
@@ -37,14 +37,14 @@ while($file = array_shift($_FILES))
 				
 			$_SESSION['GO_SESSION']['chunked_upload_size']+=$file['size'];
 				
-			if($_SESSION['GO_SESSION']['chunked_upload_size']>GO::config()->max_attachment_size)
+			if($_SESSION['GO_SESSION']['chunked_upload_size']>$GLOBALS['GO_CONFIG']->max_attachment_size)
 			{
 				for($i=1;$i<$_POST['jupart'];$i++)
 				{
 					$part = $dir.$file['name'].'.part'.$i;
 					unlink($part);
 				}
-				go_debug('Uploaded file too big: '.$_SESSION['GO_SESSION']['chunked_upload_size'].' -> '.GO::config()->max_attachment_size);
+				go_debug('Uploaded file too big: '.$_SESSION['GO_SESSION']['chunked_upload_size'].' -> '.$GLOBALS['GO_CONFIG']->max_attachment_size);
 				exit('ERROR: File is too big');
 			}
 

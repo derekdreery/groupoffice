@@ -1,6 +1,6 @@
 <?php
 /* Translator for the Greek Language: Konstantinos Georgakopoulos (kgeorga@uom.gr)*/
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Ημερολόγιο';
 $lang['calendar']['description'] = 'Άρθρωμα Ημερολογίου. Κάθε χρήστης μπορεί να προσθέσει, να τροποποιήσει ή να διαγράψει συναντήσεις.Επιπλέον, υπάρχουν διαθέσιμες οι συναντήσεις από άλλους χρήστες και μπορούν να τροποποιηθούν εάν υπάρξει ανάγκη.';
 

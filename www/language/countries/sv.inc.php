@@ -13,7 +13,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_base_language_file('countries'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('countries'));
 
 $countries['AE'] = 'Förenade Arabemiraten';
 $countries['AF'] = 'Afghanistan';

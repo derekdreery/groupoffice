@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('groups'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('groups'));
 $lang['groups']['name'] = 'Grupid';
 $lang['groups']['description'] = 'Admini moodul; kasutajagruppide haldamine.';
 $lang['groups']['noDeleteAdmins'] = 'Sa ei saa grupi admini kustutada';

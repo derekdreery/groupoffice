@@ -17,7 +17,7 @@
  *
  * We'll base this export on the CSV export so include it.
  */
-require_once(GO::config()->class_path.'export/csv_export_query.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'export/csv_export_query.class.inc.php');
 
 class custom_export_query extends csv_export_query
 {

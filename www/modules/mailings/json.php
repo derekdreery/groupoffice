@@ -13,14 +13,14 @@
  */
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('mailings');
+$GLOBALS['GO_SECURITY']->json_authenticate('mailings');
 
-require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 $ml = new mailings();
-require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 $ab = new addressbook();
 
-require_once(GO::modules()->modules['mailings']['class_path'].'templates.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'templates.class.inc.php');
 $tp = new templates();
 
 $query = !empty($_REQUEST['query']) ? ($_REQUEST['query']) : null;
@@ -36,23 +36,23 @@ try
 	{
 		case 'sendcmsfile': 
 			
-			require_once (GO::modules()->modules['cms']['class_path'].'cms.class.inc.php');
+			require_once ($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms.class.inc.php');
 			$cms = new cms();
 			
 			$file = $cms->get_file($_POST['file_id']);
 			$folder = $cms->get_folder($file['folder_id']);
 			$site = $cms->get_site($folder['site_id']);
 			
-			$tpl = GO::modules()->modules['cms']['path'].'templates/'.$site['template'].'/mailings/mailing.tpl';
+			$tpl = $GLOBALS['GO_MODULES']->modules['cms']['path'].'templates/'.$site['template'].'/mailings/mailing.tpl';
 			if(file_exists($tpl))
 			{
-				require_once(GO::config()->class_path.'smarty/Smarty.class.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'smarty/Smarty.class.php');
 				
 				$path = $cms->build_path($folder['id'], $site['root_folder_id']).$file['name'];				
 				
 				$smarty = new Smarty();
-				$smarty->template_dir=GO::modules()->modules['cms']['path'].'templates/'.$site['template'];
-				$smarty->compile_dir=GO::config()->tmpdir.'cms/'.$site['id'].'/templates_c';
+				$smarty->template_dir=$GLOBALS['GO_MODULES']->modules['cms']['path'].'templates/'.$site['template'];
+				$smarty->compile_dir=$GLOBALS['GO_CONFIG']->tmpdir.'cms/'.$site['id'].'/templates_c';
 				if(!is_dir($smarty->compile_dir))
 					mkdir($smarty->compile_dir,0755, true);
 					
@@ -60,8 +60,8 @@ try
 					$site['domain'].='/';
 					
 				$smarty->assign('viewurl', 'http://'.$site['domain'].$path);
-				$smarty->assign('signoffurl', 'http://'.substr($site['domain'],0,-1).GO::modules()->modules['mailings']['url'].'signoff.php?mailing_group_id='.$_POST['mailing_group_id'].'&site_id='.$site['id'].'&type=%type%&id=%id%&hash=%hash%');
-				$smarty->assign('settingsurl', 'http://'.substr($site['domain'],0,-1).GO::modules()->modules['mailings']['url'].'settings.php?site_id='.$site['id'].'&type=%type%&id=%id%&hash=%hash%');
+				$smarty->assign('signoffurl', 'http://'.substr($site['domain'],0,-1).$GLOBALS['GO_MODULES']->modules['mailings']['url'].'signoff.php?mailing_group_id='.$_POST['mailing_group_id'].'&site_id='.$site['id'].'&type=%type%&id=%id%&hash=%hash%');
+				$smarty->assign('settingsurl', 'http://'.substr($site['domain'],0,-1).$GLOBALS['GO_MODULES']->modules['mailings']['url'].'settings.php?site_id='.$site['id'].'&type=%type%&id=%id%&hash=%hash%');
 				$smarty->assign('file', $file);
 				
 				$response['data']['body'] = $smarty->fetch($tpl);
@@ -82,7 +82,7 @@ try
 			$id = isset($_REQUEST['id']) ? ($_REQUEST['id']) : 0;
 
 			if(isset($_POST['file_id'])){
-				require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 				$files = new files();
 				$file= $files->get_file($_POST['file_id']);
 				$path = $files->build_path($file['folder_id']).'/'.$file['name'];
@@ -132,9 +132,9 @@ try
 			$limit = !empty($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
 
-			$response['total'] = $tp->get_writable_templates(GO::security()->user_id, $start, $limit, $sort, $dir);
+			$response['total'] = $tp->get_writable_templates($GLOBALS['GO_SECURITY']->user_id, $start, $limit, $sort, $dir);
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$response['results'] = array();
@@ -166,22 +166,22 @@ try
 
 			if($response['data'])
 			{
-				if(GO::security()->has_permission(GO::security()->user_id, $response['data']['acl_id'])<2)
+				if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $response['data']['acl_id'])<2)
 				{
 					throw new AccessDeniedException();
 				}
 
 				$response['success'] = true;
 
-				require_once(GO::config()->class_path.'base/users.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 				$GO_USERS = new GO_USERS();
 
 				$response['data']['user_name']=$GO_USERS->get_user_realname($response['data']['user_id']);
 
-				require_once(GO::config()->class_path.'mail/Go2Mime.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'mail/Go2Mime.class.inc.php');
 				$go2mime = new Go2Mime();
 
-				$response['data'] = array_merge($response['data'], $go2mime->mime2GO($response['data']['content'], GO::modules()->modules['mailings']['url'].'mimepart.php?template_id='.$template_id));
+				$response['data'] = array_merge($response['data'], $go2mime->mime2GO($response['data']['content'], $GLOBALS['GO_MODULES']->modules['mailings']['url'].'mimepart.php?template_id='.$template_id));
 
 				$response['data']['inline_attachments']=array();
 				foreach($response['data']['attachments'] as $attachment){
@@ -223,7 +223,7 @@ try
 			$start = !empty($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = !empty($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
-			$user_id = GO::modules()->modules['mailings']['write_permission'] ? 0 : GO::security()->user_id;
+			$user_id = $GLOBALS['GO_MODULES']->modules['mailings']['write_permission'] ? 0 : $GLOBALS['GO_SECURITY']->user_id;
 
 
 			$response['total'] = $ml->get_mailings($_POST['mailing_group_id'],$user_id, $start, $limit, $sort, $dir);
@@ -236,7 +236,7 @@ try
 				'3'=>'Paused'
 				);
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 					
 			while($record =$ml->next_record())
@@ -247,7 +247,7 @@ try
 
 				$record['hide_pause']=$record['status']==3 || $record['status']==2;
 				$record['hide_play']=$record['status']!=3;
-				$record['message_path']=str_replace(GO::config()->file_storage_path,'', $record['message_path']);
+				$record['message_path']=str_replace($GLOBALS['GO_CONFIG']->file_storage_path,'', $record['message_path']);
 
 				$record['status']=$lang['mailings']['statuses'][$record['status']];
 				$response['results'][] = $record;
@@ -278,10 +278,10 @@ try
 				}			
 
 				//delete user filter settings because they might filter on a non-existing list now.
-				GO::config()->delete_setting('mailings_filter');
+				$GLOBALS['GO_CONFIG']->delete_setting('mailings_filter');
 			}
 			
-			$selected_mailings = GO::config()->get_setting('mailings_filter', GO::security()->user_id);			
+			$selected_mailings = $GLOBALS['GO_CONFIG']->get_setting('mailings_filter', $GLOBALS['GO_SECURITY']->user_id);			
 			$selected_mailings = empty($selected_mailings) ? array() : explode(',', $selected_mailings);
 
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
@@ -290,10 +290,10 @@ try
 			$limit = !empty($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
 
-			$response['total'] = $ml->get_authorized_mailing_groups($auth_type, GO::security()->user_id, $start, $limit, $sort, $dir);
+			$response['total'] = $ml->get_authorized_mailing_groups($auth_type, $GLOBALS['GO_SECURITY']->user_id, $start, $limit, $sort, $dir);
 			$response['results'] = array();
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 				
 			while($ml->next_record())
@@ -323,7 +323,7 @@ try
 			{
 				$response['success'] = true;
 
-				require_once(GO::config()->class_path.'base/users.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 				$GO_USERS = new GO_USERS();
 
 				$response['data']=$record;
@@ -335,7 +335,7 @@ try
 			
 		case 'mailing_group_string': 
 		
-			require_once(GO::config()->class_path.'mail/RFC822.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc');
 			$RFC822 = new RFC822();
 			$groups = explode(',', $_REQUEST['mailing_groups']);
 	

@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-require_once( GO::config()->class_path.'mail/imap.class.inc' );
+require_once( $GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc' );
 
 class imapauth
 {
@@ -29,7 +29,7 @@ class imapauth
 
 		if(!empty($domain))
 		{
-			$conf = str_replace('config.php', 'imapauth.config.php', GO::config()->get_config_file());
+			$conf = str_replace('config.php', 'imapauth.config.php', $GLOBALS['GO_CONFIG']->get_config_file());
 
 			if(file_exists($conf))
 			{
@@ -80,9 +80,9 @@ class imapauth
 			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_MODULES;
 
 
-			GO::security()->user_id = 0;
+			$GLOBALS['GO_SECURITY']->user_id = 0;
 
-			require_once(GO::config()->class_path.'mail/imap.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc');
 			$imap = new imap();
 
 			$go_username=$mail_username=$email;
@@ -103,10 +103,10 @@ class imapauth
 					go_debug('IMAPAUTH: IMAP login succesful');
 					$imap->disconnect();
 
-					require_once(GO::config()->class_path.'base/users.class.inc.php');
+					require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 					$GO_USERS = new GO_USERS();
 
-          require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
+          require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
           $email_client = new email();
 
 					$user = $GO_USERS->get_user_by_username($go_username);
@@ -124,7 +124,7 @@ class imapauth
 
 							$GO_USERS->update_profile(array('id'=>$user['id'], 'password'=>$password));
 
-							if(isset(GO::modules()->modules['email']))
+							if(isset($GLOBALS['GO_MODULES']->modules['email']))
 							{
 								$email_client->update_password($config['host'], $mail_username, $password, $config['smtp_use_login_credentials']);
 							}
@@ -136,7 +136,7 @@ class imapauth
 						$user['username'] = $go_username;
 						$user['password'] = $password;
 
-						require_once(GO::config()->class_path.'base/groups.class.inc.php');
+						require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 						$GO_GROUPS = new GO_GROUPS();
 
 
@@ -172,10 +172,10 @@ class imapauth
 		global $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY;
 		if ($config['create_email_account'])
 		{
-			if(isset(GO::modules()->modules['email']))
+			if(isset($GLOBALS['GO_MODULES']->modules['email']))
 			{
-				require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
-				require_once(GO::language()->get_language_file('email'));
+				require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
+				require_once($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
 				$email_client = new email();
 
 				$account['user_id']=$user_id;
@@ -202,7 +202,7 @@ class imapauth
 				$account['password']=$password;
 				$account['name']=$email;
 				$account['email']=$email;
-				$account['acl_id']=GO::security()->get_new_acl('email', $account['user_id']);
+				$account['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('email', $account['user_id']);
 
 				if (!$account_id = $email_client->add_account($account))
 				{
@@ -224,7 +224,7 @@ class imapauth
 	{
 		global $GO_MODULES;
 
-		require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
+		require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
 		$email_client = new email();
 
 		if(!empty($_SESSION['GO_SESSION']['imapauth']['new_account_id']))

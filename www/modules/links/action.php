@@ -12,29 +12,29 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('links');
+$GLOBALS['GO_SECURITY']->json_authenticate('links');
 
 try{
 	switch($_REQUEST['task'])
 	{
 		case 'save_default_link_folders':
 
-			foreach(GO::modules()->modules as $module) {
-				if($lang_file = GO::language()->get_language_file($module['id'])) {
-					GO::language()->require_language_file($module['id']);
+			foreach($GLOBALS['GO_MODULES']->modules as $module) {
+				if($lang_file = $GLOBALS['GO_LANGUAGE']->get_language_file($module['id'])) {
+					$GLOBALS['GO_LANGUAGE']->require_language_file($module['id']);
 				}
 			}
 
 			foreach($lang['link_type'] as $id=>$name) {
 				if(isset($_POST['default_folders_'.$id]))
-					GO::config()->save_setting('default_link_folder_'.$id, $_POST['default_folders_'.$id]);
+					$GLOBALS['GO_CONFIG']->save_setting('default_link_folder_'.$id, $_POST['default_folders_'.$id]);
 			}
 			$response['success']=true;
 
 			break;
 		case 'save_link_description':
 
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 
 			$link_description_id=$link_description['id']=isset($_POST['link_description_id']) ? $_POST['link_description_id'] : 0;

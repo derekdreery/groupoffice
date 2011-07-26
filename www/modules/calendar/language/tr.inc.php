@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 
 $lang['calendar']['name'] = 'Takvim';
 $lang['calendar']['description'] = 'Takvim modülü; Tüm kullanıcılar davet gönderip ekleyebilirler, ayrıca gönderilmiş davetleri açıp kaydedebilir veya silebilirler.';

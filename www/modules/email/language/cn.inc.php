@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('email'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('email'));
 $lang['email']['name'] = 'Email';
 $lang['email']['description'] = 'Email 模块; 基本的web邮件客户端。所有人都可以发送、回复和转发邮件。';
 

@@ -1,5 +1,5 @@
 <?php
-require(GO::config()->class_path.'export/csv_export_query.class.inc.php');
+require($GLOBALS['GO_CONFIG']->class_path.'export/csv_export_query.class.inc.php');
 class with_companies_export_query extends csv_export_query{
 
 	function init_company_columns()
@@ -22,12 +22,12 @@ class with_companies_export_query extends csv_export_query{
 	function export($fp){
 		global $lang, $GO_MODULES, $GO_SECURITY, $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 
-		if(GO::modules()->has_module('customfields')) {
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$this->cf = new customfields();
 		}else
 		{
@@ -44,11 +44,11 @@ class with_companies_export_query extends csv_export_query{
 		$books = isset($_REQUEST['books']) ? $_REQUEST['books'] : array();
 		if(count($books))
 		{
-			require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 			$ab = new addressbook();
 			$ab2 = new addressbook();
 
-			$ab->search_contacts(GO::security()->user_id,  '', $books);
+			$ab->search_contacts($GLOBALS['GO_SECURITY']->user_id,  '', $books);
 		
 			while($record = $this->db->next_record())
 			{

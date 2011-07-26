@@ -17,7 +17,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('users'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('users'));
 $lang['users']['name'] = 'Utilisateurs';
 $lang['users']['description'] = 'Module Admin. Gérer les utilisateurs de Group-Office.';
 $lang['users']['deletePrimaryAdmin'] = 'Vous ne pouvez pas supprimer l\'administrateur principal';

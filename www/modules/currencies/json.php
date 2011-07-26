@@ -12,8 +12,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once('../../Group-Office.php');
-GO::security()->json_authenticate('currencies');
-require_once (GO::modules()->modules['currencies']['class_path'].'currencies.class.inc.php');
+$GLOBALS['GO_SECURITY']->json_authenticate('currencies');
+require_once ($GLOBALS['GO_MODULES']->modules['currencies']['class_path'].'currencies.class.inc.php');
 $currencies = new currencies();
 $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 try{

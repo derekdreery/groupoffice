@@ -13,9 +13,9 @@
  */
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('addressbook');
-require_once(GO::language()->get_language_file('addressbook'));
-require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+$GLOBALS['GO_SECURITY']->json_authenticate('addressbook');
+require_once($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
+require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 $ab = new addressbook;
 
 $feedback = null;
@@ -49,7 +49,7 @@ try {
 			$contact_id = isset($_REQUEST['contact_id']) ? ($_REQUEST['contact_id']) : 0;
 
 			if (isset($_POST['delete_photo']) && strcmp($_POST['delete_photo'], 'true') == 0 && $contact_id > 0) {
-				@unlink(GO::config()->file_storage_path . 'contacts/contact_photos/' . $contact_id . '.jpg');
+				@unlink($GLOBALS['GO_CONFIG']->file_storage_path . 'contacts/contact_photos/' . $contact_id . '.jpg');
 				$response['image'] = '';
 			}
 
@@ -70,7 +70,7 @@ try {
 
 
 			$addressbook = $ab->get_addressbook($contact_credentials['addressbook_id']);
-			if (GO::security()->has_permission(GO::security()->user_id, $addressbook['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
+			if ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
 				throw new AccessDeniedException();
 			}
 
@@ -81,7 +81,7 @@ try {
 				if (!$contact_credentials['company_id'] = $ab->get_company_id_by_name($contact_credentials['company'], $contact_credentials['addressbook_id'])) {
 					$company['addressbook_id'] = $contact_credentials['addressbook_id'];
 					$company['name'] = $contact_credentials['company']; // bedrijfsnaam
-					$company['user_id'] = GO::security()->user_id;
+					$company['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
 					$contact_credentials['company_id'] = $ab->add_company($company);
 				}
 			}
@@ -104,7 +104,7 @@ try {
 				$insert = true;
 			} else {
 				$old_contact = $ab->get_contact($contact_id);
-				if (($old_contact['addressbook_id'] != $contact_credentials['addressbook_id']) && GO::security()->has_permission(GO::security()->user_id, $old_contact['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
+				if (($old_contact['addressbook_id'] != $contact_credentials['addressbook_id']) && $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_contact['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
 					throw new AccessDeniedException();
 				}
 
@@ -120,20 +120,20 @@ try {
 
 
 
-			if (GO::modules()->has_module('customfields')) {
-				require_once(GO::modules()->modules['customfields']['class_path'] . 'customfields.class.inc.php');
+			if ($GLOBALS['GO_MODULES']->has_module('customfields')) {
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'] . 'customfields.class.inc.php');
 				$cf = new customfields();
 
-				$cf->update_fields(GO::security()->user_id, $contact_id, 2, $_POST, $insert);
+				$cf->update_fields($GLOBALS['GO_SECURITY']->user_id, $contact_id, 2, $_POST, $insert);
 			}
 
 
-			if (GO::modules()->has_module('mailings')) {
-				require_once(GO::modules()->modules['mailings']['class_path'] . 'mailings.class.inc.php');
+			if ($GLOBALS['GO_MODULES']->has_module('mailings')) {
+				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'] . 'mailings.class.inc.php');
 				$ml = new mailings();
 				$ml2 = new mailings();
 
-				$ml->get_authorized_mailing_groups('write', GO::security()->user_id, 0, 0);
+				$ml->get_authorized_mailing_groups('write', $GLOBALS['GO_SECURITY']->user_id, 0, 0);
 				while ($ml->next_record()) {
 					$is_in_group = $ml2->contact_is_in_group($contact_id, $ml->f('id'));
 					$should_be_in_group = isset($_POST['mailing_' . $ml->f('id')]);
@@ -149,14 +149,14 @@ try {
 
 			if ($contact_id > 0) {
 				if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
-					move_uploaded_file($_FILES['image']['tmp_name'][0], GO::config()->tmpdir . $_FILES['image']['name'][0]);
-					$tmp_file = GO::config()->tmpdir . $_FILES['image']['name'][0];
+					move_uploaded_file($_FILES['image']['tmp_name'][0], $GLOBALS['GO_CONFIG']->tmpdir . $_FILES['image']['name'][0]);
+					$tmp_file = $GLOBALS['GO_CONFIG']->tmpdir . $_FILES['image']['name'][0];
 
 					$result['image'] = $ab->save_contact_photo($tmp_file, $contact_id);
 				}
 			}
 
-			GO::events()->fire_event('save_contact', array($contact_credentials));
+			$GLOBALS['GO_EVENTS']->fire_event('save_contact', array($contact_credentials));
 
 
 			echo json_encode($result);
@@ -181,14 +181,14 @@ try {
 
 			$addressbook = $ab->get_addressbook($company_credentials['addressbook_id']);
 
-			if (GO::security()->has_permission(GO::security()->user_id, $addressbook['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
+			if ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
 				throw new AccessDeniedException();
 			}
 
 			if ($company_id > 0) {
 				$old_company = $ab->get_company($company_id);
 
-				if (($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && GO::security()->has_permission(GO::security()->user_id, $old_company['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
+				if (($old_company['addressbook_id'] != $company_credentials['addressbook_id']) && $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_company['acl_id']) < GO_SECURITY::WRITE_PERMISSION) {
 					throw new AccessDeniedException();
 				}
 			}
@@ -209,20 +209,20 @@ try {
 				$insert = false;
 			}
 
-			if (isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission']) {
-				require_once(GO::modules()->modules['customfields']['class_path'] . 'customfields.class.inc.php');
+			if (isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission']) {
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'] . 'customfields.class.inc.php');
 				$cf = new customfields();
 
-				$cf->update_fields(GO::security()->user_id, $company_id, 3, $_POST, $insert);
+				$cf->update_fields($GLOBALS['GO_SECURITY']->user_id, $company_id, 3, $_POST, $insert);
 			}
 
 
-			if (GO::modules()->has_module('mailings')) {
-				require_once(GO::modules()->modules['mailings']['class_path'] . 'mailings.class.inc.php');
+			if ($GLOBALS['GO_MODULES']->has_module('mailings')) {
+				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'] . 'mailings.class.inc.php');
 				$ml = new mailings();
 				$ml2 = new mailings();
 
-				$ml->get_authorized_mailing_groups('write', GO::security()->user_id, 0, 0);
+				$ml->get_authorized_mailing_groups('write', $GLOBALS['GO_SECURITY']->user_id, 0, 0);
 				while ($ml->next_record()) {
 					$is_in_group = $ml2->company_is_in_group($company_id, $ml->f('id'));
 					$should_be_in_group = isset($_POST['mailing_' . $ml->f('id')]);
@@ -236,7 +236,7 @@ try {
 				}
 			}
 
-			GO::events()->fire_event('save_company', array($company_credentials));
+			$GLOBALS['GO_EVENTS']->fire_event('save_company', array($company_credentials));
 
 
 			echo json_encode($result);
@@ -258,11 +258,11 @@ try {
 
 				if ($addressbook_id < 1) {
 
-					if (!GO::modules()->modules['addressbook']['write_permission']) {
+					if (!$GLOBALS['GO_MODULES']->modules['addressbook']['write_permission']) {
 						throw new AccessDeniedException();
 					}
 
-					$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : GO::security()->user_id;
+					$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : $GLOBALS['GO_SECURITY']->user_id;
 
 					$addressbook = $ab->add_addressbook($user_id, $name, $_REQUEST['default_iso_address_format'], $_REQUEST['default_salutation']);
 					$result['addressbook_id'] = $addressbook['addressbook_id'];
@@ -272,7 +272,7 @@ try {
 
 					$addressbook['id'] = $addressbook_id;
 
-					if (isset($_REQUEST['user_id']) && GO::security()->has_admin_permission(GO::security()->user_id))
+					if (isset($_REQUEST['user_id']) && $GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id))
 						$addressbook['user_id'] = $_REQUEST['user_id'];
 
 					$addressbook['default_salutation'] = $_REQUEST['default_salutation'];
@@ -294,7 +294,7 @@ try {
 
 	    $result['success'] = true;
 
-	    $_SESSION['GO_SESSION']['addressbook']['import_file'] = GO::config()->tmpdir.uniqid(time());
+	    $_SESSION['GO_SESSION']['addressbook']['import_file'] = $GLOBALS['GO_CONFIG']->tmpdir.uniqid(time());
 	    go_debug($import_file);
 
 	    if(!move_uploaded_file($import_file, $_SESSION['GO_SESSION']['addressbook']['import_file'])) {
@@ -308,9 +308,9 @@ try {
 			ini_set('max_execution_time', 360);
 			ini_set('memory_limit', '256M');
 
-		    require_once (GO::modules()->path."classes/vcard.class.inc.php");
+		    require_once ($GLOBALS['GO_MODULES']->path."classes/vcard.class.inc.php");
 		    $vcard = new vcard();
-		    $result['success'] = $vcard->import($_SESSION['GO_SESSION']['addressbook']['import_file'], GO::security()->user_id, ($_POST['addressbook_id']));
+		    $result['success'] = $vcard->import($_SESSION['GO_SESSION']['addressbook']['import_file'], $GLOBALS['GO_SECURITY']->user_id, ($_POST['addressbook_id']));
 		    break;
 		case 'csv':
 
@@ -364,11 +364,11 @@ try {
 		    break;
 		case 'csv':
 
-		    if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission']) {
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+		    if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission']) {
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$cf = new customfields();
-			$company_customfields = $cf->get_authorized_fields(GO::security()->user_id, 3);
-			$contact_customfields = $cf->get_authorized_fields(GO::security()->user_id, 2);
+			$company_customfields = $cf->get_authorized_fields($GLOBALS['GO_SECURITY']->user_id, 3);
+			$contact_customfields = $cf->get_authorized_fields($GLOBALS['GO_SECURITY']->user_id, 2);
 		    }
 
 		    $fp = fopen($_SESSION['GO_SESSION']['addressbook']['import_file'], "r");
@@ -495,7 +495,7 @@ try {
 			$abook_id = isset($_REQUEST['book_id']) ? ($_REQUEST['book_id']) : 0;
 
 			$addressbook = $ab->get_addressbook($abook_id);
-			if (GO::security()->has_permission(GO::security()->user_id, $addressbook['acl_id']) < 3) {
+			if ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < 3) {
 				throw new AccessDeniedException();
 			}
 
@@ -506,7 +506,7 @@ try {
 				$contact['id'] = $contacts[$i];
 				if ($contact['id'] > 0) {
 					$old_contact = $ab->get_contact($contact['id']);
-					if (($old_contact['addressbook_id'] != $abook_id) && GO::security()->has_permission(GO::security()->user_id, $old_contact['acl_id']) < 2) {
+					if (($old_contact['addressbook_id'] != $abook_id) && $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_contact['acl_id']) < 2) {
 						throw new AccessDeniedException();
 					}
 					$contact['addressbook_id'] = $abook_id;
@@ -528,7 +528,7 @@ try {
 			$abook_id = isset($_REQUEST['book_id']) ? ($_REQUEST['book_id']) : 0;
 
 			$addressbook = $ab->get_addressbook($abook_id);
-			if (GO::security()->has_permission(GO::security()->user_id, $addressbook['acl_id']) < 3) {
+			if ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < 3) {
 				throw new AccessDeniedException();
 			}
 
@@ -539,7 +539,7 @@ try {
 				$company['id'] = $companies[$i];
 				if ($company['id'] > 0) {
 					$old_company = $ab->get_company($company['id']);
-					if (($old_company['addressbook_id'] != $abook_id) && GO::security()->has_permission(GO::security()->user_id, $old_company['acl_id']) < 3) {
+					if (($old_company['addressbook_id'] != $abook_id) && $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_company['acl_id']) < 3) {
 						throw new AccessDeniedException();
 					}
 
@@ -556,7 +556,7 @@ try {
 
 	case 'save_sql':
 
-	    $ab->save_sql(array('user_id'=>GO::security()->user_id, 'sql'=>$_POST['sql'],'name'=>$_POST['name'], 'companies'=>$_POST['companies']));
+	    $ab->save_sql(array('user_id'=>$GLOBALS['GO_SECURITY']->user_id, 'sql'=>$_POST['sql'],'name'=>$_POST['name'], 'companies'=>$_POST['companies']));
 	    $response['success']=true;
 	    echo json_encode($response);
 
@@ -615,11 +615,11 @@ try {
 
 		case 'save_addressbook_limits':
 
-			if (!GO::security()->has_admin_permission(GO::security()->user_id))
+			if (!$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id))
 				throw AccessDeniedException();
 
 			if (empty($_REQUEST['addressbook_id'])) {
-				require_once(GO::language()->get_language_file('addressbook'));
+				require_once($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 				throw new Exception($lang['addressbook']['no_addressbook_id']);
 			}
 

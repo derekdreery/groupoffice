@@ -31,12 +31,12 @@ session_write_close();
 
 if(php_sapi_name()!='cli')
 {
-	GO::security()->html_authenticate('tools');
+	$GLOBALS['GO_SECURITY']->html_authenticate('tools');
 }
 
 
 $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
-//GO::security()->html_authenticate('tools');
+//$GLOBALS['GO_SECURITY']->html_authenticate('tools');
 
 ini_set('max_execution_time', 3600);
 
@@ -48,21 +48,21 @@ $db3 = new db();
 $db = new db();
 $db->halt_on_error = 'no';
 
-if(GO::config()->quota>0)
+if($GLOBALS['GO_CONFIG']->quota>0)
 {
-	require_once(GO::config()->class_path.'base/quota.class.inc.php');
+	require_once($GLOBALS['GO_CONFIG']->class_path.'base/quota.class.inc.php');
 	$quota = new quota();
 			
 	echo 'Recalculating quota'.$line_break;
 	$quota->reset();
-	GO::config()->save_setting('usage_date',time());
+	$GLOBALS['GO_CONFIG']->save_setting('usage_date',time());
 	echo 'Done'.$line_break.$line_break;
 }
 flush();
 
 echo "Correcting timezone$line_break";
 
-$db->query("update go_users set timezone='".$db->escape(GO::config()->default_timezone)."' where length(timezone)<3");
+$db->query("update go_users set timezone='".$db->escape($GLOBALS['GO_CONFIG']->default_timezone)."' where length(timezone)<3");
 
 
 flush();
@@ -70,28 +70,28 @@ echo 'Adding everyone to the everyone group'.$line_break;
 
 $db->query("DELETE FROM go_users_groups where user_id NOT IN (SELECT id FROM go_users)");
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 $GO_USERS->get_users();
 
 
-require_once(GO::config()->class_path.'base/groups.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 
 while($GO_USERS->next_record())
 {
-	if(!$GO_GROUPS->is_in_group($GO_USERS->f('id'), GO::config()->group_everyone))
-		$GO_GROUPS->add_user_to_group($GO_USERS->f('id'), GO::config()->group_everyone);
+	if(!$GO_GROUPS->is_in_group($GO_USERS->f('id'), $GLOBALS['GO_CONFIG']->group_everyone))
+		$GO_GROUPS->add_user_to_group($GO_USERS->f('id'), $GLOBALS['GO_CONFIG']->group_everyone);
 }
 echo 'Done'.$line_break.$line_break;
 
 
 
-if(!$GO_GROUPS->is_in_group(1, GO::config()->group_root))
+if(!$GO_GROUPS->is_in_group(1, $GLOBALS['GO_CONFIG']->group_root))
 {
 	echo 'Adding admin to admins group'.$line_break;
-	$GO_GROUPS->add_user_to_group(1, GO::config()->group_root);
+	$GO_GROUPS->add_user_to_group(1, $GLOBALS['GO_CONFIG']->group_root);
 }
 
 
@@ -119,12 +119,12 @@ if(count($acls))
 		while($record = $db->next_record())
 		{
 			$mod['id']=$record['id'];
-			$mod['acl_id']=GO::security()->copy_acl($first['acl_id']);
+			$mod['acl_id']=$GLOBALS['GO_SECURITY']->copy_acl($first['acl_id']);
 			
 			$db2->update_row('go_modules', 'id', $mod);
 		}
 	}
-	GO::modules()->load_modules();
+	$GLOBALS['GO_MODULES']->load_modules();
 	echo "Done$line_break$line_break";
 }
 
@@ -138,21 +138,21 @@ $sql = "SELECT * FROM go_acl_items";
 $db->query($sql);
 while($db->next_record())
 {
-	if(GO::security()->group_in_acl(GO::config()->group_root, $db->f('id'))<GO_SECURITY::MANAGE_PERMISSION)
+	if($GLOBALS['GO_SECURITY']->group_in_acl($GLOBALS['GO_CONFIG']->group_root, $db->f('id'))<GO_SECURITY::MANAGE_PERMISSION)
 	{
 		echo 'Adding admin group to '.$db->f('id').$line_break;
-		GO::security()->add_group_to_acl(GO::config()->group_root, $db->f('id'), GO_SECURITY::MANAGE_PERMISSION);
+		$GLOBALS['GO_SECURITY']->add_group_to_acl($GLOBALS['GO_CONFIG']->group_root, $db->f('id'), GO_SECURITY::MANAGE_PERMISSION);
 	}
-	if(GO::security()->user_in_acl($db->f('user_id'), $db->f('id'))<GO_SECURITY::MANAGE_PERMISSION)
+	if($GLOBALS['GO_SECURITY']->user_in_acl($db->f('user_id'), $db->f('id'))<GO_SECURITY::MANAGE_PERMISSION)
 	{
 		echo 'Adding owner to '.$db->f('id').$line_break;
-		GO::security()->add_user_to_acl($db->f('user_id'), $db->f('id'), GO_SECURITY::MANAGE_PERMISSION);
+		$GLOBALS['GO_SECURITY']->add_user_to_acl($db->f('user_id'), $db->f('id'), GO_SECURITY::MANAGE_PERMISSION);
 	}
 }
 
 
 //special acl where admin does not have write permission
-GO::security()->set_read_only_acl_permissions();
+$GLOBALS['GO_SECURITY']->set_read_only_acl_permissions();
 
 
 echo 'Done'.$line_break.$line_break;
@@ -306,6 +306,6 @@ echo $line_break;
 
 echo 'Starting with module checks '.$line_break;
 
-GO::events()->fire_event('check_database');
+$GLOBALS['GO_EVENTS']->fire_event('check_database');
 
 echo 'All Done!'.$line_break;

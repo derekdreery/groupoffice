@@ -21,26 +21,26 @@ class mailings extends db
 
 	public function get_message_for_client($id, $path, $part_number, $create_temporary_attachment_files=false,$create_temporary_inline_attachment_files=false){
 		global $GO_CONFIG, $GO_MODULES;
-		require_once (GO::modules()->modules['email']['class_path']."email.class.inc.php");
+		require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
 		$email = new email();
 
 		if(!empty($path))
 		{
-			$data = file_get_contents(GO::config()->file_storage_path.$path);
-			$inline_url = GO::modules()->modules['mailings']['url'].'mimepart.php?path='.urlencode($path);
+			$data = file_get_contents($GLOBALS['GO_CONFIG']->file_storage_path.$path);
+			$inline_url = $GLOBALS['GO_MODULES']->modules['mailings']['url'].'mimepart.php?path='.urlencode($path);
 			$response['path']=$path;
 		}elseif($id>0)
 		{
 			$linked_message = $email->get_linked_message($id);
-			$data = file_get_contents(GO::config()->file_storage_path.$linked_message['path']);
+			$data = file_get_contents($GLOBALS['GO_CONFIG']->file_storage_path.$linked_message['path']);
 
-			$inline_url = GO::modules()->modules['mailings']['url'].'mimepart.php?path='.urlencode($linked_message['path']);
+			$inline_url = $GLOBALS['GO_MODULES']->modules['mailings']['url'].'mimepart.php?path='.urlencode($linked_message['path']);
 
 			$response['path']=$linked_message['path'];
 
 		}
 
-		require_once(GO::config()->class_path.'mail/Go2Mime.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/Go2Mime.class.inc.php');
 		$go2mime = new Go2Mime();
 
 		$response['blocked_images']=0;
@@ -114,7 +114,7 @@ class mailings extends db
 		if($mailing_group = $this->get_mailing_group($mailing_group_id))
 		{
 			global $GO_SECURITY;
-			GO::security()->delete_acl($mailing_group['acl_id']);
+			$GLOBALS['GO_SECURITY']->delete_acl($mailing_group['acl_id']);
 				
 			$this->query("DELETE FROM ml_mailing_contacts WHERE group_id='$mailing_group_id'");
 			$this->query("DELETE FROM ml_mailing_companies WHERE group_id='$mailing_group_id'");
@@ -328,13 +328,13 @@ class mailings extends db
 
 		$mailing_id=intval($mailing_id);
 
-		$log = GO::config()->file_storage_path.'log/mailings/';
+		$log = $GLOBALS['GO_CONFIG']->file_storage_path.'log/mailings/';
 		if(!is_dir($log))
 			mkdir($log, 0755,true);
 		
 		$log .= $mailing_id.'.log';
 
-		$cmd = GO::config()->cmd_php.' '.GO::modules()->modules['mailings']['path'].'sendmailing.php '.GO::config()->get_config_file().' '.$mailing_id.' >> '.$log;
+		$cmd = $GLOBALS['GO_CONFIG']->cmd_php.' '.$GLOBALS['GO_MODULES']->modules['mailings']['path'].'sendmailing.php '.$GLOBALS['GO_CONFIG']->get_config_file().' '.$mailing_id.' >> '.$log;
 
 		if (!is_windows()) {
 		 $cmd .= ' 2>&1 &';
@@ -511,7 +511,7 @@ class mailings extends db
 	{
 		global $GO_MODULES;
 		
-		require_once(GO::modules()->modules['mailings']['class_path'].'templates.class.inc.php');
+		require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'templates.class.inc.php');
 		$mailings = new mailings();
 		
 		$tp = new templates();

@@ -41,7 +41,7 @@ class calllog extends db {
 		$types='';
 		$params=array();
 
-		if (GO::modules()->has_module('customfields'))
+		if ($GLOBALS['GO_MODULES']->has_module('customfields'))
 		{
 			$sql .= " LEFT JOIN cf_18 ON cf_18.link_id=c.id ";
 		}

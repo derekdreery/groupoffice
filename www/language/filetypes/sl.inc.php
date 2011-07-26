@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-//require(GO::language()->get_fallback_base_language_file('filetypes'));
+//require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('filetypes'));
 
 $ft_title = "Vrste datotek";
 $ft_text = "Vrste datotek je Group-Office samodejno dodal. Tukaj lahko spremenite ikone in imena.";

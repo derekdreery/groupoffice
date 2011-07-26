@@ -1,8 +1,8 @@
 Replace
 
-GO::security()->
-GO::security()->
-GO::security()->
+$GLOBALS['GO_SECURITY']->
+$GLOBALS['GO_SECURITY']->
+$GLOBALS['GO_SECURITY']->
 
 
 - Fixed bug with etags in caldav

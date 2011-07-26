@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Calendar';
 $lang['calendar']['description'] = 'Modul calendar; Fiecate user poate adiţiona, modifica sau şterge evenimentele. Şi evenimentele altora pot fi văzute sau modificate dacă este necesar.';
 

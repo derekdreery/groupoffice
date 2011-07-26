@@ -105,10 +105,10 @@ class UUID {
 		global $GO_CONFIG;
 
 		//get or create namespace uuid for Group-Office
-		$namespace = GO::config()->get_setting('uuid_namespace');
+		$namespace = $GLOBALS['GO_CONFIG']->get_setting('uuid_namespace');
 		if(!$namespace){
 			$namespace = UUID::v4();
-			GO::config()->save_setting('uuid_namespace', $namespace);
+			$GLOBALS['GO_CONFIG']->save_setting('uuid_namespace', $namespace);
 		}
 
 		return UUID::v5($namespace, $type.$name);

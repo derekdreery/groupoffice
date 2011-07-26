@@ -21,7 +21,7 @@ function apply_write_acl($acl_id, $old_acl_write=0, $delete=true){
 				$updatedb->replace_row('go_acl', $r);
 			}
 			if($delete)
-				GO::security()->delete_acl($old_acl_write);
+				$GLOBALS['GO_SECURITY']->delete_acl($old_acl_write);
 		}
 
 		$sql = "SELECT * FROM go_acl_items WHERE id=".$acl_id;
@@ -29,9 +29,9 @@ function apply_write_acl($acl_id, $old_acl_write=0, $delete=true){
 		$acl = $selectdb->next_record();
 
 		if(!empty($acl['user_id']))
-			GO::security()->add_user_to_acl($acl['user_id'], $acl['id'], 4);
+			$GLOBALS['GO_SECURITY']->add_user_to_acl($acl['user_id'], $acl['id'], 4);
 
-		GO::security()->add_group_to_acl(1, $acl_id, 4);
+		$GLOBALS['GO_SECURITY']->add_group_to_acl(1, $acl_id, 4);
 	}
 
 }

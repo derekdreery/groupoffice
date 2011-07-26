@@ -1,5 +1,5 @@
 <?php
-require_once(GO::config()->root_path.'install/updatescripts/functions.inc.php');
+require_once($GLOBALS['GO_CONFIG']->root_path.'install/updatescripts/functions.inc.php');
 
 $db->query("SELECT acl_id FROM go_users WHERE acl_id>0");
 while($folder=$db->next_record()){

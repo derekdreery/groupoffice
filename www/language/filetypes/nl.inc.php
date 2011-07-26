@@ -1,6 +1,6 @@
 <?php
 //Translated with Group-Office translate module
-require(GO::language()->get_fallback_base_language_file('filetypes'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('filetypes'));
 $lang['filetypes']['unknown']='Onbekend';
 $lang['filetypes']['txt']='Tekstbestand';
 $lang['filetypes']['sxw']='OpenOffice.Org Writer document';

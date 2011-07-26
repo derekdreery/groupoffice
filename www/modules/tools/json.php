@@ -1,9 +1,9 @@
 <?php
 require('../../Group-Office.php');
 
-GO::security()->json_authenticate('tools');
+$GLOBALS['GO_SECURITY']->json_authenticate('tools');
 
-require(GO::language()->get_language_file('tools'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('tools'));
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
 try{
@@ -13,20 +13,20 @@ try{
 		case 'scripts':
 			
 				$response['results']=array();				
-				$response['results'][]=array('name'=>$lang['tools']['dbcheck'], 'script'=>GO::modules()->modules['tools']['url'].'dbcheck.php');
-				//$response['results'][]=array('name'=>$lang['tools']['checkmodules'], 'script'=>GO::modules()->modules['tools']['url'].'checkmodules.php');
-				$response['results'][]=array('name'=>$lang['tools']['buildsearchcache'], 'script'=>GO::modules()->modules['tools']['url'].'buildsearchcache.php');
-				$response['results'][]=array('name'=>$lang['tools']['rm_duplicates'], 'script'=>GO::modules()->modules['tools']['url'].'rm_duplicates.php');
-				$response['results'][]=array('name'=>$lang['tools']['resetState'], 'script'=>GO::modules()->modules['tools']['url'].'reset_state.php');
+				$response['results'][]=array('name'=>$lang['tools']['dbcheck'], 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'dbcheck.php');
+				//$response['results'][]=array('name'=>$lang['tools']['checkmodules'], 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'checkmodules.php');
+				$response['results'][]=array('name'=>$lang['tools']['buildsearchcache'], 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'buildsearchcache.php');
+				$response['results'][]=array('name'=>$lang['tools']['rm_duplicates'], 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'rm_duplicates.php');
+				$response['results'][]=array('name'=>$lang['tools']['resetState'], 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'reset_state.php');
 				
-				if(isset(GO::modules()->modules['files']))
+				if(isset($GLOBALS['GO_MODULES']->modules['files']))
 				{
-					//$response['results'][]=array('name'=>'Remove duplicate folders and files', 'script'=>GO::modules()->modules['files']['url'].'scripts/removeduplicatefolders.php');
-					//$response['results'][]=array('name'=>'Sync filesystem with files database', 'script'=>GO::modules()->modules['files']['url'].'scripts/sync_filesystem.php');
+					//$response['results'][]=array('name'=>'Remove duplicate folders and files', 'script'=>$GLOBALS['GO_MODULES']->modules['files']['url'].'scripts/removeduplicatefolders.php');
+					//$response['results'][]=array('name'=>'Sync filesystem with files database', 'script'=>$GLOBALS['GO_MODULES']->modules['files']['url'].'scripts/sync_filesystem.php');
 				}
 
-				if(!empty(GO::config()->phpMyAdminUrl))
-					$response['results'][]=array('name'=>'PhpMyAdmin', 'script'=>GO::modules()->modules['tools']['url'].'phpmyadmin.php');
+				if(!empty($GLOBALS['GO_CONFIG']->phpMyAdminUrl))
+					$response['results'][]=array('name'=>'PhpMyAdmin', 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'phpmyadmin.php');
 
 			break;
 	}

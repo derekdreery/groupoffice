@@ -1,10 +1,10 @@
 <?php
-require_once(GO::modules()->modules['email']['class_path'].'email.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['email']['class_path'].'email.class.inc.php');
 $email = new email();
 $email2 = new email();
 $email2->halt_on_error='no';
 
-if(isset(GO::modules()->modules['mailings']))
+if(isset($GLOBALS['GO_MODULES']->modules['mailings']))
 {
 	$db->query("ALTER TABLE `ml_mailings` ADD `alias_id` INT NOT NULL AFTER `account_id`");
 }
@@ -19,7 +19,7 @@ while($account = $email->next_record())
 	
 	$alias_id = $email2->add_alias($alias);
 	
-	if(isset(GO::modules()->modules['mailings']))
+	if(isset($GLOBALS['GO_MODULES']->modules['mailings']))
 	{
 		$email2->query("UPDATE ml_mailings SET alias_id=".$alias_id." WHERE account_id=".$account['id']);
 	}

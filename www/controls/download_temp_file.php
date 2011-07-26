@@ -6,14 +6,14 @@ if(isset($_REQUEST['sid'])) {
 }
 require_once("../Group-Office.php");
 
-GO::security()->json_authenticate();
+$GLOBALS['GO_SECURITY']->json_authenticate();
 
 //close writing to session so other concurrent requests won't be locked out.
 session_write_close();
 
 $name = (isset($_REQUEST['name']) && $_REQUEST['name']) ? $_REQUEST['name'] : '';
 
-$path = GO::config()->tmpdir.'attachments/';;
+$path = $GLOBALS['GO_CONFIG']->tmpdir.'attachments/';;
 $file = $path.$name;
 
 if(File::path_leads_to_parent($file))

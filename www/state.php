@@ -13,7 +13,7 @@
  */
 
 require_once("Group-Office.php");
-GO::security()->json_authenticate();
+$GLOBALS['GO_SECURITY']->json_authenticate();
 
 //close writing to session so other concurrent requests won't be locked out.
 session_write_close();
@@ -23,7 +23,7 @@ $values = json_decode($_POST['values'], true);
 
 foreach($values as $name=>$value){
 
-	GO::config()->save_state(GO::security()->user_id,
+	$GLOBALS['GO_CONFIG']->save_state($GLOBALS['GO_SECURITY']->user_id,
 		$name,
 		$value
 	);

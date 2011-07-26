@@ -14,9 +14,9 @@
 
 require_once("../../Group-Office.php");
 
-require_once (GO::language()->get_language_file('groups'));
+require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('groups'));
 
-require_once(GO::config()->class_path.'base/groups.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
@@ -30,7 +30,7 @@ switch ($_POST['task'])
 		if(isset($_POST['delete_keys']))
 		{
 			try{
-				if(!GO::modules()->modules['groups']['write_permission'])
+				if(!$GLOBALS['GO_MODULES']->modules['groups']['write_permission'])
 				{
 					throw new AccessDeniedException();
 				}
@@ -46,7 +46,7 @@ switch ($_POST['task'])
 					} elseif($group_id == 2) {
 						throw new Exception($lang['groups']['noDeleteEveryone']);
 					} else {
-						GO::events()->fire_event('delete_group', array($group_id));
+						$GLOBALS['GO_EVENTS']->fire_event('delete_group', array($group_id));
 						$GO_GROUPS->delete_group($group_id);
 					}
 				}
@@ -57,11 +57,11 @@ switch ($_POST['task'])
 			}
 		}
 
-		//$user_id = (!GO::modules()->modules['groups']['read_permission']) ? GO::security()->user_id : 0;
+		//$user_id = (!$GLOBALS['GO_MODULES']->modules['groups']['read_permission']) ? $GLOBALS['GO_SECURITY']->user_id : 0;
 		if(!empty($_POST['for_managing']))
-			$response['total'] = $GO_GROUPS->get_authorized_groups(GO::security()->user_id, $start, $limit, $sort, $dir);
+			$response['total'] = $GO_GROUPS->get_authorized_groups($GLOBALS['GO_SECURITY']->user_id, $start, $limit, $sort, $dir);
 		else
-			$response['total'] = $GO_GROUPS->get_groups(GO::security()->user_id, $start, $limit, $sort, $dir);
+			$response['total'] = $GO_GROUPS->get_groups($GLOBALS['GO_SECURITY']->user_id, $start, $limit, $sort, $dir);
 		
 		$response['results']=array();
 		while($GO_GROUPS->next_record())
@@ -85,7 +85,7 @@ switch ($_POST['task'])
 
 	case 'groups_all':
 		
-		$user_id = (!GO::modules()->modules['groups']['read_permission']) ? GO::security()->user_id : 0;
+		$user_id = (!$GLOBALS['GO_MODULES']->modules['groups']['read_permission']) ? $GLOBALS['GO_SECURITY']->user_id : 0;
 
 		$response['total'] = $GO_GROUPS->get_authorized_groups($user_id, $start, $limit, $sort, $dir);
 		$response['results']=array();
@@ -133,7 +133,7 @@ switch ($_POST['task'])
 
 	case 'user_groups_string':
 
-		require_once(GO::config()->class_path.'mail/RFC822.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc');
 		$RFC822 = new RFC822();
 		$groups = explode(',', $_REQUEST['user_groups']);
 

@@ -1,27 +1,27 @@
 <?php
 $module = $this->get_module('bookmarks');
 global $GO_LANGUAGE, $lang, $GO_CONFIG;
-require(GO::language()->get_language_file('bookmarks'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('bookmarks'));
 
 require_once($module['class_path'].'bookmarks.class.inc.php');
 $bookmarks = new bookmarks();
 
 $category['user_id']=1;
 $category['name']=$lang['bookmarks']['general'];
-$category['acl_id']=GO::security()->get_new_acl('bookmarks');
+$category['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('bookmarks');
 
-GO::security()->add_group_to_acl(GO::config()->group_everyone, $category['acl_id'], GO_SECURITY::READ_PERMISSION);
+$GLOBALS['GO_SECURITY']->add_group_to_acl($GLOBALS['GO_CONFIG']->group_everyone, $category['acl_id'], GO_SECURITY::READ_PERMISSION);
 
 $category_id= $bookmarks->add_category($category);
 
 
-if(GO::config()->product_name=='Group-Office'){
+if($GLOBALS['GO_CONFIG']->product_name=='Group-Office'){
 
 	$bookmark['user_id']=1;
 	$bookmark['category_id']=$category_id;
 	$bookmark['name']='Intermesh Web Solutions';
-	$bookmark['content']=GO::language()->language=='nl' ? 'http://www.intermesh.nl' : 'http://www.intermesh.nl/en/';
-	$bookmark['description']=GO::language()->language=='nl' ?'Intermesh ontwikkelt webapplicaties op maat en maakt elegante en effectieve websites' : 'Intermesh develops tailor-made web applications and designs stylish and effective websites.';
+	$bookmark['content']=$GLOBALS['GO_LANGUAGE']->language=='nl' ? 'http://www.intermesh.nl' : 'http://www.intermesh.nl/en/';
+	$bookmark['description']=$GLOBALS['GO_LANGUAGE']->language=='nl' ?'Intermesh ontwikkelt webapplicaties op maat en maakt elegante en effectieve websites' : 'Intermesh develops tailor-made web applications and designs stylish and effective websites.';
 	$bookmark['open_extern']='0';
 	$bookmark['logo']='icons/intermesh.png';
 	$bookmark['public_icon']='1';

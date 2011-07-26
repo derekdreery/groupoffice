@@ -14,7 +14,7 @@ require($argv[1]);
 
 require_once($config['root_path']."Group-Office.php");
 
-require_once (GO::modules()->modules['projects']['class_path']."projects.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['projects']['class_path']."projects.class.inc.php");
 
 $projects = new projects();
 

@@ -19,8 +19,8 @@ $start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 $limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('modules');
-require_once (GO::config()->class_path.'filesystem.class.inc');
+$GLOBALS['GO_SECURITY']->json_authenticate('modules');
+require_once ($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 $fs = new filesystem();
 
 
@@ -31,20 +31,20 @@ try{
 	{
 		case 'available_modules':
 
-			$folders = $fs->get_folders(GO::config()->module_path);
+			$folders = $fs->get_folders($GLOBALS['GO_CONFIG']->module_path);
 
 			$unsorted=array();
 
 			while($module = array_shift($folders))
 			{
-				if(GO::modules()->module_is_allowed($module['name']) && $module['name']!='professional')
+				if($GLOBALS['GO_MODULES']->module_is_allowed($module['name']) && $module['name']!='professional')
 				{
-					$installed_module = GO::modules()->get_module($module['name']);
+					$installed_module = $GLOBALS['GO_MODULES']->get_module($module['name']);
 
 					if(!$installed_module)
 					{
 						//require language file to obtain module name in the right language
-						$language_file = GO::language()->get_language_file($module['name']);
+						$language_file = $GLOBALS['GO_LANGUAGE']->get_language_file($module['name']);
 
 
 						if(file_exists($language_file))
@@ -82,7 +82,7 @@ try{
 						{
 							throw new Exception($lang['modules']['deleteModule']);							
 						} else {
-							GO::modules()->delete_module($module_id);							
+							$GLOBALS['GO_MODULES']->delete_module($module_id);							
 						}						
 					}
 					
@@ -92,12 +92,12 @@ try{
 					$response['uninstallSuccess']=false;
 				}
 				
-				GO::modules()->load_modules();
+				$GLOBALS['GO_MODULES']->load_modules();
 			}
 				
-			foreach(GO::modules()->modules as $module)
+			foreach($GLOBALS['GO_MODULES']->modules as $module)
 			{
-				$language_file = GO::language()->get_language_file($module['id']);
+				$language_file = $GLOBALS['GO_LANGUAGE']->get_language_file($module['id']);
 				if(file_exists($language_file))
 				{
 					require($language_file);

@@ -25,8 +25,8 @@ class settings // extends db
 
 		global $GO_CONFIG;
 
-		$login_screen_text = GO::config()->get_setting('login_screen_text');
-		$login_screen_text_title = GO::config()->get_setting('login_screen_text_title');
+		$login_screen_text = $GLOBALS['GO_CONFIG']->get_setting('login_screen_text');
+		$login_screen_text_title = $GLOBALS['GO_CONFIG']->get_setting('login_screen_text_title');
 
 		if(!empty($login_screen_text))
 			echo 'GO.mainLayout.on("login", function(mainLayout){mainLayout.msg("'.String::escape_javascript ($login_screen_text_title).'", "'.String::escape_javascript ($login_screen_text).'", 3600, 400);});';
@@ -42,24 +42,24 @@ class settings // extends db
 
 	public function getSettingByName($name)
 	{
-		return GO::config()->get_setting($name);
+		return $GLOBALS['GO_CONFIG']->get_setting($name);
 	}
 
 	public function getAllSettings()
 	{
-		return GO::config()->get_settings();
+		return $GLOBALS['GO_CONFIG']->get_settings();
 	}
 
 	public function getSettingsByUser($userid)
 	{
-		return GO::config()->get_settings($userid);
+		return $GLOBALS['GO_CONFIG']->get_settings($userid);
 	}
 
 	public function save_setting($name, $value, $userid)
 	{
-		GO::config()->save_setting($name, $value, $userid);
+		$GLOBALS['GO_CONFIG']->save_setting($name, $value, $userid);
 		
-		return GO::config()->get_setting($name);
+		return $GLOBALS['GO_CONFIG']->get_setting($name);
 	}
 }
 ?>

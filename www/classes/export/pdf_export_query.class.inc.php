@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-require_once(GO::config()->class_path.'tcpdf/tcpdf.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'tcpdf/tcpdf.php');
 
 
 class pdf_export_query extends base_export_query{
@@ -94,7 +94,7 @@ class pdf_export_query extends base_export_query{
 		$this->pdf->SetTitle($_REQUEST['title']);
 		$this->pdf->SetSubject($_REQUEST['title']);
 		$this->pdf->SetAuthor($_SESSION['GO_SESSION']['name']);
-		$this->pdf->SetCreator(GO::config()->product_name.' '.GO::config()->version);
+		$this->pdf->SetCreator($GLOBALS['GO_CONFIG']->product_name.' '.$GLOBALS['GO_CONFIG']->version);
 		$this->pdf->SetKeywords($_REQUEST['title']);
 	}
 
@@ -102,7 +102,7 @@ class pdf_export_query extends base_export_query{
 		parent::export($fp);
 		global $GO_CONFIG, $lang, $GO_MODULES;
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		$this->init_pdf();
@@ -228,9 +228,9 @@ class export_pdf extends TCPDF
 	{
 		global $GO_CONFIG;
 
-		if(!empty(GO::config()->tcpdf_font))
+		if(!empty($GLOBALS['GO_CONFIG']->tcpdf_font))
 		{
-			$this->font = GO::config()->tcpdf_font;
+			$this->font = $GLOBALS['GO_CONFIG']->tcpdf_font;
 		}
 
 		$orientation = isset($_REQUEST['orientation']) ? $_REQUEST['orientation'] : 'L';
@@ -257,7 +257,7 @@ class export_pdf extends TCPDF
 		$this->SetFont($this->font,'',$this->font_size);
 		$this->SetY(-20);
 		$pW=$this->getPageWidth();
-		$this->Cell($pW/2, 10, GO::config()->product_name.' '.GO::config()->version, 0, 0, 'L');
+		$this->Cell($pW/2, 10, $GLOBALS['GO_CONFIG']->product_name.' '.$GLOBALS['GO_CONFIG']->version, 0, 0, 'L');
 		$this->Cell(($pW/2)-$this->rMargin, 10, sprintf($lang['common']['printPage'], $this->getAliasNumPage(), $this->getAliasNbPages()), 0, 0, 'R');
 	}
 

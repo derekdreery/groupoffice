@@ -2,7 +2,7 @@
 /**
  * @todo refactor this code in the new MVC style
  */
-require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 
 class GO_Files_Controller_Item{
 	

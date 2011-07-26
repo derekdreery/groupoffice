@@ -1,6 +1,6 @@
 <?php
 //This is a translation by hodrag. If you have questions please e-mail to hodrag@gmail.com , modify chinese traditional by quincy
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = '行事曆';
 $lang['calendar']['description'] = '行事曆模組; 所有人都可以增加、編輯和刪除行程，也可以查看其他使用者的行事曆並在必要時進行修改。';
 

@@ -17,11 +17,11 @@
 /**
  * Require all mail classes that are used by this class
  */
-require_once GO::config()->class_path.'mail/RFC822.class.inc';
-require_once GO::config()->class_path.'mail/swift/lib/swift_required.php';
-require_once(GO::config()->class_path."html2text.class.inc");
-require_once(GO::config()->class_path."mail/mimeDecode.class.inc");
-require_once(GO::config()->class_path.'filesystem.class.inc');
+require_once $GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc';
+require_once $GLOBALS['GO_CONFIG']->class_path.'mail/swift/lib/swift_required.php';
+require_once($GLOBALS['GO_CONFIG']->class_path."html2text.class.inc");
+require_once($GLOBALS['GO_CONFIG']->class_path."mail/mimeDecode.class.inc");
+require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 
 
 /**
@@ -71,7 +71,7 @@ class Go2Mime
 		/*
 		 * Make sure temp dir exists
 		 */
-		File::mkdir(GO::config()->tmpdir);
+		File::mkdir($GLOBALS['GO_CONFIG']->tmpdir);
 
 		$message = Swift_Message::newInstance();
 		if($this->notification)
@@ -115,7 +115,7 @@ class Go2Mime
 		//fix for strange Microsoft exports
 		$mime = str_replace("------=_NextPart", "\r\n------=_NextPart", $mime);
 		
-		require_once(GO::language()->get_language_file('email'));
+		require_once($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
 		
 		$this->replacements = array();
 		$this->inline_attachments_url=$inline_attachments_url;
@@ -352,7 +352,7 @@ class Go2Mime
 					{
 						if(empty($filename))$filename=uniqid(time());
 
-						$mime_attachment['tmp_file']=GO::config()->tmpdir.'attachments/'.$filename;
+						$mime_attachment['tmp_file']=$GLOBALS['GO_CONFIG']->tmpdir.'attachments/'.$filename;
 						filesystem::mkdir_recursive(dirname($mime_attachment['tmp_file']));
 
 						file_put_contents($mime_attachment['tmp_file'], $part->body);
@@ -376,7 +376,7 @@ class Go2Mime
 							if($create_tmp_inline_attachments)
 							{
 								if(empty($filename)) $filename=uniqid(time());
-								$mime_attachment['tmp_file']=GO::config()->tmpdir.'attachments/'.$filename;
+								$mime_attachment['tmp_file']=$GLOBALS['GO_CONFIG']->tmpdir.'attachments/'.$filename;
 								filesystem::mkdir_recursive(dirname($mime_attachment['tmp_file']));
 
 								file_put_contents($mime_attachment['tmp_file'], $part->body);

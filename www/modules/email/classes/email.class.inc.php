@@ -22,7 +22,7 @@
 		exit();
 	}
 
-	if($account['user_id']!=GO::security()->user_id && !GO::security()->has_admin_permission(GO::security()->user_id)) {
+	if($account['user_id']!=$GLOBALS['GO_SECURITY']->user_id && !$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id)) {
 		$response['success']=false;
 		$response['feedback']=$lang['common']['accessDenied'];
 		echo json_encode($response);
@@ -54,12 +54,12 @@
 function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $imap, $_POST;
 
-	require_once (GO::config()->class_path.'mail/mimeDecode.class.inc');
-	require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
-	require_once(GO::modules()->modules['mailings']['class_path'].'templates.class.inc.php');
+	require_once ($GLOBALS['GO_CONFIG']->class_path.'mail/mimeDecode.class.inc');
+	require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+	require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'templates.class.inc.php');
 
-	if(GO::modules()->has_module('customfields')) {
-		require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+	if($GLOBALS['GO_MODULES']->has_module('customfields')) {
+		require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 		$cf = new customfields();
 	}else {
 		$cf = false;
@@ -72,9 +72,9 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 
 	$template = $tp->get_template($template_id);
 
-	require_once(GO::config()->class_path.'mail/Go2Mime.class.inc.php');
+	require_once($GLOBALS['GO_CONFIG']->class_path.'mail/Go2Mime.class.inc.php');
 	$go2mime = new Go2Mime();
-	$response['data'] = $go2mime->mime2GO($template['content'], GO::modules()->modules['mailings']['url'].'mimepart.php?template_id='.$template_id, true, true);
+	$response['data'] = $go2mime->mime2GO($template['content'], $GLOBALS['GO_MODULES']->modules['mailings']['url'].'mimepart.php?template_id='.$template_id, true, true);
 
 	$presetbody = isset($_POST['body']) ? $_POST['body'] : '';
 	if(!empty($presetbody) && strpos($response['data']['body'],'{body}')==false){
@@ -98,7 +98,7 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 				$contact = $ab->get_contact($contact_id);
 			}else
 			{
-				$contact = $ab->get_contact_by_email($to, GO::security()->user_id);
+				$contact = $ab->get_contact_by_email($to, $GLOBALS['GO_SECURITY']->user_id);
 			}
 
 
@@ -106,13 +106,13 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 				$response['data']['body']=$tp->replace_contact_data_fields($response['data']['body'], $contact['id'], true);
 			}else
 			{
-				require_once(GO::config()->class_path.'base/users.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 				$GO_USERS = new GO_USERS();
 
 				if($user = $GO_USERS->get_user_by_email($to)) {
 					$response['data']['body']=$tp->replace_user_data_fields($response['data']['body'], $user['id'], true);
 				}else {
-					$ab->search_companies(GO::security()->user_id, $to, 'email',0,0,1);
+					$ab->search_companies($GLOBALS['GO_SECURITY']->user_id, $to, 'email',0,0,1);
 					if($company= $ab->next_record()) {
 						$response['data']['body']=$tp->replace_company_data_fields($response['data']['body'], $company['id'], true);
 					}else
@@ -129,7 +129,7 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 		}
 		
 		/*if($cf && !empty($link_id)) {
-			$cf_values = $cf->get_values(GO::security()->user_id, $link_type, $link_id);
+			$cf_values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, $link_type, $link_id);
 			$values = array_merge($values, $cf_values);
 		}
 
@@ -163,7 +163,7 @@ class email extends db {
 	public static function head(){
 		global $GO_CONFIG, $GO_SECURITY;
 
-		$font_size = GO::security()->logged_in() ? GO::config()->get_setting('email_font_size', GO::security()->user_id) : false;
+		$font_size = $GLOBALS['GO_SECURITY']->logged_in() ? $GLOBALS['GO_CONFIG']->get_setting('email_font_size', $GLOBALS['GO_SECURITY']->user_id) : false;
 		if(!$font_size)
 			$font_size='12px';
 
@@ -184,7 +184,7 @@ class email extends db {
 	public static function key_changed($user_id, $old_key, $new_key){
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'cryptastic.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'cryptastic.class.inc.php');
 
 		$c = new cryptastic();
 		$db = new db();
@@ -207,14 +207,14 @@ class email extends db {
 
 	public static function check_mail(&$response){
 		global $GO_SECURITY, $GO_MODULES;
-		require_once (GO::modules()->modules['email']['class_path']."cached_imap.class.inc.php");
+		require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path']."cached_imap.class.inc.php");
 		
 		$imap = new cached_imap();
 		$email = new email();
 		$email2 = new email();
 
 		
-		$count = $email->get_accounts(GO::security()->user_id);
+		$count = $email->get_accounts($GLOBALS['GO_SECURITY']->user_id);
 		$response['email_status']=array();
 		while($email->next_record()) {
 			try{
@@ -243,7 +243,7 @@ class email extends db {
 		if($count_login){
 			//clear old cache
 			$db = new db();
-			$sql = "DELETE FROM em_messages_cache WHERE udate<".Date::date_add(time(),-21)." AND account_id IN (SELECT id FROM em_accounts WHERE user_id=".GO::security()->user_id.")";
+			$sql = "DELETE FROM em_messages_cache WHERE udate<".Date::date_add(time(),-21)." AND account_id IN (SELECT id FROM em_accounts WHERE user_id=".$GLOBALS['GO_SECURITY']->user_id.")";
 			$db->query($sql);
 		}
 	}
@@ -252,21 +252,21 @@ class email extends db {
 
 		global $GO_MODULES, $GO_CONFIG, $GO_SECURITY;
 
-		if(GO::modules()->has_module('email'))
+		if($GLOBALS['GO_MODULES']->has_module('email'))
 		{
-			GO::config()->save_setting('email_use_plain_text_markup', isset($_POST['use_html_markup']) ? '0' : '1', GO::security()->user_id);
-			GO::config()->save_setting('email_skip_unknown_recipients', isset($_POST['skip_unknown_recipients']) ? '1' : '0', GO::security()->user_id);
-			GO::config()->save_setting('email_always_request_notification', isset($_POST['always_request_notification']) ? '1' : '0', GO::security()->user_id);
-			GO::config()->save_setting('email_always_respond_to_notifications', isset($_POST['always_respond_to_notifications']) ? '1' : '0', GO::security()->user_id);
-			GO::config()->save_setting('email_font_size', $_POST['font_size'], GO::security()->user_id);
+			$GLOBALS['GO_CONFIG']->save_setting('email_use_plain_text_markup', isset($_POST['use_html_markup']) ? '0' : '1', $GLOBALS['GO_SECURITY']->user_id);
+			$GLOBALS['GO_CONFIG']->save_setting('email_skip_unknown_recipients', isset($_POST['skip_unknown_recipients']) ? '1' : '0', $GLOBALS['GO_SECURITY']->user_id);
+			$GLOBALS['GO_CONFIG']->save_setting('email_always_request_notification', isset($_POST['always_request_notification']) ? '1' : '0', $GLOBALS['GO_SECURITY']->user_id);
+			$GLOBALS['GO_CONFIG']->save_setting('email_always_respond_to_notifications', isset($_POST['always_respond_to_notifications']) ? '1' : '0', $GLOBALS['GO_SECURITY']->user_id);
+			$GLOBALS['GO_CONFIG']->save_setting('email_font_size', $_POST['font_size'], $GLOBALS['GO_SECURITY']->user_id);
 		}
 	}
 
 	function get_servermanager_mailbox_info($account) {
 		global $GO_CONFIG, $GO_MODULES;
 
-		if(isset(GO::modules()->modules['serverclient'])) {
-			require_once(GO::modules()->modules['serverclient']['class_path'].'serverclient.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['serverclient'])) {
+			require_once($GLOBALS['GO_MODULES']->modules['serverclient']['class_path'].'serverclient.class.inc.php');
 			$sc = new serverclient();
 
 			foreach($sc->domains as $domain) {
@@ -284,7 +284,7 @@ class email extends db {
 									'username'=>$account['username'],
 									'password'=>$account['password']
 					);
-					$server_response = $sc->send_request(GO::config()->serverclient_server_url.'modules/postfixadmin/json.php', $params);
+					$server_response = $sc->send_request($GLOBALS['GO_CONFIG']->serverclient_server_url.'modules/postfixadmin/json.php', $params);
 					return json_decode($server_response, true);
 				}
 			}
@@ -303,13 +303,13 @@ class email extends db {
 
 		if($user_id > 0) {
 
-			$groups = GO::security()->get_user_group_ids($user_id);
+			$groups = $GLOBALS['GO_SECURITY']->get_user_group_ids($user_id);
 
 			//remove admin group because we don't want to show all e-mail accounts to the admin.
 			$g=array();
 			foreach($groups as $group_id)
 			{
-				if($group_id!=GO::config()->group_root){
+				if($group_id!=$GLOBALS['GO_CONFIG']->group_root){
 					$g[]=$group_id;
 				}
 			}
@@ -347,10 +347,10 @@ class email extends db {
 
 		$result = array('links');
 
-		require_once(GO::config()->class_path.'base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 		$search = new search();
 
-		require_once(GO::config()->class_path.'base/links.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 		$GO_LINKS = new GO_LINKS();
 
 		
@@ -361,7 +361,7 @@ class email extends db {
 
 		if(empty($link_message['subject'])) {
 			global $GO_LANGUAGE, $lang;
-			GO::language()->require_language_file('email');
+			$GLOBALS['GO_LANGUAGE']->require_language_file('email');
 
 			$link_message['subject']=$lang['email']['no_subject'];
 		}
@@ -391,13 +391,13 @@ class email extends db {
 	function delete_linked_message($link_id) {
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 		$search = new search();
 		$search->delete_search_result($link_id, 9);
 
 		$message = $this->get_linked_message($link_id);
 
-		@unlink(GO::config()->file_storage_path.$message['path']);
+		@unlink($GLOBALS['GO_CONFIG']->file_storage_path.$message['path']);
 
 		$sql ="DELETE FROM em_links WHERE link_id=".intval($link_id);
 		return $this->query($sql);
@@ -414,7 +414,7 @@ class email extends db {
 	function update_settings($settings) {
 		if(!isset($settings['user_id'])) {
 			global $GO_SECURITY;
-			$settings['user_id'] = GO::security()->user_id;
+			$settings['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
 		}
 		return $this->update_row('em_settings', 'user_id', $settings);
 	}
@@ -427,8 +427,8 @@ class email extends db {
 			global $GO_MODULES;
 
 			$addressbook_id=0;
-			if(isset(GO::modules()->modules['addressbook']) && GO::modules()->modules['addressbook']['read_permission']) {
-				require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+			if(isset($GLOBALS['GO_MODULES']->modules['addressbook']) && $GLOBALS['GO_MODULES']->modules['addressbook']['read_permission']) {
+				require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 				$ab = new addressbook();
 
 				if($addressbook=$ab->get_addressbook()) {
@@ -445,7 +445,7 @@ class email extends db {
 		global $GO_CONFIG, $GO_LANGUAGE, $GO_SECURITY;
 
 
-		require_once(GO::config()->class_path."mail/imap.class.inc");
+		require_once($GLOBALS['GO_CONFIG']->class_path."mail/imap.class.inc");
 		$this->mail= new imap();
 
 		try {
@@ -492,7 +492,7 @@ class email extends db {
 
 				unset($account['name'],$account['email'],$account['signature']);
 
-				require_once(GO::config()->class_path.'cryptastic.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'cryptastic.class.inc.php');
 				$c = new cryptastic();
 
 				$encrypted = $c->encrypt($account['password']);
@@ -583,7 +583,7 @@ class email extends db {
 	function update_account($account) {
 		global $GO_CONFIG, $GO_SECURITY;
 
-		require_once(GO::config()->class_path."mail/imap.class.inc");
+		require_once($GLOBALS['GO_CONFIG']->class_path."mail/imap.class.inc");
 		$this->mail= new imap();
 
 		$oldaccount = $this->get_account($account['id']);
@@ -618,7 +618,7 @@ class email extends db {
 
 				$this->mail->disconnect();
 
-				require_once(GO::config()->class_path.'cryptastic.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'cryptastic.class.inc.php');
 				$c = new cryptastic();
 
 				$encrypted = $c->encrypt($account['password']);
@@ -642,7 +642,7 @@ class email extends db {
 	function human_connect_error($message) {
 		global $lang, $GO_LANGUAGE;
 
-		GO::language()->require_language_file('email');
+		$GLOBALS['GO_LANGUAGE']->require_language_file('email');
 
 		if(stripos($message,'getaddrinfo')) {
 			$message = $lang['email']['error_getaddrinfo'];
@@ -671,7 +671,7 @@ class email extends db {
 
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'cryptastic.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'cryptastic.class.inc.php');
 		$c = new cryptastic();
 
 		$plain_password = $password;
@@ -708,7 +708,7 @@ class email extends db {
 
 	function decrypt_account($account){
 		global $GO_CONFIG, $GO_SECURITY;
-		require_once(GO::config()->class_path.'cryptastic.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'cryptastic.class.inc.php');
 		$c = new cryptastic();
 
 
@@ -740,7 +740,7 @@ class email extends db {
 
 	/*function _decrypt_account($account){
 		global $GO_CONFIG, $GO_SECURITY;
-		require_once(GO::config()->class_path.'cryptastic.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'cryptastic.class.inc.php');
 		$c = new cryptastic();
 
 
@@ -751,7 +751,7 @@ class email extends db {
 			
 			$account['password_encrypted']=0;
 			$account['password_already_decrypted']=1;
-		}elseif(!isset($account['password_already_decrypted']) && GO::security()->user_id==$account['user_id'])
+		}elseif(!isset($account['password_already_decrypted']) && $GLOBALS['GO_SECURITY']->user_id==$account['user_id'])
 		{
 			$encrypted = $c->encrypt($account['password'], $_SESSION['GO_SESSION']['key']);
 			if($encrypted){
@@ -829,7 +829,7 @@ class email extends db {
 			$this->query($sql);
 
 			$params = array($id);
-			GO::events()->fire_event('delete_email_account', $params);
+			$GLOBALS['GO_EVENTS']->fire_event('delete_email_account', $params);
 		}
 	}
 
@@ -1340,15 +1340,15 @@ class email extends db {
 	function get_zip_of_attachments($account_id, $uid, $mailbox='INBOX') {
 		global $GO_CONFIG, $GO_MODULES, $imap;
 
-		require_once(GO::config()->class_path.'filesystem.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 
-		$tmpdir = GO::config()->tmpdir.'zip_of_attachments_'.uniqid(time()).'/';
+		$tmpdir = $GLOBALS['GO_CONFIG']->tmpdir.'zip_of_attachments_'.uniqid(time()).'/';
 		if(!$fs->mkdir_recursive($tmpdir)) {
 			return false;
 		}
 
-		require_once(GO::modules()->modules['email']['class_path']."cached_imap.class.inc.php");
+		require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."cached_imap.class.inc.php");
 
 		$imap = new cached_imap();
 		$account = $imap->open_account($account_id, $mailbox);
@@ -1374,13 +1374,13 @@ class email extends db {
 		$zipfile = uniqid(time()).'.zip';
 
 		chdir($tmpdir);
-		$cmd =GO::config()->cmd_zip.' -r "../'.$zipfile.'" *';
+		$cmd =$GLOBALS['GO_CONFIG']->cmd_zip.' -r "../'.$zipfile.'" *';
 
 		exec($cmd);
 
 		$fs->delete($tmpdir);
 
-		return GO::config()->tmpdir.$zipfile;
+		return $GLOBALS['GO_CONFIG']->tmpdir.$zipfile;
 	}
 
 
@@ -1419,10 +1419,10 @@ class email extends db {
 
 	function cache_message($message_id) {
 		global $GO_MODULES, $GO_CONFIG, $GO_LANGUAGE;
-		require_once(GO::config()->class_path.'base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 		$search = new search();
 
-		require(GO::language()->get_language_file('email'));
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
 
 		$sql  = "SELECT * FROM em_links WHERE link_id=?";
 		$this->query($sql,'i', $message_id);
@@ -1465,7 +1465,7 @@ class email extends db {
 
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 		$search = new search();
 
 		$sql = "SELECT link_id FROM em_links";
@@ -1587,13 +1587,13 @@ class email extends db {
 		
 		$user_id = intval($user_id);
 		
-		$groups = GO::security()->get_user_group_ids($user_id);
+		$groups = $GLOBALS['GO_SECURITY']->get_user_group_ids($user_id);
 
 		//remove admin group because we don't want to show all e-mail accounts to the admin.
 		$g=array();
 		foreach($groups as $group_id)
 		{
-			if($group_id!=GO::config()->group_root){
+			if($group_id!=$GLOBALS['GO_CONFIG']->group_root){
 				$g[]=$group_id;
 			}
 		}
@@ -1648,7 +1648,7 @@ class email extends db {
 		
 		$sql = "SELECT SQL_CALC_FOUND_ROWS ac.username FROM em_accounts ac ".
 			"INNER JOIN go_users u ON (u.id=ac.user_id) ".
-			"INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
+			"INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 		if(!empty($query))
 			$sql .= "WHERE ac.username LIKE '".$this->escape($query)."' ";
 		

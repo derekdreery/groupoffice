@@ -13,18 +13,18 @@ require_once("../../Group-Office.php");
 
 if(php_sapi_name()!='cli')
 {
-	GO::security()->html_authenticate('tools');
+	$GLOBALS['GO_SECURITY']->html_authenticate('tools');
 }
 
 $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
-//GO::security()->html_authenticate('tools');
+//$GLOBALS['GO_SECURITY']->html_authenticate('tools');
 
 ini_set('max_execution_time', 360);
 
 
 echo 'Start of module checks'.$line_break;
 
-GO::events()->fire_event('check_database');
+$GLOBALS['GO_EVENTS']->fire_event('check_database');
 
 echo 'Done'.$line_break.$line_break;
 ?>

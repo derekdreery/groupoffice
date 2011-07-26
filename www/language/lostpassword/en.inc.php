@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-//require(GO::language()->get_fallback_base_language_file('lostpassword'));
+//require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('lostpassword'));
 
 $lang['lostpassword']['success']='<h1>Password changed</h1><p>Your password has been changed successfully. You can now continue to the login page.</p>';
 $lang['lostpassword']['send']='Send';

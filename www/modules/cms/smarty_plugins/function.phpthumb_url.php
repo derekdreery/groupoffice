@@ -25,7 +25,7 @@ function smarty_function_phpthumb_url($params)
 {
 	global $GO_CONFIG;
 	
-	require_once(GO::config()->control_path.'phpthumb/phpThumb.config.php');
+	require_once($GLOBALS['GO_CONFIG']->control_path.'phpthumb/phpThumb.config.php');
 	
 	return phpThumbURL($params['params']);
 }

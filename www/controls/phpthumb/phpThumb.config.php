@@ -15,9 +15,9 @@ if(!isset($GO_CONFIG))
 	$root = str_replace('controls/phpthumb/phpThumb.config.php','', __FILE__);
 	require_once($root.'classes/base/config.class.inc.php');
 	$GO_CONFIG = new GO_CONFIG();
-	if(!file_exists(GO::config()->file_storage_path.'phpThumbCache/'))
+	if(!file_exists($GLOBALS['GO_CONFIG']->file_storage_path.'phpThumbCache/'))
 	{
-		mkdir(GO::config()->file_storage_path.'phpThumbCache/', GO::config()->folder_create_mode);
+		mkdir($GLOBALS['GO_CONFIG']->file_storage_path.'phpThumbCache/', $GLOBALS['GO_CONFIG']->folder_create_mode);
 	}
 }
 
@@ -44,7 +44,7 @@ $PHPTHUMB_CONFIG['document_root'] = realpath((getenv('DOCUMENT_ROOT') && preg_ma
 // Note: this directory must be writable (usually chmod 777 is neccesary) for caching to work.
 // If the directory is not writable no error will be generated but caching will be disabled.
 //$PHPTHUMB_CONFIG['cache_directory'] = dirname(__FILE__).'/cache/';                            // set the cache directory relative to the phpThumb() installation
-$PHPTHUMB_CONFIG['cache_directory'] = GO::config()->file_storage_path.'phpThumbCache/';
+$PHPTHUMB_CONFIG['cache_directory'] = $GLOBALS['GO_CONFIG']->file_storage_path.'phpThumbCache/';
 //$PHPTHUMB_CONFIG['cache_directory'] = $PHPTHUMB_CONFIG['document_root'].'/phpthumb/cache/'; // set the cache directory to an absolute directory for all source images
 //$PHPTHUMB_CONFIG['cache_directory'] = './cache/';                                           // set the cache directory relative to the source image - must start with '.' (will not work to cache URL- or database-sourced images, please use an absolute directory name)
 //$PHPTHUMB_CONFIG['cache_directory'] = null;                                                 // disable thumbnail caching (not recommended)
@@ -204,7 +204,7 @@ $PHPTHUMB_CONFIG['mysql_database'] = '';
 
 // * Security configuration
 $PHPTHUMB_CONFIG['high_security_enabled']    = true;  // if enabled, requires 'high_security_password' set to at least 5 characters, and requires the use of phpThumbURL() function (at the bottom of phpThumb.config.php) to generate hashed URLs
-$PHPTHUMB_CONFIG['high_security_password']   = 'gopass_'.GO::config()->db_pass;     // required if 'high_security_enabled' is true, must be at least 5 characters long
+$PHPTHUMB_CONFIG['high_security_password']   = 'gopass_'.$GLOBALS['GO_CONFIG']->db_pass;     // required if 'high_security_enabled' is true, must be at least 5 characters long
 $PHPTHUMB_CONFIG['disable_debug']            = false;  // prevent phpThumb from displaying any information about your system. If true, phpThumbDebug and error messages will be disabled
 $PHPTHUMB_CONFIG['allow_src_above_docroot']  = true;  // if true, allow src to be anywhere in filesystem; if false (default) only allow src within document_root
 $PHPTHUMB_CONFIG['allow_src_above_phpthumb'] = true;   // if true (default), allow src to be anywhere in filesystem; if false only allow src within sub-directory of phpThumb installation
@@ -264,7 +264,7 @@ $PHPTHUMB_DEFAULTS_DISABLEGETPARAMS  = false; // if true, GETstring parameters w
 }*/
 function phpThumbURL($ParameterString) {
 	global $GO_CONFIG, $PHPTHUMB_CONFIG;
-	return GO::config()->control_url.'phpthumb/phpThumb.php?'.$ParameterString.'&hash='.md5($ParameterString.@$PHPTHUMB_CONFIG['high_security_password']);
+	return $GLOBALS['GO_CONFIG']->control_url.'phpthumb/phpThumb.php?'.$ParameterString.'&hash='.md5($ParameterString.@$PHPTHUMB_CONFIG['high_security_password']);
 }
 ///////////////////////////////////////////////////////////////////////////////
 

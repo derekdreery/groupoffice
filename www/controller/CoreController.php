@@ -15,34 +15,34 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController {
 
 		GO_Base_Observable::cacheListeners();
 
-		if (GO::security()->logged_in())
-			GO::modules()->callModuleMethod('initUser', array(GO::security()->user_id));
+		if ($GLOBALS['GO_SECURITY']->logged_in())
+			$GLOBALS['GO_MODULES']->callModuleMethod('initUser', array($GLOBALS['GO_SECURITY']->user_id));
 
 		//$config_file = $GO_CONFIG->get_config_file();
-		if (empty(GO::config()->db_user)) {
+		if (empty($GLOBALS['GO_CONFIG']->db_user)) {
 			header('Location: install/');
 			exit();
 		}
 
 		//Redirect to correct login url if a force_login_url is set. Useful to force ssl
-		if (GO::config()->force_login_url && strpos(GO::config()->full_url, GO::config()->force_login_url) === false) {
+		if ($GLOBALS['GO_CONFIG']->force_login_url && strpos($GLOBALS['GO_CONFIG']->full_url, $GLOBALS['GO_CONFIG']->force_login_url) === false) {
 			unset(GO::session()->values['full_url']);
-			header('Location: ' . GO::config()->force_login_url);
+			header('Location: ' . $GLOBALS['GO_CONFIG']->force_login_url);
 			exit();
 		}
 
-		$mtime = GO::config()->get_setting('upgrade_mtime');
+		$mtime = $GLOBALS['GO_CONFIG']->get_setting('upgrade_mtime');
 
-		if ($mtime != GO::config()->mtime) {
+		if ($mtime != $GLOBALS['GO_CONFIG']->mtime) {
 			
 			global $lang;
 			
-			if (GO::security()->logged_in())
-				GO::security()->logout();
+			if ($GLOBALS['GO_SECURITY']->logged_in())
+				$GLOBALS['GO_SECURITY']->logout();
 
 			echo '<html><head><style>body{font-family:arial;}</style></head><body>';
 			echo '<h1>' . $lang['common']['running_sys_upgrade'] . '</h1><p>' . $lang['common']['sys_upgrade_text'] . '</p>';
-			require(GO::config()->root_path . 'install/upgrade.php');
+			require($GLOBALS['GO_CONFIG']->root_path . 'install/upgrade.php');
 			echo '<a href="#" onclick="document.location.reload();">' . $lang['common']['click_here_to_contine'] . '</a>';
 			echo '</body></html>';
 			exit();
@@ -51,7 +51,7 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController {
 
 //will do autologin here before theme is loaded.
 		try {
-			GO::security()->logged_in();
+			$GLOBALS['GO_SECURITY']->logged_in();
 		} catch (Exception $e) {
 			
 		}
@@ -60,7 +60,7 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController {
 	}
 
 	protected function actionLogout() {
-		GO::security()->logout();
+		$GLOBALS['GO_SECURITY']->logout();
 		if (isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN'] == '1') {
 			?>
 			<script type="text/javascript">
@@ -70,7 +70,7 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController {
 
 			exit();
 		} else {
-			header('Location: ' . GO::config()->host);
+			header('Location: ' . $GLOBALS['GO_CONFIG']->host);
 			exit();
 		}
 	}
@@ -99,7 +99,7 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController {
 	function loadModuleStylesheets($derrived_theme=false) {
 		global $GO_MODULES;
 
-		foreach (GO::modules()->getAll() as $module) {
+		foreach ($GLOBALS['GO_MODULES']->getAll() as $module) {
 			if (file_exists($module->path . 'themes/Default/style.css')) {
 				$this->registerCssFile($module->path . 'themes/Default/style.css');
 			}
@@ -129,7 +129,7 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController {
 //	function loadModuleStylesheets($derrived_theme=false) {
 //		global $GO_MODULES;
 //
-//		foreach (GO::modules()->modules as $module) {
+//		foreach ($GLOBALS['GO_MODULES']->modules as $module) {
 //			if (file_exists($module['path'] . 'themes/Default/style.css')) {
 //				$this->add_stylesheet($module['path'] . 'themes/Default/style.css');
 //			}
@@ -149,30 +149,30 @@ class GO_Controller_Core extends GO_Base_Controller_AbstractController {
 		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
 
 		$mods = '';
-		foreach (GO::modules()->modules as $module) {
+		foreach ($GLOBALS['GO_MODULES']->modules as $module) {
 			$mods.=$module['id'];
 		}
 
-		$hash = md5(GO::config()->file_storage_path . GO::config()->host . GO::config()->mtime . $mods);
+		$hash = md5($GLOBALS['GO_CONFIG']->file_storage_path . $GLOBALS['GO_CONFIG']->host . $GLOBALS['GO_CONFIG']->mtime . $mods);
 
 		$relpath = 'cache/' . $hash . '-' . GO::view() . '-style.css';
-		$cssfile = GO::config()->file_storage_path . $relpath;
+		$cssfile = $GLOBALS['GO_CONFIG']->file_storage_path . $relpath;
 
-		if (!file_exists($cssfile) || GO::config()->debug) {
+		if (!file_exists($cssfile) || $GLOBALS['GO_CONFIG']->debug) {
 
-			File::mkdir(GO::config()->file_storage_path . 'cache');
+			File::mkdir($GLOBALS['GO_CONFIG']->file_storage_path . 'cache');
 
 			$fp = fopen($cssfile, 'w+');
 			foreach ($this->stylesheets as $s) {
 
-				$baseurl = str_replace(GO::config()->root_path, GO::config()->host, dirname($s)) . '/';
+				$baseurl = str_replace($GLOBALS['GO_CONFIG']->root_path, $GLOBALS['GO_CONFIG']->host, dirname($s)) . '/';
 
 				fputs($fp, $this->replaceUrl(file_get_contents($s), $baseurl));
 			}
 			fclose($fp);
 		}
 
-		$cssurl = GO::config()->host . 'compress.php?file=' . basename($relpath);
+		$cssurl = $GLOBALS['GO_CONFIG']->host . 'compress.php?file=' . basename($relpath);
 		echo '<link href="' . $cssurl . '" type="text/css" rel="stylesheet" />';
 	}
 

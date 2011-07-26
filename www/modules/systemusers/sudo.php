@@ -6,7 +6,7 @@ define('CONFIG_FILE', $argv[1]);
 require_once('../../Group-Office.php');
 
 $task = $argv[2];
-$user_home_dirs = isset(GO::config()->user_home_dirs) ? GO::config()->user_home_dirs : '/home/';
+$user_home_dirs = isset($GLOBALS['GO_CONFIG']->user_home_dirs) ? $GLOBALS['GO_CONFIG']->user_home_dirs : '/home/';
 
 
 function get_string($output, $status)
@@ -41,18 +41,18 @@ switch($task)
 			exit(get_string($output, $status));
 		}
 			
-		exec('echo '.$username.':'.$password.' | '.GO::config()->cmd_chpasswd);
+		exec('echo '.$username.':'.$password.' | '.$GLOBALS['GO_CONFIG']->cmd_chpasswd);
 
-		if(!empty(GO::config()->cmd_edquota) && !empty(GO::config()->quota_protouser))
+		if(!empty($GLOBALS['GO_CONFIG']->cmd_edquota) && !empty($GLOBALS['GO_CONFIG']->quota_protouser))
 		{
-			exec(GO::config()->cmd_edquota.' -p '.GO::config()->quota_protouser.' '.GO::config()->id.'_'.$username);
+			exec($GLOBALS['GO_CONFIG']->cmd_edquota.' -p '.$GLOBALS['GO_CONFIG']->quota_protouser.' '.$GLOBALS['GO_CONFIG']->id.'_'.$username);
 		}
 
 		break;
 
 	case 'update_user':
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		$user_id = $argv[3];
@@ -64,14 +64,14 @@ switch($task)
 		$arr = explode('@', $username);
 		$username = $arr[0];
 
-		exec('echo '.$username.':'.$password.' | '.GO::config()->cmd_chpasswd.' 2>&1', $output, $status);
+		exec('echo '.$username.':'.$password.' | '.$GLOBALS['GO_CONFIG']->cmd_chpasswd.' 2>&1', $output, $status);
 		if($status)
 		{
 			exit(get_string($output, $status));
 		}
 
-		if(isset(GO::modules()->modules['email'])){
-			require_once(GO::modules()->modules['email']['class_path'].'email.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['email'])){
+			require_once($GLOBALS['GO_MODULES']->modules['email']['class_path'].'email.class.inc.php');
 			$email = new email();
 
 			$email->update_password('localhost', $username, $password);
@@ -95,16 +95,16 @@ switch($task)
 
 		$account_id=$argv[3];
 
-		require_once(GO::config()->class_path.'mail/RFC822.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc');
 		$RFC822 = new RFC822();
 
-		require_once(GO::modules()->modules['email']['class_path'].'email.class.inc.php');
+		require_once($GLOBALS['GO_MODULES']->modules['email']['class_path'].'email.class.inc.php');
 		$email = new email();
 
-		require_once(GO::modules()->modules['systemusers']['class_path'].'systemusers.class.inc.php');
+		require_once($GLOBALS['GO_MODULES']->modules['systemusers']['class_path'].'systemusers.class.inc.php');
 		$su = new systemusers();
 		
-		require_once(GO::modules()->modules['systemusers']['path'].'vacation_functions.php');
+		require_once($GLOBALS['GO_MODULES']->modules['systemusers']['path'].'vacation_functions.php');
 
 		$account = $email->get_account($account_id);
 		if($account)

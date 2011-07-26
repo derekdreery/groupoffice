@@ -14,12 +14,12 @@
 
 require('../../Group-Office.php');
 
-GO::security()->json_authenticate('files');
-require_once(GO::config()->class_path.'File.class.inc.php');
-require_once (GO::modules()->modules['files']['class_path']."files.class.inc.php");
+$GLOBALS['GO_SECURITY']->json_authenticate('files');
+require_once($GLOBALS['GO_CONFIG']->class_path.'File.class.inc.php');
+require_once ($GLOBALS['GO_MODULES']->modules['files']['class_path']."files.class.inc.php");
 $files = new files();
 
-require(GO::language()->get_language_file('files'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('files'));
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 $response=array();
@@ -46,21 +46,21 @@ try {
 
 			if ($_POST['content_type']!='plain') {
 				$downloadLink = $lang['files']['clickHereToDownload'].':'." ".
-					'<a href="'.GO::modules()->modules['files']['full_url']. 'download.php?id='.$_POST['file_id'].'&random_code='.$random_code.'">'.$file['name'].'</a> ';
+					'<a href="'.$GLOBALS['GO_MODULES']->modules['files']['full_url']. 'download.php?id='.$_POST['file_id'].'&random_code='.$random_code.'">'.$file['name'].'</a> ';
 				$lb = "<br />";
 			} else {
 				$downloadLink = $lang['files']['copyPasteToDownload'].':'."\n\n" .
-					GO::modules()->modules['files']['full_url']. 'download.php?id='.$_POST['file_id'].'&random_code='.$random_code."\n\n";
+					$GLOBALS['GO_MODULES']->modules['files']['full_url']. 'download.php?id='.$_POST['file_id'].'&random_code='.$random_code."\n\n";
 				$lb = "\n";
 			}
 
 			$_POST['body'] = $downloadLink.'('.$lang['files']['possibleUntil'].' '.date($_SESSION['GO_SESSION']['date_format'],$expire_time).')'.$lb.$lb;
 
 			if(!empty($_POST['template_id'])) {
-				require_once(GO::modules()->modules['email']['class_path'].'email.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['email']['class_path'].'email.class.inc.php');
 				$response = load_template($_POST['template_id']);
 
-				require_once(GO::config()->class_path.'mail/Go2Mime.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'mail/Go2Mime.class.inc.php');
 				$go2mime = new Go2Mime();
 				$response['data']['attachments']=$go2mime->remove_inline_images($response['data']['attachments']);
 			}else
@@ -89,7 +89,7 @@ try {
 
 			if(!empty($_POST['sync_folder_id'])){
 				//this will rebuild the cached shares folder
-				GO::config()->save_setting('fs_shared_cache', 0, GO::security()->user_id);
+				$GLOBALS['GO_CONFIG']->save_setting('fs_shared_cache', 0, $GLOBALS['GO_SECURITY']->user_id);
 			}
 
 			$fs2= new files();
@@ -204,8 +204,8 @@ try {
 						$response[]=$node;
 
 
-						if(GO::modules()->has_module('projects')) {
-							GO::language()->require_language_file('projects');
+						if($GLOBALS['GO_MODULES']->has_module('projects')) {
+							$GLOBALS['GO_LANGUAGE']->require_language_file('projects');
 
 							$projects_folder = $files->resolve_path('projects');
 							$node= array(
@@ -225,8 +225,8 @@ try {
 						}
 
 
-						if(GO::modules()->has_module('addressbook')) {
-							require(GO::language()->get_language_file('addressbook'));
+						if($GLOBALS['GO_MODULES']->has_module('addressbook')) {
+							require($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 							$contacts_folder = $files->resolve_path('contacts');
 							$node= array(
 								'text'=>$lang['addressbook']['contacts'],
@@ -259,7 +259,7 @@ try {
 						}
 
 
-						if(GO::security()->has_admin_permission(GO::security()->user_id)) {
+						if($GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id)) {
 
 							$log_folder = $files->resolve_path('log',true);
 							if($log_folder) {
@@ -277,7 +277,7 @@ try {
 
 
 
-//						$num_new_files = $files->get_num_new_files(GO::security()->user_id);
+//						$num_new_files = $files->get_num_new_files($GLOBALS['GO_SECURITY']->user_id);
 //
 //						$node= array(
 //							'text'=>$lang['files']['new'].' ('.$num_new_files.')',
@@ -296,7 +296,7 @@ try {
 
 				case 'shared':
 
-					$share_count = $files->get_cached_shares(GO::security()->user_id, false, 0,100);
+					$share_count = $files->get_cached_shares($GLOBALS['GO_SECURITY']->user_id, false, 0,100);
 
 					$nodes=array();
 
@@ -346,7 +346,7 @@ try {
 
 		case 'grid':
 
-			require_once(GO::config()->class_path.'base/theme.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/theme.class.inc.php');
 			$GO_THEME = new GO_THEME();
 
 
@@ -355,13 +355,13 @@ try {
 			}
 
 			if(!empty($_POST['empty_new_files'])) {
-				$files->delete_all_new_filelinks(GO::security()->user_id);
+				$files->delete_all_new_filelinks($GLOBALS['GO_SECURITY']->user_id);
 			}
 
 			$response['results']=array();
 
 			if(isset($_SESSION['GO_SESSION']['files']['jupload_new_files']) && count($_SESSION['GO_SESSION']['files']['jupload_new_files'])) {
-				$files->notify_users($_POST['id'],GO::security()->user_id, array(), $_SESSION['GO_SESSION']['files']['jupload_new_files']);
+				$files->notify_users($_POST['id'],$GLOBALS['GO_SECURITY']->user_id, array(), $_SESSION['GO_SESSION']['files']['jupload_new_files']);
 
 				$_SESSION['GO_SESSION']['files']['jupload_new_files']=array();
 			}
@@ -380,10 +380,10 @@ try {
 				$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
 
 
-				$response['total']= $share_count = $files->get_cached_shares(GO::security()->user_id, true, $start, $limit);
+				$response['total']= $share_count = $files->get_cached_shares($GLOBALS['GO_SECURITY']->user_id, true, $start, $limit);
 
 				while($folder = $files->next_record()){
-					$folder['thumb_url']=GO::theme()->image_url.'128x128/filetypes/folder.png';
+					$folder['thumb_url']=$GLOBALS['GO_THEME']->image_url.'128x128/filetypes/folder.png';
 					$class='filetype-folder';
 					
 					$folder['type_id']='d:'.$folder['id'];
@@ -402,7 +402,7 @@ try {
 			}elseif($_POST['id'] == 'new') {
 				$response['parent_id']=0;
 				
-				//require_once(GO::config()->control_path.'phpthumb/phpThumb.config.php');
+				//require_once($GLOBALS['GO_CONFIG']->control_path.'phpthumb/phpThumb.config.php');
 
 				$sort = isset($_POST['sort']) ? $_POST['sort'] : 'mtime';
 				$dir = isset($_POST['dir']) ? $_POST['dir'] : 'DESC';
@@ -410,7 +410,7 @@ try {
 
 				//if($sort == 'grid_display') $sort = 'name';
 
-				$response['num_files'] = $files->get_new_files(GO::security()->user_id, $sort, $dir);
+				$response['num_files'] = $files->get_new_files($GLOBALS['GO_SECURITY']->user_id, $sort, $dir);
 				while($file = $files->next_record()) {
 					$extension = File::get_extension($file['name']);
 
@@ -448,20 +448,20 @@ try {
 
 							}*/
 
-				$response['write_permission']=$files->has_write_permission(GO::security()->user_id, $curfolder);				
+				$response['write_permission']=$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $curfolder);				
 
 				$_usersfolder = $files->resolve_path('users');
 				$response['may_apply_state'] = $curfolder['apply_state']==1 && (
 						$response['write_permission'] ||
-						(GO::security()->has_admin_permission(GO::security()->user_id) || $files->is_owner($curfolder)) || // is_owner;
+						($GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id) || $files->is_owner($curfolder)) || // is_owner;
 						$curfolder['parent_id']==$_usersfolder['id'] || // is_home_dir
-						$curfolder['user_id']==GO::security()->user_id // user_id_match
+						$curfolder['user_id']==$GLOBALS['GO_SECURITY']->user_id // user_id_match
 					);
 
 				$response['lock_state'] = $curfolder['apply_state']==1;
 				$response['cm_state'] = $curfolder['cm_state'];
 
-				if(!$response['write_permission'] && !$files->has_read_permission(GO::security()->user_id, $curfolder)) {
+				if(!$response['write_permission'] && !$files->has_read_permission($GLOBALS['GO_SECURITY']->user_id, $curfolder)) {
 					throw new AccessDeniedException();
 				}
 
@@ -480,7 +480,7 @@ try {
 						$response['deleteSuccess']=true;
 						$delete_ids = json_decode($_POST['delete_keys']);						
 
-						$folder_delete_permission = $files->has_delete_permission(GO::security()->user_id, $curfolder);
+						$folder_delete_permission = $files->has_delete_permission($GLOBALS['GO_SECURITY']->user_id, $curfolder);
 
 						$deleted = array();
 						foreach($delete_ids as $delete_type_id) {
@@ -506,7 +506,7 @@ try {
 
 
 
-						$files->notify_users($curfolder, GO::security()->user_id, array(), array(), $deleted);
+						$files->notify_users($curfolder, $GLOBALS['GO_SECURITY']->user_id, array(), array(), $deleted);
 
 					}catch(Exception $e) {
 						$response['deleteSuccess']=false;
@@ -518,7 +518,7 @@ try {
 					if(!empty($_POST['template_id']) && !empty($_POST['template_name'])) {
 						$template = $files->get_template($_POST['template_id'], true);
 
-						$new_path = GO::config()->file_storage_path.$files->build_path($curfolder).'/'.$_POST['template_name'];
+						$new_path = $GLOBALS['GO_CONFIG']->file_storage_path.$files->build_path($curfolder).'/'.$_POST['template_name'];
 						if(!empty($template['extension']))
 							$new_path .= '.'.$template['extension'];
 
@@ -541,10 +541,10 @@ try {
 
 							if(!empty($_POST['compress_id'])) {
 								$compress_rel_path = $files->build_path($_POST['compress_id']);
-								$full_path = GO::config()->file_storage_path.dirname($compress_rel_path);
+								$full_path = $GLOBALS['GO_CONFIG']->file_storage_path.dirname($compress_rel_path);
 								$compress_sources=array($compress_rel_path);
 							}else {
-								$full_path = GO::config()->file_storage_path.$path;
+								$full_path = $GLOBALS['GO_CONFIG']->file_storage_path.$path;
 
 								if(file_exists($full_path.'/'.$archive_name)) {
 									throw new Exception($lang['files']['filenameExists']);
@@ -555,7 +555,7 @@ try {
 
 							chdir($full_path);
 
-							$cmd = GO::config()->cmd_zip.' -r "'.$archive_name.'" "'.implode('" "',$compress_sources).'"';
+							$cmd = $GLOBALS['GO_CONFIG']->cmd_zip.' -r "'.$archive_name.'" "'.implode('" "',$compress_sources).'"';
 
 							exec($cmd, $output);
 
@@ -564,8 +564,8 @@ try {
 								throw new Exception('Command failed: '.$cmd."<br /><br />".implode("<br />", $output));
 							}
 
-							if($full_path!=GO::config()->file_storage_path.$path) {
-								$new_full_file_path =GO::config()->file_storage_path.$path.'/'.utf8_basename($full_file_path);
+							if($full_path!=$GLOBALS['GO_CONFIG']->file_storage_path.$path) {
+								$new_full_file_path =$GLOBALS['GO_CONFIG']->file_storage_path.$path.'/'.utf8_basename($full_file_path);
 								rename($full_file_path, $new_full_file_path);
 								$full_file_path=$new_full_file_path;
 							}
@@ -585,23 +585,23 @@ try {
 							if(!is_windows())
 								putenv('LANG=en_US.UTF-8');
 
-							$full_path=GO::config()->file_storage_path.$path;
+							$full_path=$GLOBALS['GO_CONFIG']->file_storage_path.$path;
 
 							chdir($full_path);
 							$decompress_sources = json_decode($_POST['decompress_sources']);
 							while ($file = array_shift($decompress_sources)) {
 								switch(File::get_extension($file)) {
 									case 'zip':
-										exec(GO::config()->cmd_unzip.' "'.GO::config()->file_storage_path.$file.'"');
+										exec($GLOBALS['GO_CONFIG']->cmd_unzip.' "'.$GLOBALS['GO_CONFIG']->file_storage_path.$file.'"');
 										break;
 
 									case 'gz':
 									case 'tgz':
-										exec(GO::config()->cmd_tar.' zxf "'.GO::config()->file_storage_path.$file.'"');
+										exec($GLOBALS['GO_CONFIG']->cmd_tar.' zxf "'.$GLOBALS['GO_CONFIG']->file_storage_path.$file.'"');
 										break;
 
 									case 'tar':
-										exec(GO::config()->cmd_tar.' xf "'.GO::config()->file_storage_path.$file.'"');
+										exec($GLOBALS['GO_CONFIG']->cmd_tar.' xf "'.$GLOBALS['GO_CONFIG']->file_storage_path.$file.'"');
 										break;
 								}
 
@@ -634,7 +634,7 @@ try {
 				$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
 				$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
 
-				//require_once(GO::config()->control_path.'phpthumb/phpThumb.config.php');
+				//require_once($GLOBALS['GO_CONFIG']->control_path.'phpthumb/phpThumb.config.php');
 
 				//$response['path']=$path;
 
@@ -691,8 +691,8 @@ try {
 				if(!isset($extensions) || $extensions!='foldersonly'){
 					if($file_start>=0) {
 
-						if(GO::modules()->has_module('customfields')) {
-							require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+						if($GLOBALS['GO_MODULES']->has_module('customfields')) {
+							require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 							$cf = new customfields();
 						}else {
 							$cf=false;
@@ -761,34 +761,34 @@ try {
 			$folder = $files->get_folder($_POST['folder_id']);
 			if(!$folder) {
 				throw new FileNotFoundException();
-			}elseif(!$files->has_read_permission(GO::security()->user_id, $folder)) {
+			}elseif(!$files->has_read_permission($GLOBALS['GO_SECURITY']->user_id, $folder)) {
 				throw new AccessDeniedException();
 			}
 
 			$response['success']=true;
 
-			$admin = GO::security()->has_admin_permission(GO::security()->user_id);
+			$admin = $GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id);
 
 			$response['data'] = $folder;
 			$path=$files->build_path($folder);
 			$response['data']['path']=$path;
-			$response['data']['ctime']=Date::get_timestamp(filectime(GO::config()->file_storage_path.$path));
-			$response['data']['mtime']=Date::get_timestamp(fileatime(GO::config()->file_storage_path.$path));
-			$response['data']['atime']=Date::get_timestamp(filemtime(GO::config()->file_storage_path.$path));
+			$response['data']['ctime']=Date::get_timestamp(filectime($GLOBALS['GO_CONFIG']->file_storage_path.$path));
+			$response['data']['mtime']=Date::get_timestamp(fileatime($GLOBALS['GO_CONFIG']->file_storage_path.$path));
+			$response['data']['atime']=Date::get_timestamp(filemtime($GLOBALS['GO_CONFIG']->file_storage_path.$path));
 
 			$response['data']['type']='<div class="go-grid-icon filetype-folder">'.$lang['files']['folder'].'</div>';
 			$response['data']['size']='-';
 
-			$response['data']['write_permission']=empty($response['data']['readonly']) && $files->has_write_permission(GO::security()->user_id, $folder);
+			$response['data']['write_permission']=empty($response['data']['readonly']) && $files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $folder);
 			$response['data']['is_owner']=$admin || $files->is_owner($folder);
 
 			$usersfolder = $files->resolve_path('users');
 			$response['data']['is_home_dir']=$folder['parent_id']==$usersfolder['id'];
-			//$response['data']['user_id_match']=$folder['user_id']==GO::security()->user_id;
-			$response['data']['notify']=$files->is_notified($folder['id'], GO::security()->user_id);
+			//$response['data']['user_id_match']=$folder['user_id']==$GLOBALS['GO_SECURITY']->user_id;
+			$response['data']['notify']=$files->is_notified($folder['id'], $GLOBALS['GO_SECURITY']->user_id);
 
 			$params['response']=&$response;
-			GO::events()->fire_event('load_folder_properties', $params);
+			$GLOBALS['GO_EVENTS']->fire_event('load_folder_properties', $params);
 			break;
 
 
@@ -799,7 +799,7 @@ try {
 			$folder = $files->get_folder($file['folder_id']);
 			if(!$folder) {
 				throw new FileNotFoundException();
-			}elseif(!$files->has_read_permission(GO::security()->user_id, $folder)) {
+			}elseif(!$files->has_read_permission($GLOBALS['GO_SECURITY']->user_id, $folder)) {
 				throw new AccessDeniedException();
 			}
 
@@ -811,16 +811,16 @@ try {
 			$relpath = $files->build_path($folder).'/';
 			$pdf_path=$path=$relpath.$file['name'];
 
-			GO::events()->fire_event('file_extension_and_path_known',array(&$files,$extension,$path,&$pdf_path,$file,$folder));
+			$GLOBALS['GO_EVENTS']->fire_event('file_extension_and_path_known',array(&$files,$extension,$path,&$pdf_path,$file,$folder));
 
 			$response['data']['path']=$pdf_path;
 			$response['data']['name']=File::strip_extension($file['name']);
-			$response['data']['ctime']=Date::get_timestamp(filectime(GO::config()->file_storage_path.$path));
-			$response['data']['mtime']=Date::get_timestamp(fileatime(GO::config()->file_storage_path.$path));
-			$response['data']['atime']=Date::get_timestamp(filemtime(GO::config()->file_storage_path.$path));
+			$response['data']['ctime']=Date::get_timestamp(filectime($GLOBALS['GO_CONFIG']->file_storage_path.$path));
+			$response['data']['mtime']=Date::get_timestamp(fileatime($GLOBALS['GO_CONFIG']->file_storage_path.$path));
+			$response['data']['atime']=Date::get_timestamp(filemtime($GLOBALS['GO_CONFIG']->file_storage_path.$path));
 			$response['data']['type']='<div class="go-grid-icon filetype filetype-'.$extension.'">'.File::get_filetype_description($extension).'</div>';
 			$response['data']['size']=Number::format_size($file['size']);
-			$response['data']['write_permission']=$files->has_write_permission(GO::security()->user_id, $folder);
+			$response['data']['write_permission']=$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $folder);
 
 			switch($extension) {
 				case 'jpg':
@@ -835,7 +835,7 @@ try {
 					$response['data']['image_name'] = basename($path);
 					$response['data']['image_extension'] = $extension;
 					if ($extension=='xmind')
-						$response['data']['download_path'] = GO::modules()->modules['files']['url'].'download.php?path='.urlencode($path);
+						$response['data']['download_path'] = $GLOBALS['GO_MODULES']->modules['files']['url'].'download.php?path='.urlencode($path);
 					else
 						$response['data']['download_path'] = '';
 					break;
@@ -855,10 +855,10 @@ try {
 			}
 
 			if($task == 'file_properties') {
-				if(isset(GO::modules()->modules['customfields'])) {
-					require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+				if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
+					require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
-					$values = $cf->get_values(GO::security()->user_id, 6, $response['data']['id']);
+					$values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 6, $response['data']['id']);
 					$response['data']=array_merge($response['data'], $values);
 				}
 			}else {
@@ -877,7 +877,7 @@ try {
 			$params['task']=$task;
 			$params['file']=$file;
 			$params['folder']=$folder;
-			GO::events()->fire_event('load_file_properties', $params);
+			$GLOBALS['GO_EVENTS']->fire_event('load_file_properties', $params);
 
 			break;
 
@@ -887,7 +887,7 @@ try {
 			$folder = $files->get_folder($_POST['folder_id']);
 			if(!$folder) {
 				throw new FileNotFoundException();
-			}elseif(!$files->has_read_permission(GO::security()->user_id, $folder)) {
+			}elseif(!$files->has_read_permission($GLOBALS['GO_SECURITY']->user_id, $folder)) {
 				throw new AccessDeniedException();
 			}		
 
@@ -896,11 +896,11 @@ try {
 			$response['data'] = $folder;
 			$path=$files->build_path($folder);
 			$response['data']['path']=$path;
-			$response['data']['ctime']=Date::get_timestamp(filectime(GO::config()->file_storage_path.$path));
-			$response['data']['mtime']=Date::get_timestamp(fileatime(GO::config()->file_storage_path.$path));
-			$response['data']['atime']=Date::get_timestamp(filemtime(GO::config()->file_storage_path.$path));
+			$response['data']['ctime']=Date::get_timestamp(filectime($GLOBALS['GO_CONFIG']->file_storage_path.$path));
+			$response['data']['mtime']=Date::get_timestamp(fileatime($GLOBALS['GO_CONFIG']->file_storage_path.$path));
+			$response['data']['atime']=Date::get_timestamp(filemtime($GLOBALS['GO_CONFIG']->file_storage_path.$path));
 			$response['data']['type']='<div class="go-grid-icon filetype filetype-folder">Folder</div>';
-			$response['data']['write_permission']=$files->has_write_permission(GO::security()->user_id, $folder);			
+			$response['data']['write_permission']=$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $folder);			
 
 			$response['data']['location']=$path;
 			$response['data']['comment']=String::text_to_html($response['data']['comments']);			
@@ -913,7 +913,7 @@ try {
 
 		case 'templates':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			if(isset($_POST['delete_keys'])) {
@@ -931,9 +931,9 @@ try {
 			}
 
 			if(isset($_POST['writable_only'])) {
-				$response['total'] = $files->get_writable_templates(GO::security()->user_id);
+				$response['total'] = $files->get_writable_templates($GLOBALS['GO_SECURITY']->user_id);
 			}else {
-				$response['total'] = $files->get_authorized_templates(GO::security()->user_id);
+				$response['total'] = $files->get_authorized_templates($GLOBALS['GO_SECURITY']->user_id);
 			}
 			$response['results']=array();
 			while($files->next_record(DB_ASSOC)) {
@@ -946,7 +946,7 @@ try {
 			break;
 
 		case 'template':
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			
 			$response['data']=$files->get_template($_POST['template_id']);			
@@ -990,7 +990,7 @@ try {
 //			it checks which of these customfields are turned on for the files in the
 //			folder.
 
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$customfields = new customfields();
 
 			if (empty($_REQUEST['folder_id'])) {
@@ -1001,7 +1001,7 @@ try {
 			$response = array('data'=>array());
 
 			$authorized_categories = array();
-			$customfields->get_authorized_categories(6, GO::security()->user_id);
+			$customfields->get_authorized_categories(6, $GLOBALS['GO_SECURITY']->user_id);
 			while ($record = $customfields->next_record()) {
 				$authorized_categories[] = $record['id'];
 			}
@@ -1022,7 +1022,7 @@ try {
 
 		case 'is_admin':
 
-			$response['has_admin'] = GO::security()->has_admin_permission(GO::security()->user_id);//GO::modules()->modules['files']['write_permission'] && GO::modules()->modules['customfields']['write_permission'];
+			$response['has_admin'] = $GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id);//$GLOBALS['GO_MODULES']->modules['files']['write_permission'] && $GLOBALS['GO_MODULES']->modules['customfields']['write_permission'];
 			$response['success'] = true;
 
 			break;

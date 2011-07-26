@@ -24,7 +24,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		$path = rtrim($path, '/');
 
 		$this->relpath=$path;
-		$path = GO::config()->file_storage_path.$path;
+		$path = $GLOBALS['GO_CONFIG']->file_storage_path.$path;
 
 		parent::__construct($path);
 	}
@@ -54,7 +54,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 		
 		global $GO_SECURITY, $files;
 
-		if(!$files->has_write_permission(GO::security()->user_id, $this->getFolder()))
+		if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->getFolder()))
 			throw new Sabre_DAV_Exception_Forbidden();
 
         $newPath = $this->path . '/' . $name;
@@ -71,7 +71,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
     public function setName($name) {
 		global $GO_SECURITY, $files;
 
-		if(!$files->has_write_permission(GO::security()->user_id, $this->getFolder()))
+		if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->getFolder()))
 			throw new Sabre_DAV_Exception_Forbidden();
 
         parent::setName($name);
@@ -98,7 +98,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		global $GO_SECURITY, $files;
 
-		if(!$files->has_write_permission(GO::security()->user_id, $this->getFolder()))
+		if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->getFolder()))
 			throw new Sabre_DAV_Exception_Forbidden();
 
 		rename($this->path, $newPath);
@@ -124,7 +124,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		global $GO_SECURITY, $files;
 
-		if(!$files->has_write_permission(GO::security()->user_id, $this->getFolder()))
+		if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->getFolder()))
 			throw new Sabre_DAV_Exception_Forbidden();
 
         //$newPath = $this->path . '/' . $name;
@@ -229,7 +229,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		global $GO_SECURITY, $files;
 
-		if(!$files->has_write_permission(GO::security()->user_id, $this->getFolder()))
+		if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->getFolder()))
 			throw new Sabre_DAV_Exception_Forbidden();
 
 

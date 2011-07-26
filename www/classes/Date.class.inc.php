@@ -59,10 +59,10 @@ class Date {
 			$day_start = mktime(0,0,0,$date['mon'], $date['mday'], $date['year']);
 			$day_end =  mktime(0,0,0,$date['mon'], $date['mday']+1, $date['year']);
 
-			require_once(GO::config()->class_path.'holidays.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'holidays.class.inc.php');
 			$holidays = new holidays();
 
-			$region=$region ? $region : GO::language()->language;
+			$region=$region ? $region : $GLOBALS['GO_LANGUAGE']->language;
 
 			$hd = new holidays();
 			$count = $hd->get_holidays_for_period($region, $day_start, $day_end);
@@ -163,7 +163,7 @@ class Date {
 	{
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'ical2array.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
 		$ical2array = new ical2array();
 
 		if(!$rrule = $ical2array->parse_rrule($rrule))

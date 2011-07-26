@@ -1,5 +1,5 @@
 <?php
-require_once(GO::config()->root_path.'install/updatescripts/functions.inc.php');
+require_once($GLOBALS['GO_CONFIG']->root_path.'install/updatescripts/functions.inc.php');
 
 $db->query("SELECT * FROM cms_folders WHERE acl>0");
 while($folder=$db->next_record()){

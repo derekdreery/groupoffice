@@ -19,15 +19,15 @@ require($go.'Group-Office.php');
 chdir(dirname(__FILE__));
 require($go.'cli-functions.inc.php');
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
-GO::security()->logged_in($GO_USERS->get_user(1));
+$GLOBALS['GO_SECURITY']->logged_in($GO_USERS->get_user(1));
 
-require(GO::config()->class_path.'mail/imap.class.inc');
-require_once (GO::modules()->modules['email']['class_path']."cached_imap.class.inc.php");
-require_once (GO::modules()->modules['email']['class_path']."email.class.inc.php");
-require_once (GO::language()->get_language_file('email'));
+require($GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc');
+require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path']."cached_imap.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
+require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
 
 $email = new email();
 $email2 = new email();

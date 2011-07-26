@@ -12,11 +12,11 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('customcss');
+$GLOBALS['GO_SECURITY']->json_authenticate('customcss');
 
 try{	
-	file_put_contents(GO::config()->file_storage_path.'customcss/style.css', $_POST['css']);
-	file_put_contents(GO::config()->file_storage_path.'customcss/javascript.js', $_POST['javascript']);
+	file_put_contents($GLOBALS['GO_CONFIG']->file_storage_path.'customcss/style.css', $_POST['css']);
+	file_put_contents($GLOBALS['GO_CONFIG']->file_storage_path.'customcss/javascript.js', $_POST['javascript']);
 
 	$response['success']=true;
 }catch(Exception $e)

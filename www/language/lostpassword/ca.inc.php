@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_base_language_file('lostpassword'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('lostpassword'));
 $lang['lostpassword']['success']='<h1>Contrasenya modificada</h1><p>La vostra contrasenya ha estat modificada correctament. Podeu continuar a la pàgina de logueig.</p>';
 $lang['lostpassword']['send']='Enviar';
 $lang['lostpassword']['login']='Login';

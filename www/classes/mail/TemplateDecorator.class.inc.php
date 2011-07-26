@@ -16,7 +16,7 @@
 /**
  * Require all mail classes that are used by this class
  */
-require_once(GO::modules()->modules['mailings']['class_path'].'templates.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'templates.class.inc.php');
 
 /**
  * This class can be used to replace fields in a batch mail operation.

@@ -64,16 +64,16 @@ class templates extends db {
 
 		global $lang, $GO_SECURITY, $GO_LANGUAGE;
 
-		GO::language()->require_language_file('mailings');
+		$GLOBALS['GO_LANGUAGE']->require_language_file('mailings');
 
 		if(isset($_POST['default_template_id']))
 		{
-			$this->save_default_template(GO::security()->user_id, $_POST['default_template_id']);
+			$this->save_default_template($GLOBALS['GO_SECURITY']->user_id, $_POST['default_template_id']);
 		}
 
-		$default_template = $this->get_default_template(GO::security()->user_id);
+		$default_template = $this->get_default_template($GLOBALS['GO_SECURITY']->user_id);
 
-		$count = $this->get_authorized_templates(GO::security()->user_id, 0,0, 'name','ASC', 0);
+		$count = $this->get_authorized_templates($GLOBALS['GO_SECURITY']->user_id, 0,0, 'name','ASC', 0);
 		$response['total'] = $count+1;
 		$response['results'] = array(array(
 			'group' => 'templates',
@@ -161,7 +161,7 @@ class templates extends db {
 		if($template = $this->get_template($template_id)) {
 			global $GO_SECURITY;
 
-			GO::security()->delete_acl($template['acl_id']);
+			$GLOBALS['GO_SECURITY']->delete_acl($template['acl_id']);
 
 			$sql = "DELETE FROM ml_templates WHERE id='$template_id'";
 			return $this->query($sql);
@@ -174,7 +174,7 @@ class templates extends db {
 	private function build_unsubscribe_href($mailing_group_id, $recipient_type, $recipient_id, $ctime) {
 		global $GO_MODULES;
 
-		return GO::modules()->modules['mailings']['full_url'].'extern/unsubscribe.php?mailing_group_id='.$mailing_group_id
+		return $GLOBALS['GO_MODULES']->modules['mailings']['full_url'].'extern/unsubscribe.php?mailing_group_id='.$mailing_group_id
 						.'&recipient_type='.$recipient_type.'&recipient_id='.$recipient_id.'&hash='.$this->get_unsubscribe_hash($ctime,$mailing_group_id,$recipient_type,$recipient_id);
 	}
 
@@ -194,8 +194,8 @@ class templates extends db {
 			$contact['company2']=$contact['company_name2'];
 
 			global $GO_MODULES;
-			if(isset(GO::modules()->modules['customfields'])) {
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 
 				$cf_values = $cf->get_values(1, 2, $contact['id']);
@@ -211,7 +211,7 @@ class templates extends db {
 
 				global $GO_LANGUAGE, $lang;
 				if(!isset($lang['mailings']))
-					require(GO::language()->get_language_file('mailings'));
+					require($GLOBALS['GO_LANGUAGE']->get_language_file('mailings'));
 
 				$contact['unsubscribe_href']=$this->build_unsubscribe_href($mailing_group_id, 'contact', $contact_id, $contact['ctime']);
 				$contact['unsubscribe_link'] = '<a href="'.$contact['unsubscribe_href'].'">'.$lang['mailings']['unsubscription']."</a>";
@@ -264,8 +264,8 @@ class templates extends db {
 			$company['work_post_country']=$company['post_country'];
 
 			global $GO_MODULES;
-			if(isset(GO::modules()->modules['customfields'])) {
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 
 				$cf_values = $cf->get_values(1, 3, $company['id']);
@@ -278,7 +278,7 @@ class templates extends db {
 
 				global $GO_LANGUAGE, $lang;
 				if(!isset($lang['mailings']))
-					require(GO::language()->get_language_file('mailings'));
+					require($GLOBALS['GO_LANGUAGE']->get_language_file('mailings'));
 
 				$company['unsubscribe_href']=$this->build_unsubscribe_href($mailing_group_id, 'company', $company_id, $company['ctime']);
 				$company['unsubscribe_link'] = '<a href="'.$company['unsubscribe_href'].'">'.$lang['mailings']['unsubscription']."</a>";
@@ -300,7 +300,7 @@ class templates extends db {
 	function replace_user_data_fields($input, $user_id=0, $mailing_group_id=0) {
 		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $sir_madam;
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		if ($user_id > 0 && $user = $GO_USERS->get_user($user_id))
@@ -309,14 +309,14 @@ class templates extends db {
 
 				global $GO_LANGUAGE, $lang;
 				if(!isset($lang['mailings']))
-					require(GO::language()->get_language_file('mailings'));
+					require($GLOBALS['GO_LANGUAGE']->get_language_file('mailings'));
 
 				$user['unsubscribe_href']=$this->build_unsubscribe_href($mailing_group_id, 'user', $user_id, $user['registration_time']);
 				$user['unsubscribe_link'] = '<a href="'.$user['unsubscribe_href'].'">'.$lang['mailings']['unsubscription']."</a>";
 			}
 			global $GO_MODULES;
-			if(isset(GO::modules()->modules['customfields'])) {
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 
 				$cf_values = $cf->get_values(1, 8, $user['id']);
@@ -334,7 +334,7 @@ class templates extends db {
 	function get_replacements(&$values, $skip_empty=false) {
 		global $GO_SECURITY, $GO_CONFIG, $lang, $GO_LANGUAGE, $GO_MODULES;
 
-		require(GO::language()->get_base_language_file('countries'));
+		require($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
 
 		$values['date']=Date::get_timestamp(time(),false);
 		if(isset($_SESSION['GO_SESSION']['name']))
@@ -406,9 +406,9 @@ class templates extends db {
 		
 		
 
-		$user_id = GO::security()->user_id>0 ? GO::security()->user_id : 1;
+		$user_id = $GLOBALS['GO_SECURITY']->user_id>0 ? $GLOBALS['GO_SECURITY']->user_id : 1;
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 		
 
@@ -425,8 +425,8 @@ class templates extends db {
 		$values['my_country']=!empty($values['my_country']) && isset($countries[$values['my_country']]) ? $countries[$values['my_country']] : '';
 		$values['my_work_country']=!empty($values['my_work_country']) && isset($countries[$values['my_work_country']]) ? $countries[$values['my_work_country']] : '';
 
-		if(isset(GO::modules()->modules['customfields'])) {
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$cf = new customfields();
 
 			$cf->get_all_fields(2);
@@ -467,7 +467,7 @@ class templates extends db {
 			}
 		}
 
-		require_once(GO::config()->class_path.'go_template_parser.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'go_template_parser.class.inc.php');
 		$tpl = new go_template_parser($fields,$values,$skip_empty);
 		$tpl->parse($content);
 	}

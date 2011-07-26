@@ -13,17 +13,17 @@
  */
 require_once("../../Group-Office.php");
 
-GO::security()->html_authenticate();
+$GLOBALS['GO_SECURITY']->html_authenticate();
 
-require_once(GO::language()->get_language_file('email'));
-require_once(GO::config()->class_path . "mail/imap.class.inc");
-require_once(GO::modules()->modules['email']['class_path'] . "cached_imap.class.inc.php");
-require_once(GO::modules()->modules['email']['class_path'] . "email.class.inc.php");
+require_once($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
+require_once($GLOBALS['GO_CONFIG']->class_path . "mail/imap.class.inc");
+require_once($GLOBALS['GO_MODULES']->modules['email']['class_path'] . "cached_imap.class.inc.php");
+require_once($GLOBALS['GO_MODULES']->modules['email']['class_path'] . "email.class.inc.php");
 
 $imap = new cached_imap();
 $email = new email();
 
-require_once(GO::modules()->modules['smime']['class_path'].'smime.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['smime']['class_path'].'smime.class.inc.php');
 $smime = new smime();
 
 //if(empty($_REQUEST['filepath']))
@@ -34,16 +34,16 @@ if(!empty($_REQUEST['account_id'])){
 
 	$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 
-	if (!GO::security()->has_permission(GO::security()->user_id, $account['acl_id'])) {
+	if (!$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $account['acl_id'])) {
 		die($lang['common']['accessDenied']);
 	}
 
 
-	$tmpdir = GO::config()->tmpdir . 'smime/verify/';
+	$tmpdir = $GLOBALS['GO_CONFIG']->tmpdir . 'smime/verify/';
 	File::mkdir($tmpdir);
 
-	//$src_filename = !empty($_REQUEST['filepath']) ? GO::config()->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . File::strip_invalid_chars($mailbox) . '_' . $account_id . '.eml';
-	$src_filename = !empty($_REQUEST['filepath']) && empty($uid) ? GO::config()->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . File::strip_invalid_chars($mailbox) . '_' . $account_id . '.eml';
+	//$src_filename = !empty($_REQUEST['filepath']) ? $GLOBALS['GO_CONFIG']->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . File::strip_invalid_chars($mailbox) . '_' . $account_id . '.eml';
+	$src_filename = !empty($_REQUEST['filepath']) && empty($uid) ? $GLOBALS['GO_CONFIG']->file_storage_path.$_REQUEST['filepath'] : $tmpdir . $uid . '_' . File::strip_invalid_chars($mailbox) . '_' . $account_id . '.eml';
 	$cert_filename = $tmpdir . $uid . '_' . File::strip_invalid_chars($mailbox) . '_' . $account_id . '.crt';
 
 	
@@ -58,8 +58,8 @@ if(!empty($_REQUEST['account_id'])){
 			$password = $_SESSION['GO_SESSION']['smime']['passwords'][$account_id];			
 			openssl_pkcs12_read ($cert['cert'], $certs, $password);
 			
-			$reldir='smimetmp/'.GO::security()->user_id.'/';
-			$dir = GO::config()->file_storage_path.$reldir;
+			$reldir='smimetmp/'.$GLOBALS['GO_SECURITY']->user_id.'/';
+			$dir = $GLOBALS['GO_CONFIG']->file_storage_path.$reldir;
 			File::mkdir($dir);
 
 			$outfilename=$dir.'unencrypted.txt';
@@ -116,15 +116,15 @@ if(isset($cert)){
 
 	$email = String::get_email_from_string($arr['extensions']['subjectAltName']);
 
-	$existing_cert = $smime->get_public_certificate(GO::security()->user_id, $email);
+	$existing_cert = $smime->get_public_certificate($GLOBALS['GO_SECURITY']->user_id, $email);
 	if(!$existing_cert)
-		$smime->add_public_certificate(GO::security()->user_id, $email, $cert);
+		$smime->add_public_certificate($GLOBALS['GO_SECURITY']->user_id, $email, $cert);
 	else if($existing_cert['cert']!=$cert){
 		$smime->update_public_certificate($existing_cert['id'], $cert);
 	}
 }
 
-GO::language()->require_language_file('smime');
+$GLOBALS['GO_LANGUAGE']->require_language_file('smime');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

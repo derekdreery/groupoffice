@@ -37,14 +37,14 @@
 	);
 	
 	protected function afterDelete() {		
-		if(isset(GO::modules()->files)){
+		if(isset($GLOBALS['GO_MODULES']->files)){
 			GO_Files_Controller_Item::deleteFilesFolder($this->files_folder_id);	
 		}		
 		return parent::afterDelete();
 	}
 	
 	protected function beforeSave(){
-		if (empty($this->files_folder_id) && isset(GO::modules()->files)) {
+		if (empty($this->files_folder_id) && isset($GLOBALS['GO_MODULES']->files)) {
 			$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this, $this->_buildFilesPath());
 		}
 		return parent::beforeSave();

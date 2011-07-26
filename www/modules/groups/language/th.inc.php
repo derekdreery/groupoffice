@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('files'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('files'));
 $lang['groups']['name'] = 'กลุ่มผู้ใช้งาน';
 $lang['groups']['description'] = 'สำหรับการจัดการกลุ่มผู้ใช้งาน.';
 $lang['groups']['noDeleteAdmins'] = 'ไม่ได้รับสิทธิ์ิให้ทำการลบกลุ่มผู้ดูแลระบบ';//You can\'t delete the group Admins

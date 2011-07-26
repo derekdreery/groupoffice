@@ -12,8 +12,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-require_once(GO::config()->class_path.'base/ldap.class.inc.php');
-require_once(GO::config()->root_path.'modules/imapauth/classes/imapauth.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/ldap.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->root_path.'modules/imapauth/classes/imapauth.class.inc.php');
 
 class ldapauth extends imapauth {
 	/**
@@ -33,7 +33,7 @@ class ldapauth extends imapauth {
 			return $this->mapping;
 		}
 
-		$conf = str_replace('config.php', 'ldapauth.config.php', GO::config()->get_config_file());
+		$conf = str_replace('config.php', 'ldapauth.config.php', $GLOBALS['GO_CONFIG']->get_config_file());
 
 		if(file_exists($conf))
 		{
@@ -108,7 +108,7 @@ class ldapauth extends imapauth {
 
 		if(!$la->check_email($entry,$_POST['email'], $addresses)){
 			global $GO_LANGUAGE, $lang;
-			GO::language()->require_language_file('ldapauth');
+			$GLOBALS['GO_LANGUAGE']->require_language_file('ldapauth');
 			throw new Exception($lang['ldapauth']['invalid_email'].' '.implode(', ',$addresses));
 		}
 
@@ -136,8 +136,8 @@ class ldapauth extends imapauth {
 				$addresses[]=strtolower($val[$i]);
 			}
 
-			if(!empty(GO::config()->ldap_use_uid_with_email_domain)){
-				$default = strtolower($entry['uid'][0]).'@'.GO::config()->ldap_use_uid_with_email_domain;
+			if(!empty($GLOBALS['GO_CONFIG']->ldap_use_uid_with_email_domain)){
+				$default = strtolower($entry['uid'][0]).'@'.$GLOBALS['GO_CONFIG']->ldap_use_uid_with_email_domain;
 
 				if(!in_array($default, $addresses)){
 					$addresses[]=$default;
@@ -159,7 +159,7 @@ class ldapauth extends imapauth {
 	public function connect(){
 		global $GO_CONFIG, $GO_MODULES;
 
-		if(!isset(GO::config()->ldap_host)) {
+		if(!isset($GLOBALS['GO_CONFIG']->ldap_host)) {
 			go_debug('LDAPAUTH: module is installed but not configured');
 			return false;
 		}
@@ -171,7 +171,7 @@ class ldapauth extends imapauth {
 		}
 
 
-		if(!empty(GO::config()->ldap_user) && !empty(GO::config()->ldap_pass)){
+		if(!empty($GLOBALS['GO_CONFIG']->ldap_user) && !empty($GLOBALS['GO_CONFIG']->ldap_pass)){
 			if(!$this->ldap->bind()){
 				go_debug('LDAPAUTH: Could not bind to server');
 				throw new Exception('Could not bind to LDAP server');
@@ -188,10 +188,10 @@ class ldapauth extends imapauth {
 
 		$mapping = $this->get_mapping();
 
-		if(!isset(GO::config()->ldap_search_template))
-			GO::config()->ldap_search_template=$mapping['username'].'={username}';
+		if(!isset($GLOBALS['GO_CONFIG']->ldap_search_template))
+			$GLOBALS['GO_CONFIG']->ldap_search_template=$mapping['username'].'={username}';
 
-		$this->ldap->search(str_replace('{username}',$username, GO::config()->ldap_search_template), $this->ldap->PeopleDN);
+		$this->ldap->search(str_replace('{username}',$username, $GLOBALS['GO_CONFIG']->ldap_search_template), $this->ldap->PeopleDN);
 
 		$entry = $this->ldap->get_entries();
 		if(!isset($entry[0])) {
@@ -232,13 +232,13 @@ class ldapauth extends imapauth {
 		}else {
 			go_debug('LDAPAUTH: LDAP Authentication successfull');
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$mail_username=false;
 			$gouser = $GO_USERS->get_user_by_username($username);
 
-			if(!empty($user['email']) && isset(GO::modules()->modules['email'])) {
+			if(!empty($user['email']) && isset($GLOBALS['GO_MODULES']->modules['email'])) {
 				$arr = explode('@', $user['email']);
 				$mailbox = trim($arr[0]);
 				$domain = isset($arr[1]) ? trim($arr[1]) : '';
@@ -255,7 +255,7 @@ class ldapauth extends imapauth {
 			if ($gouser) {
 				go_debug('LDAPAUTH: Group-Office user was found');
 
-				if(!empty(GO::config()->ldap_auth_dont_update_profiles)){
+				if(!empty($GLOBALS['GO_CONFIG']->ldap_auth_dont_update_profiles)){
 					$user=array('email'=>$gouser['email'], 'username'=>$user['username']);
 				}else
 				{
@@ -266,7 +266,7 @@ class ldapauth extends imapauth {
 				}
 
 
-				require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
+				require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
 				$email_client = new email();
 
 				//create e-mail account if it's missing
@@ -290,23 +290,23 @@ class ldapauth extends imapauth {
 					}
 				}
 
-				if(!empty(GO::config()->ldap_create_mailboxes_for_email_domain)){
+				if(!empty($GLOBALS['GO_CONFIG']->ldap_create_mailboxes_for_email_domain)){
 					$mail_username=false;
 
 					$_POST['serverclient_no_halt']=true;//Don't stop when mailbox wasn't created. Perhaps it already exists
 
 					$arr = explode('@', $user['email']);
 					if(!empty($arr[1])){
-						require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
+						require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
 						$email_client = new email();
 
-						$account = $email_client->get_account_by_username($username, $gouser['id'], GO::config()->serverclient_host);
+						$account = $email_client->get_account_by_username($username, $gouser['id'], $GLOBALS['GO_CONFIG']->serverclient_host);
 						if($account){
 							if(crypt($password, $gouser['password']) != $gouser['password'])
-								$email_client->update_password(GO::config()->serverclient_host, $username, $password);
+								$email_client->update_password($GLOBALS['GO_CONFIG']->serverclient_host, $username, $password);
 						}else
 						{
-							require_once(GO::modules()->modules['serverclient']['class_path']."serverclient.class.inc.php");
+							require_once($GLOBALS['GO_MODULES']->modules['serverclient']['class_path']."serverclient.class.inc.php");
 							//$sc = new serverclient();
 							go_debug('LDAPAUTH: Could not find e-mail account for LDAP user. It will be created now.');
 							$_POST['serverclient_domains']=array($arr[1]);
@@ -327,12 +327,12 @@ class ldapauth extends imapauth {
 				$user['username'] = $username;
 				$user['password'] = $password;
 
-				require_once(GO::config()->class_path.'base/groups.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 				$GO_GROUPS = new GO_GROUPS();
 
 				go_debug('LDAPAUTH: Group-Office user not found. Creating new user from LDAP profile');
 
-				if(!empty(GO::config()->ldap_create_mailboxes_for_email_domain)){
+				if(!empty($GLOBALS['GO_CONFIG']->ldap_create_mailboxes_for_email_domain)){
 
 					$mail_username=false;
 
@@ -348,10 +348,10 @@ class ldapauth extends imapauth {
 				}
 
 				if (!$user_id = $GO_USERS->add_user($user,
-				$GO_GROUPS->groupnames_to_ids(explode(',',GO::config()->register_user_groups)),
-				$GO_GROUPS->groupnames_to_ids(explode(',',GO::config()->register_visible_user_groups)),
-				explode(',',GO::config()->register_modules_read),
-				explode(',',GO::config()->register_modules_write))) {
+				$GO_GROUPS->groupnames_to_ids(explode(',',$GLOBALS['GO_CONFIG']->register_user_groups)),
+				$GO_GROUPS->groupnames_to_ids(explode(',',$GLOBALS['GO_CONFIG']->register_visible_user_groups)),
+				explode(',',$GLOBALS['GO_CONFIG']->register_modules_read),
+				explode(',',$GLOBALS['GO_CONFIG']->register_modules_write))) {
 					go_debug('LDAPAUTH: Failed creating user '.$username.' and e-mail '.$email.' with ldapauth.');
 					trigger_error('Failed creating user '.$username.' and e-mail '.$email.' with ldapauth.', E_USER_WARNING);
 				} else {
@@ -430,8 +430,8 @@ class ldapauth extends imapauth {
 
 		global $GO_CONFIG;
 
-		if(!empty(GO::config()->ldap_use_uid_with_email_domain))
-			$row['email']=$row['username'].'@'.GO::config()->ldap_use_uid_with_email_domain;
+		if(!empty($GLOBALS['GO_CONFIG']->ldap_use_uid_with_email_domain))
+			$row['email']=$row['username'].'@'.$GLOBALS['GO_CONFIG']->ldap_use_uid_with_email_domain;
 
 		/*
 		 * We have processed all mapping fields and created our SQL result

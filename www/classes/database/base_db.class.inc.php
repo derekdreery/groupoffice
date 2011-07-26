@@ -201,7 +201,7 @@ class base_db{
 			
 		if(!isset($config))
 		{
-			$config = GO::config();
+			$config = $GO_CONFIG;
 		}
 			
 		if(isset($config))

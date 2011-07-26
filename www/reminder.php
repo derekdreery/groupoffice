@@ -1,34 +1,34 @@
 <?php
 require('Group-Office.php');
 
-GO::security()->html_authenticate();
+$GLOBALS['GO_SECURITY']->html_authenticate();
 
 header('Content-Type: text/html; charset=UTF-8');
 
-require_once(GO::config()->class_path.'base/theme.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/theme.class.inc.php');
 $GO_THEME = new GO_THEME();
 
 ////////////////////////////////
 // checking shortcut icon
 ////////////////////////////////
-$icon = GO::theme()->theme_path.'images/groupoffice.ico';
+$icon = $GLOBALS['GO_THEME']->theme_path.'images/groupoffice.ico';
 if(!file_exists($icon))
-	$icon = GO::config()->theme_url.'Default/images/groupoffice.ico';
+	$icon = $GLOBALS['GO_CONFIG']->theme_url.'Default/images/groupoffice.ico';
 else
-	$icon = GO::theme()->theme_url.'images/groupoffice.ico';
+	$icon = $GLOBALS['GO_THEME']->theme_url.'images/groupoffice.ico';
 ////////////////////////////////
 
 ////////////////////////////////
 // checking reminder CSS
 ////////////////////////////////
-$style = GO::theme()->theme_path.'/reminder.css';
+$style = $GLOBALS['GO_THEME']->theme_path.'/reminder.css';
 if(!file_exists($style))
-	$style = GO::config()->theme_url.'Default/reminder.css';
+	$style = $GLOBALS['GO_CONFIG']->theme_url.'Default/reminder.css';
 else
-	$style = GO::theme()->theme_url.'reminder.css';
+	$style = $GLOBALS['GO_THEME']->theme_url.'reminder.css';
 ////////////////////////////////
 
-$title=$lang['common']['alert'].' - '.GO::config()->product_name;
+$title=$lang['common']['alert'].' - '.$GLOBALS['GO_CONFIG']->product_name;
 
 $reminders= $_REQUEST['count']==1 ? $lang['common']['oneReminder'] : sprintf($lang['common']['nReminders'], $_REQUEST['count']);
 
@@ -46,7 +46,7 @@ $reminders= $_REQUEST['count']==1 ? $lang['common']['oneReminder'] : sprintf($la
 		<div id="reminderText">
 		<?php
 		if($_REQUEST['count']>0)
-			echo '<p>'.sprintf($lang['common']['youHaveReminders'], $reminders, GO::config()->product_name).'</p>';
+			echo '<p>'.sprintf($lang['common']['youHaveReminders'], $reminders, $GLOBALS['GO_CONFIG']->product_name).'</p>';
 
 		echo $_REQUEST['reminder_text'];
 		?>

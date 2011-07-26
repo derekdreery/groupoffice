@@ -3,14 +3,14 @@ header('Content-Type: text/html; charset=UTF-8');
 
 require('../../Group-Office.php');
 
-require_once(GO::modules()->modules['cms']['class_path'].'cms.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'output.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'cms_smarty.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'output.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms_smarty.class.inc.php');
 $cms = new cms();
 $co = new cms_output();
 
 if(isset($_REQUEST['task']) && $_REQUEST['task']=='logout')
-	GO::security()->logout();
+	$GLOBALS['GO_SECURITY']->logout();
 
 if(isset($_REQUEST['path']))
 {
@@ -33,7 +33,7 @@ if(isset($_REQUEST['path']))
 $smarty = new cms_smarty($co);
 
 //hide on screen errors in smarty
-GO::config()->debug_display_errors=false;
+$GLOBALS['GO_CONFIG']->debug_display_errors=false;
 
 // create site map
 if (empty($site)) {

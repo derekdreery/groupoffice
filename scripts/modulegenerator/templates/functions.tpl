@@ -59,10 +59,10 @@
 	{
 		global $GO_CONFIG, $GO_LANGUAGE;
 		
-		require_once(GO::config()->class_path.'/base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
 		$search = new search();
 		
-		require(GO::language()->get_language_file('{module}'));
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('{module}'));
 		
 		<gotpl if="$authenticate_relation">
 		$sql = "SELECT i.*,r.acl_id FROM {prefix}_{friendly_multiple} i INNER JOIN {prefix}_{related_friendly_multiple} r ON r.id=i.{related_field_id} WHERE i.id=?";
@@ -105,15 +105,15 @@
 		<gotpl if="$link_type &gt; 0">
 		global $GO_CONFIG;
 		
-		require_once(GO::config()->class_path.'base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 		$search = new search();
 		$search->delete_search_result(${friendly_single}_id, {link_type});
 		
-		require_once(GO::config()->class_path.'filesystem.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
-		if(file_exists(GO::config()->file_storage_path.'{friendly_multiple}/'.${friendly_single}_id.'/'))
+		if(file_exists($GLOBALS['GO_CONFIG']->file_storage_path.'{friendly_multiple}/'.${friendly_single}_id.'/'))
 		{
-			$fs->delete(GO::config()->file_storage_path.'{friendly_multiple}/'.${friendly_single}_id.'/');
+			$fs->delete($GLOBALS['GO_CONFIG']->file_storage_path.'{friendly_multiple}/'.${friendly_single}_id.'/');
 		}
 				
 		</gotpl>		

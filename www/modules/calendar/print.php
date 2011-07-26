@@ -1,12 +1,12 @@
 <?php
 require_once("../../Group-Office.php");
-GO::security()->html_authenticate('calendar');
+$GLOBALS['GO_SECURITY']->html_authenticate('calendar');
 
-require_once (GO::modules()->modules['calendar']['class_path']."calendar.class.inc.php");
-require_once (GO::modules()->modules['calendar']['class_path']."go_ical.class.inc");
-require_once (GO::modules()->modules['calendar']['class_path'].'pdf.class.inc.php');
+require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path']."calendar.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path']."go_ical.class.inc");
+require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'pdf.class.inc.php');
 
-require_once (GO::language()->get_language_file('calendar'));
+require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 $cal = new calendar();
 
 //$date = getdate();
@@ -88,7 +88,7 @@ function insert_events($calendars,$start_time,$end_time) {
 							'description'=>$event['description'],
 							'background'=>$background,
 							//'background'=>$default_colors[$response['count']-1],
-							'private'=>($event['private']=='1' && GO::security()->user_id != $event['user_id']),
+							'private'=>($event['private']=='1' && $GLOBALS['GO_SECURITY']->user_id != $event['user_id']),
 							'repeats'=>!empty($event['rrule']),
 							'all_day_event'=>$event['all_day_event'],
 							'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time']),

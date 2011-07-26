@@ -19,7 +19,7 @@ class holidays extends db {
 		if(!$this->in_holidays){
 			global $GO_LANGUAGE;
 			
-			require(GO::language()->language_path.'holidays.inc.php');
+			require($GLOBALS['GO_LANGUAGE']->language_path.'holidays.inc.php');
 
 			$this->in_holidays = $input_holidays;
 		}
@@ -28,7 +28,7 @@ class holidays extends db {
 	public function get_regions($language) {
 		global $GO_LANGUAGE;
 
-		require_once(GO::language()->language_path.'languages.inc.php');
+		require_once($GLOBALS['GO_LANGUAGE']->language_path.'languages.inc.php');
 		$regions = array();
 		foreach($locale as $reg => $lang) {
 			if($this->holidays_for_region_exist($reg)) {

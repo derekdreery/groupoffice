@@ -91,8 +91,8 @@ class advanced_query extends db{
 
 	public function parse_custom_fields($query, $link_type){
 		global $GO_MODULES;
-		if(isset(GO::modules()->modules['customfields'])){
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$cf = new customfields();
 
 			preg_match_all('/`cf:([^:]*):([^`]*)`/i',$query,$matched_tags, PREG_SET_ORDER);

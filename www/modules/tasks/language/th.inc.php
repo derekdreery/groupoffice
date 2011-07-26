@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('tasks'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('tasks'));
 
 $lang['tasks']['name']='งาน';
 $lang['tasks']['description']='แสดงรายการงานที่ต้องปฏิบัติ เพื่อความสะดวกในการช่วยเตือนและการจัดลำดับงานที่ต้องปฏิบัติเพื่อให้การทำงานที่ได้ประสิทธิภาพยิ่งขึ้น';

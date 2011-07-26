@@ -41,7 +41,7 @@ class search extends db {
 		
 		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 		
-		foreach(GO::modules()->modules as $module)
+		foreach($GLOBALS['GO_MODULES']->modules as $module)
 		{			
 			$file = $module['class_path'].$module['id'].'.class.inc';
 
@@ -95,7 +95,7 @@ class search extends db {
 			$sql .= ",l.description AS link_description";
 		}
 		$sql .= " FROM go_search_cache sc ".
-			"INNER JOIN go_acl a ON (sc.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." or a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
+			"INNER JOIN go_acl a ON (sc.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." or a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 				
 		if($link_id>0)
 		{
@@ -311,7 +311,7 @@ class search extends db {
 		
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/links.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 		$GO_LINKS = new GO_LINKS();
 		
 		$response['results']=array();
@@ -439,7 +439,7 @@ class search extends db {
 	{
 		global $GO_MODULES, $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/links.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 		$GO_LINKS = new GO_LINKS();
 
 		$sr = $this->get_search_result($id, $link_type);
@@ -451,8 +451,8 @@ class search extends db {
 			$this->log($id, $link_type, 'Deleted '.strip_tags($sr['name']));
 			$GO_LINKS->delete_link($id, $link_type);			
 		}
-		if(isset(GO::modules()->modules['customfields'])){
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$cf = new customfields();
 			$cf->delete_cf_row($link_type, $id);
 		}
@@ -488,10 +488,10 @@ class search extends db {
 			//create default link folders
 			global $GO_CONFIG;
 
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 			
-			$default_folders = GO::config()->get_setting('default_link_folder_'.$result['link_type']);
+			$default_folders = $GLOBALS['GO_CONFIG']->get_setting('default_link_folder_'.$result['link_type']);
 			if($default_folders){
 
 				$default_folder_array=array();
@@ -526,13 +526,13 @@ class search extends db {
 	{
 		global $GO_MODULES;
 		
-		if(isset(GO::modules()->modules['log']) && !defined('NOLOG'))
+		if(isset($GLOBALS['GO_MODULES']->modules['log']) && !defined('NOLOG'))
 		{
 			$log['link_id']=$link_id;
 			$log['link_type']=$link_type;
 			$log['time']=time();
 			$log['text']=$text;
-			$log['user_id']=GO::security()->user_id;
+			$log['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 			$log['id']=$this->nextid('go_log');
 			
 			$this->insert_row('go_log', $log);

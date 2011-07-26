@@ -1,5 +1,5 @@
 <?php
-$updates[]="UPDATE em_links SET path=replace(path, '".GO::config()->file_storage_path."','');";
+$updates[]="UPDATE em_links SET path=replace(path, '".$GLOBALS['GO_CONFIG']->file_storage_path."','');";
 
 $updates[]="CREATE TABLE IF NOT EXISTS `em_messages_cache` (
   `folder_id` int(11) NOT NULL,

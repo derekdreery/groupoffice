@@ -36,7 +36,7 @@ function launchGO(){
 		
 	}else
 	{		
-		win.location.href="<?php echo GO::config()->host; ?>?<?php echo $_SERVER['QUERY_STRING']; ?>";
+		win.location.href="<?php echo $GLOBALS['GO_CONFIG']->host; ?>?<?php echo $_SERVER['QUERY_STRING']; ?>";
 	}	
 	win.focus();	
 }
@@ -46,7 +46,7 @@ function launchGO(){
 <body onload="launchGO();" style="font:12px arial">
 <h1>Group-Office</h1>
 <?php 
-require(GO::language()->get_language_file('email'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
 echo $lang['email']['goAlreadyStarted']; ?>
 </body>
 </html>

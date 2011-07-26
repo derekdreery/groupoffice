@@ -83,21 +83,21 @@ class GO_THEME
 
 		$_SESSION['GO_SESSION']['theme'] =
 		isset($_SESSION['GO_SESSION']['theme']) ?
-		$_SESSION['GO_SESSION']['theme'] : GO::config()->theme;
+		$_SESSION['GO_SESSION']['theme'] : $GLOBALS['GO_CONFIG']->theme;
 
-		if ($_SESSION['GO_SESSION']['theme'] != '' && file_exists(GO::config()->theme_path.$_SESSION['GO_SESSION']['theme']))
+		if ($_SESSION['GO_SESSION']['theme'] != '' && file_exists($GLOBALS['GO_CONFIG']->theme_path.$_SESSION['GO_SESSION']['theme']))
 		{
 			$this->theme = $_SESSION['GO_SESSION']['theme'];
 		}else
 		{
-			$_SESSION['GO_SESSION']['theme'] = GO::config()->theme;
-			$this->theme = GO::config()->theme;
+			$_SESSION['GO_SESSION']['theme'] = $GLOBALS['GO_CONFIG']->theme;
+			$this->theme = $GLOBALS['GO_CONFIG']->theme;
 		}
 
-		$this->theme_path = GO::config()->theme_path.$this->theme.'/';
-		$this->theme_url = GO::config()->theme_url.$this->theme.'/';
+		$this->theme_path = $GLOBALS['GO_CONFIG']->theme_path.$this->theme.'/';
+		$this->theme_url = $GLOBALS['GO_CONFIG']->theme_url.$this->theme.'/';
 		$this->image_url = $this->theme_url.'images/';
-		$this->image_path = GO::config()->theme_path.'images/';
+		$this->image_path = $GLOBALS['GO_CONFIG']->theme_path.'images/';
 	}
 
 
@@ -122,7 +122,7 @@ class GO_THEME
 	function load_module_stylesheets($derrived_theme=false){
 		global $GO_MODULES;
 
-		foreach(GO::modules()->modules as $module)
+		foreach($GLOBALS['GO_MODULES']->modules as $module)
 		{
 			if(file_exists($module['path'].'themes/Default/style.css')){
 				$this->add_stylesheet($module['path'].'themes/Default/style.css');
@@ -143,30 +143,30 @@ class GO_THEME
 		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
 
 		$mods='';
-		foreach(GO::modules()->modules as $module) {
+		foreach($GLOBALS['GO_MODULES']->modules as $module) {
 			$mods.=$module['id'];
 		}
 
-		$hash = md5(GO::config()->file_storage_path.GO::config()->host.GO::config()->mtime.$mods);
+		$hash = md5($GLOBALS['GO_CONFIG']->file_storage_path.$GLOBALS['GO_CONFIG']->host.$GLOBALS['GO_CONFIG']->mtime.$mods);
 
 		$relpath= 'cache/'.$hash.'-'.$this->theme.'-style.css';
-		$cssfile = GO::config()->file_storage_path.$relpath;
+		$cssfile = $GLOBALS['GO_CONFIG']->file_storage_path.$relpath;
 
-		if(!file_exists($cssfile) || GO::config()->debug){
+		if(!file_exists($cssfile) || $GLOBALS['GO_CONFIG']->debug){
 
-			File::mkdir(GO::config()->file_storage_path.'cache');
+			File::mkdir($GLOBALS['GO_CONFIG']->file_storage_path.'cache');
 
 			$fp = fopen($cssfile, 'w+');
 			foreach($this->stylesheets as $s){
 
-				$baseurl = str_replace(GO::config()->root_path, GO::config()->host, dirname($s)).'/';
+				$baseurl = str_replace($GLOBALS['GO_CONFIG']->root_path, $GLOBALS['GO_CONFIG']->host, dirname($s)).'/';
 
 				fputs($fp, $this->replace_url(file_get_contents($s),$baseurl));
 			}
 			fclose($fp);
 		}
 
-		$cssurl = GO::config()->host.'compress.php?file='.basename($relpath);
+		$cssurl = $GLOBALS['GO_CONFIG']->host.'compress.php?file='.basename($relpath);
 		echo '<link href="'.$cssurl.'" type="text/css" rel="stylesheet" />';
 	}
 	
@@ -184,8 +184,8 @@ class GO_THEME
 		if(!isset($theme))
 			$theme = $this->theme;
 
-		$file = GO::modules()->modules[$module_id]['path'].'themes/'.$theme.'/style.css';
-		$url = GO::modules()->modules[$module_id]['url'].'themes/'.$theme.'/style.css';
+		$file = $GLOBALS['GO_MODULES']->modules[$module_id]['path'].'themes/'.$theme.'/style.css';
+		$url = $GLOBALS['GO_MODULES']->modules[$module_id]['url'].'themes/'.$theme.'/style.css';
 		if(!file_exists($file))
 		{			
 			if($theme == 'Default')
@@ -211,11 +211,11 @@ class GO_THEME
 	{
 		global $GO_CONFIG;
 
-		$theme_dir=opendir(GO::config()->theme_path);
+		$theme_dir=opendir($GLOBALS['GO_CONFIG']->theme_path);
 		while ($file=readdir($theme_dir))
 		{
-			if (is_dir(GO::config()->theme_path.$file) &&
-			file_exists(GO::config()->theme_path.$file.'/layout.inc.php'))
+			if (is_dir($GLOBALS['GO_CONFIG']->theme_path.$file) &&
+			file_exists($GLOBALS['GO_CONFIG']->theme_path.$file.'/layout.inc.php'))
 			{
 				$themes[] = $file;
 			}

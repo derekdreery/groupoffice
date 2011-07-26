@@ -12,18 +12,18 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require('Group-Office.php');
-GO::security()->html_authenticate();
+$GLOBALS['GO_SECURITY']->html_authenticate();
 ?>
 <div style="padding:10px;line-height:16px">
 	<div class="go-about-logo"></div>
 	<?php	
-	echo String::text_to_html(sprintf($lang['common']['about'], GO::config()->version, date('Y'), GO::config()->webmaster_email));
+	echo String::text_to_html(sprintf($lang['common']['about'], $GLOBALS['GO_CONFIG']->version, date('Y'), $GLOBALS['GO_CONFIG']->webmaster_email));
 	
-	$usage_date = GO::config()->get_setting('usage_date');
+	$usage_date = $GLOBALS['GO_CONFIG']->get_setting('usage_date');
 	if($usage_date){
-		$mailbox_usage = floatval(GO::config()->get_setting('mailbox_usage'));
-		$file_storage_usage = floatval(GO::config()->get_setting('file_storage_usage'));
-		$database_usage = floatval(GO::config()->get_setting('database_usage'));	
+		$mailbox_usage = floatval($GLOBALS['GO_CONFIG']->get_setting('mailbox_usage'));
+		$file_storage_usage = floatval($GLOBALS['GO_CONFIG']->get_setting('file_storage_usage'));
+		$database_usage = floatval($GLOBALS['GO_CONFIG']->get_setting('database_usage'));	
 	?>
 		<h1 style="margin-top:10px;"><?php echo sprintf($lang['common']['usage_stats'], Date::get_timestamp($usage_date)); ?></h1>	
 		<p style="margin-top:5px;margin-bottom:5px;"><?php echo $lang['common']['usage_text']; ?>:</p>

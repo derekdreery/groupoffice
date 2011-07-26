@@ -23,15 +23,15 @@ class GO_Base_Observable{
 		
 		go_debug("GO_Base_Observable::cacheListeners");
 		
-		$dir = GO::config()->file_storage_path.'cache/listeners/';
-		if(GO::config()->debug){
+		$dir = $GLOBALS['GO_CONFIG']->file_storage_path.'cache/listeners/';
+		if($GLOBALS['GO_CONFIG']->debug){
 			exec('rm -Rf '.$dir);
 		}
 		$dirExists = is_dir($dir);
 		if(!$dirExists){
 			mkdir($dir, 0755,true);
 			
-			GO::modules()->callModuleMethod('initListeners');
+			$GLOBALS['GO_MODULES']->callModuleMethod('initListeners');
 			
 		}
 	}
@@ -41,7 +41,7 @@ class GO_Base_Observable{
 		
 		$line = '$listeners["'.$eventName.'"][]=array("'.$listenerClass.'", "'.$listenerFunction.'");'."\n";
 		
-		$dir = GO::config()->file_storage_path.'cache/listeners/';
+		$dir = $GLOBALS['GO_CONFIG']->file_storage_path.'cache/listeners/';
 		$file = $dir.get_called_class().'.php';
 		
 		if(!file_exists($file))
@@ -62,13 +62,13 @@ class GO_Base_Observable{
 			//listeners array will be loaded from a file. Because addListener is only called once when there is no cache.
 			$listeners=array();
 			
-			$cacheFile = GO::config()->file_storage_path.'cache/listeners/'.get_class($this).'.php';
+			$cacheFile = $GLOBALS['GO_CONFIG']->file_storage_path.'cache/listeners/'.get_class($this).'.php';
 			if(file_exists($cacheFile))
 				require($cacheFile);
 			
 			$this->_listeners=$listeners;
 			
-//			$cacheFile = GO::config()->file_storage_path.'cache/listeners/'.get_parent_class($this).'.php';
+//			$cacheFile = $GLOBALS['GO_CONFIG']->file_storage_path.'cache/listeners/'.get_parent_class($this).'.php';
 //			if(file_exists($cacheFile)){
 //				require($cacheFile);
 //				$this->_listeners=array_merge($this->_listeners,$listeners);

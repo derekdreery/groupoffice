@@ -1,6 +1,6 @@
 <?php
 /* Translator for the Greek Language: Konstantinos Georgakopoulos (kgeorga@uom.gr)*/
-require(GO::language()->get_fallback_language_file('users'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('users'));
 $lang['users']['name'] = 'Χρήστες';
 $lang['users']['description'] = 'Διαχειριστικό άρθρωμα. Διαχείριση των χρηστών του συστήματος.';
 

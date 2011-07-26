@@ -25,7 +25,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('files'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('files'));
 $lang['files']['name'] = 'Fichiers';
 $lang['files']['description'] = 'Module gestion des fichiers. Module pour partager des fichiers entre utilisateurs de Group-Office.';
 $lang['link_type'][6]='Fichier';

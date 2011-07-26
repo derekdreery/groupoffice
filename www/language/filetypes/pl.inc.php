@@ -6,7 +6,7 @@
 //Author : rajmund
 //Date : January, 26 2011
 
-require(GO::language()->get_fallback_base_language_file('filetypes'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('filetypes'));
 $lang['filetypes']['unknown'] = 'Nieznany typ pliku';
 $lang['filetypes']['txt'] = 'Plik tekstowy';
 $lang['filetypes']['sxw'] = 'Dokument OpenOffice.Org';

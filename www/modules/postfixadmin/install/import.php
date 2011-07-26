@@ -2,7 +2,7 @@
 define('CONFIG_FILE', '/etc/groupoffice/servermanager.group-office.com/config.php');
 require('../../../Group-Office.php');
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 $doreal=false;
@@ -146,8 +146,8 @@ foreach($lines as $line)
 			$db_domain['transport']='virtual';
 			if($doreal)
 			{
-				$db_domain['acl_id']=GO::security()->get_new_acl('domain');
-				GO::security()->add_user_to_acl($db_domain['acl_id'], $user_id, GO_SECURITY::WRITE_PERMISSION);
+				$db_domain['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('domain');
+				$GLOBALS['GO_SECURITY']->add_user_to_acl($db_domain['acl_id'], $user_id, GO_SECURITY::WRITE_PERMISSION);
 			}
 
 			if($doreal)

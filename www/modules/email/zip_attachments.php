@@ -14,19 +14,19 @@
 
 
 require_once("../../Group-Office.php");
-GO::security()->authenticate();
-GO::modules()->authenticate('email');
+$GLOBALS['GO_SECURITY']->authenticate();
+$GLOBALS['GO_MODULES']->authenticate('email');
 
 
 //close writing to session so other concurrent requests won't be locked out.
 session_write_close();
 
-require_once(GO::config()->class_path."mail/imap.class.inc");
-require_once(GO::modules()->class_path."email.class.inc.php");
+require_once($GLOBALS['GO_CONFIG']->class_path."mail/imap.class.inc");
+require_once($GLOBALS['GO_MODULES']->class_path."email.class.inc.php");
 $mail = new imap();
 $email = new email();
 
-require_once (GO::language()->get_language_file('email'));
+require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
 
 $filename = File::strip_invalid_chars($_REQUEST['filename']);
 if(empty($filename))

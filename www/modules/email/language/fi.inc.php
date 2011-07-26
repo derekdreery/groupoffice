@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('email'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('email'));
 $lang['email']['name'] = 'Sähköposti';
 $lang['email']['description'] = 'Sähköpostimoduuli; Pieni webpohjainen sähköpostin lukuohjelma. Kaikki käyttäjät voivat lähettää, vastaanottaa ja edelleen välittää sähköpostiviestejä';
 

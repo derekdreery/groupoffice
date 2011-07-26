@@ -3,8 +3,8 @@
  *
  * disable because doesn't work well
  * 
-if(isset(GO::modules()->modules['calendar'])){
-	require_once(GO::modules()->modules['calendar']['class_path'].'calendar.class.inc.php');
+if(isset($GLOBALS['GO_MODULES']->modules['calendar'])){
+	require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'calendar.class.inc.php');
 	$cal = new calendar();
 	$cal1 = new db();
 	$cal2 = new db();

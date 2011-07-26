@@ -19,19 +19,19 @@
  * Require all mail classes that are used by this class
  */
 
-require_once(GO::config()->class_path."html2text.class.inc");
-require_once GO::config()->class_path.'mail/RFC822.class.inc';
-require_once GO::config()->class_path.'mail/mimeDecode.class.inc';
-require_once GO::config()->class_path.'mail/swift/lib/swift_required.php';
-require_once(GO::config()->class_path.'mail/swift/lib/classes/Swift/Mime/ContentEncoder/RawContentEncoder.php');
-require_once GO::config()->class_path.'mail/smtp_restrict.class.inc.php';
+require_once($GLOBALS['GO_CONFIG']->class_path."html2text.class.inc");
+require_once $GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc';
+require_once $GLOBALS['GO_CONFIG']->class_path.'mail/mimeDecode.class.inc';
+require_once $GLOBALS['GO_CONFIG']->class_path.'mail/swift/lib/swift_required.php';
+require_once($GLOBALS['GO_CONFIG']->class_path.'mail/swift/lib/classes/Swift/Mime/ContentEncoder/RawContentEncoder.php');
+require_once $GLOBALS['GO_CONFIG']->class_path.'mail/smtp_restrict.class.inc.php';
 
 //HOWTO DO THIS WITH 4?
 //You change the cache class using this call...
 //Swift_CacheFactory::setClassName("Swift_Cache_Disk");
 
 //Then you set up the disk cache to write to a writable folder...
-//Swift_Cache_Disk::setSavePath(GO::config()->tmpdir);
+//Swift_Cache_Disk::setSavePath($GLOBALS['GO_CONFIG']->tmpdir);
 
 
 /**
@@ -127,12 +127,12 @@ class GoSwift extends Swift_Mailer{
 		/*
 		 * Make sure temp dir exists
 		 */
-		File::mkdir(GO::config()->tmpdir);
+		File::mkdir($GLOBALS['GO_CONFIG']->tmpdir);
 
 
 		if($account_id>0 || $alias_id>0)
 		{
-			require_once (GO::modules()->modules['email']['class_path']."email.class.inc.php");
+			require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
 			$email = new email();
 
 			$this->account = $email->get_account($account_id, $alias_id);
@@ -162,18 +162,18 @@ class GoSwift extends Swift_Mailer{
 
 			if(empty($transport))
 			{
-				$encryption = empty(GO::config()->smtp_encryption) ? null : GO::config()->smtp_encryption;
-				$transport=new Swift_SmtpTransport(GO::config()->smtp_server, GO::config()->smtp_port, $encryption);
-				if(!empty(GO::config()->smtp_username))
+				$encryption = empty($GLOBALS['GO_CONFIG']->smtp_encryption) ? null : $GLOBALS['GO_CONFIG']->smtp_encryption;
+				$transport=new Swift_SmtpTransport($GLOBALS['GO_CONFIG']->smtp_server, $GLOBALS['GO_CONFIG']->smtp_port, $encryption);
+				if(!empty($GLOBALS['GO_CONFIG']->smtp_username))
 				{
-					$transport->setUsername(GO::config()->smtp_username)
-						->setPassword(GO::config()->smtp_password);
+					$transport->setUsername($GLOBALS['GO_CONFIG']->smtp_username)
+						->setPassword($GLOBALS['GO_CONFIG']->smtp_password);
 				}
 			}
 		}
 		
-		if(!empty(GO::config()->smtp_local_domain))
-			$transport->setLocalDomain(GO::config()->smtp_local_domain);
+		if(!empty($GLOBALS['GO_CONFIG']->smtp_local_domain))
+			$transport->setLocalDomain($GLOBALS['GO_CONFIG']->smtp_local_domain);
 
 		$this->smtp_host=$transport->getHost();
 		parent::__construct($transport);
@@ -194,8 +194,8 @@ class GoSwift extends Swift_Mailer{
 
 		$headers = $this->message->getHeaders();
 
-		$headers->addTextHeader("X-Mailer", "Group-Office ".GO::config()->version);
-		$headers->addTextHeader("X-MimeOLE", "Produced by Group-Office ".GO::config()->version);
+		$headers->addTextHeader("X-Mailer", "Group-Office ".$GLOBALS['GO_CONFIG']->version);
+		$headers->addTextHeader("X-MimeOLE", "Produced by Group-Office ".$GLOBALS['GO_CONFIG']->version);
 
 		if(!empty($email_to))
 			$this->set_to($email_to);
@@ -362,7 +362,7 @@ class GoSwift extends Swift_Mailer{
 		{
 			global $GO_CONFIG, $GO_MODULES;
 
-			require_once (GO::modules()->modules['email']['class_path']."cached_imap.class.inc.php");
+			require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path']."cached_imap.class.inc.php");
 			$imap = new cached_imap();
 
 			$mailbox = empty($this->reply_mailbox) ? 'INBOX' : $this->reply_mailbox;
@@ -446,28 +446,28 @@ class GoSwift extends Swift_Mailer{
 	{
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/links.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 		$GO_LINKS = new GO_LINKS();
 
 
 		$link_message['path']='email/'.date('mY').'/sent_'.time().'.eml';
 
-		require_once(GO::config()->class_path.'filesystem.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
-		$fs->mkdir_recursive(GO::config()->file_storage_path.dirname($link_message['path']));
+		$fs->mkdir_recursive($GLOBALS['GO_CONFIG']->file_storage_path.dirname($link_message['path']));
 
 		if(empty($this->data))
 		{
 			$this->data = $this->message->toString();
 		}
 
-		$fp = fopen(GO::config()->file_storage_path.$link_message['path'],"w+");
+		$fp = fopen($GLOBALS['GO_CONFIG']->file_storage_path.$link_message['path'],"w+");
 		fputs ($fp, $this->data, strlen($this->data));
 		fclose($fp);
 
 		$email = new email();
 
-		require_once(GO::config()->class_path.'base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 		$search = new search();
 
 		$link_message['from']=$this->implodeSwiftAddressArray($this->message->getFrom());
@@ -602,7 +602,7 @@ class GoSwiftImport extends GoSwift{
 				{
 					//attachment
 
-					$dir=GO::config()->tmpdir.'attachments/';
+					$dir=$GLOBALS['GO_CONFIG']->tmpdir.'attachments/';
 
 					if(!is_dir($dir))
 						mkdir($dir, 0755, true);

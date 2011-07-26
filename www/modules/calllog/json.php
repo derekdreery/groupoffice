@@ -1,8 +1,8 @@
 <?php
 
 require_once('../../Group-Office.php');
-GO::security()->json_authenticate('calllog');
-require_once (GO::modules()->modules['calllog']['class_path'].'calllog.class.inc.php');
+$GLOBALS['GO_SECURITY']->json_authenticate('calllog');
+require_once ($GLOBALS['GO_MODULES']->modules['calllog']['class_path'].'calllog.class.inc.php');
 $calllog = new calllog();
 $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 try{
@@ -14,7 +14,7 @@ try{
 			{
 				try
 				{
-					if(GO::modules()->modules['calllog']['permission_level'] < GO_SECURITY::WRITE_PERMISSION)
+					if($GLOBALS['GO_MODULES']->modules['calllog']['permission_level'] < GO_SECURITY::WRITE_PERMISSION)
 					{
 						throw new AccessDeniedException();
 					}
@@ -82,11 +82,11 @@ try{
 				$insert=true;
 			}
 
-			if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission'])
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
 			{
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
-				$cf->update_fields(GO::security()->user_id, $call['id'], 18, $_POST, $insert);
+				$cf->update_fields($GLOBALS['GO_SECURITY']->user_id, $call['id'], 18, $_POST, $insert);
 			}
 			
 			$response['success'] = true;

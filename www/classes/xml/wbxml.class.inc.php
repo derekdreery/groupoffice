@@ -52,8 +52,8 @@ class wbxml
 	{
 		global $GO_CONFIG;
 
-		//$this->wbxmlfile = GO::config()->tmpdir.md5(uniqid(time())).'.wbxml';
-		//$this->xmlfile = GO::config()->tmpdir.md5(uniqid(time())).'.xml';
+		//$this->wbxmlfile = $GLOBALS['GO_CONFIG']->tmpdir.md5(uniqid(time())).'.wbxml';
+		//$this->xmlfile = $GLOBALS['GO_CONFIG']->tmpdir.md5(uniqid(time())).'.xml';
 	}
 
 	/**
@@ -67,13 +67,13 @@ class wbxml
 	{
 		global $GO_CONFIG;
 
-		$this->wbxmlfile = GO::config()->tmpdir.'wbxml2xml_'.md5(uniqid(time())).'.wbxml';
-		$this->xmlfile = GO::config()->tmpdir.'wbxml2xml_'.md5(uniqid(time())).'.xml';
+		$this->wbxmlfile = $GLOBALS['GO_CONFIG']->tmpdir.'wbxml2xml_'.md5(uniqid(time())).'.wbxml';
+		$this->xmlfile = $GLOBALS['GO_CONFIG']->tmpdir.'wbxml2xml_'.md5(uniqid(time())).'.xml';
 
 		//create temp file
 
-		if(!is_dir(GO::config()->tmpdir))
-			mkdir(GO::config()->tmpdir, 0755, true);
+		if(!is_dir($GLOBALS['GO_CONFIG']->tmpdir))
+			mkdir($GLOBALS['GO_CONFIG']->tmpdir, 0755, true);
 
 		//file_put_contents did not work with nokia phones because the
 		//line ends got mixed up somehow.
@@ -84,10 +84,10 @@ class wbxml
 
 		if(is_windows())
 		{
-			$cmd = GO::config()->cmd_wbxml2xml.' -o '.$this->xmlfile.' '.$this->wbxmlfile;
+			$cmd = $GLOBALS['GO_CONFIG']->cmd_wbxml2xml.' -o '.$this->xmlfile.' '.$this->wbxmlfile;
 		}else
 		{
-			$cmd = GO::config()->cmd_wbxml2xml.' -o '.$this->xmlfile.' '.$this->wbxmlfile.' 2>/dev/null';
+			$cmd = $GLOBALS['GO_CONFIG']->cmd_wbxml2xml.' -o '.$this->xmlfile.' '.$this->wbxmlfile.' 2>/dev/null';
 		}
 		exec($cmd);
 
@@ -117,8 +117,8 @@ class wbxml
 	{
 		global $GO_CONFIG;
 
-		$this->wbxmlfile = GO::config()->tmpdir.'xml2wbxml_'.md5(uniqid(time())).'.wbxml';
-		$this->xmlfile = GO::config()->tmpdir.'xml2wbxml_'.md5(uniqid(time())).'.xml';
+		$this->wbxmlfile = $GLOBALS['GO_CONFIG']->tmpdir.'xml2wbxml_'.md5(uniqid(time())).'.wbxml';
+		$this->xmlfile = $GLOBALS['GO_CONFIG']->tmpdir.'xml2wbxml_'.md5(uniqid(time())).'.xml';
 
 		//create temp file
 		$fp = fopen($this->xmlfile, 'w+');
@@ -128,10 +128,10 @@ class wbxml
 
 		if(is_windows())
 		{
-			$cmd = GO::config()->cmd_xml2wbxml.' -v 1.2 -o '.$this->wbxmlfile.' '.$this->xmlfile;
+			$cmd = $GLOBALS['GO_CONFIG']->cmd_xml2wbxml.' -v 1.2 -o '.$this->wbxmlfile.' '.$this->xmlfile;
 		}else
 		{
-			$cmd = GO::config()->cmd_xml2wbxml.' -v 1.2 -o '.$this->wbxmlfile.' '.$this->xmlfile.' 2>/dev/null';
+			$cmd = $GLOBALS['GO_CONFIG']->cmd_xml2wbxml.' -v 1.2 -o '.$this->wbxmlfile.' '.$this->xmlfile.' 2>/dev/null';
 		}
 
 		//convert temp file

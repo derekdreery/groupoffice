@@ -101,11 +101,11 @@ class UPGRADE_GO_SECURITY extends db {
 
 		global $GO_MODULES;
 		if(isset($GO_MODULES)) {
-			GO::modules()->load_modules();
+			$GLOBALS['GO_MODULES']->load_modules();
 		}
 
 		global $GO_EVENTS;
-		GO::events()->fire_event('logout', $old_session);
+		$GLOBALS['GO_EVENTS']->fire_event('logout', $old_session);
 	}
 
 	/**
@@ -124,10 +124,10 @@ class UPGRADE_GO_SECURITY extends db {
 		}
 
 		if($module!='' && (
-				empty(GO::modules()->modules[$module])
+				empty($GLOBALS['GO_MODULES']->modules[$module])
 				||
-				(!GO::modules()->modules[$module]['write_permission'] &&
-				!GO::modules()->modules[$module]['read_permission'])
+				(!$GLOBALS['GO_MODULES']->modules[$module]['write_permission'] &&
+				!$GLOBALS['GO_MODULES']->modules[$module]['read_permission'])
 		)) {
 			return 'UNAUTHORIZED';
 		}
@@ -164,7 +164,7 @@ class UPGRADE_GO_SECURITY extends db {
 
 		$this->insert_row('go_acl_items', $ai);
 
-		$this->add_group_to_acl(GO::config()->group_root, $ai['id']);
+		$this->add_group_to_acl($GLOBALS['GO_CONFIG']->group_root, $ai['id']);
 		$this->add_user_to_acl($user_id, $ai['id']);
 		return $ai['id'];
 	}
@@ -283,7 +283,7 @@ class UPGRADE_GO_SECURITY extends db {
 	 */
 	function delete_group_from_acl($group_id, $acl_id) {
 		global $GO_CONFIG;
-		if($group_id != GO::config()->group_root) {
+		if($group_id != $GLOBALS['GO_CONFIG']->group_root) {
 			$sql = "DELETE FROM go_acl WHERE group_id='".$this->escape($group_id)."' AND acl_id='".$this->escape($acl_id)."'";
 			return $this->query($sql);
 		}
@@ -300,7 +300,7 @@ class UPGRADE_GO_SECURITY extends db {
 		global $GO_CONFIG;
 
 		if($this->query("DELETE FROM go_acl WHERE acl_id='".$this->escape($acl_id)."'")) {
-			return $this->add_group_to_acl(GO::config()->group_root, $acl_id);
+			return $this->add_group_to_acl($GLOBALS['GO_CONFIG']->group_root, $acl_id);
 		}
 	}
 
@@ -326,11 +326,11 @@ class UPGRADE_GO_SECURITY extends db {
 	function has_admin_permission($user_id) {
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/groups.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 		$GO_GROUPS = new GO_GROUPS();
 
 		if(!isset($this->is_admin))
-			$this->is_admin = $GO_GROUPS->is_in_group($user_id, GO::config()->group_root);
+			$this->is_admin = $GO_GROUPS->is_in_group($user_id, $GLOBALS['GO_CONFIG']->group_root);
 
 		return $this->is_admin;
 	}
@@ -512,7 +512,7 @@ class UPGRADE_GO_SECURITY extends db {
 		$security = new UPGRADE_GO_SECURITY();
 		$this->query($sql);
 		while($this->next_record()) {
-			if ($this->f("group_id") != 0 && $this->f('group_id') != GO::config()->group_root && !$security->group_in_acl($this->f("group_id"), $dAcl)) {
+			if ($this->f("group_id") != 0 && $this->f('group_id') != $GLOBALS['GO_CONFIG']->group_root && !$security->group_in_acl($this->f("group_id"), $dAcl)) {
 				$security->add_group_to_acl($this->f("group_id"), $dAcl);
 			}
 

@@ -17,7 +17,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('cms'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('cms'));
 $lang['cms']['name']='Sites Web';
 $lang['cms']['description']='Module de création de sites web intégrés';
 $lang['cms']['site']='Site';

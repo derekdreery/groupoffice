@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('systemusers'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('systemusers'));
 
 $lang['systemusers']['name']='Systeemgebruikers';
 $lang['systemusers']['description']='Maakt systeem gebruikers aan voor iedere Group-Office gebruiker';

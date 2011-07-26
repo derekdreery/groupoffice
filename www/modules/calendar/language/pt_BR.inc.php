@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Calendário';
 $lang['calendar']['description'] = 'Módulo calendário; Todo usuário pode adicionar, editar or apagar compromissos. Os compromissos de outros usuários podem ser vistos e modificados se necessário.';
 

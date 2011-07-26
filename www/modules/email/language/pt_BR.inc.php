@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('email'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('email'));
 $lang['email']['name'] = 'E-mail';
 $lang['email']['description'] = 'Módulo de e-mail; Cliente de e-mail para internet. Todo usuário pode enviar, receber e encaminhar e-mails';
 

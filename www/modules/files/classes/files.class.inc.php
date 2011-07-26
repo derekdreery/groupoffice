@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-require_once(GO::config()->class_path.'filesystem.class.inc');
+require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 
 
 class files extends db {
@@ -27,18 +27,18 @@ class files extends db {
 		parent::__construct();
 
 		$this->readable_paths = array(
-				GO::config()->tmpdir,
-				GO::config()->file_storage_path.'public/'
+				$GLOBALS['GO_CONFIG']->tmpdir,
+				$GLOBALS['GO_CONFIG']->file_storage_path.'public/'
 		);
 
 		$this->writeable_paths = array(
-				GO::config()->tmpdir
+				$GLOBALS['GO_CONFIG']->tmpdir
 		);
 
 
 		if(!empty($_SESSION['GO_SESSION']['username'])) {
-			$this->readable_paths[] = GO::config()->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/';
-			$this->writeable_paths[] = GO::config()->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/';
+			$this->readable_paths[] = $GLOBALS['GO_CONFIG']->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/';
+			$this->writeable_paths[] = $GLOBALS['GO_CONFIG']->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/';
 		}
 	}
 
@@ -54,7 +54,7 @@ class files extends db {
 
 	function init_customfields_types(){
 		global $GO_MODULES, $customfield_types;
-		require_once(GO::modules()->modules['files']['class_path'].'file_customfield_type.class.inc.php');
+		require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'file_customfield_type.class.inc.php');
 		$customfield_types['file']=new file_customfield_type(array());
 	}
 	
@@ -131,8 +131,8 @@ class files extends db {
 				$count++;
 			}
 
-			$full_source_path = GO::config()->file_storage_path.$current_path;
-			$full_dest_path = GO::config()->file_storage_path.$destfolder_path.'/'.$folder_name;
+			$full_source_path = $GLOBALS['GO_CONFIG']->file_storage_path.$current_path;
+			$full_dest_path = $GLOBALS['GO_CONFIG']->file_storage_path.$destfolder_path.'/'.$folder_name;
 
 			if(is_dir($full_source_path))
 			{
@@ -147,7 +147,7 @@ class files extends db {
 				}
 			}else
 			{
-				$fs->mkdir_recursive(GO::config()->file_storage_path.$destfolder_path.'/'.$folder_name);
+				$fs->mkdir_recursive($GLOBALS['GO_CONFIG']->file_storage_path.$destfolder_path.'/'.$folder_name);
 			}
 
 			$sourcefolder = $this->get_folder($folder_id);
@@ -160,7 +160,7 @@ class files extends db {
 			$this->update_folder($up_folder);
 		}else
 		{
-			File::mkdir(GO::config()->file_storage_path.$current_path);
+			File::mkdir($GLOBALS['GO_CONFIG']->file_storage_path.$current_path);
 		}
 		return $new_folder_id;
 	}
@@ -199,9 +199,9 @@ class files extends db {
 
 		$line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 
-		$full_path = GO::config()->file_storage_path.$path;
+		$full_path = $GLOBALS['GO_CONFIG']->file_storage_path.$path;
 
-		require(GO::language()->get_language_file('files'));
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('files'));
 		$fs = new filesystem();
 		$fs->mkdir_recursive($full_path);
 
@@ -259,10 +259,10 @@ class files extends db {
 	function notify_users($folder, $modified_by_user_id, $modified=array(), $new=array(), $deleted=array()) {
 		global $GO_LANGUAGE, $GO_CONFIG, $GO_SECURITY;
 
-		require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
-		require(GO::language()->get_language_file('files'));
+		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('files'));
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		$modified_by_user_name = $GO_USERS->get_user_realname($modified_by_user_id);
@@ -288,11 +288,11 @@ class files extends db {
 		$users=array();
 		$this->get_users_to_notify($folder['id']);
 		while($this->next_record()) {
-			if($this->f('user_id')!=GO::security()->user_id) {
+			if($this->f('user_id')!=$GLOBALS['GO_SECURITY']->user_id) {
 				$user = $GO_USERS->get_user($this->f('user_id'));
 
 				$swift = new GoSwift($user['email'], $lang['files']['folder_modified_subject'],0,0,'3',$body);
-				$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
+				$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 				$swift->sendmail();
 			}
 		}
@@ -485,7 +485,7 @@ class files extends db {
 		$status['link_id']=$link_id;
 		$status['status_id']=$status_id;
 		$status['ctime']=time();
-		$status['user_id']=GO::security()->user_id;
+		$status['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 		$status['comments']=$comments;
 
 		$this->insert_row('fs_status_history',$status);
@@ -498,7 +498,7 @@ class files extends db {
 		$share= $this->find_share($folder_id);
 
 		if($share) {
-			$users = GO::security()->get_authorized_users_in_acl($share['acl_id']);
+			$users = $GLOBALS['GO_SECURITY']->get_authorized_users_in_acl($share['acl_id']);
 		}
 
 		return $users;
@@ -522,7 +522,7 @@ class files extends db {
 	function get_versions_dir($file_id) {
 		global $GO_CONFIG;
 
-		$path = GO::config()->file_storage_path.'versioning/'.$file_id;
+		$path = $GLOBALS['GO_CONFIG']->file_storage_path.'versioning/'.$file_id;
 		File::mkdir($path);
 
 		return $path;
@@ -531,11 +531,11 @@ class files extends db {
 
 	function move_version($file, $path) {
 
-		if(!isset(GO::config()->max_file_versions)){
-			GO::config()->max_file_versions=3;
+		if(!isset($GLOBALS['GO_CONFIG']->max_file_versions)){
+			$GLOBALS['GO_CONFIG']->max_file_versions=3;
 		}
 
-		if(empty(GO::config()->max_file_versions) || GO::config()->max_file_versions!=1){
+		if(empty($GLOBALS['GO_CONFIG']->max_file_versions) || $GLOBALS['GO_CONFIG']->max_file_versions!=1){
 			//no db functions apply to this move
 			$fs = new filesystem();
 
@@ -548,8 +548,8 @@ class files extends db {
 
 			global $GO_CONFIG;
 
-			if(!empty(GO::config()->max_file_versions)){
-				$max = GO::config()->max_file_versions-1;
+			if(!empty($GLOBALS['GO_CONFIG']->max_file_versions)){
+				$max = $GLOBALS['GO_CONFIG']->max_file_versions-1;
 
 				$files = $fs->get_files_sorted($versions_dir, 'filemtime', 'ASC');
 				$count=count($files);
@@ -581,7 +581,7 @@ class files extends db {
 
 		if($log){
 			global $GO_CONFIG;
-			require_once(GO::config()->class_path.'base/search.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 			$search = new search();
 
 			$search->log(6,$up_file['id'], 'Moved file '.$sourcefile['name'].' to '.$destfolder['name']);
@@ -621,7 +621,7 @@ class files extends db {
 
 		if($log){
 			global $GO_CONFIG;
-			require_once(GO::config()->class_path.'base/search.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 			$search = new search();
 
 			$search->log(6,$sourcefolder['id'], 'Moved folder '.$sourcefolder['name'].' to '.$destfolder['name']);
@@ -636,7 +636,7 @@ class files extends db {
 		global $GO_CONFIG, $GO_EVENTS;
 
 		$file['id']=$this->nextid('fs_files');
-		$file['user_id']=GO::security()->user_id;
+		$file['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 		$file['extension']=File::get_extension($file['name']);
 		$this->insert_row('fs_files', $file);
 
@@ -644,7 +644,7 @@ class files extends db {
 
 		//$this->add_new_filelink($file);
 
-		GO::events()->fire_event('add_file', $params=array($file));
+		$GLOBALS['GO_EVENTS']->fire_event('add_file', $params=array($file));
 
 		return $file['id'];
 	}
@@ -661,9 +661,9 @@ class files extends db {
 	function import_file($full_path, &$parent_id=false, $comments='') {
 		global $GO_CONFIG;
 		
-		@chmod($full_path, GO::config()->file_create_mode);
-		if(!empty(GO::config()->file_change_group))
-			@chgrp($full_path, GO::config()->file_change_group);
+		@chmod($full_path, $GLOBALS['GO_CONFIG']->file_create_mode);
+		if(!empty($GLOBALS['GO_CONFIG']->file_change_group))
+			@chgrp($full_path, $GLOBALS['GO_CONFIG']->file_change_group);
 
 		if(!$parent_id) {
 			$parent = $this->resolve_path(dirname($this->strip_server_path($full_path)),true);
@@ -700,7 +700,7 @@ class files extends db {
 
 		$folder['name']=utf8_basename($full_path);
 		$folder['visible']='0';
-		$folder['user_id']=GO::security()->user_id;
+		$folder['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 		$folder['parent_id']=$parent_id;
 		$folder['ctime']=filectime($full_path);
 		$folder['mtime']=$recurse_only_one_level ? 1 : filemtime($full_path);
@@ -747,7 +747,7 @@ class files extends db {
 
 		$path = $path ? $path : $this->build_path($folder);
 
-		$filemtime=filemtime(GO::config()->file_storage_path.$path);
+		$filemtime=filemtime($GLOBALS['GO_CONFIG']->file_storage_path.$path);
 		if($folder['mtime']<$filemtime)
 		{
 			go_debug('Timestamp on disk didn\'t match the database so starting sync for: '.$path);
@@ -777,7 +777,7 @@ class files extends db {
 			throw new FileNotFoundException();
 		}
 
-		$full_path = GO::config()->file_storage_path.$this->build_path($folder);
+		$full_path = $GLOBALS['GO_CONFIG']->file_storage_path.$this->build_path($folder);
 		if(!is_dir($full_path))
 		{
 			echo 'Not found: '.$full_path;
@@ -859,7 +859,7 @@ class files extends db {
 
 		$this->cache_file($file['id']);
 
-		GO::events()->fire_event('update_file', $params=array($file));
+		$GLOBALS['GO_EVENTS']->fire_event('update_file', $params=array($file));
 	}
 
 	function get_folder($id) {
@@ -872,7 +872,7 @@ class files extends db {
 		$folder['id']=$this->nextid('fs_folders');
 		if(!isset($folder['user_id'])) {
 			global $GO_SECURITY;
-			$folder['user_id']=GO::security()->user_id;
+			$folder['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 		}
 
 		$this->insert_row('fs_folders', $folder);
@@ -933,7 +933,7 @@ class files extends db {
 
 		global $GO_CONFIG;
 
-		$last_build_time = GO::config()->get_setting('fs_shared_cache', $user_id);
+		$last_build_time = $GLOBALS['GO_CONFIG']->get_setting('fs_shared_cache', $user_id);
 
 		if($last_build_time<(time()-86400)){
 
@@ -972,7 +972,7 @@ class files extends db {
 					$last_path = $path;
 				}
 			}
-			GO::config()->save_setting('fs_shared_cache', time(), $user_id);
+			$GLOBALS['GO_CONFIG']->save_setting('fs_shared_cache', time(), $user_id);
 		}
 
 
@@ -1020,17 +1020,17 @@ class files extends db {
 			$folder = $this->get_folder($folder);
 		}
 		if(!$folder) {
-			return GO::security()->has_admin_permission($user_id);
+			return $GLOBALS['GO_SECURITY']->has_admin_permission($user_id);
 		}
 
 		if(empty($folder['acl_id'])) {
 			if(empty($folder['parent_id'])) {
-				return GO::security()->has_admin_permission($user_id);
+				return $GLOBALS['GO_SECURITY']->has_admin_permission($user_id);
 			}
 			$parent = $this->get_folder($folder['parent_id']);
 			return $this->has_write_permission($user_id, $parent);
 		}else {
-			return GO::security()->has_permission($user_id, $folder['acl_id'])>GO_SECURITY::READ_PERMISSION;
+			return $GLOBALS['GO_SECURITY']->has_permission($user_id, $folder['acl_id'])>GO_SECURITY::READ_PERMISSION;
 		}
 	}
 
@@ -1055,12 +1055,12 @@ class files extends db {
 
 		if(empty($folder['acl_id'])) {
 			if(empty($folder['parent_id'])) {
-				return GO::security()->has_admin_permission($user_id);
+				return $GLOBALS['GO_SECURITY']->has_admin_permission($user_id);
 			}
 			$parent = $this->get_folder($folder['parent_id']);
 			return $this->has_delete_permission($user_id, $parent);
 		}else {
-			$level = GO::security()->has_permission($user_id, $folder['acl_id']);
+			$level = $GLOBALS['GO_SECURITY']->has_permission($user_id, $folder['acl_id']);
 			//var_dump($level);
 			return $level>GO_SECURITY::WRITE_PERMISSION;
 		}
@@ -1073,17 +1073,17 @@ class files extends db {
 			$folder = $this->get_folder($folder);
 		}
 		if(!$folder) {
-			return GO::security()->has_admin_permission($user_id);
+			return $GLOBALS['GO_SECURITY']->has_admin_permission($user_id);
 		}
 		if(empty($folder['acl_id'])) {
 			if(empty($folder['parent_id'])) {
-				return GO::security()->has_admin_permission($user_id);
+				return $GLOBALS['GO_SECURITY']->has_admin_permission($user_id);
 			}
 			$parent = $this->get_folder($folder['parent_id']);
 			return $this->has_read_permission($user_id, $parent);
 		}else {
 
-			return GO::security()->has_permission($user_id, $folder['acl_id']);
+			return $GLOBALS['GO_SECURITY']->has_permission($user_id, $folder['acl_id']);
 		}
 	}
 
@@ -1132,7 +1132,7 @@ class files extends db {
 		while($item = $this->next_record())
 		{
 			$file = array();
-			$file['path'] = GO::config()->file_storage_path.$item['path'];
+			$file['path'] = $GLOBALS['GO_CONFIG']->file_storage_path.$item['path'];
 			$file['name'] = utf8_basename($file['path']);
 			$file['mtime'] = filemtime($file['path']);
 			$file['size'] = filesize($file['path']);
@@ -1160,7 +1160,7 @@ class files extends db {
 
 			//this will rebuild the cached shares folder
 			//disabled this because of slowdown with lots of users
-			//GO::config()->save_setting('fs_shared_cache', 0, $user['id']);
+			//$GLOBALS['GO_CONFIG']->save_setting('fs_shared_cache', 0, $user['id']);
 
 //			$timeout = 60*60*24*30;
 //			$deltime = time() - $timeout;
@@ -1210,7 +1210,7 @@ class files extends db {
 
 	function strip_server_path($path) {
 		global $GO_CONFIG;
-		return substr($path, strlen(GO::config()->file_storage_path));
+		return substr($path, strlen($GLOBALS['GO_CONFIG']->file_storage_path));
 	}
 
 	function get_files($folder_id, $sortfield='name', $sortorder='ASC', $start=0, $offset=0, $extensions=array()) {
@@ -1222,12 +1222,12 @@ class files extends db {
 		}
 		$sql .= "f.*";
 
-		if(GO::modules()->has_module('customfields')) {
+		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
 			$sql .= ",cf_6.*";
 		}
 		$sql .= " FROM fs_files f ";
 
-		if(GO::modules()->has_module('customfields')) {
+		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
 			$sql .= "LEFT JOIN cf_6 ON cf_6.link_id=f.id ";
 		}
 
@@ -1315,7 +1315,7 @@ class files extends db {
 
 		if($authenticate) {
 			$sql .= "LEFT JOIN go_acl a ON a.acl_id=f.acl_id ".
-					"WHERE (a.user_id=".GO::security()->user_id." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids(GO::security()->user_id)).") ";
+					"WHERE (a.user_id=".$GLOBALS['GO_SECURITY']->user_id." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($GLOBALS['GO_SECURITY']->user_id)).") ";
 
 			if($inherit_parent_permission){
 				$sql .= "OR ISNULL(a.acl_id) OR a.acl_id=0";
@@ -1352,25 +1352,25 @@ class files extends db {
 		
 		go_debug("move_by_paths($sourcepath, $destpath)");
 		
-		go_debug(GO::config()->file_storage_path.$sourcepath);
+		go_debug($GLOBALS['GO_CONFIG']->file_storage_path.$sourcepath);
 		
 
 		$destination = dirname($destpath);
 		
-		go_debug(GO::config()->file_storage_path.$destination);
-		if(file_exists(GO::config()->file_storage_path.$sourcepath) && file_exists(GO::config()->file_storage_path.$destination)) {
+		go_debug($GLOBALS['GO_CONFIG']->file_storage_path.$destination);
+		if(file_exists($GLOBALS['GO_CONFIG']->file_storage_path.$sourcepath) && file_exists($GLOBALS['GO_CONFIG']->file_storage_path.$destination)) {
 			
-			go_debug(GO::config()->file_storage_path.$destpath);
+			go_debug($GLOBALS['GO_CONFIG']->file_storage_path.$destpath);
 			
 			$fs = new filesystem();
-			$fs->move(GO::config()->file_storage_path.$sourcepath, GO::config()->file_storage_path.$destpath);
+			$fs->move($GLOBALS['GO_CONFIG']->file_storage_path.$sourcepath, $GLOBALS['GO_CONFIG']->file_storage_path.$destpath);
 
 			$source = $this->resolve_path($sourcepath);
 			$dest = $this->resolve_path($destination);
 
 			$new_filename = utf8_basename($destpath);
 
-			if(is_dir(GO::config()->file_storage_path.$destpath)) {
+			if(is_dir($GLOBALS['GO_CONFIG']->file_storage_path.$destpath)) {
 				$this->move_folder($source, $dest);
 				if($new_filename!=$source['name']) {
 					$up_folder['name']=$new_filename;
@@ -1444,16 +1444,16 @@ class files extends db {
 		$name = trim($name);
 
 		if($user_id==0) {
-			$user_id=GO::security()->user_id;
+			$user_id=$GLOBALS['GO_SECURITY']->user_id;
 		}
 
 		/*if($share_user_id==0) {
-			$share_user_id=GO::security()->user_id;
+			$share_user_id=$GLOBALS['GO_SECURITY']->user_id;
 		}*/
 
 
 		if($parent==0) {
-			/*if(!GO::security()->has_admin_permission($user_id)) {
+			/*if(!$GLOBALS['GO_SECURITY']->has_admin_permission($user_id)) {
 				throw new AccessDeniedException();
 			}*/
 		}else {
@@ -1478,7 +1478,7 @@ class files extends db {
 		}
 
 		$rel_path=$this->build_path($parent);
-		$full_path = GO::config()->file_storage_path.$rel_path;
+		$full_path = $GLOBALS['GO_CONFIG']->file_storage_path.$rel_path;
 
 		if (!$ignore_existing_filesystem_folder && file_exists($full_path.'/'.$name)) {
 			throw new Exception($lang['files']['folderExists']);
@@ -1496,7 +1496,7 @@ class files extends db {
 			$folder['ctime']=filectime($full_path.'/'.$name);
 			$folder['mtime']=filemtime($full_path.'/'.$name);
 			if($share_user_id) {
-				$folder['acl_id']=GO::security()->get_new_acl('files', $share_user_id);
+				$folder['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('files', $share_user_id);
 			}else {
 				$folder['acl_id']=0;
 			}
@@ -1589,11 +1589,11 @@ class files extends db {
 		$sql = "DELETE FROM fs_folders WHERE id=?";
 		$this->query($sql, 'i', $folder['id']);
 
-		$path = GO::config()->file_storage_path.$subpath;
+		$path = $GLOBALS['GO_CONFIG']->file_storage_path.$subpath;
 		$fs = new filesystem();
 
-		if(GO::config()->quota>0){
-			require_once(GO::config()->class_path.'base/quota.class.inc.php');
+		if($GLOBALS['GO_CONFIG']->quota>0){
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/quota.class.inc.php');
 			$quota = new quota();
 			$quota->add(-File::get_directory_size($path));
 		}
@@ -1611,7 +1611,7 @@ class files extends db {
 			}
 		}
 
-		require_once(GO::config()->class_path.'base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 		$search = new search();
 
 		$search->delete_search_result($file['id'], 6);
@@ -1629,17 +1629,17 @@ class files extends db {
 				$fs = new filesystem();
 				$fs->delete($versions_dir);
 
-				if(GO::config()->quota>0){
-					require_once(GO::config()->class_path.'base/quota.class.inc.php');
+				if($GLOBALS['GO_CONFIG']->quota>0){
+					require_once($GLOBALS['GO_CONFIG']->class_path.'base/quota.class.inc.php');
 					$quota = new quota();
 					$quota->add(-File::get_directory_size($versions_dir));
 				}
 			}
 		}
 
-		if(isset(GO::modules()->modules['workflow']))
+		if(isset($GLOBALS['GO_MODULES']->modules['workflow']))
 		{
-			require_once (GO::modules()->modules['workflow']['class_path'].'workflow.class.inc.php');
+			require_once ($GLOBALS['GO_MODULES']->modules['workflow']['class_path'].'workflow.class.inc.php');
 			$workflow = new workflow();
 			$workflow2 = new workflow();
 
@@ -1651,14 +1651,14 @@ class files extends db {
 		}
 
 
-		$path = GO::config()->file_storage_path.$this->build_path($file['folder_id']).'/'.$file['name'];
+		$path = $GLOBALS['GO_CONFIG']->file_storage_path.$this->build_path($file['folder_id']).'/'.$file['name'];
 
-		require_once(GO::config()->class_path.'base/quota.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/quota.class.inc.php');
 		$quota = new quota();
 		$quota->add(-@filesize($path)/1024);
 
 
-		GO::events()->fire_event('delete_file', array($file, $path));
+		$GLOBALS['GO_EVENTS']->fire_event('delete_file', array($file, $path));
 
 		return @unlink($path);
 	}
@@ -1738,7 +1738,7 @@ class files extends db {
 			$fs2->update_row('fs_folders', 'path', $r);
 		}
 
-		if(isset(GO::modules()->modules['customfields'])){
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
 			$db->query("delete from cf_6 where link_id not in (select id from fs_files);");
@@ -1771,7 +1771,7 @@ class files extends db {
 			$modified_earlier_then = time();
 		}
 
-		if($this->has_read_permission(GO::security()->user_id, $path)) {
+		if($this->has_read_permission($GLOBALS['GO_SECURITY']->user_id, $path)) {
 			$folders = $this->get_folders($path);
 			while ($folder = array_shift($folders)) {
 				$this->search($folder['path'], $keyword, $modified_later_then, $modified_earlier_then);
@@ -1817,10 +1817,10 @@ class files extends db {
 
 	function cache_file($file, $is_folder=false) {
 		global $GO_CONFIG, $GO_LANGUAGE;
-		require_once(GO::config()->class_path.'/base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
 		$search = new search();
 
-		require(GO::language()->get_language_file('files'));
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('files'));
 
 		$fs = new files();
 		
@@ -1891,7 +1891,7 @@ class files extends db {
 				"FROM fs_folders ".
 
 		"INNER JOIN go_acl a ON (fs_folders.acl_id = a.acl_id".
-		" AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
+		" AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 
 
 		if(!empty($query))
@@ -2006,17 +2006,17 @@ class files extends db {
 
 	function get_file_cf_category_permissions(&$response) {
 
-		if(isset(GO::modules()->modules['customfields'])){
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$cf = new customfields();
 			$fs = new files();
 			$response['data']['cf_permissions'] = array();
-			$cf->get_authorized_categories(6,GO::security()->user_id);
+			$cf->get_authorized_categories(6,$GLOBALS['GO_SECURITY']->user_id);
 			while ($cat = $cf->next_record()) {
 				$response['data']['cf_permissions']['allowed_from_cf_module'] = true;
 			}
-			$folder_cf_data = $fs->get_folder_limits_array(GO::security()->user_id,$response['data']['folder_id']);
+			$folder_cf_data = $fs->get_folder_limits_array($GLOBALS['GO_SECURITY']->user_id,$response['data']['folder_id']);
 			$response['data']['cf_permissions']['allowed_for_folder'] = $folder_cf_data[$response['data']['folder_id']];			
 		}
 	}

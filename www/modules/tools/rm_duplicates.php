@@ -5,7 +5,7 @@ require('../../Group-Office.php');
 $delete=!empty($_REQUEST['delete']);
 $verbose=true;
 
-GO::security()->html_authenticate('tools');
+$GLOBALS['GO_SECURITY']->html_authenticate('tools');
 
 session_write_close();
 

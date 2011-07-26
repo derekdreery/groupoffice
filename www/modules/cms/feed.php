@@ -3,9 +3,9 @@ header('Content-Type: text/html; charset=UTF-8');
 
 require('../../Group-Office.php');
 
-require_once(GO::modules()->modules['cms']['class_path'].'cms.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'output.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'cms_smarty.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'output.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms_smarty.class.inc.php');
 $cms = new cms();
 
 $co = new cms_output();
@@ -26,7 +26,7 @@ function replace_template($t, $r){
 }
 
 $t['title']=$co->folder['name'];
-$t['link']=GO::modules()->modules['cms']['full_url'].'rss.php?folder_id='.$co->folder['id'];
+$t['link']=$GLOBALS['GO_MODULES']->modules['cms']['full_url'].'rss.php?folder_id='.$co->folder['id'];
 $t['description']='Last messages of group '.$co->folder['name'];
 $t['webmaster']=$t['managingEditor']=$co->site['webmaster'];
 $t['language']=$co->site['language'];
@@ -42,7 +42,7 @@ $header = '<?xml version="1.0" ?>
 <pubDate>'.date('r').'</pubDate>
 <lastBuildDate>'.date('r').'</lastBuildDate>
 <docs>http://www.rssboard.org/rss-specification</docs>
-<generator>'.GO::config()->product_name.' '.GO::config()->version.'</generator>
+<generator>'.$GLOBALS['GO_CONFIG']->product_name.' '.$GLOBALS['GO_CONFIG']->version.'</generator>
 <managingEditor>{managingEditor}</managingEditor>
 <webMaster>{webMaster}</webMaster>
 <ttl>60</ttl>

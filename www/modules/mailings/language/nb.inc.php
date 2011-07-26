@@ -13,7 +13,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('mailings'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('mailings'));
 $lang['mailings']['name'] = 'Maler og adresselister';
 $lang['mailings']['description'] = 'Modul for å behandle alle kontakter.';
 $lang['mailings']['templateAlreadyExists'] = 'Malen du prøver å lage finnes fra før';

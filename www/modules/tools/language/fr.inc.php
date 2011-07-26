@@ -16,7 +16,7 @@
  * Date : September, 27 2010
  */
 
-require(GO::language()->get_fallback_language_file('tools'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('tools'));
 $lang['tools']['name']='Outils d\'administration';
 $lang['tools']['description']='Outils d\'administration. Gérer les tâche système de Group-Office.';
 $lang['tools']['dbcheck']='Vérification de la base de données';

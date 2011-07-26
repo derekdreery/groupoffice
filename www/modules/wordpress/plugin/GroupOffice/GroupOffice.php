@@ -290,7 +290,7 @@ function groupoffice_get_contact_form($post_extra_info=false){
 
 	global $current_user, $GO_CONFIG, $GO_MODULES, $GO_CONFIG;
 
-require_once(GO::config()->class_path.'base/links.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 $GO_LINKS = new GO_LINKS();
 
 	//$GO_CONFIG = get_option('groupoffice_config');
@@ -354,10 +354,10 @@ $GO_LINKS = new GO_LINKS();
 
 				if(!empty($_SESSION['last_contact_post_id'])){
 
-					require_once(GO::config()->class_path.'base/links.class.inc.php');
+					require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 					$GO_LINKS = new GO_LINKS();
 
-					require_once(GO::modules()->modules['wordpress']['class_path'].'wordpress.class.inc.php');
+					require_once($GLOBALS['GO_MODULES']->modules['wordpress']['class_path'].'wordpress.class.inc.php');
 					$wp = new wordpress();
 
 					$post = $wp->get_post_by_wp_id($_SESSION['last_contact_post_id']);
@@ -367,7 +367,7 @@ $GO_LINKS = new GO_LINKS();
 	
 					//add to first fase
 					global $GO_MODULES;
-					require_once (GO::modules()->modules['recruity']['class_path']."fase.class.inc.php");
+					require_once ($GLOBALS['GO_MODULES']->modules['recruity']['class_path']."fase.class.inc.php");
 					$fase = new fase();
 
 					$fase->get_fases('',0,1);
@@ -394,7 +394,7 @@ $GO_LINKS = new GO_LINKS();
 
 				//reactie naar klant
 
-				$dir = GO::config()->file_storage_path.'users/admin/formulieren/';
+				$dir = $GLOBALS['GO_CONFIG']->file_storage_path.'users/admin/formulieren/';
 
 				$path = $dir.'reactie-vacature-'.$category.'.eml';
 				if(!file_exists($path))
@@ -402,7 +402,7 @@ $GO_LINKS = new GO_LINKS();
 
 				if(file_exists($path)){
 					$email = file_get_contents($path);
-					require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+					require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 					$swift = new GoSwiftImport($email);
 					$body=$swift->body;
 
@@ -410,12 +410,12 @@ $GO_LINKS = new GO_LINKS();
 						$body = str_replace('{'.$key.'}', $value, $body);
 					}
 
-					require_once(GO::modules()->modules['addressbook']['path'].'classes/addressbook.class.inc.php');
+					require_once($GLOBALS['GO_MODULES']->modules['addressbook']['path'].'classes/addressbook.class.inc.php');
 					$ab = new addressbook();
 					$contact=$ab->get_contact($r['contact_id']);
 
-					if(isset(GO::modules()->modules['mailings'])){
-						require_once(GO::modules()->modules['mailings']['path'].'classes/templates.class.inc.php');
+					if(isset($GLOBALS['GO_MODULES']->modules['mailings'])){
+						require_once($GLOBALS['GO_MODULES']->modules['mailings']['path'].'classes/templates.class.inc.php');
 						$tp = new templates();
 
 						$body=$tp->replace_contact_data_fields($body, $contact, false);

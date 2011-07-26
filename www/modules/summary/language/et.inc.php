@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('summary'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('summary'));
 
 $lang['summary']['name']='Esileht';
 $lang['summary']['description']='Näita erinevate kirjete ülevaateid';

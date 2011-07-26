@@ -25,15 +25,15 @@ chdir(dirname(__FILE__));
 require_once("../../Group-Office.php");
 
 $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
-//GO::security()->html_authenticate('tools');
+//$GLOBALS['GO_SECURITY']->html_authenticate('tools');
 
 ini_set('max_execution_time', 360);
 
-require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 $fs = new files();
 
 echo "Crawling all user files and store them in the database".$line_break.$line_break;
-$fs->crawl(GO::config()->file_storage_path.'users');
+$fs->crawl($GLOBALS['GO_CONFIG']->file_storage_path.'users');
 
 echo $line_break.$line_break.'Done!'.$line_break;
 ?>

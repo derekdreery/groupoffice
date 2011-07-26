@@ -581,7 +581,7 @@ class String {
 		}
 		if ($object['country'] != '') {
 			global $lang;
-			require_once(GO::language()->get_base_language_file('countries'));
+			require_once($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
 
 			$address .= $countries[$object['country']].$linebreak;
 		}
@@ -741,7 +741,7 @@ class String {
 		// start.
 		$enriched = preg_replace('/^ (.*) $/s', '\1', $enriched);
 
-		$module = GO::modules()->modules['email'];
+		$module = $GLOBALS['GO_MODULES']->modules['email'];
 
 		if($convert_links)
 		{
@@ -795,7 +795,7 @@ class String {
 
 	function html_to_text($text, $link_list=true){
 		global $GO_CONFIG;
-		require_once(GO::config()->class_path.'html2text.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'html2text.class.inc');
 
 		$htmlToText = new Html2Text ($text);
 		return $htmlToText->get_text($link_list);
@@ -930,12 +930,12 @@ class String {
 		$regexp="/<a[^>]*href=([\"']?)(http|https|ftp|bf2)(:\/\/)(.+?)>/i";
 		$html = preg_replace($regexp, "<a target=$1_blank$1 class=$1blue$1 href=$1$2$3$4>", $html);
 
-		//$regexp="/<a.+?href=([\"']?)".str_replace('/','\\/', GO::config()->full_url)."(.+?)>/i";
-		//$html = preg_replace($regexp, "<a target=$1main$1 class=$1blue$1 href=$1".GO::config()->host."$2$3>", $html);
+		//$regexp="/<a.+?href=([\"']?)".str_replace('/','\\/', $GLOBALS['GO_CONFIG']->full_url)."(.+?)>/i";
+		//$html = preg_replace($regexp, "<a target=$1main$1 class=$1blue$1 href=$1".$GLOBALS['GO_CONFIG']->host."$2$3>", $html);
 
-		$html =str_replace(GO::config()->full_url, GO::config()->host, $html);
+		$html =str_replace($GLOBALS['GO_CONFIG']->full_url, $GLOBALS['GO_CONFIG']->host, $html);
 
-		if (GO::modules()->modules['email'] && GO::modules()->modules['email']['read_permission']) {
+		if ($GLOBALS['GO_MODULES']->modules['email'] && $GLOBALS['GO_MODULES']->modules['email']['read_permission']) {
 			$html = preg_replace("/(href=([\"']?)mailto:)([\w\.\-]+)(@)([\w\.\-\"]+)\b/i",
 			"href=\"javascript:this.showComposer({values: {to : '$3$4$5'}});", $html);
 		}
@@ -1083,7 +1083,7 @@ class String {
 		if($password_length==0)
 		{
 			global $GO_CONFIG;
-			$password_length=GO::config()->default_password_length;
+			$password_length=$GLOBALS['GO_CONFIG']->default_password_length;
 		}
 
 		// Generate array of allowable characters.

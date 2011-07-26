@@ -13,11 +13,11 @@
  */
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate();
+$GLOBALS['GO_SECURITY']->json_authenticate();
 
 $task = isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 switch($task)
@@ -26,9 +26,9 @@ switch($task)
 
 		if(isset($_POST['delete_keys']))
 		{
-			require(GO::language()->get_language_file('users'));
+			require($GLOBALS['GO_LANGUAGE']->get_language_file('users'));
 			try{
-				if(!GO::modules()->modules['users']['read_permission'])
+				if(!$GLOBALS['GO_MODULES']->modules['users']['read_permission'])
 				{
 					throw new AccessDeniedException();
 				}
@@ -41,7 +41,7 @@ switch($task)
 					if ($delete_user_id == 1)
 					{
 						throw new Exception($lang['users']['deletePrimaryAdmin']);
-					} elseif($delete_user_id == GO::security()->user_id) {
+					} elseif($delete_user_id == $GLOBALS['GO_SECURITY']->user_id) {
 						throw new Exception($lang['users']['deleteYourself']);
 					} else {
 						$GO_USERS->delete_user($delete_user_id);
@@ -62,7 +62,7 @@ switch($task)
 		$search_field = isset($_REQUEST['search_field']) ? ($_REQUEST['search_field']) : null;
 		//$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : null;
 
-		$user_id = (!GO::modules()->modules['users']['read_permission']) ? GO::security()->user_id : 0;
+		$user_id = (!$GLOBALS['GO_MODULES']->modules['users']['read_permission']) ? $GLOBALS['GO_SECURITY']->user_id : 0;
 
 		$response['results']=array();
 		$response['total']=0;
@@ -70,8 +70,8 @@ switch($task)
 			
 		$response['total'] = $GO_USERS->search($query, $search_field, $user_id, $start, $limit, $sort,$dir);
 
-		if(GO::modules()->has_module('customfields')) {
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$cf = new customfields();
 		}
 
@@ -96,11 +96,11 @@ switch($task)
 		break;
 	case 'start_module':
 		$records=array();
-		foreach(GO::modules()->modules as $module)
+		foreach($GLOBALS['GO_MODULES']->modules as $module)
 		{
 			if($module['admin_menu']=='0' &&
-					(($module['read_permission'] && (empty($_POST['user_id']) || $_POST['user_id']==GO::security()->user_id)) ||
-						(!empty($_POST['user_id']) && GO::security()->has_permission($_POST['user_id'], $module['acl_id']))
+					(($module['read_permission'] && (empty($_POST['user_id']) || $_POST['user_id']==$GLOBALS['GO_SECURITY']->user_id)) ||
+						(!empty($_POST['user_id']) && $GLOBALS['GO_SECURITY']->has_permission($_POST['user_id'], $module['acl_id']))
 					)
 				)
 			{
@@ -118,11 +118,11 @@ switch($task)
 
 	case 'themes':
 
-		require_once(GO::config()->class_path.'base/theme.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/theme.class.inc.php');
 		$GO_THEME = new GO_THEME();
 
 
-		$themes = GO::theme()->get_themes();
+		$themes = $GLOBALS['GO_THEME']->get_themes();
 		foreach($themes as $theme)
 		{
 			$record = array(

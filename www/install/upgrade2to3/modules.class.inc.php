@@ -146,7 +146,7 @@ class UPGRADE_GO_MODULES extends db {
 		if(!$this->allowed_modules)
 		{
 			global $GO_CONFIG;
-			$this->allowed_modules=empty(GO::config()->allowed_modules) ? array() : explode(',', GO::config()->allowed_modules);
+			$this->allowed_modules=empty($GLOBALS['GO_CONFIG']->allowed_modules) ? array() : explode(',', $GLOBALS['GO_CONFIG']->allowed_modules);
 		}
 		return !count($this->allowed_modules) || in_array($module, $this->allowed_modules);
 	}
@@ -206,13 +206,13 @@ class UPGRADE_GO_MODULES extends db {
 			if($this->module_is_allowed($modules_props[$i]['id']))
 			{
 				$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']] = $modules_props[$i];
-				if (isset($GO_SECURITY) &&  GO::security()->logged_in() ) {
+				if (isset($GO_SECURITY) &&  $GLOBALS['GO_SECURITY']->logged_in() ) {
 					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] =
-					GO::security()->has_permission(
+					$GLOBALS['GO_SECURITY']->has_permission(
 					$_SESSION['GO_SESSION']['user_id'], $modules_props[$i]['acl_write']);
 					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['read_permission'] =
 					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] ? true :
-					GO::security()->has_permission(
+					$GLOBALS['GO_SECURITY']->has_permission(
 					$_SESSION['GO_SESSION']['user_id'], $modules_props[$i]['acl_read']);
 
 
@@ -222,7 +222,7 @@ class UPGRADE_GO_MODULES extends db {
 					$_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['write_permission'] = $_SESSION['GO_SESSION']['modules'][$modules_props[$i]['id']]['read_permission'] = false;
 				}
 
-				$language_file = GO::language()->get_language_file($modules_props[$i]['id']);
+				$language_file = $GLOBALS['GO_LANGUAGE']->get_language_file($modules_props[$i]['id']);
 				if(file_exists($language_file))
 				{
 					require($language_file);
@@ -255,13 +255,13 @@ class UPGRADE_GO_MODULES extends db {
 		if ( isset( $this->modules[$module_id] ) ) {
 			$module = $this->modules[$module_id];
 			$_SESSION['GO_SESSION']['active_module'] = $module_id;
-			$this->path = GO::config()->root_path.'modules/'.$module_id.'/';
+			$this->path = $GLOBALS['GO_CONFIG']->root_path.'modules/'.$module_id.'/';
 			$this->class_path = $this->path.'classes/';
 			$this->read_permission = $module['read_permission'];
 			$this->write_permission = $module['write_permission'];
 			$this->id = $module_id;
-			$this->full_url = GO::config()->full_url.'modules/'.$module_id.'/';
-			$this->url = GO::config()->host.'modules/'.$module_id.'/';
+			$this->full_url = $GLOBALS['GO_CONFIG']->full_url.'modules/'.$module_id.'/';
+			$this->url = $GLOBALS['GO_CONFIG']->host.'modules/'.$module_id.'/';
 
 			if ( $this->read_permission || $this->write_permission ) {
 				if ( $admin ) {
@@ -272,7 +272,7 @@ class UPGRADE_GO_MODULES extends db {
 					return true;
 				}
 			}
-			header( 'Location: '.GO::config()->host.'error_docs/403.php' );
+			header( 'Location: '.$GLOBALS['GO_CONFIG']->host.'error_docs/403.php' );
 			exit();
 		} else {
 			exit( 'Invalid module specified' );
@@ -298,11 +298,11 @@ class UPGRADE_GO_MODULES extends db {
 		$this->query($sql);
 		if ( $this->next_record(DB_ASSOC) ) {
 			$this->record['full_url'] =
-			GO::config()->full_url.'modules/'.$module_id.'/';
+			$GLOBALS['GO_CONFIG']->full_url.'modules/'.$module_id.'/';
 			$this->record['url'] =
-			GO::config()->host.'modules/'.$module_id.'/';
+			$GLOBALS['GO_CONFIG']->host.'modules/'.$module_id.'/';
 			$this->record['path'] =
-			GO::config()->root_path.'modules/'.$module_id.'/';
+			$GLOBALS['GO_CONFIG']->root_path.'modules/'.$module_id.'/';
 			$this->record['class_path'] =
 			$this->record['path'].'classes/';
 			return $this->record;
@@ -329,18 +329,18 @@ class UPGRADE_GO_MODULES extends db {
 	function add_module($module_id) {
 		global $GO_CONFIG, $GO_SECURITY;
 
-		if(!is_dir(GO::config()->root_path.'modules/'.$module_id))
+		if(!is_dir($GLOBALS['GO_CONFIG']->root_path.'modules/'.$module_id))
 		{
 			return false;
 		}
 
 		$module['id']=$module_id;
 		$module['sort_order'] = count($this->modules)+1;
-		$module['acl_read']=GO::security()->get_new_acl();
-		$module['acl_write']=GO::security()->get_new_acl();
+		$module['acl_read']=$GLOBALS['GO_SECURITY']->get_new_acl();
+		$module['acl_write']=$GLOBALS['GO_SECURITY']->get_new_acl();
 
 		$module['version']=0;
-		$updates_file = GO::config()->root_path.'modules/'.$module_id.'/install/updates.inc.php';
+		$updates_file = $GLOBALS['GO_CONFIG']->root_path.'modules/'.$module_id.'/install/updates.inc.php';
 		if(file_exists($updates_file))
 		{
 			require($updates_file);
@@ -350,7 +350,7 @@ class UPGRADE_GO_MODULES extends db {
 		$this->insert_row('go_modules', $module);
 
 
-		$install_sql_file = GO::config()->root_path.'modules/'.$module_id.'/install/install.sql';
+		$install_sql_file = $GLOBALS['GO_CONFIG']->root_path.'modules/'.$module_id.'/install/install.sql';
 
 		if ( file_exists( $install_sql_file ) ) {
 			if ( $queries = String::get_sql_queries($install_sql_file)) {
@@ -360,7 +360,7 @@ class UPGRADE_GO_MODULES extends db {
 			}
 		}
 
-		$install_script = GO::config()->root_path.'modules/'.$module_id.'/install/install.inc.php';
+		$install_script = $GLOBALS['GO_CONFIG']->root_path.'modules/'.$module_id.'/install/install.inc.php';
 		if(file_exists($install_script))
 		{
 			require($install_script);
@@ -405,17 +405,17 @@ class UPGRADE_GO_MODULES extends db {
 		global $GO_SECURITY, $GO_CONFIG;
 		if ( $module = $this->get_module($module_id)) {
 
-			$uninstall_script = GO::config()->root_path.'modules/'.$module_id.'/install/uninstall.inc.php';
+			$uninstall_script = $GLOBALS['GO_CONFIG']->root_path.'modules/'.$module_id.'/install/uninstall.inc.php';
 			if(file_exists($uninstall_script))
 			{
 				require($uninstall_script);
 			}
 
-			GO::security()->delete_acl($module['acl_read']);
-			GO::security()->delete_acl($module['acl_write']);
+			$GLOBALS['GO_SECURITY']->delete_acl($module['acl_read']);
+			$GLOBALS['GO_SECURITY']->delete_acl($module['acl_write']);
 			$sql = "DELETE FROM go_modules WHERE id='".$module_id."'";
 			if ( $this->query( $sql ) ) {
-				$uninstall_sql_file = GO::config()->root_path.'modules/'.$module_id.'/install/uninstall.sql';
+				$uninstall_sql_file = $GLOBALS['GO_CONFIG']->root_path.'modules/'.$module_id.'/install/uninstall.sql';
 
 				if (file_exists($uninstall_sql_file)) {
 					if ( $queries = String::get_sql_queries( $uninstall_sql_file ) ) {
@@ -470,15 +470,15 @@ class UPGRADE_GO_MODULES extends db {
 		$this->get_modules($admin_menu);
 		while ( $this->next_record(DB_ASSOC) ) {
 
-			$this->record['path'] = GO::config()->root_path.'modules/'.$this->f('id').'/';
-			$this->record['full_url'] =	GO::config()->full_url.'modules/'.$this->f('id').'/';
-			$this->record['url'] = GO::config()->host.'modules/'.$this->f('id').'/';
+			$this->record['path'] = $GLOBALS['GO_CONFIG']->root_path.'modules/'.$this->f('id').'/';
+			$this->record['full_url'] =	$GLOBALS['GO_CONFIG']->full_url.'modules/'.$this->f('id').'/';
+			$this->record['url'] = $GLOBALS['GO_CONFIG']->host.'modules/'.$this->f('id').'/';
 			$this->record['legacy']=false;
 			if(!file_exists($this->record['path']))
 			{
-				$this->record['path'] = GO::config()->root_path.'legacy/modules/'.$this->f('id').'/';
-				$this->record['full_url'] =	GO::config()->full_url.'legacy/modules/'.$this->f('id').'/';
-				$this->record['url'] = GO::config()->host.'legacy/modules/'.$this->f('id').'/';
+				$this->record['path'] = $GLOBALS['GO_CONFIG']->root_path.'legacy/modules/'.$this->f('id').'/';
+				$this->record['full_url'] =	$GLOBALS['GO_CONFIG']->full_url.'legacy/modules/'.$this->f('id').'/';
+				$this->record['url'] = $GLOBALS['GO_CONFIG']->host.'legacy/modules/'.$this->f('id').'/';
 				$this->record['legacy']=true;
 			}
 			if(file_exists($this->record['path']))

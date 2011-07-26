@@ -12,9 +12,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('comments');
-require_once (GO::modules()->modules['comments']['class_path']."comments.class.inc.php");
-//require_once (GO::language()->get_language_file('comments'));
+$GLOBALS['GO_SECURITY']->json_authenticate('comments');
+require_once ($GLOBALS['GO_MODULES']->modules['comments']['class_path']."comments.class.inc.php");
+//require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('comments'));
 $comments = new comments();
 try{
 	switch($_REQUEST['task'])
@@ -30,7 +30,7 @@ try{
 			{
 				$comment['link_id']=$_POST['link_id'];
 				$comment['link_type']=$_POST['link_type'];			
-				$comment['user_id']=GO::security()->user_id;
+				$comment['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 				
 				$comment_id= $comments->add_comment($comment);
 				

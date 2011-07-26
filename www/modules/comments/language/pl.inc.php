@@ -3,7 +3,7 @@
 //Author: Grzegorz Szajuk    grzegorz.szajuk@gmail.com
 //Date: March, 30 2010/
 
-require(GO::language()->get_fallback_language_file('comments'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('comments'));
 
 $lang['comments']['name']='Komentarze';
 $lang['comments']['description']='Dodaje funkcjonalność komentowania do innych modułów';

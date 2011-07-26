@@ -21,7 +21,7 @@ class systemusers extends db {
 		}
 
 		if(!strpos($user['username'],'@')){
-			exec(GO::config()->cmd_sudo.' '.GO::modules()->modules['systemusers']['path'].'sudo.php '.GO::config()->get_config_file().' add_user '.$user['username'].' '.$user['password'], $output, $status);
+			exec($GLOBALS['GO_CONFIG']->cmd_sudo.' '.$GLOBALS['GO_MODULES']->modules['systemusers']['path'].'sudo.php '.$GLOBALS['GO_CONFIG']->get_config_file().' add_user '.$user['username'].' '.$user['password'], $output, $status);
 			if($status)
 			{
 				throw new Exception("Adding a system user failed. Did you configure sudo for the systemusers module?".implode("\n",$output));
@@ -35,7 +35,7 @@ class systemusers extends db {
 
 		if(isset($user['password']) && $user['id'])
 		{
-			exec(GO::config()->cmd_sudo.' '.GO::modules()->modules['systemusers']['path'].'sudo.php '.GO::config()->get_config_file().' update_user '.$user['id'].' '.$user['password'], $output, $status);
+			exec($GLOBALS['GO_CONFIG']->cmd_sudo.' '.$GLOBALS['GO_MODULES']->modules['systemusers']['path'].'sudo.php '.$GLOBALS['GO_CONFIG']->get_config_file().' update_user '.$user['id'].' '.$user['password'], $output, $status);
 			if($status)
 			{
 				throw new Exception("Updating the system user failed. Did you configure sudo for the systemusers module?".$output[0]);
@@ -47,7 +47,7 @@ class systemusers extends db {
 	{
 		global $GO_CONFIG, $GO_MODULES;
 		
-		exec(GO::config()->cmd_sudo.' '.GO::modules()->modules['systemusers']['path'].'sudo.php '.GO::config()->get_config_file().' delete_user '.$user['username'], $output, $status);
+		exec($GLOBALS['GO_CONFIG']->cmd_sudo.' '.$GLOBALS['GO_MODULES']->modules['systemusers']['path'].'sudo.php '.$GLOBALS['GO_CONFIG']->get_config_file().' delete_user '.$user['username'], $output, $status);
 		if($status)
 		{
 			throw new Exception(str_replace('<br />',"\n", $output[0]));

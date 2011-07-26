@@ -17,7 +17,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('ab2users'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('ab2users'));
 $lang['ab2users']['name']='Addressbook2Users';
 $lang['ab2users']['description']='Ajoute un bouton permettant de créer rapidement un utilisateur depuis un contact ou une société';
 ?>

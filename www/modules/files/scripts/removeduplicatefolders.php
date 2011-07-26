@@ -16,7 +16,7 @@ require('../../../Group-Office.php');
 
 $line_break = php_sapi_name()=='cli' ? "\n" : '<br />';
 
-if(php_sapi_name()!='cli' && !GO::security()->has_admin_permission(GO::security()->user_id))
+if(php_sapi_name()!='cli' && !$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id))
 {
 	die('You must be admin or on the command line');
 }

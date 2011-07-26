@@ -125,13 +125,13 @@ require('../../Group-Office.php');
 
 
 
-				require_once(GO::config()->class_path.'smarty/Smarty.class.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'smarty/Smarty.class.php');
 				$smarty = new Smarty();
 
-				require_once(GO::modules()->modules['cms']['path'].'smarty_plugins/function.html_input.php');
-				require_once(GO::config()->class_path.'smarty/plugins/function.html_options.php');
+				require_once($GLOBALS['GO_MODULES']->modules['cms']['path'].'smarty_plugins/function.html_input.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'smarty/plugins/function.html_options.php');
 
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 
 				$fields = $cf->get_authorized_fields(1,5);
@@ -145,7 +145,7 @@ require('../../Group-Office.php');
 
 					echo '<tr><td class="label">'.$fields[$i]['name'].':</td><td>';
 
-					require_once(GO::modules()->modules['recruity']['class_path'].'recruity.class.inc.php');
+					require_once($GLOBALS['GO_MODULES']->modules['recruity']['class_path'].'recruity.class.inc.php');
 							$r = new recruity();
 
 					switch($fields[$i]['datatype']) {

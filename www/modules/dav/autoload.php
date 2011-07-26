@@ -22,9 +22,9 @@ function GO_Sabre_autoload($className) {
 		$className = String::replace_once('_', '/', $className);
 
 		if(strpos($className, 'CalDAV')!==false)
-			include GO::modules()->modules['caldav']['path'].str_replace('CalDAV/','', $className).'.class.inc.php';
+			include $GLOBALS['GO_MODULES']->modules['caldav']['path'].str_replace('CalDAV/','', $className).'.class.inc.php';
 		else
-			include GO::modules()->modules['dav']['path'] . $className . '.class.inc.php';
+			include $GLOBALS['GO_MODULES']->modules['dav']['path'] . $className . '.class.inc.php';
 
     }
 }

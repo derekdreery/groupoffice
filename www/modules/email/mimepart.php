@@ -16,15 +16,15 @@
 //load Group-Office
 require_once("../../Group-Office.php");
 
-require_once(GO::config()->class_path."mail/mimeDecode.class.inc");
+require_once($GLOBALS['GO_CONFIG']->class_path."mail/mimeDecode.class.inc");
 
 //authenticate the user
-GO::security()->authenticate();
+$GLOBALS['GO_SECURITY']->authenticate();
 
 
 $uid = (isset($_REQUEST['uid'])) ? $_REQUEST['uid'] : 0;
 $imap_id = (isset($_REQUEST['imap_id'])) ? $_REQUEST['imap_id'] : 0;
-$tmp_dir = GO::config()->tmpdir.'attachments/';
+$tmp_dir = $GLOBALS['GO_CONFIG']->tmpdir.'attachments/';
 
 if(isset($_SESSION['GO_SESSION']['tmp_attachments']))
 {
@@ -36,7 +36,7 @@ if(isset($_SESSION['GO_SESSION']['tmp_attachments']))
 }
 
 if(isset($_REQUEST['path'])) {
-	$path = GO::config()->file_storage_path.$_REQUEST['path'];
+	$path = $GLOBALS['GO_CONFIG']->file_storage_path.$_REQUEST['path'];
 
 	if(File::path_leads_to_parent($path) || !file_exists($path)){
 		die('Invalid request');
@@ -49,8 +49,8 @@ if(isset($tmp_name))
 	$params['input'] = file_get_contents($tmp_name);
 }else{	
 
-	require_once(GO::modules()->modules['email']['class_path']."cached_imap.class.inc.php");
-	require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
+	require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."cached_imap.class.inc.php");
+	require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
 	$imap = new cached_imap();
 	$email = new email();
 
@@ -65,7 +65,7 @@ if(isset($tmp_name))
 		{
 			if(!file_exists($tmp_dir))
 			{
-				require_once(GO::config()->class_path.'filesystem.class.inc');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 				filesystem::mkdir_recursive($tmp_dir);
 			}
 

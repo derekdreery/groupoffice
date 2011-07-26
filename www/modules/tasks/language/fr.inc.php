@@ -25,7 +25,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('tasks'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('tasks'));
 $lang['tasks']['name']='Tâches';
 $lang['tasks']['description']='Module de gestion des tâches';
 $lang['link_type'][12]=$lang['tasks']['task']='Tâche';

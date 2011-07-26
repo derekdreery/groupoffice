@@ -27,7 +27,7 @@ class addressbook extends db {
 	public static function load_global_settings(&$response)
 	{
 		global $GO_CONFIG;
-		$response['data']['addressbook_name_template']=GO::config()->get_setting('addressbook_name_template');
+		$response['data']['addressbook_name_template']=$GLOBALS['GO_CONFIG']->get_setting('addressbook_name_template');
 
 		if(!$response['data']['addressbook_name_template'])
 			$response['data']['addressbook_name_template']='{first_name} {middle_name} {last_name}';
@@ -36,7 +36,7 @@ class addressbook extends db {
 	public static function save_global_settings(&$response)
 	{
 		global $GO_CONFIG;
-		GO::config()->save_setting('addressbook_name_template', $_POST['addressbook_name_template']);
+		$GLOBALS['GO_CONFIG']->save_setting('addressbook_name_template', $_POST['addressbook_name_template']);
 
 		if(isset($_POST['change_all_addressbook_names']))
 		{
@@ -63,11 +63,11 @@ class addressbook extends db {
 
 		echo 'Addressbook folders'.$line_break;
 
-		if(isset(GO::modules()->modules['files'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
 			$ab = new addressbook();
 			$db = new db();
 
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$sql = "SELECT * FROM ab_addressbooks";
@@ -83,7 +83,7 @@ class addressbook extends db {
 			}
 			flush();
 
-			$acl_id=GO::security()->get_global_read_only_acl();
+			$acl_id=$GLOBALS['GO_SECURITY']->get_global_read_only_acl();
 
 			$files->check_share('contacts', 1,$acl_id, false);
 			$files->check_share('companies', 1, $acl_id, false);
@@ -128,7 +128,7 @@ class addressbook extends db {
 
 		}
 
-		if(isset(GO::modules()->modules['customfields'])){
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
 			$db->query("delete from cf_2 where link_id not in (select id from ab_contacts);");
@@ -141,7 +141,7 @@ class addressbook extends db {
 
 	function init_customfields_types(){
 		global $GO_MODULES, $customfield_types;
-		require_once(GO::modules()->modules['addressbook']['class_path'].'contact_customfield_type.class.inc.php');
+		require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'contact_customfield_type.class.inc.php');
 		$customfield_types['contact']=new contact_customfield_type(array());
 	}
 
@@ -188,20 +188,20 @@ class addressbook extends db {
 	public function save_contact_photo($tmp_file, $contact_id){
 		global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $lang;
 
-		$destination = GO::config()->file_storage_path.'contacts/contact_photos/'.$contact_id.'.jpg';
+		$destination = $GLOBALS['GO_CONFIG']->file_storage_path.'contacts/contact_photos/'.$contact_id.'.jpg';
 
 		File::mkdir(dirname($destination));
 
 		$img = new Image();
 		if(!$img->load($tmp_file)){
-			GO::language()->require_language_file('addressbook');
+			$GLOBALS['GO_LANGUAGE']->require_language_file('addressbook');
 			throw new Exception($lang['addressbook']['imageNotSupported']);
 		}
 
 		$img->zoomcrop(90,120);
 		$img->save($destination, IMAGETYPE_JPEG);
 
-		return GO::modules()->modules['addressbook']['url'].'photo.php?contact_id='.$contact_id;
+		return $GLOBALS['GO_MODULES']->modules['addressbook']['url'].'photo.php?contact_id='.$contact_id;
 	}
 
 	public static function add_user($user) {
@@ -212,7 +212,7 @@ class addressbook extends db {
 	function create_default_addressbook($user) {
 		global $GO_CONFIG;
 		
-		$tpl = GO::config()->get_setting('task_name_template');
+		$tpl = $GLOBALS['GO_CONFIG']->get_setting('task_name_template');
 
 		if(!$tpl)
 			$tpl = '{first_name} {middle_name} {last_name}';
@@ -236,20 +236,20 @@ class addressbook extends db {
 			global $GO_SECURITY;
 
 			if($user_addressbook) {
-				$sql = "SELECT * FROM ab_addressbooks WHERE user_id=".GO::security()->user_id." ORDER BY id ASC";
+				$sql = "SELECT * FROM ab_addressbooks WHERE user_id=".$GLOBALS['GO_SECURITY']->user_id." ORDER BY id ASC";
 				$this->query($sql);
 			}else {
-				$this->get_writable_addressbooks(GO::security()->user_id);
+				$this->get_writable_addressbooks($GLOBALS['GO_SECURITY']->user_id);
 			}
 
 			if($this->next_record()) {
 				$addressbook_id = $this->f('id');
 			}else {
 				global $GO_CONFIG;
-				require_once(GO::config()->class_path.'base/users.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 				$GO_USERS = new GO_USERS();
 
-				$user = $GO_USERS->get_user(GO::security()->user_id);
+				$user = $GO_USERS->get_user($GLOBALS['GO_SECURITY']->user_id);
 				$addressbook = $this->create_default_addressbook($user);
 				$addressbook_id=$addressbook['id'];
 			}
@@ -268,7 +268,7 @@ class addressbook extends db {
 				"FROM ab_addressbooks ".
 
 		"INNER JOIN go_acl a ON (ab_addressbooks.acl_id = a.acl_id".
-		" AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
+		" AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 
 
 		if(!empty($query))
@@ -288,7 +288,7 @@ class addressbook extends db {
 		global $GO_SECURITY;
 
 		if ($user_id == 0) {
-			$user_id = GO::security()->user_id;
+			$user_id = $GLOBALS['GO_SECURITY']->user_id;
 		}
 		$sql = "SELECT ab_contacts.*,".
 				"ab_companies.name AS company FROM ab_contacts ".
@@ -352,7 +352,7 @@ class addressbook extends db {
 
 		"INNER JOIN go_acl a ON (ab_addressbooks.acl_id = a.acl_id";
 		$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
-		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
+		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 
 		if(!empty($query)){
 			$sql .= "WHERE ab_addressbooks.name LIKE '".$this->escape($query)."'";
@@ -370,7 +370,7 @@ class addressbook extends db {
 
 		if (!isset($company['user_id']) || $company['user_id'] == 0) {
 			global $GO_SECURITY;
-			$company['user_id'] = GO::security()->user_id;
+			$company['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
 		}
 
 		if (!isset($company['ctime']) || $company['ctime'] == 0) {
@@ -394,13 +394,13 @@ class addressbook extends db {
 		}
 
 		global $GO_MODULES;
-		if(!isset($company['files_folder_id']) && isset(GO::modules()->modules['files'])) {
+		if(!isset($company['files_folder_id']) && isset($GLOBALS['GO_MODULES']->modules['files'])) {
 			global $GO_CONFIG;
 
 			if(!$addressbook) {
 				$addressbook = $this->get_addressbook($company['addressbook_id']);
 			}
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$new_path = $this->build_company_files_path($company, $addressbook);
@@ -428,11 +428,11 @@ class addressbook extends db {
 
 		global $GO_MODULES;
 
-		if(isset(GO::modules()->modules['files']) && isset($company['addressbook_id'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['files']) && isset($company['addressbook_id'])) {
 			if(!$addressbook) {
 				$addressbook = $this->get_addressbook($company['addressbook_id']);
 			}
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 
@@ -562,9 +562,9 @@ class addressbook extends db {
 	function delete_company($company_id, $company=false) {
 		global $GO_CONFIG, $GO_MODULES;
 
-		if(isset(GO::modules()->modules['files'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
 			$company=$company ? $company : $this->get_company($company_id);
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			try {
 				$files->delete_folder($company['files_folder_id']);
@@ -574,7 +574,7 @@ class addressbook extends db {
 		$sql = "UPDATE ab_contacts SET company_id=0 WHERE company_id=$company_id";
 		$this->query($sql);
 
-		require_once(GO::config()->class_path.'base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 		$search = new search();
 		$search->delete_search_result($company_id, 3);
 
@@ -590,7 +590,7 @@ class addressbook extends db {
 
 		if (!isset($contact['user_id']) || $contact['user_id'] == 0) {
 			global $GO_SECURITY;
-			$contact['user_id'] = GO::security()->user_id;
+			$contact['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
 		}
 
 		if (!isset($contact['ctime']) || $contact['ctime'] == 0) {
@@ -618,13 +618,13 @@ class addressbook extends db {
 		if(!isset($contact['email_allowed']))
 			$contact['email_allowed']='1';
 
-		if(!isset($contact['files_folder_id']) && isset(GO::modules()->modules['files'])) {
+		if(!isset($contact['files_folder_id']) && isset($GLOBALS['GO_MODULES']->modules['files'])) {
 			global $GO_CONFIG;
 
 			if(!$addressbook) {
 				$addressbook = $this->get_addressbook($contact['addressbook_id']);
 			}
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$new_path = $this->build_contact_files_path($contact, $addressbook);
@@ -692,11 +692,11 @@ class addressbook extends db {
 
 
 		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files']) && isset($contact['addressbook_id'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['files']) && isset($contact['addressbook_id'])) {
 			if(!$addressbook) {
 				$addressbook = $this->get_addressbook($contact['addressbook_id']);
 			}
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			if(!isset($contact['last_name']))
@@ -753,8 +753,8 @@ class addressbook extends db {
 
 		if(!$contact) $contact = $this->get_contact($contact_id);
 
-		if(isset(GO::modules()->modules['files'])) {
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			try {
 				$files->delete_folder($contact['files_folder_id']);
@@ -762,12 +762,12 @@ class addressbook extends db {
 			catch(Exception $e ){}
 		}
 
-		if(isset(GO::modules()->modules['mailings'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['mailings'])) {
 			$sql1 = "DELETE FROM ml_mailing_contacts WHERE contact_id='".$this->escape($contact_id)."'";
 			$this->query($sql1);
 		}
 
-		require_once(GO::config()->class_path.'base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 		$search = new search();
 		$search->delete_search_result($contact_id, 2);
 
@@ -877,7 +877,7 @@ class addressbook extends db {
 
 		$sql .= "ab_contacts.*, ab_addressbooks.name AS ab_name, ab_companies.name AS company_name";
 
-		if(GO::modules()->has_module('customfields')) {
+		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
 			$sql .= ",cf_2.*";
 		}
 
@@ -885,7 +885,7 @@ class addressbook extends db {
 		
 		$sql .= " LEFT JOIN ab_addressbooks ON ab_contacts.addressbook_id = ab_addressbooks.id ";
 
-		if(GO::modules()->has_module('customfields')) {
+		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
 			$sql .= "LEFT JOIN cf_2 ON cf_2.link_id=ab_contacts.id ";
 		}
 
@@ -928,7 +928,7 @@ class addressbook extends db {
 								$fields[]='ab_contacts.'.$this->f('Field');
 							}
 						}
-						if(GO::modules()->has_module('customfields')) {
+						if($GLOBALS['GO_MODULES']->has_module('customfields')) {
 							$fields_sql = "SHOW FIELDS FROM cf_2";
 							$this->query($fields_sql);
 							while ($this->next_record()) {
@@ -1061,7 +1061,7 @@ class addressbook extends db {
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
 
-		if(isset(GO::modules()->modules['customfields'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
 			$sql .= "ab_companies.*, cf_3.* FROM ab_companies ".
 					"LEFT JOIN cf_3 ON cf_3.link_id=ab_companies.id ";
 		}else {
@@ -1102,7 +1102,7 @@ class addressbook extends db {
 								$fields[]='ab_companies.'.$this->f('Field');
 							}
 						}
-						if(GO::modules()->has_module('customfields')) {
+						if($GLOBALS['GO_MODULES']->has_module('customfields')) {
 							$fields_sql = "SHOW FIELDS FROM cf_3";
 							$this->query($fields_sql);
 							while ($this->next_record()) {
@@ -1179,7 +1179,7 @@ class addressbook extends db {
 		}
 
 
-		$result['acl_id'] = GO::security()->get_new_acl('addressbook', $user_id);
+		$result['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl('addressbook', $user_id);
 		$result['user_id']=$user_id;
 		$result['default_iso_address_format']=$default_iso_address_format;
 		$result['default_salutation']=$default_salutation;
@@ -1194,8 +1194,8 @@ class addressbook extends db {
 		global $GO_MODULES;
 		
 		$addressbook['id'] = $this->nextid('ab_addressbooks');
-		if(isset(GO::modules()->modules['files'])) {
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$files->check_share('contacts/'.File::strip_invalid_chars($addressbook['name']),$addressbook['user_id'], $addressbook['acl_id']);
@@ -1212,8 +1212,8 @@ class addressbook extends db {
 		if(!$old_addressbook)$old_addressbook=$this->get_addressbook($addressbook['id']);
 
 		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files']) && $old_addressbook &&  $addressbook['name']!=$old_addressbook['name']) {
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['files']) && $old_addressbook &&  $addressbook['name']!=$old_addressbook['name']) {
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			$files->move_by_paths('contacts/'.File::strip_invalid_chars($old_addressbook['name']), 'contacts/'.File::strip_invalid_chars($addressbook['name']));
 			$files->move_by_paths('companies/'.File::strip_invalid_chars($old_addressbook['name']), 'companies/'.File::strip_invalid_chars($addressbook['name']));
@@ -1222,7 +1222,7 @@ class addressbook extends db {
 		global $GO_SECURITY;
 		//user id of the addressbook changed. Change the owner of the ACL as well
 		if(isset($addressbook['user_id']) && $old_addressbook['user_id'] != $addressbook['user_id']) {
-			GO::security()->chown_acl($old_addressbook['acl_id'], $addressbook['user_id']);
+			$GLOBALS['GO_SECURITY']->chown_acl($old_addressbook['acl_id'], $addressbook['user_id']);
 		}
 
 		return $this->update_row('ab_addressbooks', 'id', $addressbook);
@@ -1245,8 +1245,8 @@ class addressbook extends db {
 
 		global $GO_SECURITY, $GO_MODULES, $GO_EVENTS;
 
-		if(isset(GO::modules()->modules['files'])) {
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$folder = $files->resolve_path('contacts/'.File::strip_invalid_chars($addressbook['name']));
@@ -1262,7 +1262,7 @@ class addressbook extends db {
 		}
 
 		if(empty($addressbook['shared_acl'])) {
-			GO::security()->delete_acl($addressbook['acl_id']);
+			$GLOBALS['GO_SECURITY']->delete_acl($addressbook['acl_id']);
 		}
 
 		$ab = new addressbook();
@@ -1284,9 +1284,9 @@ class addressbook extends db {
 		$this->query($sql);
 
 		if(count($contact_ids))
-			GO::events()->fire_event('addressbook_delete', array($contact_ids));
+			$GLOBALS['GO_EVENTS']->fire_event('addressbook_delete', array($contact_ids));
 
-		if(isset(GO::modules()->modules['sync'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['sync'])) {
 			$sql = "DELETE FROM sync_addressbook_user WHERE addressbook_id='".$this->escape($addressbook_id)."'";
 			$this->query($sql);
 		}
@@ -1364,10 +1364,10 @@ class addressbook extends db {
 	 */
 	private function cache_contact($contact_id) {
 		global $GO_CONFIG, $GO_LANGUAGE;
-		require_once(GO::config()->class_path.'/base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
 		$search = new search();
 
-		require(GO::language()->get_language_file('addressbook'));
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 
 		$sql = "SELECT c.*,a.acl_id, a.name AS addressbook_name, co.name AS company FROM ab_contacts c ".
 			"INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id ".
@@ -1402,9 +1402,9 @@ class addressbook extends db {
 	 */
 	private function cache_company($company_id) {
 		global $GO_CONFIG, $GO_LANGUAGE;
-		require_once(GO::config()->class_path.'/base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
 		$search = new search();
-		require(GO::language()->get_language_file('addressbook'));
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 		$sql = "SELECT c.*, a.acl_id,  a.name AS addressbook_name FROM ab_companies c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id WHERE c.id=?";
 		$this->query($sql, 'i', $company_id);
 		$record = $this->next_record();
@@ -1669,7 +1669,7 @@ class addressbook extends db {
 
 	function get_addressbooks_limits_array($user_id) {
 		global $GO_MODULES;
-		require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+		require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 		$ab = new addressbook();
 		$addressbook_ids = $ab->get_user_addressbook_ids($user_id);
 		$out_array = array();
@@ -1691,20 +1691,20 @@ class addressbook extends db {
 
 	function get_addressbook_cf_category_permissions(&$response) {
 		global $GO_MODULES,$GO_SECURITY;
-		require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
-		require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+		require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
+		require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 		$cf = new customfields();
 		$ab = new addressbook();
 		$response['data']['cf_permissions'] = array();
-		$cf->get_authorized_categories(2,GO::security()->user_id);
+		$cf->get_authorized_categories(2,$GLOBALS['GO_SECURITY']->user_id);
 		while ($cat = $cf->next_record()) {
 			$response['data']['cf_permissions']['contact_categories_allowed_from_cf_module'] = true;
 		}
-		$cf->get_authorized_categories(3,GO::security()->user_id);
+		$cf->get_authorized_categories(3,$GLOBALS['GO_SECURITY']->user_id);
 		while ($cat = $cf->next_record()) {
 			$response['data']['cf_permissions']['company_categories_allowed_from_cf_module'] = true;
 		}
-		$folder_cf_data = $ab->get_addressbooks_limits_array(GO::security()->user_id);
+		$folder_cf_data = $ab->get_addressbooks_limits_array($GLOBALS['GO_SECURITY']->user_id);
 		$response['data']['cf_permissions']['allowed_for_addressbook'] = $folder_cf_data[$response['data']['addressbook_id']];
 		return $response['data']['cf_permissions'];
 	}
@@ -1721,10 +1721,10 @@ class addressbook extends db {
 	 */
 	function cf_categories_to_record($record, $identifier='id') {
 		global $GO_MODULES;
-		if(GO::modules()->has_module('customfields'))
+		if($GLOBALS['GO_MODULES']->has_module('customfields'))
 		{
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
-			require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 			$customfields = new customfields();
 			$ab = new addressbook();
 
@@ -1733,7 +1733,7 @@ class addressbook extends db {
 			$record['allowed_cf_categories'] = array();
 
 			$authorized_contact_categories = array();
-			$customfields->get_authorized_categories(2, GO::security()->user_id);
+			$customfields->get_authorized_categories(2, $GLOBALS['GO_SECURITY']->user_id);
 			while ($record2 = $customfields->next_record()) {
 				$authorized_contact_categories[] = $record2['id'];
 				unset($record2);
@@ -1754,7 +1754,7 @@ class addressbook extends db {
 			}
 
 			$authorized_company_categories = array();
-			$customfields->get_authorized_categories(3, GO::security()->user_id);
+			$customfields->get_authorized_categories(3, $GLOBALS['GO_SECURITY']->user_id);
 			while ($record2 = $customfields->next_record()) {
 				$authorized_company_categories[] = $record2['id'];
 				unset($record2);

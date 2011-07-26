@@ -11,14 +11,14 @@ ini_set('max_execution_time', 0);
 
 require('../www/Group-Office.php');
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 //login as admin
-GO::security()->logged_in($GO_USERS->get_user(1));
-GO::modules()->load_modules();
+$GLOBALS['GO_SECURITY']->logged_in($GO_USERS->get_user(1));
+$GLOBALS['GO_MODULES']->load_modules();
 
-require_once(GO::config()->class_path.'base/links.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 $GO_LINKS = new GO_LINKS();
 
 
@@ -31,10 +31,10 @@ $cf_category_name = 'Import';
 $addressbook_name = 'Import';
 
 
-require_once(GO::modules()->modules['customfields']['class_path'] . 'customfields.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'] . 'customfields.class.inc.php');
 $cf = new customfields();
 
-require_once(GO::modules()->modules['calendar']['class_path'] . 'calendar.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'] . 'calendar.class.inc.php');
 $cal = new calendar();
 
 
@@ -48,7 +48,7 @@ function create_custom_fields($type, $cf_category_name, $custom_fields) {
 	if (!$category) {
 		$category['name'] = $cf_category_name;
 		$category['type'] = $type;
-		$category['acl_id'] = GO::security()->get_new_acl();
+		$category['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl();
 		$category_id = $cf->add_category($category);
 	} else {
 		$category_id = $category['id'];
@@ -91,7 +91,7 @@ function get_calendar($username){
 	$calendar['group_id'] = 1;
 	$calendar['show_bdays'] = 0;
 	$calendar['name']=$username;
-	$calendar['acl_id']=GO::security()->get_new_acl('calendar');
+	$calendar['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('calendar');
 	
 	$calendar['id']=$cal->add_calendar($calendar);
 
@@ -106,7 +106,7 @@ $count['deleted'] = 0;
 
 
 
-require_once(GO::modules()->modules['addressbook']['class_path'] . 'addressbook.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'] . 'addressbook.class.inc.php');
 $ab = new addressbook();
 
 $addressbook = $ab->get_addressbook_by_name($addressbook_name);
@@ -355,7 +355,7 @@ echo "\n\n";
 var_dump($count);
 
 
-require_once(GO::modules()->modules['notes']['class_path'] . 'notes.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['notes']['class_path'] . 'notes.class.inc.php');
 $no = new notes();
 
 
@@ -387,7 +387,7 @@ function get_category($category_name){
 
 	$category['name']=$category_name;
 	$category['user_id']=1;
-	$category['acl_id']=GO::security()->get_new_acl('notes', $category['user_id']);
+	$category['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('notes', $category['user_id']);
 	$category['id']=$no->add_category($category);
 
 	return $category;
@@ -497,7 +497,7 @@ $note_count=0;
 
 
 
-require_once (GO::modules()->modules['tickets']['class_path'] . "tickets.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['tickets']['class_path'] . "tickets.class.inc.php");
 $tickets = new tickets();
 
 
@@ -529,7 +529,7 @@ function get_type($name){
 
 	$type ['name']=$name;
 	$type ['user_id']=1;
-	$type ['acl_id']=GO::security()->get_new_acl('type', $type['user_id']);
+	$type ['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('type', $type['user_id']);
 	$type ['id']=$tickets->add_type($type);
 
 	return $type;
@@ -644,7 +644,7 @@ $existing_ticket=false;
 				
 				
 				$message['is_note'] = 0;
-				$message['user_id'] = GO::security()->user_id;
+				$message['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
 				$message['mtime'] = $message['ctime'] = $ticket['mtime'];						
 				$message['content']=$record[$r_index_map['Vraag']];
 				

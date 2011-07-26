@@ -18,15 +18,15 @@ $root_path = dirname(dirname(dirname(__FILE__)));
 require($root_path.'/Group-Office.php');
 
 
-require(GO::config()->class_path.'mail/GoSwift.class.inc.php');
-require_once (GO::config()->class_path.'mail/mimeDecode.class.inc');
+require($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
+require_once ($GLOBALS['GO_CONFIG']->class_path.'mail/mimeDecode.class.inc');
 
 $RFC822 = new RFC822();
 
-require_once(GO::modules()->modules['addressbook']['path'].'classes/addressbook.class.inc.php');
-require_once(GO::modules()->modules['email']['path'].'classes/email.class.inc.php');
-require_once(GO::modules()->modules['mailings']['path'].'classes/templates.class.inc.php');
-require_once(GO::modules()->modules['mailings']['path'].'classes/mailings.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['addressbook']['path'].'classes/addressbook.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['email']['path'].'classes/email.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['mailings']['path'].'classes/templates.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['mailings']['path'].'classes/mailings.class.inc.php');
 $tp = new templates();
 $ml = new mailings();
 $ml2 = new mailings();
@@ -36,7 +36,7 @@ $ab = new addressbook();
 $mailing = $ml->get_mailing($mailing_id);
 $mailing_group = $ml->get_mailing_group($mailing['mailing_group_id']);
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 $GO_USERS->update_session($mailing['user_id']);
@@ -57,15 +57,15 @@ if(!$mailing) {
 
 
 $transport=null;
-if(isset(GO::config()->mailing_smtp_server)) {
+if(isset($GLOBALS['GO_CONFIG']->mailing_smtp_server)) {
 
-	GO::config()->mailing_smtp_port = isset(GO::config()->mailing_smtp_port) ? GO::config()->mailing_smtp_port : 25;
+	$GLOBALS['GO_CONFIG']->mailing_smtp_port = isset($GLOBALS['GO_CONFIG']->mailing_smtp_port) ? $GLOBALS['GO_CONFIG']->mailing_smtp_port : 25;
 
-	$encryption = empty(GO::config()->mailing_smtp_encryption) ? null : GO::config()->mailing_smtp_encryption;
-	$transport=new Swift_SmtpTransport(GO::config()->mailing_smtp_server, GO::config()->mailing_smtp_port, $encryption);
-	if(!empty(GO::config()->mailing_smtp_username)) {
-		$transport->setUsername(GO::config()->mailing_smtp_username)
-				->setPassword(GO::config()->mailing_smtp_password);
+	$encryption = empty($GLOBALS['GO_CONFIG']->mailing_smtp_encryption) ? null : $GLOBALS['GO_CONFIG']->mailing_smtp_encryption;
+	$transport=new Swift_SmtpTransport($GLOBALS['GO_CONFIG']->mailing_smtp_server, $GLOBALS['GO_CONFIG']->mailing_smtp_port, $encryption);
+	if(!empty($GLOBALS['GO_CONFIG']->mailing_smtp_username)) {
+		$transport->setUsername($GLOBALS['GO_CONFIG']->mailing_smtp_username)
+				->setPassword($GLOBALS['GO_CONFIG']->mailing_smtp_password);
 	}
 }
 
@@ -73,13 +73,13 @@ if(isset(GO::config()->mailing_smtp_server)) {
 $data = file_get_contents($mailing['message_path']);
 $swift = new GoSwiftImport($data,false,$mailing['alias_id'],$transport);
 
-GO::config()->mailing_messages_per_minute = isset(GO::config()->mailing_messages_per_minute) ? GO::config()->mailing_messages_per_minute : 30;
+$GLOBALS['GO_CONFIG']->mailing_messages_per_minute = isset($GLOBALS['GO_CONFIG']->mailing_messages_per_minute) ? $GLOBALS['GO_CONFIG']->mailing_messages_per_minute : 30;
 
-echo 'Sending a maximum of '.GO::config()->mailing_messages_per_minute.' messages per minute'."\n";
+echo 'Sending a maximum of '.$GLOBALS['GO_CONFIG']->mailing_messages_per_minute.' messages per minute'."\n";
 
 if(!$test){
 	//Rate limit to 100 emails per-minute
-	$swift->registerPlugin(new Swift_Plugins_ThrottlerPlugin(GO::config()->mailing_messages_per_minute, Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE));
+	$swift->registerPlugin(new Swift_Plugins_ThrottlerPlugin($GLOBALS['GO_CONFIG']->mailing_messages_per_minute, Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE));
 }
 
 

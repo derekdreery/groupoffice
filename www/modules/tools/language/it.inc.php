@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('tools'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('tools'));
 
 $lang['tools']['name']='Strumenti';
 $lang['tools']['description']='Un modulo per eseguire operazioni amministrative.';

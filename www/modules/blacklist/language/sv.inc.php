@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('blacklist'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('blacklist'));
 $lang['blacklist']['name']='Svartlistade IP-adresser';
 $lang['blacklist']['description']='Modul som blockerar IP-adresser efter 5 misslyckade inloggningsförsök i rad.';
 $lang['blacklist']['ip']='IP';

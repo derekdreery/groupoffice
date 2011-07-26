@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Kalender';
 $lang['calendar']['description'] = 'Kalendemodul: Alle brukere kan legge til, redigere og slette avtaler. Man kan også se andre brukeres avtaler, og de kan endres om nødvendig.';
 

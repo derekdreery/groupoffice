@@ -13,9 +13,9 @@
  */
 require_once("../../Group-Office.php");
 
-GO::security()->json_authenticate('postfixadmin');
-require_once (GO::modules()->modules['postfixadmin']['class_path']."postfixadmin.class.inc.php");
-//require_once (GO::language()->get_language_file('postfixadmin'));
+$GLOBALS['GO_SECURITY']->json_authenticate('postfixadmin');
+require_once ($GLOBALS['GO_MODULES']->modules['postfixadmin']['class_path']."postfixadmin.class.inc.php");
+//require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('postfixadmin'));
 $postfixadmin = new postfixadmin();
 
 try{
@@ -49,7 +49,7 @@ try{
 				
 				$domain = $postfixadmin->get_domain_by_domain($domain);
 			
-				if(GO::security()->has_permission(GO::security()->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+				if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 				{
 					throw new AccessDeniedException();
 				}
@@ -69,7 +69,7 @@ try{
 			
 			$domain = $postfixadmin->get_domain_by_domain($domain);
 			
-			if(GO::security()->has_permission(GO::security()->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 			{
 				throw new AccessDeniedException();
 			}
@@ -149,9 +149,9 @@ try{
 			{
 				$domain['domain']=$_POST['domain'];
 				
-				$domain['user_id']=GO::security()->user_id;
+				$domain['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 
-				$response['acl_id']=$domain['acl_id']=GO::security()->get_new_acl('domain');
+				$response['acl_id']=$domain['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('domain');
 
 				$domain_id= $postfixadmin->add_domain($domain);
 
@@ -189,7 +189,7 @@ try{
 				$response['success']=true;
 			}else
 			{
-				$fetchmail_config['user_id']=GO::security()->user_id;
+				$fetchmail_config['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 				$fetchmail_config_id= $postfixadmin->add_fetchmail_config($fetchmail_config);
 
 				$response['fetchmail_config_id']=$fetchmail_config_id;
@@ -202,7 +202,7 @@ try{
 			$str_domain = ($_POST['domain']);			
 			$domain= $postfixadmin->get_domain_by_domain($str_domain);
 			
-			if(GO::security()->has_permission(GO::security()->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 				throw new AccessDeniedException();
 				
 			$mailbox = $postfixadmin->get_mailbox_by_username(($_POST['username']));
@@ -240,7 +240,7 @@ try{
 				$mailbox['vacation_body']=$_POST['vacation_body'];
 				
 				
-				$vacation_alias = str_replace('@','#', $old_mailbox['username']).'@'.GO::config()->postfixadmin_autoreply_domain;			
+				$vacation_alias = str_replace('@','#', $old_mailbox['username']).'@'.$GLOBALS['GO_CONFIG']->postfixadmin_autoreply_domain;			
 				
 				$postfixadmin->update_mailbox($mailbox);
 
@@ -298,10 +298,10 @@ try{
 			if(!$domain)
 			{
 				$domain['domain']=$str_domain;
-				$domain['user_id']=GO::security()->user_id;
+				$domain['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 				$domain['transport']='virtual';
 				$domain['active']='1';
-				$domain['acl_id']=GO::security()->get_new_acl('domain');
+				$domain['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('domain');
 				$domain['quota']=524288;
 				$domain['id']=$postfixadmin->add_domain($domain);
 			}
@@ -319,7 +319,7 @@ try{
 
 			$domain = $postfixadmin->get_domain($mailbox['domain_id']);		
 			
-			if(GO::security()->has_permission(GO::security()->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $domain['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 				throw new AccessDeniedException();			
 
 			if(!empty($_POST['password1']))
@@ -347,7 +347,7 @@ try{
 			if($mailbox['id']>0)
 			{
 				$old_mailbox = $postfixadmin->get_mailbox($mailbox['id']);
-				$vacation_alias = str_replace('@','#', $old_mailbox['username']).'@'.GO::config()->postfixadmin_autoreply_domain;		
+				$vacation_alias = str_replace('@','#', $old_mailbox['username']).'@'.$GLOBALS['GO_CONFIG']->postfixadmin_autoreply_domain;		
 
 				if(!empty($domain['maxquota']))// && $old_mailbox['quota']!=$mailbox['quota'])
 				{
@@ -426,7 +426,7 @@ try{
 				//create alias				
 				if($mailbox['vacation_active']=='1')
 				{
-					$vacation_alias = str_replace('@','#', $mailbox['username']).'@'.GO::config()->postfixadmin_autoreply_domain;
+					$vacation_alias = str_replace('@','#', $mailbox['username']).'@'.$GLOBALS['GO_CONFIG']->postfixadmin_autoreply_domain;
 					
 					$alias['goto']=$mailbox['username'].','.$vacation_alias;
 				}else

@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Kalenteri';
 $lang['calendar']['description'] = 'Kalenteri moduuli; Jokainen käyttäjä voi lisätä, muokata tai poistaa merkintöjä. Myös muiden kalenterin käyttäjien merkintöjä voidaan selata tai tarvittaessa muuttaa.';
 

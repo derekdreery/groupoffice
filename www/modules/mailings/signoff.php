@@ -1,10 +1,10 @@
 <?php
 require('../../Group-Office.php');
 
-require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'cms.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'output.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'cms_smarty.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'output.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms_smarty.class.inc.php');
 $cms = new cms();
 $co = new cms_output();
 $ab = new addressbook();
@@ -15,7 +15,7 @@ $smarty = new cms_smarty($co);
 switch($_GET['type'])
 {
 	case 'user':
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$user = $GO_USERS->get_user($_GET['id']);
@@ -28,7 +28,7 @@ switch($_GET['type'])
 			
 			if($_SERVER['REQUEST_METHOD']=='POST')
 			{
-				require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 				$ml = new mailings();
 				$ml->remove_user_from_group($user['id'], $_REQUEST['mailing_group_id']);
 				
@@ -47,7 +47,7 @@ switch($_GET['type'])
 			
 			if($_SERVER['REQUEST_METHOD']=='POST')
 			{
-				require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 				$ml = new mailings();
 				$ml->remove_company_from_group($company['id'], $_REQUEST['mailing_group_id']);
 				
@@ -66,7 +66,7 @@ switch($_GET['type'])
 			
 			if($_SERVER['REQUEST_METHOD']=='POST')
 			{
-				require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 				$ml = new mailings();
 				$ml->remove_contact_from_group($contact['id'], $_REQUEST['mailing_group_id']);
 				

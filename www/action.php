@@ -13,10 +13,10 @@
  */
 
 require_once("Group-Office.php");
-GO::security()->authenticate();
+$GLOBALS['GO_SECURITY']->authenticate();
 
 if($_REQUEST['task']!='login')
-	GO::security()->check_token();
+	$GLOBALS['GO_SECURITY']->check_token();
 
 
 
@@ -27,10 +27,10 @@ try{
 	{
 		case 'save_advanced_query':
 
-		require_once(GO::config()->class_path.'advanced_query.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'advanced_query.class.inc.php');
 		$aq = new advanced_query();
 
-	    $aq->add_search_query(array('user_id'=>GO::security()->user_id, 'sql'=>$_POST['sql'],'name'=>$_POST['name'],'type'=>$_POST['type']));
+	    $aq->add_search_query(array('user_id'=>$GLOBALS['GO_SECURITY']->user_id, 'sql'=>$_POST['sql'],'name'=>$_POST['name'],'type'=>$_POST['type']));
 	    $response['success']=true;
 
 	    break;
@@ -40,8 +40,8 @@ try{
 
 			$response['success']=true;
 
-			$dir = GO::config()->tmpdir.'attachments/';
-			require_once(GO::config()->class_path.'filesystem.class.inc');
+			$dir = $GLOBALS['GO_CONFIG']->tmpdir.'attachments/';
+			require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 			filesystem::mkdir_recursive($dir);
 
 			if(isset($_FILES['Filedata']))
@@ -77,25 +77,25 @@ try{
 
 		case 'update_level':
 
-			if(!GO::security()->has_permission_to_manage_acl(GO::security()->user_id, $_POST['acl_id'])){
+			if(!$GLOBALS['GO_SECURITY']->has_permission_to_manage_acl($GLOBALS['GO_SECURITY']->user_id, $_POST['acl_id'])){
 				throw new AccessDeniedException();
 			}
 
 			if(!empty($_POST['user_id'])){
 
-				$acl = GO::security()->get_acl($_POST['acl_id']);
+				$acl = $GLOBALS['GO_SECURITY']->get_acl($_POST['acl_id']);
 
-				if($_POST['user_id']==$acl['user_id'] || $_POST['user_id']==GO::security()->user_id){
+				if($_POST['user_id']==$acl['user_id'] || $_POST['user_id']==$GLOBALS['GO_SECURITY']->user_id){
 					throw new Exception($lang['common']['dontChangeOwnersPermissions']);
 				}
 
-				$response['success']=GO::security()->add_user_to_acl($_POST['user_id'], $_POST['acl_id'], $_POST['level']);
+				$response['success']=$GLOBALS['GO_SECURITY']->add_user_to_acl($_POST['user_id'], $_POST['acl_id'], $_POST['level']);
 			}else
 			{
-				if($_POST['group_id']==GO::config()->group_root){
+				if($_POST['group_id']==$GLOBALS['GO_CONFIG']->group_root){
 					throw new Exception($lang['common']['dontChangeAdminsPermissions']);
 				}
-				$response['success']=GO::security()->add_group_to_acl($_POST['group_id'], $_POST['acl_id'], $_POST['level']);
+				$response['success']=$GLOBALS['GO_SECURITY']->add_group_to_acl($_POST['group_id'], $_POST['acl_id'], $_POST['level']);
 			}
 
 			break;
@@ -103,7 +103,7 @@ try{
 		
 		case 'complete_profile':
 			
-			$user['id']=GO::security()->user_id;
+			$user['id']=$GLOBALS['GO_SECURITY']->user_id;
 			$user['first_name']=$_POST['first_name'];
 			$user['middle_name']=$_POST['middle_name'];
 			$user['last_name']=$_POST['last_name'];
@@ -137,7 +137,7 @@ try{
 			$user['work_fax'] = isset($_POST["work_fax"]) ? $_POST["work_fax"] : '';
 			$user['homepage'] = isset($_POST["homepage"]) ? $_POST["homepage"] : '';
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$GO_USERS->update_profile($user, true);
@@ -148,14 +148,14 @@ try{
 		
 		case 'lost_password':
 
-			require(GO::language()->get_base_language_file('lostpassword'));
+			require($GLOBALS['GO_LANGUAGE']->get_base_language_file('lostpassword'));
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			
 			if($user = $GO_USERS->get_user_by_email($_POST['email']))
 			{
-				$url = GO::config()->full_url.'change_lost_password.php?username='.$user['username'].'&code1='.md5($user['password']).'&code2='.md5($user['lastlogin'].$user['registration_time']);
+				$url = $GLOBALS['GO_CONFIG']->full_url.'change_lost_password.php?username='.$user['username'].'&code1='.md5($user['password']).'&code2='.md5($user['lastlogin'].$user['registration_time']);
 
 				$salutation = $lang['common']['default_salutation'][$user['sex']];
 				if(!empty($user['middle_name']))
@@ -164,14 +164,14 @@ try{
 
 				$mail_body = sprintf($lang['lostpassword']['lost_password_body'],
 					$salutation,
-					GO::config()->title,
+					$GLOBALS['GO_CONFIG']->title,
 					$user['username'],
 					$url);
 				
-				require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 				$swift = new GoSwift($user['email'], $lang['lostpassword']['lost_password_subject']);
 				$swift->set_body($mail_body,'plain');
-				$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
+				$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 				$swift->sendmail();				
 				
 				$response['success']=true;
@@ -186,16 +186,16 @@ try{
 		
 		case 'save_settings':
 
-			GO::events()->fire_event('before_save_settings');
+			$GLOBALS['GO_EVENTS']->fire_event('before_save_settings');
 
-			GO::events()->fire_event('save_settings');
+			$GLOBALS['GO_EVENTS']->fire_event('save_settings');
 
 			$response['success']=true;
 			break;
 			
 		case 'snooze_reminders':
 			
-			require(GO::config()->class_path.'base/reminder.class.inc.php');
+			require($GLOBALS['GO_CONFIG']->class_path.'base/reminder.class.inc.php');
 			$rm = new reminder();
 			
 
@@ -204,13 +204,13 @@ try{
 			
 			foreach($reminders as $reminder_id)
 			{
-				$rm->add_user_to_reminder(GO::security()->user_id, $reminder_id, time()+$_POST['snooze_time']);
+				$rm->add_user_to_reminder($GLOBALS['GO_SECURITY']->user_id, $reminder_id, time()+$_POST['snooze_time']);
 			}
 			$response['success']=true;			
 			break;
 		case 'dismiss_reminders':
 			
-			require(GO::config()->class_path.'base/reminder.class.inc.php');
+			require($GLOBALS['GO_CONFIG']->class_path.'base/reminder.class.inc.php');
 			$rm = new reminder();
 			
 			$reminders = json_decode($_POST['reminders'], true);
@@ -221,9 +221,9 @@ try{
 				
 				//other modules can do something when a reminder is dismissed
 				//eg. The calendar module sets a next reminder for a recurring event.
-				GO::events()->fire_event('reminder_dismissed', array($reminder, GO::security()->user_id));
+				$GLOBALS['GO_EVENTS']->fire_event('reminder_dismissed', array($reminder, $GLOBALS['GO_SECURITY']->user_id));
 				//$rm->delete_reminder($reminder_id);
-				$rm->remove_user_from_reminder(GO::security()->user_id, $reminder_id);
+				$rm->remove_user_from_reminder($GLOBALS['GO_SECURITY']->user_id, $reminder_id);
 			}
 			
 			$response['success']=true;
@@ -244,7 +244,7 @@ try{
 			//attempt login using security class inherited from index.php
 			//$params = isset( $auth_sources[$auth_source]) ?  $auth_sources[$auth_source] : false;
 
-			require_once(GO::config()->class_path.'base/auth.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/auth.class.inc.php');
 			$GO_AUTH = new GO_AUTH();
 
 			if (!$GO_AUTH->login($username, $password))
@@ -252,20 +252,20 @@ try{
 				throw new Exception($lang['common']['badLogin']);
 			}
 			//login is correct final check if login registration was ok
-			if (!GO::security()->logged_in())
+			if (!$GLOBALS['GO_SECURITY']->logged_in())
 			{
 				throw new Exception($lang['common']['saveError']);
 			}
 			/*if ($_REQUEST['language']=='00') {
 				global $GO_LANGUAGE, $GO_SECURITY;
 				$GO_USERS = new GO_USERS();
-				$user = $GO_USERS->get_user(GO::security()->user_id);
-				GO::language()->set_language($user['language']);
-				require(GO::language()->get_base_language_file('common'));
+				$user = $GO_USERS->get_user($GLOBALS['GO_SECURITY']->user_id);
+				$GLOBALS['GO_LANGUAGE']->set_language($user['language']);
+				require($GLOBALS['GO_LANGUAGE']->get_base_language_file('common'));
 			}*/
 			if (isset($_POST['remind']))
 			{
-				require_once(GO::config()->class_path.'cryptastic.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'cryptastic.class.inc.php');
 				$c = new cryptastic();
 
 				$enc_username = $c->encrypt($username);
@@ -285,7 +285,7 @@ try{
 			
 			SetCookie("GO_FULLSCREEN",$fullscreen,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
 				
-			$response['user_id']=GO::security()->user_id;
+			$response['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 			$response['name']=$_SESSION['GO_SESSION']['name'];
 			$response['email']=$_SESSION['GO_SESSION']['email'];
 			//$response['sid']=session_id();
@@ -294,9 +294,9 @@ try{
 			
 			//$response['fullscreen']=isset($_POST['fullscreen']);
 				
-			$response['settings'] = GO::config()->get_client_settings();
+			$response['settings'] = $GLOBALS['GO_CONFIG']->get_client_settings();
 						
-			require_once(GO::config()->class_path.'cache.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'cache.class.inc.php');
 			$cache = new cache();
 			$cache->cleanup();
 			
@@ -305,7 +305,7 @@ try{
 			break;
 
 		case 'logout':
-			GO::security()->logout();
+			$GLOBALS['GO_SECURITY']->logout();
 
 			unset($_SESSION);
 			unset($_COOKIE);
@@ -314,7 +314,7 @@ try{
 
 		case 'link':
 
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 
 			$fromLinks = json_decode($_POST['fromLinks'],true);
@@ -334,7 +334,7 @@ try{
 				break;
 		case 'updatelink':
 
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 			
 			$link['id']=$_POST['link_id1'];
@@ -355,7 +355,7 @@ try{
 		
 		case 'move_links':
 
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 			
 			$move_links = json_decode(($_POST['selections']), true);
@@ -397,7 +397,7 @@ try{
 
 		case 'save_link_folder':
 
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 
 			

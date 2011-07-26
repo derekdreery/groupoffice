@@ -19,7 +19,7 @@ if (!defined('PATH_SEPARATOR')) {
 
 global $GO_CONFIG;
 
-$include_path = GO::config()->class_path . 'pear/' . PATH_SEPARATOR;
+$include_path = $GLOBALS['GO_CONFIG']->class_path . 'pear/' . PATH_SEPARATOR;
 $include_path.= ini_get('include_path');
 
 if (set_include_path($include_path) === false) {
@@ -68,9 +68,9 @@ class sieve {
 	private function rewrite_host($host) {
 		global $GO_CONFIG;
 
-		if (isset(GO::config()->sieve_rewrite_hosts)) {
+		if (isset($GLOBALS['GO_CONFIG']->sieve_rewrite_hosts)) {
 
-			$maps = explode(',', GO::config()->sieve_rewrite_hosts);
+			$maps = explode(',', $GLOBALS['GO_CONFIG']->sieve_rewrite_hosts);
 
 			foreach ($maps as $map) {
 				$pair = explode('=', $map);
@@ -269,7 +269,7 @@ class sieve {
 	public function get_active() {
 		global $GO_LANGUAGE, $lang;
 
-		GO::language()->require_language_file('sieve');
+		$GLOBALS['GO_LANGUAGE']->require_language_file('sieve');
 
 		if (!$this->sieve)
 			return $this->_set_error(SIEVE_ERROR_INTERNAL);

@@ -3,7 +3,7 @@
 //Author : Paweł Dmitruk pawel.dmitruk@gmail.com
 //Date : September, 05 2010
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('postfixadmin'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('postfixadmin'));
 $lang['postfixadmin']['name']='Postfix admin';
 $lang['postfixadmin']['description']='Moduł do zarządzania wirtualnymi użytkownikami Postfix\'a w bazie danych Group-Office';
 $lang['postfixadmin']['alias']='Alias';

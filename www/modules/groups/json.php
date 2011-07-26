@@ -14,14 +14,14 @@
  */
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('groups');
+$GLOBALS['GO_SECURITY']->json_authenticate('groups');
 
-GO::security()->check_token();
+$GLOBALS['GO_SECURITY']->check_token();
 
-require_once(GO::config()->class_path.'base/groups.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 
-require_once (GO::language()->get_language_file('groups'));
+require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('groups'));
 
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
 $dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
@@ -53,7 +53,7 @@ switch ($action)
 					$GO_GROUPS->delete_user_from_group($user_id, $group_id);
 				}
 
-				GO::events()->fire_event('delete_users_to_group', array($group_id, $users));
+				$GLOBALS['GO_EVENTS']->fire_event('delete_users_to_group', array($group_id, $users));
 			}catch(Exception $e)
 			{
 				$response['deleteSuccess']=false;
@@ -78,7 +78,7 @@ switch ($action)
 					}
 				}
 			}
-			GO::events()->fire_event('add_users_to_group', array($group_id, $users));
+			$GLOBALS['GO_EVENTS']->fire_event('add_users_to_group', array($group_id, $users));
 		}
 
 
@@ -100,7 +100,7 @@ switch ($action)
 		break;
 	case 'users':
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		$GO_USERS->search($query, $search_field, 0, $start, $limit, $sort,$dir);

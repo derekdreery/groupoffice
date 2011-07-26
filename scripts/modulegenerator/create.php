@@ -17,7 +17,7 @@ if(isset($argv[1]))
 
 require('config.inc.php');
 
-$module_dir=GO::config()->root_path.'modules/'.$module.'/';
+$module_dir=$GLOBALS['GO_CONFIG']->root_path.'modules/'.$module.'/';
 
 require('classes/modulegenerator.class.inc.php');
 $mg = new modulegenerator();

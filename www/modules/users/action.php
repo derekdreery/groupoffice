@@ -14,13 +14,13 @@
 
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('users');
+$GLOBALS['GO_SECURITY']->json_authenticate('users');
 
-GO::security()->check_token();
+$GLOBALS['GO_SECURITY']->check_token();
 
-require_once(GO::language()->get_language_file('users'));
+require_once($GLOBALS['GO_LANGUAGE']->get_language_file('users'));
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 
@@ -36,7 +36,7 @@ try
 	switch($task)
 	{
 		case 'import':
-			require_once(GO::config()->class_path.'base/groups.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 			$GO_GROUPS = new GO_GROUPS();
 
 
@@ -76,7 +76,7 @@ try
 			$cols[]='work_fax';
 
 
-			$import_file = GO::config()->tmpdir.'userimport.csv';
+			$import_file = $GLOBALS['GO_CONFIG']->tmpdir.'userimport.csv';
 			if (is_uploaded_file($_FILES['importfile']['tmp_name'][0]))
 			{
 				move_uploaded_file($_FILES['importfile']['tmp_name'][0], $import_file);
@@ -183,7 +183,7 @@ try
 
 		case 'save_user':
 
-			require_once(GO::config()->class_path.'base/groups.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 			$GO_GROUPS = new GO_GROUPS();
 
 			$user['id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : 0;
@@ -235,7 +235,7 @@ try
 					throw new Exception($lang['users']['error_email']);
 				}
 
-				$existing_email_user = GO::config()->allow_duplicate_email ? false : $GO_USERS->get_user_by_email($user['email']);
+				$existing_email_user = $GLOBALS['GO_CONFIG']->allow_duplicate_email ? false : $GO_USERS->get_user_by_email($user['email']);
 
 				if ($existing_email_user && ($user_id == 0 || $existing_email_user['id'] != $user_id)) {
 					throw new Exception($lang['users']['error_email_exists']);
@@ -326,10 +326,10 @@ try
 				}
 
 				//deprecated modules get updated below
-				$modules_read = array_map('trim', explode(',',GO::config()->register_modules_read));
-				$modules_write = array_map('trim', explode(',',GO::config()->register_modules_write));
-				$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',GO::config()->register_user_groups)));
-				$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',GO::config()->register_visible_user_groups)));
+				$modules_read = array_map('trim', explode(',',$GLOBALS['GO_CONFIG']->register_modules_read));
+				$modules_write = array_map('trim', explode(',',$GLOBALS['GO_CONFIG']->register_modules_write));
+				$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GLOBALS['GO_CONFIG']->register_user_groups)));
+				$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GLOBALS['GO_CONFIG']->register_visible_user_groups)));
 
 				$user_id = $GO_USERS->add_user($user, $user_groups, $visible_user_groups, $modules_read, $modules_write);
 
@@ -350,24 +350,24 @@ try
 
 				if(!empty($_POST['send_invitation'])){
 
-					require_once(GO::modules()->modules['users']['class_path'].'users.class.inc.php');
+					require_once($GLOBALS['GO_MODULES']->modules['users']['class_path'].'users.class.inc.php');
 					$users = new users();
 
 					$email = $users->get_register_email();
 
 					if(!empty($email['register_email_body']) && !empty($email['register_email_subject'])){
-						require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+						require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 						$swift = new GoSwift($user['email'], $email['register_email_subject']);
 						foreach($user as $key=>$value){
 							$email['register_email_body'] = str_replace('{'.$key.'}', $value, $email['register_email_body']);
 						}
 
-						$email['register_email_body']= str_replace('{url}', GO::config()->full_url, $email['register_email_body']);
-						$email['register_email_body']= str_replace('{title}', GO::config()->title, $email['register_email_body']);
+						$email['register_email_body']= str_replace('{url}', $GLOBALS['GO_CONFIG']->full_url, $email['register_email_body']);
+						$email['register_email_body']= str_replace('{title}', $GLOBALS['GO_CONFIG']->title, $email['register_email_body']);
 						$email['register_email_body']= str_replace('{password}', $_POST["password1"], $email['register_email_body']);
 
 						$swift->set_body($email['register_email_body'],'plain');
-						$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
+						$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 						$swift->sendmail();
 					}
 				}
@@ -384,7 +384,7 @@ try
 
 				foreach($permissions['modules'] as $module)
 				{
-					$mod = GO::modules()->get_module($module['id']);
+					$mod = $GLOBALS['GO_MODULES']->get_module($module['id']);
 
 					$level = 0;
 					if($module['write_permission']){
@@ -395,18 +395,18 @@ try
 
 					if ($level)
 					{
-						GO::security()->add_user_to_acl($user_id, $mod['acl_id'], $level);
+						$GLOBALS['GO_SECURITY']->add_user_to_acl($user_id, $mod['acl_id'], $level);
 					} else {
-						if(GO::security()->user_in_acl($user_id, $mod['acl_id']))
+						if($GLOBALS['GO_SECURITY']->user_in_acl($user_id, $mod['acl_id']))
 						{
-							GO::security()->delete_user_from_acl($user_id, $mod['acl_id']);
+							$GLOBALS['GO_SECURITY']->delete_user_from_acl($user_id, $mod['acl_id']);
 						}
 					}
 				}
 
 				foreach($permissions['group_member'] as $group)
 				{
-					if($group['id']!=GO::config()->group_everyone)
+					if($group['id']!=$GLOBALS['GO_CONFIG']->group_everyone)
 					{
 						if ($group['group_permission'])
 						{
@@ -428,36 +428,36 @@ try
 				{				
 					if ($group['visible_permission'])
 					{
-						if(!GO::security()->group_in_acl($group['id'], $old_user['acl_id']))
+						if(!$GLOBALS['GO_SECURITY']->group_in_acl($group['id'], $old_user['acl_id']))
 						{
-							GO::security()->add_group_to_acl($group['id'], $old_user['acl_id']);
+							$GLOBALS['GO_SECURITY']->add_group_to_acl($group['id'], $old_user['acl_id']);
 						}
 					} else {
-						if(GO::security()->group_in_acl($group['id'], $old_user['acl_id']))
+						if($GLOBALS['GO_SECURITY']->group_in_acl($group['id'], $old_user['acl_id']))
 						{
-							GO::security()->delete_group_from_acl($group['id'], $old_user['acl_id']);
+							$GLOBALS['GO_SECURITY']->delete_group_from_acl($group['id'], $old_user['acl_id']);
 						}
 					}					
 				}
 			}
 
 
-			if(GO::modules()->has_module('customfields'))
+			if($GLOBALS['GO_MODULES']->has_module('customfields'))
 			{
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 
-				$cf->update_fields(GO::security()->user_id, $user_id, 8, $_POST, $insert);
+				$cf->update_fields($GLOBALS['GO_SECURITY']->user_id, $user_id, 8, $_POST, $insert);
 			}
 
 
-			if(GO::modules()->has_module('mailings'))
+			if($GLOBALS['GO_MODULES']->has_module('mailings'))
 			{
-				require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 				$ml = new mailings();
 				$ml2 = new mailings();
 
-				$ml->get_authorized_mailing_groups('write', GO::security()->user_id, 0,0);
+				$ml->get_authorized_mailing_groups('write', $GLOBALS['GO_SECURITY']->user_id, 0,0);
 				while($ml->next_record())
 				{
 					$is_in_group = $ml2->user_is_in_group($user_id, $ml->f('id'));
@@ -481,8 +481,8 @@ try
 
 		case 'save_settings':
 			
-			GO::config()->save_setting('register_email_subject', $_POST['register_email_subject']);
-			GO::config()->save_setting('register_email_body', $_POST['register_email_body']);
+			$GLOBALS['GO_CONFIG']->save_setting('register_email_subject', $_POST['register_email_subject']);
+			$GLOBALS['GO_CONFIG']->save_setting('register_email_body', $_POST['register_email_body']);
 			
 			break;
 	}

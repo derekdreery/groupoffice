@@ -20,12 +20,12 @@ class export_query
 	function find_custom_exports(){
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'filesystem.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 
 		$ce=array();
-		if(is_dir(GO::config()->file_storage_path.'customexports')){
-			$files = $fs->get_files(GO::config()->file_storage_path.'customexports');
+		if(is_dir($GLOBALS['GO_CONFIG']->file_storage_path.'customexports')){
+			$files = $fs->get_files($GLOBALS['GO_CONFIG']->file_storage_path.'customexports');
 			while($file = array_shift($files)){
 				require_once($file['path']);
 
@@ -143,7 +143,7 @@ class base_export_query{
 	function query(){
 		$this->prepare_query();
 
-		GO::events()->fire_event('export_before_query', array(&$this, &$this->sql, &$this->types, &$this->params));
+		$GLOBALS['GO_EVENTS']->fire_event('export_before_query', array(&$this, &$this->sql, &$this->types, &$this->params));
 
 		$this->db->query($this->sql,$this->types,$this->params);
 	}
@@ -154,7 +154,7 @@ class base_export_query{
 			call_user_func_array(array($this->q['class'], $this->q['method']),array(&$record, $this->cf));
 		}
 		
-		GO::events()->fire_event('export_format_record', array(&$this, &$record));
+		$GLOBALS['GO_EVENTS']->fire_event('export_format_record', array(&$this, &$record));
 	}
 
 	function init_columns(){
@@ -185,15 +185,15 @@ class base_export_query{
 			}
 		}
 
-		GO::events()->fire_event('export_init_columns', array(&$this));
+		$GLOBALS['GO_EVENTS']->fire_event('export_init_columns', array(&$this));
 	}
 
 	function export($fp)
 	{
 		global $GO_MODULES;
 
-		if(GO::modules()->has_module('customfields')) {
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$this->cf = new customfields();
 		}else
 		{

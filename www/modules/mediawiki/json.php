@@ -13,9 +13,9 @@
  */
 require('../../Group-Office.php');
 
-GO::security()->json_authenticate('mediawiki');
+$GLOBALS['GO_SECURITY']->json_authenticate('mediawiki');
 
-require_once(GO::modules()->modules['mediawiki']['class_path'].'mediawiki.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['mediawiki']['class_path'].'mediawiki.class.inc.php');
 $mw = new mediawiki();
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
@@ -27,9 +27,9 @@ try{
 		case 'load_settings':
 
 			$response['data'] = array();
-			$response['data']['title'] = GO::config()->get_setting('mediawiki_title');
+			$response['data']['title'] = $GLOBALS['GO_CONFIG']->get_setting('mediawiki_title');
 				if (empty($response['data']['title'])) $response['data']['title'] = 'Mediawiki';
-			$response['data']['external_url'] = GO::config()->get_setting('mediawiki_external_url');
+			$response['data']['external_url'] = $GLOBALS['GO_CONFIG']->get_setting('mediawiki_external_url');
 				if (empty($response['data']['external_url'])) $response['data']['external_url'] = '';
 			$response['success'] = true;
 

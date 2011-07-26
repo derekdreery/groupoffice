@@ -6,7 +6,7 @@
  * 10 December 2008
 */
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('notes'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('notes'));
 
 $lang['notes']['name']='Заметки';
 $lang['notes']['description']='Модуль для ведения заметок';

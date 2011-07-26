@@ -3,10 +3,10 @@
 <head>
 <meta http-equiv="x-ua-compatible" content="IE=8">
 <?php
-require(GO::theme()->theme_path.'default_head.inc.php');
+require($GLOBALS['GO_THEME']->theme_path.'default_head.inc.php');
 
-if(isset(GO::modules()->modules['customcss']) && file_exists(GO::config()->file_storage_path.'customcss/style.css'))
-	echo '<style>'.file_get_contents(GO::config()->file_storage_path.'customcss/style.css').'</style>'."\n";
+if(isset($GLOBALS['GO_MODULES']->modules['customcss']) && file_exists($GLOBALS['GO_CONFIG']->file_storage_path.'customcss/style.css'))
+	echo '<style>'.file_get_contents($GLOBALS['GO_CONFIG']->file_storage_path.'customcss/style.css').'</style>'."\n";
 
 ?>
 
@@ -15,10 +15,10 @@ if(isset(GO::modules()->modules['customcss']) && file_exists(GO::config()->file_
 <div id="loading-mask" style="width:100%;height:100%;background:#f1f1f1;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>
 <div id="loading">
 	<div class="loading-indicator">
-	<img src="<?php echo GO::config()->host; ?>ext/resources/images/default/grid/loading.gif" style="width:16px;height:16px;vertical-align:middle" />&#160;<span id="load-status"><?php echo $lang['common']['loadingCore']; ?></span>
+	<img src="<?php echo $GLOBALS['GO_CONFIG']->host; ?>ext/resources/images/default/grid/loading.gif" style="width:16px;height:16px;vertical-align:middle" />&#160;<span id="load-status"><?php echo $lang['common']['loadingCore']; ?></span>
 	<div id="copyright" style="font-size:10px; font-weight:normal;margin-top:15px;">Copyright &copy; <?php
-	if(GO::config()->product_name!='Group-Office'){
-		echo GO::config()->product_name;
+	if($GLOBALS['GO_CONFIG']->product_name!='Group-Office'){
+		echo $GLOBALS['GO_CONFIG']->product_name;
 	}else{ echo 'Intermesh BV';
 
 	} ?> 2003-<?php echo date('Y'); ?></div>
@@ -28,7 +28,7 @@ if(isset(GO::modules()->modules['customcss']) && file_exists(GO::config()->file_
 
 
 <?php
-require(GO::config()->root_path.'default_scripts.inc.php');
+require($GLOBALS['GO_CONFIG']->root_path.'default_scripts.inc.php');
 
 /*
  * If we don't have a name of the user then we don't open Group-Office yet. The login dialog will ask to complete the 
@@ -37,7 +37,7 @@ require(GO::config()->root_path.'default_scripts.inc.php');
  * When $popup_groupoffice is set in /default_scripts.inc.php we need to display the login dialog and launch GO in a popup.
  */
 
-if(GO::security()->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !isset($popup_groupoffice))
+if($GLOBALS['GO_SECURITY']->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !isset($popup_groupoffice))
 {
 	?>
 	<div id="mainNorthPanel">
@@ -49,11 +49,11 @@ if(GO::security()->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' &&
 			<span id="notification-area">				
 			</span>			
 			
-			<img id="reminder-icon" src="<?php echo GO::config()->host; ?>themes/Default/images/16x16/reminders.png" style="border:0;vertical-align:middle;cursor:pointer" />
-			<!-- <img id="checker-icon" src="<?php echo GO::config()->host; ?>ext/resources/images/default/grid/loading.gif" style="border:0;vertical-align:middle" /> -->
+			<img id="reminder-icon" src="<?php echo $GLOBALS['GO_CONFIG']->host; ?>themes/Default/images/16x16/reminders.png" style="border:0;vertical-align:middle;cursor:pointer" />
+			<!-- <img id="checker-icon" src="<?php echo $GLOBALS['GO_CONFIG']->host; ?>ext/resources/images/default/grid/loading.gif" style="border:0;vertical-align:middle" /> -->
 			
-			<?php if (isset(GO::modules()->modules['search']) && GO::modules()->modules['search']['read_permission']) {
-			//echo '<img src="'.GO::config()->host.'themes/Default/images/16x16/icon-search.png" style="border:0px;margin-left:10px;margin-right:1px;vertical-align:middle" />';
+			<?php if (isset($GLOBALS['GO_MODULES']->modules['search']) && $GLOBALS['GO_MODULES']->modules['search']['read_permission']) {
+			//echo '<img src="'.$GLOBALS['GO_CONFIG']->host.'themes/Default/images/16x16/icon-search.png" style="border:0px;margin-left:10px;margin-right:1px;vertical-align:middle" />';
 			}
 			?>
 			
@@ -72,7 +72,7 @@ if(GO::security()->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' &&
 				<?php echo $lang['common']['help']; ?></a>
 
 			<?php
-			if(!GO::security()->http_authenticated_session){?>
+			if(!$GLOBALS['GO_SECURITY']->http_authenticated_session){?>
 			<span class="top-menu-separator">|</span>
 			<a href="javascript:GO.mainLayout.logout();">
 				<?php echo $lang['common']['logout']; ?></a>
@@ -120,14 +120,14 @@ if(GO::security()->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' &&
 	<?php	
 }
 
-if(GO::security()->logged_in() && empty($_SESSION['GO_SESSION']['mute_sound']))
+if($GLOBALS['GO_SECURITY']->logged_in() && empty($_SESSION['GO_SESSION']['mute_sound']))
 {
 ?>
 	<object width="0" height="0" id="alarmSound">
-	<param name="movie" value="<?php echo GO::theme()->theme_url; ?>reminder.swf" />
+	<param name="movie" value="<?php echo $GLOBALS['GO_THEME']->theme_url; ?>reminder.swf" />
 	<param name="loop" value="false" />
 	<param name="autostart" value="false" />
-	<embed src="<?php echo GO::theme()->theme_url; ?>reminder.swf" autostart=false loop="false" width="0" height="0" name="alarmSound"></embed>
+	<embed src="<?php echo $GLOBALS['GO_THEME']->theme_url; ?>reminder.swf" autostart=false loop="false" width="0" height="0" name="alarmSound"></embed>
 	</object>
 <?php
 } 

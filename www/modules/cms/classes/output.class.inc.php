@@ -1,5 +1,5 @@
 <?php
-require_once(GO::config()->class_path.'TagParser.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'TagParser.class.inc.php');
 
 class cms_output extends cms {
 
@@ -31,7 +31,7 @@ class cms_output extends cms {
 				$url .= '?'.$querystring;
 			}
 		}else {
-			$url = GO::modules()->modules['cms']['url'].'run.php?file_id='.$file['id'];
+			$url = $GLOBALS['GO_MODULES']->modules['cms']['url'].'run.php?file_id='.$file['id'];
 			if(!empty($querystring)){
 				$url .= '&amp;'.$querystring;
 			}
@@ -49,7 +49,7 @@ class cms_output extends cms {
 				$url .= '?'.$querystring;
 			}
 		}else {
-			$url = GO::modules()->modules['cms']['url'].'run.php?file_id='.$file_id;
+			$url = $GLOBALS['GO_MODULES']->modules['cms']['url'].'run.php?file_id='.$file_id;
 			if(!empty($querystring)){
 				$url .= '&amp;'.$querystring;
 			}
@@ -64,7 +64,7 @@ class cms_output extends cms {
 				$url .= '?'.$querystring;
 			}
 		}else {
-			$url = GO::modules()->modules['cms']['url'].'run.php?site_id='.$this->site['id'].'&path='.$path;
+			$url = $GLOBALS['GO_MODULES']->modules['cms']['url'].'run.php?site_id='.$this->site['id'].'&path='.$path;
 			if(!empty($querystring)){
 				$url .= '&amp;'.$querystring;
 			}
@@ -84,7 +84,7 @@ class cms_output extends cms {
 	function load_config() {
 		global $GO_MODULES, $GO_LANGUAGE;
 
-		$conf = GO::modules()->modules['cms']['path'].'templates/'.$this->site['template'].'/config.php';
+		$conf = $GLOBALS['GO_MODULES']->modules['cms']['path'].'templates/'.$this->site['template'].'/config.php';
 		if(file_exists($conf)) {
 			require($conf);
 
@@ -96,11 +96,11 @@ class cms_output extends cms {
 			$this->site['enable_rewrite']='0';
 		}
 
-		GO::language()->set_language($this->site['language']);
+		$GLOBALS['GO_LANGUAGE']->set_language($this->site['language']);
 
 		$this->get_feeds($this->site['id']);
 		while($feed = $this->next_record()){
-			$this->head .= '<link rel="alternate" type="application/rss+xml" title="'.$feed['name'].'" href="'.GO::modules()->modules['cms']['full_url'].'feed.php?folder_id='.$feed['id'].'">'."\r\n";
+			$this->head .= '<link rel="alternate" type="application/rss+xml" title="'.$feed['name'].'" href="'.$GLOBALS['GO_MODULES']->modules['cms']['full_url'].'feed.php?folder_id='.$feed['id'].'">'."\r\n";
 		}
 		
 
@@ -214,7 +214,7 @@ class cms_output extends cms {
 			return str_replace('/{site_url}?site_id='.$this->site['id'].'&amp;path=', $this->site['rewrite_base'], $content);
 		}else {
 			//we use the ugly URL
-			return str_replace('/{site_url}?', GO::modules()->modules['cms']['url'].'run.php?', $content);
+			return str_replace('/{site_url}?', $GLOBALS['GO_MODULES']->modules['cms']['url'].'run.php?', $content);
 		}
 	}
 
@@ -265,7 +265,7 @@ class cms_output extends cms {
 			$this->get_folders($folder_id,'priority', 'ASC');
 		}
 		while($this->next_record()) {
-			if($this->f('acl')==0 || GO::security()->has_permission($user_id, $this->f('acl'))) {
+			if($this->f('acl')==0 || $GLOBALS['GO_SECURITY']->has_permission($user_id, $this->f('acl'))) {
 				$folders[]=$this->record;
 			}
 		}
@@ -279,7 +279,7 @@ class cms_output extends cms {
 
 		$this->get_files($folder_id,'priority','ASC',0,0,$only_visible);
 		while($this->next_record()) {
-			if($this->f('acl')==0 || GO::security()->has_permission($user_id, $this->f('acl'))) {
+			if($this->f('acl')==0 || $GLOBALS['GO_SECURITY']->has_permission($user_id, $this->f('acl'))) {
 				$files[]=$this->record;
 			}
 		}
@@ -293,7 +293,7 @@ class cms_output extends cms {
 			$folder_id=$this->site['root_folder_id'];
 		}
 		
-		$items = $this->get_authorized_items($folder_id, GO::security()->user_id,true);
+		$items = $this->get_authorized_items($folder_id, $GLOBALS['GO_SECURITY']->user_id,true);
 
 		foreach($items as $item) {
 			if($item['fstype']=='file') {
@@ -459,7 +459,7 @@ class cms_output extends cms {
 		if($search) {
 			$items = $this->search_files($root_folder_id, $_REQUEST['query']);
 		}else {
-			$items = isset($params['items']) ? $params['items'] : $this->get_authorized_items($folder_id, GO::security()->user_id, true, $reverse);
+			$items = isset($params['items']) ? $params['items'] : $this->get_authorized_items($folder_id, $GLOBALS['GO_SECURITY']->user_id, true, $reverse);
 		}
 
 		$total = count($items);

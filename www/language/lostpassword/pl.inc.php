@@ -2,7 +2,7 @@
 //Polish Translation v1.1
 //Author : Paweł Dmitruk pawel.dmitruk@gmail.com
 //Date : September, 03 2010
-require(GO::language()->get_fallback_base_language_file('lostpassword'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('lostpassword'));
 $lang['lostpassword']['success']='<h1>Zmiana hasła</h1><p>Twoje hasło zostało zmienione. Możesz przejść do srtony logowania.</p>';
 $lang['lostpassword']['send']='Wyślij';
 $lang['lostpassword']['login']='Login';

@@ -1,5 +1,5 @@
 <?php
-require_once(GO::config()->class_path.'smarty/Smarty.class.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'smarty/Smarty.class.php');
 
 class cms_smarty extends Smarty{
 
@@ -10,9 +10,9 @@ class cms_smarty extends Smarty{
 		
 		global $GO_MODULES, $GO_CONFIG, $co, $GO_LANGUAGE;
 		
-		//$this->plugins_dir[] = GO::modules()->modules['cms']['path'].'smarty_plugins';
+		//$this->plugins_dir[] = $GLOBALS['GO_MODULES']->modules['cms']['path'].'smarty_plugins';
 		
-		foreach(GO::modules()->modules as $module)
+		foreach($GLOBALS['GO_MODULES']->modules as $module)
 		{
 			if(is_dir($module['path'].'smarty_plugins'))
 			{
@@ -22,8 +22,8 @@ class cms_smarty extends Smarty{
 		
 		//var_dump($this->plugins_dir);
 		
-		$this->template_dir=GO::modules()->modules['cms']['path'].'templates/'.$co->site['template'];
-		$this->compile_dir=GO::config()->orig_tmpdir.'cms/'.$co->site['id'].'/templates_c';
+		$this->template_dir=$GLOBALS['GO_MODULES']->modules['cms']['path'].'templates/'.$co->site['template'];
+		$this->compile_dir=$GLOBALS['GO_CONFIG']->orig_tmpdir.'cms/'.$co->site['id'].'/templates_c';
 		if(!is_dir($this->compile_dir))
 			mkdir($this->compile_dir,0755, true);
 
@@ -31,15 +31,15 @@ class cms_smarty extends Smarty{
 		
 		$this->assign('site', $co->site);
 		$this->assign('session', $_SESSION['GO_SESSION']);
-		$this->assign('cms_url', GO::modules()->modules['cms']['url']);
-		$this->assign('template_path', GO::modules()->modules['cms']['path'].'templates/'.$co->site['template'].'/');
-		$this->assign('template_url', GO::modules()->modules['cms']['url'].'templates/'.$co->site['template'].'/');
-		$this->assign('go_url', GO::config()->host);
-		$this->assign('go_root_path', GO::config()->root_path);
-		$this->assign('file_storage_path', GO::config()->file_storage_path);
-		$this->assign('modules', GO::modules()->modules);
-		$this->assign('images_url', GO::modules()->modules['files']['url'].'download.php?path='.urlencode('public/cms/'.File::strip_invalid_chars($co->site['name']).'/'));
-		$this->assign('images_path', GO::config()->file_storage_path.'public/cms/'.File::strip_invalid_chars($co->site['name']).'/');
+		$this->assign('cms_url', $GLOBALS['GO_MODULES']->modules['cms']['url']);
+		$this->assign('template_path', $GLOBALS['GO_MODULES']->modules['cms']['path'].'templates/'.$co->site['template'].'/');
+		$this->assign('template_url', $GLOBALS['GO_MODULES']->modules['cms']['url'].'templates/'.$co->site['template'].'/');
+		$this->assign('go_url', $GLOBALS['GO_CONFIG']->host);
+		$this->assign('go_root_path', $GLOBALS['GO_CONFIG']->root_path);
+		$this->assign('file_storage_path', $GLOBALS['GO_CONFIG']->file_storage_path);
+		$this->assign('modules', $GLOBALS['GO_MODULES']->modules);
+		$this->assign('images_url', $GLOBALS['GO_MODULES']->modules['files']['url'].'download.php?path='.urlencode('public/cms/'.File::strip_invalid_chars($co->site['name']).'/'));
+		$this->assign('images_path', $GLOBALS['GO_CONFIG']->file_storage_path.'public/cms/'.File::strip_invalid_chars($co->site['name']).'/');
 		
 		if(isset($co->folder))
 		{
@@ -58,12 +58,12 @@ class cms_smarty extends Smarty{
 		$this->assign('head', $co->head);
 		
 		//process scripts
-		if(file_exists(GO::modules()->modules['cms']['path'].'templates/'.$co->site['template'].'/scripts.inc.php'))
+		if(file_exists($GLOBALS['GO_MODULES']->modules['cms']['path'].'templates/'.$co->site['template'].'/scripts.inc.php'))
 		{
-			require_once(GO::modules()->modules['cms']['path'].'templates/'.$co->site['template'].'/scripts.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['cms']['path'].'templates/'.$co->site['template'].'/scripts.inc.php');
 		}
 		
-		$this->assign('lang', GO::language()->language);				
+		$this->assign('lang', $GLOBALS['GO_LANGUAGE']->language);				
 	}
 
 	function load_plugins(){
@@ -74,7 +74,7 @@ class cms_smarty extends Smarty{
 
 		foreach($tags as $tag){
 
-			require_once(GO::modules()->modules[$tag['attributes']['module']]['path'].'smarty_plugins/function.'.$tag['attributes']['type'].'.php');
+			require_once($GLOBALS['GO_MODULES']->modules[$tag['attributes']['module']]['path'].'smarty_plugins/function.'.$tag['attributes']['type'].'.php');
 
 			$function = 'smarty_function_'.$tag['attributes']['type'];
 

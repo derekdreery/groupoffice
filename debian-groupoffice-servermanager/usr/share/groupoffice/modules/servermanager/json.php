@@ -9,8 +9,8 @@
  option) any later version.
  */
 require('../../Group-Office.php');
-GO::security()->json_authenticate('servermanager');
-require_once (GO::modules()->modules['servermanager']['class_path'].'servermanager.class.inc.php');
+$GLOBALS['GO_SECURITY']->json_authenticate('servermanager');
+require_once ($GLOBALS['GO_MODULES']->modules['servermanager']['class_path'].'servermanager.class.inc.php');
 $servermanager = new servermanager();
 
 require('/etc/groupoffice/servermanager.inc.php');
@@ -37,10 +37,10 @@ try{
 
 			$response['results']=array();
 
-			require_once(GO::config()->class_path.'filesystem.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 			$fs = new filesystem();
 
-			$folders = $fs->get_folders(GO::config()->module_path);
+			$folders = $fs->get_folders($GLOBALS['GO_CONFIG']->module_path);
 
 			foreach($folders as $modulefolder)
 			{

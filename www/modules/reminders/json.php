@@ -12,9 +12,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once('../../Group-Office.php');
-GO::security()->json_authenticate('reminders');
+$GLOBALS['GO_SECURITY']->json_authenticate('reminders');
 
-require_once (GO::config()->class_path."base/reminder.class.inc.php");
+require_once ($GLOBALS['GO_CONFIG']->class_path."base/reminder.class.inc.php");
 $reminders = new reminder();
 
 $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
@@ -26,7 +26,7 @@ try{
 
 			if($reminder['link_id']>0){
 				$reminder['link']=$reminder['link_type'].':'.$reminder['link_id'];
-				require_once(GO::config()->class_path.'base/search.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 				$search=new search();
 				
 				$link = $search->get_search_result($reminder['link_id'], $reminder['link_type']);
@@ -73,7 +73,7 @@ try{
 
 			if(isset($_POST['add_groups']))
 			{
-				require_once(GO::config()->class_path.'base/groups.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 				$GO_GROUPS = new GO_GROUPS();
 				$reminder = $reminders->get_reminder($_POST['reminder_id']);
 

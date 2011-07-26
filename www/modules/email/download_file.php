@@ -2,16 +2,16 @@
 require_once("../../Group-Office.php");
 
 global $GO_SECURITY;
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
-$user = $GO_USERS->get_user(GO::security()->user_id);
+$user = $GO_USERS->get_user($GLOBALS['GO_SECURITY']->user_id);
 
 if (empty($_REQUEST['code']) || md5($user['username'].$user['password'].$_REQUEST['filename']) != $_REQUEST['code'])
 	throw new AccessDeniedException();
 
 $browser = detect_browser();
 
-$path = GO::config()->tmpdir.'attachments/'.$_REQUEST['filename'];
+$path = $GLOBALS['GO_CONFIG']->tmpdir.'attachments/'.$_REQUEST['filename'];
 
 $extension = File::get_extension($path);
 $filename = utf8_basename($path);

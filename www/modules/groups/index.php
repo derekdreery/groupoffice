@@ -14,19 +14,19 @@
  */
 
 require_once("../../Group-Office.php");
-GO::security()->html_authenticate('groups');
-require_once(GO::language()->get_language_file('groups'));
+$GLOBALS['GO_SECURITY']->html_authenticate('groups');
+require_once($GLOBALS['GO_LANGUAGE']->get_language_file('groups'));
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
 
 	<title>
-		<?php echo GO::config()->title.' - '.$lang['groups']['name']; ?>
+		<?php echo $GLOBALS['GO_CONFIG']->title.' - '.$lang['groups']['name']; ?>
 	</title>
 	<?php	
-		require(GO::config()->root_path.'default_head.inc');
-		require(GO::config()->root_path.'default_scripts.inc');		
+		require($GLOBALS['GO_CONFIG']->root_path.'default_head.inc');
+		require($GLOBALS['GO_CONFIG']->root_path.'default_scripts.inc');		
 	?>
 	
 	

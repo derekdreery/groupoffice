@@ -169,13 +169,13 @@ class cryptastic {
 			return $_SESSION['GO_SESSION']['global_key'];
 		}
 
-		$key_file=GO::config()->file_storage_path.'key.txt';
+		$key_file=$GLOBALS['GO_CONFIG']->file_storage_path.'key.txt';
 		
 		if(file_exists($key_file)){
 			$key = file_get_contents($key_file);
 		}else
 		{
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$key = $GO_USERS->random_password('a-z,A-Z,1-9', 'i,o', 20);

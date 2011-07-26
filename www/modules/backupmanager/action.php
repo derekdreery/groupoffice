@@ -1,14 +1,14 @@
 <?php
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('backupmanager');
+$GLOBALS['GO_SECURITY']->json_authenticate('backupmanager');
 
-require_once (GO::modules()->modules['backupmanager']['class_path'] . 'backupmanager.class.inc.php');
+require_once ($GLOBALS['GO_MODULES']->modules['backupmanager']['class_path'] . 'backupmanager.class.inc.php');
 
 $backupmanager = new backupmanager();
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 
-require(GO::language()->get_language_file('backupmanager'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('backupmanager'));
 
 try {
 	switch ($task) {
@@ -61,19 +61,19 @@ try {
 				throw new Exception($lang['common']['missingField']);
 			}
 
-			require_once(GO::modules()->modules['backupmanager']['class_path'] . 'phpseclib/Net/SSH2.php');
+			require_once($GLOBALS['GO_MODULES']->modules['backupmanager']['class_path'] . 'phpseclib/Net/SSH2.php');
 			$ssh = new Net_SSH2($rmachine, $rport);
 
 			if ($ssh->login($ruser, $rpassword)) {
-				if (!file_exists(GO::config()->file_storage_path . '.ssh/id_rsa.pub')) {
-					if (!file_exists(GO::config()->file_storage_path . '.ssh')) {
-						mkdir(GO::config()->file_storage_path . '.ssh', 0700);
+				if (!file_exists($GLOBALS['GO_CONFIG']->file_storage_path . '.ssh/id_rsa.pub')) {
+					if (!file_exists($GLOBALS['GO_CONFIG']->file_storage_path . '.ssh')) {
+						mkdir($GLOBALS['GO_CONFIG']->file_storage_path . '.ssh', 0700);
 					}
 
-					exec('ssh-keygen -q -f ' . GO::config()->file_storage_path . '.ssh/id_rsa -N "" -P ""', $o, $r);
+					exec('ssh-keygen -q -f ' . $GLOBALS['GO_CONFIG']->file_storage_path . '.ssh/id_rsa -N "" -P ""', $o, $r);
 				}
 
-				$key_content = file_get_contents(GO::config()->file_storage_path . '.ssh/id_rsa.pub');
+				$key_content = file_get_contents($GLOBALS['GO_CONFIG']->file_storage_path . '.ssh/id_rsa.pub');
 
 				// check of doelmap bestaat
 				$test_targetdir = trim($ssh->exec("test -d '" . escapeshellarg($_REQUEST['rtarget']) . "' || echo 'false'"));
@@ -97,7 +97,7 @@ try {
 				$settings['running'] = 1;
 
 				$response['success'] = $backupmanager->save_settings($settings);
-				GO::config()->save_setting('backupmanager_first_run', true);
+				$GLOBALS['GO_CONFIG']->save_setting('backupmanager_first_run', true);
 			} else {
 				$response['success'] = false;
 			}

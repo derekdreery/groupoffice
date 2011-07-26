@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = '캘린더';
 $lang['calendar']['description'] = 'Calendar module; Every user can add, edit or delete appointments Also appointments from other users can be viewed and if necessary it can be changed.';
 

@@ -19,7 +19,7 @@ if(isset($_REQUEST['sid']))
 }
 require_once("../../Group-Office.php");
 
-require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 $files = new files();
 $fs = new filesystem();
 
@@ -54,13 +54,13 @@ if($public && !$file)
 	$file=array('name'=>utf8_basename($path));
 }
 
-$path = GO::config()->file_storage_path.$path;
+$path = $GLOBALS['GO_CONFIG']->file_storage_path.$path;
 
 $mode = isset($_REQUEST['mode'])  ? $_REQUEST['mode'] : 'download';
 
 if(!$file || !file_exists($path))
 {
-	GO::language()->require_language_file('files');
+	$GLOBALS['GO_LANGUAGE']->require_language_file('files');
     die($lang['files']['fileNotFound']);
 }
 
@@ -79,14 +79,14 @@ if(!isset($_REQUEST['mtime']))
 
 $random_code = isset($_REQUEST['random_code']) ? $_REQUEST['random_code'] : '';
 
-if ($public || $files->has_read_permission(GO::security()->user_id, $file['folder_id']) || ($file['random_code']==$random_code && time()<$file['expire_time']))
+if ($public || $files->has_read_permission($GLOBALS['GO_SECURITY']->user_id, $file['folder_id']) || ($file['random_code']==$random_code && time()<$file['expire_time']))
 {
     /*
      * Remove new_filelink
      */
     if(!$public)
     {
-        $files->delete_new_filelink($file['id'], GO::security()->user_id);
+        $files->delete_new_filelink($file['id'], $GLOBALS['GO_SECURITY']->user_id);
     }
 
     $browser = detect_browser();

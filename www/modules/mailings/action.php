@@ -14,12 +14,12 @@
 
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('mailings');
+$GLOBALS['GO_SECURITY']->json_authenticate('mailings');
 
-require_once(GO::language()->get_language_file('mailings'));
-require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+require_once($GLOBALS['GO_LANGUAGE']->get_language_file('mailings'));
+require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 $ml = new mailings();
-require_once(GO::modules()->modules['mailings']['class_path'].'templates.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'templates.class.inc.php');
 $tp = new templates();
 
 $feedback = null;
@@ -39,7 +39,7 @@ try {
 			}else {
 				try {
 
-					require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+					require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 
 					$swift = new GoSwift(
 									"",
@@ -57,27 +57,27 @@ try {
 
 					$body = $_POST['content_type']=='html' ? $_POST['body'] : $_POST['textbody'];
 
-					if(GO::modules()->has_module('files')) {
-						require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+					if($GLOBALS['GO_MODULES']->has_module('files')) {
+						require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 						$files = new files();
 					}
 
 					//process inline attachments
 					$inline_attachments = json_decode($_POST['inline_attachments'], true);
 					foreach($inline_attachments as $inlineAttachment) {
-						require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+						require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 						$files = new files();
 
 						$tmp_name = $inlineAttachment['tmp_file'];
 						if(!empty($inlineAttachment['temp'])){
-							$tmp_name= GO::config()->tmpdir.'attachments/'.$tmp_name;
+							$tmp_name= $GLOBALS['GO_CONFIG']->tmpdir.'attachments/'.$tmp_name;
 						}elseif(is_numeric($tmp_name)) {
 							$file = $files->get_file($tmp_name);
 							$folder = $files->get_folder($file['folder_id']);
 							if(!$file || !$folder) {
 								throw new FileNotFoundException();
 							}
-							$tmp_name = GO::config()->file_storage_path.$files->build_path($folder).'/'.$file['name'];
+							$tmp_name = $GLOBALS['GO_CONFIG']->file_storage_path.$files->build_path($folder).'/'.$file['name'];
 						}
 
 						$img = Swift_EmbeddedFile::fromPath($tmp_name);
@@ -102,7 +102,7 @@ try {
 								if(!$file || !$folder) {
 									throw new FileNotFoundException();
 								}
-								$tmp_name = GO::config()->file_storage_path.$files->build_path($folder).'/'.$file['name'];
+								$tmp_name = $GLOBALS['GO_CONFIG']->file_storage_path.$files->build_path($folder).'/'.$file['name'];
 							}
 							$attachment = Swift_Attachment::fromPath($tmp_name,File::get_mime($tmp_name));
 							$swift->message->attach($attachment);
@@ -111,7 +111,7 @@ try {
 
 
 					$mailing['alias_id']=$_POST['alias_id'];
-					$mailing['user_id']=GO::security()->user_id;
+					$mailing['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 					$mailing['subject']=$_POST['subject'];
 					$mailing['ctime']=time();
 					$mailing['status']=0;
@@ -119,7 +119,7 @@ try {
 					$mailing['errors']=0;
 					$mailing['total']=0;
 					$mailing['mailing_group_id']=$_POST['mailing_group_id'];
-					$mailing['message_path']=GO::config()->file_storage_path.'mailings/'.GO::security()->user_id.'_'.date('Ymd_Gis').'.eml';
+					$mailing['message_path']=$GLOBALS['GO_CONFIG']->file_storage_path.'mailings/'.$GLOBALS['GO_SECURITY']->user_id.'_'.date('Ymd_Gis').'.eml';
 
 					if(!is_dir(dirname($mailing['message_path'])))
 						mkdir(dirname($mailing['message_path']), 0755, true);
@@ -135,7 +135,7 @@ try {
 					echo json_encode($response);
 
 				} catch (Exception $e) {
-					require(GO::language()->get_language_file('email'));
+					require($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
 					$response['feedback'] = $lang['email']['feedbackUnexpectedError'] . $e->getMessage();
 					echo json_encode($response);
 				}
@@ -169,11 +169,11 @@ try {
 						throw new Exception($lang['mailings']['mailingAlreadyExists']);
 					}
 
-					if(!GO::modules()->modules['mailings']['write_permission']) {
+					if(!$GLOBALS['GO_MODULES']->modules['mailings']['write_permission']) {
 						throw new AccessDeniedException();
 					}
 
-					$mailing['acl_id'] = GO::security()->get_new_acl('mailings');
+					$mailing['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl('mailings');
 
 					$response['mailing_id'] = $ml->add_mailing_group($mailing);
 				} else {
@@ -183,13 +183,13 @@ try {
 					}
 
 					if($existing_mailing) {
-						if(GO::security()->has_permission(GO::security()->user_id, $existing_mailing['acl_id'])<2) {
+						if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $existing_mailing['acl_id'])<2) {
 							throw new AccessDeniedException();
 						}
 					}
 
 					if(isset($_REQUEST['user_id']) && $existing_mailing['user_id'] != $mailing['user_id']) {
-						GO::security()->chown_acl($existing_mailing['acl_id'], $mailing['user_id']);
+						$GLOBALS['GO_SECURITY']->chown_acl($existing_mailing['acl_id'], $mailing['user_id']);
 					}
 
 					$ml->update_mailing_group($mailing);
@@ -211,7 +211,7 @@ try {
 			$response['success'] = true;
 			$response['feedback'] = $feedback;
 
-			$user_id = isset($_POST['user_id']) ? ($_POST['user_id']) : GO::security()->user_id;
+			$user_id = isset($_POST['user_id']) ? ($_POST['user_id']) : $GLOBALS['GO_SECURITY']->user_id;
 
 			if(isset($_POST['user_id'])) {
 				$template['user_id'] = ($_POST['user_id']);
@@ -235,7 +235,7 @@ try {
 				$params['decode_headers'] = true;
 				$params['input'] = $existing_template['content'];
 
-				require_once(GO::config()->class_path.'mail/Go2Mime.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'mail/Go2Mime.class.inc.php');
 				$go2mime = new Go2Mime();
 
 				if(isset($_POST['notification'])) {
@@ -268,10 +268,10 @@ try {
 
 							
 							if(!empty($inline_attachment['temp'])){
-								$tmp_name= GO::config()->tmpdir.'attachments/'.$inline_attachment['tmp_file'];
+								$tmp_name= $GLOBALS['GO_CONFIG']->tmpdir.'attachments/'.$inline_attachment['tmp_file'];
 							}else
 							{
-								$tmp_name = GO::config()->file_storage_path.$inline_attachment['tmp_file'];
+								$tmp_name = $GLOBALS['GO_CONFIG']->file_storage_path.$inline_attachment['tmp_file'];
 							}
 
 							$inline_attachment['tmp_file']=$tmp_name;
@@ -295,11 +295,11 @@ try {
 						throw new Exception($lang['mailings']['templateAlreadyExists']);
 					}
 
-					if(!GO::modules()->modules['mailings']['read_permission']) {
+					if(!$GLOBALS['GO_MODULES']->modules['mailings']['read_permission']) {
 						throw new AccessDeniedException();
 					}
-					$template['user_id']=GO::security()->user_id;
-					$template['acl_id'] = $response['acl_id'] = GO::security()->get_new_acl('templates');
+					$template['user_id']=$GLOBALS['GO_SECURITY']->user_id;
+					$template['acl_id'] = $response['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl('templates');
 					$response['email_template_id'] = $template['id'] = $tp->add_template($template);
 				} else {
 					#update
@@ -309,20 +309,20 @@ try {
 					}
 
 					if($existing_template) {
-						if(GO::security()->has_permission(GO::security()->user_id, $existing_template['acl_id'])<2) {
+						if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $existing_template['acl_id'])<2) {
 							throw new AccessDeniedException();
 						}
 					}
 
 					if(isset($template['user_id']) && $existing_template['user_id'] != $template['user_id']) {
-						GO::security()->chown_acl($existing_template['acl_id'], $template['user_id']);
+						$GLOBALS['GO_SECURITY']->chown_acl($existing_template['acl_id'], $template['user_id']);
 					}
 
 					$tp->update_template($template);
 				}
 			}
 
-			$mail = $go2mime->mime2GO(stripslashes($template['content']), GO::modules()->modules['mailings']['url'].'mimepart.php?template_id='.$template['id']);
+			$mail = $go2mime->mime2GO(stripslashes($template['content']), $GLOBALS['GO_MODULES']->modules['mailings']['url'].'mimepart.php?template_id='.$template['id']);
 			//$response['inline_attachments']=$mail['inline_attachments'];
 
 			//go_debug($mail);

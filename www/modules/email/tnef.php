@@ -13,24 +13,24 @@
  */
 
 require_once("../../Group-Office.php");
-GO::security()->authenticate();
-GO::modules()->authenticate('email');
+$GLOBALS['GO_SECURITY']->authenticate();
+$GLOBALS['GO_MODULES']->authenticate('email');
 
-require_once(GO::modules()->modules['email']['class_path']."cached_imap.class.inc.php");
-require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
+require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."cached_imap.class.inc.php");
+require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
 $imap = new cached_imap();
 $email = new email();
 
-if(!is_executable(GO::config()->cmd_zip)) {
+if(!is_executable($GLOBALS['GO_CONFIG']->cmd_zip)) {
 	exit('Fatal error: ZIP compression not configured');
 }
 
 
-if(!is_executable(GO::config()->cmd_tnef)) {
+if(!is_executable($GLOBALS['GO_CONFIG']->cmd_tnef)) {
 	exit('Fatal error: TNEF extraction not configured');
 }
 
-require_once (GO::language()->get_language_file('email'));
+require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
 
 
 $account = $email->get_account($_REQUEST['account_id']);
@@ -39,12 +39,12 @@ $account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 //$file = $imap->get_message_part_decoded($_REQUEST['uid'], $_REQUEST['imap_id'], $_REQUEST['encoding'], $_REQUEST['charset']);
 $size = $imap->get_message_part_start($_REQUEST['uid'], $_REQUEST['imap_id']);
 
-$tmpdir = GO::config()->tmpdir.'winmail/';
+$tmpdir = $GLOBALS['GO_CONFIG']->tmpdir.'winmail/';
 
 if(is_dir($tmpdir))
 	exec('rm -Rf '.$tmpdir);
 
-mkdir($tmpdir, GO::config()->folder_create_mode, true);
+mkdir($tmpdir, $GLOBALS['GO_CONFIG']->folder_create_mode, true);
 $tmpfile  = $tmpdir.'winmail.dat';
 
 $fp = fopen($tmpfile, 'w+');
@@ -70,10 +70,10 @@ $imap->disconnect();
 
 
 chdir($tmpdir);
-exec(GO::config()->cmd_tnef.' winmail.dat');
+exec($GLOBALS['GO_CONFIG']->cmd_tnef.' winmail.dat');
 unlink($tmpfile);
 
-exec(GO::config()->cmd_zip.' -r "tnef-attachments.zip" *');
+exec($GLOBALS['GO_CONFIG']->cmd_zip.' -r "tnef-attachments.zip" *');
 
 
 $browser = detect_browser();

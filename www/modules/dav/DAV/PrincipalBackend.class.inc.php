@@ -48,16 +48,16 @@ class GO_DAV_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
 
 		global $GO_SECURITY, $GO_CONFIG;
 
-		require_once(GO::config()->class_path . 'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path . 'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		go_debug('GO_DAV_Auth_Backend::getUsers()');
 
 		if (!isset($this->users)) {
 
-			$this->users = array($this->recordToDAVUser($GO_USERS->get_user(GO::security()->user_id)));
+			$this->users = array($this->recordToDAVUser($GO_USERS->get_user($GLOBALS['GO_SECURITY']->user_id)));
 			go_debug('Fetching users from database');
-			/* $GO_USERS->get_authorized_users(GO::security()->user_id, 'username');
+			/* $GO_USERS->get_authorized_users($GLOBALS['GO_SECURITY']->user_id, 'username');
 			  //$GO_USERS->get_users('username', 'asc',0,10);
 			  while($user=$GO_USERS->next_record()){
 
@@ -82,7 +82,7 @@ class GO_DAV_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
 
 			global $GO_CONFIG;
 
-			require_once(GO::config()->class_path . 'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path . 'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$user = $GO_USERS->get_user_by_username($username);

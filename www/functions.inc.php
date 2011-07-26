@@ -46,31 +46,31 @@ function load_standard_info_panel_items(&$response, $link_type) {
 
 	$hidden_sections = json_decode($_POST['hidden_sections'], true);
 	
-	require_once(GO::config()->class_path . '/base/search.class.inc.php');
+	require_once($GLOBALS['GO_CONFIG']->class_path . '/base/search.class.inc.php');
 	$search = new search();
 
 	if (/*!in_array('links', $hidden_sections) && */!isset($response['data']['links'])) {
-		$links_json = $search->get_latest_links_json(GO::security()->user_id, $response['data']['id'], $link_type);
+		$links_json = $search->get_latest_links_json($GLOBALS['GO_SECURITY']->user_id, $response['data']['id'], $link_type);
 		$response['data']['links'] = $links_json['results'];
 	}
 
-	if (/*isset(GO::modules()->modules['tasks']) && !in_array('tasks', $hidden_sections) &&*/ !isset($response['data']['tasks'])) {
-		require_once(GO::modules()->modules['tasks']['class_path'] . 'tasks.class.inc.php');
+	if (/*isset($GLOBALS['GO_MODULES']->modules['tasks']) && !in_array('tasks', $hidden_sections) &&*/ !isset($response['data']['tasks'])) {
+		require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'] . 'tasks.class.inc.php');
 		$tasks = new tasks();
 
 		$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $link_type);
 	}
 
-	if (isset(GO::modules()->modules['calendar'])/* && !in_array('events', $hidden_sections)*/) {
-		require_once(GO::modules()->modules['calendar']['class_path'] . 'calendar.class.inc.php');
+	if (isset($GLOBALS['GO_MODULES']->modules['calendar'])/* && !in_array('events', $hidden_sections)*/) {
+		require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'] . 'calendar.class.inc.php');
 		$cal = new calendar();
 
 		$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $link_type);
 	}
 
 	if (/*!in_array('files', $hidden_sections) && */!isset($response['data']['files'])) {
-		if (isset(GO::modules()->modules['files'])) {
-			require_once(GO::modules()->modules['files']['class_path'] . 'files.class.inc.php');
+		if (isset($GLOBALS['GO_MODULES']->modules['files'])) {
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'] . 'files.class.inc.php');
 			$files = new files();
 
 			$response['data']['files'] = $files->get_content_json($response['data']['files_folder_id']);
@@ -80,18 +80,18 @@ function load_standard_info_panel_items(&$response, $link_type) {
 	}
 
 
-	if (/*!in_array('comments', $hidden_sections) && */isset(GO::modules()->modules['comments']) && !isset($response['data']['comments'])) {
-		require_once (GO::modules()->modules['comments']['class_path'] . 'comments.class.inc.php');
+	if (/*!in_array('comments', $hidden_sections) && */isset($GLOBALS['GO_MODULES']->modules['comments']) && !isset($response['data']['comments'])) {
+		require_once ($GLOBALS['GO_MODULES']->modules['comments']['class_path'] . 'comments.class.inc.php');
 		$comments = new comments();
 
 		$response['data']['comments'] = $comments->get_comments_json($response['data']['id'], $link_type);
 	}
 
-	if(GO::modules()->has_module('customfields') && !isset($response['data']['customfields']))
+	if($GLOBALS['GO_MODULES']->has_module('customfields') && !isset($response['data']['customfields']))
 	{
-		require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+		require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 		$cf = new customfields();
-		$response['data']['customfields']=$cf->get_all_fields_with_values(GO::security()->user_id, $link_type, $response['data']['id']);
+		$response['data']['customfields']=$cf->get_all_fields_with_values($GLOBALS['GO_SECURITY']->user_id, $link_type, $response['data']['id']);
 	}
 
 }
@@ -131,7 +131,7 @@ function set_multiselectgrid_selections($key, $ids, $user_id){
 	global $GO_CONFIG;
 	$value = is_array($ids) ? implode(',', $ids) : $ids;
 
-	GO::config()->save_setting('msg_'.$key,$value, $user_id);
+	$GLOBALS['GO_CONFIG']->save_setting('msg_'.$key,$value, $user_id);
 }
 
 /*
@@ -145,10 +145,10 @@ function get_multiselectgrid_selections($key){
 	if(isset($_POST[$key]))
 	{
 		$ids = json_decode($_POST[$key], true);
-		GO::config()->save_setting('msg_'.$key,implode(',', $ids), GO::security()->user_id);
+		$GLOBALS['GO_CONFIG']->save_setting('msg_'.$key,implode(',', $ids), $GLOBALS['GO_SECURITY']->user_id);
 	}else
 	{
-		$ids = GO::config()->get_setting('msg_'.$key, GO::security()->user_id);
+		$ids = $GLOBALS['GO_CONFIG']->get_setting('msg_'.$key, $GLOBALS['GO_SECURITY']->user_id);
 		$ids = $ids ? explode(',',$ids) : array();
 	}
 	return $ids;
@@ -175,7 +175,7 @@ function create_direct_url($module, $function, $params, $loadevent='render')
 {
 	global $GO_CONFIG;
 
-	return GO::config()->orig_full_url.'dialog.php?e='.$loadevent.'&m='.$module.'&f='.$function.'&p='.urlencode(base64_encode(json_encode($params)));
+	return $GLOBALS['GO_CONFIG']->orig_full_url.'dialog.php?e='.$loadevent.'&m='.$module.'&f='.$function.'&p='.urlencode(base64_encode(json_encode($params)));
 }
 
 
@@ -221,20 +221,20 @@ function create_direct_url($module, $function, $params, $loadevent='render')
  * @param string $class_name
  */
 
-//function go_autoload($class_name) {
-//	global $GO_CONFIG;
-//
-//	/*if(!file_exists(GO::config()->class_path. $class_name.'.class.inc.php'))
-//		{
-//		debug_print_backtrace();
-//		}*/
-//	if(isset($GO_CONFIG)){
-//		$cls = GO::config()->class_path. $class_name.'.class.inc.php';
-//		if(file_exists($cls))
-//			require_once $cls;
-//	}
-//}
-//spl_autoload_register("go_autoload");
+function go_autoload($class_name) {
+	global $GO_CONFIG;
+
+	/*if(!file_exists($GLOBALS['GO_CONFIG']->class_path. $class_name.'.class.inc.php'))
+		{
+		debug_print_backtrace();
+		}*/
+	if(isset($GO_CONFIG)){
+		$cls = $GLOBALS['GO_CONFIG']->class_path. $class_name.'.class.inc.php';
+		if(file_exists($cls))
+			require_once $cls;
+	}
+}
+spl_autoload_register("go_autoload");
 
 
 function is_windows(){
@@ -295,7 +295,7 @@ function utf8_basename($path)
  */
 function go_log($level, $message) {
 	global $GO_CONFIG;
-	if (GO::config()->log) {
+	if ($GLOBALS['GO_CONFIG']->log) {
 		$messages = str_split($message, 500);
 		for ($i = 0; $i < count($messages); $i ++) {
 			syslog($level, $messages[$i]);
@@ -305,10 +305,10 @@ function go_log($level, $message) {
 
 function go_infolog($message){
 	global $GO_CONFIG;
-	if (GO::config()->log) {
+	if ($GLOBALS['GO_CONFIG']->log) {
 		
 		if(empty($_SESSION['GO_SESSION']['logdircheck'])){
-			File::mkdir(dirname(GO::config()->info_log));
+			File::mkdir(dirname($GLOBALS['GO_CONFIG']->info_log));
 			$_SESSION['GO_SESSION']['logdircheck']=true;
 		}
 		
@@ -320,7 +320,7 @@ function go_infolog($message){
 		
 		$msg.= $message;
 		
-		@file_put_contents(GO::config()->info_log, $msg."\n", FILE_APPEND);
+		@file_put_contents($GLOBALS['GO_CONFIG']->info_log, $msg."\n", FILE_APPEND);
 	}
 }
 
@@ -345,7 +345,7 @@ function go_debug($text, $config=false)
 {
 
 	if(!$config)
-		$config=GO::config();
+		$config=$GLOBALS['GO_CONFIG'];
 
 	if($config->debug || $config->debug_log)
 	{
@@ -408,16 +408,16 @@ function detect_browser() {
 function get_thumb_dir(){
 	global $GO_CONFIG;
 
-	require_once(GO::config()->class_path.'base/theme.class.inc.php');
+	require_once($GLOBALS['GO_CONFIG']->class_path.'base/theme.class.inc.php');
 	$GO_THEME = new GO_THEME();
 
 
-	if(is_dir(GO::theme()->theme_path.'images/128x128/filetypes/')){
-		$dir = GO::theme()->image_path.'128x128/filetypes/';
-		$url = GO::theme()->image_url.'128x128/filetypes/';
+	if(is_dir($GLOBALS['GO_THEME']->theme_path.'images/128x128/filetypes/')){
+		$dir = $GLOBALS['GO_THEME']->image_path.'128x128/filetypes/';
+		$url = $GLOBALS['GO_THEME']->image_url.'128x128/filetypes/';
 	}else{
-		$dir = GO::config()->theme_path.'Default/images/128x128/filetypes/';
-		$url = GO::config()->theme_url.'Default/images/128x128/filetypes/';
+		$dir = $GLOBALS['GO_CONFIG']->theme_path.'Default/images/128x128/filetypes/';
+		$url = $GLOBALS['GO_CONFIG']->theme_url.'Default/images/128x128/filetypes/';
 	}
 
 	return array('url'=>$url,'dir'=>$dir);
@@ -426,7 +426,7 @@ function get_thumb_dir(){
 function get_thumb_url($path, $w=100,$h=100,$zc=1) {
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/theme.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/theme.class.inc.php');
 		$GO_THEME = new GO_THEME();
 
 
@@ -445,7 +445,7 @@ function get_thumb_url($path, $w=100,$h=100,$zc=1) {
 			case 'png':
 			case 'gif':
 			case 'xmind':
-				return GO::config()->control_url.'thumb.php?src='.urlencode($path).'&w='.$w.'&h='.$h.'&zc='.$zc.'&filemtime='.@filemtime(GO::config()->file_storage_path.$path).'&filectime='.@filectime(GO::config()->file_storage_path.$path);
+				return $GLOBALS['GO_CONFIG']->control_url.'thumb.php?src='.urlencode($path).'&w='.$w.'&h='.$h.'&zc='.$zc.'&filemtime='.@filemtime($GLOBALS['GO_CONFIG']->file_storage_path.$path).'&filectime='.@filectime($GLOBALS['GO_CONFIG']->file_storage_path.$path);
 				break;
 
 			case 'pdf':

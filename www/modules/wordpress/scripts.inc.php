@@ -1,5 +1,5 @@
 <?php
-require_once(GO::modules()->modules['wordpress']['class_path'].'wordpress.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['wordpress']['class_path'].'wordpress.class.inc.php');
 $wp = new wordpress();
 $mapping = $wp->get_mapping();
 

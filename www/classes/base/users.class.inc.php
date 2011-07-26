@@ -49,15 +49,15 @@ class GO_USERS extends db
 
 		$middle_name = $userdata['middle_name'] == '' ? '' : $userdata['middle_name'].' ';
 
-		if($update_language && GO::language()->language != $userdata['language'])
+		if($update_language && $GLOBALS['GO_LANGUAGE']->language != $userdata['language'])
 		{
-			$userdata['language'] = $up_user['language'] = GO::language()->language;
+			$userdata['language'] = $up_user['language'] = $GLOBALS['GO_LANGUAGE']->language;
 			$up_user['id']=$userdata['id'];
 
 			$this->update_row('go_users', 'id', $up_user);
 		}else
 		{
-			GO::language()->set_language($userdata['language']);
+			$GLOBALS['GO_LANGUAGE']->set_language($userdata['language']);
 		}
 
 		$_SESSION['GO_SESSION']['user_id'] = $userdata['id'];
@@ -105,9 +105,9 @@ class GO_USERS extends db
 		
 
 		if($theme_changed){
-			require_once(GO::config()->class_path.'base/theme.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/theme.class.inc.php');
 			$GO_THEME = new GO_THEME();
-			GO::theme()->set_theme();
+			$GLOBALS['GO_THEME']->set_theme();
 		}
 
 
@@ -188,24 +188,24 @@ class GO_USERS extends db
 		if($user_id > 0)
 		{
 			
-			if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission'])
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
 			{
 				$sql .= ", cf_8.* ";
 			}
-			$sql .=" FROM go_users u INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
+			$sql .=" FROM go_users u INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 			
-			if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission'])
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
 			{
 				$sql .= "LEFT JOIN cf_8 ON cf_8.link_id=u.id ";
 			}
 		}else
 		{		
-			if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission'])
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
 			{
 				$sql .= ", cf_8.* ";
 			}
 			$sql .= " FROM go_users u ";
-			if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission'])
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
 			{
 				$sql .= " LEFT JOIN cf_8 ON cf_8.link_id=u.id ";
 			}			
@@ -227,7 +227,7 @@ class GO_USERS extends db
 					$fields[]='city';
 					
 					
-					if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission'])
+					if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
 					{
 						$fields_sql = "SHOW FIELDS FROM cf_8";
 						$this->query($fields_sql);
@@ -287,7 +287,7 @@ class GO_USERS extends db
 	function get_linked_users($user_id, $link_id)
 	{
 		global $GO_CONFIG;
-		require_once(GO::config()->class_path.'base/links.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 		$GO_LINKS = new GO_LINKS();
 
 		$links = $GO_LINKS->get_links($link_id, 8);
@@ -519,7 +519,7 @@ class GO_USERS extends db
 	{
 		global $GO_MODULES, $GO_SECURITY, $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/groups.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 		$GO_GROUPS = new GO_GROUPS();
 
 		if($this->update_profile($user))
@@ -528,8 +528,8 @@ class GO_USERS extends db
 			$user = $this->get_user($user['id']);
 			
 			if(isset($modules_read) && isset($modules_write)){
-				GO::modules()->get_modules();
-				while ($mod = GO::modules()->next_record())
+				$GLOBALS['GO_MODULES']->get_modules();
+				while ($mod = $GLOBALS['GO_MODULES']->next_record())
 				{
 					$level = 0;
 					if(in_array($mod['id'], $modules_write)){
@@ -540,14 +540,14 @@ class GO_USERS extends db
 
 					if ($level)
 					{
-						if(!GO::security()->has_permission($user['id'], $mod['acl_id']))
+						if(!$GLOBALS['GO_SECURITY']->has_permission($user['id'], $mod['acl_id']))
 						{
-							GO::security()->add_user_to_acl($user['id'], $mod['acl_id'], $level);
+							$GLOBALS['GO_SECURITY']->add_user_to_acl($user['id'], $mod['acl_id'], $level);
 						}
 					} else {
-						if(GO::security()->user_in_acl($user['id'], $mod['acl_id']))
+						if($GLOBALS['GO_SECURITY']->user_in_acl($user['id'], $mod['acl_id']))
 						{
-							GO::security()->delete_user_from_acl($user['id'], $mod['acl_id']);
+							$GLOBALS['GO_SECURITY']->delete_user_from_acl($user['id'], $mod['acl_id']);
 						}
 					}
 				}
@@ -578,17 +578,17 @@ class GO_USERS extends db
 
 				if(isset($visible_user_groups))
 				{
-					$group_is_visible = GO::security()->group_in_acl($GO_GROUPS->f('id'), $user['acl_id']);
+					$group_is_visible = $GLOBALS['GO_SECURITY']->group_in_acl($GO_GROUPS->f('id'), $user['acl_id']);
 					$group_should_be_visible = in_array($GO_GROUPS->f('id'), $visible_user_groups);
 
 					if ($group_is_visible && !$group_should_be_visible)
 					{
-						GO::security()->delete_group_from_acl($GO_GROUPS->f('id'), $user['acl_id']);
+						$GLOBALS['GO_SECURITY']->delete_group_from_acl($GO_GROUPS->f('id'), $user['acl_id']);
 					}
 
 					if (!$group_is_visible  && $group_should_be_visible)
 					{
-						GO::security()->add_group_to_acl($GO_GROUPS->f('id'), $user['acl_id']);
+						$GLOBALS['GO_SECURITY']->add_group_to_acl($GO_GROUPS->f('id'), $user['acl_id']);
 					}
 				}
 			}
@@ -644,10 +644,10 @@ class GO_USERS extends db
 				$user['password']=$params[0]['password'];
 			}
 			$params = array($user, $user['password']);
-			GO::events()->fire_event('add_user', $params);
+			$GLOBALS['GO_EVENTS']->fire_event('add_user', $params);
 		}else
 		{
-			GO::events()->fire_event('update_user', $params);
+			$GLOBALS['GO_EVENTS']->fire_event('update_user', $params);
 		}
 		
 		return $ret;
@@ -670,7 +670,7 @@ class GO_USERS extends db
 		$sql = "UPDATE go_users SET password='".md5($password)."' WHERE id='$user_id'";
 		if ($this->query($sql))
 		{
-			GO::events()->fire_event('change_user_password', array($user_id, $password));
+			$GLOBALS['GO_EVENTS']->fire_event('change_user_password', array($user_id, $password));
 			
 			return true;
 		}
@@ -756,10 +756,10 @@ class GO_USERS extends db
 
 		global $GO_CONFIG, $GO_LANGUAGE, $GO_SECURITY, $GO_MODULES, $GO_EVENTS, $lang;
 
-		require_once(GO::config()->class_path.'base/groups.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 		$GO_GROUPS = new GO_GROUPS();
 
-		GO::language()->require_language_file('users');
+		$GLOBALS['GO_LANGUAGE']->require_language_file('users');
 
 		if(empty($user['username']) || empty($user['email']))
 		{
@@ -786,7 +786,7 @@ class GO_USERS extends db
 		// same address. It also should not be possible to have multiple users
 		// with the same name...
 
-		if(!GO::config()->allow_duplicate_email)
+		if(!$GLOBALS['GO_CONFIG']->allow_duplicate_email)
 		{
 			$this->query( "SELECT email,username,id FROM go_users WHERE email='".$this->escape($user['email'])."' OR username='".$this->escape($user['username'])."'");
 			if ($existing = $this->next_record()) {
@@ -812,35 +812,35 @@ class GO_USERS extends db
 			$user['start_module']='summary';
 		
 		if(!isset($user['language']))
-	 		$user['language'] = GO::language()->language;
+	 		$user['language'] = $GLOBALS['GO_LANGUAGE']->language;
 
 	 		
 		if(!isset($user['currency']))
-	 		$user['currency'] = GO::config()->default_currency;
+	 		$user['currency'] = $GLOBALS['GO_CONFIG']->default_currency;
 	 		
 	 	if(!isset($user['decimal_separator']))
-			$user['decimal_separator'] = GO::config()->default_decimal_separator;
+			$user['decimal_separator'] = $GLOBALS['GO_CONFIG']->default_decimal_separator;
 			
 		if(!isset($user['thousands_separator']))
-			$user['thousands_separator'] = GO::config()->default_thousands_separator;
+			$user['thousands_separator'] = $GLOBALS['GO_CONFIG']->default_thousands_separator;
 			
 		if(!isset($user['time_format']))
-			$user['time_format'] = GO::config()->default_time_format;
+			$user['time_format'] = $GLOBALS['GO_CONFIG']->default_time_format;
 			
 		if(!isset($user['date_format']))
-			$user['date_format'] = GO::config()->default_date_format;
+			$user['date_format'] = $GLOBALS['GO_CONFIG']->default_date_format;
 			
 		if(!isset($user['date_separator']))
-			$user['date_separator'] = GO::config()->default_date_separator;
+			$user['date_separator'] = $GLOBALS['GO_CONFIG']->default_date_separator;
 		
 		if(!isset($user['first_weekday']))
-			$user['first_weekday'] = GO::config()->default_first_weekday;
+			$user['first_weekday'] = $GLOBALS['GO_CONFIG']->default_first_weekday;
 			
 		if(!isset($user['timezone']))
-			$user['timezone'] = GO::config()->default_timezone;
+			$user['timezone'] = $GLOBALS['GO_CONFIG']->default_timezone;
 		
 		if(!isset($user['theme']))
-			$user['theme'] = GO::config()->theme;
+			$user['theme'] = $GLOBALS['GO_CONFIG']->theme;
 			
 		if(!isset($user['max_rows_list']))
 			$user['max_rows_list'] = 20;
@@ -849,7 +849,7 @@ class GO_USERS extends db
 			$user['sex'] = 'M';
 
 		if(!isset($user['sort_name']))
-			$user['sort_name'] = GO::config()->default_sort_name;
+			$user['sort_name'] = $GLOBALS['GO_CONFIG']->default_sort_name;
 
 
 
@@ -866,9 +866,9 @@ class GO_USERS extends db
 		// when the LDAP entry is converted to the $user entry, which is given
 		// as parameter to this function).
 		if ( isset( $user['acl_id'] ) ) {
-			GO::security()->set_acl_owner( $user['acl_id'], $user['id'] );
+			$GLOBALS['GO_SECURITY']->set_acl_owner( $user['acl_id'], $user['id'] );
 		} else {
-			$user['acl_id'] = GO::security()->get_new_acl( $user['email'] );
+			$user['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl( $user['email'] );
 		}		
 		
 		$user['registration_time'] = $user['mtime']=time();
@@ -882,7 +882,7 @@ class GO_USERS extends db
 
 		//random password is used by serverclient. It won't try to add an e-mail account
 		//with a random password
-		GO::events()->fire_event('before_add_user', array($user, $random_password));
+		$GLOBALS['GO_EVENTS']->fire_event('before_add_user', array($user, $random_password));
 		
 		$unencrypted_password = $user['password'];
 		if(!empty($user['password']))
@@ -891,9 +891,9 @@ class GO_USERS extends db
 			$user['password'] = crypt($user['password']);
 		}
 	
-		if(isset(GO::modules()->modules['files']))
+		if(isset($GLOBALS['GO_MODULES']->modules['files']))
 		{
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			
 			$usersdir = $files->resolve_path('users',true, 1);
@@ -911,47 +911,47 @@ class GO_USERS extends db
 			
 			$this->cache_user($user['id']);
 			
-			GO::security()->set_acl_owner( $user['acl_id'], $user['id'] );
-			$GO_GROUPS->add_user_to_group( $user['id'], GO::config()->group_everyone);
+			$GLOBALS['GO_SECURITY']->set_acl_owner( $user['acl_id'], $user['id'] );
+			$GO_GROUPS->add_user_to_group( $user['id'], $GLOBALS['GO_CONFIG']->group_everyone);
 
 			foreach($user_groups as $group_id)
 			{
-				if($group_id > 0 && $group_id != GO::config()->group_everyone && !$GO_GROUPS->is_in_group($user['id'], $group_id))
+				if($group_id > 0 && $group_id != $GLOBALS['GO_CONFIG']->group_everyone && !$GO_GROUPS->is_in_group($user['id'], $group_id))
 				{
 					$GO_GROUPS->add_user_to_group($user['id'], $group_id);
 				}
 			}
 			foreach($visible_user_groups as $group_id)
 			{
-				if($group_id > 0 && !GO::security()->group_in_acl($group_id, $user['acl_id']))
+				if($group_id > 0 && !$GLOBALS['GO_SECURITY']->group_in_acl($group_id, $user['acl_id']))
 				{
-					GO::security()->add_group_to_acl($group_id, $user['acl_id']);
+					$GLOBALS['GO_SECURITY']->add_group_to_acl($group_id, $user['acl_id']);
 				}
 			}
 
 			foreach($modules_read as $module_name)
 			{
-				$module = GO::modules()->get_module($module_name);
+				$module = $GLOBALS['GO_MODULES']->get_module($module_name);
 				if($module)
 				{
-					GO::security()->add_user_to_acl($user['id'], $module['acl_id'], GO_SECURITY::READ_PERMISSION);
+					$GLOBALS['GO_SECURITY']->add_user_to_acl($user['id'], $module['acl_id'], GO_SECURITY::READ_PERMISSION);
 				}
 			}
 
 			foreach($modules_write as $module_name)
 			{
-				$module = GO::modules()->get_module($module_name);
+				$module = $GLOBALS['GO_MODULES']->get_module($module_name);
 				if($module)
 				{
-					GO::security()->add_user_to_acl($user['id'], $module['acl_id'], GO_SECURITY::WRITE_PERMISSION);
+					$GLOBALS['GO_SECURITY']->add_user_to_acl($user['id'], $module['acl_id'], GO_SECURITY::WRITE_PERMISSION);
 				}
 			}
 
 			foreach($acl as $acl_id)
 			{
-				if(!GO::security()->user_in_acl($user['id'], $acl_id))
+				if(!$GLOBALS['GO_SECURITY']->user_in_acl($user['id'], $acl_id))
 				{
-					GO::security()->add_user_to_acl($user['id'], $acl_id);
+					$GLOBALS['GO_SECURITY']->add_user_to_acl($user['id'], $acl_id);
 				}
 			}
 			
@@ -960,12 +960,12 @@ class GO_USERS extends db
 			//delay add user event because name must be supplied first.
 			if(!empty($user['first_name']))
 			{
-				GO::events()->fire_event('add_user', array($user, $random_password));
+				$GLOBALS['GO_EVENTS']->fire_event('add_user', array($user, $random_password));
 			}
 
 			if($send_invitation){
-				require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
-				require_once(GO::modules()->modules['users']['class_path'].'users.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['users']['class_path'].'users.class.inc.php');
 				$users = new users();
 
 				$email = $users->get_register_email();
@@ -975,16 +975,16 @@ class GO_USERS extends db
 					$email['register_email_body'] = str_replace('{'.$key.'}', $value, $email['register_email_body']);
 				}
 
-				$email['register_email_body']= str_replace('{url}', GO::config()->full_url, $email['register_email_body']);
-				$email['register_email_body']= str_replace('{title}', GO::config()->title, $email['register_email_body']);
+				$email['register_email_body']= str_replace('{url}', $GLOBALS['GO_CONFIG']->full_url, $email['register_email_body']);
+				$email['register_email_body']= str_replace('{title}', $GLOBALS['GO_CONFIG']->title, $email['register_email_body']);
 				$swift->set_body($email['register_email_body'],'plain');
-				$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
+				$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 				$swift->sendmail();
 			}
 
 			return $user['id'];
 		} else {
-			GO::security()->delete_acl( $user['id'] );
+			$GLOBALS['GO_SECURITY']->delete_acl( $user['id'] );
 		}
 	
 		return false;
@@ -1003,7 +1003,7 @@ class GO_USERS extends db
 	{
 		global $GO_CONFIG;
 
-		if($this->get_users() < GO::config()->max_users || GO::config()->max_users == 0)
+		if($this->get_users() < $GLOBALS['GO_CONFIG']->max_users || $GLOBALS['GO_CONFIG']->max_users == 0)
 		{
 			return false;
 		}else
@@ -1024,7 +1024,7 @@ class GO_USERS extends db
 	{
 		global $GO_CONFIG,$GO_SECURITY, $GO_EVENTS;
 
-		require_once(GO::config()->class_path.'base/groups.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 		$GO_GROUPS = new GO_GROUPS();
 
 		if($user = $this->get_user($user_id))
@@ -1035,17 +1035,17 @@ class GO_USERS extends db
 			if ($this->query($sql))
 			{
 				$GO_GROUPS->delete_user($user_id);
-				GO::security()->delete_acl($acl_id);
-				GO::security()->delete_user($user_id);
+				$GLOBALS['GO_SECURITY']->delete_acl($acl_id);
+				$GLOBALS['GO_SECURITY']->delete_user($user_id);
 				
-				require_once(GO::config()->class_path.'base/search.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 				$search = new search();
 				
 				$search->delete_search_result($user_id, 8);		
 
 				$args=array($user);
 				
-				GO::events()->fire_event('user_delete', $args);
+				$GLOBALS['GO_EVENTS']->fire_event('user_delete', $args);
 
 				$sql = "DELETE FROM go_acl WHERE user_id=".intval($user_id).";";
 				$this->query($sql);
@@ -1090,10 +1090,10 @@ class GO_USERS extends db
 	{
 		global $GO_MODULES, $GO_CONFIG, $GO_LANGUAGE;
 		
-		require_once(GO::config()->class_path.'/base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
 		$search = new search();
 
-		require(GO::language()->get_language_file('users'));
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('users'));
 
 		$sql = "SELECT DISTINCT *  FROM go_users WHERE id=?";
 		$this->query($sql, 'i', $user_id);
@@ -1109,7 +1109,7 @@ class GO_USERS extends db
 			$cache['keywords']=$search->record_to_keywords($this->record).','.$cache['type'];
 			$cache['mtime']=$this->f('mtime');
 			$cache['module']='users';
-			$cache['acl_id']=GO::modules()->modules['users']['acl_id'];
+			$cache['acl_id']=$GLOBALS['GO_MODULES']->modules['users']['acl_id'];
 			
 			$search->cache_search_result($cache);
 		}

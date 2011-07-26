@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('postfixadmin'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('postfixadmin'));
 $lang['postfixadmin']['name']='PostfixVerwaltung';
 $lang['postfixadmin']['description']='Modul zum Verwalten von Postfix-Benutzern in der GroupOffice-Datenbank';
 $lang['postfixadmin']['alias']='Alias';

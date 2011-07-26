@@ -67,7 +67,7 @@ class cms extends db {
 	function get_template_config($template) {
 		global $GO_MODULES;
 
-		$file = GO::modules()->modules['cms']['path'].'templates/'.$template.'/config.xml';
+		$file = $GLOBALS['GO_MODULES']->modules['cms']['path'].'templates/'.$template.'/config.xml';
 		if(!file_exists($file))
 			return false;
 
@@ -628,8 +628,8 @@ class cms extends db {
 		$site['root_folder_id'] = $this->add_folder($folder);
 
 		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files'])) {
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			$f = $files->check_share('public/cms/'.File::strip_invalid_chars($site['name']),$site['user_id'], $site['acl_write'], $site['acl_write']);
 			$site['files_folder_id']=$f['id'];
@@ -652,8 +652,8 @@ class cms extends db {
 		if(!$old_site)$old_site=$this->get_site($site['id']);
 
 		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files']) && $site['name']!=$old_site['name']) {
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['files']) && $site['name']!=$old_site['name']) {
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			$files->move_by_paths('public/cms/'.File::strip_invalid_chars($old_site['name']), 'public/cms/'.File::strip_invalid_chars($site['name']));
 		}
@@ -675,8 +675,8 @@ class cms extends db {
 		if($site = $this->get_site($site_id)) {
 
 			global $GO_MODULES;
-			if(isset(GO::modules()->modules['files'])) {
-				require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
+				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 				$files = new files();
 
 				$folder = $files->resolve_path('public/cms/'.File::strip_invalid_chars($site['name']));
@@ -689,7 +689,7 @@ class cms extends db {
 
 			if($this->query("DELETE FROM cms_sites WHERE id='".$this->escape($site_id)."'")) {
 				global $GO_SECURITY;
-				GO::security()->delete_acl($site['acl_write']);
+				$GLOBALS['GO_SECURITY']->delete_acl($site['acl_write']);
 				return true;
 			}
 		}
@@ -810,7 +810,7 @@ class cms extends db {
 		}
 
 		$folder['id']=$this->nextid('cms_folders');
-		if($this->insert_row('cms_folders', $folder) && $this->user_folder_allow(GO::security()->user_id,$folder['id'])) {
+		if($this->insert_row('cms_folders', $folder) && $this->user_folder_allow($GLOBALS['GO_SECURITY']->user_id,$folder['id'])) {
 			return $folder['id'];
 		}
 		return false;
@@ -1012,8 +1012,8 @@ class cms extends db {
 	function add_file(&$file, $site) {
 
 		global $GO_MODULES;
-		if(!isset($file['files_folder_id']) && isset(GO::modules()->modules['files'])) {
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+		if(!isset($file['files_folder_id']) && isset($GLOBALS['GO_MODULES']->modules['files'])) {
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$new_path = $this->build_file_files_path($file, $site);
@@ -1045,8 +1045,8 @@ class cms extends db {
 	 */
 	function update_file($file, $site, $old_file=false) {
 		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files']) && (isset($file['folder_id']) || isset($file['name']))) {
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['files']) && (isset($file['folder_id']) || isset($file['name']))) {
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			if(!$old_file) $old_file = $this->get_file($file['id']);
@@ -1077,9 +1077,9 @@ class cms extends db {
 	function delete_file($file_id) {
 		global $GO_MODULES;
 
-		if(isset(GO::modules()->modules['files'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
 			$file = $this->get_file($file_id);
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			try {
 				$files->delete_folder($file['files_folder_id']);
@@ -1210,11 +1210,11 @@ class cms extends db {
 
 		echo 'Website folders'.$line_break;
 
-		if(isset(GO::modules()->modules['files'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
 			$db = new db();
 			$cms = new cms();
 
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$sql = "SELECT * FROM cms_sites";

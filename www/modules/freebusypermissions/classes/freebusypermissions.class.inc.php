@@ -26,7 +26,7 @@ class freebusypermissions extends db
 
 
 		$acl_id = $fp->get_acl($target_user_id);
-		if(!GO::security()->has_permission($request_user_id, $acl_id)){
+		if(!$GLOBALS['GO_SECURITY']->has_permission($request_user_id, $acl_id)){
 			$permission=false;
 		}  else {
 			$permission=true;
@@ -46,7 +46,7 @@ class freebusypermissions extends db
 
 		if(!$r){
 			global $GO_SECURITY;
-			$r['acl_id'] = GO::security()->get_new_acl('freebusypermissions', $user_id);
+			$r['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl('freebusypermissions', $user_id);
 			$r['user_id']=$user_id;
 
 			$this->insert_row('fb_acl', $r);

@@ -1,6 +1,6 @@
 <?php
 
-require(GO::language()->get_fallback_language_file('email'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('email'));
 
 $lang['email']['name'] = 'E-posta';
 $lang['email']['description'] = 'Tam özellikli E-posta istemcisi. Her kullanıcı E-posta gönderip alabilme özelliğine sahiptir';

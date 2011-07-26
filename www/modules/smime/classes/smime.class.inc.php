@@ -30,28 +30,28 @@ class smime extends db{
 		
 		$certs=array();
 		
-//		if(isset(GO::config()->smime_root_cert_location)){
+//		if(isset($GLOBALS['GO_CONFIG']->smime_root_cert_location)){
 //			
-//			GO::config()->smime_root_cert_location=rtrim(GO::config()->smime_root_cert_location, '/');		
+//			$GLOBALS['GO_CONFIG']->smime_root_cert_location=rtrim($GLOBALS['GO_CONFIG']->smime_root_cert_location, '/');		
 //			
-//			if(is_dir(GO::config()->smime_root_cert_location)){				
+//			if(is_dir($GLOBALS['GO_CONFIG']->smime_root_cert_location)){				
 //							
-//				$dir = opendir(GO::config()->smime_root_cert_location);
+//				$dir = opendir($GLOBALS['GO_CONFIG']->smime_root_cert_location);
 //				if ($dir) {
 //					while ($item = readdir($dir)) {
 //						if ($item != '.' && $item != '..') {
-//							$certs[] = GO::config()->smime_root_cert_location.'/'.$item;
+//							$certs[] = $GLOBALS['GO_CONFIG']->smime_root_cert_location.'/'.$item;
 //						}
 //					}
 //					closedir($dir);
 //				}
-//			}elseif(file_exists(GO::config()->smime_root_cert_location)){
-//				$certs[]=GO::config()->smime_root_cert_location;
+//			}elseif(file_exists($GLOBALS['GO_CONFIG']->smime_root_cert_location)){
+//				$certs[]=$GLOBALS['GO_CONFIG']->smime_root_cert_location;
 //			}
 //		}
 //		
-		if(file_exists(GO::config()->smime_root_cert_location)){
-				$certs[]=GO::config()->smime_root_cert_location;
+		if(file_exists($GLOBALS['GO_CONFIG']->smime_root_cert_location)){
+				$certs[]=$GLOBALS['GO_CONFIG']->smime_root_cert_location;
 			}
 		
 		//var_dump($certs);
@@ -104,10 +104,10 @@ class smime extends db{
 		
 		if (isset($_FILES['cert']['tmp_name'][0]) && is_uploaded_file($_FILES['cert']['tmp_name'][0])) {
 			
-			GO::language()->require_language_file('smime');
+			$GLOBALS['GO_LANGUAGE']->require_language_file('smime');
 			
 			
-			require_once(GO::config()->class_path.'base/auth.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/auth.class.inc.php');
 			$GO_AUTH = new GO_AUTH();
 			if(!$GO_AUTH->login($_SESSION['GO_SESSION']['username'], $_POST['smime_password'])){
 				throw new Exception($lang['smime']['badGoLogin']);
@@ -156,7 +156,7 @@ class smime extends db{
 
 				if(!$cert || empty($cert['cert']))
 				{
-					GO::language()->require_language_file('smime');
+					$GLOBALS['GO_LANGUAGE']->require_language_file('smime');
 					go_debug('SMIME: No private key at all found for this account');
 					$message['html_body']=$lang['smime']['noPrivateKeyForDecrypt'];
 					return false;
@@ -194,8 +194,8 @@ class smime extends db{
 //      'tmp_file' => false,
 //    )
 			
-			$reldir='smimetmp/'.GO::security()->user_id.'/';
-			$dir = GO::config()->file_storage_path.$reldir;
+			$reldir='smimetmp/'.$GLOBALS['GO_SECURITY']->user_id.'/';
+			$dir = $GLOBALS['GO_CONFIG']->file_storage_path.$reldir;
 			File::mkdir($dir);
 			
 			$infilename=$dir.'encrypted.txt';
@@ -232,7 +232,7 @@ class smime extends db{
 
 				if(!$return || !file_exists($outfilename) || !filesize($outfilename)){
 					//throw new Exception("Could not decrypt message");
-					GO::language()->require_language_file('smime');
+					$GLOBALS['GO_LANGUAGE']->require_language_file('smime');
 					$message['html_body']=$lang['smime']['decryptionFailed'].'<br />';
 					
 					while($str = openssl_error_string()){
@@ -265,12 +265,12 @@ class smime extends db{
 			
 			if(!$return || !file_exists($outfilename) || !filesize($outfilename)){
 				//throw new Exception("Could not decrypt message");
-				GO::language()->require_language_file('smime');
+				$GLOBALS['GO_LANGUAGE']->require_language_file('smime');
 				$message['html_body']=$lang['smime']['noPrivateKeyForDecrypt'];
 				return false;
 			}
 			
-			require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 			$ml = new mailings();		
 			
 			$decrypted_message = $ml->get_message_for_client(0, $outfilerel,'');
@@ -300,7 +300,7 @@ class smime extends db{
 
 			$cert = $smime->get_pkcs12_certificate($swift->account['id']);
 
-			$swift->message->setSignParams($cert['cert'], $password, isset(GO::config()->smime_sign_extra_certs) ? GO::config()->smime_sign_extra_certs : "");
+			$swift->message->setSignParams($cert['cert'], $password, isset($GLOBALS['GO_CONFIG']->smime_sign_extra_certs) ? $GLOBALS['GO_CONFIG']->smime_sign_extra_certs : "");
 		}
 		
 		if(!empty($_POST['encrypt_smime'])){		
@@ -331,7 +331,7 @@ class smime extends db{
 			$failed=array();
 			$public_certs=array($certs['cert']);
 			foreach($to as $email=>$name){
-				$cert = $smime->get_public_certificate(GO::security()->user_id, $email);				
+				$cert = $smime->get_public_certificate($GLOBALS['GO_SECURITY']->user_id, $email);				
 				if(!$cert){
 					$failed[]=$email;
 				}				
@@ -339,7 +339,7 @@ class smime extends db{
 			}
 			
 			if(count($failed)){
-				GO::language()->require_language_file('smime');
+				$GLOBALS['GO_LANGUAGE']->require_language_file('smime');
 				throw new Exception(sprintf($lang['smime']['noPublicCertForEncrypt'], implode(', ',$failed)));
 			}
 

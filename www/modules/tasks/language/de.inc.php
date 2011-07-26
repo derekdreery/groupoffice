@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('tasks'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('tasks'));
 
 
 $lang['tasks']['name']='Aufgaben';

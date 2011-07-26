@@ -13,10 +13,10 @@
  */
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('summary');
+$GLOBALS['GO_SECURITY']->json_authenticate('summary');
 
-require_once (GO::modules()->modules['summary']['class_path']."summary.class.inc.php");
-//require_once (GO::language()->get_language_file('calendar'));
+require_once ($GLOBALS['GO_MODULES']->modules['summary']['class_path']."summary.class.inc.php");
+//require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 $summary = new summary();
 
 try{
@@ -24,20 +24,20 @@ try{
 	switch($_REQUEST['task'])
 	{
 		case 'note':
-			$response['data']['text'] = $summary->get_note(GO::security()->user_id);
+			$response['data']['text'] = $summary->get_note($GLOBALS['GO_SECURITY']->user_id);
 			$response['success']=true;
 			break;
 		case 'rss_tabs':
-			$response['data'] = $summary->get_feeds(GO::security()->user_id);
+			$response['data'] = $summary->get_feeds($GLOBALS['GO_SECURITY']->user_id);
 			$response['success']=true;
 			break;
 		case 'feed':
-			$response['data']['url'] = $summary->get_feed(GO::security()->user_id);
+			$response['data']['url'] = $summary->get_feed($GLOBALS['GO_SECURITY']->user_id);
 			$response['success']=true;
 			break;
 		case 'announcement':
 			$announcement = $summary->get_announcement(($_REQUEST['announcement_id']));
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$announcement['user_name']=$GO_USERS->get_user_realname($announcement['user_id']);
@@ -75,7 +75,7 @@ try{
 			{
 				$response['total'] = $summary->get_announcements( $query, $sort, $dir, $start, $limit);
 			}
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			$response['results']=array();
 			while($summary->next_record())
@@ -112,10 +112,10 @@ try{
 
 			if(isset($_POST['active']) && $_POST['active']=='true')
 			{
-				$response['total'] = $summary->get_active_webfeeds($sort, $dir, $start, $limit, GO::security()->user_id);
+				$response['total'] = $summary->get_active_webfeeds($sort, $dir, $start, $limit, $GLOBALS['GO_SECURITY']->user_id);
 			}else
 			{
-				$response['total'] = $summary->get_webfeeds($query, $sort, $dir, $start, $limit, GO::security()->user_id);
+				$response['total'] = $summary->get_webfeeds($query, $sort, $dir, $start, $limit, $GLOBALS['GO_SECURITY']->user_id);
 			}
 			$response['results']=array();
 			while($summary->next_record())
@@ -149,7 +149,7 @@ try{
 			$response['total'] = $summary->get_announcements( $query, $sort, $dir, $start, $limit);
 			$response['results']=array();
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 

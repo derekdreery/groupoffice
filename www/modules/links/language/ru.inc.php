@@ -6,7 +6,7 @@
  * vajanchenko@hotmail.com
  * 10 December 2008
 */
-require(GO::language()->get_fallback_language_file('links'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('links'));
 
 $lang['links']['name']='Ссылки';
 $lang['links']['description']='Ссылки';
