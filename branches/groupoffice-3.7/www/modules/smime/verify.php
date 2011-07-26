@@ -70,7 +70,7 @@ if(!empty($_REQUEST['account_id'])){
 		
 	}
 	
-//	echo $src_filename;
+//	$response['html'] .= $src_filename;
 //	exit();
 
 	if(!file_exists($src_filename))
@@ -92,7 +92,7 @@ if(!empty($_REQUEST['account_id'])){
 		}else
 		{
 			
-			echo openssl_error_string();
+			$response['html'] .= openssl_error_string();
 			
 			throw new Exception('Certificate appears to be valid but could not get certificate from signature.');
 		}
@@ -124,52 +124,56 @@ if(isset($cert)){
 }
 
 $GO_LANGUAGE->require_language_file('smime');
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-	<head>
-		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
-		<title>SMIME certificate</title>
-		<style>body {font: 12px arial;}</style>
-	</head>
-	<body>
 
-<?php
+
+$response['html']='';
+$response['cls']='';
+$response['text']='';
+
+
 if(isset($_REQUEST['account_id'])){
 	if (!$valid) {
-		echo '<h1 class="smi-invalid">'.$lang['smime']['invalidCert'].'</h1>';
-		echo '<p>';
+		
+		$response['cls']='smi-invalid';
+		$response['text']=$lang['smime']['invalidCert'];
+		
+		$response['html'] .= '<h1 class="smi-invalid">'.$lang['smime']['invalidCert'].'</h1>';
+		$response['html'] .= '<p>';
 		while ($msg = openssl_error_string())
-			echo $msg . "<br />\n";
-		echo '</p>';
+			$response['html'] .= $msg . "<br />\n";
+		$response['html'] .= '</p>';
 	} else if($email!=$_REQUEST['email']){
-		echo '<h1 class="smi-certemailmismatch">'.$lang['smime']['certEmailMismatch'].'</h1>';
+		
+		$response['cls']='smi-certemailmismatch';
+		$response['text']=$lang['smime']['certEmailMismatch'];
+		
+		$response['html'] .= $response['short_html']= '<h1 class="smi-certemailmismatch">'.$lang['smime']['certEmailMismatch'].'</h1>';
 	}else
 	{
-		echo '<h1 class="smi-valid">'.$lang['smime']['validCert'].'</h1>';
+		$response['cls']='smi-valid';
+		$response['text']=$lang['smime']['validCert'];
+		
+		$response['html'] .= $response['short_html']= '<h1 class="smi-valid">'.$lang['smime']['validCert'].'</h1>';
 	}
 }
 
 if(!isset($_REQUEST['account_id']) || $valid){
-	echo '<table>';
-	echo '<tr><td width="100">'.$lang['common']['name'].':</td><td>' . $arr['name'] . '</td></tr>';
-	echo '<tr><td width="100">E-mail:</td><td>' . $email. '</td></tr>';
-	echo '<tr><td>Hash:</td><td>'.$arr['hash'].'</td></tr>';
-	echo '<tr><td>Serial number:</td><td>'.$arr['serialNumber'].'</td></tr>';
-	echo '<tr><td>Version:</td><td>'.$arr['version'].'</td></tr>';
-	echo '<tr><td>Issuer:</td><td>';
+	$response['html'] .= '<table>';
+	$response['html'] .= '<tr><td width="100">'.$lang['common']['name'].':</td><td>' . $arr['name'] . '</td></tr>';
+	$response['html'] .= '<tr><td width="100">E-mail:</td><td>' . $email. '</td></tr>';
+	$response['html'] .= '<tr><td>Hash:</td><td>'.$arr['hash'].'</td></tr>';
+	$response['html'] .= '<tr><td>Serial number:</td><td>'.$arr['serialNumber'].'</td></tr>';
+	$response['html'] .= '<tr><td>Version:</td><td>'.$arr['version'].'</td></tr>';
+	$response['html'] .= '<tr><td>Issuer:</td><td>';
 	
 	foreach ($arr['issuer'] as $skey => $svalue) {
-		echo $skey . ':' . $svalue . '; ';
+		$response['html'] .= $skey . ':' . $svalue . '; ';
 	}
 	
-	echo '</td></tr>';
-	echo '<tr><td>Valid from:</td><td>' . Date::get_timestamp($arr['validFrom_time_t']) . '</td></tr>';
-	echo '<tr><td>Valid to:</td><td>' . Date::get_timestamp($arr['validTo_time_t']) . '</td></tr>';
-	echo '</table>';
+	$response['html'] .= '</td></tr>';
+	$response['html'] .= '<tr><td>Valid from:</td><td>' . Date::get_timestamp($arr['validFrom_time_t']) . '</td></tr>';
+	$response['html'] .= '<tr><td>Valid to:</td><td>' . Date::get_timestamp($arr['validTo_time_t']) . '</td></tr>';
+	$response['html'] .= '</table>';
 }
-?>
-	</body>
-</html>
 
-
+echo json_encode($response);
