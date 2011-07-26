@@ -515,10 +515,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					$sql = "SELECT FOUND_ROWS() as found;";			
 					$r2 = $this->getDbConnection()->query($sql);
 					$record = $r2->fetch(PDO::FETCH_ASSOC);
-					$foundRows = $_SESSION['GO_SESSION'][$queryUid]=intval($record['found']);	
+					$foundRows = GO::session()->values[$queryUid]=intval($record['found']);	
 				}else
 				{
-					$foundRows=$_SESSION['GO_SESSION'][$queryUid];
+					$foundRows=GO::session()->values[$queryUid];
 				}
 						
 			}else
@@ -927,7 +927,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$autoAttr = array(
 				'id'=>$this->pk,
 				'link_type'=>$this->linkType,
-				'user_id'=>isset($this->user_id) ? $this->user_id : $_SESSION['GO_SESSION']['user_id'],
+				'user_id'=>isset($this->user_id) ? $this->user_id : GO::session()->values['user_id'],
 				'module'=>$this->module,
 				'name' => '',
 				'link_type'=>$this->linkType,
