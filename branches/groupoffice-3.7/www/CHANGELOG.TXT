@@ -1,7 +1,17 @@
+26-07-2011 3.7.25
+- SMIME info on print
+- Disable beeps for e-mail separately
+- Context menu on event to Send mail to all participants	
+- Context menu on contacts to send mail to multiple
+- Simple smiley support in texts
 - Caldav iphone status bug. Imported status defaults to accepted now. iphone doesn't like the status needs-action.
 - Fixed SQL and command injections after extensive security testing.
 - New caldav_max_months_old config.php parameter to control the maximum age of synced events.
 - E-mail composer HTML editor fix for Chrome.
+- Updated german translation
+- When a download link is sent in the files module. Info about that should be shown in the info panel.
+- Set global vacation subject via configuration file
+- Bug fix: In some cases webdav only created 0 byte files
 
 23-06-2011 3.7.24
 - New config variable to set subject for sieve vacation messages.
