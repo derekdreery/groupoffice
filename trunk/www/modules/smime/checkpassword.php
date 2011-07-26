@@ -13,9 +13,9 @@
  */
 require_once("../../Group-Office.php");
 
-GO::security()->json_authenticate('smime');
+$GLOBALS['GO_SECURITY']->json_authenticate('smime');
 
-require_once(GO::modules()->modules['smime']['class_path'].'smime.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['smime']['class_path'].'smime.class.inc.php');
 $smime = new smime();
 
 $cert = $smime->get_pkcs12_certificate($_POST['account_id']);

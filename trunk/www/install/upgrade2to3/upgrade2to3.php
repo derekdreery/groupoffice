@@ -27,7 +27,7 @@ require_once('security.class.inc.php');
 $GO_MODULES = new UPGRADE_GO_MODULES();
 $GO_SECURITY = new UPGRADE_GO_SECURITY();
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 
@@ -117,7 +117,7 @@ $db3 = new db();
 $db3->halt_on_error = 'report';
 $db3->suppress_errors=$db->suppress_errors;
 
-echo 'Upgrading '.GO::config()->db_name.$line_break;
+echo 'Upgrading '.$GLOBALS['GO_CONFIG']->db_name.$line_break;
 
 $db->query("SHOW TABLES");
 while($record=$db->next_record(DB_BOTH))
@@ -142,7 +142,7 @@ while($db->next_record())
 	if($module_name=='custom_fields')
 		$module_name='customfields';
 
-	if(is_dir(GO::config()->root_path.'modules/'.$module_name))
+	if(is_dir($GLOBALS['GO_CONFIG']->root_path.'modules/'.$module_name))
 	{
 		$module_ids[]=$db->f('id');
 		$modules[$db->f('id')]=$db->record;
@@ -229,11 +229,11 @@ $db->query("ALTER TABLE `go_reminders` DROP `url`");
 $db->query("ALTER TABLE `go_reminders` ADD `link_type` INT NOT NULL AFTER `link_id` ;");
 
 
-GO::modules()->load_modules();
+$GLOBALS['GO_MODULES']->load_modules();
 
 
 //prevent folder creations at this stage
-unset(GO::modules()->modules['files']);
+unset($GLOBALS['GO_MODULES']->modules['files']);
 
 //end framework updates
 
@@ -304,13 +304,13 @@ if(in_array('calendar', $module_ids))
 
 
 
-	GO::modules()->add_module('tasks');
+	$GLOBALS['GO_MODULES']->add_module('tasks');
 
         //prevent folder creations at this stage
-        unset(GO::modules()->modules['files']);
+        unset($GLOBALS['GO_MODULES']->modules['files']);
 
-	GO::security()->copy_acl(GO::modules()->modules['calendar']['acl_read'], GO::modules()->modules['tasks']['acl_read']);
-	GO::security()->copy_acl(GO::modules()->modules['calendar']['acl_write'], GO::modules()->modules['tasks']['acl_write']);
+	$GLOBALS['GO_SECURITY']->copy_acl($GLOBALS['GO_MODULES']->modules['calendar']['acl_read'], $GLOBALS['GO_MODULES']->modules['tasks']['acl_read']);
+	$GLOBALS['GO_SECURITY']->copy_acl($GLOBALS['GO_MODULES']->modules['calendar']['acl_write'], $GLOBALS['GO_MODULES']->modules['tasks']['acl_write']);
 
 
 	//separate events that are in multiple calendars
@@ -413,7 +413,7 @@ if(in_array('calendar', $module_ids))
 
 
 	echo 'Converting tasks to new separate tasks module'.$line_break;
-	require_once(GO::config()->root_path.'modules/tasks/classes/tasks.class.inc.php');
+	require_once($GLOBALS['GO_CONFIG']->root_path.'modules/tasks/classes/tasks.class.inc.php');
 	$tasks = new tasks();
 
 	$tasklists=array();
@@ -424,7 +424,7 @@ if(in_array('calendar', $module_ids))
 		$tasklists[$tasks->f('user_id')]=$tasks->f('id');
 	}
 
-	require(GO::language()->get_language_file('calendar'));
+	require($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 
 	$count = 0;
 	$db->query("SELECT e.*, c.user_id AS cal_user_id FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id WHERE todo='1'");
@@ -526,7 +526,7 @@ if(in_array('cms', $module_ids))
 	 $db->query("update `cms_template_items` set content=replace(content, 'webshop.class.inc\'', 'webshop.class.inc.php\'');");
 
 
-	 $cms_module = GO::modules()->get_module('cms');
+	 $cms_module = $GLOBALS['GO_MODULES']->get_module('cms');
 
 		require_once($cms_module['class_path'].'cms.class.inc.php');
 		$cms = new cms();
@@ -647,8 +647,8 @@ if(in_array('notes', $module_ids))
 		$category['id']=$db->nextid('no_categories');
 		$category['name']=String::format_name($user);
 		$category['user_id']=$user['id'];
-		$category['acl_read']=GO::security()->get_new_acl('', $user['id']);
-		$category['acl_write']=GO::security()->get_new_acl('', $user['id']);
+		$category['acl_read']=$GLOBALS['GO_SECURITY']->get_new_acl('', $user['id']);
+		$category['acl_write']=$GLOBALS['GO_SECURITY']->get_new_acl('', $user['id']);
 
 		$db->insert_row('no_categories', $category);
 
@@ -1003,9 +1003,9 @@ ADD `smtp_password` VARCHAR( 50 ) NOT NULL ;");
   DROP `forward_to`,
   DROP `forward_local_copy`;");
 
-	$db->query("UPDATE em_accounts SET smtp_host='".GO::config()->smtp_server.
-		"', smtp_port='".GO::config()->smtp_port."', smtp_username='".GO::config()->smtp_username.
-		"', smtp_password='".GO::config()->smtp_password."', smtp_encryption='8'");
+	$db->query("UPDATE em_accounts SET smtp_host='".$GLOBALS['GO_CONFIG']->smtp_server.
+		"', smtp_port='".$GLOBALS['GO_CONFIG']->smtp_port."', smtp_username='".$GLOBALS['GO_CONFIG']->smtp_username.
+		"', smtp_password='".$GLOBALS['GO_CONFIG']->smtp_password."', smtp_encryption='8'");
 }
 
 
@@ -1193,9 +1193,9 @@ $db->query("ALTER TABLE `sync_settings` ADD `tasklist_id` INT NOT NULL AFTER `ca
 
 
 $module['id']='sync';
-$module['sort_order'] = count(GO::modules()->modules)+1;
-$module['acl_read']=GO::security()->copy_acl(GO::modules()->modules['calendar']['acl_read']);
-$module['acl_write']=GO::security()->copy_acl(GO::modules()->modules['calendar']['acl_write']);
+$module['sort_order'] = count($GLOBALS['GO_MODULES']->modules)+1;
+$module['acl_read']=$GLOBALS['GO_SECURITY']->copy_acl($GLOBALS['GO_MODULES']->modules['calendar']['acl_read']);
+$module['acl_write']=$GLOBALS['GO_SECURITY']->copy_acl($GLOBALS['GO_MODULES']->modules['calendar']['acl_write']);
 $db->insert_row('go_modules', $module);
 
 
@@ -1237,7 +1237,7 @@ ALTER TABLE `go_links` ADD INDEX ( `link_id1`, `type1` );
 
 echo 'Clearing search cache'.$line_break;
 
-require_once(GO::config()->class_path.'base/search.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 $search = new search();
 $search->reset();
 flush();
@@ -1283,8 +1283,8 @@ if(isset($_SERVER['SERVER_NAME']))
 	echo '<br /><br /><a target="_blank" href="../../modules/tools/checkmodules.php">After that run a database check to rebuild the search index</a>';
 }else
 {
-	echo 'Now run the installer in a browser at: '.GO::config()->host.'install/'."\n\n";
-	echo 'After that run the database check to rebuild the search index at: '.GO::config()->host.'modules/tools/checkmodules.php'."\n\n";
+	echo 'Now run the installer in a browser at: '.$GLOBALS['GO_CONFIG']->host.'install/'."\n\n";
+	echo 'After that run the database check to rebuild the search index at: '.$GLOBALS['GO_CONFIG']->host.'modules/tools/checkmodules.php'."\n\n";
 }
 
 ?>

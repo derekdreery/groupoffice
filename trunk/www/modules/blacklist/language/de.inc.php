@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('blacklist'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('blacklist'));
 $lang['blacklist']['name']='IP-Blacklist';
 $lang['blacklist']['description']='Modul zur Sperrung von IP-Adressen nach 3 Login-Fehlversuchen';
 $lang['blacklist']['ip']='IP';

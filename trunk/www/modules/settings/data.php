@@ -19,22 +19,22 @@ switch($_REQUEST['task']){
 			if(preg_match("/^<br[^>]*>$/", $text))
 				$text="";
 
-			GO::config()->save_setting('login_screen_text', $text);
-			GO::config()->save_setting('login_screen_text_title', $_POST['login_screen_text_title']);
+			$GLOBALS['GO_CONFIG']->save_setting('login_screen_text', $text);
+			$GLOBALS['GO_CONFIG']->save_setting('login_screen_text_title', $_POST['login_screen_text_title']);
 
-			GO::events()->fire_event('save_global_settings', array(&$response));
+			$GLOBALS['GO_EVENTS']->fire_event('save_global_settings', array(&$response));
 			$response['saved'] = true;
 		}
 
 		$response['data']=array();
 
-		$t = GO::config()->get_setting('login_screen_text');
+		$t = $GLOBALS['GO_CONFIG']->get_setting('login_screen_text');
 		$response['data']['login_screen_text']=$t ? $t : '';
 
-		$t = GO::config()->get_setting('login_screen_text_title');
+		$t = $GLOBALS['GO_CONFIG']->get_setting('login_screen_text_title');
 		$response['data']['login_screen_text_title']=$t ? $t : '';
 
-		GO::events()->fire_event('load_global_settings',array(&$response));
+		$GLOBALS['GO_EVENTS']->fire_event('load_global_settings',array(&$response));
 
 		$response['success']=true;
 		break;
@@ -45,7 +45,7 @@ switch($_REQUEST['task']){
 
 		$response=array();
 
-		GO::events()->fire_event('save_global_settings', array(&$response));
+		$GLOBALS['GO_EVENTS']->fire_event('save_global_settings', array(&$response));
 
 		$response['success']=true;
 

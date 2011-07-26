@@ -13,8 +13,8 @@
  */
 
 require('../../Group-Office.php');
-GO::security()->json_authenticate('cms');
-require_once (GO::modules()->modules['cms']['class_path'].'cms.class.inc.php');
+$GLOBALS['GO_SECURITY']->json_authenticate('cms');
+require_once ($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms.class.inc.php');
 $cms = new cms();
 
 function contains ($haystack, $needle) {
@@ -60,7 +60,7 @@ function create_tree($folder_id,$site,$path='',$filter_enabled) {
 
 	while($item = array_shift($items)) {
 		if($item['fstype']=='file') {
-			if (!$filter_enabled || $cms->has_folder_access(GO::security()->user_id, $item['folder_id'])) {
+			if (!$filter_enabled || $cms->has_folder_access($GLOBALS['GO_SECURITY']->user_id, $item['folder_id'])) {
 				$response[] = array(
 								'text'=>$item['name'],
 								'id'=>'file_'.$item['id'],
@@ -76,7 +76,7 @@ function create_tree($folder_id,$site,$path='',$filter_enabled) {
 				);
 			}
 		} else {
-			if (!$filter_enabled || $cms->has_folder_access(GO::security()->user_id, $item['id'])) {
+			if (!$filter_enabled || $cms->has_folder_access($GLOBALS['GO_SECURITY']->user_id, $item['id'])) {
 				$folderNode = array(
 								'text'=>$item['name'],
 								'fstype'=>'folder',
@@ -113,7 +113,7 @@ function create_tree($folder_id,$site,$path='',$filter_enabled) {
 function get_folder_nodes($folder_id, $site, $path='') {
 	global $GO_SECURITY;
 	$cms = new cms();
-	$filter_enabled=$cms->filter_enabled(GO::security()->user_id,$site['id']);
+	$filter_enabled=$cms->filter_enabled($GLOBALS['GO_SECURITY']->user_id,$site['id']);
 	return create_tree($folder_id,$site,$path,$filter_enabled);
 }
 
@@ -141,7 +141,7 @@ try {
 			}else {
 				$response=array();
 				if($folder_id==0) {
-					$cms->get_authorized_sites(GO::security()->user_id);
+					$cms->get_authorized_sites($GLOBALS['GO_SECURITY']->user_id);
 
 					while($cms->next_record()) {
 						$response[] = array(
@@ -177,13 +177,13 @@ try {
 
 		case 'site':
 
-			if(!GO::modules()->modules['cms']['write_permission']) {
+			if(!$GLOBALS['GO_MODULES']->modules['cms']['write_permission']) {
 				throw new AccessDeniedException();
 			}
 
 			$site = $cms->get_site($_REQUEST['site_id']);
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$site['user_name']=$GO_USERS->get_user_realname($site['user_id']);
@@ -214,10 +214,10 @@ try {
 			$dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'DESC';
 			$start = isset($_REQUEST['start']) ? ($_REQUEST['start']) : '0';
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
-			$response['total'] = $cms->get_authorized_sites(GO::security()->user_id, $sort, $dir, $start, $limit);
+			$response['total'] = $cms->get_authorized_sites($GLOBALS['GO_SECURITY']->user_id, $sort, $dir, $start, $limit);
 			$response['results']=array();
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			while($cms->next_record()) {
@@ -246,7 +246,7 @@ try {
 				$response['data']['authentication']=$folder['acl']>0;
 
 
-				$response['data']['write_permission']=GO::security()->has_permission(GO::security()->user_id, $site['acl_write']);
+				$response['data']['write_permission']=$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $site['acl_write']);
 				if(!$response['data']['write_permission']) {
 					throw new AccessDeniedException();
 				}
@@ -270,7 +270,7 @@ try {
 
 			$site_id=$_POST['site_id'];
 			$site = $cms->get_site($site_id);
-			$response['write_permission']=GO::security()->has_permission(GO::security()->user_id, $site['acl_write']);
+			$response['write_permission']=$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $site['acl_write']);
 			if(!$response['write_permission']) {
 				throw new AccessDeniedException();
 			}
@@ -306,7 +306,7 @@ try {
 		case 'file':
 
 			global $GO_LANGUAGE;
-			require_once(GO::language()->get_language_file('cms'));
+			require_once($GLOBALS['GO_LANGUAGE']->get_language_file('cms'));
 
 			if(!empty($_REQUEST['file_id'])) {
 				$file = $cms->get_file(($_REQUEST['file_id']));
@@ -324,7 +324,7 @@ try {
 
 				$response['data']['config']=$cms->get_template_config($site['template']);
 
-				$response['data']['write_permission']=GO::security()->has_permission(GO::security()->user_id, $site['acl_write']);
+				$response['data']['write_permission']=$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $site['acl_write']);
 				if(!$response['data']['write_permission']) {
 					throw new AccessDeniedException();
 				}
@@ -358,7 +358,7 @@ try {
 		case 'files':
 			$site_id=$_POST['site_id'];
 			$site = $cms->get_site($site_id);
-			$response['write_permission']=GO::security()->has_permission(GO::security()->user_id, $site['acl_write']);
+			$response['write_permission']=$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $site['acl_write']);
 			if(!$response['write_permission']) {
 				throw new AccessDeniedException();
 			}
@@ -393,10 +393,10 @@ try {
 
 		case 'templates':
 
-			require_once(GO::config()->class_path.'filesystem.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 			$fs = new filesystem();
 
-			$response['results']=$fs->get_folders(GO::modules()->modules['cms']['path'].'templates');
+			$response['results']=$fs->get_folders($GLOBALS['GO_MODULES']->modules['cms']['path'].'templates');
 
 			break;
 
@@ -404,7 +404,7 @@ try {
 		case 'comment':
 			$comment = $cms->get_comment(($_REQUEST['comment_id']));
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 
@@ -437,7 +437,7 @@ try {
 			$response['total'] = $cms->get_comments($sort, $dir, $start, $limit);
 			$response['results']=array();
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			while($cms->next_record()) {
@@ -469,12 +469,12 @@ try {
 
 		case 'writing_users':
 
-			if(GO::modules()->modules['cms']['write_permission']) {
+			if($GLOBALS['GO_MODULES']->modules['cms']['write_permission']) {
 
 			$writing_groups = json_decode($_POST['group_ids']);
 			$writing_users = json_decode($_POST['user_ids']);
 
-			require_once(GO::modules()->modules['users']['class_path'].'users.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['users']['class_path'].'users.class.inc.php');
 			$users = new users();
 
 			foreach($writing_groups as $group_id) {
@@ -504,7 +504,7 @@ try {
 
 		case 'is_admin':
 
-			$response['is_admin'] = GO::modules()->modules['cms']['write_permission'];
+			$response['is_admin'] = $GLOBALS['GO_MODULES']->modules['cms']['write_permission'];
 			$response['success'] = true;
 
 			break;
@@ -520,7 +520,7 @@ try {
 		case 'folder_files':
 			$folder_id=$_POST['folder_id'];
 			global $GO_LANGUAGE;
-			require_once(GO::language()->get_language_file('cms'));
+			require_once($GLOBALS['GO_LANGUAGE']->get_language_file('cms'));
 			
 			$response['total'] = $cms->get_files($folder_id);
 			$response['results']=array();

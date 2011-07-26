@@ -21,8 +21,8 @@ require_once("../../Group-Office.php");
 <head>
 <title>Group-Office Tasks</title>
 <?php
-require(GO::config()->root_path.'default_head.inc');
-require(GO::config()->root_path.'default_scripts.inc');
+require($GLOBALS['GO_CONFIG']->root_path.'default_head.inc');
+require($GLOBALS['GO_CONFIG']->root_path.'default_scripts.inc');
 require('scripts.inc.php');
 ?>
 <script src="init.js" type="text/javascript"></script> 

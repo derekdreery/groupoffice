@@ -43,7 +43,7 @@ class go_ical extends calendar
 
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/reminder.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/reminder.class.inc.php');
 		$this->reminder = new reminder();
 
 		$this->version = $version;
@@ -330,7 +330,7 @@ class go_ical extends calendar
 		//$user = $GO_USERS->get_user($event['user_id']);
 	
 
-		require_once(GO::modules()->modules['calendar']['class_path'].'calendar.class.inc.php');
+		require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'calendar.class.inc.php');
 
 		$cal = new calendar();
 		$cal2 = new calendar();
@@ -451,7 +451,7 @@ class go_ical extends calendar
 
 		if(!empty($event['rrule']))
 		{
-			require_once(GO::config()->class_path.'ical2array.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
 			$ical2array = new ical2array();
 
 			if($this->version != '1.0')

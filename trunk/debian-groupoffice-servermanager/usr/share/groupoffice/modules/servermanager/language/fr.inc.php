@@ -4,7 +4,7 @@
 //Date : September, 11 2008
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('servermanager'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('servermanager'));
 
 $lang['servermanager']['name']='Gestion du serveur';
 $lang['servermanager']['description']='Module de gestion du serveur';

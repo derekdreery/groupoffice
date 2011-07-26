@@ -13,15 +13,15 @@
  */
  
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate();
+$GLOBALS['GO_SECURITY']->json_authenticate();
 
-require_once(GO::config()->class_path.'base/groups.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
-GO::security()->check_token();
+$GLOBALS['GO_SECURITY']->check_token();
 
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'username';
 $dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
@@ -43,20 +43,20 @@ switch($task)
 		$response['success'] = false;
 		$response['data'] = $GO_USERS->get_user($user_id);
 
-		//if(!GO::security()->has_permission(GO::security()->user_id, $response['data']['acl_id'])){
-		if(!GO::modules()->modules['users']['read_permission']){
+		//if(!$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $response['data']['acl_id'])){
+		if(!$GLOBALS['GO_MODULES']->modules['users']['read_permission']){
 			throw new AccessDeniedException();
 		}
 
-		$response['data']['write_permission']=GO::modules()->modules['users']['read_permission'];
+		$response['data']['write_permission']=$GLOBALS['GO_MODULES']->modules['users']['read_permission'];
 
 
 		$response['data']['birthday']=Date::format($response['data']['birthday'], false);
 	
-		//$temp = GO::language()->get_language($response['data']['language']);
+		//$temp = $GLOBALS['GO_LANGUAGE']->get_language($response['data']['language']);
 		//$response['data']['language_name'] = $temp['description'];
 		
-		$response['data']['start_module_name'] = isset(GO::modules()->modules[$response['data']['start_module']]['humanName']) ? GO::modules()->modules[$response['data']['start_module']]['humanName'] : '';
+		$response['data']['start_module_name'] = isset($GLOBALS['GO_MODULES']->modules[$response['data']['start_module']]['humanName']) ? $GLOBALS['GO_MODULES']->modules[$response['data']['start_module']]['humanName'] : '';
 		
 		$response['data']['registration_time'] = Date::get_timestamp($response['data']['registration_time']);
 		$response['data']['lastlogin'] = ($response['data']['lastlogin']) ? Date::get_timestamp($response['data']['lastlogin']) : '-';
@@ -66,24 +66,24 @@ switch($task)
 		}
 
 		if($task=='user'){
-			if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission'])
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
 			{
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
-				$values = $cf->get_values(GO::security()->user_id, 8, $user_id);
+				$values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 8, $user_id);
 
 				if(count($values))
 					$response['data']=array_merge($response['data'], $values);
 			}
 
-			if(GO::modules()->has_module('mailings'))
+			if($GLOBALS['GO_MODULES']->has_module('mailings'))
 			{
-				require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 
 				$ml = new mailings();
 				$ml2 = new mailings();
 
-				$count = $ml->get_authorized_mailing_groups('write', GO::security()->user_id, 0,0);
+				$count = $ml->get_authorized_mailing_groups('write', $GLOBALS['GO_SECURITY']->user_id, 0,0);
 
 				while($ml->next_record())
 				{
@@ -92,16 +92,16 @@ switch($task)
 			}
 		}else
 		{
-			if(GO::modules()->has_module('customfields'))
+			if($GLOBALS['GO_MODULES']->has_module('customfields'))
 			{
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
-				$response['data']['customfields']=$cf->get_all_fields_with_values(GO::security()->user_id, 8, $response['data']['id']);
+				$response['data']['customfields']=$cf->get_all_fields_with_values($GLOBALS['GO_SECURITY']->user_id, 8, $response['data']['id']);
 			}
 
-			if(GO::modules()->has_module('comments'))
+			if($GLOBALS['GO_MODULES']->has_module('comments'))
 			{
-				require_once (GO::modules()->modules['comments']['class_path'].'comments.class.inc.php');
+				require_once ($GLOBALS['GO_MODULES']->modules['comments']['class_path'].'comments.class.inc.php');
 				$comments = new comments();
 
 				$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 8);
@@ -111,16 +111,16 @@ switch($task)
 			/* loadContactDetails - contact sidepanel */
 
 
-			require_once(GO::config()->class_path.'/base/search.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
 			$search = new search();
 
-			$links_json = $search->get_latest_links_json(GO::security()->user_id, $response['data']['id'], 8);
+			$links_json = $search->get_latest_links_json($GLOBALS['GO_SECURITY']->user_id, $response['data']['id'], 8);
 
 			$response['data']['links']=$links_json['results'];
 
-			if(isset(GO::modules()->modules['files']))
+			if(isset($GLOBALS['GO_MODULES']->modules['files']))
 			{
-				require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 				$fs = new files();
 				$response['data']['files']=$fs->get_content_json($response['data']['files_folder_id']);
 			}else
@@ -131,7 +131,7 @@ switch($task)
 
 			$values = array('address_no', 'address', 'zip', 'city', 'state', 'country');
 
-			$af = GO::language()->get_address_format_by_iso(GO::config()->language);
+			$af = $GLOBALS['GO_LANGUAGE']->get_address_format_by_iso($GLOBALS['GO_CONFIG']->language);
 
 			$response['data']['formatted_address'] = $af['format'];
 
@@ -149,7 +149,7 @@ switch($task)
 		
 		$params['response']=&$response;
 		
-		GO::events()->fire_event('load_user', $params);
+		$GLOBALS['GO_EVENTS']->fire_event('load_user', $params);
 		
 		echo json_encode($response);
 		break;
@@ -157,20 +157,20 @@ switch($task)
 
 			if(empty($user_id))
 			{
-				$modules_read = array_map('trim', explode(',',GO::config()->register_modules_read));
-				$modules_write = array_map('trim', explode(',',GO::config()->register_modules_write));
+				$modules_read = array_map('trim', explode(',',$GLOBALS['GO_CONFIG']->register_modules_read));
+				$modules_write = array_map('trim', explode(',',$GLOBALS['GO_CONFIG']->register_modules_write));
 			}
 		
-			foreach(GO::modules()->modules as $module)
+			foreach($GLOBALS['GO_MODULES']->modules as $module)
 			{
 				
 				$record = array(
 		 			'id' => $module['id'],
 		 			'name' => $module['humanName'],
-	 				'read_disabled' => ($user_id && GO::security()->has_permission($user_id, $module['acl_id'], true)),
-					'write_disabled' => ($user_id && GO::security()->has_permission($user_id, $module['acl_id'], true)>GO_SECURITY::READ_PERMISSION),
-	 				'read_permission'=> $user_id > 0 ? GO::security()->has_permission($user_id, $module['acl_id']) : in_array($module['id'], $modules_read),
-	 				'write_permission'=> $user_id > 0 ? GO::security()->has_permission($user_id, $module['acl_id'])>GO_SECURITY::READ_PERMISSION : in_array($module['id'], $modules_write)
+	 				'read_disabled' => ($user_id && $GLOBALS['GO_SECURITY']->has_permission($user_id, $module['acl_id'], true)),
+					'write_disabled' => ($user_id && $GLOBALS['GO_SECURITY']->has_permission($user_id, $module['acl_id'], true)>GO_SECURITY::READ_PERMISSION),
+	 				'read_permission'=> $user_id > 0 ? $GLOBALS['GO_SECURITY']->has_permission($user_id, $module['acl_id']) : in_array($module['id'], $modules_read),
+	 				'write_permission'=> $user_id > 0 ? $GLOBALS['GO_SECURITY']->has_permission($user_id, $module['acl_id'])>GO_SECURITY::READ_PERMISSION : in_array($module['id'], $modules_write)
 				);
 				$records[] = $record;
 			}
@@ -181,11 +181,11 @@ switch($task)
 
 		if(empty($user_id))
 		{
-			$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',GO::config()->register_user_groups)));
+			$user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GLOBALS['GO_CONFIG']->register_user_groups)));
 		
-			if(!in_array(GO::config()->group_everyone, $user_groups))
+			if(!in_array($GLOBALS['GO_CONFIG']->group_everyone, $user_groups))
 			{
-				$user_groups[]=GO::config()->group_everyone;
+				$user_groups[]=$GLOBALS['GO_CONFIG']->group_everyone;
 			}
 		}
 
@@ -194,7 +194,7 @@ switch($task)
 		$GO_GROUPS->get_groups();
 		while($GO_GROUPS->next_record())
 		{
-			if(($user_id == 1 && $GO_GROUPS->f('id') == GO::config()->group_root) || $GO_GROUPS->f('id')==GO::config()->group_everyone)
+			if(($user_id == 1 && $GO_GROUPS->f('id') == $GLOBALS['GO_CONFIG']->group_root) || $GO_GROUPS->f('id')==$GLOBALS['GO_CONFIG']->group_everyone)
 			{
 				$disabled = true;
 			}else {
@@ -226,14 +226,14 @@ switch($task)
 			$user = $GO_USERS->get_user($user_id);
 		}else
 		{			
-			$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',GO::config()->register_visible_user_groups)));
+			$visible_user_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$GLOBALS['GO_CONFIG']->register_visible_user_groups)));
 		}
 		$GO_GROUPS->get_groups();
 		$groups = new GO_GROUPS();
 
 		while($GO_GROUPS->next_record())
 		{
-			if($GO_GROUPS->f('id') == GO::config()->group_root)
+			if($GO_GROUPS->f('id') == $GLOBALS['GO_CONFIG']->group_root)
 			{
 				$disabled = true;
 			}else {
@@ -244,7 +244,7 @@ switch($task)
 	 			'id' => $GO_GROUPS->f('id'),
  				'disabled' => $disabled, 
 	 			'group' => $GO_GROUPS->f('name'),
- 				'visible_permission'=> $user_id > 0 ? GO::security()->group_in_acl($GO_GROUPS->f('id'), $user['acl_id']) : in_array($GO_GROUPS->f('id'), $visible_user_groups)
+ 				'visible_permission'=> $user_id > 0 ? $GLOBALS['GO_SECURITY']->group_in_acl($GO_GROUPS->f('id'), $user['acl_id']) : in_array($GO_GROUPS->f('id'), $visible_user_groups)
 			);
 			$records[] = $record;
 		}
@@ -254,7 +254,7 @@ switch($task)
 	
 
 	case 'language':
-		$languages = GO::language()->get_languages();
+		$languages = $GLOBALS['GO_LANGUAGE']->get_languages();
 		foreach($languages as $language)
 		{
 				
@@ -269,7 +269,7 @@ switch($task)
 		break;
 	case 'settings':
 
-		require_once(GO::modules()->modules['users']['class_path'].'users.class.inc.php');
+		require_once($GLOBALS['GO_MODULES']->modules['users']['class_path'].'users.class.inc.php');
 		$users = new users();
 
 		$response['success'] = true;

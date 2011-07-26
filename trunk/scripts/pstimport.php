@@ -91,7 +91,7 @@ $args = parse_cli_args($argv);
 
 require_once($go."Group-Office.php");
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 $user = $GO_USERS->get_user_by_username($args['username']);
 
@@ -100,7 +100,7 @@ if(!$user)
 
 echo "Importing PST file for user ".$user['username']."\n";
 
-require_once(GO::modules()->modules['tasks']['class_path'].'tasks.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'].'tasks.class.inc.php');
 $tasks = new tasks();
 
 $tasklist = $tasks->get_default_tasklist($user['id']);
@@ -109,7 +109,7 @@ if(!$tasklist)
 
 $output_dir = basename($args['pst']).'.export';
 
-chdir(GO::config()->tmpdir);
+chdir($GLOBALS['GO_CONFIG']->tmpdir);
 exec('rm -Rf '.$output_dir);
 
 system('pffexport '.escapeshellarg($args['pst']));
@@ -157,14 +157,14 @@ system("readpst -o readpst ".escapeshellarg($args['pst']), $files);
 exec('find readpst -type f', $files);
 //var_dump($files);
 
-require_once (GO::modules()->modules['addressbook']['class_path']."addressbook.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['addressbook']['class_path']."addressbook.class.inc.php");
 $ab = new addressbook();
-require_once (GO::modules()->modules['addressbook']['class_path']."vcard.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['addressbook']['class_path']."vcard.class.inc.php");
 $vcard = new vcard();
 
-require_once (GO::modules()->modules['calendar']['class_path']."calendar.class.inc.php");
-require_once (GO::modules()->modules['calendar']['class_path']."go_ical.class.inc");
-require_once(GO::config()->class_path.'ical2array.class.inc');
+require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path']."calendar.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path']."go_ical.class.inc");
+require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
 $ical2array = new ical2array();
 $cal = new calendar();
 

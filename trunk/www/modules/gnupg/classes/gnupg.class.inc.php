@@ -33,14 +33,14 @@ class gnupg{
 	{
 		global $GO_CONFIG;
 		
-		if(isset(GO::config()->cmd_gpg))
+		if(isset($GLOBALS['GO_CONFIG']->cmd_gpg))
 		{
-			$this->gpg = GO::config()->cmd_gpg;
+			$this->gpg = $GLOBALS['GO_CONFIG']->cmd_gpg;
 		}
 		
 		if(!isset($home) && isset($_SESSION['GO_SESSION']['username']))
 		{
-			$home = GO::config()->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/.gnupg';
+			$home = $GLOBALS['GO_CONFIG']->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/.gnupg';
 		}
 
 		if(isset($home))
@@ -320,7 +320,7 @@ class gnupg{
 		$data.="%commit\n";
 		$data.="%echo done with success\n";		
 
-		$tmpfile = GO::config()->tmpdir.md5($email).'-gen-key.batch';
+		$tmpfile = $GLOBALS['GO_CONFIG']->tmpdir.md5($email).'-gen-key.batch';
 
 		file_put_contents($tmpfile, $data);
 

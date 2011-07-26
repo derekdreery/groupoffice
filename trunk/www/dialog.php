@@ -26,7 +26,7 @@ if(strpos($_SERVER['QUERY_STRING'], '<script') || strpos(urldecode($_SERVER['QUE
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-<title><?php echo GO::config()->product_name; ?></title>
+<title><?php echo $GLOBALS['GO_CONFIG']->product_name; ?></title>
 <script type="text/javascript">
 function launchGO(){
 	var win = window.open('', "groupoffice");
@@ -38,7 +38,7 @@ function launchGO(){
 	}else
 	{
 		//the parameters will be handled in default_scripts.inc.php
-		win.location.href="<?php echo GO::config()->host; ?>?<?php echo $_SERVER['QUERY_STRING']; ?>";
+		win.location.href="<?php echo $GLOBALS['GO_CONFIG']->host; ?>?<?php echo $_SERVER['QUERY_STRING']; ?>";
 	}
 
 	self.close();

@@ -1,5 +1,5 @@
 <?php
-require_once(GO::modules()->modules['currencies']['class_path'].'currencies.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['currencies']['class_path'].'currencies.class.inc.php');
 $cu = new currencies();
 $dc = $cu->get_default_currency();
 if($dc){

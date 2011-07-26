@@ -1,10 +1,10 @@
 <?php
 
 require_once('../../Group-Office.php');
-GO::security()->json_authenticate('emailportlet');
+$GLOBALS['GO_SECURITY']->json_authenticate('emailportlet');
 
-require_once (GO::modules()->modules['emailportlet']['class_path'].'emailportlet.class.inc.php');
-require_once (GO::modules()->modules['email']['class_path']."email.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['emailportlet']['class_path'].'emailportlet.class.inc.php');
+require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
 
 $email = new email();
 $emailportlet = new emailportlet();
@@ -15,7 +15,7 @@ try {
 
 		case 'get_folders':
 
-			$response['total'] = $emailportlet->get_folders_on_summary(GO::security()->user_id);
+			$response['total'] = $emailportlet->get_folders_on_summary($GLOBALS['GO_SECURITY']->user_id);
 			$response['data'] = array();
 			while($emailportlet->next_record())
 			{
@@ -23,7 +23,7 @@ try {
 				unset($folder['sort']);
 
 				if(!$folder){
-					$emailportlet->delete_on_summary(GO::security()->user_id, $emailportlet->f('folder_id'));					
+					$emailportlet->delete_on_summary($GLOBALS['GO_SECURITY']->user_id, $emailportlet->f('folder_id'));					
 					$response['total']--;
 					continue;
 				}
@@ -43,9 +43,9 @@ try {
 
 			$folder_id = (isset($_REQUEST['folder_id']) && $_REQUEST['folder_id']) ? $_REQUEST['folder_id'] : 0;
 
-			if(!$emailportlet->exists_on_summary(GO::security()->user_id, $folder_id))
+			if(!$emailportlet->exists_on_summary($GLOBALS['GO_SECURITY']->user_id, $folder_id))
 			{
-				$emailportlet->insert_on_summary(GO::security()->user_id, $folder_id);
+				$emailportlet->insert_on_summary($GLOBALS['GO_SECURITY']->user_id, $folder_id);
 
 				$folder = $email->get_folder_by_id($folder_id);
 
@@ -65,9 +65,9 @@ try {
 		case 'hide_folder':
 
 			$folder_id = (isset($_REQUEST['folder_id']) && $_REQUEST['folder_id']) ? $_REQUEST['folder_id'] : 0;
-			if($emailportlet->exists_on_summary(GO::security()->user_id, $folder_id))
+			if($emailportlet->exists_on_summary($GLOBALS['GO_SECURITY']->user_id, $folder_id))
 			{
-				$emailportlet->delete_on_summary(GO::security()->user_id, $folder_id);				
+				$emailportlet->delete_on_summary($GLOBALS['GO_SECURITY']->user_id, $folder_id);				
 			}
 
 			$response['success'] = true;

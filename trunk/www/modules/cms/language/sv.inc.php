@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('cms'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('cms'));
 $lang['cms']['name']='Webbsidor';
 $lang['cms']['description']='CMS-modul för hantering av webbsidor genom Group-Office.';
 $lang['cms']['site']='Webbsida';

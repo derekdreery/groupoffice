@@ -83,10 +83,10 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		header('Content-Type: text/html; charset=UTF-8');
 		
 		if(empty($this->module)){
-			require(GO::config()->root_path.'themes/'.GO::view().'/'.$viewName.'.php');
+			require($GLOBALS['GO_CONFIG']->root_path.'themes/'.GO::view().'/'.$viewName.'.php');
 		}else
 		{
-			require(GO::modules()->modules[$this->module].'themes/'.GO::view().'/'.$viewName.'.php');
+			require($GLOBALS['GO_MODULES']->modules[$this->module].'themes/'.GO::view().'/'.$viewName.'.php');
 		}
 	}
 	
@@ -108,7 +108,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	public function checkPermissions($action){
 		if(isset($this->requiredPermissionLevels[$action])){
-			return GO::security()->hasPermission($this->requiredPermissionLevels[$action]['aclId'])>=$this->requiredPermissionLevels[$action]['requiredPermissionLevel'];
+			return $GLOBALS['GO_SECURITY']->hasPermission($this->requiredPermissionLevels[$action]['aclId'])>=$this->requiredPermissionLevels[$action]['requiredPermissionLevel'];
 		}elseif($action!='*'){
 			return $this->checkPermissions('*');
 		}else

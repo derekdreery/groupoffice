@@ -42,7 +42,7 @@ class calendar extends db {
 	public static function load_global_settings(&$response)
 	{
 		global $GO_CONFIG;
-		$response['data']['calendar_name_template']=GO::config()->get_setting('calendar_name_template');
+		$response['data']['calendar_name_template']=$GLOBALS['GO_CONFIG']->get_setting('calendar_name_template');
 		
 		if(!$response['data']['calendar_name_template'])
 			$response['data']['calendar_name_template']='{first_name} {middle_name} {last_name}';
@@ -52,7 +52,7 @@ class calendar extends db {
 	public static function save_global_settings(&$response)
 	{
 		global $GO_CONFIG;
-		GO::config()->save_setting('calendar_name_template', $_POST['calendar_name_template']);
+		$GLOBALS['GO_CONFIG']->save_setting('calendar_name_template', $_POST['calendar_name_template']);
 		
 		if(isset($_POST['change_all_calendar_names']))
 		{
@@ -79,11 +79,11 @@ class calendar extends db {
 
 		echo 'Calendar folders'.$line_break;
 
-		if(isset(GO::modules()->modules['files'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
 			$cal = new calendar();
 			$db = new db();
 
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 
@@ -118,7 +118,7 @@ class calendar extends db {
 			}
 		}
 
-		if(isset(GO::modules()->modules['customfields'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
 			$db->query("delete from cf_1 where link_id not in (select id from cal_events);");
@@ -130,7 +130,7 @@ class calendar extends db {
 	public static function load_settings($response) {
 		global $GO_MODULES;
 
-		if(GO::modules()->has_module('calendar')) {
+		if($GLOBALS['GO_MODULES']->has_module('calendar')) {
 			$cal = new calendar();
 			$settings = $cal->get_settings($_POST['user_id']);
 			$settings = array_merge($settings, $cal->reminder_seconds_to_form_input($settings['reminder']));
@@ -154,7 +154,7 @@ class calendar extends db {
 
 		global $GO_MODULES;
 
-		if(GO::modules()->has_module('calendar')) {
+		if($GLOBALS['GO_MODULES']->has_module('calendar')) {
 			$settings['user_id']=$_POST['user_id'];
 			$settings['background']=$_POST['background'];
 			$settings['reminder']=$_POST['reminder_multiplier'] * $_POST['reminder_value'];
@@ -256,7 +256,7 @@ class calendar extends db {
 	function update_settings($settings) {
 		if(!isset($settings['user_id'])) {
 			global $GO_SECURITY;
-			$settings['user_id'] = GO::security()->user_id;
+			$settings['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
 		}
 		return $this->update_row('cal_settings', 'user_id', $settings);
 	}
@@ -266,7 +266,7 @@ class calendar extends db {
 	function event_to_html($event, $custom=false, $ics=false) {
 		global $GO_LANGUAGE, $GO_CONFIG, $lang;
 
-		require(GO::language()->get_language_file('calendar'));
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 
 		//go_debug($event);
 
@@ -312,7 +312,7 @@ class calendar extends db {
 
 
 		if(!empty($event['rrule'])) {
-			require_once(GO::config()->class_path.'ical2array.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
 			$ical2array = new ical2array();
 
 			$rrule = $ical2array->parse_rrule($event['rrule']);
@@ -610,7 +610,7 @@ class calendar extends db {
 			$sql .= " AND a.level>".GO_SECURITY::READ_PERMISSION;
 		}
 
-		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ".
+		$sql .= " AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ".
 		" GROUP BY v.id ORDER BY ".$this->escape($sort).' '.$this->escape($dir);
 
 		$sql = $this->add_limits_to_query($sql, $start, $offset);
@@ -745,8 +745,8 @@ class calendar extends db {
 		$calendar['id'] = $this->nextid("cal_calendars");
 
 		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files'])) {
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$files->check_share('events/'.File::strip_invalid_chars($calendar['name']),$calendar['user_id'], $calendar['acl_id']);
@@ -762,8 +762,8 @@ class calendar extends db {
 
 		$calendar = $this->get_calendar($calendar_id);
 
-		if(isset(GO::modules()->modules['files'])) {
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$folder = $files->resolve_path('calendar/'.File::strip_invalid_chars($calendar['name']));
@@ -786,12 +786,12 @@ class calendar extends db {
 
 		$this->query("DELETE FROM cal_visible_tasklists WHERE calendar_id=?", 'i', $calendar_id);
 
-		if(isset(GO::modules()->modules['summary'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['summary'])) {
 			$this->query("DELETE FROM su_visible_calendars WHERE calendar_id=?", 'i', $calendar_id);
 		}
 
 		if(empty($calendar['shared_acl'])) {
-			GO::security()->delete_acl($calendar['acl_id']);
+			$GLOBALS['GO_SECURITY']->delete_acl($calendar['acl_id']);
 		}
 	}
 
@@ -799,8 +799,8 @@ class calendar extends db {
 		if(!$old_calendar)$old_calendar=$this->get_calendar($calendar['id']);
 
 		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files']) && $old_calendar &&  $calendar['name']!=$old_calendar['name']) {
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['files']) && $old_calendar &&  $calendar['name']!=$old_calendar['name']) {
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			$files->move_by_paths('events/'.File::strip_invalid_chars($old_calendar['name']), 'events/'.File::strip_invalid_chars($calendar['name']));
 		}
@@ -808,7 +808,7 @@ class calendar extends db {
 		global $GO_SECURITY;
 		//user id of the calendar changed. Change the owner of the ACL as well
 		if(isset($calendar['user_id']) && $old_calendar['user_id'] != $calendar['user_id']) {
-			GO::security()->chown_acl($old_calendar['acl_id'], $calendar['user_id']);
+			$GLOBALS['GO_SECURITY']->chown_acl($old_calendar['acl_id'], $calendar['user_id']);
 		}
 		
 		return $this->update_row('cal_calendars','id', $calendar);
@@ -856,7 +856,7 @@ class calendar extends db {
 			global $GO_SECURITY;
 
 			global $GO_CONFIG;
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$calendar['user_id']=$user_id;
@@ -865,7 +865,7 @@ class calendar extends db {
 				return false;
 			}
 
-			$tpl = GO::config()->get_setting('calendar_name_template');
+			$tpl = $GLOBALS['GO_CONFIG']->get_setting('calendar_name_template');
 			if(!$tpl)
 				$tpl = '{first_name} {middle_name} {last_name}';
 
@@ -873,7 +873,7 @@ class calendar extends db {
 			
 			//$calendar_name = String::format_name($user['last_name'], $user['first_name'], $user['middle_name'], 'last_name');
 			$calendar['name'] = $calendar_name;
-			$calendar['acl_id']=GO::security()->get_new_acl('calendar',$user_id);
+			$calendar['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('calendar',$user_id);
 			$x = 1;
 			while($this->get_calendar_by_name($calendar['name'])) {
 				$calendar['name'] = $calendar_name.' ('.$x.')';
@@ -884,8 +884,8 @@ class calendar extends db {
 
 
 			global $GO_MODULES;
-			if(GO::modules()->has_module('tasks')){
-				require_once(GO::modules()->modules['tasks']['class_path'].'tasks.class.inc.php');
+			if($GLOBALS['GO_MODULES']->has_module('tasks')){
+				require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'].'tasks.class.inc.php');
 				$tasks = new tasks();
 				$tasks_settings = $tasks->get_settings($user_id);
 				$calendar['tasklist_id']=$tasks_settings['default_tasklist_id'];
@@ -914,7 +914,7 @@ class calendar extends db {
 			}
 		}else {
 			global $GO_SECURITY;
-			$user_id = !empty($user_id) ? $user_id : GO::security()->user_id;
+			$user_id = !empty($user_id) ? $user_id : $GLOBALS['GO_SECURITY']->user_id;
 			return $this->get_default_calendar($user_id);
 		}
 	}
@@ -984,7 +984,7 @@ class calendar extends db {
 			$sql .= " LEFT JOIN cal_groups g ON g.id=c.group_id ";
 		}
 
-		$sql .= "INNER JOIN go_acl a ON (c.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
+		$sql .= "INNER JOIN go_acl a ON (c.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 	
 		$where = false;
 
@@ -1026,7 +1026,7 @@ class calendar extends db {
 			$sql .= ", g.fields ";
 		$sql .= "FROM cal_calendars c ";
 
-		$sql .= "INNER JOIN go_acl a ON (c.acl_id = a.acl_id AND a.level>1 AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
+		$sql .= "INNER JOIN go_acl a ON (c.acl_id = a.acl_id AND a.level>1 AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 
         if($groups)
             $sql .= "LEFT JOIN cal_groups g ON c.group_id = g.id ";
@@ -1077,7 +1077,7 @@ class calendar extends db {
 
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		//if(!$update)
@@ -1113,7 +1113,7 @@ class calendar extends db {
 
 		if (empty($event['user_id'])) {
 			global $GO_SECURITY;
-			$event['user_id'] = GO::security()->user_id;
+			$event['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
 		}
 
 		if(empty($event['ctime'])) {
@@ -1166,13 +1166,13 @@ class calendar extends db {
 		}
 
 		global $GO_MODULES;
-		if(!isset($event['files_folder_id']) && isset(GO::modules()->modules['files'])) {
+		if(!isset($event['files_folder_id']) && isset($GLOBALS['GO_MODULES']->modules['files'])) {
 			global $GO_CONFIG;
 
 			if(!$calendar) {
 				$calendar = $this->get_calendar($event['calendar_id']);
 			}
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$new_path = $this->build_event_files_path($event, $calendar);
@@ -1200,7 +1200,7 @@ class calendar extends db {
 			if(!empty($event['reminder'])) {
 				global $GO_CONFIG;
 
-				require_once(GO::config()->class_path.'base/reminder.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/reminder.class.inc.php');
 				$rm = new reminder();
 
 				if(!$calendar) {
@@ -1291,12 +1291,12 @@ class calendar extends db {
 		
 
 		global $GO_MODULES;
-		if(isset(GO::modules()->modules['files'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
 
 			if(!$calendar) {
 				$calendar = $this->get_calendar($event['calendar_id']);
 			}
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			if(!isset($event['ctime'])) {
@@ -1332,7 +1332,7 @@ class calendar extends db {
 
 			global $GO_CONFIG;
 
-			require_once(GO::config()->class_path.'base/reminder.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/reminder.class.inc.php');
 			$rm = new reminder();
 
 			$rm->get_reminders_by_link_id($event['id'], 1);
@@ -1423,7 +1423,7 @@ class calendar extends db {
 
 		if(!isset($lang['calendar'])) {
 			global $GO_LANGUAGE;
-			GO::language()->require_language_file('calendar');
+			$GLOBALS['GO_LANGUAGE']->require_language_file('calendar');
 		}
 
 		$url = create_direct_url('calendar', 'showEvent', array(array('values'=>array('event_id' => $resource['id']))));
@@ -1466,16 +1466,16 @@ class calendar extends db {
 				break;
 		}
 
-		require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($recipient, $subject);
 
-		$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
+		$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 
 		$values = '';
 		$labels = '';
 
-		if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission']) {
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission']) {
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$cf = new customfields();
 
 			$categories = explode(',',$resource_group['fields']);
@@ -1883,8 +1883,8 @@ class calendar extends db {
 			$event_id = $this->escape($event_id);
 
 			global $GO_MODULES,$GO_CONFIG;
-			if(isset(GO::modules()->modules['files'])) {
-				require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
+				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 				$files = new files();
 				try {
 					$files->delete_folder($event['files_folder_id']);
@@ -1902,11 +1902,11 @@ class calendar extends db {
 			$sql = "DELETE FROM cal_exceptions WHERE event_id='$event_id'";
 			$this->query($sql);
 
-			require_once(GO::config()->class_path.'base/search.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
 			$search = new search();
 			$search->delete_search_result($event_id, 1);
 
-			require_once(GO::config()->class_path.'base/reminder.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/reminder.class.inc.php');
 			$rm = new reminder();
 			$rm2 = new reminder();
 			$rm->get_reminders_by_link_id($event_id, 1);
@@ -1929,7 +1929,7 @@ class calendar extends db {
 				}
 			}
 
-			if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission']) {
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission']) {
 				$this->query("DELETE FROM cf_1 WHERE link_id = ?", 'i', array($event_id));
 			}
 		}
@@ -2014,7 +2014,7 @@ class calendar extends db {
 		global $GO_MODULES, $GO_CONFIG;
 
 		if(!isset($this->ical2array)) {
-			require_once(GO::config()->class_path.'ical2array.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
 			$this->ical2array = new ical2array();
 		}
 
@@ -2261,7 +2261,7 @@ class calendar extends db {
 	function get_event_from_ical_file($ical_file) {
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'ical2array.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
 		$this->ical2array = new ical2array();
 
 		$vcalendar = $this->ical2array->parse_file($ical_file);
@@ -2281,7 +2281,7 @@ class calendar extends db {
 
 		$count=0;
 
-		require_once(GO::config()->class_path.'ical2array.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
 		$this->ical2array = new ical2array();
 
 		$vcalendar = $this->ical2array->parse_string($ical_string);
@@ -2316,7 +2316,7 @@ class calendar extends db {
 
 		$count=0;
 
-		require_once(GO::config()->class_path.'ical2array.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
 		$this->ical2array = new ical2array();
 
 		$vcalendar = $this->ical2array->parse_string($ical_string);
@@ -2387,16 +2387,16 @@ class calendar extends db {
 
 		//$calendar['name']=String::format_name($user,'','','last_name');
 		//$calendar['user_id']=$user['id'];
-		//$calendar['acl_id']=GO::security()->get_new_acl('calendar', $user['id']);
+		//$calendar['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('calendar', $user['id']);
 
 		$calendar = $cal->get_default_calendar($user['id']);
 
 
-		GO::security()->add_group_to_acl(GO::config()->group_internal, $calendar['acl_id'],2);
+		$GLOBALS['GO_SECURITY']->add_group_to_acl($GLOBALS['GO_CONFIG']->group_internal, $calendar['acl_id'],2);
 
 		//$calendar_id = $cal->add_calendar($calendar);
 
-		require(GO::language()->get_language_file('calendar'));
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 
 		$sql = "SELECT * FROM cal_views WHERE name LIKE '".$cal->escape($lang['calendar']['groupView'])."'";
 		$cal->query($sql);
@@ -2409,7 +2409,7 @@ class calendar extends db {
 				$cal2->add_calendar_to_view($calendar['id'], '', $view_id);
 		}
 
-		if(isset(GO::modules()->modules['summary'])) {
+		if(isset($GLOBALS['GO_MODULES']->modules['summary'])) {
 			$cal2->add_visible_calendar(array('user_id'=>$user['id'], 'calendar_id'=>$calendar['id']));
 		}
 
@@ -2420,10 +2420,10 @@ class calendar extends db {
 	function cache_event($event_id) {
 		global $GO_CONFIG, $GO_LANGUAGE, $lang;
 
-		require_once(GO::config()->class_path.'/base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
 		$search = new search();
 
-		GO::language()->require_language_file('calendar');
+		$GLOBALS['GO_LANGUAGE']->require_language_file('calendar');
 
 		$sql  = "SELECT DISTINCT cal_events.*, cal_calendars.acl_id FROM cal_events ".
 						"INNER JOIN cal_calendars ON cal_events.calendar_id=cal_calendars.id ".
@@ -2731,7 +2731,7 @@ class calendar extends db {
 	function event_to_json_response($event) {
 
 		global $GO_CONFIG;
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		if(!empty($event['user_id'])) {
@@ -2896,7 +2896,7 @@ class calendar extends db {
 
 		$this->get_calendars_by_group_id($group_admin['group_id']);
 		while($calendar = $this->next_record()) {
-			GO::security()->add_user_to_acl($group_admin['user_id'], $calendar['acl_id'], GO_SECURITY::MANAGE_PERMISSION);
+			$GLOBALS['GO_SECURITY']->add_user_to_acl($group_admin['user_id'], $calendar['acl_id'], GO_SECURITY::MANAGE_PERMISSION);
 		}
 
 		return $this->insert_row('cal_group_admins', $group_admin);
@@ -3001,7 +3001,7 @@ class calendar extends db {
 	{
 		global $GO_SECURITY;
 
-		$user_id = !empty($user_id) ? $user_id : GO::security()->user_id;
+		$user_id = !empty($user_id) ? $user_id : $GLOBALS['GO_SECURITY']->user_id;
 
 		$sql = "SELECT ";
 		if($offset>0) {
@@ -3078,12 +3078,12 @@ class calendar extends db {
 	function get_linked_events_json($link_id, $link_type){
 		global $GO_SECURITY, $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/links.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 		$GO_LINKS = new GO_LINKS();
 
 		$records=array();
 
-		$this->get_linked_events(GO::security()->user_id, $link_id, $link_type);
+		$this->get_linked_events($GLOBALS['GO_SECURITY']->user_id, $link_id, $link_type);
 		while($e=$this->next_record()){
 			$e['link_count']=$GO_LINKS->count_links($e['id'], 1);
 			$e['start_time']=Date::get_timestamp($e['start_time']);
@@ -3102,10 +3102,10 @@ class calendar extends db {
 		$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : 0;
 		$query = !empty($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
 		
-		$response['total'] = $this->get_authorized_calendars(GO::security()->user_id, $start, $limit, $resources, 1, $project_calendars, $query);
+		$response['total'] = $this->get_authorized_calendars($GLOBALS['GO_SECURITY']->user_id, $start, $limit, $resources, 1, $project_calendars, $query);
 		if($response['total']==0 && $resources==false && $project_calendars==false && empty($query)){
-			$dc = $this->get_default_calendar(GO::security()->user_id);
-			$response['total'] = $this->get_authorized_calendars(GO::security()->user_id, $start, $limit, $resources, 1, $project_calendars);
+			$dc = $this->get_default_calendar($GLOBALS['GO_SECURITY']->user_id);
+			$response['total'] = $this->get_authorized_calendars($GLOBALS['GO_SECURITY']->user_id, $start, $limit, $resources, 1, $project_calendars);
 		}
 
 		$response['results']=array();
@@ -3125,10 +3125,10 @@ class calendar extends db {
 
 		global $GO_SECURITY, $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
-		$response['total'] = $this->get_authorized_views(GO::security()->user_id);
+		$response['total'] = $this->get_authorized_views($GLOBALS['GO_SECURITY']->user_id);
 		$response['results']=array();
 		while($record= $this->next_record(DB_ASSOC)) {
 			$record['user_name'] = $GO_USERS->get_user_realname($record['user_id']);
@@ -3198,9 +3198,9 @@ class calendar extends db {
 		
 		go_debug("send_invitation");
 
-		GO::language()->require_language_file('calendar');
+		$GLOBALS['GO_LANGUAGE']->require_language_file('calendar');
 		
-		require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 
 		$RFC822 = new RFC822();
 		//$event['id']=empty($event['resource_event_id']) ? $event_id : $event['resource_event_id'];
@@ -3208,7 +3208,7 @@ class calendar extends db {
 		if(!$insert){
 			//if this is an update to the event reset the accepted status of everyone except for the logged in user and the calendar user this event is saved in.
 			$sql = "UPDATE cal_participants SET status='0' WHERE user_id!=? AND user_id!=? AND event_id=?";
-			$this->query($sql,'iii', array(GO::security()->user_id, $calendar['user_id'], $event['id']));
+			$this->query($sql,'iii', array($GLOBALS['GO_SECURITY']->user_id, $calendar['user_id'], $event['id']));
 		}
 			
 		$participants=array();
@@ -3227,7 +3227,7 @@ class calendar extends db {
 			$subject = ($insert) ? $lang['calendar']['invitation'] : $lang['calendar']['invitation_update'];
 
 			// ics attachment
-			require_once (GO::modules()->modules['calendar']['class_path'].'go_ical.class.inc');
+			require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'go_ical.class.inc');
 			$ical = new go_ical();
 			$ical->dont_use_quoted_printable = true;
 
@@ -3237,7 +3237,7 @@ class calendar extends db {
 					implode(',', $participants),
 					$subject.': '.$event['name']);
 
-			require_once (GO::modules()->modules['calendar']['class_path'].'Replacements.class.inc.php');
+			require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'Replacements.class.inc.php');
 
 			//Load the plugin with the extended replacements class
 			$swift->registerPlugin(new Swift_Plugins_DecoratorPlugin(new Cal_Event_Replacements()));
@@ -3246,9 +3246,9 @@ class calendar extends db {
 					$this->event_to_html($event).
 					'<p><b>'.$lang['calendar']['linkIfCalendarNotSupported'].'</b></p>'.
 					'<p>'.$lang['calendar']['acccept_question'].'</p>'.
-					'<a href="'.GO::modules()->modules['calendar']['full_url'].'invitation.php?event_id='.$event['id'].'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
+					'<a href="'.$GLOBALS['GO_MODULES']->modules['calendar']['full_url'].'invitation.php?event_id='.$event['id'].'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
 					'&nbsp;|&nbsp;'.
-					'<a href="'.GO::modules()->modules['calendar']['full_url'].'invitation.php?event_id='.$event['id'].'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
+					'<a href="'.$GLOBALS['GO_MODULES']->modules['calendar']['full_url'].'invitation.php?event_id='.$event['id'].'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>');
 
 			$swift->message->attach(new Swift_MimePart($ics_string, 'text/calendar; name="calendar.ics"; charset="utf-8"; METHOD="REQUEST"'));
 			//$name = File::strip_invalid_chars($event['name']).'.ics';
@@ -3269,9 +3269,9 @@ class calendar extends db {
 		global $GO_EVENTS;
 
 		//Only show availability if user has access to the default calendar
-//		if(!empty(GO::config()->require_calendar_access_for_freebusy)){
+//		if(!empty($GLOBALS['GO_CONFIG']->require_calendar_access_for_freebusy)){
 //			$default_calendar = $cal2->get_default_calendar($user['id']);
-//			$permission = GO::security()->has_permission(GO::security()->user_id, $default_calendar['acl_id']);
+//			$permission = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $default_calendar['acl_id']);
 //		}else
 //		{
 //			$permission=true;
@@ -3279,7 +3279,7 @@ class calendar extends db {
 
 		$permission=true;
 
-		GO::events()->fire_event('has_freebusy_access', array($requesting_user_id, $target_user_id, &$permission));
+		$GLOBALS['GO_EVENTS']->fire_event('has_freebusy_access', array($requesting_user_id, $target_user_id, &$permission));
 
 		return $permission;
 

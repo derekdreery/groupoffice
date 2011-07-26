@@ -6,7 +6,7 @@
  * 10 December 2008
 */
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('tools'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('tools'));
 
 $lang['tools']['name']='Инструменты';
 $lang['tools']['description']='Модуль для выполнения различных технических задач.';

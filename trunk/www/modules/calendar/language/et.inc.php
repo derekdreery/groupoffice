@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Kalender';
 $lang['calendar']['description'] = 'Kalendri moodul; Kõik kasutajad saavad kas lisada, muuta või kustutada sündmusi. Ka teiste sisestatud sündmusi on võimalik vaadata ja vajadusel muuta.';
 

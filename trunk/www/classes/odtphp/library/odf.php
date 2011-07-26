@@ -229,9 +229,9 @@ IMG;
 				$v = str_replace($key, $value, $v);
 			}
 
-			GO::config()->debug_display_errors = false;
+			$GLOBALS['GO_CONFIG']->debug_display_errors = false;
 			@eval("\$result_string=" . $v . ";");
-			GO::config()->debug_display_errors = true;
+			$GLOBALS['GO_CONFIG']->debug_display_errors = true;
 
 			$v = isset($result_string) ? $result_string : 'invalid math expression!';
 		}

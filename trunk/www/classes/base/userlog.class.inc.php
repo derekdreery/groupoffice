@@ -38,7 +38,7 @@ class userlog{
 		$this->handle=fopen($file, 'w');
 
 		$this->log('Log opened at: '.date(date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], time())));
-		$this->log('Group-Office version: '.GO::config()->version);
+		$this->log('Group-Office version: '.$GLOBALS['GO_CONFIG']->version);
 	}
 
 	function reopen()

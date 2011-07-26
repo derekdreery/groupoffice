@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_base_language_file('filetypes'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('filetypes'));
 
 $ft_title = "�ɮ�����";
 $ft_text = "�ɮ������OGroup-Office�۰ʷs�W���A�A/�p�i�H�b�o���ܧ�ϥܤΦW��";

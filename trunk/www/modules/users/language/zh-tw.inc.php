@@ -1,6 +1,6 @@
 <?php
 //This is a translation by hodrag. If you have questions please e-mail to hodrag@gmail.com , modify chinese traditional by quincy
-require(GO::language()->get_fallback_language_file('users'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('users'));
 $lang['users']['name'] = '使用者';
 $lang['users']['description'] = '管理模組; 管理系統使用者';
 

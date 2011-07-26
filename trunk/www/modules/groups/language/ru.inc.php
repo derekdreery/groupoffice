@@ -6,7 +6,7 @@
  * 10 December 2008
 */
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('groups'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('groups'));
 $lang['groups']['name'] = 'Группы';
 $lang['groups']['description'] = 'Модуль администрирования; Управление группами пользователей.';
 $lang['groups']['noDeleteAdmins'] = 'Вы не можете удалить группу Администраторы';

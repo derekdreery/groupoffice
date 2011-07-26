@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('addressbook'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('addressbook'));
 $lang['addressbook']['name']='Adressbuch';
 $lang['addressbook']['description']='Modul zur Verwaltung von Kontakten';
 $lang['addressbook']['allAddressbooks']='Alle Adressbücher';

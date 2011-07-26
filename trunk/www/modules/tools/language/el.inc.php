@@ -1,6 +1,6 @@
 <?php
 /* Translator for the Greek Language: Konstantinos Georgakopoulos (kgeorga@uom.gr)*/
-require(GO::language()->get_fallback_language_file('tools'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('tools'));
 
 $lang['tools']['name']='Εργαλεία';
 $lang['tools']['description']='Άρθρωμα για την πραγματοποίηση διαχειριστικών εργασιών.';

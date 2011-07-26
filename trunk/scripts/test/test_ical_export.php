@@ -1,8 +1,8 @@
 <?php
 require('../../www/Group-Office.php');
 
-require_once (GO::modules()->modules['calendar']['class_path']."calendar.class.inc.php");
-require_once (GO::modules()->modules['calendar']['class_path']."go_ical.class.inc");
+require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path']."calendar.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path']."go_ical.class.inc");
 $cal = new calendar();
 
 $event_id=4166;

@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('serverclient'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('serverclient'));
 
 $lang['serverclient']['name']='서버클라이언트';
 $lang['serverclient']['description']='Automatically create mailboxes on a Group-Office installation that manages the e-mail server with the postfixadmin module';

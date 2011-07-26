@@ -23,18 +23,18 @@ class users extends db
 
 	function init_customfields_types(){
 		global $GO_MODULES, $customfield_types;
-		require_once(GO::modules()->modules['users']['class_path'].'user_customfield_type.class.inc.php');
+		require_once($GLOBALS['GO_MODULES']->modules['users']['class_path'].'user_customfield_type.class.inc.php');
 		$customfield_types['user']=new user_customfield_type(array());
 	}
 
 	public function get_register_email(){
 		global $GO_CONFIG, $GO_LANGUAGE, $lang;
 		$r=array(
-			'register_email_subject' => GO::config()->get_setting('register_email_subject'),
-			'register_email_body' => GO::config()->get_setting('register_email_body')
+			'register_email_subject' => $GLOBALS['GO_CONFIG']->get_setting('register_email_subject'),
+			'register_email_body' => $GLOBALS['GO_CONFIG']->get_setting('register_email_body')
 		);
 
-		GO::language()->require_language_file('users');
+		$GLOBALS['GO_LANGUAGE']->require_language_file('users');
 		
 		if(!$r['register_email_subject']){
 			$r['register_email_subject']=$lang['users']['register_email_subject'];
@@ -54,13 +54,13 @@ class users extends db
 
 
 
-		if(isset(GO::modules()->modules['files']))
+		if(isset($GLOBALS['GO_MODULES']->modules['files']))
 		{
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			$GO_USERS->get_users();
 
@@ -70,7 +70,7 @@ class users extends db
 			{
 				$home_dir = 'users/'.$GO_USERS->f('username');
 
-				File::mkdir(GO::config()->file_storage_path.$home_dir);
+				File::mkdir($GLOBALS['GO_CONFIG']->file_storage_path.$home_dir);
 
 				$folder = $files->resolve_path($home_dir,true,1,'1');
 
@@ -80,10 +80,10 @@ class users extends db
 				{
 					echo "Sharing users/".$GO_USERS->f('username').$line_break;
 					
-					$up_folder['acl_id']=GO::security()->get_new_acl('files', $GO_USERS->f('id'));
+					$up_folder['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('files', $GO_USERS->f('id'));
 				}else
 				{
-					GO::security()->chown_acl($folder['acl_id'], $GO_USERS->f('id'));
+					$GLOBALS['GO_SECURITY']->chown_acl($folder['acl_id'], $GO_USERS->f('id'));
 				}
 				$up_folder['user_id']=$GO_USERS->f('id');
 				$up_folder['readonly']='1';
@@ -101,7 +101,7 @@ class users extends db
 
 				$home_dir = 'adminusers/'.$GO_USERS->f('username');
 
-				File::mkdir(GO::config()->file_storage_path.$home_dir);
+				File::mkdir($GLOBALS['GO_CONFIG']->file_storage_path.$home_dir);
 
 				$folder = $files->resolve_path($home_dir,true,1,'1');
 
@@ -111,7 +111,7 @@ class users extends db
 				{
 					echo "Sharing adminusers/".$GO_USERS->f('username').$line_break;
 					
-					$up_folder['acl_id']=GO::security()->get_new_acl('files', 1);	
+					$up_folder['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('files', 1);	
 				}
 				$up_folder['visible']='0';
 				$up_folder['readonly']='1';
@@ -124,7 +124,7 @@ class users extends db
 			}
 		}
 
-		if(isset(GO::modules()->modules['customfields'])){
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
 			$db = new db();
 			echo "Deleting non existing custom field records.".$line_break.$line_break;
 			$db->query("delete from cf_8 where link_id not in (select id from go_users);");
@@ -140,13 +140,13 @@ class users extends db
 
 		$user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : 0;
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		$user = $GO_USERS->get_user($user_id);
 		$response['data']=array_merge($response['data'], $user);
 		$response['data']['birthday']=Date::format($response['data']['birthday'], false);
-		$response['data']['start_module_name'] = isset(GO::modules()->modules[$response['data']['start_module']]['humanName']) ? GO::modules()->modules[$response['data']['start_module']]['humanName'] : '';
+		$response['data']['start_module_name'] = isset($GLOBALS['GO_MODULES']->modules[$response['data']['start_module']]['humanName']) ? $GLOBALS['GO_MODULES']->modules[$response['data']['start_module']]['humanName'] : '';
 		$response['data']['registration_time'] = Date::get_timestamp($response['data']['registration_time']);
 		$response['data']['lastlogin'] = Date::get_timestamp($response['data']['lastlogin']);
 	}
@@ -157,7 +157,7 @@ class users extends db
 
 		$user['id'] = isset($_POST['user_id']) ? trim($_POST['user_id']) : 0;
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		if(isset($_POST['first_name']))
@@ -203,10 +203,10 @@ class users extends db
 				throw new Exception($lang['common']['invalidEmailError']);
 			}
 
-			$existing_email_user = GO::config()->allow_duplicate_email ? false : $GO_USERS->get_user_by_email($user['email']);
+			$existing_email_user = $GLOBALS['GO_CONFIG']->allow_duplicate_email ? false : $GO_USERS->get_user_by_email($user['email']);
 
 			if ($existing_email_user && ($user['id'] == 0 || $existing_email_user['id'] != $user['id'])) {
-				require(GO::language()->get_language_file('users'));
+				require($GLOBALS['GO_LANGUAGE']->get_language_file('users'));
 				throw new Exception($lang['users']['error_email_exists']);
 			}
 		}
@@ -246,7 +246,7 @@ class users extends db
 
 		if (!empty($_POST["password1"]) || !empty($_POST["password2"]))
 		{
-			require_once(GO::config()->class_path.'base/auth.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/auth.class.inc.php');
 			$GO_AUTH = new GO_AUTH();
 			
 			if(!$GO_AUTH->authenticate($_SESSION['GO_SESSION']['username'], $_POST['current_password']))
@@ -271,7 +271,7 @@ class users extends db
 	public function build_search_index()
 	{
 		global $GO_CONFIG;
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		$users = new users();

@@ -13,10 +13,10 @@
  */
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('{module}');
+$GLOBALS['GO_SECURITY']->json_authenticate('{module}');
 
-require_once (GO::modules()->modules['{module}']['class_path']."{module}.class.inc.php");
-//require_once (GO::language()->get_language_file('{module}'));
+require_once ($GLOBALS['GO_MODULES']->modules['{module}']['class_path']."{module}.class.inc.php");
+//require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('{module}'));
 
 ${module} = new {module}();
 

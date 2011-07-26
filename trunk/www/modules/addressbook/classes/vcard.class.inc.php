@@ -562,14 +562,14 @@ class vcard extends addressbook {
 	function _get_user($user_id = 0) {
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		$records = array ();
 
 		if (!$user_id) {
 			global $GO_SECURITY;
-			$user_id = GO::security()->user_id;
+			$user_id = $GLOBALS['GO_SECURITY']->user_id;
 		}
 		$records[] = $GO_USERS->get_user($user_id);
 

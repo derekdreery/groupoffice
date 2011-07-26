@@ -1,5 +1,5 @@
 <?php
-if(isset(GO::config()->default_date_seperator))
+if(isset($GLOBALS['GO_CONFIG']->default_date_seperator))
 {
 	echo $line_break.$line_break.'########################'.$line_break.$line_break;
 	

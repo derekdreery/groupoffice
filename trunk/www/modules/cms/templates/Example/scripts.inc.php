@@ -7,7 +7,7 @@ switch($co->file['type'])
 		{
 			try
 			{
-				require(GO::config()->root_path.'modules/formprocessor/classes/formprocessor.class.inc.php');
+				require($GLOBALS['GO_CONFIG']->root_path.'modules/formprocessor/classes/formprocessor.class.inc.php');
 				$fp = new formprocessor();
 
 				$fp->process_form();

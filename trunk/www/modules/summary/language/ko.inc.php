@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('summary'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('summary'));
 
 $lang['summary']['name']='시작 페이지';
 $lang['summary']['description']='Show an overview of different actual items';

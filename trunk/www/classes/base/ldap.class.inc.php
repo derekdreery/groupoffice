@@ -93,27 +93,27 @@ class ldap {
 			$this->tls = $tls;
 		}else
 		{
-			$this->Host = GO::config()->ldap_host;
+			$this->Host = $GLOBALS['GO_CONFIG']->ldap_host;
 
-			if(isset(GO::config()->ldap_port))
-				$this->Port = GO::config()->ldap_port;
+			if(isset($GLOBALS['GO_CONFIG']->ldap_port))
+				$this->Port = $GLOBALS['GO_CONFIG']->ldap_port;
 
-			if(isset(GO::config()->ldap_user))
-				$this->User = GO::config()->ldap_user;
+			if(isset($GLOBALS['GO_CONFIG']->ldap_user))
+				$this->User = $GLOBALS['GO_CONFIG']->ldap_user;
 
-			if(isset(GO::config()->ldap_pass))
-				$this->Password = GO::config()->ldap_pass;
+			if(isset($GLOBALS['GO_CONFIG']->ldap_pass))
+				$this->Password = $GLOBALS['GO_CONFIG']->ldap_pass;
 
-			if(isset(GO::config()->ldap_basedn))
-				$this->BaseDN = GO::config()->ldap_basedn;
+			if(isset($GLOBALS['GO_CONFIG']->ldap_basedn))
+				$this->BaseDN = $GLOBALS['GO_CONFIG']->ldap_basedn;
 
-			if(isset(GO::config()->ldap_peopledn))
-				$this->PeopleDN = GO::config()->ldap_peopledn;
+			if(isset($GLOBALS['GO_CONFIG']->ldap_peopledn))
+				$this->PeopleDN = $GLOBALS['GO_CONFIG']->ldap_peopledn;
 
-			if(isset(GO::config()->ldap_groupsdn))
-				$this->GroupsDN = GO::config()->ldap_groupsdn;
+			if(isset($GLOBALS['GO_CONFIG']->ldap_groupsdn))
+				$this->GroupsDN = $GLOBALS['GO_CONFIG']->ldap_groupsdn;
 
-			$this->tls = !empty(GO::config()->ldap_tls);
+			$this->tls = !empty($GLOBALS['GO_CONFIG']->ldap_tls);
 		}
 	}
 
@@ -148,8 +148,8 @@ class ldap {
 			else
 				$this->Link_ID=ldap_connect($Host, $Port);
 			
-			if(!empty(GO::config()->ldap_network_timeout)) //only works in php 5.3
-				ldap_set_option($this->Link_ID, LDAP_OPT_NETWORK_TIMEOUT, GO::config()->ldap_network_timeout);
+			if(!empty($GLOBALS['GO_CONFIG']->ldap_network_timeout)) //only works in php 5.3
+				ldap_set_option($this->Link_ID, LDAP_OPT_NETWORK_TIMEOUT, $GLOBALS['GO_CONFIG']->ldap_network_timeout);
 
 			if (!$this->Link_ID) {
 				go_debug("ldap_connect($Host, $Port) failed.");

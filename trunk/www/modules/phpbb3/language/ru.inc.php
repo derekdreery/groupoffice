@@ -7,6 +7,6 @@
 */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('phpbb3'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('phpbb3'));
 $lang['phpbb3']['name'] = 'phpBB3';
 $lang['phpbb3']['description'] = 'Модуль подключения phpBB3 к Group-Office.';

@@ -22,7 +22,7 @@ class summary extends db{
 	{
 		global $GO_SECURITY, $GO_LANGUAGE, $GO_CONFIG;
 
-		require(GO::language()->get_language_file('summary',$user['language']));
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('summary',$user['language']));
 		
 		$feed['url'] = $lang['summary']['default_rss_url'];
 		$feed['title'] = $lang['summary']['default_rss_title'];

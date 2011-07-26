@@ -1,5 +1,5 @@
 <?php
-require_once(GO::language()->get_fallback_language_file('mailings'));
+require_once($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('mailings'));
 $lang['mailings']['name']='Vorlagen und Verteilerlisten';
 $lang['mailings']['description']='Modul zum Verwalten von E-Mail-Vorlagen und -Verteilerlisten';
 $lang['mailings']['templateAlreadyExists']='Diese Vorlage existiert bereits';

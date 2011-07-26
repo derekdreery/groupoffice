@@ -1,3 +1,3 @@
 <?php
 global $GO_MODULES;
-GO::modules()->add_module('blacklist');
+$GLOBALS['GO_MODULES']->add_module('blacklist');

@@ -18,14 +18,14 @@ require_once("../../Group-Office.php");
 session_write_close();
 if(php_sapi_name()!='cli')
 {
-	GO::security()->html_authenticate('tools');
+	$GLOBALS['GO_SECURITY']->html_authenticate('tools');
 }
 if(isset($argv[1]))
 	$module = $argv[1];
 else
 	$module=$_REQUEST['module'];
 
-require_once(GO::modules()->modules[$module]['class_path'].$module.'.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules[$module]['class_path'].$module.'.class.inc.php');
 
 $cls = new $module;
 $cls->check_database();

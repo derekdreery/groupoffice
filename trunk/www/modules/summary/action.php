@@ -12,10 +12,10 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('summary');
+$GLOBALS['GO_SECURITY']->json_authenticate('summary');
 
-require_once (GO::modules()->modules['summary']['class_path']."summary.class.inc.php");
-//require_once (GO::language()->get_language_file('calendar'));
+require_once ($GLOBALS['GO_MODULES']->modules['summary']['class_path']."summary.class.inc.php");
+//require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 $summary = new summary();
 
 try{
@@ -23,7 +23,7 @@ try{
 	switch($_REQUEST['task'])
 	{
 		case 'save_note':
-			$note['user_id']=GO::security()->user_id;
+			$note['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 			$note['text']=$_POST['text'];
 			$summary->update_note($note);
 			
@@ -37,7 +37,7 @@ try{
 			$response['data'] = array();
 			foreach($feeds as $feed)
 			{
-				$feed['user_id'] = GO::security()->user_id;
+				$feed['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
 				$feed['id'] = $feed['feedId'];
 				unset($feed['feedId']);
 				if($feed['id']>0)
@@ -51,7 +51,7 @@ try{
 				$ids[] = $feed['id'];
 				$response['data'][$feed['id']]=$feed;
 			}
-			$summary->delete_other_feeds(GO::security()->user_id, $ids);
+			$summary->delete_other_feeds($GLOBALS['GO_SECURITY']->user_id, $ids);
 			$response['ids'] = $ids;
 			$response['success']=true;
 			
@@ -68,7 +68,7 @@ try{
 				$response['success']=true;
 			}else
 			{
-				$announcement['user_id']=GO::security()->user_id;
+				$announcement['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 				$announcement_id= $summary->add_announcement($announcement);
 				$response['announcement_id']=$announcement_id;
 				$response['success']=true;

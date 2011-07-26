@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Calendario';
 $lang['calendar']['description'] = 'Módulo de calendario; Cada usuario puede agregar, editar o borrar citas. Incluso los usuarios puede ver y modificar (de ser necesario) las citas de otros usuarios';
 

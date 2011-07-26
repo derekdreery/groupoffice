@@ -14,9 +14,9 @@
 
 require_once("Group-Office.php");
 
-GO::security()->json_authenticate();
+$GLOBALS['GO_SECURITY']->json_authenticate();
 
-GO::security()->check_token();
+$GLOBALS['GO_SECURITY']->check_token();
 
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
 $dir = isset($_REQUEST['dir']) ? ($_REQUEST['dir']) : 'ASC';
@@ -29,7 +29,7 @@ try {
 
 		case 'saved_advanced_queries':
 
-		require_once(GO::config()->class_path.'advanced_query.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'advanced_query.class.inc.php');
 		$aq = new advanced_query();
 
 		if (isset($_POST['delete_keys'])) {
@@ -46,7 +46,7 @@ try {
 			}
 		}
 
-		$response['total'] = $aq->get_search_queries(GO::security()->user_id);
+		$response['total'] = $aq->get_search_queries($GLOBALS['GO_SECURITY']->user_id);
 		$response['results'] = array();
 
 		while ($r = $aq->next_record())
@@ -91,30 +91,30 @@ try {
 		case 'email_export_query':
 
 			if(!empty($_POST['template_id'])) {
-				require_once(GO::modules()->modules['email']['class_path'].'email.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['email']['class_path'].'email.class.inc.php');
 				$response = load_template($_POST['template_id']);
 			}
 
 
 
-			require_once(GO::config()->class_path.'/export/export_query.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'/export/export_query.class.inc.php');
 			$eq = new export_query();
 
 			$type = $_REQUEST['type'];
 			$filename = $type.'.class.inc.php';
 
-//			$file = GO::config()->class_path.'export/'.$filename;
+//			$file = $GLOBALS['GO_CONFIG']->class_path.'export/'.$filename;
 //			if(!file_exists($file)){
-//				$file = GO::config()->file_storage_path.'customexports/'.$filename;
+//				$file = $GLOBALS['GO_CONFIG']->file_storage_path.'customexports/'.$filename;
 //			}
 
-			if(isset($_REQUEST['export_directory']) && file_exists(GO::config()->root_path.$_REQUEST['export_directory'].$filename)){
-				$file = GO::config()->root_path.$_REQUEST['export_directory'].$filename;
+			if(isset($_REQUEST['export_directory']) && file_exists($GLOBALS['GO_CONFIG']->root_path.$_REQUEST['export_directory'].$filename)){
+				$file = $GLOBALS['GO_CONFIG']->root_path.$_REQUEST['export_directory'].$filename;
 			}else
 			{
-				$file = GO::config()->class_path.'export/'.$filename;
+				$file = $GLOBALS['GO_CONFIG']->class_path.'export/'.$filename;
 				if(!file_exists($file)){
-					$file = GO::config()->file_storage_path.'customexports/'.$filename;
+					$file = $GLOBALS['GO_CONFIG']->file_storage_path.'customexports/'.$filename;
 				}
 				if(!file_exists($file)){
 					die('Custom export class not found.');
@@ -127,7 +127,7 @@ try {
 			require_once($file);
 			$eq = new $type();
 
-			$tmp_file = GO::config()->tmpdir.File::strip_invalid_chars($_POST['title']).'.'.$eq->extension;
+			$tmp_file = $GLOBALS['GO_CONFIG']->tmpdir.File::strip_invalid_chars($_POST['title']).'.'.$eq->extension;
 
 			$fp = fopen($tmp_file, 'w+');
 			$eq->export($fp);
@@ -142,7 +142,7 @@ try {
 							'extension'=>$eq->extension
 			);
 
-			require_once(GO::config()->class_path.'mail/Go2Mime.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'mail/Go2Mime.class.inc.php');
 			$go2mime = new Go2Mime();
 			$response['data']['attachments']=$go2mime->remove_inline_images($response['data']['attachments']);
 
@@ -151,7 +151,7 @@ try {
 
 		case 'link_descriptions':
 
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 
 			if(isset($_POST['delete_keys'])) {
@@ -183,7 +183,7 @@ try {
 			$response['data']=array();
 
 			$params['response']=&$response;
-			GO::events()->fire_event('load_settings', $params);
+			$GLOBALS['GO_EVENTS']->fire_event('load_settings', $params);
 
 			$response['success']=true;
 			break;
@@ -198,8 +198,8 @@ try {
 
 			$response=array();
 
-			foreach(GO::modules()->modules as $module) {
-				$lang_file = GO::language()->get_language_file($module['id']);
+			foreach($GLOBALS['GO_MODULES']->modules as $module) {
+				$lang_file = $GLOBALS['GO_LANGUAGE']->get_language_file($module['id']);
 
 				if(!empty($lang_file))
 					require($lang_file);
@@ -207,10 +207,10 @@ try {
 
 			$response['notification_area']='';
 
-			require(GO::config()->class_path.'base/reminder.class.inc.php');
+			require($GLOBALS['GO_CONFIG']->class_path.'base/reminder.class.inc.php');
 			$rm = new reminder();
 
-			$rm->get_reminders(GO::security()->user_id);
+			$rm->get_reminders($GLOBALS['GO_SECURITY']->user_id);
 
 			while($reminder=$rm->next_record()) {
 				
@@ -231,7 +231,7 @@ try {
 				$response['reminders'][]=$reminder;
 			}
 			$params = array(&$response);
-			GO::events()->fire_event('checker', $params);
+			$GLOBALS['GO_EVENTS']->fire_event('checker', $params);
 
 			break;
 
@@ -239,10 +239,10 @@ try {
 
 		//used by /javascript/dialog/SelectGroups.js
 		case 'groups':
-			require_once(GO::config()->class_path.'base/groups.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 			$GO_GROUPS = new GO_GROUPS();
 
-			$user_id = GO::security()->has_admin_permission(GO::security()->user_id) ? 0 : GO::security()->user_id;
+			$user_id = $GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id) ? 0 : $GLOBALS['GO_SECURITY']->user_id;
 			$response['total']=$GO_GROUPS->get_groups($user_id, $start, $limit, $sort, $dir);
 
 			$response['results']=array();
@@ -264,7 +264,7 @@ try {
 
 			$acl_id = ($_REQUEST['acl_id']);
 
-			$response['manage_permission']=GO::security()->has_permission_to_manage_acl(GO::security()->user_id, $acl_id);
+			$response['manage_permission']=$GLOBALS['GO_SECURITY']->has_permission_to_manage_acl($GLOBALS['GO_SECURITY']->user_id, $acl_id);
 
 			if(isset($_REQUEST['delete_keys'])) {
 				try {
@@ -277,10 +277,10 @@ try {
 					$groups = json_decode(($_REQUEST['delete_keys']));
 
 					foreach($groups as $group_id) {
-						if($group_id == GO::config()->group_root) {
+						if($group_id == $GLOBALS['GO_CONFIG']->group_root) {
 							throw new Exception($lang['common']['dontChangeAdminsPermissions']);
 						}
-						GO::security()->delete_group_from_acl($group_id, $acl_id);
+						$GLOBALS['GO_SECURITY']->delete_group_from_acl($group_id, $acl_id);
 					}
 				}catch(Exception $e) {
 					$response['deleteSuccess']=false;
@@ -299,8 +299,8 @@ try {
 					$groups = json_decode(($_REQUEST['add_groups']));
 
 					foreach($groups as $group_id) {
-						if(!GO::security()->group_in_acl($group_id, $acl_id)) {
-							GO::security()->add_group_to_acl(addslashes($group_id), $acl_id);
+						if(!$GLOBALS['GO_SECURITY']->group_in_acl($group_id, $acl_id)) {
+							$GLOBALS['GO_SECURITY']->add_group_to_acl(addslashes($group_id), $acl_id);
 						}
 					}
 				}catch(Exception $e) {
@@ -309,9 +309,9 @@ try {
 				}
 			}
 
-			$response['total'] = GO::security()->get_groups_in_acl($acl_id);
+			$response['total'] = $GLOBALS['GO_SECURITY']->get_groups_in_acl($acl_id);
 			$response['results']=array();
-			while($r=GO::security()->next_record(DB_ASSOC)) {
+			while($r=$GLOBALS['GO_SECURITY']->next_record(DB_ASSOC)) {
 				$response['results'][]=$r;
 			}
 			break;
@@ -320,7 +320,7 @@ try {
 		case 'users_in_acl':
 			$acl_id = ($_REQUEST['acl_id']);
 
-			$response['manage_permission']=GO::security()->has_permission_to_manage_acl(GO::security()->user_id, $acl_id);
+			$response['manage_permission']=$GLOBALS['GO_SECURITY']->has_permission_to_manage_acl($GLOBALS['GO_SECURITY']->user_id, $acl_id);
 
 			if(isset($_REQUEST['delete_keys'])) {
 				try {
@@ -332,15 +332,15 @@ try {
 					$users = json_decode($_REQUEST['delete_keys']);
 
 					foreach($users as $user_id) {
-						if(GO::security()->user_owns_acl($user_id, $acl_id)) {
-							if(GO::security()->has_admin_permission(GO::security()->user_id)){
-								GO::security()->chown_acl(GO::security()->user_id, GO::security()->user_id);
+						if($GLOBALS['GO_SECURITY']->user_owns_acl($user_id, $acl_id)) {
+							if($GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id)){
+								$GLOBALS['GO_SECURITY']->chown_acl($GLOBALS['GO_SECURITY']->user_id, $GLOBALS['GO_SECURITY']->user_id);
 							}else
 							{
 								throw new Exception($lang['common']['dontChangeOwnersPermissions']);
 							}
 						}
-						GO::security()->delete_user_from_acl($user_id, $acl_id);
+						$GLOBALS['GO_SECURITY']->delete_user_from_acl($user_id, $acl_id);
 
 					}
 				}catch(Exception $e) {
@@ -360,8 +360,8 @@ try {
 					$users = json_decode(($_REQUEST['add_users']));
 
 					foreach($users as $user_id) {
-						if(!GO::security()->user_in_acl($user_id, $acl_id)) {
-							GO::security()->add_user_to_acl($user_id, $acl_id);
+						if(!$GLOBALS['GO_SECURITY']->user_in_acl($user_id, $acl_id)) {
+							$GLOBALS['GO_SECURITY']->add_user_to_acl($user_id, $acl_id);
 						}
 					}
 				}catch(Exception $e) {
@@ -370,12 +370,12 @@ try {
 				}
 			}
 
-			$response['total'] = GO::security()->get_users_in_acl($acl_id);
+			$response['total'] = $GLOBALS['GO_SECURITY']->get_users_in_acl($acl_id);
 			$response['results']=array();
-			while(GO::security()->next_record(DB_ASSOC)) {
-				$result['id']=GO::security()->f('id');
-				$result['name']=String::format_name(GO::security()->record);
-				$result['level']=GO::security()->f('level');
+			while($GLOBALS['GO_SECURITY']->next_record(DB_ASSOC)) {
+				$result['id']=$GLOBALS['GO_SECURITY']->f('id');
+				$result['name']=String::format_name($GLOBALS['GO_SECURITY']->record);
+				$result['level']=$GLOBALS['GO_SECURITY']->f('level');
 				$response['results'][]=$result;
 			}
 
@@ -383,7 +383,7 @@ try {
 			break;
 
 		case 'email':
-			require_once (GO::config()->class_path."mail/RFC822.class.inc");
+			require_once ($GLOBALS['GO_CONFIG']->class_path."mail/RFC822.class.inc");
 			$RFC822 = new RFC822();
 
 			$addresses=array();
@@ -392,12 +392,12 @@ try {
 
 			$query = !empty($_REQUEST['query']) ? '%'.trim($_REQUEST['query']).'%' : '%';
 
-			if(isset(GO::modules()->modules['addressbook']) && GO::modules()->modules['addressbook']['read_permission']) {
-				GO::language()->require_language_file('addressbook');
+			if(isset($GLOBALS['GO_MODULES']->modules['addressbook']) && $GLOBALS['GO_MODULES']->modules['addressbook']['read_permission']) {
+				$GLOBALS['GO_LANGUAGE']->require_language_file('addressbook');
 
-				require_once (GO::modules()->modules['addressbook']['class_path']."addressbook.class.inc.php");
+				require_once ($GLOBALS['GO_MODULES']->modules['addressbook']['class_path']."addressbook.class.inc.php");
 				$ab = new addressbook();
-				$ab->search_email(GO::security()->user_id, $query);
+				$ab->search_email($GLOBALS['GO_SECURITY']->user_id, $query);
 
 				while($ab->next_record()) {
 					$name = String::format_name($ab->f('last_name'),$ab->f('first_name'),$ab->f('middle_name'),'first_name');
@@ -444,7 +444,7 @@ try {
 				}
 
 				if(count($addresses)<10) {
-					$ab->search_company_email(GO::security()->user_id, $query);
+					$ab->search_company_email($GLOBALS['GO_SECURITY']->user_id, $query);
 
 					while($ab->next_record()) {
 						$rfc_email =$RFC822->write_address($ab->f('name'), $ab->f('email'));
@@ -463,10 +463,10 @@ try {
 
 			if(count($addresses)<10) {
 
-				require_once(GO::config()->class_path.'base/users.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 				$GO_USERS = new GO_USERS();
 
-				$GO_USERS->search($query,array('name','email'),GO::security()->user_id, 0,10);
+				$GO_USERS->search($query,array('name','email'),$GLOBALS['GO_SECURITY']->user_id, 0,10);
 
 				while($GO_USERS->next_record(DB_ASSOC)) {
 					$name = String::format_name($GO_USERS->f('last_name'),$GO_USERS->f('first_name'),$GO_USERS->f('middle_name'),'first_name');
@@ -493,7 +493,7 @@ try {
 
 			$response['success']=true;
 			$response['modules']=array();
-			foreach(GO::modules()->modules as $module) {
+			foreach($GLOBALS['GO_MODULES']->modules as $module) {
 				if($module['read_permission']) {
 					$response['modules'][]=$module;
 				}
@@ -502,16 +502,16 @@ try {
 
 		/*case 'link_types':
 
-			foreach(GO::modules()->modules as $module) {
-				if($lang_file = GO::language()->get_language_file($module['id'])) {
-					GO::language()->require_language_file($module['id']);
+			foreach($GLOBALS['GO_MODULES']->modules as $module) {
+				if($lang_file = $GLOBALS['GO_LANGUAGE']->get_language_file($module['id'])) {
+					$GLOBALS['GO_LANGUAGE']->require_language_file($module['id']);
 				}
 			}
 
 			$response['total'] = count($lang['link_type']);
 			$response['results']=array();
 
-			$types = GO::config()->get_setting('link_type_filter', GO::security()->user_id);
+			$types = $GLOBALS['GO_CONFIG']->get_setting('link_type_filter', $GLOBALS['GO_SECURITY']->user_id);
 			$types = empty($types) ? array() : explode(',', $types);
 
 			asort($lang['link_type']);
@@ -529,10 +529,10 @@ try {
 
 		//ini_set('max_execution_time', 120);
 
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 
-			require_once(GO::config()->class_path.'/base/search.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
 			$search = new search();
 
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : 0;
@@ -555,14 +555,14 @@ try {
 
 							$record = $search->get_search_result($link[1], $link[0]);
 
-							if(GO::security()->has_permission(GO::security()->user_id, $record['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
+							if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $record['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
 								throw new AccessDeniedException();
 							}
 
-							if(!isset(GO::modules()->modules[$record['module']])) {
+							if(!isset($GLOBALS['GO_MODULES']->modules[$record['module']])) {
 								throw new Exception('No module found for this link type');
 							}
-							$module=GO::modules()->modules[$record['module']];
+							$module=$GLOBALS['GO_MODULES']->modules[$record['module']];
 
 							$file = $module['class_path'].$module['id'].'.class.inc';
 							if(!file_exists($file)) {
@@ -603,9 +603,9 @@ try {
 				if(isset($_POST['types'])) {
 					$types= json_decode($_POST['types'], true);
 					if(!isset($_POST['no_filter_save']))
-						GO::config()->save_setting('link_type_filter', implode(',',$types), GO::security()->user_id);
+						$GLOBALS['GO_CONFIG']->save_setting('link_type_filter', implode(',',$types), $GLOBALS['GO_SECURITY']->user_id);
 				}else {
-					$types = GO::config()->get_setting('link_type_filter', GO::security()->user_id);
+					$types = $GLOBALS['GO_CONFIG']->get_setting('link_type_filter', $GLOBALS['GO_SECURITY']->user_id);
 					$types = empty($types) ? array() : explode(',', $types);
 				}
 			}
@@ -626,7 +626,7 @@ try {
 				}
 			}
 
-			$links_response = $search->get_links_json(GO::security()->user_id, $query, $start, $limit, $sort,$dir, $types, $link_id, $link_type,$folder_id);
+			$links_response = $search->get_links_json($GLOBALS['GO_SECURITY']->user_id, $query, $start, $limit, $sort,$dir, $types, $link_id, $link_type,$folder_id);
 
 			/*
 			 * Do this after search otherwise the new search result might not be present
@@ -636,7 +636,7 @@ try {
 
 				//go_debug($record);
 
-				$response['permission_level']=GO::security()->has_permission(GO::security()->user_id, $record['acl_id']);
+				$response['permission_level']=$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $record['acl_id']);
 				$response['write_permission']=$response['permission_level']>1;
 				if(!$response['permission_level']) {
 					throw new AccessDeniedException();
@@ -651,7 +651,7 @@ try {
 
 
 		case 'link_folder':
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 
 			$response['data']= $GO_LINKS->get_folder($_REQUEST['folder_id']);
@@ -660,7 +660,7 @@ try {
 
 		case 'link_folders':
 
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 
 			$folder_id=isset($_POST['folder_id']) ? ($_POST['folder_id']) : 0;
@@ -676,7 +676,7 @@ try {
 
 		case 'link_folders_tree':
 
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 
 			$folder_id=isset($_POST['node']) && substr($_POST['node'],0,10)=='lt-folder-' ? (substr($_POST['node'],10)) : 0;
@@ -705,18 +705,18 @@ try {
 			break;
 		case 'select_address_format':
 
-			require(GO::language()->get_base_language_file('countries'));
-			require_once (GO::modules()->modules['addressbook']['class_path']."addressbook.class.inc.php");
+			require($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
+			require_once ($GLOBALS['GO_MODULES']->modules['addressbook']['class_path']."addressbook.class.inc.php");
 			$ab = new addressbook();
 
 
-			$response['total'] = GO::language()->get_address_formats();
+			$response['total'] = $GLOBALS['GO_LANGUAGE']->get_address_formats();
 
 			$formats = array();
 
-			while($record = GO::language()->next_record()) {
-				if(!empty($countries[GO::language()->f('iso')])) {
-					$formats[$countries[GO::language()->f('iso')]]=$record;
+			while($record = $GLOBALS['GO_LANGUAGE']->next_record()) {
+				if(!empty($countries[$GLOBALS['GO_LANGUAGE']->f('iso')])) {
+					$formats[$countries[$GLOBALS['GO_LANGUAGE']->f('iso')]]=$record;
 				}
 			}
 

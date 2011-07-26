@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('postfixadmin'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('postfixadmin'));
 $lang['postfixadmin']['name']='Postfix administrace';
 $lang['postfixadmin']['description']='Modul k úpravě virtuálních postfix uživatelů v Group-Office databázi';
 $lang['postfixadmin']['alias']='Přezdívka';

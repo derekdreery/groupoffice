@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('gnupg'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('gnupg'));
 $lang['gnupg']['name']='GnuPG';
 $lang['gnupg']['description']='PGP ile şifrelenmiş E-posta mesajları gönder';
 

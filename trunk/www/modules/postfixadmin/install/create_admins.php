@@ -4,7 +4,7 @@ require('../../../Group-Office.php');
 
 require('../classes/postfixadmin.class.inc.php');
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 $pa = new postfixadmin();
@@ -31,7 +31,7 @@ while($pa->next_record())
 				if($up_domain['user_id']>0)
 				{
 				
-					GO::security()->add_user_to_acl($pa->f('acl_id'), $up_domain['user_id'], GO_SECURITY::WRITE_PERMISSION);
+					$GLOBALS['GO_SECURITY']->add_user_to_acl($pa->f('acl_id'), $up_domain['user_id'], GO_SECURITY::WRITE_PERMISSION);
 				
 					$up_domain['id']=$pa->f('id');
 

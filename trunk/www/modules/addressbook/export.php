@@ -13,12 +13,12 @@ option) any later version.
 require_once("../../Group-Office.php");
 $post_task = isset($post_task) ? $post_task : '';
 
-GO::security()->authenticate();
-GO::modules()->authenticate('addressbook');
-require_once(GO::language()->get_language_file('addressbook'));
+$GLOBALS['GO_SECURITY']->authenticate();
+$GLOBALS['GO_MODULES']->authenticate('addressbook');
+require_once($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 
 //load contact management class
-require_once(GO::modules()->class_path."addressbook.class.inc.php");
+require_once($GLOBALS['GO_MODULES']->class_path."addressbook.class.inc.php");
 $ab = new addressbook();
 
 $addressbook_id = isset($_REQUEST['addressbook_id']) ? $_REQUEST['addressbook_id'] : 0;
@@ -48,7 +48,7 @@ if ($browser['name'] == 'MSIE')
 }
 
 if($file_type == 'vcf') {
-	require_once(GO::modules()->path."classes/vcard.class.inc.php");
+	require_once($GLOBALS['GO_MODULES']->path."classes/vcard.class.inc.php");
 	$vcard = new vcard();
 	if($vcard->export_addressbook($addressbook_id)) {
 		echo $vcard->vcf;
@@ -65,11 +65,11 @@ if($file_type == 'vcf') {
 	{
 		$headings = array($lang['common']['title'], $lang['common']['firstName'], $lang['common']['middleName'], $lang['common']['lastName'], $lang['common']['initials'], $lang['common']['sex'], $lang['common']['birthday'], $lang['common']['email'], $lang['common']['email'].' 2', $lang['common']['email'].' 3', $lang['common']['country'], $lang['common']['state'], $lang['common']['city'], $lang['common']['zip'], $lang['common']['address'], $lang['common']['addressNo'], $lang['common']['phone'], $lang['common']['workphone'], $lang['common']['fax'], $lang['common']['workFax'], $lang['common']['cellular'], $lang['common']['company'], $lang['common']['department'], $lang['common']['function'], $lang['addressbook']['comment'], $lang['addressbook']['contactsGroup'], $lang['common']['salutation']);
 		
-		if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission'])
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
 		{
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$cf = new customfields();
-			$customfields = $cf->get_authorized_fields(GO::security()->user_id, 2);
+			$customfields = $cf->get_authorized_fields($GLOBALS['GO_SECURITY']->user_id, 2);
 			
 			foreach($customfields as $field)
 			{
@@ -89,7 +89,7 @@ if($file_type == 'vcf') {
 			
 			if(isset($cf))
 			{
-				$customvalues = $cf->get_values(GO::security()->user_id, 2, $ab->f('id'));
+				$customvalues = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 2, $ab->f('id'));
 				foreach($customfields as $field)
 				{
 					if($field['datatype']!='heading' && $field['datatype']!='function')
@@ -104,11 +104,11 @@ if($file_type == 'vcf') {
 	} else {
 		$headings = array($lang['common']['name'], $lang['common']['country'], $lang['common']['state'], $lang['common']['city'], $lang['common']['zip'], $lang['common']['address'], $lang['common']['addressNo'], $lang['common']['postCountry'], $lang['common']['postState'], $lang['common']['postCity'], $lang['common']['postZip'], $lang['common']['postAddress'], $lang['common']['postAddressNo'],  $lang['common']['email'], $lang['common']['phone'], $lang['common']['fax'], $lang['common']['homepage'], $lang['addressbook']['bankNo'], $lang['addressbook']['vatNo'], $lang['addressbook']['comment']);
 		
-		if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission'])
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
 		{
-			require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$cf = new customfields();
-			$customfields = $cf->get_authorized_fields(GO::security()->user_id, 3);
+			$customfields = $cf->get_authorized_fields($GLOBALS['GO_SECURITY']->user_id, 3);
 			
 			foreach($customfields as $field)
 			{
@@ -125,7 +125,7 @@ if($file_type == 'vcf') {
 
 		while($ab->next_record())
 		{			
-			require(GO::language()->get_base_language_file('countries'));
+			require($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
 			$country=isset($countries[$ab->f('country')]) ? $countries[$ab->f('country')] : $ab->f('country');
 			$post_country=isset($countries[$ab->f('post_country')]) ? $countries[$ab->f('post_country')] : $ab->f('post_country');
 			
@@ -133,7 +133,7 @@ if($file_type == 'vcf') {
 			
 			if(isset($cf))
 			{
-				$customvalues = $cf->get_values(GO::security()->user_id, 3, $ab->f('id'));
+				$customvalues = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 3, $ab->f('id'));
 				foreach($customfields as $field)
 				{
 					if($field['datatype']!='heading' && $field['datatype']!='function')

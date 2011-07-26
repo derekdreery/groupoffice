@@ -20,7 +20,7 @@ if(file_exists('Group-Office.php'))
 <body>
 <?php
 
-$modules = GO::modules()->get_modules_with_locations();
+$modules = $GLOBALS['GO_MODULES']->get_modules_with_locations();
 $lang1 = (isset($_GET['lang1']))? $_GET['lang1'] : 'en';
 $lang2 = (isset($_GET['lang2']))? $_GET['lang2'] : 'nl';
 
@@ -80,13 +80,13 @@ function check_encoding($file)
 			if(is_writable($file))
 			{
 				$save=true;
-				echo '<p style="color:red">Warning, corrected encoding of '.str_replace(GO::config()->root_path, '', $file).' from '.$enc.' to UTF-8</p>';
+				echo '<p style="color:red">Warning, corrected encoding of '.str_replace($GLOBALS['GO_CONFIG']->root_path, '', $file).' from '.$enc.' to UTF-8</p>';
 				
 				$str = iconv($enc, 'UTF-8', $str);//mb_convert_encoding($str,'UTF-8', $enc);
 				
 			}else
 			{
-				echo '<p style="color:red">Warning, encoding of '.str_replace(GO::config()->root_path, '', $file).' is '.$enc.' and should be UTF-8. Make the file writable to let this script correct it.</p>';
+				echo '<p style="color:red">Warning, encoding of '.str_replace($GLOBALS['GO_CONFIG']->root_path, '', $file).' is '.$enc.' and should be UTF-8. Make the file writable to let this script correct it.</p>';
 			}
 		}
 	}
@@ -128,7 +128,7 @@ function check_namespace($file)
 		if(count($allmatches))
 		{
 			$changed = true;
-			echo '<p style="color:red">Warning, removed invalid lines from '.str_replace(GO::config()->root_path, '', $file).': <br /><br /> '.implode('<br />',$allmatches).'</p>';
+			echo '<p style="color:red">Warning, removed invalid lines from '.str_replace($GLOBALS['GO_CONFIG']->root_path, '', $file).': <br /><br /> '.implode('<br />',$allmatches).'</p>';
 			
 			foreach($allmatches as $match)
 			{
@@ -141,7 +141,7 @@ function check_namespace($file)
 			$changed = true;
 			
 			$str = str_replace('//require', 'require', $str);			
-			echo '<p style="color:red">Warning, uncommented //require(GO::language()->get_fallback_language_file(\'module\'));</p>';
+			echo '<p style="color:red">Warning, uncommented //require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file(\'module\'));</p>';
 		}
 		if($changed)
 		{
@@ -151,12 +151,12 @@ function check_namespace($file)
 	{
 		if(count($allmatches))
 		{
-			echo '<p style="color:red">Warning, '.str_replace(GO::config()->root_path, '', $file).' contains: <br /><br /> '.implode('<br />',$allmatches).'<br /><br /> These lines must be removed in translations. Make the language files writable to automatically remove them.</p>';
+			echo '<p style="color:red">Warning, '.str_replace($GLOBALS['GO_CONFIG']->root_path, '', $file).' contains: <br /><br /> '.implode('<br />',$allmatches).'<br /><br /> These lines must be removed in translations. Make the language files writable to automatically remove them.</p>';
 		}
 		
 		if(strstr($str, '//require'))
 		{
-				echo '<p style="color:red">Warning, you must uncomment //require(GO::language()->get_fallback_language_file(\'module\')); make the language files writable to let this script correct it.</p>';
+				echo '<p style="color:red">Warning, you must uncomment //require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file(\'module\')); make the language files writable to let this script correct it.</p>';
 		}
 	}
 }
@@ -169,7 +169,7 @@ function compare_files($file1, $file2, $type)
 	$content2 = get_contents($file2);
 	
 	if($content1 && !$content2)
-		echo '<i><font color="red">Could not compare '.str_replace(GO::config()->root_path, '', $file1).', because the translation doesn\'t exist!</font></i><br />';
+		echo '<i><font color="red">Could not compare '.str_replace($GLOBALS['GO_CONFIG']->root_path, '', $file1).', because the translation doesn\'t exist!</font></i><br />';
 	
 	if($content1 && $content2)
 	{
@@ -185,9 +185,9 @@ function compare_files($file1, $file2, $type)
 
 
 
-require_once(GO::config()->class_path.'filesystem.class.inc');
+require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 $fs = new filesystem();
-$commons = $fs->get_folders(GO::config()->root_path.'language');
+$commons = $fs->get_folders($GLOBALS['GO_CONFIG']->root_path.'language');
 
 foreach($commons as $common){
 	echo '<h3>'.$common['path'].'</h3>';

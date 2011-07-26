@@ -25,10 +25,10 @@ if(isset($argv[1]))
 	define('CONFIG_FILE', $argv[1]);
 
 require_once('Group-Office.php');
-require_once(GO::config()->class_path.'base/reminder.class.inc.php');
-require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/reminder.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 $GO_USERS->get_users('id');
@@ -39,10 +39,10 @@ while($user = $GO_USERS->next_record())
 		$rm = new reminder();		
 		if($rm->get_reminders($user['id'], true))
 		{
-			require(GO::language()->get_base_language_file('common',$user['language']));
-			foreach(GO::modules()->modules as $module)
+			require($GLOBALS['GO_LANGUAGE']->get_base_language_file('common',$user['language']));
+			foreach($GLOBALS['GO_MODULES']->modules as $module)
 			{
-				$lang_file = GO::language()->get_language_file($module['id'],$user['language']);
+				$lang_file = $GLOBALS['GO_LANGUAGE']->get_language_file($module['id'],$user['language']);
 
 				if(!empty($lang_file))
 				require($lang_file);
@@ -62,7 +62,7 @@ while($user = $GO_USERS->next_record())
 				$body .= $lang['common']['name'].': '.str_replace('<br />', ', ', $reminder['name'])."\n";
 
 				$swift =& new GoSwift($user['email'], $subject);
-				$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
+				$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 				$swift->set_body($body, 'plain');
 				$swift->sendmail();
 
@@ -73,6 +73,6 @@ while($user = $GO_USERS->next_record())
 	}
 }
 
-GO::events()->fire_event('cronjob');
+$GLOBALS['GO_EVENTS']->fire_event('cronjob');
 
 ?>

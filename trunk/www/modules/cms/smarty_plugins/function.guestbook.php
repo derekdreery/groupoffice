@@ -3,7 +3,7 @@ function smarty_function_guestbook($params, &$smarty)
 {
 	global $co, $GO_LANGUAGE, $lang;
 	
-	require(GO::language()->get_language_file('cms'));
+	require($GLOBALS['GO_LANGUAGE']->get_language_file('cms'));
 	
 	
 	

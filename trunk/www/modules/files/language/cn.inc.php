@@ -1,6 +1,6 @@
 <?php
 //This is a translation by hodrag. If you have questions please e-mail to hodrag@gmail.com
-require(GO::language()->get_fallback_language_file('files'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('files'));
 $lang['files']['name'] = '文件';
 $lang['files']['description'] = '文件模块; 共享文件';
 

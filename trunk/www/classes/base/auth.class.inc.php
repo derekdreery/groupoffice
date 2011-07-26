@@ -110,14 +110,14 @@ class GO_AUTH extends db
 		global $GO_SECURITY, $GO_MODULES,$GO_CONFIG;
 
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		// Tell the security framework that a user has been logged in. The
 		// security framework takes care on setting the userid as active.
-		GO::security()->logged_in($user);
+		$GLOBALS['GO_SECURITY']->logged_in($user);
 
-		require_once(GO::config()->class_path.'filesystem.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 
 		// Increment the number of logins of the given user.
@@ -128,12 +128,12 @@ class GO_AUTH extends db
 			//logins are not counted for example when a synchronization is done.
 			//We also don't want to clear the temp dir in that case because that can
 			//screw up an active session in the browser.			
-			if(is_dir(GO::config()->tmpdir.$user['id'].'/'))
+			if(is_dir($GLOBALS['GO_CONFIG']->tmpdir.$user['id'].'/'))
 			{
-				$fs->delete(GO::config()->tmpdir.$user['id'].'/');
+				$fs->delete($GLOBALS['GO_CONFIG']->tmpdir.$user['id'].'/');
 			}
 		}
-		$fs->mkdir_recursive(GO::config()->tmpdir.$user['id'].'/');
+		$fs->mkdir_recursive($GLOBALS['GO_CONFIG']->tmpdir.$user['id'].'/');
 		
 		//count_login is false when sync or dav logs in. We want to use the 
 		//cache in that case because webdav makes lots of logins.
@@ -141,7 +141,7 @@ class GO_AUTH extends db
 			$user['cache']='';
 
 		//reinitialise available modules
-		GO::modules()->load_modules($user);
+		$GLOBALS['GO_MODULES']->load_modules($user);
 	}
 
 
@@ -180,19 +180,19 @@ class GO_AUTH extends db
 		global $GO_EVENTS, $GO_SECURITY;
 
 		$args = array(&$username, &$password, $count_login);
-		GO::events()->fire_event('before_login', $args);
+		$GLOBALS['GO_EVENTS']->fire_event('before_login', $args);
 
 		// This variable is used to set the id of the user that is currently
 		// logged in. Since we try to login a (maybe new) user, we have to
 		// clear the active user from the session.
 
-		GO::security()->user_id = 0;
+		$GLOBALS['GO_SECURITY']->user_id = 0;
 
 		// Authenticate the user.
 		$user = $this->authenticate($username, $password, $type);
 		// Check if the authentication was successful, otherwise exit.
 		if (!$user) {
-			GO::events()->fire_event('bad_login', $args);
+			$GLOBALS['GO_EVENTS']->fire_event('bad_login', $args);
 			go_debug('Wrong password entered for '.$username);
 		}
 
@@ -218,7 +218,7 @@ class GO_AUTH extends db
 			go_infolog("LOGIN SUCCESS for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 		
 		$args=array($username, $password, $user, $count_login);
-		GO::events()->fire_event('login', $args);
+		$GLOBALS['GO_EVENTS']->fire_event('login', $args);
 
 		return true;
 	}
@@ -237,7 +237,7 @@ class GO_AUTH extends db
 	 */
 	function is_enabled( $user_id ) {
 		
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		// The status of the user is stored inside the user management system,

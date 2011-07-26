@@ -1,15 +1,15 @@
 <?php
 $module = $this->get_module('mailings');
 global $GO_LANGUAGE, $lang;
-require(GO::language()->get_language_file('addressbook'));
-require(GO::language()->get_language_file('mailings'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('mailings'));
 
 require_once($module['class_path'].'../../addressbook/classes/addressbook.class.inc.php');
 $ab = new addressbook();
 require_once($module['class_path'].'templates.class.inc.php');
 $tp = new templates();
 
-require_once(GO::config()->class_path.'mail/Go2Mime.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'mail/Go2Mime.class.inc.php');
 
 
 $template_body = '&lt;gotpl if="salutation"&gt;{salutation},<br />&lt;/gotpl&gt;
@@ -32,8 +32,8 @@ $template['content']=$go2mime->build_mime();
 $template['name']=$lang['common']['default'];
 $template['type']='0';
 $template['user_id']=1;
-$template['acl_id']=GO::security()->get_new_acl('addressbook', 1);
+$template['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('addressbook', 1);
 $tp->add_template($template);
 
-GO::security()->add_group_to_acl(GO::config()->group_internal, $template['acl_id']);
+$GLOBALS['GO_SECURITY']->add_group_to_acl($GLOBALS['GO_CONFIG']->group_internal, $template['acl_id']);
 

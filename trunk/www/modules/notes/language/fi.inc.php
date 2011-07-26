@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('notes'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('notes'));
 
 $modules['notes']['name']='Muistiinpanot';
 $modules['notes']['description']='Laita kuvaus tähän';

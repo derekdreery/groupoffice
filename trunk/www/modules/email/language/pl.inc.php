@@ -8,7 +8,7 @@
 //Polish Translation v1.2
 //Author : rajmund
 //Date : January, 26 2011
-require(GO::language()->get_fallback_language_file('email'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('email'));
 $lang['email']['name'] = 'Email';
 $lang['email']['description'] = 'Moduł E-mail; Prosty klient e-mail przez www. Każdy użytkownik będzie mógł wysyłać, odbierać i przekazywać wiadomości email';
 $lang['link_type'][9]='E-mail';

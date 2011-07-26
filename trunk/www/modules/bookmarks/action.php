@@ -16,10 +16,10 @@
 require_once('../../Group-Office.php');
 
 //Authenticate the user
-GO::security()->json_authenticate('bookmarks');
+$GLOBALS['GO_SECURITY']->json_authenticate('bookmarks');
 
 //Require the module class
-require_once (GO::modules()->modules['bookmarks']['class_path'].'bookmarks.class.inc.php');
+require_once ($GLOBALS['GO_MODULES']->modules['bookmarks']['class_path'].'bookmarks.class.inc.php');
 $bookmarks = new bookmarks();
 
 $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
@@ -33,12 +33,12 @@ try {
 	switch($task) {
 		case 'upload':
 			$response['success']=true;
-			require_once(GO::config()->class_path.'filesystem.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 			$fs = new filesystem();
-			$fs->mkdir_recursive(GO::config()->tmpdir.'files_upload');
+			$fs->mkdir_recursive($GLOBALS['GO_CONFIG']->tmpdir.'files_upload');
 
 			$relpath = 'public/bookmarks/';
-			$path = GO::config()->file_storage_path.$relpath;
+			$path = $GLOBALS['GO_CONFIG']->file_storage_path.$relpath;
 
 			if(!is_dir($path))
 				mkdir($path,0755, true);
@@ -47,7 +47,7 @@ try {
 			
 			if (is_uploaded_file($_FILES['attachments']['tmp_name'][0]))
 			{
-				move_uploaded_file($_FILES['attachments']['tmp_name'][0], GO::config()->file_storage_path.$response['logo']);
+				move_uploaded_file($_FILES['attachments']['tmp_name'][0], $GLOBALS['GO_CONFIG']->file_storage_path.$response['logo']);
 			}
 
 			$response['success']=true;
@@ -58,7 +58,7 @@ try {
     
       try {
       $response['deleteSuccess']=true;
-			if ($usr_id!=GO::security()->user_id) {throw new AccessDeniedException();}
+			if ($usr_id!=$GLOBALS['GO_SECURITY']->user_id) {throw new AccessDeniedException();}
 
 			$bookmarks->delete_bookmark($bm_id);
 
@@ -76,7 +76,7 @@ try {
   		//$category = $bookmarks->get_category((trim($_POST['category_id'])));
      
 
-			$bookmark['user_id']=GO::security()->user_id;
+			$bookmark['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 			$bookmark['category_id']=$_POST['category_id'];
 			$bookmark['name']=$_POST['name'];
 			$bookmark['content']=$_POST['content'];
@@ -111,19 +111,19 @@ try {
 			{
 				$old_category = $bookmarks->get_category($category['id']);
 
-				if($old_category['user_id'] != GO::security()->user_id && GO::security()->has_permission(GO::security()->user_id, $old_category['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+				if($old_category['user_id'] != $GLOBALS['GO_SECURITY']->user_id && $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_category['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 				{
 					throw new AccessDeniedException();
 				}
 
 				if(isset($_POST['public']) && empty($old_category['acl_id'])){
-					$category['acl_id']=GO::security()->get_new_acl('bookmarks');
+					$category['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('bookmarks');
 					$response['acl_id']=$category['acl_id'];
 				}elseif(!isset($_POST['public']) && !empty($old_category['acl_id'])){
 					$category['acl_id']=0;
 					$response['acl_id']=0;
 					
-					GO::security()->delete_acl($old_category['acl_id']);
+					$GLOBALS['GO_SECURITY']->delete_acl($old_category['acl_id']);
 				}
 
 				$bookmarks->update_category($category, $old_category);
@@ -131,10 +131,10 @@ try {
 
 			}else
 			{
-				$category['user_id']=GO::security()->user_id;
+				$category['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 
-        //$category['acl_id']= GO::security()->get_new_acl('bookmarks');
-				$category['acl_id']=isset($_POST['public'] ) ? GO::security()->get_new_acl('bookmarks') : 0;
+        //$category['acl_id']= $GLOBALS['GO_SECURITY']->get_new_acl('bookmarks');
+				$category['acl_id']=isset($_POST['public'] ) ? $GLOBALS['GO_SECURITY']->get_new_acl('bookmarks') : 0;
         $response['acl_id']=$category['acl_id'];
 				$category_id= $bookmarks->add_category($category);
 

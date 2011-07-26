@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('summary'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('summary'));
 
 $lang['summary']['name']='Başlangıç Sayfası';
 $lang['summary']['description']='Farklı nesneler ile ilgili önizlem göster';

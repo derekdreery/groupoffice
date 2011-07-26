@@ -1,8 +1,8 @@
 <?php
 require('../../www/Group-Office.php');
 
-require_once (GO::modules()->modules['calendar']['class_path']."calendar.class.inc.php");
-require_once (GO::config()->class_path."ical2array.class.inc");
+require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path']."calendar.class.inc.php");
+require_once ($GLOBALS['GO_CONFIG']->class_path."ical2array.class.inc");
 $ical = new ical2array();
 $cal = new calendar();
 

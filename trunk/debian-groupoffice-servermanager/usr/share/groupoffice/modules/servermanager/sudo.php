@@ -23,7 +23,7 @@ require('../../Group-Office.php');
 
 go_debug($argv);
 
-require_once (GO::modules()->modules['servermanager']['class_path']."servermanager.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['servermanager']['class_path']."servermanager.class.inc.php");
 $sm = new servermanager();
 
 $args['sm_config']=isset($args['sm_config']) ? $args['sm_config'] : '/etc/groupoffice/servermanager.inc.php';
@@ -53,7 +53,7 @@ switch($args['task'])
 	
 	case 'install':
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 		
 		$tmp_config = $args['tmp_config'];
@@ -104,7 +104,7 @@ switch($args['task'])
 		mkdir('/etc/groupoffice/'.$args['name'],0755, true);
 
 
-		/*if(floatval(GO::config()->version)<3.3){
+		/*if(floatval($GLOBALS['GO_CONFIG']->version)<3.3){
 			mkdir($sm_config['install_path'].'sm-local/'.$args['name'].'/',0755,true);
 			chown($sm_config['install_path'].'sm-local/'.$args['name'].'/', $sm_config['apache_user']);
 		}*/
@@ -178,7 +178,7 @@ switch($args['task'])
 		$db->query("SET NAMES UTF8");
 		
 
-		/*require_once(GO::modules()->modules['serverclient']['class_path'].'serverclient.class.inc.php');
+		/*require_once($GLOBALS['GO_MODULES']->modules['serverclient']['class_path'].'serverclient.class.inc.php');
 		$sc = new serverclient();
 		
 		try{

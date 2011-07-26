@@ -13,7 +13,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('addressbook'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('addressbook'));
 $lang['addressbook']['name'] = 'สมุดที่อยู่';
 $lang['addressbook']['description'] = 'ส่วนการจัดการผู้ติดต่อทั้งหมด.';
 

@@ -1,8 +1,8 @@
 <?php
 
 require_once('../../../Group-Office.php');
-require(GO::language()->get_language_file('mailings'));
-//GO::language()->set_language('nl');
+require($GLOBALS['GO_LANGUAGE']->get_language_file('mailings'));
+//$GLOBALS['GO_LANGUAGE']->set_language('nl');
 
 $data['mailing_group_id'] = $_REQUEST['mailing_group_id'];
 $data['recipient_type'] = $_REQUEST['recipient_type'];
@@ -11,17 +11,17 @@ $data['hash'] = $_REQUEST['hash'];
 
 $delete_success = false;
 
-if (!isset(GO::modules()->modules['mailings'])) {
+if (!isset($GLOBALS['GO_MODULES']->modules['mailings'])) {
 	$error = sprintf($lang['common']['moduleRequired'], $lang['mailings']['name']);
 	$data['type'] = null;
 	$data['id'] = -1;
 } else if (isset($_POST['unsubscribe'])) {
 
-	require_once (GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+	require_once ($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 	$mailings = new mailings();
-	require_once (GO::modules()->modules['mailings']['class_path'].'templates.class.inc.php');
+	require_once ($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'templates.class.inc.php');
 	$tp = new templates();
-	require_once (GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+	require_once ($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 	$ab = new addressbook();
 
 	switch ($data['recipient_type']) {
@@ -37,7 +37,7 @@ if (!isset(GO::modules()->modules['mailings'])) {
 			break;
 		case 'user':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$user=$GO_USERS->get_user($data['recipient_id']);
@@ -61,7 +61,7 @@ if (!isset(GO::modules()->modules['mailings'])) {
 }
 
 
-$template_path = isset(GO::config()->mailings_template_path) ? GO::config()->mailings_template_path : GO::modules()->modules['mailings']['path'].'extern/template/';
+$template_path = isset($GLOBALS['GO_CONFIG']->mailings_template_path) ? $GLOBALS['GO_CONFIG']->mailings_template_path : $GLOBALS['GO_MODULES']->modules['mailings']['path'].'extern/template/';
 include_once($template_path.'unsubscribe_tpl.php');
 
 ?>

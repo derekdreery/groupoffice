@@ -3,7 +3,7 @@
 //Author : Paweł Dmitruk pawel.dmitruk@gmail.com
 //Date : September, 05 2010
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('serverclient'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('serverclient'));
 
 $lang['serverclient']['name']='Serverclient';
 $lang['serverclient']['description']='Automatyczne tworzenie skrzynek pocztowych w Group-Office, którymi można zarządzać przez moduł "Postfixadmin"';

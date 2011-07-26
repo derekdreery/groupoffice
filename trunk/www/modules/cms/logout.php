@@ -1,9 +1,9 @@
 <?php
 require('../../Group-Office.php');
 
-require_once(GO::modules()->modules['cms']['class_path'].'cms.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'output.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'cms_smarty.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'output.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms_smarty.class.inc.php');
 $cms = new cms();
 $co = new cms_output();
 
@@ -22,7 +22,7 @@ $success_url=isset($_REQUEST['success_url'])  ? ($_REQUEST['success_url']) : $ca
 
 $smarty->assign('success_url', $success_url);
 
-GO::security()->logout();
+$GLOBALS['GO_SECURITY']->logout();
 $smarty->assign('session', array());
 
 echo $co->replace_urls($smarty->fetch('auth/logout.tpl'));

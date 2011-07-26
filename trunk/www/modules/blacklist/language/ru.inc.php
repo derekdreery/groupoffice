@@ -6,7 +6,7 @@
  * 10 December 2008
 */
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('blacklist'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('blacklist'));
 $lang['blacklist']['name']='IP черный список';
 $lang['blacklist']['description']='Этот модуль блокирует IP адреса после 5 неудачных входов в систему.';
 $lang['blacklist']['ip']='IP';

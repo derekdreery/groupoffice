@@ -24,17 +24,17 @@
 //load Group-Office
 require_once("../../Group-Office.php");
 
-require_once(GO::config()->class_path."mail/mimeDecode.class.inc");
+require_once($GLOBALS['GO_CONFIG']->class_path."mail/mimeDecode.class.inc");
 
 //authenticate the user
-GO::security()->authenticate();
+$GLOBALS['GO_SECURITY']->authenticate();
 
 session_write_close();
 
 
 if(isset($_REQUEST['template_id'])) {
 	//load the questionnaires module class library
-	require_once(GO::modules()->modules['mailings']['class_path'].'templates.class.inc.php');
+	require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'templates.class.inc.php');
 	$tp = new templates();
 
 	//is there a template to load?
@@ -44,7 +44,7 @@ if(isset($_REQUEST['template_id'])) {
 	$params['input'] = $template['content'];
 
 }else if(isset($_REQUEST['path'])) {
-	$path = GO::config()->file_storage_path.$_REQUEST['path'];
+	$path = $GLOBALS['GO_CONFIG']->file_storage_path.$_REQUEST['path'];
 
 	if(File::path_leads_to_parent($path) || !file_exists($path)){
 		die('Invalid request');
@@ -53,8 +53,8 @@ if(isset($_REQUEST['template_id'])) {
 	$params['input'] = file_get_contents($path);
 }else {
 
-	require_once(GO::modules()->modules['email']['class_path']."cached_imap.class.inc.php");
-	require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
+	require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."cached_imap.class.inc.php");
+	require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
 	$imap = new cached_imap();
 	$email = new email();
 	

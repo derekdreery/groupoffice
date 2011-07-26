@@ -1,6 +1,6 @@
 <?php
 //This is a translation by hodrag. If you have questions please e-mail to hodrag@gmail.com
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = '日程表';
 $lang['calendar']['description'] = '日程模块; 所有人都可以添加、编辑和删除日程，也可以查看其他用户的日程安装并在必要时进行修改。';
 

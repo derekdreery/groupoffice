@@ -13,7 +13,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('tasks'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('tasks'));
 
 $lang['tasks']['name']= 'Uppgifter';
 $lang['tasks']['description']= 'Modul för hantering av uppgifter i en uppgiftslista. Kan ex. kopplas till kalenderhändelser, e-postmeddelanden eller projekt.';

@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('files'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('files'));
 $lang['files']['name'] = 'Dosyalar';
 $lang['files']['description'] = 'Dosyalar modülü; Dosya paylaşımı modülü.';
 

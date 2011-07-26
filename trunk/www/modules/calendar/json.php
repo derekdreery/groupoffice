@@ -15,11 +15,11 @@
 
 require('../../Group-Office.php');
 
-GO::security()->json_authenticate('calendar');
+$GLOBALS['GO_SECURITY']->json_authenticate('calendar');
 
-require(GO::language()->get_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 
-require_once (GO::modules()->modules['calendar']['class_path']."calendar.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path']."calendar.class.inc.php");
 $cal = new calendar();
 $cal2 = new calendar();
 
@@ -38,7 +38,7 @@ try {
 		case 'startup':
 
 			$_REQUEST['start']=0;
-			$_REQUEST['limit']=GO::config()->nav_page_size;
+			$_REQUEST['limit']=$GLOBALS['GO_CONFIG']->nav_page_size;
 			
 			$cal->get_views_json($response['views']);
 			$cal->get_calendars_json($response['calendars']);
@@ -56,10 +56,10 @@ try {
 
 		case 'init_event_window':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
-			/*$response['writable_calendars']['total'] = $cal->get_writable_calendars(GO::security()->user_id, 0, 0, 1, 1, -1, 1, 'name', 'ASC');
+			/*$response['writable_calendars']['total'] = $cal->get_writable_calendars($GLOBALS['GO_SECURITY']->user_id, 0, 0, 1, 1, -1, 1, 'name', 'ASC');
 			
 			$cal2=new calendar();
 			$response['results']=array();
@@ -88,15 +88,15 @@ try {
 				//for resources panel
 				$group['fields'] = explode(",", $group['fields']);
 				$group['resources'] = array();
-				$cal2->get_authorized_calendars(GO::security()->user_id, 0, 0, 0, $group['id']);
+				$cal2->get_authorized_calendars($GLOBALS['GO_SECURITY']->user_id, 0, 0, 0, $group['id']);
 				while($resource = $cal2->next_record()) {
 					$resource['user_name'] =$GO_USERS->get_user_realname($resource['user_id']);
-					if(isset(GO::modules()->modules['customfields']))
+					if(isset($GLOBALS['GO_MODULES']->modules['customfields']))
 					{
-						require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+						require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 						$cf = new customfields();
 
-						$values = $cf->get_values(GO::security()->user_id, 21, $resource['id'],true);
+						$values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 21, $resource['id'],true);
 
 						foreach($values as $k => $v) {
 							if (substr($k,0,4)=='col_' && empty($v)) {
@@ -167,7 +167,7 @@ try {
 
 			$num_books = count($calendars_with_bdays);
 			if($num_books) {
-				require_once (GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+				require_once ($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 				$ab = new addressbook();
 
 				$abooks = array();
@@ -209,7 +209,7 @@ try {
 
 			foreach($events as $event) {
 
-				$private = ($event['private']=='1' && GO::security()->user_id != $event['user_id']);
+				$private = ($event['private']=='1' && $GLOBALS['GO_SECURITY']->user_id != $event['user_id']);
 				if($private) {
 					$event['name']=$lang['calendar']['private'];
 					$event['description']='';
@@ -261,8 +261,8 @@ try {
 
 		/*case 'invitation':
 
-			require_once(GO::config()->class_path.'mail/RFC822.class.inc');
-			require_once(GO::config()->class_path.'filesystem.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 
 			$RFC822 = new RFC822();
 
@@ -276,9 +276,9 @@ try {
 			$response['data']['body']='<p>'.$lang['calendar']['invited'].'</p>'.
 			$cal->event_to_html($event).
 				'<p>'.$lang['calendar']['acccept_question'].'</p>'.
-				'<a href="'.GO::modules()->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
+				'<a href="'.$GLOBALS['GO_MODULES']->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=accept&email=%email%">'.$lang['calendar']['accept'].'</a>'.
 				'&nbsp;|&nbsp;'.
-				'<a href="'.GO::modules()->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>';
+				'<a href="'.$GLOBALS['GO_MODULES']->modules['calendar']['full_url'].'invitation.php?event_id='.$event_id.'&task=decline&email=%email%">'.$lang['calendar']['decline'].'</a>';
 
 			$response['replace_personal_fields']=true;
 
@@ -286,7 +286,7 @@ try {
 			$cal->get_participants($event_id);
 			while($cal->next_record())
 			{
-				if($cal->f('user_id')!=GO::security()->user_id)
+				if($cal->f('user_id')!=$GLOBALS['GO_SECURITY']->user_id)
 				{
 					$participants[] = $RFC822->write_address($cal->f('name'), $cal->f('email'));
 				}
@@ -295,13 +295,13 @@ try {
 			$response['data']['to']=implode(',', $participants);
 
 			//create ics attachment
-			require_once (GO::modules()->modules['calendar']['class_path'].'go_ical.class.inc');
+			require_once ($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'go_ical.class.inc');
 			$ical = new go_ical();
 			$ics_string = $ical->export_event($event_id);
 
 			$name = File::strip_invalid_chars($event['name']).'.ics';
 
-			$dir=GO::config()->tmpdir.'attachments/';
+			$dir=$GLOBALS['GO_CONFIG']->tmpdir.'attachments/';
 			filesystem::mkdir_recursive($dir);
 
 			$tmp_file = $dir.$name;
@@ -322,8 +322,8 @@ try {
 			break;*/
 
 		case 'event_with_items':
-			require_once(GO::config()->class_path.'ical2array.class.inc');
-			require_once(GO::config()->class_path.'Date.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'Date.class.inc.php');
 
 			$event = $cal->get_event($_REQUEST['event_id']);
 			if(!$event) {
@@ -333,10 +333,10 @@ try {
 
 			$response['success']=true;
 			$response['data']['calendar_name']=$calendar['name'];
-			$response['data']['permission_level']=GO::security()->has_permission(GO::security()->user_id, $calendar['acl_id']);
+			$response['data']['permission_level']=$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id']);
 			$response['data']['write_permission']=$response['data']['permission_level']>1;
 			if(!$response['data']['permission_level'] ||
-							($event['private']=='1' && $event['user_id']!=GO::security()->user_id)) {
+							($event['private']=='1' && $event['user_id']!=$GLOBALS['GO_SECURITY']->user_id)) {
 				throw new AccessDeniedException();
 			}
 
@@ -352,8 +352,8 @@ try {
 
 		case 'event':
 
-			require_once(GO::config()->class_path.'ical2array.class.inc');
-			require_once(GO::config()->class_path.'Date.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'Date.class.inc.php');
 
 			$event = $cal->get_event($_REQUEST['event_id']);
 
@@ -362,10 +362,10 @@ try {
 			}
 			$calendar = $cal->get_calendar($event['calendar_id']);
 
-			$response['data']['permission_level']=GO::security()->has_permission(GO::security()->user_id, $calendar['acl_id']);
+			$response['data']['permission_level']=$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id']);
 			$response['data']['write_permission']=$response['data']['permission_level']>1;
 			if(!$response['data']['permission_level'] ||
-							($event['private']=='1' && $event['user_id']!=GO::security()->user_id)) {
+							($event['private']=='1' && $event['user_id']!=$GLOBALS['GO_SECURITY']->user_id)) {
 				throw new AccessDeniedException();
 			}
 
@@ -375,7 +375,7 @@ try {
 			$num_participants = $cal->count_participants($event['id']) > 1 ? 1 : 0;
 			/*while($cal->next_record() && $continue)
 			{
-				if($cal->f('user_id') != GO::security()->user_id)
+				if($cal->f('user_id') != $GLOBALS['GO_SECURITY']->user_id)
 				{
 					$num_participants++;
 				}else
@@ -390,13 +390,13 @@ try {
 			$response['data']=array_merge($response['data'], $cal->event_to_json_response($event));
 
 
-			if(isset(GO::modules()->modules['customfields'])) {
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 
 				$response['data']['resources_checked'] = array();
 
-				$values = $cf->get_values(GO::security()->user_id, 1, $event['id']);
+				$values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 1, $event['id']);
 				$response['data']=array_merge($response['data'], $values);
 			}else
 			{
@@ -406,7 +406,7 @@ try {
 			if($calendar['group_id'] == 1) {
 				$cal->get_event_resources($response['data']['id']);
 				while($cal->next_record()) {
-					$values = $cf ? $cf->get_values(GO::security()->user_id, 1, $cal->f('id')) : array('link_id'=>$cal->f('id'));
+					$values = $cf ? $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 1, $cal->f('id')) : array('link_id'=>$cal->f('id'));
 					$response['data']['resources'][$cal->f('calendar_id')] = $values;
 					$response['data']['status_'.$cal->f('calendar_id')] = $lang['calendar']['statuses'][$cal->f('status')];
 					$i = 0;
@@ -433,7 +433,7 @@ try {
 
 
 			$params = array(&$response, $event);
-			GO::events()->fire_event('load_event', $params);
+			$GLOBALS['GO_EVENTS']->fire_event('load_event', $params);
 
 
 			$response['success']=true;
@@ -441,10 +441,10 @@ try {
 
 		case 'events':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
-		require_once(GO::config()->class_path.'base/links.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 		$GO_LINKS = new GO_LINKS();
 
 		//setlocale(LC_ALL, 'nl_NL@euro');
@@ -522,7 +522,7 @@ try {
 					$response['calendar_name']=$calendar['name'];
 				}
 
-				$response['permission_level']=GO::security()->has_permission(GO::security()->user_id, $calendar['acl_id']);
+				$response['permission_level']=$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id']);
 
 				$permission_levels[$calendar_id]=$response['permission_level'];
 
@@ -587,7 +587,7 @@ try {
 					$duration = $duration_minutes.'m';
 				}
 
-				$private = ($event['private']=='1' && GO::security()->user_id != $event['user_id']);
+				$private = ($event['private']=='1' && $GLOBALS['GO_SECURITY']->user_id != $event['user_id']);
 				if($private) {
 					$event['name']=$lang['calendar']['private'];
 					$event['description']='';
@@ -618,11 +618,11 @@ try {
 								'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
 								'background'=>$event['background'],
 								//'background'=>$default_colors[$response['count']-1],
-								'private'=>($event['private']=='1' && GO::security()->user_id != $event['user_id']),
+								'private'=>($event['private']=='1' && $GLOBALS['GO_SECURITY']->user_id != $event['user_id']),
 								'repeats'=>!empty($event['rrule']),
 								'all_day_event'=>$event['all_day_event'],
 								'day'=>$lang['common']['full_days'][date('w', $event['start_time'])].' '.date($_SESSION['GO_SESSION']['date_format'], $event['start_time']),
-								'read_only'=> $event['read_only'] || ($event['private']=='1' && GO::security()->user_id != $event['user_id']) || $permission_levels[$event['calendar_id']]<GO_SECURITY::WRITE_PERMISSION ? true : false,
+								'read_only'=> $event['read_only'] || ($event['private']=='1' && $GLOBALS['GO_SECURITY']->user_id != $event['user_id']) || $permission_levels[$event['calendar_id']]<GO_SECURITY::WRITE_PERMISSION ? true : false,
 								'username' => $username,
 								'duration' => $duration,
 								'num_participants' => $num_participants
@@ -636,7 +636,7 @@ try {
 
 			$response['count_events_only'] = $response['count'];
 	
-			if(isset(GO::modules()->modules['addressbook']))
+			if(isset($GLOBALS['GO_MODULES']->modules['addressbook']))
 			{
 				$contacts = array();
 				foreach($check_calendars as $calendar_id)
@@ -644,7 +644,7 @@ try {
 					$calendar = $cal->get_calendar($calendar_id);
 					if($calendar['show_bdays'])
 					{
-						require_once (GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+						require_once ($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 						$ab = new addressbook();
 						$abooks = $ab->get_user_addressbook_ids($calendar['user_id']);
 
@@ -673,10 +673,10 @@ try {
 				}
 			}
 
-			require_once(GO::config()->class_path.'holidays.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'holidays.class.inc.php');
 			$holidays = new holidays();
 
-			if($holidays->get_holidays_for_period(GO::language()->language, $start_time, $end_time)){
+			if($holidays->get_holidays_for_period($GLOBALS['GO_LANGUAGE']->language, $start_time, $end_time)){
 				while($record = $holidays->next_record()){
 					$response['results'][] = array(
 						'id'=>$response['count']++,
@@ -693,7 +693,7 @@ try {
 				}
 			}
 
-			if(isset(GO::modules()->modules['tasks'])) {
+			if(isset($GLOBALS['GO_MODULES']->modules['tasks'])) {
 				$visible_lists = array();
 
 				$cal->get_visible_tasklists($calendars);
@@ -703,10 +703,10 @@ try {
 
 				if(count($visible_lists) > 0) {
 
-					require_once (GO::modules()->modules['tasks']['class_path'].'tasks.class.inc.php');
+					require_once ($GLOBALS['GO_MODULES']->modules['tasks']['class_path'].'tasks.class.inc.php');
 					$tasks = new tasks();
 
-					require(GO::language()->get_language_file('tasks'));
+					require($GLOBALS['GO_LANGUAGE']->get_language_file('tasks'));
 
 					/*$tasklists_ids = array();
 					$tasks->get_authorized_tasklists();
@@ -757,7 +757,7 @@ try {
 
 		case 'view_events':
 
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 
 			$view_id = ($_REQUEST['view_id']);
@@ -875,7 +875,7 @@ try {
 				}
 
 
-				$permission_level = GO::security()->has_permission(GO::security()->user_id, $view_calendar['acl_id']);
+				$permission_level = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $view_calendar['acl_id']);
 				if(!$permission_level)
 					continue;
 
@@ -912,7 +912,7 @@ try {
 					}
 
 
-					$private = ($event['private']=='1' && GO::security()->user_id != $event['user_id']);
+					$private = ($event['private']=='1' && $GLOBALS['GO_SECURITY']->user_id != $event['user_id']);
 					if($private) {
 						$event['name']=$lang['calendar']['private'];
 						$event['description']='';
@@ -935,7 +935,7 @@ try {
 									'repeats'=>!empty($event['rrule']),
 									'private'=>$private,
 									'write_permission'=>$view_calendar['write_permission'],
-									'read_only'=> ($event['private']=='1' && GO::security()->user_id != $event['user_id']) || !$view_calendar['write_permission'] ? true : false,
+									'read_only'=> ($event['private']=='1' && $GLOBALS['GO_SECURITY']->user_id != $event['user_id']) || !$view_calendar['write_permission'] ? true : false,
 									'mtime' => $event['mtime']
 					);
 					$count++;
@@ -957,7 +957,7 @@ try {
 			break;
 
 		case 'user_calendars':
-			$response['total'] =$cal->get_user_calendars(GO::security()->user_id);
+			$response['total'] =$cal->get_user_calendars($GLOBALS['GO_SECURITY']->user_id);
 
 			while($record =$cal->next_record()) {
 				$response['results'][] = $record;
@@ -966,7 +966,7 @@ try {
 
 		case 'writable_calendars':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			if(isset($_REQUEST['delete_keys']))
@@ -978,7 +978,7 @@ try {
 					foreach($calendars as $calendar_id)
 					{
 						$calendar = $cal->get_calendar($calendar_id);
-						if((GO::modules()->modules['calendar']['permission_level'] < GO_SECURITY::WRITE_PERMISSION) || (GO::security()->has_permission(GO::security()->user_id, $calendar['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
+						if(($GLOBALS['GO_MODULES']->modules['calendar']['permission_level'] < GO_SECURITY::WRITE_PERMISSION) || ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
 						{
 							throw new AccessDeniedException();
 						}
@@ -1001,10 +1001,10 @@ try {
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'ASC';
 			$query = !empty($_REQUEST['query']) ? '%'.$_REQUEST['query'].'%' : '';
 
-			$response['total'] = $cal->get_writable_calendars(GO::security()->user_id, $start, $limit, $resources, 1, -1, $show_all, $sort, $dir, $query);
+			$response['total'] = $cal->get_writable_calendars($GLOBALS['GO_SECURITY']->user_id, $start, $limit, $resources, 1, -1, $show_all, $sort, $dir, $query);
 			if(!$response['total']) {
 				$cal->get_calendar();
-				$response['total'] = $cal->get_writable_calendars(GO::security()->user_id, $start, $limit, $resources, 1, -1, $show_all, $sort, $dir,$query);
+				$response['total'] = $cal->get_writable_calendars($GLOBALS['GO_SECURITY']->user_id, $start, $limit, $resources, 1, -1, $show_all, $sort, $dir,$query);
 			}
 
 			$response['results']=array();
@@ -1022,15 +1022,15 @@ try {
 
 		case 'view_calendars':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$view_id = ($_REQUEST['view_id']);
 
-			$response['total'] = $cal->get_authorized_calendars(GO::security()->user_id,0,0,0,-1);
+			$response['total'] = $cal->get_authorized_calendars($GLOBALS['GO_SECURITY']->user_id,0,0,0,-1);
 			if(!$response['total']) {
 				$cal->get_calendar();
-				$response['total'] = $cal->get_authorized_calendars(GO::security()->user_id,0,0,0,-1);
+				$response['total'] = $cal->get_authorized_calendars($GLOBALS['GO_SECURITY']->user_id,0,0,0,-1);
 			}
 			$response['results']=array();
 			while($record = $cal->next_record(DB_ASSOC)) {
@@ -1051,7 +1051,7 @@ try {
 
 		case 'writable_views':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			if(isset($_REQUEST['delete_keys'])) {
@@ -1061,7 +1061,7 @@ try {
 
 					foreach($views as $view_id) {
 						$view = $cal->get_view($view_id);
-						if(GO::security()->has_permission(GO::security()->user_id, $view['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
+						if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $view['acl_id'])<GO_SECURITY::DELETE_PERMISSION) {
 							throw new AccessDeniedException();
 						}
 						$cal->delete_view($view_id);
@@ -1078,7 +1078,7 @@ try {
 			$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : 'name';
 			$dir = isset($_REQUEST['dir']) ? $_REQUEST['dir'] : 'ASC';
 
-			$response['total'] = $cal->get_authorized_views(GO::security()->user_id, $sort, $dir, $start, $limit, 'write');
+			$response['total'] = $cal->get_authorized_views($GLOBALS['GO_SECURITY']->user_id, $sort, $dir, $start, $limit, 'write');
 			$response['results']=array();
 			while($calendar=$cal->next_record(DB_ASSOC)) {
 				$calendar['user_name'] =$GO_USERS->get_user_realname($calendar['user_id']);
@@ -1088,7 +1088,7 @@ try {
 
 		case 'view':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$response['data']=$cal->get_view($_REQUEST['view_id']);
@@ -1098,7 +1098,7 @@ try {
 
 		case 'calendar':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$response['data']=$cal->get_calendar($_REQUEST['calendar_id']);
@@ -1109,8 +1109,8 @@ try {
 				'group_id'=>$response['data']['group_id'])
 					),'ready');
 
-			if(isset(GO::modules()->modules['tasks']) && $response['data']['tasklist_id']>0){
-				require_once (GO::modules()->modules['tasks']['class_path'].'tasks.class.inc.php');
+			if(isset($GLOBALS['GO_MODULES']->modules['tasks']) && $response['data']['tasklist_id']>0){
+				require_once ($GLOBALS['GO_MODULES']->modules['tasks']['class_path'].'tasks.class.inc.php');
 				$tasks = new tasks();
 
 				$tasklist = $tasks->get_tasklist($response['data']['tasklist_id']);
@@ -1124,13 +1124,13 @@ try {
 			}
 
 			$response['data']['url']='<a class="normal-link" target="_blank" href="'.$url.'">'.$lang['calendar']['rightClickToCopy'].'</a>';
-			$response['data']['ics_url']='<a class="normal-link" target="_blank" href="'.GO::modules()->modules['calendar']['full_url'].'export.php?calendar_id='.$response['data']['id'].'&months_in_past=1">'.$lang['calendar']['rightClickToCopy'].'</a>';
+			$response['data']['ics_url']='<a class="normal-link" target="_blank" href="'.$GLOBALS['GO_MODULES']->modules['calendar']['full_url'].'export.php?calendar_id='.$response['data']['id'].'&months_in_past=1">'.$lang['calendar']['rightClickToCopy'].'</a>';
 
-			if(isset(GO::modules()->modules['customfields']))
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields']))
 			{
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
-				$values = $cf->get_values(GO::security()->user_id, 21, $response['data']['id'], false);
+				$values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 21, $response['data']['id'], false);
 				$response['data']=array_merge($response['data'], $values);
 			}
 
@@ -1139,7 +1139,7 @@ try {
 
 		case 'participants':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$event_id=$_REQUEST['event_id'];
@@ -1185,15 +1185,15 @@ try {
 					if($user) {
 
 						//Only show availability if user has access to the default calendar
-//						if(!empty(GO::config()->require_calendar_access_for_freebusy)){
+//						if(!empty($GLOBALS['GO_CONFIG']->require_calendar_access_for_freebusy)){
 //							$default_calendar = $cal2->get_default_calendar($user['id']);
-//							$permission = GO::security()->has_permission(GO::security()->user_id, $default_calendar['acl_id']);
+//							$permission = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $default_calendar['acl_id']);
 //						}else
 //						{
 //							$permission=true;
 //						}
 
-						if($cal->has_freebusy_access(GO::security()->user_id, $user['id'])){
+						if($cal->has_freebusy_access($GLOBALS['GO_SECURITY']->user_id, $user['id'])){
 							$participant['available']=$cal2->is_available($user['id'], $event['start_time'], $event['end_time'], $event) ? '1' : '0';
 						}
 					}
@@ -1207,7 +1207,7 @@ try {
 			break;
 		case 'get_default_participant':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$calendar = $cal->get_calendar($_REQUEST['calendar_id']);
@@ -1231,7 +1231,7 @@ try {
 
 		case 'check_availability':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			
 
@@ -1247,15 +1247,15 @@ try {
 
 				if($user) {
 					//Only show availability if user has access to the default calendar
-//					if(!empty(GO::config()->require_calendar_access_for_freebusy)){
+//					if(!empty($GLOBALS['GO_CONFIG']->require_calendar_access_for_freebusy)){
 //						$default_calendar = $cal2->get_default_calendar($user['id']);
-//						$permission = GO::security()->has_permission(GO::security()->user_id, $default_calendar['acl_id']);
+//						$permission = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $default_calendar['acl_id']);
 //					}else
 //					{
 //						$permission=true;
 //					}
 
-					if($cal->has_freebusy_access(GO::security()->user_id, $user['id'])){
+					if($cal->has_freebusy_access($GLOBALS['GO_SECURITY']->user_id, $user['id'])){
 						$response[$email]=$cal->is_available($user['id'], $_REQUEST['start_time'], $_REQUEST['end_time'], $event) ? '1' : '0';
 					}
 				}
@@ -1264,7 +1264,7 @@ try {
 
 		case 'availability':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			
 			$event_id = empty($_REQUEST['event_id']) ? 0 : $_REQUEST['event_id'];
@@ -1288,15 +1288,15 @@ try {
 				if($user) {
 
 					//Only show availability if user has access to the default calendar
-//					if(!empty(GO::config()->require_calendar_access_for_freebusy)){
+//					if(!empty($GLOBALS['GO_CONFIG']->require_calendar_access_for_freebusy)){
 //						$default_calendar = $cal2->get_default_calendar($user['id']);
-//						$permission = GO::security()->has_permission(GO::security()->user_id, $default_calendar['acl_id']);
+//						$permission = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $default_calendar['acl_id']);
 //					}else
 //					{
 //						$permission=true;
 //					}
 
-					if($cal->has_freebusy_access(GO::security()->user_id, $user['id'])){
+					if($cal->has_freebusy_access($GLOBALS['GO_SECURITY']->user_id, $user['id'])){
 
 						$freebusy=$cal->get_free_busy($user['id'], $date, $event_id);
 						foreach($freebusy as $min=>$busy) {
@@ -1338,7 +1338,7 @@ try {
 				$group['fields['.$field.']'] = true;
 			}
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$group['user_name'] = $GO_USERS->get_user_realname($group['user_id']);
@@ -1352,7 +1352,7 @@ try {
 			if(isset($_POST['delete_keys']))
 			{
 				try {
-					if(GO::modules()->modules['calendar']['permission_level'] < GO_SECURITY::WRITE_PERMISSION)
+					if($GLOBALS['GO_MODULES']->modules['calendar']['permission_level'] < GO_SECURITY::WRITE_PERMISSION)
 					{
 						throw new AccessDeniedException();
 					}
@@ -1383,7 +1383,7 @@ try {
 			$start = isset($_REQUEST['start']) ? $_REQUEST['start'] : '0';
 			$limit = isset($_REQUEST['limit']) ? $_REQUEST['limit'] : '0';
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$response['results']=array();
@@ -1397,7 +1397,7 @@ try {
 
 		case 'resources':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$cal->get_groups();
@@ -1406,17 +1406,17 @@ try {
 			while($group = $cal->next_record()) {
 				$group['fields'] = explode(",", $group['fields']);
 				$group['resources'] = array();
-				$cal2->get_authorized_calendars(GO::security()->user_id, 0, 0, 0, $group['id']);
+				$cal2->get_authorized_calendars($GLOBALS['GO_SECURITY']->user_id, 0, 0, 0, $group['id']);
 
 				while($resource = $cal2->next_record()) {
 					$user = $GO_USERS->get_user_realname($group['user_id']);
 					$resource['user_name']=String::format_name($user);
 
-//					if(isset(GO::modules()->modules['customfields']))
+//					if(isset($GLOBALS['GO_MODULES']->modules['customfields']))
 //					{
-//						require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+//						require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 //						$cf = new customfields();
-//						$values = $cf->get_values(GO::security()->user_id, 18, $resource['id'], true);
+//						$values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 18, $resource['id'], true);
 //						$resource=array_merge($resource, $values);
 //					}
 
@@ -1441,13 +1441,13 @@ try {
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 
-			$cal->get_visible_calendars(GO::security()->user_id);
+			$cal->get_visible_calendars($GLOBALS['GO_SECURITY']->user_id);
 			$visible_cals = array();
 			while($cal->next_record()) {
 				$visible_cals[] = $cal->f('calendar_id');
 			}
 
-			$response['total'] = $cal->get_authorized_calendars(GO::security()->user_id, $start, $limit,0,1);
+			$response['total'] = $cal->get_authorized_calendars($GLOBALS['GO_SECURITY']->user_id, $start, $limit,0,1);
 
 			$response['results']=array();
 
@@ -1500,7 +1500,7 @@ try {
 					}
 				}
 
-				require_once(GO::config()->class_path.'base/users.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 				$GO_USERS = new GO_USERS();
 
 				$response['total'] = $cal->get_group_admins($group_id);
@@ -1534,11 +1534,11 @@ try {
 			}
 
 
-			require_once (GO::modules()->modules['tasks']['class_path'].'tasks.class.inc.php');
+			require_once ($GLOBALS['GO_MODULES']->modules['tasks']['class_path'].'tasks.class.inc.php');
 			$tasks = new tasks();
 
 			$response['results']=array();
-			$response['total'] = $tasks->get_authorized_tasklists('read', '', GO::security()->user_id, 0, 0, $sort, $dir);
+			$response['total'] = $tasks->get_authorized_tasklists('read', '', $GLOBALS['GO_SECURITY']->user_id, 0, 0, $sort, $dir);
 			while($tasks->next_record()) {
 				$tasklist['id'] = $tasks->f('id');
 				$tasklist['name'] = $tasks->f('name');
@@ -1553,7 +1553,7 @@ try {
 
 		case 'my_calendar':
 
-			$cal = $cal->get_calendar(0, GO::security()->user_id);
+			$cal = $cal->get_calendar(0, $GLOBALS['GO_SECURITY']->user_id);
 
 			$my_cal = $response['data'] = array();
 			foreach($cal as $k=>$v) {
@@ -1566,7 +1566,7 @@ try {
 		case 'addressbooks_participants':
 			$ids = json_decode($_POST['ids']);
 
-			require_once (GO::modules()->modules['addressbook']['class_path']."addressbook.class.inc.php");
+			require_once ($GLOBALS['GO_MODULES']->modules['addressbook']['class_path']."addressbook.class.inc.php");
 			$ab = new addressbook();
 
 			$response['results'] = array();
@@ -1596,12 +1596,12 @@ try {
 		case 'mailings_participants':
 			$ids = json_decode($_POST['ids']);
 
-			require_once (GO::modules()->modules['mailings']['class_path']."mailings.class.inc.php");
+			require_once ($GLOBALS['GO_MODULES']->modules['mailings']['class_path']."mailings.class.inc.php");
 			$mailings = new mailings();
 
 			$response['results'] = array();
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			foreach($ids as $mailing_id) {
@@ -1638,7 +1638,7 @@ try {
 		case 'usergroups_participants':
 			$ids = json_decode($_POST['ids']);
 
-			require_once(GO::config()->class_path.'base/groups.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 			$GO_GROUPS = new GO_GROUPS();
 
 			$response['results'] = array();
@@ -1660,7 +1660,7 @@ try {
 
 		case 'permissions':
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$resources = (isset($_REQUEST['resources']) && $_REQUEST['resources']) ? 1 : 0;
@@ -1672,13 +1672,13 @@ try {
 			if($group_id && $level_id)
 			{
 				$checked_calendars = array();
-				$response['total'] = $cal->get_writable_calendars(GO::security()->user_id, 0, 0, $resources);
+				$response['total'] = $cal->get_writable_calendars($GLOBALS['GO_SECURITY']->user_id, 0, 0, $resources);
 				while($cal->next_record())
 				{
 					$calendar = $cal->record;		
 					$calendar['user_name']=$GO_USERS->get_user_realname($calendar['user_id']);
 
-					$acl_level = GO::security()->group_in_acl($group_id, $calendar['acl_id']);
+					$acl_level = $GLOBALS['GO_SECURITY']->group_in_acl($group_id, $calendar['acl_id']);
 					$calendar['checked'] = ($acl_level >= $level_id) ? true : false;
 					
 					if($calendar['checked'])
@@ -1703,7 +1703,7 @@ try {
 					foreach($categories as $category_id)
 					{
 						$category = $cal->get_category($category_id);
-						if(GO::security()->has_admin_permission(GO::security()->user_id) || ($category['user_id'] == GO::security()->user_id))
+						if($GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id) || ($category['user_id'] == $GLOBALS['GO_SECURITY']->user_id))
 						{
 							$cal->delete_category($category_id);
 						}else
@@ -1726,7 +1726,7 @@ try {
 			$response['results']=array();
 			$response['total'] = $cal->get_categories($sort, $dir, $start, $limit);
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			
 			while($category = $cal->next_record())

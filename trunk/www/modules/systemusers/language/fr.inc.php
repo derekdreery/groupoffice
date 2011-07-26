@@ -17,7 +17,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('users'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('users'));
 $lang['systemusers']['name']='Utilisateurs système';
 $lang['systemusers']['description']='Créer un utilisateur system pour chaque utilisateur Group-Office';
 $lang['systemusers']['vacation_not_executable_error']='Le module d\'absence du burau n\'est pas installé ou n\'est pas exécutable.';

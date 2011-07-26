@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('groups'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('groups'));
 $lang['groups']['name'] = 'Skupiny';
 $lang['groups']['description'] = 'Umožňuje upravovat skupiny.';
 $lang['groups']['noDeleteAdmins'] = 'Nemůžete smazat skupinu Administrátorů';

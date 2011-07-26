@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-require(GO::language()->get_fallback_language_file('addressbook'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('addressbook'));
 
 $lang['addressbook']['name'] = 'Adres Defteri';
 $lang['addressbook']['description'] = 'Adres Defteri içersindeki Kişileri yöneten modül.';

@@ -13,7 +13,7 @@
  */
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('users');
+$GLOBALS['GO_SECURITY']->json_authenticate('users');
 
 $browser = detect_browser();
 
@@ -28,8 +28,8 @@ if ($browser['name'] == 'MSIE')
 	header('Content-Disposition: attachment; filename="importsample.csv"');
 }
 
-$contents = file_get_contents(GO::modules()->modules['users']['path'].'importsample.csv');
-$fp = fopen(GO::modules()->modules['users']['path'].'importsample.csv','r');
+$contents = file_get_contents($GLOBALS['GO_MODULES']->modules['users']['path'].'importsample.csv');
+$fp = fopen($GLOBALS['GO_MODULES']->modules['users']['path'].'importsample.csv','r');
 
 if($fp){
 	while($record = fgetcsv($fp, 4096, ',', '"')){

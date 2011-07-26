@@ -6,7 +6,7 @@
  * 10 December 2008
 */
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('comments'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('comments'));
 $lang['comments']['name']='Коментарии';
 $lang['comments']['description']='Возможность добавления комментариев в других модулях';
 $lang['comments']['comment']='Комментарий';

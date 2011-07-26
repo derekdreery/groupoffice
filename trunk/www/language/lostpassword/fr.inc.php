@@ -8,7 +8,7 @@
 // Date : September, 27 2010
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_base_language_file('lostpassword'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('lostpassword'));
 
 $lang['lostpassword']['success']='<h1>Modification du mot de passe</h1><p>Votre mot de passe a été changé avec succès. Vous pouvez maintenant aller à la page de connexion.</p>';
 $lang['lostpassword']['send']='Envoyer';

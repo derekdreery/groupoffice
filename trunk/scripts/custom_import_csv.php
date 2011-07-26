@@ -20,30 +20,30 @@ $del = ',';
 $enc = '"';
 
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 //login as admin
-GO::security()->logged_in($GO_USERS->get_user(1));
-GO::modules()->load_modules();
+$GLOBALS['GO_SECURITY']->logged_in($GO_USERS->get_user(1));
+$GLOBALS['GO_MODULES']->load_modules();
 
-require_once(GO::config()->class_path.'base/links.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 $GO_LINKS = new GO_LINKS();
 
 
-require_once(GO::modules()->modules['addressbook']['class_path'] . 'addressbook.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'] . 'addressbook.class.inc.php');
 $ab = new addressbook();
 
-require_once(GO::modules()->modules['customfields']['class_path'] . 'customfields.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'] . 'customfields.class.inc.php');
 $cf = new customfields();
 
-require_once(GO::modules()->modules['notes']['class_path'] . 'notes.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['notes']['class_path'] . 'notes.class.inc.php');
 $no = new notes();
 
-require_once(GO::modules()->modules['tasks']['class_path'] . 'tasks.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'] . 'tasks.class.inc.php');
 $ta = new tasks();
 
-require_once(GO::modules()->modules['calendar']['class_path'] . 'calendar.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'] . 'calendar.class.inc.php');
 $ca = new calendar();
 
 
@@ -57,7 +57,7 @@ function create_custom_fields($type, $cf_category_name, $custom_fields) {
 	if (!$category) {
 		$category['name'] = $cf_category_name;
 		$category['type'] = $type;
-		$category['acl_id'] = GO::security()->get_new_acl();
+		$category['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl();
 		$category_id = $cf->add_category($category);
 	} else {
 		$category_id = $category['id'];
@@ -207,7 +207,7 @@ if (true)
                                         {                                               
                                                 $calendar['user_id'] = 1;
                                                 $calendar['name'] = $event['type_name'];
-                                                $calendar['acl_id'] = GO::security()->get_new_acl('calendar read: '.$calendar['name'], $calendar['user_id']);
+                                                $calendar['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl('calendar read: '.$calendar['name'], $calendar['user_id']);
                                                 $calendar['id'] = $ca->add_calendar($calendar);
                                         }
                                         unset($event['type_name'], $event['link_name']);
@@ -241,7 +241,7 @@ if (true)
                                         {
                                                 $category['user_id'] = 1;
                                                 $category['name'] = $note['type_name'];
-                                                $category['acl_id'] = GO::security()->get_new_acl('note-category read: '.$category['name'], $category['user_id']);
+                                                $category['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl('note-category read: '.$category['name'], $category['user_id']);
 
                                                 $category['id'] = $no->add_category($category);
                                         }
@@ -274,7 +274,7 @@ if (true)
                                         {
                                                 $tasklist['user_id'] = 1;
                                                 $tasklist['name'] = $task['type_name'];
-                                                $tasklist['acl_id'] = GO::security()->get_new_acl('tasklist read: '.$tasklist['name'], $tasklist['user_id']);
+                                                $tasklist['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl('tasklist read: '.$tasklist['name'], $tasklist['user_id']);
 
                                                 $tasklist['id'] = $ta->add_tasklist($tasklist);
                                         }

@@ -2,17 +2,17 @@
 /*
  * Script caused problems with upgrade to 3.3. Manual install required.
  *
- * if(is_dir(GO::config()->module_path.'comments') && !GO::modules()->get_module('comments'))
+ * if(is_dir($GLOBALS['GO_CONFIG']->module_path.'comments') && !$GLOBALS['GO_MODULES']->get_module('comments'))
 {		
 	$mod = new GO_MODULES();	
 	$mod->add_module('comments');
 	
-	GO::modules()->load_modules();
+	$GLOBALS['GO_MODULES']->load_modules();
 	
-	if(isset(GO::modules()->modules['addressbook']))
+	if(isset($GLOBALS['GO_MODULES']->modules['addressbook']))
 	{
-		GO::security()->copy_acl(GO::modules()->modules['addressbook']['acl_read'], GO::modules()->modules['comments']['acl_read']);
-		GO::security()->copy_acl(GO::modules()->modules['addressbook']['acl_write'], GO::modules()->modules['comments']['acl_write']);
+		$GLOBALS['GO_SECURITY']->copy_acl($GLOBALS['GO_MODULES']->modules['addressbook']['acl_read'], $GLOBALS['GO_MODULES']->modules['comments']['acl_read']);
+		$GLOBALS['GO_SECURITY']->copy_acl($GLOBALS['GO_MODULES']->modules['addressbook']['acl_write'], $GLOBALS['GO_MODULES']->modules['comments']['acl_write']);
 	}
 }*/
 ?>

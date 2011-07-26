@@ -13,17 +13,17 @@
  */
 
 require('../../Group-Office.php');
-require_once(GO::modules()->modules['sieve']['class_path']."sieve.class.inc.php");
-require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
-GO::language()->require_language_file('sieve');
+require_once($GLOBALS['GO_MODULES']->modules['sieve']['class_path']."sieve.class.inc.php");
+require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
+$GLOBALS['GO_LANGUAGE']->require_language_file('sieve');
 
 $sieve = new sieve();
 $email = new email();
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
-GO::config()->sieve_port = empty(GO::config()->sieve_port) ? 2000 : GO::config()->sieve_port;
-GO::config()->sieve_usetls = empty(GO::config()->sieve_usetls) ? false : GO::config()->sieve_usetls;
+$GLOBALS['GO_CONFIG']->sieve_port = empty($GLOBALS['GO_CONFIG']->sieve_port) ? 2000 : $GLOBALS['GO_CONFIG']->sieve_port;
+$GLOBALS['GO_CONFIG']->sieve_usetls = empty($GLOBALS['GO_CONFIG']->sieve_usetls) ? false : $GLOBALS['GO_CONFIG']->sieve_usetls;
 
 try
 {
@@ -35,9 +35,9 @@ try
 			if(!$sieve->connect($account['username'],
 							$account['password'],
 							$account['host'],
-							GO::config()->sieve_port,
+							$GLOBALS['GO_CONFIG']->sieve_port,
 							null,
-							GO::config()->sieve_usetls,
+							$GLOBALS['GO_CONFIG']->sieve_usetls,
 							array(),
 							true))
 			{
@@ -90,9 +90,9 @@ try
 			if(!$sieve->connect($account['username'],
 							$account['password'],
 							$account['host'],
-							GO::config()->sieve_port,
+							$GLOBALS['GO_CONFIG']->sieve_port,
 							null,
-							GO::config()->sieve_usetls,
+							$GLOBALS['GO_CONFIG']->sieve_usetls,
 							array(),
 							true))
 			{
@@ -114,9 +114,9 @@ try
 			if(!$sieve->connect($account['username'],
 							$account['password'],
 							$account['host'],
-							GO::config()->sieve_port,
+							$GLOBALS['GO_CONFIG']->sieve_port,
 							null,
-							GO::config()->sieve_usetls,
+							$GLOBALS['GO_CONFIG']->sieve_usetls,
 							array(),
 							true))
 			{
@@ -154,9 +154,9 @@ try
 			if(!$sieve->connect($account['username'], 
 							$account['password'],
 							$account['host'],
-							GO::config()->sieve_port,
+							$GLOBALS['GO_CONFIG']->sieve_port,
 							null,
-							GO::config()->sieve_usetls,
+							$GLOBALS['GO_CONFIG']->sieve_usetls,
 							array(),
 							true))
 			{
@@ -223,9 +223,9 @@ try
 			if(!$sieve->connect($account['username'],
 							$account['password'],
 							$account['host'],
-							GO::config()->sieve_port,
+							$GLOBALS['GO_CONFIG']->sieve_port,
 							null,
-							GO::config()->sieve_usetls,
+							$GLOBALS['GO_CONFIG']->sieve_usetls,
 							array(),
 							true))
 			{
@@ -300,9 +300,9 @@ try
 			if(!$sieve->connect($account['username'],
 							$account['password'],
 							$account['host'],
-							GO::config()->sieve_port,
+							$GLOBALS['GO_CONFIG']->sieve_port,
 							null,
-							GO::config()->sieve_usetls,
+							$GLOBALS['GO_CONFIG']->sieve_usetls,
 							array(),
 							true))
 			{
@@ -321,9 +321,9 @@ try
 			if(!$sieve->connect($account['username'],
 							$account['password'],
 							$account['host'],
-							GO::config()->sieve_port,
+							$GLOBALS['GO_CONFIG']->sieve_port,
 							null,
-							GO::config()->sieve_usetls,
+							$GLOBALS['GO_CONFIG']->sieve_usetls,
 							array(),
 							true))
 			{

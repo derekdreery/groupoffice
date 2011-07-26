@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-//require(GO::language()->get_fallback_language_file('servermanager'));
+//require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('servermanager'));
 $lang['servermanager']['name']='Servermanager';
 $lang['servermanager']['description']='Manage multiple Group-Office installations on a Debian or Ubuntu server.';
 $lang['servermanager']['installation']='Installation';

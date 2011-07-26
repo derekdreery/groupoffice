@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('files'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('files'));
 $lang['files']['name'] = 'Fişier';
 $lang['files']['description'] = 'Modul fişier; Modul pentru partajarea fişierelor.';
 

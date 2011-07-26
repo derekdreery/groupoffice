@@ -20,15 +20,15 @@ if(isset($argv[1]))
 
 require('../../Group-Office.php');
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
-require_once(GO::modules()->modules['users']['class_path'].'users.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['users']['class_path'].'users.class.inc.php');
 $users = new users();
 
 $_email = $users->get_register_email();
 
-require_once(GO::config()->class_path.'base/groups.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 
 $exclude_groups = $GO_GROUPS->groupnames_to_ids(array_map('trim',explode(',',$exclude_groups)));
@@ -59,20 +59,20 @@ while($user = $GO_USERS2->next_record()) {
 
 		unset($user['password']);
 
-		require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($user['email'], $email['register_email_subject']);
 		foreach($user as $key=>$value) {
 			$email['register_email_body'] = str_replace('{'.$key.'}', $value, $email['register_email_body']);
 		}
 
-		$email['register_email_body']= str_replace('{url}', GO::config()->full_url, $email['register_email_body']);
-		$email['register_email_body']= str_replace('{title}', GO::config()->title, $email['register_email_body']);
+		$email['register_email_body']= str_replace('{url}', $GLOBALS['GO_CONFIG']->full_url, $email['register_email_body']);
+		$email['register_email_body']= str_replace('{title}', $GLOBALS['GO_CONFIG']->title, $email['register_email_body']);
 		$email['register_email_body']= str_replace('{password}', $up_user['password'], $email['register_email_body']);
 
 		echo "Sending e-mail to ".$user['email']." ".$up_user['password']."\n";
 
 		$swift->set_body($email['register_email_body'],'plain');
-		$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
+		$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 		$swift->sendmail();
 	}
 }

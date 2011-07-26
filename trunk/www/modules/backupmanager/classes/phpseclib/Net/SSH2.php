@@ -69,33 +69,33 @@
  *
  * Used to do Diffie-Hellman key exchange and DSA/RSA signature verification.
  */
-require_once(GO::modules()->modules['backupmanager']['class_path'].'phpseclib/Math/BigInteger.php');
+require_once($GLOBALS['GO_MODULES']->modules['backupmanager']['class_path'].'phpseclib/Math/BigInteger.php');
 
 
 /**
  * Include Crypt_Random
  */
-require_once(GO::modules()->modules['backupmanager']['class_path'].'phpseclib/Crypt/Random.php');
+require_once($GLOBALS['GO_MODULES']->modules['backupmanager']['class_path'].'phpseclib/Crypt/Random.php');
 
 /**
  * Include Crypt_Hash
  */
-require_once(GO::modules()->modules['backupmanager']['class_path'].'phpseclib/Crypt/Hash.php');
+require_once($GLOBALS['GO_MODULES']->modules['backupmanager']['class_path'].'phpseclib/Crypt/Hash.php');
 
 /**
  * Include Crypt_TripleDES
  */
-require_once(GO::modules()->modules['backupmanager']['class_path'].'phpseclib/Crypt/TripleDES.php');
+require_once($GLOBALS['GO_MODULES']->modules['backupmanager']['class_path'].'phpseclib/Crypt/TripleDES.php');
 
 /**
  * Include Crypt_RC4
  */
-require_once(GO::modules()->modules['backupmanager']['class_path'].'phpseclib/Crypt/RC4.php');
+require_once($GLOBALS['GO_MODULES']->modules['backupmanager']['class_path'].'phpseclib/Crypt/RC4.php');
 
 /**
  * Include Crypt_AES
  */
-require_once(GO::modules()->modules['backupmanager']['class_path'].'phpseclib/Crypt/AES.php');
+require_once($GLOBALS['GO_MODULES']->modules['backupmanager']['class_path'].'phpseclib/Crypt/AES.php');
 
 /**#@+
  * Execution Bitmap Masks

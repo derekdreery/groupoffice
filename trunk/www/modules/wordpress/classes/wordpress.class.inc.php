@@ -34,7 +34,7 @@ class wordpress extends db{
 		if(!isset($this->mapping)){
 			global $GO_CONFIG;
 
-			$config_dir = dirname(GO::config()->get_config_file());
+			$config_dir = dirname($GLOBALS['GO_CONFIG']->get_config_file());
 			$wp_config = $config_dir.'/wp_config.inc.php';
 
 			$this->mapping=array();
@@ -73,7 +73,7 @@ class wordpress extends db{
 
 			global $GO_MODULES;
 
-			if(isset(GO::modules()->modules['customfields'])){
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
 				$cf = new customfields();
 				$custom = $cf->get_values(1, 5, $values['id']);
 

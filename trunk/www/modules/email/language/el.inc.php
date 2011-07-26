@@ -1,6 +1,6 @@
 <?php
 /* Translator for the Greek Language: Konstantinos Georgakopoulos (kgeorga@uom.gr)*/
-require(GO::language()->get_fallback_language_file('email'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('email'));
 $lang['email']['name'] = 'Ηλεκτρονικό Ταχυδρομείο';
 $lang['email']['description'] = 'Πλήρης πελάτης ηλεκτρονικού ταχυδρομείου. Κάθε χρήστης μπορεί να στέλνει και να λαμβάνει μηνύματα ηλεκτρονικού ταχυδρομείου';
 

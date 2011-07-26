@@ -11,14 +11,14 @@ ini_set('max_execution_time', 0);
 
 require('../www/Group-Office.php');
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 //login as admin
-GO::security()->logged_in($GO_USERS->get_user(1));
-GO::modules()->load_modules();
+$GLOBALS['GO_SECURITY']->logged_in($GO_USERS->get_user(1));
+$GLOBALS['GO_MODULES']->load_modules();
 
-require_once(GO::config()->class_path.'base/links.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 $GO_LINKS = new GO_LINKS();
 
 
@@ -30,10 +30,10 @@ $cf_category_name = 'Import';
 $addressbook_name = 'Import';
 
 
-require_once(GO::modules()->modules['customfields']['class_path'] . 'customfields.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'] . 'customfields.class.inc.php');
 $cf = new customfields();
 
-require_once(GO::modules()->modules['calendar']['class_path'] . 'calendar.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'] . 'calendar.class.inc.php');
 $cal = new calendar();
 
 
@@ -47,7 +47,7 @@ function create_custom_fields($type, $cf_category_name, $custom_fields) {
 	if (!$category) {
 		$category['name'] = $cf_category_name;
 		$category['type'] = $type;
-		$category['acl_id'] = GO::security()->get_new_acl();
+		$category['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl();
 		$category_id = $cf->add_category($category);
 	} else {
 		$category_id = $category['id'];

@@ -18,11 +18,11 @@ $line_break=php_sapi_name() != 'cli' ? '<br />' : "\n";
 echo "Converting old paths...".$line_break;
 flush();
 
-require_once(GO::config()->class_path.'filesystem.class.inc');
+require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 
 $fs = new filesystem();
 
-require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 $fsdb = new files();
 
 function get_file($path, $parent_id)
@@ -35,7 +35,7 @@ function get_file($path, $parent_id)
     {
         $file['name']=utf8_basename($path);
         $file['folder_id']=$parent_id;
-				$file['size']=@filesize(GO::config()->file_storage_path.$path);
+				$file['size']=@filesize($GLOBALS['GO_CONFIG']->file_storage_path.$path);
         $fsdb->update_row('fs_files', 'id', $file);
 
         return $file['id'];
@@ -43,12 +43,12 @@ function get_file($path, $parent_id)
     {
         $file['path']=$path;
         $file['name']=utf8_basename($path);
-        $file['ctime']=@filectime(GO::config()->file_storage_path.$path);
-        $file['mtime']=@filemtime(GO::config()->file_storage_path.$path);
-        $file['size']=@filesize(GO::config()->file_storage_path.$path);
+        $file['ctime']=@filectime($GLOBALS['GO_CONFIG']->file_storage_path.$path);
+        $file['mtime']=@filemtime($GLOBALS['GO_CONFIG']->file_storage_path.$path);
+        $file['size']=@filesize($GLOBALS['GO_CONFIG']->file_storage_path.$path);
         $file['folder_id']=$parent_id;
 				$file['id']=$fsdb->nextid('fs_files');
-				$file['user_id']=GO::security()->user_id;
+				$file['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 				$file['extension']=File::get_extension($file['name']);
 				$fsdb->insert_row('fs_files', $file);
 
@@ -71,7 +71,7 @@ function get_folder($path, $parent_id)
     {
         $folder['name']=utf8_basename($path);
         $folder['parent_id']=$parent_id;
-        $folder['ctime']=@filectime(GO::config()->file_storage_path.$path);
+        $folder['ctime']=@filectime($GLOBALS['GO_CONFIG']->file_storage_path.$path);
         $folder['mtime']=time();
 				$fsdb->update_row('fs_folders', 'id', $folder);
 
@@ -80,7 +80,7 @@ function get_folder($path, $parent_id)
     {
         $folder['path']=$path;
         $folder['name']=utf8_basename($path);
-        $folder['ctime']=@filectime(GO::config()->file_storage_path.$path);
+        $folder['ctime']=@filectime($GLOBALS['GO_CONFIG']->file_storage_path.$path);
         $folder['parent_id']=$parent_id;
 				$folder['id']=$fsdb->nextid('fs_folders');
 
@@ -129,7 +129,7 @@ $db->query("ALTER TABLE `fs_files` ADD `extension` VARCHAR( 4 ) NOT NULL ,ADD IN
 	$db->query("ALTER TABLE `fs_files` ADD INDEX ( `path` ) ");
 	$db->query("ALTER TABLE `fs_folders` ADD INDEX ( `path` ) ");
 
-	$folders = $fs->get_folders(GO::config()->file_storage_path);
+	$folders = $fs->get_folders($GLOBALS['GO_CONFIG']->file_storage_path);
 
 	foreach($folders as $folder)
 	{
@@ -140,7 +140,7 @@ $db->query("ALTER TABLE `fs_files` ADD `extension` VARCHAR( 4 ) NOT NULL ,ADD IN
 }*/
 
 
-if(isset(GO::modules()->modules['addressbook']))
+if(isset($GLOBALS['GO_MODULES']->modules['addressbook']))
 {
     $db->query("ALTER TABLE `ab_contacts` ADD `files_folder_id` INT NOT NULL;");
     $db->query("SELECT c.*,a.name AS addressbook_name FROM ab_contacts c INNER JOIN ab_addressbooks a ON a.id=c.addressbook_id");
@@ -168,9 +168,9 @@ if(isset(GO::modules()->modules['addressbook']))
                 $destination = $fsdb->resolve_path($new_path, true, 1);
 
 
-                $fs->mkdir_recursive(GO::config()->file_storage_path.$new_path);
+                $fs->mkdir_recursive($GLOBALS['GO_CONFIG']->file_storage_path.$new_path);
 
-                $fs->move(GO::config()->file_storage_path.$old_path, GO::config()->file_storage_path.$new_path.'/'.$new_folder_name);
+                $fs->move($GLOBALS['GO_CONFIG']->file_storage_path.$old_path, $GLOBALS['GO_CONFIG']->file_storage_path.$new_path.'/'.$new_folder_name);
                 $new_folder_id = $fsdb->move_folder($folder, $destination);
 
                 $up_folder['id']=$new_folder_id;
@@ -213,7 +213,7 @@ if(isset(GO::modules()->modules['addressbook']))
 
                 $destination = $fsdb->resolve_path($new_path, true, 1);
 
-                $fs->move(GO::config()->file_storage_path.$old_path, GO::config()->file_storage_path.$new_path.'/'.$new_folder_name);
+                $fs->move($GLOBALS['GO_CONFIG']->file_storage_path.$old_path, $GLOBALS['GO_CONFIG']->file_storage_path.$new_path.'/'.$new_folder_name);
                 $new_folder_id = $fsdb->move_folder($folder, $destination);
 
                 $up_folder['id']=$new_folder_id;
@@ -237,7 +237,7 @@ if(isset(GO::modules()->modules['addressbook']))
     }
 }
 
-if(isset(GO::modules()->modules['notes']))
+if(isset($GLOBALS['GO_MODULES']->modules['notes']))
 {
     $db->query("ALTER TABLE `no_notes` ADD `files_folder_id` INT NOT NULL;");
     $db->query("SELECT n.*,c.name AS category_name FROM no_notes n INNER JOIN no_categories c ON c.id=n.category_id");
@@ -257,9 +257,9 @@ if(isset(GO::modules()->modules['notes']))
                 $destination = $fsdb->resolve_path($new_path, true, 1);
 
 
-                $fs->mkdir_recursive(GO::config()->file_storage_path.$new_path);
+                $fs->mkdir_recursive($GLOBALS['GO_CONFIG']->file_storage_path.$new_path);
 
-                $fs->move(GO::config()->file_storage_path.$old_path, GO::config()->file_storage_path.$new_path.'/'.$new_folder_name);
+                $fs->move($GLOBALS['GO_CONFIG']->file_storage_path.$old_path, $GLOBALS['GO_CONFIG']->file_storage_path.$new_path.'/'.$new_folder_name);
                 $new_folder_id = $fsdb->move_folder($folder, $destination);
 
                 $up_folder['id']=$new_folder_id;
@@ -283,7 +283,7 @@ if(isset(GO::modules()->modules['notes']))
 }
 
 
-if(isset(GO::modules()->modules['tasks']))
+if(isset($GLOBALS['GO_MODULES']->modules['tasks']))
 {
     $db->query("ALTER TABLE `ta_tasks` ADD `files_folder_id` INT NOT NULL;");
     $db->query("SELECT t.*,l.name AS tasklist_name FROM ta_tasks t INNER JOIN ta_lists l ON l.id=t.tasklist_id");
@@ -302,9 +302,9 @@ if(isset(GO::modules()->modules['tasks']))
                 //echo $new_path."\n";
                 $destination = $fsdb->resolve_path($new_path, true, 1);
 
-                $fs->mkdir_recursive(GO::config()->file_storage_path.$new_path);
+                $fs->mkdir_recursive($GLOBALS['GO_CONFIG']->file_storage_path.$new_path);
 
-                $fs->move(GO::config()->file_storage_path.$old_path, GO::config()->file_storage_path.$new_path.'/'.$new_folder_name);
+                $fs->move($GLOBALS['GO_CONFIG']->file_storage_path.$old_path, $GLOBALS['GO_CONFIG']->file_storage_path.$new_path.'/'.$new_folder_name);
                 $new_folder_id = $fsdb->move_folder($folder, $destination);
 
                 $up_folder['id']=$new_folder_id;
@@ -330,7 +330,7 @@ if(isset(GO::modules()->modules['tasks']))
 
 
 
-if(isset(GO::modules()->modules['calendar']))
+if(isset($GLOBALS['GO_MODULES']->modules['calendar']))
 {
     $db->query("ALTER TABLE `cal_events` ADD `files_folder_id` INT NOT NULL;");
     $db->query("SELECT e.*,c.name AS calendar_name FROM cal_events e INNER JOIN cal_calendars c ON c.id=e.calendar_id");
@@ -349,9 +349,9 @@ if(isset(GO::modules()->modules['calendar']))
                 //echo $new_path."\n";
                 $destination = $fsdb->resolve_path($new_path, true, 1);
 
-                $fs->mkdir_recursive(GO::config()->file_storage_path.$new_path);
+                $fs->mkdir_recursive($GLOBALS['GO_CONFIG']->file_storage_path.$new_path);
 
-                $fs->move(GO::config()->file_storage_path.$old_path, GO::config()->file_storage_path.$new_path.'/'.$new_folder_name);
+                $fs->move($GLOBALS['GO_CONFIG']->file_storage_path.$old_path, $GLOBALS['GO_CONFIG']->file_storage_path.$new_path.'/'.$new_folder_name);
                 $new_folder_id = $fsdb->move_folder($folder, $destination);
 
                 $up_folder['id']=$new_folder_id;
@@ -375,7 +375,7 @@ if(isset(GO::modules()->modules['calendar']))
 }
 
 
-if(isset(GO::modules()->modules['billing']))
+if(isset($GLOBALS['GO_MODULES']->modules['billing']))
 {
     $db->query("ALTER TABLE `bs_orders` ADD `files_folder_id` INT NOT NULL;");
     $db->query("SELECT e.*,c.name AS book_name FROM bs_orders e INNER JOIN bs_books c ON c.id=e.book_id");
@@ -393,9 +393,9 @@ if(isset(GO::modules()->modules['billing']))
 
                 $destination = $fsdb->resolve_path($new_path, true, 1);
 
-                $fs->mkdir_recursive(GO::config()->file_storage_path.$new_path);
+                $fs->mkdir_recursive($GLOBALS['GO_CONFIG']->file_storage_path.$new_path);
 
-                $fs->move(GO::config()->file_storage_path.$old_path, GO::config()->file_storage_path.$new_path.'/'.$new_folder_name);
+                $fs->move($GLOBALS['GO_CONFIG']->file_storage_path.$old_path, $GLOBALS['GO_CONFIG']->file_storage_path.$new_path.'/'.$new_folder_name);
                 $new_folder_id = $fsdb->move_folder($folder, $destination);
 
                 $up_folder['id']=$new_folder_id;
@@ -418,9 +418,9 @@ if(isset(GO::modules()->modules['billing']))
     }
 }
 
-if(isset(GO::modules()->modules['projects']))
+if(isset($GLOBALS['GO_MODULES']->modules['projects']))
 {
-    require_once(GO::modules()->modules['projects']['class_path'].'projects.class.inc.php');
+    require_once($GLOBALS['GO_MODULES']->modules['projects']['class_path'].'projects.class.inc.php');
     $projects = new projects();
 
     $db->query("ALTER TABLE `pm_projects` ADD `files_folder_id` INT NOT NULL;");
@@ -439,9 +439,9 @@ if(isset(GO::modules()->modules['projects']))
 
                 $destination = $fsdb->resolve_path($new_path, true, 1);
 
-                $fs->mkdir_recursive(GO::config()->file_storage_path.$new_path);
+                $fs->mkdir_recursive($GLOBALS['GO_CONFIG']->file_storage_path.$new_path);
 
-                $fs->move(GO::config()->file_storage_path.$old_path, GO::config()->file_storage_path.$new_path.'/'.$new_folder_name);
+                $fs->move($GLOBALS['GO_CONFIG']->file_storage_path.$old_path, $GLOBALS['GO_CONFIG']->file_storage_path.$new_path.'/'.$new_folder_name);
                 $new_folder_id = $fsdb->move_folder($folder, $destination);
 
                 $up_folder['id']=$new_folder_id;
@@ -464,7 +464,7 @@ if(isset(GO::modules()->modules['projects']))
     }
 }
 
-if(isset(GO::modules()->modules['cms']))
+if(isset($GLOBALS['GO_MODULES']->modules['cms']))
 {
     $db->query("ALTER TABLE `cms_sites` ADD `files_folder_id` INT NOT NULL");
     $db->query("ALTER TABLE `cms_files` ADD `files_folder_id` INT NOT NULL");
@@ -479,12 +479,12 @@ if(isset(GO::modules()->modules['cms']))
             $old_path = 'public/cms/'.$site['id'];
 
 
-            if(is_dir(GO::config()->file_storage_path.$old_path))
+            if(is_dir($GLOBALS['GO_CONFIG']->file_storage_path.$old_path))
             {
-                $fs->mkdir_recursive(GO::config()->file_storage_path.dirname($new_path));
-                $fs->move(GO::config()->file_storage_path.$old_path, GO::config()->file_storage_path.$new_path);
+                $fs->mkdir_recursive($GLOBALS['GO_CONFIG']->file_storage_path.dirname($new_path));
+                $fs->move($GLOBALS['GO_CONFIG']->file_storage_path.$old_path, $GLOBALS['GO_CONFIG']->file_storage_path.$new_path);
             }
-            $up_site['files_folder_id']=$fsdb->import_folder(GO::config()->file_storage_path.$new_path, $folder['id']);
+            $up_site['files_folder_id']=$fsdb->import_folder($GLOBALS['GO_CONFIG']->file_storage_path.$new_path, $folder['id']);
             $up_site['id']=$site['id'];
 
             $db2->update_row('cms_sites','id', $up_site);
@@ -498,7 +498,7 @@ if(isset(GO::modules()->modules['cms']))
 
 }
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 $db->query("ALTER TABLE `go_users` ADD `files_folder_id` INT NOT NULL;");
@@ -517,9 +517,9 @@ while($user = $GO_USERS->next_record())
 
             $destination = $fsdb->resolve_path($new_path, true, 1);
 
-            $fs->mkdir_recursive(GO::config()->file_storage_path.$new_path);
+            $fs->mkdir_recursive($GLOBALS['GO_CONFIG']->file_storage_path.$new_path);
 
-            $fs->move(GO::config()->file_storage_path.$old_path, GO::config()->file_storage_path.$new_path.'/'.$new_folder_name);
+            $fs->move($GLOBALS['GO_CONFIG']->file_storage_path.$old_path, $GLOBALS['GO_CONFIG']->file_storage_path.$new_path.'/'.$new_folder_name);
             $new_folder_id = $fsdb->move_folder($folder, $destination);
 
             $up_folder['id']=$new_folder_id;

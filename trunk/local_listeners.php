@@ -17,7 +17,7 @@ function local_add_user_listener($user){
 	global $GO_CONFIG, $GO_SECURITY;
 
 	//load the group management class
-	require_once(GO::config()->class_path.'base/groups.class.inc.php');
+	require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 	$GO_GROUPS = new GO_GROUPS();
 
 	$arr = explode('@', $user['email']);
@@ -28,7 +28,7 @@ function local_add_user_listener($user){
 	$group = $GO_GROUPS->get_group_by_name($domain);
 	if(!$group){
 		//group doesn't exist so create it.
-		$group_id = $GO_GROUPS->add_group(1, $domain, 0, GO::security()->get_new_acl('groups'));
+		$group_id = $GO_GROUPS->add_group(1, $domain, 0, $GLOBALS['GO_SECURITY']->get_new_acl('groups'));
 	}else
 	{
 		$group_id = $group['id'];

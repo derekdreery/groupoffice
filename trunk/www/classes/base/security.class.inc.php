@@ -83,7 +83,7 @@ class GO_SECURITY extends db {
 	function check_token(){
 		global $GO_CONFIG;
 
-		if(!GO::config()->disable_security_token_check && $_REQUEST['security_token']!=$_SESSION['GO_SESSION']['security_token']){
+		if(!$GLOBALS['GO_CONFIG']->disable_security_token_check && $_REQUEST['security_token']!=$_SESSION['GO_SESSION']['security_token']){
 			$this->logout();
 			go_log(LOG_ERR, 'Fatal error: Security token mismatch. Possible cross site request forgery attack!');
 			die('Fatal error: Security token mismatch. Possible cross site request forgery attack!');
@@ -103,7 +103,7 @@ class GO_SECURITY extends db {
 
 		if(isset($user)) {
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$GO_USERS->update_session($user, !empty($_POST['login_language']));
@@ -113,7 +113,7 @@ class GO_SECURITY extends db {
 
 				if(!empty($_COOKIE['GO_UN']) && !empty($_COOKIE['GO_PW'])) {
 
-					require_once(GO::config()->class_path.'cryptastic.class.inc.php');
+					require_once($GLOBALS['GO_CONFIG']->class_path.'cryptastic.class.inc.php');
 					$c = new cryptastic();
 
 					$username = $c->decrypt($_COOKIE['GO_UN']);
@@ -125,7 +125,7 @@ class GO_SECURITY extends db {
 						$password = $_COOKIE['GO_PW'];
 					}
 
-					require_once(GO::config()->class_path.'base/auth.class.inc.php');
+					require_once($GLOBALS['GO_CONFIG']->class_path.'base/auth.class.inc.php');
 					$GO_AUTH = new GO_AUTH();
 
 					$res =  $GO_AUTH->login($username, $password);
@@ -138,7 +138,7 @@ class GO_SECURITY extends db {
 					$username = $_SERVER['PHP_AUTH_USER'];
 					$password = $_SERVER['PHP_AUTH_PW'];
 
-					require_once(GO::config()->class_path.'base/auth.class.inc.php');
+					require_once($GLOBALS['GO_CONFIG']->class_path.'base/auth.class.inc.php');
 					$GO_AUTH = new GO_AUTH();
 
 					if($GO_AUTH->login($username, $password)) {
@@ -174,15 +174,15 @@ class GO_SECURITY extends db {
 		go_infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 
 		if(!empty($this->user_id)){
-			require_once(GO::config()->class_path.'filesystem.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 			$fs = new filesystem();
 
 			$length = -strlen($this->user_id)-1;
 
-			//go_debug(substr(GO::config()->tmpdir,$length));
+			//go_debug(substr($GLOBALS['GO_CONFIG']->tmpdir,$length));
 
-			if(substr(GO::config()->tmpdir,$length)==$this->user_id.'/' && is_dir(GO::config()->tmpdir)){
-				$fs->delete(GO::config()->tmpdir);
+			if(substr($GLOBALS['GO_CONFIG']->tmpdir,$length)==$this->user_id.'/' && is_dir($GLOBALS['GO_CONFIG']->tmpdir)){
+				$fs->delete($GLOBALS['GO_CONFIG']->tmpdir);
 			}
 		}
 
@@ -199,11 +199,11 @@ class GO_SECURITY extends db {
 
 		global $GO_MODULES;
 		if(isset($GO_MODULES)) {
-			GO::modules()->load_modules();
+			$GLOBALS['GO_MODULES']->load_modules();
 		}
 
 		global $GO_EVENTS;
-		GO::events()->fire_event('logout', $old_session);
+		$GLOBALS['GO_EVENTS']->fire_event('logout', $old_session);
 	}
 
 	/**
@@ -222,10 +222,10 @@ class GO_SECURITY extends db {
 		}
 
 		if($module!='' && (
-				empty(GO::modules()->modules[$module])
+				empty($GLOBALS['GO_MODULES']->modules[$module])
 				||
-				(!GO::modules()->modules[$module]['write_permission'] &&
-				!GO::modules()->modules[$module]['read_permission'])
+				(!$GLOBALS['GO_MODULES']->modules[$module]['write_permission'] &&
+				!$GLOBALS['GO_MODULES']->modules[$module]['read_permission'])
 		)) {
 			return 'UNAUTHORIZED';
 		}
@@ -250,7 +250,7 @@ class GO_SECURITY extends db {
 		if($authenticated!='AUTHORIZED') {
 			global $GO_CONFIG;
 
-			header('Location: '.GO::config()->host.'?after_login_url='.urlencode($_SERVER['REQUEST_URI']));
+			header('Location: '.$GLOBALS['GO_CONFIG']->host.'?after_login_url='.urlencode($_SERVER['REQUEST_URI']));
 
 			exit();
 		}
@@ -278,7 +278,7 @@ class GO_SECURITY extends db {
 
 		$this->insert_row('go_acl_items', $ai);
 
-		$this->add_group_to_acl(GO::config()->group_root, $ai['id'],GO_SECURITY::MANAGE_PERMISSION);
+		$this->add_group_to_acl($GLOBALS['GO_CONFIG']->group_root, $ai['id'],GO_SECURITY::MANAGE_PERMISSION);
 		$this->add_user_to_acl($user_id, $ai['id'],GO_SECURITY::MANAGE_PERMISSION);
 		return $ai['id'];
 	}
@@ -409,7 +409,7 @@ class GO_SECURITY extends db {
 	 */
 	function delete_group_from_acl($group_id, $acl_id, $force_group_root=false) {
 		global $GO_CONFIG;
-		if($force_group_root || $group_id != GO::config()->group_root) {
+		if($force_group_root || $group_id != $GLOBALS['GO_CONFIG']->group_root) {
 			$sql = "DELETE FROM go_acl WHERE group_id='".$this->escape($group_id)."' AND acl_id='".$this->escape($acl_id)."'";
 			return $this->query($sql);
 		}
@@ -418,13 +418,13 @@ class GO_SECURITY extends db {
 	function get_global_read_only_acl(){
 		global $GO_CONFIG;
 
-		$acl_id = GO::config()->get_setting('global_read_only_acl');
+		$acl_id = $GLOBALS['GO_CONFIG']->get_setting('global_read_only_acl');
 		if(!$acl_id){
 			$acl_id = $this->get_new_acl('global', 1);
 
 			$this->set_read_only_acl_permissions($acl_id);
 
-			GO::config()->save_setting('global_read_only_acl', $acl_id);
+			$GLOBALS['GO_CONFIG']->save_setting('global_read_only_acl', $acl_id);
 		}
 
 		return $acl_id;
@@ -434,10 +434,10 @@ class GO_SECURITY extends db {
 		global $GO_CONFIG;
 
 		if(!$acl_id)
-			$acl_id = GO::config()->get_setting('global_read_only_acl');
+			$acl_id = $GLOBALS['GO_CONFIG']->get_setting('global_read_only_acl');
 		
-		$this->delete_group_from_acl(GO::config()->group_root, $acl_id, true);
-		$this->add_group_to_acl(GO::config()->group_everyone, $acl_id);
+		$this->delete_group_from_acl($GLOBALS['GO_CONFIG']->group_root, $acl_id, true);
+		$this->add_group_to_acl($GLOBALS['GO_CONFIG']->group_everyone, $acl_id);
 		$this->delete_user_from_acl(1, $acl_id);
 	}
 
@@ -452,7 +452,7 @@ class GO_SECURITY extends db {
 		global $GO_CONFIG;
 
 		if($this->query("DELETE FROM go_acl WHERE acl_id='".$this->escape($acl_id)."'")) {
-			return $this->add_group_to_acl(GO::config()->group_root, $acl_id);
+			return $this->add_group_to_acl($GLOBALS['GO_CONFIG']->group_root, $acl_id);
 		}
 	}
 
@@ -478,11 +478,11 @@ class GO_SECURITY extends db {
 	function has_admin_permission($user_id) {
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/groups.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 		$GO_GROUPS = new GO_GROUPS();
 
 		if(!isset($this->is_admin))
-			$this->is_admin = $GO_GROUPS->is_in_group($user_id, GO::config()->group_root);
+			$this->is_admin = $GO_GROUPS->is_in_group($user_id, $GLOBALS['GO_CONFIG']->group_root);
 
 		return $this->is_admin;
 	}
@@ -679,7 +679,7 @@ class GO_SECURITY extends db {
 		$security = new GO_SECURITY();
 		$this->query($sql);
 		while($this->next_record()) {
-			if ($this->f("group_id") != 0 && $this->f('group_id') != GO::config()->group_root && !$security->group_in_acl($this->f("group_id"), $dAcl)) {
+			if ($this->f("group_id") != 0 && $this->f('group_id') != $GLOBALS['GO_CONFIG']->group_root && !$security->group_in_acl($this->f("group_id"), $dAcl)) {
 				$security->add_group_to_acl($this->f("group_id"), $dAcl, $this->f('level'));
 			}
 

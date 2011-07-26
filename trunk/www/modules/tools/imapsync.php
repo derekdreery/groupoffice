@@ -55,16 +55,16 @@ if (isset($argv[1])) {
 chdir(dirname(__FILE__));
 
 require_once("../../Group-Office.php");
-require_once(GO::modules()->modules['postfixadmin']['class_path'].'postfixadmin.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['postfixadmin']['class_path'].'postfixadmin.class.inc.php');
 $postfixadmin = new postfixadmin();
 
-require_once(GO::modules()->modules['email']['class_path'].'email.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['email']['class_path'].'email.class.inc.php');
 $e = new email();
 
-require_once(GO::config()->class_path.'base/groups.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 //make sure e-mail domain exists in database
@@ -75,7 +75,7 @@ if(!$domain)
 	$domain['active']='1';
 	$domain['domain']=$maildomain;
 	$domain['user_id']=1;
-	$domain['acl_id']=GO::security()->get_new_acl('domain');
+	$domain['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('domain');
 
 	$domain_id=$postfixadmin->add_domain($domain);
 }else
@@ -118,7 +118,7 @@ while ($record = fgetcsv($fp, 4096, ',', '"')) {
 			$group_id=$group['id'];
 		}
 
-		$user_id = $GO_USERS->add_user($user, array($group_id),array(GO::config()->group_everyone,$group_id));
+		$user_id = $GO_USERS->add_user($user, array($group_id),array($GLOBALS['GO_CONFIG']->group_everyone,$group_id));
 	}else
 	{
 		$user_id = $user['id'];

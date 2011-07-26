@@ -11,7 +11,7 @@ require('/etc/groupoffice/servermanager.inc.php');
 require_once($root_path.'/modules/servermanager/classes/servermanager.class.inc.php');
 $sm = new servermanager();
 
-require_once(GO::config()->class_path.'filesystem.class.inc');
+require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 $fs = new filesystem();
 
 $folders = $fs->get_folders('/etc/groupoffice');

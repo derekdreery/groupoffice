@@ -1,6 +1,6 @@
 <?php
 //This is a translation by hodrag. If you have questions please e-mail to hodrag@gmail.com , modify chinese traditional by quincy
-require(GO::language()->get_fallback_language_file('files'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('files'));
 $lang['files']['name'] = '檔案';
 $lang['files']['description'] = '檔案模組; 共享檔案';
 

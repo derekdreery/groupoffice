@@ -14,8 +14,8 @@
 
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('users');
-require_once(GO::language()->get_language_file('users'));
+$GLOBALS['GO_SECURITY']->json_authenticate('users');
+require_once($GLOBALS['GO_LANGUAGE']->get_language_file('users'));
 
 $task = isset($_REQUEST['task']) ? ($_REQUEST['task']) : null;
 $user_id = isset($_REQUEST['user_id']) ? ($_REQUEST['user_id']) : null;

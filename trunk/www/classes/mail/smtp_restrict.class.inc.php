@@ -40,9 +40,9 @@ class smtp_restrict extends db{
 		global $GO_CONFIG;
 		
 		$hosts = array();
-		if(!empty(GO::config()->restrict_smtp_hosts))
+		if(!empty($GLOBALS['GO_CONFIG']->restrict_smtp_hosts))
 		{
-			$expl = explode(',', GO::config()->restrict_smtp_hosts);
+			$expl = explode(',', $GLOBALS['GO_CONFIG']->restrict_smtp_hosts);
 			
 			foreach($expl as $restriction)
 			{

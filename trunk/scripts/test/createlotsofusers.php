@@ -1,9 +1,9 @@
 <?php
 
 require_once("../../www/Group-Office.php");
-require_once(GO::language()->get_language_file('users'));
+require_once($GLOBALS['GO_LANGUAGE']->get_language_file('users'));
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 for($i=1000;$i<20000;$i++){

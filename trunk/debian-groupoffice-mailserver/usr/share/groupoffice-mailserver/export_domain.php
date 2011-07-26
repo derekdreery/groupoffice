@@ -44,12 +44,12 @@ if(isset($args['go_config']))
 require($args['go_root'].'/Group-Office.php');
 
 
-echo 'Using config: '.GO::config()->get_config_file()."\n\n";
+echo 'Using config: '.$GLOBALS['GO_CONFIG']->get_config_file()."\n\n";
 
-require_once(GO::modules()->modules['postfixadmin']['class_path'].'postfixadmin.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['postfixadmin']['class_path'].'postfixadmin.class.inc.php');
 $pa = new postfixadmin();
 
-require_once(GO::config()->class_path.'database/sql_export.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'database/sql_export.class.inc.php');
 $sql_export = new sql_export();
 
 

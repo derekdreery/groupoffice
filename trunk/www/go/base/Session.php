@@ -12,19 +12,16 @@ class GO_Base_Session{
 		
 		//$this->setDefaults();
 		
-		if (!is_int($this->values['timezone'])) {
-			//set user timezone setting after user class is loaded
-			date_default_timezone_set(GO::session()->values['timezone']);
-		}
 		
-		if (GO::config()->session_inactivity_timeout > 0) {
-			$now = time();
-			if (isset($_SESSION['last_activity']) && $_SESSION['last_activity'] + GO::config()->session_inactivity_timeout < $now) {
-				GO::security()->logout();
-			} elseif ($_POST['task'] != 'checker') {//don't update on the automatic checker function that runs every 2 mins.
-				$_SESSION['last_activity'] = $now;
-			}
-		}
+		
+//		if ($GLOBALS['GO_CONFIG']->session_inactivity_timeout > 0) {
+//			$now = time();
+//			if (isset($_SESSION['last_activity']) && $_SESSION['last_activity'] + $GLOBALS['GO_CONFIG']->session_inactivity_timeout < $now) {
+//				$GLOBALS['GO_SECURITY']->logout();
+//			} elseif ($_POST['task'] != 'checker') {//don't update on the automatic checker function that runs every 2 mins.
+//				$_SESSION['last_activity'] = $now;
+//			}
+//		}
 
 	}
 	
@@ -35,22 +32,27 @@ class GO_Base_Session{
 	 */
 	public function setDefaults(){
 
-		if(!isset(GO::session()->values['security_token']))
+		if(!isset(self::$values['security_token']))
 		{
-			GO::session()->values['decimal_separator'] = GO::config()->default_decimal_separator;
-			GO::session()->values['thousands_separator'] = GO::config()->default_thousands_separator;
-			GO::session()->values['date_separator'] = GO::config()->default_date_separator;
-			GO::session()->values['date_format'] = Date::get_dateformat( GO::config()->default_date_format, GO::session()->values['date_separator']);
-			GO::session()->values['time_format'] = GO::config()->default_time_format;
-			GO::session()->values['currency'] = GO::config()->default_currency;
-			GO::session()->values['timezone'] = GO::config()->default_timezone;
-			GO::session()->values['country'] = GO::config()->default_country;
-			GO::session()->values['sort_name'] = 'last_name';
-			GO::session()->values['auth_token']=String::random_password('a-z,1-9', '', 30);
+			self::$values['decimal_separator'] = $GLOBALS['GO_CONFIG']->default_decimal_separator;
+			self::$values['thousands_separator'] = $GLOBALS['GO_CONFIG']->default_thousands_separator;
+			self::$values['date_separator'] = $GLOBALS['GO_CONFIG']->default_date_separator;
+			self::$values['date_format'] = Date::get_dateformat( $GLOBALS['GO_CONFIG']->default_date_format, self::$values['date_separator']);
+			self::$values['time_format'] = $GLOBALS['GO_CONFIG']->default_time_format;
+			self::$values['currency'] = $GLOBALS['GO_CONFIG']->default_currency;
+			self::$values['timezone'] = $GLOBALS['GO_CONFIG']->default_timezone;
+			self::$values['country'] = $GLOBALS['GO_CONFIG']->default_country;
+			self::$values['sort_name'] = 'last_name';
+			self::$values['auth_token']=String::random_password('a-z,1-9', '', 30);
 			//some url's require this token to be appended
-			GO::session()->values['security_token']=String::random_password('a-z,1-9', '', 10);
+			self::$values['security_token']=String::random_password('a-z,1-9', '', 10);
+			
+			if (!is_int($this->values['timezone'])) {
+				//set user timezone setting after user class is loaded
+				date_default_timezone_set(self::$values['timezone']);
+			}
 
-			go_debug('Setup new session '.GO::session()->values['security_token']);
+			go_debug('Setup new session '.self::$values['security_token']);
 		}
 
 		
@@ -60,15 +62,15 @@ class GO_Base_Session{
 // Doesn't work well because you can't change magic properties directly.
 // 
 //		public function __get($name){
-//		return GO::session()->values[$name];
+//		return self::$values[$name];
 //	}
 //	
 //	public function __set($name, $value){
-//		GO::session()->values[$name]=$value;
+//		self::$values[$name]=$value;
 //	}
 //	
 //	public function __isset($name){
-//		return isset(GO::session()->values[$name]);
+//		return isset(self::$values[$name]);
 //	}
 	
 	/**
@@ -79,7 +81,7 @@ class GO_Base_Session{
 	 */
 	public function logout() {
 		
-		$username = isset(GO::session()->username) ? GO::session()->username : 'notloggedin';
+		$username = isset(self::$username) ? self::$username : 'notloggedin';
 		//go_log(LOG_DEBUG, 'LOGOUT Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 		GO::infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 

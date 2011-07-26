@@ -17,7 +17,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('blacklist'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('blacklist'));
 $lang['blacklist']['name']='IP blacklist';
 $lang['blacklist']['description']='Module qui bloque les adresses IP apres 5 echec d\'authentification de suite.';
 $lang['blacklist']['ip']='IP';

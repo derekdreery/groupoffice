@@ -7,9 +7,9 @@ class language {
 	public static function require_language_file($module, $language){
 		global $GO_LANGUAGE, $GO_CONFIG, $lang;
 
-		$file = GO::config()->file_storage_path.'users/admin/language/'.$language.'.inc.php';
+		$file = $GLOBALS['GO_CONFIG']->file_storage_path.'users/admin/language/'.$language.'.inc.php';
 		if(!file_exists($file)){
-			$file = GO::config()->file_storage_path.'users/admin/language/en.inc.php';
+			$file = $GLOBALS['GO_CONFIG']->file_storage_path.'users/admin/language/en.inc.php';
 		}
 		include($file);
 	}

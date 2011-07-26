@@ -1,6 +1,6 @@
 <?php
 /* Translator for the Greek Language: Konstantinos Georgakopoulos (kgeorga@uom.gr)*/
-require(GO::language()->get_fallback_language_file('files'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('files'));
 $lang['files']['name'] = 'Αρχεία';
 $lang['files']['description'] = 'Άρθρωμα Αρχεία; Άρθρωμα για διαμοιρασμό αρχείων.';
 

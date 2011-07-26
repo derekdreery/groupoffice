@@ -1,6 +1,6 @@
 <?php
 /* Translator for the Greek Language: Konstantinos Georgakopoulos (kgeorga@uom.gr)*/
-require(GO::language()->get_fallback_base_language_file('common'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('common'));
 
 $lang['common']['about']='Έκδοση: %s
 

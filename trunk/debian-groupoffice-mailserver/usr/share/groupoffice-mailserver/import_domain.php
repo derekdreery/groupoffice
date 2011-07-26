@@ -44,9 +44,9 @@ if(isset($args['go_config']))
 require($args['go_root'].'/Group-Office.php');
 
 
-echo 'Using config: '.GO::config()->get_config_file()."\n\n";
+echo 'Using config: '.$GLOBALS['GO_CONFIG']->get_config_file()."\n\n";
 
-require_once(GO::modules()->modules['postfixadmin']['class_path'].'postfixadmin.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['postfixadmin']['class_path'].'postfixadmin.class.inc.php');
 $pa = new postfixadmin();
 
 
@@ -72,7 +72,7 @@ foreach($queries as $query){
 $db = new db();
 $pa->query("SELECT id FROM pa_domains WHERE acl_id=0");
 while($r = $pa->next_record()){
-	$r['acl_id']=GO::security()->get_new_acl();
+	$r['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl();
 	$db->update_row('pa_domains', 'id', $r);
 }
 

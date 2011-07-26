@@ -13,9 +13,9 @@
  */
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('addressbook');
+$GLOBALS['GO_SECURITY']->json_authenticate('addressbook');
 
-require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 $ab = new addressbook;
 
 $sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
@@ -40,7 +40,7 @@ try
 	{
 		case 'fields':
 			
-			require(GO::language()->get_language_file('addressbook'));
+			require($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 			
 			if($_POST['type']=='contacts')
 			{			
@@ -105,12 +105,12 @@ try
 				$link_type=3;
 			}
 			
-			if(GO::modules()->has_module('customfields'))
+			if($GLOBALS['GO_MODULES']->has_module('customfields'))
 			{
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 				
-				$fields = $cf->get_authorized_fields(GO::security()->user_id, $link_type);
+				$fields = $cf->get_authorized_fields($GLOBALS['GO_SECURITY']->user_id, $link_type);
 				while($field = array_shift($fields))
 				{
 					if($field['datatype']!='heading' && $field['datatype']!='function')
@@ -140,7 +140,7 @@ try
 		case 'search_sender':
 			
 			$response['results']=array();
-			$response['total'] = $ab->get_contacts_by_email($_POST['email'], GO::security()->user_id);
+			$response['total'] = $ab->get_contacts_by_email($_POST['email'], $GLOBALS['GO_SECURITY']->user_id);
 			
 			$ab2 = new addressbook();
 			while($record=$ab->next_record())
@@ -157,7 +157,7 @@ try
 
 		case 'contacts':
 
-			require_once(GO::language()->get_language_file('addressbook'));
+			require_once($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 		
 			$response['data']['write_permission'] = false;
 
@@ -167,10 +167,10 @@ try
 			{
 				$books = json_decode($_POST['books'], true);
 				if(empty($_POST['disable_filter_save']))
-					GO::config()->save_setting('addressbook_books_filter',implode(',', $books), GO::security()->user_id);
+					$GLOBALS['GO_CONFIG']->save_setting('addressbook_books_filter',implode(',', $books), $GLOBALS['GO_SECURITY']->user_id);
 			}else
 			{
-				$books = GO::config()->get_setting('addressbook_books_filter', GO::security()->user_id);
+				$books = $GLOBALS['GO_CONFIG']->get_setting('addressbook_books_filter', $GLOBALS['GO_SECURITY']->user_id);
 				$books = ($books) ? explode(',',$books) : array();
 			}
 			
@@ -180,10 +180,10 @@ try
 			}elseif(isset($_POST['mailings_filter']))
 			{
 				$mailings_filter = json_decode($_POST['mailings_filter'], true);				
-				GO::config()->save_setting('mailings_filter', implode(',',$mailings_filter), GO::security()->user_id);
+				$GLOBALS['GO_CONFIG']->save_setting('mailings_filter', implode(',',$mailings_filter), $GLOBALS['GO_SECURITY']->user_id);
 			}else
 			{	
-				$mailings_filter = GO::config()->get_setting('mailings_filter', GO::security()->user_id);
+				$mailings_filter = $GLOBALS['GO_CONFIG']->get_setting('mailings_filter', $GLOBALS['GO_SECURITY']->user_id);
 				$mailings_filter = empty($mailings_filter) ? array() : explode(',', $mailings_filter);
 			}
 			$readable_books = array();
@@ -196,7 +196,7 @@ try
 				{
 					$book = $ab->get_addressbook($book_id);
 
-					$permission_level = GO::security()->has_permission(GO::security()->user_id, $book['acl_id']);
+					$permission_level = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $book['acl_id']);
 					if($permission_level)
 					{
 						$readable_books[] = $book_id;
@@ -230,7 +230,7 @@ try
 						if(in_array($contact['addressbook_id'], $writable_books))
 						{
 							$ab->delete_contact($contact_id, $contact);
-							GO::events()->fire_event('contact_delete', array($contact));
+							$GLOBALS['GO_EVENTS']->fire_event('contact_delete', array($contact));
 							$contacts_deleted[] = $contact_id;
 						}
 					}
@@ -272,7 +272,7 @@ try
 							
 			
 			$response['total']=$ab->search_contacts(
-			GO::security()->user_id,
+			$GLOBALS['GO_SECURITY']->user_id,
 			$query,
 			$field,
 			$readable_books,
@@ -287,8 +287,8 @@ try
 			$advancedQuery
 			);
 
-			if(GO::modules()->has_module('customfields')) {
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+			if($GLOBALS['GO_MODULES']->has_module('customfields')) {
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 			}else
 			{
@@ -313,7 +313,7 @@ try
 			//return writable only.
 
 			$response['total']=$ab->search_contacts_email(
-			GO::security()->user_id,
+			$GLOBALS['GO_SECURITY']->user_id,
 			$query,
 			$start,
 			$limit,
@@ -342,7 +342,7 @@ try
 
 		case 'companies':
 
-			require_once(GO::language()->get_language_file('addressbook'));
+			require_once($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 
 			$response['data']['write_permission'] = false;
 			if(!empty($_POST['addressbook_id'])){
@@ -350,13 +350,13 @@ try
 			}else	if(isset($_POST['books']))
 			{
 				$books = json_decode($_POST['books'], true);
-				GO::config()->save_setting('addressbook_books_filter',implode(',', $books), GO::security()->user_id);
+				$GLOBALS['GO_CONFIG']->save_setting('addressbook_books_filter',implode(',', $books), $GLOBALS['GO_SECURITY']->user_id);
 			} elseif (!empty($_POST['no_addressbooks_filter'])) {
 			
 				$books = array();
 				
 			} else {
-				$books = GO::config()->get_setting('addressbook_books_filter', GO::security()->user_id);
+				$books = $GLOBALS['GO_CONFIG']->get_setting('addressbook_books_filter', $GLOBALS['GO_SECURITY']->user_id);
 				$books = ($books) ? explode(',',$books) : array();
 			}
 			
@@ -366,10 +366,10 @@ try
 			}elseif(isset($_POST['mailings_filter']))
 			{
 				$mailings_filter = json_decode(($_POST['mailings_filter']), true);				
-				GO::config()->save_setting('mailings_filter', implode(',',$mailings_filter), GO::security()->user_id);
+				$GLOBALS['GO_CONFIG']->save_setting('mailings_filter', implode(',',$mailings_filter), $GLOBALS['GO_SECURITY']->user_id);
 			}else
 			{	
-				$mailings_filter = GO::config()->get_setting('mailings_filter', GO::security()->user_id);
+				$mailings_filter = $GLOBALS['GO_CONFIG']->get_setting('mailings_filter', $GLOBALS['GO_SECURITY']->user_id);
 				$mailings_filter = empty($mailings_filter) ? array() : explode(',', $mailings_filter);
 			}
 
@@ -382,7 +382,7 @@ try
 				{
 					$book = $ab->get_addressbook($book_id);
 
-					$permission_level = GO::security()->has_permission(GO::security()->user_id, $book['acl_id']);
+					$permission_level = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $book['acl_id']);
 					if($permission_level)
 					{
 						$readable_books[] = $book_id;
@@ -457,7 +457,7 @@ try
 			$advancedQuery = empty($_POST['advancedQuery']) ? '' : $_POST['advancedQuery'];			
 			
 			$response['total']=$ab->search_companies(
-			GO::security()->user_id,
+			$GLOBALS['GO_SECURITY']->user_id,
 			$query,
 			$field,
 			$books,
@@ -487,7 +487,7 @@ try
 				
 			$company = $ab->get_company($company_id);
 
-			if(GO::security()->has_permission(GO::security()->user_id, $company['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
+			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $company['acl_id'])<GO_SECURITY::WRITE_PERMISSION)
 			{
 				throw new AccessDeniedException();
 			}
@@ -556,7 +556,7 @@ try
 
 			$response['data'] = $ab->get_contact($contact_id);
 
-			$perm_lvl = GO::security()->has_permission(GO::security()->user_id, $response['data']['acl_id']);
+			$perm_lvl = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $response['data']['acl_id']);
 			$response['data']['write_permission']=$perm_lvl>1;
 			if(!$perm_lvl)
 			{
@@ -568,7 +568,7 @@ try
 				
 				$response['data']['full_name'] = String::format_name($response['data']['last_name'], $response['data']['first_name'], $response['data']['middle_name']);
 
-				require(GO::language()->get_base_language_file('countries'));
+				require($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
 				if($task == 'load_contact_with_items')
 				{
 					$response['data']['comment']=String::text_to_html($response['data']['comment']);
@@ -607,7 +607,7 @@ try
 
 				$response['data']['google_maps_link']=google_maps_link($response['data']['address'], $response['data']['address_no'], $response['data']['city'], $response['data']['country']);
 
-				if(GO::modules()->has_module('customfields'))
+				if($GLOBALS['GO_MODULES']->has_module('customfields'))
 				{
 					$ab2 = new addressbook();
 					$response['data'] = $ab2->cf_categories_to_record($response['data'],'addressbook_id');
@@ -616,31 +616,31 @@ try
 				$response['success']=true;	
 			}
 
-			if(file_exists(GO::config()->file_storage_path.'contacts/contact_photos/'.$response['data']['id'].'.jpg'))
+			if(file_exists($GLOBALS['GO_CONFIG']->file_storage_path.'contacts/contact_photos/'.$response['data']['id'].'.jpg'))
 			{
-				$response['data']['photo_src'] = GO::modules()->modules['addressbook']['url'].'photo.php?contact_id='.$response['data']['id'].'&mtime='.time();
+				$response['data']['photo_src'] = $GLOBALS['GO_MODULES']->modules['addressbook']['url'].'photo.php?contact_id='.$response['data']['id'].'&mtime='.time();
 			} else {
 				$response['data']['photo_src'] = false;
 			}
 				
 			if($task == 'load_contact')
 			{
-				if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission'])
+				if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
 				{
-					require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+					require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
-					$values = $cf->get_values(GO::security()->user_id, 2, $contact_id);
+					$values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 2, $contact_id);
 					$response['data']=array_merge($response['data'], $values);
 				}
 
-				if(GO::modules()->has_module('mailings'))
+				if($GLOBALS['GO_MODULES']->has_module('mailings'))
 				{
-					require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+					require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 					
 					$ml = new mailings();
 					$ml2 = new mailings();
 						
-					$count = $ml->get_authorized_mailing_groups('write', GO::security()->user_id, 0,0);
+					$count = $ml->get_authorized_mailing_groups('write', $GLOBALS['GO_SECURITY']->user_id, 0,0);
 
 					
 					while($ml->next_record())
@@ -649,7 +649,7 @@ try
 					}
 				}
 
-				GO::events()->fire_event('load_contact', array(&$response, $task));
+				$GLOBALS['GO_EVENTS']->fire_event('load_contact', array(&$response, $task));
 
 				echo json_encode($response);
 				break;
@@ -660,7 +660,7 @@ try
 			if(!isset($response['data']['iso_address_format']) || $response['data']['iso_address_format'] == '')
 				$response['data']['iso_address_format'] = $response['data']['default_iso_address_format'];
 
-			GO::events()->fire_event('load_contact', array(&$response, $task));
+			$GLOBALS['GO_EVENTS']->fire_event('load_contact', array(&$response, $task));
 
 			echo json_encode($response);
 			break;
@@ -677,7 +677,7 @@ try
 
 			$response['data'] = $ab->get_company($company_id);
 			
-			$perm_lvl = GO::security()->has_permission(GO::security()->user_id, $response['data']['acl_id']);
+			$perm_lvl = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $response['data']['acl_id']);
 			$response['data']['write_permission']=$perm_lvl>1;
 			if(!$perm_lvl)
 			{
@@ -690,7 +690,7 @@ try
 				{
 					$response['data']['comment']=String::text_to_html($response['data']['comment']);
 					
-					require(GO::language()->get_base_language_file('countries'));
+					require($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
 					$response['data']['country']=isset($countries[$response['data']['country']]) ? $countries[$response['data']['country']] : $response['data']['country'];
 					$response['data']['post_country']=isset($countries[$response['data']['post_country']]) ? $countries[$response['data']['post_country']] : $response['data']['post_country'];				
 				}
@@ -718,7 +718,7 @@ try
 
 				$response['data']['post_google_maps_link']=google_maps_link($response['data']['post_address'], $response['data']['post_address_no'], $response['data']['post_city'], $response['data']['post_country']);
 
-				if(GO::modules()->has_module('customfields'))
+				if($GLOBALS['GO_MODULES']->has_module('customfields'))
 				{
 					$ab2 = new addressbook();
 					$response['data'] = $ab2->cf_categories_to_record($response['data'],'addressbook_id');
@@ -729,28 +729,28 @@ try
 				
 			if($task == 'load_company')
 			{
-				if(GO::modules()->has_module('customfields'))
+				if($GLOBALS['GO_MODULES']->has_module('customfields'))
 				{
-					require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+					require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
-					$values = $cf->get_values(GO::security()->user_id, 3, $company_id);
+					$values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 3, $company_id);
 					$response['data']=array_merge($response['data'], $values);
 				}
 				
-				if(GO::modules()->has_module('mailings'))
+				if($GLOBALS['GO_MODULES']->has_module('mailings'))
 				{
-					require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+					require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 					$ml = new mailings();
 					$ml2 = new mailings();
 						
-					$ml->get_authorized_mailing_groups('write', GO::security()->user_id, 0,0);
+					$ml->get_authorized_mailing_groups('write', $GLOBALS['GO_SECURITY']->user_id, 0,0);
 					while($ml->next_record())
 					{
 						$response['data']['mailing_'.$ml->f('id')]=$ml2->company_is_in_group($company_id, $ml->f('id')) ? true : false;
 					}
 				}
 
-				GO::events()->fire_event('load_company', array(&$response, $task));
+				$GLOBALS['GO_EVENTS']->fire_event('load_company', array(&$response, $task));
 				echo json_encode($response);
 				
 				break;
@@ -770,7 +770,7 @@ try
 				
 			load_standard_info_panel_items($response, 3);
 
-			GO::events()->fire_event('load_company', array(&$response, $task));
+			$GLOBALS['GO_EVENTS']->fire_event('load_company', array(&$response, $task));
 				
 				
 			echo json_encode($response);
@@ -778,22 +778,22 @@ try
 
 		case 'init':
 			
-			$response['addressbooks']['total'] = $ab->get_user_addressbooks(GO::security()->user_id, $start, GO::config()->nav_page_size, $sort, $dir);
+			$response['addressbooks']['total'] = $ab->get_user_addressbooks($GLOBALS['GO_SECURITY']->user_id, $start, $GLOBALS['GO_CONFIG']->nav_page_size, $sort, $dir);
 
 			if($response['addressbooks']['total']==0)
 			{
 				$ab->get_addressbook();
-				$response['addressbooks']['total'] = $ab->get_user_addressbooks(GO::security()->user_id, $start, GO::config()->nav_page_size, $sort, $dir);
+				$response['addressbooks']['total'] = $ab->get_user_addressbooks($GLOBALS['GO_SECURITY']->user_id, $start, $GLOBALS['GO_CONFIG']->nav_page_size, $sort, $dir);
 			}
 
-			$books = GO::config()->get_setting('addressbook_books_filter', GO::security()->user_id);
+			$books = $GLOBALS['GO_CONFIG']->get_setting('addressbook_books_filter', $GLOBALS['GO_SECURITY']->user_id);
 			$books = ($books) ? explode(',',$books) : array();
 
 			while($record = $ab->next_record())
 			{
 				$record['checked']=in_array($record['id'], $books);
 
-				if(GO::modules()->has_module('customfields'))
+				if($GLOBALS['GO_MODULES']->has_module('customfields'))
 				{
 					$ab2 = new addressbook();
 					$record = $ab2->cf_categories_to_record($record);
@@ -802,15 +802,15 @@ try
 				$response['addressbooks']['results'][]=$record;
 			}
 
-			if(GO::modules()->has_module('mailings')){
+			if($GLOBALS['GO_MODULES']->has_module('mailings')){
 
-				$selected_mailings = GO::config()->get_setting('mailings_filter', GO::security()->user_id);
+				$selected_mailings = $GLOBALS['GO_CONFIG']->get_setting('mailings_filter', $GLOBALS['GO_SECURITY']->user_id);
 				$selected_mailings = empty($selected_mailings) ? array() : explode(',', $selected_mailings);
 
-				require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 				$ml = new mailings();
 
-				$response['readable_addresslists']['total'] = $ml->get_authorized_mailing_groups('read', GO::security()->user_id);
+				$response['readable_addresslists']['total'] = $ml->get_authorized_mailing_groups('read', $GLOBALS['GO_SECURITY']->user_id);
 				$response['readable_addresslists']['results'] = array();
 
 				while($mailing = $ml->next_record()){
@@ -818,7 +818,7 @@ try
 					$response['readable_addresslists']['results'][]=$mailing;
 				}
 
-				$response['writable_addresslists']['total'] = $ml->get_authorized_mailing_groups('write', GO::security()->user_id);
+				$response['writable_addresslists']['total'] = $ml->get_authorized_mailing_groups('write', $GLOBALS['GO_SECURITY']->user_id);
 				$response['writable_addresslists']['results'] = array();
 
 				while($mailing = $ml->next_record()){
@@ -833,7 +833,7 @@ try
 			/* get all readable addressbooks */
 		case 'addressbooks':
 
-			require(GO::language()->get_language_file('addressbook'));
+			require($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 
 			$auth_type = isset($_POST['auth_type']) ?$_POST['auth_type'] : 'read';
 
@@ -843,12 +843,12 @@ try
 				
 			if($auth_type=='read')
 			{			
-				$response['total'] = $ab->get_user_addressbooks(GO::security()->user_id, $start, $limit, $sort, $dir, $query);
+				$response['total'] = $ab->get_user_addressbooks($GLOBALS['GO_SECURITY']->user_id, $start, $limit, $sort, $dir, $query);
 				
 				if($response['total']==0)
 				{
 					$ab->get_addressbook();
-					$response['total'] = $ab->get_user_addressbooks(GO::security()->user_id, $start, $limit, $sort, $dir, $query);
+					$response['total'] = $ab->get_user_addressbooks($GLOBALS['GO_SECURITY']->user_id, $start, $limit, $sort, $dir, $query);
 				}
 			}else
 			{
@@ -863,7 +863,7 @@ try
 						{
 							$addressbook = $ab->get_addressbook($book_id);
 							
-							if((GO::modules()->modules['addressbook']['permission_level'] < GO_SECURITY::WRITE_PERMISSION) || (GO::security()->has_permission(GO::security()->user_id, $addressbook['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
+							if(($GLOBALS['GO_MODULES']->modules['addressbook']['permission_level'] < GO_SECURITY::WRITE_PERMISSION) || ($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $addressbook['acl_id']) < GO_SECURITY::DELETE_PERMISSION))
 							{
 								throw new AccessDeniedException();
 							}
@@ -877,19 +877,19 @@ try
 					}
 				}
 
-				$response['total'] = $ab->get_writable_addressbooks(GO::security()->user_id, $start, $limit, $sort, $dir, $query);
+				$response['total'] = $ab->get_writable_addressbooks($GLOBALS['GO_SECURITY']->user_id, $start, $limit, $sort, $dir, $query);
 				if($response['total']==0 && empty($query))
 				{
 					$ab->get_addressbook(0);
-					$response['total'] = $ab->get_writable_addressbooks(GO::security()->user_id, $start, $limit, $sort, $dir);
+					$response['total'] = $ab->get_writable_addressbooks($GLOBALS['GO_SECURITY']->user_id, $start, $limit, $sort, $dir);
 				}
 					
 			}
 				
-			$books = GO::config()->get_setting('addressbook_books_filter', GO::security()->user_id);
+			$books = $GLOBALS['GO_CONFIG']->get_setting('addressbook_books_filter', $GLOBALS['GO_SECURITY']->user_id);
 			$books = ($books) ? explode(',',$books) : array();
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 				
 			$first_record = true;
@@ -900,7 +900,7 @@ try
 					if(!count($books))
 					{
 						$books[] = $ab->f('id');
-						GO::config()->save_setting('addressbook_books_filter',$ab->f('id'), GO::security()->user_id);
+						$GLOBALS['GO_CONFIG']->save_setting('addressbook_books_filter',$ab->f('id'), $GLOBALS['GO_SECURITY']->user_id);
 					}
 
 					$first_record = false;
@@ -917,7 +917,7 @@ try
 					'checked' => in_array($ab->f('id'), $books)
 				);
 
-				if(GO::modules()->has_module('customfields'))
+				if($GLOBALS['GO_MODULES']->has_module('customfields'))
 				{
 					$ab2 = new addressbook();
 					$record = $ab2->cf_categories_to_record($record);
@@ -931,7 +931,7 @@ try
 
 		case 'addressbooks_string':
 
-			require_once(GO::config()->class_path.'mail/RFC822.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'mail/RFC822.class.inc');
 			$RFC822 = new RFC822();
 			$abs = explode(',', $_REQUEST['addressbooks']);
 
@@ -954,7 +954,7 @@ try
 
 		case 'ab_fields':
 
-			require(GO::language()->get_language_file('addressbook'));
+			require($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 
 			$ab->query("SHOW COLUMNS FROM ab_contacts");
 			$contact_types = array();
@@ -1033,13 +1033,13 @@ try
 				$link_type=3;
 			}
 
-			if(GO::modules()->has_module('customfields'))
+			if($GLOBALS['GO_MODULES']->has_module('customfields'))
 			{
 
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 
-				$fields = $cf->get_authorized_fields(GO::security()->user_id, $link_type);
+				$fields = $cf->get_authorized_fields($GLOBALS['GO_SECURITY']->user_id, $link_type);
 				while($field = array_shift($fields))
 				{
 					if($field['datatype']!='heading' && $field['datatype']!='function')
@@ -1086,7 +1086,7 @@ try
 				}
 			}
 
-			$response['total'] = $ab->get_sqls(GO::security()->user_id, $_POST['companies']);
+			$response['total'] = $ab->get_sqls($GLOBALS['GO_SECURITY']->user_id, $_POST['companies']);
 			$response['results'] = array();
 
 			while($ab->next_record())
@@ -1098,11 +1098,11 @@ try
 
 		case 'addressbook_cf_categories':
 
-			GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php';
+			$GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php';
 			$cf = new customfields();
 
 			if (empty($_REQUEST['addressbook_id'])) {
-				require_once(GO::language()->get_language_file('addressbook'));
+				require_once($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 				throw new Exception($lang['addressbook']['no_addressbook_id']);
 			}
 			$addressbook_id = $_REQUEST['addressbook_id'];
@@ -1110,7 +1110,7 @@ try
 			$response = array('data'=>array());
 
 			$authorized_contact_categories = array();
-			$cf->get_authorized_categories(2, GO::security()->user_id);
+			$cf->get_authorized_categories(2, $GLOBALS['GO_SECURITY']->user_id);
 			while ($record = $cf->next_record()) {
 				$authorized_contact_categories[] = $record['id'];
 			}
@@ -1123,7 +1123,7 @@ try
 			}
 
 			$authorized_company_categories = array();
-			$cf->get_authorized_categories(3, GO::security()->user_id);
+			$cf->get_authorized_categories(3, $GLOBALS['GO_SECURITY']->user_id);
 			while ($record = $cf->next_record()) {
 				$authorized_company_categories[] = $record['id'];
 			}

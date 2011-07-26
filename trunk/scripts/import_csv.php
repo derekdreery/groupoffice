@@ -9,14 +9,14 @@ ini_set('max_execution_time', 0);
 
 require('../www/Group-Office.php');
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 //login as admin
-GO::security()->logged_in($GO_USERS->get_user(1));
-GO::modules()->load_modules();
+$GLOBALS['GO_SECURITY']->logged_in($GO_USERS->get_user(1));
+$GLOBALS['GO_MODULES']->load_modules();
 
-require_once(GO::config()->class_path.'base/links.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 $GO_LINKS = new GO_LINKS();
 
 
@@ -29,16 +29,16 @@ $addressbook_name = 'Import';
 
 $dir = '/home/mschering/Desktop/Multicomp';
 
-require_once(GO::modules()->modules['addressbook']['class_path'] . 'addressbook.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'] . 'addressbook.class.inc.php');
 $ab = new addressbook();
 
-require_once(GO::modules()->modules['customfields']['class_path'] . 'customfields.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'] . 'customfields.class.inc.php');
 $cf = new customfields();
 
-require_once(GO::modules()->modules['notes']['class_path'] . 'notes.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['notes']['class_path'] . 'notes.class.inc.php');
 $no = new notes();
 
-require_once(GO::modules()->modules['tasks']['class_path'] . 'tasks.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'] . 'tasks.class.inc.php');
 $ta = new tasks();
 
 
@@ -52,7 +52,7 @@ function create_custom_fields($type, $cf_category_name, $custom_fields) {
 	if (!$category) {
 		$category['name'] = $cf_category_name;
 		$category['type'] = $type;
-		$category['acl_id'] = GO::security()->get_new_acl();
+		$category['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl();
 		$category_id = $cf->add_category($category);
 	} else {
 		$category_id = $category['id'];
@@ -274,7 +274,7 @@ function get_tasklist($tasklist_name){
 
 	$tasklist['name']=$tasklist_name;
 	$tasklist['user_id']=1;
-	$tasklist['acl_id']=GO::security()->get_new_acl('tasks', $tasklist['user_id']);
+	$tasklist['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('tasks', $tasklist['user_id']);
 	$tasklist['id']=$ta->add_tasklist($tasklist);
 
 	return $tasklist;
@@ -431,7 +431,7 @@ function get_category($category_name){
 
 	$category['name']=$category_name;
 	$category['user_id']=1;
-	$category['acl_id']=GO::security()->get_new_acl('notes', $category['user_id']);
+	$category['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('notes', $category['user_id']);
 	$category['id']=$no->add_category($category);
 
 	return $category;

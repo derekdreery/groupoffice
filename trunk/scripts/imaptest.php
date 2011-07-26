@@ -1,6 +1,6 @@
 <?php
 require('../www/Group-Office.php');
-require(GO::config()->class_path.'mail/imap.class.inc.php');
+require($GLOBALS['GO_CONFIG']->class_path.'mail/imap.class.inc.php');
 
 $imap = new imap();
 $ret = $imap->connect('localhost', 143, 'test@intermesh.dev', 'test', false);

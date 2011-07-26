@@ -1,7 +1,7 @@
 <?php
 
 
-require_once(GO::modules()->modules['cms']['class_path'].'cms.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms.class.inc.php');
 $cms = new cms();
 
 $cms->get_sites();

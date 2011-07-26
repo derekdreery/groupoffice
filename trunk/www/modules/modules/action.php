@@ -13,7 +13,7 @@
  */
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('modules');
+$GLOBALS['GO_SECURITY']->json_authenticate('modules');
 
 $task = isset($_REQUEST['task']) ? ($_REQUEST['task']) : null;
 
@@ -26,13 +26,13 @@ try{
 
 			foreach($modules as $module)
 			{
-				if(!GO::modules()->update_module($module->id,$module->sort_order, $module->admin_menu))
+				if(!$GLOBALS['GO_MODULES']->update_module($module->id,$module->sort_order, $module->admin_menu))
 				{
 					throw new Exception($lang['common']['saveError']);
 				}
 				$response['success']=true;
 			}
-			GO::modules()->load_modules();
+			$GLOBALS['GO_MODULES']->load_modules();
 			break;
 
 		case 'install':
@@ -40,13 +40,13 @@ try{
 
 			foreach($modules as $module)
 			{
-				if (!GO::modules()->add_module($module)) {
+				if (!$GLOBALS['GO_MODULES']->add_module($module)) {
 					throw new Exception($lang['common']['saveError']);
 				}
 				$response['success']=true;
 			}
 
-			GO::modules()->load_modules();
+			$GLOBALS['GO_MODULES']->load_modules();
 			break;
 	}
 }

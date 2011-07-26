@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('tools'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('tools'));
 
 $lang['tools']['name']='Eszközök';
 $lang['tools']['description']='A module to perform administrative tasks.';

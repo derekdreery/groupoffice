@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('tasks'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('tasks'));
 
 $lang['tasks']['name']='Tehtävät';
 $lang['tasks']['description']='Laita kuvaus tähän';

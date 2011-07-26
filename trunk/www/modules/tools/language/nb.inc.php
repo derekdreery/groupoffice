@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('tools'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('tools'));
 
 $lang['tools']['name']='Verktøy';
 $lang['tools']['description']='En modul for å utføre administrative oppgaver.';

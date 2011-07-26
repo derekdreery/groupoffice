@@ -32,11 +32,11 @@ class blacklist extends db {
 			{
 				global $GO_LANGUAGE, $lang, $response, $GO_CONFIG;
 				$response['require_captcha'] = true;
-				GO::language()->require_language_file('blacklist');
+				$GLOBALS['GO_LANGUAGE']->require_language_file('blacklist');
 
 				if(isset($_REQUEST['captcha']) && $_REQUEST['captcha'])
 				{
-					require_once(GO::config()->class_path.'securimage/securimage.php');
+					require_once($GLOBALS['GO_CONFIG']->class_path.'securimage/securimage.php');
 					$securimage = new Securimage();
 
 					if(!$securimage->check($_REQUEST['captcha']))
@@ -188,7 +188,7 @@ class blacklist extends db {
 	public function get_user_id($username='')
 	{
 		global $GO_CONFIG;
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		if($username)

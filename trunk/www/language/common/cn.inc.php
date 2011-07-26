@@ -1,6 +1,6 @@
 <?php
 //This is a translation by hodrag. If you have questions please e-mail to hodrag@gmail.com
-require(GO::language()->get_fallback_base_language_file('common'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('common'));
 
 $lang['common']['extjs_lang']='zh_CN';
 $lang['common']['htmldirection']= 'ltr';

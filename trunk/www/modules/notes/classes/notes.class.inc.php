@@ -28,12 +28,12 @@ class notes extends db {
 
 		echo 'Note folders'.$line_break;
 
-		if(isset(GO::modules()->modules['files']))
+		if(isset($GLOBALS['GO_MODULES']->modules['files']))
 		{
 			$notes = new notes();
 			$db = new db();
 
-			require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$sql = "SELECT * FROM no_categories";
@@ -67,7 +67,7 @@ class notes extends db {
 			}
 		}
 
-		if(isset(GO::modules()->modules['customfields'])){
+		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
 			$db->query("delete from cf_4 where link_id not in (select id from no_notes);");
@@ -123,7 +123,7 @@ class notes extends db {
 		{			
 			$category['name']=String::format_name($user);
 			$category['user_id']=$user['id'];
-			$category['acl_id']=GO::security()->get_new_acl('category',$user['id']);
+			$category['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('category',$user['id']);
 			
 			$notes->add_category($category);
 		}
@@ -139,10 +139,10 @@ class notes extends db {
 	{
 		global $GO_CONFIG, $GO_LANGUAGE;
 		
-		require_once(GO::config()->class_path.'/base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
 		$search = new search();
 		
-		require(GO::language()->get_language_file('notes'));
+		require($GLOBALS['GO_LANGUAGE']->get_language_file('notes'));
 		
 		$sql = "SELECT i.*,r.acl_id FROM no_notes i ".
 			"INNER JOIN no_categories r ON r.id=i.category_id WHERE i.id=?";

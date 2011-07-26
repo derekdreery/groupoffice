@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('backupmanager'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('backupmanager'));
 
 $lang['backupmanager']['name']='백업 관리자';
 $lang['backupmanager']['description']='Configure your backup cronjob';

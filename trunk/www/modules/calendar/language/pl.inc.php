@@ -8,7 +8,7 @@
 //Polish Translation v1.2
 //Author : rajmund
 //Date : January, 26 2011
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'kalendarz';
 $lang['calendar']['description'] = 'Moduł Kalendarz; Każdy użytkownik może dodawać, edytować lub usuwać terminy spotkań. Można także przeglądać terminy innych użytkowników i w razie potrzeby zmieniać je.';
 $lang['link_type'][1]='Termin';

@@ -12,8 +12,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require('../../Group-Office.php');
-GO::security()->json_authenticate('comments');
-require_once (GO::modules()->modules['comments']['class_path'].'comments.class.inc.php');
+$GLOBALS['GO_SECURITY']->json_authenticate('comments');
+require_once ($GLOBALS['GO_MODULES']->modules['comments']['class_path'].'comments.class.inc.php');
 $comments = new comments();
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 try{
@@ -22,7 +22,7 @@ try{
 		case 'comment':
 			$comment = $comments->get_comment($_REQUEST['comment_id']);
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$comment['user_name']=$GO_USERS->get_user_realname($comment['user_id']);
@@ -33,7 +33,7 @@ try{
 			break;
 		case 'comments':
 			
-			require_once(GO::config()->class_path.'/base/search.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
 			$search = new search();
 
 			$link_id = isset($_REQUEST['link_id']) ? ($_REQUEST['link_id']) : '';
@@ -41,7 +41,7 @@ try{
 
 
 			$record = $search->get_search_result($link_id, $link_type);
-			$response['permisson_level']=GO::security()->has_permission(GO::security()->user_id, $record['acl_id']);
+			$response['permisson_level']=$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $record['acl_id']);
 			$response['write_permission']=$response['permisson_level']>GO_SECURITY::WRITE_PERMISSION;
 			if(!$response['permisson_level'])
 			{
@@ -73,7 +73,7 @@ try{
 			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			
 			
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			
 			$response['total'] = $comments->get_comments($link_id, $link_type, $query, $sort, $dir, $start, $limit);

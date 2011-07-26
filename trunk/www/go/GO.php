@@ -19,31 +19,11 @@
 class GO{
 
 	private static $_classes = array(
-			'File' => 'classes/File.class.inc.php',
-			'String' => 'classes/String.class.inc.php',
-			'Number' => 'classes/Number.class.inc.php',
-			'Date' => 'classes/Date.class.inc.php',
-			'UUID' => 'classes/UUID.class.inc.php',
-			'AccessDeniedException' => 'classes/base/exceptions.class.inc.php',
-			'DatabaseInsertException' => 'classes/base/exceptions.class.inc.php',
-			'FileNotFoundException' => 'classes/base/exceptions.class.inc.php',
-			'MissingFieldException' => 'classes/base/exceptions.class.inc.php',
-			'DatabaseReplaceException' => 'classes/base/exceptions.class.inc.php',
-			'DatabaseSelectException' => 'classes/base/exceptions.class.inc.php',
-			'DatabaseDeleteException' => 'classes/base/exceptions.class.inc.php',
-			'CONFIG' => 'classes/base/config.class.inc.php',
-			'SECURITY' => 'classes/base/security.class.inc.php',
-			'MODULES' => 'classes/base/modules.class.inc.php',
-			'LANGUAGE' => 'classes/base/language.class.inc.php',
-			'EVENTS' => 'classes/base/events.class.inc.php',
+		
 	);
 	private static $_config;
-	private static $_security;
-	private static $_language;
-	private static $_modules;
-	private static $_events;
-	private static $_theme;
 	private static $_session;
+	private static $_modules;
 
 	public static $db;
 	
@@ -114,11 +94,11 @@ class GO{
 
 	/**
 	 *
-	 * @return GO_CONFIG
+	 * @return GO_Base_Config
 	 */
 	public static function config() {
 		if (!isset(self::$_config)) {
-			self::$_config = new GO_CONFIG();
+			self::$_config = new GO_Base_Config();
 		}
 		return self::$_config;
 	}
@@ -134,52 +114,6 @@ class GO{
 		return self::$_session;
 	}
 
-	/**
-	 *
-	 * @deprecated
-	 * @global type $lang
-	 * @return GO_LANGUAGE 
-	 */
-	public static function language() {
-		global $lang;
-		if (!isset(self::$_language)) {
-			self::$_language = new GO_LANGUAGE();
-		}
-		return self::$_language;
-	}
-
-	/**
-	 * @deprecated
-	 * @return GO_EVENTS 
-	 */
-	public static function events() {
-		if (!isset(self::$_events)) {
-			self::$_events = new GO_EVENTS();
-		}
-		return self::$_events;
-	}
-	
-	/**
-	 * @deprecated
-	 * @return GO_THEME 
-	 */
-	public static function theme() {
-		if (!isset(self::$_theme)) {
-			self::$_theme = new GO_THEME();
-		}
-		return self::$_theme;
-	}
-	
-	/**
-	 * @deprecated
-	 * @return GO_SECURITY
-	 */
-	public static function security() {
-		if (!isset(self::$_security)) {
-			self::$_security = new GO_SECURITY();
-		}
-		return self::$_security;
-	}
 
 	
 	/**
@@ -244,10 +178,9 @@ class GO{
 	public static function init() {
 		global $lang;
 
-		spl_autoload_register(array('GO', 'autoload'));
-		require(dirname(dirname(__FILE__)) . '/functions.inc.php');
-
+		spl_autoload_register(array('GO', 'autoload'));	
 		
+		GO::session();
 
 
 //		if (!defined('GO_NO_SESSION')) {
@@ -274,73 +207,124 @@ class GO{
 		//go_debug('[' . date('Y-m-d G:i') . '] Start of new request: ' . $_SERVER['PHP_SELF']);
 
 
-		
+		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
+			//undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
+			if (get_magic_quotes_gpc()) {
 
-		if (!empty($_REQUEST['SET_LANGUAGE'])) {
-			self::language()->set_language($_REQUEST['SET_LANGUAGE']);
-		}
-
-
-		define('GO_LOADED', true);
-
-//undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
-		if (get_magic_quotes_gpc()) {
-
-			function stripslashes_array($data) {
-				if (is_array($data)) {
-					foreach ($data as $key => $value) {
-						$data[$key] = stripslashes_array($value);
+				function stripslashes_array($data) {
+					if (is_array($data)) {
+						foreach ($data as $key => $value) {
+							$data[$key] = stripslashes_array($value);
+						}
+						return $data;
+					} else {
+						return stripslashes($data);
 					}
-					return $data;
-				} else {
-					return stripslashes($data);
 				}
+
+				$_REQUEST = stripslashes_array($_REQUEST);
+				$_GET = stripslashes_array($_GET);
+				$_POST = stripslashes_array($_POST);
+				$_COOKIE = stripslashes_array($_COOKIE);
 			}
 
-			$_REQUEST = stripslashes_array($_REQUEST);
-			$_GET = stripslashes_array($_GET);
-			$_POST = stripslashes_array($_POST);
-			$_COOKIE = stripslashes_array($_COOKIE);
-		}
+			umask(0);
 
-		umask(0);
-
-		/*
-		 * License checking for pro modules. Don't remove it or Group-Office will fail
-		 * to load!
-		 */
-		if (PHP_SAPI != 'cli' && file_exists(GO::config()->root_path . 'modules/professional/check.php')) {
-			require_once(GO::config()->root_path . 'modules/professional/check.php');
-			check_license();
-		}
+			/*
+			 * License checking for pro modules. Don't remove it or Group-Office will fail
+			 * to load!
+			 */
+			if (PHP_SAPI != 'cli' && file_exists(GO::config()->root_path . 'modules/professional/check.php')) {
+				require_once(GO::config()->root_path . 'modules/professional/check.php');
+				check_license();
+			}
 
 
-		require(GO::language()->get_base_language_file('common'));
+			//require($GLOBALS['GO_LANGUAGE']->get_base_language_file('common'));
 
-		if (GO::config()->log) {
-			$username = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
-			openlog('[Group-Office][' . date('Ymd G:i') . '][' . $username . ']', LOG_PERROR, LOG_USER);
-		}
+			if (GO::config()->log) {
+				$username = isset(GO::session()->values['username']) ? GO::session()->values['username'] : 'notloggedin';
+				openlog('[Group-Office][' . date('Ymd G:i') . '][' . $username . ']', LOG_PERROR, LOG_USER);
+			}
 
-		if (self::security()->user_id > 0) {
-			self::config()->tmpdir = self::config()->tmpdir . self::security()->user_id . '/';
-		}
+			if (!empty(self::session()->values['user_id'])) {
+				self::config()->tmpdir = self::config()->tmpdir . self::session()->values['user_id'] . '/';
+			}
 
-		if (function_exists('mb_internal_encoding'))
-			mb_internal_encoding("UTF-8");
+			if (function_exists('mb_internal_encoding'))
+				mb_internal_encoding("UTF-8");
 
 
-		if (!GO::config()->enabled) {
-			die('<h1>Disabled</h1>This Group-Office installation has been disabled');
-		}
+			if (!GO::config()->enabled) {
+				die('<h1>Disabled</h1>This Group-Office installation has been disabled');
+			}
 
-		if (GO::config()->debug) {
-			$_SESSION['connect_count'] = 0;
-			$_SESSION['query_count'] = 0;
+			if (GO::config()->debug) {
+				$_SESSION['connect_count'] = 0;
+				$_SESSION['query_count'] = 0;
+			}
 		}
 		
-		GO::session()->setDefaults();
+		//GO::session()->setDefaults();
 		
 		
+	}
+	
+	
+		/**
+	 * Add a log entry to syslog if enabled in config.php
+	 *
+	 * @param	int $level The log level. See sys_log() of the PHP docs
+	 * @param	string $message The log message
+	 * @access public
+	 * @return void
+	 */
+	function log($level, $message) {
+		if (self::config()->log) {
+			$messages = str_split($message, 500);
+			for ($i = 0; $i < count($messages); $i++) {
+				syslog($level, $messages[$i]);
+			}
+		}
+	}
+
+	function infolog($message) {
+
+		if (self::config()->log) {
+
+			if (empty(GO::session()->logdircheck)) {
+				File::mkdir(dirname(self::config()->info_log));
+				GO::session()->logdircheck = true;
+			}
+
+			$msg = '[' . date('Y-m-d G:i:s') . ']';
+
+			if (GO::user()) {
+				$msg .= '[' . self::user()->username . '] ';
+			}
+
+			$msg.= $message;
+
+			@file_put_contents(self::config()->info_log, $msg . "\n", FILE_APPEND);
+		}
+	}
+
+	/**
+	 * Write's to a debug log.
+	 *
+	 * @param string $text log entry
+	 */
+	public static function debug($text, $config=false) {
+
+		if (self::config()->debug || self::config()->debug_log) {
+			if (!is_string($text)) {
+				$text = var_export($text, true);
+			}
+
+			if ($text == '')
+				$text = '(empty string)';
+
+			file_put_contents(self::config()->file_storage_path . 'debug.log', $text . "\n", FILE_APPEND);
+		}
 	}
 }

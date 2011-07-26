@@ -14,10 +14,10 @@
 
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('mediawiki');
+$GLOBALS['GO_SECURITY']->json_authenticate('mediawiki');
 
-require_once (GO::modules()->modules['mediawiki']['class_path']."mediawiki.class.inc.php");
-//require_once (GO::language()->get_language_file('notes'));
+require_once ($GLOBALS['GO_MODULES']->modules['mediawiki']['class_path']."mediawiki.class.inc.php");
+//require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('notes'));
 
 $mw = new mediawiki();
 
@@ -25,9 +25,9 @@ try{
 	switch($_REQUEST['task'])
 	{
 		case 'save_settings':
-			GO::config()->save_setting('mediawiki_external_url', $_POST['external_url']);
+			$GLOBALS['GO_CONFIG']->save_setting('mediawiki_external_url', $_POST['external_url']);
 			$response['data']['external_url'] = $_POST['external_url'];
-			GO::config()->save_setting('mediawiki_title', $_POST['title']);
+			$GLOBALS['GO_CONFIG']->save_setting('mediawiki_title', $_POST['title']);
 			$response['data']['title'] = $_POST['title'];
 
 			$response['success']=true;

@@ -19,7 +19,7 @@
 //Author : rajmund
 //Date : January, 26 2011
 
-require(GO::language()->get_fallback_language_file('mailings'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('mailings'));
 
 $lang['mailings']['name'] = 'Szablony i listy adresowe';
 $lang['mailings']['description'] = 'Moduł zarządzania kontaktami.';

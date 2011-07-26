@@ -1,5 +1,5 @@
 <?php
-require_once(GO::config()->root_path.'install/updatescripts/functions.inc.php');
+require_once($GLOBALS['GO_CONFIG']->root_path.'install/updatescripts/functions.inc.php');
 
 $db->query("SELECT * FROM cal_calendars WHERE acl_read>0");
 while($folder=$db->next_record()){

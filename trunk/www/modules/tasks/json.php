@@ -12,11 +12,11 @@
 
 require('../../Group-Office.php');
 
-GO::security()->json_authenticate('tasks');
+$GLOBALS['GO_SECURITY']->json_authenticate('tasks');
 
 
 
-require_once (GO::modules()->modules['tasks']['class_path']."tasks.class.inc.php");
+require_once ($GLOBALS['GO_MODULES']->modules['tasks']['class_path']."tasks.class.inc.php");
 $tasks = new tasks();
 $tasks2 = new tasks();
 
@@ -30,9 +30,9 @@ try {
 		case 'task_with_items':
 		case 'task':
 
-			require(GO::config()->class_path.'ical2array.class.inc');
-			require(GO::config()->class_path.'Date.class.inc.php');
-			require_once(GO::language()->get_language_file('tasks'));
+			require($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
+			require($GLOBALS['GO_CONFIG']->class_path.'Date.class.inc.php');
+			require_once($GLOBALS['GO_LANGUAGE']->get_language_file('tasks'));
 
 			$task = $tasks->get_task(($_REQUEST['task_id']));
 			$tasklist = $tasks->get_tasklist($task['tasklist_id']);
@@ -43,7 +43,7 @@ try {
 
 			$response['data']['status_text']=isset($lang['tasks']['statuses'][$task['status']]) ? $lang['tasks']['statuses'][$task['status']] : $lang['tasks']['statuses']['NEEDS-ACTION'];
 
-			$response['data']['permission_level']=GO::security()->has_permission(GO::security()->user_id, $tasklist['acl_id']);
+			$response['data']['permission_level']=$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $tasklist['acl_id']);
 			$response['data']['write_permission']=$response['data']['permission_level']>1;
 			if(!$response['data']['permission_level']) {
 				throw new AccessDeniedException();
@@ -166,7 +166,7 @@ try {
 
 			if($_task!='task') {
 
-				require_once(GO::config()->class_path.'base/users.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 				$GO_USERS = new GO_USERS();
 
 				$response['data']['user_name']=$GO_USERS->get_user_realname($task['user_id']);
@@ -175,10 +175,10 @@ try {
 				load_standard_info_panel_items($response, 12);
 			}else
 			{
-				if(isset(GO::modules()->modules['customfields'])) {
-					require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+				if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
+					require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 					$cf = new customfields();
-					$values = $cf->get_values(GO::security()->user_id, 12, $response['data']['id']);
+					$values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 12, $response['data']['id']);
 					$response['data']=array_merge($response['data'], $values);
 				}
 			}
@@ -189,7 +189,7 @@ try {
 
 
 		case 'tasklist':
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$response['data']=$tasks->get_tasklist(($_POST['tasklist_id']));
@@ -199,9 +199,9 @@ try {
 
 		case 'init':
 
-			$_REQUEST['limit']=GO::config()->nav_page_size;
+			$_REQUEST['limit']=$GLOBALS['GO_CONFIG']->nav_page_size;
 
-			$categories = GO::config()->get_setting('tasks_categories_filter', GO::security()->user_id);
+			$categories = $GLOBALS['GO_CONFIG']->get_setting('tasks_categories_filter', $GLOBALS['GO_SECURITY']->user_id);
 			$categories = ($categories) ? explode(',',$categories) : array();
 
 			$response['categories']['results'] = array();
@@ -214,7 +214,7 @@ try {
 				$response['categories']['results'][] = $category;
 			}
 
-			$tasks->get_tasklists_json($response['tasklists'],'read','',0,GO::config()->nav_page_size,'name','ASC');
+			$tasks->get_tasklists_json($response['tasklists'],'read','',0,$GLOBALS['GO_CONFIG']->nav_page_size,'name','ASC');
 		break;
 
 		case 'tasklists':
@@ -228,7 +228,7 @@ try {
 					foreach($tasklists as $tasklist_id)
 					{
 						$tasklist = $tasks->get_tasklist($tasklist_id);
-						if(GO::modules()->modules['tasks']['permission_level'] < GO_SECURITY::WRITE_PERMISSION || GO::security()->has_permission(GO::security()->user_id, $tasklist['acl_id']) < GO_SECURITY::DELETE_PERMISSION)
+						if($GLOBALS['GO_MODULES']->modules['tasks']['permission_level'] < GO_SECURITY::WRITE_PERMISSION || $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $tasklist['acl_id']) < GO_SECURITY::DELETE_PERMISSION)
 						{
 							throw new AccessDeniedException();
 						}
@@ -259,10 +259,10 @@ try {
 
 		case 'tasks':
 
-			GO::language()->require_language_file('tasks');
+			$GLOBALS['GO_LANGUAGE']->require_language_file('tasks');
 			$readable_tasklists = array();
 			if(isset($_REQUEST['portlet'])) {
-				$user_id = GO::security()->user_id;
+				$user_id = $GLOBALS['GO_SECURITY']->user_id;
 				$response['data']['write_permission']=true;
 
 				$show_categories = array();
@@ -289,16 +289,16 @@ try {
 				$response['data']['write_permission'] = false;
 				/*if(isset($_POST['tasklists'])) {
 					$tasklists = json_decode($_POST['tasklists'], true);
-					GO::config()->save_setting('tasks_tasklists_filter',implode(',', $tasklists), GO::security()->user_id);
+					$GLOBALS['GO_CONFIG']->save_setting('tasks_tasklists_filter',implode(',', $tasklists), $GLOBALS['GO_SECURITY']->user_id);
 				}else {
-					$tasklists = GO::config()->get_setting('tasks_tasklists_filter', GO::security()->user_id);
+					$tasklists = $GLOBALS['GO_CONFIG']->get_setting('tasks_tasklists_filter', $GLOBALS['GO_SECURITY']->user_id);
 					$tasklists = ($tasklists) ? explode(',',$tasklists) : array();
 				}*/
 
 				$tasklists=get_multiselectgrid_selections('tasklists');
 
 				if(!count($tasklists)) {
-					$tasklist = $tasks->get_default_tasklist(GO::security()->user_id);
+					$tasklist = $tasks->get_default_tasklist($GLOBALS['GO_SECURITY']->user_id);
 					$tasklists[] = $tasklist['id'];
 				}
 
@@ -311,7 +311,7 @@ try {
 				{
 					$tasklist = $tasks->get_tasklist($tasklist_id);
 
-					$permission_level = GO::security()->has_permission(GO::security()->user_id, $tasklist['acl_id']);
+					$permission_level = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $tasklist['acl_id']);
 					if($permission_level) {
 						$readable_tasklists[] = $tasklist_id;
 						$tasklist_names[] = $tasklist['name'];
@@ -336,7 +336,7 @@ try {
 					throw new AccessDeniedException();
 				}
 				/*}else {
-					$user_id = GO::security()->user_id;
+					$user_id = $GLOBALS['GO_SECURITY']->user_id;
 				}*/
 
 				if(isset($_POST['delete_keys'])) {
@@ -354,7 +354,7 @@ try {
 							throw new AccessDeniedException();
 						}
 						if(count($delete_tasks) != count($tasks_deleted)) {
-							require_once(GO::language()->get_language_file('tasks'));
+							require_once($GLOBALS['GO_LANGUAGE']->get_language_file('tasks'));
 							$response['feedback'] = $lang['tasks']['incomplete_delete'];
 						}
 						$response['deleteSuccess']=true;
@@ -367,9 +367,9 @@ try {
 
 				if(isset($_POST['categories'])) {
 					$show_categories = json_decode($_POST['categories'], true);
-					GO::config()->save_setting('tasks_categories_filter',implode(',', $show_categories), GO::security()->user_id);
+					$GLOBALS['GO_CONFIG']->save_setting('tasks_categories_filter',implode(',', $show_categories), $GLOBALS['GO_SECURITY']->user_id);
 				}else {
-					$show_categories = GO::config()->get_setting('tasks_categories_filter', GO::security()->user_id);
+					$show_categories = $GLOBALS['GO_CONFIG']->get_setting('tasks_categories_filter', $GLOBALS['GO_SECURITY']->user_id);
 					$show_categories = ($show_categories) ? explode(',',$show_categories) : array();
 				}
 			}
@@ -379,7 +379,7 @@ try {
 				$task['id']=$_POST['completed_task_id'];
 
 				$old_task = $tasks->get_task($task['id']);
-				if(GO::security()->has_permission(GO::security()->user_id, $old_task['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
+				if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_task['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new AccessDeniedException();
 				}
 
@@ -418,10 +418,10 @@ try {
 			//$show_inactive=isset($_POST['show_inactive']) && $_POST['show_inactive']=='true';
 
 			if(isset($_POST['show'])) {
-				GO::config()->save_setting('tasks_filter', $_POST['show'], GO::security()->user_id);
+				$GLOBALS['GO_CONFIG']->save_setting('tasks_filter', $_POST['show'], $GLOBALS['GO_SECURITY']->user_id);
 			}
 			if(empty($_POST['portlet'])){
-				$show=GO::config()->get_setting('tasks_filter', GO::security()->user_id);
+				$show=$GLOBALS['GO_CONFIG']->get_setting('tasks_filter', $GLOBALS['GO_SECURITY']->user_id);
 			}else
 			{
 				$show='portlet';
@@ -431,8 +431,8 @@ try {
 			$response['results']=array();
 
 
-			if(GO::modules()->has_module('customfields')) {
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+			if($GLOBALS['GO_MODULES']->has_module('customfields')) {
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 			}else {
 				$cf=false;
@@ -473,7 +473,7 @@ try {
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 
-			if($tasks->get_visible_tasklists(GO::security()->user_id) == 0) {
+			if($tasks->get_visible_tasklists($GLOBALS['GO_SECURITY']->user_id) == 0) {
 				$visible_tls = array('0');
 			}
 
@@ -482,7 +482,7 @@ try {
 				$visible_tls[] = $tasks->f('tasklist_id');
 			}
 
-			$response['total'] = $tasks->get_authorized_tasklists('read', $query, GO::security()->user_id, $start, $limit, $sort, $dir);
+			$response['total'] = $tasks->get_authorized_tasklists('read', $query, $GLOBALS['GO_SECURITY']->user_id, $start, $limit, $sort, $dir);
 
 			$response['results']=array();
 
@@ -505,7 +505,7 @@ try {
 					foreach($categories as $category_id)
 					{
 						$category = $tasks->get_category($category_id);
-						if(GO::security()->has_admin_permission(GO::security()->user_id) || ($category['user_id'] == GO::security()->user_id))
+						if($GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id) || ($category['user_id'] == $GLOBALS['GO_SECURITY']->user_id))
 						{
 							$tasks->delete_category($category_id);
 						}else
@@ -520,7 +520,7 @@ try {
 				}
 			}
 
-			$categories = GO::config()->get_setting('tasks_categories_filter', GO::security()->user_id);
+			$categories = $GLOBALS['GO_CONFIG']->get_setting('tasks_categories_filter', $GLOBALS['GO_SECURITY']->user_id);
 			$categories = ($categories) ? explode(',',$categories) : array();
 
 			$sort = isset($_REQUEST['sort']) ? ($_REQUEST['sort']) : 'name';
@@ -531,7 +531,7 @@ try {
 			$response['results'] = array();
 			$response['total'] = $tasks->get_categories();
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			while($category = $tasks->next_record())

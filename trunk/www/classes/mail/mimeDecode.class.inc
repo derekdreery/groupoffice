@@ -1,6 +1,6 @@
 <?php
 
-require_once(GO::config()->class_path."mail/imap.class.inc");
+require_once($GLOBALS['GO_CONFIG']->class_path."mail/imap.class.inc");
 
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 // +-----------------------------------------------------------------------+

@@ -13,7 +13,7 @@
  */
 
 require('Group-Office.php');
-require_once(GO::config()->class_path.'export/export_query.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'export/export_query.class.inc.php');
 
 ini_set('memory_limit', '200M');
 define('EXPORTING', true);
@@ -37,15 +37,15 @@ if(strpos($_SERVER['QUERY_STRING'], '<script') || strpos(urldecode($_SERVER['QUE
 
 $filename = $type.'.class.inc.php';
 
-//GO::config()->root_path.$_REQUEST['export_directory'].$filename;
+//$GLOBALS['GO_CONFIG']->root_path.$_REQUEST['export_directory'].$filename;
 
-if(isset($_REQUEST['export_directory']) && file_exists(GO::config()->root_path.$_REQUEST['export_directory'].$filename)){
-	$file = GO::config()->root_path.$_REQUEST['export_directory'].$filename;
+if(isset($_REQUEST['export_directory']) && file_exists($GLOBALS['GO_CONFIG']->root_path.$_REQUEST['export_directory'].$filename)){
+	$file = $GLOBALS['GO_CONFIG']->root_path.$_REQUEST['export_directory'].$filename;
 }else
 {
-	$file = GO::config()->class_path.'export/'.$filename;
+	$file = $GLOBALS['GO_CONFIG']->class_path.'export/'.$filename;
 	if(!file_exists($file)){
-		$file = GO::config()->file_storage_path.'customexports/'.$filename;
+		$file = $GLOBALS['GO_CONFIG']->file_storage_path.'customexports/'.$filename;
 	}
 	if(!file_exists($file)){
 		die('Custom export class not found.');

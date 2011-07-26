@@ -50,7 +50,7 @@ class log extends db {
 		}		
 		$sql .= "gl.* FROM go_log gl INNER JOIN go_users gu ON (gl.user_id = gu.id) ";
  		if(!empty($advanced_query)){
-			require_once(GO::config()->class_path.'advanced_query.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'advanced_query.class.inc.php');
 			$aq = new advanced_query();
 
 			$sql .= ' WHERE'.$aq->parse_advanced_query($advanced_query);
@@ -84,14 +84,14 @@ class log extends db {
 
 		if(!isset($GO_USERS)){
 			global $GO_CONFIG;
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 		}
 		
 		if(!isset($lang['link_type']))
 		{
 			global $GO_LANGUAGE;
-			GO::language()->get_all();
+			$GLOBALS['GO_LANGUAGE']->get_all();
 		}
 		
 		$entry['user_name']=$GO_USERS->get_user_realname($entry['user_id']);
@@ -106,7 +106,7 @@ class log extends db {
 			$log['link_type']=$link_type;
 			$log['time']=time();
 			$log['text']=$text;
-			$log['user_id']=GO::security()->user_id;
+			$log['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 			$log['id']=$this->nextid('go_log');
 
 			return $this->insert_row('go_log', $log);

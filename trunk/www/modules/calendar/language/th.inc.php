@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'ปฏิทิน';
 $lang['calendar']['description'] = 'ผู้ใช้สามารถเพิ่ม ,แก้ไข และลบตารางการนัดหมาย โดยผู้ใช้ท่านอื่นสามารถทำการ แก้ไข เมื่อมีการกำหนดสิทธิให้สามารถแก้ไขได้.';//Every user can add. edit or delete appointments Also appointment. from other users can be viewed and if necessary it can be changed
 

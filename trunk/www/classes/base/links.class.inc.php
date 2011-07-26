@@ -283,7 +283,7 @@ class GO_LINKS extends db
 	{
 		global $GO_CONFIG;
 		
-		require_once(GO::config()->class_path . '/base/search.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path . '/base/search.class.inc.php');
 		$search = new search();
 		
 		$search->global_search(1, "", 0, 0, 'id','ASC', array(), $src_link_id, $src_link_type,0);

@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('cms'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('cms'));
 $lang['cms']['name']='Sito web';
 $lang['cms']['description']='Inserisci qui una descrizione';
 $lang['cms']['site']='Sito';

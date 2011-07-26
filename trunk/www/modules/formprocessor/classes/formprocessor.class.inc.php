@@ -15,7 +15,7 @@ class formprocessor{
 	{
 		global $lang, $GO_LANGUAGE;
 
-		require_once(GO::language()->get_language_file('addressbook'));
+		require_once($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
 
 		$fields['name']=$lang['common']['name'];
 		$fields['title']=$lang['common']['title'];
@@ -60,15 +60,15 @@ class formprocessor{
 		$this->check_required();
 
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		
 
-		if(isset($_POST['language']) && $_POST['language']!=GO::language()->language)
+		if(isset($_POST['language']) && $_POST['language']!=$GLOBALS['GO_LANGUAGE']->language)
 		{
-			GO::language()->set_language($_POST['language']);
-			require(GO::language()->get_base_language_file('common'));
+			$GLOBALS['GO_LANGUAGE']->set_language($_POST['language']);
+			require($GLOBALS['GO_LANGUAGE']->get_base_language_file('common'));
 		}
 
 		if(!isset($_POST['salutation']))
@@ -84,7 +84,7 @@ class formprocessor{
 
 			if($_POST['password1'] != $_POST['password2'])
 			{
-				require(GO::language()->get_language_file('users'));
+				require($GLOBALS['GO_LANGUAGE']->get_language_file('users'));
 				throw new Exception($lang['users']['error_match_pass']);
 			}
 
@@ -99,7 +99,7 @@ class formprocessor{
 
 			$this->user_id=$user_id=$GO_USERS->add_user($user_credentials, $this->user_groups, $this->visible_user_groups);
 
-			require_once(GO::config()->class_path.'base/auth.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/auth.class.inc.php');
 			$GO_AUTH = new GO_AUTH();
 
 			$GO_AUTH->login($user_credentials['username'], $user_credentials['password']);
@@ -112,8 +112,8 @@ class formprocessor{
 
 		if(!empty($_REQUEST['addressbook']))
 		{
-			require(GO::language()->get_language_file('addressbook'));
-			require_once(GO::modules()->modules['addressbook']['class_path'].'addressbook.class.inc.php');
+			require($GLOBALS['GO_LANGUAGE']->get_language_file('addressbook'));
+			require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
 			$ab = new addressbook();
 
 			$addressbook = $ab->get_addressbook_by_name($_REQUEST['addressbook']);
@@ -170,7 +170,7 @@ class formprocessor{
 				{
 					$company['addressbook_id'] = $contact_credentials['addressbook_id'];
 					$company['name'] = $contact_credentials['company']; // bedrijfsnaam
-					$company['user_id'] = GO::security()->user_id;
+					$company['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
 					$company['iso_address_format']=$company['post_iso_address_format']=$addressbook['default_iso_address_format'];
 					$contact_credentials['company_id'] = $ab->add_company($company);
 				}
@@ -235,8 +235,8 @@ class formprocessor{
 				$this->contact_id=$contact_id = $ab->add_contact($contact_credentials);
 				$files_folder_id=$contact_credentials['files_folder_id'];
 
-				if(isset($_POST['contact_id']) && empty($user_id) && GO::security()->user_id>0)
-					$user_id=$this->user_id=GO::security()->user_id;
+				if(isset($_POST['contact_id']) && empty($user_id) && $GLOBALS['GO_SECURITY']->user_id>0)
+					$user_id=$this->user_id=$GLOBALS['GO_SECURITY']->user_id;
 
 				if(!empty($user_id)){
 					$user['id']=$user_id;
@@ -250,15 +250,15 @@ class formprocessor{
 			}
 
 			//var_dump($_FILES);
-			if(GO::modules()->modules['files'])
+			if($GLOBALS['GO_MODULES']->modules['files'])
 			{
-				require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 				$fs = new files();
 				$path = $fs->build_path($files_folder_id);
 
 				$response['files_folder_id']=$files_folder_id;
 
-				$full_path = GO::config()->file_storage_path.$path;				
+				$full_path = $GLOBALS['GO_CONFIG']->file_storage_path.$path;				
 
 				foreach($_FILES as $key=>$file)
 				{
@@ -266,7 +266,7 @@ class formprocessor{
 						if (is_uploaded_file($file['tmp_name']))
 						{
 							move_uploaded_file($file['tmp_name'], $full_path.'/'.$file['name']);
-							chmod($full_path.'/'.$file['name'], GO::config()->file_create_mode);
+							chmod($full_path.'/'.$file['name'], $GLOBALS['GO_CONFIG']->file_create_mode);
 
 							$fs->import_file($full_path.'/'.$file['name'], $files_folder_id);
 						}
@@ -274,17 +274,17 @@ class formprocessor{
 				}
 			}
 
-			if(isset(GO::modules()->modules['customfields']))
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields']))
 			{
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
 
 				$cf->update_fields(1, $contact_id, 2, $_POST, empty($existing_contact));
 			}
 
-			if(isset(GO::modules()->modules['mailings']) && isset($_POST['mailings']))
+			if(isset($GLOBALS['GO_MODULES']->modules['mailings']) && isset($_POST['mailings']))
 			{
-				require_once(GO::modules()->modules['mailings']['class_path'].'mailings.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 				$ml = new mailings();
 
 				foreach($_POST['mailings'] as $mailing_name)
@@ -305,8 +305,8 @@ class formprocessor{
 
 			if ($this->contact_id > 0) {
 				if (isset($_FILES['photo']['tmp_name']) && is_uploaded_file($_FILES['photo']['tmp_name'])) {
-					move_uploaded_file($_FILES['photo']['tmp_name'], GO::config()->tmpdir . $_FILES['photo']['name']);
-					$tmp_file = GO::config()->tmpdir . $_FILES['photo']['name'];
+					move_uploaded_file($_FILES['photo']['tmp_name'], $GLOBALS['GO_CONFIG']->tmpdir . $_FILES['photo']['name']);
+					$tmp_file = $GLOBALS['GO_CONFIG']->tmpdir . $_FILES['photo']['name'];
 
 					$result['image'] = $ab->save_contact_photo($tmp_file, $this->contact_id);
 				}
@@ -350,12 +350,12 @@ class formprocessor{
 
 					$body .= '<br /><a href="'.$url.'">'.$lang['addressbook']['clickHereToView'].'</a>'."<br />";
 
-					$mail_from = !empty($_POST['mail_from']) ? $_POST['mail_from'] : GO::config()->webmaster_email;
+					$mail_from = !empty($_POST['mail_from']) ? $_POST['mail_from'] : $GLOBALS['GO_CONFIG']->webmaster_email;
 
-					require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+					require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 					$swift = new GoSwift(implode(',', $mail_to), $lang['addressbook']['newContactAdded']);
 					$swift->set_body($body);
-					$swift->set_from($mail_from, GO::config()->title);
+					$swift->set_from($mail_from, $GLOBALS['GO_CONFIG']->title);
 					try{
 						$swift->sendmail();
 					}
@@ -384,10 +384,10 @@ class formprocessor{
 				$subject = trim(substr($email, 0, $pos));
 				$body = trim(substr($email,$pos));
 
-				require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 				$swift = new GoSwift($_POST['email'], $subject);
 				$swift->set_body($body);
-				$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
+				$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 				$swift->sendmail();
 			}
 
@@ -396,12 +396,12 @@ class formprocessor{
 				if(File::path_leads_to_parent($_POST['confirmation_email']))
 					throw new Exception('Invalid path');
 				
-				$path = GO::config()->file_storage_path.$_POST['confirmation_email'];
+				$path = $GLOBALS['GO_CONFIG']->file_storage_path.$_POST['confirmation_email'];
 				if(!file_exists($path)){
-					$path = dirname(GO::config()->get_config_file()).'/'.$_POST['confirmation_email'];
+					$path = dirname($GLOBALS['GO_CONFIG']->get_config_file()).'/'.$_POST['confirmation_email'];
 				}
 				$email = file_get_contents($path);
-				require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 				$swift = new GoSwiftImport($email);
 				$body=$swift->body;
 
@@ -409,8 +409,8 @@ class formprocessor{
 					$body = str_replace('{'.$key.'}', $value, $body);
 				}
 
-				if(isset(GO::modules()->modules['mailings'])){
-					require_once(GO::modules()->modules['mailings']['path'].'classes/templates.class.inc.php');
+				if(isset($GLOBALS['GO_MODULES']->modules['mailings'])){
+					require_once($GLOBALS['GO_MODULES']->modules['mailings']['path'].'classes/templates.class.inc.php');
 					$tp = new templates();
 
 					$body=$tp->replace_contact_data_fields($body, $this->contact_id, false);
@@ -512,7 +512,7 @@ class formprocessor{
 		//if(empty($body))
 			//throw new Exception($lang['common']['missingField']);
 
-		require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($email, $_POST['subject']);
 		$swift->set_body($body, 'plain');
 		$swift->set_from($from_email, $from_name);

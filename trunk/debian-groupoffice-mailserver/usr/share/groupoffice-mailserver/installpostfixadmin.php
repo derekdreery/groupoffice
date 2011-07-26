@@ -4,14 +4,14 @@ require('/etc/groupoffice/config.php');
 require($config['root_path'].'Group-Office.php');
 
 try{
-	if(!isset(GO::modules()->modules['postfixadmin']))
+	if(!isset($GLOBALS['GO_MODULES']->modules['postfixadmin']))
 	{
-		GO::modules()->add_module('postfixadmin');
+		$GLOBALS['GO_MODULES']->add_module('postfixadmin');
 	}
 
-	if(!isset(GO::modules()->modules['serverclient']))
+	if(!isset($GLOBALS['GO_MODULES']->modules['serverclient']))
 	{
-		GO::modules()->add_module('serverclient');
+		$GLOBALS['GO_MODULES']->add_module('serverclient');
 	}
 }
 catch(Exception $e){

@@ -12,8 +12,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require('../../Group-Office.php');
-GO::security()->json_authenticate('gnupg');
-require_once (GO::modules()->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+$GLOBALS['GO_SECURITY']->json_authenticate('gnupg');
+require_once ($GLOBALS['GO_MODULES']->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 $gnupg = new gnupg();
 $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 
@@ -22,16 +22,16 @@ try{
 	{
 		case 'check_public_key_attachment':
 			
-			require_once (GO::config()->class_path."mail/imap.class.inc");
-			require_once (GO::modules()->modules['email']['class_path']."cached_imap.class.inc.php");
-			require_once (GO::modules()->modules['email']['class_path']."email.class.inc.php");
+			require_once ($GLOBALS['GO_CONFIG']->class_path."mail/imap.class.inc");
+			require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path']."cached_imap.class.inc.php");
+			require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
 			
 			$email = new email();
 			$imap = new cached_imap();
 
 			$account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 
-			if($account['user_id']!=GO::security()->user_id) {
+			if($account['user_id']!=$GLOBALS['GO_SECURITY']->user_id) {
 				die($lang['common']['accessDenied']);
 			}
 			
@@ -53,7 +53,7 @@ try{
 
 			unset($_SESSION['GO_SESSION']['gnupg']['public_key_attachment']);
 			
-			require(GO::language()->get_language_file('gnupg'));
+			require($GLOBALS['GO_LANGUAGE']->get_language_file('gnupg'));
 			
 			$response['feedback']=$lang['gnupg']['importSuccessful'];
 			$response['success']=true;		
@@ -70,7 +70,7 @@ try{
 		case 'gen_key':
 			session_write_close();
 
-			require_once(GO::modules()->modules['email']['class_path'].'email.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['email']['class_path'].'email.class.inc.php');
 			$email = new email();
 			
 			$account = $email->get_account($_POST['account_id']);

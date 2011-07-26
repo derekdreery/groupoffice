@@ -18,18 +18,18 @@ class bookmarks extends db {
 
 		global $GO_SECURITY, $GO_MODULES;
 
-		if(GO::security()->logged_in()){
+		if($GLOBALS['GO_SECURITY']->logged_in()){
 			echo '<style>';
 
 			$bookmarks = new bookmarks();
 
-			$bookmarks->get_authorized_bookmarks(GO::security()->user_id);
+			$bookmarks->get_authorized_bookmarks($GLOBALS['GO_SECURITY']->user_id);
 			while ($bookmarks->next_record()) {
 				$bookmark = $bookmarks->record;
 				if ($bookmark['behave_as_module']) {
 
 					if ($bookmark['public_icon'] == '1') {
-						$bookmark['thumb'] = GO::modules()->modules['bookmarks']['url'].$bookmark['logo'];
+						$bookmark['thumb'] = $GLOBALS['GO_MODULES']->modules['bookmarks']['url'].$bookmark['logo'];
 					} else {
 						$bookmark['thumb'] = get_thumb_url($bookmark['logo'], 16, 16, 0);
 					}
@@ -47,7 +47,7 @@ class bookmarks extends db {
 
 		$bookmarks = new bookmarks();
 
-		$bookmarks->get_authorized_bookmarks(GO::security()->user_id);
+		$bookmarks->get_authorized_bookmarks($GLOBALS['GO_SECURITY']->user_id);
 		while ($bookmarks->next_record()) {
 			$bookmark = $bookmarks->record;
 			if ($bookmark['behave_as_module']) {
@@ -125,7 +125,7 @@ class bookmarks extends db {
 		}
 
 		global $GO_SECURITY;
-		GO::security()->delete_acl($category['acl_id']);
+		$GLOBALS['GO_SECURITY']->delete_acl($category['acl_id']);
 
 		return $this->query("DELETE FROM bm_categories WHERE id=" . $this->escape($category_id));
 	}
@@ -247,7 +247,7 @@ class bookmarks extends db {
 		global $GO_SECURITY;
 		//user id of the category changed. Change the owner of the ACL as well
 		if (isset($category['user_id']) && $old_category['user_id'] != $category['user_id']) {
-			GO::security()->chown_acl($old_category['acl_id'], $category['user_id']);
+			$GLOBALS['GO_SECURITY']->chown_acl($old_category['acl_id'], $category['user_id']);
 		}
 
 		return $this->update_row('bm_categories', 'id', $category);

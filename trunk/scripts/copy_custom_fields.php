@@ -9,11 +9,11 @@ ini_set('max_execution_time', 0);
 
 require('../www/Group-Office.php');
 
-require_once(GO::modules()->modules['addressbook']['class_path'] . 'addressbook.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'] . 'addressbook.class.inc.php');
 $ab = new addressbook();
 
 
-require_once(GO::modules()->modules['customfields']['class_path'] . 'customfields.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'] . 'customfields.class.inc.php');
 $cf = new customfields();
 
 

@@ -63,8 +63,8 @@ class GO_LANGUAGE extends db {
 		
 		global $GO_CONFIG;
 
-		$this->language_path = GO::config()->root_path.GO::config()->language_path.'/';
-		$this->default_language = GO::config()->language;
+		$this->language_path = $GLOBALS['GO_CONFIG']->root_path.$GLOBALS['GO_CONFIG']->language_path.'/';
+		$this->default_language = $GLOBALS['GO_CONFIG']->language;
 
 		if (!empty($_SESSION['GO_SESSION']['language'])) {
 			$this->language = $_SESSION['GO_SESSION']['language'];
@@ -122,7 +122,7 @@ class GO_LANGUAGE extends db {
 				SetCookie("GO_LANGUAGE",$language,time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
 			}
 			if(is_object($GO_LANGUAGE))
-				require(GO::language()->get_base_language_file('common'));
+				require($GLOBALS['GO_LANGUAGE']->get_base_language_file('common'));
 				
 			return true;
 		}else
@@ -192,7 +192,7 @@ class GO_LANGUAGE extends db {
 		if(!isset($language))
 			$language = $this->language;
 
-		$module_path = GO::config()->module_path.$module_id;
+		$module_path = $GLOBALS['GO_CONFIG']->module_path.$module_id;
 
 		$file = $module_path.'/language/'.$language.'.inc.php';
 
@@ -214,7 +214,7 @@ class GO_LANGUAGE extends db {
 		require($lang_file);
 			
 		$args=array($module_id, $language);
-		GO::events()->fire_event('require_language_file', $args);
+		$GLOBALS['GO_EVENTS']->fire_event('require_language_file', $args);
 	}
 
 	/**
@@ -227,7 +227,7 @@ class GO_LANGUAGE extends db {
 	function get_fallback_language_file($module_id) {
 		global $GO_CONFIG;
 
-		$module_path = GO::config()->module_path.'/'.$module_id;
+		$module_path = $GLOBALS['GO_CONFIG']->module_path.'/'.$module_id;
 		$file = $module_path.'/language/en.inc.php';
 
 		if (file_exists($file)) {
@@ -241,7 +241,7 @@ class GO_LANGUAGE extends db {
 	{
 		global $lang, $GO_MODULES, $GO_LANGUAGE;
 		
-		foreach(GO::modules()->modules as $module)
+		foreach($GLOBALS['GO_MODULES']->modules as $module)
 		{
 			$lang_file = $this->get_language_file($module['id']);
 			if($lang_file)

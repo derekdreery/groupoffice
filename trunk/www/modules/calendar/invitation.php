@@ -15,13 +15,13 @@
 header('Content-Type: text/html; charset=UTF-8');
 require_once("../../Group-Office.php");
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
-require_once(GO::modules()->modules['calendar']['class_path'].'calendar.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'calendar.class.inc.php');
 
 $cal = new calendar();
-require(GO::language()->get_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 
 $calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
 $email = isset($_REQUEST['email']) ? ($_REQUEST['email']) : "";
@@ -30,26 +30,26 @@ $event_id = isset($_REQUEST['event_id']) ? ($_REQUEST['event_id']) : 0;
 
 $user = $GO_USERS->get_user_by_email($email);
 
-if($user && !GO::security()->has_permission($user['id'], GO::modules()->modules['calendar']['acl_id'])){
+if($user && !$GLOBALS['GO_SECURITY']->has_permission($user['id'], $GLOBALS['GO_MODULES']->modules['calendar']['acl_id'])){
 	$user=false;
 }
 
-if($user && GO::security()->user_id!=$user['id']){
-	GO::security()->logout();
+if($user && $GLOBALS['GO_SECURITY']->user_id!=$user['id']){
+	$GLOBALS['GO_SECURITY']->logout();
 }
 
 if($user)
-	GO::security()->html_authenticate();
+	$GLOBALS['GO_SECURITY']->html_authenticate();
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
 <?php
-require_once(GO::config()->class_path.'base/theme.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/theme.class.inc.php');
 $GO_THEME = new GO_THEME();
 
-require(GO::theme()->theme_path.'default_head.inc.php');
+require($GLOBALS['GO_THEME']->theme_path.'default_head.inc.php');
 ?>
 </head>
 <body>
@@ -61,7 +61,7 @@ $event = $cal->get_event($event_id);
 
 if(!$event)
 {
-	echo '<h1 class="cal-go-title">'.GO::config()->title.'</h1>';
+	echo '<h1 class="cal-go-title">'.$GLOBALS['GO_CONFIG']->title.'</h1>';
 	echo '<p>'.$lang['calendar']['bad_event'].'</p>';
 }elseif(!$user || $task == 'decline')
 {
@@ -71,18 +71,18 @@ if(!$event)
 	if($task=='accept')
 	{
 		$cal->set_event_status($event_id, '1', $email);
-		echo '<h1 class="cal-go-title">'.GO::config()->title.'</h1>';
+		echo '<h1 class="cal-go-title">'.$GLOBALS['GO_CONFIG']->title.'</h1>';
 		echo '<h1>'.$lang['calendar']['accept_title'].'</h1>';
 		echo '<p>'.$lang['calendar']['accept_confirm'].'</p>';
 
-		if($user['language']!=GO::language()->language){
-			GO::language()->set_language($user['language']);
-			require(GO::language()->get_language_file('calendar'));
+		if($user['language']!=$GLOBALS['GO_LANGUAGE']->language){
+			$GLOBALS['GO_LANGUAGE']->set_language($user['language']);
+			require($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 		}
 
-		require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($owner['email'],  sprintf($lang['calendar']['accept_mail_subject'],$event['name']));
-		$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
+		$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 		$body = sprintf($lang['calendar']['accept_mail_body'],$email);
 		$body .= '<br /><br />'.$cal->event_to_html($event);
 
@@ -92,18 +92,18 @@ if(!$event)
 	{
 		$cal->set_event_status($event_id, '2', $email);
 
-		echo '<h1 class="cal-go-title">'.GO::config()->title.'</h1>';
+		echo '<h1 class="cal-go-title">'.$GLOBALS['GO_CONFIG']->title.'</h1>';
 		echo '<h1>'.$lang['calendar']['decline_title'].'</h1>';
 		echo '<p>'.$lang['calendar']['decline_confirm'].'</p>';
 
-		if($user['language']!=GO::language()->language){
-			GO::language()->set_language($user['language']);
-			require(GO::language()->get_language_file('calendar'));
+		if($user['language']!=$GLOBALS['GO_LANGUAGE']->language){
+			$GLOBALS['GO_LANGUAGE']->set_language($user['language']);
+			require($GLOBALS['GO_LANGUAGE']->get_language_file('calendar'));
 		}
 
-		require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($owner['email'], sprintf($lang['calendar']['decline_mail_subject'],$event['name']));
-		$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
+		$swift->set_from($GLOBALS['GO_CONFIG']->webmaster_email, $GLOBALS['GO_CONFIG']->title);
 
 		$body = sprintf($lang['calendar']['decline_mail_body'],$email);
 		$body .= '<br /><br />'.$cal->event_to_html($event);
@@ -118,18 +118,18 @@ if(!$event)
 	$status = $cal->get_event_status($event['id'], $email);
 	if($status['status']=='1')
 	{
-		echo '<h1 class="cal-go-title">'.GO::config()->title.'</h1>';
+		echo '<h1 class="cal-go-title">'.$GLOBALS['GO_CONFIG']->title.'</h1>';
 		echo '<h1>'.$lang['calendar']['accept_title'].'</h1>';
 		echo '<p>'.$lang['calendar']['already_accepted'].'</p>';
 	}else
 	{
-		require(GO::config()->root_path.'default_scripts.inc.php');
+		require($GLOBALS['GO_CONFIG']->root_path.'default_scripts.inc.php');
 
 		echo '<script src="language/en.js" type="text/javascript"></script>';
 
-		if(GO::language()->language!='en' && file_exists(GO::modules()->modules['calendar']['path'].'language/'.GO::language()->language.'.js'))
+		if($GLOBALS['GO_LANGUAGE']->language!='en' && file_exists($GLOBALS['GO_MODULES']->modules['calendar']['path'].'language/'.$GLOBALS['GO_LANGUAGE']->language.'.js'))
 		{
-			echo '<script src="language/'.GO::language()->language.'.js" type="text/javascript"></script>';
+			echo '<script src="language/'.$GLOBALS['GO_LANGUAGE']->language.'.js" type="text/javascript"></script>';
 		}
 
 		echo '<script src="SelectCalendarWindow.js" type="text/javascript"></script><script type="text/javascript">

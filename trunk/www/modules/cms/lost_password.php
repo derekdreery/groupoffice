@@ -1,9 +1,9 @@
 <?php
 require('../../Group-Office.php');
 
-require_once(GO::modules()->modules['cms']['class_path'].'cms.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'output.class.inc.php');
-require_once(GO::modules()->modules['cms']['class_path'].'cms_smarty.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'output.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['cms']['class_path'].'cms_smarty.class.inc.php');
 $cms = new cms();
 $co = new cms_output();
 if(!empty($_REQUEST['file_id']))
@@ -23,7 +23,7 @@ $smarty->assign('success_url', $success_url);
 
 if($_SERVER['REQUEST_METHOD']=='POST')
 {
-	require_once(GO::config()->class_path.'base/users.class.inc.php');
+	require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 	$GO_USERS = new GO_USERS();
 
 	if($_POST['email'] == '')
@@ -49,7 +49,7 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 
 		$mail_body = $smarty->fetch('auth/lost_password_email.tpl');
 		
-		require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 		$swift = new GoSwift($user['email'], $co->config['lang']['lost_password_subject']);
 		$swift->set_from($co->site['webmaster'], $co->site['name']);
 		$swift->set_body($mail_body);

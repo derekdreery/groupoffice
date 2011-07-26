@@ -17,7 +17,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Calendrier';
 $lang['calendar']['description'] = 'Module de gestion du calendrier. Chaque utilisateur peut ajouter, éditer ou supprimer des rendez-vous. Les rendez-vous des autres utilisateurs peuvent être consultés (selon les permissions accordées).';
 $lang['link_type'][1]='Rendez-vous';

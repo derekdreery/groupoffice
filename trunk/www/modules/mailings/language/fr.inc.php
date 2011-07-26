@@ -17,7 +17,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('mailings'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('mailings'));
 $lang['mailings']['description'] = 'Module de gestion d\'envoi de mailing et newsletters.';
 $lang['mailings']['templateAlreadyExists'] = 'Le modèle que vous êtes en train de créer existe déjà';
 $lang['mailings']['mailingAlreadyExists'] = 'Le mailing que vous êtes en train de créer existe déjà';

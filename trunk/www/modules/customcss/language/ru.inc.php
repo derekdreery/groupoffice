@@ -6,7 +6,7 @@
  * 10 December 2008
 */
 //Uncomment this line in new translations!
-//require(GO::language()->get_fallback_language_file('customcss'));
+//require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('customcss'));
 
 $lang['customcss']['name']='Пользовательские CSS стили';
 $lang['customcss']['description']='Назначить другой стиль вместо тукущего для Group-Office.';

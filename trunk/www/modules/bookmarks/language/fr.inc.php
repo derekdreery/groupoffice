@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('bookmarks'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('bookmarks'));
 $lang['bookmarks']['name']='Marques-pages';
 $lang['bookmarks']['description']='Un module pour gérer les marques-pages.';
 

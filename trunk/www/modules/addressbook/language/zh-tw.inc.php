@@ -13,7 +13,7 @@
  */
 
 //This is a translation by hodrag. If you have questions please e-mail to hodrag@gmail.com , modify chinese traditional by quincy
-require(GO::language()->get_fallback_language_file('addressbook'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('addressbook'));
 $lang['addressbook']['name'] = '通訊錄';
 $lang['addressbook']['description'] = '連絡人管理模組.';
 

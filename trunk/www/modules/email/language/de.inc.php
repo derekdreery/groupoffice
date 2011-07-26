@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('email'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('email'));
 $lang['email']['name']='E-Mail';
 $lang['email']['description']='Modul zum Verwalten von E-Mail-Konten und -Nachrichten';
 $lang['link_type'][9]='E-Mail';

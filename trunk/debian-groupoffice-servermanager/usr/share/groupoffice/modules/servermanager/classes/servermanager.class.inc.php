@@ -13,8 +13,8 @@
  */
 
 
-if(file_exists(GO::config()->root_path.'modules/professional/check.php'))
-	require_once(GO::config()->root_path.'modules/professional/check.php');
+if(file_exists($GLOBALS['GO_CONFIG']->root_path.'modules/professional/check.php'))
+	require_once($GLOBALS['GO_CONFIG']->root_path.'modules/professional/check.php');
 
 class servermanager extends db {
 
@@ -30,7 +30,7 @@ class servermanager extends db {
 	public function get_all_config_files($roots){
 		global $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'filesystem.class.inc');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 		$fs = new filesystem();
 
 		$configs=array();
@@ -231,10 +231,10 @@ class servermanager extends db {
 
 					$installation['mailbox_usage']=0;
 
-					if(!empty(GO::config()->serverclient_server_url) && !empty($config['serverclient_domains'])) {
+					if(!empty($GLOBALS['GO_CONFIG']->serverclient_server_url) && !empty($config['serverclient_domains'])) {
 						if(!$sc) {
 							global $GO_MODULES;
-							require_once(GO::modules()->modules['serverclient']['class_path'].'serverclient.class.inc.php');
+							require_once($GLOBALS['GO_MODULES']->modules['serverclient']['class_path'].'serverclient.class.inc.php');
 							$sc = new serverclient();
 						}
 
@@ -325,8 +325,8 @@ class servermanager extends db {
 		if($user['id']==1 && !empty($user['password'])) {
 			global $GO_CONFIG, $GO_MODULES;
 
-			$cmd='sudo '.GO::modules()->modules['servermanager']['path'].'sudo.php --go_config='.
-					GO::config()->get_config_file().' --task=change_admin_password --password="'.$user['password'].'"';
+			$cmd='sudo '.$GLOBALS['GO_MODULES']->modules['servermanager']['path'].'sudo.php --go_config='.
+					$GLOBALS['GO_CONFIG']->get_config_file().' --task=change_admin_password --password="'.$user['password'].'"';
 
 			system($cmd);
 		}
@@ -382,7 +382,7 @@ class servermanager extends db {
 		global $GO_CONFIG;
 
 		$max_users=0;
-		if(isset(GO::config()->test_servermanager)){
+		if(isset($GLOBALS['GO_CONFIG']->test_servermanager)){
 			$max_users=2;
 		}elseif(extension_loaded('ionCube Loader') && function_exists('license_get_max_server_users')){
 			$max_users=license_get_max_server_users();
@@ -648,7 +648,7 @@ class servermanager extends db {
 
 
 		$installation = $this->get_installation($installation_id);
-		$cmd = 'sudo '.GO::modules()->modules['servermanager']['path'].'sudo.php --go_config='.GO::config()->get_config_file().' --task=remove --name='.$installation['name'];
+		$cmd = 'sudo '.$GLOBALS['GO_MODULES']->modules['servermanager']['path'].'sudo.php --go_config='.$GLOBALS['GO_CONFIG']->get_config_file().' --task=remove --name='.$installation['name'];
 
 		exec($cmd, $output, $return_var);
 
@@ -722,7 +722,7 @@ class servermanager extends db {
 	function get_status_message($status) {
 		global $GO_MODULES;
 
-		$file = GO::modules()->modules['servermanager']['path'].'templates/'.$status.'.txt';
+		$file = $GLOBALS['GO_MODULES']->modules['servermanager']['path'].'templates/'.$status.'.txt';
 
 		$text = file_get_contents($file);
 
@@ -740,7 +740,7 @@ class servermanager extends db {
 
 		require('/etc/groupoffice/servermanager.inc.php');
 
-		require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 
 		$message = $this->get_status_message($status);
 		if($message && !empty($installation['admin_email'])) {

@@ -2,8 +2,8 @@
 /*
  *
  * disable because doesn't work well
-if(isset(GO::modules()->modules['tasks'])){
-	require_once(GO::modules()->modules['tasks']['class_path'].'tasks.class.inc.php');
+if(isset($GLOBALS['GO_MODULES']->modules['tasks'])){
+	require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'].'tasks.class.inc.php');
 	$tasks = new tasks();
 	$db1 = new db();
 	$db2 = new db();

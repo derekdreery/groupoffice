@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name']='Kalender';
 $lang['calendar']['description']='Modul zum Verwalten von Terminen';
 $lang['link_type'][1]='Termin';

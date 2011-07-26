@@ -12,8 +12,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require('../../Group-Office.php');
-GO::security()->json_authenticate('postfixadmin');
-require_once (GO::modules()->modules['postfixadmin']['class_path'].'postfixadmin.class.inc.php');
+$GLOBALS['GO_SECURITY']->json_authenticate('postfixadmin');
+require_once ($GLOBALS['GO_MODULES']->modules['postfixadmin']['class_path'].'postfixadmin.class.inc.php');
 $postfixadmin = new postfixadmin();
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
@@ -25,7 +25,7 @@ try{
 			$response['domains']=array();
 			foreach($domains as $domain)
 			{
-				$path = isset(GO::config()->postfixadmin_vmail_root) ? GO::config()->postfixadmin_vmail_root.$domain : '/vmail/'.$domain;
+				$path = isset($GLOBALS['GO_CONFIG']->postfixadmin_vmail_root) ? $GLOBALS['GO_CONFIG']->postfixadmin_vmail_root.$domain : '/vmail/'.$domain;
 				
 				$domain = $postfixadmin->get_domain_by_domain($domain);
 				
@@ -92,7 +92,7 @@ try{
 			$domain = $postfixadmin->get_domain(($_REQUEST['domain_id']));
 
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			
 			$domain['user_name']= $GO_USERS->get_user_realname($domain['user_id']);
@@ -113,7 +113,7 @@ try{
 			if(isset($_POST['delete_keys']))
 			{
 				try{
-					if(!GO::modules()->modules['postfixadmin']['write_permission'])
+					if(!$GLOBALS['GO_MODULES']->modules['postfixadmin']['write_permission'])
 						throw new AccessDeniedException();
 
 					$response['deleteSuccess']=true;
@@ -134,12 +134,12 @@ try{
 			$limit = isset($_REQUEST['limit']) ? ($_REQUEST['limit']) : '0';
 			$query = !empty($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 			
-			$response['total'] = $postfixadmin->get_authorized_domains($auth_type, GO::security()->user_id,  $query, $sort, $dir, $start, $limit,!GO::modules()->modules['postfixadmin']['write_permission']);
+			$response['total'] = $postfixadmin->get_authorized_domains($auth_type, $GLOBALS['GO_SECURITY']->user_id,  $query, $sort, $dir, $start, $limit,!$GLOBALS['GO_MODULES']->modules['postfixadmin']['write_permission']);
 			$response['results']=array();
 			
 			$pa2 = new postfixadmin();
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 			
 			while($domain = $postfixadmin->next_record())

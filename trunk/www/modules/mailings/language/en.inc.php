@@ -13,7 +13,7 @@
  */
 
 //Uncomment this line in new translations!
-//require(GO::language()->get_fallback_language_file('mailings'));
+//require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('mailings'));
 $lang['mailings']['name'] = 'E-mail templates and addresslists';
 $lang['mailings']['description'] = 'Adds e-mail templates and addresslists for sending newsletters to the addressbook.';
 

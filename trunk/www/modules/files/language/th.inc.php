@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('files'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('files'));
 $lang['files']['name'] = 'ไฟล์';
 $lang['files']['description'] = 'การใช้งานไฟล์ร่วมกัน';//Files module; Module for sharing files
 

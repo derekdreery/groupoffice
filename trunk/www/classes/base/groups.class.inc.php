@@ -54,7 +54,7 @@ class GO_GROUPS extends db
 		if($this->clear_group($group_id))
 		{
 			global $GO_SECURITY;
-			if(GO::security()->delete_group($group_id))
+			if($GLOBALS['GO_SECURITY']->delete_group($group_id))
 			{
 				return $this->query("DELETE FROM go_groups WHERE id='".$this->escape($group_id)."'");
 			}
@@ -176,7 +176,7 @@ class GO_GROUPS extends db
 		$group['id'] = $this->nextid("go_groups");		
 		$group['user_id']=$user_id;
 		$group['name']=$name;
-		$group['acl_id']=$acl_id ? $acl_id : GO::security()->get_new_acl('group', $group['user_id']);
+		$group['acl_id']=$acl_id ? $acl_id : $GLOBALS['GO_SECURITY']->get_new_acl('group', $group['user_id']);
 		$group['admin_only']=$admin_only;
 			
 		if($this->insert_row('go_groups', $group))
@@ -308,7 +308,7 @@ class GO_GROUPS extends db
 
 		if($user_id > 0)
 		{
-			$sql .= "INNER JOIN go_acl a ON (g.acl_id = a.acl_id AND (a.user_id=".$this->escape($user_id)." OR a.group_id IN (".implode(',',GO::security()->get_user_group_ids($user_id))."))) ";
+			$sql .= "INNER JOIN go_acl a ON (g.acl_id = a.acl_id AND (a.user_id=".$this->escape($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 		}
 
 		$sql .= 'ORDER BY '.$sort.' '.$direction;
@@ -343,7 +343,7 @@ class GO_GROUPS extends db
 			
 			$sql .= "INNER JOIN go_users_groups ON go_groups.id=go_users_groups.group_id ".
 							"AND go_users_groups.user_id='".$this->escape($user_id)."' ".
-							"AND go_groups.id!=".GO::config()->group_everyone." ".
+							"AND go_groups.id!=".$GLOBALS['GO_CONFIG']->group_everyone." ".
 							"AND go_groups.admin_only!='1'";
 		}
 

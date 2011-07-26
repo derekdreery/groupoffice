@@ -6,8 +6,8 @@ require($config['root_path'].'Group-Office.php');
 
 
 
-if(!isset(GO::modules()->modules['servermanager']))
+if(!isset($GLOBALS['GO_MODULES']->modules['servermanager']))
 {
-	GO::modules()->add_module('servermanager');
+	$GLOBALS['GO_MODULES']->add_module('servermanager');
 }
 

@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('smime'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('smime'));
 
 $lang['smime']['name']='SMIME Unterstützung';
 $lang['smime']['description']='Erweitert das E-Mailmodul mith SMIME-Signatur und -Verschlüsselung.';

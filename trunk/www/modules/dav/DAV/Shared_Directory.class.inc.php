@@ -27,7 +27,7 @@ class GO_DAV_Shared_Directory extends Sabre_DAV_FS_Directory implements Sabre_DA
 
 		global $files, $GO_SECURITY;
 
-		$r= $files->get_cached_share(GO::security()->user_id, $name);
+		$r= $files->get_cached_share($GLOBALS['GO_SECURITY']->user_id, $name);
 		
 		if (!$r)
 			throw new Sabre_DAV_Exception_FileNotFound('File with name ' . $name . ' could not be located');
@@ -46,7 +46,7 @@ class GO_DAV_Shared_Directory extends Sabre_DAV_FS_Directory implements Sabre_DA
 		
 		global $GO_SECURITY,$GO_CONFIG, $files;
 
-		$files->get_cached_shares(GO::security()->user_id);
+		$files->get_cached_shares($GLOBALS['GO_SECURITY']->user_id);
 
 		$nodes = array();
 		while($r=$files->next_record()){

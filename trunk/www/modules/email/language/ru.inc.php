@@ -6,7 +6,7 @@
  * 10 December 2008
 */
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('email'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('email'));
 $lang['email']['name'] = 'Почта';
 $lang['email']['description'] = 'Модуль Почта; Небольшой e-mail клиент. Любой пользователь может принимать и отправлять почтовые сообщения';
 

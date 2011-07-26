@@ -45,20 +45,20 @@ require_once("../../../Group-Office.php");
 
 $path = isset($argv[2]) ? $argv[2] : '';
 
-if(php_sapi_name()!='cli' && !GO::security()->has_admin_permission(GO::security()->user_id))
+if(php_sapi_name()!='cli' && !$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id))
 {
 	die('You must be admin or on the command line');
 }
 
-require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 $files = new files();
 
-require_once(GO::config()->class_path.'filesystem.class.inc');
+require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
 $fs = new filesystem();
 
 if(empty($path))
 {
-	$folders = $fs->get_folders(GO::config()->file_storage_path);
+	$folders = $fs->get_folders($GLOBALS['GO_CONFIG']->file_storage_path);
 
 	foreach($folders as $folder)
 	{

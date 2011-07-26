@@ -134,7 +134,7 @@ if(!isset($mapping[$type]))
 	exit('abexport2userimport.php contacts contactexport.csv');
 }
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 $record = fgetcsv($fp, 4096, $list_sep, $text_sep);

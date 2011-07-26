@@ -52,14 +52,14 @@ if (File::get_extension($path) == 'xmind') {
 
 	$filename = File::strip_extension(basename($path)) . '.jpeg';
 
-	if (!file_exists(GO::config()->file_storage_path . 'thumbcache/' . $filename) || filectime(GO::config()->file_storage_path . 'thumbcache/' . $filename) < filectime(GO::config()->file_storage_path . $path)) {
-		$zipfile = zip_open(GO::config()->file_storage_path . $path);
+	if (!file_exists($GLOBALS['GO_CONFIG']->file_storage_path . 'thumbcache/' . $filename) || filectime($GLOBALS['GO_CONFIG']->file_storage_path . 'thumbcache/' . $filename) < filectime($GLOBALS['GO_CONFIG']->file_storage_path . $path)) {
+		$zipfile = zip_open($GLOBALS['GO_CONFIG']->file_storage_path . $path);
 
 		while ($entry = zip_read($zipfile)) {
 			if (zip_entry_name($entry) == 'Thumbnails/thumbnail.jpg') {
-				require_once(GO::config()->class_path . 'filesystem.class.inc');
+				require_once($GLOBALS['GO_CONFIG']->class_path . 'filesystem.class.inc');
 				zip_entry_open($zipfile, $entry, 'r');
-				file_put_contents(GO::config()->file_storage_path . 'thumbcache/' . $filename, zip_entry_read($entry, zip_entry_filesize($entry)));
+				file_put_contents($GLOBALS['GO_CONFIG']->file_storage_path . 'thumbcache/' . $filename, zip_entry_read($entry, zip_entry_filesize($entry)));
 				zip_entry_close($entry);
 				break;
 			}
@@ -70,9 +70,9 @@ if (File::get_extension($path) == 'xmind') {
 }
 
 
-$full_path = GO::config()->file_storage_path . $path;
+$full_path = $GLOBALS['GO_CONFIG']->file_storage_path . $path;
 
-$cache_dir = GO::config()->file_storage_path . 'thumbcache';
+$cache_dir = $GLOBALS['GO_CONFIG']->file_storage_path . 'thumbcache';
 if (!is_dir($cache_dir)) {
 	mkdir($cache_dir, 0755, true);
 }

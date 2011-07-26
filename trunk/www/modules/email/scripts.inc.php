@@ -1,36 +1,36 @@
 <?php
-$GO_SCRIPTS_JS .='GO.email.defaultSmtpHost="'.GO::config()->smtp_server.'";
+$GO_SCRIPTS_JS .='GO.email.defaultSmtpHost="'.$GLOBALS['GO_CONFIG']->smtp_server.'";
 GO.email.useHtmlMarkup=';
 
-$use_plain_text_markup = GO::config()->get_setting('email_use_plain_text_markup', GO::security()->user_id);
+$use_plain_text_markup = $GLOBALS['GO_CONFIG']->get_setting('email_use_plain_text_markup', $GLOBALS['GO_SECURITY']->user_id);
 if(!empty($use_plain_text_markup))
 	$GO_SCRIPTS_JS .= 'false;';
 else
 	$GO_SCRIPTS_JS .= 'true;';
 
 $GO_SCRIPTS_JS .= 'GO.email.skipUnknownRecipients=';
-$skip_unknown_recipients = GO::config()->get_setting('email_skip_unknown_recipients', GO::security()->user_id);
+$skip_unknown_recipients = $GLOBALS['GO_CONFIG']->get_setting('email_skip_unknown_recipients', $GLOBALS['GO_SECURITY']->user_id);
 if(empty($skip_unknown_recipients))
 	$GO_SCRIPTS_JS .= 'false;';
 else
 	$GO_SCRIPTS_JS .= 'true;';
 
 $GO_SCRIPTS_JS .= 'GO.email.alwaysRequestNotification=';
-$always_request_notification = GO::config()->get_setting('email_always_request_notification', GO::security()->user_id);
+$always_request_notification = $GLOBALS['GO_CONFIG']->get_setting('email_always_request_notification', $GLOBALS['GO_SECURITY']->user_id);
 if(empty($always_request_notification))
 	$GO_SCRIPTS_JS .= 'false;';
 else
 	$GO_SCRIPTS_JS .= 'true;';
 
 $GO_SCRIPTS_JS .= 'GO.email.alwaysRespondToNotifications=';
-$always_respond_to_notifications = GO::config()->get_setting('email_always_respond_to_notifications', GO::security()->user_id);
+$always_respond_to_notifications = $GLOBALS['GO_CONFIG']->get_setting('email_always_respond_to_notifications', $GLOBALS['GO_SECURITY']->user_id);
 if(empty($always_respond_to_notifications))
 	$GO_SCRIPTS_JS .= 'false;';
 else
 	$GO_SCRIPTS_JS .= 'true;';
 
 
-$font_size = GO::config()->get_setting('email_font_size', GO::security()->user_id);
+$font_size = $GLOBALS['GO_CONFIG']->get_setting('email_font_size', $GLOBALS['GO_SECURITY']->user_id);
 if(empty($font_size))
 	$GO_SCRIPTS_JS .= 'GO.email.fontSize="12px";';
 else
@@ -68,8 +68,8 @@ if(isset($_GET['mail_to']))
 	<?php
 }
 
-$email_show_cc = GO::config()->get_setting('email_show_cc', GO::security()->user_id);
-$email_show_bcc = GO::config()->get_setting('email_show_bcc', GO::security()->user_id);
+$email_show_cc = $GLOBALS['GO_CONFIG']->get_setting('email_show_cc', $GLOBALS['GO_SECURITY']->user_id);
+$email_show_bcc = $GLOBALS['GO_CONFIG']->get_setting('email_show_bcc', $GLOBALS['GO_SECURITY']->user_id);
 
 $GO_SCRIPTS_JS .='GO.email.showCCfield="'.$email_show_cc.'";'
 		. 'GO.email.showBCCfield="'.$email_show_bcc.'";';

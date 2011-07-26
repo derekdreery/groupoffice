@@ -30,14 +30,14 @@ class serverclient
 	{
 		global $GO_CONFIG;
 
-		if(isset(GO::config()->serverclient_server_url))
+		if(isset($GLOBALS['GO_CONFIG']->serverclient_server_url))
 		{
-			$this->server_url = GO::config()->serverclient_server_url;
-			$this->server_username = GO::config()->serverclient_username;
-			$this->server_password = GO::config()->serverclient_password;
+			$this->server_url = $GLOBALS['GO_CONFIG']->serverclient_server_url;
+			$this->server_username = $GLOBALS['GO_CONFIG']->serverclient_username;
+			$this->server_password = $GLOBALS['GO_CONFIG']->serverclient_password;
 			$this->ch = curl_init();
 		}
-		$this->domains = empty(GO::config()->serverclient_domains) ? array() : explode(',',GO::config()->serverclient_domains);
+		$this->domains = empty($GLOBALS['GO_CONFIG']->serverclient_domains) ? array() : explode(',',$GLOBALS['GO_CONFIG']->serverclient_domains);
 	}
 
 	public static function before_add_user($user)
@@ -59,7 +59,7 @@ class serverclient
 				$params=array(
 					'task'=>'serverclient_create_mailbox',
 					'domain'=>($domain),
-					'go_installation_id'=>GO::config()->id,
+					'go_installation_id'=>$GLOBALS['GO_CONFIG']->id,
 					'username'=>$user['username'],
 					'password1'=>$user['password'],
 					'password2'=>$user['password'],
@@ -94,17 +94,17 @@ class serverclient
 
 		$sc = new serverclient();
 
-		if(!empty($user['password']) && !empty(GO::config()->serverclient_domains))
+		if(!empty($user['password']) && !empty($GLOBALS['GO_CONFIG']->serverclient_domains))
 		{
 			$new_password = $user['password'];
-			$domains = explode(',', GO::config()->serverclient_domains);
+			$domains = explode(',', $GLOBALS['GO_CONFIG']->serverclient_domains);
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$user = $GO_USERS->get_user($user['id']);
 
-			if(isset(GO::modules()->modules['servermanager']) && $user['username']==$sc->server_username){
+			if(isset($GLOBALS['GO_MODULES']->modules['servermanager']) && $user['username']==$sc->server_username){
 				$sc->server_password=$new_password;
 			}
 
@@ -121,12 +121,12 @@ class serverclient
 				$response = $sc->send_request($sc->server_url.'modules/postfixadmin/action.php', $params);
 				$response = json_decode($response, true);
 
-				if(is_array($response) && $response['success'] && isset(GO::modules()->modules['email']))
+				if(is_array($response) && $response['success'] && isset($GLOBALS['GO_MODULES']->modules['email']))
 				{
-					require_once(GO::modules()->modules['email']['class_path'].'email.class.inc.php');
+					require_once($GLOBALS['GO_MODULES']->modules['email']['class_path'].'email.class.inc.php');
 					$email = new email();
 
-					$email->update_password(GO::config()->serverclient_host,$user['username'].'@'.$domain,$new_password);
+					$email->update_password($GLOBALS['GO_CONFIG']->serverclient_host,$user['username'].'@'.$domain,$new_password);
 				}
 			}
 		}
@@ -137,7 +137,7 @@ class serverclient
 	{
 		global $GO_CONFIG;
 
-		if(!empty(GO::config()->serverclient_domains))
+		if(!empty($GLOBALS['GO_CONFIG']->serverclient_domains))
 		 {
 
 			if(!$this->login())
@@ -145,7 +145,7 @@ class serverclient
 			throw new Exception('Could not connect to server manager! Authentication failed');
 			}
 
-			$domains = explode(',', GO::config()->serverclient_domains);
+			$domains = explode(',', $GLOBALS['GO_CONFIG']->serverclient_domains);
 
 			foreach($domains as $domain)
 			{
@@ -167,9 +167,9 @@ class serverclient
 		
 		go_debug(var_export($random_password, true));
 
-		if(!$random_password && isset($_POST['serverclient_domains']) && isset(GO::modules()->modules['email']))
+		if(!$random_password && isset($_POST['serverclient_domains']) && isset($GLOBALS['GO_MODULES']->modules['email']))
 		{
-			require_once(GO::modules()->modules['email']['class_path'].'email.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['email']['class_path'].'email.class.inc.php');
 
 			$email = new email();
 
@@ -177,26 +177,26 @@ class serverclient
 			{
 				$account = array();
 				$account['user_id']=$user['id'];
-				$account['mbroot'] = GO::config()->serverclient_mbroot;
-				$account['use_ssl'] = GO::config()->serverclient_use_ssl;
-				$account['novalidate_cert'] = GO::config()->serverclient_novalidate_cert;
-				$account['type']=GO::config()->serverclient_type;
-				$account['host']=GO::config()->serverclient_host;
-				$account['port']=GO::config()->serverclient_port;
+				$account['mbroot'] = $GLOBALS['GO_CONFIG']->serverclient_mbroot;
+				$account['use_ssl'] = $GLOBALS['GO_CONFIG']->serverclient_use_ssl;
+				$account['novalidate_cert'] = $GLOBALS['GO_CONFIG']->serverclient_novalidate_cert;
+				$account['type']=$GLOBALS['GO_CONFIG']->serverclient_type;
+				$account['host']=$GLOBALS['GO_CONFIG']->serverclient_host;
+				$account['port']=$GLOBALS['GO_CONFIG']->serverclient_port;
 
 				$account['username']=$user['username'];
-				if(empty(GO::config()->serverclient_dont_add_domain_to_imap_username)){
+				if(empty($GLOBALS['GO_CONFIG']->serverclient_dont_add_domain_to_imap_username)){
 					$account['username'].='@'.$domain;
 				}
 				$account['password']=$user['password'];
 				$account['name']=String::format_name($user);
 				$account['email']=$user['email'];
-				$account['smtp_host']=GO::config()->serverclient_smtp_host;
-				$account['smtp_port']=GO::config()->serverclient_smtp_port;
-				$account['smtp_encryption']=GO::config()->serverclient_smtp_encryption;
-				$account['smtp_username']=GO::config()->serverclient_smtp_username;
-				$account['smtp_password']=GO::config()->serverclient_smtp_password;
-				$account['acl_id']=GO::security()->get_new_acl('email', $account['user_id']);
+				$account['smtp_host']=$GLOBALS['GO_CONFIG']->serverclient_smtp_host;
+				$account['smtp_port']=$GLOBALS['GO_CONFIG']->serverclient_smtp_port;
+				$account['smtp_encryption']=$GLOBALS['GO_CONFIG']->serverclient_smtp_encryption;
+				$account['smtp_username']=$GLOBALS['GO_CONFIG']->serverclient_smtp_username;
+				$account['smtp_password']=$GLOBALS['GO_CONFIG']->serverclient_smtp_password;
+				$account['acl_id']=$GLOBALS['GO_SECURITY']->get_new_acl('email', $account['user_id']);
 
 				//go_debug(var_export($account, true));
 
@@ -233,7 +233,7 @@ class serverclient
 		if(!isset($response['success']) || !$response['success'])
 		{
 			go_debug($response);
-			require(GO::language()->get_language_file('serverclient'));
+			require($GLOBALS['GO_LANGUAGE']->get_language_file('serverclient'));
 			$feedback = isset($response['feedback']) ? $response['feedback'] : sprintf($lang['serverclient']['connect_error'], $this->server_url);
 			throw new Exception($feedback);
 		}
@@ -247,8 +247,8 @@ class serverclient
 		curl_setopt($this->ch, CURLOPT_POST, 1);
 		curl_setopt($this->ch, CURLOPT_POSTFIELDS, $params);
 		curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($this->ch, CURLOPT_COOKIEJAR, GO::config()->tmpdir.'cookie_'.GO::security()->user_id.'.txt');
-		curl_setopt($this->ch, CURLOPT_COOKIEFILE, GO::config()->tmpdir.'cookie_'.GO::security()->user_id.'.txt');
+		curl_setopt($this->ch, CURLOPT_COOKIEJAR, $GLOBALS['GO_CONFIG']->tmpdir.'cookie_'.$GLOBALS['GO_SECURITY']->user_id.'.txt');
+		curl_setopt($this->ch, CURLOPT_COOKIEFILE, $GLOBALS['GO_CONFIG']->tmpdir.'cookie_'.$GLOBALS['GO_SECURITY']->user_id.'.txt');
 
 		//for self-signed certificates
 		curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -273,9 +273,9 @@ class serverclient
 			curl_close ($this->ch);
 		}
 
-		if(file_exists(GO::config()->tmpdir.'cookie_'.GO::security()->user_id.'.txt'))
+		if(file_exists($GLOBALS['GO_CONFIG']->tmpdir.'cookie_'.$GLOBALS['GO_SECURITY']->user_id.'.txt'))
 		{
-			unlink(GO::config()->tmpdir.'cookie_'.GO::security()->user_id.'.txt');
+			unlink($GLOBALS['GO_CONFIG']->tmpdir.'cookie_'.$GLOBALS['GO_SECURITY']->user_id.'.txt');
 		}
 	}
 }

@@ -1,9 +1,9 @@
 <?php
 
 require_once('../../Group-Office.php');
-GO::security()->json_authenticate('backupmanager');
+$GLOBALS['GO_SECURITY']->json_authenticate('backupmanager');
 
-require_once (GO::modules()->modules['backupmanager']['class_path'].'backupmanager.class.inc.php');
+require_once ($GLOBALS['GO_MODULES']->modules['backupmanager']['class_path'].'backupmanager.class.inc.php');
 
 $backupmanager = new backupmanager();
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';

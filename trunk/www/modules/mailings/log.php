@@ -12,12 +12,12 @@ option) any later version.
 
 require_once("../../Group-Office.php");
 
-GO::security()->authenticate();
-GO::modules()->authenticate('mailings');
+$GLOBALS['GO_SECURITY']->authenticate();
+$GLOBALS['GO_MODULES']->authenticate('mailings');
 $browser = detect_browser();
 
 $filename = intval($_REQUEST['mailing_id']).'.log';
-$path = GO::config()->file_storage_path.'log/mailings/'.$filename;
+$path = $GLOBALS['GO_CONFIG']->file_storage_path.'log/mailings/'.$filename;
 header("Content-type: text/plain;charset=UTF-8");
 
 if ($browser['name'] == 'MSIE')

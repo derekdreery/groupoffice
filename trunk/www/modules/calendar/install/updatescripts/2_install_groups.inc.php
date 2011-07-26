@@ -1,5 +1,5 @@
 <?php
-require_once(GO::modules()->modules['calendar']['class_path'].'calendar.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'calendar.class.inc.php');
 $cal = new calendar();
 
 $old_exists = $db->table_exists('cal_groups');
@@ -19,7 +19,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `cal_groups` (
 if(!$old_exists){
 	$group['user_id']=1;
 	$group['name']='Calendars';
-	$group['acl_admin']=GO::security()->get_new_acl('resource_group', 1);
+	$group['acl_admin']=$GLOBALS['GO_SECURITY']->get_new_acl('resource_group', 1);
 	$group['id']=1;
 
 	$cal->nextid('cal_groups');
@@ -42,8 +42,8 @@ if(!$old_exists){
 
 	$db->query("SELECT a.user_id, g.acl_write FROM cal_group_admins a INNER JOIN cal_groups_old g ON g.id=a.group_id");
 	while($r=$db->next_record()){
-		if(!GO::security()->user_in_acl($r['user_id'], $r['acl_write'])){
-			GO::security()->add_user_to_acl($r['user_id'], $r['acl_write']);
+		if(!$GLOBALS['GO_SECURITY']->user_in_acl($r['user_id'], $r['acl_write'])){
+			$GLOBALS['GO_SECURITY']->add_user_to_acl($r['user_id'], $r['acl_write']);
 		}
 	}
 }

@@ -1,8 +1,8 @@
 <?php
 require('../../Group-Office.php');
 
-GO::security()->json_authenticate('gnupg');
-require_once (GO::modules()->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+$GLOBALS['GO_SECURITY']->json_authenticate('gnupg');
+require_once ($GLOBALS['GO_MODULES']->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 $gnupg = new gnupg();
 
 $filename='key.asc';

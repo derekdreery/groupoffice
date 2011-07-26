@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_base_language_file('filetypes'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('filetypes'));
 
 $lang['filetypes']['unknown'] = 'Tipo desconhecido';
 $lang['filetypes']['txt'] = 'Ficheiro de texto';

@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Calendari';
 $lang['calendar']['description'] = 'Mòdul de calendari; Cada usuari pot afegir, editar o esborrar cites. Inclús els usuaris poden veure i modificar (en cas de ser necessari) les cites d\'altres usuaris';
 

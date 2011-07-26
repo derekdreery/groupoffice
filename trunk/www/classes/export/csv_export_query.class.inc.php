@@ -71,7 +71,7 @@ class csv_export_query extends base_export_query
 
 		global $lang, $GO_MODULES, $GO_CONFIG;
 
-		require_once(GO::config()->class_path.'base/users.class.inc.php');
+		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 		$GO_USERS = new GO_USERS();
 
 		if(count($this->headers))

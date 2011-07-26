@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-//require(GO::language()->get_fallback_language_file('links'));
+//require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('links'));
 $lang['links']['name']='Link descriptions';
 $lang['links']['description']='Manage default link descriptions';
 $lang['links']['link_description']='Link description';

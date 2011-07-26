@@ -12,18 +12,18 @@ require('/etc/groupoffice/servermanager.inc.php');
 require('/usr/share/groupoffice/Group-Office.php');
 
 
-if(!isset(GO::modules()->modules['serverclient'])) {
+if(!isset($GLOBALS['GO_MODULES']->modules['serverclient'])) {
 	die('Fatal error: serverclient module must be installed');
 }
 
-if(!isset(GO::modules()->modules['servermanager'])) {
+if(!isset($GLOBALS['GO_MODULES']->modules['servermanager'])) {
 	die('Fatal error: servermanager module must be installed');
 }
 
 $roots=array($sm_config['install_path']);
 //$roots=array('/var/www/groupoffice');
 
-require_once(GO::modules()->modules['servermanager']['class_path'].'servermanager.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['servermanager']['class_path'].'servermanager.class.inc.php');
 $sm = new servermanager();
 $configs=$sm->get_all_config_files($roots);
 

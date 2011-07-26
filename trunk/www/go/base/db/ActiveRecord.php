@@ -290,7 +290,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				return -1;
 			}
 			
-			$this->_permissionLevel=GO::security()->hasPermission($acl_id);
+			$this->_permissionLevel=$GLOBALS['GO_SECURITY']->hasPermission($acl_id);
 		}
 		return $this->_permissionLevel;
 	}
@@ -364,7 +364,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		
 		if(!isset($params['userId'])){
-			$params['userId']=GO::security()->user_id;
+			$params['userId']=GO::session()->values->user_id;
 		}
 		
 		$aclJoin['relation']='';
@@ -391,7 +391,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$sql .= "t.*".$aclJoin['fields'].' ';
 		
 		
-		$joinCf = !empty($params['joinCustomFields']) && $this->linkType>0 && GO::modules()->has_module('customfields');
+		$joinCf = !empty($params['joinCustomFields']) && $this->linkType>0 && $GLOBALS['GO_MODULES']->has_module('customfields');
 		
 		if($joinCf)			
 			$sql .= ",cf_".$this->linkType.".* ";
@@ -408,7 +408,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_SECURITY::READ_PERMISSION){
 				$sql .= " AND go_acl.level>=".intval($params['permissionLevel']);
 			}
-			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',GO::security()->get_user_group_ids($params['userId']))."))) ";
+			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($params['userId']))."))) ";
 		}  else {
 			//quick and dirty way to use and in next sql build blocks
 			$sql .= 'WHERE 1 ';
@@ -627,7 +627,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		/**
 		 * Useful event for modules. For example custom fields can be loaded or a files folder.
 		 */
-		//GO::events()->fire_event('loadactiverecord',array(&$this));
+		//$GLOBALS['GO_EVENTS']->fire_event('loadactiverecord',array(&$this));
 	}
 	
 	/**
@@ -849,7 +849,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 			
 			if(isset($this->_columns['user_id']) && !isset($this->user_id)){
-				$this->user_id=GO::security()->user_id;
+				$this->user_id=$GLOBALS['GO_SECURITY']->user_id;
 			}
 			
 			
@@ -862,7 +862,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				
 				if($this->aclField && !$this->joinAclField){
 					//generate acl id
-					$this->{$this->aclField}=GO::security()->get_new_acl($this->tableName);
+					$this->{$this->aclField}=$GLOBALS['GO_SECURITY']->get_new_acl($this->tableName);
 				}				
 				
 				if(!$this->beforeSave())
@@ -1098,7 +1098,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 				
 		if($this->aclField && !$this->joinAclField){
-			GO::security()->delete_acl($this->{$this->aclField});
+			$GLOBALS['GO_SECURITY']->delete_acl($this->{$this->aclField});
 		}	
 		
 		foreach($this->relations as $name => $attr){

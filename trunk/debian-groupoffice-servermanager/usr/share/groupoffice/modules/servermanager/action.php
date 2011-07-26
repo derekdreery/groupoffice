@@ -12,10 +12,10 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('servermanager');
-require_once (GO::modules()->modules['servermanager']['class_path']."servermanager.class.inc.php");
+$GLOBALS['GO_SECURITY']->json_authenticate('servermanager');
+require_once ($GLOBALS['GO_MODULES']->modules['servermanager']['class_path']."servermanager.class.inc.php");
 
-require_once (GO::language()->get_language_file('servermanager'));
+require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('servermanager'));
 
 require('/etc/groupoffice/servermanager.inc.php');
 
@@ -31,7 +31,7 @@ try{
 			if(!$installation)
 				throw new Exception('Installation '.$installation_name.' does not exist');
 
-			//$cmd = 'sudo '.GO::modules()->modules['servermanager']['path'].'sudo.php --go_config='.GO::config()->get_config_file().' --task=remove --name='.$installation_name
+			//$cmd = 'sudo '.$GLOBALS['GO_MODULES']->modules['servermanager']['path'].'sudo.php --go_config='.$GLOBALS['GO_CONFIG']->get_config_file().' --task=remove --name='.$installation_name
 			//exec($cmd);
 			
 			$servermanager->delete_installation($installation['id']);			
@@ -158,7 +158,7 @@ try{
 				
 				//$config_str = ($_POST['config']);
 				
-				$tmp_config = GO::config()->tmpdir.uniqid();
+				$tmp_config = $GLOBALS['GO_CONFIG']->tmpdir.uniqid();
 				copy('/etc/groupoffice/'.$old_installation['name'].'/config.php', $tmp_config);
 				//file_put_contents($tmp_config, $config_str);
 
@@ -166,7 +166,7 @@ try{
 				$servermanager->write_config($tmp_config, $config);
 
 				
-				$cmd = 'sudo '.GO::modules()->modules['servermanager']['path'].'sudo.php --go_config='.GO::config()->get_config_file().' --task=move_config --name='.$old_installation['name'].' --tmp_config='.$tmp_config;
+				$cmd = 'sudo '.$GLOBALS['GO_MODULES']->modules['servermanager']['path'].'sudo.php --go_config='.$GLOBALS['GO_CONFIG']->get_config_file().' --task=move_config --name='.$old_installation['name'].' --tmp_config='.$tmp_config;
 				if(isset($admin_password))
 				{
 					$cmd .= ' --password="'.$admin_password.'"';
@@ -214,7 +214,7 @@ try{
 				$config['root_path']=$sm_config['install_path'].$installation['name'].'/groupoffice/';
 				$config['tmpdir']='/tmp/'.$installation['name'].'/';
 
-				if(floatval(GO::config()->version)<3.3){
+				if(floatval($GLOBALS['GO_CONFIG']->version)<3.3){
 					$config['local_path']=$sm_config['install_path'].'/sm-local/'.$installation['name'].'/';
 					$config['local_url']='/sm-local/'.$installation['name'].'/';
 				}
@@ -226,7 +226,7 @@ try{
 				
 				$config['id']=$installation['name'];
 					
-				$tmp_config = GO::config()->tmpdir.uniqid();
+				$tmp_config = $GLOBALS['GO_CONFIG']->tmpdir.uniqid();
 				touch($tmp_config);
 				$servermanager->write_config($tmp_config, $config);
 
@@ -246,7 +246,7 @@ try{
 
 				//$installation_id= $servermanager->add_installation($installation);
 			
-				$cmd = 'sudo '.GO::modules()->modules['servermanager']['path'].'sudo.php --go_config='.GO::config()->get_config_file().' --task=install --name='.$installation['name'].' --tmp_config='.$tmp_config;
+				$cmd = 'sudo '.$GLOBALS['GO_MODULES']->modules['servermanager']['path'].'sudo.php --go_config='.$GLOBALS['GO_CONFIG']->get_config_file().' --task=install --name='.$installation['name'].' --tmp_config='.$tmp_config;
 				if(isset($admin_password))
 				{
 					$cmd .= ' --password="'.$admin_password.'"';
@@ -299,13 +299,13 @@ try{
 				
 			//throw new Exception(var_export($config, true));
 				
-			$tmp_config = GO::config()->tmpdir.uniqid();
+			$tmp_config = $GLOBALS['GO_CONFIG']->tmpdir.uniqid();
 			touch($tmp_config);
 
 				
 			$servermanager->write_config($tmp_config, $config);
 				
-			exec('sudo '.GO::modules()->modules['servermanager']['path'].'sudo.php --go_config='.GO::config()->get_config_file().'--task=move_config --name='.$installation_name.' --tmp_config='.$tmp_config);
+			exec('sudo '.$GLOBALS['GO_MODULES']->modules['servermanager']['path'].'sudo.php --go_config='.$GLOBALS['GO_CONFIG']->get_config_file().'--task=move_config --name='.$installation_name.' --tmp_config='.$tmp_config);
 				
 			$response['success']=true;
 				

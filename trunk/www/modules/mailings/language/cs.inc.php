@@ -13,7 +13,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('mailings'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('mailings'));
 $lang['mailings']['name'] = 'Šablony a seznamy adres';
 $lang['mailings']['description'] = 'Modul pro úpravu všech kontaktů.';
 

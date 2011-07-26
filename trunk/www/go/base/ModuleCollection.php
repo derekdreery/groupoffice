@@ -60,7 +60,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 
 		if(!$this->allowed_modules)
 		{
-			$this->allowed_modules=empty(GO::config()->allowed_modules) ? array() : explode(',', GO::config()->allowed_modules);
+			$this->allowed_modules=empty($GLOBALS['GO_CONFIG']->allowed_modules) ? array() : explode(',', $GLOBALS['GO_CONFIG']->allowed_modules);
 		}
 		return !count($this->allowed_modules) || in_array($module, $this->allowed_modules);
 	}
@@ -90,13 +90,13 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		if ( isset( $this->modules[$module_id] ) ) {
 			$module = $this->modules[$module_id];
 			$_SESSION['GO_SESSION']['active_module'] = $module_id;
-			$this->path = GO::config()->root_path.'modules/'.$module_id.'/';
+			$this->path = $GLOBALS['GO_CONFIG']->root_path.'modules/'.$module_id.'/';
 			$this->class_path = $this->path.'classes/';
 			$this->read_permission = $module['read_permission'];
 			$this->write_permission = $module['write_permission'];
 			$this->id = $module_id;
-			$this->full_url = GO::config()->full_url.'modules/'.$module_id.'/';
-			$this->url = GO::config()->host.'modules/'.$module_id.'/';
+			$this->full_url = $GLOBALS['GO_CONFIG']->full_url.'modules/'.$module_id.'/';
+			$this->url = $GLOBALS['GO_CONFIG']->host.'modules/'.$module_id.'/';
 
 			if ( $this->read_permission || $this->write_permission ) {
 				if ( $admin ) {
@@ -107,7 +107,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 					return true;
 				}
 			}
-			header( 'Location: '.GO::config()->host);
+			header( 'Location: '.$GLOBALS['GO_CONFIG']->host);
 			exit();
 		} else {
 			exit( 'Invalid module specified' );

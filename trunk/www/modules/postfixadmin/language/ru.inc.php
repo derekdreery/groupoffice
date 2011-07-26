@@ -6,7 +6,7 @@
  * 10 December 2008
 */
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('postfixadmin'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('postfixadmin'));
 $lang['postfixadmin']['name']='Администрирование Postfix';
 $lang['postfixadmin']['description']='Модуль для управления виртуальными пользователями postfix в базе данных Group-Office';
 $lang['postfixadmin']['alias']='Псевдоним';

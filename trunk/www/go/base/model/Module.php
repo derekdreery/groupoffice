@@ -43,16 +43,16 @@
 	protected function init() {
 		parent::init();
 		
-		$this->path = GO::config()->root_path.'modules/'.$this->id.'/';
-		$this->full_url = GO::config()->full_url.'modules/'.$this->id.'/';
-		$this->url = GO::config()->host.'modules/'.$this->id.'/';
+		$this->path = $GLOBALS['GO_CONFIG']->root_path.'modules/'.$this->id.'/';
+		$this->full_url = $GLOBALS['GO_CONFIG']->full_url.'modules/'.$this->id.'/';
+		$this->url = $GLOBALS['GO_CONFIG']->host.'modules/'.$this->id.'/';
 		$this->class_path = $this->path.'classes/';		
 	}
 	
 	protected function getHumanName(){
 		global $lang;
 		
-		$file = GO::language()->get_language_file($this->id);
+		$file = $GLOBALS['GO_LANGUAGE']->get_language_file($this->id);
 		if($file)
 			require($file);
 		
@@ -62,7 +62,7 @@
 	protected function getDescription(){
 		global $lang;
 		
-		$file = GO::language()->get_language_file($this->id);
+		$file = $GLOBALS['GO_LANGUAGE']->get_language_file($this->id);
 		if($file)
 			require($file);
 		

@@ -12,7 +12,7 @@
 
 <div class="main-container">    
 	<div class="header">
-		<img src="<?php echo GO::modules()->modules['mailings']['url'].'extern/template/images/groupoffice.png'; ?>" alt="Group-Office logo" />
+		<img src="<?php echo $GLOBALS['GO_MODULES']->modules['mailings']['url'].'extern/template/images/groupoffice.png'; ?>" alt="Group-Office logo" />
 	</div>
 
 	<div class="hoofd-kader">		

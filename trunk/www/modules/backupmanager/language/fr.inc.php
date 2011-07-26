@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('backupmanager'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('backupmanager'));
 
 $lang['backupmanager']['name']='Gestionnaire de sauvegardes';
 $lang['backupmanager']['description']='Configurer vos tâches de sauvegardes planifiées';

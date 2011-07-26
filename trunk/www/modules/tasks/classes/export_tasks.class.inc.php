@@ -249,7 +249,7 @@ class export_tasks
 
 		if(!empty($task['rrule']) && !$no_rrule)
 		{
-			require_once(GO::config()->class_path.'ical2array.class.inc');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'ical2array.class.inc');
 			$ical2array = new ical2array();
 
 			if($this->version != '1.0')

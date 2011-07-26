@@ -16,7 +16,7 @@
 /**
  * Required classes
  */
-require_once(GO::config()->class_path.'html/html_element.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'html/html_element.class.inc.php');
 
 /**
  * Create an form input field

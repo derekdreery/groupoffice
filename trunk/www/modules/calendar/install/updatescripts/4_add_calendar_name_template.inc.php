@@ -1,7 +1,7 @@
 <?php
-require_once(GO::config()->root_path.'install/updatescripts/functions.inc.php');
+require_once($GLOBALS['GO_CONFIG']->root_path.'install/updatescripts/functions.inc.php');
 
-$tpl = GO::config()->get_setting('calendar_name_template');
+$tpl = $GLOBALS['GO_CONFIG']->get_setting('calendar_name_template');
 if(!$tpl)
-	GO::config()->save_setting('calendar_name_template', '{first_name} {middle_name} {last_name}');
+	$GLOBALS['GO_CONFIG']->save_setting('calendar_name_template', '{first_name} {middle_name} {last_name}');
 ?>

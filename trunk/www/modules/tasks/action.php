@@ -13,10 +13,10 @@
  */
 
 require_once("../../Group-Office.php");
-GO::security()->json_authenticate('tasks');
+$GLOBALS['GO_SECURITY']->json_authenticate('tasks');
 
-require_once (GO::modules()->modules['tasks']['class_path']."tasks.class.inc.php");
-//require_once (GO::language()->get_language_file('tasks'));
+require_once ($GLOBALS['GO_MODULES']->modules['tasks']['class_path']."tasks.class.inc.php");
+//require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('tasks'));
 $tasks = new tasks();
 
 //we are unsuccessfull by default
@@ -31,12 +31,12 @@ try {
 
 			ini_set('max_execution_time', 180);
 
-			require_once (GO::language()->get_language_file('tasks'));
+			require_once ($GLOBALS['GO_LANGUAGE']->get_language_file('tasks'));
 
 			if (!file_exists($_FILES['ical_file']['tmp_name'][0])) {
 				throw new Exception($lang['common']['noFileUploaded']);
 			}else {
-				$tmpfile = GO::config()->tmpdir.uniqid(time());
+				$tmpfile = $GLOBALS['GO_CONFIG']->tmpdir.uniqid(time());
 				move_uploaded_file($_FILES['ical_file']['tmp_name'][0], $tmpfile);
 				File::convert_to_utf8($tmpfile);
 
@@ -58,13 +58,13 @@ try {
 			$task['status']='NEEDS-ACTION';
 			$task['tasklist_id']=$_POST['tasklist_id'];
 			$task['reminder']=Date::to_unixtime(($_POST['date'].' '.$_POST['remind_time']));
-			$task['user_id']=GO::security()->user_id;
+			$task['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 
 			$response['task_id']= $task_id = $tasks->add_task($task);
 
 			$links = json_decode($_POST['links'], true);
 
-			require_once(GO::config()->class_path.'base/links.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 
 			foreach($links as $link) {
@@ -79,11 +79,11 @@ try {
 
 			$comment_link_index = isset($_POST['comment_link_index']) ? $_POST['comment_link_index'] : 0;
 
-			/*if(isset(GO::modules()->modules['comments']) && isset($links[$comment_link_index]))
+			/*if(isset($GLOBALS['GO_MODULES']->modules['comments']) && isset($links[$comment_link_index]))
 			{
-				require(GO::language()->get_language_file('tasks'));
+				require($GLOBALS['GO_LANGUAGE']->get_language_file('tasks'));
 				
-				require_once(GO::modules()->modules['comments']['class_path'].'comments.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['comments']['class_path'].'comments.class.inc.php');
 				$comments = new comments();
 				
 				$comment['comments']=sprintf($lang['tasks']['scheduled_call'], Date::get_timestamp($task['reminder']));
@@ -92,7 +92,7 @@ try {
 					
 				$comment['link_id']=($links[$comment_link_index]['link_id']);
 				$comment['link_type']=($links[$comment_link_index]['link_type']);			
-				$comment['user_id']=GO::security()->user_id;
+				$comment['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 				
 				$comments->add_comment($comment);
 			}*/
@@ -104,7 +104,7 @@ try {
 
 		case 'continue_task':
 
-			GO::language()->require_language_file('tasks');
+			$GLOBALS['GO_LANGUAGE']->require_language_file('tasks');
 
 			$old_task= $tasks->get_task($_POST['task_id']);
 			$old_tasklist = $tasks->get_tasklist($old_task['tasklist_id']);
@@ -132,18 +132,18 @@ try {
 
 			$tasks->update_task($task, $old_tasklist, $old_task);
 
-			if(isset(GO::modules()->modules['comments']))
+			if(isset($GLOBALS['GO_MODULES']->modules['comments']))
 			{
-				require(GO::language()->get_language_file('tasks'));
+				require($GLOBALS['GO_LANGUAGE']->get_language_file('tasks'));
 
-				require_once(GO::modules()->modules['comments']['class_path'].'comments.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['comments']['class_path'].'comments.class.inc.php');
 				$comments = new comments();
 
 				$comment['comments']=$_POST['description'];
 
 				$comment['link_id']=$task['id'];
 				$comment['link_type']=12;
-				$comment['user_id']=GO::security()->user_id;
+				$comment['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 
 				$comments->add_comment($comment);
 			}
@@ -168,7 +168,7 @@ try {
 				$task['project_name']=$_POST['project_name'];
 
 			$tasklist = $tasks->get_tasklist($task['tasklist_id']);
-			if(GO::security()->has_permission(GO::security()->user_id, $tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
+			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 				throw new AccessDeniedException();
 			}
 
@@ -183,7 +183,7 @@ try {
 				$task['reminder']=Date::to_unixtime($_POST['remind_date'].' '.$_POST['remind_time']);
 			}elseif(!isset($_POST['status'])) {
 				//this task is added with the quick add option
-				$settings=$tasks->get_settings(GO::security()->user_id);
+				$settings=$tasks->get_settings($GLOBALS['GO_SECURITY']->user_id);
 				if(!empty($settings['remind'])) {
 					$reminder_day = $task['due_time'];
 					if(!empty($settings['reminder_days']))
@@ -228,7 +228,7 @@ try {
 				$response['success']=true;
 
 			}else {
-				$task['user_id']=GO::security()->user_id;
+				$task['user_id']=$GLOBALS['GO_SECURITY']->user_id;
 				$task_id= $tasks->add_task($task, $tasklist);
 				if($task_id) {
 					$insert = true;
@@ -237,14 +237,14 @@ try {
 				}					
 			}
 
-			if(isset(GO::modules()->modules['customfields']) && GO::modules()->modules['customfields']['read_permission']) {
-				require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission']) {
+				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 				$cf = new customfields();
-				$cf->update_fields(GO::security()->user_id, $task_id, 12, $_POST, $insert);
+				$cf->update_fields($GLOBALS['GO_SECURITY']->user_id, $task_id, 12, $_POST, $insert);
 			}
 
-			if(!empty($_POST['tmp_files']) && GO::modules()->has_module('files')) {
-				require_once(GO::modules()->modules['files']['class_path'].'files.class.inc.php');
+			if(!empty($_POST['tmp_files']) && $GLOBALS['GO_MODULES']->has_module('files')) {
+				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 				$files = new files();
 				$fs = new filesystem();
 
@@ -255,7 +255,7 @@ try {
 				$tmp_files = json_decode($_POST['tmp_files'], true);
 				while($tmp_file = array_shift($tmp_files)) {
 					if(!empty($tmp_file['tmp_file'])) {
-						$new_path = GO::config()->file_storage_path.$path.'/'.$tmp_file['name'];
+						$new_path = $GLOBALS['GO_CONFIG']->file_storage_path.$path.'/'.$tmp_file['name'];
 						$fs->move($tmp_file['tmp_file'], $new_path);
 						$files->import_file($new_path, $task['files_folder_id']);
 					}
@@ -263,7 +263,7 @@ try {
 			}
 
 			if(!empty($_POST['link'])) {
-				require_once(GO::config()->class_path.'base/links.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 				$GO_LINKS = new GO_LINKS();
 				
 				$link_props = explode(':', $_POST['link']);
@@ -279,7 +279,7 @@ try {
 		case 'save_tasklist':
 
 			$tasklist['id']=$_POST['tasklist_id'];
-			$tasklist['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : GO::security()->user_id;
+			$tasklist['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GLOBALS['GO_SECURITY']->user_id;
 			$tasklist['name']=$_POST['name'];
 
 
@@ -295,19 +295,19 @@ try {
 
 			if($tasklist['id']>0) {
 				$old_tasklist = $tasks->get_tasklist($tasklist['id']);
-				if(GO::security()->has_permission(GO::security()->user_id, $old_tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
+				if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
 					throw new AccessDeniedException();
 				}
-				if(!GO::security()->has_admin_permission(GO::security()->user_id))
+				if(!$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id))
 				{
 					unset($tasklist['user_id']);
 				}				
 				$tasks->update_tasklist($tasklist, $old_tasklist);
 			}else {
-				if(!GO::modules()->modules['tasks']['write_permission']) {
+				if(!$GLOBALS['GO_MODULES']->modules['tasks']['write_permission']) {
 					throw new AccessDeniedException();
 				}
-				$response['acl_id'] = $tasklist['acl_id'] = GO::security()->get_new_acl('tasks', $tasklist['user_id']);
+				$response['acl_id'] = $tasklist['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl('tasks', $tasklist['user_id']);
 
 				$response['tasklist_id']=$tasks->add_tasklist($tasklist);
 			}
@@ -320,7 +320,7 @@ try {
 			$tasklists = json_decode($_POST['tasklists'], true);
 			$response['data'] = array();
 			foreach($tasklists as $tasklist) {
-				$tasklist['user_id'] = GO::security()->user_id;
+				$tasklist['user_id'] = $GLOBALS['GO_SECURITY']->user_id;
 				if($tasklist['visible'] == 0) {
 					$tasks->delete_visible_tasklist($tasklist['tasklist_id'], $tasklist['user_id']);
 				}
@@ -337,7 +337,7 @@ try {
 
 			$category['id'] = (isset($_REQUEST['id']) && $_REQUEST['id']) ? $_REQUEST['id'] : 0;
                         $category['name'] = (isset($_REQUEST['name']) && $_REQUEST['name']) ? $_REQUEST['name'] : '';
-                        $category['user_id'] = (isset($_REQUEST['global'])) ? 0 : GO::security()->user_id;
+                        $category['user_id'] = (isset($_REQUEST['global'])) ? 0 : $GLOBALS['GO_SECURITY']->user_id;
 
 			if(empty($category['name']))
 			{

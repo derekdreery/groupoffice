@@ -3,7 +3,7 @@ function smarty_function_form($params, &$smarty)
 {
 	global $co, $GO_LANGUAGE, $lang, $GO_CONFIG;
 	
-	require(GO::language()->get_language_file('cms'));
+	require($GLOBALS['GO_LANGUAGE']->get_language_file('cms'));
 	
 	$form_id = $params['form_id'];
 	$templates=explode(',', $params['templates']);	
@@ -34,7 +34,7 @@ function smarty_function_form($params, &$smarty)
 			
 			if($template_index==(count($templates)-1))
 			{
-				require_once(GO::config()->class_path.'mail/GoSwift.class.inc.php');
+				require_once($GLOBALS['GO_CONFIG']->class_path.'mail/GoSwift.class.inc.php');
 				
 				//send
 				$body='';

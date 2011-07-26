@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_language_file('users'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('users'));
 $lang['users']['name']='Benutzer';
 $lang['users']['description']='Modul zur Benutzerverwaltung';
 $lang['users']['deletePrimaryAdmin']='Sie können den primären Administrator nicht löschen';

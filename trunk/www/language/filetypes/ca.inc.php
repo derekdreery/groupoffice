@@ -1,6 +1,6 @@
 <?php
 //Translated with Group-Office translate module
-require(GO::language()->get_fallback_base_language_file('filetypes'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('filetypes'));
 $lang['filetypes']['unknown']='Tipus d\'arxiu desconegut';
 $lang['filetypes']['txt']='Arxiu de text';
 $lang['filetypes']['sxw']='Document d\'OpenOffice.Org Writer';

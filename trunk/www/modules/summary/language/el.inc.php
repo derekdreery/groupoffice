@@ -1,6 +1,6 @@
 <?php
 /* Translator for the Greek Language: Konstantinos Georgakopoulos (kgeorga@uom.gr)*/
-require(GO::language()->get_fallback_language_file('summary'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('summary'));
 
 $lang['summary']['name']='Αρχική σελίδα';
 $lang['summary']['description']='Εμφανίζει μια σύνοψη διαφορετικών πραγματικών στοιχείων';

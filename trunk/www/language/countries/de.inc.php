@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_base_language_file('countries'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('countries'));
 $countries['AD']='Andorra';
 $countries['AE']='Vereinigte Arabische Emirate';
 $countries['AF']='Afghanistan';

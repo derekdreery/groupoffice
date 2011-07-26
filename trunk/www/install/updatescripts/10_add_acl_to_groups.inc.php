@@ -3,7 +3,7 @@ $db2 = new db();
 
 $db->query("SELECT * FROM go_groups");
 while($r=$db->next_record()){
-	$acl_id = GO::security()->get_new_acl('group', 1);
+	$acl_id = $GLOBALS['GO_SECURITY']->get_new_acl('group', 1);
 
 	$record['id']=$r['id'];
 	$record['acl_id']=$acl_id;

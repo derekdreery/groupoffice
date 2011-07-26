@@ -13,7 +13,7 @@
  */
 
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('tools'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('tools'));
 
 $lang['tools']['name']= 'Verktyg';
 $lang['tools']['description']= 'En modul för att utföra administrativa uppgifter, bl a databasunderhåll.';

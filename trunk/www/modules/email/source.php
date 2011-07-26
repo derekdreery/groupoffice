@@ -15,23 +15,23 @@
 
 require_once("../../Group-Office.php");
 
-GO::security()->html_authenticate();
+$GLOBALS['GO_SECURITY']->html_authenticate();
 
 $account_id = ($_REQUEST['account_id']);
 $mailbox = ($_REQUEST['mailbox']);
 $uid = ($_REQUEST['uid']);
 
-require_once(GO::language()->get_language_file('email'));
-require_once(GO::config()->class_path."mail/imap.class.inc");
-require_once(GO::modules()->modules['email']['class_path']."cached_imap.class.inc.php");
-require_once(GO::modules()->modules['email']['class_path']."email.class.inc.php");
+require_once($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
+require_once($GLOBALS['GO_CONFIG']->class_path."mail/imap.class.inc");
+require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."cached_imap.class.inc.php");
+require_once($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
 
 $imap = new cached_imap();
 $email = new email();
 
 $account = $imap->open_account($_REQUEST['account_id'], $_REQUEST['mailbox']);
 
-if(!GO::security()->has_permission(GO::security()->user_id,$account['acl_id'])) {
+if(!$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id,$account['acl_id'])) {
 	die($lang['common']['accessDenied']);
 }
 

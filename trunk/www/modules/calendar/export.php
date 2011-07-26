@@ -15,8 +15,8 @@
 
 require_once("../../Group-Office.php");
 
-require_once(GO::modules()->modules['calendar']['class_path'].'calendar.class.inc.php');
-require_once(GO::modules()->modules['calendar']['class_path'].'go_ical.class.inc');
+require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'calendar.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'go_ical.class.inc');
 $ical = new go_ical('2.0');
 $ical->line_break="\r\n";
 $ical->dont_use_quoted_printable=true;
@@ -34,10 +34,10 @@ if (isset($_REQUEST['calendar_id']) && $calendar = $ical->get_calendar($_REQUEST
 	$filename = $event['name'].'.ics';
 }
 if(!$calendar || !$calendar['public']){
-	GO::security()->authenticate();
-	GO::modules()->authenticate('calendar');
+	$GLOBALS['GO_SECURITY']->authenticate();
+	$GLOBALS['GO_MODULES']->authenticate('calendar');
 
-	if($calendar && !GO::security()->has_permission(GO::security()->user_id, $calendar['acl_id'])){
+	if($calendar && !$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id'])){
 		die('Access denied');
 	}
 }

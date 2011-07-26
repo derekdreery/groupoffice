@@ -1,18 +1,18 @@
 <?php
-require(GO::language()->get_language_file('calllog'));
+require($GLOBALS['GO_LANGUAGE']->get_language_file('calllog'));
 
-require_once(GO::modules()->modules['calllog']['class_path'].'calllog.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['calllog']['class_path'].'calllog.class.inc.php');
 
-if(isset(GO::modules()->modules['customfields']))
+if(isset($GLOBALS['GO_MODULES']->modules['customfields']))
 {
-	require_once(GO::modules()->modules['customfields']['class_path'].'customfields.class.inc.php');
+	require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 	$cf = new customfields();
 	$GO_SCRIPTS_JS .= $cf->get_javascript(18, $lang['calllog']['name']);
 }
 
 /*
 $tickets = new tickets();
-$type = $tickets->get_default_type(GO::security()->user_id);
+$type = $tickets->get_default_type($GLOBALS['GO_SECURITY']->user_id);
 
 //$autoreply_template = $tickets->get_template_auto_reply();
 //$art_id=$autoreply_template ? $autoreply_template['id'] : 0;
@@ -20,10 +20,10 @@ $ticket_created_for_client_template = $tickets->get_template_ticket_created_for_
 $tcfc_id=$ticket_created_for_client_template ? $ticket_created_for_client_template['id'] : 0;
 
 
-$tickets_bill_item_template = GO::config()->get_setting('tickets_bill_item_template');
+$tickets_bill_item_template = $GLOBALS['GO_CONFIG']->get_setting('tickets_bill_item_template');
 if (!$tickets_bill_item_template) {
 	$tickets_bill_item_template = $lang['tickets']['bill_item_template'];
-	GO::config()->save_setting('tickets_bill_item_template',$lang['tickets']['bill_item_template']);
+	$GLOBALS['GO_CONFIG']->save_setting('tickets_bill_item_template',$lang['tickets']['bill_item_template']);
 }
 $GO_SCRIPTS_JS .= 'GO.tickets.bill_item_template="'.String::escape_javascript($tickets_bill_item_template).'";';
 

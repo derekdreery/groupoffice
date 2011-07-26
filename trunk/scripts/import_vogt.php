@@ -9,14 +9,14 @@ ini_set('max_execution_time', 0);
 
 require('../www/Group-Office.php');
 
-require_once(GO::config()->class_path.'base/users.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
 //login as admin
-GO::security()->logged_in($GO_USERS->get_user(1));
-GO::modules()->load_modules();
+$GLOBALS['GO_SECURITY']->logged_in($GO_USERS->get_user(1));
+$GLOBALS['GO_MODULES']->load_modules();
 
-require_once(GO::config()->class_path.'base/links.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 $GO_LINKS = new GO_LINKS();
 
 error_reporting(E_ALL ^ E_DEPRECATED);
@@ -30,16 +30,16 @@ $addressbook_name = 'Import';
 
 $dir = '/home/sjmeut/Desktop/';
 
-require_once(GO::modules()->modules['projects']['class_path'] . 'projects.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['projects']['class_path'] . 'projects.class.inc.php');
 $pm = new projects();
 
-require_once(GO::modules()->modules['billing']['class_path'] . 'billing.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['billing']['class_path'] . 'billing.class.inc.php');
 $bs = new billing();
 
-require_once(GO::modules()->modules['addressbook']['class_path'] . 'addressbook.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'] . 'addressbook.class.inc.php');
 $ab = new addressbook();
 
-require_once(GO::modules()->modules['customfields']['class_path'] . 'customfields.class.inc.php');
+require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'] . 'customfields.class.inc.php');
 $cf = new customfields();
 
 
@@ -52,7 +52,7 @@ function create_custom_fields($type, $cf_category_name, $custom_fields) {
 	if (!$category) {
 		$category['name'] = $cf_category_name;
 		$category['type'] = $type;
-		$category['acl_id'] = GO::security()->get_new_acl();
+		$category['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl();
 		$category_id = $cf->add_category($category);
 	} else {
 		$category_id = $category['id'];
@@ -245,7 +245,7 @@ if(true)
                                     $company['post_city'] = $company['city'];
                                 }
 
-                                require_once(GO::language()->get_base_language_file('countries'));
+                                require_once($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
 
                                 $arr = array_keys($countries, $company['country']);                                
                                 $company['country'] = isset($arr[0]) ? $arr[0] : $company['country'];
@@ -277,7 +277,7 @@ if(true)
                 $book_id = $book['id'];
         }else
         {
-                $book_id = $bs->add_book(array('name' => 'Bestelbonnen', 'default_vat' => 19, 'is_purchase_orders_book' => 1, 'country' => 'NL', 'currency' => '€', 'order_id_prefix' => '%y-', 'user_id' => 1, 'acl_id' => GO::security()->get_new_acl('book')));
+                $book_id = $bs->add_book(array('name' => 'Bestelbonnen', 'default_vat' => 19, 'is_purchase_orders_book' => 1, 'country' => 'NL', 'currency' => '€', 'order_id_prefix' => '%y-', 'user_id' => 1, 'acl_id' => $GLOBALS['GO_SECURITY']->get_new_acl('book')));
         }
        
         //map the std fields to the csv file headers
@@ -352,7 +352,7 @@ if(true)
                                                 $order['status_id'] = $status['id'];
                                         }else
                                         {
-                                                $status_language['status_id'] = $order['status_id'] = $bs->add_order_status(array('book_id' => $book_id, 'acl_id' => GO::security()->get_new_acl('order_status')));
+                                                $status_language['status_id'] = $order['status_id'] = $bs->add_order_status(array('book_id' => $book_id, 'acl_id' => $GLOBALS['GO_SECURITY']->get_new_acl('order_status')));
 
                                                 if($status_language['status_id'])
                                                 {
@@ -376,7 +376,7 @@ if(true)
                                 $existing_company = $ab->get_company_by_name($addressbook_id, $company_name);
                                 if($existing_company)
                                 {
-                                        require(GO::language()->get_base_language_file('countries'));
+                                        require($GLOBALS['GO_LANGUAGE']->get_base_language_file('countries'));
                                         
                                         $order['company_id'] = $existing_company['id'];
                                         $order['customer_to'] = $order['customer_name'] = $existing_company['name'];                                        

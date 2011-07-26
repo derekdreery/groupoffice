@@ -1,5 +1,5 @@
 <?php
-require(GO::language()->get_fallback_base_language_file('lostpassword'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('lostpassword'));
 $lang['lostpassword']['success']='<h1>Contraseña modificada</h1><p>Su contraseña fue modificada exitosamente. Puede continuar a la página de logueo.</p>';
 $lang['lostpassword']['send']='Enviar';
 $lang['lostpassword']['login']='Login';

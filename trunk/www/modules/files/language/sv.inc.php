@@ -1,6 +1,6 @@
 <?php
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('files'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('files'));
 $lang['files']['name'] = 'Filer';
 $lang['files']['description'] = 'Modul för att hantera filer i Group-Office. Filer kan delas mellan användare och grupper. Använd GOTA för att redigera filer från Group-Office lokalt och spara ändringarna till servern.';
 

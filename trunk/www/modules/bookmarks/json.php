@@ -15,10 +15,10 @@
 require_once('../../Group-Office.php');
 
 //Authenticate the user
-GO::security()->json_authenticate('bookmarks');
+$GLOBALS['GO_SECURITY']->json_authenticate('bookmarks');
 
 //Require the module class
-require_once (GO::modules()->modules['bookmarks']['class_path'] . 'bookmarks.class.inc.php');
+require_once ($GLOBALS['GO_MODULES']->modules['bookmarks']['class_path'] . 'bookmarks.class.inc.php');
 $bookmarks = new bookmarks();
 
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
@@ -95,7 +95,7 @@ try {
 
 			if(!empty($contents)){
 				$relpath = 'public/bookmarks/';
-				$path = GO::config()->file_storage_path.$relpath;
+				$path = $GLOBALS['GO_CONFIG']->file_storage_path.$relpath;
 				if(!is_dir($path))
 					mkdir($path,0755, true);
 
@@ -132,7 +132,7 @@ try {
 			$category = isset($_REQUEST['category']) ? ($_REQUEST['category']) : '0';
 			$query = !empty($_REQUEST['query']) ? '%' . ($_REQUEST['query']) . '%' : '';
 
-			$bookmarks->get_authorized_bookmarks(GO::security()->user_id, $query, $start, $limit, $category);
+			$bookmarks->get_authorized_bookmarks($GLOBALS['GO_SECURITY']->user_id, $query, $start, $limit, $category);
 
 			$response['results'] = array();
 			$response['total'] = $bookmarks->found_rows(); // paging
@@ -142,14 +142,14 @@ try {
 				if ($bookmark['acl_id'] == 0) {
 					$bookmark['write_permission'] = true;
 				} else {
-					$bookmark['write_permission'] = GO::security()->has_permission(GO::security()->user_id, $bookmark['acl_id']) > GO_SECURITY::READ_PERMISSION;
+					$bookmark['write_permission'] = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $bookmark['acl_id']) > GO_SECURITY::READ_PERMISSION;
 				}
 
 				//$bookmark['description']=nl2br($bookmark['description']);
 				$bookmark['thumb'] = '';
 				if (!empty($bookmark['logo'])) {
 					if ($bookmark['public_icon'] == '1') {
-						$bookmark['thumb'] = GO::modules()->modules['bookmarks']['url'] . $bookmark['logo'];
+						$bookmark['thumb'] = $GLOBALS['GO_MODULES']->modules['bookmarks']['url'] . $bookmark['logo'];
 					} else {
 						$bookmark['thumb'] = get_thumb_url($bookmark['logo'], 16, 16, 0);
 					}
@@ -163,12 +163,12 @@ try {
 
 		case 'category':
 			$category = $bookmarks->get_category(($_REQUEST['category_id']));
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			$category['user_name']=$GO_USERS->get_user_realname($category['user_id']);
 			$category['public'] = $category['acl_id'] > 0 ? '1' : '0';
-			$category['write_permission'] = GO::security()->has_permission(GO::security()->user_id, $category['acl_id']) > GO_SECURITY::READ_PERMISSION;
+			$category['write_permission'] = $GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $category['acl_id']) > GO_SECURITY::READ_PERMISSION;
 			$response['data'] = $category;
 			$response['success'] = true;
 			break;
@@ -201,15 +201,15 @@ try {
 
 			$query = ''; //isset($_REQUEST['query']) ? '%'.($_REQUEST['query']).'%' : '';
 
-			$response['total'] = $bookmarks->get_authorized_categories($auth_type, GO::security()->user_id, $query, $sort, $dir, $start, $limit);
+			$response['total'] = $bookmarks->get_authorized_categories($auth_type, $GLOBALS['GO_SECURITY']->user_id, $query, $sort, $dir, $start, $limit);
 			if (!$response['total']) {
 
-				$response['total'] = $bookmarks->get_authorized_categories($auth_type, GO::security()->user_id, $query, $sort, $dir, $start, $limit);
+				$response['total'] = $bookmarks->get_authorized_categories($auth_type, $GLOBALS['GO_SECURITY']->user_id, $query, $sort, $dir, $start, $limit);
 			}
 
 			$response['results'] = array();
 
-			require_once(GO::config()->class_path.'base/users.class.inc.php');
+			require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 			$GO_USERS = new GO_USERS();
 
 			while ($category =$bookmarks->next_record()){

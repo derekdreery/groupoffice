@@ -13,22 +13,22 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require('../../Group-Office.php');
-GO::security()->json_authenticate('gnupg');
-require_once (GO::modules()->modules['gnupg']['class_path'].'gnupg.class.inc.php');
+$GLOBALS['GO_SECURITY']->json_authenticate('gnupg');
+require_once ($GLOBALS['GO_MODULES']->modules['gnupg']['class_path'].'gnupg.class.inc.php');
 $gnupg = new gnupg();
 $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 try{
 	switch($task)
 	{
 		case 'send_key': 			
-			require_once (GO::modules()->modules['email']['class_path']."email.class.inc.php");
+			require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path']."email.class.inc.php");
 		
-			$tmp_file = GO::config()->tmpdir.'public_key.asc';
+			$tmp_file = $GLOBALS['GO_CONFIG']->tmpdir.'public_key.asc';
 			
 			$data = $gnupg->export($_REQUEST['fingerprint']);
 			file_put_contents($tmp_file, $data);
 			
-			if(GO::modules()->has_module('mailings') && isset($_REQUEST['template_id']))
+			if($GLOBALS['GO_MODULES']->has_module('mailings') && isset($_REQUEST['template_id']))
 			{
 				$response = load_template($_REQUEST['template_id'], '');
 			}

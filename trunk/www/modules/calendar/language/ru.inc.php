@@ -6,7 +6,7 @@
  * 10 December 2008
 */
 //Uncomment this line in new translations!
-require(GO::language()->get_fallback_language_file('calendar'));
+require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
 $lang['calendar']['name'] = 'Календарь';
 $lang['calendar']['description'] = 'Модуль Календарь; Каждый пользователь может добавить, редактировать или удалить события. Можно просматривать события других пользователей, и в случае необходимости можно их изменять.';
 

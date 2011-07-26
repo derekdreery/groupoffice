@@ -12,8 +12,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require('../../Group-Office.php');
-GO::security()->json_authenticate('log');
-require_once (GO::modules()->modules['log']['class_path'].'log.class.inc.php');
+$GLOBALS['GO_SECURITY']->json_authenticate('log');
+require_once ($GLOBALS['GO_MODULES']->modules['log']['class_path'].'log.class.inc.php');
 $log = new log();
 $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 try{
@@ -43,8 +43,8 @@ try{
 		case 'advanced_query_fields':
 			$response['results'] = array();
 
-			foreach(GO::modules()->modules as $module) {
-				GO::language()->require_language_file($module['id']);
+			foreach($GLOBALS['GO_MODULES']->modules as $module) {
+				$GLOBALS['GO_LANGUAGE']->require_language_file($module['id']);
 			}
 
 

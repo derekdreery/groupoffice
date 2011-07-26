@@ -66,13 +66,13 @@ class filesystem extends db
 	{
 		global $GO_CONFIG;
 
-		if(!empty(GO::config()->cmd_quota))
+		if(!empty($GLOBALS['GO_CONFIG']->cmd_quota))
 		{
 			if(!isset($username))
 			{
 				$username = str_replace(strstr($_SESSION['GO_SESSION']['username'], "@"), "", $_SESSION['GO_SESSION']['username']);
 			}
-			exec(escapeshellcmd(GO::config()->cmd_sudo.' '.GO::config()->cmd_quota.' '.$username), $quota_out);
+			exec(escapeshellcmd($GLOBALS['GO_CONFIG']->cmd_sudo.' '.$GLOBALS['GO_CONFIG']->cmd_quota.' '.$username), $quota_out);
 			if(isset($quota_out[0]))
 			{
 				foreach($quota_out as $line)
@@ -243,8 +243,8 @@ class filesystem extends db
 					return true;
 
 					//rename fails when moving accross partitions
-					/*if(isset($_SESSION['GO_SESSION']['username']) && strstr($source_path, GO::config()->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/') &&
-					strstr($destination_path, GO::config()->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/')
+					/*if(isset($_SESSION['GO_SESSION']['username']) && strstr($source_path, $GLOBALS['GO_CONFIG']->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/') &&
+					strstr($destination_path, $GLOBALS['GO_CONFIG']->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'].'/')
 					)
 					{
 						if(!rename($source_path, $destination_path)){
@@ -299,7 +299,7 @@ class filesystem extends db
 			{
 				if (!file_exists($destination_path))
 				{
-					if (!mkdir($destination_path, GO::config()->folder_create_mode))
+					if (!mkdir($destination_path, $GLOBALS['GO_CONFIG']->folder_create_mode))
 					{
 						throw new Exception('Failed to create direcory');
 					}
@@ -321,7 +321,7 @@ class filesystem extends db
 				{
 					throw new Exception('Copy failed');
 				}
-				chmod($destination_path, GO::config()->file_create_mode);
+				chmod($destination_path, $GLOBALS['GO_CONFIG']->file_create_mode);
 				
 				return true;
 			}
@@ -338,12 +338,12 @@ class filesystem extends db
 	function get_usedspace($path)
 	{
 		global $GO_CONFIG;
-		if ( strstr( $path, GO::config()->file_storage_path.'users/' ) )
+		if ( strstr( $path, $GLOBALS['GO_CONFIG']->file_storage_path.'users/' ) )
 		{
-			$dest = substr( $path, strlen( GO::config()->file_storage_path.'users/' ) );
+			$dest = substr( $path, strlen( $GLOBALS['GO_CONFIG']->file_storage_path.'users/' ) );
 			$dest = substr( $dest, 0, strpos( $dest, "/" ) );
-			//echo "du ".GO::config()->file_storage_path.'users/'.$dest." -s";
-			exec("du ".GO::config()->file_storage_path.'users/'.$dest." -s", $retval );
+			//echo "du ".$GLOBALS['GO_CONFIG']->file_storage_path.'users/'.$dest." -s";
+			exec("du ".$GLOBALS['GO_CONFIG']->file_storage_path.'users/'.$dest." -s", $retval );
 
 			list($usedspace) = sscanf( $retval[0], "%d");
 			return $usedspace*1024;
@@ -385,7 +385,7 @@ class filesystem extends db
 					return false;
 				}
 			}
-			if ($this->has_write_permission(GO::security()->user_id, $path))
+			if ($this->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $path))
 			{
 				return rmdir($path);
 			}else
@@ -395,7 +395,7 @@ class filesystem extends db
 		}elseif(file_exists($path))
 		{	
 				
-			if ($this->has_write_permission(GO::security()->user_id, $path))
+			if ($this->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $path))
 			{
 				return unlink($path);
 			}else
@@ -489,9 +489,9 @@ class filesystem extends db
 		
 		$folders=array();
 
-		if(strstr($path, GO::config()->root_path))
+		if(strstr($path, $GLOBALS['GO_CONFIG']->root_path))
 		{
-			$url = str_replace(GO::config()->root_path, GO::config()->host, $path);
+			$url = str_replace($GLOBALS['GO_CONFIG']->root_path, $GLOBALS['GO_CONFIG']->host, $path);
 		}
 		$sort_field = function_exists($sort_field) ? $sort_field : 'utf8_basename';
 		if (is_dir($path))
@@ -600,9 +600,9 @@ class filesystem extends db
 		$files = array();
 
 
-		if(strstr($path, GO::config()->root_path))
+		if(strstr($path, $GLOBALS['GO_CONFIG']->root_path))
 		{
-			$url = str_replace(GO::config()->root_path, GO::config()->host, $path);
+			$url = str_replace($GLOBALS['GO_CONFIG']->root_path, $GLOBALS['GO_CONFIG']->host, $path);
 		}
 		
 		if($pos = strpos($sort_field, '::'))

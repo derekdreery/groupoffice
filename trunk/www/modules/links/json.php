@@ -12,9 +12,9 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 require('../../Group-Office.php');
-GO::security()->json_authenticate();
+$GLOBALS['GO_SECURITY']->json_authenticate();
 
-require_once(GO::config()->class_path.'base/links.class.inc.php');
+require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 $GO_LINKS = new GO_LINKS();
 
 $task=isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
@@ -28,15 +28,15 @@ try{
 			break;
 
 		case 'default_link_folders':
-			foreach(GO::modules()->modules as $module) {
-				if($lang_file = GO::language()->get_language_file($module['id'])) {
-					GO::language()->require_language_file($module['id']);
+			foreach($GLOBALS['GO_MODULES']->modules as $module) {
+				if($lang_file = $GLOBALS['GO_LANGUAGE']->get_language_file($module['id'])) {
+					$GLOBALS['GO_LANGUAGE']->require_language_file($module['id']);
 				}
 			}
 			$response['data']=array();
 			$response['success']=true;
 			foreach($lang['link_type'] as $id=>$name) {
-				$v = GO::config()->get_setting('default_link_folder_'.$id);
+				$v = $GLOBALS['GO_CONFIG']->get_setting('default_link_folder_'.$id);
 				if($v)
 					$response['data']['default_folders_'.$id]=$v;
 			}
