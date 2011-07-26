@@ -7,7 +7,7 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 	
 	protected function getGridParams(){
 		
-		$this->selectedCategories = $GLOBALS['GO_CONFIG']->get_setting('notes_categories_filter', $GLOBALS['GO_SECURITY']->user_id);
+		$this->selectedCategories = GO::config()->get_setting('notes_categories_filter', GO::session()->values['user_id']);
 		$this->selectedCategories  = $this->selectedCategories ? explode(',',$this->selectedCategories) : array();
 		
 		return array();

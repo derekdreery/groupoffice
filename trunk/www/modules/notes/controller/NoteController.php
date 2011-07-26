@@ -10,10 +10,10 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 		if(isset($_POST['categories']))
 		{
 			$categories = json_decode($_POST['categories'], true);
-			$GLOBALS['GO_CONFIG']->save_setting('notes_categories_filter',implode(',', $categories), $GLOBALS['GO_SECURITY']->user_id);
+			GO::config()->save_setting('notes_categories_filter',implode(',', $categories), GO::session()->values['user_id']);
 		}else
 		{
-			$categories = $GLOBALS['GO_CONFIG']->get_setting('notes_categories_filter', $GLOBALS['GO_SECURITY']->user_id);
+			$categories = GO::config()->get_setting('notes_categories_filter', GO::session()->values['user_id']);
 			$categories = $categories ? explode(',',$categories) : array();
 		}
 		
