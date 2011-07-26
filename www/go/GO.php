@@ -43,6 +43,7 @@ class GO{
 	private static $_modules;
 	private static $_events;
 	private static $_theme;
+	private static $_session;
 
 	public static $db;
 	
@@ -119,6 +120,17 @@ class GO{
 			self::$_config = new GO_CONFIG();
 		}
 		return self::$_config;
+	}
+	
+	/**
+	 *
+	 * @return GO_Base_Session
+	 */
+	public static function session() {
+		if (!isset(self::$_session)) {
+			self::$_session = new GO_Base_Session();
+		}
+		return self::$_session;
 	}
 
 	/**
