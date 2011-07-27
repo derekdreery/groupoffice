@@ -1236,9 +1236,9 @@ class GO_Base_Config {
 		$response['state']=array();
 		if($GLOBALS['GO_SECURITY']->logged_in()) {
 			//state for Ext components
-			$response['state'] = $this->get_state($GLOBALS['GO_SECURITY']->user_id, $response['state_index']);
+			$response['state'] = $this->get_state(GO::session()->values['user_id'], $response['state_index']);
 
-			$response['has_admin_permission']=$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id);
+			$response['has_admin_permission']=$GLOBALS['GO_SECURITY']->has_admin_permission(GO::session()->values['user_id']);
 		}
 		foreach($_SESSION['GO_SESSION'] as $key=>$value) {
 			if(!is_array($value)) {

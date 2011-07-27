@@ -17,7 +17,7 @@ class GO_Base_OutputStream_OutputStreamXML implements GO_Base_OutputStream_Outpu
 	}
 	
 	public function write($data){
-		require_once($GLOBALS['GO_CONFIG']->root_path.'classes/xml/GOXML.class.inc.php');
+		require_once(GO::config()->root_path.'classes/xml/GOXML.class.inc.php');
 		$dom = new DOMDocument('1.0');
 		$GOXML = new GOXML($dom);
 		$GOXML->addArray($data,$dom);

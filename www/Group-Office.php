@@ -219,3 +219,10 @@ if (get_magic_quotes_gpc())
 }
 
 umask(0);
+
+
+//todo this would be the new code:
+
+$root = dirname(__FILE__).'/';
+require_once($root.'go/GO.php');
+GO::init();
