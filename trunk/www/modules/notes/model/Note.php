@@ -19,6 +19,9 @@
  * 
  * 
  * The Note model
+ * 
+ * @property int $id
+ * @property int $category_id
  */
 class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 
