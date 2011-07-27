@@ -41,7 +41,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	/**
 	 * @var array relational rules.
 	 */
-	protected $relations;
+	protected $relations=array();
 	
 	/**
 	 * 
@@ -111,6 +111,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$pk = $this->pk;
 		
 		$this->_setOldAttributes();		
+		
+		$this->joinAclField = strpos($this->aclField, '.')!==false;
 		
 		$this->setIsNew(empty($pk));
 		$this->init();
@@ -207,11 +209,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(count($arr)==2){
 			//we need to join a table for the acl field
 			
-			$model = new $this->relations[$arr[0]][1];
+			$model = new $this->relations[$arr[0]]['model'];
 			
 			$ret['relation']=$arr[0];
 			$ret['aclField']=$arr[1];
-			$ret['join']='INNER JOIN `'.$model->tableName.'` '.$ret['relation'].' ON ('.$ret['relation'].'.`'.$model->primaryKey.'`=t.`'.$this->relations[$arr[0]][2].'`) ';
+			$ret['join']='INNER JOIN `'.$model->tableName.'` '.$ret['relation'].' ON ('.$ret['relation'].'.`'.$model->primaryKey.'`=t.`'.$this->relations[$arr[0]]['field'].'`) ';
 			$ret['fields']='';
 			
 			$cols = $model->getColumns();
@@ -645,34 +647,46 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			return false;			
 		}
 		
-		$model = $this->relations[$name][1];
+		$model = $this->relations[$name]['model'];
 		
-		//if($this->relations[$name][0]==self::BELONGS_TO)
+		if($this->relations[$name]['type']==self::BELONGS_TO){// || $this->relations[$name]['type']==self::HAS_ONE){
 		
-		/**
-		 * Related stuff can be put in the relatedCache array for when a relation is
-		 * accessed multiple times.
-		 * 
-		 * Related stuff can also be joined in a query and be passed to the __set 
-		 * function as relation@relation_attribute. This array will be used here to
-		 * construct the related model.
-		 */
-		if(isset($this->_relatedCache[$name])){			
-			
-			if(is_array($this->_relatedCache[$name])){
-				$attr = $this->_relatedCache[$name];
-				
-				$this->_relatedCache[$name]=new $model;
-				$this->_relatedCache[$name]->setAttributes($attr, false);				
+			/**
+			 * Related stuff can be put in the relatedCache array for when a relation is
+			 * accessed multiple times.
+			 * 
+			 * Related stuff can also be joined in a query and be passed to the __set 
+			 * function as relation@relation_attribute. This array will be used here to
+			 * construct the related model.
+			 */
+			if(isset($this->_relatedCache[$name])){			
+
+				if(is_array($this->_relatedCache[$name])){
+					$attr = $this->_relatedCache[$name];
+
+					$this->_relatedCache[$name]=new $model;
+					$this->_relatedCache[$name]->setAttributes($attr, false);				
+				}
+
+			}else
+			{
+				$joinAttribute = $this->relations[$name]['field'];
+				$this->_relatedCache[$name]= $model::model()->findByPk($this->_attributes[$joinAttribute]);
 			}
-			
-		}else
-		{
-			$joinAttribute = $this->relations[$name][2];
-			$this->_relatedCache[$name]= $model::model()->findByPk($this->_attributes[$joinAttribute]);
+
+			return $this->_relatedCache[$name];
+		}elseif($this->relations[$name]['type']==self::HAS_MANY)
+		{							
+			$remotePkValue = $this->pk;
+			$remotePkField = $this->relations[$name]['field'];
+			$findParams = array(
+					"by"=>array(array($remotePkField,$remotePkValue,'=')),
+					"ignoreAcl"=>true
+			);
+				
+			$stmt = $model::model()->find($findParams);
+			return $stmt;		
 		}
-		
-		return $this->_relatedCache[$name];
 	}
 	
 	protected function formatInputValues($attributes){
@@ -861,7 +875,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			if($this->isNew){				
 				
-				if($this->aclField && !$this->joinAclField){
+				if($this->aclField && !$this->joinAclField && empty($this->{$this->aclField})){
 					//generate acl id
 					
 					$acl = new GO_Base_Model_Acl();
@@ -1088,6 +1102,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!$this->beforeDelete())
 				return false;
 		
+		foreach($this->relations as $name => $attr){
+			if(!empty($attr['delete'])){
+
+				$stmt = $this->$name;
+				while($child = $stmt->fetch()){
+
+					$child->delete();
+				}
+			}
+		}
+		
 		$sql = "DELETE FROM `".$this->tableName."` WHERE ";
 		$sql = $this->_appendPkSQL($sql);
 		
@@ -1103,16 +1128,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkType));
 			$model->delete();
 		}
-				
-		if($this->aclField && !$this->joinAclField){
-			$GLOBALS['GO_SECURITY']->delete_acl($this->{$this->aclField});
-		}	
 		
-		foreach($this->relations as $name => $attr){
-			if($attr[0]==self::HAS_MANY){
-				$this->name();
-			}
-		}
+		
+		if($this->aclField && !$this->joinAclField){			
+			//echo 'Deleting acl '.$this->{$this->aclField}.' '.$this->aclField.'<br />';
+			
+			$acl = GO_Base_Model_Acl::model()->findByPk($this->{$this->aclField});			
+			$acl->delete();
+		}	
 
 		return $this->afterDelete();			
 	}

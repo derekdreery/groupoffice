@@ -62,7 +62,7 @@ GO.notes.ManageCategoriesGrid = Ext.extend(GO.grid.GridPanel,{
 			this.categoryDialog = new GO.notes.CategoryDialog();
 
 			this.categoryDialog.on('save', function(){   
-				this.store.reload();
+				this.store.load();
 				this.changed=true;	    			    			
 			}, this);	
 		}

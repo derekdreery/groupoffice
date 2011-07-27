@@ -24,8 +24,8 @@
 	public $tableName='no_categories';
 	
 	protected $relations=array(
-				'notes' => array(self::HAS_MANY, 'GO_Notes_Model_Note', 'category_id'),
-				'user' => array(self::BELONGS_TO, 'GO_Base_Model_User', 'user_id')
+				'notes' => array('type'=>self::HAS_MANY, 'model'=>'GO_Notes_Model_Note', 'field'=>'category_id', 'delete'=>true),
+				'user' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id')
 		);
 
 	protected $_columns=array(

@@ -154,7 +154,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	}
 
 	/**
-	 * Override this function to supplie additional parameters to the 
+	 * Override this function to supply additional parameters to the 
 	 * GO_Base_Db_ActiveRecord->find() function
 	 * 
 	 * @return array parameters for the GO_Base_Db_ActiveRecord->find() function 
@@ -220,9 +220,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 
 		$this->output($response);
-
-
-		//var_dump(GO_Notes_Model_Note::$_models);
 	}
 	
 	/**
