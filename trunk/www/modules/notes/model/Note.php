@@ -57,7 +57,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function beforeSave(){
-		if (empty($this->files_folder_id) && isset($GLOBALS['GO_MODULES']->files)) {
+		if (empty($this->files_folder_id) && isset(GO::modules()->files)) {
 			$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this, $this->_buildFilesPath());
 		}
 		return parent::beforeSave();
@@ -65,13 +65,13 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 
 	protected function afterSave() {
 
-		if (isset($GLOBALS['GO_MODULES']->customfields))
+		if (isset(GO::modules()->customfields))
 			GO_Customfields_Controller_Item::saveCustomFields($this, "GO_Notes_Model_CustomFieldsRecord");
 
 		
 		//Does this belong in the controller?
-		if (!empty($_POST['tmp_files']) && $GLOBALS['GO_MODULES']->has_module('files')) {
-			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'] . 'files.class.inc.php');
+		if (!empty($_POST['tmp_files']) && GO::modules()->has_module('files')) {
+			require_once(GO::modules()->modules['files']['class_path'] . 'files.class.inc.php');
 			$files = new files();
 			$fs = new filesystem();
 
@@ -80,7 +80,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 			$tmp_files = json_decode($_POST['tmp_files'], true);
 			while ($tmp_file = array_shift($tmp_files)) {
 				if (!empty($tmp_file['tmp_file'])) {
-					$new_path = $GLOBALS['GO_CONFIG']->file_storage_path . $path . '/' . $tmp_file['name'];
+					$new_path = GO::config()->file_storage_path . $path . '/' . $tmp_file['name'];
 					$fs->move($tmp_file['tmp_file'], $new_path);
 					$files->import_file($new_path, $this->files_folder_id);
 				}
@@ -94,7 +94,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	
 	protected function afterDelete() {
 		
-		if(isset($GLOBALS['GO_MODULES']->files)){
+		if(isset(GO::modules()->files)){
 			GO_Files_Controller_Item::deleteFilesFolder($this->files_folder_id);	
 		}
 		

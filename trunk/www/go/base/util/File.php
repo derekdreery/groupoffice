@@ -43,9 +43,9 @@ class GO_Base_Util_File
 
 	  if(!file_exists($path))
 	  {
-	  	if(mkdir($path, $GLOBALS['GO_CONFIG']->folder_create_mode, true)){
-			if(!empty($GLOBALS['GO_CONFIG']->file_change_group))
-				chgrp($path, $GLOBALS['GO_CONFIG']->file_change_group);
+	  	if(mkdir($path, GO::config()->folder_create_mode, true)){
+			if(!empty(GO::config()->file_change_group))
+				chgrp($path, GO::config()->file_change_group);
 			return true;
 		}else
 		{
@@ -164,7 +164,7 @@ class GO_Base_Util_File
 	{
 		global $GO_CONFIG;
 
-		$types = file_get_contents($GLOBALS['GO_CONFIG']->root_path.'mime.types');
+		$types = file_get_contents(GO::config()->root_path.'mime.types');
 
 		$extension = GO_Base_Util_File::get_extension($path);
 

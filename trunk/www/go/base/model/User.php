@@ -6,7 +6,7 @@
 	public $tableName="go_users";
 
 	protected $_columns=array(
-		'id'=>array('type'=>PDO::PARAM_INT, 'required'=>true),
+		'id'=>array('type'=>PDO::PARAM_INT),
 		'username'=>array('type'=>PDO::PARAM_STR, 'required'=>false,'length'=>50, 'gotype'=>'textfield'),
 		'password'=>array('type'=>PDO::PARAM_STR, 'required'=>false,'length'=>64, 'gotype'=>'textfield'),
 		'enabled'=>array('type'=>PDO::PARAM_STR, 'required'=>false, 'gotype'=>'textfield'),
@@ -104,6 +104,13 @@
 			}
 			return $ids;
 		}
+	}
+	
+	public function getModulePermissionLevel($moduleId){
+		if(GO::modules()->$moduleId)						
+			return GO::modules()->$moduleId->permissionLevel;
+		else
+			return false;
 	}
 }
 

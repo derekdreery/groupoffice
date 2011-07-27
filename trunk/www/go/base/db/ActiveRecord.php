@@ -850,7 +850,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 			
 			if(isset($this->_columns['user_id']) && !isset($this->user_id)){
-				$this->user_id=$GLOBALS['GO_SECURITY']->user_id;
+				$this->user_id=GO::session()->values['user_id'];
 			}
 			
 			
@@ -1155,8 +1155,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function __call($name,$parameters)
 	{
 		//todo find relation
-		
-		return parent::__call($name,$parameters);
+		die('function '.$name.' does not exist');
+		//return parent::__call($name,$parameters);
 	}
 
 	/**

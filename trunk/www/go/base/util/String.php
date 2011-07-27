@@ -795,7 +795,7 @@ class GO_Base_Util_String {
 
 	function html_to_text($text, $link_list=true){
 		global $GO_CONFIG;
-		require_once($GLOBALS['GO_CONFIG']->class_path.'html2text.class.inc');
+		require_once(GO::config()->class_path.'html2text.class.inc');
 
 		$htmlToText = new Html2Text ($text);
 		return $htmlToText->get_text($link_list);
@@ -930,10 +930,10 @@ class GO_Base_Util_String {
 		$regexp="/<a[^>]*href=([\"']?)(http|https|ftp|bf2)(:\/\/)(.+?)>/i";
 		$html = preg_replace($regexp, "<a target=$1_blank$1 class=$1blue$1 href=$1$2$3$4>", $html);
 
-		//$regexp="/<a.+?href=([\"']?)".str_replace('/','\\/', $GLOBALS['GO_CONFIG']->full_url)."(.+?)>/i";
-		//$html = preg_replace($regexp, "<a target=$1main$1 class=$1blue$1 href=$1".$GLOBALS['GO_CONFIG']->host."$2$3>", $html);
+		//$regexp="/<a.+?href=([\"']?)".str_replace('/','\\/', GO::config()->full_url)."(.+?)>/i";
+		//$html = preg_replace($regexp, "<a target=$1main$1 class=$1blue$1 href=$1".GO::config()->host."$2$3>", $html);
 
-		$html =str_replace($GLOBALS['GO_CONFIG']->full_url, $GLOBALS['GO_CONFIG']->host, $html);
+		$html =str_replace(GO::config()->full_url, GO::config()->host, $html);
 
 		if ($GLOBALS['GO_MODULES']->modules['email'] && $GLOBALS['GO_MODULES']->modules['email']['read_permission']) {
 			$html = preg_replace("/(href=([\"']?)mailto:)([\w\.\-]+)(@)([\w\.\-\"]+)\b/i",
@@ -1083,7 +1083,7 @@ class GO_Base_Util_String {
 		if($password_length==0)
 		{
 			global $GO_CONFIG;
-			$password_length=$GLOBALS['GO_CONFIG']->default_password_length;
+			$password_length=GO::config()->default_password_length;
 		}
 
 		// Generate array of allowable characters.

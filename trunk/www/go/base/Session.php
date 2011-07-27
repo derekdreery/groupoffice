@@ -5,8 +5,11 @@ class GO_Base_Session{
 	
 	public function __construct(){
 		//start session
-		session_name('groupoffice');
-		session_start();
+		
+		if(session_id()==''){
+			session_name('groupoffice');
+			session_start();
+		}
 		
 		$this->values = &$_SESSION['GO_SESSION'];
 		
@@ -14,9 +17,9 @@ class GO_Base_Session{
 		
 		
 		
-//		if ($GLOBALS['GO_CONFIG']->session_inactivity_timeout > 0) {
+//		if (GO::config()->session_inactivity_timeout > 0) {
 //			$now = time();
-//			if (isset($_SESSION['last_activity']) && $_SESSION['last_activity'] + $GLOBALS['GO_CONFIG']->session_inactivity_timeout < $now) {
+//			if (isset($_SESSION['last_activity']) && $_SESSION['last_activity'] + GO::config()->session_inactivity_timeout < $now) {
 //				$GLOBALS['GO_SECURITY']->logout();
 //			} elseif ($_POST['task'] != 'checker') {//don't update on the automatic checker function that runs every 2 mins.
 //				$_SESSION['last_activity'] = $now;
@@ -34,14 +37,14 @@ class GO_Base_Session{
 
 		if(!isset(self::$values['security_token']))
 		{
-			self::$values['decimal_separator'] = $GLOBALS['GO_CONFIG']->default_decimal_separator;
-			self::$values['thousands_separator'] = $GLOBALS['GO_CONFIG']->default_thousands_separator;
-			self::$values['date_separator'] = $GLOBALS['GO_CONFIG']->default_date_separator;
-			self::$values['date_format'] = GO_Base_Util_Date::get_dateformat( $GLOBALS['GO_CONFIG']->default_date_format, self::$values['date_separator']);
-			self::$values['time_format'] = $GLOBALS['GO_CONFIG']->default_time_format;
-			self::$values['currency'] = $GLOBALS['GO_CONFIG']->default_currency;
-			self::$values['timezone'] = $GLOBALS['GO_CONFIG']->default_timezone;
-			self::$values['country'] = $GLOBALS['GO_CONFIG']->default_country;
+			self::$values['decimal_separator'] = GO::config()->default_decimal_separator;
+			self::$values['thousands_separator'] = GO::config()->default_thousands_separator;
+			self::$values['date_separator'] = GO::config()->default_date_separator;
+			self::$values['date_format'] = GO_Base_Util_Date::get_dateformat( GO::config()->default_date_format, self::$values['date_separator']);
+			self::$values['time_format'] = GO::config()->default_time_format;
+			self::$values['currency'] = GO::config()->default_currency;
+			self::$values['timezone'] = GO::config()->default_timezone;
+			self::$values['country'] = GO::config()->default_country;
 			self::$values['sort_name'] = 'last_name';
 			self::$values['auth_token']=GO_Base_Util_String::random_password('a-z,1-9', '', 30);
 			//some url's require this token to be appended
