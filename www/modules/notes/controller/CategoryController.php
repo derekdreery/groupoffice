@@ -42,6 +42,7 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 	
 	public function actionTest(){
 		$model = GO_Notes_Model_Category::model()->findByPk($_REQUEST['id']);
+	
 		$stmt = $model->notes;
 		
 		while($note = $stmt->fetch()){

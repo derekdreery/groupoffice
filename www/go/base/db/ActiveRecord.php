@@ -16,6 +16,8 @@
 /**
  * 
  * All Group-Office models should extend this ActiveRecord class.
+ * 
+ * @property bool $joinAclField
  */
 
 abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
@@ -70,9 +72,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 	/**
 	 *
-	 * @return <type> Call $model->aclFieldJoin to check if the aclfield is joined.
+	 * @return <type> Call $model->joinAclField to check if the aclfield is joined.
 	 */
-	private function getAclFieldJoin (){
+	private function getJoinAclField (){
 		return strpos($this->aclField,'.')!==false;
 	}
 	
@@ -112,7 +114,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$this->_setOldAttributes();		
 		
-		$this->joinAclField = strpos($this->aclField, '.')!==false;
 		
 		$this->setIsNew(empty($pk));
 		$this->init();
