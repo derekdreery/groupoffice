@@ -1,3 +1,6 @@
+28-07-2011 3.7.26
+- Smiley's broke some e-mails and did not work case insensitive.
+
 26-07-2011 3.7.25
 - SMIME info on print
 - Disable beeps for e-mail separately
