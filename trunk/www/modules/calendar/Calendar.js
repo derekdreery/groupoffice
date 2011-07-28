@@ -351,7 +351,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'num_participants']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'num_participants','participant_ids']
 	});
 	
 	this.daysGridStore.on('load', this.setCalendarBackgroundColors, this);
@@ -363,7 +363,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count', 'num_participants']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count', 'num_participants','participant_ids']
 	});
 	
 	this.monthGridStore.on('load', this.setCalendarBackgroundColors, this);

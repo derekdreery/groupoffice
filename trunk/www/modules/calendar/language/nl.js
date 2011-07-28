@@ -135,3 +135,5 @@ GO.calendar.lang.publishICS='Publiceer iCalendar bestand voor afgelopen maand en
 GO.calendar.lang.addTimeRegistration='Invoeren als tijdsregistratie';
 
 GO.calendar.lang.showNotBusy='Nieuwe boekingen niet als bezet tonen';
+
+GO.calendar.lang.sendEmailParticipants = 'Email opstellen voor deelnemers';

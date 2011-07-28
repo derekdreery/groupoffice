@@ -58,6 +58,18 @@ class String {
 	 * Check if parenthesis are closed properly.
 	 */
 	public static function check_parentheses($str){
+		
+		if(preg_match('/SELECT.*FROM/i', $str))
+			return false;
+		
+		if(preg_match('/DELETE.*FROM/i', $str))
+			return false;
+		
+		if(preg_match('/INSERT.*INTO/i', $str))
+			return false;
+		
+		if(preg_match('/update.*set/i', $str))
+			return false;
 
 		//remove escaped slashes
 		$str = str_replace("\'", "", $str);
@@ -123,7 +135,8 @@ class String {
 	public static function clean_utf8($str, $source_charset='UTF-8') {
 		
 		//must use html_entity_decode here other wise some weird utf8 might be decoded later
-		$str = html_entity_decode($str, ENT_COMPAT, $source_charset);			
+    if(strtolower($source_charset)!='ascii')
+      $str = @html_entity_decode($str, ENT_COMPAT, $source_charset);
 
 		//Does not always work. We suppress the:
 		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31
@@ -790,8 +803,90 @@ class String {
 		$text = str_replace("{lt}", "<", $text);
 		$text = str_replace("{gt}", ">", $text);
 
-		return ($text);
+    // Replace emoticons
+    $text = String::text_replace_emoticons($text,true);
+
+    return ($text);
 	}
+
+
+  /**
+   * Convert text to emoticons
+   *
+   * @param string $string String without emoticons
+   * @return string String with emoticons
+   */
+  public static function text_replace_emoticons($string, $html=false)
+  {
+    // Check for smilies to be enabled by the user (settings->Look & Feel-> Show Smilies)
+    if(!empty($_SESSION['GO_SESSION']['show_smilies']))
+    {
+
+      global $GO_CONFIG;
+
+      $emoticons = array(
+          ":@"=>"angry.gif",
+          ":d"=>"bigsmile.gif",
+          "(brb)"=>"brb.gif",
+          "(o)"=>"clock.gif",
+          "(c)"=>"coffee.gif",
+          "(co)"=>"computer.gif",
+          ":s"=>"confused.gif",
+          ":'("=>"cry.gif",
+          ":'|"=>"dissapointed.gif",
+          ":^)"=>"dontknow.gif",
+          "(e)"=>"email.gif",
+          "+o("=>"ill.gif",
+          "(k)"=>"kiss.gif",
+          "(l)"=>"love.gif",
+          "(mp)"=>"mobile.gif",
+          "(mo)"=>"money.gif",
+          "(n)"=>"notok.gif",
+          "(y)"=>"ok.gif",
+          "<o)"=>"party.gif",
+          "(g)"=>"present.gif",
+          ":("=>"sad.gif",
+          "^o)"=>"sarcasm.gif",
+          ":$"=>"shy.gif",
+          "|-)"=>"sleepy.gif",
+          ":)"=>"smile.gif",
+          "(*)"=>"star.gif",
+          "(h)"=>"sunglasses.gif",
+          ":o"=>"surprised.gif",
+          "(ph)"=>"telephone.gif",
+          "*-)"=>"thinking.gif",
+          ":p"=>"tongue.gif",
+          ";)"=>"wink.gif",
+          );
+
+    
+      foreach($emoticons as $emoticon=>$img)
+      {
+
+        $imgpath = $GO_CONFIG->full_url.'themes/'.$GO_CONFIG->theme.'/images/emoticons/normal/'.$img;
+        $imgstring = '<img src="'.$imgpath.'" alt="'.$emoticon.'" />';
+        if($html)
+          $string = String::html_replace($emoticon, $imgstring, $string);
+        else
+          $string = str_ireplace($emoticon, $imgstring, $string);
+      }
+
+    }
+    
+    return $string;
+  }
+
+
+  public static function html_replace($search, $replacement, $html){
+    $html = preg_replace_callback('/<[^>]*('.preg_quote($search).')[^>]*>/uis',array('String', '_replace_in_tags'), $html);
+    $html = str_ireplace($search, $replacement, $html);
+    return str_replace('{TEMP}', $search, $html);
+  }
+
+  public static function _replace_in_tags($matches)
+  {
+    return stripslashes(str_replace($matches[1], '{TEMP}', $matches[0]));
+  }
 
 	function html_to_text($text, $link_list=true){
 		global $GO_CONFIG;
@@ -878,6 +973,9 @@ class String {
 				$html = str_replace($tag[0],'z-index:8000;',$html);
 			}
 		}
+
+    // Replace emoticons
+    $html = String::text_replace_emoticons($html,true);
 
 		return $html;
 	}

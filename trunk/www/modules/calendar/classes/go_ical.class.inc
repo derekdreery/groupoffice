@@ -54,8 +54,10 @@ class go_ical extends calendar
 		$this->calendar_properties =
 			"VERSION:".$version.$this->line_break.
 			"PRODID:-//Intermesh//NONSGML Group-Office//EN".$this->line_break.
-			"CALSCALE:GREGORIAN".$this->line_break.
-			"METHOD:".$method.$this->line_break;
+			"CALSCALE:GREGORIAN".$this->line_break;
+		
+		if(!empty($method))
+			$this->calendar_properties .= "METHOD:".$method.$this->line_break;
 	}
 
 	function format_transition_hour($hour){		
@@ -82,10 +84,24 @@ class go_ical extends calendar
 			$timezone = date_default_timezone_get ();
 
 		$tz = new DateTimeZone($_SESSION['GO_SESSION']['timezone']);
+    //$tz = new DateTimeZone("Europe/Amsterdam");
 		$transitions = $tz->getTransitions();
+
 		$start_of_year = mktime(0,0,0,1,1);
 
-		$STANDARD_TZOFFSETFROM=$STANDARD_TZOFFSETTO=$DAYLIGHT_TZOFFSETFROM=$DAYLIGHT_TZOFFSETTO='+00';
+    $to = Date::get_timezone_offset(time());
+    if($to<0){
+      if(strlen($to)==2)
+        $to='-0'.($to*-1);
+    }else
+    {
+      if(strlen($to)==1)
+        $to='0'.$to;
+
+      $to='+'.$to;
+    }
+
+		$STANDARD_TZOFFSETFROM=$STANDARD_TZOFFSETTO=$DAYLIGHT_TZOFFSETFROM=$DAYLIGHT_TZOFFSETTO=$to;
 
 		$STANDARD_RRULE='';
 		$DAYLIGHT_RRULE='';

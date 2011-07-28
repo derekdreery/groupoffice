@@ -1034,6 +1034,22 @@ class files extends db {
 		}
 	}
 
+  function get_permission_level($user_id, $folder) {
+		global $GO_SECURITY;
+
+		if(is_numeric($folder)) {
+			$folder = $this->get_folder($folder);
+		}
+
+
+		if(empty($folder['acl_id'])) {
+			$parent = $this->get_folder($folder['parent_id']);
+			return $this->get_permission_level($user_id, $parent);
+		}else {
+			return $GO_SECURITY->has_permission($user_id, $folder['acl_id']);
+		}
+	}
+
 	function has_delete_permission($user_id, $folder){
 
 		global $GO_SECURITY;

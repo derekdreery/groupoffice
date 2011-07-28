@@ -54,6 +54,7 @@ GO.mailings.lang.noTemplate='Geen sjabloon';
 
 GO.mailings.lang.customContactFields='Extra velden contactpersonen';
 GO.mailings.lang.customCompanyFields='Extra velden bedrijven';
+GO.mailings.lang.customUserFields='Extra velden gebruikers';
 GO.mailings.lang.newsletters='Nieuwsbrieven';
 
 GO.mailings.lang.addresslist='Adreslijst';

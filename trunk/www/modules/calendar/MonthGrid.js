@@ -605,6 +605,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 		}
 
 		e.stopEvent();
+		this.contextMenu.setParticipants(event.participant_ids);
 		this.contextMenu.setEvent(event);
 		this.contextMenu.showAt(e.getXY());
 	},

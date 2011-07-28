@@ -84,3 +84,6 @@ GO.users.lang.firstName='Vorname';
 GO.users.lang.sendInvitation='Einladung versenden';
 GO.users.lang.contactInfo='Kontakt-Info';
 GO.users.lang.popupNotification='Popupfenster anzeigen wenn eine Erinnerung ansteht oder eine neue E-Mail eintrifft';
+GO.users.lang.muteNewMailSound='Keine Sounds für E-Mails nutzen';
+GO.users.lang.muteReminderSound='Keine Sounds für Erinnerungen nutzen';
+GO.users.lang.showSmilies='Zeige Smileys';

@@ -301,7 +301,7 @@ class GO_GROUPS extends db
 	 return false;
 	 }*/
 
-	function get_authorized_groups($user_id=0, $start = 0, $offset = 0, $sort="name", $direction = "ASC")
+	function get_authorized_groups($user_id=0, $start = 0, $offset = 0, $sort="name", $direction = "ASC", $query='')
 	{
 		$sql = "SELECT g.*,u.username, u.first_name, u.middle_name, u.last_name FROM go_groups g ".
   	"INNER JOIN go_users u ON g.user_id=u.id ";
@@ -310,8 +310,12 @@ class GO_GROUPS extends db
 		{
 			$sql .= "INNER JOIN go_acl a ON (g.acl_id = a.acl_id AND (a.user_id=".$this->escape($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 		}
+		
+		if(!empty($query)){
+			$sql .= ' AND name LIKE "'.$query.'" ';
+		}
 
-		$sql .= 'ORDER BY '.$sort.' '.$direction;
+		$sql .= 'GROUP BY g.id ORDER BY '.$sort.' '.$direction;
 		$this->query($sql);
 
 		$count = $this->num_rows();
@@ -332,7 +336,7 @@ class GO_GROUPS extends db
 	 * @access public
 	 * @return int	Number of go_groups
 	 */
-	function get_groups($user_id=0, $start = 0, $offset = 0, $sort="name", $direction = "ASC")
+	function get_groups($user_id=0, $start = 0, $offset = 0, $sort="name", $direction = "ASC", $query='')
 	{
 		$sql = "SELECT go_groups.*,go_users.username, go_users.first_name, go_users.middle_name, go_users.last_name FROM go_groups ".
   	"INNER JOIN go_users ON go_groups.user_id=go_users.id ";
@@ -345,6 +349,11 @@ class GO_GROUPS extends db
 							"AND go_users_groups.user_id='".$this->escape($user_id)."' ".
 							"AND go_groups.id!=".$GLOBALS['GO_CONFIG']->group_everyone." ".
 							"AND go_groups.admin_only!='1'";
+		}
+		
+		
+		if(!empty($query)){
+			$sql .= ' AND go_groups.name LIKE "'.$query.'" ';
 		}
 
 		$sql .= 'ORDER BY '.$sort.' '.$direction;

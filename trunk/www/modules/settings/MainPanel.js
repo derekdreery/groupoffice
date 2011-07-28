@@ -18,6 +18,12 @@ GO.settingsmodule.MainPanel = function(config){
 		labelAlign:'top',
 		title:GO.settingsmodule.lang.loginScreenText,
 		items:[{
+			boxLabel:GO.settingsmodule.lang.loginTextEnabled,
+			xtype:'checkbox',
+			hideLabel:true,			
+			name:'login_screen_text_enabled',
+			anchor:"100%"
+		},{
 			fieldLabel:GO.settingsmodule.lang.title,
 			xtype:'textfield',
 			hideLabel:true,

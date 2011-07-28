@@ -138,3 +138,5 @@ GO.addressbook.lang.strUnknownEmail = 'This email address is unknown. Do you wis
 GO.addressbook.lang.globalsettings_templatelabel = 'Template';
 GO.addressbook.lang.globalsettings_allchangelabel = 'Change all?';
 GO.addressbook.lang.globalsettings_renameall = 'Rename all?';
+
+GO.addressbook.lang.createEmailSelected = 'Create email for selection';

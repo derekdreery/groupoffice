@@ -34,6 +34,12 @@ GO.files.lang.newFolder = 'Nieuwe map';
 GO.files.lang.applyState = 'De weergaveinstellingen van deze map toepassen voor iedereen.';
 GO.files.lang.stateLocked = 'Map weergave vastgezet door eigenaar/beheerder';
 
+
+GO.files.lang.strDownloadActive = 'Externe download link ingeschakeld';
+GO.files.lang.downloadExpireTime='Link verloopt na';
+GO.files.lang.downloadUrl='URL';
+GO.files.lang.stateLocked = 'Map weergave vastgezet door eigenaar/beheerder';
+
 GO.files.lang.categoriesFiles = 'Extra velden van bestanden';
 GO.files.lang.applyToCurrentFolder = 'Bovenstaande instellingen toepassen op de inhoud van alleen de huidige map';
 GO.files.lang.applyRecursively = 'Bovenstaande instellingen toepassen op de inhoud van de huidige en alle onderliggende mappen';

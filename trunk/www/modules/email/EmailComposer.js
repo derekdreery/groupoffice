@@ -627,19 +627,26 @@ GO.email.EmailComposer = function(config) {
 						this.deferFocus();
 					}
 				};
-			}else if(Ext.isWebKit){
-				return function(e){
-					var k = e.getKey();
-					if(k == e.TAB){
-						e.stopEvent();
-						this.execCmd('InsertText','\t');
-						this.deferFocus();
-					}else if(k == e.ENTER){
-				//                    e.stopEvent();
-				//                    this.execCmd('InsertHtml','<br /><br />');
-				//                    this.deferFocus();
-				}
-				};
+			}else if(Ext.isWebKit){ 
+            return function(e){
+                var k = e.getKey();
+                if(k == e.TAB){
+                    e.stopEvent();
+                    this.execCmd('InsertText','\t');
+                    this.deferFocus();
+                }else if(k == e.ENTER){
+                    e.stopEvent();
+                    var doc = this.getDoc();
+                    if (doc.queryCommandState('insertorderedlist') ||
+                        doc.queryCommandState('insertunorderedlist')) {
+                      this.execCmd('InsertHTML', '</li><br /><li>');
+                   } else {
+                      this.execCmd('InsertHtml','<br />&nbsp;');
+											this.execCmd('delete');
+                   }
+                    this.deferFocus();
+                }
+             };
 			}
 		}(),
 		updateToolbar: function(){
@@ -866,22 +873,7 @@ GO.email.EmailComposer = function(config) {
 					this.addressbookDialog = new GO.email.AddressbookDialog();
 					this.addressbookDialog.on('addrecipients',
 						function(fieldName, selections) {
-							var field = this.formPanel.form.findField(fieldName);
-										
-							var currentVal = field.getValue();
-							if (currentVal != '' && currentVal.substring(currentVal.length-1,currentVal.length) != ',' && currentVal.substring(currentVal.length-2,currentVal.length-1)!=',')
-								currentVal += ', ';
-
-							currentVal += selections;
-
-							field.setValue(currentVal);
-
-							if (fieldName == 'cc') {
-								this.ccFieldCheck.setChecked(true);
-							} else if (fieldName == 'bcc') {
-								this.bccFieldCheck.setChecked(true);
-							}
-
+							this.addRecipients(fieldName,selections);
 						}, this);
 				}
 
@@ -1115,6 +1107,30 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.bccCombo.onResize();
 		}
 	},
+
+	addRecipients : function(fieldName,selections) {
+		var field = this.formPanel.form.findField(fieldName);
+
+		var currentVal = field.getValue();
+		if (currentVal != '' && currentVal.substring(currentVal.length-1,currentVal.length) != ',' && currentVal.substring(currentVal.length-2,currentVal.length-1)!=',')
+			currentVal += ', ';
+
+		currentVal += selections;
+
+		field.setValue(currentVal);
+
+		if (fieldName == 'cc') {
+			this.ccFieldCheck.setChecked(true);
+		} else if (fieldName == 'bcc') {
+			this.bccFieldCheck.setChecked(true);
+		}
+	},
+//
+//	setRecipients : function(fieldName,selections) {
+//		var field = this.formPanel.form.findField(fieldName);
+//		field.setValue(selections);
+//		field.store.load();
+//	},
 
 	show : function(config) {
 
@@ -2033,27 +2049,33 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	downloadTemporaryAttachment : function(dv, index, node, e ) {
 
 		var record = dv.store.getAt(index);
-
-		Ext.Ajax.request({
-				url: GO.settings.modules.email.url+'json.php',
-				params:{
-					task: 'create_download_hash',
-					filename: record.data.name
-				},
-				callback: function(options, success, response)
-				{
-					if(!success)
+		
+			
+		if(!record.data.id){
+			Ext.Ajax.request({
+					url: GO.settings.modules.email.url+'json.php',
+					params:{
+						task: 'create_download_hash',
+						filename: record.data.name
+					},
+					callback: function(options, success, response)
 					{
-						alert( GO.lang['strRequestError']);
-					}else
-					{
-						var jsonData = Ext.decode(response.responseText);
-						var code = jsonData.code;
-						document.location=GO.settings.modules.email.url+'download_file.php?filename='+encodeURIComponent(record.data.name)+'&code='+code;
-					}
-				},
-				scope:this
-			});
+						if(!success)
+						{
+							alert( GO.lang['strRequestError']);
+						}else
+						{
+							var jsonData = Ext.decode(response.responseText);
+							var code = jsonData.code;						
+							document.location=GO.settings.modules.email.url+'download_file.php?filename='+encodeURIComponent(record.data.name)+'&code='+code;
+						}
+					},
+					scope:this
+				});
+		}else
+		{
+			GO.files.openFile(record);
+		}
 	},
 
 	onAttachmentContextMenu : function(dv, index, node, e)

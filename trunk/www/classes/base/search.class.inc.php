@@ -396,7 +396,7 @@ class search extends db {
 	 */
 	function get_search_result($id, $type)
 	{
-		$sql = "SELECT * FROM go_search_cache WHERE id=".intval($id)." AND link_type=".$this->escape($type);
+		$sql = "SELECT * FROM go_search_cache WHERE id=".intval($id)." AND link_type=".intval($type);
 		$this->query($sql);
 		if($this->next_record())
 		{

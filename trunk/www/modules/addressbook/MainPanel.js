@@ -38,6 +38,20 @@ GO.addressbook.MainPanel = function(config)
 		this.setAdvancedSearchNotification(this.contactsGrid.store);
 	}, this);
 
+	if (GO.email) {
+		this.contactsGrid.on("cellcontextmenu",function(grid,row,cell,e){
+			{
+				if(typeof(this.contactsGrid.contextMenu)=='undefined')
+				{
+					this.contactsGrid.contextMenu = new GO.addressbook.ContextMenu();
+				}
+				this.contactsGrid.contextMenu.setSelected(grid.selModel.getSelections());
+				e.stopEvent();
+				this.contactsGrid.contextMenu.showAt(e.getXY());
+			}
+		},this);
+	}
+
 	this.companiesGrid = new GO.addressbook.CompaniesGrid({
 		layout: 'fit',
 		region: 'center',
@@ -50,6 +64,20 @@ GO.addressbook.MainPanel = function(config)
 	this.companiesGrid.on("rowdblclick", function(){
 		this.companyEastPanel.editHandler();
 	}, this);
+
+	if (GO.email) {
+		this.companiesGrid.on("cellcontextmenu",function(grid,row,cell,e){
+			{
+				if(typeof(this.companiesGrid.contextMenu)=='undefined')
+				{
+					this.companiesGrid.contextMenu = new GO.addressbook.ContextMenu();
+				}
+				this.companiesGrid.contextMenu.setSelected(grid.selModel.getSelections());
+				e.stopEvent();
+				this.companiesGrid.contextMenu.showAt(e.getXY());
+			}
+		},this);
+	}
 
 
 	this.companiesGrid.store.on('load', function(){

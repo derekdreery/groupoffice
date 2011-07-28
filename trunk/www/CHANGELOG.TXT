@@ -1,11 +1,36 @@
-Replace
+28-07-2011 3.7.26
+- Smiley's broke some e-mails and did not work case insensitive.
 
-$GLOBALS['GO_SECURITY']->
-$GLOBALS['GO_SECURITY']->
-$GLOBALS['GO_SECURITY']->
+26-07-2011 3.7.25
+- SMIME info on print
+- Disable beeps for e-mail separately
+- Context menu on event to Send mail to all participants	
+- Context menu on contacts to send mail to multiple
+- Simple smiley support in texts
+- Caldav iphone status bug. Imported status defaults to accepted now. iphone doesn't like the status needs-action.
+- Fixed SQL and command injections after extensive security testing.
+- New caldav_max_months_old config.php parameter to control the maximum age of synced events.
+- E-mail composer HTML editor fix for Chrome.
+- Updated german translation
+- When a download link is sent in the files module. Info about that should be shown in the info panel.
+- Set global vacation subject via configuration file
+- Bug fix: In some cases webdav only created 0 byte files
 
+23-06-2011 3.7.24
+- New config variable to set subject for sieve vacation messages.
+- Worked around php smime header bug.
+- Made a checkbox to enable the login screen text at the settings module. 
+  Don't forget to check this when you already have a text setup.
+- User groups list was showing less rows then it should.
+- User groups are searchable
+- Bug in calendar with removing a single instance from a recurring event.
 
+16/06/2011 3.7.23
+>>>>>>> .merge-right.r7762
 - Fixed bug with etags in caldav
+- New ticket message template tags and attach files when saving an e-mail as ticket
+- Check if SMIME certificate address matches the sender address
+- Fixed some SQL injection vulnarabilites.
 
 06/06/2011 3.7.22
 - Timer in timeregistration didn't add values.

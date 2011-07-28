@@ -85,7 +85,7 @@ GO.users.lang.maxUsersReached='The maximum number of users has been reached. Con
 
 GO.users.lang.group='Group';
 
-GO.users.lang.muteSound='Mute sound';
+GO.users.lang.muteSound='Mute all sounds';
 GO.users.lang.mailReminders='Mail reminders';
 
 GO.users.lang.downloadSampleCSV='Download sample CSV';
@@ -110,3 +110,8 @@ GO.users.lang.sendInvitation='Send invitation';
 GO.users.lang.contactInfo='Contact info';
 
 GO.users.lang.popupNotification='Show a popup window when a reminder becomes active or an e-mail arrives';
+
+GO.users.lang.muteNewMailSound='Mute new mail sounds';
+GO.users.lang.muteReminderSound='Mute reminder sounds';
+
+GO.users.lang.showSmilies='Show smilies';

@@ -47,7 +47,7 @@ $lang['email']['error_connection_refused']='Die Verbindung wurde abgebrochen. Bi
 $lang['email']['iCalendar_event_invitation']='Diese Nachricht enthält eine Termineinladung.';
 $lang['email']['iCalendar_event_not_found']='Diese Nachricht enthält eine Aktualisierung zu einem nicht mehr vorhandenem Termin.';
 $lang['email']['iCalendar_update_available']='Diese Nachricht enthält eine Aktualisierung eines existierenden Termins.';
-$lang['email']['iCalendar_update_old']='Diese Nachricht enthält einen Termin der in der Vergangenheit liegt.';
+$lang['email']['iCalendar_update_old']='Diese Nachricht enthält einen Termin, der bereits verarbeitet wurde.';
 $lang['email']['iCalendar_event_cancelled']='Diese Nachricht enthält die Absage eines Termins.';
 $lang['email']['iCalendar_event_invitation_declined']='Diese Nachricht enthält einen Termin den sie abgelehnt haben.';
 
