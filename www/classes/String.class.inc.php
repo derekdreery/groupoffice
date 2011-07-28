@@ -804,7 +804,7 @@ class String {
 		$text = str_replace("{gt}", ">", $text);
 
     // Replace emoticons
-    $text = String::text_replace_emoticons($text);
+    $text = String::text_replace_emoticons($text,true);
 
     return ($text);
 	}
@@ -816,7 +816,7 @@ class String {
    * @param string $string String without emoticons
    * @return string String with emoticons
    */
-  public static function text_replace_emoticons($string)
+  public static function text_replace_emoticons($string, $html=false)
   {
     // Check for smilies to be enabled by the user (settings->Look & Feel-> Show Smilies)
     if(!empty($_SESSION['GO_SESSION']['show_smilies']))
@@ -827,55 +827,65 @@ class String {
       $emoticons = array(
           ":@"=>"angry.gif",
           ":d"=>"bigsmile.gif",
-          ":brb"=>"brb.gif",
-          ":clock"=>"clock.gif",
-          ":coffee"=>"coffee.gif",
-          ":pc"=>"computer.gif",
+          "(brb)"=>"brb.gif",
+          "(o)"=>"clock.gif",
+          "(c)"=>"coffee.gif",
+          "(co)"=>"computer.gif",
           ":s"=>"confused.gif",
           ":'("=>"cry.gif",
           ":'|"=>"dissapointed.gif",
           ":^)"=>"dontknow.gif",
-          ":mail"=>"email.gif",
+          "(e)"=>"email.gif",
           "+o("=>"ill.gif",
-          ":kiss("=>"kiss.gif",
-          ":love"=>"love.gif",
-          ":mobile"=>"mobile.gif",
-          ":money"=>"money.gif",
-          ":yes"=>"notok.gif",
-          ":no"=>"ok.gif",
-          "<:o"=>"party.gif",
-          ":present"=>"present.gif",
+          "(k)"=>"kiss.gif",
+          "(l)"=>"love.gif",
+          "(mp)"=>"mobile.gif",
+          "(mo)"=>"money.gif",
+          "(n)"=>"notok.gif",
+          "(y)"=>"ok.gif",
+          "<o)"=>"party.gif",
+          "(g)"=>"present.gif",
           ":("=>"sad.gif",
-          "^o"=>"sarcasm.gif",
+          "^o)"=>"sarcasm.gif",
           ":$"=>"shy.gif",
           "|-)"=>"sleepy.gif",
           ":)"=>"smile.gif",
-          ":*"=>"star.gif",
-          ":sunglasses"=>"sunglasses.gif",
+          "(*)"=>"star.gif",
+          "(h)"=>"sunglasses.gif",
           ":o"=>"surprised.gif",
-          ":phone"=>"telephone.gif",
+          "(ph)"=>"telephone.gif",
           "*-)"=>"thinking.gif",
           ":p"=>"tongue.gif",
           ";)"=>"wink.gif",
           );
 
-      $keys = array();
-      $replace = array();
-      $i = 0;
+    
       foreach($emoticons as $emoticon=>$img)
       {
-        $keys[$i]=$emoticon;
 
         $imgpath = $GO_CONFIG->full_url.'themes/'.$GO_CONFIG->theme.'/images/emoticons/normal/'.$img;
         $imgstring = '<img src="'.$imgpath.'" alt="'.$emoticon.'" />';
-        $replace[$i]=$imgstring;
-        $i++;
+        if($html)
+          $string = String::html_replace($emoticon, $imgstring, $string);
+        else
+          $string = str_ireplace($emoticon, $imgstring, $string);
       }
 
-      $string = str_replace($keys, $replace, $string);
     }
     
     return $string;
+  }
+
+
+  public static function html_replace($search, $replacement, $html){
+    $html = preg_replace_callback('/<[^>]*('.preg_quote($search).')[^>]*>/uis',array('String', '_replace_in_tags'), $html);
+    $html = str_ireplace($search, $replacement, $html);
+    return str_replace('{TEMP}', $search, $html);
+  }
+
+  public static function _replace_in_tags($matches)
+  {
+    return stripslashes(str_replace($matches[1], '{TEMP}', $matches[0]));
   }
 
 	function html_to_text($text, $link_list=true){
@@ -965,7 +975,7 @@ class String {
 		}
 
     // Replace emoticons
-    $html = String::text_replace_emoticons($html);
+    $html = String::text_replace_emoticons($html,true);
 
 		return $html;
 	}
