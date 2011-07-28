@@ -343,8 +343,8 @@ class smime extends db{
 				throw new Exception(sprintf($lang['smime']['noPublicCertForEncrypt'], implode(', ',$failed)));
 			}
 
-			if($cert)
-				$swift->message->setEncryptParams($public_certs);
+			//if($cert)
+			$swift->message->setEncryptParams($public_certs);
 		}
 
 	}

@@ -187,8 +187,8 @@ class GO_SECURITY extends db {
 		}
 
 
-		SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
-		SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
+		SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),true);
+		SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),true);
 
 		$old_session = $_SESSION;
 
@@ -803,7 +803,8 @@ class GO_SECURITY extends db {
 
 				$this->query("SELECT group_id FROM go_users_groups WHERE user_id=?", 'i', $user_id);
 				while ($r = $this->next_record()) {
-					$_SESSION['GO_SESSION']['user_groups'][] = $r['group_id'];
+					if(!empty($r['group_id']))
+						$_SESSION['GO_SESSION']['user_groups'][] = $r['group_id'];
 				}
 			}
 
@@ -812,7 +813,8 @@ class GO_SECURITY extends db {
 			$ids = array();
 			$this->query("SELECT group_id FROM go_users_groups WHERE user_id=?", 'i', $user_id);
 			while ($r = $this->next_record()) {
-				$ids[] = $r['group_id'];
+				if(!empty($r['group_id']))
+					$ids[] = $r['group_id'];
 			}
 			return $ids;
 		}

@@ -760,6 +760,7 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		}
 
 		e.stopEvent();
+		this.contextMenu.setParticipants(event.participant_ids);
 		this.contextMenu.setEvent(event);
 		this.contextMenu.showAt(e.getXY());
 	},
@@ -1513,7 +1514,13 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				}
 				this.fireEvent(this.currentFireEvent, this, this.currentRecurringEvent , this.currentActionData, domIds);
 
-				this.currentRecurringEvent.repeats=false;
+				//removed this line because otherwise the following happened:
+				// 1. OPen a single instance
+				// 2. close it.
+				// 3. delete this event.
+				// 4. Whole recurring series is removed while you would think only one is removed.
+				//
+				//this.currentRecurringEvent.repeats=false;
 				this.recurrenceDialog.hide();
 			},this)
 

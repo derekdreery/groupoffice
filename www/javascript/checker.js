@@ -373,7 +373,14 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 		//this.fireEvent('startcheck', this);
 
 		Ext.TaskMgr.start({
-			run: function(){
+			run: this.checkForReminders,
+			scope:this,
+			interval:120000 //check changes every 2 minutes
+			//interval:5000 //testing each 5 sec
+		});
+	},
+  // Function to check for reminders in the database
+  checkForReminders : function(){
 				Ext.Ajax.request({
 					url: BaseHref+'json.php',
 					params: this.params,
@@ -404,17 +411,21 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 									});
 									if(this.lastCount != this.checkerWindow.checkerGrid.store.getCount())
 									{
-										this.lastCount = this.checkerWindow.checkerGrid.store.getCount();									
+										this.lastCount = this.checkerWindow.checkerGrid.store.getCount();
 
 										this.checkerWindow.show();
 										this.reminderIcon.setDisplayed(true);
-										data.alarm=true;
-									}									
+
+                    if(GO.util.empty(GO.settings.mute_reminder_sound))
+                      data.alarm=true;
+                    else
+                      data.alarm=false;
+									}
 								}else
 								{
 									this.reminderIcon.setDisplayed(false);
 								}
-								
+
 								if(data.alarm){
 									GO.playAlarm();
 									if(!GO.hasFocus && !GO.util.empty(GO.settings.popup_reminders)){
@@ -426,7 +437,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 											position:'br',
 											closeOnFocus:false
 										});
-										
+
 									}
 								}
 							}
@@ -435,10 +446,5 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 					},
 					scope:this
 				});
-			},
-			scope:this,
-			interval:120000 //check changes every 2 minutes
-			//interval:5000 //testing each 5 sec
-		});
-	}
+			}
 });

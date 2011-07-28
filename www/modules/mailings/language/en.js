@@ -67,6 +67,7 @@ GO.mailings.lang.noTemplate='No template';
 
 GO.mailings.lang.customContactFields='Custom contact fields';
 GO.mailings.lang.customCompanyFields='Custom company fields';
+GO.mailings.lang.customUserFields='Custom user fields';
 GO.mailings.lang.newsletters='Newsletters';
 
 GO.mailings.lang.addresslist='Addresslist';

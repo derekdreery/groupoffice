@@ -29,11 +29,9 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
 
 	public function checkWritePermission($delete=false){
 		global $GO_SECURITY, $files;
-		
-		$this->file=$files->resolve_path($this->relpath);
-		$this->folder=$files->get_folder($this->file['folder_id']);
 
-		if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->folder))
+		$this->folder=$files->resolve_path(dirname($this->relpath));
+		if(!$files->has_write_permission($GO_SECURITY->user_id, $this->folder))
 				throw new Sabre_DAV_Exception_Forbidden();
 
 		/*if($delete){
@@ -54,7 +52,7 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
     public function put($data) {
 
 		$this->checkWritePermission();
-			
+
 
         file_put_contents($this->path,$data);
 
@@ -69,7 +67,7 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
     public function setName($name) {
 		global $files;
 		$this->checkWritePermission();
-		
+
         parent::setName($name);
 
 		$this->relpath = $files->strip_server_path($this->path);
@@ -97,9 +95,9 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
 		}
 
 		$destFolder = $files->resolve_path($files->strip_server_path(dirname($newPath)));
-
+    $this->file=$files->resolve_path($this->relpath);
 		$files->move_file($this->file, $destFolder);
-		
+
 		$this->path = $newPath;
 		$this->relpath = $files->strip_server_path($this->path);
     }

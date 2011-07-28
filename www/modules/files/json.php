@@ -779,8 +779,12 @@ try {
 			$response['data']['type']='<div class="go-grid-icon filetype-folder">'.$lang['files']['folder'].'</div>';
 			$response['data']['size']='-';
 
-			$response['data']['write_permission']=empty($response['data']['readonly']) && $files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $folder);
-			$response['data']['is_owner']=$admin || $files->is_owner($folder);
+
+      $permission_level = $files->get_permission_level($GO_SECURITY->user_id, $folder);
+
+      $response['data']['manage_permission']=$permission_level==  GO_SECURITY::MANAGE_PERMISSION;
+      $response['data']['write_permission']=empty($response['data']['readonly']) && $permission_level>GO_SECURITY::READ_PERMISSION;
+			//$response['data']['is_owner']=$admin || $files->is_owner($folder);
 
 			$usersfolder = $files->resolve_path('users');
 			$response['data']['is_home_dir']=$folder['parent_id']==$usersfolder['id'];
@@ -813,6 +817,20 @@ try {
 
 			$GLOBALS['GO_EVENTS']->fire_event('file_extension_and_path_known',array(&$files,$extension,$path,&$pdf_path,$file,$folder));
 
+
+      if(!empty($file['random_code']) && time()<$file['expire_time'])
+      {
+        $response['data']['expire_time']=Date::get_timestamp($file['expire_time'],false);
+        $response['data']['download_link']='<a href="'.$GO_MODULES->modules['files']['full_url'].'download.php?id='.$file['id'].'&random_code='.$file['random_code'].'">'.$GO_MODULES->modules['files']['full_url'].'download.php?id='.$file['id'].'&random_code='.$file['random_code'].'</a>';
+
+      }
+      else
+      {
+        $response['data']['expire_time']=null;
+        $response['data']['download_link']=null;
+      }
+
+      
 			$response['data']['path']=$pdf_path;
 			$response['data']['name']=File::strip_extension($file['name']);
 			$response['data']['ctime']=Date::get_timestamp(filectime($GLOBALS['GO_CONFIG']->file_storage_path.$path));

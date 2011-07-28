@@ -806,12 +806,14 @@ class addressbook extends db {
 		$conditions = "WHERE ";
 
 
-		$user_ab = array();//$this->get_user_addressbook_ids($user_id);
-
-		$this->get_writable_addressbooks($user_id);
-		while($r=$this->next_record()){
-			$user_ab[]=$r['id'];
-		}
+//		$user_ab = array();//$this->get_user_addressbook_ids($user_id);
+//
+//		$this->get_writable_addressbooks($user_id);
+//		while($r=$this->next_record()){
+//			$user_ab[]=$r['id'];
+//		}
+		
+		$user_ab = $this->get_user_addressbook_ids($user_id);
 
 		if(count($user_ab) > 1) {
 			$conditions .= " c.addressbook_id IN (".implode(",",$user_ab).") ";
@@ -1003,7 +1005,7 @@ class addressbook extends db {
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
 	}
 
-	public static function format_contact_record(&$record, $cf=false) {
+	public static function format_contact_record(&$record, $cf=false, $html=true) {
 		$record['name'] = String::format_name($record['last_name'], $record['first_name'], $record['middle_name']);
 		$record['ctime']=Date::get_timestamp($record['ctime']);
 		$record['mtime']=Date::get_timestamp($record['mtime']);
@@ -1030,11 +1032,11 @@ class addressbook extends db {
 		$record['birthday'] = Date::format($record['birthday'], false);
 
 		if($cf)
-			$cf->format_record($record, 2, true);
+			$cf->format_record($record, 2, $html);
 	}
 
 
-	function format_company_record(&$record, $cf=false) {
+	function format_company_record(&$record, $cf=false, $html=true) {
 		$record['ctime']=Date::get_timestamp($record['ctime']);
 		$record['mtime']=Date::get_timestamp($record['mtime']);
 
@@ -1043,7 +1045,7 @@ class addressbook extends db {
 			$record['name_and_name2'].= ' - '.$record['name2'];
 
 		if($cf)
-			$cf->format_record($record, 3, true);
+			$cf->format_record($record, 3, $html);
 	}
 
 	function search_companies($user_id, $query, $field = 'name', $addressbooks=array(), $start=0, $offset=0, $require_email=false, $sort_index='name', $sort_order='ASC', $query_type='LIKE', $mailings_filter=array(), $advanced_query='') {
@@ -1152,13 +1154,13 @@ class addressbook extends db {
 			$sql .= ' AND ('.$advanced_query.')';
 		}
 
+		$sql .= " ORDER BY $sort_index $sort_order";
+		
 		$_SESSION['GO_SESSION']['export_queries']['search_companies']=array(
 				'query'=>$sql,
 				'method'=>'format_company_record',
 				'class'=>'addressbook',
 				'require'=>__FILE__);
-
-		$sql .= " ORDER BY $sort_index $sort_order";
 
 		if($offset > 0 ) {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);

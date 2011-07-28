@@ -690,7 +690,7 @@ class email extends db {
 			$sql .= ", smtp_password='$plain_password'";
 		}		
 		
-		$sql.=	"WHERE username='".$this->escape($username)."'".
+		$sql.=	"WHERE username='".$this->escape($username)."' ".
 						"AND host='".$this->escape($host)."'";
 
 		return $this->query($sql);

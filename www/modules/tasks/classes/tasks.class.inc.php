@@ -948,6 +948,9 @@ class tasks extends db
 					$where=true;
 					$sql .= " WHERE ";
 			}
+			
+			$categories=array_map('intval', $categories);
+			
 			$sql .= "t.category_id IN (".implode(',', $categories).")";
 		}
 

@@ -46,6 +46,10 @@ GO.files.lang.newFolder = 'New folder';
 GO.files.lang.applyState = 'Apply the folder\'s display settings for everyone.';
 GO.files.lang.stateLocked = 'Folder display locked by owner/admin';
 
+GO.files.lang.strDownloadActive = 'External download link enabled';
+GO.files.lang.downloadExpireTime='Link expires after';
+GO.files.lang.downloadUrl='URL';
+
 GO.files.lang.categoriesFiles = 'Custom fields for files';
 GO.files.lang.applyToCurrentFolder = 'Apply above changes to contents of only the current folder';
 GO.files.lang.applyRecursively = 'Apply above changes to contents of the current and all underlying folders';

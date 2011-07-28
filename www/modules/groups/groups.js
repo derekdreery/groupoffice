@@ -41,6 +41,12 @@
 				{header: GO.groups.lang.adminOnly, dataIndex: 'admin_only', renderer: function(value){return (value == 1)?GO.lang.cmdYes:GO.lang.cmdNo;}}
     ]
 	});  
+	
+	this.searchField = new GO.form.SearchField({
+		store: this.storeAllGroups,
+		width:320
+	});
+		    	
 
 	var tbar = new Ext.Toolbar({
 		cls:'go-head-tb',
@@ -60,7 +66,7 @@
 			handler: function(){this.deleteSelected();},
 			scope: this,
 			disabled: !GO.settings.modules.groups.write_permission
-		}
+		},'-',GO.lang['strSearch'] + ':', this.searchField
 		]});
       
   config.layout='fit';

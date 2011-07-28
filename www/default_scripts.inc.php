@@ -68,7 +68,7 @@ if(isset($_REQUEST['after_login_url'])) {
 if(isset($_REQUEST['SET_LANGUAGE']))
 	echo 'GO.loginSelectedLanguage="'.$_REQUEST['SET_LANGUAGE'].'";';
 
-echo 'GO.afterLoginUrl="'.$after_login_url.'";';
+echo 'GO.afterLoginUrl="'.String::xss_clean($after_login_url).'";';
 
 $fullscreen = isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1' ? 'true' : 'false';
 echo 'GO.fullscreen='.$fullscreen.';';

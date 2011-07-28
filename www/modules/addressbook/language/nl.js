@@ -127,3 +127,5 @@ GO.addressbook.lang.strUnknownEmail = 'Dit emailadres is onbekend. Wilt u dit to
 GO.addressbook.lang.globalsettings_templatelabel = 'Naam template';
 GO.addressbook.lang.globalsettings_allchangelabel = 'Bestaande veranderen?';
 GO.addressbook.lang.globalsettings_renameall = 'Weet u zeker dat u alles wilt hernoemen?';
+
+GO.addressbook.lang.createEmailSelected = 'Email opstellen voor selectie';

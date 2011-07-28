@@ -703,7 +703,7 @@ class calendar extends db {
 	}
 
 	function is_participant($event_id, $email) {
-		$sql = "SELECT * FROM cal_participants WHERE event_id='".$this->escape($event_id)."' AND email='".$this->escape($email)."'";
+		$sql = "SELECT * FROM cal_participants WHERE event_id='".intval($event_id)."' AND email='".$this->escape($email)."'";
 		$this->query($sql);
 		return $this->next_record();
 	}
@@ -722,6 +722,18 @@ class calendar extends db {
 		$this->query($sql);
 		$r = $this->next_record();
 		return intval($r['c']);
+	}
+
+	function get_participant_user($participant_id) {
+		$sql = "SELECT u.* FROM go_users u ".
+			"INNER JOIN cal_participants p ON p.user_id=u.id ".
+			"WHERE p.id='".intval($participant_id)."' ";
+		$this->query($sql);
+		if ($user = $this->next_record()) {
+			return $user;
+		} else {
+			return false;
+		}
 	}
 
 	function set_default_calendar($user_id, $calendar_id) {
@@ -1604,6 +1616,10 @@ class calendar extends db {
 					$only_busy_events=false,
 					$query_field='',
 					$query_param='') {
+		
+		$interval_start=intval($interval_start);
+		$interval_end=intval($interval_end);
+		$user_id=intval($user_id);
 
 		$sql  = "SELECT e.* FROM cal_events e";
 
@@ -1643,6 +1659,9 @@ class calendar extends db {
 				$sql .= " WHERE ";
 				$where=true;
 			}
+			
+			$calendars=array_map('intval', $calendars);
+			
 			$sql .= "e.calendar_id IN (".implode(',', $calendars).")";
 		}
 
@@ -1816,7 +1835,7 @@ class calendar extends db {
 	}
 
 	function get_event($event_id) {
-		$sql = "SELECT e.*, c.acl_id FROM cal_events e LEFT JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.id='".$this->escape($event_id)."'";
+		$sql = "SELECT e.*, c.acl_id FROM cal_events e LEFT JOIN cal_calendars c ON c.id=e.calendar_id WHERE e.id='".intval($event_id)."'";
 		$this->query($sql);
 		return $this->next_record(DB_ASSOC);
 	}
@@ -1947,7 +1966,7 @@ class calendar extends db {
 	}
 
 	function move_exceptions($event_id, $diff) {
-		$event_id = $this->escape($event_id);
+		$event_id = intval($event_id);
 
 		$sql = "UPDATE cal_exceptions SET time=time+".$this->escape($diff)." WHERE event_id=$event_id";
 		return $this->query($sql);
@@ -2068,7 +2087,7 @@ class calendar extends db {
 			$event['location'] = quoted_printable_decode($event['location']);
 		}
 
-		$event['status'] = isset($object['STATUS']['value']) ? $object['STATUS']['value'] : 'NEEDS-ACTION';
+		$event['status'] = isset($object['STATUS']['value']) ? $object['STATUS']['value'] : 'ACCEPTED';
 
 		$event['all_day_event'] = (isset($object['DTSTART']['params']['VALUE']) &&
 										strtoupper($object['DTSTART']['params']['VALUE']) == 'DATE') ? '1' : '0';
@@ -2677,7 +2696,7 @@ class calendar extends db {
 	 */
 	function get_event_resource($event_id, $calendar_id) {
 		if($event_id>0 && $calendar_id>0) {
-			$sql = "SELECT cal_events.* FROM cal_events WHERE resource_event_id='$event_id' AND calendar_id='$calendar_id'";
+			$sql = "SELECT cal_events.* FROM cal_events WHERE resource_event_id='".intval($event_id)."' AND calendar_id='".intval($calendar_id)."'";
 
 			$this->query($sql);
 			if($this->next_record()) {
@@ -2701,6 +2720,9 @@ class calendar extends db {
 			."WHERE birthday != '0000-00-00' ";
 
 		if(count($abooks)) {
+			
+			$abooks=array_map('intval', $abooks);
+			
 			$sql .= "AND addressbook_id IN (".implode(',', $abooks).") ";
 		}
 
@@ -2866,7 +2888,7 @@ class calendar extends db {
 	}
 
 	public function get_visible_calendars($user_id) {
-		$this->query("SELECT * FROM su_visible_calendars WHERE user_id = $user_id");
+		$this->query("SELECT * FROM su_visible_calendars WHERE user_id = ".intval($user_id));
 		return $this->num_rows();
 	}
 
@@ -2910,6 +2932,8 @@ class calendar extends db {
 	{
 		if(!is_array($calendars))
 			$calendars = array($calendars);
+		
+		$calendars=array_map('intval', $calendars);
 		
 		$this->query("SELECT DISTINCT tasklist_id FROM cal_visible_tasklists WHERE calendar_id IN (".implode(',', $calendars).")");
 		return $this->num_rows();
@@ -3192,8 +3216,10 @@ class calendar extends db {
 	}
 
 
-
-	function send_invitation($event, $calendar, $insert=true){
+/*
+ * (optional)param $new_added = array of participant id's that are newly added to this event.
+ */
+	function send_invitation($event, $calendar, $insert=true,$new_added = false){
 		global $GO_CONFIG, $GO_MODULES, $lang, $GO_LANGUAGE, $GO_SECURITY;
 		
 		go_debug("send_invitation");
@@ -3217,7 +3243,11 @@ class calendar extends db {
 			//don't send invitation to the user that is doing this and don't send
 			//it to the user of the calendar in which this event is created.
 			if($this->f('status') !=1 || ($this->f('email')!=$_SESSION['GO_SESSION']['email'] && $calendar['user_id']!=$this->f('user_id'))) {
-				$participants[] = $RFC822->write_address($this->f('name'), $this->f('email'));
+
+        // Also don't send invitation to users that allready had one.
+        // TODO: find out which ones are new users
+        if($new_added === false || in_array($this->f('id'), $new_added))
+          $participants[] = $RFC822->write_address($this->f('name'), $this->f('email'));
 			}
 		}
 

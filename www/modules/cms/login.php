@@ -43,8 +43,8 @@ if($_SERVER['REQUEST_METHOD']=='POST')
 				require_once($GLOBALS['GO_CONFIG']->class_path.'cryptastic.class.inc.php');
 				$c = new cryptastic();
 
-				SetCookie("GO_UN",$c->encrypt($username),time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
-				SetCookie("GO_PW",$c->encrypt($password),time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),false);
+				SetCookie("GO_UN",$c->encrypt($username),time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),true);
+				SetCookie("GO_PW",$c->encrypt($password),time()+3600*24*30,"/",'',!empty($_SERVER['HTTPS']),true);
 			}
 
 			if(strpos($success_url, 'login.php') || strpos($success_url, 'logout.php')){

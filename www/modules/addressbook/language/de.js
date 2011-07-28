@@ -101,3 +101,7 @@ GO.addressbook.lang.crn='Firmenbuchnummer';
 GO.addressbook.lang.iban='IBAN';
 GO.addressbook.lang.unknownEmail= 'Unbekannte E-Mail Adresse';
 GO.addressbook.lang.strUnknownEmail= 'Diese E-Mail Adresse ist unbekannt. Wollen Sie sie in einem neuen Kontakt speichern, zu einem existierenden Kontakt hinzufügen, oder Abbrechen?';
+GO.addressbook.lang.globalsettings_templatelabel = 'Vorlage';
+GO.addressbook.lang.globalsettings_allchangelabel = 'Alle ändern?';
+GO.addressbook.lang.globalsettings_renameall = 'Alle umbenennen?';
+GO.addressbook.lang.createEmailSelected = 'Sende E-Mail an ausgewählte Empfänger';

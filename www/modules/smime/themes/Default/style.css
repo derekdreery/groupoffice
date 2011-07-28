@@ -27,3 +27,8 @@
 	background:url(images/invalid.png) no-repeat;
 	padding:0px 0px 10px 20px;
 }
+
+.smi-certemailmismatch{
+	background:url(images/certemailmismatch.png) no-repeat;
+	padding:0px 0px 10px 20px;
+}

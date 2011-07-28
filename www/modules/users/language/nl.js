@@ -72,7 +72,7 @@ GO.users.lang.maxUsersReached='Het maximaal aantal gebruikers is bereikt. Neem c
 GO.users.lang.group='Groep';
 GO.users.lang.profile='Profiel';
 
-GO.users.lang.muteSound='Demp geluiden';
+GO.users.lang.muteSound='Demp alle geluiden';
 GO.users.lang.mailReminders='Email herinneringen';
 
 
@@ -98,3 +98,8 @@ GO.users.lang.sendInvitation='Verstuur uitnodiging';
 GO.users.lang.contactInfo='Contact information';
 
 GO.users.lang.popupNotification='Toon een popup scherm wanneer een herinnering actief wordt of e-mail arriveert';
+
+GO.users.lang.muteNewMailSound='Demp geluid bij inkomende mail';
+GO.users.lang.muteReminderSound='Demp geluid bij herinneringen';
+
+GO.users.lang.showSmilies='Toon smilies';

@@ -57,8 +57,8 @@ if(empty($SECOND_RUN)){
 	if(!defined('NOTINSTALLED') && !isset($RERUN_UPDATE) && !headers_sent())
 	{
 		//login event can cause problems
-		SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
-		SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),false);
+		SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),true);
+		SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),true);
 	}
 
 
