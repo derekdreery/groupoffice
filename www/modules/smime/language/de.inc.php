@@ -13,3 +13,7 @@ $lang['smime']['smime_pass_empty']="Ihr SMIME-Schlüssel ist nicht durch ein Ken
 
 $lang['smime']['invalidCert']="Das Zertifikat ist ungültig!";
 $lang['smime']['validCert']="Gültiges Zertifikat";
+
+$lang['smime']['certEmailMismatch']="Gültiges Zertifikat, aber die Absenderadresse stimmt nicht mit der E-Mailadresse des Zertifikates überein.";
+
+$lang['smime']['decryptionFailed']='SMIME-Entschlüsselung dieser Nachricht fehlgeschlagen.';
