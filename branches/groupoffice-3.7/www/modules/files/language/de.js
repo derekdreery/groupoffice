@@ -27,3 +27,7 @@ GO.files.lang.normalSize='Normale Größe';
 GO.files.lang.imageViewer='Bildbetrachter';
 
 GO.files.lang.applyState = 'Anzeigeeinstellungen dieses Ordners für alle Nutzer übernehmen';
+GO.files.lang.strDownloadActive = 'Externer Download-Link verfügbar';
+GO.files.lang.downloadExpireTime='Link verfällt nach dem';
+GO.files.lang.downloadUrl='URL';
+
