@@ -1825,6 +1825,12 @@ class imap extends imap_bodystruct {
 		return $this->check_response($result, false);		
 	}
 
+	public function get_folder_tree($mailbox) {
+		$this->clean($mailbox, 'mailbox');
+		$delim = $this->get_mailbox_delimiter();
+		return $this->get_folders($mailbox.$delim,true);
+	}
+
 	/**
 	 * Rename a mailbox
 	 *
