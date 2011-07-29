@@ -1514,6 +1514,113 @@ try {
 				$response['success']=$imap->set_acl($_REQUEST['mailbox'], $_REQUEST['identifier'], $perms);
 				break;
 
+	case 'delete_old_mails':
+
+		if (empty($GO_MODULES->modules['email']['write_permission']))
+			throw new AccessDeniedException();
+
+//		function get_child_folders($account_id,$folder_id) {
+//			$children = array();
+//			$email2 = new email();
+//			$email2->get_mailboxes($account_id,$folder_id);
+//			while ($mb = $email2->next_record()) {
+//				$children[] = $mb['name'];
+//				$children = array_merge($children,get_child_folders($account_id,$mb['id']));
+//			}
+//			return $children;
+//		}
+
+		global $GO_LANGUAGE;
+		require_once ($GO_LANGUAGE->get_language_file('email'));
+
+		$before_timestamp = Date::to_unixtime($_POST['until_date']);
+		if (empty($before_timestamp))
+			throw new Exception($lang['email']['untilDateError'].': '.$_POST['until_date']);
+
+		$date_string = date('d',$before_timestamp).'-'.date('M',$before_timestamp).'-'.date('Y',$before_timestamp);
+
+		$total = !empty($_POST['total']) ? $_POST['total'] : false;
+		$n_deleted = !empty($_POST['n_deleted']) ? $_POST['n_deleted'] : 0;
+		$apply_to_children = $_POST['apply_to_children']!='false' && $_POST['apply_to_children']!=false && !empty($_POST['apply_to_children']);
+		$mailbox_name = $_POST['mailbox'];
+		$uids = json_decode($_POST['uids']);
+		$account_id = $_POST['account_id'];
+		$id_array = explode('_',$_POST['id']); $folder_id = $id_array[1];
+
+		$account = $imap->open_account($account_id, $mailbox_name);
+
+		if (!empty($apply_to_children)) {
+			$folders = $imap->get_folder_tree($mailbox_name);
+		} else {
+			$folders = array($mailbox_name => $mailbox_name);
+		}
+
+		if (empty($uids)) {
+			foreach ($folders as $folder_name=>$value) {
+				$imap->select_mailbox($folder_name);
+				$new_uids = $imap->sort_mailbox('ARRIVAL',false,'BEFORE "'.$date_string.'"');
+				foreach ($new_uids as $k=>$v) {
+					$new_uids[$k] = array($folder_name,$v);
+				}
+				$uids = array_merge($new_uids,$uids);
+			}
+		}
+		
+		if ($total===false) {
+			$total = count($uids);
+		}
+
+		$end_time = time() + 1;
+
+		$current_mailbox = '';
+		while ($uid = array_shift($uids)) {
+			if (time()<=$end_time) {
+				if (strcmp($current_mailbox,$uid[0])!=0) {
+					$current_mailbox=$uid[0];
+					$imap->select_mailbox($uid[0]);
+				}
+				$imap->delete(array($uid[1]));
+				$n_deleted++;
+			} else {
+				$uids[] = $uid;
+				break;
+			}
+		}
+
+		$response['total'] = $total;
+		$response['uids'] = json_encode($uids);
+		$response['progress']= !empty($total) ? number_format($n_deleted/$total,2) : 1.00;
+		$response['nDeleted'] = $n_deleted;
+		$response['success'] = true;
+
+		break;
+
+	case 'log_deletion':
+
+		$n_deleted = !empty($_POST['n_deleted']) ? $_POST['n_deleted'] : 0;
+
+		if ($n_deleted>0 && !empty($GO_MODULES->modules['log'])) {
+			$before_timestamp = Date::to_unixtime($_POST['until_date']);
+			if (empty($before_timestamp))
+				throw new Exception($lang['email']['untilDateError'].': '.$_POST['until_date']);
+			$date_string = date('d',$before_timestamp).'-'.date('M',$before_timestamp).'-'.date('Y',$before_timestamp);
+			$apply_to_children = $_POST['apply_to_children']!='false' && $_POST['apply_to_children']!=false && !empty($_POST['apply_to_children']);
+			$mailbox_name = $_POST['mailbox'];
+			$account_id = $_POST['account_id'];
+
+			$account = $imap->open_account($account_id, $mailbox_name);
+
+			global $GO_CONFIG;
+			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+			$search = new search();
+			$with_children_txt = !empty($apply_to_children) ? '(including subfolders) ' : '';
+			$before_txt = 'from before '.$date_string;
+			$search->log(0, 9, 'Deleted '.$n_deleted.' emails '.$before_txt.' from mailbox '.$mailbox_name.' '.$with_children_txt.'of account '.$account['username'].'.');
+		}
+
+		$response['success'] = true;
+
+		break;
 
 		/* {TASKSWITCH} */
 	}
