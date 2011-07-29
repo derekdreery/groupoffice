@@ -190,3 +190,13 @@ GO.email.lang.deleteMailboxPerm='Mailbox verwijderen';
 GO.email.lang.adminPerm='Beheren';
 
 GO.email.lang.anyField='Alle velden';
+
+GO.email.lang.deleteOldMails = 'Oude mails verwijderen';
+GO.email.lang.deleteOldMailsInstructions = 'Selecteer een datum. Als u vervolgens op OK klikt, zullen alle emails in de geselecteerde folder tot dat datum permanent worden verwijderd.';
+GO.email.lang.folder = 'Folder';
+GO.email.lang.deleteOldMailsSure1 = 'Deze handeling kan niet ongedaan gemaakt worden. Weet u zeker dat u alle mails van deze folder tot';
+GO.email.lang.deleteOldMailsSure2 = ' wilt verwijderen?'
+GO.email.lang.nDeletedMailsTxt = 'Het aantal verwijderde emails is';
+GO.email.lang.deletingEmails = 'Emails aan het verwijderen...';
+GO.email.lang.everythingBefore = 'Alle emails voor';
+GO.email.lang.alsoChildren = 'Deze bewerking ook toepassen op emails in subfolders.';

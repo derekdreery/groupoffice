@@ -70,3 +70,5 @@ $lang['email']['iCalendar_update_available']='This message contains an update to
 $lang['email']['iCalendar_update_old']='This message containts an event that has already been processed.';
 $lang['email']['iCalendar_event_cancelled']='This message contains an event cancellation.';
 $lang['email']['iCalendar_event_invitation_declined']='This message contains an invitation to an event you have declined.';
+
+$lang['email']['untilDateError']='I tried to process the following "Until Date", but the processing stopped because an error occurred';
