@@ -51,11 +51,13 @@ class GO_DAV_FS_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
      * @return void
      */
     public function put($data) {
+      global $files;
+      $this->checkWritePermission();
 
-		$this->checkWritePermission();
 
-
-        file_put_contents($this->path,$data);
+      file_put_contents($this->path,$data);
+      $file_id = $files->import_file($this->path, $this->folder['id']);
+      go_debug('ADDED FILE WITH WEBDAV -> FILE_ID: '.$file_id);
 
     }
 
