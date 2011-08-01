@@ -370,7 +370,7 @@ class PDF extends TCPDF {
 							'color' => array(40, 40, 40),
 							'width' => .5
 						);
-						$this->Line($this->lMargin + $this->cMargin, $this->getY(), $this->getPageWidth() - $this->rMargin - $this->cMargin, $this->getY(), $lineStyle);
+						$this->Line($this->lMargin, $this->getY(), $this->getPageWidth() - $this->rMargin, $this->getY(), $lineStyle);
 						$this->ln(10);
 					}
 				}
