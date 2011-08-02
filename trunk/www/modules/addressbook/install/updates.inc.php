@@ -122,3 +122,4 @@ $updates[]="ALTER TABLE `ab_contacts` ADD `go_user_id` INT NOT NULL , ADD INDEX 
 $updates[]="ALTER TABLE `ab_addressbooks` DROP `acl_write`";
 
 $updates[]="ALTER TABLE `ab_addressbooks` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
+$updates[]="ALTER TABLE `ab_addressbooks` ADD `files_folder_id` INT NOT NULL";
