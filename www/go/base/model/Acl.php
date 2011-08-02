@@ -11,11 +11,6 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	const MANAGE_PERMISSION=4;
 
 	public $tableName = "go_acl_items";
-	protected $_columns = array(
-			'id' => array('type' => PDO::PARAM_INT),
-			'user_id' => array('type' => PDO::PARAM_INT, 'required' => true),
-			'description' => array('type' => PDO::PARAM_INT, 'required' => true),
-	);
 
 	/**
 	 * Return the permission level that a user has for this ACL.

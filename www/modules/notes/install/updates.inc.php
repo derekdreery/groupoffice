@@ -9,4 +9,5 @@ $updates[]="ALTER TABLE `no_categories` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO
 $updates[]="ALTER TABLE `no_notes` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
 
 $updates[]="ALTER TABLE `no_categories` ADD `files_folder_id` INT NOT NULL";
+$updates[]="ALTER TABLE `no_categories` DROP `acl_write`";
 ?>

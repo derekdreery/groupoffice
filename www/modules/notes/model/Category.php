@@ -31,13 +31,6 @@
 				'user' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id')
 		);
 
-	protected $_columns=array(
-		'id'=>array('type'=>PDO::PARAM_INT),
-		'user_id'=>array('type'=>PDO::PARAM_INT),
-		'name'=>array('type'=>PDO::PARAM_STR,'required'=>true,'length'=>100),
-		'acl_id'=>array('type'=>PDO::PARAM_INT),
-		'files_folder_id' => array('type' => PDO::PARAM_INT) //For implemting a file folder
-	);
 	
 	protected function afterDelete() {		
 		if(isset(GO::modules()->files)){

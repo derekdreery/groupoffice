@@ -24,21 +24,12 @@
 	 * @var String the absolute path to the classes folder of this module.
 	 */
 	public $class_path;
-	
-	
 		
 	 
 	public $aclField='acl_id';
 	
 	public $tableName='go_modules';
 
-	protected $_columns=array(
-		'id'=>array('type'=>PDO::PARAM_STR),
-		'name'=>array('type'=>PDO::PARAM_STR,'required'=>true,'length'=>100),
-		'version'=>array('type'=>PDO::PARAM_INT),
-		'sort_order'=>array('type'=>PDO::PARAM_INT),
-		'acl_id'=>array('type'=>PDO::PARAM_INT)
-	);	
 	
 	protected function init() {
 		parent::init();
