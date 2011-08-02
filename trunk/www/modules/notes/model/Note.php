@@ -45,15 +45,8 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	protected function getCacheAttributes() {
 		return array(
 				'name' => $this->name,
-				'type' => 'Note'
+				'type' => GO::t('note','notes')
 		);
-	}
-	
-	protected function beforeSave(){
-		if (empty($this->files_folder_id) && isset(GO::modules()->files)) {
-			$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this, $this->_buildFilesPath());
-		}
-		return parent::beforeSave();
 	}
 
 	protected function afterSave() {
@@ -80,27 +73,15 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 			}
 		}
 
-
-
 		return parent::afterSave();
 	}
-	
-	protected function afterDelete() {
-		
-		if(isset(GO::modules()->files)){
-			GO_Files_Controller_Item::deleteFilesFolder($this->files_folder_id);	
-		}
-		
-		return parent::afterDelete();
-	}
-	
 
 	/**
 	 * The files module will use this function.
 	 */
-	private function _buildFilesPath() {
+	protected function buildFilesPath() {
 
-		return 'notes/' . File::strip_invalid_chars($this->category->name) . '/' . date('Y', $this->ctime) . '/' . File::strip_invalid_chars($this->name);
+		return 'notes/' . File::strip_invalid_chars($this->category->name) . '/' . date('Y', $this->ctime) . '/' . GO_Base_Util_File::strip_invalid_chars($this->name);
 	}
 
 }

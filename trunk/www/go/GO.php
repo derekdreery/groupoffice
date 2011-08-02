@@ -64,7 +64,10 @@ class GO{
 	 * @return GO_Base_Model_User The logged in user model
 	 */
 	public static function user(){
-		return GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id']);
+		if(empty(GO::session()->values['user_id']))
+			return false;
+		else
+			return GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id']);
 	}
 
 	/**
@@ -326,5 +329,22 @@ class GO{
 
 			file_put_contents(self::config()->file_storage_path . 'debug.log', $text . "\n", FILE_APPEND);
 		}
+	}
+	
+	private static $_language;
+	
+	/**
+	 * Translates a language variable name into the local language
+	 * 
+	 * @param String $name Name of the translation variable
+	 * @param String $module Name of the module to find the translation
+	 * @param String $basesection Only applies if module is set to 'base'
+	 */
+	public function t($name, $module='base', $basesection='common'){
+		if(!isset(self::$_language)){
+			self::$_language=new GO_Base_Language();
+		}
+		
+		return self::$_language->getTranslation($name, $module, $basesection);
 	}
 }

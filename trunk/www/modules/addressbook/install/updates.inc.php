@@ -118,3 +118,7 @@ $updates[]="DELETE FROM go_links_2 WHERE link_id=0 OR id=0;";
 $updates[]="DELETE FROM go_links_3 WHERE link_id=0 OR id=0;";
 
 $updates[]="ALTER TABLE `ab_contacts` ADD `go_user_id` INT NOT NULL , ADD INDEX ( `go_user_id` )";
+
+$updates[]="ALTER TABLE `ab_addressbooks` DROP `acl_write`";
+
+$updates[]="ALTER TABLE `ab_addressbooks` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
