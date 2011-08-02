@@ -79,7 +79,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	}
 	
 	/**
-	 *
+	 * The columns array is loaded automatically. Validator rules can be added by
+	 * overriding the init() method.
+	 * 
 	 * @var array Holds all the column properties indexed by the field name.
 	 * 
 	 * eg: 'id'=>array('type'=>PDO::PARAM_INT,'required'=>true,'length'=><max length of the value>, 'validator'=><a function to call to validate the value>)
@@ -90,9 +92,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			return true;
 		}
 	 */
-	protected $_columns=array(
+	protected $columns=array(
 				'id'=>array('type'=>PDO::PARAM_INT,'required'=>true,'length'=>null, 'validator'=>null)
 			);
+	
+	
+	
+	
+	
 	
 	/**
 	 * 
@@ -114,9 +121,66 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$this->_setOldAttributes();		
 		
-		
+		$this->_loadColumns();
 		$this->setIsNew(empty($pk));
 		$this->init();
+	}
+	
+	/**
+	 * Loads the column information from the database
+	 * 
+	 * @todo cache this
+	 */
+	private function _loadColumns() {
+		if(!empty($this->tableName)){
+			$sql = "SHOW COLUMNS FROM `" . $this->tableName . "`;";
+			$stmt = $this->getDbConnection()->query($sql);
+			while ($field = $stmt->fetch()) {
+				preg_match('/([a-zA-Z].*)\(([1-9].*)\)/', $field['Type'], $matches);
+				if ($matches) {
+					$length = $matches[2];
+					$type = $matches[1];
+				} else {
+					$type = $field['Type'];
+					$length = 0;
+				}
+
+				$gotype = 'textfield';
+				$required=false;
+
+				$pdoType = PDO::PARAM_STR;
+				switch ($type) {
+					case 'int':
+					case 'tinyint':
+					case 'bigint':
+						$pdoType = PDO::PARAM_INT;
+						$length = 0;
+						$gotype = '';
+						break;
+
+					case 'text':
+						$gotype = 'textarea';
+						break;
+				}
+
+				switch($field['Field']){
+					case 'ctime':
+					case 'mtime':
+						$gotype = 'unixtimestamp';			
+						break;
+					case 'name':
+						$required=true;
+						break;
+				}
+
+				$this->columns[$field['Field']]=array(
+						'type'=>$pdoType,
+						'required'=>$required,
+						'length'=>$length,
+						'gotype'=>$gotype
+				);
+			}
+		}
 	}
 	
 	/**
@@ -443,12 +507,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				
 				if($comparator=='IN'){
 					for($i=0;$i<count($value);$i++)
-						$value[$i]=$this->getDbConnection()->quote($value[$i], $this->_columns[$field]['type']);
+						$value[$i]=$this->getDbConnection()->quote($value[$i], $this->columns[$field]['type']);
 					
 					$sql .= "`$field` $comparator (".implode(',',$value).") ";
 				}else
 				{							
-					$sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value, $this->_columns[$field]['type'])." ";
+					$sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value, $this->columns[$field]['type'])." ";
 				}
 			}
 
@@ -550,7 +614,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	protected function getFindSearchQueryParamFields(){
 		//throw new Exception('Error: you supplied a searchQuery parameter to find but getFindSearchQueryParamFields() should be overriden in '.$this->className());
 		$fields = array();
-		foreach($this->_columns as $field=>$attributes){
+		foreach($this->columns as $field=>$attributes){
 			if($attributes['type']==PDO::PARAM_STR){
 				$fields[]=$field;
 			}
@@ -582,13 +646,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				else
 					$first=false;
 				
-				$sql .= "`".$field.'`='.$this->getDbConnection()->quote($value, $this->_columns[$field]['type']);
+				$sql .= "`".$field.'`='.$this->getDbConnection()->quote($value, $this->columns[$field]['type']);
 			}
 		}else
 		{
 			$this->{$this->primaryKey}=$primaryKey;
 			
-			$sql .= "`".$this->primaryKey.'`='.$this->getDbConnection()->quote($primaryKey, $this->_columns[$this->primaryKey]['type']);
+			$sql .= "`".$this->primaryKey.'`='.$this->getDbConnection()->quote($primaryKey, $this->columns[$this->primaryKey]['type']);
 		}
 		return $sql;
 	}
@@ -693,14 +757,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	protected function formatInputValues($attributes){
 		$formatted = array();
 		foreach($attributes as $key=>$value){
-			if(!isset($this->_columns[$key])){
+			if(!isset($this->columns[$key])){
 				//don't process unknown columns.
 				continue;
 			}
-			if(!isset($this->_columns[$key]['gotype'])){
-				$this->_columns[$key]['gotype']='string';
+			if(!isset($this->columns[$key]['gotype'])){
+				$this->columns[$key]['gotype']='string';
 			}
-			switch($this->_columns[$key]['gotype']){
+			switch($this->columns[$key]['gotype']){
 				case 'unixtimestamp':
 					$formatted[$key] = GO_Base_Util_Date::to_unixtime($value);
 					break;			
@@ -718,10 +782,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$formatted = array();
 		foreach($attributes as $key=>$value){
-			if(!isset($this->_columns[$key]['gotype'])){
-				$this->_columns[$key]['gotype']='string';
+			if(!isset($this->columns[$key]['gotype'])){
+				$this->columns[$key]['gotype']='string';
 			}
-			switch($this->_columns[$key]['gotype']){
+			switch($this->columns[$key]['gotype']){
 				case 'unixtimestamp':
 					$formatted[$key] = GO_Base_Util_Date::get_timestamp($value);
 					break;	
@@ -758,7 +822,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$attributes = $this->formatInputValues($attributes);
 		
 		foreach($attributes as $key=>$value){
-			if(isset($this->_columns[$key])){
+			if(isset($this->columns[$key])){
 				$this->$key=$value;
 			}		
 		}		
@@ -796,7 +860,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function getColumns()
 	{
-		return $this->_columns;
+		return $this->columns;
 	}
 	
 	/**
@@ -825,7 +889,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 
 	public function validate(){
-		foreach($this->_columns as $field=>$attributes){
+		foreach($this->columns as $field=>$attributes){
 			if(!empty($attributes['required']) && empty($this->_attributes[$field])){
 				throw new Exception($field.' is required');
 			}elseif(!empty($attributes['length']) && strlen($this->_attributes[$field])>$attributes['length'])
@@ -858,13 +922,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			 * Set some common column values
 			*/
 			
-			if(isset($this->_columns['mtime']))
+			if(isset($this->columns['mtime']))
 				$this->mtime=time();
-			if(isset($this->_columns['ctime']) && !isset($this->ctime)){
+			if(isset($this->columns['ctime']) && !isset($this->ctime)){
 				$this->ctime=time();
 			}
 			
-			if(isset($this->_columns['user_id']) && !isset($this->user_id)){
+			if(isset($this->columns['user_id']) && !isset($this->user_id)){
 				$this->user_id=GO::session()->values['user_id'];
 			}
 			
@@ -980,7 +1044,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	private function _getSearchCacheKeywords(){
 		$keywords=array();
 
-		foreach($this->_columns as $key=>$attr)
+		foreach($this->columns as $key=>$attr)
 		{
 			$value = $this->$key;
 			if($attr['type']==PDO::PARAM_STR && !in_array($value,$keywords)){
@@ -1013,7 +1077,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	private function _dbInsert(){		
 		
-		$fieldNames = array_keys($this->_columns);
+		$fieldNames = array_keys($this->columns);
 		
 		$sql = "INSERT INTO `{$this->tableName}` (`".implode('`,`', $fieldNames)."`) VALUES ".
 					"(:".implode(',:', $fieldNames).")";
@@ -1025,7 +1089,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		foreach($fieldNames as  $field){
 			
-			$attr = $this->_columns[$field];
+			$attr = $this->columns[$field];
 			
 			$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
 		}
@@ -1040,7 +1104,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$updates=array();
 		
 		$pks = is_array($this->primaryKey) ? $this->primaryKey : array($this->primaryKey);
-		foreach($this->_columns as $field => $value)
+		foreach($this->columns as $field => $value)
 		{
 			if(!in_array($field,$pks))
 			{
@@ -1073,9 +1137,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 		$stmt = $this->getDbConnection()->prepare($sql);
 		
-		foreach($this->_columns as $field => $value){
+		foreach($this->columns as $field => $value){
 			
-			$attr = $this->_columns[$field];
+			$attr = $this->columns[$field];
 			
 			$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
 		}
@@ -1127,7 +1191,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		if($attr){
 			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkType));
-			$model->delete();
+			if($model)
+				$model->delete();
 		}
 		
 		
@@ -1215,7 +1280,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	{
 		if(property_exists($this,$name)){
 			$this->$name=$value;
-		}elseif(isset($this->_columns[$name])){
+		}elseif(isset($this->columns[$name])){
 			$this->_attributes[$name]=$value;		
 		}else{
 			$arr = explode('@',$name);

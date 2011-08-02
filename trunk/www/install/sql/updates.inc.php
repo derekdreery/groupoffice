@@ -449,3 +449,9 @@ $updates[]="ALTER TABLE `go_users` CHANGE `middle_name` `middle_name` VARCHAR( 5
 $updates[]="ALTER TABLE `go_users` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
 
 $updates[]="ALTER TABLE `go_acl_items` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
+
+$updates[]="ALTER TABLE `go_search_cache` DROP `table` ,
+DROP `url` ,
+DROP `link_count` ,
+DROP `acl_read` ;";
+
