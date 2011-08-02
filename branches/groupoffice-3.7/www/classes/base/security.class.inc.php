@@ -194,7 +194,9 @@ class GO_SECURITY extends db {
 
 		unset($_SESSION, $_COOKIE['GO_UN'], $_COOKIE['GO_PW']);
 
-		@session_destroy();
+		
+    session_regenerate_id();
+    @session_destroy();
 		$this->user_id = 0;
 
 		global $GO_MODULES;
