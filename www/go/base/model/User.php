@@ -1,7 +1,7 @@
 <?php
  class GO_Base_Model_User extends GO_Base_Db_ActiveRecord{
 
-	public $aclField=false;
+	public $aclField="acl_id";
 
 	public $tableName="go_users";	
 	/**

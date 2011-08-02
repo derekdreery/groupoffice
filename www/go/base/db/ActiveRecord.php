@@ -430,8 +430,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		
 		
-		if(!isset($params['userId'])){
-			$params['userId']=GO::session()->values['user_id'];
+		if(!isset($params['userId'])){			
+			$params['userId']=GO::user() ? GO::user()->id : 1;
 		}
 		
 		$aclJoin['relation']='';
@@ -892,10 +892,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		foreach($this->columns as $field=>$attributes){
 			if(!empty($attributes['required']) && empty($this->_attributes[$field])){
 				throw new Exception($field.' is required');
-			}elseif(!empty($attributes['length']) && strlen($this->_attributes[$field])>$attributes['length'])
+			}elseif(!empty($attributes['length']) && !empty($this->_attributes[$field]) && strlen($this->_attributes[$field])>$attributes['length'])
 			{
 				throw new Exception($field.' too long');
-			}elseif(!empty($attributes['validator']) && !call_user_func($attributes['validator'], $this->_attributes[$field]))
+			}elseif(!empty($attributes['validator']) && !empty($this->_attributes[$field]) && !call_user_func($attributes['validator'], $this->_attributes[$field]))
 			{
 				throw new Exception($field.' did not validate');
 			}
@@ -929,7 +929,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 			
 			if(isset($this->columns['user_id']) && !isset($this->user_id)){
-				$this->user_id=GO::session()->values['user_id'];
+				$this->user_id=GO::user() ? GO::user()->id : 1;
 			}
 			
 			
@@ -938,6 +938,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			 */
 			$this->fireEvent('beforesave',array(&$this));
 			
+			
+			if (empty($this->files_folder_id) && isset(GO::modules()->files)) {
+				$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this, $this->buildFilesPath());
+			}
+			
+			
 			if($this->isNew){				
 				
 				if($this->aclField && !$this->joinAclField && empty($this->{$this->aclField})){
@@ -945,7 +951,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					
 					$acl = new GO_Base_Model_Acl();
 					$acl->description=$this->tableName.'.'.$this->aclField;
-					$acl->user_id=GO::session()->values['user_id'];
+					$acl->user_id=GO::user() ? GO::user()->id : 1;
 					$acl->save();
 					
 					$this->{$this->aclField}=$acl->id;
@@ -971,6 +977,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					return false;
 			}
 			
+			
+			
 			if(!$this->afterSave())
 				return false;
 			
@@ -990,6 +998,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		{
 			return false;
 		}
+	}
+	
+	/**
+	 * The files module will use this function. To create a files folder.
+	 * Override it if you don't like the default path.
+	 */
+	protected function buildFilesPath() {
+
+		return isset($this->name) ? $this->getModule().'/' . GO_Base_Util_File::strip_invalid_chars($this->name) : false;
 	}
 	
 	private function getModule(){
@@ -1202,6 +1219,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$acl = GO_Base_Model_Acl::model()->findByPk($this->{$this->aclField});			
 			$acl->delete();
 		}	
+		
+		
+		if(isset(GO::modules()->files) && isset($this->files_folder_id)){
+			GO_Files_Controller_Item::deleteFilesFolder($this->files_folder_id);	
+		}
 
 		return $this->afterDelete();			
 	}
