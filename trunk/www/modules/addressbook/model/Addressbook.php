@@ -22,15 +22,21 @@
 
  class GO_Addressbook_Model_Addressbook extends GO_Base_Db_ActiveRecord{
 		 
-	public $aclField='acl_id';	
+	public function aclField(){
+		return 'acl_id';	
+	}
 	
-	public $tableName='ab_addressbooks';
+	public function tableName(){
+		return 'ab_addressbooks';
+	}
 	
-	protected $relations=array(
+	public function relations(){
+		return array(
 				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'addressbook_id', 'delete'=>true),
 				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'addressbook_id', 'delete'=>true),
 				'user' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id')
 		);
+	}
 	
 	protected function beforeSave() {
 		

@@ -1,9 +1,15 @@
 <?php
  class GO_Base_Model_User extends GO_Base_Db_ActiveRecord{
 
-	public $aclField="acl_id";
+	public function aclField(){
+		return 'acl_id';	
+	}
+	
+	public function tableName(){
+		return 'go_users';
+	}
 
-	public $tableName="go_users";	
+
 	/**
 	 *
 	 * @return String Full formatted name of the user

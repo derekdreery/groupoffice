@@ -23,18 +23,18 @@
  * @property int $id
  * @property int $category_id
  */
-class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
+class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	public function linkType(){
-		return 4;	
+		return 2;	
 	}
 	
 	public function aclField(){
-		return 'category.acl_id';	
+		return 'addressbook.acl_id';	
 	}
 	
 	public function tableName(){
-		return 'no_notes';
+		return 'ab_contacts';
 	}
 	
 	public function hasFiles(){
@@ -46,44 +46,34 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	}
 
 	public function relations(){
-		return array(	
-				'category' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Notes_Model_Category', 'field'=>'category_id'),
+		return array(
+				'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Addressbook', 'field'=>'addressbook_id'),
 				'user' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id'),
 				'customfieldRecord' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Notes_Model_CustomFieldsRecord', 'field'=>'id')
 		);
 	}
 
 
+	
+	/**
+	 *
+	 * @return String Full formatted name of the user
+	 */
+	public function getName(){
+		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name);
+	}
+
 	protected function getCacheAttributes() {
 		return array(
 				'name' => $this->name,
-				'type' => GO::t('note','notes')
+				'type' => GO::t('contact','addressbook')
 		);
 	}
 
-	protected function afterSave() {		
+	protected function afterSave() {
 
 		if (isset(GO::modules()->customfields))
 			GO_Customfields_Controller_Item::saveCustomFields($this, "GO_Notes_Model_CustomFieldsRecord");
-
-		
-		//Does this belong in the controller?
-		if (!empty($_POST['tmp_files']) && GO::modules()->has_module('files')) {
-			require_once(GO::modules()->modules['files']['class_path'] . 'files.class.inc.php');
-			$files = new files();
-			$fs = new filesystem();
-
-			$path = $files->build_path($this->files_folder_id);
-
-			$tmp_files = json_decode($_POST['tmp_files'], true);
-			while ($tmp_file = array_shift($tmp_files)) {
-				if (!empty($tmp_file['tmp_file'])) {
-					$new_path = GO::config()->file_storage_path . $path . '/' . $tmp_file['name'];
-					$fs->move($tmp_file['tmp_file'], $new_path);
-					$files->import_file($new_path, $this->files_folder_id);
-				}
-			}
-		}
 
 		return parent::afterSave();
 	}
@@ -92,6 +82,21 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	 * The files module will use this function.
 	 */
 	protected function buildFilesPath() {
+		
+		$new_folder_name = GO_Base_Util_File::strip_invalid_chars($this->name);
+		$last_part = empty($contact['last_name']) ? '' : $this->get_index_char($contact['last_name']);
+		$new_path = 'contacts/'.GO_Base_Util_File::strip_invalid_chars($addressbook['name']);
+		if(!empty($last_part)) {
+			$new_path .= '/'.$last_part;
+		}else {
+			$new_path .= '/0 no last name';
+		}
+		
+		if(empty($new_folder_name))
+			$new_folder_name='unnamed';
+			
+		$new_path .= '/'.$new_folder_name;
+		return $new_path;
 
 		return 'notes/' . File::strip_invalid_chars($this->category->name) . '/' . date('Y', $this->ctime) . '/' . GO_Base_Util_File::strip_invalid_chars($this->name);
 	}

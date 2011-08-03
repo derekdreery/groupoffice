@@ -68,7 +68,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			//Nicer would be $model->linkTo($othermodel);
 			$link_props = explode(':', $_POST['link']);
 			$GO_LINKS->add_link(
-							($link_props[1]), ($link_props[0]), $model->pk, $model->linkType);
+							($link_props[1]), ($link_props[0]), $model->pk, $model->linkType());
 		}
 
 		$this->afterSubmit($response, $model);
@@ -258,7 +258,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$search = new search();
 
 		if (/* !in_array('links', $hidden_sections) && */!isset($response['data']['links'])) {
-			$links_json = $search->get_latest_links_json(GO::session()->values['user_id'], $response['data']['id'], $model->linkType);
+			$links_json = $search->get_latest_links_json(GO::session()->values['user_id'], $response['data']['id'], $model->linkType());
 			$response['data']['links'] = $links_json['results'];
 		}
 
@@ -266,14 +266,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			require_once(GO::modules()->tasks->class_path . 'tasks.class.inc.php');
 			$tasks = new tasks();
 
-			$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $model->linkType);
+			$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $model->linkType());
 		}
 
 		if (isset(GO::modules()->calendar)/* && !in_array('events', $hidden_sections) */) {
 			require_once(GO::modules()->calendar->class_path . 'calendar.class.inc.php');
 			$cal = new calendar();
 
-			$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $model->linkType);
+			$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $model->linkType());
 		}
 
 		if (/* !in_array('files', $hidden_sections) && */!isset($response['data']['files'])) {
@@ -292,14 +292,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			require_once (GO::modules()->comments->class_path.'comments.class.inc.php');
 			$comments = new comments();
 
-			$response['data']['comments'] = $comments->get_comments_json($response['data']['id'], $model->linkType);
+			$response['data']['comments'] = $comments->get_comments_json($response['data']['id'], $model->linkType());
 		}
 
 		if (GO::modules()->customfields && !isset($response['data']['customfields'])) {
 			require_once(GO::modules()->customfields->class_path.'customfields.class.inc.php');
 			$cf = new customfields();		
 			
-			$response['data']['customfields'] = $cf->get_all_fields_with_values(GO::session()->values['user_id'], $model->linkType, $response['data']['id']);
+			$response['data']['customfields'] = $cf->get_all_fields_with_values(GO::session()->values['user_id'], $model->linkType(), $response['data']['id']);
 		}
 
 
