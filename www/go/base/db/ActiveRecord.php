@@ -22,8 +22,27 @@
 
 abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
+	/**
+	 * This relation is used when the remote model's primary key is stored in a 
+	 * local attribute.
+	 * 
+	 * Addressbook->user() for example
+	 */
 	const BELONGS_TO=1;	
+	
+	/**
+	 * This relation type is used when this model has many related models. 
+	 * 
+	 * Addressbook->contacts() for example.
+	 */
 	const HAS_MANY=2;
+	
+	/**
+	 * This relation type means that the relation is single and this model's primary
+	 * key can be found in the remote model.
+	 * 
+	 * User->Addressbook for example where user_id is in the addressbook table.
+	 */
 	const HAS_ONE=3;
 	
 	/**
@@ -44,12 +63,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	/**
 	 * 
+	 * Define the relations for the model.
+	 * 
 	 * Example return value:
 	 * array(
 				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'addressbook_id', 'delete'=>true //with this enabled the relation will be deleted along with the model),
 				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'addressbook_id', 'delete'=>true),
 				'user' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id')
 		);
+	 * 
+	 * The relations can be accessed as functions:
+	 * 
+	 * Model->contacts() for example. They always return a PDO statement
 	 * 
 	 * @var array relational rules.
 	 */
@@ -74,6 +99,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function aclField(){
 		return false;
+	}
+	
+		
+	/**
+	 * 
+	 * Returns the primary key of the database table of this model
+	 * 
+	 * @var mixed Primary key of database table. Can be a field name string or an array of fieldnames
+	 */
+		
+	public function primaryKey()
+	{
+		return 'id';
 	}
 	
 	private $_relatedCache;
@@ -130,19 +168,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	protected $columns=array(
 				'id'=>array('type'=>PDO::PARAM_INT,'required'=>true,'length'=>null, 'validator'=>null)
 			);	
-	
-	
-	/**
-	 * 
-	 * Returns the primary key of the database table of this model
-	 * 
-	 * @var mixed Primary key of database table. Can be a field name string or an array of fieldnames
-	 */
-		
-	public function primaryKey()
-	{
-		return 'id';
-	}
 	
 	private $_new=true;
 
@@ -255,6 +280,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 	}
 	
+	/**
+	 * Can be overriden to initialize the model. Useful for setting attribute
+	 * validators in the columns property for example.
+	 */
 	protected function init(){}
 	
 	/**
@@ -278,10 +307,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return $ret;
 	}
 	
+	/**
+	 * Check if this model is new and not stored in the database yet.
+	 * 
+	 * @return bool 
+	 */
 	public function getIsNew(){
 		
 		return $this->_new;
 	}
+	
+	/**
+	 * Set if this model is new and not stored in the database yet.
+	 * 
+	 * @param bool $new 
+	 */
 	public function setIsNew($new){
 		
 		$this->_new=$new;
@@ -355,7 +395,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	private $_acl_id;
 	
-	
+	/**
+	 * Find the acl_id integer value that applies to this model.
+	 * 
+	 * @return int ACL id from go_acl_items table. 
+	 */
 	public function findAclId() {
 		if (!$this->aclField())
 			return false;
@@ -741,8 +785,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			//GO::debug($this);
 	}
 	
-		
-	protected function getRelated($name){
+
+	private function _getRelated($name){
 		 //$name::findByPk($hit-s)
 		$r= $this->relations();
 		
@@ -792,6 +836,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 	}
 	
+	/**
+	 * Formats user input for the database.
+	 * 
+	 * @param array $attributes
+	 * @return array 
+	 */
 	protected function formatInputValues($attributes){
 		$formatted = array();
 		foreach($attributes as $key=>$value){
@@ -816,6 +866,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return $formatted;
 	}
 	
+	/**
+	 * Format database values for display in the user's locale.
+	 * 
+	 * @param array $attributes
+	 * @param bool $html set to true if it's used for html output
+	 * @return array 
+	 */
 	protected function formatOutputValues($attributes, $html=false){
 		
 		$formatted = array();
@@ -1047,6 +1104,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return isset($this->name) ? $this->getModule().'/' . GO_Base_Util_File::strip_invalid_chars($this->name) : false;
 	}
 	
+	/**
+	 * Get the name of the module that this model belongs to.
+	 * 
+	 * @return string 
+	 */
 	private function getModule(){
 		$arr = explode('_', $this->className());
 		
@@ -1290,7 +1352,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				$r = $this->relations();
 				if(isset($r[$name]))			
 				{
-					return $this->getRelated($name);
+					return $this->_getRelated($name);
 				}
 			}
 		}
@@ -1364,6 +1426,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * Pass another model to this function and they will be linked with the
 	 * Group-Office link system.
 	 * 
+	 * @todo
 	 * @param mixed $model 
 	 */
 	
