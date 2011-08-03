@@ -136,12 +136,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function hasFiles(){return false;}
 	
 	/**
-	 * Set to true to enabled custom fields. A relation customfieldsRecord will be
+	 * Set to a model to enabled custom fields. A relation customfieldsRecord will be
 	 * created automatically and saving and deleting custom fields will be handled.
 	 * 
 	 * @return bool 
 	 */
-	public function hasCustomFields(){return false;}
+	public function customfieldsModel(){return false;}
 
 	/**
 	 *
@@ -1073,6 +1073,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 			
 			
+			if (isset(GO::modules()->customfields) && $this->customfieldsModel())
+				GO_Customfields_Controller_Item::saveCustomFields($this, $this->customfieldsModel());
+
 			
 			if(!$this->afterSave())
 				return false;
@@ -1432,6 +1435,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	public function linkTo($model){
 		
+	}
+	
+	
+	public function customfieldsRecord(){
+		
+		if($this->$this->customfieldsModel() && GO::modules()->customfields){
+			$customFieldModelName=$this->$this->customfieldsModel();
+
+			return $customFieldModelName::model()->findByPk($model->pk);
+		}else
+		{
+			return false;
+		}
 	}
 
 }

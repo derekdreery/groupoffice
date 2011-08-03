@@ -41,15 +41,14 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 		return true;
 	}
 	
-	public function hasCustomfields(){
-		return true;
+	public function customfieldsModel(){
+		return "GO_Notes_Model_CustomFieldsRecord";
 	}
 
 	public function relations(){
 		return array(	
 				'category' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Notes_Model_Category', 'field'=>'category_id'),
-				'user' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id'),
-				'customfieldRecord' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Notes_Model_CustomFieldsRecord', 'field'=>'id')
+				'user' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id')
 		);
 	}
 
@@ -63,9 +62,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 
 	protected function afterSave() {		
 
-		if (isset(GO::modules()->customfields))
-			GO_Customfields_Controller_Item::saveCustomFields($this, "GO_Notes_Model_CustomFieldsRecord");
-
+		
 		
 		//Does this belong in the controller?
 		if (!empty($_POST['tmp_files']) && GO::modules()->has_module('files')) {
