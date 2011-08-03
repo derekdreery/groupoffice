@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright Intermesh
  *
@@ -19,15 +20,20 @@
  * @property String $name The name of the category
  * @property int $files_folder_id
  */
+class GO_Notes_Model_Category extends GO_Base_Db_ActiveRecord {
 
- class GO_Notes_Model_Category extends GO_Base_Db_ActiveRecord{
-		 
-	public $aclField='acl_id';	
-	
-	public $tableName='no_categories';
-	
-	protected $relations=array(
-				'notes' => array('type'=>self::HAS_MANY, 'model'=>'GO_Notes_Model_Note', 'field'=>'category_id', 'delete'=>true),
-				'user' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id')
+	public function aclField() {
+		return 'acl_id';
+	}
+
+	public function tableName() {
+		return 'no_categories';
+	}
+
+	public function relations() {
+		return array(
+				'notes' => array('type' => self::HAS_MANY, 'model' => 'GO_Notes_Model_Note', 'field' => 'category_id', 'delete' => true),
+				'user' => array('type' => self::BELONGS_TO, 'model' => 'GO_Base_Model_User', 'field' => 'user_id')
 		);
+	}
 }

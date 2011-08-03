@@ -10,7 +10,9 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	const DELETE_PERMISSION=3;
 	const MANAGE_PERMISSION=4;
 
-	public $tableName = "go_acl_items";
+	public function tableName(){
+		return "go_acl_items";
+	}
 
 	/**
 	 * Return the permission level that a user has for this ACL.

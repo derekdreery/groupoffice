@@ -37,26 +37,44 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
 	 */
-	public $linkType=0;
+	public function linkType(){
+		return false;
+	}
 	
 	
 	/**
+	 * 
+	 * Example return value:
+	 * array(
+				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'addressbook_id', 'delete'=>true //with this enabled the relation will be deleted along with the model),
+				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'addressbook_id', 'delete'=>true),
+				'user' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id')
+		);
+	 * 
 	 * @var array relational rules.
 	 */
-	protected $relations=array();
+	public function relations(){
+		return array();
+	}
 	
 	/**
+	 * This is defined as a function because it's a only property that can be set
+	 * by child classes.
 	 * 
 	 * @var string The database table name
 	 */
 	
-	public $tableName;
+	public function tableName(){
+		return false;
+	}
 	
 	/**
 	 * 
-	 * @var int ACL to check for permissions.
+	 * @return int ACL to check for permissions.
 	 */
-	public $aclField=false;
+	public function aclField(){
+		return false;
+	}
 	
 	private $_relatedCache;
 	
@@ -69,13 +87,30 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	private $_oldAttributes=array();
 	
 	private $_debugSql=true;
+	
+	
+	/**
+	 * Set to true to enable a files module folder for this item. You will probably 
+	 * need to override buildFilesPath() to make it work properly.
+	 * 
+	 * @return bool 
+	 */
+	public function hasFiles(){return false;}
+	
+	/**
+	 * Set to true to enabled custom fields. A relation customfieldsRecord will be
+	 * created automatically and saving and deleting custom fields will be handled.
+	 * 
+	 * @return bool 
+	 */
+	public function hasCustomFields(){return false;}
 
 	/**
 	 *
 	 * @return <type> Call $model->joinAclField to check if the aclfield is joined.
 	 */
 	private function getJoinAclField (){
-		return strpos($this->aclField,'.')!==false;
+		return strpos($this->aclField(),'.')!==false;
 	}
 	
 	/**
@@ -94,19 +129,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	protected $columns=array(
 				'id'=>array('type'=>PDO::PARAM_INT,'required'=>true,'length'=>null, 'validator'=>null)
-			);
-	
-	
-	
-	
+			);	
 	
 	
 	/**
 	 * 
+	 * Returns the primary key of the database table of this model
 	 * 
 	 * @var mixed Primary key of database table. Can be a field name string or an array of fieldnames
 	 */
-	public $primaryKey='id'; //TODO can also be array('user_id','group_id') for example.
+		
+	public function primaryKey()
+	{
+		return 'id';
+	}
 	
 	private $_new=true;
 
@@ -132,8 +168,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @todo cache this
 	 */
 	private function _loadColumns() {
-		if(!empty($this->tableName)){
-			$sql = "SHOW COLUMNS FROM `" . $this->tableName . "`;";
+		if($this->tableName()){
+			$sql = "SHOW COLUMNS FROM `" . $this->tableName() . "`;";
 			$stmt = $this->getDbConnection()->query($sql);
 			while ($field = $stmt->fetch()) {
 				preg_match('/([a-zA-Z].*)\(([1-9].*)\)/', $field['Type'], $matches);
@@ -230,14 +266,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$ret = null;
 		
-		if(is_array($this->primaryKey)){
-			foreach($this->primaryKey as $field){
+		if(is_array($this->primaryKey())){
+			foreach($this->primaryKey() as $field){
 				if(isset($this->_attributes[$field])){
 					$ret[$field]=$this->_attributes[$field];
 				}
 			}
-		}elseif(isset($this->_attributes[$this->primaryKey]))
-			$ret =  $this->_attributes[$this->primaryKey];
+		}elseif(isset($this->_attributes[$this->primaryKey()]))
+			$ret =  $this->_attributes[$this->primaryKey()];
 		
 		return $ret;
 	}
@@ -270,15 +306,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	}
 	
 	private function _joinAclTable(){
-		$arr = explode('.',$this->aclField);
+		$arr = explode('.',$this->aclField());
 		if(count($arr)==2){
 			//we need to join a table for the acl field
-			
-			$model = new $this->relations[$arr[0]]['model'];
+			$r= $this->relations();
+			$model = new $r[$arr[0]]['model'];
 			
 			$ret['relation']=$arr[0];
 			$ret['aclField']=$arr[1];
-			$ret['join']='INNER JOIN `'.$model->tableName.'` '.$ret['relation'].' ON ('.$ret['relation'].'.`'.$model->primaryKey.'`=t.`'.$this->relations[$arr[0]]['field'].'`) ';
+			$ret['join']='INNER JOIN `'.$model->tableName.'` '.$ret['relation'].' ON ('.$ret['relation'].'.`'.$model->primaryKey.'`=t.`'.$r[$arr[0]]['field'].'`) ';
 			$ret['fields']='';
 			
 			$cols = $model->getColumns();
@@ -321,17 +357,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	
 	public function findAclId() {
-		if (empty($this->aclField))
+		if (!$this->aclField())
 			return false;
 		
 		if(!isset($this->_acl_id)){
-			$arr = explode('.', $this->aclField);
+			$arr = explode('.', $this->aclField());
 			if (count($arr) == 2) {
 				$relation = $arr[0];
 				$aclField = $arr[1];
 				$this->_acl_id = $this->$relation->$aclField;
 			} else {
-				$this->_acl_id = $this->{$this->aclField};
+				$this->_acl_id = $this->{$this->aclField()};
 			}
 		}
 		
@@ -347,7 +383,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	public function getPermissionLevel(){
 		
-		if(empty($this->aclField))
+		if(!$this->aclField())
 			return -1;	
 	
 		if(!isset($this->_permissionLevel)){
@@ -435,12 +471,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 		
 		$aclJoin['relation']='';
-		$aclJoin['aclField']=$this->aclField;
+		$aclJoin['aclField']=$this->aclField();
 		$aclJoin['table']='t';
 		$aclJoin['join']='';
 		$aclJoin['fields']='';
 		
-		if($this->aclField && empty($params['ignoreAcl'])){
+		if($this->aclField() && empty($params['ignoreAcl'])){
 			$ret = $this->_joinAclTable();
 			if($ret)
 				$aclJoin=$ret;
@@ -458,18 +494,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$sql .= "t.*".$aclJoin['fields'].' ';
 		
 		
-		$joinCf = !empty($params['joinCustomFields']) && $this->linkType>0 && GO::modules()->customfields->permissionLevel;
+		$joinCf = !empty($params['joinCustomFields']) && $this->linkType()>0 && GO::modules()->customfields->permissionLevel;
 		
 		if($joinCf)			
-			$sql .= ",cf_".$this->linkType.".* ";
+			$sql .= ",cf_".$this->linkType().".* ";
 		
 		
-		$sql .= "FROM `".$this->tableName."` t ".$aclJoin['join'];
+		$sql .= "FROM `".$this->tableName()."` t ".$aclJoin['join'];
 		
 		if($joinCf)			
-			$sql .= "LEFT JOIN cf_".$this->linkType." ON cf_".$this->linkType.".link_id=t.id ";
+			$sql .= "LEFT JOIN cf_".$this->linkType()." ON cf_".$this->linkType().".link_id=t.id ";
 		
-		if($this->aclField && empty($params['ignoreAcl'])){			
+		if($this->aclField() && empty($params['ignoreAcl'])){			
 			
 			$sql .= "INNER JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
 			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
@@ -543,9 +579,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 		
 		
-		if($this->aclField && empty($params['ignoreAcl'])){
+		if($this->aclField() && empty($params['ignoreAcl'])){
 			
-			$pk = is_array($this->primaryKey) ? $this->primaryKey : array($this->primaryKey);
+			$pk = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
 			
 			$sql .= "GROUP BY `".implode('`,`', $pk)."` ";
 		}
@@ -567,7 +603,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($this->_debugSql)
 				GO::debug($sql);
 
-		//$sql .= "WHERE `".$this->primaryKey.'`='.intval($primaryKey);
+		//$sql .= "WHERE `".$this->primaryKey().'`='.intval($primaryKey);
 		$result = $this->getDbConnection()->query($sql);
 		
 		
@@ -637,7 +673,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$primaryKey=$this->pk;
 		
 					
-		if(is_array($this->primaryKey)){
+		if(is_array($this->primaryKey())){
 			$first = true;
 			foreach($primaryKey as $field=>$value){
 				$this->$field=$value;
@@ -650,9 +686,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 		}else
 		{
-			$this->{$this->primaryKey}=$primaryKey;
+			$this->{$this->primaryKey()}=$primaryKey;
 			
-			$sql .= "`".$this->primaryKey.'`='.$this->getDbConnection()->quote($primaryKey, $this->columns[$this->primaryKey]['type']);
+			$sql .= "`".$this->primaryKey().'`='.$this->getDbConnection()->quote($primaryKey, $this->columns[$this->primaryKey()]['type']);
 		}
 		return $sql;
 	}
@@ -671,7 +707,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($cachedModel)
 			return $cachedModel;
 		
-		$sql = "SELECT * FROM `".$this->tableName."` WHERE ";
+		$sql = "SELECT * FROM `".$this->tableName()."` WHERE ";
 		
 		$sql = $this->_appendPkSQL($sql, $primaryKey);
 	
@@ -708,13 +744,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 	protected function getRelated($name){
 		 //$name::findByPk($hit-s)
-		if(!isset($this->relations[$name])){
+		$r= $this->relations();
+		
+		if(!isset($r[$name])){
 			return false;			
 		}
 		
-		$model = $this->relations[$name]['model'];
+		$model = $r[$name]['model'];
 		
-		if($this->relations[$name]['type']==self::BELONGS_TO){// || $this->relations[$name]['type']==self::HAS_ONE){
+		if($r[$name]['type']==self::BELONGS_TO){// || r[$name]['type']==self::HAS_ONE){
 		
 			/**
 			 * Related stuff can be put in the relatedCache array for when a relation is
@@ -735,15 +773,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 			}else
 			{
-				$joinAttribute = $this->relations[$name]['field'];
+				$joinAttribute = $r[$name]['field'];
 				$this->_relatedCache[$name]= $model::model()->findByPk($this->_attributes[$joinAttribute]);
 			}
 
 			return $this->_relatedCache[$name];
-		}elseif($this->relations[$name]['type']==self::HAS_MANY)
+		}elseif($r[$name]['type']==self::HAS_MANY)
 		{							
 			$remotePkValue = $this->pk;
-			$remotePkField = $this->relations[$name]['field'];
+			$remotePkField = $r[$name]['field'];
 			$findParams = array(
 					"by"=>array(array($remotePkField,$remotePkValue,'=')),
 					"ignoreAcl"=>true
@@ -871,7 +909,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	private function _checkPermissionLevel($level){
 
-		if(empty($this->aclField))
+		if(!$this->aclField())
 			return true;
 
 		if($this->getPermissionLevel()==-1)
@@ -939,22 +977,22 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$this->fireEvent('beforesave',array(&$this));
 			
 			
-			if (empty($this->files_folder_id) && isset(GO::modules()->files)) {
+			if ($this->hasFiles()) {
 				$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this, $this->buildFilesPath());
 			}
 			
 			
 			if($this->isNew){				
 				
-				if($this->aclField && !$this->joinAclField && empty($this->{$this->aclField})){
+				if($this->aclField() && !$this->joinAclField && empty($this->{$this->aclField()})){
 					//generate acl id
 					
 					$acl = new GO_Base_Model_Acl();
-					$acl->description=$this->tableName.'.'.$this->aclField;
+					$acl->description=$this->tableName().'.'.$this->aclField();
 					$acl->user_id=GO::user() ? GO::user()->id : 1;
 					$acl->save();
 					
-					$this->{$this->aclField}=$acl->id;
+					$this->{$this->aclField()}=$acl->id;
 				}				
 				
 				if(!$this->beforeSave())
@@ -962,8 +1000,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 				$this->_dbInsert();
 				
-				if(!is_array($this->primaryKey))
-					$this->{$this->primaryKey} = $this->getDbConnection()->lastInsertId();
+				if(!is_array($this->primaryKey()))
+					$this->{$this->primaryKey()} = $this->getDbConnection()->lastInsertId();
 				
 				if(!$this->pk)
 					return false;
@@ -1021,7 +1059,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		if($attr){
 
-			$model =GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkType));
+			$model =GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkType()));
 			if(!$model)
 				$model = GO_Base_Model_SearchCacheRecord::model();
 			
@@ -1029,11 +1067,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 			$autoAttr = array(
 				'id'=>$this->pk,
-				'link_type'=>$this->linkType,
+				'link_type'=>$this->linkType(),
 				'user_id'=>isset($this->user_id) ? $this->user_id : GO::session()->values['user_id'],
 				'module'=>$this->module,
 				'name' => '',
-				'link_type'=>$this->linkType,
+				'link_type'=>$this->linkType(),
 				'description'=>'',		
 				'type'=>'',
 				'keywords'=>$this->_getSearchCacheKeywords($this->record).','.$attr['type'],
@@ -1052,7 +1090,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	/**
 	 * Override this function if you want to put your model in the search cache.
 	 * 
-	 * @return array cache parameters with at least 'name', 'description' and 'type'. All are strings.
+	 * @return array cache parameters with at least 'name', 'description' and 'type'. All are strings. See GO_Base_Model_Search_Cache for more info.
 	 */
 	protected function getCacheAttributes(){
 		return false;
@@ -1096,7 +1134,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$fieldNames = array_keys($this->columns);
 		
-		$sql = "INSERT INTO `{$this->tableName}` (`".implode('`,`', $fieldNames)."`) VALUES ".
+		$sql = "INSERT INTO `{$this->tableName()}` (`".implode('`,`', $fieldNames)."`) VALUES ".
 					"(:".implode(',:', $fieldNames).")";
 
 		if($this->_debugSql)
@@ -1120,7 +1158,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$updates=array();
 		
-		$pks = is_array($this->primaryKey) ? $this->primaryKey : array($this->primaryKey);
+		$pks = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
 		foreach($this->columns as $field => $value)
 		{
 			if(!in_array($field,$pks))
@@ -1132,12 +1170,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!count($updates))
 			return true;
 		
-		$sql = "UPDATE `{$this->tableName}` SET ".implode(',',$updates)." WHERE ";
+		$sql = "UPDATE `{$this->tableName()}` SET ".implode(',',$updates)." WHERE ";
 		
-		if(is_array($this->primaryKey)){
+		if(is_array($this->primaryKey())){
 			
 			$first=true;
-			foreach($this->primaryKey as $field){
+			foreach($this->primaryKey() as $field){
 				if(!$first)
 					$sql .= ' AND ';
 				else
@@ -1147,7 +1185,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 			
 		}else
-			$sql .= "`".$this->primaryKey."`=:".$this->primaryKey;
+			$sql .= "`".$this->primaryKey()."`=:".$this->primaryKey();
 		
 		if($this->_debugSql)
 			GO::debug($sql);
@@ -1184,7 +1222,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!$this->beforeDelete())
 				return false;
 		
-		foreach($this->relations as $name => $attr){
+		$r= $this->relations();
+		
+		foreach($r as $name => $attr){
 			if(!empty($attr['delete'])){
 
 				$stmt = $this->$name;
@@ -1195,7 +1235,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 		}
 		
-		$sql = "DELETE FROM `".$this->tableName."` WHERE ";
+		$sql = "DELETE FROM `".$this->tableName()."` WHERE ";
 		$sql = $this->_appendPkSQL($sql);
 		
 		
@@ -1207,21 +1247,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$attr = $this->getCacheAttributes();
 		
 		if($attr){
-			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkType));
+			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkType()));
 			if($model)
 				$model->delete();
 		}
 		
 		
-		if($this->aclField && !$this->joinAclField){			
-			//echo 'Deleting acl '.$this->{$this->aclField}.' '.$this->aclField.'<br />';
+		if($this->aclField() && !$this->joinAclField){			
+			//echo 'Deleting acl '.$this->{$this->aclField()}.' '.$this->aclField().'<br />';
 			
-			$acl = GO_Base_Model_Acl::model()->findByPk($this->{$this->aclField});			
+			$acl = GO_Base_Model_Acl::model()->findByPk($this->{$this->aclField()});			
 			$acl->delete();
 		}	
 		
 		
-		if(isset(GO::modules()->files) && isset($this->files_folder_id)){
+		if(isset(GO::modules()->files) && $this->hasFiles()){
 			GO_Files_Controller_Item::deleteFilesFolder($this->files_folder_id);	
 		}
 
@@ -1245,9 +1285,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			if(method_exists($this,$getter)){
 				return $this->$getter();
-			}elseif(isset($this->relations[$name]))
+			}else
 			{
-				return $this->getRelated($name);
+				$r = $this->relations();
+				if(isset($r[$name]))			
+				{
+					return $this->getRelated($name);
+				}
 			}
 		}
 			

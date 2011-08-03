@@ -1,89 +1,89 @@
 <?php
- class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord{
-	
+
+class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
+
 	/**
 	 *
 	 * @var String The absolute filesystem path to this module 
 	 */
 	public $path;
-	
 	/**
 	 *
 	 * @var String The absolute URL to this module. This is autodetected or manually set in config.php.
 	 */
 	public $full_url;
-	
 	/**
 	 *
 	 * @var string The relative URL to this module. 
 	 */
 	public $url;
-	
 	/**
 	 * @deprecated
 	 * @var String the absolute path to the classes folder of this module.
 	 */
 	public $class_path;
-		
-	 
-	public $aclField='acl_id';
-	
-	public $tableName='go_modules';
 
-	
+
+
+	public function aclField() {
+		return 'acl_id';
+	}
+
+	public function tableName() {
+		return 'go_modules';
+	}
+
 	protected function init() {
 		parent::init();
-		
-		$this->path = GO::config()->root_path.'modules/'.$this->id.'/';
-		$this->full_url = GO::config()->full_url.'modules/'.$this->id.'/';
-		$this->url = GO::config()->host.'modules/'.$this->id.'/';
-		$this->class_path = $this->path.'classes/';		
+
+		$this->path = GO::config()->root_path . 'modules/' . $this->id . '/';
+		$this->full_url = GO::config()->full_url . 'modules/' . $this->id . '/';
+		$this->url = GO::config()->host . 'modules/' . $this->id . '/';
+		$this->class_path = $this->path . 'classes/';
 	}
-	
-	protected function getHumanName(){
+
+	protected function getHumanName() {
 		global $lang;
 		//@todo
 //		$file = $GLOBALS['GO_LANGUAGE']->get_language_file($this->id);
 //		if($file)
 //			require($file);
-		
+
 		return isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;
 	}
-	
-	protected function getDescription(){
+
+	protected function getDescription() {
 		global $lang;
-		
+
 //		$file = $GLOBALS['GO_LANGUAGE']->get_language_file($this->id);
 //		if($file)
 //			require($file);
-		
+
 		return isset($lang[$this->id]['description']) ? $lang[$this->id]['description'] : "";
 	}
-	
-	
-	
+
 	/**
 	 * Installs the module's tables etc
 	 */
-	protected function afterSave(){
+	protected function afterSave() {
 		return parent::afterSave();
 	}
-	
+
 	/**
 	 * Delete's the module's tables etc.
-	 */	
-	public function afterDelete(){
+	 */
+	public function afterDelete() {
 		return parent::afterDelete();
 	}
-	
+
 	/**
 	 * This class can be overriden by a module class to add listeners to objects
 	 * that extend the GO_Base_Observable class.
 	 */
-	public function initListeners(){
+	public function initListeners() {
 		
 	}
-	
+
 	/**
 	 * 
 	 * When a user is created, updated or logs in this function will be called.
@@ -91,7 +91,8 @@
 	 * is created for this user.
 	 * 
 	 */
-	public function initUser($userId){
+	public function initUser($userId) {
 		
 	}
+
 }
