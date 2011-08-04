@@ -18,6 +18,7 @@
  * 
  * @property String $name The name of the Addressbook
  * @property int $files_folder_id
+ * @property bool $users true if this addressbook is the special addressbook that holds the Group-Office users.
  */
 
  class GO_Addressbook_Model_Addressbook extends GO_Base_Db_ActiveRecord{

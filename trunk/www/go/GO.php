@@ -145,25 +145,30 @@ class GO{
 			{
 				$arr = explode('_', $className);
 
-				if(count($arr)==3)
-					$module = strtolower(array_shift($arr));
-				else
-					$module=false;
+				$module = strtolower(array_shift($arr));
 				
-				$type = strtolower(array_shift($arr));
-				$file = ucfirst(array_shift($arr));
 				
-				if($type=='controller')
-					$file .= 'Controller';
+				
+				
 
-				if($module){					
-					$file = self::modules()->$module->path.$type.'/'.$file.'.php';
+				if($module!='core'){					
+					$file = self::modules()->$module->path;
 				}else
 				{
-					$file = self::config()->root_path.$type.'/'.$file.'.php';
+					$file = self::config()->root_path;
 				}
-				
-				
+				for($i=0,$c=count($arr);$i<$c;$i++){
+					if($i==$c-1){
+						$file .= ucfirst($arr[$i]);
+						if($arr[$c-2]=='Controller')
+							$file .= 'Controller';
+						$file .='.php';
+					}else
+					{
+						$file .= strtolower($arr[$i]).'/';
+					}
+					
+				}
 				
 				if(!file_exists($file))
 					throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');

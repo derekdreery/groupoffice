@@ -23,8 +23,12 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 */
 	public function getUserPermissionLevel($userId=0, $checkGroupPermissionOnly=false) {
 		
-		if($userId==0)
-			$userId=GO::session ()->values['user_id'];
+		if($userId==0){
+			if(GO::user())
+				$userId=GO::user()->id;
+			else
+				return false;
+		}
 		
 		if ($userId > 0 && $this->id > 0) {
 			$sql = "SELECT a.acl_id, a.level FROM go_acl a " .
