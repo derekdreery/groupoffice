@@ -76,7 +76,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * Model->contacts() for example. They always return a PDO statement
 	 * 
-	 * @var array relational rules.
+	 * If you have a "user_id" field, an automatic relation model->user() is created that 
+	 * returns a GO_Base_Model_User.
+	 * 
+	 * @return array relational rules.
 	 */
 	public function relations(){
 		return array();
@@ -128,7 +131,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	
 	/**
-	 * Set to true to enable a files module folder for this item. You will probably 
+	 * Set to true to enable a files module folder for this item. A files_folder_id
+	 * column in the database is required. You will probably 
 	 * need to override buildFilesPath() to make it work properly.
 	 * 
 	 * @return bool 
@@ -1437,13 +1441,33 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 	}
 	
-	
+	/**
+	 * Returns the customfields record if module is installed and this model
+	 * supports it (See GO_Base_Db_ActiveRecord::customFieldsModel())
+	 * 
+	 * @return GO_Customfields_Model_AbstractCustomFieldsRecord 
+	 */
 	public function customfieldsRecord(){
 		
 		if($this->$this->customfieldsModel() && GO::modules()->customfields){
 			$customFieldModelName=$this->$this->customfieldsModel();
 
-			return $customFieldModelName::model()->findByPk($model->pk);
+			return $customFieldModelName::model()->findByPk($this->pk);
+		}else
+		{
+			return false;
+		}
+	}
+	
+	/**
+	 * Returns the user model if this model has a user_id column.
+	 * 
+	 * @return GO_Base_Model_User 
+	 */
+	public function user(){
+		
+		if(!empty($this->user_id)){
+			return GO_Base_Model_User::model()->findByPk($model->user_id);
 		}else
 		{
 			return false;

@@ -29,11 +29,13 @@ class GO_Notes_Model_Category extends GO_Base_Db_ActiveRecord {
 	public function tableName() {
 		return 'no_categories';
 	}
+	
+	public function hasFiles(){
+		return true;
+	}
 
 	public function relations() {
 		return array(
-				'notes' => array('type' => self::HAS_MANY, 'model' => 'GO_Notes_Model_Note', 'field' => 'category_id', 'delete' => true),
-				'user' => array('type' => self::BELONGS_TO, 'model' => 'GO_Base_Model_User', 'field' => 'user_id')
-		);
+				'notes' => array('type' => self::HAS_MANY, 'model' => 'GO_Notes_Model_Note', 'field' => 'category_id', 'delete' => true)		);
 	}
 }
