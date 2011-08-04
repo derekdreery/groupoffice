@@ -45,6 +45,10 @@
 		}
 	}
 	
+	public function isAdmin(){
+		return in_array(GO::config()->group_root, GO_Base_Model_User::getGroupIds($this->id));
+	}
+	
 	public function getModulePermissionLevel($moduleId){
 		if(GO::modules()->$moduleId)						
 			return GO::modules()->$moduleId->permissionLevel;

@@ -47,9 +47,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 
 	public function relations(){
 		return array(
-				'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Addressbook', 'field'=>'addressbook_id'),
-				'user' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id'),
-				'customfieldRecord' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Notes_Model_CustomFieldsRecord', 'field'=>'id')
+				'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Addressbook', 'field'=>'addressbook_id')
 		);
 	}
 
@@ -84,8 +82,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	protected function buildFilesPath() {
 		
 		$new_folder_name = GO_Base_Util_File::strip_invalid_chars($this->name);
-		$last_part = empty($contact['last_name']) ? '' : $this->get_index_char($contact['last_name']);
-		$new_path = 'contacts/'.GO_Base_Util_File::strip_invalid_chars($addressbook['name']);
+		$last_part = empty($this->last_name) ? '' : GO_Addressbook_Utils::getIndexChar($this->last_name);
+		$new_path = 'contacts/'.GO_Base_Util_File::strip_invalid_chars($this->addressbook->name);
 		if(!empty($last_part)) {
 			$new_path .= '/'.$last_part;
 		}else {
@@ -97,8 +95,6 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			
 		$new_path .= '/'.$new_folder_name;
 		return $new_path;
-
-		return 'notes/' . File::strip_invalid_chars($this->category->name) . '/' . date('Y', $this->ctime) . '/' . GO_Base_Util_File::strip_invalid_chars($this->name);
 	}
 
 }
