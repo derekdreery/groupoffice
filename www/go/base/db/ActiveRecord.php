@@ -198,52 +198,60 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	private function _loadColumns() {
 		if($this->tableName()){
-			$sql = "SHOW COLUMNS FROM `" . $this->tableName() . "`;";
-			$stmt = $this->getDbConnection()->query($sql);
-			while ($field = $stmt->fetch()) {
-				preg_match('/([a-zA-Z].*)\(([1-9].*)\)/', $field['Type'], $matches);
-				if ($matches) {
-					$length = $matches[2];
-					$type = $matches[1];
-				} else {
-					$type = $field['Type'];
-					$length = 0;
-				}
-
-				$gotype = 'textfield';
-				$required=false;
-
-				$pdoType = PDO::PARAM_STR;
-				switch ($type) {
-					case 'int':
-					case 'tinyint':
-					case 'bigint':
-						$pdoType = PDO::PARAM_INT;
+			
+			//todo use memcached ?
+			if(!isset(GO::session()->values['modelColumns'][$this->tableName()])){
+			
+				$sql = "SHOW COLUMNS FROM `" . $this->tableName() . "`;";
+				$stmt = $this->getDbConnection()->query($sql);
+				while ($field = $stmt->fetch()) {
+					preg_match('/([a-zA-Z].*)\(([1-9].*)\)/', $field['Type'], $matches);
+					if ($matches) {
+						$length = $matches[2];
+						$type = $matches[1];
+					} else {
+						$type = $field['Type'];
 						$length = 0;
-						$gotype = '';
-						break;
+					}
 
-					case 'text':
-						$gotype = 'textarea';
-						break;
+					$gotype = 'textfield';
+					$required=false;
+
+					$pdoType = PDO::PARAM_STR;
+					switch ($type) {
+						case 'int':
+						case 'tinyint':
+						case 'bigint':
+							$pdoType = PDO::PARAM_INT;
+							$length = 0;
+							$gotype = '';
+							break;
+
+						case 'text':
+							$gotype = 'textarea';
+							break;
+					}
+
+					switch($field['Field']){
+						case 'ctime':
+						case 'mtime':
+							$gotype = 'unixtimestamp';			
+							break;
+						case 'name':
+							$required=true;
+							break;
+					}
+
+					$this->columns[$field['Field']]=array(
+							'type'=>$pdoType,
+							'required'=>$required,
+							'length'=>$length,
+							'gotype'=>$gotype
+					);
 				}
-
-				switch($field['Field']){
-					case 'ctime':
-					case 'mtime':
-						$gotype = 'unixtimestamp';			
-						break;
-					case 'name':
-						$required=true;
-						break;
-				}
-
-				$this->columns[$field['Field']]=array(
-						'type'=>$pdoType,
-						'required'=>$required,
-						'length'=>$length,
-						'gotype'=>$gotype
-				);
+			}else
+			{
+				$this->columns[$field['Field']]=GO::session()->values['modelColumns'][$this->tableName()];
 			}
 		}
 	}
