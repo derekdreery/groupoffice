@@ -28,14 +28,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * Addressbook->user() for example
 	 */
-	const BELONGS_TO=1;	
+	const BELONGS_TO=1;	// n:1
 	
 	/**
 	 * This relation type is used when this model has many related models. 
 	 * 
 	 * Addressbook->contacts() for example.
 	 */
-	const HAS_MANY=2;
+	const HAS_MANY=2; // 1:n
 	
 	/**
 	 * This relation type means that the relation is single and this model's primary
@@ -43,8 +43,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * User->Addressbook for example where user_id is in the addressbook table.
 	 */
-	const HAS_ONE=3;
+	const HAS_ONE=3; // 1:1
 	
+  /*
+   * This relation type is used when this model has many related models.
+   * The relation makes use of a linked table that has a combined key of the related model and this model.
+   * 
+   * Example use in the model class relationship array: 'users' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'group_id', 'linksTable' => 'go_users_groups', 'remoteField'=>'user_id'),
+   * 
+   */
+  const MANY_MANY=4;	// n:n
+  
 	/**
 	 * The database connection of this record
 	 * 
@@ -574,6 +583,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($joinCf)			
 			$sql .= "LEFT JOIN cf_".$this->linkType()." ON cf_".$this->linkType().".link_id=t.id ";
 		
+    if (!empty($params['linksTable'])) {
+      $sql .= "INNER JOIN `".$params['linksTable']."`link_t ON t.id= link_t.".$params['local_field']." ";
+//        "INNER JOIN `".$params['remoteTable']."` remote_t ON remote_t.id= link_t.`".$params['remoteField']."` ";
+    }
+    
 		if($this->aclField() && empty($params['ignoreAcl'])){			
 			
 			$sql .= "INNER JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
@@ -585,7 +599,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			//quick and dirty way to use and in next sql build blocks
 			$sql .= 'WHERE 1 ';
 		}
-		
+    	
 		if(!empty($params['criteriaSql']))
 			$sql .= $params['criteriaSql'];
 		
@@ -616,8 +630,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					
 					$sql .= "`$field` $comparator (".implode(',',$value).") ";
 				}else
-				{							
-					$sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value, $this->columns[$field]['type'])." ";
+				{
+          // TODO : find a way to make the condition work for joining with many_many relations, but without doing the linksTable check again
+          if (empty($params['linksTable']))
+            $sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value, $this->columns[$field]['type'])." ";
+          else
+            $sql .= "`$field` $comparator '$value' ";
 				}
 			}
 
@@ -702,8 +720,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
 		$result->setFetchMode(PDO::FETCH_CLASS, $this->className());
-		
-		return $result;
+
+    return $result;
 		
 	}
 	
@@ -857,6 +875,24 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			);
 				
 			$stmt = $model::model()->find($findParams);
+			return $stmt;		
+		}elseif($r[$name]['type']==self::MANY_MANY)
+		{							
+			$localPkValue = $this->pk; // single local value id
+			$localPkField = $r[$name]['field'];
+      $remotePkField = $r[$name]['remoteField'];
+      $linkTableName = $r[$name]['linksTable']; // name where the local id is linked to the ids of the records in the remote table
+      
+      // Please note that 'local' and 'remote' are reversed from the point of view of the remote model.
+			$findParams = array(
+          'linksTable'=>$linkTableName,
+					"by"=>array(array($localPkField,$localPkValue,'=')),
+//          "remoteField"=>$localPkField,
+          "local_field"=>$remotePkField,
+					"ignoreAcl"=>true
+			);
+				
+			$stmt = $model::model()->find($findParams); // pakt alle records waarvan de ids via de koppeltabel gelinked zijn aan de local id
 			return $stmt;		
 		}
 	}
