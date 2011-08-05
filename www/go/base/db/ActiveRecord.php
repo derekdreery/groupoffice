@@ -208,8 +208,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	private function _loadColumns() {
 		if($this->tableName()){
 			
-			//todo use memcached ?
-			if(!isset(GO::session()->values['modelColumns'][$this->tableName()])){
+			$this->columns=GO::cache()->get('modelColumns_'.$this->tableName());
+			
+			if(!$this->columns){
 			
 				$sql = "SHOW COLUMNS FROM `" . $this->tableName() . "`;";
 				$stmt = $this->getDbConnection()->query($sql);
@@ -257,10 +258,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 							'length'=>$length,
 							'gotype'=>$gotype
 					);
+					
 				}
-			}else
-			{
-				$this->columns[$field['Field']]=GO::session()->values['modelColumns'][$this->tableName()];
+				GO::cache()->set('modelColumns_'.$this->tableName(), $this->columns);
 			}
 		}
 	}

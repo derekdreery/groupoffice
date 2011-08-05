@@ -85,7 +85,8 @@ class GO{
 	}
 	
 	/**
-	 *
+	 * Models are cached within one script run
+	 * 
 	 * @return GO_Base_Model_ModelCache 
 	 */
 	public static function modelCache() {
@@ -93,6 +94,20 @@ class GO{
 			self::$_modelCache=new GO_Base_Model_ModelCache();
 		}
 		return self::$_modelCache;
+	}
+	
+	
+	private static $_cache;
+	/**
+	 * @todo implement memcached driver
+	 * @return GO_Base_Cache_Interface
+	 */
+	public static function cache(){
+		
+		if (!isset(self::$_cache)) {			
+			self::$_cache=new GO_Base_Cache_Disk();
+		}
+		return self::$_cache;
 	}
 
 	/**

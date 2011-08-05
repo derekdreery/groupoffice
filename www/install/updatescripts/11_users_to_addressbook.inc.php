@@ -18,15 +18,19 @@ if(!$ab){
 	$ab->name=GO::t('users','users');
 	$ab->users=true;
 	$ab->save();
+
+
+	$db = GO::getDbConnection();
+
+	$stmt = $db->query("SELECT * FROM go_users");
+	while($user=$stmt->fetch()){
+		$c = new GO_Addressbook_Model_Contact();
+		unset($user['id']);
+		$c->setAttributes($user);
+		$c->addressbook_id=$ab->id;
+		$c->save();
+	}
 }
 
-$db = GO::getDbConnection();
+GO::cache()->set('test','test');
 
-$stmt = $db->query("SELECT * FROM go_users");
-while($user=$stmt->fetch()){
-	$c = new GO_Addressbook_Model_Contact();
-	unset($user['id']);
-	$c->setAttributes($user);
-	$c->addressbook_id=$ab->id;
-	$c->save();
-}
