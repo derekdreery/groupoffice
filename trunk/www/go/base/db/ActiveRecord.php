@@ -1214,7 +1214,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	private function _dbInsert(){		
 		
-		$fieldNames = array_keys($this->columns);
+		$fieldNames = array();
+		
+		//Build an array of fields that are set in the object. Unset columns will
+		//not be in the SQL query so default values from the database are respected.
+		foreach($this->columns as $field=>$col){
+			if(isset($this->_attributes[$field])){
+				$fieldNames[]=$field;
+			}
+		}
+
 		
 		$sql = "INSERT INTO `{$this->tableName()}` (`".implode('`,`', $fieldNames)."`) VALUES ".
 					"(:".implode(',:', $fieldNames).")";
@@ -1460,12 +1469,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * @return GO_Customfields_Model_AbstractCustomFieldsRecord 
 	 */
-	public function customfieldsRecord(){
+	public function getCustomfieldsRecord(){
 		
-		if($this->$this->customfieldsModel() && GO::modules()->customfields){
-			$customFieldModelName=$this->$this->customfieldsModel();
+		if($this->customfieldsModel() && GO::modules()->customfields){
+			$customFieldModelName=$this->customfieldsModel();
 
-			return $customFieldModelName::model()->findByPk($this->pk);
+			$model = $customFieldModelName::model()->findByPk($this->pk);
+			if(!$model){
+				//doesn't exist yet. Return a new one
+				$model = $customFieldModelName::model();
+				$model->link_id=$model->pk;
+			}
+			return $model;
 		}else
 		{
 			return false;
@@ -1477,10 +1492,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * @return GO_Base_Model_User 
 	 */
-	public function user(){
+	public function getUser(){
 		
 		if(!empty($this->user_id)){
-			return GO_Base_Model_User::model()->findByPk($model->user_id);
+			return GO_Base_Model_User::model()->findByPk($this->user_id);
 		}else
 		{
 			return false;

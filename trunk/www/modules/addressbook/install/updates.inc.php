@@ -125,3 +125,14 @@ $updates[]="ALTER TABLE `ab_addressbooks` CHANGE `id` `id` INT( 11 ) NOT NULL AU
 $updates[]="ALTER TABLE `ab_addressbooks` ADD `files_folder_id` INT NOT NULL";
 
 $updates[]="ALTER TABLE `ab_addressbooks` ADD `users` BOOLEAN NOT NULL ";
+
+ALTER TABLE `ab_contacts` DROP `source_id` 
+ALTER TABLE `ab_contacts` DROP `link_id` 
+
+ALTER TABLE `ab_contacts` CHANGE `email2` `email2` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''
+	ALTER TABLE `ab_contacts` CHANGE `email3` `email3` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''
+		ALTER TABLE `ab_contacts` CHANGE `email` `email` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''
+			ALTER TABLE `ab_contacts` CHANGE `email_allowed` `email_allowed` ENUM( '0', '1' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1'
+				ALTER TABLE `ab_contacts` DROP `color` 
+				ALTER TABLE `ab_contacts` DROP `sid` 
+				ALTER TABLE `ab_contacts` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT 
