@@ -455,3 +455,6 @@ DROP `url` ,
 DROP `link_count` ,
 DROP `acl_read` ;";
 
+$updates[]="ALTER TABLE `go_users` CHANGE `max_rows_list` `max_rows_list` TINYINT( 4 ) NOT NULL DEFAULT '20'";
+$updates[]="ALTER TABLE `go_users` CHANGE `registration_time` `ctime` INT( 11 ) NOT NULL DEFAULT '0'";
+

@@ -14,49 +14,11 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	protected function actionInit() {
 
 		GO_Base_Observable::cacheListeners();
-
-		if ($GLOBALS['GO_SECURITY']->logged_in())
-			$GLOBALS['GO_MODULES']->callModuleMethod('initUser', array($GLOBALS['GO_SECURITY']->user_id));
-
-		//$config_file = $GO_CONFIG->get_config_file();
-		if (empty($GLOBALS['GO_CONFIG']->db_user)) {
-			header('Location: install/');
-			exit();
-		}
-
-		//Redirect to correct login url if a force_login_url is set. Useful to force ssl
-		if ($GLOBALS['GO_CONFIG']->force_login_url && strpos($GLOBALS['GO_CONFIG']->full_url, $GLOBALS['GO_CONFIG']->force_login_url) === false) {
-			unset(GO::session()->values['full_url']);
-			header('Location: ' . $GLOBALS['GO_CONFIG']->force_login_url);
-			exit();
-		}
-
-		$mtime = $GLOBALS['GO_CONFIG']->get_setting('upgrade_mtime');
-
-		if ($mtime != $GLOBALS['GO_CONFIG']->mtime) {
+		if(GO::user())
+			$this->fireEvent('loadapplication', array(&$this));
 			
-			global $lang;
-			
-			if ($GLOBALS['GO_SECURITY']->logged_in())
-				$GLOBALS['GO_SECURITY']->logout();
-
-			echo '<html><head><style>body{font-family:arial;}</style></head><body>';
-			echo '<h1>' . $lang['common']['running_sys_upgrade'] . '</h1><p>' . $lang['common']['sys_upgrade_text'] . '</p>';
-			require($GLOBALS['GO_CONFIG']->root_path . 'install/upgrade.php');
-			echo '<a href="#" onclick="document.location.reload();">' . $lang['common']['click_here_to_contine'] . '</a>';
-			echo '</body></html>';
-			exit();
-		}
-
-
-//will do autologin here before theme is loaded.
-		try {
-			$GLOBALS['GO_SECURITY']->logged_in();
-		} catch (Exception $e) {
-			
-		}
-
-		$this->render('init');
+		
+		//$this->render('init');
 	}
 
 	protected function actionLogout() {

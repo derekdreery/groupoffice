@@ -20,30 +20,15 @@ GO.users.MainPanel = function(config)
 	}
 
 	var fields = {
-		fields:['id', 'username', 'name','company','logins','lastlogin','registration_time','address','address_no','zip','city','state','country','home_phone','email',
+		fields:['id', 'username', 'name','logins','lastlogin','ctime','address','address_no','zip','city','state','country','home_phone','email',
 	    	'waddress','waddress_no','wzip','wcity','wstate','wcountry','wphone','enabled'],
 		columns:[
         {header: GO.lang['strUsername'], dataIndex: 'username', width: 200},
         {header: GO.lang['strName'], dataIndex: 'name', width: 250},
-        {header: GO.lang['strCompany'], dataIndex: 'company', width: 200},
         {header: GO.users.lang.numberOfLogins, dataIndex: 'logins', width: 100, align:"right"},
         {header: GO.users.lang['cmdFormLabelLastLogin'], dataIndex: 'lastlogin', width: 100},
-        {header: GO.users.lang['cmdFormLabelRegistrationTime'], dataIndex: 'registration_time', width: 100},
-        {header: GO.lang['strAddress'], dataIndex: 'address',  hidden: true, width: 150},
-				{header: GO.lang['strAddressNo'], dataIndex: 'address_no',  hidden: true, width: 100},
-        {header: GO.lang['strZip'], dataIndex: 'zip',  hidden: true, width: 100},
-        {header: GO.lang['strCity'], dataIndex: 'city',  hidden: true, width: 100},
-        {header: GO.lang['strState'], dataIndex: 'state',  hidden: true, width: 100},
-        {header: GO.lang['strCountry'], dataIndex: 'country',  hidden: true, width: 100},
-        {header: GO.lang['strPhone'], dataIndex: 'home_phone',  hidden: true},
-        {header: GO.lang['strEmail'], dataIndex: 'email',  hidden: false, width: 150},
-        {header: GO.lang['strWorkAddress'], dataIndex: 'work_address',  hidden: true, width: 100},
-				{header: GO.lang['strWorkAddressNo'], dataIndex: 'work_address_no',  hidden: true, width: 100},
-        {header: GO.lang['strWorkZip'], dataIndex: 'work_zip',  hidden: true},
-        {header: GO.lang['strWorkCity'], dataIndex: 'work_city',  hidden: true},
-        {header: GO.lang['strWorkState'], dataIndex: 'work_state',  hidden: true},
-        {header: GO.lang['strWorkCountry'], dataIndex: 'work_country',  hidden: true},
-        {header: GO.lang['strWorkPhone'], dataIndex: 'work_phone',  hidden: true}
+        {header: GO.users.lang['cmdFormLabelRegistrationTime'], dataIndex: 'ctime', width: 100},      
+        {header: GO.lang['strEmail'], dataIndex: 'email',  hidden: false, width: 150}       
     ]
 	};
 

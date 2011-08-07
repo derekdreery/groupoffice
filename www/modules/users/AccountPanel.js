@@ -61,7 +61,17 @@ GO.users.AccountPanel = function(config)
 	config.items=[
 		this.usernameField,
 		this.passwordField1,
-		this.passwordField2,{
+		this.passwordField2,
+		{
+			fieldLabel: GO.lang['strEmail'],
+			name: 'email',
+			allowBlank: false,
+			vtype:'emailAddress'
+		},
+		{fieldLabel: GO.lang['strFirstName'], name: 'first_name', allowBlank: false},
+		{fieldLabel: GO.lang['strMiddleName'], name: 'middle_name'},
+		{fieldLabel: GO.lang['strLastName'], name: 'last_name', allowBlank: false},
+		{
 			xtype:'panel',
 			hideLabel:true,
 			border:false,

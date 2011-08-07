@@ -265,21 +265,8 @@ Ext.extend(GO.users.UserDialog,GO.Window,{
 						'password2',
 						'first_name',
 						'middle_name',
-						'last_name',
-						'title',
-						'initials',
-						'sex',
-						'birthday',
-						'address',
-						'address_no',
-						'city',
-						'zip',
-						'email',
-						'home_phone',
-						'fax',
-						'cellular',
-						'department',
-						'function'
+						'last_name',						
+						'email'						
 					];
 					
 					for(var i=0;i<resetFields.length;i++)
@@ -315,19 +302,8 @@ Ext.extend(GO.users.UserDialog,GO.Window,{
 		
 
 		this.accountTab = new GO.users.AccountPanel();
-		this.personalTab = new Ext.form.FieldSet({
-			title:GO.users.lang.personalProfile,
-			items:new GO.users.PersonalPanel({
-				cb_id:'users_countryCombo'
-			}),
-			autoHeight:true,
-			layout:'fit'			
-		});
-		this.companyTab = new GO.users.CompanyPanel({
-			title:GO.users.lang.companyProfile,
-			cls:'go-form-panel',
-			cb_id:'users_work_countryCombo'
-		});
+		
+
 		this.loginTab = new GO.users.LoginPanel();
 		this.permissionsTab = new GO.users.PermissionsPanel();
 		this.regionalSettingsTab = new GO.users.RegionalSettingsPanel();
@@ -349,16 +325,12 @@ Ext.extend(GO.users.UserDialog,GO.Window,{
 				bodyStyle:'padding-left:5px',
 				items:[this.loginTab],
 				border:false
-			}),{
-				columnWidth:1,
-				items:[this.personalTab],
-				border:false
-			}]
+			})]
 		});
 		
 		var items = [
       	this.profileTab,
-				this.companyTab,
+			
       	this.permissionsTab,
       	this.regionalSettingsTab,
       	this.lookAndFeelTab

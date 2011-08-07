@@ -74,7 +74,7 @@ class GO{
 	 * Returns a collection of Group-Office Module objects
 	 * 
 	 * @deprecated
-	 * @return GO_Base_Model_ModelCollection
+	 * @return GO_Base_ModuleCollection
 	 * 
 	 */
 	public static function modules() {

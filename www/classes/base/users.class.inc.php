@@ -64,17 +64,17 @@ class GO_USERS extends db
 
 		$_SESSION['GO_SESSION']['username'] = $userdata['username'];
 		$_SESSION['GO_SESSION']['name'] = trim($userdata['first_name'].' '.$middle_name.$userdata['last_name']);
-		$_SESSION['GO_SESSION']['company'] = $userdata['company'];
-		$_SESSION['GO_SESSION']['function'] = $userdata['function'];
-		$_SESSION['GO_SESSION']['department'] = $userdata['department'];
-
-		$_SESSION['GO_SESSION']['first_name'] = $userdata['first_name'];
-		$_SESSION['GO_SESSION']['middle_name'] = $userdata['middle_name'];
-		$_SESSION['GO_SESSION']['last_name'] = $userdata['last_name'];
-		$_SESSION['GO_SESSION']['country'] = $userdata['country'];
+//		$_SESSION['GO_SESSION']['company'] = $userdata['company'];
+//		$_SESSION['GO_SESSION']['function'] = $userdata['function'];
+//		$_SESSION['GO_SESSION']['department'] = $userdata['department'];
+//
+//		$_SESSION['GO_SESSION']['first_name'] = $userdata['first_name'];
+//		$_SESSION['GO_SESSION']['middle_name'] = $userdata['middle_name'];
+//		$_SESSION['GO_SESSION']['last_name'] = $userdata['last_name'];
+//		$_SESSION['GO_SESSION']['country'] = $userdata['country'];
 		$_SESSION['GO_SESSION']['email'] = $userdata['email'];
-		$_SESSION['GO_SESSION']['work_phone'] = $userdata['work_phone'];
-		$_SESSION['GO_SESSION']['home_phone'] = $userdata['home_phone'];
+//		$_SESSION['GO_SESSION']['work_phone'] = $userdata['work_phone'];
+//		$_SESSION['GO_SESSION']['home_phone'] = $userdata['home_phone'];
 
 		$_SESSION['GO_SESSION']['thousands_separator'] = $userdata['thousands_separator'];
 		if($_SESSION['GO_SESSION']['thousands_separator']=='')
@@ -186,7 +186,7 @@ class GO_USERS extends db
 			$sql .= ' SQL_CALC_FOUND_ROWS';
 		}
 
-		$sql .= " u.id,u.username,u.first_name,u.middle_name,u.last_name,u.company,u.logins,u.lastlogin,u.registration_time,u.address,u.address_no,u.zip,u.city,u.state,u.country,u.home_phone,u.email,u.work_address,u.work_address_no,u.work_zip,u.work_city,u.work_state,u.work_country,u.work_phone,u.enabled";
+		$sql .= " u.id,u.username,u.first_name,u.middle_name,u.last_name,u.logins,u.lastlogin,u.ctime,u.email,u.enabled";
 
 		if($user_id > 0)
 		{
@@ -874,7 +874,7 @@ class GO_USERS extends db
 			$user['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl( $user['email'] );
 		}		
 		
-		$user['registration_time'] = $user['mtime']=time();
+		$user['ctime'] = $user['mtime']=time();
 
 		$random_password=false;
 		$user['password_type']='crypt';
