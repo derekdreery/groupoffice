@@ -51,7 +51,7 @@ switch($task)
 		$response['data']['write_permission']=$GLOBALS['GO_MODULES']->modules['users']['read_permission'];
 
 
-		$response['data']['birthday']=Date::format($response['data']['birthday'], false);
+		//$response['data']['birthday']=Date::format($response['data']['birthday'], false);
 	
 		//$temp = $GLOBALS['GO_LANGUAGE']->get_language($response['data']['language']);
 		//$response['data']['language_name'] = $temp['description'];

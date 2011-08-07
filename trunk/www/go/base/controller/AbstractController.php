@@ -123,7 +123,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * 
 	 * @param string $action 
 	 */
-	public function run($action){
+	public function run($action=''){
 
 	//	try {
 			if(!$this->checkPermissions($action)){

@@ -2,7 +2,7 @@
 class GO_Notes_NotesModule extends GO_Base_Model_Module{
 	
 	public function initListeners(){
-		
+		GO_Core_Controller_Core::addListener('loadapplication', 'GO_Notes_NotesModule', 'loadApplication');
 	}	
 	
 	/**
@@ -12,14 +12,18 @@ class GO_Notes_NotesModule extends GO_Base_Model_Module{
 	 * is created for this user.
 	 * 
 	 */
-	public function initUser($userId){		
+	public function loadApplication(){	
+		
+		$userId = GO::user()->id;
 		
 		$category = GO_Notes_Model_Category::model()->findSingleByAttribute('user_id', $userId);
 		if (!$category){
 			$category = GO_Notes_Model_Category::model();
 			
-			$category->user_id=GO::user()->id;
-			$category->name=GO::user()->name;
+			$user = GO_Base_Model_User::model()->findByPk($userId);
+			
+			$category->user_id=$user->id;
+			$category->name=$user->name;
 			$category->makeAttributeUnique('name');
 			$category->save();
 		}		

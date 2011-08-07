@@ -44,6 +44,12 @@ if($mtime!=$GLOBALS['GO_CONFIG']->mtime)
 	exit();
 }
 
+//temporary hack. In the future this controller will replace this index.php script.
+//Now we need it to fire events.
+$newController = new GO_Core_Controller_Core();
+$newController->run();
+
+
 
 //will do autologin here before theme is loaded.
 try{

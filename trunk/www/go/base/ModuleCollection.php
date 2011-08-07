@@ -13,7 +13,9 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 
 	
 	public function callModuleMethod($method, $params=array()){
-		foreach($this->getAll() as $module)
+		
+		$stmt = $this->getAll();
+		while($module = $stmt->fetch())
 		{	
 			$file = $module->path.ucfirst($module->id).'Module.php';
 			//todo load listeners

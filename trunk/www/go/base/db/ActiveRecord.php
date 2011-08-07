@@ -822,6 +822,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	}
 	
 	/**
+	 * Return the number of model records in the database.
+	 * 
+	 * @return int  
+	 */
+	public function count(){
+		$stmt = $this->getDbConnection()->query("SELECT count(*) AS count FROM `".$this->tableName()."`");
+		$record = $stmt->fetch();
+		return $record['count'];		
+	}
+	
+	/**
 	 * May be overriden to do stuff after the model was loaded from the database
 	 */
 	protected function afterLoad(){
@@ -861,7 +872,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}else
 			{
 				$joinAttribute = $r[$name]['field'];
-				$this->_relatedCache[$name]= $model::model()->findByPk($this->_attributes[$joinAttribute]);
+				if($r[$name]['type']==self::BELONGS_TO)
+				{
+					//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
+					$this->_relatedCache[$name]= $model::model()->findByPk($this->_attributes[$joinAttribute]);
+				}else
+				{
+					//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
+					$this->_relatedCache[$name]= $model::model()->findSingleByAttribute($r[$name]['field'], $this->pk);
+				}
 			}
 
 			return $this->_relatedCache[$name];
@@ -1051,6 +1070,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}elseif(!empty($attributes['length']) && !empty($this->_attributes[$field]) && strlen($this->_attributes[$field])>$attributes['length'])
 			{
 				throw new Exception($field.' too long');
+			}elseif(!empty($this->_attributes[$field]) && preg_match('/[<>]+/',$this->_attributes[$field])){
+				throw new Exception($field.' contains invalid characters < or >');
+			}elseif(!empty($attributes['regex']) && !empty($this->_attributes[$field]) && !preg_match($attributes['regex'], $this->_attributes[$field]))
+			{
+				throw new Exception($field.' was not correctly formatted');
 			}elseif(!empty($attributes['validator']) && !empty($this->_attributes[$field]) && !call_user_func($attributes['validator'], $this->_attributes[$field]))
 			{
 				throw new Exception($field.' did not validate');

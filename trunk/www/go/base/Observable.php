@@ -18,7 +18,13 @@
  */
 class GO_Base_Observable{
 	
-	
+	/**
+	 * Will check if the event listeners have been cached and will 
+	 * cache them when necessary.
+	 * 
+	 * At the moment this function is called in index.php In the future this
+	 * should be called at the new entry point of the application.
+	 */
 	public static function cacheListeners(){
 		
 		GO::debug("GO_Base_Observable::cacheListeners");
@@ -35,7 +41,13 @@ class GO_Base_Observable{
 			
 		}
 	}
-	
+	/**
+	 * Add a listener function to this object
+	 * 
+	 * @param String $eventName
+	 * @param String $listenerClass Object class name where the static listener function is in.
+	 * @param type $listenerFunction Static listener function name.
+	 */
 	public static function addListener($eventName,$listenerClass, $listenerFunction){
 		$class = get_called_class();		
 		
@@ -52,10 +64,24 @@ class GO_Base_Observable{
 	
 	}	
 	
+	/**
+	 * Remove a listener function to this object
+	 * 
+	 * @todo
+	 * @param String $eventName
+	 * @param String $listenerClass Object class name where the static listener function is in.
+	 * @param type $listenerFunction Static listener function name.
+	 */
 	public static function removeListener($eventName,$listenerClass,$listenerFunction){
-		
+		return false;
 	}
 	
+	/**
+	 * Fire an event so that listener functions will be called.
+	 * 
+	 * @param String $eventName Name fo the event
+	 * @param Array $params Paramters for the listener function
+	 */
 	protected function fireEvent($eventName, $params){
 		if(!isset($this->_listeners)){
 			
