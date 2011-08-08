@@ -97,7 +97,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	}
 
 	/**
-	 * The default action to load a form in the edit dialog.
+	 * Action to load a single record.
 	 */
 	public function actionLoad() {
 		$modelName = $this->model;
@@ -175,11 +175,45 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	}
 
 	/**
+	 * Override this function to do things before the query is done to get the
+	 * grid records from the database.
+	 * @param array $params Also used by the GO_Base_Db_ActiveRecord->find() function.
+	 * @return array $response The response object.
+	 */
+	protected function beforeGridActions(&$params) {
+		return array();
+	}
+
+	/**
+	 * Override this function to make changes to the grid response before
+	 * it is outputted.
+	 *
+	 * @param array &$response The grid response that will be outputted, usually in JSON format to the client.
+	 */
+	protected function beforeGridOutput(&$response) {
+	}
+
+	/**
 	 * The default action for loading a grid. This function shouldn't be overridden.
 	 * You can override formatModelForGrid and getGridParams.
 	 */
 	public function actionGrid() {
 
+		$defaultParams = array(
+				'searchQuery' => !empty($_REQUEST['query']) ? '%' . $_REQUEST['query'] . '%' : '',
+				'limit' => isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0,
+				'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
+				'orderField' => isset($_REQUEST['orderField']) ? $_REQUEST['orderField'] : '',
+				'orderDirection' => isset($_REQUEST['orderDirection']) ? $_REQUEST['orderDirection'] : ''
+		);
+
+		if(isset($_POST['permissionLevel'])){
+			$defaultParams['permissionLevel']=$_POST['permissionLevel'];
+		}
+
+		$params = array_merge($defaultParams, $this->getGridParams());
+
+		$response = $this->beforeGridActions(&$params);
 
 		if (isset($_POST['delete_keys'])) {
 			try {
@@ -196,20 +230,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			}
 		}
 
-		$defaultParams = array(
-				'searchQuery' => !empty($_REQUEST['query']) ? '%' . $_REQUEST['query'] . '%' : '',
-				'limit' => isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0,
-				'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
-				'orderField' => isset($_REQUEST['orderField']) ? $_REQUEST['orderField'] : '',
-				'orderDirection' => isset($_REQUEST['orderDirection']) ? $_REQUEST['orderDirection'] : ''				
-		);
-		
-		if(isset($_POST['permissionLevel'])){
-			$defaultParams['permissionLevel']=$_POST['permissionLevel'];
-		}
-
-		$params = array_merge($defaultParams, $this->getGridParams());
-
 		$modelName = $this->model;
 		$stmt = $modelName::model()->find($params, $response['total']);
 		
@@ -218,6 +238,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		while ($model = $stmt->fetch()) {
 			$response['results'][] = $this->formatModelForGrid($model->getAttributes(), $model);
 		}
+
+		$this->beforeGridOutput(&$response);
 
 		$this->output($response);
 	}
