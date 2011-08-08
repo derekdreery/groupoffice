@@ -20,7 +20,7 @@ GO.comments.CommentsGrid = function(config){
 	config.split=true;
 	config.border=false;
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.comments.url+ 'json.php',
+	    url: GO.url('comments/comment/grid'),
 	    baseParams: {
 	    	task: 'comments'
 	    	},
@@ -102,7 +102,7 @@ GO.comments.CommentsGrid = function(config){
 		if(this.writePermission)
 		{
 			var record = grid.getStore().getAt(rowIndex);			
-			GO.comments.commentDialog.show(record.data.id);
+			GO.comments.showCommentDialog(record.data.id);
 		}
 	}, this);
 };
