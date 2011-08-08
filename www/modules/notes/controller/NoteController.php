@@ -4,8 +4,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	protected $model = 'GO_Notes_Model_Note';
 	
 	
-	protected function getGridParams(){
-		
+	protected function getGridParams(){		
 		
 		if(isset($_POST['categories']))
 		{
@@ -18,20 +17,20 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 		}
 		
 		//todo category acl's should be checked for read permission here.
-		
-		return array(
+   
+
+    return array_merge(parent::getGridParams(),array(
 				'ignoreAcl'=>true,
 				'joinCustomFields'=>true,
 				'by'=>array(array('category_id', $categories, 'IN'))
-				);
+				));
+    
 	}
-	
-	protected function formatModelForGrid($record, $model) {
-		if($model->user)
-			$record['user_name']=$model->user->name;
-		return $record;
-	}
-
+  
+  protected function prepareGrid($grid){
+    $grid->formatColumn('user_name','$model->user->name');
+    return $grid;
+  }
 	
 	/**
 	 * List all fields that require a remote text to load for a remote combobox.

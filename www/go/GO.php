@@ -43,6 +43,7 @@ class GO{
 			
 			self::$db = new PDO("mysql:host=localhost;dbname=$dbname", $dbuser, $dbpass);
 			self::$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+      self::$db->setAttribute( PDO::ATTR_STATEMENT_CLASS, array( 'GO_Base_Db_ActiveStatement', array() ) );
 		}
 		
 		return self::$db;
