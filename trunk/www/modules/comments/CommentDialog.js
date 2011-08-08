@@ -64,7 +64,7 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 		if(this.comment_id>0)
 		{
 			this.formPanel.load({
-				url : GO.settings.modules.comments.url+'json.php',
+				url : GO.url('comments/comment/load'),
 				waitMsg:GO.lang['waitMsgLoad'],
 				success:function(form, action)
 				{
@@ -91,14 +91,15 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 	},
 	setCommentId : function(comment_id)
 	{
-		this.formPanel.form.baseParams['comment_id']=comment_id;
+		this.formPanel.form.baseParams['id']=comment_id;
+//		this.formPanel.form.baseParams['comment_id']=comment_id;
 		this.comment_id=comment_id;
 	},
 	submitForm : function(hide){
 		this.formPanel.form.submit(
 		{
-			url:GO.settings.modules.comments.url+'action.php',
-			params: {'task' : 'save_comment'},
+			url:GO.url('comments/comment/submit'),
+//			params: {'task' : 'save_comment'},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 				this.fireEvent('save', this);
