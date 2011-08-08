@@ -22,7 +22,7 @@
  	}
 	
 	this.storeAllGroups = new GO.data.JsonStore({
-	    url: GO.settings.modules.groups.url+'non_admin_json.php',
+	    url: GO.url('groups/group/grid'),
 	    baseParams: {task: 'groups',for_managing:1},
 	    root: 'results',
 	    id: 'id',
@@ -107,8 +107,8 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 			if(!this.new_dialog)
 			{
 				this.userStore = new GO.data.JsonStore({
-				    url: GO.settings.modules.groups.url+'json.php',
-				    baseParams: {action: 'users_in_group'},
+				    url: GO.url("groups/group/getUsers"),
+				    baseParams: {id: group.id},
 				    root: 'results',
 				    id: 'id',
 				    fields: ['id', 'user_id', 'name', 'email'],

@@ -531,14 +531,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 *  "ignoreAcl"=>true,
 	 * 
 	 *  searchQuery=>"String",
-	 *  joinCustomFields=>false
+	 *  joinCustomFields=>false,
+   * calcFoundRows=true // Set tot true to return the number of foundRows in the statement (See class GO_Base_Db_ActiveStatement 
+
 	 * };
 	 * 
 	 * 
 	 * @param array $params
 	 * @return PDOStatement
 	 */
-	public function find($params=array(), &$foundRows=false){
+	public function find($params=array()){
 		
 		//todo joins acl tables and finds stuff by parameters
 
@@ -564,7 +566,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$sql = "SELECT ";
 		
-		if($foundRows!==false && !empty($params['limit']) && empty($params['start'])){
+		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && empty($params['start'])){
 			
 			//TODO: This is MySQL only code
 			
@@ -585,9 +587,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($joinCf)			
 			$sql .= "LEFT JOIN cf_".$this->linkType()." ON cf_".$this->linkType().".link_id=t.id ";
 		
-    if (!empty($params['linksTable'])) {
-      $sql .= "INNER JOIN `".$params['linksTable']."`link_t ON t.id= link_t.".$params['local_field']." ";
-//        "INNER JOIN `".$params['remoteTable']."` remote_t ON remote_t.id= link_t.`".$params['remoteField']."` ";
+    if (!empty($params['linkModel'])) { //passed in case of a MANY_MANY relation query
+      $linkModel = new $params['linkModel'];
+      $sql .= "INNER JOIN `".$linkModel->tableName()."` link_t ON t.`".$this->primaryKey()."`= link_t.".$params['linkModelLocalField']." ";
     }
     
 		if($this->aclField() && empty($params['ignoreAcl'])){			
@@ -634,12 +636,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				}else
 				{
           // TODO : find a way to make the condition work for joining with many_many relations, but without doing the linksTable check again
-          if (empty($params['linksTable']))
+         // if (empty($params['linksTable']))
             $sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value, $this->columns[$field]['type'])." ";
-          else
-            $sql .= "`$field` $comparator '$value' ";
+          //else
+            //$sql .= "`$field` $comparator '$value' ";
 				}
 			}
+      
+      if(isset($linkModel)){
+        $primaryKeys = $linkModel->primaryKey();
+        $remoteField = $primaryKeys[0]==$params['linkModelLocalField'] ? $primaryKeys[1] : $primaryKeys[0];
+        $sql .= "link_t.`$remoteField` = ".$this->getDbConnection()->quote($value, $primaryKeys->columns[$field]['type'])." ";
+      }
 
 			$sql .= ') ';
 		}
@@ -696,7 +704,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$result = $this->getDbConnection()->query($sql);
 
 		
-		if($foundRows!==false){			
+		if(!empty($params['calcFoundRows'])){
 			if(!empty($params['limit'])){
 				
 				$queryUid = $this->_getFindQueryUid($params);
@@ -715,13 +723,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 						
 			}else
 			{
-				$foundRows = $result->rowCount();
-			}			
+				$foundRows = $result->rowCount();       
+      }	
+      $result->foundRows=$foundRows;
 		}
+    
+    
 		
 		
 		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
 		$result->setFetchMode(PDO::FETCH_CLASS, $this->className());
+    
+    //TODO these values should be set on findByPk too.
+    $result->model=$this;
+    $result->findParams=$params;
+    if(isset($params['relation']))
+      $result->relation=$params['relation'];
+    
 
     return $result;
 		
@@ -789,7 +807,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @return GO_Base_Db_ActiveRecord 
 	 */
 	
-	public function findByPk($primaryKey){
+	public function findByPk($primaryKey, $findParams=array()){
 
 //		if(!$this->_checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
 //			throw new AccessDeniedException();
@@ -810,10 +828,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		//GO::debug($sql);
 			
 		$result = $this->getDbConnection()->query($sql);
-		
+		$result->model=$this;
+    $result->findParams=$findParams;
+    
 		$result->setFetchMode(PDO::FETCH_CLASS, $this->className());
 		
 		$model =  $result->fetch();
+    
+    //todo check read permissions
+    //if(!$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
+			//throw new AccessDeniedException();
 		
 		if(!is_array($primaryKey) && $model)
 			GO::modelCache()->add($this->className(), $model);
@@ -845,7 +869,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	}
 	
 
-	private function _getRelated($name){
+	private function _getRelated($name, $extraFindParams=array()){
 		 //$name::findByPk($hit-s)
 		$r= $this->relations();
 		
@@ -880,44 +904,42 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				if($r[$name]['type']==self::BELONGS_TO)
 				{
 					//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
-					$this->_relatedCache[$name]= $model::model()->findByPk($this->_attributes[$joinAttribute]);
+					$this->_relatedCache[$name]= $model::model()->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name));
 				}else
 				{
 					//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
-					$this->_relatedCache[$name]= $model::model()->findSingleByAttribute($r[$name]['field'], $this->pk);
+					$this->_relatedCache[$name]= $model::model()->findSingleByAttribute($r[$name]['field'], $this->pk, array('relation'=>$name));
 				}
 			}
 
 			return $this->_relatedCache[$name];
 		}elseif($r[$name]['type']==self::HAS_MANY)
 		{							
-			$remotePkValue = $this->pk;
-			$remotePkField = $r[$name]['field'];
-			$findParams = array(
-					"by"=>array(array($remotePkField,$remotePkValue,'=')),
-					"ignoreAcl"=>true
-			);
+			$remoteFieldThatHoldsMyPk = $r[$name]['field'];
+			$findParams = array_merge($extraFindParams,array(
+					"by"=>array(array($remoteFieldThatHoldsMyPk,$this->pk,'=')),
+					"ignoreAcl"=>true,
+          "relation"=>$name
+			));
 				
 			$stmt = $model::model()->find($findParams);
 			return $stmt;		
 		}elseif($r[$name]['type']==self::MANY_MANY)
 		{							
-			$localPkValue = $this->pk; // single local value id
 			$localPkField = $r[$name]['field'];
-      $remotePkField = $r[$name]['remoteField'];
-      $linkTableName = $r[$name]['linksTable']; // name where the local id is linked to the ids of the records in the remote table
+      $linkModelName = $r[$name]['linkModel']; // name where the local id is linked to the ids of the records in the remote table
       
       // Please note that 'local' and 'remote' are reversed from the point of view of the remote model.
-			$findParams = array(
-          'linksTable'=>$linkTableName,
-					"by"=>array(array($localPkField,$localPkValue,'=')),
-//          "remoteField"=>$localPkField,
-          "local_field"=>$remotePkField,
-					"ignoreAcl"=>true
-			);
+			$findParams = array_merge($extraFindParams,array(
+          'linkModel'=>$linkModelName,
+          'linkModelLocalField'=>$localPkField,
+					//"by"=>array(array($localPkField,$this->pk,'=')),
+					"ignoreAcl"=>true,
+          "relation"=>$name
+			));
 				
 			$stmt = $model::model()->find($findParams); // pakt alle records waarvan de ids via de koppeltabel gelinked zijn aan de local id
-			return $stmt;		
+      return $stmt;		
 		}
 	}
 	
@@ -1049,7 +1071,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @todo new item's which don't have ACL should check different ACL for adding new items.
 	 * @return boolean 
 	 */
-	private function _checkPermissionLevel($level){
+	public function checkPermissionLevel($level){
 
 		if(!$this->aclField())
 			return true;
@@ -1098,7 +1120,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	public function save(){
 		
-		if(!$this->_checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new AccessDeniedException();
 				
 		if($this->validate()){		
@@ -1379,7 +1401,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function delete(){
 		
-		if(!$this->_checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
+		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
 						throw new AccessDeniedException ();
 		
 		
@@ -1474,6 +1496,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function __call($name,$parameters)
 	{
 		//todo find relation
+
+    $extraFindParams=isset($parameters[0]) ?$parameters[0] : array();
+    return $this->_getRelated($name,$extraFindParams);
 		die('function '.$name.' does not exist');
 		//return parent::__call($name,$parameters);
 	}

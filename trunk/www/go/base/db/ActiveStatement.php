@@ -1,0 +1,38 @@
+<?php
+
+class GO_Base_Db_ActiveStatement extends PDOStatement {
+
+  /**
+   * The model type this statement result returns.
+   * 
+   * @var GO_Base_Db_ActiveRecord 
+   */
+  public $model;
+  
+  /**
+   * Parameters  that were passed to GO_BaseDb_activeRecord::find()
+   * 
+   * @var array 
+   */
+  public $findParams;
+  
+  /**
+   * If the statement was returned by a relational query eg. $model->relationName() then this
+   * is set to the relation name.
+   * 
+   * @var String 
+   */
+  public $relation;
+  
+  /**
+   * The total number of found rows. Even when specifying a limit it will return the number of rows as if you wouldn't have specified a limit.
+   * 
+   * @var int 
+   */
+  public $foundRows;
+
+  protected function __construct() {
+    
+  }
+
+}
