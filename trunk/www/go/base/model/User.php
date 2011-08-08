@@ -102,7 +102,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 
 	public function afterSave() {
 
-
+		
+		$everyoneGroup = GO_Base_Model_Group::model()->findByPk(GO::config()->group_everyone);		
+		$everyoneGroup->addUser($this->id);
+		
 
 		return parent::afterSave();
 	}
