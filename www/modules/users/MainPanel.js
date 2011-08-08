@@ -38,7 +38,7 @@ GO.users.MainPanel = function(config)
 	}
 
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.users.url+'non_admin_json.php',
+	    url: GO.url('users/user/grid'),
 	    baseParams: {task: 'users'},
 	    id: 'id',
 	    totalProperty: 'total',

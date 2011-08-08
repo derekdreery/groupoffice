@@ -286,6 +286,10 @@ class GO{
 			if (GO::config()->debug) {
 				$_SESSION['connect_count'] = 0;
 				$_SESSION['query_count'] = 0;
+				
+				error_reporting(E_STRICT);
+				ini_set('display_errors','on');
+				ini_set('log_errors','on');
 			}
 		}
 		

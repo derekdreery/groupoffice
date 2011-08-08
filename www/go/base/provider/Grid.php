@@ -39,9 +39,13 @@ class GO_Base_Provider_Grid {
 
   /**
    * Add columns to the grid and give the format in how to parse the value of this column.
-   * You can also use this function to set the format of an excisting column.
+   * You can also use this function to set the format of an existing column.
    * 
    * The format can be parsed as normal php. (For example: formatColumn('read_date','date("d-m-Y")');)
+	 * 
+	 * You can use any model attribute name as a variable and you also have the $model variable available.
+	 * 
+	 * Example formatColumn('Special name','$model->getSpecialName()');
    * 
    * @param type $column
    * @param string $format 

@@ -455,9 +455,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			//the new model has it's own ACL but it's not created yet.
 			//In this case we will check the module permissions.
 			$module = $this->getModule();
-			if($module=='base')
+			if($module=='base'){
 				return GO::user()->isAdmin() ? GO_Base_Model_Acl::MANAGE_PERMISSION : false;
-			else
+			}else
 				return GO::modules()->$module->permissionLevel;
 			 
 		}else
@@ -1119,10 +1119,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	
 	public function save(){
-		
+						
+			
 		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new AccessDeniedException();
-				
+		
 		if($this->validate()){		
 		
 			/*
@@ -1150,6 +1151,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this, $this->buildFilesPath());
 			}
 			
+
 			
 			if($this->isNew){				
 				
@@ -1308,7 +1310,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @return boolean 
 	 */
 	private function _dbInsert(){		
-		
+
 		$fieldNames = array();
 		
 		//Build an array of fields that are set in the object. Unset columns will
@@ -1533,6 +1535,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function setAttribute($name,$value)
 	{
+		
 		if(property_exists($this,$name)){
 			$this->$name=$value;
 		}elseif(isset($this->columns[$name])){

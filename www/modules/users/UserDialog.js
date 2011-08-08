@@ -9,20 +9,22 @@
  * @version $Id$
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
- * @author Boy Wijnmaalen <bwijnmaalen@intermesh.nl>
  */
- 
-GO.users.UserDialog = function(config){
-	if(!config)
-	{
-		config={};
-	}
-
-	config.goDialogId='user';
+ GO.users.UserDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
-	this.buildForm();
-
-	config.tbar = [
+	customFieldType : 8,
+	initComponent : function(){
+		
+		Ext.apply(this, {
+			goDialogId:'user',
+			title:GO.users.lang.userSettings,
+			formControllerUrl: GO.url('users/user'),
+			height:580,
+			width:800
+			
+		});
+		
+		this.tbar = [
 		this.linkBrowseButton = new Ext.Button({
 			iconCls: 'btn-link', 
 			cls: 'x-btn-text-icon', 
@@ -39,7 +41,7 @@ GO.users.UserDialog = function(config){
 		
 		if(GO.files)
 		{		
-			config.tbar.push(this.fileBrowseButton = new Ext.Button({
+			this.tbar.push(this.fileBrowseButton = new Ext.Button({
 				iconCls: 'btn-files',
 				cls: 'x-btn-text-icon', 
 				text: GO.files.lang.files,
@@ -50,79 +52,51 @@ GO.users.UserDialog = function(config){
 				disabled: true
 			}));
 		}	
-
-	config.layout='fit';
-	config.modal=false;
-	config.resizable=true;
-	config.maximizable=true;
-	config.width=750;
-	config.collapsible=true;
-	config.height=580;
-	config.closeAction='hide';
-	config.title= GO.users.lang.userSettings;					
-	config.items= this.formPanel;
-	config.buttons=[{
-			text: GO.lang['cmdOk'],
-			handler: function(){
-				this.submitForm(true);
-			},
-			scope: this
-		},{
-			text: GO.lang.cmdSavePlusNew,
-			handler: function(){
-				this.submitForm(false, true);
-				
-			},
-			scope:this
-		},{
-			text: GO.lang['cmdApply'],
-			handler: function(){
-				this.submitForm();
-			},
-			scope:this
-		},{
-			text: GO.lang['cmdClose'],
-			handler: function(){
-				this.hide();
-			},
-			scope:this
-		}					
-	];
-	
-	GO.users.UserDialog.superclass.constructor.call(this, config);
-	
-	this.addEvents({'save' : true, 'set_id' : true});	
-}
-
-Ext.extend(GO.users.UserDialog,GO.Window,{
+		
+		GO.users.UserDialog.superclass.initComponent.call(this);	
+	},
 
 	user_id : 0,
 	
 	files_folder_id : '',
 	
-	setUserId : function(user_id){
-		this.formPanel.form.baseParams['user_id']=user_id;
-		this.user_id=user_id;	
+	afterLoad : function(remoteModelId, config, action){
 		
-		this.permissionsTab.setUserId(user_id);
-		this.accountTab.setUserId(user_id);
+		if(!remoteModelId){
+			if(!config.category_id)
+			{
+				config.category_id=GO.notes.defaultCategory.id;
+				config.category_name=GO.notes.defaultCategory.name;
+			}
+			this.selectCategory.setValue(config.category_id);
+			if(config.category_name)
+			{			
+				this.selectCategory.setRemoteText(config.category_name);
+			}		
+		}
+	},
+	
+	afterLoad : function(remoteModelId, config, action){
+		
+		this.permissionsTab.setUserId(remoteModelId);
+		this.accountTab.setUserId(remoteModelId);
 		
 		if(this.serverclientFieldSet)
 		{
-			var visible = user_id>0;
+			var visible = remoteModelId>0;
 			this.serverclientFieldSet.setVisible(!visible);
 		}
 
-		this.loginTab.setVisible(user_id>0);
+		this.loginTab.setVisible(remoteModelId>0);
 		
-		this.linkBrowseButton.setDisabled(!user_id);
+		this.linkBrowseButton.setDisabled(!remoteModelId);
 		if(GO.files)
 		{
-			this.fileBrowseButton.setDisabled(!user_id);
+			this.fileBrowseButton.setDisabled(!remoteModelId);
 		}
 
 		this.lookAndFeelTab.startModuleField.clearLastSearch();
-		this.lookAndFeelTab.modulesStore.baseParams.user_id=user_id;
+		this.lookAndFeelTab.modulesStore.baseParams.user_id=remoteModelId;
 
 		this.fireEvent('set_id', this);
 	},
@@ -151,156 +125,12 @@ Ext.extend(GO.users.UserDialog,GO.Window,{
 	},
 	
 	
-	show : function (user_id) {
-
-		if(GO.mailings && !GO.mailings.writableMailingsStore.loaded){
-			GO.mailings.writableMailingsStore.load({
-				callback:function(){
-					this.show(user_id);
-				},
-				scope:this
-			});
-			return false;
-		}
-		
-		if(!this.rendered)
-		{
-			if(GO.serverclient && GO.serverclient.domains)
-			{				
-				this.serverclientFieldSet = new Ext.form.FieldSet({
-					title: GO.serverclient.lang.mailboxes, 
-					height:100,
-					autoScroll:true,
-					items:new GO.form.HtmlComponent({
-						html:'<p class="go-form-text">'+GO.serverclient.lang.createMailbox+':</p>'
-					})
-				});
-				
-				for(var i=0;i<GO.serverclient.domains.length;i++)
-				{
-					this.serverclientDomainCheckboxes[i]=new Ext.form.Checkbox({						
-						checked:(i==0),
-						name:'serverclient_domains[]',
-						autoCreate: {tag: "input", type: "checkbox", value: GO.serverclient.domains[i]},						
-						hideLabel:true,
-						boxLabel: GO.serverclient.domains[i]
-					});
-					
-					this.serverclientDomainCheckboxes[i].on('check', this.setDefaultEmail, this);
-					this.serverclientFieldSet.add(this.serverclientDomainCheckboxes[i]);
-				}
-				
-				this.rightCol.add(this.serverclientFieldSet);
-			}		
-			
-			this.render(Ext.getBody());
-		}
-		
-		if(GO.serverclient && GO.serverclient.domains)
-		{
-			this.formPanel.form.findField('username').on('change', this.setDefaultEmail, this);
-		}
-		
-		this.profileTab.show();
-
-		//reset form
-		this.formPanel.form.reset();
-		
-		this.setUserId(user_id);
-		
-		if(user_id>0)
-		{
-			this.formPanel.load({
-				url : GO.settings.modules.users.url+'json.php',
-				
-				success:function(form, action)
-				{				
-					this.loaded=true;
-					GO.users.UserDialog.superclass.show.call(this);
-					
-					this.files_folder_id = action.result.data.files_folder_id;
-					
-					this.lookAndFeelTab.startModuleField.setRemoteText(action.result.data.start_module_name);
-				},
-				failure:function(form, action)
-				{
-					Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
-				},
-				scope: this
-				
-			});
-		}else
-		{			
-			GO.users.UserDialog.superclass.show.call(this);
-		}
+	afterSubmit : function(action){
+		this.permissionsTab.commit();
+		this.files_folder_id = action.result.files_folder_id;
 	},
-	
-
-	submitForm : function(hide, reset){
-		var params = this.permissionsTab.getPermissionParameters();
-		
-		params.task='save_user';
-		
-		this.formPanel.form.submit(
-		{
-			url:GO.settings.modules.users.url+'action.php',
-			params: params,
-			waitMsg:GO.lang['waitMsgSave'],
-			success:function(form, action){
-				
-				this.fireEvent('save', this, action.result.user_id || this.user_id);
-
-				this.permissionsTab.commit();
-				
-				if(hide)
-				{
-					this.hide();
-				}else if(reset)
-				{
-					this.setUserId(0);
-					
-					var resetFields = [
-						'username',
-						'password1',
-						'password2',
-						'first_name',
-						'middle_name',
-						'last_name',						
-						'email'						
-					];
-					
-					for(var i=0;i<resetFields.length;i++)
-					{
-						this.formPanel.form.findField(resetFields[i]).reset();
-					}
-					
-					this.permissionsTab.onShow();
-					
-				}else if(action.result.user_id)
-				{
-					this.setUserId(action.result.user_id);
-					
-					this.files_folder_id = action.result.files_folder_id;
-				}
-			},		
-			failure: function(form, action) {
-				if(action.failureType == 'client')
-				{					
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
-				} else {
-					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
-				}
-			},
-			scope: this
-		});
-		
-	},
-	
 	
 	buildForm : function () {
-
-		
-
 		this.accountTab = new GO.users.AccountPanel();
 		
 
@@ -328,42 +158,49 @@ Ext.extend(GO.users.UserDialog,GO.Window,{
 			})]
 		});
 		
-		var items = [
-      	this.profileTab,
-			
-      	this.permissionsTab,
-      	this.regionalSettingsTab,
-      	this.lookAndFeelTab
-      ];
-
-		if(GO.mailings)
-		{
-			items.push(new GO.mailings.SelectMailingsPanel({hideAllowCheck:true}));
-		}
+		this.addPanel(this.profileTab);
+		this.addPanel(this.permissionsTab);
+    this.addPanel(this.regionalSettingsTab);
+    this.addPanel(this.lookAndFeelTab);
+     
 
 		if(GO.customfields && GO.customfields.types["8"])
 		{
 			for(var i=0;i<GO.customfields.types["8"].panels.length;i++)
 			{
-				items.push(GO.customfields.types["8"].panels[i]);
+				this.addPanel(GO.customfields.types["8"].panels[i]);
 			}
-		}
- 
-    this.tabPanel = new Ext.TabPanel({     
-      deferredRender: false,
-			anchor:'100% 100%',
-      layoutOnTabChange:true,
-    	border: false,
-      items: items
-    }) ;    
-    
-    this.formPanel = new Ext.form.FormPanel({
-			items:this.tabPanel,
-			baseParams:{task:'user'},
-	    waitMsgTarget:true,
-	    border:false
-		});
-    
-    
+		}   
+		
+		if(GO.serverclient && GO.serverclient.domains)
+		{				
+			this.serverclientFieldSet = new Ext.form.FieldSet({
+				title: GO.serverclient.lang.mailboxes, 
+				height:100,
+				autoScroll:true,
+				items:new GO.form.HtmlComponent({
+					html:'<p class="go-form-text">'+GO.serverclient.lang.createMailbox+':</p>'
+				})
+			});
+
+			for(var i=0;i<GO.serverclient.domains.length;i++)
+			{
+				this.serverclientDomainCheckboxes[i]=new Ext.form.Checkbox({						
+					checked:(i==0),
+					name:'serverclient_domains[]',
+					autoCreate: {tag: "input", type: "checkbox", value: GO.serverclient.domains[i]},						
+					hideLabel:true,
+					boxLabel: GO.serverclient.domains[i]
+				});
+
+				this.serverclientDomainCheckboxes[i].on('check', this.setDefaultEmail, this);
+				this.serverclientFieldSet.add(this.serverclientDomainCheckboxes[i]);
+			}
+
+			this.rightCol.add(this.serverclientFieldSet);
+			
+			this.formPanel.form.findField('username').on('change', this.setDefaultEmail, this);
+			
+		}		
 	}
 });
