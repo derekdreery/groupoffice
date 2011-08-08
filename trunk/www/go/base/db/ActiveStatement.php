@@ -25,7 +25,10 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
   public $relation;
   
   /**
-   * The total number of found rows. Even when specifying a limit it will return the number of rows as if you wouldn't have specified a limit.
+   * The total number of found rows. Even when specifying a limit it will return 
+	 * the number of rows as if you wouldn't have specified a limit.
+	 * 
+	 * It is only set when calcFoundRows was passed to the GO_Base_Db_ActiveRecord::find() function parameters.
    * 
    * @var int 
    */

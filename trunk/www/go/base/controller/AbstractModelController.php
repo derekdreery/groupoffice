@@ -42,8 +42,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		if (!empty($_REQUEST['id']))
 			$model = $modelName::model()->findByPk($_REQUEST['id']);
 		else
-			$model = $modelName::model();
-
+			$model = new $modelName;
 
 		$model->setAttributes($_POST);
 
