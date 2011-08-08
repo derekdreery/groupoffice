@@ -541,7 +541,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function find($params=array(), &$foundRows=false){
 		
 		//todo joins acl tables and finds stuff by parameters
-		
+
+//		if(!$this->_checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
+//			throw new AccessDeniedException ();
 		
 		
 		if(!isset($params['userId'])){			
@@ -692,7 +694,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 		//$sql .= "WHERE `".$this->primaryKey().'`='.intval($primaryKey);
 		$result = $this->getDbConnection()->query($sql);
-		
+
 		
 		if($foundRows!==false){			
 			if(!empty($params['limit'])){
@@ -788,7 +790,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	
 	public function findByPk($primaryKey){
-		
+
+//		if(!$this->_checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
+//			throw new AccessDeniedException();
+
 		//Use cache so identical findByPk calls are only executed once per script request
 		$cachedModel = !is_array($primaryKey) ? GO::modelCache()->get($this->className(), $primaryKey) : false;
 		if($cachedModel)
@@ -1300,11 +1305,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			GO::debug($sql);
 		
 		$stmt = $this->getDbConnection()->prepare($sql);
-		
+
 		foreach($fieldNames as  $field){
 			
 			$attr = $this->columns[$field];
-			
+
 			$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
 		}
 		return $stmt->execute();
