@@ -1477,7 +1477,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			GO_Files_Controller_Item::deleteFilesFolder($this->files_folder_id);	
 		}
 
-		return $this->afterDelete();			
+		if(!$this->afterDelete())
+			return false;
+		
+		$this->fireEvent('delete', array(&$this));
+		
+		return true;
 	}
 	
 	/**

@@ -20,19 +20,31 @@ class GO_Base_Provider_Grid {
    *
    * @var array the relation of the given model.  
    */
-  private $_relation = NULL;
+  private $_relation;
+	
+	private $_response;
 
   /**
    * See function formatColumn for a detailed description about how to use the format parameter.
-   * 
-   * @param GO_Base_Db_ActiveStatement $stmt
+   *
    * @param array $columns eg. array('username', 'date'=>array('format'=>'date("Ymd", $date)'))
    */
-  public function __construct(GO_Base_Db_ActiveStatement $stmt, $columns=array()) {
-
-    $this->_stmt = $stmt;
-    
-    $this->_columns = count($columns) ? $columns :  array_keys($stmt->model->columns);
+  public function __construct($columns=array()) {        
+    $this->_columns = $columns;	
+  }
+	
+	/**
+	 * Set the statement that contains the models for the grid data.
+	 * Run the statement after you construct this grid. Otherwise the delete
+	 * actions will be ran later and they will still be in the result set.
+	 * 
+	 * @param GO_Base_Db_ActiveStatement $stmt 
+	 */
+	public function setStatement(GO_Base_Db_ActiveStatement $stmt){
+		$this->_stmt = $stmt;
+		
+		if(!count($this->_columns))
+			$this->_columns = array_keys($stmt->model->columns);
 		
 		if($stmt->model->customfieldsRecord){
 			
@@ -44,7 +56,38 @@ class GO_Base_Provider_Grid {
 		
     if (isset($stmt->relation))
       $this->_relation = $stmt->relation;
-  }
+	}
+	
+	public function processDeleteActions($deleteModelName){
+		
+		if(isset($this->_stmt))
+			throw new Exception("processDeleteActions should be called before setStatement. If you run the statement before the deletes then the deleted items will still be in the result.");
+		
+		if (isset($_POST['delete_keys'])) {
+      try {
+        $deleteIds = json_decode($_POST['delete_keys']);
+        foreach ($deleteIds as $modelPk) {
+
+//          $deleteModelName = $this->_stmt->model->className();
+//
+//          //If this is a MANY_MANY relational query. For example when you're displaying the users in a 
+//          // group in a grid then you don't want to delete the GO_BAse_Model_User but the linking table record GO_Base_MOdel_UserGroup
+//          if (!empty($this->_stmt->relation)) {
+//            $relations = $this->stmt->model->relations();
+//            if (isset($relations[$this->stmt->relation]['linksModel']))
+//              $deleteModelName = $relations[$this->stmt->relation]['linksModel'];
+//          }
+
+          $model = $deleteModelName::model()->findByPk($modelPk);
+          $model->delete();
+        }
+        $this->_response['deleteSuccess'] = true;
+      } catch (Exception $e) {
+        $this->_response['deleteSuccess'] = false;
+        $this->_response['deleteFeedback'] = $e->getMessage();
+      }
+    }
+	}
 
   /**
    * Add columns to the grid and give the format in how to parse the value of this column.
@@ -60,8 +103,6 @@ class GO_Base_Provider_Grid {
    * @param string $format 
    */
   public function formatColumn($column, $format) {
-//    if (!isset($this->_columns[$column]))
-//      throw new Exception('Column ' . $column . ' does not exist in ' . $this->stmt);
 
     $this->_columns[$column]['format'] = $format;
   }
@@ -71,49 +112,26 @@ class GO_Base_Provider_Grid {
    * Returns the data for the grid.
    * Also deletes the given delete_keys.
    *
-   * @return array $response 
+   * @return array $this->_response 
    */
   public function getData() {
+		
+		if(!isset($this->_stmt))
+			throw new Exception('You must provide a statement with setStatement()');
 
     if (empty($this->_columns))
-      throw new Exception('No columns given for this grid.');
-
-
-    if (isset($_POST['delete_keys'])) {
-      try {
-        $deleteIds = json_decode($_POST['delete_keys']);
-        foreach ($deleteIds as $modelPk) {
-
-          $deleteModelName = $this->_stmt->model->className();
-
-          //If this is a MANY_MANY relational query. For example when you're displaying the users in a 
-          // group in a grid then you don't want to delete the GO_BAse_Model_User but the linking table record GO_Base_MOdel_UserGroup
-          if (!empty($this->_stmt->relation)) {
-            $relations = $this->stmt->model->relations();
-            if (isset($relations[$this->stmt->relation]['linksModel']))
-              $deleteModelName = $relations[$this->stmt->relation]['linksModel'];
-          }
-
-          $model = $deleteModelName::model()->findByPk($modelPk);
-          $model->delete();
-        }
-        $response['deleteSuccess'] = true;
-      } catch (Exception $e) {
-        $response['deleteSuccess'] = false;
-        $response['deleteFeedback'] = $e->getMessage();
-      }
-    }
+      throw new Exception('No columns given for this grid.');   
 
     
-    $response['results'] = array();
-    $response['total']=$this->_stmt->foundRows;
+    $this->_response['results'] = array();
+    $this->_response['total']=$this->_stmt->foundRows;
 
 		while ($model = $this->_stmt->fetch()) {
-			$response['results'][] = $this->formatModelForGrid($model);
+			$this->_response['results'][] = $this->formatModelForGrid($model);
 		}
 
 
-    return $response;
+    return $this->_response;
   }
   
   /**
