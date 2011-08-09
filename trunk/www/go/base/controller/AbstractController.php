@@ -125,7 +125,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	public function run($action=''){
 
-	//	try {
+		try {
 			if(!$this->checkPermissions($action)){
 				throw new AccessDeniedException();
 			}
@@ -142,12 +142,16 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 				$this->runWithParams($method, $_REQUEST);
 			else
 				$this->$methodName();
-//		} catch (Exception $e) {
-//			$response['success'] = false;
-//			$response['feedback'] = !empty($response['feedback']) ? $response['feedback'] : '';
-//			$response['feedback'] .= "\r\n\r\n".$e->getMessage();
-//			echo json_encode($response);exit();
-//		}
+		} catch (Exception $e) {
+			$response['success'] = false;
+			$response['feedback'] = !empty($response['feedback']) ? $response['feedback'] : '';
+			$response['feedback'] .= "\r\n\r\n".$e->getMessage();
+			
+			if(GO::config()->debug)
+				$response['trace']=$e->getTraceAsString();
+			
+			echo json_encode($response);exit();
+		}
 	}
 	
 	/**

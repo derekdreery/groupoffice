@@ -33,6 +33,15 @@ class GO_Base_Provider_Grid {
     $this->_stmt = $stmt;
     
     $this->_columns = count($columns) ? $columns :  array_keys($stmt->model->columns);
+		
+		if($stmt->model->customfieldsRecord){
+			
+			$cfColumns = array_keys($stmt->model->customfieldsRecord->getAttributes());
+			array_shift($cfColumns); //remove link_id column
+			
+			$this->_columns=array_merge($this->_columns, $cfColumns);
+		}
+		
     if (isset($stmt->relation))
       $this->_relation = $stmt->relation;
   }
@@ -157,6 +166,7 @@ class GO_Base_Provider_Grid {
         'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
         'orderField' => isset($_REQUEST['orderField']) ? $_REQUEST['orderField'] : '',
         'orderDirection' => isset($_REQUEST['orderDirection']) ? $_REQUEST['orderDirection'] : '',
+				'joinCustomFields'=>true,
         'calcFoundRows'=>true
     );
   }
