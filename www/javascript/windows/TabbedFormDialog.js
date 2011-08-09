@@ -135,11 +135,15 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		}
 	},
 	
+	getSubmitParams : function(){
+		
+	},
+	
 	submitForm : function(hide){
 		this.formPanel.form.submit(
 		{
 			url:this.formControllerUrl+'/submit',
-			
+			params: this.getSubmitParams(),
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){		
 				

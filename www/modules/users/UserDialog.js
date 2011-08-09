@@ -130,6 +130,10 @@
 		this.files_folder_id = action.result.files_folder_id;
 	},
 	
+	getSubmitParams : function(){
+		return this.permissionsTab.getPermissionParameters();
+	},
+	
 	buildForm : function () {
 		this.accountTab = new GO.users.AccountPanel();
 		

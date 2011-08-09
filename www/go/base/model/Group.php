@@ -43,11 +43,24 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
   }
   
   public function addUser($user_id){
-    $userGroup = new GO_Base_Model_UserGroup();
-    $userGroup->group_id = $this->id;
-    $userGroup->user_id = $user_id;
-    return $userGroup->save();
+		if(!$this->hasUser($user_id)){
+			$userGroup = new GO_Base_Model_UserGroup();
+			$userGroup->group_id = $this->id;
+			$userGroup->user_id = $user_id;
+			return $userGroup->save();
+		}else
+		{
+			return true;
+		}
   }
+	
+	public function removeUser($user_id){
+		$model = GO_Base_Model_UserGroup::model()->findByPk($user_id);
+		if($model)
+			return $model->delete();
+		else
+			return true;
+	}
   
   /**
    * Check if this group has a user
