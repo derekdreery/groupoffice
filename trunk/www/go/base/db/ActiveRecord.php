@@ -644,11 +644,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					$sql .= "`$field` $comparator (".implode(',',$value).") ";
 				}else
 				{
-          // TODO : find a way to make the condition work for joining with many_many relations, but without doing the linksTable check again
-         // if (empty($params['linksTable']))
-            $sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value, $this->columns[$field]['type'])." ";
-          //else
-            //$sql .= "`$field` $comparator '$value' ";
+					if(!isset($this->columns[$field]['type']))
+						throw new Exception($field.' not found in columns for model '.$this->className());
+					
+          $sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value, $this->columns[$field]['type'])." ";
 				}
 			}
       
@@ -853,7 +852,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
     //if(!$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
 			//throw new AccessDeniedException();
 		
-		if(!is_array($primaryKey) && $model)
+		if($model)
 			GO::modelCache()->add($this->className(), $model);
 		
 		return $model;
@@ -1133,7 +1132,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	
 	public function save(){
-						
+			
+		GO::debug('save'.$this->className());
 			
 		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new AccessDeniedException();
@@ -1345,8 +1345,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$sql = "INSERT INTO `{$this->tableName()}` (`".implode('`,`', $fieldNames)."`) VALUES ".
 					"(:".implode(',:', $fieldNames).")";
 
-		if($this->_debugSql)
+		if($this->_debugSql){
 			GO::debug($sql);
+			GO::debug($this->_attributes);
+		}
 		
 		$stmt = $this->getDbConnection()->prepare($sql);
 
@@ -1395,8 +1397,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}else
 			$sql .= "`".$this->primaryKey()."`=:".$this->primaryKey();
 		
-		if($this->_debugSql)
+		if($this->_debugSql){
 			GO::debug($sql);
+			GO::debug($this->_attributes);
+		}
 
 		$stmt = $this->getDbConnection()->prepare($sql);
 		

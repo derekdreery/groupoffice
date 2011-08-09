@@ -17,6 +17,8 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Return the permission level that a user has for this ACL.
 	 * 
+	 * @todo this query should be handled by GO_Base_Db_ActiveRecord::find()
+	 * 
 	 * @param int $userId
 	 * @param bool $checkGroupPermissionOnly
 	 * @return int Permission level. See constants in GO_Base_Model_Acl for values. 
@@ -82,7 +84,11 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 * @param int $level See constants in GO_Base_Model_Acl for values. 
 	 * @return bool True on success
 	 */
-	public function addGroup($groupId, $level) {
+	public function addGroup($groupId, $level=GO_Base_Model_Acl::READ_PERMISSION) {
+		
+		
+		if($groupId==GO::config()->group_root)
+			$level = GO_Base_Model_Acl::MANAGE_PERMISSION;
 		
 		$usersGroup = $this->hasGroup($groupId);
 		
@@ -100,6 +106,12 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		return $usersGroup->save();
 	}
 	
+	/**
+	 * Returns the links table model if the acl has the group
+	 * 
+	 * @param int $groupId
+	 * @return GO_Base_Model_AclUsersGroups 
+	 */
 	public function hasGroup($groupId){
 		return GO_Base_Model_AclUsersGroups::model()->findByPk(array(
 				'acl_id'=>$this->id,
@@ -108,6 +120,12 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 						));
 	}
 	
+	/**
+	 * Returns the links table model if the acl has the user
+	 * 
+	 * @param int $userId
+	 * @return GO_Base_Model_AclUsersGroups 
+	 */
 	public function hasUser($userId){
 		return GO_Base_Model_AclUsersGroups::model()->findByPk(array(
 				'acl_id'=>$this->id,
