@@ -57,11 +57,22 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 * @return bool True on success
 	 */
 	public function addUser($userId, $level=GO_Base_Model_Acl::READ_PERMISSION) {
+		
+		$usersGroup = $this->hasUser($userId);
+		
+		if($usersGroup){
+			$usersGroup->level=$level;			
+		}else
+		{		
+			$usersGroup = new GO_Base_Model_AclUsersGroups();
+			$usersGroup->acl_id = $this->id;
+			$usersGroup->group_id = 0;
+			$usersGroup->user_id = $userId;
+			$usersGroup->level = $level;
+		}
+		
+		return $usersGroup->save();
 
-		$sql = "REPLACE INTO go_acl (acl_id,user_id,level) " .
-						"VALUES ('" . intval($this->id) . "','" . intval($userId) . "','" . intval($level) . "')";
-		GO::debug($sql);
-		return $this->getDbConnection()->query($sql);
 	}
 
 	/**
@@ -72,9 +83,39 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 * @return bool True on success
 	 */
 	public function addGroup($groupId, $level) {
-		return $this->getDbConnection()->query("REPLACE INTO go_acl (acl_id,group_id,level) " .
-						"VALUES ('" . intval($this->id) . "','" . intval($groupId) . "','" . intval($level) . "')");
+		
+		$usersGroup = $this->hasGroup($groupId);
+		
+		if($usersGroup){
+			$usersGroup->level=$level;			
+		}else
+		{	
+			$usersGroup = new GO_Base_Model_AclUsersGroups();
+			$usersGroup->acl_id = $this->id;
+			$usersGroup->group_id = $groupId;
+			$usersGroup->user_id = 0;
+			$usersGroup->level = $level;
+		}
+		
+		return $usersGroup->save();
 	}
+	
+	public function hasGroup($groupId){
+		return GO_Base_Model_AclUsersGroups::model()->findByPk(array(
+				'acl_id'=>$this->id,
+				'group_id'=>$groupId,
+				'user_id'=>0
+						));
+	}
+	
+	public function hasUser($userId){
+		return GO_Base_Model_AclUsersGroups::model()->findByPk(array(
+				'acl_id'=>$this->id,
+				'group_id'=>0,
+				'user_id'=>$userId
+						));
+	}
+
 
 	/**
 	 * Remove a user from the ACL
@@ -83,8 +124,12 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 * @return bool 
 	 */
 	public function removeUser($userId) {
-		$sql = "DELETE FROM go_acl WHERE user_id=".intval($userId);
-		return $this->getDbConnection()->query($sql);
+		
+		$model = $this->hasUser($userId);
+		if($model)
+			return $model->delete();
+		else
+			return true;
 	}
 	
 	/**
@@ -94,8 +139,11 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 * @return bool 
 	 */
 	public function removeGroup($groupId) {
-		$sql = "DELETE FROM go_acl WHERE group_id=".intval($groupId);
-		return $this->getDbConnection()->query($sql);
+		$model = $this->hasGroup($groupId);
+		if($model)
+			return $model->delete();
+		else
+			return true;
 	}
 
 	protected function afterSave($wasNew) {

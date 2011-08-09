@@ -192,14 +192,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * @param int $primaryKey integer The primary key of the database table
 	 */
-	public function __construct(){			
+	public function __construct($newRecord=true){			
 		
 		$pk = $this->pk;
 		
 		$this->_setOldAttributes();		
 		
 		$this->_loadColumns();
-		$this->setIsNew(empty($pk));
+		$this->setIsNew($newRecord);
 		$this->init();
 	}
 	
@@ -738,7 +738,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 		
 		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
-		$result->setFetchMode(PDO::FETCH_CLASS, $this->className());
+		$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
     
     //TODO these values should be set on findByPk too.
     $result->model=$this;
@@ -827,7 +827,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 //			throw new AccessDeniedException();
 
 		//Use cache so identical findByPk calls are only executed once per script request
-		$cachedModel = !is_array($primaryKey) ? GO::modelCache()->get($this->className(), $primaryKey) : false;
+		$cachedModel =  GO::modelCache()->get($this->className(), $primaryKey);
 		if($cachedModel)
 			return $cachedModel;
 		
@@ -845,7 +845,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$result->model=$this;
     $result->findParams=$findParams;
   
-		$result->setFetchMode(PDO::FETCH_CLASS, $this->className());
+		$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
 		
 		$model =  $result->fetch();
     

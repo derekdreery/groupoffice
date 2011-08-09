@@ -41,6 +41,10 @@ class GO_Base_Model_ModelCache{
 	 * @param mixed $primaryKey 
 	 */
 	public function get($modelClassName, $primaryKey){
+		
+		if(is_array($primaryKey))
+			$primaryKey=implode('|', $primaryKey);
+		
 		return isset($this->_models[$modelClassName][$primaryKey]) ? $this->_models[$modelClassName][$primaryKey] : false;
 	}
 	
