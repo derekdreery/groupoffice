@@ -852,7 +852,7 @@ class cached_imap extends imap{
 			}
 			$message['html_body']=String::convert_html($message['html_body']);
 			$return['html_body_fetched']=true;
-		}
+		}		
 		if($html_body_requested){
 
 			if(empty($message['html_body'])){				

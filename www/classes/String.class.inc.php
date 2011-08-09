@@ -924,14 +924,16 @@ class String {
 		//remove strange white spaces in tags first
 		//sometimes things like this happen <style> </ style >
 		
-		$body_startpos = stripos($html, '<body');
-		$body_endpos = stripos($html, '</body');
-		if($body_startpos){
-			if($body_endpos)
-				$html = substr($html, $body_startpos, $body_endpos-$body_startpos);
-			else
-				$html = substr($html, $body_startpos);
-		}
+		//Unfortunately some mail clients put html outside the body tags :(
+		// so the next code block didn't work.
+//		$body_startpos = stripos($html, '<body');
+//		$body_endpos = stripos($html, '</body');
+//		if($body_startpos){
+//			if($body_endpos)
+//				$html = substr($html, $body_startpos, $body_endpos-$body_startpos);
+//			else
+//				$html = substr($html, $body_startpos);
+//		}
 		
 		$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u","</$1>", $html);
 		
@@ -967,6 +969,8 @@ class String {
 		"'<textarea[^>]*>.*?</textarea>'usi",
 		"'</form>'usi"
 		);
+		
+		//go_debug($html);
 
 		$html = preg_replace($to_removed_array, '', $html);
 		$html = String::xss_clean($html);
