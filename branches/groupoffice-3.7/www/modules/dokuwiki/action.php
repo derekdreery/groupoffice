@@ -16,10 +16,9 @@
 require_once("../../Group-Office.php");
 $GO_SECURITY->json_authenticate('dokuwiki');
 
-require_once ($GO_MODULES->modules['dokuwiki']['class_path']."dokuwiki.class.inc.php");
-//require_once ($GO_LANGUAGE->get_language_file('notes'));
+//require_once ($GO_MODULES->modules['dokuwiki']['class_path']."dokuwiki.class.inc.php");
 
-$dw = new dokuwiki();
+//$dw = new dokuwiki();
 
 try{
 	switch($_REQUEST['task'])
