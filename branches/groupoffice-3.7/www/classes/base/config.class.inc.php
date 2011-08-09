@@ -205,6 +205,15 @@ class GO_CONFIG {
 	 * @access  public
 	 */
 	var $allow_profile_edit = true;
+	
+	
+	/**
+	 * Set to true to show all user groups as recipients in the mail module.
+	 *
+	 * @var     bool
+	 * @access  public
+	 */
+	var $show_all_user_groups_in_mail = false;
 
 	/**
 	 * Enable user registration by everyone
