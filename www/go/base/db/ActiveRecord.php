@@ -20,6 +20,7 @@
  * @property GO_Base_Model_User $user If this model has a user_id field it will automatically create this property
  * @property GO_Base_Model_Acl $acl If this model has an acl ID configured {@link See GO_Base_Db_ActiveRecord::aclId} it will automatically create this property.
  * @property bool $joinAclField
+ * @property int/array Primary key value(s) for the model
  */
 
 abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
@@ -322,6 +323,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			foreach($this->primaryKey() as $field){
 				if(isset($this->_attributes[$field])){
 					$ret[$field]=$this->_attributes[$field];
+				}else
+				{
+					$ret[$field]=null;
 				}
 			}
 		}elseif(isset($this->_attributes[$this->primaryKey()]))
@@ -780,9 +784,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		if(!$primaryKey)
 			$primaryKey=$this->pk;
-		
 					
 		if(is_array($this->primaryKey())){
+			
+			if(!is_array($primaryKey)){
+				throw new Exception('Primary key should be an array for the model '.$this->className());
+			}
+			
 			$first = true;
 			foreach($primaryKey as $field=>$value){
 				$this->$field=$value;
@@ -790,6 +798,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					$sql .= ' AND ';
 				else
 					$first=false;
+				
+				if(!isset($this->columns[$field])){
+					throw new Exception($field.' not found in columns of '.$this->className());
+				}
 				
 				$sql .= "`".$field.'`='.$this->getDbConnection()->quote($value, $this->columns[$field]['type']);
 			}

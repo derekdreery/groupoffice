@@ -56,10 +56,12 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 * @param int $level See constants in GO_Base_Model_Acl for values. 
 	 * @return bool True on success
 	 */
-	public function addUser($userId, $level) {
+	public function addUser($userId, $level=GO_Base_Model_Acl::READ_PERMISSION) {
 
-		return $this->getDbConnection()->query("REPLACE INTO go_acl (acl_id,user_id,level) " .
-						"VALUES ('" . intval($this->id) . "','" . intval($userId) . "','" . intval($level) . "')");
+		$sql = "REPLACE INTO go_acl (acl_id,user_id,level) " .
+						"VALUES ('" . intval($this->id) . "','" . intval($userId) . "','" . intval($level) . "')";
+		GO::debug($sql);
+		return $this->getDbConnection()->query($sql);
 	}
 
 	/**

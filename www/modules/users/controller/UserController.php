@@ -9,7 +9,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		return $grid;
 	}
 
-	protected function afterSubmit() {
+	protected function afterSubmit(&$response, $user) {
 		if (isset($_POST['modules'])) {
 			$modules = json_decode($_POST['modules'], true);
 			$groupsMember = json_decode($_POST['group_member'], true);
@@ -19,6 +19,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 				
 				$mod = GO_Base_Model_Module::model()->findByPk($module['id']);
 				
+	
 				$level = 0;
 				if ($module['write_permission']) {
 					$level = GO_SECURITY::WRITE_PERMISSION;
@@ -27,32 +28,27 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 				}
 
 				if ($level) {
-					$mod->acl->addUser($this->model->id, $level);
+					$mod->acl->addUser($user->id, $level);
 				} else {
-					$mod->acl->removeUser($this->model->id);					
+					$mod->acl->removeUser($user->id);					
 				}
 			}
 
 			foreach ($groupsMember as $group) {
 				if ($group['id'] != GO::config()->group_everyone) {
 					if ($group['group_permission']) {						
-						GO_Base_Model_Group::model()->findByPk($group['id'])->addUser($this->model->id);
+						GO_Base_Model_Group::model()->findByPk($group['id'])->addUser($user->id);
 					} else {
-						GO_Base_Model_Group::model()->findByPk($group['id'])->removeUser($this->model->id);
+						GO_Base_Model_Group::model()->findByPk($group['id'])->removeUser($user->id);
 					}
 				}
 			}
 
-
-			foreach ($groupsVisible as $group) {
-				if ($group['visible_permission']) {
-					if (!$GO_SECURITY->group_in_acl($group['id'], $old_user['acl_id'])) {
-						$GO_SECURITY->add_group_to_acl($group['id'], $old_user['acl_id']);
-					}
+			foreach ($groupsVisible as $group) {				
+				if ($group['visible_permission']){
+					$user->acl->addUser($user->id);
 				} else {
-					if ($GO_SECURITY->group_in_acl($group['id'], $old_user['acl_id'])) {
-						$GO_SECURITY->delete_group_from_acl($group['id'], $old_user['acl_id']);
-					}
+					$user->acl->removeUser($user->id);					
 				}
 			}
 		}
