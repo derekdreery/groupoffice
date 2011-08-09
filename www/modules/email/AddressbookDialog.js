@@ -94,7 +94,8 @@ GO.email.AddressbookDialog = function(config) {
 	this.userGroupsStore = new GO.data.JsonStore({
 		url : GO.settings.modules.groups.url + 'non_admin_json.php',
 		baseParams : {
-			task : 'groups'
+			task : 'groups',
+			for_mail : 1
 		},
 		id : 'id',
 		root : 'results',

@@ -62,8 +62,12 @@ switch ($_POST['task'])
 		//$user_id = (!$GO_MODULES->modules['groups']['read_permission']) ? $GO_SECURITY->user_id : 0;
 		if(!empty($_POST['for_managing']))
 			$response['total'] = $GO_GROUPS->get_authorized_groups($GO_SECURITY->user_id, $start, $limit, $sort, $dir, $query);
-		else
-			$response['total'] = $GO_GROUPS->get_groups($GO_SECURITY->user_id, $start, $limit, $sort, $dir,$query);
+		else{
+			
+			$user_id = !empty($GO_CONFIG->show_all_user_groups_in_mail) && !empty($_POST['for_mail']) ? 0 : $GO_SECURITY->user_id;
+			
+			$response['total'] = $GO_GROUPS->get_groups($user_id, $start, $limit, $sort, $dir,$query);
+		}
 		
 		$response['results']=array();
 		while($GO_GROUPS->next_record())
