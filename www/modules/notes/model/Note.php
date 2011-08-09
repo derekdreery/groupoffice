@@ -58,7 +58,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 		);
 	}
 
-	protected function afterSave() {		
+	protected function afterSave($wasNew) {		
 
 		
 		
@@ -80,7 +80,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 			}
 		}
 
-		return parent::afterSave();
+		return parent::afterSave($wasNew);
 	}
 
 	/**

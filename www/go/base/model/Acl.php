@@ -96,12 +96,14 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		return $this->getDbConnection()->query($sql);
 	}
 
-	protected function afterSave() {
+	protected function afterSave($wasNew) {
 
-		$this->addGroup(GO::config()->group_root, GO_Base_Model_Acl::MANAGE_PERMISSION);
-		$this->addUser(GO::user() ? GO::user()->id : 1, GO_Base_Model_Acl::MANAGE_PERMISSION);
+		if($wasNew){
+			$this->addGroup(GO::config()->group_root, GO_Base_Model_Acl::MANAGE_PERMISSION);
+			$this->addUser(GO::user() ? GO::user()->id : 1, GO_Base_Model_Acl::MANAGE_PERMISSION);
+		}
 
-		return parent::afterSave();
+		return parent::afterSave($wasNew);
 	}
 
 	protected function afterDelete() {

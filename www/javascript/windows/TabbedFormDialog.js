@@ -98,6 +98,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		if(this._panels.length) {
 			this._tabPanel = new Ext.TabPanel({
 				activeTab: 0,
+				enableTabScroll:true,
 				deferredRender: false,
 				border: false,
 				anchor: '100% 100%',

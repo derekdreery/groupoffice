@@ -547,6 +547,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 //		if(!$this->_checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
 //			throw new AccessDeniedException ();
 		
+		GO::debug('ActiveRecord::find()');
+		GO::debug($params);
+		
 		
 		if(!isset($params['userId'])){			
 			$params['userId']=GO::user() ? GO::user()->id : 1;
@@ -727,9 +730,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
       }	
       $result->foundRows=$foundRows;
 		}
-    
-    
-		
 		
 		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
 		$result->setFetchMode(PDO::FETCH_CLASS, $this->className());
@@ -830,7 +830,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$result = $this->getDbConnection()->query($sql);
 		$result->model=$this;
     $result->findParams=$findParams;
-    
+  
 		$result->setFetchMode(PDO::FETCH_CLASS, $this->className());
 		
 		$model =  $result->fetch();
@@ -1153,7 +1153,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 
 			
+			
 			if($this->isNew){				
+				
+				$wasNew=true;
 				
 				if($this->aclField() && !$this->joinAclField && empty($this->{$this->aclField()})){
 					//generate acl id
@@ -1178,6 +1181,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					return false;
 			}else
 			{
+				$wasNew=false;
+				
 				if(!$this->beforeSave())
 					return false;
 				
@@ -1191,7 +1196,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				GO_Customfields_Controller_Item::saveCustomFields($this, $this->customfieldsModel());
 
 			
-			if(!$this->afterSave())
+			if(!$this->afterSave($wasNew))
 				return false;
 			
 			/**
@@ -1298,9 +1303,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	/**
 	 * May be overridden to do stuff after save
 	 * 
+	 * @var bool $wasNew True if the model was new before saving
 	 * @return boolean 
 	 */
-	protected function afterSave(){
+	protected function afterSave($wasNew){
 		return true;
 	}
 	
@@ -1578,8 +1584,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$model = $customFieldModelName::model()->findByPk($this->pk);
 			if(!$model){
 				//doesn't exist yet. Return a new one
-				$model = $customFieldModelName::model();
-				$model->link_id=$model->pk;
+				$model = new $customFieldModelName;
+				$model->link_id=$this->pk;
 			}
 			return $model;
 		}else

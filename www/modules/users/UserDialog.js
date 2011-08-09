@@ -24,34 +24,34 @@
 			
 		});
 		
-		this.tbar = [
-		this.linkBrowseButton = new Ext.Button({
-			iconCls: 'btn-link', 
-			cls: 'x-btn-text-icon', 
-			text: GO.lang.cmdBrowseLinks,
-			disabled:true,
-			handler: function(){
-				if(!GO.linkBrowser){
-					GO.linkBrowser = new GO.LinkBrowser();
-				}
-				GO.linkBrowser.show({link_id: this.user_id,link_type: "8",folder_id: "0"});				
-			},
-			scope: this
-		})];
-		
-		if(GO.files)
-		{		
-			this.tbar.push(this.fileBrowseButton = new Ext.Button({
-				iconCls: 'btn-files',
-				cls: 'x-btn-text-icon', 
-				text: GO.files.lang.files,
-				handler: function(){
-					GO.files.openFolder(this.files_folder_id);				
-				},
-				scope: this,
-				disabled: true
-			}));
-		}	
+//		this.tbar = [
+//		this.linkBrowseButton = new Ext.Button({
+//			iconCls: 'btn-link', 
+//			cls: 'x-btn-text-icon', 
+//			text: GO.lang.cmdBrowseLinks,
+//			disabled:true,
+//			handler: function(){
+//				if(!GO.linkBrowser){
+//					GO.linkBrowser = new GO.LinkBrowser();
+//				}
+//				GO.linkBrowser.show({link_id: this.user_id,link_type: "8",folder_id: "0"});				
+//			},
+//			scope: this
+//		})];
+//		
+//		if(GO.files)
+//		{		
+//			this.tbar.push(this.fileBrowseButton = new Ext.Button({
+//				iconCls: 'btn-files',
+//				cls: 'x-btn-text-icon', 
+//				text: GO.files.lang.files,
+//				handler: function(){
+//					GO.files.openFolder(this.files_folder_id);				
+//				},
+//				scope: this,
+//				disabled: true
+//			}));
+//		}	
 		
 		GO.users.UserDialog.superclass.initComponent.call(this);	
 	},
@@ -89,11 +89,11 @@
 
 		this.loginTab.setVisible(remoteModelId>0);
 		
-		this.linkBrowseButton.setDisabled(!remoteModelId);
-		if(GO.files)
-		{
-			this.fileBrowseButton.setDisabled(!remoteModelId);
-		}
+//		this.linkBrowseButton.setDisabled(!remoteModelId);
+//		if(GO.files)
+//		{
+//			this.fileBrowseButton.setDisabled(!remoteModelId);
+//		}
 
 		this.lookAndFeelTab.startModuleField.clearLastSearch();
 		this.lookAndFeelTab.modulesStore.baseParams.user_id=remoteModelId;

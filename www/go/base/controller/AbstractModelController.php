@@ -106,8 +106,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['data'] = $model->getAttributes();
 		
 		//todo custom fields should be in a subarray.
-		if(GO::user()->getModulePermissionLevel('customfields') && $model->customfieldRecord)
-			$response['data'] = array_merge($response['data'], $model->customfieldRecord->getAttributes());	
+		if(GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord)
+			$response['data'] = array_merge($response['data'], $model->customfieldsRecord->getAttributes());	
 						
 		$response['success'] = true;
 
