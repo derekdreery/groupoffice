@@ -37,8 +37,8 @@ class GO_Base_Model_UserGroup extends GO_Base_Db_ActiveRecord {
   public function relations() {
     
     return array(
-				'groups' => array('type'=>self::HAS_MANY, 'model'=>'GO_Base_Model_Group', 'field'=>'group_id', 'delete'=>true),
-        'users' => array('type'=>self::HAS_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'group_id', 'delete'=>true),
+				'groups' => array('type'=>self::HAS_MANY, 'model'=>'GO_Base_Model_Group', 'field'=>'group_id'),
+        'users' => array('type'=>self::HAS_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'group_id'),
     );
   }
 }

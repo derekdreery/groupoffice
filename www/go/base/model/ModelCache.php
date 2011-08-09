@@ -31,7 +31,15 @@ class GO_Base_Model_ModelCache{
 	 * @param mixed $model 
 	 */
 	public function add($modelClassName, $model){
-		$this->_models[$modelClassName][$model->pk]=$model;
+		
+		$this->_models[$modelClassName][$this->_formatPrimaryKey($model->pk)]=$model;
+	}
+	
+	private function _formatPrimaryKey($pk){
+		if(is_array($pk))
+			$pk=implode('|', $pk);
+		
+		return $pk;
 	}
 	
 	/**
@@ -41,10 +49,7 @@ class GO_Base_Model_ModelCache{
 	 * @param mixed $primaryKey 
 	 */
 	public function get($modelClassName, $primaryKey){
-		
-		if(is_array($primaryKey))
-			$primaryKey=implode('|', $primaryKey);
-		
+		$primaryKey=$this->_formatPrimaryKey($primaryKey);
 		return isset($this->_models[$modelClassName][$primaryKey]) ? $this->_models[$modelClassName][$primaryKey] : false;
 	}
 	
