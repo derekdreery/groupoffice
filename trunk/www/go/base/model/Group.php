@@ -55,7 +55,7 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
   }
 	
 	public function removeUser($user_id){
-		$model = GO_Base_Model_UserGroup::model()->findByPk($user_id);
+		$model = GO_Base_Model_UserGroup::model()->findByPk(array('user_id'=>$user_id, 'group_id'=>$this->pk));
 		if($model)
 			return $model->delete();
 		else
@@ -69,7 +69,7 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
    * @return GO_Base_Model_UserGroup or false 
    */
   public function hasUser($user_id){
-    return GO_Base_Model_UserGroup::model()->findByPk(array($user_id, $this->pk));
+    return GO_Base_Model_UserGroup::model()->findByPk(array('user_id'=>$user_id, 'group_id'=>$this->pk));
   }
   
 }

@@ -147,7 +147,7 @@ class GO_Base_Provider_Grid {
       if(isset($attributes['format'])){
         eval('$result='.$attributes['format'].';');
         $formattedRecord[$colName]=$result;
-      }else
+      }elseif(isset($array[$colName]))
         $formattedRecord[$colName]=$array[$colName];
     }
     
