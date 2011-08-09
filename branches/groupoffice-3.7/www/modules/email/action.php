@@ -1570,7 +1570,7 @@ try {
 			$total = count($uids);
 		}
 
-		$end_time = time() + 1;
+		$end_time = time() + 10;
 
 		$current_mailbox = '';
 		while ($uid = array_shift($uids)) {
