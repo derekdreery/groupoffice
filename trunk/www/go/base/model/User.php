@@ -1,4 +1,86 @@
 <?php
+/**
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ */
+
+/**
+ * The User model
+ * 
+ * @property int $id
+ * @property String $username
+ * @property String $password
+ * @property String $password_type
+ * @property Boolean $enabled
+ * @property String $first_name
+ * @property String $middle_name
+ * @property String $last_name
+ * @property String $initials
+ * @property String $title
+ * @property enum('M','F') $sex
+ * @property date $birthday
+ * @property String $email
+ * @property String $company
+ * @property String $department
+ * @property String $function
+ * @property String $home_phone
+ * @property String $work_phone
+ * @property String $fax
+ * @property String $cellular
+ * @property String $country
+ * @property String $state
+ * @property String $city
+ * @property String $zip
+ * @property String $address
+ * @property String $address_no
+ * @property String $homepage
+ * @property String $work_address
+ * @property String $work_address_no
+ * @property String $work_zip
+ * @property String $work_country
+ * @property String $work_state
+ * @property String $work_city
+ * @property String $work_fax
+ * @property int $acl_id
+ * @property String $date_format
+ * @property String $date_separator
+ * @property String $time_format
+ * @property String $thousands_separator
+ * @property String $decimal_separator
+ * @property String $currency
+ * @property int $logins
+ * @property int $lastlogin
+ * @property int $ctime
+ * @property int $max_rows_list
+ * @property String $timezone
+ * @property String $start_module
+ * @property String $language
+ * @property String $theme
+ * @property int $first_weekday
+ * @property String $sort_name
+ * @property String $bank
+ * @property String $bank_no
+ * @property int $mtime
+ * @property Boolean $mute_sound
+ * @property Boolean $mute_reminder_sound
+ * @property Boolean $mute_new_mail_sound
+ * @property Boolean $show_smilies
+ * @property String $list_separator
+ * @property String $text_separator
+ * @property int $files_folder_id
+ * @property int $mail_reminders
+ * @property int $popup_reminders
+ * @property int $contact_id
+ * @property String $cache
+ */
 
 class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 
