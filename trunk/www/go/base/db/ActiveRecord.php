@@ -17,6 +17,8 @@
  * 
  * All Group-Office models should extend this ActiveRecord class.
  * 
+ * @property GO_Base_Model_User $user If this model has a user_id field it will automatically create this property
+ * @property GO_Base_Model_Acl $acl If this model has an acl ID configured {@link See GO_Base_Db_ActiveRecord::aclId} it will automatically create this property.
  * @property bool $joinAclField
  */
 
@@ -1607,6 +1609,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		{
 			return false;
 		}
+	}
+	
+	/**
+	 * Get's the Acces Control List for this model if it has one.
+	 * 
+	 * @return GO_Base_Model_Acl 
+	 */
+	public function getAcl(){
+		$aclId = $this->findAclId();
+		if($aclId)
+			return GO_Base_Model_Acl::model()->findByPk($aclId);
+		else
+			return false;
 	}
 
 }
