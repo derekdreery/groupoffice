@@ -82,12 +82,8 @@ class auth_groupoffice extends auth_basic {
     global $USERINFO;
     global $conf;
     global $lang;
-    
-    
-    
-    
-    $sticky ? $sticky = true : $sticky = false; //sanity check
 
+    $sticky ? $sticky = true : $sticky = false; //sanity check
     
     if(isset($_COOKIE['groupoffice']))
     {
@@ -97,9 +93,13 @@ class auth_groupoffice extends auth_basic {
       $GO_SID=false;
     }
  
+   // var_dump($_SESSION['GO_SESSION']['GO_SID']);
+   // var_dump($GO_SID);
+    
     if(isset($_SESSION['GO_SESSION']['GO_SID']) && $_SESSION['GO_SESSION']['GO_SID']!=$GO_SID){
       //Group-Office session id changed. Someone else logged in.      
-      $this->logOff();
+      if(!$this->logOff())
+        throw new Exception('The GO session is not closed properly.');
     }
     
     if ($GO_SID && empty($_SESSION['GO_SESSION']['user_id'])) 

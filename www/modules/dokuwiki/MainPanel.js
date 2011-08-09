@@ -25,6 +25,7 @@ GO.dokuwiki.MainPanel = function(config){
 			cls: 'x-btn-text-icon',
 			text: GO.lang['cmdRefresh'],
 			handler:function(){
+        this.checkHost(GO.dokuwiki.settings.externalUrl);
         //GO.dokuwiki.iFrameComponent.setUrl(GO.settings.modules.dokuwiki.url);
 				GO.dokuwiki.iFrameComponent.setUrl(GO.dokuwiki.settings.externalUrl);
 			},
@@ -61,38 +62,31 @@ GO.dokuwiki.MainPanel = function(config){
 	config.items = [GO.dokuwiki.iFrameComponent];
 
 	config.title = GO.dokuwiki.settings.title;
+  
+  config.listeners={
+    scope:this,
+    render:function(){
+      this.checkHost(GO.dokuwiki.settings.externalUrl);
+    }
+  }
 
 	GO.dokuwiki.MainPanel.superclass.constructor.call(this, config);
 
 }
 
 Ext.extend(GO.dokuwiki.MainPanel, Ext.Panel,{
-
-//	beforeRender : function() {
-//		Ext.Ajax.request({
-//			url: GO.settings.modules.dokuwiki.url + 'json.php',
-//			params: {
-//				task: 'load_settings'
-//			},
-//			scope: this,
-//			success: function(response,options) {
-//				var responseParams = Ext.decode(response.responseText);
-//				if (responseParams.success) 
-//        {
-//					GO.dokuwiki.settings.externalUrl = responseParams.data.external_url;
-//					//GO.dokuwiki.iFrameComponent.setUrl(GO.dokuwiki.settings.external_url);
-//          GO.dokuwiki.iFrameComponent.setUrl(GO.settings.modules.dokuwiki.url+'redirect.php');
-//					GO.dokuwiki.settings.title = responseParams.data.title;
-//					this.title = responseParams.title;
-//				} 
-//        else 
-//        {
-//					Ext.Msg.alert(GO.lang['strError'], responseParams.feedback);
-//				}
-//			}
-//		})
-//	}
-
+  checkHost : function(wikiurl) {
+    godomain = window.location.hostname;
+    wikidomain = wikiurl.match(/:\/\/(www\.)?(.[^/:]+)/)[2];
+    
+    if(godomain != wikidomain)
+      Ext.MessageBox.show({
+        title:'Wrong Domain',
+        msg:"Login and Logout functions will not work properly because Dokuwiki is on a different domain than Group-Office.<br /><br />Group-Office Domain: " + godomain + "<br />Dokuwiki Domain: " + wikidomain,
+        buttons: Ext.Msg.OK,
+        icon: Ext.MessageBox.ERROR
+      });
+  }
 });
 
 GO.moduleManager.addModule('dokuwiki', GO.dokuwiki.MainPanel, {
