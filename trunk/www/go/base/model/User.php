@@ -189,12 +189,15 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	protected function buildFilesPath() {
 		return 'users/'.$this->username;
 	}
+	
+	
 
 	public function afterSave($wasNew) {
 
 		if($wasNew){
 			$everyoneGroup = GO_Base_Model_Group::model()->findByPk(GO::config()->group_everyone);		
 			$everyoneGroup->addUser($this->id);
+			
 		}	
 
 		return parent::afterSave($wasNew);
