@@ -44,9 +44,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		else
 			$model = new $modelName;
 
-		$model->setAttributes($_POST);
-
 		$this->beforeSubmit($response, $model);
+		
+		$model->setAttributes($_POST);
 
 		$response['success'] = $model->save();
 
