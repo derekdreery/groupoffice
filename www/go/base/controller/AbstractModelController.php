@@ -188,11 +188,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
    * The default grid action for the current model.
    */
   public function actionGrid(){
-    $modelName = $this->model;
-  
-    $stmt = $modelName::model()->find($this->getGridParams());
-    $grid = new GO_Base_Provider_Grid($stmt,$this->getGridColumnModel());
-    $this->prepareGrid($grid);
+    $modelName = $this->model;  
+    
+    $grid = new GO_Base_Provider_Grid($this->getGridColumnModel());		    
+		$grid->processDeleteActions($modelName);
+		$grid->setStatement($modelName::model()->find($this->getGridParams()));
+		$this->prepareGrid($grid);
     $this->output($grid->getData());
   }	
 

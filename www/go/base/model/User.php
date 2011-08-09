@@ -202,6 +202,23 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 
 		return parent::afterSave($wasNew);
 	}
+	
+	protected function afterDelete() {
+		
+		
+		//delete all acl records
+		$stmt = GO_Base_Model_AclUsersGroups::model()->find(array(
+				"by"=>array(array('user_id',$this->id))
+		));
+		
+		while($r = $stmt->fetch())
+			$r->delete();
+		
+		
+		return parent::afterDelete();
+	}
+		
+	
 
 	/**
 	 *

@@ -8,6 +8,38 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		$grid->formatColumn('name', '$model->name');
 		return $grid;
 	}
+	
+	private function _getRegisterEmail(){
+		$r=array(
+			'register_email_subject' => GO::config()->get_setting('register_email_subject'),
+			'register_email_body' => GO::config()->get_setting('register_email_body')
+		);
+		
+		if(!$r['register_email_subject']){
+			$r['register_email_subject']=GO::t('register_email_subject','users');
+		}
+		if(!$r['register_email_body']){
+			$r['register_email_body']=GO::t('register_email_body','users');
+		}
+		return $r;
+	}
+	
+	protected function beforeSubmit(&$response, &$model) {
+		
+		if (!empty($_POST["password1"]) || !empty($_POST["password2"]))
+		{
+			if($_POST["password1"] != $_POST["password2"])
+			{
+				throw new Exception(GO::t('error_match_pass','users'));
+			}
+			if(!empty($_POST["password2"]))
+			{				
+				$model->setAttribute('password', $_POST['password2']);
+			}
+		}
+		
+		return parent::beforeSubmit($response, $model);
+	}
 
 	protected function afterSubmit(&$response, $user) {
 		if (isset($_POST['modules'])) {
@@ -15,6 +47,9 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			$groupsMember = json_decode($_POST['group_member'], true);
 			$groupsVisible = json_decode($_POST['groups_visible'], true);
 
+			/**
+			 * Process selected module permissions
+			 */
 			foreach ($modules as $module) {
 				
 				$mod = GO_Base_Model_Module::model()->findByPk($module['id']);
@@ -33,7 +68,11 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 					$mod->acl->removeUser($user->id);					
 				}
 			}
-
+			
+			
+			/**
+			 * User will be member of the selected groups
+			 */
 			foreach ($groupsMember as $group) {
 				if ($group['id'] != GO::config()->group_everyone) {
 					if ($group['group_permission']) {						
@@ -43,13 +82,39 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 					}
 				}
 			}
-
+			
+			
+			/**
+			 * User will be visible to the selected groups
+			 */
 			foreach ($groupsVisible as $group) {				
 				if ($group['visible_permission']){
-					$user->acl->addUser($user->id);
+					$user->acl->addGroup($group['id']);
 				} else {
-					$user->acl->removeUser($user->id);					
+					$user->acl->removeGroup($group['id']);					
 				}
+			}
+		}
+		
+		
+		
+		if (!empty($_POST['send_invitation'])) {
+
+			$email = $this->_getRegisterEmail();
+
+			if (!empty($email['register_email_body']) && !empty($email['register_email_subject'])) {
+				$swift = new GO_Base_Mail_Swift($user->email, $email['register_email_subject']);
+				foreach ($user->getAttributes() as $key => $value) {
+					$email['register_email_body'] = str_replace('{' . $key . '}', $value, $email['register_email_body']);
+				}
+
+				$email['register_email_body'] = str_replace('{url}', GO::config()->full_url, $email['register_email_body']);
+				$email['register_email_body'] = str_replace('{title}', GO::config()->title, $email['register_email_body']);
+				$email['register_email_body'] = str_replace('{password}', $_POST["password1"], $email['register_email_body']);
+
+				$swift->set_body($email['register_email_body'], 'plain');
+				$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
+				$swift->sendmail();
 			}
 		}
 	}
