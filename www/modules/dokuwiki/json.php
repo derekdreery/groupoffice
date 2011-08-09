@@ -15,8 +15,8 @@ require('../../Group-Office.php');
 
 $GO_SECURITY->json_authenticate('dokuwiki');
 
-require_once($GO_MODULES->modules['dokuwiki']['class_path'].'dokuwiki.class.inc.php');
-$mw = new dokuwiki();
+//require_once($GO_MODULES->modules['dokuwiki']['class_path'].'dokuwiki.class.inc.php');
+//$dw = new dokuwiki();
 
 $task=isset($_REQUEST['task']) ? ($_REQUEST['task']) : '';
 
