@@ -1259,7 +1259,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 			$model =GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkType()));
 			if(!$model)
-				$model = GO_Base_Model_SearchCacheRecord::model();
+				$model = new GO_Base_Model_SearchCacheRecord();
 			
 			//GO::debug($model);
 
@@ -1277,7 +1277,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				'acl_id'=>$this->findAclId()
 			);
 			
+			
+			
 			$attr = array_merge($autoAttr, $attr);
+			
+			GO::debug($attr);
 
 			$model->setAttributes($attr);
 			return $model->save();
