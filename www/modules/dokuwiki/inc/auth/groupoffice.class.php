@@ -38,7 +38,8 @@ class auth_groupoffice extends auth_basic {
         break;
       case 'UserMod':
         // can at least anything be changed?
-        return ( $this->cando['modPass']   ||
+        return ( $this->cando['getGroups'] || 
+                 $this->cando['modPass']   ||
                  $this->cando['modName']   ||
                  $this->cando['modMail']   ||
                  $this->cando['modLogin']  ||
@@ -92,9 +93,9 @@ class auth_groupoffice extends auth_basic {
     {
       $GO_SID=false;
     }
- 
-   // var_dump($_SESSION['GO_SESSION']['GO_SID']);
-   // var_dump($GO_SID);
+
+//    var_dump($_SESSION['GO_SESSION']['GO_SID']);
+//    var_dump($GO_SID);
     
     if(isset($_SESSION['GO_SESSION']['GO_SID']) && $_SESSION['GO_SESSION']['GO_SID']!=$GO_SID){
       //Group-Office session id changed. Someone else logged in.      
@@ -119,7 +120,9 @@ class auth_groupoffice extends auth_basic {
     {           
       $USERINFO['name'] = $_SESSION['GO_SESSION']['name'];
       $USERINFO['mail'] = $_SESSION['GO_SESSION']['email'];
-      //$USERINFO['grps'] = array('admin', 'groep1');
+      
+      $USERINFO['grps'] = $this->getGroups($_SESSION['GO_SESSION']['user_id']);
+            
       $_SERVER['REMOTE_USER'] = $_SESSION['GO_SESSION']['username'];
       $_SESSION[DOKU_COOKIE]['auth']['user'] = $_SESSION['GO_SESSION']['username'];
       $_SESSION[DOKU_COOKIE]['auth']['pass'] = $pass;
@@ -138,6 +141,18 @@ class auth_groupoffice extends auth_basic {
     }
   }
   
+//  /**
+//   * Retrieve groups [implement only where required/possible]
+//   *
+//   * Set getGroups capability when implemented
+//   *
+//   * @author  Chris Smith <chris@jalakai.co.uk>
+//   * @return  array
+//   */
+//  function retrieveGroups($start=0,$limit=0) {
+//    return $this->getGroups($_SESSION['GO_SESSION']['user_id']);
+//  }
+
   /**
    * Log out
    * 
@@ -186,10 +201,12 @@ class auth_groupoffice extends auth_basic {
       return false;
     
     $this->checkRights();
-    
+        
     $USERINFO['name'] = $_SESSION['GO_SESSION']['name'];
     $USERINFO['mail'] = $_SESSION['GO_SESSION']['email'];
-    //$USERINFO['grps'] = array('admin', 'groep1');
+
+    $USERINFO['grps'] = $this->getGroups($_SESSION['GO_SESSION']['user_id']);
+
     $_SERVER['REMOTE_USER'] = $_SESSION['GO_SESSION']['username'];
     $_SESSION[DOKU_COOKIE]['auth']['user'] = $_SESSION['GO_SESSION']['username'];
     $_SESSION[DOKU_COOKIE]['auth']['pass'] = $pass;
@@ -198,7 +215,7 @@ class auth_groupoffice extends auth_basic {
   }  
     
   /**
-   * Check wich rights the user has.
+   * Check which rights the user has.
    * 
    * @global type $GO_MODULES 
    */
@@ -211,6 +228,26 @@ class auth_groupoffice extends auth_basic {
     else
       $this->canDo('Profile');
   }
+  
+  /**
+   *
+   * @global GO_CONFIG $conf
+   * @param int $usr_id
+   * @return array groupnames  
+   */
+  function getGroups($usr_id)
+  {
+    global $conf, $GO_CONFIG;
+    require_once($conf['GO_php']);
+    
+    require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
+    $groups = new GO_GROUPS();
+    
+    $groupnames = $groups->get_groupnames_by_user($usr_id);
+   
+    return $groupnames;
+  }
+  
   
   /**
    * Unserialize the Group-Office session
