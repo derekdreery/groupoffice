@@ -2072,7 +2072,7 @@ class calendar extends db {
 		
 		$event['sequence'] = (isset($object['SEQUENCE']['value']) && $object['SEQUENCE']['value'] != '') ? trim($object['SEQUENCE']['value']) : 0;
 
-		$event['name'] = (isset($object['SUMMARY']['value']) && $object['SUMMARY']['value'] != '') ? trim($object['SUMMARY']['value']) : 'Unnamed';
+		$event['name'] = (isset($object['SUMMARY']['value']) && $object['SUMMARY']['value'] != '') ? trim($object['SUMMARY']['value']) : '';
 		if(isset($object['SUMMARY']['params']['ENCODING']) && $object['SUMMARY']['params']['ENCODING'] == 'QUOTED-PRINTABLE') {
 			$event['name'] = quoted_printable_decode($event['name']);
 		}
@@ -2081,6 +2081,12 @@ class calendar extends db {
 		if(isset($object['DESCRIPTION']['params']['ENCODING']) && $object['DESCRIPTION']['params']['ENCODING'] == 'QUOTED-PRINTABLE') {
 			$event['description'] = String::trim_lines(quoted_printable_decode($event['description']));
 		}
+		
+		if(empty($event['name']))
+		{
+			$event['name']=!empty($event['description']) ? substr($event['description'],0,100) : 'Unnamed';
+		}
+
 		$event['location'] = isset($object['LOCATION']['value']) ? trim($object['LOCATION']['value']) : '';
 		if(isset($object['LOCATION']['params']['ENCODING']) && $object['LOCATION']['params']['ENCODING'] == 'QUOTED-PRINTABLE') {
 			$event['location'] = quoted_printable_decode($event['location']);
@@ -2209,6 +2215,41 @@ class calendar extends db {
 			if (!empty($object['RRULE']['value']) && $rrule = $this->ical2array->parse_rrule($object['RRULE']['value'])) {
 
 				$event['rrule'] = 'RRULE:'.$object['RRULE']['value'];
+				
+
+				if(isset($rrule['BYDAY'])) {
+
+					$month_time=1;
+					if($rrule['FREQ']=='MONTHLY') {
+						if(!isset($rrule['BYSETPOS'])){
+							$month_time = $rrule['BYDAY'][0];
+							$day = substr($rrule['BYDAY'], 1);
+						}else
+						{
+							$month_time = $rrule['BYSETPOS'];
+							$day = $rrule['BYDAY'];
+						}
+						$days_arr =array($day);
+					}else {
+						$days_arr = explode(',', $rrule['BYDAY']);
+					}
+
+					$days['sun'] = in_array('SU', $days_arr) ? '1' : '0';
+					$days['mon'] = in_array('MO', $days_arr) ? '1' : '0';
+					$days['tue'] = in_array('TU', $days_arr) ? '1' : '0';
+					$days['wed'] = in_array('WE', $days_arr) ? '1' : '0';
+					$days['thu'] = in_array('TH', $days_arr) ? '1' : '0';
+					$days['fri'] = in_array('FR', $days_arr) ? '1' : '0';
+					$days['sat'] = in_array('SA', $days_arr) ? '1' : '0';
+
+
+					$days=Date::shift_days_to_gmt($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
+
+					
+				}
+				
+				
+				
 				if (isset($rrule['UNTIL'])) {
 					if($event['repeat_end_time'] = $this->ical2array->parse_date($rrule['UNTIL'])) {
 						$event['repeat_end_time'] = mktime(0,0,0, date('n', $event['repeat_end_time']), date('j', $event['repeat_end_time'])+1, date('Y', $event['repeat_end_time']));
@@ -2229,32 +2270,13 @@ class calendar extends db {
 					}
 					
 				}
-
-				if(isset($rrule['BYDAY'])) {
-
-					$month_time=1;
-					if($rrule['FREQ']=='MONTHLY') {
-						$month_time = $rrule['BYDAY'][0];
-						$day = substr($rrule['BYDAY'], 1);
-						$days_arr =array($day);
-					}else {
-						$days_arr = explode(',', $rrule['BYDAY']);
-					}
-
-					$days['sun'] = in_array('SU', $days_arr) ? '1' : '0';
-					$days['mon'] = in_array('MO', $days_arr) ? '1' : '0';
-					$days['tue'] = in_array('TU', $days_arr) ? '1' : '0';
-					$days['wed'] = in_array('WE', $days_arr) ? '1' : '0';
-					$days['thu'] = in_array('TH', $days_arr) ? '1' : '0';
-					$days['fri'] = in_array('FR', $days_arr) ? '1' : '0';
-					$days['sat'] = in_array('SA', $days_arr) ? '1' : '0';
-
-
-					$days=Date::shift_days_to_gmt($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
-
+				
+				if(isset($rrule['BYDAY'])) 
 					$event['rrule']=Date::build_rrule(Date::ical_freq_to_repeat_type($rrule), $rrule['INTERVAL'], $event['repeat_end_time'], $days, $month_time);
-				}
 			}
+			
+			
+			
 
 
 
@@ -2270,7 +2292,9 @@ class calendar extends db {
 			}
 
 			
+			
 		
+
 			return $event;
 		}
 		return false;
