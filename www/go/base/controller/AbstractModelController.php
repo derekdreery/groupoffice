@@ -159,7 +159,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @return array parameters for the GO_Base_Db_ActiveRecord->find() function 
 	 */
 	protected function getGridParams() {
-		return GO_Base_Provider_Grid::getDefaultParams();
+		return array();
 	}
 
 	/**
@@ -192,7 +192,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
     
     $grid = new GO_Base_Provider_Grid($this->getGridColumnModel());		    
 		$grid->processDeleteActions($modelName);
-		$grid->setStatement($modelName::model()->find($this->getGridParams()));
+
+		$gridParams = array_merge(GO_Base_Provider_Grid::getDefaultParams(),$this->getGridParams());
+
+		$grid->setStatement($modelName::model()->find($gridParams));
 		$this->prepareGrid($grid);
     $this->output($grid->getData());
   }	
