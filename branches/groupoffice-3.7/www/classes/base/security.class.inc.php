@@ -667,7 +667,7 @@ class GO_SECURITY extends db {
 	 * @access public
 	 * @return void
 	 */
-	function copy_acl($sAcl, $dAcl=0) {
+	function copy_acl($sAcl, $dAcl=0, $level=0) {
 		global $GO_CONFIG;
 
 		if($dAcl > 0) {
@@ -676,7 +676,7 @@ class GO_SECURITY extends db {
 			$dAcl = $this->get_new_acl();
 		}
 
-		$sql = "SELECT * FROM go_acl WHERE acl_id='$sAcl'";
+		$sql = "SELECT * FROM go_acl WHERE acl_id='$sAcl' AND level>=".intval($level);
 
 		$security = new GO_SECURITY();
 		$this->query($sql);
