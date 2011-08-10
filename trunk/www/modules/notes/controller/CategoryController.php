@@ -3,22 +3,25 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 	
 	protected $model = 'GO_Notes_Model_Category';
 	
-	private $selectedCategories;
+	public $selectedCategories;
 	
 	protected function getGridParams(){
 		
 		$this->selectedCategories = GO::config()->get_setting('notes_categories_filter', GO::session()->values['user_id']);
 		$this->selectedCategories  = $this->selectedCategories ? explode(',',$this->selectedCategories) : array();
-		
+
 		return array();
 	}
 	
-	protected function formatModelForGrid($record, $model) {
+	protected function prepareGrid($grid){
 		
-		$record['checked'] = in_array($record['id'], $this->selectedCategories);
-		$record['user_name']=$model->user->name;
-		return $record;
-	}	
+		$grid->addFormatVariable('controller', $this);
+	
+    $grid->formatColumn('user_name','$model->user->name');
+		$grid->formatColumn('checked','in_array($model->id, $controller->selectedCategories)');
+    return $grid;
+  }
+
 	
 	/**
 	 * List all fields that require a remote text to load for a remote combobox.

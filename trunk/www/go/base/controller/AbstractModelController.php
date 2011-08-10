@@ -187,7 +187,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
   /**
    * The default grid action for the current model.
    */
-  public function actionGrid(){
+  public function actionGrid(){	
     $modelName = $this->model;  
     
     $grid = new GO_Base_Provider_Grid($this->getGridColumnModel());		    
