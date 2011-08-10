@@ -323,9 +323,17 @@ class Date {
 					}
 					
 					//Maybe more efficient to jump to right week first....
+					
+					
+					if(!isset($rrule['BYSETPOS'])){
+						$event['month_time'] = $rrule['BYDAY'][0];
+						$day = substr($rrule['BYDAY'], 1);
+					}else
+					{
+						$event['month_time'] = $rrule['BYSETPOS'];
+						$day = $rrule['BYDAY'];
+					}
 
-					$event['month_time'] = $rrule['BYDAY'][0];
-					$day = substr($rrule['BYDAY'], 1);
 						
 					$days = Date::byday_to_days($day);
 
