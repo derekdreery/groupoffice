@@ -19,12 +19,11 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 		//todo category acl's should be checked for read permission here.
    
 
-    return array_merge(parent::getGridParams(),array(
-				'ignoreAcl'=>true,
-				'joinCustomFields'=>true,
-				'by'=>array(array('category_id', $categories, 'IN'))
-				));
-    
+            return array(
+                'ignoreAcl'=>true,
+                'joinCustomFields'=>true,
+                'by'=>array(array('category_id', $categories, 'IN'))
+            );
 	}
   
   protected function prepareGrid($grid){
