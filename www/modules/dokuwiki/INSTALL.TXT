@@ -20,3 +20,13 @@ Now login to Group-Office, go to the Dokuwiki tab and click on "Settings".
 Set the correct url and title for Dokuwiki and click on "Ok". (example url: http://localhost/dokuwiki)
 
 Now Dokuwiki should be accessable through Group-Office.
+
+
+===================================================================
+You may want to disable the login/logout button from DokuWiki.
+
+This can be done by editing the file main.php of the DokuWiki template. Remove this line:
+
+<?php tpl_button('login')?>
+
+===================================================================
