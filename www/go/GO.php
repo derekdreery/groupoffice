@@ -30,7 +30,7 @@ class GO{
 	private static $_modelCache;
 	
 	/**
-	 * Get's the global database connection object.
+	 * Gets the global database connection object.
 	 * 
 	 * @return PDO Database connection object
 	 */
@@ -143,8 +143,10 @@ class GO{
 	public static function autoload($className) {
 
 		$orgClassName = $className;
-		
-		if(substr($className,0,7)=='GO_Base'){		
+
+		$forGO = substr($className,0,3)=='GO_';
+
+		if(substr($className,0,7)=='GO_Base'){
 			$arr = explode('_', $className);		
 			$file = array_pop($arr).'.php';		
 			
@@ -157,13 +159,13 @@ class GO{
 
 			if(isset(self::$_classes[$className])){
 				require_once(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
-			}else
+			}elseif ($forGO)
 			{
 				$arr = explode('_', $className);
 
 				$module = strtolower(array_shift($arr));
 				
-				
+
 				
 				
 
