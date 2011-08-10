@@ -17,7 +17,7 @@ class auth_groupoffice extends auth_basic {
   function auth_groupoffice()
   {
     $this->cando['external'] = true;
-    $this->cando['logoff'] = true;
+    $this->cando['logoff'] = false;
     $this->success = true;
   }
 
@@ -97,7 +97,7 @@ class auth_groupoffice extends auth_basic {
 //    var_dump($_SESSION['GO_SESSION']['GO_SID']);
 //    var_dump($GO_SID);
     
-    if(isset($_SESSION['GO_SESSION']['GO_SID']) && $_SESSION['GO_SESSION']['GO_SID']!=$GO_SID){
+    if(!isset($_SESSION['GO_SESSION']['GO_SID']) || $_SESSION['GO_SESSION']['GO_SID']!=$GO_SID){
       //Group-Office session id changed. Someone else logged in.      
       if(!$this->logOff())
         throw new Exception('The GO session is not closed properly.');
@@ -162,6 +162,7 @@ class auth_groupoffice extends auth_basic {
   {
     unset($_SESSION[DOKU_COOKIE]);
     unset($_SESSION['GO_SESSION']);
+    //session_destroy();
     return true;
   }
   
@@ -181,8 +182,8 @@ class auth_groupoffice extends auth_basic {
   {
     global $conf, $GO_EVENTS,$USERINFO,$GO_SECURITY;
     define('GO_NO_SESSION', true);
-    unset($_SESSION['GO_SESSION']['config_file']);
-    $_SESSION['GO_SESSION']['config_file'] = $conf['GO_root'].'config.php';
+    //unset($_SESSION['GO_SESSION']['config_file']);
+    //$_SESSION['GO_SESSION']['config_file'] = $conf['GO_root'].'config.php';
     require_once($conf['GO_php']);
     
     require_once($GO_CONFIG->class_path.'base/events.class.inc.php');
