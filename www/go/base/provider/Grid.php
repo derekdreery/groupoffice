@@ -23,6 +23,8 @@ class GO_Base_Provider_Grid {
   private $_relation;
 	
 	private $_response;
+	
+	private $_formatVariables=array();
 
   /**
    * See function formatColumn for a detailed description about how to use the format parameter.
@@ -106,6 +108,22 @@ class GO_Base_Provider_Grid {
 
     $this->_columns[$column]['format'] = $format;
   }
+	
+	/**
+	 * Add variables so you can use them in the format of a column {@see GO_Base_Provider_Grid::formatColumn()}
+	 * 
+	 * eg. do this in a controller:
+	 * 
+	 * $grid->addFormatVariable('controller', $this);
+	 * 
+	 * Then you can user '$controller->aControllerProperty' in the column format.
+	 * 
+	 * @param string $name
+	 * @param mixed $variable 
+	 */
+	public function addFormatVariable($name, $variable){
+		$this->_formatVariables[$name]=$variable;
+	}
 
   
   /**
@@ -154,6 +172,11 @@ class GO_Base_Provider_Grid {
      * 'format'=>'$name'
      */
     extract($array);
+		
+		/**
+		 * See addFormatVariable for more info.
+		 */
+		extract($this->_formatVariables);
     
     $formattedRecord = array();
     foreach($this->_columns as $colName=>$attributes)
