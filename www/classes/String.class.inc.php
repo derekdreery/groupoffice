@@ -529,8 +529,7 @@ class String {
 	public static function get_email_validation_regex() {
 		return "/^[a-z0-9\._\-+]+@[a-z0-9\.\-_]+\.[a-z]{2,6}$/i";
 	}
-
-
+  
 	/**
 	 * Check if an email adress is in a valid format
 	 *
@@ -874,7 +873,8 @@ class String {
         if($html)
           $string = String::html_replace($emoticon, $imgstring, $string);
         else
-          $string = str_ireplace($emoticon, $imgstring, $string);
+          $string = preg_replace('/([^a-z0-9])'.preg_quote($emoticon).'([^a-z0-9])/i',"\\1".$imgstring."\\2", $string);
+          
       }
 
     }
@@ -885,7 +885,9 @@ class String {
 
   public static function html_replace($search, $replacement, $html){
     $html = preg_replace_callback('/<[^>]*('.preg_quote($search).')[^>]*>/uis',array('String', '_replace_in_tags'), $html);
-    $html = str_ireplace($search, $replacement, $html);
+    $html = preg_replace('/([^a-z0-9])'.preg_quote($search).'([^a-z0-9])/i',"\\1".$replacement."\\2", $html);
+    
+    //$html = str_ireplace($search, $replacement, $html);
     return str_replace('{TEMP}', $search, $html);
   }
 
