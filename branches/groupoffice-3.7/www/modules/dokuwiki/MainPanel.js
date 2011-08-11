@@ -91,5 +91,5 @@ Ext.extend(GO.dokuwiki.MainPanel, Ext.Panel,{
 
 GO.moduleManager.addModule('dokuwiki', GO.dokuwiki.MainPanel, {
 	title : GO.dokuwiki.settings.title,
-	iconCls : 'go-tab-icon-tasks'
+	iconCls : 'go-tab-icon-dokuwiki'
 });
