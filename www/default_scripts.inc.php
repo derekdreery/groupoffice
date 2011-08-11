@@ -36,9 +36,7 @@ $scripts[]=$root_uri.'javascript/namespaces.js';
 	GO.settings=<?php echo json_encode($GLOBALS['GO_CONFIG']->get_client_settings()); ?>;
 	GO.calltoTemplate = '<?php echo $GLOBALS['GO_CONFIG']->callto_template; ?>';
 	
-	GO.url = function(relativeUrl){
-		return BaseHref+'router.php?r='+relativeUrl
-	}
+	
 	
 	GO.permissionLevels={
 		read:1,

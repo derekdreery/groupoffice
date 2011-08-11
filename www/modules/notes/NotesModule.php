@@ -1,8 +1,10 @@
 <?php
+
 class GO_Notes_NotesModule extends GO_Base_Model_Module{
 	
-	public function initListeners(){
-		GO_Core_Controller_Core::addListener('loadapplication', 'GO_Notes_NotesModule', 'loadApplication');
+	public static function initListeners(){		
+		GO_Base_Model_User::addListener('save', 'GO_Notes_NotesModule', 'saveUser');
+		GO_Base_Model_User::addListener('delete', 'GO_Notes_NotesModule', 'deleteUser');		
 	}	
 	
 	/**
@@ -12,13 +14,36 @@ class GO_Notes_NotesModule extends GO_Base_Model_Module{
 	 * is created for this user.
 	 * 
 	 */
-	public function loadApplication(){	
+	public static function firstRun(){
+		parent::firstRun();
+		self::createDefaultNoteCategory(GO::user()->id);	
+	}
+	
+	
+
+	
+	
+	
+	
+	
+	public static function saveUser($user){
+		self::createDefaultNoteCategory($user->id);	
+	}
+	
+	public static function deleteUser($user){
+		$stmt = GO_Notes_Model_Category::model()->find(array(
+				'by'=>array(array('user_id', $user->id)),
+				'ignoreAcl'=>true
+				));
 		
-		$userId = GO::user()->id;
-		
+		$stmt->callOnEach('delete');
+	}
+	
+	
+	public static function createDefaultNoteCategory($userId){
 		$category = GO_Notes_Model_Category::model()->findSingleByAttribute('user_id', $userId);
 		if (!$category){
-			$category = GO_Notes_Model_Category::model();
+			$category = new GO_Notes_Model_Category();
 			
 			$user = GO_Base_Model_User::model()->findByPk($userId);
 			

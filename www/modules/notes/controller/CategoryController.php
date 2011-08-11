@@ -14,7 +14,7 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	protected function prepareGrid(GO_Base_Provider_Grid $grid){
-    $grid->formatColumn('user_name','$model->user->name');
+    $grid->formatColumn('user_name','$model->user ? $model->user->name : 0');
 		$grid->formatColumn('checked','in_array($model->id, $controller->selectedCategories)', array('controller'=>$this));
     return $grid;
   }
@@ -40,8 +40,8 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 			'user_id'=>array('user','name')
 	);
 	
-	public function actionTest(){
-		$model = GO_Notes_Model_Category::model()->findByPk($_REQUEST['id']);
+	public function actionTest($params){
+		$model = GO_Notes_Model_Category::model()->findByPk($params['id']);
 	
 		$stmt = $model->notes;
 		
