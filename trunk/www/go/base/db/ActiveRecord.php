@@ -615,46 +615,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$sql .= 'WHERE 1 ';
 		}
     	
-		if(!empty($params['criteriaSql']))
-			$sql .= $params['criteriaSql'];
+//		if(!empty($params['criteriaSql']))
+//			$sql .= $params['criteriaSql'];
 		
-		if(!empty($params['by'])){
-
-			if(!isset($params['byOperator']))
-				$params['byOperator']='AND';
-
-			$first=true;
-			$sql .= 'AND (';
-			foreach($params['by'] as $arr){
-				
-				$field = $arr[0];
-				$value= $arr[1];
-				$comparator=isset($arr[2]) ? $arr[2] : '=';
-
-				if($first)
-				{
-					$first=false;
-				}else
-				{
-					$sql .= $params['byOperator'].' ';
-				}
-				
-				if($comparator=='IN'){
-					for($i=0;$i<count($value);$i++)
-						$value[$i]=$this->getDbConnection()->quote($value[$i], $this->columns[$field]['type']);
-					
-					$sql .= "`$field` $comparator (".implode(',',$value).") ";
-				}else
-				{
-					if(!isset($this->columns[$field]['type']))
-						throw new Exception($field.' not found in columns for model '.$this->className());
-					
-          $sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value, $this->columns[$field]['type'])." ";
-				}
-			}
-
-			$sql .= ') ';
-		}
+		$sql = self::_appendByParamsToSQL($sql, $params);
     
     if(isset($linkModel)){
       //$primaryKeys = $linkModel->primaryKey();
@@ -750,6 +714,47 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
     return $result;
 		
+	}
+	
+	private function _appendByParamsToSQL($sql, $params){
+		if(!empty($params['by'])){
+
+			if(!isset($params['byOperator']))
+				$params['byOperator']='AND';
+
+			$first=true;
+			$sql .= 'AND (';
+			foreach($params['by'] as $arr){
+				
+				$field = $arr[0];
+				$value= $arr[1];
+				$comparator=isset($arr[2]) ? $arr[2] : '=';
+
+				if($first)
+				{
+					$first=false;
+				}else
+				{
+					$sql .= $params['byOperator'].' ';
+				}
+				
+				if($comparator=='IN'){
+					for($i=0;$i<count($value);$i++)
+						$value[$i]=$this->getDbConnection()->quote($value[$i], $this->columns[$field]['type']);
+					
+					$sql .= "`$field` $comparator (".implode(',',$value).") ";
+				}else
+				{
+					if(!isset($this->columns[$field]['type']))
+						throw new Exception($field.' not found in columns for model '.$this->className());
+					
+          $sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value, $this->columns[$field]['type'])." ";
+				}
+			}
+
+			$sql .= ') ';
+		}
+		return $sql;
 	}
 	
 	/**
@@ -1222,7 +1227,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$this->fireEvent('save',array(&$this));
 			
 			
-			$this->_cacheSearchRecord();
+			$this->cacheSearchRecord();
 			
 			$this->_setOldAttributes();
 			
@@ -1248,15 +1253,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * @return string 
 	 */
-	private function getModule(){
+	public function getModule(){
 		$arr = explode('_', $this->className());
 		
 		return strtolower($arr[1]);
 	}
 	
-	private function _cacheSearchRecord(){
+	public function cacheSearchRecord(){
 		
 		$attr = $this->getCacheAttributes();
+		
+		GO::debug($attr);
 		
 		if($attr){
 
@@ -1651,5 +1658,42 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		else
 			return false;
 	}
-
+	
+	/**
+	 * 
+	 */
+	public function deleteBy($params){
+		
+		$sql = 'DELETE FROM `'.$this->tableName().'` WHERE 1 ';
+		
+		$sql = $this->_appendByParamsToSQL($sql, $params);
+		
+		GO::debug($sql);
+		
+		return $this->getDbConnection()->query($sql);
+	}
+	
+	
+	
+	public function rebuildSearchCache(){
+		$attr = $this->getCacheAttributes();
+		
+		if($attr){
+			
+			GO_Base_Model_SearchCacheRecord::model()->deleteBy(array(
+					'by'=>array(
+							array('link_type',$this->linkType())
+							)
+						)
+					);
+			
+			
+			$stmt = $this->find(array(
+					'ignoreAcl'=>true
+			));
+			
+			$stmt->callOnEach('cacheSearchRecord');
+			
+		}
+	}
 }
