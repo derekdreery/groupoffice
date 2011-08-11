@@ -204,7 +204,8 @@ class GO{
 				}
 				
 				if(!file_exists($file))
-					throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
+					//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
+					return false;
 				
 				require($file);
 			}

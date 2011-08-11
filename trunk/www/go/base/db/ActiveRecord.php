@@ -536,6 +536,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 *	)
 	 *  "ignoreAcl"=>true,
 	 * 
+	 * join='';
+	 * 
 	 *  searchQuery=>"String",
 	 *  joinCustomFields=>false,
    * calcFoundRows=true // Set tot true to return the number of foundRows in the statement (See class GO_Base_Db_ActiveStatement 
@@ -575,6 +577,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$sql = "SELECT ";
 		
+		if(!empty($params['distinct']))
+			$sql .= "DISTINCT";
+		
 		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && empty($params['start'])){
 			
 			//TODO: This is MySQL only code
@@ -591,44 +596,51 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$sql .= ",cf_".$this->linkType().".* ";
 		
 		
-		$sql .= "FROM `".$this->tableName()."` t ".$aclJoin['join'];
+		$sql .= "\nFROM `".$this->tableName()."` t ".$aclJoin['join'];
 		
-		if($joinCf)			
-			$sql .= "LEFT JOIN cf_".$this->linkType()." ON cf_".$this->linkType().".link_id=t.id ";
 		
-    if (!empty($params['linkModel'])) { //passed in case of a MANY_MANY relation query
+		if (!empty($params['linkModel'])) { //passed in case of a MANY_MANY relation query
       $linkModel = new $params['linkModel'];
       $primaryKeys = $linkModel->primaryKey();
       $remoteField = $primaryKeys[0]==$params['linkModelLocalField'] ? $primaryKeys[1] : $primaryKeys[0];
-      $sql .= "INNER JOIN `".$linkModel->tableName()."` link_t ON t.`".$this->primaryKey()."`= link_t.".$remoteField.' ';
+      $sql .= "\nINNER JOIN `".$linkModel->tableName()."` link_t ON t.`".$this->primaryKey()."`= link_t.".$remoteField.' ';
     }
     
+		
+		if($joinCf)			
+			$sql .= "\nLEFT JOIN cf_".$this->linkType()." ON cf_".$this->linkType().".link_id=t.id ";
+		
+		if(isset($params['join']))
+			$sql .= $params['join'];
+		
 		if($this->aclField() && empty($params['ignoreAcl'])){			
 			
-			$sql .= "INNER JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
+			$sql .= "\nINNER JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
 			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
 				$sql .= " AND go_acl.level>=".intval($params['permissionLevel']);
 			}
 			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',GO_Base_Model_User::getGroupIds($params['userId']))."))) ";
 		}  else {
 			//quick and dirty way to use and in next sql build blocks
-			$sql .= 'WHERE 1 ';
+			$sql .= "\nWHERE 1 ";
 		}
     	
 //		if(!empty($params['criteriaSql']))
 //			$sql .= $params['criteriaSql'];
 		
 		$sql = self::_appendByParamsToSQL($sql, $params);
+		
+		if(isset($params['where']))
+			$sql .= "\nAND ".$params['where'];
     
     if(isset($linkModel)){
       //$primaryKeys = $linkModel->primaryKey();
       //$remoteField = $primaryKeys[0]==$params['linkModelLocalField'] ? $primaryKeys[1] : $primaryKeys[0];
-      $sql .= " AND link_t.`".$params['linkModelLocalField']."` = ".intval($params['linkModelLocalPk'])." ";
+      $sql .= " \nAND link_t.`".$params['linkModelLocalField']."` = ".intval($params['linkModelLocalPk'])." ";
     }
-
 		
 		if(!empty($params['searchQuery'])){
-			$sql .= ' AND (';
+			$sql .= " \nAND (";
 			
 			$fields = $this->getFindSearchQueryParamFields();
 			
@@ -654,8 +666,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			$pk = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
 			
-			$sql .= "GROUP BY `".implode('`,`', $pk)."` ";
+			$sql .= "\nGROUP BY `".implode('`,`', $pk)."` ";			
+			if(isset($query['group']))
+				$sql .= ", ";
+			
+							
+		}elseif(isset($query['group'])){
+			$sql .= "\nGROUP BY ";
 		}
+		
+		if(isset($query['group']))
+			$sql .= $query['group'];		
+		
+		if(isset($params['having']))
+			$sql.="\nHAVING ".$params['having'];
 		
 		if(!empty($params['orderField'])){
 			$sql .= 'ORDER BY `'.$params['orderField'].'`' ;

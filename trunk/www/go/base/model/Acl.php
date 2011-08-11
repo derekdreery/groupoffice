@@ -37,6 +37,28 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 				return false;
 		}
 		
+//		$where = 'a.acl_id=:acl_id AND (ug.user_id=:user_id';
+//		if (!$checkGroupPermissionOnly)
+//			$where .= " OR a.user_id=:user_id) ORDER BY a.level DESC";
+//		else
+//			$where .= ")";
+//
+//		
+//		$findParams=array(
+//			'join'=>"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ",
+//			'where'=>$where,
+//			'order'=>'a.level',
+//			'orderDirection'=>'DESC',
+//			'bindParams'=>array('acl_id', $this->id, 'user_id', $userId)
+//		);
+//		
+//		$model = GO_Base_Model_AclUsersGroups::model()->find($findParams);
+//		if($model)
+//			return $model->level;
+//		else 
+//			return false;
+		
+		
 		if ($userId > 0 && $this->id > 0) {
 			$sql = "SELECT a.acl_id, a.level FROM go_acl a " .
 							"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id " .

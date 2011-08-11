@@ -94,8 +94,6 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	/**
 	 * This function is called when a database check is performed
 	 * 
-	 * You want to use MyModel::model()->rebuildSearchCache();
-	 * 
 	 * @param array $response Array of output lines
 	 */
 	public static function checkDatabase(&$response){
