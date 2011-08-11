@@ -52,8 +52,10 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		if($this->module != 'core' && !isset(GO::session()->values[$this->module]['firstRunDone'])){
 			$moduleClass = "GO_".ucfirst($this->module)."_".ucfirst($this->module)."Module";
 			
-			$moduleClass::firstRun();
-			GO::session()->values[$this->module]['firstRunDone']=true;
+			if(class_exists($moduleClass)){
+				$moduleClass::firstRun();
+				GO::session()->values[$this->module]['firstRunDone']=true;
+			}
 		}
 	}	
 	
