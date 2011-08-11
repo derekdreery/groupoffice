@@ -2,19 +2,6 @@
 class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelController{
 	
 	protected $model = 'GO_Base_Model_Group';
-	
-  /**
-   * Retreive the group id from a given groupname.
-   * 
-   * @param String $groupname
-   * @return int $id 
-   */
-//  public function actionIdFromName($groupname)
-//  {
-//    $group = $this->model->findSingleByAttribute('name', $groupname);
-//    
-//    return $group->id;
-//  }
   
   /**
    * Add the username field to this default grid.
@@ -33,53 +20,57 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
    * @param int $id
    * @return array Users
    */
-  public function actionGetUsers($id)
-  {
-    $group = GO_Base_Model_Group::model()->findByPk($id);
+  public function actionGetUsers($params)
+  { 
+    $group = GO_Base_Model_Group::model()->findByPk($params['id']);
     
-    $stmt = $group->users(GO_Base_Provider_Grid::getDefaultParams());
+    if(empty($group))
+      $group = new GO_Base_Model_Group();
     
-    $grid = new GO_Base_Provider_Grid($stmt,array(
+    if(isset($params['add_users']) && !empty($group->id))
+    {
+      $users = json_decode($params['add_users']);
+      foreach($users as $usr_id)
+      {
+        if(!$group->addUser($usr_id))
+          var_dump($usr_id); // TODO: create error messages
+      }
+    }
+    
+    $gridparams = GO_Base_Provider_Grid::getDefaultParams(array(
+        'joinCustomFields'=>false
+    ));
+    
+    $grid = new GO_Base_Provider_Grid(array(
+        'id',
         'name'=>array('format'=>'$model->name'),
         'username',
-        'lastlogin'=>array('format'=>'GO_Base_Util_Date::get_timestamp($lastlogin)')
+        'email'
      ));
-    $this->output($grid->getData());
-  }
-  
-  
-  /**
-   * Delete a group by id
-   *
-   * @param int $id
-   * @return bool $success 
-   */
-  public function actionDeleteGroup($id)
-  {
-    $group = $this->model->findByPk($id);
-    return $group->delete();
-  }
-  
-  /**
-   * Clear a group.
-   * Deletes every user that is inside the given group.
-   * 
-   * @param int $id 
-   * @return bool $success 
-   */
-  public function actionClearGroup($id)
-  {
-    $group = $this->model->findByPk($id);
+
+    // The users in the group "everyone" cannot be deleted
+
+    $delresponse = array();
+    if($group->id != GO::config()->group_everyone)
+    { 
+      $grid->processDeleteActions('GO_Base_Model_UserGroup', array('group_id'=>$group->id));
+    }
+    else
+    {
+      $delresponse['deleteSuccess'] = false;
+      $delresponse['deleteFeedback'] = 'Members of the group everyone cannot be deleted.';
+    }
     
-    // @TODO: Make relation to userGroup model in Group model and fix this deletion.
+    $stmt = $group->users($gridparams);
+    $grid->setStatement($stmt);
     
-//    foreach($group->users as $user)
-//    {
-//      $user->delete();
-//    }
-    return true;
+    $response = $grid->getData();
+    
+    $response = array_merge($response,$delresponse);
+    
+    return $response;
   }
-  
+
   /**
    * Add the given user to the given group.
    * 
@@ -93,39 +84,6 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
     $group->addUser($user_id);
     return $userGroup->save();
   }
-  
-  
-  /**
-   * Delete a particular user from a Group.
-   * 
-   * @param int $group_id
-   * @param int $user_id
-   * @return bool $success 
-   */
-  public function actionDeleteUserFromGroup($group_id, $user_id)
-  {
-    $group = new GO_Base_Model_Group();
-    
-    $stmt = $group->users;
-    while($user = $stmt->fetch())
-    {
-			if($user->id == $user_id)
-        return $user->delete();
-    }
-    return false;
-  }
-  
-  /**
-   * Get the Group object by a given Id
-   * 
-   * @param int $id
-   * @return object Group 
-   */
-  public function actionGetGroup($id)
-  {
-    return GO_Base_Model_Group::model()->findByPk($id);
-  }
-  
   
   /**
    * Update the params of a given Group
@@ -154,13 +112,11 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
    * @param bool $admin_only
    * @return bool $success 
    */
-  public function actionAddGroup($user_id,$name,$admin_only=false)
+  public function actionSaveGroup()
   {
     $group = new GO_Base_Model_Group();
-    
-    $group->user_id = $user_id;
-    $group->name = $name;
-    $group->admin_only = $admin_only;
+    $group->setAttributes($_POST);
+    $group->user_id=GO::user()->id;
     
     return $group->save();
   }

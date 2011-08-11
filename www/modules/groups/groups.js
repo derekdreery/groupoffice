@@ -111,7 +111,7 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 				    baseParams: {id: group.id},
 				    root: 'results',
 				    id: 'id',
-				    fields: ['id', 'user_id', 'name', 'email'],
+				    fields: ['id', 'user_id', 'name', 'username', 'email'],
 				    remoteSort: true
 				});			
 	
@@ -120,7 +120,8 @@ Ext.extend(GO.groups.MainPanel, GO.grid.GridPanel,{
 						sortable:true
 					},
 					columns:[
-							{header: GO.lang.strUsername, dataIndex: 'name'},
+							{header: GO.lang.strName, dataIndex: 'name'},
+              {header: GO.lang.strUsername, dataIndex: 'username'},
 			        {header: GO.lang.strEmail, dataIndex: 'email'}	        			        
 			    ]
 				});

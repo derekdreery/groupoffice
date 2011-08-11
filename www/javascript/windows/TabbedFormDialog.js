@@ -178,12 +178,16 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			scope: this
 		});		
 	},
+  
+  beforeLoad : function(remoteModelId, config){},
 	afterLoad : function(remoteModelId, config, action){},
 	afterSubmit : function(action){},
 	
 	show : function (remoteModelId, config) {
 
 		config = config || {};
+    
+    this.beforeLoad(remoteModelId, config);
 
 		//tmpfiles on the remoteModel ({name:'Name',tmp_file:/tmp/name.ext} will be attached)
 		this.formPanel.baseParams.tmp_files = config.tmp_files ? Ext.encode(config.tmp_files) : '';

@@ -34,6 +34,12 @@ class GO_Base_Model_Group extends GO_Base_Db_ActiveRecord {
 		return 'go_groups';
 	}
   
+//  public function searchFields() {
+//    return array(
+//      'concat(first_name,last_name)',
+//      'username'
+//      );
+//  }
   
   public function relations() {
     
