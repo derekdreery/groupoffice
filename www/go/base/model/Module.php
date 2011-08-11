@@ -43,23 +43,11 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	}
 
 	protected function getHumanName() {
-		global $lang;
-		//@todo
-//		$file = $GLOBALS['GO_LANGUAGE']->get_language_file($this->id);
-//		if($file)
-//			require($file);
-
-		return isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;
+		return GO::t('name', $this->id);// isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;
 	}
 
 	protected function getDescription() {
-		global $lang;
-
-//		$file = $GLOBALS['GO_LANGUAGE']->get_language_file($this->id);
-//		if($file)
-//			require($file);
-
-		return isset($lang[$this->id]['description']) ? $lang[$this->id]['description'] : "";
+		return GO::t('description', $this->id);
 	}
 
 	/**
@@ -82,9 +70,64 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	 */
 	public static function initListeners() {
 		
-	}	
+	}
 	
+	/**
+	 * This function is called when the first request is made to the module.
+	 * Useful to check for a default calendar, tasklist etc.
+	 */
 	public static function firstRun(){
 		
+	}
+	
+	/**
+	 * This function is called when the search index needs to be rebuilt.
+	 * 
+	 * You want to use MyModel::model()->rebuildSearchCache();
+	 * 
+	 * @param array $response Array of output lines
+	 */
+	public static function buildSearchCache(&$response){
+		
+	}
+	
+	/**
+	 * This function is called when a database check is performed
+	 * 
+	 * You want to use MyModel::model()->rebuildSearchCache();
+	 * 
+	 * @param array $response Array of output lines
+	 */
+	public static function checkDatabase(&$response){
+		
+		
+		$moduleClass = get_called_class();
+		$arr = explode('_', $moduleClass);
+		$module = $arr[1];
+		
+		
+		$module = GO::modules()->$module;
+	
+
+		$folder = new GO_Base_Fs_Folder($module->path.'model');
+		if($folder->exists()){
+			$items = $folder->ls();
+			
+			foreach($items as $item){
+				if($item instanceof GO_Base_Fs_File){
+					$className = 'GO_'.ucfirst($module->id).'_Model_'.$item->nameWithoutExtension();
+					
+					$class = new ReflectionClass($className);
+					if(!$class->isAbstract()){
+					
+						$response[] = "Processing ".$className;
+						$stmt = $className::model()->find(array(
+								'ignoreAcl'=>true
+						));
+						$stmt->callOnEach('save');
+					}
+				}
+			}
+		}
 	}
 }

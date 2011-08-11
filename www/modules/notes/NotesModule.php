@@ -20,7 +20,13 @@ class GO_Notes_NotesModule extends GO_Base_Model_Module{
 	}
 	
 	
+	public static function buildSearchCache(&$response){
+		
+		$response[] = "Processing notes";
+		GO_Notes_Model_Note::model()->rebuildSearchCache();
+	}
 
+	
 	
 	
 	

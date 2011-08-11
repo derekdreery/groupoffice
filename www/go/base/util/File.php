@@ -20,6 +20,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package go.utils
  * @since Group-Office 3.0
+ * 
+ * @deprecated Move stuff into GO_Base_Fs_File
  */
 
 class GO_Base_Util_File
@@ -244,7 +246,7 @@ class GO_Base_Util_File
 	public static function checkfilename($filepath)
 	{
 		$dir = dirname($filepath).'/';
-		$name = utf8_basename($filepath);
+		$name = GO_Base_util_File::utf8Basename($filepath);
 		$x=1;
 		while(file_exists($filepath))
 		{
@@ -256,6 +258,33 @@ class GO_Base_Util_File
 
 		return $filepath;
 	}
+	
+	
+	function utf8Basename($path)
+	{
+		if(!function_exists('mb_substr'))
+		{
+			return basename($path);
+		}
+		//$path = trim($path);
+		if(substr($path,-1,1)=='/')
+		{
+			$path = substr($path,0,-1);
+		}
+		if(empty($path))
+		{
+			return '';
+		}
+		$pos = mb_strrpos($path, '/');
+		if($pos===false)
+		{
+			return $path;
+		}else
+		{
+			return mb_substr($path, $pos+1);
+		}
+	}
+
 
 
 }
