@@ -1541,7 +1541,7 @@ try {
 
 		$total = !empty($_POST['total']) ? $_POST['total'] : false;
 		$n_deleted = !empty($_POST['n_deleted']) ? $_POST['n_deleted'] : 0;
-		$apply_to_children = $_POST['apply_to_children']!='false' && $_POST['apply_to_children']!=false && !empty($_POST['apply_to_children']);
+		$apply_to_children = false; // $_POST['apply_to_children']!='false' && $_POST['apply_to_children']!=false && !empty($_POST['apply_to_children']);
 		$mailbox_name = $_POST['mailbox'];
 		$uids = json_decode($_POST['uids']);
 		$account_id = $_POST['account_id'];

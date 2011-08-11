@@ -13,7 +13,7 @@ GO.email.DeleteOldMailDialog = function(config){
 	config.maximizable=true;
 	config.modal=false;
 	config.width=500;
-	config.height=180;
+	config.height=170;
 	config.resizable=true;
 	config.minizable=true;
 	config.closeAction='hide';	
@@ -41,7 +41,6 @@ GO.email.DeleteOldMailDialog = function(config){
 Ext.extend(GO.email.DeleteOldMailDialog, Ext.Window,{
 
 	onShow : function() {
-		console.log(this.node);
 		GO.email.DeleteOldMailDialog.superclass.onShow.call(this);
 		if (typeof(this.node)=='object') {
 			this.folderNameField.setValue(this.node.attributes.name);
@@ -76,12 +75,13 @@ Ext.extend(GO.email.DeleteOldMailDialog, Ext.Window,{
 					format : GO.settings['date_format'],
 					allowBlank : false,
 					fieldLabel : GO.email.lang.everythingBefore
-				}),this.applyToChildren = new Ext.form.Checkbox({
-					boxLabel : GO.email.lang.alsoChildren,
-					hideLabel : true,
-					checked : false,
-					name : 'apply_to_children'
 				})
+//                                ,this.applyToChildren = new Ext.form.Checkbox({
+//					boxLabel : GO.email.lang.alsoChildren,
+//					hideLabel : true,
+//					checked : false,
+//					name : 'apply_to_children'
+//				})
 			]
 		});
 	},
