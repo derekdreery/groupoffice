@@ -598,7 +598,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
     if (!empty($params['linkModel'])) { //passed in case of a MANY_MANY relation query
       $linkModel = new $params['linkModel'];
-      $sql .= "INNER JOIN `".$linkModel->tableName()."` link_t ON t.`".$this->primaryKey()."`= link_t.".$params['linkModelLocalField']." ";
+      $primaryKeys = $linkModel->primaryKey();
+      $remoteField = $primaryKeys[0]==$params['linkModelLocalField'] ? $primaryKeys[1] : $primaryKeys[0];
+      $sql .= "INNER JOIN `".$linkModel->tableName()."` link_t ON t.`".$this->primaryKey()."`= link_t.".$remoteField.' ';
     }
     
 		if($this->aclField() && empty($params['ignoreAcl'])){			
@@ -650,15 +652,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
           $sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value, $this->columns[$field]['type'])." ";
 				}
 			}
-      
-      if(isset($linkModel)){
-        $primaryKeys = $linkModel->primaryKey();
-        $remoteField = $primaryKeys[0]==$params['linkModelLocalField'] ? $primaryKeys[1] : $primaryKeys[0];
-        $sql .= "link_t.`$remoteField` = ".$this->getDbConnection()->quote($value, $primaryKeys->columns[$field]['type'])." ";
-      }
 
 			$sql .= ') ';
 		}
+    
+    if(isset($linkModel)){
+      //$primaryKeys = $linkModel->primaryKey();
+      //$remoteField = $primaryKeys[0]==$params['linkModelLocalField'] ? $primaryKeys[1] : $primaryKeys[0];
+      $sql .= " AND link_t.`".$params['linkModelLocalField']."` = ".intval($params['linkModelLocalPk'])." ";
+    }
 
 		
 		if(!empty($params['searchQuery'])){
@@ -946,6 +948,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$findParams = array_merge($extraFindParams,array(
           'linkModel'=>$linkModelName,
           'linkModelLocalField'=>$localPkField,
+          'linkModelLocalPk'=>$this->pk,
 					//"by"=>array(array($localPkField,$this->pk,'=')),
 					"ignoreAcl"=>true,
           "relation"=>$name
