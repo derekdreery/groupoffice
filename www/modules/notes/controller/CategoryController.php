@@ -13,12 +13,9 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 		return array();
 	}
 	
-	protected function prepareGrid($grid){
-		
-		$grid->addFormatVariable('controller', $this);
-	
+	protected function prepareGrid(GO_Base_Provider_Grid $grid){
     $grid->formatColumn('user_name','$model->user->name');
-		$grid->formatColumn('checked','in_array($model->id, $controller->selectedCategories)');
+		$grid->formatColumn('checked','in_array($model->id, $controller->selectedCategories)', array('controller'=>$this));
     return $grid;
   }
 
