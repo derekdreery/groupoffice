@@ -12,7 +12,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	private function _load(){
 		if(!isset($this->_values)){
 			
-			if(file_exists($this->_file)){
+			if(!GO::config()->debug &&file_exists($this->_file)){
 				$data = file_get_contents($this->_file);
 				$this->_values = unserialize($data);
 			}else

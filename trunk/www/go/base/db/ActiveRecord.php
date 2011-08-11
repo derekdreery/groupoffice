@@ -544,7 +544,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * 
 	 * @param array $params
-	 * @return PDOStatement
+	 * @return GO_Base_Db_ActiveStatement
 	 */
 	public function find($params=array()){
 		

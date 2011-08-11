@@ -37,5 +37,16 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
   protected function __construct() {
     
   }
+	
+	/**
+	 * Calls the specified function on each model that's in the result set of 
+	 * the statement object.
+	 * 
+	 * @param String $function 
+	 */
+	public function callOnEach($function){
+		while($m=$this->fetch())
+			$m->$function;
+	}
 
 }

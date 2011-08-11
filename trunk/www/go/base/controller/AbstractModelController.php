@@ -72,7 +72,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$this->afterSubmit($response, $model);
 
-		$this->output($response);
+		return $response;
 	}
 
 	/**
@@ -98,9 +98,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	/**
 	 * Action to load a single record.
 	 */
-	public function actionLoad() {
+	public function actionLoad($params) {
 		$modelName = $this->model;
-		$model = $modelName::model()->findByPk($_REQUEST['id']);
+		$model = $modelName::model()->findByPk($params['id']);
 
 
 		$response['data'] = $model->getAttributes();
@@ -115,7 +115,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$response = $this->afterLoad($response, $model);
 
-		$this->output($response);
+		return $response;
 	}
 
 	protected function afterLoad($response, $model) {
@@ -187,7 +187,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
   /**
    * The default grid action for the current model.
    */
-  public function actionGrid(){	
+  public function actionGrid($params){	
     $modelName = $this->model;  
     
     $grid = new GO_Base_Provider_Grid($this->getGridColumnModel());		    
@@ -197,15 +197,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$grid->setStatement($modelName::model()->find($gridParams));
 		$this->prepareGrid($grid);
-    $this->output($grid->getData());
+    return $grid->getData();
   }	
 
 	/**
 	 * The default action for displaying a model in a DisplayPanel.
 	 */
-	public function actionDisplay() {
+	public function actionDisplay($params) {
 		$modelName = $this->model;
-		$model = $modelName::model()->findByPk($_REQUEST['id']);
+		$model = $modelName::model()->findByPk($params['id']);
 
 		$response['data'] = $model->getAttributes();
 		$response['success'] = true;
@@ -266,7 +266,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$response = $this->afterDisplay($response, $model);
 
-		$this->output($response);
+		return $response;
 	}
 
 	protected function afterDisplay($response, $model) {

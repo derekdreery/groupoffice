@@ -18,6 +18,10 @@ GO.util.callToHref = function(phone){
 	return GO.calltoTemplate.replace('{phone}', phone);
 }
 
+GO.url = function(relativeUrl){
+	return BaseHref+'router.php?r='+relativeUrl
+}
+
 GO.request = function(config){
 
 	var url = GO.url(config.url);

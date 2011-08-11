@@ -18,11 +18,7 @@
  */
 abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable {
 	
-	/**
-	 *
-	 * @var mixed A JSON outputstream for example. 
-	 */
-	protected $outputStream;
+	
 	
 	/**
 	 *
@@ -51,26 +47,15 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @param string $output Type of output eg. json or html
 	 */
 	public function init($module){
-		//header('Content-Type: text/plain');
-		$this->module=$module;
+		$this->module=$module;	
 		
-		
-	}
-	
-	/**
-	 * Outputs data directly to the standard output
-	 * 
-	 * @param mixed $str 
-	 */
-	protected function output($str){
-		
-		if(!isset($this->outputStream)){
-			$output=empty($_REQUEST['output']) ? 'Json' : ucfirst($_REQUEST['output']);
-			$outputClass = 'GO_Base_OutputStream_OutputStream'.$output;
-			$this->outputStream = new $outputClass;
+		if(!isset(GO::session()->values[$module]['firstRunDone'])){
+			$moduleClass = "GO_".ucfirst($module)."_".ucfirst($module)."Module";
+			
+			$moduleClass::firstRun();
+			GO::session()->values[$module]['firstRunDone']=true;
 		}
-		$this->outputStream->write($str);
-	}
+	}	
 	
 	/**
 	 * Includes the file from the views folder
@@ -137,11 +122,11 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 
 			$methodName='action'.$action;
 
-			$method=new ReflectionMethod($this, $methodName);
-			if($method->getNumberOfParameters()>0)
-				$this->runWithParams($method, $_REQUEST);
-			else
-				$this->$methodName();
+//			$method=new ReflectionMethod($this, $methodName);
+//			if($method->getNumberOfParameters()>0)
+//				$this->runWithParams($method, $_REQUEST);
+//			else
+				return $this->$methodName($_REQUEST);
 		} catch (Exception $e) {
 			$response['success'] = false;
 			$response['feedback'] = !empty($response['feedback']) ? $response['feedback'] : '';
@@ -150,7 +135,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			if(GO::config()->debug)
 				$response['trace']=$e->getTraceAsString();
 			
-			echo json_encode($response);exit();
+			return $response;
+			//exit();
 		}
 	}
 	
@@ -162,29 +148,29 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @return boolean whether the named parameters are valid
 	 * @since 4.0
 	 */
-	protected function runWithParams($method, $params)
-	{
-		$ps=array();
-		foreach($method->getParameters() as $i=>$param)
-		{
-			$name=$param->getName();
-			if(isset($params[$name]))
-			{
-				if($param->isArray())
-					$ps[]=is_array($params[$name]) ? $params[$name] : array($params[$name]);
-				else if(!is_array($params[$name]))
-					$ps[]=$params[$name];
-				else
-					return false;
-			}
-			else if($param->isDefaultValueAvailable())
-				$ps[]=$param->getDefaultValue();
-			else
-				return false;
-		}
-		$method->invokeArgs($this,$ps);
-		return true;
-	}
+//	protected function runWithParams($method, $params)
+//	{
+//		$ps=array();
+//		foreach($method->getParameters() as $i=>$param)
+//		{
+//			$name=$param->getName();
+//			if(isset($params[$name]))
+//			{
+//				if($param->isArray())
+//					$ps[]=is_array($params[$name]) ? $params[$name] : array($params[$name]);
+//				else if(!is_array($params[$name]))
+//					$ps[]=$params[$name];
+//				else
+//					return false;
+//			}
+//			else if($param->isDefaultValueAvailable())
+//				$ps[]=$param->getDefaultValue();
+//			else
+//				return false;
+//		}
+//		$method->invokeArgs($this,$ps);
+//		return true;
+//	}
 	
 	/**
 	 * This default action should be overrriden

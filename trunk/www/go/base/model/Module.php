@@ -80,19 +80,11 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	 * This class can be overriden by a module class to add listeners to objects
 	 * that extend the GO_Base_Observable class.
 	 */
-	public function initListeners() {
+	public static function initListeners() {
+		
+	}	
+	
+	public static function firstRun(){
 		
 	}
-
-	/**
-	 * 
-	 * When a user is created, updated or logs in this function will be called.
-	 * The function can check if the default calendar, addressbook, notebook etc.
-	 * is created for this user.
-	 * 
-	 */
-	public function initUser($userId) {
-		
-	}
-
 }
