@@ -60,7 +60,13 @@ class GO_Base_Provider_Grid {
       $this->_relation = $stmt->relation;
 	}
 	
-	public function processDeleteActions($deleteModelName){
+  /**
+   * Handle a delete request when a grid loads.
+   * 
+   * @param type $deleteModelName Name of the model to delete
+   * @param array $extraPkValue If your model has more then one pk. Then you can supply the other keys in an array eg. array('group_id'=>1)
+   */
+	public function processDeleteActions($deleteModelName, $extraPkValue=false){
 		
 		if(isset($this->_stmt))
 			throw new Exception("processDeleteActions should be called before setStatement. If you run the statement before the deletes then the deleted items will still be in the result.");
@@ -79,8 +85,30 @@ class GO_Base_Provider_Grid {
 //            if (isset($relations[$this->stmt->relation]['linksModel']))
 //              $deleteModelName = $relations[$this->stmt->relation]['linksModel'];
 //          }
+          $staticModel = $deleteModelName::model();
+          if($extraPkValue){           
+            
+            //get the primary key names of the delete model in an array
+            $primaryKeyNames = $staticModel->primaryKey();
+            
+            $newPk=array();
+            foreach($primaryKeyNames as $name){
+              
+              if(isset($extraPkValue[$name]))
+              {
+                //pk is supplied in the extra values
+                $newPk[$name]=$extraPkValue[$name];
+              }else
+              {
+                //it's not set in the extra values so it must be the key passed in the request
+                $newPk[$name]=$modelPk;
+              }
+            }
+            
+            $modelPk=$newPk;
+          }
 
-          $model = $deleteModelName::model()->findByPk($modelPk);
+          $model = $staticModel->findByPk($modelPk);
           $model->delete();
         }
         $this->_response['deleteSuccess'] = true;
@@ -101,31 +129,21 @@ class GO_Base_Provider_Grid {
 	 * 
 	 * Example formatColumn('Special name','$model->getSpecialName()');
    * 
-   * @param type $column
+   * @param type $column   * 
    * @param string $format 
+   * @param array $extraVars 
+   * 
+   * Add extra variables like this for example array('controller'=>$this) in a controller.
+   * 
+   * Then you can use '$controller->aControllerProperty' in the column format.
+   * 
    */
-  public function formatColumn($column, $format) {
+  public function formatColumn($column, $format, $extraVars=array()) {
 
     $this->_columns[$column]['format'] = $format;
+    $this->_columns[$column]['extraVars'] = $extraVars;
   }
-	
-	/**
-	 * Add variables so you can use them in the format of a column {@see GO_Base_Provider_Grid::formatColumn()}
-	 * 
-	 * eg. do this in a controller:
-	 * 
-	 * $grid->addFormatVariable('controller', $this);
-	 * 
-	 * Then you can user '$controller->aControllerProperty' in the column format.
-	 * 
-	 * @param string $name
-	 * @param mixed $variable 
-	 */
-	public function addFormatVariable($name, $variable){
-		$this->_formatVariables[$name]=$variable;
-	}
-
-  
+	  
   /**
    * Returns the data for the grid.
    * Also deletes the given delete_keys.
@@ -173,18 +191,19 @@ class GO_Base_Provider_Grid {
      */
     extract($array);
 		
-		/**
-		 * See addFormatVariable for more info.
-		 */
-		extract($this->_formatVariables);
     
     $formattedRecord = array();
     foreach($this->_columns as $colName=>$attributes)
-    {
+    {     
       if(!is_array($attributes)){
         $colName=$attributes;
         $attributes=array();
       }
+      
+      if(isset($attributes['extraVars'])){
+        extract($attributes['extraVars']);
+      }     
+      
       if(isset($attributes['format'])){
         eval('$result='.$attributes['format'].';');
         $formattedRecord[$colName]=$result;
@@ -196,12 +215,13 @@ class GO_Base_Provider_Grid {
   }
 
   /**
-   *  Returns a set of default parameters for use with a grid.
+   * Returns a set of default parameters for use with a grid.
    * 
+   * @var array $params Supply parameters to add to or override the default ones
    * @return array defaultParams 
    */
-  public static function getDefaultParams() {
-    return array(
+  public static function getDefaultParams($params=array()) {
+    return array_merge(array(
         'searchQuery' => !empty($_REQUEST['query']) ? '%' . $_REQUEST['query'] . '%' : '',
         'limit' => isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0,
         'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
@@ -209,7 +229,7 @@ class GO_Base_Provider_Grid {
         'orderDirection' => isset($_REQUEST['orderDirection']) ? $_REQUEST['orderDirection'] : '',
 				'joinCustomFields'=>true,
         'calcFoundRows'=>true
-    );
+    ), $params);
   }
 
 }
