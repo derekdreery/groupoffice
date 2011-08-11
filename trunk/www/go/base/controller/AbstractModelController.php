@@ -36,17 +36,17 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	/**
 	 * The default action when the form in an edit dialog is submitted.
 	 */
-	public function actionSubmit() {
+	public function actionSubmit($params) {
 
 		$modelName = $this->model;
-		if (!empty($_REQUEST['id']))
-			$model = $modelName::model()->findByPk($_REQUEST['id']);
+		if (!empty($params['id']))
+			$model = $modelName::model()->findByPk($params['id']);
 		else
 			$model = new $modelName;
 
-		$this->beforeSubmit($response, $model);
+		$this->beforeSubmit($response, $model, $params);
 		
-		$model->setAttributes($_POST);
+		$model->setAttributes($params);
 
 		$response['success'] = $model->save();
 
