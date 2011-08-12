@@ -11,6 +11,8 @@ class GO_Base_Session{
 			session_start();
 		}
 		
+		GO::debug("Started session");
+		
 		$this->values = &$_SESSION['GO_SESSION'];
 		
 		//$this->setDefaults();

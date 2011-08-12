@@ -24,22 +24,45 @@ class GO_Base_Model_ModelCache{
 	
 	private $_models;
 	
+	public function __construct() {
+		
+		GO::debug("Model cache construct");
+		
+		if(isset(GO::session()->values['modelCache'])){
+			//GO::debug(array_keys(GO::session()->values['modelCache']));
+			//$this->_models=GO::session()->values['modelCache'];
+			
+		}
+	}
+	
 	/**
 	 * Add a model to the memory cache.
 	 * 
 	 * @param String $modelClassName The GO_Base_Db_ActiveRecord derived class
 	 * @param mixed $model 
 	 */
-	public function add($modelClassName, $model){
+	public function add($modelClassName, $model, $cacheKey=false){
 		
-		$this->_models[$modelClassName][$this->_formatPrimaryKey($model->pk)]=$model;
+		if(!$cacheKey)
+			$cacheKey=$model->pk;
+		
+		//GO::debug("GO_Base_Model_ModelCache::add($modelClassName, $cacheKey)");
+		
+		$cacheKey = $this->_formatCacheKey($cacheKey);
+		
+		$this->_models[$modelClassName][$cacheKey]=$model;
+		
+		if($model->sessionCache()){
+			//GO::debug("Add to session");
+			//GO::session()->values['modelCache'][$modelClassName][$cacheKey]=$model;
+		}
 	}
 	
-	private function _formatPrimaryKey($pk){
-		if(is_array($pk))
-			$pk=implode('|', $pk);
+	private function _formatCacheKey($cacheKey){
 		
-		return $pk;
+		$cacheKey=md5(serialize($cacheKey));
+		
+		return $cacheKey;
 	}
 	
 	/**
@@ -48,9 +71,20 @@ class GO_Base_Model_ModelCache{
 	 * @param String $modelClassName The GO_Base_Db_ActiveRecord derived class
 	 * @param mixed $primaryKey 
 	 */
-	public function get($modelClassName, $primaryKey){
-		$primaryKey=$this->_formatPrimaryKey($primaryKey);
-		return isset($this->_models[$modelClassName][$primaryKey]) ? $this->_models[$modelClassName][$primaryKey] : false;
+	public function get($modelClassName, $cacheKey){		
+		
+		
+		
+		$formatted=$this->_formatCacheKey($cacheKey);
+		
+		//GO::debug("GO_Base_Model_ModelCache::get($modelClassName, $cacheKey) ".$formatted);
+		
+		if(isset($this->_models[$modelClassName][$formatted]))
+		{
+			//GO::debug("Found in cache");
+			return $this->_models[$modelClassName][$formatted];
+		}else
+			return false;
 	}
 	
 }

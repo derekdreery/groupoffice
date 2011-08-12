@@ -23,7 +23,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 * @param bool $checkGroupPermissionOnly
 	 * @return int Permission level. See constants in GO_Base_Model_Acl for values. 
 	 */
-	public function getUserPermissionLevel($userId=0, $checkGroupPermissionOnly=false) {
+	public static function getUserPermissionLevel($aclId, $userId=0, $checkGroupPermissionOnly=false) {
 		
 		//Scripts can set this variable to ignore permissions
 		if(GO::$ignoreAclPerissions){
@@ -37,45 +37,28 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 				return false;
 		}
 		
-//		$where = 'a.acl_id=:acl_id AND (ug.user_id=:user_id';
-//		if (!$checkGroupPermissionOnly)
-//			$where .= " OR a.user_id=:user_id) ORDER BY a.level DESC";
-//		else
-//			$where .= ")";
-//
-//		
-//		$findParams=array(
-//			'join'=>"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id ",
-//			'where'=>$where,
-//			'order'=>'a.level',
-//			'orderDirection'=>'DESC',
-//			'bindParams'=>array('acl_id', $this->id, 'user_id', $userId)
-//		);
-//		
-//		$model = GO_Base_Model_AclUsersGroups::model()->find($findParams);
-//		if($model)
-//			return $model->level;
-//		else 
-//			return false;
-		
-		
-		if ($userId > 0 && $this->id > 0) {
-			$sql = "SELECT a.acl_id, a.level FROM go_acl a " .
-							"LEFT JOIN go_users_groups ug ON a.group_id=ug.group_id " .
-							"WHERE a.acl_id=" . intval($this->id) . " AND " .
-							"(ug.user_id=" . intval($userId);
+		$bindParams = array(':acl_id'=>$aclId, ':user_id1'=>$userId);
+		$where = 't.acl_id=:acl_id AND (ug.user_id=:user_id1';
+		if (!$checkGroupPermissionOnly){		
+			$bindParams[':user_id2'] = $userId;		
+			$where .= " OR t.user_id=:user_id2) ORDER BY t.level DESC";			
+		}else
+			$where .= ")";
 
-			if (!$checkGroupPermissionOnly)
-				$sql .= " OR a.user_id=" . intval($userId) . ") ORDER BY a.level DESC";
-			else
-				$sql .= ")";
-
-			$stmt = $this->getDbConnection()->query($sql);
-			if ($r = $stmt->fetch()) {
-				return intval($r['level']);
-			}
-		}
-		return false;
+		
+		$findParams=array(
+			'join'=>"LEFT JOIN go_users_groups ug ON t.group_id=ug.group_id",
+			'where'=>$where,
+			'order'=>'t.level',
+			'orderDirection'=>'DESC',
+			'bindParams'=>$bindParams
+		);
+		
+		$model = GO_Base_Model_AclUsersGroups::model()->findSingle($findParams);
+		if($model)
+			return $model->level;
+		else 
+			return false;
 	}
 
 	/**

@@ -32,6 +32,10 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	public function tableName() {
 		return 'go_modules';
 	}
+	
+	public function sessionCache(){
+		return true;
+	}
 
 	protected function init() {
 		parent::init();
@@ -53,8 +57,8 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Installs the module's tables etc
 	 */
-	protected function afterSave() {
-		return parent::afterSave();
+	protected function afterSave($wasNew) {
+		return parent::afterSave($wasNew);
 	}
 
 	/**

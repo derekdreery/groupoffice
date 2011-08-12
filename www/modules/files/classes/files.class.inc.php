@@ -42,7 +42,7 @@ class files extends db {
 		}
 	}
 
-	public function __on_load_listeners($events) {
+	public static function __on_load_listeners($events) {
 		$events->add_listener('check_database', __FILE__, 'files', 'check_database');
 		$events->add_listener('user_delete', __FILE__, 'files', 'user_delete');
 		//$events->add_listener('add_user', __FILE__, 'files', 'add_user');
@@ -52,7 +52,7 @@ class files extends db {
 		$events->add_listener('load_file_properties', __FILE__, 'files', 'get_file_cf_category_permissions');
 	}
 
-	function init_customfields_types(){
+	public static function init_customfields_types(){
 		global $GO_MODULES, $customfield_types;
 		require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'file_customfield_type.class.inc.php');
 		$customfield_types['file']=new file_customfield_type(array());

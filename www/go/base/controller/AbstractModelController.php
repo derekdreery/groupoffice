@@ -26,12 +26,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @var GO_Base_Db_ActiveRecord 
 	 */
 	protected $model;
-	
-	function init($output) {
-		parent::init($output);
-		$this->addPermissionCheck(GO::modules()->{$this->module}->acl_id, GO_Base_Model_Acl::READ_PERMISSION);
-		//$this->addPermissionCheck(GO::modules()->modules['models']['acl_id'], GO_Base_Model_Acl::DELETE_PERMISSION,'delete');
-	}
+//	
+//	function init($output) {
+//		parent::init($output);
+//		//$this->addPermissionCheck(GO::modules()->{$this->module}->acl_id, GO_Base_Model_Acl::READ_PERMISSION);
+//		//$this->addPermissionCheck(GO::modules()->modules['models']['acl_id'], GO_Base_Model_Acl::DELETE_PERMISSION,'delete');
+//	}
 
 	/**
 	 * The default action when the form in an edit dialog is submitted.

@@ -129,6 +129,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return 'id';
 	}
 	
+	/**
+	 * Return true if this model is likely to be identical through a session so
+	 * it can be cached in the session for performance.
+	 * 
+	 * @return boolean 
+	 */
+	public function sessionCache(){
+		return false;
+	}
+	
 	private $_relatedCache;
 	
 	
@@ -216,6 +226,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			if(!$this->columns){
 			
 				$sql = "SHOW COLUMNS FROM `" . $this->tableName() . "`;";
+				$GLOBALS['query_count']++;
 				$stmt = $this->getDbConnection()->query($sql);
 				while ($field = $stmt->fetch()) {
 					preg_match('/([a-zA-Z].*)\(([1-9].*)\)/', $field['Type'], $matches);
@@ -475,7 +486,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					throw new Exception("Could not find ACL for ".$this->className()." with pk: ".$this->pk);
 				}
 
-				$this->_permissionLevel=GO_Base_Model_Acl::model()->findByPk($acl_id)->getUserPermissionLevel();
+				$this->_permissionLevel=GO_Base_Model_Acl::getUserPermissionLevel($acl_id);// model()->findByPk($acl_id)->getUserPermissionLevel();
 			}
 			return $this->_permissionLevel;
 		}
@@ -515,6 +526,33 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$stmt = $this->find($params);
 		
 		$model = $stmt->fetch();
+		
+		return $model;		
+	}
+	
+	/**
+	 * Finds a single model by an attribute name and value.
+	 * 
+	 * @param string $attributeName
+	 * @param mixed $value
+	 * @param array $findParams Extra parameters to send to the find function.
+	 * @return GO_Base_Db_ActiveRecord 
+	 */
+	public function findSingle($findParams=array()){
+		
+		$defaultParams=array('limit'=>1,'ignoreAcl'=>true);
+		$params = array_merge($defaultParams, $findParams);
+		
+		$cacheKey = md5(serialize($params));
+		//Use cache so identical findByPk calls are only executed once per script request
+		$cachedModel =  GO::modelCache()->get($this->className(), $cacheKey);
+		if($cachedModel)
+			return $cachedModel;
+				
+		$stmt = $this->find($params);		
+		$model = $stmt->fetch();
+		
+		GO::modelCache()->add($this->className(), $model, $cacheKey);
 		
 		return $model;		
 	}
@@ -692,14 +730,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			if(!isset($params['start']))
 				$params['start']=0;
 			
-			$sql .= 'LIMIT '.intval($params['start']).','.intval($params['limit']);
+			$sql .= "\nLIMIT ".intval($params['start']).','.intval($params['limit']);
 		}
 		
 		if($this->_debugSql)
 				GO::debug($sql);
 
 		//$sql .= "WHERE `".$this->primaryKey().'`='.intval($primaryKey);
-		$result = $this->getDbConnection()->query($sql);
+		
+		$GLOBALS['query_count']++;
+		
+		if(isset($params['bindParams'])){			
+			$result = $this->getDbConnection()->prepare($sql);
+			$result->execute($params['bindParams']);
+		}else
+		{
+			$result = $this->getDbConnection()->query($sql);
+		}
 
 		
 		if(!empty($params['calcFoundRows'])){
@@ -851,11 +898,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @return GO_Base_Db_ActiveRecord 
 	 */
 	
-	public function findByPk($primaryKey, $findParams=array()){
-
-//		if(!$this->_checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
-//			throw new AccessDeniedException();
-
+	public function findByPk($primaryKey, $findParams=array(), $ignoreAcl=false){		
+		
+		GO::debug($this->className()."::findByPk($primaryKey)");
+		if(empty($primaryKey))
+			return false;
+		
 		//Use cache so identical findByPk calls are only executed once per script request
 		$cachedModel =  GO::modelCache()->get($this->className(), $primaryKey);
 		if($cachedModel)
@@ -870,7 +918,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				GO::debug($sql);
 		
 		//GO::debug($sql);
-			
+		$GLOBALS['query_count']++;
 		$result = $this->getDbConnection()->query($sql);
 		$result->model=$this;
     $result->findParams=$findParams;
@@ -878,10 +926,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
 		
 		$model =  $result->fetch();
-    
+		
+		
     //todo check read permissions
-    //if(!$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
-			//throw new AccessDeniedException();
+    if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
+			throw new AccessDeniedException();
 		
 		if($model)
 			GO::modelCache()->add($this->className(), $model);
@@ -900,6 +949,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @return int  
 	 */
 	public function count(){
+		$GLOBALS['query_count']++;
 		$stmt = $this->getDbConnection()->query("SELECT count(*) AS count FROM `".$this->tableName()."`");
 		$record = $stmt->fetch();
 		return $record['count'];		
@@ -1387,6 +1437,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			GO::debug($sql);
 			GO::debug($this->_attributes);
 		}
+		$GLOBALS['query_count']++;
 		
 		$stmt = $this->getDbConnection()->prepare($sql);
 
@@ -1439,6 +1490,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			GO::debug($sql);
 			GO::debug($this->_attributes);
 		}
+		
+		$GLOBALS['query_count']++;
 
 		$stmt = $this->getDbConnection()->prepare($sql);
 		
@@ -1492,6 +1545,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($this->_debugSql)
 			GO::debug($sql);
 		
+		$GLOBALS['query_count']++;
 		$success = $this->getDbConnection()->query($sql);		
 		
 		$attr = $this->getCacheAttributes();
@@ -1663,7 +1717,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function getUser(){
 		
 		if(!empty($this->user_id)){
-			return GO_Base_Model_User::model()->findByPk($this->user_id);
+			return GO_Base_Model_User::model()->findByPk($this->user_id, array(), true);
 		}else
 		{
 			return false;
@@ -1693,7 +1747,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$sql = $this->_appendByParamsToSQL($sql, $params);
 		
 		GO::debug($sql);
-		
+		$GLOBALS['query_count']++;
 		return $this->getDbConnection()->query($sql);
 	}
 	

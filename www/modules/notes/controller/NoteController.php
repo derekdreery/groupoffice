@@ -3,6 +3,11 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	
 	protected $model = 'GO_Notes_Model_Note';
 	
+	public function actionTest(){
+		return GO::user()->username;
+	}
+	
+	
 	
 	protected function getGridParams(){		
 		

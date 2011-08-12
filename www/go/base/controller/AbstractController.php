@@ -47,7 +47,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @param string $output Type of output eg. json or html
 	 */
 	public function init($module){
-		$this->module=strtolower($module);	
+		$this->module=strtolower($module);
+		$this->moduleObject = GO::modules()->{$this->module};
 		
 		if($this->module != 'core' && !isset(GO::session()->values[$this->module]['firstRunDone'])){
 			$moduleClass = "GO_".ucfirst($this->module)."_".ucfirst($this->module)."Module";
