@@ -41,7 +41,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		$where = 't.acl_id=:acl_id AND (ug.user_id=:user_id1';
 		if (!$checkGroupPermissionOnly){		
 			$bindParams[':user_id2'] = $userId;		
-			$where .= " OR t.user_id=:user_id2) ORDER BY t.level DESC";			
+			$where .= " OR t.user_id=:user_id2)";			
 		}else
 			$where .= ")";
 

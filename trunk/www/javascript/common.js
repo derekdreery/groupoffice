@@ -30,17 +30,28 @@ GO.request = function(config){
 	if(!config.scope)
 		config.scope=this;
 	
+	if(config.maskEl)
+		config.maskEl.mask(GO.lang.waitMsgLoad);
+	
+	var origSuccess=config.success;
+	delete config.success;
+	
 	var p = Ext.apply({
 		url:url,
+		callback:function(){
+			if(config.maskEl)
+				config.maskEl.unmask();
+		},
 		success: function(response, options)
 		{
-			var responseParams = Ext.decode(response.responseText);
-			if(!responseParams.success)
+			var result = Ext.decode(response.responseText);
+			if(!result.success)
 			{
-				alert(responseParams.feedback);
-			}else if(config.success){					
-				config.success.call(config.scope, response, options);
+				alert(result.feedback);
+			}else if(origSuccess){					
+				origSuccess.call(config.scope, response, options, result);
 			}
+			
 		}
 	}, config);
 	

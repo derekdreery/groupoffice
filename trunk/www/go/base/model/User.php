@@ -190,7 +190,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		}
 	}
 	
-	protected function buildFilesPath() {
+	public function buildFilesPath() {
 		return 'users/'.$this->username;
 	}
 	
