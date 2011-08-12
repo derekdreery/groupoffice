@@ -111,6 +111,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	public function hasFiles(){
 		return true;
 	}
+	
+	public function sessionCache(){
+		return true;
+	}
 
 	public function init() {
 		$this->columns['email']['regex'] = GO_Base_Util_String::get_email_validation_regex();

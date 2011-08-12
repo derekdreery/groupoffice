@@ -14,7 +14,7 @@
 
 class addressbook extends db {
 
-	public function __on_load_listeners($events) {
+	public static function __on_load_listeners($events) {
 		$events->add_listener('user_delete', __FILE__, 'addressbook', 'user_delete');
 		$events->add_listener('add_user', __FILE__, 'addressbook', 'add_user');
 		$events->add_listener('build_search_index', __FILE__, 'addressbook', 'build_search_index');
@@ -139,7 +139,7 @@ class addressbook extends db {
 
 	}
 
-	function init_customfields_types(){
+	public static function  init_customfields_types(){
 		global $GO_MODULES, $customfield_types;
 		require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'contact_customfield_type.class.inc.php');
 		$customfield_types['contact']=new contact_customfield_type(array());

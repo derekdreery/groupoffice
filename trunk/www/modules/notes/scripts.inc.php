@@ -13,11 +13,11 @@ if(isset($GLOBALS['GO_MODULES']->modules['customfields']))
 //
 //$category = $notes->get_category();
 
-require_once('GO.php');
-
-$category = GO_Notes_Model_Category::model()->findSingleByAttribute('user_id', GO::session()->values['user_id']);
-if($category){
-	$GO_SCRIPTS_JS .= 'GO.notes.defaultCategory = {id: '.$category->id.', name: "'.$category->name.'"};';
-
-	$GLOBALS['GO_CONFIG']->save_setting('notes_categories_filter',$category->id, GO::session()->values['user_id']);
-}
+//require_once('GO.php');
+//
+//$category = GO_Notes_Model_Category::model()->findSingleByAttribute('user_id', GO::session()->values['user_id']);
+//if($category){
+//	$GO_SCRIPTS_JS .= 'GO.notes.defaultCategory = {id: '.$category->id.', name: "'.$category->name.'"};';
+//
+//	$GLOBALS['GO_CONFIG']->save_setting('notes_categories_filter',$category->id, GO::session()->values['user_id']);
+//}

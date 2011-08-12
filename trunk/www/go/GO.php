@@ -80,10 +80,11 @@ class GO{
 	 * @return GO_Base_Model_User The logged in user model
 	 */
 	public static function user(){
+		GO::debug("GO::user()");
 		if(empty(GO::session()->values['user_id']))
 			return false;
 		else
-			return GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id']);
+			return GO_Base_Model_User::model()->findByPk(GO::session()->values['user_id'], array(), true);
 	}
 
 	/**
@@ -156,6 +157,7 @@ class GO{
 	 * @param string $className 
 	 */
 	public static function autoload($className) {
+		
 
 		$orgClassName = $className;
 
@@ -179,13 +181,11 @@ class GO{
 				$arr = explode('_', $className);
 
 				$module = strtolower(array_shift($arr));
-				
-
-				
-				
+			
 
 				if($module!='core'){					
-					$file = self::modules()->$module->path;
+					//$file = self::modules()->$module->path; //doesn't play nice with objects in the session and autoloading
+					$file = self::config()->root_path.'modules/'.$module.'/';
 				}else
 				{
 					$file = self::config()->root_path;
@@ -203,9 +203,10 @@ class GO{
 					
 				}
 				
-				if(!file_exists($file))
+				if(!file_exists($file)){
 					//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
 					return false;
+				}
 				
 				require($file);
 			}
@@ -305,15 +306,23 @@ class GO{
 				$_SESSION['connect_count'] = 0;
 				$_SESSION['query_count'] = 0;
 				
-				error_reporting(E_STRICT);
+				error_reporting(E_ALL | E_STRICT);
 				ini_set('display_errors','on');
 				ini_set('log_errors','on');
 			}
+			
+			set_error_handler(array('GO','errorHandler'), E_ALL | E_STRICT);
 		}
+	}
+	
+	
+	public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
+
+		$err_str = "PHP error: $errfile:$errline $errstr ($errno)";
+		if(GO::config()->debug())
+			echo $err_str."\n";
 		
-		//GO::session()->setDefaults();
-		
-		
+    GO::debug($err_str);
 	}
 	
 	
@@ -407,4 +416,4 @@ class GO{
 		self::$_outputStream->write($str);
 	}
 
-}
+}	
