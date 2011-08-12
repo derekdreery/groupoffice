@@ -8,21 +8,11 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @author Wilmar van Beusekom <wilmar@intermesh.nl>
  */
 
-/**
- * 
- * @todo delete files folder, delete custom fields
- * 
- * 
- * The Note model
- * 
- * @property int $id
- * @property int $category_id
- */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	public function linkType(){
@@ -47,9 +37,10 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	}
 
 	public function relations(){
-		return array(
-				'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Addressbook', 'field'=>'addressbook_id')
-		);
+            return array(
+                'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Addressbook', 'field'=>'addressbook_id'),
+                'company' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'company_id')
+            );
 	}
 
 
@@ -72,7 +63,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 
 		if (isset(GO::modules()->customfields))
-			GO_Customfields_Controller_Item::saveCustomFields($this, "GO_Notes_Model_CustomFieldsRecord");
+			GO_Customfields_Controller_Item::saveCustomFields($this, "GO_Addressbook_Model_ContactCustomFieldsRecord");
 
 		return parent::afterSave($wasNew);
 	}
