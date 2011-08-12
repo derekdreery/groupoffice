@@ -27,17 +27,15 @@ GO.dialog.UsersInGroup = function(config){
 
 	Ext.apply(this, config);
 
-
 	this.store = new GO.data.JsonStore({
-   	url: GO.settings.modules.groups.url+'non_admin_json.php',
+    url: GO.url('groups/group/getUsers'),
+    baseParams: {id:0},
+   //	url: GO.settings.modules.groups.url+'non_admin_json.php',
     root: 'results',
 		totalProperty: 'total',
 		id: 'id',
 		fields: ['id','name','username'],
-		remoteSort: true,
-			baseParams: {
-				task: 'users_in_group'
-			}
+		remoteSort: true
   });
 
 	this.searchField = new GO.form.SearchField({
@@ -95,7 +93,7 @@ GO.dialog.UsersInGroup = function(config){
 Ext.extend(GO.dialog.UsersInGroup, Ext.Window, {
 
 	setGroupId : function(groupId){
-		this.grid.store.setBaseParam('group_id',groupId);
+		this.grid.store.setBaseParam('id',groupId);
 		this.grid.store.load();
 	},
 
