@@ -1758,6 +1758,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return $this->getDbConnection()->query($sql);
 	}
 	
+	public function checkFilesFolder(){
+		if($this->hasFiles()){
+			GO_Files_Controller_Item::checkFolder($this);						
+		}
+	}
+	
 	
 	
 	public function rebuildSearchCache(){

@@ -27,6 +27,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 */
 	public function actionBuildSearchCache(){
 		$response=array();
+		
+		ini_set('max_execution_time','300');
 		GO::modules()->callModuleMethod('buildSearchCache',array(&$response));
 		return $response;
 	}
@@ -37,6 +39,9 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 */
 	public function actionCheckDatabase(){
 		$response=array();
+		//GO::$ignoreAclPerissions=true;
+		
+		ini_set('max_execution_time','300');
 		GO::modules()->callModuleMethod('checkDatabase',array(&$response));
 		return $response;
 	}

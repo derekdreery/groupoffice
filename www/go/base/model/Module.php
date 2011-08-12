@@ -93,6 +93,26 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	 */
 	public static function buildSearchCache(&$response){
 		
+		
+		$moduleClass = get_called_class();
+		$arr = explode('_', $moduleClass);
+		$module = $arr[1];		
+		
+		$response[]  = "Building search cache for ".$module;
+		
+		$module = GO::modules()->$module;
+		
+		
+		
+		$models=$module->getModels();
+		
+		foreach($models as $model){
+			echo $response[] = "Processing ".$model;
+			$stmt = $model::model()->find(array(
+					'ignoreAcl'=>true
+			));
+			$stmt->callOnEach('rebuildSearchCache');
+		}
 	}
 	
 	/**
@@ -100,36 +120,48 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param array $response Array of output lines
 	 */
-	public static function checkDatabase(&$response){
-		
+	public static function checkDatabase(&$response){				
 		
 		$moduleClass = get_called_class();
 		$arr = explode('_', $moduleClass);
-		$module = $arr[1];
+		$module = $arr[1];		
 		
+		$response[]  = "Checking database for ".$module;
 		
 		$module = GO::modules()->$module;
+		
+		
+		
+		$models=$module->getModels();
+		
+		foreach($models as $model){			
+			$response[] = "Processing ".$model;
+			$stmt = $model::model()->find(array(
+					'ignoreAcl'=>true
+			));
+			$stmt->callOnEach('save');
+		}
+	}
 	
-
-		$folder = new GO_Base_Fs_Folder($module->path.'model');
+	public function getModels(){		
+	
+		$models=array();
+		$folder = new GO_Base_Fs_Folder($this->path.'model');
 		if($folder->exists()){
 			$items = $folder->ls();
 			
 			foreach($items as $item){
 				if($item instanceof GO_Base_Fs_File){
-					$className = 'GO_'.ucfirst($module->id).'_Model_'.$item->nameWithoutExtension();
+					$className = 'GO_'.ucfirst($this->id).'_Model_'.$item->nameWithoutExtension();
 					
 					$class = new ReflectionClass($className);
-					if(!$class->isAbstract()){
-					
-						$response[] = "Processing ".$className;
-						$stmt = $className::model()->find(array(
-								'ignoreAcl'=>true
-						));
-						$stmt->callOnEach('save');
+					if(!$class->isAbstract()){					
+						$models[] = $className;
 					}
 				}
 			}
 		}
+		
+		return $models;
 	}
 }

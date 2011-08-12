@@ -260,7 +260,7 @@ class GO_Base_Util_File
 	}
 	
 	
-	function utf8Basename($path)
+	public static function utf8Basename($path)
 	{
 		if(!function_exists('mb_substr'))
 		{
