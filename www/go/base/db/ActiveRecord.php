@@ -719,8 +719,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(isset($params['having']))
 			$sql.="\nHAVING ".$params['having'];
 		
-		if(!empty($params['orderField'])){
-			$sql .= 'ORDER BY `'.$params['orderField'].'`' ;
+		if(!empty($params['order'])){
+			$sql .= "\nORDER BY ".$this->_quoteColumnName($params['order']).' ' ;
 			if(!empty($params['orderDirection'])){
 				$sql .= $params['orderDirection'].' ';
 			}
@@ -785,6 +785,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
     return $result;
 		
+	}
+	
+	private function _quoteColumnName($name){
+		$arr = explode('.',$name);
+		
+//		for($i=0,$max=count($arr);$i<$max;$i++)
+//			$arr[$i]=$this->getDbConnection ()->quote ($arr[$i]);
+		
+		return '`'.implode('`.`',$arr).'`';
 	}
 	
 	private function _appendByParamsToSQL($sql, $params){
@@ -1243,12 +1252,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$this->fireEvent('beforesave',array(&$this));
 			
 			
+			//do this when a files folder is actually needed.
 			if ($this->hasFiles()) {
-				$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this, $this->buildFilesPath());
-			}
-			
-
-			
+				$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this);
+			}		
 			
 			if($this->isNew){				
 				
@@ -1317,7 +1324,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * The files module will use this function. To create a files folder.
 	 * Override it if you don't like the default path.
 	 */
-	protected function buildFilesPath() {
+	public function buildFilesPath() {
 
 		return isset($this->name) ? $this->getModule().'/' . GO_Base_Util_File::strip_invalid_chars($this->name) : false;
 	}

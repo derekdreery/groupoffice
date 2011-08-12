@@ -92,9 +92,29 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 				iconCls: 'btn-files',
 				cls: 'x-btn-text-icon', 
 				text: GO.files.lang.files,
-				handler: function(){					
-					GO.files.openFolder(this.data.files_folder_id);
-					GO.files.fileBrowserWin.on('hide', this.reload, this, {single:true});
+				handler: function(){			
+					
+					if(this.data.files_folder_id==0 && this.data.model){
+						GO.request({
+							url:'files/item/createFolder',
+							maskEl:this.getEl(),
+							params:{								
+								model:this.data.model,
+								id:this.data.id
+							},
+							success:function(response, options, result){
+								this.data.files_folder_id=result.files_folder_id;								
+								GO.files.openFolder(this.data.files_folder_id);
+								GO.files.fileBrowserWin.on('hide', this.reload, this, {single:true});
+							},
+							scope:this
+							
+						});
+					}else
+					{
+						GO.files.openFolder(this.data.files_folder_id);
+						GO.files.fileBrowserWin.on('hide', this.reload, this, {single:true});
+					}
 				},
 				scope: this,
 				disabled:true
@@ -262,7 +282,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		
 		if(this.fileBrowseButton)
 		{
-			this.fileBrowseButton.setDisabled(data.files_folder_id<1);
+			this.fileBrowseButton.setDisabled(data.files_folder_id<1 && !data.model);
 		}
 		
 		this.xtemplate.overwrite(this.body, data);

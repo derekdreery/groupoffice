@@ -87,7 +87,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	/**
 	 * The files module will use this function.
 	 */
-	protected function buildFilesPath() {
+	public function buildFilesPath() {
 
 		return 'notes/' . File::strip_invalid_chars($this->category->name) . '/' . date('Y', $this->ctime) . '/' . GO_Base_Util_File::strip_invalid_chars($this->name);
 	}

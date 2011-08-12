@@ -392,7 +392,7 @@ class GO{
 	 * @param String $module Name of the module to find the translation
 	 * @param String $basesection Only applies if module is set to 'base'
 	 */
-	public function t($name, $module='base', $basesection='common'){
+	public static function t($name, $module='base', $basesection='common'){
 		if(!isset(self::$_language)){
 			self::$_language=new GO_Base_Language();
 		}

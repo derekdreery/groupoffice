@@ -225,8 +225,8 @@ class GO_Base_Provider_Grid {
         'searchQuery' => !empty($_REQUEST['query']) ? '%' . $_REQUEST['query'] . '%' : '',
         'limit' => isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0,
         'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
-        'orderField' => isset($_REQUEST['orderField']) ? $_REQUEST['orderField'] : '',
-        'orderDirection' => isset($_REQUEST['orderDirection']) ? $_REQUEST['orderDirection'] : '',
+        'order' => isset($_REQUEST['sort']) ? $_REQUEST['sort'] : '',
+        'orderDirection' => isset($_REQUEST['dir']) ? $_REQUEST['dir'] : '',
 				'joinCustomFields'=>true,
         'calcFoundRows'=>true
     ), $params);

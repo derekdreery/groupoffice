@@ -26,12 +26,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @var GO_Base_Db_ActiveRecord 
 	 */
 	protected $model;
-//	
-//	function init($output) {
-//		parent::init($output);
-//		//$this->addPermissionCheck(GO::modules()->{$this->module}->acl_id, GO_Base_Model_Acl::READ_PERMISSION);
-//		//$this->addPermissionCheck(GO::modules()->modules['models']['acl_id'], GO_Base_Model_Acl::DELETE_PERMISSION,'delete');
-//	}
 
 	/**
 	 * The default action when the form in an edit dialog is submitted.
@@ -208,6 +202,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$model = $modelName::model()->findByPk($params['id']);
 
 		$response['data'] = $model->getAttributes();
+		$response['data']['model']=$model->className();
 		$response['success'] = true;
 		$response['data']['permission_level']=$model->getPermissionLevel();
 		$response['data']['write_permission']=$response['data']['permission_level']>GO_Base_Model_Acl::READ_PERMISSION;
