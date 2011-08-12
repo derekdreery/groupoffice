@@ -46,7 +46,9 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 	 */
 	public function callOnEach($function){
 		while($m=$this->fetch()){
-			$m->$function();
+			if(method_exists($m, $function))
+				$m->$function();
+
 		}
 	}
 
