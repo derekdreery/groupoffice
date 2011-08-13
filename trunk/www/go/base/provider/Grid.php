@@ -159,10 +159,9 @@ class GO_Base_Provider_Grid {
       throw new Exception('No columns given for this grid.');   
 
     
-    $this->_response['results'] = array();   
-		$this->_response['total']=$this->_stmt->foundRows;
-		
+    $this->_response['results'] = array();		
 		$models = $this->_stmt->fetchAll();
+		$this->_response['total']=$this->_stmt->foundRows();
 		
 		
 		//when using this:

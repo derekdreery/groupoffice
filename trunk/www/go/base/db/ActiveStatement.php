@@ -52,23 +52,33 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 		}
 	}
 	
-//	public function foundRows(){
-//		//Total numbers are cached in session when browsing through pages.
-//		
-//		$queryUid = $this->queryString;
-//		if(empty($this->findParams['start'])){
-//			//TODO: This is MySQL only code
-//			$sql = "SELECT FOUND_ROWS() as found;";			
-//			GO::debug($sql)
-//			$r = GO::getDbConnection()->query($sql);
-//			$record = $r->fetch(PDO::FETCH_ASSOC);
-//			$foundRows = GO::session()->values[$queryUid]=intval($record['found']);	
-//		}else
-//		{
-//			$foundRows=GO::session()->values[$queryUid];
-//		}
-//		
-//		return $foundRows;
-//	}
+	public function foundRows(){
+		//Total numbers are cached in session when browsing through pages.
+		
+		$queryUid = $this->queryString;
+		if(empty($this->findParams['start'])){
+			
+			$distinct = stripos($this->queryString, 'distinct');
+			$fromPos = stripos($this->queryString, 'from');
+			
+			$sql = "SELECT ";
+			if($distinct)
+				$sql .= 'DISTINCT ';
+			
+			$sql .= 'count(*) as found ';
+			$sql .= substr($this->queryString, $fromPos);
+			
+			//TODO: This is MySQL only code
+			//$sql = "SELECT FOUND_ROWS() as found;";			
+			GO::debug($sql);
+			$r = GO::getDbConnection()->query($sql);
+			$foundRows = GO::session()->values[$queryUid]=intval($r->fetchColumn(0));	
+		}else
+		{
+			$foundRows=GO::session()->values[$queryUid];
+		}
+		
+		return $foundRows;
+	}
 
 }
