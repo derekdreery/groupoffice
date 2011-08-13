@@ -25,6 +25,22 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_File {
 		return $folders;
 	}
 	
+	public function delete(){
+		
+		$items = $this->ls(true);
+		
+		foreach($items as $item){
+			if(!$item->delete())
+				return false;
+		}
+		
+		return rmdir($this->path);
+	}
+	
+	public function create(){
+		return !is_dir($this->path) ? mkdir($this->path, GO::config()->folder_create_mode,true) : true;
+	}
+	
 	
 
 }
