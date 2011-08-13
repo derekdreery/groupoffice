@@ -1044,6 +1044,9 @@ class files extends db {
 
 		if(empty($folder['acl_id'])) {
 			$parent = $this->get_folder($folder['parent_id']);
+			if(!$parent)
+				return false;
+			
 			return $this->get_permission_level($user_id, $parent);
 		}else {
 			return $GO_SECURITY->has_permission($user_id, $folder['acl_id']);
