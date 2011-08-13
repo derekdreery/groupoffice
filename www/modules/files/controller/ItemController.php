@@ -97,7 +97,7 @@ class GO_Files_Controller_Item extends GO_Base_Controller_AbstractController{
 	
 	public function actionCreateFolder($params){
 		
-		$model = $params['model']::model()->findByPk($params['id']);
+		$model = call_user_func(array($params['model'],'model'))->findByPk($params['id']);
 		
 		
 		//TODO folder should be a model
