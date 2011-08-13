@@ -250,7 +250,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$response['data']['comments'] = $comments->get_comments_json($response['data']['id'], $model->linkType());
 		}
 
-		if (GO::modules()->customfields && !isset($response['data']['customfields'])) {
+		if (GO::modules()->customfields && $model->customFieldsModel() && !isset($response['data']['customfields'])) {
 			require_once(GO::modules()->customfields->class_path.'customfields.class.inc.php');
 			$cf = new customfields();		
 			
