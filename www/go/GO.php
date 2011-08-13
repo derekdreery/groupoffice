@@ -61,7 +61,7 @@ class GO{
       self::$db->setAttribute( PDO::ATTR_STATEMENT_CLASS, array( 'GO_Base_Db_ActiveStatement', array() ) );
 			
 			//todo needed for foundRows
-			self::$db->setAttribute(PDO::MYSQL_USE_BUFFERED_QUERY,true); 
+			//self::$db->setAttribute(PDO::MYSQL_USE_BUFFERED_QUERY,true); 
 		}
 		
 		return self::$db;
