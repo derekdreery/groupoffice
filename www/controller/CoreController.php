@@ -64,15 +64,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 	public function actionUpgrade($params) {
 
-		echo '<pre>';
-		
-		
-		
-		
-
-		
-		
-		
+		ini_set('max_execution_time', '300');
 		
 		$logDir = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'log/upgrade/');
 		$logDir->create();
@@ -106,6 +98,9 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			echo "Failed!\n";
 		
 		$folder->create();
+		
+		
+		echo "Updating Group-Office database\n";
 			
 		
 		GO::$ignoreAclPerissions = true;

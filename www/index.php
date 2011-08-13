@@ -29,20 +29,21 @@ if($GLOBALS['GO_CONFIG']->force_login_url && strpos($GLOBALS['GO_CONFIG']->full_
 	exit();
 }
 
-$mtime = $GLOBALS['GO_CONFIG']->get_setting('upgrade_mtime');
-
-if($mtime!=$GLOBALS['GO_CONFIG']->mtime)
-{
-	if($GLOBALS['GO_SECURITY']->logged_in())
-		$GLOBALS['GO_SECURITY']->logout();
-	
-	echo '<html><head><style>body{font-family:arial;}</style></head><body>';
-	echo '<h1>'.$lang['common']['running_sys_upgrade'].'</h1><p>'.$lang['common']['sys_upgrade_text'].'</p>';
-	require($GLOBALS['GO_CONFIG']->root_path.'install/upgrade.php');
-	echo '<a href="#" onclick="document.location.reload();">'.$lang['common']['click_here_to_contine'].'</a>';
-	echo '</body></html>';
-	exit();
-}
+//$mtime = $GLOBALS['GO_CONFIG']->get_setting('upgrade_mtime');
+//
+//if($mtime!=$GLOBALS['GO_CONFIG']->mtime)
+//{
+//	header('Location: '.$GO_CONFIG->host.'router.php?r=core/upgrade');
+////	if($GLOBALS['GO_SECURITY']->logged_in())
+////		$GLOBALS['GO_SECURITY']->logout();
+////	
+////	echo '<html><head><style>body{font-family:arial;}</style></head><body>';
+////	echo '<h1>'.$lang['common']['running_sys_upgrade'].'</h1><p>'.$lang['common']['sys_upgrade_text'].'</p>';
+////	require($GLOBALS['GO_CONFIG']->root_path.'install/upgrade.php');
+////	echo '<a href="#" onclick="document.location.reload();">'.$lang['common']['click_here_to_contine'].'</a>';
+////	echo '</body></html>';
+//	exit();
+//}
 
 //temporary hack. In the future this controller will replace this index.php script.
 //Now we need it to fire events.
