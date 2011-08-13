@@ -11,5 +11,7 @@ class GO_Notes_Model_CustomFieldsRecord extends GO_Customfields_Model_AbstractCu
 		return parent::model($className);
 	}
 	
-	const linkType = 4;
+	public function linkType(){
+		return 4;
+	}
 }
