@@ -2023,7 +2023,7 @@ class files extends db {
 		return $out_array;
 	}
 
-	function get_file_cf_category_permissions(&$response) {
+	public static function get_file_cf_category_permissions(&$response) {
 
 		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
 			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
