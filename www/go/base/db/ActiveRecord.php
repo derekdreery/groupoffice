@@ -1105,7 +1105,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					}
 					break;
 				default:
-					$formatted[$key] = $value;
+					$formatted[$key] = htmlspecialchars($value,ENT_QUOTES,'UTF-8');
 					break;
 			}
 		}
@@ -1200,10 +1200,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				throw new Exception($field.' is required');
 			}elseif(!empty($attributes['length']) && !empty($this->_attributes[$field]) && strlen($this->_attributes[$field])>$attributes['length'])
 			{
-				throw new Exception($field.' too long');
-			}elseif(!empty($this->_attributes[$field]) && preg_match('/[<>]+/',$this->_attributes[$field])){
-				throw new Exception($field.' contains invalid characters < or >');
-			}elseif(!empty($attributes['regex']) && !empty($this->_attributes[$field]) && !preg_match($attributes['regex'], $this->_attributes[$field]))
+				throw new Exception($field.' too long '.strlen($this->_attributes[$field]).' > '.$attributes['length']);
+			}
+//			}elseif(!empty($this->_attributes[$field]) && preg_match('/[<>]+/',$this->_attributes[$field])){
+//				throw new Exception($this->className().' '.$field.' contains invalid characters < or > : '.$this->_attributes[$field]);
+//			}
+			elseif(!empty($attributes['regex']) && !empty($this->_attributes[$field]) && !preg_match($attributes['regex'], $this->_attributes[$field]))
 			{
 				throw new Exception($field.' was not correctly formatted');
 			}elseif(!empty($attributes['validator']) && !empty($this->_attributes[$field]) && !call_user_func($attributes['validator'], $this->_attributes[$field]))
@@ -1363,7 +1365,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				'link_type'=>$this->linkType(),
 				'description'=>'',		
 				'type'=>'',
-				'keywords'=>$this->_getSearchCacheKeywords($this->record).','.$attr['type'],
+				'keywords'=>$this->_getSearchCacheKeywords($attr['type']),
 				'mtime'=>$this->mtime,
 				'acl_id'=>$this->findAclId()
 			);
@@ -1389,7 +1391,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return false;
 	}
 	
-	private function _getSearchCacheKeywords(){
+	private function _getSearchCacheKeywords($prepend=''){
 		$keywords=array();
 
 		foreach($this->columns as $key=>$attr)
@@ -1399,7 +1401,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				$keywords[]=$value;
 			}
 		}
-		$keywords =  implode(',',$keywords);
+		$keywords =  $prepend.','.implode(',',$keywords);
 		
 		return substr($keywords,0,255);
 	}
