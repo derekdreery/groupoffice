@@ -61,6 +61,17 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			exit();
 		}
 	}
+	
+	public function actionUpgrade(){
+		
+		$updates = array();
+		
+		$stmt = GO::modules()->getAll();
+		while($module = $stmt->fetch())
+		{	
+			
+		}
+	}
 
 	/**
 	 * Todo replace compress.php with this action
