@@ -14,35 +14,35 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	protected function actionInit() {
 
 		GO_Base_Observable::cacheListeners();
-		if(GO::user())
+		if (GO::user())
 			$this->fireEvent('loadapplication', array(&$this));
-			
-		
+
+
 		//$this->render('init');
 	}
-	
+
 	/**
 	 * Calls buildSearchIndex on each Module class.
 	 * @return array 
 	 */
-	public function actionBuildSearchCache(){
-		$response=array();
-		
-		ini_set('max_execution_time','300');
-		GO::modules()->callModuleMethod('buildSearchCache',array(&$response));
+	public function actionBuildSearchCache() {
+		$response = array();
+
+		ini_set('max_execution_time', '300');
+		GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
 		return $response;
 	}
-	
+
 	/**
 	 * Calls checkDatabase on each Module class.
 	 * @return array 
 	 */
-	public function actionCheckDatabase(){
-		$response=array();
+	public function actionCheckDatabase() {
+		$response = array();
 		//GO::$ignoreAclPerissions=true;
-		
-		ini_set('max_execution_time','300');
-		GO::modules()->callModuleMethod('checkDatabase',array(&$response));
+
+		ini_set('max_execution_time', '300');
+		GO::modules()->callModuleMethod('checkDatabase', array(&$response));
 		return $response;
 	}
 
@@ -61,16 +61,101 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			exit();
 		}
 	}
-	
-	public function actionUpgrade(){
-		
-		$updates = array();
-		
-		$stmt = GO::modules()->getAll();
-		while($module = $stmt->fetch())
-		{	
-			
+
+	public function actionUpgrade($params) {
+
+
+		GO::$ignoreAclPerissions = true;
+
+		echo '<pre>';
+		//build an array of all update files. The queries are indexed by timestamp
+		//so they will all be executed in the right order.
+		$u = array();
+
+		require(GO::config()->root_path . 'install/updates.php');
+
+		//put the updates in an extra array dimension so we know to which module
+		//they belong too.
+		foreach ($updates as $timestamp => $updatequeries) {
+			$u[$timestamp]['core'] = $updatequeries;
 		}
+
+
+		$stmt = GO::modules()->getAll();
+		while ($module = $stmt->fetch()) {
+			$updatesFile = $module->path . 'install/updates.php';
+			if (!file_exists($updatesFile))
+				$updatesFile = $module->path . 'install/updates.inc.php';
+
+			if (file_exists($updatesFile)) {
+				$updates = array();
+				require($updatesFile);
+
+				//put the updates in an extra array dimension so we know to which module
+				//they belong too.
+				foreach ($updates as $timestamp => $updatequeries) {
+					$u[$timestamp][$module->id] = $updatequeries;
+				}
+			}
+		}
+		//sort the array by timestamp
+		ksort($u);
+
+		$currentVersion = GO::config()->get_setting('version');
+		if (!$currentVersion)
+			$currentVersion = 0;
+		$i = 100; //start at 100 for 3.x update system.
+		foreach ($u as $timestamp => $updateQuerySet) {
+			
+			foreach ($updateQuerySet as $module => $queries) {
+				foreach ($queries as $query) {
+					$i++;
+					if ($i > $currentVersion) {
+						if (substr($query, 0, 7) == 'script:') {
+							if ($module == 'core')
+								$updateScript = GO::config()->root_path . 'install/updatescripts/' . substr($query, 7);
+							else
+								$updateScript = GO::modules()->$module->path . 'install/updatescripts/' . substr($query, 7);
+
+							if (!file_exists($updateScript)) {
+								die($updateScript . ' not found!');
+							}
+							//if(!$quiet)
+							echo 'Running ' . $updateScript . "\n";
+							if (empty($params['test']))
+								require_once($updateScript);
+						}else {
+							echo 'Excuting query: ' . $query . "\n";
+							if (empty($params['test'])) {
+								try {
+									GO::getDbConnection()->query($query);
+								} catch (PDOException $e) {
+									//var_dump($e);
+									echo $e->getMessage() . "\n";
+//									if ($e->getCode() == 1091 || $e->getCode() == 1060) {
+//										//duplicate and drop errors. Ignore those on updates
+//									} else {
+//										die();
+//									}
+								}
+							}
+						}
+
+						if (empty($params['test'])) {
+							GO::config()->save_setting('version', $i);
+						}
+					}
+				}
+			}
+		}
+
+		if (empty($params['test'])) {
+			echo "Database updated to version " . $i, "\n";
+		} else {
+			echo "Ran in test mode\n";
+		}
+
+		//return $response;
 	}
 
 	/**
@@ -173,5 +258,4 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //		$cssurl = $GLOBALS['GO_CONFIG']->host . 'compress.php?file=' . basename($relpath);
 //		echo '<link href="' . $cssurl . '" type="text/css" rel="stylesheet" />';
 //	}
-
 }

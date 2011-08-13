@@ -1,4 +1,6 @@
 <?php
+$updates[201108131011][]="ALTER TABLE `ab_companies` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
+$updates[201108131011][]="ALTER TABLE `ab_contacts` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
 $updates[201108131011][]="ALTER TABLE `ab_contacts` ADD `go_user_id` INT NOT NULL , ADD INDEX ( `go_user_id` )";
 $updates[201108131011][]="ALTER TABLE `ab_addressbooks` DROP `acl_write`";
 $updates[201108131011][]="ALTER TABLE `ab_addressbooks` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
