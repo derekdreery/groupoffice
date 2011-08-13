@@ -19,9 +19,6 @@ modules/users/RegionalSettingsPanel.js
 modules/users/LookAndFeelPanel.js
 modules/users/PasswordPanel.js
 modules/users/Settings.js
-modules/users/ProfilePanel.js
-modules/users/PersonalPanel.js
-modules/users/CompanyPanel.js
 
 javascript/windows/AboutDialog.js
 javascript/windows/LoginDialog.js
