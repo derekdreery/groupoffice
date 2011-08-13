@@ -11,5 +11,7 @@ class GO_Addressbook_Model_ContactCustomFieldsRecord extends GO_Customfields_Mod
 	{	
 		return parent::model($className);
 	}
-	const linkType = 2;
+	public function linkType(){
+		return 2;
+	}
 }
