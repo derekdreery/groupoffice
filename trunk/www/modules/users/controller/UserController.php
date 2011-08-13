@@ -41,7 +41,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		return parent::beforeSubmit($response, $model);
 	}
 
-	protected function afterSubmit(&$response, $user) {
+	protected function afterSubmit(&$response, &$model) {
 		if (isset($_POST['modules'])) {
 			$modules = json_decode($_POST['modules'], true);
 			$groupsMember = json_decode($_POST['group_member'], true);
@@ -63,9 +63,9 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 				}
 
 				if ($level) {
-					$mod->acl->addUser($user->id, $level);
+					$mod->acl->addUser($model->id, $level);
 				} else {
-					$mod->acl->removeUser($user->id);					
+					$mod->acl->removeUser($model->id);					
 				}
 			}
 			
@@ -76,9 +76,9 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			foreach ($groupsMember as $group) {
 				if ($group['id'] != GO::config()->group_everyone) {
 					if ($group['group_permission']) {						
-						GO_Base_Model_Group::model()->findByPk($group['id'])->addUser($user->id);
+						GO_Base_Model_Group::model()->findByPk($group['id'])->addUser($model->id);
 					} else {
-						GO_Base_Model_Group::model()->findByPk($group['id'])->removeUser($user->id);
+						GO_Base_Model_Group::model()->findByPk($group['id'])->removeUser($model->id);
 					}
 				}
 			}
@@ -89,9 +89,9 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			 */
 			foreach ($groupsVisible as $group) {				
 				if ($group['visible_permission']){
-					$user->acl->addGroup($group['id']);
+					$model->acl->addGroup($group['id']);
 				} else {
-					$user->acl->removeGroup($group['id']);					
+					$model->acl->removeGroup($group['id']);					
 				}
 			}
 		}
@@ -103,8 +103,8 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			$email = $this->_getRegisterEmail();
 
 			if (!empty($email['register_email_body']) && !empty($email['register_email_subject'])) {
-				$swift = new GO_Base_Mail_Swift($user->email, $email['register_email_subject']);
-				foreach ($user->getAttributes() as $key => $value) {
+				$swift = new GO_Base_Mail_Swift($model->email, $email['register_email_subject']);
+				foreach ($model->getAttributes() as $key => $value) {
 					$email['register_email_body'] = str_replace('{' . $key . '}', $value, $email['register_email_body']);
 				}
 

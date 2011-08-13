@@ -550,11 +550,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			return $cachedModel;
 				
 		$stmt = $this->find($params);		
-		$model = $stmt->fetch();
+		$models = $stmt->fetchAll();
 		
-		GO::modelCache()->add($this->className(), $model, $cacheKey);
+		GO::modelCache()->add($this->className(), $models[0], $cacheKey);
 		
-		return $model;		
+		return $models[0];		
 	}
 	
 
@@ -934,8 +934,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
   
 		$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
 		
-		$model =  $result->fetch();
-		
+		$models =  $result->fetchAll();
+		$model = $models[0];
 		
     //todo check read permissions
     if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
