@@ -24,6 +24,16 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	public $class_path;
 
 
+	/**
+	 * Returns a static model of itself
+	 * 
+	 * @param String $className
+	 * @return GO_Base_Model_Module 
+	 */
+	public static function model($className=__CLASS__)
+	{	
+		return parent::model($className);
+	}
 
 	public function aclField() {
 		return 'acl_id';

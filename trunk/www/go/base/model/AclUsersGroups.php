@@ -24,6 +24,17 @@
  */
 class GO_Base_Model_AclUsersGroups extends GO_Base_Db_ActiveRecord {
 
+	/**
+	 * Returns a static model of itself
+	 * 
+	 * @param String $className
+	 * @return GO_Base_Model_AclUsersGroups 
+	 */
+	public static function model($className=__CLASS__)
+	{	
+		return parent::model($className);
+	}
+	
 	public function tableName() {
 		return 'go_acl';
 	}

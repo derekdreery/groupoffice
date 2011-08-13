@@ -9,6 +9,17 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	const WRITE_PERMISSION=2;
 	const DELETE_PERMISSION=3;
 	const MANAGE_PERMISSION=4;
+	
+	/**
+	 * Returns a static model of itself
+	 * 
+	 * @param String $className
+	 * @return GO_Base_Model_Acl 
+	 */
+	public static function model($className=__CLASS__)
+	{	
+		return parent::model($className);
+	}
 
 	public function tableName(){
 		return "go_acl_items";

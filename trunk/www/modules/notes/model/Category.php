@@ -22,6 +22,16 @@
  */
 class GO_Notes_Model_Category extends GO_Base_Db_ActiveRecord {
 
+	/**
+	 * Returns a static model of itself
+	 * 
+	 * @param String $className
+	 * @return GO_Notes_Model_Category 
+	 */
+	public static function model($className=__CLASS__)
+	{	
+		return parent::model($className);
+	}
 	public function aclField() {
 		return 'acl_id';
 	}
