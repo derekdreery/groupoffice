@@ -272,15 +272,15 @@ class GO_SECURITY extends db {
 		if ($user_id == -1) {
 			$user_id = $this->user_id;
 		}
-		$ai['id'] = $this->nextid("go_acl_items");
+		//$ai['id'] = $this->nextid("go_acl_items");
 		$ai['description']=$description;
 		$ai['user_id']=$user_id;
 
 		$this->insert_row('go_acl_items', $ai);
-
-		$this->add_group_to_acl($GLOBALS['GO_CONFIG']->group_root, $ai['id'],GO_SECURITY::MANAGE_PERMISSION);
-		$this->add_user_to_acl($user_id, $ai['id'],GO_SECURITY::MANAGE_PERMISSION);
-		return $ai['id'];
+    $id = $this->insert_id();
+		$this->add_group_to_acl($GLOBALS['GO_CONFIG']->group_root, $id,GO_SECURITY::MANAGE_PERMISSION);
+		$this->add_user_to_acl($user_id, $id,GO_SECURITY::MANAGE_PERMISSION);
+		return $id;
 	}
 
 	/**
