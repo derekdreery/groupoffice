@@ -28,7 +28,7 @@ if($GLOBALS['GO_CONFIG']->force_login_url && strpos($GLOBALS['GO_CONFIG']->full_
 	header('Location: '.$GLOBALS['GO_CONFIG']->force_login_url);
 	exit();
 }
-
+//
 //$mtime = $GLOBALS['GO_CONFIG']->get_setting('upgrade_mtime');
 //
 //if($mtime!=$GLOBALS['GO_CONFIG']->mtime)
