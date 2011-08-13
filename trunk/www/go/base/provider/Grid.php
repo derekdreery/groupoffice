@@ -85,7 +85,7 @@ class GO_Base_Provider_Grid {
 //            if (isset($relations[$this->stmt->relation]['linksModel']))
 //              $deleteModelName = $relations[$this->stmt->relation]['linksModel'];
 //          }
-          $staticModel = $deleteModelName::model();
+          $staticModel = call_user_func(array($deleteModelName,'model'));
           if($extraPkValue){           
             
             //get the primary key names of the delete model in an array

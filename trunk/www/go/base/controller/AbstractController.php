@@ -54,7 +54,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			$moduleClass = "GO_".ucfirst($this->module)."_".ucfirst($this->module)."Module";
 			
 			if(class_exists($moduleClass)){
-				$moduleClass::firstRun();
+
+				call_user_func(array($moduleClass,'firstRun'));
 				GO::session()->values[$this->module]['firstRunDone']=true;
 			}
 		}

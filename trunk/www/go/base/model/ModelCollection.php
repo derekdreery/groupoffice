@@ -14,7 +14,7 @@ class GO_Base_Model_ModelCollection{
 	protected $model;
 	
 	public function __construct($model){
-		$this->model = $model::model();		
+		$this->model = call_user_func(array($model,'model'));		
 	}
 	
 	public function __get($name){
