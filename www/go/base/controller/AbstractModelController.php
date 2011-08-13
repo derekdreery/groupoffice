@@ -34,7 +34,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$modelName = $this->model;
 		if (!empty($params['id']))
-			$model = $modelName::model()->findByPk($params['id']);
+			$model = call_user_func(array($modelName,'model'))->findByPk($params['id']);
 		else
 			$model = new $modelName;
 
@@ -94,7 +94,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	public function actionLoad($params) {
 		$modelName = $this->model;
-		$model = $modelName::model()->findByPk($params['id']);
+		//$modelName::model() does not work on php 5.2!
+		$model = call_user_func(array($modelName,'model'))->findByPk($params['id']);
 
 
 		$response['data'] = $model->getAttributes();
@@ -189,7 +190,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$gridParams = array_merge(GO_Base_Provider_Grid::getDefaultParams(),$this->getGridParams());
 
-		$grid->setStatement($modelName::model()->find($gridParams));
+		$grid->setStatement(call_user_func(array($modelName,'model'))->find($gridParams));
 		$this->prepareGrid($grid);
     return $grid->getData();
   }	
@@ -199,7 +200,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	public function actionDisplay($params) {
 		$modelName = $this->model;
-		$model = $modelName::model()->findByPk($params['id']);
+		$model = call_user_func(array($modelName,'model'))->findByPk($params['id']);
 
 		$response['data'] = $model->getAttributes();
 		$response['data']['model']=$model->className();

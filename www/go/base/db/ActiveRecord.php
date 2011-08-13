@@ -1007,11 +1007,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				if($r[$name]['type']==self::BELONGS_TO)
 				{
 					//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
-					$this->_relatedCache[$name]= $model::model()->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name));
+					$this->_relatedCache[$name]= call_user_func(array($model,'model'))->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name));
 				}else
 				{
 					//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
-					$this->_relatedCache[$name]= $model::model()->findSingleByAttribute($r[$name]['field'], $this->pk, array('relation'=>$name));
+					$this->_relatedCache[$name]= call_user_func(array($model,'model'))->findSingleByAttribute($r[$name]['field'], $this->pk, array('relation'=>$name));
 				}
 			}
 
@@ -1025,7 +1025,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
           "relation"=>$name
 			));
 				
-			$stmt = $model::model()->find($findParams);
+			$stmt = call_user_func(array($model,'model'))->find($findParams);
 			return $stmt;		
 		}elseif($r[$name]['type']==self::MANY_MANY)
 		{							
@@ -1042,7 +1042,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
           "relation"=>$name
 			));
 				
-			$stmt = $model::model()->find($findParams); // pakt alle records waarvan de ids via de koppeltabel gelinked zijn aan de local id
+			$stmt = call_user_func(array($model,'model'))->find($findParams); // pakt alle records waarvan de ids via de koppeltabel gelinked zijn aan de local id
       return $stmt;		
 		}
 	}
@@ -1705,7 +1705,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($this->customfieldsModel() && GO::modules()->customfields){
 			$customFieldModelName=$this->customfieldsModel();
 
-			$model = $customFieldModelName::model()->findByPk($this->pk);
+			$model = call_user_func(array($customFieldModelName,'model'))->findByPk($this->pk);
 			if(!$model){
 				//doesn't exist yet. Return a new one
 				$model = new $customFieldModelName;

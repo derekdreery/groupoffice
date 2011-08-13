@@ -108,7 +108,7 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 		
 		foreach($models as $model){
 			echo $response[] = "Processing ".$model;
-			$stmt = $model::model()->find(array(
+			$stmt = call_user_func(array($model,'model'))->find(array(
 					'ignoreAcl'=>true
 			));
 			$stmt->callOnEach('rebuildSearchCache');
@@ -136,7 +136,7 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 		
 		foreach($models as $model){			
 			$response[] = "Processing ".$model;
-			$stmt = $model::model()->find(array(
+			$stmt = call_user_func(array($model,'model'))->find(array(
 					'ignoreAcl'=>true
 			));
 			$stmt->callOnEach('save');
