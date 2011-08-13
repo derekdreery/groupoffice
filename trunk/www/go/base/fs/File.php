@@ -7,6 +7,10 @@ class GO_Base_Fs_File{
 		$this->path = dirname($path) . '/' . GO_Base_util_File::utf8Basename($path);
 	}
 	
+	public function path(){
+		return $this->path;
+	}
+	
 	public function mtime(){
 		return filemtime($this->path);
 	}
@@ -20,6 +24,10 @@ class GO_Base_Fs_File{
 	
 	public function exists(){
 		return file_exists($this->path);
+	}
+	
+	public function delete(){
+		return unlink($this->path);
 	}
 	
 	/**

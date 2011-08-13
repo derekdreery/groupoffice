@@ -64,10 +64,53 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 	public function actionUpgrade($params) {
 
+		echo '<pre>';
+		
+		
+		
+		
 
+		
+		
+		
+		
+		$logDir = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'log/upgrade/');
+		$logDir->create();
+		global $logFile;
+		
+		$logFile = $logDir->path().'/'.date('Ymd_Gi').'.log';
+		touch ($logFile);
+
+		if(!is_writable($logFile)){
+			die('Fatal error: Could not write to log file');
+		}
+
+		function ob_upgrade_log($buffer)
+		{
+			global $logFile;
+
+			file_put_contents($logFile, $buffer, FILE_APPEND);
+			return $buffer;
+		}
+		
+		if(php_sapi_name() != 'cli'){
+			echo '<pre>';
+		}
+		ob_start("ob_upgrade_log");
+		
+		echo "Removing cached javascripts...\n";
+		$folder = new GO_Base_Fs_Folder((GO::config()->file_storage_path.'cache'));
+		if($folder->delete())
+			echo "Done\n";
+		else
+			echo "Failed!\n";
+		
+		$folder->create();
+			
+		
 		GO::$ignoreAclPerissions = true;
 
-		echo '<pre>';
+		
 		//build an array of all update files. The queries are indexed by timestamp
 		//so they will all be executed in the right order.
 		$u = array();
@@ -101,16 +144,27 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		//sort the array by timestamp
 		ksort($u);
 
-		$currentVersion = GO::config()->get_setting('version');
-		if (!$currentVersion)
-			$currentVersion = 0;
-		$i = 100; //start at 100 for 3.x update system.
+		$currentCoreVersion = GO::config()->get_setting('version');
+		if (!$currentCoreVersion)
+			$currentCoreVersion = 0;
+		
+		$counts=array();
+		
 		foreach ($u as $timestamp => $updateQuerySet) {
 			
 			foreach ($updateQuerySet as $module => $queries) {
+				
+				if($module=='core')
+					$currentVersion=$currentCoreVersion;
+				else
+					$currentVersion = GO::modules()->$module->version;
+				
+				if(!isset($counts[$module]))
+					$counts[$module]=1000;				//start at 100 for 3.x update system.	
+				
 				foreach ($queries as $query) {
-					$i++;
-					if ($i > $currentVersion) {
+					$counts[$module]++;
+					if ($counts[$module] > $currentVersion) {
 						if (substr($query, 0, 7) == 'script:') {
 							if ($module == 'core')
 								$updateScript = GO::config()->root_path . 'install/updatescripts/' . substr($query, 7);
@@ -142,7 +196,13 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 						}
 
 						if (empty($params['test'])) {
-							GO::config()->save_setting('version', $i);
+							if($module=='core')
+								GO::config()->save_setting('version', $counts[$module]);
+							else{
+								GO::modules()->$module->version=$counts[$module];
+								GO::modules()->$module->save();
+							}
+							flush();
 						}
 					}
 				}
@@ -150,7 +210,9 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		}
 
 		if (empty($params['test'])) {
-			echo "Database updated to version " . $i, "\n";
+			echo "Database updated to version " . GO::config()->mtime, "\n";
+			
+			GO::config()->save_setting('upgrade_mtime', GO::config()->mtime);
 		} else {
 			echo "Ran in test mode\n";
 		}
