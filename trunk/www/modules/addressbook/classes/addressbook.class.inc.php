@@ -1036,7 +1036,7 @@ class addressbook extends db {
 	}
 
 
-	function format_company_record(&$record, $cf=false, $html=true) {
+	public static function format_company_record(&$record, $cf=false, $html=true) {
 		$record['ctime']=Date::get_timestamp($record['ctime']);
 		$record['mtime']=Date::get_timestamp($record['mtime']);
 
