@@ -129,16 +129,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return 'id';
 	}
 	
-	/**
-	 * Return true if this model is likely to be identical through a session so
-	 * it can be cached in the session for performance.
-	 * 
-	 * @return boolean 
-	 */
-	public function sessionCache(){
-		return false;
-	}
-	
 	private $_relatedCache;
 	
 	
@@ -552,9 +542,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$stmt = $this->find($params);		
 		$models = $stmt->fetchAll();
 		
-		GO::modelCache()->add($this->className(), $models[0], $cacheKey);
+		$model = isset($models[0]) ? $models[0] : false;
 		
-		return $models[0];		
+		GO::modelCache()->add($this->className(), $model, $cacheKey);
+		
+		return $model;		
 	}
 	
 
@@ -935,7 +927,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
 		
 		$models =  $result->fetchAll();
-		$model = $models[0];
+		$model = isset($models[0]) ? $models[0] : false;
 		
     //todo check read permissions
     if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
@@ -1105,7 +1097,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					}
 					break;
 				default:
-					$formatted[$key] = htmlspecialchars($value,ENT_QUOTES,'UTF-8');
+					$formatted[$key] = $value;//htmlspecialchars($value,ENT_QUOTES,'UTF-8');
 					break;
 			}
 		}

@@ -18,14 +18,21 @@ class GO_Base_Model_ModelCollection{
 	}
 	
 	public function __get($name){
-		
-		$model =  $this->model->findByPk($name);
+		try{
+			$model =  $this->model->findByPk($name);
+		}catch(AccessDeniedException $e){
+			return false;
+		}
 		
 		return $model;
 	}
 	
 	public function __isset($name){
-		return $this->model->findByPk($name)!==false;
+		try{
+			return $this->model->findByPk($name)!==false;
+		}catch(AccessDeniedException $e){
+			return false;
+		}
 	}
 	
 	public function getAll(){

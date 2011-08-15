@@ -44,7 +44,7 @@ GO.users.AccountPanel = function(config)
 			name: 'username'
 		});
 		
-	this.enabledField = new Ext.form.Checkbox({
+	this.enabledField = new Ext.ux.form.XCheckbox({
 		boxLabel: GO.users.lang['cmdBoxLabelEnabled'],
 		name: 'enabled',
 		checked: true,
