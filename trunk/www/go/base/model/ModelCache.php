@@ -52,10 +52,10 @@ class GO_Base_Model_ModelCache{
 		
 		$this->_models[$modelClassName][$cacheKey]=$model;
 		
-		if($model->sessionCache()){
-			//GO::debug("Add to session");
-			//GO::session()->values['modelCache'][$modelClassName][$cacheKey]=$model;
-		}
+//		if($model->sessionCache()){
+//			//GO::debug("Add to session");
+//			//GO::session()->values['modelCache'][$modelClassName][$cacheKey]=$model;
+//		}
 	}
 	
 	private function _formatCacheKey($cacheKey){
