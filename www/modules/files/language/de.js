@@ -27,7 +27,12 @@ GO.files.lang.normalSize='Normale Größe';
 GO.files.lang.imageViewer='Bildbetrachter';
 
 GO.files.lang.applyState = 'Anzeigeeinstellungen dieses Ordners für alle Nutzer übernehmen';
-GO.files.lang.strDownloadActive = 'Externer Download-Link verfügbar';
+GO.files.lang.strDownloadActive = 'Externer Downloadlink verfügbar';
+
+GO.files.lang.emailDownloadLink = 'E-Mail Downloadlink';
 GO.files.lang.downloadExpireTime='Link verfällt nach dem';
+GO.files.lang.expireTime = 'Verfallsdatum des Links';
 GO.files.lang.downloadUrl='URL';
 
+GO.files.lang.newFolder = 'Neuer Ordner';
+GO.files.lang.stateLocked = 'Ordneranzeige durch Besitzer/Administrator gesperrt';
