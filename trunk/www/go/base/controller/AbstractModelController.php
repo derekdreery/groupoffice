@@ -269,5 +269,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return $response;
 	}
 
+	/**
+	 * Deletes a specific record.
+	 * @param type $params The POST parameters 
+	 */
+	protected function actionDelete($params) {
+	    $modelName = $this->model;
+	    $model = $modelName::model()->findByPk($params['id']);
+	    $response['success'] = $model->delete();
+	    return $response;
+	}
 }
 
