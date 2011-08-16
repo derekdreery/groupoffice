@@ -1114,6 +1114,11 @@ class calendar extends db {
 	}
 
 	function add_event(&$event, $calendar=false) {
+    GLOBAL $GO_EVENTS;
+    
+    $GO_EVENTS->fire_event('before_add_event', array(&$event,&$before_event_response));
+    
+       
 		if(empty($event['calendar_id'])) {
 			return false;
 		}		
@@ -1237,7 +1242,9 @@ class calendar extends db {
 			if(isset($participants)){
 				$this->add_participants($event,$participants);
 			}
-
+      
+      $GO_EVENTS->fire_event('calendar_add_event', array($event, $before_event_response));
+      
 			return $event['id'];
 		}				
 		return false;
