@@ -2001,28 +2001,31 @@ class calendar extends db {
 
 	function convert_attendees_to_participants($attendees, $organizer=false)
 	{
+		go_debug($attendees);
 		$participants = array();
 		foreach($attendees as $attendee)
 		{
-			$email = strtolower($attendee['value']);
-			$email = (strpos($email, 'mailto') === 0) ? $email = substr($email, 7) : $email;
-			
-			if(!isset($participants[$email]))
-			{
-				$participants[$email] = array();
-			}
-			
-			$participant['name'] = isset($attendee['params']['CN']) ? $attendee['params']['CN'] : $email;
-			$status = isset($attendee['params']['PARTSTAT']) ? $attendee['params']['PARTSTAT'] : 'ACCEPTED';
-			$participant['status'] = $this->get_participant_status_id($status);
-			$participant['role'] = isset($attendee['params']['ROLE']) ? $attendee['params']['ROLE'] : '';
+			if(isset($attendee['value'])){
+				$email = strtolower($attendee['value']);
+				$email = (strpos($email, 'mailto') === 0) ? $email = substr($email, 7) : $email;
 
-			if($organizer)
-			{
-				$participant['is_organizer'] = true;
-			}
+				if(!isset($participants[$email]))
+				{
+					$participants[$email] = array();
+				}
 
-			$participants[$email] = $participant;
+				$participant['name'] = isset($attendee['params']['CN']) ? $attendee['params']['CN'] : $email;
+				$status = isset($attendee['params']['PARTSTAT']) ? $attendee['params']['PARTSTAT'] : 'ACCEPTED';
+				$participant['status'] = $this->get_participant_status_id($status);
+				$participant['role'] = isset($attendee['params']['ROLE']) ? $attendee['params']['ROLE'] : '';
+
+				if($organizer)
+				{
+					$participant['is_organizer'] = true;
+				}
+
+				$participants[$email] = $participant;
+			}
 		}
 					
 		return $participants;
