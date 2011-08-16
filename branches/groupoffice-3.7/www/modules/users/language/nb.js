@@ -102,3 +102,6 @@ GO.users.lang.mailReminders='Send påminnelser';
 GO.users.lang.sendInvitation='Send invitasjon';
 GO.users.lang.contactInfo='Kontaktinformasjon';
 GO.users.lang.popupNotification='Vis et sprettoppvindu når en påminnelse blir aktiv, eller når det er kommet ny e-post';
+GO.users.lang.muteNewMailSound='Demp lydvarsling av ny e-post';
+GO.users.lang.muteReminderSound='Demp lydvarsling av påminnelser';
+GO.users.lang.showSmilies='Vis smilefjes';
