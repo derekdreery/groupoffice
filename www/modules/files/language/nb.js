@@ -40,3 +40,6 @@ GO.files.lang.expireTime= 'Lenken utløper den:';
 GO.files.lang.newFolder= 'Ny mappe';
 GO.files.lang.applyState= 'Lås mappens visningmodus for alle brukere.';
 GO.files.lang.stateLocked= 'Mappens visningsmodus er låst av eier/admin';
+GO.files.lang.strDownloadActive= 'Ekstern nedlastingslenke er aktivert';
+GO.files.lang.downloadExpireTime='Lenken utløper den';
+GO.files.lang.downloadUrl='URL';

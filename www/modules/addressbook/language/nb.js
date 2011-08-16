@@ -124,3 +124,4 @@ GO.addressbook.lang.strUnknownEmail= 'Ukjent e-postadresse. Vil du legge den til
 GO.addressbook.lang.globalsettings_templatelabel= 'Mal';
 GO.addressbook.lang.globalsettings_allchangelabel= 'Endre alle?';
 GO.addressbook.lang.globalsettings_renameall= 'Gi nytt navn til alle?';
+GO.addressbook.lang.createEmailSelected= 'Lag e-post til utvalg';
