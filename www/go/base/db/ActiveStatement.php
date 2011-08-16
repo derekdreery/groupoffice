@@ -45,7 +45,8 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 	 * @param String $function 
 	 */
 	public function callOnEach($function){
-		while($m=$this->fetch()){
+		$models = $this->fetchAll();
+		foreach($models as $m){
 			if(method_exists($m, $function))
 				$m->$function();
 
@@ -68,8 +69,6 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 			$sql .= 'count(*) as found ';
 			$sql .= substr($this->queryString, $fromPos);
 			
-			//TODO: This is MySQL only code
-			//$sql = "SELECT FOUND_ROWS() as found;";			
 			GO::debug($sql);
 			$r = GO::getDbConnection()->query($sql);
 			$foundRows = GO::session()->values[$queryUid]=intval($r->fetchColumn(0));	

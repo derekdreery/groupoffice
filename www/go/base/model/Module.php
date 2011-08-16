@@ -101,20 +101,11 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param array $response Array of output lines
 	 */
-	public static function buildSearchCache(&$response){
+	public function buildSearchCache(&$response){		
 		
-		
-		$moduleClass = get_called_class();
-		$arr = explode('_', $moduleClass);
-		$module = $arr[1];		
-		
-		$response[]  = "Building search cache for ".$module;
-		
-		$module = GO::modules()->$module;
-		
-		
-		
-		$models=$module->getModels();
+		$response[]  = "Building search cache for ".$this->getModule();		
+				
+		$models=$this->getModels();
 		
 		foreach($models as $model){
 			echo $response[] = "Processing ".$model;
@@ -130,29 +121,34 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param array $response Array of output lines
 	 */
-	public static function checkDatabase(&$response){				
+	public function checkDatabase(&$response){				
 		
-		$moduleClass = get_called_class();
-		$arr = explode('_', $moduleClass);
-		$module = $arr[1];		
+		//echo "<pre>";
 		
-		$response[]  = "Checking database for ".$module;
+		echo "Checking database for ".$this->id."\n";		
+				
+		$models=$this->getModels();
 		
-		$module = GO::modules()->$module;
-		
-		
-		
-		$models=$module->getModels();
 		
 		foreach($models as $model){			
-			$response[] = "Processing ".$model;
-			$stmt = call_user_func(array($model,'model'))->find(array(
+			echo "Processing ".$model."\n";
+			
+			$m = call_user_func(array($model,'model'));
+			
+			$stmt = $m->find(array(
 					'ignoreAcl'=>true
 			));
 			$stmt->callOnEach('save');
+			
+			
 		}
 	}
 	
+	/**
+	 * Get all model class names.
+	 * 
+	 * @return Array Names of all model classes 
+	 */
 	public function getModels(){		
 	
 		$models=array();
