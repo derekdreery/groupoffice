@@ -21,6 +21,7 @@
  * @property GO_Base_Model_Acl $acl If this model has an acl ID configured {@link See GO_Base_Db_ActiveRecord::aclId} it will automatically create this property.
  * @property bool $joinAclField
  * @property int/array Primary key value(s) for the model
+ * @property string Name of the module this model belongs to
  */
 
 abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
@@ -198,17 +199,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$this->_setOldAttributes();		
 		
-		$this->_loadColumns();
+		$this->loadColumns();
 		$this->setIsNew($newRecord);
 		$this->init();
 	}
 	
 	/**
 	 * Loads the column information from the database
-	 * 
-	 * @todo cache this
+
 	 */
-	private function _loadColumns() {
+	protected function loadColumns() {
 		if($this->tableName()){
 			
 			$this->columns=GO::cache()->get('modelColumns_'.$this->tableName());

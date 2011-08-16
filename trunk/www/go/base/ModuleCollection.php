@@ -15,18 +15,20 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	public function callModuleMethod($method, $params=array()){
 		
 		$stmt = $this->getAll();
-		while($module = $stmt->fetch())
+		$modules = $stmt->fetchAll();
+		foreach($modules as $module)
 		{	
 			$file = $module->path.ucfirst($module->id).'Module.php';
 			//todo load listeners
 			if(file_exists($file)){
 				require_once($file);
 				$class='GO_'.ucfirst($module->id).'_'.ucfirst($module->id).'Module';
-				$object = new $class;
+				
+				$object = call_user_func(array($class, 'model'))->findByPk($module->id);
 				if(method_exists($object, $method)){					
 					GO::debug('Calling '.$class.'::'.$method);
-					call_user_func_array(array($object, $method), $params);
-					//$object->$method();
+					//call_user_func_array(array($object, $method), $params);
+					$object->$method($params);
 				}
 			}
 		}
