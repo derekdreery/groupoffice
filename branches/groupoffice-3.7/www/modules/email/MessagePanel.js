@@ -180,7 +180,7 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 						if(!this.passwordDialog)
 						{
 							this.passwordDialog = new GO.dialog.PasswordDialog({
-								title:GO.smime.lang.enterPassword,
+								title:GO.smime ? GO.smime.lang.enterPassword : GO.gnupg.lang.enterPassword,
 								fn:function(button, password, passwordDialog){
 									if(button=='cancel')
 									{

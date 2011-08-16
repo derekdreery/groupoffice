@@ -19,3 +19,5 @@ GO.gnupg.lang.importPublicKeyAttachment='Dit is een publieke sleutel om versleut
 
 GO.gnupg.lang.generateKeyStarted='Uw sleutelpaar wordt aangemaakt.';
 GO.gnupg.lang.generateKeyStartedText='Uw sleutelpaar wordt aangemaakt. Dit kan tot 10 minuten duren. Controleer later of de sleutel gemaakt is.';
+
+GO.gnupg.lang.enterPassword='Voer wachtwoord in';
