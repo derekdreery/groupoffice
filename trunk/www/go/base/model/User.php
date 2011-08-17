@@ -205,6 +205,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		return 'users/'.$this->username;
 	}
 	
+	public function beforeSave(){
+		
+		return parent::beforeSave();
+	}	
 	
 
 	public function afterSave($wasNew) {

@@ -91,7 +91,6 @@ class GO{
 	 * @return GO_Base_Model_User The logged in user model
 	 */
 	public static function user(){
-		GO::debug("GO::user()");
 		if(empty(GO::session()->values['user_id']))
 			return false;
 		else

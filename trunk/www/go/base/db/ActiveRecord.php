@@ -138,7 +138,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	private $_attributes=array();
 	
-	private $_oldAttributes=array();
+	private $_modifiedAttributes=array();
 	
 	private $_debugSql=true;
 	
@@ -196,12 +196,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function __construct($newRecord=true){			
 		
 		$pk = $this->pk;
-		
-		$this->_setOldAttributes();		
-		
+
 		$this->loadColumns();
 		$this->setIsNew($newRecord);
 		$this->init();
+		
+		$this->_modifiedAttributes=array();
 	}
 	
 	/**
@@ -269,23 +269,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 	}
 	
-	/**
-	 * Save original attributes so we can check the modifications later.
-	 */
-	private function _setOldAttributes(){
-		$this->_oldAttributes = $this->_attributes;
-	}
 	
-	
-	/**
-	 * Get's the attribute value of this model as it is saved in the database.
-	 * 
-	 * @param string $name Attribute name
-	 * @return string Database value
-	 */
-	public function getOldAttribute($name){
-		return $this->_oldAttributes[$name];
-	}
+
 	
 	
 	/**
@@ -580,14 +565,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @return GO_Base_Db_ActiveStatement
 	 */
 	public function find($params=array()){
+	
 		
-		//todo joins acl tables and finds stuff by parameters
-
-//		if(!$this->_checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
-//			throw new AccessDeniedException ();
-		
-		GO::debug('ActiveRecord::find()');
-		GO::debug($params);
+		//GO::debug('ActiveRecord::find()');
+		//GO::debug($params);
 		
 		
 		if(!isset($params['userId'])){			
@@ -902,7 +883,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	public function findByPk($primaryKey, $findParams=array(), $ignoreAcl=false){		
 		
-		GO::debug($this->className()."::findByPk($primaryKey)");
+		//GO::debug($this->className()."::findByPk($primaryKey)");
 		if(empty($primaryKey))
 			return false;
 		
@@ -1224,6 +1205,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
 		
+		if(!$this->isModified())
+			return true;
+		
 		if($this->validate()){		
 		
 			/*
@@ -1305,13 +1289,39 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			$this->cacheSearchRecord();
 			
-			$this->_setOldAttributes();
+			$this->_modifiedAttributes = array();
 			
 			return true;
 			
 		}else
 		{
 			return false;
+		}
+	}
+	
+	
+	/**
+	 * Get an array of modified attribute names that are not saved to the database.
+	 * 
+	 * @return array 
+	 */
+	public function getModifiedAttributes(){
+		return $this->_modifiedAttributes;
+	}
+	
+	/**
+	 * Check is this model or model attribute name has modifications not saved to
+	 * the database yet.
+	 * 
+	 * @param type $attributeName
+	 * @return boolean 
+	 */
+	public function isModified($attributeName=false){
+		if(!$attributeName){
+			return count($this->_modifiedAttributes)>0;
+		}else
+		{
+			return isset($this->_modifiedAttributes[$attributeName]);
 		}
 	}
 	
@@ -1339,7 +1349,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$attr = $this->getCacheAttributes();
 		
-		GO::debug($attr);
+		//GO::debug($attr);
 		
 		if($attr){
 
@@ -1367,7 +1377,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			$attr = array_merge($autoAttr, $attr);
 			
-			GO::debug($attr);
+			//GO::debug($attr);
 
 			$model->setAttributes($attr);
 			return $model->save();
@@ -1455,18 +1465,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 	}
 	
+
 	private function _dbUpdate(){
 		
 		$updates=array();
 		
-		$pks = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
-		foreach($this->columns as $field => $value)
-		{
-			if(!in_array($field,$pks))
-			{
-				$updates[] = "`$field`=:".$field;
-			}
-		}
+		//$pks = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
+//		foreach($this->columns as $field => $value)
+//		{
+//			if(!in_array($field,$pks))
+//			{
+//				$updates[] = "`$field`=:".$field;
+//			}
+//		}
+//		
+		foreach($this->_modifiedAttributes as $field)
+			$updates[] = "`$field`=:".$field;		
+		
 		
 		if(!count($updates))
 			return true;
@@ -1497,11 +1512,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 		$stmt = $this->getDbConnection()->prepare($sql);
 		
-		foreach($this->columns as $field => $value){
+		$pks = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
+		
+		foreach($this->columns as $field => $attr){
 			
-			$attr = $this->columns[$field];
-			
-			$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
+			if(in_array($field,$this->_modifiedAttributes) || in_array($field, $pks))
+				$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
 		}
 		return $stmt->execute();
 		
@@ -1660,6 +1676,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		unset($this->_attributes[$name]);		
 	}
 	
+	
 	/**
 	 * Sets the named attribute value.
 	 * You may also use $this->AttributeName to set the attribute value.
@@ -1674,7 +1691,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(property_exists($this,$name)){
 			$this->$name=$value;
 		}elseif(isset($this->columns[$name])){
-			$this->_attributes[$name]=$value;		
+			
+			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!=$value) && !in_array($name,$this->_modifiedAttributes))
+			{
+				$this->_modifiedAttributes[]=$name;
+			}	
+			$this->_attributes[$name]=$value;
+
 		}else{
 			$arr = explode('@',$name);
 			if(count($arr)>1)
