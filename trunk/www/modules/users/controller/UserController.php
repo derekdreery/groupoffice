@@ -33,7 +33,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 				throw new Exception(GO::t('error_match_pass','users'));
 			}
 			if(!empty($_POST["password2"]))
-			{				
+			{			
 				$model->setAttribute('password', $_POST['password2']);
 			}
 		}

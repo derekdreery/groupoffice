@@ -1205,6 +1205,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
 		
+		GO::debug($this->_modifiedAttributes);
+		
 		if(!$this->isModified())
 			return true;
 		
@@ -1321,7 +1323,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			return count($this->_modifiedAttributes)>0;
 		}else
 		{
-			return isset($this->_modifiedAttributes[$attributeName]);
+			return in_array($attributeName, $this->_modifiedAttributes);
 		}
 	}
 	

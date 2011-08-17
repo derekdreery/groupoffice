@@ -207,6 +207,9 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	
 	public function beforeSave(){
 		
+		if($this->isModified('password'))
+			$this->password=crypt($this->password);
+		
 		return parent::beforeSave();
 	}	
 	
