@@ -932,7 +932,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
     //todo check read permissions
     if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
-			throw new AccessDeniedException();
+			throw new GO_Base_Exception_AccessDeniedException($this->className().' #'.$this->pk);
 		
 		if($model)
 			GO::modelCache()->add($this->className(), $model);
