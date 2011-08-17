@@ -296,6 +296,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public static function model($className=__CLASS__)
 	{		
+//	    if ($className=='GO_Base_Db_ActiveRecord') throw new Exception($className);
 		if(isset(self::$_models[$className]))
 			return self::$_models[$className];
 		else
