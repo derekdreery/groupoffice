@@ -90,16 +90,18 @@ try {
 				$file['tmp_name'] = $_FILES['attachments']['tmp_name'][0];
 				$file['size'] = $_FILES['attachments']['size'][0];
 			}
-
+			
 			if(is_uploaded_file($file['tmp_name']))
 			{
-				$tmp_file = $dir.File::strip_invalid_chars($file['name']);
+
+				$file['name']=File::strip_invalid_chars($file['name']);
+				$tmp_file = $dir.uniqid(date('is'),true).$file['name'];
 				move_uploaded_file($file['tmp_name'], $tmp_file);
 
 				$extension = File::get_extension($file['name']);
 				$response['file'] = array(
 					'tmp_name'=>$tmp_file,
-					'name'=>utf8_basename($tmp_file),
+					'name'=>$file['name'],
 					'size'=>$file['size'],
 					'type'=>File::get_filetype_description($extension),
 					'extension'=>$extension,
@@ -325,14 +327,14 @@ try {
 			filesystem::mkdir_recursive($dir);
 
 			for ($n = 0; $n < count($_FILES['attachments']['tmp_name']); $n ++) {
-				if (is_uploaded_file($_FILES['attachments']['tmp_name'][$n])) {
-					$tmp_file = $dir.File::strip_invalid_chars($_FILES['attachments']['name'][$n]);
+				if (is_uploaded_file($_FILES['attachments']['tmp_name'][$n])) {										
+					$tmp_file = $dir.uniqid(date('is'),true).File::strip_invalid_chars($_FILES['attachments']['name'][$n]);
 					move_uploaded_file($_FILES['attachments']['tmp_name'][$n], $tmp_file);
 
 					$extension = File::get_extension($_FILES['attachments']['name'][$n]);
 					$response['files'][] = array(
 						'tmp_name'=>$tmp_file,
-						'name'=>utf8_basename($tmp_file),
+						'name'=>File::strip_invalid_chars($_FILES['attachments']['name'][$n]),
 						'size'=>$_FILES['attachments']['size'][$n],
 						'type'=>File::get_filetype_description($extension),
 						'extension'=>$extension,
@@ -561,6 +563,7 @@ try {
 
 						foreach($attachments as $tmp_name) {
 							if(is_numeric($tmp_name)) {
+								$from_go=true;
 								$file = $files->get_file($tmp_name);
 								$folder = $files->get_folder($file['folder_id']);
 								if(!$file || !$folder) {
@@ -569,6 +572,7 @@ try {
 								$tmp_name = $GO_CONFIG->file_storage_path.$files->build_path($folder).'/'.$file['name'];
 							}else
 							{
+								$from_go=false;
 								$attachments_tmp_names[] = $tmp_name;
 							}
 
@@ -582,6 +586,8 @@ try {
 								$attachment = Swift_Attachment::fromPath($encoded,'application/pgp-encoded');
 							}else {
 								$attachment = Swift_Attachment::fromPath($tmp_name,File::get_mime($tmp_name));
+								if(!$from_go)
+									$attachment->setFilename(substr(utf8_basename($tmp_name),27));
 							}
 							$swift->message->attach($attachment);
 						}
