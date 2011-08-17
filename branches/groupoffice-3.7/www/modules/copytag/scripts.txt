@@ -1,2 +1,0 @@
-modules/copytag/MainPanel.js
-modules/copytag/TagGrid.js
