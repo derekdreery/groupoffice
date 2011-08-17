@@ -26,6 +26,14 @@ class GO{
 	 * @var boolean 
 	 */
 	public static $ignoreAclPerissions=false;
+	
+	/**
+	 * This GO_Base_Model_ModelCache.php mechanism can consume a lot of memory 
+	 * when running large batch scripts. That's why it can be disabled.
+	 * 
+	 * @var boolean 
+	 */
+	public static $disableModelCache=false;
 
 	private static $_classes = array(
 		
@@ -305,24 +313,30 @@ class GO{
 				die('<h1>Disabled</h1>This Group-Office installation has been disabled');
 			}
 
-			if (GO::config()->debug) {
-				$_SESSION['connect_count'] = 0;
-				$_SESSION['query_count'] = 0;
-				
-				error_reporting(E_ALL | E_STRICT);
-				ini_set('display_errors','on');
-				ini_set('log_errors','on');
-			}
 			
-			set_error_handler(array('GO','errorHandler'), E_ALL | E_STRICT);
 		}
+		
+		if (GO::config()->debug) {
+
+			$_SESSION['connect_count'] = 0;
+			$_SESSION['query_count'] = 0;
+
+			error_reporting(E_ALL | E_STRICT);
+
+			ini_set('display_errors','on');
+			ini_set('log_errors','on');
+			ini_set('memory_limit','32M');
+			ini_set('max_execution_time',10);
+		}
+
+		//set_error_handler(array('GO','errorHandler'), E_ALL | E_STRICT);
 	}
 	
 	
 	public static function errorHandler($errno, $errstr, $errfile, $errline, $errcontext) {
 
 		$err_str = "PHP error: $errfile:$errline $errstr ($errno)";
-		if(GO::config()->debug())
+		if(GO::config()->debug)
 			echo $err_str."\n";
 		
     GO::debug($err_str);
@@ -417,6 +431,21 @@ class GO{
 			self::$_outputStream = new $outputClass;
 		}
 		self::$_outputStream->write($str);
+	}
+	
+	
+	
+	public static function memdiff() {
+		static $int = null;
+
+		$current = memory_get_usage();
+
+		if ($int === null) {
+			$int = $current;
+		} else {
+			print ($current - $int) . "\n";
+			$int = $current;
+		}
 	}
 
 }	

@@ -932,7 +932,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
     //todo check read permissions
     if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
-			throw new GO_Base_Exception_AccessDeniedException($this->className().' #'.$this->pk);
+			throw new GO_Base_Exception_AccessDenied($this->className().' #'.$this->pk);
 		
 		if($model)
 			GO::modelCache()->add($this->className(), $model);
@@ -1222,7 +1222,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		GO::debug('save'.$this->className());
 			
 		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
-			throw new AccessDeniedException();
+			throw new GO_Base_Exception_AccessDenied();
 		
 		if($this->validate()){		
 		
@@ -1521,7 +1521,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function delete(){
 		
 		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
-						throw new AccessDeniedException ();
+						throw new GO_Base_Exception_AccessDenied ();
 		
 		
 		if(!$this->beforeDelete())
@@ -1646,6 +1646,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function __isset($name){
 		$var = $this->$name;
 		return isset($var);
+	}
+	
+	/**
+	 * Sets a component property to be null.
+	 * This method overrides the parent implementation by clearing
+	 * the specified attribute value.
+	 * 
+	 * @param string $name the property name
+	 */
+	public function __unset($name)
+	{		
+		unset($this->_attributes[$name]);		
 	}
 	
 	/**

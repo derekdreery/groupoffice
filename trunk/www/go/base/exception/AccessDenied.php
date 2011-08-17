@@ -24,7 +24,7 @@
  * @uses Exception
  */
 
-class GO_Base_Exception_AccessDeniedException extends Exception
+class GO_Base_Exception_AccessDenied extends Exception
 {
 
 	public function __construct($message='') {

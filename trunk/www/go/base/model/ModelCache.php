@@ -43,12 +43,19 @@ class GO_Base_Model_ModelCache{
 	 */
 	public function add($modelClassName, $model, $cacheKey=false){
 		
+		/**
+		 * This cache mechanism can consume a lot of memory when running large
+		 * batch scripts. That's why it can be disabled.
+		 */
+		if(GO::$disableModelCache)
+			return;
+		
 		if(!$cacheKey)
 			$cacheKey=$model->pk;
 		
 		//GO::debug("GO_Base_Model_ModelCache::add($modelClassName, $cacheKey)");
 		
-		$cacheKey = $this->_formatCacheKey($cacheKey);
+		$cacheKey = $this->_formatCacheKey($cacheKey);		
 		
 		$this->_models[$modelClassName][$cacheKey]=$model;
 		
@@ -72,8 +79,6 @@ class GO_Base_Model_ModelCache{
 	 * @param mixed $primaryKey 
 	 */
 	public function get($modelClassName, $cacheKey){		
-		
-		
 		
 		$formatted=$this->_formatCacheKey($cacheKey);
 		
