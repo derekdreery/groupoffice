@@ -45,12 +45,11 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 	 * @param String $function 
 	 */
 	public function callOnEach($function){
-		$models = $this->fetchAll();
-		foreach($models as $m){
+		//$models = $this->fetchAll();
+		while($m = $this->fetch()){		
 			if(method_exists($m, $function))
 				$m->$function();
-
-		}
+			}
 	}
 	
 	public function foundRows(){

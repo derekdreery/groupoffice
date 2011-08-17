@@ -160,19 +160,17 @@ class GO_Base_Provider_Grid {
 
     
     $this->_response['results'] = array();		
-		$models = $this->_stmt->fetchAll();
-		$this->_response['total']=$this->_stmt->foundRows();
-		
+		//$models = $this->_stmt->fetchAll();
 		
 		//when using this:
 		//while ($model = $this->_stmt->fetch()) {
 		//I got this error on php 5.2
 		//SQLSTATE[HY000]: General error: 2014 Cannot execute queries while other unbuffered queries are active. Consider using PDOStatement::fetchAll(). Alternatively, if your code is only ever going to run against mysql, you may enable query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute.
 		
-		foreach($models as $model){		
+		while ($model = $this->_stmt->fetch()) {
 			$this->_response['results'][] = $this->formatModelForGrid($model);
 		}
-
+		$this->_response['total']=$this->_stmt->foundRows();
 
     return $this->_response;
   }

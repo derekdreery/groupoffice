@@ -27,8 +27,12 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 */
 	public function actionBuildSearchCache() {
 		$response = array();
-
+		
+		GO::$ignoreAclPerissions=true; //allow this script access to all
+		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '300');
+		
+		echo '<pre>';
 		GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
 		return $response;
 	}
@@ -39,9 +43,12 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 */
 	public function actionCheckDatabase() {
 		$response = array();
-		//GO::$ignoreAclPerissions=true;
-
+		
+		GO::$ignoreAclPerissions=true; //allow this script access to all
+		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '300');
+		
+		echo '<pre>';		
 		GO::modules()->callModuleMethod('checkDatabase', array(&$response));
 		return $response;
 	}

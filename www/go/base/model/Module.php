@@ -103,12 +103,12 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	 */
 	public function buildSearchCache(&$response){		
 		
-		$response[]  = "Building search cache for ".$this->getModule();		
+		$response[]  = "Building search cache for ".$this->getModule()."\n";		
 				
 		$models=$this->getModels();
 		
 		foreach($models as $model){
-			echo $response[] = "Processing ".$model;
+			echo $response[] = "Processing ".$model."\n";
 			$stmt = call_user_func(array($model,'model'))->find(array(
 					'ignoreAcl'=>true
 			));
@@ -132,6 +132,7 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 		
 		foreach($models as $model){			
 			echo "Processing ".$model."\n";
+			flush();
 			
 			$m = call_user_func(array($model,'model'));
 			
