@@ -51,7 +51,7 @@ if(!empty($_REQUEST['account_id'])){
 		$imap->save_to_file($uid, $src_filename);
 		
 		$data = file_get_contents($src_filename);
-		if(strpos($data, "enveloped-data")) {		
+		if(strpos($data, "enveloped-data") || stripos($data, 'Encrypted Message')) {		
 			
 			$cert = $smime->get_pkcs12_certificate($account_id);
 			$password = $_SESSION['GO_SESSION']['smime']['passwords'][$account_id];			

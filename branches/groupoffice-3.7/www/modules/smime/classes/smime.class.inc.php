@@ -149,8 +149,11 @@ class smime extends db{
 
 		if(!$message['from_cache'] && ($message['content-type']=='application/pkcs7-mime' || $message['content-type']=='application/x-pkcs7-mime')){
 			
-			$encrypted = isset($message['content-type-attributes']['smime-type']) && $message['content-type-attributes']['smime-type']=='enveloped-data';
+			$encrypted = !isset($message['content-type-attributes']['smime-type']) || $message['content-type-attributes']['smime-type']!='signed-data';
 			if($encrypted){
+				
+				go_debug("Message is encrypted");
+				
 				$smime = new smime();
 				$cert = $smime->get_pkcs12_certificate($message['account_id']);
 
