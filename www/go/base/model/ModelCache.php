@@ -26,7 +26,7 @@ class GO_Base_Model_ModelCache{
 	
 	public function __construct() {
 		
-		GO::debug("Model cache construct");
+		//GO::debug("Model cache construct");
 		
 		if(isset(GO::session()->values['modelCache'])){
 			//GO::debug(array_keys(GO::session()->values['modelCache']));
