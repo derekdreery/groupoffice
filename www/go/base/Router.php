@@ -43,7 +43,14 @@ class GO_Base_Router{
 	 * )
 	 * )
 	 */
-	public function run(){
+	public function run(){		
+		
+		if(!GO::config()->disable_security_token_check && GO::user() && $_REQUEST['security_token']!=GO::session()->values['security_token']){
+			GO::session()->logout();
+			go_log(LOG_ERR, 'Fatal error: Security token mismatch. Possible cross site request forgery attack!');
+			die('Fatal error: Security token mismatch. Possible cross site request forgery attack!');
+		}
+		
 		
 		$r = isset($_REQUEST['r']) ? explode('/', $_REQUEST['r']) :array();
 		

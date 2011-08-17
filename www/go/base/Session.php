@@ -1,5 +1,5 @@
 <?php
-class GO_Base_Session{
+class GO_Base_Session extends GO_Base_Observable{
 	
 	public $values;
 	
@@ -90,16 +90,15 @@ class GO_Base_Session{
 		//go_log(LOG_DEBUG, 'LOGOUT Username: '.$username.'; IP: '.$_SERVER['REMOTE_ADDR']);
 		GO::infolog("LOGOUT for user: \"".$username."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 
-		if(!empty($this->user_id)){
-			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-			$fs = new filesystem();
-
-			$length = -strlen($this->user_id)-1;
+		if(GO::user()){
+	
+			$length = -strlen(GO::user()->id)-1;
 
 			//GO::debug(substr($GO_CONFIG->tmpdir,$length));
 
-			if(substr($GO_CONFIG->tmpdir,$length)==$this->user_id.'/' && is_dir($GO_CONFIG->tmpdir)){
-				$fs->delete($GO_CONFIG->tmpdir);
+			if(substr(GO::config()->tmpdir,$length)==GO::user()->id.'/' && is_dir(GO::config()->tmpdir)){
+				$folder = new GO_Base_Fs_Folder(GO::config()->tmpdir);
+				$folder->delete();
 			}
 		}
 
@@ -112,15 +111,8 @@ class GO_Base_Session{
 		unset($_SESSION, $_COOKIE['GO_UN'], $_COOKIE['GO_PW']);
 
 		@session_destroy();
-		$this->user_id = 0;
 
-		global $GO_MODULES;
-		if(isset($GO_MODULES)) {
-			$GO_MODULES->load_modules();
-		}
-
-		global $GO_EVENTS;
-		$GO_EVENTS->fire_event('logout', $old_session);
+		$this->fireEvent('logout', array($old_session));
 	}
 	
 	
