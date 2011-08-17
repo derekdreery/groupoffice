@@ -693,7 +693,7 @@ try {
 					$response['body']=$response['html_body'];
 				}
 				unset($response['html_body'], $response['plain_body']);
-
+			
 				if(!empty($response['new'])) {
 					if($imap->set_unseen_cache(array($uid), false)) {
 						if(!empty($response['from_cache']) || stripos($account['host'],'gmail')!==false) {
@@ -949,7 +949,7 @@ try {
 								break;						
 						}
 					}
-				}
+				}				
 
 				break;
 

@@ -135,10 +135,9 @@ class String {
 	public static function clean_utf8($str, $source_charset='UTF-8') {
 		
 		//must use html_entity_decode here other wise some weird utf8 might be decoded later
-
-// Commented out to prevent XML parse errors on ampersands.
-//    if(strtolower($source_charset)!='ascii')
-//      $str = @html_entity_decode($str, ENT_COMPAT, $source_charset);
+		//Commented out to prevent XML parse errors on ampersands when used in syncml.
+		//    if(strtolower($source_charset)!='ascii')
+		//      $str = @html_entity_decode($str, ENT_COMPAT, $source_charset);
 
 		//Does not always work. We suppress the:
 		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31
@@ -953,6 +952,8 @@ class String {
 		"'<title>.*?</title>'usi",
 		"'<head[^>]*>.*?</head>'usi",
 		"'<head[^>]*>'usi",
+		
+		"'<base[^>]*>'usi",
 		
 		/* MS Word junk */
 		"'<xml[^>]*>.*?</xml>'usi",
