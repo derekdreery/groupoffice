@@ -253,16 +253,18 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			if (!isset(GO::session()->values['user_groups'])) {
 				GO::session()->values['user_groups'] = array();
 
-				$stmt = $this->getDbConnection()->query("SELECT group_id FROM go_users_groups WHERE user_id=" . intval($userId));
-				while ($r = $this->next_record()) {
+				$stmt = GO::getDbConnection()->query("SELECT group_id FROM go_users_groups WHERE user_id=" . intval($userId));
+				$stmt->setFetchMode(PDO::FETCH_ASSOC);
+				while ($r = $stmt->fetch()) {
 					GO::session()->values['user_groups'][] = $r['group_id'];
 				}
 			}
+			GO::debug(GO::session()->values['user_groups']);
 
 			return GO::session()->values['user_groups'];
 		} else {
 			$ids = array();
-			$stmt = $this->getDbConnection()->query("SELECT group_id FROM go_users_groups WHERE user_id=" . intval($userId));
+			$stmt = GO::getDbConnection()->query("SELECT group_id FROM go_users_groups WHERE user_id=" . intval($userId));
 			while ($r = $stmt->fetch()) {
 				$ids[] = $r['group_id'];
 			}
