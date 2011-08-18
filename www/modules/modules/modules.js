@@ -108,7 +108,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 			if (cindex == 'undefined') {
 				cindex = this.store.data.length - 1;
 			}
-			for (i = 0; i < rows.length; i++) {
+			for (var i = 0; i < rows.length; i++) {
 				var rowData = this.store.getById(rows[i].id);
 
 				if (!this.copy) {
@@ -236,13 +236,9 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 		}
 
 		if (records.length > 0) {
-			Ext.Ajax.request({
-				url : GO.settings.modules.modules.url + 'action.php',
-				params : {
-					task : 'install',
-					modules : keys.join(',')
-				},
-				callback : function(options, success, response) {
+			GO.request({
+				url : 'modules/module/install',				
+				success: function(options, success, response) {
 					grid.container.unmask();
 					grid.store.reload();
 					this.store.reload();

@@ -2,6 +2,7 @@
 
 /**
  * @property String $path The absolute filesystem path to module.
+ * @property GO_Base_Module $moduleManager The module class to install, initialize etc the module.
  */
 class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 
@@ -35,6 +36,23 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 			return new $className;
 		else
 			return false;
+	}
+	
+	protected function beforeSave() {
+		if($this->isNew){
+			$this->version = $this->moduleManager->databaseVersion();		
+			$this->sort_order = $this->count()+1;
+			$this->admin_menu = $this->moduleManager->adminModule();
+		}		
+		return parent::beforeSave();
+	}
+	
+	protected function afterSave($wasNew) {
+		
+		if($wasNew){			
+			$this->moduleManager->install();
+		}		
+		return parent::afterSave($wasNew);
 	}
 
 //	protected function getName() {

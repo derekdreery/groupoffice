@@ -47,5 +47,15 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		
 		return $response;
 	}
+	
+	
+	public function actionInstall($params){
+		$modules = explode(',', $params['modules']);
+		foreach($modules as $moduleId)
+		{
+			$module = new GO_Base_Model_Module();
+			$module->id=$moduleId;
+		}
+	}
 }
 

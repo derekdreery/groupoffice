@@ -1,7 +1,17 @@
 <?php
-
+/**
+ * This class is used to manage a module. It performs tasks such as
+ * installing, uninstalling and initializing.
+ */
 class GO_Base_Module extends GO_Base_Observable {
 
+	/**
+	 * Get the id of the module which is identical to 
+	 * the folder name in the modules folder.
+	 * 
+	 * eg. notes, calendar  etc.
+	 * @return string 
+	 */
 	public function id() {
 		
 		$className = get_class($this);
@@ -10,47 +20,138 @@ class GO_Base_Module extends GO_Base_Observable {
 		return strtolower($arr[1]);
 	}
 	
+	/**
+	 * Get the absolute filesystem path to the module.
+	 * 
+	 * @return string 
+	 */
 	public function path(){
 		return GO::config()->root_path . 'modules/' . $this->id() . '/';
 	}
 
+	/**
+	 * Return the localized name
+	 * 
+	 * @return String 
+	 */
 	public function name() {
 		return GO::t('name', $this->id());// isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;
 	}
 
+	/**
+	 * Return the localized description
+	 * 
+	 * @return String 
+	 */
 	public function description() {
 		return GO::t('description', $this->id());
 	}
 	
+	/**
+	 * Return the name of the author.
+	 * 
+	 * @return String 
+	 */
 	public function author(){
 		return '';
 	}
 	
+	/**
+	 * Return the e-mail address of the author.
+	 * 
+	 * @return String 
+	 */
 	public function authorEmail(){
 		return 'info@intermesh.nl';
 	}
 	
+	/**
+	 * Return copyright information
+	 * 
+	 * @return String 
+	 */
 	public function copyright(){
 		return 'Copyright Intermesh BV';
+	}
+	
+	/**
+	 * Return true if this module belongs in the admin menu.
+	 * 
+	 * @return boolean 
+	 */
+	public function adminModule(){
+		return false;
+	}
+	
+	/**
+	 * Return the number of update queries.
+	 * 
+	 * @return integer 
+	 */
+	public function databaseVersion(){
+		$updatesFile = $this->path() . 'install/updates.php';
+		if(file_exists($updatesFile))
+		{
+			require($updatesFile);
+			if(isset($updates))
+				return count($updates);
+		}else
+		{
+			return 0;
+		}
 	}
 
 	/**
 	 * Installs the module's tables etc
+	 * 
+	 * @return boolean
 	 */
-	protected function install() {
+	public function install() {
+		
+		$sqlFile = $this->path().'install/install.sql';
+		
+		if(file_exists($sqlFile))
+		{
+			$queries = GO_Base_Util_SQL::getSqlQueries($sqlFile);
+			foreach($queries as $query)
+				GO::getDbConnection ()->query($sql);
+		}
+		
+		//clear cache
+		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'cache');
+		$folder->delete();
+		
 		return true;
 	}
 
 	/**
 	 * Delete's the module's tables etc.
+	 * 
+	 * @return boolean
 	 */
 	public function uninstall() {
+		
+		$sqlFile = $this->path().'install/uninstall.sql';
+		
+		if(file_exists($sqlFile))
+		{
+			$queries = GO_Base_Util_SQL::getSqlQueries($sqlFile);
+			foreach($queries as $query)
+				GO::getDbConnection ()->query($sql);
+		}
+		
+		//clear cache
+		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'cache');
+		$folder->delete();
+		
+		
 		return true;
 	}
 
 	/**
 	 * This class can be overriden by a module class to add listeners to objects
 	 * that extend the GO_Base_Observable class.
+	 * 	 
 	 */
 	public static function initListeners() {
 		
@@ -110,8 +211,6 @@ class GO_Base_Module extends GO_Base_Observable {
 					'ignoreAcl'=>true
 			));
 			$stmt->callOnEach('save');
-			
-			
 		}
 	}
 	
