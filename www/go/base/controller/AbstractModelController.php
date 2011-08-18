@@ -97,7 +97,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		//$modelName::model() does not work on php 5.2!
 		$model = call_user_func(array($modelName,'model'))->findByPk($params['id']);
 
-
 		$response['data'] = $model->getAttributes();
 		
 		//todo custom fields should be in a subarray.

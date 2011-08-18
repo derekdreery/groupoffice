@@ -357,8 +357,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 			defaults: {
 				border: false,
 				anchor:'100%'
-			},
-			items: [this.formEmail,this.formEmail2,this.formEmail3,this.formHomePhone,this.formFax,this.formCellular,this.formWorkPhone,this.formWorkFax]
+			}
 		});
 		
 		
