@@ -18,28 +18,17 @@ GO.modules.MainPanel = function(config) {
 	}
 
 	this.installedModulesDS = new GO.data.JsonStore({
-		url : GO.settings.modules.modules.url + 'json.php',
-		baseParams : {
-			task : 'installed_modules'
-		},
-		root : 'results',
-		id : 'id',
-		fields : ['name', 'description', 'id', 'sort_order',
-		'admin_menu', 'acl_id'],
+		url : GO.url('modules/module/grid'),
+		fields : ['name', 'description', 'id', 'sort_order','admin_menu', 'acl_id'],
 		remoteSort : true
 	});
 
 	this.availableModulesDS = new GO.data.JsonStore({
-		url : GO.settings.modules.modules.url + 'json.php',
-		baseParams : {
-			task : 'available_modules'
-		},
+		url : GO.url('modules/module/availableModulesGrid'),
 		sortInfo: {
 			field: 'name',
 			direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
 		},
-		root : 'results',
-		id : 'id',
 		fields : ['name', 'description', 'id', 'sort_order',
 		'admin_menu', 'acl_id']
 	});

@@ -1,6 +1,7 @@
 <?php
 
-class GO_Notes_NotesModule extends GO_Base_Model_Module{
+class GO_Notes_NotesModule extends GO_Base_Module{
+	
 	
 	public static function initListeners(){		
 		GO_Base_Model_User::addListener('save', 'GO_Notes_NotesModule', 'saveUser');

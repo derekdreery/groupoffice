@@ -226,9 +226,25 @@ class GO_Base_Provider_Grid {
       }elseif(isset($array[$colName]))
         $formattedRecord[$colName]=$array[$colName];
     }
+		
+		if(isset($this->_formatRecordFunction)){
+			$formattedRecord=call_user_func($this->_formatRecordFunction, $formattedRecord, $model, $this);
+		}
     
     return $formattedRecord;
   }
+	
+	/**
+	 * Set a function that will be called with call_user_func to format a record.
+	 * The function will be called with parameters:
+	 * 
+	 * Array $formattedRecord, GO_Base_Db_ActiveRecord $model, GO_Base_Provider_Grid $grid
+	 * 
+	 * @param mixed $func Function name string or array($object, $functionName)
+	 */
+	public function setFormatRecordFunction($func){
+		$this->_formatRecordFunction=$func;
+	}
 
   /**
    * Returns a set of default parameters for use with a grid.
