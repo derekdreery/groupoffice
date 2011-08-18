@@ -99,5 +99,13 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$new_path .= '/'.$new_folder_name;
 		return $new_path;
 	}
+	
+	public function beforeDelete() {
+		
+		if($this->go_user_id>0)			
+			throw new Exception("This contact belongs to a user account. Please delete this account first.");
+		
+		return parent::beforeDelete();
+	}
 
 }

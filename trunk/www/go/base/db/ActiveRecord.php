@@ -956,7 +956,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$model = $r[$name]['model'];
 		
-		if($r[$name]['type']==self::BELONGS_TO){// || r[$name]['type']==self::HAS_ONE){
+		if($r[$name]['type']==self::BELONGS_TO || $r[$name]['type']==self::HAS_ONE){
 		
 			/**
 			 * Related stuff can be put in the relatedCache array for when a relation is

@@ -30,8 +30,4 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 		}
 		return $response;
 	}
-
-	protected $remoteComboFields=array(
-			'user_id'=>array('user','name')
-	);
 }

@@ -3,11 +3,40 @@
 class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = 'GO_Base_Model_User';
+	
+	
+	protected function remoteComboFields(){
+		return array('addressbook_id'=>'$model->contact->addressbook->name');
+	}
 
+	//GRID
 	protected function prepareGrid($grid) {
 		$grid->formatColumn('name', '$model->name');
 		return $grid;
 	}
+	
+	
+	//LOAD	
+	
+	protected function afterLoad($response, $model, $params) {
+		
+		
+		//Join the contact that belongs to the user in the form response.
+		if(GO::modules()->addressbook){
+			$contact = $model->contact();
+			if($contact){
+				$attr = $contact->getAttributes();
+
+				$response['data']=array_merge($attr, $response['data']);
+			}
+		}
+		
+		return parent::afterLoad($response, $model, $params);
+	}	
+	
+	
+	
+	//START OF SUBMIT
 	
 	private function _getRegisterEmail(){
 		$r=array(
@@ -24,24 +53,37 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		return $r;
 	}
 	
-	protected function beforeSubmit(&$response, &$model) {
+	protected function beforeSubmit(&$response, &$model, $params) {
 		
-		if (!empty($_POST["password1"]) || !empty($_POST["password2"]))
+		if (!empty($params["password1"]) || !empty($params["password2"]))
 		{
-			if($_POST["password1"] != $_POST["password2"])
+			if($params["password1"] != $params["password2"])
 			{
 				throw new Exception(GO::t('error_match_pass','users'));
 			}
-			if(!empty($_POST["password2"]))
+			if(!empty($params["password2"]))
 			{			
 				$model->setAttribute('password', $_POST['password2']);
 			}
 		}
 		
-		return parent::beforeSubmit($response, $model);
+		return parent::beforeSubmit($response, $model, $params);
 	}
 
-	protected function afterSubmit(&$response, &$model) {
+	protected function afterSubmit(&$response, &$model, $params) {
+		
+		
+		
+		//Save the contact fields to the contact.
+		if(GO::modules()->addressbook){
+			$contact = $model->contact();
+			unset($params['addressbook_id'], $params['id']);
+			$contact->setAttributes($params);
+			$contact->save();
+		}
+		
+		
+		
 		if (isset($_POST['modules'])) {
 			$modules = json_decode($_POST['modules'], true);
 			$groupsMember = json_decode($_POST['group_member'], true);
