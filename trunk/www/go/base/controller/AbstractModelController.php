@@ -201,7 +201,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$modelName = $this->model;
 		$model = call_user_func(array($modelName,'model'))->findByPk($params['id']);
 		
-		//necessary for old library functions
+		//todo build in new style. Now it's necessary for old library functions
 		require_once(GO::config()->root_path.'Group-Office.php');
 
 		$response['data'] = $model->getAttributes();
