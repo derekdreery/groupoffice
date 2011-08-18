@@ -25,9 +25,9 @@ GO.dokuwiki.MainPanel = function(config){
 			cls: 'x-btn-text-icon',
 			text: GO.lang['cmdRefresh'],
 			handler:function(){
-        this.checkHost(GO.dokuwiki.settings.externalUrl);
-        //GO.dokuwiki.iFrameComponent.setUrl(GO.settings.modules.dokuwiki.url);
-				GO.dokuwiki.iFrameComponent.setUrl(GO.dokuwiki.settings.externalUrl);
+					this.checkHost(GO.dokuwiki.settings.externalUrl);
+					//GO.dokuwiki.iFrameComponent.setUrl(GO.settings.modules.dokuwiki.url);
+					GO.dokuwiki.iFrameComponent.setUrl(GO.dokuwiki.settings.externalUrl);
 			},
 			scope: this
 		})
@@ -76,8 +76,12 @@ GO.dokuwiki.MainPanel = function(config){
 
 Ext.extend(GO.dokuwiki.MainPanel, Ext.Panel,{
   checkHost : function(wikiurl) {
-    godomain = window.location.hostname;
-    wikidomain = wikiurl.match(/:\/\/(www\.)?(.[^/:]+)/)[2];
+
+		if(GO.util.empty(wikiurl))
+			return true;
+		
+    var godomain = window.location.hostname;
+    var wikidomain = wikiurl.match(/:\/\/(www\.)?(.[^/:]+)/)[2];
     
     if(godomain != wikidomain)
       Ext.MessageBox.show({
