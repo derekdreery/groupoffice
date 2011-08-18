@@ -1610,7 +1610,7 @@ try {
 			if (empty($before_timestamp))
 				throw new Exception($lang['email']['untilDateError'].': '.$_POST['until_date']);
 			$date_string = date('d',$before_timestamp).'-'.date('M',$before_timestamp).'-'.date('Y',$before_timestamp);
-			$apply_to_children = $_POST['apply_to_children']!='false' && $_POST['apply_to_children']!=false && !empty($_POST['apply_to_children']);
+			$apply_to_children = false; //$_POST['apply_to_children']!='false' && $_POST['apply_to_children']!=false && !empty($_POST['apply_to_children']);
 			$mailbox_name = $_POST['mailbox'];
 			$account_id = $_POST['account_id'];
 
@@ -1619,7 +1619,7 @@ try {
 			global $GO_CONFIG;
 			require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
 			$search = new search();
-			$with_children_txt = !empty($apply_to_children) ? '(including subfolders) ' : '';
+			//$with_children_txt = !empty($apply_to_children) ? '(including subfolders) ' : '';
 			$before_txt = 'from before '.$date_string;
 			$search->log(0, 9, 'Deleted '.$n_deleted.' emails '.$before_txt.' from mailbox '.$mailbox_name.' '.$with_children_txt.'of account '.$account['username'].'.');
 		}
