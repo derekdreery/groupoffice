@@ -114,12 +114,10 @@ class GO_Base_Module extends GO_Base_Observable {
 		{
 			$queries = GO_Base_Util_SQL::getSqlQueries($sqlFile);
 			foreach($queries as $query)
-				GO::getDbConnection ()->query($sql);
+				GO::getDbConnection ()->query($query);
 		}
 		
-		//clear cache
-		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'cache');
-		$folder->delete();
+		GO::clearCache();
 		
 		return true;
 	}
@@ -137,12 +135,10 @@ class GO_Base_Module extends GO_Base_Observable {
 		{
 			$queries = GO_Base_Util_SQL::getSqlQueries($sqlFile);
 			foreach($queries as $query)
-				GO::getDbConnection ()->query($sql);
+				GO::getDbConnection ()->query($query);
 		}
 		
-		//clear cache
-		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'cache');
-		$folder->delete();
+		GO::clearCache();
 		
 		
 		return true;

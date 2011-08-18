@@ -55,6 +55,8 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 		{
 			$module = new GO_Base_Model_Module();
 			$module->id=$moduleId;
+			if(!$module->save())
+				throw new GO_Base_Exception_Save();			
 		}
 	}
 }

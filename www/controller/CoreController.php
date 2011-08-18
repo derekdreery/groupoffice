@@ -101,13 +101,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		ob_start("ob_upgrade_log");
 		
 		echo "Removing cached javascripts...\n";
-		$folder = new GO_Base_Fs_Folder((GO::config()->file_storage_path.'cache'));
-		if($folder->delete())
-			echo "Done\n";
-		else
-			echo "Failed!\n";
 		
-		$folder->create();
+		GO::clearCache();
 		
 		
 		echo "Updating Group-Office database\n";

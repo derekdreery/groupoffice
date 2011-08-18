@@ -75,6 +75,20 @@ class GO{
 		return self::$db;
 	}
 	
+	
+	public static function clearCache(){
+		$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'cache');
+		
+		//make sure it exists
+		$folder->create();
+		
+		$items = $folder->ls();
+		foreach($items as $item)
+			$item->delete();
+		
+		
+	}
+	
 	/**
 	 *
 	 * @return string Returns the currently selected theme. 
