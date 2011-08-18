@@ -25,6 +25,11 @@ class GO_Base_Provider_Grid {
 	private $_response;
 	
 	private $_formatVariables=array();
+	
+	
+	private $_alternateSortFields=array();
+	
+	private $_columnModelProvided=false;
 
   /**
    * See function formatColumn for a detailed description about how to use the format parameter.
@@ -33,6 +38,8 @@ class GO_Base_Provider_Grid {
    */
   public function __construct($columns=array()) {        
     $this->_columns = $columns;	
+		if(count($columns))
+			$this->_columnModelProvided=true;
   }
 	
 	/**
@@ -45,8 +52,8 @@ class GO_Base_Provider_Grid {
 	public function setStatement(GO_Base_Db_ActiveStatement $stmt){
 		$this->_stmt = $stmt;
 		
-		if(!count($this->_columns))
-			$this->_columns = array_keys($stmt->model->columns);
+		if(!$this->_columnModelProvided)
+			$this->_columns = array_merge(array_keys($stmt->model->columns), $this->_columns);
 		
 		if($stmt->model->customfieldsRecord){
 			
@@ -138,10 +145,14 @@ class GO_Base_Provider_Grid {
    * Then you can use '$controller->aControllerProperty' in the column format.
    * 
    */
-  public function formatColumn($column, $format, $extraVars=array()) {
+  public function formatColumn($column, $format, $extraVars=array(), $sortfield='') {
 
     $this->_columns[$column]['format'] = $format;
     $this->_columns[$column]['extraVars'] = $extraVars;
+		
+		if(!empty($sortfield)){
+			$this->_alternateSortFields[$column]=$sortfield;
+		}
   }
 	  
   /**
@@ -170,7 +181,7 @@ class GO_Base_Provider_Grid {
 		while ($model = $this->_stmt->fetch()) {
 			$this->_response['results'][] = $this->formatModelForGrid($model);
 		}
-		$this->_response['total']=$this->_stmt->foundRows();
+		$this->_response['total']=$this->_stmt->foundRows;
 
     return $this->_response;
   }
@@ -225,12 +236,18 @@ class GO_Base_Provider_Grid {
    * @var array $params Supply parameters to add to or override the default ones
    * @return array defaultParams 
    */
-  public static function getDefaultParams($params=array()) {
+  public function getDefaultParams($params=array()) {
+		
+		$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : '';
+		
+		if(isset($this->_alternateSortFields[$sort]))
+			$sort=$this->_alternateSortFields[$sort];
+		
     return array_merge(array(
         'searchQuery' => !empty($_REQUEST['query']) ? '%' . $_REQUEST['query'] . '%' : '',
         'limit' => isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0,
         'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
-        'order' => isset($_REQUEST['sort']) ? $_REQUEST['sort'] : '',
+        'order' => $sort,
         'orderDirection' => isset($_REQUEST['dir']) ? $_REQUEST['dir'] : '',
 				'joinCustomFields'=>true,
         'calcFoundRows'=>true

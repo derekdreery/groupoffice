@@ -592,12 +592,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!empty($params['distinct']))
 			$sql .= "DISTINCT";
 		
-//		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && empty($params['start'])){
-//			
-//			//TODO: This is MySQL only code
-//			
-//			$sql .= "SQL_CALC_FOUND_ROWS ";
-//		}
+		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && empty($params['start'])){
+			
+			//TODO: This is MySQL only code			
+			$sql .= "SQL_CALC_FOUND_ROWS ";
+		}
 		
 		$sql .= "t.*".$aclJoin['fields'].' ';
 		
@@ -693,7 +692,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(isset($params['having']))
 			$sql.="\nHAVING ".$params['having'];
 		
-		if(!empty($params['order'])){
+		if(!empty($params['order']) && isset($this->columns[$params['order']])){
 			$sql .= "\nORDER BY ".$this->_quoteColumnName($params['order']).' ' ;
 			if(!empty($params['orderDirection'])){
 				$sql .= $params['orderDirection'].' ';
@@ -723,29 +722,29 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 
 		
-//		if(!empty($params['calcFoundRows'])){
-//			if(!empty($params['limit'])){
-//				
-//				$queryUid = $this->_getFindQueryUid($params);
-//				
-//				//Total numbers are cached in session when browsing through pages.
-//				if(empty($params['start'])){
-//					//TODO: This is MySQL only code
-//					$sql = "SELECT FOUND_ROWS() as found;";			
-//					$r2 = $this->getDbConnection()->query($sql);
-//					$record = $r2->fetch(PDO::FETCH_ASSOC);
-//					$foundRows = GO::session()->values[$queryUid]=intval($record['found']);	
-//				}else
-//				{
-//					$foundRows=GO::session()->values[$queryUid];
-//				}
-//						
-//			}else
-//			{
-//				$foundRows = $result->rowCount();       
-//      }	
-//      $result->foundRows=$foundRows;
-//		}
+		if(!empty($params['calcFoundRows'])){
+			if(!empty($params['limit'])){
+				
+				$queryUid = $this->_getFindQueryUid($params);
+				
+				//Total numbers are cached in session when browsing through pages.
+				if(empty($params['start'])){
+					//TODO: This is MySQL only code
+					$sql = "SELECT FOUND_ROWS() as found;";			
+					$r2 = $this->getDbConnection()->query($sql);
+					$record = $r2->fetch(PDO::FETCH_ASSOC);
+					$foundRows = GO::session()->values[$queryUid]=intval($record['found']);	
+				}else
+				{
+					$foundRows=GO::session()->values[$queryUid];
+				}
+						
+			}else
+			{
+				$foundRows = $result->rowCount();       
+      }	
+      $result->foundRows=$foundRows;
+		}
 		
 		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
 		$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));

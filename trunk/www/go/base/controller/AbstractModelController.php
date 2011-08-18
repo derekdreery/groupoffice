@@ -190,11 +190,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
     
     $grid = new GO_Base_Provider_Grid($this->getGridColumnModel());		    
 		$grid->processDeleteActions($modelName);
-
-		$gridParams = array_merge(GO_Base_Provider_Grid::getDefaultParams(),$this->getGridParams());
+		$this->prepareGrid($grid);
+		$gridParams = array_merge($grid->getDefaultParams(),$this->getGridParams());
 
 		$grid->setStatement(call_user_func(array($modelName,'model'))->find($gridParams));
-		$this->prepareGrid($grid);
+		
     return $grid->getData();
   }	
 

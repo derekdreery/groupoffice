@@ -52,31 +52,35 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 			}
 	}
 	
-	public function foundRows(){
-		//Total numbers are cached in session when browsing through pages.
-		
-		$queryUid = $this->queryString;
-		if(empty($this->findParams['start'])){
-			
-			$distinct = stripos($this->queryString, 'distinct');
-			$fromPos = stripos($this->queryString, 'from');
-			
-			$sql = "SELECT ";
-			if($distinct)
-				$sql .= 'DISTINCT ';
-			
-			$sql .= 'count(*) as found ';
-			$sql .= substr($this->queryString, $fromPos);
-			
-			GO::debug($sql);
-			$r = GO::getDbConnection()->query($sql);
-			$foundRows = GO::session()->values[$queryUid]=intval($r->fetchColumn(0));	
-		}else
-		{
-			$foundRows=GO::session()->values[$queryUid];
-		}
-		
-		return $foundRows;
-	}
+//	public function foundRows(){
+//		//Total numbers are cached in session when browsing through pages.
+//		
+//		$queryUid = $this->queryString;
+//		if(empty($this->findParams['start'])){
+//			
+//			$distinct = stripos($this->queryString, 'distinct');
+//			$fromPos = stripos($this->queryString, 'from');
+//			
+//			$sql = "SELECT ";
+//			if($distinct)
+//				$sql .= 'DISTINCT ';
+//			
+//			$sql .= 'count(*) as found ';
+//			$sql .= substr($this->queryString, $fromPos);
+//			
+//			$sql = preg_replace('/^LIMIT .*$/mi','', $sql);
+//			$sql = preg_replace('/^ORDER BY .*$/mi','', $sql);
+//			$sql = preg_replace('/^LEFT JOIN .*$/mi','', $sql);			
+//			GO::debug($sql);
+//		
+//			$r = GO::getDbConnection()->query($sql);
+//			$foundRows = GO::session()->values[$queryUid]=intval($r->fetchColumn(0));	
+//		}else
+//		{
+//			$foundRows=GO::session()->values[$queryUid];
+//		}
+//		
+//		return $foundRows;
+//	}
 
 }
