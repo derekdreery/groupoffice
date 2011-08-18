@@ -48,25 +48,10 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
     return $grid;
   }
 	
-	/**
-	 * List all fields that require a remote text to load for a remote combobox.
-	 * eg. with a model you want to provide the category name so that that the
-	 * category combo store does not need to be loaded to show it.
-	 * 
-	 * You would list that like this:
-	 * 
-	 * 'category_id'=>array('category','name')
-	 * 
-	 * The category name would be looked up in the model model ->category->name.
-	 * A relation for this must be defined. See ActiveRecord->relations.
-	 * 
-	 * 
-	 * @var array remote combo mappings 
-	 */
+	protected function remoteComboFields(){
+		return array('category_id'=>'$model->category->name');
+	}
 	
-	protected $remoteComboFields=array(
-			'category_id'=>array('category','name')
-	);	
 	
 
 }

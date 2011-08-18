@@ -64,7 +64,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 							($link_props[1]), ($link_props[0]), $model->pk, $model->linkType());
 		}
 
-		$this->afterSubmit($response, $model);
+		$this->afterSubmit($response, $model, $params);
 
 		return $response;
 	}
@@ -75,7 +75,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param array $response The response array
 	 * @param mixed $model
 	 */
-	protected function beforeSubmit(&$response, &$model) {
+	protected function beforeSubmit(&$response, &$model, $params) {
 		
 	}
 
@@ -85,7 +85,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param array $response The response array
 	 * @param mixed $model
 	 */
-	protected function afterSubmit(&$response, &$model) {
+	protected function afterSubmit(&$response, &$model, $params) {
 		
 	}
 
@@ -107,12 +107,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$response = $this->_loadComboTexts($response, $model);
 
-		$response = $this->afterLoad($response, $model);
+		$response = $this->afterLoad($response, $model, $params);
 
 		return $response;
 	}
 
-	protected function afterLoad($response, $model) {
+	protected function afterLoad($response, $model, $params) {
 		return $response;
 	}
 
@@ -123,24 +123,28 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 *
 	 * You would list that like this:
 	 *
-	 * 'category_id'=>array('category','name')
+	 * 'category_id'=>'$model->category->name'
 	 *
 	 * The category name would be looked up in the model model ->category->name.
 	 * A relation for this must be defined. See ActiveRecord->relations.
 	 *
 	 *
-	 * @var array remote combo mappings
+	 * @return array remote combo mappings
 	 */
-	protected $remoteComboFields = array(
-					//'category_id'=>array('category','name')
-	);
+	protected function remoteComboFields(){
+		return array();
+	}
 
 	private function _loadComboTexts($response, $model) {
 
 		$response['remoteComboTexts'] = array();
 
-		foreach ($this->remoteComboFields as $property => $map) {
-			$response['remoteComboTexts'][$property] = $model->{$map[0]}->{$map[1]};
+		foreach ($this->remoteComboFields() as $property => $map) {
+			
+			$eval = '$value = '.$map.';';
+			//GO::debug($eval);
+			eval($eval);			
+			$response['remoteComboTexts'][$property] = $value;
 		}
 
 		return $response;
