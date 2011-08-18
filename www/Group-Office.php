@@ -26,7 +26,7 @@
  * @access public
  */
 
-global $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE;
+global $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_EVENTS;
 
 $root = dirname(__FILE__).'/';
 require_once($root.'functions.inc.php');
@@ -47,7 +47,7 @@ if ( isset( $GO_INCLUDES ) ) {
 
 
 
-if(!defined('GO_NO_SESSION')){
+if(!defined('GO_NO_SESSION') && session_id()==''){
 	//start session
 	session_name('groupoffice');
 	if(isset($_REQUEST['session_id']) && isset($_REQUEST['auth_token']))
