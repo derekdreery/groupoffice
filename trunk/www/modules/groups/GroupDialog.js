@@ -18,7 +18,7 @@ GO.groups.GroupDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		Ext.apply(this, {
 			goDialogId:'group',
 			title:GO.groups.lang.group,
-			formControllerUrl: GO.url('groups/group')
+			formControllerUrl: 'groups/group'
 		});
 		
 		GO.groups.GroupDialog.superclass.initComponent.call(this);	

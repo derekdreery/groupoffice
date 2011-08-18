@@ -19,7 +19,7 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		Ext.apply(this, {
 			goDialogId:'note',
 			title:GO.notes.lang.note,
-			formControllerUrl: GO.url('notes/note')
+			formControllerUrl: 'notes/note'
 		});
 		
 		GO.notes.NoteDialog.superclass.initComponent.call(this);	

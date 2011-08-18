@@ -18,7 +18,7 @@
 		Ext.apply(this, {
 			goDialogId:'user',
 			title:GO.users.lang.userSettings,
-			formControllerUrl: GO.url('users/user'),
+			formControllerUrl: 'users/user',
 			height:580,
 			width:800
 			

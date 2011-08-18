@@ -142,7 +142,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	submitForm : function(hide){
 		this.formPanel.form.submit(
 		{
-			url:this.formControllerUrl+'/submit',
+			url:GO.url(this.formControllerUrl+'/submit'),
 			params: this.getSubmitParams(),
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){		
@@ -211,7 +211,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		if(this.remoteModelId>0)
 		{
 			this.formPanel.load({
-				url:this.formControllerUrl+'/load',
+				url:GO.url(this.formControllerUrl+'/load'),
 				success:function(form, action)
 				{					
 					if(action.result.remoteComboTexts){
