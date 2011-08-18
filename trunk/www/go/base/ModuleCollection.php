@@ -10,12 +10,30 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		parent::__construct($model);
 	}
 	
+	
+	public function getAvailableModules(){
+		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'modules');
+		
+		$folders = $folder->ls();
+		$modules = array();
+		foreach($folders as $folder){
+			$ucfirst = ucfirst($folder->name());
+			$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
+			if(file_exists($moduleClass)){// && !GO_Base_Model_Module::model()->findByPk($folder->name())){
+				$modules[]='GO_'.$ucfirst.'_'.$ucfirst.'Module';
+			}
+		}
+		
+		return $modules;		
+	}
+	
 
 	
 	public function callModuleMethod($method, $params=array()){
 		
 		$stmt = $this->getAll();
 		$modules = $stmt->fetchAll();
+		
 		foreach($modules as $module)
 		{	
 			$file = $module->path.ucfirst($module->id).'Module.php';
@@ -24,7 +42,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 				require_once($file);
 				$class='GO_'.ucfirst($module->id).'_'.ucfirst($module->id).'Module';
 				
-				$object = call_user_func(array($class, 'model'))->findByPk($module->id);
+				$object = new $class;
 				if(method_exists($object, $method)){					
 					GO::debug('Calling '.$class.'::'.$method);
 					//call_user_func_array(array($object, $method), $params);

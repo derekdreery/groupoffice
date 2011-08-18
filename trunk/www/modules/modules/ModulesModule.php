@@ -1,9 +1,9 @@
 <?php
 
-class GO_Groups_GroupsModule extends GO_Base_Module{
+class GO_Modules_ModulesModule extends GO_Base_Module{
 	
 	public static function initListeners(){		
-		
+
 	}	
 	
 	/**
@@ -15,5 +15,6 @@ class GO_Groups_GroupsModule extends GO_Base_Module{
 	 */
 	public static function firstRun(){
 		parent::firstRun();
+		
 	}
 }

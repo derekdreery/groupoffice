@@ -39,15 +39,5 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 	protected function remoteComboFields(){
 		return array('user_id'=>'$model->user->name');
 	}
-	
-	public function actionTest($params){
-		$model = GO_Notes_Model_Category::model()->findByPk($params['id']);
-	
-		$stmt = $model->notes;
-		
-		while($note = $stmt->fetch()){
-			echo $note->name.'<br />';
-		}
-	}
 }
 
