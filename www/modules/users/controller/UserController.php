@@ -11,7 +11,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 	//GRID
 	protected function prepareGrid($grid) {
-		$grid->formatColumn('name', '$model->name');
+		$grid->formatColumn('name', '$model->name',array(), 'first_name');
 		return $grid;
 	}
 	
