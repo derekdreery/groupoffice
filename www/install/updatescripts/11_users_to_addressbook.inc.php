@@ -51,35 +51,5 @@ if(!$ab){
 		
 		//todo copy adminusers files to contact
 	}
-	
-	
-	
-	$pdo->query("ALTER TABLE `go_users`
-  DROP `initials`,
-  DROP `title`,
-  DROP `sex`,
-  DROP `birthday`,
-  DROP `company`,
-  DROP `department`,
-  DROP `function`,
-  DROP `home_phone`,
-  DROP `work_phone`,
-  DROP `fax`,
-  DROP `cellular`,
-  DROP `country`,
-  DROP `state`,
-  DROP `city`,
-  DROP `zip`,
-  DROP `address`,
-  DROP `address_no`,
-  DROP `homepage`,
-  DROP `work_address`,
-  DROP `work_address_no`,
-  DROP `work_zip`,
-  DROP `work_country`,
-  DROP `work_state`,
-  DROP `work_city`,
-  DROP `work_fax`,
-  DROP `contact_id`;");
 }
 

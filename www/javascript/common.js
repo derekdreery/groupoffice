@@ -19,7 +19,7 @@ GO.util.callToHref = function(phone){
 }
 
 GO.url = function(relativeUrl){
-	return BaseHref+'router.php?r='+relativeUrl
+	return BaseHref+'router.php?r='+relativeUrl+'&security_token='+GO.securityToken;
 }
 
 GO.request = function(config){

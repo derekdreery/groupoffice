@@ -54,7 +54,9 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	}
 
 	protected function actionLogout() {
-		$GLOBALS['GO_SECURITY']->logout();
+		
+		GO::session()->logout();
+		
 		if (isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN'] == '1') {
 			?>
 			<script type="text/javascript">
@@ -64,13 +66,14 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 			exit();
 		} else {
-			header('Location: ' . $GLOBALS['GO_CONFIG']->host);
-			exit();
+			$this->redirect();
 		}
 	}
 
 	public function actionUpgrade($params) {
 
+		GO::$ignoreAclPerissions=true; //allow this script access to all
+		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '300');
 		
 		$logDir = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'log/upgrade/');

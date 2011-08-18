@@ -149,7 +149,9 @@
 		this.addPanel(this.profileTab);
 		
 		if(GO.addressbook){
-			this.contactPanel = new  GO.addressbook.ContactProfilePanel();
+			this.contactPanel = new  GO.addressbook.ContactProfilePanel({
+				forUser:true
+			});
 			this.addPanel(this.contactPanel);
 		}
 		

@@ -182,4 +182,15 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	protected function actionIndex(){
 		
 	}
+	
+	protected function redirect($path=''){
+		$url = GO::config()->host;
+		
+		if($path!=''){
+			$url .= '?r='.$path.'&security_token='.GO::session()->values['security_token'];
+		}
+		
+		header('Location: ' .$url);
+		exit();
+	}
 }
