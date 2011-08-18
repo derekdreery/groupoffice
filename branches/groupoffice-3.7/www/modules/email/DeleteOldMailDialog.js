@@ -117,8 +117,9 @@ Ext.extend(GO.email.DeleteOldMailDialog, Ext.Window,{
 				'total' : totalMails,
 				'n_deleted' : nDeleted,
 				'uids' : Ext.encode(uids),
-				'until_date' : this.untilDate.value,
-				'apply_to_children' : this.applyToChildren.getValue()
+				'until_date' : this.untilDate.value
+//				,
+//				'apply_to_children' : this.applyToChildren.getValue()
 			},
 			callback:function(options, success, response){
 				var responseParams = Ext.decode(response.responseText);
@@ -144,8 +145,9 @@ Ext.extend(GO.email.DeleteOldMailDialog, Ext.Window,{
 							'account_id' : this.account_id,
 							'mailbox' : this.node.attributes.mailbox,
 							'n_deleted' : responseParams.nDeleted,
-							'until_date' : this.untilDate.value,
-							'apply_to_children' : this.applyToChildren.getValue()
+							'until_date' : this.untilDate.value
+//							,
+//							'apply_to_children' : this.applyToChildren.getValue()
 						},
 						scope: this
 					});
