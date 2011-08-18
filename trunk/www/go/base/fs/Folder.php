@@ -1,9 +1,16 @@
 <?php
-
+/**
+ * A filesystem folder
+ */
 class GO_Base_Fs_Folder extends GO_Base_Fs_File {
 
 
-	
+	/**
+	 * Get folder directory listing.
+	 * 
+	 * @param boolean $getHidden
+	 * @return GO_Base_Fs_File or GO_Base_Fs_Folder
+	 */
 	public function ls($getHidden=false) {
 		if (!$dir = @opendir($this->path))
 			throw new Exception("Could not open " . $this->path);
@@ -25,6 +32,11 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_File {
 		return $folders;
 	}
 	
+	/**
+	 * Delete the folder
+	 * 
+	 * @return boolean 
+	 */
 	public function delete(){
 		
 		$items = $this->ls(true);
@@ -37,6 +49,11 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_File {
 		return rmdir($this->path);
 	}
 	
+	/**
+	 * Create the folder
+	 * 
+	 * @return boolean 
+	 */
 	public function create(){
 		return !is_dir($this->path) ? mkdir($this->path, GO::config()->folder_create_mode,true) : true;
 	}

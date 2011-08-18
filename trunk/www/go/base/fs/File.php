@@ -1,4 +1,7 @@
 <?php
+/**
+ * A file on the filesystem
+ */
 class GO_Base_Fs_File{
 	
 	protected $path;
@@ -7,25 +10,55 @@ class GO_Base_Fs_File{
 		$this->path = dirname($path) . '/' . GO_Base_util_File::utf8Basename($path);
 	}
 	
+	/**
+	 * Return absolute filesystem path
+	 * 
+	 * @return String 
+	 */
 	public function path(){
 		return $this->path;
 	}
 	
+	/**
+	 * Return the modification unix timestamp
+	 * 
+	 * @return int Unix timestamp
+	 */
 	public function mtime(){
 		return filemtime($this->path);
 	}
 	
+	/**
+	 * Filesize in bytes
+	 * 
+	 * @return int Filesize in bytes
+	 */
 	public function size(){
 		return filesize($this->path);
 	}
+	
+	/**
+	 * Get the name of this file or folder
+	 * 
+	 * @return String  
+	 */
 	public function name(){
 		return GO_Base_util_File::utf8Basename($this->path);
 	}
 	
+	/**
+	 * Check if the file or folder exists
+	 * @return boolean 
+	 */
 	public function exists(){
 		return file_exists($this->path);
 	}
 	
+	/**
+	 * Delete the file
+	 * 
+	 * @return boolean 
+	 */
 	public function delete(){
 		return unlink($this->path);
 	}
@@ -45,6 +78,10 @@ class GO_Base_Fs_File{
 		return strtolower($extension);
 	}
 	
+	/**
+	 * Get the file name with out extension
+	 * @return String 
+	 */
 	public function nameWithoutExtension(){
 		$filename=$this->name();
 		$pos = strrpos($filename, '.');
