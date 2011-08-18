@@ -1,5 +1,6 @@
 GO.addressbook.ContactProfilePanel = function(config)
 	{
+		config = config || {};
 		Ext.apply(config);
 
 		if(!config.forUser){
