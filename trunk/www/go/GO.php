@@ -350,7 +350,7 @@ class GO{
 	 * @access public
 	 * @return void
 	 */
-	function log($level, $message) {
+	public static function log($level, $message) {
 		if (self::config()->log) {
 			$messages = str_split($message, 500);
 			for ($i = 0; $i < count($messages); $i++) {
@@ -359,7 +359,7 @@ class GO{
 		}
 	}
 
-	function infolog($message) {
+	public static function infolog($message) {
 
 		if (self::config()->log) {
 
