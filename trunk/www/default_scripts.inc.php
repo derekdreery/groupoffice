@@ -400,6 +400,7 @@ if(count($load_modules)) {
 	//some functions require extra security
 	<?php
 	if(isset($_SESSION['GO_SESSION']['security_token']))		
+		echo 'GO.securityToken="'.$_SESSION['GO_SESSION']['security_token'].'";';
 		echo 'Ext.Ajax.extraParams={security_token:"'.$_SESSION['GO_SESSION']['security_token'].'"};';
 	?>
 </script>
