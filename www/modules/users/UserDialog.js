@@ -147,6 +147,13 @@
 		});
 		
 		this.addPanel(this.profileTab);
+		
+		if(GO.addressbook){
+			this.contactPanel = new  GO.addressbook.ContactProfilePanel();
+			this.addPanel(this.contactPanel);
+		}
+		
+		
 		this.addPanel(this.permissionsTab);
     this.addPanel(this.regionalSettingsTab);
     this.addPanel(this.lookAndFeelTab);
