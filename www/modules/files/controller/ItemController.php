@@ -2,6 +2,10 @@
 /**
  * @todo refactor this code in the new MVC style
  */
+
+//todo build in new style. Now it's necessary for old library functions
+require_once(GO::config()->root_path.'Group-Office.php');
+		
 require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 
 class GO_Files_Controller_Item extends GO_Base_Controller_AbstractController{
