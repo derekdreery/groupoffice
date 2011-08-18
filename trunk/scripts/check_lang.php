@@ -141,7 +141,7 @@ function check_namespace($file)
 			$changed = true;
 			
 			$str = str_replace('//require', 'require', $str);			
-			echo '<p style="color:red">Warning, uncommented //require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file(\'module\'));</p>';
+			echo '<p style="color:red">Warning, uncommented //require($GO_LANGUAGE->get_fallback_language_file(\'module\'));</p>';
 		}
 		if($changed)
 		{
@@ -156,7 +156,7 @@ function check_namespace($file)
 		
 		if(strstr($str, '//require'))
 		{
-				echo '<p style="color:red">Warning, you must uncomment //require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file(\'module\')); make the language files writable to let this script correct it.</p>';
+				echo '<p style="color:red">Warning, you must uncomment //require($GO_LANGUAGE->get_fallback_language_file(\'module\')); make the language files writable to let this script correct it.</p>';
 		}
 	}
 }
