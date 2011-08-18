@@ -54,6 +54,12 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 		}		
 		return parent::afterSave($wasNew);
 	}
+	
+	protected function afterDelete() {
+		$this->moduleManager->uninstall();
+		
+		return parent::afterDelete();
+	}
 
 //	protected function getName() {
 //		return GO::t('name', $this->id);// isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;

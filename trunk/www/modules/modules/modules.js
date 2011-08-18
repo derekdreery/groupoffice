@@ -45,7 +45,7 @@ GO.modules.MainPanel = function(config) {
 			iconCls : 'btn-delete',
 			text : GO.modules.lang['cmdUninstall'],
 			cls : 'x-btn-text-icon',
-			handler : this.uninstallModule,
+			handler : this.deleteSelected,
 			scope : this
 		}, {
 			iconCls : 'btn-permissions',
@@ -237,7 +237,10 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 
 		if (records.length > 0) {
 			GO.request({
-				url : 'modules/module/install',				
+				url : 'modules/module/install',		
+				params:{
+					modules:keys
+				},
 				success: function(options, success, response) {
 					grid.container.unmask();
 					grid.store.reload();
