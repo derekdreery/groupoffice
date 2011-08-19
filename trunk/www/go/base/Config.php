@@ -181,6 +181,14 @@ class GO_Base_Config {
 	 * @access  public
 	 */
 	var $theme = 'Default';
+	
+	/**
+	 * Default theme
+	 *
+	 * @var     string
+	 * @access  public
+	 */
+	var $defaultView = 'Extjs3';
 
 	/**
 	 * Enable theme switching by users

@@ -26,7 +26,7 @@
  * @access public
  */
 
-global $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_EVENTS;
+global $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_EVENTS, $GO_THEME;
 
 $root = dirname(__FILE__).'/';
 require_once($root.'functions.inc.php');

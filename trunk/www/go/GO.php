@@ -96,7 +96,7 @@ class GO{
 	 * TODO SHould be changed to theme().
 	 */
 	public static function view(){
-		return 'Default';
+		return GO::config()->defaultView;
 	}
 	
 	/**

@@ -94,8 +94,8 @@ class GO_THEME
 			$this->theme = $GLOBALS['GO_CONFIG']->theme;
 		}
 
-		$this->theme_path = $GLOBALS['GO_CONFIG']->theme_path.$this->theme.'/';
-		$this->theme_url = $GLOBALS['GO_CONFIG']->theme_url.$this->theme.'/';
+		$this->theme_path = $GLOBALS['GO_CONFIG']->root_path.'views/Extjs3/themes/'.$this->theme.'/';
+		$this->theme_url = $GLOBALS['GO_CONFIG']->host.'views/Extjs3/themes/'.$this->theme.'/';
 		$this->image_url = $this->theme_url.'images/';
 		$this->image_path = $GLOBALS['GO_CONFIG']->theme_path.'images/';
 	}
