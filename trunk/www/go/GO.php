@@ -96,7 +96,11 @@ class GO{
 	 * TODO SHould be changed to theme().
 	 */
 	public static function view(){
-		return GO::config()->defaultView;
+		return isset(GO::session()->values['view']) ? GO::session()->values['view'] : GO::config()->defaultView;
+	}
+	
+	public static function setView($viewName){
+		GO::session()->values['view']=$viewName;
 	}
 	
 	/**

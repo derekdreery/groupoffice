@@ -209,14 +209,38 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * 
 	 * @param string $path 
 	 */
-	protected function redirect($path=''){
+	protected function redirect($path=''){		
+		header('Location: ' .$this->url($path));
+		exit();
+	}
+	
+	
+	protected function url($path){
 		$url = GO::config()->host;
 		
-		if($path!=''){
-			$url .= '?r='.$path.'&security_token='.GO::session()->values['security_token'];
-		}
+		if($path!='')
+			$url .= '?r='.$path;
 		
-		header('Location: ' .$url);
-		exit();
+		if(isset(GO::session()->values['security_token']))
+			$url .= '&security_token='.GO::session()->values['security_token'];
+		
+		return $url;
+	}
+	
+	/**
+	 * Set a cookie
+	 * 
+	 * @param string $name 
+	 * @param string $value [optional] 
+	 * @param int $expire [optional] 
+	 * @return type 
+	 */
+	protected function setCookie($name, $value, $expires=0){
+		return SetCookie($name,$value,$expires,GO::config()->host,$_SERVER['HTTP_HOST'],!empty($_SERVER['HTTPS']),true);
+	}
+	
+	
+	protected function isAjax(){
+		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']==='XMLHttpRequest';
 	}
 }
