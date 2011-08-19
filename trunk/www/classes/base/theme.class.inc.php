@@ -136,6 +136,21 @@ class GO_THEME
 					$this->add_stylesheet($module['path'].'themes/'.$this->theme.'/style.css');
 				}
 			}
+			
+			
+			//double for compatibility with new views. This entire file will be deprecated at some point.
+			if(file_exists($module['path'].'views/Extjs3/themes/Default/style.css')){
+				$this->add_stylesheet($module['path'].'views/Extjs3/themes/Default/style.css');
+			}
+
+			if($this->theme!='Default'){
+				if($derrived_theme && file_exists($module['path'].'views/Extjs3/themes/'.$derrived_theme.'/style.css')){
+					$this->add_stylesheet($module['path'].'views/Extjs3/themes/'.$derrived_theme.'/style.css');
+				}
+				if(file_exists($module['path'].'views/Extjs3/themes/'.$this->theme.'/style.css')){
+					$this->add_stylesheet($module['path'].'views/Extjs3/themes/'.$this->theme.'/style.css');
+				}
+			}
 		}
 	}
 

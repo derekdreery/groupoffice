@@ -15,6 +15,8 @@
 header('Content-Type: text/html; charset=UTF-8');
 require_once("Group-Office.php");
 
+
+
 //$config_file = $GLOBALS['GO_CONFIG']->get_config_file();
 if(empty($GLOBALS['GO_CONFIG']->db_user))
 {
