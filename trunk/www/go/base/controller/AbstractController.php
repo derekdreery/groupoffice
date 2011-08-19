@@ -15,6 +15,20 @@
 
 /**
  * Abstract class for al Group-Office controllers.
+ * 
+ * Any function that starts with action will be publicly accessible by:
+ * 
+ * index.php?r=module/controllername/functionNameWithoutAction
+ * 
+ * This function will be called with one parameter which holds all request
+ * variables.
+ * 
+ * The functions must return a response object. In case of ajax controllers this
+ * should be a an array that will be converted to Json or XMl by an OutputStream.
+ * 
+ * If you supply exportVariables in this response object the view will import
+ * those variables for use in the view.
+ * 
  */
 abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable {
 	
@@ -49,16 +63,6 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	public function init($module){
 		$this->module=strtolower($module);
 		$this->moduleObject = GO::modules()->{$this->module};
-		
-		if($this->module != 'core' && !isset(GO::session()->values[$this->module]['firstRunDone'])){
-			$moduleClass = "GO_".ucfirst($this->module)."_".ucfirst($this->module)."Module";
-			
-			if(class_exists($moduleClass)){
-
-				call_user_func(array($moduleClass,'firstRun'));
-				GO::session()->values[$this->module]['firstRunDone']=true;
-			}
-		}
 	}	
 	
 	/**
@@ -125,6 +129,22 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 				$action=ucfirst($action);
 
 			$methodName='action'.$action;
+			
+			
+			/**
+			 * If this controller belongs to a module and it's the first request to
+			 * a module we run the {Module}Module.php class firstRun function
+			 * The response is added to the controller's action parameters.
+			 */
+			if($this->module != 'core' && !isset(GO::session()->values[$this->module]['firstRunDone'])){
+				$moduleClass = "GO_".ucfirst($this->module)."_".ucfirst($this->module)."Module";
+
+				if(class_exists($moduleClass)){
+
+					$_REQUEST['firstRun']=call_user_func(array($moduleClass,'firstRun'));
+					GO::session()->values[$this->module]['firstRunDone']=true;
+				}
+			}
 
 //			$method=new ReflectionMethod($this, $methodName);
 //			if($method->getNumberOfParameters()>0)
@@ -179,10 +199,15 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	/**
 	 * This default action should be overrriden
 	 */
-	protected function actionIndex(){
+	public function actionIndex($params){
 		
 	}
 	
+	/**
+	 * Redirect the browser.
+	 * 
+	 * @param string $path 
+	 */
 	protected function redirect($path=''){
 		$url = GO::config()->host;
 		

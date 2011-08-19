@@ -42,7 +42,7 @@ GO.notes.MainPanel = function(config){
 	this.westPanel.on('change', function(grid, categories, records)
 	{
 		if(records.length){
-			this.centerPanel.store.baseParams.categories = Ext.encode(categories);
+			this.centerPanel.store.baseParams.notes_categories_filter = Ext.encode(categories);
 			this.centerPanel.store.reload();
 			this.category_ids = categories;
 
@@ -52,7 +52,7 @@ GO.notes.MainPanel = function(config){
 				this.category_name = records[0].data.name;
 			}
 
-			delete this.centerPanel.store.baseParams.categories;
+			delete this.centerPanel.store.baseParams.notes_categories_filter;
 		}
 	}, this);
 	

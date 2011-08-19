@@ -3,19 +3,19 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 	
 	protected $model = 'GO_Notes_Model_Category';
 	
-	public $selectedCategories;
 	
-	protected function getGridParams(){
-		
-		$this->selectedCategories = GO::config()->get_setting('notes_categories_filter', GO::session()->values['user_id']);
-		$this->selectedCategories  = $this->selectedCategories ? explode(',',$this->selectedCategories) : array();
-
-		return array();
+	protected function multiSelectRequestParam(){
+		return 'notes_categories_filter';
 	}
+	
+	protected function multiSelectDefault(){
+		$category = GO_Notes_NotesModule::getDefaultNoteCategory(GO::user()->id);
+		return $category->id;
+	}	
 	
 	protected function prepareGrid($grid){
     $grid->formatColumn('user_name','$model->user ? $model->user->name : 0');
-		$grid->formatColumn('checked','in_array($model->id, $controller->selectedCategories)', array('controller'=>$this));
+		$grid->formatColumn('checked','in_array($model->id, $controller->multiselectIds)', array('controller'=>$this));
     return $grid;
   }
 

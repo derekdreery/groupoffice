@@ -22,6 +22,14 @@ GO.url = function(relativeUrl){
 	return BaseHref+'router.php?r='+relativeUrl+'&security_token='+GO.securityToken;
 }
 
+/**
+ * Generic request function. Must handle exportVariables in responses.
+ * 
+ * exportVariables = {
+ * varName: mixed
+ * }
+ * 
+ */
 GO.request = function(config){
 
 	var url = GO.url(config.url);
@@ -48,8 +56,15 @@ GO.request = function(config){
 			if(!result.success)
 			{
 				alert(result.feedback);
-			}else if(origSuccess){					
-				origSuccess.call(config.scope, response, options, result);
+			}else 
+			{
+				//the same happens in GO.data.JSonStore.
+				if(result.exportVariables){					
+					GO.util.mergeObjects(window, result.exportVariables);				
+				}
+				
+				if(origSuccess)					
+					origSuccess.call(config.scope, response, options, result);				
 			}
 			
 		}
@@ -57,6 +72,29 @@ GO.request = function(config){
 	
 	Ext.Ajax.request(p)
 }
+
+GO.util.mergeObjects = function(a, b) {
+    for(var item in b){
+        if(a[item]){
+            if(typeof b[item] === 'object' && !b[item].length){
+                GO.util.mergeObjects (a[item], b[item]);
+            } else {
+                if(typeof a[item] === 'object' || typeof b[item] === 'object') {
+                    a[item] = [].concat(a[item],b[item]);
+                } else {
+                    a[item] = [a[item],b[item]];  // assumes that merged members that are common should become an array.
+                }
+            }
+        } else {
+            a[item] = b[item];
+        }
+    }
+    return a;
+}
+
+//Ext.Ajax.on('requestcomplete', function(){
+//	
+//}, this);
 
 
 GO.util.empty = function(v)

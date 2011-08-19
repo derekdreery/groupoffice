@@ -17,12 +17,23 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 	 */
 	public static function firstRun(){
 		parent::firstRun();
-		self::createDefaultNoteCategory(GO::user()->id);	
+		$category = self::getDefaultNoteCategory(GO::user()->id);
+		
+		return array('exportVariables'=>array(
+				'GO'=>array(
+						"notes"=>array(
+								"defaultCategory"=>array(
+									'id'=>$category->id,
+									'name'=>$category->name
+									)
+						)
+				)
+		));
 	}
 	
 	
 	public static function saveUser($user){
-		self::createDefaultNoteCategory($user->id);	
+		self::getDefaultNoteCategory($user->id);	
 	}
 	
 	public static function deleteUser($user){
@@ -35,7 +46,7 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 	}
 	
 	
-	public static function createDefaultNoteCategory($userId){
+	public static function getDefaultNoteCategory($userId){
 		$category = GO_Notes_Model_Category::model()->findSingleByAttribute('user_id', $userId);
 		if (!$category){
 			$category = new GO_Notes_Model_Category();
@@ -46,6 +57,8 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 			$category->name=$user->name;
 			$category->makeAttributeUnique('name');
 			$category->save();
-		}		
+		}
+		
+		return $category;
 	}
 }

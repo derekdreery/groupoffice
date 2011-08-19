@@ -3,44 +3,16 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	
 	protected $model = 'GO_Notes_Model_Note';
 	
-	public function actionTest(){
-		return GO::user()->username;
-	}
+	protected function multiSelectRequestParam(){
+		return 'notes_categories_filter';
+	}	
 	
-	
-	
-	protected function getGridParams(){		
-		
-		if(isset($_POST['categories']))
-		{
-			$categories = json_decode($_POST['categories'], true);
-			GO::config()->save_setting('notes_categories_filter',implode(',', $categories), GO::user()->id);
-		}else
-		{
-			$categories = GO::config()->get_setting('notes_categories_filter', GO::user()->id);
-			$categories = $categories ? explode(',',$categories) : array();
-		}
-		
-		//todo category acl's should be checked for read permission here.
-   
-
+	protected function getGridParams(){
 		return array(
 				'ignoreAcl'=>true,
 				'joinCustomFields'=>true,
-				'by'=>array(array('category_id', $categories, 'IN'))
+				'by'=>array(array('category_id', $this->multiselectIds, 'IN'))
 		);
-	}
-	
-	protected function beforeActionGrid(){
-		if(isset($_POST['categories']))
-		{
-			$categories = json_decode($_POST['categories'], true);
-			GO::config()->save_setting('notes_categories_filter',implode(',', $categories), GO::user()->id);
-		}else
-		{
-			$categories = $GO_CONFIG->get_setting('notes_categories_filter', $GO_SECURITY->user_id);
-			$categories = ($categories) ? explode(',',$categories) : array();
-		}
 	}
   
   protected function prepareGrid($grid){
@@ -51,8 +23,5 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	protected function remoteComboFields(){
 		return array('category_id'=>'$model->category->name');
 	}
-	
-	
-
 }
 

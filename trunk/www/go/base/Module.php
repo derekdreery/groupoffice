@@ -156,9 +156,12 @@ class GO_Base_Module extends GO_Base_Observable {
 	/**
 	 * This function is called when the first request is made to the module.
 	 * Useful to check for a default calendar, tasklist etc.
+	 * 
+	 * The response is added to the controller action parameters with index
+	 * 'firstRun'.
 	 */
 	public static function firstRun(){
-		
+		return '';
 	}
 	
 	/**
