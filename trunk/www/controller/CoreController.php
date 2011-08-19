@@ -14,6 +14,10 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	protected function actionInit() {
 
 		GO_Base_Observable::cacheListeners();
+		
+		//when GO initializes modules need to perform their first run actions.
+		unset(GO::session()->values['firstRunDone']);
+		
 		if (GO::user())
 			$this->fireEvent('loadapplication', array(&$this));
 

@@ -37,16 +37,16 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
       }
     }
     
-    $gridparams = GO_Base_Provider_Grid::getDefaultParams(array(
-        'joinCustomFields'=>false
-    ));
-    
     $grid = new GO_Base_Provider_Grid(array(
         'id',
         'name'=>array('format'=>'$model->name'),
         'username',
         'email'
      ));
+		
+		$gridParams = $grid->getDefaultParams(array(
+        'joinCustomFields'=>false
+    ));
 
     // The users in the group "everyone" cannot be deleted
 
@@ -61,7 +61,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
       $delresponse['deleteFeedback'] = 'Members of the group everyone cannot be deleted.';
     }
     
-    $stmt = $group->users($gridparams);
+    $stmt = $group->users($gridParams);
     $grid->setStatement($stmt);
     
     $response = $grid->getData();
