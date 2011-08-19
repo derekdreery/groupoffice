@@ -650,7 +650,7 @@ try {
 												'id'=>$response['count']++,
 												'name'=>htmlspecialchars(str_replace('{NAME}',$name,$lang['calendar']['birthday_name']), ENT_COMPAT, 'UTF-8'),
 												'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$contact['upcoming']-$contact['birthday']), $lang['calendar']['birthday_desc']), ENT_COMPAT, 'UTF-8'),
-												'time'=>date($_SESSION['GO_SESSION']['date_format'],$contact['upcoming']),												
+												'time'=>'',												
 												'start_time'=>$contact['upcoming'].' 00:00',
 												'end_time'=>$contact['upcoming'].' 23:59',
 												'background'=>'EBF1E2',
