@@ -46,6 +46,13 @@ $scripts[]=$root_uri.'javascript/namespaces.js';
 	};
 
 <?php
+
+//some functions require extra security
+
+if(isset($_SESSION['GO_SESSION']['security_token'])){	
+	echo 'GO.securityToken="'.$_SESSION['GO_SESSION']['security_token'].'";';
+}
+
 if(isset($_REQUEST['after_login_url'])) {
 	$after_login_url = $_REQUEST['after_login_url'];
 }else {
@@ -400,7 +407,6 @@ if(count($load_modules)) {
 	//some functions require extra security
 	<?php
 	if(isset($_SESSION['GO_SESSION']['security_token']))		
-		echo 'GO.securityToken="'.$_SESSION['GO_SESSION']['security_token'].'";';
 		echo 'Ext.Ajax.extraParams={security_token:"'.$_SESSION['GO_SESSION']['security_token'].'"};';
 	?>
 </script>

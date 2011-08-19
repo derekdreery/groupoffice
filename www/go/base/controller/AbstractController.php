@@ -18,10 +18,13 @@
  * 
  * Any function that starts with action will be publicly accessible by:
  * 
- * index.php?r=module/controllername/functionNameWithoutAction
+ * index.php?r=module/controllername/functionNameWithoutAction&security_token=1233456
  * 
  * This function will be called with one parameter which holds all request
  * variables.
+ * 
+ * A security token must be supplied in each request to prevent cross site 
+ * request forgeries.
  * 
  * The functions must return a response object. In case of ajax controllers this
  * should be a an array that will be converted to Json or XMl by an OutputStream.
@@ -136,13 +139,13 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			 * a module we run the {Module}Module.php class firstRun function
 			 * The response is added to the controller's action parameters.
 			 */
-			if($this->module != 'core' && !isset(GO::session()->values[$this->module]['firstRunDone'])){
+			if($this->module != 'core' && !isset(GO::session()->values['firstRunDone'][$this->module])){
 				$moduleClass = "GO_".ucfirst($this->module)."_".ucfirst($this->module)."Module";
 
 				if(class_exists($moduleClass)){
 
 					$_REQUEST['firstRun']=call_user_func(array($moduleClass,'firstRun'));
-					GO::session()->values[$this->module]['firstRunDone']=true;
+					GO::session()->values['firstRunDone'][$this->module]=true;
 				}
 			}
 

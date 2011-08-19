@@ -32,7 +32,7 @@ GO.users.LoginPanel = function(config)
 		{
       xtype: 'plainfield',
 			fieldLabel: GO.users.lang.cmdFormLabelRegistrationTime,
-			name: 'registration_time'
+			name: 'ctime'
 		},
 		{
       xtype: 'plainfield',
