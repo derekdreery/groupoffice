@@ -30,7 +30,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	
 	/**
 	 * It's often convenient to select multiple addressbooks, calendars etc. for
-	 * display in a grid. By overriding multiSelectRequestParam and multiSelectDefault
+	 * display in a grid. By overriding multiSelectProperties and multiSelectDefault
 	 * this array will be filled with ids that are send by the request parameter.
 	 * They will be saved to the database too.
 	 * 
@@ -164,21 +164,27 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	/**
 	 *
 	 * It's often convenient to select multiple addressbooks, calendars etc. for
-	 * display in a grid. By overriding multiSelectRequestParam and multiSelectDefault
+	 * display in a grid. By overriding multiSelectProperties and multiSelectDefault
 	 * this array will be filled with ids that are send by the request parameter.
 	 * They will be saved to the database too.
 	 * 
 	 *
-	 * @return string The name of the request parameter sent by the view. 
+	 * @return array The name of the request parameter sent by the view. 
+	 * 
+	 * array(
+				'requestParam'=>'notes_categories_filter', //The name of the request parameter sent by the view. 
+				'permissionsModel'=>'GO_Notes_Model_Category', //The model to check permissions. 
+				'titleAttribute'=>'name' //Only set this if your grid needs the names of the perissionsmodel in the title.
+				);
 	 */
-	protected function multiSelectRequestParam(){
+	protected function getGridmultiSelectProperties(){
 		return false;
 	}
 	
 	/**
 	 * If nothing is selected. Return a default id if necessary.
 	 */
-	protected function multiSelectDefault(){
+	protected function getGridMultiSelectDefault(){
 		return false;
 	}
 
@@ -223,18 +229,38 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
     $grid = new GO_Base_Provider_Grid($this->getGridColumnModel());		    
 		$grid->processDeleteActions($modelName);
 		
-		if($multiSelectParam =$this->multiSelectRequestParam()){
-			$this->multiselectIds = GO::config()->get_setting($multiSelectParam, GO::session()->values['user_id']);
-			$this->multiselectIds  = $this->multiselectIds ? explode(',',$this->multiselectIds) : array();
+		if($multiSelectProperties =$this->getGridmultiSelectProperties()){
+			
+			if(isset($params[$multiSelectProperties['requestParam']])){
+				$this->multiselectIds=json_decode($params[$multiSelectProperties['requestParam']], true);
+				GO::config()->save_setting($multiSelectProperties['requestParam'], implode(',',$this->multiselectIds), GO::session()->values['user_id']);
+			}else
+			{
+				$this->multiselectIds = GO::config()->get_setting($multiSelectProperties['requestParam'], GO::session()->values['user_id']);
+				$this->multiselectIds  = $this->multiselectIds ? explode(',',$this->multiselectIds) : array();
+			}
 		
 			
 			if(empty($this->multiselectIds))
 			{
-				$default = $this->multiSelectDefault();
+				$default = $this->getGridMultiSelectDefault();
 				if($default){
 					$this->multiselectIds = array($category->id);
-					GO::config()->save_setting(key($multiSelectParam),implode(',', $this->multiselectIds), GO::user()->id);
+					GO::config()->save_setting($multiSelectProperties['requestParam'],implode(',', $this->multiselectIds), GO::user()->id);
 				}
+			}
+			
+			//Do a check if the permission model needs to be checked. If we don't ignore the acl and the model is the same as the model of this controller
+			//it's not needed.
+			if(isset($multiSelectProperties['permissionsModel']) && $multiSelectProperties['permissionsModel']!=$this->model && empty($gridParams['ignoreAcl'])){
+				$titleArray = array();
+				foreach($this->multiselectIds as $id){
+					$model = call_user_func(array($multiSelectProperties['permissionsModel'],'model'))->findByPk($id);
+					if($model && !empty($multiSelectProperties['titleAttribute']))
+						$titleArray[]=$model->{$multiSelectProperties['titleAttribute']};
+				}		
+				if(count($titleArray))
+					$grid->setTitle(implode(', ',$titleArray));
 			}
 		}
 
@@ -244,7 +270,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 		$grid->setStatement(call_user_func(array($modelName,'model'))->find($gridParams));
 		
-    $response = $grid->getData();
+    $response = $this->afterActionGrid($grid->getData(), $params, $grid, $gridParams);		
 		
 		//this parameter is set when this request is the first request of the module.
 		//We pass the response on to the output.
@@ -254,6 +280,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		return $response;
   }	
+	
+	protected function afterActionGrid($response, $params, $grid, $gridParams){
+		return $response;
+	}
 
 	/**
 	 * The default action for displaying a model in a DisplayPanel.

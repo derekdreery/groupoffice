@@ -90,8 +90,6 @@ GO.notes.MainPanel = function(config){
 
 	this.centerPanel.store.on('load', function(){
 
-		this.centerPanel.setTitle(this.centerPanel.store.reader.jsonData.grid_title);
-
 //		this.getTopToolbar().items.get('add').setDisabled(!this.centerPanel.store.reader.jsonData.data.write_permission);
 //		this.getTopToolbar().items.get('delete').setDisabled(!this.centerPanel.store.reader.jsonData.data.write_permission);
 
