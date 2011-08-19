@@ -588,12 +588,7 @@ try {
 
 				//TODO could be more efficient by doing these queries only when deleting or updating
 				$num_participants = $cal->count_participants($event['id']) > 1 ? 1 : 0;
-				$cal->get_participants($event['id']);
-				$participant_ids = array();
-				while ($part = $cal->next_record()) {
-					$participant_ids[] = $part['id'];
-				}
-			
+	
 				$response['results'][] = array(
 								'id'=>$response['count']++,
 								'event_id'=> $event['id'],
@@ -615,8 +610,7 @@ try {
 								'read_only'=> $event['read_only'] || ($event['private']=='1' && $GO_SECURITY->user_id != $event['user_id']) || $permission_levels[$event['calendar_id']]<GO_SECURITY::WRITE_PERMISSION ? true : false,
 								'username' => $username,
 								'duration' => $duration,
-								'num_participants' => $num_participants,
-								'participant_ids' => implode(',',$participant_ids)
+								'num_participants' => $num_participants
 				);
 				
 				if($event['mtime'] > $response['mtime'])
@@ -1710,18 +1704,15 @@ try {
 
 			break;
 
-		case 'user_email_addresses':
-			$participant_ids = explode(',',$_POST['participant_ids']);
-			$response['total'] = count($participant_ids);
+		case 'participant_email_addresses':
+
+
+			$response['total'] = $cal->get_participants($_POST['event_id']);
 			$response['results'] = array();
-			foreach ($participant_ids as $pid) {
-				$user = $cal->get_participant_user($pid);
-				$response['results'][] = array(
-					'id' => $user['id'],
-					'name' => String::format_name($user),
-					'email' => $user['email']
-				);
+			while ($part = $cal->next_record()) {
+				$response['results'][] = $part;
 			}
+			
 			$response['success'] = true;
 			break;
 	}
