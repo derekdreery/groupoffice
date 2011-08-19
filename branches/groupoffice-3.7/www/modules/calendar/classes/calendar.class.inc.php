@@ -715,7 +715,7 @@ class calendar extends db {
 		$this->query($sql);
 		return $this->num_rows();
 	}
-
+	
 	function count_participants($event_id){
 		$sql = "SELECT count(*) AS c FROM cal_participants WHERE event_id='".$this->escape($event_id)."'";
 		$this->query($sql);
@@ -730,6 +730,16 @@ class calendar extends db {
 		$this->query($sql);
 		if ($user = $this->next_record()) {
 			return $user;
+		} else {
+			return false;
+		}
+	}
+
+	function get_participant_contact($contact_id) {
+		$sql = "SELECT * FROM ab_contacts WHERE id='".intval($contact_id)."';";
+		$this->query($sql);
+		if ($contact = $this->next_record()) {
+			return $contact;
 		} else {
 			return false;
 		}

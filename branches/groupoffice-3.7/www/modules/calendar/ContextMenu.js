@@ -119,32 +119,30 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 		this.actionDelete.setDisabled(this.event.read_only);
 
 		if (GO.email)
-			this.actionCreateMail.setDisabled(event.participant_ids=='');
+			this.actionCreateMail.setDisabled(event.num_participants==0);
 
 		this.newMenuItem.setLinkConfig({
 			type:1,
 			id:event.event_id
 		});
 	},
-	setParticipants : function(participant_ids) {
-		this.participant_ids = participant_ids;
-	},
+	
 	showCreateMailDialog : function() {
 		if (GO.email) {
 			Ext.Ajax.request({
 				url: GO.settings.modules.calendar.url + 'json.php',
 				params : {
-					'task' : 'user_email_addresses',
-					'participant_ids' : this.participant_ids
+					'task' : 'participant_email_addresses',
+					'event_id': this.event.event_id
 				},
 				success : function(response,options) {
 					var responseText = Ext.decode(response.responseText);
-					var users = responseText.results;
+					var participants = responseText.results;
 
 					var emails = [];
-					for (var i = 0; i < users.length; i++) {
-						emails.push('"' + users[i].name + '" <'
-							+ users[i].email + '>');
+					for (var i = 0; i < participants.length; i++) {
+						emails.push('"' + participants[i].name + '" <'
+							+ participants[i].email + '>');
 					}
 
 					if (emails.length>0)
