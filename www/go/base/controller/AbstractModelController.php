@@ -274,7 +274,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		//this parameter is set when this request is the first request of the module.
 		//We pass the response on to the output.
-		if(isset($params['firstRun'])){
+		if(isset($params['firstRun']) && is_array($params['firstRun'])){
 			$response=array_merge($response, $params['firstRun']);
 		}
 		
