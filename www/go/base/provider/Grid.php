@@ -30,7 +30,7 @@ class GO_Base_Provider_Grid {
 	private $_alternateSortFields=array();
 	
 	private $_columnModelProvided=false;
-
+	
   /**
    * See function formatColumn for a detailed description about how to use the format parameter.
    *
@@ -41,6 +41,15 @@ class GO_Base_Provider_Grid {
 		if(count($columns))
 			$this->_columnModelProvided=true;
   }
+	
+	/**
+	 * Set a title response
+	 * 
+	 * @param String $title 
+	 */
+	public function setTitle($title){
+		$this->_response['title'] = $title;
+	}
 	
 	/**
 	 * Set the statement that contains the models for the grid data.
@@ -182,6 +191,7 @@ class GO_Base_Provider_Grid {
 			$this->_response['results'][] = $this->formatModelForGrid($model);
 		}
 		$this->_response['total']=$this->_stmt->foundRows;
+
 
     return $this->_response;
   }

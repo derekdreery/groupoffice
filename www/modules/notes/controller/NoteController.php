@@ -3,8 +3,12 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	
 	protected $model = 'GO_Notes_Model_Note';
 	
-	protected function multiSelectRequestParam(){
-		return 'notes_categories_filter';
+	protected function getGridMultiSelectProperties(){
+		return array(
+				'requestParam'=>'notes_categories_filter',
+				'permissionsModel'=>'GO_Notes_Model_Category',
+				'titleAttribute'=>'name'
+				);
 	}	
 	
 	protected function getGridParams(){
@@ -16,6 +20,9 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	}
   
   protected function prepareGrid($grid){
+		
+		
+		
     $grid->formatColumn('user_name','$model->user->name');
     return $grid;
   }

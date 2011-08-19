@@ -102,6 +102,11 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 			}
 			this.store.baseParams['limit']=this.paging;
 		}
+		
+		this.store.on('load', function(){
+			if(this.store.reader.jsonData.title)
+				this.setTitle(this.store.reader.jsonData.title);
+		}, this);
 	
 		this.loadMask=true;
 	

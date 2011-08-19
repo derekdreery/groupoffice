@@ -4,11 +4,11 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 	protected $model = 'GO_Notes_Model_Category';
 	
 	
-	protected function multiSelectRequestParam(){
-		return 'notes_categories_filter';
+	protected function getGridMultiSelectProperties(){
+		return array('requestParam'=>'notes_categories_filter');
 	}
 	
-	protected function multiSelectDefault(){
+	protected function getGridMultiSelectDefault(){
 		$category = GO_Notes_NotesModule::getDefaultNoteCategory(GO::user()->id);
 		return $category->id;
 	}	
