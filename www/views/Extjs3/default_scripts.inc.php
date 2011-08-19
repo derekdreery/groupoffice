@@ -219,6 +219,9 @@ foreach($GLOBALS['GO_MODULES']->modules as $module) {
 	if(file_exists($module['path'].'logged_off_scripts.inc.php')) {
 		require($module['path'].'logged_off_scripts.inc.php');
 	}
+	if(file_exists($module['path'].'views/Extjs3/logged_off_scripts.inc.php')) {
+		require($module['path'].'views/Extjs3/logged_off_scripts.inc.php');
+	}
 }
 
 $scripts=array();
@@ -265,6 +268,9 @@ if(count($load_modules)) {
 			if(file_exists($module['path'].'prescripts.inc.php')) {
 				require($module['path'].'prescripts.inc.php');
 			}
+			if(file_exists($module['path'].'views/Extjs3/prescripts.inc.php')) {
+				require($module['path'].'views/Extjs3/prescripts.inc.php');
+			}
 		}
 	}
 
@@ -274,9 +280,13 @@ if(count($load_modules)) {
 		if($module['read_permission']) {
 
 			$module_uri = $GLOBALS['GO_CONFIG']->debug ? $module['url'] : $module['path'];
+			
+			$scriptsFile = $module['path'].'scripts.txt';
+			if(!file_exists($scriptsFile))
+						$scriptsFile = $module['path'].'views/Extjs3/scripts.txt';	
 
-			if(file_exists($module['path'].'scripts.txt') && $GLOBALS['GO_CONFIG']->debug) {
-				$data = file_get_contents($module['path'].'scripts.txt');
+			if(file_exists($scriptsFile) && $GLOBALS['GO_CONFIG']->debug) {
+				$data = file_get_contents($scriptsFile);
 				$lines = explode("\n", $data);
 				foreach($lines as $line) {
 					if(!empty($line)) {
@@ -285,6 +295,9 @@ if(count($load_modules)) {
 				}
 			}else {
 				if(file_exists($module['path'].'all-module-scripts-min')) {
+					$scripts[]=$module_uri.'all-module-scripts-min';
+				}
+				if(file_exists($module['path'].'views/Extjs3/all-module-scripts-min')) {
 					$scripts[]=$module_uri.'all-module-scripts-min';
 				}
 			}
@@ -376,6 +389,9 @@ if(count($load_modules)) {
 			if(file_exists($module['path'].'scripts.inc.php')) {
 				require($module['path'].'scripts.inc.php');
 			}
+			if(file_exists($module['path'].'views/Extjs3/scripts.inc.php')) {
+				require($module['path'].'views/Extjs3/scripts.inc.php');
+			}
 		}
 	}
 
@@ -399,7 +415,7 @@ if(count($load_modules)) {
 
 	<?php $GLOBALS['GO_EVENTS']->fire_event('inline_scripts');	?>
 
-	Ext.BLANK_IMAGE_URL = '<?php echo $GLOBALS['GO_CONFIG']->host; ?>ext/resources/images/default/s.gif';
+	Ext.BLANK_IMAGE_URL = '<?php echo $GLOBALS['GO_CONFIG']->host; ?>views/Extjs3/ext/resources/images/default/s.gif';
 
 	Ext.state.Manager.setProvider(new GO.state.HttpProvider({url: BaseHref+'state.php'}));
 	//Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
