@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `no_categories` (
   `acl_id` int(11) NOT NULL,
   `name` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
 
 -- --------------------------------------------------------
 
@@ -79,4 +79,4 @@ CREATE TABLE IF NOT EXISTS `no_notes` (
   KEY `user_id` (`user_id`),
   KEY `category_id` (`category_id`),
   FULLTEXT KEY `content` (`content`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=0 ;
