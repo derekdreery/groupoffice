@@ -22,7 +22,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			$this->fireEvent('loadapplication', array(&$this));
 
 
-		//$this->render('init');
+		$this->render('index');
 	}
 
 	/**
