@@ -115,5 +115,45 @@ class GO_Base_Session extends GO_Base_Observable{
 		$this->fireEvent('logout', array($old_session));
 	}
 	
-	
+	/**
+	 * Logs a user in.
+	 * 
+	 * @param string $username
+	 * @param string $password
+	 * @return GO_Base_Model_User or false on failure.
+	 */
+	public function login($username, $password) {
+		
+		$this->fireEvent('beforelogin', array($username, $password));
+		
+		$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
+
+		if (!$user)
+			return false;
+		
+		if(!$user->enabled)
+			return false;
+
+		if ($user->password_type == 'crypt') {
+			if (crypt($password, $user->password) != $user->password) {
+				return false;
+			}
+		} else {
+			//pwhash is not set yet. We're going to use the old md5 hashed password
+			if (md5($password) != $user->password) {
+				return false;
+			} else {				
+				$user->password=$password;
+				$user->save();
+			}
+		}
+		
+		//remember user id in session
+		$this->values['user_id']=$user->id;
+		
+		$this->fireEvent('login', array($username, $password, $user));
+		
+		return $user;
+	}
+
 }
