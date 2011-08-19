@@ -1258,7 +1258,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 				$this->_dbInsert();
 				
-				if(!is_array($this->primaryKey()))
+				if(!is_array($this->primaryKey()) && empty($this->pk))
 					$this->{$this->primaryKey()} = $this->getDbConnection()->lastInsertId();
 				
 				if(!$this->pk)

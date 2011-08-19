@@ -47,36 +47,36 @@ CREATE TABLE IF NOT EXISTS `go_links_4` (
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `no_categories`
+-- Tabelstructuur voor tabel `no_categories`
 --
 
 DROP TABLE IF EXISTS `no_categories`;
 CREATE TABLE IF NOT EXISTS `no_categories` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `acl_id` int(11) NOT NULL,
-  `name` varchar(50) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT ;
 
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `no_notes`
+-- Tabelstructuur voor tabel `no_notes`
 --
 
 DROP TABLE IF EXISTS `no_notes`;
 CREATE TABLE IF NOT EXISTS `no_notes` (
-  `id` int(11) NOT NULL default '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `category_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL default '0',
-  `ctime` int(11) NOT NULL default '0',
-  `mtime` int(11) NOT NULL default '0',
-  `name` varchar(100) default NULL,
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `ctime` int(11) NOT NULL DEFAULT '0',
+  `mtime` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(100) DEFAULT NULL,
   `content` text,
-  `files_folder_id` INT NOT NULL,
-  PRIMARY KEY  (`id`),
+  `files_folder_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `category_id` (`category_id`),
   FULLTEXT KEY `content` (`content`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT ;

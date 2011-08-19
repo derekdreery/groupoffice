@@ -26,6 +26,17 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @var GO_Base_Db_ActiveRecord 
 	 */
 	protected $model;
+	
+	
+	/**
+	 * It's often convenient to select multiple addressbooks, calendars etc. for
+	 * display in a grid. By overriding multiSelectRequestParam and multiSelectDefault
+	 * this array will be filled with ids that are send by the request parameter.
+	 * They will be saved to the database too.
+	 * 
+	 * @var array Ids that are selected 
+	 */
+	public $multiselectIds=array();
 
 	/**
 	 * The default action when the form in an edit dialog is submitted.
@@ -149,6 +160,27 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		return $response;
 	}
+	
+	/**
+	 *
+	 * It's often convenient to select multiple addressbooks, calendars etc. for
+	 * display in a grid. By overriding multiSelectRequestParam and multiSelectDefault
+	 * this array will be filled with ids that are send by the request parameter.
+	 * They will be saved to the database too.
+	 * 
+	 *
+	 * @return string The name of the request parameter sent by the view. 
+	 */
+	protected function multiSelectRequestParam(){
+		return false;
+	}
+	
+	/**
+	 * If nothing is selected. Return a default id if necessary.
+	 */
+	protected function multiSelectDefault(){
+		return false;
+	}
 
 	/**
 	 * Override this function to supply additional parameters to the 
@@ -190,12 +222,37 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
     
     $grid = new GO_Base_Provider_Grid($this->getGridColumnModel());		    
 		$grid->processDeleteActions($modelName);
+		
+		if($multiSelectParam =$this->multiSelectRequestParam()){
+			$this->multiselectIds = GO::config()->get_setting($multiSelectParam, GO::session()->values['user_id']);
+			$this->multiselectIds  = $this->multiselectIds ? explode(',',$this->multiselectIds) : array();
+		
+			
+			if(empty($this->multiselectIds))
+			{
+				$default = $this->multiSelectDefault();
+				if($default){
+					$this->multiselectIds = array($category->id);
+					GO::config()->save_setting(key($multiSelectParam),implode(',', $this->multiselectIds), GO::user()->id);
+				}
+			}
+		}
+
 		$this->prepareGrid($grid);
 		$gridParams = array_merge($grid->getDefaultParams(),$this->getGridParams());
-
+		
+			
 		$grid->setStatement(call_user_func(array($modelName,'model'))->find($gridParams));
 		
-    return $grid->getData();
+    $response = $grid->getData();
+		
+		//this parameter is set when this request is the first request of the module.
+		//We pass the response on to the output.
+		if(isset($params['firstRun'])){
+			$response=array_merge($response, $params['firstRun']);
+		}
+		
+		return $response;
   }	
 
 	/**
@@ -225,14 +282,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 
 		if (/* isset(GO::modules()->modules['tasks']) && !in_array('tasks', $hidden_sections) && */!isset($response['data']['tasks'])) {
-			require_once(GO::modules()->tasks->class_path . 'tasks.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'] . 'tasks.class.inc.php');
 			$tasks = new tasks();
 
 			$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $model->linkType());
 		}
 
 		if (isset(GO::modules()->calendar)/* && !in_array('events', $hidden_sections) */) {
-			require_once(GO::modules()->calendar->class_path . 'calendar.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'] . 'calendar.class.inc.php');
 			$cal = new calendar();
 
 			$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $model->linkType());
@@ -240,7 +297,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		if (/* !in_array('files', $hidden_sections) && */!isset($response['data']['files'])) {
 			if (isset(GO::modules()->files)) {
-				require_once(GO::modules()->files->class_path . 'files.class.inc.php');
+				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path']. 'files.class.inc.php');
 				$files = new files();
 
 				$response['data']['files'] = $files->get_content_json($response['data']['files_folder_id']);
@@ -251,14 +308,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 
 		if (/* !in_array('comments', $hidden_sections) && */isset(GO::modules()->comments) && !isset($response['data']['comments'])) {
-			require_once (GO::modules()->comments->class_path.'comments.class.inc.php');
+			require_once ($GLOBALS['GO_MODULES']->modules['comments']['class_path'].'comments.class.inc.php');
 			$comments = new comments();
 
 			$response['data']['comments'] = $comments->get_comments_json($response['data']['id'], $model->linkType());
 		}
 
 		if (GO::modules()->customfields && $model->customFieldsModel() && !isset($response['data']['customfields'])) {
-			require_once(GO::modules()->customfields->class_path.'customfields.class.inc.php');
+			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$cf = new customfields();		
 			
 			$response['data']['customfields'] = $cf->get_all_fields_with_values(GO::session()->values['user_id'], $model->linkType(), $response['data']['id']);
