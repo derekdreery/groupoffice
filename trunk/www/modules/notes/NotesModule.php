@@ -8,6 +8,14 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 		GO_Base_Model_User::addListener('delete', 'GO_Notes_NotesModule', 'deleteUser');		
 	}	
 	
+	public function author() {
+		return 'Merijn Schering';
+	}
+	
+	public function authorEmail() {
+		return 'mschering@intermesh.nl';
+	}
+	
 	/**
 	 * 
 	 * When a user is created, updated or logs in this function will be called.
