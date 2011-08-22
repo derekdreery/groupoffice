@@ -19,3 +19,4 @@ GO.smime.lang.pkcs12Cert="PKCS12 sertifikat";
 GO.smime.lang.pkcs12CertInfo="For å laste opp et nytt PCSK12 sertifikat må du oppgi ditt Group-Office passord. Av sikkerhetsårsaker må Group-Office passordet være forskjellig fra passordet til PCSK12 sertifikatet. Du kan heller ikke ha tomt passord.";
 GO.smime.lang.pubCerts="Offentlige SMIME sertifikater";
 GO.smime.lang.youHaveAcert='Du har allerede lastet opp et sertifikat. SMIME støtte er aktivert for denne kontoen.';
+GO.smime.lang.downloadCert='Last ned sertifikat';

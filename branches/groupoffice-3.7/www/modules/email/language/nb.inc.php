@@ -68,3 +68,4 @@ $lang['email']['iCalendar_update_available']='Meldingen inneholder en oppdaterin
 $lang['email']['iCalendar_update_old']='Meldingen inneholder en hendelse som allerede er behandlet.';
 $lang['email']['iCalendar_event_cancelled']='Meldingen inneholder kansellering av en hendelse.';
 $lang['email']['iCalendar_event_invitation_declined']='Meldingen inneholder en invitasjon til en hendelse du har avvist.';
+$lang['email']['untilDateError']='Forsøkte å behandle fram til angitt dato, men ble avbrutt på grunn av at det oppstod en feil';
