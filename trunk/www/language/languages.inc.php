@@ -12,6 +12,7 @@ $languages['es']='Español';
 $languages['et']='Estonian';
 $languages['el']='Ελληνικά';
 $languages['fr']='Francais';
+$languages['hr']='Hrvatski';
 $languages['it']='Italiano';
 $languages['hu']='Magyar';
 $languages['nl']='Nederlands';

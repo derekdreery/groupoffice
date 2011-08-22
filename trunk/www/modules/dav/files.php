@@ -66,9 +66,9 @@ $baseUri = strpos($_SERVER['REQUEST_URI'],'files.php') ? $GLOBALS['GO_MODULES']-
 $server->setBaseUri($baseUri);
 
 // Support for LOCK and UNLOCK
-//$lockBackend = new Sabre_DAV_Locks_Backend_FS($GLOBALS['GO_CONFIG']->tmpdir);
-//$lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
-//$server->addPlugin($lockPlugin);
+$lockBackend = new Sabre_DAV_Locks_Backend_FS($GO_CONFIG->tmpdir);
+$lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
+$server->addPlugin($lockPlugin);
 
 // Support for html frontend
 $browser = new Sabre_DAV_Browser_Plugin();

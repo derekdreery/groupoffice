@@ -169,6 +169,12 @@ try {
 					}
 					if (!isset ($_POST['share']) && $folder['acl_id']) {
 						$up_folder['acl_id']=0;
+						
+						require_once($GO_CONFIG->class_path.'base/search.class.inc.php');
+						$search = new search();
+						$search->log($up_folder['id'],17, "Sharing removed for folder ".$folder['name'].' '.$folder['id']);
+							
+					
 
 						$GLOBALS['GO_SECURITY']->delete_acl($folder['acl_id']);
 					}

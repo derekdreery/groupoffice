@@ -522,6 +522,10 @@ class tasks extends db
 
 	function add_task($task, $tasklist=false)
 	{
+    global $GO_EVENTS;
+
+    $GO_EVENTS->fire_event('before_add_task', array(&$task,&$before_task_response));
+    
 		if(empty($task['tasklist_id']))
 		{
 			return false;
@@ -585,7 +589,9 @@ class tasks extends db
 		$this->cache_task($task['id']);
 		
 		$this->set_reminder($task);
-		
+    
+		$GO_EVENTS->fire_event('task_add_event', array($task, $before_task_response));
+    
 		return $task['id'];
 	}
 	

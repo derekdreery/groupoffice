@@ -205,6 +205,15 @@ class GO_CONFIG {
 	 * @access  public
 	 */
 	var $allow_profile_edit = true;
+	
+	
+	/**
+	 * Set to true to show all user groups as recipients in the mail module.
+	 *
+	 * @var     bool
+	 * @access  public
+	 */
+	var $show_all_user_groups_in_mail = false;
 
 	/**
 	 * Enable user registration by everyone
@@ -719,7 +728,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $version = '3.7.26';
+	var $version = '3.7.27';
 
 
 	/* The permissions mode to use when creating files
@@ -749,7 +758,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  public
 	 */
-	var $mtime = '20110728';
+	var $mtime = '20110817';
 
 	#group configuration
 	/**

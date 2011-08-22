@@ -716,7 +716,7 @@ class calendar extends db {
 		$this->query($sql);
 		return $this->num_rows();
 	}
-
+	
 	function count_participants($event_id){
 		$sql = "SELECT count(*) AS c FROM cal_participants WHERE event_id='".$this->escape($event_id)."'";
 		$this->query($sql);
@@ -731,6 +731,16 @@ class calendar extends db {
 		$this->query($sql);
 		if ($user = $this->next_record()) {
 			return $user;
+		} else {
+			return false;
+		}
+	}
+
+	function get_participant_contact($contact_id) {
+		$sql = "SELECT * FROM ab_contacts WHERE id='".intval($contact_id)."';";
+		$this->query($sql);
+		if ($contact = $this->next_record()) {
+			return $contact;
 		} else {
 			return false;
 		}
@@ -1115,6 +1125,11 @@ class calendar extends db {
 	}
 
 	function add_event(&$event, $calendar=false) {
+    GLOBAL $GO_EVENTS;
+    
+    $GO_EVENTS->fire_event('before_add_event', array(&$event,&$before_event_response));
+    
+       
 		if(empty($event['calendar_id'])) {
 			return false;
 		}		
@@ -1238,7 +1253,9 @@ class calendar extends db {
 			if(isset($participants)){
 				$this->add_participants($event,$participants);
 			}
-
+      
+      $GO_EVENTS->fire_event('calendar_add_event', array($event, $before_event_response));
+      
 			return $event['id'];
 		}				
 		return false;
@@ -2002,28 +2019,31 @@ class calendar extends db {
 
 	function convert_attendees_to_participants($attendees, $organizer=false)
 	{
+		go_debug($attendees);
 		$participants = array();
 		foreach($attendees as $attendee)
 		{
-			$email = strtolower($attendee['value']);
-			$email = (strpos($email, 'mailto') === 0) ? $email = substr($email, 7) : $email;
-			
-			if(!isset($participants[$email]))
-			{
-				$participants[$email] = array();
-			}
-			
-			$participant['name'] = isset($attendee['params']['CN']) ? $attendee['params']['CN'] : $email;
-			$status = isset($attendee['params']['PARTSTAT']) ? $attendee['params']['PARTSTAT'] : 'ACCEPTED';
-			$participant['status'] = $this->get_participant_status_id($status);
-			$participant['role'] = isset($attendee['params']['ROLE']) ? $attendee['params']['ROLE'] : '';
+			if(isset($attendee['value'])){
+				$email = strtolower($attendee['value']);
+				$email = (strpos($email, 'mailto') === 0) ? $email = substr($email, 7) : $email;
 
-			if($organizer)
-			{
-				$participant['is_organizer'] = true;
-			}
+				if(!isset($participants[$email]))
+				{
+					$participants[$email] = array();
+				}
 
-			$participants[$email] = $participant;
+				$participant['name'] = isset($attendee['params']['CN']) ? $attendee['params']['CN'] : $email;
+				$status = isset($attendee['params']['PARTSTAT']) ? $attendee['params']['PARTSTAT'] : 'ACCEPTED';
+				$participant['status'] = $this->get_participant_status_id($status);
+				$participant['role'] = isset($attendee['params']['ROLE']) ? $attendee['params']['ROLE'] : '';
+
+				if($organizer)
+				{
+					$participant['is_organizer'] = true;
+				}
+
+				$participants[$email] = $participant;
+			}
 		}
 					
 		return $participants;
@@ -2073,7 +2093,7 @@ class calendar extends db {
 		
 		$event['sequence'] = (isset($object['SEQUENCE']['value']) && $object['SEQUENCE']['value'] != '') ? trim($object['SEQUENCE']['value']) : 0;
 
-		$event['name'] = (isset($object['SUMMARY']['value']) && $object['SUMMARY']['value'] != '') ? trim($object['SUMMARY']['value']) : 'Unnamed';
+		$event['name'] = (isset($object['SUMMARY']['value']) && $object['SUMMARY']['value'] != '') ? trim($object['SUMMARY']['value']) : '';
 		if(isset($object['SUMMARY']['params']['ENCODING']) && $object['SUMMARY']['params']['ENCODING'] == 'QUOTED-PRINTABLE') {
 			$event['name'] = quoted_printable_decode($event['name']);
 		}
@@ -2082,6 +2102,12 @@ class calendar extends db {
 		if(isset($object['DESCRIPTION']['params']['ENCODING']) && $object['DESCRIPTION']['params']['ENCODING'] == 'QUOTED-PRINTABLE') {
 			$event['description'] = String::trim_lines(quoted_printable_decode($event['description']));
 		}
+		
+		if(empty($event['name']))
+		{
+			$event['name']=!empty($event['description']) ? substr($event['description'],0,100) : 'Unnamed';
+		}
+
 		$event['location'] = isset($object['LOCATION']['value']) ? trim($object['LOCATION']['value']) : '';
 		if(isset($object['LOCATION']['params']['ENCODING']) && $object['LOCATION']['params']['ENCODING'] == 'QUOTED-PRINTABLE') {
 			$event['location'] = quoted_printable_decode($event['location']);
@@ -2210,6 +2236,41 @@ class calendar extends db {
 			if (!empty($object['RRULE']['value']) && $rrule = $this->ical2array->parse_rrule($object['RRULE']['value'])) {
 
 				$event['rrule'] = 'RRULE:'.$object['RRULE']['value'];
+				
+
+				if(isset($rrule['BYDAY'])) {
+
+					$month_time=1;
+					if($rrule['FREQ']=='MONTHLY') {
+						if(!isset($rrule['BYSETPOS'])){
+							$month_time = $rrule['BYDAY'][0];
+							$day = substr($rrule['BYDAY'], 1);
+						}else
+						{
+							$month_time = $rrule['BYSETPOS'];
+							$day = $rrule['BYDAY'];
+						}
+						$days_arr =array($day);
+					}else {
+						$days_arr = explode(',', $rrule['BYDAY']);
+					}
+
+					$days['sun'] = in_array('SU', $days_arr) ? '1' : '0';
+					$days['mon'] = in_array('MO', $days_arr) ? '1' : '0';
+					$days['tue'] = in_array('TU', $days_arr) ? '1' : '0';
+					$days['wed'] = in_array('WE', $days_arr) ? '1' : '0';
+					$days['thu'] = in_array('TH', $days_arr) ? '1' : '0';
+					$days['fri'] = in_array('FR', $days_arr) ? '1' : '0';
+					$days['sat'] = in_array('SA', $days_arr) ? '1' : '0';
+
+
+					$days=Date::shift_days_to_gmt($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
+
+					
+				}
+				
+				
+				
 				if (isset($rrule['UNTIL'])) {
 					if($event['repeat_end_time'] = $this->ical2array->parse_date($rrule['UNTIL'])) {
 						$event['repeat_end_time'] = mktime(0,0,0, date('n', $event['repeat_end_time']), date('j', $event['repeat_end_time'])+1, date('Y', $event['repeat_end_time']));
@@ -2230,32 +2291,13 @@ class calendar extends db {
 					}
 					
 				}
-
-				if(isset($rrule['BYDAY'])) {
-
-					$month_time=1;
-					if($rrule['FREQ']=='MONTHLY') {
-						$month_time = $rrule['BYDAY'][0];
-						$day = substr($rrule['BYDAY'], 1);
-						$days_arr =array($day);
-					}else {
-						$days_arr = explode(',', $rrule['BYDAY']);
-					}
-
-					$days['sun'] = in_array('SU', $days_arr) ? '1' : '0';
-					$days['mon'] = in_array('MO', $days_arr) ? '1' : '0';
-					$days['tue'] = in_array('TU', $days_arr) ? '1' : '0';
-					$days['wed'] = in_array('WE', $days_arr) ? '1' : '0';
-					$days['thu'] = in_array('TH', $days_arr) ? '1' : '0';
-					$days['fri'] = in_array('FR', $days_arr) ? '1' : '0';
-					$days['sat'] = in_array('SA', $days_arr) ? '1' : '0';
-
-
-					$days=Date::shift_days_to_gmt($days, date('G', $event['start_time']), Date::get_timezone_offset($event['start_time']));
-
+				
+				if(isset($rrule['BYDAY'])) 
 					$event['rrule']=Date::build_rrule(Date::ical_freq_to_repeat_type($rrule), $rrule['INTERVAL'], $event['repeat_end_time'], $days, $month_time);
-				}
 			}
+			
+			
+			
 
 
 
@@ -2271,7 +2313,9 @@ class calendar extends db {
 			}
 
 			
+			
 		
+
 			return $event;
 		}
 		return false;

@@ -32,3 +32,5 @@ GO.gnupg.lang.importPublicKeyAttachment='This is a public key to encrypt e-mails
 
 GO.gnupg.lang.generateKeyStarted='Generating key in progress';
 GO.gnupg.lang.generateKeyStartedText='Your key is being generated. This process can take a long time. Please check if your key is generated in 10 minutes.';
+
+GO.gnupg.lang.enterPassword='Enter password';

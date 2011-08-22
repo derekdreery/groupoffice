@@ -135,8 +135,9 @@ class String {
 	public static function clean_utf8($str, $source_charset='UTF-8') {
 		
 		//must use html_entity_decode here other wise some weird utf8 might be decoded later
-    if(strtolower($source_charset)!='ascii')
-      $str = @html_entity_decode($str, ENT_COMPAT, $source_charset);
+		//Commented out to prevent XML parse errors on ampersands when used in syncml.
+		//    if(strtolower($source_charset)!='ascii')
+		//      $str = @html_entity_decode($str, ENT_COMPAT, $source_charset);
 
 		//Does not always work. We suppress the:
 		//Notice:  iconv() [function.iconv]: Detected an illegal character in input string in /var/www/community/trunk/www/classes/String.class.inc.php on line 31
@@ -379,7 +380,7 @@ class String {
 	 * @return void
 	 */
 	public static function get_email_from_string($email) {
-		if (preg_match("/(\b)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,4})\b/i", $email, $matches)) {
+		if (preg_match(String::get_email_validation_regex(), $email, $matches)) {
 			return $matches[0];
 		} else {
 			return false;
@@ -527,10 +528,9 @@ class String {
 	 * @return	string
 	 */
 	public static function get_email_validation_regex() {
-		return "/^[a-z0-9\._\-+]+@[a-z0-9\.\-_]+\.[a-z]{2,6}$/i";
+		return "/^[a-z0-9\._\-+']+@[a-z0-9\.\-_]+\.[a-z]{2,6}$/i";
 	}
-
-
+  
 	/**
 	 * Check if an email adress is in a valid format
 	 *
@@ -828,14 +828,14 @@ class String {
           ":@"=>"angry.gif",
           ":d"=>"bigsmile.gif",
           "(brb)"=>"brb.gif",
-          "(o)"=>"clock.gif",
-          "(c)"=>"coffee.gif",
+          //"(o)"=>"clock.gif",
+          //"(c)"=>"coffee.gif", //conflicts with copyright
           "(co)"=>"computer.gif",
           ":s"=>"confused.gif",
           ":'("=>"cry.gif",
           ":'|"=>"dissapointed.gif",
           ":^)"=>"dontknow.gif",
-          "(e)"=>"email.gif",
+          //"(e)"=>"email.gif",
           "+o("=>"ill.gif",
           "(k)"=>"kiss.gif",
           "(l)"=>"love.gif",
@@ -846,17 +846,23 @@ class String {
           "<o)"=>"party.gif",
           "(g)"=>"present.gif",
           ":("=>"sad.gif",
+					":-("=>"sad.gif",
           "^o)"=>"sarcasm.gif",
+					"^-o)"=>"sarcasm.gif",
           ":$"=>"shy.gif",
           "|-)"=>"sleepy.gif",
           ":)"=>"smile.gif",
+					":-)"=>"smile.gif",
           "(*)"=>"star.gif",
           "(h)"=>"sunglasses.gif",
           ":o"=>"surprised.gif",
+					":-o"=>"surprised.gif",
           "(ph)"=>"telephone.gif",
           "*-)"=>"thinking.gif",
           ":p"=>"tongue.gif",
+					":-p"=>"tongue.gif",
           ";)"=>"wink.gif",
+					";-)"=>"wink.gif",
           );
 
     
@@ -868,7 +874,8 @@ class String {
         if($html)
           $string = String::html_replace($emoticon, $imgstring, $string);
         else
-          $string = str_ireplace($emoticon, $imgstring, $string);
+          $string = preg_replace('/([^a-z0-9])'.preg_quote($emoticon).'([^a-z0-9])/i',"\\1".$imgstring."\\2", $string);
+          
       }
 
     }
@@ -879,7 +886,9 @@ class String {
 
   public static function html_replace($search, $replacement, $html){
     $html = preg_replace_callback('/<[^>]*('.preg_quote($search).')[^>]*>/uis',array('String', '_replace_in_tags'), $html);
-    $html = str_ireplace($search, $replacement, $html);
+    $html = preg_replace('/([^a-z0-9])'.preg_quote($search).'([^a-z0-9])/i',"\\1".$replacement."\\2", $html);
+    
+    //$html = str_ireplace($search, $replacement, $html);
     return str_replace('{TEMP}', $search, $html);
   }
 
@@ -918,14 +927,16 @@ class String {
 		//remove strange white spaces in tags first
 		//sometimes things like this happen <style> </ style >
 		
-		$body_startpos = stripos($html, '<body');
-		$body_endpos = stripos($html, '</body');
-		if($body_startpos){
-			if($body_endpos)
-				$html = substr($html, $body_startpos, $body_endpos-$body_startpos);
-			else
-				$html = substr($html, $body_startpos);
-		}
+		//Unfortunately some mail clients put html outside the body tags :(
+		// so the next code block didn't work.
+//		$body_startpos = stripos($html, '<body');
+//		$body_endpos = stripos($html, '</body');
+//		if($body_startpos){
+//			if($body_endpos)
+//				$html = substr($html, $body_startpos, $body_endpos-$body_startpos);
+//			else
+//				$html = substr($html, $body_startpos);
+//		}
 		
 		$html = preg_replace("'</[\s]*([\w]*)[\s]*>'u","</$1>", $html);
 		
@@ -941,6 +952,8 @@ class String {
 		"'<title>.*?</title>'usi",
 		"'<head[^>]*>.*?</head>'usi",
 		"'<head[^>]*>'usi",
+		
+		"'<base[^>]*>'usi",
 		
 		/* MS Word junk */
 		"'<xml[^>]*>.*?</xml>'usi",
@@ -961,6 +974,8 @@ class String {
 		"'<textarea[^>]*>.*?</textarea>'usi",
 		"'</form>'usi"
 		);
+		
+		//go_debug($html);
 
 		$html = preg_replace($to_removed_array, '', $html);
 		$html = String::xss_clean($html);

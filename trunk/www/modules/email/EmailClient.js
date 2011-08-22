@@ -526,7 +526,26 @@ GO.email.EmailClient = function(config){
 	for(i=0;i<GO.email.extraTreeContextMenuItems.length;i++)
 	{
 		items.push(GO.email.extraTreeContextMenuItems[i]);
-	}	
+	}
+
+	if (GO.settings.modules.email.write_permission) {
+		items.splice(5,0,
+			new Ext.menu.Item({
+				iconCls: 'btn-delete',
+				text:GO.email.lang.deleteOldMails,
+				cls: 'x-btn-text-icon',
+				scope:this,
+				handler: function()
+				{
+					if (typeof(this.deleteOldMailDialog)=='undefined') {
+						this.deleteOldMailDialog = new GO.email.DeleteOldMailDialog();
+					}
+					this.deleteOldMailDialog.setNode(this.treePanel.getSelectionModel().getSelectedNode());
+					this.deleteOldMailDialog.show();
+				}
+			})
+		);
+	}
 	
 	this.treeContextMenu = new Ext.menu.Menu({		
 		items: items
@@ -536,7 +555,7 @@ GO.email.EmailClient = function(config){
 	
 	this.treePanel.on('contextmenu', function(node, e){
 		e.stopEvent();
-		
+
 		var selModel = this.treePanel.getSelectionModel();
 		
 		if(!selModel.isSelected(node))
@@ -549,6 +568,12 @@ GO.email.EmailClient = function(config){
 
 		this.addFolderButton.setDisabled(!node.attributes.canHaveChildren);
 		this.shareBtn.setVisible(node.attributes.aclSupported);
+
+		if (GO.settings.modules.email.write_permission) {
+			var node_id_type = node.attributes.id.substring(0,6);
+			this.treeContextMenu.items.get(5).setDisabled(node_id_type!='folder');
+		}
+
 		this.treeContextMenu.showAt([coords[0], coords[1]]);
 	}, this);
 
@@ -701,7 +726,7 @@ GO.email.EmailClient = function(config){
 	//select the first inbox to be displayed in the messages grid
 	root.on('load', function(node)
 	{
-		this.body.unmask();
+		this.body.unmask();		
 		if(node.childNodes[0])
 		{
 			var firstAccountNode=false;
@@ -1169,7 +1194,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	onShow : function(){
 		
 		GO.email.notificationEl.setDisplayed(false);
-		
+
 		GO.email.EmailClient.superclass.onShow.call(this);
 	},
 	
