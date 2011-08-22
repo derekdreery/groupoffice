@@ -9,12 +9,12 @@ require($argv[1]);
 
 require_once($config['root_path']."Group-Office.php");
 
-require_once($GLOBALS['GO_MODULES']->modules['ldapauth']['class_path'].'ldapauth.class.inc.php');
+require_once($GO_MODULES->modules['ldapauth']['class_path'].'ldapauth.class.inc.php');
 
-require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
+require_once($GO_CONFIG->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
 
-require_once($GLOBALS['GO_CONFIG']->class_path.'base/groups.class.inc.php');
+require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 
 $la = new ldapauth();
@@ -29,10 +29,16 @@ $db->query("TRUNCATE TABLE `ldap_sync`");
 $rec['user_id']=1;
 $db->insert_row('ldap_sync',$rec);
 
-echo "Sending query for all users to LDAP server\n";
+// overwrites openlog from Group-Office.php
+openlog("GO_UserSyncLDAP", LOG_PID | LOG_CONS | LOG_ODELAY, LOG_LOCAL0);
+syslog(LOG_INFO, "GO-UserSyncLDAP started ".date("H:i").".");
+
+syslog(LOG_INFO, "Sending query for all users to LDAP server");
+// echo "Sending query for all users to LDAP server\n";
 $search_id=$ldap->search('uid=*', $ldap->PeopleDN);
 
-echo "Query finished\n";
+syslog(LOG_INFO, "Query finished");
+// echo "Query finished\n";
 
 $count=0;
 for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
@@ -43,8 +49,8 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 	#echo $count++;
 	#echo ': ';
 
-	//if($count==100)
-		//break;
+#	if($count==100)
+#		break;
 
 
 	$entry = ldap_get_attributes ($ldap->Link_ID,$entryID);
@@ -58,51 +64,60 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 
 	if($gouser){
 		$user_id=$gouser['id'];
-		echo "User ".$gouser['username']." already exists\n";
+        syslog(LOG_INFO, "User ".$gouser['username']." already exists");
+		// echo "User ".$gouser['username']." already exists\n";
 
 //		if($gouser['enabled']=='1' && $user['enabled']=='0'){
 //			$args=array($gouser);
 //
 //			//for later
-//			//$GLOBALS['GO_EVENTS']->fire_event('user_delete', $args);
+//			//$GO_EVENTS->fire_event('user_delete', $args);
 //			//echo 'Disabling user: '.$gouser['username']."\n";
 //		}
 
-		if(!isset($entry['UniHGW-ServiceAgreement']) || $entry['UniHGW-ServiceAgreement']!="groupware"){
-			echo 'Disabling user: '.$gouser['username']."\n";
 
-//			require($GLOBALS['GO_MODULES']->modules['calendar']['class_path'].'calendar.class.inc.php');
-//			$cal = new calendar();
-//			$cal->user_delete($gouser);
-//
-//			require($GLOBALS['GO_MODULES']->modules['tasks']['class_path'].'tasks.class.inc.php');
-//			$t = new tasks();
-//			$t->user_delete($gouser);
-//
-//			require($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
-//			$files = new files();
-//			$folder = $files->resolve_path('users/'.$gouser['username']);
-//			if($folder) {
-//				$files->delete_folder($folder);
-//
-//				$files->resolve_path('users/'.$gouser['username'], true);
-//			}
+		if($gouser['username']!='admin' && (!isset($entry['UniHGW-ServiceAgreement'][0]) || $entry['UniHGW-ServiceAgreement'][0]!="groupware")){
+            syslog(LOG_INFO, "No service agreement. Removing data for: ".$gouser['username']);
+			echo 'No service agreement. Removing data for: '.$gouser['username']."\n";
+
+			require_once($GO_MODULES->modules['calendar']['class_path'].'calendar.class.inc.php');
+			$cal = new calendar();
+			$cal->user_delete($gouser);
+
+			require_once($GO_MODULES->modules['tasks']['class_path'].'tasks.class.inc.php');
+			$t = new tasks();
+			$t->user_delete($gouser);
+
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+			$files = new files();
+			$folder = $files->resolve_path('users/'.$gouser['username']);
+			if($folder) {
+				$files->delete_folder($folder);
+
+				$files->check_share('users/'.$gouser['username'], $gouser['id'], $GO_SECURITY->get_new_acl('user', $gouser['id']));
+			}
 
 
 			
+		}else
+		{
+            syslog(LOG_INFO, "Service agreement accepted for ".$gouser['username']);
+			// echo "Service agreement accepted for ".$gouser['username']."\n";
 		}
 
 	}else
 	{
 		try{
 			if (!$user_id = $GO_USERS->add_user($user,
-			$GO_GROUPS->groupnames_to_ids(explode(',',$GLOBALS['GO_CONFIG']->register_user_groups)),
-			$GO_GROUPS->groupnames_to_ids(explode(',',$GLOBALS['GO_CONFIG']->register_visible_user_groups)),
-			explode(',',$GLOBALS['GO_CONFIG']->register_modules_read),
-			explode(',',$GLOBALS['GO_CONFIG']->register_modules_write))) {
-				echo "Failed creating user ".$user['username']."\n";
+			$GO_GROUPS->groupnames_to_ids(explode(',',$GO_CONFIG->register_user_groups)),
+			$GO_GROUPS->groupnames_to_ids(explode(',',$GO_CONFIG->register_visible_user_groups)),
+			explode(',',$GO_CONFIG->register_modules_read),
+			explode(',',$GO_CONFIG->register_modules_write))) {
+                syslog(LOG_ERR,"Failed creating user ".$user['username']);
+				// echo "Failed creating user ".$user['username']."\n";
 			}
 		}catch(Exception $e){
+            syslog(LOG_INFO, $e->getMessage());
 			echo $e->getMessage()."\n";
 
 			var_dump($user);
@@ -123,8 +138,8 @@ $db->next_record();
 $ldap_count = $db->f('count');
 
 
-
-echo "Deleting ".($db_count-$ldap_count)." users\n\n";
+syslog(LOG_INFO, "Deleting ".($db_count-$ldap_count)." users");
+// echo "Deleting ".($db_count-$ldap_count)." users\n\n";
 
 $div = $db_count/$ldap_count;
 
@@ -132,21 +147,23 @@ echo $div."\n";
 
 if($div>1.05)
 {
+    syslog(LOG_ERR,"Aborted because script was about to delete more then 5% of the users");
 	exit("Aborted because script was about to delete more then 5% of the users");
 }
 
 $sql = "SELECT id,username FROM go_users u LEFT JOIN ldap_sync l ON u.id=l.user_id WHERE ISNULL(l.user_id) ORDER BY username ASC";
 $db->query($sql);
 while($r = $db->next_record()){
-	echo "Deleting ".$r['username']." (id: ".$r['id'].")\n";
+    syslog(LOG_INFO, "Deleting ".$r['username']." (id: ".$r['id']);
+	// echo "Deleting ".$r['username']." (id: ".$r['id'].")\n";
 	$GO_USERS->delete_user($r['id']);
 }
 
 
 
 
-
-echo "Setting calendar entries older then one month to private\n";
+syslog(LOG_INFO, "Setting calendar entries older then one month to private");
+// echo "Setting calendar entries older then one month to private\n";
 
 $sql = <<<EOF
 UPDATE cal_events INNER JOIN cal_calendars ON cal_calendars.id=cal_events.calendar_id
@@ -160,4 +177,7 @@ EOF;
 
 $db->query($sql);
 
-echo "Done!\n";
+// echo "Done!\n";
+syslog(LOG_INFO, "GO-UserSyncLDAP finished ".date("H:i").".");
+closelog();
+
