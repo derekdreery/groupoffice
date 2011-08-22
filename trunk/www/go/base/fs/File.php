@@ -10,6 +10,16 @@ class GO_Base_Fs_File{
 		$this->path = dirname($path) . '/' . GO_Base_util_File::utf8Basename($path);
 	}
 	
+	
+	/**
+	 * Get the parent folder object
+	 * 
+	 * @return GO_Base_Fs_Folder Parent folder object
+	 */
+	public function parent(){
+		return new GO_Base_Fs_Folder(dirname($this->path));
+	}
+	
 	/**
 	 * Return absolute filesystem path
 	 * 
