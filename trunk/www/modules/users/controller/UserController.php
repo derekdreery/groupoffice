@@ -77,6 +77,13 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		//Save the contact fields to the contact.
 		if(GO::modules()->addressbook){
 			$contact = $model->contact();
+			if(!$contact){
+				$contact = new GO_Addressbook_Model_Contact();			
+				$addressbook = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', 1);
+				$contact->go_user_id=$model->id;
+				$contact->addressbook_id=$addressbook->id;
+			}
+			
 			unset($params['addressbook_id'], $params['id']);
 			$contact->setAttributes($params);
 			$contact->save();
