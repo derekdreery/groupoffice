@@ -208,3 +208,13 @@ GO.email.lang.deletePerm='Delete';
 GO.email.lang.createMailboxPerm='Create mailbox';
 GO.email.lang.deleteMailboxPerm='Delete mailbox';
 GO.email.lang.adminPerm='Administrate';
+
+GO.email.lang.deleteOldMails = 'Delete old mails';
+GO.email.lang.deleteOldMailsInstructions = 'Select a date. If you click OK after that, all the emails in the selected folder before that date will be permanently deleted.';
+GO.email.lang.folder = 'Folder';
+GO.email.lang.deleteOldMailsSure1 = 'This action cannot be undone. Are you sure you want to permanently remove all the emails in this folder of before';
+GO.email.lang.deleteOldMailsSure2 = '?'
+GO.email.lang.nDeletedMailsTxt = 'The number of deleted emails is';
+GO.email.lang.deletingEmails = 'Deleting emails...';
+GO.email.lang.everythingBefore = 'All emails before';
+GO.email.lang.alsoChildren = 'Also apply this to the emails in the subfolders.';

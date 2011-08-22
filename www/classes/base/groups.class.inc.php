@@ -329,6 +329,26 @@ class GO_GROUPS extends db
 		return $count;
 	}
 
+  /**
+   * Get Groups from a given user
+   */
+  function get_groupnames_by_user($user_id)
+  {
+    $sql = "SELECT go_groups.name FROM go_groups INNER JOIN go_users_groups ON go_groups.id=go_users_groups.group_id ".
+            "AND go_users_groups.user_id='".$this->escape($user_id)."';";
+    
+    $this->query($sql);
+    
+    $return = array();
+    
+    while($this->next_record())
+      $return[] = $this->record['name'];
+    
+    return $return;
+  }
+  
+  
+  
 	/**
 	 * Get's all go_groups. If a user ID is specified it returns only the go_groups
 	 *	that user is a member of.

@@ -54,6 +54,7 @@ if(!defined('GO_NO_SESSION') && session_id()==''){
 	{
 		session_id($_REQUEST['session_id']);
 	}
+  session_set_cookie_params(0,'/');
 	session_start();
 	if(isset($_REQUEST['auth_token'])){
 		if($_REQUEST['auth_token']!=$_SESSION['GO_SESSION']['auth_token']){

@@ -13,3 +13,5 @@ $lang['smime']['smime_pass_empty']="Denne SMIME nøkkelen har ikke noe passord. 
 
 $lang['smime']['invalidCert']="Sertifikatet er ugyldig!";
 $lang['smime']['validCert']="Gyldig sertifikat";
+$lang['smime']['certEmailMismatch']="Sertfikatet er gyldig, men e-postadressen sertifikatet gjelder for er forskjellig fra denne e-postens avsenderadresse.";
+$lang['smime']['decryptionFailed']='Feil ved SMIME dekryptering.';

@@ -67,3 +67,5 @@ $lang['email']['iCalendar_update_available']='Dit bericht bevat een update voor 
 $lang['email']['iCalendar_update_old']='Dit bericht bevat een afspraak die al is verwerkt.';
 $lang['email']['iCalendar_event_cancelled']='Dit bericht bevat een annulering voor een afspraak.';
 $lang['email']['iCalendar_event_invitation_declined']='Dit bericht bevat een door u geweigerde uitnodiging voor een afspraak.';
+
+$lang['email']['untilDateError']='Ik probeerde de volgende "Tot-Datum" te verwerken, maar de verwerking ervan is gestopt omdat er een fout optrad';

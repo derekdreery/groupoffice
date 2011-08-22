@@ -1,3 +1,13 @@
+17-08-2011 3.7.27
+- WebDav locking is enabled
+- Fixed some webdav bugs.
+- TCPDF upgraded to latest version.
+- Bug in some e-mail display.
+- Smime decryption bugs fixed.
+- Syncml decoding error fixed.
+- Translation updates.
+- Better GUI for selecting tasklists, addressbooks and note categories in Settings -> Sync
+
 28-07-2011 3.7.26
 - Smiley's broke some e-mails and did not work case insensitive.
 

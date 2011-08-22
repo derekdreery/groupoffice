@@ -760,7 +760,6 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 		}
 
 		e.stopEvent();
-		this.contextMenu.setParticipants(event.participant_ids);
 		this.contextMenu.setEvent(event);
 		this.contextMenu.showAt(e.getXY());
 	},
@@ -1101,6 +1100,12 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				{
 					this.fireEvent("eventDblClick", this, event, actionData);
 				}
+			}, this);
+			
+			event.on('contextmenu', function(e, eventEl)
+			{
+				var event = this.elementToEvent(this.clickedEventId);
+				this.showContextMenu(e, event);
 			}, this);
 
 			if(!eventData.read_only)

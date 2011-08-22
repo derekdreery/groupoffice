@@ -159,12 +159,16 @@ class imapauth
 				{
 					go_debug('IMAPAUTH: Authentication to IMAP server failed '.$imap->last_error());
 					$imap->clear_errors();
+					
+					$GLOBALS['GO_SECURITY']->logout(); //for clearing remembered password cookies
 
 					throw new Exception($GLOBALS['lang']['common']['badLogin']);
 				}
 			}catch(Exception $e){
 				go_debug('IMAPAUTH: Authentication to IMAP server failed with Exception: '.$e->getMessage().' IMAP error:'.$imap->last_error());
 				$imap->clear_errors();
+				
+				$GLOBALS['GO_SECURITY']->logout(); //for clearing remembered password cookies
 
 				throw new Exception($GLOBALS['lang']['common']['badLogin']);
 			}

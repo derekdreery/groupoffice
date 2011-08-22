@@ -342,6 +342,434 @@ END:VEVENT
 END:VCALENDAR';
 
 
+$ical_str='BEGIN:VCALENDAR
+PRODID:-//Sun/Calendar Server//EN
+METHOD:PUBLISH
+VERSION:2.0
+X-S1CS-EXPORTVERSION:6.0
+BEGIN:VEVENT
+UID:000000000000000000000000000000004b1f939b00005d27000009a8000061bc
+DTSTAMP:20110518T012414Z
+SUMMARY:CBS issues of GHB : Updated status
+DTSTART:20091211T060000Z
+DTEND:20091211T090000Z
+CREATED:20091209T121003Z
+LAST-MODIFIED:20091221T113514Z
+PRIORITY:0
+SEQUENCE:0
+DESCRIPTION:Please note : postpone the meeting from 15:00 to 13:00 at same
+  meeting room
+CLASS:PUBLIC
+LOCATION:Crystal Room\, 7th fl.\, YIT office
+ORGANIZER;CN="crystal_room"
+ ;SENT-BY="mailto:piyapol.ch@yipintsoi.com"
+ ;X-NSCP-ORGANIZER-UID=piyapoch@yipintsoi.com
+ ;X-NSCP-ORGANIZER-SENT-BY-UID=piyapoch@yipintsoi.com
+ ;X-S1CS-EMAIL=piyapol.ch@yipintsoi.com
+ :crystal_room@yipintsoi.com
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Akaradej Ketruskul"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=akaradej.ke@yipintsoi.com
+ :akaradke@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Anake Ruttanai"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=anake.ru@yipintsoi.com
+ :anakeru@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Anake Srivilas"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=anake.sr@yipintsoi.com
+ :anakesr@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Anurat Ratnumnoy"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=anurat.ra@yipintsoi.com
+ :anuratra@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Danai Wangsiri"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=danai.wa@yipintsoi.com
+ :danaiwa@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Piyapol Churnratanakul"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=piyapol.ch@yipintsoi.com
+ :piyapoch@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Prapan Charasshutshawankul"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=prapan.ch@yipintsoi.com
+ :prapanch@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Prasarn Lerkumnueychok"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=prasarn.le@yipintsoi.com
+ :prasarle@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=ACCEPTED;CN="Pravit Komthongchuskul"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=pravit.ko@yipintsoi.com
+ :pravitko@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Saraphol Kittiwarakarn"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=saraphol.ki@yipintsoi.com
+ :saraphki@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Satchaporn Rattanavanit"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=satchaporn.ra@yipintsoi.com
+ :satchara@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Sirin Piya-O-Lan"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=sirin.pi@yipintsoi.com
+ :sirinpi@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=DECLINED;CN="Somchai Kanjanapattana"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=somchai.ka@yipintsoi.com
+ :somchaka@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Suksan Mongkoljuthar"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=suksan.mo@yipintsoi.com
+ :suksanmo@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Supak Lailert"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=supak.la@yipintsoi.com
+ :supak@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Taned Sangowingul"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=taned.sa@yipintsoi.com
+ :tanedsa@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Tanongsak Gulyanon"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=tanongsak.gu@yipintsoi.com
+ :tanonggu@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=ACCEPTED;CN="Teera Sumatawattana"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=teera.su@yipintsoi.com
+ :teerasu@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Thitipong Limudomsuk"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=thitipong.li@yipintsoi.com
+ :thitipli@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Vicha Upariputtipong"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=vicha.up@yipintsoi.com
+ :vichaup@yipintsoi.com
+X-S1CS-GROUP-ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP
+ ;X-S1CS-GROUP-EXPAND=TRUE
+ ;PARTSTAT=NEEDS-ACTION;CN="ghb-support"
+ ;RSVP=FALSE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=ghb-support@yipintsoi.com
+ :ghb-support@yipintsoi.com
+X-NSCP-ORIGINAL-DTSTART:20091211T060000Z
+X-NSCP-LANGUAGE:en
+X-NSCP-DTSTART-TZID:Asia/Bangkok
+X-NSCP-TOMBSTONE:0
+X-NSCP-ONGOING:0
+X-NSCP-ORGANIZER-EMAIL:piyapol.ch@yipintsoi.com
+X-NSCP-GSE-COMPONENT-STATE;X-NSCP-GSE-COMMENT="REPLY-DECLINED":262208
+END:VEVENT
+BEGIN:VEVENT
+UID:000000000000000000000000000000004b2b539f00000de900000ac0000061bc
+DTSTAMP:20110518T012414Z
+SUMMARY:GHB : Meeting for update any issues of GHB
+DTSTART:20091221T070000Z
+DTEND:20091221T090000Z
+CREATED:20091218T100415Z
+LAST-MODIFIED:20091221T113456Z
+PRIORITY:0
+SEQUENCE:0
+DESCRIPTION:อาเจ็กขอเรียกประชุมเ
+ พื่ออัพเดท issues ต่างๆ ของ GHB เ
+ ช่น CBS issues\, M5000 เพื่อช่วยงาน LOS 
+ เป็นต้น
+CLASS:PUBLIC
+LOCATION:Crystal Room
+ORGANIZER;CN="crystal_room"
+ ;SENT-BY="mailto:piyapol.ch@yipintsoi.com"
+ ;X-NSCP-ORGANIZER-UID=piyapoch@yipintsoi.com
+ ;X-NSCP-ORGANIZER-SENT-BY-UID=piyapoch@yipintsoi.com
+ ;X-S1CS-EMAIL=piyapol.ch@yipintsoi.com
+ :crystal_room@yipintsoi.com
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Akaradej Ketruskul"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=akaradej.ke@yipintsoi.com
+ :akaradke@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Anake Ruttanai"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=anake.ru@yipintsoi.com
+ :anakeru@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Anake Srivilas"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=anake.sr@yipintsoi.com
+ :anakesr@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Anurat Ratnumnoy"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=anurat.ra@yipintsoi.com
+ :anuratra@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Danai Wangsiri"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=danai.wa@yipintsoi.com
+ :danaiwa@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Piyapol Churnratanakul"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=piyapol.ch@yipintsoi.com
+ :piyapoch@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Prapan Charasshutshawankul"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=prapan.ch@yipintsoi.com
+ :prapanch@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Prasarn Lerkumnueychok"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=prasarn.le@yipintsoi.com
+ :prasarle@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=ACCEPTED;CN="Pravit Komthongchuskul"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=pravit.ko@yipintsoi.com
+ :pravitko@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Saraphol Kittiwarakarn"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=saraphol.ki@yipintsoi.com
+ :saraphki@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Satchaporn Rattanavanit"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=satchaporn.ra@yipintsoi.com
+ :satchara@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Sirin Piya-O-Lan"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=sirin.pi@yipintsoi.com
+ :sirinpi@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=DECLINED;CN="Somchai Kanjanapattana"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=2
+ ;X-S1CS-EMAIL=somchai.ka@yipintsoi.com
+ :somchaka@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Suksan Mongkoljuthar"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=suksan.mo@yipintsoi.com
+ :suksanmo@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Supak Lailert"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=supak.la@yipintsoi.com
+ :supak@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Taned Sangowingul"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=taned.sa@yipintsoi.com
+ :tanedsa@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Tanongsak Gulyanon"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=tanongsak.gu@yipintsoi.com
+ :tanonggu@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Teera Sumatawattana"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=teera.su@yipintsoi.com
+ :teerasu@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Thitipong Limudomsuk"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=thitipong.li@yipintsoi.com
+ :thitipli@yipintsoi.com
+ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=INDIVIDUAL
+ ;PARTSTAT=NEEDS-ACTION;CN="Vicha Upariputtipong"
+ ;MEMBER="ghb-support@yipintsoi.com"
+ ;RSVP=TRUE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=vicha.up@yipintsoi.com
+ :vichaup@yipintsoi.com
+X-S1CS-GROUP-ATTENDEE;ROLE=REQ-PARTICIPANT;CUTYPE=GROUP
+ ;X-S1CS-GROUP-EXPAND=TRUE
+ ;PARTSTAT=NEEDS-ACTION;CN="ghb-support"
+ ;RSVP=FALSE
+ ;X-NSCP-ATTENDEE-GSE-STATUS=0
+ ;X-S1CS-EMAIL=ghb-support@yipintsoi.com
+ :ghb-support@yipintsoi.com
+X-NSCP-ORIGINAL-DTSTART:20091221T070000Z
+X-NSCP-LANGUAGE:en
+X-NSCP-DTSTART-TZID:Asia/Bangkok
+X-NSCP-TOMBSTONE:0
+X-NSCP-ONGOING:0
+X-NSCP-ORGANIZER-EMAIL:piyapol.ch@yipintsoi.com
+X-NSCP-GSE-COMPONENT-STATE;X-NSCP-GSE-COMMENT="REPLY-DECLINED":262208
+END:VEVENT
+BEGIN:VEVENT
+UID:000000000000000000000000000000004b08f4a6000074db000006c9000061bc
+DTSTAMP:20110518T012414Z
+SUMMARY:YIT :: ITIL v.3
+DTSTART:20091222T010000Z
+DTEND:20091222T100000Z
+CREATED:20091122T082158Z
+LAST-MODIFIED:20091122T082158Z
+PRIORITY:0
+SEQUENCE:0
+DESCRIPTION:ITIL v.3
+CLASS:PUBLIC
+ORGANIZER;CN="Somchai Kanjanapattana"
+ ;X-S1CS-EMAIL=somchai.ka@yipintsoi.com
+ :somchaka@yipintsoi.com
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+X-NSCP-ORIGINAL-DTSTART:20091222T010000Z
+X-NSCP-LANGUAGE:en
+BEGIN:VALARM
+ACTION:EMAIL
+TRIGGER;VALUE=DATE-TIME:20091221T010000Z
+SUMMARY:Reminder: YIT :: ITIL v.3
+DESCRIPTION:Reminder: YIT :: ITIL v.3
+ATTENDEE:MAILTO:somchaka@yipintsoi.com
+END:VALARM
+X-NSCP-DTSTART-TZID:Asia/Bangkok
+X-NSCP-TOMBSTONE:0
+X-NSCP-ONGOING:0
+X-NSCP-ORGANIZER-EMAIL:somchai.ka@yipintsoi.com
+X-NSCP-GSE-COMPONENT-STATE;X-NSCP-GSE-COMMENT="PUBLISH-COMPLETED":65538
+END:VEVENT
+BEGIN:VEVENT
+UID:000000000000000000000000000000004b08f4a900002db3000006cb000061bc
+DTSTAMP:20110518T012414Z
+SUMMARY:YIT :: ITIL v.3
+DTSTART:20091223T010000Z
+DTEND:20091223T100000Z
+CREATED:20091122T082201Z
+LAST-MODIFIED:20091122T082203Z
+PRIORITY:0
+SEQUENCE:1
+DESCRIPTION:ITIL v.3
+CLASS:PUBLIC
+ORGANIZER;CN="Somchai Kanjanapattana"
+ ;X-S1CS-EMAIL=somchai.ka@yipintsoi.com
+ :somchaka@yipintsoi.com
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+X-NSCP-ORIGINAL-DTSTART:20091222T010000Z
+X-NSCP-LANGUAGE:en
+BEGIN:VALARM
+ACTION:EMAIL
+TRIGGER;VALUE=DATE-TIME:20091222T010000Z
+SUMMARY:Reminder: YIT :: ITIL v.3
+DESCRIPTION:Reminder: YIT :: ITIL v.3
+ATTENDEE:MAILTO:somchaka@yipintsoi.com
+END:VALARM
+X-NSCP-DTSTART-TZID:Asia/Bangkok
+X-NSCP-TOMBSTONE:0
+X-NSCP-ONGOING:0
+X-NSCP-ORGANIZER-EMAIL:somchai.ka@yipintsoi.com
+X-NSCP-GSE-COMPONENT-STATE;X-NSCP-GSE-COMMENT="PUBLISH-COMPLETED":65538
+END:VEVENT
+END:VCALENDAR';
+
+
 //$vcalendar = $ical->parse_file('/home/mschering/jos.ics');
 //
 $vcalendar = $ical->parse_icalendar_string($ical_str);

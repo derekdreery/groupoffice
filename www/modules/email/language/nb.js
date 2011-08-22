@@ -192,3 +192,13 @@ GO.email.lang.deletePerm='Slette';
 GO.email.lang.createMailboxPerm='Opprett mailbox';
 GO.email.lang.deleteMailboxPerm='Slett mailbox';
 GO.email.lang.adminPerm='Administrere';
+
+GO.email.lang.deleteOldMails= 'Slett gamle e-poster';
+GO.email.lang.deleteOldMailsInstructions= 'Velg en dato. Hvis du deretter klikker OK vil ALLE E-POSTER som er ELDRE enn angitt dato bli SLETTET PERMANENT.';
+GO.email.lang.folder= 'Mappe';
+GO.email.lang.deleteOldMailsSure1= 'Denne handlingen kan IKKE ANGRES. Er du HELT SIKKER på at du vil slette ALLE e-poster i denne mappen, som er eldre enn ';
+GO.email.lang.deleteOldMailsSure2= '?'
+GO.email.lang.nDeletedMailsTxt= 'Antall slettede e-poster er';
+GO.email.lang.deletingEmails= 'Sletter e-poster...';
+GO.email.lang.everythingBefore= 'Alle e-poster som er eldre enn';
+GO.email.lang.alsoChildren= 'La dette også gjelde for e-poster i undermappene.';
