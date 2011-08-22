@@ -218,8 +218,8 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	protected function url($path){
 		$url = GO::config()->host;
 		
-		if($path!='')
-			$url .= '?r='.$path;
+		//if($path!='')
+		$url .= '?r='.$path;
 		
 		if(isset(GO::session()->values['security_token']))
 			$url .= '&security_token='.GO::session()->values['security_token'];
