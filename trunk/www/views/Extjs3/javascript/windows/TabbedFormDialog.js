@@ -87,28 +87,33 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 
 		this.buildForm();
 
-		this.formPanel = new Ext.form.FormPanel({
-			waitMsgTarget:true,			
-			border: false,
-			baseParams : {}
-		});
+		
 
 		this.addCustomFields();
-				
-		if(this._panels.length) {
-			this._tabPanel = new Ext.TabPanel({
-				activeTab: 0,
-				enableTabScroll:true,
-				deferredRender: false,
-				border: false,
-				anchor: '100% 100%',
-				items: this._panels
-			});
 
-			this.formPanel.add(this._tabPanel);
+		if(this._panels.length > 1) {
+		    
+		    this.formPanel = new Ext.form.FormPanel({
+			    waitMsgTarget:true,			
+			    border: false,
+			    baseParams : {}
+		    });
+		    
+		    this._tabPanel = new Ext.TabPanel({
+			activeTab: 0,
+			enableTabScroll:true,
+			deferredRender: false,
+			border: false,
+			anchor: '100% 100%',
+			items: this._panels
+		    });
+		    
+		    this.formPanel.add(this._tabPanel);
+		} else if (this._panels.length==1) {
+		    this.formPanel = this._panels[0];
 		}
 		
-		this.items=this.formPanel;		
+		this.items=this.formPanel;				
 		
 		GO.dialog.TabbedFormDialog.superclass.initComponent.call(this); 
 		
@@ -187,7 +192,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 
 		config = config || {};
     
-    this.beforeLoad(remoteModelId, config);
+		this.beforeLoad(remoteModelId, config);
 
 		//tmpfiles on the remoteModel ({name:'Name',tmp_file:/tmp/name.ext} will be attached)
 		this.formPanel.baseParams.tmp_files = config.tmp_files ? Ext.encode(config.tmp_files) : '';
