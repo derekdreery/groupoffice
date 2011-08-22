@@ -52,7 +52,7 @@ class GO_Base_Router{
 		}
 		
 		
-		$r = isset($_REQUEST['r']) ? explode('/', $_REQUEST['r']) :array();
+		$r = !empty($_REQUEST['r']) ? explode('/', $_REQUEST['r']) :array();
 		
 		$first = isset($r[0]) ? ucfirst($r[0]) : 'Core';
 		
