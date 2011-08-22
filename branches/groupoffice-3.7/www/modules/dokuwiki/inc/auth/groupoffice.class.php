@@ -58,8 +58,8 @@ class auth_groupoffice extends auth_basic {
   /**
    * Get the user data to display in Dokuwiki
    * 
-   * @param type $user
-   * @return type 
+   * @param string $user The username of the user
+   * @return array Array with user data 
    */
   function getUserData($user)
   {
