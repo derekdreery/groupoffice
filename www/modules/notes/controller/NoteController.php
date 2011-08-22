@@ -19,10 +19,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 		);
 	}
   
-  protected function prepareGrid($grid){
-		
-		
-		
+  protected function prepareGrid($grid){		
     $grid->formatColumn('user_name','$model->user->name');
     return $grid;
   }
