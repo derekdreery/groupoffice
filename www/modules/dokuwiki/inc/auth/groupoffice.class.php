@@ -61,11 +61,11 @@ class auth_groupoffice extends auth_basic {
    * @param type $user
    * @return type 
    */
-  function getUserData($user)
-  {
-    $data = array('name'=>$_SESSION['GO_SESSION']['name'],'mail'=>$_SESSION['GO_SESSION']['email'],'grps'=>array('user','groep2'));
-    return $data;
-  }
+//  function getUserData($user)
+//  {
+//    $data = array('name'=>$_SESSION['GO_SESSION']['name'],'mail'=>$_SESSION['GO_SESSION']['email'],'grps'=>array('user','groep2'));
+//    return $data;
+//  }
   
   /**
    * Check for Group-Office login and auto login to Dokuwiki when inside Group-Office.
