@@ -103,15 +103,19 @@ class gnupg{
 	public function decode($data, $passphrase){
 
 		global $GO_CONFIG;
-
+		
 		// the text to decrypt from another platforms can has a bad sequence
 		// this line removes the bad date and converts to line returns
 		$data = preg_replace("/\x0D\x0D\x0A/s", "\n", $data);
 
+		//commented out the following code because of this error:
+		/*
+		 * gpg: invalid radix64 character 3A skipped gpg: invalid radix64 character 2E skipped gpg: invalid radix64 character 2E skipped gpg: invalid radix64 character 28 skipped gpg: invalid radix64 character 29 skipped gpg: invalid radix64 character 3A skipped gpg: invalid radix64 character 2D skipped gpg: invalid radix64 character 3C skipped gpg: [don't know]: invalid packet (ctb=55) 
+		 */		
 		// we generate an array and add a new line after the PGP header
-		$data = explode("\n", $data);
-		if (count($data) > 1) $data[1] .= "\n";
-		$data = implode("\n", $data);
+//		$data = explode("\n", $data);
+//		if (count($data) > 1) $data[1] .= "\n";
+//		$data = implode("\n", $data);
 
 		$data = $passphrase."\n".$data;
 
