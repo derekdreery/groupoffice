@@ -10,6 +10,7 @@ if(isset($GLOBALS['GO_MODULES']->modules['customcss']) && file_exists($GLOBALS['
 
 ?>
 
+
 </head>
 <body>
 <div id="loading-mask" style="width:100%;height:100%;background:#f1f1f1;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>

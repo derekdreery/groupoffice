@@ -119,22 +119,22 @@ if($GLOBALS['GO_CONFIG']->debug || !file_exists($path)) {
 	}*/
 	echo "\n<!-- regenerated script -->\n";
 
-	$scripts[]=$root_uri.'language/common/en.js';
-	$scripts[]=$root_uri.'modules/users/language/en.js';
-
-	if($GLOBALS['GO_LANGUAGE']->language!='en') {
-		if(file_exists($GLOBALS['GO_CONFIG']->root_path.'language/common/'.$GLOBALS['GO_LANGUAGE']->language.'.js')) {
-			$scripts[]=$root_uri.'language/common/'.$GLOBALS['GO_LANGUAGE']->language.'.js';
-		}
-
-		if(file_exists($GLOBALS['GO_CONFIG']->root_path.'ext/src/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js')) {
-			$scripts[]=$view_root_uri.'ext/src/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js';
-		}
-
-		if(file_exists($GLOBALS['GO_CONFIG']->root_path.'modules/users/language/'.$GLOBALS['GO_LANGUAGE']->language.'.js')) {
-			$scripts[]=$root_uri.'modules/users/language/'.$GLOBALS['GO_LANGUAGE']->language.'.js';
-		}
-	}
+//	$scripts[]=$root_uri.'language/common/en.js';
+//	$scripts[]=$root_uri.'modules/users/language/en.js';
+//
+//	if($GLOBALS['GO_LANGUAGE']->language!='en') {
+//		if(file_exists($GLOBALS['GO_CONFIG']->root_path.'language/common/'.$GLOBALS['GO_LANGUAGE']->language.'.js')) {
+//			$scripts[]=$root_uri.'language/common/'.$GLOBALS['GO_LANGUAGE']->language.'.js';
+//		}
+//
+//		if(file_exists($GLOBALS['GO_CONFIG']->root_path.'ext/src/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js')) {
+//			$scripts[]=$view_root_uri.'ext/src/locale/ext-lang-'.$lang['common']['extjs_lang'].'.js';
+//		}
+//
+//		if(file_exists($GLOBALS['GO_CONFIG']->root_path.'modules/users/language/'.$GLOBALS['GO_LANGUAGE']->language.'.js')) {
+//			$scripts[]=$root_uri.'modules/users/language/'.$GLOBALS['GO_LANGUAGE']->language.'.js';
+//		}
+//	}
 
 	$dynamic_debug_scripts=array();
 
@@ -144,11 +144,39 @@ if($GLOBALS['GO_CONFIG']->debug || !file_exists($path)) {
 		die('Could not write to cache directory');
 	}
 	fwrite($fp, "GO.Languages=[];\n");
+	
+	
+	//Temporary dirty hack for namespaces
+	$stmt = GO::modules()->getAll();
+	while($module = $stmt->fetch()){
+		fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
+	}
+	
+	fwrite($fp, 'Ext.ns("GO.portlets");');
+	fwrite($fp, 'Ext.ns("GO.customfields.columns");');
+	fwrite($fp, 'Ext.ns("GO.customfields.types");');
+	
 
 	//fwrite($fp,'GO.Languages.push(["",GO.lang.userSelectedLanguage]);');
 	foreach($languages as $code=>$language) {
 		fwrite($fp,'GO.Languages.push(["'.$code.'","'.$language.'"]);');
 	}
+	
+	
+	//Put all lang vars in js
+	$language = new GO_Base_Language();
+	$l = $language->getAllLanguage();
+	
+	fwrite($fp,'GO.lang='.json_encode($l['base']['common']).';');
+	fwrite($fp,'GO.lang.countries='.json_encode($l['base']['countries']).';');
+	unset($l['base']);
+	foreach($l as $module=>$langVars){
+		fwrite($fp,'GO.'.$module.'.lang='.json_encode($langVars).';');
+	}
+	
+	
+	
+	
 	fclose($fp);
 	if(!$GLOBALS['GO_CONFIG']->debug){
 		$scripts[]=$GLOBALS['GO_CONFIG']->file_storage_path.'cache/languages.js';
@@ -245,22 +273,22 @@ if(!isset($default_scripts_load_modules)){
 
 if(count($load_modules)) {
 	//load language first so it can be overridden
-	foreach($load_modules as $module) {
-		if($module['read_permission']) {
-
-			$module_uri = $GLOBALS['GO_CONFIG']->debug ? $module['url'] : $module['path'];
-
-			if(file_exists($module['path'].'language/en.js')) {
-				$scripts[]=$module_uri.'language/en.js';
-			}
-
-			if($GLOBALS['GO_LANGUAGE']->language!='en' && file_exists($module['path'].'language/'.$GLOBALS['GO_LANGUAGE']->language.'.js')) {
-				$scripts[]=$module_uri.'language/'.$GLOBALS['GO_LANGUAGE']->language.'.js';
-			}
-		}
-	}
-
-	$scripts[]=$root_uri.'javascript/LanguageLoaded.js';
+//	foreach($load_modules as $module) {
+//		if($module['read_permission']) {
+//
+//			$module_uri = $GLOBALS['GO_CONFIG']->debug ? $module['url'] : $module['path'];
+//
+//			if(file_exists($module['path'].'language/en.js')) {
+//				$scripts[]=$module_uri.'language/en.js';
+//			}
+//
+//			if($GLOBALS['GO_LANGUAGE']->language!='en' && file_exists($module['path'].'language/'.$GLOBALS['GO_LANGUAGE']->language.'.js')) {
+//				$scripts[]=$module_uri.'language/'.$GLOBALS['GO_LANGUAGE']->language.'.js';
+//			}
+//		}
+//	}
+//
+//	$scripts[]=$root_uri.'javascript/LanguageLoaded.js';
 
 
 	foreach($load_modules as $module) {
@@ -423,6 +451,10 @@ if(count($load_modules)) {
 
 	//some functions require extra security
 	<?php
+	
+	
+	
+	
 	if(isset($_SESSION['GO_SESSION']['security_token']))		
 		echo 'Ext.Ajax.extraParams={security_token:"'.$_SESSION['GO_SESSION']['security_token'].'"};';
 	?>

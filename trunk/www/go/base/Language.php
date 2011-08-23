@@ -28,12 +28,18 @@ class GO_Base_Language{
 	 */
 	public function getTranslation($name, $module='base',$basesection='common'){
 		
-		if($module=='base')
-			$key=$module.'.'.$basesection;
-		else
-			$key = $module;
+		$this->_loadSection($module, $basesection);		
 		
-		if(!isset($this->_lang[$key])){
+		if($module=='base'){
+			return isset($this->_lang[$module][$basesection][$name]) ? $this->_lang[$module][$basesection][$name] : $name;
+		}else
+		{
+			return isset($this->_lang[$module][$name]) ? $this->_lang[$module][$name] : $name;
+		}
+	}
+	
+	private function _loadSection($module='base',$basesection='common'){
+		if(!isset($this->_lang[$module]) || ($module=='base' && !isset($this->_lang[$module][$basesection]))){
 			
 			$file = $this->_find_file('en', $module, $basesection);
 			if($file)
@@ -45,18 +51,25 @@ class GO_Base_Language{
 				$file = $this->_find_file($langcode, $module, $basesection);
 				if($file)
 					require($file);
-			}			
+			}		
 			
 			if(isset($l)){
-				$this->_lang[$key]=$l;
-			}elseif(isset($lang[$module])){
-				$this->_lang[$key]=$lang[$module];
-			}else	if(isset($lang[$basesection])){
-				$this->_lang[$key]=$lang[$basesection];
+				if($module=='base'){
+					$this->_lang[$module][$basesection]=$l;
+				}else
+				{
+					$this->_lang[$module]=$l;
+				}
 			}
+			
+//			if(isset($l)){
+//				$this->_lang[$key]=$l;
+//			}elseif(isset($lang[$module])){
+//				$this->_lang[$key]=$lang[$module];
+//			}else	if(isset($lang[$basesection])){
+//				$this->_lang[$key]=$lang[$basesection];
+//			}
 		}
-		
-		return isset($this->_lang[$key][$name]) ? $this->_lang[$key][$name] : $key.'.'.$name;
 	}
 	
 	private function _find_file($lang, $module, $basesection){
@@ -65,12 +78,30 @@ class GO_Base_Language{
 		else
 			$dir=GO::config()->root_path.'modules/'.$module.'/language/';
 				
-		$file = $dir.$lang.'.inc.php';
+		$file = $dir.$lang.'.php';
 		
 		if(file_exists($file))
 			return $file;
 		else
 			return false;
+	}
+	
+	
+	public function getAllLanguage(){
+		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'language');
+		$items = $folder->ls();
+		foreach($items as $folder){
+			if($folder instanceof GO_Base_Fs_Folder){
+				$this->_loadSection('base', $folder->name());
+			}
+		}
+		
+		$stmt = GO::modules()->getAll();
+		while($module = $stmt->fetch()){
+			$this->_loadSection($module->id);
+		}
+		
+		return $this->_lang;
 	}
 	
 }
