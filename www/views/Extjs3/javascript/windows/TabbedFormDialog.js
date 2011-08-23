@@ -90,27 +90,31 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		
 
 		this.addCustomFields();
+		
+		this.formPanel = new Ext.form.FormPanel({
+			waitMsgTarget:true,			
+			border: false,
+			baseParams : {}
+		});
 
 		if(this._panels.length > 1) {
 		    
-		    this.formPanel = new Ext.form.FormPanel({
-			    waitMsgTarget:true,			
-			    border: false,
-			    baseParams : {}
-		    });
 		    
-		    this._tabPanel = new Ext.TabPanel({
-			activeTab: 0,
-			enableTabScroll:true,
-			deferredRender: false,
-			border: false,
-			anchor: '100% 100%',
-			items: this._panels
-		    });
 		    
-		    this.formPanel.add(this._tabPanel);
+			this._tabPanel = new Ext.TabPanel({
+				activeTab: 0,
+				enableTabScroll:true,
+				deferredRender: false,
+				border: false,
+				anchor: '100% 100%',
+				items: this._panels
+			});
+		    
+			this.formPanel.add(this._tabPanel);
 		} else if (this._panels.length==1) {
-		    this.formPanel = this._panels[0];
+			this.formPanel.items = this._panels[0].items;
+			this.formPanel.cls='go-form-panel';
+			delete this._panels[0];
 		}
 		
 		this.items=this.formPanel;				
@@ -184,7 +188,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		});		
 	},
   
-  beforeLoad : function(remoteModelId, config){},
+	beforeLoad : function(remoteModelId, config){},
 	afterLoad : function(remoteModelId, config, action){},
 	afterSubmit : function(action){},
 	
