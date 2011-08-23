@@ -149,12 +149,13 @@ if($GLOBALS['GO_CONFIG']->debug || !file_exists($path)) {
 	//Temporary dirty hack for namespaces
 	$stmt = GO::modules()->getAll();
 	while($module = $stmt->fetch()){
-		fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
+		if($module->isAvailable())
+			fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
 	}
 	
 	fwrite($fp, 'Ext.ns("GO.portlets");');
-	fwrite($fp, 'Ext.ns("GO.customfields.columns");');
-	fwrite($fp, 'Ext.ns("GO.customfields.types");');
+	
+	fwrite($fp, 'if(GO.customfields){Ext.ns("GO.customfields.columns");Ext.ns("GO.customfields.types");}');
 	
 
 	//fwrite($fp,'GO.Languages.push(["",GO.lang.userSelectedLanguage]);');
