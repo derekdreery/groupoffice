@@ -77,7 +77,7 @@ try {
 
 			$response['success']=true;
 
-			$dir = $GO_CONFIG->tmpdir.'attachments/';
+			$dir = $GO_CONFIG->tmpdir.'attachments/'.uniqid(date('is'),true).'/';
 			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 			filesystem::mkdir_recursive($dir);
 
@@ -95,7 +95,7 @@ try {
 			{
 
 				$file['name']=File::strip_invalid_chars($file['name']);
-				$tmp_file = $dir.uniqid(date('is'),true).$file['name'];
+				$tmp_file = $dir.$file['name'];
 				move_uploaded_file($file['tmp_name'], $tmp_file);
 
 				$extension = File::get_extension($file['name']);
@@ -321,14 +321,14 @@ try {
 			$response['files']=array();		
 
 			//$response['debug']=$_FILES['attachments'];
-			$dir = $GO_CONFIG->tmpdir.'attachments/';
+			$dir = $GO_CONFIG->tmpdir.'attachments/'.uniqid(date('is'),true).'/';
 
 			require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 			filesystem::mkdir_recursive($dir);
 
 			for ($n = 0; $n < count($_FILES['attachments']['tmp_name']); $n ++) {
 				if (is_uploaded_file($_FILES['attachments']['tmp_name'][$n])) {										
-					$tmp_file = $dir.uniqid(date('is'),true).File::strip_invalid_chars($_FILES['attachments']['name'][$n]);
+					$tmp_file = $dir.File::strip_invalid_chars($_FILES['attachments']['name'][$n]);
 					move_uploaded_file($_FILES['attachments']['tmp_name'][$n], $tmp_file);
 
 					$extension = File::get_extension($_FILES['attachments']['name'][$n]);
@@ -586,8 +586,8 @@ try {
 								$attachment = Swift_Attachment::fromPath($encoded,'application/pgp-encoded');
 							}else {
 								$attachment = Swift_Attachment::fromPath($tmp_name,File::get_mime($tmp_name));
-								if(!$from_go)
-									$attachment->setFilename(substr(utf8_basename($tmp_name),27));
+//								if(!$from_go)
+//									$attachment->setFilename(substr(utf8_basename($tmp_name),27));
 							}
 							$swift->message->attach($attachment);
 						}
