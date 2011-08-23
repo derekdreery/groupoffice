@@ -352,7 +352,7 @@ class Go2Mime
 					{
 						if(empty($filename))$filename=uniqid(time());
 
-						$mime_attachment['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$filename;
+						$mime_attachment['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.uniqid(date('is'),true).'/'.$filename;
 						filesystem::mkdir_recursive(dirname($mime_attachment['tmp_file']));
 
 						file_put_contents($mime_attachment['tmp_file'], $part->body);
@@ -376,7 +376,7 @@ class Go2Mime
 							if($create_tmp_inline_attachments)
 							{
 								if(empty($filename)) $filename=uniqid(time());
-								$mime_attachment['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.$filename;
+								$mime_attachment['tmp_file']=$GO_CONFIG->tmpdir.'attachments/'.uniqid(date('is'),true).'/'.$filename;
 								filesystem::mkdir_recursive(dirname($mime_attachment['tmp_file']));
 
 								file_put_contents($mime_attachment['tmp_file'], $part->body);
