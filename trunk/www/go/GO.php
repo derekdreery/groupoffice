@@ -275,10 +275,13 @@ class GO{
 //		}
 		
 	
-		//GO::debug('[' . date('Y-m-d G:i') . '] Start of new request: ' . $_SERVER['PHP_SELF']);
+		
 
 
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
+		
+			GO::debug('['.date('Y-m-d G:i').'] Start of new request: '.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
+
 			//undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
 			if (get_magic_quotes_gpc()) {
 

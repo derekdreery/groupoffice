@@ -23,6 +23,7 @@
  * @property int/array $pk Primary key value(s) for the model
  * @property string $module Name of the module this model belongs to
  * @property boolean $isNew Is the model new and not inserted in the database yet.
+ * @property GO_Customfields_Model_AbstractCustomFieldsRecord $customfieldsRecord
  */
 
 abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
@@ -1096,6 +1097,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	
 	public function setAttributes($attributes, $format=true){		
+		
+		if($this->customfieldsRecord)
+			$this->customfieldsRecord->setAttributes($attributes);
+		
 		$related=array();
 		
 		if($format)
@@ -1105,7 +1110,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			if(isset($this->columns[$key])){
 				$this->$key=$value;
 			}		
-		}		
+		}
+		
+		
 	}
 	
 	/**
@@ -1204,12 +1211,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
-		
-		GO::debug($this->_modifiedAttributes);
-		
-		if(!$this->isModified())
+	
+		//Don't do anything if nothing has been modified.
+		if(!$this->isModified() && (!$this->customfieldsRecord || !$this->customfieldsRecord->isModified()))
 			return true;
-		
+
 		if($this->validate()){		
 		
 			/*
@@ -1275,9 +1281,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					return false;
 			}
 			
+
+			if ($this->customfieldsRecord)
+				$this->customfieldsRecord->save();
 			
-			if (isset(GO::modules()->customfields) && $this->customfieldsModel())
-				GO_Customfields_Controller_Item::saveCustomFields($this, $this->customfieldsModel());
 
 			
 			if(!$this->afterSave($wasNew))
@@ -1724,6 +1731,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 	}
 	
+	private $_customfieldsRecord;
+	
 	/**
 	 * Returns the customfields record if module is installed and this model
 	 * supports it (See GO_Base_Db_ActiveRecord::customFieldsModel())
@@ -1735,13 +1744,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($this->customfieldsModel() && GO::modules()->customfields){
 			$customFieldModelName=$this->customfieldsModel();
 
-			$model = call_user_func(array($customFieldModelName,'model'))->findByPk($this->pk);
-			if(!$model){
-				//doesn't exist yet. Return a new one
-				$model = new $customFieldModelName;
-				$model->link_id=$this->pk;
+			if(!isset($this->_customfieldsRecord)){
+				$this->_customfieldsRecord = call_user_func(array($customFieldModelName,'model'))->findByPk($this->pk);
+				if(!$this->_customfieldsRecord){
+					//doesn't exist yet. Return a new one
+					$this->_customfieldsRecord = new $customFieldModelName;
+					$this->_customfieldsRecord->link_id=$this->pk;
+				}
 			}
-			return $model;
+			return $this->_customfieldsRecord;
 		}else
 		{
 			return false;
