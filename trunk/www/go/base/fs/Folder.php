@@ -2,7 +2,7 @@
 /**
  * A filesystem folder
  */
-class GO_Base_Fs_Folder extends GO_Base_Fs_File {
+class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 
 
 	/**
@@ -55,9 +55,18 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_File {
 	 * @return boolean 
 	 */
 	public function create(){
-		return !is_dir($this->path) ? mkdir($this->path, GO::config()->folder_create_mode,true) : true;
+		
+		if(is_dir($this->path))
+			return true;
+		
+		if(mkdir($this->path, GO::config()->folder_create_mode,true)){
+			if(GO::config()->file_change_group)
+				chgrp ($this->path, GO::config()->file_change_group);
+			
+			return true;
+		}else
+		{
+			return false;
+		}
 	}
-	
-	
-
 }
