@@ -1,3 +1,4 @@
+modules/calendar/Calendar.js
 modules/calendar/EventTemplate.js
 modules/calendar/EventDialog.js
 modules/calendar/CalendarGrid.js
@@ -16,7 +17,6 @@ modules/calendar/GroupDialog.js
 modules/calendar/ManagePermissionsPanel.js
 modules/calendar/ResourcesGrid.js
 modules/calendar/PortletSettings.js
-modules/calendar/Calendar.js
 modules/calendar/GroupAdminsPanel.js
 modules/calendar/TasklistsGrid.js
 modules/calendar/EventPanel.js

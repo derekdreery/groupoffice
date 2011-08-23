@@ -10,6 +10,8 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
+
+Ext.ns("GO.calendar.dd");
  
 GO.calendar.formatQtip = function(data)
 {
