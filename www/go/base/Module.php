@@ -220,23 +220,32 @@ class GO_Base_Module extends GO_Base_Observable {
 	 */
 	public function getModels(){		
 	
-		$models=array();
-		$folder = new GO_Base_Fs_Folder($this->path().'model');
+		$classes=$this->findClasses('model');
+		foreach($classes as $class){
+				$class = new ReflectionClass($className);
+				if(!$class->isAbstract()){					
+					$models[] = $className;
+				}
+		}		
+		return $classes;
+	}
+	
+	public function findClasses($subfolder){
+		
+		$classes=array();
+		$folder = new GO_Base_Fs_Folder($this->path().$subfolder);
 		if($folder->exists()){
+			
 			$items = $folder->ls();
 			
 			foreach($items as $item){
 				if($item instanceof GO_Base_Fs_File){
-					$className = 'GO_'.ucfirst($this->id()).'_Model_'.$item->nameWithoutExtension();
-					
-					$class = new ReflectionClass($className);
-					if(!$class->isAbstract()){					
-						$models[] = $className;
-					}
+					$className = 'GO_'.ucfirst($this->id()).'_'.ucfirst($subfolder).'_'.$item->nameWithoutExtension();					
+					$classes[] = new ReflectionClass($className);					
 				}
 			}
 		}
 		
-		return $models;
+		return $classes;
 	}
 }
