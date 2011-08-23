@@ -60,6 +60,15 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 		
 		return parent::afterDelete();
 	}
+	
+	/**
+	 * Check if the module is available on disk.
+	 * 
+	 * @return boolean 
+	 */
+	public function isAvailable(){
+		return is_dir($this->path);
+	}
 
 //	protected function getName() {
 //		return GO::t('name', $this->id);// isset($lang[$this->id]['name']) ? $lang[$this->id]['name'] : $this->id;
