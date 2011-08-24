@@ -72,9 +72,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	}
 
 	protected function afterSave($wasNew) {
-
-		if (isset(GO::modules()->customfields))
-			GO_Customfields_Controller_Item::saveCustomFields($this, "GO_Addressbook_Model_ContactCustomFieldsRecord");
+// Obsolete according to Merijn.
+//		if (isset(GO::modules()->customfields))
+//			GO_Customfields_Controller_Item::saveCustomFields($this, "GO_Addressbook_Model_ContactCustomFieldsRecord");
 
 		return parent::afterSave($wasNew);
 	}
