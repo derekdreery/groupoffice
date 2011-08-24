@@ -176,7 +176,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * @var array Holds all the column properties indexed by the field name.
 	 * 
-	 * eg: 'id'=>array('type'=>PDO::PARAM_INT,'required'=>true,'length'=><max length of the value>, 'validator'=><a function to call to validate the value>)
+	 * eg: 'id'=>array(
+	 * 'type'=>PDO::PARAM_INT,
+	 * 'required'=>true,
+	 * 'length'=><max length of the value>, 
+	 * 'validator'=><a function to call to validate the value>,
+	 * 'gotype'=>'number|text|unixtimestamp',
+	 * 'decimals'=>2//only for gotype=number)
 	 * 
 	 * The validator looks like this:
 	 * 
@@ -185,7 +191,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 	 */
 	protected $columns=array(
-				'id'=>array('type'=>PDO::PARAM_INT,'required'=>true,'length'=>null, 'validator'=>null)
+				'id'=>array('type'=>PDO::PARAM_INT,'required'=>true,'length'=>null, 'validator'=>null,)
 			);	
 	
 	private $_new=true;
@@ -238,10 +244,25 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 						case 'int':
 						case 'tinyint':
 						case 'bigint':
+						
 							$pdoType = PDO::PARAM_INT;
+							if($length==1 && $type=='tinyint')
+								$gotype='boolean';
+							else
+								$gotype = '';
+							
 							$length = 0;
-							$gotype = '';
+							
+							break;		
+						
+						case 'float':
+						case 'double':
+							$pdoType = PDO::PARAM_STR;
+							$length = 0;
+							$gotype = 'number';
 							break;
+						
+							
 
 						case 'text':
 							$gotype = 'textarea';
@@ -783,7 +804,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				
 				$field = $arr[0];
 				$value= $arr[1];
-				$comparator=isset($arr[2]) ? $arr[2] : '=';
+				$comparator=isset($arr[2]) ? strtoupper($arr[2]) : '=';
 
 				if($first)
 				{
@@ -793,11 +814,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					$sql .= $params['byOperator'].' ';
 				}
 				
-				if($comparator=='IN'){
+				if($comparator=='IN' || $comparator=='NOT IN'){
+					
+					//prevent sql error on empty value
+					if(!count($value))
+						$value=array(0);
+					
 					for($i=0;$i<count($value);$i++)
 						$value[$i]=$this->getDbConnection()->quote($value[$i], $this->columns[$field]['type']);
-					
+
 					$sql .= "`$field` $comparator (".implode(',',$value).") ";
+					
+						
 				}else
 				{
 					if(!isset($this->columns[$field]['type']))
@@ -1042,6 +1070,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				case 'unixtimestamp':
 					$formatted[$key] = GO_Base_Util_Date::to_unixtime($value);
 					break;			
+				case 'number':
+					$formatted[$key] = GO_Base_Util_Number::unlocalize($value);
+					break;
+				case 'boolean':
+					$formatted[$key] = empty($value) ? 0 : 1; 
+					break;
 
 				default:
 					$formatted[$key] = $value;
@@ -1078,6 +1112,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					{
 						$formatted[$key] = $value;
 					}
+					break;
+					
+				case 'number':
+					$decimals = isset($this->columns[$key]['decimals']) ? $this->columns[$key]['decimals'] : 2;
+					$formatted[$key] = GO_Base_Util_Number::localize($value, $decimals);
 					break;
 				default:
 					$formatted[$key] = $value;//htmlspecialchars($value,ENT_QUOTES,'UTF-8');
@@ -1696,7 +1735,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function setAttribute($name,$value)
 	{
-		
 		if(property_exists($this,$name)){
 			$this->$name=$value;
 		}elseif(isset($this->columns[$name])){

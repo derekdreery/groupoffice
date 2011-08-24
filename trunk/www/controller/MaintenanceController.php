@@ -126,7 +126,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 					$currentVersion = GO::modules()->$module->version;
 				
 				if(!isset($counts[$module]))
-					$counts[$module]=1000;				//start at 100 for 3.x update system.	
+					$counts[$module]=0;			
 				
 				foreach ($queries as $query) {
 					$counts[$module]++;

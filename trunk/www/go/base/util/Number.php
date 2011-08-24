@@ -34,9 +34,9 @@ class GO_Base_Util_Number {
 	 * @return string
 	 */
 
-	public static function format($number, $decimals=2)
+	public static function localize($number, $decimals=2)
 	{		
-		return number_format(floatval($number), $decimals, $_SESSION['GO_SESSION']['decimal_separator'], $_SESSION['GO_SESSION']['thousands_separator']);
+		return number_format(floatval($number), $decimals, GO::user()->decimal_separator, GO::user()->thousands_separator);
 	}
 
 	/**
@@ -48,10 +48,10 @@ class GO_Base_Util_Number {
 	 * @return string
 	 */
 
-	public static function to_phpnumber($number)
-	{
-		$number = str_replace($_SESSION['GO_SESSION']['thousands_separator'],'', $number);
-		return floatval(str_replace($_SESSION['GO_SESSION']['decimal_separator'],'.',$number));
+	public static function unlocalize($number)
+	{	
+		$number = str_replace(GO::user()->thousands_separator,'', $number);
+		return floatval(str_replace(GO::user()->decimal_separator,'.',$number));
 	}
 
 	/**
@@ -63,29 +63,29 @@ class GO_Base_Util_Number {
 	 * @return string
 	 */
 
-	public static function format_size($size, $decimals = 1) {
+	public static function formatSize($size, $decimals = 1) {
 		
 		if($size==0)
 			return 0;
 		
 		switch ($size) {
 			case ($size > 1073741824) :
-				$size = number_format($size / 1073741824, $decimals, $_SESSION['GO_SESSION']['decimal_separator'], $_SESSION['GO_SESSION']['thousands_separator']);
+				$size = self::localize($size / 1073741824, $decimals);
 				$size .= " GB";
 				break;
 
 			case ($size > 1048576) :
-				$size = number_format($size / 1048576, $decimals, $_SESSION['GO_SESSION']['decimal_separator'], $_SESSION['GO_SESSION']['thousands_separator']);
+				$size = self::localize($size / 1048576, $decimals);
 				$size .= " MB";
 				break;
 
 			case ($size > 1024) :
-				$size = number_format($size / 1024, $decimals, $_SESSION['GO_SESSION']['decimal_separator'], $_SESSION['GO_SESSION']['thousands_separator']);
+				$size = self::localize($size / 1024, $decimals);
 				$size .= " KB";
 				break;
 
 			default :
-				$size = number_format($size, $decimals, $_SESSION['GO_SESSION']['decimal_separator'], $_SESSION['GO_SESSION']['thousands_separator']);
+				$size = self::localize($size, $decimals);
 				$size .= " bytes";
 				break;
 		}
