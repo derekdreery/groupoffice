@@ -165,8 +165,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 							if($module=='core')
 								GO::config()->save_setting('version', $counts[$module]);
 							else{
-								GO::modules()->$module->version=$counts[$module];
-								GO::modules()->$module->save();
+								
+								//echo $module.' updated to '.$counts[$module]."\n";
+								
+								$moduleModel = GO::modules()->$module;
+								
+								$moduleModel->version=$counts[$module];
+								$moduleModel->save();
 							}
 							flush();
 						}
