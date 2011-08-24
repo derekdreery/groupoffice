@@ -40,3 +40,6 @@ $updates[201108181012][]="ALTER TABLE `go_users`
   DROP `work_city`,
   DROP `work_fax`,
   DROP `contact_id`;";
+
+
+$updates[201108240000][]="UPDATE go_modules SET version=0";
