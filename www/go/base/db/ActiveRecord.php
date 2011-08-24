@@ -602,8 +602,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$sql .= "t.*".$aclJoin['fields'].' ';
 		
-		
-		$joinCf = !empty($params['joinCustomFields']) && $this->linkType()>0 && GO::modules()->customfields->permissionLevel;
+
+		$joinCf = !empty($params['joinCustomFields']) && $this->linkType()>0 && isset(GO::modules()->customfields) && GO::modules()->customfields->permissionLevel;
 		
 		if($joinCf)			
 			$sql .= ",cf_".$this->linkType().".* ";
@@ -982,7 +982,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				if($r[$name]['type']==self::BELONGS_TO)
 				{
 					//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
-					$this->_relatedCache[$name]= call_user_func(array($model,'model'))->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name));
+					$this->_relatedCache[$name]= call_user_func(array($model,'model'))->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true);
 				}else
 				{
 					//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
