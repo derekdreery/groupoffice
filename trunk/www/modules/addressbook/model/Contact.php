@@ -13,6 +13,9 @@
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
  */
 
+/**
+ * @property String $name Full name of the contact
+ */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	
@@ -60,7 +63,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 *
 	 * @return String Full formatted name of the user
 	 */
-	public function getName(){
+	protected function getName(){
 		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name);
 	}
 
