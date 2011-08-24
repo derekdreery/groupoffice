@@ -36,6 +36,6 @@ class GO_Base_Model_ModelCollection{
 	}
 	
 	public function getAll(){
-		return $this->model->find(array('ignoreAcl'=>true));
+		return $this->model->find();
 	}
 }
