@@ -141,7 +141,7 @@ class smime extends db{
 		
 	}
 	
-	public function decrypt_message(&$message, cached_imap $imap){
+	public static function decrypt_message(&$message, cached_imap $imap){
 		
 		global $GO_MODULES, $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $lang;
 			
