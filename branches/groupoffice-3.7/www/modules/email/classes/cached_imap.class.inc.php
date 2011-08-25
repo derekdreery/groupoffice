@@ -227,10 +227,10 @@ class cached_imap extends imap{
 		* @return void
 		*/
 
-	public function delete($messages) {
+	public function delete($messages, $expunge=true) {
 		if(count($messages))
 		{
-			if(parent::delete($messages))
+			if(parent::delete($messages, $expunge))
 			{
 				$this->delete_cached_messages($messages);
 				return true;
@@ -247,10 +247,10 @@ class cached_imap extends imap{
 		* @access public
 		* @return bool True on success
 		*/
-	public function move($uids, $mailbox) {
+	public function move($uids, $mailbox, $expunge=true) {
 		if(count($uids))
 		{
-			if(parent::move($uids, $mailbox))
+			if(parent::move($uids, $mailbox, $expunge))
 			{
 				$this->delete_cached_messages($uids);
 				return true;
@@ -356,7 +356,7 @@ class cached_imap extends imap{
 	}
 
 
-	public function get_message_part($uid, $message_part=0, $peek=false) {
+	public function get_message_part($uid, $message_part=0, $peek=false, $max=false) {
 		
 		go_debug("imap::get_message_part($uid, $message_part, $peek)");
 
@@ -366,17 +366,17 @@ class cached_imap extends imap{
 			}
 		}
 
-		return parent::get_message_part($uid, $message_part, $peek);
+		return parent::get_message_part($uid, $message_part, $peek, $max);
 	}
 
-	public function get_message_header($uid){
+	public function get_message_header($uid, $full_data=false){
 		$this->get_cached_messages($this->folder['id'], array($uid));
 		$record = $this->email->next_record();
 
 		if($record)
 			return $record;
 		else
-			return parent::get_message_header($uid);
+			return parent::get_message_header($uid, $full_data);
 	}
 
 
