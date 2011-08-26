@@ -113,7 +113,10 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			this.formPanel.add(this._tabPanel);
 		} else if (this._panels.length==1) {
 			this.formPanel.items = this._panels[0].items;
-			this.formPanel.cls='go-form-panel';
+			
+			if(this._panels[0].cls)
+				this.formPanel.cls=this._panels[0].cls;
+			
 			delete this._panels[0];
 		}
 		
@@ -236,8 +239,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 					if(this.permissionsPanel && action.result.data[this.permissionsPanel.fieldName])
 						this.permissionsPanel.setAcl(action.result.data[this.permissionsPanel.fieldName]);
 
-					this.afterLoad(remoteModelId, config, action);
 					GO.dialog.TabbedFormDialog.superclass.show.call(this);
+					this.afterLoad(remoteModelId, config, action);
 				},
 				failure:function(form, action)
 				{
