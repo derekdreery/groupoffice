@@ -380,7 +380,7 @@ class String {
 	 * @return void
 	 */
 	public static function get_email_from_string($email) {
-		if (preg_match(String::get_email_validation_regex(), $email, $matches)) {
+		if (preg_match("/(\b)([\w\.\-+']+)(@)([\w\.-]+)([a-z]{2,6})\b/i", $email, $matches)) {
 			return $matches[0];
 		} else {
 			return false;
