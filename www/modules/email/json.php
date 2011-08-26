@@ -352,7 +352,7 @@ try {
 			$content = $ml->get_message_for_client($id, $path, $part_number, $task=='forward', true);
 		}
 
-		//go_debug($content);
+		go_debug($content);
 
 		switch($task) {
 			case "reply":
