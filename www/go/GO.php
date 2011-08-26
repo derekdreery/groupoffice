@@ -25,7 +25,7 @@ class GO{
 	 * 
 	 * @var boolean 
 	 */
-	public static $ignoreAclPerissions=false;
+	public static $ignoreAclPermissions=false;
 	
 	/**
 	 * This GO_Base_Model_ModelCache.php mechanism can consume a lot of memory 

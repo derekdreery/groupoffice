@@ -594,6 +594,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		//GO::debug($params);
 		
 		
+		if(GO::$ignoreAclPermissions)
+			$params['ignoreAcl']=true;
+		
 		if(!isset($params['userId'])){			
 			$params['userId']=GO::user() ? GO::user()->id : 1;
 		}

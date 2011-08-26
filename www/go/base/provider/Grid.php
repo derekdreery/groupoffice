@@ -276,7 +276,8 @@ class GO_Base_Provider_Grid {
         'order' => $sort,
         'orderDirection' => isset($_REQUEST['dir']) ? $_REQUEST['dir'] : '',
 				'joinCustomFields'=>true,
-        'calcFoundRows'=>true
+        'calcFoundRows'=>true,
+				'permissionLevel'=> isset($_REQUEST['permissionLevel']) ? $_REQUEST['permissionLevel'] : GO_Base_Model_Acl::READ_PERMISSION
     ), $params);
   }
 
