@@ -297,12 +297,42 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		//todo build in new style. Now it's necessary for old library functions
 		require_once(GO::config()->root_path.'Group-Office.php');
 
-		$response['data'] = $model->getAttributes();
+		$response['data'] = $model->getAttributes('html');
 		$response['data']['model']=$model->className();
 		$response['success'] = true;
 		$response['data']['permission_level']=$model->getPermissionLevel();
 		$response['data']['write_permission']=$response['data']['permission_level']>GO_Base_Model_Acl::READ_PERMISSION;
 
+		
+		if($model->customfieldsRecord){
+			$customAttributes = $model->customfieldsRecord->getAttributes('html');
+			
+			//Get all field models and build an array of categories with their
+			//fields for display.
+			$stmt = GO_Customfields_Model_Field::model()->find(array(
+					'where'=>'category.type=:type',
+					'bindParams'=>array('type'=>$model->linkType())
+			));			
+			
+			while($field = $stmt->fetch()){
+				if(!isset($categories[$field->category_id])){
+					$categories[$field->category->id]['id']=$field->category->id;
+					$categories[$field->category->id]['name']=$field->category->name;
+					$categories[$field->category->id]['fields']=array();
+				}
+				$categories[$field->category->id]['fields'][]=array(
+						'name'=>$field->name,
+						'value'=>$customAttributes[$field->columnName()]
+				);				
+			}
+			
+			
+			$response['data']['customfields']=array_values($categories);
+			
+		}else
+		{
+			$response['data']['customfields']=array();
+		}
 
 	
 		require_once(GO::config()->class_path . '/base/search.class.inc.php');
@@ -345,15 +375,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 			$response['data']['comments'] = $comments->get_comments_json($response['data']['id'], $model->linkType());
 		}
-
-		if (GO::modules()->customfields && $model->customFieldsModel() && !isset($response['data']['customfields'])) {
-			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
-			$cf = new customfields();		
-			
-			$response['data']['customfields'] = $cf->get_all_fields_with_values(GO::session()->values['user_id'], $model->linkType(), $response['data']['id']);
-		}
-
-
 
 		$response = $this->afterDisplay($response, $model);
 
