@@ -8,7 +8,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	public function actionBuildSearchCache() {
 		$response = array();
 		
-		GO::$ignoreAclPerissions=true; //allow this script access to all
+		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '300');
 		
@@ -24,7 +24,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	public function actionCheckDatabase() {
 		$response = array();
 		
-		GO::$ignoreAclPerissions=true; //allow this script access to all
+		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '300');
 		
@@ -38,7 +38,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 	public function actionUpgrade($params) {
 
-		GO::$ignoreAclPerissions=true; //allow this script access to all
+		GO::$ignoreAclPermissions=true; //allow this script access to all
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '300');
 		
@@ -74,7 +74,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		echo "Updating Group-Office database\n";
 			
 		
-		GO::$ignoreAclPerissions = true;
+		GO::$ignoreAclPermissions = true;
 
 		
 		//build an array of all update files. The queries are indexed by timestamp
