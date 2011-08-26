@@ -311,7 +311,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			//fields for display.
 			$stmt = GO_Customfields_Model_Field::model()->find(array(
 					'where'=>'category.type=:type',
-					'bindParams'=>array('type'=>$model->linkType())
+					'bindParams'=>array('type'=>$model->linkType()),
+					'order'=>array('category.sort_index','t.sort_index'),
+					'orderDirection'=>array('ASC','ASC')
 			));			
 			
 			while($field = $stmt->fetch()){

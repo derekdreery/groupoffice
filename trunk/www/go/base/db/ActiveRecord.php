@@ -718,10 +718,25 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(isset($params['having']))
 			$sql.="\nHAVING ".$params['having'];
 		
-		if(!empty($params['order']) && isset($this->columns[$params['order']])){
-			$sql .= "\nORDER BY ".$this->_quoteColumnName($params['order']).' ' ;
-			if(!empty($params['orderDirection'])){
-				$sql .= $params['orderDirection'].' ';
+		if(!empty($params['order'])){
+			$sql .= "\nORDER BY ";
+			
+			if(!is_array($params['order']))
+				$params['order']=array($params['order']);
+			
+			if(!isset($params['orderDirection'])){
+				$params['orderDirection']=array('ASC');
+			}elseif(!is_array($params['orderDirection'])){
+				$params['orderDirection']=array($params['orderDirection']);
+			}
+			
+			for($i=0;$i<count($params['order']);$i++){
+				if($i>0)
+					$sql .= ',';
+				
+				$sql .= $this->_quoteColumnName($params['order'][$i]).' ';
+				if(isset($params['orderDirection'][$i]))
+					$sql .= $params['orderDirection'][$i].' ';
 			}
 		}
 		
