@@ -174,7 +174,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * array(
 				'requestParam'=>'notes_categories_filter', //The name of the request parameter sent by the view. 
 				'permissionsModel'=>'GO_Notes_Model_Category', //The model to check permissions. 
-				'titleAttribute'=>'name' //Only set this if your grid needs the names of the perissionsmodel in the title.
+				'titleAttribute'=>'name' //Only set this if your grid needs the names of the permissionsmodel in the title.
 				);
 	 */
 	protected function getGridmultiSelectProperties(){
@@ -192,9 +192,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * Override this function to supply additional parameters to the 
 	 * GO_Base_Db_ActiveRecord->find() function
 	 * 
+	 * @var array() $params The request parameters of actionGrid
+	 * 
 	 * @return array parameters for the GO_Base_Db_ActiveRecord->find() function 
 	 */
-	protected function getGridParams() {
+	protected function getGridParams($params) {
 		return array();
 	}
 
@@ -265,7 +267,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 
 		$this->prepareGrid($grid);
-		$gridParams = array_merge($grid->getDefaultParams(),$this->getGridParams());
+		$gridParams = array_merge($grid->getDefaultParams(),$this->getGridParams($params));
 		
 			
 		$grid->setStatement(call_user_func(array($modelName,'model'))->find($gridParams));

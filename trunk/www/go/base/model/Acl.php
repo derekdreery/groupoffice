@@ -37,7 +37,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	public static function getUserPermissionLevel($aclId, $userId=0, $checkGroupPermissionOnly=false) {
 		
 		//Scripts can set this variable to ignore permissions
-		if(GO::$ignoreAclPerissions){
+		if(GO::$ignoreAclPermissions){
 			return self::MANAGE_PERMISSION;
 		}
 		
