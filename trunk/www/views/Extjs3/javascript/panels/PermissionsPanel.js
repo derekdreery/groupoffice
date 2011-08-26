@@ -326,11 +326,9 @@ GO.grid.PermissionsPanel = Ext.extend(Ext.Panel, {
 		this.aclGroupsStore.baseParams['acl_id'] = acl_id;
 		this.aclUsersStore.baseParams['acl_id'] = acl_id;
 		this.setDisabled(GO.util.empty(acl_id));
-
+		
 		if (this.isVisible()) {
-			this.aclGroupsStore.load();
-			this.aclUsersStore.load();
-			this.loaded = true;
+			this.loadAcl();
 		}
 	},
 
