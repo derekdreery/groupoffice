@@ -11,7 +11,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 				);
 	}	
 	
-	protected function getGridParams(){
+	protected function getGridParams($params){
 		return array(
 				'ignoreAcl'=>true,
 				'joinCustomFields'=>true,

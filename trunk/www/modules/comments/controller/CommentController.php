@@ -4,7 +4,7 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 	protected $model = 'GO_Comments_Model_Comment';
 
 
-	protected function getGridParams(){
+	protected function getGridParams($params){
 
 		return array(
 				'by' => array(array('link_id',$_REQUEST['link_id'],'='),array('link_type',$_REQUEST['link_type'],'=')),

@@ -391,7 +391,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			$ret['relation']=$arr[0];
 			$ret['aclField']=$arr[1];
-			$ret['join']='INNER JOIN `'.$model->tableName.'` '.$ret['relation'].' ON ('.$ret['relation'].'.`'.$model->primaryKey.'`=t.`'.$r[$arr[0]]['field'].'`) ';
+			$ret['join']='INNER JOIN `'.$model->tableName().'` '.$ret['relation'].' ON ('.$ret['relation'].'.`'.$model->primaryKey().'`=t.`'.$r[$arr[0]]['field'].'`) ';
 			$ret['fields']='';
 			
 			$cols = $model->getColumns();
