@@ -1279,11 +1279,18 @@ class calendar extends db {
 	function update_event(&$event, $calendar=false, $old_event=false, $update_related=true, $update_related_status=true) {
 
 		go_debug('calendar::update_event');
-
+		
+		GLOBAL $GO_EVENTS;
+		
+    $GO_EVENTS->fire_event('before_update_event', array(&$event,&$before_event_response));
 		
 		if(!$old_event) {
 			$old_event = $this->get_event($event['id']);
 		}
+		$event = array_merge($old_event, $event);
+		unset($event['acl_id']);
+		
+		$GO_EVENTS->fire_event('before_update_event', array(&$event,&$before_event_response));
 
 		if(isset($event['name']) && strlen($event['name'])>150){
 			$event['name']=substr($event['name'],0,150);
@@ -1443,6 +1450,8 @@ class calendar extends db {
 			}
 		}
 
+		$GO_EVENTS->fire_event('calendar_update_event', array($event, $before_event_response));
+		
 		return $r;
 	}
 
