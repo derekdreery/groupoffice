@@ -1528,6 +1528,8 @@ class addressbook extends db {
 		if($offset > 0) {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 		}
+		
+		go_debug($sql);
 
 		$this->query($sql);
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
