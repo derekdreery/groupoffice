@@ -10,7 +10,7 @@ if(!class_exists('GO', false)){
 }
 
 
-GO::$ignoreAclPerissions=true;
+GO::$ignoreAclPermissions=true;
 
 $ab = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name', 'Users');//GO::t('users','base'));
 if(!$ab){

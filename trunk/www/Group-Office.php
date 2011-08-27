@@ -200,8 +200,9 @@ unset($type);
 define('GO_LOADED', true);
 
 //undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
-if (get_magic_quotes_gpc())
+if (get_magic_quotes_gpc() && !class_exists('GO'))
 {
+	
 	function stripslashes_array($data) {
 		if (is_array($data)){
 			foreach ($data as $key => $value){
