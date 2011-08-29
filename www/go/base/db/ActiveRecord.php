@@ -632,8 +632,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 		$joinCf = !empty($params['joinCustomFields']) && $this->customfieldsModel()>0 && isset(GO::modules()->customfields) && GO::modules()->customfields->permissionLevel;
 		
-		if($joinCf)			
-			$sql .= ",cf_".$this->linkType().".* ";
+		if($joinCf){
+			
+			$cfModel = call_user_funct($this->customfieldsModel(), 'model');
+			
+			$sql .= ",".$cfModel->tableName().".* ";
+		}
 		
 		
 		$sql .= "\nFROM `".$this->tableName()."` t ".$aclJoin['join'];
@@ -648,7 +652,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
     
 		
 		if($joinCf)			
-			$sql .= "\nLEFT JOIN cf_".$this->linkType()." ON cf_".$this->linkType().".link_id=t.id ";
+			$sql .= "\nLEFT JOIN ".$cfModel->tableName()." cf ON cf.id=t.id ";
 		
 		if(isset($params['join']))
 			$sql .= $params['join'];
@@ -758,6 +762,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$GLOBALS['query_count']++;
 		
 		if(isset($params['bindParams'])){			
+			GO::debug($params['bindParams']);
 			$result = $this->getDbConnection()->prepare($sql);
 			$result->execute($params['bindParams']);
 		}else

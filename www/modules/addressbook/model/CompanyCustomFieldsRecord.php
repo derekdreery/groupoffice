@@ -1,7 +1,7 @@
 <?php
 class GO_Addressbook_Model_CompanyCustomFieldsRecord extends GO_Customfields_Model_AbstractCustomFieldsRecord{
-	public function linkType(){
-		return 3;
+	public function extendsModel() {		
+		return "GO_Addressbook_Model_Company";
 	}
 	
 	/**

@@ -5,7 +5,7 @@ if(isset($GLOBALS['GO_MODULES']->modules['customfields']))
 {
 	require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 	$cf = new customfields();
-	$GO_SCRIPTS_JS .= $cf->get_javascript(4, $lang['notes']['notes']);
+	$GO_SCRIPTS_JS .= $cf->get_javascript("GO_Notes_Model_Note", $lang['notes']['notes']);
 }
 
 //require_once($GLOBALS['GO_MODULES']->modules['notes']['class_path'].'notes.class.inc.php');

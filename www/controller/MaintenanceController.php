@@ -72,10 +72,6 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		
 		echo "Updating Group-Office database\n";
-			
-		
-		GO::$ignoreAclPermissions = true;
-
 		
 		//build an array of all update files. The queries are indexed by timestamp
 		//so they will all be executed in the right order.

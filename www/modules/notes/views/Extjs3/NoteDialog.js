@@ -13,7 +13,8 @@
  
 GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
-	customFieldType : 4,
+	customFieldType : "GO_Notes_Model_Note",
+	
 	initComponent : function(){
 		
 		Ext.apply(this, {

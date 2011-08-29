@@ -1,6 +1,8 @@
 <?php
 class GO_Addressbook_Model_ContactCustomFieldsRecord extends GO_Customfields_Model_AbstractCustomFieldsRecord{
-	
+	public function extendsModel() {		
+		return "GO_Addressbook_Model_Contact";
+	}
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -10,8 +12,5 @@ class GO_Addressbook_Model_ContactCustomFieldsRecord extends GO_Customfields_Mod
 	public static function model($className=__CLASS__)
 	{	
 		return parent::model($className);
-	}
-	public function linkType(){
-		return 2;
 	}
 }
