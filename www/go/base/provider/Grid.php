@@ -31,6 +31,8 @@ class GO_Base_Provider_Grid {
 	
 	private $_columnModelProvided=false;
 	
+	private $_modelFormatType='formatted';
+	
   /**
    * See function formatColumn for a detailed description about how to use the format parameter.
    *
@@ -134,6 +136,14 @@ class GO_Base_Provider_Grid {
       }
     }
 	}
+	
+	/**
+	 * Set the format type used in the GO_Base_Db_ActiveRecord
+	 * @param string $type @see GO_Base_Db_ActiveRecord::getAttributes()
+	 */
+	public function setModelFormatType($type){
+		$this->_modelFormatType=$type;
+	}
 
   /**
    * Add columns to the grid and give the format in how to parse the value of this column.
@@ -203,7 +213,7 @@ class GO_Base_Provider_Grid {
    */
   public function formatModelForGrid($model){
     
-    $array = $model->getAttributes();
+    $array = $model->getAttributes($this->_modelFormatType);
     
     /**
      * The extract function makes the array keys available as variables in the current function scope.
