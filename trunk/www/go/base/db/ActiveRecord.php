@@ -616,7 +616,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$sql = "SELECT ";
 		
 		if(!empty($params['distinct']))
-			$sql .= "DISTINCT";
+			$sql .= "DISTINCT ";
 		
 		if(!empty($params['calcFoundRows']) && !empty($params['limit']) && empty($params['start'])){
 			
@@ -624,10 +624,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
 		
-		$sql .= "t.*".$aclJoin['fields'].' ';
+		if(empty($params['fields']))
+			$params['fields']='t.*';
+		
+		$sql .= $params['fields'].$aclJoin['fields'].' ';
 		
 
-		$joinCf = !empty($params['joinCustomFields']) && $this->linkType()>0 && isset(GO::modules()->customfields) && GO::modules()->customfields->permissionLevel;
+		$joinCf = !empty($params['joinCustomFields']) && $this->customfieldsModel()>0 && isset(GO::modules()->customfields) && GO::modules()->customfields->permissionLevel;
 		
 		if($joinCf)			
 			$sql .= ",cf_".$this->linkType().".* ";
@@ -703,7 +706,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			$pk = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
 			
-			$sql .= "\nGROUP BY `".implode('`,`', $pk)."` ";			
+			$sql .= "\nGROUP BY t.`".implode('`,t.`', $pk)."` ";			
 			if(isset($query['group']))
 				$sql .= ", ";
 			
