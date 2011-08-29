@@ -453,6 +453,10 @@ class GO{
 		self::$_outputStream->write($str);
 	}
 	
+	public static function setOutputStream($outputStream){
+		self::$_outputStream=$outputStream;
+	}
+	
 	
 	
 	public static function memdiff() {
