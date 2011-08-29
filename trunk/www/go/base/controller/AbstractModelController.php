@@ -310,8 +310,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			//Get all field models and build an array of categories with their
 			//fields for display.
 			$stmt = GO_Customfields_Model_Field::model()->find(array(
-					'where'=>'category.type=:type',
-					'bindParams'=>array('type'=>$model->linkType()),
+					'where'=>'category.extends_model=:extends_model',
+					'bindParams'=>array('extends_model'=>$model->customfieldsRecord->extendsModel()),
 					'order'=>array('category.sort_index','t.sort_index'),
 					'orderDirection'=>array('ASC','ASC')
 			));			

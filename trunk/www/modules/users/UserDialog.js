@@ -12,7 +12,7 @@
  */
  GO.users.UserDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	
-	customFieldType : 8,
+	customFieldType : "GO_Base_Model_User",
 	initComponent : function(){
 		
 		Ext.apply(this, {

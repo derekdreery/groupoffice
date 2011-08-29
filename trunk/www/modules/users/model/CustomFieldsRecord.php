@@ -11,7 +11,7 @@ class GO_Users_Model_CustomFieldsRecord extends GO_Customfields_Model_AbstractCu
 	{	
 		return parent::model($className);
 	}
-	public function linkType(){
-		return 8;
+	public function extendsModel() {
+		return "GO_Base_Model_User";
 	}
 }

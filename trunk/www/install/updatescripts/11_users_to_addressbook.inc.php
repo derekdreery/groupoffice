@@ -12,7 +12,7 @@ if(!class_exists('GO', false)){
 
 GO::$ignoreAclPermissions=true;
 
-$ab = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('name', 'Users');//GO::t('users','base'));
+$ab = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', '1');//GO::t('users','base'));
 if(!$ab){
 	
 //	$pdo->query("ALTER TABLE `ab_addressbooks` CHANGE `acl_read` `acl_id` INT( 11 ) NOT NULL DEFAULT '0'");
@@ -33,7 +33,7 @@ if(!$ab){
 //	$pdo->query("ALTER TABLE `ab_contacts` DROP `link_id` ");
 	
 	$ab = new GO_Addressbook_Model_Addressbook();
-	$ab->name='Users';//GO::t('users','base');
+	$ab->name=GO::t('users');
 	$ab->users=true;
 	$ab->save();
 
