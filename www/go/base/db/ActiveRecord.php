@@ -24,6 +24,7 @@
  * @property string $module Name of the module this model belongs to
  * @property boolean $isNew Is the model new and not inserted in the database yet.
  * @property GO_Customfields_Model_AbstractCustomFieldsRecord $customfieldsRecord
+ * @property String $localizedName The localized human friendly name of this model.
  */
 
 abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
@@ -71,8 +72,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
 	 */
-	public function linkType(){
-		return false;
+	public function linkModelId(){		
+		return GO_Base_Model_LinkModel::model()->findByModelName($this->className());		
+	}
+	
+	/**
+	 * Get the localized human friendly name of this model.
+	 * This function must be overriden.
+	 * 
+	 * @return String 
+	 */
+	protected function getLocalizedName(){
+		return $this->className();
 	}
 	
 	
@@ -1437,7 +1448,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		if($attr){
 
-			$model =GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkType()));
+			$model =GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkModelId()));
 			if(!$model)
 				$model = new GO_Base_Model_SearchCacheRecord();
 			
@@ -1445,11 +1456,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 			$autoAttr = array(
 				'id'=>$this->pk,
-				'link_type'=>$this->linkType(),
+				'link_type'=>$this->linkModelId(),
 				'user_id'=>isset($this->user_id) ? $this->user_id : GO::session()->values['user_id'],
 				'module'=>$this->module,
 				'name' => '',
-				'link_type'=>$this->linkType(),
+				'link_type'=>$this->linkModelId(),
 				'description'=>'',		
 				'type'=>'',
 				'keywords'=>$this->_getSearchCacheKeywords($attr['type']),
@@ -1653,7 +1664,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$attr = $this->getCacheAttributes();
 		
 		if($attr){
-			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkType()));
+			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$this->pk,'link_type'=>$this->linkModelId()));
 			if($model)
 				$model->delete();
 		}
@@ -1890,7 +1901,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			GO_Base_Model_SearchCacheRecord::model()->deleteBy(array(
 					'by'=>array(
-							array('link_type',$this->linkType())
+							array('link_type',$this->linkModelId())
 							)
 						)
 					);

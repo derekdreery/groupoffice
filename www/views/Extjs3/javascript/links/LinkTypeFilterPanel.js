@@ -19,11 +19,10 @@ GO.LinkTypeFilterPanel = function(config)
 		config.title=GO.lang.strType;
 
 	if(!GO.linkTypesStore){
-		GO.linkTypesStore= new Ext.data.JsonStore({
-				root: 'results',
-				data: {"results":GO.linkTypes}, //defined in /default_scripts.inc.php
-				fields: ['id','name', 'checked'],
-				id:'id'
+		GO.linkTypesStore= new GO.data.JsonStore({				
+				fields: ['id','name','model', 'checked'],
+				url:GO.url('core/linkModels'),
+				autoLoad:true
 			});
 	}
 

@@ -72,7 +72,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			//Nicer would be $model->linkTo($othermodel);
 			$link_props = explode(':', $_POST['link']);
 			$GO_LINKS->add_link(
-							($link_props[1]), ($link_props[0]), $model->pk, $model->linkType());
+							($link_props[1]), ($link_props[0]), $model->pk, $model->linkModelId());
 		}
 
 		$this->afterSubmit($response, $model, $params);
@@ -341,7 +341,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$search = new search();
 
 		if (/* !in_array('links', $hidden_sections) && */!isset($response['data']['links'])) {
-			$links_json = $search->get_latest_links_json(GO::session()->values['user_id'], $response['data']['id'], $model->linkType());
+			$links_json = $search->get_latest_links_json(GO::session()->values['user_id'], $response['data']['id'], $model->linkModelId());
 			$response['data']['links'] = $links_json['results'];
 		}
 
@@ -349,14 +349,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'] . 'tasks.class.inc.php');
 			$tasks = new tasks();
 
-			$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $model->linkType());
+			$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $model->linkModelId());
 		}
 
 		if (isset(GO::modules()->calendar)/* && !in_array('events', $hidden_sections) */) {
 			require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'] . 'calendar.class.inc.php');
 			$cal = new calendar();
 
-			$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $model->linkType());
+			$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $model->linkModelId());
 		}
 
 		if (/* !in_array('files', $hidden_sections) && */!isset($response['data']['files'])) {
@@ -375,7 +375,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			require_once ($GLOBALS['GO_MODULES']->modules['comments']['class_path'].'comments.class.inc.php');
 			$comments = new comments();
 
-			$response['data']['comments'] = $comments->get_comments_json($response['data']['id'], $model->linkType());
+			$response['data']['comments'] = $comments->get_comments_json($response['data']['id'], $model->linkModelId());
 		}
 
 		$response = $this->afterDisplay($response, $model);
