@@ -87,11 +87,32 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		else
 			$this->redirect();
 	}	
+	
+	
+	public function actionSearch($params){
+		
+		$grid = new GO_Base_Provider_Grid();		    
+		$stmt = GO_Base_Model_SearchCacheRecord::model()->find($grid->getDefaultParams());
+		$grid->setStatement($stmt);
+		
+		return $grid->getData();		
+	}
+	
+	
+	public function actionLinkModels(){
+		$grid = new GO_Base_Provider_Grid();		    
+		$stmt = GO_Base_Model_LinkModel::model()->find($grid->getDefaultParams());
+		$grid->setStatement($stmt);
+		$grid->formatColumn('name', 'call_user_func(array($model->model_name,"model"))->localizedName');	
+		
+		return $grid->getData();		
+	}
+	
 
 	/**
 	 * Todo replace compress.php with this action
 	 */
-	protected function actionCompress() {
+	public function actionCompress() {
 		
 	}
 

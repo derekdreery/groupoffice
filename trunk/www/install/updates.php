@@ -43,3 +43,9 @@ $updates[201108181012][]="ALTER TABLE `go_users`
 
 
 $updates[201108240000][]="UPDATE go_modules SET version=0";
+
+$updates[201108301656][]="CREATE TABLE IF NOT EXISTS `go_link_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `model` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";

@@ -35,8 +35,9 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	{	
 		return parent::model($className);
 	}
-	public function linkType(){
-		return 4;	
+	
+	public function getLocalizedName(){
+		return GO::t('note','notes');
 	}
 	
 	public function aclField(){
