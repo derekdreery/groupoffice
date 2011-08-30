@@ -577,6 +577,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * join='';
 	 * 
+	 * 'fields'=>'col1,col2' //note if you supply this and the fields do not contain t.* then the system can't return full objects. Arrays will be fetched instead.
+	 * 
 	 *  searchQuery=>"String",
 	 *  joinCustomFields=>false,
    * calcFoundRows=true // Set tot true to return the number of foundRows in the statement (See class GO_Base_Db_ActiveStatement 
@@ -624,8 +626,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
 		
-		if(empty($params['fields']))
+		if(empty($params['fields'])){
 			$params['fields']='t.*';
+			$fetchObject= true;
+		}else
+		{
+			$fetchObject = strpos($params['fields'],'t.*')!==false;
+		}
 		
 		$sql .= $params['fields'].$aclJoin['fields'].' ';
 		
@@ -796,7 +803,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 		
 		//$result->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $this->className());
-		$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
+		if($fetchObject)
+			$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
+		else
+			$result->setFetchMode (PDO::FETCH_ASSOC);
     
     //TODO these values should be set on findByPk too.
     $result->model=$this;
