@@ -46,9 +46,9 @@ GO.grid.SearchPanel = function(config){
 	
 	
 	this.store = new GO.data.JsonStore({
-		url: BaseHref+'json.php',			
+		//url: BaseHref+'json.php',			
+		url: GO.url('core/search'),
 		baseParams: {
-			task: "links",
 			link_id: this.link_id,
 			link_type: this.link_type,
 			folder_id: this.folder_id,
@@ -56,8 +56,8 @@ GO.grid.SearchPanel = function(config){
 		},
 		root: 'results',
 		totalProperty: 'total',
-		id: 'link_and_type',
-		fields: ['icon','link_and_type', 'link_type','name','type','url','mtime','id','module', 'description', 'iconCls', 'type_name'],
+		id: 'id',
+		fields: ['icon','id', 'model_name','name','model_type_id','type','mtime','model_id','module', 'description', 'iconCls', 'type_name'],
 		remoteSort: true
 	});
 	
@@ -208,16 +208,16 @@ Ext.extend(GO.grid.SearchPanel, Ext.Panel, {
 
 		this.previewPanel.getLayout().setActiveItem(0);
 
-		var panelId = 'search_pp_'+record.data.link_type;
+		var panelId = 'search_pp_'+record.data.model_name;
 
 		if(record.data.link_type!='folder'){
 
-			if(!GO.linkPreviewPanels[record.data.link_type]){
+			if(!GO.linkPreviewPanels[record.data.model_name]){
 				this.linkPreviewPanels["search_pp_0"].body.update('Sorry, the preview of this type not implemented yet.');
 			}else
 			{
 				if(!this.linkPreviewPanels[panelId]){
-					this.linkPreviewPanels[panelId] = GO.linkPreviewPanels[record.data.link_type].call(this, {id:panelId});
+					this.linkPreviewPanels[panelId] = GO.linkPreviewPanels[record.data.model_name].call(this, {id:panelId});
 					this.previewPanel.add(this.linkPreviewPanels[panelId]);
 				}
 				

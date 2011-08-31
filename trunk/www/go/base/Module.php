@@ -173,13 +173,13 @@ class GO_Base_Module extends GO_Base_Observable {
 	 */
 	public function buildSearchCache(&$response){		
 		
-		$response[]  = "Building search cache for ".$this->getModule()."\n";		
+		$response[]  = "Building search cache for ".$this->id()."\n";		
 				
 		$models=$this->getModels();
-		
+
 		foreach($models as $model){
-			echo $response[] = "Processing ".$model."\n";
-			$stmt = call_user_func(array($model,'model'))->find(array(
+			echo $response[] = "Processing ".$model->getName()."\n";
+			$stmt = call_user_func(array($model->getName(),'model'))->find(array(
 					'ignoreAcl'=>true
 			));
 			$stmt->callOnEach('rebuildSearchCache');
@@ -201,10 +201,10 @@ class GO_Base_Module extends GO_Base_Observable {
 		
 		
 		foreach($models as $model){			
-			echo "Processing ".$model."\n";
+			echo "Processing ".$model->getName()."\n";
 			flush();
 			
-			$m = call_user_func(array($model,'model'));
+			$m = call_user_func(array($model->getName(),'model'));
 			
 			$stmt = $m->find(array(
 					'ignoreAcl'=>true
@@ -220,14 +220,16 @@ class GO_Base_Module extends GO_Base_Observable {
 	 */
 	public function getModels(){		
 	
+		$models=array();
 		$classes=$this->findClasses('model');
 		foreach($classes as $class){
-				$class = new ReflectionClass($className);
+//			$class = new ReflectionClass($className);
+//			$class->is
 				if(!$class->isAbstract()){					
-					$models[] = $className;
+					$models[] = $class;
 				}
 		}		
-		return $classes;
+		return $models;
 	}
 	
 	public function findClasses($subfolder){

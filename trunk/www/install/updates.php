@@ -44,8 +44,20 @@ $updates[201108181012][]="ALTER TABLE `go_users`
 
 $updates[201108240000][]="UPDATE go_modules SET version=0";
 
-$updates[201108301656][]="CREATE TABLE IF NOT EXISTS `go_link_types` (
+$updates[201108301656][]="CREATE TABLE IF NOT EXISTS `go_model_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
+
+
+
+$updates[201108301656][]="ALTER TABLE `go_search_cache` CHANGE `id` `model_id` INT( 11 ) NOT NULL DEFAULT '0'";
+
+ALTER TABLE `go_search_cache` CHANGE `link_type` `model_type_id` INT( 11 ) NOT NULL DEFAULT '0'
+	
+ALTER TABLE `go_search_cache` CHANGE `type` `model_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL 
+	
+	ALTER TABLE `go_search_cache` DROP PRIMARY KEY 
+	
+	ALTER TABLE `go_search_cache` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST 

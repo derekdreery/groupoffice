@@ -210,7 +210,7 @@ GO.moduleManager.addModule('notes', GO.notes.MainPanel, {
  * panel with links. 
  */
 
-GO.linkHandlers[4]=function(id){
+GO.linkHandlers["GO_Notes_Model_Note"]=function(id){
 	if(!GO.notes.linkWindow){
 		var notePanel = new GO.notes.NotePanel();
 		GO.notes.linkWindow= new GO.LinkViewWindow({
@@ -224,7 +224,7 @@ GO.linkHandlers[4]=function(id){
 	GO.notes.linkWindow.show();
 }
 
-GO.linkPreviewPanels[4]=function(config){
+GO.linkPreviewPanels["GO_Notes_Model_Note"]=function(config){
 	config = config || {};
 	return new GO.notes.NotePanel(config);
 }
