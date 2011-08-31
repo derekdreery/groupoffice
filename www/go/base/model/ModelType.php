@@ -1,6 +1,6 @@
 <?php
 
-class GO_Base_Model_LinkModel extends GO_Base_Db_ActiveRecord {
+class GO_Base_Model_ModelType extends GO_Base_Db_ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
@@ -14,7 +14,7 @@ class GO_Base_Model_LinkModel extends GO_Base_Db_ActiveRecord {
 	}
 
 	public function tableName(){
-		return "go_link_models";
+		return "go_model_types";
 	}
 	
 	public function findByModelName($modelName){
@@ -22,7 +22,7 @@ class GO_Base_Model_LinkModel extends GO_Base_Db_ActiveRecord {
 		if($model)
 			return $model->id;
 		
-		$model = new GO_Base_Model_LinkModel();
+		$model = new GO_Base_Model_ModelType();
 		$model->model_name=$modelName;
 		$model->save();
 		

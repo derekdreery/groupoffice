@@ -12,6 +12,8 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		GO::$disableModelCache=true; //for less memory usage
 		ini_set('max_execution_time', '300');
 		
+		GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
+		
 		echo '<pre>';
 		GO::modules()->callModuleMethod('buildSearchCache', array(&$response));
 		return $response;

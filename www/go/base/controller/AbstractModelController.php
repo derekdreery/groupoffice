@@ -337,27 +337,27 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 
 	
-		require_once(GO::config()->class_path . '/base/search.class.inc.php');
-		$search = new search();
+//		require_once(GO::config()->class_path . '/base/search.class.inc.php');
+//		$search = new search();
+//
+//		if (/* !in_array('links', $hidden_sections) && */!isset($response['data']['links'])) {
+//			$links_json = $search->get_latest_links_json(GO::session()->values['user_id'], $response['data']['id'], $model->linkModelId());
+//			$response['data']['links'] = $links_json['results'];
+//		}
 
-		if (/* !in_array('links', $hidden_sections) && */!isset($response['data']['links'])) {
-			$links_json = $search->get_latest_links_json(GO::session()->values['user_id'], $response['data']['id'], $model->linkModelId());
-			$response['data']['links'] = $links_json['results'];
-		}
-
-		if (/* isset(GO::modules()->modules['tasks']) && !in_array('tasks', $hidden_sections) && */!isset($response['data']['tasks'])) {
-			require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'] . 'tasks.class.inc.php');
-			$tasks = new tasks();
-
-			$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $model->linkModelId());
-		}
-
-		if (isset(GO::modules()->calendar)/* && !in_array('events', $hidden_sections) */) {
-			require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'] . 'calendar.class.inc.php');
-			$cal = new calendar();
-
-			$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $model->linkModelId());
-		}
+//		if (/* isset(GO::modules()->modules['tasks']) && !in_array('tasks', $hidden_sections) && */!isset($response['data']['tasks'])) {
+//			require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'] . 'tasks.class.inc.php');
+//			$tasks = new tasks();
+//
+//			$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $model->linkModelId());
+//		}
+//
+//		if (isset(GO::modules()->calendar)/* && !in_array('events', $hidden_sections) */) {
+//			require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'] . 'calendar.class.inc.php');
+//			$cal = new calendar();
+//
+//			$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $model->linkModelId());
+//		}
 
 		if (/* !in_array('files', $hidden_sections) && */!isset($response['data']['files'])) {
 			if (isset(GO::modules()->files)) {

@@ -95,13 +95,16 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		$stmt = GO_Base_Model_SearchCacheRecord::model()->find($grid->getDefaultParams());
 		$grid->setStatement($stmt);
 		
+		$grid->formatColumn('iconCls', '"go-model-".$model->mode_name');		
+		$grid->formatColumn('type', 'call_user_func(array($model->model_name, "model"))->localizedName');
+		
 		return $grid->getData();		
 	}
 	
 	
-	public function actionLinkModels(){
+	public function actionModelTypes(){
 		$grid = new GO_Base_Provider_Grid();		    
-		$stmt = GO_Base_Model_LinkModel::model()->find($grid->getDefaultParams());
+		$stmt = GO_Base_Model_ModelType::model()->find($grid->getDefaultParams());
 		$grid->setStatement($stmt);
 		$grid->formatColumn('name', 'call_user_func(array($model->model_name,"model"))->localizedName');	
 		
