@@ -5,6 +5,9 @@ if(!isset($argv[1]))
 }
 
 define('CONFIG_FILE', $argv[1]);
+
+define('NOLOG', true);
+
 require($argv[1]);
 
 require_once($config['root_path']."Group-Office.php");
