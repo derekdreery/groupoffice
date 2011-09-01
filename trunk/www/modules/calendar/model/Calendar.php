@@ -32,6 +32,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Db_ActiveRecord {
 	{	
 		return parent::model($className);
 	}
+	
 	public function aclField() {
 		return 'acl_id';
 	}
