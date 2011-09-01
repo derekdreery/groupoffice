@@ -757,7 +757,7 @@ GO.moduleManager.addModule('addressbook', GO.addressbook.MainPanel, {
 	iconCls : 'go-tab-icon-addressbook'
 });
 
-GO.linkHandlers[2]=GO.mailFunctions.showContact=GO.addressbook.showContact=function(id){
+GO.linkHandlers["GO_Addressbook_Model_Contact"]=GO.mailFunctions.showContact=GO.addressbook.showContact=function(id){
 	if(!GO.addressbook.linkContactWindow){
 		var contactPanel = new GO.addressbook.ContactReadPanel();
 		GO.addressbook.linkContactWindow = new GO.LinkViewWindow({
@@ -771,18 +771,18 @@ GO.linkHandlers[2]=GO.mailFunctions.showContact=GO.addressbook.showContact=funct
 	GO.addressbook.linkContactWindow.show();
 }
 
-GO.linkPreviewPanels[2]=function(config){
+GO.linkPreviewPanels["GO_Addressbook_Model_Contact"]=function(config){
 	config = config || {};
 	return new GO.addressbook.ContactReadPanel(config);
 }
 
-GO.linkPreviewPanels[3]=function(config){
+GO.linkPreviewPanels["GO_Addressbook_Model_Company"]=function(config){
 	config = config || {};
 	return new GO.addressbook.CompanyReadPanel(config);
 }
 
 
-GO.linkHandlers[3]=function(id){
+GO.linkHandlers["GO_Addressbook_Model_Company"]=function(id){
 
 	if(!GO.addressbook.linkCompanyWindow){
 		var companyPanel = new GO.addressbook.CompanyReadPanel();
