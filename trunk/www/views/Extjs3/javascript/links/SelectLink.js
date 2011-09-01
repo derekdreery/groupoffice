@@ -23,7 +23,7 @@ GO.form.SelectLink = function(config){
 
 	config.forceSelection=true;
 	config.displayField='name_and_type';
-	config.valueField='name_name_and_id',
+	config.valueField='model_name_and_id',
 	config.hiddenName='link';
 	config.triggerAction='all';
 	config.width=400;
