@@ -1242,12 +1242,12 @@ class files extends db {
 		$sql .= "f.*";
 
 		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
-			$sql .= ",cf_6.*";
+			$sql .= ",cf_fs_files.*";
 		}
 		$sql .= " FROM fs_files f ";
 
 		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
-			$sql .= "LEFT JOIN cf_6 ON cf_6.link_id=f.id ";
+			$sql .= "LEFT JOIN cf_fs_files ON cf_fs_files.id=f.id ";
 		}
 
 		$types='';

@@ -170,3 +170,7 @@ VALUES (
 $updates[201108301656][]="ALTER TABLE `go_search_cache` ADD `type` VARCHAR( 20 ) NOT NULL ";
 
 $updates[201109011331][]="script:11_users_to_addressbook.inc.php";
+
+$updates[201108190000][]="RENAME TABLE `go_links_8` TO `go_links_go_users`;";
+$updates[201108190000][]="ALTER TABLE `go_links_go_users` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL";
+$updates[201108190000][]="ALTER TABLE `go_links_go_users` CHANGE `link_type` `model_type_id` INT( 11 ) NOT NULL";

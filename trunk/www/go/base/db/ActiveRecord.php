@@ -670,7 +670,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
     
 		
 		if($joinCf)			
-			$sql .= "\nLEFT JOIN ".$cfModel->tableName()." cf ON cf.id=t.id ";
+			$sql .= "\nLEFT JOIN ".$cfModel->tableName()." cf ON cf.model_id=t.id ";
 		
 		if(isset($params['join']))
 			$sql .= $params['join'];
@@ -1942,7 +1942,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				if(!$this->_customfieldsRecord){
 					//doesn't exist yet. Return a new one
 					$this->_customfieldsRecord = new $customFieldModelName;
-					$this->_customfieldsRecord->link_id=$this->pk;
+					$this->_customfieldsRecord->model_id=$this->pk;
 				}
 			}
 			return $this->_customfieldsRecord;
