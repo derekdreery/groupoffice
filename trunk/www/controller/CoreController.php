@@ -87,30 +87,30 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		else
 			$this->redirect();
 	}	
+		
 	
-	
-	public function actionSearch($params){
-		
-		$grid = new GO_Base_Provider_Grid();		    
-		$stmt = GO_Base_Model_SearchCacheRecord::model()->find($grid->getDefaultParams());
-		$grid->setStatement($stmt);
-		
-		$grid->formatColumn('iconCls', '"go-model-".$model->mode_name');		
-		$grid->formatColumn('type', 'call_user_func(array($model->model_name, "model"))->localizedName');
-		
-		return $grid->getData();		
+	public function actionLink($params){
+
+			$fromLinks = json_decode($_POST['fromLinks'],true);
+			$toLinks = json_decode($_POST['toLinks'],true);
+			$from_folder_id=isset($_POST['from_folder_id']) ? $_POST['from_folder_id'] : 0;
+			$to_folder_id=isset($_POST['to_folder_id']) ? $_POST['to_folder_id'] : 0;
+
+			foreach($fromLinks as $fromLink)
+			{				
+				$fromModel = call_user_func(array($fromLink['model_name'], 'model'))->findByPk($fromLink['model_id']);
+				
+				foreach($toLinks as $toLink)
+				{
+					$model = call_user_func(array($toLink['model_name'],'model'))->findByPk($toLink['model_id']);
+					$fromModel->link($model, $_POST['description'], $from_folder_id, $to_folder_id);
+				}
+			}
+
+			$response['success']=true;
+			
+			return $response;
 	}
-	
-	
-	public function actionModelTypes(){
-		$grid = new GO_Base_Provider_Grid();		    
-		$stmt = GO_Base_Model_ModelType::model()->find($grid->getDefaultParams());
-		$grid->setStatement($stmt);
-		$grid->formatColumn('name', 'call_user_func(array($model->model_name,"model"))->localizedName');	
-		
-		return $grid->getData();		
-	}
-	
 
 	/**
 	 * Todo replace compress.php with this action

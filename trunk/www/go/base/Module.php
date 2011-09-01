@@ -179,10 +179,8 @@ class GO_Base_Module extends GO_Base_Observable {
 
 		foreach($models as $model){
 			echo $response[] = "Processing ".$model->getName()."\n";
-			$stmt = call_user_func(array($model->getName(),'model'))->find(array(
-					'ignoreAcl'=>true
-			));
-			$stmt->callOnEach('rebuildSearchCache');
+			$stmt = call_user_func(array($model->getName(),'model'))->rebuildSearchCache();
+			//$stmt->callOnEach('rebuildSearchCache');
 		}
 	}
 	

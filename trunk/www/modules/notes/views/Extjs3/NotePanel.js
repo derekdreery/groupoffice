@@ -12,7 +12,7 @@
  */
  
 GO.notes.NotePanel = Ext.extend(GO.DisplayPanel,{
-	link_type : 4,
+	linkModelName : "GO_Notes_Model_Note",
 	
 	stateId : 'no-note-panel',
 

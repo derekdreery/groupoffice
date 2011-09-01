@@ -29,10 +29,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	{	
 		return parent::model($className);
 	}
-	public function linkType(){
-		return 2;	
-	}
-	
+
 	public function aclField(){
 		return 'addressbook.acl_id';	
 	}
@@ -69,9 +66,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 
 	protected function getCacheAttributes() {
 		return array(
-				'name' => $this->name,
-				'type' => GO::t('contact','addressbook')
+				'name' => $this->name
 		);
+	}
+	
+	protected function getLocalizedName() {
+		return GO::t('contact', 'addressbook');
 	}
 
 	protected function afterSave($wasNew) {

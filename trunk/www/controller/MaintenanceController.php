@@ -1,16 +1,21 @@
 <?php
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 
+	public function init($module) {
+		
+		parent::init($module);
+		
+		GO::$ignoreAclPermissions=true; //allow this script access to all
+		GO::$disableModelCache=true; //for less memory usage
+		ini_set('max_execution_time', '300');
+		session_write_close();		
+	}
 	/**
 	 * Calls buildSearchIndex on each Module class.
 	 * @return array 
 	 */
 	public function actionBuildSearchCache() {
 		$response = array();
-		
-		GO::$ignoreAclPermissions=true; //allow this script access to all
-		GO::$disableModelCache=true; //for less memory usage
-		ini_set('max_execution_time', '300');
 		
 		GO::getDbConnection()->query('TRUNCATE TABLE go_search_cache');
 		
@@ -25,24 +30,13 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 */
 	public function actionCheckDatabase() {
 		$response = array();
-		
-		GO::$ignoreAclPermissions=true; //allow this script access to all
-		GO::$disableModelCache=true; //for less memory usage
-		ini_set('max_execution_time', '300');
-		
+				
 		echo '<pre>';		
 		GO::modules()->callModuleMethod('checkDatabase', array(&$response));
 		return $response;
 	}
 
-
-	
-
 	public function actionUpgrade($params) {
-
-		GO::$ignoreAclPermissions=true; //allow this script access to all
-		GO::$disableModelCache=true; //for less memory usage
-		ini_set('max_execution_time', '300');
 		
 		$logDir = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'log/upgrade/');
 		$logDir->create();
@@ -188,12 +182,4 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 		//return $response;
 	}
-
-	/**
-	 * Todo replace compress.php with this action
-	 */
-	protected function actionCompress() {
-		
-	}
-
 }

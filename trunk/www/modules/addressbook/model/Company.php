@@ -26,8 +26,8 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		return parent::model($className);
 	}
 	
-	public function linkType(){
-		return 3;
+	protected function getLocalizedName() {
+		return GO::t('company', 'addressbook');
 	}
 	
 	public function aclField(){

@@ -21,7 +21,7 @@ GO.LinkTypeFilterPanel = function(config)
 	if(!GO.linkTypesStore){
 		GO.linkTypesStore= new GO.data.JsonStore({				
 				fields: ['id','name','model', 'checked'],
-				url:GO.url('core/modelTypes'),
+				url:GO.url('search/modelTypes'),
 				autoLoad:true
 			});
 	}
