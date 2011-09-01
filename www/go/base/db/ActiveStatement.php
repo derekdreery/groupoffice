@@ -48,7 +48,11 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 		//$models = $this->fetchAll();
 		while($m = $this->fetch()){		
 			if(method_exists($m, $function))
-				$m->$function();
+				try{
+					$m->$function();
+				}catch(Exception $e){
+					echo $e->getMessage();
+				}
 			}
 	}
 	

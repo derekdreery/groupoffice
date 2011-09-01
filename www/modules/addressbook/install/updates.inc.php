@@ -16,11 +16,21 @@ $updates[201108131011][]="ALTER TABLE `ab_contacts` DROP `color`";
 $updates[201108131011][]="ALTER TABLE `ab_contacts` DROP `sid`"; 
 
 
-$updates[201108190000][]="RENAME TABLE `go_links_2` TO `go_links_ab_contacts`;";
-$updates[201108190000][]="ALTER TABLE `go_links_ab_contacts` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL";
-$updates[201108190000][]="ALTER TABLE `go_links_ab_contacts` CHANGE `link_type` `model_type_id` INT( 11 ) NOT NULL";
+$updates[201109011450][]="RENAME TABLE `go_links_2` TO `go_links_ab_contacts`;";
+$updates[201109011450][]="ALTER TABLE `go_links_ab_contacts` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL";
+$updates[201109011450][]="ALTER TABLE `go_links_ab_contacts` CHANGE `link_type` `model_type_id` INT( 11 ) NOT NULL";
 
 
-$updates[201108190000][]="RENAME TABLE `go_links_3` TO `go_links_ab_companies`;";
-$updates[201108190000][]="ALTER TABLE `go_links_ab_companies` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL";
-$updates[201108190000][]="ALTER TABLE `go_links_ab_companies` CHANGE `link_type` `model_type_id` INT( 11 ) NOT NULL";
+$updates[201109011450][]="RENAME TABLE `go_links_3` TO `go_links_ab_companies`;";
+$updates[201109011450][]="ALTER TABLE `go_links_ab_companies` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL";
+$updates[201109011450][]="ALTER TABLE `go_links_ab_companies` CHANGE `link_type` `model_type_id` INT( 11 ) NOT NULL";
+
+
+$updates[201109011450][]="ALTER TABLE `cf_2` CHANGE `link_id` `id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates[201109011450][]="RENAME TABLE `cf_2` TO `cf_ab_contacts` ;";
+$updates[201109011450][]="update cf_categories set extends_model='GO_Addressbook_Model_Contact' where extends_model=2;";
+
+$updates[201109011450][]="ALTER TABLE `cf_3` CHANGE `link_id` `id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates[201109011450][]="RENAME TABLE `cf_3` TO `cf_ab_companies` ;";
+$updates[201109011450][]="update cf_categories set extends_model='GO_Addressbook_Model_Contact' where extends_model=3;";
+

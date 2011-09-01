@@ -209,6 +209,7 @@ class GO_LINKS extends db
 	
 	function delete_link($link_id1, $type1, $link_id2=0, $type2=0)
 	{		
+		return true;
 		//if($link_id1>0)
 		//{
 			if($link_id2>0)
@@ -225,7 +226,7 @@ class GO_LINKS extends db
 				}*/
 			}else
 			{
-				$sql = "SELECT DISTINCT link_type FROM go_links_".intval($type1)." WHERE id=".intval($link_id1);
+				$sql = "SELECT DISTINCT link_type FROM go_links_".intval($type1)." WHERE model_id=".intval($link_id1);
 				//go_debug($sql);
 				$this->query($sql);
 				
@@ -249,7 +250,7 @@ class GO_LINKS extends db
 					}*/
 					
 				}
-				$sql = "DELETE FROM go_links_".intval($type1)." WHERE id=".intval($link_id1);				
+				$sql = "DELETE FROM go_links_".intval($type1)." WHERE model_id=".intval($link_id1);				
 				$this->query($sql);
 
 				//$this->update_link_count($link_id1, $type1);
@@ -265,14 +266,20 @@ class GO_LINKS extends db
 
 	function count_links($link_id, $type)
 	{
-		if($link_id > 0)
-		{
-			$sql = "SELECT count(*) AS count FROM go_links_".intval($type)." WHERE id=".intval($link_id);
-			$this->query($sql);
-			$r =$this->next_record();
-			return $r['count'];
-		}
-		return false;
+		
+		$sql = "SELECT model_name FROM go_model_types WHERE id=$type";
+		$this->query($sql);
+		$r = $this->next_record();
+		return GO::getModel($r['model_name'])->countLinks($link_id);
+//		
+//		if($link_id > 0)
+//		{
+//			$sql = "SELECT count(*) AS count FROM go_links_".intval($type)." WHERE model_id=".intval($link_id);
+//			$this->query($sql);
+//			$r =$this->next_record();
+//			return $r['count'];
+//		}
+//		return false;
 	}
 	
 	/*

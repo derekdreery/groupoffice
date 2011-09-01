@@ -471,5 +471,15 @@ class GO{
 			$int = $current;
 		}
 	}
+	
+	
+	/**
+	 * Get the static model object 
+	 * @param String $modelName
+	 * @return GO_Base_Db_ActiveRecord 
+	 */
+	public static function getModel($modelName){
+		return call_user_func(array($modelName, 'model'));
+	}
 
 }	

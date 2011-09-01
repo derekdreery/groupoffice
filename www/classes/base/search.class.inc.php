@@ -396,7 +396,7 @@ class search extends db {
 	 */
 	function get_search_result($id, $type)
 	{
-		$sql = "SELECT * FROM go_search_cache WHERE id=".intval($id)." AND model_type_id=".intval($type);
+		$sql = "SELECT * FROM go_search_cache WHERE model_id=".intval($id)." AND model_type_id=".intval($type);
 		$this->query($sql);
 		if($this->next_record())
 		{
@@ -445,7 +445,7 @@ class search extends db {
 		$sr = $this->get_search_result($id, $model_type_id);
 		if($sr)
 		{
-			$sql = "DELETE FROM go_search_cache WHERE id=".intval($id)." AND model_type_id=".$this->escape($model_type_id);
+			$sql = "DELETE FROM go_search_cache WHERE model_id=".intval($id)." AND model_type_id=".$this->escape($model_type_id);
 			$this->query($sql);
 			
 			$this->log($id, $model_type_id, 'Deleted '.strip_tags($sr['name']));
@@ -474,16 +474,20 @@ class search extends db {
 		}
 
 		//$result['link_count']=$GO_LINKS->count_links($result['id'], $result['model_type_id']);
+		
+		$result['model_type_id']=$result['link_type'];
+		$result['model_id']=$result['id'];
+		unset($result['link_type'], $result['id']);
 
-		$old_result = $this->get_search_result($result['id'], $result['model_type_id']);
+		$old_result = $this->get_search_result($result['model_id'], $result['model_type_id']);
 		if($old_result)
  		{
- 			$this->update_row('go_search_cache',array('id', 'model_type_id'), $result);
-			$this->log($result['id'], $result['model_type_id'], 'Updated '.strip_tags($result['name']));
+ 			$this->update_row('go_search_cache',array('model_id', 'model_type_id'), $result);
+			$this->log($result['model_id'], $result['model_type_id'], 'Updated '.strip_tags($result['name']));
  		}else {		
  			$cache['ctime']=time();
  			$this->insert_row('go_search_cache',$result);
- 			$this->log($result['id'], $result['model_type_id'], 'Added '.strip_tags($result['name']));
+ 			$this->log($result['model_id'], $result['model_type_id'], 'Added '.strip_tags($result['name']));
 
 			//create default link folders
 			global $GO_CONFIG;

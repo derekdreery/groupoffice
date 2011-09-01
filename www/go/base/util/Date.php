@@ -628,6 +628,12 @@ class GO_Base_Util_Date {
 		return mktime($date['hours'],$date['minutes'], $date['seconds'],$date['mon']+$months,$date['mday']+$days,$date['year']+$years);
 	}
 	
+	/**
+	 * Remove the time from a unix timestamp so it will return the start of a day.
+	 * 
+	 * @param int $time Unix timestamp
+	 * @return int 
+	 */
 	public static function clear_time($time){
 		$date=getdate($time);
 		return mktime(0,0,0,$date['mon'],$date['mday'],$date['year']);
