@@ -1,4 +1,4 @@
-GO.settingsmodule.MainPanel = function(config){
+GO.settings.MainPanel = function(config){
 
 	if(!config)
 	{
@@ -16,21 +16,21 @@ GO.settingsmodule.MainPanel = function(config){
 	config.items={
 		xtype:'fieldset',
 		labelAlign:'top',
-		title:GO.settingsmodule.lang.loginScreenText,
+		title:GO.settings.lang.loginScreenText,
 		items:[{
-			boxLabel:GO.settingsmodule.lang.loginTextEnabled,
+			boxLabel:GO.settings.lang.loginTextEnabled,
 			xtype:'checkbox',
 			hideLabel:true,			
 			name:'login_screen_text_enabled',
 			anchor:"100%"
 		},{
-			fieldLabel:GO.settingsmodule.lang.title,
+			fieldLabel:GO.settings.lang.title,
 			xtype:'textfield',
 			hideLabel:true,
 			name:'login_screen_text_title',
 			anchor:"100%"
 		},{
-			fieldLabel:GO.settingsmodule.lang.text,
+			fieldLabel:GO.settings.lang.text,
 			xtype:'htmleditor',
 			hideLabel:true,
 			name:'login_screen_text',
@@ -69,20 +69,20 @@ GO.settingsmodule.MainPanel = function(config){
 	}]
 	});
 
-	GO.settingsmodule.MainPanel.superclass.constructor.call(this, config);
+	GO.settings.MainPanel.superclass.constructor.call(this, config);
 };
 
-Ext.extend(GO.settingsmodule.MainPanel, Ext.FormPanel, {
+Ext.extend(GO.settings.MainPanel, Ext.FormPanel, {
 	afterRender : function()
 	{
-		GO.settingsmodule.MainPanel.superclass.afterRender.call(this);
+		GO.settings.MainPanel.superclass.afterRender.call(this);
 		this.form.load();
 		this.form.timeout=360;
 	}
 });
 
-GO.moduleManager.addModule('settings', GO.settingsmodule.MainPanel, {
-	title : GO.settingsmodule.lang.mainTitle,
+GO.moduleManager.addModule('settings', GO.settings.MainPanel, {
+	title : GO.settings.lang.mainTitle,
 	iconCls : 'go-tab-icon-settings',
 	admin :true
 });

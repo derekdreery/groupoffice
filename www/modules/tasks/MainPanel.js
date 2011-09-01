@@ -6,15 +6,14 @@ GO.tasks.MainPanel = function(config){
 	}
 		
 	this.taskListsStore = new GO.data.JsonStore({
-		url: GO.settings.modules.tasks.url+'json.php',
+		url: GO.url('tasks/tasklist/grid'),
 		baseParams: {
-			'task': 'tasklists',
 			limit:GO.settings.config.nav_page_size
 		},
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
-		fields:['id','dom_id','name','checked']
+		fields:['id','name','checked']
 	});
 
 	this.taskListsPanel = new GO.tasks.TaskListsGrid({

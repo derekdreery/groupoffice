@@ -316,6 +316,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					'orderDirection'=>array('ASC','ASC')
 			));			
 			
+			$categories=array();
+			
 			while($field = $stmt->fetch()){
 				if(!isset($categories[$field->category_id])){
 					$categories[$field->category->id]['id']=$field->category->id;

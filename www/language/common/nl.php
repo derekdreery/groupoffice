@@ -250,7 +250,7 @@ $l["strWorkAddressNo"]= 'Huisnummer (werk)';
 $l["strWorkZip"]= 'Postcode (werk)';
 $l["strWorkCity"]= 'Woonplaats (werk)';
 $l["strWorkState"]= 'Provincie (werk)';
-$l["strWorkCountry"]= 'Land (werk)',	;
+$l["strWorkCountry"]= 'Land (werk)';
 $l["strWorkPhone"]= 'Tel. (werk)';
 $l["strWorkFax"]= 'Fax (werk)';
 $l["strPostAddress"]= 'Adres (post)';
@@ -261,7 +261,7 @@ $l["strPostCountry"]= 'Land (post)';
 $l["strPostZip"]= 'Postcode (post)';
 $l["locations"]= 'Locaties';
 $l["strMale"]= 'Man';
-$l["strFemale"]= 'Vrouw',	;
+$l["strFemale"]= 'Vrouw';
 $l["strType"]= 'Type';
 $l["strMtime"]= 'Gewijzigd op';
 $l["strCtime"]= 'Gemaakt op';
@@ -366,7 +366,7 @@ $l["strMonths"]="Maanden";
 $l["strYear"]="Jaar";
 $l["strYears"]="Jaren";
 $l["strTime"]='Tijd';
-$l["shortDays"]= ['Zon', 'Maa', 'Din', 'Woe', 'Don', 'Vri','Zat'];
+$l["shortDays"]= array('Zon', 'Maa', 'Din', 'Woe', 'Don', 'Vri','Zat');
 $l["selectWeek"]='Selecteer week';
 $l["noRecurrence"]= 'Geen herhaling';
 $l["monthsByDate"]= 'Maanden op datum';
@@ -413,9 +413,9 @@ $l["displayingItemsShort"]='Totaal: {2}';
 $l["keyword"]='Trefwoord';
 $l["keywords"]='Trefwoorden';
 if(Ext.form.BasicForm)
-{;
+{
 	Ext.form.BasicForm.prototype.waitTitle = "Even wachten a.u.b...";
-};
+}
 $l["closeApps"]='Applicaties afsluiten';
 $l["rightClickToClose"]='Klik met de rechtermuisknop op een tabblad kop om deze af te sluiten.';
 $l["administration"]='Beheer';
