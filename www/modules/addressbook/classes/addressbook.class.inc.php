@@ -131,8 +131,8 @@ class addressbook extends db {
 		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
-			$db->query("delete from cf_2 where link_id not in (select id from ab_contacts);");
-			$db->query("delete from cf_3 where link_id not in (select id from ab_companies);");
+			$db->query("delete from cf_ab_contacts where id not in (select id from ab_contacts);");
+			$db->query("delete from cf_ab_companies where id not in (select id from ab_companies);");
 		}
 
 		echo 'Done with addressbook'.$line_break.$line_break;
@@ -877,18 +877,20 @@ class addressbook extends db {
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
 
+	
+		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
+			$sql .= "cf_ab_contacts.*,";
+		}
+		
 		$sql .= "ab_contacts.*, ab_addressbooks.name AS ab_name, ab_companies.name AS company_name";
 
-		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
-			$sql .= ",cf_2.*";
-		}
 
 		$sql .= " FROM ab_contacts LEFT JOIN ab_companies ON ab_contacts.company_id=ab_companies.id ";
 		
 		$sql .= " LEFT JOIN ab_addressbooks ON ab_contacts.addressbook_id = ab_addressbooks.id ";
 
 		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
-			$sql .= "LEFT JOIN cf_2 ON cf_2.link_id=ab_contacts.id ";
+			$sql .= "LEFT JOIN cf_ab_contacts ON cf_ab_contacts.id=ab_contacts.id ";
 		}
 
 		if(count($mailings_filter)) {
@@ -931,10 +933,10 @@ class addressbook extends db {
 							}
 						}
 						if($GLOBALS['GO_MODULES']->has_module('customfields')) {
-							$fields_sql = "SHOW FIELDS FROM cf_2";
+							$fields_sql = "SHOW FIELDS FROM cf_ab_contacts";
 							$this->query($fields_sql);
 							while ($this->next_record()) {
-								$fields[]='cf_2.'.$this->f('Field');
+								$fields[]='cf_ab_contacts.'.$this->f('Field');
 							}
 						}						
 						$fields[] = 'ab_companies.name';
@@ -1064,8 +1066,8 @@ class addressbook extends db {
 		}
 
 		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
-			$sql .= "ab_companies.*, cf_3.* FROM ab_companies ".
-					"LEFT JOIN cf_3 ON cf_3.link_id=ab_companies.id ";
+			$sql .= "cf_ab_companies.*,ab_companies.* FROM ab_companies ".
+					"LEFT JOIN cf_ab_companies ON cf_ab_companies.id=ab_companies.id ";
 		}else {
 			$sql .= "ab_companies.* FROM ab_companies ";
 		}
@@ -1105,10 +1107,10 @@ class addressbook extends db {
 							}
 						}
 						if($GLOBALS['GO_MODULES']->has_module('customfields')) {
-							$fields_sql = "SHOW FIELDS FROM cf_3";
+							$fields_sql = "SHOW FIELDS FROM cf_ab_companies";
 							$this->query($fields_sql);
 							while ($this->next_record()) {
-								$fields[]='cf_3.'.$this->f('Field');
+								$fields[]='cf_ab_companies.'.$this->f('Field');
 							}
 						}
 						$_SESSION['GO_SESSION']['addressbook_search_company_fields']=$fields;
