@@ -397,12 +397,12 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 				{
 					var index = href.substr(pos+6, href.length);		
 					var link = this.data.links[index];			
-					if(link.linkModelName=='folder')
+					if(link.model_name=='folder')
 					{
-						GO.linkBrowser.show({linkModelId: link.parent_linkModelId,linkModelName: link.parent_linkModelName,folder_id: link.id});
+						GO.linkBrowser.show({linkModelId: link.parent_model_id,linkModelName: link.parent_model_name,folder_id: link.id});
 					}else
 					{
-						GO.linkHandlers[link.linkModelName].call(this, link.id, {data: link});
+						GO.linkHandlers[link.model_name].call(this, link.model_id, {data: link});
 					}
 					e.preventDefault();
 					return;
