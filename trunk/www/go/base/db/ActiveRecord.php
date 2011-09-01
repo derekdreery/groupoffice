@@ -1213,7 +1213,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @return array attribute values indexed by attribute names.
 	 */
 	public function getAttributes($outputType='formatted')
-	{
+	{		
 		if($outputType=='raw')
 			return $this->_attributes;
 		
@@ -1454,7 +1454,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				$model = new GO_Base_Model_SearchCacheRecord();
 			
 			//GO::debug($model);
-
 			$autoAttr = array(
 				'model_id'=>$this->pk,
 				'model_type_id'=>$this->modelTypeId(),
@@ -1478,6 +1477,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 			$model->setAttributes($attr);
 			return $model->save();
+			
 		}
 		return true;
 	}
@@ -1798,8 +1798,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$arr = explode('@',$name);
 			if(count($arr)>1)
 				$this->_relatedCache[$arr[0]][$arr[1]]=$value;				
-			else		
+			else		{
+				//GO::debug('UNSAFE ATTRIBUTE: '.$name.' -> '.$value);
 				$this->_attributes[$name]=$value; //this attribute is unsafe but we may want to use it in the contructor anyway. For example the customfield record doesn't know the columns until after the constructor.
+			}
 		}
 
 		return true;
@@ -1856,6 +1858,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return $stmt->fetchColumn(0) > 0;		
 	}
 	
+	/**
+	 * Unlink a model from this model
+	 * 
+	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param boolean $unlinkBack For private use only
+	 * @return boolean 
+	 */
 	public function unlink($model, $unlinkBack=true){
 		$sql = "DELETE FROM `go_links_{$this->tableName()}` WHERE id=:id AND model_type_id=:model_type_id AND model_id=:model_id";
 		
@@ -1872,6 +1881,44 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			return !$unlinkBack || $model->unlink($this, false);
 		
 	}
+	
+	/**
+	 * Get the number of links this model has to other models.
+	 * 
+	 * @param int $model_id
+	 * @return int
+	 */
+	public function countLinks($model_id=0){
+		if($model_id==0)
+			$model_id=$this->id;
+		$sql = "SELECT count(*) FROM `go_links_{$this->tableName()}` WHERE id=".intval($model_id);
+		$stmt = $this->getDbConnection()->query($sql);
+		return intval($stmt->fetchColumn(0));	
+	}
+	
+	/**
+	 * Find links of this model type to a given model. 
+	 * 
+	 * eg.:
+	 * 
+	 * GO_Addressbook_Model_Contact::model()->findLinks($noteModel);
+	 * 
+	 * selects all contacts linked to the $noteModel
+	 * 
+	 * @param type $model
+	 * @param type $findParams
+	 * @return type 
+	 */
+	public function findLinks($model, $findParams=array()){
+		
+		$findParams['fields']='t.*,l.description AS link_description';
+		$findParams['join']="INNER JOIN `go_links_{$model->tableName()}` l ON ".
+			"(l.id=".intval($model->id)." AND t.id=l.model_id AND l.model_type_id=".intval($this->modelTypeId()).")";
+		return $this->find($findParams);
+	}
+	
+	
+	
 	
 	private $_customfieldsRecord;
 	

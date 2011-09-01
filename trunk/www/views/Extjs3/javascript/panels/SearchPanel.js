@@ -88,7 +88,7 @@ GO.grid.SearchPanel = function(config){
 			css: 'white-space:normal;',
 			sortable: true,
 			renderer:function(v, meta, record){
-				return '<div class="go-grid-icon '+record.data.iconCls+'">'+v+'</div>';
+				return '<div class="go-grid-icon go-model-icon-'+record.data.model_name+'">'+v+'</div>';
 			}
 		},{
 			header: GO.lang['strType'],

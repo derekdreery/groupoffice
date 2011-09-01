@@ -336,28 +336,60 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$response['data']['customfields']=array();
 		}
 
+		$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, array(
+				'limit'=>15
+		));
+		
+		$grid = new GO_Base_Provider_Grid();
+		$grid->setStatement($stmt);
+		$grid->formatColumn('link_count','GO::getModel($model->model_name)->countLinks($model->model_id)');
+		$grid->formatColumn('link_description','$model->link_description');
+		$data = $grid->getData();
+		$response['data']['links']=$data['results'];
+		
+		
+		if (isset(GO::modules()->calendar)){
+			
+			$startOfDay = GO_Base_Util_Date::clear_time(time());
+			
+			$stmt = GO_Calendar_Model_Event::model()->findLinks($model, array(
+					//'limit'=>15
+					'where'=>'start_time>=:start_time',
+					'bindParams'=>array(':start_time'=>$startOfDay)
+			));		
+
+			$grid = new GO_Base_Provider_Grid();
+			$grid->setStatement($stmt);
+			$grid->formatColumn('calendar_name','$model->calendar->name');
+			$grid->formatColumn('link_count','$model->countLinks()');
+			$grid->formatColumn('link_description','$model->link_description');
+			$data = $grid->getData();
+			$response['data']['events']=$data['results'];
+		}
+		
+
 	
-		require_once(GO::config()->class_path . '/base/search.class.inc.php');
-		$search = new search();
-
-		if (/* !in_array('links', $hidden_sections) && */!isset($response['data']['links'])) {
-			$links_json = $search->get_latest_links_json(GO::session()->values['user_id'], $response['data']['id'], $model->linkModelId());
-			$response['data']['links'] = $links_json['results'];
-		}
-
-		if (/* isset(GO::modules()->modules['tasks']) && !in_array('tasks', $hidden_sections) && */!isset($response['data']['tasks'])) {
-			require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'] . 'tasks.class.inc.php');
-			$tasks = new tasks();
-
-			$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $model->linkModelId());
-		}
-
-		if (isset(GO::modules()->calendar)/* && !in_array('events', $hidden_sections) */) {
-			require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'] . 'calendar.class.inc.php');
-			$cal = new calendar();
-
-			$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $model->linkModelId());
-		}
+//		require_once(GO::config()->class_path . '/base/search.class.inc.php');
+//		$search = new search();
+//
+//		if (/* !in_array('links', $hidden_sections) && */!isset($response['data']['links'])) {
+//			$links_json = $search->get_latest_links_json(GO::session()->values['user_id'], $response['data']['id'], $model->linkModelId());
+//			$response['data']['links'] = $links_json['results'];
+//		}
+//
+//		if (/* isset(GO::modules()->modules['tasks']) && !in_array('tasks', $hidden_sections) && */!isset($response['data']['tasks'])) {
+//			require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'] . 'tasks.class.inc.php');
+//			$tasks = new tasks();
+//
+//			$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $model->linkModelId());
+//		}
+//
+//		if (isset(GO::modules()->calendar)/* && !in_array('events', $hidden_sections) */) {
+//			require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'] . 'calendar.class.inc.php');
+//			$cal = new calendar();
+//
+//			$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $model->linkModelId());
+//		}
 
 		if (/* !in_array('files', $hidden_sections) && */!isset($response['data']['files'])) {
 			if (isset(GO::modules()->files)) {

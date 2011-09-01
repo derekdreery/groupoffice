@@ -23,6 +23,23 @@ class GO_Base_Model_SearchCacheRecord extends GO_Base_Db_ActiveRecord {
 		return array('model_id', 'model_type_id');					
 	}
 	
+	
+	/**
+	 * Find all links of this model type to a given model. 
+	 * 
+	 * @param type $model
+	 * @param type $findParams
+	 * @return type 
+	 */
+	public function findLinks($model, $findParams=array()){
+		
+		$findParams['fields']='t.*,l.description AS link_description';
+		$findParams['join']="INNER JOIN `go_links_{$model->tableName()}` l ON ".
+			"(l.id=".intval($model->id)." AND t.model_id=l.model_id AND t.model_type_id=l.model_type_id)";
+		return $this->find($findParams);
+	}
+	
+	
 	/**
 	 * Set this to true so it won't be deleted.
 	 * @var type 
