@@ -63,16 +63,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$response[$model->aclField] = $model->{$model->aclField};
 		}
 
-
+		
 		if (!empty($_POST['link'])) {
-			require_once(GO::config()->class_path . 'base/links.class.inc.php');
-			$GO_LINKS = new GO_LINKS();
-
-			//todo link type should be handled better.
-			//Nicer would be $model->linkTo($othermodel);
-			$link_props = explode(':', $_POST['link']);
-			$GO_LINKS->add_link(
-							($link_props[1]), ($link_props[0]), $model->pk, $model->linkModelId());
+			
+			//a link is sent like  GO_Notes_Model_Note:1
+			//where 1 is the id of the model
+			
+			$linkProps = explode(':', $_POST['link']);			
+			$linkModel = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
+			$model->link($linkModel);			
 		}
 
 		$this->afterSubmit($response, $model, $params);
@@ -303,7 +302,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['data']['permission_level']=$model->getPermissionLevel();
 		$response['data']['write_permission']=$response['data']['permission_level']>GO_Base_Model_Acl::READ_PERMISSION;
 
-		
+		$response['data']['customfields']=array();
 		if($model->customfieldsRecord){
 			$customAttributes = $model->customfieldsRecord->getAttributes('html');
 			
@@ -324,18 +323,20 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					$categories[$field->category->id]['name']=$field->category->name;
 					$categories[$field->category->id]['fields']=array();
 				}
-				$categories[$field->category->id]['fields'][]=array(
-						'name'=>$field->name,
-						'value'=>$customAttributes[$field->columnName()]
-				);				
+				if(!empty($customAttributes[$field->columnName()])){
+					$categories[$field->category->id]['fields'][]=array(
+							'name'=>$field->name,
+							'value'=>$customAttributes[$field->columnName()]
+					);				
+				}
 			}
 			
 			
-			$response['data']['customfields']=array_values($categories);
+			foreach($categories as $category){
+				if(count($category['fields']))
+					$response['data']['customfields'][]=$category;
+			}
 			
-		}else
-		{
-			$response['data']['customfields']=array();
 		}
 
 		$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, array(

@@ -1368,8 +1368,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 			
 
-			if ($this->customfieldsRecord)
+			if ($this->customfieldsRecord){
+				//id is not set if this is a new record so we make sure it's set here.
+				$this->customfieldsRecord->id=$this->id;
+				
 				$this->customfieldsRecord->save();
+			}
 			
 
 			
