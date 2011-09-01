@@ -278,6 +278,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 						case 'text':
 							$gotype = 'textarea';
 							break;
+						
+						case 'date':
+							$gotype='date';
+							break;
 					}
 
 					switch($field['Field']){
@@ -529,6 +533,34 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$params = array_merge(array(
 				"by"=>array(array($attributeName,$value,'=')),
+				"ignoreAcl"=>true,
+				"limit"=>1
+		), $findParams);		
+				
+		$stmt = $this->find($params);
+		
+		$model = $stmt->fetch();
+		
+		return $model;		
+	}
+	
+	
+	/**
+	 * Finds a single model by an attribute name and value.
+	 * 
+	 * @param string $attributeName
+	 * @param mixed $value
+	 * @param array $findParams Extra parameters to send to the find function.
+	 * @return GO_Base_Db_ActiveRecord 
+	 */
+	public function findSingleByAttributes($attributes, $findParams=array()){
+		
+		$by = array();
+		foreach($attributes as $attributeName=>$value)
+			$by[]=array($attributeName,$value,'=');
+		
+		$params = array_merge(array(
+				"by"=>$by,
 				"ignoreAcl"=>true,
 				"limit"=>1
 		), $findParams);		
@@ -1122,6 +1154,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					break;
 				case 'boolean':
 					$formatted[$key] = empty($value) ? 0 : 1; 
+					break;				
+				case 'date':
+					$formatted[$key] = GO_Base_Util_Date::to_db_date($value);
 					break;
 
 				default:
@@ -1149,7 +1184,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 			switch($this->columns[$key]['gotype']){
 				case 'unixtimestamp':
-					$formatted[$key] = GO_Base_Util_Date::get_timestamp($value);
+					$formatted[$key] = GO_Base_Util_Date::format($value);
 					break;	
 
 				case 'textarea':
@@ -1159,6 +1194,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					{
 						$formatted[$key] = $value;
 					}
+					break;
+					
+				case 'date':
+					$formatted[$key] = GO_Base_Util_Date::format($value);
 					break;
 					
 				case 'number':

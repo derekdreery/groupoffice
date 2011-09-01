@@ -33,7 +33,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if ($pos) {
 			$extension = substr($this->path, $pos +1, strlen($this->path));
 		}
-		return strtolower($extension);
+		return trim(strtolower($extension));
 	}
 	
 	/**
@@ -77,5 +77,49 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 */
 	public function getContents(){
 		return file_get_contents($this->path);
+	}
+	
+	
+	/**
+	 * Returns the mime type for the file.
+	 * If it can't detect it it will return application/octet-stream
+	 * 
+	 * @return String 
+	 */
+	public static function mimeType()
+	{
+		$types = file_get_contents(GO::config()->root_path.'mime.types');
+
+		if($this->extension()=='')
+		{
+			return 'application/octet-stream';
+		}
+
+		$pos = strpos($types, ' '.$this->extension());
+
+		if($pos)
+		{
+			$pos++;
+
+			$start_of_line = String::rstrpos($types, "\n", $pos);
+			$end_of_mime = strpos($types, ' ', $start_of_line);
+			$mime = substr($types, $start_of_line+1, $end_of_mime-$start_of_line-1);
+
+			return $mime;
+		}
+
+		if(file_exists($this->path())){
+			if(function_exists('finfo_open')){
+					$finfo    = @finfo_open(FILEINFO_MIME);
+					$mimetype = @finfo_file($finfo, $this->path());
+					finfo_close($finfo);
+					return $mimetype;
+			}elseif(function_exists('mime_content_type'))
+			{
+				return @mime_content_type($this->path());
+			}
+		}
+    
+    return 'application/octet-stream';    
 	}
 }

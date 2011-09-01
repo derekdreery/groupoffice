@@ -305,18 +305,22 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 	loadContact : function(id)
 	{
 		this.formPanel.form.load({
-			url: GO.settings.modules.addressbook.url+ 'json.php', 
-			params: {
-				contact_id: id,
-				task: 'load_contact'
+//			url: GO.settings.modules.addressbook.url+ 'json.php', 
+//			params: {
+//				contact_id: id,
+//				task: 'load_contact'
+//			},
+			url:GO.url('addressbook/contact/load'),
+			params:{
+				id:id
 			},
 			success: function(form, action) {
 				
-				if(!action.result.data.write_permission)
-				{
-					Ext.Msg.alert(GO.lang['strError'], GO.lang['strNoWritePermissions']);						
-				}else
-				{					
+//				if(!action.result.data.write_permission)
+//				{
+//					Ext.Msg.alert(GO.lang['strError'], GO.lang['strNoWritePermissions']);						
+//				}else
+//				{					
 					this.personalPanel.setAddressbookID(action.result.data.addressbook_id);
 					this.formPanel.form.findField('company_id').setRemoteText(action.result.data.company_name);
 					if(!GO.util.empty(action.result.data.photo_src))
@@ -326,7 +330,7 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 						this.updateCfTabs(action.result.data.allowed_cf_categories);
 					}
 					GO.addressbook.ContactDialog.superclass.show.call(this);
-				}
+				//}
 			},
 			scope: this
 		});
@@ -337,12 +341,12 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 		var company = this.personalPanel.formCompany.getRawValue();
 
 		this.formPanel.form.submit({
-			url:GO.settings.modules.addressbook.url+ 'action.php',
+			//url:GO.settings.modules.addressbook.url+ 'action.php',
 			waitMsg:GO.lang['waitMsgSave'],
+			url:GO.url('addressbook/contact/submit'),			
 			params:
-			{
-				task : 'save_contact',
-				contact_id : this.contact_id,
+			{				
+				id : this.contact_id,
 				company: company,
 				delete_photo : this.deleteImageCB.getValue()
 			},
