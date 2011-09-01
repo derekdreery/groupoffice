@@ -163,14 +163,17 @@ class GO_LINKS extends db
 		{
 			$link['id'] = $id1;
 			$link['folder_id'] = $folder_id1;
-			$link['link_type'] = $type2;
-			$link['link_id'] = $id2;
+			$link['model_type_id'] = $type2;
+			$link['model_id'] = $id2;
 			$link['description'] = $description1;
 			$link['ctime']=time();
 
 			//go_debug($link);
+			
+			$model = get_model_by_type_id($type1);
+			$table1 = $model->tableName();
 	
-			$this->insert_row('go_links_'.$type1,$link);
+			$this->insert_row('go_links_'.$table1,$link);
 			//if($update_link_count)
 				//$this->update_link_count($id1, $type1);
 		}
@@ -179,12 +182,15 @@ class GO_LINKS extends db
 		{
 			$link['id'] = $id2;
 			$link['folder_id'] = $folder_id2;
-			$link['link_type'] = $type1;
-			$link['link_id'] = $id1;
+			$link['model_type_id'] = $type1;
+			$link['model_id'] = $id1;
 			$link['description'] = $description2;
 			$link['ctime']=time();
+			
+			$model = get_model_by_type_id($type2);
+			$table2 = $model->tableName();
 				
-			$this->insert_row('go_links_'.$type2,$link);
+			$this->insert_row('go_links_'.$table2,$link);
 
 			//if($update_link_count)
 				//$this->update_link_count($id2, $type2);
@@ -201,23 +207,30 @@ class GO_LINKS extends db
 	
 	function link_exists($link_id1, $type1, $link_id2, $type2)
 	{
-		$sql = "SELECT * FROM go_links_".intval($type1)." WHERE ".
-			"`id`=".intval($link_id1)." AND link_type=".intval($type2)." AND `link_id`=".intval($link_id2);
+		$model = get_model_by_type_id($type1);
+		$table1 = $model->tableName();
+			
+		$sql = "SELECT * FROM go_links_".$table1." WHERE ".
+			"`id`=".intval($link_id1)." AND model_type_id=".intval($type2)." AND `model_id`=".intval($link_id2);
 		$this->query($sql);
 		return $this->next_record();
 	}
 	
 	function delete_link($link_id1, $type1, $link_id2=0, $type2=0)
 	{		
-		return true;
+			$model = get_model_by_type_id($type1);
+			$table1 = $model->tableName();
+			
+			$model = get_model_by_type_id($type2);
+			$table2 = $model->tableName();
 		//if($link_id1>0)
 		//{
 			if($link_id2>0)
 			{
-				$sql = "DELETE FROM go_links_".intval($type1)." WHERE id=".intval($link_id1)." AND link_type=".$this->escape($type2)." AND link_id=".intval($link_id2);
+				$sql = "DELETE FROM go_links_".$table1." WHERE id=".intval($link_id1)." AND model_type_id=".$this->escape($type2)." AND id=".intval($link_id2);
 				$this->query($sql);
 				
-				$sql = "DELETE FROM go_links_".intval($type2)." WHERE id=".intval($link_id2)." AND link_type=".$this->escape($type1)." AND link_id=".intval($link_id1);
+				$sql = "DELETE FROM go_links_".$table2." WHERE id=".intval($link_id2)." AND model_type_id=".$this->escape($type1)." AND id=".intval($link_id1);
 				$this->query($sql);
 
 				/*if($update_link_count){
@@ -226,7 +239,7 @@ class GO_LINKS extends db
 				}*/
 			}else
 			{
-				$sql = "SELECT DISTINCT link_type FROM go_links_".intval($type1)." WHERE model_id=".intval($link_id1);
+				$sql = "SELECT DISTINCT link_type FROM go_links_".$table1." WHERE model_id=".intval($link_id1);
 				//go_debug($sql);
 				$this->query($sql);
 				
@@ -244,13 +257,16 @@ class GO_LINKS extends db
 					while($r=$db->next_record()){
 						$touched_items[]=$r['id'];
 					}*/
-					$db->query("DELETE FROM go_links_".intval($this->f('link_type'))." WHERE link_id=".intval($link_id1));
+					
+					$model = get_model_by_type_id($this->f('link_type'));
+					
+					$db->query("DELETE FROM go_links_".$model->tableName()." WHERE id=".intval($link_id1));
 					/*foreach($touched_items as $i){
 						$l->update_link_count($i, intval($this->f('link_type')));
 					}*/
 					
 				}
-				$sql = "DELETE FROM go_links_".intval($type1)." WHERE model_id=".intval($link_id1);				
+				$sql = "DELETE FROM go_links_".$table1." WHERE model_id=".intval($link_id1);				
 				$this->query($sql);
 
 				//$this->update_link_count($link_id1, $type1);

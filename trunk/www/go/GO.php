@@ -479,6 +479,10 @@ class GO{
 	 * @return GO_Base_Db_ActiveRecord 
 	 */
 	public static function getModel($modelName){
+		
+		if(!class_exists($modelName))
+			throw new Exception($modelName.' does not exist');
+		
 		return call_user_func(array($modelName, 'model'));
 	}
 
