@@ -18,10 +18,10 @@ class GO_Base_Model_SearchCacheRecord extends GO_Base_Db_ActiveRecord {
 	public function tableName() {
 		return 'go_search_cache';
 	}
-//
-//	public function primaryKey(){
-//		return array('id', 'link_type');					
-//	}
+
+	public function primaryKey(){
+		return array('model_id', 'model_type_id');					
+	}
 	
 	/**
 	 * Set this to true so it won't be deleted.

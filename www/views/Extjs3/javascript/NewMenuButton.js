@@ -27,20 +27,20 @@
 	},
 	
 	setLinkConfig : function(config){
-		this.menu.link_config=config;		
-		this.menu.link_config.type_id=config.type+':'+config.id;
+		this.menu.linkConfig=config;		
+		//this.menu.linkConfig.type_id=config.type+':'+config.id;
 		
-		if(!this.menu.link_config.scope)
+		if(!this.menu.linkConfig.scope)
 		{
-			this.menu.link_config.scope=this;
+			this.menu.linkConfig.scope=this;
 		}
 		
-		if(this.menu.link_config.callback)
+		if(this.menu.linkConfig.callback)
 		{
-			this.menu.link_config.callback=this.menu.link_config.callback.createDelegate(this.menu.link_config.scope);
+			this.menu.linkConfig.callback=this.menu.linkConfig.callback.createDelegate(this.menu.linkConfig.scope);
 		}
 		
-		this.setDisabled(GO.util.empty(config.id));
+		this.setDisabled(GO.util.empty(config.linkModelId));
 	}	
 	
 });
@@ -61,27 +61,27 @@
 	},
 
 	setLinkConfig : function(config){
-		this.menu.link_config=config;
-		this.menu.link_config.type_id=config.type+':'+config.id;
+		this.menu.linkConfig=config;
+		this.menu.linkConfig.modelNameAndId=config.linkModelName+':'+config.linkModelId;
 
-		if(!this.menu.link_config.scope)
+		if(!this.menu.linkConfig.scope)
 		{
-			this.menu.link_config.scope=this;
+			this.menu.linkConfig.scope=this;
 		}
 
-		if(this.menu.link_config.callback)
+		if(this.menu.linkConfig.callback)
 		{
-			this.menu.link_config.callback=this.menu.link_config.callback.createDelegate(this.menu.link_config.scope);
+			this.menu.linkConfig.callback=this.menu.linkConfig.callback.createDelegate(this.menu.linkConfig.scope);
 		}
 
-		this.setDisabled(GO.util.empty(config.id));
+		this.setDisabled(GO.util.empty(config.linkModelId));
 	}
 
 });
 
 
-GO.moduleManager.on('languageLoaded',function(){
-	GO.newMenuItems.push({
+GO.mainLayout.onReady(function(){
+	GO.newMenuItems.unshift({
 		text: GO.lang.link,
 		iconCls: 'has-links',
 		handler:function(item, e)
@@ -96,7 +96,7 @@ GO.moduleManager.on('languageLoaded',function(){
 				});
 			}
 
-			this.linksDialog.setSingleLink(item.parentMenu.link_config.id, item.parentMenu.link_config.type);
+			this.linksDialog.setSingleLink(item.parentMenu.linkConfig.linkModelId, item.parentMenu.linkConfig.linkModelName);
 			this.linksDialog.show();
 		}
 	});

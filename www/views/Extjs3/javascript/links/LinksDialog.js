@@ -76,12 +76,12 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 		this.fromLinks = [];
 		for (var i = 0;i<gridRecords.length;i++)
 		{
-			this.fromLinks.push({'link_id' : gridRecords[i].data['link_id'], 'link_type' : gridRecords[i].data['link_type']});
+			this.fromLinks.push({'model_id' : gridRecords[i].data['model_id'], 'model_name' : gridRecords[i].data['model_name']});
 		}
 	},
-	setSingleLink : function(link_id, link_type)
+	setSingleLink : function(linkModelId, linkModelName)
 	{
-		this.fromLinks=[{"link_id":link_id,"link_type":link_type}];
+		this.fromLinks=[{"model_id":linkModelId,"model_name":linkModelName}];
 	},
 
 	selectFolder : function(toLinks){
@@ -99,7 +99,7 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 
 		for (var i = 0;i<records.length;i++)
 		{
-			this.tolinks.push({'link_id' : records[i].data['id'], 'link_type' : records[i].data['link_type']});
+			this.tolinks.push({'model_id' : records[i].data['model_id'], 'model_name' : records[i].data['model_name']});
 		}
 
 		if(this.tolinks.length==1){
@@ -140,7 +140,7 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 			}
 			this.selectFolderWindow.show();
 
-			this.selectFolderTree.loadLinks(this.tolinks[0]['link_id'], this.tolinks[0]['link_type'], function(rootNode){
+			this.selectFolderTree.loadLinks(this.tolinks[0]['model_id'], this.tolinks[0]['model_name'], function(rootNode){
 				if(!rootNode.childNodes.length){
 					this.selectFolderWindow.hide();
 					this.sendLinkRequest(this.tolinks);
@@ -158,13 +158,12 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 	sendLinkRequest : function(tolinks, to_folder_id){
 		var to_folder_id = to_folder_id || 0;
 		Ext.Ajax.request({
-			url: BaseHref+'action.php',
+			url: GO.url('core/link'),
 			params: {
-				task: 'link',
 				fromLinks: Ext.encode(this.fromLinks),
 				toLinks: Ext.encode(tolinks),
 				description:this.grid.linkDescriptionField.getValue(),
-				folder_id: this.folder_id,
+				from_folder_id: this.folder_id,
 				to_folder_id : to_folder_id
 				},
 			callback: function(options, success, response)

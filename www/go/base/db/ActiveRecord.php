@@ -214,7 +214,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function __construct($newRecord=true){			
 		
-		$pk = $this->pk;
+		//$pk = $this->pk;
 
 		$this->loadColumns();
 		$this->setIsNew($newRecord);
@@ -1448,14 +1448,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		if($attr){
 
-			$model = GO_Base_Model_SearchCacheRecord::model()->findSingle(
-							array(
-									'by'=>array(
-											array('model_id',$this->pk),
-											array('model_type_id',$this->modelTypeId())
-									)
-								)
-							);
+			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()));
 			
 			if(!$model)
 				$model = new GO_Base_Model_SearchCacheRecord();
@@ -1471,7 +1464,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				'name' => '',
 				'link_type'=>$this->modelTypeId(),
 				'description'=>'',		
-				'type'=>'',
+				'type'=>$this->localizedName, //deprecated, for backwards compatibilty
 				'keywords'=>$this->_getSearchCacheKeywords($this->localizedName),
 				'mtime'=>$this->mtime,
 				'acl_id'=>$this->findAclId()
@@ -1673,14 +1666,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$attr = $this->getCacheAttributes();
 		
 		if($attr){
-			$model = GO_Base_Model_SearchCacheRecord::model()->findSingle(
-							array(
-									'by'=>array(
-											array('model_id',$this->pk),
-											array('model_type_id',$this->modelTypeId())
-									)
-								)
-							);
+			$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$this->pk, 'model_type_id'=>$this->modelTypeId()));
 			if($model)
 				$model->delete();
 		}
@@ -1824,11 +1810,66 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * Pass another model to this function and they will be linked with the
 	 * Group-Office link system.
 	 * 
-	 * @todo
 	 * @param mixed $model 
 	 */
 	
-	public function linkTo($model){
+	public function link($model, $description='', $this_folder_id=0, $model_folder_id=0, $linkBack=true){
+		
+		if($this->_linkExists($model))
+			return true;
+		
+		$fieldNames = array(
+				'id',
+				'folder_id',
+				'model_type_id',
+				'model_id', 
+				'description',
+				'ctime');
+		
+		$sql = "INSERT INTO `go_links_{$this->tableName()}` ".
+					"(`".implode('`,`', $fieldNames)."`) VALUES ".
+					"(:".implode(',:', $fieldNames).")";
+		
+		$values = array(
+				':id'=>$this->id,
+				':folder_id'=>$this_folder_id,
+				':model_type_id'=>$model->modelTypeId(),
+				':model_id'=>$model->id,
+				':description'=>$description,
+				':ctime'=>time()
+		);
+		
+		GO::debug($sql);
+		GO::debug($values);
+
+		$result = $this->getDbConnection()->prepare($sql);
+		$success = $result->execute($values);
+		
+		if($success)
+			return !$linkBack || $model->link($this, $description, $model_folder_id, $this_folder_id, false);
+	}
+	
+	private function _linkExists($model){
+		$sql = "SELECT count(*)FROM `go_links_{$this->tableName()}` WHERE ".
+			"`id`=".intval($this->id)." AND model_type_id=".intval($model->modelTypeId())." AND `model_id`=".intval($model->id);
+		$stmt = $this->getDbConnection()->query($sql);
+		return $stmt->fetchColumn(0) > 0;		
+	}
+	
+	public function unlink($model, $unlinkBack=true){
+		$sql = "DELETE FROM `go_links_{$this->tableName()}` WHERE id=:id AND model_type_id=:model_type_id AND model_id=:model_id";
+		
+		$values=array(
+				'id'=>$this->id,
+				'module_type_id'=>$model->modelTypeId(),
+				'model_id'=>$model->id
+		);
+		
+		$result = $this->getDbConnection()->prepare($sql);
+		$success = $result->execute($values);
+		
+		if($success)
+			return !$unlinkBack || $model->unlink($this, false);
 		
 	}
 	
@@ -1915,12 +1956,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		if($attr){
 			
-			GO_Base_Model_SearchCacheRecord::model()->deleteBy(array(
-					'by'=>array(
-							array('model_name',$this->className())
-							)
-						)
-					);
+//			GO_Base_Model_SearchCacheRecord::model()->deleteBy(array(
+//					'by'=>array(
+//							array('model_name',$this->className())
+//							)
+//						)
+//					);
 			
 			
 			$stmt = $this->find(array(

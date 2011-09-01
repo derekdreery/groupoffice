@@ -14,3 +14,13 @@ $updates[201108131011][]="ALTER TALE `ab_contacts` CHANGE `email` `email` VARCHA
 $updates[201108131011][]="ALTER TABLE `ab_contacts` CHANGE `email_allowed` `email_allowed` ENUM( '0', '1' ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1'";
 $updates[201108131011][]="ALTER TABLE `ab_contacts` DROP `color`"; 
 $updates[201108131011][]="ALTER TABLE `ab_contacts` DROP `sid`"; 
+
+
+$updates[201108190000][]="RENAME TABLE `go_links_2` TO `go_links_ab_contacts`;";
+$updates[201108190000][]="ALTER TABLE `go_links_ab_contacts` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL";
+$updates[201108190000][]="ALTER TABLE `go_links_ab_contacts` CHANGE `link_type` `model_type_id` INT( 11 ) NOT NULL";
+
+
+$updates[201108190000][]="RENAME TABLE `go_links_3` TO `go_links_ab_companies`;";
+$updates[201108190000][]="ALTER TABLE `go_links_ab_companies` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL";
+$updates[201108190000][]="ALTER TABLE `go_links_ab_companies` CHANGE `link_type` `model_type_id` INT( 11 ) NOT NULL";

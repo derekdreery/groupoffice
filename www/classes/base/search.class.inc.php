@@ -80,26 +80,26 @@ class search extends db {
 	 * @param int $offset
 	 * @param string $sort_index Sort the result on this field
 	 * @param string $sort_order Order it DESC / ASC 
-	 * @param array $selected_types An array of link_types that should only be searched on.
-	 * @param int $link_id Search only in items linked to this id and type
-	 * @param int $link_type Search only in items linked to this id and type
+	 * @param array $selected_types An array of model_type_ids that should only be searched on.
+	 * @param int $model_id Search only in items linked to this id and type
+	 * @param int $model_type_id Search only in items linked to this id and type
 	 * @param int $link_folder_id Show results from this link folder
-	 * @param bool $omit_link_types select all but the selected array of link types
+	 * @param bool $omit_model_type_ids select all but the selected array of link types
 	 * @return int The total records found
 	 */
-	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0, $link_folder_id=0, $conditions=array(), $omit_link_types=false)
+	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $model_id=0, $model_type_id=0, $link_folder_id=0, $conditions=array(), $omit_model_type_ids=false)
 	{
-		$sql = "SELECT sc.acl_id, sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.link_type, sc.type, sc.mtime";
-		if($link_id>0)
+		$sql = "SELECT sc.acl_id, sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.model_type_id, sc.type, sc.mtime";
+		if($model_id>0)
 		{
 			$sql .= ",l.description AS link_description";
 		}
 		$sql .= " FROM go_search_cache sc ".
 			"INNER JOIN go_acl a ON (sc.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." or a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 				
-		if($link_id>0)
+		if($model_id>0)
 		{
-			$sql .= "INNER JOIN go_links_$link_type l ON l.link_id=sc.id AND l.link_type=sc.link_type ";		
+			$sql .= "INNER JOIN go_links_$model_type_id l ON l.model_id=sc.id AND l.model_type_id=sc.model_type_id ";		
 		}
 		 
 		/*$sql .=	"WHERE EXISTS (".
@@ -112,10 +112,10 @@ class search extends db {
 		{
 			$where = true;
 			$sql .= "WHERE l.folder_id=".intval($link_folder_id)." ";
-		}elseif($link_id>0)
+		}elseif($model_id>0)
 		{
 			$where = true;
-			$sql .= "WHERE l.id=".intval($link_id)." ";
+			$sql .= "WHERE l.id=".intval($model_id)." ";
 			
 			if($link_folder_id>-1)
 				$sql .= " AND l.folder_id=0 "; 
@@ -148,9 +148,9 @@ class search extends db {
 			$sql .= $where ? ' AND ' : ' WHERE ';
 			$where = true;
 
-			$sql .= "sc.link_type ";
+			$sql .= "sc.model_type_id ";
 
-			if($omit_link_types)
+			if($omit_model_type_ids)
 				$sql .= "NOT ";
 
 			$sql .= "IN (".implode(',', $selected_types).") ";
@@ -163,7 +163,7 @@ class search extends db {
 			$sql .= $condition." ";
 		}
 
-		$sql .= " GROUP BY sc.id, sc.link_type";	
+		$sql .= " GROUP BY sc.id, sc.model_type_id";	
 
 		if(!empty($sort_index))
 			$sql .= " ORDER BY $sort_index $sort_order";
@@ -194,7 +194,7 @@ class search extends db {
 	}
 
 	
-	/*function global_search_oud($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $link_id=0, $link_type=0)
+	/*function global_search_oud($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $model_id=0, $model_type_id=0)
 	{
 		$this->update_search_cache();
 		$sql = "SELECT DISTINCT sc.* FROM go_search_cache sc ";
@@ -206,11 +206,11 @@ class search extends db {
 				"INNER JOIN go_users_groups ug ON (ug.group_id=a.group_id) ";
 		}
 				
-		if($link_id>0)
+		if($model_id>0)
 		{			
 			$sql .= "INNER JOIN go_links l ON ".
-				"((l.link_id1=sc.id AND l.type1=sc.link_type AND l.link_id2=$link_id AND l.type2=$link_type) OR ".
-				"(l.link_id2=sc.id AND l.type2=sc.link_type AND l.link_id1=$link_id AND l.type1=$link_type)) ";		
+				"((l.model_id1=sc.id AND l.type1=sc.model_type_id AND l.model_id2=$model_id AND l.type2=$model_type_id) OR ".
+				"(l.model_id2=sc.id AND l.type2=sc.model_type_id AND l.model_id1=$model_id AND l.type1=$model_type_id)) ";		
 		}		
 		
 		//WIth an offset the joins work faster then the subselects
@@ -245,7 +245,7 @@ class search extends db {
 		
 		if(count($selected_types))
 		{
-			$sql .= " AND link_type IN (".implode(',', $selected_types).") ";
+			$sql .= " AND model_type_id IN (".implode(',', $selected_types).") ";
 		}
 		
 		$sql .= " ORDER BY sc.type ASC, mtime ASC";
@@ -282,14 +282,14 @@ class search extends db {
 		return $count;
 	}*/
 	
-	function get_latest_links_json($user_id, $link_id, $link_type)
+	function get_latest_links_json($user_id, $model_id, $model_type_id)
 	{
 		/*$conditions = array(
 			'l.ctime>'.Date::date_add(time(), -90)
 		);*/
 
 		//events and tasks are omitted because they are in separate tables
-		return $this->get_links_json($user_id,'',0,15,'l.ctime', 'DESC',array(1,12), $link_id,$link_type,-1, array(),true);
+		return $this->get_links_json($user_id,'',0,15,'l.ctime', 'DESC',array(1,12), $model_id,$model_type_id,-1, array(),true);
 	}
 	
 	/**
@@ -301,13 +301,13 @@ class search extends db {
 	 * @param unknown_type $limit
 	 * @param unknown_type $sort
 	 * @param unknown_type $dir
-	 * @param unknown_type $link_types
-	 * @param unknown_type $link_id
-	 * @param unknown_type $link_type
+	 * @param unknown_type $model_type_ids
+	 * @param unknown_type $model_id
+	 * @param unknown_type $model_type_id
 	 * @param unknown_type $folder_id
 	 * @return unknown
 	 */
-	function get_links_json($user_id, $query, $start, $limit, $sort,$dir, $link_types, $link_id, $link_type,$folder_id, $conditions=array(), $omit_link_types=false){
+	function get_links_json($user_id, $query, $start, $limit, $sort,$dir, $model_type_ids, $model_id, $model_type_id,$folder_id, $conditions=array(), $omit_model_type_ids=false){
 		
 		global $GO_CONFIG;
 
@@ -316,23 +316,23 @@ class search extends db {
 		
 		$response['results']=array();
 		$response['total']=0;
-		if(empty($query) && empty($link_id)){
+		if(empty($query) && empty($model_id)){
 			return $response;
 		}
 		
 		
 		
-		if($link_id>0)
+		if($model_id>0)
 		{
 			//$_folder_id = $folder_id>-1 ? $folder_id : 0;
-			$GO_LINKS->get_folders($link_id, $link_type, $folder_id);
+			$GO_LINKS->get_folders($model_id, $model_type_id, $folder_id);
 			while($link=$GO_LINKS->next_record())
 			{
 				$response['results'][]=array(
 					'id'=>$link['id'],
-					'parent_link_id'=>$link_id, 
-					'parent_link_type'=>$link_type,
-					'link_type'=>'folder',
+					'parent_model_id'=>$model_id, 
+					'parent_model_type_id'=>$model_type_id,
+					'model_type_id'=>'folder',
 					'link_and_type'=>'folder:'.$link['id'],
 					'name'=>htmlspecialchars($link['name'],ENT_QUOTES, 'UTF-8'),
 					'type'=>'Folder',
@@ -346,16 +346,16 @@ class search extends db {
 		
 		
 		
-		$response['total']=$this->global_search($user_id, $query, $start, $limit, $sort,$dir, $link_types, $link_id, $link_type,$folder_id, $conditions, $omit_link_types);
+		$response['total']=$this->global_search($user_id, $query, $start, $limit, $sort,$dir, $model_type_ids, $model_id, $model_type_id,$folder_id, $conditions, $omit_model_type_ids);
 
 		while($this->next_record())
 		{
 			$response['results'][]=array(
-				'iconCls'=>'go-link-icon-'.$this->f('link_type'),
+				'iconCls'=>'go-link-icon-'.$this->f('model_type_id'),
 				'id'=>$this->f('id'),
-				'link_count'=>$GO_LINKS->count_links($this->f('id'), $this->f('link_type')),
-				'link_type'=>$this->f('link_type'),
-				'link_and_type'=>$this->f('link_type').':'.$this->f('id'),
+				'link_count'=>$GO_LINKS->count_links($this->f('id'), $this->f('model_type_id')),
+				'model_type_id'=>$this->f('model_type_id'),
+				'link_and_type'=>$this->f('model_type_id').':'.$this->f('id'),
 				'type_name'=>'('.$this->f('type').') '.strip_tags($this->f('name')),
 				'name'=>$this->f('name'),
 				'type'=>$this->f('type'),
@@ -396,7 +396,7 @@ class search extends db {
 	 */
 	function get_search_result($id, $type)
 	{
-		$sql = "SELECT * FROM go_search_cache WHERE id=".intval($id)." AND link_type=".intval($type);
+		$sql = "SELECT * FROM go_search_cache WHERE id=".intval($id)." AND model_type_id=".intval($type);
 		$this->query($sql);
 		if($this->next_record())
 		{
@@ -432,29 +432,29 @@ class search extends db {
 	 *
 	 *
 	 * @param unknown_type $id
-	 * @param unknown_type $link_type
+	 * @param unknown_type $model_type_id
 	 */
 	
-	function delete_search_result($id, $link_type)
+	function delete_search_result($id, $model_type_id)
 	{
 		global $GO_MODULES, $GO_CONFIG;
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 		$GO_LINKS = new GO_LINKS();
 
-		$sr = $this->get_search_result($id, $link_type);
+		$sr = $this->get_search_result($id, $model_type_id);
 		if($sr)
 		{
-			$sql = "DELETE FROM go_search_cache WHERE id=".intval($id)." AND link_type=".$this->escape($link_type);
+			$sql = "DELETE FROM go_search_cache WHERE id=".intval($id)." AND model_type_id=".$this->escape($model_type_id);
 			$this->query($sql);
 			
-			$this->log($id, $link_type, 'Deleted '.strip_tags($sr['name']));
-			$GO_LINKS->delete_link($id, $link_type);			
+			$this->log($id, $model_type_id, 'Deleted '.strip_tags($sr['name']));
+			$GO_LINKS->delete_link($id, $model_type_id);			
 		}
 		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
 			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
 			$cf = new customfields();
-			$cf->delete_cf_row($link_type, $id);
+			$cf->delete_cf_row($model_type_id, $id);
 		}
 	}
 	
@@ -473,17 +473,17 @@ class search extends db {
 			$result['keywords']=substr($result['keywords'],0,255);
 		}
 
-		//$result['link_count']=$GO_LINKS->count_links($result['id'], $result['link_type']);
+		//$result['link_count']=$GO_LINKS->count_links($result['id'], $result['model_type_id']);
 
-		$old_result = $this->get_search_result($result['id'], $result['link_type']);
+		$old_result = $this->get_search_result($result['id'], $result['model_type_id']);
 		if($old_result)
  		{
- 			$this->update_row('go_search_cache',array('id', 'link_type'), $result);
-			$this->log($result['id'], $result['link_type'], 'Updated '.strip_tags($result['name']));
+ 			$this->update_row('go_search_cache',array('id', 'model_type_id'), $result);
+			$this->log($result['id'], $result['model_type_id'], 'Updated '.strip_tags($result['name']));
  		}else {		
  			$cache['ctime']=time();
  			$this->insert_row('go_search_cache',$result);
- 			$this->log($result['id'], $result['link_type'], 'Added '.strip_tags($result['name']));
+ 			$this->log($result['id'], $result['model_type_id'], 'Added '.strip_tags($result['name']));
 
 			//create default link folders
 			global $GO_CONFIG;
@@ -491,7 +491,7 @@ class search extends db {
 			require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
 			$GO_LINKS = new GO_LINKS();
 			
-			$default_folders = $GLOBALS['GO_CONFIG']->get_setting('default_link_folder_'.$result['link_type']);
+			$default_folders = $GLOBALS['GO_CONFIG']->get_setting('default_link_folder_'.$result['model_type_id']);
 			if($default_folders){
 
 				$default_folder_array=array();
@@ -503,12 +503,12 @@ class search extends db {
 					$parent_id=0;
 					for($i=0;$i<count($folders);$i++)
 					{
-						$folder = $GO_LINKS->get_folder_by_name($folders[$i], $result['id'], $result['link_type'], $parent_id);
+						$folder = $GO_LINKS->get_folder_by_name($folders[$i], $result['id'], $result['model_type_id'], $parent_id);
 						if(!$folder){
 							$parent_id = $GO_LINKS->add_folder(array(
 								'name'=>$folders[$i],
-								'link_id'=>$result['id'],
-								'link_type'=>$result['link_type'],
+								'model_id'=>$result['id'],
+								'model_type_id'=>$result['model_type_id'],
 								'parent_id'=>$parent_id
 							));
 						}else
@@ -522,14 +522,14 @@ class search extends db {
  		}
 	}
 	
-	function log($link_id, $link_type, $text)
+	function log($model_id, $model_type_id, $text)
 	{
 		global $GO_MODULES;
 		
 		if(isset($GLOBALS['GO_MODULES']->modules['log']) && !defined('NOLOG'))
 		{
-			$log['link_id']=$link_id;
-			$log['link_type']=$link_type;
+			$log['model_id']=$model_id;
+			$log['model_type_id']=$model_type_id;
 			$log['time']=time();
 			$log['text']=$text;
 			$log['user_id']=$GLOBALS['GO_SECURITY']->user_id;
@@ -583,12 +583,12 @@ class search extends db {
 	{
 		if(!isset($_SESSION['GO_SESSION']['search_types']))
 		{
-			$sql = "SELECT DISTINCT link_type, type FROM go_search_cache";
+			$sql = "SELECT DISTINCT model_type_id, type FROM go_search_cache";
 			$this->query($sql);
 			while($this->next_record())
 			{
 				$type['type']=$this->f('type');
-				$type['link_type']=$this->f('link_type');
+				$type['model_type_id']=$this->f('model_type_id');
 
 				$_SESSION['GO_SESSION']['search_types'][]=$type;
 			}

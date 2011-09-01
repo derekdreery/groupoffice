@@ -41,13 +41,13 @@ GO.grid.SearchPanel = function(config){
 	this.filterPanel.on('change', function(grid, types){		
 		this.searchGrid.store.baseParams.types = Ext.encode(types);
 		this.searchGrid.store.load();
-		delete this.searchGrid.store.baseParams.types;
+		//delete this.searchGrid.store.baseParams.types;
 	}, this);
 	
 	
 	this.store = new GO.data.JsonStore({
 		//url: BaseHref+'json.php',			
-		url: GO.url('core/search'),
+		url: GO.url('search/grid'),
 		baseParams: {
 			link_id: this.link_id,
 			link_type: this.link_type,
@@ -222,7 +222,7 @@ Ext.extend(GO.grid.SearchPanel, Ext.Panel, {
 				}
 				
 				this.previewPanel.getLayout().setActiveItem(panelId);				
-				this.linkPreviewPanels[panelId].load(record.data.id);
+				this.linkPreviewPanels[panelId].load(record.data.model_id);
 			}
 		}
 	},
