@@ -24,6 +24,15 @@ if ( !function_exists( 'get_called_class' ) ) {
 } 
 
 
+function get_model_by_type_id($model_type_id){
+	$db = new db();
+	$sql = "SELECT model_name FROM go_model_types WHERE id=$model_type_id";
+		$db->query($sql);
+		$r = $db->next_record();
+		return GO::getModel($r['model_name']);
+}
+
+
 function ini_return_bytes($val) {
     $val = trim($val);
     $last = strtolower($val[strlen($val)-1]);

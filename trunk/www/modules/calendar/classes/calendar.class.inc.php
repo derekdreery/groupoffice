@@ -3135,9 +3135,13 @@ class calendar extends db {
 
 
 	function get_linked_events($user_id, $link_id, $link_type){
+		
+		$model = get_model_by_type_id($link_type);
+		
+		
 		$sql = "SELECT DISTINCT e.*, c.name AS calendar_name FROM cal_events e ".
 			"INNER JOIN cal_calendars c ON c.id=e.calendar_id ".
-			"INNER JOIN go_links_$link_type l ON l.link_id=e.id AND l.link_type=1 ".
+			"INNER JOIN go_links_{$model->tableName()} l ON l.id=e.id AND l.model_type_id=1 ".
 			"WHERE l.id=? AND start_time>".time()." ORDER BY start_time ASC";
 
 		$this->query($sql, 'i', array($link_id));

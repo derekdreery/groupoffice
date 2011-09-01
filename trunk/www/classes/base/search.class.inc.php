@@ -89,7 +89,10 @@ class search extends db {
 	 */
 	function global_search($user_id, $query, $start, $offset, $sort_index='name', $sort_order='ASC', $selected_types=array(), $model_id=0, $model_type_id=0, $link_folder_id=0, $conditions=array(), $omit_model_type_ids=false)
 	{
-		$sql = "SELECT sc.acl_id, sc.user_id,sc.id, sc.module, sc.name, sc.description,sc.model_type_id, sc.type, sc.mtime";
+		
+		
+		
+		$sql = "SELECT sc.acl_id, sc.user_id,sc.model_id AS id, sc.module, sc.name, sc.description,sc.model_type_id AS link_type, sc.type, sc.mtime";
 		if($model_id>0)
 		{
 			$sql .= ",l.description AS link_description";
@@ -99,7 +102,9 @@ class search extends db {
 				
 		if($model_id>0)
 		{
-			$sql .= "INNER JOIN go_links_$model_type_id l ON l.model_id=sc.id AND l.model_type_id=sc.model_type_id ";		
+			$model = get_model_by_type_id($model_type_id);
+			
+			$sql .= "INNER JOIN go_links_{$model->tableName()} l ON l.model_id=sc.model_id AND l.model_type_id=sc.model_type_id ";		
 		}
 		 
 		/*$sql .=	"WHERE EXISTS (".
@@ -163,7 +168,7 @@ class search extends db {
 			$sql .= $condition." ";
 		}
 
-		$sql .= " GROUP BY sc.id, sc.model_type_id";	
+		$sql .= " GROUP BY sc.model_id, sc.model_type_id";	
 
 		if(!empty($sort_index))
 			$sql .= " ORDER BY $sort_index $sort_order";

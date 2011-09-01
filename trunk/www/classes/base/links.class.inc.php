@@ -267,10 +267,8 @@ class GO_LINKS extends db
 	function count_links($link_id, $type)
 	{
 		
-		$sql = "SELECT model_name FROM go_model_types WHERE id=$type";
-		$this->query($sql);
-		$r = $this->next_record();
-		return GO::getModel($r['model_name'])->countLinks($link_id);
+		return get_model_by_type_id($type)->countLinks($link_id);
+
 //		
 //		if($link_id > 0)
 //		{

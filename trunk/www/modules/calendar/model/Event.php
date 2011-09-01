@@ -17,6 +17,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	
 	protected function init() {
+		
+		$this->columns['start_time']['gotype']='unixtimestamp';
+		$this->columns['end_time']['gotype']='unixtimestamp';
+		$this->columns['repeat_end_time']['gotype']='unixtimestamp';
+		
 		parent::init();
 	}
 	
