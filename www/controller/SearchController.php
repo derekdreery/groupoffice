@@ -17,6 +17,8 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	
 	protected function prepareGrid($grid) {
 		$grid->formatColumn('iconCls', '"go-model-".$model->mode_name');		
+		$grid->formatColumn('name_and_type', '"(".$model->type.") ".$model->name');
+		$grid->formatColumn('name_name_and_id', '$model->model_name.":".$model->model_id');
 		//$grid->formatColumn('type', 'class_exists($model->model_name) ? call_user_func(array($model->model_name, "model"))->localizedName');
 	}
 	

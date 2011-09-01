@@ -16,22 +16,14 @@ GO.form.SelectLink = function(config){
 	config = config || {};
 	
 	config.store = new GO.data.JsonStore({				
-		url: BaseHref+'json.php',
-		baseParams: {
-			query: '',
-			task:'links'
-		},
-		root: 'results',
-		totalProperty: 'total',
-		fields:['link_id','link_type','link_and_type', 'type_name'],
-
-		remoteSort: true
-				
+		url: GO.url('search/grid'),
+		fields:['model_id','model_name','name_and_type', 'model_name_and_id'],
+		remoteSort: true				
 	});
 
 	config.forceSelection=true;
-	config.displayField='type_name';
-	config.valueField='link_and_type',
+	config.displayField='name_and_type';
+	config.valueField='name_name_and_id',
 	config.hiddenName='link';
 	config.triggerAction='all';
 	config.width=400;
@@ -53,8 +45,8 @@ Ext.extend(GO.form.SelectLink, GO.form.ComboBoxReset,{
 					var selectionModel = this.grid.searchGrid.getSelectionModel();
 					var record = selectionModel.getSelected();
 
-					this.selectLinkField.setValue(record.get('link_and_type'));
-					this.selectLinkField.setRemoteText(record.get('type_name'));
+					this.selectLinkField.setValue(record.get('model_name_and_id'));
+					this.selectLinkField.setRemoteText(record.get('name_and_type'));
 					this.hide();
 				}
 			});
