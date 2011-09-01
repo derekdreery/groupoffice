@@ -485,5 +485,21 @@ class GO{
 		
 		return call_user_func(array($modelName, 'model'));
 	}
+	
+	
+	public static function url($path='', $params='', $relative=true){
+		$url = $relative ? GO::config()->host : GO::config()->full_url;
+		
+		//if($path!='')
+		$url .= '?r='.$path;
+		
+		if(empty($params))
+			$url .= '&'.$params;
+		
+		if(isset(GO::session()->values['security_token']))
+			$url .= '&security_token='.GO::session()->values['security_token'];
+		
+		return $url;
+	}
 
 }	

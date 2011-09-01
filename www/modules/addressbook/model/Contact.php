@@ -14,6 +14,9 @@
  */
 
 /**
+ * @property String $photo Full path to photo
+ * @property String $photoURL URL to photo
+ * 
  * @property String $name Full name of the contact
  */
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
@@ -110,5 +113,54 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		return parent::beforeDelete();
 	}
+	
+	
+	
+	/**
+	 * Set the photo
+	 * 
+	 * @param String $tmpFile 
+	 */
+	protected function setPhoto($tmpFile){
+		
+		$destination = GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
+		
+		if(empty($tmpFile))
+		{
+			$file = new GO_Base_Fs_File($this->_getPhotoPath());
+			return !$file->exists() || $file->delete();
+		}else
+		{		
+
+			$f = new GO_Base_Fs_Folder(dirname($this->_getPhotoPath()));
+			$f->create();
+
+
+			$img = new GO_Base_Util_Image();
+			if(!$img->load($tmpFile)){
+				throw new Exception(GO::t('imageNotSupported','addressbook'));
+			}
+
+			$img->zoomcrop(90,120);
+			return $img->save($destination, IMAGETYPE_JPEG);
+		}
+	}
+	
+	private function _getPhotoPath(){
+		return GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
+	}
+	
+	protected function getPhoto(){
+		if(file_exists($this->_getPhotoPath()))
+			return $this->_getPhotoPath();
+		else
+			return '';
+	}
+	
+	protected function getPhotoURL(){
+		return GO::url('addressbook/contact/photo', 'id='.$this->id);
+	}
+	
+	
 
 }
