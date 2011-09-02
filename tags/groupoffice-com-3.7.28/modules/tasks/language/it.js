@@ -1,0 +1,32 @@
+
+
+GO.tasks.lang.task = 'Attività';
+GO.tasks.lang.noTask = 'Non ci sono attività da visualizzare';
+GO.tasks.lang.tasks = 'Attività';
+GO.tasks.lang.addTask = 'Aggiungi un\'attività...';
+GO.tasks.lang.tasklist = 'Elenco attività'
+GO.tasks.lang.tasklists = 'Elenchi attività';
+GO.tasks.lang.showCompletedTasks = 'Mostra le attività completate';
+GO.tasks.lang.filter = 'Filtra';
+GO.tasks.lang.dueDate = 'Data di scadenza';
+GO.tasks.lang.dueAt = 'Scadenza il';
+GO.tasks.lang.needsAction = 'Occorre intervento';
+GO.tasks.lang.accepted = 'Accettato';
+GO.tasks.lang.declined = 'Rifiutato';
+GO.tasks.lang.tentative = 'Tentativo';
+GO.tasks.lang.delegated = 'Delegato';
+GO.tasks.lang.completed = 'Completato';
+GO.tasks.lang.inProcess = 'In elaborazione';
+GO.tasks.lang.repeatEvery = 'Ripeti ogni';
+GO.tasks.lang.atDays = 'Al giorno';
+GO.tasks.lang.repeatUntil = 'Ripeti finchè';
+GO.tasks.lang.repeatForever = 'ripeti per sempre';
+GO.tasks.lang.recurrence = 'Ricorrenza';
+GO.tasks.lang.reminder = 'Promemoria';
+GO.tasks.lang.options = 'Opzioni';
+GO.tasks.lang.createLink = 'Crea un collegamento';
+GO.tasks.lang.startsAt='Inizia a';
+GO.tasks.lang.showInactiveTasks='Mostra attività inattive';
+GO.tasks.lang.remindMe= 'Promemoria';
+GO.tasks.lang.scheduleCall='Pianifica Telefonata';
+GO.tasks.lang.call='Telefonata';
