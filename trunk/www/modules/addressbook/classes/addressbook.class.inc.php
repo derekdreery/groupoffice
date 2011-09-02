@@ -131,8 +131,8 @@ class addressbook extends db {
 		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
-			$db->query("delete from cf_ab_contacts where id not in (select id from ab_contacts);");
-			$db->query("delete from cf_ab_companies where id not in (select id from ab_companies);");
+			$db->query("delete from cf_ab_contacts where model_id not in (select id from ab_contacts);");
+			$db->query("delete from cf_ab_companies where model_id not in (select id from ab_companies);");
 		}
 
 		echo 'Done with addressbook'.$line_break.$line_break;
@@ -890,7 +890,7 @@ class addressbook extends db {
 		$sql .= " LEFT JOIN ab_addressbooks ON ab_contacts.addressbook_id = ab_addressbooks.id ";
 
 		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
-			$sql .= "LEFT JOIN cf_ab_contacts ON cf_ab_contacts.id=ab_contacts.id ";
+			$sql .= "LEFT JOIN cf_ab_contacts ON cf_ab_contacts.model_id=ab_contacts.id ";
 		}
 
 		if(count($mailings_filter)) {

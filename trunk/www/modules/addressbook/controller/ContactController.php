@@ -109,7 +109,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$file->output();
 	}
 	
-	
+
 	protected function afterDisplay(&$response, &$model, &$params) {
 			
 		$response['data']['name']=$model->name;
