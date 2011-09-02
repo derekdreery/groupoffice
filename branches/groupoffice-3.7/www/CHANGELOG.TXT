@@ -1,3 +1,9 @@
+02-09-2011 3.7.28
+- Fixed bug in ActiveSync with Android 2.3.3
+- Other small bug fixes.
+- Fixed bug in delete old mail
+- Bug fixes with webdav
+
 17-08-2011 3.7.27
 - WebDav locking is enabled
 - Fixed some webdav bugs.
