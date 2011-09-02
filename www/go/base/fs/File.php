@@ -86,7 +86,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * 
 	 * @return String 
 	 */
-	public static function mimeType()
+	public function mimeType()
 	{
 		$types = file_get_contents(GO::config()->root_path.'mime.types');
 
@@ -101,7 +101,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		{
 			$pos++;
 
-			$start_of_line = String::rstrpos($types, "\n", $pos);
+			$start_of_line = GO_Base_Util_String::rstrpos($types, "\n", $pos);
 			$end_of_mime = strpos($types, ' ', $start_of_line);
 			$mime = substr($types, $start_of_line+1, $end_of_mime-$start_of_line-1);
 
@@ -121,5 +121,9 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		}
     
     return 'application/octet-stream';    
+	}
+	
+	public function output(){
+		readfile($this->path());
 	}
 }

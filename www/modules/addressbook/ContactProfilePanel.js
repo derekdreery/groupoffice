@@ -169,31 +169,9 @@ GO.addressbook.ContactProfilePanel = function(config)
 		this.formCountry = new GO.form.SelectCountry({
 			fieldLabel: GO.lang['strCountry'],
 			name: 'country_text',
-			hiddenName: 'country',
-			listeners:{
-				select:function(combo, record) {
-					var r = this.formAddressFormat.store.getById(record.get('iso'));
-					if(!r){
-						var abRecord = this.formAddressBooks.store.getById(this.formAddressBooks.getValue());
-						r = abRecord.get('default_iso_address_format');
-					}
-					else
-					{
-						r = r.id;
-					}
-					this.formAddressFormat.setValue(r);
-				},
-				scope:this
-			}
+			hiddenName: 'country'
 		});
 
-		this.formAddressFormat = new GO.form.SelectAddressFormat({
-			fieldLabel: GO.lang['strAddressFormat'],
-			name: 'iso_address_format',
-			displayField: 'country_name',
-			hiddenName: 'iso_address_format',
-			allowBlank: false
-		});
 
 
 		this.formCompany = new GO.addressbook.SelectCompany({
@@ -246,11 +224,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 			{
 				this.setAddressbookID(record.data.id);
 
-				var r = this.formAddressFormat.store.getById(record.get('default_iso_address_format'));
-				if(r){
-					this.formAddressFormat.setValue(r.id);
-					this.setSalutation();
-				}
+				this.setSalutation();
 				return true;
 			}else
 			{
@@ -346,7 +320,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 				border: false,
 				anchor:'100%'
 			},
-			items: [this.formAddress,this.formAddressNo,this.formPostal,this.formCity,this.formState,this.formCountry,this.formAddressFormat]
+			items: [this.formAddress,this.formAddressNo,this.formPostal,this.formCity,this.formState,this.formCountry]
 		}
 	
 		this.contactFieldset =new Ext.form.FieldSet(

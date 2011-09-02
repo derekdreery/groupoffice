@@ -493,7 +493,7 @@ class GO{
 		//if($path!='')
 		$url .= '?r='.$path;
 		
-		if(empty($params))
+		if(!empty($params))
 			$url .= '&'.$params;
 		
 		if(isset(GO::session()->values['security_token']))

@@ -4,9 +4,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	protected $model = 'GO_Addressbook_Model_Contact';
 	
 	protected function beforeSubmit(&$response, &$model, &$params) {
-		
-		GO::debug($params);
-		
+				
 		if(!empty($params['company_id']) && !is_numeric($params['company_id'])){
 			$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
 				'addressbook_id'=>$model->addressbook_id,
@@ -31,16 +29,19 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	protected function afterSubmit(&$response, &$model, &$params) {
 		
-		if(isset($params['delete_photo']) && strcmp($_POST['delete_photo'], 'true') == 0){
+		if(!empty($params['delete_photo'])){
 			$model->photo='';
 		}
 		
 		if (isset($_FILES['image']['tmp_name'][0]) && is_uploaded_file($_FILES['image']['tmp_name'][0])) {
+			$f = new GO_Base_Fs_Folder(GO::config()->tmpdir);
+			$f->create();
+			
 			move_uploaded_file($_FILES['image']['tmp_name'][0], GO::config()->tmpdir . $_FILES['image']['name'][0]);
 			
 			$model->photo = GO::config()->tmpdir . $_FILES['image']['name'][0];
 
-			$response['image'] = $model->photoURL;
+			$response['photo_url'] = $model->photoURL;
 		}
 		
 		
@@ -68,11 +69,23 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return parent::afterSubmit($response, $model, $params);
 	}
 	
+	
+	protected function afterLoad($response, $model, $params) {
+		
+		$response['data']['photo_url']=$model->photoURL;
+		
+		return parent::afterLoad($response, $model, $params);
+	}	
+	
+	
 	public function actionPhoto($params){
 
-		$contact = GO::getModel($this->model, $params['id']);
+		$contact = GO::getModel($this->model)->findByPk($params['id']);
 		
-		$file = new GO_Base_Fs_File($contact->photo);		
+		if(empty($contact->photo))
+			exit("No photo set");
+		
+		$file = new GO_Base_Fs_File($contact->photo);	
 
 		header('Content-Length: '.$file->size());
 		header('Content-Transfer-Encoding: binary');
@@ -93,8 +106,36 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			header('Content-Disposition: inline; filename="'.$file->name().'"');
 		}
 
-		readfile($path);		
+		$file->output();
 	}
+	
+	
+	protected function afterDisplay($response, $model) {
+		
+		if(!empty($response['data']['country']))
+			$response['data']['country']=GO::t($response['data']['country'],'base','countries');
+		
+		$response['data']['photo_url']=$model->photo_url;
+		
+		$company = $model->company();
+		if($company){					
+			$response['data']['company_name'] = $company->name;
+			$response['data']['company_name2'] = $company->name2;
+		} else {
+			$response['data']['company_name'] = '';
+			$response['data']['company_name2'] = '';
+		}
+		
+		$response['data']['google_maps_link']=GO_Base_Util_Common::googleMapsLink(
+						$model->address, $model->address_no,$model->city, $model->country);
+		
+		$response['data']['formatted_address']=nl2br(GO_Base_Util_Common::formatAddress(
+						$model->country, $model->address, $model->address_no,$model->zip, $model->city, $model->state
+						));
+		
+		return parent::afterDisplay($response, $model);
+	}
+	
 	
 //	protected function getGridMultiSelectProperties(){
 //		return array(

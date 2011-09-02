@@ -27,12 +27,12 @@ GO.addressbook.ContactDialog = function(config)
 				src:Ext.BLANK_IMAGE_URL
 			},
 	
-		setPhotoSrc : function(contact_id)
+		setPhotoSrc : function(url)
 		{
 			var now = new Date();
 			if (this.el)
 				this.el.set({
-					src: contact_id==0 ? Ext.BLANK_IMAGE_URL : GO.settings.modules.addressbook.url+'photo.php?contact_id='+contact_id+'&mtime='+now.format('U')
+					src: GO.util.empty(url) ? Ext.BLANK_IMAGE_URL : url+'&mtime='+now.format('U')
 				});
 			this.setVisible(true);
 		}
@@ -238,8 +238,7 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 			this.formPanel.form.reset();
 
 			this.personalPanel.formAddressBooks.setValue(tempAddressbookID);
-			//this.personalPanel.formAddressFormat.selectDefault();
-
+		
 			if(contact_id)
 			{
 				this.contact_id = contact_id;
@@ -275,9 +274,6 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 				GO.addressbook.ContactDialog.superclass.show.call(this);
 			}
 			var abRecord = this.personalPanel.formAddressBooks.store.getById(this.personalPanel.formAddressBooks.getValue());
-			this.personalPanel.formAddressFormat.setValue(abRecord.get('default_iso_address_format'));
-			//var sal = this.personalPanel.setSalutation();
-			//this.personalPanel.formSalutation.setValue(sal);
 			this.tabPanel.setActiveTab(0);
 		}
 
@@ -323,8 +319,8 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 //				{					
 					this.personalPanel.setAddressbookID(action.result.data.addressbook_id);
 					this.formPanel.form.findField('company_id').setRemoteText(action.result.data.company_name);
-					if(!GO.util.empty(action.result.data.photo_src))
-						this.setPhoto(id);
+					if(!GO.util.empty(action.result.data.photo_url))
+						this.setPhoto(action.result.data.photo_url);
 
 					if (GO.customfields) {
 						this.updateCfTabs(action.result.data.allowed_cf_categories);
@@ -347,8 +343,7 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 			params:
 			{				
 				id : this.contact_id,
-				company: company,
-				delete_photo : this.deleteImageCB.getValue()
+				company: company
 			},
 			success:function(form, action){
 				if(action.result.contact_id)
@@ -357,10 +352,10 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 				}
 				this.uploadFile.clearQueue();
 				this.fireEvent('save', this, this.contact_id);
-				if(!GO.util.empty(action.result.image))
-					this.setPhoto(this.contact_id);
+				if(!GO.util.empty(action.result.photo_url))
+					this.setPhoto(action.result.photo_url);
 				else
-					this.setPhoto(0);
+					this.setPhoto("");
 				if (hide)
 				{
 					this.hide();
@@ -378,10 +373,10 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 		});
 	},
 
-	setPhoto : function(contact_id)
+	setPhoto : function(url)
 	{
-		this.contactPhoto.setPhotoSrc(contact_id);
+		this.contactPhoto.setPhotoSrc(url);
 		this.deleteImageCB.setValue(false);
-		this.deleteImageCB.setDisabled(contact_id=='');
+		this.deleteImageCB.setDisabled(url=='');
 	}
 });
