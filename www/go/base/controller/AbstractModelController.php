@@ -85,7 +85,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param array $response The response array
 	 * @param mixed $model
 	 */
-	protected function beforeSubmit(&$response, &$model, $params) {
+	protected function beforeSubmit(&$response, &$model, &$params) {
 		
 	}
 
@@ -95,7 +95,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param array $response The response array
 	 * @param mixed $model
 	 */
-	protected function afterSubmit(&$response, &$model, $params) {
+	protected function afterSubmit(&$response, &$model, &$params) {
 		
 	}
 

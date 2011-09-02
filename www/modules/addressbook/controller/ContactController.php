@@ -3,9 +3,11 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	protected $model = 'GO_Addressbook_Model_Contact';
 	
-	protected function beforeSubmit(&$response, &$model, $params) {
+	protected function beforeSubmit(&$response, &$model, &$params) {
 		
-		if(!empty($params['company']) && empty($params['company_id'])){
+		GO::debug($params);
+		
+		if(!empty($params['company_id']) && !is_numeric($params['company_id'])){
 			$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
 				'addressbook_id'=>$model->addressbook_id,
 				'name'=>$params['company_id']
@@ -14,17 +16,20 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			if(!$company)
 			{
 				$company = new GO_Addressbook_Model_Company();
-				$company->name=$params['company'];
+				$company->name=$params['company_id'];
 				$company->addressbook_id=$model->addressbook_id;
-				$company->save();
+				if(!$company->save())
+					throw new GO_Base_Exception_Save("Company ".$company->name);
 			}
-			$contact->company_id=$company->id;
+			$model->company_id=$company->id;
+			unset($params['company_id']);
+			
 		}
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}
 	
-	protected function afterSubmit(&$response, &$model, $params) {
+	protected function afterSubmit(&$response, &$model, &$params) {
 		
 		if(isset($params['delete_photo']) && strcmp($_POST['delete_photo'], 'true') == 0){
 			$model->photo='';

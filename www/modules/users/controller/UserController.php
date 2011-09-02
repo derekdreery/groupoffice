@@ -49,7 +49,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		return $r;
 	}
 
-	protected function beforeSubmit(&$response, &$model, $params) {
+	protected function beforeSubmit(&$response, &$model, &$params) {
 
 		if (!empty($params["password1"]) || !empty($params["password2"])) {
 			if ($params["password1"] != $params["password2"]) {
@@ -63,7 +63,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		return parent::beforeSubmit($response, $model, $params);
 	}
 
-	protected function afterSubmit(&$response, &$model, $params) {
+	protected function afterSubmit(&$response, &$model, &$params) {
 
 
 
