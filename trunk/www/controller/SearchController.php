@@ -27,8 +27,12 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$grid = new GO_Base_Provider_Grid();		    
 		$stmt = GO_Base_Model_ModelType::model()->find($grid->getDefaultParams());
 		$grid->setStatement($stmt);
-		$grid->formatColumn('name', 'class_exists($model->model_name) ? call_user_func(array($model->model_name,"model"))->localizedName : $model->model_name');	
-		
+		$grid->formatColumn('name', 'GO::getModel($model->model_name)->localizedName');
+//		$response['results']=array();
+//		while($type = $stmt->fetch()){
+//			$response['results'][]=array
+//		}
+//		
 		return $grid->getData();		
 	}
 	

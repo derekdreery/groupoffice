@@ -235,7 +235,7 @@ GO.linkPreviewPanels["GO_Notes_Model_Note"]=function(config){
 
 GO.newMenuItems.push({
 	text: GO.notes.lang.note,
-	iconCls: 'go-link-icon-4',
+	iconCls: 'go-model-icon-GO_Notes_Model_Note',
 	handler:function(item, e){		
 		GO.notes.showNoteDialog(0, {
 			link_config: item.parentMenu.link_config			

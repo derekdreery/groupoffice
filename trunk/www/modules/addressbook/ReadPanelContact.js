@@ -13,7 +13,7 @@
 
 GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	
-	link_model : "GO_Addressbook_Model_Contact",
+	linkModelName : "GO_Addressbook_Model_Contact",
 
 	stateId : 'ab-contact-panel',
 
@@ -30,7 +30,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 		this.template = 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					/*'<tr>'+
-						'<td colspan="2" class="display-panel-heading">' + GO.addressbook.lang['cmdContactDetailsFor'] + ' <b>{full_name}</b></td>'+
+						'<td colspan="2" class="display-panel-heading">' + GO.addressbook.lang['cmdContactDetailsFor'] + ' <b>{name}</b></td>'+
 					'</tr>'+*/
 					
 					'<tr>'+
@@ -48,7 +48,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 										'<tpl if="!GO.util.empty(title)">'+
 											'{title} '+
 										'</tpl>'+
-										'{full_name}'+
+										'{name}'+
 										'<br />'+
 										'<tpl if="!GO.util.empty(google_maps_link)">'+
 											'<a href="{google_maps_link}" target="_blank">'+
@@ -106,21 +106,21 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 									//EMAIL							
 									'<tpl if="!GO.util.empty(email)">'+
 										'<tr>'+
-											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ':</td><td>{[this.mailTo(values.email, values.full_name)]}</td>'+
+											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ':</td><td>{[this.mailTo(values.email, values.name)]}</td>'+
 										'</tr>'+						
 									'</tpl>'+
 		
 									//EMAIL2							
 									'<tpl if="!GO.util.empty(email2)">'+
 										'<tr>'+
-											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ' 2:</td><td>{[this.mailTo(values.email2, values.full_name)]}</td>'+
+											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ' 2:</td><td>{[this.mailTo(values.email2, values.name)]}</td>'+
 										'</tr>'+						
 									'</tpl>'+
 		
 									//EMAIL3							
 									'<tpl if="!GO.util.empty(email3)">'+
 										'<tr>'+
-											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ' 3:</td><td>{[this.mailTo(values.email3, values.full_name)]}</td>'+
+											'<td class="contactCompanyLabelWidth">' + GO.lang['strEmail'] + ' 3:</td><td>{[this.mailTo(values.email3, values.name)]}</td>'+
 										'</tr>'+						
 									'</tpl>'+
 									
@@ -366,9 +366,6 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			this.newMenuButton.menu.add(this.scheduleCallItem);
 		}
 	},
-	getLinkName : function(){
-		return this.data.full_name;
-	},
 	setData : function(data)
 	{
 		GO.addressbook.ContactReadPanel.superclass.setData.call(this, data);
@@ -380,7 +377,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 		{
 			if(this.scheduleCallItem)
 			{				
-				var name = this.data.full_name;
+				var name = this.data.name;
 				
 				if(this.data.work_phone!='')
 				{

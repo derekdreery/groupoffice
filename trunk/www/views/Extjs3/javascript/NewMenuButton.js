@@ -28,7 +28,7 @@
 	
 	setLinkConfig : function(config){
 		this.menu.linkConfig=config;		
-		//this.menu.linkConfig.type_id=config.type+':'+config.id;
+		this.menu.linkConfig.modelNameAndId=config.linkModelName+':'+config.linkModelId;
 		
 		if(!this.menu.linkConfig.scope)
 		{
@@ -39,6 +39,8 @@
 		{
 			this.menu.linkConfig.callback=this.menu.linkConfig.callback.createDelegate(this.menu.linkConfig.scope);
 		}
+		
+		this.menu.link_config=this.menu.linkConfig;
 		
 		this.setDisabled(GO.util.empty(config.linkModelId));
 	}	
@@ -73,6 +75,8 @@
 		{
 			this.menu.linkConfig.callback=this.menu.linkConfig.callback.createDelegate(this.menu.linkConfig.scope);
 		}
+		
+		this.menu.link_config=this.menu.linkConfig;
 
 		this.setDisabled(GO.util.empty(config.linkModelId));
 	}
