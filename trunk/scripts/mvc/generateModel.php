@@ -37,7 +37,7 @@ function generateModel($className, $table, $moduleName){
 			break;
 
 			case 'enum(\'0\',\'1\')';
-				$pdoType='Boolean';
+				$pdoType='boolean';
 			break;
 		}	
 
