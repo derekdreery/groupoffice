@@ -12,14 +12,8 @@
  */
  
 GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
-	link_type : 12,
+	link_model : "GO_Tasks_Model_Task",
 	
-	loadParams : {task: 'task_with_items'},
-	
-	idParam : 'task_id',
-	
-	loadUrl : GO.settings.modules.tasks.url+'json.php',
-
 	stateId : 'ta-task-panel',
 
 	editGoDialogId : 'task',
@@ -29,6 +23,8 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 	},	
 	
 	initComponent : function(){
+	
+		this.loadUrl=GO.url('tasks/task/display');
 	
 		this.template = 			
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
@@ -45,11 +41,11 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 					'</tr>'+
 					'<tr>'+
 						'<td>'+GO.tasks.lang.startsAt+':</td>'+
-						'<td>{start_date}</td>'+
+						'<td>{start_time}</td>'+
 					'</tr>'+
 					'<tr>'+
 						'<td>'+GO.tasks.lang.dueAt+':</td>'+
-						'<td>{due_date}</td>'+
+						'<td>{due_time}</td>'+
 					'</tr>'+
 					'<tr>'+
 						'<td>'+GO.lang.createdBy+':</td>'+

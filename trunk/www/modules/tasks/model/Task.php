@@ -40,6 +40,9 @@
  */
 class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 
+	
+	private $_parsedRrule;
+	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -50,16 +53,32 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	{	
 		return parent::model($className);
 	}
+	
+	protected function init() {
+		$this->columns['name']['required']=true;
+		
+		$this->columns['start_time']['gotype']='unixdate';
+		$this->columns['due_time']['gotype']='unixdate';
+		$this->columns['completion_time']['gotype']='unixdate';
+		$this->columns['repeat_end_time']['gotype']='unixdate';
+		$this->columns['reminder']['gotype']='unixtimestamp';
+		parent::init();
+	}
 
 	public function tableName() {
 		return 'ta_tasks';
 	}
+	
+	public function aclField() {
+		return 'tasklist.acl_id';
+	}
 
 	public function relations() {
 		return array(
-				'tasklists' => array('type' => self::HAS_ONE, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id', 'delete' => false),
-				'category' => array('type' => self::HAS_ONE, 'model' => 'GO_Base_Model_Category', 'field' => 'category_id', 'delete' => false),
-				'user' => array('type' => self::HAS_ONE, 'model' => 'GO_Base_Model_User', 'field' => 'user_id', 'delete' => false)
+				'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id', 'delete' => false),
+				'category' => array('type' => self::BELONGS_TO, 'model' => 'GO_Base_Model_Category', 'field' => 'category_id', 'delete' => false),
+				'user' => array('type' => self::BELONGS_TO, 'model' => 'GO_Base_Model_User', 'field' => 'user_id', 'delete' => false)
 				);
 	}
+	
 }
