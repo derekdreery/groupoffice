@@ -70,7 +70,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	}
 	
 	
-	protected function afterLoad($response, $model, $params) {
+	protected function afterLoad(&$response, &$model, &$params) {
 		
 		$response['data']['photo_url']=$model->photoURL;		
 		
