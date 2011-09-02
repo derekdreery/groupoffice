@@ -1247,7 +1247,7 @@ class files extends db {
 		$sql .= " FROM fs_files f ";
 
 		if($GLOBALS['GO_MODULES']->has_module('customfields')) {
-			$sql .= "LEFT JOIN cf_fs_files ON cf_fs_files.id=f.id ";
+			$sql .= "LEFT JOIN cf_fs_files ON cf_fs_files.model_id=f.id ";
 		}
 
 		$types='';

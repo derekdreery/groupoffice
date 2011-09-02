@@ -61,15 +61,6 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 				'type' => GO::t('company','addressbook')
 		);
 	}
-
-	protected function afterSave($wasNew) {
-
-		if (isset(GO::modules()->customfields))
-			GO_Customfields_Controller_Item::saveCustomFields($this, "GO_Addressbook_Model_CompanyCustomFieldsRecord");
-
-		return parent::afterSave($wasNew);
-	}
-
 	/**
 	 * The files module will use this function.
 	 */
