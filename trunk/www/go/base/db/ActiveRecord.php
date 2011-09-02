@@ -1146,6 +1146,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				$this->columns[$key]['gotype']='string';
 			}
 			switch($this->columns[$key]['gotype']){
+				case 'unixdate':
 				case 'unixtimestamp':
 					$formatted[$key] = GO_Base_Util_Date::to_unixtime($value);
 					break;			
@@ -1183,8 +1184,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				$this->columns[$key]['gotype']='string';
 			}
 			switch($this->columns[$key]['gotype']){
+				
+				case 'unixdate':
+					$formatted[$key] = GO_Base_Util_Date::get_timestamp($value, false);
+					break;	
+				
 				case 'unixtimestamp':
-					$formatted[$key] = GO_Base_Util_Date::format($value);
+					$formatted[$key] = GO_Base_Util_Date::get_timestamp($value);
 					break;	
 
 				case 'textarea':
@@ -1197,7 +1203,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					break;
 					
 				case 'date':
-					$formatted[$key] = GO_Base_Util_Date::format($value);
+					$formatted[$key] = GO_Base_Util_Date::get_timestamp(strtotime($value),false);
 					break;
 					
 				case 'number':
