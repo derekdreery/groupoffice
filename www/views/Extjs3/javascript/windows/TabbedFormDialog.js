@@ -272,9 +272,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			this.selectLinkField.container.up('div.x-form-item').setDisplayed(remoteModelId==0);
 			
 			this.link_config=config.link_config;
-			if(config.link_config.type_id)
+			if(config.link_config.modelNameAndId)
 			{
-				this.selectLinkField.setValue(config.link_config.type_id);
+				this.selectLinkField.setValue(config.link_config.modelNameAndId);
 				this.selectLinkField.setRemoteText(config.link_config.text);
 			}
 		}

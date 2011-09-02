@@ -72,7 +72,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	protected function afterLoad($response, $model, $params) {
 		
-		$response['data']['photo_url']=$model->photoURL;
+		$response['data']['photo_url']=$model->photoURL;		
 		
 		return parent::afterLoad($response, $model, $params);
 	}	
@@ -112,6 +112,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	protected function afterDisplay(&$response, &$model, &$params) {
 			
+		$response['data']['name']=$model->name;
 		$response['data']['photo_url']=$model->photo_url;
 		
 		$company = $model->company();
