@@ -706,7 +706,7 @@ GO.addressbook.searchSender = function(sender, name){
 					break;
 				case 1:
 					var r = GO.addressbook.searchSenderStore.getAt(0);
-					GO.linkHandlers[2].call(this, r.get('id'));
+					GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, r.get('id'));
 					break;
 				default:
 					if(!GO.addressbook.searchSenderWin)
@@ -719,7 +719,7 @@ GO.addressbook.searchSender = function(sender, name){
 							var contact_id = dataview.store.data.items[index].id;
 							list.clearSelections();
 							GO.addressbook.searchSenderWin.hide();
-							GO.linkHandlers[2].call(this, contact_id);
+							GO.linkHandlers["GO_Addressbook_Model_Contact"].call(this, contact_id);
 						}, this);
 						GO.addressbook.searchSenderWin=new GO.Window({
 							title:GO.addressbook.lang.strSelectContact,

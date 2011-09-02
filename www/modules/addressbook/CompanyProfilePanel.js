@@ -88,48 +88,17 @@ GO.addressbook.CompanyProfilePanel = function(config)
 		name: 'country_text',
 		hiddenName: 'country',
 		listeners:{
-			select:function(combo, record) {
-				var r = this.formAddressFormat.store.getById(record.get('iso'));
-				if(!r){
-					var abRecord = this.formAddressBooks.store.getById(this.formAddressBooks.getValue());
-					r = abRecord.get('default_iso_address_format');
-				}
-				else
-				{
-					r = r.id;
-				}
-				this.formAddressFormat.setValue(r);
-			},
+			
 			change:function(field, v)
 			{
 				if(this.formPostCountry.getValue()=='')
 				{
-					this.formPostCountry.setValue(v);
-					//var r = this.formAddressBooks.store.getById(this.formAddressBooks.getValue());
-					var r = this.formPostAddressFormat.store.getById(v);
-					if(!r){
-						var abRecord = this.formAddressBooks.store.getById(this.formAddressBooks.getValue());
-						r = abRecord.get('default_iso_address_format');
-					}
-					else
-					{
-						r = r.id;
-					}
-					this.formPostAddressFormat.setValue(r);
+					this.formPostCountry.setValue(v);					
 				}
 			},
 			scope:this
 		}
 	});
-
-	this.formAddressFormat = new GO.form.SelectAddressFormat({
-		fieldLabel: GO.lang['strAddressFormat'],
-		name: 'iso_address_format',
-		displayField: 'country_name',
-		hiddenName: 'iso_address_format',
-		allowBlank: false
-	});
-	
 	
 	/*
 	 * 
@@ -170,29 +139,7 @@ GO.addressbook.CompanyProfilePanel = function(config)
 	this.formPostCountry = new GO.form.SelectCountry({
 		fieldLabel: GO.lang['strCountry'],
 		name: 'post_country_text',
-		hiddenName: 'post_country',
-		listeners:{
-			select:function(combo, record) {
-				var r = this.formPostAddressFormat.store.getById(record.get('iso'));
-				if(!r){
-					var abRecord = this.formAddressBooks.store.getById(this.formAddressBooks.getValue());
-					r = abRecord.get('default_iso_address_format');
-				}
-				else
-				{
-					r = r.id;
-				}
-				this.formPostAddressFormat.setValue(r);
-			},
-			scope:this
-		}
-	});
-
-	this.formPostAddressFormat = new GO.form.SelectAddressFormat({
-		fieldLabel: GO.lang['strAddressFormat'],
-		name: 'post_iso_address_format',
-		displayField: 'country_name',
-		hiddenName: 'post_iso_address_format'
+		hiddenName: 'post_country'
 	});
 					 
 	this.formName = new Ext.form.TextField(
@@ -327,7 +274,7 @@ GO.addressbook.CompanyProfilePanel = function(config)
     		collapsed: false,
     		border: true,
 	    	defaults: { border: false, anchor: '100%' },
-				items: [this.formAddress,this.formAddressNo,this.formZip,this.formCity,this.formState,this.formCountry,this.formAddressFormat]
+				items: [this.formAddress,this.formAddressNo,this.formZip,this.formCity,this.formState,this.formCountry]
 			},{			    		
     		xtype: 'fieldset',
     		title: GO.addressbook.lang['cmdFieldsetPostAddress'], 
@@ -335,7 +282,7 @@ GO.addressbook.CompanyProfilePanel = function(config)
     		collapsed: false,
     		border: true,
 	    	defaults: { border: false, anchor:'100%' },
-				items: [this.formPostAddress,this.formPostAddressNo,this.formPostZip,this.formPostCity,this.formPostState,this.formPostCountry,this.formPostAddressFormat]
+				items: [this.formPostAddress,this.formPostAddressNo,this.formPostZip,this.formPostCity,this.formPostState,this.formPostCountry]
 			}]
   	}];
 
