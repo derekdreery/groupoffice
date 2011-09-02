@@ -105,9 +105,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	public function actionLoad($params) {
 		$modelName = $this->model;
 		//$modelName::model() does not work on php 5.2!
-		$model = call_user_func(array($modelName,'model'))->findByPk($params['id']);
+		$model = GO::getModel($modelName)->findByPk($params['id']);
 
 		$response['data'] = $model->getAttributes();
+		
+		$response['data']['permission_level']=$model->getPermissionLevel();
+		$response['data']['write_permission']=$response['data']['permission_level']>GO_Base_Model_Acl::READ_PERMISSION;
+
 		
 		//todo custom fields should be in a subarray.
 		if(GO::user()->getModulePermissionLevel('customfields') && $model->customfieldsRecord)
@@ -122,7 +126,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return $response;
 	}
 
-	protected function afterLoad($response, $model, $params) {
+	
+	
+	protected function afterLoad(&$response, &$model, &$params) {
 		return $response;
 	}
 
@@ -150,10 +156,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['remoteComboTexts'] = array();
 
 		foreach ($this->remoteComboFields() as $property => $map) {
-			
-			$eval = '$value = '.$map.';';
-			//GO::debug($eval);
-			eval($eval);			
+			$value='';
+			$eval = '$value = '.$map.';';			
+			eval($eval);						
 			$response['remoteComboTexts'][$property] = $value;
 		}
 

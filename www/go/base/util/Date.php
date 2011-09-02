@@ -867,4 +867,60 @@ class GO_Base_Util_Date {
 		$date = getdate($time);		
 		return mktime(0,0,0,$date['mon'],$date['mday']-$date['wday'], $date['year']);
 	}
+	
+	/**
+	 * Convert a date formatted according to icalendar 2.0 specs to a unix timestamp.
+	 * 
+	 * @param String $date
+	 * @param GO_Base_Util_Icalendar_Timezone $icalendarTimezone
+	 * @return int Unix timestamp 
+	 */
+	public static function parseIcalDate($date, $icalendarTimezone=false) {
+		$date=trim($date);
+		$year = substr($date,0,4);
+		$month = substr($date,4,2);
+		$day = substr($date,6,2);
+		if (strpos($date, 'T') !== false) {
+			$hour = substr($date,9,2);
+			$min = substr($date,11,2);
+			$sec = substr($date,13,2);
+		}else {
+			$hour = 0;
+			$min = 0;
+			$sec = 0;
+		}
+
+		if($icalendarTimezone){
+			//todo
+		
+			if(isset($this->force_timezone)) {
+				$timezone_offset = $this->force_timezone;
+			}else {
+				if(strpos($date, 'Z') === false) {
+					if(isset($this->timezones[$timezone_id]) && isset($this->timezones[$timezone_id]['STANDARD'])) {
+						//if ($this->is_standard_timezone($timezone_id)) {
+						$standard_tzoffset = $this->timezones[$timezone_id]['STANDARD'];
+						$daylight_tzoffset = isset($this->timezones[$timezone_id]['DAYLIGHT']) ? $this->timezones[$timezone_id]['DAYLIGHT'] : $standard_tzoffset;
+						if(date('I', mktime($hour, $min, $sec, $month, $day , $year)) > 0) {
+							//event is in DST
+							$timezone_offset = $daylight_tzoffset;
+						}else {
+							$timezone_offset = $standard_tzoffset;
+						}
+					}				
+				}else
+				{
+					$timezone_offset = 0;
+				}
+			}
+		}
+
+		if(isset($timezone_offset)){
+			return gmmktime($hour-$timezone_offset, $min, $sec, $month, $day , $year);
+		}else
+		{
+			return mktime($hour, $min, $sec, $month, $day , $year);
+		}
+	}
+	
 }

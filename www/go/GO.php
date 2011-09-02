@@ -475,11 +475,12 @@ class GO{
 	
 	/**
 	 * Get the static model object 
+	 * 
 	 * @param String $modelName
 	 * @return GO_Base_Db_ActiveRecord 
 	 */
 	public static function getModel($modelName){
-		
+		//$modelName::model() does not work on php 5.2! That's why we use this function.
 		if(!class_exists($modelName))
 			throw new Exception($modelName.' does not exist');
 		
