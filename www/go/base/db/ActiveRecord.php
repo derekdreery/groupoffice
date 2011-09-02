@@ -461,7 +461,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			if (count($arr) == 2) {
 				$relation = $arr[0];
 				$aclField = $arr[1];
-				$this->_acl_id = $this->$relation->$aclField;
+				$this->_acl_id = $this->$relation->findAclId();
 			} else {
 				$this->_acl_id = $this->{$this->aclField()};
 			}
@@ -637,6 +637,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		//GO::debug('ActiveRecord::find()');
 		//GO::debug($params);
+		
+		if(!empty($params['single'])){
+			unset($params['single']);
+			return $this->findSingle($params);
+		}
 		
 		
 		if(GO::$ignoreAclPermissions)
