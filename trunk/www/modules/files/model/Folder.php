@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright Intermesh
  *
@@ -10,7 +11,7 @@
  * @version $Id: GO_Files_Model_Folder.php 7607 2011-09-01 15:44:36Z <<USERNAME>> $
  * @copyright Copyright Intermesh
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
- */  
+ */
 
 /**
  * The GO_Files_Model_Folder model
@@ -29,9 +30,9 @@
  * @property Boolean $readonly
  * @property String $cm_state
  * @property int $apply_state
+ * @property GO_Base_Fs_Folder $fsFolder
  */
-
-class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord{
+class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 	/**
 	 * Returns a static model of itself
@@ -39,31 +40,167 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord{
 	 * @param String $className
 	 * @return GO_Files_Model_Folder
 	 */
-	public static function model($className=__CLASS__)
-	{	
+	public static function model($className=__CLASS__) {
 		return parent::model($className);
 	}
-
 
 	/**
 	 * Enable this function if you want this model to check the acl's automatically.
 	 */
-	// public function aclField(){
-	//	 return 'acl_id';	
-	// }
+	public function aclField() {
+		return 'acl_id';
+	}
+
+	public function findAclId() {
+		//folder may have an acl ID if they don't have one we must recurse up the tree
+		//to find the acl.
+		if ($this->acl_id > 0)
+			return parent::findAclId();
+		else
+			return $this->parent->findAclId();
+	}
 
 	/**
 	 * Returns the table name
 	 */
-	 public function tableName() {
-		 return 'fs_folders';
-	 }
+	public function tableName() {
+		return 'fs_folders';
+	}
 
 	/**
 	 * Here you can define the relations of this model with other models.
 	 * See the parent class for a more detailed description of the relations.
 	 */
-	 public function relations() {
-		 return array();
-	 }
+	public function relations() {
+		return array(
+				'parent' => array('type' => self::BELONGS_TO, 'model' => 'GO_Files_Model_Folder', 'field' => 'parent_id'),
+				'folders' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_Folder', 'field' => 'parent_id', 'delete' => true),
+				'files' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_File', 'field' => 'folder_id', 'delete' => true)
+		);
+	}
+
+	/**
+	 * This getter recursively builds the folder path.
+	 * @return string 
+	 */
+	protected function getPath() {
+		$path = $this->name;
+		$currentFolder = $this;
+		while ($currentFolder = $currentFolder->parent) {
+			$path = $currentFolder->name . '/' . $path;
+		}
+		return $path;
+	}
+
+	protected function getFsFolder() {
+		return new GO_Base_Fs_Folder(GO::config()->file_storage_path . $this->path);
+	}
+
+	protected function afterSave($wasNew) {
+
+		if ($wasNew) {
+			$this->fsFolder->create();
+		}
+
+		return parent::afterSave($wasNew);
+	}
+
+	protected function afterDelete() {
+		$this->fsFolder->delete();
+		return parent::afterDelete();
+	}
+
+	/**
+	 * Find a folder by path relative to GO::config()->file_storage_path
+	 * 
+	 * @param String $relpath 
+	 * @param boolean $autoCreate
+	 * @return GO_Files_Model_Folder 
+	 */
+	public function findByPath($relpath, $autoCreate=false) {
+		if (substr($relpath, -1) == '/') {
+			$relpath = substr($relpath, 0, -1);
+		}
+		$parts = explode('/', $relpath);
+		$parent_id = 0;
+		while ($folderName = array_shift($parts)) {
+			$folder = $this->findSingleByAttributes(array(
+					'parent_id' => $parent_id,
+					'name' => $folderName
+							));
+			if (!$folder) {
+				if (!$autoCreate)
+					return false;
+
+				$folder = new GO_Files_Model_Folder();
+				$folder->name = $folderName;
+				$folder->parent_id = $parent_id;
+				if (!$folder->save())
+					throw new GO_Base_Exception_Save($relpath);
+			}
+
+			$parent_id = $folder->id;
+		}
+
+		return $folder;
+	}
+
+	
+	public function addFile($name) {
+		$file = new GO_Files_Model_File();
+		$file->folder_id = $this->id;
+		$file->name = $name;
+		$file->save();
+
+		return $file;
+	}
+	
+	public function addFolder($name){
+		$folder = new GO_Files_Model_Folder();
+		$folder->parent_id = $this->id;
+		$folder->name = $name;
+		$folder->save();
+
+		return $folder;
+	}
+
+	/**
+	 * Adds missing files and folders from the filesystem to the database and 
+	 * removes files and folders from the database that are not on the filesystem.
+	 */
+	public function syncFilesystem($recurseOneLevel=true) {
+
+		$items = $this->fsFolder->ls();
+
+		foreach ($items as $item) {
+			if ($item instanceof GO_Base_Fs_File) {
+				$file = $this->files(array('single'=>true,'name'=>$item->name()));
+				
+				if (!$file)
+					$this->addFile($item->name());
+				
+			}else
+			{
+				$folder = $this->folders(array('single'=>true,'name'=>$item->name()));
+				if(!$folder)
+					$folder = $this->addFolder($item->name());
+				
+				if($recurseOneLevel)
+					$folder->syncFilesystem(false);				
+			}
+		}
+		
+		$stmt= $this->folders();
+		while($folder = $stmt->fetch()){
+			if(!$folder->fsFolder->exists())
+				$folders->delete();
+		}
+		
+		$stmt= $this->files();
+		while($file = $stmt->fetch()){
+			if(!$file->fsFile->exists())
+				$files->delete();
+		}
+	}
+
 }

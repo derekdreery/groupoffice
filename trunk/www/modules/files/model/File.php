@@ -18,7 +18,7 @@
  * @property int $id
  * @property int $folder_id
  * @property String $name
- * @property String $path
+ 
  * @property int $locked_user_id
  * @property int $status_id
  * @property int $ctime
@@ -29,6 +29,9 @@
  * @property String $extension
  * @property int $expire_time
  * @property String $random_code
+ * 
+ * @property String $path
+ * @property GO_Base_Fs_File $fsFile
  */
 
 class GO_Files_Model_File extends GO_Base_Db_ActiveRecord{
@@ -48,9 +51,9 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord{
 	/**
 	 * Enable this function if you want this model to check the acl's automatically.
 	 */
-	// public function aclField(){
-	//	 return 'acl_id';	
-	// }
+	public function aclField(){
+		 return 'folder.acl_id';	
+	}
 
 	/**
 	 * Returns the table name
@@ -64,6 +67,24 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord{
 	 * See the parent class for a more detailed description of the relations.
 	 */
 	 public function relations() {
-		 return array();
+		 return array(
+				 'folder' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Files_Model_Folder', 'field'=>'folder_id')
+		 );
+	 }
+	 
+	 
+	 protected function getPath(){
+		 return $this->folder()->path.'/'.$this->name;
+	 }
+	 
+	 protected function getFsFile(){
+		 return new GO_Base_Fs_File(GO::config()->file_storage_path.$this->path);
+	 }
+	 
+	 protected function afterDelete() {
+		 
+		 $this->fsFile->delete();						 
+		 
+		 return parent::afterDelete();
 	 }
 }
