@@ -549,7 +549,7 @@ GO.tasks.writableTasklistsStore = new GO.data.JsonStore({
 });
 
 GO.tasks.categoriesStore = new GO.data.JsonStore({
-	url: GO.settings.modules.tasks.url+'json.php',
+	url: GO.url('tasks/category/grid'),
 	baseParams: {
 		'task': 'categories'
 	},

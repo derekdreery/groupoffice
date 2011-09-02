@@ -865,7 +865,7 @@ class tasks extends db
 		$sql  = "SELECT DISTINCT t.*, l.name AS tasklist_name";
 
 		if($join_custom_fields && $GLOBALS['GO_MODULES']->has_module('customfields')) {
-			$sql .= " ,cf_12.*";
+			$sql .= " ,cf_ta_tasks.*";
 		}
 
 		$sql .= " FROM ta_tasks t "
@@ -873,7 +873,7 @@ class tasks extends db
 			. "LEFT JOIN ta_categories c ON (t.category_id=c.id)";
 
 		if($join_custom_fields && $GLOBALS['GO_MODULES']->has_module('customfields')) {
-			$sql .= " LEFT JOIN cf_12 ON cf_12.link_id=t.id";
+			$sql .= " LEFT JOIN cf_ta_tasks ON cf_ta_tasks.model_id=t.id";
 		}
 
 		$where=false;

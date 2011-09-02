@@ -105,20 +105,19 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		if (config.task_id > 0) {
 
 			this.formPanel.load({
-				url : GO.settings.modules.tasks.url + 'json.php',
+				url : GO.url('tasks/task/load'),
 				success : function(form, action) {
 					this.win.show();
 					this.changeRepeat(action.result.data.repeat_type);
 					this.setValues(config.values);
 
-					this.selectTaskList
-					.setRemoteText(action.result.data.tasklist_name);
-					this
-					.setWritePermission(action.result.data.write_permission);
+					this.selectTaskList.setRemoteText(action.result.data.tasklist_name);
+					this.setWritePermission(action.result.data.write_permission);
 
 					if(action.result.data.category_id == 0)
 					{
-						//this.selectCategory.setRemoteText(GO.tasks.lang.selectCategory);
+						//this.selectCategory.setRemoteText();
+						this.selectCategory.setValue("");
 					}else
 					{
 						this.selectCategory.setRemoteText(action.result.data.category_name);
@@ -186,7 +185,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 	},
 	setTaskId : function(task_id) {
-		this.formPanel.form.baseParams['task_id'] = task_id;
+		this.formPanel.form.baseParams['id'] = task_id;
 		this.task_id = task_id;
 	},
 
@@ -195,7 +194,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 		var date = new Date();
 
-		formValues['start_date'] = formValues['remind_date'] = date
+		formValues['start_time'] = formValues['remind_date'] = date
 		.format(GO.settings['date_format']);
 		formValues['start_hour'] = date.format("H");
 		formValues['start_min'] = '00';
@@ -209,10 +208,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 	submitForm : function(hide) {
 		this.formPanel.form.submit({
-			url : GO.settings.modules.tasks.url + 'action.php',
-			params : {
-				'task' : 'save_task'
-			},
+			url : GO.url('tasks/task/submit'),
 			waitMsg : GO.lang['waitMsgSave'],
 			success : function(form, action) {
 
@@ -257,7 +253,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 		var checkDateInput = function(field) {
 
-			if (field.name == 'due_date') {
+			if (field.name == 'due_time') {
 				if (startDate.getValue() > dueDate.getValue()) {
 					startDate.setValue(dueDate.getValue());
 				}
@@ -271,7 +267,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			
 			formPanel.form.findField('remind_date').setValue(remindDate);
 
-			if (this.repeatType.getValue() > 0) {
+			if (this.repeatType.getValue() != '') {
 				if (this.repeatEndDate.getValue() == '') {
 					this.repeatForever.setValue(true);
 				} else {
@@ -286,7 +282,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		var now = new Date();
 
 		var startDate = new Ext.form.DateField({
-			name : 'start_date',
+			name : 'start_time',
 			format : GO.settings['date_format'],
 			allowBlank : false,
 			fieldLabel : GO.tasks.lang.startsAt,
@@ -300,7 +296,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		});
 
 		var dueDate = new Ext.form.DateField({
-			name : 'due_date',
+			name : 'due_time',
 			format : GO.settings['date_format'],
 			allowBlank : false,
 			fieldLabel : GO.tasks.lang.dueAt,
@@ -384,7 +380,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		});
 
 		this.repeatType = new Ext.form.ComboBox({
-			hiddenName : 'repeat_type',
+			hiddenName : 'freq',
 			triggerAction : 'all',
 			editable : false,
 			selectOnFocus : true,
@@ -396,12 +392,12 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			displayField : 'text',
 			store : new Ext.data.SimpleStore({
 				fields : ['value', 'text'],
-				data : [['0', GO.lang.noRecurrence],
-				['1', GO.lang.strDays],
-				['2', GO.lang.strWeeks],
-				['3', GO.lang.monthsByDate],
-				['4', GO.lang.monthsByDay],
-				['5', GO.lang.strYears]]
+				data : [['', GO.lang.noRecurrence],
+				['DAILY', GO.lang.strDays],
+				['WEEKLY', GO.lang.strWeeks],
+				['MONTHLY_DATE', GO.lang.monthsByDate],
+				['MONTHLY', GO.lang.monthsByDay],
+				['YEARLY', GO.lang.strYears]]
 			}),
 			hideLabel : true,
 			listeners : {
@@ -597,7 +593,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 		var form = this.formPanel.form;
 		switch (value) {
-			case '0' :
+			case '' :
 				this.disableDays(true);
 				this.monthTime.setDisabled(true);
 				this.repeatForever.setDisabled(true);
@@ -605,7 +601,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				this.repeatEvery.setDisabled(true);
 				break;
 
-			case '1' :
+			case 'DAILY' :
 				this.disableDays(true);
 				this.monthTime.setDisabled(true);
 				this.repeatForever.setDisabled(false);
@@ -614,7 +610,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 				break;
 
-			case '2' :
+			case 'WEEKLY' :
 				this.disableDays(false);
 				this.monthTime.setDisabled(true);
 				this.repeatForever.setDisabled(false);
@@ -623,7 +619,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 				break;
 
-			case '3' :
+			case 'MONTHLY_DATE' :
 				this.disableDays(true);
 				this.monthTime.setDisabled(true);
 				this.repeatForever.setDisabled(false);
@@ -632,7 +628,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 				break;
 
-			case '4' :
+			case 'MONTH' :
 				this.disableDays(false);
 				this.monthTime.setDisabled(false);
 				this.repeatForever.setDisabled(false);
@@ -640,7 +636,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				this.repeatEvery.setDisabled(false);
 				break;
 
-			case '5' :
+			case 'YEARLY' :
 				this.disableDays(true);
 				this.monthTime.setDisabled(true);
 				this.repeatForever.setDisabled(false);
