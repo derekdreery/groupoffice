@@ -110,11 +110,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	}
 	
 	
-	protected function afterDisplay($response, $model) {
-		
-		if(!empty($response['data']['country']))
-			$response['data']['country']=GO::t($response['data']['country'],'base','countries');
-		
+	protected function afterDisplay(&$response, &$model, &$params) {
+			
 		$response['data']['photo_url']=$model->photo_url;
 		
 		$company = $model->company();
@@ -133,7 +130,9 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 						$model->country, $model->address, $model->address_no,$model->zip, $model->city, $model->state
 						));
 		
-		return parent::afterDisplay($response, $model);
+		
+		
+		return parent::afterDisplay($response, $model, $params);
 	}
 	
 	

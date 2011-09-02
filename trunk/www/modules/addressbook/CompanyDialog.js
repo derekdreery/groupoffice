@@ -265,9 +265,7 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				this.personalPanel.setCompanyId(0);
 
 				var abRecord = this.personalPanel.formAddressBooks.store.getById(this.personalPanel.formAddressBooks.getValue());
-				this.personalPanel.formAddressFormat.setValue(abRecord.get('default_iso_address_format'));
-				this.personalPanel.formPostAddressFormat.setValue(abRecord.get('default_iso_address_format'));
-
+			
 				if (GO.customfields) {
 					var allowed_cf_categories = abRecord.data.allowed_cf_categories.split(',');
 					this.updateCfTabs(allowed_cf_categories);
@@ -293,29 +291,24 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 	loadCompany : function(id)
 	{
 		this.companyForm.form.load({
-			url: GO.settings.modules.addressbook.url+ 'json.php', 
+			url:GO.url('addressbook/company/load'),
 			params: {
-				company_id: id,
-				task: 'load_company'
+				id: id
 			},
 			
 			success: function(form, action) {
 				
-				if(!action.result.data.write_permission)
-				{
-					Ext.Msg.alert(GO.lang['strError'], GO.lang['strNoWritePermissions']);						
-				}else
-				{					
-					this.employeePanel.setCompanyId(action.result.data['id']);
-					this.personalPanel.setCompanyId(action.result.data['id']);
-					this.moveEmployeesButton.setDisabled(false);
-					
-					if (GO.customfields) {
-						this.updateCfTabs(action.result.data.allowed_cf_categories);
-					}
-					
-					GO.addressbook.CompanyDialog.superclass.show.call(this);
-				}						
+
+				this.employeePanel.setCompanyId(action.result.data['id']);
+				this.personalPanel.setCompanyId(action.result.data['id']);
+				this.moveEmployeesButton.setDisabled(false);
+
+				if (GO.customfields) {
+					this.updateCfTabs(action.result.data.allowed_cf_categories);
+				}
+
+				GO.addressbook.CompanyDialog.superclass.show.call(this);
+						
 			},
 			failure: function(form, action)
 			{
@@ -334,11 +327,10 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 	saveCompany : function(hide)
 	{	
 		this.companyForm.form.submit({
-			url:GO.settings.modules.addressbook.url+ 'action.php',
+			url:GO.url('addressbook/company/submit'),
 			params:
 			{
-				task : 'save_company',
-				company_id : this.company_id
+				id : this.company_id
 			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){

@@ -13,13 +13,7 @@
 
 GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 	
-	link_type : 3,
-	
-	loadParams : {task: 'load_company_with_items'},
-	
-	idParam : 'company_id',
-	
-	loadUrl : GO.settings.modules.addressbook.url+'json.php',
+	link_model : "GO_Addressbook_Model_Company",
 
 	stateId : 'ab-company-panel',
 
@@ -30,6 +24,8 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 	},	
 	
 	initComponent : function(){
+		
+		this.loadUrl = GO.url("addressbook/company/display");
  
 			this.template = '<div>'+
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
@@ -266,8 +262,8 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 											
 						'<tpl for="employees">'+
 							'<tr>'+
-								'<td><div class="go-icon go-link-icon-2"></div></td>'+
-								'<td><a href="#" onclick="GO.linkHandlers[2].call(this, {id});">{name}</a></td>'+
+								'<td><div class="go-icon go-model-icon-GO_Addressbook_Model_Contact"></div></td>'+
+								'<td><a href="#" onclick="GO.linkHandlers[\'GO_Addressbook_Model_Contact\'].call(this, {id});">{name}</a></td>'+
 								'<td>{function}</td>'+
 								'<td>{[this.mailTo(values.email, values.name)]}</td>'+
 							'</tr>'+							
@@ -457,7 +453,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 				
 				this.scheduleCallItem.setLinkConfig({
 					name: name,
-					links:[{link_id: this.data.id, link_type:3}],
+					links:[{model_id: this.data.id, model_name:"GO_Addressbook_Model_Company"}],
 					callback:this.reload,
 					scope: this
 				});
