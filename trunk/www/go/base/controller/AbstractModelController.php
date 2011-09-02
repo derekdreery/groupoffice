@@ -290,9 +290,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * The default action for displaying a model in a DisplayPanel.
 	 */
 	public function actionDisplay($params) {
-		$modelName = $this->model;
-		$model = call_user_func(array($modelName,'model'))->findByPk($params['id']);
 		
+		$response = array();
+				
+		$modelName = $this->model;
+		$model = GO::getModel($modelName)->findByPk($params['id']);
+		
+		$response = $this->beforeDisplay($response, $model, $params);
 		//todo build in new style. Now it's necessary for old library functions
 		require_once(GO::config()->root_path.'Group-Office.php');
 
@@ -413,12 +417,29 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$response['data']['comments'] = $comments->get_comments_json($response['data']['id'], $model->linkModelId());
 		}
 
-		$response = $this->afterDisplay($response, $model);
+		$response = $this->afterDisplay($response, $model, $params);
 
 		return $response;
 	}
 
-	protected function afterDisplay($response, $model) {
+	
+	/**
+	 * Useful to override
+	 * 
+	 * @param array $response The response array
+	 * @param mixed $model
+	 */
+	protected function beforeDisplay(&$response, &$model, &$params) {
+		return $response;
+	}
+	
+	/**
+	 * Useful to override
+	 * 
+	 * @param array $response The response array
+	 * @param mixed $model
+	 */
+	protected function afterDisplay(&$response, &$model, &$params) {
 		return $response;
 	}
 
