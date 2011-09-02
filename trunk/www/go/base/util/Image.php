@@ -27,7 +27,7 @@ class GO_Base_Util_Image {
 	public function load($filename) {
 		$image_info = getimagesize($filename);
 		$this->image_type = $image_info[2];
-		go_debug($this->image_type);
+
 		if ($this->image_type == IMAGETYPE_JPEG) {
 			$this->original_image = imagecreatefromjpeg($filename);
 		} elseif ($this->image_type == IMAGETYPE_GIF) {
@@ -94,16 +94,24 @@ class GO_Base_Util_Image {
 		if (!$image_type)
 			$image_type = $this->image_type;
 
+		$ret = false;
 		if ($image_type == IMAGETYPE_JPEG) {
-			imagejpeg($this->resized_image, $filename, $compression);
+			$ret = imagejpeg($this->resized_image, $filename, $compression);
 		} elseif ($image_type == IMAGETYPE_GIF) {
-			imagegif($this->resized_image, $filename);
+			$ret = imagegif($this->resized_image, $filename);
 		} elseif ($image_type == IMAGETYPE_PNG) {
-			imagepng($this->resized_image, $filename);
+			$ret = imagepng($this->resized_image, $filename);
 		}
+		
+		if(!$ret)
+			return false;
+		
 		if ($permissions != null) {
 			chmod($filename, $permissions);
 		}
+		
+		return true;
+		
 	}
 
 	public function getWidth() {

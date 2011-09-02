@@ -7,6 +7,9 @@ abstract class GO_Base_Fs_Base{
 	protected $path;
 
 	public function __construct($path) {
+		if(empty($path))
+			throw new Exception("Path may not be empty in GO_Base_Fs_Base");
+		
 		$this->path = dirname($path) . '/' . GO_Base_util_File::utf8Basename($path);
 	}
 	

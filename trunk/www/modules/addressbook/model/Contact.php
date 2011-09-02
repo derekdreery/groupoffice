@@ -77,14 +77,6 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		return GO::t('contact', 'addressbook');
 	}
 
-	protected function afterSave($wasNew) {
-// Obsolete according to Merijn.
-//		if (isset(GO::modules()->customfields))
-//			GO_Customfields_Controller_Item::saveCustomFields($this, "GO_Addressbook_Model_ContactCustomFieldsRecord");
-
-		return parent::afterSave($wasNew);
-	}
-
 	/**
 	 * The files module will use this function.
 	 */
@@ -122,7 +114,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @param String $tmpFile 
 	 */
 	protected function setPhoto($tmpFile){
-		
+				GO::debug("setPhoto($tmpFile)");
 		$destination = GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
 		
 		if(empty($tmpFile))
@@ -142,7 +134,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			}
 
 			$img->zoomcrop(90,120);
-			return $img->save($destination, IMAGETYPE_JPEG);
+			if(!$img->save($destination, IMAGETYPE_JPEG))
+				throw new Exception("Could not save photo at ".$destination." from ".$tmpFile);
 		}
 	}
 	

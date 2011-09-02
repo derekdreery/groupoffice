@@ -13,13 +13,7 @@
 
 GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	
-	link_type : 2,
-	
-	loadParams : {task: 'load_contact_with_items'},
-	
-	idParam : 'contact_id',
-	
-	loadUrl : GO.settings.modules.addressbook.url+'json.php',
+	link_model : "GO_Addressbook_Model_Contact",
 
 	stateId : 'ab-contact-panel',
 
@@ -30,6 +24,8 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 	},	
 	
 	initComponent : function(){	
+		
+		this.loadUrl=GO.url('addressbook/contact/display');
 		
 		this.template = 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
@@ -65,9 +61,9 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 								'</tr>'+					
 							'</table>'+
 						'</td>'+
-						'<tpl if="photo_src">'+
+						'<tpl if="photo_url">'+
 							'<td rowspan="2" align="right">' +
-								'<img src="{photo_src}" width="90" height="120" />' +
+								'<img src="{photo_url}" width="90" height="120" />' +
 							'</td>' +
 						'</tpl>'+
 					'</tr>' +
@@ -202,7 +198,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 									//COMPANY							
 									'<tpl if="!GO.util.empty(company_name)">'+
 										'<tr>'+
-											'<td class="contactCompanyLabelWidth">' + GO.lang['strCompany'] + ':</td><td><a href="#" onclick="GO.linkHandlers[3].call(this,{company_id});">{company_name}</a></td>'+
+											'<td class="contactCompanyLabelWidth">' + GO.lang['strCompany'] + ':</td><td><a href="#" onclick="GO.linkHandlers["GO_Addressbook_Model_Company].call(this,{company_id});">{company_name}</a></td>'+
 										'</tr>'+						
 									'</tpl>'+
 

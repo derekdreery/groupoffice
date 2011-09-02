@@ -33,3 +33,6 @@ $updates[201109011450][]="ALTER TABLE `cf_3` CHANGE `link_id` `model_id` INT( 11
 $updates[201109011450][]="RENAME TABLE `cf_3` TO `cf_ab_companies` ;";
 
 
+$updates[201109021000][]="ALTER TABLE `ab_contacts` DROP `iso_address_format` ";
+
+

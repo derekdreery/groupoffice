@@ -1837,13 +1837,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}	
 			$this->_attributes[$name]=$value;
 
-		}else{
-			$arr = explode('@',$name);
-			if(count($arr)>1)
-				$this->_relatedCache[$arr[0]][$arr[1]]=$value;				
-			else		{
-				//GO::debug('UNSAFE ATTRIBUTE: '.$name.' -> '.$value);
-				$this->_attributes[$name]=$value; //this attribute is unsafe but we may want to use it in the contructor anyway. For example the customfield record doesn't know the columns until after the constructor.
+		}else{			
+			$setter = 'set'.ucfirst($name);
+			
+			if(method_exists($this,$setter)){
+				return $this->$setter($value);
+			}else
+			{
+				$arr = explode('@',$name);
+				if(count($arr)>1)
+					$this->_relatedCache[$arr[0]][$arr[1]]=$value;				
+				else		{
+					//GO::debug('UNSAFE ATTRIBUTE: '.$name.' -> '.$value);
+					$this->_attributes[$name]=$value; //this attribute is unsafe but we may want to use it in the contructor anyway. For example the customfield record doesn't know the columns until after the constructor.
+				}
 			}
 		}
 
