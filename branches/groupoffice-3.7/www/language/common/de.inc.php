@@ -183,3 +183,6 @@ $lang['common']['none']='Keine';
 $lang['common']['alert']='Alarm';
 $lang['common']['theFolderAlreadyExists']='Ein Ordner dieses Namens existiert bereits';
 $lang['common']['other']='Andere';
+$lang['common']['name2']= 'Name 2';
+$lang['common']['copy']='Kopieren';
+$lang['common']['upload_file_to_big']='Die Datei, die Sie hochladen möchten, ist größer als das Limit von %s.';
