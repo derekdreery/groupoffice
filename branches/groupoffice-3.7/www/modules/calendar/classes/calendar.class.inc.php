@@ -1286,6 +1286,7 @@ class calendar extends db {
 		
 		if(!$old_event) {
 			$old_event = $this->get_event($event['id']);
+			unset($old_event['mtime']);
 		}
 		$event = array_merge($old_event, $event);
 		unset($event['acl_id']);
