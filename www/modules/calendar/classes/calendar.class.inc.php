@@ -1281,14 +1281,13 @@ class calendar extends db {
 		go_debug('calendar::update_event');
 		
 		GLOBAL $GO_EVENTS;
-		
-    $GO_EVENTS->fire_event('before_update_event', array(&$event,&$before_event_response));
-		
+		   
 		if(!$old_event) {
-			$old_event = $this->get_event($event['id']);
-			unset($old_event['mtime']);
+			$old_event = $this->get_event($event['id']);			
 		}
+		unset($old_event['mtime']);
 		$event = array_merge($old_event, $event);
+
 		unset($event['acl_id']);
 		
 		$GO_EVENTS->fire_event('before_update_event', array(&$event,&$before_event_response));
