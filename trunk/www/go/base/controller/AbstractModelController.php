@@ -45,13 +45,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$modelName = $this->model;
 		if (!empty($params['id']))
-			$model = call_user_func(array($modelName,'model'))->findByPk($params['id']);
+			$model = GO::getModel($modelName)->findByPk($params['id']);
 		else
 			$model = new $modelName;
 
 		$this->beforeSubmit($response, $model, $params);
 		
 		$model->setAttributes($params);
+		
+		$modifiedAttributes = $model->getModifiedAttributes();
 
 		$response['success'] = $model->save();
 
@@ -74,7 +76,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$model->link($linkModel);			
 		}
 
-		$this->afterSubmit($response, $model, $params);
+		$this->afterSubmit($response, $model, $params, $modifiedAttributes);
 
 		return $response;
 	}
@@ -95,7 +97,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param array $response The response array
 	 * @param mixed $model
 	 */
-	protected function afterSubmit(&$response, &$model, &$params) {
+	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		
 	}
 
@@ -404,7 +406,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 //		}
 
 		if (/* !in_array('files', $hidden_sections) && */!isset($response['data']['files'])) {
-			if (isset(GO::modules()->files)) {
+			if (isset(GO::modules()->files) && $model->hasFiles()) {
 				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path']. 'files.class.inc.php');
 				$files = new files();
 

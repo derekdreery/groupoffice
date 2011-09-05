@@ -53,23 +53,8 @@ GO.files.FolderPropertiesDialog = function(config){
 			name: 'mtime'
 		},
 		{
-			xtype: 'plainfield',
-			fieldLabel: GO.lang.Atime,
-			name: 'atime'
-		},
-		{
 			xtype: 'htmlcomponent',
 			html:'<hr />'
-		},
-		{
-			xtype: 'plainfield',
-			fieldLabel: GO.lang.strType,
-			name: 'type'
-		},
-		{
-			xtype: 'plainfield',
-			fieldLabel: GO.lang.strSize,
-			name: 'size'
 		},
 		new Ext.form.Checkbox({
 			boxLabel: GO.files.lang.activateSharing,
@@ -102,7 +87,7 @@ GO.files.FolderPropertiesDialog = function(config){
 		title: GO.files.lang.comments,
 		border:false,
 		items: new Ext.form.TextArea({
-			name: 'comments',
+			name: 'comment',
 			fieldLabel: '',
 			hideLabel: true,
 			anchor:'100% 100%'
@@ -209,11 +194,11 @@ GO.files.FolderPropertiesDialog = function(config){
 							})
 						]
 					});
-					for (var i=0; i<GO.customfields.types['6'].panels.length; i++) {
+					for (var i=0; i<GO.customfields.types['GO_Files_Model_File'].panels.length; i++) {
 						this.cfCategoriesFieldset.add(new Ext.form.Checkbox({
-								name: 'cat_'+GO.customfields.types['6'].panels[i].category_id,
+								name: 'cat_'+GO.customfields.types['GO_Files_Model_File'].panels[i].category_id,
 								hideLabel: true,
-								boxLabel: GO.customfields.types['6'].panels[i].title,
+								boxLabel: GO.customfields.types['GO_Files_Model_File'].panels[i].title,
 								checked: false
 							}));
 					}
@@ -269,10 +254,9 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 			this.render(Ext.getBody());
 		
 		this.formPanel.form.load({
-			url: GO.settings.modules.files.url+'json.php', 
+			url: GO.url('files/folder/load'),
 			params: {
-				folder_id: folder_id, 
-				task: 'folder_properties'
+				id: folder_id
 			},			
 			success: function(form, action) {
 
@@ -283,7 +267,7 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 								
 				this.readPermissionsTab.setAcl(action.result.data.acl_id);
 				
-				this.setWritePermission(action.result.data.is_home_dir, action.result.data.write_permission, action.result.data.manage_permission);
+				this.setPermission(action.result.data.is_someones_home_dir, action.result.data.permission_level);
 
 				this.tabPanel.setActiveTab(0);
 				
@@ -298,12 +282,12 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 		
 	},
 	
-	setWritePermission : function(is_home_dir, writePermission, managePermission)
+	setPermission : function(is_someones_home_dir, permission_level)
 	{
 		var form = this.formPanel.form;
-		form.findField('name').setDisabled(is_home_dir || !writePermission);
-		form.findField('share').setDisabled(is_home_dir || !managePermission);
-		form.findField('apply_state').setDisabled(!( managePermission || GO.settings.has_admin_permission));
+		form.findField('name').setDisabled(is_someones_home_dir || permission_level<GO.permissionLevels.write);
+		form.findField('share').setDisabled(is_someones_home_dir || permission_level<GO.permissionLevels.manage);
+		form.findField('apply_state').setDisabled(permission_level<GO.permissionLevels.manage && !GO.settings.has_admin_permission);
 		this.readPermissionsTab.setDisabled(this.readPermissionsTab.acl_id==0);
 	},
 	
@@ -311,22 +295,21 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 	{
 		this.formPanel.form.submit({
 						
-			url:GO.settings.modules.files.url+'action.php',
+			url: GO.url('files/folder/submit'),
 			params: {
-				folder_id: this.folder_id, 
-				task: 'folder_properties'
+				id: this.folder_id
 			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 
-				if(action.result.acl_id)
+				if(typeof(action.result.acl_id) != 'undefined')
 				{
 					this.readPermissionsTab.setAcl(action.result.acl_id);
 				}
 				
-				if(action.result.path)
+				if(action.result.new_path)
 				{
-					this.formPanel.form.findField('path').setValue(action.result.path);
+					this.formPanel.form.findField('path').setValue(action.result.new_path);
 					this.fireEvent('rename', this, this.parent_id);				
 				}
 				this.fireEvent('save', this, this.folder_id);

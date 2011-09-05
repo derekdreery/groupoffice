@@ -27,7 +27,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return parent::beforeSubmit($response, $model, $params);
 	}
 	
-	protected function afterSubmit(&$response, &$model, &$params) {
+	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		
 		if(!empty($params['delete_photo'])){
 			$model->photo='';
@@ -66,7 +66,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 //				}
 //			}
 		
-		return parent::afterSubmit($response, $model, $params);
+		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
 	
 	
