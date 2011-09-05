@@ -1760,7 +1760,7 @@ class files extends db {
 		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])){
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
-			$db->query("delete from cf_6 where link_id not in (select id from fs_files);");
+			$db->query("delete from cf_fs_files where link_id not in (select id from fs_files);");
 		}
 	}
 

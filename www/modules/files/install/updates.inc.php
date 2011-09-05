@@ -23,3 +23,7 @@ $updates[201109020000][]="ALTER TABLE `fs_folders` DROP `path`";
 
 $updates[201109020000][]="ALTER TABLE `fs_folders` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
 $updates[201109020000][]="ALTER TABLE `fs_files` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+
+
+$updates[201109050000][]="ALTER TABLE `fs_folders` CHANGE `comments` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+$updates[201109050000][]="ALTER TABLE `fs_files` CHANGE `comments` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";

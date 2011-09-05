@@ -25,6 +25,7 @@
  * @property boolean $isNew Is the model new and not inserted in the database yet.
  * @property GO_Customfields_Model_AbstractCustomFieldsRecord $customfieldsRecord
  * @property String $localizedName The localized human friendly name of this model.
+ * @property GO_Base_Model_Acl $acl The acl object
  */
 
 abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
@@ -1470,8 +1471,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			return count($this->_modifiedAttributes)>0;
 		}else
 		{
-			return in_array($attributeName, $this->_modifiedAttributes);
+			return isset($this->_modifiedAttributes[$attributeName]);
 		}
+	}
+
+	/**
+	 * Get the old value for a modified attribute.
+	 * 
+	 * @param String $attributeName
+	 * @return mixed 
+	 */
+	public function getOldAttributeValue($attributeName){
+		return isset($this->_modifiedAttributes[$attributeName]) ? $this->_modifiedAttributes[$attributeName] : false;
 	}
 	
 	/**
@@ -1630,7 +1641,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 //			}
 //		}
 //		
-		foreach($this->_modifiedAttributes as $field)
+		foreach($this->_modifiedAttributes as $field=>$oldValue)
 			$updates[] = "`$field`=:".$field;		
 		
 		
@@ -1667,7 +1678,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		foreach($this->columns as $field => $attr){
 			
-			if(in_array($field,$this->_modifiedAttributes) || in_array($field, $pks))
+			if($this->isModified($field) || in_array($field, $pks))
 				$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
 		}
 		return $stmt->execute();
@@ -1842,9 +1853,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$this->$name=$value;
 		}elseif(isset($this->columns[$name])){
 			
-			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!=$value) && !in_array($name,$this->_modifiedAttributes))
+			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!=$value) && !$this->isModified($name))
 			{
-				$this->_modifiedAttributes[]=$name;
+				$this->_modifiedAttributes[$name]=isset($this->_attributes[$name]) ? $this->_attributes[$name] : false;
 			}	
 			$this->_attributes[$name]=$value;
 

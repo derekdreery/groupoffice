@@ -21,10 +21,10 @@
  * @property int $parent_id
  * @property String $name
  * @property String $path
- * @property Boolean $visible
+ * @property Boolean $visible When this folder is shared it only shows up in the tree when visible is set to true
  * @property int $acl_id
  * @property String $comments
- * @property Boolean $thumbs
+ * @property Boolean $thumbs Show this folder in thumbnails
  * @property int $ctime
  * @property int $mtime
  * @property Boolean $readonly
@@ -33,6 +33,10 @@
  * @property GO_Base_Fs_Folder $fsFolder
  */
 class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
+	
+	private $_path;
+	
+	public $joinAclField=true;
 
 	/**
 	 * Returns a static model of itself
@@ -84,22 +88,35 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @return string 
 	 */
 	protected function getPath() {
-		$path = $this->name;
-		$currentFolder = $this;
-		while ($currentFolder = $currentFolder->parent) {
-			$path = $currentFolder->name . '/' . $path;
+		if(!isset($this->_path)){
+			$this->_path = $this->name;
+			$currentFolder = $this;
+			while ($currentFolder = $currentFolder->parent) {
+				$this->_path = $currentFolder->name . '/' . $this->_path;
+			}
 		}
-		return $path;
+		return $this->_path;
 	}
 
 	protected function getFsFolder() {
 		return new GO_Base_Fs_Folder(GO::config()->file_storage_path . $this->path);
 	}
 
-	protected function afterSave($wasNew) {
+	protected function afterSave($wasNew) {		
 
 		if ($wasNew) {
 			$this->fsFolder->create();
+		}else
+		{
+			//move folder on the filesystem after a rename
+			if($this->isModified('name')){
+				$oldPath = GO::config()->file_storage_path.dirname($this->path).'/'.$this->getOldAttributeValue('name');
+				$newPath = GO::config()->file_storage_path.dirname($this->path).'/'.$this->name;
+				if(!rename($oldPath, $newPath))
+					throw new Exception("Could not rename folder on the filesystem");
+				
+				$this->_path = $newPath;
+			}
 		}
 
 		return parent::afterSave($wasNew);
@@ -109,6 +126,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$this->fsFolder->delete();
 		return parent::afterDelete();
 	}
+	
+	
+	
 
 	/**
 	 * Find a folder by path relative to GO::config()->file_storage_path
@@ -144,8 +164,23 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 		return $folder;
 	}
+	
+	/**
+	 * Check if this folder is the home folder of a user.
+	 * 
+	 * @return boolean 
+	 */
+	public function isSomeonesHomeFolder(){
+		return $this->parent->name=='users' && $this->parent->parent_id=0;
+	}
 
 	
+	/**
+	 * Add a file to this folder
+	 * 
+	 * @param String $name
+	 * @return GO_Files_Model_File 
+	 */
 	public function addFile($name) {
 		$file = new GO_Files_Model_File();
 		$file->folder_id = $this->id;
@@ -155,6 +190,12 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return $file;
 	}
 	
+	/**
+	 * Add a subfolder.
+	 * 
+	 * @param String $name
+	 * @return GO_Files_Model_Folder 
+	 */
 	public function addFolder($name){
 		$folder = new GO_Files_Model_Folder();
 		$folder->parent_id = $this->id;

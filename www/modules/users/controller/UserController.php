@@ -63,7 +63,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 		return parent::beforeSubmit($response, $model, $params);
 	}
 
-	protected function afterSubmit(&$response, &$model, &$params) {
+	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 
 
 

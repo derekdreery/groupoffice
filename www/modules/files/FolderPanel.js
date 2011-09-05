@@ -1,11 +1,7 @@
 GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
-	link_type : 17,
+	linkModelName : "GO_Files_Model_Folder",
 
-	loadParams : {task: 'folder_with_items'},
 
-	idParam : 'folder_id',
-
-	loadUrl : GO.settings.modules.files.url+'json.php',
 
 	noFileBrowser:true,
 	
@@ -39,7 +35,10 @@ GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
 		GO.files.FolderPanel.superclass.setData.call(this, data);
 	},
 
-	initTemplate : function(){
+	initComponent : function(){	
+		
+		this.loadUrl=GO.url('files/folder/display');
+		
 		this.template =
 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
@@ -93,6 +92,6 @@ GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
 			this.template += GO.comments.displayPanelTemplate;
 		}
 
-		GO.files.FolderPanel.superclass.initTemplate.call(this);
+		GO.files.FolderPanel.superclass.initComponent.call(this);
 	}
 });
