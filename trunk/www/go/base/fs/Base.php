@@ -13,7 +13,7 @@ abstract class GO_Base_Fs_Base{
 			throw new Exception("Path may not be empty in GO_Base_Fs_Base");
 		
 		if(!self::checkPathInput($path))
-			throw new Exception("The supplied path was invalid");
+			throw new Exception("The supplied path '$path' was invalid");
 		
 		$this->path = dirname($path) . '/' . self::utf8Basename($path);
 	}
@@ -44,6 +44,14 @@ abstract class GO_Base_Fs_Base{
 	 */
 	public function mtime(){
 		return filemtime($this->path);
+	}
+	/**
+	 * Return the creation unix timestamp
+	 * 
+	 * @return int Unix timestamp
+	 */
+	public function ctime(){
+		return filectime($this->path);
 	}
 	
 	/**
@@ -100,7 +108,7 @@ abstract class GO_Base_Fs_Base{
 	 * @return boolean 
 	 */
 	public static function checkPathInput($path){
-		return strpos($path, '../') !== false || strpos($path, '..\\')!==false;
+		return strpos($path, '../') === false && strpos($path, '..\\')===false;
 	}
 	
 	
