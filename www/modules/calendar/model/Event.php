@@ -77,7 +77,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public function buildFilesPath() {
 
-		return 'calendar/' . GO_Base_Util_File::strip_invalid_chars($this->calendar->name) . '/' . date('Y', $this->start_time) . '/' . GO_Base_Util_File::strip_invalid_chars($this->name);
+		return 'calendar/' . GO_Base_Fs_Base::stripInvalidChars($this->calendar->name) . '/' . date('Y', $this->start_time) . '/' . GO_Base_Fs_Base::stripInvalidChars($this->name);
 	}
 	
 	public function beforeDelete() {

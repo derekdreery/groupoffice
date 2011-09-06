@@ -82,9 +82,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 */
 	public function buildFilesPath() {
 		
-		$new_folder_name = GO_Base_Util_File::strip_invalid_chars($this->name);
+		$new_folder_name = GO_Base_Fs_Base::stripInvalidChars($this->name);
 		$last_part = empty($this->last_name) ? '' : GO_Addressbook_Utils::getIndexChar($this->last_name);
-		$new_path = 'contacts/'.GO_Base_Util_File::strip_invalid_chars($this->addressbook->name);
+		$new_path = 'contacts/'.GO_Base_Fs_Base::stripInvalidChars($this->addressbook->name);
 		if(!empty($last_part)) {
 			$new_path .= '/'.$last_part;
 		}else {

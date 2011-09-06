@@ -72,6 +72,11 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord{
 		 );
 	 }
 	 
+	 protected function init() {
+		 $this->columns['expire_time']['gotype']='unixdate';
+		 parent::init();
+	 }
+	 
 	 
 	 protected function getPath(){
 		 return $this->folder()->path.'/'.$this->name;
@@ -86,5 +91,15 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord{
 		 $this->fsFile->delete();						 
 		 
 		 return parent::afterDelete();
+	 }
+	 
+	 protected function getDownloadURL(){
+		 if(!empty($this->expire_time) && !empty($this->random_code)){
+			 return GO::url('files/file/download', 'id='.$this->id.'&random_code='.$this->random_code, false);
+		 }
+	 }
+	 
+	 protected function getThumbURL(){
+		 return GO::url('core/thumb', 'src='.urlencode($this->path).'&w=100&h=100&filemtime='.$this->fsFile->mtime());
 	 }
 }

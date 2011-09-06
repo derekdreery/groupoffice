@@ -1491,7 +1491,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function buildFilesPath() {
 
-		return isset($this->name) ? $this->getModule().'/' . GO_Base_Util_File::strip_invalid_chars($this->name) : false;
+		return isset($this->name) ? $this->getModule().'/' . GO_Base_Fs_Base::stripInvalidChars($this->name) : false;
 	}
 	
 	/**
