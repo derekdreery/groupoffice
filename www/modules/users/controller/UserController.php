@@ -16,7 +16,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 	//LOAD	
 
-	protected function afterLoad($response, $model, $params) {
+	protected function afterLoad(&$response, &$model, &$params) {
 
 
 		//Join the contact that belongs to the user in the form response.
