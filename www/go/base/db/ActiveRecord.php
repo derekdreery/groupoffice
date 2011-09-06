@@ -2006,7 +2006,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$customFieldModelName=$this->customfieldsModel();
 
 			if(!isset($this->_customfieldsRecord)){
-				$this->_customfieldsRecord = call_user_func(array($customFieldModelName,'model'))->findByPk($this->pk);
+				$this->_customfieldsRecord = GO::getModel($customFieldModelName)->findByPk($this->pk);
 				if(!$this->_customfieldsRecord){
 					//doesn't exist yet. Return a new one
 					$this->_customfieldsRecord = new $customFieldModelName;
