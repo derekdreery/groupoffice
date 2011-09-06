@@ -30,6 +30,8 @@
  * @property int $expire_time
  * @property String $random_code
  * 
+ * @property String $thumbURL
+ * 
  * @property String $path
  * @property GO_Base_Fs_File $fsFile
  */
