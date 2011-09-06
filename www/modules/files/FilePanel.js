@@ -12,13 +12,7 @@
  */
 
 GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
-	link_type : 6,
-
-	loadParams : {task: 'file_with_items'},
-
-	idParam : 'file_id',
-
-	loadUrl : GO.settings.modules.files.url+'json.php',
+	linkModelName : "GO_Files_Model_File",
 
 	noFileBrowser:true,
 
@@ -84,17 +78,20 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 		GO.files.FilePanel.superclass.setData.call(this, data);
 	},
 
-	initTemplate : function(){
+	initComponent : function(){
+		
+		this.loadUrl=GO.url('files/file/display');
+		
 		this.template =
 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
 						'<td>'+GO.lang.strLocation+':</td>'+
-						'<td>{location}</td>'+
+						'<td>{path}</td>'+
 					'</tr>'+
 					'<tr>'+
 						'<td>'+GO.lang.strType+':</td>'+
-						'<td colspan=>{type}</td>'+						
+						'<td colspan=><div class="go-grid-icon filetype filetype-{extension}">{type}</div></td>'+						
 					'</tr>'+
 
 					'<tr>'+
@@ -125,19 +122,14 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 						
 						'<tr>'+
             '<td>'+GO.files.lang.downloadUrl+':</td>'+
-            '<td>{download_link}</td>'+
+            '<td><a href="{download_link}" target="_blank">{download_link}</a></td>'+
 						'</tr>'+
 	
 					
           '</tpl>'+
 
-//          '<tpl if="GO.util.empty(expire_time)"><tr>'+
-//            '<td colspan="2">'+GO.files.lang.strDownloadInactive+'</td>'+
-////            '<td>{expire_time} (<a href="{download_link}">'+GO.files.lang.strClickHere+'</a>)</td>'+
-//          '</tpl>'+
-
-					'<tpl if="!GO.util.empty(image_src)"><tr><td colspan="2">'+
-						'<img style="cursor:pointer;" src="{image_src}" onclick="javascript:GO.files.openFile(new Ext.data.Record({\'name\':\'{image_name}\',\'path\':\'{image_path}\',\'extension\':\'{image_extension}\',\'download_path\':\'{download_path}\'}));" />'+
+					'<tpl if="!GO.util.empty(thumbnail_url)"><tr><td colspan="2">'+
+						'<img src="{thumbnail_url}" />'+
 					'</td></tr></tpl>'+
 
 					this.extraTemplateProperties +
@@ -179,6 +171,6 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 			this.template += GO.comments.displayPanelTemplate;
 		}
 
-		GO.files.FilePanel.superclass.initTemplate.call(this);
+		GO.files.FilePanel.superclass.initComponent.call(this);
 	}
 });
