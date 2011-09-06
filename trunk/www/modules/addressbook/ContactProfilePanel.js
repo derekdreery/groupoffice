@@ -3,7 +3,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 		config = config || {};
 		Ext.apply(config);
 
-		if(!config.forUser){
+		if(!config.forUser){		
 			this.formFirstName = new Ext.form.TextField(
 			{
 				fieldLabel: GO.lang['strFirstName'],
@@ -356,7 +356,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 			items: [this.formCompany,this.formDepartment,this.formFunction]
 		}
  
-		var leftColItems = [];
+			var leftColItems = [];
 		
 		//if(!config.forUser)
 			leftColItems.push(this.addressbookFieldset);

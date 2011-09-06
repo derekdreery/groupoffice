@@ -14,7 +14,7 @@
 
 GO.addressbook.ContactDialog = function(config)
 {
-	Ext.apply(this, config);
+	config = config || {};
 
 	this.goDialogId = 'contact';
 	
@@ -134,6 +134,34 @@ GO.addressbook.ContactDialog = function(config)
 	});
 	
 	
+	if(GO.settings.modules.users.read_permission){
+		config.tbar=[{
+				handler:function(){
+					GO.users.showUserDialog();
+					if(this.go_user_id){
+						GO.users.userDialog.formPanel.load({
+							url:GO.url('addressbook/contact/load'),
+							params: {
+								id : this.contact_id 
+							},
+							failure:function(form, action)
+							{
+								Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
+							},
+							scope: this				
+						});
+					}else
+					{
+						
+					}
+					//GO.users.userDialog.contactPanel.fillPersonalFields();
+				},
+				scope:this,
+				text:GO.addressbook.lang.createUser
+			}];
+	}
+	
+	
 	//this.downloadDocumentButton = new Ext.Button();
 
 	this.collapsible=true;
@@ -182,7 +210,7 @@ GO.addressbook.ContactDialog = function(config)
 	this.focus= focusFirstField.createDelegate(this);
 	
 	
-	GO.addressbook.ContactDialog.superclass.constructor.call(this);
+	GO.addressbook.ContactDialog.superclass.constructor.call(this, config);
 	
 	this.addEvents({
 		'save':true
@@ -352,6 +380,7 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 				}
 				this.uploadFile.clearQueue();
 				this.fireEvent('save', this, this.contact_id);
+				this.personalPanel.setContactID(this.contact_id);
 				if(!GO.util.empty(action.result.photo_url))
 					this.setPhoto(action.result.photo_url);
 				else
