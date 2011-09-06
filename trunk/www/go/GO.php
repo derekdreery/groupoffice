@@ -385,7 +385,8 @@ class GO{
 		if (self::config()->log) {
 
 			if (empty(GO::session()->logdircheck)) {
-				GO_Base_Util_File::mkdir(dirname(self::config()->info_log));
+				$folder = new GO_Base_Fs_Folder(dirname(self::config()->info_log));
+				$folder->create();				
 				GO::session()->logdircheck = true;
 			}
 

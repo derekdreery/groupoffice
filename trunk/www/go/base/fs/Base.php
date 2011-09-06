@@ -5,12 +5,17 @@
 abstract class GO_Base_Fs_Base{
 	
 	protected $path;
+	
+	const INVALID_CHARS = '/[\/:\*\?"<>|\\\]/';
 
 	public function __construct($path) {
 		if(empty($path))
 			throw new Exception("Path may not be empty in GO_Base_Fs_Base");
 		
-		$this->path = dirname($path) . '/' . GO_Base_util_File::utf8Basename($path);
+		if(!self::checkPathInput($path))
+			throw new Exception("The supplied path was invalid");
+		
+		$this->path = dirname($path) . '/' . self::utf8Basename($path);
 	}
 	
 	
@@ -47,7 +52,24 @@ abstract class GO_Base_Fs_Base{
 	 * @return String  
 	 */
 	public function name(){
-		return GO_Base_util_File::utf8Basename($this->path);
+		
+		if(!function_exists('mb_substr'))
+		{
+			return basename($this->path);
+		}
+
+		if(empty($this->path))
+		{
+			return '';
+		}
+		$pos = mb_strrpos($this->path, '/');
+		if($pos===false)
+		{
+			return $this->path;
+		}else
+		{
+			return mb_substr($this->path, $pos+1);
+		}
 	}
 	
 	/**
@@ -70,4 +92,69 @@ abstract class GO_Base_Fs_Base{
 	public function __toString() {
 		return $this->path;
 	}
+	
+	/**
+	 * Checks if a path send as a request parameter is valid.
+	 * 
+	 * @param String $path
+	 * @return boolean 
+	 */
+	public static function checkPathInput($path){
+		return strpos($path, '../') !== false || strpos($path, '..\\')!==false;
+	}
+	
+	
+	/**
+	 * Get's the filename from a path string and works with UTF8 characters
+	 * 
+	 * @param String $path
+	 * @return String 
+	 */
+	public static function utf8Basename($path)
+	{
+		if(!function_exists('mb_substr'))
+		{
+			return basename($path);
+		}
+		//$path = trim($path);
+		if(substr($path,-1,1)=='/')
+		{
+			$path = substr($path,0,-1);
+		}
+		if(empty($path))
+		{
+			return '';
+		}
+		$pos = mb_strrpos($path, '/');
+		if($pos===false)
+		{
+			return $path;
+		}else
+		{
+			return mb_substr($path, $pos+1);
+		}
+	}
+	
+	/**
+	 * Remove unwanted characters from a string so it can safely be used as a filename.
+	 * 
+	 * @param string $filename
+	 * @return string 
+	 */
+	public static function stripInvalidChars($filename){
+		$filename = trim(preg_replace(self::INVALID_CHARS,'', $filename));
+
+		//IE likes to change a double white space to a single space
+		//We must do this ourselves so the filenames will match.
+		$filename =  preg_replace('/\s+/', ' ', $filename);
+
+		//strip dots from start
+		$filename=ltrim($filename, '.');
+
+		if(empty($filename)){
+			$filename = 'unnamed';
+		}
+		return $filename;
+	}
+
 }
