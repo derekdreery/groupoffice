@@ -270,7 +270,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 					$cacheFilename .= '_zc';
 				}
 //$cache_filename .= '_'.filesize($full_path);
-				$cacheFilename .= $filename;
+				$cacheFilename .= $file->name();
 
 				$readfile = $cacheDir->path() . '/' . $cacheFilename;
 				$thumbExists = file_exists($cacheDir->path() . '/' . $cacheFilename);

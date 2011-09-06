@@ -123,6 +123,26 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
     return 'application/octet-stream';    
 	}
 	
+	/**
+	 * Check if the file is an image.
+	 * 
+	 * @return boolean 
+	 */
+	public function isImage(){
+		switch($this->extension()){
+			case 'ico':
+			case 'jpg':
+			case 'jpeg':
+			case 'png':
+			case 'gif':
+			case 'xmind':
+
+				return true;
+			default:
+				return false;
+		}
+	}
+	
 	public function output(){
 		readfile($this->path());
 	}

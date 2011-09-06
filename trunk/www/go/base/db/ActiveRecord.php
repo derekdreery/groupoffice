@@ -1185,44 +1185,49 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	protected function formatOutputValues($attributes, $html=false){
 		
 		$formatted = array();
-		foreach($attributes as $key=>$value){
-			if(!isset($this->columns[$key]['gotype'])){
-				$this->columns[$key]['gotype']='string';
-			}
-			switch($this->columns[$key]['gotype']){
-				
-				case 'unixdate':
-					$formatted[$key] = GO_Base_Util_Date::get_timestamp($value, false);
-					break;	
-				
-				case 'unixtimestamp':
-					$formatted[$key] = GO_Base_Util_Date::get_timestamp($value);
-					break;	
-
-				case 'textarea':
-					if($html){
-						$formatted[$key] = GO_Base_Util_String::text_to_html($value);
-					}else
-					{
-						$formatted[$key] = $value;
-					}
-					break;
-					
-				case 'date':
-					$formatted[$key] = GO_Base_Util_Date::get_timestamp(strtotime($value),false);
-					break;
-					
-				case 'number':
-					$decimals = isset($this->columns[$key]['decimals']) ? $this->columns[$key]['decimals'] : 2;
-					$formatted[$key] = GO_Base_Util_Number::localize($value, $decimals);
-					break;
-				default:
-					$formatted[$key] = $value;//htmlspecialchars($value,ENT_QUOTES,'UTF-8');
-					break;
-			}
+		foreach($attributes as $attributeName=>$value){			
+			$formatted[$attributeName]=$this->_formatAttribute($attributeName, $value, $html);
 		}
 		
 		return $formatted;
+	}
+	
+	private function _formatAttribute($attributeName, $value, $html=false){
+		if(!isset($this->columns[$attributeName]['gotype'])){
+			$this->columns[$attributeName]['gotype']='string';
+		}
+
+		switch($this->columns[$attributeName]['gotype']){
+				
+			case 'unixdate':
+				return GO_Base_Util_Date::get_timestamp($value, false);
+				break;	
+
+			case 'unixtimestamp':
+				return GO_Base_Util_Date::get_timestamp($value);
+				break;	
+
+			case 'textarea':
+				if($html){
+					return GO_Base_Util_String::text_to_html($value);
+				}else
+				{
+					return $value;
+				}
+				break;
+
+			case 'date':
+				return GO_Base_Util_Date::get_timestamp(strtotime($value),false);
+				break;
+
+			case 'number':
+				$decimals = isset($this->columns[$key]['decimals']) ? $this->columns[$key]['decimals'] : 2;
+				return GO_Base_Util_Number::localize($value, $decimals);
+				break;
+			default:
+				return $value;
+				break;
+		}		
 	}
 	
 	/**
@@ -1251,6 +1256,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		
 	}
+	
+	
 	
 	/**
 	 * Returns all column attribute values.
@@ -1784,6 +1791,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			}
 		}
 			
+	}
+	
+	public function getAttribute($attributeName, $outputType='raw'){
+		if(!isset($this->_attributes[$attributeName]))						
+			return false;
+		
+		return $outputType=='raw' ?  $this->_attributes[$attributeName] : $this->_formatAttribute($attributeName, $this->_attributes[$attributeName]);
 	}
 	
 	
