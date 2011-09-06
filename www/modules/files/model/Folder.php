@@ -79,7 +79,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return array(
 				'parent' => array('type' => self::BELONGS_TO, 'model' => 'GO_Files_Model_Folder', 'field' => 'parent_id'),
 				'folders' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_Folder', 'field' => 'parent_id', 'delete' => true),
-				'files' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_File', 'field' => 'folder_id', 'delete' => true)
+				'files' => array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_File', 'field' => 'folder_id', 'delete' => true),
+				'notifyUsers'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderNotification', 'field' => 'folder_id', 'delete' => true),
 		);
 	}
 
@@ -243,5 +244,49 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				$files->delete();
 		}
 	}
+	
+	/**
+	 * Add a user that will be notified by e-mail when something changes in the
+	 * folder.
+	 * 
+	 * @param int $user_id
+	 * @return boolean
+	 */
+	public function addNotifyUser($user_id){
+		if(!$this->hasNotifyUser($user_id)){
+			$m = new GO_Files_Model_FolderNotification();
+			$m->folder_id = $this->id;
+			$m->user_id = $user_id;
+			return $m->save();
+		}else
+		{
+			return true;
+		}
+  }
+	
+	/**
+	 * Remove a user that will be notified by e-mail when something changes in the
+	 * folder.
+	 * 
+	 * @param int $user_id
+	 * @return boolean
+	 */
+	public function removeNotifyUser($user_id){
+		$model = GO_Files_Model_FolderNotification::model()->findByPk(array('user_id'=>$user_id, 'folder_id'=>$this->pk));
+		if($model)
+			return $model->delete();
+		else
+			return true;
+	}
+  
+  /**
+   * Check if a user receives notifications about changes in the folder.
+   * 
+   * @param type $user_id
+   * @return GO_Files_Model_FolderNotification or false 
+   */
+  public function hasNotifyUser($user_id){
+    return GO_Files_Model_FolderNotification::model()->findByPk(array('user_id'=>$user_id, 'folder_id'=>$this->pk)) !== false;
+  }
 
 }

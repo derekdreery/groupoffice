@@ -39,14 +39,19 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if(isset($modifiedAttributes['name']))
 			$response['new_path']=$model->path;
 		
+		if(isset($params['notify']) && !$model->hasNotifyUser(GO::user()->id))
+			$model->addNotifyUser(GO::user()->id);
+		
+		if(!isset($params['notify']) && $model->hasNotifyUser(GO::user()->id))
+			$model->removeNotifyUser(GO::user()->id);			
+		
 		parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
 	
 	protected function afterLoad(&$response, &$model, &$params) {
 		
 		$response['data']['path']=$model->path;		
-		$response['data']['notify']=false;
-		
+		$response['data']['notify']= $model->hasNotifyUser(GO::user()->id);			
 		$response['data']['is_someones_home_dir']=$model->isSomeonesHomeDir();
 		
 		return parent::afterLoad($response, $model, $params);
