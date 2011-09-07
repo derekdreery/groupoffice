@@ -1222,7 +1222,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				break;
 
 			case 'number':
-				$decimals = isset($this->columns[$key]['decimals']) ? $this->columns[$key]['decimals'] : 2;
+				$decimals = isset($this->columns[$attributeName]['decimals']) ? $this->columns[$attributeName]['decimals'] : 2;
 				return GO_Base_Util_Number::localize($value, $decimals);
 				break;
 			default:
