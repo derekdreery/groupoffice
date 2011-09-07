@@ -123,7 +123,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return parent::afterSave($wasNew);
 	}
 
-	protected function afterDelete() {
+	protected function afterDelete() {		
 		$this->fsFolder->delete();
 		return parent::afterDelete();
 	}
@@ -212,36 +212,38 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function syncFilesystem($recurseOneLevel=true) {
 
-		$items = $this->fsFolder->ls();
+		if($this->fsFolder->exists()){
+			$items = $this->fsFolder->ls();
 
-		foreach ($items as $item) {
-			if ($item instanceof GO_Base_Fs_File) {
-				$file = $this->files(array('single'=>true,'name'=>$item->name()));
-				
-				if (!$file)
-					$this->addFile($item->name());
-				
-			}else
-			{
-				$folder = $this->folders(array('single'=>true,'name'=>$item->name()));
-				if(!$folder)
-					$folder = $this->addFolder($item->name());
-				
-				if($recurseOneLevel)
-					$folder->syncFilesystem(false);				
+			foreach ($items as $item) {
+				if ($item instanceof GO_Base_Fs_File) {
+					$file = $this->files(array('single'=>true,'name'=>$item->name()));
+
+					if (!$file)
+						$this->addFile($item->name());
+
+				}else
+				{
+					$folder = $this->folders(array('single'=>true,'name'=>$item->name()));
+					if(!$folder)
+						$folder = $this->addFolder($item->name());
+
+					if($recurseOneLevel)
+						$folder->syncFilesystem(false);				
+				}
 			}
 		}
 		
 		$stmt= $this->folders();
 		while($folder = $stmt->fetch()){
 			if(!$folder->fsFolder->exists())
-				$folders->delete();
+				$folder->delete();
 		}
 		
 		$stmt= $this->files();
 		while($file = $stmt->fetch()){
 			if(!$file->fsFile->exists())
-				$files->delete();
+				$file->delete();
 		}
 	}
 	

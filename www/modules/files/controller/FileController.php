@@ -21,6 +21,8 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		
 		if($model->fsFile->isImage())
 			$response['data']['thumbnail_url']=$model->thumbURL;
+		else
+			$response['data']['thumbnail_url']="";
 
 
 		return parent::afterDisplay($response, $model, $params);

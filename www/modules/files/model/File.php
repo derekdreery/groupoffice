@@ -88,8 +88,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord{
 		 return new GO_Base_Fs_File(GO::config()->file_storage_path.$this->path);
 	 }
 	 
-	 protected function afterDelete() {
-		 
+	 protected function afterDelete() {		 
 		 $this->fsFile->delete();						 
 		 
 		 return parent::afterDelete();
