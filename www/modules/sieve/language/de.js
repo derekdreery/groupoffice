@@ -87,4 +87,4 @@ GO.sieve.lang.fromequals = 'Absender gleich';
 GO.sieve.lang.fromequalsnot = 'Absender ungleich';
 GO.sieve.lang.toequals = 'Empfänger gleich';
 GO.sieve.lang.toequalsnot = 'Empfänger ungleich';
-
+GO.sieve.lang.subjectequals= 'Betreff gleich';
