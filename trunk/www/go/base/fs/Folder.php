@@ -46,7 +46,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 				return false;
 		}
 		
-		return rmdir($this->path);
+		return !is_dir($this->path) || rmdir($this->path);
 	}
 	
 	/**

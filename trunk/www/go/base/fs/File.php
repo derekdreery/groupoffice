@@ -18,7 +18,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * @return boolean 
 	 */
 	public function delete(){
-		return unlink($this->path);
+		return !file_exists($this->path) || unlink($this->path);
 	}
 	
 	/**
