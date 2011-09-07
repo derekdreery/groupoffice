@@ -7,9 +7,10 @@
 	if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 	{
 		$_SESSION=array();
-		$GO_SECURITY->logged_in($GO_USERS->get_user($_GET['id']));
+		$user = $GO_USERS->get_user($_GET['id']);
+		$GO_SECURITY->logged_in($user);
 		$GO_MODULES->load_modules();
-		
+		go_infolog("ADMIN logged-in as user: \"".$user['username']."\" from IP: ".$_SERVER['REMOTE_ADDR']);
 		header( 'Location: '.$GO_CONFIG->host ) ;
 	}
 	else
