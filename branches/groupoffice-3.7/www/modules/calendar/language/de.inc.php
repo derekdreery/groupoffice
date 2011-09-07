@@ -77,3 +77,5 @@ $lang['calendar']['invitation']='Einladung';
 $lang['calendar']['invitation_update']='Aktualisierung';
 $lang['calendar']['cancellation']='Absage';
 $lang['calendar']['non_selected']= 'nicht in ausgewähltem Kalendar';
+$lang['calendar']['statuses']['CONFIRMED']= 'Bestätigt';
+$lang['calendar']['linkIfCalendarNotSupported']='Nutzen Sie die untenstehenden Links nur, wenn Ihr E-Mailprogramm keine Kalenderfunktionen unterstützt.';
