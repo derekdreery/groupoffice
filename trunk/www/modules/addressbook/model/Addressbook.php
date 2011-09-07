@@ -65,4 +65,13 @@
 		
 		return parent::beforeSave();
 	}
+	
+	public function beforeDelete() {
+		
+		if($this->users)			
+			throw new Exception("You can't delete the users addressbook");
+		
+		return parent::beforeDelete();
+	}
+	
 }
