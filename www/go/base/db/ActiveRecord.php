@@ -710,20 +710,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($joinCf)			
 			$sql .= "\nLEFT JOIN ".$cfModel->tableName()." cf ON cf.model_id=t.id ";
 		
-		if(isset($params['join']))
-			$sql .= $params['join'];
-		
 		if($this->aclField() && empty($params['ignoreAcl'])){			
 			
 			$sql .= "\nINNER JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
 			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
 				$sql .= " AND go_acl.level>=".intval($params['permissionLevel']);
 			}
-			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',GO_Base_Model_User::getGroupIds($params['userId']))."))) ";
-		}  else {
-			//quick and dirty way to use and in next sql build blocks
-			$sql .= "\nWHERE 1 ";
-		}
+			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',GO_Base_Model_User::getGroupIds($params['userId']))."))) ";		
+		}  
+			
+		if(isset($params['join']))
+			$sql .= $params['join'];
+
+		//quick and dirty way to use and in next sql build blocks
+		$sql .= "\nWHERE 1 ";
+
     	
 //		if(!empty($params['criteriaSql']))
 //			$sql .= $params['criteriaSql'];
