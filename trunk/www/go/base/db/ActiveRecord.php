@@ -1064,14 +1064,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			//GO::debug($this);
 	}
 	
+	private function _relationExists($name){
+		$r= $this->relations();
+		
+		return isset($r[$name]);		
+	}
+	
 
 	private function _getRelated($name, $extraFindParams=array()){
 		 //$name::findByPk($hit-s)
 		$r= $this->relations();
 		
-		if(!isset($r[$name])){
-			throw new Exception("Call to undefined function {$this->className()} $name");
-		}
+		if(!isset($r[$name]))
+			return false;
 		
 		$model = $r[$name]['model'];
 		
@@ -1839,8 +1844,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		//todo find relation
 
     $extraFindParams=isset($parameters[0]) ?$parameters[0] : array();
-    return $this->_getRelated($name,$extraFindParams);
-		die('function '.$name.' does not exist');
+		if($this->_relationExists($name))
+			return $this->_getRelated($name,$extraFindParams);
+		else
+			throw new Exception("function {$this->className()}:$name does not exist");
 		//return parent::__call($name,$parameters);
 	}
 
