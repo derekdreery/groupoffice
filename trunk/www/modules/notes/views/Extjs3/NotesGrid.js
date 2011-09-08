@@ -44,7 +44,7 @@ GO.notes.NotesGrid = function(config){
 
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns(4, fields);
+		GO.customfields.addColumns("GO_Notes_Model_Note", fields);
 	}
 	
 	config.title = GO.notes.lang.notes;
