@@ -61,8 +61,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		//If the model has it's own ACL id then we return the newly created ACL id.
 		//The model automatically creates it.
-		if ($model->aclField && !$model->aclFieldJoin) {
-			$response[$model->aclField] = $model->{$model->aclField};
+		if ($model->aclField() && !$model->aclFieldJoin) {
+			$response[$model->aclField()] = $model->{$model->aclField()};
 		}
 
 		
@@ -233,9 +233,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
    */
   public function actionGrid($params){	
     $modelName = $this->model;  
+		
+		
     
     $grid = new GO_Base_Provider_Grid($this->getGridColumnModel());		    
 		$grid->processDeleteActions($modelName);
+		
+		$response=array();
+		
+		$response = $this->beforeGrid($response, $params, $grid);
 		
 		if($multiSelectProperties =$this->getGridmultiSelectProperties()){
 			
@@ -278,7 +284,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 		$grid->setStatement(call_user_func(array($modelName,'model'))->find($gridParams));
 		
-    $response = $this->afterActionGrid($grid->getData(), $params, $grid, $gridParams);		
+		$response = array_merge($response, $grid->getData());
+		
+    $response = $this->afterGrid($response, $params, $grid, $gridParams);		
 		
 		//this parameter is set when this request is the first request of the module.
 		//We pass the response on to the output.
@@ -289,7 +297,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return $response;
   }	
 	
-	protected function afterActionGrid($response, $params, $grid, $gridParams){
+	protected function afterGrid(&$response, &$params, &$grid, $gridParams){
+		return $response;
+	}
+	
+	protected function beforeGrid(&$response, &$params, &$grid){
 		return $response;
 	}
 
@@ -417,12 +429,19 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 
 
-		if (/* !in_array('comments', $hidden_sections) && */isset(GO::modules()->comments) && !isset($response['data']['comments'])) {
-			require_once ($GLOBALS['GO_MODULES']->modules['comments']['class_path'].'comments.class.inc.php');
-			$comments = new comments();
+		if (isset(GO::modules()->comments)){
+			$stmt = GO_Comments_Model_Comment::model()->find(array(
+				'where'=>'model_id=:model_id AND model_type_id=:model_type_id',
+				'bindParams'=>array('model_id'=>$model->id,'model_type_id'=>$model->modelTypeId()),
+				'limit'=>5
+			));
 
-			$response['data']['comments'] = $comments->get_comments_json($response['data']['id'], $model->linkModelId());
-		}
+			$grid = new GO_Base_Provider_Grid();
+			$grid->setStatement($stmt);
+			$grid->formatColumn('user_name','$model->user->name');
+			$data = $grid->getData();
+			$response['data']['comments']=$data['results'];
+		}		
 
 		$response = $this->afterDisplay($response, $model, $params);
 

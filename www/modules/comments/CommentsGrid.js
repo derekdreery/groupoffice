@@ -24,10 +24,7 @@ GO.comments.CommentsGrid = function(config){
 	    baseParams: {
 	    	task: 'comments'
 	    	},
-	    root: 'results',
-	    id: 'id',
-	    totalProperty:'total',
-	    fields: ['id','link_id','link_type','user_name','ctime','mtime','comments'],
+	    fields: ['id','model_id','model_name','user_name','ctime','mtime','comments'],
 	    remoteSort: true
 	});
 	
@@ -82,8 +79,8 @@ GO.comments.CommentsGrid = function(config){
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				GO.comments.showCommentDialog();
-				GO.comments.commentDialog.formPanel.baseParams.link_id=this.store.baseParams.link_id;
- 		 		GO.comments.commentDialog.formPanel.baseParams.link_type=this.store.baseParams.link_type;
+				GO.comments.commentDialog.formPanel.baseParams.model_id=this.store.baseParams.model_id;
+ 		 		GO.comments.commentDialog.formPanel.baseParams.model_name=this.store.baseParams.model_name;
 			},
 			scope: this
 		},{
@@ -134,14 +131,14 @@ Ext.extend(GO.comments.CommentsGrid, GO.grid.GridPanel,{
       }
       return 'x-grid3-row-collapsed';
   },
-  setLinkId :  function(link_id, link_type){
-  	this.store.baseParams.link_id=link_id;
-  	this.store.baseParams.link_type=link_type;
+  setLinkId :  function(model_id, model_name){
+  	this.store.baseParams.model_id=model_id;
+  	this.store.baseParams.model_name=model_name;
   	
   	
   	this.store.loaded=false;
   	
-  	this.setDisabled(link_id<1);
+  	this.setDisabled(model_id<1);
   },
   onShow : function(){
 		GO.grid.LinksPanel.superclass.onShow.call(this);

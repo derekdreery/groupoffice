@@ -79,6 +79,25 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord{
 		 parent::init();
 	 }
 	 
+	 protected function afterSave($wasNew) {		
+
+		if ($wasNew) {
+			//$this->fsFile->create();
+		}else
+		{
+			//move folder on the filesystem after a rename
+			if($this->isModified('name')){
+				$oldPath = GO::config()->file_storage_path.dirname($this->path).'/'.$this->getOldAttributeValue('name');
+				$newPath = GO::config()->file_storage_path.dirname($this->path).'/'.$this->name;
+				if(!rename($oldPath, $newPath))
+					throw new Exception("Could not rename file on the filesystem");
+			}
+		}
+
+		return parent::afterSave($wasNew);
+	}
+	 
+	 
 	 
 	 protected function getPath(){
 		 return $this->folder()->path.'/'.$this->name;

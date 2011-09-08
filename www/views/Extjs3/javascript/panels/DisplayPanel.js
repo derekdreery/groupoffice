@@ -254,7 +254,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	{
 		//this.body.removeAllListeners();
 		
-		data.linkModelName=this.linkModelName;
+		data.linkModelName=data.model_name=this.linkModelName;
 		data.panelId=this.getId();
 		this.data=data;
 		

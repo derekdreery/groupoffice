@@ -7,27 +7,36 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 	protected function getGridParams($params){
 
 		return array(
-				'by' => array(array('link_id',$_REQUEST['link_id'],'='),array('link_type',$_REQUEST['link_type'],'=')),
+				'by' => array(
+						array('model_id',$params['model_id'],'='),
+						array('model_type_id',GO_Base_Model_ModelType::model()->findByModelName($params['model_name']),'=')
+						),
 				'ignoreAcl'=>true,
 				'joinCustomFields'=>false
 				);
 	}
-
-	protected function formatModelForGrid($record, $model) {
-		$record['user_name']=$model->user->name;
-		return $record;
+	
+	protected function prepareGrid($grid) {
+		$grid->formatColumn('user_name','$model->user->name');
 	}
 
-	protected function beforeGridActions(&$params) {
+	protected function beforeGrid(&$response, &$params, &$grid) {
 		
-		$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('id'=>$_REQUEST['link_id'], 'link_type'=>$_REQUEST['link_type']));
+		$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$params['model_id'], 'model_type_id'=>GO_Base_Model_ModelType::model()->findByModelName($params['model_name'])));
 
 		$response['permisson_level']=$model->permissionLevel;
-		$response['write_permission']=$model->permissionLevel>GO_SECURITY::WRITE_PERMISSION;
+		$response['write_permission']=$model->permissionLevel>  GO_Base_Model_Acl::WRITE_PERMISSION;
 		if(!$response['permisson_level'])
 		{
 			throw new AccessDeniedException();
 		}
 		return $response;
+	}
+	
+	protected function beforeSubmit(&$response, &$model, &$params) {
+		
+		$params['model_type_id']=GO_Base_Model_ModelType::model()->findByModelName($params['model_name']);
+		
+		return parent::beforeSubmit($response, $model, $params);
 	}
 }
