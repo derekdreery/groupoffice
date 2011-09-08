@@ -68,7 +68,7 @@ class GO_Base_Provider_Grid {
 		
 		if($stmt->model->customfieldsRecord){
 			
-			$cfColumns = array_keys($stmt->model->customfieldsRecord->getAttributes());
+			$cfColumns = array_keys($stmt->model->customfieldsRecord->columns);
 			array_shift($cfColumns); //remove link_id column
 			
 			$this->_columns=array_merge($this->_columns, $cfColumns);

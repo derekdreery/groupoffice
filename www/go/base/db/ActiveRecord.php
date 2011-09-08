@@ -686,13 +686,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$sql .= $params['fields'].$aclJoin['fields'].' ';
 		
 
-		$joinCf = !empty($params['joinCustomFields']) && $this->customfieldsModel()>0 && isset(GO::modules()->customfields) && GO::modules()->customfields->permissionLevel;
+		$joinCf = !empty($params['joinCustomFields']) && $this->customfieldsModel() && isset(GO::modules()->customfields) && GO::modules()->customfields->permissionLevel;
 		
 		if($joinCf){
 			
-			$cfModel = call_user_funct($this->customfieldsModel(), 'model');
+			$cfModel = GO::getModel($this->customfieldsModel());
 			
-			$sql .= ",".$cfModel->tableName().".* ";
+			$sql .= ",cf.* ";
 		}
 		
 		
@@ -708,7 +708,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
     
 		
 		if($joinCf)			
-			$sql .= "\nLEFT JOIN ".$cfModel->tableName()." cf ON cf.model_id=t.id ";
+			$sql .= "\nLEFT JOIN `".$cfModel->tableName()."` cf ON cf.model_id=t.id ";
 		
 		if($this->aclField() && empty($params['ignoreAcl'])){			
 			
@@ -743,7 +743,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!empty($params['searchQuery'])){
 			$sql .= " \nAND (";
 			
-			$fields = $this->getFindSearchQueryParamFields();
+			$fields = $this->getFindSearchQueryParamFields('t',$joinCf);
 			
 			//`name` LIKE "test" OR `content` LIKE "test"
 			
@@ -755,7 +755,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				{
 					$sql .= ' OR ';
 				}
-				$sql .= 't.`'.$field.'` LIKE '.$this->getDbConnection()->quote($params['searchQuery'], PDO::PARAM_STR);
+				$sql .= $field.' LIKE '.$this->getDbConnection()->quote($params['searchQuery'], PDO::PARAM_STR);
 			}			
 			
 			
@@ -932,16 +932,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * By default all fields with type PDO::PARAM_STR are returned
 	 * 
-	 * @todo implement custom fields
 	 * @return array Field names that should be used for the search query.
 	 */
-	protected function getFindSearchQueryParamFields(){
+	public function getFindSearchQueryParamFields($prefixTable='t', $withCustomFields=true){
 		//throw new Exception('Error: you supplied a searchQuery parameter to find but getFindSearchQueryParamFields() should be overriden in '.$this->className());
 		$fields = array();
 		foreach($this->columns as $field=>$attributes){
 			if($attributes['type']==PDO::PARAM_STR){
-				$fields[]=$field;
+				$fields[]='`'.$prefixTable.'`.`'.$field.'`';
 			}
+		}
+		
+		if($withCustomFields && $this->customfieldsRecord)
+		{
+			$fields = array_merge($fields, $this->customfieldsRecord->getFindSearchQueryParamFields('cf'));
 		}
 		return $fields;		
 	}
@@ -1513,6 +1517,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return strtolower($arr[1]);
 	}
 	
+	/**
+	 * Put this model in the go_search_cache table as a GO_Base_Model_SearchCacheRecord so it's searchable and linkable.
+	 * Generally you don't need to do this. It's called from the save function automatically when getCacheAttributes is overridden.
+	 * This method is only public so that the maintenance script can access it to rebuid the search cache.
+	 * 
+	 * @return boolean 
+	 */
 	public function cacheSearchRecord(){
 		
 		$attr = $this->getCacheAttributes();
@@ -1537,7 +1548,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				'link_type'=>$this->modelTypeId(),
 				'description'=>'',		
 				'type'=>$this->localizedName, //deprecated, for backwards compatibilty
-				'keywords'=>$this->_getSearchCacheKeywords($this->localizedName),
+				'keywords'=>$this->getSearchCacheKeywords($this->localizedName),
 				'mtime'=>$this->mtime,
 				'acl_id'=>$this->findAclId()
 			);
@@ -1564,7 +1575,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return false;
 	}
 	
-	private function _getSearchCacheKeywords($prepend=''){
+	/**
+	 * Get keywords this model should be found on.
+	 * Returns all String properties in a concatenated string.
+	 * 
+	 * @param String $prepend
+	 * @return String 
+	 */
+	public function getSearchCacheKeywords($prepend=''){
 		$keywords=array();
 
 		foreach($this->columns as $key=>$attr)
@@ -1574,7 +1592,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				$keywords[]=$value;
 			}
 		}
-		$keywords =  $prepend.','.implode(',',$keywords);
+		
+		$keywords = $prepend.','.implode(',',$keywords);
+		
+		if($this->customfieldsRecord){
+			$keywords .= ','.$this->customfieldsRecord->getSearchCacheKeywords();
+		}
 		
 		return substr($keywords,0,255);
 	}
