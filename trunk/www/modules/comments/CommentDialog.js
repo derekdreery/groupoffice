@@ -85,8 +85,8 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 		{
 			this.link_config=config.link_config;
 			
-			this.formPanel.baseParams.link_id=config.link_config.id;
-			this.formPanel.baseParams.link_type=config.link_config.type;
+			this.formPanel.baseParams.model_id=config.link_config.linkModelId;
+			this.formPanel.baseParams.model_name=config.link_config.linkModelName;
 		}
 	},
 	setCommentId : function(comment_id)
@@ -165,7 +165,7 @@ GO.comments.showCommentDialog = function(comment_id, config){
 	GO.comments.commentDialog.show(comment_id, config);
 }
 
-GO.comments.browseComments= function (link_id, link_type)
+GO.comments.browseComments= function (model_id, model_name)
 {
 	if(!GO.comments.commentsBrowser)
 	{
@@ -175,7 +175,7 @@ GO.comments.browseComments= function (link_id, link_type)
 		GO.comments.commentsBrowser.on(GO.comments.commentDialogListeners);
 	}
 	
-	GO.comments.commentsBrowser.show({link_id: link_id, link_type:link_type});
+	GO.comments.commentsBrowser.show({model_id: model_id, model_name:model_name});
 };
 
 

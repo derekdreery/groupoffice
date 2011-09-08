@@ -51,11 +51,6 @@ GO.files.FilePropertiesDialog = function(config){
 			fieldLabel: GO.lang.strMtime,
 			name: 'mtime'
 		},
-		{
-			xtype: 'plainfield',
-			fieldLabel: GO.lang.Atime,
-			name: 'atime'
-		},
 		new GO.form.HtmlComponent({
 			html:'<hr />'
 		}),
@@ -78,7 +73,7 @@ GO.files.FilePropertiesDialog = function(config){
 		title: GO.files.lang.comments,
 		border:false,
 		items: new Ext.form.TextArea({
-			name: 'comments',
+			name: 'comment',
 			fieldLabel: '',
 			hideLabel: true,
 			anchor:'100% 100%'
@@ -98,11 +93,11 @@ GO.files.FilePropertiesDialog = function(config){
 	}
 
 
-	if(GO.customfields && GO.customfields.types["6"])
+	if(GO.customfields && GO.customfields.types["GO_Files_Model_File"])
 	{
-		for(var i=0;i<GO.customfields.types["6"].panels.length;i++)
+		for(var i=0;i<GO.customfields.types["GO_Files_Model_File"].panels.length;i++)
 		{
-			items.push(GO.customfields.types["6"].panels[i]);
+			items.push(GO.customfields.types["GO_Files_Model_File"].panels[i]);
 		}
 	}
 
@@ -234,8 +229,7 @@ Ext.extend(GO.files.FilePropertiesDialog, GO.Window, {
 		this.tabPanel.setActiveTab(0);
 		
 		var params = {
-			file_id: file_id,
-			task: 'file_properties'
+			id: file_id
 		};
 			
 		if(config.loadParams)
@@ -246,16 +240,16 @@ Ext.extend(GO.files.FilePropertiesDialog, GO.Window, {
 		
 		
 		this.formPanel.form.load({
-			url: GO.settings.modules.files.url+'json.php', 
+			url: GO.url("files/file/load"), 
 			params: params,			
 			success: function(form, action) {				
 				this.setWritePermission(action.result.data.write_permission);		
 
 				this.fireEvent('fileCommentsEdit',this);
 				
-				if(action.result.data.file_id)
+				if(action.result.data.id)
 				{
-					this.setFileID(action.result.data.file_id);
+					this.setFileID(action.result.data.id);
 				}
 				
 				this.folder_id=action.result.data.folder_id;
@@ -286,10 +280,9 @@ Ext.extend(GO.files.FilePropertiesDialog, GO.Window, {
 	{
 		this.formPanel.form.submit({
 						
-			url:GO.settings.modules.files.url+'action.php',
+			url: GO.url("files/file/submit"),
 			params: {
-				file_id: this.file_id, 
-				task: 'file_properties'
+				id: this.file_id
 			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){

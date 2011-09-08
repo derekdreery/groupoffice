@@ -47,7 +47,7 @@ Ext.extend(GO.comments.CommentsBrowser, GO.Window, {
 	
 	show : function(config)
 	{
-		this.commentsGrid.setLinkId(config.link_id, config.link_type);
+		this.commentsGrid.setLinkId(config.model_id, config.model_name);
 		this.commentsGrid.store.load();
 		
 		GO.comments.CommentsBrowser.superclass.show.call(this);

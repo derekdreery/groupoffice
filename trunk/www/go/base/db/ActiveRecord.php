@@ -1070,7 +1070,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$r= $this->relations();
 		
 		if(!isset($r[$name])){
-			return false;			
+			throw new Exception("Call to undefined function {$this->className()} $name");
 		}
 		
 		$model = $r[$name]['model'];
