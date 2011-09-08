@@ -269,6 +269,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 						
 						case 'float':
 						case 'double':
+						case 'decimal':
 							$pdoType = PDO::PARAM_STR;
 							$length = 0;
 							$gotype = 'number';
@@ -1822,6 +1823,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 	}
 	
+	/**
+	 * Get a single attibute raw like in the database or formatted using the \
+	 * Group-Office user preferences.
+	 * 
+	 * @param String $attributeName
+	 * @param String $outputType raw or formatted
+	 * @return mixed 
+	 */
 	public function getAttribute($attributeName, $outputType='raw'){
 		if(!isset($this->_attributes[$attributeName]))						
 			return false;
