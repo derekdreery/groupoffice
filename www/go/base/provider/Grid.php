@@ -212,6 +212,8 @@ class GO_Base_Provider_Grid {
    * @return array formatted grid row key value array
    */
   public function formatModelForGrid($model){
+		
+		$oldLevel = error_reporting(E_ERROR);	//suppress errors in the eval'd code
     
     $array = $model->getAttributes($this->_modelFormatType);
     
@@ -241,12 +243,14 @@ class GO_Base_Provider_Grid {
       }     
       
       if(isset($attributes['format'])){
-
-        GO_Base_Util_Common::evalCode('$result='.$attributes['format'].';');
+				$result = '';
+        eval('$result='.$attributes['format'].';');
         $formattedRecord[$colName]=$result;
       }elseif(isset($array[$colName]))
         $formattedRecord[$colName]=$array[$colName];
     }
+		
+		error_reporting($oldLevel);
 		
 		if(isset($this->_formatRecordFunction)){
 			$formattedRecord=call_user_func($this->_formatRecordFunction, $formattedRecord, $model, $this);
