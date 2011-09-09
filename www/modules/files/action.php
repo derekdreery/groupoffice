@@ -221,7 +221,7 @@ try {
 			$response['success']=true;
 
 			require_once($GLOBALS['GO_CONFIG']->class_path.'filesystem.class.inc');
-			filesystem::mkdir_recursive($GLOBALS['GO_CONFIG']->tmpdir.'files_upload/');
+			File::mkdir($GLOBALS['GO_CONFIG']->tmpdir.'files_upload/');
 
 			if(!isset($_SESSION['GO_SESSION']['files']['uploaded_files']))
 				$_SESSION['GO_SESSION']['files']['uploaded_files']=array();
