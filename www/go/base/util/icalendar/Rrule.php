@@ -1,43 +1,199 @@
 <?php
 
 /**
- * @property int $count Number of occurences
- * @property string $freq Frequency 
+ * An Icalendar Rrule object
  */
 class GO_Base_Util_Icalendar_Rrule {
-
-//	private $_attributes;
+	
 	private $_count;
+	/**
+	 *
+	 * @var int Unix timstamp 
+	 */
 	private $_until;
 	private $_freq;
 	private $_interval;
+	/**
+	 *
+	 * @var array eg. array('MO','WE') OR array('1MO') in case of the first monday
+	 */
 	private $_byday;
 	private $_bymonth;
 	private $_bymonthday;
-
-//	private function __set($name, $value){
-//		$setter = 'set'.ucfirst($name);
-//		if(method_exists($this, $setter))
-//			$this->_attributes[$name]=$this->$setter($value);
-//		else
-//			$this->_attributes[$name]=$value;
-//	}
-//	
-//	public function __get($name){
-//		$getter = 'get'.ucfirst($name);
-//		if(method_exists($this, $setter))
-//			return $this->$getter($name);
-//		else
-//			return $this->_attributes[$name];
-//	}
+	private $_eventStartTime;
+	
+	private $_days=array('SU','MO','TU','WE','TH','FR','SA');
 
 	private function setCount($value) {
 		return intval($value);
 	}
 
 	/**
-	 * Set the values of this object from a version 1.0 Icalendar Rrule
+	 * Create a Rrule object from a Rrule string. This function automatically finds 
+	 * out which Rrule version is used. 
 	 * 
+	 * @param String $rrule 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
+	 */
+	public function readRruleString($eventStartTime, $rrule) {
+
+		$this->_eventStartTime=$eventStartTime;
+		
+		$rrule = str_replace('RRULE:', '', $rrule);
+		
+		if (strpos($rrule, 'FREQ') === false) {
+			$this->_parseRruleIcalendarV1($rrule);
+		} else {
+			$this->_parseRruleIcalendar($rrule);
+		}
+	}
+
+	/**
+	 * Output a rrule
+	 * 
+	 * @return String $rrule eg.: 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
+	 */
+	public function createRrule() {
+		$rrule = 'RRULE:INTERVAL='.$this->_interval.';FREQ='.$this->_freq;
+
+		switch($this->_freq)
+		{
+			case 'WEEKLY':
+				$rrule .= ";BYDAY=".implode(',', $this->_byday);
+			break;
+
+			case 'MONTHLY':				
+				if($this->_bymonthday){
+					$rrule .= ';BYMONTHDAY='.date('j', $this->_eventStartTime);
+				}else
+				{
+					$rrule .= ';BYDAY='.implode(',', $this->_byday);
+				}
+			break;
+		}
+			
+		if ($this->_until>0)
+		{
+			$rrule .= ";UNTIL=".date('Ymd', $this->_until);
+		}
+		return $rrule;
+	}
+
+//	public function getNextRecurrence($startTime)
+//	{
+//		$func = '_getNextRecurrence'.ucfirst($this->freq);
+//		return $func($starttime);
+//	}
+//	
+//	private function _getNextRecurrenceDaily($startTime){
+//		
+//	}
+
+	/**
+	 * Read an array of params and convert the to a Rrule object.
+	 * 
+	 * @param int $eventStartTime
+	 * @param array $params 
+	 */
+	public function readInputArray($eventStartTime, $params) {
+		
+		$this->_eventStartTime=$eventStartTime;
+		$this->_freq=strtoupper($params['freq']);
+		$this->_interval = intval($params['interval']);	
+		$this->_until = !isset($params['repeat_forever']) && isset($params['until']) ? GO_Base_Util_Date::to_unixtime($params['until']) : '';
+		$this->_byday=array();
+
+		foreach($this->_days as $day){
+			if(isset($_POST[$day]))
+				$this->_byday[]=$day;
+		}		
+		
+		$this->_shiftDays();		
+	}
+
+	/**
+	 * Creates a Rrule response which can be merged with a normal JSON response.
+	 * 
+	 * @return array Rrule 
+	 */
+	public function createOutputArray() {
+		$response = array();
+		if (isset($this->_freq)) {
+			if (!empty($this->_until)){
+				$response['until'] = GO_Base_Util_Date::get_timestamp($this->_until, false);
+				$response['repeat_forever'] = 0;
+			}else
+			{
+				$response['repeat_forever'] = 1;
+			}
+			
+			$response['interval'] = $this->_interval;
+			$response['freq'] = $this->_freq;
+			switch ($this->_freq) {
+
+				case 'WEEKLY':
+					
+					foreach($this->_byday as $day)
+						$response[$day]=1;
+
+				case 'MONTHLY':
+					if (isset($this->_byday) && !empty($this->_byday)) {
+						$response['bydayoccurence'] = $this->_byday[0];
+						$day = substr($this->_byday[0], 1);
+						
+						$response[$day]=1;
+						
+					} else {
+						$response['freq'];
+					}
+					break;
+			}
+		}
+		return $response;
+	}
+	
+	/**
+	 * Calculate and if needed shifts a task item to another day of the week when GMT = +>1 or ->1
+	 * 
+	 * @param boolean $toGmt Will be converted to GMT time (true) or from GMT time (false).
+	 */
+	private function _shiftDays($toGmt=true){
+		$date = new DateTime(date('Y-m-d G:i', $this->_eventStartTime));
+		$timezoneOffset = $date->getOffset();
+				
+		$localStartHour = $date->format('G');
+		
+		$gmtStartHour = $localStartHour-($timezoneOffset/3600);
+
+		if ($gmtStartHour > 23) {
+			$shiftDay = $toGmt ? 1 : 0;
+		}elseif ($gmtStartHour < 0) {
+			$shiftDay = $toGmt ? 0 : 1;
+		} else {
+			$shiftDay = 0;
+		}	
+	
+		$newByDay=array();
+		if($shiftDay!=0){
+			foreach($this->_byday as $day){
+				
+				$number = "";
+				$dayStr = $day;
+				if(strlen($day)>2){
+					$number = substr($day,0,1);
+					$dayStr = substr($day, 1);
+				}
+					
+				
+				$shiftedDay = $this->_days[array_search($dayStr, $this->_days)+$shiftDay];
+				$newByDay[]=$number.$shiftedDay;
+			}						
+			$this->_byday=$newByDay;
+		}
+	}
+	
+	/**
+	 * Set the values of this object from a version 1.0 Icalendar Rrule
+	 * @TODO: This function is not yet changed for the new go version
 	 * This must be a vcalendar 1.0 rrule
 	 */
 	private function _parseRruleIcalendarV1($rrule) {
@@ -78,7 +234,6 @@ class GO_Base_Util_Icalendar_Rrule {
 
 			$lastchar = substr($rrule_arr['FREQ'], -1, 1);
 			while (is_numeric($lastchar)) {
-				//echo $rrule_arr['FREQ'].'<br>';
 				$rrule_arr['INTERVAL'] = $lastchar . $rrule_arr['INTERVAL'];
 				$rrule_arr['FREQ'] = substr($rrule_arr['FREQ'], 0, strlen($rrule_arr['FREQ']) - 1);
 				$lastchar = substr($rrule_arr['FREQ'], -1, 1);
@@ -139,6 +294,8 @@ class GO_Base_Util_Icalendar_Rrule {
 	}
 
 	/**
+	 * Convert a Rrule object from an Icalendar Rrule string.
+	 * 
 	 * Set the values of this object from the latest version of an Icalendar Rrule
 	 */
 	private function _parseRruleIcalendar($rrule) {
@@ -151,129 +308,13 @@ class GO_Base_Util_Icalendar_Rrule {
 				$rrule_arr[strtoupper(trim($param_arr[0]))] = strtoupper(trim($param_arr[1]));
 			}
 		}
-		//	private $_byday;
+				//var_dump($rrule_arr);
 		$this->_byday = !empty($rrule_arr['BYDAY']) ? explode(',', $rrule_arr['BYDAY']) : array();
-		//	private $_bymonth;
 		$this->_bymonth = !empty($rrule_arr['BYMONTH']) ? intval($rrule_arr['BYMONTH']) : 0;
-		//	private $_bymonthday;
 		$this->_bymonthday = !empty($rrule_arr['BYMONTHDAY']) ? intval($rrule_arr['BYMONTHDAY']) : 0;
-		//	private $_freq;
 		$this->_freq = !empty($rrule_arr['FREQ']) ? $rrule_arr['FREQ'] : '';
-		//	private $_until;
-		$this->_until = !empty($rrule_arr['UNTIL']) ? GO_Base_Util_Date::parseIcalDate($rrule_arr['UNTIL']) : 0;
-		//	private $_count;
+		$this->_until = isset($rrule_arr['UNTIL']) ? GO_Base_Util_Date::parseIcalDate($rrule_arr['UNTIL']) : 0;
 		$this->_count = !empty($rrule_arr['COUNT']) ? intval($rrule_arr['COUNT']) : 0;
-		//	private $_interval;
 		$this->_interval = !empty($rrule_arr['INTERVAL']) ? intval($rrule_arr['INTERVAL']) : 1;
 	}
-
-	/**
-	 *
-	 * @param String $rrule 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
-	 */
-	public function parseRrule($rrule) {
-
-		$rrule = str_replace('RRULE:', '', $rrule);
-
-		if (strpos($rrule, 'FREQ') === false) {
-			$this->_parseRruleIcalendarV1($rrule);
-		} else {
-			$this->_parseRruleIcalendar($rrule);
-		}
-	}
-
-	public function setParams($params) {
-		foreach ($params as $key => $value) {
-			$key = '_' . $key;
-			$this->$key = $value;
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public function createRrule() {
-		return '';
-	}
-
-//	public function getNextRecurrence($startTime)
-//	{
-//		$func = '_getNextRecurrence'.ucfirst($this->freq);
-//		return $func($starttime);
-//	}
-//	
-//	private function _getNextRecurrenceDaily($startTime){
-//		
-//	}
-
-
-	public function createResponseArray() {
-		$response = array();
-		if (isset($this->_freq)) {
-			if (isset($this->_until))
-				$response['repeat_end_time'] = $ical2array->parse_date($rrule['UNTIL']);
-//			elseif(isset($this->_count)) 
-			//go doesn't support this
-			else
-				$response['repeat_forever'] = 1;
-
-			$response['repeat_every'] = $this->_interval;
-			$response['freq'] = $this->_freq;
-			switch ($this->_freq) {
-
-				case 'WEEKLY':
-
-					$response['repeat_days_0'] = in_array('SU', $this->_byday) ? '1' : '0';
-					$response['repeat_days_1'] = in_array('MO', $this->_byday) ? '1' : '0';
-					$response['repeat_days_2'] = in_array('TU', $this->_byday) ? '1' : '0';
-					$response['repeat_days_3'] = in_array('WE', $this->_byday) ? '1' : '0';
-					$response['repeat_days_4'] = in_array('TH', $this->_byday) ? '1' : '0';
-					$response['repeat_days_5'] = in_array('FR', $this->_byday) ? '1' : '0';
-					$response['repeat_days_6'] = in_array('SA', $this->_byday) ? '1' : '0';
-					break;
-
-				case 'MONTHLY':
-					if (isset($this->_byday)) {
-
-						$response['month_time'] = $this->_byday[0];
-						$day = substr($this->_byday, 1);
-
-						switch ($day) {
-							case 'MO':
-								$response['repeat_days_1'] = 1;
-								break;
-
-							case 'TU':
-								$response['repeat_days_2'] = 1;
-								break;
-
-							case 'WE':
-								$response['repeat_days_3'] = 1;
-								break;
-
-							case 'TH':
-								$response['repeat_days_4'] = 1;
-								break;
-
-							case 'FR':
-								$response['repeat_days_5'] = 1;
-								break;
-
-							case 'SA':
-								$response['repeat_days_6'] = 1;
-								break;
-
-							case 'SU':
-								$response['repeat_days_0'] = 1;
-								break;
-						}
-					} else {
-						$response['freq'] .= '_DATE';
-					}
-					break;
-			}
-		}
-		return $response;
-	}
-
 }

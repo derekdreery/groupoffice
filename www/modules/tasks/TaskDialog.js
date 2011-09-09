@@ -108,7 +108,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				url : GO.url('tasks/task/load'),
 				success : function(form, action) {
 					this.win.show();
-					this.changeRepeat(action.result.data.repeat_type);
+					this.changeRepeat(action.result.data.freq);
 					this.setValues(config.values);
 
 					this.selectTaskList.setRemoteText(action.result.data.tasklist_name);
@@ -358,7 +358,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		// Start of recurrence tab
 		this.repeatEvery = new Ext.form.ComboBox({					
 			name : 'repeat_every_text',
-			hiddenName : 'repeat_every',
+			//hiddenName : 'repeat_every',
+			hiddenName : 'interval',
 			triggerAction : 'all',
 			editable : false,
 			selectOnFocus : true,
@@ -387,7 +388,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			width : 200,
 			forceSelection : true,
 			mode : 'local',
-			value : '0',
+			value : '',
 			valueField : 'value',
 			displayField : 'text',
 			store : new Ext.data.SimpleStore({
@@ -413,7 +414,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		}, this);
 
 		this.monthTime = new Ext.form.ComboBox({
-			hiddenName : 'month_time',
+			//hiddenName : 'month_time',
+			hiddenName : 'bydayoccurence',
 			triggerAction : 'all',
 			selectOnFocus : true,
 			disabled : true,
@@ -432,12 +434,15 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				['4', GO.lang.strFourth]]
 			})
 		});
+		
+		
+		var days = ['SU','MO','TU','WE','TH','FR','SA'];
 
 		this.cb = [];
 		for (var day = 0; day < 7; day++) {
 			this.cb[day] = new Ext.form.Checkbox({
 				boxLabel : GO.lang.shortDays[day],
-				name : 'repeat_days_' + day,
+				name : days[day],
 				disabled : true,
 				checked : false,
 				width : 'auto',
@@ -447,7 +452,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		}
 
 		this.repeatEndDate = this.repeatEndDate = new Ext.form.DateField({
-			name : 'repeat_end_date',
+			name : 'until',
 			width : 100,
 			disabled : true,
 			format : GO.settings['date_format'],
@@ -468,7 +473,13 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 			disabled : true,
 			width : 'auto',
 			hideLabel : true,
-			laelSeperator : ''
+			labelSeperator : '',
+			listeners : {
+				check : {
+					fn : this.disableUntilField,
+					scope : this
+				}
+			}
 		});
 
 		this.recurrencePanel = new Ext.Panel({
@@ -542,11 +553,11 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		var items = [propertiesPanel, this.recurrencePanel, optionsPanel];
 
 
-		if(GO.customfields && GO.customfields.types["12"])
+		if(GO.customfields && GO.customfields.types["GO_Tasks_Model_Task"])
 		{
-			for(var i=0;i<GO.customfields.types["12"].panels.length;i++)
+			for(var i=0;i<GO.customfields.types["GO_Tasks_Model_Task"].panels.length;i++)
 			{
-				items.push(GO.customfields.types["12"].panels[i]);
+				items.push(GO.customfields.types["GO_Tasks_Model_Task"].panels[i]);
 			}
 		}
 		this.tabPanel = new Ext.TabPanel({
@@ -591,6 +602,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 	changeRepeat : function(value) {
 
+		var repeatForever = this.repeatForever.getValue();
+		
 		var form = this.formPanel.form;
 		switch (value) {
 			case '' :
@@ -605,7 +618,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				this.disableDays(true);
 				this.monthTime.setDisabled(true);
 				this.repeatForever.setDisabled(false);
-				this.repeatEndDate.setDisabled(false);
+				this.repeatEndDate.setDisabled(repeatForever);
 				this.repeatEvery.setDisabled(false);
 
 				break;
@@ -614,7 +627,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				this.disableDays(false);
 				this.monthTime.setDisabled(true);
 				this.repeatForever.setDisabled(false);
-				this.repeatEndDate.setDisabled(false);
+				this.repeatEndDate.setDisabled(repeatForever);
 				this.repeatEvery.setDisabled(false);
 
 				break;
@@ -623,16 +636,16 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				this.disableDays(true);
 				this.monthTime.setDisabled(true);
 				this.repeatForever.setDisabled(false);
-				this.repeatEndDate.setDisabled(false);
+				this.repeatEndDate.setDisabled(repeatForever);
 				this.repeatEvery.setDisabled(false);
 
 				break;
 
-			case 'MONTH' :
+			case 'MONTHLY' :
 				this.disableDays(false);
 				this.monthTime.setDisabled(false);
 				this.repeatForever.setDisabled(false);
-				this.repeatEndDate.setDisabled(false);
+				this.repeatEndDate.setDisabled(repeatForever);
 				this.repeatEvery.setDisabled(false);
 				break;
 
@@ -640,15 +653,22 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				this.disableDays(true);
 				this.monthTime.setDisabled(true);
 				this.repeatForever.setDisabled(false);
-				this.repeatEndDate.setDisabled(false);
+				this.repeatEndDate.setDisabled(repeatForever);
 				this.repeatEvery.setDisabled(false);
 				break;
 		}
 	},
 	disableDays : function(disabled) {
+		var days = ['SU','MO','TU','WE','TH','FR','SA'];
 		for (var day = 0; day < 7; day++) {
-			this.formPanel.form.findField('repeat_days_' + day)
+			this.formPanel.form.findField(days[day])
 			.setDisabled(disabled);
 		}
+	},
+	disableUntilField : function() {
+		if(this.repeatForever.checked)
+			this.repeatEndDate.setDisabled(true);
+		else
+			this.repeatEndDate.setDisabled(false);
 	}
 });

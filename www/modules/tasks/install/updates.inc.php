@@ -15,3 +15,5 @@ $updates[201108301656][]="INSERT INTO `go_model_types` (
 VALUES (
 '12', 'GO_Tasks_Model_Task'
 );";
+
+$updates[201109070000][]="ALTER TABLE `ta_tasks` CHANGE `rrule` `rrule` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
