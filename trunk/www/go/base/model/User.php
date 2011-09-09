@@ -110,6 +110,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 				'contact' => array('type' => self::HAS_ONE, 'model' => 'GO_Addressbook_Model_Contact', 'field' => 'go_user_id')
 		);
 	}
+	
+	protected function getLocalizedName() {
+		return GO::t('strUser');
+	}
 
 	public function customfieldsModel() {
 		return 'GO_Users_Model_CustomFieldsRecord';
