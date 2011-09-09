@@ -415,7 +415,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 		this.monthTime = new Ext.form.ComboBox({
 			//hiddenName : 'month_time',
-			hiddenName : 'bydayoccurence',
+			hiddenName : 'bysetpos',
 			triggerAction : 'all',
 			selectOnFocus : true,
 			disabled : true,

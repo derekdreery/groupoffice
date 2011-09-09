@@ -12,7 +12,7 @@
  */
  
 GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
-	link_model : "GO_Tasks_Model_Task",
+	linkModelName : "GO_Tasks_Model_Task",
 	
 	stateId : 'ta-task-panel',
 

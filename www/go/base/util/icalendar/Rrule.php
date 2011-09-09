@@ -3,7 +3,7 @@
 /**
  * An Icalendar Rrule object
  */
-class GO_Base_Util_Icalendar_Rrule {
+class GO_Base_Util_Icalendar_Rrule{
 	
 	private $_count;
 	/**
@@ -21,12 +21,9 @@ class GO_Base_Util_Icalendar_Rrule {
 	private $_bymonth;
 	private $_bymonthday;
 	private $_eventStartTime;
+	private $_bysetpos;
 	
 	private $_days=array('SU','MO','TU','WE','TH','FR','SA');
-
-	private function setCount($value) {
-		return intval($value);
-	}
 
 	/**
 	 * Create a Rrule object from a Rrule string. This function automatically finds 
@@ -34,7 +31,7 @@ class GO_Base_Util_Icalendar_Rrule {
 	 * 
 	 * @param String $rrule 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
 	 */
-	public function readRruleString($eventStartTime, $rrule) {
+	public function readIcalendarRruleString($eventStartTime, $rrule) {
 
 		$this->_eventStartTime=$eventStartTime;
 		
@@ -46,13 +43,32 @@ class GO_Base_Util_Icalendar_Rrule {
 			$this->_parseRruleIcalendar($rrule);
 		}
 	}
+	
+	public function setParams($params){
+		foreach($params as $paramName=>$value)
+		{
+			$var = '_'.$paramName;
+			$this->$var=$value;
+		}
+	}
+	
+	private function _reset()
+	{
+
+		unset($this->_interval);
+		unset($this->_byday);
+		unset($this->_freq);
+	}
 
 	/**
 	 * Output a rrule
 	 * 
 	 * @return String $rrule eg.: 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
 	 */
-	public function createRrule() {
+	public function createRrule($params=array()) {
+		
+		$this->setParams ($params);
+		
 		$rrule = 'RRULE:INTERVAL='.$this->_interval.';FREQ='.$this->_freq;
 
 		switch($this->_freq)
@@ -78,15 +94,87 @@ class GO_Base_Util_Icalendar_Rrule {
 		return $rrule;
 	}
 
-//	public function getNextRecurrence($startTime)
-//	{
-//		$func = '_getNextRecurrence'.ucfirst($this->freq);
-//		return $func($starttime);
-//	}
-//	
-//	private function _getNextRecurrenceDaily($startTime){
-//		
-//	}
+	public function getNextRecurrence($startTime=false)
+	{
+		if(!$startTime)
+			$startTime=time();
+		
+		$func = '_getNextRecurrence'.ucfirst($this->_freq);
+		
+		$next=call_user_func(array($this, $func),$startTime);
+		if(empty($this->_until) || $next<GO_Base_Util_Date::date_add($this->_until,1))
+			return $next;
+		else
+			return false;		
+	}
+	
+	private function _getNextRecurrenceDaily($startTime){
+							
+		$daysBetweenNextAndFirstEvent=$this->_findNumberOfPeriods($startTime, $this->_interval, 'd');		
+		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime,$daysBetweenNextAndFirstEvent); 
+		
+		return $recurrenceTime;		
+	}
+	
+	private function _getNextRecurrenceWeekly($startTime){
+							
+		$daysBetweenNextAndFirstEvent=$this->_findNumberOfPeriods($startTime, $this->_interval, 'd');		
+		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime,$daysBetweenNextAndFirstEvent); 
+		
+		return $recurrenceTime;
+	}
+	
+	
+	private function _getNextRecurrenceMonthly($startTime){
+							
+		if(empty($this->_bydays)){
+			$daysBetweenNextAndFirstEvent=$this->_findNumberOfPeriods($startTime, $this->_interval, 'm');		
+			$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime, 0, $daysBetweenNextAndFirstEvent); 
+		}else
+		{
+			// IEDERE DAG VAN DE MAAND
+			
+			// IEDERE 2E DAG VAN DE MAAND
+		}
+		
+		return $recurrenceTime;		
+	}
+	
+	private function _getNextRecurrenceYearly($startTime){							
+		$daysBetweenNextAndFirstEvent=$this->_findNumberOfPeriods($startTime, $this->_interval, 'y');		
+		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime, 0, 0, $daysBetweenNextAndFirstEvent); 
+		
+		return $recurrenceTime;		
+	}
+	
+	
+	/**
+	 * 
+	 * @param int $startTime Unixtime of start time
+	 * @param int $period Number of days, months or years
+	 * @param string $type d=days, m=months, y= years 
+	 * @return int Number of periods that fall between event start and start time
+	 */
+	private function _findNumberOfPeriods($startTime, $period, $type){
+		
+		$eventStartDateTime = new GO_Base_Util_DateTime(date('c',$this->_eventStartTime));
+		$startDateTime= new GO_Base_Util_DateTime(date('c',$startTime));
+		$diff = $eventStartDateTime->diff($startDateTime);
+		
+		
+		
+		$elapsed = $diff->$type; //get the days, months or years elapsed since the event.
+		//var_dump($intervalDays);
+		$devided = $elapsed/$period; 
+		$rounded = ceil($devided);
+		$periodsBetweenNextAndFirstEvent = $period*$rounded;
+		
+		if($periodsBetweenNextAndFirstEvent == $elapsed)
+			$periodsBetweenNextAndFirstEvent+=$period;
+		
+		return $periodsBetweenNextAndFirstEvent;
+		
+	}
 
 	/**
 	 * Read an array of params and convert the to a Rrule object.
@@ -99,12 +187,19 @@ class GO_Base_Util_Icalendar_Rrule {
 		$this->_eventStartTime=$eventStartTime;
 		$this->_freq=strtoupper($params['freq']);
 		$this->_interval = intval($params['interval']);	
+		$this->_bysetpos = intval($params['bysetpos']);
 		$this->_until = !isset($params['repeat_forever']) && isset($params['until']) ? GO_Base_Util_Date::to_unixtime($params['until']) : '';
 		$this->_byday=array();
 
 		foreach($this->_days as $day){
-			if(isset($_POST[$day]))
+			if(isset($_POST[$day])){
+//				if(!empty($params['bysetpos']))
+//				{
+//					$day = $params['bysetpos'].$day;
+//					$this->_bysetpos
+			//	}
 				$this->_byday[]=$day;
+			}
 		}		
 		
 		$this->_shiftDays();		
@@ -137,7 +232,7 @@ class GO_Base_Util_Icalendar_Rrule {
 
 				case 'MONTHLY':
 					if (isset($this->_byday) && !empty($this->_byday)) {
-						$response['bydayoccurence'] = $this->_byday[0];
+						$response['bysetpos'] = $this->_byday[0];
 						$day = substr($this->_byday[0], 1);
 						
 						$response[$day]=1;
@@ -316,5 +411,6 @@ class GO_Base_Util_Icalendar_Rrule {
 		$this->_until = isset($rrule_arr['UNTIL']) ? GO_Base_Util_Date::parseIcalDate($rrule_arr['UNTIL']) : 0;
 		$this->_count = !empty($rrule_arr['COUNT']) ? intval($rrule_arr['COUNT']) : 0;
 		$this->_interval = !empty($rrule_arr['INTERVAL']) ? intval($rrule_arr['INTERVAL']) : 1;
+		$this->_bysetpos = !empty($rrule_arr['BYSETPOS']) ? intval($rrule_arr['BYSETPOS']) : 0;
 	}
 }
