@@ -268,8 +268,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 					GO::session()->values['user_groups'][] = $r['group_id'];
 				}
 			}
-			GO::debug(GO::session()->values['user_groups']);
-
+		
 			return GO::session()->values['user_groups'];
 		} else {
 			$ids = array();

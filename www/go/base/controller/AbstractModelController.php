@@ -159,8 +159,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		foreach ($this->remoteComboFields() as $property => $map) {
 			$value='';
-			$eval = '$value = '.$map.';';			
-			eval($eval);						
+			$eval = '$value = '.$map.';';
+			GO_Base_Util_Common::evalCode($eval);
 			$response['remoteComboTexts'][$property] = $value;
 		}
 

@@ -241,7 +241,8 @@ class GO_Base_Provider_Grid {
       }     
       
       if(isset($attributes['format'])){
-        eval('$result='.$attributes['format'].';');
+
+        GO_Base_Util_Common::evalCode('$result='.$attributes['format'].';');
         $formattedRecord[$colName]=$result;
       }elseif(isset($array[$colName]))
         $formattedRecord[$colName]=$array[$colName];
