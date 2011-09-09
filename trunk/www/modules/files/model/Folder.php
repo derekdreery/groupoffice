@@ -83,6 +83,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				'notifyUsers'=>array('type' => self::HAS_MANY, 'model' => 'GO_Files_Model_FolderNotification', 'field' => 'folder_id', 'delete' => true),
 		);
 	}
+	
+	protected function getLocalizedName() {
+		return GO::t('folder', 'files');
+	}
 
 	/**
 	 * This getter recursively builds the folder path.
