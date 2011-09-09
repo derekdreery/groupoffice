@@ -35,4 +35,18 @@ $updates[201109011450][]="RENAME TABLE `cf_3` TO `cf_ab_companies` ;";
 
 $updates[201109021000][]="ALTER TABLE `ab_contacts` DROP `iso_address_format` ";
 
+$updates[201108301656][]="INSERT INTO `go_model_types` (
+`id` ,
+`model_name`
+)
+VALUES (
+'2', 'GO_Addressbook_Model_Contact'
+);";
+$updates[201108301656][]="INSERT INTO `go_model_types` (
+`id` ,
+`model_name`
+)
+VALUES (
+'3', 'GO_Addressbook_Model_Company'
+);";
 

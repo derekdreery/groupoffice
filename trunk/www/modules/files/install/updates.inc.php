@@ -29,3 +29,20 @@ $updates[201109050000][]="ALTER TABLE `fs_folders` CHANGE `comments` `comment` T
 $updates[201109050000][]="ALTER TABLE `fs_files` CHANGE `comments` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
 
 $updates[201109060000][]="ALTER TABLE `fs_notifications` DROP `path`";
+
+$updates[201108301656][]="INSERT INTO `go_model_types` (
+`id` ,
+`model_name`
+)
+VALUES (
+'6', 'GO_Files_Model_File'
+);";
+
+$updates[201108301656][]="INSERT INTO `go_model_types` (
+`id` ,
+`model_name`
+)
+VALUES (
+'17', 'GO_Files_Model_Folder'
+);";
+
