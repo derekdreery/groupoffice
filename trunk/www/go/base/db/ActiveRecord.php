@@ -616,27 +616,31 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	/**
 	 * Finds model objects
 	 *
-	 *
 	 * params=array(
 	 *	"by"=> array(array('field','value','=')),
-	 *  "byOperator"=>[AND / OR]
+	 *  "byOperator"=>[AND / OR]	 *
 	 *
-	 *
-	 * TODO:
-	 *	"byGroups"=> array(
-	 *			array('operator=>'AND','criteria'=>array('field','value','=')),
-	 *			array('operator=>'OR','criteria'=>array('field','value','='))
-	 *	)
-	 *  "ignoreAcl"=>true,
+	 *  "ignoreAcl"=>true, //Ignore ACL permissions
 	 * 
-	 * join='';
+	 *  "where"=>'field=:field' //add where condition. Use in combination with bindParams for security!
+	 *  "bindParams"=array(':field'=>'value') 
 	 * 
-	 * 'fields'=>'col1,col2' //note if you supply this and the fields do not contain t.* then the system can't return full objects. Arrays will be fetched instead.
+	 *  
+	 *  "fields"=>'t.*' //select other fields in combination with 'join'. Remember the model table is aliased with 't'.  if you supply this and the fields do not contain t.* then the system can't return full objects. Arrays will be fetched instead.
+	 *  "join"=>''; //inserts join statements
 	 * 
-	 *  searchQuery=>"String",
-	 *  joinCustomFields=>false,
-   * calcFoundRows=true // Set tot true to return the number of foundRows in the statement (See class GO_Base_Db_ActiveStatement 
-
+	 *  "searchQuery"=>"String",
+	 *  "joinCustomFields"=>false,
+   *  "calcFoundRows"=true // Set tot true to return the number of foundRows in the statement (See class GO_Base_Db_ActiveStatement 
+			
+	 *	"order"=>'field' or array('field1','field2') for multiple values
+	 *	"orderDirection"=>'ASC' or array('ASC','DESC') for multiple values
+	 * 
+	 *	"group" => 'field'
+	 *  "having" => 'field'
+	 * 
+	 *  "single"=>false //set to true to return a single model instead of a statement.
+	 * 
 	 * };
 	 * 
 	 * 
@@ -1093,6 +1097,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$model = $r[$name]['model'];
 		
+		if(!isset($r[$name]['findParams']))
+			$r[$name]['findParams']=array();
+		
 		if($r[$name]['type']==self::BELONGS_TO || $r[$name]['type']==self::HAS_ONE){
 		
 			/**
@@ -1113,16 +1120,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				}
 
 			}else
-			{
+			{			
 				$joinAttribute = $r[$name]['field'];
 				if($r[$name]['type']==self::BELONGS_TO)
 				{
 					//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
-					$this->_relatedCache[$name]= call_user_func(array($model,'model'))->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true);
+					$this->_relatedCache[$name]= GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true);
 				}else
 				{
 					//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
-					$this->_relatedCache[$name]= call_user_func(array($model,'model'))->findSingleByAttribute($r[$name]['field'], $this->pk, array('relation'=>$name));
+					$this->_relatedCache[$name]= GO::getModel($model)->findSingleByAttribute($r[$name]['field'], $this->pk, array('relation'=>$name));
 				}
 			}
 
@@ -1130,13 +1137,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}elseif($r[$name]['type']==self::HAS_MANY)
 		{							
 			$remoteFieldThatHoldsMyPk = $r[$name]['field'];
-			$findParams = array_merge($extraFindParams,array(
+			
+			$findParams = array_merge($extraFindParams,$r[$name]['findParams'],array(
 					"by"=>array(array($remoteFieldThatHoldsMyPk,$this->pk,'=')),
 					"ignoreAcl"=>true,
           "relation"=>$name
 			));
 				
-			$stmt = call_user_func(array($model,'model'))->find($findParams);
+			$stmt = GO::getModel($model)->find($findParams);
 			return $stmt;		
 		}elseif($r[$name]['type']==self::MANY_MANY)
 		{							
@@ -1144,7 +1152,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
       $linkModelName = $r[$name]['linkModel']; // name where the local id is linked to the ids of the records in the remote table
       
       // Please note that 'local' and 'remote' are reversed from the point of view of the remote model.
-			$findParams = array_merge($extraFindParams,array(
+			$findParams = array_merge($extraFindParams,$r[$name]['findParams'],array(
           'linkModel'=>$linkModelName,
           'linkModelLocalField'=>$localPkField,
           'linkModelLocalPk'=>$this->pk,
@@ -1153,7 +1161,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
           "relation"=>$name
 			));
 				
-			$stmt = call_user_func(array($model,'model'))->find($findParams); // pakt alle records waarvan de ids via de koppeltabel gelinked zijn aan de local id
+			$stmt = GO::getModel($model)->find($findParams); // pakt alle records waarvan de ids via de koppeltabel gelinked zijn aan de local id
       return $stmt;		
 		}
 	}
@@ -1451,7 +1459,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 			if ($this->customfieldsRecord){
 				//id is not set if this is a new record so we make sure it's set here.
-				$this->customfieldsRecord->id=$this->id;
+				$this->customfieldsRecord->model_id=$this->id;
 				
 				$this->customfieldsRecord->save();
 			}
