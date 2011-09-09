@@ -13,7 +13,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	
 	protected function afterLoad(&$response, &$model, &$params) {
 		$rRule = new GO_Base_Util_Icalendar_Rrule();
-		$rRule->readRruleString($model->start_time, $model->rrule);
+		$rRule->readIcalendarRruleString($model->start_time, $model->rrule);
 		$createdRule = $rRule->createOutputArray();
 		
 		$response['data'] = array_merge($response['data'],$createdRule);
