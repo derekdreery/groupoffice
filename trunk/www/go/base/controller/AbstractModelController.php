@@ -157,12 +157,17 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$response['remoteComboTexts'] = array();
 
+		$oldLevel = error_reporting(E_ERROR);	//suppress errors in the eval'd code
+			
 		foreach ($this->remoteComboFields() as $property => $map) {
 			$value='';
 			$eval = '$value = '.$map.';';
-			GO_Base_Util_Common::evalCode($eval);
+			eval($eval);
+			
 			$response['remoteComboTexts'][$property] = $value;
 		}
+		
+		error_reporting($oldLevel);
 
 		return $response;
 	}
