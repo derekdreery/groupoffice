@@ -109,4 +109,20 @@ class GO_Base_Util_Common {
 		return preg_replace("/(\r\n)+|(\n|\r)+/", "\n", $format);
 	}
 
+	
+	/**
+	 * Evaluate PHP code and suppress all errors except fatal errors.
+	 * 
+	 * @param String $code
+	 * @return boolean 
+	 */
+	public static function evalCode($code){
+		// Notice: 
+			$oldLevel = error_reporting(E_ERROR);			
+			$ret = eval($code);	
+			error_reporting($oldLevel);
+			
+			return $ret;			
+	}
+
 }

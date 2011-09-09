@@ -155,7 +155,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	private $_modifiedAttributes=array();
 	
-	private $_debugSql=true;
+	private $_debugSql=false;
 	
 	
 	/**
@@ -829,7 +829,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$GLOBALS['query_count']++;
 		
 		if(isset($params['bindParams'])){			
-			GO::debug($params['bindParams']);
+			
+			if($this->_debugSql)
+				GO::debug($params['bindParams']);
+			
 			$result = $this->getDbConnection()->prepare($sql);
 			$result->execute($params['bindParams']);
 		}else
@@ -1371,7 +1374,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	public function save(){
 			
-		GO::debug('save'.$this->className());
+		//GO::debug('save'.$this->className());
 			
 		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
@@ -1976,8 +1979,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				':ctime'=>time()
 		);
 		
-		GO::debug($sql);
-		GO::debug($values);
+		if($this->_debugSql){
+			GO::debug($sql);
+			GO::debug($values);
+		}
 
 		$result = $this->getDbConnection()->prepare($sql);
 		$success = $result->execute($values);
@@ -2120,7 +2125,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$sql = $this->_appendByParamsToSQL($sql, $params);
 		
-		GO::debug($sql);
+		if($this->_debugSql)
+			GO::debug($sql);
+		
 		$GLOBALS['query_count']++;
 		return $this->getDbConnection()->query($sql);
 	}
