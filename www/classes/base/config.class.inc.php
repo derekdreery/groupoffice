@@ -1059,7 +1059,7 @@ class GO_CONFIG {
 	}
 
 	function __destruct() {
-		if($this->debug_log) {
+		if($this->debug_log && !class_exists('GO')) {
 			go_debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
 
 			go_debug('Page load took: '.(getmicrotime()-$this->loadstart).'ms', $this);
