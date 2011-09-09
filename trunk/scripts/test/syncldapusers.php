@@ -20,6 +20,9 @@ $GO_USERS = new GO_USERS();
 require_once($GO_CONFIG->class_path.'base/groups.class.inc.php');
 $GO_GROUPS = new GO_GROUPS();
 
+require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
+$files = new files();
+
 $la = new ldapauth();
 
 $ldap = $la->connect();
@@ -95,17 +98,26 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 			$files = new files();
 			$folder = $files->resolve_path('users/'.$gouser['username']);
 			if($folder) {
-				$files->delete_folder($folder);
-
-				$files->check_share('users/'.$gouser['username'], $gouser['id'], $GO_SECURITY->get_new_acl('user', $gouser['id']));
-			}
-
-
-			
+				$files->delete_folder($folder);				
+			}			
 		}else
 		{
-            syslog(LOG_INFO, "Service agreement accepted for ".$gouser['username']);
-			// echo "Service agreement accepted for ".$gouser['username']."\n";
+        syslog(LOG_INFO, "Service agreement accepted for ".$gouser['username']);		
+				
+				$folder = $files->resolve_path('users/'.$gouser['username'],true, $gouser['id'],'1');
+				$up_folder=array();
+				$up_folder['id']=$folder['id'];
+				if(empty($folder['acl_id']))
+				{					
+					$up_folder['acl_id']=$GO_SECURITY->get_new_acl('files', $gouser['id']);
+				}else
+				{
+					$GO_SECURITY->chown_acl($folder['acl_id'], $gouser['id']);
+				}
+				$up_folder['user_id']=$gouser['id'];
+				$up_folder['readonly']='1';
+				$up_folder['visible']='1';
+				$files->update_folder($up_folder);
 		}
 
 	}else
