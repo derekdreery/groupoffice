@@ -26,6 +26,7 @@
  * @property GO_Customfields_Model_AbstractCustomFieldsRecord $customfieldsRecord
  * @property String $localizedName The localized human friendly name of this model.
  * @property GO_Base_Model_Acl $acl The acl object
+ * @property int $permissionLevel @see GO_Base_Model_Acl for available levels. Returns -1 if no aclField() is set in the model.
  */
 
 abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
@@ -222,6 +223,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$this->init();
 		
 		$this->_modifiedAttributes=array();
+	}
+	
+	
+	/**
+	 * @todo Generate return translated label names for the attributes.
+	 */
+	public function attributeLabels(){
+		return array();
 	}
 	
 	/**
