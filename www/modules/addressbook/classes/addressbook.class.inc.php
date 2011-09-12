@@ -1067,7 +1067,7 @@ class addressbook extends db {
 
 		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
 			$sql .= "cf_ab_companies.*,ab_companies.* FROM ab_companies ".
-					"LEFT JOIN cf_ab_companies ON cf_ab_companies.id=ab_companies.id ";
+					"LEFT JOIN cf_ab_companies ON cf_ab_companies.model_id=ab_companies.id ";
 		}else {
 			$sql .= "ab_companies.* FROM ab_companies ";
 		}
