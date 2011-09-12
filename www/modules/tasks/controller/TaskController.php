@@ -12,22 +12,32 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	}
 	
 	protected function afterLoad(&$response, &$model, &$params) {
+		
 		$rRule = new GO_Base_Util_Icalendar_Rrule();
 		$rRule->readIcalendarRruleString($model->start_time, $model->rrule);
-		$createdRule = $rRule->createOutputArray();
+		$createdRule = $rRule->createJSONOutput();
 		
 		$response['data'] = array_merge($response['data'],$createdRule);
 
 		return parent::afterLoad($response, $model, $params);
 	}
 	
+	
 	protected function beforeSubmit(&$response, &$model, &$params) {
+//		$rRule = new GO_Base_Util_Icalendar_Rrule();
+//		$rRule->readInputArray($model->start_time, $params);
+//		$model->rrule = $rRule->createRrule();
+		
 		$rRule = new GO_Base_Util_Icalendar_Rrule();
-		$rRule->readInputArray($model->start_time, $params);
+		$rRule->readJsonArray($params);		
 		$model->rrule = $rRule->createRrule();
-
+		
 		return parent::beforeSubmit($response, $model, $params);
 	}
+	
+	
+
+
 	
 //	protected function getGridParams($params) {
 //		
