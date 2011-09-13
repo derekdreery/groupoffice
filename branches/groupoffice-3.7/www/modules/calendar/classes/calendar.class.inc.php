@@ -2057,8 +2057,11 @@ class calendar extends db {
 		return $participants;
 	}
 
-	function get_event_from_ical_object($object) {
+	function get_event_from_ical_object($object, $user_id=0) {
 		global $GO_MODULES, $GO_CONFIG;
+		
+		if(!$user_id)
+			$user_id=$GLOBALS['GO_SECURITY']->user_id;
 
 		if(!isset($this->ical2array)) {
 			require_once($GO_CONFIG->class_path.'ical2array.class.inc');
@@ -2319,9 +2322,15 @@ class calendar extends db {
 					}
 				}
 			}
-
 			
 			
+			if(isset($object['CATEGORIES']['value'])){
+				$categories = explode(',', $object['CATEGORIES']['value']);
+				$category = $categories[0];
+				
+				$cat = $this->get_or_create_category_by_name($category, $user_id);
+				$event['category_id']=$cat['id'];
+			}		
 		
 
 			return $event;
@@ -2389,16 +2398,24 @@ class calendar extends db {
 
 		require_once($GO_CONFIG->class_path.'ical2array.class.inc');
 		$this->ical2array = new ical2array();
+		
+		if ($calendar_id != -1){
+			$calendar = $this->get_calendar($calendar_id);
+			$user_id=$calendar['user_id'];
+		}else
+		{
+			$user_id=0;
+		}
 
 		$vcalendar = $this->ical2array->parse_string($ical_string);
 
 		if(isset($vcalendar[0]['objects'])) {
 			while($object = array_shift($vcalendar[0]['objects'])) {
 				if($object['type'] == 'VEVENT') {
-					if($event = $this->get_event_from_ical_object($object)) {
+					if($event = $this->get_event_from_ical_object($object,$user_id)) {
 						if ($calendar_id != -1) {
 							$event['calendar_id']=$calendar_id;
-							if ($event_id = $this->add_event($event)) {
+							if ($event_id = $this->add_event($event, $calendar)) {
 								$count++;
 							}
 						}
@@ -3092,6 +3109,19 @@ class calendar extends db {
 
 		$this->query($sql, 'i', $user_id);
 		return $offset>0 ? $this->found_rows() : $this->num_rows();
+	}
+	
+	
+	function get_or_create_category_by_name($name, $user_id){
+		$sql = "SELECT * FROM cal_categories WHERE user_id=$user_id AND name='$name'";
+		$this->query($sql);
+		$record = $this->next_record();
+		if(!$record){
+			$record['user_id']=$user_id;
+			$record['name']=$name;
+			$record['id']=$this->add_category($record);			
+		}
+		return $record;
 	}
 
 	function get_participant_status_id($status_name)
