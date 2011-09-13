@@ -80,6 +80,8 @@
  * @property int $popup_reminders
  * @property int $contact_id
  * @property String $cache
+ * 
+ * @property $completeDateFormat
  */
 
 class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
@@ -290,6 +292,14 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		else
 			return false;
 	}
-
+	
+	
+	protected function getCompleteDateFormat(){
+		return $this->date_format[0].
+						$this->date_separator.
+						$this->date_format[1].
+						$this->date_separator.
+						$this->date_format[2];
+	}
 }
 
