@@ -111,7 +111,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 					this.changeRepeat(action.result.data.freq);
 					this.setValues(config.values);
 
-					this.selectTaskList.setRemoteText(action.result.data.tasklist_name);
+				//	this.selectTaskList.setRemoteText(action.result.data.tasklist_name);
+					this.selectTaskList.setRemoteText(action.result.remoteComboTexts.tasklist_id);
 					this.setWritePermission(action.result.data.write_permission);
 
 					if(action.result.data.category_id == 0)
