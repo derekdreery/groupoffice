@@ -39,9 +39,6 @@
  * 
  */
 class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
-
-	
-	private $_parsedRrule;
 	
 	/**
 	 * Returns a static model of itself
@@ -73,6 +70,14 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		return 'tasklist.acl_id';
 	}
 
+	public function hasFiles(){
+		return true;
+	}
+	
+	public function customfieldsModel(){
+		return "GO_Tasks_Model_CustomFieldsRecord";
+	}
+	
 	public function relations() {
 		return array(
 				'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id', 'delete' => false),
@@ -83,6 +88,40 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	
 	protected function getCacheAttributes() {
 		return array('name'=>$this->name, 'description'=>$this->description);
+	}
+	
+	public function beforeSave() {
+		
+		if($this->status=='COMPLETED' && empty($this->completion_time))
+		{
+			$this->completion_time = time();
+			$this->_recur(); // Check for recurrency in the rrule attribute of this object
+		}
+
+		return parent::beforeSave();
+	}
+	
+	/**
+	 * Creates the new Recurring task when the rrule is not empty
+	 */
+	private function _recur(){
+		if(!empty($this->rrule)) {
+			$this->duplicate(array(
+				'completion_time'=>0,
+				'start_time'=>time(),
+				'due_time'=>Date::get_next_recurrence_time($this->due_time, $this->due_time, 0, $this->rrule),
+				'status'=>'NEEDS-ACTION'
+			));
+		}
+	}
+	
+
+	/**
+	 * The files module will use this function.
+	 */
+	public function buildFilesPath() {
+
+		return 'tasks/' . GO_Base_Fs_Base::stripInvalidChars($this->tasklist->name) . '/' . date('Y', $this->due_time) . '/' . GO_Base_Fs_Base::stripInvalidChars($this->name);
 	}
 	
 }

@@ -1,12 +1,12 @@
 <?php
 require($GLOBALS['GO_LANGUAGE']->get_language_file('tasks'));
 
-if(isset($GLOBALS['GO_MODULES']->modules['customfields']))
-{
-	require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
-	$cf = new customfields();
-	$GO_SCRIPTS_JS .= $cf->get_javascript(12, $lang['tasks']['name']);
-}
+//if(isset($GLOBALS['GO_MODULES']->modules['customfields']))
+//{
+//	require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
+//	$cf = new customfields();
+//	$GO_SCRIPTS_JS .= $cf->get_javascript(12, $lang['tasks']['name']);
+//}
 
 require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'].'tasks.class.inc.php');
 $tasks = new tasks();

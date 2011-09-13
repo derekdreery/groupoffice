@@ -153,168 +153,168 @@ try {
 			break;
 
 		case 'save_task':
-			$conflicts=array();
+//			$conflicts=array();
+//
+//			$task_id=$task['id']=isset($_POST['task_id']) ? ($_POST['task_id']) : 0;
+//
+//			$task['name']=$_POST['name'];
+//			$task['due_time']=Date::to_unixtime($_POST['due_date']);
+//			$task['start_time']=Date::to_unixtime($_POST['start_date']);
+//			$task['tasklist_id']=$_POST['tasklist_id'];
+//                        $task['category_id']=(isset($_REQUEST['category_id']) && $_REQUEST['category_id']) ? $_REQUEST['category_id'] : 0;
+//			$task['priority']=(isset($_REQUEST['priority'])) ? $_REQUEST['priority'] : 1;
+//
+//			if(isset($_POST['project_name']))
+//				$task['project_name']=$_POST['project_name'];
+//
+//			$tasklist = $tasks->get_tasklist($task['tasklist_id']);
+//			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
+//				throw new AccessDeniedException();
+//			}
+//
+//			if(isset($_POST['status']))
+//				$task['status']=$_POST['status'];
+//			if(isset($_POST['description']))
+//				$task['description']=$_POST['description'];
+//
+//			$old_task = $task_id>0 ? $tasks->get_task($task_id) : false;
 
-			$task_id=$task['id']=isset($_POST['task_id']) ? ($_POST['task_id']) : 0;
+//			if(isset($_POST['remind'])) {
+//				$task['reminder']=Date::to_unixtime($_POST['remind_date'].' '.$_POST['remind_time']);
+//			}elseif(!isset($_POST['status'])) {
+//				//this task is added with the quick add option
+//				$settings=$tasks->get_settings($GLOBALS['GO_SECURITY']->user_id);
+//				if(!empty($settings['remind'])) {
+//					$reminder_day = $task['due_time'];
+//					if(!empty($settings['reminder_days']))
+//						$reminder_day = Date::date_add($reminder_day,-$settings['reminder_days']);
+//
+//					$task['reminder']=Date::to_unixtime(Date::get_timestamp($reminder_day, false).' '.$settings['reminder_time']);
+//				}
+//			}else {
+//				$task['reminder']=0;
+//			}
+//			$timezone_offset = Date::get_timezone_offset($task['due_time']);
+//
+//			if(empty($task['tasklist_id'])) {
+//				throw new Exception('FATAL: No tasklist ID!');
+//			}
+//
+//			$repeat_every = isset ($_POST['repeat_every']) ? $_POST['repeat_every'] : '1';
+//			$task['repeat_end_time'] = (isset ($_POST['repeat_forever']) || !isset($_POST['repeat_end_date'])) ? '0' : Date::to_unixtime($_POST['repeat_end_date']);
+//			$month_time = isset ($_POST['month_time']) ? $_POST['month_time'] : '0';
+//
+//			$days['mon'] = isset ($_POST['repeat_days_1']) ? '1' : '0';
+//			$days['tue'] = isset ($_POST['repeat_days_2']) ? '1' : '0';
+//			$days['wed'] = isset ($_POST['repeat_days_3']) ? '1' : '0';
+//			$days['thu'] = isset ($_POST['repeat_days_4']) ? '1' : '0';
+//			$days['fri'] = isset ($_POST['repeat_days_5']) ? '1' : '0';
+//			$days['sat'] = isset ($_POST['repeat_days_6']) ? '1' : '0';
+//			$days['sun'] = isset ($_POST['repeat_days_0']) ? '1' : '0';
+//
+//
+//			$days = Date::shift_days_to_gmt($days, date('G', $task['due_time']), Date::get_timezone_offset($task['due_time']));
+//			if(isset($_POST['repeat_type']) && $_POST['repeat_type']>0) {
+//				$task['rrule']=Date::build_rrule($_POST['repeat_type'], $repeat_every,$task['repeat_end_time'], $days, $month_time);
+//			}
+//
+//			if(empty($task['name']) || empty($task['due_time'])) {
+//				throw new Exception($lang['common']['missingField']);
+//			}
+//
+//			if($task['id']>0) {
+//				$tasks->update_task($task, $tasklist, $old_task);
+//				$insert = false;
+//				$response['success']=true;
+//
+//			}else {
+//				$task['user_id']=$GLOBALS['GO_SECURITY']->user_id;
+//				$task_id= $tasks->add_task($task, $tasklist);
+//				if($task_id) {
+//					$insert = true;
+//					$response['task_id']=$task_id;
+//					$response['success']=true;
+//				}					
+//			}
+//
+//			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission']) {
+//				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
+//				$cf = new customfields();
+//				$cf->update_fields($GLOBALS['GO_SECURITY']->user_id, $task_id, 12, $_POST, $insert);
+//			}
 
-			$task['name']=$_POST['name'];
-			$task['due_time']=Date::to_unixtime($_POST['due_date']);
-			$task['start_time']=Date::to_unixtime($_POST['start_date']);
-			$task['tasklist_id']=$_POST['tasklist_id'];
-                        $task['category_id']=(isset($_REQUEST['category_id']) && $_REQUEST['category_id']) ? $_REQUEST['category_id'] : 0;
-			$task['priority']=(isset($_REQUEST['priority'])) ? $_REQUEST['priority'] : 1;
+//			if(!empty($_POST['tmp_files']) && $GLOBALS['GO_MODULES']->has_module('files')) {
+//				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
+//				$files = new files();
+//				$fs = new filesystem();
+//
+//				$task = $tasks->get_task($task_id);
+//				$path = $files->build_path($task['files_folder_id']);
+//
+//
+//				$tmp_files = json_decode($_POST['tmp_files'], true);
+//				while($tmp_file = array_shift($tmp_files)) {
+//					if(!empty($tmp_file['tmp_file'])) {
+//						$new_path = $GLOBALS['GO_CONFIG']->file_storage_path.$path.'/'.$tmp_file['name'];
+//						$fs->move($tmp_file['tmp_file'], $new_path);
+//						$files->import_file($new_path, $task['files_folder_id']);
+//					}
+//				}
+//			}
 
-			if(isset($_POST['project_name']))
-				$task['project_name']=$_POST['project_name'];
-
-			$tasklist = $tasks->get_tasklist($task['tasklist_id']);
-			if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
-				throw new AccessDeniedException();
-			}
-
-			if(isset($_POST['status']))
-				$task['status']=$_POST['status'];
-			if(isset($_POST['description']))
-				$task['description']=$_POST['description'];
-
-			$old_task = $task_id>0 ? $tasks->get_task($task_id) : false;
-
-			if(isset($_POST['remind'])) {
-				$task['reminder']=Date::to_unixtime($_POST['remind_date'].' '.$_POST['remind_time']);
-			}elseif(!isset($_POST['status'])) {
-				//this task is added with the quick add option
-				$settings=$tasks->get_settings($GLOBALS['GO_SECURITY']->user_id);
-				if(!empty($settings['remind'])) {
-					$reminder_day = $task['due_time'];
-					if(!empty($settings['reminder_days']))
-						$reminder_day = Date::date_add($reminder_day,-$settings['reminder_days']);
-
-					$task['reminder']=Date::to_unixtime(Date::get_timestamp($reminder_day, false).' '.$settings['reminder_time']);
-				}
-			}else {
-				$task['reminder']=0;
-			}
-			$timezone_offset = Date::get_timezone_offset($task['due_time']);
-
-			if(empty($task['tasklist_id'])) {
-				throw new Exception('FATAL: No tasklist ID!');
-			}
-
-			$repeat_every = isset ($_POST['repeat_every']) ? $_POST['repeat_every'] : '1';
-			$task['repeat_end_time'] = (isset ($_POST['repeat_forever']) || !isset($_POST['repeat_end_date'])) ? '0' : Date::to_unixtime($_POST['repeat_end_date']);
-			$month_time = isset ($_POST['month_time']) ? $_POST['month_time'] : '0';
-
-			$days['mon'] = isset ($_POST['repeat_days_1']) ? '1' : '0';
-			$days['tue'] = isset ($_POST['repeat_days_2']) ? '1' : '0';
-			$days['wed'] = isset ($_POST['repeat_days_3']) ? '1' : '0';
-			$days['thu'] = isset ($_POST['repeat_days_4']) ? '1' : '0';
-			$days['fri'] = isset ($_POST['repeat_days_5']) ? '1' : '0';
-			$days['sat'] = isset ($_POST['repeat_days_6']) ? '1' : '0';
-			$days['sun'] = isset ($_POST['repeat_days_0']) ? '1' : '0';
-
-
-			$days = Date::shift_days_to_gmt($days, date('G', $task['due_time']), Date::get_timezone_offset($task['due_time']));
-			if(isset($_POST['repeat_type']) && $_POST['repeat_type']>0) {
-				$task['rrule']=Date::build_rrule($_POST['repeat_type'], $repeat_every,$task['repeat_end_time'], $days, $month_time);
-			}
-
-			if(empty($task['name']) || empty($task['due_time'])) {
-				throw new Exception($lang['common']['missingField']);
-			}
-
-			if($task['id']>0) {
-				$tasks->update_task($task, $tasklist, $old_task);
-				$insert = false;
-				$response['success']=true;
-
-			}else {
-				$task['user_id']=$GLOBALS['GO_SECURITY']->user_id;
-				$task_id= $tasks->add_task($task, $tasklist);
-				if($task_id) {
-					$insert = true;
-					$response['task_id']=$task_id;
-					$response['success']=true;
-				}					
-			}
-
-			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission']) {
-				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
-				$cf = new customfields();
-				$cf->update_fields($GLOBALS['GO_SECURITY']->user_id, $task_id, 12, $_POST, $insert);
-			}
-
-			if(!empty($_POST['tmp_files']) && $GLOBALS['GO_MODULES']->has_module('files')) {
-				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
-				$files = new files();
-				$fs = new filesystem();
-
-				$task = $tasks->get_task($task_id);
-				$path = $files->build_path($task['files_folder_id']);
-
-
-				$tmp_files = json_decode($_POST['tmp_files'], true);
-				while($tmp_file = array_shift($tmp_files)) {
-					if(!empty($tmp_file['tmp_file'])) {
-						$new_path = $GLOBALS['GO_CONFIG']->file_storage_path.$path.'/'.$tmp_file['name'];
-						$fs->move($tmp_file['tmp_file'], $new_path);
-						$files->import_file($new_path, $task['files_folder_id']);
-					}
-				}
-			}
-
-			if(!empty($_POST['link'])) {
-				require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
-				$GO_LINKS = new GO_LINKS();
-				
-				$link_props = explode(':', $_POST['link']);
-				$GO_LINKS->add_link(
-								($link_props[1]),
-								($link_props[0]),
-								$task_id,
-								12);
-			}
-			break;
-
-
-		case 'save_tasklist':
-
-			$tasklist['id']=$_POST['tasklist_id'];
-			$tasklist['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GLOBALS['GO_SECURITY']->user_id;
-			$tasklist['name']=$_POST['name'];
+//			if(!empty($_POST['link'])) {
+//				require_once($GLOBALS['GO_CONFIG']->class_path.'base/links.class.inc.php');
+//				$GO_LINKS = new GO_LINKS();
+//				
+//				$link_props = explode(':', $_POST['link']);
+//				$GO_LINKS->add_link(
+//								($link_props[1]),
+//								($link_props[0]),
+//								$task_id,
+//								12);
+//			}
+//			break;
 
 
-			if(empty($tasklist['name'])) {
-				throw new Exception($lang['common']['missingField']);
-			}
+//		case 'save_tasklist':
 
-			/*$existing_tasklist = $tasks->get_tasklist_by_name($tasklist['name']);
-			if($existing_tasklist && ($tasklist['id']==0 || $existing_tasklist['id']!=$tasklist['id']))
-			{
-				throw new Exception($sc_tasklist_exists);
-			}*/
-
-			if($tasklist['id']>0) {
-				$old_tasklist = $tasks->get_tasklist($tasklist['id']);
-				if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
-					throw new AccessDeniedException();
-				}
-				if(!$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id))
-				{
-					unset($tasklist['user_id']);
-				}				
-				$tasks->update_tasklist($tasklist, $old_tasklist);
-			}else {
-				if(!$GLOBALS['GO_MODULES']->modules['tasks']['write_permission']) {
-					throw new AccessDeniedException();
-				}
-				$response['acl_id'] = $tasklist['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl('tasks', $tasklist['user_id']);
-
-				$response['tasklist_id']=$tasks->add_tasklist($tasklist);
-			}
-			$response['success']=true;
-
-			break;
-
+//			$tasklist['id']=$_POST['tasklist_id'];
+//			$tasklist['user_id'] = isset($_POST['user_id']) ? ($_POST['user_id']) : $GLOBALS['GO_SECURITY']->user_id;
+//			$tasklist['name']=$_POST['name'];
+//
+//
+//			if(empty($tasklist['name'])) {
+//				throw new Exception($lang['common']['missingField']);
+//			}
+//
+//			/*$existing_tasklist = $tasks->get_tasklist_by_name($tasklist['name']);
+//			if($existing_tasklist && ($tasklist['id']==0 || $existing_tasklist['id']!=$tasklist['id']))
+//			{
+//				throw new Exception($sc_tasklist_exists);
+//			}*/
+//
+//			if($tasklist['id']>0) {
+//				$old_tasklist = $tasks->get_tasklist($tasklist['id']);
+//				if($GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $old_tasklist['acl_id'])<GO_SECURITY::WRITE_PERMISSION) {
+//					throw new AccessDeniedException();
+//				}
+//				if(!$GLOBALS['GO_SECURITY']->has_admin_permission($GLOBALS['GO_SECURITY']->user_id))
+//				{
+//					unset($tasklist['user_id']);
+//				}				
+//				$tasks->update_tasklist($tasklist, $old_tasklist);
+//			}else {
+//				if(!$GLOBALS['GO_MODULES']->modules['tasks']['write_permission']) {
+//					throw new AccessDeniedException();
+//				}
+//				$response['acl_id'] = $tasklist['acl_id'] = $GLOBALS['GO_SECURITY']->get_new_acl('tasks', $tasklist['user_id']);
+//
+//				$response['tasklist_id']=$tasks->add_tasklist($tasklist);
+//			}
+//			$response['success']=true;
+//
+//			break;
+//
 
 		case 'save_portlet':
 			$tasklists = json_decode($_POST['tasklists'], true);
