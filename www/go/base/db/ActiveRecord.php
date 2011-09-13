@@ -155,7 +155,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	private $_modifiedAttributes=array();
 	
-	private $_debugSql=false;
+	private $_debugSql=true;
 	
 	
 	/**
@@ -2170,6 +2170,43 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 		}
 	}
+
+	
+	/**
+	 * Duplicates the current activerecord to a new one.
+	 * 
+	 * @param array $params Array of parameters that need to be set in the newly created activerecord as KEY => VALUE. Like: $params = array('attribute1'=>1,'attribute2'=>'Hello');
+	 *
+	 * @return Object The newly created object
+	 * 
+	 * @todo Copy the linked items too.
+	 * 
+	 */
+	public function duplicate($params = array()) {
+		
+		//$copy = new GO_Base_Db_ActiveRecord(true);
+		$copy = clone $this;
+		
+		$copy->setIsNew(true);
+		
+		$pkField = $this->primaryKey();
+		if(is_array($pkField)) {
+			foreach($pkField as $key)
+				unset($copy->$key);
+		}
+		else {
+			unset($copy->$pkField);
+		}
+
+		foreach($params as $key=>$value) {
+			$copy->$key = $value;
+		}
+		$copy->validate();		
+		$copy->save();
+
+		return $copy;
+	}
+
 	
 	/**
 	 * Lock the database table
@@ -2193,3 +2230,4 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	}
 	
 }
+
