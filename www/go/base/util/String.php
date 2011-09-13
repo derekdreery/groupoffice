@@ -297,7 +297,7 @@ class GO_Base_Util_String {
 	 * @return String
 	 */
 
-	public static function replace_once($search, $replace, $subject, &$found=false) {
+	public static function replaceOnce($search, $replace, $subject, &$found=false) {
 		$firstChar = strpos($subject, $search);
 		if($firstChar !== false) {
 			$found=true;

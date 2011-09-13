@@ -1175,13 +1175,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	protected function formatInputValues($attributes){
 		$formatted = array();
 		foreach($attributes as $key=>$value){
-			if(!isset($this->columns[$key])){
-				//don't process unknown columns.
+			if(!isset($this->columns[$key]['gotype'])){
+				//don't process unknown columns. But keep them for flexibility.
+				$formatted[$key]=$value;
 				continue;
 			}
-			if(!isset($this->columns[$key]['gotype'])){
-				$this->columns[$key]['gotype']='string';
-			}
+//			if(!isset($this->columns[$key]['gotype'])){
+//				$this->columns[$key]['gotype']='string';
+//			}
 			switch($this->columns[$key]['gotype']){
 				case 'unixdate':
 				case 'unixtimestamp':
@@ -1225,7 +1226,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	private function _formatAttribute($attributeName, $value, $html=false){
 		if(!isset($this->columns[$attributeName]['gotype'])){
-			$this->columns[$attributeName]['gotype']='string';
+			return $value;
 		}
 
 		switch($this->columns[$attributeName]['gotype']){
@@ -1280,9 +1281,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$attributes = $this->formatInputValues($attributes);
 		
 		foreach($attributes as $key=>$value){
-			if(isset($this->columns[$key])){
+			//if(isset($this->columns[$key])){
 				$this->$key=$value;
-			}		
+			//}		
 		}
 		
 		
@@ -2169,4 +2170,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 		}
 	}
+	
+	/**
+	 * Lock the database table
+	 *
+	 * @param string $mode Modes are: "read", "read local", "write", "low priority write"
+	 * @return boolean
+	 */
+	public function lockTable($mode="WRITE"){
+		$sql = "LOCK TABLES `".$this->tableName()."` $mode;";
+		return $this->getDbConnection()->query($sql);
+	}
+	/**
+	 * Unlock tables
+	 *
+	 * @return bool True on success
+	 */
+
+	public function unlockTable(){
+		$sql = "UNLOCK TABLES;";
+		return $this->getDbConnection()->query($sql);
+	}
+	
 }
