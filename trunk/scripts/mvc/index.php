@@ -8,6 +8,7 @@
 			<ul>
 				<li><a href="?action=createModel">Create a model</a></li>
 				<li><a href="?action=createCFModel">Create a customfield model</a></li>
+				<li><a href="?action=createController">Create a Controller</a></li>
 			</ul>
 		</div>
 		<div id="content">
@@ -20,6 +21,9 @@
 						break;
 					case 'createCFModel':
 						include "createCFModel.php";
+						break;
+					case 'createController':
+						include "createController.php";
 						break;
 					default:
 						echo "Select a task from the menu!";
