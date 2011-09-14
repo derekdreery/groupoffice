@@ -13,3 +13,6 @@ $updates[201108301656][]="INSERT INTO `go_model_types` (
 VALUES (
 '1', 'GO_Calendar_Model_Event'
 );";
+
+
+$updates[201108301656][]="delete from cal_events where calendar_id not in(select id from cal_calendars);";

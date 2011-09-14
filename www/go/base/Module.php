@@ -202,7 +202,7 @@ class GO_Base_Module extends GO_Base_Observable {
 			echo "Processing ".$model->getName()."\n";
 			flush();
 			
-			$m = call_user_func(array($model->getName(),'model'));
+			$m = GO::getModel($model->getName());
 			
 			$stmt = $m->find(array(
 					'ignoreAcl'=>true

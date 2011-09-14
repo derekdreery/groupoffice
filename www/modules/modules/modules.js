@@ -135,7 +135,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 	showavailableModules : function() {
 
 		if (!this.availableModulesWin) {
-			this.availableModulesDS.load();
+			
 
 			var grid = new GO.grid.GridPanel({
 				layout : 'fit',
@@ -194,6 +194,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 				}]
 			});
 		}
+		this.availableModulesDS.load();
 		this.availableModulesWin.show();
 
 	},

@@ -580,7 +580,7 @@ GO.moduleManager.addModule('tasks', GO.tasks.MainPanel, {
  * Basically this function opens a task window when a user clicks on it from a 
  * panel with links. 
  */
-GO.linkHandlers[12]=function(id, link_config){
+GO.linkHandlers["GO_Tasks_Model_Task"]=function(id, link_config){
 
 	if(!GO.tasks.taskLinkWindow){
 		var taskPanel = new GO.tasks.TaskPanel();
@@ -595,7 +595,7 @@ GO.linkHandlers[12]=function(id, link_config){
 	GO.tasks.taskLinkWindow.show();
 }
 
-GO.linkPreviewPanels[12]=function(config){
+GO.linkPreviewPanels["GO_Tasks_Model_Task"]=function(config){
 	config = config || {};
 	return new GO.tasks.TaskPanel(config);
 }
@@ -603,7 +603,7 @@ GO.linkPreviewPanels[12]=function(config){
 
 GO.newMenuItems.push({
 	text: GO.tasks.lang.task,
-	iconCls: 'go-link-icon-12',
+	iconCls: 'go-model-icon-GO_Tasks_Model_Task',
 	itemId:'ta-new-task',
 	handler:function(item, e){
 

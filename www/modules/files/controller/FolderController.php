@@ -5,6 +5,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	
 	
 	public function actionTree($params){
+		GO::$ignoreAclPermissions=true;
 		if(empty($params['node']) || $params['node']=='root'){
 			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.GO::user()->username, true);
 			

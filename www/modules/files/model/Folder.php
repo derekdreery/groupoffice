@@ -60,8 +60,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		//to find the acl.
 		if ($this->acl_id > 0)
 			return parent::findAclId();
-		else
+		elseif($this->parent)
 			return $this->parent->findAclId();
+		else
+			return false;
 	}
 
 	/**
