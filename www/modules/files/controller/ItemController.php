@@ -19,6 +19,45 @@ class GO_Files_Controller_Item extends GO_Base_Controller_AbstractController{
 	 */
 	public static function itemFilesFolder($model){
 		
+		
+//		if($model->isNew){
+//			
+//			if(!$model->joinAclField){
+//				//only new models that have it's own acl field should always have a folder.
+//				//otherwise it will be created when first accessed.
+//								
+//				$f = new GO_Base_Fs_Folder(GO::config()->file_storage_path.$model->buildFilesPath());
+//				$fullPath = $f->appendNumberToNameIfExists();
+//				$relPath = str_replace(GO::config()->file_storage_path, '', $fullPath);
+//				
+//				
+//				$folder = GO_Files_Model_Folder::model()->findByPath($relPath, true);
+//				if(!$folder->acl_id){
+//					//folder is not shared.
+//					$folder->acl_id=$model->findAclId();
+//					$folder->visible=0;
+//					$folder->readonly=1;
+//					$folder->save();
+//				}
+//				return $folder->id;
+//			}
+//			
+//		}else
+//		{
+//			$folder=false;
+//			if(!empty($model->files_folder_id)){
+//				$folder = GO_Files_Model_Folder::model()->findByPk($model->files_folder_id);
+//				if($folder){
+//					$currentPath = $folder->path;
+//					
+//					if($currentPath != $relPath){
+//						$folder->move();
+//					}
+//				}
+//			}
+//			
+//		}
+//		
 		if(!$model->getIsNew() && !empty($model->files_folder_id))
 		{			
 			//TODO folder should be a model
