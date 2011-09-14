@@ -77,7 +77,7 @@ class imapauth
 		{
 			go_debug($config);
 
-			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_MODULES;
+			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_MODULES, $GO_EVENTS;
 
 
 			$GO_SECURITY->user_id = 0;
