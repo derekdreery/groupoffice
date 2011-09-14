@@ -145,8 +145,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			$email = $this->_getRegisterEmail();
 
 			if (!empty($email['register_email_body']) && !empty($email['register_email_subject'])) {
-				$swift = new GO_Base_Mail_Swift($model->email, $email['register_email_subject']);
-
+				
 				$email['register_email_body'] = str_replace('{password}', $params["password1"], $email['register_email_body']);
 
 				foreach ($model->getAttributes() as $key => $value) {
@@ -155,11 +154,15 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 				$email['register_email_body'] = str_replace('{url}', GO::config()->full_url, $email['register_email_body']);
 				$email['register_email_body'] = str_replace('{title}', GO::config()->title, $email['register_email_body']);
+				
+				$message = new GO_Base_Mail_Message();
+				$message->setSubject($email['register_email_subject'])
+								->setTo(array($model->email=>$model->name))
+								->setFrom(array(GO::config()->webmaster_email=>GO::config()->title))
+								->setBody($email['register_email_body']);								
 
-
-				$swift->set_body($email['register_email_body'], 'plain');
-				$swift->set_from(GO::config()->webmaster_email, GO::config()->title);
-				$swift->sendmail();
+				GO_Base_Mail_Mailer::newGoInstance()->send($message);
+				
 			}
 		}
 	}
