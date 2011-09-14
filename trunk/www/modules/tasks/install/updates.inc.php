@@ -17,3 +17,4 @@ VALUES (
 );";
 
 $updates[201109070000][]="ALTER TABLE `ta_tasks` CHANGE `rrule` `rrule` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+$updates[201109140000][]="ALTER TABLE `ta_tasks` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";

@@ -9,5 +9,5 @@ $updates[201108301656][]="INSERT INTO `go_model_types` (
 `model_name`
 )
 VALUES (
-'9', 'GO_Email_Model_Email'
+'9', 'GO_Email_Model_LinkedEmail'
 );";
