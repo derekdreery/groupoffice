@@ -70,5 +70,25 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		}
 	}
 	
+	
+	/**
+	 * Checks if a filename exists and renames it.
+	 *
+	 * @param	string $filepath The complete path to the file
+	 * @access public
+	 * @return string  New filepath
+	 */
+	public function appendNumberToNameIfExists()
+	{
+		$origPath = $this->path;
+		$x=1;
+		while($this->exists())
+		{			
+			$this->path=$origPath.'_'.$x;
+			$x++;
+		}
+		return $this->path;
+	}
+	
 
 }
