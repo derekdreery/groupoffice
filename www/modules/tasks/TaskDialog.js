@@ -162,8 +162,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		// value in the select link field
 		if (config.link_config) {
 			this.link_config = config.link_config;
-			if (config.link_config.type_id) {
-				this.selectLinkField.setValue(config.link_config.type_id);
+			if (config.link_config.modelNameAndId) {
+				this.selectLinkField.setValue(config.link_config.modelNameAndId);
 				this.selectLinkField.setRemoteText(config.link_config.text);
 			}
 		}
