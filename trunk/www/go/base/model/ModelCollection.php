@@ -20,7 +20,7 @@ class GO_Base_Model_ModelCollection{
 	public function __get($name){
 		try{
 			$model =  $this->model->findByPk($name);
-		}catch(AccessDeniedException $e){
+		}catch(GO_Base_Exception_AccessDenied $e){
 			return false;
 		}
 		
@@ -30,7 +30,7 @@ class GO_Base_Model_ModelCollection{
 	public function __isset($name){
 		try{
 			return $this->model->findByPk($name)!==false;
-		}catch(AccessDeniedException $e){
+		}catch(GO_Base_Exception_AccessDenied $e){
 			return false;
 		}
 	}
