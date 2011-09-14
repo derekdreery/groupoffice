@@ -473,16 +473,8 @@ class addressbook extends db {
 
 	function get_company($company_id) {
 		$sql = "SELECT ab_companies.*, ab_addressbooks.acl_id, ".
-				"af.format AS address_format, ".
-				"iaf.iso AS iso_address_format, ".
-				"post_af.format AS post_address_format, ".
-				"post_iaf.iso AS post_iso_address_format ".
 				"FROM ab_companies ".
 				"INNER JOIN ab_addressbooks ON (ab_addressbooks.id=ab_companies.addressbook_id) ".
-				"LEFT JOIN go_iso_address_format AS iaf ON (ab_companies.iso_address_format=iaf.iso) ".
-				"LEFT JOIN go_address_format AS af ON (af.id=iaf.address_format_id) ".
-				"LEFT JOIN go_iso_address_format AS post_iaf ON (ab_companies.post_iso_address_format=post_iaf.iso) ".
-				"LEFT JOIN go_address_format AS post_af ON (post_af.id=post_iaf.address_format_id) ".
 				"WHERE ab_companies.id='".$this->escape($company_id)."'";
 		$this->query($sql);
 		return $this->next_record(DB_ASSOC);
@@ -560,28 +552,31 @@ class addressbook extends db {
 	}
 
 	function delete_company($company_id, $company=false) {
-		global $GO_CONFIG, $GO_MODULES;
-
-		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
-			$company=$company ? $company : $this->get_company($company_id);
-			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
-			$files = new files();
-			try {
-				$files->delete_folder($company['files_folder_id']);
-			}catch(Exception $e ){}
-		}
-
-		$sql = "UPDATE ab_contacts SET company_id=0 WHERE company_id=$company_id";
-		$this->query($sql);
-
-		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
-		$search = new search();
-		$search->delete_search_result($company_id, 3);
-
-		$sql = "DELETE FROM ab_companies WHERE id='".$this->escape($company_id)."'";
-		if ($this->query($sql)) {
-			return true;
-		}
+		
+		return GO_Addressbook_Model_Company::model()->findByPk($company_id)->delete();
+		
+//		global $GO_CONFIG, $GO_MODULES;
+//
+//		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
+//			$company=$company ? $company : $this->get_company($company_id);
+//			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
+//			$files = new files();
+//			try {
+//				$files->delete_folder($company['files_folder_id']);
+//			}catch(Exception $e ){}
+//		}
+//
+//		$sql = "UPDATE ab_contacts SET company_id=0 WHERE company_id=$company_id";
+//		$this->query($sql);
+//
+//		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
+//		$search = new search();
+//		$search->delete_search_result($company_id, 3);
+//
+//		$sql = "DELETE FROM ab_companies WHERE id='".$this->escape($company_id)."'";
+//		if ($this->query($sql)) {
+//			return true;
+//		}
 	}
 
 	function add_contact(&$contact, $addressbook=false) {
@@ -722,7 +717,6 @@ class addressbook extends db {
 
 	function get_contact($contact_id) {
 		$this->query("SELECT ab_addressbooks.acl_id, ab_contacts.*, ".
-				"ab_addressbooks.default_iso_address_format AS default_iso_address_format, ".
 				"ab_addressbooks.default_salutation AS default_salutation, ".
 				"ab_companies.address AS work_address, ab_companies.address_no AS ".
 				"work_address_no, ab_companies.zip AS work_zip, ".
@@ -734,44 +728,42 @@ class addressbook extends db {
 				"ab_companies.name2 AS company_name2, ".
 				"ab_companies.post_address AS work_post_address, ab_companies.post_address_no AS work_post_address_no, ".
 				"ab_companies.post_zip AS work_post_zip, ab_companies.post_city AS work_post_city, ab_companies.post_state AS work_post_state, ".
-				"ab_companies.post_country AS work_post_country, ".
-				"go_address_format.format AS address_format, ".
-				"go_iso_address_format.iso AS iso_address_format ".
+				"ab_companies.post_country AS work_post_country ".
 				"FROM ab_contacts LEFT JOIN ab_companies ON (ab_contacts.company_id=ab_companies.id) ".
 				"INNER JOIN ab_addressbooks ON (ab_contacts.addressbook_id=ab_addressbooks.id) ".
-				"LEFT JOIN go_iso_address_format ON (ab_contacts.iso_address_format=go_iso_address_format.iso) ".
-				"LEFT JOIN go_address_format ON (go_address_format.id=go_iso_address_format.address_format_id) ".
-				"WHERE ab_contacts.id='".$this->escape($contact_id)."'");
+			"WHERE ab_contacts.id='".$this->escape($contact_id)."'");
 
 		return $this->next_record(DB_ASSOC);
 		
 	}
 
 	function delete_contact($contact_id, $contact=false) {
+		
+		return GO_Addressbook_Model_Contact::model()->findByPk($contact_id)->delete();
 
-		global $GO_CONFIG, $GO_MODULES;
-
-		if(!$contact) $contact = $this->get_contact($contact_id);
-
-		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
-			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
-			$files = new files();
-			try {
-				$files->delete_folder($contact['files_folder_id']);
-			}
-			catch(Exception $e ){}
-		}
-
-		if(isset($GLOBALS['GO_MODULES']->modules['mailings'])) {
-			$sql1 = "DELETE FROM ml_mailing_contacts WHERE contact_id='".$this->escape($contact_id)."'";
-			$this->query($sql1);
-		}
-
-		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
-		$search = new search();
-		$search->delete_search_result($contact_id, 2);
-
-		return $this->query("DELETE FROM ab_contacts WHERE id='".$this->escape($contact_id)."'");
+//		global $GO_CONFIG, $GO_MODULES;
+//
+//		if(!$contact) $contact = $this->get_contact($contact_id);
+//
+//		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
+//			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
+//			$files = new files();
+//			try {
+//				$files->delete_folder($contact['files_folder_id']);
+//			}
+//			catch(Exception $e ){}
+//		}
+//
+//		if(isset($GLOBALS['GO_MODULES']->modules['mailings'])) {
+//			$sql1 = "DELETE FROM ml_mailing_contacts WHERE contact_id='".$this->escape($contact_id)."'";
+//			$this->query($sql1);
+//		}
+//
+//		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
+//		$search = new search();
+//		$search->delete_search_result($contact_id, 2);
+//
+//		return $this->query("DELETE FROM ab_contacts WHERE id='".$this->escape($contact_id)."'");
 
 	}
 
