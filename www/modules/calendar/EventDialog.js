@@ -68,10 +68,11 @@ GO.calendar.EventDialog = function(calendar) {
 
 	this.formPanel = new Ext.form.FormPanel({
 		waitMsgTarget : true,
-		url : GO.settings.modules.calendar.url + 'json.php',
+		//url : GO.settings.modules.calendar.url + 'json.php',
+		url : GO.url('calendar/event/load'),
 		border : false,
 		baseParams : {
-			task : 'event'
+//			task : 'event'
 		},
 		items : this.tabPanel
 	});
@@ -320,7 +321,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 		if (config.event_id > 0) {
 			this.formPanel.load({
-				url : GO.settings.modules.calendar.url + 'json.php',
+				//url : GO.settings.modules.calendar.url + 'json.php',
+				url : GO.url('calendar/event/load'),
 				waitMsg:GO.lang.waitMsgLoad,
 				success : function(form, action) {
 					//this.win.show();
@@ -595,7 +597,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		}
 	},
 	setEventId : function(event_id) {
-		this.formPanel.form.baseParams['event_id'] = event_id;
+		this.formPanel.form.baseParams['id'] = event_id;
 		this.event_id = event_id;
 
 		this.participantsPanel.setEventId(event_id);
@@ -663,7 +665,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		}
 		
 		this.formPanel.form.submit({
-			url : GO.settings.modules.calendar.url + 'action.php',
+			//url : GO.settings.modules.calendar.url + 'action.php',
+			url : GO.url('calendar/event/submit'),
 			params : params,
 			waitMsg : GO.lang.waitMsgSave,
 			success : function(form, action) {
