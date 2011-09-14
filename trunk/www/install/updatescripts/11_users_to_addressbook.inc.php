@@ -40,16 +40,7 @@ if(!$ab){
 
 	$pdo = GO::getDbConnection();
 
-	$stmt = $pdo->query("SELECT * FROM go_users");
-	while($user=$stmt->fetch()){
-		$c = new GO_Addressbook_Model_Contact();
-		$c->go_user_id=$user['id'];
-		unset($user['id']);
-		$c->setAttributes($user);
-		$c->addressbook_id=$ab->id;
-		$c->save();
-		
-		//todo copy adminusers files to contact
-	}
+	$pdo->query("INSERT INTO ab_contacts (`addressbook_id`,`first_name`, `middle_name`, `last_name`, `initials`, `title`, `sex`, `birthday`, `email`, `department`, `function`, `home_phone`, `work_phone`, `fax`, `cellular`, `country`, `state`, `city`, `zip`, `address`, `address_no`,`go_user_id`) SELECT {$ab->id},`first_name`, `middle_name`, `last_name`, `initials`, `title`, `sex`, `birthday`, `email`, `department`, `function`, `home_phone`, `work_phone`, `fax`, `cellular`, `country`, `state`, `city`, `zip`, `address`, `address_no`,`id`  FROM `go_users` ");
+
 }
 

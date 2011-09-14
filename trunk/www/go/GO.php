@@ -349,7 +349,7 @@ class GO{
 			ini_set('display_errors','on');
 			ini_set('log_errors','on');
 			ini_set('memory_limit','32M');
-			ini_set('max_execution_time',10);
+			//ini_set('max_execution_time',10);
 		}
 
 		//set_error_handler(array('GO','errorHandler'), E_ALL | E_STRICT);

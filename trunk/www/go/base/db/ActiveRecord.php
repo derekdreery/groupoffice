@@ -472,6 +472,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			if (count($arr) == 2) {
 				$relation = $arr[0];
 				$aclField = $arr[1];
+				
+				if(!$this->$relation)
+					throw new Exception("Could not find relation: ".$relation." in ".$this->className()." with pk: ".$this->pk);
+				
 				$this->_acl_id = $this->$relation->findAclId();
 			} else {
 				$this->_acl_id = $this->{$this->aclField()};
@@ -489,6 +493,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	
 	public function getPermissionLevel(){
+		
+		if(GO::$ignoreAclPermissions)
+			return GO_Base_Model_Acl::MANAGE_PERMISSION;
 		
 		if(!$this->aclField())
 			return -1;	
@@ -832,16 +839,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$GLOBALS['query_count']++;
 		
-		if(isset($params['bindParams'])){			
+		try{
+			if(isset($params['bindParams'])){			
+
+				if($this->_debugSql)
+					GO::debug($params['bindParams']);
+
+				$result = $this->getDbConnection()->prepare($sql);
+				$result->execute($params['bindParams']);
+			}else
+			{
+				$result = $this->getDbConnection()->query($sql);
+			}
+		}catch(Exception $e){
+			$msg = $e->getMessage()."\n\nFull SQL Query: ".$sql;
 			
-			if($this->_debugSql)
-				GO::debug($params['bindParams']);
+			if(isset($params['bindParams'])){	
+				$msg .= "\nbBind params: ".var_export($params['bindParams'], true);
+			}
 			
-			$result = $this->getDbConnection()->prepare($sql);
-			$result->execute($params['bindParams']);
-		}else
-		{
-			$result = $this->getDbConnection()->query($sql);
+			throw new Exception($msg);
 		}
 
 		

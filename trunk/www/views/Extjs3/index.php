@@ -15,6 +15,8 @@
 header('Content-Type: text/html; charset=UTF-8');
 require_once("Group-Office.php");
 
+global $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_EVENTS, $GO_THEME, $lang;
+
 
 
 //$config_file = $GLOBALS['GO_CONFIG']->get_config_file();
