@@ -477,7 +477,7 @@ class Date {
 	}
 
 
-	public function shift_days_to_local($days, $local_start_hour, $timezone_offset)
+	public static function shift_days_to_local($days, $local_start_hour, $timezone_offset)
 	{
 		//shift the selected weekdays to local time
 		//var_dump($days);
