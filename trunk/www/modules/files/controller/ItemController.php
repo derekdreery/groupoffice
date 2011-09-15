@@ -57,11 +57,15 @@ class GO_Files_Controller_Item extends GO_Base_Controller_AbstractController{
 //			}
 //			
 //		}
-//		
-		if(!$model->getIsNew() && !empty($model->files_folder_id))
-		{			
-			//TODO folder should be a model
+//		//TODO folder should be a model
 			$files = new files();	
+		
+		if(!$model->joinAclField){
+			//for addressbooks, calendars etc.
+			$files->check_share($model->buildFilesPath(), $model->user_id, $model->acl_id);
+		}elseif(!$model->getIsNew() && !empty($model->files_folder_id))
+		{			
+			
 			
 			$folder_id = $model->files_folder_id;
 			$new_folder_id=$folder_id;
