@@ -38,34 +38,34 @@ GO.grid.LinksGrid = function(config){
 
 	config['store'] = new GO.data.JsonStore({
 
-			url: BaseHref+'json.php',			
-			baseParams: {
-				task: "links",
-				link_id: this.link_id,
-				link_type: this.link_type,
-				folder_id: this.folder_id,
-				type_filter:'true',
-				no_filter_save: config.noFilterSave
-			},
-			root: 'results',
-			totalProperty: 'total',
-			id: 'link_and_type',
-			fields: ['icon','link_and_type', 'link_type','name','type','url','mtime','id','module', 'description', 'iconCls', 'link_description'],
-			remoteSort: true
+		url: GO.url('search/links'),			
+		baseParams: {
+			task: "links",
+			link_id: this.link_id,
+			link_type: this.link_type,
+			folder_id: this.folder_id,
+			type_filter:'true',
+			no_filter_save: config.noFilterSave
+		},
+		root: 'results',
+		totalProperty: 'total',
+		id: 'model_name_and_id',
+		fields: ['icon','id', 'model_name','name','model_type_id','type','mtime','model_id','module', 'description', 'name_and_type', 'model_name_and_id'],
+		remoteSort: true
 
-		});
+	});
 	config['store'].setDefaultSort('mtime', 'desc');
 
 	if(!config.noSearchField)
 	{
 		this.searchField = new GO.form.SearchField({
-								store: config.store,
-								width:240
-						  });
+			store: config.store,
+			width:240
+		});
 	
-	config['tbar']=[
-	            GO.lang['strSearch']+': ', ' ',this.searchField
-	            ];
+		config['tbar']=[
+		GO.lang['strSearch']+': ', ' ',this.searchField
+		];
 	}
 	
 	config.clicksToEdit = 1;
@@ -80,29 +80,29 @@ GO.grid.LinksGrid = function(config){
 					dataIndex: 'icon',
 					renderer: this.iconRenderer
 		    },*/{
-		      header: GO.lang['strName'],
-					dataIndex: 'name',
-					css: 'white-space:normal;',
-					sortable: true,
-					renderer:function(v, meta, record){
-						return '<div class="go-grid-icon '+record.data.iconCls+'">'+v+'</div>';
-					}
-		    },{
-			    header: GO.lang['strDescription'],
-					dataIndex: 'link_description',
-			    sortable:true,
-			    editor : new GO.form.LinkDescriptionField()
-		   	},{
-			    header: GO.lang['strType'],
-					dataIndex: 'type',
-			    sortable:true,
-			    hidden:true			    
-		   	},{
-		      header: GO.lang['strMtime'],
-					dataIndex: 'mtime',
-		      sortable:true,
-		      width:80
-		    }];
+		header: GO.lang['strName'],
+		dataIndex: 'name',
+		css: 'white-space:normal;',
+		sortable: true,
+		renderer:function(v, meta, record){
+			return '<div class="go-grid-icon  go-model-icon-'+record.data.model_name+'">'+v+'</div>';
+		}
+	},{
+		header: GO.lang['strDescription'],
+		dataIndex: 'link_description',
+		sortable:true,
+		editor : new GO.form.LinkDescriptionField()
+	},{
+		header: GO.lang['strType'],
+		dataIndex: 'type',
+		sortable:true,
+		hidden:true			    
+	},{
+		header: GO.lang['strMtime'],
+		dataIndex: 'mtime',
+		sortable:true,
+		width:80
+	}];
 		    
 		    
 	
@@ -112,13 +112,13 @@ GO.grid.LinksGrid = function(config){
 	config.paging=20;
 
 	config.bbar = new Ext.PagingToolbar({
-			cls: 'go-paging-tb',
-			store: config.store,
-			pageSize: 20,//parseInt(GO.settings['max_rows_list']),
-			displayInfo: true,
-			displayMsg: GO.lang.displayingItemsShort,
-			emptyMsg: GO.lang['strNoItems']
-		});
+		cls: 'go-paging-tb',
+		store: config.store,
+		pageSize: 20,//parseInt(GO.settings['max_rows_list']),
+		displayInfo: true,
+		displayMsg: GO.lang.displayingItemsShort,
+		emptyMsg: GO.lang['strNoItems']
+	});
 	      
 	config['layout']='fit';
 	config['view']=new Ext.grid.GridView({
@@ -128,24 +128,26 @@ GO.grid.LinksGrid = function(config){
 		forceFit:true,
 		emptyText:GO.lang.strNoItems,	
 		getRowClass : function(record, rowIndex, p, store){
-	    if(this.showPreview && record.data.description.length){
-	        p.body = '<div class="go-links-panel-description">'+record.data.description+'</div>';
-	        return 'x-grid3-row-expanded';
-	    }
-	    return 'x-grid3-row-collapsed';
+			if(this.showPreview && record.data.description.length){
+				p.body = '<div class="go-links-panel-description">'+record.data.description+'</div>';
+				return 'x-grid3-row-expanded';
+			}
+			return 'x-grid3-row-collapsed';
 		}
 	});
 
-  config['loadMask']={msg: GO.lang['waitMsgLoad']};
-  config['sm']=new Ext.grid.RowSelectionModel({});
+	config['loadMask']={
+		msg: GO.lang['waitMsgLoad']
+		};
+	config['sm']=new Ext.grid.RowSelectionModel({});
   
 
-  GO.grid.LinksGrid.superclass.constructor.call(this, config);
+	GO.grid.LinksGrid.superclass.constructor.call(this, config);
   
-  this.addEvents({
-  	folderOpened : true, 
-  	folderDrop : true
-  	});
+	this.addEvents({
+		folderOpened : true, 
+		folderDrop : true
+	});
   	
 }
 
@@ -157,7 +159,7 @@ Ext.extend(GO.grid.LinksGrid, GO.grid.EditorGridPanel, {
 		
 		GO.grid.LinksGrid.superclass.afterRender.call(this);
 		
-  	var DDtarget = new Ext.dd.DropTarget(this.getView().mainBody, 
+		var DDtarget = new Ext.dd.DropTarget(this.getView().mainBody, 
 		{
 			ddGroup : 'LinksDD',
 			copy:false,
@@ -197,24 +199,24 @@ Ext.extend(GO.grid.LinksGrid, GO.grid.EditorGridPanel, {
 	
 	
 	onGridNotifyOver : function(dd, e, data){
-			var dragData = dd.getDragData(e);
-			if(data.grid && this.write_permission)
+		var dragData = dd.getDragData(e);
+		if(data.grid && this.write_permission)
+		{
+			var dropRecord = data.grid.store.data.items[dragData.rowIndex];
+			if(dropRecord)
 			{
-  			var dropRecord = data.grid.store.data.items[dragData.rowIndex];
-  			if(dropRecord)
-    		{
-  				if(dropRecord.data.link_type=='folder')
-  				{
-  					return this.dropAllowed;
-  				}
+				if(dropRecord.data.link_type=='folder')
+				{
+					return this.dropAllowed;
 				}
 			}
-			return false;
+		}
+		return false;
 	},
 
 	onGridNotifyDrop : function(dd, e, data)
 	{
-	  if(data.grid && this.write_permission)
+		if(data.grid && this.write_permission)
 		{
 			var sm=data.grid.getSelectionModel();
 			var rows=sm.getSelections();
@@ -223,12 +225,12 @@ Ext.extend(GO.grid.LinksGrid, GO.grid.EditorGridPanel, {
 			var dropRecord = data.grid.store.data.items[dragData.rowIndex];
 			
 			if(dropRecord.data.link_type=='folder')
-	    {
+			{
 				this.fireEvent('folderDrop', this, data.selections, dropRecord);
-	    }
+			}
 		}else
 		{
-		  return false;
+			return false;
 		}
 	},
 	

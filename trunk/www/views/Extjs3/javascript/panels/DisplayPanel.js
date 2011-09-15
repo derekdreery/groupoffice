@@ -81,7 +81,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 				if(!GO.linkBrowser){
 					GO.linkBrowser = new GO.LinkBrowser();
 				}
-				GO.linkBrowser.show({linkModelId: this.data.id,linkModelName: this.linkModelName,folder_id: "0"});
+				GO.linkBrowser.show({model_id: this.data.id,model_name: this.linkModelName,folder_id: "0"});
 				GO.linkBrowser.on('hide', this.reload, this,{single:true});
 			},
 			scope: this
