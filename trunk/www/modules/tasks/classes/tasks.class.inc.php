@@ -133,7 +133,7 @@ class tasks extends db
 	}
 
 	
-	function load_settings($response)
+	public static function load_settings($response)
 	{
 		global $GO_MODULES;
 
@@ -154,7 +154,7 @@ class tasks extends db
 		}
 	}
 
-	function save_settings(){
+	public static function save_settings(){
 
 		global $GO_MODULES;
 

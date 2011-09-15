@@ -165,7 +165,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){		
 				
-				this.setRemoteModelId(action.result[this.remoteModelIdName]);
+				if(action.result[this.remoteModelIdName])
+					this.setRemoteModelId(action.result[this.remoteModelIdName]);
 				
 				if(this.permissionsPanel && action.result[this.permissionsPanel.fieldName])
 					this.permissionsPanel.setAcl(action.result[this.permissionsPanel.fieldName]);
