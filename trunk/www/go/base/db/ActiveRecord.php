@@ -1404,7 +1404,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
-	
+		
+		
+		if ($this->hasFiles()) {
+			$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this);
+		}	
+		
 		//Don't do anything if nothing has been modified.
 		if(!$this->isModified() && (!$this->customfieldsRecord || !$this->customfieldsRecord->isModified()))
 			return true;
@@ -1432,10 +1437,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$this->fireEvent('beforesave',array(&$this));
 			
 			
-			//do this when a files folder is actually needed.
-			if ($this->hasFiles()) {
-				$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this);
-			}		
+				
 			
 			if($this->isNew){				
 				
