@@ -174,7 +174,7 @@ GO.grid.MonthGrid = Ext.extend(Ext.Panel, {
 
 		for(var i=this.firstWeekday; i<7+this.firstWeekday; i++)
 		{
-			var dayName = (i == 7) ? GO.calendar.lang.daynames[0] : GO.calendar.lang.daynames[i];
+			var dayName = (i == 7) ? GO.lang.full_days[0] : GO.lang.full_days[i];
 
 			var cell = Ext.DomHelper.append(this.cellWrap,
 			{

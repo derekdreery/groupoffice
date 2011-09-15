@@ -11,6 +11,7 @@
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ * @author Wesley Smits <wsmits@intermesh.nl>
  */
 
 class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
@@ -86,6 +87,23 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			throw new Exception("This contact belongs to a user account. Please delete this account first.");
 		
 		return parent::beforeDelete();
+	}
+	
+	/**
+	 * Get the date interval for the event.
+	 * 
+	 * @return DateInterval 
+	 */
+	public function getDiff(){
+		$startDateTime = new GO_Base_Util_DateTime(date('c',$this->start_time));
+		$endDateTime= new GO_Base_Util_DateTime(date('c',$this->end_time));
+		return $startDateTime->diff($endDateTime, true); //todo find out if this returns 40 days and not 1 month and 10 days.
+		
+	}
+	
+	
+	public function addException($date){
+		
 	}
 
 }
