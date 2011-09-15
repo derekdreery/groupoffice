@@ -943,7 +943,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					for($i=0;$i<count($value);$i++)
 						$value[$i]=$this->getDbConnection()->quote($value[$i], $this->columns[$field]['type']);
 
-					$sql .= "`$field` $comparator (".implode(',',$value).") ";
+					$sql .= "t.`$field` $comparator (".implode(',',$value).") ";
 					
 						
 				}else
@@ -951,7 +951,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					if(!isset($this->columns[$field]['type']))
 						throw new Exception($field.' not found in columns for model '.$this->className());
 					
-          $sql .= "`$field` $comparator ".$this->getDbConnection()->quote($value, $this->columns[$field]['type'])." ";
+          $sql .= "t.`$field` $comparator ".$this->getDbConnection()->quote($value, $this->columns[$field]['type'])." ";
 				}
 			}
 

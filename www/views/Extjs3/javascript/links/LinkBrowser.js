@@ -46,7 +46,7 @@ Ext.extend(GO.LinkBrowser, GO.Window, {
 	
 	show : function(config)
 	{
-		this.linksPanel.loadLinks(config.link_id, config.link_type);
+		this.linksPanel.loadLinks(config.model_id, config.model_name);
 		
 		if(config.folder_id)
 		{

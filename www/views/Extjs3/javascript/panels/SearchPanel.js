@@ -56,7 +56,7 @@ GO.grid.SearchPanel = function(config){
 		},
 		root: 'results',
 		totalProperty: 'total',
-		id: 'id',
+		id: 'model_name_and_id',
 		fields: ['icon','id', 'model_name','name','model_type_id','type','mtime','model_id','module', 'description', 'name_and_type', 'model_name_and_id'],
 		remoteSort: true
 	});
