@@ -11,7 +11,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
- /**
+/**
  * @class GO.dialog.SelectGroups
  * @extends Ext.Window
  * A window to select a number of Group-Office user groups.
@@ -29,65 +29,64 @@ GO.dialog.SelectGroups = function(config){
 	
 
 	this.store = new GO.data.JsonStore({
-       	url: BaseHref+'json.php',
-        root: 'results',
-		totalProperty: 'total',
-		id: 'id',
+		url: GO.url('core/groups'),
 		fields: ['id','name','user_id','user_name'],
-		remoteSort: true,
-        baseParams: {task: 'groups'}
-    });
+		remoteSort: true		
+	});
     
-   var action = new Ext.ux.grid.RowActions({
-			header : '-',
-			autoWidth:true,
-			align : 'center',
-			actions : [{
-				iconCls : 'btn-users',
-				qtip: GO.lang.users
-			}]
-		});
+	var action = new Ext.ux.grid.RowActions({
+		header : '-',
+		autoWidth:true,
+		align : 'center',
+		actions : [{
+			iconCls : 'btn-users',
+			qtip: GO.lang.users
+		}]
+	});
 
 	this.grid = new GO.grid.GridPanel({
-			plugins : action,
-			clicksToEdit : 1,
-			paging:true,
-			border:false,
-		    store: this.store,
-		    view: new Ext.grid.GridView({
-	    		autoFill: true,
-	    		forceFit: true}),
-		    columns: [{
-		       	header: GO.lang['strName'],
-				dataIndex: 'name',
-				css: 'white-space:normal;',
-				sortable: true
-		    },action],
-		    sm: new Ext.grid.RowSelectionModel()			
-		});
+		plugins : action,
+		clicksToEdit : 1,
+		paging:true,
+		border:false,
+		store: this.store,
+		view: new Ext.grid.GridView({
+			autoFill: true,
+			forceFit: true
+		}),
+		columns: [{
+			header: GO.lang['strName'],
+			dataIndex: 'name',
+			css: 'white-space:normal;',
+			sortable: true
+		},action],
+		sm: new Ext.grid.RowSelectionModel()			
+	});
 
 	action.on({
-			scope:this,
-			action:function(grid, record, action, row, col) {
+		scope:this,
+		action:function(grid, record, action, row, col) {
 
-				this.grid.getSelectionModel().selectRow(row);
+			this.grid.getSelectionModel().selectRow(row);
 
-				switch(action){
-					case 'btn-users':
-						this.showUsersInGroupDialog(record.data.id);
-						break;
-				}
+			switch(action){
+				case 'btn-users':
+					this.showUsersInGroupDialog(record.data.id);
+					break;
 			}
-		}, this);
+		}
+	}, this);
 
 
-	this.grid.on('rowdblclick', function(){this.callHandler(true);}, this);
+	this.grid.on('rowdblclick', function(){
+		this.callHandler(true);
+	}, this);
 		
 	this.store.load();
 
 	
 	Ext.Window.superclass.constructor.call(this, {
-    	layout: 'fit',
+		layout: 'fit',
 		modal:false,
 		height:400,
 		width:600,
@@ -95,34 +94,36 @@ GO.dialog.SelectGroups = function(config){
 		title:GO.lang['strSelectGroups'],
 		items: this.grid,
 		buttons: [
-			{
-				text: GO.lang['cmdOk'],
-				handler: function (){
-					this.callHandler(true);
-				},
-				scope:this
-			},
-			{
-				text: GO.lang['cmdAdd'],
-				handler: function (){
-					this.callHandler(false);
-				},
-				scope:this
-			},
-			{
-				text: GO.lang['cmdClose'],
-				handler: function(){this.hide();},
-				scope: this
-			}
-		],
-		keys: [{
-            key: Ext.EventObject.ENTER,
-            fn: function (){
+		{
+			text: GO.lang['cmdOk'],
+			handler: function (){
 				this.callHandler(true);
 			},
-            scope:this
-        }]
-    });
+			scope:this
+		},
+		{
+			text: GO.lang['cmdAdd'],
+			handler: function (){
+				this.callHandler(false);
+			},
+			scope:this
+		},
+		{
+			text: GO.lang['cmdClose'],
+			handler: function(){
+				this.hide();
+			},
+			scope: this
+		}
+		],
+		keys: [{
+			key: Ext.EventObject.ENTER,
+			fn: function (){
+				this.callHandler(true);
+			},
+			scope:this
+		}]
+	});
 };
 
 Ext.extend(GO.dialog.SelectGroups, Ext.Window, {

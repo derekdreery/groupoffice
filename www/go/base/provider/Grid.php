@@ -27,11 +27,14 @@ class GO_Base_Provider_Grid {
 	private $_formatVariables=array();
 	
 	
-	private $_alternateSortFields=array();
+	private $_sortFieldsAliases=array();
 	
 	private $_columnModelProvided=false;
 	
 	private $_modelFormatType='formatted';
+
+	private $_defaultSortOrder='';
+	private $_defaultSortDirection='ASC';
 	
   /**
    * See function formatColumn for a detailed description about how to use the format parameter.
@@ -51,6 +54,16 @@ class GO_Base_Provider_Grid {
 	 */
 	public function setTitle($title){
 		$this->_response['title'] = $title;
+	}
+	
+	
+	/**
+	 * Set the default column to sort on.
+	 * @param String / Array $order 
+	 */
+	public function setDefaultSortOrder($order, $direction){
+		$this->_defaultSortOrder=$order;
+		$this->_defaultSortDirection=$direction;
 	}
 	
 	/**
@@ -162,6 +175,12 @@ class GO_Base_Provider_Grid {
    * Add extra variables like this for example array('controller'=>$this) in a controller.
    * 
    * Then you can use '$controller->aControllerProperty' in the column format.
+	 * 
+	 * @param $sortfield
+	 * 
+	 * Set a sort field. Sometimes you need construct a column from multiple columns
+	 * Like user->name is a concatenation of first,middle and last.
+	 * In that case you can set sortfield to: array('first_name','last_name')
    * 
    */
   public function formatColumn($column, $format, $extraVars=array(), $sortfield='') {
@@ -170,7 +189,7 @@ class GO_Base_Provider_Grid {
     $this->_columns[$column]['extraVars'] = $extraVars;
 		
 		if(!empty($sortfield)){
-			$this->_alternateSortFields[$column]=$sortfield;
+			$this->_sortFieldsAliases[$column]=$sortfield;
 		}
   }
 	  
@@ -279,17 +298,17 @@ class GO_Base_Provider_Grid {
    */
   public function getDefaultParams($params=array()) {
 		
-		$sort = isset($_REQUEST['sort']) ? $_REQUEST['sort'] : '';
+		$sort = !empty($_REQUEST['sort']) ? $_REQUEST['sort'] : $this->_defaultSortOrder;
 		
-		if(isset($this->_alternateSortFields[$sort]))
-			$sort=$this->_alternateSortFields[$sort];
+		if(isset($this->_sortFieldsAliases[$sort]))
+			$sort=$this->_sortFieldsAliases[$sort];
 		
     return array_merge(array(
         'searchQuery' => !empty($_REQUEST['query']) ? '%' . $_REQUEST['query'] . '%' : '',
         'limit' => isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0,
         'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
         'order' => $sort,
-        'orderDirection' => isset($_REQUEST['dir']) ? $_REQUEST['dir'] : '',
+        'orderDirection' => !empty($_REQUEST['dir']) ? $_REQUEST['dir'] : $this->_defaultSortDirection,
 				'joinCustomFields'=>true,
         'calcFoundRows'=>true,
 				'permissionLevel'=> isset($_REQUEST['permissionLevel']) ? $_REQUEST['permissionLevel'] : GO_Base_Model_Acl::READ_PERMISSION
