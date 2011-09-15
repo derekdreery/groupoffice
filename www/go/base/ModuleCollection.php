@@ -45,8 +45,8 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 				$object = new $class;
 				if(method_exists($object, $method)){					
 					GO::debug('Calling '.$class.'::'.$method);
-					//call_user_func_array(array($object, $method), $params);
-					$object->$method($params);
+					call_user_func_array(array($object, $method), $params);
+					//$object->$method($params);
 				}
 			}
 		}

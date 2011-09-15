@@ -134,7 +134,7 @@ class users extends db
 		echo 'Done'.$line_break.$line_break;
 	}
 
-	function load_settings($response)
+	public static function load_settings($response)
 	{
 		global $GO_MODULES, $GO_CONFIG;
 
@@ -151,7 +151,7 @@ class users extends db
 		$response['data']['lastlogin'] = Date::get_timestamp($response['data']['lastlogin']);
 	}
 
-	function save_settings()
+	public static function save_settings()
 	{		
 		global $lang, $GO_CONFIG, $GO_LANGUAGE;
 

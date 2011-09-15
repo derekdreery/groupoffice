@@ -285,7 +285,7 @@ Ext.extend(GO.calendar.SettingsPanel, Ext.Panel, {
 
 });
 
-GO.mainLayout.onReady(function() {
-			GO.moduleManager.addSettingsPanel('calendar',
-					GO.calendar.SettingsPanel);
-		});
+//GO.mainLayout.onReady(function() {
+//			GO.moduleManager.addSettingsPanel('calendar',
+//					GO.calendar.SettingsPanel);
+//		});

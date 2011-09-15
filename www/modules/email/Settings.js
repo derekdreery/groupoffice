@@ -15,23 +15,23 @@ GO.email.SettingsPanel = function(config) {
 	
 	config.items=[{
 		xtype:'fieldset',
-		title:GO.email.defaultProgram,
+		title:GO.email.lang.defaultProgram,
 		autoHeight:true,		
-		html:GO.email.defaultProgramInstructions.replace('{url}', GO.settings.modules.email.url+'register_email.php').replace('{product_name}', GO.settings.config.product_name)
+		html:GO.email.lang.defaultProgramInstructions.replace('{url}', GO.settings.modules.email.url+'register_email.php').replace('{product_name}', GO.settings.config.product_name)
 	},this.useHtml = new Ext.form.Checkbox({
 		boxLabel:GO.email.lang.htmlMarkup,
 		hideLabel:true,
-		checked:GO.email.useHtmlMarkup,
+		checked:GO.email.lang.useHtmlMarkup,
 		name:'use_html_markup'
 	}),this.skipUnknownRecipients = new Ext.form.Checkbox({
 		boxLabel:GO.email.lang.skipUnknownRecipients,
 		hideLabel:true,
-		checked:GO.email.skipUnknownRecipients,
+		checked:GO.email.lang.skipUnknownRecipients,
 		name:'skip_unknown_recipients'
 	}),this.alwaysRequestNotification = new Ext.form.Checkbox({
 		boxLabel:GO.email.lang.alwaysRequestNotification,
 		hideLabel:true,
-		checked:GO.email.alwaysRequestNotification,
+		checked:GO.email.lang.alwaysRequestNotification,
 		name:'always_request_notification'
 	}),this.alwaysRespondToNotifications = new Ext.form.Checkbox({
 		boxLabel:GO.email.lang.alwaysRespondToNotifications,
@@ -62,7 +62,7 @@ GO.email.SettingsPanel = function(config) {
 				]
 			}),
 			width:70,
-			value : GO.email.fontSize,
+			value : GO.email.lang.fontSize,
 			valueField : 'value',
 			displayField : 'value',
 			mode : 'local',
@@ -91,7 +91,7 @@ Ext.extend(GO.email.SettingsPanel, Ext.Panel, {
 
 });
 
-GO.mainLayout.onReady(function() {
-			GO.moduleManager.addSettingsPanel('email',
-					GO.email.SettingsPanel);
-		});
+//GO.mainLayout.onReady(function() {
+//			GO.moduleManager.addSettingsPanel('email',
+//					GO.email.SettingsPanel);
+//		});

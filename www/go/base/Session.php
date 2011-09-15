@@ -133,20 +133,9 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		if(!$user->enabled)
 			return false;
-
-		if ($user->password_type == 'crypt') {
-			if (crypt($password, $user->password) != $user->password) {
-				return false;
-			}
-		} else {
-			//pwhash is not set yet. We're going to use the old md5 hashed password
-			if (md5($password) != $user->password) {
-				return false;
-			} else {				
-				$user->password=$password;
-				$user->save();
-			}
-		}
+		
+		if(!$user->checkPassword($password))
+			return false;
 		
 		//remember user id in session
 		$this->values['user_id']=$user->id;

@@ -151,7 +151,11 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 //			if($method->getNumberOfParameters()>0)
 //				$this->runWithParams($method, $_REQUEST);
 //			else
-				return $this->$methodName($_REQUEST);
+				$response =  $this->$methodName($_REQUEST);
+				
+				$this->fireEvent($methodName, array(&$this, &$_REQUEST, &$response));
+				
+				return $response;
 		} catch (Exception $e) {
 			$response['success'] = false;
 			$response['feedback'] = !empty($response['feedback']) ? $response['feedback'] : '';

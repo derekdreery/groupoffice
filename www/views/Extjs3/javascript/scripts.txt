@@ -14,7 +14,7 @@ views/Extjs3/javascript/SmallPagingToolbar.js
 views/Extjs3/javascript/WeekPicker.js
 
 modules/users/TimeZones.js
-views/Extjs3/javascript/windows/PersonalSettingsDialog.js
+
 modules/users/RegionalSettingsPanel.js
 modules/users/LookAndFeelPanel.js
 modules/users/PasswordPanel.js
@@ -116,3 +116,5 @@ views/Extjs3/javascript/advancedquery/SavedQueriesGrid.js
 views/Extjs3/javascript/windows/UsersInGroup.js
 
 views/Extjs3/javascript/windows/TabbedFormDialog.js
+
+views/Extjs3/javascript/windows/PersonalSettingsDialog.js

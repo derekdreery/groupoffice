@@ -211,8 +211,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	
 	public function beforeSave(){
 		
-		if($this->isModified('password'))
+		if($this->isModified('password')){
 			$this->password=crypt($this->password);
+			$this->password_type='crypt';
+		}
 		
 		return parent::beforeSave();
 	}	
@@ -301,5 +303,30 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 						$this->date_separator.
 						$this->date_format[2];
 	}
+	
+	
+	/**
+	 * Check if the password is correct for this user.
+	 * 
+	 * @param string $password
+	 * @return boolean 
+	 */
+	public function checkPassword($password){
+
+		if ($this->password_type == 'crypt') {
+			if (crypt($password, $this->password) != $this->password) {
+				return false;
+			}
+		} else {
+			//pwhash is not set yet. We're going to use the old md5 hashed password
+			if (md5($password) != $this->password) {
+				return false;
+			} else {				
+				$this->password=$password;
+				$this->save();				
+			}
+		}
+		return true;
+	}	
 }
 
