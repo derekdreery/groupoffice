@@ -11,7 +11,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
  
- /**
+/**
  * @class GO.dialog.SelectUsers
  * @extends Ext.Window
  * A window to select a number of User-Office user Users.
@@ -29,55 +29,53 @@ GO.dialog.SelectUsers = function(config){
 	
 
 	this.store = new GO.data.JsonStore({
-   	url: GO.settings.modules.users.url+'non_admin_json.php',
-    root: 'results',
-		totalProperty: 'total',
-		id: 'id',
+		url: GO.url('core/users'),
 		fields: ['id','name', 'email'],
-		remoteSort: true,
-        baseParams: {task: 'users'}
-    });
+		remoteSort: true
+	});
     
-    this.searchField = new GO.form.SearchField({
-			store: this.store,
-			width:320
-    });
+	this.searchField = new GO.form.SearchField({
+		store: this.store,
+		width:320
+	});
     
    
     
 	
 	this.grid = new GO.grid.GridPanel({
-			paging:true,
-			border:false,
-		    store: this.store,
-		    view: new Ext.grid.GridView({
-		    		autoFill: true,
-		    		forceFit: true
-	    		}),
-		    columns: [{
-	       	header: GO.lang['strName'],
-					dataIndex: 'name',					
-					sortable: true
-		    	},{
-	       	header: GO.lang['strEmail'],
-					dataIndex: 'email',					
-					sortable: true
-		    	}],
-		    sm: new Ext.grid.RowSelectionModel(),
-		    tbar: [
-	            GO.lang['strSearch']+': ', ' ',
-	            this.searchField
-	        ]		
-		});
+		paging:true,
+		border:false,
+		store: this.store,
+		view: new Ext.grid.GridView({
+			autoFill: true,
+			forceFit: true
+		}),
+		columns: [{
+			header: GO.lang['strName'],
+			dataIndex: 'name',					
+			sortable: true
+		},{
+			header: GO.lang['strEmail'],
+			dataIndex: 'email',					
+			sortable: true
+		}],
+		sm: new Ext.grid.RowSelectionModel(),
+		tbar: [
+		GO.lang['strSearch']+': ', ' ',
+		this.searchField
+		]		
+	});
 		
-	this.grid.on('rowdblclick', function(){this.callHandler(true);}, this);
+	this.grid.on('rowdblclick', function(){
+		this.callHandler(true);
+	}, this);
 		
 	var focusSearchField = function(){
 		this.searchField.focus(true);
 	};
 		
 	GO.dialog.SelectUsers.superclass.constructor.call(this, {
-    layout: 'fit',
+		layout: 'fit',
 		modal:false,
 		height:400,
 		width:600,
@@ -86,30 +84,32 @@ GO.dialog.SelectUsers = function(config){
 		title:GO.lang['strSelectUsers'],
 		items: this.grid,
 		buttons: [
-			{
-				text: GO.lang['cmdOk'],
-				handler: function (){
-					this.callHandler(true);
-				},
-				scope:this
+		{
+			text: GO.lang['cmdOk'],
+			handler: function (){
+				this.callHandler(true);
 			},
-			{
-				text: GO.lang['cmdAdd'],
-				handler: function (){
-					this.callHandler(false);
-				},
-				scope:this
+			scope:this
+		},
+		{
+			text: GO.lang['cmdAdd'],
+			handler: function (){
+				this.callHandler(false);
 			},
-			{
-				text: GO.lang['cmdClose'],
-				handler: function(){this.hide();},
-				scope: this
-			}
+			scope:this
+		},
+		{
+			text: GO.lang['cmdClose'],
+			handler: function(){
+				this.hide();
+			},
+			scope: this
+		}
 		]
-    });
+	});
 };
 
-Ext.extend(GO.dialog.SelectUsers, Ext.Window, {
+Ext.extend(GO.dialog.SelectUsers, GO.Window, {
 
 	show : function(){
 		if(!this.grid.store.loaded)

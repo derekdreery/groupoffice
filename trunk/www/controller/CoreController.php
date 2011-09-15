@@ -105,6 +105,45 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 		return $response;
 	}
+	
+	
+	/**
+	 * Get users
+	 * 
+	 * @param array $params @see GO_Base_Provider_Grid::getDefaultParams()
+	 * @return  
+	 */
+	public function actionUsers($params){		
+		
+		$grid = new GO_Base_Provider_Grid();		
+		$grid->setDefaultSortOrder('name','ASC');
+		$grid->formatColumn('name','$model->name',array(),array('first_name','last_name'));
+		
+		$stmt = GO_Base_Model_User::model()->find($grid->getDefaultParams());
+		$grid->setStatement($stmt);		
+		
+
+		return $grid->getData();
+	}
+	
+	/**
+	 * Get user groups
+	 * 
+	 */
+	public function actionGroups($params){
+		$grid = new GO_Base_Provider_Grid();		
+		$grid->setDefaultSortOrder('name','ASC');
+			
+		$stmt = GO_Base_Model_Group::model()->find($grid->getDefaultParams());
+		$grid->setStatement($stmt);		
+		
+
+		return $grid->getData();
+	}
+	
+	
+	
+	
 
 	/**
 	 * Todo replace compress.php with this action
