@@ -472,7 +472,7 @@ class addressbook extends db {
 	}
 
 	function get_company($company_id) {
-		$sql = "SELECT ab_companies.*, ab_addressbooks.acl_id, ".
+		$sql = "SELECT ab_companies.*, ab_addressbooks.acl_id ".
 				"FROM ab_companies ".
 				"INNER JOIN ab_addressbooks ON (ab_addressbooks.id=ab_companies.addressbook_id) ".
 				"WHERE ab_companies.id='".$this->escape($company_id)."'";
