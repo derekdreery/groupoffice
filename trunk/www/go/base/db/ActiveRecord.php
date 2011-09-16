@@ -637,6 +637,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 *  "join"=>''; //inserts join statements
 	 * 
 	 *  "searchQuery"=>"String",
+	 *  'searchQueryFields=>array('field') //defaults to all text fields
+	 * 
 	 *  "joinCustomFields"=>false,
    *  "calcFoundRows"=true // Set tot true to return the number of foundRows in the statement (See class GO_Base_Db_ActiveStatement 
 			
@@ -798,7 +800,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!empty($params['searchQuery'])){
 			$sql .= " \nAND (";
 			
-			$fields = $this->getFindSearchQueryParamFields('t',$joinCf);
+			if(!isset($params['searchQueryFields']))
+				$fields = $this->getFindSearchQueryParamFields('t',$joinCf);
+			else
+				$fields = $params['searchQueryFields'];
 			
 			//`name` LIKE "test" OR `content` LIKE "test"
 			
