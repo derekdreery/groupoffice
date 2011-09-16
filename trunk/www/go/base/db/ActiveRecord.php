@@ -648,6 +648,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 *  "single"=>false //set to true to return a single model instead of a statement.
 	 * 
+	 *  'joinModel'=>array(
+	 *			'model'=>'GO_Billing_Model_OrderStatusLanguage',					
+	 *			'foreignField'=>'status_id', //defaults to primary key of the remote model
+	 *			'localField'=>'id', //defaults to primary key of the model
+	 *			'tableAlias'=>'l', //Optional table alias
+	 *			'type'=>'INNER' //defaults to INNER
+	 *			)
+	 * 
 	 * };
 	 * 
 	 * 
@@ -742,6 +750,32 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 		if(isset($params['join']))
 			$sql .= $params['join'];
+		
+		if(isset($params['joinModel'])){
+			
+			$joinModel = GO::getModel($params['joinModel']['model']);
+			
+			if(!isset($params['joinModel']['foreignField']))
+				$params['joinModel']['foreignField']=$joinModel->primaryKey();
+			
+			if(!isset($params['joinModel']['localField']))
+				$params['joinModel']['localField']=$this->primaryKey();
+			
+			if(!isset($params['joinModel']['type']))
+				$params['joinModel']['type']='INNER';
+			
+			
+			
+			$sql .= "\n".$params['joinModel']['type']." JOIN `".$joinModel->tableName()."`";
+			if(isset($params['joinModel']['tableAlias']))
+				$sql .= " `".$params['joinModel']['tableAlias']."`";
+			else
+				$params['joinModel']['tableAlias']=$joinModel->tableName();
+			
+			$sql .= " ON (`".$params['joinModel']['tableAlias']."`.`".$params['joinModel']['foreignField']."`=".
+							"t.`".$params['joinModel']['localField']."`) ";
+			
+		}
 
 		//quick and dirty way to use and in next sql build blocks
 		$sql .= "\nWHERE 1 ";
