@@ -4,8 +4,8 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 	
 	
 	public static function initListeners(){		
-		GO_Base_Model_User::addListener('save', 'GO_Notes_NotesModule', 'saveUser');
-		GO_Base_Model_User::addListener('delete', 'GO_Notes_NotesModule', 'deleteUser');		
+		GO_Base_Model_User::model()->addListener('save', 'GO_Notes_NotesModule', 'saveUser');
+		GO_Base_Model_User::model()->addListener('delete', 'GO_Notes_NotesModule', 'deleteUser');		
 	}	
 	
 	public function author() {
