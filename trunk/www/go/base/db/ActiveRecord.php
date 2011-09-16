@@ -68,7 +68,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * @var PDO  
 	 */
-	public static $db;
+	private static $db;
 	
 	/**
 	 *
@@ -1354,11 +1354,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @return array attribute values indexed by attribute names.
 	 */
 	public function getAttributes($outputType='formatted')
-	{		
+	{	
 		if($outputType=='raw')
-			return $this->_attributes;
+			$att=$this->_attributes;
+		else
+			$att=$this->formatOutputValues($this->_attributes, $outputType=='html');		
 		
-		return $this->formatOutputValues($this->_attributes, $outputType=='html');		
+		$r = new ReflectionObject($this);
+		$publicProperties = $r->getProperties(ReflectionProperty::IS_PUBLIC);
+		foreach($publicProperties as $prop){
+			$att[$prop->getName()]=$prop->getValue($this);
+		}
+		return $att;
 	}
 	
 	/**
