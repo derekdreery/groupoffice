@@ -487,7 +487,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function actionDelete($params) {
 	    $modelName = $this->model;
-	    $model = $modelName::model()->findByPk($params['id']);
+	    $model = GO::getModel($modelName)->findByPk($params['id']);
 	    $response['success'] = $model->delete();
 	    return $response;
 	}
