@@ -12,17 +12,6 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-//TODO temporary hack!
-if ( !function_exists( 'get_called_class' ) ) {
-    function get_called_class ()
-    {
-        $t = debug_backtrace(); $t = $t[0];
-        if ( isset( $t['object'] ) && $t['object'] instanceof $t['class'] )
-            return get_class( $t['object'] );
-        return false;
-    }
-} 
-
 /**
  * Objects that extend this class can fire events and modules can add listeners 
  * to these objects.
@@ -59,13 +48,12 @@ class GO_Base_Observable{
 	 * @param String $listenerClass Object class name where the static listener function is in.
 	 * @param type $listenerFunction Static listener function name.
 	 */
-	public static function addListener($eventName,$listenerClass, $listenerFunction){
-		$class = get_called_class();		
+	public function addListener($eventName,$listenerClass, $listenerFunction){
 		
 		$line = '$listeners["'.$eventName.'"][]=array("'.$listenerClass.'", "'.$listenerFunction.'");'."\n";
 		
 		$dir = GO::config()->file_storage_path.'cache/listeners/';
-		$file = $dir.get_called_class().'.php';
+		$file = $dir.$this->className().'.php';
 		
 		if(!file_exists($file))
 			file_put_contents($file, "<?php\n", FILE_APPEND);	
