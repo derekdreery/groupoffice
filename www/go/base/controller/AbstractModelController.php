@@ -108,6 +108,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$modelName = $this->model;
 		//$modelName::model() does not work on php 5.2!
 		$model = GO::getModel($modelName)->findByPk($params['id']);
+		
+		$response = array();
+		
+		$response = $this->beforeLoad($response, $model, $params);
 
 		$response['data'] = $model->getAttributes();
 		
@@ -128,6 +132,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return $response;
 	}
 
+	protected function beforeLoad(&$response, &$model, &$params) {
+		return $response;
+	}
 	
 	
 	protected function afterLoad(&$response, &$model, &$params) {
