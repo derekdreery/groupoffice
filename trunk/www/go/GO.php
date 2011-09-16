@@ -231,7 +231,7 @@ class GO{
 					
 				}
 				
-				if(!file_exists($file)){
+				if(!file_exists($file) || is_dir($file)){
 					//throw new Exception('Class '.$orgClassName.' not found! ('.$file.')');
 					return false;
 				}

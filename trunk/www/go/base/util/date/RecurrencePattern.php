@@ -96,7 +96,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 	protected function _getNextRecurrenceDaily($startTime){
 							
-		$daysBetweenNextAndFirstEvent=$this->_findNumberOfPeriods($startTime, $this->_interval, 'd');
+		$daysBetweenNextAndFirstEvent=$this->_findNumberOfPeriods($startTime, $this->_interval, 'days');
 		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime,$daysBetweenNextAndFirstEvent);
 		
 		return $recurrenceTime;
@@ -111,7 +111,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 		 * 
 	*/
 	
-		$daysBetweenNextAndFirstEvent=$this->_findNumberOfPeriods($startTime, $this->_interval*7, 'd');
+		$daysBetweenNextAndFirstEvent=$this->_findNumberOfPeriods($startTime, $this->_interval*7, 'days');
 		
 		//$daysBetweenNextAndFirstEvent = 14
 		
