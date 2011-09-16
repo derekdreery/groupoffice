@@ -1464,6 +1464,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				
 				if(!$this->pk)
 					return false;
+				
+				$this->setIsNew(false);
 			}else
 			{
 				$wasNew=false;
