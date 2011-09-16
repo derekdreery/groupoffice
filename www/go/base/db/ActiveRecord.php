@@ -1500,8 +1500,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					$this->{$this->aclField()}=$acl->id;
 				}				
 				
-				if(!$this->beforeSave())
+				if(!$this->beforeSave()){
+					GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
 					return false;				
+				}
 
 				$this->_dbInsert();
 				
@@ -1516,8 +1518,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			{
 				$wasNew=false;
 				
-				if(!$this->beforeSave())
-					return false;
+				if(!$this->beforeSave()){
+					GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
+					return false;				
+				}
 				
 				
 				if(!$this->_dbUpdate())
@@ -1534,8 +1538,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 
 			
-			if(!$this->afterSave($wasNew))
+			if(!$this->afterSave($wasNew)){
+				GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
 				return false;
+			}
 			
 			/**
 			 * Useful event for modules. For example custom fields can be loaded or a files folder.
