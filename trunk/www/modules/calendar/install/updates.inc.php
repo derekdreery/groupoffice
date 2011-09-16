@@ -22,4 +22,5 @@ $updates[201109140000][]="ALTER TABLE `cal_events` CHANGE `all_day_event` `all_d
 $updates[201109140000][]="ALTER TABLE `cal_events` CHANGE `busy` `busy` BOOLEAN NOT NULL DEFAULT '0'";
 $updates[201109140000][]="ALTER TABLE `cal_events` CHANGE `private` `private` BOOLEAN NOT NULL DEFAULT '0'";
 $updates[201109140000][]="ALTER TABLE `cal_events` CHANGE `read_only` `read_only` BOOLEAN NOT NULL DEFAULT '0'";
+$updates[201109160000][]="ALTER TABLE `cal_exceptions` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
 

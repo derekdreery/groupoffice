@@ -16,6 +16,11 @@
 
 class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
+	/**
+	 * The date where the exception needs to be created
+	 * @var timestamp 
+	 */
+	public $exception_date; 
 	
 	protected function init() {
 		
@@ -55,9 +60,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 //	}
 
 	public function relations(){
-            return array(
-                'calendar' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Calendar_Model_Calendar', 'field'=>'calendar_id')
-            );
+		return array(
+				'calendar' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Calendar_Model_Calendar', 'field'=>'calendar_id')
+		);
 	}
 
 
@@ -80,30 +85,66 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		return 'calendar/' . GO_Base_Fs_Base::stripInvalidChars($this->calendar->name) . '/' . date('Y', $this->start_time) . '/' . GO_Base_Fs_Base::stripInvalidChars($this->name);
 	}
-	
-	public function beforeDelete() {
 		
-		if($this->go_user_id>0)			
-			throw new Exception("This contact belongs to a user account. Please delete this account first.");
-		
-		return parent::beforeDelete();
-	}
-	
 	/**
 	 * Get the date interval for the event.
 	 * 
 	 * @return DateInterval 
 	 */
 	public function getDiff(){
-		$startDateTime = new GO_Base_Util_DateTime(date('c',$this->start_time));
-		$endDateTime= new GO_Base_Util_DateTime(date('c',$this->end_time));
-		return $startDateTime->diff($endDateTime, true); //todo find out if this returns 40 days and not 1 month and 10 days.
-		
+		$startDateTime = new GO_Base_Util_Date_DateTime(date('c',$this->start_time));
+		$endDateTime= new GO_Base_Util_Date_DateTime(date('c',$this->end_time));
+		return $startDateTime->diff($endDateTime, true); 
 	}
 	
-	
-	public function addException($date){
+	/**
+	 * Add an Exception for the Event if it is recurring
+	 * 
+	 * @param Unix Timestamp $date The date where the exception belongs to
+	 * @param Int $for_event_id The event id of the event where the exception belongs to
+	 */
+	public function addException($date, $for_event_id){
 		
+		
+		$exception = new GO_Calendar_Model_Exception();
+		$exception->event_id = $this->id;
+		$exception->time = $date; // Needs to be a unix timestamp
+		$exception->save();
 	}
-
+	
+	/**
+	 * This Event needs to be reinitialized to become an Exception of its own on the given Unix timestamp.
+	 * 
+	 * @param int $exceptionDate Unix timestamp
+	 */
+	public function becomeException($exceptionDate){
+		
+		$this->rrule='';
+		$this->exception_for_event_id=$this->id;
+		$this->exception_date = $exceptionDate;
+		
+		$this->id=0;
+		$this->setIsNew(true);
+	
+		$diff = $this->getDiff();
+		
+		$d = date('Y-m-d', $exceptionDate);
+		$t = date('G:i', $this->start_time);
+		
+		$this->start_time=strtotime($d.' '.$t);
+		
+		$endTime = new GO_Base_Util_Date_DateTime(date('c', $this->start_time));
+		$endTime->add($diff);		
+		$this->end_time = $endTime->format('U');
+	}
+		
+	protected function afterSave($wasNew) {
+		//add exception model for the original recurring event
+		if($wasNew && $this->exception_for_event_id>0){
+			$newExeptionEvent = GO_Calendar_Model_Event::model()->findByPk($this->exception_for_event_id);
+			$newExeptionEvent->addException($this->exception_date,$this->exception_for_event_id);			
+		}
+		
+		return parent::afterSave($wasNew);
+	}
 }

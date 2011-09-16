@@ -15,9 +15,9 @@ GO.calendar.EventTemplate =
 			'</tpl>'+
 			'<tpl for="events">'+
 				'<tr class="display-panel-link">'+
-					'<td style="padding-right:0px !important;"><div class="display-panel-link-icon go-link-icon-1"></div></td>'+
+					'<td style="padding-right:0px !important;"><div class="display-panel-link-icon go-model-icon-GO_Calendar_Model_Event"></div></td>'+
 					'<td style="padding-right:0px !important;padding-left:0px !important;"><div class="display-panel-has-links <tpl if="link_count&gt;1">has-links</tpl>"></div></td>'+
-					'<td><a href="#" onclick="GO.linkHandlers[1].call(this, {id});">{name}</a></td>'+
+					'<td><a href="#" onclick="GO.linkHandlers[\'GO_Calendar_Model_Event\'].call(this, {id});">{name}</a></td>'+
 					'<td>{start_time}</td>'+
 					'<td>{calendar_name}</td>'+
 				'</tr>'+

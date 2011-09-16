@@ -1472,7 +1472,6 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		}
 	},
 	
-	
 	saveState : function()
 	{
 		var state = {
@@ -1645,20 +1644,10 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 		if(event.repeats && actionData.singleInstance)
 		{
-			var formValues={};
-
-			formValues['start_date'] = event['startDate'].format(GO.settings['date_format']);
-			formValues['start_hour'] = event['startDate'].format("H");
-			formValues['start_min'] = event['startDate'].format("i");
-
-			formValues['end_date'] = event['endDate'].format(GO.settings['date_format']);
-			formValues['end_hour'] = event['endDate'].format("H");
-			formValues['end_min'] = event['endDate'].format("i");
 
 			GO.calendar.showEventDialog({
-				values: formValues,
-				exceptionDate: event['startDate'].format(this.daysGrid.dateTimeFormat),
-				exception_event_id: event['event_id'],
+				exception_date: event['startDate'].format(this.daysGrid.dateTimeFormat),
+				event_id: event['event_id'],
 				oldDomId : event.domId
 			});
 		}else
@@ -2147,7 +2136,7 @@ GO.mainLayout.onReady(function(){
 
 	GO.newMenuItems.push({
 		text: GO.calendar.lang.appointment,
-		iconCls: 'go-link-icon-1',
+		iconCls: 'go-model-icon-GO_Calendar_Model_Event',
 		handler:function(item, e){
 
 			var eventShowConfig = item.parentMenu.eventShowConfig || {};
@@ -2190,21 +2179,21 @@ GO.calendar.showEventDialog = function(config){
 	GO.calendar.eventDialog.show(config);
 }
 
-GO.linkHandlers[1]=function(id){
-	
-	if(!GO.calendar.eventLinkWindow){
-		var eventPanel = new GO.calendar.EventPanel();
-		GO.calendar.eventLinkWindow = new GO.LinkViewWindow({
-			title: GO.calendar.lang.appointment,
-			closeAction:'hide',
-			items: eventPanel,
-			eventPanel: eventPanel
-		});
-	}
-	GO.calendar.eventLinkWindow.eventPanel.load(id);
-	GO.calendar.eventLinkWindow.show();
+GO.linkHandlers["GO_Calendar_Model_Event"]=function(id){
+	GO.calendar.showEventDialog({event_id:id});
+//	if(!GO.calendar.eventLinkWindow){
+//		var eventPanel = new GO.calendar.EventPanel();
+//		GO.calendar.eventLinkWindow = new GO.LinkViewWindow({
+//			title: GO.calendar.lang.appointment,
+//			closeAction:'hide',
+//			items: eventPanel,
+//			eventPanel: eventPanel
+//		});
+//	}
+//	GO.calendar.eventLinkWindow.eventPanel.load(id);
+//	GO.calendar.eventLinkWindow.show();
 };
-GO.linkPreviewPanels[1]=function(config){
+GO.linkPreviewPanels["GO_Calendar_Model_Event"]=function(config){
 	var config = config || {};
 	return new GO.calendar.EventPanel(config);
 }
