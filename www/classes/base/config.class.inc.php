@@ -861,7 +861,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  private
 	 */
-	var $theme_path = 'themes';
+	var $theme_path = 'views/Extjs3/themes';
 
 	/**
 	 * Relative URL to the themes directory with no slash at start and end
@@ -869,7 +869,7 @@ class GO_CONFIG {
 	 * @var     string
 	 * @access  private
 	 */
-	var $theme_url = 'themes';
+	var $theme_url = 'views/Extjs3/themes';
 
 	/**
 	 * Relative path to the language directory with no slash at start and end
