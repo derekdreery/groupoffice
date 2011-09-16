@@ -12,13 +12,7 @@
  */
 
 GO.calendar.EventPanel = Ext.extend(GO.DisplayPanel,{
-	link_type : 1,
-
-	loadParams : {task: 'event_with_items'},
-
-	idParam : 'event_id',
-
-	loadUrl : GO.settings.modules.calendar.url+'json.php',
+	linkModelName : "GO_Calendar_Model_Event",
 
 	stateId : 'cal-event-panel',
 
@@ -29,6 +23,8 @@ GO.calendar.EventPanel = Ext.extend(GO.DisplayPanel,{
 	},
 
 	initComponent : function(){
+		
+		this.loadUrl=GO.url('calendar/event/display');
 
 		this.template =
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+

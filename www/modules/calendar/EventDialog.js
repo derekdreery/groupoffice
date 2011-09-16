@@ -315,17 +315,29 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		if (!config.event_id) {
 			config.event_id = 0;
 		}
-
+		
+		
 
 		this.setEventId(config.event_id);
 
 		if (config.event_id > 0) {
 			this.formPanel.load({
 				//url : GO.settings.modules.calendar.url + 'json.php',
+				params:{
+					//These parameters are present when a user edits a single occurence of a repeating event
+					exception_date:config.exception_date
+				},
 				url : GO.url('calendar/event/load'),
 				waitMsg:GO.lang.waitMsgLoad,
 				success : function(form, action) {
 					//this.win.show();
+					
+					// If this is a recurrence and the following is true (action.result.data.exception_for_event_id and action.result.data.exception_date are set and not empty)
+					if(action.result.data.exception_date){
+						this.setEventId(0);
+						this.formPanel.form.baseParams['exception_for_event_id'] = action.result.data.exception_for_event_id;
+						this.formPanel.form.baseParams['exception_date'] = action.result.data.exception_date;
+					}
 					
 					this.formPanel.form.baseParams['group_id'] = action.result.data.group_id;
 					this.initCustomFields(action.result.data.group_id);
@@ -361,37 +373,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				scope : this
 
 			});
-		} else if (config.exception_event_id) {
-
-			this.formPanel.load({
-				url : GO.settings.modules.calendar.url + 'json.php',
-				params : {
-					event_id : config.exception_event_id
-				},
-				waitMsg : GO.lang.waitMsgLoad,
-				success : function(form, action) {
-					//this.win.show();
-
-					//this.participantsPanel.setEventId(0);
-					this.formPanel.form.baseParams['exception_event_id'] = config.exception_event_id;
-					this.formPanel.form.baseParams['exceptionDate'] = config.exceptionDate;
-
-					// set recurrence to none
-					this.formPanel.form.findField('repeat_type').setValue(0);
-					this.changeRepeat(action.result.data.freq);
-
-					this.setValues(config.values);
-
-					this.setWritePermission(action.result.data.write_permission);
-				},
-				failure : function(form, action) {
-					Ext.Msg.alert(GO.lang.strError, action.result.feedback)
-				},
-				scope : this
-			});
 		} else {
-			delete this.formPanel.form.baseParams['exception_event_id'];
-			delete this.formPanel.form.baseParams['exceptionDate'];
+
 			delete this.formPanel.form.baseParams['group_id'];
 			this.setWritePermission(true);
 
@@ -462,16 +445,17 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		
 		// if the newMenuButton from another passed a linkTypeId then set this
 		// value in the select link field
-		if (config && config.link_config) {
+		if (config.link_config) {
 			this.link_config = config.link_config;
-			if (config.link_config.type_id) {
-				this.selectLinkField.setValue(config.link_config.type_id);
+			if (config.link_config.modelNameAndId) {
+				this.selectLinkField.setValue(config.link_config.modelNameAndId);
 				this.selectLinkField.setRemoteText(config.link_config.text);
+			}		
 
-				if(this.subjectField.getValue()=='')
-					this.subjectField.setValue(config.link_config.text);
-			}
+			if(this.subjectField.getValue()=='')
+				this.subjectField.setValue(config.link_config.text);
 		}
+
 
 		this.fireEvent('show', this);
 	},
@@ -598,6 +582,10 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 	},
 	setEventId : function(event_id) {
 		this.formPanel.form.baseParams['id'] = event_id;
+		
+		delete this.formPanel.form.baseParams['exception_for_event_id'];
+		delete this.formPanel.form.baseParams['exception_date'];
+		
 		this.event_id = event_id;
 
 		this.participantsPanel.setEventId(event_id);
@@ -696,7 +684,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					location : this.formPanel.form.findField('location')
 					.getValue(),
 					repeats : this.formPanel.form.findField('freq')
-					.getValue() > 0,
+					.getValue() !="",
 					'private' : false,
 					exception_event_id : this.formPanel.form.baseParams['exception_event_id'],
 					num_participants: this.numParticipants
