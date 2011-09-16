@@ -479,8 +479,9 @@ class search extends db {
 		}
 
 		//$result['link_count']=$GO_LINKS->count_links($result['id'], $result['model_type_id']);
+		if(isset($result['link_type']))
+			$result['model_type_id']=$result['link_type'];
 		
-		$result['model_type_id']=$result['link_type'];
 		$result['model_id']=$result['id'];
 		unset($result['link_type'], $result['id']);
 
