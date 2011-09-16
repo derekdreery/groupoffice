@@ -24,18 +24,24 @@ require('../../www/GO.php');
 
 
 
-$params = array(
-		'byday' => '',
-		'bymonth' => '',
-		'bymonthday' => '',
-		'byday' => '',
-		'freq' => '',
-		'interval' => '',
-		'eventStartTime' => '',
-		'bysetpos' => '',
-		'until' => '',
-);
+//$params = array(
+//		'byday' => '',
+//		'bymonth' => '',
+//		'bymonthday' => '',
+//		'byday' => '',
+//		'freq' => '',
+//		'interval' => '',
+//		'eventStartTime' => '',
+//		'bysetpos' => '',
+//		'until' => '',
+//);
+//
+//$Recurrence_pattern = new GO_Base_Util_Date_RecurrencePattern($params);
 
-$Recurrence_pattern = new GO_Base_Util_Date_RecurrencePattern($params);
 
+$date1 = new DateTime('2011-09-01 15:00');
+$date2 = new DateTime('2011-11-01 16:00');
 
+$diff = $date1->diff($date2);
+
+var_dump($diff);
