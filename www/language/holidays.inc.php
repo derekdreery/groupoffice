@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // holidays with fixed date
 $input_holidays['fix']['en']['01-01'] = 'New Years Day';
 $input_holidays['fix']['en']['12-25'] = 'Christmas Day';
