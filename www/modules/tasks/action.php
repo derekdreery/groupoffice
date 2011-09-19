@@ -332,28 +332,28 @@ try {
 			$response['success']=true;
 			break;
 
-
-                case 'save_category':
-
-			$category['id'] = (isset($_REQUEST['id']) && $_REQUEST['id']) ? $_REQUEST['id'] : 0;
-                        $category['name'] = (isset($_REQUEST['name']) && $_REQUEST['name']) ? $_REQUEST['name'] : '';
-                        $category['user_id'] = (isset($_REQUEST['global'])) ? 0 : $GLOBALS['GO_SECURITY']->user_id;
-
-			if(empty($category['name']))
-			{
-				throw new Exception($lang['common']['missingField']);
-			}
-
-			if($category['id']>0)
-			{
-				$tasks->update_category($category);
-			}else
-			{
-				$response['id'] = $tasks->add_category($category);
-			}
-
-			$response['success'] = true;
-			break;                        		
+//
+//                case 'save_category':
+//
+//			$category['id'] = (isset($_REQUEST['id']) && $_REQUEST['id']) ? $_REQUEST['id'] : 0;
+//                        $category['name'] = (isset($_REQUEST['name']) && $_REQUEST['name']) ? $_REQUEST['name'] : '';
+//                        $category['user_id'] = (isset($_REQUEST['global'])) ? 0 : $GLOBALS['GO_SECURITY']->user_id;
+//
+//			if(empty($category['name']))
+//			{
+//				throw new Exception($lang['common']['missingField']);
+//			}
+//
+//			if($category['id']>0)
+//			{
+//				$tasks->update_category($category);
+//			}else
+//			{
+//				$response['id'] = $tasks->add_category($category);
+//			}
+//
+//			$response['success'] = true;
+//			break;                        		
 
 
 		case 'move_tasks':
