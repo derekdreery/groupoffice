@@ -132,8 +132,8 @@ try {
 			if(!$new_notify && $old_notify) {
 				$files->remove_notification($_POST['folder_id'], $GO_SECURITY->user_id);
 			}
-       $permission_level=$files->has_write_permission($GO_SECURITY->user_id, $folder);
-			if($permission_level) {
+       $permission_level=$files->get_permission_level($GO_SECURITY->user_id, $folder);
+			if($permission_level>GO_SECURITY::READ_PERMISSION) {
 				if(isset($_POST['name']) && empty($_POST['name'])) {
 					throw new MissingFieldException();
 				}
@@ -142,8 +142,11 @@ try {
 				$up_folder['comments']=$_POST['comments'];
 
 				$usersfolder = $files->resolve_path('users');
+				
+				//throw new Exception($permission_level);
 
 				if(empty($folder['readonly']) && $folder['parent_id']!=$usersfolder['id'] && $permission_level==GO_SECURITY::MANAGE_PERMISSION) {
+					
 					if (isset($_POST['share']) && $folder['acl_id']==0) {
 
 						$up_folder['acl_id']=$GO_SECURITY->get_new_acl();
