@@ -31,10 +31,7 @@ GO.form.SelectUser = function(config){
 	Ext.apply(this, config);
 	
 	this.store = new GO.data.JsonStore({
-		url: GO.settings.modules.users.url+'non_admin_json.php',
-		baseParams: {
-			'task':'users'
-		},
+		url: GO.url('core/users'),
 		root: 'results',
 		totalProperty: 'total',
 		id: 'id',
