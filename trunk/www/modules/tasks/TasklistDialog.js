@@ -8,6 +8,7 @@ GO.tasks.TasklistDialog = function(config)
 	this.propertiesTab = new Ext.form.FormPanel({
 		waitMsgTarget:true,
 		url: GO.settings.modules.tasks.url+'action.php',
+		//url:GO.url('tasks/tasklist/submit'),
 		title:GO.lang['strProperties'],
 		layout:'form',
 		anchor: '100% 100%',
@@ -32,6 +33,7 @@ GO.tasks.TasklistDialog = function(config)
 				text:GO.lang.cmdExport,
 				disabled:true,
 				handler:function(){
+					// TODO: Fix this export so it works with the new MVC structure
 					document.location=GO.settings.modules.tasks.url+'export.php?tasklist_id='+this.tasklist_id;
 				},
 				scope:this
@@ -71,6 +73,7 @@ GO.tasks.TasklistDialog = function(config)
 				handler: function(){						
 					this.importTab.form.submit({
 						//waitMsg:GO.lang.waitMsgUpload,
+						// TODO: Fix this import so it works with the new MVC structure
 						url:GO.settings.modules.tasks.url+'action.php',
 						params: {task: 'import', tasklist_id:this.tasklist_id},
 						success: function(form,action)
@@ -183,15 +186,16 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 	loadTasklist : function(tasklist_id)
 	{
 		this.propertiesTab.form.load({
-			url: GO.settings.modules.tasks.url+'json.php',
+			//url: GO.settings.modules.tasks.url+'json.php',
+			url: GO.url('tasks/tasklist/load'),
 			params: {
-				tasklist_id:tasklist_id,
-				task: 'tasklist'
+				id:tasklist_id
+//				task: 'tasklist'
 			},
 			
 			success: function(form, action) {
-				this.tasklist_id=tasklist_id;
-				this.selectUser.setRemoteText(action.result.data.user_name);
+				this.tasklist_id=action.result.data.id;
+				this.selectUser.setRemoteText(action.result.remoteComboTexts.user_name);
 				this.readPermissionsTab.setAcl(action.result.data.acl_id);
 				
 				this.exportButton.setDisabled(false);
@@ -209,17 +213,18 @@ Ext.extend(GO.tasks.TasklistDialog, Ext.Window, {
 	{
 		this.propertiesTab.form.submit({
 				
-			url:GO.settings.modules.tasks.url+'action.php',
+			//url:GO.settings.modules.tasks.url+'action.php',
+			url: GO.url('tasks/tasklist/submit'),
 			params: {
-					'task' : 'save_tasklist', 
-					'tasklist_id': this.tasklist_id
+			//		'task' : 'save_tasklist', 
+					'id': this.tasklist_id
 			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 										
-				if(action.result.tasklist_id)
+				if(action.result.id)
 				{
-					this.tasklist_id=action.result.tasklist_id;
+					this.tasklist_id=action.result.id;
 					this.readPermissionsTab.setAcl(action.result.acl_id);
 					
 					this.exportButton.setDisabled(false);

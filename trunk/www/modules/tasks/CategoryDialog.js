@@ -61,10 +61,13 @@ Ext.extend(GO.tasks.CategoryDialog, Ext.Window, {
 		if(record)
 		{
 			this.category_id=record.data.id;
+			
 		}else
 		{
 			this.category_id=0;
 		}
+		
+		this.formPanel.form.baseParams['id'] = this.category_id;
 		
 		if(this.category_id > 0)
 		{
@@ -84,10 +87,11 @@ Ext.extend(GO.tasks.CategoryDialog, Ext.Window, {
 	{
 		this.formPanel.form.submit(
 		{		
-			url:GO.settings.modules.tasks.url+'action.php',
+			//url:GO.settings.modules.tasks.url+'action.php',
+			url:GO.url('tasks/category/submit'),
 			params: {
-				task:'save_category',
-				id:this.category_id
+//				task:'save_category',
+			//	id:this.category_id
 			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action)
@@ -95,6 +99,7 @@ Ext.extend(GO.tasks.CategoryDialog, Ext.Window, {
 				if(action.result.id)
 				{
 					this.category_id=action.result.id;
+					this.formPanel.form.baseParams['id'] = this.category_id;
 				}
 			
 				this.fireEvent('save');
@@ -143,6 +148,7 @@ Ext.extend(GO.tasks.CategoryDialog, Ext.Window, {
 			anchor:'100% 100%',
 			bodyStyle:'padding:5px',
 			defaults:{anchor: '95%'},
+			baseParams:{},
 			defaultType:'textfield',
 			autoHeight:true,
 			waitMsgTarget:true,

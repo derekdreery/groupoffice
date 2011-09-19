@@ -18,3 +18,7 @@ VALUES (
 
 $updates[201109070000][]="ALTER TABLE `ta_tasks` CHANGE `rrule` `rrule` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
 $updates[201109140000][]="ALTER TABLE `ta_tasks` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
+
+$updates[201109190000][]="ALTER TABLE `ta_categories` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
+$updates[201109190001][]="ALTER TABLE `ta_lists` DROP `shared_acl`";
+$updates[201109190002][]="ALTER TABLE `ta_lists` ADD `files_folder_id` INT NOT NULL DEFAULT '0'";

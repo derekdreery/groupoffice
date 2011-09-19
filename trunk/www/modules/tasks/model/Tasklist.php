@@ -21,7 +21,6 @@
  * @param String $name
  * @param int $user_id
  * @param int $acl_id
- * @param int $shared_acl
  */
 class GO_Tasks_Model_Tasklist extends GO_Base_Db_ActiveRecord {
 
@@ -49,5 +48,9 @@ class GO_Tasks_Model_Tasklist extends GO_Base_Db_ActiveRecord {
 				'tasks' => array('type' => self::HAS_MANY, 'model' => 'GO_Tasks_Model_Task', 'field' => 'category_id', 'delete' => true),
 				'user' => array('type' => self::HAS_ONE, 'model' => 'GO_Base_Model_User', 'field' => 'user_id', 'delete' => false)
 				);
+	}
+	
+	public function hasFiles(){
+		return true;
 	}
 }

@@ -532,7 +532,7 @@ GO.tasks.showTaskDialog = function(config){
 
 
 GO.tasks.writableTasklistsStore = new GO.data.JsonStore({
-	url: GO.settings.modules.tasks.url+'json.php',
+	url: GO.url('tasks/tasklist/grid'),
 	baseParams: {
 		'task': 'tasklists',
 		'auth_type':'write'
