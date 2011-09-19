@@ -21,6 +21,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	protected $_bymonth;
 	protected $_bymonthday;
 	protected $_eventStartTime;
+	protected $_bysetpos;
 	
 	protected $_days=array('SU','MO','TU','WE','TH','FR','SA');
 
@@ -78,15 +79,21 @@ class GO_Base_Util_Date_RecurrencePattern{
 		
 		if(!$startTime)
 			$startTime=$this->_recurPositionStartTime;
-		
-		$func = '_getNextRecurrence'.ucfirst($this->_freq);
-		
-		$next=call_user_func(array($this, $func),$startTime);
+
+		//if the start of the event matches the time to check then return 0.
+		//the next recurrence matches exactly.
+		if($this->_eventStartTime==$startTime){
+			$next = $startTime;
+		}else
+		{
+			$func = '_getNextRecurrence'.ucfirst($this->_freq);		
+			$next=call_user_func(array($this, $func),$startTime);
+		}
 		if(empty($this->_until) || $next<GO_Base_Util_Date::date_add($this->_until,1)){
 			
 			//check next recurrence from one day later
-			$this->_recurPositionStartTime=GO_Base_Util_Date::date_add($next,1);
-						
+			$this->_recurPositionStartTime=$next+1;//GO_Base_Util_Date::date_add($next,1);
+			//echo "N:".date('c', $this->_recurPositionStartTime)."\n";
 			return $next;
 		}else
 		{
@@ -97,7 +104,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 	protected function _getNextRecurrenceDaily($startTime){
 							
-		$daysBetweenNextAndFirstEvent=$this->_findNumberOfPeriods($startTime, $this->_interval, 'days');
+		$daysBetweenNextAndFirstEvent=$this->_findNumberOfDays($startTime, $this->_interval);
 		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime,$daysBetweenNextAndFirstEvent);
 		return $recurrenceTime;
 		
@@ -109,26 +116,19 @@ class GO_Base_Util_Date_RecurrencePattern{
 		 * eg. Recurs every 2 weeks on Wednesday. Starting on 04-09-2011.
 		 * $startTime = 17-09-2011
 		 * This function should return 21-09-2011
-		 * 
-	*/
-		
-		
+		 */	
 		
 		$period = $this->_interval*7;
 	
-		$daysBetweenNextAndFirstEvent=$this->_findNumberOfPeriods($startTime, $period, 'days', false);
+		$daysBetweenNextAndFirstEvent=$this->_findNumberOfDays($startTime, $period, false);
 		
 		$firstPossibleWeekStart = $recurrenceTime = GO_Base_Util_Date::date_add($this->_eventStartTime,$daysBetweenNextAndFirstEvent);
 		
 		//check each weekday for a match
-		for($day=0;$day<7;$day++){
+		for($day=0;$day<7;$day++){			
 			
-			
-			if($recurrenceTime>=$startTime){
-				$weekdayInt = date('w',$recurrenceTime); //0-6
-				$weekday = $this->_days[$weekdayInt]; //WE
-				//echo $weekdayInt.':'.$weekday."\n";	
-				if(in_array($weekday, $this->_byday)){
+			if($recurrenceTime>=$startTime){			
+				if($this->_hasWeekday($recurrenceTime)){
 					return $recurrenceTime;
 				}			
 			}
@@ -140,28 +140,129 @@ class GO_Base_Util_Date_RecurrencePattern{
 		return $this->_getNextRecurrenceWeekly(GO_Base_Util_Date::date_add($firstPossibleWeekStart,$period));
 	}
 	
-	protected function _hasWeekday($weekday){
-		
-	}
-	
 	protected function _getNextRecurrenceMonthly($startTime){
+		
 							
 		if(empty($this->_byday)){
-			$daysBetweenNextAndFirstEvent=$this->_findNumberOfPeriods($startTime, $this->_interval, 'm');
-			$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime, 0, $daysBetweenNextAndFirstEvent);
+			//eg. every 12th of the month
+			$monthBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval);
+			//echo $monthBetweenNextAndFirstEvent."\n";
+			
+			$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime, 0, $monthBetweenNextAndFirstEvent);
 		}else
 		{
-			//bv.  de 3e woensdag vd maand
+
+			//set event start to first day of month for calculation of the number of periods.
+			$this->_eventStartTime=mktime(0,0,0,date('m',$this->_eventStartTime),1,date('Y',$this->_eventStartTime));
+			
+			//eg. 3rd monday of the month
+			$monthBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval, false);
+			
+			$recurrenceTime = $firstPossibleTime=GO_Base_Util_Date::date_add($this->_eventStartTime, 0, $monthBetweenNextAndFirstEvent);
+			
+			$currentMonth = $startMonth = date('m', $recurrenceTime);
+						
+			while($currentMonth==$startMonth){
+				
+				$bySetPos = ceil(date('j', $recurrenceTime)/7);
+			
+				if($recurrenceTime>=$startTime){
+					if($this->_hasWeekday($recurrenceTime, $bySetPos)){
+						return $recurrenceTime;
+					}
+				}
+				
+				$recurrenceTime =  GO_Base_Util_Date::date_add($recurrenceTime, 1);
+				$currentMonth = date('m', $recurrenceTime);
+			}
+			
+			$nextDate = date('Y', $firstPossibleTime).'-'.($startMonth+$this->_interval).'-01';
+
+			//It did not fall in this month. Check the next month in the recurrence
+			return $this->_getNextRecurrenceMonthly(mktime(0,0,0,$startMonth+$this->_interval,1,date('Y',$firstPossibleTime)));
 		}
 		
 		return $recurrenceTime;		
 	}
 	
+	private function _splitDaysAndSetPos(){
+		
+		$response['days']=array();
+		$response['bysetpos']=array();
+		
+		foreach($this->_byday as $day){
+			if(strlen($day)>2){
+				$_day = substr($day,1);
+				$response['days'][]=$_day;
+				$response['bysetpos'][$_day]=$day[0];
+			}else
+			{
+				$response['days'][]=$day;
+				$response['bysetpos'][$day]=$this->_bysetpos;
+			}
+		}
+		
+		return $response;
+			
+	}
+	
+	/**
+	 * Check if a weekday of a given time matches the recurrence pattern
+	 * 
+	 * @param int $time unix timestamp
+	 * @param int $bySetPos The nth occurrence in a month for a monthly recurrence.
+	 * @return boolean 
+	 */
+	private function _hasWeekday($time, $bySetPos=0){
+		$weekdayInt = date('w',$time); //0-6
+		$weekday = $this->_days[$weekdayInt]; //WE
+		//echo $weekdayInt.':'.$weekday."\n";	
+		
+		if($bySetPos==0){
+			//for weekly
+			if(in_array($weekday, $this->_byday))
+				return true;			
+		}else
+		{
+			//for every nth weekday in the month
+			$daysAndSetPos = $this->_splitDaysAndSetPos();
+			if(in_array($weekday, $daysAndSetPos['days']) && $bySetPos==$daysAndSetPos['bysetpos'][$weekday])
+				return true;
+		}
+		
+		return false;
+		
+	}
+	
 	protected function _getNextRecurrenceYearly($startTime){
-		$daysBetweenNextAndFirstEvent=$this->_findNumberOfPeriods($startTime, $this->_interval, 'y');
-		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime, 0, 0, $daysBetweenNextAndFirstEvent);
+		$monthsBetweenNextAndFirstEvent=$this->_findNumberOfMonths($startTime, $this->_interval*12);
+		$recurrenceTime =  GO_Base_Util_Date::date_add($this->_eventStartTime, 0, $monthsBetweenNextAndFirstEvent);
 		
 		return $recurrenceTime;
+	}
+	
+	
+	protected function _findNumberOfMonths($startTime, $interval, $ceil=true){
+		$eventStartDateTime = new GO_Base_Util_Date_DateTime(date('c',$this->_eventStartTime));
+		$startDateTime= new GO_Base_Util_Date_DateTime(date('c',$startTime));
+		$diff = $eventStartDateTime->diff($startDateTime, true); 
+		
+		$intervalYears = date('Y', $startTime)-date('Y', $this->_eventStartTime);
+		$intervalMonths = date('n', $startTime)-date('n', $this->_eventStartTime);
+		$intervalMonths = 12*$intervalYears+$intervalMonths;
+
+		$devided = $intervalMonths/$interval;
+		$rounded = ceil($devided);
+		
+		$rounded = $ceil ? ceil($devided) : floor($devided);
+		$periodsBetweenNextAndFirstEvent = $interval*$rounded;
+		
+		if($ceil){
+			if($periodsBetweenNextAndFirstEvent == $intervalMonths)
+				$periodsBetweenNextAndFirstEvent+=$interval;
+		}
+		
+		return $periodsBetweenNextAndFirstEvent;	
 	}
 	
 	
@@ -175,35 +276,25 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 * @param string ceil or floor the difference.  For weekly we need to floor it because the time can fall in the week where a recurrence may take place in. 
 	 * @return int Number of periods that fall between event start and start time
 	 */
-	protected function _findNumberOfPeriods($startTime, $period, $type, $ceil=true){
-		
+	protected function _findNumberOfDays($startTime, $interval=1, $ceil=true){
 		$eventStartDateTime = new GO_Base_Util_Date_DateTime(date('c',$this->_eventStartTime));
 		$startDateTime= new GO_Base_Util_Date_DateTime(date('c',$startTime));
 		$diff = $eventStartDateTime->diff($startDateTime, true); 
-		
-//		echo "-\n";
-//		echo date('c',$this->_eventStartTime)."\n";
-//		echo date('c',$startTime)."\n";
-		
-		
-		$elapsed = $diff->$type; //get the days, months or years elapsed since the event.
-		
-//		echo $elapsed."\n";
-//		echo "-\n";
-		
-		$devided = $elapsed/$period; 
+
+		$elapsed = $diff->days; //get the days, months or years elapsed since the event.
+		$devided = $elapsed/$interval; 
 		
 		
 		$rounded = $ceil ? ceil($devided) : floor($devided);
 		$periodsBetweenNextAndFirstEvent = $period*$rounded;
 		
-//		if($ceil){
-//			if($periodsBetweenNextAndFirstEvent == $elapsed)
-//				$periodsBetweenNextAndFirstEvent+=$period;
-//		}
 		
-		return $periodsBetweenNextAndFirstEvent;
+		if($ceil){
+			if($periodsBetweenNextAndFirstEvent == $elapsed)
+				$periodsBetweenNextAndFirstEvent+=$period;
+		}	
 		
+		return $periodsBetweenNextAndFirstEvent;		
 	}
 
 	/**
