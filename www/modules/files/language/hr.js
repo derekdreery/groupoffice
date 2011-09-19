@@ -1,4 +1,4 @@
-﻿/** 
+/** 
  * @copyright Copyright Boso d.o.o.
  * @author Mihovil Stanić <mihovil.stanic@boso.hr>
  */
@@ -38,5 +38,5 @@ GO.files.lang.emailDownloadLink = 'Link za slidanje e-maila';
 GO.files.lang.expireTime = 'Vrijeme isteka linka za skidanje';
 GO.files.lang.newFolder = 'Novi direktorij';
 
-GO.files.lang.applyState = 'Primjeni postavke za prikaz direktorija na sve.';
+GO.files.lang.applyState = 'Primjeni postavke za prikaz direktorija na sve korisnike';
 GO.files.lang.stateLocked = 'Prikaz direktorija zaključan od vlasnika/administratora';
