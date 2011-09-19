@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /** 
  * @copyright Copyright Boso d.o.o.
  * @author Mihovil Stanić <mihovil.stanic@boso.hr>
