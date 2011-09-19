@@ -66,7 +66,7 @@ class GO_Base_Router{
 		{
 			//it must be pointing to a module
 			$module=strtolower($r[0]);
-			$controller=isset($r[1]) ? $r[1] : 'Default';
+			$controller=isset($r[1]) ? ucfirst($r[1]) : 'Default';
 			$action = isset($r[2]) ? $r[2] : '';
 		}
 				
