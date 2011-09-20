@@ -1494,12 +1494,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				if($this->aclField() && !$this->joinAclField && empty($this->{$this->aclField()})){
 					//generate acl id
 					
-					$acl = new GO_Base_Model_Acl();
-					$acl->description=$this->tableName().'.'.$this->aclField();
-					$acl->user_id=GO::user() ? GO::user()->id : 1;
-					$acl->save();
 					
-					$this->{$this->aclField()}=$acl->id;
+					
+					$this->setNewAcl();
 				}				
 				
 				if(!$this->beforeSave()){
@@ -1571,6 +1568,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function getModifiedAttributes(){
 		return $this->_modifiedAttributes;
+	}
+	
+	public function setNewAcl($user_id=0){
+		
+		if(!$user_id)
+			$user_id = GO::user() ? GO::user()->id : 1;
+		
+		$acl = new GO_Base_Model_Acl();
+		$acl->description=$this->tableName().'.'.$this->aclField();
+		$acl->user_id=$user_id;
+		$acl->save();
+
+		$this->{$this->aclField()}=$acl->id;
+		
+		return $acl->id;
 	}
 	
 	/**

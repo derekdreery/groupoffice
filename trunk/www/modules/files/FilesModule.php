@@ -22,13 +22,21 @@ class GO_Files_FilesModule extends GO_Base_Module{
 
 	public function checkDatabase(&$response) {
 		
+		//create user home folders
 		$stmt = GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));
 		
 		while($user = $stmt->fetch()){
-			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);			
+			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
+			if(empty($folder->acl_id)){
+				$folder->setNewAcl($user->id);
+				$folder->user_id=$user->id;
+				$folder->visible=1;
+				$folder->save();
+			}
 			$folder->syncFilesystem();		
 		}
 		
 		parent::checkDatabase($response);
 	}
+	
 }

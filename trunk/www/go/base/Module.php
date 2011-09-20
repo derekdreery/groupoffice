@@ -250,10 +250,42 @@ class GO_Base_Module extends GO_Base_Observable {
 	}
 	
 	
-	
+	/**
+	 * Called when the main settings are loaded.
+	 * 
+	 * @param GO_Core_Controller_Settings $settingsController
+	 * @param array $params Request params
+	 * @param array $response 
+	 */
 	public static function loadSettings(&$settingsController, &$params, &$response){		
 	}
 	
+	/**
+	 * Called when the main settings are submitted.
+	 * 
+	 * @param GO_Core_Controller_Settings $settingsController
+	 * @param array $params Request params
+	 * @param array $response 
+	 */
 	public static function submitSettings(&$settingsController, &$params, &$response){		
+	}
+	
+	/**
+	 * Called when a user is deleted
+	 *
+	 * @param GO_Base_Model_User $user
+	 */
+	public static function deleteUser($user){
+		
+	}
+	
+	/**
+	 * Called when a user is saved
+	 *
+	 * @param GO_Base_Model_User $user
+	 * @param boolean $wasNew 
+	 */
+	public static function saveUser($user, $wasNew){
+		
 	}
 }
