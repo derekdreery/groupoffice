@@ -44,32 +44,12 @@ GO.notes.MainPanel = function(config){
 		if(records.length){
 			this.centerPanel.store.baseParams.notes_categories_filter = Ext.encode(categories);
 			this.centerPanel.store.reload();
-			this.category_ids = categories;
-
-			if(records.length)
-			{
-				this.category_id = records[0].data.id;
-				this.category_name = records[0].data.name;
-			}
-
 			delete this.centerPanel.store.baseParams.notes_categories_filter;
 		}
 	}, this);
 	
 	this.westPanel.store.on('load', function()
 	{
-		for(var i=0, found=false; i<this.westPanel.store.data.length && !found; i++)
-		{
-			var item = this.westPanel.store.data.items[i];
-			if(item.data.checked)
-			{
-				this.category_id = item.data.id;
-				this.category_name = item.data.name;
-				
-				found = true;
-			}
-		}
-		
 		this.centerPanel.store.load();
 		
 	}, this);
@@ -89,10 +69,6 @@ GO.notes.MainPanel = function(config){
 	}, this);
 
 	this.centerPanel.store.on('load', function(){
-
-//		this.getTopToolbar().items.get('add').setDisabled(!this.centerPanel.store.reader.jsonData.data.write_permission);
-//		this.getTopToolbar().items.get('delete').setDisabled(!this.centerPanel.store.reader.jsonData.data.write_permission);
-
 		if(this.eastPanel.data.category_id!=this.category_id)
 		{
 			this.eastPanel.reset();
@@ -109,27 +85,20 @@ GO.notes.MainPanel = function(config){
 	config.tbar=new Ext.Toolbar({
 		cls:'go-head-tb',
 		items: [{
-			iconCls: 'btn-add',
-			itemId:'add',
-			//disabled:true,
-			text: GO.lang['cmdAdd'],
-			cls: 'x-btn-text-icon',
-			handler: function(){
+			grid: this.centerPanel,
+			xtype:'addbutton',
+			handler: function(b){
 				this.eastPanel.reset();
 
 				GO.notes.showNoteDialog(0, {
-					category_id: this.category_id,
-					category_name: this.category_name
+					category_id: b.buttonParams.id,
+					category_name: b.buttonParams.name
 					});
-
 			},
 			scope: this
 		},{
-			//disabled:true,
-			itemId:'delete',
-			iconCls: 'btn-delete',
-			text: GO.lang['cmdDelete'],
-			cls: 'x-btn-text-icon',
+			xtype:'deletebutton',
+			grid:this.centerPanel,
 			handler: function(){
 				this.centerPanel.deleteSelected({
 					callback : this.eastPanel.gridDeleteCallback,
