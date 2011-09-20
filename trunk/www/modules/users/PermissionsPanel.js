@@ -19,7 +19,6 @@ GO.users.PermissionsPanel = function(config)
     }
 	
     config.autoScroll=false;
-    config.border=false;
     config.hideLabel=true;
     config.title = GO.lang['strPermissions'];
     config.layout='columnfit';
