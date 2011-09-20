@@ -1492,11 +1492,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				$wasNew=true;
 				
 				if($this->aclField() && !$this->joinAclField && empty($this->{$this->aclField()})){
-					//generate acl id
-					
-					
-					
-					$this->setNewAcl();
+					//generate acl id				
+										
+					$this->setNewAcl(!empty($this->user_id) ? $this->user_id : 0);
 				}				
 				
 				if(!$this->beforeSave()){
