@@ -1,100 +1,55 @@
 <?php
 class GO_Base_Db_FindCriteria {
 	
-	public $joinCustomFields=false;
+	private $_condition='';
 	
-	/**
-	 * Set to true 
-	 * 
-	 * @var boolean 
-	 */
-	public $ignoreAcl=false;
-	public $userId;
-	public $permissionLevel;
+	private static $_paramCount = 0;
 	
-	public $joins=array();
+	private $_paramPrefix = ':go';
 	
-	/**
-	 * Add a search query on all text fields.
-	 * 
-	 * @var String 
-	 */
-	public $searchQuery="";
+	private $_params;
 	
-	/**
-	 * Set tot true to return the number of foundRows in the statement (See class GO_Base_Db_ActiveStatement 
-	 * 
-	 * @var boolean 
-	 */
-	public $calcFoundRows=false;
-	
-	
-	public $limit=0;
-	public $start=0;
-	
-	/**
-	 * The model of a linking table passed in case of a MANY_MANY relation query
-	 * @var String 
-	 */
-	public $linkModel;
-	
-	/**
-	 * The name of the key to link the linking table too in a many_many relational query.
-	 * @var type 
-	 */
-	public $linkModelLocalField;
-	public $linkModelLocalPk;
-	public $relation;
-	
-	public $orderField;
-	public $orderDirection;
-	
-	/**
-	 *
-	 * @param type $params 
-	 * 
-	 * array(
-	 * type=>'LEFT'
-	 * table1=>'go_users_groups'
-	 * table2=>'go_acl'
-	 * key1=>'acl_id',
-	 * key2=>'acl_id'
-	 * )
-	 * 
-	 */
-	public function addJoin($params){
-		$this->joins[]=$params;
+	public function addCondition($field, $value, $comparator='=', $useAnd=true) {
+		
+		if($this->_condition!='')
+			$this->_condition .= $useAnd ? ' AND' : ' OR';
+		
+		$paramTag = $this->_getParamTag();
+		
+		$this->_condition .= '`'.$field.'` '.$comparator.' '.$paramTag.'';
+		$this->_params[$paramTag]=$value;
+		
+		return $this;
 	}
 	
-	/**
-	 *
-	 * @param $params $params 
-	 * 
-	 * array(array('field','value','=')),
-	 *  "byOperator"=>[AND / OR]
-	 */
-	public function addBy($params, $byOperator='AND'){
-		$this->by[]=array($params, $byOperator);
-	}
-	
-	
-	public static function newInstance($params=array()){
-		
-		$f = new GO_Base_Db_FindCriteria();
-		
-		if(isset($params['by']))
-		{
-			$f->addBy($params['by']);
-			unset($params['by']);
-		}
-		
-		foreach($params as $key=>$value)
-		{
-			$f->$key=$value;
-		}
-		
-		return $f;
+	// TODO: Create function
+	public function addInCondition($field, $value, $useAnd=true) {
 		
 	}
 	
+	// TODO: Create function
+	public function searchCondition($field, $value, $useAnd=true) {
+		
+	}
+
+	private function _getParamTag() {
+		self::$_paramCount++;
+		return $this->_paramPrefix.self::$_paramCount;
+	}
+	
+	public function getCondition() {
+		return $this->_condition;
+	}
+	
+	public function getParams() {
+		return $this->_params;
+	}
+	
+	
+	public function mergeWith(GO_Base_Db_FindCriteria $criteria, $useAnd=true) {
+		$operator = $useAnd ? 'AND' : 'OR';
+		$this->_condition = '('.$this->_condition.') '.$operator.' ('.$criteria->getCondition().')';
+		$this->_params = array_merge($this->_params, $criteria->getParams());
+		return $this;
+	}
 }
