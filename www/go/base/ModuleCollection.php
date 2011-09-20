@@ -39,7 +39,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 			$file = $module->path.ucfirst($module->id).'Module.php';
 			//todo load listeners
 			if(file_exists($file)){
-				require_once($file);
+				//require_once($file);
 				$class='GO_'.ucfirst($module->id).'_'.ucfirst($module->id).'Module';
 				
 				$object = new $class;

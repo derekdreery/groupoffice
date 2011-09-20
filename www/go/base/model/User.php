@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * Copyright Intermesh
  *
  * This file is part of Group-Office. You should have received a copy of the
@@ -7,13 +7,16 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
- * @copyright Copyright Intermesh
- * @author Merijn Schering <mschering@intermesh.nl>
+ 
  */
 
 /**
  * The User model
+ * 
+ * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
+ * @copyright Copyright Intermesh
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @package GO.base.model
  * 
  * @property int $id
  * @property String $username
@@ -224,9 +227,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 
 		if($wasNew){
 			$everyoneGroup = GO_Base_Model_Group::model()->findByPk(GO::config()->group_everyone);		
-			$everyoneGroup->addUser($this->id);
-			
+			$everyoneGroup->addUser($this->id);			
 		}	
+		
+		GO::modules()->callModuleMethod('saveUser', array(&$this, $wasNew));
 
 		return parent::afterSave($wasNew);
 	}
@@ -242,6 +246,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		while($r = $stmt->fetch())
 			$r->delete();
 		
+		GO::modules()->callModuleMethod('deleteUser', array(&$this));
 		
 		return parent::afterDelete();
 	}

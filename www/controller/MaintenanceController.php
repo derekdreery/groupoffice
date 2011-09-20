@@ -28,11 +28,21 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 	 * Calls checkDatabase on each Module class.
 	 * @return array 
 	 */
-	public function actionCheckDatabase() {
+	public function actionCheckDatabase($params) {
 		$response = array();
 				
 		echo '<pre>';		
-		GO::modules()->callModuleMethod('checkDatabase', array(&$response));
+		
+		if(!empty($params['module'])){
+			$class='GO_'.ucfirst($params['module']).'_'.ucfirst($params['module']).'Module';
+			$module = new $class;
+			$module->checkDatabase($response);
+		}else
+		{
+			GO::modules()->callModuleMethod('checkDatabase', array(&$response));
+		}
+		
+		
 		return $response;
 	}
 

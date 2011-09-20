@@ -1,23 +1,23 @@
 <?php
-/**
- * Copyright Intermesh
+/*
+ * Copyright Intermesh BV.
  *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
- * @copyright Copyright Intermesh
- * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-
 /**
- * 
  * Sometimes the same models are accessed lots of times in one script run. This
  * class helps GO_Base_Db_ActiveRecord->findByPk to return the object from 
  * memory if it has already been fetched from the database.
+ * 
+ * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
+ * @copyright Copyright Intermesh BV.
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @package GO.base.model 
  */
 
 class GO_Base_Model_ModelCache{
