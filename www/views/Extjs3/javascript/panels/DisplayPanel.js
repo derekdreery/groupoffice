@@ -24,8 +24,8 @@ GO.DisplayPanel=function(config){
 
 Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	link_id : 0, //for backwards comaptibility
-	linkModelId: 0,
-	linkModelName : 0,
+	model_id: 0,
+	model_name : 0,
 	
 	newMenuButton : false,
 	
@@ -81,7 +81,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 				if(!GO.linkBrowser){
 					GO.linkBrowser = new GO.LinkBrowser();
 				}
-				GO.linkBrowser.show({model_id: this.data.id,model_name: this.linkModelName,folder_id: "0"});
+				GO.linkBrowser.show({model_id: this.data.id,model_name: this.model_name,folder_id: "0"});
 				GO.linkBrowser.on('hide', this.reload, this,{single:true});
 			},
 			scope: this
@@ -217,7 +217,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		{
 			this.reload();
 		}*/
-		if(saved_id > 0 && (this.linkModelId == saved_id || this.linkModelId==0)){
+		if(saved_id > 0 && (this.model_id == saved_id || this.model_id==0)){
 			this.load(saved_id, true);
 		}
 	},
@@ -241,7 +241,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			this.body.update("");		
 
 		this.data={};
-		this.linkModelId=this.collapsedLinkId=0;
+		this.model_id=this.collapsedLinkId=0;
 		var tbar = this.getTopToolbar();
 		if(tbar)
 			tbar.setDisabled(true);
@@ -255,7 +255,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	{
 		//this.body.removeAllListeners();
 		
-		data.linkModelName=data.model_name=this.linkModelName;
+		data.model_name=data.model_name=this.model_name;
 		data.panelId=this.getId();
 		this.data=data;
 		
@@ -270,8 +270,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			if(data.write_permission)
 			{
 				this.newMenuButton.setLinkConfig({
-					linkModelId:this.data.id,
-					linkModelName:this.linkModelName,
+					model_id:this.data.id,
+					model_name:this.model_name,
 					text: this.getLinkName(),
 					callback:this.reload,
 					scope:this
@@ -400,7 +400,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					var link = this.data.links[index];			
 					if(link.model_name=='folder')
 					{
-						GO.linkBrowser.show({linkModelId: link.parent_model_id,linkModelName: link.parent_model_name,folder_id: link.id});
+						GO.linkBrowser.show({model_id: link.parent_model_id,model_name: link.parent_model_name,folder_id: link.id});
 					}else
 					{
 						GO.linkHandlers[link.model_name].call(this, link.model_id, {data: link});
@@ -438,7 +438,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 					if(!GO.linkBrowser){
 						GO.linkBrowser = new GO.LinkBrowser();
 					}
-					GO.linkBrowser.show({linkModelId: this.data.id,linkModelName: this.linkModelName,folder_id: "0"});
+					GO.linkBrowser.show({model_id: this.data.id,model_name: this.model_name,folder_id: "0"});
 					GO.linkBrowser.on('hide', this.reload, this,{single:true});
 					e.preventDefault();
 
@@ -472,13 +472,13 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	load : function(id, reload)
 	{
 		if(this.expandListenObject.collapsed || !this.rendered){
-			//linkModelId is needed for editHandlers
-			this.collapsedLinkId=this.linkModelId=id;
-		}else if(this.linkModelId!=id || reload)
+			//model_id is needed for editHandlers
+			this.collapsedLinkId=this.model_id=id;
+		}else if(this.model_id!=id || reload)
 		{
 			this.loading=true;
 
-			this.loadParams[this.idParam]=this.linkModelId=this.link_id=id;
+			this.loadParams[this.idParam]=this.model_id=this.link_id=id;
 			this.loadParams['hidden_sections']=Ext.encode(this.hiddenSections)
 			
 			this.body.mask(GO.lang.waitMsgLoad);

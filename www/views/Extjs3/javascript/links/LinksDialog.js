@@ -79,9 +79,9 @@ Ext.extend(GO.dialog.LinksDialog, Ext.Window, {
 			this.fromLinks.push({'model_id' : gridRecords[i].data['model_id'], 'model_name' : gridRecords[i].data['model_name']});
 		}
 	},
-	setSingleLink : function(linkModelId, linkModelName)
+	setSingleLink : function(model_id, model_name)
 	{
-		this.fromLinks=[{"model_id":linkModelId,"model_name":linkModelName}];
+		this.fromLinks=[{"model_id":model_id,"model_name":model_name}];
 	},
 
 	selectFolder : function(toLinks){

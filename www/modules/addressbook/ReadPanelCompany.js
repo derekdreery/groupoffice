@@ -13,7 +13,7 @@
 
 GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 	
-	linkModelName : "GO_Addressbook_Model_Company",
+	model_name : "GO_Addressbook_Model_Company",
 
 	stateId : 'ab-company-panel',
 
