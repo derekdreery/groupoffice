@@ -10,6 +10,9 @@ views/Extjs3/javascript/DialogListeners.js
 views/Extjs3/javascript/JsonMenu.js
 views/Extjs3/javascript/SmallPagingToolbar.js
 
+views/Extjs3/javascript/buttons/AddButton.js
+views/Extjs3/javascript/buttons/DeleteButton.js
+
 
 views/Extjs3/javascript/WeekPicker.js
 

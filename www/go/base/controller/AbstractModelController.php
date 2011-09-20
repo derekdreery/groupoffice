@@ -255,7 +255,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$response = $this->beforeGrid($response, $params, $grid);
 		
+		
 		if($multiSelectProperties =$this->getGridmultiSelectProperties()){
+			
+			
 			
 			if(isset($params[$multiSelectProperties['requestParam']])){
 				$this->multiselectIds=json_decode($params[$multiSelectProperties['requestParam']], true);
@@ -279,9 +282,20 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			//Do a check if the permission model needs to be checked. If we don't ignore the acl and the model is the same as the model of this controller
 			//it's not needed.
 			if(isset($multiSelectProperties['permissionsModel']) && $multiSelectProperties['permissionsModel']!=$this->model && empty($gridParams['ignoreAcl'])){
+				
+		
+				
 				$titleArray = array();
 				foreach($this->multiselectIds as $id){
-					$model = call_user_func(array($multiSelectProperties['permissionsModel'],'model'))->findByPk($id);
+					
+					$model = GO::getModel($multiSelectProperties['permissionsModel'])->findByPk($id);
+					
+					if(!isset($response['buttonParams']) && $model->getPermissionLevel()>GO_Base_Model_Acl::READ_PERMISSION){
+
+						//instruct the view for the add action.
+						$response['buttonParams']=array('id'=>$model->id,'name'=>$model->name, 'permissionLevel'=>$model->getPermissionLevel());
+					}
+					
 					if($model && !empty($multiSelectProperties['titleAttribute']))
 						$titleArray[]=$model->{$multiSelectProperties['titleAttribute']};
 				}		
