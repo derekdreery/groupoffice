@@ -1,23 +1,22 @@
 <?php
-/**
+/*
  * 
- * Copyright Intermesh
+ * Copyright Intermesh BV.
  *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
  * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
- * @copyright Copyright Intermesh
- * @author Merijn Schering <mschering@intermesh.nl> 
- * @package GO.base.db
  */
 
 /**
  * All Group-Office models should extend this ActiveRecord class.
  *
  * @package GO.base.db
+ * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
+ * @copyright Copyright Intermesh BV.
+ * @author Merijn Schering <mschering@intermesh.nl> 
+ * @abstract
  * 
  * @property GO_Base_Model_User $user If this model has a user_id field it will automatically create this property
  * @property GO_Base_Model_Acl $acl If this model has an acl ID configured. See GO_Base_Db_ActiveRecord::aclId it will automatically create this property.
