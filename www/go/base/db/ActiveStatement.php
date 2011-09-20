@@ -15,7 +15,7 @@
  * functionality.
  * 
  * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
- * @copyright Copyright Intermesh
+ * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl> 
  * @package GO.base.db
  */
