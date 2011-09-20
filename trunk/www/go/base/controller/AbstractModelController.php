@@ -335,7 +335,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * The default action for displaying a model in a DisplayPanel.
 	 */
 	public function actionDisplay($params) {
-		
+
 		$response = array();
 				
 		$modelName = $this->model;
@@ -354,7 +354,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response['data']['customfields']=array();
 		if($model->customfieldsRecord){
 			$customAttributes = $model->customfieldsRecord->getAttributes('html');
-			
+
 			//Get all field models and build an array of categories with their
 			//fields for display.
 			$stmt = GO_Customfields_Model_Field::model()->find(array(
@@ -363,7 +363,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					'order'=>array('category.sort_index','t.sort_index'),
 					'orderDirection'=>array('ASC','ASC')
 			));			
-			
+
 			$categories=array();
 			
 			while($field = $stmt->fetch()){
@@ -399,9 +399,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$data = $grid->getData();
 		$response['data']['links']=$data['results'];
 		
-		
-		if (isset(GO::modules()->calendar)){
-			
+
+		if (GO::modules()->calendar){
+
 			$startOfDay = GO_Base_Util_Date::clear_time(time());
 			
 			$stmt = GO_Calendar_Model_Event::model()->findLinks($model, array(
