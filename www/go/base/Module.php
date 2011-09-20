@@ -119,6 +119,13 @@ class GO_Base_Module extends GO_Base_Observable {
 		
 		GO::clearCache();
 		
+		
+		//call saveUser for each user
+		$stmt = GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
+		while($user = $stmt->fetch()){
+			call_user_func(array(get_class($this),'saveUser'), $user, true);
+		}
+		
 		return true;
 	}
 
@@ -128,6 +135,13 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * @return boolean
 	 */
 	public function uninstall() {
+		
+		
+		//call deleteUser for each user
+		$stmt = GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
+		while($user = $stmt->fetch()){
+			call_user_func(array(get_class($this),'deleteUser'), $user);
+		}
 		
 		$sqlFile = $this->path().'install/uninstall.sql';
 		
