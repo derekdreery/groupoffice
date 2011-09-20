@@ -741,16 +741,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
     
 		
 		if($joinCf)			
-			$sql .= "\nLEFT JOIN `".$cfModel->tableName()."` cf ON cf.model_id=t.id ";
-		
-		if($this->aclField() && empty($params['ignoreAcl'])){			
-			
-			$sql .= "\nINNER JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
-			if(isset($params['permissionLevel']) && $params['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
-				$sql .= " AND go_acl.level>=".intval($params['permissionLevel']);
-			}
-			$sql .= " AND (go_acl.user_id=".intval($params['userId'])." OR go_acl.group_id IN (".implode(',',GO_Base_Model_User::getGroupIds($params['userId']))."))) ";		
-		}  
+			$sql .= "\nLEFT JOIN `".$cfModel->tableName()."` cf ON cf.model_id=t.id ";	
+		  
+		if($this->aclField() && empty($params['ignoreAcl']))
+			$sql .= $this->_appendAclJoin($params, $aclJoin);
 			
 		if(isset($params['join']))
 			$sql .= $params['join'];
@@ -942,6 +936,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
     return $result;
 		
+	}
+	
+	
+	private function _appendAclJoin($findParams, $aclJoin){		
+			
+		$sql = "\nINNER JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
+		if(isset($params['permissionLevel']) && $findParams['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
+			$sql .= " AND go_acl.level>=".intval($findParams['permissionLevel']);
+		}
+		$sql .= " AND (go_acl.user_id=".intval($findParams['userId'])." OR go_acl.group_id IN (".implode(',',GO_Base_Model_User::getGroupIds($findParams['userId']))."))) ";		
+		
+		return $sql;
 	}
 	
 	private function _quoteColumnName($name){

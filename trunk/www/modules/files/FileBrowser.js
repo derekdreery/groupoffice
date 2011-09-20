@@ -63,9 +63,8 @@ GO.files.FileBrowser = function(config){
 	
 	this.treeLoader = new Ext.tree.TreeLoader(
 	{
-		dataUrl:GO.settings.modules.files.url+'json.php',
+		dataUrl:GO.url('files/folder/tree'),
 		baseParams:{
-			task: 'tree',
 			root_folder_id:0,
 			expand_folder_id:0
 		},

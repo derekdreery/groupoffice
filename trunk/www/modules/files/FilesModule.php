@@ -26,6 +26,9 @@ class GO_Files_FilesModule extends GO_Base_Module{
 		$stmt = GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));
 		
 		while($user = $stmt->fetch()){
+			$folder = GO_Files_Model_Folder::model()->findHomeFolder($user);
+			$folder->syncFilesystem();
+			
 //			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
 //			if(empty($folder->acl_id)){
 //				$folder->setNewAcl($user->id);
@@ -35,7 +38,6 @@ class GO_Files_FilesModule extends GO_Base_Module{
 //			}
 //			$folder->syncFilesystem();		
 			
-			GO_Files_FilesModule::saveUser($user, true);
 		}
 		
 		parent::checkDatabase($response);
@@ -43,14 +45,7 @@ class GO_Files_FilesModule extends GO_Base_Module{
 	
 	public static function saveUser($user, $wasNew) {
 		if($wasNew){
-			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
-			if(empty($folder->acl_id)){
-				$folder->setNewAcl($user->id);
-				$folder->user_id=$user->id;
-				$folder->visible=1;
-				$folder->save();
-			}
-			$folder->syncFilesystem();
+			$folder = GO_Files_Model_Folder::model()->findHomeFolder($user);			
 		}
 	}
 	

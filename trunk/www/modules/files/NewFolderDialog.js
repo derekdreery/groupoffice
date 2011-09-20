@@ -17,30 +17,38 @@ GO.files.NewFolderDialog = function(config){
 	}
 	
 	this.newFolderNameField = new Ext.form.TextField({	              	
-	      fieldLabel: GO.lang['strName'],
-        name: 'name',
-        value: GO.files.lang.newFolder,
-        allowBlank:false,
-        anchor:'100%',
-				validator:function(v){
-					return !v.match(/[&\/:\*\?"<>|\\]/);
-				}   
-    });
+		fieldLabel: GO.lang['strName'],
+		name: 'name',
+		value: GO.files.lang.newFolder,
+		allowBlank:false,
+		anchor:'100%',
+		validator:function(v){
+			return !v.match(/[&\/:\*\?"<>|\\]/);
+		}   
+	});
 	this.newFolderFormPanel = new Ext.form.FormPanel({
-			url: GO.settings.modules.files.url+'action.php',
-			baseParams:{folder_id:0},
-			defaultType: 'textfield',
-			labelWidth:75,
-			autoHeight:true,
-			cls:'go-form-panel',
-			waitMsgTarget:true,
-			items:this.newFolderNameField			
-		});
+			
+		baseParams:{
+			parent_id:0
+		},
+		defaultType: 'textfield',
+		labelWidth:75,
+		autoHeight:true,
+		cls:'go-form-panel',
+		waitMsgTarget:true,
+		items:this.newFolderNameField,
+		keys:[{
+			key: Ext.EventObject.ENTER,
+			fn: function(key, e){
+				this.submitForm();
+			},
+			scope:this
+		}]
+	});
 	
 	var focusName = function(){
 		this.newFolderNameField.focus(true);		
 	};
-			
 	config.collapsible=false;
 	config.maximizable=false;
 	config.modal=false;
@@ -52,55 +60,62 @@ GO.files.NewFolderDialog = function(config){
 	config.focus=focusName.createDelegate(this);
 	config.title= GO.files.lang.addFolder;		
 	config.buttons= [{
-					text: GO.lang['cmdOk'],
-					handler: function(){	
-						
-						this.newFolderFormPanel.form.submit({
-										
-							url:GO.settings.modules.files.url+'action.php',
-							params: {'task' : 'new_folder'},
-							waitMsg:GO.lang['waitMsgSave'],
-							success:function(form, action){								
-								this.fireEvent('save', action.result);															
-								this.hide();
-							},
-					
-							failure: function(form, action) {
-								var error = '';
-								if(action.failureType=='client')
-								{
-									error = GO.lang['strErrorsInForm'];
-								}else
-								{
-									error = action.result.feedback;
-								}
-								
-								Ext.MessageBox.alert(GO.lang['strError'], error);
-							},
-							scope:this
-							
-						});
-						
-					},
-					scope:this
-				},
-				{
-					text: GO.lang['cmdClose'],
-					handler: function(){this.hide();},
-					scope: this
-				}];
+		text: GO.lang['cmdOk'],
+		handler: function(){	
+			this.submitForm();						
+		},
+		scope:this
+	},
+	{
+		text: GO.lang['cmdClose'],
+		handler: function(){
+			this.hide();
+		},
+		scope: this
+	}];
 				
 	GO.files.NewFolderDialog.superclass.constructor.call(this, config);
 	
-	this.addEvents({save:true});
+	this.addEvents({
+		save:true
+	});
 }
 Ext.extend(GO.files.NewFolderDialog, Ext.Window,{
-	show : function (folder_id) {
+	
+	submitForm : function(){
+		this.newFolderFormPanel.form.submit({
+										
+			url: GO.url('files/folder/submit'),
+			waitMsg:GO.lang['waitMsgSave'],
+			success:function(form, action){								
+				this.fireEvent('save', action.result);															
+				this.hide();
+			},
+					
+			failure: function(form, action) {
+				var error = '';
+				if(action.failureType=='client')
+				{
+					error = GO.lang['strErrorsInForm'];
+				}else
+				{
+					error = action.result.feedback;
+				}
+								
+				Ext.MessageBox.alert(GO.lang['strError'], error);
+			},
+			scope:this
+							
+		});
+						
+	},
+	
+	show : function (parent_id) {
 		if(!this.rendered)
 		{
 			this.render(Ext.getBody());
 		}
-		this.newFolderFormPanel.baseParams.folder_id=folder_id;
+		this.newFolderFormPanel.baseParams.parent_id=parent_id;
 		this.newFolderFormPanel.form.reset();
 		
 		GO.files.NewFolderDialog.superclass.show.call(this);

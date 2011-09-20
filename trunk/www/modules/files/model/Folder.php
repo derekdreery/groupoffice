@@ -65,6 +65,19 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		else
 			return false;
 	}
+	
+	protected function appendAclJoin($findParams, $aclJoin){		
+			
+		$sql .= "\nLEFT JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
+		if(isset($params['permissionLevel']) && $findParams['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
+			$sql .= " AND go_acl.level>=".intval($findParams['permissionLevel']);
+		}
+		$sql .= " AND (go_acl.user_id=".intval($findParams['userId'])." OR go_acl.group_id IN (".implode(',',GO_Base_Model_User::getGroupIds($findParams['userId']))."))) ";		
+		
+		$sql .= "OR ISNULL(a.acl_id) OR a.acl_id=0";
+		
+		return $sql;
+	}
 
 	/**
 	 * Returns the table name
@@ -171,6 +184,21 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 		return $folder;
 	}
+	/**
+	 * Return the home folder of a user.
+	 * 
+	 * @param GO_Base_Model_User $user 
+	 */
+	public function findHomeFolder($user){
+		$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
+		if(empty($folder->acl_id)){
+				$folder->setNewAcl($user->id);
+				$folder->user_id=$user->id;
+				$folder->visible=1;
+				$folder->save();
+		}
+		return $folder;
+	}
 	
 	/**
 	 * Check if this folder is the home folder of a user.
@@ -250,6 +278,18 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		while($file = $stmt->fetch()){
 			if(!$file->fsFile->exists())
 				$file->delete();
+		}
+	}
+	
+	/**
+	 * Compares the database timestamp with the filesystem timestamp and syncs the
+	 * folder if necessary.
+	 */
+	public function checkFsSync(){
+		if($this->mtime < $this->fsFolder->mtime()){
+			$this->syncFilesystem ();
+			$this->mtime=time();
+			$this->save();
 		}
 	}
 	
