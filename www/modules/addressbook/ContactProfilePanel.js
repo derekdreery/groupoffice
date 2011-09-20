@@ -213,31 +213,34 @@ GO.addressbook.ContactProfilePanel = function(config)
 			selectOnFocus:true,
 			forceSelection: true,
 			allowBlank: false,
-			anchor:'100%',
-			disabled:config.forUser
+			anchor:'100%'
+//			,
+//			disabled:config.forUser
 		});
 		
-
-		this.formAddressBooks.on('beforeselect', function(combo, record)
-		{
-			if(this.formCompany.getValue()==0 || confirm(GO.addressbook.lang.moveAll))
-			{
-				this.setAddressbookID(record.data.id);
-
-				this.setSalutation();
-				return true;
-			}else
-			{
-				return false;
-			}
-		}, this);
-		
-
-		this.formAddressBooks.on('select', function(){
-			this.setSalutation(true)
-		}, this);
-		
 		if(!config.forUser){
+			this.formAddressBooks.on('beforeselect', function(combo, record)
+			{
+				if(this.formCompany.getValue()==0 || confirm(GO.addressbook.lang.moveAll))
+				{
+					this.setAddressbookID(record.data.id);
+					var r = this.formAddressFormat.store.getById(record.get('default_iso_address_format'));
+					if(r){
+						this.formAddressFormat.setValue(r.id);
+						this.setSalutation();
+					}
+					return true;
+				}else
+				{
+					return false;
+				}
+			}, this);
+		
+
+			this.formAddressBooks.on('select', function(){
+				this.setSalutation(true)
+			}, this);
+
 			this.formFirstName.on('blur', function(){
 				this.setSalutation(false)
 			}, this);
