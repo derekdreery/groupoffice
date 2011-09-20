@@ -38,6 +38,14 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		return parent::model($className);
 	}
 	
+	protected function init() {
+		
+		$this->columns['user_id']['required']=true;
+		$this->columns['description']['required']=true;
+		
+		return parent::init();
+	}
+	
 	public function relations() {
 		return array(
 				'records' => array('type'=>self::HAS_MANY, 'model'=>'GO_Base_Model_AclUsersGroups', 'field'=>'acl_id', 'delete'=>true),
