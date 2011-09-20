@@ -91,7 +91,7 @@ require_once($GLOBALS['GO_CONFIG']->class_path."mail/imap.class.inc");
 *
 * @author  Richard Heyes <richard@phpguru.org>
 * @version $Id: mimeDecode.class.inc 7752 2011-07-26 13:48:43Z mschering $
-* @package go.mail
+* @package GO.base.mail
 */
 class GO_Base_Mail_MimeDecode
 {
