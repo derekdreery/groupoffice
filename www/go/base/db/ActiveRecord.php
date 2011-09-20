@@ -1,31 +1,32 @@
 <?php
 /**
+ * 
  * Copyright Intermesh
  *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
  * If you have questions write an e-mail to info@intermesh.nl
- *
+ * 
  * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
  * @copyright Copyright Intermesh
- * @author Merijn Schering <mschering@intermesh.nl>
+ * @author Merijn Schering <mschering@intermesh.nl> 
+ * @package GO.base.db
  */
 
-
 /**
- * 
  * All Group-Office models should extend this ActiveRecord class.
+ *
+ * @package GO.base.db
  * 
  * @property GO_Base_Model_User $user If this model has a user_id field it will automatically create this property
- * @property GO_Base_Model_Acl $acl If this model has an acl ID configured {@link See GO_Base_Db_ActiveRecord::aclId} it will automatically create this property.
+ * @property GO_Base_Model_Acl $acl If this model has an acl ID configured. See GO_Base_Db_ActiveRecord::aclId it will automatically create this property.
  * @property bool $joinAclField
  * @property int/array $pk Primary key value(s) for the model
  * @property string $module Name of the module this model belongs to
  * @property boolean $isNew Is the model new and not inserted in the database yet.
  * @property GO_Customfields_Model_AbstractCustomFieldsRecord $customfieldsRecord
  * @property String $localizedName The localized human friendly name of this model.
- * @property GO_Base_Model_Acl $acl The acl object
  * @property int $permissionLevel @see GO_Base_Model_Acl for available levels. Returns -1 if no aclField() is set in the model.
  */
 
@@ -623,7 +624,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	/**
 	 * Finds model objects
 	 *
-	 * params=array(
+	 * params=
+	 * 
+	 * array(
 	 *	"by"=> array(array('field','value','=')),
 	 *  "byOperator"=>[AND / OR]	 *
 	 *
@@ -641,7 +644,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 *  "joinCustomFields"=>false,
    *  "calcFoundRows"=true // Set tot true to return the number of foundRows in the statement (See class GO_Base_Db_ActiveStatement 
-			
+	 *		
 	 *	"order"=>'field' or array('field1','field2') for multiple values
 	 *	"orderDirection"=>'ASC' or array('ASC','DESC') for multiple values
 	 * 
