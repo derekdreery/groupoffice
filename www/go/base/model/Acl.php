@@ -37,6 +37,12 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	{	
 		return parent::model($className);
 	}
+	
+	public function relations() {
+		return array(
+				'records' => array('type'=>self::HAS_MANY, 'model'=>'GO_Base_Model_AclUsersGroups', 'field'=>'acl_id', 'delete'=>true),
+		);
+	}
 
 	public function tableName(){
 		return "go_acl_items";
@@ -206,7 +212,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 
 		if($wasNew){
 			$this->addGroup(GO::config()->group_root, GO_Base_Model_Acl::MANAGE_PERMISSION);
-			$this->addUser(GO::user() ? GO::user()->id : 1, GO_Base_Model_Acl::MANAGE_PERMISSION);
+			$this->addUser($this->user_id, GO_Base_Model_Acl::MANAGE_PERMISSION);
 		}
 
 		return parent::afterSave($wasNew);
