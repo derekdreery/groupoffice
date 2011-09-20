@@ -28,7 +28,7 @@
 	
 	setLinkConfig : function(config){
 		this.menu.linkConfig=config;		
-		this.menu.linkConfig.modelNameAndId=config.linkModelName+':'+config.linkModelId;
+		this.menu.linkConfig.modelNameAndId=config.model_name+':'+config.model_id;
 		
 		if(!this.menu.linkConfig.scope)
 		{
@@ -42,7 +42,7 @@
 		
 		this.menu.link_config=this.menu.linkConfig;
 		
-		this.setDisabled(GO.util.empty(config.linkModelId));
+		this.setDisabled(GO.util.empty(config.model_id));
 	}	
 	
 });
@@ -64,7 +64,7 @@
 
 	setLinkConfig : function(config){
 		this.menu.linkConfig=config;
-		this.menu.linkConfig.modelNameAndId=config.linkModelName+':'+config.linkModelId;
+		this.menu.linkConfig.modelNameAndId=config.model_name+':'+config.model_id;
 
 		if(!this.menu.linkConfig.scope)
 		{
@@ -78,7 +78,7 @@
 		
 		this.menu.link_config=this.menu.linkConfig;
 
-		this.setDisabled(GO.util.empty(config.linkModelId));
+		this.setDisabled(GO.util.empty(config.model_id));
 	}
 
 });
@@ -100,7 +100,7 @@ GO.mainLayout.onReady(function(){
 				});
 			}
 
-			this.linksDialog.setSingleLink(item.parentMenu.linkConfig.linkModelId, item.parentMenu.linkConfig.linkModelName);
+			this.linksDialog.setSingleLink(item.parentMenu.linkConfig.model_id, item.parentMenu.linkConfig.model_name);
 			this.linksDialog.show();
 		}
 	});

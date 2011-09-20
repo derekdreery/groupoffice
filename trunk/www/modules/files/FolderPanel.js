@@ -1,5 +1,5 @@
 GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
-	linkModelName : "GO_Files_Model_Folder",
+	model_name : "GO_Files_Model_Folder",
 
 
 

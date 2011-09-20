@@ -12,7 +12,7 @@
  */
 
 GO.calendar.EventPanel = Ext.extend(GO.DisplayPanel,{
-	linkModelName : "GO_Calendar_Model_Event",
+	model_name : "GO_Calendar_Model_Event",
 
 	stateId : 'cal-event-panel',
 

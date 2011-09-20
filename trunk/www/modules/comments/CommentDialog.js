@@ -85,8 +85,8 @@ Ext.extend(GO.comments.CommentDialog, Ext.Window,{
 		{
 			this.link_config=config.link_config;
 			
-			this.formPanel.baseParams.model_id=config.link_config.linkModelId;
-			this.formPanel.baseParams.model_name=config.link_config.linkModelName;
+			this.formPanel.baseParams.model_id=config.link_config.model_id;
+			this.formPanel.baseParams.model_name=config.link_config.model_name;
 		}
 	},
 	setCommentId : function(comment_id)
