@@ -778,7 +778,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		//quick and dirty way to use and in next sql build blocks
 		$sql .= "\nWHERE 1 ";
 
-    	
+    
+		if(isset($params['criteriaObject'])){
+			$conditionSql = $params['criteriaObject']->getCondition();
+			if(!empty($conditionSql))
+				$sql .= "\nAND".$conditionSql;
+		}
+		
 //		if(!empty($params['criteriaSql']))
 //			$sql .= $params['criteriaSql'];
 		
@@ -875,12 +881,24 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$GLOBALS['query_count']++;
 		
 		try{
-			if(isset($params['bindParams'])){			
+			
+			$result = $this->getDbConnection()->prepare($sql);
+			
+			if(isset($params['criteriaObject'])){
+				$criteriaObjectParams = $params['criteriaObject']->getParams();
+				
+				GO::debug($criteriaObjectParams);
+				
+				foreach($criteriaObjectParams as $param=>$value)
+					$result->bindValue($param, $value[0], $value[1]);
+				
+				$result->execute();
+			}elseif(isset($params['bindParams'])){			
 
 				if($this->_debugSql)
 					GO::debug($params['bindParams']);
 
-				$result = $this->getDbConnection()->prepare($sql);
+				$result = $this->getDbConnection()->prepare($sql);				
 				$result->execute($params['bindParams']);
 			}else
 			{
@@ -892,7 +910,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			if(isset($params['bindParams'])){	
 				$msg .= "\nbBind params: ".var_export($params['bindParams'], true);
 			}
-			
+			GO::debug($msg);
 			throw new Exception($msg);
 		}
 
@@ -966,7 +984,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				$params['byOperator']='AND';
 
 			$first=true;
-			$sql .= 'AND (';
+			$sql .= "\nAND (";
 			foreach($params['by'] as $arr){
 				
 				$field = $arr[0];

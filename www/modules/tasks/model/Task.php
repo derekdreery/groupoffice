@@ -1,44 +1,144 @@
 <?php
-
-/**
- * Copyright Intermesh
+/*
+ * Copyright Intermesh BV.
  *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
  * If you have questions write an e-mail to info@intermesh.nl
+ */
+ 
+/**
+ * The GO_Tasks_Model_Task model
  *
- * @version $Id: Task.php 7607 2011-09-01 11:17:42Z wsmits $
- * @copyright Copyright Intermesh
- * @author Wesley Smits <wsmits@intermesh.nl>
+ * @package GO.modules.Tasks
+ * @version $Id: GO_Tasks_Model_Task.php 7607 2011-09-20 10:05:23Z <<USERNAME>> $
+ * @copyright Copyright Intermesh BV.
+ * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ *
+ * @property int $id
+ * @property String $uuid
+ * @property int $tasklist_id
+ * @property int $user_id
+ * @property int $ctime
+ * @property int $mtime
+ * @property int $start_time
+ * @property int $due_time
+ * @property int $completion_time
+ * @property String $name
+ * @property String $description
+ * @property String $status
+ * @property int $repeat_end_time
+ * @property int $reminder
+ * @property String $rrule
+ * @property int $files_folder_id
+ * @property int $category_id
+ * @property int $priority
+ * @property String $project_name
  */
 
-/**
- * 
- * The Task model
- *  
- * @param int $id
- * @param String $uuid
- * @param int $tasklist_id
- * @param int $user_id
- * @param int $ctime
- * @param int $mtime
- * @param int $start_time
- * @param int $due_time
- * @param int $completion_time
- * @param String $name
- * @param String $description
- * @param String $status
- * @param int $repeat_end_time
- * @param int $reminder
- * @param String $rrule
- * @param int $files_folder_id
- * @param int $category_id
- * @param int $priority
- * @param String $project_name 
- * 
- */
 class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
+	
+	
+	public function find($params = array()) {
+		
+		
+		if(isset($params['taskFilter'])){
+				
+			
+			$criteria = GO_Base_Db_FindCriteria::newInstance()
+				->addModel(GO_Tasks_Model_Task::model(),'t');
+			//	->addModel(GO_Tasks_Model_Tasklist::model(),'tl');
+			
+
+			switch($params['taskFilter']) {
+				case 'today':
+					$start_time = mktime(0,0,0);
+					$end_time = GO_Base_Util_Date::date_add($start_time, 1);
+					break;
+
+				case 'sevendays':
+					$start_time = mktime(0,0,0);
+					$end_time = GO_Base_Util_Date::date_add($start_time, 7);
+					break;
+
+				case 'overdue':
+					$start_time = 0;
+					$end_time = mktime(0,0,0);
+					$show_completed=false;
+					$show_future=false;
+					break;
+
+				case 'completed':
+					$start_time = 0;
+					$end_time = 0;
+					$show_completed=true;
+					//$show_future=false;
+					break;
+
+				case 'future':
+					$start_time = 0;
+					$end_time = 0;
+					$show_completed=false;				
+					$show_future=true;
+					break;
+
+				case 'active':
+				case 'portlet':
+					$start_time = 0;
+					$end_time = 0;
+					$show_completed=false;
+					$show_future=false;
+				break;
+
+				default:
+					//$start_time=0;
+					//$end_time=0;
+					//unset($show_completed);
+					//unset($show_future);
+					break;
+			}
+			
+			if(isset($show_completed)) {
+				if($show_completed) {
+					//$gridParams['where'] .=' AND completion_time>0';
+					$criteria->addCondition('completion_time', 0, '>');
+				} else {
+					//$gridParams['where'] .=' AND completion_time=0';
+					$criteria->addCondition('completion_time', 0, '=');
+				}
+			}
+			
+			if(!empty($start_time)) {
+				//$gridParams['where']=' AND due_time>=:start_time';
+				//$gridParams['bindParams'][':start_time'] = $start_time;
+				$criteria->addCondition('due_time', $start_time, '>=');
+			}	
+			if(!empty($end_time)) {
+				//$gridParams['where']=' AND due_time<:end_time';
+				//$gridParams['bindParams'][':end_time'] = $end_time;
+				$criteria->addCondition('due_time', $end_time, '<');
+			}
+
+			if(isset($show_future)) {
+				$now = GO_Base_Util_Date::date_add(mktime(0,0,0),1);
+				//$gridParams['bindParams'][':now_time'] = $now;
+				if($show_future) {
+					//$gridParams['where'] .=' AND start_time<:now_time';
+					$criteria->addCondition('start_time', $now, '>=');
+				} else {
+					//$gridParams['where'] .=' AND start_time >=:now_time';
+					$criteria->addCondition('start_time', $now, '<');
+				}
+			}
+			$params['criteriaObject']=$criteria;
+		}
+		
+		
+		
+		return parent::find($params);
+	}
+	
 	
 	/**
 	 * Returns a static model of itself
@@ -106,10 +206,14 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	 */
 	private function _recur(){
 		if(!empty($this->rrule)) {
+
+			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule->readIcalendarRruleString($this->due_time, $this->rrule);
+			
 			$this->duplicate(array(
 				'completion_time'=>0,
 				'start_time'=>time(),
-				'due_time'=>Date::get_next_recurrence_time($this->due_time, $this->due_time, 0, $this->rrule),
+				'due_time'=>$rrule->getNextRecurrence($this->due_time+1),
 				'status'=>'NEEDS-ACTION'
 			));
 		}

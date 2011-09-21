@@ -135,10 +135,10 @@ GO.tasks.TasksPanel = function(config)
 		});
 
 		config.store = new Ext.data.GroupingStore({
-//			url: GO.url('tasks/task/grid'),
-			url: GO.settings.modules.tasks.url+'json.php',
+		url: GO.url('tasks/task/grid'),
+			//url: GO.settings.modules.tasks.url+'json.php',
 			baseParams: {
-				'task': 'tasks'
+				'show': 'all'
 			},
 			reader: reader,
 			sortInfo: {
@@ -193,7 +193,6 @@ GO.tasks.TasksPanel = function(config)
 			store: config.store,
 			width:320
 		});
-
 
 		config.enableDragDrop=true;
 		config.ddGroup='TasklistsDD';
