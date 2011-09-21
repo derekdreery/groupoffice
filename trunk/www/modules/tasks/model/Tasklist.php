@@ -1,27 +1,28 @@
 <?php
-
-/**
- * Copyright Intermesh
+/*
+ * Copyright Intermesh BV.
  *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
  * If you have questions write an e-mail to info@intermesh.nl
+ */
+ 
+/**
+ * The GO_Tasks_Model_Tasklist model
  *
- * @version $Id: Tasklist.php 7607 2011-09-01 11:17:42Z wsmits $
- * @copyright Copyright Intermesh
- * @author Wesley Smits <wsmits@intermesh.nl>
+ * @package GO.modules.Tasks
+ * @version $Id: GO_Tasks_Model_Tasklist.php 7607 2011-09-20 10:07:07Z <<USERNAME>> $
+ * @copyright Copyright Intermesh BV.
+ * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ *
+ * @property int $id
+ * @property String $name
+ * @property int $user_id
+ * @property int $acl_id
+ * @property int $files_folder_id
  */
 
-/**
- * 
- * The Tasklist model
- *  
- * @param int $id
- * @param String $name
- * @param int $user_id
- * @param int $acl_id
- */
 class GO_Tasks_Model_Tasklist extends GO_Base_Db_ActiveRecord {
 
 	/**

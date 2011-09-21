@@ -1,4 +1,22 @@
 <?php
+/*
+ * Copyright Intermesh BV.
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ */
+
+/**
+ * The GO_Tasks_Controller_Task controller
+ *
+ * @package GO.modules.Tasks
+ * @version $Id: GO_Tasks_Controller_Task.php 7607 2011-09-20 10:09:05Z <<USERNAME>> $
+ * @copyright Copyright Intermesh BV.
+ * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ */
+
 class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelController{
 	
 	protected $model = 'GO_Tasks_Model_Task';
@@ -13,7 +31,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	
 	protected function afterLoad(&$response, &$model, &$params) {
 		
-		if(isset($params['rrule']) && !empty($params['rrule'])) {
+		if(!empty($model->rrule)) {
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
 			$rRule->readIcalendarRruleString($model->start_time, $model->rrule);
 			$createdRule = $rRule->createJSONOutput();
@@ -68,25 +86,135 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		return parent::beforeSubmit($response, $model, $params);
 	}
 
-//	protected function getGridParams($params) {
-//		
-//		switch($params['filter']){
-//			case 'active':
-//				$findParams = array(
-//						'where'=>'start_time>:start_time',
-//						'bindParams'=>array(':start_time'=>time())
-//				);
-//				break;
-//		}
-//		
-//		return $findParams;
-//	}
-
 	protected function remoteComboFields(){
 		return array(
 				'category_id'=>'$model->category->name',
 				'tasklist_id'=>'$model->tasklist->name'
 				);
+	}
+
+	protected function getGridMultiSelectProperties(){
+		return array(
+				'requestParam'=>'tasks_tasklist_filter',
+				'permissionsModel'=>'GO_Tasks_Model_Tasklist'
+				//'titleAttribute'=>'name'
+				);
+	}	
+	
+	protected function prepareGrid($grid) {
+		$grid->formatColumn('completed','$model->status=="COMPLETED" ? 1 : 0');
+		return parent::prepareGrid($grid);
+	}
+	
+	protected function getGridParams($params){
+		
+		
+		$gridParams =  array(
+				'ignoreAcl'=>true,
+				'joinCustomFields'=>true,
+				'by'=>array(array('tasklist_id', $this->multiselectIds, 'IN'))
+		);
+		
+		if(isset($params['show'])) {
+			$gridParams['taskFilter']=$params['show'];
+		}
+//		$params['show'] = isset($params['show']) ? $params['show'] : 0;
+		
+//
+//		
+//	
+//		
+//		if(!empty($params['show'])) {
+//			$start_time = 0;
+//			$end_time = 0;
+//			
+//			switch($params['show']) {
+//				case 'today':
+//					$start_time = mktime(0,0,0);
+//					$end_time = GO_Base_Util_Date::date_add($start_time, 1);
+//					break;
+//
+//				case 'sevendays':
+//					$start_time = mktime(0,0,0);
+//					$end_time = GO_Base_Util_Date::date_add($start_time, 7);
+//					break;
+//
+//				case 'overdue':
+//					$start_time = 0;
+//					$end_time = mktime(0,0,0);
+//					$show_completed=false;
+//					$show_future=false;
+//					break;
+//
+//				case 'completed':
+//					$start_time = 0;
+//					$end_time = 0;
+//					$show_completed=true;
+//					$show_future=false;
+//					break;
+//
+//				case 'future':
+//					$start_time = 0;
+//					$end_time = 0;
+//					$show_completed=false;				
+//					$show_future=true;
+//					break;
+//
+//				case 'active':
+//				case 'portlet':
+//					$start_time = 0;
+//					$end_time = 0;
+//					$show_completed=false;
+//					$show_future=false;
+//				break;
+//
+//				default:
+//					//$start_time=0;
+//					//$end_time=0;
+//					//unset($show_completed);
+//					//unset($show_future);
+//					break;
+//			}
+//			
+//			$gridParams['bindParams'] = array();
+//			
+//			$gridParams['where'] = ' 1';
+//			
+//			if(isset($show_completed)) {
+//			if($show_completed)
+//				$gridParams['where'] .=' AND completion_time>0';
+//			else
+//				$gridParams['where'] .=' AND completion_time=0';
+//			}
+//			
+//			if(!empty($start_time) && !empty($end_time)) {
+//				$gridParams['where'] .=' AND due_time>=:start_time AND due_time<:end_time';
+//				$gridParams['bindParams'][':start_time'] = $start_time;
+//				$gridParams['bindParams'][':end_time'] = $end_time;
+//			}	else if(!empty($start_time)) {
+//				$gridParams['where']=' AND due_time>=:start_time';
+//				$gridParams['bindParams'][':start_time'] = $start_time;
+//			}	else if(!empty($end_time)){
+//				$gridParams['where']=' AND due_time<:end_time';
+//				$gridParams['bindParams'][':end_time'] = $end_time;
+//			}
+//
+//			if(isset($show_future)) {
+//				$now = GO_Base_Util_Date::date_add(mktime(0,0,0),1);
+//				$gridParams['bindParams'][':now_time'] = $now;
+//				if($show_future)
+//					$gridParams['where'] .=' AND start_time<:now_time';
+//				else
+//					$gridParams['where'] .=' AND start_time >=:now_time';
+//			}
+//			
+//		}
+//
+//		GO::debug("*************************************");
+//		GO::debug($gridParams);
+//		GO::debug("*************************************");
+//	
+		return $gridParams;
 	}
 }
 	

@@ -31,7 +31,7 @@ GO.tasks.MainPanel = function(config){
 
 	this.taskListsPanel.on('change', function(grid, tasklists, records)
 	{                		                
-		this.gridPanel.store.baseParams.tasklists = Ext.encode(tasklists);
+		this.gridPanel.store.baseParams.tasks_tasklist_filter = Ext.encode(tasklists);
 		this.gridPanel.store.load();
 		this.tasklist_ids = tasklists;
 
@@ -43,7 +43,7 @@ GO.tasks.MainPanel = function(config){
 			this.tasklist_name = records[0].data.name;
 		}
 
-		delete this.gridPanel.store.baseParams.tasklists;
+		//delete this.gridPanel.store.baseParams.tasklists;
 	}, this);
 				
 	var filterPanel = new Ext.form.FormPanel({
@@ -140,8 +140,8 @@ GO.tasks.MainPanel = function(config){
 	}, this);
 			
 	this.gridPanel.store.on('load', function(store){
-		this.deleteButton.setDisabled(!store.reader.jsonData.data.write_permission);
-		this.addButton.setDisabled(!store.reader.jsonData.data.write_permission);
+		//this.deleteButton.setDisabled(!store.reader.jsonData.data.write_permission);
+		//this.addButton.setDisabled(!store.reader.jsonData.data.write_permission);
 
 		//this.gridPanel.ownerCt.setTitle(store.reader.jsonData.grid_title);
 
@@ -170,33 +170,84 @@ GO.tasks.MainPanel = function(config){
 
 			
 	config.layout='border';
+	config.items=[	
+		new Ext.Panel({
+			region:'west',
+			titlebar: false,
+			autoScroll:false,
+			closeOnTab: true,
+			width: 210,
+			split:true,
+			resizable:true,
+			layout:'border',
+			baseCls: 'x-plain',
+			items:[
+			this.taskListsPanel,
+			filterPanel,
+			this.categoriesPanel
+			]
+		}),
+		{
+			//title:GO.tasks.lang.tasks,
+			region:'center',
+			border:false,
+			layout:'border',
+			items:[this.gridPanel, this.addTaskPanel]
+		},
+	this.taskPanel
+	];
+	
 	config.tbar=new Ext.Toolbar({
 			cls:'go-head-tb',
-			items: [this.addButton = new Ext.Button({
-				iconCls: 'btn-add',
-				text: GO.lang['cmdAdd'],
-				cls: 'x-btn-text-icon',
-				handler: function(){
+			items: [{
+				grid: this.gridPanel,
+				xtype:'addbutton',
+				handler: function(b){
 					this.taskPanel.reset();
 					GO.tasks.showTaskDialog({
-						tasklist_id: this.tasklist_id,
-						tasklist_name: this.tasklist_name
+						tasklist_id: b.buttonParams.id,
+						tasklist_name: b.buttonParams.name
 					});
-
 				},
 				scope: this
-			}),this.deleteButton = new Ext.Button({
-				iconCls: 'btn-delete',
-				text: GO.lang['cmdDelete'],
-				cls: 'x-btn-text-icon',
-				handler: function(){
+			},
+			{
+				grid: this.gridPanel,
+				xtype:'deletebutton',
+				handler: function(b){
 					this.gridPanel.deleteSelected({
 						callback : this.taskPanel.gridDeleteCallback,
 						scope: this.taskPanel
 					});
 				},
 				scope: this
-			}),{
+			},
+//			this.addButton = new Ext.Button({
+//				iconCls: 'btn-add',
+//				text: GO.lang['cmdAdd'],
+//				cls: 'x-btn-text-icon',
+//				handler: function(){
+//					this.taskPanel.reset();
+//					GO.tasks.showTaskDialog({
+//						tasklist_id: this.tasklist_id,
+//						tasklist_name: this.tasklist_name
+//					});
+//
+//				},
+//				scope: this
+//			}),this.deleteButton = new Ext.Button({
+//				iconCls: 'btn-delete',
+//				text: GO.lang['cmdDelete'],
+//				cls: 'x-btn-text-icon',
+//				handler: function(){
+//					this.gridPanel.deleteSelected({
+//						callback : this.taskPanel.gridDeleteCallback,
+//						scope: this.taskPanel
+//					});
+//				},
+//				scope: this
+//			})
+			{
 				iconCls: 'btn-settings',
 				text: GO.lang.administration,
 				cls: 'x-btn-text-icon',
@@ -243,32 +294,6 @@ GO.tasks.MainPanel = function(config){
 			}
 			]
 		});
-	config.items=[	
-	new Ext.Panel({
-		region:'west',
-		titlebar: false,
-		autoScroll:false,
-		closeOnTab: true,
-		width: 210,
-		split:true,
-		resizable:true,
-		layout:'border',
-		baseCls: 'x-plain',
-		items:[
-		this.taskListsPanel,
-		filterPanel,
-		this.categoriesPanel
-		]
-	}),
-	{
-		//title:GO.tasks.lang.tasks,
-		region:'center',
-		border:false,
-		layout:'border',
-		items:[this.gridPanel, this.addTaskPanel]
-	},
-	this.taskPanel
-	];
 	
 	GO.tasks.MainPanel.superclass.constructor.call(this, config);
 	

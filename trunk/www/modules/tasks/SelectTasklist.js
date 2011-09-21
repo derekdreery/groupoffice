@@ -27,11 +27,13 @@ GO.tasks.SelectTasklist = function(config){
 	
 	
 	this.store = new GO.data.JsonStore({
-		url: GO.settings.modules.tasks.url+'json.php',
-		baseParams: {'task': 'tasklists', 'auth_type':'write'},
-		root: 'results',
-		totalProperty: 'total',
-		id: 'id',
+		url: GO.url('tasks/tasklist/grid'),
+		baseParams:{permissionLevel:GO.permissionLevels.write},
+		//url: GO.settings.modules.tasks.url+'json.php',
+		//baseParams: {'task': 'tasklists', 'auth_type':'write'},
+//		root: 'results',
+//		totalProperty: 'total',
+//		id: 'id',
 		fields:['id','name','user_name'],
 		remoteSort:true
 	});	

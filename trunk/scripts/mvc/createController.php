@@ -32,22 +32,22 @@ function generateController($moduleName, $modelName) {
 	$fullModelName = 'GO_'.$moduleName.'_Model_'.$modelName;
 
 	echo '<pre>'.htmlspecialchars('<?php
-/**
- * Copyright Intermesh
+/*
+ * Copyright Intermesh BV.
  *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
  * If you have questions write an e-mail to info@intermesh.nl
- *
- * @version $Id: '.$className.'.php 7607 '.$date.'Z <<USERNAME>> $
- * @copyright Copyright Intermesh
- * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
- */  
+ */
 
 /**
  * The '.$className.' controller
  *
+ * @package GO.modules.'.$moduleName.'
+ * @version $Id: '.$className.'.php 7607 '.$date.'Z <<USERNAME>> $
+ * @copyright Copyright Intermesh BV.
+ * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
 class '.$className.' extends GO_Base_Controller_AbstractModelController {

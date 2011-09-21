@@ -9,6 +9,7 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 * Create a Rrule object from a Rrule string. This function automatically finds 
 	 * out which Rrule version is used. 
 	 * 
+	 * @param String $eventStartTime The time the recurrence pattern starts. This is important to calculate the correct interval.
 	 * @param String $rrule 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
 	 */
 	public function readIcalendarRruleString($eventStartTime, $rrule) {

@@ -81,60 +81,61 @@ function generateModel($className, $table, $moduleName){
 
 
 	echo '<pre>'.htmlspecialchars('<?php
-	/**
-	 * Copyright Intermesh
-	 *
-	 * This file is part of Group-Office. You should have received a copy of the
-	 * Group-Office license along with Group-Office. See the file /LICENSE.TXT
-	 *
-	 * If you have questions write an e-mail to info@intermesh.nl
-	 *
-	 * @version $Id: '.$className.'.php 7607 '.$date.'Z <<USERNAME>> $
-	 * @copyright Copyright Intermesh
-	 * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
-	 */  
+/*
+ * Copyright Intermesh BV.
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ */
+ 
+/**
+ * The '.$className.' model
+ *
+ * @package GO.modules.'.$moduleName.'
+ * @version $Id: '.$className.'.php 7607 '.$date.'Z <<USERNAME>> $
+ * @copyright Copyright Intermesh BV.
+ * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ *
+'.$props.'
+
+class '.$className.' extends GO_Base_Db_ActiveRecord{
 
 	/**
-	 * The '.$className.' model
+	 * Returns a static model of itself
 	 * 
-	'.$props.'
-
-	class '.$className.' extends GO_Base_Db_ActiveRecord{
-
-		/**
-		 * Returns a static model of itself
-		 * 
-		 * @param String $className
-		 * @return '.$className.'
-		 */
-		public static function model($className=__CLASS__)
-		{	
-			return parent::model($className);
-		}
-
-
-		/**
-		 * Enable this function if you want this model to check the acl\'s automatically.
-		 */
-		// public function aclField(){
-		//	 return \'acl_id\';	
-		// }
-
-		/**
-		 * Returns the table name
-		 */
-		 public function tableName() {
-			 return \''.$table.'\';
-		 }
-
-		/**
-		 * Here you can define the relations of this model with other models.
-		 * See the parent class for a more detailed description of the relations.
-		 */
-		 public function relations() {
-			 return array();
-		 }
+	 * @param String $className
+	 * @return '.$className.'
+	 */
+	public static function model($className=__CLASS__)
+	{	
+		return parent::model($className);
 	}
+
+
+	/**
+	 * Enable this function if you want this model to check the acl\'s automatically.
+	 */
+	// public function aclField(){
+	//	 return \'acl_id\';	
+	// }
+
+	/**
+	 * Returns the table name
+	 */
+	 public function tableName() {
+		 return \''.$table.'\';
+	 }
+
+	/**
+	 * Here you can define the relations of this model with other models.
+	 * See the parent class for a more detailed description of the relations.
+	 */
+	 public function relations() {
+		 return array();
+	 }
+}
 	').'</pre>';
 }
 ?>

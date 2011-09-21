@@ -72,10 +72,18 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 	protected $_recurPositionStartTime;
 
+	/**
+	 * Return the first valid occurrence time after the given startTime.
+	 * 
+	 * If $startTime is omitted it returns the next recurrence since last call or the first occurrence.
+	 * 
+	 * @param int $startTime Unix timstamp
+	 * @return int Unix timestamp 
+	 */
 	public function getNextRecurrence($startTime=false)
 	{
 		if(!isset($this->_recurPositionStartTime))
-			$this->_recurPositionStartTime=time();
+			$this->_recurPositionStartTime=$this->_eventStartTime;
 		
 		if(!$startTime)
 			$startTime=$this->_recurPositionStartTime;
@@ -271,7 +279,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 * and a given time.
 	 * 
 	 * @param int $startTime Unixtime of start time
-	 * @param int $period Number of days, months or years
+	 * @param int $interval Number of days, months or years
 	 * @param string $type days=days, m=months, y= years 
 	 * @param string ceil or floor the difference.  For weekly we need to floor it because the time can fall in the week where a recurrence may take place in. 
 	 * @return int Number of periods that fall between event start and start time
@@ -286,12 +294,12 @@ class GO_Base_Util_Date_RecurrencePattern{
 		
 		
 		$rounded = $ceil ? ceil($devided) : floor($devided);
-		$periodsBetweenNextAndFirstEvent = $period*$rounded;
+		$periodsBetweenNextAndFirstEvent = $interval*$rounded;
 		
 		
 		if($ceil){
 			if($periodsBetweenNextAndFirstEvent == $elapsed)
-				$periodsBetweenNextAndFirstEvent+=$period;
+				$periodsBetweenNextAndFirstEvent+=$interval;
 		}	
 		
 		return $periodsBetweenNextAndFirstEvent;		
