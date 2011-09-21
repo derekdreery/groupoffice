@@ -249,7 +249,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
     
     $grid = new GO_Base_Provider_Grid($this->getGridColumnModel());		    
-		$grid->processDeleteActions($modelName);
+		$grid->processDeleteActions($params, $modelName);
 		
 		$response=array();
 		

@@ -94,17 +94,18 @@ class GO_Base_Provider_Grid {
   /**
    * Handle a delete request when a grid loads.
    * 
+	 * @param array $params The action request params
    * @param type $deleteModelName Name of the model to delete
    * @param array $extraPkValue If your model has more then one pk. Then you can supply the other keys in an array eg. array('group_id'=>1)
    */
-	public function processDeleteActions($deleteModelName, $extraPkValue=false){
+	public function processDeleteActions($params, $deleteModelName, $extraPkValue=false){
 		
 		if(isset($this->_stmt))
 			throw new Exception("processDeleteActions should be called before setStatement. If you run the statement before the deletes then the deleted items will still be in the result.");
 		
-		if (isset($_POST['delete_keys'])) {
+		if (isset($params['delete_keys'])) {
       try {
-        $deleteIds = json_decode($_POST['delete_keys']);
+        $deleteIds = json_decode($params['delete_keys']);
         foreach ($deleteIds as $modelPk) {
 
 //          $deleteModelName = $this->_stmt->model->className();
@@ -305,7 +306,7 @@ class GO_Base_Provider_Grid {
 		
     return array_merge(array(
         'searchQuery' => !empty($_REQUEST['query']) ? '%' . $_REQUEST['query'] . '%' : '',
-        'limit' => isset($_REQUEST['limit']) ? $_REQUEST['limit'] : 0,
+        'limit' => isset($_REQUEST['limit']) ? $_REQUEST['limit'] : GO::user()->max_rows_list,
         'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
         'order' => $sort,
         'orderDirection' => !empty($_REQUEST['dir']) ? $_REQUEST['dir'] : $this->_defaultSortDirection,

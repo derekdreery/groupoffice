@@ -247,12 +247,13 @@ GO.files.FileBrowser = function(config){
 	}
 	
 	this.gridStore = new GO.data.JsonStore({
-		url: GO.settings.modules.files.url+'json.php',
-		baseParams: {
-			'task': 'grid'
-		},
-		root: 'results',
-		totalProperty: 'total',
+//		url: GO.settings.modules.files.url+'json.php',
+//		baseParams: {
+//			'task': 'grid'
+//		},
+//		root: 'results',
+//		totalProperty: 'total',
+		url:GO.url("files/folder/list"),
 		id: 'type_id',
 		fields:fields.fields,
 		remoteSort:true
@@ -834,7 +835,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		this.path = store.reader.jsonData.path;
 
-		this.setWritePermission(store.reader.jsonData.write_permission);
+		this.setWritePermission(true);///store.reader.jsonData.write_permission);
 		
 		this.thumbsToggle.toggle(store.reader.jsonData.thumbs=='1');
 		
@@ -1670,7 +1671,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	{
 		this.folder_id = id;
 		//this.gridStore.baseParams['id']=this.thumbsStore.baseParams['id']=id;
-		this.gridStore.baseParams['id']=id;
+		this.gridStore.baseParams['folder_id']=id;
 	
 		this.getActiveGridStore().load({
 			callback:function(){
