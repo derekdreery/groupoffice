@@ -1075,7 +1075,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	}
 	
 	/**
-	 * Loads the model attributes from the database
+	 * Loads the model attributes from the database. It also automatically checks
+	 * read permission for the current user.
 	 * 
 	 * @param int $primaryKey
 	 * @return GO_Base_Db_ActiveRecord 

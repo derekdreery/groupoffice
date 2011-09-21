@@ -14,10 +14,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		
 		$response = array();
 		
+		
 		switch($params['node']){
 			case 'root':
-				if(!empty($_POST['root_folder_id'])) {					
-					$folder = GO_Files_Model_Folder::model()->findByPk($_POST['root_folder_id']);
+				if(!empty($params['root_folder_id'])) {					
+					$folder = GO_Files_Model_Folder::model()->findByPk($params['root_folder_id']);
 				}else {
 					$folder = GO_Files_Model_Folder::model()->findHomeFolder(GO::user());						
 				}
@@ -40,15 +41,25 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //					}
 //				}
 				
-				
+				$node = $this->_folderToNode($folder);				
+				$response[]=$node;
 				
 				break;
+				
+				default:
+					$folder = GO_Files_Model_Folder::model()->findByPk($params['node']);
+					$folder->checkFsSync();
+					
+					$stmt = $folder->folders();
+					while($subfolder = $stmt->fetch()){				
+						$response[]=$this->_folderToNode($subfolder);
+					}
+				
+					break;
 		}
 		
 		
-		$node = $this->_folderToNode($folder);
-				
-		$response[]=$node;
+		
 
 		
 		return $response;
@@ -69,6 +80,18 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$stmt = $folder->folders();
 			while($subfolder = $stmt->fetch()){
 				$node['children'][]=$this->_folderToNode($subfolder, false);
+			}
+		}else
+		{
+			//check if folder has subfolders
+			$firstSubfolder = $folder->folders(array(
+				'single'=>true
+			));
+			if(!$firstSubfolder) {
+				//it doesn't habe any subfolders so instruct the client about this
+				//so it can present the node as a leaf.
+				$node['children']=array();
+				$node['expanded']=true;
 			}
 		}
 		
@@ -129,21 +152,46 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	
 	public function actionList($params){
 		
+		//get the folder that contains the files and folders to list.
+		//This will check permissions too.
+		$folder= GO_Files_Model_Folder::model()->findByPk($params['folder_id']);
+		
 		
 		$grid = new GO_Base_Provider_Grid();		
-		$grid->setDefaultSortOrder('name','ASC');
 		
-		$grid->formatColumn('name','$model->name',array(),array('first_name','last_name'));
-		$grid->formatColumn('cf', '$model->id.":".$model->name');//special field used by custom fields. They need an id an value in one.
 		
-		$grid->setFormatRecordFunction(array($this, 'formatLsRecord'));
+		//handle delete request for both files and folder
+		if (isset($params['delete_keys'])) {
+			
+			$fileDeleteIds = array();
+			$folderDeleteIds = array();
+			
+			$deleteIds = json_decode($params['delete_keys']);
+			foreach ($deleteIds as $typeId) {
+				if(substr($typeId, 0,1)=='d'){
+					$folderDeleteIds[]=substr($typeId,2);
+				}else
+				{
+					$fileDeleteIds[]=substr($typeId,2);
+				}
+			}
+			
+			$params['delete_keys']=json_encode($folderDeleteIds);
+			$grid->processDeleteActions($params, "GO_Files_Model_Folder");
+			
+			$params['delete_keys']=json_encode($fileDeleteIds);
+			$grid->processDeleteActions($params, "GO_Files_Model_File");
+		}
+		
+		
+		$grid->setFormatRecordFunction(array($this, 'formatListRecord'));
 		$findParams = $grid->getDefaultParams(array(
-				'by'=>array(array('parent_id',$params['folder_id']))
+				'ignoreAcl'=>true
 		));
-		$stmt = GO_Files_Model_Folder::model()->find($findParams);
+		$stmt = $folder->folders($findParams);
 		$grid->setStatement($stmt);		
 		
-		$folderData = $grid->getData();
+		$response = $grid->getData();
 		
 		
 		//add files to the listing if it fits
@@ -160,6 +208,21 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$fileStart = $findParams['start']-$folderPages*$findParams['limit'];
 			$fileLimit = $findParams['limit']-$foldersOnLastPage;
 		}
+		
+		$findParams = $grid->getDefaultParams(array(
+				'limit'=>$fileLimit,
+				'start'=>$fileStart
+		));
+		
+		$stmt = $folder->files($findParams);
+		$grid->setStatement($stmt);	
+		
+		$filesResponse=$grid->getData();
+		
+		$response['total']+=$filesResponse['total'];
+		$response['results']=array_merge($response['results'],$filesResponse['results']);
+		
+		return $response;
 	}
 	
 	public function formatListRecord($record, $model, $grid){

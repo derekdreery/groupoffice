@@ -53,7 +53,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
     $delresponse = array();
     if($group->id != GO::config()->group_everyone)
     { 
-      $grid->processDeleteActions('GO_Base_Model_UserGroup', array('group_id'=>$group->id));
+      $grid->processDeleteActions($params, 'GO_Base_Model_UserGroup', array('group_id'=>$group->id));
     }
     else
     {
