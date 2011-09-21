@@ -380,7 +380,6 @@ class cached_imap extends imap{
 	}
 
 
-
 	public function get_message_with_body($uid, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false, $peek=false, $plain_body_requested=true, $html_body_requested=true) {
 		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_EVENTS, $lang;
 
@@ -401,11 +400,12 @@ class cached_imap extends imap{
 		 */
 		$this->get_cached_messages($this->folder['id'], array($uid), true);
 		$values=$this->email->next_record();
-		if(!$this->disable_message_cache && !empty($values['serialized_message_object'])){
+		if(!$this->disable_message_cache && !empty($values['serialized_message_object']) && $message =  json_decode($values['serialized_message_object'], true)){
 
 			go_debug('got cached message');		
 
-			$message =  unserialize($values['serialized_message_object']);
+	
+			
 			$ret = $this->get_body_parts($plain_body_requested,$html_body_requested, $struct, $message, $peek);
 			if($ret['html_body_fetched'] || $ret['plain_body_fetched'])
 			{
@@ -415,7 +415,7 @@ class cached_imap extends imap{
 				//additional body part added
 				$cached_message['uid']=$uid;
 				$cached_message['folder_id']=$this->folder['id'];
-				$cached_message['serialized_message_object']=serialize($message);
+				$cached_message['serialized_message_object']=json_encode($message);
 				
 				$this->update_cached_message($cached_message);
 			}
@@ -649,7 +649,7 @@ class cached_imap extends imap{
 		
 		$cached_message['uid']=$uid;
 		$cached_message['folder_id']=$this->folder['id'];
-		$cached_message['serialized_message_object']=serialize($message);		
+		$cached_message['serialized_message_object']=json_encode($message);		
 		$this->update_cached_message($cached_message);
 
 		//go_debug($message)
