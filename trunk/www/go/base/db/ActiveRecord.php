@@ -1713,7 +1713,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	/**
 	 * Override this function if you want to put your model in the search cache.
 	 * 
-	 * @return array cache parameters with at least 'name', 'description' and 'type'. All are strings. See GO_Base_Model_Search_Cache for more info.
+	 * @return array cache parameters with at least 'name', 'description' and 'type'. All are strings. See GO_Base_Model_SearchCacheRecord for more info.
 	 */
 	protected function getCacheAttributes(){
 		return false;

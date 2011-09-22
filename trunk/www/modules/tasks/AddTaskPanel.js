@@ -150,11 +150,12 @@ Ext.extend(GO.tasks.AddTaskPanel, Ext.FormPanel,{
 			if(!Ext.isEmpty(taskname) && due){
 
 				Ext.Ajax.request({
-					url: GO.settings.modules.tasks.url+'action.php',
+					//url: GO.settings.modules.tasks.url+'action.php',
+					url:GO.url('tasks/task/submit'),
 					params: {
-						task: 'save_task',
-						tasklist_id: tasklist_id,
-						name: taskname,
+						//task: 'save_task',
+						//tasklist_id: tasklist_id,
+						//name: taskname,
 						//link: link,
 						start_date: new Date().format(GO.settings.date_format),
 						due_date: due.format(GO.settings.date_format)

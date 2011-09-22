@@ -43,7 +43,7 @@ GO.tasks.MainPanel = function(config){
 			this.tasklist_name = records[0].data.name;
 		}
 
-		//delete this.gridPanel.store.baseParams.tasklists;
+		// this.gridPanel.store.baseParams.tasklists;
 	}, this);
 				
 	var filterPanel = new Ext.form.FormPanel({
@@ -64,7 +64,7 @@ GO.tasks.MainPanel = function(config){
 					change:function(radiogroup, checkedbox){
 						this.gridPanel.store.baseParams['show']=checkedbox.inputValue;
 						this.gridPanel.store.load();
-						delete this.gridPanel.store.baseParams['show'];
+						//delete this.gridPanel.store.baseParams['show'];
 					},
 					scope:this
 				},
@@ -111,7 +111,7 @@ GO.tasks.MainPanel = function(config){
 		this.gridPanel.store.baseParams.categories = Ext.encode(categories);
 		this.gridPanel.store.reload();
                 
-		delete this.gridPanel.store.baseParams.categories;
+		//delete this.gridPanel.store.baseParams.categories;
 	}, this);
 
 
