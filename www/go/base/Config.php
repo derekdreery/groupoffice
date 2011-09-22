@@ -1,32 +1,26 @@
 <?php
-/**
- * Copyright Intermesh
+/*
+ * Copyright Intermesh BV.
  *
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @copyright Copyright Intermesh
- * @version $Id: config.class.inc.php 7687 2011-06-23 12:00:34Z mschering $
- * @author Merijn Schering <mschering@intermesh.nl>
- * @package go.basic
  */
 
 /**
  * This class holds the main configuration options of Group-Office
  * Don't modify this file. The values defined here are just default values.
- * They are overwritten by the configuration options in /config.inc.php or
- * /etc/groupoffice/{HOSTNAME}/config.inc.php
+ * They are overwritten by the configuration options in /config.php or
+ * /etc/groupoffice/{HOSTNAME}/config.php
  *
  * To edit these options use install.php.
  *
  * @author Merijn Schering <mschering@intermesh.nl>
  * @version $Id: config.class.inc.php 7687 2011-06-23 12:00:34Z mschering $
- * @copyright Copyright Intermesh
- * @package go.basic
- *
- * @uses db
+ * @copyright Copyright Intermesh BV.
+ * @package go.base 
  */
 
 class GO_Base_Config {

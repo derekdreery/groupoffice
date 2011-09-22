@@ -103,6 +103,7 @@
  *  @author Jon Abernathy <jon@chuggnutt.com>
  *  @version 1.0.0
  *  @since PHP 4.0.2
+ *  @package GO.base.util
  */
 class GO_Base_Util_Html2Text
 {

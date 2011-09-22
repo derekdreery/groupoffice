@@ -1,6 +1,5 @@
 <?php
-
-/**
+/*
  * Copyright Intermesh
  *
  * This file is part of Group-Office. You should have received a copy of the
@@ -8,10 +7,17 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
  */
+
+/**
+ * This class has functions that handle dates and takes the user's date
+ * preferences into account.
+ *
+ * @copyright Copyright Intermesh BV.
+ * @version $Id$
+ * @package go.base.util
+ */
+
 class GO_Base_Util_Image {
 
 	var $original_image;
