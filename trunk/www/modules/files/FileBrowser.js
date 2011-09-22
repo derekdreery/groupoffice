@@ -1409,9 +1409,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 		
 		var params = {
-			task : 'paste',
-			paste_sources : Ext.encode(paste_sources),
-			paste_destination : destination,
+			//task : 'paste',
+			ids : Ext.encode(paste_sources),
+			destination_folder_id : destination,
 			paste_mode : pasteMode,
 			id : this.folder_id
 		};
@@ -1458,14 +1458,14 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		this.getEl().mask(GO.lang.waitMsgSave);
 		
 		Ext.Ajax.request({
-			url: GO.settings.modules.files.url+'action.php',
+			url: GO.url('files/folder/paste'),
 			params:this.overwriteParams,
 			callback: function(options, success, response){
 
 				this.getEl().unmask();
 					
-				var pasteSources = Ext.decode(this.overwriteParams.paste_sources);
-				var pasteDestination = this.overwriteParams.paste_destination;
+				var pasteSources = Ext.decode(this.overwriteParams.ids);
+				var pasteDestination = this.overwriteParams.destination_folder_id;
 					
 					
 				//delete params.paste_sources;
@@ -1479,7 +1479,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						
 					var responseParams = Ext.decode(response.responseText);
 						
-					if(!responseParams.success && !responseParams.file_exists)
+					if(!responseParams.success && !responseParams.fileExists)
 					{
 						if(this.overwriteDialog)
 						{
@@ -1489,7 +1489,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						this.refresh();
 					}else
 					{
-						if(responseParams.file_exists)
+						if(responseParams.fileExists)
 						{
 							if(!this.overwriteDialog)
 							{
@@ -1507,28 +1507,28 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 									{
 										text: GO.lang.cmdYes,
 										handler: function(){
-											this.overwriteParams.command='yes';
+											this.overwriteParams.overwrite='yes';
 											this.sendOverwrite(this.overwriteParams);
 										},
 										scope: this
 									},{
 										text: GO.lang.cmdYesToAll,
 										handler: function(){
-											this.overwriteParams.command='yestoall';
+											this.overwriteParams.overwrite='yestoall';
 											this.sendOverwrite(this.overwriteParams);
 										},
 										scope: this
 									},{
 										text: GO.lang.cmdNo,
 										handler: function(){
-											this.overwriteParams.command='no';
+											this.overwriteParams.overwrite='no';
 											this.sendOverwrite(this.overwriteParams);
 										},
 										scope: this
 									},{
 										text: GO.lang.cmdNoToAll,
 										handler: function(){
-											this.overwriteParams.command='notoall';
+											this.overwriteParams.overwrite='notoall';
 											this.sendOverwrite(this.overwriteParams);
 										},
 										scope: this
@@ -1547,7 +1547,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 								
 							var t = new Ext.Template(GO.lang.overwriteFile);
 							t.overwrite(this.overwriteDialog.body, {
-								file: responseParams.file_exists
+								file: responseParams.fileExists
 							});
 							this.overwriteDialog.show();
 						}else

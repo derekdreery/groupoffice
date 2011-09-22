@@ -6,12 +6,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	
 	public function actionTree($params){
 		//GO::$ignoreAclPermissions=true;
-		if(empty($params['node']) || $params['node']=='root'){
-			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.GO::user()->username, true);
-			
-			$folder->syncFilesystem();			
-		}
-		
+//		if(empty($params['node']) || $params['node']=='root'){
+//			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.GO::user()->username, true);
+//			
+//			$folder->syncFilesystem();			
+//		}
+//		
 		$response = array();
 		
 		
@@ -146,9 +146,70 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 	
 	
+	public function actionPaste($params){
+		
+		$response['success']=true;
+		
+		$ids = $this->_splitFolderAndFileIds(json_decode($params['ids'], true));		
+		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
+		
+		if(!$destinationFolder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+			throw new GO_Base_Exception_AccessDenied();
+		
+		foreach($ids['files'] as $file_id){
+			$file = GO_Files_Model_File::model()->findByPk($file_id);
+			
+			if($destinationFolder->hasFile($file->name)){
+				if(empty($params['overwrite']))
+				{
+					$response['fileExists']=array($file->name, $file->id);
+				}
+			}
+			
+			if($params['paste_mode']=='cut'){
+				if(!$file->move($destinationFolder))
+					throw new Exception("Could not move ".$file->name);
+			}else
+			{
+				if(!$file->copy($destinationFolder))
+					throw new Exception("Could not copy ".$file->name);
+			}			
+		}
+		
+		foreach($ids['folders'] as $folder_id){
+			$folder = GO_Files_Model_Folder::model()->findByPk($folder_id);
+			
+			if($params['paste_mode']=='cut'){
+				if(!$folder->move($destinationFolder))
+					throw new Exception("Could not move ".$folder->name);
+			}else
+			{
+				if(!$folder->copy($destinationFolder))
+					throw new Exception("Could not copy ".$folder->name);
+			}
+			
+		}
+		
+		return $response;
+		
+	}	
 	
-	
-	
+	private function _splitFolderAndFileIds($ids){
+		$fileIds = array();
+		$folderIds = array();
+
+		
+		foreach ($ids as $typeId) {
+			if(substr($typeId, 0,1)=='d'){
+				$folderIds[]=substr($typeId,2);
+			}else
+			{
+				$fileIds[]=substr($typeId,2);
+			}
+		}
+		
+		return array('files'=>$fileIds, 'folders'=>$folderIds);
+	}
 	
 	public function actionList($params){
 		
@@ -163,23 +224,12 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		//handle delete request for both files and folder
 		if (isset($params['delete_keys'])) {
 			
-			$fileDeleteIds = array();
-			$folderDeleteIds = array();
+			$ids = $this->_splitFolderAndFileIds(json_decode($params['delete_keys'],true));
 			
-			$deleteIds = json_decode($params['delete_keys']);
-			foreach ($deleteIds as $typeId) {
-				if(substr($typeId, 0,1)=='d'){
-					$folderDeleteIds[]=substr($typeId,2);
-				}else
-				{
-					$fileDeleteIds[]=substr($typeId,2);
-				}
-			}
-			
-			$params['delete_keys']=json_encode($folderDeleteIds);
+			$params['delete_keys']=json_encode($ids['folders']);
 			$grid->processDeleteActions($params, "GO_Files_Model_Folder");
 			
-			$params['delete_keys']=json_encode($fileDeleteIds);
+			$params['delete_keys']=json_encode($ids['files']);
 			$grid->processDeleteActions($params, "GO_Files_Model_File");
 		}
 		

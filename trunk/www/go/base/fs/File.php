@@ -143,7 +143,44 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		}
 	}
 	
+	/**
+	 * Output the contents of this file to standard out (browser).
+	 */
 	public function output(){
 		readfile($this->path());
 	}
+	
+	/**
+	 * Move a file to another folder.
+	 * 
+	 * @param GO_Base_Fs_Folder $destinationFolder 
+	 * @return boolean
+	 */
+	public function move($destinationFolder){
+		
+		return rename($this->path, $destinationFolder->path().'/'.$this->name());
+	}
+	
+	/**
+	 * Copy a file to another folder.
+	 * 
+	 * @param GO_Base_Fs_Folder $destinationFolder 
+	 * @return boolean
+	 */
+	public function copy($destinationFolder){
+		
+		//echo $this->path.' > '.$destinationFolder->path().$this->name();
+		
+		$newPath = $destinationFolder->path().'/'.$this->name();
+		
+		if(!copy($this->path, $newPath))
+			throw new Exception("Could not copy ".$this->name());
+				
+		chmod($newPath, GO::config()->file_create_mode);
+		if(GO::config()->file_change_group)
+			chgrp($newPath, GO::config()->file_change_group);
+						
+		return true;
+	}
+
 }

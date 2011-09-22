@@ -164,5 +164,43 @@ abstract class GO_Base_Fs_Base{
 		}
 		return $filename;
 	}
+	
+	/**
+	 * Check if this object is a folder.
+	 * 
+	 * @return boolean 
+	 */
+	public function isFolder(){
+		return is_dir($this->path);
+	}
+	
+	/**
+	 * Check if this object is a file.
+	 * 
+	 * @return boolean 
+	 */
+	public function isFile(){
+		return !is_dir($this->path);
+	}
+	
+	/**
+	 * Rename a file or folder
+	 * 
+	 * @param String $name
+	 * @return boolean 
+	 */
+	public function rename($name){
+		$oldPath = $this->path;
+		$newPath = dirname($this->path).'/'.$name;
+		
+		if(rename($oldPath,$newPath))
+		{
+			$this->path = $newPath;
+			return true;
+		}else
+		{
+			return false;
+		}		
+	}
 
 }
