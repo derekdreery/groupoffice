@@ -42,7 +42,22 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //				}
 				
 				$node = $this->_folderToNode($folder);				
+				$node['text']=GO::t('personal','files');
+				$node['iconCls']='folder-home';
 				$response[]=$node;
+				
+				
+				$node= array(
+						'text'=>GO::t('shared','files'),
+						'id'=>'shared',
+						'readonly'=>true,
+						'draggable'=>false,
+						'allowDrop'=>false,
+						'iconCls'=>'folder-shares',
+						//'expanded'=>true,
+						//'children'=>$children
+					);
+					$response[]=$node;
 				
 				break;
 				
@@ -208,7 +223,37 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return array('files'=>$fileIds, 'folders'=>$folderIds);
 	}
 	
+	
+	private function _listShares(){
+		$stmt = GO_Files_Model_Folder::model()->find(array(
+				'criteriaObject'=>  GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('visible', 1)
+		));
+		
+		//sort by path and only list top level shares
+		$shares = array();
+		while($folder = $stmt->fetch())
+		{
+			$shares[$folder->path]=$folder;
+		}
+		ksort($shares);
+		
+		$response=array();
+		foreach($shares as $path=>$folder){
+			$isSubDir = isset($lastFolder) && $folder->isSubFolderOf($lastFolder);
+			
+			if(!$isSubDir)
+				$response[]=$this->_folderToNode ($folder, true);
+			$lastFolder=$folder;
+		}
+		
+		return $response;
+	}
+	
 	public function actionList($params){
+		
+		if($params['folder_id']=='shared')
+			return $this->_listShares();
 		
 		//get the folder that contains the files and folders to list.
 		//This will check permissions too.
