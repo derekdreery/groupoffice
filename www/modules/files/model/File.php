@@ -80,18 +80,38 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		$this->columns['expire_time']['gotype'] = 'unixdate';
 		parent::init();
 	}
+	
+	protected function beforeSave() {
+		
+		if($this->folder->hasFile($this->name))
+			throw new Exception(GO::t('filenameExists','files'));
+		
+		return parent::beforeSave();
+	}
 
 	protected function afterSave($wasNew) {
 
 		if ($wasNew) {
 			//$this->fsFile->create();
 		} else {
-			//move folder on the filesystem after a rename
-			if ($this->isModified('name')) {
-				$oldPath = GO::config()->file_storage_path . dirname($this->path) . '/' . $this->getOldAttributeValue('name');
-				$newPath = GO::config()->file_storage_path . dirname($this->path) . '/' . $this->name;
-				if (!rename($oldPath, $newPath))
-					throw new Exception("Could not rename file on the filesystem");
+			
+			if($this->isModified('name')){				
+				//rename filesystem file.
+				$oldFsFile = new GO_Base_Fs_File(dirname($this->fsFile->path()).'/'.$this->getOldAttributeValue('name'));				
+				$oldFsFile->rename($this->name);
+			}
+			
+			if($this->isModified('folder_id')){
+				//file will be moved so we need the old folder path.
+				$oldFolderId = $this->getOldAttributeValue('folder_id');
+				$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
+				$oldRelPath = $oldFolder->path;				
+				$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $this->name;
+				
+				$fsFile= new GO_Base_Fs_File($oldPath);
+				
+				if (!$fsFile->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($this->path))))
+					throw new Exception("Could not rename folder on the filesystem");
 			}
 		}
 
@@ -120,6 +140,27 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 
 	protected function getThumbURL() {
 		return GO::url('core/thumb', 'src=' . urlencode($this->path) . '&w=100&h=100&filemtime=' . $this->fsFile->mtime());
+	}
+	
+	/**
+	 * Move a file to another folder
+	 * 
+	 * @param GO_Files_Model_Folder $destinationFolder
+	 * @return boolean 
+	 */
+	public function move($destinationFolder){
+		
+		$this->folder_id=$destinationFolder->id;		
+		return $this->save();
+	}
+	
+	public function copy($destinationFolder){
+		
+		$copy = $this->duplicate();
+		$copy->folder_id=$destinationFolder->id;
+		$copy->save();
+		
+		return $this->fsFile->copy($copy->fsFile->parent());		
 	}
 
 }

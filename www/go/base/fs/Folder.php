@@ -49,6 +49,74 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		return !is_dir($this->path) || rmdir($this->path);
 	}
 	
+	private function _validateSrcAndDestPath($srcPath, $destPath){
+		if(strpos($srcPath.'/', $destPath.'/')===0)
+		{
+			throw new Exception('The destination is located inside the source directory');
+		}
+	}
+	
+	
+	/**
+	 *
+	 * @param GO_Base_Fs_Folder $destinationFolder 
+	 * @return GO_Base_Fs_Folder $destinationFolder
+	 */
+	public function move($destinationFolder){
+
+		$this->_validateSrcAndDestPath($destinationFolder->path(), $this->path());
+		
+			
+		$movedFolder = new GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());
+		if(!$movedFolder->create())
+			throw new Exception ("Could not create ".$destinationFolder->path());
+		
+		
+		$ls = $this->ls(true);
+		foreach($ls as $fsObject){
+			if($fsObject->isFolder()){				
+				$newDestinationFolder= new GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());				
+				$fsObject->move($newDestinationFolder);
+			}else
+			{
+				$fsObject->move($movedFolder);
+			}
+		}
+		
+		$this->delete();
+		
+		$this->path = $movedFolder->path();
+		
+		return true;
+	}
+	
+	/**
+	 * Copy a folder to another folder.
+	 * 
+	 * @param GO_Base_Fs_Folder $destinationFolder 
+	 * @return boolean
+	 */
+	public function copy($destinationFolder){
+		$this->_validateSrcAndDestPath($destinationFolder->path(), $this->path());
+		
+		$copiedFolder = new GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());
+		if(!$copiedFolder->create())
+			throw new Exception ("Could not create ".$destinationFolder->path());
+		
+		$ls = $this->ls(true);
+		foreach($ls as $fsObject){
+			if($fsObject->isFolder()){				
+				$newDestinationFolder= new GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());				
+				$fsObject->copy($newDestinationFolder);
+			}else
+			{
+				$fsObject->copy($copiedFolder);
+			}
+		}
+		
+		return $copiedFolder;
+	}
+	
 	/**
 	 * Create the folder
 	 * 

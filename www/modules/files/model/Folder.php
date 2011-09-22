@@ -121,26 +121,46 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	protected function getFsFolder() {
 		return new GO_Base_Fs_Folder(GO::config()->file_storage_path . $this->path);
 	}
+	
+	protected function beforeSave() {
+		
+		if($this->parent->hasFolder($this->name))
+			throw new Exception(GO::t('folderExists','files'));
+		
+		return parent::beforeSave();
+	}
 
-	protected function afterSave($wasNew) {		
+	protected function afterSave($wasNew) {
 
 		if ($wasNew) {
 			$this->fsFolder->create();
-		}else
-		{
-			//move folder on the filesystem after a rename
+		} else {
+			
 			if($this->isModified('name')){
-				$oldPath = GO::config()->file_storage_path.dirname($this->path).'/'.$this->getOldAttributeValue('name');
-				$newPath = GO::config()->file_storage_path.dirname($this->path).'/'.$this->name;
-				if(!rename($oldPath, $newPath))
-					throw new Exception("Could not rename folder on the filesystem");
 				
-				$this->_path = $newPath;
+				$oldFsFolder = new GO_Base_Fs_Folder(dirname($this->fsFolder->path()).'/'.$this->getOldAttributeValue('name'));
+				
+				$oldFsFolder->rename($this->name);
+			}
+			
+			if($this->isModified('parent_id')){
+				//file will be moved so we need the old folder path.
+				$oldFolderId = $this->getOldAttributeValue('parent_id');
+				$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
+				$oldRelPath = $oldFolder->path;				
+				
+				$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $this->name;
+							
+				$fsFolder = new GO_Base_Fs_Folder($oldPath);
+				
+				if (!$fsFolder->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($this->path))))
+					throw new Exception("Could not rename folder on the filesystem");
 			}
 		}
 
 		return parent::afterSave($wasNew);
 	}
+	
 
 	protected function afterDelete() {		
 		$this->fsFolder->delete();
@@ -336,5 +356,52 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
   public function hasNotifyUser($user_id){
     return GO_Files_Model_FolderNotification::model()->findByPk(array('user_id'=>$user_id, 'folder_id'=>$this->pk)) !== false;
   }
-
+	
+	
+	/**
+	 * Check if this folder has a file by filename and return the model.
+	 * 
+	 * @param String $filename
+	 * @return GO_Files_Model_File 
+	 */
+	public function hasFile($filename){		
+		return $this->files(array(
+				'criteriaObject'=>GO_Base_Db_FindCriteria::newInstance()->addCondition('name', $filename),
+				'single'=>true
+		));
+	}
+	
+	/**
+	 * Check if this folder has a file by filename and return the model.
+	 * 
+	 * @param String $filename
+	 * @return GO_Files_Model_Folder
+	 */
+	public function hasFolder($filename){		
+		return $this->folders(array(
+				'criteriaObject'=>GO_Base_Db_FindCriteria::newInstance()->addCondition('name', $filename),
+				'single'=>true
+		));
+	}
+	
+	/**
+	 * Move a folder to another folder
+	 * 
+	 * @param GO_Files_Model_Folder $destinationFolder
+	 * @return boolean 
+	 */
+	public function move($destinationFolder){
+		
+		$this->parent_id=$destinationFolder->id;		
+		return $this->save();
+	}
+	
+	public function copy($destinationFolder){
+		
+		$copy = $this->duplicate();
+		$copy->parent_id=$destinationFolder->id;
+		$copy->save();
+		
+		$this->fsFolder->copy($copy->fsFolder->parent());		
+	}
 }
