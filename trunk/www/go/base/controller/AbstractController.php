@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * Copyright Intermesh
  *
  * This file is part of Group-Office. You should have received a copy of the
@@ -7,11 +7,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
- * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
- * @copyright Copyright Intermesh
- * @author Merijn Schering <mschering@intermesh.nl>
  */
-
 
 /**
  * Abstract class for al Group-Office controllers.
@@ -32,6 +28,11 @@
  * If you supply exportVariables in this response object the view will import
  * those variables for use in the view.
  * 
+ * @package GO.base.controller
+ * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
+ * @copyright Copyright Intermesh BV.
+ * @author Merijn Schering <mschering@intermesh.nl> 
+ * @abstract
  */
 abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable {
 	

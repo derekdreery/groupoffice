@@ -1,6 +1,21 @@
 <?php
+/*
+ * Copyright Intermesh BV.
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ */
+
 /**
- * This class is solely for backwards compatibility
+ * A collection that holds all the installed modules.
+ * 
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @version $Id: config.class.inc.php 7687 2011-06-23 12:00:34Z mschering $
+ * @copyright Copyright Intermesh BV.
+ * @package go.base 
  */
 class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	
@@ -10,7 +25,11 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		parent::__construct($model);
 	}
 	
-	
+	/**
+	 * Returns an array of all module classes found in the modules folder.
+	 * 
+	 * @return array 
+	 */
 	public function getAvailableModules(){
 		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'modules');
 		
@@ -28,7 +47,12 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	}
 	
 
-	
+	/**
+	 * Call a method of a module class. eg. GO_Notes_NotesModule::firstRun
+	 * 
+	 * @param string $method
+	 * @param array $params 
+	 */
 	public function callModuleMethod($method, $params=array()){
 		
 		$stmt = $this->getAll();

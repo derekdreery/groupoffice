@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * 
  * Copyright Intermesh
  *

@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright Intermesh
+ * Copyright Intermesh BV
  * 
  * This file is part of Group-Office. You should have received a copy of the
  * Group-Office license along with Group-Office. See the file /LICENSE.TXT
