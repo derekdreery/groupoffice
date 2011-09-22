@@ -14,7 +14,7 @@
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
- * @package go.base.util
+ * @package GO.base.util
  * @since Group-Office 3.0
  */
 

@@ -15,7 +15,7 @@
  *
  * @copyright Copyright Intermesh
  * @version $Id$
- * @package go.base.util
+ * @package GO.base.util
  * @since Group-Office 3.0
  */
 

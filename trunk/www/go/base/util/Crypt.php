@@ -35,7 +35,7 @@
  * @author Andrew Johnson  http://www.itnewb.com/user/Andrew
  * @version $Id: config.class.inc.php 7687 2011-06-23 12:00:34Z mschering $
  * @copyright Cryptastic, by Andrew Johnson (2009).
- * @package go.base.util 
+ * @package GO.base.util 
  */
 
 

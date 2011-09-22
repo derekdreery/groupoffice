@@ -15,7 +15,7 @@
  *
  * @copyright Copyright Intermesh BV.
  * @version $Id$
- * @package go.base.util
+ * @package GO.base.util
  */
 
 class GO_Base_Util_Image {
