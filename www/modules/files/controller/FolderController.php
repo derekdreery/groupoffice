@@ -52,7 +52,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					
 					$stmt = $folder->folders();
 					while($subfolder = $stmt->fetch()){				
-						$response[]=$this->_folderToNode($subfolder);
+						$response[]=$this->_folderToNode($subfolder, false);
 					}
 				
 					break;
@@ -69,11 +69,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$node = array(
 				'text'=>$folder->name,
 				'id'=>$folder->id,
-				'expanded'=>true,
 				'draggable'=>false,
-				'iconCls'=>'folder-default',
-				'children'=>array(),
-				'notreloadable'=>true
+				'iconCls'=>'folder-default'
 		);
 		
 		if($withChildren){
@@ -287,8 +284,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		}else
 		{
 			$record['type_id']='f:'.$model->id;
-			$record['type']=GO::t('file','files');
+			$record['type']=$model->fsFile->mimeType();		
+			$record['extension']=$model->fsFile->extension();
 		}
+		$record['thumb_url']=$model->thumbURL;
 		
 		return $record;
 	}

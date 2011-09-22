@@ -120,10 +120,10 @@ cursor:pointer;
 	/*background: #dddddd;*/
 	padding: 3px;
 	text-align:center;
-}
-.fs-thumb img{
 	height: 100px;
 	width: 100px;
+	background-position:  center center;
+	background-repeat: no-repeat;
 }
 .fs-thumb-wrap{
 	float: left;
