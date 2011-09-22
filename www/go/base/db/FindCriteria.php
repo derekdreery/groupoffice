@@ -12,6 +12,7 @@ class GO_Base_Db_FindCriteria {
 	private $_columns;
 		
 	/**
+	 * Get a new instance object of this class file
 	 * 
 	 * @return GO_Base_Db_FindCriteria 
 	 */
@@ -23,8 +24,8 @@ class GO_Base_Db_FindCriteria {
 	 * Add a model to the criteria object so it can determine of which PDO type a column is.
 	 * You can also give an alias with it. If not then the alias defaults to "t".
 	 * 
-	 * @param GO_Base_Db_ActiveRecord $model
-	 * @param String $tableAlias 
+	 * @param GO_Base_Db_ActiveRecord $model An ActiveRecord model.
+	 * @param String $tableAlias The alias that this model needs to use. Default: 't'.
 	 */
 	public function addModel($model, $tableAlias='t'){
 		$this->_columns[$tableAlias]=$model->getColumns();
@@ -33,9 +34,9 @@ class GO_Base_Db_FindCriteria {
 	
 	
 	/**
-	 * A
+	 * Private function to add 'AND' or 'OR' to the current condition.
 	 * 
-	 * @param Boolean $useAnd 
+	 * @param Boolean $useAnd True for 'AND', false for 'OR'.
 	 */
 	private function _appendOperator($useAnd){
 		if($this->_condition!='')
@@ -43,6 +44,13 @@ class GO_Base_Db_FindCriteria {
 		
 	}
 	
+	/**
+	 * Private function to recognize the PDOTYPE(http://www.php.net/manual/en/pdo.constants.php) of the given fields.
+	 * 
+	 * @param String $tableAlias The alias of the table in this SQL statement.
+	 * @param String $field The field for where the PDOTYPE needs to be checked.
+	 * @return int type The constant of the found PDO type .
+	 */
 	private function _getPdoType($tableAlias, $field){
 		if(isset($this->_columns[$tableAlias][$field]['type']))
 			$type = $this->_columns[$tableAlias][$field]['type'];
@@ -53,6 +61,14 @@ class GO_Base_Db_FindCriteria {
 		return $type;
 	}
 	
+	/**
+	 * Private function to add the given condition to the rest of this object's condition string.
+	 * 
+	 * @param String $tableAlias The alias of the table in this SQL statement.
+	 * @param String $field The field where this condition is for.
+	 * @param Mixed $value The value of the field for this condition.
+	 * @param String $comparator How needs this field be compared with the value. Can be ('<','>','<>','=<','>=','=').
+	 */
 	private function _appendConditionString($tableAlias, $field, $value, $comparator){
 		$paramTag = $this->_getParamTag();
 		
@@ -60,6 +76,16 @@ class GO_Base_Db_FindCriteria {
 		$this->_condition .= ' `'.$tableAlias.'`.`'.$field.'` '.$comparator.' '.$paramTag;
 	}
 	
+	/**
+	 * Adds a condition to this object and returns itself.
+	 * 
+	 * @param type $field The field where this condition is for.
+	 * @param type $value The value of the field for this condition.
+	 * @param type $comparator How needs this field be compared with the value. Can be ('<','>','<>','=<','>=','=').
+	 * @param type $tableAlias The alias of the table in this SQL statement.
+	 * @param type $useAnd True for 'AND', false for 'OR'. Default: true.
+	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
+	 */
 	public function addCondition($field, $value, $comparator='=',$tableAlias='t', $useAnd=true) {
 		
 		$this->_appendOperator($useAnd);
@@ -67,11 +93,23 @@ class GO_Base_Db_FindCriteria {
 		return $this;
 	}
 	
-	
+	/**
+	 * Add an IN condition to this object and returns itself.
+	 * 
+	 * @param type $field The field where this condition is for.
+	 * @param type $value The value of the field for this condition.
+	 * @param type $tableAlias The alias of the table in this SQL statement.
+	 * @param type $useAnd True for 'AND', false for 'OR'. Default: true.
+	 * @param type $useNot True for 'NOT IN', false for 'IN'. Default: false.
+	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
+	 */
 	public function addInCondition($field, $value, $tableAlias='t', $useAnd=true, $useNot=false) {	
 				
 		if(!is_array($value))
 			throw new Exception("ERROR: Value for addInCondition must be an array");
+		
+//		if(!count($value))
+//			throw new Exception("ERROR: Value for addInCondition can't be empty");
 		
 		$this->_appendOperator($useAnd);
 		$comparator = $useNot ? 'NOT IN' : 'IN';
@@ -83,13 +121,24 @@ class GO_Base_Db_FindCriteria {
 			$this->_params[$paramTag]=array($val, $this->_getPdoType($tableAlias, $field));
 		}
 		
-		$this->_condition .= ' `'.$tableAlias.'`.`'.$field.'` '.$comparator.' ('.implode(',',$paramTags).')';
+		if(count($value))
+			$this->_condition .= ' `'.$tableAlias.'`.`'.$field.'` '.$comparator.' ('.implode(',',$paramTags).')';
 		
 		return $this;
 		
 	}
 	
-	
+	/**
+	 * Add a search condition to this object and returns itself.
+	 * The $useExact parameter verifies the given value as an exact string or adds a '%' before and after the given value.
+	 * 
+	 * @param type $field The field where this condition is for.
+	 * @param string $value The value of the field for this condition.
+	 * @param type $useAnd True for 'AND', false for 'OR'. Default: true.
+	 * @param type $useNot True for 'NOT LIKE', false for 'LIKE'. Default: false.
+	 * @param type $useExact True if you need an exact match for the given value, false if it needs to be a part of the given value. Default: false.
+	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
+	 */
 	public function addSearchCondition($field, $value, $useAnd=true, $useNot=false, $useExact=false) {
 		
 		$this->_appendOperator($useAnd);
@@ -103,24 +152,61 @@ class GO_Base_Db_FindCriteria {
 		return $this;
 	}
 
+	/**
+	 * Private function to get the current parameter prefix.
+	 * 
+	 * @return String The next available parameter prefix.
+	 */
 	private function _getParamTag() {
 		self::$_paramCount++;
 		return $this->_paramPrefix.self::$_paramCount;
 	}
 	
+	/**
+	 * Returns the current condition value of this GO_Base_Db_FindCriteria object as a string.
+	 * 
+	 * @return String Current condition value.
+	 */
 	public function getCondition() {
 		return $this->_condition;
 	}
 	
+	/**
+	 * Returns the current parameter values of this GO_Base_Db_FindCriteria object as an array.
+	 * 
+	 * @return Array Current parameter values.
+	 */
 	public function getParams() {
 		return $this->_params;
 	}
 	
-	
+	/**
+	 * Merge an other GO_Base_Db_FindCriteria object together with this GO_Base_Db_FindCriteria object.
+	 * Then returns the complete merged GO_Base_Db_FindCriteria object.
+	 * 
+	 * @param GO_Base_Db_FindCriteria $criteria The GO_Base_Db_FindCriteria object that needs to be merged with this GO_Base_Db_FindCriteria object.
+	 * @param type $useAnd True for 'AND', false for 'OR'. Default: true.
+	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
+	 */
 	public function mergeWith(GO_Base_Db_FindCriteria $criteria, $useAnd=true) {
-		$operator = $useAnd ? 'AND' : 'OR';
-		$this->_condition = '('.$this->_condition.') '.$operator.' ('.$criteria->getCondition().')';
-		$this->_params = array_merge($this->_params, $criteria->getParams());
+		
+		$condition = $criteria->getCondition();
+		
+		if(!empty($condition)){		
+			$operator = $useAnd ? 'AND' : 'OR';
+			
+			$thisCondition = $this->getCondition();
+			if(!empty($thisCondition))
+			{
+				$this->_condition = ' ('.$thisCondition.') '.$operator.' ('.$condition .')';
+				$this->_params = array_merge($this->getParams(), $criteria->getParams());
+			}else
+			{
+				$this->_condition = $condition;
+				$this->_params = $criteria->getParams();
+			}		
+		}
+		
 		return $this;
 	}
 }

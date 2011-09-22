@@ -39,19 +39,22 @@
 
 class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	
+	const STATUS_NEEDS_ACTION = "NEEDS-ACTION";
+	const STATUS_COMPLETED = "COMPLETED";
+	const STATUS_ACCEPTED = "ACCEPTED";
+	const STATUS_DECLINED = "DECLINED";
+	const STATUS_TENTATIVE = "TENTATIVE";
+	const STATUS_DELEGATED = "DELEGATED";
+	const STATUS_IN_PROCESS = "IN-PROCESS";
 	
 	public function find($params = array()) {
 		
-		
-		if(isset($params['taskFilter'])){
-				
-			
-			$criteria = GO_Base_Db_FindCriteria::newInstance()
-				->addModel(GO_Tasks_Model_Task::model(),'t');
-			//	->addModel(GO_Tasks_Model_Tasklist::model(),'tl');
-			
+		// Check for a given filter on the statusses
+		if(isset($params['statusFilter'])) {
+			$statusCriteria = GO_Base_Db_FindCriteria::newInstance()
+				->addModel(GO_Tasks_Model_Task::model(),'t');			
 
-			switch($params['taskFilter']) {
+			switch($params['statusFilter']) {
 				case 'today':
 					$start_time = mktime(0,0,0);
 					$end_time = GO_Base_Util_Date::date_add($start_time, 1);
@@ -60,6 +63,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 				case 'sevendays':
 					$start_time = mktime(0,0,0);
 					$end_time = GO_Base_Util_Date::date_add($start_time, 7);
+					$show_completed=false;	
 					break;
 
 				case 'overdue':
@@ -92,49 +96,53 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 				break;
 
 				default:
-					//$start_time=0;
-					//$end_time=0;
-					//unset($show_completed);
-					//unset($show_future);
-					break;
+					// Nothing
+				break;
 			}
 			
 			if(isset($show_completed)) {
-				if($show_completed) {
-					//$gridParams['where'] .=' AND completion_time>0';
-					$criteria->addCondition('completion_time', 0, '>');
-				} else {
-					//$gridParams['where'] .=' AND completion_time=0';
-					$criteria->addCondition('completion_time', 0, '=');
-				}
+				if($show_completed)
+					$statusCriteria->addCondition('completion_time', 0, '>');
+				else
+					$statusCriteria->addCondition('completion_time', 0, '=');
 			}
 			
-			if(!empty($start_time)) {
-				//$gridParams['where']=' AND due_time>=:start_time';
-				//$gridParams['bindParams'][':start_time'] = $start_time;
-				$criteria->addCondition('due_time', $start_time, '>=');
-			}	
-			if(!empty($end_time)) {
-				//$gridParams['where']=' AND due_time<:end_time';
-				//$gridParams['bindParams'][':end_time'] = $end_time;
-				$criteria->addCondition('due_time', $end_time, '<');
-			}
+			if(!empty($start_time)) 
+				$statusCriteria->addCondition('due_time', $start_time, '>=');
+				
+			if(!empty($end_time)) 
+				$statusCriteria->addCondition('due_time', $end_time, '<');
 
 			if(isset($show_future)) {
 				$now = GO_Base_Util_Date::date_add(mktime(0,0,0),1);
-				//$gridParams['bindParams'][':now_time'] = $now;
-				if($show_future) {
-					//$gridParams['where'] .=' AND start_time<:now_time';
-					$criteria->addCondition('start_time', $now, '>=');
-				} else {
-					//$gridParams['where'] .=' AND start_time >=:now_time';
-					$criteria->addCondition('start_time', $now, '<');
-				}
+				if($show_future) 
+					$statusCriteria->addCondition('start_time', $now, '>=');
+				else
+					$statusCriteria->addCondition('start_time', $now, '<');
 			}
-			$params['criteriaObject']=$criteria;
+			
+			$params['criteriaObject']=$statusCriteria;
 		}
 		
-		
+		// Check for a given filter on the categories
+		if(isset($params['categoryFilter'])) {
+			$categoryCriteria = GO_Base_Db_FindCriteria::newInstance()
+				->addModel(GO_Tasks_Model_Task::model(),'t');
+			
+			$categories = json_decode($params['categoryFilter']);
+			
+//			foreach($categories as $category) 
+//				$categoryCriteria->addCondition('category_id', $category, '=','t',false);
+			//if(count($categories))
+			$categoryCriteria->addInCondition('category_id', $categories,'t',false,false);
+			
+			
+
+			if(isset($params['criteriaObject']))
+				$params['criteriaObject']->mergeWith($categoryCriteria);
+			else
+				$params['criteriaObject'] = $categoryCriteria;
+		}
 		
 		return parent::find($params);
 	}
@@ -189,16 +197,34 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	protected function getCacheAttributes() {
 		return array('name'=>$this->name, 'description'=>$this->description);
 	}
-	
+		
 	public function beforeSave() {
 		
-		if($this->status=='COMPLETED' && empty($this->completion_time))
-		{
-			$this->completion_time = time();
-			$this->_recur(); // Check for recurrency in the rrule attribute of this object
-		}
+		if($this->status==GO_Tasks_Model_Task::STATUS_COMPLETED && empty($this->completion_time))
+			$this->setCompleted(true, false);
 
 		return parent::beforeSave();
+	}
+	
+	/**
+	 * Set the task to completed or not completed.
+	 * 
+	 * @param Boolean $complete 
+	 * @param Boolean $save 
+	 */
+	public function setCompleted($complete=true, $save=true) {
+		if($complete) {
+			$this->completion_time = time();
+			$this->status=GO_Tasks_Model_Task::STATUS_COMPLETED;
+			$this->_recur();
+			$this->rrule='';
+		} else {
+			$this->completion_time = 0;
+			$this->status=GO_Tasks_Model_Task::STATUS_NEEDS_ACTION;
+		}
+		
+		if($save)
+			$this->save();
 	}
 	
 	/**
@@ -214,7 +240,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 				'completion_time'=>0,
 				'start_time'=>time(),
 				'due_time'=>$rrule->getNextRecurrence($this->due_time+1),
-				'status'=>'NEEDS-ACTION'
+				'status'=>GO_Tasks_Model_Task::STATUS_NEEDS_ACTION
 			));
 		}
 	}

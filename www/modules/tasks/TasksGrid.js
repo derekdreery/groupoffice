@@ -26,8 +26,6 @@ GO.tasks.TasksPanel = function(config)
 				scope:this
 			});
 
-			delete this.store.baseParams['completed_task_id'];
-			delete this.store.baseParams['checked'];
 		}, this);
 
 		var fields ={
@@ -58,7 +56,8 @@ GO.tasks.TasksPanel = function(config)
 			},{
 				header:GO.tasks.lang.category,
 				dataIndex: 'category_name',
-				width:150
+				width:150,
+				sortable:false
 			},
 //			{
 //				header:GO.lang.priority,

@@ -50,13 +50,12 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
-		if(isset($params['freq']) && !empty($params['freq']))
-		{
+		if(isset($params['freq']) && !empty($params['freq'])) {
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
 			$rRule->readJsonArray($params);		
 			$model->rrule = $rRule->createRrule();
 		}
-		
+				
 		if(isset($params['remind'])) // Check for a setted reminder
 		{
 			$model->reminder= GO_Base_Util_Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
@@ -101,119 +100,51 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 				);
 	}	
 	
-	protected function prepareGrid($grid) {
+	protected function beforeGrid(&$response, &$params, &$grid) {
+		
+		if(isset($params['completed_task_id'])) {
+			$updateTask = GO_Tasks_Model_Task::model()->findByPk($params['completed_task_id']);
+			if(isset($params['checked']) && $params['checked'] == 1)
+				$updateTask->setCompleted(true);
+			else
+				$updateTask->setCompleted(false);
+		}
+		
+		return parent::beforeGrid($response, $params, $grid);
+	}
+	
+	protected function prepareGrid(GO_Base_Provider_Grid $grid) {
 		$grid->formatColumn('completed','$model->status=="COMPLETED" ? 1 : 0');
+		$grid->formatColumn('category_name','$model->category->name',array(),'category_id');
+		$grid->formatColumn('tasklist_name','$model->tasklist_name');
+		//$grid->formatColumn('project_name','$model->project->name'); TODO: Implement the project from the ID and not from the name
 		return parent::prepareGrid($grid);
 	}
 	
-	protected function getGridParams($params){
-		
-		
+	protected function getGridParams($params) {
+
 		$gridParams =  array(
 				'ignoreAcl'=>true,
 				'joinCustomFields'=>true,
-				'by'=>array(array('tasklist_id', $this->multiselectIds, 'IN'))
+				'by'=>array(array('tasklist_id', $this->multiselectIds, 'IN')),
+				'fields'=>'t.*, tl.name AS tasklist_name',
+				'joinModel'=>array(
+					'model'=>'GO_Tasks_Model_Tasklist',					
+					'localField'=>'tasklist_id',
+					'tableAlias'=>'tl', //Optional table alias
+					)
 		);
 		
 		if(isset($params['show'])) {
-			$gridParams['taskFilter']=$params['show'];
+			$gridParams['statusFilter']=$params['show'];
 		}
-//		$params['show'] = isset($params['show']) ? $params['show'] : 0;
 		
-//
-//		
-//	
-//		
-//		if(!empty($params['show'])) {
-//			$start_time = 0;
-//			$end_time = 0;
-//			
-//			switch($params['show']) {
-//				case 'today':
-//					$start_time = mktime(0,0,0);
-//					$end_time = GO_Base_Util_Date::date_add($start_time, 1);
-//					break;
-//
-//				case 'sevendays':
-//					$start_time = mktime(0,0,0);
-//					$end_time = GO_Base_Util_Date::date_add($start_time, 7);
-//					break;
-//
-//				case 'overdue':
-//					$start_time = 0;
-//					$end_time = mktime(0,0,0);
-//					$show_completed=false;
-//					$show_future=false;
-//					break;
-//
-//				case 'completed':
-//					$start_time = 0;
-//					$end_time = 0;
-//					$show_completed=true;
-//					$show_future=false;
-//					break;
-//
-//				case 'future':
-//					$start_time = 0;
-//					$end_time = 0;
-//					$show_completed=false;				
-//					$show_future=true;
-//					break;
-//
-//				case 'active':
-//				case 'portlet':
-//					$start_time = 0;
-//					$end_time = 0;
-//					$show_completed=false;
-//					$show_future=false;
-//				break;
-//
-//				default:
-//					//$start_time=0;
-//					//$end_time=0;
-//					//unset($show_completed);
-//					//unset($show_future);
-//					break;
-//			}
-//			
-//			$gridParams['bindParams'] = array();
-//			
-//			$gridParams['where'] = ' 1';
-//			
-//			if(isset($show_completed)) {
-//			if($show_completed)
-//				$gridParams['where'] .=' AND completion_time>0';
-//			else
-//				$gridParams['where'] .=' AND completion_time=0';
-//			}
-//			
-//			if(!empty($start_time) && !empty($end_time)) {
-//				$gridParams['where'] .=' AND due_time>=:start_time AND due_time<:end_time';
-//				$gridParams['bindParams'][':start_time'] = $start_time;
-//				$gridParams['bindParams'][':end_time'] = $end_time;
-//			}	else if(!empty($start_time)) {
-//				$gridParams['where']=' AND due_time>=:start_time';
-//				$gridParams['bindParams'][':start_time'] = $start_time;
-//			}	else if(!empty($end_time)){
-//				$gridParams['where']=' AND due_time<:end_time';
-//				$gridParams['bindParams'][':end_time'] = $end_time;
-//			}
-//
-//			if(isset($show_future)) {
-//				$now = GO_Base_Util_Date::date_add(mktime(0,0,0),1);
-//				$gridParams['bindParams'][':now_time'] = $now;
-//				if($show_future)
-//					$gridParams['where'] .=' AND start_time<:now_time';
-//				else
-//					$gridParams['where'] .=' AND start_time >=:now_time';
-//			}
-//			
-//		}
-//
-//		GO::debug("*************************************");
-//		GO::debug($gridParams);
-//		GO::debug("*************************************");
-//	
+		if(isset($params['categories'])) {
+			$gridParams['categoryFilter']=$params['categories'];
+		}
+		
+		
+
 		return $gridParams;
 	}
 }
