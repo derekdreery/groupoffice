@@ -173,5 +173,15 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		return $this->path;
 	}
 	
+	/**
+	 * Check if the given folder is a subfolder of this folder.
+	 * 
+	 * @param GO_Base_Fs_Folder $subFolder
+	 * @return boolean 
+	 */
+	public function isSubFolderOf($parent){
+		return strpos($this->path().'/', $parent->path().'/')===0;
+	}
+	
 
 }
