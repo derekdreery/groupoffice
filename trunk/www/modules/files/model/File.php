@@ -83,7 +83,8 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave() {
 		
-		if($this->folder->hasFile($this->name))
+		$existingFile = $this->folder->hasFile($this->name);
+		if($existingFile && $existingFile->id!=$this->id)
 			throw new Exception(GO::t('filenameExists','files'));
 		
 		return parent::beforeSave();
@@ -139,7 +140,7 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 
 	protected function getThumbURL() {
-		return GO::url('core/thumb', 'src=' . urlencode($this->path) . '&w=100&h=100&filemtime=' . $this->fsFile->mtime());
+		return GO::url('core/thumb', 'src=' . urlencode($this->path) . '&lw=100&ph=100&zc=1&filemtime=' . $this->fsFile->mtime());
 	}
 	
 	/**

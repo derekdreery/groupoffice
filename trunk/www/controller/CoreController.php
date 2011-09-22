@@ -105,47 +105,42 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 		return $response;
 	}
-	
-	
+
 	/**
 	 * Get users
 	 * 
 	 * @param array $params @see GO_Base_Provider_Grid::getDefaultParams()
 	 * @return  
 	 */
-	public function actionUsers($params){		
-		
-		$grid = new GO_Base_Provider_Grid();		
-		$grid->setDefaultSortOrder('name','ASC');
-		
-		$grid->formatColumn('name','$model->name',array(),array('first_name','last_name'));
-		$grid->formatColumn('cf', '$model->id.":".$model->name');//special field used by custom fields. They need an id an value in one.
-		
+	public function actionUsers($params) {
+
+		$grid = new GO_Base_Provider_Grid();
+		$grid->setDefaultSortOrder('name', 'ASC');
+
+		$grid->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
+		$grid->formatColumn('cf', '$model->id.":".$model->name'); //special field used by custom fields. They need an id an value in one.
+
 		$stmt = GO_Base_Model_User::model()->find($grid->getDefaultParams());
-		$grid->setStatement($stmt);		
-		
+		$grid->setStatement($stmt);
+
 
 		return $grid->getData();
 	}
-	
+
 	/**
 	 * Get user groups
 	 * 
 	 */
-	public function actionGroups($params){
-		$grid = new GO_Base_Provider_Grid();		
-		$grid->setDefaultSortOrder('name','ASC');
-			
+	public function actionGroups($params) {
+		$grid = new GO_Base_Provider_Grid();
+		$grid->setDefaultSortOrder('name', 'ASC');
+
 		$stmt = GO_Base_Model_Group::model()->find($grid->getDefaultParams());
-		$grid->setStatement($stmt);		
-		
+		$grid->setStatement($stmt);
+
 
 		return $grid->getData();
 	}
-	
-	
-	
-	
 
 	/**
 	 * Todo replace compress.php with this action
@@ -251,35 +246,87 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 	public function actionThumb($params) {
 
-		$file = new GO_Base_Fs_File(GO::config()->file_storage_path . $params['src']);
-		
-		
-		$dir = GO::config()->root_path.'views/extjs3/Default/images/128x128/filetypes/';
-		$url = GO::config()->host.'views/extjs3/Default/images/128x128/filetypes/';
+	
+
+		$dir = GO::config()->root_path . 'views/Extjs3/themes/Default/images/128x128/filetypes/';
+		$url = GO::config()->host . 'views/Extjs3/themes/Default/images/128x128/filetypes/';
+
+		if (is_dir(GO::config()->file_storage_path . $params['src'])) {
+			$src = $dir . 'folder.png';
+		} else {
+
+			switch ($file->extension()) {
+
+				case 'ico':
+				case 'jpg':
+				case 'jpeg':
+				case 'png':
+				case 'gif':
+				case 'xmind':
+					$src = GO::config()->file_storage_path . $params['src'];
+					break;
 
 
-		switch ($file->extension()) {
+				case 'tar':
+				case 'tgz':
+				case 'gz':
+				case 'bz2':
+				case 'zip':
+					$src = $dir . 'zip.png';
+					break;
+				case 'odt':
+				case 'docx':
+				case 'doc':
+				case 'htm':
+				case 'html':
+					$src = $dir . 'doc.png';
 
-			case 'ico':
-			case 'jpg':
-			case 'jpeg':
-			case 'png':
-			case 'gif':
-			case 'xmind':
+					break;
+
+				case 'odc':
+				case 'ods':
+				case 'xls':
+				case 'xlsx':
+					$src = $dir . 'spreadsheet.png';
+					break;
+
+				case 'odp':
+				case 'pps':
+				case 'pptx':
+				case 'ppt':
+					$src = $dir . 'pps.png';
+					break;
+				case 'eml':
+					$src = $dir . 'message.png';
+					break;
 
 
+				case 'log':
+					$src = $dir . 'txt.png';
+					break;
+				default:
+					if (file_exists($dir . $file->extension() . '.png')) {
+						$src = $dir . $file->extension() . '.png';
+					} else {
+						$src = $dir . 'unknown.png';
+					}
+					break;
+			}
+		}
 
-				$w = isset($params['w']) ? intval($params['w']) : 0;
-				$h = isset($params['h']) ? intval($params['h']) : 0;
-				$zc = !empty($params['zc']) && !empty($w) && !empty($h);
+		$file = new GO_Base_Fs_File($src);
 
-				$lw = isset($params['lw']) ? intval($params['lw']) : 0;
-				$lh = isset($params['lh']) ? intval($params['lh']) : 0;
+		$w = isset($params['w']) ? intval($params['w']) : 0;
+		$h = isset($params['h']) ? intval($params['h']) : 0;
+		$zc = !empty($params['zc']) && !empty($w) && !empty($h);
 
-				$pw = isset($params['pw']) ? intval($params['pw']) : 0;
-				$ph = isset($params['ph']) ? intval($params['ph']) : 0;
+		$lw = isset($params['lw']) ? intval($params['lw']) : 0;
+		$lh = isset($params['lh']) ? intval($params['lh']) : 0;
 
-				if ($file->extension() == 'xmind') {
+		$pw = isset($params['pw']) ? intval($params['pw']) : 0;
+		$ph = isset($params['ph']) ? intval($params['ph']) : 0;
+
+		if ($file->extension() == 'xmind') {
 
 //			$filename = $file->nameWithoutExtension().'.jpeg';
 //
@@ -298,122 +345,119 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //				zip_close($zipfile);
 //			}
 //			$path = 'thumbcache/' . $filename;
-				}
+		}
 
 
 
-				$cacheDir = new GO_Base_Fs_Folder(GO::config()->file_storage_path . 'thumbcache');
-				$cacheDir->create();
+		$cacheDir = new GO_Base_Fs_Folder(GO::config()->file_storage_path . 'thumbcache');
+		$cacheDir->create();
 
 
-				$cacheFilename = str_replace(array('/', '\\'), '_', $file->parent()->path() . '_' . $w . '_' . $h . '_' . $lw . '_' . $lh . '_' . $pw . '_' . $lw);
-				if ($zc) {
-					$cacheFilename .= '_zc';
-				}
+		$cacheFilename = str_replace(array('/', '\\'), '_', $file->parent()->path() . '_' . $w . '_' . $h . '_' . $lw . '_' . $lh . '_' . $pw . '_' . $lw);
+		if ($zc) {
+			$cacheFilename .= '_zc';
+		}
 //$cache_filename .= '_'.filesize($full_path);
-				$cacheFilename .= $file->name();
+		$cacheFilename .= $file->name();
 
-				$readfile = $cacheDir->path() . '/' . $cacheFilename;
-				$thumbExists = file_exists($cacheDir->path() . '/' . $cacheFilename);
-				$thumbMtime = $thumbExists ? filemtime($cacheDir->path() . '/' . $cacheFilename) : 0;
+		$readfile = $cacheDir->path() . '/' . $cacheFilename;
+		$thumbExists = file_exists($cacheDir->path() . '/' . $cacheFilename);
+		$thumbMtime = $thumbExists ? filemtime($cacheDir->path() . '/' . $cacheFilename) : 0;
 
-				if (!empty($params['nocache']) || !$thumbExists || $thumbMtime < $file->mtime() || $thumbMtime < $file->ctime()) {
-					$image = new GO_Base_Util_Image($file->path());
-					if (!$image->load_success) {
-						//failed. Stream original image
-						$readfile = $file->path();
-					} else {
+		if (!empty($params['nocache']) || !$thumbExists || $thumbMtime < $file->mtime() || $thumbMtime < $file->ctime()) {
+			$image = new GO_Base_Util_Image($file->path());
+			if (!$image->load_success) {
+				//failed. Stream original image
+				$readfile = $file->path();
+			} else {
 
 
-						if ($zc) {
-							$image->zoomcrop($w, $h);
+				if ($zc) {
+					$image->zoomcrop($w, $h);
+				} else {
+					if ($lw || $lh || $pw || $lw) {
+						//treat landscape and portrait differently
+						$landscape = $image->landscape();
+						if ($landscape) {
+							$w = $lw;
+							$h = $lh;
 						} else {
-							if ($lw || $lh || $pw || $lw) {
-								//treat landscape and portrait differently
-								$landscape = $image->landscape();
-								if ($landscape) {
-									$w = $lw;
-									$h = $lh;
-								} else {
-									$w = $pw;
-									$h = $ph;
-								}
-							}
-
-							if ($w && $h) {
-								$image->resize($w, $h);
-							} elseif ($w) {
-								$image->resizeToWidth($w);
-							} else {
-								$image->resizeToHeight($h);
-							}
+							$w = $pw;
+							$h = $ph;
 						}
-						$image->save($cacheDir->path() . '/' . $cacheFilename);
+					}
+
+					if ($w && $h) {
+						$image->resize($w, $h);
+					} elseif ($w) {
+						$image->resizeToWidth($w);
+					} else {
+						$image->resizeToHeight($h);
 					}
 				}
-
-				header("Expires: " . date("D, j M Y G:i:s ", time() + (86400 * 365)) . 'GMT'); //expires in 1 year
-				header('Cache-Control: cache');
-				header('Pragma: cache');
-				header('Content-Type: ' . $file->mimeType());
-				header('Content-Disposition: inline; filename="' . $cacheFilename . '"');
-				header('Content-Transfer-Encoding: binary');
-
-				readfile($readfile);
-
-				break;
-
-
-			case 'pdf':
-				$this->redirect($url . 'pdf.png');
-				break;
-
-			case 'tar':
-			case 'tgz':
-			case 'gz':
-			case 'bz2':
-			case 'zip':
-				$this->redirect( $url . 'zip.png');
-				break;
-			case 'odt':
-			case 'docx':
-			case 'doc':
-				$this->redirect( $url . 'doc.png');
-				break;
-
-			case 'odc':
-			case 'ods':
-			case 'xls':
-			case 'xlsx':
-				$this->redirect( $url . 'spreadsheet.png');
-				break;
-
-			case 'odp':
-			case 'pps':
-			case 'pptx':
-			case 'ppt':
-				$this->redirect( $url . 'pps.png');
-				break;
-			case 'eml':
-				$this->redirect( $url . 'message.png');
-				break;
-
-			case 'htm':
-				$this->redirect( $url . 'doc.png');
-				break;
-
-			case 'log':
-				$this->redirect( $url . 'txt.png');
-				break;
-
-			default:
-				if (file_exists($dir . $file->extension() . '.png')) {
-					$this->redirect( $url . $file->extension() . '.png');
-				} else {
-					$this->redirect( $url . 'unknown.png');
-				}
-				break;
+				$image->save($cacheDir->path() . '/' . $cacheFilename);
+			}
 		}
+
+//				header("Expires: " . date("D, j M Y G:i:s ", time() + (86400 * 365)) . 'GMT'); //expires in 1 year
+//				header('Cache-Control: cache');
+//				header('Pragma: cache');
+//				header('Content-Type: ' . $file->mimeType());
+//				header('Content-Disposition: inline; filename="' . $cacheFilename . '"');
+//				header('Content-Transfer-Encoding: binary');
+
+		readfile($readfile);
+
+
+//			case 'pdf':
+//				$this->redirect($url . 'pdf.png');
+//				break;
+//
+//			case 'tar':
+//			case 'tgz':
+//			case 'gz':
+//			case 'bz2':
+//			case 'zip':
+//				$this->redirect( $url . 'zip.png');
+//				break;
+//			case 'odt':
+//			case 'docx':
+//			case 'doc':
+//				$this->redirect( $url . 'doc.png');
+//				break;
+//
+//			case 'odc':
+//			case 'ods':
+//			case 'xls':
+//			case 'xlsx':
+//				$this->redirect( $url . 'spreadsheet.png');
+//				break;
+//
+//			case 'odp':
+//			case 'pps':
+//			case 'pptx':
+//			case 'ppt':
+//				$this->redirect( $url . 'pps.png');
+//				break;
+//			case 'eml':
+//				$this->redirect( $url . 'message.png');
+//				break;
+//
+//			case 'htm':
+//				$this->redirect( $url . 'doc.png');
+//				break;
+//
+//			case 'log':
+//				$this->redirect( $url . 'txt.png');
+//				break;
+//
+//			default:
+//				if (file_exists($dir . $file->extension() . '.png')) {
+//					$this->redirect( $url . $file->extension() . '.png');
+//				} else {
+//					$this->redirect( $url . 'unknown.png');
+//				}
+//				break;
 	}
 
 }

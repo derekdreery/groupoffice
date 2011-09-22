@@ -124,7 +124,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave() {
 		
-		if($this->parent->hasFolder($this->name))
+		$existingFolder = $this->parent->hasFolder($this->name);
+		if($existingFolder && $existingFolder->id!=$this->id)
 			throw new Exception(GO::t('folderExists','files'));
 		
 		return parent::beforeSave();
@@ -403,5 +404,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$copy->save();
 		
 		$this->fsFolder->copy($copy->fsFolder->parent());		
+	}
+	
+	protected function getThumbURL() {
+		return GO::url('core/thumb', 'src=' . urlencode($this->path) . '&lw=100&ph=100&zc=1&filemtime=' . $this->fsFolder->mtime());
 	}
 }
