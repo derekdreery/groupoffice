@@ -22,9 +22,9 @@ class users extends db
 	}
 
 	function init_customfields_types(){
-		global $GO_MODULES, $customfield_types;
-		require_once($GO_MODULES->modules['users']['class_path'].'user_customfield_type.class.inc.php');
-		$customfield_types['user']=new user_customfield_type(array());
+//		global $GO_MODULES, $customfield_types;
+//		require_once($GO_MODULES->modules['users']['class_path'].'user_customfield_type.class.inc.php');
+//		$customfield_types['user']=new user_customfield_type(array());
 	}
 
 	public function get_register_email(){
