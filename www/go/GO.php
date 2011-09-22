@@ -16,7 +16,7 @@
  * @copyright Copyright Intermesh BV
  * @version $Id: Number.php 7962 2011-08-24 14:48:45Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
- * @package go
+ * @package GO
  */
 class GO{
 	

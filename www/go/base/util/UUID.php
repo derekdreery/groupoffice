@@ -14,7 +14,7 @@
  * @copyright Copyright Intermesh
  * @version $Id: Number.php 7962 2011-08-24 14:48:45Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
- * @package go.base.util
+ * @package GO.base.util
  */
 
 class GO_Base_Util_UUID {

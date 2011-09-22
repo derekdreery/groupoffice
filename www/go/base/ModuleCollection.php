@@ -15,7 +15,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @version $Id: config.class.inc.php 7687 2011-06-23 12:00:34Z mschering $
  * @copyright Copyright Intermesh BV.
- * @package go.base 
+ * @package GO.base 
  */
 class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 	
