@@ -27,7 +27,7 @@
  * @property Boolean $thumbs Show this folder in thumbnails
  * @property int $ctime
  * @property int $mtime
- * @property Boolean $readonly
+ * @property Boolean $readonly Means this folder is readonly even to the administrator! eg. Home folders may never be edited.
  * @property String $cm_state
  * @property int $apply_state
  * @property GO_Base_Fs_Folder $fsFolder
@@ -57,7 +57,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 	public function findAclId() {
 		//folder may have an acl ID if they don't have one we must recurse up the tree
-		//to find the acl.
+		//to find the acl.		
 		if ($this->acl_id > 0)
 			return parent::findAclId();
 		elseif($this->parent)
@@ -66,18 +66,18 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			return false;
 	}
 	
-	protected function appendAclJoin($findParams, $aclJoin){		
-			
-		$sql .= "\nLEFT JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
-		if(isset($params['permissionLevel']) && $findParams['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
-			$sql .= " AND go_acl.level>=".intval($findParams['permissionLevel']);
-		}
-		$sql .= " AND (go_acl.user_id=".intval($findParams['userId'])." OR go_acl.group_id IN (".implode(',',GO_Base_Model_User::getGroupIds($findParams['userId']))."))) ";		
-		
-		$sql .= "OR ISNULL(a.acl_id) OR a.acl_id=0";
-		
-		return $sql;
-	}
+//	protected function appendAclJoin($findParams, $aclJoin){		
+//			
+//		$sql .= "\nLEFT JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
+//		if(isset($params['permissionLevel']) && $findParams['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
+//			$sql .= " AND go_acl.level>=".intval($findParams['permissionLevel']);
+//		}
+//		$sql .= " AND (go_acl.user_id=".intval($findParams['userId'])." OR go_acl.group_id IN (".implode(',',GO_Base_Model_User::getGroupIds($findParams['userId']))."))) ";		
+//		
+//		$sql .= "OR ISNULL(a.acl_id) OR a.acl_id=0";
+//		
+//		return $sql;
+//	}
 
 	/**
 	 * Returns the table name
@@ -122,11 +122,27 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return new GO_Base_Fs_Folder(GO::config()->file_storage_path . $this->path);
 	}
 	
+	public function validate() {
+		if($this->parent_id==0){
+			//top level folders are readonly to everyone.
+			$this->readonly=1;
+			$this->acl_id=GO::modules()->files->acl_id;			
+		}
+		return parent::validate();
+	}
+	
 	protected function beforeSave() {
+
+		if(!$this->isNew && $this->readonly){
+			if($this->isModified('name') || $this->isModified('folder_id'))
+				return false;
+		}			
 		
-		$existingFolder = $this->parent->hasFolder($this->name);
-		if($existingFolder && $existingFolder->id!=$this->id)
-			throw new Exception(GO::t('folderExists','files'));
+		if($this->parent){
+			$existingFolder = $this->parent->hasFolder($this->name);
+			if($existingFolder && $existingFolder->id!=$this->id)
+				throw new Exception(GO::t('folderExists','files'));
+		}
 		
 		return parent::beforeSave();
 	}
@@ -214,10 +230,16 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
 		if(empty($folder->acl_id)){
 				$folder->setNewAcl($user->id);
-				$folder->user_id=$user->id;
-				$folder->visible=1;
-				$folder->save();
 		}
+		
+		
+		$folder->user_id=$user->id;
+		$folder->visible=1;
+		$folder->readonly=1;
+		
+		if(!$folder->save())
+			die("Save error");
+		
 		return $folder;
 	}
 	
@@ -408,5 +430,60 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	
 	protected function getThumbURL() {
 		return GO::url('core/thumb', 'src=' . urlencode($this->path) . '&lw=100&ph=100&zc=1&filemtime=' . $this->fsFolder->mtime());
+	}
+	
+	/**
+	 * Get all the subfolders of this folder.
+	 * Unlike the standard folders relation it handles some folders differently.
+	 * On special folders like addressbooks, projects etc it checks authentication
+	 * for all subfolders. On normal folders it doesn't check authentication.
+	 * 
+	 * @return GO_Base_Db_ActiveStatement 
+	 */
+	public function getSubFolders(){
+		if($this->parent_id==0){
+			//this is a special folder like addressbooks, projects etc.
+			//we must check acl's here
+
+			return GO_Files_Model_Folder::model()->find(array(
+							'limit'=>100,
+							'criteriaObject'=>  GO_Base_Db_FindCriteria::newInstance()
+									->addCondition('parent_id', $this->id)
+					));
+		}else
+		{
+			//relational queries don't check acl's
+			return $this->folders();
+		}
+	}
+	
+	
+	
+	public function findShares($findParams){
+		
+		$findParams['criteriaObject']=GO_Base_Db_FindCriteria::newInstance()
+					->addCondition('visible', 1)
+					->addCondition('user_id', GO::user()->id,'!=');
+		
+		return GO_Files_Model_Folder::model()->find($findParams);
+		
+//		//sort by path and only list top level shares
+//		$shares = array();
+//		while($folder = $stmt->fetch())
+//		{
+//			$shares[$folder->path]=$folder;
+//		}
+//		ksort($shares);
+//		
+//		$response=array();
+//		foreach($shares as $path=>$folder){
+//			$isSubDir = isset($lastFolder) && $folder->isSubFolderOf($lastFolder);
+//			
+//			if(!$isSubDir)
+//				$response[]=$folder;
+//			$lastFolder=$folder;
+//		}
+//		
+//		return $response;
 	}
 }
