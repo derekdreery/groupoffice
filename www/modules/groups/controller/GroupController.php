@@ -9,7 +9,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
    * @param GO_Base_Provider_Grid $grid
    * @return GO_Base_Provider_Grid
    */
-  protected function prepareGrid($grid){
+  protected function prepareGrid(GO_Base_Provider_Grid $grid){
     $grid->formatColumn('user_name','$model->user->name');
     return $grid;
   }

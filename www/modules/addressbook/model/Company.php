@@ -67,7 +67,7 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 	public function buildFilesPath() {
 		
 		$new_folder_name = GO_Base_Fs_Base::stripInvalidChars($this->name);
-		$new_path = 'companies/'.GO_Base_Fs_Base::stripInvalidChars($this->addressbook->name);
+		$new_path = $this->addressbook->buildFilesPath().'/companies';
 		
 		if(empty($new_folder_name))
 			$new_folder_name='unnamed';
