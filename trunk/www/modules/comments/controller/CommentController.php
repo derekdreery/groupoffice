@@ -16,7 +16,7 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 				);
 	}
 	
-	protected function prepareGrid($grid) {
+	protected function prepareGrid(GO_Base_Provider_Grid $grid) {
 		$grid->formatColumn('user_name','$model->user->name');
 	}
 

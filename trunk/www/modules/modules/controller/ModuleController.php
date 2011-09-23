@@ -3,12 +3,12 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	
 	protected $model = 'GO_Base_Model_Module';
 	
-	protected function prepareGrid($grid){
+	protected function prepareGrid(GO_Base_Provider_Grid $grid){
 		
 			
 		$grid->setFormatRecordFunction(array('GO_Modules_Controller_Module', 'formatRecord'));
 		
-    return parent::prepareGrid($grid);
+    return parent::prepareGrid(GO_Base_Provider_Grid $grid);
 	}
 	
 	public static function formatRecord($record, $model, $grid){

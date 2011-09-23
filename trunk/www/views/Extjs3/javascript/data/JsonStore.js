@@ -86,15 +86,20 @@ GO.data.JsonStore = function(config) {
 					break;
 
 					default:
-						var msg = GO.lang.serverError;
+						var msg;
 
 						if(this.reader.jsonData && this.reader.jsonData.feedback)
 						{
-							msg += '<br /><br />'+this.reader.jsonData.feedback;
+							msg = this.reader.jsonData.feedback;
+							GO.errorDialog.show(msg);
+						}else
+						{
+							msg = GO.lang.serverError;
+							msg += '<br /><br />JsonStore load exception occurred';
+							GO.errorDialog.show(msg, response.responseText);
 						}
 
-						msg += '<br /><br />JsonStore load exception occurred';
-						GO.errorDialog.show(msg, response.responseText);
+						
 						break;
 				}					
 			}

@@ -27,8 +27,8 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 * @return GO_Base_Fs_File or GO_Base_Fs_Folder
 	 */
 	public function ls($getHidden=false) {
-		if (!$dir = @opendir($this->path))
-			throw new Exception("Could not open " . $this->path);
+		if (!$dir = opendir($this->path))
+			return false;
 
 		$folders = array();
 		while ($item = readdir($dir)) {

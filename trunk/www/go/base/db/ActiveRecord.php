@@ -102,7 +102,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 * The relations can be accessed as functions:
 	 * 
-	 * Model->contacts() for example. They always return a PDO statement
+	 * Model->contacts() for example. They always return a PDO statement. 
+	 * 
+	 * Note: relational queries do not check permissions!
 	 * 
 	 * If you have a "user_id" field, an automatic relation model->user() is created that 
 	 * returns a GO_Base_Model_User.
@@ -1132,7 +1134,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
     //todo check read permissions
     if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied($this->className().' #'.$this->pk);
+			throw new GO_Base_Exception_AccessDenied();
 		
 		if($model)
 			GO::modelCache()->add($this->className(), $model);
@@ -1485,6 +1487,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
 		
+		if(!$this->validate()){
+			GO::debug("WARNING: GO_Base_Db_Active::validate returned false or no value");
+			return false;
+		}
 		
 		if ($this->hasFiles()) {
 			$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this);
@@ -1494,100 +1500,94 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!$this->isModified() && (!$this->customfieldsRecord || !$this->customfieldsRecord->isModified()))
 			return true;
 
-		if($this->validate()){		
-		
-			/*
-			 * Set some common column values
-			*/
-			
-			if(isset($this->columns['mtime']))
-				$this->mtime=time();
-			if(isset($this->columns['ctime']) && !isset($this->ctime)){
-				$this->ctime=time();
-			}
-			
-			if(isset($this->columns['user_id']) && !isset($this->user_id)){
-				$this->user_id=GO::user() ? GO::user()->id : 1;
-			}
-			
-			
-			/**
-			 * Useful event for modules. For example custom fields can be loaded or a files folder.
-			 */
-			$this->fireEvent('beforesave',array(&$this));
-			
-			
-				
-			
-			if($this->isNew){				
-				
-				$wasNew=true;
-				
-				if($this->aclField() && !$this->joinAclField && empty($this->{$this->aclField()})){
-					//generate acl id				
-										
-					$this->setNewAcl(!empty($this->user_id) ? $this->user_id : 0);
-				}				
-				
-				if(!$this->beforeSave()){
-					GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
-					return false;				
-				}
 
-				$this->_dbInsert();
-				
-				if(!is_array($this->primaryKey()) && empty($this->pk))
-					$this->{$this->primaryKey()} = $this->getDbConnection()->lastInsertId();
-				
-				if(!$this->pk)
-					return false;
-				
-				$this->setIsNew(false);
-			}else
-			{
-				$wasNew=false;
-				
-				if(!$this->beforeSave()){
-					GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
-					return false;				
-				}
-				
-				
-				if(!$this->_dbUpdate())
-					return false;
-			}
-			
+		/*
+		 * Set some common column values
+		*/
 
-			if ($this->customfieldsRecord){
-				//id is not set if this is a new record so we make sure it's set here.
-				$this->customfieldsRecord->model_id=$this->id;
-				
-				$this->customfieldsRecord->save();
-			}
-			
+		if(isset($this->columns['mtime']))
+			$this->mtime=time();
+		if(isset($this->columns['ctime']) && !isset($this->ctime)){
+			$this->ctime=time();
+		}
 
-			
-			if(!$this->afterSave($wasNew)){
+		if(isset($this->columns['user_id']) && !isset($this->user_id)){
+			$this->user_id=GO::user() ? GO::user()->id : 1;
+		}
+
+
+		/**
+		 * Useful event for modules. For example custom fields can be loaded or a files folder.
+		 */
+		$this->fireEvent('beforesave',array(&$this));
+
+
+
+
+		if($this->isNew){				
+
+			$wasNew=true;
+
+			if($this->aclField() && !$this->joinAclField && empty($this->{$this->aclField()})){
+				//generate acl id				
+
+				$this->setNewAcl(!empty($this->user_id) ? $this->user_id : 0);
+			}				
+
+			if(!$this->beforeSave()){
 				GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
-				return false;
+				return false;				
 			}
-			
-			/**
-			 * Useful event for modules. For example custom fields can be loaded or a files folder.
-			 */
-			$this->fireEvent('save',array(&$this));
-			
-			
-			$this->cacheSearchRecord();
-			
-			$this->_modifiedAttributes = array();
-			
-			return true;
-			
+
+			$this->_dbInsert();
+
+			if(!is_array($this->primaryKey()) && empty($this->pk))
+				$this->{$this->primaryKey()} = $this->getDbConnection()->lastInsertId();
+
+			if(!$this->pk)
+				return false;
+
+			$this->setIsNew(false);
 		}else
 		{
+			$wasNew=false;
+
+			if(!$this->beforeSave()){
+				GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
+				return false;				
+			}
+
+
+			if(!$this->_dbUpdate())
+				return false;
+		}
+
+
+		if ($this->customfieldsRecord){
+			//id is not set if this is a new record so we make sure it's set here.
+			$this->customfieldsRecord->model_id=$this->id;
+
+			$this->customfieldsRecord->save();
+		}
+
+
+
+		if(!$this->afterSave($wasNew)){
+			GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
 			return false;
 		}
+
+		/**
+		 * Useful event for modules. For example custom fields can be loaded or a files folder.
+		 */
+		$this->fireEvent('save',array(&$this));
+
+
+		$this->cacheSearchRecord();
+
+		$this->_modifiedAttributes = array();
+
+		return true;
 	}
 	
 	
