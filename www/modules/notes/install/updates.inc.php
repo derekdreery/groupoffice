@@ -18,3 +18,6 @@ $updates[201108301656][]="INSERT INTO `go_model_types` (
 VALUES (
 '4', 'GO_Notes_Model_Note'
 );";
+
+
+$updates[201109230000][]="ALTER TABLE `no_categories` ADD `files_folder_id` INT NOT NULL";

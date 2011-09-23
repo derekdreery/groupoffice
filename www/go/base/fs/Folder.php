@@ -19,7 +19,7 @@
  */
 class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 
-
+	
 	/**
 	 * Get folder directory listing.
 	 * 
@@ -167,7 +167,7 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		$x=1;
 		while($this->exists())
 		{			
-			$this->path=$origPath.'_'.$x;
+			$this->path=$origPath.' ('.$x.')';
 			$x++;
 		}
 		return $this->path;

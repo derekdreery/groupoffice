@@ -98,9 +98,10 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 //					if(this.data.files_folder_id==0 && this.data.model){
 					if(this.data.model){
 						GO.request({
-							url:'files/item/createFolder',
+							url:'files/folder/checkModelFolder',
 							maskEl:this.getEl(),
 							params:{								
+								mustExist:true,
 								model:this.data.model,
 								id:this.data.id
 							},

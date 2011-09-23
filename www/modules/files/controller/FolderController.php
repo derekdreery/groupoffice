@@ -337,6 +337,109 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		return $record;
 	}
+	
+	
+	private function _checkExistingModelFolder($model,$folder,$mustExist=false){
+		
+		$files_folder_id=0;
+		
+		//todo test this:	
+//		if(!isset($model->acl_id) && empty($params['mustExist'])){
+//			//if this model is not a container like an addressbook but a contact
+//			//then delete the folder if it's empty.
+//			$ls = $folder->fsFolder->ls();
+//			if(!count($ls) && $folder->fsFolder->mtime()<time()-60){
+//				$folder->delete();
+//				$response['files_folder_id']=$model->files_folder_id=0;
+//				$model->save();
+//				return $response;
+//			}
+//		}
+		
+
+				
+		$currentPath = $folder->path;
+		//strip the (n) part at the end of the path that is added when a duplicate
+		//is found.
+		$currentPath = preg_replace('/ \([0-9]+\)$/', '', $currentPath);
+		$newPath = $model->buildFilesPath();
+		
+		
+		if($currentPath!=$newPath){
+
+			//model has a new path. We must move the current folder					
+			$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
+							dirname($newPath), true);
+
+			$folder->name = GO_Base_Fs_File::utf8Basename($newPath);
+			$folder->folder_id=$destinationFolder->id;
+			$folder->systemSave=true;
+			$folder->save();
+		}
+		
+		return $folder->id;
+	}
+	
+	public function _createNewModelFolder($model){
+		
+		$f = new GO_Base_Fs_Folder(GO::config()->file_storage_path.$model->buildFilesPath());
+		$fullPath = $f->appendNumberToNameIfExists();
+		$relPath = str_replace(GO::config()->file_storage_path, '', $fullPath);
+
+		$folder = GO_Files_Model_Folder::model()->findByPath($relPath, true);
+		if(!$folder->acl_id && isset($model->acl_id)){
+			$folder->acl_id=$model->acl_id;			
+		}
+		
+		$folder->visible=0;
+		$folder->readonly=1;
+		$folder->systemSave=true;
+		$folder->save();
+		
+		return $folder->id;
+	}
+	
+	/**
+	 * check if a model folder exists
+	 * 
+	 * @param type $params
+	 * @return type 
+	 */
+	public function actionCheckModelFolder($params){		
+		$model = GO::getModel($params['model'])->findByPk($params['id']);
+		
+		$response['success']=true;
+		$response['files_folder_id']=$this->checkModelFolder($model, true, !empty($params['mustExist']));
+		return $response;
+	}
+	
+	
+	public function checkModelFolder($model, $saveModel=false, $mustExist=false){
+		$folder = false;
+		if($model->files_folder_id>0){
+			$folder = GO_Files_Model_Folder::model()->findByPk($model->files_folder_id);			
+		}
+		
+		if($folder){			
+			$model->files_folder_id=$this->_checkExistingModelFolder($model, $folder, $mustExist);
+			
+			if($saveModel)
+				$model->save();
+			
+		}elseif(isset($model->acl_id) || $mustExist){
+			//this model has an acl_id. So we should create a shared folder with this acl.
+			//this folder should always exist.
+			
+			//only new models that have it's own acl field should always have a folder.
+			//otherwise it will be created when first accessed.
+			$model->files_folder_id=$this->_createNewModelFolder($model);
+			
+			if($saveModel)
+				$model->save();			
+		}		
+		
+		return $model->files_folder_id;		
+	}
 
 }
 
