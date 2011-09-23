@@ -37,6 +37,12 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	private $_path;
 	
 	public $joinAclField=true;
+	
+	/**
+	 *
+	 * @var boolean Set to true by a system save so the readonly flag won't take effect in beforeSave
+	 */
+	public $systemSave=false;
 
 	/**
 	 * Returns a static model of itself
@@ -133,7 +139,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	
 	protected function beforeSave() {
 
-		if(!$this->isNew && $this->readonly){
+		if(!$this->systemSave && !$this->isNew && $this->readonly){
 			if($this->isModified('name') || $this->isModified('folder_id'))
 				return false;
 		}			
@@ -486,4 +492,6 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 //		
 //		return $response;
 	}
+	
+	
 }

@@ -1493,7 +1493,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 		
 		if ($this->hasFiles()) {
-			$this->files_folder_id = GO_Files_Controller_Item::itemFilesFolder($this);
+			$fc = new GO_Files_Controller_Folder();
+			$this->files_folder_id = $fc->checkModelFolder($this);
 		}	
 		
 		//Don't do anything if nothing has been modified.
@@ -1920,8 +1921,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}	
 		
 		
-		if(isset(GO::modules()->files) && $this->hasFiles()){
-			GO_Files_Controller_Item::deleteFilesFolder($this->files_folder_id);	
+		if(isset(GO::modules()->files) && $this->hasFiles() && $this->files_folder_id > 0){
+			$folder = GO_Files_Model_Folder::model()->findByPk($this->files_folder_id);
+			$folder->delete();
 		}
 
 		if(!$this->afterDelete())
@@ -2258,11 +2260,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return $this->getDbConnection()->query($sql);
 	}
 	
-	public function checkFilesFolder(){
-		if($this->hasFiles()){
-			GO_Files_Controller_Item::checkFolder($this);						
-		}
-	}
+//	public function checkFilesFolder(){
+//		if($this->hasFiles()){
+//			GO_Files_Controller_Folder::checkModelFolder($this);						
+//		}
+//	}
 	
 	
 	
