@@ -860,7 +860,7 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		}
 		
 		this.parentID = store.reader.jsonData.parent_id;
-		if(this.parentID==0 || !this.treePanel.getNodeById(this.parentID))
+		if(!this.parentID || !this.treePanel.getNodeById(this.parentID))
 		{		
 			this.upButton.setDisabled(true);			
 		}else
