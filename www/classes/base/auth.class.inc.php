@@ -77,11 +77,13 @@ class GO_AUTH extends db
 			}else
 			{
 				//clear old md5 hash and set new pwhash for improved security.
-				$u['id']=$user['id'];
-				$user['password']=$u['password']=crypt($password);
-				$u['password_type']='crypt';
+				if(false){
+					$u['id']=$user['id'];
+					$user['password']=$u['password']=crypt($password);
+					$u['password_type']='crypt';
 
-				$this->update_row('go_users', 'id', $u);
+					$this->update_row('go_users', 'id', $u);
+				}
 			}
 		}
 
