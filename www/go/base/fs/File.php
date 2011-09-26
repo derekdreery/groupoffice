@@ -185,9 +185,8 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 */
 	public function copy($destinationFolder){
 		
-		//echo $this->path.' > '.$destinationFolder->path().$this->name();
-		
 		$newPath = $destinationFolder->path().'/'.$this->name();
+		GO::debug('copy: '.$this->path.' > '.$newPath);
 		
 		if(!copy($this->path, $newPath))
 			throw new Exception("Could not copy ".$this->name());

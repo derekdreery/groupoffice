@@ -82,6 +82,27 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function beforeSave() {
+		
+		if(!$this->isNew){
+			if($this->isModified('name')){				
+				//rename filesystem file.
+				$oldFsFile = new GO_Base_Fs_File(dirname($this->fsFile->path()).'/'.$this->getOldAttributeValue('name'));				
+				$oldFsFile->rename($this->name);
+			}
+
+			if($this->isModified('folder_id')){
+				//file will be moved so we need the old folder path.
+				$oldFolderId = $this->getOldAttributeValue('folder_id');
+				$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
+				$oldRelPath = $oldFolder->path;				
+				$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $this->name;
+
+				$fsFile= new GO_Base_Fs_File($oldPath);
+
+				if (!$fsFile->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($this->path))))
+					throw new Exception("Could not rename folder on the filesystem");
+			}
+		}
 
 		$this->extension = $this->fsFile->extension();
 		$this->size = $this->fsFile->size();
@@ -101,24 +122,24 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 			//$this->fsFile->create();
 		} else {
 			
-			if($this->isModified('name')){				
-				//rename filesystem file.
-				$oldFsFile = new GO_Base_Fs_File(dirname($this->fsFile->path()).'/'.$this->getOldAttributeValue('name'));				
-				$oldFsFile->rename($this->name);
-			}
-			
-			if($this->isModified('folder_id')){
-				//file will be moved so we need the old folder path.
-				$oldFolderId = $this->getOldAttributeValue('folder_id');
-				$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
-				$oldRelPath = $oldFolder->path;				
-				$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $this->name;
-				
-				$fsFile= new GO_Base_Fs_File($oldPath);
-				
-				if (!$fsFile->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($this->path))))
-					throw new Exception("Could not rename folder on the filesystem");
-			}
+//			if($this->isModified('name')){				
+//				//rename filesystem file.
+//				$oldFsFile = new GO_Base_Fs_File(dirname($this->fsFile->path()).'/'.$this->getOldAttributeValue('name'));				
+//				$oldFsFile->rename($this->name);
+//			}
+//			
+//			if($this->isModified('folder_id')){
+//				//file will be moved so we need the old folder path.
+//				$oldFolderId = $this->getOldAttributeValue('folder_id');
+//				$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
+//				$oldRelPath = $oldFolder->path;				
+//				$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $this->name;
+//				
+//				$fsFile= new GO_Base_Fs_File($oldPath);
+//				
+//				if (!$fsFile->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($this->path))))
+//					throw new Exception("Could not rename folder on the filesystem");
+//			}
 		}
 
 		return parent::afterSave($wasNew);
@@ -162,10 +183,10 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	
 	public function copy($destinationFolder){
 		
-		$copy = $this->duplicate();
-		$copy->folder_id=$destinationFolder->id;
+		$copy = $this->duplicate(array('folder_id'=>$destinationFolder->id), false);
+		$this->fsFile->copy($copy->fsFile->parent());
 		$copy->save();
 		
-		return $this->fsFile->copy($copy->fsFile->parent());		
+		return true;
 	}
 }

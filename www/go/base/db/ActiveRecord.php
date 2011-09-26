@@ -2367,12 +2367,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @todo Copy the linked items too.
 	 * 
 	 */
-	public function duplicate($params = array()) {
+	public function duplicate($params = array(), $save=true) {
 		
 		//$copy = new GO_Base_Db_ActiveRecord(true);
 		$copy = clone $this;
 		
-		$copy->setIsNew(true);
+		
 		
 		$pkField = $this->primaryKey();
 		if(is_array($pkField)) {
@@ -2386,8 +2386,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		foreach($params as $key=>$value) {
 			$copy->$key = $value;
 		}
-		$copy->validate();		
-		$copy->save();
+		
+		$copy->setIsNew(true);
+		
+		if($save)
+			$copy->save();
 
 		return $copy;
 	}
