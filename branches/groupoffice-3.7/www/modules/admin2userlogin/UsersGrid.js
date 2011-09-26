@@ -6,12 +6,17 @@ GO.admin2userlogin.UsersGrid = function(config){
 	}
 
 	var fields ={
-		fields : ['id','name','lastlogin','registration_time'],
+		fields : ['id','username','name','lastlogin','registration_time'],
 		columns :[{
 			header: GO.admin2userlogin.lang.userId,
 			dataIndex: 'id',
 			id:'id',
-			width:110
+			width:60
+		},{
+			header: GO.admin2userlogin.lang.username,
+			dataIndex: 'username',
+			id:'username',
+			width:180
 		},{
 			header: GO.admin2userlogin.lang.name,
 			dataIndex: 'name',
