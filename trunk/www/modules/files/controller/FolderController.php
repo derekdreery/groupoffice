@@ -167,6 +167,13 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		return parent::afterLoad($response, $model, $params);
 	}
+	
+	protected function afterDisplay(&$response, &$model, &$params) {
+		$response['data']['path']=$model->path;
+		$response['data']['type']=GO::t('folder','files');
+		
+		return parent::afterDisplay($response, $model, $params);
+	}
 
 	public function actionPaste($params) {
 

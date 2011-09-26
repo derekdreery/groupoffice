@@ -33,20 +33,8 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 			this.editHandler.defer(200, this);
 		}else
 		{				
-			if(GO.settings.modules.gota && GO.settings.modules.gota.read_permission)
-			{
-				if(!deployJava.isWebStartInstalled('1.6.0'))
-				{
-					Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
-					window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.link_id;
-				}else
-				{
-					window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+this.link_id;
-				}
-			}else
-			{
-				window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.link_id;
-			}
+			GO.files.editFile(this.model_id);
+			
 		}
 	},
 
@@ -86,7 +74,7 @@ GO.files.FilePanel = Ext.extend(GO.DisplayPanel,{
 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
-						'<td>'+GO.lang.strLocation+':</td>'+
+						'<td>'+GO.files.lang.path+':</td>'+
 						'<td>{path}</td>'+
 					'</tr>'+
 					'<tr>'+

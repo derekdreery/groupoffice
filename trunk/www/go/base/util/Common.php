@@ -112,4 +112,39 @@ class GO_Base_Util_Common {
 
 		return preg_replace("/(\r\n)+|(\n|\r)+/", "\n", $format);
 	}
+	
+	
+	
+	public static function outputDownloadHeaders(GO_Base_Fs_File $file, $inline=false, $cache=false) {
+		if($file->exists()){
+			header('Content-Length: ' . $file->size());
+			header("Last-Modified: " . gmdate("D, d M Y H:i:s", $file->mtime())." GMT");
+			header("ETag: " . md5_file($file->path()));
+		}
+		header('Content-Transfer-Encoding: binary');		
+		
+		$disposition = $inline ? 'inline' : 'attachment';
+
+		if ($cache) {
+			header("Expires: " . date("D, j M Y G:i:s ", time() + 86400) . 'GMT'); //expires in 1 day
+			header('Cache-Control: cache');
+			header('Pragma: cache');
+		}
+		if (GO_Base_Util_Common::isInternetExplorer()) {
+			header('Content-Type: application/download');
+			header('Content-Disposition: '.$disposition.'; filename="' . $file->name() . '"');
+
+			if (!$cache) {
+				header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+				header('Pragma: public');
+			}
+		} else {
+			header('Content-Type: ' .$file->mimeType());
+			header('Content-Disposition: '.$disposition.'; filename="' . $file->name() . '"');
+
+			if (!$cache) {
+				header('Pragma: no-cache');
+			}
+		}
+	}
 }

@@ -473,5 +473,4 @@ $l['none']='None';
 $l['alert']='Alert';
 $l['theFolderAlreadyExists']='A folder with that name already exists';
 $l['other']='Other';
-$l['copy']='copy';
 $l['upload_file_to_big']='The file you tried to upload was larger then the maximum allowed size of %s.';

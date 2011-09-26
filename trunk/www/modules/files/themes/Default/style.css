@@ -150,9 +150,9 @@ cursor:pointer;
 	border:1px solid #669900;
 	padding: 4px;
 }
-.fs-view-selected .fs-thumb{
+/*.fs-view-selected .fs-thumb{
 	background:transparent;
-}
+}*/
 
 .fs-loading-indicator {
 	font-size:11px;

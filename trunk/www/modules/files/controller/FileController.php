@@ -8,25 +8,55 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 
 		$response['data']['path'] = $model->path;
 		$response['data']['size'] = GO_Base_Util_Number::formatSize($model->fsFile->size());
-		$response['data']['extension']=$model->fsFile->extension();
-		$response['data']['type']=GO::t($model->fsFile->extension(),'base','filetypes');
+		$response['data']['extension'] = $model->fsFile->extension();
+		$response['data']['type'] = GO::t($model->fsFile->extension(), 'base', 'filetypes');
 
 		if (!empty($model->random_code) && time() < $model->expire_time) {
-			$response['data']['expire_time'] = $model->getAttribute('expire_time','formatted');
+			$response['data']['expire_time'] = $model->getAttribute('expire_time', 'formatted');
 			$response['data']['download_link'] = $model->downloadURL;
 		} else {
 			$response['data']['expire_time'] = "";
 			$response['data']['download_link'] = "";
 		}
-		
-		if($model->fsFile->isImage())
-			$response['data']['thumbnail_url']=$model->thumbURL;
+
+		if ($model->fsFile->isImage())
+			$response['data']['thumbnail_url'] = $model->thumbURL;
 		else
-			$response['data']['thumbnail_url']="";
+			$response['data']['thumbnail_url'] = "";
 
 
 		return parent::afterDisplay($response, $model, $params);
 	}
+
+	protected function afterLoad(&$response, &$model, &$params) {
+
+		$response['data']['path'] = $model->path;
+		$response['data']['size'] = GO_Base_Util_Number::formatSize($model->fsFile->size());
+		$response['data']['extension'] = $model->fsFile->extension();
+		$response['data']['type'] = GO::t($model->fsFile->extension(), 'base', 'filetypes');
+
+
+		return parent::afterLoad($response, $model, $params);
+	}
+
+	public function actionDownload($params) {
+		GO::session()->closeWriting();
+
+		$file = GO_Files_Model_File::model()->findByPk($params['id']);
+		GO_Base_Util_Common::outputDownloadHeaders($file->fsFile, false, !empty($params['cache']));
+		$file->fsFile->output();
+	}
+
+	
+	/**
+	 *
+	 * @param type $params 
+	 * @todo
+	 */
+	public function actionEmailDownloadLink($params){
+		
+	}
+	
 
 }
 
