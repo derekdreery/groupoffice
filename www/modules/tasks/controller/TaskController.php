@@ -113,18 +113,20 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		return parent::beforeGrid($response, $params, $grid);
 	}
 	
-	protected function prepareGrid(GO_Base_Provider_Grid $grid) {
-		$grid->formatColumn('completed','$model->status=="COMPLETED" ? 1 : 0');
-		$grid->formatColumn('category_name','$model->category->name',array(),'category_id');
-		$grid->formatColumn('tasklist_name','$model->tasklist_name');
-		//$grid->formatColumn('project_name','$model->project->name'); TODO: Implement the project from the ID and not from the name
-		return parent::prepareGrid($grid);
+	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+		
+		$columnModel->formatColumn('completed','$model->status=="COMPLETED" ? 1 : 0');
+		$columnModel->formatColumn('category_name','$model->category->name',array(),'category_id');
+		$columnModel->formatColumn('tasklist_name','$model->tasklist_name');
+		//$colModel->formatColumn('project_name','$model->project->name'); TODO: Implement the project from the ID and not from the name
+		return parent::formatColumns($columnModel);
 	}
 	
 	protected function getGridParams($params) {
 
 		$gridParams =  array(
 				'ignoreAcl'=>true,
+				'export'=>'tasks',
 				'joinCustomFields'=>true,
 				'by'=>array(array('tasklist_id', $this->multiselectIds, 'IN')),
 				'fields'=>'t.*, tl.name AS tasklist_name',
@@ -146,8 +148,5 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		return $gridParams;
 	}
 	
-	public function actionExport() {
-		
-	}
 }
 	
