@@ -1,3 +1,6 @@
+26-09-2011 3.7.31
+- Various small bugfixes.
+
 02-09-2011 3.7.28
 - Fixed bug in ActiveSync with Android 2.3.3
 - Other small bug fixes.
