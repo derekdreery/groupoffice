@@ -28,9 +28,8 @@ class GO_Base_Session extends GO_Base_Observable{
 		if(session_id()==''){
 			
 			//TODO Check if this is dangerous.
-			if (!empty($_POST['sid'])) {
-				GO::debug("USED GIVEN SESSION ID: ".$_POST['ids']);
-				session_id($_POST['sid']);
+			if (!empty($_REQUEST['sid'])) {
+				session_id($_REQUEST['sid']);
 			}
 
 			session_name('groupoffice');

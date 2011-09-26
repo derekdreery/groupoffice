@@ -1033,7 +1033,7 @@ class GO_Base_Config {
 			return CONFIG_FILE;
 
 		//on start page always search for config
-		if(basename($_SERVER['PHP_SELF'])=='index.php'){
+		if(empty($_REQUEST['r'])){
 			unset($_SESSION['GO_SESSION']['config_file']);
 		}
 
