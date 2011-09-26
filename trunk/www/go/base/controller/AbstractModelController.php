@@ -221,7 +221,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 	/**
 	 * Override this function to format the grid record data.
-	 * 
+	 * @TODO: THIS DESCRIPTION IS NOT OK
 	 * @param array $record The grid record returned from the GO_Base_Db_ActiveRecord->getAttributes
 	 * @param GO_Base_Db_ActiveRecord $model
 	 * @return array The grid record data
@@ -231,6 +231,19 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$cm->setColumnsFromModel(GO::getModel($this->model));	
 		return $cm;
 	}
+	
+	/**
+	 * Override this function to format the grid record data.
+	 * @TODO: THIS DESCRIPTION IS NOT OK
+	 * @param array $record The grid record returned from the GO_Base_Db_ActiveRecord->getAttributes
+	 * @param GO_Base_Db_ActiveRecord $model
+	 * @return array The grid record data
+	 */
+	protected function prepareGrid($grid) {
+		
+		return $grid;
+	}
+	
   
   /**
    * Override this function to format columns if necessary.
