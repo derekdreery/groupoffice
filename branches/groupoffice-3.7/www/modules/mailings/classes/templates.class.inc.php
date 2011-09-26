@@ -451,6 +451,7 @@ class templates extends db {
 
 	function replace_customfields($record, $tag, $content) {
 		for($i=0; $i<count($record); $i++) {
+			$record[$i]['value']=preg_replace('/^[0-9]+:/','',$record[$i]['value']);
 			$content = str_replace('{'.$tag.':'.$record[$i]['category_name'].':'.$record[$i]['name'].'}', htmlspecialchars($record[$i]['value'], ENT_COMPAT, 'UTF-8'), $content);
 		}
 		return $content;
