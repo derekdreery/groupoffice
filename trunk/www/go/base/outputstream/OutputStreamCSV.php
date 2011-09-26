@@ -22,7 +22,7 @@ class GO_Base_OutputStream_OutputStreamCSV implements GO_Base_OutputStream_Outpu
 
 	
 	public function __construct($filename, $addKeysAsHeaders=true){
-		header('Content-Disposition: attachment; filename="'.$filename.'.csv"');
+		//header('Content-Disposition: attachment; filename="'.$filename.'.csv"');
 		
 		$this->sendHeaders();
 		
@@ -30,7 +30,8 @@ class GO_Base_OutputStream_OutputStreamCSV implements GO_Base_OutputStream_Outpu
 	}
 	
 	public function sendHeaders(){
-		header('Content-Type: text/x-csv; charset=UTF-8');
+		//header('Content-Type: text/x-csv; charset=UTF-8');
+		header('Content-Type: text/plain; charset=UTF-8');
 	}
 
 	
@@ -44,4 +45,12 @@ class GO_Base_OutputStream_OutputStreamCSV implements GO_Base_OutputStream_Outpu
 		
 		fputcsv($this->_fp, $data, GO::user()->list_separator, GO::user()->text_separator);
 	}	
+	
+	public function flush(){
+		
+	}
+	
+	public function endFlush(){
+		
+	}
 }

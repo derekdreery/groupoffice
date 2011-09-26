@@ -227,18 +227,20 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @return array The grid record data
 	 */
 	protected function getGridColumnModel() {
-		return array();
+		$cm =  new GO_Base_Data_ColumnModel();
+		$cm->setColumnsFromModel(GO::getModel($this->model));	
+		return $cm;
 	}
   
   /**
    * Override this function to format columns if necessary.
    * You can also use formatColumn to add extra columns
    * 
-   * @param GO_Base_Provider_Grid $grid
-   * @return GO_Base_Provider_Grid 
+   * @param GO_Base_Data_ColumnModel $columnModel
+   * @return GO_Base_Data_ColumnModel 
    */
-  protected function prepareGrid(GO_Base_Provider_Grid $grid){
-    return $grid;
+  protected function formatColumns(GO_Base_Data_ColumnModel $columnModel){
+    return $columnModel;
   }
   
   /**
@@ -305,7 +307,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			}
 		}
 
-		$this->prepareGrid($grid);
+		//$this->prepareGrid($grid);
+		$columnModel = $grid->getColumnModel();
+		$this->formatColumns($columnModel);
+		
 		$gridParams = array_merge($grid->getDefaultParams(),$this->getGridParams($params));
 		
 			
@@ -393,10 +398,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				'limit'=>15
 		));
 		
-		$grid = new GO_Base_Provider_Grid();
+		$columnModel = new GO_Base_Data_ColumnModel();
+		$columnModel->setColumnsFromModel($model);
+		$grid = new GO_Base_Provider_Grid($columnModel);
 		$grid->setStatement($stmt);
-		$grid->formatColumn('link_count','GO::getModel($model->model_name)->countLinks($model->model_id)');
-		$grid->formatColumn('link_description','$model->link_description');
+		$columnModel = $grid->getColumnModel();
+		
+		$columnModel->formatColumn('link_count','GO::getModel($model->model_name)->countLinks($model->model_id)');
+		$columnModel->formatColumn('link_description','$model->link_description');
 		$data = $grid->getData();
 		$response['data']['links']=$data['results'];
 		
@@ -411,11 +420,15 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					'bindParams'=>array(':start_time'=>$startOfDay)
 			));		
 
-			$grid = new GO_Base_Provider_Grid();
+			$columnModel = new GO_Base_Data_ColumnModel();
+			$columnModel->setColumnsFromModel($model);
+			$grid = new GO_Base_Provider_Grid($columnModel);
 			$grid->setStatement($stmt);
-			$grid->formatColumn('calendar_name','$model->calendar->name');
-			$grid->formatColumn('link_count','$model->countLinks()');
-			$grid->formatColumn('link_description','$model->link_description');
+			$columnModel = $grid->getColumnModel();
+			
+			$columnModel->formatColumn('calendar_name','$model->calendar->name');
+			$columnModel->formatColumn('link_count','$model->countLinks()');
+			$columnModel->formatColumn('link_description','$model->link_description');
 			$data = $grid->getData();
 			$response['data']['events']=$data['results'];
 		}
@@ -463,9 +476,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				'limit'=>5
 			));
 
-			$grid = new GO_Base_Provider_Grid();
+			$columnModel = new GO_Base_Data_ColumnModel();
+			$columnModel->setColumnsFromModel($model);
+			$grid = new GO_Base_Provider_Grid($columnModel);
 			$grid->setStatement($stmt);
-			$grid->formatColumn('user_name','$model->user->name');
+			$columnModel = $grid->getColumnModel();
+			
+			$columnModel->formatColumn('user_name','$model->user->name');
 			$data = $grid->getData();
 			$response['data']['comments']=$data['results'];
 		}		
@@ -505,6 +522,55 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	    $model = GO::getModel($modelName)->findByPk($params['id']);
 	    $response['success'] = $model->delete();
 			return $response;
+	}
+	
+	/**
+	 * This function can export the current data to a given format.
+	 * 
+	 * The $params array has a couple of keys wich you maybe want to set:
+	 * - title	: The title of the file that will be created. (Without extention)
+	 * - type		: To which kind of file do you want to export. (Can be: CSV,JSON,HTML,PDF)
+	 * - showHeader : Do you want to show the column headers in the file? (True or False)
+	 * 
+	 * @param Array $params 
+	 */
+	public function actionExport($params) {
+
+		if(!empty($params['title']))
+			$title = $params['title'];
+		else
+			$title = GO::session()->values[$params['exportName']]['name'];
+		
+		$outputStream = new GO_Base_OutputStream_OutputStreamCSV($title,false); // The default autputstream is the CSV outputter.
+		
+		if(!empty($params['type'])) {
+			$outputstreamObjectString = "GO_Base_OutputStream_OutputStream".strtoupper($params['type']);
+			$outputStream = new $outputstreamObjectString($title,false);
+		}
+		
+		$filter = GO::session()->values[$params['exportName']]['findParams'];
+		$model = GO::getModel(GO::session()->values[$params['exportName']]['model']);
+		
+		$columnModel = new GO_Base_Data_ColumnModel();
+		$columnModel->setColumnsFromModel($model);
+		$columnModel = $this->formatColumns($columnModel);
+		
+		
+		$stmt = $model->find($filter);
+		
+		while($obj = $stmt->fetch()) {
+			if(!empty($params['showHeader'])) {
+				$attr = $obj->getAttributes('formatted');
+				$header = array();				
+				foreach($attr as $attribute=>$value)
+					$header[] = $model->getAttributeLabel($attribute);
+				$outputStream->write($header);
+				$params['showHeader']=false;
+			}
+			$outputStream->write($obj->getAttributes());
+		}
+		
+		$outputStream->endFlush();
 	}
 }
 

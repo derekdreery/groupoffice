@@ -70,6 +70,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	private static $db;
 	
+	
+
+	private $_attributeLabels;
+	
+	
 	/**
 	 *
 	 * @var int Link type of this Model used for the link system. See also the linkTo function
@@ -224,7 +229,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$this->setIsNew($newRecord);
 		
 		if($this->isNew) 
-			$this->setAttributes($this->defaultAttributes(),false);
+			$this->setAttributes($this->_getDefaultAttributes(),false);
 		
 		$this->init();
 		
@@ -253,14 +258,32 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * 
 	 */
 	public function attributeLabels(){
-		$labels = array();
-		
-		$prefix = strtolower(array_pop(explode('_',$this->className())));
-		
-		foreach($this->columns as $columnName=>$columnData)
-			$labels[$columnName] = GO::t($prefix.ucfirst($columnName), $this->getModule());
+		if(!isset($this->_attributeLabels)){
+			$this->_attributeLabels = array();
+
+			$classParts = explode('_',$this->className());
+			$prefix = strtolower(array_pop($classParts));
+
+			foreach($this->columns as $columnName=>$columnData)
+				$this->_attributeLabels[$columnName] = GO::t($prefix.ucfirst($columnName), $this->getModule());
+		}
+		return $this->_attributeLabels;
+	}
 	
-		return $labels;
+		
+		
+	/**
+	 * Get the label of the asked attribute
+	 * 
+	 * This function can be overridden in the model.
+	 * 
+	 * @return String The label of the asked attribute
+	 */
+	public function getAttributeLabel($attribute) {
+		
+		$labels = $this->attributeLabels();
+		
+		return isset($labels[$attribute]) ? $labels[$attribute] : $attribute;
 	}
 	
 	/**
@@ -365,7 +388,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			return self::$_models[$className];
 		else
 		{
-			$model=self::$_models[$className]=new $className(null);
+			$model=self::$_models[$className]=new $className();
 			return $model;
 		}
 	}
@@ -701,6 +724,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		//GO::debug('ActiveRecord::find()');
 		//GO::debug($params);
+		
+		if(!empty($params['export'])){
+			GO::session()->values[$params['export']]=array('name'=>$params['export'], 'model'=>$this->className(), 'findParams'=>$params);
+		}
 		
 		if(!empty($params['single'])){
 			unset($params['single']);
@@ -1382,6 +1409,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}		
 	}
 	
+	
+	private function _hasCustomfieldValue($attributes){
+		foreach($attributes as $key=>$value)
+		{
+			if(substr($key,0,4)=='col_'){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * This function is used to set attributes of this model from a controller.
 	 * Input may be in regional format and the model will translate it to the
@@ -1392,8 +1430,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	public function setAttributes($attributes, $format=true){		
 		
-		if($this->customfieldsRecord)
-			$this->customfieldsRecord->setAttributes($attributes);
+		if($this->_hasCustomfieldValue($attributes) && $this->customfieldsRecord)
+			$this->customfieldsRecord->setAttributes($attributes, $format);
 		
 		$related=array();
 		
@@ -1428,7 +1466,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$att=$this->_attributes;
 		else
 			$att=$this->formatOutputValues($this->_attributes, $outputType=='html');		
-		
+
 		$r = new ReflectionObject($this);
 		$publicProperties = $r->getProperties(ReflectionProperty::IS_PUBLIC);
 		foreach($publicProperties as $prop){
@@ -2229,7 +2267,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if($this->customfieldsModel() && GO::modules()->customfields){
 			$customFieldModelName=$this->customfieldsModel();
 
-			if(!isset($this->_customfieldsRecord)){
+			if(!isset($this->_customfieldsRecord) && !empty($this->pk)){
 				$this->_customfieldsRecord = GO::getModel($customFieldModelName)->findByPk($this->pk);
 				if(!$this->_customfieldsRecord){
 					//doesn't exist yet. Return a new one
@@ -2376,6 +2414,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return $this->getDbConnection()->query($sql);
 	}
 	
+	
+	private function _getDefaultAttributes(){
+		$attr=array();
+		foreach($this->getColumns() as $field => $colAttr)
+			$attr[$field]=null;
+		
+		return array_merge($attr, $this->defaultAttributes());
+	}
+	
 	/**
 	 * Array of default attributes to set
 	 * 
@@ -2386,5 +2433,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function defaultAttributes() {
 		return array();
 	}
+
 }
 
