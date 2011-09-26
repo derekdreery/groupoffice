@@ -26,6 +26,13 @@ class GO_Base_Session extends GO_Base_Observable{
 		//start session
 		
 		if(session_id()==''){
+			
+			//TODO Check if this is dangerous.
+			if (!empty($_POST['sid'])) {
+				GO::debug("USED GIVEN SESSION ID: ".$_POST['ids']);
+				session_id($_POST['sid']);
+			}
+
 			session_name('groupoffice');
 			session_start();
 		}
@@ -162,6 +169,14 @@ class GO_Base_Session extends GO_Base_Observable{
 		$this->fireEvent('login', array($username, $password, $user));
 		
 		return $user;
+	}
+	
+	/**
+	 * Close writing to session so other concurrent requests won't be locked out.
+	 */
+	public function closeWriting(){
+		
+		session_write_close();
 	}
 
 }

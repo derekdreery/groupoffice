@@ -43,8 +43,8 @@ GO.files.FolderPanel = Ext.extend(GO.DisplayPanel,{
 
 				'<table class="display-panel" cellpadding="0" cellspacing="0" border="0">'+
 					'<tr>'+
-						'<td>'+GO.lang.strLocation+':</td>'+
-						'<td>{location}</td>'+
+						'<td>'+GO.files.lang.path+':</td>'+
+						'<td>{path}</td>'+
 					'</tr>'+
 					'<tr>'+
 						'<td>'+GO.lang.strType+':</td>'+

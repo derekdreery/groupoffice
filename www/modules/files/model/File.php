@@ -82,6 +82,11 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function beforeSave() {
+
+		$this->extension = $this->fsFile->extension();
+		$this->size = $this->fsFile->size();
+		$this->ctime = $this->fsFile->ctime();
+		$this->mtime = $this->fsFile->mtime();
 		
 		$existingFile = $this->folder->hasFile($this->name);
 		if($existingFile && $existingFile->id!=$this->id)
@@ -163,5 +168,4 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		
 		return $this->fsFile->copy($copy->fsFile->parent());		
 	}
-
 }

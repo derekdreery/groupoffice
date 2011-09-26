@@ -494,17 +494,19 @@ class GO{
 	}
 	
 	
-	public static function url($path='', $params='', $relative=true){
+	public static function url($path='', $params='', $relative=true, $htmlspecialchars=false){
 		$url = $relative ? GO::config()->host : GO::config()->full_url;
 		
 		//if($path!='')
 		$url .= '?r='.$path;
 		
+		$amp = $htmlspecialchars ? '&amp;' : '&';
+		
 		if(!empty($params))
-			$url .= '&'.$params;
+			$url .= $amp.$params;
 		
 		if(isset(GO::session()->values['security_token']))
-			$url .= '&security_token='.GO::session()->values['security_token'];
+			$url .= $amp.'security_token='.GO::session()->values['security_token'];
 		
 		return $url;
 	}

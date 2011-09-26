@@ -75,3 +75,4 @@ $l['copyPasteToDownload'] = 'Click the secured link below or copy it to your bro
 $l['possibleUntil'] = 'possible until';
 $l['fileNotFound']='Sorry, the file you tried to download is not found.';
 $l['no_folder_id'] = 'Invalid folder id has been passed with the request to the server!';
+$l['path']='Path';

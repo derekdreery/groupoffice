@@ -153,6 +153,15 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 		}
 	}
 	
+	/**
+	 * Set's default permissions and group ownership
+	 */
+	public function setDefaultPermissions(){
+		chmod($this->path, GO::config()->folder_create_mode);
+		if(!empty(GO::config()->file_change_group))
+			chgrp($this->path, GO::config()->file_change_group);
+	}
+	
 	
 	/**
 	 * Checks if a filename exists and renames it.

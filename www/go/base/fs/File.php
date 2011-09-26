@@ -198,5 +198,27 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 						
 		return true;
 	}
+	
+	
+	public static function moveUploadedFile($uploadedFileArray, $destinationPath){
+		if (is_uploaded_file($uploadedFileArray['tmp_name'])) {
+			if(move_uploaded_file($uploadedFileArray['tmp_name'], $destinationPath)){		
+				$file = new GO_Base_Fs_File($destinationPath);
+				$file->setDefaultPermissions();
 
+				return $file;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Set's default permissions and group ownership
+	 */
+	public function setDefaultPermissions(){
+		chmod($this->path, GO::config()->file_create_mode);
+		if(!empty(GO::config()->file_change_group))
+			chgrp($this->path, GO::config()->file_change_group);
+	}
 }

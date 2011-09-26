@@ -250,7 +250,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 		$dir = GO::config()->root_path . 'views/Extjs3/themes/Default/images/128x128/filetypes/';
 		$url = GO::config()->host . 'views/Extjs3/themes/Default/images/128x128/filetypes/';
-
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path . $params['src']);
+		
 		if (is_dir(GO::config()->file_storage_path . $params['src'])) {
 			$src = $dir . 'folder.png';
 		} else {
@@ -315,6 +316,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		}
 
 		$file = new GO_Base_Fs_File($src);
+		
 
 		$w = isset($params['w']) ? intval($params['w']) : 0;
 		$h = isset($params['h']) ? intval($params['h']) : 0;
@@ -458,6 +460,33 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 //					$this->redirect( $url . 'unknown.png');
 //				}
 //				break;
+	}
+	
+	
+	/**
+	 * Download file from GO::config()->tmpdir/user_id/$path
+	 * Because download is restricted from <user_id> subfolder this is secure.
+	 * The user_id is appended in the config class.
+	 * 
+	 * 
+	 */
+	public function actionDownloadTempfile($params){		
+		$file = new GO_Base_Fs_File(GO::config()->tmpdir.$params['path']);
+		GO_Base_Util_Common::outputDownloadHeaders($file, false, !empty($params['cache']));
+		$file->output();		
+	}
+	
+	/**
+	 * Public files are files stored in GO::config()->file_storage_path.'public'
+	 * They are publicly accessible.
+	 * Public files are cached
+	 * 
+	 * @param String $path 
+	 */
+	public function actionDownloadPublicFile($params){
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'public/'.$params['path']);
+		GO_Base_Util_Common::outputDownloadHeaders($file,false,!empty($params['cache']));
+		$file->output();		
 	}
 
 }
