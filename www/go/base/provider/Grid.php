@@ -18,94 +18,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.provider
  */
-class GO_Base_Provider_Grid {
+class GO_Base_Provider_Grid extends GO_Base_Provider_Abstract {
 
-  /**
-   * Holds the columns from model. See GO_Base_Db_ActiveRecord::$columns for more info.
-   * This array may be extended with a format function.
-   * 
-   * @var array 
-   */
-  private $_columns;
-  
-  /**
-   *
-   * @var GO_Base_Db_ActiveStatement 
-   */
-  private $_stmt;
-  
-  /**
-   *
-   * @var array the relation of the given model.  
-   */
-  private $_relation;
-	
-	private $_response;
-	
-	private $_sortFieldsAliases=array();
-	
-	private $_columnModelProvided=false;
-	
-	private $_modelFormatType='formatted';
-
-	private $_defaultSortOrder='';
-	private $_defaultSortDirection='ASC';
-	
-  /**
-   * See function formatColumn for a detailed description about how to use the format parameter.
-   *
-   * @param array $columns eg. array('username', 'date'=>array('format'=>'date("Ymd", $date)'))
-   */
-  public function __construct($columns=array()) {        
-    $this->_columns = $columns;	
-		if(count($columns))
-			$this->_columnModelProvided=true;
-  }
-	
-	/**
-	 * Set a title response
-	 * 
-	 * @param String $title 
-	 */
-	public function setTitle($title){
-		$this->_response['title'] = $title;
-	}
-	
-	
-	/**
-	 * Set the default column to sort on.
-	 * @param String / Array $order 
-	 */
-	public function setDefaultSortOrder($order, $direction){
-		$this->_defaultSortOrder=$order;
-		$this->_defaultSortDirection=$direction;
-	}
-	
-	/**
-	 * Set the statement that contains the models for the grid data.
-	 * Run the statement after you construct this grid. Otherwise the delete
-	 * actions will be ran later and they will still be in the result set.
-	 * 
-	 * @param GO_Base_Db_ActiveStatement $stmt 
-	 */
-	public function setStatement(GO_Base_Db_ActiveStatement $stmt){
-		$this->_stmt = $stmt;
-		
-		if(!$this->_columnModelProvided)
-			$this->_columns = array_merge(array_keys($stmt->model->columns), $this->_columns);
-		
-		if($stmt->model->customfieldsRecord){
-			
-			$cfColumns = array_keys($stmt->model->customfieldsRecord->columns);
-			array_shift($cfColumns); //remove link_id column
-			
-			$this->_columns=array_merge($this->_columns, $cfColumns);
-		}
-		
-    if (isset($stmt->relation))
-      $this->_relation = $stmt->relation;
-	}
-	
   /**
    * Handle a delete request when a grid loads.
    * 
@@ -166,81 +80,6 @@ class GO_Base_Provider_Grid {
     }
 	}
 	
-	/**
-	 * Set the format type used in the GO_Base_Db_ActiveRecord
-	 * @param string $type @see GO_Base_Db_ActiveRecord::getAttributes()
-	 */
-	public function setModelFormatType($type){
-		$this->_modelFormatType=$type;
-	}
-
-  /**
-   * Add columns to the grid and give the format in how to parse the value of this column.
-   * You can also use this function to set the format of an existing column.
-   * 
-   * The format can be parsed as normal php. (For example: formatColumn('read_date','date("d-m-Y")');)
-	 * 
-	 * You can use any model attribute name as a variable and you also have the $model variable available.
-	 * 
-	 * Example formatColumn('Special name','$model->getSpecialName()');
-   * 
-   * @param type $column   * 
-   * @param string $format 
-   * @param array $extraVars 
-   * 
-   * Add extra variables like this for example array('controller'=>$this) in a controller.
-   * 
-   * Then you can use '$controller->aControllerProperty' in the column format.
-	 * 
-	 * @param $sortfield
-	 * 
-	 * Set a sort field. Sometimes you need construct a column from multiple columns
-	 * Like user->name is a concatenation of first,middle and last.
-	 * In that case you can set sortfield to: array('first_name','last_name')
-   * 
-   */
-  public function formatColumn($column, $format, $extraVars=array(), $sortfield='') {
-
-    $this->_columns[$column]['format'] = $format;
-    $this->_columns[$column]['extraVars'] = $extraVars;
-		
-		if(!empty($sortfield)){
-			$this->_sortFieldsAliases[$column]=$sortfield;
-		}
-  }
-	  
-  /**
-   * Returns the data for the grid.
-   * Also deletes the given delete_keys.
-   *
-   * @return array $this->_response 
-   */
-  public function getData() {
-		
-		if(!isset($this->_stmt))
-			throw new Exception('You must provide a statement with setStatement()');
-
-    if (empty($this->_columns))
-      throw new Exception('No columns given for this grid.');   
-
-    
-    $this->_response['results'] = array();		
-		//$models = $this->_stmt->fetchAll();
-		
-		//when using this:
-		//while ($model = $this->_stmt->fetch()) {
-		//I got this error on php 5.2
-		//SQLSTATE[HY000]: General error: 2014 Cannot execute queries while other unbuffered queries are active. Consider using PDOStatement::fetchAll(). Alternatively, if your code is only ever going to run against mysql, you may enable query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute.
-		
-		while ($model = $this->_stmt->fetch()) {
-			$this->_response['results'][] = $this->formatModelForGrid($model);
-		}
-		$this->_response['total']=$this->_stmt->foundRows;
-
-
-    return $this->_response;
-  }
-  
   /**
    *
    * @param GO_Base_Db_ActiveRecord $model
@@ -294,42 +133,36 @@ class GO_Base_Provider_Grid {
     return $formattedRecord;
   }
 	
-	/**
-	 * Set a function that will be called with call_user_func to format a record.
-	 * The function will be called with parameters:
-	 * 
-	 * Array $formattedRecord, GO_Base_Db_ActiveRecord $model, GO_Base_Provider_Grid $grid
-	 * 
-	 * @param mixed $func Function name string or array($object, $functionName)
-	 */
-	public function setFormatRecordFunction($func){
-		$this->_formatRecordFunction=$func;
-	}
-
+		  
   /**
-   * Returns a set of default parameters for use with a grid.
-   * 
-   * @var array $params Supply parameters to add to or override the default ones
-   * @return array defaultParams 
+   * Returns the data for the grid.
+   * Also deletes the given delete_keys.
+   *
+   * @return array $this->_response 
    */
-  public function getDefaultParams($params=array()) {
+  public function getData() {
 		
-		$sort = !empty($_REQUEST['sort']) ? $_REQUEST['sort'] : $this->_defaultSortOrder;
+		if(!isset($this->_stmt))
+			throw new Exception('You must provide a statement with setStatement()');
+
+    if (empty($this->_columns))
+      throw new Exception('No columns given for this grid.');   
+
+    
+    $this->_response['results'] = array();		
+		//$models = $this->_stmt->fetchAll();
 		
-		if(isset($this->_sortFieldsAliases[$sort]))
-			$sort=$this->_sortFieldsAliases[$sort];
+		//when using this:
+		//while ($model = $this->_stmt->fetch()) {
+		//I got this error on php 5.2
+		//SQLSTATE[HY000]: General error: 2014 Cannot execute queries while other unbuffered queries are active. Consider using PDOStatement::fetchAll(). Alternatively, if your code is only ever going to run against mysql, you may enable query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute.
 		
-    return array_merge(array(
-        'searchQuery' => !empty($_REQUEST['query']) ? '%' . $_REQUEST['query'] . '%' : '',
-        'limit' => isset($_REQUEST['limit']) ? $_REQUEST['limit'] : GO::user()->max_rows_list,
-        'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
-        'order' => $sort,
-        'orderDirection' => !empty($_REQUEST['dir']) ? $_REQUEST['dir'] : $this->_defaultSortDirection,
-				'joinCustomFields'=>true,
-        'calcFoundRows'=>true,
-				'permissionLevel'=> isset($_REQUEST['permissionLevel']) ? $_REQUEST['permissionLevel'] : GO_Base_Model_Acl::READ_PERMISSION
-    ), $params);
+		while ($model = $this->_stmt->fetch()) {
+			$this->_response['results'][] = $this->formatModelForGrid($model);
+		}
+		$this->_response['total']=$this->_stmt->foundRows;
+
+
+    return $this->_response;
   }
-
 }
-

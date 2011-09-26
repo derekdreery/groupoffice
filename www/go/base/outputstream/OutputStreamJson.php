@@ -21,6 +21,8 @@ class GO_Base_OutputStream_OutputStreamJson implements GO_Base_OutputStream_Outp
 	
 	//private $_headersSent=false;
 	
+	private $_data;
+	
 	public function __construct(){
 		$this->sendHeaders();
 	}
@@ -31,8 +33,19 @@ class GO_Base_OutputStream_OutputStreamJson implements GO_Base_OutputStream_Outp
 	}
 	
 	public function write($data){
-		
-		echo json_encode($data);
+		$this->_data=array_merge($this->_data, $data);
 	}
+	
+	public function flush(){
+		
+	}
+	
+	public function endFlush(){
+		if(isset($this->_data)){
+			echo json_encode($this->_data);
+			unset($this->_data);
+		}
+	}
+
 	
 }

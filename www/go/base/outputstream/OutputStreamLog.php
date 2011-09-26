@@ -31,4 +31,8 @@ class GO_Base_OutputStream_OutputStreamLog implements GO_Base_OutputStream_Outpu
 		echo $data."\n";
 		flush();
 	}	
+	public function flush(){}
+
+	public function endFlush(){}
+
 }

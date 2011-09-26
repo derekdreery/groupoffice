@@ -504,7 +504,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	    $modelName = $this->model;
 	    $model = GO::getModel($modelName)->findByPk($params['id']);
 	    $response['success'] = $model->delete();
-	    return $response;
+			return $response;
 	}
 }
 
