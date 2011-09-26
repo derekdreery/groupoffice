@@ -47,7 +47,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 
 		return parent::afterLoad($response, $model, $params);
 	}
-	
+
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
 		if(isset($params['freq']) && !empty($params['freq'])) {
@@ -118,7 +118,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		$grid->formatColumn('category_name','$model->category->name',array(),'category_id');
 		$grid->formatColumn('tasklist_name','$model->tasklist_name');
 		//$grid->formatColumn('project_name','$model->project->name'); TODO: Implement the project from the ID and not from the name
-		return parent::prepareGrid(GO_Base_Provider_Grid $grid);
+		return parent::prepareGrid($grid);
 	}
 	
 	protected function getGridParams($params) {
@@ -143,9 +143,11 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			$gridParams['categoryFilter']=$params['categories'];
 		}
 		
-		
-
 		return $gridParams;
+	}
+	
+	public function actionExport() {
+		
 	}
 }
 	

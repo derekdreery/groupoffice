@@ -1,6 +1,4 @@
 <?php
-
-
 $l["task"]= 'Task';
 $l["noTask"]= 'No Tasks to display';
 $l["tasks"]= 'Tasks';
@@ -54,8 +52,10 @@ $l["active"]='Active';
 $l["globalsettings_templatelabel"]='Task template';
 $l["globalsettings_allchangelabel"]='Change existing?';
 $l["globalsettings_renameall"]= 'Rename all?';
+
 $l['name']='Tasks';
-$l['description']='Put a description here';
+$l['description']='A simple tasks module.';
+
 $lang['link_type'][12]=$l['task']='Task';
 $l['status']='Status';
 $l['scheduled_call']='Scheduled call at %s';

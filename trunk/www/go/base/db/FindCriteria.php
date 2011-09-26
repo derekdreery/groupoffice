@@ -97,11 +97,11 @@ class GO_Base_Db_FindCriteria {
 	/**
 	 * Adds a condition to this object and returns itself.
 	 * 
-	 * @param type $field The field where this condition is for.
-	 * @param type $value The value of the field for this condition.
-	 * @param type $comparator How needs this field be compared with the value. Can be ('<','>','<>','=<','>=','=').
-	 * @param type $tableAlias The alias of the table in this SQL statement.
-	 * @param type $useAnd True for 'AND', false for 'OR'. Default: true.
+	 * @param String $field The field where this condition is for.
+	 * @param String $value The value of the field for this condition.
+	 * @param String $comparator How needs this field be compared with the value. Can be ('<','>','<>','=<','>=','=').
+	 * @param String $tableAlias The alias of the table in this SQL statement.
+	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true.
 	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
 	 */
 	public function addCondition($field, $value, $comparator='=',$tableAlias='t', $useAnd=true) {
@@ -114,11 +114,11 @@ class GO_Base_Db_FindCriteria {
 	/**
 	 * Add an IN condition to this object and returns itself.
 	 * 
-	 * @param type $field The field where this condition is for.
-	 * @param type $value The value of the field for this condition.
-	 * @param type $tableAlias The alias of the table in this SQL statement.
-	 * @param type $useAnd True for 'AND', false for 'OR'. Default: true.
-	 * @param type $useNot True for 'NOT IN', false for 'IN'. Default: false.
+	 * @param String $field The field where this condition is for.
+	 * @param String $value The value of the field for this condition.
+	 * @param String $tableAlias The alias of the table in this SQL statement.
+	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true.
+	 * @param Boolean $useNot True for 'NOT IN', false for 'IN'. Default: false.
 	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
 	 */
 	public function addInCondition($field, $value, $tableAlias='t', $useAnd=true, $useNot=false) {	
@@ -150,11 +150,11 @@ class GO_Base_Db_FindCriteria {
 	 * Add a search condition to this object and returns itself.
 	 * The $useExact parameter verifies the given value as an exact string or adds a '%' before and after the given value.
 	 * 
-	 * @param type $field The field where this condition is for.
-	 * @param string $value The value of the field for this condition.
-	 * @param type $useAnd True for 'AND', false for 'OR'. Default: true.
-	 * @param type $useNot True for 'NOT LIKE', false for 'LIKE'. Default: false.
-	 * @param type $useExact True if you need an exact match for the given value, false if it needs to be a part of the given value. Default: false.
+	 * @param String $field The field where this condition is for.
+	 * @param String $value The value of the field for this condition.
+	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true.
+	 * @param Boolean $useNot True for 'NOT LIKE', false for 'LIKE'. Default: false.
+	 * @param Boolean $useExact True if you need an exact match for the given value, false if it needs to be a part of the given value. Default: false.
 	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
 	 */
 	public function addSearchCondition($field, $value, $useAnd=true, $useNot=false, $useExact=false) {
@@ -203,7 +203,7 @@ class GO_Base_Db_FindCriteria {
 	 * Then returns the complete merged GO_Base_Db_FindCriteria object.
 	 * 
 	 * @param GO_Base_Db_FindCriteria $criteria The GO_Base_Db_FindCriteria object that needs to be merged with this GO_Base_Db_FindCriteria object.
-	 * @param type $useAnd True for 'AND', false for 'OR'. Default: true.
+	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true.
 	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
 	 */
 	public function mergeWith(GO_Base_Db_FindCriteria $criteria, $useAnd=true) {

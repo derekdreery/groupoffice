@@ -222,6 +222,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 		$this->loadColumns();
 		$this->setIsNew($newRecord);
+		
+		if($this->isNew) 
+			$this->setAttributes($this->defaultAttributes(),false);
+		
 		$this->init();
 		
 		$this->_modifiedAttributes=array();
@@ -229,10 +233,34 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	
 	/**
-	 * @todo Generate return translated label names for the attributes.
+	 * Returns localized attribute labels for each column.
+	 * 
+	 * The default language variable name is modelColumn.
+	 * 
+	 * eg.: GO_Tasks_Model_Task column 'name' will look for:
+	 * 
+	 * $l['taskName']
+	 * 
+	 * 'due_time' will be
+	 * 
+	 * $l['taskDue_time']
+	 * 
+	 * If you don't like this you may also override this function in your model.
+	 * 
+	 * @return array
+	 * 
+	 * A key value array eg. array('name'=>'Name', 'due_time'=>'Due time')
+	 * 
 	 */
 	public function attributeLabels(){
-		return array();
+		$labels = array();
+		
+		$prefix = strtolower(array_pop(explode('_',$this->className())));
+		
+		foreach($this->columns as $columnName=>$columnData)
+			$labels[$columnName] = GO::t($prefix.ucfirst($columnName), $this->getModule());
+	
+		return $labels;
 	}
 	
 	/**
@@ -2348,5 +2376,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		return $this->getDbConnection()->query($sql);
 	}
 	
+	/**
+	 * Array of default attributes to set
+	 * 
+	 * This function can be overridden in the model.
+	 * 
+	 * @return Array An empty array.
+	 */
+	public function defaultAttributes() {
+		return array();
+	}
 }
 

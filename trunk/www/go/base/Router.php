@@ -84,7 +84,7 @@ class GO_Base_Router{
 		$controller = new $controllerClass;
 		$controller->init($module);
 		$response = $controller->run($action);	
-		if(isset($response))
-			GO::output($response);
+//		if(isset($response))
+//			GO::output($response);
 	}	
 }

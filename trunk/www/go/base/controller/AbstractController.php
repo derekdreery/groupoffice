@@ -74,16 +74,30 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * 
 	 * @param string $viewName 
 	 */
-	protected function render($viewName){		
+	protected function render($viewName, $data=array()){		
 		//header('Content-Type: text/html; charset=UTF-8');
 		
 		if(empty($this->module)){
-			require(GO::config()->root_path.'views/'.GO::view().'/'.$viewName.'.php');
+			$file = GO::config()->root_path.'views/'.GO::view().'/'.$viewName.'.php';
 		}else
 		{
-			require(GO::modules()->{$this->module}.'views/'.GO::view().'/'.$viewName.'.php');
+			$file = $this->moduleObject->path.'views/'.GO::view().'/'.$viewName.'.php';
+		}
+		
+		if(file_exists($file)){
+			require($file);
+		}else
+		{
+			$file = GO::config()->root_path.'views/'.GO::view().'/Default.php';
+			
+			require($file);
 		}
 	}
+	
+	protected function renderPartial($data=array()) {
+		
+	}
+	
 	
 	/**
 	 * Adds a permission check on an acl ID.
@@ -153,6 +167,9 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 //				$this->runWithParams($method, $_REQUEST);
 //			else
 				$response =  $this->$methodName($_REQUEST);
+
+				if(isset($response))
+					$this->render($action, $response);
 				
 				$this->fireEvent($methodName, array(&$this, &$_REQUEST, &$response));
 				

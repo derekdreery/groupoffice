@@ -154,11 +154,11 @@ Ext.extend(GO.tasks.AddTaskPanel, Ext.FormPanel,{
 					url:GO.url('tasks/task/submit'),
 					params: {
 						//task: 'save_task',
-						//tasklist_id: tasklist_id,
-						//name: taskname,
-						//link: link,
-						start_date: new Date().format(GO.settings.date_format),
-						due_date: due.format(GO.settings.date_format)
+						tasklist_id: tasklist_id,
+						name: taskname,
+					//	link: link,
+						start_time: new Date().format(GO.settings.date_format),
+						due_time: due.format(GO.settings.date_format)
 					},
 					callback: function(options, success, response)
 					{

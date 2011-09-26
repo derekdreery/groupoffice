@@ -254,4 +254,14 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		return 'tasks/' . GO_Base_Fs_Base::stripInvalidChars($this->tasklist->name) . '/' . date('Y', $this->due_time) . '/' . GO_Base_Fs_Base::stripInvalidChars($this->name);
 	}
 	
+	public function defaultAttributes() {
+		
+		$defaults = array(
+			//	'description'=>'DIT IS DE BESCHRIJVING DIE STANDAARD WORDT INGEVULD',
+				'status'=>  GO_Tasks_Model_Task::STATUS_NEEDS_ACTION
+		);
+		
+		return $defaults;
+	}
+	
 }

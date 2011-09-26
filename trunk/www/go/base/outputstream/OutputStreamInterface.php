@@ -24,4 +24,8 @@ interface GO_Base_OutputStream_OutputStreamInterface{
 	
 	public function write($str);
 	
+	public function flush();
+	
+	public function endFlush();
+	
 }
