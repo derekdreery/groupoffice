@@ -479,9 +479,7 @@ GO.files.FileBrowser = function(config){
 
 						this.uploadFlashDialog = new GO.UploadFlashDialog({
 							uploadPanel: new Ext.ux.SwfUploadPanel({
-								post_params : {
-									"task" : 'upload_file'
-								},
+								url:GO.url('files/folder/upload'),
 								upload_url : GO.settings.modules.files.url+ 'action.php',
 								labelWidth: 110,
 								file_size_limit:max,

@@ -178,19 +178,48 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	public function actionPaste($params) {
 
 		$response['success'] = true;
+		
+		if(!isset($params['overwrite']))
+			$params['overwrite']='ask'; //can be ask, yes, no
+			
 
-		$ids = $this->_splitFolderAndFileIds(json_decode($params['ids'], true));
+		if(isset($params['ids']) && $params['overwrite']=='ask')
+			GO::session()->values['files']['pasteIds'] = $this->_splitFolderAndFileIds(json_decode($params['ids'], true));
+	
 		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
 
 		if (!$destinationFolder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
 
-		foreach ($ids['files'] as $file_id) {
+		while($file_id=array_shift(GO::session()->values['files']['pasteIds']['files'])){
 			$file = GO_Files_Model_File::model()->findByPk($file_id);
-
-			if ($destinationFolder->hasFile($file->name)) {
-				if (empty($params['overwrite'])) {
-					$response['fileExists'] = array($file->name, $file->id);
+			
+			$existingFile = $destinationFolder->hasFile($file->name);
+			if ($existingFile) {
+				switch($params['overwrite']){
+					case 'ask':
+						array_unshift(GO::session()->values['files']['pasteIds']['files'], $file_id);
+						$response['fileExists'] = $file->name;
+						return $response;
+						break;
+					
+					case 'yestoall':
+					case 'yes':
+						$existingFile->delete();
+						
+						if($params['overwrite']=='yes')
+							$params['overwrite']='ask';
+						break;
+						
+					case 'notoall':
+					case 'no':	
+						if($params['overwrite']=='no')
+							$params['overwrite']='ask';
+						
+						continue;
+						
+						break;
+						
 				}
 			}
 
@@ -203,8 +232,37 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			}
 		}
 
-		foreach ($ids['folders'] as $folder_id) {
+		while($folder_id=array_shift(GO::session()->values['files']['pasteIds']['folders'])){
 			$folder = GO_Files_Model_Folder::model()->findByPk($folder_id);
+			
+			$existingFolder = $destinationFolder->hasFolder($file->name);
+			if ($existingFolder) {
+				switch($params['overwrite']){
+					case 'ask':
+						array_unshift(GO::session()->values['folders']['pasteIds']['folders'], $file_id);
+						$response['fileExists'] = $file->name;
+						return $response;
+						break;
+					
+					case 'yestoall':
+					case 'yes':
+						$existingFolder->delete();
+						
+						if($params['overwrite']=='yes')
+							$params['overwrite']='ask';
+						break;
+						
+					case 'notoall':
+					case 'no':	
+						if($params['overwrite']=='no')
+							$params['overwrite']='ask';
+						
+						continue;
+						
+						break;
+						
+				}
+			}
 
 			if ($params['paste_mode'] == 'cut') {
 				if (!$folder->move($destinationFolder))
