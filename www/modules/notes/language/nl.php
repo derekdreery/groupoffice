@@ -1,7 +1,7 @@
 <?php
 
 
-require_once($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('notes'));
+//require_once($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('notes'));
 $l['category']='Notitieblok';
 $l['categories']='Notitieblokken';
 $lang['link_type'][4]=$l['note']='Notitie';
