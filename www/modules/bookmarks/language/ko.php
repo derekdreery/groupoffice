@@ -17,6 +17,6 @@ $l["sharedCategory"]='Shared category';
 $l["behaveAsModule"]='Behave as a module (Browser reload required)';
 $l["confirmDelete"]='Are you sure you want to delete this bookmark?';
 $l['name']='북마크';
-$l['description']='A module to create bookmarks.';
+$l['description']='Website description.';
 $l['general']='일반';
 $l['googleDescription']="웹 검색";

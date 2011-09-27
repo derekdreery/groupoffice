@@ -17,13 +17,13 @@ GO.bookmarks.groupingStore = new Ext.data.GroupingStore({
 			totalProperty: "total",
 			root: "results",
 			id: "id",
-		fields: ['id','category_id','category_name','user_id','name','content','description','logo','open_extern','write_permission','index','public_icon','thumb','behave_as_module']
+		fields: ['id','category_id','category_name','user_id','name','content','description','logo','open_extern','permissionLevel','public_icon','thumb','behave_as_module']
 		}),
 		baseParams: {
 			task:'get_bookmarks'
 		},
 		proxy: new Ext.data.HttpProxy({
-			url: GO.settings.modules.bookmarks.url+'json.php'
+			url : GO.url('bookmarks/bookmark/grid')
 		}),
 		groupField:'category_name',
 		sortInfo: {
@@ -38,11 +38,9 @@ GO.bookmarks.groupingStore = new Ext.data.GroupingStore({
 
 // laat categorieen zien
 GO.bookmarks.writableCategoriesStore = new GO.data.JsonStore({
-	url: GO.settings.modules.bookmarks.url+ 'json.php',
+	url : GO.url('bookmarks/category/grid'),
 	baseParams: {
-		auth_type:'write',
-		task: 'categories'
-	
+		permissionLevel:GO.permissionLevels.write
 	},
 	root: 'results',
 	id: 'id',
@@ -54,15 +52,9 @@ GO.bookmarks.writableCategoriesStore = new GO.data.JsonStore({
 // comboCategoriesStore, zelfde als writableCategoriesStore PLUS extra veldje met 'show all'
 
 GO.bookmarks.comboCategoriesStore = new GO.data.JsonStore({
-	    url: GO.settings.modules.bookmarks.url+ 'json.php',
+	    url : GO.url('bookmarks/category/grid'),
 	    baseParams: {
-	    	task: 'categories',
-	    	auth_type: 'read',
-			  combo: 1								// show ALL field, category=0;
 	    	},
-	    root: 'results',
-	    id: 'id',
-	    totalProperty:'total',
 	    fields: ['id','user_name','acl_id','name'],
 	    remoteSort: true
 	});
@@ -71,13 +63,12 @@ GO.bookmarks.comboCategoriesStore = new GO.data.JsonStore({
 // store voor public icons, bestandsnamen
 	GO.bookmarks.thumbstore = new GO.data.JsonStore(
 	{
-		url: GO.settings.modules.bookmarks.url+ 'json.php',
-		baseParams: {
-			task: 'thumbdir'
-		}	,
-		root: 'results',
-		id:'id',
-		totalProperty:'total',
+			url: GO.url('bookmarks/bookmark/thumbs'),
+		
+//		url: GO.settings.modules.bookmarks.url+ 'json.php',
+//		baseParams: {
+//			task: 'thumbdir'
+//		}	,
 		fields: ['filename']
 	});
 

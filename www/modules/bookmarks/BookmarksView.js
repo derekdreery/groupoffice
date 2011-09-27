@@ -27,7 +27,7 @@ GO.bookmarks.BookmarksView = function(config){
 	
 	this.bookmarkthumbs  = new Ext.XTemplate(
 		'<tpl for=".">',
-		'<tpl if="(this.is_new_category(category_name)||(!index))">', 
+		'<tpl if="this.is_new_category(category_name)">', 
 		'<h1 class="categorie">{category_name}</h1>',
 		'</tpl>',
 		'<div class="thumb-wrap"  >',
@@ -38,7 +38,7 @@ GO.bookmarks.BookmarksView = function(config){
 		{
 			// switchen van categorie
 			is_new_category : function(category_name){
-				if(category_name!=this.lastcategory){
+				if(!this.lastcategory || category_name!=this.lastcategory){
 					this.lastcategory=category_name;
 					return true;
 				}else
@@ -68,18 +68,18 @@ GO.bookmarks.BookmarksView = function(config){
    * Close-button om node in Dataview te verwijderen
    */
 
-	if (!this.closeButton)
-	{
-		this.closeButton = new GO.bookmarks.CloseButton({
-			autoEl: {
-				tag: 'img',
-				src: 'modules/bookmarks/themes/Default/images/close.gif',
-				cls: 'closebutton'
-			}
-		});
-	}
-	this.closeButton.hide();
-	this.closeButton.on('remove_bookmark', GO.bookmarks.removeBookmark, this);
+//	if (!this.closeButton)
+//	{
+//		this.closeButton = new GO.bookmarks.CloseButton({
+//			autoEl: {
+//				tag: 'img',
+//				src: 'modules/bookmarks/themes/Default/images/close.gif',
+//				cls: 'closebutton'
+//			}
+//		});
+//	}
+//	this.closeButton.hide();
+//	this.closeButton.on('remove_bookmark', GO.bookmarks.removeBookmark, this);
 
 
 	/*
@@ -96,19 +96,32 @@ GO.bookmarks.BookmarksView = function(config){
 	 * rechtermuisknop, edit bookmark
 	 */
 
+	
 	this.DV.on('contextmenu',function( DV, index, node, e) {
 		e.preventDefault();
-		
-		var record = this.DV.getRecord(node).data;
-		if (this.DV.getRecord(node).data.write_permission) // users kunnen niet rechts klikken op public bookmarks
-		{
-			GO.bookmarks.showBookmarksDialog({
-				record:record,
-				edit:1
-			});
-		}
-	}, this);
 
+		var XY = new Array(e.getPageX(),e.getPageY());
+
+		if (!GO.bookmarks.bookmarkContextMenu) {
+			GO.bookmarks.bookmarkContextMenu = new GO.bookmarks.BookmarkContextMenu();
+		}
+		
+		// Verry Important !! to get the record and the XY data of the mouse
+		var record = this.DV.getRecord(node);
+		GO.bookmarks.bookmarkContextMenu.setRecord(record);
+		GO.bookmarks.bookmarkContextMenu.showAt(XY);
+		
+				
+
+//	if (this.DV.getRecord(node).data.permissionLevel>GO.permissionLevels.read) // users kunnen niet rechts klikken op public bookmarks
+//{
+//	GO.bookmarks.showBookmarksDialog({
+//		record:record,
+//		edit:1
+///);
+//}
+ 
+	}, this);
 
 	/*
   * Mouseover
@@ -120,23 +133,23 @@ GO.bookmarks.BookmarksView = function(config){
 
 	this.DV.on('mouseenter',function( DV, index, node, e) {
 		
-		if((this.mouseOver)&&(this.DV.getRecord(node)!=undefined)){
-			if (this.DV.getRecord(node).data.write_permission) // users zien geen kruisje bij een public bookmark
-			{
-				this.closeButton.show();
-				this.closeButton.record=this.DV.getRecord(node);
-				this.closeButton.getEl().alignTo(node, 'tr', [-21,6]);
-			}
-		}
+//		if((this.mouseOver)&&(this.DV.getRecord(node)!=undefined)){
+//			if (this.DV.getRecord(node).data.permissionLevel>GO.permissionLevels.write) // users zien geen kruisje bij een public bookmark
+//			{
+//				this.closeButton.show();
+//				this.closeButton.record=this.DV.getRecord(node);
+//				this.closeButton.getEl().alignTo(node, 'tr', [-21,6]);
+//			}
+//		}
 	}, this, {
 		delay:600,
 		buffer:200
 	})
 
-	this.DV.on('mouseleave',function( DV, index, node, e) {
-		this.mouseOver=false;
-		this.closeButton.hideIfNotOver.defer(100, this.closeButton);
-	}, this);
+//	this.DV.on('mouseleave',function( DV, index, node, e) {
+//		this.mouseOver=false;
+//		this.closeButton.hideIfNotOver.defer(100, this.closeButton);
+//	}, this);
 
 	Ext.apply(config, {
 		listeners:{
@@ -144,7 +157,7 @@ GO.bookmarks.BookmarksView = function(config){
 				config.store.load();
 			}
 		},
-		items: [this.DV,this.closeButton]
+		items: [this.DV]
 	});
 
 	GO.bookmarks.BookmarksView.superclass.constructor.call(this, config);
@@ -153,3 +166,64 @@ GO.bookmarks.BookmarksView = function(config){
 Ext.extend(GO.bookmarks.BookmarksView, Ext.Panel,{
 
 	});
+
+
+GO.bookmarks.BookmarkContextMenu = function(config)
+{
+	if(!config)
+	{
+		config = {};
+	}
+	config['shadow']='frame';
+	config['minWidth']=180;
+	
+
+				
+	this.deleteButton = new Ext.menu.Item({
+					iconCls: 'btn-delete',
+					text: 'Delete bookmark',
+					cls: 'x-btn-text-icon',
+					handler: function(){
+						GO.bookmarks.removeBookmark(this.record);						
+					},
+					scope:this
+	});
+	
+	this.editButton = new Ext.menu.Item({
+					iconCls: 'btn-edit',
+					text: 'Edit bookmark',
+					cls: 'x-btn-text-icon',
+					handler: function(){
+
+						GO.bookmarks.showBookmarksDialog({
+								record:this.record,
+								edit:1
+					})
+					
+					},
+					scope:this
+				
+			
+		
+					
+	
+});
+				
+
+				
+	config.items=[this.deleteButton,
+	this.editButton];
+	
+
+
+	GO.bookmarks.BookmarkContextMenu.superclass.constructor.call(this, config);	
+}
+
+Ext.extend(GO.bookmarks.BookmarkContextMenu, Ext.menu.Menu,{
+
+	setRecord : function (record){
+		this.record = record;
+	}
+	
+			
+});

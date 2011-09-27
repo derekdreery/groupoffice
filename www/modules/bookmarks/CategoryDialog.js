@@ -91,8 +91,7 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 		if(this.category_id>0)
 		{
 			this.formPanel.load({
-				url : GO.settings.modules.bookmarks.url+'json.php',
-				'task' : 'category',
+				url : GO.url('bookmarks/category/load'),
 
 				success:function(form, action)
 				{					
@@ -129,7 +128,7 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 
 	setCategoryId : function(category_id)
 	{
-		this.formPanel.form.baseParams['category_id']=category_id;
+		this.formPanel.form.baseParams['id']=category_id;
 		this.category_id=category_id;
 		
 	},
@@ -137,10 +136,7 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 	submitForm : function(hide){
 		this.formPanel.form.submit(
 		{
-			url:GO.settings.modules.bookmarks.url+'action.php',
-			params: {
-				'task' : 'save_category'
-			},
+			url : GO.url('bookmarks/category/submit'),
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){				
 				this.fireEvent('save', this);				
@@ -149,8 +145,8 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 					this.hide();	
 				}else
 				{				
-					if(action.result.category_id)					
-						this.setCategoryId(action.result.category_id);
+					if(action.result.id)					
+						this.setCategoryId(action.result.id);
 
 					if(typeof(action.result.acl_id)!='undefined')
 						this.readPermissionsTab.setAcl(action.result.acl_id);
@@ -192,11 +188,7 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
 		});
 
 		this.propertiesPanel = new Ext.Panel({
-			url: GO.settings.modules.bookmarks.url+'json.php',
-			border: false,
-			baseParams: {
-				task: 'category'
-			},
+			border: false,			
 			title:GO.lang['strProperties'],			
 			cls:'go-form-panel',
 			waitMsgTarget:true,
@@ -222,11 +214,8 @@ Ext.extend(GO.bookmarks.CategoryDialog, Ext.Window,{
     
 		this.formPanel = new Ext.form.FormPanel({
 			waitMsgTarget:true,
-			url: GO.settings.modules.bookmarks.url+'json.php',
-			border: false,
-			baseParams: {
-				task: 'category'
-			},
+			url : GO.url('bookmarks/category/category'),
+			baseParams: {},
 			items:this.tabPanel				
 		});
 	}

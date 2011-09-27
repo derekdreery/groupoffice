@@ -211,6 +211,7 @@ Ext.extend(GO.bookmarks.MainPanel, Ext.Panel, {
 GO.bookmarks.showBookmarksDialog = function(config){
 	
 	if(!this.bookmarksDialog){
+
 		this.bookmarksDialog = new GO.bookmarks.BookmarksDialog({
 			edit:config.edit, // leeg of bestaand record?
 			listeners:{
@@ -258,24 +259,24 @@ GO.bookmarks.removeBookmark = function(record)
 {
 	if(confirm(GO.bookmarks.lang.confirmDelete))
 	{
-		Ext.Ajax.request({
-			url: GO.settings.modules.bookmarks.url+'action.php',
+
+		GO.request({
+			url : 'bookmarks/bookmark/delete', 
 			params: {
-				'task':'delete_bookmark',
-				'bm_id': record.data.id,
-				'usr_id': record.data.user_id
+				id: record.data.id
 			},
 			scope:this,
 
 			callback: function(options, success, response){
 				var responseParams = Ext.decode(response.responseText);
-				if(!responseParams.deleteSuccess)
+				if(!responseParams.success)
 				{
-					Ext.MessageBox.alert(GO.lang['strError'],responseParams.deleteFeedback);
+					Ext.MessageBox.alert(GO.lang['strError'],responseParams.feedback);
 				}
 				else
 				{
 					GO.bookmarks.groupingStore.remove(record);
+					GO.bookmarks.groupingStore.load();
 				}
 			}
 		})
