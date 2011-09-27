@@ -23,7 +23,7 @@ GO.bookmarks.groupingStore = new Ext.data.GroupingStore({
 			task:'get_bookmarks'
 		},
 		proxy: new Ext.data.HttpProxy({
-			url : GO.url('bookmarks/bookmark/grid')
+			url : GO.url('bookmarks/bookmark/store')
 		}),
 		groupField:'category_name',
 		sortInfo: {
@@ -38,7 +38,7 @@ GO.bookmarks.groupingStore = new Ext.data.GroupingStore({
 
 // laat categorieen zien
 GO.bookmarks.writableCategoriesStore = new GO.data.JsonStore({
-	url : GO.url('bookmarks/category/grid'),
+	url : GO.url('bookmarks/category/store'),
 	baseParams: {
 		permissionLevel:GO.permissionLevels.write
 	},
@@ -52,7 +52,7 @@ GO.bookmarks.writableCategoriesStore = new GO.data.JsonStore({
 // comboCategoriesStore, zelfde als writableCategoriesStore PLUS extra veldje met 'show all'
 
 GO.bookmarks.comboCategoriesStore = new GO.data.JsonStore({
-	    url : GO.url('bookmarks/category/grid'),
+	    url : GO.url('bookmarks/category/store'),
 	    baseParams: {
 	    	},
 	    fields: ['id','user_name','acl_id','name'],

@@ -3,15 +3,15 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	
 	protected $model = 'GO_Base_Model_Module';
 	
-	protected function prepareGrid(GO_Base_Data_Store $grid){
+	protected function prepareStore(GO_Base_Data_Store $store){
 		
 			
-		$grid->setFormatRecordFunction(array('GO_Modules_Controller_Module', 'formatRecord'));
+		$store->setFormatRecordFunction(array('GO_Modules_Controller_Module', 'formatRecord'));
 		
-    return parent::prepareGrid(GO_Base_Data_Store $grid);
+    return parent::prepareStore(GO_Base_Data_Store $store);
 	}
 	
-	public static function formatRecord($record, $model, $grid){
+	public static function formatRecord($record, $model, $store){
 
 		if($model->moduleManager){
 			$record['description'] = $model->moduleManager->description();
@@ -26,7 +26,7 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	
-	public function actionAvailableModulesGrid($params){
+	public function actionAvailableModulesStore($params){
 		
 		$response['results']=array();
 		

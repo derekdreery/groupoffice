@@ -294,13 +294,13 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	private function _listShares() {
 
-		$grid = new GO_Base_Data_Store();
-		$grid->setFormatRecordFunction(array($this, 'formatListRecord'));
-		$findParams = $grid->getDefaultParams();
+		$store = new GO_Base_Data_Store();
+		$store->setFormatRecordFunction(array($this, 'formatListRecord'));
+		$findParams = $store->getDefaultParams();
 		$stmt = GO_Files_Model_Folder::model()->findShares($findParams);
-		$grid->setStatement($stmt);
+		$store->setStatement($stmt);
 
-		return $grid->getData();
+		return $store->getData();
 	}
 
 	public function actionList($params) {
@@ -319,7 +319,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$response['parent_id'] = $folder->parent_id;
 
 
-		$grid = new GO_Base_Data_Store();
+		$store = new GO_Base_Data_Store();
 
 
 		//handle delete request for both files and folder
@@ -328,21 +328,21 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$ids = $this->_splitFolderAndFileIds(json_decode($params['delete_keys'], true));
 
 			$params['delete_keys'] = json_encode($ids['folders']);
-			$grid->processDeleteActions($params, "GO_Files_Model_Folder");
+			$store->processDeleteActions($params, "GO_Files_Model_Folder");
 
 			$params['delete_keys'] = json_encode($ids['files']);
-			$grid->processDeleteActions($params, "GO_Files_Model_File");
+			$store->processDeleteActions($params, "GO_Files_Model_File");
 		}
 
 
-		$grid->setFormatRecordFunction(array($this, 'formatListRecord'));
-		$findParams = $grid->getDefaultParams(array(
+		$store->setFormatRecordFunction(array($this, 'formatListRecord'));
+		$findParams = $store->getDefaultParams(array(
 				'ignoreAcl' => true
 						));
 		$stmt = $folder->folders($findParams);
-		$grid->setStatement($stmt);
+		$store->setStatement($stmt);
 
-		$response = array_merge($response, $grid->getData());
+		$response = array_merge($response, $store->getData());
 
 
 		//add files to the listing if it fits
@@ -360,15 +360,15 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		}
 		
 		if($fileStart>=0) {
-			$findParams = $grid->getDefaultParams(array(
+			$findParams = $store->getDefaultParams(array(
 					'limit' => $fileLimit,
 					'start' => $fileStart
 							));
 
 			$stmt = $folder->files($findParams);
-			$grid->setStatement($stmt);
+			$store->setStatement($stmt);
 
-			$filesResponse = $grid->getData();
+			$filesResponse = $store->getData();
 
 			$response['total']+=$filesResponse['total'];
 			$response['results'] = array_merge($response['results'], $filesResponse['results']);
@@ -384,7 +384,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $response;
 	}
 
-	public function formatListRecord($record, $model, $grid) {
+	public function formatListRecord($record, $model, $store) {
 
 		$record['path'] = $model->path;
 

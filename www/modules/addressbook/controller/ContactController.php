@@ -137,7 +137,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	}
 	
 	
-//	protected function getGridMultiSelectProperties(){
+//	protected function getStoreMultiSelectProperties(){
 //		return array(
 //				'requestParam'=>'notes_categories_filter',
 //				'permissionsModel'=>'GO_Notes_Model_Category',
@@ -145,7 +145,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 //				);
 //	}	
 //	
-//	protected function getGridParams($params){
+//	protected function getStoreParams($params){
 //		return array(
 //				'ignoreAcl'=>true,
 //				'joinCustomFields'=>true,
@@ -153,9 +153,9 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 //		);
 //	}
 //  
-//  protected function prepareGrid(GO_Base_Data_Store $grid){		
-//    $grid->formatColumn('user_name','$model->user->name');
-//    return $grid;
+//  protected function prepareStore(GO_Base_Data_Store $store){		
+//    $store->formatColumn('user_name','$model->user->name');
+//    return $store;
 //  }
 //	
 //	protected function remoteComboFields(){

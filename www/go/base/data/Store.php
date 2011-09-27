@@ -10,7 +10,7 @@
  */
 
 /**
- * The Grid provider is useful to generate response for a grid store in a 
+ * The Store provider is useful to generate response for a grid store in a 
  * controller.
  * 
  * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
@@ -74,11 +74,11 @@ class GO_Base_Data_Store {
 	public static function newInstance($model, $excludeColumns=array(), $findParams=false)
 	{
 		$cm = new GO_Base_Data_ColumnModel($model, $excludeColumns);		
-		$grid = new self($cm);
+		$store = new self($cm);
 		if($findParams)
-			$grid->setStatement ($model->find($findParams));
+			$store->setStatement ($model->find($findParams));
 		
-		return $grid;
+		return $store;
 		
 	}
 	
@@ -263,7 +263,7 @@ class GO_Base_Data_Store {
 		//SQLSTATE[HY000]: General error: 2014 Cannot execute queries while other unbuffered queries are active. Consider using PDOStatement::fetchAll(). Alternatively, if your code is only ever going to run against mysql, you may enable query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute.
 		
 		while ($model = $this->_stmt->fetch()) {
-			$this->_response['results'][] = $this->formatModelForGrid($model);
+			$this->_response['results'][] = $this->formatModelForStore($model);
 		}
 		$this->_response['total']=$this->_stmt->foundRows;
 
@@ -276,7 +276,7 @@ class GO_Base_Data_Store {
    * @param GO_Base_Db_ActiveRecord $model
    * @return array formatted grid row key value array
    */
-  public function formatModelForGrid($model){
+  public function formatModelForStore($model){
 		
 		$oldLevel = error_reporting(E_ERROR);	//suppress errors in the eval'd code
     
@@ -330,7 +330,7 @@ class GO_Base_Data_Store {
 	 * Set a function that will be called with call_user_func to format a record.
 	 * The function will be called with parameters:
 	 * 
-	 * Array $formattedRecord, GO_Base_Db_ActiveRecord $model, GO_Base_Data_Store $grid
+	 * Array $formattedRecord, GO_Base_Db_ActiveRecord $model, GO_Base_Data_Store $store
 	 * 
 	 * @param mixed $func Function name string or array($object, $functionName)
 	 */

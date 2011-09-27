@@ -20,7 +20,7 @@ GO.comments.CommentsGrid = function(config){
 	config.split=true;
 	config.border=false;
 	config.store = new GO.data.JsonStore({
-	    url: GO.url('comments/comment/grid'),
+	    url: GO.url('comments/comment/store'),
 	    baseParams: {
 	    	task: 'comments'
 	    	},

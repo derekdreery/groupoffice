@@ -38,7 +38,7 @@ GO.users.MainPanel = function(config)
 	}
 
 	config.store = new GO.data.JsonStore({
-	    url: GO.url('users/user/grid'),
+	    url: GO.url('users/user/store'),
 	    baseParams: {task: 'users'},
 	    id: 'id',
 	    totalProperty: 'total',

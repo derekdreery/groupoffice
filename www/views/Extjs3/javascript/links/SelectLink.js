@@ -16,7 +16,7 @@ GO.form.SelectLink = function(config){
 	config = config || {};
 	
 	config.store = new GO.data.JsonStore({				
-		url: GO.url('search/grid'),
+		url: GO.url('search/store'),
 		fields:['model_id','model_name','name_and_type', 'model_name_and_id'],
 		remoteSort: true				
 	});

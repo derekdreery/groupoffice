@@ -47,7 +47,7 @@ GO.grid.SearchPanel = function(config){
 	
 	this.store = new GO.data.JsonStore({
 		//url: BaseHref+'json.php',			
-		url: GO.url('search/grid'),
+		url: GO.url('search/store'),
 		baseParams: {
 			link_id: this.link_id,
 			link_type: this.link_type,

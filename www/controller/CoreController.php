@@ -114,17 +114,17 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 */
 	public function actionUsers($params) {
 
-		$grid = new GO_Base_Data_Store();
-		$grid->setDefaultSortOrder('name', 'ASC');
+		$store = new GO_Base_Data_Store();
+		$store->setDefaultSortOrder('name', 'ASC');
 
-		$grid->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
-		$grid->formatColumn('cf', '$model->id.":".$model->name'); //special field used by custom fields. They need an id an value in one.
+		$store->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
+		$store->formatColumn('cf', '$model->id.":".$model->name'); //special field used by custom fields. They need an id an value in one.
 
-		$stmt = GO_Base_Model_User::model()->find($grid->getDefaultParams());
-		$grid->setStatement($stmt);
+		$stmt = GO_Base_Model_User::model()->find($store->getDefaultParams());
+		$store->setStatement($stmt);
 
 
-		return $grid->getData();
+		return $store->getData();
 	}
 
 	/**
@@ -132,14 +132,14 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 * 
 	 */
 	public function actionGroups($params) {
-		$grid = new GO_Base_Data_Store();
-		$grid->setDefaultSortOrder('name', 'ASC');
+		$store = new GO_Base_Data_Store();
+		$store->setDefaultSortOrder('name', 'ASC');
 
-		$stmt = GO_Base_Model_Group::model()->find($grid->getDefaultParams());
-		$grid->setStatement($stmt);
+		$stmt = GO_Base_Model_Group::model()->find($store->getDefaultParams());
+		$store->setStatement($stmt);
 
 
-		return $grid->getData();
+		return $store->getData();
 	}
 
 	/**

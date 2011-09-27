@@ -90,8 +90,8 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		return $response;
 	}
 
-	protected function getGridParams($params) {
-		$gridParams = array(
+	protected function getStoreParams($params) {
+		$storeParams = array(
 				'order' => array('category_name', 'name'),
 				'fields' => 't.*,bm_categories.name AS category_name',
 				'join' => 'inner join bm_categories on t.category_id = bm_categories.id',
@@ -100,16 +100,16 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		
 		if(!empty($params['category'])){
 			// Do something
-			$gridParams['where'] = 'category_id = ' . $params['category'];
+			$storeParams['where'] = 'category_id = ' . $params['category'];
 		}
 		
-		return $gridParams;
+		return $storeParams;
 	}
 
-	protected function prepareGrid($grid) {
-		$grid->formatColumn('category_name', '$model->category_name');
-		$grid->formatColumn('thumb', '$model->thumbURL');
-		$grid->formatColumn('permissionLevel', '$model->permissionLevel');
+	protected function prepareStore($store) {
+		$store->formatColumn('category_name', '$model->category_name');
+		$store->formatColumn('thumb', '$model->thumbURL');
+		$store->formatColumn('permissionLevel', '$model->permissionLevel');
 	}
 
 	protected function remoteComboFields() {
