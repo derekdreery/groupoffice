@@ -44,6 +44,10 @@ class GO{
 	private static $_session;
 	private static $_modules;
 
+	/**
+	 *
+	 * @var PDO 
+	 */
 	public static $db;
 	
 	private static $_modelCache;
@@ -72,6 +76,11 @@ class GO{
 			
 			//todo needed for foundRows
 			self::$db->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY,true); 
+			
+			if(GO::config()->debug){
+				GO::debug("Setting MySQL sql_mode to TRADITIONAL");
+				self::$db->query("SET sql_mode='TRADITIONAL'");
+			}
 		}
 		
 		return self::$db;
