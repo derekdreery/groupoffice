@@ -109,12 +109,12 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	/**
 	 * Get users
 	 * 
-	 * @param array $params @see GO_Base_Provider_Grid::getDefaultParams()
+	 * @param array $params @see GO_Base_Data_Store::getDefaultParams()
 	 * @return  
 	 */
 	public function actionUsers($params) {
 
-		$grid = new GO_Base_Provider_Grid();
+		$grid = new GO_Base_Data_Store();
 		$grid->setDefaultSortOrder('name', 'ASC');
 
 		$grid->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
@@ -132,7 +132,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 * 
 	 */
 	public function actionGroups($params) {
-		$grid = new GO_Base_Provider_Grid();
+		$grid = new GO_Base_Data_Store();
 		$grid->setDefaultSortOrder('name', 'ASC');
 
 		$stmt = GO_Base_Model_Group::model()->find($grid->getDefaultParams());

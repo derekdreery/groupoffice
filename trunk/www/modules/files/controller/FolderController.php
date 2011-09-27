@@ -294,7 +294,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	private function _listShares() {
 
-		$grid = new GO_Base_Provider_Grid();
+		$grid = new GO_Base_Data_Store();
 		$grid->setFormatRecordFunction(array($this, 'formatListRecord'));
 		$findParams = $grid->getDefaultParams();
 		$stmt = GO_Files_Model_Folder::model()->findShares($findParams);
@@ -319,7 +319,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$response['parent_id'] = $folder->parent_id;
 
 
-		$grid = new GO_Base_Provider_Grid();
+		$grid = new GO_Base_Data_Store();
 
 
 		//handle delete request for both files and folder

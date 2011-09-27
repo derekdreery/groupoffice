@@ -18,7 +18,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.provider
  */
-class GO_Base_Provider_Grid {
+class GO_Base_Data_Store {
 
   /**
    * Holds the columns from model. See GO_Base_Db_ActiveRecord::$columns for more info.
@@ -58,9 +58,35 @@ class GO_Base_Provider_Grid {
    */
   public function __construct($columnModel=false) {        
 		if($columnModel)
-			$this->_cm = $columnModel;	
+			$this->_cm = $columnModel;
+		else
+			$this->_cm = new GO_Base_Data_ColumnModel();
   }
 	
+	/**
+	 * Create a new grid with column model and query result
+	 * 
+	 * @param GO_Base_Db_ActiveRecord $model
+	 * @param array $excludeColumns
+	 * @param array $findParams
+	 * @return GO_Base_Data_Store 
+	 */
+	public static function newInstance($model, $excludeColumns=array(), $findParams=false)
+	{
+		$cm = new GO_Base_Data_ColumnModel($model, $excludeColumns);		
+		$grid = new self($cm);
+		if($findParams)
+			$grid->setStatement ($model->find($findParams));
+		
+		return $grid;
+		
+	}
+	
+	/**
+	 * Returns the column model
+	 * 
+	 * @return GO_Base_Data_ColumnModel 
+	 */
 	public function getColumnModel(){
 		return $this->_cm;
 	}
@@ -304,7 +330,7 @@ class GO_Base_Provider_Grid {
 	 * Set a function that will be called with call_user_func to format a record.
 	 * The function will be called with parameters:
 	 * 
-	 * Array $formattedRecord, GO_Base_Db_ActiveRecord $model, GO_Base_Provider_Grid $grid
+	 * Array $formattedRecord, GO_Base_Db_ActiveRecord $model, GO_Base_Data_Store $grid
 	 * 
 	 * @param mixed $func Function name string or array($object, $functionName)
 	 */
