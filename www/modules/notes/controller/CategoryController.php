@@ -13,11 +13,11 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 		return $category->id;
 	}	
 	
-	protected function prepareGrid(GO_Base_Provider_Grid $grid){
-    $grid->formatColumn('user_name','$model->user ? $model->user->name : 0');
-		$grid->formatColumn('checked','in_array($model->id, $controller->multiselectIds)', array('controller'=>$this));
-    return $grid;
-  }
+	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+		$columnModel->formatColumn('user_name','$model->user ? $model->user->name : 0');
+		$columnModel->formatColumn('checked','in_array($model->id, $controller->multiselectIds)', array('controller'=>$this));
+		return parent::formatColumns($columnModel);
+	}
 
 	
 	/**
