@@ -9,11 +9,10 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	}
 
 	//GRID
-	protected function prepareGrid(GO_Base_Provider_Grid $grid) {
-		$grid->formatColumn('name', '$model->name', array(), 'first_name');
-		return $grid;
+	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+		$columnModel->formatColumn('name', '$model->name', array(), 'first_name');
+		return parent::formatColumns($columnModel);
 	}
-
 	//LOAD	
 
 	protected function afterLoad(&$response, &$model, &$params) {
