@@ -153,7 +153,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 //		);
 //	}
 //  
-//  protected function prepareGrid(GO_Base_Provider_Grid $grid){		
+//  protected function prepareGrid(GO_Base_Data_Store $grid){		
 //    $grid->formatColumn('user_name','$model->user->name');
 //    return $grid;
 //  }

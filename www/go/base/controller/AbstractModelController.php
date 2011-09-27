@@ -264,7 +264,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		
     
-    $grid = new GO_Base_Provider_Grid($this->getGridColumnModel());		    
+    $grid = new GO_Base_Data_Store($this->getGridColumnModel());		    
 		$grid->processDeleteActions($params, $modelName);
 		
 		$response=array();
@@ -415,7 +415,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$columnModel = new GO_Base_Data_ColumnModel();
 		$columnModel->setColumnsFromModel($model);
-		$grid = new GO_Base_Provider_Grid($columnModel);
+		$grid = new GO_Base_Data_Store($columnModel);
 		$grid->setStatement($stmt);
 		$columnModel = $grid->getColumnModel();
 		
@@ -437,7 +437,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 			$columnModel = new GO_Base_Data_ColumnModel();
 			$columnModel->setColumnsFromModel($model);
-			$grid = new GO_Base_Provider_Grid($columnModel);
+			$grid = new GO_Base_Data_Store($columnModel);
 			$grid->setStatement($stmt);
 			$columnModel = $grid->getColumnModel();
 			
@@ -493,7 +493,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 			$columnModel = new GO_Base_Data_ColumnModel();
 			$columnModel->setColumnsFromModel($model);
-			$grid = new GO_Base_Provider_Grid($columnModel);
+			$grid = new GO_Base_Data_Store($columnModel);
 			$grid->setStatement($stmt);
 			$columnModel = $grid->getColumnModel();
 			

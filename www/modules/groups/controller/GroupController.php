@@ -6,10 +6,10 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 //  /**
 //   * Add the username field to this default grid.
 //   * 
-//   * @param GO_Base_Provider_Grid $grid
-//   * @return GO_Base_Provider_Grid
+//   * @param GO_Base_Data_Store $grid
+//   * @return GO_Base_Data_Store
 //   */
-//  protected function prepareGrid(GO_Base_Provider_Grid $grid){
+//  protected function prepareGrid(GO_Base_Data_Store $grid){
 //    $grid->formatColumn('user_name','$model->user->name');
 //    return $grid;
 //  }
@@ -42,7 +42,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
       }
     }
     
-    $grid = new GO_Base_Provider_Grid(array(
+    $grid = new GO_Base_Data_Store(array(
         'id',
         'name'=>array('format'=>'$model->name'),
         'username',
