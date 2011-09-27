@@ -47,7 +47,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		}
 		
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_ModelType::model());					
+		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());					
 		$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, $store->getDefaultParams($storeParams));
 		$store->setStatement($stmt);
 		

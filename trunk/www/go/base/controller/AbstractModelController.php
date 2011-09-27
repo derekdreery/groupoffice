@@ -413,14 +413,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				'limit'=>15
 		));
 		
-		$columnModel = new GO_Base_Data_ColumnModel();
-		$columnModel->setColumnsFromModel($model);
-		$store = new GO_Base_Data_Store($columnModel);
+		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());		
 		$store->setStatement($stmt);
-		$columnModel = $store->getColumnModel();
 		
+		$columnModel = $store->getColumnModel();		
 		$columnModel->formatColumn('link_count','GO::getModel($model->model_name)->countLinks($model->model_id)');
 		$columnModel->formatColumn('link_description','$model->link_description');
+		
 		$data = $store->getData();
 		$response['data']['links']=$data['results'];
 		
@@ -435,15 +434,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 					'bindParams'=>array(':start_time'=>$startOfDay)
 			));		
 
-			$columnModel = new GO_Base_Data_ColumnModel();
-			$columnModel->setColumnsFromModel($model);
-			$store = new GO_Base_Data_Store($columnModel);
+			$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Event::model());
 			$store->setStatement($stmt);
-			$columnModel = $store->getColumnModel();
 			
+			$columnModel = $store->getColumnModel();			
 			$columnModel->formatColumn('calendar_name','$model->calendar->name');
 			$columnModel->formatColumn('link_count','$model->countLinks()');
 			$columnModel->formatColumn('link_description','$model->link_description');
+			
 			$data = $store->getData();
 			$response['data']['events']=$data['results'];
 		}
@@ -491,13 +489,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				'limit'=>5
 			));
 
-			$columnModel = new GO_Base_Data_ColumnModel();
-			$columnModel->setColumnsFromModel($model);
-			$store = new GO_Base_Data_Store($columnModel);
-			$store->setStatement($stmt);
-			$columnModel = $store->getColumnModel();
 			
+			$store = GO_Base_Data_Store::newInstance(GO_Comments_Model_Comment::model());			
+			$store->setStatement($stmt);
+			
+			$columnModel = $store->getColumnModel();			
 			$columnModel->formatColumn('user_name','$model->user->name');
+			
 			$data = $store->getData();
 			$response['data']['comments']=$data['results'];
 		}		
