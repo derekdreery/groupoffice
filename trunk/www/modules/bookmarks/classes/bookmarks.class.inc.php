@@ -76,6 +76,8 @@ class bookmarks extends db {
 
 		return $images;
 	}
+	
+	
 
 	function get_usercats($user) {
 		return $this->query("SELECT * FROM bm_categories WHERE user_id = ?", 'i', $user);

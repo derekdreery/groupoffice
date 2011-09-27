@@ -78,13 +78,13 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 		if (config.edit==1) // edit bookmark
 		{
 			// vul form met gegevens van aangeklikte bookmark
-			this.formPanel.form.setValues(config.record);
+			this.formPanel.form.setValues(config.record.data);
 			//this.selectCategory.setRemoteText(config.record.category_name);
-			this.formPanel.baseParams.id=config.record.id;
+			this.formPanel.baseParams.id=config.record.data.id;
 			// thumb voorbeeld
 
-			logo = config.record.logo;
-			this.formPanel.baseParams.public_icon = config.record.public_icon;
+			logo = config.record.data.logo;
+			this.formPanel.baseParams.public_icon = config.record.data.public_icon;
 			
 		}
 		else // add bookmark
@@ -106,10 +106,7 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 		
 		this.formPanel.form.submit(
 		{
-			url:GO.settings.modules.bookmarks.url+'action.php',
-			params: {
-				'task' : 'save_bookmark'
-			},
+			url : GO.url('bookmarks/bookmark/submit'),
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 				if(action.result.bookmark_id){
@@ -183,9 +180,9 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 					change:function(combo){
 						this.el.mask(GO.lang.waitMsgLoad);
 						Ext.Ajax.request({
-							url:GO.settings.modules.bookmarks.url+'json.php',
+							url : GO.url('bookmarks/bookmark/description'),
 							params:{
-								task:'description',
+								
 								url: combo.getValue()
 							},
 							callback:function(options, success, response){
@@ -247,10 +244,12 @@ Ext.extend(GO.bookmarks.BookmarksDialog, Ext.Window,{
 			this.thumbExample = new Ext.Component({
 				style: {
 					marginLeft: '100px'
-				}
-			})
+				}}),
 			]
 		});
+		
+
+		
 
 		this.moduleCheck.on('check', function(cb, checked)
 		{

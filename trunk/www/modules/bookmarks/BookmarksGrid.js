@@ -73,14 +73,16 @@ GO.bookmarks.BookmarksGrid = function(config){
 
 	
 
-	// rechtermuisknop, edit bookmark
-	this.on('rowcontextmenu', function(grid, rowIndex){
-		var rec = grid.getStore().getAt(rowIndex).data;
-		GO.bookmarks.showBookmarksDialog({
-			record:rec,
-			edit:1
-		});
-	},this)
+	// rechtermuisknop, edit bookmark ** show context menu with edit delete 
+	//this.on('rowcontextmenu', function(grid, rowIndex){
+		//var rec = grid.getStore().getAt(rowIndex).data;
+		//GO.bookmarks.showBookmarksDialog({
+		//	record:rec,
+		//	edit:1
+		//});
+		
+		
+	//},this)
 
 
 	// dubbelklik, edit bookmark
