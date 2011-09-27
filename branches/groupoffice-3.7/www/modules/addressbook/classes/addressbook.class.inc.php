@@ -1064,11 +1064,13 @@ class addressbook extends db {
 		}
 
 		if(isset($GO_MODULES->modules['customfields'])) {
-			$sql .= "ab_companies.*, cf_3.* FROM ab_companies ".
+			$sql .= "ab_companies.*,ab_addressbooks.name AS ab_name, cf_3.* FROM ab_companies ".
 					"LEFT JOIN cf_3 ON cf_3.link_id=ab_companies.id ";
 		}else {
-			$sql .= "ab_companies.* FROM ab_companies ";
+			$sql .= "ab_companies.*,ab_addressbooks.name AS ab_name FROM ab_companies ";
 		}
+		
+		$sql .= " LEFT JOIN ab_addressbooks ON ab_companies.addressbook_id = ab_addressbooks.id ";
 
 		if(count($mailings_filter)) {
 			$sql .= "INNER JOIN ml_mailing_companies mc ON mc.company_id=ab_companies.id ";
