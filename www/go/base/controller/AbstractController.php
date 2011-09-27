@@ -77,7 +77,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	protected function render($viewName, $data=array()){		
 		//header('Content-Type: text/html; charset=UTF-8');
 		
-		if(empty($this->module)){
+		if(!$this->moduleObject){
 			$file = GO::config()->root_path.'views/'.GO::view().'/'.$viewName.'.php';
 		}else
 		{
