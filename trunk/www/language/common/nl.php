@@ -241,6 +241,7 @@ $l["strCountry"]= 'Land';
 $l["strAddressFormat"]= 'Adres formaat';
 $l["strHomepage"]= 'Homepage';
 $l["strCompany"]= 'Bedrijf';
+$l["strContact"]= 'Contact';
 $l["strDepartment"]= 'Afdeling';
 $l["strFunction"]= 'Functie';
 $l["strSalutation"]= 'Aanhef';
@@ -412,7 +413,6 @@ $l["off"]='Uit';
 $l["displayingItemsShort"]='Totaal: {2}';
 $l["keyword"]='Trefwoord';
 $l["keywords"]='Trefwoorden';
-
 $l["closeApps"]='Applicaties afsluiten';
 $l["rightClickToClose"]='Klik met de rechtermuisknop op een tabblad kop om deze af te sluiten.';
 $l["administration"]='Beheer';

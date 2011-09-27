@@ -58,6 +58,7 @@ $l["strState"]= 'State';
 $l["strCountry"]= 'Country';
 $l["strAddressFormat"]= 'Address format';
 $l["strHomepage"]= 'Homepage';
+$l["strContact"]= 'Contact';
 $l["strCompany"]= 'Company';
 $l["strDepartment"]= 'Department';
 $l["strFunction"]= 'Function';

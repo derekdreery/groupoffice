@@ -134,3 +134,4 @@ $l['emailDoesntExists']='E-mail address wasn\'t found';
 $l['imageNotSupported']='The image you uploaded is not supported. Only gif, png and jpg images are supported.';
 $l['no_addressbook_id'] = 'Invalid addressbook id has been passed with the request to the server!';
 $l['undefined'] = '-';
+$l['createUser'] = 'Create user';
