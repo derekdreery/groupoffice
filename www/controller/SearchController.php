@@ -15,13 +15,12 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		return $gridParams;
 	}
 	
-	protected function prepareGrid(GO_Base_Provider_Grid $grid) {
-		$grid->formatColumn('iconCls', '"go-model-".$model->model_name');		
-		$grid->formatColumn('name_and_type', '"(".$model->type.") ".$model->name');
-		$grid->formatColumn('model_name_and_id', '$model->model_name.":".$model->model_id');
-		//$grid->formatColumn('type', 'class_exists($model->model_name) ? call_user_func(array($model->model_name, "model"))->localizedName');
+	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+		$columnModel->formatColumn('iconCls', '"go-model-".$model->model_name');		
+		$columnModel->formatColumn('name_and_type', '"(".$model->type.") ".$model->name');
+		$columnModel->formatColumn('model_name_and_id', '$model->model_name.":".$model->model_id');
+		return parent::formatColumns($columnModel);
 	}
-	
 	
 	public function actionModelTypes($params){
 		$grid = new GO_Base_Provider_Grid();		    		
