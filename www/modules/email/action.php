@@ -1522,7 +1522,11 @@ try {
 
 	case 'delete_old_mails':
 
-		if (empty($GO_MODULES->modules['email']['write_permission']))
+		$account_id = $_POST['account_id'];
+		$account_record = $email->get_account($account_id);
+		
+		// User has access to email account or not, there is no other distinction with email account rights.
+		if (!$GO_SECURITY->has_permission($GO_SECURITY->user_id,$account_record['acl_id']))
 			throw new AccessDeniedException();
 
 //		function get_child_folders($account_id,$folder_id) {
@@ -1550,7 +1554,6 @@ try {
 		$apply_to_children = false; // $_POST['apply_to_children']!='false' && $_POST['apply_to_children']!=false && !empty($_POST['apply_to_children']);
 		$mailbox_name = $_POST['mailbox'];
 		$uids = json_decode($_POST['uids']);
-		$account_id = $_POST['account_id'];
 		$id_array = explode('_',$_POST['id']); $folder_id = $id_array[1];
 
 		$account = $imap->open_account($account_id, $mailbox_name);
@@ -1571,7 +1574,7 @@ try {
 				$uids = array_merge($new_uids,$uids);
 			}
 		}
-		
+
 		if ($total===false) {
 			$total = count($uids);
 		}

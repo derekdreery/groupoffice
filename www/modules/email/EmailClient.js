@@ -423,7 +423,20 @@ GO.email.EmailClient = function(config){
 			}
 		},
 		scope:this
-	}),'-',this.emptyFolderButton = new Ext.menu.Item({
+	}),'-',	new Ext.menu.Item({
+		iconCls: 'btn-delete',
+		text:GO.email.lang.deleteOldMails,
+		cls: 'x-btn-text-icon',
+		scope:this,
+		handler: function()
+		{
+			if (typeof(this.deleteOldMailDialog)=='undefined') {
+				this.deleteOldMailDialog = new GO.email.DeleteOldMailDialog();
+			}
+			this.deleteOldMailDialog.setNode(this.treePanel.getSelectionModel().getSelectedNode());
+			this.deleteOldMailDialog.show();
+		}
+	}),this.emptyFolderButton = new Ext.menu.Item({
 		iconCls: 'btn-delete',
 		text: GO.email.lang.emptyFolder,
 		handler: function(){
@@ -529,25 +542,6 @@ GO.email.EmailClient = function(config){
 		items.push(GO.email.extraTreeContextMenuItems[i]);
 	}
 
-	if (GO.settings.modules.email.write_permission) {
-		items.splice(5,0,
-			new Ext.menu.Item({
-				iconCls: 'btn-delete',
-				text:GO.email.lang.deleteOldMails,
-				cls: 'x-btn-text-icon',
-				scope:this,
-				handler: function()
-				{
-					if (typeof(this.deleteOldMailDialog)=='undefined') {
-						this.deleteOldMailDialog = new GO.email.DeleteOldMailDialog();
-					}
-					this.deleteOldMailDialog.setNode(this.treePanel.getSelectionModel().getSelectedNode());
-					this.deleteOldMailDialog.show();
-				}
-			})
-		);
-	}
-	
 	this.treeContextMenu = new Ext.menu.Menu({		
 		items: items
 	});
