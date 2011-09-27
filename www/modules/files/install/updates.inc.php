@@ -46,3 +46,5 @@ VALUES (
 '17', 'GO_Files_Model_Folder'
 );";
 
+
+$updates[201109271656][]="ALTER TABLE `fs_folders` CHANGE `cm_state` `cm_state` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;";

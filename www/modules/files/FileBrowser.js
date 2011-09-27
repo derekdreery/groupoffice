@@ -461,6 +461,113 @@ GO.files.FileBrowser = function(config){
 		cls: 'x-btn-text-icon',
 		menu: this.uploadMenu		
 	});
+//	
+//	this.pluploadButton = new Ext.ux.PluploadButton({
+//		text: 'Upload files',
+//		window_width: 640,
+//		window_height: 480,
+//		window_title: 'Upload files',
+//		clearOnClose: false, //clear queue after window is closed (actually window is hidden )
+//		upload_config: {
+//			url: GO.url('files/folder/plupload'),
+//			//the only required parameter
+//
+//			//runtimes: 'html5,gears,flash,silverlight,browserplus,html4',
+//			//runtimes: 'html5,flash,silverlight,html4',
+//			runtimes: 'html4',
+//			// first available runtime will be used
+//
+//			multipart: true,
+//			multipart_params: {
+//				param1: 1, 
+//				param2: 2
+//			},
+//			// works as baseParams for store. 
+//			// Accessible via this.uploader.settings.multipart_params after init
+//			// multipart must be true
+//
+//			max_file_size: '10mb',
+//
+//			resize: {
+//				width: 640, 
+//				height: 480, 
+//				quality: 60
+//			},
+//
+//			flash_swf_url: BaseHref+'views/Extjs3/javascript/plupload/js/plupload.flash.swf',
+//			silverlight_xap_url: BaseHref+'views/Extjs3/javascript/plupload/js/plupload.silverlight.xap',
+//			// urls must be set properly or absent, otherwise uploader fail to initialize
+//
+////			filters: [  {
+////				title : "Image files", 
+////				extensions : "jpg,JPG,gif,GIF,png,PNG"
+////			},
+////
+////			{
+////				title : "Zip files", 
+////				extensions : "zip,ZIP"
+////			},
+////
+////			{
+////				title : "Text files", 
+////				extensions : "txt,TXT"
+////			}
+////			],
+//
+//			runtime_visible: true, // show current runtime in statusbar
+//
+//			// icon classes for toolbar buttons
+//			addButtonCls: 'silk-add',
+//			uploadButtonCls: 'silk-arrow-up',
+//			cancelButtonCls: 'silk-stop',
+//			deleteButtonCls: 'silk-cross',
+//
+//			// localization
+//			addButtonText: 'Add files',
+//			uploadButtonText: 'Upload',
+//			cancelButtonText: 'Cancel upload',
+//			deleteButtonText: 'Remove',
+//			deleteSelectedText: '<b>Remove selected</b>',
+//			deleteUploadedText: 'Remove uploaded',
+//			deleteAllText: 'Remove ALL',
+// 
+//			statusQueuedText: 'Queued',
+//			statusUploadingText: 'Uploading ({0}%)',
+//			statusFailedText: '<span style="color: red">FAILED</span>',
+//			statusDoneText: '<span style="color: green">DONE</span>',
+// 
+//			statusInvalidSizeText: 'Too big',
+//			statusInvalidExtensionText: 'Invalid file type',
+// 
+//			emptyText: '<div class="plupload_emptytext"><span>Upload queue is empty</span></div>',
+//			emptyDropText: '<div class="plupload_emptytext"><span>Drop files here</span></div>',
+// 
+//			progressText: '{0}/{1} ({3} failed) ({5}/s)',
+//			// params are number of
+//			// {0} files sent
+//			// {1} total files
+//			// {2} files successfully uploaded
+//			// {3} failed files
+//			// {4} files left in queue
+//			// {5} current upload speed 
+//
+//			listeners: {
+//				beforestart: function(uploadpanel) {
+//					//uploadpanel.uploader.settings.url = '/path/to/upload/handler?_runtime=' + uploadpanel.runtime;
+//				},
+//				uploadstarted: function(uploadpanel) {
+//
+//				},
+//				uploadcomplete: function(uploadpanel, success, failures) {
+//					if ( success.length ) {
+//						//myStore.reload();
+//					}
+//				}
+//			}
+//		}
+//	});
+//	
+//	tbar.push(this.pluploadButton);
 		
 	if(!config.hideActionButtons)
 	{		
@@ -493,7 +600,7 @@ GO.files.FileBrowser = function(config){
 						this.uploadFlashDialog.on('fileUploadComplete', function(obj, file, data)
 						{
 							this.sendOverwrite({
-								folder_id : this.folder_id,
+								destination_folder_id : this.folder_id,
 								task: 'overwrite'
 							});
 						},this)												
@@ -510,14 +617,15 @@ GO.files.FileBrowser = function(config){
 				baseParams:{
 					task:'upload_file'
 				},
-				url:GO.settings.modules.files.url+'action.php',
+				url:GO.url('files/folder/upload'),
 				addText: GO.lang.smallUpload
 			});
 			this.uploadForm.on('upload', function(e, file)
 			{
 				this.uploadMenu.hide();
 				this.sendOverwrite({
-					folder_id : this.folder_id,
+					upload:true,
+					destination_folder_id : this.folder_id,
 					task: 'overwrite'
 				});
 
@@ -1454,8 +1562,10 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 
 		this.getEl().mask(GO.lang.waitMsgSave);
 		
+		var url = params.upload ? GO.url('files/folder/processUploadQueue') : GO.url('files/folder/paste');
+		
 		Ext.Ajax.request({
-			url: GO.url('files/folder/paste'),
+			url: url,
 			params:this.overwriteParams,
 			callback: function(options, success, response){
 
@@ -1566,28 +1676,30 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 									}
 								}
 							}
+							
+							this.treePanel.getRootNode().reload();
 								
 								
-							var destinationNode = this.treePanel.getNodeById(pasteDestination);
-							if(destinationNode)
-							{
-								//delete destinationNode.attributes.children;
-								destinationNode.attributes.children=[];
-								destinationNode.attributes.childrenRendered=false;
-								destinationNode.reload();
-							}
-								
-							if(pasteSources)
-							{
-								for(var i=0;i<pasteSources.length;i++)
-								{
-									var node = this.treePanel.getNodeById(pasteSources[i]);
-									if(node)
-									{
-										node.remove();
-									}
-								}
-							}
+//							var destinationNode = this.treePanel.getNodeById(pasteDestination);
+//							if(destinationNode)
+//							{
+//								//delete destinationNode.attributes.children;
+//								destinationNode.attributes.children=[];
+//								destinationNode.attributes.childrenRendered=false;
+//								destinationNode.reload();
+//							}
+//								
+//							if(pasteSources)
+//							{
+//								for(var i=0;i<pasteSources.length;i++)
+//								{
+//									var node = this.treePanel.getNodeById(pasteSources[i]);
+//									if(node)
+//									{
+//										node.remove();
+//									}
+//								}
+//							}
 								
 							if(this.overwriteDialog)
 							{
