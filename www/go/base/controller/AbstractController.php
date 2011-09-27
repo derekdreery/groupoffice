@@ -175,6 +175,10 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 				
 				return $response;
 		} catch (Exception $e) {
+			
+			
+			GO::debug("EXCEPTION: ".$e->getMessage());
+			
 			$response['success'] = false;
 			$response['feedback'] = !empty($response['feedback']) ? $response['feedback'] : '';
 			$response['feedback'] .= "\r\n\r\n".$e->getMessage();
@@ -182,7 +186,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			if(GO::config()->debug)
 				$response['trace']=$e->getTraceAsString();
 			
-			return $response;
+			$this->render($action, $response);
 			//exit();
 		}
 	}
