@@ -32,10 +32,10 @@ class GO_Tasks_Controller_Category extends GO_Base_Controller_AbstractModelContr
 		return parent::beforeSubmit($response, $model, $params);
 	}
 	
-	protected function prepareGrid(GO_Base_Provider_Grid $grid){
-    $grid->formatColumn('user_name','$model->user ? $model->user->name : GO::t("globalCategory","tasks")');
-    return $grid;
-  }
+	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+		$columnModel->formatColumn('user_name','$model->user ? $model->user->name : GO::t("globalCategory","tasks")');
+		return parent::formatColumns($columnModel);
+	}
 	
 	
 }
