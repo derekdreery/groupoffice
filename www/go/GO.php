@@ -51,13 +51,7 @@ class GO{
 	public static $db;
 	
 	private static $_modelCache;
-	
-	/**
-	 *
-	 * @var mixed A JSON outputstream for example. 
-	 */
-	private static $_outputStream;
-	
+
 	/**
 	 * Gets the global database connection object.
 	 * 
@@ -451,28 +445,7 @@ class GO{
 		
 		return self::$_language->getTranslation($name, $module, $basesection);
 	}
-	
-	
-	/**
-	 * Outputs data directly to the standard output
-	 * 
-	 * @param mixed $str 
-	 */
-	public static function output($str){
-		
-		if(!isset(self::$_outputStream)){
-			$output=empty($_REQUEST['output']) ? 'Json' : ucfirst($_REQUEST['output']);
-			$outputClass = 'GO_Base_OutputStream_OutputStream'.$output;
-			self::$_outputStream = new $outputClass;
-		}
-		self::$_outputStream->write($str);
-	}
-	
-	public static function setOutputStream($outputStream){
-		self::$_outputStream=$outputStream;
-	}
-	
-	
+
 	
 	public static function memdiff() {
 		static $int = null;

@@ -12,22 +12,17 @@
 /**
  * The Store provider is useful to generate response for a grid store in a 
  * controller.
+ * @TODO: RENAME THIS STORE TO DBSTORE so it will be GO_Base_Data_DBStore. NEEDS TO BE FIXED IN THE WHOLE PROJECT THEN
+ * 
+
  * 
  * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
- * @package GO.base.provider
+ * @package GO.base.data
  */
-class GO_Base_Data_Store {
-
-  /**
-   * Holds the columns from model. See GO_Base_Db_ActiveRecord::$columns for more info.
-   * This array may be extended with a format function.
-   * 
-   * @var array 
-   */
-  private $_columns;
-  
+class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
+	
   /**
    *
    * @var GO_Base_Db_ActiveStatement 
@@ -38,30 +33,13 @@ class GO_Base_Data_Store {
    *
    * @var array the relation of the given model.  
    */
-  private $_relation;
+//  private $_relation;
 	
 	private $_response;
 	
 	private $_sortFieldsAliases=array();
-	
-	private $_cm=false;
-	
-	private $_modelFormatType='formatted';
 
-	private $_defaultSortOrder='';
-	private $_defaultSortDirection='ASC';
-	
-  /**
-   * See function formatColumn for a detailed description about how to use the format parameter.
-   *
-   * @param array $columns eg. array('username', 'date'=>array('format'=>'date("Ymd", $date)'))
-   */
-  public function __construct($columnModel=false) {        
-		if($columnModel)
-			$this->_cm = $columnModel;
-		else
-			$this->_cm = new GO_Base_Data_ColumnModel();
-  }
+	private $_modelFormatType='formatted';
 	
 	/**
 	 * Create a new grid with column model and query result
@@ -88,7 +66,7 @@ class GO_Base_Data_Store {
 	 * @return GO_Base_Data_ColumnModel 
 	 */
 	public function getColumnModel(){
-		return $this->_cm;
+		return $this->_columnModel;
 	}
 	
 	/**
@@ -100,16 +78,7 @@ class GO_Base_Data_Store {
 		$this->_response['title'] = $title;
 	}
 	
-	
-	/**
-	 * Set the default column to sort on.
-	 * @param String / Array $order 
-	 */
-	public function setDefaultSortOrder($order, $direction){
-		$this->_defaultSortOrder=$order;
-		$this->_defaultSortDirection=$direction;
-	}
-	
+
 	/**
 	 * Set the statement that contains the models for the grid data.
 	 * Run the statement after you construct this grid. Otherwise the delete
@@ -131,8 +100,8 @@ class GO_Base_Data_Store {
 //			$this->_columns=array_merge($this->_columns, $cfColumns);
 //		}
 		
-    if (isset($stmt->relation))
-      $this->_relation = $stmt->relation;
+//    if (isset($stmt->relation))
+//      $this->_relation = $stmt->relation;
 	}
 	
   /**
@@ -204,41 +173,6 @@ class GO_Base_Data_Store {
 	}
 
   /**
-   * Add columns to the grid and give the format in how to parse the value of this column.
-   * You can also use this function to set the format of an existing column.
-   * 
-   * The format can be parsed as normal php. (For example: formatColumn('read_date','date("d-m-Y")');)
-	 * 
-	 * You can use any model attribute name as a variable and you also have the $model variable available.
-	 * 
-	 * Example formatColumn('Special name','$model->getSpecialName()');
-   * 
-   * @param type $column   * 
-   * @param string $format 
-   * @param array $extraVars 
-   * 
-   * Add extra variables like this for example array('controller'=>$this) in a controller.
-   * 
-   * Then you can use '$controller->aControllerProperty' in the column format.
-	 * 
-	 * @param $sortfield
-	 * 
-	 * Set a sort field. Sometimes you need construct a column from multiple columns
-	 * Like user->name is a concatenation of first,middle and last.
-	 * In that case you can set sortfield to: array('first_name','last_name')
-   * 
-   */
-//  public function formatColumn($column, $format, $extraVars=array(), $sortfield='') {
-//
-//    $this->_columns[$column]['format'] = $format;
-//    $this->_columns[$column]['extraVars'] = $extraVars;
-//		
-//		if(!empty($sortfield)){
-//			$this->_sortFieldsAliases[$column]=$sortfield;
-//		}
-//  }
-//	  
-  /**
    * Returns the data for the grid.
    * Also deletes the given delete_keys.
    *
@@ -249,7 +183,7 @@ class GO_Base_Data_Store {
 		if(!isset($this->_stmt))
 			throw new Exception('You must provide a statement with setStatement()');
 
-		$columns = $this->_cm->getColumns();
+		$columns = $this->_columnModel->getColumns();
     if (empty($columns))
       throw new Exception('No columns given for this grid.');   
 
@@ -296,7 +230,7 @@ class GO_Base_Data_Store {
 		
     
     $formattedRecord = array();
-		$columns = $this->_cm->getColumns();
+		$columns = $this->_columnModel->getColumns();
 		
     foreach($columns as $colName=>$attributes)
     {     

@@ -15,9 +15,9 @@
  * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
- * @package GO.base.outputstream
+ * @package GO.base.export
  */
-class GO_Base_OutputStream_OutputStreamJson implements GO_Base_OutputStream_OutputStreamInterface{
+class GO_Base_Export_ExportJson implements GO_Base_Export_ExportInterface{
 	
 	//private $_headersSent=false;
 	
@@ -47,5 +47,8 @@ class GO_Base_OutputStream_OutputStreamJson implements GO_Base_OutputStream_Outp
 		}
 	}
 
+	public function getName() {
+		return 'JSON';
+	}
 	
 }

@@ -10,15 +10,15 @@
  */
 
 /**
- * An outputstream is used by the controllers to output data to the browser.
+ * An export is used by the controllers to output data to the browser.
  * For example JSON, XML, CSV, plain text or HTML
  * 
  * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
  * @copyright Copyright Intermesh BV.
  * @author Merijn Schering <mschering@intermesh.nl>
- * @package GO.base.outputstream
+ * @package GO.base.export
  */
-interface GO_Base_OutputStream_OutputStreamInterface{
+interface GO_Base_Export_ExportInterface{
 	
 	public function sendHeaders();
 	
@@ -27,5 +27,7 @@ interface GO_Base_OutputStream_OutputStreamInterface{
 	public function flush();
 	
 	public function endFlush();
+	
+	public function getName();
 	
 }

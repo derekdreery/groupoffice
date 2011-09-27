@@ -23,7 +23,7 @@
  * request forgeries.
  * 
  * The functions must return a response object. In case of ajax controllers this
- * should be a an array that will be converted to Json or XMl by an OutputStream.
+ * should be a an array that will be converted to Json or XMl by an Exporter.
  * 
  * If you supply exportVariables in this response object the view will import
  * those variables for use in the view.
