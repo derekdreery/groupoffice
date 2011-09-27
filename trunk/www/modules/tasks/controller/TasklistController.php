@@ -21,10 +21,10 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 	
 	protected $model = 'GO_Tasks_Model_Tasklist';
 	
-	protected function prepareGrid(GO_Base_Provider_Grid $grid){
-    $grid->formatColumn('user_name','$model->user->name');
-    return $grid;
-  }
+	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+		$columnModel->formatColumn('user_name','$model->user->name');
+		return parent::formatColumns($columnModel);
+	}
 	
 	protected function remoteComboFields(){
 		return array(
