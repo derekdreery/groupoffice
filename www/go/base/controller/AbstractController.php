@@ -186,7 +186,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			if(GO::config()->debug)
 				$response['trace']=$e->getTraceAsString();
 			
-			$this->render($action, $response);
+			$this->render('exception', $response);
 			//exit();
 		}
 	}
