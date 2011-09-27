@@ -1385,6 +1385,8 @@ class addressbook extends db {
 
 			if($record['company']!='')
 				$cache['name'] .= ' ('.htmlspecialchars($record['company'], ENT_QUOTES,'UTF-8').')';
+			
+			$cache['name'] .= ' ('.htmlspecialchars($record['addressbook_name'], ENT_QUOTES,'UTF-8').')';
 
 			$cache['link_type']=2;
 			$cache['description']=$this->f('addressbook_name');//.', '.$this->f('company');
