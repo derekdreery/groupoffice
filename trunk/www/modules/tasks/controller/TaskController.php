@@ -92,7 +92,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 				);
 	}
 
-	protected function getGridMultiSelectProperties(){
+	protected function getStoreMultiSelectProperties(){
 		return array(
 				'requestParam'=>'tasks_tasklist_filter',
 				'permissionsModel'=>'GO_Tasks_Model_Tasklist'
@@ -100,7 +100,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 				);
 	}	
 	
-	protected function beforeGrid(&$response, &$params, &$grid) {
+	protected function beforeStore(&$response, &$params, &$store) {
 		
 		if(isset($params['completed_task_id'])) {
 			$updateTask = GO_Tasks_Model_Task::model()->findByPk($params['completed_task_id']);
@@ -110,7 +110,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 				$updateTask->setCompleted(false);
 		}
 		
-		return parent::beforeGrid($response, $params, $grid);
+		return parent::beforeStore($response, $params, $store);
 	}
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
@@ -122,9 +122,9 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		return parent::formatColumns($columnModel);
 	}
 	
-	protected function getGridParams($params) {
+	protected function getStoreParams($params) {
 
-		$gridParams =  array(
+		$storeParams =  array(
 				'ignoreAcl'=>true,
 				'export'=>'tasks',
 				'joinCustomFields'=>true,
@@ -138,14 +138,14 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		);
 		
 		if(isset($params['show'])) {
-			$gridParams['statusFilter']=$params['show'];
+			$storeParams['statusFilter']=$params['show'];
 		}
 		
 		if(isset($params['categories'])) {
-			$gridParams['categoryFilter']=$params['categories'];
+			$storeParams['categoryFilter']=$params['categories'];
 		}
 		
-		return $gridParams;
+		return $storeParams;
 	}
 	
 }

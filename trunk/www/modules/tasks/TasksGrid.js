@@ -134,7 +134,7 @@ GO.tasks.TasksPanel = function(config)
 		});
 
 		config.store = new Ext.data.GroupingStore({
-		url: GO.url('tasks/task/grid'),
+		url: GO.url('tasks/task/store'),
 			//url: GO.settings.modules.tasks.url+'json.php',
 			baseParams: {
 				'show': 'all'

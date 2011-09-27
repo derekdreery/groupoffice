@@ -4,7 +4,7 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 	protected $model = 'GO_Comments_Model_Comment';
 
 
-	protected function getGridParams($params){
+	protected function getStoreParams($params){
 
 		return array(
 				'by' => array(
@@ -21,7 +21,7 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 		return parent::formatColumns($columnModel);
 	}
 	
-	protected function beforeGrid(&$response, &$params, &$grid) {
+	protected function beforeStore(&$response, &$params, &$store) {
 		
 		$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$params['model_id'], 'model_type_id'=>GO_Base_Model_ModelType::model()->findByModelName($params['model_name'])));
 

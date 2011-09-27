@@ -196,14 +196,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				'titleAttribute'=>'name' //Only set this if your grid needs the names of the permissionsmodel in the title.
 				);
 	 */
-	protected function getGridmultiSelectProperties(){
+	protected function getStoremultiSelectProperties(){
 		return false;
 	}
 	
 	/**
 	 * If nothing is selected. Return a default id if necessary.
 	 */
-	protected function getGridMultiSelectDefault(){
+	protected function getStoreMultiSelectDefault(){
 		return false;
 	}
 
@@ -211,11 +211,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * Override this function to supply additional parameters to the 
 	 * GO_Base_Db_ActiveRecord->find() function
 	 * 
-	 * @var array() $params The request parameters of actionGrid
+	 * @var array() $params The request parameters of actionStore
 	 * 
 	 * @return array parameters for the GO_Base_Db_ActiveRecord->find() function 
 	 */
-	protected function getGridParams($params) {
+	protected function getStoreParams($params) {
 		return array();
 	}
 
@@ -226,7 +226,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param GO_Base_Db_ActiveRecord $model
 	 * @return array The grid record data
 	 */
-	protected function getGridColumnModel() {
+	protected function getStoreColumnModel() {
 		$cm =  new GO_Base_Data_ColumnModel();
 		$cm->setColumnsFromModel(GO::getModel($this->model));	
 		return $cm;
@@ -239,9 +239,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param GO_Base_Db_ActiveRecord $model
 	 * @return array The grid record data
 	 */
-	protected function prepareGrid($grid) {
+	protected function prepareStore($store) {
 		
-		return $grid;
+		return $store;
 	}
 	
   
@@ -259,20 +259,20 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
   /**
    * The default grid action for the current model.
    */
-  public function actionGrid($params){	
+  public function actionStore($params){	
     $modelName = $this->model;  
 		
 		
     
-    $grid = new GO_Base_Data_Store($this->getGridColumnModel());		    
-		$grid->processDeleteActions($params, $modelName);
+    $store = new GO_Base_Data_Store($this->getStoreColumnModel());		    
+		$store->processDeleteActions($params, $modelName);
 		
 		$response=array();
 		
-		$response = $this->beforeGrid($response, $params, $grid);
+		$response = $this->beforeStore($response, $params, $store);
 		
 		
-		if($multiSelectProperties =$this->getGridmultiSelectProperties()){
+		if($multiSelectProperties =$this->getStoremultiSelectProperties()){
 			
 			
 			
@@ -288,7 +288,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 			if(empty($this->multiselectIds))
 			{
-				$default = $this->getGridMultiSelectDefault();
+				$default = $this->getStoreMultiSelectDefault();
 				if($default){
 					$this->multiselectIds = array($category->id);
 					GO::config()->save_setting($multiSelectProperties['requestParam'],implode(',', $this->multiselectIds), GO::user()->id);
@@ -297,7 +297,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 			//Do a check if the permission model needs to be checked. If we don't ignore the acl and the model is the same as the model of this controller
 			//it's not needed.
-			if(isset($multiSelectProperties['permissionsModel']) && $multiSelectProperties['permissionsModel']!=$this->model && empty($gridParams['ignoreAcl'])){
+			if(isset($multiSelectProperties['permissionsModel']) && $multiSelectProperties['permissionsModel']!=$this->model && empty($storeParams['ignoreAcl'])){
 				
 		
 				
@@ -316,24 +316,24 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 						$titleArray[]=$model->{$multiSelectProperties['titleAttribute']};
 				}		
 				if(count($titleArray))
-					$grid->setTitle(implode(', ',$titleArray));
+					$store->setTitle(implode(', ',$titleArray));
 			}
 		}
 
 
-		$columnModel = $grid->getColumnModel();
+		$columnModel = $store->getColumnModel();
 		$this->formatColumns($columnModel);
 		
-		$this->prepareGrid($grid);
+		$this->prepareStore($store);
 		
-		$gridParams = array_merge($grid->getDefaultParams(),$this->getGridParams($params));
+		$storeParams = array_merge($store->getDefaultParams(),$this->getStoreParams($params));
 		
 			
-		$grid->setStatement(call_user_func(array($modelName,'model'))->find($gridParams));
+		$store->setStatement(call_user_func(array($modelName,'model'))->find($storeParams));
 		
-		$response = array_merge($response, $grid->getData());
+		$response = array_merge($response, $store->getData());
 		
-    $response = $this->afterGrid($response, $params, $grid, $gridParams);		
+    $response = $this->afterStore($response, $params, $store, $storeParams);		
 		
 		//this parameter is set when this request is the first request of the module.
 		//We pass the response on to the output.
@@ -344,11 +344,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return $response;
   }	
 	
-	protected function afterGrid(&$response, &$params, &$grid, $gridParams){
+	protected function afterStore(&$response, &$params, &$store, $storeParams){
 		return $response;
 	}
 	
-	protected function beforeGrid(&$response, &$params, &$grid){
+	protected function beforeStore(&$response, &$params, &$store){
 		return $response;
 	}
 
@@ -415,13 +415,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$columnModel = new GO_Base_Data_ColumnModel();
 		$columnModel->setColumnsFromModel($model);
-		$grid = new GO_Base_Data_Store($columnModel);
-		$grid->setStatement($stmt);
-		$columnModel = $grid->getColumnModel();
+		$store = new GO_Base_Data_Store($columnModel);
+		$store->setStatement($stmt);
+		$columnModel = $store->getColumnModel();
 		
 		$columnModel->formatColumn('link_count','GO::getModel($model->model_name)->countLinks($model->model_id)');
 		$columnModel->formatColumn('link_description','$model->link_description');
-		$data = $grid->getData();
+		$data = $store->getData();
 		$response['data']['links']=$data['results'];
 		
 
@@ -437,14 +437,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 			$columnModel = new GO_Base_Data_ColumnModel();
 			$columnModel->setColumnsFromModel($model);
-			$grid = new GO_Base_Data_Store($columnModel);
-			$grid->setStatement($stmt);
-			$columnModel = $grid->getColumnModel();
+			$store = new GO_Base_Data_Store($columnModel);
+			$store->setStatement($stmt);
+			$columnModel = $store->getColumnModel();
 			
 			$columnModel->formatColumn('calendar_name','$model->calendar->name');
 			$columnModel->formatColumn('link_count','$model->countLinks()');
 			$columnModel->formatColumn('link_description','$model->link_description');
-			$data = $grid->getData();
+			$data = $store->getData();
 			$response['data']['events']=$data['results'];
 		}
 		
@@ -493,12 +493,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 			$columnModel = new GO_Base_Data_ColumnModel();
 			$columnModel->setColumnsFromModel($model);
-			$grid = new GO_Base_Data_Store($columnModel);
-			$grid->setStatement($stmt);
-			$columnModel = $grid->getColumnModel();
+			$store = new GO_Base_Data_Store($columnModel);
+			$store->setStatement($stmt);
+			$columnModel = $store->getColumnModel();
 			
 			$columnModel->formatColumn('user_name','$model->user->name');
-			$data = $grid->getData();
+			$data = $store->getData();
 			$response['data']['comments']=$data['results'];
 		}		
 

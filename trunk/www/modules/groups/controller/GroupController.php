@@ -6,12 +6,12 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 //  /**
 //   * Add the username field to this default grid.
 //   * 
-//   * @param GO_Base_Data_Store $grid
+//   * @param GO_Base_Data_Store $store
 //   * @return GO_Base_Data_Store
 //   */
-//  protected function prepareGrid(GO_Base_Data_Store $grid){
-//    $grid->formatColumn('user_name','$model->user->name');
-//    return $grid;
+//  protected function prepareStore(GO_Base_Data_Store $store){
+//    $store->formatColumn('user_name','$model->user->name');
+//    return $store;
 //  }
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
@@ -42,14 +42,14 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
       }
     }
     
-    $grid = new GO_Base_Data_Store(array(
+    $store = new GO_Base_Data_Store(array(
         'id',
         'name'=>array('format'=>'$model->name'),
         'username',
         'email'
      ));
 		
-		$gridParams = $grid->getDefaultParams(array(
+		$storeParams = $store->getDefaultParams(array(
         'joinCustomFields'=>false
     ));
 
@@ -58,7 +58,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
     $delresponse = array();
     if($group->id != GO::config()->group_everyone)
     { 
-      $grid->processDeleteActions($params, 'GO_Base_Model_UserGroup', array('group_id'=>$group->id));
+      $store->processDeleteActions($params, 'GO_Base_Model_UserGroup', array('group_id'=>$group->id));
     }
     else
     {
@@ -66,10 +66,10 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
       $delresponse['deleteFeedback'] = 'Members of the group everyone cannot be deleted.';
     }
     
-    $stmt = $group->users($gridParams);
-    $grid->setStatement($stmt);
+    $stmt = $group->users($storeParams);
+    $store->setStatement($stmt);
     
-    $response = $grid->getData();
+    $response = $store->getData();
     
     $response = array_merge($response,$delresponse);
     

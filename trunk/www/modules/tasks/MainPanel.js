@@ -6,7 +6,7 @@ GO.tasks.MainPanel = function(config){
 	}
 		
 	this.taskListsStore = new GO.data.JsonStore({
-		url: GO.url('tasks/tasklist/grid'),
+		url: GO.url('tasks/tasklist/store'),
 		baseParams: {
 			limit:GO.settings.config.nav_page_size
 		},
@@ -557,7 +557,7 @@ GO.tasks.showTaskDialog = function(config){
 
 
 GO.tasks.writableTasklistsStore = new GO.data.JsonStore({
-	url: GO.url('tasks/tasklist/grid'),
+	url: GO.url('tasks/tasklist/store'),
 	baseParams: {
 		'task': 'tasklists',
 		'auth_type':'write'
@@ -574,7 +574,7 @@ GO.tasks.writableTasklistsStore = new GO.data.JsonStore({
 });
 
 GO.tasks.categoriesStore = new GO.data.JsonStore({
-	url: GO.url('tasks/category/grid'),
+	url: GO.url('tasks/category/store'),
 	baseParams: {
 		'task': 'categories'
 	},

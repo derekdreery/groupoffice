@@ -1,5 +1,5 @@
 GO.notes.writableCategoriesStore = new GO.data.JsonStore({
-	url: GO.url('notes/category/grid'),
+	url: GO.url('notes/category/store'),
 	baseParams: {
 		permissionLevel:GO.permissionLevels.write
 	},	
@@ -7,7 +7,7 @@ GO.notes.writableCategoriesStore = new GO.data.JsonStore({
 });
 
 GO.notes.writableAdminCategoriesStore = new GO.data.JsonStore({
-	url: GO.url('notes/category/grid'),
+	url: GO.url('notes/category/store'),
 	baseParams: {
 		permissionLevel:GO.permissionLevels.write
 	},	
@@ -16,7 +16,7 @@ GO.notes.writableAdminCategoriesStore = new GO.data.JsonStore({
 
 
 GO.notes.readableCategoriesStore = new GO.data.JsonStore({
-	url: GO.url('notes/category/grid'),
+	url: GO.url('notes/category/store'),
 	baseParams: {
 		limit:GO.settings.config.nav_page_size
 	},

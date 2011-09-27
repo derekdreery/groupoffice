@@ -3,7 +3,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	
 	protected $model = 'GO_Notes_Model_Note';
 	
-	protected function getGridMultiSelectProperties(){
+	protected function getStoreMultiSelectProperties(){
 		return array(
 				'requestParam'=>'notes_categories_filter',
 				'permissionsModel'=>'GO_Notes_Model_Category',
@@ -11,7 +11,7 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 				);
 	}	
 	
-	protected function getGridParams($params){
+	protected function getStoreParams($params){
 		return array(
 				'ignoreAcl'=>true,
 				'joinCustomFields'=>true,

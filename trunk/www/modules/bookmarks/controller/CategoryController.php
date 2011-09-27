@@ -8,7 +8,7 @@ class GO_Bookmarks_Controller_Category extends GO_Base_Controller_AbstractModelC
 		echo 'test';
 	}
 	
-	protected function getGridParams($params) {
+	protected function getStoreParams($params) {
 		return array(
 				'order' => 'name',
 				'orderDirection' => 'ASC'

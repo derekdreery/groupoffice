@@ -18,7 +18,7 @@ GO.modules.MainPanel = function(config) {
 	}
 
 	this.installedModulesDS = new GO.data.JsonStore({
-		url : GO.url('modules/module/grid'),
+		url : GO.url('modules/module/store'),
 		fields : ['name', 'description', 'id', 'sort_order','admin_menu', 'acl_id'],
 		remoteSort : true
 	});
