@@ -3,16 +3,21 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 	
 	protected $model = 'GO_Base_Model_Group';
   
-  /**
-   * Add the username field to this default grid.
-   * 
-   * @param GO_Base_Provider_Grid $grid
-   * @return GO_Base_Provider_Grid
-   */
-  protected function prepareGrid(GO_Base_Provider_Grid $grid){
-    $grid->formatColumn('user_name','$model->user->name');
-    return $grid;
-  }
+//  /**
+//   * Add the username field to this default grid.
+//   * 
+//   * @param GO_Base_Provider_Grid $grid
+//   * @return GO_Base_Provider_Grid
+//   */
+//  protected function prepareGrid(GO_Base_Provider_Grid $grid){
+//    $grid->formatColumn('user_name','$model->user->name');
+//    return $grid;
+//  }
+	
+	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+		$columnModel->formatColumn('user_name','$model->user->name');
+		return parent::formatColumns($columnModel);
+	}
   
   /**
    * Retreive all users that belong to the given group.
