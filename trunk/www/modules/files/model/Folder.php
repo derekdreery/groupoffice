@@ -36,7 +36,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	
 	private $_path;
 	
-	public $joinAclField=true;
+	//public $joinAclField=true;
 	
 	/**
 	 *
@@ -425,13 +425,42 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		return $this->save();
 	}
 	
+	/**
+	 * Copy a folder to another folder
+	 * 
+	 * @param GO_Files_Model_Folder $destinationFolder
+	 * @return boolean 
+	 */
 	public function copy($destinationFolder){
 		
-		$copy = $this->duplicate();
-		$copy->parent_id=$destinationFolder->id;
-		$copy->save();
+		$existing = $destinationFolder->hasFolder($this->name);
+		if(!$existing){
+			$copy = $this->duplicate();
+			$copy->parent_id=$destinationFolder->id;
+			if(!$copy->save())
+				return false;
+
+			if(!$this->fsFolder->copy($copy->fsFolder->parent()))
+				return false;
+		}else
+		{
+			$copy = $existing;
+			//if folder exist then merge the folder.
+		}
 		
-		$this->fsFolder->copy($copy->fsFolder->parent());		
+		$stmt = $this->folders();
+		while($folder = $stmt->fetch()){
+			if(!$folder->copy($copy))
+				return false;
+		}
+		
+		$stmt = $this->files();
+		while($file = $stmt->fetch()){
+			if(!$file->copy($copy))
+				return false;
+		}
+		
+		return true;
 	}
 	
 	protected function getThumbURL() {

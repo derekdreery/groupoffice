@@ -8,9 +8,11 @@
 $root_path = $GLOBALS['GO_CONFIG']->root_path.'views/Extjs3/';
 $root_url = $GLOBALS['GO_CONFIG']->host.'views/Extjs3/';
 
+
 $GLOBALS['GO_THEME']->add_stylesheet($root_path.'ext/resources/css/ext-all.css', $root_url.'ext/resources/css/');
 $GLOBALS['GO_THEME']->add_stylesheet($root_path.'themes/Default/xtheme-groupoffice.css', $root_url.'themes/Default/');
 $GLOBALS['GO_THEME']->add_stylesheet($root_path.'themes/Default/style.css', $root_url.'themes/Default/');
+//$GLOBALS['GO_THEME']->add_stylesheet($root_path.'javascript/plupload/ext.ux.plupload.css', $root_url.'ext/resources/css/');
 $GLOBALS['GO_THEME']->load_module_stylesheets();
 $GLOBALS['GO_THEME']->get_cached_css();
 

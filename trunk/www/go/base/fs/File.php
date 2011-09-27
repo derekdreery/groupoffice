@@ -174,7 +174,17 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 */
 	public function move($destinationFolder){
 		
-		return rename($this->path, $destinationFolder->path().'/'.$this->name());
+		$newPath = $destinationFolder->path().'/'.$this->name();
+		
+		if(rename($this->path, $newPath))
+		{
+			$this->path = $newPath;
+			return true;
+		}else
+		{
+			return false;
+		}
+						
 	}
 	
 	/**
@@ -198,18 +208,27 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		return true;
 	}
 	
-	
-	public static function moveUploadedFile($uploadedFileArray, $destinationPath){
-		if (is_uploaded_file($uploadedFileArray['tmp_name'])) {
-			if(move_uploaded_file($uploadedFileArray['tmp_name'], $destinationPath)){		
-				$file = new GO_Base_Fs_File($destinationPath);
-				$file->setDefaultPermissions();
+	/**
+	 *
+	 * @param array $uploadedFileArray
+	 * @param GO_Base_Fs_Folder  $destinationFolder
+	 * @return GO_Base_Fs_File 
+	 */
+	public static function moveUploadedFiles($uploadedFileArray, $destinationFolder){
+		$files = array();
+		for($i=0;$i<count($uploadedFileArray['tmp_name']);$i++){
+			if (is_uploaded_file($uploadedFileArray['tmp_name'][$i])) {
+				$destinationPath = $destinationFolder->path().'/'.$uploadedFileArray['name'][$i];
+				if(move_uploaded_file($uploadedFileArray['tmp_name'][$i], $destinationPath)){		
+					$file = new GO_Base_Fs_File($destinationPath);
+					$file->setDefaultPermissions();
 
-				return $file;
+					$files[]=$file;
+				}
 			}
 		}
 		
-		return false;
+		return $files;
 	}
 	
 	/**

@@ -94,7 +94,6 @@ views/Extjs3/javascript/links/LinkTypeFilterPanel.js
 views/Extjs3/javascript/links/LinkDescriptionField.js
 _views/Extjs3/javascript/links/LinksAccordion.js
 
-views/Extjs3/javascript/links/SimpleLinkBrowser.js
 
 views/Extjs3/javascript/panels/SearchPanel.js
 views/Extjs3/javascript/checker.js
@@ -123,3 +122,4 @@ views/Extjs3/javascript/windows/UsersInGroup.js
 views/Extjs3/javascript/windows/TabbedFormDialog.js
 
 views/Extjs3/javascript/windows/PersonalSettingsDialog.js
+

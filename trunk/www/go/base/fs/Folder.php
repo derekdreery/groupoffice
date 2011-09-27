@@ -54,6 +54,9 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 */
 	public function delete(){
 		
+		if(!$this->exists())
+			return true;
+		
 		$items = $this->ls(true);
 		
 		foreach($items as $item){
@@ -113,6 +116,8 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	 */
 	public function copy($destinationFolder){
 		$this->_validateSrcAndDestPath($destinationFolder->path(), $this->path());
+		
+		GO::debug('folder::copy: '.$this->path().' > '.$destinationFolder->path());
 		
 		$copiedFolder = new GO_Base_Fs_Folder($destinationFolder->path().'/'.$this->name());
 		if(!$copiedFolder->create())

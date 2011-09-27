@@ -31,7 +31,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					$response[] = $node;
 				} else {
 					$folder = GO_Files_Model_Folder::model()->findHomeFolder(GO::user());
-				
+
 					$folder->checkFsSync();
 
 					$node = $this->_folderToNode($folder);
@@ -47,43 +47,42 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 							'draggable' => false,
 							'allowDrop' => false,
 							'iconCls' => 'folder-shares',
-	//						'expanded'=>true,
-	//						'children'=>array()
+									//						'expanded'=>true,
+									//						'children'=>array()
 					);
 					$response[] = $node;
 
-					if(GO::modules()->addressbook){
+					if (GO::modules()->addressbook) {
 						$contactsFolder = GO_Files_Model_Folder::model()->findByPath('addressbook');
 
-						if($contactsFolder){
+						if ($contactsFolder) {
 							$node = $this->_folderToNode($contactsFolder, false);
-							$node['text']=GO::t('addressbook','addressbook');
-							$response[]=$node;
+							$node['text'] = GO::t('addressbook', 'addressbook');
+							$response[] = $node;
 						}
 					}
-					
-					if(GO::modules()->projects){
+
+					if (GO::modules()->projects) {
 						$projectsFolder = GO_Files_Model_Folder::model()->findByPath('projects');
 
-						if($projectsFolder){
+						if ($projectsFolder) {
 							$node = $this->_folderToNode($projectsFolder, false);
-							$node['text']=GO::t('projects','projects');
-							$response[]=$node;
+							$node['text'] = GO::t('projects', 'projects');
+							$response[] = $node;
 						}
 					}
-
 				}
-				
-				
+
+
 
 				break;
 
 			default:
 				$folder = GO_Files_Model_Folder::model()->findByPk($params['node']);
 				$folder->checkFsSync();
-				
+
 				$stmt = $folder->getSubFolders();
-				
+
 				while ($subfolder = $stmt->fetch()) {
 					$response[] = $this->_folderToNode($subfolder, false);
 				}
@@ -167,59 +166,58 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		return parent::afterLoad($response, $model, $params);
 	}
-	
+
 	protected function afterDisplay(&$response, &$model, &$params) {
-		$response['data']['path']=$model->path;
-		$response['data']['type']=GO::t('folder','files');
-		
+		$response['data']['path'] = $model->path;
+		$response['data']['type'] = GO::t('folder', 'files');
+
 		return parent::afterDisplay($response, $model, $params);
 	}
 
 	public function actionPaste($params) {
 
 		$response['success'] = true;
-		
-		if(!isset($params['overwrite']))
-			$params['overwrite']='ask'; //can be ask, yes, no
-			
 
-		if(isset($params['ids']) && $params['overwrite']=='ask')
+		if (!isset($params['overwrite']))
+			$params['overwrite'] = 'ask'; //can be ask, yes, no
+
+
+		if (isset($params['ids']) && $params['overwrite'] == 'ask')
 			GO::session()->values['files']['pasteIds'] = $this->_splitFolderAndFileIds(json_decode($params['ids'], true));
-	
+
 		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
 
 		if (!$destinationFolder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
 			throw new GO_Base_Exception_AccessDenied();
 
-		while($file_id=array_shift(GO::session()->values['files']['pasteIds']['files'])){
+		while ($file_id = array_shift(GO::session()->values['files']['pasteIds']['files'])) {
 			$file = GO_Files_Model_File::model()->findByPk($file_id);
-			
+
 			$existingFile = $destinationFolder->hasFile($file->name);
 			if ($existingFile) {
-				switch($params['overwrite']){
+				switch ($params['overwrite']) {
 					case 'ask':
 						array_unshift(GO::session()->values['files']['pasteIds']['files'], $file_id);
 						$response['fileExists'] = $file->name;
 						return $response;
 						break;
-					
+
 					case 'yestoall':
 					case 'yes':
 						$existingFile->delete();
-						
-						if($params['overwrite']=='yes')
-							$params['overwrite']='ask';
+
+						if ($params['overwrite'] == 'yes')
+							$params['overwrite'] = 'ask';
 						break;
-						
+
 					case 'notoall':
-					case 'no':	
-						if($params['overwrite']=='no')
-							$params['overwrite']='ask';
-						
+					case 'no':
+						if ($params['overwrite'] == 'no')
+							$params['overwrite'] = 'ask';
+
 						continue;
-						
+
 						break;
-						
 				}
 			}
 
@@ -232,35 +230,34 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			}
 		}
 
-		while($folder_id=array_shift(GO::session()->values['files']['pasteIds']['folders'])){
+		while ($folder_id = array_shift(GO::session()->values['files']['pasteIds']['folders'])) {
 			$folder = GO_Files_Model_Folder::model()->findByPk($folder_id);
-			
-			$existingFolder = $destinationFolder->hasFolder($file->name);
+
+			$existingFolder = $destinationFolder->hasFolder($folder->name);
 			if ($existingFolder) {
-				switch($params['overwrite']){
+				switch ($params['overwrite']) {
 					case 'ask':
-						array_unshift(GO::session()->values['folders']['pasteIds']['folders'], $file_id);
-						$response['fileExists'] = $file->name;
+						array_unshift(GO::session()->values['files']['pasteIds']['folders'], $folder_id);
+						$response['fileExists'] = $folder->name;
 						return $response;
 						break;
-					
+
 					case 'yestoall':
 					case 'yes':
-						$existingFolder->delete();
-						
-						if($params['overwrite']=='yes')
-							$params['overwrite']='ask';
+						//$existingFolder->delete();
+
+						if ($params['overwrite'] == 'yes')
+							$params['overwrite'] = 'ask';
 						break;
-						
+
 					case 'notoall':
-					case 'no':	
-						if($params['overwrite']=='no')
-							$params['overwrite']='ask';
-						
+					case 'no':
+						if ($params['overwrite'] == 'no')
+							$params['overwrite'] = 'ask';
+
 						continue;
-						
+
 						break;
-						
 				}
 			}
 
@@ -319,7 +316,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$response['parent_id'] = $folder->parent_id;
 
 
-		$store = new GO_Base_Data_Store();
+		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
 
 
 		//handle delete request for both files and folder
@@ -340,10 +337,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				'ignoreAcl' => true
 						));
 		$stmt = $folder->folders($findParams);
+
 		$store->setStatement($stmt);
 
 		$response = array_merge($response, $store->getData());
-
 
 		//add files to the listing if it fits
 		$folderPages = floor($stmt->foundRows / $findParams['limit']);
@@ -358,8 +355,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$fileStart = $findParams['start'] - $stmt->foundRows;
 			$fileLimit = $findParams['limit'];
 		}
-		
-		if($fileStart>=0) {
+
+		if ($fileStart >= 0) {
 			$findParams = $store->getDefaultParams(array(
 					'limit' => $fileLimit,
 					'start' => $fileStart
@@ -372,14 +369,14 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 			$response['total']+=$filesResponse['total'];
 			$response['results'] = array_merge($response['results'], $filesResponse['results']);
-		}else
-		{
+		} else {
 			$record = $folder->files(array(
-					'single'=>true,
-					'fields'=>'count(*) as total'
-			));
+					'single' => true,
+					'fields' => 'count(*) as total'
+							));
 			$response['total']+=$record['total'];
 		}
+
 
 		return $response;
 	}
@@ -402,12 +399,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		return $record;
 	}
-	
-	
-	private function _checkExistingModelFolder($model,$folder,$mustExist=false){
-		
-		$files_folder_id=0;
-		
+
+	private function _checkExistingModelFolder($model, $folder, $mustExist=false) {
+
+		$files_folder_id = 0;
+
 		//todo test this:	
 //		if(!isset($model->acl_id) && empty($params['mustExist'])){
 //			//if this model is not a container like an addressbook but a contact
@@ -420,90 +416,156 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 //				return $response;
 //			}
 //		}
-		
 
-				
+
+
 		$currentPath = $folder->path;
 		//strip the (n) part at the end of the path that is added when a duplicate
 		//is found.
 		$currentPath = preg_replace('/ \([0-9]+\)$/', '', $currentPath);
 		$newPath = $model->buildFilesPath();
-		
-		
-		if($currentPath!=$newPath){
+
+
+		if ($currentPath != $newPath) {
 
 			//model has a new path. We must move the current folder					
 			$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
 							dirname($newPath), true);
 
 			$folder->name = GO_Base_Fs_File::utf8Basename($newPath);
-			$folder->folder_id=$destinationFolder->id;
-			$folder->systemSave=true;
+			$folder->folder_id = $destinationFolder->id;
+			$folder->systemSave = true;
 			$folder->save();
 		}
-		
+
 		return $folder->id;
 	}
-	
-	public function _createNewModelFolder($model){
-		
-		$f = new GO_Base_Fs_Folder(GO::config()->file_storage_path.$model->buildFilesPath());
+
+	public function _createNewModelFolder($model) {
+
+		$f = new GO_Base_Fs_Folder(GO::config()->file_storage_path . $model->buildFilesPath());
 		$fullPath = $f->appendNumberToNameIfExists();
 		$relPath = str_replace(GO::config()->file_storage_path, '', $fullPath);
 
 		$folder = GO_Files_Model_Folder::model()->findByPath($relPath, true);
-		if(!$folder->acl_id && isset($model->acl_id)){
-			$folder->acl_id=$model->acl_id;			
+		if (!$folder->acl_id && isset($model->acl_id)) {
+			$folder->acl_id = $model->acl_id;
 		}
-		
-		$folder->visible=0;
-		$folder->readonly=1;
-		$folder->systemSave=true;
+
+		$folder->visible = 0;
+		$folder->readonly = 1;
+		$folder->systemSave = true;
 		$folder->save();
-		
+
 		return $folder->id;
 	}
-	
+
 	/**
 	 * check if a model folder exists
 	 * 
 	 * @param type $params
 	 * @return type 
 	 */
-	public function actionCheckModelFolder($params){		
+	public function actionCheckModelFolder($params) {
 		$model = GO::getModel($params['model'])->findByPk($params['id']);
-		
-		$response['success']=true;
-		$response['files_folder_id']=$this->checkModelFolder($model, true, !empty($params['mustExist']));
+
+		$response['success'] = true;
+		$response['files_folder_id'] = $this->checkModelFolder($model, true, !empty($params['mustExist']));
 		return $response;
+	}
+
+	public function checkModelFolder($model, $saveModel=false, $mustExist=false) {
+		$folder = false;
+		if ($model->files_folder_id > 0) {
+			$folder = GO_Files_Model_Folder::model()->findByPk($model->files_folder_id);
+		}
+
+		if ($folder) {
+			$model->files_folder_id = $this->_checkExistingModelFolder($model, $folder, $mustExist);
+
+			if ($saveModel)
+				$model->save();
+		}elseif (isset($model->acl_id) || $mustExist) {
+			//this model has an acl_id. So we should create a shared folder with this acl.
+			//this folder should always exist.
+			//only new models that have it's own acl field should always have a folder.
+			//otherwise it will be created when first accessed.
+			$model->files_folder_id = $this->_createNewModelFolder($model);
+
+			if ($saveModel)
+				$model->save();
+		}
+
+		return $model->files_folder_id;
+	}
+
+	public function actionUpload($params) {
+		
+		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir.'uploadqueue');		
+		$tmpFolder->delete();
+		$tmpFolder->create();
+		
+		GO::debug($_FILES['attachments']);
+		
+		$files = GO_Base_Fs_File::moveUploadedFiles ($_FILES['attachments'], $tmpFolder);
+		GO::session()->values['files']['uploadqueue']=array();
+		foreach($files as $file){
+			GO::session()->values['files']['uploadqueue'][]=$file->path();
+		}
+		
+		return array('success'=>true);
 	}
 	
 	
-	public function checkModelFolder($model, $saveModel=false, $mustExist=false){
-		$folder = false;
-		if($model->files_folder_id>0){
-			$folder = GO_Files_Model_Folder::model()->findByPk($model->files_folder_id);			
+	public function actionProcessUploadQueue($params){
+		$response['success'] = true;
+
+		if (!isset($params['overwrite']))
+			$params['overwrite'] = 'ask'; //can be ask, yes, no
+		
+		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
+
+		if (!$destinationFolder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
+			throw new GO_Base_Exception_AccessDenied();
+
+		while ($tmpfile = array_shift(GO::session()->values['files']['uploadqueue'])) {
+			$file = new GO_Base_Fs_File($tmpfile);
+
+			$existingFile = $destinationFolder->hasFile($file->name());
+			if ($existingFile) {
+				switch ($params['overwrite']) {
+					case 'ask':
+						array_unshift(GO::session()->values['files']['uploadqueue'], $tmpfile);
+						$response['fileExists'] = $file->name();
+						return $response;
+						break;
+
+					case 'yestoall':
+					case 'yes':
+						$existingFile->delete();
+
+						if ($params['overwrite'] == 'yes')
+							$params['overwrite'] = 'ask';
+						break;
+
+					case 'notoall':
+					case 'no':
+						if ($params['overwrite'] == 'no')
+							$params['overwrite'] = 'ask';
+
+						continue;
+
+						break;
+				}
+			}
+
+			$file->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path.$destinationFolder->path));
+			
+			if(!GO_Files_Model_File::importFromFilesystem($file))
+				$response['success']=false;
 		}
 		
-		if($folder){			
-			$model->files_folder_id=$this->_checkExistingModelFolder($model, $folder, $mustExist);
-			
-			if($saveModel)
-				$model->save();
-			
-		}elseif(isset($model->acl_id) || $mustExist){
-			//this model has an acl_id. So we should create a shared folder with this acl.
-			//this folder should always exist.
-			
-			//only new models that have it's own acl field should always have a folder.
-			//otherwise it will be created when first accessed.
-			$model->files_folder_id=$this->_createNewModelFolder($model);
-			
-			if($saveModel)
-				$model->save();			
-		}		
-		
-		return $model->files_folder_id;		
+		return $response;
 	}
 
 }
