@@ -320,9 +320,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			}
 		}
 
-		//$this->prepareGrid($grid);
+
 		$columnModel = $grid->getColumnModel();
 		$this->formatColumns($columnModel);
+		
+		$this->prepareGrid($grid);
 		
 		$gridParams = array_merge($grid->getDefaultParams(),$this->getGridParams($params));
 		
