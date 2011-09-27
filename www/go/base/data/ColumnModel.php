@@ -15,9 +15,7 @@ class GO_Base_Data_ColumnModel {
 		
 		$attributes = $model->getAttributes();
 		$columns = array_keys($attributes);
-		
 
-		
 		if($model->customfieldsRecord) {
 			$cfAttributes = array_keys($model->customfieldsRecord->columns);
 			array_shift($cfAttributes); //remove model_id column
