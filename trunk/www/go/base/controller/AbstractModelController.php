@@ -30,6 +30,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	
 	
 	/**
+	 * An array of Id's
+	 * 
 	 * It's often convenient to select multiple addressbooks, calendars etc. for
 	 * display in a grid. By overriding multiSelectProperties and multiSelectDefault
 	 * this array will be filled with ids that are send by the request parameter.
@@ -541,9 +543,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * This function can export the current data to a given format.
 	 * 
 	 * The $params array has a couple of keys wich you maybe want to set:
-	 * - title	: The title of the file that will be created. (Without extention)
-	 * - type		: To which kind of file do you want to export. (Can be: CSV,JSON,HTML,PDF)
-	 * - showHeader : Do you want to show the column headers in the file? (True or False)
+	 * 
+	 * * title	: The title of the file that will be created. (Without extention)
+	 * * type		: To which kind of file do you want to export. (Can be: CSV,JSON,HTML,PDF)
+	 * * showHeader : Do you want to show the column headers in the file? (True or False)
 	 * 
 	 * @param Array $params 
 	 */
@@ -554,11 +557,11 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		else
 			$title = GO::session()->values[$params['exportName']]['name'];
 		
-		$outputStream = new GO_Base_OutputStream_OutputStreamCSV($title,false); // The default autputstream is the CSV outputter.
+		$export = new GO_Base_Export_ExportCSV($title,false); // The default Export is the CSV outputter.
 		
 		if(!empty($params['type'])) {
-			$outputstreamObjectString = "GO_Base_OutputStream_OutputStream".strtoupper($params['type']);
-			$outputStream = new $outputstreamObjectString($title,false);
+			$exportObjectString = "GO_Base_Export_Export".strtoupper($params['type']);
+			$export = new $exportObjectString($title,false);
 		}
 		
 		$filter = GO::session()->values[$params['exportName']]['findParams'];
@@ -577,13 +580,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$header = array();				
 				foreach($attr as $attribute=>$value)
 					$header[] = $model->getAttributeLabel($attribute);
-				$outputStream->write($header);
+				$export->write($header);
 				$params['showHeader']=false;
 			}
-			$outputStream->write($obj->getAttributes());
+			$export->write($obj->getAttributes());
 		}
 		
-		$outputStream->endFlush();
+		$export->endFlush();
 	}
 }
 
