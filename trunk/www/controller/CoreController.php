@@ -114,14 +114,11 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 */
 	public function actionUsers($params) {
 
-		$store = new GO_Base_Data_Store();
+		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_User::model(), array(), array());
 		$store->setDefaultSortOrder('name', 'ASC');
 
-		$store->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
-		$store->formatColumn('cf', '$model->id.":".$model->name'); //special field used by custom fields. They need an id an value in one.
-
-		$stmt = GO_Base_Model_User::model()->find($store->getDefaultParams());
-		$store->setStatement($stmt);
+		$store->getColumnModel()->formatColumn('name', '$model->name', array(), array('first_name', 'last_name'));
+		$store->getColumnModel()->formatColumn('cf', '$model->id.":".$model->name'); //special field used by custom fields. They need an id an value in one.
 
 
 		return $store->getData();
@@ -132,13 +129,8 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 * 
 	 */
 	public function actionGroups($params) {
-		$store = new GO_Base_Data_Store();
+		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_Group::model(), array(), array());
 		$store->setDefaultSortOrder('name', 'ASC');
-
-		$stmt = GO_Base_Model_Group::model()->find($store->getDefaultParams());
-		$store->setStatement($stmt);
-
-
 		return $store->getData();
 	}
 
