@@ -27,6 +27,10 @@ class GO_Base_Export_ExportJson implements GO_Base_Export_ExportInterface{
 		$this->sendHeaders();
 	}
 	
+	public function showInView(){
+		return true;
+	}
+	
 	public function sendHeaders(){
 		//text plain doesn't play nice with ajax upload solution with iframes in Extjs
 		header('Content-Type: text/html; charset=UTF-8');

@@ -545,27 +545,25 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * The $params array has a couple of keys wich you maybe want to set:
 	 * 
 	 * * title	: The title of the file that will be created. (Without extention)
-	 * * type		: To which kind of file do you want to export. (Can be: CSV,JSON,HTML,PDF)
+	 * * type		: Which class needs to be used to export. (Eg. GO_Base_Export_ExportCSV)
 	 * * showHeader : Do you want to show the column headers in the file? (True or False)
 	 * 
 	 * @param Array $params 
 	 */
 	public function actionExport($params) {
-
-		if(!empty($params['title']))
-			$title = $params['title'];
+		
+		if(!empty($params['documentTitle']))
+			$title = $params['documentTitle'];
 		else
-			$title = GO::session()->values[$params['exportName']]['name'];
+			$title = GO::session()->values[$params['name']]['name'];
 		
-		$export = new GO_Base_Export_ExportCSV($title,false); // The default Export is the CSV outputter.
+		if(!empty($params['type']))
+			$export = new $params['type']($title,false);
+		else
+			$export = new GO_Base_Export_ExportCSV($title,false); // The default Export is the CSV outputter.
 		
-		if(!empty($params['type'])) {
-			$exportObjectString = "GO_Base_Export_Export".strtoupper($params['type']);
-			$export = new $exportObjectString($title,false);
-		}
-		
-		$filter = GO::session()->values[$params['exportName']]['findParams'];
-		$model = GO::getModel(GO::session()->values[$params['exportName']]['model']);
+		$filter = GO::session()->values[$params['name']]['findParams'];
+		$model = GO::getModel(GO::session()->values[$params['name']]['model']);
 		
 		$columnModel = new GO_Base_Data_ColumnModel();
 		$columnModel->setColumnsFromModel($model);

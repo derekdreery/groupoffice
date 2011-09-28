@@ -22,6 +22,10 @@ class GO_Base_Export_ExportLog implements GO_Base_Export_ExportInterface{
 		$this->sendHeaders();
 	}
 	
+	public function showInView(){
+		return false;
+	}
+	
 	public function sendHeaders(){
 		header('Content-Type: text/plain; charset=UTF-8');
 	}

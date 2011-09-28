@@ -121,5 +121,5 @@ views/Extjs3/javascript/windows/UsersInGroup.js
 
 views/Extjs3/javascript/windows/TabbedFormDialog.js
 
+views/Extjs3/javascript/windows/ExportDialog.js
 views/Extjs3/javascript/windows/PersonalSettingsDialog.js
-
