@@ -1181,73 +1181,63 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 		if(decompress_sources.length)
 		{		
 			var store = this.getActiveGridStore();
-			store.baseParams['decompress_sources']=Ext.encode(decompress_sources);
+			var params = {};
+			params['decompress_sources']=Ext.encode(decompress_sources);
+			params.working_folder_id=this.folder_id;
 			
-			store.load({
-				callback: function(){
-					
-					if(!store.reader.jsonData.decompress_success)
-					{
-						Ext.Msg.alert(GO.lang['strError'], store.reader.jsonData.decompress_feedback);
-					}
-				},
-				scope: this
+			GO.request({
+				maskEl:this.getEl(),
+				url:'files/folder/decompress',
+				params:params,
+				success:function(){
+					store.load();
+				}
 			});
-			delete store.baseParams['decompress_sources'];
 		}		
 	},
 	
 	onCompress : function(records, filename)
 	{		
-		var compress_sources = [];
-		var compress_id=0;
-		if(records.length==1 && !records[0].data.path && records[0].data.id>0){
-			compress_id=records[0].data.id;
-		}else
-		{
-			for(var i=0;i<records.length;i++)
-			{
-				compress_sources.push(records[i].data.path);
-			}
-		}
-			
+	
+		var params = {
+			compress_sources: [],
+			working_folder_id:this.folder_id,
+			destination_folder_id:this.folder_id
+		};
 		
-		if(compress_sources.length || compress_id>0)
-		{		
-			if(!filename || filename == '')
-			{
-				Ext.Msg.prompt(GO.files.lang.enterName, GO.files.lang.pleaseEnterNameArchive, 
-					function(id, filename){
-						if(id=='ok'){
-							this.onCompress(records, filename);
-						}
-					},this);
-			}else
-			{
-				var store = this.getActiveGridStore();
-				
-				store.baseParams['compress_sources']=Ext.encode(compress_sources);
-				store.baseParams['archive_name']=filename;
-				store.baseParams['compress_id']=compress_id;
-				
-				store.load({
-					callback: function(){
-						
-						if(!store.reader.jsonData.compress_success)
-						{
-							Ext.Msg.alert(GO.lang['strError'], store.reader.jsonData.compress_feedback);
-						}
-					},
-					scope: this
-				});
-				delete store.baseParams['compress_sources'];
-				delete store.baseParams['archive_name'];
-				delete store.baseParams['compress_id'];
-			}		
+		for(var i=0;i<records.length;i++)
+		{
+			if(records[i].data.parent_id)//for tree
+				params.working_folder_id=records[i].data.parent_id;
+			
+			params.compress_sources.push(records[i].data.path);
+		}
+		
+
+		if(!filename || filename == '')
+		{
+			Ext.Msg.prompt(GO.files.lang.enterName, GO.files.lang.pleaseEnterNameArchive, 
+				function(id, filename){
+					if(id=='ok'){
+						this.onCompress(records, filename);
+					}
+				},this);
 		}else
 		{
-			alert('You can\'t compress that folder');
-		}
+			params.archive_name=filename;
+			params.compress_sources=Ext.encode(params.compress_sources);
+			var store = this.getActiveGridStore();
+
+			GO.request({
+				maskEl:this.getEl(),
+				url:'files/folder/compress',
+				params:params,
+				success:function(){
+					store.load();
+				}
+			});			
+		}		
+
 	},
 	
 	getSelectedTreeRecords : function(){

@@ -82,3 +82,6 @@ $updates[201108301656][]="ALTER TABLE `go_search_cache` ADD `type` VARCHAR( 20 )
 $updates[201108190000][]="RENAME TABLE `go_links_8` TO `go_links_go_users`;";
 $updates[201108190000][]="ALTER TABLE `go_links_go_users` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL";
 $updates[201108190000][]="ALTER TABLE `go_links_go_users` CHANGE `link_type` `model_type_id` INT( 11 ) NOT NULL";
+
+$updates[201109280000][]="ALTER TABLE `go_search_cache` DROP `table`";
+$updates[201109280000][]="ALTER TABLE `go_search_cache` DROP `link_count`";

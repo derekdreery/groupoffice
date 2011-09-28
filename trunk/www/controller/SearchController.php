@@ -24,7 +24,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	
 	public function actionModelTypes($params){
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_ModelType::model(), array(), $store->getDefaultParams());			
+		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_ModelType::model(), array(), array());			
 		$store->getColumnModel()->formatColumn('name', 'GO::getModel($model->model_name)->localizedName');
 
 		return $store->getData();		

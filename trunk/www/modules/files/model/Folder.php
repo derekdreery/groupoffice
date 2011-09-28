@@ -36,7 +36,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	
 	private $_path;
 	
-	//public $joinAclField=true;
+	//prevents acl id's to be generated automatically by the activerecord.
+	public $joinAclField=true;
 	
 	/**
 	 *
@@ -186,7 +187,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	
 
 	protected function afterDelete() {		
-		$this->fsFolder->delete();
+		$this->fsFolder->delete();		
+		
+		//Read only flag is set for addressbooks, tasklists etc. They share the same acl so deleting it would make addressbooks inaccessible.
+		if(!$this->readonly){
+			//normally this is done automatically. But we overide $this->joinAclfield to prevent acl management.
+			$acl = GO_Base_Model_Acl::model()->findByPk($this->{$this->aclField()});			
+			$acl->delete();
+		}
+		
 		return parent::afterDelete();
 	}
 	
@@ -292,27 +301,31 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Adds missing files and folders from the filesystem to the database and 
 	 * removes files and folders from the database that are not on the filesystem.
+	 * 
+	 * @param boolean $recurseAll
+	 * @param boolean $recurseOneLevel 
 	 */
-	public function syncFilesystem($recurseOneLevel=true) {
+	public function syncFilesystem($recurseAll=false, $recurseOneLevel=true) {
 
 		if($this->fsFolder->exists()){
 			$items = $this->fsFolder->ls();
+			
 
 			foreach ($items as $item) {
-				if ($item instanceof GO_Base_Fs_File) {
-					$file = $this->files(array('single'=>true,'name'=>$item->name()));
-
+				if ($item->isFile()) {
+					$file = $this->hasFile($item->name());
+					
 					if (!$file)
 						$this->addFile($item->name());
 
 				}else
 				{
-					$folder = $this->folders(array('single'=>true,'name'=>$item->name()));
+					$folder = $this->hasFolder($item->name());
 					if(!$folder)
 						$folder = $this->addFolder($item->name());
 
-					if($recurseOneLevel)
-						$folder->syncFilesystem(false);				
+					if($recurseOneLevel || $recurseAll)
+						$folder->syncFilesystem($recurseAll, false);				
 				}
 			}
 		}
