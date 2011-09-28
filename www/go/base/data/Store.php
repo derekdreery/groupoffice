@@ -282,8 +282,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		
 		$sort = !empty($_REQUEST['sort']) ? $_REQUEST['sort'] : $this->_defaultSortOrder;
 		
-		if(isset($this->_sortFieldsAliases[$sort]))
-			$sort=$this->_sortFieldsAliases[$sort];
+		$sort = $this->getColumnModel()->getSortAlias($sort);
 		
     return array_merge(array(
         'searchQuery' => !empty($_REQUEST['query']) ? '%' . $_REQUEST['query'] . '%' : '',

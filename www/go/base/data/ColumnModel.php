@@ -114,5 +114,12 @@ class GO_Base_Data_ColumnModel {
 		return $this->_columns;
 	}
 	
+	public function getSortAlias($alias){
+		if(isset($this->_sortFieldsAliases[$alias]))
+			$alias=$this->_sortFieldsAliases[$alias];
+		
+		return $alias;
+	}
+	
 	
 }
