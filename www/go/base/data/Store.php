@@ -28,6 +28,11 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
    * @var GO_Base_Db_ActiveStatement 
    */
   private $_stmt;
+	
+	
+	protected $_limit;
+	protected $_defaultSortOrder='';
+	protected $_defaultSortDirection='ASC';
   
   /**
    *
@@ -61,13 +66,14 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	}
 	
 	/**
-	 * Returns the column model
-	 * 
-	 * @return GO_Base_Data_ColumnModel 
+	 * Set the default column to sort on.
+	 * @param String / Array $order 
 	 */
-	public function getColumnModel(){
-		return $this->_columnModel;
+	public function setDefaultSortOrder($order, $direction){
+		$this->_defaultSortOrder=$order;
+		$this->_defaultSortDirection=$direction;
 	}
+	
 	
 	/**
 	 * Set a title response
@@ -295,6 +301,5 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 				'permissionLevel'=> isset($_REQUEST['permissionLevel']) ? $_REQUEST['permissionLevel'] : GO_Base_Model_Acl::READ_PERMISSION
     ), $params);
   }
-
 }
 

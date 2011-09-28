@@ -27,9 +27,6 @@ abstract class GO_Base_Data_AbstractStore {
 	 */
 	protected $_columnModel=false;
 	
-	protected $_limit;
-	protected $_defaultSortOrder='';
-	protected $_defaultSortDirection='ASC';
 	
   /**
 	 * The constructor of the Store
@@ -48,35 +45,22 @@ abstract class GO_Base_Data_AbstractStore {
 			$this->_columnModel = new GO_Base_Data_ColumnModel();
   }
 	
-		
 	/**
-	 * Set the default column to sort on.
-	 * @param String / Array $order 
-	 */
-	public function setDefaultSortOrder($order, $direction){
-		$this->_defaultSortOrder=$order;
-		$this->_defaultSortDirection=$direction;
-	}
-	
-	
-	/**
-	 * A function that can be overridden in the child classes.
+	 * Returns the column model
 	 * 
-	 * Return allways an array with the default parameters.
-	 * 
-	 * @param Array $params
-	 * @return Array 
+	 * @return GO_Base_Data_ColumnModel 
 	 */
-	public function getDefaultParams($params=array()) {
-		return $params;
+	public function getColumnModel(){
+		return $this->_columnModel;
 	}
 	
 	
-	/**
-	 * A function that needs to be overridden in the child classes.
-	 */
-	public function getData() {
-		
-	}
+//	public function nextRecord(){
+//		
+//	}
+//	
+//	public function getTotal(){
+//		
+//	}
 	
 }

@@ -20,6 +20,8 @@
  */
 interface GO_Base_Export_ExportInterface{
 	
+	public function showInView();
+	
 	public function sendHeaders();
 	
 	public function write($str);

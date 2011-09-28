@@ -1,7 +1,7 @@
 <?php
 class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModelController{
 	
-	protected $model = 'GO_Addressbook_Model_Contact';
+	protected $model = 'GO_Addressbook_Model_Contact';	
 	
 	protected function beforeSubmit(&$response, &$model, &$params) {
 				

@@ -17,12 +17,12 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.export
  */
-class GO_Base_Export_ExportCSV implements GO_Base_Export_ExportInterface{	
+class GO_Base_Export_ExportPDF implements GO_Base_Export_ExportInterface{	
 	private $_fp;
 
 	
 	public function __construct($filename, $addKeysAsHeaders=true){
-		header('Content-Disposition: attachment; filename="'.$filename.'.csv"');
+		//header('Content-Disposition: attachment; filename="'.$filename.'.csv"');
 		
 		$this->sendHeaders();
 		
@@ -34,8 +34,8 @@ class GO_Base_Export_ExportCSV implements GO_Base_Export_ExportInterface{
 	}
 	
 	public function sendHeaders(){
-		header('Content-Type: text/x-csv; charset=UTF-8');
-		//header('Content-Type: text/plain; charset=UTF-8');
+		//header('Content-Type: text/x-csv; charset=UTF-8');
+		header('Content-Type: text/plain; charset=UTF-8');
 	}
 
 	
@@ -59,6 +59,6 @@ class GO_Base_Export_ExportCSV implements GO_Base_Export_ExportInterface{
 	}
 	
 	public function getName() {
-		return 'CSV';
+		return 'PDF';
 	}
 }

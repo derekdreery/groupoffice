@@ -260,26 +260,38 @@ GO.tasks.MainPanel = function(config){
 				text: GO.lang.cmdExport,
 				cls: 'x-btn-text-icon',
 				handler:function(){
-					var config = {};
-					config.colModel = this.gridPanel.getColumnModel();
-					config.title = GO.tasks.lang.tasks;
+//					var config = {};
+//					config.colModel = this.gridPanel.getColumnModel();
+//					config.title = GO.tasks.lang.tasks;
+//
+//					var query = this.gridPanel.searchField.getValue();
+//					if(!GO.util.empty(query))
+//					{
+//						config.subtitle= GO.lang.searchQuery+': '+query;
+//					}else
+//					{
+//						config.subtitle='';
+//					}
+//
+//					if(!this.exportDialog)
+//					{
+//						this.exportDialog = new GO.ExportQueryDialog({
+//							query:'get_tasks'
+//						});
+//					}
+//					this.exportDialog.show(config);
 
-					var query = this.gridPanel.searchField.getValue();
-					if(!GO.util.empty(query))
-					{
-						config.subtitle= GO.lang.searchQuery+': '+query;
-					}else
-					{
-						config.subtitle='';
-					}
-
-					if(!this.exportDialog)
-					{
-						this.exportDialog = new GO.ExportQueryDialog({
-							query:'get_tasks'
-						});
-					}
-					this.exportDialog.show(config);
+				
+				if(!this.exportDialog)
+				{
+					this.exportDialog = new GO.ExportDialog({
+						url: 'tasks/task/export',
+						name: 'tasks',
+						documentTitle:'ExportTask'
+					});
+				}
+				
+				this.exportDialog.show();
 
 				},
 				scope: this
