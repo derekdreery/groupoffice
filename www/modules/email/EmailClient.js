@@ -1975,7 +1975,7 @@ GO.newMenuItems.push({
 	handler:function(item, e){
 		var taskShowConfig = item.parentMenu.taskShowConfig || {};
 		taskShowConfig.link_config=item.parentMenu.link_config
-		if(item.parentMenu.panel.data.email){
+		if(typeof(item.parentMenu.panel)!='undefined' && typeof(item.parentMenu.panel.data.email)!='undefined'){
 			var to='';
 			if(item.parentMenu.panel.data.full_name){
 				to='"'+item.parentMenu.panel.data.full_name+'" <'+item.parentMenu.panel.data.email+'>';
