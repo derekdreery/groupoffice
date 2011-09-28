@@ -1518,6 +1518,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 	public function validate(){
 		foreach($this->columns as $field=>$attributes){
+			
+			if($attributes['type']==PDO::PARAM_INT && isset($this->_attributes[$field]))
+					$this->_attributes[$field]=intval($this->_attributes[$field]);
+				
+			
 			if(!empty($attributes['required']) && empty($this->_attributes[$field])){
 				throw new Exception($field.' is required');
 			}elseif(!empty($attributes['length']) && !empty($this->_attributes[$field]) && strlen($this->_attributes[$field])>$attributes['length'])
@@ -2408,8 +2413,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @return boolean
 	 */
 	public function lockTable($mode="WRITE"){
-		$sql = "LOCK TABLES `".$this->tableName()."` $mode;";
-		return $this->getDbConnection()->query($sql);
+		$sql = "LOCK TABLES `".$this->tableName()."` AS t $mode";
+		$this->getDbConnection()->query($sql);
+		
+		if($this->hasFiles()){
+			$sql = "LOCK TABLES `fs_folders` AS t $mode";
+			$this->getDbConnection()->query($sql);
+		}
+		
+		return true;
 	}
 	/**
 	 * Unlock tables
