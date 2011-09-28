@@ -46,6 +46,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 							'readonly' => true,
 							'draggable' => false,
 							'allowDrop' => false,
+							'parent_id'=>0,
 							'iconCls' => 'folder-shares',
 									//						'expanded'=>true,
 									//						'children'=>array()
@@ -99,7 +100,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				'id' => $folder->id,
 				'draggable' => false,
 				'iconCls' => 'folder-default',
-				'expanded' => $withChildren
+				'expanded' => $withChildren,
+				'parent_id'=>$folder->parent_id
 		);
 
 		if ($withChildren) {
@@ -500,29 +502,28 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	}
 
 	public function actionUpload($params) {
-		
-		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir.'uploadqueue');		
+
+		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
 		$tmpFolder->delete();
 		$tmpFolder->create();
-		
+
 		GO::debug($_FILES['attachments']);
-		
-		$files = GO_Base_Fs_File::moveUploadedFiles ($_FILES['attachments'], $tmpFolder);
-		GO::session()->values['files']['uploadqueue']=array();
-		foreach($files as $file){
-			GO::session()->values['files']['uploadqueue'][]=$file->path();
+
+		$files = GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $tmpFolder);
+		GO::session()->values['files']['uploadqueue'] = array();
+		foreach ($files as $file) {
+			GO::session()->values['files']['uploadqueue'][] = $file->path();
 		}
-		
-		return array('success'=>true);
+
+		return array('success' => true);
 	}
-	
-	
-	public function actionProcessUploadQueue($params){
+
+	public function actionProcessUploadQueue($params) {
 		$response['success'] = true;
 
 		if (!isset($params['overwrite']))
 			$params['overwrite'] = 'ask'; //can be ask, yes, no
-		
+
 		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
 
 		if (!$destinationFolder->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION))
@@ -559,14 +560,95 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				}
 			}
 
-			$file->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path.$destinationFolder->path));
-			
-			if(!GO_Files_Model_File::importFromFilesystem($file))
-				$response['success']=false;
+			$file->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . $destinationFolder->path));
+
+			if (!GO_Files_Model_File::importFromFilesystem($file))
+				$response['success'] = false;
 		}
-		
+
 		return $response;
 	}
+
+	public function actionCompress($params) {
+	
+		if (!GO_Base_Util_Common::isWindows())
+			putenv('LANG=en_US.UTF-8');
+
+		$sources = json_decode($params['compress_sources'], true);
+
+
+		$workingFolder = GO_Files_Model_Folder::model()->findByPk($params['working_folder_id']);
+		$destinationFolder = GO_Files_Model_Folder::model()->findByPk($params['destination_folder_id']);
+
+
+		$workingPath = GO::config()->file_storage_path.$workingFolder->path;
+		chdir($workingPath);
+
+		for($i=0;$i<count($sources);$i++){
+			$sources[$i]=str_replace($workingFolder->path.'/', '', $sources[$i]);
+		}
+
+		$archiveFile = new GO_Base_Fs_File(GO::config()->file_storage_path.$destinationFolder->path . '/' . $params['archive_name'] . '.zip');
+
+		$cmd = GO::config()->cmd_zip . ' -r "' . $archiveFile->path() . '" "' . implode('" "', $sources) . '"';
+
+		exec($cmd, $output);
+
+		if (!$archiveFile->exists()) {
+			throw new Exception('Command failed: ' . $cmd . "<br /><br />" . implode("<br />", $output));
+		}
+
+		GO_Files_Model_File::importFromFilesystem($archiveFile);
+
+		$response['success']=true;		
+
+		return $response;
+	}
+	
+	
+	public function actionDecompress($params){
+		if (!GO_Base_Util_Common::isWindows())
+			putenv('LANG=en_US.UTF-8');
+		
+		
+		$sources = json_decode($params['decompress_sources'], true);
+
+
+		$workingFolder = GO_Files_Model_Folder::model()->findByPk($params['working_folder_id']);
+		
+		$workingPath = GO::config()->file_storage_path.$workingFolder->path;
+		chdir($workingPath);
+
+				
+		while ($filePath = array_shift($sources)) {
+			$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$filePath);
+			switch($file->extension()) {
+				case 'zip':
+					$cmd = GO::config()->cmd_unzip.' "'.$file->path().'"';					
+					break;
+				case 'gz':
+				case 'tgz':
+					$cmd = GO::config()->cmd_tar.' zxf "'.$file->path().'"';
+					break;
+
+				case 'tar':
+					$cmd = GO::config()->cmd_tar.' xf "'.$file->path().'"';
+					break;
+			}
+		}
+		exec($cmd, $output, $ret);
+		
+		if($ret>1)
+		{
+			throw new Exception(implode("\n",$output));
+		}
+		
+		$workingFolder->syncFilesystem(true);
+
+		return array('success'=>true);
+
+	}
+
 
 }
 

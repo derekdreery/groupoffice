@@ -53,8 +53,8 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	{
 		$cm = new GO_Base_Data_ColumnModel($model, $excludeColumns);		
 		$store = new self($cm);
-		if($findParams)
-			$store->setStatement ($model->find($findParams));
+		if(is_array($findParams))
+			$store->setStatement ($model->find($store->getDefaultParams($findParams)));
 		
 		return $store;
 		

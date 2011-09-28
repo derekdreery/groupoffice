@@ -57,6 +57,15 @@ class GO_Base_Util_Common {
 
 		return $b['name'] == 'MSIE';
 	}
+	
+	/**
+	 * Check if this is a windows server
+	 * 
+	 * @return boolean
+	 */
+	public static function isWindows(){
+		return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+	}
 
 	/**
 	 * Get a link to Google maps for a given address

@@ -27,7 +27,8 @@ GO.files.FilesContextMenu = function(config)
 					handler: function(){
 						//this.fireEvent('download', this, this.records);
 						
-						window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.records[0].data.id;
+						//window.location.href=GO.settings.modules.files.url+'download.php?mode=download&id='+this.records[0].data.id;
+						GO.files.openFile(this.records[0]);
 					},
 					scope: this
 				});
@@ -37,13 +38,7 @@ GO.files.FilesContextMenu = function(config)
 					text: GO.files.lang.downloadGOTA,
 					cls: 'x-btn-text-icon',
 					handler: function(){
-						if(!deployJava.isWebStartInstalled('1.6.0'))
-						{
-							Ext.MessageBox.alert(GO.lang.strError, GO.lang.noJava);
-						}else
-						{		
-							window.location.href=GO.settings.modules.gota.url+'jnlp.php?id='+this.records[0].data.id;
-						}
+						GO.files.editFile(this.records[0].data.id);
 					},
 					scope: this
 				});
@@ -177,7 +172,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 	{ 	
 		if(clickedAt)
 			this.clickedAt = clickedAt;
-			
+	
 		var extension = '';
 		this.records = records;
 		if(records.length=='1')
@@ -202,7 +197,7 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 		 			this.downloadButton.hide();
 		 			this.gotaButton.hide();
 		 			this.decompressButton.hide();
-		 			this.compressButton.show();
+		 			clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 					this.downloadLinkButton.hide();
 		 			
 		 		break;
@@ -210,14 +205,14 @@ Ext.extend(GO.files.FilesContextMenu, Ext.menu.Menu,{
 		 		default:
 		 			this.downloadButton.show();
 		 			this.gotaButton.show();
-		 			this.compressButton.show();	
+		 			clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 		 			this.decompressButton.hide();
 					this.downloadLinkButton.show();
 		 		break;	 		
 		 	}
 		}else
 		{
-			this.compressButton.show();
+			clickedAt == 'tree' ? this.compressButton.hide() : this.compressButton.show();
 			this.decompressButton.hide();
 			this.downloadButton.hide();
 		 	this.gotaButton.hide();
