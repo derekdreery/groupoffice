@@ -1396,7 +1396,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			}
 			if (config.link_config) {
 				this.link_config = config.link_config;
-				if (config.link_config.type_id) {
+				if (config.link_config.type_id && typeof(this.selectLinkField)!='undefined') {
 					this.selectLinkField.setValue(config.link_config.type_id);
 					this.selectLinkField.setRemoteText(config.link_config.text);
 				}
