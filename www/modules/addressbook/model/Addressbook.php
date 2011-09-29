@@ -62,7 +62,7 @@
 		
 		if(!isset($this->shared_acl))
 			$this->shared_acl=0;
-		
+			
 		return parent::beforeSave();
 	}
 	
@@ -73,5 +73,5 @@
 		
 		return parent::beforeDelete();
 	}
-	
+
 }

@@ -13,7 +13,7 @@ GO.addressbook.ManageAddressbooksGrid = function(config){
 	
 	config.paging=true;
 
-	var companiesColumnModel =  new Ext.grid.ColumnModel({
+	var columnModel =  new Ext.grid.ColumnModel({
 		defaults:{
 			sortable:true
 		},
@@ -24,13 +24,13 @@ GO.addressbook.ManageAddressbooksGrid = function(config){
 	  },
 	  {
 	  	header: GO.addressbook.lang['cmdOwner'], 
-	  	dataIndex: 'owner' ,
+	  	dataIndex: 'user_name' ,
 	  	sortable: false
 	  }
 	]
 	});
 	
-	config.cm=companiesColumnModel;
+	config.cm=columnModel;
 	
 	config.view=new Ext.grid.GridView({
 		autoFill: true,
