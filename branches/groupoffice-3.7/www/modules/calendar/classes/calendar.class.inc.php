@@ -1923,6 +1923,8 @@ class calendar extends db {
 
 
 	function delete_event($event_id, $delete_related=true) {
+		global $GO_EVENTS;
+		
 		if($event = $this->get_event($event_id)) {
 			$event_id = $this->escape($event_id);
 
@@ -1976,6 +1978,8 @@ class calendar extends db {
 			if(isset($GO_MODULES->modules['customfields']) && $GO_MODULES->modules['customfields']['read_permission']) {
 				$this->query("DELETE FROM cf_1 WHERE link_id = ?", 'i', array($event_id));
 			}
+			
+			$GO_EVENTS->fire_event('calendar_delete_event', array($event));
 		}
 	}
 
