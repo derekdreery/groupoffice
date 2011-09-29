@@ -42,9 +42,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	
 	private $_response;
 	
-	private $_sortFieldsAliases=array();
 
-	private $_modelFormatType='formatted';
 	
 	/**
 	 * Create a new grid with column model and query result
@@ -170,13 +168,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
     }
 	}
 	
-	/**
-	 * Set the format type used in the GO_Base_Db_ActiveRecord
-	 * @param string $type @see GO_Base_Db_ActiveRecord::getAttributes()
-	 */
-	public function setModelFormatType($type){
-		$this->_modelFormatType=$type;
-	}
+
 
   /**
    * Returns the data for the grid.
@@ -203,7 +195,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		//SQLSTATE[HY000]: General error: 2014 Cannot execute queries while other unbuffered queries are active. Consider using PDOStatement::fetchAll(). Alternatively, if your code is only ever going to run against mysql, you may enable query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute.
 		
 		while ($model = $this->_stmt->fetch()) {
-			$this->_response['results'][] = $this->formatModelForStore($model);
+			$this->_response['results'][] = $this->getColumnModel()->formatModel($model);
 		}
 		$this->_response['total']=$this->_stmt->foundRows;
 
@@ -211,72 +203,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
     return $this->_response;
   }
   
-  /**
-   *
-   * @param GO_Base_Db_ActiveRecord $model
-   * @return array formatted grid row key value array
-   */
-  public function formatModelForStore($model){
-		
-		$oldLevel = error_reporting(E_ERROR);	//suppress errors in the eval'd code
-    
-    $array = $model->getAttributes($this->_modelFormatType);
-    
-    /**
-     * The extract function makes the array keys available as variables in the current function scope.
-     * we need this for the eval functoion.
-     * 
-     * example $array = array('name'=>'Pete'); becomes $name='Pete';
-     * 
-     * In the column definition we can supply a format like this:
-     * 
-     * 'format'=>'$name'
-     */
-    extract($array);
-		
-    
-    $formattedRecord = array();
-		$columns = $this->_columnModel->getColumns();
-		
-    foreach($columns as $colName=>$attributes)
-    {     
-      if(!is_array($attributes)){
-        $colName=$attributes;
-        $attributes=array();
-      }
-      
-      if(isset($attributes['extraVars'])){
-        extract($attributes['extraVars']);
-      }     
-      
-      if(isset($attributes['format'])){
-				$result = '';
-        eval('$result='.$attributes['format'].';');
-        $formattedRecord[$colName]=$result;
-      }elseif(isset($array[$colName]))
-        $formattedRecord[$colName]=$array[$colName];
-    }
-		
-		error_reporting($oldLevel);
-		
-		if(isset($this->_formatRecordFunction)){
-			$formattedRecord=call_user_func($this->_formatRecordFunction, $formattedRecord, $model, $this);
-		}
-    
-    return $formattedRecord;
-  }
-	
-	/**
-	 * Set a function that will be called with call_user_func to format a record.
-	 * The function will be called with parameters:
-	 * 
-	 * Array $formattedRecord, GO_Base_Db_ActiveRecord $model, GO_Base_Data_Store $store
-	 * 
-	 * @param mixed $func Function name string or array($object, $functionName)
-	 */
-	public function setFormatRecordFunction($func){
-		$this->_formatRecordFunction=$func;
-	}
+  
 
   /**
    * Returns a set of default parameters for use with a grid.

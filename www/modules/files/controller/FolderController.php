@@ -294,7 +294,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	private function _listShares() {
 
 		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
-		$store->setFormatRecordFunction(array($this, 'formatListRecord'));
+		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatListRecord'));
 		$findParams = $store->getDefaultParams();
 		$stmt = GO_Files_Model_Folder::model()->findShares($findParams);
 		$store->setStatement($stmt);
@@ -334,7 +334,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		}
 
 
-		$store->setFormatRecordFunction(array($this, 'formatListRecord'));
+		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatListRecord'));
 		$findParams = $store->getDefaultParams(array(
 				'ignoreAcl' => true
 						));

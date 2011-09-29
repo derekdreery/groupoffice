@@ -254,7 +254,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		return $store;
 	}
 	
-  
   /**
    * Override this function to format columns if necessary.
    * You can also use formatColumn to add extra columns
@@ -271,9 +270,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
    */
   public function actionStore($params){	
     $modelName = $this->model;  
-		
-		
-    
+
     $store = new GO_Base_Data_Store($this->getStoreColumnModel());		    
 		$store->processDeleteActions($params, $modelName);
 		
@@ -281,11 +278,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$response = $this->beforeStore($response, $params, $store);
 		
-		
 		if($multiSelectProperties =$this->getStoremultiSelectProperties()){
-			
-			
-			
+
 			if(isset($params[$multiSelectProperties['requestParam']])){
 				$this->multiselectIds=json_decode($params[$multiSelectProperties['requestParam']], true);
 				GO::config()->save_setting($multiSelectProperties['requestParam'], implode(',',$this->multiselectIds), GO::session()->values['user_id']);
@@ -308,8 +302,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			//Do a check if the permission model needs to be checked. If we don't ignore the acl and the model is the same as the model of this controller
 			//it's not needed.
 			if(isset($multiSelectProperties['permissionsModel']) && $multiSelectProperties['permissionsModel']!=$this->model && empty($storeParams['ignoreAcl'])){
-				
-		
 				
 				$titleArray = array();
 				foreach($this->multiselectIds as $id){
@@ -414,7 +406,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				}
 			}
 			
-			
 			foreach($categories as $category){
 				if(count($category['fields']))
 					$response['data']['customfields'][]=$category;
@@ -494,7 +485,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			}
 		}
 
-
 		if (isset(GO::modules()->comments)){
 			$stmt = GO_Comments_Model_Comment::model()->find(array(
 				'where'=>'model_id=:model_id AND model_type_id=:model_type_id',
@@ -502,7 +492,6 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				'limit'=>5
 			));
 
-			
 			$store = GO_Base_Data_Store::newInstance(GO_Comments_Model_Comment::model());			
 			$store->setStatement($stmt);
 			
@@ -562,38 +551,54 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param Array $params 
 	 */
 	public function actionExport($params) {
-		
+		$incHead = false;
+
 		if(!empty($params['documentTitle']))
 			$title = $params['documentTitle'];
 		else
 			$title = GO::session()->values[$params['name']]['name'];
 		
+		if(!empty($params['includeHeaders']))
+			$incHead = true;
+		
 		if(!empty($params['type']))
-			$export = new $params['type']($title,false);
+			$export = new $params['type']($title,$incHead);
 		else
-			$export = new GO_Base_Export_ExportCSV($title,false); // The default Export is the CSV outputter.
+			$export = new GO_Base_Export_ExportCSV($title,$incHead); // The default Export is the CSV outputter.
 		
 		$filter = GO::session()->values[$params['name']]['findParams'];
 		$model = GO::getModel(GO::session()->values[$params['name']]['model']);
 		
+		$filter['limit'] = 0; // Let the export handle all found records without a limit
+		
 		$columnModel = new GO_Base_Data_ColumnModel();
 		$columnModel->setColumnsFromModel($model);
+
 		$columnModel = $this->formatColumns($columnModel);
 		
+		if(!empty($params['columns'])) {		
+			
+			$requestedCols = explode(',',$params['columns']);
+			
+			$columns = $columnModel->getColumns();
+
+			foreach($columns as $colName=>$attr) {
+				if(!in_array($colName, $requestedCols)){
+					$columnModel->removeColumn($colName);
+				}
+			}
+		}
+		
+		$header = array();				
+		foreach($columnModel->getColumns() as $colName=>$attr)
+			$header[] = $attr['label'];
+		
+		$export->write($header);
 		
 		$stmt = $model->find($filter);
 		
-		while($obj = $stmt->fetch()) {
-			if(!empty($params['showHeader'])) {
-				$attr = $obj->getAttributes('formatted');
-				$header = array();				
-				foreach($attr as $attribute=>$value)
-					$header[] = $model->getAttributeLabel($attribute);
-				$export->write($header);
-				$params['showHeader']=false;
-			}
-			$export->write($obj->getAttributes());
-		}
+		while($obj = $stmt->fetch()) 
+			$export->write($columnModel->formatModel($obj));
 		
 		$export->endFlush();
 	}

@@ -123,7 +123,7 @@ GO.tasks.TasksPanel = function(config)
 
 		if(GO.customfields)
 		{
-			GO.customfields.addColumns(12, fields);
+			GO.customfields.addColumns("GO_Tasks_Model_Task", fields);
 		}
 
 		var reader = new Ext.data.JsonReader({
