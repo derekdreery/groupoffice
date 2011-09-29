@@ -4,4 +4,4 @@ require_once($root.'go/GO.php');
 GO::init();
 
 $router = new GO_Base_Router();
-$router->run();
+$router->runController();
