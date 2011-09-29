@@ -69,7 +69,7 @@ function load_standard_info_panel_items(&$response, $link_type) {
 	}
 
 
-	if (/*!in_array('comments', $hidden_sections) && */isset($GO_MODULES->modules['comments']) && !isset($response['data']['comments'])) {
+	if (/*!in_array('comments', $hidden_sections) && */isset($GO_MODULES->modules['comments']) && empty($response['data']['comments'])) {
 		require_once ($GO_MODULES->modules['comments']['class_path'] . 'comments.class.inc.php');
 		$comments = new comments();
 
