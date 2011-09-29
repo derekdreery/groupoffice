@@ -127,7 +127,7 @@ class tasks extends db
 		if(isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
 			$db = new db();
 			echo "Deleting non existing custom field records".$line_break.$line_break;
-			$db->query("delete from cf_12 where link_id not in (select id from ta_lists);");
+			$db->query("delete from cf_12 where link_id not in (select id from ta_tasks);");
 		}
 		echo 'Done'.$line_break.$line_break;
 	}
