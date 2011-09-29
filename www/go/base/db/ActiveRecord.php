@@ -162,7 +162,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	private $_modifiedAttributes=array();
 	
-	private $_debugSql=true;
+	private $_debugSql=false;
 	
 	
 	/**
