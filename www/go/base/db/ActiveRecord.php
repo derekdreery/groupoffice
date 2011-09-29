@@ -497,11 +497,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	public function makeAttributeUnique($attributeName){
 		$x = 1;
 		
-		$value = $this->$attributeName;
-		
-		while($this->findSingleByAttribute($attributeName, $value))
+		$origValue = $value =  $this->$attributeName;
+
+		while($existing = $this->findSingle(array(
+				'criteriaObject'=>  GO_Base_Db_FindCriteria::newInstance()
+					->addCondition($attributeName, $value)
+					->addCondition($this->primaryKey(), $this->pk, '!=')
+		)))
 		{			
-			$value = $value.' ('.$x.')';
+			
+			$value = $origValue.' ('.$x.')';
 			$x++;
 		}
 		$this->$attributeName=$value;

@@ -404,7 +404,14 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	private function _checkExistingModelFolder($model, $folder, $mustExist=false) {
 
+		
 		$files_folder_id = 0;
+		
+		if(!$folder->fsFolder->exists())
+		{
+			$folder->delete();
+			return 0;
+		}
 
 		//todo test this:	
 //		if(!isset($model->acl_id) && empty($params['mustExist'])){
@@ -435,6 +442,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 							dirname($newPath), true);
 
 			$folder->name = GO_Base_Fs_File::utf8Basename($newPath);
+			$folder->makeAttributeUnique('name');
 			$folder->folder_id = $destinationFolder->id;
 			$folder->systemSave = true;
 			$folder->save();
