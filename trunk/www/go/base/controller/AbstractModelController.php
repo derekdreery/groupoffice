@@ -220,6 +220,14 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	protected function getStoreParams($params) {
 		return array();
 	}
+	
+	/**
+	 * Override to pass an array of columns to exclude in the store.
+	 * @return array 
+	 */
+	protected function getStoreExcludeColumns(){
+		return array();
+	}
 
 	/**
 	 * Override this function to format the grid record data.
@@ -230,7 +238,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 */
 	protected function getStoreColumnModel() {
 		$cm =  new GO_Base_Data_ColumnModel();
-		$cm->setColumnsFromModel(GO::getModel($this->model));	
+		$cm->setColumnsFromModel(GO::getModel($this->model), $this->getStoreExcludeColumns());	
 		return $cm;
 	}
 	
@@ -335,6 +343,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$response = array_merge($response, $store->getData());
 		
+		$response['success']=true;
+		
     $response = $this->afterStore($response, $params, $store, $storeParams);		
 		
 		//this parameter is set when this request is the first request of the module.
@@ -342,6 +352,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		if(isset($params['firstRun']) && is_array($params['firstRun'])){
 			$response=array_merge($response, $params['firstRun']);
 		}
+		
 		
 		return $response;
   }	

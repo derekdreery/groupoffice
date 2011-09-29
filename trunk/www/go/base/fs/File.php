@@ -91,8 +91,22 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * 
 	 * @return String  
 	 */
-	public function getContents(){
+	public function contents(){
 		return file_get_contents($this->path);
+	}
+	
+	
+	public static function getFileTypeDescription($extension) {		
+		$lang = GO::t($extension,'base','filetypes');
+		
+		if($lang==$extention)
+			$lang = GO::t('unknown','base','filetypes');
+		
+		return $lang;
+	}
+	
+	public function typeDescription(){
+		return self::getFileTypeDescription($this->extension());
 	}
 	
 	
@@ -215,10 +229,17 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * @return GO_Base_Fs_File 
 	 */
 	public static function moveUploadedFiles($uploadedFileArray, $destinationFolder){
+		
+		if(!is_array($uploadedFileArray['tmp_name'])){
+			$uploadedFileArray['tmp_name']=array($uploadedFileArray['tmp_name']);
+			$uploadedFileArray['name']=array($uploadedFileArray['name']);
+		}
+		
 		$files = array();
 		for($i=0;$i<count($uploadedFileArray['tmp_name']);$i++){
 			if (is_uploaded_file($uploadedFileArray['tmp_name'][$i])) {
 				$destinationPath = $destinationFolder->path().'/'.$uploadedFileArray['name'][$i];
+				echo $destinationPath;
 				if(move_uploaded_file($uploadedFileArray['tmp_name'][$i], $destinationPath)){		
 					$file = new GO_Base_Fs_File($destinationPath);
 					$file->setDefaultPermissions();
