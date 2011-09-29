@@ -423,7 +423,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 				cls:'go-form-panel',
 				waitMsgTarget:true,
 				items:[this.addressbook_id_field = new Ext.form.Hidden({
-					name: 'addressbook_id',
+					name: 'id',
 					value: this.addressbook_id
 				}),{
 					xtype:'fieldset',
@@ -466,19 +466,20 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 				}]
 
 			});
-			for (var i=0; i<GO.customfields.types['2'].panels.length; i++) {
+
+			for (var i=0; i<GO.customfields.types['GO_Addressbook_Model_Contact'].panels.length; i++) {
 				this.contactCfCategoriesFieldset.add(new Ext.form.Checkbox({
-						name: 'cat_2_'+GO.customfields.types['2'].panels[i].category_id,
+						name: 'cat_2_'+GO.customfields.types['GO_Addressbook_Model_Contact'].panels[i].category_id,
 						hideLabel: true,
-						boxLabel: GO.customfields.types['2'].panels[i].title,
+						boxLabel: GO.customfields.types['GO_Addressbook_Model_Contact'].panels[i].title,
 						checked: false
 					}));
 			}
-			for (var i=0; i<GO.customfields.types['3'].panels.length; i++) {
+			for (var i=0; i<GO.customfields.types['GO_Addressbook_Model_Company'].panels.length; i++) {
 				this.companyCfCategoriesFieldset.add(new Ext.form.Checkbox({
-						name: 'cat_3_'+GO.customfields.types['3'].panels[i].category_id,
+						name: 'cat_3_'+GO.customfields.types['GO_Addressbook_Model_Company'].panels[i].category_id,
 						hideLabel: true,
-						boxLabel: GO.customfields.types['3'].panels[i].title,
+						boxLabel: GO.customfields.types['GO_Addressbook_Model_Company'].panels[i].title,
 						checked: false
 					}));
 			}
@@ -745,11 +746,10 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 	{
 		this.propertiesPanel.form.submit({
 			waitMsg:GO.lang.waitMsgSave,
-			url:GO.settings.modules.addressbook.url+ 'action.php',
+			url:GO.url('addressbook/addressbook/Submit'),
 			params:
 			{
-				task : 'save_addressbook',
-				addressbook_id : this.addressbook_id
+				id : this.addressbook_id
 			},
 			success:function(form, action){
 				
