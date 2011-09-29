@@ -53,8 +53,27 @@ class GO_Base_Router{
 			//exit();
 		}
 		
+		if(!empty($_POST['multirequest'])){
+			
+			echo "{\n";
+			
+			foreach($_POST['multirequest'] as $responseIndex=>$params){
+				ob_start();				
+				$this->_getControllerByRoute($params);	
+				echo '"'.$responseIndex.'" : '.ob_get_contents();
+			}
+			ob_end_clean();
+			echo "}\n";
+			
+		}else
+		{	
+			$this->_runControllerByRoute($_REQUEST);			
+		}
+	}	
+	
+	private function _runControllerByRoute($params){
 		
-		$r = !empty($_REQUEST['r']) ? explode('/', $_REQUEST['r']) :array();
+		$r = !empty($params['r']) ?  explode('/', $params['r']): array();		
 		
 		$first = isset($r[0]) ? ucfirst($r[0]) : 'Core';
 		
@@ -78,13 +97,9 @@ class GO_Base_Router{
 			$controllerClass.=ucfirst($module).'_';
 		
 		$controllerClass.='Controller_'.$controller;
-	
-		//$output=empty($_REQUEST['output']) ? 'json' : $_REQUEST['output'];
 		
-		$controller = new $controllerClass;
+		$controller = new  $controllerClass;
 		$controller->init($module);
-		$response = $controller->run($action);	
-//		if(isset($response))
-//			GO::output($response);
-	}	
+		$controller->run($action, $params);		
+	}
 }
