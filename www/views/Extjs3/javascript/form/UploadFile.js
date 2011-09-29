@@ -60,6 +60,8 @@ Ext.extend(GO.form.UploadFile, Ext.BoxComponent, {
 		tag: "div"
 	},
 	fileCls: 'filetype',
+	
+	inputName: 'attachments',
 
 	/**
 	 * @cfg {Number} The maximum number of files that can be selected
