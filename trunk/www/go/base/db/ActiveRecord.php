@@ -1349,8 +1349,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 				case 'date':
 					$formatted[$key] = GO_Base_Util_Date::to_db_date($value);
 					break;
-
+				
+				
 				default:
+					if($this->columns[$key]['type']==PDO::PARAM_INT)
+						$value = intval($value);
+					
 					$formatted[$key] = $value;
 					break;
 			}
@@ -1523,10 +1527,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 	public function validate(){
 		foreach($this->columns as $field=>$attributes){
-			
-			if($attributes['type']==PDO::PARAM_INT && isset($this->_attributes[$field]))
-					$this->_attributes[$field]=intval($this->_attributes[$field]);
-				
 			
 			if(!empty($attributes['required']) && empty($this->_attributes[$field])){
 				throw new Exception($field.' is required');
