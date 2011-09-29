@@ -132,7 +132,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * 
 	 * @param string $action 
 	 */
-	public function run($action=''){
+	public function run($action='', $params){
 
 		try {
 			if(!$this->checkPermissions($action)){
@@ -166,12 +166,12 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 //			if($method->getNumberOfParameters()>0)
 //				$this->runWithParams($method, $_REQUEST);
 //			else
-				$response =  $this->$methodName($_REQUEST);
+				$response =  $this->$methodName($params);
 
 				if(isset($response))
 					$this->render($action, $response);
 				
-				$this->fireEvent($methodName, array(&$this, &$_REQUEST, &$response));
+				$this->fireEvent($methodName, array(&$this, &$params, &$response));
 				
 				return $response;
 		} catch (Exception $e) {
