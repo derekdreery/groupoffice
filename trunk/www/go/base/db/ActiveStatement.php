@@ -71,7 +71,7 @@ class GO_Base_Db_ActiveStatement extends PDOStatement {
 				try{
 					$m->$function();
 				}catch(Exception $e){
-					GO::output($e->getMessage());
+					echo $e->getMessage();
 				}
 			}
 	}
