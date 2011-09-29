@@ -48,3 +48,7 @@ VALUES (
 
 
 $updates[201109271656][]="ALTER TABLE `fs_folders` CHANGE `cm_state` `cm_state` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL;";
+$updates[201109271656][]="ALTER TABLE `fs_templates` DROP `acl_write`";
+$updates[201109271656][]="ALTER TABLE `fs_templates` CHANGE `content` `content` MEDIUMBLOB NOT NULL DEFAULT ''";
+$updates[201109271656][]="ALTER TABLE `fs_templates` CHANGE `extension` `extension` CHAR( 4 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates[201109271656][]="ALTER TABLE `fs_templates` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";

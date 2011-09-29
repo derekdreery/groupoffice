@@ -293,7 +293,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	private function _listShares() {
 
-		$store = new GO_Base_Data_Store();
+		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
 		$store->setFormatRecordFunction(array($this, 'formatListRecord'));
 		$findParams = $store->getDefaultParams();
 		$stmt = GO_Files_Model_Folder::model()->findShares($findParams);
@@ -443,7 +443,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $folder->id;
 	}
 
-	public function _createNewModelFolder($model) {
+	private function _createNewModelFolder($model) {
 
 		$f = new GO_Base_Fs_Folder(GO::config()->file_storage_path . $model->buildFilesPath());
 		$fullPath = $f->appendNumberToNameIfExists();
@@ -506,8 +506,6 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
 		$tmpFolder->delete();
 		$tmpFolder->create();
-
-		GO::debug($_FILES['attachments']);
 
 		$files = GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $tmpFolder);
 		GO::session()->values['files']['uploadqueue'] = array();

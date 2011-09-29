@@ -1062,76 +1062,66 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 		this.newMenu.removeAll();
 		
-		Ext.Ajax.request({
-			url: GO.settings.modules.files.url+'json.php',
-			params: {
-				task: 'templates'
-			},
-			callback: function(options, success, response)
+		GO.request({
+			url: 'files/template/store',
+			success: function(response, options, result)
 			{
 
-				if(!success)
+				this.newMenu.add( {
+					iconCls: 'btn-add-folder',
+					text: GO.lang.folder,
+					cls: 'x-btn-text-icon',
+					handler: this.promptNewFolder,
+					scope: this
+				});
+			
+				if(result.results.length)
 				{
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-				}else
-				{
-					this.newMenu.add( {
-						iconCls: 'btn-add-folder',
-						text: GO.lang.folder,
-						cls: 'x-btn-text-icon',
-						handler: this.promptNewFolder,
-						scope: this
-					});
-					
-					var responseParams = Ext.decode(response.responseText);
-					
-					if(responseParams.results.length)
+					this.newMenu.add('-');
+					for(var i=0;i<result.results.length;i++)
 					{
-						this.newMenu.add('-');
-						for(var i=0;i<responseParams.results.length;i++)
-						{
-							var template = responseParams.results[i];
-							
-							var menuItem = new Ext.menu.Item({
-								iconCls:'filetype filetype-'+template.extension,
-								text: template.name,
-								template_id:template.id,
-								handler: function(item){
-									
-									this.createFileFromTemplate(item.template_id);
-								},
-								scope:this	
-							});
-							
-							this.newMenu.add(menuItem);						
-						}						
-					}
-					
-					if(GO.settings.modules.files.write_permission)
-					{
-						this.newMenu.add('-');
-						
-						this.newMenu.add({
-							iconCls: 'btn-templates',
-							text: GO.files.lang.manageTemplates,
-							cls: 'x-btn-text-icon',
-							handler: function(){
-								if(!this.templatesWindow)
-								{
-									this.templatesWindow = new GO.files.TemplateWindow();
-									this.templatesWindow.gridStore.on('datachanged', function(){
-										if(!this.templatesWindow.firstLoad)
-										{
-											this.buildNewMenu();
-										}
-									}, this);
-								}
-								this.templatesWindow.show();
+						var template = result.results[i];
+
+						var menuItem = new Ext.menu.Item({
+							iconCls:'filetype filetype-'+template.extension,
+							text: template.name,
+							template_id:template.id,
+							handler: function(item){
+
+								this.createFileFromTemplate(item.template_id);
 							},
-							scope: this					
+							scope:this	
 						});
-					}
+
+						this.newMenu.add(menuItem);						
+					}						
 				}
+
+				if(GO.settings.modules.files.write_permission)
+				{
+					this.newMenu.add('-');
+
+					this.newMenu.add({
+						iconCls: 'btn-templates',
+						text: GO.files.lang.manageTemplates,
+						cls: 'x-btn-text-icon',
+						handler: function(){
+							if(!this.templatesWindow)
+							{
+								this.templatesWindow = new GO.files.TemplateWindow();
+								this.templatesWindow.gridStore.on('datachanged', function(){
+									if(!this.templatesWindow.firstLoad)
+									{
+										this.buildNewMenu();
+									}
+								}, this);
+							}
+							this.templatesWindow.show();
+						},
+						scope: this					
+					});
+				}
+
 			},
 			scope: this		
 		});		
@@ -1149,24 +1139,31 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 						this.createFileFromTemplate(template_id, filename);
 				},this);
 		}else
-		{
+		{			
 			var store = this.getActiveGridStore();
 			
-			store.baseParams['template_id']=template_id;
-			store.baseParams['template_name']=filename;
-			
-			store.load({
-				callback: function(){
-					if(store.reader.jsonData.new_id)
-					{
-						var record = store.getById('f:'+store.reader.jsonData.new_id);
-						GO.files.openFile(record);
-					}
+			GO.request({
+				url: 'files/template/createFile',
+				params:{
+					template_id:template_id,
+					folder_id:this.folder_id,
+					filename: filename
 				},
-				scope: this
+				success: function(response, options, result)
+				{
+					store.load({
+						callback: function(){
+							if(result.id)
+							{
+								//var record = store.getById('f:'+result.id);
+								GO.files.editFile(result.id);
+							}
+						},
+						scope: this
+					});
+				},
+				scope:this
 			});
-			delete store.baseParams['template_id'];
-			delete store.baseParams['template_name'];
 		}		
 	},
 	
