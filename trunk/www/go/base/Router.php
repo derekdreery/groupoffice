@@ -45,33 +45,18 @@ class GO_Base_Router{
 	 * )
 	 * )
 	 */
-	public function run(){		
+	
+	
+	public function runController($params=false){
+		
+		if(!$params)
+			$params=$_REQUEST;
 		
 		if(!GO::config()->debug && !GO::config()->disable_security_token_check && GO::user() && $_REQUEST['security_token']!=GO::session()->values['security_token']){
 			//GO::session()->logout();			
 			trigger_error('Fatal error: Security token mismatch. Possible cross site request forgery attack!', E_USER_ERROR);
 			//exit();
 		}
-		
-		if(!empty($_POST['multirequest'])){
-			
-			echo "{\n";
-			
-			foreach($_POST['multirequest'] as $responseIndex=>$params){
-				ob_start();				
-				$this->_getControllerByRoute($params);	
-				echo '"'.$responseIndex.'" : '.ob_get_contents();
-			}
-			ob_end_clean();
-			echo "}\n";
-			
-		}else
-		{	
-			$this->_runControllerByRoute($_REQUEST);			
-		}
-	}	
-	
-	private function _runControllerByRoute($params){
 		
 		$r = !empty($params['r']) ?  explode('/', $params['r']): array();		
 		

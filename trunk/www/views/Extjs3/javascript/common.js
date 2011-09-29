@@ -22,6 +22,7 @@ GO.url = function(relativeUrl){
 	return BaseHref+'index.php?r='+relativeUrl+'&security_token='+GO.securityToken;
 }
 
+
 /**
  * Generic request function. Must handle exportVariables in responses.
  * 
