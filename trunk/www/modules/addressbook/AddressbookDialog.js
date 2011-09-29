@@ -545,7 +545,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 			//this.propertiesPanel.form.findField('name').setValue(this.record.data.name);
 			//this.selectUser.setValue(this.record.data.user_id);
 			this.propertiesPanel.form.setValues(this.record.data);
-			this.selectUser.setRemoteText(this.record.data.owner);
+			this.selectUser.setRemoteText(this.record.data.user_name);
 			
 			this.addressbookImportPanel.setDisabled(false);
 			this.addressbookExportPanel.setDisabled(false);
