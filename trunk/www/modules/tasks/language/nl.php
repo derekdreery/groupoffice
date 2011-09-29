@@ -73,3 +73,4 @@ $l["active"]='Actieve';
 $l["globalsettings_templatelabel"]='Naam template';
 $l["globalsettings_allchangelabel"]='Bestaande veranderen?';
 $l["globalsettings_renameall"]= 'Weet u zeker dat u alles wilt hernoemen?';
+

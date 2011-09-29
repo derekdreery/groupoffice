@@ -3,12 +3,11 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	
 	protected $model = 'GO_Base_Model_Module';
 	
-	protected function prepareStore(GO_Base_Data_Store $store){
-		
+	protected function prepareStore(GO_Base_Data_Store $store){		
 			
-		$store->setFormatRecordFunction(array('GO_Modules_Controller_Module', 'formatRecord'));
+		$store->getColumnModel()->setFormatRecordFunction(array('GO_Modules_Controller_Module', 'formatRecord'));
 		
-    return parent::prepareStore(GO_Base_Data_Store $store);
+    return parent::prepareStore($store);
 	}
 	
 	public static function formatRecord($record, $model, $store){

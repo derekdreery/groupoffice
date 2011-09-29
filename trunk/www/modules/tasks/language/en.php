@@ -74,3 +74,11 @@ $l['tasklistChanged']="* Tasklist changed from '%s' to '%s'";
 $l['statusChanged']="* Status changed from '%s' to '%s'";
 $l['multipleSelected']='Multiple tasklists selected';
 $l['incomplete_delete']='You don\'t have permission to delete all selected tasks';
+
+$l["taskName"]='Name';
+$l["taskCtime"]='Created at';
+$l["taskMtime"]='Modified at';
+$l["taskDue_time"]='Due';
+$l["taskStatus"]='Status';
+$l["taskCompletion_time"]='Completed at';
+$l["taskProject_name"]='Project';

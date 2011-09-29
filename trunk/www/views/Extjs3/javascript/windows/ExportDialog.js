@@ -16,6 +16,7 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 	documentTitle : '',
 	name : '',
 	url : '',
+	colModel : '',
 
 	initComponent : function(){
 
@@ -28,6 +29,13 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 		this.hiddenUrl = new Ext.form.Hidden({
 			name:'url'
 		});
+		this.hiddenColumns = new Ext.form.Hidden({
+			name:'columns'
+		});
+		this.hiddenHeaders = new Ext.form.Hidden({
+			name:'headers'
+		});
+	
 	
 		this.radioGroup = new Ext.form.RadioGroup({
 			fieldLabel : 'Type',
@@ -39,6 +47,11 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 		this.includeHidden = new Ext.form.Checkbox({
 			fieldLabel : 'Export hidden columns too',
 			name       : 'includeHidden'
+		});
+		
+		this.includeHeaders = new Ext.form.Checkbox({
+			fieldLabel  : 'Export headers too',
+			name				: 'includeHeaders'
 		});
 		
 		this.exportOrientation = new Ext.form.ComboBox({
@@ -61,6 +74,8 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 			displayField: 'displayText'
 		});
 		
+		this.includeHeaders.setValue(true);
+		
 		this.formPanel = new Ext.form.FormPanel({
 			url:GO.url(this.url),
 			standardSubmit:true,
@@ -72,10 +87,13 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 			items: [
 				this.radioGroup,
 				this.includeHidden,
+				this.includeHeaders,
 				this.exportOrientation,
 				this.hiddenDocumentTitle,
 				this.hiddenName,
-				this.hiddenUrl
+				this.hiddenUrl,
+				this.hiddenColumns,
+				this.hiddenHeaders
 			]
 		});
 		
@@ -106,7 +124,6 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 	},
 	
 	show : function () {
-					
 		if(!this.rendered){
 			
 			this.hiddenDocumentTitle.setValue(this.documentTitle);
@@ -151,6 +168,26 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 	submitForm : function(hide) {
 		this.formPanel.form.getEl().dom.target='_blank';
 		this.formPanel.form.el.dom.target='_blank';
+		
+		// Get the columns that needs to be exported from the grid.
+		var columns = [];
+		var headers = [];
+			
+		var exportHidden = this.includeHidden.getValue();
+
+		if (this.colModel) {
+			for (var i = 0; i < this.colModel.getColumnCount(); i++) {
+				var c = this.colModel.config[i];
+
+				if ((exportHidden || !c.hidden) && !c.hideInExport)
+					columns.push(c.dataIndex);
+					headers.push(c.header);
+			}
+		}
+		
+		this.hiddenColumns.setValue(columns.join(','));
+		this.hiddenHeaders.setValue(headers.join(','));
+
 		this.formPanel.form.submit(
 		{
 			url:GO.url(this.url),
