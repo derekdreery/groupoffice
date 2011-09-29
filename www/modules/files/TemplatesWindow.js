@@ -13,15 +13,11 @@
  
 GO.files.TemplateWindow = function(config){	
 	this.gridStore = new GO.data.JsonStore({
-		url: GO.settings.modules.files.url+'json.php',
+		url: GO.url('files/template/store'),
 		baseParams: {
-			'task': 'templates',
-			'writable_only': 'true'
+			'permissionLevel': GO.permissionLevels.write
 		},
-		root: 'results',
-		totalProperty: 'total',
-		id: 'id',
-		fields:['id','name', 'type', 'grid_display'],
+		fields:['id','name', 'type', 'extension'],
 		remoteSort:true
 	});
 	
@@ -41,7 +37,10 @@ GO.files.TemplateWindow = function(config){
 		store: this.gridStore,
 		columns:[{
 			header:GO.lang['strName'],
-			dataIndex: 'grid_display',
+			dataIndex: 'name',
+			renderer:function(v, metaData,record){
+				return '<div class="go-grid-icon filetype filetype-'+record.get("extension")+'">'+v+'</div>';
+			},
 			sortable:true
 		},{
 			header:GO.lang.strType,
@@ -104,13 +103,12 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 		if(!this.templateDialog)
 		{			
 			this.uploadFile = new GO.form.UploadFile({
-				inputName : 'file',
 				max: 1
 			});
 			
 			this.downloadButton = new Ext.Button({
 				handler: function(){
-					document.location.href = 'download_template.php?template_id=' + this.template_id;
+					document.location.href = GO.url('files/template/download&id='+this.template_id);
 				},
 				disabled: true,
 				text: GO.files.lang.downloadTemplate,
@@ -220,10 +218,9 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 	loadTemplate : function()
 	{
 		this.formPanel.form.load({
-			url: GO.settings.modules.files.url+'json.php', 
+			url: GO.url('files/template/load'), 
 			params: {
-				template_id: this.template_id,
-				task: 'template'
+				id: this.template_id
 			},
 			
 			success: function(form, action) {
@@ -239,14 +236,13 @@ Ext.extend(GO.files.TemplateWindow,Ext.Window, {
 	{
 		this.formPanel.form.submit({
 			waitMsg:GO.lang.waitMsgSave,
-			url:GO.settings.modules.files.url+'action.php',
+			url:GO.url('files/template/submit'),
 			params:
 			{
-				task : 'save_template',
-				template_id: this.template_id
+				id: this.template_id
 			},
 			success:function(form, action){
-				this.template_id = action.result.template_id;
+				this.template_id = action.result.id;
 				this.gridStore.reload();
 
 				this.uploadFile.clearQueue();
