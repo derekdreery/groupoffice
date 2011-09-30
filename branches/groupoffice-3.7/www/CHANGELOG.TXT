@@ -1,6 +1,7 @@
 30-09-2011 3.7.31
 - Updated French and Russian.
 - Fixed several small bugs.
+- Added addressbook column to companies grid.
 
 26-09-2011 3.7.30
 - Various small bugfixes.
