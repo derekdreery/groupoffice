@@ -97,7 +97,7 @@ class GO_Base_Db_FindParams{
 	 * @return GO_Base_Db_FindParams 
 	 */
 	public function join($join){
-		$this->_params['join']=$fields;
+		$this->_params['join']=$join;
 		return $this;
 	}
 	

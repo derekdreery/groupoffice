@@ -692,19 +692,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$params = $params->getParams();
 		}
 		
-		if(!empty($params['debugSql']))
-			$this->_debugSql=true;
 		
-		//GO::debug('ActiveRecord::find()');
-		//GO::debug($params);
-		
-		if(!empty($params['export'])){
-			GO::session()->values[$params['export']]=array('name'=>$params['export'], 'model'=>$this->className(), 'findParams'=>$params);
-		}
+		//GO::debug('ActiveRecord::find()');		
 		
 		if(!empty($params['single'])){
 			unset($params['single']);
 			return $this->findSingle($params);
+		}
+		
+		if(!empty($params['export'])){
+			GO::session()->values[$params['export']]=array('name'=>$params['export'], 'model'=>$this->className(), 'findParams'=>$params);
+		}
+				
+		if(!empty($params['debugSql'])){
+			$this->_debugSql=true;
+			GO::debug($params);
 		}
 		
 		

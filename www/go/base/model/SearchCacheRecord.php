@@ -52,10 +52,12 @@ class GO_Base_Model_SearchCacheRecord extends GO_Base_Db_ActiveRecord {
 	 */
 	public function findLinks($model, $findParams=array()){
 		
-		$findParams['fields']='t.*,l.description AS link_description';
-		$findParams['join']="INNER JOIN `go_links_{$model->tableName()}` l ON ".
-			"(l.id=".intval($model->id)." AND t.model_id=l.model_id AND t.model_type_id=l.model_type_id)";
-		return $this->find($findParams);
+		$params = GO_Base_Db_FindParams::newInstance()
+						->select("t.*,l.description AS link_description")
+						->join("INNER JOIN `go_links_{$model->tableName()}` l ON (l.id=".intval($model->id)." AND t.model_id=l.model_id AND t.model_type_id=l.model_type_id)")
+						->mergeWith($findParams);
+
+		return $this->find($params);
 	}
 	
 	
