@@ -116,3 +116,8 @@ GO.users.lang.sendInvitation='Отправить приглашение';
 GO.users.lang.contactInfo='Информация о контакте';
 
 GO.users.lang.popupNotification='Показывать всплывающее окно когда срабатывает "непоминание" или при приходе новой почты';
+
+GO.users.lang.muteNewMailSound='Выключить звуковое уведомление для новых писем';
+GO.users.lang.muteReminderSound='Выключить звуковое уведомление для напоминаний';
+
+GO.users.lang.showSmilies='Показывать смайлы';

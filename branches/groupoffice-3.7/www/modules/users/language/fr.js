@@ -1,19 +1,22 @@
-/** 
- * Copyright Intermesh
- * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
- * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
- *
- * French Translation
- * Author : Lionel JULLIEN
- * Date : September, 05 2008
- */
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
 
 GO.users.lang.cmdCheckColumnRead= 'Lecture';
 GO.users.lang.cmdCheckColumnWrite= 'Ecriture';
@@ -99,3 +102,6 @@ GO.users.lang.sendInvitation='Envoyer une invitation';
 GO.users.lang.contactInfo='Informations de contact';
 GO.users.lang.popupNotification='Afficher une fenêtre popup quand un rappel est actif ou quand un email est reçu';
 GO.users.lang.profile='Profil';
+GO.users.lang.muteNewMailSound='Pas d\'alerte sonore pour les nouveau email';
+GO.users.lang.muteReminderSound='Pas d\'alerte sonore pour les rappels de rendez-vous';
+GO.users.lang.showSmilies='Afficher les smilies';

@@ -76,3 +76,5 @@ $lang['email']['iCalendar_update_available']='Это сообщение соде
 $lang['email']['iCalendar_update_old']='Это сообщение содержит обновление для уже произошедшего события.';
 $lang['email']['iCalendar_event_cancelled']='Это сообщение содержит отмену для события..';
 $lang['email']['iCalendar_event_invitation_declined']='Это сообщение содержите приглашение на событие которое Вы отклонили.';
+
+$lang['email']['untilDateError']='При обработке параметра "до даты"произошла ошибка.';

@@ -1,31 +1,23 @@
-/** 
- * Copyright Intermesh
- * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
- * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
- *
- * French Translation v1.0
- * Author : Lionel JULLIEN
- * Date : September, 04 2008
- * 
- * Update for 3.02-stable-10 and order between en.js and fr.js for easy update later
- * Author : Cyril DUCHENOY <c.duchenoy@geco-it.fr>
- * Date : July, 21 2009
- *
- * Update for 3.5-stable-25
- * Author : Lionel JULLIEN
- * Date : September, 27 2010
- * 
- * Update for 3.6.8
- * Author : Cyril DUCHENOY <c.duchenoy@geco-it.fr>
- * Date : December, 07 2010
- */
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
+
 GO.lang.exportHiddenColumns='Exporter les colonnes cachées';
 GO.lang.searchQuery='Requête de recherche';
 GO.lang.pleaseApplyFirst='Veuillez tout d\'abord sauvegarder en cliquant sur \'Appliquer\'';
@@ -198,10 +190,10 @@ GO.lang.strProperties = 'Propriétés';
 GO.lang.strConfirm= 'Confirmer';
 GO.lang.strSuccess= 'Succès';
 GO.lang.strError= 'Erreur';
-GO.lang.waitMsgSave= 'Sauvegarde...';
-GO.lang.waitMsgLoad= 'Chargement...';
-GO.lang.waitMsgUpload= 'Envoie...';
-GO.lang.strRequestError= 'Impossible de contacter le serveur. Veuillez vérifier votre connexion réseau0.';
+GO.lang.waitMsgSave= 'Sauvegarde en cours...';
+GO.lang.waitMsgLoad= 'Chargement en cours...';
+GO.lang.waitMsgUpload= 'Envoi en cours...';
+GO.lang.strRequestError= 'Impossible de contacter le serveur. Veuillez vérifier votre connexion réseau.';
 
 GO.lang.strSelected = 'Sélectionné';
 GO.lang.noItemSelected= 'Vous n\'avez pas sélectionné d\'élément.';
@@ -374,7 +366,7 @@ GO.lang.confirmSelectLotsOfItems='Cette action va sélectionner {count} article(
 GO.lang.captcha='Code de sécurité';
 GO.lang.captchaEmpty='Le code de sécurité est vide';
 
-GO.lang.multiselectComboMaxItemsReachedWarning='Vous pouvez séléctionner au masimum {max} options';
+GO.lang.multiselectComboMaxItemsReachedWarning='Vous pouvez séléctionner au maximum {max} options';
 
 GO.lang.toScreen='Visu écran';
 
@@ -396,7 +388,7 @@ GO.lang.swfUploadPanelStrings = {
 		text_remove: 'Supprimer le fichier',
 		text_remove_sure: 'Etes-vous sûr de vouloir supprimer ce fichier de la file d\'attente ?',
 		text_error: 'Erreur',
-		text_uploading: 'Téléchargement du fichier: {0} ({1} of {2})',
+		text_uploading: 'Téléchargement du fichier: {0} ({1} sur {2})',
 		header_filename: 'Nom du fichier',
 		header_size: 'Taille',
 		header_status: 'Statut',
@@ -408,14 +400,14 @@ GO.lang.swfUploadPanelStrings = {
 			4: 'Annuler'
 		},
 		error_queue_exceeded: 'Les fichiers sélectionnés dépassent le nombre maximum possible de fichiers en file d\'attente ({0}).',
-		error_queue_slots_0: 'There is no slot left',
-		error_queue_slots_1: 'There is only one slot left',
-		error_queue_slots_2: 'There are only {0} slots left',
-		error_size_exceeded: 'The selected files size exceeds the allowed limit of 1 MB.',
-		error_zero_byte_file: 'Zero byte file selected.',
+		error_queue_slots_0: 'Il n\'y a plus d\'emplacement libre',
+		error_queue_slots_1: 'Il reste seulement un emplacement libre',
+		error_queue_slots_2: 'Il reste seuleument {0} emplacements libres',
+		error_size_exceeded: 'Le fichier sélectionné dépasse la limite autorisée de 1 MB.',
+		error_zero_byte_file: 'Fichier vide selectionné.',
 		error_invalid_filetype: 'Type de fichier invalide.',
 		error_file_not_found: 'Fichier non trouvé 404.',
-		error_security_error: 'Security Error. Not allowed to post to different url.'
+		error_security_error: 'Erreur de sécurité. Il n\'est pas autorisé de publier vers un URL différent.'
 	};
 
 
@@ -425,3 +417,13 @@ GO.lang.landscape='Paysage';
 
 GO.lang.strName2= 'Nom 2';
 GO.lang.selectAll='Tout sélectionner';
+
+GO.lang.link='Link';
+
+GO.lang.savedQueries='Requètes sauvegardées';
+GO.lang.searchQueryName = 'Rechercher un nom de requète';
+GO.lang.enterSearchQueryName = 'Saisir un nom de requète à rechercher';
+
+GO.lang.strUsersInGroup = 'Utilisateur membres du groupe';
+
+GO.lang.pleaseEnterASearchTerm='Veuillez saisir un terme à rechercher';

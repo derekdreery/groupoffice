@@ -10,6 +10,7 @@
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
  */
+
 /**
  * Russian translation
  * By Valery Yanchenko (utf-8 encoding)
@@ -17,6 +18,12 @@
  * 10 December 2008
 */
 
+/**
+
+GO.lang = {};
+GO.lang.countries={};
+ * Copy everything below for translations
+ */
 
 GO.lang.exportHiddenColumns='Экспортировать со скрытыми колонками';
 GO.lang.searchQuery='запрос для поиска';
@@ -52,6 +59,7 @@ GO.lang.strAbout='О Group-Office';
 GO.lang.strUsage='Статистика использования';
 
 GO.lang.strName = 'Имя';
+GO.lang.strName2 = 'Имя 2';
 GO.lang.strDescription = 'Описание';
 GO.lang.strEmail = 'Почта';
 GO.lang.strUser = 'Пользователь';
@@ -151,7 +159,6 @@ GO.lang.cmdPrint='Печать';
 GO.lang.cmdImport='Импорт';
 GO.lang.cmdInsert='Вставить';
 
-
 GO.lang.cmdActions = 'Действия';
 
 GO.lang.cmdNext='Вперед';
@@ -197,7 +204,7 @@ GO.lang.strError= 'Ошибка';
 GO.lang.waitMsgSave= 'Сохранение...';
 GO.lang.waitMsgLoad= 'Загрузка...';
 GO.lang.waitMsgUpload= 'Скачивание...';
-
+GO.lang.strRequestError= 'Не могу подключиться к серверу. Проверте Ваше интернет подключение.';
 
 GO.lang.strSelected = 'Выбраны';
 GO.lang.noItemSelected= 'Вы не произвели выбор.';
@@ -223,10 +230,6 @@ GO.lang.strLogin= 'Необходимо подключиться';
 GO.lang.strLoggedInAs= 'Подключены как ';
 
 GO.lang.strErrorsInForm= 'Неверно заполнена форма. Неверно заполненные поля отмечены.';
-
-
-
-
 
 GO.lang.strMinute="Минута";
 GO.lang.strMinutes="Минут";
@@ -312,6 +315,7 @@ GO.lang.on ='Вкл';
 GO.lang.off ='Выкл';
 
 GO.lang.keyword='Ключевое слово';
+GO.lang.keywords='Ключевые слова';
 
 
 GO.lang.total='Всего';
@@ -326,7 +330,6 @@ GO.lang.administration='Настройки';
 GO.lang.extra='Дополнительно';
 
 GO.lang.permissionsLevel='Уровень';
-
 
 GO.lang.permissionRead='Только чтение';
 GO.lang.permissionWrite='Запись';
@@ -381,7 +384,6 @@ GO.lang.multiselectComboMaxItemsReachedWarning='Вы можете выбрать
 
 GO.lang.toScreen='На экран';
 
-
 GO.lang.priority='Приоритет';
 GO.lang.priority_low='Низкий';
 GO.lang.priority_normal='Нормальный';
@@ -404,6 +406,7 @@ GO.lang.swfUploadPanelStrings = {
 		header_filename: 'Имя файла',
 		header_size: 'Размер',
 		header_status: 'Статус',
+		header_progress: "Выполнено",
 		status: {
 			0: 'В очереди',
 			1: 'Загружается...',
@@ -426,3 +429,12 @@ GO.lang.swfUploadPanelStrings = {
 GO.lang.orientation='Ориентация';
 GO.lang.portrait='Портретная';
 GO.lang.landscape='Ландшафтная';
+GO.lang.link='Ссылка';
+
+GO.lang.savedQueries='Сохраненные запросы';
+GO.lang.searchQueryName = 'Имя запроса';
+GO.lang.enterSearchQueryName = 'Ввыедите имя запроса';
+
+GO.lang.strUsersInGroup = 'Пользователи в группе';
+
+GO.lang.pleaseEnterASearchTerm='Ввыедите условия поиска';

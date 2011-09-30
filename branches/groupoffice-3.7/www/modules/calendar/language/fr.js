@@ -1,20 +1,24 @@
-/** 
- * Copyright Intermesh
- * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
- * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
- *
- * French Translation
- * Author : Lionel JULLIEN
- * Date : September, 27 2010
- */
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
 
+GO.calendar.lang.addressbook='Carnet d\'adresses';
 GO.calendar.lang.appointment = 'Rendez-vous';
 GO.calendar.lang.appointments = 'Rendez-vous';
 GO.calendar.lang.recurrence = 'Récurrence';
@@ -98,7 +102,6 @@ GO.calendar.lang.resourceConflictTitle = 'Conflit de ressource';
 GO.calendar.lang.resourceConflictMsg = 'Une ou plusieures ressources de cet événement sont déjà utilisées pendant la même période :</br>';
 GO.calendar.lang.view = 'Vue';
 
-GO.calendar.lang.addressbook='Carnet d\'adresses';
 GO.calendar.lang.calendarsPermissions='Droits des calendriers';
 GO.calendar.lang.resourcesPermissions='Droits des ressources';
 GO.calendar.lang.daynames[0]='Dimanche';
@@ -118,9 +121,16 @@ GO.calendar.lang.showInfo='Détails';
 GO.calendar.lang.copyEvent='Copier le rendez-vous';
 GO.calendar.lang.moveEvent='Déplacer le rendez-vous';
 GO.calendar.lang.eventInfo='Détails du rendez-vous';
-GO.calendar.lang.isOrganizer='Organizer';
+GO.calendar.lang.isOrganizer='Organisateur';
 GO.calendar.lang.sendInvitationInitial='Voulez vous envoyer une invitation aux participants ?';
 GO.calendar.lang.sendInvitationUpdate='Voulez vous envoyer les informations à jour du rendez-vous aux participants ?';
 GO.calendar.lang.sendCancellation='Voulez vous envoyer aux participants une confirmation de l\'annulation ?';
 GO.calendar.lang.forthcomingAppointments='Rendez-vous à venir';
-GO.calendar.lang.quarterShort= 'Q';
+GO.calendar.lang.quarterShort= 'Trimestre ';
+GO.calendar.lang.globalsettings_templatelabel = 'Modèle';
+GO.calendar.lang.globalsettings_allchangelabel = 'Renommer tous les existants';
+GO.calendar.lang.globalsettings_renameall = 'Etes-vous sûr de vouloir renommer tous les calendriers par défaut des utilisateurs ?';
+GO.calendar.lang.publishICS='Publier un fichier iCalendar des événements du mois en cours et des mois futurs. Attention ! Le calendrier sera consultable par tout le monde.';
+GO.calendar.lang.addTimeRegistration='Importer dans la gestion du temps';
+GO.calendar.lang.showNotBusy='Ne pas montrer les nouvelles réservation comme occupée';
+GO.calendar.lang.sendEmailParticipants = 'Créer un email pour les participants';

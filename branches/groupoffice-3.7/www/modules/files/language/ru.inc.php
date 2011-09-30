@@ -44,4 +44,12 @@ $lang['files']['file']='Файл';
 $lang['files']['folder']='Папка';
 $lang['files']['files']='Файлы';
 
+
 $lang['files']['emptyFile']='Пустой файл';
+
+$lang['files']['downloadLink'] = 'Ссылка на загрузку';
+$lang['files']['clickHereToDownload'] = 'Нажмите здесь чтобы загрузиить файл';
+$lang['files']['copyPasteToDownload'] = ' Чтобы загрузить файл нажмите на ссылку ниже или скопируйте ее в адресную строку Вашего internet browser.';
+$lang['files']['possibleUntil'] = 'доступно до';
+
+$lang['files']['fileNotFound']='Извините, файл который Вы хотели загрузить не найден.';

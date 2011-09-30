@@ -60,3 +60,14 @@ GO.cms.lang.selectPage='Выбрать страницу';
 
 GO.cms.lang.showUntil='Отображать страницу до';
 GO.cms.lang.alwaysShow='Оставьте это поле незаполненным чтобы показывать всегда';
+
+GO.cms.lang.root='Корень';
+GO.cms.lang.advancedPermissions='Расширенные разрешения';
+GO.cms.lang.enablePermissionsPerFolder='Включить настройку разрешений для папок этому пользователю';
+
+GO.cms.lang.sortDate='Дата';
+GO.cms.lang.unused='Не применять к этой странице';
+
+GO.cms.lang.feed='Offer items from this folder as feed';
+GO.cms.lang.enableRewrite='Включить дружественные URL с mod_rewrite. Вэб сервер дложен поддерживать модуль mod_rewrite для этого домена.';
+GO.cms.lang.rewriteBase='путь к mod_rewrite';

@@ -1,31 +1,27 @@
 <?php
-/** 
- * Copyright Intermesh
- * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
- * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
- *
- * French Translation
- * Author : Lionel JULLIEN
- * Date : September, 05 2008
- *
- * Update for 3.02-stable-10
- * Author : Cyril DUCHENOY
- * Date : July, 21 200
- *
- * Update for 3.5-stable-25
- * Author : Lionel JULLIEN
- * Date : September, 27 2010
- */
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
 
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('tasks'));
+
 $lang['tasks']['name']='Tâches';
 $lang['tasks']['description']='Module de gestion des tâches';
 $lang['link_type'][12]=$lang['tasks']['task']='Tâche';
@@ -46,4 +42,4 @@ $lang['tasks']['tasklistChanged']="* Liste de tâches modifiée de '%s' à '%s'"
 $lang['tasks']['statusChanged']="* Statut modifé de '%s' à '%s'";
 $lang['tasks']['multipleSelected']='Plusieurs listes de tâches sélectionnées';
 $lang['tasks']['incomplete_delete']='Vous n\'avez pas les droits nécessaires pour supprimer toutes les tâches sélectionnées';
-?>
+

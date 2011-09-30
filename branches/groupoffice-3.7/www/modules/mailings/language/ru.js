@@ -73,6 +73,7 @@ GO.mailings.lang.noTemplate='Нет шаблона';
 
 GO.mailings.lang.customContactFields='Допонительные поля для контакта';
 GO.mailings.lang.customCompanyFields='Дополнительные поля для компании';
+GO.mailings.lang.customUserFields='Дополнительные поля для пользователя';
 GO.mailings.lang.newsletters='Новости';
 
 GO.mailings.lang.addresslist='Адресный список';

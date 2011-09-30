@@ -1,27 +1,22 @@
-/** 
- * Copyright Intermesh
- * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
- * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
- *
- * French Translation
- * Author : Lionel JULLIEN
- * Date : September, 04 2008
- *
- * Update for 3.02-stable-10
- * Author : Cyril DUCHENOY
- * Date : July, 21 200
- * 
- * Update for 3.5-stable-25
- * Author : Lionel JULLIEN
- * Date : September, 27 2010
- */
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
 
 GO.files.lang.files='Fichiers';
 GO.files.lang.template = 'Modèle'
@@ -52,3 +47,9 @@ GO.files.lang.normalSize='Taille normale';
 GO.files.lang.imageViewer='Visualiseur d\'images';
 GO.files.lang.emailDownloadLink= 'Envoyer un lien de téléchargement';
 GO.files.lang.expireTime= 'Date d\'expiration du lien';
+GO.files.lang.newFolder = 'Nouveau dossier';
+GO.files.lang.applyState = 'Appliquer les paramètres de visualisation actuels à tout le monde.';
+GO.files.lang.stateLocked = 'Visualisation du dossier verrouiller par le proriétaire ou par l\'administrateur';
+GO.files.lang.strDownloadActive = 'Lien de téléchargement externe activé';
+GO.files.lang.downloadExpireTime='Le lien expirera après';
+GO.files.lang.downloadUrl='URL';
