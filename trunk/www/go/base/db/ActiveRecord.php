@@ -680,52 +680,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 	/**
 	 * Finds model objects
-	 *
-	 * params=
 	 * 
-	 * array(
-	 *	"by"=> array(array('field','value','=')),
-	 *  "byOperator"=>[AND / OR]	 *
-	 *
-	 *  "ignoreAcl"=>true, //Ignore ACL permissions
-	 * 
-	 *  "where"=>'field=:field' //add where condition. Use in combination with bindParams for security!
-	 *  "bindParams"=array(':field'=>'value') 
-	 * 
-	 *  
-	 *  "fields"=>'t.*' //select other fields in combination with 'join'. Remember the model table is aliased with 't'.  if you supply this and the fields do not contain t.* then the system can't return full objects. Arrays will be fetched instead.
-	 *  "join"=>''; //inserts join statements
-	 * 
-	 *  "searchQuery"=>"String",
-	 *  'searchQueryFields=>array('field') //defaults to all text fields
-	 * 
-	 *  "joinCustomFields"=>false,
-   *  "calcFoundRows"=true // Set tot true to return the number of foundRows in the statement (See class GO_Base_Db_ActiveStatement 
-	 *		
-	 *	"order"=>'field' or array('field1','field2') for multiple values
-	 *	"orderDirection"=>'ASC' or array('ASC','DESC') for multiple values
-	 * 
-	 *	"group" => 'field'
-	 *  "having" => 'field'
-	 * 
-	 *  "single"=>false //set to true to return a single model instead of a statement.
-	 * 
-	 *  'joinModel'=>array(
-	 *			'model'=>'GO_Billing_Model_OrderStatusLanguage',					
-	 *			'foreignField'=>'status_id', //defaults to primary key of the remote model
-	 *			'localField'=>'id', //defaults to primary key of the model
-	 *			'tableAlias'=>'l', //Optional table alias
-	 *			'type'=>'INNER' //defaults to INNER
-	 *			)
-	 * 
-	 * };
-	 * 
-	 * 
-	 * @param array $params
+	 * @param GO_Base_Db_FindParams $params
 	 * @return GO_Base_Db_ActiveStatement
 	 */
 	public function find($params=array()){
 	
+		if(!is_array($params))
+		{
+			//it must be a GO_Base_Db_FindParams object
+			$params = $params->getParams();
+		}
 		
 		//GO::debug('ActiveRecord::find()');
 		//GO::debug($params);
@@ -743,7 +708,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(GO::$ignoreAclPermissions)
 			$params['ignoreAcl']=true;
 		
-		if(!isset($params['userId'])){			
+		if(empty($params['userId'])){			
 			$params['userId']=GO::user() ? GO::user()->id : 1;
 		}
 		

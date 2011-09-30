@@ -205,25 +205,37 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
   /**
    * Returns a set of default parameters for use with a grid.
    * 
-   * @var array $params Supply parameters to add to or override the default ones
+   * @var GO_Base_Db_FindParams $params Supply parameters to add to or override the default ones
    * @return array defaultParams 
    */
-  public function getDefaultParams($params=array()) {
+  public function getDefaultParams($params=false) {
 		
 		$sort = !empty($_REQUEST['sort']) ? $_REQUEST['sort'] : $this->_defaultSortOrder;
 		
 		$sort = $this->getColumnModel()->getSortAlias($sort);
 		
-    return array_merge(array(
-        'searchQuery' => !empty($_REQUEST['query']) ? '%' . $_REQUEST['query'] . '%' : '',
-        'limit' => isset($_REQUEST['limit']) ? $_REQUEST['limit'] : GO::user()->max_rows_list,
-        'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 0,
-        'order' => $sort,
-        'orderDirection' => !empty($_REQUEST['dir']) ? $_REQUEST['dir'] : $this->_defaultSortDirection,
-				'joinCustomFields'=>true,
-        'calcFoundRows'=>true,
-				'permissionLevel'=> isset($_REQUEST['permissionLevel']) ? $_REQUEST['permissionLevel'] : GO_Base_Model_Acl::READ_PERMISSION
-    ), $params);
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->calcFoundRows()
+						->joinCustomFields()
+						->order($sort, !empty($_REQUEST['dir']) ? $_REQUEST['dir'] : $this->_defaultSortDirection);
+		if(!empty($_REQUEST['query']))
+			$findParams->searchQuery ('%' . $_REQUEST['query'] . '%');
+		
+		if(!empty($_REQUEST['limit']))
+			$findParams->limit ($_REQUEST['limit']);
+		
+		if(!empty($_REQUEST['start']))
+			$findParams->start ($_REQUEST['start']);
+		
+		if(isset($_REQUEST['permissionLevel']))
+			$findParams->permissionLevel ($_REQUEST['permissionLevel']);
+		
+		if($params)
+			$findParams->mergeWith($params);
+		
+		return $findParams;
+		
+    
   }
 }
 
