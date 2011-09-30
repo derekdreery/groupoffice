@@ -1,3 +1,6 @@
+30-09-2011 3.7.32
+- Fixed sort bug in addressbook
+
 30-09-2011 3.7.31
 - Updated French and Russian.
 - Fixed several small bugs.
