@@ -328,7 +328,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$this->prepareStore($store);
 		
-		$storeParams = array_merge($store->getDefaultParams(),$this->getStoreParams($params));
+		$storeParams = $store->getDefaultParams()->mergeWith($this->getStoreParams($params));
 		
 			
 		$store->setStatement(call_user_func(array($modelName,'model'))->find($storeParams));
