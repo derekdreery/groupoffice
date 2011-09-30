@@ -335,9 +335,17 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatListRecord'));
-		$findParams = $store->getDefaultParams(array(
-				'ignoreAcl' => true
-						));
+		
+		$findParams = $store->getDefaultParams()
+						->ignoreAcl();
+		
+		$findParamsArray = $findParams->getParams();
+		if(!isset($findParamsArray['start']))
+			$findParamsArray['start']=0;
+		
+		if(!isset($findParamsArray['limit']))
+			$findParamsArray['limit']=0;
+		
 		$stmt = $folder->folders($findParams);
 
 		$store->setStatement($stmt);
@@ -345,24 +353,23 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		$response = array_merge($response, $store->getData());
 
 		//add files to the listing if it fits
-		$folderPages = floor($stmt->foundRows / $findParams['limit']);
-		$foldersOnLastPage = $stmt->foundRows - ($folderPages * $findParams['limit']);
+		$folderPages = floor($stmt->foundRows / $findParamsArray['limit']);
+		$foldersOnLastPage = $stmt->foundRows - ($folderPages * $findParamsArray['limit']);
 
 		//$isOnLastPageofFolders = $stmt->foundRows < ($findParams['limit'] + $findParams['start']);
 
 		if (count($response['results'])) {
-			$fileStart = $findParams['start'] - $folderPages * $findParams['limit'];
-			$fileLimit = $findParams['limit'] - $foldersOnLastPage;
+			$fileStart = $findParamsArray['start'] - $folderPages * $findParamsArray['limit'];
+			$fileLimit = $findParamsArray['limit'] - $foldersOnLastPage;
 		} else {
-			$fileStart = $findParams['start'] - $stmt->foundRows;
-			$fileLimit = $findParams['limit'];
+			$fileStart = $findParamsArray['start'] - $stmt->foundRows;
+			$fileLimit = $findParamsArray['limit'];
 		}
 
 		if ($fileStart >= 0) {
-			$findParams = $store->getDefaultParams(array(
-					'limit' => $fileLimit,
-					'start' => $fileStart
-							));
+			$findParams = $store->getDefaultParams()
+							->limit($fileLimit)
+							->start($fileStart);
 
 			$stmt = $folder->files($findParams);
 			$store->setStatement($stmt);

@@ -113,6 +113,18 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
+	 * Get the find criteria object so you can add more conditions.
+	 * 
+	 * @return GO_Base_Db_FindCriteria 
+	 */
+	public function getCriteria(){
+		if(!isset($this->_params['criteriaObject']))
+			$this->_params['criteriaObject']= new GO_Base_Db_FindCriteria();
+		
+		return $this->_params['criteriaObject'];
+	}
+	
+	/**
 	 * Make this query available for exports to CSV, PDF etc.
 	 * It will be stored in the session so that 
 	 * GO_Base_Controller_AbstractModelController can reuise the params.
@@ -279,5 +291,35 @@ class GO_Base_Db_FindParams{
 		return $this;
 	}
 	
+	/**
+	 * For internal use by GO_Base_Db_ActiveRecord only. This will be set to the 
+	 * relation name when a relational query is made.
+	 * 
+	 * @param string $name
+	 * @return GO_Base_Db_FindParams 
+	 */
+	public function relation($name){
+		$this->_params['relation']=$name;
+		
+		return $this;
+	}
+	
+	/**
+	 * For internal use by GO_Base_Db_ActiveRecord only. This is set with 
+	 * MANY_MANY relations that use a link table with a model.
+	 * 
+	 * @param string $modelName The model name
+	 * @param string $localPkField Attribute field that holds the pk of the other model.
+	 * @param int $localPk Primary key of the model
+	 * @return GO_Base_Db_FindParams 
+	 */
+	public function linkModel($modelName, $localPkField, $localPk){
+		
+		$this->_params['linkModel']=$modelName;
+    $this->_params['linkModelLocalField']=$localPkField;
+    $this->_params['linkModelLocalPk']=$localPk;
+		
+		return $this;
+	}
 	
 }
