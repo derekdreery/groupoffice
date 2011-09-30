@@ -31,6 +31,12 @@ class GO_Base_Db_FindParams{
 		if(!is_array($findParams))
 			$findParams = $findParams->getParams();
 		
+		
+		if(isset($this->_params['criteriaObject']) && isset($findParams['criteriaObject'])){
+			$this->_params['criteriaObject']->mergeWith($findParams['criteriaObject']);
+			unset($findParams['criteriaObject']);
+		}
+		
 		$this->_params = array_merge($this->_params, $findParams);
 		return $this;
 	}
