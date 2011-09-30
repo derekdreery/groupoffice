@@ -1,0 +1,2 @@
+modules/emailportlet/Plugin.js
+
