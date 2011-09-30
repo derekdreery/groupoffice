@@ -118,7 +118,7 @@ class go_ical extends calendar
 				$DAYLIGHT_TZOFFSETTO=$this->format_transition_hour($dst_end['offset']/3600);
 
 				$DAYLIGHT_RRULE = "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=".date('n', $dst_end['ts']). $this->line_break;
-				$STANDARD_RRULE="RRULE:FREQ=YEARLY;BYDAY=1SU;BYMONTH=".date('n', $dst_start['ts']). $this->line_break ;
+				$STANDARD_RRULE="RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=".date('n', $dst_start['ts']). $this->line_break ;
 
 
 				break;
