@@ -85,3 +85,4 @@ $updates[201108190000][]="ALTER TABLE `go_links_go_users` CHANGE `link_type` `mo
 
 $updates[201109280000][]="ALTER TABLE `go_search_cache` DROP `table`";
 $updates[201109280000][]="ALTER TABLE `go_search_cache` DROP `link_count`";
+$updates[201109301050][]="ALTER TABLE `go_users` CHANGE `show_smilies` `show_smilies` BOOL NOT NULL DEFAULT '1'";
