@@ -3,14 +3,11 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	protected $model = 'GO_Base_Model_SearchCacheRecord';
 	
 	protected function getStoreParams($params) {
-		$storeParams = array();
+		$storeParams = GO_Base_Db_FindParams::newInstance();
 		if(isset($params['types'])){
 			$types = json_decode($params['types'], true);
-			if(count($types)){
-				$storeParams['by']=array(
-									array('model_type_id', $types,'IN')
-							);
-			}
+			if(count($types))
+				$storeParams->getCriteria()->addInCondition('model_type_id', $types);
 		}
 		return $storeParams;
 	}
