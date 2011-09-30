@@ -1062,6 +1062,10 @@ class addressbook extends db {
 		if($offset>0) {
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
+		
+		
+		if($field=='name')
+			$field = 'ab_companies.name';
 
 		if(isset($GO_MODULES->modules['customfields'])) {
 			$sql .= "ab_companies.*,ab_addressbooks.name AS ab_name, cf_3.* FROM ab_companies ".
