@@ -34,20 +34,20 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 	public function actionLinks($params){
 		
 		$model = GO::getModel($params['model_name'])->findByPk($params['model_id']);
+	
 		
-			$storeParams=array();
+		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());			
+		
+		$storeParams = $store->getDefaultParams();
+		
 		if(isset($params['types'])){
 			$types = json_decode($params['types'], true);
-			if(count($types)){
-				$storeParams['by']=array(
-									array('model_type_id', $types,'IN')
-							);
-			}
+			if(count($types))
+				$storeParams->getCriteria ()->addInCondition ('model_type_id', $types);
 		}
 		
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());					
-		$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, $store->getDefaultParams($storeParams));
+		$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, $storeParams);
 		$store->setStatement($stmt);
 		
 		$cm = $store->getColumnModel();		
