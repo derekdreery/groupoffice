@@ -692,6 +692,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$params = $params->getParams();
 		}
 		
+		if(!empty($params['debugSql']))
+			$this->_debugSql=true;
+		
 		//GO::debug('ActiveRecord::find()');
 		//GO::debug($params);
 		

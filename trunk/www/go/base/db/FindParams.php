@@ -108,7 +108,7 @@ class GO_Base_Db_FindParams{
 	 * @return GO_Base_Db_FindParams 
 	 */
 	public function criteria(GO_Base_Db_FindCriteria $criteria){
-		$this->_params['criteriaObject']=$fields;
+		$this->_params['criteriaObject']=$criteria;
 		return $this;
 	}
 	
@@ -263,6 +263,18 @@ class GO_Base_Db_FindParams{
 	public function permissionLevel($level, $user_id=false){
 		$this->_params['permissionLevel']=$level;
 		$this->_params['userId']=$user_id;
+		
+		return $this;
+	}
+	
+	/**
+	 * Set to true to debug the SQL code in the debug log
+	 * 
+	 * @param boolean $value
+	 * @return GO_Base_Db_FindParams 
+	 */
+	public function debugSql($value=true){
+		$this->_params['debugSql']=$value;
 		
 		return $this;
 	}
