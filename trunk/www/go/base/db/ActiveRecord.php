@@ -788,6 +788,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if (!empty($params['linkModel'])) { //passed in case of a MANY_MANY relation query
       $linkModel = new $params['linkModel'];
       $primaryKeys = $linkModel->primaryKey();
+			
+			if(!is_array($primaryKeys))
+				throw new Exception ("Fatal error: Primary key of linkModel '".$params['linkModel']."' in relation '".$params['relation']."' should be an array.");
+			
       $remoteField = $primaryKeys[0]==$params['linkModelLocalField'] ? $primaryKeys[1] : $primaryKeys[0];
       $sql .= "\nINNER JOIN `".$linkModel->tableName()."` link_t ON t.`".$this->primaryKey()."`= link_t.".$remoteField.' ';
     }
@@ -1958,6 +1962,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		$r= $this->relations();
 		
 		foreach($r as $name => $attr){
+			
 			if(!empty($attr['delete'])){
 
 				$stmt = $this->$name;
@@ -1965,6 +1970,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 					$child->delete();
 				}
+			}
+			
+			//clean up link models for many_many relations
+			if($attr['type']==self::MANY_MANY){
+				$stmt = GO::getModel($attr['linkModel'])->find(
+				 GO_Base_Db_FindParams::newInstance()
+								->criteria(GO_Base_Db_FindCriteria::newInstance()
+												->addCondition($attr['field'], $this->pk)
+												)											
+								);
+				$stmt->callOnEach('delete');
 			}
 		}
 		
