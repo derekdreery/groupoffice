@@ -679,7 +679,28 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 
 	/**
-	 * Finds model objects
+	 * Find models
+	 * 
+	 * Example usage:
+	 * 
+	 * <code>
+	 * //create new find params object
+	 * $params = GO_Base_Db_FindParams::newInstance()
+	 *   ->joinCustomFields()
+	 *   ->order('due_time','ASC');
+	 * 
+	 * //select all from tasklist id = 1
+	 * $params->getCriteria()->addCondition('tasklist_id,1);
+	 * 
+	 * //find the tasks
+	 * $stmt = GO_Tasks_Model_Task::model()->find($params);
+	 * 
+	 * //print the names
+	 * while($task = $stmt->fetch()){
+	 *	echo $task->name.'&lt;br&gt;';
+	 * }
+	 * </code>
+	 * 
 	 * 
 	 * @param GO_Base_Db_FindParams $params
 	 * @return GO_Base_Db_ActiveStatement
