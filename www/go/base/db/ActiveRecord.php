@@ -1258,28 +1258,35 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		{							
 			$remoteFieldThatHoldsMyPk = $r[$name]['field'];
 			
-			$findParams = array_merge($extraFindParams,$r[$name]['findParams'],array(
-					"by"=>array(array($remoteFieldThatHoldsMyPk,$this->pk,'=')),
-					"ignoreAcl"=>true,
-          "relation"=>$name
-			));
-				
+			$findParams = GO_Base_Db_FindParams::newInstance()
+					->mergeWith($extraFindParams)
+					->mergeWith($r[$name]['findParams'])
+					->ignoreAcl()
+					->relation($name);
+					
+			$findParams->getCriteria()->addCondition($remoteFieldThatHoldsMyPk, $this->pk);
+			
+			
+			
+//			$findParams = array_merge($extraFindParams,$r[$name]['findParams'],array(
+//					"by"=>array(array($remoteFieldThatHoldsMyPk,$this->pk,'=')),
+//					"ignoreAcl"=>true,
+//          "relation"=>$name
+//			));
+//				
 			$stmt = GO::getModel($model)->find($findParams);
 			return $stmt;		
 		}elseif($r[$name]['type']==self::MANY_MANY)
 		{							
 			$localPkField = $r[$name]['field'];
       $linkModelName = $r[$name]['linkModel']; // name where the local id is linked to the ids of the records in the remote table
-      
-      // Please note that 'local' and 'remote' are reversed from the point of view of the remote model.
-			$findParams = array_merge($extraFindParams,$r[$name]['findParams'],array(
-          'linkModel'=>$linkModelName,
-          'linkModelLocalField'=>$localPkField,
-          'linkModelLocalPk'=>$this->pk,
-					//"by"=>array(array($localPkField,$this->pk,'=')),
-					"ignoreAcl"=>true,
-          "relation"=>$name
-			));
+			
+			$findParams = GO_Base_Db_FindParams::newInstance()
+					->mergeWith($extraFindParams)
+					->mergeWith($r[$name]['findParams'])
+					->ignoreAcl()
+					->relation($name)
+					->linkModel($r[$name]['linkModel'], $r[$name]['field'], $this->pk);
 				
 			$stmt = GO::getModel($model)->find($findParams); // pakt alle records waarvan de ids via de koppeltabel gelinked zijn aan de local id
       return $stmt;		
