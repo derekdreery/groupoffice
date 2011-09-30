@@ -1,31 +1,27 @@
 <?php
-/** 
- * Copyright Intermesh
- * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
- * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
- *
- * French Translation
- * Author : Lionel JULLIEN
- * Date : September, 04 2008
- *
- * Update for 3.02-stable-10
- * Author : Cyril DUCHENOY
- * Date : July, 21 2009
- *
- * Update for 3.5-stable-25
- * Author : Lionel JULLIEN
- * Date : September, 27 2010
- */
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
 
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_language_file('files'));
+
 $lang['files']['name'] = 'Fichiers';
 $lang['files']['description'] = 'Module gestion des fichiers. Module pour partager des fichiers entre utilisateurs de Group-Office.';
 $lang['link_type'][6]='Fichier';
@@ -59,4 +55,4 @@ $lang['files']['downloadLink']= 'Lien de téléchargement';
 $lang['files']['clickHereToDownload']= 'Cliquez ici pour télécharger ce fichier de manière sécurisée';
 $lang['files']['copyPasteToDownload']= 'Cliquez sur le lien sécurisé ci-dessous ou copiez le dans la barre d\'adresse de votre navigateur pour télécharger le fichier.';
 $lang['files']['possibleUntil']= 'possible jusqu\'au';
-?>
+$lang['files']['fileNotFound']='Désolé, le fichier que vous essayez de télécharger est introuvable.';

@@ -43,6 +43,7 @@ $lang['calendar']['statuses']['TENTATIVE'] = 'Предварительно';
 $lang['calendar']['statuses']['DELEGATED'] = 'Делегировано';
 $lang['calendar']['statuses']['COMPLETED'] = 'Выполнено';
 $lang['calendar']['statuses']['IN-PROCESS'] = 'На исполнении';
+$lang['calendar']['statuses']['CONFIRMED'] = 'Подтверждено';
 
 
 $lang['calendar']['accept_mail_subject'] = 'Приглашение для \'%s\' принято';
@@ -124,3 +125,5 @@ $lang['calendar']['invitation_update']='Обновленные приглаше�
 $lang['calendar']['cancellation']='Отказ';
 
 $lang['calendar']['non_selected'] = 'в не выбранном календаре';
+
+$lang['calendar']['linkIfCalendarNotSupported']='Если Ваш email клиент не поддерживает функции календаря используйте ссылку:';

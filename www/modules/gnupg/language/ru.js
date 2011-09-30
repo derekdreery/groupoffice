@@ -36,3 +36,8 @@ GO.gnupg.lang.decryptPasswordRequired='Введите пароль для рас
 GO.gnupg.lang.sendPublicKey='Отправить публичный ключь';
 
 GO.gnupg.lang.importPublicKeyAttachment='Это публичный ключь для шифрования сообщений отправителю этого письма . Импортируйте этот ключь только в том случае, если Вы уверены, что он от принадлежит отправителю. Хотите импортировать ключь?';
+
+GO.gnupg.lang.generateKeyStarted='Создается ключь';
+GO.gnupg.lang.generateKeyStartedText='Ваш ключь содается. Это длятельный процесс который может занять до 10 мин.';
+
+GO.gnupg.lang.enterPassword='Введите пароль';

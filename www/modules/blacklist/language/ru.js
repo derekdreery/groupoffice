@@ -1,9 +1,10 @@
 /**
  * Don't copy the next line into a translation
- */
+ * 
 Ext.namespace('GO.blacklist');
 GO.blacklist.lang={};
 GO.blacklist.lang.blacklist='IP черный список';
+ * */
 /**
  * Copy everything below for translations
  */

@@ -1,19 +1,22 @@
-/** 
- * Copyright Intermesh
- * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
- * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
- *
- * French Translation
- * Author : Lionel JULLIEN
- * Date : September, 27 2010
- */
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
 
 GO.mailings.lang.cmdPanelTemplate = 'Modèles';
 GO.mailings.lang.cmdAddEmailTemplate= 'Ajouter un nouveau modèle d\'e-mail';
@@ -41,7 +44,7 @@ GO.mailings.lang['status']='Statut';
 GO.mailings.lang.sent='Envoyé';
 GO.mailings.lang.total='Total';
 GO.mailings.lang.errors='Erreurs';
-GO.mailings.lang.addEntireAddressbook='Ajouter un carnet d\adresses entier';
+GO.mailings.lang.addEntireAddressbook='Ajouter un carnet d\'adresses entier';
 GO.mailings.lang.selectAddressbook='Selectionner un carnet d\'adresses';
 GO.mailings.lang.defaultSalutationText='Saisir une formule de politesse qui sera utilisée lorsque le destinataire est inconnu';
 GO.mailings.lang.filterMailings='Filtre de liste d\'adresses';

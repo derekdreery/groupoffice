@@ -70,3 +70,7 @@ GO.tasks.lang.overDue='Просроченео';
 GO.tasks.lang.futureTasks='Будущие задачи';
 GO.tasks.lang.all='Все';
 GO.tasks.lang.active='Активная(ые)';
+
+GO.tasks.lang.globalsettings_templatelabel='Шаблон задачи';
+GO.tasks.lang.globalsettings_allchangelabel='Заменить существующую?';
+GO.tasks.lang.globalsettings_renameall = 'Переименовать все?';

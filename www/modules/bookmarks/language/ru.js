@@ -17,3 +17,5 @@ GO.bookmarks.lang.clearLogo='Очистить логотип';
 GO.bookmarks.lang.uploadLogo='Загрузить логотип';
 GO.bookmarks.lang.showAll='Показать все';
 GO.bookmarks.lang.sharedCategory='Общая категория';
+GO.bookmarks.lang.behaveAsModule='Behave as a module (Browser reload required)';
+GO.bookmarks.lang.confirmDelete='Вы уыерены что хотите удалить эту закладку?';

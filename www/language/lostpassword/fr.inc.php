@@ -1,11 +1,23 @@
 <?php
-//French Translation v1.0
-//Author : Cyril DUCHENOY
-//Date : July, 21 2009
-
-// Update for 3.5-stable-25
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
 // Author : Lionel JULLIEN
-// Date : September, 27 2010
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
 
 //Uncomment this line in new translations!
 require($GO_LANGUAGE->get_fallback_base_language_file('lostpassword'));
@@ -16,7 +28,7 @@ $lang['lostpassword']['login']='Connexion';
 $lang['lostpassword']['lost_password_subject']='Votre demande de nouveau mot de passe Group-Office';
 $lang['lostpassword']['lost_password_body']='%s,
 
-Vous avez demandé un nouveau mot de passe pour %s. Your nom d\'utilisateur est "%s".
+Vous avez demandé un nouveau mot de passe pour %s. Votre nom d\'utilisateur est "%s".
 
 Cliquer sur le lien ci-dessous (ou copier le dans votre navigateur) pour changer votre mot de passe:
 

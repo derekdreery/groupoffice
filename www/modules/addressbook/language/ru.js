@@ -115,8 +115,7 @@ GO.addressbook.lang.defaultAddressFormat='Формат адреса';
 GO.addressbook.lang.defaultSalutation='Приветствие по умолчанию';
 GO.addressbook.lang.explanationVariables='Пояснения к параметрам приветствия';
 GO.addressbook.lang.explanationSex='Форма приветствия для мужчины и женщины';
-GO.addressbook.lang.btnSearch = 'Поиск';
-GO.addressbook.lang.btnReset = 'Сбросить';
+
 GO.addressbook.lang.searchQueryName='Имя поискового запроса';
 GO.addressbook.lang.enterSearchQueryName='Введите имя поискового запроса:';
 
@@ -141,3 +140,9 @@ GO.addressbook.lang.iban='IBAN';
 
 GO.addressbook.lang.unknownEmail = 'Неизвестный email адрес';
 GO.addressbook.lang.strUnknownEmail = 'Этот email адрес не найден в Контактах. Хотите добавить его в Контакты?';
+
+GO.addressbook.lang.globalsettings_templatelabel = 'Шаблон';
+GO.addressbook.lang.globalsettings_allchangelabel = 'Заменить все?';
+GO.addressbook.lang.globalsettings_renameall = 'Переименовать все?';
+
+GO.addressbook.lang.createEmailSelected = 'Создать email';

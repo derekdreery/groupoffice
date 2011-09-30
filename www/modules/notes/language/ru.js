@@ -15,14 +15,14 @@
  */
 
 /* new table: no_categories */
-GO.notes.lang.category="Категория";
-GO.notes.lang.categories="Категории";
+GO.notes.lang.category="Блокнот";
+GO.notes.lang.categories="Блокноты";
 
 /* new table: no_notes */
 GO.notes.lang.note="Заметка";
 GO.notes.lang.notes="Заметки";
-GO.notes.lang.category_id="Категория";
+GO.notes.lang.category_id="Блокнот";
 GO.notes.lang.content="Содержание";
 
 
-GO.notes.lang.manageCategories="Управление категориями";
+GO.notes.lang.manageCategories="Управление блокнотами";

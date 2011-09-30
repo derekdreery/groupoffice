@@ -12,7 +12,7 @@ $lang['tasks']['name']='Задачи';
 $lang['tasks']['description']='Введите описание';
 
 $lang['link_type'][12]=$lang['tasks']['task']='Задача';
-$lang['tasks']['status']='Cтaтyc';
+$lang['tasks']['status']='Статус';
 
 
 $lang['tasks']['scheduled_call']='Запланировать звонок в %s';
@@ -35,4 +35,3 @@ $lang['tasks']['tasklistChanged']="* Список задач изменен с '
 $lang['tasks']['statusChanged']="* Статус изменен с '%s' на '%s'";
 $lang['tasks']['multipleSelected']='Выбрано несколько списков задач';
 $lang['tasks']['incomplete_delete']='У Вас недостаточно прав чтобы удалить все выбранные задачи';
-?>

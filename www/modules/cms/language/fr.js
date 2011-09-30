@@ -1,19 +1,23 @@
-/** 
- * Copyright Intermesh
- * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
- * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
- *
- * French Translation
- * Author : Lionel JULLIEN
- * Date : September, 27 2010
- */
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
+ 
 GO.cms.lang.cms='Sites Web';
 /* table: cms_sites */
 GO.cms.lang.site="Site";
@@ -53,3 +57,8 @@ GO.cms.lang.alwaysShow='Laisser vide pour afficher pour toujours';
 GO.cms.lang.root='Racine';
 GO.cms.lang.advancedPermissions='Permissions avancées';
 GO.cms.lang.enablePermissionsPerFolder='Activer les permissions par dossier pour cet utilisateur';
+GO.cms.lang.sortDate='Trier par date';
+GO.cms.lang.unused='Ne pas appliquer à cette page';
+GO.cms.lang.feed='Offrir les éléments de ce dossier comme flux';
+GO.cms.lang.enableRewrite='Activer les URL simplifiés avec le module apache mod_rewrite. Le serveur web doit être configuré et fonctionnera uniquement avec le domaine renseigné ci-dessus.';
+GO.cms.lang.rewriteBase='Chemin de base pour le module mod_rewrite';
