@@ -12,11 +12,11 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	}	
 	
 	protected function getStoreParams($params){
-		return array(
-				'ignoreAcl'=>true,
-				'joinCustomFields'=>true,
-				'by'=>array(array('category_id', $this->multiselectIds, 'IN'))
-		);
+		
+		return GO_Base_Db_FindParams::newInstance()
+						->ignoreAcl()
+						->joinCustomFields()
+						->criteria(GO_Base_Db_FindCriteria::newInstance()->addInCondition('category_id', $this->multiselectIds));
 	}
 
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
