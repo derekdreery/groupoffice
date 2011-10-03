@@ -2225,17 +2225,17 @@ class calendar extends db {
 
 			$end_hour = date('G', $event['end_time']);
 
-			if($event['end_time'] == $event['start_time'] || (($end_hour==23 || $end_hour==0) && date('G', $event['start_time'])==0)) {
-				$event['all_day_event'] = '1';
-
-				//make sure times are 0 - 23
-
-				$start_date = getdate($event['start_time']);
-				$end_date = getdate($event['end_time']-60);
-
-				$event['start_time']=mktime(0,0,0,$start_date['mon'], $start_date['mday'], $start_date['year']);
-				$event['end_time']=mktime(23,59,0,$end_date['mon'], $end_date['mday'], $end_date['year']);
-			}
+//			if($event['end_time'] == $event['start_time'] || (($end_hour==23 || $end_hour==0) && date('G', $event['start_time'])==0)) {
+//				$event['all_day_event'] = '1';
+//
+//				//make sure times are 0 - 23
+//
+//				$start_date = getdate($event['start_time']);
+//				$end_date = getdate($event['end_time']-60);
+//
+//				$event['start_time']=mktime(0,0,0,$start_date['mon'], $start_date['mday'], $start_date['year']);
+//				$event['end_time']=mktime(23,59,0,$end_date['mon'], $end_date['mday'], $end_date['year']);
+//			}
 
 			if(isset($object['CLASS']['value']) && $object['CLASS']['value'] == 'PRIVATE') {
 				$event['private'] = '1';
