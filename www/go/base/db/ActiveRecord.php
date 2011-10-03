@@ -27,6 +27,8 @@
  * @property GO_Customfields_Model_AbstractCustomFieldsRecord $customfieldsRecord
  * @property String $localizedName The localized human friendly name of this model.
  * @property int $permissionLevel @see GO_Base_Model_Acl for available levels. Returns -1 if no aclField() is set in the model.
+ * 
+ * @property GO_Files_Model_Folder $filesFolder The folder model that belongs to this model if hasFiles is true.
  */
 
 abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
@@ -162,7 +164,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	private $_modifiedAttributes=array();
 	
-	private $_debugSql=false;
+	private $_debugSql=true;
 	
 	
 	/**
@@ -1234,6 +1236,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!isset($r[$name]))
 			return false;
 		
+		if(!isset($r[$name]['model']))
+		{
+			throw new Exception('model not set in relation '.$name.' '.var_export($r[$name], true));
+		}
+		
 		$model = $r[$name]['model'];
 		
 		if(!isset($r[$name]['findParams']))
@@ -1549,6 +1556,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 		
 		return true;
+	}
+	
+	
+	public function getFilesFolder(){
+		if(!$this->hasFiles())
+			throw new Exception("getFilesFolder() called on ".$this->className()." but hasFiles() is false for this model.");
+		
+		if($this->files_folder_id==0)
+			return false;
+		
+		return GO_Files_Model_Folder::model()->findByPk($this->files_folder_id);
+		
 	}
 
 

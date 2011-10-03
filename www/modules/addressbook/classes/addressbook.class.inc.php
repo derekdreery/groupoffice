@@ -380,18 +380,18 @@ class addressbook extends db {
 			$company['mtime'] = $company['ctime'];
 		}
 
-		if(!isset($company['iso_address_format'])){
-			if(!$addressbook) {
-				$addressbook = $this->get_addressbook($company['addressbook_id']);
-			}
-			$company['iso_address_format']=$addressbook['default_iso_address_format'];
-		}
-		if(!isset($company['post_iso_address_format'])){
-			if(!$addressbook) {
-				$addressbook = $this->get_addressbook($company['addressbook_id']);
-			}
-			$company['post_iso_address_format']=$addressbook['default_iso_address_format'];
-		}
+//		if(!isset($company['iso_address_format'])){
+//			if(!$addressbook) {
+//				$addressbook = $this->get_addressbook($company['addressbook_id']);
+//			}
+//			$company['iso_address_format']=$addressbook['default_iso_address_format'];
+//		}
+//		if(!isset($company['post_iso_address_format'])){
+//			if(!$addressbook) {
+//				$addressbook = $this->get_addressbook($company['addressbook_id']);
+//			}
+//			$company['post_iso_address_format']=$addressbook['default_iso_address_format'];
+//		}
 
 		global $GO_MODULES;
 		if(!isset($company['files_folder_id']) && isset($GLOBALS['GO_MODULES']->modules['files'])) {
@@ -603,12 +603,12 @@ class addressbook extends db {
 			$contact['first_name']='Unnamed';
 		}
 
-		if(!isset($contact['iso_address_format'])){
-			if(!$addressbook) {
-				$addressbook = $this->get_addressbook($contact['addressbook_id']);
-			}
-			$contact['iso_address_format']=$addressbook['default_iso_address_format'];
-		}
+//		if(!isset($contact['iso_address_format'])){
+//			if(!$addressbook) {
+//				$addressbook = $this->get_addressbook($contact['addressbook_id']);
+//			}
+//			$contact['iso_address_format']=$addressbook['default_iso_address_format'];
+//		}
 
 		if(!isset($contact['email_allowed']))
 			$contact['email_allowed']='1';

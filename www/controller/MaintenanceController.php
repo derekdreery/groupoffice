@@ -48,6 +48,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 
 	public function actionUpgrade($params) {
 		
+		//don't be strict in upgrade process
+		GO::getDbConnection()->query("SET sql_mode=''");
+		
 		$logDir = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'log/upgrade/');
 		$logDir->create();
 		global $logFile;
