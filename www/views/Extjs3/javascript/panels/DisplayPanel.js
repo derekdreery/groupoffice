@@ -25,7 +25,7 @@ GO.DisplayPanel=function(config){
 Ext.extend(GO.DisplayPanel, Ext.Panel,{
 	link_id : 0, //for backwards comaptibility
 	model_id: 0,
-	model_name : 0,
+	model_name : "",
 	
 	newMenuButton : false,
 	
@@ -89,38 +89,8 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		
 		if(GO.files && !this.noFileBrowser)
 		{
-			tbar.push(this.fileBrowseButton = new Ext.Button({
-				iconCls: 'btn-files',
-				cls: 'x-btn-text-icon', 
-				text: GO.files.lang.files,
-				handler: function(){			
-					
-//					if(this.data.files_folder_id==0 && this.data.model){
-					if(this.data.model){
-						GO.request({
-							url:'files/folder/checkModelFolder',
-							maskEl:this.getEl(),
-							params:{								
-								mustExist:true,
-								model:this.data.model,
-								id:this.data.id
-							},
-							success:function(response, options, result){
-								this.data.files_folder_id=result.files_folder_id;								
-								GO.files.openFolder(this.data.files_folder_id);
-								GO.files.fileBrowserWin.on('hide', this.reload, this, {single:true});
-							},
-							scope:this
-							
-						});
-					}else
-					{
-						GO.files.openFolder(this.data.files_folder_id);
-						GO.files.fileBrowserWin.on('hide', this.reload, this, {single:true});
-					}
-				},
-				scope: this,
-				disabled:true
+			tbar.push(this.fileBrowseButton = new GO.files.FileBrowserButton({
+				model_name:this.model_name
 			}));
 		}
 		
@@ -285,7 +255,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 		
 		if(this.fileBrowseButton)
 		{
-			this.fileBrowseButton.setDisabled(data.files_folder_id<1 && !data.model);
+			this.fileBrowseButton.setId(data.id);
 		}
 		
 		this.xtemplate.overwrite(this.body, data);

@@ -19,3 +19,4 @@ modules/files/FolderPanel.js
 modules/files/FilesGrid.js
 modules/files/SelectFilesDialog.js
 modules/files/SelectFilesGrid.js
+modules/files/FileBrowserButton.js
