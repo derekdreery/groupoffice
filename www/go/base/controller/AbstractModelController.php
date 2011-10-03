@@ -368,8 +368,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$model = GO::getModel($modelName)->findByPk($params['id']);
 		
 		$response = $this->beforeDisplay($response, $model, $params);
+		
 		//todo build in new style. Now it's necessary for old library functions
-		require_once(GO::config()->root_path.'Group-Office.php');
+		//require_once(GO::config()->root_path.'Group-Office.php');
 
 		$response['data'] = $model->getAttributes('html');
 		$response['data']['model']=$model->className();
@@ -475,11 +476,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 //		}
 
 		if (/* !in_array('files', $hidden_sections) && */!isset($response['data']['files'])) {
-			if (isset(GO::modules()->files) && $model->hasFiles()) {
-				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path']. 'files.class.inc.php');
-				$files = new files();
+			if (isset(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
+				
+				$fc = new GO_Files_Controller_Folder();
+				$listResponse = $fc->actionList(array('folder_id'=>$response['data']['files_folder_id']));
+				$response['data']['files'] = $listResponse['results'];
 
-				$response['data']['files'] = $files->get_content_json($response['data']['files_folder_id']);
+				//$response['data']['files'] = $files->get_content_json($response['data']['files_folder_id']);
 			} else {
 				$response['data']['files'] = array();
 			}
