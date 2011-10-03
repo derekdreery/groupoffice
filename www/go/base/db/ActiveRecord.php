@@ -1952,6 +1952,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 */
 	public function delete(){
 		
+		if($this->isNew)
+			return true;
+		
 		if(!$this->checkPermissionLevel(GO_Base_Model_Acl::DELETE_PERMISSION))
 						throw new GO_Base_Exception_AccessDenied ();
 		
