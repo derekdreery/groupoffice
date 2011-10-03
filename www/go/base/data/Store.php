@@ -223,6 +223,8 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		
 		if(!empty($_REQUEST['limit']))
 			$findParams->limit ($_REQUEST['limit']);
+		else
+			$findParams->limit (GO::user()->max_rows_list);
 		
 		if(!empty($_REQUEST['start']))
 			$findParams->start ($_REQUEST['start']);
