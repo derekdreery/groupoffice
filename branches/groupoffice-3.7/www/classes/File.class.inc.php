@@ -49,6 +49,7 @@ class File
 			return true;
 		}else
 		{
+			trigger_error('Failed creating: '.$path, E_USER_NOTICE);
 			go_debug('Failed creating: '.$path);
 			return false;
 		}
