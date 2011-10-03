@@ -513,6 +513,9 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				$model->save();
 		}
 
+		if(!$model->files_folder_id)
+			$model->files_folder_id=0;
+		
 		return $model->files_folder_id;
 	}
 
