@@ -426,8 +426,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$columnModel->formatColumn('link_description','$model->link_description');
 		
 		$data = $store->getData();
-		$response['data']['links']=$data['results'];
-		
+		$response['data']['links']=$data['results'];		
 
 		if (GO::modules()->calendar){
 
@@ -449,31 +448,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 			$data = $store->getData();
 			$response['data']['events']=$data['results'];
-		}
-		
-
-	
-//		require_once(GO::config()->class_path . '/base/search.class.inc.php');
-//		$search = new search();
-//
-//		if (/* !in_array('links', $hidden_sections) && */!isset($response['data']['links'])) {
-//			$links_json = $search->get_latest_links_json(GO::session()->values['user_id'], $response['data']['id'], $model->linkModelId());
-//			$response['data']['links'] = $links_json['results'];
-//		}
-//
-//		if (/* isset(GO::modules()->modules['tasks']) && !in_array('tasks', $hidden_sections) && */!isset($response['data']['tasks'])) {
-//			require_once($GLOBALS['GO_MODULES']->modules['tasks']['class_path'] . 'tasks.class.inc.php');
-//			$tasks = new tasks();
-//
-//			$response['data']['tasks'] = $tasks->get_linked_tasks_json($response['data']['id'], $model->linkModelId());
-//		}
-//
-//		if (isset(GO::modules()->calendar)/* && !in_array('events', $hidden_sections) */) {
-//			require_once($GLOBALS['GO_MODULES']->modules['calendar']['class_path'] . 'calendar.class.inc.php');
-//			$cal = new calendar();
-//
-//			$response['data']['events'] = $cal->get_linked_events_json($response['data']['id'], $model->linkModelId());
-//		}
+		}		
 
 		if (/* !in_array('files', $hidden_sections) && */!isset($response['data']['files'])) {
 			if (isset(GO::modules()->files) && $model->hasFiles() && $response['data']['files_folder_id']>0) {
@@ -489,11 +464,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 
 		if (isset(GO::modules()->comments)){
-			$stmt = GO_Comments_Model_Comment::model()->find(array(
-				'where'=>'model_id=:model_id AND model_type_id=:model_type_id',
-				'bindParams'=>array('model_id'=>$model->id,'model_type_id'=>$model->modelTypeId()),
-				'limit'=>5
-			));
+
+			$stmt = GO_Comments_Model_Comment::model()->find(GO_Base_Db_FindParams::newInstance()
+							->limit(5)
+							->criteria(GO_Base_Db_FindCriteria::newInstance()->
+											addCondition('model_id', $model->id)->
+											addCondition('model_type_id',$model->modelTypeId())
+							));
 
 			$store = GO_Base_Data_Store::newInstance(GO_Comments_Model_Comment::model());			
 			$store->setStatement($stmt);
