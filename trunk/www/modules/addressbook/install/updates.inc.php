@@ -50,3 +50,15 @@ VALUES (
 '3', 'GO_Addressbook_Model_Company'
 );";
 
+
+$updates[201110031344][]="ALTER TABLE `ab_companies` DROP `iso_address_format`";
+$updates[201110031344][]="ALTER TABLE `ab_companies` DROP `post_iso_address_format` ";
+$updates[201110031344][]="ALTER TABLE `ab_companies` CHANGE `files_folder_id` `files_folder_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates[201110031344][]="ALTER TABLE `ab_addressbooks` CHANGE `files_folder_id` `files_folder_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates[201110031344][]="ALTER TABLE `ab_contacts` CHANGE `files_folder_id` `files_folder_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates[201110031344][]="ALTER TABLE `ab_contacts` CHANGE `go_user_id` `go_user_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates[201110031344][]="ALTER TABLE `ab_contacts` DROP `link_id` ";
+$updates[201110031344][]="ALTER TABLE `ab_contacts` CHANGE `email_allowed` `email_allowed` BOOLEAN NOT NULL DEFAULT '1'";
+$updates[201110031344][]="ALTER TABLE `ab_contacts` DROP `sid` ";
+$updates[201110031344][]="ALTER TABLE `ab_contacts` DROP `color` ";
+$updates[201110031344][]="ALTER TABLE `ab_contacts` DROP `source_id`";
