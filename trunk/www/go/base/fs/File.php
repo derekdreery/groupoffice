@@ -239,7 +239,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		for($i=0;$i<count($uploadedFileArray['tmp_name']);$i++){
 			if (is_uploaded_file($uploadedFileArray['tmp_name'][$i])) {
 				$destinationPath = $destinationFolder->path().'/'.$uploadedFileArray['name'][$i];
-				echo $destinationPath;
+
 				if(move_uploaded_file($uploadedFileArray['tmp_name'][$i], $destinationPath)){		
 					$file = new GO_Base_Fs_File($destinationPath);
 					$file->setDefaultPermissions();
