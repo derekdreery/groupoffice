@@ -47,107 +47,6 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	const STATUS_DELEGATED = "DELEGATED";
 	const STATUS_IN_PROCESS = "IN-PROCESS";
 	
-	public function find($params = array()) {
-		
-		// Check for a given filter on the statusses
-		if(isset($params['statusFilter'])) {
-			$statusCriteria = GO_Base_Db_FindCriteria::newInstance()
-				->addModel(GO_Tasks_Model_Task::model(),'t');			
-
-			switch($params['statusFilter']) {
-				case 'today':
-					$start_time = mktime(0,0,0);
-					$end_time = GO_Base_Util_Date::date_add($start_time, 1);
-					break;
-
-				case 'sevendays':
-					$start_time = mktime(0,0,0);
-					$end_time = GO_Base_Util_Date::date_add($start_time, 7);
-					$show_completed=false;	
-					break;
-
-				case 'overdue':
-					$start_time = 0;
-					$end_time = mktime(0,0,0);
-					$show_completed=false;
-					$show_future=false;
-					break;
-
-				case 'completed':
-					$start_time = 0;
-					$end_time = 0;
-					$show_completed=true;
-					//$show_future=false;
-					break;
-
-				case 'future':
-					$start_time = 0;
-					$end_time = 0;
-					$show_completed=false;				
-					$show_future=true;
-					break;
-
-				case 'active':
-				case 'portlet':
-					$start_time = 0;
-					$end_time = 0;
-					$show_completed=false;
-					$show_future=false;
-				break;
-
-				default:
-					// Nothing
-				break;
-			}
-			
-			if(isset($show_completed)) {
-				if($show_completed)
-					$statusCriteria->addCondition('completion_time', 0, '>');
-				else
-					$statusCriteria->addCondition('completion_time', 0, '=');
-			}
-			
-			if(!empty($start_time)) 
-				$statusCriteria->addCondition('due_time', $start_time, '>=');
-				
-			if(!empty($end_time)) 
-				$statusCriteria->addCondition('due_time', $end_time, '<');
-
-			if(isset($show_future)) {
-				$now = GO_Base_Util_Date::date_add(mktime(0,0,0),1);
-				if($show_future) 
-					$statusCriteria->addCondition('start_time', $now, '>=');
-				else
-					$statusCriteria->addCondition('start_time', $now, '<');
-			}
-			
-			$params['criteriaObject']=$statusCriteria;
-		}
-		
-		// Check for a given filter on the categories
-		if(isset($params['categoryFilter'])) {
-			$categoryCriteria = GO_Base_Db_FindCriteria::newInstance()
-				->addModel(GO_Tasks_Model_Task::model(),'t');
-			
-			$categories = json_decode($params['categoryFilter']);
-			
-//			foreach($categories as $category) 
-//				$categoryCriteria->addCondition('category_id', $category, '=','t',false);
-			//if(count($categories))
-			$categoryCriteria->addInCondition('category_id', $categories,'t',false,false);
-			
-			
-
-			if(isset($params['criteriaObject']))
-				$params['criteriaObject']->mergeWith($categoryCriteria);
-			else
-				$params['criteriaObject'] = $categoryCriteria;
-		}
-		
-		return parent::find($params);
-	}
-	
-	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -206,6 +105,17 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		return parent::beforeSave();
 	}
 	
+	public function afterSave($wasNew) {
+		if(!$this->uuid) {
+			$this->uuid = GO_Base_Util_UUID::create('task', $this->id);
+			$this->save();
+		}
+		
+		return parent::afterSave($wasNew);
+	}
+
+
+	
 	/**
 	 * Set the task to completed or not completed.
 	 * 
@@ -245,7 +155,6 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		}
 	}
 	
-
 	/**
 	 * The files module will use this function.
 	 */
@@ -263,5 +172,4 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		
 		return $defaults;
 	}
-	
 }
