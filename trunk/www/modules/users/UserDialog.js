@@ -161,11 +161,11 @@
     this.addPanel(this.lookAndFeelTab);
      
 
-		if(GO.customfields && GO.customfields.types["8"])
+		if(GO.customfields && GO.customfields.types["GO_Base_Model_User"])
 		{
-			for(var i=0;i<GO.customfields.types["8"].panels.length;i++)
+			for(var i=0;i<GO.customfields.types["GO_Base_Model_User"].panels.length;i++)
 			{
-				this.addPanel(GO.customfields.types["8"].panels[i]);
+				this.addPanel(GO.customfields.types["GO_Base_Model_User"].panels[i]);
 			}
 		}   
 		

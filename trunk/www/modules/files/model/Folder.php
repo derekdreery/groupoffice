@@ -408,7 +408,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function hasFile($filename){		
 		return $this->files(array(
-				'criteriaObject'=>GO_Base_Db_FindCriteria::newInstance()->addCondition('name', $filename),
+				'criteriaObject'=>GO_Base_Db_FindCriteria::newInstance()
+						->addModel(GO_Files_Model_File::model())
+						->addCondition('name', $filename),
 				'single'=>true
 		));
 	}
@@ -421,7 +423,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function hasFolder($filename){		
 		return $this->folders(array(
-				'criteriaObject'=>GO_Base_Db_FindCriteria::newInstance()->addCondition('name', $filename),
+				'criteriaObject'=>GO_Base_Db_FindCriteria::newInstance()
+						->addModel(GO_Files_Model_Folder::model())
+						->addCondition('name', $filename),
 				'single'=>true
 		));
 	}
@@ -496,6 +500,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			return GO_Files_Model_Folder::model()->find(array(
 							'limit'=>100,
 							'criteriaObject'=>  GO_Base_Db_FindCriteria::newInstance()
+									->addModel(GO_Files_Model_Folder::model())
 									->addCondition('parent_id', $this->id)
 					));
 		}else
@@ -510,6 +515,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	public function findShares($findParams){
 		
 		$findParams['criteriaObject']=GO_Base_Db_FindCriteria::newInstance()
+					->addModel(GO_Files_Model_Folder::model())
 					->addCondition('visible', 1)
 					->addCondition('user_id', GO::user()->id,'!=');
 		
