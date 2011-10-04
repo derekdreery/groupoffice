@@ -27,6 +27,7 @@ class GO_Base_Mail_Mailer extends Swift_Mailer{
    */
   public static function newGoInstance()
   {
+		
     return new self(GO_Base_Mail_Transport::newGoInstance());
   }
 	

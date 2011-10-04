@@ -503,6 +503,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 
 		while($existing = $this->findSingle(array(
 				'criteriaObject'=>  GO_Base_Db_FindCriteria::newInstance()
+					->addModel(GO::getModel($this->className()))
 					->addCondition($attributeName, $value)
 					->addCondition($this->primaryKey(), $this->pk, '!=')
 		)))
@@ -1889,18 +1890,24 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		}
 		$GLOBALS['query_count']++;
 		
-		$stmt = $this->getDbConnection()->prepare($sql);
+		try{
+			$stmt = $this->getDbConnection()->prepare($sql);
 
-		foreach($fieldNames as  $field){
+			foreach($fieldNames as  $field){
+
+				$attr = $this->columns[$field];
+
+				$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
+			}
+			$ret =  $stmt->execute();
+		}catch(Exception $e){
+			$msg = $e->getMessage()."\n\nFull SQL Query: ".$sql."\n\nParams:\n".var_export($this->_attributes, true);
 			
-			$attr = $this->columns[$field];
-
-			$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
+			GO::debug($msg);
+			throw new Exception($msg);
 		}
-		return $stmt->execute();
 		
-		
-		
+		return $ret;
 	}
 	
 
@@ -1948,16 +1955,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		
 		$GLOBALS['query_count']++;
 
-		$stmt = $this->getDbConnection()->prepare($sql);
-		
-		$pks = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
-		
-		foreach($this->columns as $field => $attr){
+		try{
+			$stmt = $this->getDbConnection()->prepare($sql);
+
+			$pks = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
+
+			foreach($this->columns as $field => $attr){
+
+				if($this->isModified($field) || in_array($field, $pks))
+					$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
+			}
+			$ret = $stmt->execute();
+		}catch(Exception $e){
+			$msg = $e->getMessage()."\n\nFull SQL Query: ".$sql."\n\nParams:\n".var_export($this->_attributes, true);
 			
-			if($this->isModified($field) || in_array($field, $pks))
-				$stmt->bindParam(':'.$field, $this->_attributes[$field], $attr['type'], empty($attr['length']) ? null : $attr['length']);
+			GO::debug($msg);
+			throw new Exception($msg);
 		}
-		return $stmt->execute();
+
+		
+		return $ret;
 		
 	}
 	

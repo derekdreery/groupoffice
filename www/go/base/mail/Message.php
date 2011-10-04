@@ -15,7 +15,7 @@
 
 //Load Swift utility class
 require_once GO::config()->root_path.'go/base/mail/swift/lib/classes/Swift.php';
-require_once GO::config()->root_path.'classes/mail/mimeDecode.class.inc';
+//require_once GO::config()->root_path.'classes/mail/mimeDecode.class.inc';
 //Swift must be run before GO now.
 spl_autoload_unregister(array('GO', 'autoload'));	
 
@@ -27,6 +27,10 @@ spl_autoload_register(array('GO', 'autoload'));
 
 //Load the init script to set up dependency injection
 require_once GO::config()->root_path.'go/base/mail/swift/lib/swift_init.php';
+
+//make sure temp dir exists
+$cacheFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir);
+$cacheFolder->create();
 
 /**
  * This class is used to parse and write RFC822 compliant recipient lists
@@ -50,6 +54,20 @@ class GO_Base_Mail_Message extends Swift_Message{
 			$headers->addTextHeader("X-MimeOLE", "Produced by Group-Office ".GO::config()->version);
 		}
 	}
+	
+	/**
+   * Create a new Message.
+   * @param string $subject
+   * @param string $body
+   * @param string $contentType
+   * @param string $charset
+   * @return Swift_Mime_Message
+   */
+  public static function newInstance($subject = null, $body = null,
+    $contentType = null, $charset = null)
+  {
+    return new self($subject, $body, $contentType, $charset);
+  }
 	
 	/**
 	 * Load the message by mime data

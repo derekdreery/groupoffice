@@ -254,7 +254,7 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		$users = $stmt->fetchAll();
 		$ids = array();
 		foreach($users as $user)
-			$ids[]=$user;
+			$ids[]=$user->id;
 		
 		$stmt =  GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()				
 						->ignoreAcl()
