@@ -29,6 +29,7 @@ class GO_Base_Db_FindCriteria {
 	
 	private $_columns;
 		
+	private $_ignoreUnknownColumns=false;
 	/**
 	 * Get a new instance object of this class file
 	 * 
@@ -63,6 +64,17 @@ class GO_Base_Db_FindCriteria {
 	}
 	
 	/**
+	 * Prevent warnings on column types when the model is unknown
+	 * 
+	 * @return GO_Base_Db_FindCriteria 
+	 */
+	public function ignoreUnknownColumns(){
+		$this->_ignoreUnknownColumns=true;
+		
+		return $this;
+	}
+	
+	/**
 	 * Private function to recognize the PDOTYPE(http://www.php.net/manual/en/pdo.constants.php) of the given fields.
 	 * 
 	 * @param String $tableAlias The alias of the table in this SQL statement.
@@ -74,7 +86,15 @@ class GO_Base_Db_FindCriteria {
 			$type = $this->_columns[$tableAlias][$field]['type'];
 		else{
 			$type= PDO::PARAM_STR;
-			GO::debug("WARNING: Could not find column type for $tableAlias. $field in GO_Base_Db_FindCriteria. Using PDO::PARAM_STR. Do you need to use addModel?");
+			if(!$this->_ignoreUnknownColumns){
+				GO::debug("WARNING: Could not find column type for $tableAlias. $field in GO_Base_Db_FindCriteria. Using PDO::PARAM_STR. Do you need to use addModel?");
+				$trace = debug_backtrace();
+				for($i=0;$i<count($trace);$i++){
+					GO::debug($trace[$i]['class'].'::'.$trace[$i]['function']);
+				}
+			
+			}
+			
 		}
 		return $type;
 	}
@@ -87,12 +107,20 @@ class GO_Base_Db_FindCriteria {
 	 * @param Mixed $value The value of the field for this condition.
 	 * @param String $comparator How needs this field be compared with the value. Can be ('<','>','<>','=<','>=','=').
 	 */
-	private function _appendConditionString($tableAlias, $field, $value, $comparator){
-		$paramTag = $this->_getParamTag();
+	private function _appendConditionString($tableAlias, $field, $value, $comparator, $valueIsColumn){
 		
-		$this->_params[$paramTag]=array($value, $this->_getPdoType($tableAlias, $field));
+		if(!$valueIsColumn){
+			$paramTag = $this->_getParamTag();		
+			$this->_params[$paramTag]=array($value, $this->_getPdoType($tableAlias, $field));
+		}else
+		{
+			$paramTag=$value;
+		}
+		
 		$this->_condition .= ' `'.$tableAlias.'`.`'.$field.'` '.$comparator.' '.$paramTag;
 	}
+	
+
 	
 	/**
 	 * Adds a condition to this object and returns itself.
@@ -101,13 +129,14 @@ class GO_Base_Db_FindCriteria {
 	 * @param String $value The value of the field for this condition.
 	 * @param String $comparator How needs this field be compared with the value. Can be ('<','>','<>','=<','>=','=').
 	 * @param String $tableAlias The alias of the table in this SQL statement.
-	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true.
+	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true. 
+	 * @param Boolean $valueIsColumn Treat the value as a column name. In this case the value must contain the table alias too if necessary.
 	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
 	 */
-	public function addCondition($field, $value, $comparator='=',$tableAlias='t', $useAnd=true) {
+	public function addCondition($field, $value, $comparator='=',$tableAlias='t', $useAnd=true, $valueIsColumn=false) {
 		
 		$this->_appendOperator($useAnd);
-		$this->_appendConditionString($tableAlias, $field, $value, $comparator);		
+		$this->_appendConditionString($tableAlias, $field, $value, $comparator, $valueIsColumn);		
 		return $this;
 	}
 	
@@ -226,5 +255,14 @@ class GO_Base_Db_FindCriteria {
 		}
 		
 		return $this;
+	}
+	
+	/**
+	 * Add extra params to bind to the query. This is used by GO_Base_Db_FindParams::join()
+	 * 
+	 * @var array $params
+	 */
+	public function addParams($params){
+		$this->_params = array_merge($this->getParams(), $params);
 	}
 }
