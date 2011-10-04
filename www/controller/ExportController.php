@@ -57,7 +57,7 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 				{
 					$export = new $classname('temp');
 					if($export->showInView())
-						$defaultTypes[$classname] = $export->getName();
+						$defaultTypes[$classname] = array('name'=>$export->getName(),'useOrientation'=>$export->useOrientation());
 				}
 			}
 		}

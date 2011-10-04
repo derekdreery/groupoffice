@@ -44,6 +44,10 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 			items: []
 		});
 		
+		this.radioGroup.on('change', function(){
+			this.checkOrientation(this.radioGroup.getValue());
+		}, this);
+		
 		this.includeHidden = new Ext.form.Checkbox({
 			fieldLabel : 'Export hidden columns too',
 			name       : 'includeHidden'
@@ -61,7 +65,7 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 			editable:false,
 			triggerAction:'all',
 			width: 120,
-			value:"H",
+			value:"V",
 			store: new Ext.data.ArrayStore({
 				id:"id",
 				fields: [
@@ -130,7 +134,6 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 			this.hiddenName.setValue(this.name);
 			this.hiddenUrl.setValue(this.url);
 			
-			
 				// Get the available export types for the form
 			GO.request({
 				url: 'export/types',
@@ -140,9 +143,13 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 				success: function(response, options, result)
 				{
 					var name;
+					var useOrientation;
+					var checked=true;
 					for(var clsName in result.outputTypes) {
-						name = result.outputTypes[clsName];
-						this.createExportTypeRadio(name, clsName);
+						name = result.outputTypes[clsName].name;
+						useOrientation = result.outputTypes[clsName].useOrientation;
+						this.createExportTypeRadio(name, clsName, checked, useOrientation);
+						checked=false;
 					}
 					GO.ExportDialog.superclass.show.call(this);	
 				},
@@ -152,18 +159,31 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 		{
 			GO.ExportDialog.superclass.show.call(this);
 		}
-		
 	},	
-	createExportTypeRadio : function(name,clsName) {
+	createExportTypeRadio : function(name,clsName, checked, useOrientation) {
 		var radioButton = new Ext.form.Radio({
 			  fieldLabel : "",
         boxLabel   : name,
         name       : 'type',
         inputValue : clsName,
-				value : clsName
+				value : clsName,
+				checked: checked,
+				orientation: useOrientation
 		});
 		
 		this.radioGroup.items.push(radioButton);		
+		if(checked && !useOrientation)
+			this.exportOrientation.hide();
+	},
+	checkOrientation : function(selectedRadio){
+
+		if(!selectedRadio.orientation)
+			this.exportOrientation.hide();
+		else
+			this.exportOrientation.show();
+		
+		this.syncShadow();
+		
 	},
 	submitForm : function(hide) {
 		this.formPanel.form.getEl().dom.target='_blank';

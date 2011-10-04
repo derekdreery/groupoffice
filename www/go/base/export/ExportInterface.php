@@ -32,4 +32,6 @@ interface GO_Base_Export_ExportInterface{
 	
 	public function getName();
 	
+	public function useOrientation();
+	
 }

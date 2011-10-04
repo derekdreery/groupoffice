@@ -75,4 +75,8 @@ class GO_Base_Export_ExportHTML implements GO_Base_Export_ExportInterface{
 	public function getName() {
 		return 'HTML';
 	}
+		
+	public function useOrientation(){
+		return false;
+	}
 }

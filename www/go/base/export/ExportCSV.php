@@ -61,4 +61,8 @@ class GO_Base_Export_ExportCSV implements GO_Base_Export_ExportInterface{
 	public function getName() {
 		return 'CSV';
 	}
+		
+	public function useOrientation(){
+		return false;
+	}
 }
