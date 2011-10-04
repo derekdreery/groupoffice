@@ -93,11 +93,28 @@ class GO_Base_Db_FindParams{
 	/**
 	 * Insert a plain join SQL string
 	 * 
-	 * @param string $join
+	 * @param string $tableName
+	 * @param GO_Base_Db_FindCriteria $criteria
+	 * @param String $tableAlias
+	 * @param String $type INNER or LEFT etc.
+	 * 
 	 * @return GO_Base_Db_FindParams 
 	 */
-	public function join($join){
-		$this->_params['join']=$join;
+	public function join($tableName, $criteria, $tableAlias = false, $type='INNER'){
+		if(!isset($this->_params['join']))
+			$this->_params['join']='';
+		
+		$this->_params['join'].="$type JOIN `$tableName` ";
+		
+		if($tableAlias)
+			$this->_params['join'] .= $tableAlias.' ';
+		
+		$this->_params['join'] .= ' ON ('.$criteria->getCondition().')';
+		
+		//add the bind params to the main criteria object.
+		$this->getCriteria()->addParams($criteria->getParams());
+		
+		
 		return $this;
 	}
 	
@@ -129,11 +146,11 @@ class GO_Base_Db_FindParams{
 	 * It will be stored in the session so that 
 	 * GO_Base_Controller_AbstractModelController can reuise the params.
 	 * 
-	 * @param boolean $value
+	 * @param string $name
 	 * @return GO_Base_Db_FindParams 
 	 */
-	public function export($value=true){
-		$this->_params['export']=$fields;
+	public function export($name){
+		$this->_params['export']=$name;
 		return $this;
 	}
 	

@@ -54,7 +54,12 @@ class GO_Base_Model_SearchCacheRecord extends GO_Base_Db_ActiveRecord {
 		
 		$params = GO_Base_Db_FindParams::newInstance()
 						->select("t.*,l.description AS link_description")
-						->join("INNER JOIN `go_links_{$model->tableName()}` l ON (l.id=".intval($model->id)." AND t.model_id=l.model_id AND t.model_type_id=l.model_type_id)")
+						->join('go_links_'.$model->tableName(),  GO_Base_Db_FindCriteria::newInstance()
+										->ignoreUnknownColumns() //we don't have models for go_links_* tables
+										->addCondition('id', $model->id,'=','l')
+										->addCondition('model_id', 'l.model_id','=','t',true, true)
+										->addCondition('model_type_id', 'l.model_type_id','=','t',true, true),
+										'l')
 						->mergeWith($findParams);
 
 		return $this->find($params);

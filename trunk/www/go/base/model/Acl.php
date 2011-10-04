@@ -230,5 +230,52 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 
 		return parent::afterDelete();
 	}
+	
+	
+	/**
+	 * Get all users that have access to an acl.
+	 * 
+	 * @param int $aclId
+	 * @param int $level 
+	 * @return GO_Base_Db_ActiveStatement 
+	 */
+	public static function getAuthorizedUsers($aclId, $level){
+		$stmt =  GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()		
+						->ignoreAcl()
+						->join(GO_Base_Model_AclUsersGroups::model()->tableName(),GO_Base_Db_FindCriteria::newInstance()
+										->addModel(GO_Base_Model_AclUsersGroups::model(), 'a')
+										->addModel(GO_Base_Model_User::model(), 't')
+										->addCondition('id', 'a.user_id','=','t',true,true)
+										->addCondition('acl_id', $aclId,'=','a')
+										->addCondition('level', $level,'>=','a')
+										,'a')
+						);
+		
+		$users = $stmt->fetchAll();
+		$ids = array();
+		foreach($users as $user)
+			$ids[]=$user;
+		
+		$stmt =  GO_Base_Model_User::model()->find(GO_Base_Db_FindParams::newInstance()				
+						->ignoreAcl()
+						->join(GO_Base_Model_UserGroup::model()->tableName(),  GO_Base_Db_FindCriteria::newInstance()		
+										->addCondition('id', 'ug.user_id','=','t',true,true),
+										'ug')
+						->join(GO_Base_Model_AclUsersGroups::model()->tableName(),GO_Base_Db_FindCriteria::newInstance()
+										->addModel(GO_Base_Model_AclUsersGroups::model(),'a')										
+										->addCondition('group_id', 'ug.group_id','=','a',true,true)
+										->addCondition('acl_id', $aclId,'=','a')
+										->addCondition('level', $level,'>=','a')
+										,'a')
+						->order('a.level')
+						->group('t.id'));
+		
+		while($user = $stmt->fetch()){
+			if(!in_array($user->id, $ids))
+				$users[]=$user;
+		}
+		
+		return $users;
+	}
 
 }

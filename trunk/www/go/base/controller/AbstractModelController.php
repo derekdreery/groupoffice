@@ -467,9 +467,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 			$stmt = GO_Comments_Model_Comment::model()->find(GO_Base_Db_FindParams::newInstance()
 							->limit(5)
-							->criteria(GO_Base_Db_FindCriteria::newInstance()->
-											addCondition('model_id', $model->id)->
-											addCondition('model_type_id',$model->modelTypeId())
+							->criteria(GO_Base_Db_FindCriteria::newInstance()
+							        ->addModel(GO_Comments_Model_Comment::model())
+											->addCondition('model_id', $model->id)
+											->addCondition('model_type_id',$model->modelTypeId())
 							));
 
 			$store = GO_Base_Data_Store::newInstance(GO_Comments_Model_Comment::model());			

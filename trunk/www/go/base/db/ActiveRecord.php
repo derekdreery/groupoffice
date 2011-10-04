@@ -946,7 +946,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			if(isset($params['criteriaObject'])){
 				$criteriaObjectParams = $params['criteriaObject']->getParams();
 				
-				GO::debug($criteriaObjectParams);
+				if($this->_debugSql)
+					GO::debug($criteriaObjectParams);
 				
 				foreach($criteriaObjectParams as $param=>$value)
 					$result->bindValue($param, $value[0], $value[1]);
@@ -1298,7 +1299,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					->ignoreAcl()
 					->relation($name);
 					
-			$findParams->getCriteria()->addCondition($remoteFieldThatHoldsMyPk, $this->pk);
+			$findParams->getCriteria()
+							->addModel(GO::getModel($model))
+							->addCondition($remoteFieldThatHoldsMyPk, $this->pk);
 			
 			
 			
