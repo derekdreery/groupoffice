@@ -98,9 +98,9 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 				$level = 0;
 				if ($module['write_permission']) {
-					$level = GO_SECURITY::WRITE_PERMISSION;
+					$level = GO_Base_Model_Acl::WRITE_PERMISSION;
 				} elseif ($module['read_permission']) {
-					$level = GO_SECURITY::READ_PERMISSION;
+					$level = GO_Base_Model_Acl::READ_PERMISSION;
 				}
 
 				if ($level) {
