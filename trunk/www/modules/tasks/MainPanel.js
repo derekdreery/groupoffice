@@ -655,37 +655,37 @@ GO.newMenuItems.push({
 
 
 
-GO.mainLayout.onReady(function(){
-
-	//GO.checker is not available in some screens like accept invitation from calendar
-	if(GO.checker){
-		//create notify icon
-		var notificationArea = Ext.get('notification-area');
-		if(notificationArea)
-		{
-			GO.tasks.notificationEl = notificationArea.createChild({
-				id: 'ta-notify',
-				tag:'a',
-				href:'#',
-				style:'display:none'
-			});
-			GO.tasks.notificationEl.on('click', function(){
-				GO.mainLayout.openModule('tasks');
-			}, this);
-		}
-
-		GO.checker.on('check', function(checker, data){
-			var tp = GO.mainLayout.getModulePanel('tasks');
-
-			if(data.tasks.active!=GO.tasks.last_active && data.tasks.active>0)
-			{
-				
-				if(!tp || !tp.isVisible())
-					GO.tasks.notificationEl.setDisplayed(true);
-			}
-
-			GO.tasks.notificationEl.update(data.tasks.active);			
-			GO.tasks.last_active=data.tasks.active;			
-		});
-	}
-});
+//GO.mainLayout.onReady(function(){
+//
+//	//GO.checker is not available in some screens like accept invitation from calendar
+//	if(GO.checker){
+//		//create notify icon
+//		var notificationArea = Ext.get('notification-area');
+//		if(notificationArea)
+//		{
+//			GO.tasks.notificationEl = notificationArea.createChild({
+//				id: 'ta-notify',
+//				tag:'a',
+//				href:'#',
+//				style:'display:none'
+//			});
+//			GO.tasks.notificationEl.on('click', function(){
+//				GO.mainLayout.openModule('tasks');
+//			}, this);
+//		}
+//
+//		GO.checker.on('check', function(checker, data){
+//			var tp = GO.mainLayout.getModulePanel('tasks');
+//
+//			if(data.tasks.active!=GO.tasks.last_active && data.tasks.active>0)
+//			{
+//				
+//				if(!tp || !tp.isVisible())
+//					GO.tasks.notificationEl.setDisplayed(true);
+//			}
+//
+//			GO.tasks.notificationEl.update(data.tasks.active);			
+//			GO.tasks.last_active=data.tasks.active;			
+//		});
+//	}
+//});

@@ -240,7 +240,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 	public function actionThumb($params) {
 
-	
+		GO::session()->closeWriting();
 
 		$dir = GO::config()->root_path . 'views/Extjs3/themes/Default/images/128x128/filetypes/';
 		$url = GO::config()->host . 'views/Extjs3/themes/Default/images/128x128/filetypes/';
