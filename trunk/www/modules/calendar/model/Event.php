@@ -139,11 +139,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 		
 	protected function afterSave($wasNew) {
+		
+		if(!$this->uuid) {
+			$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
+			$this->save();
+		}
+		
 		//add exception model for the original recurring event
 		if($wasNew && $this->exception_for_event_id>0){
 			$newExeptionEvent = GO_Calendar_Model_Event::model()->findByPk($this->exception_for_event_id);
 			$newExeptionEvent->addException($this->exception_date,$this->exception_for_event_id);			
-		}
+		}		
 		
 		return parent::afterSave($wasNew);
 	}
