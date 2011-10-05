@@ -190,15 +190,15 @@ class reminder extends db
 /**
 	* Gets a reminder record by a link ID
 	*
-	* @param Int $link_id ID of the reminder
+	* @param Int $model_id ID of the reminder
 	*
 	* @access public
 	* @return Array Record properties
 	*/
 	
-	function delete_reminders_by_link_id($link_id, $link_type)
+	function delete_reminders_by_model_id($model_id, $model_type_id)
 	{
-		$this->get_reminders_by_link_id($link_id, $link_type);
+		$this->get_reminders_by_model_id($model_id, $model_type_id);
 
 		$r = new reminder();
 		while($reminder=$this->next_record()){
@@ -209,30 +209,30 @@ class reminder extends db
 	/**
 	* Gets a reminder record by a link ID
 	*
-	* @param Int $link_id ID of the reminder
+	* @param Int $model_id ID of the reminder
 	*
 	* @access public
 	* @return Array Record properties
 	*/
 	
-	function get_reminder_by_link_id($user_id, $link_id, $link_type)
+	function get_reminder_by_model_id($user_id, $model_id, $model_type_id)
 	{
-		$this->query("SELECT r.*,u.time FROM go_reminders r INNER JOIN go_reminders_users u ON u.reminder_id=r.id WHERE u.user_id=".intval($user_id)." AND link_id=".intval($link_id)." AND link_type=".intval($link_type));
+		$this->query("SELECT r.*,u.time FROM go_reminders r INNER JOIN go_reminders_users u ON u.reminder_id=r.id WHERE u.user_id=".intval($user_id)." AND model_id=".intval($model_id)." AND model_type_id=".intval($model_type_id));
 		return $this->next_record();
 	}
 	
  /**
 	* Get a reminders record by a link ID
 	*
-	* @param Int $link_id ID of the reminder
+	* @param Int $model_id ID of the reminder
 	*
 	* @access public
 	* @return Array Record properties
 	*/
 	
-	function get_reminders_by_link_id($link_id, $link_type)
+	function get_reminders_by_model_id($model_id, $model_type_id)
 	{
-		$this->query("SELECT * FROM go_reminders WHERE link_id=".intval($link_id)." AND link_type=".intval($link_type));
+		$this->query("SELECT * FROM go_reminders WHERE model_id=".intval($model_id)." AND model_type_id=".intval($model_type_id));
 		return $this->num_rows();
 	}
 	
@@ -283,7 +283,7 @@ class reminder extends db
 	*/
 	function get_reminders($user_id, $not_mailed=false)
 	{
-	 	$sql = "SELECT DISTINCT r.id, r.time, r.vtime, r.name, r.link_id,r.link_type,r.snooze_time, r.text FROM go_reminders r ".
+	 	$sql = "SELECT DISTINCT r.id, r.time, r.vtime, r.name, r.model_id,r.model_type_id,r.snooze_time, r.text FROM go_reminders r ".
 		"LEFT JOIN go_reminders_users u ON u.reminder_id=r.id ".
 		"WHERE u.user_id=? ".
 		"AND u.time<?";

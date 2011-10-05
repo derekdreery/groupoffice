@@ -86,3 +86,11 @@ $updates[201108190000][]="ALTER TABLE `go_links_go_users` CHANGE `link_type` `mo
 $updates[201109280000][]="ALTER TABLE `go_search_cache` DROP `table`";
 $updates[201109280000][]="ALTER TABLE `go_search_cache` DROP `link_count`";
 $updates[201109301050][]="ALTER TABLE `go_users` CHANGE `show_smilies` `show_smilies` BOOL NOT NULL DEFAULT '1'";
+
+$updates[201110050822][]="ALTER TABLE `go_reminders` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+$updates[201110050822][]="ALTER TABLE `go_reminders` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL";
+$updates[201110050822][]="ALTER TABLE `go_reminders` CHANGE `link_type` `model_type_id` INT( 11 ) NOT NULL ";
+
+$updates[201110050822][]="ALTER TABLE `go_reminders` CHANGE `manual` `manual` TINYINT( 1 ) NOT NULL DEFAULT '0'";
+$updates[201110050822][]="ALTER TABLE `go_reminders` CHANGE `text` `text` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates[201110050822][]="ALTER TABLE `go_reminders_users` CHANGE `mail_sent` `mail_sent` TINYINT( 1 ) NOT NULL DEFAULT '0'";
