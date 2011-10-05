@@ -200,11 +200,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	 * @var array Holds all the column properties indexed by the field name.
 	 * 
 	 * eg: 'id'=>array(
-	 * 'type'=>PDO::PARAM_INT,
-	 * 'required'=>true,
-	 * 'length'=><max length of the value>, 
+	 * 'type'=>PDO::PARAM_INT, //Autodetected
+	 * 'required'=>true, //Will be true automatically if field in database may not be null and doesn't have a default value
+	 * 'length'=><max length of the value>, //Autodetected from db
 	 * 'validator'=><a function to call to validate the value>,
-	 * 'gotype'=>'number|text|unixtimestamp',
+	 * 'gotype'=>'number|text|unixtimestamp', //Autodetected from db as far as possible. See loadColumns()
 	 * 'decimals'=>2//only for gotype=number)
 	 * 
 	 * The validator looks like this:
@@ -291,7 +291,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	
 	/**
 	 * Loads the column information from the database
-
+	 * 
 	 */
 	protected function loadColumns() {
 		if($this->tableName()){
@@ -314,8 +314,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 					}
 
 					$gotype = 'textfield';
-					$required=false;
-
+	
 					$pdoType = PDO::PARAM_STR;
 					switch ($type) {
 						case 'int':
@@ -340,8 +339,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 							$gotype = 'number';
 							break;
 						
-							
-
 						case 'text':
 							$gotype = 'textarea';
 							break;
@@ -356,19 +353,25 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 						case 'mtime':
 							$gotype = 'unixtimestamp';			
 							break;
-						case 'name':
-							$required=true;
-							break;
+//						case 'name':
+//							$required=true;
+//							break;
 					}
+					
+					$default = $field['Default'];
+					
+					$required = is_null($default) && $field['Null']=='NO' && strpos($field['Extra'],'auto_increment')===false;
 
 					$this->columns[$field['Field']]=array(
 							'type'=>$pdoType,
 							'required'=>$required,
 							'length'=>$length,
-							'gotype'=>$gotype
+							'gotype'=>$gotype,
+							'default'=>$default
 					);
 					
 				}
+
 				GO::cache()->set('modelColumns_'.$this->tableName(), $this->columns);
 			}
 		}
@@ -2500,7 +2503,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	private function _getDefaultAttributes(){
 		$attr=array();
 		foreach($this->getColumns() as $field => $colAttr)
-			$attr[$field]=null;
+			$attr[$field]=$colAttr['default'];
 		
 		return array_merge($attr, $this->defaultAttributes());
 	}
