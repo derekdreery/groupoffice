@@ -106,10 +106,12 @@ class GO_Bookmarks_Controller_Bookmark extends GO_Base_Controller_AbstractModelC
 		return $storeParams;
 	}
 
-	protected function prepareStore($store) {
-		$store->formatColumn('category_name', '$model->category_name');
-		$store->formatColumn('thumb', '$model->thumbURL');
-		$store->formatColumn('permissionLevel', '$model->permissionLevel');
+	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+		
+		
+		$columnModel->formatColumn('category_name', '$model->category_name');
+		$columnModel->formatColumn('thumb', '$model->thumbURL');
+		$columnModel->formatColumn('permissionLevel', '$model->permissionLevel');
 	}
 
 	protected function remoteComboFields() {
