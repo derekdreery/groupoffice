@@ -52,7 +52,9 @@ class GO_Base_Db_FindParams{
 	 * @return GO_Base_Db_FindParams 
 	 */
 	public function mergeWith($findParams){
-		if(!is_array($findParams))
+		if(!$findParams)
+			$findParams=array();
+		elseif(!is_array($findParams))
 			$findParams = $findParams->getParams();
 		
 		

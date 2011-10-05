@@ -48,13 +48,14 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	 * Create a new grid with column model and query result
 	 * 
 	 * @param GO_Base_Db_ActiveRecord $model
-	 * @param array $excludeColumns
+	 * @param array $excludeColumns Exlude columns if you autoload all columns
+	 * @param array $excludeColumns Set the columns to load from the model. If ommitted it will load all columns.
 	 * @param array $findParams
 	 * @return GO_Base_Data_Store 
 	 */
-	public static function newInstance($model, $excludeColumns=array())
+	public static function newInstance($model, $excludeColumns=array(), $includeColumns=array())
 	{
-		$cm = new GO_Base_Data_ColumnModel($model, $excludeColumns);		
+		$cm = new GO_Base_Data_ColumnModel($model, $excludeColumns, $includeColumns=array());		
 		$store = new self($cm);
 		return $store;
 		
