@@ -24,3 +24,8 @@ $updates[201109140000][]="ALTER TABLE `cal_events` CHANGE `private` `private` BO
 $updates[201109140000][]="ALTER TABLE `cal_events` CHANGE `read_only` `read_only` BOOLEAN NOT NULL DEFAULT '0'";
 $updates[201109160000][]="ALTER TABLE `cal_exceptions` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
 
+$updates[201110051633][]="ALTER TABLE `cal_events` CHANGE `uuid` `uuid` VARCHAR( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates[201110051633][]="ALTER TABLE `cal_events` CHANGE `resource_event_id` `resource_event_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates[201110051633][]="ALTER TABLE `cal_events` CHANGE `rrule` `rrule` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates[201110051633][]="ALTER TABLE `cal_events` CHANGE `exception_for_event_id` `exception_for_event_id` INT( 11 ) NOT NULL DEFAULT '0'";
