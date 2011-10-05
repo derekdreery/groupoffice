@@ -35,7 +35,7 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 	
 	public function relations() {
 		
-		return array('users' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'group_id', 'linkModel' => 'GO_Base_Model_ReminderUser'));
+		return array('users' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'reminder_id', 'linkModel' => 'GO_Base_Model_ReminderUser'));
 	}
 	
 	/**
@@ -109,7 +109,7 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 						->select('count(*) AS count')
 						->single();
 		
-		$params->getCriteria()->addCondition('reminder_id', $this->reminder_id);
+		$params->getCriteria()->addModel(GO_Base_Model_ReminderUser::model())->addCondition('reminder_id', $this->id);
 		
 		$record = GO_Base_Model_ReminderUser::model()->find($params);
 		
@@ -141,6 +141,17 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 	
 	public function defaultAttributes() {
 		return array('snooze_time'=>7200);
+	}
+	
+	
+	public function findByModel($modelName, $id){
+		$model_type_id = GO::getModel($modelName)->modelTypeId();		
+		
+		return $this->find(GO_Base_Db_FindParams::newInstance()
+						->criteria(GO_Base_Db_FindCriteria::newInstance()
+										->addModel(GO_Base_Model_Reminder::model())
+										->addCondition('model_type_id', $model_type_id)
+										->addCondition('model_id', $id)));
 	}
 	
 	

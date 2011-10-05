@@ -195,7 +195,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		while ($model = $this->_stmt->fetch()) {
 			$this->_response['results'][] = $this->getColumnModel()->formatModel($model);
 		}
-		$this->_response['total']=$this->_stmt->foundRows;
+		$this->_response['total']=isset($this->_stmt->foundRows) ? $this->_stmt->foundRows : $this->_stmt->rowCount();
 
 
     return $this->_response;

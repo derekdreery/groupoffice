@@ -133,9 +133,10 @@ GO.CheckerPanel = Ext.extend(function(config){
 			'id',
 			'name',
 			'description',
-			'link_id',
-			'link_type',
-			'link_type_name',
+			'model_id',
+			'model_name',
+			'model_type_id',
+			'type',
 			'local_time',
 			'iconCls',
 			'time',
@@ -143,7 +144,7 @@ GO.CheckerPanel = Ext.extend(function(config){
 			'text'
 			]
 		}),
-		groupField:'link_type_name',
+		groupField:'type',
 		sortInfo: {
 			field: 'time',
 			direction: 'ASC'
@@ -183,7 +184,7 @@ GO.CheckerPanel = Ext.extend(function(config){
  
 	config.cm = new Ext.grid.ColumnModel([
 	{
-		dataIndex: 'link_type_name',
+		dataIndex: 'type',
 		hideable: false
 	},{
 		header: "",
@@ -274,12 +275,12 @@ GO.CheckerPanel = Ext.extend(function(config){
 		var selectionModel = grid.getSelectionModel();
 		var record = selectionModel.getSelected();
 		
-		if(GO.linkHandlers[record.data.link_type])
+		if(GO.linkHandlers[record.data.model_name])
 		{
-			GO.linkHandlers[record.data.link_type].call(this, record.data.link_id);
+			GO.linkHandlers[record.data.model_name].call(this, record.data.model_id);
 		}else
 		{
-			Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.link_type);
+			Ext.Msg.alert(GO.lang['strError'], 'No handler definded for link type: '+record.data.model_name);
 		}
 	}, this);
 	
@@ -302,9 +303,11 @@ GO.CheckerPanel = Ext.extend(function(config){
 			{
 				reminders.push(selected[i].get('id'));
 			}
+			
+			var url = task=='snooze_reminders' ? GO.url('reminder/snooze') : GO.url('reminder/dismiss');
 
 			Ext.Ajax.request({
-				url: BaseHref+'action.php',
+				url: url,
 				params: {
 					task:task,
 					snooze_time: seconds,
@@ -382,7 +385,7 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
   // Function to check for reminders in the database
   checkForReminders : function(){
 				Ext.Ajax.request({
-					url: BaseHref+'json.php',
+					url: GO.url('reminder/store'),
 					params: this.params,
 					callback: function(options, success, response)
 					{
@@ -404,11 +407,9 @@ Ext.extend(GO.Checker, Ext.util.Observable, {
 
 								this.fireEvent('check', this, data);
 
-								if(data.reminders)
+								if(data.results)
 								{
-									this.checkerWindow.checkerGrid.store.loadData({
-										results: data.reminders
-									});
+									this.checkerWindow.checkerGrid.store.loadData(data);
 									if(this.lastCount != this.checkerWindow.checkerGrid.store.getCount())
 									{
 										this.lastCount = this.checkerWindow.checkerGrid.store.getCount();

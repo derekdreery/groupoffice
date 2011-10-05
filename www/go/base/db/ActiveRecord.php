@@ -313,6 +313,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 						$length = 0;
 					}
 
+					$required=false;
 					$gotype = 'textfield';
 	
 					$pdoType = PDO::PARAM_STR;
@@ -353,14 +354,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 						case 'mtime':
 							$gotype = 'unixtimestamp';			
 							break;
-//						case 'name':
-//							$required=true;
-//							break;
+						case 'name':
+							$required=true;
+							break;
 					}
 					
 					$default = $field['Default'];
 					
-					$required = is_null($default) && $field['Null']=='NO' && strpos($field['Extra'],'auto_increment')===false;
+					//$required = is_null($default) && $field['Null']=='NO' && strpos($field['Extra'],'auto_increment')===false;
 
 					$this->columns[$field['Field']]=array(
 							'type'=>$pdoType,
@@ -1617,7 +1618,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$this->ctime=time();
 		}
 
-		if(isset($this->columns['user_id']) && !isset($this->user_id)){
+		if(isset($this->columns['user_id']) && empty($this->user_id)){
 			$this->user_id=GO::user() ? GO::user()->id : 1;
 		}
 
@@ -2021,8 +2022,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			//clean up link models for many_many relations
 			if($attr['type']==self::MANY_MANY){
 				$stmt = GO::getModel($attr['linkModel'])->find(
-				 GO_Base_Db_FindParams::newInstance()
+				 GO_Base_Db_FindParams::newInstance()							
 								->criteria(GO_Base_Db_FindCriteria::newInstance()
+												->addModel(GO::getModel($attr['linkModel']))
 												->addCondition($attr['field'], $this->pk)
 												)											
 								);
