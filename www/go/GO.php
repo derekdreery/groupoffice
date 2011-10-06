@@ -257,6 +257,8 @@ class GO{
 		spl_autoload_register(array('GO', 'autoload'));	
 		
 		GO::session();
+		
+		date_default_timezone_set(GO::user()->timezone);
 
 
 //		if (!defined('GO_NO_SESSION')) {
