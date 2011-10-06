@@ -85,6 +85,10 @@ class GO_Base_Util_Date_RecurrencePattern{
 	}
 	
 	protected $_recurPositionStartTime;
+	
+	public function setRecurpositionStartTime($startTime){
+		$this->_recurPositionStartTime=$startTime;
+	}
 
 	/**
 	 * Return the first valid occurrence time after the given startTime.
@@ -96,7 +100,7 @@ class GO_Base_Util_Date_RecurrencePattern{
 	 */
 	public function getNextRecurrence($startTime=false)
 	{
-		if(!isset($this->_recurPositionStartTime))
+		if(!isset($this->_recurPositionStartTime) || $this->_recurPositionStartTime<$this->_eventStartTime)
 			$this->_recurPositionStartTime=$this->_eventStartTime;
 		
 		if(!$startTime)
@@ -356,6 +360,5 @@ class GO_Base_Util_Date_RecurrencePattern{
 			}						
 			$this->_byday=$newByDay;
 		}
-	}
-	
+	}	
 }

@@ -45,11 +45,11 @@ GO.calendar.EventDialog = function(calendar) {
 	this.resourcesPanel
 	];
 
-	if(GO.customfields && GO.customfields.types["1"])
+	if(GO.customfields && GO.customfields.types["GO_Calendar_Model_Event"])
 	{
-		for(var i=0;i<GO.customfields.types["1"].panels.length;i++)
+		for(var i=0;i<GO.customfields.types["GO_Calendar_Model_Event"].panels.length;i++)
 		{
-			items.push(GO.customfields.types["1"].panels[i]);
+			items.push(GO.customfields.types["GO_Calendar_Model_Event"].panels[i]);
 		}
 	}
 

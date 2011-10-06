@@ -187,7 +187,7 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 	},
 	showEventInfoDialog : function()
 	{
-		GO.linkHandlers[1].call(this, this.event.event_id);
+		GO.linkHandlers["GO_Calendar_Model_Event"].call(this, this.event.event_id);
 	},
 	menuHandler : function()
 	{

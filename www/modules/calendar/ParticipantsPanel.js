@@ -72,12 +72,10 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 	config.hideMode = 'offsets';
 
 	config.store = new GO.data.JsonStore({
-		url : GO.settings.modules.calendar.url + 'json.php',
+		url : GO.url('calendar/participant/store'),
 		baseParams : {
 			task : "participants"
 		},
-		root : 'results',
-		id : 'id',
 		fields : ['id', 'name', 'email', 'available','status', 'user_id', 'is_organizer']
 	});
 		
@@ -120,7 +118,7 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 	})
 	*/
 	this.importCheckbox = new Ext.form.Checkbox({
-		name:'import',
+		name:'add_to_participant_calendars',
 		boxLabel:GO.calendar.lang.importToCalendar,
 		hideLabel:true		
 	})
@@ -185,16 +183,9 @@ GO.calendar.ParticipantsPanel = function(eventDialog, config) {
 			renderer : function(v) {
 
 				var className = 'img-unknown';
-				switch (v) {
-					case '1' :
-						className = 'img-available';
-						break;
-
-					case '0' :
-						className = 'img-unavailable';
-						break;
-				}
-
+				if(v!='?')
+					className = v ? 'img-available' : 'img-unavailable';
+				
 				return '<div class="' + className + '"></div>';
 			}
 		}, {
@@ -431,34 +422,34 @@ Ext.extend(GO.calendar.ParticipantsPanel, Ext.Panel, {
 	},
 	
 	addDefaultParticipant : function(){
-		this.body.mask(GO.lang.waitMsgLoad);
-		Ext.Ajax.request({
-			url : GO.settings.modules.calendar.url + 'json.php',
-			params : {
-				task : 'get_default_participant',
-				calendar_id : this.eventDialog.selectCalendar.getValue(),
-				start_time : this.eventDialog.getStartDate().format('U'),
-				end_time : this.eventDialog.getEndDate().format('U')
-			},
-			callback : function(options, success, response) {
-				this.body.unmask();
-				if (!success) {
-					Ext.MessageBox.alert(GO.lang['strError'],
-						GO.lang['strRequestError']);
-				} else {
-					var responseParams = Ext.decode(response.responseText);							
-					this.addParticipant({
-						name : responseParams.name,
-						email : responseParams.email,
-						status :  responseParams.status,
-						user_id : responseParams.user_id,
-						available : responseParams.available,
-						is_organizer : responseParams.is_organizer
-					});
-				}
-			},
-			scope : this
-		});
+//		this.body.mask(GO.lang.waitMsgLoad);
+//		Ext.Ajax.request({
+//			url : GO.settings.modules.calendar.url + 'json.php',
+//			params : {
+//				task : 'get_default_participant',
+//				calendar_id : this.eventDialog.selectCalendar.getValue(),
+//				start_time : this.eventDialog.getStartDate().format('U'),
+//				end_time : this.eventDialog.getEndDate().format('U')
+//			},
+//			callback : function(options, success, response) {
+//				this.body.unmask();
+//				if (!success) {
+//					Ext.MessageBox.alert(GO.lang['strError'],
+//						GO.lang['strRequestError']);
+//				} else {
+//					var responseParams = Ext.decode(response.responseText);							
+//					this.addParticipant({
+//						name : responseParams.name,
+//						email : responseParams.email,
+//						status :  responseParams.status,
+//						user_id : responseParams.user_id,
+//						available : responseParams.available,
+//						is_organizer : responseParams.is_organizer
+//					});
+//				}
+//			},
+//			scope : this
+//		});
 	},
 	
 	addParticipant : function(config)

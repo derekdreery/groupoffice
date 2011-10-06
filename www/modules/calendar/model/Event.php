@@ -61,14 +61,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 	public function relations(){
 		return array(
-				'calendar' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Calendar_Model_Calendar', 'field'=>'calendar_id')
+				'calendar' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Calendar_Model_Calendar', 'field'=>'calendar_id'),
+				'participants' => array('type'=>self::HAS_MANY, 'model'=>'GO_Calendar_Model_Participant', 'field'=>'event_id','delete'=>true),
+				'exceptions' => array('type'=>self::HAS_MANY, 'model'=>'GO_Calendar_Model_Exception', 'field'=>'event_id','delete'=>true)
 		);
 	}
 
 
 	protected function getCacheAttributes() {
 		return array(
-				'name' => $this->name
+				'name' => $this->name,
+				'description'=>$this->description
+				
 		);
 	}
 	
@@ -152,5 +156,141 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}		
 		
 		return parent::afterSave($wasNew);
+	}
+	
+	private $_calculatedEvents;
+	
+	/**
+	 * Find events for a given time period.
+	 * 
+	 * Recurring events are calculated and added to the array.
+	 * 
+	 * @param GO_Base_Db_FindParams $findParams
+	 * @param int $periodStartTime
+	 * @param int $periodEndTime
+	 * @param boolean $onlyBusyEvents
+	 * @return array Note, this are not models but arrays of attributes.
+	 */
+	public function findForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents=false){
+		
+		if(!$findParams)
+			$findParams = GO_Base_Db_FindParams::newInstance();
+		
+		$findParams
+			->order('start_time','ASC');
+		
+		$findParams->getCriteria()
+						->addModel(GO_Calendar_Model_Event::model())
+						->addCondition('start_time',$periodEndTime,'<')
+						->addCondition('end_time',$periodStartTime,'>');
+		
+		if($onlyBusyEvents)
+			$findParams->getCriteria()->addCondition('busy',1);
+		
+		$stmt = $this->find($findParams);
+		
+		
+		$this->_calculatedEvents=array();
+		
+		while($event = $stmt->fetch()){
+			$this->_calculateRecurrences($event, $periodStartTime, $periodEndTime);
+		}				
+		
+		return array_values($this->_calculatedEvents);
+	}
+	
+	private function _calculateRecurrences($event, $periodStartTime, $periodEndTime){
+		if(empty($event->rrule)){
+			//not a recurring event
+			$this->_calculatedEvents[]=$event->getAttributes('formatted');
+		}else
+		{
+			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule->readIcalendarRruleString($event->start_time, $event->rrule);
+			
+			$rrule->setRecurpositionStartTime($periodStartTime);
+			
+			$origEventAttr = $event->getAttributes('formatted');
+			
+			while($occurenceStartTime = $rrule->getNextRecurrence()){
+					
+				if($occurenceStartTime>$periodEndTime)
+					break;
+				
+				$origEventAttr['start_time']=  GO_Base_Util_Date::get_timestamp($occurenceStartTime);
+				
+				$diff = $this->getDiff();
+		
+				$endTime = new GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
+				$endTime->add($diff);
+				$origEventAttr['end_time'] = GO_Base_Util_Date::get_timestamp($endTime->format('U'));
+				
+				$this->_calculatedEvents[$occurenceStartTime.'-'.$origEventAttr['id']]=$origEventAttr;
+			}
+			
+			ksort($this->_calculatedEvents);
+		}
+	}
+	
+	/**
+	 * Find an event that belongs to a group of participant events. They all share the same uuid field.
+	 * 
+	 * @param int $calendar_id
+	 * @param string $uuid
+	 * @return GO_Calendar_Model_Event 
+	 */
+	public function findParticipantEvent($calendar_id, $uuid){
+		return GO_Calendar_Model_Event::model()->findSingleByAttributes(array('uuid'=>$event->uuid,'calendar_id'=>$calendar->id));
+	}
+	
+	
+	/**
+	 * Get the event in HTML markup
+	 * 
+	 * @todo Add recurrence info
+	 * @return string 
+	 */
+	public function toHtml(){
+		$html = '<table>'.
+						'<tr><td>'.GO::t('subject','calendar').':</td>'.
+						'<td>'.$this->name.'</td></tr>';
+
+		$html .= '<tr><td>'.GO::t('status','calendar').':</td>'.
+			'<td>'.$this->status.'</td></tr>';
+		
+
+		if (!empty($this->location)) {
+			$html .= '<tr><td style="vertical-align:top">'.GO::t('location','calendar').':</td>'.
+							'<td>'.GO_Base_Util_String::text_to_html($this->location).'</td></tr>';
+		}
+
+		//don't calculate timezone offset for all day events
+		$timezone_offset_string = GO_Base_Util_Date::get_timezone_offset($this->start_time);
+
+		if ($timezone_offset_string > 0) {
+			$gmt_string = '(\G\M\T +'.$timezone_offset_string.')';
+		}
+		elseif ($timezone_offset_string < 0) {
+			$gmt_string = '(\G\M\T -'.$timezone_offset_string.')';
+		} else {
+			$gmt_string = '(\G\M\T)';
+		}
+
+		if ($this->all_day_event=='1') {
+			$event_datetime_format = GO::user()->completeDateFormat;
+		} else {
+			$event_datetime_format = GO::user()->completeDateFormat.' '.GO::user()->time_format.' '.$gmt_string;
+		}
+
+		$html .= '<tr><td colspan="2">&nbsp;</td></tr>';
+
+		$html .= '<tr><td>'.GO::t('startsAt','calendar').':</td>'.
+						'<td>'.date($event_datetime_format, $this->start_time).'</td></tr>'.
+						'<tr><td>'.GO::t('endsAt','calendar').':</td>'.
+						'<td>'.date($event_datetime_format, $this->end_time).'</td></tr>';
+
+		$html .= '</table>';
+		
+		return $html;
 	}
 }

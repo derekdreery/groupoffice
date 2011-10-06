@@ -10,6 +10,11 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
     return parent::prepareStore($store);
 	}
 	
+	protected function getStoreParams($params) {
+		return GO_Base_Db_FindParams::newInstance()
+						->limit(0);
+	}
+	
 	public static function formatRecord($record, $model, $store){
 
 		if($model->moduleManager){

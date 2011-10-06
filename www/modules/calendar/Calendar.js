@@ -1660,7 +1660,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 			}else
 			if(event['contact_id'])
 			{			
-				GO.linkHandlers[2].call(this, event['contact_id']);
+				GO.linkHandlers["GO_Adressbook_Model_Contact"].call(this, event['contact_id']);
 			}else
 			if(event['event_id'])
 			{

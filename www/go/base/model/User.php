@@ -26,35 +26,7 @@
  * @property String $first_name
  * @property String $middle_name
  * @property String $last_name
- * @property String $initials
- * @property String $title
- * @property enum('M','F') $sex
- * @property date $birthday
- * @property String $email
- * @property String $company
- * @property String $department
- * @property String $function
- * @property String $home_phone
- * @property String $work_phone
- * @property String $fax
- * @property String $cellular
- * @property String $country
- * @property String $state
- * @property String $city
- * @property String $zip
- * @property String $address
- * @property String $address_no
- * @property String $homepage
- * @property String $work_address
- * @property String $work_address_no
- * @property String $work_zip
- * @property String $work_country
- * @property String $work_state
- * @property String $work_city
- * @property String $work_fax
  * @property int $acl_id
- * @property String $date_format
- * @property String $date_separator
  * @property String $time_format
  * @property String $thousands_separator
  * @property String $decimal_separator
