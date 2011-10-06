@@ -230,15 +230,15 @@ class cms_output extends cms {
 	 */
 	function get_authorized_items($folder_id, $user_id, $only_visible=false, $reverse=false) {
 		$items = array();
-		$folders = $this->get_authorized_folders($folder_id, $user_id, $only_visible);
-		foreach($folders as $folder) {
-			$priority=$folder['priority'];
-			while(isset($items[$priority]))
-				$priority++;
+			$folders = $this->get_authorized_folders($folder_id, $user_id, $only_visible);
+			foreach($folders as $folder) {
+				$priority=$folder['priority'];
+				while(isset($items[$priority]))
+					$priority++;
 
-			$items[$priority] = $folder;
-			$items[$priority]['fstype']='folder';
-		}
+				$items[$priority] = $folder;
+				$items[$priority]['fstype']='folder';
+			}
 		$files = $this->get_authorized_files($folder_id, $user_id, $only_visible);
 		foreach($files as $file) {
 			$priority=$file['priority'];
@@ -272,12 +272,12 @@ class cms_output extends cms {
 		return $folders;
 	}
 
-	function get_authorized_files($folder_id, $user_id, $only_visible=false) {
+	function get_authorized_files($folder_id, $user_id, $only_visible=false, $category_names=array(),$site_id=0) {
 		global $GO_SECURITY;
 
 		$files=array();
 
-		$this->get_files($folder_id,'priority','ASC',0,0,$only_visible);
+		$this->get_files($folder_id,'priority','ASC',0,0,$only_visible, $category_names,$site_id);
 		while($this->next_record()) {
 			if($this->f('acl')==0 || $GO_SECURITY->has_permission($user_id, $this->f('acl'))) {
 				$files[]=$this->record;
@@ -660,6 +660,148 @@ class cms_output extends cms {
 				if($item['fstype']=='folder' && $current_level < $expand_levels && ($is_in_path || $expand_all)) {
 					$href_path = empty($path) ? '' : $path.'/';
 					$html .= $this->print_items($params, $smarty, $current_level+1,$item['id'],$href_path.urlencode($item['name']), $item);
+				}
+
+				/**
+				 * Record the previous and next file if there is an active file
+				 */
+				if($item['fstype']=='file') {
+					$this->lastfile=$item;
+					if(!$is_in_path && $this->record_next_file) {
+						$smarty->assign('next_file', $item);
+						$this->record_next_file=false;
+					}
+				}
+
+				$counter++;
+
+				if($max_items>0 && $max_items==$counter) {
+					break;
+				}
+
+				$uneven=!$uneven;
+			}
+			if($wrap_div)
+				$html .= '</div>';
+
+			if(!empty($level_template)) {
+				$smarty2->assign('parentitem', $parentitem);
+				$smarty2->assign('level', $current_level);
+				$smarty2->assign('count', $counter);
+				$smarty2->assign('active_index', $active_index);
+				$smarty2->assign('content', $html);
+
+				$html = $smarty2->fetch($level_template);
+			}
+
+		}
+
+		return $html;
+	}
+	
+	function print_category_items($params, &$smarty) {
+		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
+		//var_dump($this->site);
+		$category_names = explode(',',$params['category_names']);
+		$class = isset($params['class']) ? $params['class'] : 'items';
+		$item_template = isset($params['item_template']) ? $params['item_template'] : '';
+		$active_item_template = isset($params['active_item_template']) ? $params['active_item_template'] : $item_template;
+		$max_items=isset($params['max_items']) ? $params['max_items'] : 0;
+		$wrap_div=isset($params['wrap_div']) && (empty($params['wrap_div']) || $params['wrap_div']=='false') ? false : true;
+		$random = !empty($params['random']);
+
+		if (!is_array($category_names)) {
+			return 'Invalid parameter category_names: "'.$params['category_names'].'". It must be a comma separated list of this site\'s file category names.';
+		} else {
+			for ($i=0; $i<count($category_names); $i++) {
+				$category_names[$i] = trim($category_names[$i]);
+			}
+		}
+		
+		$items = $this->get_authorized_files(0, $GO_SECURITY->user_id, true, $category_names,$this->site['id']);
+
+		if($random)
+			shuffle($items);
+		
+		$count = count($items);
+
+		$smarty2 = new cms_smarty();
+
+		$uneven=true;
+
+		$smarty->assign('item_count', $count);
+
+		if($count) {
+			$smarty2->assign('item_count', $count);
+			$smarty2->assign('item_percentage', round(100/$count,1));
+
+			if($wrap_div)
+				$html .= '<div id="'.$class.'" class="'.$class.' '.$class.'_'.$current_level.'">';
+
+			$counter=$active_index=0;
+			while ($item = array_shift($items)) {
+
+				$item['index']=$counter;
+				$item['safename']=preg_replace($this->safe_regex, '', $item['name']);
+				$item['name']=htmlspecialchars($item['name']);
+				$item['level']=$current_level;
+
+				$current_item_template = $item_template;
+
+				$last_was_in_path = !empty($is_in_path);
+
+				$item_html = '';
+				if ($item['fstype']=='file') {
+
+					$name = File::strip_extension($item['name']);
+					$title = $item['title'] == '' ? $name : $item['title'];
+					$item_html .= '<a title="'.$title.'" class="'.$class.' '.$class.'_'.$current_level;
+
+					if($this->file['id']==$item['id']) {
+						$is_in_path=true;
+						$item_html .= ' selected';
+						$current_item_template = $active_item_template;
+
+						$smarty->assign('previous_file', $this->lastfile);
+						$this->record_next_file=true;
+					}else {
+						$is_in_path=false;
+					}
+
+
+					$filepath = $search ? $this->build_path($item['folder_id'], true, $this->site['root_folder_id']) : $path;
+					if(!empty($filepath)){
+						$filepath .= '/';
+					}
+					$filepath .=$this->special_encode($item['name']);
+					$item['href']=$this->create_href_by_path($filepath);
+
+					$item_html .= '" href="'.$item['href'].'">'.$name.'</a>';
+
+				}
+				
+				if($is_in_path)
+					$active_index=$counter;
+
+				if(!empty($current_item_template)) {
+					if(!empty($item['option_values']))
+						$item['option_values']=$this->get_template_values($item['option_values']);
+
+					$smarty2->assign('parentitem', $parentitem);
+					$smarty2->assign('item', $item);
+					$smarty2->assign('content', $item_html);
+					$smarty2->assign('level', $current_level);
+					$smarty2->assign('is_in_path', $is_in_path);
+					$smarty2->assign('last_was_in_path', $last_was_in_path);
+
+					$smarty2->assign('even', $uneven ? 'uneven' : 'even');
+
+					$folder = $this->get_folder($folder_id);
+					$smarty2->assign('folder', $folder);
+
+					$html .= $smarty2->fetch($current_item_template);
+				}else {
+					$html .= $item_html;
 				}
 
 				/**

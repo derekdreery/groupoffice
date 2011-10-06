@@ -183,7 +183,7 @@ class cms extends db {
 		*/
 
 		$sql = "SELECT * FROM cms_files WHERE folder_id='".$this->escape($folder_id)."'";
-
+		
 		$allkeywords=array();
 		$keywords= explode(' ', $search_word);
 		foreach($keywords as $keyword) {
@@ -1163,13 +1163,34 @@ class cms extends db {
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_files($folder_id, $sortfield='priority', $sortorder='ASC', $start=0, $offset=0, $only_visible=false) {
-		$sql = "SELECT * FROM cms_files WHERE folder_id=".intval($folder_id);
-
-		if($only_visible) {
-			$sql .= " AND (show_until=0 OR show_until>".time().")";
+	function get_files($folder_id, $sortfield='priority', $sortorder='ASC', $start=0, $offset=0, $only_visible=false, $category_names=array(), $site_id=0) {
+		$sql = "SELECT DISTINCT f.* FROM cms_files f ";
+		
+		if (!empty($category_names)) {
+			$sql .= "INNER JOIN cms_files_categories fc ON f.id=fc.file_id ".
+				"INNER JOIN cms_categories c ON c.id=fc.category_id ".
+				"AND (c.name='".implode("' OR c.name='",$category_names)."') ";
+		}
+		
+		$where = false;
+		
+		if (!empty($folder_id)) {
+			$sql .= "WHERE folder_id=".intval($folder_id);
+			$where = true;
+		} else if ($site_id>0) {
+			//join cms_folders 
+			$sql .= "WHERE site_id=".intval($site_id);
+			$where = true;
 		}
 
+		if($only_visible) {
+			if ($where)
+				$sql .= " AND ";
+			else
+				$sql .= " WHERE ";
+			$sql .= "(show_until=0 OR show_until>".time().")";
+		}
+	
 		$sql .= " ORDER BY ".$this->escape($sortfield." ".$sortorder);
 		$this->query($sql);
 		$count = $this->num_rows();
