@@ -14,7 +14,7 @@
 
 
 //Load Swift utility class
-require_once GO::config()->root_path.'go/base/mail/swift/lib/classes/Swift.php';
+require_once GO::config()->root_path.'go/vendor/swift/lib/classes/Swift.php';
 //require_once GO::config()->root_path.'classes/mail/mimeDecode.class.inc';
 //Swift must be run before GO now.
 spl_autoload_unregister(array('GO', 'autoload'));	
@@ -26,7 +26,7 @@ Swift::registerAutoload();
 spl_autoload_register(array('GO', 'autoload'));	
 
 //Load the init script to set up dependency injection
-require_once GO::config()->root_path.'go/base/mail/swift/lib/swift_init.php';
+require_once GO::config()->root_path.'go/vendor/swift/lib/swift_init.php';
 
 //make sure temp dir exists
 $cacheFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir);
