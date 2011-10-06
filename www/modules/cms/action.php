@@ -71,6 +71,7 @@ try {
 			$site['language']=$_POST['language'];
 			$site['template']=$_POST['template'];
 			$site['name']=$_POST['name'];
+			$site['enable_categories']= !empty($_POST['enable_categories']) ? '1' : '0';
 			$site['enable_rewrite']=isset($_POST['enable_rewrite']) ? '1' :'0';
 
 			if(isset($_POST['rewrite_base'])){
@@ -398,7 +399,34 @@ try {
 				$response['feedback']=$lang['email']['feedbackSubscribeFolderFailed'];
 			}
 			break;
+		
+		case 'save_category':
+			
+			$file_id = intval($_POST['file_id']);
+			$file = $cms->get_file($file_id);
+			$folder = $cms->get_folder($file['folder_id']);
 
+			$id = intval($_POST['id']);
+			$category['name'] = $_POST['name'];
+			$category['site_id'] = $folder['site_id'];
+			$used = !empty($_POST['used']) ? '1' : '0';
+			
+			if ($id>0) {
+				$category['id'] = $id;
+				$cms->update_category($category);
+			} else {
+				$category['id'] = $cms->add_category($category);
+			}
+			
+			$fc['category_id'] = $category['id'];
+			$fc['file_id'] = $file_id;
+			$cms->delete_file_category($fc);
+			
+			if ($used) {
+				$cms->add_file_category($fc);
+			}
+			
+			$response['success'] = true;
 			break;
 		/* {TASKSWITCH} */
 	}

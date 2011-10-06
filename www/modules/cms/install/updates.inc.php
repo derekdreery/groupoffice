@@ -26,3 +26,17 @@ $updates[]="ALTER TABLE `cms_folders` ADD INDEX ( `feed` ) ";
 $updates[]="ALTER TABLE `cms_sites` ADD `enable_rewrite` BOOLEAN NOT NULL";
 $updates[]="ALTER TABLE `cms_sites` ADD `rewrite_base` VARCHAR( 50 ) NOT NULL";
 $updates[]="UPDATE `cms_sites` SET `rewrite_base`='/', enable_rewrite='1'";
+
+$updates[]="ALTER TABLE `cms_sites` ADD `enable_categories` BOOLEAN NOT NULL default '0';";
+$updates[]="CREATE TABLE IF NOT EXISTS `cms_categories` (
+	`id` int(11) NOT NULL default '0',
+	`name` VARCHAR(50) NOT NULL default 'category_name',
+	`site_id` int(11) NOT NULL default '0',
+	PRIMARY KEY (`id`),
+	KEY `site_id` (`site_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+$updates[]="CREATE TABLE IF NOT EXISTS `cms_files_categories` (
+	`category_id` int(11) NOT NULL default '0',
+	`file_id` int(11) NOT NULL default '0',
+	PRIMARY KEY (`category_id`,`file_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

@@ -317,7 +317,7 @@ try {
 				$file['ctime']=Date::get_timestamp($file['ctime']);
 				$file['show_until']=Date::get_timestamp($file['show_until'],false);
 				$file['sort_date']=Date::get_timestamp($file['sort_time'],false);
-
+				$file['enable_categories']=$site['enable_categories'];
 
 				$response['data']=$file;
 				$response['data']['root_folder_id']=$site['files_folder_id'];
@@ -533,6 +533,46 @@ try {
 			}
 			break;
 
+		case 'file_categories':
+			
+			$file_id = $_POST['file_id'];
+			$file = $cms->get_file($file_id);
+			$folder = $cms->get_folder($file['folder_id']);
+
+			$site_id = $folder['site_id'];
+			$site = $cms->get_site($site_id);
+		
+			if(isset($_POST['delete_keys'])) {
+				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $site['acl_write'])<GO_SECURITY::DELETE_PERMISSION) {
+					throw new AccessDeniedException();
+				}
+				
+				try {
+					$response['deleteSuccess']=true;
+					$delete_categories = json_decode(($_POST['delete_keys']));
+					foreach($delete_categories as $del_cat_id) {
+						$cms->delete_category($del_cat_id);
+					}
+				}catch(Exception $e) {
+					$response['deleteSuccess']=false;
+					$response['deleteFeedback']=$e->getMessage();
+				}
+			}
+			
+			$site_categories = $cms->get_categories($site_id);
+			$file_categories = $cms->get_categories_of_file($file_id);
+			
+			$response['total'] = count($site_categories);
+			$response['success'] = true;
+			$response['results'] = array();
+			foreach ($site_categories as $site_category) {
+				$record = $site_category;
+				$record['used'] = in_array($site_category,$file_categories);
+				$response['results'][] = $record;
+			}
+			
+			break;
+			
 		/* {TASKSWITCH} */
 	}
 } catch(Exception $e) {

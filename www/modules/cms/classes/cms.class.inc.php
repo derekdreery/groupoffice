@@ -1311,4 +1311,52 @@ class cms extends db {
 						"user_id=$user_id AND site_id=$site_id");
 	}
 
+	public function get_categories($site_id) {
+		$sql = "SELECT id,name FROM cms_categories WHERE site_id='".intval($site_id)."';";
+		$this->query($sql);
+		$records = array();
+		while ($categories = $this->next_record()) {
+			$records[] = $categories;
+		}
+		return $records;
+	}
+	
+	public function get_categories_of_file($file_id) {
+		$sql = "SELECT c.id,c.name FROM cms_files_categories fc ".
+			"INNER JOIN cms_categories c ON fc.category_id=c.id ".
+			"WHERE fc.file_id='".intval($file_id)."';";
+		$this->query($sql);
+		$records = array();
+		while ($categories = $this->next_record()) {
+			$records[] = $categories;
+		}
+		return $records;
+	}
+	
+	public function delete_category($category_id) {
+		$sql1 = "DELETE FROM cms_files_categories WHERE category_id='".intval($category_id)."'; ";
+		$sql2 = "DELETE FROM cms_categories WHERE id='".intval($category_id)."'; ";
+		$this->query($sql1);
+		return $this->query($sql2);
+	}
+	
+	public function add_category($category) {
+		$category['id'] = $this->nextid('cms_categories');
+		$this->insert_row('cms_categories',$category);
+		return $category['id'];
+	}
+	
+	public function update_category($category) {
+		return $this->update_row('cms_categories','id',$category);
+	}
+	
+	public function add_file_category($fc) {
+		return $this->insert_row('cms_files_categories',$fc);
+	}
+	
+	public function delete_file_category($fc) {
+		$sql = "DELETE FROM `cms_files_categories` WHERE file_id='".intval($fc['file_id'])."' AND category_id='".intval($fc['category_id'])."';";
+		return $this->query($sql);
+	}
+	
 }
