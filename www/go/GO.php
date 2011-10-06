@@ -258,7 +258,7 @@ class GO{
 		
 		GO::session();
 		
-		date_default_timezone_set(GO::user()->timezone);
+		date_default_timezone_set(GO::user() ? GO::user()->timezone : GO::config()->default_timezone);
 
 
 //		if (!defined('GO_NO_SESSION')) {
