@@ -22,6 +22,14 @@
 class GO_Base_Util_Date {
 	
 
+	public static function roundQuarters($time) {
+		$date = getdate($time);
+
+		$mins = ceil($date['minutes']/15)*15;
+		$time = mktime($date['hours'], $mins, 0, $date['mon'], $date['mday'], $date['year']);
+
+		return $time;
+	}
 
 	/**
 	 * Returns true if the time is a holiday or in the weekend

@@ -1,12 +1,7 @@
-Everything in classes should be moved to the go folder and be autoloaded so no 
-require functions are needed anymore.
 
-All json.php and action.php files should be replaced by models and controllers.
+Email save as alle functies testen
 
-All the language files should be made in php files. Javascript language can be 
-generated from them.
+Settings panels
+Complete Links browser
 
-All the javascript should be moved to a view so that for example a pure html or ipad view
-could be made parallel.
-
-default_script.inc.php belongs to the view and is ugly. It should be redesigned.
+Checker: tickets, tasks, email en calendar
