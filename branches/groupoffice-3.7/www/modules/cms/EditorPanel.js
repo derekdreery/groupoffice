@@ -49,8 +49,94 @@ GO.cms.EditorPanel = Ext.extend(
 		};
 			
 		this.editor = new Ext.ux.TinyMCE(this.editorConfig);
-				
+		
+		this.optionsPanel = new GO.cms.TemplateOptionsPanel();
+		this.eastFormPanel = new Ext.Panel({
+			layout:'form',
+			labelAlign:'top',
+			border:false,
+			bodyStyle:'padding: 5px',
+				title: GO.lang.strProperties,
+				width: '100%',
+				waitMsgTarget:true,
+				autoScroll:true,
+				defaults: {
+					anchor: '-20',
+					listeners:{
+						change: function(){
+							this.dirty=true;
+						},
+						scope: this
+					}
+				},
+				defaultType: 'textfield',
+				items: [{
+					fieldLabel:GO.lang.strName,
+					name:'name',
+					allowBlank:false		
+				},{
+					xtype:'datefield',
+					format:GO.settings.date_format,
+					fieldLabel:GO.cms.lang.showUntil,
+					name:'show_until',
+					allowBlank:true,
+					emptyText:GO.cms.lang.alwaysShow
+				},{
+					hideLabel:true,
+					xtype:'checkbox',
+					checked: true,
+					name:'auto_meta',
+					boxLabel:GO.cms.lang.autoMeta,
+					listeners:{
+						check:function(cb, checked){
 
+							this.setAutoMeta(checked);
+						},
+						scope:this
+					}
+				},{
+					xtype:'datefield',
+					format:GO.settings.date_format,
+					fieldLabel:GO.cms.lang.sortDate,
+					name:'sort_date',
+					allowBlank:true,
+					emptyText:GO.cms.lang.unused
+				},{
+					fieldLabel:GO.cms.lang.title,
+					xtype:'textarea',
+					name:'title',
+					height:60
+				},{
+					fieldLabel:GO.lang.strDescription,
+					xtype:'textarea',
+					name:'description',
+					height:80
+				},{
+					fieldLabel:GO.cms.lang.keywords,
+					xtype:'textarea',
+					name:'keywords',
+					height:80
+				},
+				this.optionsPanel]
+			});
+		
+		this.fileCategoriesGrid = new GO.cms.FileCategoriesGrid();
+		
+		this.eastPanel = new Ext.TabPanel({
+			region: 'east',
+			activeTab: 0,      
+      deferredRender: false,
+    	border: false,
+      items: [
+				this.eastFormPanel,
+				this.fileCategoriesGrid
+			],
+      width:320
+		})
+		
+		this.eastPanel.on('afterrender',function(eastPanel){
+			this.eastPanel.hideTabStripItem(1);
+		},this);
 		
 		var config = {
 			disabled:true,
@@ -66,79 +152,15 @@ GO.cms.EditorPanel = Ext.extend(
 				anchor:'100% 100%',
 				layout:'border',
 				border:false,
-				items:[{
-					region:'center',
-					layout:'fit',
-					border:false,
-					items:this.editor
-				},{
-					region:'east',
-					split:true,
-					width:300,
-					cls:'go-form-panel',
-					waitMsgTarget:true,
-					layout:'form',
-					autoScroll:true,
-					defaults: {
-						anchor: '-20',
-						listeners:{
-							change: function(){
-								this.dirty=true;
-							},
-							scope: this
-						}
+				items:[
+					{
+						region:'center',
+						layout:'fit',
+						border:false,
+						items:this.editor
 					},
-					defaultType: 'textfield',
-					items:[{
-						fieldLabel:GO.lang.strName,
-						name:'name',
-						allowBlank:false
-										
-					},{
-						xtype:'datefield',
-						format:GO.settings.date_format,
-						fieldLabel:GO.cms.lang.showUntil,
-						name:'show_until',
-						allowBlank:true,
-						emptyText:GO.cms.lang.alwaysShow
-					},{
-						hideLabel:true,
-						xtype:'checkbox',
-						checked: true,
-						name:'auto_meta',
-						boxLabel:GO.cms.lang.autoMeta,
-						listeners:{
-							check:function(cb, checked){
-									
-								this.setAutoMeta(checked);
-							},
-							scope:this
-						}
-					},{
-						xtype:'datefield',
-						format:GO.settings.date_format,
-						fieldLabel:GO.cms.lang.sortDate,
-						name:'sort_date',
-						allowBlank:true,
-						emptyText:GO.cms.lang.unused
-					},{
-						fieldLabel:GO.cms.lang.title,
-						xtype:'textarea',
-						name:'title',
-						height:60
-					},{
-						fieldLabel:GO.lang.strDescription,
-						xtype:'textarea',
-						name:'description',
-						height:80
-					},{
-						fieldLabel:GO.cms.lang.keywords,
-						xtype:'textarea',
-						name:'keywords',
-						height:80
-					},
-					this.optionsPanel = new GO.cms.TemplateOptionsPanel()]
-				}]
+					this.eastPanel
+				]
 			}
 		};
 			
@@ -170,7 +192,17 @@ GO.cms.EditorPanel = Ext.extend(
 		dirty : false,
 			
 		file_id : 0,
-			
+				
+		setEastPanel : function(enable_categories,file_id) {
+			if (enable_categories!=1) {
+				this.eastPanel.hideTabStripItem(1);
+				this.eastPanel.setActiveTab(0);
+			} else {
+				this.eastPanel.unhideTabStripItem(1);
+				this.fileCategoriesGrid.load(file_id);
+			}
+		},
+		
 		loadFile : function(file_id, template)
 		{
 			this.setDisabled(false);
@@ -225,6 +257,8 @@ GO.cms.EditorPanel = Ext.extend(
 						action.result.data.config,
 						action.result.data.option_values,
 						action.result.data.type);
+
+					this.setEastPanel(action.result.data.enable_categories,action.result.data.id);
 
 					this.fireEvent('load', this);
 				},

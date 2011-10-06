@@ -55,3 +55,6 @@ GO.cms.lang.unused='Niet van toepassing op deze pagina';
 GO.cms.lang.feed='Biedt documenten uit deze map aan als RSS feed.';
 GO.cms.lang.enableRewrite='Schakel vriendelijke URL\'s in dmv mod_rewrite. De webserver moet hiervoor geconfigureerd zijn en het werkt alleen op het domein dat hierboven is ingesteld.';
 GO.cms.lang.rewriteBase='mod_rewrite base path';
+
+GO.cms.lang.categories ='Categorieën';
+GO.cms.lang.enableCategories = 'Paginacategorieën inschakelen';
