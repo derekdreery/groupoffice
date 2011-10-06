@@ -49,4 +49,15 @@ class GO_Calendar_Model_Calendar extends GO_Base_Db_ActiveRecord {
 		return array(
 				'events' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Event', 'field' => 'calendar_id', 'delete' => true)		);
 	}
+	
+	public function findDefault($userId){
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->single()
+						->join("cal_settings", GO_Base_Db_FindCriteria::newInstance()
+										->addCondition('id', 's.calendar_id','=','t',true,true)
+										->addCondition('user_id', $userId,'=','s'),
+										's');
+		
+		return $this->find($findParams);		
+	}
 }

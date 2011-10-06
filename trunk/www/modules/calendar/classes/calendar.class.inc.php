@@ -1915,6 +1915,10 @@ class calendar extends db {
 
 
 	function delete_event($event_id, $delete_related=true) {
+		
+		return GO_Calendar_Model_Event::model()->findByPk($event_id)->delete();
+		
+		
 		if($event = $this->get_event($event_id)) {
 			$event_id = $this->escape($event_id);
 

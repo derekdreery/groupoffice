@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright Intermesh BV.
  *
@@ -7,7 +8,7 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  */
- 
+
 /**
  * The GO_Calendar_Model_Participant model
  *
@@ -26,8 +27,13 @@
  * @property int $is_organizer
  * @property String $role
  */
-
-class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord{
+class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
+	
+					
+	const STATUS_TENTATIVE = 3;	
+	const STATUS_DECLINED = 2;
+	const STATUS_ACCEPTED = 1;
+	const STATUS_PENDING = 0;
 
 	/**
 	 * Returns a static model of itself
@@ -35,11 +41,9 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord{
 	 * @param String $className
 	 * @return GO_Calendar_Model_Participant
 	 */
-	public static function model($className=__CLASS__)
-	{	
+	public static function model($className=__CLASS__) {
 		return parent::model($className);
 	}
-
 
 	/**
 	 * Enable this function if you want this model to check the acl's automatically.
@@ -51,15 +55,71 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord{
 	/**
 	 * Returns the table name
 	 */
-	 public function tableName() {
-		 return 'cal_participants';
-	 }
+	public function tableName() {
+		return 'cal_participants';
+	}
 
 	/**
 	 * Here you can define the relations of this model with other models.
 	 * See the parent class for a more detailed description of the relations.
 	 */
-	 public function relations() {
-		 return array();
-	 }
+	public function relations() {
+		return array(
+				'event' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Calendar_Model_Event', 'field'=>'event_id'),
+		);
+	}
+	
+	/**
+	 * Check if the participant is available.
+	 * 
+	 * Returns a questionmark if the particiant is not a user.
+	 * 
+	 * @return boolean/?
+	 */
+	public function isAvailable(){
+		if(empty($this->user_id) || !$this->_hasFreeBusyAccess()){
+			return '?';
+		}else
+		{
+			return self::userIsAvailable($this->event->start_time, $this->event->end_time, $this->user_id, $this->event);
+		}
+	}
+	
+	/**
+	 * @todo
+	 */
+	private function _hasFreeBusyAccess(){
+		return true;
+	}
+
+	/**
+	 * Check if a user has events between two given times.
+	 * 
+	 * @param type $periodStartTime
+	 * @param type $periodEndTime
+	 * @param type $userId
+	 * @param type $ignoreEvent
+	 * @return boolean 
+	 */
+	public static function userIsAvailable($periodStartTime, $periodEndTime, $userId=0, $ignoreEvent=false) {
+			
+		$findParams = GO_Base_Db_FindParams::newInstance()->debugSql();
+		
+		if($userId>0)
+			$findParams->permissionLevel (GO_Base_Model_Acl::READ_PERMISSION, $userId);
+		
+		if($ignoreEvent){
+			$findParams->getCriteria()
+							->addModel(GO_Calendar_Model_Event::model())
+							->addCondition('id', $ignoreEvent->id,'!=')
+							->addCondition('uuid', $ignoreEvent->uuid,'!=')
+							;
+		}
+		
+		$events = GO_Calendar_Model_Event::model()->findForPeriod($findParams, $periodStartTime, $periodEndTime, true);
+
+		return count($events)==0;
+	}
+	
+
 }

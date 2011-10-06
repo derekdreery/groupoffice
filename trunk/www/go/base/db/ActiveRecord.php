@@ -477,7 +477,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			
 			$ret['relation']=$arr[0];
 			$ret['aclField']=$arr[1];
-			$ret['join']='INNER JOIN `'.$model->tableName().'` '.$ret['relation'].' ON ('.$ret['relation'].'.`'.$model->primaryKey().'`=t.`'.$r[$arr[0]]['field'].'`) ';
+			$ret['join']="\nINNER JOIN `".$model->tableName().'` '.$ret['relation'].' ON ('.$ret['relation'].'.`'.$model->primaryKey().'`=t.`'.$r[$arr[0]]['field'].'`) ';
 			$ret['fields']='';
 			
 			$cols = $model->getColumns();
@@ -812,7 +812,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			$sql .= $this->_appendAclJoin($params, $aclJoin);
 			
 		if(isset($params['join']))
-			$sql .= $params['join'];
+			$sql .= "\n".$params['join'];
 		
 		if(isset($params['joinModel'])){
 			
@@ -2444,7 +2444,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		//$copy = new GO_Base_Db_ActiveRecord(true);
 		$copy = clone $this;
 		
-		
+		//unset the files folder
+		if($this->hasFiles())
+			unset($copy->files_folder_id);
 		
 		$pkField = $this->primaryKey();
 		if(is_array($pkField)) {
