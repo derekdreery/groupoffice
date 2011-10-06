@@ -31,4 +31,3 @@ $updates[201110051633][]="ALTER TABLE `cal_events` CHANGE `rrule` `rrule` VARCHA
 $updates[201110051633][]="ALTER TABLE `cal_events` CHANGE `exception_for_event_id` `exception_for_event_id` INT( 11 ) NOT NULL DEFAULT '0'";
 
 $updates[201110061133][]="ALTER TABLE `cal_participants` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
-ALTER TABLE `cal_events` ADD `organizer_event_id` INT NOT NULL DEFAULT '0'
