@@ -311,7 +311,7 @@ GO.tasks.MainPanel = function(config){
 	GO.tasks.MainPanel.superclass.constructor.call(this, config);
 	
 	this.on('show', function(){
-		GO.tasks.notificationEl.setDisplayed(false);
+		//GO.tasks.notificationEl.setDisplayed(false);
 	},this);
 	
 }
