@@ -1492,8 +1492,9 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		this.daysGrid.on("eventResize", function(grid, event, actionData){
 
 			var params = {
-				task : 'update_grid_event',
-				update_event_id : event['event_id'],
+				//task : 'update_grid_event',
+				id : event['event_id'],
+				calc_start_time: true,
 				end_time : actionData.end_time
 			};
 
@@ -1501,14 +1502,13 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
 			
 			if(event.repeats && actionData.singleInstance)
-			{
-				params['createException']='true';
-				params['exceptionDate']=actionData.dragDate.format(grid.dateTimeFormat);
-				params['repeats']='true';
+			{				
+				params['exception_date']=actionData.dragDate.format(grid.dateTimeFormat);
+				params['repeats']=true;
 			}
   		
 			Ext.Ajax.request({
-				url: GO.settings.modules.calendar.url+'action.php',
+				url: GO.url('calendar/event/submit'),
 				params: params,
 				callback: function(options, success, response)
 				{
@@ -1675,33 +1675,32 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	onEventMove : function(grid, event, actionData, domIds){
 
 		var params = {
-			task : 'update_grid_event',
-			update_event_id : event['event_id']
+			//task : 'update_grid_event',
+			id : event['event_id']
 		};
 
 		if(actionData.offset)
 			params['offset']=actionData.offset;
 
 		if(actionData.offsetDays)
-			params['offsetDays']=actionData.offsetDays;
+			params['offset_days']=actionData.offsetDays;
 
 		if(event.repeats && actionData.singleInstance)
-		{
-			params['createException']='true';
-			params['exceptionDate']=actionData.dragDate.format(grid.dateTimeFormat);
-			params['repeats']='true';
+		{			
+			params['exception_date']=actionData.dragDate.format(grid.dateTimeFormat);
+			params['repeats']=true;
 		}
 
 		if(actionData.calendar_id)
 		{
-			params['update_calendar_id']=actionData.calendar_id;
+			params['calendar_id']=actionData.calendar_id;
 		}
 
 		if(event.num_participants)
 			params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
 
 		Ext.Ajax.request({
-			url: GO.settings.modules.calendar.url+'action.php',
+			url: GO.url('calendar/event/submit'),
 			params: params,
 			callback: function(options, success, response)
 			{

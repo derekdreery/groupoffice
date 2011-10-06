@@ -22,21 +22,50 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected $model = 'GO_Calendar_Model_Event';
 
 	function beforeSubmit(&$response, &$model, &$params) {
-
-		$params['name'] = $params['subject'];
-
-		if (isset($params['all_day_event'])) {
-			$params['all_day_event'] = '1';
-			$start_time = "00:00";
-			$end_time = '23:59';
-		} else {
-			$params['all_day_event'] = '0';
-			$start_time = $params['start_time'];
-			$end_time = $params['end_time'];
+		
+		
+		if (!empty($params['exception_date'])) {
+			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
+			//this parameter is sent by the view when it wants to edit a single occurence of a repeating event.
+			$model->becomeException(strtotime($params['exception_date']));
+			unset($params['exception_date']);
+			unset($params['id']);
 		}
 
-		$params['start_time'] = $params['start_date'] . ' ' . $start_time;
-		$params['end_time'] = $params['end_date'] . ' ' . $end_time;
+		if(isset($params['subject']))
+			$params['name'] = $params['subject'];
+
+		if(isset($params['start_time'])){
+			if (isset($params['all_day_event'])) {
+				$params['all_day_event'] = '1';
+				$start_time = "00:00";
+				$end_time = '23:59';
+			} else {
+				$params['all_day_event'] = '0';
+				$start_time = $params['start_time'];
+				$end_time = $params['end_time'];
+			}
+
+			$params['start_time'] = $params['start_date'] . ' ' . $start_time;
+			$params['end_time'] = $params['end_date'] . ' ' . $end_time;
+		}
+		
+		if(isset($params['offset'])) {
+			//move an event
+			$model->start_time=GO_Base_Util_Date::roundQuarters($model->start_time+$params['offset']);
+			$model->end_time=GO_Base_Util_Date::roundQuarters($model->end_time+$params['offset']);
+		}
+		
+		
+
+
+//		if(isset($_POST['offsetDays'])) {
+//		//move an event
+//			$offsetDays = ($_POST['offsetDays']);
+//			$update_event['start_time'] = Date::date_add($update_event['start_time'], $offsetDays);
+//			$update_event['end_time'] = Date::date_add($update_event['end_time'], $offsetDays);
+//
+//		}
 
 		if (!empty($params['freq'])) {
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
@@ -164,7 +193,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 										)->setFrom(GO::user()->email, GO::user()->name)
 										->addTo($participant->email, $participant->name);
 														
-					$message->setHtmlAlternateBody($body);
+					$message->setHtmlAlternateBody($body);					
+					$message->attach(Swift_Attachment::newInstance($event->toICS(), GO_Base_Fs_File::stripInvalidChars($event->name). '.ics', 'text/calendar'));
 
 					GO_Base_Mail_Mailer::newGoInstance()->send($message);
 				}
@@ -246,6 +276,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$events = GO_Calendar_Model_Event::model()->findForPeriod(false, strtotime("2011-10-03"), strtotime("2011-10-10"));
 
 		var_dump($events);
+	}
+	public function actionVcalendar($params){
+		$event = GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
+		header('Content-Type: text/plain');
+		echo $event->toICS();
 	}
 
 }
