@@ -472,7 +472,7 @@ class GO{
 	public static function getModel($modelName){
 		//$modelName::model() does not work on php 5.2! That's why we use this function.
 		if(!class_exists($modelName))
-			throw new Exception($modelName.' does not exist');
+			throw new Exception("Model class '$modelName' not found in GO::getModel()");
 		
 		return call_user_func(array($modelName, 'model'));
 	}

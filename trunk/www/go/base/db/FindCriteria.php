@@ -246,14 +246,14 @@ class GO_Base_Db_FindCriteria {
 			if(!empty($thisCondition))
 			{
 				$this->_condition = ' ('.$thisCondition.') '.$operator.' ('.$condition .')';
-				$this->_params = array_merge($this->getParams(), $criteria->getParams());
+				
 			}else
 			{
-				$this->_condition = $condition;
-				$this->_params = $criteria->getParams();
+				$this->_condition = $condition;				
 			}		
 		}
-		
+		//always merge params. FindParams::join can add params without a condtion.
+		$this->_params = array_merge($this->getParams(), $criteria->getParams());
 		return $this;
 	}
 	
