@@ -90,9 +90,9 @@ for ($entryID=ldap_first_entry($ldap->Link_ID,$search_id);
 			$cal = new calendar();
 			$cal->user_delete($gouser);
 			
-			require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
-			$e = new email();
-			$e->user_delete($gouser);
+//			require_once($GO_MODULES->modules['email']['class_path'].'email.class.inc.php');
+//			$e = new email();
+//			$e->user_delete($gouser);
 
 
 			require_once($GO_MODULES->modules['tasks']['class_path'].'tasks.class.inc.php');
