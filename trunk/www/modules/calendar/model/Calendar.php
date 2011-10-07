@@ -44,10 +44,16 @@ class GO_Calendar_Model_Calendar extends GO_Base_Db_ActiveRecord {
 	public function hasFiles(){
 		return true;
 	}
+	
+	public function customfieldsModel() {
+		return "GO_Calendar_Model_CalendarCustomFieldsRecord";
+	}
 
 	public function relations() {
 		return array(
-				'events' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Event', 'field' => 'calendar_id', 'delete' => true)		);
+			'events' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Event', 'field' => 'calendar_id', 'delete' => true),
+			'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id')		
+				);
 	}
 	
 	public function findDefault($userId){
