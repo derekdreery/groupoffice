@@ -867,7 +867,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 		if(!empty($params['searchQuery'])){
 			$sql .= " \nAND (";
 			
-			if(!isset($params['searchQueryFields']))
+			if(empty($params['searchQueryFields']))
 				$fields = $this->getFindSearchQueryParamFields('t',$joinCf);
 			else
 				$fields = $params['searchQueryFields'];
