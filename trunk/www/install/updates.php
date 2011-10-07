@@ -94,3 +94,7 @@ $updates[201110050822][]="ALTER TABLE `go_reminders` CHANGE `link_type` `model_t
 $updates[201110050822][]="ALTER TABLE `go_reminders` CHANGE `manual` `manual` TINYINT( 1 ) NOT NULL DEFAULT '0'";
 $updates[201110050822][]="ALTER TABLE `go_reminders` CHANGE `text` `text` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates[201110050822][]="ALTER TABLE `go_reminders_users` CHANGE `mail_sent` `mail_sent` TINYINT( 1 ) NOT NULL DEFAULT '0'";
+
+$updates[201110070822][]="ALTER TABLE `go_users` CHANGE `mail_reminders` `mail_reminders` TINYINT( 1 ) NOT NULL DEFAULT '0'";
+$updates[201110070822][]="ALTER TABLE `go_users` CHANGE `popup_reminders` `popup_reminders` TINYINT( 1 ) NOT NULL DEFAULT '0'";
+$updates[201110070822][]="ALTER TABLE `go_users` CHANGE `cache` `cache` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
