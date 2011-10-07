@@ -22,4 +22,11 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	protected $model = 'GO_Calendar_Model_Calendar';
 	
 	
+	protected function remoteComboFields() {
+		return array(
+				'user_id'=>'$model->user->name',
+				'tasklist_id' => '$model->tasklist->name'
+		);
+	}
+	
 }

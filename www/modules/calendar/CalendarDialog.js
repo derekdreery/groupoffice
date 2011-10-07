@@ -41,6 +41,7 @@ GO.calendar.CalendarDialog = function(config)
 			hiddenName:'group_id',
 			fieldLabel:GO.calendar.lang.group,
 			valueField:'id',
+			value:1,
 			displayField:'name',
 			id:'resource_groups',
 			emptyText: GO.lang.strPleaseSelect,
@@ -76,11 +77,8 @@ GO.calendar.CalendarDialog = function(config)
 		this.selectTasklist = new GO.form.ComboBoxReset({
 			fieldLabel:'CalDAV '+GO.tasks.lang.tasklist,
 				store:new GO.data.JsonStore({
-				url: GO.settings.modules.tasks.url+'json.php',
-				baseParams: {'task': 'tasklists', 'auth_type':'write'},
-				root: 'results',
-				totalProperty: 'total',
-				id: 'id',
+				url: GO.url('tasks/tasklist/store'),
+				baseParams: {'permissionLevel': GO.permissionLevels.write},
 				fields:['id','name','user_name'],
 				remoteSort:true
 			}),
@@ -194,11 +192,11 @@ GO.calendar.CalendarDialog = function(config)
 	items.push(this.readPermissionsTab);
 	items.push(this.importTab);
 
-	if(GO.customfields && GO.customfields.types["21"])
+	if(GO.customfields && GO.customfields.types["GO_Calendar_Model_Event"])
 	{
-		for(var i=0;i<GO.customfields.types["21"].panels.length;i++)
+		for(var i=0;i<GO.customfields.types["GO_Calendar_Model_Event"].panels.length;i++)
 		{
-			var panel = GO.customfields.types["21"].panels[i];
+			var panel = GO.customfields.types["GO_Calendar_Model_Event"].panels[i];
 			panel.autoScroll = true;
 			items.push(panel);
 		}
@@ -216,8 +214,8 @@ GO.calendar.CalendarDialog = function(config)
 	});
 
 	this.formPanel = new Ext.FormPanel({
-		fileUpload:true,
-		url: GO.settings.modules.calendar.url+'action.php',
+		//fileUpload:true,
+		url: GO.url("calendar/calendar/load"),
 		defaultType: 'textfield',
 		waitMsgTarget:true,
 		items:this.tabPanel
@@ -308,7 +306,7 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 				this.selectGroup.selectFirst();
 			}else
 			{
-				this.selectGroup.setValue(0);
+				this.selectGroup.setValue(1);
 			}
             
 			this.exportButton.setDisabled(true);
@@ -330,21 +328,20 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 		}
 
 		this.formPanel.form.load({
-			url: GO.settings.modules.calendar.url+'json.php',
+			url: GO.url("calendar/calendar/load"),
 			params: {
-				calendar_id:calendar_id,
-				task: 'calendar'
+				id:calendar_id				
 			},
 			waitMsg:GO.lang.waitMsgLoad,
 			success: function(form, action) {
 				this.calendar_id=calendar_id;
-				this.selectUser.setRawValue(action.result.data.user_name);
+				this.selectUser.setRawValue(action.result.remoteComboTexts.user_id);
 				this.readPermissionsTab.setAcl(action.result.data.acl_id);
 				this.exportButton.setDisabled(false);
 				this.importTab.setDisabled(false);
 
-				if(action.result.data.tasklist_name)
-					this.selectTasklist.setRemoteText(action.result.data.tasklist_name);
+				if(action.result.remoteComboTexts.tasklist_id)
+					this.selectTasklist.setRemoteText(action.result.remoteComboTexts.tasklist_id);
 
 				this.showGroups(action.result.data.group_id > 1);
 
@@ -367,18 +364,17 @@ Ext.extend(GO.calendar.CalendarDialog, GO.Window, {
 			var tasklists = (GO.tasks && !this.resource) ? Ext.encode(this.tasklistsTab.getGridData()) : '';
 		
 			this.formPanel.form.submit({
-				url:GO.settings.modules.calendar.url+'action.php',
-				params: {
-					'task' : 'save_calendar',
-					'calendar_id': this.calendar_id,
+				url:GO.url("calendar/calendar/submit"),
+				params: {					
+					'id': this.calendar_id,
 					'tasklists':tasklists
 				},
 				waitMsg:GO.lang.waitMsgSave,
 				success:function(form, action){
 
-					if(action.result.calendar_id)
+					if(action.result.id)
 					{
-						this.calendar_id=action.result.calendar_id;
+						this.calendar_id=action.result.id;
 						this.readPermissionsTab.setAcl(action.result.acl_id);
 						this.exportButton.setDisabled(false);
 						this.importTab.setDisabled(false);

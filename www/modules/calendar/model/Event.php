@@ -52,10 +52,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return true;
 	}
 
-//	public function customfieldsModel() {
-//		
-//		return "GO_Addressbook_Model_ContactCustomFieldsRecord";
-//	}
+	public function customfieldsModel() {
+		return "GO_Calendar_Model_EventCustomFieldsRecord";
+	}
+
 
 	public function relations() {
 		return array(
