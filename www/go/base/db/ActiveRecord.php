@@ -976,6 +976,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 			if(isset($params['bindParams'])){	
 				$msg .= "\nbBind params: ".var_export($params['bindParams'], true);
 			}
+			
+			if(isset($criteriaObjectParams)){
+				$msg .= "\nbBind params: ".var_export($criteriaObjectParams, true);
+			}
 			GO::debug($msg);
 			throw new Exception($msg);
 		}
