@@ -417,7 +417,10 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		if(!$folder->fsFolder->exists())
 		{
 			$folder->delete();
-			return 0;
+			if($mustExist)
+				return $this->createNewModelFolder($model);
+			else
+				return 0;
 		}
 
 		//todo test this:	
