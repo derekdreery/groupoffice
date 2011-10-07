@@ -102,9 +102,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param Unix Timestamp $date The date where the exception belongs to
 	 * @param Int $for_event_id The event id of the event where the exception belongs to
 	 */
-	public function addException($date, $for_event_id) {
-
-
+	public function addException($date) {
 		$exception = new GO_Calendar_Model_Exception();
 		$exception->event_id = $this->id;
 		$exception->time = $date; // Needs to be a unix timestamp
@@ -116,38 +114,39 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param int $exceptionDate Unix timestamp
 	 */
-	public function becomeException($exceptionDate) {
+	public function getExceptionEvent($exceptionDate) {
+		
 
-		$this->rrule = '';
-		$this->exception_for_event_id = $this->id;
-		$this->exception_date = $exceptionDate;
-
-		$this->id = 0;
-		$this->setIsNew(true);
-
+		$att['rrule'] = '';
+		$att['exception_for_event_id'] = $this->id;
+		$att['exception_date'] = $exceptionDate;
+		
 		$diff = $this->getDiff();
 
 		$d = date('Y-m-d', $exceptionDate);
 		$t = date('G:i', $this->start_time);
 
-		$this->start_time = strtotime($d . ' ' . $t);
+		$att['start_time'] = strtotime($d . ' ' . $t);
 
-		$endTime = new GO_Base_Util_Date_DateTime(date('c', $this->start_time));
+		$endTime = new GO_Base_Util_Date_DateTime(date('c', $att['start_time']));
 		$endTime->add($diff);
-		$this->end_time = $endTime->format('U');
+		$att['end_time'] = $endTime->format('U');
+		
+		return $this->duplicate($att, false);
 	}
 
 	protected function afterSave($wasNew) {
+		
+		//add exception model for the original recurring event
+		if ($wasNew && $this->exception_for_event_id > 0) {
+			
+			$newExeptionEvent = GO_Calendar_Model_Event::model()->findByPk($this->exception_for_event_id);
+			$newExeptionEvent->addException($this->exception_date);
+		}
 
 		if (!$this->uuid) {
 			$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
 			$this->save();
-		}
-
-		//add exception model for the original recurring event
-		if ($wasNew && $this->exception_for_event_id > 0) {
-			$newExeptionEvent = GO_Calendar_Model_Event::model()->findByPk($this->exception_for_event_id);
-			$newExeptionEvent->addException($this->exception_date, $this->exception_for_event_id);
 		}
 
 		return parent::afterSave($wasNew);
