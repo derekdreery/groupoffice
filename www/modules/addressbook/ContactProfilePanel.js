@@ -212,10 +212,8 @@ GO.addressbook.ContactProfilePanel = function(config)
 			store: GO.addressbook.writableAddressbooksStore,			
 			selectOnFocus:true,
 			forceSelection: true,
-			allowBlank: false,
+			allowBlank: true,
 			anchor:'100%'
-//			,
-//			disabled:config.forUser
 		});
 		
 		if(!config.forUser){
@@ -361,7 +359,7 @@ GO.addressbook.ContactProfilePanel = function(config)
  
 			var leftColItems = [];
 		
-		//if(!config.forUser)
+		if(!config.forUser)
 			leftColItems.push(this.addressbookFieldset);
 		
 		leftColItems.push(this.personalFieldset,this.workFieldset);
