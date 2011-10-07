@@ -1093,7 +1093,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 					var params={
 						task: 'delete_event',
 						create_exception: true,
-						exception_date: this.currentDeleteEvent.startDate.format(this.daysGrid.dateTimeFormat),
+						exception_date: this.currentDeleteEvent.startDate.format("U"),
 						event_id: this.currentDeleteEvent.event_id
 					};
 
@@ -1493,18 +1493,16 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 			var params = {
 				//task : 'update_grid_event',
-				id : event['event_id'],
-				calc_start_time: true,
-				end_time : actionData.end_time
+				id : event['event_id'],				
+				duration_end_time : actionData.end_time
 			};
 
 			if(event.num_participants)
 				params.send_invitation=confirm(GO.calendar.lang.sendInvitationUpdate);
 			
-			if(event.repeats && actionData.singleInstance)
+			if(actionData.singleInstance)
 			{				
-				params['exception_date']=actionData.dragDate.format(grid.dateTimeFormat);
-				params['repeats']=true;
+				params['exception_date']=actionData.dragDate.format("U");
 			}
   		
 			Ext.Ajax.request({
@@ -1586,9 +1584,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 		this.viewGrid.on("move", function(grid, event, actionData, domIds){
 
-			var params = {
-				task : 'update_grid_event',
-				update_event_id : event['event_id']
+			var params = {				
+				id : event['event_id']
 			};
 
 			if(event.num_participants)
@@ -1598,22 +1595,20 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				params['offset']=actionData.offset;
 			
 			if(actionData.offsetDays)
-				params['offsetDays']=actionData.offsetDays;
+				params['offset_days']=actionData.offsetDays;
 			
 			if(event.repeats && actionData.singleInstance)
 			{
-				params['createException']='true';
-				params['exceptionDate']=actionData.dragDate.format(grid.dateTimeFormat);
-				params['repeats']='true';
+				params['exception_date']=actionData.dragDate.format(grid.dateTimeFormat);				
 			}
 			
 			if(actionData.calendar_id)
 			{
-				params['update_calendar_id']=actionData.calendar_id;
+				params['calendar_id']=actionData.calendar_id;
 			}
 			 		
 			Ext.Ajax.request({
-				url: GO.settings.modules.calendar.url+'action.php',
+				url: GO.url('calendar/event/submit'),
 				params: params,
 				callback: function(options, success, response)
 				{
@@ -1646,7 +1641,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 		{
 
 			GO.calendar.showEventDialog({
-				exception_date: event['startDate'].format(this.daysGrid.dateTimeFormat),
+				exception_date: event['startDate'].format("U"),
 				event_id: event['event_id'],
 				oldDomId : event.domId
 			});
@@ -1687,7 +1682,7 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 		if(event.repeats && actionData.singleInstance)
 		{			
-			params['exception_date']=actionData.dragDate.format(grid.dateTimeFormat);
+			params['exception_date']=actionData.dragDate.format("U");
 			params['repeats']=true;
 		}
 

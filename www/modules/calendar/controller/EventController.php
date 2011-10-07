@@ -23,15 +23,16 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 	function beforeSubmit(&$response, &$model, &$params) {
 		
+		$this->_checkConflicts();
 		
 		if (!empty($params['exception_date'])) {
 			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
 			//this parameter is sent by the view when it wants to edit a single occurence of a repeating event.
-			$model->becomeException(strtotime($params['exception_date']));
+			$model = $model->getExceptionEvent($params['exception_date']);
 			unset($params['exception_date']);
 			unset($params['id']);
 		}
-
+	
 		if(isset($params['subject']))
 			$params['name'] = $params['subject'];
 
@@ -50,38 +51,45 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$params['end_time'] = $params['end_date'] . ' ' . $end_time;
 		}
 		
+		//Grid sends move request
 		if(isset($params['offset'])) {
-			//move an event
 			$model->start_time=GO_Base_Util_Date::roundQuarters($model->start_time+$params['offset']);
 			$model->end_time=GO_Base_Util_Date::roundQuarters($model->end_time+$params['offset']);
 		}
+		if(isset($params['offset_days'])) {
+			$model->start_time = GO_Base_Util_Date::date_add($model->start_time, $params['offset_days']);
+			$model->end_time = GO_Base_Util_Date::date_add($model->end_time, $params['offset_days']);
+		}
 		
+		//when a user resizes an event
+		if(isset($params['duration_end_time'])){			
+			//only use time for the update
+			$old_end_date = getdate($model->end_time);
+			$new_end_time = getdate($params['duration_end_time']);
+
+			$model->end_time=mktime($new_end_time['hours'],$new_end_time['minutes'], 0,$old_end_date['mon'],$old_end_date['mday'],$old_end_date['year']);
+		}
 		
-
-
-//		if(isset($_POST['offsetDays'])) {
-//		//move an event
-//			$offsetDays = ($_POST['offsetDays']);
-//			$update_event['start_time'] = Date::date_add($update_event['start_time'], $offsetDays);
-//			$update_event['end_time'] = Date::date_add($update_event['end_time'], $offsetDays);
-//
-//		}
 
 		if (!empty($params['freq'])) {
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
 			$rRule->readJsonArray($params);
 			$model->rrule = $rRule->createRrule();
-		}else
+		}elseif(isset($params['freq']))
 		{
 			$model->rrule="";
 		}
 
 		if (isset($params['reminder_value']) && isset($params['reminder_multiplier']))
 			$model->reminder = $params['reminder_value'] * $params['reminder_multiplier'];
-		else
-			$model->reminder = 0;
+//		else
+//			$model->reminder = 0;
 
 		return parent::beforeSubmit($response, $model, $params);
+	}
+	
+	private function _checkConflicts(){
+		return true;
 	}
 
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
@@ -171,7 +179,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 	private function _sendInvitation($params, $newParticipantIds, $event, $isNewEvent, $modifiedAttributes){
 		
-		if(!empty($params['send_invitation'])){
+		if(isset($params['send_invitation']) && $params['send_invitation']!='false'){
 			
 			$stmt = $event->participants();
 			
@@ -207,7 +215,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if (!empty($params['exception_date'])) {
 			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
 			//this parameter is sent by the view when it wants to edit a single occurence of a repeating event.
-			$model->becomeException(strtotime($params['exception_date']));
+			$model = $model->getExceptionEvent($params['exception_date']);
 		}
 		return parent::beforeLoad($response, $model, $params);
 	}
