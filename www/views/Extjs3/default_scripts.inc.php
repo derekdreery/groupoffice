@@ -206,7 +206,7 @@ if($GLOBALS['GO_CONFIG']->debug || !file_exists($path)) {
 		$scripts[]=$GLOBALS['GO_CONFIG']->host.'compress.php?file=countries.js&mtime='.filemtime($dynamic_debug_script);
 	}
 
-	if($GLOBALS['GO_CONFIG']->debug) {
+	
 		$data = file_get_contents($GLOBALS['GO_CONFIG']->root_path.'views/Extjs3/javascript/scripts.txt');
 		$lines = explode("\n", $data);
 		foreach($lines as $line) {
@@ -214,9 +214,7 @@ if($GLOBALS['GO_CONFIG']->debug || !file_exists($path)) {
 				$scripts[]=$root_uri.$line;
 			}
 		}
-	}else {
-		$scripts[]=$view_root_uri.'javascript/go-all-min';
-	}
+	
 
 	
 
@@ -314,20 +312,13 @@ if(count($load_modules)) {
 			if(!file_exists($scriptsFile))
 						$scriptsFile = $module['path'].'views/Extjs3/scripts.txt';	
 
-			if(file_exists($scriptsFile) && $GLOBALS['GO_CONFIG']->debug) {
+			if(file_exists($scriptsFile)) {
 				$data = file_get_contents($scriptsFile);
 				$lines = explode("\n", $data);
 				foreach($lines as $line) {
 					if(!empty($line)) {
 						$scripts[]=$root_uri.$line;
 					}
-				}
-			}else {
-				if(file_exists($module['path'].'all-module-scripts-min')) {
-					$scripts[]=$module_uri.'all-module-scripts-min';
-				}
-				if(file_exists($module['path'].'views/Extjs3/all-module-scripts-min')) {
-					$scripts[]=$module_uri.'all-module-scripts-min';
 				}
 			}
 
@@ -340,7 +331,7 @@ if(count($load_modules)) {
 
 	//include config file location because in some cases different URL's point to
 	//the same database and this can break things if the settings are cached.
-	$file = $GLOBALS['GO_SECURITY']->user_id.'-'.md5($GLOBALS['GO_CONFIG']->mtime.$GLOBALS['GO_CONFIG']->get_config_file().filemtime($GLOBALS['GO_CONFIG']->root_path.'views/Extjs3/javascript/go-all-min').':'.$GLOBALS['GO_LANGUAGE']->language.':'.implode(':', $modules)).'.js';
+	$file = $GLOBALS['GO_SECURITY']->user_id.'-'.md5($GLOBALS['GO_CONFIG']->mtime.$GLOBALS['GO_CONFIG']->get_config_file().':'.$GLOBALS['GO_LANGUAGE']->language.':'.implode(':', $modules)).'.js';
 	$path = $GLOBALS['GO_CONFIG']->file_storage_path.'cache/'.$file;
 	$url = $GLOBALS['GO_CONFIG']->host.'compress.php?file='.$file;
 	
