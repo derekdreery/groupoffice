@@ -598,6 +598,7 @@ try {
 								'calendar_id'=>$event['calendar_id'],
 								'calendar_name'=>isset($calendar_names[$event['calendar_id']]) ? $calendar_names[$event['calendar_id']] : '',
 								'start_time'=> date('Y-m-d H:i', $event['start_time']),
+								'ctime'=> date('Y-m-d H:i', $event['ctime']),
 								'end_time'=> date('Y-m-d H:i', $event['end_time']),
 								'location'=>htmlspecialchars($event['location'], ENT_COMPAT, 'UTF-8'),
 								'description'=>nl2br(htmlspecialchars(String::cut_string($event['description'],$max_description_length), ENT_COMPAT, 'UTF-8')),
