@@ -573,6 +573,48 @@ try {
 			
 			break;
 			
+		case 'categories_tree':
+
+			$file_id = intval($_POST['file_id']);
+			
+			$file = $cms->get_file($file_id);
+			$folder = $cms->get_folder($file['folder_id']);
+			$site_id = $folder['site_id'];
+			
+			if(!empty($_POST['delete_key'])) {
+				$site = $cms->get_site($site_id);
+				
+				if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $site['acl_write'])<GO_SECURITY::DELETE_PERMISSION) {
+					throw new AccessDeniedException();
+				}
+				
+				try {
+					$response['deleteSuccess']=true;
+					$cms->delete_category(intval($_POST['delete_key']),true);
+				}catch(Exception $e) {
+					$response['deleteSuccess']=false;
+					$response['deleteFeedback']=$e->getMessage();
+				}
+			}
+			
+			$categories = $cms->get_categories($site_id,0);
+
+			$response = array();
+			foreach ($categories as $child_category) {
+				$response[] = $cms->get_category_tree($child_category['id'],$site_id,$file_id);
+			}
+			
+			$response = array(array(
+					'id' => 0,
+					'text' => 'Root',
+					'checked' => false,
+					'canHaveChildren' => true,
+					'children' => $response,
+					'expanded' => true
+			));
+
+			break;
+			
 		/* {TASKSWITCH} */
 	}
 } catch(Exception $e) {

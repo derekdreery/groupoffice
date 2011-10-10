@@ -1306,7 +1306,7 @@ class cms extends db {
 
 	public function user_folder_deny($user_id,$folder_id) {
 		return $this->query("DELETE FROM cms_user_folder_access WHERE ".
-						"user_id=$user_id AND folder_id=$folder_id");
+						"user_id='".intval($user_id)."' AND folder_id='".intval($folder_id)."' ");
 	}
 
 	public function filter_enabled($user_id, $site_id) {
@@ -1332,8 +1332,15 @@ class cms extends db {
 						"user_id=$user_id AND site_id=$site_id");
 	}
 
-	public function get_categories($site_id) {
-		$sql = "SELECT id,name FROM cms_categories WHERE site_id='".intval($site_id)."';";
+	public function get_categories($site_id,$parent_id=-1) {
+		$sql = "SELECT id,name FROM cms_categories WHERE site_id='".intval($site_id)."' ";
+		
+		if ($parent_id>-1) {
+			$sql .= "AND parent_id='".intval($parent_id)."' ";
+		}
+		
+		$sql .= "ORDER BY name ASC ";
+		
 		$this->query($sql);
 		$records = array();
 		while ($categories = $this->next_record()) {
@@ -1354,11 +1361,25 @@ class cms extends db {
 		return $records;
 	}
 	
-	public function delete_category($category_id) {
+	private function delete_subcategories($parent_id) {
+		$sql = "SELECT id FROM cms_categories WHERE parent_id='".intval($parent_id)."' ";
+		$this->query($sql);
+		$cms = new cms();
+		while ($record = $this->next_record()) {
+			$cms->delete_category($record['id'],true);
+		}
+	}
+	
+	public function delete_category($category_id, $recursive=false) {
 		$sql1 = "DELETE FROM cms_files_categories WHERE category_id='".intval($category_id)."'; ";
 		$sql2 = "DELETE FROM cms_categories WHERE id='".intval($category_id)."'; ";
 		$this->query($sql1);
-		return $this->query($sql2);
+		if ($recursive!==true)
+			return $this->query($sql2);
+		else {
+			$this->query($sql2);
+			return $this->delete_subcategories($category_id);
+		}
 	}
 	
 	public function add_category($category) {
@@ -1378,6 +1399,56 @@ class cms extends db {
 	public function delete_file_category($fc) {
 		$sql = "DELETE FROM `cms_files_categories` WHERE file_id='".intval($fc['file_id'])."' AND category_id='".intval($fc['category_id'])."';";
 		return $this->query($sql);
+	}
+
+	public function get_category_tree($category_id,$site_id,$file_id) {
+		$node = $this->get_category_node($category_id,$file_id);
+		$node['text'] = $node['name']; unset($node['name']);
+		$node['checked'] = !empty($node['category_id']); unset($node['category_id']);
+		$node['canHaveChildren'] = true;
+		$node['expanded'] = true;
+		$node['iconCls'] = 'cms-file-category';
+		$node['children'] = array();
+		
+		$categories = $this->get_categories($site_id, $category_id);
+		$cms = new cms();
+		foreach ($categories as $child_category) {
+			$node['children'][] = $cms->get_category_tree($child_category['id'],$site_id,$file_id);
+		}
+		
+		return $node;
+	}
+	
+	private function get_category_node($category_id,$file_id) {
+		$sql = "SELECT c.*, fc.category_id FROM cms_categories c ".
+			"LEFT JOIN cms_files_categories fc ON c.id=fc.category_id AND fc.file_id='".intval($file_id)."' ".
+			"WHERE c.id='".intval($category_id)."' ";
+		$this->query($sql);
+		if ($this->num_rows() > 0)
+			return $this->next_record();
+		else
+			return false;
+	}
+	
+	private function category_assignment_exists($file_id,$category_id) {
+		$sql = "SELECT * FROM cms_files_categories WHERE file_id='".intval($file_id)."' AND category_id='".intval($category_id)."' ";
+		$this->query($sql);
+		return $this->num_rows() > 0;
+	}
+	
+	public function assign_file_to_category($file_id,$category_id) {
+		if (!$this->category_assignment_exists($file_id,$category_id)) {
+			$fc['file_id'] = $file_id;
+			$fc['category_id'] = $category_id;
+			return $this->insert_row('cms_files_categories', $fc);
+		} else {
+			return true;
+		}
+	}
+
+	public function unassign_file_from_category($file_id,$category_id) {
+		return $this->query("DELETE FROM cms_files_categories WHERE ".
+			"file_id='".intval($file_id)."' AND category_id='".intval($category_id)."'");
 	}
 	
 }

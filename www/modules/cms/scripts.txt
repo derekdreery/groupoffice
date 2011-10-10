@@ -16,4 +16,5 @@ modules/cms/TemplateOptionsPanel.js
 modules/cms/MainPanel.js
 modules/cms/WritingUsersPanel.js
 modules/cms/FoldersDialog.js
-modules/cms/FileCategoriesGrid.js
+modules/cms/FileCategoriesTree.js
+modules/cms/CategoryDialog.js

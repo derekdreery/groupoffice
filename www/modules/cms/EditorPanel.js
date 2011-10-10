@@ -120,7 +120,7 @@ GO.cms.EditorPanel = Ext.extend(
 				this.optionsPanel]
 			});
 		
-		this.fileCategoriesGrid = new GO.cms.FileCategoriesGrid();
+		this.fileCategoriesTree = new GO.cms.FileCategoriesTree();
 		
 		this.eastPanel = new Ext.TabPanel({
 			region: 'east',
@@ -129,7 +129,7 @@ GO.cms.EditorPanel = Ext.extend(
     	border: false,
       items: [
 				this.eastFormPanel,
-				this.fileCategoriesGrid
+				this.fileCategoriesTree
 			],
       width:320
 		})
@@ -199,7 +199,7 @@ GO.cms.EditorPanel = Ext.extend(
 				this.eastPanel.setActiveTab(0);
 			} else {
 				this.eastPanel.unhideTabStripItem(1);
-				this.fileCategoriesGrid.load(file_id);
+				this.fileCategoriesTree.load(file_id);
 			}
 		},
 		

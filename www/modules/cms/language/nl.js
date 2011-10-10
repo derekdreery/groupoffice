@@ -56,5 +56,9 @@ GO.cms.lang.feed='Biedt documenten uit deze map aan als RSS feed.';
 GO.cms.lang.enableRewrite='Schakel vriendelijke URL\'s in dmv mod_rewrite. De webserver moet hiervoor geconfigureerd zijn en het werkt alleen op het domein dat hierboven is ingesteld.';
 GO.cms.lang.rewriteBase='mod_rewrite base path';
 
+GO.cms.lang.category ='Categorie';
 GO.cms.lang.categories ='Categorieën';
 GO.cms.lang.enableCategories = 'Paginacategorieën inschakelen';
+GO.cms.lang.parentCategory = 'Bovenliggende categorie';
+
+GO.cms.lang.sure2remove = 'Deze verwijdering kan niet ongedaan gemaakt worden, alhoewel hierdoor geen pagina\'s van de site worden verwijderd. Weet u zeker dat u deze categorie en alle onderliggende categorieën wilt verwijderen?';

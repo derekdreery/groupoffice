@@ -40,3 +40,5 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cms_files_categories` (
 	`file_id` int(11) NOT NULL default '0',
 	PRIMARY KEY (`category_id`,`file_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="ALTER TABLE `cms_categories` ADD `parent_id` int(11) NOT NULL default '0';";

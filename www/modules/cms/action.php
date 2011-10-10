@@ -400,33 +400,77 @@ try {
 			}
 			break;
 		
-		case 'save_category':
+		case 'update_category':
 			
 			$file_id = intval($_POST['file_id']);
 			$file = $cms->get_file($file_id);
 			$folder = $cms->get_folder($file['folder_id']);
 
-			$id = intval($_POST['id']);
+			$category['id'] = intval($_POST['id']);
 			$category['name'] = $_POST['name'];
 			$category['site_id'] = $folder['site_id'];
-			$used = !empty($_POST['used']) ? '1' : '0';
+			$category['parent_id'] = intval($_POST['parent_id']);
+//			$used = !empty($_POST['checked']) ? '1' : '0';
 			
-			if ($id>0) {
-				$category['id'] = $id;
-				$cms->update_category($category);
-			} else {
-				$category['id'] = $cms->add_category($category);
-			}
+			$cms->update_category($category);
 			
-			$fc['category_id'] = $category['id'];
-			$fc['file_id'] = $file_id;
-			$cms->delete_file_category($fc);
-			
-			if ($used) {
-				$cms->add_file_category($fc);
-			}
+//			$fc['category_id'] = $category['id'];
+//			$fc['file_id'] = $file_id;
+//			$cms->delete_file_category($fc);
+//			
+//			if ($used) {
+//				$cms->add_file_category($fc);
+//			}
 			
 			$response['success'] = true;
+			break;
+		
+		case 'update_category_name':
+			
+			$category['id'] = intval($_POST['id']);
+			$category['name'] = $_POST['name'];
+			$cms->update_category($category);
+					
+			$response['success'] = true;
+			break;
+			
+		case 'add_category':
+			global $GO_LANGUAGE;
+			
+			$file_id = intval($_POST['file_id']);
+			$file = $cms->get_file($file_id);
+			$folder = $cms->get_folder($file['folder_id']);
+			
+			require_once($GO_LANGUAGE->get_language_file('cms'));
+			
+			$category['name'] = $lang['cms']['newCategory'];
+			$category['site_id'] = $folder['site_id'];
+			$category['parent_id'] = intval($_POST['parent_id']);
+			
+			$cms->add_category($category);
+			
+			$response['success'] = true;
+			break;
+			
+		case 'assign_category':
+
+			$file_id = intval($_POST['file_id']);
+			$category_id = intval($_POST['category_id']);
+
+			$response['success']=$cms->assign_file_to_category($file_id, $category_id);
+
+			break;
+
+		case 'unassign_category':
+
+			$file_id = intval($_POST['file_id']);
+			$category_id = intval($_POST['category_id']);
+
+			$response['success']=$cms->unassign_file_from_category($file_id, $category_id);
+
+			if(!$response['success']) {
+				$response['feedback']=$lang['email']['feedbackSubscribeFolderFailed'];
+			}
 			break;
 		/* {TASKSWITCH} */
 	}
