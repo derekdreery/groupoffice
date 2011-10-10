@@ -5,11 +5,13 @@ require_once ($GO_MODULES->modules['calendar']['class_path']."calendar.class.inc
 require_once ($GO_MODULES->modules['calendar']['class_path']."go_ical.class.inc");
 $cal = new calendar();
 
-$event_id=4166;
+$event_id=2;
 
 $go_ical = new go_ical('2.0', true);
-//$ical_event = $go_ical->export_event($event_id);
-//var_dump($ical_event);
+//$go_ical->dont_use_quoted_printable=true;
+$ical_event = $go_ical->export_event($event_id);
 
-echo $tz = $go_ical->export_timezone();
+var_dump($ical_event);
+
+//echo $tz = $go_ical->export_timezone();
 

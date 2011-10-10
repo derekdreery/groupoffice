@@ -1,3 +1,6 @@
+10-10-2011 3.7.33
+- Worked around Funambol bug in client 10.0.1 where line wrapping is not supported.
+
 30-09-2011 3.7.32
 - Fixed sort bug in addressbook
 

@@ -24,7 +24,7 @@ class go_ical extends calendar
 
 	var $version;
 
-	var $line_break="\n";
+	var $line_break="\r\n";
 
 	var $utc=false;
 
