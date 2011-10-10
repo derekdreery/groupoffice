@@ -105,8 +105,10 @@ CREATE TABLE IF NOT EXISTS `cms_categories` (
 	`id` int(11) NOT NULL default '0',
 	`name` VARCHAR(50) NOT NULL default 'category_name',
 	`site_id` int(11) NOT NULL default '0',
+	`parent_id` int(11) NOT NULL default '0',
 	PRIMARY KEY (`id`),
-	KEY `site_id` (`site_id`)
+	KEY `site_id` (`site_id`),
+	KEY `parent_id` (`parent_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `cms_files_categories`;

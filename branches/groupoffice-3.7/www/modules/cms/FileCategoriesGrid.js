@@ -11,6 +11,11 @@
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
  */
 
+/**
+ * This code will have to make place for FileCategoriesTree.js .
+ */
+
+
 GO.cms.FileCategoriesGrid = function(config){
 	
 	config = config || {};
