@@ -61,4 +61,9 @@ class GO_Email_Model_LinkedEmail extends GO_Base_Db_ActiveRecord{
 	 public function relations() {
 		 return array();
 	 }
+	 
+	 
+	 public function loadImapUid(){
+		 
+	 }
 }

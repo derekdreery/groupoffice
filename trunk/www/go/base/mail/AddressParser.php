@@ -12,6 +12,7 @@
 /**
  * This class is used to parse and write RFC822 compliant recipient lists
  * 
+ * @deprecated Use EmailRecipients instead
  * @package GO.base.mail
  * @version $Id: RFC822.class.inc 7536 2011-05-31 08:37:36Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
