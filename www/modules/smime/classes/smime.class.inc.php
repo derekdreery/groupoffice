@@ -59,7 +59,7 @@ class smime extends db{
 		return $certs;
 	}
 	
-	public function add_smime_info_to_aliases(&$response){
+	public static function add_smime_info_to_aliases(&$response){
 		
 		$account_certs=array();
 		
@@ -85,7 +85,7 @@ class smime extends db{
 		}
 	}
 	
-	public function load_certificate(&$response){
+	public static function load_certificate(&$response){
 		$smime = new smime();
 		
 		$cert = $smime->get_pkcs12_certificate($response['data']['id']);
@@ -96,7 +96,7 @@ class smime extends db{
 		}		
 	}
 	
-	public function save_certificate(&$account, $email, &$response){
+	public static function save_certificate(&$account, $email, &$response){
 		global $GO_CONFIG, $GO_LANGUAGE, $lang;
 		
 		
@@ -291,7 +291,7 @@ class smime extends db{
 		}
 	}
 	
-	public function sendmail(GoSwift &$swift){
+	public static function sendmail(GoSwift &$swift){
 		global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $lang;
 		
 		$smime = new smime();

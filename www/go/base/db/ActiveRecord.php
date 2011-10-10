@@ -31,7 +31,7 @@
  * @property GO_Files_Model_Folder $filesFolder The folder model that belongs to this model if hasFiles is true.
  */
 
-abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
+abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	/**
 	 * This relation is used when the remote model's primary key is stored in a 
@@ -2145,9 +2145,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Observable{
 	/**
 	 * PHP setter magic method.
 	 * This method is overridden so that AR attributes can be accessed like properties.
-	 * 
-	 * //TODO record changed attributes here for smarter saving.
-	 * 
 	 * 
 	 * @param string $name property name
 	 * @param mixed $value property value
