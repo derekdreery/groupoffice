@@ -1,0 +1,39 @@
+<HTML>
+<HEAD>
+<TITLE>Twitter DG</TITLE>
+<link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+</HEAD>
+<BodY>
+<script src="http://widgets.twimg.com/j/2/widget.js"></script>
+<script>
+new TWTR.Widget({
+  version: 2,
+  type: 'profile',
+  rpp: 5,
+  interval: 1000,
+  width: 168,
+  height: 400,
+  theme: {
+    shell: {
+      background: '#ffffff',
+      color: '#ffffff'
+    },
+    tweets: {
+      background: '#ffffff',
+      color: '#444444',
+      links: '#4272b5'
+    }
+  },
+  features: {
+    scrollbar: false,
+    loop: true,
+    live: false,
+    hashtags: true,
+    timestamp: false,
+    avatars: true,
+    behavior: 'default'
+  }
+}).render().setUser('DuurzaamGebouw').start();
+</script>
+</BodY>
+</HTML>

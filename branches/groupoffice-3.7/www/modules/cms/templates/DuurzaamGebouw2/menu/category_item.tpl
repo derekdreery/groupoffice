@@ -1,0 +1,1 @@
+<div class="category-item {$item.active_class_name}"><a href="{update_get_params baseurl="`$file.href`" filter_category_id="`$item.id`"}#the-anchor">{$item.name}</a></div>
