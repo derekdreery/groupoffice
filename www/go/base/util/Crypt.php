@@ -119,7 +119,7 @@ class GO_Base_Util_Crypt {
 		$mo = strlen($msg) - 32;			 # mac offset
 		$em = substr($msg, $mo);			 # extract mac
 		$msg = substr($msg, 32, strlen($msg) - 64);	 # extract ciphertext
-		$mac = $this->pbkdf2($iv . $msg, $k, 1000, 32);	# create mac
+		$mac = self::pbkdf2($iv . $msg, $k, 1000, 32);	# create mac
 
 		if ($em !== $mac)				 # authenticate mac
 			return false;
@@ -146,7 +146,7 @@ class GO_Base_Util_Crypt {
 	 *
 	 * 	@return  string  derived key
 	 */
-	public static function pbkdf2($p, $s, $c, $kl, $a = 'sha256') {
+	private static function pbkdf2($p, $s, $c, $kl, $a = 'sha256') {
 
 		$hl = strlen(hash($a, null, true)); # Hash length
 		$kb = ceil($kl / $hl);		# Key blocks to compute
@@ -170,7 +170,7 @@ class GO_Base_Util_Crypt {
 		return substr($dk, 0, $kl);
 	}
 
-	private function getKey() {
+	private static function getKey() {
 		global $GO_CONFIG;
 
 		$key_file = GO::config()->file_storage_path . 'key.txt';

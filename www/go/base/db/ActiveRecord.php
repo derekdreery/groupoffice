@@ -158,7 +158,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private $_relatedCache;
 	
 	
-	private static $_models=array();			// class name => model
+	
 	
 	
 	private $_attributes=array();
@@ -382,23 +382,23 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 	
 	
-	/**
-	 * Returns the static model of the specified AR class.
-	 * Every child of this class must override it.
-	 * 
-	 * @return GO_Base_Db_ActiveRecord the static model class
-	 */
-	public static function model($className=__CLASS__)
-	{		
-//	    if ($className=='GO_Base_Db_ActiveRecord') throw new Exception($className);
-		if(isset(self::$_models[$className]))
-			return self::$_models[$className];
-		else
-		{
-			$model=self::$_models[$className]=new $className();
-			return $model;
-		}
-	}
+//	/**
+//	 * Returns the static model of the specified AR class.
+//	 * Every child of this class must override it.
+//	 * 
+//	 * @return GO_Base_Db_ActiveRecord the static model class
+//	 */
+//	public static function model($className=__CLASS__)
+//	{		
+////	    if ($className=='GO_Base_Db_ActiveRecord') throw new Exception($className);
+//		if(isset(self::$_models[$className]))
+//			return self::$_models[$className];
+//		else
+//		{
+//			$model=self::$_models[$className]=new $className();
+//			return $model;
+//		}
+//	}
 	
 	/**
 	 * Can be overriden to initialize the model. Useful for setting attribute
@@ -2437,7 +2437,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 *
 	 * @return Object The newly created object
 	 * 
-	 * @todo Copy the linked items too.
+	 * @todo Copy the linked items too.  Use __clone() ??
 	 * 
 	 */
 	public function duplicate($params = array(), $save=true) {

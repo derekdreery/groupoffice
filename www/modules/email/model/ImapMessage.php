@@ -74,21 +74,17 @@ class GO_Email_Model_ImapMessage extends GO_Base_Model {
 	}
 
 	/**
-	 * Returns the static model of the specified AR class.
-	 * Every child of this class must override it.
+	 * Returns a static model of itself
 	 * 
-	 * @return GO_Email_Model_ImapMessage the static model class
+	 * @param String $className
+	 * @return GO_Email_Model_ImapMessage
 	 */
-	public static function model($className=__CLASS__) {
-		if (isset(self::$_models[$className]))
-			return self::$_models[$className];
-		else {
-			$model = self::$_models[$className] = new $className();
-			return $model;
-		}
+	public static function model($className=__CLASS__)
+	{	
+		return parent::model($className);
 	}
 
-	public function setAttibutes($attributes) {
+	public function setAttributes($attributes) {
 
 		$this->_attributes = array_merge($this->_attributes, $attributes);
 		
@@ -130,6 +126,10 @@ class GO_Email_Model_ImapMessage extends GO_Base_Model {
 	}
 
 	public function getBody() {
+		
+	}
+	
+	public function getSource(){
 		
 	}
 

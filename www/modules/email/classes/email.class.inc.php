@@ -399,12 +399,12 @@ class email extends db {
 
 		@unlink($GLOBALS['GO_CONFIG']->file_storage_path.$message['path']);
 
-		$sql ="DELETE FROM em_links WHERE link_id=".intval($link_id);
+		$sql ="DELETE FROM em_links WHERE  id=".intval($link_id);
 		return $this->query($sql);
 	}
 
 	function get_linked_message($id) {
-		$sql = "SELECT * FROM em_links WHERE link_id=".intval($id);
+		$sql = "SELECT * FROM em_links WHERE id=".intval($id);
 		$this->query($sql);
 		return $this->next_record();
 	}

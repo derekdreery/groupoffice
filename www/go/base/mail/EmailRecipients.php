@@ -1,13 +1,31 @@
 <?php
 class GO_Base_Mail_EmailRecipients{
-	public function __construct(String $emailRecipientList){
-		$this->addString($recipientListString);
+	/**
+	 * Pass a e-mail string like:
+	 * 
+	 * "Merijn Schering" <mschering@intermesh.nl>,someone@somedomain.com,Pete <pete@pete.com
+	 * 
+	 * @param string $emailRecipientList 
+	 */
+	public function __construct($emailRecipientList){
+		$this->addString($emailRecipientList);
 	}
 	
+	/**
+	 * Add a recipient to the list.
+	 * 
+	 * @param string $email
+	 * @param string $personal 
+	 */
 	public function addRecipient($email, $personal=''){
 		$this->_addresses[trim($email)]=trim($personal);
 	}	
 	
+	/**
+	 * Get the addresses in an array('email@address.com'=>'Personal')
+	 * 
+	 * @return array  
+	 */
 	public function getAddresses(){
 		return $this->_addresses;
 	}
@@ -67,15 +85,14 @@ class GO_Base_Mail_EmailRecipients{
 
 	private $_emailFound=false;
 	
-	
+
 	/**
-	* Parses an RFC822 formatted string 
-	* (eg. "Merijn Schering" <mschering@intermesh.nl>)
-	*
-	* @param	string	$recipientListString	The address list to parse
-	* @access public
-	* @return array 	With addresses containing 'personal' and 'email'
-	*/
+	 * Pass a e-mail string like:
+	 * 
+	 * "Merijn Schering" <mschering@intermesh.nl>,someone@somedomain.com,Pete <pete@pete.com
+	 * 
+	 * @param string $emailRecipientList 
+	 */
 	public function addString($recipientListString)
 	{
 		//initiate addresses array
