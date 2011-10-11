@@ -1,7 +1,5 @@
 <?php
 
-require_once($GLOBALS['GO_CONFIG']->class_path."mail/imap.class.inc");
-
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 // +-----------------------------------------------------------------------+
 // | Copyright (c) 2002-2003  Richard Heyes                                |

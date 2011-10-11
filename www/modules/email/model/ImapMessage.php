@@ -31,48 +31,7 @@
  * @property GO_Email_Model_Account $account
  * @property String $mailbox
  */
-class GO_Email_Model_ImapMessage extends GO_Base_Model {
-
-	private $_attributes = array(
-			'to' => '',
-			'cc' => '',
-			'bcc' => '',
-			'from' => '',
-			'subject' => '',
-			'uid' => '',
-			'size' => '',
-			'internal_date' => '',
-			'date' => '',
-			'udate' => '',
-			'internal_udate' => '',
-			'x_priority' => 3,
-			'reply_to' => '',
-			'message_id' => '',
-			'content_type' => '',
-			'content_type_attributes' => array(),
-			'disposition_notification_to' => '',
-			'content_transfer_encoding' => '',
-			'charset' => '',
-			'seen' => 0,
-			'flagged' => 0,
-			'answered' => 0,
-			'forwarded' => 0,
-			'account'
-	);
-
-	/**
-	 * PHP getter magic method.
-	 * This method is overridden so that AR attributes can be accessed like properties.
-	 * @param string $name property name
-	 * @return mixed property value
-	 * @see getAttribute
-	 */
-	public function __get($name) {
-		if (isset($this->_attributes[$name])) {
-			return $this->_attributes[$name];
-		}
-	}
-
+class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -83,20 +42,6 @@ class GO_Email_Model_ImapMessage extends GO_Base_Model {
 	{	
 		return parent::model($className);
 	}
-
-	public function setAttributes($attributes) {
-
-		$this->_attributes = array_merge($this->_attributes, $attributes);
-		
-		$this->_attributes['to']=new GO_Base_Mail_EmailRecipients($this->_attributes['to']);
-		$this->_attributes['cc']=new GO_Base_Mail_EmailRecipients($this->_attributes['cc']);
-		$this->_attributes['bcc']=new GO_Base_Mail_EmailRecipients($this->_attributes['bcc']);
-		$this->_attributes['from']=new GO_Base_Mail_EmailRecipients($this->_attributes['from']);
-		$this->_attributes['reply_to']=new GO_Base_Mail_EmailRecipients($this->_attributes['reply_to']);
-		
-		
-	}
-
 	/**
 	 *
 	 * @param GO_Email_Model_Account $account

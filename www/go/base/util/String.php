@@ -758,7 +758,7 @@ class GO_Base_Util_String {
 	 * @access public
 	 * @return string HTML formatted string
 	 */
-	public static function convert_html($html) {
+	public static function sanitizeHtml($html) {
 		global $GO_CONFIG;
 
 		//needed for very large strings when data is embedded in the html with an img tag
