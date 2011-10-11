@@ -228,7 +228,7 @@ class cms_output extends cms {
 	 * @param bool $reverse
 	 * @return Array An array of folders and/or files the user has access to.
 	 */
-	function get_authorized_items($folder_id, $user_id, $only_visible=false, $reverse=false) {
+	function get_authorized_items($folder_id, $user_id, $only_visible=false, $reverse=false, $filter_year=false, $filter_category_id=false) {
 		$items = array();
 			$folders = $this->get_authorized_folders($folder_id, $user_id, $only_visible);
 			foreach($folders as $folder) {
@@ -239,7 +239,7 @@ class cms_output extends cms {
 				$items[$priority] = $folder;
 				$items[$priority]['fstype']='folder';
 			}
-		$files = $this->get_authorized_files($folder_id, $user_id, $only_visible);
+		$files = $this->get_authorized_files($folder_id, $user_id, $only_visible,array(),0,$filter_year,$filter_category_id);
 		foreach($files as $file) {
 			$priority=$file['priority'];
 			while(isset($items[$priority]))
@@ -272,12 +272,12 @@ class cms_output extends cms {
 		return $folders;
 	}
 
-	function get_authorized_files($folder_id, $user_id, $only_visible=false, $category_names=array(),$site_id=0) {
+	function get_authorized_files($folder_id, $user_id, $only_visible=false, $categories=array(),$site_id=0, $filter_year=false, $filter_category_id=0) {
 		global $GO_SECURITY;
 
 		$files=array();
 
-		$this->get_files($folder_id,'priority','ASC',0,0,$only_visible, $category_names,$site_id);
+		$this->get_files($folder_id,'priority','ASC',0,0,$only_visible, $categories,$site_id,$filter_year,$filter_category_id);
 		while($this->next_record()) {
 			if($this->f('acl')==0 || $GO_SECURITY->has_permission($user_id, $this->f('acl'))) {
 				$files[]=$this->record;
@@ -405,6 +405,8 @@ class cms_output extends cms {
 		$no_folder_links = !empty($params['no_folder_links']);
 		$search = !empty($params['search']);
 		$sort_time = !empty($params['sort_time']) ? $params['sort_time'] : '';
+		$filter_by_get_year = !empty($params['filter_by_get_year']) ? $_GET['filter_year'] : false;
+		$filter_by_get_category_id = !empty($params['filter_by_get_category_id']) ? $_GET['filter_category_id'] : false;
 
 		/*
 		 * lastfile is used to record the previous and next file of the currently viewed file
@@ -459,7 +461,7 @@ class cms_output extends cms {
 		if($search) {
 			$items = $this->search_files($root_folder_id, $_REQUEST['query']);
 		}else {
-			$items = isset($params['items']) ? $params['items'] : $this->get_authorized_items($folder_id, $GO_SECURITY->user_id, true, $reverse);
+			$items = isset($params['items']) ? $params['items'] : $this->get_authorized_items($folder_id, $GO_SECURITY->user_id, true, $reverse, $filter_by_get_year, $filter_by_get_category_id);
 		}
 
 		$total = count($items);
@@ -550,6 +552,8 @@ class cms_output extends cms {
 			}
 		}
 
+		
+		
 		$count = count($items);
 
 		$smarty2 = new cms_smarty();
@@ -702,42 +706,97 @@ class cms_output extends cms {
 	function print_category_items($params, &$smarty) {
 		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
 		//var_dump($this->site);
-		$category_names = explode(',',$params['category_names']);
+		$category_names = !empty($params['category_names']) ? explode(',',$params['category_names']) : array();
+		$category_ids = !empty($params['category_ids']) ? explode(',',$params['category_ids']) : array();
+		$random = !empty($params['random']);
+		
+		if (is_array($category_names)) {
+			for ($i=0; $i<count($category_names); $i++) {
+				$category_names[$i] = trim($category_names[$i]);
+			}
+			$params['items'] = $this->get_authorized_files(0, $GO_SECURITY->user_id, true, $category_names,$this->site['id']);
+		} else if (is_array($category_ids)) {
+			for ($i=0; $i<count($category_ids); $i++) {
+				$category_ids[$i] = trim($category_ids[$i]);
+			}
+			$params['items'] = $this->get_authorized_files(0, $GO_SECURITY->user_id, true, $category_ids,$this->site['id']);
+		}
+
+		if($random)
+			shuffle($params['items']);
+		
+		return $this->items2html($params, &$smarty);
+	}
+	
+	function print_child_categories($params, &$smarty) {
+//		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
+		$category_name = !empty($params['category_name']) ? $params['category_name'] : '';
+		$category_id = !empty($params['category_id']) ? intval($params['category_id']) : '';
+		$random = !empty($params['random']);
+		
+		if ($category_name=='Root') {
+			$category_id = 0;
+			unset($category_name);
+		}
+		
+		if (!empty($category_name)) {
+			$category_name = trim($category_name);
+			$params['items'] = $this->get_child_categories($category_name,$this->site['id']);
+		} else {
+			$params['items'] = $this->get_child_categories($category_id,$this->site['id']);
+		}
+		
+		if($random)
+			shuffle($params['items']);
+		
+		return $this->items2html($params, &$smarty);
+	}
+	
+	function print_years($params, &$smarty) {
+		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
+		
+		$root_path = isset($params['root_path']) ? $params['root_path'] : '';
+		$random = !empty($params['random']);
+				
+		$folder =  $this->resolve_url($root_path, $this->site['root_folder_id']);
+		if(!$folder) {
+			return 'Couldn\'t resolve path: '.$root_path;
+		} else {
+			$root_folder_id=$folder['id'];
+		}
+		
+		$params['items'] = $this->get_item_years($root_folder_id);
+		
+		if($random)
+			shuffle($params['items']);
+		
+		return $this->items2html($params, &$smarty);
+	}
+	
+	private function items2html ($params, &$smarty) {
+		$html = !empty($params['html']) ? $params['html'] : '';
+		$items = !empty($params['items']) ? $params['items'] : array();
 		$class = isset($params['class']) ? $params['class'] : 'items';
 		$item_template = isset($params['item_template']) ? $params['item_template'] : '';
 		$active_item_template = isset($params['active_item_template']) ? $params['active_item_template'] : $item_template;
 		$max_items=isset($params['max_items']) ? $params['max_items'] : 0;
 		$wrap_div=isset($params['wrap_div']) && (empty($params['wrap_div']) || $params['wrap_div']=='false') ? false : true;
-		$random = !empty($params['random']);
-
-		if (!is_array($category_names)) {
-			return 'Invalid parameter category_names: "'.$params['category_names'].'". It must be a comma separated list of this site\'s file category names.';
-		} else {
-			for ($i=0; $i<count($category_names); $i++) {
-				$category_names[$i] = trim($category_names[$i]);
-			}
-		}
-		
-		$items = $this->get_authorized_files(0, $GO_SECURITY->user_id, true, $category_names,$this->site['id']);
-
-		if($random)
-			shuffle($items);
-		
+		$level_template  = isset($params['level_template'])?  $params['level_template'] : '';
+	
 		$count = count($items);
-
 		$smarty2 = new cms_smarty();
-
 		$uneven=true;
 
 		$smarty->assign('item_count', $count);
 
 		if($count) {
+			
 			$smarty2->assign('item_count', $count);
 			$smarty2->assign('item_percentage', round(100/$count,1));
 
 			if($wrap_div)
-				$html .= '<div id="'.$class.'" class="'.$class.' '.$class.'_'.$current_level.'">';
-
+				$html .= '<div id="'.$class.'" class="'.$class.'">';
+			
 			$counter=$active_index=0;
 			while ($item = array_shift($items)) {
 
@@ -823,9 +882,10 @@ class cms_output extends cms {
 
 				$uneven=!$uneven;
 			}
+			
 			if($wrap_div)
 				$html .= '</div>';
-
+			
 			if(!empty($level_template)) {
 				$smarty2->assign('parentitem', $parentitem);
 				$smarty2->assign('level', $current_level);
@@ -835,9 +895,7 @@ class cms_output extends cms {
 
 				$html = $smarty2->fetch($level_template);
 			}
-
 		}
-
 		return $html;
 	}
 }

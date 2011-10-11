@@ -1000,6 +1000,20 @@ class cms extends db {
 	}
 
 
+	function get_item_years($root_folder_id) {
+		$sql = "SELECT DISTINCT FROM_UNIXTIME(sort_time, '%Y') AS year FROM cms_files ".
+			"WHERE folder_id='".intval($root_folder_id)."' ORDER BY year ASC ";
+		$this->query($sql);
+		$records = array();
+		while ($record = $this->next_record()) {
+			$record['active'] = isset($_GET['filter_year']) && $record['year']==$_GET['filter_year'];
+			$record['active_class_name'] = $record['active'] ? 'active_year_filter' : '';
+			$records[] = $record;
+		}
+		
+		return $records;
+	}
+	
 
 	/**
 	 * Add a File
@@ -1153,23 +1167,39 @@ class cms extends db {
 	}
 
 	/**
-	 * Gets all Files
+	 * Gets files
 	 *
-	 * @param Int $start First record of the total record set to return
-	 * @param Int $offset Number of records to return
+	 * @param Int $folder_id The ID of the folder to search in. Can be 0, but then $site_id must be valid.
 	 * @param String $sortfield The field to sort on
 	 * @param String $sortorder The sort order
+	 * @param Int $start First record of the total record set to return
+	 * @param Int $offset Number of records to return
+	 * @param Boolean $only_visible Return only the visible files if true (default false)
+	 * @param Array $categories Array of category names or category ids the returned files must be part of
+	 * @param Int $site_id The ID of the site to search in. Should be used if folder_id is 0.
 	 *
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_files($folder_id, $sortfield='priority', $sortorder='ASC', $start=0, $offset=0, $only_visible=false, $category_names=array(), $site_id=0) {
-		$sql = "SELECT DISTINCT f.* FROM cms_files f ";
+	function get_files($folder_id, $sortfield='priority', $sortorder='ASC', $start=0, $offset=0, $only_visible=false, $categories=array(), $site_id=0, $filter_year=false, $filter_category_id=false) {
+		$sql = "SELECT DISTINCT f.* ";
 		
-		if (!empty($category_names)) {
+		if (!empty($categories) || $filter_category_id>0) {
+			$sql .= " , c.id AS category_id, c.name AS category_name ";
+		}
+		
+		$sql .= " FROM cms_files f ";
+		
+		if (!empty($categories) && is_numeric($categories[0])) {
+			$sql .= "INNER JOIN cms_files_categories fc ON f.id=fc.file_id ".
+				"INNER JOIN cms_categories c ON c.id=fc.category_id ";
+		} else if (!empty($categories) && !is_numeric($categories[0])) {
 			$sql .= "INNER JOIN cms_files_categories fc ON f.id=fc.file_id ".
 				"INNER JOIN cms_categories c ON c.id=fc.category_id ".
-				"AND (c.name='".implode("' OR c.name='",$category_names)."') ";
+				"AND (c.name='".implode("' OR c.name='",$categories)."') ";
+		} else if ($filter_category_id>0) {
+			$sql .= "INNER JOIN cms_files_categories fc ON f.id=fc.file_id AND fc.category_id='".intval($filter_category_id)."' ".
+				"INNER JOIN cms_categories c ON c.id=fc.category_id ";
 		}
 		
 		$where = false;
@@ -1183,6 +1213,13 @@ class cms extends db {
 			$where = true;
 		}
 
+		if (!empty($categories) && is_numeric($categories[0])) {
+			if ($where)
+				$sql .= " AND fc.category_id IN (".implode(',',$categories).") ";
+			else
+				$sql .= " WHERE fc.category_id IN (".implode(',',$categories).") ";
+		}
+		
 		if($only_visible) {
 			if ($where)
 				$sql .= " AND ";
@@ -1191,6 +1228,14 @@ class cms extends db {
 			$sql .= "(show_until=0 OR show_until>".time().")";
 		}
 	
+		if($filter_year) {
+			if ($where)
+				$sql .= " AND ";
+			else
+				$sql .= " WHERE ";
+			$sql .= "(sort_time>='".mktime(0,0,0,1,1,$filter_year)."' AND sort_time<'".mktime(0,0,0,1,1,$filter_year+1)."')";
+		}
+		
 		$sql .= " ORDER BY ".$this->escape($sortfield." ".$sortorder);
 		$this->query($sql);
 		$count = $this->num_rows();
@@ -1198,6 +1243,7 @@ class cms extends db {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
+
 		return $count;
 	}
 
@@ -1450,5 +1496,25 @@ class cms extends db {
 		return $this->query("DELETE FROM cms_files_categories WHERE ".
 			"file_id='".intval($file_id)."' AND category_id='".intval($category_id)."'");
 	}
-	
+
+	public function get_child_categories($category, $site_id) {
+		if (is_numeric($category))
+			$sql = "SELECT c.* FROM cms_categories c ".
+				"WHERE c.parent_id='".intval($category)."' ";
+		else
+			$sql = "SELECT c.* FROM cms_categories c ".
+				"INNER JOIN cms_categories c2 on c2.id=c.parent_id ".
+				"WHERE c2.name='".$this->escape($category)."' ";
+		
+		$sql .= "AND c.site_id='".intval($site_id)."' ";
+
+		$this->query($sql);
+		$categories = array();
+		while ($record = $this->next_record()) {
+			$record['active'] = isset($_GET['filter_category_id']) && $record['id']==$_GET['filter_category_id'];
+			$record['active_class_name'] = $record['active'] ? 'active_category_filter' : '';
+			$categories[] = $record;
+		}
+		return $categories;
+	}
 }
