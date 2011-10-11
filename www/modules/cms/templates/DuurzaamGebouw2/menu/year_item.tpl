@@ -1,0 +1,1 @@
+<div class="year-item {$item.active_class_name}"><a href="{update_get_params baseurl="`$file.href`" filter_year="`$item.year`"}#the-anchor">{$item.year}</a></div>
