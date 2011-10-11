@@ -171,7 +171,7 @@ Ext.extend(GO.cms.FileCategoriesTree, Ext.tree.TreePanel,{
 			this.loader.baseParams.delete_key = this.getSelectionModel().selNode.attributes.id;
 			this.load(this.file_id);
 			this.loader.baseParams.delete_key = undefined;
-		});
+		},this);
 	},
 	
 	addCategory : function() {
