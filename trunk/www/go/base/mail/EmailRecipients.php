@@ -18,11 +18,12 @@ class GO_Base_Mail_EmailRecipients{
 	 * @param string $personal 
 	 */
 	public function addRecipient($email, $personal=''){
-		$this->_addresses[trim($email)]=trim($personal);
+		//echo $email.' '.$personal.'<br />';
+		$this->_addresses[]=array('email'=>trim($email),'personal'=>trim($personal));
 	}	
 	
 	/**
-	 * Get the addresses in an array('email@address.com'=>'Personal')
+	 * Get the addresses in an array(array('email'=>'email@address.com','personal'=>'Personal'))
 	 * 
 	 * @return array  
 	 */
@@ -30,14 +31,22 @@ class GO_Base_Mail_EmailRecipients{
 		return $this->_addresses;
 	}
 	
+	public function getEmail($index=0){
+		return isset($this->_addresses[$index]['email']) ? $this->_addresses[$index]['email'] : '';
+	}
+	
+	public function getPersonal($index=0){
+		return isset($this->_addresses[$index]['personal']) ? $this->_addresses[$index]['personal'] : '';
+	}
+	
 	public function __toString() {
 		$str = '';
-		foreach($this->_addresses as $email=>$personal){
-			if(!empty($personal)){
-				$str .= '"'.$personal.'" <'.$email.'>, ';
+		foreach($this->_addresses as $a){
+			if(!empty($a['personal'])){
+				$str .= '"'.$a['personal'].'" <'.$a['email'].'>, ';
 			}else
 			{
-				$str .= $email.', ';
+				$str .= $a['email'].', ';
 			}
 		}
 		
@@ -98,6 +107,8 @@ class GO_Base_Mail_EmailRecipients{
 		//initiate addresses array
 		//$this->_addresses = array();
 		
+		
+		
 		for($i=0;$i<strlen($recipientListString);$i++)
 		{
 			$char = $recipientListString[$i];	
@@ -126,7 +137,7 @@ class GO_Base_Mail_EmailRecipients{
 				case ';':
 					if($this->_quote || (!$this->_emailFound && !GO_Base_Util_String::validate_email(trim($this->_buffer))))
 					{
-						$this->buffer .= $char;				
+						$this->_buffer .= $char;				
 					}else
 					{
 						$this->_addBuffer();
@@ -135,7 +146,7 @@ class GO_Base_Mail_EmailRecipients{
 			
 
 				default:					
-					$this->buffer .= $char;
+					$this->_buffer .= $char;
 				break;
 			}			
 		}
