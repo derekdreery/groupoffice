@@ -78,6 +78,6 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		}
 		$this->_imap->select_mailbox('INBOX');
 		
-		return $imap;		
+		return $this->_imap;		
 	}
 }

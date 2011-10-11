@@ -1288,7 +1288,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 		
 		if(!forceDownload && attachment.type=='message')
 		{
-			GO.linkHandlers[9].call(this, 0, params);
+			GO.linkHandlers["GO_Savemailas_Model_LinkedEmail"].call(this, 0, params);
 		}else
 		{
 			switch(attachment.extension)
@@ -1916,75 +1916,10 @@ GO.email.showAddressMenu = function(e, email, name)
 }
 
 
-GO.linkHandlers[9] = function(id, remoteMessage){
-
-	if(!GO.email.linkedMessagePanel){
-		GO.email.linkedMessagePanel = new GO.email.LinkedMessagePanel();
-
-		GO.email.linkedMessageWin = new GO.Window({
-			maximizable:true,
-			collapsible:true,
-			stateId:'em-linked-message-panel',
-			title: GO.email.lang.emailMessage,
-			height: 400,
-			width: 600,
-			closeAction:'hide',
-			layout:'fit',
-			items: GO.email.linkedMessagePanel
-		});
-	}
-	
-	GO.email.linkedMessagePanel.remoteMessage=remoteMessage;
-	GO.email.linkedMessageWin.show();
-	GO.email.linkedMessagePanel.load(id);
-	
-/*var messagePanel = new GO.email.MessagePanel({
-			border:false,
-			autoScroll:true
-		});		
-		
-	messagePanel.on('linkClicked', function(href){
-  	var win = window.open(href);
-  	win.focus();
-  }, this);
-  
-  messagePanel.on('attachmentClicked', function(attachment, panel){ 	
-  	if(attachment.mime.indexOf('message')>-1)
-  	{
-  		remoteMessage.part_number=attachment.number+".0";
-  		GO.linkHandlers[9].call(this, id, remoteMessage);
-  	}else
-  	{
-	  	if(panel.data.path)
-	  	{
-	  		document.location.href=GO.settings.modules.email.url+
-	  			'mimepart.php?path='+
-	  			encodeURIComponent(panel.data.path)+'&part_number='+attachment.number;
-	  	}else
-	  	{
-	  		document.location.href=GO.settings.modules.email.url+
-	  			'mimepart.php?uid='+remoteMessage.uid+'' +
-	  			'&account_id='+remoteMessage.account_id+'' +
-	  			'&transfer='+remoteMessage.transfer+'' +
-	  			'&mailbox='+encodeURIComponent(remoteMessage.mailbox)+'' +
-	  			'&part='+remoteMessage.part+'' +
-	  			'&part_number='+attachment.number;
-	  	}
-  	}
-  	
-  	
-  }, this);
-  messagePanel.on('zipOfAttachmentsClicked', function(){}, this);*/
-}
-
-GO.linkPreviewPanels[9]=function(config){
-	config = config || {};
-	return new GO.email.LinkedMessagePanel(config);
-}
 
 GO.newMenuItems.push({
 	text: GO.email.lang.email,
-	iconCls: 'go-link-icon-9',
+	iconCls: 'go-model-icon-GO_Email_Model_ImapMessage',
 	handler:function(item, e){
 		var taskShowConfig = item.parentMenu.taskShowConfig || {};
 		//taskShowConfig.link_config=item.parentMenu.link_config

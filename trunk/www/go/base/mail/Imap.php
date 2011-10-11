@@ -33,7 +33,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 
 	public function last_error(){
 		$count=count($this->errors);
-		//go_debug($this->errors);
+		//GO::debug($this->errors);
 		if($count)
 			return $this->errors[$count-1];
 		else
@@ -59,7 +59,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 
 	public function connect($server, $port, $username, $password, $ssl=false, $starttls=false, $auth='plain') {
 
-		go_debug("imap::connect($server, $port, $username, ***, $ssl, $starttls)");
+		GO::debug("imap::connect($server, $port, $username, ***, $ssl, $starttls)");
 
 		//cache DNS in session. Seems to be faster with gmail somehow.
 //		if(empty($_SESSION['GO_SESSION']['imap'][$server]))
@@ -102,9 +102,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 			$this->send_command($command);
 			$this->state = 'disconnected';
 			$result = $this->get_response();
-			//go_debug($this->commands);
+			//GO::debug($this->commands);
 
-			//go_debug($this->responses);
+			//GO::debug($this->responses);
 
 			fclose($this->handle);
 
@@ -145,7 +145,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 				$this->banner = fgets($this->handle, 1024);
 				$cram1 = 'A'.$this->command_number().' AUTHENTICATE CRAM-MD5'."\r\n";
 				fputs ($this->handle, $cram1);
-				$this->commands[trim($cram1)] = getmicrotime();
+				$this->commands[trim($cram1)] = GO_Base_Util_Date::getmicrotime();
 				$response = fgets($this->handle, 1024);
 				$this->responses[] = $response;
 				$challenge = base64_decode(substr(trim($response), 1));
@@ -154,12 +154,12 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 				$opad = str_repeat(chr(0x5c), 64);
 				$digest = bin2hex(pack("H*", md5(($pass ^ $opad).pack("H*", md5(($pass ^ $ipad).$challenge)))));
 				$challenge_response = base64_encode($username.' '.$digest);
-				$this->commands[trim($challenge_response)] = getmicrotime();
+				$this->commands[trim($challenge_response)] = GO_Base_Util_Date::getmicrotime();
 				fputs($this->handle, $challenge_response."\r\n");
 				break;
 			default:
 				$login = 'A'.$this->command_number().' LOGIN "'.str_replace('"', '\"', $username).'" "'.str_replace('"', '\"', $pass). "\"\r\n";
-				$this->commands[trim(str_replace($pass, 'xxxx', $login))] = getmicrotime();
+				$this->commands[trim(str_replace($pass, 'xxxx', $login))] = GO_Base_Util_Date::getmicrotime();
 				fputs($this->handle, $login);
 				break;
 		}
@@ -173,7 +173,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 			if(!$response && count($res)==2)
 				$response = array_pop($res);
 
-			$this->short_responses[$response] = getmicrotime();
+			$this->short_responses[$response] = GO_Base_Util_Date::getmicrotime();
 			if (!$this->auth) {
 				if (isset($res[1])) {
 					$this->banner = $res[1];
@@ -211,7 +211,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 			$this->capability = $_SESSION['GO_IMAP'][$this->server]['imap_capability'] = implode(' ', $response);
 		}
 
-		go_debug('IMAP capability: '.$this->capability);
+		GO::debug('IMAP capability: '.$this->capability);
 
 		return $this->capability;
 	}
@@ -404,7 +404,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 			$last_folder = $name;
 		}
 
-		//go_debug($folders);
+		//GO::debug($folders);
 
 		ksort($folders);
 
@@ -422,7 +422,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 
 	public function select_mailbox($mailbox_name='INBOX') {
 
-		//go_debug($this->selected_mailbox);
+		//GO::debug($this->selected_mailbox);
 
 		if($this->selected_mailbox && $this->selected_mailbox['name']==$mailbox_name)
 			return true;
@@ -550,7 +550,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 
 		$this->selected_mailbox['unseen']=$unseen;
 
-		//go_debug($unseen);
+		//GO::debug($unseen);
 		return array('count'=>$unseen, 'uids'=>$uids);
 	}
 
@@ -613,7 +613,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 	}
 
 	private function server_side_sort($sort, $reverse, $filter) {
-		go_debug("server_side_sort($sort, $reverse, $filter)");
+		GO::debug("server_side_sort($sort, $reverse, $filter)");
 
 		$this->clean($sort, 'keyword');
 		//$this->clean($filter, 'keyword');
@@ -688,7 +688,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 	/* use the FETCH command to manually sort the mailbox */
 	private function client_side_sort($sort, $reverse, $filter='ALL') {
 		
-		go_debug("imap::client_side_sort($sort, $reverse, $filter)");
+		GO::debug("imap::client_side_sort($sort, $reverse, $filter)");
 
 		$uid_string='1:*';
 		if(!empty($filter) && $filter !='ALL'){
@@ -1012,8 +1012,8 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 					'date'=>'',
 					'udate'=>'',
 					'internal_udate'=>'',
-					'x-priority'=>3,
-					'reply-to'=>'',
+					'x_priority'=>3,
+					'reply_to'=>'',
 					'message_id'=>'',
 					'content_type'=>'',
 					'content_type_attributes'=>array(),
@@ -1126,7 +1126,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 			}
 		}
 
-		//go_debug($final_headers);
+		//GO::debug($final_headers);
 		return $final_headers;
 	}
 
@@ -1143,7 +1143,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 		$mbroot = trim($mbroot);
 
 		$list = $this->get_folders('', false,'%');
-		//go_debug($list);
+		//GO::debug($list);
 		if (is_array($list)) {
 			while ($folder = array_shift($list)) {
 				if (!$this->delimiter && strlen($folder['delimiter']) > 0) {
@@ -1278,7 +1278,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 
 	public function has_alternative_body($struct){
 
-		//go_debug($struct);
+		//GO::debug($struct);
 
 		if (!is_array($struct) || empty($struct)) {
 			return false;
@@ -1327,12 +1327,12 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 		}
 		foreach ($struct as $id => $vals) {
 
-			//go_debug($vals);
+			//GO::debug($vals);
 			if(is_array($vals)){
 				if (isset($vals['type'])){
 
 					$vals['imap_id'] = $id;
-					//go_debug($vals);
+					//GO::debug($vals);
 
 					if ($vals['type'] == $type && $subtype == $vals['subtype'] && $vals['disposition']!='attachment') {
 
@@ -1516,7 +1516,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 			if($charset=='us-ascii')
 				$charset = 'windows-1252';
 			
-			$str = String::clean_utf8($str, $charset);
+			$str = GO_Base_Util_String::clean_utf8($str, $charset);
 			if($charset != 'utf-8') {
 				$str = str_replace($charset, 'utf-8', $str);
 			}
@@ -1536,7 +1536,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 	 */
 
 	public function get_message_part_decoded($uid, $part_no, $encoding, $charset=false, $peek=false, $max=false) {
-		go_debug("get_message_part_decoded($uid, $part_no, $encoding, $charset)");
+		GO::debug("get_message_part_decoded($uid, $part_no, $encoding, $charset)");
 		return $this->decode_message_part(
 						$this->get_message_part($uid, $part_no, $peek, $max),
 						$encoding,
@@ -1608,7 +1608,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 		$this->send_command($command);
 		$result = fgets($this->handle);
 
-		//go_debug($result);
+		//GO::debug($result);
 		$size = false;
 		if (preg_match("/\{(\d+)\}\r\n/", $result, $matches)) {
 			$size = $matches[1];
@@ -1845,7 +1845,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 
 		$children = $this->get_folders($mailbox.$delim);
 
-		//go_debug($children);
+		//GO::debug($children);
 		//throw new Exception('test');
 
 		$command = 'RENAME "'.$this->addslashes($this->utf7_encode($mailbox)).'" "'.
@@ -2009,7 +2009,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 	 */
 	public function append_message($mailbox, $data, $flags=""){
 
-		go_debug("imap::append_message($mailbox, data, $flags);");
+		GO::debug("imap::append_message($mailbox, data, $flags);");
 
 		if(!$this->append_start($mailbox, strlen($data), $flags))
 			return false;
@@ -2064,7 +2064,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 
     //remove it from the body.
     $body = preg_replace($regex, "", $body);
-    //go_debug($body);
+    //GO::debug($body);
 
     return $attachments;
 	}

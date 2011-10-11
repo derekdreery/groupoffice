@@ -47,7 +47,7 @@ margin:5px 2px;
 	font-weight:bold !important;	
 }
 
-.go-link-icon-9 {
+.go-model-icon-GO_Email_Model_ImapMessage, .go-model-icon-GO_Savemailas_Model_LinkedEmail {
 	background-image: url('images/16x16/message.png') !important;
 	width:16px;
 	height:16px;
