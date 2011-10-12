@@ -469,21 +469,25 @@ class cms_output extends cms {
 		// sort by sort_time
 
 		if (strtolower($sort_time)=='asc') {
-			function cmp_sort_time($a,$b) {
-				if ($a['sort_time']==$b['sort_time'])
-					return 0;
-				return $a['sort_time']<$b['sort_time'] ? -1 : 1;
+			if(!function_exists('cmp_sort_time_asc')){
+				function cmp_sort_time_asc($a,$b) {
+					if ($a['sort_time']==$b['sort_time'])
+						return 0;
+					return $a['sort_time']<$b['sort_time'] ? -1 : 1;
+				}
 			}
 		} elseif (strtolower($sort_time)=='desc') {
-			function cmp_sort_time($a,$b) {
-				if ($a['sort_time']==$b['sort_time'])
-					return 0;
-				return $a['sort_time']>$b['sort_time'] ? -1 : 1;
+			if(!function_exists('cmp_sort_time_desc')){
+				function cmp_sort_time_desc($a,$b) {
+					if ($a['sort_time']==$b['sort_time'])
+						return 0;
+					return $a['sort_time']>$b['sort_time'] ? -1 : 1;
+				}
 			}
 		}
 
 		if (strtolower($sort_time)=='asc' || strtolower($sort_time)=='desc') {
-			usort($items,'cmp_sort_time');
+			usort($items,'cmp_sort_time_'.strtolower($sort_time));
 		}
 
 		if($random) {
@@ -573,6 +577,8 @@ class cms_output extends cms {
 			while ($item = array_shift($items)) {
 
 				$item['index']=$counter;
+				$item['first']=$counter==0;
+				$item['last']=$counter==$count-1;
 				$item['safename']=preg_replace($this->safe_regex, '', $item['name']);
 				$item['name']=htmlspecialchars($item['name']);
 				$item['level']=$current_level;
@@ -898,4 +904,5 @@ class cms_output extends cms {
 		}
 		return $html;
 	}
+		
 }
