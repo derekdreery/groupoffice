@@ -21,6 +21,17 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 
 	protected $model = 'GO_Calendar_Model_Calendar';
 	
+	protected function getStoreParams($params) {
+		if(!empty($params['resources'])){
+			return GO_Base_Db_FindParams::newInstance()
+							->criteria(GO_Base_Db_FindCriteria::newInstance()
+											->addCondition('group_id', 1,'!='));
+		}else
+		{
+			return parent::getStoreParams($params);
+		}
+	}
+	
 	
 	protected function remoteComboFields() {
 		return array(
@@ -28,5 +39,8 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 				'tasklist_id' => '$model->tasklist->name'
 		);
 	}
+	
+	
+	
 	
 }

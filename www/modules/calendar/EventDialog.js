@@ -227,39 +227,66 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.win.show();
 
 		if(!this.initialized){
-
-			this.win.getEl().mask(GO.lang.waitMsgLoad);
-			Ext.Ajax.request({
-				url: GO.settings.modules.calendar.url+'json.php',
+			
+			
+			GO.request({
+				url: 'core/multiRequest',
+				maskEl:this.win.getEl(),
 				params:{
-					task:'init_event_window'
+					requests:Ext.encode({
+						groups:{r:'calendar/group/store'},
+						categories:{r:'calendar/category/store'},
+						resources:{r:'calendar/group/groupsWithResources'}						
+					})
 				},
-				callback: function(options, success, response)
+				success: function(options, response, result)
 				{
+					GO.calendar.groupsStore.loadData(result.groups);
+					this.resourceGroupsStore.loadData(result.resources);
 
-					if(!success)
-					{
-						alert( GO.lang['strRequestError']);
-					}else
-					{
-						var jsonData = Ext.decode(response.responseText);
+					if(!GO.calendar.categoriesStore.loaded)
+						GO.calendar.categoriesStore.loadData(result.categories);
 
-						GO.calendar.groupsStore.loadData(jsonData.groups);
-						//this.selectCalendar.store.loadData(jsonData.writable_calendars);
-						this.resourceGroupsStore.loadData(jsonData.resources);
 
-						if(!GO.calendar.categoriesStore.loaded)
-							GO.calendar.categoriesStore.loadData(jsonData.categories);
-						
-						this.win.getEl().unmask();
-
-						this.initialized=true;
-						this.show(config);
-
-					}
+					this.initialized=true;
+					
+					this.show(config);
 				},
 				scope:this
 			});
+			
+//			this.win.getEl().mask(GO.lang.waitMsgLoad);
+//			Ext.Ajax.request({
+//				url: GO.settings.modules.calendar.url+'json.php',
+//				params:{
+//					task:'init_event_window'
+//				},
+//				callback: function(options, success, response)
+//				{
+//
+//					if(!success)
+//					{
+//						alert( GO.lang['strRequestError']);
+//					}else
+//					{
+//						var jsonData = Ext.decode(response.responseText);
+//
+//						GO.calendar.groupsStore.loadData(jsonData.groups);
+//						//this.selectCalendar.store.loadData(jsonData.writable_calendars);
+//						this.resourceGroupsStore.loadData(jsonData.resources);
+//
+//						if(!GO.calendar.categoriesStore.loaded)
+//							GO.calendar.categoriesStore.loadData(jsonData.categories);
+//						
+//						this.win.getEl().unmask();
+//
+//						this.initialized=true;
+//						this.show(config);
+//
+//					}
+//				},
+//				scope:this
+//			});
 			return false;
 		}
 
