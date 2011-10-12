@@ -1209,7 +1209,7 @@ class cms extends db {
 			$where = true;
 		} else if ($site_id>0) {
 			//join cms_folders 
-			$sql .= "WHERE site_id=".intval($site_id);
+			$sql .= "INNER JOIN cms_folders fo ON f.folder_id=fo.id WHERE site_id=".intval($site_id);
 			$where = true;
 		}
 
@@ -1525,11 +1525,21 @@ class cms extends db {
 		}
 		return $categories;
 	}
-	
-	function get_category_by_name($category_name){
-		$sql = "SELECT id FROM cms_categories WHERE name='".$category_name."';";
+
+	public function get_category_id($name,$parent_id=0) {
+		$sql = "SELECT id FROM cms_categories WHERE name='".$this->escape($name)."' AND parent_id='".intval($parent_id)."' ";
 		$this->query($sql);
-		$record = $this->next_record();
-		return $record['id'];
+		if ($record = $this->next_record()) {
+			return $record['id'];
+		} else {
+			return false;
+		}
 	}
+
+//	function get_category_by_name($category_name){
+//		$sql = "SELECT id FROM cms_categories WHERE name='".$category_name."';";
+//		$this->query($sql);
+//		$record = $this->next_record();
+//		return $record['id'];
+//	}
 }
