@@ -1813,8 +1813,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$attr = array_merge($autoAttr, $attr);
 			
 			//make sure these attributes are not too long
-			$attr['name']=substr($attr['name'], 0, 100);
-			$attr['description']=substr($attr['description'], 0, 255);
+			if(strlen($attr['description'])>100)
+				$attr['name']=substr($attr['name'], 0, 100);
+			
+			if(strlen($attr['description'])>255)
+				$attr['description']=substr($attr['description'], 0, 255);
 			
 			//GO::debug($attr);
 
@@ -2344,7 +2347,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->customfieldsModel() && GO::modules()->customfields){
 			$customFieldModelName=$this->customfieldsModel();
 
-			if(!isset($this->_customfieldsRecord) && !empty($this->pk)){
+			if(!isset($this->_customfieldsRecord)){// && !empty($this->pk)){
 				$this->_customfieldsRecord = GO::getModel($customFieldModelName)->findByPk($this->pk);
 				if(!$this->_customfieldsRecord){
 					//doesn't exist yet. Return a new one
@@ -2461,6 +2464,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		else {
 			unset($copy->$pkField);
 		}
+		
+		if(!$this->beforeDuplicate($copy)){
+			$copy->delete();
+			return false;
+		}
+		
 
 		foreach($params as $key=>$value) {
 			$copy->$key = $value;
@@ -2473,12 +2482,51 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$copy->setIsNew(true);
 		
+		if($this->customFieldsRecord){
+			$copy->customFieldsRecord->setAttributes($this->customFieldsRecord->getAttributes('raw'), false);
+		}
+		
+		
+		
 		if($save)
 			$copy->save();
+		
+		if(!$this->afterDuplicate($copy)){
+			$copy->delete();
+			return false;
+		}
 
 		return $copy;
 	}
-
+	
+	protected function beforeDuplicate(&$duplicate){
+		return true;	
+	}
+	protected function afterDuplicate(&$duplicate){
+		return true;	
+	}
+	
+	
+	public function duplicateRelation($relationName, $duplicate){
+		
+		$r= $this->relations();
+		
+		if(!isset($r[$relationName]))
+			throw new Exception("Relation $relationName not found");
+		
+		if($r[$relationName]['type']!=self::HAS_MANY){
+			throw new Exception("Only HAS_MANY relations are supported in duplicateRelation");
+		}
+		
+		$field = $r[$relationName]['field'];
+		
+		$stmt = $this->_getRelated($relationName);
+		while($model = $stmt->fetch()){
+			$model->duplicate(array($field=>$duplicate->pk));
+		}
+		
+		return true;
+	}
 	
 	/**
 	 * Lock the database table

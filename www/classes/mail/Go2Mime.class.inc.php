@@ -126,9 +126,8 @@ class Go2Mime
 		$params['decode_headers'] = true;
 		$params['input'] = $mime;
 
-		$structure = Mail_mimeDecode::decode($params);
+		$structure = @Mail_mimeDecode::decode($params);
 		
-		go_debug($structure);
 		
 
 		if($part_number!='')
