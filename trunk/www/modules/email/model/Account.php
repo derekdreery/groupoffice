@@ -76,7 +76,7 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 			$password = GO_Base_Util_Crypt::decrypt($this->password);
 			$this->_imap->connect($this->host, $this->port, $this->username, $password, $this->use_ssl);
 		}
-		$this->_imap->select_mailbox('INBOX');
+		$this->_imap->select_mailbox($mailbox);
 		
 		return $this->_imap;		
 	}

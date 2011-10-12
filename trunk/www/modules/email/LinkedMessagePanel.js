@@ -73,30 +73,36 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 	editHandler : function(){
 		//needed because it needs to be compatible with javascript/DisplayPanel.js
 	},
-	load : function(id){
+	load : function(config){
 
 		this.el.mask(GO.lang.strWaitMsgLoad);
 
 		if(!this.remoteMessage)
 			this.remoteMessage={};
 
-		if(id)
-			this.messageId=id;
+		if(config.id)
+			this.messageId=config.id;
 		
 		this.remoteMessage.id=this.messageId;
 
 		var url = '';
-		if(this.remoteMessage.account_id)
-		{
-			this.remoteMessage.task='message_attachment';
-			url = GO.settings.modules.email.url+'json.php';
-		}else
-		{
-			//this.remoteMessage.task='linked_message';
-			//url = GO.settings.modules.mailings.url+'json.php';
-			url=GO.url("savemailas/linkedEmail/load");
+		switch(config.action){
+			
+			case 'attachment':
+				this.remoteMessage.task='message_attachment';
+				url = GO.settings.modules.email.url+'json.php';
+				break;
+				
+			case 'file':
+				url=GO.url("savemailas/linkedEmail/loadFile");
+				break;
+				
+			default:
+				url=GO.url("savemailas/linkedEmail/loadLink");
+				
+				break;
+			
 		}
-
 
 		Ext.Ajax.request({
 			url: url,
@@ -123,21 +129,23 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 				GO.linkHandlers[9].call(panel, panel.messageId, panel.remoteMessage);
 			}else
 			{
-				if(panel.data.path)
-				{
-					document.location.href=GO.settings.modules.email.url+
-					'mimepart.php?path='+
-					encodeURIComponent(panel.data.path)+'&part_imap_id='+attachment.imap_id;
-				}else
-				{
-					document.location.href=GO.settings.modules.email.url+
-					'mimepart.php?uid='+panel.remoteMessage.uid+'' +
-					'&account_id='+panel.remoteMessage.account_id+'' +
-					'&encoding='+panel.remoteMessage.encoding+'' +
-					'&mailbox='+encodeURIComponent(panel.remoteMessage.mailbox)+'' +
-					'&imap_id='+panel.remoteMessage.imap_id+'' +
-					'&part_imap_id='+attachment.imap_id;
-				}
+				document.location.href=attachment.url;
+				
+//				if(panel.data.path)
+//				{
+//					document.location.href=GO.settings.modules.email.url+
+//					'mimepart.php?path='+
+//					encodeURIComponent(panel.data.path)+'&part_imap_id='+attachment.imap_id;
+//				}else
+//				{
+//					document.location.href=GO.settings.modules.email.url+
+//					'mimepart.php?uid='+panel.uid+'' +
+//					'&account_id='+panel.remoteMessage.account_id+'' +
+//					'&encoding='+panel.remoteMessage.encoding+'' +
+//					'&mailbox='+encodeURIComponent(panel.remoteMessage.mailbox)+'' +
+//					'&imap_id='+panel.remoteMessage.imap_id+'' +
+//					'&part_imap_id='+attachment.imap_id;
+//				}
 			}
 		}
 	}

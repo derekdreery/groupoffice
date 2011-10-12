@@ -1812,6 +1812,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			$attr = array_merge($autoAttr, $attr);
 			
+			//make sure these attributes are not too long
+			$attr['name']=substr($attr['name'], 0, 100);
+			$attr['description']=substr($attr['description'], 0, 255);
+			
 			//GO::debug($attr);
 
 			$model->setAttributes($attr);

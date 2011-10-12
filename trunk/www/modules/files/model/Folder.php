@@ -509,8 +509,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			return $this->folders();
 		}
 	}
-	
-	
+
 	
 	public function findShares($findParams){
 		
