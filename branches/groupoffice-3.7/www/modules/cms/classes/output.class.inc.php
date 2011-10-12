@@ -747,17 +747,20 @@ class cms_output extends cms {
 		
 		if (!empty($category_name)) {
 			$category_name = trim($category_name);
-			$params['items'] = $this->get_child_categories($category_name,$this->site['id']);
-		} else {
-			$params['items'] = $this->get_child_categories($category_id,$this->site['id']);
-		}
+			
+			//todo get_category_by_name
+			
+			$category_id = $this->get_category_by_name($category_name);
+						
+		} 
+		$params['items'] = $this->get_child_categories($category_id,$this->site['id'],!empty($params['return_first_item']));
 		
 		if($random)
 			shuffle($params['items']);
 		
 		return $this->items2html($params, &$smarty);
 	}
-	
+		
 	function print_years($params, &$smarty) {
 		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
 		
