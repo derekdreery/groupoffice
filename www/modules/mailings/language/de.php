@@ -22,7 +22,7 @@ $l["selectMailingGroup"]='Verteilerliste auswählen';
 $l["noMailingGroups"]='Keine vorhanden';
 $l["sentMailings"]='Gesendete Verteiler';
 $l["subject"]='Betreff';
-GO.mailings.lang['status']='Status';
+$l['status']='Status';
 $l["sent"]='Gesendet';
 $l["total"]='Gesamt';
 $l["errors"]='Fehler';
@@ -47,8 +47,6 @@ $l["unsubscribeLink"]='Link zur Abmeldung';
 $l["unsubscribeHref"]='href für Abmeldung';
 $l["addDocumentTemplate"]='Dokumentvorlage hinzufügen';
 $l["documentTemplate"]='Dokumentvorlage';
-
-require_once($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('mailings'));
 $l['name']='Vorlagen und Verteilerlisten';
 $l['description']='Modul zum Verwalten von E-Mail-Vorlagen und -Verteilerlisten';
 $l['templateAlreadyExists']='Diese Vorlage existiert bereits';
