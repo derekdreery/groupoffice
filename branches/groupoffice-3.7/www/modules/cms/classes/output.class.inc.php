@@ -712,16 +712,21 @@ class cms_output extends cms {
 	function print_category_items($params, &$smarty) {
 		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
 		//var_dump($this->site);
-		$category_names = !empty($params['category_names']) ? explode(',',$params['category_names']) : array();
+		$category_path = !empty($params['category_path']) ? $params['category_path'] : '';
+//		$category_names = !empty($params['category_names']) ? explode(',',$params['category_names']) : array();
 		$category_ids = !empty($params['category_ids']) ? explode(',',$params['category_ids']) : array();
 		$random = !empty($params['random']);
 		
-		if (is_array($category_names)) {
-			for ($i=0; $i<count($category_names); $i++) {
-				$category_names[$i] = trim($category_names[$i]);
-			}
-			$params['items'] = $this->get_authorized_files(0, $GO_SECURITY->user_id, true, $category_names,$this->site['id']);
-		} else if (is_array($category_ids)) {
+		if ($cat_id = $this->get_category_id($category_path)) {
+			$params['items'] = $this->get_authorized_files(0, $GO_SECURITY->user_id, true, array($cat_id),$this->site['id']);
+		}
+//		else if (is_array($category_names)) {
+//			for ($i=0; $i<count($category_names); $i++) {
+//				$category_names[$i] = trim($category_names[$i]);
+//			}
+//			$params['items'] = $this->get_authorized_files(0, $GO_SECURITY->user_id, true, $category_names,$this->site['id']);
+//		} 
+		else if (is_array($category_ids)) {
 			for ($i=0; $i<count($category_ids); $i++) {
 				$category_ids[$i] = trim($category_ids[$i]);
 			}
@@ -736,25 +741,29 @@ class cms_output extends cms {
 	
 	function print_child_categories($params, &$smarty) {
 //		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
-		$category_name = !empty($params['category_name']) ? $params['category_name'] : '';
+		$category_path = !empty($params['category_path']) ? $params['category_path'] : '';
+//		$category_name = !empty($params['category_name']) ? $params['category_name'] : '';
 		$category_id = !empty($params['category_id']) ? intval($params['category_id']) : '';
 		$random = !empty($params['random']);
 		
-		if ($category_name=='Root') {
-			$category_id = 0;
-			unset($category_name);
+//		if ($category_name=='Root') {
+//			$category_id = 0;
+//			unset($category_name);
+//		}
+		
+		if ($category_id = $this->get_category_id_by_path($category_path)) {
+			$params['items'] = $this->get_child_categories($category_id,$this->site['id']);
 		}
-		
-		if (!empty($category_name)) {
-			$category_name = trim($category_name);
-			
-			//todo get_category_by_name
-			
-			$category_id = $this->get_category_by_name($category_name);
-						
-		} 
+//		else if (!empty($category_name)) {
+//			$category_name = trim($category_name);
+//			
+//			//todo get_category_by_name
+//			
+//			$category_id = $this->get_category_by_name($category_name);
+//						
+//		} 
 		$params['items'] = $this->get_child_categories($category_id,$this->site['id'],!empty($params['return_first_item']));
-		
+
 		if($random)
 			shuffle($params['items']);
 		
@@ -780,6 +789,25 @@ class cms_output extends cms {
 			shuffle($params['items']);
 		
 		return $this->items2html($params, &$smarty);
+	}
+	
+	private function get_category_id_by_path($path_string,$root_category_id=0) {
+		if (substr($path_string,0,1)=='/')
+			$path_string = substr($path_string,1);
+		if (substr($path_string,-1,1)=='/')
+			$path_string = substr($path_string,0,strlen($path_string)-1);
+		
+		$path_arr = explode('/',$path_string);
+		$head_category_name = array_shift($path_arr);
+		$cat_id = $this->get_category_id($head_category_name,$root_category_id);
+		if (is_numeric($cat_id)) {
+			if (empty($path_arr))
+				return $cat_id;
+			else
+				return $this->get_category_id_by_path(implode('/',$path_arr),$cat_id);
+		} else {
+			return false;
+		}
 	}
 	
 	private function items2html ($params, &$smarty) {
