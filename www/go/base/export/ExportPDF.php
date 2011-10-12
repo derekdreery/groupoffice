@@ -18,20 +18,18 @@
  * @package GO.base.export
  */
 class GO_Base_Export_ExportPDF implements GO_Base_Export_ExportInterface{	
-	private $_fp;
 
+	private $_pdfWriter;
 	
 	public function __construct($filename, $addKeysAsHeaders=true){
-		//header('Content-Disposition: attachment; filename="'.$filename.'.csv"');
 		
+		$this->_pdfWriter = new GO_Base_Util_Pdf();
 		$this->sendHeaders();
 		
 		$this->_addKeysAsHeaders=$addKeysAsHeaders;
 	}
 	
-	public function showInView(){
-		return true;
-	}
+
 	
 	public function sendHeaders(){
 		//header('Content-Type: text/x-csv; charset=UTF-8');
@@ -60,5 +58,13 @@ class GO_Base_Export_ExportPDF implements GO_Base_Export_ExportInterface{
 	
 	public function getName() {
 		return 'PDF';
+	}
+	
+	public function useOrientation(){
+		return true;
+	}
+	
+	public function showInView(){
+		return true;
 	}
 }
