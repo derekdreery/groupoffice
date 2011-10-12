@@ -1,7 +1,23 @@
 <?php
-//French Translation v1.0
-//Author : Lionel JULLIEN
-//Date : September, 04 2008
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
 
 //Uncomment this line in new translations!
 require($GLOBALS['GO_LANGUAGE']->get_fallback_base_language_file('countries'));
@@ -237,15 +253,15 @@ $countries['ZA'] = 'Afrique du Sud';
 $countries['ZM'] = 'Zambie';
 $countries['ZR'] = 'Zaïre';
 $countries['ZW'] = 'Zimbabwe';
-$countries['AE']= 'Émirats arabes unis';
-$countries['AX']= 'Åland, État libre associé d\'';
-$countries['CN']= 'Chine';
-$countries['TF']= 'French Southern Territories';
-$countries['GG']= 'Guernesey';
-$countries['IR']= 'Iran';
-$countries['IQ']= 'Iraq';
-$countries["MY"]= "Malaysie";
-$countries['CD']= 'République Démocratique du Congo';
-$countries['KP']= 'Corée, République populaire démocratique de';
-$countries['KR']= 'Corée, République de';
+$countries['AE'] = 'Émirats arabes unis';
+$countries['AX'] = 'Åland, État libre associé d\'';
+$countries['CN'] = 'Chine';
+$countries['TF'] = 'French Southern Territories';
+$countries['GG'] = 'Guernesey';
+$countries['IR'] = 'Iran';
+$countries['IQ'] = 'Iraq';
+$countries['MY'] = 'Malaysie';
+$countries['CD'] = 'République Démocratique du Congo';
+$countries['KP'] = 'Corée, République populaire démocratique de';
+$countries['KR'] = 'Corée, République de';
 ?>

@@ -313,3 +313,11 @@ GO.lang.captcha='Sicherheitscode';
 GO.lang.captchaEmpty='Sicherheitscode ist leer';
 GO.lang.multiselectComboMaxItemsReachedWarning='Sie können maximal {max} Einträge auswählen';
 GO.lang.toScreen='Auf den Bildschirm';
+
+GO.lang.strName2= 'Name 2';
+GO.lang.link='Link';
+GO.lang.savedQueries='Gespeicherte Abfragen';
+GO.lang.searchQueryName= 'Abfragename';
+GO.lang.enterSearchQueryName= 'Abfragename eingeben';
+GO.lang.strUsersInGroup= 'Nutzer in der Gruppe';
+GO.lang.pleaseEnterASearchTerm='Bitte Suchausdruck eingeben';

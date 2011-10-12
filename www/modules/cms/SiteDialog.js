@@ -223,6 +223,11 @@ Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 				anchor:'-20'
 			}),{
 				xtype:'checkbox',
+				name:'enable_categories',
+				hideLabel:true,
+				boxLabel:GO.cms.lang.enableCategories
+			},{
+				xtype:'checkbox',
 				name:'enable_rewrite',
 				hideLabel:true,
 				boxLabel:GO.cms.lang.enableRewrite

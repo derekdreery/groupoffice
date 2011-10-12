@@ -380,7 +380,7 @@ class String {
 	 * @return void
 	 */
 	public static function get_email_from_string($email) {
-		if (preg_match(String::get_email_validation_regex(), $email, $matches)) {
+		if (preg_match("/(\b)([\w\.\-+']+)(@)([\w\.-]+)([a-z]{2,6})\b/i", $email, $matches)) {
 			return $matches[0];
 		} else {
 			return false;
@@ -1141,13 +1141,16 @@ class String {
 
 	public static function wrap_quoted_printable_encoded_string($sText, $add_leading_space=false){
 		$lb = '='.chr(13).chr(10);
+		
+		//$lb = chr(10);
 
 		//funambol clients need this to parse the vcard correctly.
-		if($add_leading_space)
-			$lb .= ' ';
+		//if($add_leading_space)
+			//$lb .= ' ';
 
 		preg_match_all( '/.{1,73}([^=]{0,2})?/', $sText, $aMatch );
-		return implode($lb, $aMatch[0]); // add soft crlf's
+		$lines = array_map('trim',$aMatch[0]);
+		return implode($lb, $lines); // add soft crlf's
 		
 	}
 

@@ -1,3 +1,24 @@
+10-10-2011 3.7.33
+- Worked around Funambol bug in client 10.0.1 where line wrapping is not supported.
+
+30-09-2011 3.7.32
+- Fixed sort bug in addressbook
+
+30-09-2011 3.7.31
+- Updated French and Russian.
+- Fixed several small bugs.
+- Added addressbook column to companies grid.
+
+26-09-2011 3.7.30
+- Various small bugfixes.
+
+02-09-2011 3.7.28
+- Fixed bug in ActiveSync with Android 2.3.3
+- Other small bug fixes.
+- Fixed bug in delete old mail
+- Bug fixes with webdav
+- New module for admins to become other users
+
 17-08-2011 3.7.27
 - WebDav locking is enabled
 - Fixed some webdav bugs.

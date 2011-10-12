@@ -487,6 +487,9 @@ try
 			$GLOBALS['GO_CONFIG']->save_setting('register_email_subject', $_POST['register_email_subject']);
 			$GLOBALS['GO_CONFIG']->save_setting('register_email_body', $_POST['register_email_body']);
 			
+			$response['success']=true;
+			echo json_encode($response);
+			
 			break;
 	}
 }

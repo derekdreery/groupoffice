@@ -1,19 +1,22 @@
-/** 
- * Copyright Intermesh
- * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
- * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
- *
- * French Translation
- * Author : Lionel JULLIEN
- * Date : September, 27 2010
- */
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
  
 GO.addressbook.lang.newSearch='Nouvelle recherche';
 GO.addressbook.lang.executeQuery='Executer la recherche';
@@ -112,3 +115,7 @@ GO.addressbook.lang.crn='SIREN/SIRET';
 GO.addressbook.lang.iban='IBAN';
 GO.addressbook.lang.unknownEmail= 'Adresse email inconnue';
 GO.addressbook.lang.strUnknownEmail= 'L\'adresse email est inconnue. Voulez vous l\'ajouter a un nouveau contact, l\'ajouter a un contact existant ou annuler ?';
+GO.addressbook.lang.globalsettings_templatelabel = 'Modèle';
+GO.addressbook.lang.globalsettings_renameall = 'Tout renommer ?';
+GO.addressbook.lang.globalsettings_allchangelabel = 'Tout changer ?';
+GO.addressbook.lang.createEmailSelected = 'Envoyer un email à ces contacts';

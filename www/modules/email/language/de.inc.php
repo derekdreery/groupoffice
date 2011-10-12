@@ -50,4 +50,4 @@ $lang['email']['iCalendar_update_available']='Diese Nachricht enthält eine Aktu
 $lang['email']['iCalendar_update_old']='Diese Nachricht enthält einen Termin, der bereits verarbeitet wurde.';
 $lang['email']['iCalendar_event_cancelled']='Diese Nachricht enthält die Absage eines Termins.';
 $lang['email']['iCalendar_event_invitation_declined']='Diese Nachricht enthält einen Termin den sie abgelehnt haben.';
-
+$lang['email']['untilDateError']='Es wurde versucht, das folgende Enddatum zu verarbeiten, aber der Vorgang wurde aufgrund eines Fehlers beendet.';

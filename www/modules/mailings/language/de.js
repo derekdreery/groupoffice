@@ -45,3 +45,6 @@ GO.mailings.lang.unsubscribeLink='Link zur Abmeldung';
 GO.mailings.lang.unsubscribeHref='href für Abmeldung';
 GO.mailings.lang.addDocumentTemplate='Dokumentvorlage hinzufügen';
 GO.mailings.lang.documentTemplate='Dokumentvorlage';
+
+GO.mailings.lang.customUserFields='Extra Benutzerfelder';
+GO.mailings.lang.copyingMessages='Kopiere Nachrichten...';

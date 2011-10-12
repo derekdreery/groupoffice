@@ -65,3 +65,10 @@ GO.cms.lang.unused='Does not apply to this page';
 GO.cms.lang.feed='Offer items from this folder as feed';
 GO.cms.lang.enableRewrite='Enable friendly URL\'s with mod_rewrite. The webserver must be configured for this and it will only work on the domain set above.';
 GO.cms.lang.rewriteBase='mod_rewrite base path';
+
+GO.cms.lang.category ='Category';
+GO.cms.lang.categories ='Categories';
+GO.cms.lang.enableCategories = 'Enable page categories';
+GO.cms.lang.parentCategory = 'Parent category';
+
+GO.cms.lang.sure2remove = 'This removal cannot be undone, although it does not remove site pages. Are you sure to remove this category and all its underlying categories?';

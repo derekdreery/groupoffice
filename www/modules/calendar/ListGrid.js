@@ -328,7 +328,7 @@ Ext.extend(GO.calendar.ListGrid, Ext.grid.GridPanel, {
 
 		e.stopEvent();
 		this.contextMenu.setEvent(event);
-		this.contextMenu.setParticipants(event.participant_ids);
+		//this.contextMenu.setParticipants(event.participant_ids);
 		this.contextMenu.showAt(e.getXY());
 	}
 	

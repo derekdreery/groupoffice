@@ -58,7 +58,7 @@ class imapauth
 	}
 
 
-	public static function before_login($username, $password)
+	public static function before_login($username, $password, $count_login)
 	{
 		$ia = new imapauth();
 
@@ -77,7 +77,7 @@ class imapauth
 		{
 			go_debug($config);
 
-			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_MODULES;
+			global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_MODULES, $GO_EVENTS;
 
 
 			$GLOBALS['GO_SECURITY']->user_id = 0;
@@ -161,12 +161,18 @@ class imapauth
 					$imap->clear_errors();
 					
 					$GLOBALS['GO_SECURITY']->logout(); //for clearing remembered password cookies
-
+					
+					$args = array(&$username, &$password, $count_login);
+					$GO_EVENTS->fire_event('bad_login', $args);
+				
 					throw new Exception($GLOBALS['lang']['common']['badLogin']);
 				}
 			}catch(Exception $e){
 				go_debug('IMAPAUTH: Authentication to IMAP server failed with Exception: '.$e->getMessage().' IMAP error:'.$imap->last_error());
 				$imap->clear_errors();
+				
+				$args = array(&$username, &$password, $count_login);
+				$GO_EVENTS->fire_event('bad_login', $args);
 				
 				$GLOBALS['GO_SECURITY']->logout(); //for clearing remembered password cookies
 

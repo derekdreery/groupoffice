@@ -1,4 +1,4 @@
-﻿/** 
+/** 
  * @copyright Copyright Boso d.o.o.
  * @author Mihovil Stanić <mihovil.stanic@boso.hr>
  */
@@ -13,7 +13,7 @@ GO.calendar.lang.repeatForever = 'ponavljaj zauvijek';
 GO.calendar.lang.repeatEvery = 'Ponavljaj svaki';
 GO.calendar.lang.repeatUntil = 'Ponavljaj do';
 GO.calendar.lang.busy = 'Prikaži kao zauzet';
-GO.calendar.lang.allDay = 'Vrijeme nije primjenjivo';
+GO.calendar.lang.allDay = 'Cijeli dan';
 GO.calendar.lang.navigation = 'Navigacija';
 GO.calendar.lang.oneDay = '1 Dan';
 GO.calendar.lang.fiveDays = '5 Dana';
@@ -51,7 +51,7 @@ GO.calendar.lang.noInformationAvailable = 'Informacija nije dostupna';
 GO.calendar.lang.noParticipantsToDisplay = 'Nema sudionika za prikaz';
 GO.calendar.lang.previousDay = 'Prošli dan';
 GO.calendar.lang.nextDay = 'Slijedeći dan';
-GO.calendar.lang.noAppointmentsToDisplay = 'Nema sastanaka za prikaz';
+GO.calendar.lang.noAppointmentsToDisplay = 'Nema sastanaka za prikazati';
 GO.calendar.lang.selectCalendar = 'Odaberi kalendar';
 GO.calendar.lang.selectCalendarForAppointment = 'Odaberite kalendar u koji želite smjestiti ovaj sastanak';
 GO.calendar.lang.closeWindow = 'Sastanak je prihvaćen i zakazan. Možete zatvoriti ovaj prozor.';

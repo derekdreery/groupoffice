@@ -1,23 +1,27 @@
 <?php
-/** 
- * Copyright Intermesh
- * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
- * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
- *
- * French Translation
- * Author : Lionel JULLIEN
- * Date : September, 27 2010
- */
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
 
 //Uncomment this line in new translations!
 require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('cms'));
+
 $lang['cms']['name']='Sites Web';
 $lang['cms']['description']='Module de création de sites web intégrés';
 $lang['cms']['site']='Site';
@@ -52,3 +56,5 @@ $lang['cms']['cant_move_into_itself']='Impossible de déplacer';
 $lang['cms']['done_with_cms']='Terminé avec le CMS';
 $lang['cms']['antispam_fail']='La répose de l\'anti-spam est incorrecte. Veuillez réessayer';
 $lang['cms']['no_admin_rights']='Vous ne possédez pas les droits suffisants pour modifer les accès utilisateurs sur les dossiers site web.';
+$lang['cms']['none'] = 'AUCUN';
+$lang['cms']['template_not_found'] = 'Modèle de site introuvable. Vérifiez si le site est rattaché à un modèle et si le dossier de modèle existe bien dans modules/cms/template/...';

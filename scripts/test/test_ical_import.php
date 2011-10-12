@@ -324,15 +324,7 @@ LAST-MODIFIED:20110513T091807Z
 DTSTAMP:20110513T091807Z
 UID:e107c9a6-bf05-5163-b16f-9b558156ddfd
 SUMMARY:test elke dag
-ORGANIZER;CN="Administrator, Group-Office":mailto:admin@intermesh.dev
-ATTENDEE;RSVP=FALSE;CN="Administrator, Group-Office";PARTSTAT=ACCEPTED;CUT
- YPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;LANGUAGE=en:mailto:admin@intermesh.dev
- 
-RRULE:FREQ=DAILY
-EXDATE:20110519T082500Z
-EXDATE:20110518T082500Z
-EXDATE:20110517T082500Z
-DTSTART:20110509T082500Z
+CATEGORIES:APPOINTMENT,EDUCATION
 DTEND:20110509T092500Z
 SEQUENCE:3
 TRANSP:OPAQUE
@@ -770,11 +762,26 @@ END:VEVENT
 END:VCALENDAR';
 
 
+$ical_str='BEGIN:VCALENDAR
+PRODID:-//Mozilla.org/NONSGML Mozilla Calendar V1.1//EN
+VERSION:2.0
+BEGIN:VEVENT
+LAST-MODIFIED:20110513T091807Z
+DTSTAMP:20110513T091807Z
+UID:e107c9a6-bf05-5163-b16f-9b558156ddfd
+SUMMARY:test
+CATEGORIES:APPOINTMENT,EDUCATION
+DTSTART:20110913T070000Z
+DTSTART:20110913T080000Z
+END:VEVENT
+END:VCALENDAR';
+
+
 //$vcalendar = $ical->parse_file('/home/mschering/jos.ics');
 //
 $vcalendar = $ical->parse_icalendar_string($ical_str);
-var_dump($vcalendar);
-exit();
+//var_dump($vcalendar);
+//exit();
 
 while($object = array_shift($vcalendar[0]['objects'])) {
 	if($object['type'] == 'VEVENT' || $object['type'] == 'VTODO') {

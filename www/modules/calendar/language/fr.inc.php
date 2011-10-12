@@ -1,23 +1,27 @@
 <?php
-/** 
- * Copyright Intermesh
- * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
- * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
- *
- * French Translation
- * Author : Lionel JULLIEN
- * Date : September, 27 2010
- */
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
 
 //Uncomment this line in new translations!
 require($GLOBALS['GO_LANGUAGE']->get_fallback_language_file('calendar'));
+
 $lang['calendar']['name'] = 'Calendrier';
 $lang['calendar']['description'] = 'Module de gestion du calendrier. Chaque utilisateur peut ajouter, éditer ou supprimer des rendez-vous. Les rendez-vous des autres utilisateurs peuvent être consultés (selon les permissions accordées).';
 $lang['link_type'][1]='Rendez-vous';
@@ -97,5 +101,5 @@ $lang['calendar']['invitation']='Invitation';
 $lang['calendar']['invitation_update']='Invitation mise à jour';
 $lang['calendar']['cancellation']='Annulation';
 $lang['calendar']['non_selected']= 'dans les calendriers non sélectionnés';
-$lang['calendar']['linkIfCalendarNotSupported']='N\'utilisez les liens ci-dessous que si votre client email ne possède pas de fonctionnalité calendrier.';
+$lang['calendar']['linkIfCalendarNotSupported']='N\'utilisez les liens ci-dessous que si votre client email ne possède pas la fonctionnalité de calendrier.';
 ?>
