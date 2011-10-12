@@ -69,12 +69,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		}
 
 		
-		if (!empty($_POST['link'])) {
+		if (!empty($params['link'])) {
 			
 			//a link is sent like  GO_Notes_Model_Note:1
 			//where 1 is the id of the model
 			
-			$linkProps = explode(':', $_POST['link']);			
+			$linkProps = explode(':', $params['link']);			
 			$linkModel = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
 			$model->link($linkModel);			
 		}

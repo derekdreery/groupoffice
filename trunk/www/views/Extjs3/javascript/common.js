@@ -19,6 +19,9 @@ GO.util.callToHref = function(phone){
 }
 
 GO.url = function(relativeUrl){
+	if(!relativeUrl)
+		return BaseHref;
+	
 	return BaseHref+'index.php?r='+relativeUrl+'&security_token='+GO.securityToken;
 }
 

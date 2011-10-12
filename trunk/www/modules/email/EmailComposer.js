@@ -1396,13 +1396,12 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 			}else
 			{
-				console.debug('2');
 				this.afterShowAndLoad(true, config);
 			}
 			if (config.link_config) {
 				this.link_config = config.link_config;
-				if (config.link_config.type_id) {
-					this.selectLinkField.setValue(config.link_config.type_id);
+				if (config.link_config.modelNameAndId) {
+					this.selectLinkField.setValue(config.link_config.modelNameAndId);
 					this.selectLinkField.setRemoteText(config.link_config.text);
 				}
 			}
