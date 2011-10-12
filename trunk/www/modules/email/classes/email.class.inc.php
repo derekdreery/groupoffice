@@ -687,7 +687,7 @@ class email extends db {
 						"', password_encrypted=$password_encrypted ";
 		
 		if($smtp_password_too){
-			$sql .= ", smtp_password='$plain_password'";
+			$sql .= ", smtp_password='".$this->escape($plain_password)."'";
 		}		
 		
 		$sql.=	"WHERE username='".$this->escape($username)."' ".

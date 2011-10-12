@@ -23,6 +23,10 @@ GO.calendar.formatQtip = function(data)
 	if(!data.endDate)
 		data.endDate = Date.parseDate(data.end_time, df);
 	
+	
+	if(!data.creationDate)
+		data.creationDate = data.ctime ? Date.parseDate(data.ctime, df) : new Date();
+	
 	var new_df = GO.settings.time_format;
 	if(data.startDate.format('Ymd')!=data.endDate.format('Ymd'))
 	{
@@ -44,7 +48,9 @@ GO.calendar.formatQtip = function(data)
 	{
 		str += '<br />'+GO.lang.strOwner+': '+data.username;
 	}
-
+	
+	str += '<br />'+GO.lang.strCtime+': '+data.creationDate.format(GO.settings.date_format+' '+GO.settings.time_format);
+	
 	
 	if(data.location!='')
 	{

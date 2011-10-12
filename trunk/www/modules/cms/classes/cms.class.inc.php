@@ -67,7 +67,7 @@ class cms extends db {
 	function get_template_config($template) {
 		global $GO_MODULES;
 
-		$file = $GLOBALS['GO_MODULES']->modules['cms']['path'].'templates/'.$template.'/config.xml';
+		$file = $GO_MODULES->modules['cms']['path'].'templates/'.$template.'/config.xml';
 		if(!file_exists($file))
 			return false;
 
@@ -183,7 +183,7 @@ class cms extends db {
 		*/
 
 		$sql = "SELECT * FROM cms_files WHERE folder_id='".$this->escape($folder_id)."'";
-
+		
 		$allkeywords=array();
 		$keywords= explode(' ', $search_word);
 		foreach($keywords as $keyword) {
@@ -628,8 +628,8 @@ class cms extends db {
 		$site['root_folder_id'] = $this->add_folder($folder);
 
 		global $GO_MODULES;
-		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
-			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GO_MODULES->modules['files'])) {
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			$f = $files->check_share('public/cms/'.File::strip_invalid_chars($site['name']),$site['user_id'], $site['acl_write'], $site['acl_write']);
 			$site['files_folder_id']=$f['id'];
@@ -652,8 +652,8 @@ class cms extends db {
 		if(!$old_site)$old_site=$this->get_site($site['id']);
 
 		global $GO_MODULES;
-		if(isset($GLOBALS['GO_MODULES']->modules['files']) && $site['name']!=$old_site['name']) {
-			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GO_MODULES->modules['files']) && $site['name']!=$old_site['name']) {
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			$files->move_by_paths('public/cms/'.File::strip_invalid_chars($old_site['name']), 'public/cms/'.File::strip_invalid_chars($site['name']));
 		}
@@ -675,8 +675,8 @@ class cms extends db {
 		if($site = $this->get_site($site_id)) {
 
 			global $GO_MODULES;
-			if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
-				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
+			if(isset($GO_MODULES->modules['files'])) {
+				require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 				$files = new files();
 
 				$folder = $files->resolve_path('public/cms/'.File::strip_invalid_chars($site['name']));
@@ -689,7 +689,7 @@ class cms extends db {
 
 			if($this->query("DELETE FROM cms_sites WHERE id='".$this->escape($site_id)."'")) {
 				global $GO_SECURITY;
-				$GLOBALS['GO_SECURITY']->delete_acl($site['acl_write']);
+				$GO_SECURITY->delete_acl($site['acl_write']);
 				return true;
 			}
 		}
@@ -810,7 +810,7 @@ class cms extends db {
 		}
 
 		$folder['id']=$this->nextid('cms_folders');
-		if($this->insert_row('cms_folders', $folder) && $this->user_folder_allow($GLOBALS['GO_SECURITY']->user_id,$folder['id'])) {
+		if($this->insert_row('cms_folders', $folder) && $this->user_folder_allow($GO_SECURITY->user_id,$folder['id'])) {
 			return $folder['id'];
 		}
 		return false;
@@ -1000,6 +1000,20 @@ class cms extends db {
 	}
 
 
+	function get_item_years($root_folder_id) {
+		$sql = "SELECT DISTINCT FROM_UNIXTIME(sort_time, '%Y') AS year FROM cms_files ".
+			"WHERE folder_id='".intval($root_folder_id)."' ORDER BY year ASC ";
+		$this->query($sql);
+		$records = array();
+		while ($record = $this->next_record()) {
+			$record['active'] = isset($_GET['filter_year']) && $record['year']==$_GET['filter_year'];
+			$record['active_class_name'] = $record['active'] ? 'active_year_filter' : '';
+			$records[] = $record;
+		}
+		
+		return $records;
+	}
+	
 
 	/**
 	 * Add a File
@@ -1012,8 +1026,8 @@ class cms extends db {
 	function add_file(&$file, $site) {
 
 		global $GO_MODULES;
-		if(!isset($file['files_folder_id']) && isset($GLOBALS['GO_MODULES']->modules['files'])) {
-			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
+		if(!isset($file['files_folder_id']) && isset($GO_MODULES->modules['files'])) {
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$new_path = $this->build_file_files_path($file, $site);
@@ -1045,8 +1059,8 @@ class cms extends db {
 	 */
 	function update_file($file, $site, $old_file=false) {
 		global $GO_MODULES;
-		if(isset($GLOBALS['GO_MODULES']->modules['files']) && (isset($file['folder_id']) || isset($file['name']))) {
-			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
+		if(isset($GO_MODULES->modules['files']) && (isset($file['folder_id']) || isset($file['name']))) {
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			if(!$old_file) $old_file = $this->get_file($file['id']);
@@ -1077,9 +1091,9 @@ class cms extends db {
 	function delete_file($file_id) {
 		global $GO_MODULES;
 
-		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
+		if(isset($GO_MODULES->modules['files'])) {
 			$file = $this->get_file($file_id);
-			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 			try {
 				$files->delete_folder($file['files_folder_id']);
@@ -1153,23 +1167,75 @@ class cms extends db {
 	}
 
 	/**
-	 * Gets all Files
+	 * Gets files
 	 *
-	 * @param Int $start First record of the total record set to return
-	 * @param Int $offset Number of records to return
+	 * @param Int $folder_id The ID of the folder to search in. Can be 0, but then $site_id must be valid.
 	 * @param String $sortfield The field to sort on
 	 * @param String $sortorder The sort order
+	 * @param Int $start First record of the total record set to return
+	 * @param Int $offset Number of records to return
+	 * @param Boolean $only_visible Return only the visible files if true (default false)
+	 * @param Array $categories Array of category names or category ids the returned files must be part of
+	 * @param Int $site_id The ID of the site to search in. Should be used if folder_id is 0.
 	 *
 	 * @access public
 	 * @return Int Number of records found
 	 */
-	function get_files($folder_id, $sortfield='priority', $sortorder='ASC', $start=0, $offset=0, $only_visible=false) {
-		$sql = "SELECT * FROM cms_files WHERE folder_id=".intval($folder_id);
-
-		if($only_visible) {
-			$sql .= " AND (show_until=0 OR show_until>".time().")";
+	function get_files($folder_id, $sortfield='priority', $sortorder='ASC', $start=0, $offset=0, $only_visible=false, $categories=array(), $site_id=0, $filter_year=false, $filter_category_id=false) {
+		$sql = "SELECT DISTINCT f.* ";
+		
+		if (!empty($categories) || $filter_category_id>0) {
+			$sql .= " , c.id AS category_id, c.name AS category_name ";
+		}
+		
+		$sql .= " FROM cms_files f ";
+		
+		if (!empty($categories) && is_numeric($categories[0])) {
+			$sql .= "INNER JOIN cms_files_categories fc ON f.id=fc.file_id ".
+				"INNER JOIN cms_categories c ON c.id=fc.category_id ";
+		} else if (!empty($categories) && !is_numeric($categories[0])) {
+			$sql .= "INNER JOIN cms_files_categories fc ON f.id=fc.file_id ".
+				"INNER JOIN cms_categories c ON c.id=fc.category_id ".
+				"AND (c.name='".implode("' OR c.name='",$categories)."') ";
+		} else if ($filter_category_id>0) {
+			$sql .= "INNER JOIN cms_files_categories fc ON f.id=fc.file_id AND fc.category_id='".intval($filter_category_id)."' ".
+				"INNER JOIN cms_categories c ON c.id=fc.category_id ";
+		}
+		
+		$where = false;
+		
+		if (!empty($folder_id)) {
+			$sql .= "WHERE folder_id=".intval($folder_id);
+			$where = true;
+		} else if ($site_id>0) {
+			//join cms_folders 
+			$sql .= "WHERE site_id=".intval($site_id);
+			$where = true;
 		}
 
+		if (!empty($categories) && is_numeric($categories[0])) {
+			if ($where)
+				$sql .= " AND fc.category_id IN (".implode(',',$categories).") ";
+			else
+				$sql .= " WHERE fc.category_id IN (".implode(',',$categories).") ";
+		}
+		
+		if($only_visible) {
+			if ($where)
+				$sql .= " AND ";
+			else
+				$sql .= " WHERE ";
+			$sql .= "(show_until=0 OR show_until>".time().")";
+		}
+	
+		if($filter_year) {
+			if ($where)
+				$sql .= " AND ";
+			else
+				$sql .= " WHERE ";
+			$sql .= "(sort_time>='".mktime(0,0,0,1,1,$filter_year)."' AND sort_time<'".mktime(0,0,0,1,1,$filter_year+1)."')";
+		}
+		
 		$sql .= " ORDER BY ".$this->escape($sortfield." ".$sortorder);
 		$this->query($sql);
 		$count = $this->num_rows();
@@ -1177,6 +1243,7 @@ class cms extends db {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
 		}
+
 		return $count;
 	}
 
@@ -1210,11 +1277,11 @@ class cms extends db {
 
 		echo 'Website folders'.$line_break;
 
-		if(isset($GLOBALS['GO_MODULES']->modules['files'])) {
+		if(isset($GO_MODULES->modules['files'])) {
 			$db = new db();
 			$cms = new cms();
 
-			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
+			require_once($GO_MODULES->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
 			$sql = "SELECT * FROM cms_sites";
@@ -1285,7 +1352,7 @@ class cms extends db {
 
 	public function user_folder_deny($user_id,$folder_id) {
 		return $this->query("DELETE FROM cms_user_folder_access WHERE ".
-						"user_id=$user_id AND folder_id=$folder_id");
+						"user_id='".intval($user_id)."' AND folder_id='".intval($folder_id)."' ");
 	}
 
 	public function filter_enabled($user_id, $site_id) {
@@ -1311,122 +1378,143 @@ class cms extends db {
 						"user_id=$user_id AND site_id=$site_id");
 	}
 
-	public function to_permalink_style($str,$remove_first_count=false) {
-		if (!empty($remove_first_count))
-			$str=substr($str,$remove_first_count);
-		$str=str_replace('^',' ',$str);
-		$str=preg_replace('/[^0-9^a-z^A-Z^\s^\/]/','',$str);
-		$str=preg_replace('/[\s]+/',' ',$str);
-		return strtolower(str_replace(' ','-',$str));
+	public function get_categories($site_id,$parent_id=-1) {
+		$sql = "SELECT id,name FROM cms_categories WHERE site_id='".intval($site_id)."' ";
+		
+		if ($parent_id>-1) {
+			$sql .= "AND parent_id='".intval($parent_id)."' ";
+		}
+		
+		$sql .= "ORDER BY name ASC ";
+		
+		$this->query($sql);
+		$records = array();
+		while ($categories = $this->next_record()) {
+			$records[] = $categories;
+		}
+		return $records;
 	}
-
-	private function get_XML_folder_tree(&$xmlwriter,$folder_id) {
-		$items = $this->get_items($folder_id);
-		foreach ($items as $k => $item) {
-			if ($item['fstype']=='folder') {
-				$xmlwriter->startElement('folder');
-				$xmlwriter->writeAttribute('id',$item['id']);
-				$xmlwriter->writeAttribute('name',$item['name']);
-				$xmlwriter->writeAttribute('disabled',$item['disabled']);
-				$xmlwriter->writeAttribute('parent_id',$item['parent_id']);
-				$xmlwriter->writeAttribute('priority',$item['priority']);
-				$xmlwriter->writeAttribute('ctime',$item['ctime']);
-				$xmlwriter->writeAttribute('mtime',$item['mtime']);
-				$xmlwriter->writeAttribute('acl',$item['acl']);
-				$xmlwriter->writeAttribute('site_id',$item['site_id']);
-				$xmlwriter->writeAttribute('default_template',$item['default_template']);
-				$xmlwriter->writeAttribute('type',$item['type']);
-				$xmlwriter->writeAttribute('feed',$item['feed']);
-					$xmlwriter->startElement('option_values');
-					$option_values = simplexml_load_string($item['option_values']);
-					if (isset($option_values->option)) {
-						foreach($option_values->option as $k=>$v) {
-							$attributes = $v->attributes();
-							$xmlwriter->writeAttribute($attributes[0],$attributes[1]);
-						}
-					}
-					$xmlwriter->endElement(); //option_values
-
-					$xmlwriter->startElement('contents');
-					$this->get_XML_folder_tree($xmlwriter,$item['id']);
-					$xmlwriter->endElement(); //contents
-				$xmlwriter->endElement(); //folder
-			} else {
-				$xmlwriter->startElement('file');
-				$xmlwriter->writeAttribute('id',$item['id']);
-				$xmlwriter->writeAttribute('name',$item['name']);
-				$xmlwriter->writeAttribute('folder_id',$item['folder_id']);
-				$xmlwriter->writeAttribute('size',$item['size']);
-				$xmlwriter->writeAttribute('priority',$item['priority']);
-				$xmlwriter->writeAttribute('ctime',$item['ctime']);
-				$xmlwriter->writeAttribute('mtime',$item['mtime']);
-				$xmlwriter->writeAttribute('content',$item['content']);
-				$xmlwriter->writeAttribute('auto_meta',$item['auto_meta']);
-				$xmlwriter->writeAttribute('title',$item['title']);
-				$xmlwriter->writeAttribute('description',$item['description']);
-				$xmlwriter->writeAttribute('keywords',$item['keywords']);
-					$xmlwriter->startElement('option_values');
-					$option_values = simplexml_load_string($item['option_values']);
-					if (isset($option_values->option)) {
-						foreach($option_values->option as $k=>$v) {
-							$attributes = $v->attributes();
-							$xmlwriter->writeAttribute($attributes[0],$attributes[1]);
-						}
-					}
-					$xmlwriter->endElement(); //option_values
-				$xmlwriter->writeAttribute('plugin',$item['plugin']);
-				$xmlwriter->writeAttribute('type',$item['type']);
-				$xmlwriter->writeAttribute('files_folder_id',$item['files_folder_id']);
-				$xmlwriter->writeAttribute('show_until',$item['show_until']);
-				$xmlwriter->writeAttribute('sort_time',$item['sort_time']);
-				$xmlwriter->endElement(); //file
-			}
+	
+	public function get_categories_of_file($file_id) {
+		$sql = "SELECT c.id,c.name FROM cms_files_categories fc ".
+			"INNER JOIN cms_categories c ON fc.category_id=c.id ".
+			"WHERE fc.file_id='".intval($file_id)."';";
+		$this->query($sql);
+		$records = array();
+		while ($categories = $this->next_record()) {
+			$records[] = $categories;
+		}
+		return $records;
+	}
+	
+	private function delete_subcategories($parent_id) {
+		$sql = "SELECT id FROM cms_categories WHERE parent_id='".intval($parent_id)."' ";
+		$this->query($sql);
+		$cms = new cms();
+		while ($record = $this->next_record()) {
+			$cms->delete_category($record['id'],true);
 		}
 	}
+	
+	public function delete_category($category_id, $recursive=false) {
+		$sql1 = "DELETE FROM cms_files_categories WHERE category_id='".intval($category_id)."'; ";
+		$sql2 = "DELETE FROM cms_categories WHERE id='".intval($category_id)."'; ";
+		$this->query($sql1);
+		if ($recursive!==true)
+			return $this->query($sql2);
+		else {
+			$this->query($sql2);
+			return $this->delete_subcategories($category_id);
+		}
+	}
+	
+	public function add_category($category) {
+		$category['id'] = $this->nextid('cms_categories');
+		$this->insert_row('cms_categories',$category);
+		return $category['id'];
+	}
+	
+	public function update_category($category) {
+		return $this->update_row('cms_categories','id',$category);
+	}
+	
+	public function add_file_category($fc) {
+		return $this->insert_row('cms_files_categories',$fc);
+	}
+	
+	public function delete_file_category($fc) {
+		$sql = "DELETE FROM `cms_files_categories` WHERE file_id='".intval($fc['file_id'])."' AND category_id='".intval($fc['category_id'])."';";
+		return $this->query($sql);
+	}
 
-	public function get_XML_sitemap($site_id,$destination_file=false) {
-		$xmlwriter = new XMLWriter();
-		$xmlwriter->openMemory();
-		$xmlwriter->startDocument('1.0', 'UTF-8');
-			$site = $this->get_site($site_id);
-			$root_folder = $this->get_folder($site['root_folder_id']);
-			$xmlwriter->startElement('folder');
-				$xmlwriter->writeAttribute('id',$root_folder['id']);
-				$xmlwriter->writeAttribute('name',$root_folder['name']);
-				$xmlwriter->writeAttribute('disabled',$root_folder['disabled']);
-				$xmlwriter->writeAttribute('parent_id',$root_folder['parent_id']);
-				$xmlwriter->writeAttribute('priority',$root_folder['priority']);
-				$xmlwriter->writeAttribute('ctime',$root_folder['ctime']);
-				$xmlwriter->writeAttribute('mtime',$root_folder['mtime']);
-				$xmlwriter->writeAttribute('acl',$root_folder['acl']);
-				$xmlwriter->writeAttribute('site_id',$root_folder['site_id']);
-				$xmlwriter->writeAttribute('default_template',$root_folder['default_template']);
-				$xmlwriter->writeAttribute('type',$root_folder['type']);
-				$xmlwriter->writeAttribute('feed',$root_folder['feed']);
-					$xmlwriter->startElement('option_values');
-					$option_values = simplexml_load_string($root_folder['option_values']);
-					if (isset($option_values->option)) {
-						foreach($option_values->option as $k=>$v) {
-							$attributes = $v->attributes();
-							$xmlwriter->writeAttribute($attributes[0],$attributes[1]);
-						}
-					}
-					$xmlwriter->endElement(); //option_values
-				$xmlwriter->startElement('contents');
-				$this->get_XML_folder_tree($xmlwriter,$root_folder['id']);
-				$xmlwriter->endElement(); //contents
-			$xmlwriter->endElement(); //folder
-		$xmlwriter->endDocument();
-
-		if (!empty($destination_file)) {
-			if ($out = fopen($destination_file,'w')) {
-				fwrite($out,$xmlwriter->outputMemory());
-				fclose($out);
-			} else {
-				throw new Exception('Unable to open file '.$destination_file.' for the site map. Please notify the site administrator.');
-			}
+	public function get_category_tree($category_id,$site_id,$file_id) {
+		$node = $this->get_category_node($category_id,$file_id);
+		$node['text'] = $node['name']; unset($node['name']);
+		$node['checked'] = !empty($node['category_id']); unset($node['category_id']);
+		$node['canHaveChildren'] = true;
+		$node['expanded'] = true;
+		$node['iconCls'] = 'cms-file-category';
+		$node['children'] = array();
+		
+		$categories = $this->get_categories($site_id, $category_id);
+		$cms = new cms();
+		foreach ($categories as $child_category) {
+			$node['children'][] = $cms->get_category_tree($child_category['id'],$site_id,$file_id);
+		}
+		
+		return $node;
+	}
+	
+	private function get_category_node($category_id,$file_id) {
+		$sql = "SELECT c.*, fc.category_id FROM cms_categories c ".
+			"LEFT JOIN cms_files_categories fc ON c.id=fc.category_id AND fc.file_id='".intval($file_id)."' ".
+			"WHERE c.id='".intval($category_id)."' ";
+		$this->query($sql);
+		if ($this->num_rows() > 0)
+			return $this->next_record();
+		else
+			return false;
+	}
+	
+	private function category_assignment_exists($file_id,$category_id) {
+		$sql = "SELECT * FROM cms_files_categories WHERE file_id='".intval($file_id)."' AND category_id='".intval($category_id)."' ";
+		$this->query($sql);
+		return $this->num_rows() > 0;
+	}
+	
+	public function assign_file_to_category($file_id,$category_id) {
+		if (!$this->category_assignment_exists($file_id,$category_id)) {
+			$fc['file_id'] = $file_id;
+			$fc['category_id'] = $category_id;
+			return $this->insert_row('cms_files_categories', $fc);
 		} else {
-			return $xmlwriter->outputMemory();
+			return true;
 		}
+	}
+
+	public function unassign_file_from_category($file_id,$category_id) {
+		return $this->query("DELETE FROM cms_files_categories WHERE ".
+			"file_id='".intval($file_id)."' AND category_id='".intval($category_id)."'");
+	}
+
+	public function get_child_categories($category, $site_id) {
+		if (is_numeric($category))
+			$sql = "SELECT c.* FROM cms_categories c ".
+				"WHERE c.parent_id='".intval($category)."' ";
+		else
+			$sql = "SELECT c.* FROM cms_categories c ".
+				"INNER JOIN cms_categories c2 on c2.id=c.parent_id ".
+				"WHERE c2.name='".$this->escape($category)."' ";
+		
+		$sql .= "AND c.site_id='".intval($site_id)."' ";
+
+		$this->query($sql);
+		$categories = array();
+		while ($record = $this->next_record()) {
+			$record['active'] = isset($_GET['filter_category_id']) && $record['id']==$_GET['filter_category_id'];
+			$record['active_class_name'] = $record['active'] ? 'active_category_filter' : '';
+			$categories[] = $record;
+		}
+		return $categories;
 	}
 }

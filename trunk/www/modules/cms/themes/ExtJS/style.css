@@ -23,3 +23,6 @@ background:url('images/cms.png') no-repeat !important;
 	background-image:url('images/folder.png') !important;
 }
 
+.cms-file-category{
+	background-image:url('images/category.jpeg') !important;
+}

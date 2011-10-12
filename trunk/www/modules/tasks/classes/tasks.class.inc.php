@@ -630,6 +630,11 @@ class tasks extends db
 
 
 	function update_task($task, $tasklist=false, $old_task=false) {
+		
+		GLOBAL $GO_EVENTS;
+		
+		$GO_EVENTS->fire_event('before_update_task', array(&$task,&$before_task_response));
+		
 		if(!isset($task['mtime']) || $task['mtime'] == 0) {
 			$task['mtime']  = time();
 		}
@@ -699,6 +704,9 @@ class tasks extends db
 
 
 		$this->cache_task($task['id']);
+		
+		$GO_EVENTS->fire_event('task_update_event', array($task, $before_task_response));
+		
 		return $r;
 	}
 
@@ -939,10 +947,27 @@ class tasks extends db
 			}
 			$query = $this->escape($search_query);
 
-			if(empty($search_field))
-				$sql .= "(t.name LIKE '".$query."' OR t.description LIKE '".$query."')";
-			else
+			if(empty($search_field)){
+				$sql .= "(t.name LIKE '".$query."' OR t.description LIKE '".$query."'";
+				
+				// STAR OF SEARCHING CUSTOM FIELDS
+				if($GO_MODULES->has_module('customfields')) {
+					$fields_sql = "SHOW FIELDS FROM cf_12";
+					$this->query($fields_sql);
+					while ($this->next_record()) {
+						$sql .= " OR cf_12.".$this->f('Field')." LIKE '".$query."'";
+					}
+				}	
+				
+				$sql .= ') ';
+				// END OF SEARCHING CUSTOM FIELDS
+			}else
+			{
 				$sql .= "$search_field LIKE '".$query."'";
+			}
+			
+		
+			
 		}
 
 		if(count($categories))

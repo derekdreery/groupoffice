@@ -203,3 +203,24 @@ GO.email.lang.icalendarDeleteEventConfirm='Вы уверены что хотит
 
 
 GO.email.lang.sending='Отправка...';
+
+GO.email.lang.defaultFontSize = 'Размер шрифта по умолчанию';
+
+GO.email.lang.shareFolder = 'Общий доступ';
+
+GO.email.lang.readPerm='Читать';
+GO.email.lang.writePerm='Писать';
+GO.email.lang.deletePerm='Удалять';
+GO.email.lang.createMailboxPerm='Сосздать почтовый ящик';
+GO.email.lang.deleteMailboxPerm='Удалить почтовый ящик';
+GO.email.lang.adminPerm='Администрировать';
+
+GO.email.lang.deleteOldMails = 'Удалить старые письма';
+GO.email.lang.deleteOldMailsInstructions = 'Выберите дату. Если Вы нажмете ОК после этого все письма в указанной папке до этой даты будут полностью удалены.';
+GO.email.lang.folder = 'Папка';
+GO.email.lang.deleteOldMailsSure1 = 'Это действие не может быть отменено. Вы действительно хотите полностью удалить письма до';
+GO.email.lang.deleteOldMailsSure2 = '?'
+GO.email.lang.nDeletedMailsTxt = 'Удалено писем';
+GO.email.lang.deletingEmails = 'Удаляютс письма...';
+GO.email.lang.everythingBefore = 'Все писма до';
+GO.email.lang.alsoChildren = 'Применить для писем во вложенных папках.';

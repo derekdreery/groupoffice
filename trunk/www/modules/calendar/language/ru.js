@@ -142,3 +142,15 @@ GO.calendar.lang.sendCancellation='Хотите разослать всем уч
 GO.calendar.lang.forthcomingAppointments='Предстоящие события';
 
 GO.calendar.lang.quarterShort = 'Q';
+
+GO.calendar.lang.globalsettings_templatelabel = 'Шаблон';
+GO.calendar.lang.globalsettings_allchangelabel = 'Преименовать все';
+GO.calendar.lang.globalsettings_renameall = 'Вы точно хотите переименовать все текущие пользовательские календари?';
+
+GO.calendar.lang.publishICS='Опубликовать файл iCalendar с событиями за последний месяц и всеми последующими событиями. Внимание! Каледарь быдет доступен для чтения всем.';
+
+GO.calendar.lang.addTimeRegistration='Импортировать в регистрирование времени';
+
+GO.calendar.lang.showNotBusy='Не отображать новое резервирование как ЗАНЯТ';
+
+GO.calendar.lang.sendEmailParticipants = 'Отправить письмо участникам';

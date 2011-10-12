@@ -41,3 +41,5 @@ $lang['cms']['no_admin_rights']="You do not have the admin rights to alter users
 $lang['cms']['none'] = 'NONE';
 
 $lang['cms']['template_not_found'] = 'Site template not found. Check if the site is plugged to a template and that the template\'s directory exists in modules/cms/template/...';
+
+$lang['cms']['newCategory'] = 'New category';

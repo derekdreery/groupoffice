@@ -1,0 +1,1 @@
+{literal}header_images.push('{/literal}{thumbnail_url path="`$file.relpath`" zc=1 w=962 h=298"}');

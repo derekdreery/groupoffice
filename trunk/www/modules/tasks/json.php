@@ -85,15 +85,21 @@ try {
 						case 'WEEKLY':
 							$response['data']['repeat_type'] = REPEAT_WEEKLY;
 
-							$days = explode(',', $rrule['BYDAY']);
+				
+					
+							$days = Date::byday_to_days($rrule['BYDAY']);
+							$days = Date::shift_days_to_local($days, date('G', $task['due_time']), Date::get_timezone_offset($task['due_time']));
+							
 
-							$response['data']['repeat_days_0'] = in_array('SU', $days) ? '1' : '0';
-							$response['data']['repeat_days_1'] = in_array('MO', $days) ? '1' : '0';
-							$response['data']['repeat_days_2'] = in_array('TU', $days) ? '1' : '0';
-							$response['data']['repeat_days_3'] = in_array('WE', $days) ? '1' : '0';
-							$response['data']['repeat_days_4'] = in_array('TH', $days) ? '1' : '0';
-							$response['data']['repeat_days_5'] = in_array('FR', $days) ? '1' : '0';
-							$response['data']['repeat_days_6'] = in_array('SA', $days) ? '1' : '0';
+							$response['data']['repeat_days_0'] = $days['sun'];
+							$response['data']['repeat_days_1'] = $days['mon'];
+							$response['data']['repeat_days_2'] = $days['tue'];
+							$response['data']['repeat_days_3'] = $days['wed'];
+							$response['data']['repeat_days_4'] = $days['thu'];
+							$response['data']['repeat_days_5'] = $days['fri'];
+							$response['data']['repeat_days_6'] = $days['sat'];
+
+
 							break;
 
 						case 'MONTHLY':

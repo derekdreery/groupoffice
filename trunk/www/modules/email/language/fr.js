@@ -1,19 +1,22 @@
-/** 
- * Copyright Intermesh
- * 
- * This file is part of Group-Office. You should have received a copy of the
- * Group-Office license along with Group-Office. See the file /LICENSE.TXT
- * 
- * If you have questions write an e-mail to info@intermesh.nl
- * 
- * @copyright Copyright Intermesh
- * @version $Id$
- * @author Merijn Schering <mschering@intermesh.nl>
- *
- * French Translation
- * Author : Lionel JULLIEN
- * Date : September, 27 2010
- */
+/////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright Intermesh
+// 
+// This file is part of Group-Office. You should have received a copy of the
+// Group-Office license along with Group-Office. See the file /LICENSE.TXT
+// 
+// If you have questions write an e-mail to info@intermesh.nl
+//
+// @copyright Copyright Intermesh
+// @version $Id$
+// @author Merijn Schering <mschering@intermesh.nl>
+//
+// French Translation
+// Version : 3.7.29 
+// Author : Lionel JULLIEN
+// Date : September, 27 2011
+//
+/////////////////////////////////////////////////////////////////////////////////
  
 GO.email.lang.forwardTo='Transférer le message à';
 GO.email.lang.messages='Messages';
@@ -168,3 +171,22 @@ GO.email.lang.icalendarEventDeleted='Le rendez-vous a été supprimé.';
 GO.email.lang.icalendarInvitationDeclined='L\'invitation a été déclinée.';
 GO.email.lang.icalendarDeleteEventConfirm='Êtes vous sur de vouloir supprimer ce rendez-vous ?';
 GO.email.lang.sending='Envoi en cours...';
+
+GO.email.lang.defaultFontSize = 'Taille de la police par défaut';
+GO.email.lang.shareFolder = 'Partager';
+GO.email.lang.readPerm='Lire';
+GO.email.lang.writePerm='Ecrire';
+GO.email.lang.deletePerm='supprimer';
+GO.email.lang.createMailboxPerm='Créer la boite de messagerie';
+GO.email.lang.deleteMailboxPerm='Supprimer la boite messagerie';
+GO.email.lang.adminPerm='Administrer';
+
+GO.email.lang.deleteOldMails = 'Supprimer les anciens messages';
+GO.email.lang.deleteOldMailsInstructions = 'Sélectionnez une date. Si vous cliquez sur OK, tous les messages avec une date antérieure dans le dossier sélectionné seront supprimés.';
+GO.email.lang.folder = 'Dossier';
+GO.email.lang.deleteOldMailsSure1 = 'Cette action est irréversible. Etes-vous sûr de vouloir supprimer tous les messages remplissant la condition de date selectionnée ';
+GO.email.lang.deleteOldMailsSure2 = '?'
+GO.email.lang.nDeletedMailsTxt = 'Le nombre de messages supprimés est';
+GO.email.lang.deletingEmails = 'Suppression des messages...';
+GO.email.lang.everythingBefore = 'Tous les messages avant';
+GO.email.lang.alsoChildren = 'Appliquer également cette condition aux sous-dossiers.';

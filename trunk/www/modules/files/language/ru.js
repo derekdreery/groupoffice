@@ -46,7 +46,13 @@ GO.files.lang.normalSize='Нормальный размер';
 GO.files.lang.imageViewer='Просмотр изображений';
 
 GO.files.lang.emailDownloadLink = 'Ссылка на загрузку Email';
-GO.files.lang.downloadLink = 'Ссылка на загрузку';
-GO.files.lang.clickHereToDownload = 'Нажмите здесь чтобы загрузить файл';
-GO.files.lang.expireTime = 'Вермя жизни ссылки';
-GO.files.lang.possibleUntil = 'возможно до';
+GO.files.lang.expireTime = 'Ссылка на загрузку истекает';
+GO.files.lang.newFolder = 'Новая папка';
+
+GO.files.lang.applyState = 'Применить ко всем папкам.';
+GO.files.lang.stateLocked = 'Отображение папки заблокировано владельцем или администратором';
+
+GO.files.lang.strDownloadActive = 'Ссылки для загрузки включены';
+GO.files.lang.downloadExpireTime='Срок действия ссылки';
+GO.files.lang.downloadUrl='URL';
+

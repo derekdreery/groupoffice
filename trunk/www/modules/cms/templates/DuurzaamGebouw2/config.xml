@@ -1,0 +1,62 @@
+<config>
+<file_options>
+	<type name="standaard_pagina">
+		<file name="headers_dir" field_label="Headers directory" files_filter="-" />
+		<file name="project_folder_1" field_label="Subitem 1 : locatie map" files_filter="-" />
+		<input name="project_title_1" field_label="Subitem 1 : titel" />
+		<input name="project_highlighted_text_1" field_label="Subitem 1 : blauwe tekst" />
+		<file name="project_folder_2" field_label="Subitem 2 : locatie map" files_filter="-" />
+		<input name="project_title_2" field_label="Subitem 2 : titel" />
+		<input name="project_highlighted_text_2" field_label="Subitem 2 : blauwe tekst" />
+		<file name="project_folder_3" field_label="Subitem 3 : locatie map" files_filter="-" />
+		<input name="project_title_3" field_label="Subitem 3 : titel" />
+		<input name="project_highlighted_text_3" field_label="Subitem 3 : blauwe tekst" />
+	</type>
+	<type name="vier_kolommen_overzichtspagina">
+		<file name="headers_dir" field_label="Headers directory" files_filter="-" />
+		<file name="four_columns_folder" field_label="Folder met pagina's voor vier kolommen" files_filter="-" />
+	</type>
+	<type name="nieuws_overzichtspagina">
+		<file name="headers_dir" field_label="Headers directory" files_filter="-" />
+	</type>
+	<type name="nieuws_item">
+		<file name="headers_dir" field_label="Headers directory" files_filter="-" />
+		<file name="image" field_label="Afbeelding" />
+	</type>
+	<type name="projecten_overzichtspagina">
+		<file name="headers_dir" field_label="Headers directory" files_filter="-" />
+		<file name="projects_folder1" field_label="Projectenfolder 1" files_filter="-" />
+		<file name="projects_folder2" field_label="Projectenfolder 2" files_filter="-" />
+	</type>
+	<type name="project">
+		<file name="thumbnail" field_label="Thumbnail" />
+		<input name="description" field_label="Omschrijving" />
+	</type>
+	<type name="direct_contact">
+		<file name="headers_dir" field_label="Headers directory" files_filter="-" />
+		<input name="addressbook" field_label="Addressbook" />
+	</type>
+	<type name="direct_contact_inhoud">
+	</type>
+	<type name="footer_contact_adres">
+	</type>
+	<type name="verwijzing_bestaande_pagina">
+		<file name="headers_dir" field_label="Headers directory" files_filter="-" />
+		<file name="page_folder" field_label="Pagina map" files_filter="-" />
+		<input name="page_title" field_label="Pagina titel" />
+	</type>
+	<type name="projecten_overzicht">
+		<input name="addressbook" field_label="Overzicht: Selecteer bedrijven uit dit adresboek" />
+		<input name="cf_category" field_label="Overzicht: Gebruik deze categorie van extra velden" />
+		<input name="type_cf" field_label="Overzicht: Code extra veld - type (hierop wordt gesorteerd)" />
+		<input name="logo_cf" field_label="Overzicht: Code extra veld - logo" />
+		<input name="subtext_cf" field_label="Code extra veld: subtekst" />
+	</type>
+	<checkbox name="column_enabled" field_label="Kolom: Deze pagina gebruiken" />
+	<file name="column_thumbnail" field_label="Kolom: Afbeelding" />
+	<input name="column_thumbnail_title1" field_label="Kolom: Afbeelding titel 1" />
+	<input name="column_thumbnail_title2" field_label="Kolom: Afbeelding titel 2" />
+	<textarea name="column_text" field_label="Kolom: Tekst" />
+	<input name="column_block_text" field_label="Kolom: Bloktekst" />
+</file_options>
+</config>

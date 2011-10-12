@@ -20,7 +20,6 @@ GO.tasks.lang.atDays='Jeweils am';
 GO.tasks.lang.repeatUntil='Bis zum';
 GO.tasks.lang.repeatForever='unendlich wiederholen';
 GO.tasks.lang.recurrence='Wiederholungen';
-GO.tasks.lang.reminder='Erinnerung';
 GO.tasks.lang.remindMe= 'Automatisch an Aufgaben erinnern';
 GO.tasks.lang.options='Extras';
 GO.tasks.lang.createLink='Verknüpfung hinzufügen';
@@ -50,3 +49,7 @@ GO.tasks.lang.overDue='Überfällig';
 GO.tasks.lang.futureTasks='Zukünftige Aufgaben';
 GO.tasks.lang.all='Alle';
 GO.tasks.lang.active='Aktiv';
+
+GO.tasks.lang.globalsettings_templatelabel='Aufgabenvorlage';
+GO.tasks.lang.globalsettings_allchangelabel='Vorhandene ändern?';
+GO.tasks.lang.globalsettings_renameall= 'Alle umbenennen?';

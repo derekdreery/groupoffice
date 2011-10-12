@@ -590,6 +590,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 					'work_fax': GO.lang['strWorkFax'],
 					'cellular': GO.lang['strCellular'],
 					'company_name': GO.lang['strCompany'],
+					'company_name2': GO.lang['strCompany']+' 2',
 					'department': GO.lang['strDepartment'],
 					'function': GO.lang['strFunction'],
 					'salutation': GO.lang['strSalutation'],
@@ -601,6 +602,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 				var type="3";
 				this.defaultCSVField = {
 					'name':  GO.lang['strName'], 
+					'name2':  GO.lang['strName']+' 2', 
 					'email':  GO.lang['strEmail'],
 					'phone': GO.lang['strPhone'],
 					'fax': GO.lang['strFax'],

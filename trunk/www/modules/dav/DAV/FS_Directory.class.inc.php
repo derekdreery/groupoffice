@@ -59,7 +59,7 @@ class GO_DAV_FS_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
         $newPath = $this->path . '/' . $name;
         file_put_contents($newPath,$data);
-
+				$file_id = $files->import_file($newPath, $this->folder['id']);
     }
 
 	/**

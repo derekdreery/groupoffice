@@ -160,7 +160,7 @@ $GO_MODULES = new GO_MODULES();
  * License checking for pro modules. Don't remove it or Group-Office will fail
  * to load!
  */
-if(PHP_SAPI != 'cli' && file_exists($GO_CONFIG->root_path.'modules/professional/check.php')){
+if((PHP_SAPI != 'cli' || PHP_SAPI == '') && file_exists($GO_CONFIG->root_path.'modules/professional/check.php')){
 	require_once($GO_CONFIG->root_path.'modules/professional/check.php');
 	check_license();
 }
@@ -171,7 +171,7 @@ if($GO_CONFIG->session_inactivity_timeout>0){
 	$now = time();
 	if(isset($_SESSION['last_activity']) && $_SESSION['last_activity']+$GO_CONFIG->session_inactivity_timeout<$now){
 		$GO_SECURITY->logout();
-	}elseif($_POST['task']!='checker')//don't update on the automatic checker function that runs every 2 mins.
+	}elseif(isset($_POST['task']) && $_POST['task']!='checker')//don't update on the automatic checker function that runs every 2 mins.
 	{
 		$_SESSION['last_activity']=$now;
 	}
