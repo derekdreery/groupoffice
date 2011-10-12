@@ -85,13 +85,7 @@ $l["resourceConflictMsg"]= 'Eine oder mehrere Ressourcen in diesem Termin sind s
 $l["view"]= 'Ansicht';
 $l["calendarsPermissions"]='Kalendar Berechtigungen';
 $l["resourcesPermissions"]='Resourcen Berechtigungen';
-GO.calendar.lang.daynames[0]='Sonntag';
-GO.calendar.lang.daynames[1]='Montag';
-GO.calendar.lang.daynames[2]='Dienstag';
-GO.calendar.lang.daynames[3]='Mittwoch';
-GO.calendar.lang.daynames[4]='Donnerstag';
-GO.calendar.lang.daynames[5]='Freitag';
-GO.calendar.lang.daynames[6]='Samstag';
+
 $l["categories"]='Kategorien';
 $l["category"]='Kategorie';
 $l["globalCategory"]='Globale Kategorie';
