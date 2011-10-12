@@ -65,7 +65,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 	}
 
 	public function saveToFile($path) {
-		$imap = $this->account->openImapConnection();
+		$imap = $this->account->openImapConnection($this->mailbox);
 
 		return $imap->save_to_file($this->uid, $path);
 	}

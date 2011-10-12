@@ -435,7 +435,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 		$this->clean($box, 'mailbox');
 
 		$command = "SELECT \"$box\"\r\n";
-
+	
 		$this->send_command($command);
 		$res = $this->get_response(false, true);
 		$status = $this->check_response($res, true);
@@ -1607,12 +1607,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 		}
 		$this->send_command($command);
 		$result = fgets($this->handle);
-
-		//GO::debug($result);
+		
 		$size = false;
 		if (preg_match("/\{(\d+)\}\r\n/", $result, $matches)) {
 			$size = $matches[1];
 		}
+		
+		if(!$size)
+			return false;
 
 		$this->last_line=fgets($this->handle);
 		return $size;
@@ -1656,6 +1658,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 		 */
 		if($imap_part_id==-1){
 			$header = $this->get_message_part($uid, 'HEADER')."\r\n\r\n";
+			
+			if(empty($header))
+				return false;
 
 			if(!fputs($fp, $header))
 				return false;
@@ -1664,6 +1669,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 		}
 
 		$size = $this->get_message_part_start($uid,$imap_part_id);
+		
+		if(!$size)
+			return false;
 
 		while($line = $this->get_message_part_line()){
 			

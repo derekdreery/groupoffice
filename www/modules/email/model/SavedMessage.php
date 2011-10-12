@@ -2,7 +2,7 @@
 class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 	
 	private $_loadedBody;
-	private $_attachments;
+	private $_attachments=array();
 	private $_tmpDir;
 	/**
 	 * Returns a static model of itself
@@ -78,7 +78,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 		return $this->_loadedBody;
 	}
 	
-	protected function getInlineImageReplacementUrl($attachment) {
+	protected function getAttachmentUrl($attachment) {
 		return GO::url('core/downloadTempFile', 'path='.urlencode($attachment['tmp_file']));
 	}
 
@@ -130,11 +130,16 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 						$content_id='';						
 					}
 					
-					$tmp_file = $this->_tmpDir.$filename;
-					file_put_contents($tmp_file, $part->body);
-					
+					if(!empty($part->body)){
+						$tmp_file = $this->_tmpDir.$filename;
+						file_put_contents($tmp_file, $part->body);
+					}else
+					{
+						$tmp_file=false;
+					}
 					
 					$f = new GO_Base_Fs_File($filename);
+					
 					
 					$a['name']=$filename;
 					$a['number']=$part_number_prefix.$part_number;
@@ -147,6 +152,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 					$a['extension']=  $f->extension();
 					$a['encoding'] = isset($part->headers['content-transfer-encoding']) ? $part->headers['content-transfer-encoding'] : '';
 					$a['disposition'] = isset($part->disposition) ? $part->disposition : '';
+					$a['url']=$this->getAttachmentUrl($a);
 					
 					$this->_attachments[$a['number']]=$a;
 					

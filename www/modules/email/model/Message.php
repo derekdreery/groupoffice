@@ -106,6 +106,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 *
 	 * @return array
 	 * 
+	 * $a['url']='';
 	 *  $a['name']=$filename;
 			$a['number']=$part_number_prefix.$part_number;
 			$a['content_id']=$content_id;
@@ -128,7 +129,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 * @param array $attachment See getAttachments
 	 * @return string 
 	 */
-	protected function getInlineImageReplacementUrl($attachment) {
+	protected function getAttachmentUrl($attachment) {
 		return false;
 	}
 
@@ -172,9 +173,9 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		foreach($attachments as $a){
 			$replaceCount = 0;
 
-			$replacementUrl = $this->getInlineImageReplacementUrl($a);
-			if (!empty($replacementUrl))
-				$response['body'] = str_replace('cid:' . $a['content_id'], $replacementUrl, $response['body'], $replaceCount);
+			
+			if (!empty($a['content_id']))
+				$response['body'] = str_replace('cid:' . $a['content_id'], $a['url'], $response['body'], $replaceCount);
 
 			if ($a['name'] == 'smime.p7s') {
 				$response['smime_signed'] = true;
