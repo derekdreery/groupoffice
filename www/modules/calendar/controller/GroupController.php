@@ -15,6 +15,8 @@ class GO_Calendar_Controller_Group extends GO_Base_Controller_AbstractModelContr
 		$response['total']=0;
 		while($group = $stmt->fetch()){
 			$record = $group->getAttributes('formatted');
+			
+			$record['customfields']=GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Calendar_Model_Event", $group->id);
 			$record['resources']=array();
 			
 			$calStmt = GO_Calendar_Model_Calendar::model()->find(GO_Base_Db_FindParams::newInstance()
@@ -24,7 +26,9 @@ class GO_Calendar_Controller_Group extends GO_Base_Controller_AbstractModelContr
 										));
 			
 			while($resource = $calStmt->fetch()){				
-				$record['resources'][]= $resource->getAttributes('formatted');
+				$resourceRecord = $resource->getAttributes('formatted');
+				
+				$record['resources'][]= $resourceRecord;
 			}
 			
 			$num_resources = count($record['resources']);
