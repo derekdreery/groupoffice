@@ -22,9 +22,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	protected $model = 'GO_Calendar_Model_Event';
 
 	function beforeSubmit(&$response, &$model, &$params) {
-		
+
 		$this->_checkConflicts();
-		
+
 		if (!empty($params['exception_date'])) {
 			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
 			//this parameter is sent by the view when it wants to edit a single occurence of a repeating event.
@@ -32,11 +32,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			unset($params['exception_date']);
 			unset($params['id']);
 		}
-	
-		if(isset($params['subject']))
+
+		if (isset($params['subject']))
 			$params['name'] = $params['subject'];
 
-		if(isset($params['start_time'])){
+		if (isset($params['start_time'])) {
 			if (isset($params['all_day_event'])) {
 				$params['all_day_event'] = '1';
 				$start_time = "00:00";
@@ -50,34 +50,33 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$params['start_time'] = $params['start_date'] . ' ' . $start_time;
 			$params['end_time'] = $params['end_date'] . ' ' . $end_time;
 		}
-		
+
 		//Grid sends move request
-		if(isset($params['offset'])) {
-			$model->start_time=GO_Base_Util_Date::roundQuarters($model->start_time+$params['offset']);
-			$model->end_time=GO_Base_Util_Date::roundQuarters($model->end_time+$params['offset']);
+		if (isset($params['offset'])) {
+			$model->start_time = GO_Base_Util_Date::roundQuarters($model->start_time + $params['offset']);
+			$model->end_time = GO_Base_Util_Date::roundQuarters($model->end_time + $params['offset']);
 		}
-		if(isset($params['offset_days'])) {
+		if (isset($params['offset_days'])) {
 			$model->start_time = GO_Base_Util_Date::date_add($model->start_time, $params['offset_days']);
 			$model->end_time = GO_Base_Util_Date::date_add($model->end_time, $params['offset_days']);
 		}
-		
+
 		//when a user resizes an event
-		if(isset($params['duration_end_time'])){			
+		if (isset($params['duration_end_time'])) {
 			//only use time for the update
 			$old_end_date = getdate($model->end_time);
 			$new_end_time = getdate($params['duration_end_time']);
 
-			$model->end_time=mktime($new_end_time['hours'],$new_end_time['minutes'], 0,$old_end_date['mon'],$old_end_date['mday'],$old_end_date['year']);
+			$model->end_time = mktime($new_end_time['hours'], $new_end_time['minutes'], 0, $old_end_date['mon'], $old_end_date['mday'], $old_end_date['year']);
 		}
-		
+
 
 		if (!empty($params['freq'])) {
 			$rRule = new GO_Base_Util_Icalendar_Rrule();
 			$rRule->readJsonArray($params);
 			$model->rrule = $rRule->createRrule();
-		}elseif(isset($params['freq']))
-		{
-			$model->rrule="";
+		} elseif (isset($params['freq'])) {
+			$model->rrule = "";
 		}
 
 		if (isset($params['reminder_value']) && isset($params['reminder_multiplier']))
@@ -87,133 +86,179 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		return parent::beforeSubmit($response, $model, $params);
 	}
-	
-	private function _checkConflicts(){
+
+	private function _checkConflicts() {
 		return true;
 	}
 
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 
 		$isNewEvent = empty($params['id']);
-		
-		
-		$this->_saveParticipants($params, $model, $isNewEvent, $modifiedAttributes);
-		
-		$this->_saveResources($params, $model, $isNewEvent, $modifiedAttributes);
+
+		if (!$model->isResource()) {
+
+			$this->_saveParticipants($params, $model, $isNewEvent, $modifiedAttributes);
+
+			$this->_saveResources($params, $model, $isNewEvent, $modifiedAttributes);
+		}
 
 
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
-	
-	private function _saveResources($params, $model, $isNewEvent, $modifiedAttributes){
-		
+
+	/**
+	 * Handles the saving of related resource bookings of an event.
+	 * 
+	 * @param type $params
+	 * @param type $model
+	 * @param type $isNewEvent
+	 * @param type $modifiedAttributes 
+	 */
+	private function _saveResources($params, $model, $isNewEvent, $modifiedAttributes) {
+
+		if (isset($params['resources'])) {
+			$ids = array();
+			foreach ($params['resources'] as $resource_calendar_id => $enabled) {
+				$resourceEvent = $isNewEvent ? false : GO_Calendar_Model_Event::model()->findResourceForEvent($model->id, $resource_calendar_id);
+				if (!$resourceEvent) {
+					$resourceEvent = new GO_Calendar_Model_Event();
+				}
+
+				$resourceEvent->resource_event_id=$model->id;
+				$resourceEvent->calendar_id = $resource_calendar_id;
+				$resourceEvent->name = $model->name;
+				$resourceEvent->start_time = $model->start_time;
+				$resourceEvent->end_time = $model->end_time;
+				$resourceEvent->rrule = $model->rrule;
+				$resourceEvent->repeat_end_time = $model->repeat_end_time;
+				$resourceEvent->status = "NEEDS-ACTION";
+				$resourceEvent->user_id = $model->user_id;
+				
+
+				if (GO::modules()->customfields)
+					$resourceEvent->customfieldsRecord->setAttributes($params['resource_options'][$resource_calendar_id]);
+
+				$resourceEvent->save();
+
+				$ids[] = $resourceEvent->id;
+			}
+
+			//delete all other resource events
+			$stmt = GO_Calendar_Model_Event::model()->find(
+							GO_Base_Db_FindParams::newInstance()
+											->criteria(
+															GO_Base_Db_FindCriteria::newInstance()
+															->addInCondition('id', $ids, 't', true, true)
+															->addCondition('resource_event_id', $model->id)
+											)
+			);
+			$stmt->callOnEach('delete');
+		}
 	}
 
 	private function _saveParticipants($params, $event, $isNewEvent, $modifiedAttributes) {
-		
+
 		$ids = array();
-		
+
 		$newParticipantIds = array();
 		if (!empty($params['participants'])) {
-			
+
 			$newParticipantIds = array();
-			
+
 			$participants = json_decode($params['participants'], true);
 
 			foreach ($participants as $p) {
-				
-				$participant=false;
+
+				$participant = false;
 				if (substr($p['id'], 0, 4) != 'new_') {
 					$participant = GO_Calendar_Model_Participant::model()->findByPk($p['id']);
 				}
-				if(!$participant)
+				if (!$participant)
 					$participant = new GO_Calendar_Model_Participant();
-								
+
 				unset($p['id']);
 				$participant->setAttributes($p);
-				$participant->is_organizer=$event->user_id==$participant->user_id;
-				$participant->event_id=$event->id;
-				
-				
+				$participant->is_organizer = $event->user_id == $participant->user_id;
+				$participant->event_id = $event->id;
+
+
 				//Add new event for the participant if requested. Set the status to accepted automatically.
-				if(!empty($params['add_to_participant_calendars']) && $participant->user_id>0 && $participant->user_id!=$event->user_id){
+				if (!empty($params['add_to_participant_calendars']) && $participant->user_id > 0 && $participant->user_id != $event->user_id) {
 					$calendar = GO_Calendar_Model_Calendar::model()->findDefault($participant->user_id);
-					
-					if($calendar && $calendar->getPermissionLevel()>=GO_Base_Model_Acl::WRITE_PERMISSION){
-						
+
+					if ($calendar && $calendar->getPermissionLevel() >= GO_Base_Model_Acl::WRITE_PERMISSION) {
+
 						$participantEvent = GO_Calendar_Model_Event::model()->findParticipantEvent($calendar->id, $event->uuid);
-						if(!$participantEvent)
-							$participantEvent = $event->duplicate(array('calendar_id'=>$calendar->id));				
-						
+						if (!$participantEvent)
+							$participantEvent = $event->duplicate(array('calendar_id' => $calendar->id));
+
 						//TODO: Do we want this?
 						//$participant->status=GO_Calendar_Model_Participant::STATUS_ACCEPTED;
 					}
 				}
-				
-				if($isNewEvent || !empty($modifiedAttributes)){
+
+				if ($isNewEvent || !empty($modifiedAttributes)) {
 					//reset status on when event is modified or new
 					$participant->status = GO_Calendar_Model_Participant::STATUS_PENDING;
 				}
-				
-				$new = $participant->isNew;
-				
-				$participant->save();
-				
-				if($new)
-					$newParticipantIds[]=$participant->id;
-				
-				
-				$ids[]=$participant->id;
-			}
-		
-		
-			$stmt = GO_Calendar_Model_Participant::model()->find(
-				GO_Base_Db_FindParams::newInstance()
-							->criteria(
-									GO_Base_Db_FindCriteria::newInstance()
-										->addInCondition('id', $ids, 't', true, true)
-										->addCondition('event_id', $event->id)
-											)
 
+				$new = $participant->isNew;
+
+				$participant->save();
+
+				if ($new)
+					$newParticipantIds[] = $participant->id;
+
+
+				$ids[] = $participant->id;
+			}
+
+
+			$stmt = GO_Calendar_Model_Participant::model()->find(
+							GO_Base_Db_FindParams::newInstance()
+											->criteria(
+															GO_Base_Db_FindCriteria::newInstance()
+															->addInCondition('id', $ids, 't', true, true)
+															->addCondition('event_id', $event->id)
+											)
 			);
 			$stmt->callOnEach('delete');
 		}
-		
-		$this->_sendInvitation($params, $newParticipantIds, $event, $isNewEvent, $modifiedAttributes);
-		
-	}
-	
-	private function _sendInvitation($params, $newParticipantIds, $event, $isNewEvent, $modifiedAttributes){
-		
-		if(isset($params['send_invitation']) && $params['send_invitation']!='false'){
-			
-			$stmt = $event->participants();
-			
-			while($participant = $stmt->fetch()){
-				
-				if($participant->user_id != GO::user()->id){
-					$subject = $isNewEvent ? GO::t('invitation','calendar') : GO::t('invitation_update','calendar');
 
-					$body = '<p>'.GO::t('invited','calendar').'</p>'.
-						$event->toHtml().
-						'<p><b>'.GO::t('linkIfCalendarNotSupported','calendar').'</b></p>'.
-						'<p>'.GO::t('acccept_question','calendar').'</p>'.
-						'<a href="'.GO::modules()->calendar->full_url.'invitation.php?event_id='.$event->id.'&task=accept&email='.urlencode($participant->email).'">'.GO::t('accept','calendar').'</a>'.
-						'&nbsp;|&nbsp;'.
-						'<a href="'.GO::modules()->calendar->full_url.'invitation.php?event_id='.$event->id.'&task=decline&email='.urlencode($participant->email).'">'.GO::t('decline','calendar').'</a>';
+		$this->_sendInvitation($params, $newParticipantIds, $event, $isNewEvent, $modifiedAttributes);
+	}
+
+	private function _sendInvitation($params, $newParticipantIds, $event, $isNewEvent, $modifiedAttributes) {
+
+		if (isset($params['send_invitation']) && $params['send_invitation'] != 'false') {
+
+			$stmt = $event->participants();
+
+			while ($participant = $stmt->fetch()) {
+
+				if ($participant->user_id != GO::user()->id) {
+					$subject = $isNewEvent ? GO::t('invitation', 'calendar') : GO::t('invitation_update', 'calendar');
+
+					$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
+									$event->toHtml() .
+									'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+									'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+									'<a href="' . GO::modules()->calendar->full_url . 'invitation.php?event_id=' . $event->id . '&task=accept&email=' . urlencode($participant->email) . '">' . GO::t('accept', 'calendar') . '</a>' .
+									'&nbsp;|&nbsp;' .
+									'<a href="' . GO::modules()->calendar->full_url . 'invitation.php?event_id=' . $event->id . '&task=decline&email=' . urlencode($participant->email) . '">' . GO::t('decline', 'calendar') . '</a>';
 
 					$message = GO_Base_Mail_Message::newInstance(
-										$subject
-										)->setFrom(GO::user()->email, GO::user()->name)
-										->addTo($participant->email, $participant->name);
-														
-					$message->setHtmlAlternateBody($body);					
-					$message->attach(Swift_Attachment::newInstance($event->toICS(), GO_Base_Fs_File::stripInvalidChars($event->name). '.ics', 'text/calendar'));
+													$subject
+									)->setFrom(GO::user()->email, GO::user()->name)
+									->addTo($participant->email, $participant->name);
+
+					$message->setHtmlAlternateBody($body);
+					$message->attach(Swift_Attachment::newInstance($event->toICS(), GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar'));
 
 					GO_Base_Mail_Mailer::newGoInstance()->send($message);
 				}
 			}
-		}		
+		}
 	}
 
 	protected function beforeLoad(&$response, &$model, &$params) {
@@ -245,12 +290,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		$response['data']['start_date'] = GO_Base_Util_Date::get_timestamp($model->start_time, false);
 		$response['data']['end_date'] = GO_Base_Util_Date::get_timestamp($model->end_time, false);
-		
-		if(GO::modules()->customfields)
-			$response['customfields']=GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Calendar_Model_Event", $model->calendar->group_id);
-		
-		$response['group_id']=$model->calendar->group_id;
-				
+
+		if (GO::modules()->customfields)
+			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Calendar_Model_Event", $model->calendar->group_id);
+
+		$response['group_id'] = $model->calendar->group_id;
+
 		return parent::afterLoad($response, $model, $params);
 	}
 
@@ -290,8 +335,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		return parent::afterDisplay($response, $model, $params);
 	}
-	
-	
+
 //	protected function getStoreMultiSelectProperties(){
 //		return array(
 //				'requestParam'=>'calendars',
@@ -305,7 +349,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		var_dump($events);
 	}
-	public function actionVcalendar($params){
+
+	public function actionVcalendar($params) {
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
 		header('Content-Type: text/plain');
 		echo $event->toICS();

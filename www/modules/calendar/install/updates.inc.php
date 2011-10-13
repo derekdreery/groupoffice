@@ -46,3 +46,5 @@ $updates[201110071512][]="ALTER TABLE `cal_calendars` CHANGE `project_id` `proje
 $updates[201110071512][]="ALTER TABLE `cal_calendars` CHANGE `tasklist_id` `tasklist_id` INT( 11 ) NOT NULL DEFAULT '0'";
 
 $updates[201110131221][]="ALTER TABLE `cal_events` CHANGE `status` `status` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NEEDS-ACTION'";
+
+$updates[201110131221][]="ALTER TABLE `cal_events` CHANGE `category_id` `category_id` INT( 11 ) NOT NULL DEFAULT '0'";
