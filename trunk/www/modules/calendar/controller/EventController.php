@@ -98,9 +98,15 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		
 		$this->_saveParticipants($params, $model, $isNewEvent, $modifiedAttributes);
+		
+		$this->_saveResources($params, $model, $isNewEvent, $modifiedAttributes);
 
 
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
+	}
+	
+	private function _saveResources($params, $model, $isNewEvent, $modifiedAttributes){
+		
 	}
 
 	private function _saveParticipants($params, $event, $isNewEvent, $modifiedAttributes) {

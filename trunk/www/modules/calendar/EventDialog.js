@@ -28,7 +28,7 @@ GO.calendar.EventDialog = function(calendar) {
 		root: 'results',
 		id: 'id',
 		totalProperty:'total',
-		fields: ['id','resources','name','fields'],
+		fields: ['id','resources','name','customfields'],
 		remoteSort: true
 	});
 
@@ -422,7 +422,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		// save values before all items are removed (checkboxes + statuses)
 		if(this.win.isVisible())
 		{
-			if(GO.customfields && GO.customfields.types["1"])
+			if(GO.customfields && GO.customfields.types["GO_Calendar_Model_Event"])
 			{
 				for(var i=0; i<this.resourceGroupsStore.data.items.length; i++)
 				{
@@ -1376,19 +1376,18 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				resourceOptions.push(pfieldStatus);
 				this.formPanel.form.add(pfieldStatus);
 
-				for(var k=0; k<record.fields.length; k++)
-				{
-					var field = record.fields[k];
-
-					if(field && GO.customfields)
+					if(GO.customfields)
 					{
-						if (GO.customfields.types["21"]) {
-							for(var l=0; l<GO.customfields.types["21"].panels.length; l++)
+						var enabled_categories = record.customfields.enabled_categories;
+						var disable_categories = record.customfields.disable_categories;
+
+						if (GO.customfields.types["GO_Calendar_Model_Calendar"]) {
+							for(var l=0; l<GO.customfields.types["GO_Calendar_Model_Calendar"].panels.length; l++)
 							{
-									var cf = GO.customfields.types["21"].panels[l].customfields;
+									var cf = GO.customfields.types["GO_Calendar_Model_Calendar"].panels[l].customfields;
 									var formFields = [new GO.form.PlainField({
 											hideLabel: true,
-											value: '<b>'+GO.customfields.types["21"].panels[l].title+'</b>'
+											value: '<b>'+GO.customfields.types["GO_Calendar_Model_Calendar"].panels[l].title+'</b>'
 										})];
 									for(var m=0; m<cf.length; m++)
 									{
@@ -1413,17 +1412,18 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 									}
 							}
 						}
-						if (GO.customfields.types["1"]) {
+						if (GO.customfields.types["GO_Calendar_Model_Event"]) {
 							resourceOptions.push({
 								xtype: 'plainfield',
 								value: '<br />'
 							});
-							for(var l=0; l<GO.customfields.types["1"].panels.length; l++)
+							var panels = GO.customfields.types["GO_Calendar_Model_Event"].panels;
+							for(var l=0; l<panels.length; l++)
 							{
-								var cfield = 'cf_category_'+GO.customfields.types["1"].panels[l].category_id;
-								if(cfield == field)
-								{
-									var cf = GO.customfields.types["1"].panels[l].customfields;
+								var category_id = GO.customfields.types["GO_Calendar_Model_Event"].panels[l].category_id.toString();
+								if(!disable_categories || enabled_categories.indexOf(category_id)>-1){									
+		
+									var cf = panels[l].customfields;
 									for(var m=0; m<cf.length; m++)
 									{
 										newFormField = GO.customfields.getFormField(cf[m],{
@@ -1443,8 +1443,6 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 										resourceOptions.push(newFormField);
 										this.formPanel.form.add(newFormField);
 									}
-
-									l = GO.customfields.types["1"].panels.length;
 								}
 							}
 						}
@@ -1457,7 +1455,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 							value: GO.calendar.lang.no_custom_fields
 						}));
 					}
-				}
+				
 
 				resourceFieldSets.push({
 					xtype:'fieldset',
