@@ -62,7 +62,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				'exceptionEvent'=>array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Event', 'field' => 'exception_for_event_id'),
 				'calendar' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Calendar', 'field' => 'calendar_id'),
 				'participants' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Participant', 'field' => 'event_id', 'delete' => true),
-				'exceptions' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Exception', 'field' => 'event_id', 'delete' => true)
+				'exceptions' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Exception', 'field' => 'event_id', 'delete' => true),
+				'resources' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Event', 'field' => 'resource_event_id', 'delete' => true)
 		);
 	}
 
@@ -134,6 +135,25 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		return $this->duplicate($att, false);
 	}
+	
+	protected function beforeSave() {
+		
+		if($this->isResource()){
+			if($this->status=='ACCEPTED'){
+				$this->background='CCFFCC';
+			}else
+			{
+				$this->background='FF6666';
+			}
+		}
+		
+		return parent::beforeSave();
+	}
+	
+	protected function afterDbInsert() {
+		$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
+		return true;
+	}
 
 	protected function afterSave($wasNew) {
 		
@@ -143,13 +163,104 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$newExeptionEvent = GO_Calendar_Model_Event::model()->findByPk($this->exception_for_event_id);
 			$newExeptionEvent->addException($this->exception_date);
 		}
-
-		if (!$this->uuid) {
-			$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
-			$this->save();
+	
+		if($this->isResource()){
+			$this->_sendResourceNotification($wasNew);
+		}else
+		{
+			if(!$wasNew)
+				$this->_updateResourceEvents();
 		}
 
 		return parent::afterSave($wasNew);
+	}
+	
+	
+	/**
+	 * Events may have related resource events that must be updated aftersave
+	 */
+	private function _updateResourceEvents(){
+		$stmt = $this->resources();
+		
+		while($resourceEvent = $stmt->fetch()){
+			
+			$resourceEvent->name=$this->name;
+			$resourceEvent->start_time=$this->start_time;
+			$resourceEvent->end_time=$this->end_time;
+			$resourceEvent->rrule=$this->rrule;
+			$resourceEvent->repeat_end_time=$this->repeat_end_time;				
+			$resourceEvent->status="NEEDS-ACTION";
+			$resourceEvent->user_id=$this->user_id;	
+			$resourceEvent->save();
+		}
+	}
+	
+	private function _sendResourceNotification($wasNew){
+		
+		$url = 'TODO';//create_direct_url('calendar', 'showEvent', array(array('values'=>array('event_id' => $resource['id']))));		
+		
+		$stmt = $this->calendar->group->admins();
+		while($user = $stmt->fetch()){
+			if($wasNew){
+				$body = sprintf(GO::t('resource_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+								. $this->toHtml()
+								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+			
+				$subject = sprintf(GO::t('resource_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+			}else
+			{
+				$body = sprintf(GO::t('resource_modified_mail_body','calendar'),$this->user->name,$this->calendar->name).'<br /><br />'
+								. $this->toHtml()
+								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+			
+				$subject = sprintf(GO::t('resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+			}
+			
+			$message = GO_Base_Mail_Message::newInstance(
+								$subject
+								)->setFrom(GO::user()->email, GO::user()->name)
+								->addTo($user->email, $user->name);
+
+			$message->setHtmlAlternateBody($body);					
+			
+			GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		}
+		
+		if($this->user_id!=GO::user()->id){
+			//todo send update to user
+			
+			if($this->isModified('status')){
+				if($this->status=='ACCEPTED'){
+					$body = sprintf(GO::t('your_resource_accepted_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
+								. $this->toHtml()
+								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+			
+					$subject = sprintf(GO::t('your_resource_accepted_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+				}else
+				{
+						$body = sprintf(GO::t('your_resource_declined_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
+								. $this->toHtml()
+								. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+			
+					$subject = sprintf(GO::t('your_resource_declined_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+				}
+			}else
+			{
+				$body = sprintf(GO::t('your_resource_modified_mail_body','calendar'),$user->name,$this->calendar->name).'<br /><br />'
+							. $this->toHtml()
+							. '<br /><a href="'.$url.'">'.GO::t('open_resource','calendar').'</a>';
+				$subject = sprintf(GO::t('your_resource_modified_mail_subject','calendar'),$this->calendar->name, $this->name, GO_Base_Util_Date::get_timestamp($this->start_time,false));
+			}
+			
+			$message = GO_Base_Mail_Message::newInstance(
+								$subject
+								)->setFrom(GO::user()->email, GO::user()->name)
+								->addTo($this->user->email, $this->user->name);
+
+			$message->setHtmlAlternateBody($body);					
+			
+			GO_Base_Mail_Mailer::newGoInstance()->send($message);
+		}
 	}
 
 	private $_calculatedEvents;
@@ -233,7 +344,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Calendar_Model_Event 
 	 */
 	public function findParticipantEvent($calendar_id, $uuid) {
-		return GO_Calendar_Model_Event::model()->findSingleByAttributes(array('uuid' => $event->uuid, 'calendar_id' => $calendar->id));
+		return $this->findSingleByAttributes(array('uuid' => $event->uuid, 'calendar_id' => $calendar->id));
+	}
+	
+	/**
+	 * Find the resource booking that belongs to this event
+	 * 
+	 * @param int $event_id
+	 * @param int $resource_calendar_id
+	 * @return GO_Calendar_Model_Event 
+	 */
+	public function findResourceForEvent($event_id, $resource_calendar_id){
+		return $this->findSingleByAttributes(array('resource_event_id' => $event_id, 'calendar_id' => $resource_calendar_id));
 	}
 
 	/**
@@ -346,6 +468,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		return $c->serialize();
 		
+	}
+	
+	/**
+	 * Check if this event is a resource booking;
+	 * 
+	 * @return boolean
+	 */
+	public function isResource(){
+		return $this->calendar->group_id>1;
 	}
 
 }

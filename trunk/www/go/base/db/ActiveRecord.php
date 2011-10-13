@@ -1651,7 +1651,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 
 			$this->_dbInsert();
-
+			
 			if(!is_array($this->primaryKey()) && empty($this->pk))
 				$this->{$this->primaryKey()} = $this->getDbConnection()->lastInsertId();
 
@@ -1659,6 +1659,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				return false;
 
 			$this->setIsNew(false);
+			
+			if($this->afterDbInsert()){
+				$this->_dbUpdate();
+			}
 		}else
 		{
 			$wasNew=false;
@@ -1699,6 +1703,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->_modifiedAttributes = array();
 
 		return true;
+	}
+	
+	
+	/**
+	 * Sometimes you need the auto incremented primary key to generate another
+	 * property. Like the UUID of an event or task.
+	 * Or in a project number for example where you want to generate a number 
+	 * like PR00023 where 23 is the id for example.
+	 * 
+	 * @return boolean NOTE: Only return true if a database update is needed.
+	 */
+	protected function afterDbInsert(){
+		return false;
 	}
 	
 	

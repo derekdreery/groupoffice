@@ -56,6 +56,9 @@ class GO_Calendar_Model_Group extends GO_Base_Db_ActiveRecord{
 	 * See the parent class for a more detailed description of the relations.
 	 */
 	 public function relations() {
-		 return array();
+		 
+		 return array(
+				'admins' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'group_id', 'linkModel' => 'GO_Calendar_Model_GroupAdmin'),
+			);
 	 }
 }

@@ -51,6 +51,7 @@ class GO_Calendar_Model_Calendar extends GO_Base_Db_ActiveRecord {
 
 	public function relations() {
 		return array(
+			'group' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Group', 'field' => 'group_id'),
 			'events' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Event', 'field' => 'calendar_id', 'delete' => true),
 			'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id')		
 				);
