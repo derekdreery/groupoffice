@@ -71,6 +71,8 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 				{
 					this.groupAdminsPanel.setGroupId(action.result.data.id);
 					this.selectUser.setRemoteText(action.result.data.user_name);
+					
+					
 
 					if(this.group_id == 1)
 					{
@@ -100,6 +102,7 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 	},
 	setGroupId : function(group_id)
 	{
+		this.disableCategoriesPanel.setModel(group_id,"GO_Calendar_Model_Event");
 		this.formPanel.form.baseParams['group_id'] = group_id;
 		this.group_id = group_id;
 	},
