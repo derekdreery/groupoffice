@@ -113,3 +113,4 @@ $updates[]="script:2_add_acl.inc.php";
 
 $updates[]="INSERT INTO em_accounts_sort SELECT id,user_id,standard FROM `em_accounts`";
 $updates[]="ALTER TABLE `em_accounts` DROP `standard`";
+$updates[]="TRUNCATE TABLE `em_messages_cache` ";
