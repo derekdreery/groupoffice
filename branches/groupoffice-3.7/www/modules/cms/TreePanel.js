@@ -21,7 +21,6 @@ GO.cms.TreePanel = function(config){
 	if(!config.rootNodeId)
 		config.rootNodeId='root';
 		
-	config.title=GO.cms.lang.categories;
 	config.layout='fit';
   config.split=true;
 	config.autoScroll=true;
