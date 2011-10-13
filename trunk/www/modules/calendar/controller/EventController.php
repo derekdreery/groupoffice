@@ -260,9 +260,21 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			}
 		}
 	}
+	
+	protected function beforeDisplay(&$response, &$model, &$params) {
+		
+		if($model->private && $model->user_id != GO::user()->id)
+			throw new GO_Base_Exception_AccessDenied();
+		
+		return parent::beforeDisplay($response, $model, $params);
+	}
 
 	protected function beforeLoad(&$response, &$model, &$params) {
-
+		
+	
+		if($model->private && $model->user_id != GO::user()->id)
+			throw new GO_Base_Exception_AccessDenied();
+	
 		if (!empty($params['exception_date'])) {
 			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
 			//this parameter is sent by the view when it wants to edit a single occurence of a repeating event.
@@ -295,15 +307,45 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Calendar_Model_Event", $model->calendar->group_id);
 
 		$response['group_id'] = $model->calendar->group_id;
+		
+		if(!$model->isResource())
+			$this->_loadResourceEvents($model, $response);
 
 		return parent::afterLoad($response, $model, $params);
 	}
+
 
 	protected function remoteComboFields() {
 		return array(
 				//	'category_id'=>'$model->category->name',
 				'calendar_id' => '$model->calendar->name'
 		);
+	}
+	
+	/**
+	 *
+	 * @param GO_Calendar_Model_Event $event
+	 * @param array $response 
+	 */
+	private function _loadResourceEvents($event, &$response){
+		
+		$response['data']['resources_checked']=array();
+		
+		$stmt = $event->resources();		
+		while($resourceEvent = $stmt->fetch()){
+			$response['data']['resources'][$resourceEvent->calendar->id] = array();
+			$response['data']['status_'.$resourceEvent->calendar->id] = $resourceEvent->status;
+			$response['data']['resources_checked'][] = $resourceEvent->calendar->id;
+			
+			if(GO::modules()->customfields){
+				
+				$attr = $resourceEvent->customfieldsRecord->getAttributes('formatted');
+				foreach($attr as $key=>$value){
+					$resource_options = 'resource_options['.$resourceEvent->calendar->id.']['.$key.']';
+					$response['data'][$resource_options] = $value;
+				}
+			}
+		}			
 	}
 
 	private function _reminderSecondsToForm($response) {
