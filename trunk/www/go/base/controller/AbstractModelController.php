@@ -110,7 +110,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	public function actionLoad($params) {
 		$modelName = $this->model;
 		//$modelName::model() does not work on php 5.2!
-		$model = GO::getModel($modelName)->findByPk($params['id']);
+		if(!empty($params['id'])){
+			$model = GO::getModel($modelName)->findByPk($params['id']);
+		}else{
+			$model = new $modelName;
+			$model->setAttributes($params);
+		}
 		
 		$response = array();
 		

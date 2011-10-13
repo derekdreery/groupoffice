@@ -44,3 +44,5 @@ $updates[201110071512][]="ALTER TABLE `cal_calendars` CHANGE `shared_acl` `share
 $updates[201110071512][]="ALTER TABLE `cal_calendars` CHANGE `show_bdays` `show_bdays` TINYINT( 1 ) NOT NULL DEFAULT '1'";
 $updates[201110071512][]="ALTER TABLE `cal_calendars` CHANGE `project_id` `project_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates[201110071512][]="ALTER TABLE `cal_calendars` CHANGE `tasklist_id` `tasklist_id` INT( 11 ) NOT NULL DEFAULT '0'";
+
+$updates[201110131221][]="ALTER TABLE `cal_events` CHANGE `status` `status` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NEEDS-ACTION'";

@@ -239,7 +239,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		$response['data']['start_date'] = GO_Base_Util_Date::get_timestamp($model->start_time, false);
 		$response['data']['end_date'] = GO_Base_Util_Date::get_timestamp($model->end_time, false);
-
+		
+		if(GO::modules()->customfields)
+			$response['customfields']=GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Calendar_Model_Event", $model->calendar->group_id);
+		
+		$response['group_id']=$model->calendar->group_id;
+				
 		return parent::afterLoad($response, $model, $params);
 	}
 

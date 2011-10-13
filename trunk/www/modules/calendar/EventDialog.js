@@ -172,49 +172,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 
 	files_folder_id : 0,
 
-	initCustomFields : function(group_id){
 
-		var record, fields;
-		if(group_id > 1)
-		{
-			record = GO.calendar.groupsStore.getById(group_id);
-			fields = record.get('fields');
-		}else
-		{
-			record = true;
-			fields = GO.calendar.defaultGroupFields;
-		}
-		
-		if(record)
-		{
-			if(fields == null)
-				fields = '';
-			fields = fields.split(',');
-
-			if(GO.customfields && GO.customfields.types["1"])
-			{
-				this.tabPanel.items.each(function(p){
-					if(p.category_id)
-					{
-						var visible = fields.indexOf('cf_category_'+p.category_id)>-1;
-
-						if(visible)
-						{
-							this.tabPanel.unhideTabStripItem(p.id);
-						}else
-						{
-							this.tabPanel.hideTabStripItem(p.id);
-						}
-					}
-				}, this);
-			}
-		}
-
-		if(this.resourceGroupsStore.data.items.length == 0 || group_id != '1')
-			this.tabPanel.hideTabStripItem('resources-panel');
-		else
-			this.tabPanel.unhideTabStripItem('resources-panel');
-	},
 
 	initialized : false,
 
@@ -346,66 +304,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		
 
 		this.setEventId(config.event_id);
-
-		if (config.event_id > 0) {
-			this.formPanel.load({
-				//url : GO.settings.modules.calendar.url + 'json.php',
-				params:{
-					//These parameters are present when a user edits a single occurence of a repeating event
-					exception_date:config.exception_date
-				},
-				url : GO.url('calendar/event/load'),
-				waitMsg:GO.lang.waitMsgLoad,
-				success : function(form, action) {
-					//this.win.show();
-					
-					// If this is a recurrence and the following is true (action.result.data.exception_for_event_id and action.result.data.exception_date are set and not empty)
-					if(action.result.data.exception_date){
-						this.setEventId(0);
-						this.formPanel.form.baseParams['exception_for_event_id'] = action.result.data.exception_for_event_id;
-						this.formPanel.form.baseParams['exception_date'] = action.result.data.exception_date;
-					}
-					
-					this.formPanel.form.baseParams['group_id'] = action.result.data.group_id;
-					this.initCustomFields(action.result.data.group_id);
-					this.changeRepeat(action.result.data.freq);
-					this.setValues(config.values);
-					this.setWritePermission(action.result.data.write_permission);
-					//this.selectCalendar.setValue(action.result.data.calendar_id);
-					this.selectCalendar.setRemoteText(action.result.remoteComboTexts.calendar_id);
-					this.files_folder_id = action.result.data.files_folder_id;
-
-					if(action.result.data.group_id == 1)
-					{
-						this.toggleFieldSets(action.result.data.resources_checked);
-					}
-
-					this.selectCategory.container.up('div.x-form-item').setDisplayed(this.formPanel.form.baseParams['group_id']==1);
-					
-					if(action.result.data.category_name)
-						this.selectCategory.setRemoteText(action.result.data.category_name);
-					/*if(this.formPanel.form.baseParams['group_id'] == 1)
-					{
-						this.selectCategory.setValue(GO.calendar.lang.selectCategory);
-					}*/
-					
-					//this.colorField.setDisabled(this.formPanel.form.baseParams['group_id']==1);
-
-					this.numParticipants=action.result.data.num_participants;
-
-				},
-				failure : function(form, action) {
-					Ext.Msg.alert(GO.lang.strError, action.result.feedback)
-				},
-				scope : this
-
-			});
-		} else {
-
-			delete this.formPanel.form.baseParams['group_id'];
-			this.setWritePermission(true);
-
-			config.values = config.values || {};
+		
+		
+		var params = config.values || {};
+		
+		
+		
+		if(!config.event_id){
+			
+			params.calendar_id=config.calendar_id;
 
 			var date = new Date();
 
@@ -421,53 +328,74 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				i = '00';
 			}
 
-			if (!config.values.start_date)
-				config.values['start_date'] = new Date();
-			if (!config.values.start_time)
-				config.values['start_time'] = date.format(GO.settings.time_format);
+			if (!params.start_date)
+				params['start_date'] = new Date();
+			if (!params.start_time)
+				params['start_time'] = date.format(GO.settings.time_format);
 
-			if (!config.values.end_date)
-				config.values['end_date'] = new Date();
-			if (!config.values.end_time)
-				config.values['end_time'] = date.add(Date.HOUR, 1).format(GO.settings.time_format);
+			if (!params.end_date)
+				params['end_date'] = new Date();
+			if (!params.end_time)
+				params['end_time'] = date.add(Date.HOUR, 1).format(GO.settings.time_format);
 
-
-			this.setValues(config.values);
-
-			var group_id=1;
-
-			if (GO.util.empty(config.calendar_id)){// || !this.selectCalendar.store.getById(config.calendar_id)) {
-				config.calendar_id = GO.calendar.defaultCalendar.id;
-				config.calendar_name = GO.calendar.defaultCalendar.name;
-			}
-
-			var calendarRecord = this.selectCalendar.store.getById(config.calendar_id);
-
-            if(calendarRecord){
-				group_id = calendarRecord.get('group_id');
-			}
-			this.formPanel.form.baseParams['group_id'] = group_id;
-			this.initCustomFields(group_id);
-			
-			//this.colorField.setDisabled(group_id==1);
-			this.selectCategory.container.up('div.x-form-item').setDisplayed(group_id==1);
-
-			if(group_id == 1)
-				this.toggleFieldSets();
-
-			this.selectCalendar.setValue(config.calendar_id);
-
-			if(config.calendar_name)
-				this.selectCalendar.setRemoteText(config.calendar_name);
-			
-		/*if (config.calendar_name) {
-                //this.selectCalendar.container.up('div.x-form-item').setDisplayed(true);
-                this.selectCalendar.setRemoteText(config.calendar_name);
-            }else
-            {
-                //this.selectCalendar.container.up('div.x-form-item').setDisplayed(false);
-            }*/
 		}
+		
+		//These parameters are present when a user edits a single occurence of a repeating event
+		params.exception_date=config.exception_date;
+		
+
+		//if (config.event_id > 0) {
+			this.formPanel.load({
+				//url : GO.settings.modules.calendar.url + 'json.php',
+				params:params,
+				url : GO.url('calendar/event/load'),
+				waitMsg:GO.lang.waitMsgLoad,
+				success : function(form, action) {
+					//this.win.show();
+					
+					// If this is a recurrence and the following is true (action.result.data.exception_for_event_id and action.result.data.exception_date are set and not empty)
+					if(action.result.data.exception_date){
+						this.setEventId(0);
+						this.formPanel.form.baseParams['exception_for_event_id'] = action.result.data.exception_for_event_id;
+						this.formPanel.form.baseParams['exception_date'] = action.result.data.exception_date;
+					}
+					
+					this.changeRepeat(action.result.data.freq);
+					this.setValues(config.values);
+					this.setWritePermission(action.result.data.write_permission);
+					//this.selectCalendar.setValue(action.result.data.calendar_id);
+					this.selectCalendar.setRemoteText(action.result.remoteComboTexts.calendar_id);
+					this.files_folder_id = action.result.data.files_folder_id;
+					
+					GO.customfields.disableTabs(this.tabPanel, action.result);	
+
+					if(action.result.group_id == 1)
+					{
+						//TODO
+						this.toggleFieldSets(action.result.data.resources_checked);
+					}
+
+					this.selectCategory.container.up('div.x-form-item').setDisplayed(this.formPanel.form.baseParams['group_id']==1);
+					
+					if(action.result.data.category_name)
+						this.selectCategory.setRemoteText(action.result.data.category_name);
+
+					this.numParticipants=action.result.data.num_participants;
+					
+					
+					if(this.resourceGroupsStore.data.items.length == 0 || action.result.group_id != '1')
+						this.tabPanel.hideTabStripItem('resources-panel');
+					else
+						this.tabPanel.unhideTabStripItem('resources-panel');
+
+				},
+				failure : function(form, action) {
+					Ext.Msg.alert(GO.lang.strError, action.result.feedback)
+				},
+				scope : this
+
+			});
+		
 					
 		
 		// if the newMenuButton from another passed a linkTypeId then set this
