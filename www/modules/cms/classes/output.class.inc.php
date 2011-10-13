@@ -736,7 +736,7 @@ class cms_output extends cms {
 		if($random)
 			shuffle($params['items']);
 		
-		return $this->items2html($params, &$smarty);
+		return $this->items2html($params, $smarty);
 	}
 	
 	function print_child_categories($params, &$smarty) {
@@ -767,7 +767,7 @@ class cms_output extends cms {
 		if($random)
 			shuffle($params['items']);
 		
-		return $this->items2html($params, &$smarty);
+		return $this->items2html($params, $smarty);
 	}
 		
 	function print_years($params, &$smarty) {
@@ -788,7 +788,7 @@ class cms_output extends cms {
 		if($random)
 			shuffle($params['items']);
 		
-		return $this->items2html($params, &$smarty);
+		return $this->items2html($params, $smarty);
 	}
 	
 	private function get_category_id_by_path($path_string,$root_category_id=0) {
