@@ -14101,7 +14101,7 @@ Ext.extend(GO.cms.SitesGrid, GO.grid.GridPanel,{
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: SiteDialog.js 5163 2010-06-25 13:57:24Z mschering $
+ * @version $Id: SiteDialog.js 8249 2011-10-06 07:58:14Z wilmar1980 $
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
@@ -14317,6 +14317,11 @@ Ext.extend(GO.cms.SiteDialog, Ext.Window,{
 				value: GO.settings.language,
 				anchor:'-20'
 			}),{
+				xtype:'checkbox',
+				name:'enable_categories',
+				hideLabel:true,
+				boxLabel:GO.cms.lang.enableCategories
+			},{
 				xtype:'checkbox',
 				name:'enable_rewrite',
 				hideLabel:true,
@@ -15431,8 +15436,94 @@ GO.cms.EditorPanel = Ext.extend(
 		};
 			
 		this.editor = new Ext.ux.TinyMCE(this.editorConfig);
-				
+		
+		this.optionsPanel = new GO.cms.TemplateOptionsPanel();
+		this.eastFormPanel = new Ext.Panel({
+			layout:'form',
+			labelAlign:'top',
+			border:false,
+			bodyStyle:'padding: 5px',
+				title: GO.lang.strProperties,
+				width: '100%',
+				waitMsgTarget:true,
+				autoScroll:true,
+				defaults: {
+					anchor: '-20',
+					listeners:{
+						change: function(){
+							this.dirty=true;
+						},
+						scope: this
+					}
+				},
+				defaultType: 'textfield',
+				items: [{
+					fieldLabel:GO.lang.strName,
+					name:'name',
+					allowBlank:false		
+				},{
+					xtype:'datefield',
+					format:GO.settings.date_format,
+					fieldLabel:GO.cms.lang.showUntil,
+					name:'show_until',
+					allowBlank:true,
+					emptyText:GO.cms.lang.alwaysShow
+				},{
+					hideLabel:true,
+					xtype:'checkbox',
+					checked: true,
+					name:'auto_meta',
+					boxLabel:GO.cms.lang.autoMeta,
+					listeners:{
+						check:function(cb, checked){
 
+							this.setAutoMeta(checked);
+						},
+						scope:this
+					}
+				},{
+					xtype:'datefield',
+					format:GO.settings.date_format,
+					fieldLabel:GO.cms.lang.sortDate,
+					name:'sort_date',
+					allowBlank:true,
+					emptyText:GO.cms.lang.unused
+				},{
+					fieldLabel:GO.cms.lang.title,
+					xtype:'textarea',
+					name:'title',
+					height:60
+				},{
+					fieldLabel:GO.lang.strDescription,
+					xtype:'textarea',
+					name:'description',
+					height:80
+				},{
+					fieldLabel:GO.cms.lang.keywords,
+					xtype:'textarea',
+					name:'keywords',
+					height:80
+				},
+				this.optionsPanel]
+			});
+		
+		this.fileCategoriesTree = new GO.cms.FileCategoriesTree();
+		
+		this.eastPanel = new Ext.TabPanel({
+			region: 'east',
+			activeTab: 0,      
+      deferredRender: false,
+    	border: false,
+      items: [
+				this.eastFormPanel,
+				this.fileCategoriesTree
+			],
+      width:320
+		})
+		
+		this.eastPanel.on('afterrender',function(eastPanel){
+			this.eastPanel.hideTabStripItem(1);
+		},this);
 		
 		var config = {
 			disabled:true,
@@ -15448,79 +15539,15 @@ GO.cms.EditorPanel = Ext.extend(
 				anchor:'100% 100%',
 				layout:'border',
 				border:false,
-				items:[{
-					region:'center',
-					layout:'fit',
-					border:false,
-					items:this.editor
-				},{
-					region:'east',
-					split:true,
-					width:300,
-					cls:'go-form-panel',
-					waitMsgTarget:true,
-					layout:'form',
-					autoScroll:true,
-					defaults: {
-						anchor: '-20',
-						listeners:{
-							change: function(){
-								this.dirty=true;
-							},
-							scope: this
-						}
+				items:[
+					{
+						region:'center',
+						layout:'fit',
+						border:false,
+						items:this.editor
 					},
-					defaultType: 'textfield',
-					items:[{
-						fieldLabel:GO.lang.strName,
-						name:'name',
-						allowBlank:false
-										
-					},{
-						xtype:'datefield',
-						format:GO.settings.date_format,
-						fieldLabel:GO.cms.lang.showUntil,
-						name:'show_until',
-						allowBlank:true,
-						emptyText:GO.cms.lang.alwaysShow
-					},{
-						hideLabel:true,
-						xtype:'checkbox',
-						checked: true,
-						name:'auto_meta',
-						boxLabel:GO.cms.lang.autoMeta,
-						listeners:{
-							check:function(cb, checked){
-									
-								this.setAutoMeta(checked);
-							},
-							scope:this
-						}
-					},{
-						xtype:'datefield',
-						format:GO.settings.date_format,
-						fieldLabel:GO.cms.lang.sortDate,
-						name:'sort_date',
-						allowBlank:true,
-						emptyText:GO.cms.lang.unused
-					},{
-						fieldLabel:GO.cms.lang.title,
-						xtype:'textarea',
-						name:'title',
-						height:60
-					},{
-						fieldLabel:GO.lang.strDescription,
-						xtype:'textarea',
-						name:'description',
-						height:80
-					},{
-						fieldLabel:GO.cms.lang.keywords,
-						xtype:'textarea',
-						name:'keywords',
-						height:80
-					},
-					this.optionsPanel = new GO.cms.TemplateOptionsPanel()]
-				}]
+					this.eastPanel
+				]
 			}
 		};
 			
@@ -15552,7 +15579,17 @@ GO.cms.EditorPanel = Ext.extend(
 		dirty : false,
 			
 		file_id : 0,
-			
+				
+		setEastPanel : function(enable_categories,file_id) {
+			if (enable_categories!=1) {
+				this.eastPanel.hideTabStripItem(1);
+				this.eastPanel.setActiveTab(0);
+			} else {
+				this.eastPanel.unhideTabStripItem(1);
+				this.fileCategoriesTree.load(file_id);
+			}
+		},
+		
 		loadFile : function(file_id, template)
 		{
 			this.setDisabled(false);
@@ -15607,6 +15644,8 @@ GO.cms.EditorPanel = Ext.extend(
 						action.result.data.config,
 						action.result.data.option_values,
 						action.result.data.type);
+
+					this.setEastPanel(action.result.data.enable_categories,action.result.data.id);
 
 					this.fireEvent('load', this);
 				},
@@ -15947,7 +15986,7 @@ GO.cms.TemplateOptionsPanel = Ext.extend(function(cfg) {
 
 					this.options.push(new GO.files.SelectFile({
 						fieldLabel : o.fieldLabel,
-						root_folder_id : this.ownerCt.ownerCt.ownerCt.root_folder_id,
+						root_folder_id : this.ownerCt.ownerCt.ownerCt.ownerCt.root_folder_id,
 						name : o.name,
 						value : value,
 						anchor : '-20',
@@ -16902,4 +16941,236 @@ Ext.extend(GO.cms.FoldersDialog, Ext.Window, {
 		GO.cms.FoldersDialog.superclass.show.call(this);
 
 	}
+});;
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @copyright Copyright Intermesh
+ * @version $Id: 
+ * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ */
+
+GO.cms.FileCategoriesTree = function(config){
+	
+	config = config || {};
+
+	config.title = GO.cms.lang.categories;
+	
+	config.animate = true;
+	config.layout = 'fit';
+	config.border = false;
+	config.autoScroll = true;
+	config.rootVisible = false;
+	config.height = '100%';
+	config.split=true;
+	config.enableDD = true;
+	
+	config.loader = new Ext.tree.TreeLoader({
+		dataUrl : GO.settings.modules.cms.url
+		+ 'json.php',
+		baseParams : {
+			task : 'categories_tree',
+			file_id : 0
+		},
+		preloadChildren : true,
+		listeners : {
+			beforeload : function() {
+				this.body.mask(GO.lang.waitMsgLoad);
+			},
+			load : function() {
+				this.body.unmask();
+			},
+			scope : this
+		}
+	});
+	config.rootNode = new Ext.tree.AsyncTreeNode({
+			text : GO.cms.lang.root,
+			draggable : false,
+			id : 'category_root',
+			category_id : 0,
+			expanded : false,
+			editable : false,
+			iconCls : 'folder-default'
+		});
+
+	config.tbar=[{
+		iconCls: 'btn-add',
+		text: GO.lang['cmdAdd'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.addCategory();
+		},
+		scope: this
+	},{
+		iconCls: 'btn-delete',
+		text: GO.lang['cmdDelete'],
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			this.deleteSelected();
+		},
+		scope: this
+	}];
+
+	GO.cms.FileCategoriesTree.superclass.constructor.call(this, config);
+
+	this.setRootNode(this.rootNode);
+	
+	this.on('checkchange', function(node, checked) {
+
+		if (node.attributes.id>0) {
+			this.body.mask(GO.lang.waitMsgSave, 'x-mask-loading');
+
+			var task = checked ? 'assign_category' : 'unassign_category';
+
+			Ext.Ajax.request({
+				url : GO.settings.modules.cms.url + 'action.php',
+				params : {
+					task : task,
+					file_id : this.file_id,
+					category_id : node.attributes.id
+				},
+				callback : function(options, success, response) {
+					if (!success) {
+						Ext.MessageBox.alert(GO.lang.strError,
+							response.result.feedback);
+					}
+					this.body.unmask();
+				},
+				scope : this
+			});
+		} else {
+			this.load(this.file_id);
+		}
+
+	}, this);
+	
+	this.on('dragdrop', function(treepanel,node,dd,e){
+		Ext.Ajax.request({
+				url : GO.settings.modules.cms.url + 'action.php',
+				params : {
+					task : 'update_category',
+					file_id : this.file_id,
+					id : node.attributes.id,
+					name : node.attributes.text,
+					parent_id : node.parentNode.attributes.id
+				},
+				callback : function(options, success, response) {
+					if (!success) {
+						Ext.MessageBox.alert(GO.lang.strError,
+							response.result.feedback);
+					} else {
+						this.load(this.file_id);
+					}
+					this.body.unmask();
+				},
+				scope : this
+			});
+	},this);
+	
+	this.on('contextmenu',function(node,e){
+		if (node.attributes.id>0)
+			this.showCategoryDialog(node);
+	}, this);
+	
+};
+
+Ext.extend(GO.cms.FileCategoriesTree, Ext.tree.TreePanel,{
+
+	load : function(file_id){	
+		this.loader.baseParams.file_id=this.file_id=file_id;
+		
+		if(!this.rendered)
+		{
+			//render will automatically expand hidden root folder because rootVisible=false
+			this.render(Ext.getBody());
+		}else
+		{
+			this.rootNode.reload();
+		}
+//			
+//		GO.cms.FileCategoriesTree.superclass.show.call(this);
+	},
+	
+	showCategoryDialog : function(node) {
+		if (!this.categoryDialog) {
+			this.categoryDialog = new GO.cms.CategoryDialog();
+			this.categoryDialog.on('save',function(){
+				this.load(this.file_id);
+			},this);
+		}
+		
+		var attributes = node.attributes;
+		attributes.parentName = node.parentNode.attributes.text;
+		
+		this.categoryDialog.show(attributes);
+	},
+	
+	deleteSelected : function() {
+		Ext.MessageBox.confirm(GO.lang.strWarning,GO.cms.lang.sure2remove,function(){
+			this.loader.baseParams.delete_key = this.getSelectionModel().selNode.attributes.id;
+			this.load(this.file_id);
+			this.loader.baseParams.delete_key = undefined;
+		},this);
+	},
+	
+	addCategory : function() {
+		this.body.mask(GO.lang.waitMsgSave);
+		
+		if (this.getSelectionModel().selNode)
+			var parent_id = this.getSelectionModel().selNode.attributes.id;
+		else
+			var parent_id = 0;
+		
+		Ext.Ajax.request({
+			url : GO.settings.modules.cms.url + 'action.php',
+			params : {
+				task : 'add_category',
+				parent_id : parent_id,
+				file_id : this.file_id
+			},
+			scope : this,
+			callback : function (options, success,response) {
+				var responseParams = Ext.decode(response.responseText);
+				if (!success) {
+					Ext.Msg.alert(GO.lang['strError'], responseParams.feedback)
+				}
+				else
+				{
+					this.load(this.file_id);
+					this.body.unmask();
+				}
+			}
+		})
+	},
+	
+	save_category : function (data) {
+		this.body.mask(GO.lang.waitMsgSave);
+		Ext.Ajax.request({
+			url : GO.settings.modules.cms.url + 'action.php',
+			params : {
+				task : 'save_category',
+				id : data.id,
+				file_id : this.file_id,
+				used : data.used,
+				name : data.name
+			},
+			scope : this,
+			callback : function (options, success,response) {
+				var responseParams = Ext.decode(response.responseText);
+				if (!success) {
+					Ext.Msg.alert(GO.lang['strError'], responseParams.feedback)
+				}
+				else
+				{
+					this.body.unmask();
+				}
+			}
+		})
+	}
+	
 });;
