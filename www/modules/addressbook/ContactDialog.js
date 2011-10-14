@@ -107,17 +107,16 @@ GO.addressbook.ContactDialog = function(config)
 	}
 	
   
-	if(GO.customfields && GO.customfields.types["2"])
+	if(GO.customfields && GO.customfields.types["GO_Addressbook_Model_Contact"])
 	{
-		for(var i=0;i<GO.customfields.types["2"].panels.length;i++)
+		for(var i=0;i<GO.customfields.types["GO_Addressbook_Model_Contact"].panels.length;i++)
 		{
-			items.push(GO.customfields.types["2"].panels[i]);
+			items.push(GO.customfields.types["GO_Addressbook_Model_Contact"].panels[i]);
 		}
 	}
 
 	this.formPanel = new Ext.FormPanel({
 		waitMsgTarget:true,
-		url: GO.settings.modules.addressbook.url+ 'json.php',
 		baseParams: {},
 		border: false,
 		fileUpload : true,

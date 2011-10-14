@@ -233,6 +233,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	protected function getStoreExcludeColumns(){
 		return array();
 	}
+	
+	public function formatStoreRecord($record, $model, $store){
+		return $record;
+	}
 
 	/**
 	 * Override this function to format the grid record data.
@@ -276,7 +280,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
   public function actionStore($params){	
     $modelName = $this->model;  
 
-    $store = new GO_Base_Data_Store($this->getStoreColumnModel());		    
+    $store = new GO_Base_Data_Store($this->getStoreColumnModel());	
+		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
 		$store->processDeleteActions($params, $modelName);
 		
 		$response=array();

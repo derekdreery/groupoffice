@@ -32,7 +32,6 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		}
 	}
 	
-	
 	protected function remoteComboFields() {
 		return array(
 				'user_id'=>'$model->user->name',
@@ -40,7 +39,36 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		);
 	}
 	
+	public function actionWritableCalendarsWithGroup($params){
+		
+		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Calendar::model());
+		
+		$findParams = $store->getDefaultParams()
+						->join(GO_Calendar_Model_Group::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('group_id', 'g.id', '=', 't', true, true),'g')
+						->order(array('g.name','t.name'))
+						->select('t.*,g.name AS group_name')
+						->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION);
+		
+		$stmt = GO_Calendar_Model_Calendar::model()->find($findParams);
+		
+		
+		$store->setStatement($stmt);
+		
+		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatCalendarWithGroup'));
+		
+		return $store->getData();
+		
+	}
 	
-	
+	public function formatCalendarWithGroup($record, $model, $store){
+		
+		$record['user_name']=$model->user->name;
+		$record['group_name']=$model->group_name;
+		if(GO::modules()->customfields)
+			$record['customfields']=GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Calendar_Model_Event", $model->group_id);
+		
+		
+		return $record;
+	}	
 	
 }

@@ -27,15 +27,8 @@ GO.calendar.SelectCalendar = function(config){
 
 
 	this.store = new GO.data.JsonStore({
-		url: GO.settings.modules.calendar.url+'json.php',
-		baseParams: {
-            'task': 'writable_calendars',
-            'show_all': true
-        },
-		root: 'results',
-		totalProperty: 'total',
-		id: 'id',        
-		fields:['id','name', 'group_name', 'user_name', 'group_id', 'fields'],
+		url: GO.url("calendar/calendar/writableCalendarsWithGroup"),
+		fields:['id','name', 'group_name', 'user_name', 'group_id', 'customfields'],
 		remoteSort:true
 	});
 

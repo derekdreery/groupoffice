@@ -24,15 +24,13 @@ GO.addressbook.SelectContact = function(config){
 	var fields = {fields: ['id', 'cf', 'name', 'salutation', 'email', 'first_name', 'middle_name','last_name', 'home_phone', 'work_phone', 'cellular', 'company_id','company_name','address','address_no','zip','city','state','country'], columns:[]};
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns(2, fields);
+		GO.customfields.addColumns("GO_Addressbook_Model_Contact", fields);
 	}
 	
 	config.store = new GO.data.JsonStore({
-	    url: GO.settings.modules.addressbook.url+ 'json.php',
-	    baseParams: {
-	    	task: 'contacts',
-				'addressbook_id' : config.addressbook_id,
-				'no_addressbooks_filter' : 1
+	    url: GO.url("addressbook/contact/store"),
+	    baseParams: {	    	
+				'addressbook_id' : config.addressbook_id
 				},
 	    root: 'results',
 	    id: 'id',
