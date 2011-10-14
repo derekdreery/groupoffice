@@ -215,12 +215,12 @@ GO.addressbook.ContactDialog = function(config)
 		'save':true
 	});
 
-	if (GO.customfields) {
-		this.personalPanel.formAddressBooks.on('select',function(combo,record,index){
-			var allowed_cf_categories = record.data.allowed_cf_categories.split(',');
-			this.updateCfTabs(allowed_cf_categories);
-		},this);
-	}
+//	if (GO.customfields) {
+//		this.personalPanel.formAddressBooks.on('select',function(combo,record,index){
+//			var allowed_cf_categories = record.data.allowed_cf_categories.split(',');
+//			this.updateCfTabs(allowed_cf_categories);
+//		},this);
+//	}
 }
 
 Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
@@ -307,15 +307,15 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 	},
 
 	updateCfTabs : function(allowed_cf_categories) {
-		for (var i=0; i<this.tabPanel.items.items.length; i++) {
-			if (typeof(this.tabPanel.items.items[i].category_id)!='undefined') {
-				this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
-				if(allowed_cf_categories.indexOf(this.tabPanel.items.items[i].category_id.toString())>=0)
-					this.tabPanel.unhideTabStripItem(this.tabPanel.items.items[i]);
-				else
-					this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
-			}
-		}
+//		for (var i=0; i<this.tabPanel.items.items.length; i++) {
+//			if (typeof(this.tabPanel.items.items[i].category_id)!='undefined') {
+//				this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
+//				if(allowed_cf_categories.indexOf(this.tabPanel.items.items[i].category_id.toString())>=0)
+//					this.tabPanel.unhideTabStripItem(this.tabPanel.items.items[i]);
+//				else
+//					this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
+//			}
+//		}
 	},
 
 	/*setAddressbookId : function(addressbook_id)
