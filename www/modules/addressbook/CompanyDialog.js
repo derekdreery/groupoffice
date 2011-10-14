@@ -50,11 +50,11 @@ GO.addressbook.CompanyDialog = function(config)
 	}
 	items.push(this.employeePanel);
   
-	if(GO.customfields && GO.customfields.types["3"])
+	if(GO.customfields && GO.customfields.types["GO_Addressbook_Model_Company"])
 	{
-		for(var i=0;i<GO.customfields.types["3"].panels.length;i++)
+		for(var i=0;i<GO.customfields.types["GO_Addressbook_Model_Company"].panels.length;i++)
 		{
-			items.push(GO.customfields.types["3"].panels[i]);
+			items.push(GO.customfields.types["GO_Addressbook_Model_Company"].panels[i]);
 		}
 	}	
 	
@@ -184,17 +184,17 @@ GO.addressbook.CompanyDialog = function(config)
 		'save':true
 	});
 	
-	if (GO.customfields) {
-		this.personalPanel.formAddressBooks.on('select',function(combo,record,index){
-			var allowed_cf_categories = record.data.allowed_cf_categories.split(',');
-			this.updateCfTabs(allowed_cf_categories);
-		},this);
-		this.companyForm.form.on('actioncomplete',function(form, action){
-			if(action.type=='load'){
-				
-			}
-		},this);
-	}
+//	if (GO.customfields) {
+//		this.personalPanel.formAddressBooks.on('select',function(combo,record,index){
+//			var allowed_cf_categories = record.data.allowed_cf_categories.split(',');
+//			this.updateCfTabs(allowed_cf_categories);
+//		},this);
+//		this.companyForm.form.on('actioncomplete',function(form, action){
+//			if(action.type=='load'){
+//				
+//			}
+//		},this);
+//	}
 }
 	
 Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
@@ -277,15 +277,15 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 	},	
 
 	updateCfTabs : function(allowed_cf_categories) {
-		for (var i=0; i<this.tabPanel.items.items.length; i++) {
-			if (typeof(this.tabPanel.items.items[i].category_id)!='undefined') {
-				this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
-				if(allowed_cf_categories.indexOf(this.tabPanel.items.items[i].category_id.toString())>=0)
-					this.tabPanel.unhideTabStripItem(this.tabPanel.items.items[i]);
-				else
-					this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
-			}
-		}
+//		for (var i=0; i<this.tabPanel.items.items.length; i++) {
+//			if (typeof(this.tabPanel.items.items[i].category_id)!='undefined') {
+//				this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
+//				if(allowed_cf_categories.indexOf(this.tabPanel.items.items[i].category_id.toString())>=0)
+//					this.tabPanel.unhideTabStripItem(this.tabPanel.items.items[i]);
+//				else
+//					this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
+//			}
+//		}
 	},
 
 	loadCompany : function(id)
