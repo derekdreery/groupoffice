@@ -1,14 +1,15 @@
 <?php
-$updates[201108120000][]="UPDATE go_modules SET version=0";
+$updates[201108010000][]="UPDATE go_modules SET version=0";
 
 $updates[201108120000][]="ALTER TABLE `go_users` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
 
 $updates[201108120000][]="ALTER TABLE `go_acl_items` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
 
-$updates[201108120000][]="ALTER TABLE `go_search_cache` DROP `table` ,
-DROP `url` ,
-DROP `link_count` ,
-DROP `acl_read` ;";
+$updates[201108120000][]="ALTER TABLE `go_search_cache` DROP `table`";
+$updates[201108120000][]="ALTER TABLE `go_search_cache` DROP `url`";
+$updates[201108120000][]="ALTER TABLE `go_search_cache` DROP `link_count`";
+$updates[201108120000][]="ALTER TABLE `go_search_cache` DROP `acl_read`";
+	
 
 $updates[201108120000][]="ALTER TABLE `go_users` CHANGE `max_rows_list` `max_rows_list` TINYINT( 4 ) NOT NULL DEFAULT '20'";
 $updates[201108120000][]="ALTER TABLE `go_users` CHANGE `registration_time` `ctime` INT( 11 ) NOT NULL DEFAULT '0'";
@@ -98,3 +99,21 @@ $updates[201110050822][]="ALTER TABLE `go_reminders_users` CHANGE `mail_sent` `m
 $updates[201110070822][]="ALTER TABLE `go_users` CHANGE `mail_reminders` `mail_reminders` TINYINT( 1 ) NOT NULL DEFAULT '0'";
 $updates[201110070822][]="ALTER TABLE `go_users` CHANGE `popup_reminders` `popup_reminders` TINYINT( 1 ) NOT NULL DEFAULT '0'";
 $updates[201110070822][]="ALTER TABLE `go_users` CHANGE `cache` `cache` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates[201110140822][]="ALTER TABLE `go_users` DROP `cache`";
+
+$updates[201110140822][]="ALTER TABLE `go_users` CHANGE `mute_sound` `mute_sound` BOOLEAN NOT NULL DEFAULT '0'";
+$updates[201110140822][]="ALTER TABLE `go_users` CHANGE `enabled` `enabled` BOOLEAN NOT NULL DEFAULT '1'";
+$updates[201110140822][]="ALTER TABLE `go_users` CHANGE `mute_reminder_sound` `mute_reminder_sound` BOOLEAN NOT NULL DEFAULT '0'";
+$updates[201110140822][]="ALTER TABLE `go_users` CHANGE `mute_new_mail_sound` `mute_new_mail_sound` BOOLEAN NOT NULL DEFAULT '0'";
+
+$updates[201110141221][]="UPDATE go_users SET mute_sound=0 where mute_sound=1";
+$updates[201110141221][]="UPDATE go_users SET mute_sound=1 where mute_sound=2";
+
+$updates[201110141221][]="UPDATE go_users SET enabled=0 where enabled=1";
+$updates[201110141221][]="UPDATE go_users SET enabled=1 where enabled=2";
+
+$updates[201110141221][]="UPDATE go_users SET mute_reminder_sound=0 where mute_reminder_sound=1";
+$updates[201110141221][]="UPDATE go_users SET mute_reminder_sound=1 where mute_reminder_sound=2";
+
+$updates[201110141221][]="UPDATE go_users SET mute_new_mail_sound=0 where mute_new_mail_sound=1";
+$updates[201110141221][]="UPDATE go_users SET mute_new_mail_sound=1 where mute_new_mail_sound=2";

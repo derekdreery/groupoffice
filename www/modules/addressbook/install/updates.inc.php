@@ -62,3 +62,7 @@ $updates[201110031344][]="ALTER TABLE `ab_contacts` CHANGE `email_allowed` `emai
 $updates[201110031344][]="ALTER TABLE `ab_contacts` DROP `sid` ";
 $updates[201110031344][]="ALTER TABLE `ab_contacts` DROP `color` ";
 $updates[201110031344][]="ALTER TABLE `ab_contacts` DROP `source_id`";
+
+
+$updates[201110141221][]="UPDATE ab_contacts SET email_allowed=0 where email_allowed=1";
+$updates[201110141221][]="UPDATE ab_contacts SET email_allowed=1 where email_allowed=2";
