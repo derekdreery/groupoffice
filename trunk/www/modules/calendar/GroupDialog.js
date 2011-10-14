@@ -102,7 +102,9 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 	},
 	setGroupId : function(group_id)
 	{
-		this.disableCategoriesPanel.setModel(group_id,"GO_Calendar_Model_Event");
+		if(GO.customfields)
+			this.disableCategoriesPanel.setModel(group_id,"GO_Calendar_Model_Event");
+		
 		this.formPanel.form.baseParams['group_id'] = group_id;
 		this.group_id = group_id;
 	},
@@ -164,11 +166,11 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 				anchor : '100%',
 				fieldLabel : GO.lang.strName
 			},{
-                                xtype:'checkbox',
-                                name:'show_not_as_busy',
-                                hideLabel: true,
-                                boxLabel:GO.calendar.lang.showNotBusy
-                        }]
+				xtype:'checkbox',
+				name:'show_not_as_busy',
+				hideLabel: true,
+				boxLabel:GO.calendar.lang.showNotBusy
+			}]
 		});
 
 //		if(GO.customfields && GO.customfields.types["1"])
@@ -200,9 +202,10 @@ Ext.extend(GO.calendar.GroupDialog, GO.Window, {
 
 		items.push(this.groupAdminsPanel);
 		
-		
-		this.disableCategoriesPanel = new GO.customfields.DisableCategoriesPanel();
-		items.push(this.disableCategoriesPanel);
+		if(GO.customfields){
+			this.disableCategoriesPanel = new GO.customfields.DisableCategoriesPanel();
+			items.push(this.disableCategoriesPanel);
+		}
         
 		this.tabPanel = new Ext.TabPanel({
 			activeTab : 0,

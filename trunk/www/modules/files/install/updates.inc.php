@@ -1,4 +1,7 @@
 <?php
+$updates[201108020000][]="ALTER TABLE `fs_folders` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+$updates[201108020000][]="ALTER TABLE `fs_files` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+
 
 $updates[201108190000][]="RENAME TABLE `go_links_6` TO `go_links_fs_files`;";
 $updates[201108190000][]="ALTER TABLE `go_links_fs_files` CHANGE `link_id` `model_id` INT( 11 ) NOT NULL";

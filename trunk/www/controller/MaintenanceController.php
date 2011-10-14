@@ -114,6 +114,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 		//sort the array by timestamp
 		ksort($u);
+//		
+//		var_dump($u);
+//		exit();
 
 		$currentCoreVersion = GO::config()->get_setting('version');
 		if (!$currentCoreVersion)
@@ -124,6 +127,10 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		foreach ($u as $timestamp => $updateQuerySet) {
 			
 			foreach ($updateQuerySet as $module => $queries) {
+				
+				if(!is_array($queries)){
+					exit("Invalid queries in module: ".$module);
+				}
 				
 				if($module=='core')
 					$currentVersion=$currentCoreVersion;

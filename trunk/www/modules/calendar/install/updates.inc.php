@@ -48,3 +48,24 @@ $updates[201110071512][]="ALTER TABLE `cal_calendars` CHANGE `tasklist_id` `task
 $updates[201110131221][]="ALTER TABLE `cal_events` CHANGE `status` `status` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'NEEDS-ACTION'";
 
 $updates[201110131221][]="ALTER TABLE `cal_events` CHANGE `category_id` `category_id` INT( 11 ) NOT NULL DEFAULT '0'";
+
+$updates[201110141221][]="CREATE TABLE IF NOT EXISTS `cf_cal_calendars` (
+  `model_id` int(11) NOT NULL,
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+
+$updates[201110141221][]="UPDATE cal_events SET private=0 where private=1";
+$updates[201110141221][]="UPDATE cal_events SET private=1 where private=2";
+
+$updates[201110141221][]="UPDATE cal_events SET all_day_event=0 where all_day_event=1";
+$updates[201110141221][]="UPDATE cal_events SET all_day_event=1 where all_day_event=2";
+
+$updates[201110141221][]="UPDATE cal_events SET busy=0 where busy=1";
+$updates[201110141221][]="UPDATE cal_events SET busy=1 where busy=2";
+
+$updates[201110141221][]="UPDATE cal_events SET read_only=0 where read_only=1";
+$updates[201110141221][]="UPDATE cal_events SET read_only=1 where read_only=2";
+
+$updates[201110141221][]="UPDATE cal_calendars SET public=0 where public=1";
+$updates[201110141221][]="UPDATE cal_calendars SET public=1 where public=2";

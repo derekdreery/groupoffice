@@ -139,8 +139,8 @@ class GO_AUTH extends db
 		
 		//count_login is false when sync or dav logs in. We want to use the 
 		//cache in that case because webdav makes lots of logins.
-		if($count_login)
-			$user['cache']='';
+//		if($count_login)
+//			$user['cache']='';
 
 		//reinitialise available modules
 		$GLOBALS['GO_MODULES']->load_modules($user);

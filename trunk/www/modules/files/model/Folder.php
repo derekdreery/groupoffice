@@ -193,7 +193,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		if(!$this->readonly){
 			//normally this is done automatically. But we overide $this->joinAclfield to prevent acl management.
 			$acl = GO_Base_Model_Acl::model()->findByPk($this->{$this->aclField()});			
-			$acl->delete();
+			if($acl)
+				$acl->delete();
 		}
 		
 		return parent::afterDelete();
