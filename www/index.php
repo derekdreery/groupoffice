@@ -33,6 +33,7 @@ $mtime = $GO_CONFIG->get_setting('upgrade_mtime');
 
 if($mtime!=$GO_CONFIG->mtime)
 {
+	go_infolog("Running system update");
 	if($GO_SECURITY->logged_in())
 		$GO_SECURITY->logout();
 	
