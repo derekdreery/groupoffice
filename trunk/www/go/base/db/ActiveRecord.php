@@ -1300,7 +1300,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 			return $this->_relatedCache[$cacheKey];
 		}elseif($r[$name]['type']==self::HAS_MANY)
-		{							
+		{									
 			$remoteFieldThatHoldsMyPk = $r[$name]['field'];
 			
 			$findParams = GO_Base_Db_FindParams::newInstance()
