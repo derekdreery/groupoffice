@@ -308,7 +308,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		$response['group_id'] = $model->calendar->group_id;
 		
-		if(!$model->isResource())
+		if(!$model->isResource() && $model->id>0)
 			$this->_loadResourceEvents($model, $response);
 
 		return parent::afterLoad($response, $model, $params);
