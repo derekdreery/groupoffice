@@ -88,6 +88,10 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 		var url = '';
 		switch(config.action){
 			
+			case 'path':
+				url=GO.url("savemailas/linkedEmail/loadPath");
+			break;
+			
 			case 'attachment':
 				this.remoteMessage.task='message_attachment';
 				url = GO.settings.modules.email.url+'json.php';
