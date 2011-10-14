@@ -711,13 +711,12 @@ class cms_output extends cms {
 	
 	function print_category_items($params, &$smarty) {
 		global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
-		//var_dump($this->site);
 		$category_path = !empty($params['category_path']) ? $params['category_path'] : '';
 //		$category_names = !empty($params['category_names']) ? explode(',',$params['category_names']) : array();
 		$category_ids = !empty($params['category_ids']) ? explode(',',$params['category_ids']) : array();
 		$random = !empty($params['random']);
 		
-		if ($cat_id = $this->get_category_id($category_path)) {
+		if ($cat_id = $this->get_category_id_by_path($category_path)) {
 			$params['items'] = $this->get_authorized_files(0, $GO_SECURITY->user_id, true, array($cat_id),$this->site['id']);
 		}
 //		else if (is_array($category_names)) {

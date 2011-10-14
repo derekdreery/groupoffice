@@ -1209,7 +1209,7 @@ class cms extends db {
 			$where = true;
 		} else if ($site_id>0) {
 			//join cms_folders 
-			$sql .= "INNER JOIN cms_folders fo ON f.folder_id=fo.id WHERE site_id=".intval($site_id);
+			$sql .= "INNER JOIN cms_folders fo ON f.folder_id=fo.id WHERE fo.site_id=".intval($site_id);
 			$where = true;
 		}
 
@@ -1507,7 +1507,7 @@ class cms extends db {
 //		
 		$sql .= "AND c.site_id='".intval($site_id)."' ";
 
-		$cms2= new cms();
+		$cms2= new cms_output();
 		
 		$this->query($sql);
 		$categories = array();
@@ -1519,6 +1519,7 @@ class cms extends db {
 				$sql = "SELECT * FROM cms_files f INNER JOIN cms_files_categories c ON c.file_id=f.id WHERE c.category_id=".intval($record['id'])." ORDER BY f.sort_time ASC LIMIT 0,1";
 				$cms2->query($sql);
 				$record['first_item']=$cms2->next_record();
+				$record['first_item']['href']=$cms2->create_href_by_file($record['first_item']);
 			}
 			
 			$categories[] = $record;
@@ -1531,6 +1532,16 @@ class cms extends db {
 		$this->query($sql);
 		if ($record = $this->next_record()) {
 			return $record['id'];
+		} else {
+			return false;
+		}
+	}
+	
+	public function get_category_name($category_id) {
+		$sql = "SELECT name FROM cms_categories WHERE id='".intval($category_id)."'";
+		$this->query($sql);
+		if ($record = $this->next_record()) {
+			return $record['name'];
 		} else {
 			return false;
 		}
