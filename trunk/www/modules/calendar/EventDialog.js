@@ -958,7 +958,14 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				editable : false,
 				selectOnFocus : true,
 				forceSelection : true,
-				allowBlank : false
+				allowBlank : false,
+				listeners:{
+					scope:this,
+					change:function(sc, newValue, oldValue){
+						var record = sc.store.getById(newValue);
+						GO.customfields.disableTabs(this.tabPanel, record.data);	
+					}
+				}
 			}),this.selectCategory,new GO.form.PlainField({
 				fieldLabel: GO.lang.strOwner,
 				value: GO.settings.name,

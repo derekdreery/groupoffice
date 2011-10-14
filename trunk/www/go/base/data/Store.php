@@ -207,7 +207,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
    * Returns a set of default parameters for use with a grid.
    * 
    * @var GO_Base_Db_FindParams $params Supply parameters to add to or override the default ones
-   * @return array defaultParams 
+   * @return GO_Base_Db_FindParams defaultParams 
    */
   public function getDefaultParams($params=false) {
 		

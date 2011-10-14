@@ -1434,6 +1434,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$decimals = isset($this->columns[$attributeName]['decimals']) ? $this->columns[$attributeName]['decimals'] : 2;
 				return GO_Base_Util_Number::localize($value, $decimals);
 				break;
+			
+			case 'html':
 			default:
 				return $value;
 				break;

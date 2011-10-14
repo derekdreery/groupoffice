@@ -36,11 +36,9 @@ GO.addressbook.SelectCompany = function(config){
 
 	if (typeof(config.store)=='undefined') {
 		this.store = new GO.data.JsonStore({
-			url: GO.settings.modules.addressbook.url+ 'json.php',
-			baseParams: {
-				task: 'companies',
-				'addressbook_id' : this.addressbook_id,
-				no_addressbooks_filter:'1'
+			url: GO.url("addressbook/company/store"),
+			baseParams: {				
+				'addressbook_id' : this.addressbook_id				
 			},
 			root: 'results',
 			id: 'id',
