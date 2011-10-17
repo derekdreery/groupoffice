@@ -8,9 +8,11 @@
  *
  * If you have questions write an e-mail to info@intermesh.nl
  *
+ * 
+ * @property int $reminder The number of seconds prior to the start of the event.
+ * 
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
- * @author Wilmar van Beusekom <wilmar@intermesh.nl>
  * @author Wesley Smits <wsmits@intermesh.nl>
  */
 class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
@@ -154,6 +156,42 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
 		return true;
 	}
+	
+	protected function afterDelete() {
+		
+		$this->deleteReminders();
+		
+		return parent::afterDelete();
+	}
+	
+	public static function reminderDismissed($reminder, $userId){		
+		
+		//this listener function is added in GO_Calendar_CalendarModule
+		
+		if($reminder->model_type_id==GO_Calendar_Model_Event::model()->modelTypeId()){			
+			$event = GO_Calendar_Model_Event::model()->findByPk($reminder->model_id);
+			if($event->isRecurring() && $event->reminder>0){
+				$rRule = new GO_Base_Util_Icalendar_Rrule();
+				$rRule->readIcalendarRruleString($event->start_time, $event->rrule);				
+				$rRule->setRecurpositionStartTime(time());
+				$nextTime = $rRule->getNextRecurrence();
+				
+				if($nextTime){
+					$event->addReminder($event->name, $nextTime-$event->reminder, $user_id);
+				}				
+			}			
+		}
+	}
+	
+	/**
+	 * Check if this event is recurring
+	 * 
+	 * @return boolean 
+	 */
+	public function isRecurring(){
+		return $this->rrule!="";
+	}
+	
 
 	protected function afterSave($wasNew) {
 		
@@ -171,6 +209,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			if(!$wasNew)
 				$this->_updateResourceEvents();
 		}
+
+		if($this->reminder>0){
+			$remindTime = $this->start_time-$this->reminder;
+			
+			$this->deleteReminders();
+			$this->addReminder($this->name, $remindTime, $this->user_id);
+		}	
 
 		return parent::afterSave($wasNew);
 	}

@@ -69,3 +69,19 @@ $updates[201110141221][]="UPDATE cal_events SET read_only=1 where read_only=2";
 
 $updates[201110141221][]="UPDATE cal_calendars SET public=0 where public=1";
 $updates[201110141221][]="UPDATE cal_calendars SET public=1 where public=2";
+
+
+$updates[201110171221][]="ALTER TABLE `cal_events` DROP `mon` ,
+DROP `tue` ,
+DROP `wed` ,
+DROP `thu` ,
+DROP `fri` ,
+DROP `sat` ,
+DROP `sun` ,
+DROP `month_time` ;";
+
+
+$updates[201110171221][]="ALTER TABLE `cal_events` CHANGE `repeat_forever` `repeat_forever` BOOLEAN NOT NULL DEFAULT '0'";
+$updates[201110171221][]="UPDATE cal_events SET repeat_forever=0 where repeat_forever=1";
+$updates[201110171221][]="UPDATE cal_events SET repeat_forever=1 where repeat_forever=2";
+

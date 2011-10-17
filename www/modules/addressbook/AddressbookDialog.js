@@ -104,16 +104,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 				disabled : !GO.settings.has_admin_permission,
 				allowBlank: false,
 				anchor:'100%'
-			}),
-			this.formAddressFormat = new GO.form.SelectAddressFormat({
-				fieldLabel: GO.addressbook.lang['defaultAddressFormat'],
-				name: 'default_iso_address_format',
-				displayField: 'country_name',
-				hiddenName:'default_iso_address_format',
-				allowBlank:false,
-				anchor:'100%',
-				value:GO.settings.country
-			}), {
+			}),{
 				xtype:'panel',
 				border:false,
 				layout:'column',
