@@ -59,6 +59,9 @@ function create_tree($folder_id,$site,$path='',$filter_enabled) {
 	$items = $cms->get_items($folder_id);
 
 	while($item = array_shift($items)) {
+		
+		$path = empty($path) ? '' : $path.'/';
+		
 		if($item['fstype']=='file') {
 			if (!$filter_enabled || $cms->has_folder_access($GO_SECURITY->user_id, $item['folder_id'])) {
 				$response[] = array(
@@ -72,7 +75,7 @@ function create_tree($folder_id,$site,$path='',$filter_enabled) {
 								'template'=>$site['template'],
 								'root_folder_id'=>$item['files_folder_id'],
 								'leaf'=>true,
-								'path'=> $path.'/'.urlencode($item['name'])
+								'path'=> $path.urlencode($item['name'])
 				);
 			}
 		} else {
@@ -87,7 +90,7 @@ function create_tree($folder_id,$site,$path='',$filter_enabled) {
 								'template'=>$site['template'],
 								'root_folder_id'=>$site['files_folder_id'],
 								'default_template'=>$item['default_template'],
-								'path'=> $path.'/'.urlencode($item['name'])
+								'path'=> $path.urlencode($item['name'])
 				);
 
 				$subitems = $cms->get_items($item['id']);
