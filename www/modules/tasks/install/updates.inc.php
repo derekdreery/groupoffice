@@ -29,3 +29,15 @@ $updates[201110040002][]="ALTER TABLE `ta_tasks` CHANGE `repeat_end_time` `repea
 $updates[201110040002][]="ALTER TABLE `ta_tasks` CHANGE `reminder` `reminder` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates[201110040002][]="ALTER TABLE `ta_tasks` CHANGE `rrule` `rrule` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates[201110040002][]="ALTER TABLE `ta_tasks` CHANGE `project_name` `project_name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates[201110170002][]="ALTER TABLE `ta_tasks`
+  DROP `repeat_type`,
+  DROP `repeat_every`,
+  DROP `mon`,
+  DROP `tue`,
+  DROP `wed`,
+  DROP `thu`,
+  DROP `fri`,
+  DROP `sat`,
+  DROP `sun`,
+  DROP `month_time`;";

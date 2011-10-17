@@ -101,7 +101,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 			$this->_saveResources($params, $model, $isNewEvent, $modifiedAttributes);
 		}
-
+		
+		
+		 if(GO::modules()->files){
+			 $f = new GO_Files_Controller_Folder();
+			 $f->processAttachments($response, $model, $params);
+		 }
 
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}

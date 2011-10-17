@@ -668,6 +668,35 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 	}
 
+	
+	/**
+	 * The savemailas module can send attachments along to be stored as files with
+	 * a note, task, event etc.
+	 * 
+	 * @param type $response
+	 * @param type $model
+	 * @param type $params 
+	 */
+	public function processAttachments(&$response, &$model, &$params){
+		//Does this belong in the controller?
+		if (!empty($params['tmp_files'])) {
+			$tmp_files = json_decode($params['tmp_files'], true);
+			
+			$folder_id = $this->checkModelFolder($model, true, true);
+			
+			$folder = GO_Files_Model_Folder::model()->findByPk($folder_id);
+			
+			while ($tmp_file = array_shift($tmp_files)) {
+				if (!empty($tmp_file['tmp_file'])) {
+					
+					$file = new GO_Base_Fs_File($tmp_file['tmp_file']);
+					$file->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . $folder->path));
+					
+					$folder->addFile($file->name());					
+				}
+			}
+		}
+	}
 
 }
 

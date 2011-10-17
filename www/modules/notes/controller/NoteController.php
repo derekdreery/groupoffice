@@ -27,5 +27,17 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	protected function remoteComboFields(){
 		return array('category_id'=>'$model->category->name');
 	}
+	
+	
+	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
+		
+		
+		 if(GO::modules()->files){
+			 $f = new GO_Files_Controller_Folder();
+			 $f->processAttachments($response, $model, $params);
+		 }
+		
+		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
+	}
 }
 
