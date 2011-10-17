@@ -176,6 +176,27 @@ class GO_Base_Db_FindCriteria {
 	}
 	
 	/**
+	 * Add a fulltext search query
+	 * 
+	 * @param string $field
+	 * @param string $matchQuery
+	 * @param string $tableAlias
+	 * @param boolean $useAnd
+	 * @param string $mode
+	 * @return GO_Base_Db_FindCriteria 
+	 */
+	public function addMatchCondition($field, $matchQuery, $tableAlias='t', $useAnd=true, $mode='BOOLEAN'){
+		$this->_appendOperator($useAnd);
+		
+		$paramTag = $this->_getParamTag();
+		$this->_params[$paramTag]=array($matchQuery, PDO::PARAM_STR);
+		
+		$this->_condition .= ' MATCH(`'.$tableAlias.'`.`'.$field.'`) AGAINST ('.$paramTag.' IN '.$mode.' MODE)';
+		
+		return $this;
+	}
+	
+	/**
 	 * Add a search condition to this object and returns itself.
 	 * The $useExact parameter verifies the given value as an exact string or adds a '%' before and after the given value.
 	 * 

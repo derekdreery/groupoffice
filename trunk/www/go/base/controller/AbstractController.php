@@ -171,7 +171,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 				if(isset($response))
 					$this->render($action, $response);
 				
-				$this->fireEvent($methodName, array(&$this, &$params, &$response));
+				//$this->fireEvent($methodName, array(&$this, &$params, &$response));
 				
 				return $response;
 		} catch (Exception $e) {
