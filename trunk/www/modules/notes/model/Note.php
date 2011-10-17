@@ -68,32 +68,7 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 				'description'=>''
 		);
 	}
-
-	protected function afterSave($wasNew) {		
-
-		
-		
-		//Does this belong in the controller?
-		if (!empty($_POST['tmp_files']) && GO::modules()->has_module('files')) {
-			require_once(GO::modules()->modules['files']['class_path'] . 'files.class.inc.php');
-			$files = new files();
-			$fs = new filesystem();
-
-			$path = $files->build_path($this->files_folder_id);
-
-			$tmp_files = json_decode($_POST['tmp_files'], true);
-			while ($tmp_file = array_shift($tmp_files)) {
-				if (!empty($tmp_file['tmp_file'])) {
-					$new_path = GO::config()->file_storage_path . $path . '/' . $tmp_file['name'];
-					$fs->move($tmp_file['tmp_file'], $new_path);
-					$files->import_file($new_path, $this->files_folder_id);
-				}
-			}
-		}
-
-		return parent::afterSave($wasNew);
-	}
-
+	
 	/**
 	 * The files module will use this function.
 	 */
