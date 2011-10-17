@@ -130,10 +130,13 @@ class GO_Base_Model_Reminder extends GO_Base_Db_ActiveRecord {
 			if(!$model->delete())
 				return  false;
 		}
+				
+		$this->fireEvent('dismiss', array($this, $userId));
 		
 		//delete the reminder if it doesn't have users anymore.
 		if(!$this->hasUsers())
 			$this->delete();
+				
 			
 		return true;		
 	}

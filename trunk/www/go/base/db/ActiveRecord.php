@@ -2594,6 +2594,34 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function defaultAttributes() {
 		return array();
 	}
+	
+	
+	
+	/**
+	 * Delete all reminders linked to this midel.
+	 */
+	public function deleteReminders(){
+		
+		$stmt = GO_Base_Model_Reminder::model()->findByModel($this->className(), $this->pk);
+		$stmt->callOnEach("delete");
+	}
+	
+	/**
+	 * Add a reminder linked to this model
+	 * 
+	 * @param string $name
+	 * @param int $time
+	 * @param int $user_id
+	 * @return GO_Base_Model_Reminder 
+	 */
+	public function addReminder($name, $time, $user_id){	
+	
+		$reminder = GO_Base_Model_Reminder::newInstance($name, $time, $this->className(), $this->pk);
+		$reminder->setForUser($user_id);
+		
+		return $reminder;
+					
+	}
 
 }
 

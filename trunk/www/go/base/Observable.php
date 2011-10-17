@@ -51,6 +51,8 @@ class GO_Base_Observable{
 	 */
 	public function addListener($eventName,$listenerClass, $listenerFunction){
 		
+		GO::debug("addListener($eventName,$listenerClass, $listenerFunction)");
+		
 		$line = '$listeners["'.$eventName.'"][]=array("'.$listenerClass.'", "'.$listenerFunction.'");'."\n";
 		
 		$dir = GO::config()->file_storage_path.'cache/listeners/';
