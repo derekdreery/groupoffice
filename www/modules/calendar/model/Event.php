@@ -173,7 +173,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			if($event->isRecurring() && $event->reminder>0){
 				$rRule = new GO_Base_Util_Icalendar_Rrule();
 				$rRule->readIcalendarRruleString($event->start_time, $event->rrule);				
-				$rRule->setRecurpositionStartTime(time());
+				$rRule->setRecurpositionStartTime(time()+$event->reminder);
 				$nextTime = $rRule->getNextRecurrence();
 				
 				if($nextTime){

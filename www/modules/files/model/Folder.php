@@ -498,12 +498,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			//this is a special folder like addressbooks, projects etc.
 			//we must check acl's here
 
-			return GO_Files_Model_Folder::model()->find(array(
-							'limit'=>100,
-							'criteriaObject'=>  GO_Base_Db_FindCriteria::newInstance()
+			return GO_Files_Model_Folder::model()->find(
+							GO_Base_Db_FindParams::newInstance()
+							->limit(100)//not so nice hardcoded limit
+							->criteria(GO_Base_Db_FindCriteria::newInstance()
 									->addModel(GO_Files_Model_Folder::model())
-									->addCondition('parent_id', $this->id)
-					));
+									->addCondition('parent_id', $this->id))
+							
+					);
 		}else
 		{
 			//relational queries don't check acl's
@@ -511,10 +513,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		}
 	}
 
-	
+	/**
+	 * 
+	 * @param GO_Base_Db_FindParams $findParams
+	 * @return GO_Base_Db_ActiveStatement
+	 */
 	public function findShares($findParams){
 		
-		$findParams['criteriaObject']=GO_Base_Db_FindCriteria::newInstance()
+				
+		 $findParams->getCriteria()
 					->addModel(GO_Files_Model_Folder::model())
 					->addCondition('visible', 1)
 					->addCondition('user_id', GO::user()->id,'!=');

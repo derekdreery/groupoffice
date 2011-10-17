@@ -17,8 +17,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		switch ($params['node']) {
 			case 'shared':
-				//not so nice hardcoded limit on folder nodes.
-				$stmt = GO_Files_Model_Folder::model()->findShares(array('limit' => 100));
+				$stmt = GO_Files_Model_Folder::model()->findShares(GO_Base_Db_FindParams::newInstance()->limit(100));
 				while ($folder = $stmt->fetch()) {
 					$response[] = $this->_folderToNode($folder, false);
 				}
