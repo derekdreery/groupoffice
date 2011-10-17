@@ -103,8 +103,10 @@ try
 			
 			if($sieve->save())
 				$response['success'] = true;
-			else
+			else{
 				$response['success'] = false;
+				$response['feedback']=$sieve->error();
+			}
 			break;
 
 		case 'get_sieve_scripts':
