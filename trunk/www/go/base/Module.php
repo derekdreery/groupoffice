@@ -236,7 +236,7 @@ class GO_Base_Module extends GO_Base_Observable {
 			$stmt = $m->find(array(
 					'ignoreAcl'=>true
 			));
-			$stmt->callOnEach('save');
+			$stmt->callOnEach('checkDatabase');
 		}
 	}
 	
@@ -250,8 +250,6 @@ class GO_Base_Module extends GO_Base_Observable {
 		$models=array();
 		$classes=$this->findClasses('model');
 		foreach($classes as $class){
-//			$class = new ReflectionClass($className);
-//			$class->is
 				if(!$class->isAbstract()){					
 					$models[] = $class;
 				}

@@ -1644,7 +1644,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if($this->aclField() && !$this->joinAclField && empty($this->{$this->aclField()})){
 				//generate acl id				
 
-				$this->setNewAcl(!empty($this->user_id) ? $this->user_id : 0);
+				$this->setNewAcl(!empty($this->user_id) ? $this->user_id : 1);
 			}				
 
 			if(!$this->beforeSave()){
@@ -2431,6 +2431,29 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 //		}
 //	}
 	
+	/**
+	 * A function that checks the consistency with the database.
+	 * Generally this is called by r=maintenance/checkDabase
+	 */
+	public function checkDatabase(){
+		$this->save();
+		
+
+		if($this->aclField() && !$this->joinAclField){
+
+			$acl = $this->acl;
+			if(!$acl)
+				$this->setNewAcl();
+			else
+			{
+				$user_id = empty($this->user_id) ? 1 : $this->user_id;				
+				$acl->user_id=$user_id;
+				$acl->description=$this->tableName().'.'.$this->aclField();
+				$acl->save();
+			}
+		}
+		
+	}
 	
 	
 	public function rebuildSearchCache(){

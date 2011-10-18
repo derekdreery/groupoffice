@@ -112,6 +112,9 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 */
 	public function addUser($userId, $level=GO_Base_Model_Acl::READ_PERMISSION) {
 		
+		if($userId<1)
+			return false;
+		
 		$usersGroup = $this->hasUser($userId);
 		
 		if($usersGroup){
@@ -138,6 +141,8 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 	 */
 	public function addGroup($groupId, $level=GO_Base_Model_Acl::READ_PERMISSION) {
 		
+		if($groupId<1)
+			return false;
 		
 		if($groupId==GO::config()->group_root)
 			$level = GO_Base_Model_Acl::MANAGE_PERMISSION;
@@ -221,14 +226,11 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		if($wasNew){
 			$this->addGroup(GO::config()->group_root, GO_Base_Model_Acl::MANAGE_PERMISSION);
 			$this->addUser($this->user_id, GO_Base_Model_Acl::MANAGE_PERMISSION);
+		}elseif($this->isModified('user_id')){
+			$this->addUser($this->user_id, GO_Base_Model_Acl::MANAGE_PERMISSION);
 		}
 
 		return parent::afterSave($wasNew);
-	}
-
-	protected function afterDelete() {
-
-		return parent::afterDelete();
 	}
 	
 	
@@ -276,6 +278,20 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		}
 		
 		return $users;
+	}
+	
+	public function checkDatabase() {
+		
+		if(empty($this->user_id))
+			$this->user_id=1;
+		
+		if(empty($this->description))
+			$this->description='unknown';
+		
+		$this->addGroup(GO::config()->group_root, GO_Base_Model_Acl::MANAGE_PERMISSION);
+		$this->addUser($this->user_id, GO_Base_Model_Acl::MANAGE_PERMISSION);
+		
+		return parent::checkDatabase();
 	}
 
 }
