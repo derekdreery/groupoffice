@@ -287,7 +287,7 @@ if false # anyof (true)
 $lang['sieve']['standardvacationmessage']."\r\n".
 "test\r\n".
 ".\r\n".	
-";\r\n";
+";\r\n".
 "}\r\n";
 
 			$content .= '# rule:[Spam]
