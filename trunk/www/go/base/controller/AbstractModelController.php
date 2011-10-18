@@ -273,6 +273,10 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
   protected function formatColumns(GO_Base_Data_ColumnModel $columnModel){
     return $columnModel;
   }
+	
+	protected function processStoreDelete($store, &$params){
+		$store->processDeleteActions($params, $this->model);
+	}
   
   /**
    * The default grid action for the current model.
@@ -282,7 +286,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
     $store = new GO_Base_Data_Store($this->getStoreColumnModel());	
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
-		$store->processDeleteActions($params, $modelName);
+		$this->processStoreDelete($store, $params);
 		
 		$response=array();
 		
