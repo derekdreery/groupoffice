@@ -1547,6 +1547,19 @@ class cms extends db {
 		}
 	}
 
+	public function get_one_item_category($file_id) {
+		$sql = "SELECT c.* FROM cms_files f ".
+			"INNER JOIN cms_files_categories fc ON f.id=fc.file_id ".
+			"INNER JOIN cms_categories c ON c.id=fc.category_id ".
+			"WHERE f.id='".intval($file_id)."' ";
+		$this->query($sql);
+		return $this->next_record();
+	}
+	
+	public function get_one_item_category_name($file_id) {
+		$category = $this->get_one_item_category($file_id);
+		return $category['name'];
+	}
 //	function get_category_by_name($category_name){
 //		$sql = "SELECT id FROM cms_categories WHERE name='".$category_name."';";
 //		$this->query($sql);
