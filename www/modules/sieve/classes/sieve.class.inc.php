@@ -283,7 +283,10 @@ require ["fileinto"];
 # rule:[' . $lang['sieve']['standardvacation'] . ']
 if false # anyof (true)
 {
-			vacation :days 3 text:"' . $lang['sieve']['standardvacationmessage'] . '";
+			vacation :days 3 text:
+'.$lang['sieve']['standardvacationmessage'].'
+.	
+;
 }
 ';
 			$content .= '# rule:[Spam]
