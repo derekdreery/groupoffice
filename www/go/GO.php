@@ -498,5 +498,30 @@ class GO{
 		
 		return $url;
 	}
+	
+	/**
+	 * Find classes in a folder
+	 * 
+	 * @param string $path Relative from go/base
+	 * @return ReflectionClass 
+	 */
+	public static function findClasses($subfolder){
+		
+		$classes=array();
+		$folder = new GO_Base_Fs_Folder(GO::config()->root_path.'go/base/'.$subfolder);
+		if($folder->exists()){
+			
+			$items = $folder->ls();
+			
+			foreach($items as $item){
+				if($item instanceof GO_Base_Fs_File){
+					$className = 'GO_Base_'.ucfirst($subfolder).'_'.$item->nameWithoutExtension();					
+					$classes[] = new ReflectionClass($className);					
+				}
+			}
+		}
+		
+		return $classes;
+	}
 
 }	

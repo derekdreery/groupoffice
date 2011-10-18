@@ -34,18 +34,55 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		echo '<pre>';		
 		
 		if(!empty($params['module'])){
-			$class='GO_'.ucfirst($params['module']).'_'.ucfirst($params['module']).'Module';
-			$module = new $class;
-			$module->checkDatabase($response);
+			if($params['module']=='base'){
+				$this->_checkCoreModels();
+			}else
+			{
+				$class='GO_'.ucfirst($params['module']).'_'.ucfirst($params['module']).'Module';
+				$module = new $class;
+				$module->checkDatabase($response);
+			}
 		}else
 		{
+			$this->_checkCoreModels();
 			GO::modules()->callModuleMethod('checkDatabase', array(&$response));
 		}
 		
 		
 		return $response;
 	}
+	
+	private function _checkCoreModels(){
+		
+		//fix for invalid acl rows.
+		$sql = "insert ignore into go_acl (acl_id,group_id) SELECT acl_id,group_id FROM `go_acl` WHERE user_id>0 && group_id>0;";
+		GO::getDbConnection()->query($sql);
+		
+		$sql = "insert ignore into go_acl (acl_id,user_id) SELECT acl_id,user_id FROM `go_acl` WHERE user_id>0 && group_id>0;";
+		GO::getDbConnection()->query($sql);		
+		
+		$sql = "delete from go_acl where user_id>0 and group_id>0;";
+		GO::getDbConnection()->query($sql);
 
+		
+		
+		$classes=GO::findClasses('model');
+		foreach($classes as $model){
+			if($model->isSubclassOf('GO_Base_Db_ActiveRecord')){
+		
+				echo "Processing ".$model->getName()."\n";
+				flush();
+
+				$m = GO::getModel($model->getName());
+
+				$stmt = $m->find(array(
+						'ignoreAcl'=>true
+				));
+				$stmt->callOnEach('checkDatabase');
+			}
+		}
+	}
+	
 	public function actionUpgrade($params) {
 		
 		//don't be strict in upgrade process

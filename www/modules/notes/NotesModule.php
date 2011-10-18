@@ -41,7 +41,8 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 	
 	
 	public static function saveUser($user, $wasNew){
-		self::getDefaultNoteCategory($user->id);	
+		if($wasNew)
+			self::getDefaultNoteCategory($user->id);	
 	}
 	
 	public static function deleteUser($user){

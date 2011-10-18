@@ -292,7 +292,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		$response['data']['subject'] = $response['data']['name'];
 
-		$response = $this->_reminderSecondsToForm($response);
+		$response = self::reminderSecondsToForm($response);
 
 		$response['data']['start_time'] = date(GO::user()->time_format, $model->start_time);
 		$response['data']['end_time'] = date(GO::user()->time_format, $model->end_time);
@@ -353,7 +353,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		}			
 	}
 
-	private function _reminderSecondsToForm($response) {
+	public static function reminderSecondsToForm($response) {
 		$multipliers[] = 604800;
 		$multipliers[] = 86400;
 		$multipliers[] = 3600;

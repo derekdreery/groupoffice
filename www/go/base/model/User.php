@@ -100,8 +100,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		return true;
 	}
 	
-	public function sessionCache(){
-		return true;
+	/**
+	 * Getter function for the ACL function
+	 * @return int 
+	 */
+	protected function getUser_id(){
+		return $this->id;
 	}
 
 	public function init() {
@@ -200,6 +204,9 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		if($wasNew){
 			$everyoneGroup = GO_Base_Model_Group::model()->findByPk(GO::config()->group_everyone);		
 			$everyoneGroup->addUser($this->id);			
+			
+			$this->acl->user_id=$this->id;
+			$this->acl->save();
 		}	
 		
 		GO::modules()->callModuleMethod('saveUser', array(&$this, $wasNew));
