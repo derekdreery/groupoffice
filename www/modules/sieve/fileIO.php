@@ -194,8 +194,8 @@ try
 				}
 			}
 
-			$index=0;
 			if(!empty($sieve->script->content)) {
+				$index=0;
 				foreach($sieve->script->content as $item)
 				{
 					$i['name']=$item['name'];
