@@ -48,6 +48,9 @@ if(!empty($GO_CONFIG->serverclient_domains))
 					$account['smtp_username']=$GO_CONFIG->serverclient_smtp_username;
 					$account['smtp_password']=$GO_CONFIG->serverclient_smtp_password;
 					$account['acl_id']=$GO_SECURITY->get_new_acl('email');
+					
+					$GO_SECURITY->add_user_to_acl(1, $account['acl_id'],GO_SECURITY::MANAGE_PERMISSION);
+					
 					try{
 						$account['id'] = $email->add_account($account);
 
