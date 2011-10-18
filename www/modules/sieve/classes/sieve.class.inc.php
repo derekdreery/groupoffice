@@ -442,6 +442,7 @@ if anyof (header :contains "X-Spam-Flag" "YES")
 
 	private function _set_error($error) {
 		$this->error = $error;
+		go_debug($error);
 		return false;
 	}
 
