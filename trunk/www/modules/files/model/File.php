@@ -65,6 +65,10 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 	protected function getLocalizedName() {
 		return GO::t('file', 'files');
 	}
+	
+	public function customfieldsModel() {
+		return "GO_Files_Model_FileCustomFieldsRecord";
+	}
 
 	/**
 	 * Here you can define the relations of this model with other models.

@@ -29,14 +29,14 @@ class GO_Files_FilesModule extends GO_Base_Module{
 			$folder = GO_Files_Model_Folder::model()->findHomeFolder($user);
 			$folder->syncFilesystem();
 			
-//			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
-//			if(empty($folder->acl_id)){
-//				$folder->setNewAcl($user->id);
-//				$folder->user_id=$user->id;
-//				$folder->visible=1;
-//				$folder->save();
-//			}
-//			$folder->syncFilesystem();		
+			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
+			if(!$folder->acl){
+				$folder->setNewAcl($user->id);
+				$folder->user_id=$user->id;
+				$folder->visible=1;
+				$folder->save();
+			}
+			//$folder->syncFilesystem();		
 			
 		}
 		
