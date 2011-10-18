@@ -3,6 +3,42 @@
 class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = 'GO_Files_Model_Folder';
+	
+	
+	public function actionSyncFilesystem($params){
+		
+		
+		GO::$ignoreAclPermissions=true; //allow this script access to all
+		GO::$disableModelCache=true; //for less memory usage
+		ini_set('max_execution_time', '300');
+		session_write_close();		
+		
+		$folders = array('users','projects','addressbook');	
+		
+		echo "<pre>";
+		foreach($folders as $name){
+			
+			echo "Syncing ".$name."\n";
+			
+			$folder = GO_Files_Model_Folder::model()->findByPath($name, true);
+			$folder->syncFilesystem();
+		}
+		
+		echo "Done\n";
+		
+		
+		$folders = array('billing','email');	
+		
+		foreach($folders as $name){
+			
+			echo "Deleting ".$name."\n";
+			
+			$folder = GO_Files_Model_Folder::model()->findByPath($name);
+			if($folder)
+				$folder->delete();
+		}
+	}
+	
 
 	public function actionTree($params) {
 		//GO::$ignoreAclPermissions=true;
