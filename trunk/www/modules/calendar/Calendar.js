@@ -85,33 +85,34 @@ GO.calendar.MainPanel = function(config){
 	},this);
 		
 	GO.calendar.calendarsStore = this.calendarsStore = new GO.data.JsonStore({
-		url: GO.settings.modules.calendar.url+'json.php',
-		baseParams: {
-			'task': 'calendars',
-			limit:parseInt(GO.settings['max_rows_list'])
-		},
-		root: 'results',
-		totalProperty: 'total',
-		id: 'id',
+//		url: GO.settings.modules.calendar.url+'json.php',
+//		baseParams: {
+//			'task': 'calendars',
+//			limit:parseInt(GO.settings['max_rows_list'])
+//		},
+//		root: 'results',
+//		totalProperty: 'total',
+//		id: 'id',
+		url:GO.url("calendar/calendar/store"),
 		fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
 		remoteSort:true
 	});
 
-	if(GO.projects){
-		this.projectCalendarsStore = new GO.data.JsonStore({
-			url: GO.settings.modules.calendar.url+'json.php',
-			baseParams: {
-				'task': 'calendars',
-				'project_calendars':1,
-				limit:parseInt(GO.settings['max_rows_list'])
-			},
-			root: 'results',
-			totalProperty: 'total',
-			id: 'id',
-			fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
-			remoteSort:true
-		});
-	}
+//	if(GO.projects){
+//		this.projectCalendarsStore = new GO.data.JsonStore({
+//			url: GO.settings.modules.calendar.url+'json.php',
+//			baseParams: {
+//				'task': 'calendars',
+//				'project_calendars':1,
+//				limit:parseInt(GO.settings['max_rows_list'])
+//			},
+//			root: 'results',
+//			totalProperty: 'total',
+//			id: 'id',
+//			fields:['id','name','comment','user_name','group_id', 'group_name','checked', 'project_id'],
+//			remoteSort:true
+//		});
+//	}
 
 	this.viewsStore = new GO.data.JsonStore({
 		url: GO.settings.modules.calendar.url+'json.php',
@@ -127,9 +128,8 @@ GO.calendar.MainPanel = function(config){
 	});
 
 	GO.calendar.resourcesStore = this.resourcesStore = new Ext.data.GroupingStore({
-		baseParams: {
-			'task': 'calendars',
-			'resources' : 'true',
+		baseParams: {			
+			resourcesOnly : 1,
 			limit:parseInt(GO.settings['max_rows_list'])
 		},
 		reader: new Ext.data.JsonReader({
@@ -139,7 +139,7 @@ GO.calendar.MainPanel = function(config){
 			fields:['id','name','comment','user_name','group_id', 'group_name']
 		}),
 		proxy: new Ext.data.HttpProxy({
-			url: GO.settings.modules.calendar.url+'json.php'
+			url: GO.url("calendar/calendar/calendarsWithGroup")
 		}),
 		sortInfo:{
 			field: 'name',
@@ -163,12 +163,12 @@ GO.calendar.MainPanel = function(config){
 		}
 	}, this);
 
-	if(GO.projects){
-		this.projectCalendarsStore.on('load', function(){
-			this.projectCalendarsList.setVisible(this.projectCalendarsStore.data.length);
-			this.calendarListPanel.doLayout();
-		}, this);
-	}
+//	if(GO.projects){
+//		this.projectCalendarsStore.on('load', function(){
+//			this.projectCalendarsList.setVisible(this.projectCalendarsStore.data.length);
+//			this.calendarListPanel.doLayout();
+//		}, this);
+//	}
 
 	this.viewsStore.on('load', function(){
 		this.viewsList.setVisible(this.viewsStore.data.length);
@@ -208,17 +208,17 @@ GO.calendar.MainPanel = function(config){
 		})
 	});
 
-	if(GO.projects){
-		this.projectCalendarsList = new GO.grid.MultiSelectGrid({
-			title:GO.projects.lang.projectCalendars,
-			store: this.projectCalendarsStore,
-			allowNoSelection:true,
-			bbar: new GO.SmallPagingToolbar({
-				store:this.calendarsStore,
-				pageSize:GO.settings.config.nav_page_size
-			})
-		});
-	}
+//	if(GO.projects){
+//		this.projectCalendarsList = new GO.grid.MultiSelectGrid({
+//			title:GO.projects.lang.projectCalendars,
+//			store: this.projectCalendarsStore,
+//			allowNoSelection:true,
+//			bbar: new GO.SmallPagingToolbar({
+//				store:this.calendarsStore,
+//				pageSize:GO.settings.config.nav_page_size
+//			})
+//		});
+//	}
 
 	this.viewsList = new GO.grid.GridPanel({
 		border: false,

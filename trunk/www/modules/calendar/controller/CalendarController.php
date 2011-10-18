@@ -22,14 +22,19 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	protected $model = 'GO_Calendar_Model_Calendar';
 	
 	protected function getStoreParams($params) {
+		
+		$findParams =GO_Base_Db_FindParams::newInstance()
+						->order('name');
+		
+		$c = $findParams->getCriteria();
+		
 		if(!empty($params['resources'])){
-			return GO_Base_Db_FindParams::newInstance()
-							->criteria(GO_Base_Db_FindCriteria::newInstance()
-											->addCondition('group_id', 1,'!='));
+			$c->addCondition('group_id', 1,'!=');
 		}else
 		{
-			return parent::getStoreParams($params);
+			$c->addCondition('group_id', 1,'=');
 		}
+		return $findParams;
 	}
 	
 	protected function remoteComboFields() {
@@ -39,15 +44,23 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		);
 	}
 	
-	public function actionWritableCalendarsWithGroup($params){
+	public function actionCalendarsWithGroup($params){
 		
 		$store = GO_Base_Data_Store::newInstance(GO_Calendar_Model_Calendar::model());
+		
+		if(!isset($params['permissionLevel']))
+			$params['permissionLevel']=GO_Base_Model_Acl::READ_PERMISSION;
 		
 		$findParams = $store->getDefaultParams()
 						->join(GO_Calendar_Model_Group::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('group_id', 'g.id', '=', 't', true, true),'g')
 						->order(array('g.name','t.name'))
 						->select('t.*,g.name AS group_name')
-						->permissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION);
+						->permissionLevel($params['permissionLevel']);
+		
+		if(!empty($params['resourcesOnly']))
+			$findParams->getCriteria ()->addCondition ('group_id', 1,'>');
+		elseif(!empty($params['calendarsOnly']))
+			$findParams->getCriteria ()->addCondition ('group_id', 1,'=');
 		
 		$stmt = GO_Calendar_Model_Calendar::model()->find($findParams);
 		
@@ -57,7 +70,6 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatCalendarWithGroup'));
 		
 		return $store->getData();
-		
 	}
 	
 	public function formatCalendarWithGroup($record, $model, $store){
