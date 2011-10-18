@@ -195,17 +195,18 @@ try
 			}
 
 			$index=0;
+			if(!empty($sieve->script->content)) {
+				foreach($sieve->script->content as $item)
+				{
+					$i['name']=$item['name'];
+					$i['index']=$index;
+					$i['script_name']=$script_name;
+					$i['disabled']= $item['disabled'];
 
-			foreach($sieve->script->content as $item)
-			{
-				$i['name']=$item['name'];
-				$i['index']=$index;
-				$i['script_name']=$script_name;
-				$i['disabled']= $item['disabled'];
+					$response['results'][]=$i;
 
-				$response['results'][]=$i;
-
-				$index++;
+					$index++;
+				}
 			}
 
 			$response['success']=true;
