@@ -60,6 +60,11 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	
 	public function __construct() {
 		$this->checkSecurityToken();
+		$this->init();
+	}
+	
+	protected function init(){
+		
 	}
 	
 	/**

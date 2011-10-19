@@ -49,8 +49,14 @@ class GO_Base_Router{
 	
 	public function runController($params=false){
 		
-		if(!$params)
-			$params=$_REQUEST;
+		if(!$params){
+			if(PHP_SAPI=='cli'){
+				$params = GO_Base_Util_Cli::parseArgs();
+			}else
+			{
+				$params=$_REQUEST;
+			}
+		}
 		
 		$r = !empty($params['r']) ?  explode('/', $params['r']): array();		
 		
