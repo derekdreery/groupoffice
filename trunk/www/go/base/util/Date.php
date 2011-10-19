@@ -525,11 +525,13 @@ class GO_Base_Util_Date {
 
 	public static function to_input_format($date_string, $date_separator=null, $date_format=null)
 	{
-		if(!isset($date_format))
-			$date_format=$_SESSION['GO_SESSION']['date_format'];
+		if(!isset($date_format)){
+			$date_format=GO::user() ? GO::user()->completeDateFormat : GO::config()->default_date_format;
+		}
 
-		if(!isset($date_separator))
-			$date_separator=$_SESSION['GO_SESSION']['date_separator'];
+		if(!isset($date_separator)){
+			$date_separator=GO::user() ? GO::user()->date_separator : GO::config()->default_date_separator;
+		}
 
 		$date_string = trim($date_string);
 		
