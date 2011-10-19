@@ -897,7 +897,7 @@ class GO_Base_Config {
 
 			$this->db_host='localhost';
 
-			if(is_windows()) {
+			if(GO_Base_Util_Common::isWindows()) {
 				$this->file_storage_path = substr($this->root_path,0,3).'groupoffice/';
 				$this->tmpdir=substr($this->root_path,0,3).'temp';
 
