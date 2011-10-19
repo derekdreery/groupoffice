@@ -116,6 +116,8 @@ views/Extjs3/javascript/advancedquery/AdvancedQueryPanel.js
 views/Extjs3/javascript/advancedquery/QueryPanel.js
 views/Extjs3/javascript/advancedquery/SavedQueriesGrid.js
 
+views/Extjs3/javascript/query/QueryPanel.js
+
 views/Extjs3/javascript/windows/UsersInGroup.js
 
 views/Extjs3/javascript/windows/TabbedFormDialog.js
