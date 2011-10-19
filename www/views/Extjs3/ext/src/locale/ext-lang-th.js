@@ -1,8 +1,8 @@
 /*!
- * Ext JS Library 3.2.1
- * Copyright(c) 2006-2010 Ext JS, Inc.
- * licensing@extjs.com
- * http://www.extjs.com/license
+ * Ext JS Library 3.4.0
+ * Copyright(c) 2006-2011 Sencha Inc.
+ * licensing@sencha.com
+ * http://www.sencha.com/license
  */
 /**
  * List compiled by KillerNay on the extjs.com forums.
@@ -18,7 +18,7 @@ if(Ext.View){
 }
 
 if(Ext.grid.GridPanel){
-  Ext.grid.GridPanel.prototype.ddText = "{0} จำนวนที่ถูกเลือก";
+  Ext.grid.GridPanel.prototype.ddText = "{0} àÅ×Í¡áÅéÇ·Ñé§ËÁŽá¶Ç";
 }
 
 if(Ext.TabPanelItem){
@@ -30,22 +30,22 @@ if(Ext.form.Field){
 }
 
 if(Ext.LoadMask){
-  Ext.LoadMask.prototype.msg = 'กำลังโหลด...';
+  Ext.LoadMask.prototype.msg = "¡ÓÅÑ§âËÅŽ...";
 }
 
 Date.monthNames = [
-  'มกราคม',
-  'กุมภาพันธ์',
-  'มีนาคม',
-  'เมษายน',
-  'พฤษภาคม',
-  'มิถุนายน',
-  'กรกฏาคม',
-  'สิงหาคม',
-  'กันยายน',
-  'ตุลาคม',
-  'พฤจิกายน',
-  'ธันวาคม'
+  "Á¡ÃÒ€Á",
+  "¡ØÁŸÒÓŸÑ¹žì",
+  "ÁÕ¹Ò€Á",
+  "àÁÉÒÂ¹",
+  "ŸÄÉÀÒ€Á",
+  "ÁÔ¶Ø¹ÒÂ¹",
+  "¡Ä¡¯Ò€Á",
+  "ÊÔ§ËÒ€Á",
+  "¡Ñ¹ÂÒÂ¹",
+  "µØÅÒ€Á",
+  "ŸÄÈšÔ¡ÒÂ¹",
+  "žÑ¹ÇÒ€Á"
 ];
 
 Date.getShortMonthName = function(month) {
@@ -53,18 +53,18 @@ Date.getShortMonthName = function(month) {
 };
 
 Date.monthNumbers = {
-  'มค' : 0,
-  'กพ' : 1,
-  'มีค' : 2,
-  'เมย' : 3,
-  'พค' : 4,
-  'มิย' : 5,
-  'กค' : 6,
-  'สค' : 7,
-  'กย' : 8,
-  'ตค' : 9,
-  'พย' : 10,
-  'ธค' : 11
+  "Á€" : 0,
+  "¡Ÿ" : 1,
+  "ÁÕ€" : 2,
+  "àÁÂ" : 3,
+  "Ÿ€" : 4,
+  "ÁÔÂ" : 5,
+  "¡€" : 6,
+  "Ê€" : 7,
+  "¡Â" : 8,
+  "µ€" : 9,
+  "ŸÂ" : 10,
+  "ž€" : 11
 };
 
 Date.getMonthNumber = function(name) {
@@ -72,13 +72,13 @@ Date.getMonthNumber = function(name) {
 };
 
 Date.dayNames = [
-  'อา.',
-  'จ.',
-  'อ.',
-  'พ.',
-  'พฤ.',
-  'ศ.',
-  'ส.'
+  "ÍÒ·ÔµÂì",
+  "šÑ¹·Ãì",
+  "ÍÑ§€ÒÃ",
+  "ŸØ×ž",
+  "ŸÄËÑÊºŽÕ",
+  "ÈØ¡Ãì",
+  "àÊÒÃì"
 ];
 
 Date.getShortDayName = function(day) {
@@ -87,10 +87,10 @@ Date.getShortDayName = function(day) {
 
 if(Ext.MessageBox){
   Ext.MessageBox.buttonText = {
-    ok     : 'ตกลง',
-    cancel : 'ยกเลิก',
-    yes    : 'ใช่',
-    no     : 'ไม่ใช่'
+    ok     : "µ¡Å§",
+    cancel : "Â¡àÅÔ¡",
+    yes    : "ãªè",
+    no     : "äÁèãªè"
   };
 }
 
@@ -98,49 +98,49 @@ if(Ext.util.Format){
   Ext.util.Format.date = function(v, format){
     if(!v) return "";
     if(!(v instanceof Date)) v = new Date(Date.parse(v));
-    return v.dateFormat(format || "d/m/Y");
+    return v.dateFormat(format || "m/d/Y");
   };
 }
 
 if(Ext.DatePicker){
   Ext.apply(Ext.DatePicker.prototype, {
-    todayText         : 'วันนี้',
+    todayText         : "ÇÑ¹¹Õé",
     minText           : "This date is before the minimum date",
     maxText           : "This date is after the maximum date",
     disabledDaysText  : "",
     disabledDatesText : "",
     monthNames        : Date.monthNames,
     dayNames          : Date.dayNames,
-    nextText          : 'เดือนถัดไป (Control+Right)',
-    prevText          : 'เดือนที่แล้ว (Control+Left)',
-    monthYearText     : 'ระบุเดือน (Control+Up/Down to move years)',
+    nextText          : 'àŽ×Í¹¶ÑŽä» (Control+Right)',
+    prevText          : 'àŽ×Í¹¡èÍ¹Ë¹éÒ (Control+Left)',
+    monthYearText     : 'àÅ×Í¡àŽ×Í¹ (Control+Up/Down to move years)',
     todayTip          : "{0} (Spacebar)",
-    format            : "d/m/y",
-    okText            : 'ตกลง',
-    cancelText        : 'ยกเลิก',
+    format            : "m/d/y",
+    okText            : "&#160;µ¡Å§&#160;",
+    cancelText        : "Â¡àÅÔ¡",
     startDay          : 0
   });
 }
 
 if(Ext.PagingToolbar){
   Ext.apply(Ext.PagingToolbar.prototype, {
-    beforePageText : "หน้า",
-    afterPageText  : "ของ {0}",
-    firstText      : "หน้าแรก",
-    prevText       : "หน้าที่แล้ว",
-    nextText       : "หน้าถัดไป",
-    lastText       : "หน้าสุดท้าย",
-    refreshText    : "รีเฟรช",
-    displayMsg     : "แสดงผลจาก {0} - {1} ของทังหมด {2}",
-    emptyMsg       : 'ไม่พบรายการ'
+    beforePageText : "Ë¹éÒ",
+    afterPageText  : "of {0}",
+    firstText      : "Ë¹éÒáÃ¡",
+    prevText       : "¡èÍ¹Ë¹éÒ",
+    nextText       : "¶ÑŽä»",
+    lastText       : "Ë¹éÒÊØŽ·éÒÂ",
+    refreshText    : "ÃÕà¿Ãª",
+    displayMsg     : "¡ÓÅÑ§áÊŽ§ {0} - {1} šÒ¡ {2}",
+    emptyMsg       : 'äÁèÁÕ¢éÍÁÙÅáÊŽ§'
   });
 }
 
 if(Ext.form.TextField){
   Ext.apply(Ext.form.TextField.prototype, {
-    minLengthText : "ความยาวต่ำสุดที่กรอกได้คือ {0}",
-    maxLengthText : "ความยาวสูงสุดที่กรอกได้คือ {0}",
-    blankText     : "รายการนี้จำเป็นต้องกรอก",
+    minLengthText : "The minimum length for this field is {0}",
+    maxLengthText : "The maximum length for this field is {0}",
+    blankText     : "This field is required",
     regexText     : "",
     emptyText     : null
   });
@@ -148,112 +148,113 @@ if(Ext.form.TextField){
 
 if(Ext.form.NumberField){
   Ext.apply(Ext.form.NumberField.prototype, {
-    minText : "ค่าต่ำสุดที่กรอกได้คือ  {0}",
-    maxText : "ค่าสูงสุดที่กรอกได้คือ {0}",
-    nanText : "{0} ไม่ใช่ตัวเลข"
+    minText : "The minimum value for this field is {0}",
+    maxText : "The maximum value for this field is {0}",
+    nanText : "{0} is not a valid number"
   });
 }
 
 if(Ext.form.DateField){
   Ext.apply(Ext.form.DateField.prototype, {
-    disabledDaysText  : "ปิดการใช้งาน",
-    disabledDatesText : "ปิดการใช้งาน",
-    minText           : "ค่าวันในข่องนี้ต้องเป็นวันหลังจากวันที่ {0}",
-    maxText           : "ค่าวันในช่องนี้ต้องเป็นวันก่อนวันที่ {0}",
-    invalidText       : "{0} ไม่ใช่รูปแบบของวันที่ที่กำหนด - กรุณาใช้รูปแบบดังนี้ {1}",
-    format            : "d/m/y",
-    altFormats        : "d/m/Y|d-m-y|d-m-Y|d/m|d-m|dm|dmy|dmY|d|Y-m-d"
+    disabledDaysText  : "»ÔŽ",
+    disabledDatesText : "»ÔŽ",
+    minText           : "The date in this field must be after {0}",
+    maxText           : "The date in this field must be before {0}",
+    invalidText       : "{0} is not a valid date - it must be in the format {1}",
+    format            : "m/d/y",
+    altFormats        : "m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d",
+    startDay          : 0
   });
 }
 
 if(Ext.form.ComboBox){
   Ext.apply(Ext.form.ComboBox.prototype, {
-    loadingText       : "กำลังโหลด...",
+    loadingText       : "¡ÓÅÑ§âËÅŽ...",
     valueNotFoundText : undefined
   });
 }
 
 if(Ext.form.VTypes){
   Ext.apply(Ext.form.VTypes, {
-    emailText    : 'ค่าในช่องนี้จะต้องเป็นอีเมลซึ่งมีรูปแบบคือ "user@example.com"',
-    urlText      : 'ค่าในช่องนี้จะต้องเป็น URL ซึ่งมีรูปแบบคือ "http:/'+'/www.example.com"',
-    alphaText    : 'ค่าในช่องนี้จะต้องเป็นตัวอักษรและเครื่องหมาย _ เท่านั้น',
-    alphanumText : 'ค่าในช่องนี้จะต้องเป็นตัวอักษร ตัวเลข และเครื่องหมาย _ เท่านั้น'
+    emailText    : 'This field should be an e-mail address in the format "user@example.com"',
+    urlText      : 'This field should be a URL in the format "http:/'+'/www.example.com"',
+    alphaText    : 'This field should only contain letters and _',
+    alphanumText : 'This field should only contain letters, numbers and _'
   });
 }
 
 if(Ext.form.HtmlEditor){
   Ext.apply(Ext.form.HtmlEditor.prototype, {
-    createLinkText : 'กรุณาระบุค่า URL ของ link:',
+    createLinkText : 'Please enter the URL for the link:',
     buttonTips : {
       bold : {
-        title: 'ตัวใหญ่ (Ctrl+B)',
-        text: 'ทำตัวใหญ่ให้กับข้อความที่ถูกเลือก',
+        title: 'Bold (Ctrl+B)',
+        text: 'Make the selected text bold.',
         cls: 'x-html-editor-tip'
       },
       italic : {
-        title: 'ตัวเอียง (Ctrl+I)',
-        text: 'ทำตัวเอียงให้กับข้อความที่ถูกเลือก',
+        title: 'Italic (Ctrl+I)',
+        text: 'Make the selected text italic.',
         cls: 'x-html-editor-tip'
       },
       underline : {
-        title: 'เส้นใต้ (Ctrl+U)',
-        text: 'ขีดเส้นใต้ให้กับข้อความที่ถูกเลือก',
+        title: 'Underline (Ctrl+U)',
+        text: 'Underline the selected text.',
         cls: 'x-html-editor-tip'
       },
       increasefontsize : {
-        title: 'เพิ่ม',
-        text: 'เพิ่มขนาดฟอนต์',
+        title: 'Grow Text',
+        text: 'Increase the font size.',
         cls: 'x-html-editor-tip'
       },
       decreasefontsize : {
-        title: 'ลด',
-        text: 'ลดขนาดฟอนต์',
+        title: 'Shrink Text',
+        text: 'Decrease the font size.',
         cls: 'x-html-editor-tip'
       },
       backcolor : {
-        title: 'สีด้านหลัง',
-        text: 'เปลี่ยนสีด้านหลังให้กับข้อความที่ถูกเลือก',
+        title: 'Text Highlight Color',
+        text: 'Change the background color of the selected text.',
         cls: 'x-html-editor-tip'
       },
       forecolor : {
-        title: 'สีฟอนต์',
-        text: 'เปลี่ยนสีให้กับข้อความทีถูกเลือก',
+        title: 'Font Color',
+        text: 'Change the color of the selected text.',
         cls: 'x-html-editor-tip'
       },
       justifyleft : {
-        title: 'ชิดซ้าย',
-        text: 'จัดเรียงโดยให้ชิดทางซ้าย',
+        title: 'Align Text Left',
+        text: 'Align text to the left.',
         cls: 'x-html-editor-tip'
       },
       justifycenter : {
-        title: 'ตรงกลาง',
-        text: 'จัดเรียงข้อความให้อยู่ตรงกลาง',
+        title: 'Center Text',
+        text: 'Center text in the editor.',
         cls: 'x-html-editor-tip'
       },
       justifyright : {
-        title: 'ชิดชวา',
-        text: 'จัดเรียงโดยให้ชิดทางขวา',
+        title: 'Align Text Right',
+        text: 'Align text to the right.',
         cls: 'x-html-editor-tip'
       },
       insertunorderedlist : {
-        title: 'เครื่องหมายนำหน้า',
-        text: 'แสดงเครื่องหมายหน้าข้อความ',
+        title: 'Bullet List',
+        text: 'Start a bulleted list.',
         cls: 'x-html-editor-tip'
       },
       insertorderedlist : {
-        title: 'ตัวเลขนำหน้า',
-        text: 'แสดงตัวเลขหน้าข้อความ',
+        title: 'Numbered List',
+        text: 'Start a numbered list.',
         cls: 'x-html-editor-tip'
       },
       createlink : {
-        title: 'ลิ้งค์',
-        text: 'สร้างลิ้งค์ให้กับข้อความที่ถูกเลือก',
+        title: 'Hyperlink',
+        text: 'Make the selected text a hyperlink.',
         cls: 'x-html-editor-tip'
       },
       sourceedit : {
-        title: 'แก้ไขซอสโคด',
-        text: 'เปลี่ยนโหมดเป็นรูปแบบซอสโคด',
+        title: 'Source Edit',
+        text: 'Switch to source editing mode.',
         cls: 'x-html-editor-tip'
       }
     }
@@ -262,11 +263,11 @@ if(Ext.form.HtmlEditor){
 
 if(Ext.grid.GridView){
   Ext.apply(Ext.grid.GridView.prototype, {
-    sortAscText  : "จากน้อยไปหามาก",
-    sortDescText : "จากมากไปหาน้อย",
-    lockText     : "ล็อกช่อง",
-    unlockText   : "ปลดล็อกช่อง",
-    columnsText  : "ช่อง"
+    sortAscText  : "Sort Ascending",
+    sortDescText : "Sort Descending",
+    lockText     : "Lock Column",
+    unlockText   : "Unlock Column",
+    columnsText  : "Columns"
   });
 }
 
@@ -280,15 +281,15 @@ if(Ext.grid.GroupingView){
 
 if(Ext.grid.PropertyColumnModel){
   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
-    nameText   : "ชื่อ",
-    valueText  : "ค่า",
+    nameText   : "Name",
+    valueText  : "Value",
     dateFormat : "m/j/Y"
   });
 }
 
 if(Ext.layout.BorderLayout && Ext.layout.BorderLayout.SplitRegion){
   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
-    splitTip            : "ลากเพื่อเปลี่ยนขนาด",
-    collapsibleSplitTip : "ลากเพื่อเปลี่ยนขนาด ดับเบิลคลิกเพื่อซ่อน"
+    splitTip            : "Drag to resize.",
+    collapsibleSplitTip : "Drag to resize. Double click to hide."
   });
 }
