@@ -42,7 +42,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 *
 	 * @var string The module the controller belongs too. 
 	 */
-	protected $module;
+	private $_module;
 	
 	/**
 	 *
@@ -58,30 +58,62 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 	);
 	
+	public function __construct() {
+		$this->checkSecurityToken();
+	}
+	
 	/**
-	 * Inititalizes the controller
-	 * 
-	 * @param string $module Name of the module this controller belongs too
-	 * @param string $output Type of output eg. json or html
+	 * Checks a token that is generated for each session.
 	 */
-	public function init($module){
-		$this->module=strtolower($module);
-		$this->moduleObject = GO::modules()->{$this->module};
+	protected function checkSecurityToken(){
+		if(!GO::config()->debug && !GO::config()->disable_security_token_check && GO::user() && !empty($params['r']) && $_REQUEST['security_token']!=GO::session()->values['security_token']){
+			//GO::session()->logout();			
+			trigger_error('Fatal error: Security token mismatch. Possible cross site request forgery attack!', E_USER_ERROR);
+		}
 	}	
+	
+	/**
+	 * Get the module object to which this controller belongs.
+	 * Returns false if it's a core controller.
+	 * 
+	 * @return GO_Base_Model_Module 
+	 */
+	public function getModule(){
+		if(!isset($this->_module)){
+			$classParts = explode('_',get_class($this));
+			
+			$moduleId = strtolower($classParts[1]);
+			
+			$this->_module = GO::modules()->{$moduleId};			
+		}
+		
+		return $this->_module;
+	}
 	
 	/**
 	 * Includes the file from the views folder
 	 * 
 	 * @param string $viewName 
+	 * The view will be searched in modules/<moduleid>/views/<view>/<viewName>.php
+	 * of /views/<view>/<viewName>.php
+	 * 
+	 * If it's not found it will fall back on Default.php
+	 * 
+	 * @param array $data 
+	 * An associative array of which the keys become available variables in the view file.
 	 */
 	protected function render($viewName, $data=array()){		
 		header('Content-Type: text/html; charset=UTF-8');
 		
-		if(!$this->moduleObject){
+		//extract($data);
+		
+		$module = $this->getModule();
+		
+		if(!$module){
 			$file = GO::config()->root_path.'views/'.GO::view().'/'.$viewName.'.php';
 		}else
 		{
-			$file = $this->moduleObject->path.'views/'.GO::view().'/'.$viewName.'.php';
+			$file = $module->path.'views/'.GO::view().'/'.$viewName.'.php';
 		}
 		
 		if(file_exists($file)){
@@ -94,37 +126,37 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		}
 	}
 	
-	protected function renderPartial($data=array()) {
-		
-	}
-	
-	
-	/**
-	 * Adds a permission check on an acl ID.
-	 * 
-	 * @param int $aclId
-	 * @param int $requiredPermissionLevel See GO_SECURITY constants
-	 * @param string $action By default it applies to all actions but you may specify a specific action here.
-	 */
-	protected function addPermissionCheck($aclId, $requiredPermissionLevel, $action='*'){
-		$this->requiredPermissionLevels[$action]=array('aclId'=>$aclId, 'requiredPermissionLevel'=>$requiredPermissionLevel);
-	}
-	/**
-	 * Checks 
-	 * 
-	 * @param type $action
-	 * @return type boolean
-	 */
-	public function checkPermissions($action){
-		if(isset($this->requiredPermissionLevels[$action])){
-			return true;// $GLOBALS['GO_SECURITY']->hasPermission($this->requiredPermissionLevels[$action]['aclId'])>=$this->requiredPermissionLevels[$action]['requiredPermissionLevel'];
-		}elseif($action!='*'){
-			return $this->checkPermissions('*');
-		}else
-		{
-			return true;
-		}
-	}
+//	protected function renderPartial($data=array()) {
+//		
+//	}
+//	
+//	
+//	/**
+//	 * Adds a permission check on an acl ID.
+//	 * 
+//	 * @param int $aclId
+//	 * @param int $requiredPermissionLevel See GO_SECURITY constants
+//	 * @param string $action By default it applies to all actions but you may specify a specific action here.
+//	 */
+//	protected function addPermissionCheck($aclId, $requiredPermissionLevel, $action='*'){
+//		$this->requiredPermissionLevels[$action]=array('aclId'=>$aclId, 'requiredPermissionLevel'=>$requiredPermissionLevel);
+//	}
+//	/**
+//	 * Checks 
+//	 * 
+//	 * @param type $action
+//	 * @return type boolean
+//	 */
+//	public function checkPermissions($action){
+//		if(isset($this->requiredPermissionLevels[$action])){
+//			return true;// $GLOBALS['GO_SECURITY']->hasPermission($this->requiredPermissionLevels[$action]['aclId'])>=$this->requiredPermissionLevels[$action]['requiredPermissionLevel'];
+//		}elseif($action!='*'){
+//			return $this->checkPermissions('*');
+//		}else
+//		{
+//			return true;
+//		}
+//	}
 	
 	/**
 	 * Runs a method of this controller. If $action is save then it will run
@@ -135,9 +167,9 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	public function run($action='', $params){
 
 		try {
-			if(!$this->checkPermissions($action)){
-				throw new AccessDeniedException();
-			}
+//			if(!$this->checkPermissions($action)){
+//				throw new AccessDeniedException();
+//			}
 
 			if(empty($action))
 				$action=$this->defaultAction;
@@ -146,36 +178,31 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 
 			$methodName='action'.$action;
 			
+			$module = $this->getModule();
 			
 			/**
 			 * If this controller belongs to a module and it's the first request to
 			 * a module we run the {Module}Module.php class firstRun function
 			 * The response is added to the controller's action parameters.
 			 */
-			if($this->module != 'core' && !isset(GO::session()->values['firstRunDone'][$this->module])){
-				$moduleClass = "GO_".ucfirst($this->module)."_".ucfirst($this->module)."Module";
+			if($module && !isset(GO::session()->values['firstRunDone'][$module->id])){
+				$moduleClass = "GO_".ucfirst($module->id)."_".ucfirst($module->id)."Module";
 
 				if(class_exists($moduleClass)){
 
 					$_REQUEST['firstRun']=call_user_func(array($moduleClass,'firstRun'));
-					GO::session()->values['firstRunDone'][$this->module]=true;
+					GO::session()->values['firstRunDone'][$module->id]=true;
 				}
 			}
 
-//			$method=new ReflectionMethod($this, $methodName);
-//			if($method->getNumberOfParameters()>0)
-//				$this->runWithParams($method, $_REQUEST);
-//			else
-				$response =  $this->$methodName($params);
+			$response =  $this->$methodName($params);
 
-				if(isset($response))
-					$this->render($action, $response);
-				
-				//$this->fireEvent($methodName, array(&$this, &$params, &$response));
-				
-				return $response;
-		} catch (Exception $e) {
+			if(isset($response))
+				$this->render($action, $response);
+
+			return $response;
 			
+		} catch (Exception $e) {
 			
 			GO::debug("EXCEPTION: ".$e->getMessage());
 			
