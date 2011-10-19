@@ -71,10 +71,12 @@ if(isset($_REQUEST['after_login_url'])) {
 	}
 }
 
+//$_SESSION['GO_SESSION']['after_login_url']=$after_login_url;
+
 if(isset($_REQUEST['SET_LANGUAGE']))
 	echo 'GO.loginSelectedLanguage="'.$_REQUEST['SET_LANGUAGE'].'";';
 
-echo 'GO.afterLoginUrl="'.String::xss_clean($after_login_url).'";';
+echo 'GO.afterLoginUrl="'.$after_login_url.'";';
 
 $fullscreen = isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1' ? 'true' : 'false';
 echo 'GO.fullscreen='.$fullscreen.';';
@@ -461,40 +463,25 @@ if(file_exists($GLOBALS['GO_THEME']->theme_path.'MainLayout.js')) {
 <?php
 //these parameter are passed by dialog.php. These are used to directly link to
 //a dialog.
-if(isset($_REQUEST['m']) || isset($_REQUEST['module']))
+if(isset($_REQUEST['f']))
 {
-	//old names where long
-	if(!isset($_REQUEST['m']) && isset($_REQUEST['module']))
-		$_REQUEST['m']=$_REQUEST['module'];
+	$fp = GO_Base_Util_Crypt::decrypt($_REQUEST['f']);
+	
 
-	if(!isset($_REQUEST['e']) && isset($_REQUEST['loadevent']))
-		$_REQUEST['e']=$_REQUEST['loadevent'];
+	$loadevent = 'render';
 
-	if(!isset($_REQUEST['f']) && isset($_REQUEST['function']))
-		$_REQUEST['f']=$_REQUEST['function'];
-
-	if(!isset($_REQUEST['p']) && isset($_REQUEST['params']))
-		$_REQUEST['p']=$_REQUEST['params'];
-
-	$module = isset($_REQUEST['m']) ? $_REQUEST['m'] : false;
-	$function = isset($_REQUEST['f']) ? $_REQUEST['f'] : false;
-	$params = isset($_REQUEST['p']) ? ($_REQUEST['p']) : false;
-	$loadevent = isset($_REQUEST['e']) ? $_REQUEST['e'] : 'render';
-
-	if($module && $function && $params)
-	{
 	?>
-	if(GO.<?php echo $module; ?>)
+	if(GO.<?php echo $fp['m']; ?>)
 	{
 
 		 <?php if(!empty($loadevent)) echo 'GO.mainLayout.on("'.$loadevent.'",function(){'; ?>
 
-					GO.<?php echo $module; ?>.<?php echo $function; ?>.apply(this, <?php echo base64_decode($params); ?>);
+					GO.<?php echo $fp['m']; ?>.<?php echo $fp['f']; ?>.apply(this, <?php echo json_encode($fp['p']); ?>);
 
 		 <?php if(!empty($loadevent)) echo '});'; ?>
 	}
 	<?php
-	}
+	
 }
 ?>
 </script>

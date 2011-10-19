@@ -477,7 +477,34 @@ class GO{
 		return call_user_func(array($modelName, 'model'));
 	}
 	
+	/**
+	 * Create a URL for an outside application. The URL will open Group-Office and
+	 * launch a function.
+	 * 
+	 * @param string $module
+	 * @param function $function
+	 * @param array $params
+	 * @return string 
+	 */
+	public static function createExternalUrl($module, $function, $params)
+	{		
+		//$p = 'm='.urlencode($module).'&f='.urlencode($function).'&p='.urlencode(base64_encode(json_encode($params)));
+		
+		$p = array('m'=>$module,'f'=>$function, 'p'=>$params);
+		
+		$url = GO::config()->orig_full_url.'?r=external/index&f='.urlencode(GO_Base_Util_Crypt::encrypt($p));
+		return $url;
+	}
 	
+	/**
+	 * Generate a controller URL.
+	 * 
+	 * @param type $path
+	 * @param type $params
+	 * @param type $relative
+	 * @param type $htmlspecialchars
+	 * @return string 
+	 */
 	public static function url($path='', $params='', $relative=true, $htmlspecialchars=false){
 		$url = $relative ? GO::config()->host : GO::config()->full_url;
 		
@@ -485,13 +512,19 @@ class GO{
 			return $url;
 		}
 		
-		//if($path!='')
-		
-		
-		$amp = $htmlspecialchars ? '&amp;' : '&';
+		if(empty($path)){
+			$amp = '?';
+		}else
+		{
+			$url .= '?r='.$path;
+			
+			$amp = $htmlspecialchars ? '&amp;' : '&';
+		}
 		
 		if(!empty($params))
 			$url .= $amp.$params;
+		
+		$amp = $htmlspecialchars ? '&amp;' : '&';
 		
 		if(isset(GO::session()->values['security_token']))
 			$url .= $amp.'security_token='.GO::session()->values['security_token'];

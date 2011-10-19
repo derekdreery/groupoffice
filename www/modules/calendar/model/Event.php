@@ -242,7 +242,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	private function _sendResourceNotification($wasNew){
 		
-		$url = 'TODO';//create_direct_url('calendar', 'showEvent', array(array('values'=>array('event_id' => $resource['id']))));		
+		$url = GO::createExternalUrl('calendar', 'showEvent', array(array('values'=>array('event_id' => $resource['id']))));		
 		
 		$stmt = $this->calendar->group->admins();
 		while($user = $stmt->fetch()){
