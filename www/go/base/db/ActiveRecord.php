@@ -267,8 +267,27 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$classParts = explode('_',$this->className());
 			$prefix = strtolower(array_pop($classParts));
 
-			foreach($this->columns as $columnName=>$columnData)
-				$this->_attributeLabels[$columnName] = GO::t($prefix.ucfirst($columnName), $this->getModule());
+			foreach($this->columns as $columnName=>$columnData){
+				switch($columnName){
+					case 'user_id':
+						$this->_attributeLabels[$columnName] = GO::t('strUser');
+						break;
+					
+					case 'ctime':
+						$this->_attributeLabels[$columnName] = GO::t('strCtime');
+						break;
+					
+					case 'mtime':
+						$this->_attributeLabels[$columnName] = GO::t('strMtime');
+						break;
+					
+					default:
+						$this->_attributeLabels[$columnName] = GO::t($prefix.ucfirst($columnName), $this->getModule());
+						break;
+				}
+				
+				
+			}
 		}
 		return $this->_attributeLabels;
 	}
@@ -1349,40 +1368,40 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	protected function formatInputValues($attributes){
 		$formatted = array();
 		foreach($attributes as $key=>$value){
-			if(!isset($this->columns[$key]['gotype'])){
-				//don't process unknown columns. But keep them for flexibility.
-				$formatted[$key]=$value;
-				continue;
-			}
-//			if(!isset($this->columns[$key]['gotype'])){
-//				$this->columns[$key]['gotype']='string';
-//			}
-			switch($this->columns[$key]['gotype']){
-				case 'unixdate':
-				case 'unixtimestamp':
-					$formatted[$key] = GO_Base_Util_Date::to_unixtime($value);
-					break;			
-				case 'number':
-					$formatted[$key] = GO_Base_Util_Number::unlocalize($value);
-					break;
-				case 'boolean':
-					$formatted[$key] = empty($value) ? 0 : 1; 
-					break;				
-				case 'date':
-					$formatted[$key] = GO_Base_Util_Date::to_db_date($value);
-					break;
-				
-				
-				default:
-					if($this->columns[$key]['type']==PDO::PARAM_INT)
-						$value = intval($value);
-					
-					$formatted[$key] = $value;
-					break;
-			}
-			
+			$formatted[$key]=$this->formatInput($key, $value);			
 		}
 		return $formatted;
+	}
+	
+	
+	public function formatInput($column, $value){
+			if(!isset($this->columns[$column]['gotype'])){
+				//don't process unknown columns. But keep them for flexibility.
+				return $value;				
+			}
+
+			switch($this->columns[$column]['gotype']){
+				case 'unixdate':
+				case 'unixtimestamp':
+					return  GO_Base_Util_Date::to_unixtime($value);
+					break;			
+				case 'number':
+					return  GO_Base_Util_Number::unlocalize($value);
+					break;
+				case 'boolean':
+					return  empty($value) ? 0 : 1; 
+					break;				
+				case 'date':
+					return  GO_Base_Util_Date::to_db_date($value);
+					break;				
+				
+				default:
+					if($this->columns[$column]['type']==PDO::PARAM_INT)
+						$value = intval($value);
+					
+					return  $value;
+					break;
+			}
 	}
 	
 	/**
@@ -1396,13 +1415,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$formatted = array();
 		foreach($attributes as $attributeName=>$value){			
-			$formatted[$attributeName]=$this->_formatAttribute($attributeName, $value, $html);
+			$formatted[$attributeName]=$this->formatAttribute($attributeName, $value, $html);
 		}
 		
 		return $formatted;
 	}
 	
-	private function _formatAttribute($attributeName, $value, $html=false){
+	public function formatAttribute($attributeName, $value, $html=false){
 		if(!isset($this->columns[$attributeName]['gotype'])){
 			return $value;
 		}
@@ -2143,7 +2162,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!isset($this->_attributes[$attributeName]))						
 			return false;
 		
-		return $outputType=='raw' ?  $this->_attributes[$attributeName] : $this->_formatAttribute($attributeName, $this->_attributes[$attributeName]);
+		return $outputType=='raw' ?  $this->_attributes[$attributeName] : $this->formatAttribute($attributeName, $this->_attributes[$attributeName]);
 	}
 	
 	
