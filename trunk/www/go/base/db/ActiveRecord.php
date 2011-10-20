@@ -178,6 +178,22 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function hasFiles(){return false;}
 	
 	/**
+	 * Get the folder model belonging to this model if it supports it.
+	 * 
+	 * @return GO_Files_Model_Folder
+	 */
+	public function getFilesFolder(){
+		if(!$this->hasFiles())
+			return false;
+		
+		$c = new GO_Files_Controller_Folder();
+		$folder_id = $c->checkModelFolder($this, true, true);
+		
+		return GO_Files_Model_Folder::model()->findByPk($folder_id);
+		
+	}
+	
+	/**
 	 * Set to a model to enabled custom fields. A relation customfieldsRecord will be
 	 * created automatically and saving and deleting custom fields will be handled.
 	 * 
@@ -1593,16 +1609,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	
-	public function getFilesFolder(){
-		if(!$this->hasFiles())
-			throw new Exception("getFilesFolder() called on ".$this->className()." but hasFiles() is false for this model.");
-		
-		if($this->files_folder_id==0)
-			return false;
-		
-		return GO_Files_Model_Folder::model()->findByPk($this->files_folder_id);
-		
-	}
+//	public function getFilesFolder(){
+//		if(!$this->hasFiles())
+//			throw new Exception("getFilesFolder() called on ".$this->className()." but hasFiles() is false for this model.");
+//		
+//		if($this->files_folder_id==0)
+//			return false;
+//		
+//		return GO_Files_Model_Folder::model()->findByPk($this->files_folder_id);
+//		
+//	}
 
 
 	/**
