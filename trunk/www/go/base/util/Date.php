@@ -525,6 +525,9 @@ class GO_Base_Util_Date {
 
 	public static function to_input_format($date_string, $date_separator=null, $date_format=null)
 	{
+		if(strpos($date_string,'T')){
+			return $date_string;
+		}
 		if(!isset($date_format)){
 			$date_format=GO::user() ? GO::user()->completeDateFormat : GO::config()->default_date_format;
 		}

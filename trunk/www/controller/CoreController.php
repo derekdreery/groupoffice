@@ -497,5 +497,36 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 			}
 			echo "success:true\n}\n";	
 	}
+	
+	
+	public function actionModelAttributes($params){
+		
+		$response['results']=array();
+		
+		$model = GO::getModel($params['modelName']);
+		$labels = $model->attributeLabels();
+		
+		$columns = $model->getColumns();
+		foreach($columns as $name=>$attr){
+			if($name!='id' && $name!='user_id' && $name!='acl_id'){
+				$attr['name']=$name;
+				$attr['label']=$model->getAttributeLabel($name);
+				$response['results'][]=$attr;
+			}
+		}
+		
+		if($model->customfieldsRecord){
+			$columns = $model->customfieldsRecord->getColumns();
+			foreach($columns as $name=>$attr){
+				if($name != 'model_id'){
+					$attr['name']=$name;
+					$attr['label']=$model->customfieldsRecord->getAttributeLabel($name);
+					$response['results'][]=$attr;
+				}
+			}
+		}
+		
+		return $response;		
+	}
 
 }

@@ -20,8 +20,12 @@ GO.query.QueryPanel = function(config){
 	}
 	
 	this.typesStore = new GO.data.JsonStore({
-		url: GO.url(config.fieldsControllerRoute),
-		fields: ['name','value','type','fields', 'custom','id'],
+		url: GO.url("core/modelAttributes"),
+		id:'name',
+		baseParams:{
+			modelName:config.modelName
+		},
+		fields: ['name','label','gotype'],
 		remoteSort: true
 	});
 	
@@ -29,15 +33,16 @@ GO.query.QueryPanel = function(config){
 	config.autoScroll=true;
 	config.split=true;
 	
-	var checkColumn = new GO.grid.CheckColumn({
-		header: '&nbsp;',
-		dataIndex: 'close_group',
-		width: 20	
-	});
+//	var checkColumn = new GO.grid.CheckColumn({
+//		header: '&nbsp;',
+//		dataIndex: 'close_group',
+//		width: 20	
+//	});
 
 	var fields ={
-		fields:['andor','field','operator', 'value','close_group'],
+		fields:['andor','field','comparator', 'value','close_group','gotype'],
 		columns:[	{
+			width: 40,
 			header: 'AND / OR',
 			dataIndex: 'andor',
 			editor:new GO.form.ComboBox({
@@ -53,7 +58,7 @@ GO.query.QueryPanel = function(config){
 				valueField:'value',
 				displayField:'value',
 				name:'query_operator',
-				width: 60,
+				
 				mode: 'local',
 				triggerAction: 'all',
 				editable: false,
@@ -61,22 +66,33 @@ GO.query.QueryPanel = function(config){
 				forceSelection:true
 			})
 		},{
+			width:150,
 			header: 'Field',
 			dataIndex: 'field',
+			renderer : this.renderSelect.createDelegate(this),
 			editor: new GO.form.ComboBox({
 					store: this.typesStore,
-					valueField:'value',
-					displayField:'name',
-					mode: 'remote',
+					valueField:'name',
+					displayField:'label',
+					mode: 'local',
 					triggerAction: 'all',
 					editable: true,
 					selectOnFocus:true,
-					forceSelection:true					
-				}),
-			align:'right'
+					forceSelection:true,
+					listeners:{
+						scope:this,
+						select:function(combo,record){
+							var gridRecord = this.store.getAt(this.lastEdit.row);
+							
+							gridRecord.set('gotype',record.get('gotype'));							
+							
+						}
+					}
+				})
 		},{
-			header: 'Operator',
-			dataIndex: 'operator',
+			width:50,
+			header: 'Comparator',
+			dataIndex: 'comparator',
 			editor: new GO.form.ComboBox({
 				store: new Ext.data.ArrayStore({
 					idIndex:0,
@@ -99,17 +115,20 @@ GO.query.QueryPanel = function(config){
 				editable: false,
 				selectOnFocus:true,
 				forceSelection:true
-			}),
-			align:'right'
+			})
 		},{
+			width:100,
 			header: 'Value',
 			dataIndex: 'value',
 			editor: new Ext.form.TextField({
 				
-			}),
-			align:'right'
+			})
 		},
-		checkColumn]
+		{
+			width:50,
+			dataIndex: 'close_group',
+			editor: new Ext.form.Checkbox()
+		}]
 	};
 	config.store = new GO.data.JsonStore({
 		fields: fields.fields,
@@ -118,17 +137,12 @@ GO.query.QueryPanel = function(config){
 
 	var columnModel =  new Ext.grid.ColumnModel({
 		defaults:{
-			sortable:true
+			sortable:false
 		},
 		columns:fields.columns
 	});
 	
 	config.cm=columnModel;
-	config.view=new Ext.grid.GridView({
-		autoFill: true,
-		forceFit: true,
-		emptyText: GO.lang['strNoItems']
-	});
 	config.sm=new Ext.grid.RowSelectionModel();
 	config.loadMask=true;
 
@@ -139,12 +153,15 @@ GO.query.QueryPanel = function(config){
 		name: 'andor',
 		type: 'string'
 	},
-
+	{
+		name: 'gotype',
+		type: 'string'
+	},
 	{
 		name: 'field',
 		type: 'string'
 	},{
-		name: 'operator',
+		name: 'comparator',
 		type: 'string'
 	},
 
@@ -163,8 +180,8 @@ GO.query.QueryPanel = function(config){
 		handler: function(){
 			var e = new Criteria({
 				andor:'AND',
-				operator:'LIKE',
-				close_group:0
+				comparator:'LIKE',
+				close_group:false
 			});
 			this.stopEditing();
 			var count = this.store.getCount();
@@ -187,10 +204,64 @@ GO.query.QueryPanel = function(config){
 		scope: this
 	}];
 
+	config.listeners={
+		render:function(){
+			this.typesStore.load();
+		},
+		beforeedit:function(e){			
+			if(e.column==this.valueCol)
+				this.setEditor(e.record.get('gotype'));
+			
+			return true;
+		}
+	}
+
 
 	GO.query.QueryPanel.superclass.constructor.call(this, config);
 
 };
-Ext.extend(GO.query.QueryPanel, Ext.grid.EditorGridPanel,{
+Ext.extend(GO.query.QueryPanel, GO.grid.EditorGridPanel,{
+	
+	valueCol : 3,
+	
+	editors : {},
+	
+	renderSelect : function(value, p, record, rowIndex, colIndex, ds) {
+		var cm = this.getColumnModel();
+		var ce = cm.getCellEditor(colIndex, rowIndex);
 
+		var val = '';
+		if (ce.field.store.getById(value) !== undefined) {
+			val = ce.field.store.getById(value).get("label");
+		}
+		return val;
+	},
+	
+	setEditor : function(gotype){
+		
+		var col = this.getColumnModel().getColumnAt(this.valueCol);
+		
+		//if(!this.editors[gotype]){
+			switch(gotype){
+				case 'unixtimestamp':
+				case 'unixdate':
+					this.editors[gotype] = new Ext.form.DateField();
+					break;
+					
+				case 'number':
+					this.editors[gotype] = new GO.form.NumberField();
+				break;
+					
+				case 'boolean':
+					this.editors[gotype] = new Ext.form.CheckBox();
+				break;
+
+				default:
+					this.editors[gotype] = new Ext.form.TextField();
+					break;				
+			}
+		//}
+		
+		col.setEditor(this.editors[gotype]);
+	}
 });
