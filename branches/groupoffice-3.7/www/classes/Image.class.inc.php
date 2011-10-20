@@ -147,6 +147,20 @@ class Image {
 		imagecopyresampled($this->resized_image, $this->original_image, 0, 0, 0, 0, $width, $height, $current_width, $current_height);
 	}
 
+		
+	public function fitbox($box_width, $box_height) {
+		$width_orig = $this->getWidth();
+		$height_orig = $this->getHeight();
+		
+		$ratio_orig = $width_orig / $height_orig;
+		
+		if ($box_width / $box_height < $ratio_orig) {
+			$this->resizeToWidth($box_width);
+		} else {
+			$this->resizeToHeight($box_height);
+		}
+	}
+	
 	public function zoomcrop($thumbnail_width, $thumbnail_height) { //$imgSrc is a FILE - Returns an image resource.
 		$width_orig = $this->getWidth();
 		$height_orig = $this->getHeight();
