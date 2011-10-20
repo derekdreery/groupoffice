@@ -735,6 +735,20 @@ class cms_output extends cms {
 		if($random)
 			shuffle($params['items']);
 		
+		foreach ($params['items'] as $k=>$item) {
+			//When we start with a level or root_folder_id we don't
+			//know the current path yet. If rewrte is enabled we need to know
+			//the path for mod_rewrite to work.
+			$path = $this->build_path($item['folder_id'], true, $this->site['root_folder_id']);
+
+			$filepath = $search ? $this->build_path($item['folder_id'], true, $this->site['root_folder_id']) : $path;
+			if(!empty($filepath)){
+				$filepath .= '/';
+			}
+			$filepath .=$this->special_encode($item['name']);
+			$params['items'][$k]['href']=$this->create_href_by_path($filepath);
+		}
+		
 		return $this->items2html($params, $smarty);
 	}
 	
