@@ -103,6 +103,11 @@ GO.files.FolderPropertiesDialog = function(config){
 		hideLabel:true,
 		items:[this.propertiesPanel, this.commentsPanel, this.readPermissionsTab]
 	});
+	
+	if(GO.customfields){
+		this.disableCategoriesPanel = new GO.customfields.DisableCategoriesPanel();
+		this.tabPanel.add(this.disableCategoriesPanel);
+	}
 
 	if(GO.workflow)
 	{
@@ -147,97 +152,9 @@ GO.files.FolderPropertiesDialog = function(config){
 				},
 			scope: this
 		}
-		]
-		
-		
+		]		
 	});
 
-	if (GO.customfields) {
-		Ext.Ajax.request({
-			url:GO.settings.modules.files.url+'json.php',
-			params:{
-				task:'is_admin'
-			},
-			success: function(response, options)
-			{
-				var responseParams = Ext.decode(response.responseText);
-				if(responseParams.success && responseParams.has_admin)
-				{
-					this.customfieldCategoryPanel = new Ext.FormPanel({
-					waitMsgTarget:true,
-					title: GO.files.lang.categoriesFiles,
-					labelWidth: 150,
-					width: 800,
-					defaultType: 'checkbox',
-					border: false,
-					layout: 'form',
-					defaults: {
-						anchor:'100%'
-					},
-					cls:'go-form-panel',
-					waitMsgTarget:true,
-					items:[
-							this.limitCB = new Ext.form.Checkbox({
-								name: 'limit',
-								hideLabel: true,
-								boxLabel: GO.files.lang.applyLimits
-							}),this.cfCategoriesFieldset = new Ext.form.FieldSet({
-								title: GO.customfields.lang.categories,
-								layout: 'form',
-								style: 'margin:3px;padding:0;padding-left:3px;',
-								autoHeight: true
-							}),this.applyRecursivelyCB = new Ext.form.Checkbox({
-								name: 'recursive',
-								hideLabel: true,
-								boxLabel: GO.files.lang.applyRecursively,
-								checked : false
-							})
-						]
-					});
-					for (var i=0; i<GO.customfields.types['GO_Files_Model_File'].panels.length; i++) {
-						this.cfCategoriesFieldset.add(new Ext.form.Checkbox({
-								name: 'cat_'+GO.customfields.types['GO_Files_Model_File'].panels[i].category_id,
-								hideLabel: true,
-								boxLabel: GO.customfields.types['GO_Files_Model_File'].panels[i].title,
-								checked: false
-							}));
-					}
-
-					this.limitCB.on('check',function(cbox,checked) {
-						if (checked)
-							this.cfCategoriesFieldset.enable();
-						else
-							this.cfCategoriesFieldset.disable();
-					},this);
-
-					this.applyRecursivelyCB.on('check',function(cbox,checked) {
-						if (checked) {
-							Ext.MessageBox.show({
-							 title: GO.files.lang.pleaseConfirm,
-							 msg: GO.files.lang.applyRecursivelyRUSure,
-							 buttons: Ext.MessageBox.YESNO,
-							 fn: function(x) {
-								 this.applyRecursivelyCB.setValue(x=='yes');
-							 },
-							 animEl: 'mb4',
-							 icon: Ext.MessageBox.QUESTION,
-							 scope: this
-						 });
-						}
-					},this);
-
-					this.customfieldCategoryPanel.on('show',this.customfieldCategoriesPanelShownHandler,this);
-					this.tabPanel.add(this.customfieldCategoryPanel);
-					this.setSize(800,400);
-				}else if (!responseParams.success)
-				{
-					this.reload();
-					alert(responseParams.feedback);
-				}
-			},
-			scope:this
-		});
-	}
 
 	this.addEvents({
 		'rename' : true
@@ -270,6 +187,8 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 				this.setPermission(action.result.data.is_someones_home_dir, action.result.data.permission_level);
 
 				this.tabPanel.setActiveTab(0);
+				if(GO.customfields)
+					this.disableCategoriesPanel.setModel(folder_id,"GO_Files_model_File");
 				
 				GO.files.FolderPropertiesDialog.superclass.show.call(this);
 			},
@@ -313,11 +232,7 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 					this.fireEvent('rename', this, this.parent_id);				
 				}
 				this.fireEvent('save', this, this.folder_id);
-
-				if (GO.customfields) {
-					this.submitAllowedCfCategories(hide);
-				}
-
+				
 				if(hide)
 				{
 					this.hide();
@@ -341,66 +256,5 @@ Ext.extend(GO.files.FolderPropertiesDialog, GO.Window, {
 			
 		});
 			
-	},
-
-	submitAllowedCfCategories : function(hide) {
-		this.customfieldCategoryPanel.form.submit({
-			waitMsg:GO.lang.waitMsgSave,
-			url:GO.settings.modules.files.url+ 'action.php',
-			params:
-			{
-				task : 'save_folder_limits',
-				folder_id : this.folder_id
-			},
-			success:function(form, action){
-				if (hide)
-					this.hide();
-			},
-			failure: function(form, action) {
-				if(action.failureType == 'client')
-				{
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);
-				} else {
-					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
-				}
-			},
-			scope: this
-		});
-	},
-	uncheckCategoryCBs : function() {
-		for(var i=0; i<this.cfCategoriesFieldset.items.items.length;i++)
-			this.cfCategoriesFieldset.items.items[i].setValue(false);
-	},
-	loadCustomfieldCategoriesForm : function() {
-		this.uncheckCategoryCBs();
-		this.customfieldCategoryPanel.form.load({
-			url : GO.settings.modules.files.url + 'json.php',
-			params : {
-				task : 'folder_cf_categories',
-				folder_id : this.folder_id
-			},
-			waitMsg : GO.lang.waitMsgLoad,
-			success : function(form, action) {
-				var response = Ext.decode(action.response.responseText);
-				if (response.data.limit)
-					this.cfCategoriesFieldset.enable();
-				else
-					this.cfCategoriesFieldset.disable();
-
-				this.applyRecursivelyCB.setValue(false);
-			},
-			failure: function(form, action) {
-				if(action.failureType == 'client')
-				{
-					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);
-				} else {
-					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
-				}
-			},
-			scope : this
-		});
-	},
-	customfieldCategoriesPanelShownHandler : function() {
-		this.loadCustomfieldCategoriesForm();
-	}
+	}	
 });

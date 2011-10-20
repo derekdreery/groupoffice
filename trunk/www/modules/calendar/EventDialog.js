@@ -367,7 +367,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					this.selectCalendar.setRemoteText(action.result.remoteComboTexts.calendar_id);
 					this.files_folder_id = action.result.data.files_folder_id;
 					
-					GO.customfields.disableTabs(this.tabPanel, action.result);	
+					if(GO.customfields)
+						GO.customfields.disableTabs(this.tabPanel, action.result);	
 
 					if(action.result.group_id == 1)
 					{
