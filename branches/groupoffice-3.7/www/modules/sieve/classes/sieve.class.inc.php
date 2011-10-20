@@ -278,23 +278,24 @@ class sieve {
 		$active = $this->sieve->getActive();
 		if (!$active) {
 
-			$content = "require [\"vacation\"];
-require [\"fileinto\"];
-# rule:[".$lang['sieve']['standardvacation']."]
-if false # anyof (true)
-{".
-"vacation :days 3 text:\r\n".
-$lang['sieve']['standardvacationmessage']."\r\n".
-"\r\n".
-".\r\n".	
-";\r\n".
-"}\r\n";
-
-			$content .= "# rule:[Spam]
-if anyof (header :contains \"X-Spam-Flag\" \"YES\")
-{
-	fileinto \"Spam\";
-}";
+			$content = '';
+//			$content = "require [\"vacation\"];
+//require [\"fileinto\"];
+//# rule:[".$lang['sieve']['standardvacation']."]
+//if false # anyof (true)
+//{".
+//"vacation :days 3 text:\r\n".
+//$lang['sieve']['standardvacationmessage']."\r\n".
+//"\r\n".
+//".\r\n".	
+//";\r\n".
+//"}\r\n";
+//
+//			$content .= "# rule:[Spam]
+//if anyof (header :contains \"X-Spam-Flag\" \"YES\")
+//{
+//	fileinto \"Spam\";
+//}";
 			$this->save_script('groupoffice', $content);
 			$this->activate('groupoffice');
 			$active = 'groupoffice';
