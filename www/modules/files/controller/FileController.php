@@ -52,7 +52,9 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 		$response['data']['size'] = GO_Base_Util_Number::formatSize($model->fsFile->size());
 		$response['data']['extension'] = $model->fsFile->extension();
 		$response['data']['type'] = GO::t($model->fsFile->extension(), 'base', 'filetypes');
-
+		
+		if (GO::modules()->customfields)
+			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Files_Model_File", $model->folder_id);
 
 		return parent::afterLoad($response, $model, $params);
 	}

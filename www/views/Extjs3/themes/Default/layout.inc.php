@@ -16,7 +16,7 @@ if(isset($GLOBALS['GO_MODULES']->modules['customcss']) && file_exists($GLOBALS['
 <div id="loading-mask" style="width:100%;height:100%;background:#f1f1f1;position:absolute;z-index:20000;left:0;top:0;">&#160;</div>
 <div id="loading">
 	<div class="loading-indicator">
-	<img src="<?php echo $GLOBALS['GO_CONFIG']->host; ?>ext/resources/images/default/grid/loading.gif" style="width:16px;height:16px;vertical-align:middle" />&#160;<span id="load-status"><?php echo $lang['common']['loadingCore']; ?></span>
+	<img src="<?php echo $GLOBALS['GO_CONFIG']->host; ?>views/Extjs3/ext/resources/images/default/grid/loading.gif" style="width:16px;height:16px;vertical-align:middle" />&#160;<span id="load-status"><?php echo $lang['common']['loadingCore']; ?></span>
 	<div id="copyright" style="font-size:10px; font-weight:normal;margin-top:15px;">Copyright &copy; <?php
 	if($GLOBALS['GO_CONFIG']->product_name!='Group-Office'){
 		echo $GLOBALS['GO_CONFIG']->product_name;
