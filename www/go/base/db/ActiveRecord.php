@@ -1655,7 +1655,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 		if(isset($this->columns['mtime']))
 			$this->mtime=time();
-		if(isset($this->columns['ctime']) && !isset($this->ctime)){
+		if(isset($this->columns['ctime']) && empty($this->ctime)){
 			$this->ctime=time();
 		}
 

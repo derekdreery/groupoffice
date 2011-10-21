@@ -53,9 +53,9 @@ class Odf {
 			throw new OdfException('Configuration data must be provided as array');
 		}
 		foreach ($config as $configKey => $configValue) {
-			if (array_key_exists($configKey, $this->config)) {
+			//if (array_key_exists($configKey, $this->config)) {
 				$this->config[$configKey] = $configValue;
-			}
+			//}
 		}
 		if (!class_exists($this->config['ZIP_PROXY'])) {
 			throw new OdfException($this->config['ZIP_PROXY'] . ' class not found - check your php settings');
@@ -232,24 +232,24 @@ IMG;
 				$v = str_replace($key, $value, $v);
 			}
 
-			$GLOBALS['GO_CONFIG']->debug_display_errors = false;
+			GO::config()->debug_display_errors = false;
 			@eval("\$result_string=" . $v . ";");
-			$GLOBALS['GO_CONFIG']->debug_display_errors = true;
+			GO::config()->debug_display_errors = true;
 
 			$v = isset($result_string) ? $result_string : 'invalid math expression!';
 		}
 
-		if (isset($arr[1])) {
-			$args = explode(':', $arr[1]);
-
-			//first value = function name
-			$func = array_shift($args);
-
-			//add value as first argument
-			array_unshift($args, $v);
-
-			$v = call_user_func_array(array('odf_renderers', $func), $args);
-		}
+//		if (isset($arr[1])) {
+//			$args = explode(':', $arr[1]);
+//
+//			//first value = function name
+//			$func = array_shift($args);
+//
+//			//add value as first argument
+//			array_unshift($args, $v);
+//
+//			$v = call_user_func_array(array('odf_renderers', $func), $args);
+//		}
 		return $garbage_tags . $v;
 	}
 
@@ -416,20 +416,20 @@ IMG;
 
 }
 
-class odf_renderers {
-
-	function number($v, $decimals=2) {
-		return Number::format($v, $decimals);
-	}
-
-	function from_unixtime($v, $with_time=true) {
-		return Date::get_timestamp($v, $with_time);
-	}
-
-	function from_unixdate($v) {
-		return Date::get_timestamp($v, false);
-	}
-
-}
+//class odf_renderers {
+//
+//	function number($v, $decimals=2) {
+//		return GO_Base_Util_Number::localize($v, $decimals);
+//	}
+//
+//	function from_unixtime($v, $with_time=true) {
+//		return GO_Base_Util_Date::get_timestamp($v, $with_time);
+//	}
+//
+//	function from_unixdate($v) {
+//		return GO_Base_Util_Date::get_timestamp($v, false);
+//	}
+//
+//}
 
 ?>
