@@ -1275,6 +1275,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return isset($r[$name]);		
 	}
 	
+	private function _getRelation($name){
+		$r= $this->relations();
+		
+		if(!isset($r[$name]))
+			return false;
+		
+		return $r[$name];
+	}
+	
 	private function _getRelated($name, $extraFindParams=array()){
 		 //$name::findByPk($hit-s)
 		$r= $this->relations();
@@ -2680,6 +2689,75 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $reminder;
 					
 	}
+		
+	/**
+	 * Add a record to the given MANY_MANY relation
+	 * 
+	 * @param String $relationName
+	 * @param int $foreignPk
+	 * @param array $extraAttributes
+	 * @return boolean Saved
+	 */
+	public function addManyMany($relationName, $foreignPk, $extraAttributes=array()){
+		
+		if(!$this->hasManyMany($relationName, $foreignPk)){
+			
+			$r = $this->_getRelation($relationName);
+			
+			$linkModel = new $r['linkModel'];
+			$linkModel->{$r['field']} = $this->id;
+			
+			$keys = $linkModel->primaryKey();
+			
+			$foreignField = $keys[0]==$r['field'] ? $keys[1] : $keys[2];
+			
+			$linkModel->$remoteField = $foreignPk;
+			
+			$linkModel->setAttributes($extraAttributes);
+			
+			return $linkModel->save();
+		}else
+		{
+			return true;
+		}
+  }
+	
+	/**
+	 * Remove a record from the given MANY_MANY relation
+	 * 
+	 * @param String $relationName
+	 * @param int $foreignPk
+	 * 
+	 * @return GO_Base_Db_ActiveRecord or false 
+	 */
+	public function removeManyMany($relationName, $foreignPk){		
+		$linkModel = $this->hasManyMany($relationName, $foreignPk);
+		
+		if($linkModel)
+			return $linkModel->delete();
+		else
+			return true;
+	}
+  
+  /**
+   * Check for records in the given MANY_MANY relation
+   * 
+   * @param String $relationName
+	 * @param int $foreignPk
+	 * 
+   * @return GO_Base_Db_ActiveRecord or false 
+   */
+  public function hasManyMany($relationName, $foreignPk){
+		$r = $this->_getRelation($relationName);
+		
+		$linkModel = GO::getModel($r['linkModel']);
+		$keys = $linkModel->primaryKey();	
+		$foreignField = $keys[0]==$r['field'] ? $keys[1] : $keys[2];
+		
+		$primaryKey = array($r['field']=>$this->pk, $foreignField=>$foreignPk);
+		
+    return $linkModel->findByPk($primaryKey);
+  }
 
 }
 
