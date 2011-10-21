@@ -41,3 +41,7 @@ $updates[201110170002][]="ALTER TABLE `ta_tasks`
   DROP `sat`,
   DROP `sun`,
   DROP `month_time`;";
+
+$updates[201110211221][]="ALTER TABLE `ta_settings` CHANGE `remind` `remind` BOOLEAN NOT NULL DEFAULT '0'";
+$updates[201110211221][]="UPDATE ta_settings SET remind=0 where remind=1";
+$updates[201110211221][]="UPDATE ta_settings SET remind=1 where remind=2";
