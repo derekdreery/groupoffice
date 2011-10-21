@@ -66,7 +66,7 @@ GO.data.JsonStore = function(config) {
 		
 	}, this);
 	
-	this.on('loadexception',	
+	this.on('loadexception',		
 		function(proxy, store, response, e){
 
 			if(response.status==0)
@@ -88,15 +88,17 @@ GO.data.JsonStore = function(config) {
 					default:
 						var msg;
 
-						if(this.reader.jsonData && this.reader.jsonData.feedback)
-						{
-							msg = this.reader.jsonData.feedback;
-							GO.errorDialog.show(msg);
-						}else
-						{
-							msg = GO.lang.serverError;
-							msg += '<br /><br />JsonStore load exception occurred';
-							GO.errorDialog.show(msg, response.responseText);
+						if(!GO.errorDialog.isVisible()){
+							if(this.reader.jsonData && this.reader.jsonData.feedback)
+							{
+								msg = this.reader.jsonData.feedback;
+								GO.errorDialog.show(msg);
+							}else
+							{
+								msg = GO.lang.serverError;
+								msg += '<br /><br />JsonStore load exception occurred';
+								GO.errorDialog.show(msg, response.responseText);
+							}
 						}
 
 						
