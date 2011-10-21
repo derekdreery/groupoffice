@@ -128,10 +128,11 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		$columnModel->formatColumn('completed','$model->status=="COMPLETED" ? 1 : 0');
 		$columnModel->formatColumn('category_name','$model->category->name',array(),'category_id');
 		$columnModel->formatColumn('tasklist_name','$model->tasklist_name');
+		$columnModel->formatColumn('late','$model->due_time<time() ? 1 : 0;');
 		//$colModel->formatColumn('project_name','$model->project->name'); TODO: Implement the project from the ID and not from the name
 		return parent::formatColumns($columnModel);
 	}
-	
+		
 	protected function getStoreParams($params) {
 
 //		$storeParams =  array(
