@@ -886,7 +886,7 @@ class addressbook extends db {
 		}
 
 		if(count($mailings_filter)) {
-			$sql .= "INNER JOIN ml_mailing_contacts mc ON mc.contact_id=ab_contacts.id ";
+			$sql .= "INNER JOIN ab_addresslist_contacts mc ON mc.contact_id=ab_contacts.id ";
 		}
 
 
@@ -971,7 +971,7 @@ class addressbook extends db {
 		}
 
 		if(count($mailings_filter)) {
-			$sql .= " AND mc.group_id IN (".implode(',', $mailings_filter).")";
+			$sql .= " AND mc.list_id IN (".implode(',', $mailings_filter).")";
 		}
 
 		if(!empty($advanced_query)) {
@@ -1065,7 +1065,7 @@ class addressbook extends db {
 		}
 
 		if(count($mailings_filter)) {
-			$sql .= "INNER JOIN ml_mailing_companies mc ON mc.company_id=ab_companies.id ";
+			$sql .= "INNER JOIN ab_addresslist_companies mc ON mc.company_id=ab_companies.id ";
 		}
 
 		if($addressbooks && count($addressbooks))
@@ -1138,7 +1138,7 @@ class addressbook extends db {
 		}
 
 		if(count($mailings_filter)) {
-			$sql .= " AND mc.group_id IN (".implode(',', $mailings_filter).")";
+			$sql .= " AND mc.list_id IN (".implode(',', $mailings_filter).")";
 		}
 
 		if(!empty($advanced_query)) {
