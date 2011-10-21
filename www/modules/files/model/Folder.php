@@ -277,8 +277,11 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 */
 	public function addFile($name) {
 		$file = new GO_Files_Model_File();
+	
 		$file->folder_id = $this->id;
 		$file->name = $name;
+		
+		
 		$file->save();
 
 		return $file;

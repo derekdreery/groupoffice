@@ -350,8 +350,10 @@ class GO{
 
 			$_SESSION['connect_count'] = 0;
 			$_SESSION['query_count'] = 0;
-
-			error_reporting(E_ALL | E_STRICT);
+			
+			//Don't do this for old lib
+			if(!isset($GLOBALS['GO_CONFIG']))
+				error_reporting(E_ALL | E_STRICT);
 
 			ini_set('display_errors','on');
 			ini_set('log_errors','on');

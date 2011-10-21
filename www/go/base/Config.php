@@ -1029,8 +1029,8 @@ class GO_Base_Config {
 	 */
 
 	function get_config_file() {
-		if(defined('CONFIG_FILE'))
-			return CONFIG_FILE;
+		if(defined('GO_CONFIG_FILE'))
+			return GO_CONFIG_FILE;
 
 		//on start page always search for config
 		if(empty($_REQUEST['r'])){

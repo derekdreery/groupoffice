@@ -22,6 +22,6 @@ modules/addressbook/SearchQueryPanel.js
 modules/addressbook/SavedQueryGrid.js
 modules/addressbook/MainPanel.js
 modules/addressbook/SelectAddressbook.js
-modules/addressbook/CustomField.js
+
 modules/addressbook/GlobalSettings.js
 modules/addressbook/ContextMenu.js
