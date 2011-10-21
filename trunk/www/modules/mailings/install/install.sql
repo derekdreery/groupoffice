@@ -16,11 +16,11 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `ml_mailings`
+-- Tabel structuur voor tabel `ab_sent_mailings`
 --
 
-DROP TABLE IF EXISTS `ml_mailings`;
-CREATE TABLE IF NOT EXISTS `ml_mailings` (
+DROP TABLE IF EXISTS `ab_sent_mailings`;
+CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `subject` varchar(100) default NULL,
@@ -41,11 +41,11 @@ CREATE TABLE IF NOT EXISTS `ml_mailings` (
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `ml_mailing_groups`
+-- Tabel structuur voor tabel `ab_addresslists`
 --
 
-DROP TABLE IF EXISTS `ml_mailing_groups`;
-CREATE TABLE IF NOT EXISTS `ml_mailing_groups` (
+DROP TABLE IF EXISTS `ab_addresslists`;
+CREATE TABLE IF NOT EXISTS `ab_addresslists` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `acl_id` int(11) NOT NULL default '0',
@@ -92,15 +92,15 @@ CREATE TABLE IF NOT EXISTS `ml_default_templates` (
 
 
 
-DROP TABLE IF EXISTS `ml_mailing_contacts`;
-CREATE TABLE IF NOT EXISTS `ml_mailing_contacts` (
+DROP TABLE IF EXISTS `ab_addresslist_contacts`;
+CREATE TABLE IF NOT EXISTS `ab_addresslist_contacts` (
   `group_id` int(11) NOT NULL DEFAULT '0',
   `contact_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`group_id`,`contact_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `ml_mailing_companies`;
-CREATE TABLE IF NOT EXISTS `ml_mailing_companies` (
+DROP TABLE IF EXISTS `ab_addresslist_companies`;
+CREATE TABLE IF NOT EXISTS `ab_addresslist_companies` (
   `group_id` int(11) NOT NULL DEFAULT '0',
   `company_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`group_id`,`company_id`)
