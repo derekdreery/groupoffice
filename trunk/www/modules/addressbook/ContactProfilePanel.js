@@ -426,10 +426,10 @@ Ext.extend(GO.addressbook.ContactProfilePanel, Ext.Panel,{
 		this.formCompany.store.baseParams['addressbook_id'] = addressbook_id;
 		this.formCompany.clearLastSearch();
 
-		if (GO.customfields) {
-			var allowed_cf_categories = this.formAddressBooks.store.getById(addressbook_id).data.allowed_cf_categories.split(',');
-			GO.addressbook.contactDialog.updateCfTabs(allowed_cf_categories);
-		}
+//		if (GO.customfields) {
+//			var allowed_cf_categories = this.formAddressBooks.store.getById(addressbook_id).data.allowed_cf_categories.split(',');
+//			GO.addressbook.contactDialog.updateCfTabs(allowed_cf_categories);
+//		}
 	},
 	setValues : function(record)
 	{
