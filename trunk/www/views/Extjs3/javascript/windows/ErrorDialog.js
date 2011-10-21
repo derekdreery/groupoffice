@@ -48,6 +48,9 @@ Ext.extend(GO.ErrorDialog, GO.Window, {
 					this.render(Ext.getBody());
 
 				this.detailPanel.collapse();
+				
+				if(!error)
+					error = "No error message given";
 
 				this.messagePanel.body.update(error);
 				
