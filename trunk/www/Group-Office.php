@@ -146,11 +146,12 @@ if($GO_CONFIG->debug){
     go_debug($err_str);
 	}
 
-	error_reporting(E_ALL | E_STRICT);
-	ini_set('display_errors', 1);
-
+	error_reporting(E_ALL & ~E_STRICT);
+	ini_set('display_errors', "on");
+	
 	//set_error_handler("groupoffice_error_handler", E_ALL);
 }
+
 
 $GO_LANGUAGE = new GO_LANGUAGE();
 $GO_SECURITY = new GO_SECURITY();

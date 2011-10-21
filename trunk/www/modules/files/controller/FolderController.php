@@ -487,9 +487,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			//model has a new path. We must move the current folder					
 			$destinationFolder = GO_Files_Model_Folder::model()->findByPath(
 							dirname($newPath), true);
+			
+			$fsFolder = new GO_Base_Fs_Folder($newPath);
+			$fsFolder->appendNumberToNameIfExists();
 
-			$folder->name = GO_Base_Fs_File::utf8Basename($newPath);
-			$folder->makeAttributeUnique('name');
+			$folder->name = $fsFolder->name();			
 			$folder->folder_id = $destinationFolder->id;
 			$folder->systemSave = true;
 			$folder->save();

@@ -108,7 +108,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * An associative array of which the keys become available variables in the view file.
 	 */
 	protected function render($viewName, $data=array()){		
-		header('Content-Type: text/html; charset=UTF-8');
+		//header('Content-Type: text/html; charset=UTF-8');
 		
 		//extract($data);
 		

@@ -97,6 +97,9 @@ class Odf {
 	 */
 	public function setVars($key, $value, $encode = true) {
 			$value = $encode ? htmlspecialchars($value, ENT_COMPAT, 'UTF-8') : $value;
+			
+			GO::debug('ODF var: '.$key.'=>'.$value);
+			
 			$this->vars[$key] = str_replace("\n", "<text:line-break/>", $value);
 			return $this;
 	}
@@ -194,7 +197,7 @@ IMG;
 		return $tag . $garbage_tags;
 	}
 
-	function replacetag($tag, $record) {
+	public static function replacetag($tag, $record) {
 		$tag = stripslashes($tag);
 		$orig_tag = $tag;
 
