@@ -132,8 +132,19 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		//$colModel->formatColumn('project_name','$model->project->name'); TODO: Implement the project from the ID and not from the name
 		return parent::formatColumns($columnModel);
 	}
+	
+	protected function getStoreMultiSelectDefault() {
+		$settings = GO_Tasks_Model_Settings::model()->findByPk(GO::user()->id);
+		
+		
+		return $settings->default_tasklist_id;	
+	}
 		
 	protected function getStoreParams($params) {
+		
+		//TODO store in settings
+		if(!isset($params['show']))
+			$params['show']='active';
 
 //		$storeParams =  array(
 //				'ignoreAcl'=>true,

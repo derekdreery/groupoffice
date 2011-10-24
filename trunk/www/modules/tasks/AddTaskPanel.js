@@ -79,7 +79,7 @@ Ext.extend(GO.tasks.AddTaskPanel, Ext.FormPanel,{
 			}
 		}else
 		{
-			data = [[GO.tasks.defaultTasklist.id, GO.tasks.defaultTasklist.name]]
+			//data = [[GO.tasks.defaultTasklist.id, GO.tasks.defaultTasklist.name]]
 		}
 
 		this.ntTasklist.store.loadData(data);
