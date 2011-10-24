@@ -72,6 +72,8 @@ GO.grid.MultiSelectGrid = function (config){
 		}
 
 		this.selectedAll = (num_selected == this.store.data.items.length) ? true : false;
+		
+		//this.fireEvent('change', this, this.getSelected(), this.getSelectedRecords());
 
 //		if(this.allowNoSelection)
 //		{
@@ -107,15 +109,27 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 	},
 
 	getSelected : function(){
-		var types = [];
+		var ids = [];
 		for (var i = 0; i < this.store.data.items.length;  i++)
 		{
 			if( this.store.data.items[i].get('checked'))
 			{
-				types.push(this.store.data.items[i].get('id'));
+				ids.push(this.store.data.items[i].get('id'));
 			}
 		}
-		return types;
+		return ids;
+	},
+	
+	getSelectedRecords : function(){
+		var records = [];
+		for (var i = 0; i < this.store.data.items.length;  i++)
+		{
+			if( this.store.data.items[i].get('checked'))
+			{
+				records.push(this.store.data.items[i]);
+			}
+		}
+		return records;
 	},
 
 	applyFilter : function(select_records, suppressEvent){
