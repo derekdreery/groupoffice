@@ -91,9 +91,10 @@ GO.notes.MainPanel = function(config){
 				this.eastPanel.reset();
 
 				GO.notes.showNoteDialog(0, {
-					category_id: b.buttonParams.id,
-					category_name: b.buttonParams.name
-					});
+						loadParams:{
+							category_id: b.buttonParams.id						
+						}
+				});
 			},
 			scope: this
 		},{

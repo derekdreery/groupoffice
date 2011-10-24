@@ -25,22 +25,6 @@ GO.notes.NoteDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		
 		GO.notes.NoteDialog.superclass.initComponent.call(this);	
 	},
-
-	afterLoad : function(remoteModelId, config, action){
-		
-		if(!remoteModelId){
-			if(!config.category_id)
-			{
-				config.category_id=GO.notes.defaultCategory.id;
-				config.category_name=GO.notes.defaultCategory.name;
-			}
-			this.selectCategory.setValue(config.category_id);
-			if(config.category_name)
-			{			
-				this.selectCategory.setRemoteText(config.category_name);
-			}		
-		}
-	},
 	
 	buildForm : function () {
 		
