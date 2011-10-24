@@ -23,7 +23,19 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name','$model->user->name');
+		
 		return parent::formatColumns($columnModel);
+	}
+	
+	protected function getStoreMultiSelectProperties(){
+		return array('requestParam'=>'tasks_tasklist_filter');
+	}
+	
+	protected function getStoreMultiSelectDefault() {
+		$settings = GO_Tasks_Model_Settings::model()->findByPk(GO::user()->id);
+		
+		
+		return $settings->default_tasklist_id;	
 	}
 	
 	protected function remoteComboFields(){

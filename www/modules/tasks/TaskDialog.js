@@ -88,9 +88,9 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 		delete this.link_config;
 		this.formPanel.form.reset();
 
-		this.formPanel.form.findField('remind').setValue(!GO.util.empty(GO.tasks.remind));
-		this.formPanel.form.findField('remind_date').setDisabled(GO.util.empty(GO.tasks.remind));
-		this.formPanel.form.findField('remind_time').setDisabled(GO.util.empty(GO.tasks.remind));
+//		this.formPanel.form.findField('remind').setValue(!GO.util.empty(GO.tasks.remind));
+//		this.formPanel.form.findField('remind_date').setDisabled(GO.util.empty(GO.tasks.remind));
+//		this.formPanel.form.findField('remind_time').setDisabled(GO.util.empty(GO.tasks.remind));
 
 		this.tabPanel.setActiveTab(0);
 
@@ -100,12 +100,17 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 
 		this.setTaskId(config.task_id);
 		
+		var params = {};
+		if (!GO.util.empty(config.tasklist_id))
+			params.tasklist_id=config.tasklist_id;
+		
 		// this.selectTaskList.container.up('div.x-form-item').setDisplayed(false);
 
-		if (config.task_id > 0) {
+//		if (config.task_id > 0) {
 
 			this.formPanel.load({
 				url : GO.url('tasks/task/load'),
+				params:params,
 				success : function(form, action) {
 					this.win.show();
 					this.changeRepeat(action.result.data.freq);
@@ -124,6 +129,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 						this.selectCategory.setRemoteText(action.result.data.category_name);
 					}
 					
+					this.formPanel.form.clearInvalid();
+					
 				},
 				failure : function(form, action) {
 					Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
@@ -131,32 +138,32 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				scope : this
 
 			});
-		} else {
-			delete this.formPanel.form.baseParams['exception_task_id'];
-			delete this.formPanel.form.baseParams['exceptionDate'];
-
-			this.lastTaskListId = this.selectTaskList.getValue();
-
-			this.selectTaskList.setValue(this.lastTaskListId);
-
-			this.setWritePermission(true);
-
-			this.win.show();
-			this.setValues(config.values);
-
-			if (GO.util.empty(config.tasklist_id)) {
-				config.tasklist_id = GO.tasks.defaultTasklist.id;
-				config.tasklist_name = GO.tasks.defaultTasklist.name;
-			}
-			this.selectTaskList.setValue(config.tasklist_id);
-			if (config.tasklist_name) {
-				this.selectTaskList.setRemoteText(config.tasklist_name);
-				this.selectTaskList.container.up('div.x-form-item').setDisplayed(true);
-			}else
-			{
-				this.selectTaskList.container.up('div.x-form-item').setDisplayed(false);
-			}
-		}
+//		} else {
+//			delete this.formPanel.form.baseParams['exception_task_id'];
+//			delete this.formPanel.form.baseParams['exceptionDate'];
+//
+//			this.lastTaskListId = this.selectTaskList.getValue();
+//
+//			this.selectTaskList.setValue(this.lastTaskListId);
+//
+//			this.setWritePermission(true);
+//
+//			this.win.show();
+//			this.setValues(config.values);
+//
+//			if (GO.util.empty(config.tasklist_id)) {
+//				config.tasklist_id = GO.tasks.defaultTasklist.id;
+//				config.tasklist_name = GO.tasks.defaultTasklist.name;
+//			}
+//			this.selectTaskList.setValue(config.tasklist_id);
+//			if (config.tasklist_name) {
+//				this.selectTaskList.setRemoteText(config.tasklist_name);
+//				this.selectTaskList.container.up('div.x-form-item').setDisplayed(true);
+//			}else
+//			{
+//				this.selectTaskList.container.up('div.x-form-item').setDisplayed(false);
+//			}
+//		}
 
 		// if the newMenuButton from another passed a linkTypeId then set this
 		// value in the select link field

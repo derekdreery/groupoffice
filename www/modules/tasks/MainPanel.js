@@ -347,42 +347,32 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 				this.tasklist_id = records[0].data.id;
 				this.tasklist_name = records[0].data.name;
 			}
-                       
-			this.gridPanel.store.load();                       
+                                             
 		},this);
 
 		
-		//this.taskListsStore.load();
 
-		this.getEl().mask(GO.lang.waitMsgLoad);
-		Ext.Ajax.request({
-			url: GO.settings.modules.tasks.url+'json.php',
+		GO.request({
+			maskEl:this.getEl(),
+			url: "core/multiRequest",
 			params:{
-				task:'init'
+				requests:Ext.encode({
+					tasklists:{r:"tasks/tasklist/store"},				
+					categories:{r:"tasks/category/store"},
+					tasks:{r:"tasks/task/store"}
+				})
 			},
-			callback: function(options, success, response)
+			success: function(options, response, result)
 			{
-
-				if(!success)
-				{
-					alert( GO.lang['strRequestError']);
-				}else
-				{
-					var jsonData = Ext.decode(response.responseText);
-
-					GO.tasks.categoriesStore.loadData(jsonData.categories);
-					this.taskListsStore.loadData(jsonData.tasklists);
-
-					this.getEl().unmask();
-				}
+				GO.tasks.categoriesStore.loadData(result.categories);
+				this.taskListsStore.loadData(result.tasklists);				
+				this.gridPanel.store.loadData(result.tasks);
 			},
 			scope:this
-		});
-
-               
+		});               
 		
 		GO.mainLayout.on('linksDeleted', function(deleteConfig, link_types){
-			GO.mainLayout.onLinksDeletedHandler(link_types[12], this, this.gridPanel.store);
+			GO.mainLayout.onLinksDeletedHandler(link_types["GO_Tasks_Model_Task"], this, this.gridPanel.store);
 		}, this);    
 	},
   
@@ -393,12 +383,12 @@ Ext.extend(GO.tasks.MainPanel, Ext.Panel,{
 			this.tasklistDialog = new GO.tasks.TasklistDialog();
 			this.categoryDialog = new GO.tasks.CategoryDialog();
 
-			GO.tasks.writableTasklistsStore.on('load', function(){
-				if(GO.tasks.writableTasklistsStore.reader.jsonData.new_default_tasklist){
-					GO.tasks.defaultTasklist=GO.tasks.writableTasklistsStore.reader.jsonData.new_default_tasklist;
-				}
-			
-			}, this);
+//			GO.tasks.writableTasklistsStore.on('load', function(){
+//				if(GO.tasks.writableTasklistsStore.reader.jsonData.new_default_tasklist){
+//					GO.tasks.defaultTasklist=GO.tasks.writableTasklistsStore.reader.jsonData.new_default_tasklist;
+//				}
+//			
+//			}, this);
 			
 			this.tasklistDialog.on('save', function(){
 				GO.tasks.writableTasklistsStore.load();
