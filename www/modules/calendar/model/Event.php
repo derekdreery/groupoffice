@@ -480,11 +480,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$dateType = $this->all_day_event ? Sabre_VObject_Element_DateTime::DATE : Sabre_VObject_Element_DateTime::LOCALTZ;
 		
-		if($this->exceptionEvent){			
-			$recurrenceId =new Sabre_VObject_Element_DateTime("recurrence-id",$dateType);
-			$recurrenceId->setDateTime(new DateTime(date('c',$this->exceptionEvent->start_time)));
-			$e->add($recurrenceId);
-		}
+//		if($this->exceptionEvent){			
+//			$recurrenceId =new Sabre_VObject_Element_DateTime("recurrence-id",$dateType);
+//			$recurrenceId->setDateTime(new DateTime(date('c',$this->exceptionEvent->start_time)));
+//			$e->add($recurrenceId);
+//		}
 		
 		
 		$dtstart = new Sabre_VObject_Element_DateTime('dtstart',$dateType);

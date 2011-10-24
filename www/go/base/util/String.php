@@ -19,6 +19,12 @@
  */
 
 class GO_Base_Util_String {
+	
+	
+	public static function normalizeCrlf($text, $crlf="\r\n"){
+		$text = str_replace("\r","",$text);
+		return $crlf != "\n" ? str_replace("\n",$crlf,$text) : $text;
+	}
 
 	public static function get_first_letters($phrase) {
 

@@ -16,6 +16,15 @@
  * @version $Id: Number.php 7962 2011-08-24 14:48:45Z mschering $
  * @author Merijn Schering <mschering@intermesh.nl>
  * @package GO.base.util.date
+ * 
+ * @property int $until
+ * @property string $freq
+ * @property int $interval
+ * @property array $byday
+ * @property array $bymonth
+ * @property int $bymonthday
+ * @property int $eventStartTime
+ * @property int $bysetpos
  */
 class GO_Base_Util_Date_RecurrencePattern{
 	
@@ -47,16 +56,30 @@ class GO_Base_Util_Date_RecurrencePattern{
 	public function setParams($params){
 		foreach($params as $paramName=>$value)
 		{
-			$setter = '_set'.ucfirst($paramName);
-			if(method_exists($this, $setter)){
-				$this->$setter($value);
-			}else
-			{
-				$var = '_'.$paramName;
-				$this->$var=$value;
-			}			
-			
+			$this->$paramName=$value;
 		}
+	}
+	
+	public function __set($name, $value) {
+		$setter = '_set'.ucfirst($name);
+		if(method_exists($this, $setter)){
+			$this->$setter($value);
+		}else
+		{
+			$var = '_'.$name;
+			$this->$var=$value;
+		}			
+	}
+	
+	public function __get($name) {
+		$getter = '_get'.ucfirst($name);
+		if(method_exists($this, $getter)){
+			$this->$getter($name);
+		}else
+		{
+			$var = '_'.$name;
+			return $this->$var;
+		}		
 	}
 	
 	public function getParams(){

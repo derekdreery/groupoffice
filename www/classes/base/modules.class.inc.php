@@ -120,9 +120,6 @@ class GO_MODULES extends db {
 		if(isset($_SESSION['GO_SESSION']['modules']))
 		{
 			$this->modules = $_SESSION['GO_SESSION']['modules'];
-		}elseif(!defined('NOTINSTALLED') && !empty($this->user))
-		{
-			$this->load_modules();
 		}	
 	}
 	
@@ -206,6 +203,8 @@ class GO_MODULES extends db {
 //
 //			}
 //		}
+		
+
 		
 		$this->modules=array();
 		$_SESSION['GO_SESSION']['modules']=array();

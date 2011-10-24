@@ -147,11 +147,17 @@ class GO_Base_Session extends GO_Base_Observable{
 	 * @param string $password
 	 * @return GO_Base_Model_User or false on failure.
 	 */
-	public function login($username, $password) {
+	public function login($username, $password, $countLogin=true) {
 		
 		$this->fireEvent('beforelogin', array($username, $password));
 		
 		$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
+		
+		if($countLogin){
+			$user->last_login=time();
+			$user->logins++;
+			$user->save();
+		}
 
 		if (!$user)
 			return false;
