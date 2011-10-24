@@ -296,11 +296,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 			if(isset($params[$multiSelectProperties['requestParam']])){
 				$this->multiselectIds=json_decode($params[$multiSelectProperties['requestParam']], true);
-				GO::config()->save_setting($multiSelectProperties['requestParam'], implode(',',$this->multiselectIds), GO::session()->values['user_id']);
+				//GO::config()->save_setting($multiSelectProperties['requestParam'], implode(',',$this->multiselectIds), GO::session()->values['user_id']);
 			}else
 			{
-				$this->multiselectIds = GO::config()->get_setting($multiSelectProperties['requestParam'], GO::session()->values['user_id']);
-				$this->multiselectIds  = $this->multiselectIds ? explode(',',$this->multiselectIds) : array();
+				//$this->multiselectIds = GO::config()->get_setting($multiSelectProperties['requestParam'], GO::session()->values['user_id']);
+				//$this->multiselectIds  = $this->multiselectIds ? explode(',',$this->multiselectIds) : array();
+				$this->multiselectIds=array();
 			}
 		
 			
@@ -308,7 +309,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			{
 				$default = $this->getStoreMultiSelectDefault();
 				if($default){
-					$this->multiselectIds = array($category->id);
+					$this->multiselectIds = array($default);
 					GO::config()->save_setting($multiSelectProperties['requestParam'],implode(',', $this->multiselectIds), GO::user()->id);
 				}
 			}
@@ -339,6 +340,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 		$columnModel = $store->getColumnModel();
 		$this->formatColumns($columnModel);
+		
+		if($multiSelectProperties)
+			$columnModel->formatColumn('checked','in_array($model->id, $controller->multiselectIds)', array('controller'=>$this));
 		
 		$this->prepareStore($store);
 		
