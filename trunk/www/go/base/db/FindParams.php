@@ -127,7 +127,11 @@ class GO_Base_Db_FindParams{
 	 * @return GO_Base_Db_FindParams 
 	 */
 	public function criteria(GO_Base_Db_FindCriteria $criteria){
-		$this->_params['criteriaObject']=$criteria;
+		if(!isset($this->_params['criteriaObject']))
+			$this->_params['criteriaObject']=$criteria;
+		else
+			$this->_params['criteriaObject']->mergeWith($criteria);
+		
 		return $this;
 	}
 	

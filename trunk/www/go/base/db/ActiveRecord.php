@@ -805,12 +805,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$sql .= "SQL_CALC_FOUND_ROWS ";
 		}
 		
+		
 		if(empty($params['fields'])){
 			$params['fields']='t.*';
 			$fetchObject= true;
 		}else
 		{
-			$fetchObject = strpos($params['fields'],'t.*')!==false;
+			$fetchObject = strpos($params['fields'],'t.*')!==false || strpos($params['fields'],'t.id')!==false;
 		}
 		
 		$sql .= $params['fields'].$aclJoin['fields'].' ';

@@ -154,8 +154,13 @@ if($GO_CONFIG->debug){
 
 
 $GO_LANGUAGE = new GO_LANGUAGE();
-$GO_SECURITY = new GO_SECURITY();
+
 $GO_MODULES = new GO_MODULES();
+$GO_SECURITY = new GO_SECURITY();
+if(!defined('NOTINSTALLED'))
+{
+	$GO_MODULES->load_modules();
+}
 
 /*
  * License checking for pro modules. Don't remove it or Group-Office will fail

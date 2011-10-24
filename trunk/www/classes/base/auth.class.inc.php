@@ -182,6 +182,10 @@ class GO_AUTH extends db
 		global $GO_EVENTS, $GO_SECURITY;
 
 		$args = array(&$username, &$password, $count_login);
+		
+		if(!isset($GO_EVENTS))
+			$GO_EVENTS = new GO_EVENTS();
+		
 		$GLOBALS['GO_EVENTS']->fire_event('before_login', $args);
 
 		// This variable is used to set the id of the user that is currently
