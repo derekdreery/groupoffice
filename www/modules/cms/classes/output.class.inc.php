@@ -804,7 +804,7 @@ class cms_output extends cms {
 		return $this->items2html($params, $smarty);
 	}
 	
-	private function get_category_id_by_path($path_string,$root_category_id=0) {
+	public function get_category_id_by_path($path_string,$root_category_id=0) {
 		if (substr($path_string,0,1)=='/')
 			$path_string = substr($path_string,1);
 		if (substr($path_string,-1,1)=='/')
