@@ -163,8 +163,11 @@ GO.tasks.TasksPanel = function(config)
 			hideGroupedColumn:true,
 			emptyText: GO.tasks.lang.noTask,
 			getRowClass : function(record, rowIndex, p, store){
-				if(record.data.late){
+				if(record.data.late && !record.data.completed){
 					return 'tasks-late';
+				}
+				if(record.data.completed){
+					return 'tasks-completed';
 				}
 			}
 		}),
