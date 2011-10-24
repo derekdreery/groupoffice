@@ -282,6 +282,9 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * 
 	 * @param GO_Core_Controller_Settings $settingsController
 	 * @param array $params Request params
+	 * 
+	 * $params['id'] is the current logged in user id.
+	 * 
 	 * @param array $response 
 	 */
 	public static function loadSettings(&$settingsController, &$params, &$response){		
@@ -292,6 +295,9 @@ class GO_Base_Module extends GO_Base_Observable {
 	 * 
 	 * @param GO_Core_Controller_Settings $settingsController
 	 * @param array $params Request params
+	 * 
+	 * $params['id'] is the current logged in user id.
+	 * 
 	 * @param array $response 
 	 */
 	public static function submitSettings(&$settingsController, &$params, &$response){		
