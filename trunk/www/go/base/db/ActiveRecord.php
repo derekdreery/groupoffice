@@ -111,6 +111,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * The relations can be accessed as functions:
 	 * 
 	 * Model->contacts() for example. They always return a PDO statement. 
+	 * You can supply GO_Base_Db_FindParams as an optional parameter to narrow down the results.
 	 * 
 	 * Note: relational queries do not check permissions!
 	 * 
