@@ -983,7 +983,7 @@ try
 					array('field'=>'ab_contacts.birthday', 'label'=>$lang['common']['birthday'], 'type'=>$contact_types['birthday']),
 					array('field'=>'ab_contacts.email', 'label'=>$lang['common']['email'], 'type'=>$contact_types['email']),
 					array('field'=>'ab_contacts.country', 'label'=>$lang['common']['country'], 'type'=>$contact_types['country']),
-					array('field'=>'ab_contacts.iso_address_format', 'label'=>$lang['common']['address_format'], 'type'=>$contact_types['iso_address_format']),
+//					array('field'=>'ab_contacts.iso_address_format', 'label'=>$lang['common']['address_format'], 'type'=>$contact_types['iso_address_format']),
 					array('field'=>'ab_contacts.state', 'label'=>$lang['common']['state'], 'type'=>$contact_types['state']),
 					array('field'=>'ab_contacts.city', 'label'=>$lang['common']['city'], 'type'=>$contact_types['city']),
 					array('field'=>'ab_contacts.zip', 'label'=>$lang['common']['zip'], 'type'=>$contact_types['zip']),
@@ -1001,7 +1001,7 @@ try
 					array('field'=>'ab_contacts.salutation', 'label'=>$lang['common']['salutation'], 'type'=>$contact_types['salutation'])
 				);
 
-				$link_type=2;
+				$model="GO_Addressbook_Model_Contact";
 			}else
 			{
 				$response['results']=array(
@@ -1010,7 +1010,7 @@ try
 					//array('field'=>'ab_companies.title', 'label'=>$lang['common']['title'], 'type'=>$company_types['title']),
 					array('field'=>'ab_companies.email', 'label'=>$lang['common']['email'], 'type'=>$company_types['email']),
 					array('field'=>'ab_companies.country', 'label'=>$lang['common']['country'], 'type'=>$company_types['country']),
-					array('field'=>'ab_companies.iso_address_format', 'label'=>$lang['common']['address_format'], 'type'=>$company_types['iso_address_format']),
+//					array('field'=>'ab_companies.iso_address_format', 'label'=>$lang['common']['address_format'], 'type'=>$company_types['iso_address_format']),
 					array('field'=>'ab_companies.state', 'label'=>$lang['common']['state'], 'type'=>$company_types['state']),
 					array('field'=>'ab_companies.city', 'label'=>$lang['common']['city'], 'type'=>$company_types['city']),
 					array('field'=>'ab_companies.zip', 'label'=>$lang['common']['zip'], 'type'=>$company_types['zip']),
@@ -1030,38 +1030,24 @@ try
 					array('field'=>'ab_companies.comment', 'label'=>$lang['addressbook']['comment'], 'type'=>$company_types['comment'])
 
 				);
-				$link_type=3;
+				$model="GO_Addressbook_Model_Company";
 			}
 
-			if($GLOBALS['GO_MODULES']->has_module('customfields'))
-			{
+				if (isset($GLOBALS['GO_MODULES']->modules['customfields'])) {
+				require_once($GO_CONFIG->root_path.'GO.php');
 
-				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
-				$cf = new customfields();
-
-				$fields = $cf->get_authorized_fields($GLOBALS['GO_SECURITY']->user_id, $link_type);
-				while($field = array_shift($fields))
-				{
-					if($field['datatype']!='heading' && $field['datatype']!='function')
-					{
-						$f = array('field'=>'cf_'.$link_type.'.'.$field['dataname'], 'label'=>$field['name'], 'type'=>$field['datatype']);
-
-						if($f['type']=='select')
-						{
-							$f['type']=$field['name'];
-							$f['options']=array();
-							$cf->get_select_options($field['id']);
-							while($cf->next_record())
-							{
-								$f['options'][]=array($cf->f('text'));
-							}
-						}
-
-						$response['results'][]=$f;
+				$stmt = GO_Customfields_Model_Category::model()->findByModel($model);
+				while($category = $stmt->fetch()){
+					$fstmt = $category->fields();
+					while($field = $fstmt->fetch()){
+						$arr=$field->getAttributes();
+						$arr['dataname']=$field->columnName();
+						$fields[]=$arr;
+						if(empty($field->exclude_from_grid))
+								$response['results'][] = array('id'=>$arr['id'], 'field'=>$field->columnName() ,'custom'=>true,'name' => $arr['name'] . ':' . $arr['name'],'label' => $arr['name'] . ':' . $arr['name'], 'value' => '`cf:' . $category->name . ':' . $arr['name'] . '`', 'type' => $arr['datatype']);
 					}
 				}
 			}
-			go_debug($response);
 
 			echo json_encode($response);
 			break;
