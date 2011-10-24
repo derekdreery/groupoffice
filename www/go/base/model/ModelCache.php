@@ -24,17 +24,6 @@ class GO_Base_Model_ModelCache{
 	
 	private $_models;
 	
-	public function __construct() {
-		
-		//GO::debug("Model cache construct");
-		
-		if(isset(GO::session()->values['modelCache'])){
-			//GO::debug(array_keys(GO::session()->values['modelCache']));
-			//$this->_models=GO::session()->values['modelCache'];
-			
-		}
-	}
-	
 	/**
 	 * Add a model to the memory cache.
 	 * 
@@ -53,16 +42,10 @@ class GO_Base_Model_ModelCache{
 		if(!$cacheKey)
 			$cacheKey=$model->pk;
 		
-		//GO::debug("GO_Base_Model_ModelCache::add($modelClassName, $cacheKey)");
-		
 		$cacheKey = $this->_formatCacheKey($cacheKey);		
 		
 		$this->_models[$modelClassName][$cacheKey]=$model;
-		
-//		if($model->sessionCache()){
-//			//GO::debug("Add to session");
-//			//GO::session()->values['modelCache'][$modelClassName][$cacheKey]=$model;
-//		}
+
 	}
 	
 	private function _formatCacheKey($cacheKey){
