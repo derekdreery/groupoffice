@@ -21,6 +21,7 @@ GO.calendar.formatQtip = function(data)
 	if(!data.endDate)
 		data.endDate = Date.parseDate(data.end_time, df);
 	
+	console.log(data);
 	
 	if(!data.creationDate)
 		data.creationDate = data.ctime ? Date.parseDate(data.ctime, df) : new Date();
@@ -357,7 +358,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'num_participants','participant_ids']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','all_day_event','username','duration', 'link_count', 'num_participants','participant_ids','ctime']
 	});
 	
 	this.daysGridStore.on('load', this.setCalendarBackgroundColors, this);
@@ -369,7 +370,7 @@ GO.calendar.MainPanel = function(config){
 		},
 		root: 'results',
 		id: 'id',
-		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count', 'num_participants','participant_ids']
+		fields:['id','event_id','name','start_time','end_time','description', 'repeats', 'private','location', 'background', 'read_only', 'task_id', 'contact_id','calendar_name','calendar_id','username','duration','link_count', 'num_participants','participant_ids','ctime']
 	});
 	
 	this.monthGridStore.on('load', this.setCalendarBackgroundColors, this);

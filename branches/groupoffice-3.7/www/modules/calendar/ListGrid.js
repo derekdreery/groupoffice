@@ -42,7 +42,8 @@ GO.calendar.ListGrid = function(config)
 			'calendar_id',
 			'calendar_name',
 			'num_participants',
-			'participant_ids'
+			'participant_ids',
+			'ctime'
 			]
 		}),
 		baseParams: {
