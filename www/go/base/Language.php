@@ -56,6 +56,10 @@ class GO_Base_Language{
 					require($file);
 			}		
 			
+			$file = $this->_find_override_file($langcode, $module, $basesection);
+			if($file)
+				require($file);
+			
 			if(isset($l)){
 				if($module=='base'){
 					$this->_lang[$module][$basesection]=$l;
@@ -87,6 +91,28 @@ class GO_Base_Language{
 			return $file;
 		else
 			return false;
+	}
+	
+	private function _find_override_file($lang, $module, $basesection){
+		
+		$dir=GO::config()->file_storage_path.'users/admin/lang/'.$lang.'/';		
+		$filename = $module=='base' ? 'base_'.$basesection.'.php' : $module.'.php';
+						
+		$file = $dir.$filename;
+		
+		if(file_exists($file))
+			return $file;
+		
+
+		$dir=GO::config()->file_storage_path.'users/admin/lang/';		
+
+		$file = $dir.$filename;
+
+		if(file_exists($file))
+			return $file;			
+		
+		
+		return false;
 	}
 	
 	
