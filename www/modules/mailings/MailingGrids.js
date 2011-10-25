@@ -1,111 +1,111 @@
 
 GO.mailings.createMailingGrids = function(){
 
-	GO.mailings.MailingUsersGrid = function(config){
-
-		if(!config)
-		{
-			config = {};
-		}
-
-		config.store = new GO.data.JsonStore({
-			url: GO.settings.modules.mailings.url+'json.php',
-				baseParams: {
-					task: 'mailing_users',
-					mailing_id: '0'
-				},
-				root: 'results',
-				id: 'id',
-				totalProperty:'total',
-				fields: ['id', 'name', 'email', 'company_name', 'home_phone', 'work_phone', 'cellular'],
-				remoteSort: true
-		});
-
-		this.selectUserDialog = new GO.dialog.SelectUsers({
-				handler: function(grid){
-					var selModel = grid.getSelectionModel();
-					this.store.baseParams.add_keys = Ext.encode(selModel.selections.keys);
-					this.store.load();
-					delete this.store.baseParams.add_keys;
-				},
-				scope : this
-			});
-
-		config.border=false;
-		config.paging=true;
-		config.disabled=true;
-
-		var columnModel =  new Ext.grid.ColumnModel(
-		{
-		defaults:{
-			sortable:true
-		},
-		columns:[
-			{
-				header: GO.lang['strName'],
-				dataIndex: 'name'
-			},
-			{
-				header: GO.lang['strEmail'],
-				dataIndex: 'email' ,
-				width: 150
-			}
-		]
-		});
-		
-		config.cm=columnModel;
-
-		config.view=new Ext.grid.GridView({
-			autoFill: true,
-			forceFit: true,
-			emptyText: GO.lang.strNoItems
-		});
-
-		config.sm=new Ext.grid.RowSelectionModel();
-		config.loadMask=true;
-
-		config.title=GO.addressbook.lang.users;
-		config.tbar = [
-			{
-				iconCls: 'btn-add',
-				text: GO.lang.cmdAdd,
-				cls: 'x-btn-text-icon',
-				handler: function(){
-					this.selectUserDialog.show();
-				},
-				scope: this
-			},
-			{
-				iconCls: 'btn-delete',
-				text: GO.lang['cmdDelete'],
-				cls: 'x-btn-text-icon',
-				handler: function(){
-					this.deleteSelected();
-				},
-				scope: this
-			}
-			];
-
-
-		GO.mailings.MailingUsersGrid.superclass.constructor.call(this, config);
-
-	};
-
-	Ext.extend(GO.mailings.MailingUsersGrid, GO.grid.GridPanel, {
-		onShow : function(){
-			if(!this.store.loaded)
-			{
-				this.store.load();
-			}
-			GO.mailings.MailingCompaniesGrid.superclass.onShow.call(this);
-		},
-		setMailingId : function(mailing_id)
-		{
-			this.store.baseParams['mailing_id']=mailing_id;
-			this.store.loaded=false;
-			this.setDisabled(mailing_id==0);
-		}
-	});
+//	GO.mailings.MailingUsersGrid = function(config){
+//
+//		if(!config)
+//		{
+//			config = {};
+//		}
+//
+//		config.store = new GO.data.JsonStore({
+//			url: GO.settings.modules.mailings.url+'json.php',
+//				baseParams: {
+//					task: 'mailing_users',
+//					mailing_id: '0'
+//				},
+//				root: 'results',
+//				id: 'id',
+//				totalProperty:'total',
+//				fields: ['id', 'name', 'email', 'company_name', 'home_phone', 'work_phone', 'cellular'],
+//				remoteSort: true
+//		});
+//
+//		this.selectUserDialog = new GO.dialog.SelectUsers({
+//				handler: function(grid){
+//					var selModel = grid.getSelectionModel();
+//					this.store.baseParams.add_keys = Ext.encode(selModel.selections.keys);
+//					this.store.load();
+//					delete this.store.baseParams.add_keys;
+//				},
+//				scope : this
+//			});
+//
+//		config.border=false;
+//		config.paging=true;
+//		config.disabled=true;
+//
+//		var columnModel =  new Ext.grid.ColumnModel(
+//		{
+//		defaults:{
+//			sortable:true
+//		},
+//		columns:[
+//			{
+//				header: GO.lang['strName'],
+//				dataIndex: 'name'
+//			},
+//			{
+//				header: GO.lang['strEmail'],
+//				dataIndex: 'email' ,
+//				width: 150
+//			}
+//		]
+//		});
+//		
+//		config.cm=columnModel;
+//
+//		config.view=new Ext.grid.GridView({
+//			autoFill: true,
+//			forceFit: true,
+//			emptyText: GO.lang.strNoItems
+//		});
+//
+//		config.sm=new Ext.grid.RowSelectionModel();
+//		config.loadMask=true;
+//
+//		config.title=GO.addressbook.lang.users;
+//		config.tbar = [
+//			{
+//				iconCls: 'btn-add',
+//				text: GO.lang.cmdAdd,
+//				cls: 'x-btn-text-icon',
+//				handler: function(){
+//					this.selectUserDialog.show();
+//				},
+//				scope: this
+//			},
+//			{
+//				iconCls: 'btn-delete',
+//				text: GO.lang['cmdDelete'],
+//				cls: 'x-btn-text-icon',
+//				handler: function(){
+//					this.deleteSelected();
+//				},
+//				scope: this
+//			}
+//			];
+//
+//
+//		GO.mailings.MailingUsersGrid.superclass.constructor.call(this, config);
+//
+//	};
+//
+//	Ext.extend(GO.mailings.MailingUsersGrid, GO.grid.GridPanel, {
+//		onShow : function(){
+//			if(!this.store.loaded)
+//			{
+//				this.store.load();
+//			}
+//			GO.mailings.MailingCompaniesGrid.superclass.onShow.call(this);
+//		},
+//		setMailingId : function(mailing_id)
+//		{
+//			this.store.baseParams['mailing_id']=mailing_id;
+//			this.store.loaded=false;
+//			this.setDisabled(mailing_id==0);
+//		}
+//	});
 
 
 
@@ -186,10 +186,9 @@ GO.mailings.createMailingGrids = function(){
 
 
 		config.store = new GO.data.JsonStore({
-				url: GO.settings.modules.mailings.url+ 'json.php',
+				url: GO.url('addressbook/addresslist/contacts'),
 				baseParams: {
-					task: 'mailing_contacts',
-					mailing_id: '0'
+					addresslist_id: '0'
 				},
 				root: 'results',
 				id: 'id',
@@ -267,11 +266,11 @@ GO.mailings.createMailingGrids = function(){
 			}
 			GO.mailings.MailingContactsGrid.superclass.onShow.call(this);
 		},
-		setMailingId : function(mailing_id)
+		setMailingId : function(addresslist_id)
 		{
-			this.store.baseParams['mailing_id']=mailing_id;
+			this.store.baseParams['addresslist_id']=addresslist_id;
 			this.store.loaded=false;
-			this.setDisabled(mailing_id==0);
+			this.setDisabled(addresslist_id==0);
 		}
 	});
 
@@ -353,10 +352,9 @@ GO.mailings.createMailingGrids = function(){
 			];
 
 		config.store = new GO.data.JsonStore({
-			url: GO.settings.modules.mailings.url+ 'json.php',
+			url: GO.url('addressbook/addresslist/companies'),
 			baseParams: {
-				task: 'mailing_companies',
-				mailing_id: '0'
+				addresslist_id: '0'
 			},
 			root: 'results',
 			id: 'id',
@@ -426,11 +424,11 @@ GO.mailings.createMailingGrids = function(){
 		},
 
 
-		setMailingId : function(mailing_id)
+		setMailingId : function(addresslist_id)
 		{
-			this.store.baseParams['mailing_id']=mailing_id;
+			this.store.baseParams['addresslist_id']=addresslist_id;
 			this.store.loaded=false;
-			this.setDisabled(mailing_id==0);
+			this.setDisabled(addresslist_id==0);
 		}
 	});
 

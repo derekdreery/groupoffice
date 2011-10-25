@@ -158,13 +158,13 @@ class mailings extends db
 
 	function remove_contact_from_group($contact_id, $addresslist_id)
 	{
-		$sql = "DELETE FROM ab_addresslist_contacts WHERE list_id='".$this->escape($addresslist_id)."' AND contact_id='$contact_id'";
+		$sql = "DELETE FROM ab_addresslist_contacts WHERE addresslist_id='".$this->escape($addresslist_id)."' AND contact_id='$contact_id'";
 		return $this->query($sql);
 	}
 
 	function contact_is_in_group($contact_id, $addresslist_id)
 	{
-		$sql = "SELECT * FROM ab_addresslist_contacts WHERE contact_id='".$this->escape($contact_id)."' AND list_id='".$this->escape($addresslist_id)."'";
+		$sql = "SELECT * FROM ab_addresslist_contacts WHERE contact_id='".$this->escape($contact_id)."' AND addresslist_id='".$this->escape($addresslist_id)."'";
 		$this->query($sql);
 		return $this->next_record();
 	}
@@ -238,7 +238,7 @@ class mailings extends db
 	{
 		$sql = "SELECT DISTINCT ab_contacts.first_name, ab_contacts.middle_name, ab_contacts.last_name,ab_contacts.id, ab_contacts.email FROM ab_addresslist_contacts ".
 		"INNER JOIN ab_contacts ON (ab_addresslist_contacts.contact_id=ab_contacts.id) ".
-		"WHERE ab_addresslist_contacts.list_id='".$this->escape($addresslist_id)."'";
+		"WHERE ab_addresslist_contacts.addresslist_id='".$this->escape($addresslist_id)."'";
 		
 
 		$sql .= " ORDER BY last_name ".$this->escape($dir).", first_name ".$this->escape($dir);
@@ -272,13 +272,13 @@ class mailings extends db
 
 	function remove_company_from_group($company_id, $addresslist_id)
 	{
-		$sql = "DELETE FROM ab_addresslist_companies WHERE list_id='".$this->escape($addresslist_id)."' AND company_id='".$this->escape($company_id)."'";
+		$sql = "DELETE FROM ab_addresslist_companies WHERE addresslist_id='".$this->escape($addresslist_id)."' AND company_id='".$this->escape($company_id)."'";
 		return $this->query($sql);
 	}
 
 	function company_is_in_group($company_id, $addresslist_id)
 	{
-		$sql = "SELECT * FROM ab_addresslist_companies WHERE company_id='".$this->escape($company_id)."' AND list_id='".$this->escape($addresslist_id)."'";
+		$sql = "SELECT * FROM ab_addresslist_companies WHERE company_id='".$this->escape($company_id)."' AND addresslist_id='".$this->escape($addresslist_id)."'";
 		$this->query($sql);
 		return $this->next_record();
 	}
@@ -287,7 +287,7 @@ class mailings extends db
 	{
 		$sql = "SELECT DISTINCT ab_companies.name, ab_companies.id, ab_companies.email FROM ab_addresslist_companies ".
 		"INNER JOIN ab_companies ON (ab_addresslist_companies.company_id=ab_companies.id) ".
-		"WHERE ab_addresslist_companies.list_id='".$this->escape($addresslist_id)."'";
+		"WHERE ab_addresslist_companies.addresslist_id='".$this->escape($addresslist_id)."'";
 		
 		$sql .= " ORDER BY ".$this->escape($name." ".$dir);
 
@@ -380,7 +380,7 @@ class mailings extends db
 
 		$sql = "INSERT INTO ml_sendmailing_contacts SELECT DISTINCT ?, contact_id FROM ab_addresslist_contacts c ".
 			"INNER JOIN ab_contacts a ON (c.contact_id=a.id) ".
-			"WHERE list_id=? AND email_allowed='1' AND email!=''";
+			"WHERE addresslist_id=? AND email_allowed='1' AND email!=''";
 		$types='ii';
 		$params = array($mailing['id'], $mailing['addresslist_id']);		
 		$this->query($sql, $types, $params);
@@ -390,7 +390,7 @@ class mailings extends db
 
 		$sql = "INSERT INTO ml_sendmailing_companies SELECT DISTINCT ?, company_id FROM ab_addresslist_companies c ".
 			"INNER JOIN ab_companies a ON (c.company_id=a.id) ".
-			"WHERE list_id=? AND email_allowed='1' AND email!=''";
+			"WHERE addresslist_id=? AND email_allowed='1' AND email!=''";
 		$types='ii';
 		$params = array($mailing['id'], $mailing['addresslist_id']);
 		$this->query($sql, $types, $params);

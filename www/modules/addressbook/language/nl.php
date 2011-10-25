@@ -134,3 +134,5 @@ $l["globalsettings_allchangelabel"]= 'Bestaande veranderen?';
 $l["globalsettings_renameall"]= 'Weet u zeker dat u alles wilt hernoemen?';
 $l["createEmailSelected"]= 'Email opstellen voor selectie';
 $l['createUser'] = 'Gebruiker aanmaken';
+$l['addresslist'] = 'Adreslijst';
+$l['addresslistContact'] = 'Adreslijstcontact';

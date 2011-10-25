@@ -1,12 +1,8 @@
 GO.mailings.writableMailingsStore = new GO.data.JsonStore({
-    url: GO.settings.modules.mailings.url+ 'json.php',
+    url: GO.url("addressbook/addresslist/store"),
     baseParams: {
-        task: 'mailings',
-        auth_type: 'write'
+        permissionLevel: GO.permissionLevels.write
     },
-    root: 'results',
-    id: 'id',
-    totalProperty: 'total',
     fields: ['id', 'name', 'owner','acl_id'],
     remoteSort: true
 });
@@ -18,14 +14,10 @@ GO.mailings.writableMailingsStore.on('load', function(){
 }, this, {single:true});
 		
 GO.mailings.readableMailingsStore = new GO.data.JsonStore({
-    url: GO.settings.modules.mailings.url+ 'json.php',
+    url: GO.url("addressbook/addresslist/store"),
     baseParams: {
-        task: 'mailings',
-        auth_type: 'read'
+        permissionLevel: GO.permissionLevels.read
     },
-    root: 'results',
-    id: 'id',
-    totalProperty: 'total',
     fields: ['id', 'name', 'owner','acl_id', 'checked'],
     remoteSort: true
 });

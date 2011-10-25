@@ -6,4 +6,6 @@ $updates[201110211025][]="RENAME TABLE `ml_mailing_companies` TO `ab_addresslist
 $updates[201110211025][]="ALTER TABLE `ab_sent_mailings` CHANGE `mailing_group_id` `addresslist_id` int(11) NOT NULL";
 $updates[201110211025][]="ALTER TABLE `ab_addresslist_contacts` CHANGE `group_id` `list_id` int(11) NOT NULL";
 $updates[201110211025][]="ALTER TABLE `ab_addresslist_companies` CHANGE `group_id` `list_id` int(11) NOT NULL";
+$updates[201110211025][]="ALTER TABLE `ab_addresslist_contacts` CHANGE `list_id` `addresslist_id` int(11) NOT NULL";
+$updates[201110211025][]="ALTER TABLE `ab_addresslist_companies` CHANGE `list_id` `addresslist_id` int(11) NOT NULL";
 ?>
