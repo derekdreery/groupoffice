@@ -33,7 +33,16 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		return parent::afterDisplay($response, $model, $params);
 	}
 	
-	
+	protected function getStoreParams($params) {
+		
+		$storeParams = GO_Base_Db_FindParams::newInstance();
+		
+		if(isset($params['addressbook_id'])){
+			$storeParams->getCriteria()->addCondition('addressbook_id', $params['addressbook_id']);
+		}
+		
+		return $storeParams;		
+	}
 	
 	
 	public function formatStoreRecord($record, $model, $store) {
