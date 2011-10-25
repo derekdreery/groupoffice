@@ -9,6 +9,7 @@
  * @copyright Copyright Intermesh
  * @version $Id$
  * @author Merijn Schering <mschering@intermesh.nl>
+ * @author Wilmar van Beusekom <wilmar@intermesh.nl>
  */
 
  
@@ -86,7 +87,7 @@ Ext.extend(GO.mailings.MailingDialog, Ext.Window,{
 		if(this.mailing_id>0)
 		{
 			this.formPanel.load({
-				url : GO.settings.modules.mailings.url+'json.php',
+				url : GO.url('addressbook/addresslist/load'),
 				
 				success:function(form, action)
 				{
@@ -118,11 +119,11 @@ Ext.extend(GO.mailings.MailingDialog, Ext.Window,{
 	{
 		this.contactsGrid.setMailingId(mailing_id);
 		this.companiesGrid.setMailingId(mailing_id);
-		this.usersGrid.setMailingId(mailing_id);
+//		this.usersGrid.setMailingId(mailing_id);
 		
 		
 		
-		this.formPanel.form.baseParams['mailing_id']=mailing_id;
+		this.formPanel.form.baseParams['id']=mailing_id;
 		this.mailing_id=mailing_id;		
 		
 		if(this.mailing_id==0)
@@ -136,9 +137,10 @@ Ext.extend(GO.mailings.MailingDialog, Ext.Window,{
 	submitForm : function(hide){
 		this.formPanel.form.submit(
 		{
-			url:GO.settings.modules.mailings.url+'action.php',
+			url: GO.url('addressbook/addresslist/submit'),
+//			url:GO.settings.modules.mailings.url+'action.php',
 			params: {
-				'task' : 'save_mailing',
+//				'task' : 'save_mailing',
 				inline_attachments: Ext.encode(this.inline_attachments)
 			},
 			waitMsg:GO.lang['waitMsgSave'],
@@ -151,9 +153,9 @@ Ext.extend(GO.mailings.MailingDialog, Ext.Window,{
 					this.hide();	
 				}else
 				{
-					if(action.result.mailing_id)
+					if(action.result.id)
 					{
-						this.setMailingId(action.result.mailing_id);
+						this.setMailingId(action.result.id);
 						
 						this.readPermissionsTab.setAcl(action.result.acl_id);
 						
@@ -177,9 +179,8 @@ Ext.extend(GO.mailings.MailingDialog, Ext.Window,{
 	buildForm : function () {
 		
 		this.propertiesPanel = new Ext.Panel({
-			url: GO.settings.modules.mailings.url+'action.php',
-			border: false,
-			baseParams: {task: 'mailing'},			
+			url: GO.url('addressbook/addresslist/load'),
+			border: false,	
 			title:GO.lang['strProperties'],			
 			cls:'go-form-panel',			
 			layout:'form',
@@ -216,8 +217,8 @@ Ext.extend(GO.mailings.MailingDialog, Ext.Window,{
 		this.companiesGrid = new GO.mailings.MailingCompaniesGrid();
 		items.push(this.companiesGrid);
 		
-		this.usersGrid = new GO.mailings.MailingUsersGrid();
-		items.push(this.usersGrid);
+//		this.usersGrid = new GO.mailings.MailingUsersGrid();
+//		items.push(this.usersGrid);
 		
 		
     this.readPermissionsTab = new GO.grid.PermissionsPanel({
@@ -240,7 +241,7 @@ Ext.extend(GO.mailings.MailingDialog, Ext.Window,{
     this.formPanel = new Ext.form.FormPanel({
     	waitMsgTarget:true,
 			border: false,
-			baseParams: {task: 'mailing'},				
+			baseParams: new Object(),				
 			items:this.tabPanel				
 		});
     

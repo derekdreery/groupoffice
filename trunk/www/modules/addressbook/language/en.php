@@ -135,3 +135,5 @@ $l['imageNotSupported']='The image you uploaded is not supported. Only gif, png 
 $l['no_addressbook_id'] = 'Invalid addressbook id has been passed with the request to the server!';
 $l['undefined'] = '-';
 $l['createUser'] = 'Create user';
+$l['addresslist'] = 'Address list';
+$l['addresslistContact'] = 'Address list contact';

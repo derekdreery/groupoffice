@@ -971,7 +971,7 @@ class addressbook extends db {
 		}
 
 		if(count($mailings_filter)) {
-			$sql .= " AND mc.list_id IN (".implode(',', $mailings_filter).")";
+			$sql .= " AND mc.addresslist_id IN (".implode(',', $mailings_filter).")";
 		}
 
 		if(!empty($advanced_query)) {
@@ -1138,7 +1138,7 @@ class addressbook extends db {
 		}
 
 		if(count($mailings_filter)) {
-			$sql .= " AND mc.list_id IN (".implode(',', $mailings_filter).")";
+			$sql .= " AND mc.addresslist_id IN (".implode(',', $mailings_filter).")";
 		}
 
 		if(!empty($advanced_query)) {

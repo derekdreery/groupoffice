@@ -16,50 +16,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Tabel structuur voor tabel `ab_sent_mailings`
---
-
-DROP TABLE IF EXISTS `ab_sent_mailings`;
-CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `subject` varchar(100) default NULL,
-  `message_path` varchar(255) default NULL,
-  `ctime` int(11) NOT NULL,
-  `mailing_group_id` int(11) NOT NULL,
-  `alias_id` int(11) NOT NULL,
-  `status` tinyint(4) NOT NULL,
-  `total` int(11) default NULL,
-  `sent` int(11) default NULL,
-  `errors` int(11) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
-
--- --------------------------------------------------------
-
---
--- Tabel structuur voor tabel `ab_addresslists`
---
-
-DROP TABLE IF EXISTS `ab_addresslists`;
-CREATE TABLE IF NOT EXISTS `ab_addresslists` (
-  `id` int(11) NOT NULL default '0',
-  `user_id` int(11) NOT NULL default '0',
-  `acl_id` int(11) NOT NULL default '0',
-  `name` varchar(255) default NULL,
-  `default_salutation` varchar(50) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
-
--- --------------------------------------------------------
-
---
 -- Tabel structuur voor tabel `ml_templates`
 --
 
@@ -89,25 +45,6 @@ CREATE TABLE IF NOT EXISTS `ml_default_templates` (
   KEY `template_id` (`template_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-
-
-DROP TABLE IF EXISTS `ab_addresslist_contacts`;
-CREATE TABLE IF NOT EXISTS `ab_addresslist_contacts` (
-  `group_id` int(11) NOT NULL DEFAULT '0',
-  `contact_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`group_id`,`contact_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `ab_addresslist_companies`;
-CREATE TABLE IF NOT EXISTS `ab_addresslist_companies` (
-  `group_id` int(11) NOT NULL DEFAULT '0',
-  `company_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`group_id`,`company_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
--- --------------------------------------------------------
 
 -- --------------------------------------------------------
 
