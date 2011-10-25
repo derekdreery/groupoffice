@@ -149,7 +149,7 @@ try {
 				
 				$calendar = $cal->get_calendar($event['calendar_id']);
 				
-				$cal->send_invitation($event, $calendar, false);
+				//$cal->send_invitation($event, $calendar, false);
 			}else
 			{
 				if(!empty($_REQUEST['send_cancellation']))
