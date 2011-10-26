@@ -67,4 +67,8 @@ class GO_Calendar_Model_Calendar extends GO_Base_Db_ActiveRecord {
 		
 		return $this->find($findParams);		
 	}
+	
+	protected function getLocalizedName() {
+		return GO::t('calendar', 'calendar');
+	}
 }
