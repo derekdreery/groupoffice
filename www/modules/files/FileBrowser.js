@@ -451,216 +451,127 @@ GO.files.FileBrowser = function(config){
 	tbar.push(this.newButton);
 
 
-	this.uploadMenu = new Ext.menu.Menu({
-		items: []
-	});
 	
-	this.uploadButton = new Ext.Button({
+	this.uploadButton = new Ext.ux.PluploadButton({
 		iconCls: 'btn-upload',
 		text: GO.lang.upload,
-		cls: 'x-btn-text-icon',
-		menu: this.uploadMenu		
-	});
-//	
-//	this.pluploadButton = new Ext.ux.PluploadButton({
-//		text: 'Upload files',
-//		window_width: 640,
-//		window_height: 480,
-//		window_title: 'Upload files',
-//		clearOnClose: false, //clear queue after window is closed (actually window is hidden )
-//		upload_config: {
-//			url: GO.url('files/folder/plupload'),
-//			//the only required parameter
-//
-//			//runtimes: 'html5,gears,flash,silverlight,browserplus,html4',
-//			//runtimes: 'html5,flash,silverlight,html4',
-//			runtimes: 'html4',
-//			// first available runtime will be used
-//
-//			multipart: true,
-//			multipart_params: {
-//				param1: 1, 
-//				param2: 2
+		window_width: 640,
+		window_height: 480,
+		window_title: 'Upload files',
+		clearOnClose: false, //clear queue after window is closed (actually window is hidden )
+		upload_config: {
+			url: GO.url('files/folder/plupload'),
+			//the only required parameter
+
+			//runtimes: 'html5,gears,flash,silverlight,browserplus,html4',
+			runtimes: 'html5,gears,flash,silverlight,html4',
+			//runtimes: 'html4',
+			// first available runtime will be used
+
+			multipart: true,
+			multipart_params: {
+				param1: 1, 
+				param2: 2
+			},
+			// works as baseParams for store. 
+			// Accessible via this.uploader.settings.multipart_params after init
+			// multipart must be true
+
+			max_file_size: '10mb',
+
+			resize: {
+				width: 640, 
+				height: 480, 
+				quality: 60
+			},
+
+			flash_swf_url: BaseHref+'views/Extjs3/javascript/plupload/js/plupload.flash.swf',
+			silverlight_xap_url: BaseHref+'views/Extjs3/javascript/plupload/js/plupload.silverlight.xap',
+			// urls must be set properly or absent, otherwise uploader fail to initialize
+
+//			filters: [  {
+//				title : "Image files", 
+//				extensions : "jpg,JPG,gif,GIF,png,PNG"
 //			},
-//			// works as baseParams for store. 
-//			// Accessible via this.uploader.settings.multipart_params after init
-//			// multipart must be true
 //
-//			max_file_size: '10mb',
-//
-//			resize: {
-//				width: 640, 
-//				height: 480, 
-//				quality: 60
+//			{
+//				title : "Zip files", 
+//				extensions : "zip,ZIP"
 //			},
 //
-//			flash_swf_url: BaseHref+'views/Extjs3/javascript/plupload/js/plupload.flash.swf',
-//			silverlight_xap_url: BaseHref+'views/Extjs3/javascript/plupload/js/plupload.silverlight.xap',
-//			// urls must be set properly or absent, otherwise uploader fail to initialize
-//
-////			filters: [  {
-////				title : "Image files", 
-////				extensions : "jpg,JPG,gif,GIF,png,PNG"
-////			},
-////
-////			{
-////				title : "Zip files", 
-////				extensions : "zip,ZIP"
-////			},
-////
-////			{
-////				title : "Text files", 
-////				extensions : "txt,TXT"
-////			}
-////			],
-//
-//			runtime_visible: true, // show current runtime in statusbar
-//
-//			// icon classes for toolbar buttons
-//			addButtonCls: 'silk-add',
-//			uploadButtonCls: 'silk-arrow-up',
-//			cancelButtonCls: 'silk-stop',
-//			deleteButtonCls: 'silk-cross',
-//
-//			// localization
-//			addButtonText: 'Add files',
-//			uploadButtonText: 'Upload',
-//			cancelButtonText: 'Cancel upload',
-//			deleteButtonText: 'Remove',
-//			deleteSelectedText: '<b>Remove selected</b>',
-//			deleteUploadedText: 'Remove uploaded',
-//			deleteAllText: 'Remove ALL',
-// 
-//			statusQueuedText: 'Queued',
-//			statusUploadingText: 'Uploading ({0}%)',
-//			statusFailedText: '<span style="color: red">FAILED</span>',
-//			statusDoneText: '<span style="color: green">DONE</span>',
-// 
-//			statusInvalidSizeText: 'Too big',
-//			statusInvalidExtensionText: 'Invalid file type',
-// 
-//			emptyText: '<div class="plupload_emptytext"><span>Upload queue is empty</span></div>',
-//			emptyDropText: '<div class="plupload_emptytext"><span>Drop files here</span></div>',
-// 
-//			progressText: '{0}/{1} ({3} failed) ({5}/s)',
-//			// params are number of
-//			// {0} files sent
-//			// {1} total files
-//			// {2} files successfully uploaded
-//			// {3} failed files
-//			// {4} files left in queue
-//			// {5} current upload speed 
-//
-//			listeners: {
-//				beforestart: function(uploadpanel) {
-//					//uploadpanel.uploader.settings.url = '/path/to/upload/handler?_runtime=' + uploadpanel.runtime;
-//				},
-//				uploadstarted: function(uploadpanel) {
-//
-//				},
-//				uploadcomplete: function(uploadpanel, success, failures) {
-//					if ( success.length ) {
-//						//myStore.reload();
-//					}
-//				}
+//			{
+//				title : "Text files", 
+//				extensions : "txt,TXT"
 //			}
-//		}
-//	});
-//	
-//	tbar.push(this.pluploadButton);
+//			],
+
+			runtime_visible: true, // show current runtime in statusbar
+
+			// icon classes for toolbar buttons
+			addButtonCls: 'btn-add',
+			uploadButtonCls: 'btn-up',
+			cancelButtonCls: 'silk-stop',
+			deleteButtonCls: 'btn-delete',
+
+			// localization
+			addButtonText: 'Add files',
+			uploadButtonText: 'Upload',
+			cancelButtonText: 'Cancel upload',
+			deleteButtonText: 'Remove',
+			deleteSelectedText: '<b>Remove selected</b>',
+			deleteUploadedText: 'Remove uploaded',
+			deleteAllText: 'Remove ALL',
+ 
+			statusQueuedText: 'Queued',
+			statusUploadingText: 'Uploading ({0}%)',
+			statusFailedText: '<span style="color: red">FAILED</span>',
+			statusDoneText: '<span style="color: green">DONE</span>',
+ 
+			statusInvalidSizeText: 'Too big',
+			statusInvalidExtensionText: 'Invalid file type',
+ 
+			emptyText: '<div class="plupload_emptytext"><span>Upload queue is empty</span></div>',
+			emptyDropText: '<div class="plupload_emptytext"><span>Drop files here</span></div>',
+ 
+			progressText: '{0}/{1} ({3} failed) ({5}/s)',
+			// params are number of
+			// {0} files sent
+			// {1} total files
+			// {2} files successfully uploaded
+			// {3} failed files
+			// {4} files left in queue
+			// {5} current upload speed 
+
+			listeners: {
+				scope:this,
+				beforestart: function(uploadpanel) {
+					//uploadpanel.uploader.settings.url = '/path/to/upload/handler?_runtime=' + uploadpanel.runtime;
+				},
+				uploadstarted: function(uploadpanel) {
+
+				},
+				uploadcomplete: function(uploadpanel, success, failures) {
+					if ( success.length ) {
+						this.sendOverwrite({
+							upload:true,
+							destination_folder_id : this.folder_id,
+							task: 'overwrite'
+						});
+						if(!failures.length){
+							uploadpanel.onDeleteAll();
+							uploadpanel.ownerCt.hide();
+						}
+					}
+				}
+			}
+		}
+	});
+	
+	
 		
 	if(!config.hideActionButtons)
-	{		
-		tbar.push(this.uploadButton);
-		
-		var version = deconcept.SWFObjectUtil.getPlayerVersion();
-		if(false && !GO.settings.config.disable_flash_upload && version.major > 0)
-		{
-			this.uploadMenu.add({
-				text : GO.lang.smallUpload,
-				handler : function()
-				{
-					if(!this.uploadFlashDialog)
-					{
-						var max = Math.floor(GO.settings.config.max_file_size/1048576)+'MB';
-
-						this.uploadFlashDialog = new GO.UploadFlashDialog({
-							uploadPanel: new Ext.ux.SwfUploadPanel({
-								url:GO.url('files/folder/upload'),
-								upload_url : GO.settings.modules.files.url+ 'action.php',
-								labelWidth: 110,
-								file_size_limit:max,
-								single_file_select: false, // Set to true if you only want to select one file from the FileDialog.
-								confirm_delete: false, // This will prompt for removing files from queue.
-								remove_completed: false // Remove file from grid after uploaded.
-							}),
-							title:GO.files.lang.files
-						});
-
-						this.uploadFlashDialog.on('fileUploadComplete', function(obj, file, data)
-						{
-							this.sendOverwrite({
-								destination_folder_id : this.folder_id,
-								task: 'overwrite'
-							});
-						},this)												
-					}
-
-					this.uploadFlashDialog.show();
-				},
-				scope:this
-			})
-		}else
-		{
-			this.uploadForm = new GO.UploadPCForm({
-				waitMsgTarget:config.id,
-				baseParams:{
-					task:'upload_file'
-				},
-				url:GO.url('files/folder/upload'),
-				addText: GO.lang.smallUpload
-			});
-			this.uploadForm.on('upload', function(e, file)
-			{
-				this.uploadMenu.hide();
-				this.sendOverwrite({
-					upload:true,
-					destination_folder_id : this.folder_id,
-					task: 'overwrite'
-				});
-
-			},this);
-
-			this.uploadMenu.add(this.uploadForm);
-		}
-
-		this.uploadMenu.add({
-			text : GO.lang.largeUpload,
-			handler : function() {
-
-				GO.currentFilesStore=this.gridStore;
-				
-				if (!deployJava.isWebStartInstalled('1.5.0')) {
-					Ext.MessageBox.alert(GO.lang.strError,
-							GO.lang.noJava);
-				} else {
-					
-					 GO.util.popup({url:
-						 GO.settings.modules.files.url+'jupload/index.php?id='+encodeURIComponent(this.folder_id),
-						 width : 660, height: 500, target:
-						 'jupload'});
-					 
-
-					/*window.open(GO.settings.modules.files.url
-									+ 'jupload/index.php?id='
-									+ this.folder_id);*/
-
-					
-				}
-			},
-			scope : this
-		});
-		
+	{				
+		tbar.push(this.uploadButton);		
 		tbar.push('-');
 	}
 
