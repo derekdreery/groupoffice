@@ -574,7 +574,7 @@ GO.files.FileBrowser = function(config){
 		tbar.push(this.uploadButton);
 		
 		var version = deconcept.SWFObjectUtil.getPlayerVersion();
-		if(!GO.settings.config.disable_flash_upload && version.major > 0)
+		if(false && !GO.settings.config.disable_flash_upload && version.major > 0)
 		{
 			this.uploadMenu.add({
 				text : GO.lang.smallUpload,
