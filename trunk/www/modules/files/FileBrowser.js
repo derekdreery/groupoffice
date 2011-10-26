@@ -450,7 +450,7 @@ GO.files.FileBrowser = function(config){
 
 	tbar.push(this.newButton);
 
-
+	var maxFileSize = Math.floor(GO.settings.config.max_file_size/1048576)+'mb';
 	
 	this.uploadButton = new Ext.ux.PluploadButton({
 		iconCls: 'btn-upload',
@@ -476,8 +476,9 @@ GO.files.FileBrowser = function(config){
 			// works as baseParams for store. 
 			// Accessible via this.uploader.settings.multipart_params after init
 			// multipart must be true
-
-			max_file_size: '10mb',
+			chunk_size:'2mb',
+			
+			max_file_size: maxFileSize,
 
 			resize: {
 				width: 640, 
@@ -510,7 +511,7 @@ GO.files.FileBrowser = function(config){
 			// icon classes for toolbar buttons
 			addButtonCls: 'btn-add',
 			uploadButtonCls: 'btn-up',
-			cancelButtonCls: 'silk-stop',
+			cancelButtonCls: 'btn-cancel',
 			deleteButtonCls: 'btn-delete',
 
 			// localization
