@@ -68,6 +68,10 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		$this->columns['reminder']['gotype']='unixtimestamp';
 		parent::init();
 	}
+	
+	protected function getLocalizedName() {
+		return GO::t('task', 'tasks');
+	}
 
 	public function tableName() {
 		return 'ta_tasks';
