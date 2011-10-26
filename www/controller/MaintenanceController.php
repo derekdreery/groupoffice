@@ -122,11 +122,11 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		$u = array();
 
 		require(GO::config()->root_path . 'install/updates.php');
-
+		
 		//put the updates in an extra array dimension so we know to which module
 		//they belong too.
 		foreach ($updates as $timestamp => $updatequeries) {
-			$u[$timestamp]['core'] = $updatequeries;
+			$u["$timestamp"]['core'] = $updatequeries;
 		}
 
 
@@ -143,15 +143,15 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 				//put the updates in an extra array dimension so we know to which module
 				//they belong too.
 				foreach ($updates as $timestamp => $updatequeries) {
-					$u[$timestamp][$module->id] = $updatequeries;
+					$u["$timestamp"][$module->id] = $updatequeries;
 				}
 			}
 		}
 		//sort the array by timestamp
 		ksort($u);
-//		
-//		var_dump($u);
-//		exit();
+		
+		var_dump($u);
+		exit();
 
 		$currentCoreVersion = GO::config()->get_setting('version');
 		if (!$currentCoreVersion)
