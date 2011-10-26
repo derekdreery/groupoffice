@@ -103,8 +103,10 @@ try
 			
 			if($sieve->save())
 				$response['success'] = true;
-			else
+			else{
 				$response['success'] = false;
+				$response['feedback']=$sieve->error();
+			}
 			break;
 
 		case 'get_sieve_scripts':
@@ -192,18 +194,19 @@ try
 				}
 			}
 
-			$index=0;
+			if(!empty($sieve->script->content)) {
+				$index=0;
+				foreach($sieve->script->content as $item)
+				{
+					$i['name']=$item['name'];
+					$i['index']=$index;
+					$i['script_name']=$script_name;
+					$i['disabled']= $item['disabled'];
 
-			foreach($sieve->script->content as $item)
-			{
-				$i['name']=$item['name'];
-				$i['index']=$index;
-				$i['script_name']=$script_name;
-				$i['disabled']= $item['disabled'];
+					$response['results'][]=$i;
 
-				$response['results'][]=$i;
-
-				$index++;
+					$index++;
+				}
 			}
 
 			$response['success']=true;

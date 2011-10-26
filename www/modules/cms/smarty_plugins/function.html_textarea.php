@@ -19,7 +19,11 @@ function smarty_function_html_textarea($params, &$smarty)
 	if(!isset($params['class']))
 		$params['class']='textbox';
 
-
+	if(!isset($params['rows']))
+		$params['rows']='';
+	else
+		$params['rows']='rows="'.$params['rows'].'"';
+	
 	if($pos = strpos($params['name'], '['))
 	{
 		$key1 = substr($params['name'],0,$pos);
@@ -41,7 +45,7 @@ function smarty_function_html_textarea($params, &$smarty)
 		$value = $params['empty_text'];
 	}
 
-	$html ='<textarea class="'.$params['class'].'" name="'.$params['name'].'" '.$params['extra'];
+	$html ='<textarea class="'.$params['class'].'" name="'.$params['name'].'" '.$params['rows'].' '.$params['extra'];
 
 
 	if(!empty($params['empty_text'])){

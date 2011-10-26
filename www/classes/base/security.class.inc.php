@@ -131,10 +131,13 @@ class GO_SECURITY extends db {
 					$res =  $GO_AUTH->login($username, $password);
 
 					if(!$res){
-						$this->logout();
+						//$this->logout();
+						SetCookie("GO_UN","",time()-3600,"/","",!empty($_SERVER['HTTPS']),true);
+						SetCookie("GO_PW","",time()-3600,"/","",!empty($_SERVER['HTTPS']),true);
+						unset($_COOKIE['GO_UN'],$_COOKIE['GO_PW']);
 					}
 					return $res;
-				}elseif(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW']) && empty($_SESSION['PHP_AUTH_USER_FAILED'])) {
+				}elseif(!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW']) && empty($_SESSION['PHP_AUTH_USER_FAILED']) && !defined("PHP_AUTH_USER_FAILED")) {
 					$username = $_SERVER['PHP_AUTH_USER'];
 					$password = $_SERVER['PHP_AUTH_PW'];
 
@@ -150,6 +153,7 @@ class GO_SECURITY extends db {
 						go_debug('PHP_AUTH_USER is set but http authentication failed');
 						//if PHP_AUTH_USER fails we must remember that because otherwise it will endlessly loop.
 						$_SESSION['PHP_AUTH_USER_FAILED']=true;
+						define("PHP_AUTH_USER_FAILED", true);
 					}
 				}
 

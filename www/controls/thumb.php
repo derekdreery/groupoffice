@@ -39,7 +39,9 @@ if (File::path_leads_to_parent($path))
 
 $w = isset($_REQUEST['w']) ? intval($_REQUEST['w']) : 0;
 $h = isset($_REQUEST['h']) ? intval($_REQUEST['h']) : 0;
+
 $zc = !empty($_REQUEST['zc']) && !empty($w) && !empty($h);
+$fb = !empty($_REQUEST['fb']) && !empty($w) && !empty($h);
 
 $lw = isset($_REQUEST['lw']) ? intval($_REQUEST['lw']) : 0;
 $lh = isset($_REQUEST['lh']) ? intval($_REQUEST['lh']) : 0;
@@ -101,6 +103,9 @@ if (!empty($_REQUEST['nocache']) || !$thumb_exists || $thumb_mtime < $file_mtime
 
 		if ($zc) {
 			$image->zoomcrop($w, $h);
+		}
+		else if($fb) {
+			$image->fitbox($w, $h);
 		} else {
 			if ($lw || $lh || $pw || $lw) {
 				//treat landscape and portrait differently

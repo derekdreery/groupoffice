@@ -705,7 +705,8 @@ class cms extends db {
 	 * @return Array Record properties
 	 */
 	function get_site($site_id) {
-		$this->query("SELECT * FROM cms_sites WHERE id=".intval($site_id));
+		$sql = "SELECT * FROM cms_sites WHERE id=".intval($site_id);
+		$this->query($sql);
 		if($this->next_record()) {
 			return $this->record;
 		}else {
@@ -1209,7 +1210,7 @@ class cms extends db {
 			$where = true;
 		} else if ($site_id>0) {
 			//join cms_folders 
-			$sql .= "WHERE site_id=".intval($site_id);
+			$sql .= "INNER JOIN cms_folders fo ON f.folder_id=fo.id WHERE fo.site_id=".intval($site_id);
 			$where = true;
 		}
 
@@ -1497,24 +1498,73 @@ class cms extends db {
 			"file_id='".intval($file_id)."' AND category_id='".intval($category_id)."'");
 	}
 
-	public function get_child_categories($category, $site_id) {
-		if (is_numeric($category))
+	public function get_child_categories($category_id, $site_id, $return_first_item=false) {
 			$sql = "SELECT c.* FROM cms_categories c ".
-				"WHERE c.parent_id='".intval($category)."' ";
-		else
-			$sql = "SELECT c.* FROM cms_categories c ".
-				"INNER JOIN cms_categories c2 on c2.id=c.parent_id ".
-				"WHERE c2.name='".$this->escape($category)."' ";
-		
+				"WHERE c.parent_id='".intval($category_id)."' ";
+//		else
+//			$sql = "SELECT c.* FROM cms_categories c ".
+//				"INNER JOIN cms_categories c2 on c2.id=c.parent_id ".
+//				"WHERE c2.name='".$this->escape($category)."' ";
+//		
 		$sql .= "AND c.site_id='".intval($site_id)."' ";
 
+		$cms2= new cms_output();
+		
 		$this->query($sql);
 		$categories = array();
 		while ($record = $this->next_record()) {
 			$record['active'] = isset($_GET['filter_category_id']) && $record['id']==$_GET['filter_category_id'];
 			$record['active_class_name'] = $record['active'] ? 'active_category_filter' : '';
+			
+			if($return_first_item){
+				$sql = "SELECT * FROM cms_files f INNER JOIN cms_files_categories c ON c.file_id=f.id WHERE c.category_id=".intval($record['id'])." ORDER BY f.sort_time ASC LIMIT 0,1";
+				$cms2->query($sql);
+				$record['first_item']=$cms2->next_record();
+				$record['first_item']['href']=$cms2->create_href_by_file($record['first_item']);
+			}
+			
 			$categories[] = $record;
 		}
 		return $categories;
 	}
+
+	public function get_category_id($name,$parent_id=0) {
+		$sql = "SELECT id FROM cms_categories WHERE name='".$this->escape($name)."' AND parent_id='".intval($parent_id)."' ";
+		$this->query($sql);
+		if ($record = $this->next_record()) {
+			return $record['id'];
+		} else {
+			return false;
+		}
+	}
+	
+	public function get_category_name($category_id) {
+		$sql = "SELECT name FROM cms_categories WHERE id='".intval($category_id)."'";
+		$this->query($sql);
+		if ($record = $this->next_record()) {
+			return $record['name'];
+		} else {
+			return false;
+		}
+	}
+
+	public function get_one_item_category($file_id) {
+		$sql = "SELECT c.* FROM cms_files f ".
+			"INNER JOIN cms_files_categories fc ON f.id=fc.file_id ".
+			"INNER JOIN cms_categories c ON c.id=fc.category_id ".
+			"WHERE f.id='".intval($file_id)."' ";
+		$this->query($sql);
+		return $this->next_record();
+	}
+	
+	public function get_one_item_category_name($file_id) {
+		$category = $this->get_one_item_category($file_id);
+		return $category['name'];
+	}
+//	function get_category_by_name($category_name){
+//		$sql = "SELECT id FROM cms_categories WHERE name='".$category_name."';";
+//		$this->query($sql);
+//		$record = $this->next_record();
+//		return $record['id'];
+//	}
 }

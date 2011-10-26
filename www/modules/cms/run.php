@@ -35,16 +35,6 @@ $smarty = new cms_smarty($co);
 //hide on screen errors in smarty
 $GLOBALS['GO_CONFIG']->debug_display_errors=false;
 
-// create site map
-if (empty($site)) {
-	if (empty($folder_id))
-		$folder = $cms->get_folder($file_id);
-	else
-		$folder = $cms->get_folder($folder_id);
-	$site = $cms->get_site($folder['site_id']);
-}
-$site_name_simplified = $cms->to_permalink_style($site['name']);
-$_SESSION['GO_SESSION']['cms'][$site_name_simplified]['site_map'] = $cms->get_XML_sitemap($site['id']);
 
 echo $co->replace_urls($smarty->fetch('index.tpl'));
 ?>

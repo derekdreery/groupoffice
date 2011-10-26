@@ -7,7 +7,7 @@ require($config['root_path'].'Group-Office.php');
 
 if(!empty($GLOBALS['GO_CONFIG']->serverclient_domains))
 {
-	global $GO_CONFIG, $GO_MODULES;
+	global $GO_CONFIG, $GO_MODULES, $GO_SECURITY;
 
 	require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 	$GO_USERS = new GO_USERS();
@@ -47,6 +47,10 @@ if(!empty($GLOBALS['GO_CONFIG']->serverclient_domains))
 					$account['smtp_encryption']=$GLOBALS['GO_CONFIG']->serverclient_smtp_encryption;
 					$account['smtp_username']=$GLOBALS['GO_CONFIG']->serverclient_smtp_username;
 					$account['smtp_password']=$GLOBALS['GO_CONFIG']->serverclient_smtp_password;
+					$account['acl_id']=$GO_SECURITY->get_new_acl('email');
+					
+					$GO_SECURITY->add_user_to_acl(1, $account['acl_id'],GO_SECURITY::MANAGE_PERMISSION);
+					
 					try{
 						$account['id'] = $email->add_account($account);
 
