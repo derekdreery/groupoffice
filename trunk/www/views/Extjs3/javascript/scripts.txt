@@ -124,3 +124,10 @@ views/Extjs3/javascript/windows/TabbedFormDialog.js
 
 views/Extjs3/javascript/windows/ExportDialog.js
 views/Extjs3/javascript/windows/PersonalSettingsDialog.js
+
+
+views/Extjs3/javascript/plupload/DataView-more.js
+views/Extjs3/javascript/plupload/plupload/js/plupload.full.js
+views/Extjs3/javascript/plupload/ext.ux.plupload.js
+
+
