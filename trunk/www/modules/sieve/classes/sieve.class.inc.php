@@ -63,6 +63,7 @@ class sieve {
 
 	public function __construct() {
 		$this->sieve = new Net_Sieve();
+		$this->sieve->setDebug(true, array($this, "debug_handler"));
 	}
 
 	private function rewrite_host($host) {
@@ -277,19 +278,24 @@ class sieve {
 		$active = $this->sieve->getActive();
 		if (!$active) {
 
-			$content = 'require ["vacation"];
-require ["fileinto"];
-# rule:[' . $lang['sieve']['standardvacation'] . ']
-if false # anyof (true)
-{
-			vacation :days 3 text:"' . $lang['sieve']['standardvacationmessage'] . '";
-}
-';
-			$content .= '# rule:[Spam]
-if anyof (header :contains "X-Spam-Flag" "YES")
-{
-	fileinto "Spam";
-}';
+			$content = '';
+//			$content = "require [\"vacation\"];
+//require [\"fileinto\"];
+//# rule:[".$lang['sieve']['standardvacation']."]
+//if false # anyof (true)
+//{".
+//"vacation :days 3 text:\r\n".
+//$lang['sieve']['standardvacationmessage']."\r\n".
+//"\r\n".
+//".\r\n".	
+//";\r\n".
+//"}\r\n";
+//
+//			$content .= "# rule:[Spam]
+//if anyof (header :contains \"X-Spam-Flag\" \"YES\")
+//{
+//	fileinto \"Spam\";
+//}";
 			$this->save_script('groupoffice', $content);
 			$this->activate('groupoffice');
 			$active = 'groupoffice';
@@ -437,6 +443,7 @@ if anyof (header :contains "X-Spam-Flag" "YES")
 
 	private function _set_error($error) {
 		$this->error = $error;
+		go_debug($error);
 		return false;
 	}
 

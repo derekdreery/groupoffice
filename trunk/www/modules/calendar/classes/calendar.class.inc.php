@@ -1284,6 +1284,9 @@ class calendar extends db {
 		
 		if(!$old_event) {
 			$old_event = $this->get_event($event['id']);
+			if(!$old_event) {
+				return false;
+			}
 		}
 
 		if(isset($event['name']) && strlen($event['name'])>150){

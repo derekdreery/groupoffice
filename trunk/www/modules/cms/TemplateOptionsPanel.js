@@ -169,7 +169,7 @@ GO.cms.TemplateOptionsPanel = Ext.extend(function(cfg) {
 
 					this.options.push(new GO.files.SelectFile({
 						fieldLabel : o.fieldLabel,
-						root_folder_id : this.ownerCt.ownerCt.ownerCt.root_folder_id,
+						root_folder_id : this.ownerCt.ownerCt.ownerCt.ownerCt.root_folder_id,
 						name : o.name,
 						value : value,
 						anchor : '-20',
