@@ -23,8 +23,6 @@ GO.calendar.formatQtip = function(data)
 	if(!data.endDate)
 		data.endDate = Date.parseDate(data.end_time, df);
 	
-	console.log(data);
-	
 	if(!data.creationDate)
 		data.creationDate = data.ctime ? Date.parseDate(data.ctime, df) : new Date();
 	
