@@ -2,7 +2,6 @@
 require(GO::config()->root_path.'go/vendor/odtphp/library/odf.php');
 
 class GO_Base_Util_Odf extends Odf{
-	private $_filename;
 	
 	public function __construct($filename, $config = array()) {
 		
@@ -14,4 +13,5 @@ class GO_Base_Util_Odf extends Odf{
 	public function getFilename(){
 		return $this->_filename;
 	}
+
 }

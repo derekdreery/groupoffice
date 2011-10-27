@@ -24,7 +24,7 @@ GO.modules.MainPanel = function(config) {
 	});
 
 	this.availableModulesDS = new GO.data.JsonStore({
-		url : GO.url('modules/module/availableModulesGrid'),
+		url : GO.url('modules/module/availableModulesStore'),
 		sortInfo: {
 			field: 'name',
 			direction: 'ASC' // or 'DESC' (case sensitive for local sorting)
