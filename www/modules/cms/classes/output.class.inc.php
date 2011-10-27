@@ -757,6 +757,8 @@ class cms_output extends cms {
 		$category_path = !empty($params['category_path']) ? $params['category_path'] : '';
 //		$category_name = !empty($params['category_name']) ? $params['category_name'] : '';
 		$category_id = !empty($params['category_id']) ? intval($params['category_id']) : '';
+		$sort_by = !empty($params['sort_by']) ? $params['sort_by'] : false;
+		$sort_order = !empty($params['sort_order']) ? $params['sort_order'] : false;
 		$random = !empty($params['random']);
 		
 //		if ($category_name=='Root') {
@@ -765,7 +767,7 @@ class cms_output extends cms {
 //		}
 		
 		if ($category_id = $this->get_category_id_by_path($category_path)) {
-			$params['items'] = $this->get_child_categories($category_id,$this->site['id']);
+			$params['items'] = $this->get_child_categories($category_id,$this->site['id'],!empty($params['return_first_item']),$sort_by,$sort_order);
 		}
 //		else if (!empty($category_name)) {
 //			$category_name = trim($category_name);
@@ -775,7 +777,7 @@ class cms_output extends cms {
 //			$category_id = $this->get_category_by_name($category_name);
 //						
 //		} 
-		$params['items'] = $this->get_child_categories($category_id,$this->site['id'],!empty($params['return_first_item']));
+		$params['items'] = $this->get_child_categories($category_id,$this->site['id'],!empty($params['return_first_item']),$sort_by,$sort_order);
 
 		if($random)
 			shuffle($params['items']);

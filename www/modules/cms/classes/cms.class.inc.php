@@ -1497,7 +1497,7 @@ class cms extends db {
 			"file_id='".intval($file_id)."' AND category_id='".intval($category_id)."'");
 	}
 
-	public function get_child_categories($category_id, $site_id, $return_first_item=false) {
+	public function get_child_categories($category_id, $site_id, $return_first_item=false, $sortby=false, $sortdirection=false) {
 			$sql = "SELECT c.* FROM cms_categories c ".
 				"WHERE c.parent_id='".intval($category_id)."' ";
 //		else
@@ -1506,6 +1506,13 @@ class cms extends db {
 //				"WHERE c2.name='".$this->escape($category)."' ";
 //		
 		$sql .= "AND c.site_id='".intval($site_id)."' ";
+		
+		if(!empty($sortby)){
+			if(empty($sortdirection))
+				$sortdirection = "ASC";
+			
+			$sql .= " ORDER BY c.".$this->escape($sortby)." ".$this->escape($sortdirection)."";
+		}
 
 		$cms2= new cms_output();
 		
