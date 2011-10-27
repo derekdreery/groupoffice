@@ -523,5 +523,20 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function isResource(){
 		return $this->calendar->group_id>1;
 	}
+	
+	
+	public function defaultAttributes() {
+		$settings = GO_Calendar_Model_Settings::model()->findByPk(GO::user()->id);
+		
+		$defaults = array(
+				//'description'=>'DIT IS DE BESCHRIJVING DIE STANDAARD WORDT INGEVULD',
+				'status' => "NEEDS-ACTION",
+				'start_time'=> time(), 
+				'end_time'=>time()+3600,
+				'reminder' => $settings->reminder
+		);
+		
+		return $defaults;
+	}
 
 }
