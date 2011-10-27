@@ -72,6 +72,9 @@ class Odf {
 		if (($this->stylesXml = $this->file->getFromName('styles.xml')) === false) {
 			throw new OdfException("Nothing to parse - check that the styles.xml file is correctly formed");
 		}
+		
+		$this->contentXml = str_replace('<text:s/>', ' ', $this->contentXml);
+		$this->stylesXml = str_replace('<text:s/>', ' ', $this->stylesXml);
 
 		$this->file->close();
 
@@ -98,7 +101,7 @@ class Odf {
 	public function setVars($key, $value, $encode = true) {
 			$value = $encode ? htmlspecialchars($value, ENT_COMPAT, 'UTF-8') : $value;
 			
-			GO::debug('ODF var: '.$key.'=>'.$value);
+			//GO::debug('ODF var: '.$key.'=>'.$value);
 			
 			$this->vars[$key] = str_replace("\n", "<text:line-break/>", $value);
 			return $this;

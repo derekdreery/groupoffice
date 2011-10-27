@@ -196,7 +196,9 @@
 
 			this.rightCol.add(this.serverclientFieldSet);
 			
-			this.formPanel.form.findField('username').on('change', this.setDefaultEmail, this);
+			this.on('render',function(){
+				this.formPanel.form.findField('username').on('change', this.setDefaultEmail, this);
+			},this);
 			
 		}		
 	}

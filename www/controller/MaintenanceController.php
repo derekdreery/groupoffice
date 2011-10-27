@@ -149,9 +149,9 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 		//sort the array by timestamp
 		ksort($u);
-		
-		var_dump($u);
-		exit();
+//		
+//		var_dump($u);
+//		exit();
 
 		$currentCoreVersion = GO::config()->get_setting('version');
 		if (!$currentCoreVersion)
