@@ -407,6 +407,7 @@ class cms_output extends cms {
 		$sort_time = !empty($params['sort_time']) ? $params['sort_time'] : '';
 		$filter_by_get_year = !empty($params['filter_by_get_year']) ? $_GET['filter_year'] : false;
 		$filter_by_get_category_id = !empty($params['filter_by_get_category_id']) ? $_GET['filter_category_id'] : false;
+		$all_subfolder_content = !empty($params['all_subfolder_content']);
 
 		/*
 		 * lastfile is used to record the previous and next file of the currently viewed file
@@ -667,7 +668,7 @@ class cms_output extends cms {
 					$html .= $item_html;
 				}
 
-				if($item['fstype']=='folder' && $current_level < $expand_levels && ($is_in_path || $expand_all)) {
+				if($item['fstype']=='folder' && ($all_subfolder_content || ($current_level < $expand_levels && ($is_in_path || $expand_all)))) {
 					$href_path = empty($path) ? '' : $path.'/';
 					$html .= $this->print_items($params, $smarty, $current_level+1,$item['id'],$href_path.urlencode($item['name']), $item);
 				}
