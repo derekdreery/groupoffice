@@ -100,6 +100,14 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		return true;
 	}
 	
+	public function getAttributes($outputType = 'formatted') {
+		
+		$attr = parent::getAttributes($outputType);
+		$attr['name']=$this->getName();
+		
+		return $attr;
+	}
+	
 	/**
 	 * Getter function for the ACL function
 	 * @return int 

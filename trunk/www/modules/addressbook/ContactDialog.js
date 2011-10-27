@@ -379,7 +379,7 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 				}
 				this.uploadFile.clearQueue();
 				this.fireEvent('save', this, this.contact_id);
-				this.personalPanel.setContactID(this.contact_id);
+				//this.personalPanel.setContactID(this.contact_id);
 				if(!GO.util.empty(action.result.photo_url))
 					this.setPhoto(action.result.photo_url);
 				else

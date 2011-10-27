@@ -95,37 +95,50 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 		if (!empty($to) || !empty($contact_id)) {
 
 			if($contact_id>0){
-				$contact = $ab->get_contact($contact_id);
+				//$contact = $ab->get_contact($contact_id);
+				$contact = GO_Addressbook_Model_Contact::model()->findByPk($contact_id);
 			}else
 			{
-				$contact = $ab->get_contact_by_email($to, $GLOBALS['GO_SECURITY']->user_id);
+				$email = GO_Base_Util_String::get_email_from_string($to);
+				$contact = GO_Addressbook_Model_Contact::model()->findSingleByAttribute('email', $email);
+				
+//				$contact = $ab->get_contact_by_email($to, $GLOBALS['GO_SECURITY']->user_id);
 			}
 
 
 			if ($contact) {
-				$response['data']['body']=$tp->replace_contact_data_fields($response['data']['body'], $contact['id'], true);
-			}else
-			{
-				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-				$GO_USERS = new GO_USERS();
-
-				if($user = $GO_USERS->get_user_by_email($to)) {
-					$response['data']['body']=$tp->replace_user_data_fields($response['data']['body'], $user['id'], true);
-				}else {
-					$ab->search_companies($GLOBALS['GO_SECURITY']->user_id, $to, 'email',0,0,1);
-					if($company= $ab->next_record()) {
-						$response['data']['body']=$tp->replace_company_data_fields($response['data']['body'], $company['id'], true);
-					}else
-					{
-						//this will remove the tags
-						$tp->replace_fields($response['data']['body'],array());
-					}
-				}
-			}
+				//$response['data']['body']=$tp->replace_contact_data_fields($response['data']['body'], $contact['id'], true);
+				$response['data']['body']= GO_Addressbook_Model_Template::model()->replaceContactTags($response['data']['body'], $contact);
+			}  else {
+				
+				//echo 'ja';
+				$response['data']['body']= GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['body']);
+				
+			}	
+			//else
+//			{
+//				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
+//				$GO_USERS = new GO_USERS();
+//
+//				if($user = $GO_USERS->get_user_by_email($to)) {
+//					$response['data']['body']=$tp->replace_user_data_fields($response['data']['body'], $user['id'], true);
+//				}else {
+//					$ab->search_companies($GLOBALS['GO_SECURITY']->user_id, $to, 'email',0,0,1);
+//					if($company= $ab->next_record()) {
+//						$response['data']['body']=$tp->replace_company_data_fields($response['data']['body'], $company['id'], true);
+//					}else
+//					{
+//						//this will remove the tags
+//						$tp->replace_fields($response['data']['body'],array());
+//					}
+//				}
+//			}
 		}else
 		{
 			//this will remove the tags
-			$tp->replace_fields($response['data']['body'],array());
+			//$tp->replace_fields($response['data']['body'],array());
+			$response['data']['body']= GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['body']);
+				
 		}
 		
 		/*if($cf && !empty($link_id)) {

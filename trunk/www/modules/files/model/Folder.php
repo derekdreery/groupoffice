@@ -211,6 +211,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Files_Model_Folder 
 	 */
 	public function findByPath($relpath, $autoCreate=false) {
+		$folder=false;
 		if (substr($relpath, -1) == '/') {
 			$relpath = substr($relpath, 0, -1);
 		}
