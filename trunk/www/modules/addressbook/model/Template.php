@@ -59,9 +59,11 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		return $attributes;
 	}
 	
-	public function replaceContactTags($content, GO_Addressbook_Model_Contact $contact){
+	public function replaceContactTags($content, GO_Addressbook_Model_Contact $contact, $leaveEmptyTags=false){
 		
-		$attributes = $this->_getModelAttributes($contact, 'contact:');
+		$attributes = $this->_getDefaultTags();
+		
+		$attributes = array_merge($attributes, $this->_getModelAttributes($contact, 'contact:'));
 		if($contact->company)
 		{
 			$attributes = array_merge($attributes, $this->_getModelAttributes($contact->company, 'company'));
@@ -70,30 +72,46 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
 		
 		$templateParser = new GO_Base_Util_TemplateParser();
-		return $templateParser->parse($content, $attributes);
+		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
 	}
 	
-	public function replaceCompanyTags($content, GO_Addressbook_Model_Company $company){
-		$attributes = $this->_getModelAttributes($company, 'company:');
+	
+	
+	public function replaceModelTags($content, $model, $tagPrefix='', $leaveEmptyTags=false){
+		
+		
+		
+		$attributes = $this->_getDefaultTags();
+		
+		$attributes = array_merge($attributes, $this->_getModelAttributes($model, $tagPrefix));
 		
 		$attributes = array_merge($attributes, $this->_getUserAttributes());
 		
-		$attributes['contact:salutation']=GO::t('default_salutation_unknown');
+		
 		
 		$templateParser = new GO_Base_Util_TemplateParser();
-		return $templateParser->parse($content, $attributes);
+		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
 	}
 	
-	public function replaceUserTags($content){
+	private function _getDefaultTags(){
+		$attributes['contact:salutation']=GO::t('default_salutation_unknown');
+		$attributes['date']=GO_Base_Util_Date::get_timestamp(time(), false);
 		
-		$attributes = $this->_getUserAttributes();
+		return $attributes;
+	}
+	
+	public function replaceUserTags($content, $leaveEmptyTags=false){
+		
+		$attributes = $this->_getDefaultTags();
+		
+		$attributes = array_merge($attributes, $this->_getUserAttributes());
 		
 		$attributes['contact:salutation']=GO::t('default_salutation_unknown');
 		
 		//var_dump($attributes);
 		
 		$templateParser = new GO_Base_Util_TemplateParser();
-		return $templateParser->parse($content, $attributes);
+		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
 	}
 	
 	
