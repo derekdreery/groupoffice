@@ -148,16 +148,9 @@ if($GLOBALS['GO_CONFIG']->debug || !file_exists($path)) {
 	fwrite($fp, "GO.Languages=[];\n");
 	
 	
-	//Temporary dirty hack for namespaces
-	$stmt = GO::modules()->getAll();
-	while($module = $stmt->fetch()){
-		if($module->isAvailable())
-			fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
-	}
-	
+
 	fwrite($fp, 'Ext.ns("GO.portlets");');
 	
-	fwrite($fp, 'if(GO.customfields){Ext.ns("GO.customfields.columns");Ext.ns("GO.customfields.types");}');
 	
 
 	//fwrite($fp,'GO.Languages.push(["",GO.lang.userSelectedLanguage]);');
@@ -173,9 +166,8 @@ if($GLOBALS['GO_CONFIG']->debug || !file_exists($path)) {
 	fwrite($fp,'GO.lang='.json_encode($l['base']['common']).';');
 	fwrite($fp,'GO.lang.countries='.json_encode($l['base']['countries']).';');
 	unset($l['base']);
-	foreach($l as $module=>$langVars){
-		fwrite($fp,'GO.'.$module.'.lang='.json_encode($langVars).';');
-	}
+	
+	
 	
 	
 	
@@ -273,6 +265,33 @@ if(!isset($default_scripts_load_modules)){
 
 
 if(count($load_modules)) {
+	
+	
+	$fp=fopen($GLOBALS['GO_CONFIG']->file_storage_path.'cache/module-languages.js','w');
+	if(!$fp){
+		die('Could not write to cache directory');
+	}
+	fwrite($fp, "GO.Languages=[];\n");
+	
+	//Temporary dirty hack for namespaces
+	$stmt = GO::modules()->getAll();
+	while($module = $stmt->fetch()){
+		if($module->isAvailable())
+			fwrite($fp, 'Ext.ns("GO.'.$module->id.'");');
+	}
+	
+	//Put all lang vars in js
+	$language = new GO_Base_Language();
+	$l = $language->getAllLanguage();
+	unset($l['base']);
+	
+	fwrite($fp, 'if(GO.customfields){Ext.ns("GO.customfields.columns");Ext.ns("GO.customfields.types");}');
+	foreach($l as $module=>$langVars){
+		fwrite($fp,'GO.'.$module.'.lang='.json_encode($langVars).';');
+	}
+	fclose($fp);
+	$scripts[]=$GLOBALS['GO_CONFIG']->file_storage_path.'cache/module-languages.js';
+	
 	//load language first so it can be overridden
 //	foreach($load_modules as $module) {
 //		if($module['read_permission']) {
