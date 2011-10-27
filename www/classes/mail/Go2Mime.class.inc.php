@@ -186,7 +186,7 @@ class Go2Mime
 			$this->response['to_string']=substr($this->response['to_string'],0,-2);
 		}else
 		{
-			$this->response['to'][]=array('email'=>'', 'name'=> $lang['email']['no_recipients']);
+			$this->response['to'][]=array('email'=>'', 'name'=> '');
 		}
 
 		$cc=array();

@@ -292,6 +292,14 @@ if(count($load_modules)) {
 	fclose($fp);
 	$scripts[]=$GLOBALS['GO_CONFIG']->file_storage_path.'cache/module-languages.js';
 	
+	if(!$GLOBALS['GO_CONFIG']->debug){
+		$scripts[]=$GLOBALS['GO_CONFIG']->file_storage_path.'cache/module-languages.js';
+	}else
+	{
+		//$dynamic_debug_script=$GLOBALS['GO_CONFIG']->file_storage_path.'cache/languages.js';
+		$scripts[]=$GLOBALS['GO_CONFIG']->host.'compress.php?file=module-languages.js&mtime='.filemtime($dynamic_debug_script);
+	}
+	
 	//load language first so it can be overridden
 //	foreach($load_modules as $module) {
 //		if($module['read_permission']) {

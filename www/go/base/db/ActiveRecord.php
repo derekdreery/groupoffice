@@ -1546,12 +1546,39 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		else
 			$att=$this->formatOutputValues($this->_attributes, $outputType=='html');		
 
-		$r = new ReflectionObject($this);
-		$publicProperties = $r->getProperties(ReflectionProperty::IS_PUBLIC);
-		foreach($publicProperties as $prop){
-			$att[$prop->getName()]=$prop->getValue($this);
+		foreach($this->_getMagicAttributeNames() as $attName){
+			$att[$attName]=$this->$attName;
 		}
+		
 		return $att;
+	}
+	
+	private $_magicAttributeNames;
+	
+	private function _getMagicAttributeNames(){
+		if(!isset($this->_magicAttributeNames)){
+			$this->_magicAttributeNames=array();
+			$r = new ReflectionObject($this);
+			$publicProperties = $r->getProperties(ReflectionProperty::IS_PUBLIC);
+			foreach($publicProperties as $prop){
+				//$att[$prop->getName()]=$prop->getValue($this);
+				$this->_magicAttributeNames[]=$prop->getName();
+			}
+			
+//			$methods = $r->getMethods();
+//			
+//			foreach($methods as $method){
+//				$methodName = $method->getName();
+//				if(substr($methodName,0,3)=='get' && !$method->getNumberOfParameters()){
+//					
+//					echo $propName = strtolower(substr($methodName,3,1)).substr($methodName,4);
+//					
+//					$this->_magicAttributeNames[]=$propName;
+//				}
+//			}
+//			
+		}
+		return $this->_magicAttributeNames;
 	}
 	
 	/**

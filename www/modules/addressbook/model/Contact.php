@@ -56,6 +56,14 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
                 'company' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'company_id')
             );
 	}
+	
+	public function getAttributes($outputType = 'formatted') {
+		
+		$attr = parent::getAttributes($outputType);
+		$attr['name']=$this->getName();
+		
+		return $attr;
+	}
 
 
 	
