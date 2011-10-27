@@ -23,6 +23,37 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 
 	}
 	
+	public static function saveUser($user, $wasNew){
+		if($wasNew)
+			self::getDefaultCalendar($user->id);	
+	}
+	
+	public static function deleteUser($user){
+		$stmt = GO_Calendar_Model_Category::model()->find(array(
+				'by'=>array(array('user_id', $user->id)),
+				'ignoreAcl'=>true
+				));
+		
+		$stmt->callOnEach('delete');
+	}
+	
+	
+	public static function getDefaultCalendar($userId){
+		$calendar = GO_Calendar_Model_Calendar::model()->findSingleByAttribute('user_id', $userId);
+		if (!$calendar){
+			$calendar = new GO_Calendar_Model_Calendar();
+			
+			$user = GO_Base_Model_User::model()->findByPk($userId);
+			
+			$calendar->user_id=$user->id;
+			$calendar->name=$user->name;
+			$calendar->makeAttributeUnique('name');
+			$calendar->save();
+		}
+		
+		return $calendar;
+	}
+	
 	public static function initListeners() {		
 		GO_Base_Model_Reminder::model()->addListener('dismiss', "GO_Calendar_Model_Event", "reminderDismissed");
 	}
