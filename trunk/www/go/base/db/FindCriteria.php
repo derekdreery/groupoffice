@@ -158,6 +158,9 @@ class GO_Base_Db_FindCriteria {
 //		if(!count($value))
 //			throw new Exception("ERROR: Value for addInCondition can't be empty");
 		
+		if(!count($value))
+				return $this;
+		
 		$this->_appendOperator($useAnd);
 		$comparator = $useNot ? 'NOT IN' : 'IN';
 		
@@ -168,8 +171,8 @@ class GO_Base_Db_FindCriteria {
 			$this->_params[$paramTag]=array($val, $this->_getPdoType($tableAlias, $field));
 		}
 		
-		if(count($value))
-			$this->_condition .= ' `'.$tableAlias.'`.`'.$field.'` '.$comparator.' ('.implode(',',$paramTags).')';
+		
+		$this->_condition .= ' `'.$tableAlias.'`.`'.$field.'` '.$comparator.' ('.implode(',',$paramTags).')';
 		
 		return $this;
 		
