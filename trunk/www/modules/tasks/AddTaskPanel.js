@@ -83,7 +83,9 @@ Ext.extend(GO.tasks.AddTaskPanel, Ext.FormPanel,{
 		}
 
 		this.ntTasklist.store.loadData(data);
-		this.ntTasklist.setValue(this.ntTasklist.store.getAt(0).data.id);
+		var record = this.ntTasklist.store.getAt(0);
+		if(record)
+			this.ntTasklist.setValue(record.data.id);
 	},
 	afterRender : function()
 	{
