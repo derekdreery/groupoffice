@@ -8,4 +8,5 @@ $updates["201110211025"][]="ALTER TABLE `ab_addresslist_contacts` CHANGE `group_
 $updates["201110211025"][]="ALTER TABLE `ab_addresslist_companies` CHANGE `group_id` `list_id` int(11) NOT NULL";
 $updates["201110211025"][]="ALTER TABLE `ab_addresslist_contacts` CHANGE `list_id` `addresslist_id` int(11) NOT NULL";
 $updates["201110211025"][]="ALTER TABLE `ab_addresslist_companies` CHANGE `list_id` `addresslist_id` int(11) NOT NULL";
+$updates["201110281015"][]="ALTER TABLE `ab_addresslists` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
 ?>

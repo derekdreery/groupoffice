@@ -23,7 +23,7 @@
  * @property int $files_folder_id
  */
 
-class GO_Tasks_Model_Tasklist extends GO_Base_Db_ActiveRecord {
+class GO_Tasks_Model_Tasklist extends GO_Base_Model_AbstractUserDefaultModel {
 
 	/**
 	 * Returns a static model of itself
@@ -35,9 +35,17 @@ class GO_Tasks_Model_Tasklist extends GO_Base_Db_ActiveRecord {
 	{	
 		return parent::model($className);
 	}
+	
+	public function settingsModelName() {
+		return "GO_Tasks_Model_Settings";
+	}
+	
+	public function settingsPkAttribute() {
+		return 'default_tasklist_id';
+	}
 
 	public function tableName() {
-		return 'ta_lists';
+		return 'ta_tasklists';
 	}
 
 	public function aclField() {

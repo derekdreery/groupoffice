@@ -215,6 +215,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			
 			$this->acl->user_id=$this->id;
 			$this->acl->save();
+			
+			$defaultModels = GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels();
+		
+			foreach($defaultModels as $model){
+				$model->getDefault($this);
+			}
 		}	
 		
 		GO::modules()->callModuleMethod('saveUser', array(&$this, $wasNew));
@@ -232,6 +238,12 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		
 		while($r = $stmt->fetch())
 			$r->delete();
+		
+		$defaultModels = GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels();
+	
+		foreach($defaultModels as $model){
+			$model->deleteByAttribute('user_id',$this->id);
+		}
 		
 		GO::modules()->callModuleMethod('deleteUser', array(&$this));
 		
@@ -320,5 +332,24 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		}
 		return true;
 	}	
+	
+	public function defaultAttributes() {
+		$attr = parent::defaultAttributes();
+		
+		$attr['language']=GO::config()->language;
+		$attr['date_format']=GO::config()->default_date_format;
+		$attr['date_separator']=GO::config()->default_date_separator;
+		$attr['theme']=GO::config()->theme;
+		$attr['timezone']=GO::config()->default_timezone;
+		$attr['first_weekday']=GO::config()->default_first_weekday;
+		$attr['currency']=GO::config()->default_currency;
+		$attr['decimal_separator']=GO::config()->default_decimal_separator;
+		$attr['thousands_separator']=GO::config()->default_thousands_separator;
+		$attr['time_format']=GO::config()->default_time_format;
+		$attr['sort_name']=GO::config()->default_sort_name;
+	
+		
+		return $attr;
+	}
 }
 

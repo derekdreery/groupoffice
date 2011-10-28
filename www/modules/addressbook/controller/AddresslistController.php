@@ -14,6 +14,8 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 						
 		$store->getColumnModel()->formatColumn('name', '$model->name',array(),array('first_name','last_name'));
 		
+		$store->processDeleteActions($params, "GO_Addressbook_Model_AddresslistContact", array('addresslist_id'=>$params['addresslist_id']));
+		
 		$response = array();
 		
 		if (!empty($params['add_addressbook_id'])) {
@@ -28,15 +30,9 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 			$model = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']);
 			foreach ($add_keys as $add_key)
 				$model->addManyMany('contacts',$add_key);
-		} elseif (!empty($params['delete_keys'])) {
-			$del_keys = json_decode($params['delete_keys'],true);
-			$model = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']);
-			foreach ($del_keys as $del_key)
-				$model->removeManyMany ('contacts', $del_key);
-			$response['deleteSuccess'] = true;
 		}
 			
-		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id'])->contacts($store->getDefaultParams()->debugSql());
+		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id'])->contacts($store->getDefaultParams());
 		
 		$store->setDefaultSortOrder('name', 'ASC');
 		$store->setStatement ($stmt);
@@ -50,6 +46,8 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 		$store = GO_Base_Data_Store::newInstance(GO_Addressbook_Model_Company::model());
 						
 		$store->getColumnModel()->formatColumn('name', '$model->name',array(),array('first_name','last_name'));
+		
+		$store->processDeleteActions($params, "GO_Addressbook_Model_AddresslistCompany", array('addresslist_id'=>$params['addresslist_id']));
 		
 		$response = array();
 		
@@ -65,15 +63,9 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 			$model = !isset($model) ? GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']) : $model;
 			foreach ($add_keys as $add_key)
 				$model->addManyMany('companies',$add_key);
-		} elseif (!empty($params['delete_keys'])) {
-			$del_keys = json_decode($params['delete_keys'],true);
-			$model = !isset($model) ? GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id']) : $model;
-			foreach ($del_keys as $del_key)
-				$model->removeManyMany ('companies', $del_key);
-			$response['deleteSuccess'] = true;
-		}
+		} 
 			
-		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id'])->companies($store->getDefaultParams()->debugSql());
+		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id'])->companies($store->getDefaultParams());
 		
 		$store->setDefaultSortOrder('name', 'ASC');
 		$store->setStatement ($stmt);

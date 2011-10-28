@@ -1697,7 +1697,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$this->ctime=time();
 		}
 
-		if(isset($this->columns['user_id']) && empty($this->user_id)){
+		//do not use empty() here for checking the user id because some times it must be 0. eg. go_acl
+		if(isset($this->columns['user_id']) && !isset($this->user_id)){
 			$this->user_id=GO::user() ? GO::user()->id : 1;
 		}
 
@@ -2792,6 +2793,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
     return $linkModel->findByPk($primaryKey);
   }
+	
+	/**
+	 * Quickly delete all records by attribute. This function does NOT check the ACL.
+	 * 
+	 * @param string $name
+	 * @param mixed $value 
+	 */
+	public function deleteByAttribute($name, $value){
+		$stmt = $this->find(GO_Base_Db_FindParams::newInstance()->ignoreAcl()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition($name, $value)));		
+		$stmt->callOnEach('delete');	
+	}
 
 }
 

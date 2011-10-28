@@ -17,7 +17,7 @@
  * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
  */
 
-class GO_Tasks_Controller_Settings extends GO_Base_Controller_AbstractModelController{
+class GO_Tasks_Controller_Settings extends GO_Base_Model_AbstractUserDefaultModel{
 	
 	protected $model = 'GO_Tasks_Model_Settings';
 
