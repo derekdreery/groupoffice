@@ -38,30 +38,11 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 				)
 		));
 	}
-	
-	
-	public static function saveUser($user, $wasNew){
-		if($wasNew)
-			self::getDefaultNoteCategory($user->id);	
-	}
-	
-	public static function deleteUser($user){
-		GO_Notes_Model_Category::model()->deleteByAttribute('user_id', $user->id);
-	}
-	
+
 	
 	public static function getDefaultNoteCategory($userId){
-		$category = GO_Notes_Model_Category::model()->findSingleByAttribute('user_id', $userId);
-		if (!$category){
-			$category = new GO_Notes_Model_Category();
-			
-			$user = GO_Base_Model_User::model()->findByPk($userId);
-			
-			$category->user_id=$user->id;
-			$category->name=$user->name;
-			$category->makeAttributeUnique('name');
-			$category->save();
-		}
+		$user = GO_Base_Model_User::model()->findByPk($userId);
+		$category = GO_Notes_Model_Category::model()->getDefault($user);
 		
 		return $category;
 	}

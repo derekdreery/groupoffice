@@ -20,7 +20,7 @@
  * @property String $name The name of the category
  * @property int $files_folder_id
  */
-class GO_Notes_Model_Category extends GO_Base_Db_ActiveRecord {
+class GO_Notes_Model_Category extends GO_Base_Model_AbstractUserDefaultModel {
 
 	/**
 	 * Returns a static model of itself
