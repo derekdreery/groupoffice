@@ -198,7 +198,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 		{
 			fieldLabel: GO.lang['strWorkPhone'],
 			name: 'work_phone'
-		});
+		});	
 
 		this.formWorkFax = new Ext.form.TextField(
 		{
@@ -222,11 +222,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 				if(this.formCompany.getValue()==0 || confirm(GO.addressbook.lang.moveAll))
 				{
 					this.setAddressbookID(record.data.id);
-					var r = this.formAddressFormat.store.getById(record.get('default_iso_address_format'));
-					if(r){
-						this.formAddressFormat.setValue(r.id);
-						this.setSalutation();
-					}
+					this.setSalutation();
 					return true;
 				}else
 				{

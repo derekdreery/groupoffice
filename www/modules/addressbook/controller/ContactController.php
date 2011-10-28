@@ -63,6 +63,9 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	protected function afterLoad(&$response, &$model, &$params) {
 		
+		if (GO::modules()->customfields)
+			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Addressbook_Model_Contact", $model->addressbook_id);
+		
 		$response['data']['photo_url']=$model->photoURL;		
 		
 		$stmt = $model->addresslists();

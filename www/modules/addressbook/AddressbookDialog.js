@@ -394,103 +394,18 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 		});
 		
 		
-		this.propertiesPanel.on('show', this.syncButtons,	this);			
-		this.addressbookImportPanel.on('show', this.syncButtons, this);			
-		this.addressbookExportPanel.on('show', this.syncButtons, this);				
-		this.readPermissionsTab.on('show', this.syncButtons, this);			
-
-		if (GO.customfields) {
-			this.customfieldCategoryPanel = new Ext.FormPanel({
-				waitMsgTarget:true,
-				title: GO.customfields.lang.categories,
-				labelWidth: 150,
-				width: 800,
-				defaultType: 'checkbox',
-				border: false,
-				layout: 'column',
-				defaults: {
-					anchor:'100%'
-				},
-				cls:'go-form-panel',
-				waitMsgTarget:true,
-				items:[this.addressbook_id_field = new Ext.form.Hidden({
-					name: 'id',
-					value: this.addressbook_id
-				}),{
-					xtype:'fieldset',
-					title:GO.addressbook.lang.contacts,
-					border:true,
-					layout:'form',
-					width: 380,
-					style: 'margin:3px;padding:3px;',
-					autoHeight:true,
-					items:[this.limitContactsCB = new Ext.form.Checkbox({
-							name: 'limit_contacts',
-							hideLabel: true,
-							boxLabel: GO.customfields.lang.applyLimits
-						}),this.contactCfCategoriesFieldset = new Ext.form.FieldSet({
-							title: GO.customfields.lang.categories,
-							border:false,
-							layout: 'form',
-							style: 'margin:3px;padding:0;padding-left:3px;',
-							autoHeight: true
-					})]
-				},{
-					xtype:'fieldset',
-					title:GO.addressbook.lang.companies,
-					border:true,
-					layout:'form',
-					width: 380,
-					style: 'margin:3px;padding:3px;',
-					autoHeight:true,
-					items:[this.limitCompaniesCB = new Ext.form.Checkbox({
-							name: 'limit_companies',
-							hideLabel: true,
-							boxLabel: GO.customfields.lang.applyLimits
-						}),this.companyCfCategoriesFieldset = new Ext.form.FieldSet({
-							title: GO.customfields.lang.categories,
-							border:false,
-							layout: 'form',
-							style: 'margin:3px;padding:0;padding-left:3px;',
-							autoHeight: true
-					})]
-				}]
-
+		this.tabPanel.on('tabchange', this.syncButtons,	this);			
+		
+		if(GO.customfields){
+			this.disableContactsCategoriesPanel = new GO.customfields.DisableCategoriesPanel({
+				title:'Contacts custom fields'
 			});
-
-			for (var i=0; i<GO.customfields.types['GO_Addressbook_Model_Contact'].panels.length; i++) {
-				this.contactCfCategoriesFieldset.add(new Ext.form.Checkbox({
-						name: 'cat_2_'+GO.customfields.types['GO_Addressbook_Model_Contact'].panels[i].category_id,
-						hideLabel: true,
-						boxLabel: GO.customfields.types['GO_Addressbook_Model_Contact'].panels[i].title,
-						checked: false
-					}));
-			}
-			for (var i=0; i<GO.customfields.types['GO_Addressbook_Model_Company'].panels.length; i++) {
-				this.companyCfCategoriesFieldset.add(new Ext.form.Checkbox({
-						name: 'cat_3_'+GO.customfields.types['GO_Addressbook_Model_Company'].panels[i].category_id,
-						hideLabel: true,
-						boxLabel: GO.customfields.types['GO_Addressbook_Model_Company'].panels[i].title,
-						checked: false
-					}));
-			}
-
-			this.limitContactsCB.on('check',function(cbox,checked) {
-				if (checked)
-					this.contactCfCategoriesFieldset.enable();
-				else
-					this.contactCfCategoriesFieldset.disable();
-			},this);
-
-			this.limitCompaniesCB.on('check',function(cbox,checked) {
-				if (checked)
-					this.companyCfCategoriesFieldset.enable();
-				else
-					this.companyCfCategoriesFieldset.disable();
-			},this);
-
-			this.customfieldCategoryPanel.on('show',this.customfieldCategoriesPanelShownHandler,this);
-			this.tabPanel.add(this.customfieldCategoryPanel);
+			this.tabPanel.add(this.disableContactsCategoriesPanel);
+			
+			this.disableCompaniesCategoriesPanel = new GO.customfields.DisableCategoriesPanel({
+				title:'Company custom fields'
+			});
+			this.tabPanel.add(this.disableCompaniesCategoriesPanel);
 		}
 	},
 	
@@ -501,10 +416,10 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 		this.buttons[2].setVisible(this.propertiesPanel.isVisible());
 		this.buttons[3].setVisible(this.propertiesPanel.isVisible());
 
-		if (GO.customfields) {
-			this.buttons[this.buttons.length-3].setVisible(this.customfieldCategoryPanel.isVisible());
-			this.buttons[this.buttons.length-2].setVisible(this.customfieldCategoryPanel.isVisible());
-		}
+//		if (GO.customfields) {
+//			this.buttons[this.buttons.length-3].setVisible(this.customfieldCategoryPanel.isVisible());
+//			this.buttons[this.buttons.length-2].setVisible(this.customfieldCategoryPanel.isVisible());
+//		}
 	},
 	
 	show : function(record)
@@ -542,6 +457,11 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 			this.addressbookExportPanel.setDisabled(false);
 			
 			this.readPermissionsTab.setAcl(this.record.data.acl_id);
+			
+			if(GO.customfields){
+				this.disableContactsCategoriesPanel.setModel(this.record.data.id,"GO_Addressbook_Model_Contact");
+				this.disableCompaniesCategoriesPanel.setModel(this.record.data.id,"GO_Addressbook_Model_Company");
+			}
 		}
 		
 		

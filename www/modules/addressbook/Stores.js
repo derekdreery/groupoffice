@@ -11,11 +11,8 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-GO.addressbook.addressbooksStoreFields = new Array('id','name','user_name', 'acl_id','user_id','default_iso_address_format','default_salutation');
+GO.addressbook.addressbooksStoreFields = new Array('id','name','user_name', 'acl_id','user_id','contactCustomfields','companyCustomfields','default_salutation');
 
-if (GO.customfields) {
-	GO.addressbook.addressbooksStoreFields.push('allowed_cf_categories');
-}
 
 GO.addressbook.readableAddressbooksStore = new GO.data.JsonStore({
 			url: GO.url('addressbook/addressbook/Store'),
