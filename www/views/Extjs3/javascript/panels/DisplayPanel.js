@@ -212,7 +212,7 @@ Ext.extend(GO.DisplayPanel, Ext.Panel,{
 			this.body.update("");		
 
 		this.data={};
-		this.model_id=this.collapsedLinkId=0;
+		this.model_id=this.link_id=this.collapsedLinkId=0;
 		var tbar = this.getTopToolbar();
 		if(tbar)
 			tbar.setDisabled(true);
