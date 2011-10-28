@@ -271,7 +271,6 @@ if(count($load_modules)) {
 	if(!$fp){
 		die('Could not write to cache directory');
 	}
-	fwrite($fp, "GO.Languages=[];\n");
 	
 	//Temporary dirty hack for namespaces
 	$stmt = GO::modules()->getAll();
