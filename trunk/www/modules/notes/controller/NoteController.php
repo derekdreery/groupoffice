@@ -13,10 +13,16 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	
 	protected function getStoreParams($params){
 		
-		return GO_Base_Db_FindParams::newInstance()
-						->ignoreAcl()
+		$findParams = GO_Base_Db_FindParams::newInstance()						
 						->joinCustomFields()
-						->criteria(GO_Base_Db_FindCriteria::newInstance()->addInCondition('category_id', $this->multiselectIds));
+						->debugSql();
+		
+		if(count($this->multiselectIds)){
+			$findParams->ignoreAcl();
+			$findParams->criteria(GO_Base_Db_FindCriteria::newInstance()->addInCondition('category_id', $this->multiselectIds));
+		}
+						
+		return $findParams;
 	}
 
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {

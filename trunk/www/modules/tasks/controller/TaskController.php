@@ -160,7 +160,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 //		);
 		
 		$storeParams = GO_Base_Db_FindParams::newInstance()
-						->ignoreAcl()
+						
 						->export("tasks")
 						->joinCustomFields()
 						->criteria(GO_Base_Db_FindCriteria::newInstance()
@@ -173,6 +173,10 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 							'localField'=>'tasklist_id',
 							'tableAlias'=>'tl', //Optional table alias
 							));
+		
+		if(!empty($this->multiselectIds)){
+			$storeParams->ignoreAcl();
+		}
 		
 		
 		if(isset($params['categories'])) {
