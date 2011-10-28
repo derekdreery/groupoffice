@@ -43,3 +43,28 @@ GO.addressbook.writableAddressbooksStore = new GO.data.JsonStore({
 			fields: GO.addressbook.addressbooksStoreFields,
 			remoteSort: true
 		});
+
+GO.addressbook.writableAddresslistsStore = new GO.data.JsonStore({
+    url: GO.url("addressbook/addresslist/store"),
+    baseParams: {
+        permissionLevel: GO.permissionLevels.write
+    },
+    fields: ['id', 'name', 'owner','acl_id'],
+    remoteSort: true
+});
+		
+GO.addressbook.writableAddresslistsStore.on('load', function(){
+	GO.addressbook.writableAddresslistsStore.on('load', function(){
+    GO.addressbook.readableAddresslistsStore.load();
+	}, this);
+}, this, {single:true});
+		
+GO.addressbook.readableAddresslistsStore = new GO.data.JsonStore({
+    url: GO.url("addressbook/addresslist/store"),
+    baseParams: {
+        permissionLevel: GO.permissionLevels.read
+    },
+    fields: ['id', 'name', 'owner','acl_id', 'checked'],
+    remoteSort: true
+});
+		

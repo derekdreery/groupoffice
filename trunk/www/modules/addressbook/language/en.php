@@ -1,6 +1,6 @@
 <?php
-
-
+$l['addresslists']='Addresslists';
+$l['sendingEmailAllowed']='Allowed to receive mailings';
 $l["newSearch"]='New search';
 $l["executeQuery"]='Execute search query';
 $l["savedQueries"]='Saved search queries';

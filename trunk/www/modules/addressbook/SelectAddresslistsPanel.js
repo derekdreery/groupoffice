@@ -1,4 +1,4 @@
-GO.addressbook.SelectAddresslistPanel = Ext.extend(Ext.Panel, {
+GO.addressbook.SelectAddresslistsPanel = Ext.extend(Ext.Panel, {
 	
 	addresslistElements : [],
 
@@ -6,7 +6,7 @@ GO.addressbook.SelectAddresslistPanel = Ext.extend(Ext.Panel, {
 	
 	initComponent : function(){
 		
-		this.title=GO.addressbook.lang.cmdPanelAddresslist;
+		this.title=GO.addressbook.lang.addresslists;
 		this.cls='go-form-panel';
 		this.autoScroll=true;
 		
@@ -26,7 +26,7 @@ GO.addressbook.SelectAddresslistPanel = Ext.extend(Ext.Panel, {
 
 		
 
-		GO.addressbook.SelectAddresslistPanel.superclass.initComponent.call(this);
+		GO.addressbook.SelectAddresslistsPanel.superclass.initComponent.call(this);
 
 	},
 	
@@ -46,14 +46,14 @@ GO.addressbook.SelectAddresslistPanel = Ext.extend(Ext.Panel, {
 
 		var f = this.ownerCt.ownerCt.form;
 		
-		for(var i=0;i<GO.addressbook.writableAddresslistStore.data.items.length;i++)
+		for(var i=0;i<GO.addressbook.writableAddresslistsStore.data.items.length;i++)
 		{
-			var record = GO.addressbook.writableAddresslistStore.data.items[i];
+			var record = GO.addressbook.writableAddresslistsStore.data.items[i];
 			
 			this.addresslistElements.push(new Ext.form.Checkbox({
 				boxLabel: record.data.name,
 				labelSeparator: '',
-				name: 'addresslists[]',
+				name: 'addresslist_'+record.data.id,
 				autoCreate:  { tag: "input", type: "checkbox", autocomplete: "off", value: record.data.id },
 				value:false
 			}));
@@ -65,16 +65,16 @@ GO.addressbook.SelectAddresslistPanel = Ext.extend(Ext.Panel, {
 		
 	},
 	afterRender : function(){
-		GO.addressbook.SelectAddresslistPanel.superclass.afterRender.call(this);
+		GO.addressbook.SelectAddresslistsPanel.superclass.afterRender.call(this);
 
-		if(GO.addressbook.writableAddresslistStore.loaded){
+		if(GO.addressbook.writableAddresslistsStore.loaded){
 			this.loadComponents();
 		}else
 		{
 			this.disabled=true;
 		}
 
-		GO.addressbook.writableAddresslistStore.on('load', function(){
+		GO.addressbook.writableAddresslistsStore.on('load', function(){
 			this.loadComponents();
 			this.setDisabled(false);
 		}, this);

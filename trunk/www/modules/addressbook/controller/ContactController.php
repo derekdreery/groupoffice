@@ -45,26 +45,17 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		}
 		
 		
-		//todo
-		
-//		if ($GLOBALS['GO_MODULES']->has_module('mailings')) {
-//				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'] . 'mailings.class.inc.php');
-//				$ml = new mailings();
-//				$ml2 = new mailings();
-//
-//				$ml->get_authorized_mailing_groups('write', $GLOBALS['GO_SECURITY']->user_id, 0, 0);
-//				while ($ml->next_record()) {
-//					$is_in_group = $ml2->contact_is_in_group($contact_id, $ml->f('id'));
-//					$should_be_in_group = isset($_POST['mailing_' . $ml->f('id')]);
-//
-//					if ($is_in_group && !$should_be_in_group) {
-//						$ml2->remove_contact_from_group($contact_id, $ml->f('id'));
-//					}
-//					if (!$is_in_group && $should_be_in_group) {
-//						$ml2->add_contact_to_mailing_group($contact_id, $ml->f('id'));
-//					}
-//				}
-//			}
+		$stmt = GO_Addressbook_Model_Addresslist::model()->find();
+		while($addresslist = $stmt->fetch()){
+			$linkModel = $addresslist->hasManyMany('contacts', $model->id);
+			$mustHaveLinkModel = isset($params['addresslist_' . $addresslist->id]);
+			if ($linkModel && !$mustHaveLinkModel) {
+				$linkModel->delete();
+			}
+			if (!$linkModel && $mustHaveLinkModel) {
+				$addresslist->addManyMany('contacts',$model->id);
+			}
+		}		
 		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
@@ -74,8 +65,20 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		$response['data']['photo_url']=$model->photoURL;		
 		
+		$stmt = $model->addresslists();
+		while($addresslist = $stmt->fetch()){
+			$response['data']['addresslist_'.$addresslist->id]=1;
+		}
+		
 		return parent::afterLoad($response, $model, $params);
 	}	
+	
+	protected function remoteComboFields() {
+		return array(
+				'addressbook_id'=>'$model->addressbook->name',
+				'company_id'=>'$model->company->name'
+				);
+	}
 	
 	
 	public function actionPhoto($params){

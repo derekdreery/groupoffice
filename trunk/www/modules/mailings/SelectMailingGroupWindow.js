@@ -6,7 +6,7 @@ GO.mailings.SelectMailingGroupWindow = Ext.extend(Ext.Window, {
 		this.title=GO.mailings.lang.selectMailingGroup;
 		
 		this.list = new GO.grid.SimpleSelectList({
-				store: GO.mailings.readableMailingsStore
+				store: GO.addressbook.readableAddresslistsStore
 			});
 		
 		this.list.on('click', function(dataview, index){			

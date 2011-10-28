@@ -55,6 +55,40 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		return parent::formatStoreRecord($record, $model, $store);
 	}
 	
+	protected function remoteComboFields() {
+		return array(
+				'addressbook_id'=>'$model->addressbook->name'
+				);
+	}
+	
+	protected function afterLoad(&$response, &$model, &$params) {
+		
+		
+		$stmt = $model->addresslists();
+		while($addresslist = $stmt->fetch()){
+			$response['data']['addresslist_'.$addresslist->id]=1;
+		}
+				
+		
+		return parent::afterLoad($response, $model, $params);
+	}
+	
+	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
+		$stmt = GO_Addressbook_Model_Addresslist::model()->find();
+		while($addresslist = $stmt->fetch()){
+			$linkModel = $addresslist->hasManyMany('companies', $model->id);
+			$mustHaveLinkModel = isset($params['addresslist_' . $addresslist->id]);
+			if ($linkModel && !$mustHaveLinkModel) {
+				$linkModel->delete();
+			}
+			if (!$linkModel && $mustHaveLinkModel) {
+				$addresslist->addManyMany('companies',$model->id);
+			}
+		}
+		
+		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
+	}
+	
 
 }
 

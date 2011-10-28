@@ -101,10 +101,7 @@ GO.addressbook.ContactDialog = function(config)
 	this.photoPanel,
 	this.commentPanel];
 	      
-	if(GO.mailings)
-	{	
-		items.push(new GO.mailings.SelectMailingsPanel());
-	}
+	items.push(new GO.addressbook.SelectAddresslistsPanel());
 	
   
 	if(GO.customfields && GO.customfields.types["GO_Addressbook_Model_Contact"])
@@ -119,7 +116,7 @@ GO.addressbook.ContactDialog = function(config)
 		waitMsgTarget:true,
 		baseParams: {},
 		border: false,
-		fileUpload : true,
+		//fileUpload : true,
 		items: [
 		this.tabPanel = new Ext.TabPanel({
 			border: false,
@@ -232,9 +229,9 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 			this.render(Ext.getBody());
 		}
 		
-		if(GO.mailings && !GO.mailings.writableMailingsStore.loaded)
+		if(!GO.addressbook.writableAddresslistsStore.loaded)
 		{
-			GO.mailings.writableMailingsStore.load({
+			GO.addressbook.writableAddresslistsStore.load({
 				callback:function(){
 					var values = GO.util.empty(contact_id) ? this.formPanel.form.getValues() : {};
 					this.show(contact_id);
@@ -345,7 +342,8 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 //				}else
 //				{					
 					this.personalPanel.setAddressbookID(action.result.data.addressbook_id);
-					this.formPanel.form.findField('company_id').setRemoteText(action.result.data.company_name);
+					this.formPanel.form.findField('addressbook_id').setRemoteText(action.result.remoteComboTexts.addressbook_id);
+					this.formPanel.form.findField('company_id').setRemoteText(action.result.remoteComboTexts.company_id);
 					if(!GO.util.empty(action.result.data.photo_url))
 						this.setPhoto(action.result.data.photo_url);
 
