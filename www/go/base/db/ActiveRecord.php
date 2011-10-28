@@ -963,8 +963,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					$sql .= ',';
 				
 				$sql .= $this->_quoteColumnName($params['order'][$i]).' ';
-				if(isset($params['orderDirection'][$i]))
-					$sql .= $params['orderDirection'][$i].' ';
+				if(isset($params['orderDirection'][$i])){
+					$sql .= strtoupper($params['orderDirection'][$i])=='ASC' ? 'ASC ' : 'DESC ';
+				}
 			}
 		}
 		
