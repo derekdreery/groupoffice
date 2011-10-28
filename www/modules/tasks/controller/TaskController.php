@@ -182,8 +182,10 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		if(isset($params['categories'])) {
 			$categories = json_decode($params['categories'], true);
 			
-			$storeParams->getCriteria()->addInCondition('category_id', $categories,'t',false,false);
+			$storeParams->getCriteria()->addInCondition('category_id', $categories,'t');
 		}
+		
+		$storeParams->debugSql();
 		
 		$storeParams = $this->checkFilterParams($params['show'],$storeParams);
 		
@@ -263,7 +265,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 					$statusCriteria->addCondition('start_time', $now, '<');
 			}
 			
-			$params->getCriteria()->mergeWith($statusCriteria);
+			//$params->getCriteria()->mergeWith($statusCriteria);
 			//			$params['criteriaObject']=$statusCriteria;
 		}
 		

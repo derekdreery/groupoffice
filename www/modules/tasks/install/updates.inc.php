@@ -51,3 +51,7 @@ $updates["201110281135"][]="RENAME TABLE `ta_lists` TO `ta_tasklists` ;";
 $updates["201110281135"][]="ALTER TABLE `ta_settings` CHANGE `reminder_time` `reminder_time` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0'";
 $updates["201110281135"][]="ALTER TABLE `ta_settings` CHANGE `reminder_days` `reminder_days` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201110281135"][]="ALTER TABLE `ta_settings` CHANGE `default_tasklist_id` `default_tasklist_id` INT( 11 ) NOT NULL DEFAULT '0'";
+
+
+$updates["201110281135"][]="ALTER TABLE `ta_tasks` CHANGE `files_folder_id` `files_folder_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates["201110281135"][]="ALTER TABLE `ta_tasks` CHANGE `category_id` `category_id` INT( 11 ) NOT NULL DEFAULT '0'";
