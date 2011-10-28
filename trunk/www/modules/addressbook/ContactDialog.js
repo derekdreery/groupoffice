@@ -206,6 +206,15 @@ GO.addressbook.ContactDialog = function(config)
 	this.focus= focusFirstField.createDelegate(this);
 	
 	
+	this.personalPanel.formAddressBooks.on({
+					scope:this,
+					change:function(sc, newValue, oldValue){
+						var record = sc.store.getById(newValue);
+						GO.customfields.disableTabs(this.tabPanel, record.data,'contactCustomfields');	
+					}
+				});
+	
+	
 	GO.addressbook.ContactDialog.superclass.constructor.call(this, config);
 	
 	this.addEvents({
@@ -224,6 +233,7 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 
 	show : function(contact_id)
 	{
+		
 		if(!this.rendered)
 		{
 			this.render(Ext.getBody());
@@ -262,7 +272,7 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 			this.formPanel.form.reset();
 
 			this.personalPanel.formAddressBooks.setValue(tempAddressbookID);
-		
+	
 			if(contact_id)
 			{
 				this.contact_id = contact_id;
@@ -290,30 +300,19 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 				this.personalPanel.setAddressbookID(this.personalPanel.formAddressBooks.getValue());
 			}
 						
-			if(this.contact_id > 0)
-			{
-				this.loadContact(contact_id);
-			} else {
-				this.setPhoto(0);
-				GO.addressbook.ContactDialog.superclass.show.call(this);
-			}
-			var abRecord = this.personalPanel.formAddressBooks.store.getById(this.personalPanel.formAddressBooks.getValue());
+//			if(this.contact_id > 0)
+//			{
+				this.loadContact(this.contact_id);
+//			} else {
+//				this.setPhoto(0);
+//				GO.addressbook.ContactDialog.superclass.show.call(this);
+//			}
+			//var abRecord = this.personalPanel.formAddressBooks.store.getById(this.personalPanel.formAddressBooks.getValue());
 			this.tabPanel.setActiveTab(0);
 		}
 
 	},
 
-	updateCfTabs : function(allowed_cf_categories) {
-//		for (var i=0; i<this.tabPanel.items.items.length; i++) {
-//			if (typeof(this.tabPanel.items.items[i].category_id)!='undefined') {
-//				this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
-//				if(allowed_cf_categories.indexOf(this.tabPanel.items.items[i].category_id.toString())>=0)
-//					this.tabPanel.unhideTabStripItem(this.tabPanel.items.items[i]);
-//				else
-//					this.tabPanel.hideTabStripItem(this.tabPanel.items.items[i]);
-//			}
-//		}
-	},
 
 	/*setAddressbookId : function(addressbook_id)
 	{
@@ -332,7 +331,8 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 //			},
 			url:GO.url('addressbook/contact/load'),
 			params:{
-				id:id
+				id:id,
+				addressbook_id:this.formPanel.form.findField('addressbook_id').getValue()
 			},
 			success: function(form, action) {
 				
@@ -347,9 +347,9 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 					if(!GO.util.empty(action.result.data.photo_url))
 						this.setPhoto(action.result.data.photo_url);
 
-					if (GO.customfields) {
-						this.updateCfTabs(action.result.data.allowed_cf_categories);
-					}
+					if(GO.customfields)
+						GO.customfields.disableTabs(this.tabPanel, action.result);	
+					
 					GO.addressbook.ContactDialog.superclass.show.call(this);
 				//}
 			},

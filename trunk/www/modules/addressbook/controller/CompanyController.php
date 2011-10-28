@@ -63,6 +63,8 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	
 	protected function afterLoad(&$response, &$model, &$params) {
 		
+		if (GO::modules()->customfields)
+			$response['customfields'] = GO_Customfields_Controller_Category::getEnabledCategoryData("GO_Addressbook_Model_Company", $model->addressbook_id);
 		
 		$stmt = $model->addresslists();
 		while($addresslist = $stmt->fetch()){
