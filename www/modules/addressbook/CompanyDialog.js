@@ -44,10 +44,7 @@ GO.addressbook.CompanyDialog = function(config)
 	this.personalPanel,
 	this.commentPanel];
 	      	
-	if(GO.mailings)
-	{
-		items.push(new GO.mailings.SelectMailingsPanel());
-	}
+	items.push(new GO.addressbook.SelectAddresslistsPanel());
 	items.push(this.employeePanel);
   
 	if(GO.customfields && GO.customfields.types["GO_Addressbook_Model_Company"])
@@ -210,9 +207,9 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				},
 				scope:this
 			});
-		}else	if(GO.mailings && !GO.mailings.writableMailingsStore.loaded)
+		}else	if(!GO.addressbook.writableAddresslistsStore.loaded)
 		{
-			GO.mailings.writableMailingsStore.load({
+			GO.addressbook.writableAddresslistsStore.load({
 				callback:function(){
 					this.show(company_id);
 				},
@@ -302,10 +299,9 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 				this.employeePanel.setCompanyId(action.result.data['id']);
 				this.personalPanel.setCompanyId(action.result.data['id']);
 				this.moveEmployeesButton.setDisabled(false);
-
-				if (GO.customfields) {
-					this.updateCfTabs(action.result.data.allowed_cf_categories);
-				}
+				
+				
+				this.personalPanel.formAddressBooks.setRemoteText(action.result.remoteComboTexts.addressbook_id);
 
 				GO.addressbook.CompanyDialog.superclass.show.call(this);
 						

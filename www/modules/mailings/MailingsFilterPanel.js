@@ -33,7 +33,7 @@ GO.mailings.MailingsFilterPanel = function(config)
 		disableSelection:true,
 		border:true,
 		loadMask:true,
-		store: GO.mailings.readableMailingsStore,		
+		store: GO.addressbook.readableAddresslistsStore,		
 		columns: [
 				checkColumn,
 				{
@@ -55,18 +55,18 @@ GO.mailings.MailingsFilterPanel = function(config)
 		handler:function(){			
 			var mailings = [];
 			
-			for (var i = 0; i < GO.mailings.readableMailingsStore.data.items.length;  i++)
+			for (var i = 0; i < GO.addressbook.readableAddresslistsStore.data.items.length;  i++)
 			{
-				var checked = GO.mailings.readableMailingsStore.data.items[i].get('checked');
+				var checked = GO.addressbook.readableAddresslistsStore.data.items[i].get('checked');
 				if(checked=="1")
 				{
-					mailings.push(GO.mailings.readableMailingsStore.data.items[i].get('id'));	
+					mailings.push(GO.addressbook.readableAddresslistsStore.data.items[i].get('id'));	
 				}				
 			}
 			
 			this.fireEvent('change', this, mailings);
 			
-			GO.mailings.readableMailingsStore.commitChanges();			
+			GO.addressbook.readableAddresslistsStore.commitChanges();			
 		},
 		scope: this
 	});    
@@ -76,13 +76,13 @@ GO.mailings.MailingsFilterPanel = function(config)
 		handler:function(){			
 			
 			var mailings = [];
-			for (var i = 0; i < GO.mailings.readableMailingsStore.data.items.length;  i++)
+			for (var i = 0; i < GO.addressbook.readableAddresslistsStore.data.items.length;  i++)
 			{
-				var checked = GO.mailings.readableMailingsStore.data.items[i].set('checked', '0');								
+				var checked = GO.addressbook.readableAddresslistsStore.data.items[i].set('checked', '0');								
 			}
 						
 			this.fireEvent('change', this, mailings);			
-			GO.mailings.readableMailingsStore.commitChanges();		
+			GO.addressbook.readableAddresslistsStore.commitChanges();		
 		},
 		scope: this
 	});    
@@ -100,7 +100,7 @@ Ext.extend(GO.mailings.MailingsFilterPanel, GO.grid.GridPanel,{
 		
 		
 		
-		GO.mailings.readableMailingsStore.load();
+		GO.addressbook.readableAddresslistsStore.load();
 		
 		GO.mailings.MailingsFilterPanel.superclass.afterRender.call(this);
 	}

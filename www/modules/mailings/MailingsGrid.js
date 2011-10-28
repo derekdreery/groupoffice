@@ -45,7 +45,7 @@ GO.mailings.MailingsGrid = function(config)
 	];
 	config.paging=false;
 	//	config.id= 'ab-mailings-grid';
-	config.store=GO.mailings.writableMailingsStore;
+	config.store=GO.addressbook.writableAddresslistsStore;
 
 	config.view=new Ext.grid.GridView({
 		autoFill: true,

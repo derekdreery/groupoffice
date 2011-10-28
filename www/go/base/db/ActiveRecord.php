@@ -2733,6 +2733,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			$r = $this->_getRelation($relationName);
 			
+			if(!$r)
+				throw new Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::addManyMany()");
+			
 			$linkModel = new $r['linkModel'];
 			$linkModel->{$r['field']} = $this->id;
 			
@@ -2740,7 +2743,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			$foreignField = $keys[0]==$r['field'] ? $keys[1] : $keys[2];
 			
-			$linkModel->$remoteField = $foreignPk;
+			$linkModel->$foreignField = $foreignPk;
 			
 			$linkModel->setAttributes($extraAttributes);
 			
@@ -2778,6 +2781,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
    */
   public function hasManyMany($relationName, $foreignPk){
 		$r = $this->_getRelation($relationName);
+		if(!$r)
+			throw new Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::hasManyMany()");
 		
 		$linkModel = GO::getModel($r['linkModel']);
 		$keys = $linkModel->primaryKey();	

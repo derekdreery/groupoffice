@@ -225,7 +225,7 @@ GO.addressbook.MainPanel = function(config)
 			id:'ab-mailingsfilter-panel',
 			title:GO.mailings.lang.filterMailings,
 			loadMask:true,
-			store:GO.mailings.readableMailingsStore,
+			store:GO.addressbook.readableAddresslistsStore,
 			allowNoSelection:true
 		});
 
@@ -492,8 +492,8 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 					GO.addressbook.readableAddressbooksStore.loadData(jsonData.addressbooks);
 					if(GO.mailings)
 					{
-						GO.mailings.readableMailingsStore.loadData(jsonData.readable_addresslists);
-						GO.mailings.writableMailingsStore.loadData(jsonData.writable_addresslists);
+						GO.addressbook.readableAddresslistsStore.loadData(jsonData.readable_addresslists);
+						GO.addressbook.writableAddresslistsStore.loadData(jsonData.writable_addresslists);
 					}
 
 					this.getEl().unmask();
