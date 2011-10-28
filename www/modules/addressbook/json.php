@@ -268,7 +268,8 @@ try
 				$query = !empty($query) ? '%'.$query.'%' : '';
 			}
 			
-			$advancedQuery = empty($_POST['advancedQuery']) ? '' : $_POST['advancedQuery'];
+			//temporarily disabled until replaced by a secure component.
+			$advancedQuery = '';//empty($_POST['advancedQuery']) ? '' : $_POST['advancedQuery'];
 							
 			
 			$response['total']=$ab->search_contacts(
@@ -454,7 +455,8 @@ try
 				$query = !empty($query) ? '%'.$query.'%' : '';
 			}
 			
-			$advancedQuery = empty($_POST['advancedQuery']) ? '' : $_POST['advancedQuery'];			
+			//temporarily disabled until replaced with secure component
+			$advancedQuery = '';//empty($_POST['advancedQuery']) ? '' : $_POST['advancedQuery'];			
 			
 			$response['total']=$ab->search_companies(
 			$GLOBALS['GO_SECURITY']->user_id,

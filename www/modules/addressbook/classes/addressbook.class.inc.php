@@ -315,7 +315,7 @@ class addressbook extends db {
 			$sql .= " WHERE ab_contacts.addressbook_id='".$this->escape($addressbook_id)."'";
 		}
 
-		$sql .= 	" ORDER BY $sort $direction";
+		$sql .= 	" ORDER BY ".$this->escape($sort.' '.$direction);
 
 		$this->query($sql);
 		$count =  $this->num_rows();
@@ -460,7 +460,7 @@ class addressbook extends db {
 			$sql .= " WHERE addressbook_id='$addressbook_id'";
 		}
 
-		$sql .= " ORDER BY $sort $direction";
+		$sql .= " ORDER BY ".$this->escape($sort.' '.$direction);
 		$this->query($sql);
 		$count = $this->num_rows();
 
@@ -529,7 +529,7 @@ class addressbook extends db {
 
 		//	  $sort = 'first_name '.$direction.', last_name';
 		}
-		$sql = "SELECT * FROM ab_contacts WHERE company_id='".$this->escape($company_id)."' ORDER BY $sort $direction";
+		$sql = "SELECT * FROM ab_contacts WHERE company_id='".$this->escape($company_id)."' ORDER BY ".$this->escape($sort.' '.$direction);
 
 		if ($offset != 0) {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
@@ -830,7 +830,7 @@ class addressbook extends db {
 		$sql .= "$fields, c.email FROM ab_contacts c LEFT JOIN ab_companies co ON co.id=c.company_id $conditions ".
 			"UNION SELECT $fields, email2 AS email FROM ab_contacts c LEFT JOIN ab_companies co ON co.id=c.company_id ".str_replace('email', 'email2', $conditions)." ".
 			"UNION SELECT $fields, email3 AS email FROM ab_contacts c LEFT JOIN ab_companies co ON co.id=c.company_id ".str_replace('email', 'email3', $conditions)." ".
-			"ORDER BY $sort_index $sort_order";
+			"ORDER BY ".$this->escape($sort_index.' '.$sort_order);
 
 		$this->query($sql);
 
@@ -982,7 +982,7 @@ class addressbook extends db {
 			
 		}
 
-		$sql .= " ORDER BY $sort_index $sort_order";
+		$sql .= " ORDER BY ".$this->escape($sort_index.' '.$sort_order);
 
 
 		$_SESSION['GO_SESSION']['export_queries']['search_contacts']=array(
@@ -1148,7 +1148,7 @@ class addressbook extends db {
 			$sql .= ' AND ('.$advanced_query.')';
 		}
 
-		$sql .= " ORDER BY $sort_index $sort_order";
+		$sql .= " ORDER BY ".$this->escape($sort_index.' '.$sort_order);
 		
 		$_SESSION['GO_SESSION']['export_queries']['search_companies']=array(
 				'query'=>$sql,
