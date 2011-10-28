@@ -1,5 +1,5 @@
 <?php
-class GO_Calendar_Model_Settings extends GO_Base_Db_ActiveRecord{
+class GO_Calendar_Model_Settings extends GO_Base_Model_AbstractUserDefaultModel{
 	
 	/**
 	 * Returns a static model of itself

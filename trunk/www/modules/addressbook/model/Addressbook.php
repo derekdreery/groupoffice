@@ -21,7 +21,7 @@
  * @property bool $users true if this addressbook is the special addressbook that holds the Group-Office users.
  */
 
- class GO_Addressbook_Model_Addressbook extends GO_Base_Db_ActiveRecord{
+ class GO_Addressbook_Model_Addressbook extends GO_Base_Model_AbstractUserDefaultModel{
 		 
 	 /**
 	 * Returns a static model of itself

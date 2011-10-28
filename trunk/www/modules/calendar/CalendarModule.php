@@ -29,25 +29,13 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 	}
 	
 	public static function deleteUser($user){
-		GO_Calendar_Model_Calendar::model()->deleteByAttribute('user_id', $user->id);
-		GO_Calendar_Model_Settings::model()->deleteByAttribute('user_id', $user->id);
 		GO_Calendar_Model_Category::model()->deleteByAttribute('user_id', $user->id);		
 	}
 	
 	
 	public static function getDefaultCalendar($userId){
-		$calendar = GO_Calendar_Model_Calendar::model()->findSingleByAttribute('user_id', $userId);
-		if (!$calendar){
-			$calendar = new GO_Calendar_Model_Calendar();
-			
-			$user = GO_Base_Model_User::model()->findByPk($userId);
-			
-			$calendar->user_id=$user->id;
-			$calendar->name=$user->name;
-			$calendar->makeAttributeUnique('name');
-			$calendar->save();
-		}
-		
+		$user = GO_Base_Model_User::model()->findByPk($userId);
+		$calendar = GO_Calendar_Model_Calendar::model()->getDefault($user);		
 		return $calendar;
 	}
 	

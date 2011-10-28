@@ -86,3 +86,7 @@ $updates["201110171221"][]="UPDATE cal_events SET repeat_forever=0 where repeat_
 $updates["201110171221"][]="UPDATE cal_events SET repeat_forever=1 where repeat_forever=2";
 
 $updates["201110281025"][]="ALTER TABLE `cal_calendars` CHANGE `comment` `comment` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201110281025"][]="ALTER TABLE `cal_settings` CHANGE `reminder` `reminder` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates["201110281025"][]="ALTER TABLE `cal_settings` CHANGE `background` `background` CHAR( 6 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'EBF1E2'";
+$updates["201110281025"][]="ALTER TABLE `cal_settings` CHANGE `calendar_id` `calendar_id` INT( 11 ) NOT NULL DEFAULT '0'";

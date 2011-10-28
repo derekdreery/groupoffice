@@ -20,7 +20,7 @@
  * @property String $name The name of the category
  * @property int $files_folder_id
  */
-class GO_Calendar_Model_Calendar extends GO_Base_Db_ActiveRecord {
+class GO_Calendar_Model_Calendar extends GO_Base_Model_AbstractUserDefaultModel {
 
 	/**
 	 * Returns a static model of itself
@@ -66,6 +66,15 @@ class GO_Calendar_Model_Calendar extends GO_Base_Db_ActiveRecord {
 										's');
 		
 		return $this->find($findParams);		
+	}
+	
+	
+	public function settingsModelName() {
+		return "GO_Calendar_Model_Settings";
+	}
+	
+	public function settingsPkAttribute() {
+		return 'calendar_id';
 	}
 	
 	protected function getLocalizedName() {
