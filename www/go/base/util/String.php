@@ -562,7 +562,7 @@ class GO_Base_Util_String {
 			$last = isset($last['last_name']) ? $last['last_name'] : '';
 		}
 
-		$sort_name = $sort_name == '' ? $_SESSION['GO_SESSION']['sort_name'] : $sort_name;
+		$sort_name = $sort_name == '' ? GO::user()->sort_name : $sort_name;
 
 		if ($sort_name== 'last_name') {
 			$name = 	!empty ($last) ? $last : '';

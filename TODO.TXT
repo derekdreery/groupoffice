@@ -6,8 +6,6 @@ Complete Links browser
 Project report custom fields and advanced search panel...!?
 ticket facturatie
 
-ODF template
-
 Checker: tickets, tasks, email en calendar
 
 E-mail files functie
@@ -16,9 +14,6 @@ E-mail files functie
 Adresboek import / export
 Generieke export
 Adreslijsten
-
-reminders voor taken
-rode kleur taken
 
 e-mail mvc
 fire events ombouwen
@@ -33,5 +28,8 @@ Files versioning
 Incomplete objects. Geen select * maar text en blobs niet meenemen.
 
 sync
+
+serverclient
+
 
 overige modules mvc

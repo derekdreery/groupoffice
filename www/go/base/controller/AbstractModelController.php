@@ -47,10 +47,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	public function actionSubmit($params) {
 
 		$modelName = $this->model;
-		if (!empty($params['id']))
+		if (!empty($params['id'])){
 			$model = GO::getModel($modelName)->findByPk($params['id']);
-		else
+		}else
+		{
 			$model = new $modelName;
+			$model->user_id=GO::user()->id;
+		}
 
 		$this->beforeSubmit($response, $model, $params);
 		
