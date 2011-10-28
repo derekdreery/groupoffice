@@ -148,7 +148,8 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 				$email['register_email_body'] = str_replace('{password}', $params["password1"], $email['register_email_body']);
 
 				foreach ($model->getAttributes() as $key => $value) {
-					$email['register_email_body'] = str_replace('{' . $key . '}', $value, $email['register_email_body']);
+					if(is_string($value))
+						$email['register_email_body'] = str_replace('{' . $key . '}', $value, $email['register_email_body']);
 				}
 
 				$email['register_email_body'] = str_replace('{url}', GO::config()->full_url, $email['register_email_body']);

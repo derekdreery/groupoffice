@@ -29,12 +29,9 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 	}
 	
 	public static function deleteUser($user){
-		$stmt = GO_Calendar_Model_Category::model()->find(array(
-				'by'=>array(array('user_id', $user->id)),
-				'ignoreAcl'=>true
-				));
-		
-		$stmt->callOnEach('delete');
+		GO_Calendar_Model_Calendar::model()->deleteByAttribute('user_id', $user->id);
+		GO_Calendar_Model_Settings::model()->deleteByAttribute('user_id', $user->id);
+		GO_Calendar_Model_Category::model()->deleteByAttribute('user_id', $user->id);		
 	}
 	
 	

@@ -45,3 +45,9 @@ $updates["201110170002"][]="ALTER TABLE `ta_tasks`
 $updates["201110211221"][]="ALTER TABLE `ta_settings` CHANGE `remind` `remind` BOOLEAN NOT NULL DEFAULT '0'";
 $updates["201110211221"][]="UPDATE ta_settings SET remind=0 where remind=1";
 $updates["201110211221"][]="UPDATE ta_settings SET remind=1 where remind=2";
+
+$updates["201110281135"][]="ALTER TABLE `ta_lists` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+$updates["201110281135"][]="RENAME TABLE `ta_lists` TO `ta_tasklists` ;";
+$updates["201110281135"][]="ALTER TABLE `ta_settings` CHANGE `reminder_time` `reminder_time` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0'";
+$updates["201110281135"][]="ALTER TABLE `ta_settings` CHANGE `reminder_days` `reminder_days` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates["201110281135"][]="ALTER TABLE `ta_settings` CHANGE `default_tasklist_id` `default_tasklist_id` INT( 11 ) NOT NULL DEFAULT '0'";

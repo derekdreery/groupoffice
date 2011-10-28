@@ -42,27 +42,37 @@ class GO_Tasks_TasksModule extends GO_Base_Module{
 		return parent::loadSettings($settingsController, $params, $response);
 	}
 	
-	public static function getDefaultTasksCategory($userId){
-		$category = GO_Tasks_Model_Category::model()->findSingleByAttribute('user_id', $userId);
-		if (!$category){
-			$category = new GO_Tasks_Model_Category();
+	public static function getDefaultTasksTasklist($userId){
+		$tasklist = GO_Tasks_Model_Tasklist::model()->findSingleByAttribute('user_id', $userId);
+		if (!$tasklist){
+			$tasklist = new GO_Tasks_Model_Tasklist();
 			
 			$user = GO_Base_Model_User::model()->findByPk($userId);
 			
-			$category->user_id=$user->id;
-			$category->name=$user->name;
-			$category->makeAttributeUnique('name');
-			$category->save();
+			$tasklist->user_id=$user->id;
+			$tasklist->name=$user->name;
+			$tasklist->makeAttributeUnique('name');
+			$tasklist->save();
+			
+			
 		}
 		
-		return $category;
+		return $tasklist;
 	}
 	
-	public static function saveUser($user, $wasNew) {
-		if($wasNew)
-			self::getDefaultTasksCategory($user->id);
-		
-		return parent::saveUser($user, $wasNew);
+//	public static function saveUser($user, $wasNew) {
+//		if($wasNew)
+//			self::getDefaultTasksTasklist($user->id);
+//		
+//		return parent::saveUser($user, $wasNew);
+//	}
+	
+	public static function deleteUser($user) {
+
+		//GO_Tasks_Model_Tasklist::model()->deleteByAttribute('user_id', $user->id);
+		GO_Tasks_Model_Settings::model()->deleteByAttribute('user_id', $user->id);
+
+		return parent::deleteUser($user);
 	}
 	
 }

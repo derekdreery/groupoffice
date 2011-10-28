@@ -85,3 +85,4 @@ $updates["201110171221"][]="ALTER TABLE `cal_events` CHANGE `repeat_forever` `re
 $updates["201110171221"][]="UPDATE cal_events SET repeat_forever=0 where repeat_forever=1";
 $updates["201110171221"][]="UPDATE cal_events SET repeat_forever=1 where repeat_forever=2";
 
+$updates["201110281025"][]="ALTER TABLE `cal_calendars` CHANGE `comment` `comment` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";

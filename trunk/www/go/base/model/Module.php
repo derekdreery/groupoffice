@@ -46,12 +46,18 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getModuleManager(){
-		$className = 'GO_'.ucfirst($this->id).'_'.ucfirst($this->id).'Module';
+		if(!isset($this->_moduleManager)){
+			$className = 'GO_'.ucfirst($this->id).'_'.ucfirst($this->id).'Module';
+
+			if(class_exists($className))
+				$this->_moduleManager = new $className;
+			else
+				$this->_moduleManager = false;
+		}
 		
-		if(class_exists($className))
-			return new $className;
-		else
-			return false;
+		return $this->_moduleManager;
+		
+		
 	}
 	
 	protected function beforeSave() {
