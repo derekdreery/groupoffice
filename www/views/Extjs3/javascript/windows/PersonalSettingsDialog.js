@@ -28,10 +28,39 @@ GO.PersonalSettingsDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 	buildForm : function(){
 		var panels =GO.moduleManager.getAllSettingsPanels();
 		
-		for(i=0;i<panels.length;i++)
+		for(var i=0;i<panels.length;i++)
 			this.addPanel(panels[i]);
 	},
+	
+	afterLoad : function(remoteModelId, config, action){
+		for(var i=0;i<this._tabPanel.items.getCount();i++)
+		{
+			var panel = this._tabPanel.items.itemAt(i);
+			if(panel.onLoadSettings)
+			{
+				var func = panel.onLoadSettings.createDelegate(panel, [action]);
+				func.call();							 
+			}
+		}			
+	},
 
+	beforeSubmit : function(){
+		for(var i=0;i<this._tabPanel.items.getCount();i++)
+		{
+			var panel = this._tabPanel.items.itemAt(i);
+			if(panel.onBeforeSaveSettings)
+			{
+				var func = panel.onBeforeSaveSettings.createDelegate(panel, [this]);
+				var result = func.call();
+				if(!result)
+				{
+					this._tabPanel.setActiveTab(panel);
+					return false;
+				}
+			}
+		}
+	},
+	
 	show : function (remoteModelId, config) {
 		
 		remoteModelId = GO.settings.user_id;
