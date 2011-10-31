@@ -66,7 +66,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		
 		$classes=GO::findClasses('model');
 		foreach($classes as $model){
-			if($model->isSubclassOf('GO_Base_Db_ActiveRecord')){
+			if($model->isSubclassOf('GO_Base_Db_ActiveRecord') && !$model->isAbstract()){
 		
 				echo "Processing ".$model->getName()."\n";
 				flush();

@@ -673,19 +673,20 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @param array $findParams Extra parameters to send to the find function.
 	 * @return GO_Base_Db_ActiveRecord 
 	 */
-	public function findSingleByAttributes($attributes, $findParams=array()){
+	public function findSingleByAttributes($attributes, $findParams=false){
 		
-		$by = array();
+		$newParams = GO_Base_Db_FindParams::newInstance();
+		$criteria = $newParams->getCriteria();
+		
 		foreach($attributes as $attributeName=>$value)
-			$by[]=array($attributeName,$value,'=');
+			$criteria->addCondition($attributeName, $value);
 		
-		$params = array_merge(array(
-				"by"=>$by,
-				"ignoreAcl"=>true,
-				"limit"=>1
-		), $findParams);		
+		if($findParams)
+			$newParams->mergeWith ($findParams);
+		
+		$newParams->ignoreAcl()->limit(1)->debugSql();
 				
-		$stmt = $this->find($params);
+		$stmt = $this->find($newParams);
 		
 		$model = $stmt->fetch();
 		
