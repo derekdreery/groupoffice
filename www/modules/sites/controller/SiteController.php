@@ -28,7 +28,14 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		
 		//find page
 		
-		$this->_renderPage($page);
+		$this->renderPage($page);
+		
+	}
+	
+	protected function renderPage($path, $params){
+		extract($params);
+		
+		
 		
 	}
 	
