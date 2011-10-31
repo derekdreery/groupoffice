@@ -2735,6 +2735,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			$r = $this->_getRelation($relationName);
 			
+			if($this->isNew)
+				throw new Exception("Can't add manymany relation to a new model. Call save() first.");
+			
 			if(!$r)
 				throw new Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::addManyMany()");
 			
@@ -2772,6 +2775,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		else
 			return true;
 	}
+
+	public function removeAllManyMany($relationName){
+		$r = $this->_getRelation($relationName);
+		if(!$r)
+			throw new Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::hasManyMany()");
+		$linkModel = GO::getModel($r['linkModel']);
+		
+		$linkModel->deleteByAttribute($r['field'],$this->pk);
+	}
   
   /**
    * Check for records in the given MANY_MANY relation
@@ -2785,6 +2797,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$r = $this->_getRelation($relationName);
 		if(!$r)
 			throw new Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::hasManyMany()");
+		
+		if($this->isNew)
+			throw new Exception("You can't call hasManyMany on a new model. Call save() first.");
 		
 		$linkModel = GO::getModel($r['linkModel']);
 		$keys = $linkModel->primaryKey();	

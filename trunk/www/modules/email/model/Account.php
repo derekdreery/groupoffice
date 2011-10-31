@@ -48,7 +48,9 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 	 * See the parent class for a more detailed description of the relations.
 	 */
 	public function relations() {
-		return array();
+		return array(
+				'aliases' => array('type'=>self::HAS_MANY, 'model'=>'GO_Email_Model_Alias', 'field'=>'account_id','delete'=>true),
+		);
 	}
 	
 	
