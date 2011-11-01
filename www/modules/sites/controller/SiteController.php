@@ -26,6 +26,11 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	protected $templateFolder;
 	
 	
+	protected function checkPermission() {
+		
+	}
+	
+	
 	protected function setSite($params){
 		if(!empty($params['site_id']))
 			$this->site=GO_Sites_Model_Site::model()->findByPk($params['site_id']);
@@ -41,6 +46,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * This default action should be overrriden
 	 */
 	public function actionIndex($params){		
+	
 		$this->setSite($params);
 		$this->renderPage($params['p']);		
 	}
