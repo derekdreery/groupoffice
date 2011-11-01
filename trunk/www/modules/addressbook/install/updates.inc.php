@@ -70,3 +70,4 @@ $updates["201110141221"][]="UPDATE ab_contacts SET email_allowed=1 where email_a
 $updates["201110170846"][]="ALTER TABLE `ab_addressbooks` DROP `default_iso_address_format`";
 
 $updates["201110281132"][]="ALTER TABLE `ab_addressbooks` CHANGE `users` `users` TINYINT( 1 ) NOT NULL DEFAULT '0'";
+$updates["201110281132"][]="update `ab_contacts` set birthday=null where birthday='0000-00-00'";

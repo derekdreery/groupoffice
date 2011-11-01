@@ -8,10 +8,7 @@ if(PHP_SAPI=='cli'){
 	require_once($root.'go/base/util/Cli.php');
 	
 	$args = GO_Base_Util_Cli::parseArgs();
-	
-	var_dump($args);
-	exit();
-	
+
 	if(isset($args['c'])){
 		define("GO_CONFIG_FILE", $args['c']);
 	}
