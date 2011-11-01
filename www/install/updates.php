@@ -119,5 +119,7 @@ $updates["201110141221"][]="UPDATE go_users SET mute_new_mail_sound=0 where mute
 $updates["201110141221"][]="UPDATE go_users SET mute_new_mail_sound=1 where mute_new_mail_sound=2";
 
 $updates["201110311221"][]="ALTER TABLE `go_modules` CHANGE `admin_menu` `admin_menu` BOOLEAN NOT NULL DEFAULT '0'";
-	$updates["201110311221"][]="UPDATE go_modules SET admin_menu=0 where admin_menu=1";
-	$updates["201110311221"][]="UPDATE go_modules SET admin_menu=1 where admin_menu=2";
+$updates["201110311221"][]="UPDATE go_modules SET admin_menu=0 where admin_menu=1";
+$updates["201110311221"][]="UPDATE go_modules SET admin_menu=1 where admin_menu=2";
+	
+$updates["201111011221"][]="ALTER TABLE `go_reminders` CHANGE `text` `text` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";

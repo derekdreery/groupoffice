@@ -241,13 +241,13 @@ GO.dialog.SelectEmail = function(config) {
 		items.push(this.contactsGrid);
 		items.push(this.companyGrid);
 
-		if (GO.mailings) {
+		if (GO.addressbook) {
 			this.mailingsGrid = new GO.grid.GridPanel({
 				id : 'select-mailings-grid',
 				title : GO.mailings.lang.cmdPanelMailings,
 				paging : false,
 				border : false,
-				store : GO.mailings.readableMailingsStore,
+				store : GO.addressbook.readableAddresslistsStore,
 				view : new Ext.grid.GridView({
 					autoFill : true,
 					forceFit : true
