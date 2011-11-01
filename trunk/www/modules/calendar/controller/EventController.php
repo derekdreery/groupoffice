@@ -313,6 +313,13 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		$response['group_id'] = $model->calendar->group_id;
 		
+		
+		if(!$model->id){
+			$settings = GO_Calendar_Model_Settings::model()->findByPk($model->calendar->user_id);
+			if($settings)
+				$response['data']['background']=$settings->background;
+		}
+		
 		if(!$model->isResource() && $model->id>0)
 			$this->_loadResourceEvents($model, $response);
 

@@ -73,7 +73,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @return String Full formatted name of the user
 	 */
 	protected function getName(){
-		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name);
+		return GO_Base_Util_String::format_name($this->last_name, $this->first_name, $this->middle_name,'first_name');
 	}
 
 	protected function getCacheAttributes() {
