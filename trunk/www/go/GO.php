@@ -523,8 +523,18 @@ class GO{
 			$amp = $htmlspecialchars ? '&amp;' : '&';
 		}
 		
-		if(!empty($params))
-			$url .= $amp.$params;
+		if(!empty($params)){			
+			if(is_array($params)){				
+				foreach($params as $name=>$value){
+					$url .= $amp.$name.'='.urlencode($value);
+					
+					$amp = $htmlspecialchars ? '&amp;' : '&';
+				}
+			}else
+			{
+				$url .= $amp.$params;			
+			}			
+		}
 		
 		$amp = $htmlspecialchars ? '&amp;' : '&';
 		

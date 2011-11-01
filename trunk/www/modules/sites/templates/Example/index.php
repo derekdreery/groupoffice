@@ -1,14 +1,13 @@
 <?php
 require('header.php');
 ?>
-
 					<div class="subkader-small-top">
 						<div class="subkader-small-bottom">
 							<div class="subkader-small-center">						
 
-								<h1>Software</h1>
-								
+								<h1>Software</h1>								
 								<?php
+								
 								$stmt = GO_Billing_Model_Product::model()->find(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('category_id', 1)));
 								
 								while($product = $stmt->fetch()){
@@ -23,7 +22,7 @@ require('header.php');
 
 									<div class="button-green" onmouseover="this.className='button-green-hover';"  onmouseout="this.className='button-green';">
 										<div class="button-green-right">
-											<a href="#" class="button-green-center"> 
+											<a href="<?php echo GO::url("webshop/cart/add",array('product_id'=>$product->id)); ?>" class="button-green-center"> 
 												Add to cart
 											</a>
 
@@ -33,9 +32,6 @@ require('header.php');
 									<?php
 								}
 								?>
-
-								
-
 							</div>
 						</div>
 
@@ -43,12 +39,9 @@ require('header.php');
 
 
 					<div class="subkader-right">
-
-						<h1>Shopping cart</h1>
-						There are no products in your shopping cart
-
-
+						<?php require('sidebar.php'); ?>
 					</div>
 
 <?php
 require('footer.php');
+?>
