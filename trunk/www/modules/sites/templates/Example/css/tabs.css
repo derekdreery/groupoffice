@@ -18,12 +18,12 @@
 	
 }
 
-.selected .topmenu-item-left{
-	background:url('../images/tab/tab_left_sel.gif') left no-repeat;
-	margin-left:3px;
-	height:31px;
-	float:left;
-	padding-left:5px;
+.topmenu-item-left.selected{
+	background:url('../images/tab/tab_left_sel.gif') left no-repeat !important;
+	margin-left:3px !important;
+	height:31px !important;
+	float:left !important;
+	padding-left:5px !important;
 	
 }
 

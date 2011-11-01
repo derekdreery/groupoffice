@@ -33,14 +33,12 @@
 					<?php
 					$stmt = $this->site->pages();
 					while ($page = $stmt->fetch()) {
-						?>
-						<?php if($page->id==$this->page->id)echo '<div class="selected">'; ?> 
-						<div class="topmenu-item-left">
+						?>					
+						<div class="topmenu-item-left <?php if($page->id==$this->page->id)echo 'selected'; ?> ">
 							<div class="topmenu-item-right">
 								<a class="topmenu-item-center" href="<?php echo $page->url; ?>"><?php echo $page->name; ?></a>
 							</div>
 						</div>
-						<?php if($page->id==$this->page->id)echo '</div>'; ?> 
 						<?
 					}
 					?>				
