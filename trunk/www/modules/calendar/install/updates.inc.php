@@ -90,3 +90,6 @@ $updates["201110281025"][]="ALTER TABLE `cal_calendars` CHANGE `comment` `commen
 $updates["201110281025"][]="ALTER TABLE `cal_settings` CHANGE `reminder` `reminder` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201110281025"][]="ALTER TABLE `cal_settings` CHANGE `background` `background` CHAR( 6 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'EBF1E2'";
 $updates["201110281025"][]="ALTER TABLE `cal_settings` CHANGE `calendar_id` `calendar_id` INT( 11 ) NOT NULL DEFAULT '0'";
+
+$updates["201110281025"][]="ALTER TABLE `cal_participants` CHANGE `last_modified` `last_modified` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates["201110281025"][]="ALTER TABLE `cal_participants` CHANGE `role` `role` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
