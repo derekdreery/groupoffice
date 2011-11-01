@@ -1,4 +1,4 @@
-a.topmenu-item-center-sel:visited, a.topmenu-item-center-sel:link, a.topmenu-item-center-sel:active{
+.selected  a.topmenu-item-center:visited, .selected  a.topmenu-item-center:link, .selected  a.topmenu-item-center:active{
 	font-family:"Lucida Sans Unicode","Lucida Grande","Mukti Narrow", sans-serif;
 	background:url('../images/tab/tab_center_sel.gif') center repeat-x;
 	color:#FFFFFF;
@@ -10,7 +10,7 @@ a.topmenu-item-center-sel:visited, a.topmenu-item-center-sel:link, a.topmenu-ite
 
 }
 
-a.topmenu-item-center-sel:hover{
+.selected a.topmenu-item-center:hover{
 	background:url('../images/tab/tab_center_sel.gif') center repeat-x;
 	float:left;
 	line-height:30px;
@@ -18,7 +18,7 @@ a.topmenu-item-center-sel:hover{
 	
 }
 
-.topmenu-item-left-sel{
+.selected .topmenu-item-left{
 	background:url('../images/tab/tab_left_sel.gif') left no-repeat;
 	margin-left:3px;
 	height:31px;
@@ -27,7 +27,7 @@ a.topmenu-item-center-sel:hover{
 	
 }
 
-.topmenu-item-right-sel{
+.selected  .topmenu-item-right{
 	background:url('../images/tab/tab_right_sel.gif') right no-repeat;
 	float:left;
 	padding-right:5px;
