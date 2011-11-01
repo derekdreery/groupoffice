@@ -1475,6 +1475,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				break;
 
 			case 'date':
+				//strtotime hangs a while on parsing 0000-00-00 from the database. There shouldn't be such a date in it but 
+				//the old system stored dates like this.
 				return $value != '0000-00-00' ? GO_Base_Util_Date::get_timestamp(strtotime($value),false) : '';
 				break;
 
