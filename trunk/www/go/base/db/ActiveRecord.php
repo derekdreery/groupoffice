@@ -1475,7 +1475,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				break;
 
 			case 'date':
-				return GO_Base_Util_Date::get_timestamp(strtotime($value),false);
+				return $value != '0000-00-00' ? GO_Base_Util_Date::get_timestamp(strtotime($value),false) : '';
 				break;
 
 			case 'number':
