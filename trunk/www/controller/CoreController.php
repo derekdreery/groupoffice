@@ -10,6 +10,10 @@
 class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 
 	protected $defaultAction = 'Init';
+	
+	protected function checkPermission() {
+		return true;
+	}
 
 	private function loadInit() {
 		GO_Base_Observable::cacheListeners();
