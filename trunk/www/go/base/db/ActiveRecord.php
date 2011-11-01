@@ -1067,9 +1067,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	
 	private function _appendAclJoin($findParams, $aclJoin){		
-			
+		
 		$sql = "\nINNER JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";
-		if(isset($params['permissionLevel']) && $findParams['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
+		if(isset($findParams['permissionLevel']) && $findParams['permissionLevel']>GO_Base_Model_Acl::READ_PERMISSION){
 			$sql .= " AND go_acl.level>=".intval($findParams['permissionLevel']);
 		}
 		$sql .= " AND (go_acl.user_id=".intval($findParams['userId'])." OR go_acl.group_id IN (".implode(',',GO_Base_Model_User::getGroupIds($findParams['userId']))."))) ";		
@@ -2119,9 +2119,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if(!empty($attr['delete'])){
 
 				$stmt = $this->$name;
-				while($child = $stmt->fetch()){
-
-					$child->delete();
+				while($child = $stmt->fetch()){				
+						$child->delete();
 				}
 			}
 			
