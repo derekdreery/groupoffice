@@ -73,7 +73,11 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			throw new GO_Base_Exception_AccessDenied();
 		
 		//getting the module will effectively check read permissions on the module because findByPk does that.
-		$this->getModule();
+		$module = $this->getModule();
+		
+		if($module && !$module->permissionLevel){
+			throw new GO_Base_Exception_AccessDenied();
+		}
 							
 	}
 	
@@ -99,7 +103,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			$moduleId = strtolower($classParts[1]);
 			
-			$this->_module = GO_Base_Model_Module::model()->findByPk($moduleId);			
+			$this->_module = GO_Base_Model_Module::model()->findByPk($moduleId, false, true);			
 		}
 		
 		return $this->_module;

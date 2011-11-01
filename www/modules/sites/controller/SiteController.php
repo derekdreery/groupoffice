@@ -25,19 +25,30 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	protected $templateUrl;
 	protected $templateFolder;
 	
+	protected $lastPath;
+	
 	
 	protected function checkPermission() {
 		
 	}
 	
+	protected function init() {
+
+		$this->setSite($_REQUEST);
+		
+		if(isset(GO::session()->values['sites']['lastPath']))
+			$this->lastPath=GO::session()->values['sites']['lastPath'];
+		
+		return parent::init();
+	}
 	
 	protected function setSite($params){
 		if(!empty($params['site_id']))
-			$this->site=GO_Sites_Model_Site::model()->findByPk($params['site_id']);
-		
+			$this->site=GO_Sites_Model_Site::model()->findByPk($params['site_id']);		
 		
 		$this->site=GO_Sites_Model_Site::model()->find(GO_Base_Db_FindParams::newInstance()->single());
 		
+
 		$this->templateUrl = GO::config()->host.'modules/sites/templates/'.$this->site->template.'/';
 		$this->templateFolder = new GO_Base_Fs_Folder(GO::config()->root_path.'modules/sites/templates/'.$this->site->template);
 	}
@@ -46,23 +57,41 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * This default action should be overrriden
 	 */
 	public function actionIndex($params){		
-	
-		$this->setSite($params);
 		$this->renderPage($params['p']);		
 	}
 	
 	protected function renderPage($path, $params=array()){
 		extract($params);
 		
+		//echo $path.':'.$this->site->id;
+		
+		GO::session()->values['sites']['lastPath']=$path;
+		
 		$this->page = GO_Sites_Model_Page::model()->findSingleByAttributes(array('site_id'=>$this->site->id, 'path'=>$path));
 		
-		$template = empty($this->page->template) ? 'index.php' : $this->page->template.'.php';
+		if(!$this->page){
+			$this->notFound();
+		}else{
 		
-		require(GO::modules()->sites->path.'templates/'.$this->site->template.'/'.$template);
+			//var_dump($this->page);
+
+			$template = empty($this->page->template) ? 'index.php' : $this->page->template.'.php';
+
+			require($this->templateFolder->path().'/'.$template);
+		}
+	}
+	
+	protected function notFound(){
+		echo '<h1>Not found</h1>';
 	}
 	
 	public static function pageUrl($path){
 		return GO::url('sites/site/index', 'p='.urlencode($path));
+	}
+	
+	protected function pageRedirect($path = '') {
+		header('Location: ' .self::pageUrl($path));
+		exit();
 	}
 	
 }

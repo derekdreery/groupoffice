@@ -1209,7 +1209,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return GO_Base_Db_ActiveRecord 
 	 */
 	
-	public function findByPk($primaryKey, $findParams=array(), $ignoreAcl=false){		
+	public function findByPk($primaryKey, $findParams=false, $ignoreAcl=false){		
 		
 		//GO::debug($this->className()."::findByPk($primaryKey)");
 		if(empty($primaryKey))
