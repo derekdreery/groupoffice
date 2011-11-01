@@ -93,7 +93,7 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 			this.logout.defer(500, this, [true]);
 		}else
 		{
-			document.location=GO.url('core/logout');
+			document.location=GO.url('auth/logout');
 		}
 	},
 	
