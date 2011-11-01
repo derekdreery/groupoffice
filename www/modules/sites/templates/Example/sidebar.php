@@ -9,11 +9,6 @@ if (!$cart->hasProducts()) {
 } else {
 	?>
 	<table class="cart">
-
-
-
-
-	</div>	
 	<?php
 	$cart = $cart->getCart();
 
@@ -36,6 +31,7 @@ if (!$cart->hasProducts()) {
 				Checkout
 			</a>
 		</div>
+	</div>
 		<?php
 	}
 	?>
