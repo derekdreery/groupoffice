@@ -60,11 +60,21 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	
 	public function __construct() {
 		$this->checkSecurityToken();
+		$this->checkPermission();
 		$this->init();
 	}
 	
 	protected function init(){
 		
+	}
+	
+	protected function checkPermission(){
+		if(!GO::user())
+			throw new GO_Base_Exception_AccessDenied();
+		
+		//getting the module will effectively check read permissions on the module because findByPk does that.
+		$this->getModule();
+							
 	}
 	
 	/**
@@ -89,7 +99,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			$moduleId = strtolower($classParts[1]);
 			
-			$this->_module = GO::modules()->{$moduleId};			
+			$this->_module = GO_Base_Model_Module::model()->findByPk($moduleId);			
 		}
 		
 		return $this->_module;

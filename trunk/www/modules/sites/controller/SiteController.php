@@ -30,10 +30,11 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		if(!empty($params['site_id']))
 			$this->site=GO_Sites_Model_Site::model()->findByPk($params['site_id']);
 		
+		
 		$this->site=GO_Sites_Model_Site::model()->find(GO_Base_Db_FindParams::newInstance()->single());
 		
 		$this->templateUrl = GO::config()->host.'modules/sites/templates/'.$this->site->template.'/';
-		$this->templateFolder = new GO_Base_Fs_Folder(GO::modules()->sites->path.'templates/'.$this->site->template);
+		$this->templateFolder = new GO_Base_Fs_Folder(GO::config()->root_path.'modules/sites/templates/'.$this->site->template);
 	}
 	
 	/**
@@ -52,6 +53,10 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		$template = empty($this->page->template) ? 'index.php' : $this->page->template.'.php';
 		
 		require(GO::modules()->sites->path.'templates/'.$this->site->template.'/'.$template);
+	}
+	
+	public static function pageUrl($path){
+		return GO::url('sites/site/index', 'p='.urlencode($path));
 	}
 	
 }
