@@ -1196,7 +1196,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				items : [this.reminderValue,this.reminderMultiplier]
 			},this.colorField = new GO.form.ColorField({
 				fieldLabel : GO.lang.color,
-				value : GO.calendar.defaultBackground,
+				value : "EBF1E2",
 				name : 'background',
 				colors : [
 				'EBF1E2',
