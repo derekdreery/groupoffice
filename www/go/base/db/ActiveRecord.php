@@ -1701,10 +1701,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$this->ctime=time();
 		}
 
+		//user id is set by defaultAttributes now.
 		//do not use empty() here for checking the user id because some times it must be 0. eg. go_acl
-		if(isset($this->columns['user_id']) && !isset($this->user_id)){
-			$this->user_id=GO::user() ? GO::user()->id : 1;
-		}
+//		if(isset($this->columns['user_id']) && !isset($this->user_id)){
+//			$this->user_id=GO::user() ? GO::user()->id : 1;
+//		}
 
 
 		/**
@@ -2680,6 +2681,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$attr=array();
 		foreach($this->getColumns() as $field => $colAttr)
 			$attr[$field]=$colAttr['default'];
+		
+		if(isset($this->columns['user_id']))
+			$attr['user_id']=GO::user() ? GO::user()->id : 1;
 		
 		return array_merge($attr, $this->defaultAttributes());
 	}

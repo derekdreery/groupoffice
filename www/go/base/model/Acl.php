@@ -293,5 +293,10 @@ class GO_Base_Model_Acl extends GO_Base_Db_ActiveRecord {
 		
 		return parent::checkDatabase();
 	}
+	
+	public function defaultAttributes() {
+		//necessary because GO set's this to the logged in user. And we don't want rows with group_id and user_id.
+		return array('user_id'=>0);
+	}
 
 }
