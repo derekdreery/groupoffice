@@ -104,7 +104,7 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 		}
 		
 		this.store.on('load', function(){
-			if(this.store.reader.jsonData.title)
+			if(this.store.reader.jsonData && this.store.reader.jsonData.title)
 				this.setTitle(this.store.reader.jsonData.title);
 		}, this);
 	
