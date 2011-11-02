@@ -93,3 +93,5 @@ $updates["201110281025"][]="ALTER TABLE `cal_settings` CHANGE `calendar_id` `cal
 
 $updates["201110281025"][]="ALTER TABLE `cal_participants` CHANGE `last_modified` `last_modified` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201110281025"][]="ALTER TABLE `cal_participants` CHANGE `role` `role` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201111021004"][]="update `cal_events` set resource_event_id=0 WHERE id=resource_event_id;";
