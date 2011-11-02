@@ -562,7 +562,7 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 	}
 });
 
-GO.addressbook.showContactDialog = function(contact_id){
+GO.addressbook.showContactDialog = function(contact_id, config){
 
 	if(!GO.addressbook.contactDialog)
 		GO.addressbook.contactDialog = new GO.addressbook.ContactDialog();
@@ -572,7 +572,7 @@ GO.addressbook.showContactDialog = function(contact_id){
 		delete GO.addressbook.contactDialogListeners;
 	}
 
-	GO.addressbook.contactDialog.show(contact_id);
+	GO.addressbook.contactDialog.show(contact_id, config);
 }
 
 GO.addressbook.showCompanyDialog = function(company_id){

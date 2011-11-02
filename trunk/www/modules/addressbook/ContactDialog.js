@@ -232,7 +232,7 @@ GO.addressbook.ContactDialog = function(config)
 
 Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 
-	show : function(contact_id)
+	show : function(contact_id, config)
 	{
 		
 		if(!this.rendered)
@@ -303,7 +303,7 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 						
 //			if(this.contact_id > 0)
 //			{
-				this.loadContact(this.contact_id);
+				this.loadContact(this.contact_id, config);
 //			} else {
 //				this.setPhoto(0);
 //				GO.addressbook.ContactDialog.superclass.show.call(this);
@@ -322,7 +322,7 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 		this.addressbook_id = addressbook_id;
 	},*/
 	
-	loadContact : function(id)
+	loadContact : function(id, config)
 	{
 		this.formPanel.form.load({
 //			url: GO.settings.modules.addressbook.url+ 'json.php', 
@@ -341,7 +341,11 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 //				{
 //					Ext.Msg.alert(GO.lang['strError'], GO.lang['strNoWritePermissions']);						
 //				}else
-//				{					
+//				{		
+
+					if(config && config.values)
+						this.formPanel.form.setValues(config.values);
+
 					this.personalPanel.setAddressbookID(action.result.data.addressbook_id);
 					this.formPanel.form.findField('addressbook_id').setRemoteText(action.result.remoteComboTexts.addressbook_id);
 					this.formPanel.form.findField('company_id').setRemoteText(action.result.remoteComboTexts.company_id);
