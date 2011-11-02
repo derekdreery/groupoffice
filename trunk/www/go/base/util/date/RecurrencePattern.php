@@ -292,9 +292,6 @@ class GO_Base_Util_Date_RecurrencePattern{
 	
 	
 	protected function _findNumberOfMonths($startTime, $interval, $ceil=true){
-		$eventStartDateTime = new GO_Base_Util_Date_DateTime(date('c',$this->_eventStartTime));
-		$startDateTime= new GO_Base_Util_Date_DateTime(date('c',$startTime));
-		$diff = $eventStartDateTime->diff($startDateTime, true); 
 		
 		$intervalYears = date('Y', $startTime)-date('Y', $this->_eventStartTime);
 		$intervalMonths = date('n', $startTime)-date('n', $this->_eventStartTime);
@@ -328,9 +325,12 @@ class GO_Base_Util_Date_RecurrencePattern{
 	protected function _findNumberOfDays($startTime, $interval=1, $ceil=true){
 		$eventStartDateTime = new GO_Base_Util_Date_DateTime(date('c',$this->_eventStartTime));
 		$startDateTime= new GO_Base_Util_Date_DateTime(date('c',$startTime));
-		$diff = $eventStartDateTime->diff($startDateTime, true); 
-
-		$elapsed = $diff->days; //get the days, months or years elapsed since the event.
+		
+		//diff is only compatible with 5.3 and we want 5.2 compatibility
+		//$diff = $eventStartDateTime->diff($startDateTime, true); 
+		//$elapsed = $diff->days; //get the days, months or years elapsed since the event.
+		
+		$elapsed = $days = $eventStartDateTime->getDaysElapsed($startDateTime);
 		$devided = $elapsed/$interval; 
 		
 		

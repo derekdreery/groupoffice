@@ -91,12 +91,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	/**
 	 * Get the date interval for the event.
 	 * 
-	 * @return DateInterval 
+	 * @return array 
 	 */
 	public function getDiff() {
 		$startDateTime = new GO_Base_Util_Date_DateTime(date('c', $this->start_time));
 		$endDateTime = new GO_Base_Util_Date_DateTime(date('c', $this->end_time));
-		return $startDateTime->diff($endDateTime, true);
+		return $startDateTime->getDiffCompat($endDateTime);
 	}
 
 	/**
@@ -132,7 +132,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$att['start_time'] = strtotime($d . ' ' . $t);
 
 		$endTime = new GO_Base_Util_Date_DateTime(date('c', $att['start_time']));
-		$endTime->add($diff);
+		$endTime->addDiffCompat($diff);
 		$att['end_time'] = $endTime->format('U');
 		
 		return $this->duplicate($att, false);
@@ -371,7 +371,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$diff = $this->getDiff();
 
 				$endTime = new GO_Base_Util_Date_DateTime(date('c', $occurenceStartTime));
-				$endTime->add($diff);
+				$endTime->addDiffCompat($diff);
 				$origEventAttr['end_time'] = GO_Base_Util_Date::get_timestamp($endTime->format('U'));
 
 				$this->_calculatedEvents[$occurenceStartTime . '-' . $origEventAttr['id']] = $origEventAttr;
