@@ -5,9 +5,9 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	protected function beforeSubmit(&$response, &$model, &$params) {
 				
-		if(!empty($params['company_id']) && !is_numeric($params['company_id'])){
+		if(!empty($params['company_id']) && $params['company_id']==$params['company']){			
 			$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
-				'addressbook_id'=>$model->addressbook_id,
+				'addressbook_id'=>$params['addressbook_id'],
 				'name'=>$params['company_id']
 			));
 			
@@ -15,7 +15,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			{
 				$company = new GO_Addressbook_Model_Company();
 				$company->name=$params['company_id'];
-				$company->addressbook_id=$model->addressbook_id;
+				$company->addressbook_id=$params['addressbook_id'];
 				if(!$company->save())
 					throw new GO_Base_Exception_Save("Company ".$company->name);
 			}

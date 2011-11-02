@@ -123,6 +123,7 @@ GO.addressbook.ContactDialog = function(config)
 			activeTab: 0,
 			hideLabel: true,
 			deferredRender: false,
+			enableTabScroll:true,
 			anchor:'100% 100%',
 			items: items
 		})

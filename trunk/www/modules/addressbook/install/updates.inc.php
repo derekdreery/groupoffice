@@ -71,3 +71,13 @@ $updates["201110170846"][]="ALTER TABLE `ab_addressbooks` DROP `default_iso_addr
 
 $updates["201110281132"][]="ALTER TABLE `ab_addressbooks` CHANGE `users` `users` TINYINT( 1 ) NOT NULL DEFAULT '0'";
 $updates["201110281132"][]="update `ab_contacts` set birthday=null where birthday='0000-00-00'";
+$updates["201110281132"][]="ALTER TABLE `ab_companies` CHANGE `phone` `phone` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL";
+$updates["201110281132"][]="ALTER TABLE `ab_companies` CHANGE `fax` `fax` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";
+
+$updates["201110281132"][]="ALTER TABLE `ab_companies` CHANGE `email_allowed` `email_allowed` BOOLEAN NOT NULL DEFAULT '1'";
+$updates["201110281132"][]="UPDATE ab_companies SET email_allowed=0 where email_allowed=1";
+$updates["201110281132"][]="UPDATE ab_companies SET email_allowed=1 where email_allowed=2";
+
+$updates["201110281132"][]="ALTER TABLE `ab_companies` CHANGE `crn` `crn` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";
+$updates["201110281132"][]="ALTER TABLE `ab_companies` CHANGE `iban` `iban` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";
+$updates["201110281132"][]="ALTER TABLE `ab_contacts` DROP `default_salutation`";
