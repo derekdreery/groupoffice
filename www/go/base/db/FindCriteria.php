@@ -109,7 +109,9 @@ class GO_Base_Db_FindCriteria {
 	 */
 	private function _appendConditionString($tableAlias, $field, $value, $comparator, $valueIsColumn){
 		
-		if(!$valueIsColumn){
+		if(is_null($value)){
+			$paramTag = "NULL";
+		}elseif(!$valueIsColumn){
 			$paramTag = $this->_getParamTag();		
 			$this->_params[$paramTag]=array($value, $this->_getPdoType($tableAlias, $field));
 		}else
