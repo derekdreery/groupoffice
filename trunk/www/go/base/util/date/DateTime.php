@@ -38,6 +38,13 @@ class GO_Base_Util_Date_DateTime extends DateTime{
 		return $jdDT-$jdThis;
 	}
 	
+	/**
+	 * Get an array with elapsed days, hours and minutes that can be used for
+	 * addDiffCompat. These functions are for php 5.2 compatibility.
+	 * 
+	 * @param GO_Base_Util_Date_DateTime $dateTime
+	 * @return array 
+	 */
 	public function getDiffCompat($dateTime){
 		
 		$hours = $dateTime->format('G')-$this->format('G');
@@ -46,6 +53,12 @@ class GO_Base_Util_Date_DateTime extends DateTime{
 		return array('days'=>$this->getDaysElapsed($dateTime),'hours'=>$hours, 'mins'=>$mins);
 	}
 	
+	/**
+	 * Add a diff array returned by getDiffCompat
+	 * 
+	 * @param array $diff
+	 * @return GO_Base_Util_Date_DateTime 
+	 */
 	public function addDiffCompat($diff){
 		$unixtime = GO_Base_Util_Date::date_add($this->format('U'), $diff['days']);
 		$unixtime += (($diff['hours']*60)+$diff['mins'])*60;
