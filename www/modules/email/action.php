@@ -367,6 +367,8 @@ try {
 					break;
 				}
 			}
+			
+			require($GO_LANGUAGE->get_language_file('email'));
 
 			$body = sprintf($lang['email']['notification_body'], $_POST['subject'], Date::get_timestamp(time()));
 
