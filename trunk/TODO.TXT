@@ -1,4 +1,6 @@
 
+Calendar delete exception
+
 Advanced search panel
 Settings panels
 Complete Links browser

@@ -233,7 +233,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$this->_sendInvitation($params, $newParticipantIds, $event, $isNewEvent, $modifiedAttributes);
 	}
 
-	private function _sendInvitation($params, $newParticipantIds, $event, $isNewEvent, $modifiedAttributes) {
+	private function _sendInvitation($params, $newParticipantIds, $event, $isNewEvent, $modifiedAttributes, $method='REQUEST') {
 
 		if (isset($params['send_invitation']) && $params['send_invitation'] != 'false') {
 
@@ -258,7 +258,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 									->addTo($participant->email, $participant->name);
 
 					$message->setHtmlAlternateBody($body);
-					$message->attach(Swift_Attachment::newInstance($event->toICS(), GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar'));
+					$message->attach(Swift_Attachment::newInstance($event->toICS($method), GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar'));
 
 					GO_Base_Mail_Mailer::newGoInstance()->send($message);
 				}
@@ -408,6 +408,29 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
 		header('Content-Type: text/plain');
 		echo $event->toICS();
+	}
+	
+	
+	public function actionDelete($params){
+		
+		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
+		
+		if(!empty($params['send_cancellation']))
+		{
+			//todo
+		}
+		
+		if(!empty($params['exception_date'])){
+			$event->addException($params['exception_date']);
+		}else
+		{			
+			if($event)
+				$event->delete();
+		}
+		
+		$response['success']=true;
+		
+		return $response;
 	}
 
 }

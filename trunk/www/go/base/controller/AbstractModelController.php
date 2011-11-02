@@ -535,10 +535,38 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param type $params The POST parameters 
 	 */
 	protected function actionDelete($params) {
-	    $modelName = $this->model;
-	    $model = GO::getModel($modelName)->findByPk($params['id']);
-	    $response['success'] = $model->delete();
-			return $response;
+		
+		$model = GO::getModel($this->model)->findByPk($params['id']);
+		
+		$response=array();
+		
+		$response = $this->beforeDelete($response, $model, $params);
+
+		$response['success'] = $model->delete();
+
+		$response = $this->afterDelete($response, $model, $params);
+
+		return $response;
+	}
+	
+	/**
+	 * Useful to override
+	 * 
+	 * @param array $response The response array
+	 * @param mixed $model
+	 */
+	protected function beforeDelete(&$response, &$model, &$params) {
+		return $response;
+	}
+	
+	/**
+	 * Useful to override
+	 * 
+	 * @param array $response The response array
+	 * @param mixed $model
+	 */
+	protected function afterDelete(&$response, &$model, &$params) {
+		return $response;
 	}
 	
 	/**
