@@ -13,10 +13,10 @@
  */
 
 // check is needed for SWFUpload
-if(isset($_REQUEST['groupoffice']))
-{
-	session_id($_REQUEST['groupoffice']);
-}
+//if(isset($_REQUEST['groupoffice']))
+//{
+//	session_id($_REQUEST['groupoffice']);
+//}
 
 require_once("../../Group-Office.php");
 
@@ -191,6 +191,10 @@ try {
 
 			$path.='/'.$_POST['filename'];
 			
+			if(file_exists($GO_CONFIG->file_storage_path.$path)){
+				throw new Exception("File exists");
+			}
+			
 			
 			require_once($GO_CONFIG->class_path."mail/mimeDecode.class.inc");
 			if(!empty($_REQUEST['filepath'])){
@@ -226,8 +230,12 @@ try {
 				$imap->save_to_file($_REQUEST['uid'], $GO_CONFIG->file_storage_path.$path, $_REQUEST['imap_id'], $_REQUEST['encoding']);			
 				$imap->disconnect();
 			}
+			
+			require_once($GO_CONFIG->root_path.'GO.php');
+			$folder = GO_Files_Model_Folder::model()->findByPk($folder['id']);
+			$folder->addFile($_POST['filename']);
 
-			$files->import_file($GO_CONFIG->file_storage_path.$path,$folder['id']);
+			//$files->import_file($GO_CONFIG->file_storage_path.$path,$folder['id']);
 
 			$response['success']=true;
 			break;

@@ -155,7 +155,7 @@ GO.email.EmailComposer = function(config) {
 	var uploadItems = [];
 	
 	var version = deconcept.SWFObjectUtil.getPlayerVersion();
-	if(!GO.settings.config.disable_flash_upload && version.major > 0)
+	if(false && !GO.settings.config.disable_flash_upload && version.major > 0)
 	{
 		uploadItems.push({
 			iconCls:'btn-computer',
