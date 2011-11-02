@@ -128,7 +128,7 @@ class GO_Base_Db_FindCriteria {
 	 * @param String $field The field where this condition is for.
 	 * @param String $value The value of the field for this condition.
 	 * @param String $comparator How needs this field be compared with the value. Can be ('<','>','<>','=<','>=','=').
-	 * @param String $tableAlias The alias of the table in this SQL statement.
+	 * @param String $tableAlias The alias of the table for the $field parameter
 	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true. 
 	 * @param Boolean $valueIsColumn Treat the value as a column name. In this case the value must contain the table alias too if necessary.
 	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
