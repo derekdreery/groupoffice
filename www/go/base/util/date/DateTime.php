@@ -24,5 +24,35 @@ class GO_Base_Util_Date_DateTime extends DateTime{
 		return new self(date('Y-m-d H:i:s',$time));//, new DateTimeZone(date_default_timezone_get()));
 	}
 	
+	/**
+	 * Get the number of days elapsed. We could not use DateTime::diff() because it's only
+	 * compatible with PHP 5.3
+	 * 
+	 * @param GO_Base_Util_Date_DateTime $dateTime
+	 * @return int 
+	 */
+	public function getDaysElapsed($dateTime){
+		$jdThis = gregoriantojd($this->format('n'),$this->format('j'),$this->format('Y'));		
+		$jdDT = gregoriantojd($dateTime->format('n'),$dateTime->format('j'),$dateTime->format('Y'));
+		
+		return $jdDT-$jdThis;
+	}
+	
+	public function getDiffCompat($dateTime){
+		
+		$hours = $dateTime->format('G')-$this->format('G');
+		$mins = $dateTime->format('i')-$this->format('i');
+		
+		return array('days'=>$this->getDaysElapsed($dateTime),'hours'=>$hours, 'mins'=>$mins);
+	}
+	
+	public function addDiffCompat($diff){
+		$unixtime = GO_Base_Util_Date::date_add($this->format('U'), $diff['days']);
+		$unixtime += (($diff['hours']*60)+$diff['mins'])*60;
+		
+		$this->setTimestamp($unixtime);
+		
+		return $this;
+	}
 	
 }

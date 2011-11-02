@@ -8,7 +8,7 @@ $rruleString = 'FREQ=MONTHLY;INTERVAL=2;BYDAY=2MO,2WE';
 //$rruleString = 'FREQ=WEEKLY;INTERVAL=3;BYDAY=FR,SU';
 //$rruleString = 'FREQ=DAILY;INTERVAL=2';
 
-//$rruleString = 'FREQ=MONTHLY;INTERVAL=2';
+$rruleString = 'FREQ=MONTHLY;INTERVAL=2';
 
 //$rruleString = 'FREQ=YEARLY;INTERVAL=2';
 
