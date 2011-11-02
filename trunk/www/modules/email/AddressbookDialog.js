@@ -37,18 +37,12 @@ GO.email.AddressbookDialog = function(config) {
 
 	var items = Array();
 	this.usersStore = new GO.data.JsonStore({
-		url : GO.settings.modules.users.url + 'non_admin_json.php',
-		baseParams : {
-			task : 'users'
-		},
-		id : 'id',
-		root : 'results',
+		url : GO.url("core/users"),
 		fields : ['id', 'username', 'name', 'company', 'logins',
 		'lastlogin', 'registration_time', 'address', 'zip',
 		'city', 'state', 'country', 'phone', 'email',
 		'waddress', 'wzip', 'wcity', 'wstate', 'wcountry',
 		'wphone'],
-		totalProperty : 'total',
 		remoteSort : true
 	});
 
@@ -92,9 +86,8 @@ GO.email.AddressbookDialog = function(config) {
 	items.push(this.usersGrid);
 
 	this.userGroupsStore = new GO.data.JsonStore({
-		url : GO.settings.modules.groups.url + 'non_admin_json.php',
+		url : GO.url('core/groups'),
 		baseParams : {
-			task : 'groups',
 			for_mail : 1
 		},
 		id : 'id',
@@ -195,12 +188,12 @@ GO.email.AddressbookDialog = function(config) {
 
 	}
 
-	if (GO.mailings) {
+	if (GO.addressbook) {
 		this.mailingsGrid = new GO.grid.GridPanel({
 			title : GO.mailings.lang.cmdPanelMailings,
 			paging : false,
 			border : false,
-			store : GO.mailings.readableMailingsStore,
+			store : GO.addressbook.readableAddresslistsStore,
 			view : new Ext.grid.GridView({
 				autoFill : true,
 				forceFit : true
@@ -214,8 +207,8 @@ GO.email.AddressbookDialog = function(config) {
 			sm : new Ext.grid.RowSelectionModel()
 		});
 		this.mailingsGrid.on('show', function() {
-			if(!GO.mailings.readableMailingsStore.loaded)
-				GO.mailings.readableMailingsStore.load();
+			if(!GO.addressbook.readableAddresslistsStore.loaded)
+				GO.addressbook.readableAddresslistsStore.load();
 		}, this);
 
 		items.push(this.mailingsGrid);
