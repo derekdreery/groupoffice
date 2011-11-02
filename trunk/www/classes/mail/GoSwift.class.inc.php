@@ -542,8 +542,11 @@ class GoSwiftImport extends GoSwift{
 
 		//go_debug($structure);
 
-
+		$this->replaceIds=array();
 		$this->get_parts($structure);
+		
+		foreach($this->replaceIds as $oldId=>$newId)
+			$this->body=str_replace($oldId, $newId, $this->body);
 
 		if($add_body)
 			$this->set_body($this->body);
@@ -639,8 +642,17 @@ class GoSwiftImport extends GoSwift{
 						}
 						$img = Swift_EmbeddedFile::fromPath($tmp_file);
 						$img->setContentType(File::get_mime($mime_type));
-						$img->setId($content_id);
-						$this->message->embed($img);
+						try{
+							$img->setId($content_id);
+						}
+						catch(Swift_RfcComplianceException $e){
+							
+						}
+						$id = $this->message->embed($img);
+						
+						if($id != $content_id){
+							$this->replaceIds[$content_id]=$id;
+						}
 					}else
 					{
 					//echo $tmp_file."\n";
