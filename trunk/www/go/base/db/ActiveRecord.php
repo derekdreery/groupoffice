@@ -937,12 +937,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				$sql .= ", ";
 			
 							
-		}elseif(isset($query['group'])){
+		}elseif(isset($params['group'])){
 			$sql .= "\nGROUP BY ";
 		}
 		
-		if(isset($query['group']))
-			$sql .= $query['group'];		
+		if(isset($params['group']))
+			$sql .= $params['group'];		
 		
 		if(isset($params['having']))
 			$sql.="\nHAVING ".$params['having'];
