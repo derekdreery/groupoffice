@@ -295,10 +295,7 @@ Ext.extend(GO.addressbook.CompanyProfilePanel, Ext.Panel,{
 	{
 		this.formAddressBooks.setValue(addressbook_id);
 		
-		if (GO.customfields) {
-			var allowed_cf_categories = this.formAddressBooks.store.getById(addressbook_id).data.allowed_cf_categories.split(',');
-			GO.addressbook.companyDialog.updateCfTabs(allowed_cf_categories);
-		}
+		
 	},
 
 	setCompanyId : function(company_id)

@@ -63,6 +63,7 @@ GO.addressbook.CompanyDialog = function(config)
 		this.tabPanel = new Ext.TabPanel({
 			border: false,
 			activeTab: 0,
+			enableTabScroll:true,
 			deferredRender: false,
 			hideLabel: true,
 			anchor:'100% 100%',
@@ -224,6 +225,11 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 			});
 		}else
 		{
+			var tempAddressbookID = this.personalPanel.formAddressBooks.getValue();
+			this.companyForm.form.reset();
+
+			this.personalPanel.formAddressBooks.setValue(tempAddressbookID);
+			
 			if(!this.rendered)
 			{
 				this.render(Ext.getBody());
@@ -247,7 +253,15 @@ Ext.extend(GO.addressbook.CompanyDialog, GO.Window, {
 
 				this.personalPanel.setAddressbookID(GO.addressbook.defaultAddressbook.id);
 				//this.personalPanel.formAddressBooks.setValue(GO.addressbook.defaultAddressbook);
+			}else if(tempAddressbookID>0 && this.personalPanel.formAddressBooks.store.getById(tempAddressbookID))
+			{
+				this.personalPanel.setAddressbookID(tempAddressbookID);
+			}else
+			{
+				this.personalPanel.formAddressBooks.selectFirst();
+				this.personalPanel.setAddressbookID(this.personalPanel.formAddressBooks.getValue());
 			}
+			
 			this.moveEmployeesButton.setDisabled(true);
 		
 			this.tabPanel.setActiveTab(0);
