@@ -1096,10 +1096,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				this.recurrenceDialog.on('single', function()
 				{
 					var params={
-						task: 'delete_event',
-						create_exception: true,
 						exception_date: this.currentDeleteEvent.startDate.format("U"),
-						event_id: this.currentDeleteEvent.event_id
+						id: this.currentDeleteEvent.event_id
 					};
 
 					if(event.num_participants)
@@ -1114,9 +1112,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 
 				this.recurrenceDialog.on('entire', function()
 				{
-					var params={
-						task: 'delete_event',
-						event_id: this.currentDeleteEvent.event_id
+					var params={						
+						id: this.currentDeleteEvent.event_id
 					};
 
 					if(event.num_participants)
@@ -1142,8 +1139,8 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 				if(btn=='yes')
 				{
 					var params={
-						task: 'delete_event',
-						event_id: event.event_id
+						//task: 'delete_event',
+						id: event.event_id
 					};
 					
 					if(event.num_participants)
@@ -1159,24 +1156,17 @@ Ext.extend(GO.calendar.MainPanel, Ext.Panel, {
 	
 	sendDeleteRequest : function(params, callback, event, refresh)
 	{
-		Ext.Ajax.request({
-			url: GO.settings.modules.calendar.url+'action.php',
+		GO.request({
+			maskEl:this.getEl(),
+			url: 'calendar/event/delete',
 			params: params,
-			callback:function(options, success, response){				
-				
-				if(!success)
+			success:function(options, response,result){				
+				if(!result.success)
 				{
-					Ext.MessageBox.alert(GO.lang.strError, GO.lang.strRequestError);
+					Ext.MessageBox.alert(GO.lang.strError, result.feedback);
 				}else
 				{
-					var responseParams = Ext.decode(response.responseText);
-					if(!responseParams.success)
-					{
-						Ext.MessageBox.alert(GO.lang.strError, responseParams.feedback);
-					}else
-					{
-						callback.call(this, event, refresh);
-					}
+					callback.call(this, event, refresh);
 				}
 			},
 			scope:this

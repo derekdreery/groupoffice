@@ -453,8 +453,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 
-
-	public function toICS() {
+	/**
+	 *
+	 * @param string $method REQUEST or CANCEL
+	 * @param int $forRecurrenceId 
+	 * 
+	 * Set this to a unix timestamp of the start of an occurence if it's an update
+	 * for a particular recurrence date.
+	 * 
+	 * @return type 
+	 */
+	public function toICS($method='REQUEST', $forRecurrenceId=false) {
 		
 		//require vendor lib SabreDav vobject
 		require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
@@ -463,7 +472,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$c->version='2.0';
 		$c->prodid='-//Intermesh//NONSGML Group-Office//EN';
 		$c->calscale='GREGORIAN';
-		$c->method='REQUEST';
+		$c->method=$method;
 		
 		$e=new Sabre_VObject_Component('vevent');
 		$e->uuid=$this->uuid;
@@ -480,11 +489,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$dateType = $this->all_day_event ? Sabre_VObject_Element_DateTime::DATE : Sabre_VObject_Element_DateTime::LOCALTZ;
 		
-//		if($this->exceptionEvent){			
-//			$recurrenceId =new Sabre_VObject_Element_DateTime("recurrence-id",$dateType);
-//			$recurrenceId->setDateTime(new DateTime(date('c',$this->exceptionEvent->start_time)));
-//			$e->add($recurrenceId);
-//		}
+		if($forRecurrenceId){			
+			$recurrenceId =new Sabre_VObject_Element_DateTime("recurrence-id",$dateType);
+			$recurrenceId->setDateTime(new DateTime(date('c',$forRecurrenceId)));
+			$e->add($recurrenceId);
+		}
 		
 		
 		$dtstart = new Sabre_VObject_Element_DateTime('dtstart',$dateType);
