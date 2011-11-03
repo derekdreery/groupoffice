@@ -114,7 +114,7 @@ Ext.extend(GO.data.JsonStore, Ext.data.JsonStore, {
 	
 	reload : function(options){
 		
-		if(this.lastOptions.params && this.lastOptions.params.add){
+		if(this.lastOptions && this.lastOptions.params && this.lastOptions.params.add){
 			delete this.lastOptions.params.add;
 		}
 		
