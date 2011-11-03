@@ -71,6 +71,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	protected function checkPermission(){
 		if(!GO::user())
 			throw new GO_Base_Exception_AccessDenied();
+
 		
 		//getting the module will effectively check read permissions on the module because findByPk does that.
 		$module = $this->getModule();
@@ -281,13 +282,13 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * 
 	 * @param string $path 
 	 */
-	protected function redirect($path=''){		
-		header('Location: ' .$this->url($path));
+	protected function redirect($path='', $params=array()){		
+		header('Location: ' .$this->url($path, $params));
 		exit();
 	}
 	
 	
-	protected function url($path, $params='', $relative=true){
+	protected function url($path, $params=array(), $relative=true){
 		return GO::url($path, $params, $relative);
 	}
 	

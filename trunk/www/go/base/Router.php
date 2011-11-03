@@ -58,6 +58,15 @@ class GO_Base_Router{
 						"eg.:\n\n".
 						"sudo -u www-data php index.php -c=/path/to/config.php -r=maintenance/upgrade --param=value\n\n";
 					exit();
+					
+					
+				}elseif(isset($params['u']) && isset($params['p']))
+				{
+					echo "Logging on\n";
+					$user = GO::session()->login($params['u'], $params['p']);
+					if(!$user){
+						die("Login failed for user ".$params['u']."\n");
+					}
 				}
 			}else
 			{

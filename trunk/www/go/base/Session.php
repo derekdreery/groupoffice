@@ -155,12 +155,6 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
 		
-		if($countLogin){
-			$user->last_login=time();
-			$user->logins++;
-			$user->save();
-		}
-
 		if (!$user)
 			return false;
 		
@@ -172,6 +166,12 @@ class GO_Base_Session extends GO_Base_Observable{
 		
 		//remember user id in session
 		$this->values['user_id']=$user->id;
+		
+		if($countLogin){
+			$user->last_login=time();
+			$user->logins++;
+			$user->save();
+		}
 		
 		$this->fireEvent('login', array($username, $password, $user));
 		
