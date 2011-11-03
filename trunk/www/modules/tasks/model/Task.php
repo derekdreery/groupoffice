@@ -85,6 +85,10 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		return true;
 	}
 	
+	public function hasLinks() {
+		return true;
+	}
+	
 	public function customfieldsModel(){
 		return "GO_Tasks_Model_CustomFieldsRecord";
 	}

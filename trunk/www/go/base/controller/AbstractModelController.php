@@ -435,19 +435,21 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 		}
 
-		$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, array(
-				'limit'=>15
-		));
-		
-		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());		
-		$store->setStatement($stmt);
-		
-		$columnModel = $store->getColumnModel();		
-		$columnModel->formatColumn('link_count','GO::getModel($model->model_name)->countLinks($model->model_id)');
-		$columnModel->formatColumn('link_description','$model->link_description');
-		
-		$data = $store->getData();
-		$response['data']['links']=$data['results'];		
+		if($model->hasLinks()){
+			$stmt = GO_Base_Model_SearchCacheRecord::model()->findLinks($model, array(
+					'limit'=>15
+			));
+
+			$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());		
+			$store->setStatement($stmt);
+
+			$columnModel = $store->getColumnModel();		
+			$columnModel->formatColumn('link_count','GO::getModel($model->model_name)->countLinks($model->model_id)');
+			$columnModel->formatColumn('link_description','$model->link_description');
+
+			$data = $store->getData();
+			$response['data']['links']=$data['results'];		
+		}
 
 		if (GO::modules()->calendar){
 
@@ -646,7 +648,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$attributeIndexMap = array();		
 		for ($i = 0, $m = count($headers); $i < $m; $i++) {
 			if(substr($headers[$i],0,3)=='cf\\'){				
-				$attributeIndexMap[$i] = $this->_resolveCustomField($headers[$i]);
+				$cf = $this->_resolveCustomField($headers[$i]);
+				if($cf)
+					$attributeIndexMap[$i] = $cf;
 			}else
 			{
 				$attributeIndexMap[$i] = $headers[$i];
@@ -666,18 +670,34 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$model = new $this->model;
 			
 			if($this->beforeImport($model, $attributes, $record)){			
+				
+				$columns = $model->getColumns();
+				foreach($columns as $col=>$attr){
+					if(isset($attributes[$col]) && ($attr['gotype']=='unixtimestamp' || $attr['gotype']=='unixdate')){
+						$attributes[$col]=strtotime($attributes[$col]);
+					}
+				}
+				
 				$model->setAttributes($attributes, false);
 				$model->save();			
 			}
+			
+			$this->afterImport($model, $attributes, $record);
 		}
 	}
 	
 	protected function beforeImport(&$model, &$attributes, $record){
 		return true;
 	}
+	protected function afterImport(&$model, &$attributes, $record){
+		return true;
+	}
 	
 	private function _resolveCustomField($header){
 		$parts = explode('\\', $header);
+		
+		if(count($parts)<3)
+			return false;
 		
 		$categoryName = $parts[1];
 		$fieldName = $parts[2];
@@ -686,7 +706,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		if(!$category){
 			$category = new GO_Customfields_Model_Category();
-			$category->extends_model=$modelName;
+			$category->extends_model=$this->model;
 			$category->name=$categoryName;
 			$category->save();
 		}	
