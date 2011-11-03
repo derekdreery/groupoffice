@@ -73,6 +73,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			return false;
 	}
 	
+	public function hasLinks() {
+		return true;
+	}
+	
 //	protected function appendAclJoin($findParams, $aclJoin){		
 //			
 //		$sql .= "\nLEFT JOIN go_acl ON (`".$aclJoin['table']."`.`".$aclJoin['aclField']."` = go_acl.acl_id";

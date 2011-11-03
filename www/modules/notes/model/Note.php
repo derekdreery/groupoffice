@@ -51,7 +51,9 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 	public function hasFiles(){
 		return true;
 	}
-	
+	public function hasLinks() {
+		return true;
+	}
 	public function customfieldsModel(){
 		return "GO_Notes_Model_CustomFieldsRecord";
 	}

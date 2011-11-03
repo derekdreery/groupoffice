@@ -179,6 +179,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function hasFiles(){return false;}
 	
 	/**
+	 * Set to true to enable links for this model. A table go_links_$this->tableName() must be created
+	 * with columns: id, model_id, model_type_id
+	 * 
+	 * @return bool 
+	 */
+	public function hasLinks(){return false;}
+	
+	
+	/**
 	 * Get the folder model belonging to this model if it supports it.
 	 * 
 	 * @return GO_Files_Model_Folder
@@ -2171,6 +2180,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$folder = GO_Files_Model_Folder::model()->findByPk($this->files_folder_id);
 			$folder->delete();
 		}
+			
+		
+		$this->_deleteLinks();
 
 		if(!$this->afterDelete())
 			return false;
@@ -2178,6 +2190,30 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$this->fireEvent('delete', array(&$this));
 		
 		return true;
+	}
+	
+	
+	private function _deleteLinks(){
+		//cleanup links
+		if($this->hasLinks()){
+			$stmt = GO_Base_Model_ModelType::model()->find();
+			while($modelType = $stmt->fetch()){
+
+				$model = GO::getModel($modelType->model_name);
+				if($model->hasLinks()){
+
+					$linksTable = "go_links_".$model->tableName();
+
+					$sql = "DELETE FROM $linksTable WHERE model_type_id=".intval($this->modelTypeId()).' AND model_id='.intval($this->pk);
+					$this->getDbConnection()->query($sql);
+
+					$linksTable = "go_links_".$this->tableName();
+
+					$sql = "DELETE FROM $linksTable WHERE id=".intval($this->pk);
+					$this->getDbConnection()->query($sql);			
+				}
+			}
+		}
 	}
 	
 	/**
@@ -2325,6 +2361,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	
 	public function link($model, $description='', $this_folder_id=0, $model_folder_id=0, $linkBack=true){
+		
+		if(!$this->hasLinks())
+			throw new Exception("Links not supported by ".$this->className ());
 		
 		if($this->_linkExists($model))
 			return true;

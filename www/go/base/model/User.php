@@ -97,6 +97,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function hasFiles(){
+		return false;
+	}
+	
+	public function hasLinks() {
 		return true;
 	}
 	
