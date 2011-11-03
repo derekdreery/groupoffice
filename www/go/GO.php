@@ -441,13 +441,14 @@ class GO{
 	 * @param String $name Name of the translation variable
 	 * @param String $module Name of the module to find the translation
 	 * @param String $basesection Only applies if module is set to 'base'
+	 * @param boolean $found Pass by reference to determine if the language variable was found in the language file.
 	 */
-	public static function t($name, $module='base', $basesection='common'){
+	public static function t($name, $module='base', $basesection='common', &$found=false){
 		if(!isset(self::$_language)){
 			self::$_language=new GO_Base_Language();
 		}
 		
-		return self::$_language->getTranslation($name, $module, $basesection);
+		return self::$_language->getTranslation($name, $module, $basesection, $found);
 	}
 
 	

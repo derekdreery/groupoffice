@@ -28,16 +28,31 @@ class GO_Base_Language{
 	 * @param String $name Name of the translation variable
 	 * @param String $module Name of the module to find the translation
 	 * @param String $basesection Only applies if module is set to 'base'
+	 * @param boolean $found Pass by reference to determine if the language variable was found in the language file.
 	 */
-	public function getTranslation($name, $module='base',$basesection='common'){
+	public function getTranslation($name, $module='base',$basesection='common', &$found=false){
 		
 		$this->_loadSection($module, $basesection);		
 		
 		if($module=='base'){
-			return isset($this->_lang[$module][$basesection][$name]) ? $this->_lang[$module][$basesection][$name] : $name;
+			if(isset($this->_lang[$module][$basesection][$name])){
+				$found=true;
+				return $this->_lang[$module][$basesection][$name];
+			}else
+			{
+				$found = false;
+				return $name;
+			}
 		}else
 		{
-			return isset($this->_lang[$module][$name]) ? $this->_lang[$module][$name] : $name;
+			if(isset($this->_lang[$module][$name])){
+				$found=true;
+				return $this->_lang[$module][$name];
+			}else
+			{
+				$found = false;
+				return $name;
+			}
 		}
 	}
 	
