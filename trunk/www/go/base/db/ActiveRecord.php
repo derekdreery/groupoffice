@@ -285,26 +285,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$prefix = strtolower(array_pop($classParts));
 
 			foreach($this->columns as $columnName=>$columnData){
-				switch($columnName){
-					case 'user_id':
-						$this->_attributeLabels[$columnName] = GO::t('strUser');
-						break;
-					
-					case 'ctime':
-						$this->_attributeLabels[$columnName] = GO::t('strCtime');
-						break;
-					
-					case 'mtime':
-						$this->_attributeLabels[$columnName] = GO::t('strMtime');
-						break;
-					
-					default:
-						$this->_attributeLabels[$columnName] = GO::t($prefix.ucfirst($columnName), $this->getModule());
-						break;
+				$this->_attributeLabels[$columnName] = GO::t($prefix.ucfirst($columnName), $this->getModule(),'',$found);
+				if(!$found) {
+						switch($columnName){
+							case 'user_id':
+								$this->_attributeLabels[$columnName] = GO::t('strUser');
+								break;
+
+							case 'ctime':
+								$this->_attributeLabels[$columnName] = GO::t('strCtime');
+								break;
+
+							case 'mtime':
+								$this->_attributeLabels[$columnName] = GO::t('strMtime');
+								break;
+							case 'name':
+								$this->_attributeLabels[$columnName] = GO::t('strName');
+								break;	
+						}
+					}				
 				}
-				
-				
-			}
 		}
 		return $this->_attributeLabels;
 	}
