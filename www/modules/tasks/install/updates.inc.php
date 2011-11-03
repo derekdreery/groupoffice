@@ -55,3 +55,5 @@ $updates["201110281135"][]="ALTER TABLE `ta_settings` CHANGE `default_tasklist_i
 
 $updates["201110281135"][]="ALTER TABLE `ta_tasks` CHANGE `files_folder_id` `files_folder_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201110281135"][]="ALTER TABLE `ta_tasks` CHANGE `category_id` `category_id` INT( 11 ) NOT NULL DEFAULT '0'";
+
+$updates["201111021035"][]="RENAME TABLE `su_visible_lists` TO `ta_portlet_tasklists`";

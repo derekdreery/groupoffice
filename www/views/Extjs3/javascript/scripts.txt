@@ -130,4 +130,5 @@ views/Extjs3/javascript/plupload/DataView-more.js
 views/Extjs3/javascript/plupload/plupload/js/plupload.full.js
 views/Extjs3/javascript/plupload/ext.ux.plupload.js
 
-
+views/Extjs3/javascript/windows/MultiSelectDialog.js
+views/Extjs3/javascript/windows/MultiSelectAddDialog.js

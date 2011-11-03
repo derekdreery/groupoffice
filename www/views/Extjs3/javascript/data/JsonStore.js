@@ -110,6 +110,15 @@ GO.data.JsonStore = function(config) {
 };
 
 Ext.extend(GO.data.JsonStore, Ext.data.JsonStore, {
-	loaded : false	
+	loaded : false	,
+	
+	reload : function(options){
+		
+		if(this.lastOptions.params && this.lastOptions.params.add){
+			delete this.lastOptions.params.add;
+		}
+		
+		GO.data.JsonStore.superclass.reload.call(this, options);
+	}
 });
 	
