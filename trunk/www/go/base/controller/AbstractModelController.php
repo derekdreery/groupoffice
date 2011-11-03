@@ -24,7 +24,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 	/**
 	 *
-	 * @var GO_Base_Db_ActiveRecord 
+	 * @var string 
 	 */
 	protected $model;
 	
@@ -631,6 +631,74 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$export->write($columnModel->formatModel($obj));
 		
 		$export->endFlush();
+	}
+	
+	
+	public function actionImport($params) {
+
+		$importFile = new GO_Base_Fs_CsvFile($params['file']);
+		$importFile->convertToUtf8();
+
+		$headers = $importFile->getRecord();
+		
+		//Map the field headers to the index in the record.
+		//eg. name=>2,user_id=>4, etc.
+		$attributeIndexMap = array();		
+		for ($i = 0, $m = count($headers); $i < $m; $i++) {
+			if(substr($headers[$i],0,3)=='cf\\'){				
+				$attributeIndexMap[$i] = $this->_resolveCustomField($headers[$i]);
+			}else
+			{
+				$attributeIndexMap[$i] = $headers[$i];
+			}
+		}
+		
+//		var_dump($attributeIndexMap);
+//		exit();
+						
+
+		while ($record = $importFile->getRecord()) {
+			$attributes = array();
+			foreach($attributeIndexMap as $index=>$attributeName){
+				$attributes[$attributeName]=$record[$index];
+			}
+			
+			$model = new $this->model;
+			
+			if($this->beforeImport($model, $attributes, $record)){			
+				$model->setAttributes($attributes, false);
+				$model->save();			
+			}
+		}
+	}
+	
+	protected function beforeImport(&$model, &$attributes, $record){
+		return true;
+	}
+	
+	private function _resolveCustomField($header){
+		$parts = explode('\\', $header);
+		
+		$categoryName = $parts[1];
+		$fieldName = $parts[2];
+		
+		$category = GO_Customfields_Model_Category::model()->findSingleByAttributes(array('extends_model'=>$this->model, 'name'=>$categoryName));
+		
+		if(!$category){
+			$category = new GO_Customfields_Model_Category();
+			$category->extends_model=$modelName;
+			$category->name=$categoryName;
+			$category->save();
+		}	
+		$field = GO_Customfields_Model_Field::model()->findSingleByAttributes(array('category_id'=>$category->id,'name'=>$fieldName));
+		if(!$field){
+			$field = new GO_Customfields_Model_Field();
+			$field->category_id=$category->id;
+			$field->name=$fieldName;
+			$field->save();
+		}
+		
+		return $field->columnName();
 	}
 }
 
