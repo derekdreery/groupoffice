@@ -498,23 +498,21 @@ try {
 			$permission_levels=array();
 
 			foreach($check_calendars as $calendar_id){
-
 				$calendar = $calendar_props[] = $cal->get_calendar($calendar_id);
+				if (!isset($response['permission_level']) || $response['permission_level']<GO_SECURITY::WRITE_PERMISSION) {
 
-				if(!isset($response['calendar_id'])){
 					$response['comment']=$calendar['comment'];
 					$response['calendar_id']=$calendar['id'];
 					$response['calendar_name']=$calendar['name'];
+
+					$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
+
+					$permission_levels[$calendar_id]=$response['permission_level'];
+
+					if($response['permission_level']>1){
+						$response['write_permission']=true;
+					}
 				}
-
-				$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
-
-				$permission_levels[$calendar_id]=$response['permission_level'];
-
-				if($response['permission_level']>1){
-					$response['write_permission']=true;
-				}
-
 				if($response['permission_level']) {
 					$calendars[]=$calendar_id;
 					$calendar_names[$calendar_id]=$calendar['name'];
