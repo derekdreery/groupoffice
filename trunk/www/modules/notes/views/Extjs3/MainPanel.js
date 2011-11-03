@@ -44,7 +44,7 @@ GO.notes.MainPanel = function(config){
 		if(records.length){
 			this.centerPanel.store.baseParams.notes_categories_filter = Ext.encode(categories);
 			this.centerPanel.store.reload();
-			delete this.centerPanel.store.baseParams.notes_categories_filter;
+			//delete this.centerPanel.store.baseParams.notes_categories_filter;
 		}
 	}, this);
 	

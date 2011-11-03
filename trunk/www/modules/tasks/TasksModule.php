@@ -42,22 +42,11 @@ class GO_Tasks_TasksModule extends GO_Base_Module{
 		return parent::loadSettings($settingsController, $params, $response);
 	}
 	
-//	public static function getDefaultTasksTasklist($userId){
-//		$tasklist = GO_Tasks_Model_Tasklist::model()->findSingleByAttribute('user_id', $userId);
-//		if (!$tasklist){
-//			$tasklist = new GO_Tasks_Model_Tasklist();
-//			
-//			$user = GO_Base_Model_User::model()->findByPk($userId);
-//			
-//			$tasklist->user_id=$user->id;
-//			$tasklist->name=$user->name;
-//			$tasklist->makeAttributeUnique('name');
-//			$tasklist->save();
-//			
-//			
-//		}
-//		
-//		return $tasklist;
-//	}
+	public static function deleteUser($user) {
+		
+		GO_Tasks_Model_PortletTasklist::model()->deleteByAttribute('user_id', $user->id);
+		
+		return parent::deleteUser($user);
+	}
 	
 }

@@ -37,9 +37,9 @@ GO.tasks.PortletSettings = function(config){
 	]
 	};
 	config.store = new GO.data.JsonStore({
-		url: GO.settings.modules.tasks.url+ 'json.php',
+		url: GO.url('tasks/portlet/selectedStore'),
 		baseParams: {
-			task: 'settings'
+			//task: 'settings'
 		},
 		root: 'results',
 		id: 'tasklist_id',

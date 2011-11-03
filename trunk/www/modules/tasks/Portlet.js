@@ -15,12 +15,13 @@ GO.tasks.SimpleTasksPanel = function(config)
 		});
 	
 		config.store = new Ext.data.GroupingStore({
-			url: GO.settings.modules.tasks.url+'json.php',
+//			url: GO.settings.modules.tasks.url+'json.php',
+			url: GO.url('tasks/portlet/portletGrid'),
 			baseParams: {
-				'task': 'tasks',
-				'user_id' : GO.settings.user_id,
-				'active_only' : true,
-				'portlet' : true
+//				'task': 'tasks',
+//				'user_id' : GO.settings.user_id,
+//				'active_only' : true,
+//				'portlet' : true
 			},
 			reader: reader,
 			sortInfo: {
@@ -151,57 +152,70 @@ GO.mainLayout.onReady(function(){
 			tools: [{
 				id: 'gear',
 				handler: function(){
-					if(!this.manageTasksWindow)
+					if(!this.selectTasklistsWin)
 					{
-						this.manageTasksWindow = new Ext.Window({
-							layout:'fit',
-							items:this.PortletSettings =  new GO.tasks.PortletSettings(),
-							width:700,
-							height:400,
-							title:GO.tasks.lang.visibleTasklists,
-							closeAction:'hide',
-							buttons:[{
-								text: GO.lang.cmdSave,
-								handler: function(){
-									var params={
-										'task' : 'save_portlet'
-									};
-									if(this.PortletSettings.store.loaded){
-										params['tasklists']=Ext.encode(this.PortletSettings.getGridData());
-									}
-									Ext.Ajax.request({
-										url: GO.settings.modules.tasks.url+'action.php',
-										params: params,
-										callback: function(options, success, response){
-											if(!success)
-											{
-												Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
-											}else
-											{
-												//var responseParams = Ext.decode(response.responseText);
-												this.PortletSettings.store.reload();
-												this.manageTasksWindow.hide();
-												
-												tasksGrid.store.reload();
-											}
-										},
-										scope:this
-									});
-								},
-								scope: this
-							}],
+						this.selectTasklistsWin = new GO.dialog.MultiSelectDialog({
+							url:'tasks/portlet',
+							cm:[{ header: GO.lang['strName'], dataIndex: 'name', sortable: true }],
+							fields:['id','name'],
+							model_id:GO.settings.user_id,
 							listeners:{
-								show: function(){
-									if(!this.PortletSettings.store.loaded)
-									{
-										this.PortletSettings.store.load();
-									}
+								hide:function(){
+									tasksGrid.store.reload();
 								},
 								scope:this
 							}
 						});
+						
+//						this.manageTasksWindow = new Ext.Window({
+//							layout:'fit',
+//							items:this.PortletSettings =  new GO.tasks.PortletSettings(),
+//							width:700,
+//							height:400,
+//							title:GO.tasks.lang.visibleTasklists,
+//							closeAction:'hide',
+//							buttons:[{
+//								text: GO.lang.cmdSave,
+//								handler: function(){
+//									var params={
+//										'task' : 'save_portlet'
+//									};
+//									if(this.PortletSettings.store.loaded){
+//										params['tasklists']=Ext.encode(this.PortletSettings.getGridData());
+//									}
+//									Ext.Ajax.request({
+//										url: GO.settings.modules.tasks.url+'action.php',
+//										params: params,
+//										callback: function(options, success, response){
+//											if(!success)
+//											{
+//												Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strRequestError']);
+//											}else
+//											{
+//												//var responseParams = Ext.decode(response.responseText);
+//												this.PortletSettings.store.reload();
+//												this.manageTasksWindow.hide();
+//												
+//												tasksGrid.store.reload();
+//											}
+//										},
+//										scope:this
+//									});
+//								},
+//								scope: this
+//							}],
+//							listeners:{
+//								show: function(){
+//									if(!this.PortletSettings.store.loaded)
+//									{
+//										this.PortletSettings.store.load();
+//									}
+//								},
+//								scope:this
+//							}
+//						});
 					}
-					this.manageTasksWindow.show();
+					this.selectTasklistsWin.show();
 				}
 			},{
 				id:'close',

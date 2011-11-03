@@ -12,9 +12,9 @@
  * The GO_Tasks_Controller_Task controller
  *
  * @package GO.modules.Tasks
- * @version $Id: GO_Tasks_Controller_Task.php 7607 2011-09-20 10:09:05Z <<USERNAME>> $
+ * @version $Id: TaskController.php 7607 2011-09-20 10:09:05Z wsmits $
  * @copyright Copyright Intermesh BV.
- * @author <<FIRST_NAME>> <<LAST_NAME>> <<EMAIL>>@intermesh.nl
+ * @author Wesley Smits <wsmits@intermesh.nl>
  */
 
 class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelController{
@@ -289,6 +289,6 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		
 		return $params;
 	}
-	
+
 }
 	
