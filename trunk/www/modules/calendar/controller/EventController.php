@@ -432,5 +432,17 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		return $response;
 	}
+	
+	
+	
+	public function actionAcceptInvitation($params){
+		
+		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
+		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
+		
+		
+	}
+	
+	
 
 }

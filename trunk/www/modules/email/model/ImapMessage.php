@@ -69,8 +69,18 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 
 		return $imap->save_to_file($this->uid, $path);
 	}
+	
+	/**
+	 *
+	 * @return GO_Base_Mail_Imap 
+	 */
+	private function _getImapConnection(){
+		return $this->account->openImapConnection($this->mailbox);
+	}
 
 	public function getBody() {
+		
+		$headers = $this->_getImapConnection()->get_message_header($uid, true);
 		
 	}
 	
