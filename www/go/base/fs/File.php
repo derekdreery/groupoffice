@@ -108,6 +108,10 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		}
 	}
 	
+	public function getContents(){
+		return file_get_contents($this->path());
+	}
+	
 	/**
 	 * Get the contents of this file.
 	 * 
@@ -281,5 +285,42 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		chmod($this->path, GO::config()->file_create_mode);
 		if(!empty(GO::config()->file_change_group))
 			chgrp($this->path, GO::config()->file_change_group);
+	}
+	
+	/**
+	 * Try to detect the encoding. See PHP manual mb_detect_encoding
+	 * 
+	 * @return string 
+	 */
+	public function detectEncoding(){
+		$enc = false;
+		if(function_exists('mb_detect_encoding'))
+		{
+			$enc = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,ISO-8859-15,EUC-JP,SJIS");
+		}
+		
+		return $enc;
+	}
+	
+	/**
+	 * Convert and clean the file to ensure it has valid UTF-8 data.
+	 * 
+	 * @return boolean 
+	 */
+	public function convertToUtf8(){
+		
+		if(!is_writable($this->path()))
+			return false;
+		
+		$enc = $this->detectEncoding();
+		if(!$enc)
+			$enc='UTF-8';
+		
+		$str = $this->getContents();
+		if(!$str){
+			return false;
+		}
+		
+		return $this->putContents(GO_Base_Util_String::clean_utf8($str, $enc));
 	}
 }
