@@ -132,3 +132,5 @@ views/Extjs3/javascript/plupload/ext.ux.plupload.js
 
 views/Extjs3/javascript/windows/MultiSelectDialog.js
 views/Extjs3/javascript/windows/MultiSelectAddDialog.js
+
+views/Extjs3/javascript/panels/Ext.ux.tot2ivn.VrTabPanel.js
