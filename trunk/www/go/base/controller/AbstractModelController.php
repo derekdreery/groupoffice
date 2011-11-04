@@ -299,12 +299,12 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
 			if(isset($params[$multiSelectProperties['requestParam']])){
 				$this->multiselectIds=json_decode($params[$multiSelectProperties['requestParam']], true);
-				//GO::config()->save_setting($multiSelectProperties['requestParam'], implode(',',$this->multiselectIds), GO::session()->values['user_id']);
+				GO::config()->save_setting('ms_'.$multiSelectProperties['requestParam'], implode(',',$this->multiselectIds), GO::session()->values['user_id']);
 			}else
-			{
-				//$this->multiselectIds = GO::config()->get_setting($multiSelectProperties['requestParam'], GO::session()->values['user_id']);
-				//$this->multiselectIds  = $this->multiselectIds ? explode(',',$this->multiselectIds) : array();
-				$this->multiselectIds=array();
+			{			
+				$this->multiselectIds = GO::config()->get_setting('ms_'.$multiSelectProperties['requestParam'], GO::session()->values['user_id']);
+				$this->multiselectIds  = $this->multiselectIds ? explode(',',$this->multiselectIds) : array();
+				//$this->multiselectIds=array();
 			}
 		
 			
