@@ -1850,4 +1850,64 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 }
 
 
+/* VrTabPanel CSS for Blue theme */
+
+/* Left Panel background */
+.x-tot2ivn-vr-tab-panel {		
+	/* background: #BFCED2;	*/
+	background: url("images/extjs/toolbar/bg.gif") repeat-x scroll left top #EBF0F2 !important;
+	border-color: #99BBE8 !important;
+}
+
+/* Left Panel */
+.x-tot2ivn-vr-tab-panel-header {
+	float: left;	
+}
+
+.x-tot2ivn-vr-tab-panel .x-tot2ivn-vr-tab-strip-spacer { visibility: hidden; }
+.x-tot2ivn-vr-tab-panel ul.x-tot2ivn-vr-tab-strip-top { border-bottom: 0; }
+
+.x-tot2ivn-vr-tab-strip-wrap{
+/*	border-bottom: 1px solid #aac3e5;*/
+}
+
+/* Right Body Panel */
+.x-tot2ivn-vr-tab-panel-bwrap {
+/*	border-left: 1px solid #99BBE8;*/
+	float: right;
+	background: #fff;	
+}
+
+/* Menu Items */
+.x-tot2ivn-vr-tab-panel li.x-tot2ivn-vr-tab-strip-title {
+	display: inline-block;
+	float: left;
+	width: 100%;
+	overflow: hidden;
+	white-space: nowrap;		
+}
+
+.x-tab-strip span.x-tot2ivn-vr-tab-strip-text,
+/* Active Items. Adjust tab padding in here !! */
+.x-tab-strip-active .x-tab-right span.x-tot2ivn-vr-tab-strip-text{
+	padding-top: 7px !important;
+	padding-bottom: 7px !important;	
+}
+
+
+.x-tot2ivn-vr-tab-panel-body .x-panel-body{
+	border-left: 1px #C0C0C0 solid !important;
+}
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top {padding-top:0px !important;}
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-right{background: none;}
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-left{background: none;}
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-strip-inner{background: none;}
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tot2ivn-vr-tab-strip-title {margin:0px!important; background:#666666; border-top:1px solid #D1D1D1; color:#D1D1D1;}
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tot2ivn-vr-tab-strip-title span.x-tab-strip-text {color:#D1D1D1;}
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-strip-active {background: url("images/extjs/toolbar/bg.gif") repeat-x scroll left top #EBF0F2 !important;}
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-strip-active span.x-tab-strip-text {color:#fff;}
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-strip-over span.x-tab-strip-text {color:#fff;}
+/*.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-right{background:transparent url(images/extjs/tabs/tabs-sprite.gif) no-repeat 0 -51px;}
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-left{background:transparent url(images/extjs/tabs/tabs-sprite.gif) no-repeat right -351px;}
+.x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-strip-inner{background:transparent url(images/extjs/tabs/tabs-sprite.gif) repeat-x 0 -201px;}*/
 
