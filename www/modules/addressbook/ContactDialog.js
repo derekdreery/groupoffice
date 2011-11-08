@@ -325,11 +325,6 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 	loadContact : function(id, config)
 	{
 		this.formPanel.form.load({
-//			url: GO.settings.modules.addressbook.url+ 'json.php', 
-//			params: {
-//				contact_id: id,
-//				task: 'load_contact'
-//			},
 			url:GO.url('addressbook/contact/load'),
 			params:{
 				id:id,
@@ -367,7 +362,6 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 		var company = this.personalPanel.formCompany.getRawValue();
 
 		this.formPanel.form.submit({
-			//url:GO.settings.modules.addressbook.url+ 'action.php',
 			waitMsg:GO.lang['waitMsgSave'],
 			url:GO.url('addressbook/contact/submit'),			
 			params:

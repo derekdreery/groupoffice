@@ -160,16 +160,19 @@ GO.addressbook.MainPanel = function(config)
 	{
 		var books = Ext.encode(abooks);
 		var panel = this.tabPanel.getActiveTab();
+		
+		this.companiesGrid.store.baseParams.books = books;
+		this.contactsGrid.store.baseParams.books = books;
+			
 		if(panel.id=='ab-contacts-grid')
 		{
-			this.contactsGrid.store.baseParams.books = books;
 			this.contactsGrid.store.load();
-			delete this.contactsGrid.store.baseParams.books;
+			//delete this.contactsGrid.store.baseParams.books;
 		}else
 		{
-			this.companiesGrid.store.baseParams.books = books;
+			
 			this.companiesGrid.store.load();
-			delete this.companiesGrid.store.baseParams.books;
+			//delete this.companiesGrid.store.baseParams.books;
 		}
 
 		if(records.length)
@@ -229,18 +232,18 @@ GO.addressbook.MainPanel = function(config)
 			allowNoSelection:true
 		});
 
-		this.mailingsFilterPanel.on('change', function(grid, mailings_filter){
+		this.mailingsFilterPanel.on('change', function(grid, addresslist_filter){
 			var panel = this.tabPanel.getActiveTab();
 			if(panel.id=='ab-contacts-grid')
 			{
-				this.contactsGrid.store.baseParams.mailings_filter = Ext.encode(mailings_filter);
+				this.contactsGrid.store.baseParams.addresslist_filter = Ext.encode(addresslist_filter);
 				this.contactsGrid.store.load();
-				delete this.contactsGrid.store.baseParams.mailings_filter;
+				//delete this.contactsGrid.store.baseParams.addresslist_filter;
 			}else
 			{
-				this.companiesGrid.store.baseParams.mailings_filter = Ext.encode(mailings_filter);
+				this.companiesGrid.store.baseParams.addresslist_filter = Ext.encode(addresslist_filter);
 				this.companiesGrid.store.load();
-				delete this.companiesGrid.store.baseParams.mailings_filter;
+				//delete this.companiesGrid.store.baseParams.addresslist_filter;
 			}
 		}, this);
 
@@ -474,30 +477,27 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 
 	init : function(){
 		this.getEl().mask(GO.lang.waitMsgLoad);
-		Ext.Ajax.request({
-			url: GO.settings.modules.addressbook.url+'json.php',
+		GO.request({
+			maskEl:this.getEl(),
+			url: "core/multiRequest",
 			params:{
-				task:'init'
+				requests:Ext.encode({
+//					contacts:{r:"addressbook/contact/store"},
+//					companies:{r:"addressbook/company/store"},
+					addressbooks:{r:"addressbook/addressbook/store"},
+					writable_addresslists:{r:"addressbook/addresslist/store",permissionLevel: GO.permissionLevels.write},
+					readable_addresslists:{r:"addressbook/addresslist/store",permissionLevel: GO.permissionLevels.read}
+				})
 			},
-			callback: function(options, success, response)
+			success: function(options, response, result)
 			{
-
-				if(!success)
+				GO.addressbook.readableAddressbooksStore.loadData(result.addressbooks);
+				if(GO.mailings)
 				{
-					alert( GO.lang['strRequestError']);
-				}else
-				{
-					var jsonData = Ext.decode(response.responseText);
-
-					GO.addressbook.readableAddressbooksStore.loadData(jsonData.addressbooks);
-					if(GO.mailings)
-					{
-						GO.addressbook.readableAddresslistsStore.loadData(jsonData.readable_addresslists);
-						GO.addressbook.writableAddresslistsStore.loadData(jsonData.writable_addresslists);
-					}
-
-					this.getEl().unmask();
+					GO.addressbook.readableAddresslistsStore.loadData(result.readable_addresslists);
+					GO.addressbook.writableAddresslistsStore.loadData(result.writable_addresslists);
 				}
+				this.getEl().unmask();
 			},
 			scope:this
 		});

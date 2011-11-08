@@ -178,10 +178,9 @@ GO.addressbook.ContactsGrid = function(config){
 		GO.customfields.addColumns(2, fields);
 	}
 	config.store = new GO.data.JsonStore({
-		url: GO.settings.modules.addressbook.url+ 'json.php',
+		url: GO.url('addressbook/contact/store'),
 		baseParams: {
-			task: 'contacts',
-			enable_mailings_filter:true
+			enable_addresslist_filter:true
 		},
 		root: 'results',
 		id: 'id',
