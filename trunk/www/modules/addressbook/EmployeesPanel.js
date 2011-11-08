@@ -6,11 +6,11 @@ GO.addressbook.EmployeesPanel = function(config)
 		}
 	
 		config.store = new Ext.data.JsonStore({
-			url: GO.settings.modules.addressbook.url+ 'json.php',
+			url: GO.url('addressbook/contact/employees'),
 			baseParams:
 			{
-				company_id: this.company_id,
-				task: 'load_employees'
+				company_id: this.company_id
+//				,task: 'load_employees'
 			},
 			id:'id',
 			root: 'results',
@@ -20,7 +20,7 @@ GO.addressbook.EmployeesPanel = function(config)
 			},
 
 			{
-				name:'name'
+				name:'addressbook_name'
 			},
 
 			{

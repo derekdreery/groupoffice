@@ -149,29 +149,100 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return parent::formatColumns($columnModel);
 	}
 	
-//	protected function getStoreMultiSelectProperties(){
-//		return array(
-//				'requestParam'=>'notes_categories_filter',
-//				'permissionsModel'=>'GO_Notes_Model_Category',
-//				'titleAttribute'=>'name'
-//				);
-//	}	
-//	
-//	protected function getStoreParams($params){
-//		return array(
-//				'ignoreAcl'=>true,
-//				'joinCustomFields'=>true,
-//				'by'=>array(array('category_id', $this->multiselectIds, 'IN'))
-//		);
-//	}
-//  
-//  protected function prepareStore(GO_Base_Data_Store $store){		
-//    $store->formatColumn('user_name','$model->user->name');
-//    return $store;
-//  }
-//	
-//	protected function remoteComboFields(){
-//		return array('category_id'=>'$model->category->name');
-//	}
+	protected function getStoreMultiSelectProperties(){
+		return array(
+			'requestParam'=>'books',
+			'permissionsModel'=>'GO_Addressbook_Model_Addressbook'
+			//'titleAttribute'=>'name'
+		);
+	}	
+	
+	protected function getStoreParams($params) {
+		$storeParams = GO_Base_Db_FindParams::newInstance()
+			->criteria(GO_Base_Db_FindCriteria::newInstance()
+				->addModel(GO_Addressbook_Model_Contact::model(),'t')
+				->addInCondition('addressbook_id', $this->multiselectIds))
+			->select('t.*t, ab.name AS addressbook_name')
+			->joinModel(array(
+				'model'=>'GO_Addressbook_Model_Addressbook',					
+				'localField'=>'addressbook_id',
+				'tableAlias'=>'ab' //Optional table alias
+			));	
+
+		//if(empty($params['enable_addresslist_filter'])){
+			if(isset($params['addresslist_filter']))
+			{
+				$addresslist_filter = json_decode($params['addresslist_filter'],true);
+				if (!empty($addresslist_filter)) {
+					$storeParams->join(GO_Addressbook_Model_AddresslistContact::model()->tableName(),
+							GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.contact_id', '=', 't', true, true),
+							'ac'
+						)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter,'ac');
+				}
+				GO::config()->save_setting('ms_addresslist_filter', implode(',',$addresslist_filter), GO::user()->id);
+			}
+			elseif ($addresslist_filter = GO::config()->get_setting('ms_addresslist_filter', GO::user()->id))
+			{	
+				$addresslist_filter = empty($addresslist_filter) ? array() : explode(',', $addresslist_filter);
+				$storeParams->join(GO_Addressbook_Model_AddresslistContact::model()->tableName(),
+						GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.contact_id', '=', 't', true, true),
+						'ac'
+					)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter,'ac');
+			}
+		//}
+		return $storeParams;
+		
+	}
+	
+	function actionEmployees($params) {
+		$result['success'] = false;
+		$company = GO_Addressbook_Model_Company::model()->findByPk($params['company_id']);
+		if(GO_Base_Model_Acl::getUserPermissionLevel($company->getAcl()->id,GO::user()->id)<GO_Base_Model_Acl::WRITE_PERMISSION)
+			throw new GO_Base_Exception_AccessDenied();
+		if(isset($params['delete_keys']))
+		{
+			$response['deleteSuccess'] = true;
+			try{
+				$delete_contacts = json_decode(($params['delete_keys']));
+
+				foreach($delete_contacts as $id)
+				{
+					$contact = GO_Addressbook_Model_Contact::model()->findByPk($id);
+					$contact->setAttributes(array('id'=>$id,'company_id'=>0));
+					$contact->save();
+				}
+			}
+			catch (Exception $e)
+			{
+				$response['deleteFeedback'] = $strDeleteError;
+				$response['deleteSuccess'] = false;
+			}
+		}
+
+		if(isset($params['add_contacts']))
+		{
+			$add_contacts = json_decode(($params['add_contacts']));
+
+			foreach($add_contacts as $id)
+			{
+				$contact = GO_Addressbook_Model_Contact::model()->findByPk($id);
+				$contact->setAttributes(array('id'=>$id,'company_id'=>$params['company_id']));
+				$contact->save();
+			}			
+		}
+
+		$params['field'] = isset($params['field']) ? ($params['field']) : 'addressbook_name';
+
+		$store = new GO_Base_Data_Store($this->getStoreColumnModel());	
+
+		$this->prepareStore($store);
+		
+		$response['success']=true;
+		
+		$storeParams = $store->getDefaultParams()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('company_id',$params['company_id']))
+						->mergeWith($this->getStoreParams($params));
+		$store->setStatement(call_user_func(array('GO_Addressbook_Model_Contact','model'))->find($storeParams));
+		return array_merge($response, $store->getData());
+	}
 }
 

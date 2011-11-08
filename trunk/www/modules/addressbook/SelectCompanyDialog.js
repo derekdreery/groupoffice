@@ -45,7 +45,7 @@ GO.addressbook.SelectCompanyDialog = function(config){
 
 	this.addressbooksGrid.getSelectionModel().on('rowselect', function(sm, rowIndex, r){
 		var record = this.addressbooksGrid.getStore().getAt(rowIndex);
-		this.grid.store.baseParams.addressbook_id=record.get("id");
+		this.grid.store.baseParams.books='["'+record.get("id")+'"]';
 		this.grid.store.load();
 	}, this);
 
