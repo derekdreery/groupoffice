@@ -60,7 +60,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
    * This relation type is used when this model has many related models.
    * The relation makes use of a linked table that has a combined key of the related model and this model.
    * 
-   * Example use in the model class relationship array: 'users' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'group_id', 'linksTable' => 'go_users_groups', 'remoteField'=>'user_id'),
+   * Example use in the model class relationship array: 'users' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'linkModel'=>'GO_Base_Model_UserGroups', 'field'=>'group_id', 'linksTable' => 'go_users_groups', 'remoteField'=>'user_id'),
    * 
    */
   const MANY_MANY=4;	// n:n
