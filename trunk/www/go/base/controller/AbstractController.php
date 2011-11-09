@@ -60,7 +60,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	
 	public function __construct() {
 		$this->checkSecurityToken();
-		$this->checkPermission();
+	//	$this->checkPermission();
 		$this->init();
 	}
 	
@@ -68,19 +68,6 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		
 	}
 	
-	protected function checkPermission(){
-		if(!GO::user())
-			throw new GO_Base_Exception_AccessDenied();
-
-		
-		//getting the module will effectively check read permissions on the module because findByPk does that.
-		$module = $this->getModule();
-		
-		if($module && !$module->permissionLevel){
-			throw new GO_Base_Exception_AccessDenied();
-		}
-							
-	}
 	
 	/**
 	 * Checks a token that is generated for each session.
@@ -151,32 +138,50 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 //	}
 //	
 //	
-//	/**
-//	 * Adds a permission check on an acl ID.
-//	 * 
-//	 * @param int $aclId
-//	 * @param int $requiredPermissionLevel See GO_SECURITY constants
-//	 * @param string $action By default it applies to all actions but you may specify a specific action here.
-//	 */
-//	protected function addPermissionCheck($aclId, $requiredPermissionLevel, $action='*'){
-//		$this->requiredPermissionLevels[$action]=array('aclId'=>$aclId, 'requiredPermissionLevel'=>$requiredPermissionLevel);
-//	}
-//	/**
-//	 * Checks 
-//	 * 
-//	 * @param type $action
-//	 * @return type boolean
-//	 */
-//	public function checkPermissions($action){
-//		if(isset($this->requiredPermissionLevels[$action])){
-//			return true;// $GLOBALS['GO_SECURITY']->hasPermission($this->requiredPermissionLevels[$action]['aclId'])>=$this->requiredPermissionLevels[$action]['requiredPermissionLevel'];
-//		}elseif($action!='*'){
-//			return $this->checkPermissions('*');
-//		}else
-//		{
-//			return true;
-//		}
-//	}
+	/**
+	 * Adds a permission check on an acl ID for specific controller actions.
+	 * 
+	 * Note: In most cases this is not necessary because model's have ACL's in 
+	 * most cases which are checked automatically.
+	 * 
+	 * @param int $aclId
+	 * @param int $requiredPermissionLevel See GO_SECURITY constants
+	 * @param string $action By default it applies to all actions but you may specify a specific action here.
+	 */
+	protected function addPermissionCheck($aclId, $requiredPermissionLevel, $action='*'){
+		if(!is_array($action))
+			$action = array($action);
+		
+		foreach($action as $a)
+			$this->requiredPermissionLevels[$a]=array('aclId'=>$aclId, 'requiredPermissionLevel'=>$requiredPermissionLevel);
+	}
+	/**
+	 * Checks if a user is logged in, if the user has permission to the module and if the user has access to a specific action.
+	 * 
+	 * @param string $action
+	 * @return boolean boolean
+	 */
+	protected function checkPermission($action){
+
+		//check for logged in user
+		if(!GO::user())
+			return false;
+			
+		//check module permission
+		$module = $this->getModule();		
+		if($module && !$module->permissionLevel)
+			return false;
+		
+		//check action permission
+		if(isset($this->requiredPermissionLevels[$action])){
+			return GO_Base_Model_Acl::getUserPermissionLevel($this->requiredPermissionLevels[$action]['aclId'])>=$this->requiredPermissionLevels[$action]['requiredPermissionLevel'];
+		}elseif($action!='*'){
+			return $this->checkPermission('*');
+		}else
+		{
+			return true;
+		}
+	}
 	
 	/**
 	 * Runs a method of this controller. If $action is save then it will run
@@ -187,9 +192,9 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	public function run($action='', $params){
 
 		try {
-//			if(!$this->checkPermissions($action)){
-//				throw new AccessDeniedException();
-//			}
+			if(!$this->checkPermission($action)){
+				throw new GO_Base_Exception_AccessDenied();
+			}
 
 			if(empty($action))
 				$action=$this->defaultAction;

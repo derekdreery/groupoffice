@@ -14,7 +14,7 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 
 	protected $defaultAction = 'Init';
 	
-	protected function checkPermission() {
+	protected function checkPermission($action='*') {
 		return true;
 	}
 
