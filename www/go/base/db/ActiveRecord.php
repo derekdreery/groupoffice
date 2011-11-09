@@ -2776,6 +2776,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function addManyMany($relationName, $foreignPk, $extraAttributes=array()){
 		
+		if(empty($foreignPk))
+			return false;
+		
 		if(!$this->hasManyMany($relationName, $foreignPk)){
 			
 			$r = $this->_getRelation($relationName);
