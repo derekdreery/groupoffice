@@ -26,3 +26,6 @@ modules/addressbook/SelectAddresslistsPanel.js
 
 modules/addressbook/GlobalSettings.js
 modules/addressbook/ContextMenu.js
+modules/addressbook/TemplatesGrid.js
+modules/addressbook/EmailTemplateDialog.js
+modules/addressbook/WilmarDialog.js
