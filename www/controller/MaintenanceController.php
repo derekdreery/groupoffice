@@ -1,5 +1,14 @@
 <?php
+/**
+ * WARNING: This controller does not check authentication!
+ * 
+ * Controller with some maintenance functions
+ */
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
+	
+	protected function checkPermission($action) {
+		return true;
+	}
 
 	protected function init() {
 		
