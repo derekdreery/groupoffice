@@ -8,7 +8,7 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 		
 		return GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl()	
-						->order('mtime','DESC')
+						->order('id','DESC')
 						->criteria(
 										GO_Base_Db_FindCriteria::newInstance()
 											->addCondition('model_id', $params['model_id'])
@@ -32,7 +32,8 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 	
 	protected function beforeStore(&$response, &$params, &$store) {
 		
-		$model = GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$params['model_id'], 'model_type_id'=>GO_Base_Model_ModelType::model()->findByModelName($params['model_name'])));
+		$model = GO::getModel($params['model_name'])->findByPk($params['model_id']);
+		////GO_Base_Model_SearchCacheRecord::model()->findByPk(array('model_id'=>$params['model_id'], 'model_type_id'=>GO_Base_Model_ModelType::model()->findByModelName($params['model_name'])));
 
 		$response['permisson_level']=$model->permissionLevel;
 		$response['write_permission']=$model->permissionLevel>  GO_Base_Model_Acl::WRITE_PERMISSION;
