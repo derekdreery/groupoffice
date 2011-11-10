@@ -391,7 +391,7 @@ class email extends db {
 
 				$GO_LINKS->add_link($link['link_id'], $link['link_type'], $link_message['link_id'], 9,$to_folder_id,0, $link_description, $link_description);
 			}else {
-				$imap->disconnect();
+				//$imap->disconnect();
 				throw new Exception('Cached record not found!');
 			}
 		}	
