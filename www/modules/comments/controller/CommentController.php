@@ -7,7 +7,8 @@ class GO_Comments_Controller_Comment extends GO_Base_Controller_AbstractModelCon
 	protected function getStoreParams($params){
 		
 		return GO_Base_Db_FindParams::newInstance()
-						->ignoreAcl()						
+						->ignoreAcl()	
+						->order('mtime','DESC')
 						->criteria(
 										GO_Base_Db_FindCriteria::newInstance()
 											->addCondition('model_id', $params['model_id'])
