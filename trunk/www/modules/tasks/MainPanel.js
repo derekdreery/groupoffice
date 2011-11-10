@@ -16,12 +16,19 @@ GO.tasks.MainPanel = function(config){
 		fields:['id','name','checked']
 	});
 
+	this.gridPanel = new GO.tasks.TasksPanel( {		
+		id:'ta-tasks-grid',
+		loadMask:true,
+		region:'center'
+	});
+	
 	this.taskListsPanel = new GO.tasks.TaskListsGrid({
-		id:'ta-tasksgrid',
+		id:'ta-taskslists',
 		region:'center',
 		loadMask:true,
 		store: this.taskListsStore,
-		title: GO.tasks.lang.tasklists		
+		title: GO.tasks.lang.tasklists,	
+		relatedStore: this.gridPanel.store
 	});
 
 	this.taskListsPanel.on('drop', function(type)
@@ -31,8 +38,8 @@ GO.tasks.MainPanel = function(config){
 
 	this.taskListsPanel.on('change', function(grid, tasklists, records)
 	{                		                
-		this.gridPanel.store.baseParams.tasks_tasklist_filter = Ext.encode(tasklists);
-		this.gridPanel.store.load();
+//		this.gridPanel.store.baseParams.tasks_tasklist_filter = Ext.encode(tasklists);
+//		this.gridPanel.store.load();
 		this.tasklist_ids = tasklists;
 
 		if(records.length)
@@ -119,11 +126,7 @@ GO.tasks.MainPanel = function(config){
 		region:'north'
 	});
 
-	this.gridPanel = new GO.tasks.TasksPanel( {		
-		id:'ta-tasks-grid',
-		loadMask:true,
-		region:'center'
-	});
+	
 			
 	this.gridPanel.on("delayedrowselect",function(grid, rowIndex, r){
 		this.taskPanel.load(r.data.id);
