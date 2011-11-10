@@ -24,13 +24,10 @@ GO.addressbook.ManageDialog = function(config)
 			this.addressbooksGrid			
 		];
 		
-	if(GO.mailings)
-	{
-		this.templatesGrid = new GO.mailings.TemplatesGrid();
-		this.mailingsGrid = new GO.mailings.MailingsGrid();
-		items.push(this.templatesGrid);
-		items.push(this.mailingsGrid);
-	}
+	this.templatesGrid = new GO.addressbook.TemplatesGrid();
+	this.mailingsGrid = new GO.mailings.MailingsGrid();
+	items.push(this.templatesGrid);
+	items.push(this.mailingsGrid);
 
 	if(GO.settings.has_admin_permission)
 	{
