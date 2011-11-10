@@ -74,12 +74,16 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 		return $this->_attachments;
 	}
 	
-	public function getBody(){
+	public function getHtmlBody(){
 		return $this->_loadedBody;
 	}
 	
+	public function getTextBody(){
+		
+	}
+	
 	protected function getAttachmentUrl($attachment) {
-		return GO::url('core/downloadTempFile', 'path='.urlencode($attachment['tmp_file']));
+		return GO::url('core/downloadTempFile', array('path',$attachment['tmp_file']));
 	}
 
 	private function _getParts($structure, $part_number_prefix='') {

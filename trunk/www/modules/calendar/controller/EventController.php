@@ -440,7 +440,47 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
 		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
 		
+		//$response = $message->toOutputArray();
+		//var_dump($response);
 		
+		$attachments = $message->getAttachments();
+		
+		foreach($attachments as $attachment){
+			if($attachment['mime']=='text/calendar'){
+				$data = $message->getImapConnection()->get_message_part_decoded($message->uid, $attachment['number'], $attachment['encoding']);
+				
+				//require vendor lib SabreDav vobject
+				require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
+				
+				$vcalendar = Sabre_VObject_Reader::read($data);
+				
+				$vevent = $vcalendar->vevent[0];
+				
+				//var_dump($vobject);
+				
+				$attendee = $vevent->attendee;
+				
+				$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+								->addCondition('calendar_id', 'c.id','=','t',true, true)
+								->addCondition('user_id', GO::user()->id);
+				
+				$whereCriteria = GO_Base_Db_FindCriteria::newInstance()												
+												->addCondition($vevent->uuid, 'uuid');
+				
+				//todo exception date
+				
+				$params = GO_Base_Db_FindParams::newInstance()
+								->ignoreAcl()
+								->single()
+								->join(GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c')
+								->criteria($whereCriteria);
+				
+				GO_Calendar_Model_Event::model()->find($params);				
+				
+				var_dump($attendee);
+								
+			}
+		}
 	}
 	
 	
