@@ -455,7 +455,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		{
 			$folder->delete();
 			if($mustExist || $model->acl_id)
-				return $this->createNewModelFolder($model);
+				return $this->_createNewModelFolder($model);
 			else
 				return 0;
 		}
