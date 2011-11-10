@@ -5,34 +5,56 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 	private $_attachments=array();
 	private $_tmpDir;
 	/**
-	 * Returns a static model of itself
+	 * Returns the static model of the specified AR class.
+	 * Every child of this class must override it.
 	 * 
-	 * @param String $className
-	 * @return GO_Email_Model_SavedMessage
+	 * @return GO_Base_Model the static model class
 	 */
-	public static function model($className=__CLASS__) {
+	public static function model($className=__CLASS__)
+	{		
 		return parent::model($className);
 	}
-	
-	public function getFromMimeFile($path){
-		$m = new GO_Email_Model_SavedMessage();
-		$m->_loadMimeFromPath($path);
+
+	/**
+	 * Get a model instance loaded from  MIME data string.
+	 * 
+	 * @param string $mimeData MIME data string
+	 * @return GO_Email_Model_SavedMessage 
+	 */
+	public function createFromMimeData($mimeData) {
+		$m = new GO_Email_Model_SavedMessage();		
+		$m->setMimeData($mimeData);
 		return $m;
 	}
 
-	
-	public function _loadMimeFromPath($path){
+	/**
+	 * Reads a MIME file and creates a SavedMessage model from it.
+	 * 
+	 * @param string $path Where the MIME file is stored
+	 * @return GO_Email_Model_SavedMessage
+	 */
+	public function createFromMimeFile($path) {
 		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.$path);
-	
 		$mimeData = $file->contents();
 		
-		$attributes['path']=$path;
+		return $this->createFromMimeData($mimeData);
+	}
+	
+	/**
+	 * Reads MIME data and creates a SavedMessage model from it.
+	 * @param string $mimeData The MIME data string.
+	 * @return GO_Email_Model_SavedMessage 
+	 */
+	public function setMimeData($mimeData) {
+	
+//		if (!empty($path))
+//			$attributes['path'] = $path;
 		
 		$decoder = new GO_Base_Mail_MimeDecode($mimeData);
 		$structure = $decoder->decode(array(
 				'include_bodies' => true,
 				'decode_headers' => true,
-				'decode_bodies' => true,
+				'decode_bodies' => true
 						));
 
 		if (!$structure)
@@ -52,7 +74,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 		$attributes['cc'] = isset($structure->headers['cc']) && strpos($structure->headers['cc'], 'undisclosed') === false ? $structure->headers['cc'] : '';
 		$attributes['bcc'] = isset($structure->headers['bcc']) && strpos($structure->headers['bcc'], 'undisclosed') === false ? $structure->headers['bcc'] : '';		
 		$attributes['from'] = isset($structure->headers['from']) ? $structure->headers['from'] : '';
-
+		
 		
 		$attributes['date']=isset($structure->headers['date']) ? $structure->headers['date'] : date('c');		
 		$attributes['udate']=strtotime($attributes['date']);
@@ -60,7 +82,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 		
 		$this->setAttributes($attributes);
 		
-		$this->_tmpDir=GO::config()->tmpdir.'saved_messages/'.str_replace('/','_',$path).'/';
+		$this->_tmpDir=GO::config()->tmpdir.'saved_messages/'.uniqid(time()).'/';
 		if(!is_dir($this->_tmpDir))
 			mkdir($this->_tmpDir, 0755, true);
 
@@ -70,16 +92,20 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 		$this->_loadedBody=GO_Base_Util_String::sanitizeHtml($this->_loadedBody);
 	}
 	
-	public function getAttachments(){
-		return $this->_attachments;
-	}
-	
 	public function getHtmlBody(){
 		return $this->_loadedBody;
 	}
 	
-	public function getTextBody(){
-		
+	public function getPlainBody() {
+		return "";
+	}
+	
+	public function getSource(){
+		return '';
+	}
+	
+	public function getAttachments(){
+		return $this->_attachments;
 	}
 	
 	protected function getAttachmentUrl($attachment) {

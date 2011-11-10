@@ -287,4 +287,43 @@ class GO_Base_Mail_Message extends Swift_Message{
 		}
 		return false;
 	}
+	
+	/**
+	 * handleEmailFormInput
+	 * 
+	 * Author: Wilmar van Beusekom (wilmar@intermesh.nl)
+	 * This method can be used in Models and Controllers. It puts the email body
+	 * and inline (image) attachments from the client in the message, which can
+	 * then be used for storage in the database or sending emails.
+	 * @param String $body The email body text as given by the client.
+	 * @param String $inlineAttachments The JSON encoded array of inline
+	 * (image) attachments (therefore a string)
+	 */
+	public function handleEmailFormInput($body,$inlineAttachments){
+		$this->setHtmlAlternateBody($params['body']);
+		if(!empty($inlineAttachments)) {
+			$inlineAttachments = json_decode($inlineAttachments);
+			/**
+			 * TODO foreach inline attachment: if its url is not in an image in the
+			 * body, remove it from the inlineAttachments
+			 */
+			foreach ($inlineAttachments as $ia) {
+				var_dump($ia);
+//				if(file_exists($tmp_name)) {
+//					//Browsers reformat URL's so a pattern match
+//					$just_filename = utf8_basename($ia['url']);
+//					if(preg_match('/="([^"]*'.preg_quote($just_filename).')"/',$body,$matches)){
+//						//go_debug($matches);
+//						$img = Swift_EmbeddedFile::fromPath($tmp_name);
+//						$img->setContentType(File::get_mime($tmp_name));
+//						$src_id = $swift->message->embed($img);
+//
+//						//Browsers reformat URL's so a pattern match
+//						$body = str_replace($matches[1], $src_id, $body);
+//					}
+//				}
+			}
+			exit();
+		}
+	}
 }

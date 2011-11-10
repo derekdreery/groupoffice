@@ -206,7 +206,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 			}
 
 			if(empty($this->_htmlBody) && !$asText){
-				$this->_htmlBody = $this->getTextBody(true);			
+				$this->_htmlBody = $this->getPlainBody(true);			
 			}
 		}
 		
@@ -218,7 +218,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 		return $this->_htmlBody;
 	}
 	
-	public function getTextBody($asHtml=false){
+	public function getPlainBody($asHtml=false){
 		
 		if(!isset($this->_plainBody)){
 			//$imap = $this->getImapConnection();		

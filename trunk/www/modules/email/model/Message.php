@@ -97,24 +97,41 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$this->_attributes['reply_to'] = new GO_Base_Mail_EmailRecipients($this->_attributes['reply_to']);
 	}
 
-	public function getHtmlBody() {
-		return '';
-	}
-
-	public function getSource() {
-		return '';
-	}
+	/**
+	 * Get the body in HTML format. If no HTML body was found the text version will
+	 * be converted to HTML.
+	 * 
+	 * @return string 
+	 */
+	abstract public function getHtmlBody();
+	
+	/**
+	 * Get the body in plain text format. If no plain text body was found the HTML version will
+	 * be converted to plain text.
+	 * 
+	 * @return string 
+	 */
+	abstract public function getPlainBody();
+		
+	/**
+	 * Return the raw MIME source as string
+	 * 
+	 * @return string
+	 */
+	abstract public function getSource();
 
 	/**
-	 *
+	 * Get an array of attachments in this message.
+	 * 
 	 * @return array
 	 * 
+	 * The array is formatted like this:
 	 * 
 	 * indexed by $a['number']
 	 * 
 	 * $a['url']='';
 	 *  $a['name']=$filename;
-			$a['number']=$part_number_prefix.$part_number;
+			$a['number']="2";
 			$a['content_id']=$content_id;
 			$a['mime']=$mime_type;
 			$a['tmp_file']=false;
@@ -130,6 +147,13 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		return array();
 	}
 	
+	/**
+	 * Get an attachment by MIME partnumber.
+	 * eg. 1.1 or 2
+	 * 
+	 * @param string $number
+	 * @return array See getAttachments 
+	 */
 	public function getAttachment($number){
 		$att = $this->getAttachments();
 		
@@ -146,7 +170,12 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		return '';
 	}
 
-	public function toOutputArray() {
+	/**
+	 * Returns MIME fields contained in this class's instance as an associative
+	 * array.
+	 * @return Array
+	 */
+	public function toOutputArray($html=true) {
 
 		$from = $this->from->getAddresses();
 		
@@ -177,7 +206,10 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$response['size'] = $this->size;
 
 		$response['attachments'] = array();
-		$response['body'] = $this->getHtmlBody();
+
+		$response['inlineAttachments'] = array();
+
+		$response['body'] = $html ? $this->getHtmlBody() : $this->getPlainBody();
 
 		$response['smime_signed'] = false;
 
@@ -197,6 +229,9 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 			if(!$replaceCount)
 				$response['attachments'][] = $a;
+			else
+				$response['inlineAttachments'][]=$a;
+				
 		}
 		
 		$response['blocked_images']=0;
