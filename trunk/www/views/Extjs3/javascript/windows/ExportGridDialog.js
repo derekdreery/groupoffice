@@ -6,12 +6,12 @@
  * 
  * If you have questions write an e-mail to info@intermesh.nl
  * 
- * @version $Id: ExportDialog.js 7982 2011-08-29 14:38:37Z mschering $
+ * @version $Id: ExportGridDialog.js 7982 2011-08-29 14:38:37Z mschering $
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-GO.ExportDialog = Ext.extend(GO.Window , {
+GO.ExportGridDialog = Ext.extend(GO.Window , {
 	
 	documentTitle : '',
 	name : '',
@@ -124,7 +124,7 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 			}]
 		});		
 				
-		GO.ExportDialog.superclass.initComponent.call(this);	
+		GO.ExportGridDialog.superclass.initComponent.call(this);	
 	},
 	
 	show : function () {
@@ -151,13 +151,13 @@ GO.ExportDialog = Ext.extend(GO.Window , {
 						this.createExportTypeRadio(name, clsName, checked, useOrientation);
 						checked=false;
 					}
-					GO.ExportDialog.superclass.show.call(this);	
+					GO.ExportGridDialog.superclass.show.call(this);	
 				},
 				scope:this
 			});
 		}else
 		{
-			GO.ExportDialog.superclass.show.call(this);
+			GO.ExportGridDialog.superclass.show.call(this);
 		}
 	},	
 	createExportTypeRadio : function(name,clsName, checked, useOrientation) {
