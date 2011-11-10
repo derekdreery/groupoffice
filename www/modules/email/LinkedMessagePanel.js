@@ -73,16 +73,17 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 	editHandler : function(){
 		//needed because it needs to be compatible with javascript/DisplayPanel.js
 	},
-	load : function(config){
+	load : function(id, config){
 
+	 config = config || {};
+	 
 		this.el.mask(GO.lang.strWaitMsgLoad);
 
 		if(!this.remoteMessage)
 			this.remoteMessage={};
 
-		if(config.id)
-			this.messageId=config.id;
-		
+
+		this.messageId=id;		
 		this.remoteMessage.id=this.messageId;
 
 		var url = '';

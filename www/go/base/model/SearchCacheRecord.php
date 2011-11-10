@@ -54,6 +54,7 @@ class GO_Base_Model_SearchCacheRecord extends GO_Base_Db_ActiveRecord {
 		
 		$params = GO_Base_Db_FindParams::newInstance()
 						->select("t.*,l.description AS link_description")
+						->order('mtime','DESC')
 						->join('go_links_'.$model->tableName(),  GO_Base_Db_FindCriteria::newInstance()
 										->ignoreUnknownColumns() //we don't have models for go_links_* tables
 										->addCondition('id', $model->id,'=','l')

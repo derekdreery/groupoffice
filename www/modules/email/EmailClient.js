@@ -1916,7 +1916,7 @@ GO.newMenuItems.push({
 	iconCls: 'go-model-icon-GO_Email_Model_ImapMessage',
 	handler:function(item, e){
 		var taskShowConfig = item.parentMenu.taskShowConfig || {};
-		//taskShowConfig.link_config=item.parentMenu.link_config
+		taskShowConfig.link_config=item.parentMenu.link_config
 		taskShowConfig.values={};
 		if(typeof(item.parentMenu.panel)!='undefined' && typeof(item.parentMenu.panel.data.email)!='undefined'){
 			var to='';

@@ -442,7 +442,7 @@ class GoSwift extends Swift_Mailer{
 	 * @param array $links Format Array(Array(link_id=>1, link_type=>1));
 	 * @return void
 	 */
-	function link_to(Array $links)
+	function link_to($model_name, $model_id)
 	{
 		global $GO_CONFIG;
 
@@ -467,15 +467,31 @@ class GoSwift extends Swift_Mailer{
 
 		$email = new email();
 
-		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
-		$search = new search();
+//		require_once($GLOBALS['GO_CONFIG']->class_path.'base/search.class.inc.php');
+//		$search = new search();
+//
+//		$link_message['from']=$this->implodeSwiftAddressArray($this->message->getFrom());
+//		$link_message['to']=$this->implodeSwiftAddressArray($this->message->getTo());
+//		$link_message['subject']=$this->message->getSubject();
+//		$link_message['ctime']=$link_message['time']=time();
+		
+		require_once($GO_CONFIG->root_path.'GO.php');
+		
+		$model = GO::getModel($model_name)->findByPk($model_id);
+		
+		$linkedEmail = new GO_Savemailas_Model_LinkedEmail();
+		$linkedEmail->from = $this->implodeSwiftAddressArray($this->message->getFrom());
+		$linkedEmail->to = $this->implodeSwiftAddressArray($this->message->getTo());
+		$linkedEmail->subject = $this->message->getSubject();
+		$linkedEmail->acl_id = $model->findAclId();
+		$linkedEmail->path=$link_message['path'];
+		$linkedEmail->save();			
 
-		$link_message['from']=$this->implodeSwiftAddressArray($this->message->getFrom());
-		$link_message['to']=$this->implodeSwiftAddressArray($this->message->getTo());
-		$link_message['subject']=$this->message->getSubject();
-		$link_message['ctime']=$link_message['time']=time();
 
-		$email->link_message($link_message, 0, $links, '');	
+		
+		$linkedEmail->link($model);
+
+		//$email->link_message($link_message, 0, $links, '');	
 	}
 }
 
