@@ -19,9 +19,15 @@ GO.notes.MainPanel = function(config){
 		config = {};
 	}
 
+	this.centerPanel = new GO.notes.NotesGrid({
+		region:'center',
+		id:'no-center-panel',
+		border:true
+	});
+	
 	this.westPanel= new GO.grid.MultiSelectGrid({
 		region:'west',
-		id:'no-west-panel',
+		id:'no-multiselect',
 		title:GO.notes.lang.categories,
 		loadMask:true,
 		store: GO.notes.readableCategoriesStore,
@@ -36,29 +42,26 @@ GO.notes.MainPanel = function(config){
 			})],
 			store:GO.notes.readableCategoriesStore,
 			pageSize:GO.settings.config.nav_page_size
-		})
+		}),
+		relatedStore: this.centerPanel.store
 	});
 
-	this.westPanel.on('change', function(grid, categories, records)
-	{
-		if(records.length){
-			this.centerPanel.store.baseParams.notes_categories_filter = Ext.encode(categories);
-			this.centerPanel.store.reload();
-			//delete this.centerPanel.store.baseParams.notes_categories_filter;
-		}
-	}, this);
+//	this.westPanel.on('change', function(grid, categories, records)
+//	{
+//		if(records.length){
+//			this.centerPanel.store.baseParams.notes_categories_filter = Ext.encode(categories);
+//			this.centerPanel.store.reload();
+//			//delete this.centerPanel.store.baseParams.notes_categories_filter;
+//		}
+//	}, this);
+//	
+//	this.westPanel.store.on('load', function()
+//	{
+//		this.centerPanel.store.baseParams.notes_categories_filter = Ext.encode(this.westPanel.getSelected());
+//		this.centerPanel.store.load();		
+//	}, this);
+
 	
-	this.westPanel.store.on('load', function()
-	{
-		this.centerPanel.store.load();
-		
-	}, this);
-
-	this.centerPanel = new GO.notes.NotesGrid({
-		region:'center',
-		id:'no-center-panel',
-		border:true
-	});
 	
 	this.centerPanel.on("delayedrowselect",function(grid, rowIndex, r){
 		this.eastPanel.load(r.data.id);		

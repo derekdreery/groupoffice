@@ -78,5 +78,14 @@ class GO_Notes_Model_Note extends GO_Base_Db_ActiveRecord {
 
 		return 'notes/' . GO_Base_Fs_Base::stripInvalidChars($this->category->name) . '/' . date('Y', $this->ctime) . '/' . GO_Base_Fs_Base::stripInvalidChars($this->name);
 	}
+	
+	public function defaultAttributes() {
+		$attr = parent::defaultAttributes();
+		
+		$category = GO_Notes_NotesModule::getDefaultNoteCategory(GO::user()->id);
+		$attr['category_id']=$category->id;
+		
+		return $attr;
+	}
 
 }
