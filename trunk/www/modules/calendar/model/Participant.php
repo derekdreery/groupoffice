@@ -44,6 +44,13 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	public static function model($className=__CLASS__) {
 		return parent::model($className);
 	}
+	
+	public function validate() {
+		if(empty($this->name))
+			$this->name=$this->email;
+		
+		return parent::validate();
+	}
 
 	/**
 	 * Enable this function if you want this model to check the acl's automatically.

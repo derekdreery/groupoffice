@@ -193,7 +193,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 					if ($calendar && $calendar->getPermissionLevel() >= GO_Base_Model_Acl::WRITE_PERMISSION) {
 
-						$participantEvent = GO_Calendar_Model_Event::model()->findParticipantEvent($calendar->id, $event->uuid);
+						$participantEvent = GO_Calendar_Model_Event::model()->findByUuid($event->uuid,0,$calendar->id);
 						if (!$participantEvent)
 							$participantEvent = $event->duplicate(array('calendar_id' => $calendar->id));
 
@@ -460,24 +460,15 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				
 				$attendee = $vevent->attendee;
 				
-				$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
-								->addCondition('calendar_id', 'c.id','=','t',true, true)
-								->addCondition('user_id', GO::user()->id);
+				$event = GO_Calendar_Model_Event::model()->findByUuid($vevent->uid, GO::user()->id);
+				if(!$event){
+					$event = GO_Calendar_Model_Event::model()->importVobject($vevent);
+				}
 				
-				$whereCriteria = GO_Base_Db_FindCriteria::newInstance()												
-												->addCondition($vevent->uuid, 'uuid');
 				
-				//todo exception date
+					
 				
-				$params = GO_Base_Db_FindParams::newInstance()
-								->ignoreAcl()
-								->single()
-								->join(GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c')
-								->criteria($whereCriteria);
-				
-				GO_Calendar_Model_Event::model()->find($params);				
-				
-				var_dump($attendee);
+				//var_dump($attendee);
 								
 			}
 		}

@@ -53,6 +53,25 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function hasFiles() {
 		return true;
 	}
+	
+	public function hasLinks() {
+		return true;
+	}
+	
+	public function defaultAttributes() {
+		$settings = GO_Calendar_Model_Settings::model()->findByPk(GO::user()->id);
+		
+		$defaults = array(
+				//'description'=>'DIT IS DE BESCHRIJVING DIE STANDAARD WORDT INGEVULD',
+				'status' => "NEEDS-ACTION",
+				'start_time'=> time(), 
+				'end_time'=>time()+3600,
+				'reminder' => $settings->reminder,
+				'calendar_id'=>$settings->calendar_id
+		);
+		
+		return $defaults;
+	}
 
 	public function customfieldsModel() {
 		return "GO_Calendar_Model_EventCustomFieldsRecord";
@@ -380,17 +399,57 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			ksort($this->_calculatedEvents);
 		}
 	}
-
+	
 	/**
-	 * Find an event that belongs to a group of participant events. They all share the same uuid field.
+	 * Find an event based on uuid field for a user. Either user_id or calendar_id
+	 * must be supplied.
 	 * 
-	 * @param int $calendar_id
+	 * Optionally exceptionDate can be specified to find a specific exception.
+	 * 
 	 * @param string $uuid
+	 * @param int $user_id
+	 * @param int $calendar_id
+	 * @param int $exceptionDate
 	 * @return GO_Calendar_Model_Event 
 	 */
-	public function findParticipantEvent($calendar_id, $uuid) {
-		return $this->findSingleByAttributes(array('uuid' => $event->uuid, 'calendar_id' => $calendar->id));
+	public function findByUuid($uuid, $user_id, $calendar_id=0, $exceptionDate=false){
+		
+		$whereCriteria = GO_Base_Db_FindCriteria::newInstance()												
+										->addCondition('uuid', $uuid);
+
+		//todo exception date
+
+		$params = GO_Base_Db_FindParams::newInstance()
+						->ignoreAcl()
+						->single();		
+						
+		
+		if(!$calendar_id){
+			$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('calendar_id', 'c.id','=','t',true, true)
+							->addCondition('user_id', $user_id);
+			
+			$params->join(GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
+		}else
+		{
+			$whereCriteria->addCondition('calendar_id', $calendar_id);
+		}
+
+		$params->criteria($whereCriteria);
+
+		return $this->find($params);			
 	}
+
+//	/**
+//	 * Find an event that belongs to a group of participant events. They all share the same uuid field.
+//	 * 
+//	 * @param int $calendar_id
+//	 * @param string $uuid
+//	 * @return GO_Calendar_Model_Event 
+//	 */
+//	public function findParticipantEvent($calendar_id, $uuid) {
+//		return $this->findSingleByAttributes(array('uuid' => $event->uuid, 'calendar_id' => $calendar->id));
+//	}
 	
 	/**
 	 * Find the resource booking that belongs to this event
@@ -534,18 +593,58 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	
-	public function defaultAttributes() {
-		$settings = GO_Calendar_Model_Settings::model()->findByPk(GO::user()->id);
+	
+	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()){
+		$event = new GO_Calendar_Model_Event();
 		
-		$defaults = array(
-				//'description'=>'DIT IS DE BESCHRIJVING DIE STANDAARD WORDT INGEVULD',
-				'status' => "NEEDS-ACTION",
-				'start_time'=> time(), 
-				'end_time'=>time()+3600,
-				'reminder' => $settings->reminder
-		);
+		$event->uuid = (string) $vobject->uid;
+		$event->name = (string) $vobject->summary;
+		$event->description = (string) $vobject->description;
+		$event->start_time = $vobject->dtstart->getDateTime()->format('U');
+		$event->end_time = $vobject->dtend->getDateTime()->format('U');
 		
-		return $defaults;
+		$event->setAttributes($attributes);
+		$event->save();
+		
+	
+		if($vobject->organizer){
+	//		var_dump($vobject->organizer);
+			$this->_importVObjectAttendee($event, $vobject->organizer, true);
+		}
+		
+		if($vobject->attendee){
+			$this->_importVObjectAttendee($event, $vobject->attendee, false);
+		}
+		
+		//var_dump($event);
 	}
+	
+	private function _importVobjectAttendee(GO_Calendar_Model_Event $event, Sabre_VObject_Property $vattendee, $isOrganizer=false){
+		
+		//var_dump($vattendee);
+		$p = new GO_Calendar_Model_Participant();
+		$p->is_organizer=$isOrganizer;
+		$p->event_id=$event->id;
+		$p->name = (string) $vattendee['CN'];
+		$p->email=str_replace('mailto:','', (string) $vattendee);
+		$p->status=$this->_importVObjectStatus((string) $vattendee['PARTSTAT']);
+		$p->role=(string) $vattendee['ROLE'];
+		$p->save();
+		
+		return $p;
+	}
+	
+	private function _importVObjectStatus($status)
+	{
+		$statuses = array(
+			'NEEDS-ACTION' => GO_Calendar_Model_Participant::STATUS_PENDING,
+			'ACCEPTED' => GO_Calendar_Model_Participant::STATUS_ACCEPTED,
+			'DECLINED' => GO_Calendar_Model_Participant::STATUS_DECLINED,
+			'TENTATIVE' => GO_Calendar_Model_Participant::STATUS_TENTATIVE
+		);
+
+		return $statuses[$status];
+	}
+	
 
 }
