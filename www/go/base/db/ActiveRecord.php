@@ -2552,9 +2552,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * A function that checks the consistency with the database.
 	 * Generally this is called by r=maintenance/checkDabase
 	 */
-	public function checkDatabase(){
-		$this->save();
-		
+	public function checkDatabase(){		
+		$this->save();		
 
 		if($this->aclField() && !$this->joinAclField){
 
