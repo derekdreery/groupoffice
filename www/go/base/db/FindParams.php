@@ -63,6 +63,10 @@ class GO_Base_Db_FindParams{
 			unset($findParams['criteriaObject']);
 		}
 		
+//		if(isset($this->_params['joinRelations']) && isset($findParams['joinRelations'])){
+//			$findParams['joinRelations'] = array_merge($this->_params['joinRelations'], $findParams['joinRelations']);
+//		}
+		
 		$this->_params = array_merge($this->_params, $findParams);
 		return $this;
 	}
@@ -119,6 +123,14 @@ class GO_Base_Db_FindParams{
 		
 		return $this;
 	}
+	
+	
+//	public function joinRelation($relationName){
+//		if(!isset($this->_params['joinRelations']))
+//			$this->_params['joinRelations']=array();
+//		
+//		$this->_params['joinRelations'][]=$relationName;
+//	}
 	
 	/**
 	 * Add a find criteria object to add where conditions

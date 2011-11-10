@@ -1,5 +1,5 @@
 <?php
-class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
+class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 	var $handle=false;
 
@@ -1203,7 +1203,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 		$command = "UID FETCH $uid BODYSTRUCTURE\r\n";
 		$this->send_command($command);
 		$result = $this->get_response(false, true);
-
+		
 		while (isset($result[0][0]) && isset($result[0][1]) && $result[0][0] == '*' && strtoupper($result[0][1]) == 'OK') {
 			array_shift($result);
 		}
@@ -1239,35 +1239,35 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 	 * message body.
 	 *
 	 * @param <type> $struct
-	 * @param <type> $imap_id
+	 * @param <type> $number
 	 * @param <type> $type
 	 * @param <type> $subtype
 	 * @return <type>
 	 */
 
-	public function find_message_parts($struct, $imap_id, $type='text', $subtype=false, $parts=array()) {
+	public function find_message_parts($struct, $number, $type='text', $subtype=false, $parts=array()) {
 		if (!is_array($struct) || empty($struct)) {
 			return $parts;
 		}
 		foreach ($struct as $id => $vals) {
-			if ($imap_id && $id == $imap_id) {
-				$vals['imap_id'] = $id;
+			if ($number && $id == $number) {
+				$vals['number'] = $id;
 				$parts[] = $vals;
 			}
-			elseif (!$imap_id && isset($vals['type']) && $vals['type'] == $type) {
+			elseif (!$number && isset($vals['type']) && $vals['type'] == $type) {
 				if ($subtype) {
 					if ($subtype == $vals['subtype']) {
-						$vals['imap_id'] = $id;
+						$vals['number'] = $id;
 						$parts[] = $vals;
 					}
 				}
 				else {
-					$vals['imap_id'] = $id;
+					$vals['number'] = $id;
 					$parts[] = $vals;
 				}
 			}
 			if (empty($res) && isset($vals['subs'])) {
-				$this->find_message_parts($vals['subs'], $imap_id, $type, $subtype, $parts);				
+				$this->find_message_parts($vals['subs'], $number, $type, $subtype, $parts);				
 			}
 		}
 		return $parts;
@@ -1310,7 +1310,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 	 * message body.
 	 *
 	 * @param <type> $struct
-	 * @param <type> $imap_id
+	 * @param <type> $number
 	 * @param <type> $type
 	 * @param <type> $subtype
 	 * @return <type>
@@ -1331,7 +1331,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 			if(is_array($vals)){
 				if (isset($vals['type'])){
 
-					$vals['imap_id'] = $id;
+					$vals['number'] = $id;
 					//GO::debug($vals);
 
 					if ($vals['type'] == $type && $subtype == $vals['subtype'] && $vals['disposition']!='attachment') {
@@ -1476,7 +1476,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBase {
 				continue;
 
 			if(isset($vals['type'])){
-				$vals['imap_id'] = $id;
+				$vals['number'] = $id;
 				
 				//sometimes NIL is returned from Dovecot?!?
 				if($vals['id']=='NIL')

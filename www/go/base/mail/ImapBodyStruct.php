@@ -99,9 +99,9 @@ class GO_Base_Mail_ImapBodyStruct extends GO_Base_Mail_ImapBase {
 						
 						//get a default charset to decode filenames of attachments that don't have
 						//that value
-						if(empty($this->default_charset) && !empty($res[$v])){
-							$this->default_charset = $res[$v];
-						}
+//						if(empty($this->default_charset) && !empty($res[$v])){
+//							$this->default_charset = $res[$v];
+//						}
 					}
 					else {
 						$res[$v] = trim($res[$v]);

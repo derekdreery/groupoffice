@@ -57,8 +57,11 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 			'flagged' => 0,
 			'answered' => 0,
 			'forwarded' => 0,
-			'account'
+			'account',
+			'smime_signed'=>false
 	);
+	
+	protected $defaultCharset='UTF-8';
 
 	/**
 	 * PHP getter magic method.
@@ -94,7 +97,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$this->_attributes['reply_to'] = new GO_Base_Mail_EmailRecipients($this->_attributes['reply_to']);
 	}
 
-	public function getBody() {
+	public function getHtmlBody() {
 		return '';
 	}
 
@@ -105,6 +108,9 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	/**
 	 *
 	 * @return array
+	 * 
+	 * 
+	 * indexed by $a['number']
 	 * 
 	 * $a['url']='';
 	 *  $a['name']=$filename;
@@ -119,8 +125,15 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 			$a['encoding'] = isset($part->headers['content-transfer-encoding']) ? $part->headers['content-transfer-encoding'] : '';
 			$a['disposition'] = isset($part->disposition) ? $part->disposition : ''; 
 	 */
+	
 	public function getAttachments() {
 		return array();
+	}
+	
+	public function getAttachment($number){
+		$att = $this->getAttachments();
+		
+		return $att[$number];
 	}
 
 	/** 
@@ -130,7 +143,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 * @return string 
 	 */
 	protected function getAttachmentUrl($attachment) {
-		return false;
+		return '';
 	}
 
 	public function toOutputArray() {
@@ -164,7 +177,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$response['size'] = $this->size;
 
 		$response['attachments'] = array();
-		$response['body'] = $this->getBody();
+		$response['body'] = $this->getHtmlBody();
 
 		$response['smime_signed'] = false;
 
