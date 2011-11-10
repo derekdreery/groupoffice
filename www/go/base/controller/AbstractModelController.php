@@ -201,7 +201,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @return array The name of the request parameter sent by the view. 
 	 * 
 	 * array(
-				'requestParam'=>'notes_categories_filter', //The name of the request parameter sent by the view. 
+				//'requestParam'=>'notes_categories_filter', //The name of the request parameter sent by the view. 
 				'permissionsModel'=>'GO_Notes_Model_Category', //The model to check permissions. 
 				'titleAttribute'=>'name' //Only set this if your grid needs the names of the permissionsmodel in the title.
 				);

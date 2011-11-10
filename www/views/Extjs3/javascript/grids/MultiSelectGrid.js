@@ -82,6 +82,23 @@ GO.grid.MultiSelectGrid = function (config){
 //		}
 	    
 	},this);
+	
+	if(this.relatedStore){
+		this.on('change', function(grid, categories, records)
+		{
+			if(records.length){
+				this.relatedStore.baseParams[this.id] = Ext.encode(categories);
+				this.relatedStore.reload();
+			}
+		}, this);
+
+		this.store.on('load', function()
+		{
+			this.relatedStore.baseParams[this.id] = Ext.encode(this.getSelected());
+			this.relatedStore.load();		
+		}, this);
+
+	}
 
 	this.addEvents({
 		change : true

@@ -5,7 +5,7 @@ class GO_Notes_Controller_Category extends GO_Base_Controller_AbstractModelContr
 	
 	
 	protected function getStoreMultiSelectProperties(){
-		return array('requestParam'=>'notes_categories_filter');
+		return array('requestParam'=>'no-multiselect');
 	}
 	
 	protected function getStoreMultiSelectDefault(){
