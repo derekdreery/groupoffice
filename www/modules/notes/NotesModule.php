@@ -42,6 +42,8 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 	
 	public static function getDefaultNoteCategory($userId){
 		$user = GO_Base_Model_User::model()->findByPk($userId);
+		if(!$user)
+			return false;
 		$category = GO_Notes_Model_Category::model()->getDefault($user);
 		
 		return $category;
