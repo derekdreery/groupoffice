@@ -287,7 +287,7 @@ GO.tasks.MainPanel = function(config){
 				
 				if(!this.exportDialog)
 				{
-					this.exportDialog = new GO.ExportDialog({
+					this.exportDialog = new GO.ExportGridDialog({
 						url: 'tasks/task/export',
 						name: 'tasks',
 						documentTitle:'ExportTask',
