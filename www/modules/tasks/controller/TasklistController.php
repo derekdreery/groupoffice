@@ -28,7 +28,7 @@ class GO_Tasks_Controller_Tasklist extends GO_Base_Controller_AbstractModelContr
 	}
 	
 	protected function getStoreMultiSelectProperties(){
-		return array('requestParam'=>'tasks_tasklist_filter');
+		return array('requestParam'=>'ta-taskslists');
 	}
 	
 	protected function getStoreMultiSelectDefault() {

@@ -104,7 +104,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 
 	protected function getStoreMultiSelectProperties(){
 		return array(
-				'requestParam'=>'tasks_tasklist_filter',
+				'requestParam'=>'ta-taskslists',
 				'permissionsModel'=>'GO_Tasks_Model_Tasklist'
 				//'titleAttribute'=>'name'
 				);
