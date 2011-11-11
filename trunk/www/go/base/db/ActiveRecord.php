@@ -335,6 +335,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
+	 * Set the label of an attribute
+	 * 
+	 * This function can be overridden in the model.
+	 * 
+	 * @param type $attribute
+	 * @param type $label 
+	 */
+	public function setAttributeLabel($attribute,$label) {
+			$this->columns[$attribute]['label'] = $label;
+	}
+	
+	
+	/**
 	 * Loads the column information from the database
 	 * 
 	 */
