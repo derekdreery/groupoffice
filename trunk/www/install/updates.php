@@ -123,3 +123,6 @@ $updates["201110311221"][]="UPDATE go_modules SET admin_menu=0 where admin_menu=
 $updates["201110311221"][]="UPDATE go_modules SET admin_menu=1 where admin_menu=2";
 	
 $updates["201111011221"][]="ALTER TABLE `go_reminders` CHANGE `text` `text` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";
+
+$updates["201111112300"][]="ALTER TABLE `go_users` CHANGE `files_folder_id` `files_folder_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates["201111112300"][]="ALTER TABLE `go_users` CHANGE `password` `password` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";

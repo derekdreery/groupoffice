@@ -489,21 +489,19 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		//if a recurrence-id if passed then convert it to a unix time stamp.
 		//it is an update just for a particular occurrence.
-		$recurenceDate=false;
+		$recurrenceDate=false;
 		$recurrence = $vevent->select('recurrence-id');
+		//var_dump($recurrence);exit();
 		if(count($recurrence)){
-			$recurenceDate=$recurrence[0]->getDateTime()->format('U');
+			$firstMatch = array_shift($recurrence);
+			$recurrenceDate=$firstMatch->getDateTime()->format('U');
 		}
-	
-		/*
-		 * TODO map cal_exceptions to cal_events and use the exception time as
-		 * recurrence-id.
-		 * 
-		 * On event update exceptions must be moved.
-		 */
+		
+		
+		//TODO test import of new exception from external client
 		
 		//find existing event
-		$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id, $recurenceDate);				
+		$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id, 0, $recurrenceDate);				
 
 		$userIsOrganizer=false;
 		if($event){
@@ -522,6 +520,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		if($userIsOrganizer)
 		{
+			//because it's the organizer the event should be there. Wheter it's a recurrence or
+			//a normal event.
+			if(!$event)
+				throw new Exception("The event wasn't found in your calendar");
+			
 			$participantAttributes=$event->vobjectAttendeeToParticipantAttributes($vevent->attendee);
 
 			$participant = GO_Calendar_Model_Participant::model()
@@ -530,12 +533,31 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$participant->setAttributes($participantAttributes);
 			$participant->save();
 
-			//todo send update to other participants
+			//todo send update to other participants?
 
 		}else
 		{				
+			
+			$importAttributes=array();
+			if($recurrenceDate){
+				//if a particular recurrence-id was send then we queried for that particular
+				//recurrence. We need to get the master event to add a new exception.
+				$masterEvent = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);				
+				if($masterEvent){
+					$importAttributes=array(
+							'exception_for_event_id'=>$masterEvent->id,
+							'exception_date'=>$recurrenceDate
+					);
+					
+					//old exception might be there. Delete it because it will be recreated by the import.
+					$exception = GO_Calendar_Model_Exception::model()->findSingleByAttributes(array('event_id'=>$masterEvent->id, 'time'=>$recurrenceDate));
+					if($exception)
+						$exception->delete();
+				}
+			}
+			
 			//import it
-			$event = GO_Calendar_Model_Event::model()->importVObject($vevent);
+			$event = GO_Calendar_Model_Event::model()->importVObject($vevent, $importAttributes);
 
 			if(!empty($params['status'])){
 				//Accept participant status
