@@ -517,6 +517,101 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return $html;
 	}
 	
+	
+	private function _formatVtimezoneTransitionHour($hour){		
+
+		if($hour<0){
+			$prefix = '-';
+			$hour = $hour*-1;
+		}else
+		{
+			$prefix = '+';
+		}
+
+		if($hour<10)
+			$hour = '0'.$hour;
+
+		$hour = $prefix.$hour;
+
+		return $hour;
+	}
+	
+	private function _getVtimezone(){
+		//$timezone = date_default_timezone_get();
+
+		$tz = new DateTimeZone(GO::user()->timezone);
+    //$tz = new DateTimeZone("Europe/Amsterdam");
+		$transitions = $tz->getTransitions();
+
+		$start_of_year = mktime(0,0,0,1,1);
+
+    $to = GO_Base_Util_Date::get_timezone_offset(time());
+    if($to<0){
+      if(strlen($to)==2)
+        $to='-0'.($to*-1);
+    }else
+    {
+      if(strlen($to)==1)
+        $to='0'.$to;
+
+      $to='+'.$to;
+    }
+
+		$STANDARD_TZOFFSETFROM=$STANDARD_TZOFFSETTO=$DAYLIGHT_TZOFFSETFROM=$DAYLIGHT_TZOFFSETTO=$to;
+
+		$STANDARD_RRULE='';
+		$DAYLIGHT_RRULE='';
+
+		for($i=0,$max=count($transitions);$i<$max;$i++) {
+			if($transitions[$i]['ts']>$start_of_year) {
+				$dst_end = $transitions[$i];
+				$dst_start = $transitions[$i+1];				
+
+				$STANDARD_TZOFFSETFROM=$this->_formatVtimezoneTransitionHour($dst_end['offset']/3600);
+				$STANDARD_TZOFFSETTO=$this->_formatVtimezoneTransitionHour($dst_start['offset']/3600);
+
+				$DAYLIGHT_TZOFFSETFROM=$this->_formatVtimezoneTransitionHour($dst_start['offset']/3600);
+				$DAYLIGHT_TZOFFSETTO=$this->_formatVtimezoneTransitionHour($dst_end['offset']/3600);
+
+				$DAYLIGHT_RRULE = "FREQ=YEARLY;BYDAY=-1SU;BYMONTH=".date('n', $dst_end['ts']);
+				$STANDARD_RRULE="FREQ=YEARLY;BYDAY=-1SU;BYMONTH=".date('n', $dst_start['ts']);
+
+
+				break;
+			}
+		}
+
+//		$timezone_name = $tz->getName();
+//		
+//		//hack for outlook. It only treats recurring events right with this name. When a daily recurring event goes from daylight to standard time it shifts.
+//		if($timezone_name=='Europe/Amsterdam' || $timezone_name=='Europe/Brussels' || $timezone_name=='Europe/Berlin')
+//			$timezone_name = 'W. Europe Standard Time';
+//		
+		$t=new Sabre_VObject_Component('vtimezone');
+		
+		$t->tzid=$tz->getName();
+		$t->add("last-modified","19870101T000000Z");
+		
+		$s = new Sabre_VObject_Component("standard");
+		$s->dtstart="16010101T000000";
+		$s->rrule = $STANDARD_RRULE;
+		$s->tzoffsetfrom=$STANDARD_TZOFFSETFROM."00";
+		$s->tzoffsetto=$STANDARD_TZOFFSETFROM."00";
+		
+		$t->add($s);
+		
+		$s = new Sabre_VObject_Component("daylight");
+		$s->dtstart="16010101T000000";
+		$s->rrule = $DAYLIGHT_RRULE;
+		$s->tzoffsetfrom=$DAYLIGHT_TZOFFSETTO."00";
+		$s->tzoffsetto=$STANDARD_TZOFFSETFROM."00";
+		
+		$t->add($s);
+		
+		return $t;
+		
+	}
+	
 
 	/**
 	 *
@@ -539,16 +634,30 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$c->calscale='GREGORIAN';
 		$c->method=$method;
 		
+		$c->add($this->_getVtimezone());
+		
+		
 		$e=new Sabre_VObject_Component('vevent');
-		$e->uuid=$this->uuid;
+		$e->uid=$this->uuid;		
 		
-		$dtstart = new Sabre_VObject_Element_DateTime('dtstamp');
-		$dtstart->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::UTC);		
-		$e->add($dtstart);
+		$dtstamp = new Sabre_VObject_Element_DateTime('dtstamp');
+		$dtstamp->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::UTC);		
+		//$dtstamp->offsetUnset('VALUE');
+		$e->add($dtstamp);
 		
-		$dtstart = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
-		$dtstart->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::UTC);		
-		$e->add($dtstart);
+		$mtimeDateTime = new DateTime();
+		$mtimeDateTime->setTimestamp($this->mtime);
+		$lm = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
+		$lm->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
+		//$lm->offsetUnset('VALUE');
+		$e->add($lm);
+		
+		$ctimeDateTime = new DateTime();
+		$ctimeDateTime->setTimestamp($this->mtime);
+		$ct = new Sabre_VObject_Element_DateTime('created');
+		$ct->setDateTime($ctimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
+		//$ct->offsetUnset('VALUE');
+		$e->add($ct);
 		
     $e->summary = $this->name;
 		
@@ -563,14 +672,16 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$dtstart = new Sabre_VObject_Element_DateTime('dtstart',$dateType);
 		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time));		
+		//$dtstart->offsetUnset('VALUE');
 		$e->add($dtstart);
 		
 		$dtend = new Sabre_VObject_Element_DateTime('dtend',$dateType);
 		$dtend->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->end_time));		
+		//$dtend->offsetUnset('VALUE');
 		$e->add($dtend);
 		
 		$e->description=$this->description;
-		$e->location=$this->location;
+		//$e->location=$this->location;
 		
 		//todo exceptions
 		if(!empty($this->rrule)){
@@ -584,6 +695,24 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
     $c->add($e);
+		
+		$stmt = $this->participants();
+		while($participant=$stmt->fetch()){
+			if($participant->is_organizer){
+				$p = new Sabre_VObject_Property('organizer','mailto:'.$participant->email);				
+			}else
+			{
+				$p = new Sabre_VObject_Property('attendee','mailto:'.$participant->email);				
+			}
+			$p['CN']=$participant->name;
+			$p['RSVP']="true";
+			$p['PARTSTAT']=$this->_exportVObjectStatus($participant->status);
+	
+			//If this is a meeting REQUEST then we must send all participants.
+			//For a CANCEL or REPLY we must send the organizer and the current user.
+			if($participant->is_organizer || $method=='REQUEST' || $this->calendar->user_id==$participant->user_id)
+				$e->add($p);
+		}
 		
 		return $c->serialize();
 		
@@ -654,9 +783,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->_importVObjectAttendee($event, $vobject->organizer, true);
 		}
 		
-		if($vobject->attendee){
-			$this->_importVObjectAttendee($event, $vobject->attendee, false);
-		}
+		$attendees = $vobject->select('attendee');
+		foreach($attendees as $attendee)
+			$this->_importVObjectAttendee($event, $attendee, false);
+		
 		
 		if($vobject->exdate){
 			
@@ -726,6 +856,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		return $p;
 	}
 	
+	public function vobjectAttendeeToParticipantAttributes(Sabre_VObject_Property $vattendee){
+		return array(
+				'name'=>(string) $vattendee['CN'],
+				'email'=>str_replace('mailto:','', (string) $vattendee),
+				'status'=>$this->_importVObjectStatus((string) $vattendee['PARTSTAT']),
+				'role'=>(string) $vattendee['ROLE']
+		);
+	}
+	
 	private function _importVObjectStatus($status)
 	{
 		$statuses = array(
@@ -733,6 +872,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			'ACCEPTED' => GO_Calendar_Model_Participant::STATUS_ACCEPTED,
 			'DECLINED' => GO_Calendar_Model_Participant::STATUS_DECLINED,
 			'TENTATIVE' => GO_Calendar_Model_Participant::STATUS_TENTATIVE
+		);
+
+		return $statuses[$status];
+	}
+	private function _exportVObjectStatus($status)
+	{
+		$statuses = array(
+			GO_Calendar_Model_Participant::STATUS_PENDING=>'NEEDS-ACTION',
+			GO_Calendar_Model_Participant::STATUS_ACCEPTED=>'ACCEPTED',
+			GO_Calendar_Model_Participant::STATUS_DECLINED=>'DECLINED',
+			GO_Calendar_Model_Participant::STATUS_TENTATIVE=>'TENTATIVE'
 		);
 
 		return $statuses[$status];
