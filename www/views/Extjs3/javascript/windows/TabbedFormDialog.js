@@ -93,14 +93,11 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		
 		this.formPanel = new Ext.form.FormPanel({
 			waitMsgTarget:true,			
-			border: false,
+			border: false,			
 			baseParams : {}
 		});
 
-		if(this._panels.length > 1) {
-		    
-		    
-		    
+		if(this._panels.length > 1) {		    
 			this._tabPanel = new Ext.TabPanel({
 				activeTab: 0,
 				enableTabScroll:true,
@@ -122,6 +119,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			
 			if(this._panels[0].bodyStyle)
 				this.formPanel.bodyStyle=this._panels[0].bodyStyle;
+			
+			this.formPanel.autoScroll=true;
 			
 			delete this._panels[0];
 		}
