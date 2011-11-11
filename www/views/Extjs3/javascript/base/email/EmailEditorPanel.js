@@ -87,7 +87,7 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 			anchor: '100% 100%'
 		}, config.htmlEditorConfig);
 
-		if (htmlEditorConfig.enableInlineAttachments) {
+		if (htmlEditorConfig.enableInlineAttachments || config.enableInlineAttachments) {
 			this.inlineAttachments = new Array();
 			this.hiddenInlineImagesField = new Ext.form.TextField({
 				hidden: true,
