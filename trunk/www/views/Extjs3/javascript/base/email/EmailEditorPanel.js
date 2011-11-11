@@ -132,6 +132,10 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		return htmlEditorConfig.plugins;
 	},
 	
+	getHtmlEditor : function() {
+		return this.htmlEditor;
+	},
+	
 	setInlineAttachments : function(inlineAttachments){
 		this.inlineAttachments = inlineAttachments;
 		this.hiddenInlineImagesField.setValue(Ext.encode(this.inlineAttachments));
