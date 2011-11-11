@@ -466,33 +466,33 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 	declined:false,
 	processInvitation : function(status_id)
 	{
-		this.status_id = status_id || -1;
+		this.status_id = status_id || 0;
 		
 		var invitation = this.data.iCalendar.invitation;
 		var event_id = (invitation.event_id) ? invitation.event_id : 0;
 		
-		Ext.Ajax.request({
-			url: GO.settings.modules.email.url+'action.php',
+		GO.request({
+			url: 'calendar/event/acceptInvitation',
 			params: {
-				event_id: event_id,
-				cal_id: this.cal_id,
-				status_id: this.status_id,
+//				event_id: event_id,
+//				cal_id: this.cal_id,
+				status: this.status_id,
 				account_id: this.account_id,
 				mailbox: this.mailbox,
-				message_uid: this.uid,
-				uuid: invitation.uuid,
-				imap_id: invitation.imap_id,
-				encoding: invitation.encoding,
-				email_sender: invitation.email_sender,
-				email: invitation.email,
-				task: 'icalendar_process_invitation'
+				uid: this.uid
+//				uuid: invitation.uuid,
+//				imap_id: invitation.imap_id,
+//				encoding: invitation.encoding,
+//				email_sender: invitation.email_sender,
+//				email: invitation.email,
+//				task: 'icalendar_process_invitation'
 			},
 			scope: this,
-			callback: function(options, success, response)
+			success: function(options, response, data)
 			{
-				var data = Ext.decode(response.responseText);
-				if(data.success)
-				{
+				//var data = Ext.decode(response.responseText);
+//				if(data.success)
+//				{
 					if(data.updated)
 					{
 						this.updated = true;
@@ -509,11 +509,10 @@ GO.email.MessagePanel = Ext.extend(Ext.Panel, {
 					}
 					
 					this.loadMessage();
-					this.cal_id = 0;
-				}else
-				{
-					this.showSelectCalendarWindow(data.calendars, data.status_id);
-				}
+//				}else
+//				{
+//					this.showSelectCalendarWindow(data.calendars, data.status_id);
+//				}
 			}
 		});
 	},

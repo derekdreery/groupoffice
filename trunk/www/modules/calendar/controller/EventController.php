@@ -204,7 +204,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 				if ($isNewEvent || !empty($modifiedAttributes)) {
 					//reset status on when event is modified or new
-					$participant->status = GO_Calendar_Model_Participant::STATUS_PENDING;
+					if($participant->is_organizer){
+						$participant->status = GO_Calendar_Model_Participant::STATUS_ACCEPTED;
+					}else
+					{
+						$participant->status = GO_Calendar_Model_Participant::STATUS_PENDING;
+					}
 				}
 
 				$new = $participant->isNew;
@@ -230,39 +235,48 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$stmt->callOnEach('delete');
 		}
 
-		$this->_sendInvitation($params, $newParticipantIds, $event, $isNewEvent, $modifiedAttributes);
+		if (isset($params['send_invitation']) && $params['send_invitation'] != 'false') {
+			$this->_sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes);
+		}
 	}
 
-	private function _sendInvitation($params, $newParticipantIds, $event, $isNewEvent, $modifiedAttributes, $method='REQUEST') {
+	private function _sendInvitation($newParticipantIds, $event, $isNewEvent, $modifiedAttributes, $method='REQUEST') {
 
-		if (isset($params['send_invitation']) && $params['send_invitation'] != 'false') {
-
+		
 			$stmt = $event->participants();
 
 			while ($participant = $stmt->fetch()) {
+				
+				if($method=='REQUEST' || $participant->is_organizer){
 
-				if ($participant->user_id != GO::user()->id) {
-					$subject = $isNewEvent ? GO::t('invitation', 'calendar') : GO::t('invitation_update', 'calendar');
+					if (true || $participant->user_id != GO::user()->id) {
+						$subject = $isNewEvent ? GO::t('invitation', 'calendar') : GO::t('invitation_update', 'calendar');
 
-					$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
-									$event->toHtml() .
-									'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
-									'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
-									'<a href="' . GO::modules()->calendar->full_url . 'invitation.php?event_id=' . $event->id . '&task=accept&email=' . urlencode($participant->email) . '">' . GO::t('accept', 'calendar') . '</a>' .
-									'&nbsp;|&nbsp;' .
-									'<a href="' . GO::modules()->calendar->full_url . 'invitation.php?event_id=' . $event->id . '&task=decline&email=' . urlencode($participant->email) . '">' . GO::t('decline', 'calendar') . '</a>';
+						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
+										$event->toHtml() .
+										'<p><b>' . GO::t('linkIfCalendarNotSupported', 'calendar') . '</b></p>' .
+										'<p>' . GO::t('acccept_question', 'calendar') . '</p>' .
+										'<a href="' . GO::modules()->calendar->full_url . 'invitation.php?event_id=' . $event->id . '&task=accept&email=' . urlencode($participant->email) . '">' . GO::t('accept', 'calendar') . '</a>' .
+										'&nbsp;|&nbsp;' .
+										'<a href="' . GO::modules()->calendar->full_url . 'invitation.php?event_id=' . $event->id . '&task=decline&email=' . urlencode($participant->email) . '">' . GO::t('decline', 'calendar') . '</a>';
 
-					$message = GO_Base_Mail_Message::newInstance(
-													$subject
-									)->setFrom(GO::user()->email, GO::user()->name)
-									->addTo($participant->email, $participant->name);
-
-					$message->setHtmlAlternateBody($body);
-					$message->attach(Swift_Attachment::newInstance($event->toICS($method), GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar'));
-
-					GO_Base_Mail_Mailer::newGoInstance()->send($message);
+						$message = GO_Base_Mail_Message::newInstance(
+														$subject
+										)->setFrom(GO::user()->email, GO::user()->name)
+										->addTo($participant->email, $participant->name);
+						
+						$ics=$event->toICS($method);
+						
+						$message->setHtmlAlternateBody($body);
+						//$message->setBody($body, 'text/html','UTF-8');
+						$a = Swift_Attachment::newInstance($event->toICS($method), GO_Base_Fs_File::stripInvalidChars($event->name) . '.ics', 'text/calendar; METHOD="'.$method.'"');
+						$a->setEncoder(new Swift_Mime_ContentEncoder_PlainContentEncoder("8bit"));
+						$a->setDisposition("inline");
+						$message->attach($a);
+						GO_Base_Mail_Mailer::newGoInstance()->send($message);
+					}
 				}
-			}
+			
 		}
 	}
 	
@@ -404,8 +418,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		var_dump($events);
 	}
 
-	public function actionVcalendar($params) {
-		$event = GO_Calendar_Model_Event::model()->findByPk($params['event_id']);
+	public function actionIcs($params) {
+		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
 		header('Content-Type: text/plain');
 		echo $event->toICS();
 	}
@@ -458,20 +472,52 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				
 				$vevent = $vcalendar->vevent[0];				
 				//find and delete existing event
-				$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
-				if($event)
-					$event->delete();
+				$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);				
 				
-				//import it
-				$event = GO_Calendar_Model_Event::model()->importVObject($vevent);
+				$userIsOrganizer=false;
+				if($event){
+					
+					$participant = GO_Calendar_Model_Participant::model()
+									->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>GO::user()->id));
+					if($participant)
+						$userIsOrganizer = $participant->is_organizer;
+					
+					//If the user is not the organizer simply delete the old event and
+					//import the update. If it's the organizer then we must update just the
+					//participant status.
+					if(!$userIsOrganizer)
+						$event->delete();
+				}				
 				
-				//Accept participant status
-				$participant = GO_Calendar_Model_Participant::model()
-								->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>GO::user()->id));
-				
-				$participant->status=$params['status'];
-				
-				$response['success']=$participant->save();
+				if($userIsOrganizer)
+				{
+					$participantAttributes=$event->vobjectAttendeeToParticipantAttributes($vevent->attendee);
+
+					$participant = GO_Calendar_Model_Participant::model()
+								->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$participantAttributes['email']));
+
+					$participant->setAttributes($participantAttributes);
+					$participant->save();
+					
+					//todo send update to other participants
+					
+				}else
+				{				
+					//import it
+					$event = GO_Calendar_Model_Event::model()->importVObject($vevent);
+
+					if(!empty($params['status'])){
+						//Accept participant status
+						$participant = GO_Calendar_Model_Participant::model()
+										->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>$event->calendar->user_id));
+
+						$participant->status=$params['status'];
+						$participant->save();
+
+						$this->_sendInvitation(array(), $event, false, array(), 'REPLY');
+					}
+				}
+				$response['success']=true;
 				
 				break;				
 			}
