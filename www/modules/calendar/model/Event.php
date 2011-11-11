@@ -83,6 +83,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	public function relations() {
 		return array(
 				'exceptionEvent'=>array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Event', 'field' => 'exception_for_event_id'),
+				'recurringEventException'=>array('type' => self::HAS_ONE, 'model' => 'GO_Calendar_Model_Exception', 'field' => 'exception_event_id'),//If this event is an exception for a recurring series. This relation points to the exception of the recurring series.
 				'calendar' => array('type' => self::BELONGS_TO, 'model' => 'GO_Calendar_Model_Calendar', 'field' => 'calendar_id'),
 				'participants' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Participant', 'field' => 'event_id', 'delete' => true),
 				'exceptions' => array('type' => self::HAS_MANY, 'model' => 'GO_Calendar_Model_Exception', 'field' => 'event_id', 'delete' => true),
@@ -126,10 +127,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param Unix Timestamp $date The date where the exception belongs to
 	 * @param Int $for_event_id The event id of the event where the exception belongs to
 	 */
-	public function addException($date) {
+	public function addException($date, $exception_event_id=0) {
 		$exception = new GO_Calendar_Model_Exception();
 		$exception->event_id = $this->id;
 		$exception->time = $date; // Needs to be a unix timestamp
+		$exception->exception_event_id=$exception_event_id;
 		$exception->save();
 	}
 
@@ -225,7 +227,30 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if ($wasNew && $this->exception_for_event_id > 0) {
 			
 			$newExeptionEvent = GO_Calendar_Model_Event::model()->findByPk($this->exception_for_event_id);
-			$newExeptionEvent->addException($this->exception_date);
+			$newExeptionEvent->addException($this->exception_date, $this->id);
+			
+			//copy particpants to new exception
+			$stmt = $newExeptionEvent->participants();
+			while($participant = $stmt->fetch()){
+				$newParticipant = new GO_Calendar_Model_Participant();
+				$newParticipant->setAttributes($participant->getAttributes());
+				unset($newParticipant->id);
+				$newParticipant->event_id=$this->id;
+				if(!$newParticipant->is_organizer){
+					$newParticipant->status=GO_Calendar_Model_Participant::STATUS_PENDING;
+				}
+				$newParticipant->save();
+			}
+		}
+		
+		//move exceptions if this event was moved in time
+		if(!$wasNew && !empty($this->rrule) && $this->isModified('start_time')){
+			$diffSeconds = $this->getOldAttributeValue('start_time')-$this->start_time;
+			$stmt = $this->exceptions();
+			while($exception = $stmt->fetch()){
+				$exception->time+=$diffSeconds;
+				$exception->save();
+			}
 		}
 	
 		if($this->isResource()){
@@ -445,8 +470,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		if($exceptionDate){
 			//must be an exception and start on the must start on the exceptionTime
-			$whereCriteria->addCondition('exception_event_id', 0,'>');
+			$exceptionJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('id', 'e.exception_event_id','=','t',true,true);
 			
+			$params->join(GO_Calendar_Model_Exception::model()->tableName(),$exceptionJoinCriteria,'e');
+			
+			$whereCriteria->addCondition('time', $exceptionDate,'=','e');			
 		}
 
 		$params->criteria($whereCriteria);
@@ -631,7 +660,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @return type 
 	 */
-	public function toICS($method='REQUEST', $forRecurrenceId=false) {
+	public function toICS($method='REQUEST') {
 		
 		//require vendor lib SabreDav vobject
 		require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
@@ -671,10 +700,17 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$dateType = $this->all_day_event ? Sabre_VObject_Element_DateTime::DATE : Sabre_VObject_Element_DateTime::LOCALTZ;
 		
-		if($forRecurrenceId){			
-			$recurrenceId =new Sabre_VObject_Element_DateTime("recurrence-id",$dateType);
-			$recurrenceId->setDateTime(new DateTime(date('c',$forRecurrenceId)));
-			$e->add($recurrenceId);
+		if($this->exception_for_event_id>0){
+			//this is an exception
+			
+			$exception = $this->recurringEventException();
+			if($exception){
+				$recurrenceId =new Sabre_VObject_Element_DateTime("recurrence-id",$dateType);
+				$dt = new DateTime();
+				$dt->setTimestamp($exception->time);
+				$recurrenceId->setDateTime($dt);
+				$e->add($recurrenceId);
+			}
 		}
 		
 		
@@ -693,7 +729,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		//todo exceptions
 		if(!empty($this->rrule)){
-			$e->rrule=$this->rrule;					
+			$e->rrule=str_replace('RRULE:','',$this->rrule);					
 			$stmt = $this->exceptions();
 			while($exception = $stmt->fetch()){
 				$exdate = new Sabre_VObject_Element_DateTime('exdate',Sabre_VObject_Element_DateTime::DATE);
