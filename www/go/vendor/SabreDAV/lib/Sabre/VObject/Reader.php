@@ -27,6 +27,7 @@ class Sabre_VObject_Reader {
      * @var array
      */
     static public $elementMap = array(
+				'DTSTAMP'   => 'Sabre_VObject_Element_DateTime',
         'DTSTART'   => 'Sabre_VObject_Element_DateTime',
         'DTEND'     => 'Sabre_VObject_Element_DateTime',
         'COMPLETED' => 'Sabre_VObject_Element_DateTime',

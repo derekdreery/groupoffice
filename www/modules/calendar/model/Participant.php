@@ -128,5 +128,11 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		return count($events)==0;
 	}
 	
+	public function defaultAttributes() {
+		$attr = parent::defaultAttributes();
+		$attr['user_id']=0;
+		return $attr;
+	}
+	
 
 }

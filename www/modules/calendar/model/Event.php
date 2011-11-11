@@ -172,8 +172,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function afterDbInsert() {
-		$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
-		return true;
+		if(!$this->uuid){
+			$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
+			return true;
+		}else
+		{
+			return false;
+		}
 	}
 	
 	protected function afterDelete() {
@@ -421,13 +426,14 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 		$params = GO_Base_Db_FindParams::newInstance()
 						->ignoreAcl()
+						->debugSql()
 						->single();		
 						
 		
 		if(!$calendar_id){
 			$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
 							->addCondition('calendar_id', 'c.id','=','t',true, true)
-							->addCondition('user_id', $user_id);
+							->addCondition('user_id', $user_id,'=','c');
 			
 			$params->join(GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
 		}else
@@ -593,7 +599,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	
-	
+	/**
+	 * Import an event from a VObject 
+	 * 
+	 * @param Sabre_VObject_Component $vobject
+	 * @param array $attributes Extra attributes to apply to the event
+	 * @return GO_Calendar_Model_Event 
+	 */
 	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()){
 		$event = new GO_Calendar_Model_Event();
 		
@@ -602,6 +614,36 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$event->description = (string) $vobject->description;
 		$event->start_time = $vobject->dtstart->getDateTime()->format('U');
 		$event->end_time = $vobject->dtend->getDateTime()->format('U');
+		
+		if($vobject->rrule){			
+			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule->readIcalendarRruleString($event->start_time, (string) $vobject->rrule);			
+			$event->rrule = $rrule->createRrule();
+			$event->repeat_end_time = $rrule->until;
+		}
+		
+		if($vobject->dtstamp)
+			$event->mtime=$vobject->dtstamp->getDateTime()->format('U');
+		
+		if($vobject->location)
+			$event->location=(string) $vobject->location;
+		
+		if($vobject->status)
+			$event->status=(string) $vobject->status;
+		
+		if($vobject->duration){
+			$duration = $this->_parseDuration($vobject->duration);
+			$event->end_time = $event->start_time+$duration;
+		}
+		
+		$event->all_day_event = isset($vobject->dtstart['VALUE']) && $vobject->dtstart['VALUE']=='DATE';
+		
+		if($vobject->valarm){
+			
+		}else
+		{
+			$event->reminder=0;
+		}
 		
 		$event->setAttributes($attributes);
 		$event->save();
@@ -616,19 +658,69 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->_importVObjectAttendee($event, $vobject->attendee, false);
 		}
 		
+		if($vobject->exdate){
+			
+		}
+		
+		
+		return $event;
+		
 		//var_dump($event);
 	}
 	
-	private function _importVobjectAttendee(GO_Calendar_Model_Event $event, Sabre_VObject_Property $vattendee, $isOrganizer=false){
-		
+	private function _parseDuration($duration){
+		preg_match('/(-?)P([0-9]+[WD])?T?([0-9]+H)?([0-9]+M)?([0-9]+S)?/', (string) $duration, $matches);
+		//var_dump($matches);
+
+
+		$negative = $matches[1]=='-' ? -1 : 1;
+
+		$days = 0;
+		$weeks = 0;
+		$hours=0;
+		$mins=0;
+		$secs = 0;
+		for($i=2;$i<count($matches);$i++){
+			$d = substr($matches[$i],-1);
+			switch($d){
+				case 'D':
+					$days += intval($matches[$i]);
+					break;
+				case 'W':
+					$weeks += intval($matches[$i]);
+					break;
+				case 'H':
+					$hours += intval($matches[$i]);
+					break;
+				case 'M':
+					$mins += intval($matches[$i]);
+					break;
+				case 'S':
+					$secs += intval($matches[$i]);
+					break;
+			}
+		}
+
+		return $negative*(($weeks * 60 * 60 * 24 * 7) + ($days * 60 * 60 * 24) + ($hours * 60 * 60) + ($mins * 60) + ($secs));
+	
+	}
+	
+	private function _importVObjectAttendee(GO_Calendar_Model_Event $event, Sabre_VObject_Property $vattendee, $isOrganizer=false){
+				
 		//var_dump($vattendee);
 		$p = new GO_Calendar_Model_Participant();
 		$p->is_organizer=$isOrganizer;
 		$p->event_id=$event->id;
 		$p->name = (string) $vattendee['CN'];
 		$p->email=str_replace('mailto:','', (string) $vattendee);
+		
+		$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $p->email);
+		if($user)
+			$p->user_id=$user->id;
+		
 		$p->status=$this->_importVObjectStatus((string) $vattendee['PARTSTAT']);
 		$p->role=(string) $vattendee['ROLE'];
+		
 		$p->save();
 		
 		return $p;
