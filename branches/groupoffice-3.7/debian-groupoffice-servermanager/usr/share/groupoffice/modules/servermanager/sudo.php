@@ -7,6 +7,9 @@ require('../../cli-functions.inc.php');
 
 $args = parse_cli_args($argv);
 
+if(empty($args['name']))
+	die("Name was empty");
+
 $db_name = str_replace('.','_', $args['name']);
 $db_name = str_replace('-','_', $db_name);
 
