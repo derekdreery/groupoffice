@@ -42,13 +42,14 @@ Ext.extend(GO.UploadPCForm, Ext.form.FormPanel, {
 	uploadHandler : function(){
 
 		this.form.submit({
+			url:GO.url('core/upload'),
 			waitMsg: GO.lang.waitMsgUpload,
 			success:function(form, action){
 				this.uploadFile.clearQueue();
 				
-				var file = (action.result.files) ? action.result.files[0] : action.result.file;
+				//var file = (action.result.files) ? action.result.files[0] : action.result.file;
 				
-				this.fireEvent('upload', this, file);
+				this.fireEvent('upload', this, action.result.files, action);
 			},
 			failure:function(form, action)
 			{
