@@ -23,6 +23,7 @@ Ext.namespace("GO.users");
 Ext.namespace('GO.layout');
 Ext.namespace('GO.mailFunctions');
 Ext.namespace('GO.menu');
+Ext.namespace('GO.base.email');
 
 //An object of functions that open a particular link.
 //the index is the link type and the function gets the id as a parameter
