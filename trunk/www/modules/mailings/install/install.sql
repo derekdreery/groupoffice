@@ -19,17 +19,17 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Tabel structuur voor tabel `ml_templates`
 --
 
-DROP TABLE IF EXISTS `ml_templates`;
-CREATE TABLE IF NOT EXISTS `ml_templates` (
-  `id` int(11) NOT NULL default '0',
-  `user_id` int(11) NOT NULL default '0',
-  `type` tinyint(4) NOT NULL default '0',
-  `name` varchar(100) default NULL,
-  `acl_id` int(11) NOT NULL default '0',
-  `content` longblob NOT NULL,
-	`extension` VARCHAR( 4 ) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+--DROP TABLE IF EXISTS `ml_templates`;
+--CREATE TABLE IF NOT EXISTS `ml_templates` (
+--  `id` int(11) NOT NULL default '0',
+--  `user_id` int(11) NOT NULL default '0',
+--  `type` tinyint(4) NOT NULL default '0',
+--  `name` varchar(100) default NULL,
+--  `acl_id` int(11) NOT NULL default '0',
+--  `content` longblob NOT NULL,
+--	`extension` VARCHAR( 4 ) NOT NULL,
+--  PRIMARY KEY  (`id`)
+--) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
