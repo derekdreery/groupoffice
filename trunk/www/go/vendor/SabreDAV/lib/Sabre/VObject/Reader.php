@@ -27,13 +27,19 @@ class Sabre_VObject_Reader {
      * @var array
      */
     static public $elementMap = array(
-				'DTSTAMP'   => 'Sabre_VObject_Element_DateTime',
-        'DTSTART'   => 'Sabre_VObject_Element_DateTime',
-        'DTEND'     => 'Sabre_VObject_Element_DateTime',
-        'COMPLETED' => 'Sabre_VObject_Element_DateTime',
-        'DUE'       => 'Sabre_VObject_Element_DateTime',
-        'EXDATE'    => 'Sabre_VObject_Element_MultiDateTime',
+        'COMPLETED' => 'Sabre_VObject_Property_DateTime',
+        'CREATED' => 'Sabre_VObject_Property_DateTime',
+        'DTEND' => 'Sabre_VObject_Property_DateTime',
+        'DTSTAMP' => 'Sabre_VObject_Property_DateTime',
+        'DTSTART' => 'Sabre_VObject_Property_DateTime',
+        'DUE' => 'Sabre_VObject_Property_DateTime',
+        'EXDATE' => 'Sabre_VObject_Property_MultiDateTime',
+        'LAST-MODIFIED' => 'Sabre_VObject_Property_DateTime',
+				'RECURRENCE-ID' => 'Sabre_VObject_Property_DateTime',
+        'TRIGGER' => 'Sabre_VObject_Property_DateTime',
     );
+
+
 
     /**
      * Parses the file and returns the top component 

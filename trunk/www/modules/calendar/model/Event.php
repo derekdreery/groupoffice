@@ -10,6 +10,8 @@
  *
  * 
  * @property int $reminder The number of seconds prior to the start of the event.
+ * @property int $exception_event_id If this event is an exception it holds the id of the original event
+ * @property int $recurrence_id If this event is an exception it holds the date (not the time) of the original recurring instance. It can be used to identity it with an vcalendar file.
  * 
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -439,6 +441,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}else
 		{
 			$whereCriteria->addCondition('calendar_id', $calendar_id);
+		}
+		
+		if($exceptionDate){
+			//must be an exception and start on the must start on the exceptionTime
+			$whereCriteria->addCondition('exception_event_id', 0,'>');
+			
 		}
 
 		$params->criteria($whereCriteria);

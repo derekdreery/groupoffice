@@ -447,12 +447,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		return $response;
 	}
 	
-	
-	
-	public function actionAcceptInvitation($params){
-		
-		$response['success']=false;
-		
+	/**
+	 *
+	 * @param array $params
+	 * @return Sabre_VObject_Component 
+	 */
+	private function _getVObjectFromMail($params){
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
 		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
 		
@@ -467,61 +467,91 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				
 				//require vendor lib SabreDav vobject
 				require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
-				
+
 				$vcalendar = Sabre_VObject_Reader::read($data);
-				
-				$vevent = $vcalendar->vevent[0];				
-				//find and delete existing event
-				$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);				
-				
-				$userIsOrganizer=false;
-				if($event){
-					
-					$participant = GO_Calendar_Model_Participant::model()
-									->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>GO::user()->id));
-					if($participant)
-						$userIsOrganizer = $participant->is_organizer;
-					
-					//If the user is not the organizer simply delete the old event and
-					//import the update. If it's the organizer then we must update just the
-					//participant status.
-					if(!$userIsOrganizer)
-						$event->delete();
-				}				
-				
-				if($userIsOrganizer)
-				{
-					$participantAttributes=$event->vobjectAttendeeToParticipantAttributes($vevent->attendee);
 
-					$participant = GO_Calendar_Model_Participant::model()
-								->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$participantAttributes['email']));
-
-					$participant->setAttributes($participantAttributes);
-					$participant->save();
-					
-					//todo send update to other participants
-					
-				}else
-				{				
-					//import it
-					$event = GO_Calendar_Model_Event::model()->importVObject($vevent);
-
-					if(!empty($params['status'])){
-						//Accept participant status
-						$participant = GO_Calendar_Model_Participant::model()
-										->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>$event->calendar->user_id));
-
-						$participant->status=$params['status'];
-						$participant->save();
-
-						$this->_sendInvitation(array(), $event, false, array(), 'REPLY');
-					}
-				}
-				$response['success']=true;
-				
-				break;				
+				return $vcalendar->vevent[0];
 			}
 		}
+		return false;
+	}
+	
+	
+	public function actionAcceptInvitation($params){
+		
+		$response['success']=false;
+		
+		
+		//todo calendar should be associated with mail account!
+		//GO::user()->id must be replaced with $account->calendar->user_id
+
+		$vevent = $this->_getVObjectFromMail($params);
+		
+		//if a recurrence-id if passed then convert it to a unix time stamp.
+		//it is an update just for a particular occurrence.
+		$recurenceDate=false;
+		$recurrence = $vevent->select('recurrence-id');
+		if(count($recurrence)){
+			$recurenceDate=$recurrence[0]->getDateTime()->format('U');
+		}
+	
+		/*
+		 * TODO map cal_exceptions to cal_events and use the exception time as
+		 * recurrence-id.
+		 * 
+		 * On event update exceptions must be moved.
+		 */
+		
+		//find existing event
+		$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id, $recurenceDate);				
+
+		$userIsOrganizer=false;
+		if($event){
+
+			$participant = GO_Calendar_Model_Participant::model()
+							->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>GO::user()->id));
+			if($participant)
+				$userIsOrganizer = $participant->is_organizer;
+
+			//If the user is not the organizer simply delete the old event and
+			//import the update. If it's the organizer then we must update just the
+			//participant status.
+			if(!$userIsOrganizer)
+				$event->delete();
+		}				
+
+		if($userIsOrganizer)
+		{
+			$participantAttributes=$event->vobjectAttendeeToParticipantAttributes($vevent->attendee);
+
+			$participant = GO_Calendar_Model_Participant::model()
+						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$participantAttributes['email']));
+
+			$participant->setAttributes($participantAttributes);
+			$participant->save();
+
+			//todo send update to other participants
+
+		}else
+		{				
+			//import it
+			$event = GO_Calendar_Model_Event::model()->importVObject($vevent);
+
+			if(!empty($params['status'])){
+				//Accept participant status
+				$participant = GO_Calendar_Model_Participant::model()
+								->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>$event->calendar->user_id));
+
+				$participant->status=$params['status'];
+				$participant->save();
+
+				$this->_sendInvitation(array(), $event, false, array(), 'REPLY');
+			}
+		}
+		$response['success']=true;
+				
+	
+		
 		
 		return $response;
 	}
