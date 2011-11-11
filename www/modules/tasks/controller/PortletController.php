@@ -57,6 +57,9 @@ class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelect
 		
 		$store = GO_Base_Data_Store::newInstance(GO_Tasks_Model_Task::model());
 		
+		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addCondition('status',  GO_Tasks_Model_Task::STATUS_COMPLETED , '<>', 't');
+		
 		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('user_id', GO::user()->id,'=','pt')
 						->addCondition('tasklist_id', 'pt.tasklist_id', '=', 't', true, true);
@@ -66,6 +69,7 @@ class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelect
 		
 		$findParams = $store->getDefaultParams()
 						->select('t.*, tl.name AS tasklist_name')
+						->criteria($findCriteria)
 						->order(array('tasklist_name', $sort), $dir)
 						->ignoreAcl()
 						->join(GO_Tasks_Model_PortletTasklist::model()->tableName(),$joinCriteria,'pt')
