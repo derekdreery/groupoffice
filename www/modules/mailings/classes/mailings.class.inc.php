@@ -523,7 +523,7 @@ class mailings extends db
 			$tp->delete_mailing_group($mailings->f('id'));
 		}
 		
-		$sql = "SELECT id FROM ml_templates WHERE user_id='".$mailings->escape($user['id'])."'";
+		$sql = "SELECT id FROM ab_email_templates WHERE user_id='".$mailings->escape($user['id'])."'";
 		$mailings->query($sql);
 		while($mailings->next_record())
 		{

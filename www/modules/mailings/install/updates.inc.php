@@ -9,4 +9,5 @@ $updates["201110211025"][]="ALTER TABLE `ab_addresslist_companies` CHANGE `group
 $updates["201110211025"][]="ALTER TABLE `ab_addresslist_contacts` CHANGE `list_id` `addresslist_id` int(11) NOT NULL";
 $updates["201110211025"][]="ALTER TABLE `ab_addresslist_companies` CHANGE `list_id` `addresslist_id` int(11) NOT NULL";
 $updates["201110281015"][]="ALTER TABLE `ab_addresslists` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+$updates["201111081444"][]="RENAME TABLE `ml_templates` TO `ab_email_templates`";
 ?>

@@ -19,7 +19,7 @@ class templates extends db {
 	var $custom_field_types=array(2,3,8);
 
 	function get_template_by_name($user_id, $name) {
-		$sql = "SELECT * FROM ml_templates WHERE ml_templates.name='".$this->escape($name)."' AND  user_id='$user_id'";
+		$sql = "SELECT * FROM ab_email_templates WHERE ab_email_templates.name='".$this->escape($name)."' AND  user_id='$user_id'";
 		$this->query($sql);
 		if ($this->next_record()) {
 			return $this->record;
@@ -28,7 +28,7 @@ class templates extends db {
 	}
 
 	function download_OO_template($id) {
-		$sql = "SELECT * FROM ml_templates WHERE id='$id'";
+		$sql = "SELECT * FROM ab_email_templates WHERE id='$id'";
 		$this->query($sql);
 		if ($this->next_record()) {
 			return $this->record;
@@ -37,9 +37,9 @@ class templates extends db {
 	}
 
 	function get_writable_templates($user_id, $offset, $start, $name, $dir, $type=-1) {
-		$sql = "SELECT DISTINCT ml_templates.* ".
-						"FROM ml_templates ".
-						"	INNER JOIN go_acl ON (ml_templates.acl_id = go_acl.acl_id AND go_acl.level>1) ".
+		$sql = "SELECT DISTINCT ab_email_templates.* ".
+						"FROM ab_email_templates ".
+						"	INNER JOIN go_acl ON (ab_email_templates.acl_id = go_acl.acl_id AND go_acl.level>1) ".
 						"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 						"WHERE (go_acl.user_id=".intval($user_id)." ".
 						"OR go_users_groups.user_id=".intval($user_id).") ";
@@ -48,7 +48,7 @@ class templates extends db {
 			$sql .= " AND type='$type'";
 		}
 
-		$sql .= " ORDER BY ml_templates.".$name." ".$dir;
+		$sql .= " ORDER BY ab_email_templates.".$name." ".$dir;
 
 		if($offset > 0 ) {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
@@ -110,9 +110,9 @@ class templates extends db {
 	}
 
 	function get_authorized_templates($user_id, $offset, $start, $name, $dir, $type=-1, $query='') {
-		$sql = "SELECT DISTINCT ml_templates.id, ml_templates.type, ml_templates.extension, ml_templates.name, ml_templates.user_id ".
-						"FROM ml_templates ".						
-						"INNER JOIN go_acl ON ml_templates.acl_id = go_acl.acl_id ".
+		$sql = "SELECT DISTINCT ab_email_templates.id, ab_email_templates.type, ab_email_templates.extension, ab_email_templates.name, ab_email_templates.user_id ".
+						"FROM ab_email_templates ".						
+						"INNER JOIN go_acl ON ab_email_templates.acl_id = go_acl.acl_id ".
 						"LEFT JOIN go_users_groups ON go_acl.group_id = go_users_groups.group_id ".
 						"WHERE (go_acl.user_id=".intval($user_id)." ".
 						"OR go_users_groups.user_id=".intval($user_id).") ";
@@ -122,9 +122,9 @@ class templates extends db {
 		}
 
 		if(!empty($query))
-			$sql .= "AND ml_templates.name LIKE '".$this->escape($query)."'";
+			$sql .= "AND ab_email_templates.name LIKE '".$this->escape($query)."'";
 
-		$sql .= " ORDER BY ml_templates.".$name." ".$dir;
+		$sql .= " ORDER BY ab_email_templates.".$name." ".$dir;
 
 		if($offset > 0 ) {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
@@ -137,18 +137,18 @@ class templates extends db {
 	}
 
 	function add_template($template, $types='') {
-		$template['id']=$this->nextid('ml_templates');
-		$this->insert_row("ml_templates", $template,$types,false);
+		$template['id']=$this->nextid('ab_email_templates');
+		$this->insert_row("ab_email_templates", $template,$types,false);
 		return $template['id'];
 	}
 
 	function update_template($template,$types='') {
-		$this->update_row("ml_templates", 'id', $template, $types,false);
+		$this->update_row("ab_email_templates", 'id', $template, $types,false);
 	}
 
 
 	function get_template($template_id) {
-		$sql = "SELECT * FROM ml_templates WHERE id='$template_id'";
+		$sql = "SELECT * FROM ab_email_templates WHERE id='$template_id'";
 
 		$this->query($sql);
 		if ($this->next_record()) {
@@ -163,7 +163,7 @@ class templates extends db {
 
 			$GLOBALS['GO_SECURITY']->delete_acl($template['acl_id']);
 
-			$sql = "DELETE FROM ml_templates WHERE id='$template_id'";
+			$sql = "DELETE FROM ab_email_templates WHERE id='$template_id'";
 			return $this->query($sql);
 		}
 		return false;
@@ -483,15 +483,15 @@ class templates extends db {
 	function save_default_template($user_id, $template_id) {
 		
 		if ($this->get_default_template($user_id)) {
-			$this->update_row("ml_default_templates", 'user_id', array('user_id'=>$user_id, 'template_id'=>$template_id));
+			$this->update_row("ab_default_email_templates", 'user_id', array('user_id'=>$user_id, 'template_id'=>$template_id));
 		}else {
-			$this->insert_row("ml_default_templates", array('user_id'=>$user_id, 'template_id'=>$template_id));
+			$this->insert_row("ab_default_email_templates", array('user_id'=>$user_id, 'template_id'=>$template_id));
 		}
 		return true;
 	}
 
 	function get_default_template($user_id){
-		$this->query("SELECT * FROM ml_default_templates WHERE user_id=?", 'i', $user_id);
+		$this->query("SELECT * FROM ab_default_email_templates WHERE user_id=?", 'i', $user_id);
 		return $this->next_record();
 	}
 
