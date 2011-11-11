@@ -67,8 +67,8 @@ GO.addressbook.EmailTemplateDialog = function(config){
 }
 
 Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
-
-	inline_attachments : [],
+//
+//	inline_attachments : [],
 	
 	show : function (email_template_id) {
 		
@@ -98,7 +98,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 					
 					this.selectUser.setRemoteText(action.result.data.user_name);
 					
-					this.inline_attachments = action.result.data.inline_attachments;	
+					this.htmlEditPanel.setInlineAttachments(action.result.data.inlineAttachments);	
 					
 					GO.addressbook.EmailTemplateDialog.superclass.show.call(this);
 				},
@@ -129,28 +129,28 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 	submitForm : function(hide){
 
 		//won't toggle if not done twice...
-		this.emailHtmlEditor.toggleSourceEdit(false);
-		this.emailHtmlEditor.toggleSourceEdit(false);
+		this.htmlEditPanel.getHtmlEditor().toggleSourceEdit(false);
+		this.htmlEditPanel.getHtmlEditor().toggleSourceEdit(false);
 
 		this.formPanel.form.submit(
 		{
 			url: GO.url('addressbook/emailTemplate/submit'),
-			params: {
-				inline_attachments: Ext.encode(this.inline_attachments)
-			},
+//			params: {
+//				inline_attachments: Ext.encode(this.inline_attachments)
+//			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 				
 				this.fireEvent('save', this);
-				
-				this.inline_attachments = action.result.inline_attachments;
+//				
+//				this.inline_attachments = action.result.inline_attachments;
 				
 				if(hide)
 				{
 					this.hide();	
 				}else
 				{
-					this.emailHtmlEditor.setValue(action.result.body);
+					this.htmlEditPanel.getHtmlEditor().setValue(action.result.body);
 					
 					if(action.result.id)
 					{
@@ -176,18 +176,18 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 	
 	buildForm : function () {
 		
-		var imageInsertPlugin = new GO.plugins.HtmlEditorImageInsert();
-		imageInsertPlugin.on('insert', function(plugin, path, url,temp,id) {
-
-
-			var ia = {
-				tmp_file : path,
-				url : url,
-				temp:temp
-			};
-
-		this.inline_attachments.push(ia);
-		}, this);
+//		var imageInsertPlugin = new GO.plugins.HtmlEditorImageInsert();
+//		imageInsertPlugin.on('insert', function(plugin, path, url,temp,id) {
+//
+//
+//			var ia = {
+//				tmp_file : path,
+//				url : url,
+//				temp:temp
+//			};
+//
+//		this.inline_attachments.push(ia);
+//		}, this);
 		
 		var autodata = [			
 		['{date}',GO.lang['strDate']],
@@ -269,8 +269,8 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 					scope:this,
 					click:function(dataview, index){
 						
-						this.emailHtmlEditor.insertAtCursor(dataview.store.data.items[index].data.value);
-						this.emailHtmlEditor.deferFocus();
+						this.htmlEditPanel.getHtmlEditor().insertAtCursor(dataview.store.data.items[index].data.value);
+						this.htmlEditPanel.getHtmlEditor().deferFocus();
 						dataview.clearSelections();
 					}
 				}
@@ -302,8 +302,8 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 						listeners:{
 							scope:this,
 							click:function(dataview, index){
-								this.emailHtmlEditor.insertAtCursor(dataview.store.data.items[index].data.value);
-								this.emailHtmlEditor.deferFocus();
+								this.htmlEditPanel.getHtmlEditor().insertAtCursor(dataview.store.data.items[index].data.value);
+								this.htmlEditPanel.getHtmlEditor().deferFocus();
 								dataview.clearSelections();
 							}
 						}
@@ -334,8 +334,8 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 						listeners:{
 							scope:this,
 							click:function(dataview, index){
-								this.emailHtmlEditor.insertAtCursor(dataview.store.data.items[index].data.value);
-								this.emailHtmlEditor.deferFocus();
+								this.htmlEditPanel.getHtmlEditor().insertAtCursor(dataview.store.data.items[index].data.value);
+								this.htmlEditPanel.getHtmlEditor().deferFocus();
 								dataview.clearSelections();
 							}
 						}
@@ -368,8 +368,8 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 						listeners:{
 							scope:this,
 							click:function(dataview, index){
-								this.emailHtmlEditor.insertAtCursor(dataview.store.data.items[index].data.value);
-								this.emailHtmlEditor.deferFocus();
+								this.htmlEditPanel.getHtmlEditor().insertAtCursor(dataview.store.data.items[index].data.value);
+								this.htmlEditPanel.getHtmlEditor().deferFocus();
 								dataview.clearSelections();
 							}
 						}
@@ -408,23 +408,12 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 				anchor: '100%'
 			}),
 
-			this.emailHtmlEditor = new Ext.form.HtmlEditor({
-				hideLabel: true,
-				name: 'body',
-				border: false,
-				allowBlank: true,
-				value:'<font style="font:12px arial"><br /></font>',
-				plugins: [
-				imageInsertPlugin
-				],
-				style:'font:12px arial";',
-				defaultFont:'arial',
-				anchor: '100% -90'  // anchor width by percentage and height by raw adjustment
+			this.htmlEditPanel = new GO.base.email.EmailEditorPanel({
+				enableInlineAttachments : true
 			})]
 				
 		});
-		
-		
+
 		var borderLayoutPanel = new Ext.Panel({
 			layout:'border',
 			title:GO.lang['strProperties'],		
