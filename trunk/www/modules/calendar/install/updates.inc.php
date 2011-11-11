@@ -96,3 +96,4 @@ $updates["201110281025"][]="ALTER TABLE `cal_participants` CHANGE `role` `role` 
 
 $updates["201111021004"][]="update `cal_events` set resource_event_id=0 WHERE id=resource_event_id;";
 $updates["201111101938"][]="ALTER TABLE `cal_participants` CHANGE `event_id` `event_id` INT( 11 ) NOT NULL";
+$updates["201111101938"][]="ALTER TABLE `cal_events` CHANGE `busy` `busy` TINYINT( 1 ) NOT NULL DEFAULT '1'";

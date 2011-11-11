@@ -230,6 +230,17 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		$this->_count = !empty($rrule_arr['COUNT']) ? intval($rrule_arr['COUNT']) : 0;
 		$this->_interval = !empty($rrule_arr['INTERVAL']) ? intval($rrule_arr['INTERVAL']) : 1;
 		$this->_bysetpos = !empty($rrule_arr['BYSETPOS']) ? intval($rrule_arr['BYSETPOS']) : 0;
+		
+		
+		//figure out end time of event
+		//UNTESTED
+		if($this->_count>0 && empty($this->_until)){
+			$this->_until=0;
+			$start_time=$event['start_time'];
+			for($i=1;$i<$this->_count;$i++) {
+				$this->_until=$this->getNextRecurrence();
+			}			
+		}
 	}
 	
 	/**

@@ -437,6 +437,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 	public function actionAcceptInvitation($params){
 		
+		$response['success']=false;
+		
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
 		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
 		
@@ -454,24 +456,28 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 				
 				$vcalendar = Sabre_VObject_Reader::read($data);
 				
-				$vevent = $vcalendar->vevent[0];
+				$vevent = $vcalendar->vevent[0];				
+				//find and delete existing event
+				$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id);
+				if($event)
+					$event->delete();
 				
-				//var_dump($vobject);
+				//import it
+				$event = GO_Calendar_Model_Event::model()->importVObject($vevent);
 				
-				$attendee = $vevent->attendee;
+				//Accept participant status
+				$participant = GO_Calendar_Model_Participant::model()
+								->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>GO::user()->id));
 				
-				$event = GO_Calendar_Model_Event::model()->findByUuid($vevent->uid, GO::user()->id);
-				if(!$event){
-					$event = GO_Calendar_Model_Event::model()->importVobject($vevent);
-				}
+				$participant->status=$params['status'];
 				
+				$response['success']=$participant->save();
 				
-					
-				
-				//var_dump($attendee);
-								
+				break;				
 			}
 		}
+		
+		return $response;
 	}
 	
 	
