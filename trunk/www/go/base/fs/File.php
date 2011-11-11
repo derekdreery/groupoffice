@@ -140,6 +140,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * Returns the mime type for the file.
 	 * If it can't detect it it will return application/octet-stream
 	 * 
+	 * @todo rename to contentType
 	 * @return String 
 	 */
 	public function mimeType()
