@@ -173,7 +173,8 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 				//'description'=>'DIT IS DE BESCHRIJVING DIE STANDAARD WORDT INGEVULD',
 				'status' => GO_Tasks_Model_Task::STATUS_NEEDS_ACTION,
 				'remind' => $settings->remind,
-				'start_time'=> time(), 
+				'start_time'=> time(),
+				'due_time'=> time(),
 				'tasklist_id'=>$settings->default_tasklist_id,
 				'reminder' => strtotime(date('Y-m-d', GO_Base_Util_Date::date_add(time(), -$settings->reminder_days)).' '.$settings->reminder_time)
 		);
