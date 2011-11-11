@@ -33,6 +33,9 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 
 	root_folder_id : 0,
 	folder_id : 0,
+	
+	isTempFile : true,
+	
 	onRender :  function() {
 
 		var element={};
@@ -50,16 +53,11 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 		element.overflowText=GO.lang.insertImage;
 		
 							
-		this.uploadForm = new GO.UploadPCForm({
-			baseParams:{
-				task:'upload_image'
-			},
-			url:BaseHref+'action.php'
-		});
+		this.uploadForm = new GO.UploadPCForm();
 
-		this.uploadForm.on('upload', function(e, file)
+		this.uploadForm.on('upload', function(e, files)
 		{
-			this.selectTempImage(file.name);
+			this.selectTempImage(files[0]);
 		},this);
 
 		var menuItems = [
@@ -100,17 +98,15 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 		GO.selectFileBrowserWindow.show.defer(200, GO.selectFileBrowserWindow);
 	},
 
-	selectTempImage : function(name)
+	selectTempImage : function(path)
 	{
-		this.selectedUrl = BaseHref+'controls/download_temp_file.php?name='+encodeURIComponent(name);
+		this.selectedUrl = GO.url("core/downloadTempFile", {path:path});
 
-		this.name = name;
-		this.selectedPath = name;
-		this.temp=true;
+		this.selectedPath = path;
 
 		var html = '<img src="'+this.selectedUrl+'" border="0" />';
 
-		this.fireEvent('insert', this,  this.selectedPath, this.selectedUrl, this.temp);
+		this.fireEvent('insert', this,  this.selectedPath, this.selectedUrl);
 		
 		this.menu.hide();
 
@@ -119,21 +115,23 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 	},
 	
 	selectImage : function(r){	
-
-		this.selectedRecord = r;
-		this.selectedPath = r.data.path;
-		this.selectedUrl = GO.settings.modules.files.url+'download.php?id='+this.selectedRecord.get('id');
-		this.temp=false;
-				
-		var html = '<img src="'+this.selectedUrl+'" border="0" />';
-								
-		this.fireEvent('insert', this, this.selectedPath, this.selectedUrl, this.temp, r.data.id);
-
-		this.editor.focus();
-			
-		this.editor.insertAtCursor(html);
 		
-		GO.selectFileBrowserWindow.hide();
+		alert("Todo copy file to temp file");
+
+//		this.selectedRecord = r;
+//		this.selectedPath = r.data.path;
+//		this.selectedUrl = GO.settings.modules.files.url+'download.php?id='+this.selectedRecord.get('id');
+//		this.isTempFile=false;
+//				
+//		var html = '<img src="'+this.selectedUrl+'" border="0" />';
+//								
+//		this.fireEvent('insert', this, this.selectedPath, this.selectedUrl, this.isTempFile, r.data.id);
+//
+//		this.editor.focus();
+//			
+//		this.editor.insertAtCursor(html);
+//		
+//		GO.selectFileBrowserWindow.hide();
 	}
 	
 });
