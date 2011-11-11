@@ -143,6 +143,38 @@ class GO_Base_Db_FindCriteria {
 	}
 	
 	/**
+	 * Adds a condition to this object and returns itself. 
+	 * 
+	 * WARNING: This function does not do any sanity checks on the input! It just 
+	 * inserts the plain values so user input may not be passed to this function.
+	 * 
+	 * @param String $value1 The field value where this condition is for.
+	 * @param String $value The value of the field for this condition.
+	 * @param String $comparator How needs this field be compared with the value. Can be ('<','>','<>','=<','>=','=').
+	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true. 
+	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
+	 */
+	public function addRawCondition($value1, $value2, $comparator='=', $useAnd=true) {
+		$this->_appendOperator($useAnd);
+		$this->_appendRawConditionString($value1, $value2, $comparator);		
+		return $this;
+	}
+	
+	/**
+	 * Private function to add the given condition to the rest of this object's condition string.
+	 * 
+	 * WARNING: This function does not do any sanity checks on the input! It just 
+	 * inserts the plain values so user input may not be passed to this function.
+	 * 
+	 * @param String $value1 The raw field where this condition is for.
+	 * @param Mixed $value2 The raw value of the field for this condition.
+	 * @param String $comparator How needs this field be compared with the value. Can be ('<','>','<>','=<','>=','=').
+	 */
+	private function _appendRawConditionString($value1, $value2, $comparator) {
+		$this->_condition .= ' '.$value1.' '.$comparator.' '.$value2;
+	}
+	
+	/**
 	 * Add an IN condition to this object and returns itself.
 	 * 
 	 * @param String $field The field where this condition is for.
