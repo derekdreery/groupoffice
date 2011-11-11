@@ -35,9 +35,9 @@ class GO_Addressbook_Controller_EmailTemplate extends GO_Base_Controller_Abstrac
 		
 		// create message model from client's content field, turned into HTML format
 		$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($model->content);
-		
+	
 		$response['data'] = array_merge($response['data'], $message->toOutputArray());
-		
+
 		return parent::afterLoad($response, $model, $params);
 	}
 	
