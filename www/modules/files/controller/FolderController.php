@@ -561,21 +561,6 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return $model->files_folder_id;
 	}
 
-	public function actionUpload($params) {
-
-		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
-		$tmpFolder->delete();
-		$tmpFolder->create();
-
-		$files = GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $tmpFolder);
-		GO::session()->values['files']['uploadqueue'] = array();
-		foreach ($files as $file) {
-			GO::session()->values['files']['uploadqueue'][] = $file->path();
-		}
-
-		return array('success' => true);
-	}
-
 	public function actionProcessUploadQueue($params) {
 		$response['success'] = true;
 
