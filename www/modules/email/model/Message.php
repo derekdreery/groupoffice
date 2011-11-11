@@ -173,6 +173,9 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	/**
 	 * Returns MIME fields contained in this class's instance as an associative
 	 * array.
+	 * 
+	 * @param boolean $html Whether or not to return HTML body. The alternative is
+	 * plain text. Defaults to true.
 	 * @return Array
 	 */
 	public function toOutputArray($html=true) {
