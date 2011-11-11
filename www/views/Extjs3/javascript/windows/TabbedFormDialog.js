@@ -94,7 +94,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		this.formPanel = new Ext.form.FormPanel({
 			waitMsgTarget:true,			
 			border: false,			
-			baseParams : {}
+			baseParams : {},
+			layout:'fit'
 		});
 
 		if(this._panels.length > 1) {		    
@@ -108,21 +109,19 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			});
 		    
 			this.formPanel.add(this._tabPanel);
-		} else if (this._panels.length==1) {
-			
-			this._panels[0].items.each(function(item){
-				this.formPanel.add(item);
-			}, this);
-			
-			if(this._panels[0].cls)
-				this.formPanel.cls=this._panels[0].cls;
-			
-			if(this._panels[0].bodyStyle)
-				this.formPanel.bodyStyle=this._panels[0].bodyStyle;
-			
-			this.formPanel.autoScroll=true;
-			
-			delete this._panels[0];
+		} else if (this._panels.length==1) {			
+//			this._panels[0].items.each(function(item){
+//				this.formPanel.add(item);
+//			}, this);
+//			
+//			if(this._panels[0].cls)
+//				this.formPanel.cls=this._panels[0].cls;
+//			
+//			if(this._panels[0].bodyStyle)
+//				this.formPanel.bodyStyle=this._panels[0].bodyStyle;
+//			
+//			delete this._panels[0];
+			this.formPanel.add(this._panels[0]);
 		}
 		
 		this.items=this.formPanel;				
