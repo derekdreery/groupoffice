@@ -20,7 +20,7 @@ GO.addressbook.EmployeesPanel = function(config)
 			},
 
 			{
-				name:'addressbook_name'
+				name:'name'
 			},
 
 			{
