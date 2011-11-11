@@ -273,6 +273,17 @@ GO.addressbook.MainPanel = function(config)
 	var tbar=[
 	{
 		iconCls: 'btn-addressbook-add-contact',
+		text: 'WILMAR',
+		cls: 'x-btn-text-icon',
+		handler: function(){
+			if (!GO.addressbook.wilmarDialog)
+				GO.addressbook.wilmarDialog = new GO.addressbook.WilmarDialog();
+			GO.addressbook.wilmarDialog.show(1);
+		},
+		scope: this
+	},
+	{
+		iconCls: 'btn-addressbook-add-contact',
 		text: GO.addressbook.lang['btnAddContact'],
 		cls: 'x-btn-text-icon',
 		handler: function(){

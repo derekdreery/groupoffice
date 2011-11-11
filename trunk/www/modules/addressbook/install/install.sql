@@ -196,3 +196,33 @@ CREATE TABLE IF NOT EXISTS `ab_addresslist_companies` (
 
 
 -- --------------------------------------------------------
+
+--
+-- Tabel structuur voor tabel `ab_email_templates`
+--
+
+DROP TABLE IF EXISTS `ab_email_templates`;
+CREATE TABLE IF NOT EXISTS `ab_email_templates` (
+  `id` int(11) NOT NULL default '0',
+  `user_id` int(11) NOT NULL default '0',
+  `type` tinyint(4) NOT NULL default '0',
+  `name` varchar(100) default NULL,
+  `acl_id` int(11) NOT NULL default '0',
+  `content` longblob NOT NULL,
+	`extension` VARCHAR( 4 ) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ab_default_email_templates`
+--
+
+DROP TABLE IF EXISTS `ab_default_email_templates`;
+CREATE TABLE IF NOT EXISTS `ab_default_email_templates` (
+  `user_id` int(11) NOT NULL,
+  `template_id` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`),
+  KEY `template_id` (`template_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
