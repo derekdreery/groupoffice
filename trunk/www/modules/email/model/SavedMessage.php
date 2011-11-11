@@ -79,7 +79,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 		$attributes['date']=isset($structure->headers['date']) ? $structure->headers['date'] : date('c');		
 		$attributes['udate']=strtotime($attributes['date']);
 		$attributes['size']=strlen($mimeData);
-		
+
 		$this->setAttributes($attributes);
 		
 		$this->_tmpDir=GO::config()->tmpdir.'saved_messages/'.uniqid(time()).'/';
@@ -109,7 +109,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 	}
 	
 	protected function getAttachmentUrl($attachment) {
-		return GO::url('core/downloadTempFile', array('path',$attachment['tmp_file']));
+		return GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
 	}
 
 	private function _getParts($structure, $part_number_prefix='') {
@@ -217,4 +217,46 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 		return false;
 	}
 
+//	protected function _getAttachedImages($mimeNode) {
+//		$imageInfos = array();
+//
+//		if (!empty($mimeNode->ctype_primary) && $mimeNode->ctype_primary=='image') {
+//			$imageInfos[] = array(
+//					'filename' => $mimeNode->d_parameters['filename'],
+//					'image' => $mimeNode->body
+//			);
+//		}
+//		if (!empty($mimeNode->parts) && is_array($mimeNode->parts)) {
+//			foreach ($mimeNode->parts as $part) {
+//				$imageInfos = array_merge($imageInfos,$this->_getAttachedImages($part));
+//			}
+//		}
+//		
+//		return $imageInfos;
+//	}
+//	
+//	/**
+//	 * Returns information of the images, if any.
+//	 * @return Array Array of elements of type array("url"=>img src tag,
+//	 * "path"=>image location on server)
+//	 */
+//	public function getEmbeddedImages() {
+//		$imagePaths = array();
+////		preg_match_all('!<[\s]*img[\s][.]*src[\s]*="([^"]*)"!',$this->getHtmlBody(),$matches);
+////		foreach ($matches[1] as $src) {
+////			$pathArr = explode('&amp;path=',$src);
+////			$imagePaths[] = urldecode($pathArr[1]);
+////		}
+//		
+//		return $imagePaths;
+//	}
+//
+//	/**
+//	 * 
+//	 */
+//	public function toOutputArray($html=true) {
+//		$response = parent::toOutputArray();
+//		$response['inlineImages'] = $this->inlineImages;
+//		return $response;
+//	}
 }
