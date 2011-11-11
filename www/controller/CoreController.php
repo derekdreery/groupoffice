@@ -456,7 +456,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	public function actionUpload($params) {
 
 		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
-		$tmpFolder->delete();
+//		$tmpFolder->delete();
 		$tmpFolder->create();
 
 		$files = GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $tmpFolder);
