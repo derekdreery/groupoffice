@@ -824,12 +824,12 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 		if($vobject->organizer){
 	//		var_dump($vobject->organizer);
-			$this->_importVObjectAttendee($event, $vobject->organizer, true);
+			$this->importVObjectAttendee($event, $vobject->organizer, true);
 		}
 		
 		$attendees = $vobject->select('attendee');
 		foreach($attendees as $attendee)
-			$this->_importVObjectAttendee($event, $attendee, false);
+			$this->importVObjectAttendee($event, $attendee, false);
 		
 		
 		if($vobject->exdate){
@@ -879,28 +879,37 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	}
 	
-	private function _importVObjectAttendee(GO_Calendar_Model_Event $event, Sabre_VObject_Property $vattendee, $isOrganizer=false){
-				
-		//var_dump($vattendee);
-		$p = new GO_Calendar_Model_Participant();
-		$p->is_organizer=$isOrganizer;
-		$p->event_id=$event->id;
-		$p->name = (string) $vattendee['CN'];
-		$p->email=str_replace('mailto:','', (string) $vattendee);
+	/**
+	 * Will import an attendee from a VObject to a given event. If the attendee
+	 * already exists it will update it.
+	 * 
+	 * @param GO_Calendar_Model_Event $event
+	 * @param Sabre_VObject_Property $vattendee
+	 * @param boolean $isOrganizer
+	 * @return GO_Calendar_Model_Participant 
+	 */
+	public function importVObjectAttendee(GO_Calendar_Model_Event $event, Sabre_VObject_Property $vattendee, $isOrganizer=false){
+			
+		$attributes = $this->_vobjectAttendeeToParticipantAttributes($vattendee);
 		
-		$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $p->email);
-		if($user)
-			$p->user_id=$user->id;
+		$p= GO_Calendar_Model_Participant::model()
+						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$attributes['email']));
+		if(!$p){
+			$p = new GO_Calendar_Model_Participant();
+			$p->is_organizer=$isOrganizer;		
+			$p->event_id=$event->id;					
+			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $p->email);
+			if($user)
+				$p->user_id=$user->id;
+		}		
 		
-		$p->status=$this->_importVObjectStatus((string) $vattendee['PARTSTAT']);
-		$p->role=(string) $vattendee['ROLE'];
-		
+		$p->setAttributes($attributes);
 		$p->save();
 		
 		return $p;
 	}
 	
-	public function vobjectAttendeeToParticipantAttributes(Sabre_VObject_Property $vattendee){
+	private function _vobjectAttendeeToParticipantAttributes(Sabre_VObject_Property $vattendee){
 		return array(
 				'name'=>(string) $vattendee['CN'],
 				'email'=>str_replace('mailto:','', (string) $vattendee),

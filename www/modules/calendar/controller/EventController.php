@@ -497,9 +497,6 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$recurrenceDate=$firstMatch->getDateTime()->format('U');
 		}
 		
-		
-		//TODO test import of new exception from external client
-		
 		//find existing event
 		$event = GO_Calendar_Model_Event::model()->findByUuid((string)$vevent->uid, GO::user()->id, 0, $recurrenceDate);				
 
@@ -525,19 +522,12 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			if(!$event)
 				throw new Exception("The event wasn't found in your calendar");
 			
-			$participantAttributes=$event->vobjectAttendeeToParticipantAttributes($vevent->attendee);
-
-			$participant = GO_Calendar_Model_Participant::model()
-						->findSingleByAttributes(array('event_id'=>$event->id, 'email'=>$participantAttributes['email']));
-
-			$participant->setAttributes($participantAttributes);
-			$participant->save();
-
-			//todo send update to other participants?
+			$participant = $event->importVObjectAttendee($event, $vevent->attendee);			
+			
+			//todo should we send update to other participants?
 
 		}else
-		{				
-			
+		{	
 			$importAttributes=array();
 			if($recurrenceDate){
 				//if a particular recurrence-id was send then we queried for that particular
@@ -560,22 +550,52 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$event = GO_Calendar_Model_Event::model()->importVObject($vevent, $importAttributes);
 
 			if(!empty($params['status'])){
-				//Accept participant status
+				//Update participant status.
 				$participant = GO_Calendar_Model_Participant::model()
 								->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>$event->calendar->user_id));
 
 				$participant->status=$params['status'];
 				$participant->save();
 
+				//When the status changes we should notify the organizer.
 				$this->_sendInvitation(array(), $event, false, array(), 'REPLY');
 			}
 		}
 		$response['success']=true;
-				
-	
-		
 		
 		return $response;
+	}
+	
+	
+	
+	public function actionImportIcs($params){
+		//require vendor lib SabreDav vobject
+		require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
+		
+		$file = new GO_Base_Fs_File($params['file']);
+		
+		if(!$file->exists()){
+			
+			$shortopts  = "";
+
+
+$longopts  = array(
+    "file",     // Required value    
+);
+$options = getopt($shortopts, $longopts);
+var_dump($options);
+			
+			var_dump($GLOBALS['argv']);
+			die("File does not exist");
+		}
+		
+		$data = $file->getContents();
+		
+		var_dump($data);
+
+		$vcalendar = Sabre_VObject_Reader::read($data);
+		
+		$event = GO_Calendar_Model_Event::model()->importVObject($vcalendar->vevent[0]);
 	}
 	
 	
