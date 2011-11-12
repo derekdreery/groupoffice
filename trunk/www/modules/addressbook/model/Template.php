@@ -23,7 +23,7 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	}
 	
 	public function tableName(){
-		return 'ab_templates';
+		return 'ab_email_templates';
 	}
 	
 	private function _addTagPrefix($attributes, $tagPrefix){
