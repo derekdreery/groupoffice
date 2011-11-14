@@ -118,8 +118,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * This getter recursively builds the folder path.
 	 * @return string 
 	 */
-	protected function getPath() {
-		if(!isset($this->_path)){
+	protected function getPath($forceResolve=false) {
+		if($forceResolve || !isset($this->_path)){
 			$this->_path = $this->name;
 			$currentFolder = $this;
 			while ($currentFolder = $currentFolder->parent) {
@@ -181,7 +181,14 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 							
 				$fsFolder = new GO_Base_Fs_Folder($oldPath);
 				
-				if (!$fsFolder->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($this->path))))
+				//unset($this->_path);
+				
+				$newRelPath = $this->getPath(true);
+				var_dump($newRelPath);
+				
+				$newFsFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($newRelPath));
+				
+				if (!$fsFolder->move($newFsFolder))
 					throw new Exception("Could not rename folder on the filesystem");
 			}
 		}
