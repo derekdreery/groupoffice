@@ -1,7 +1,5 @@
-modules/mailings/TemplatesGrid.js
 modules/mailings/MailingsGrid.js
 modules/mailings/MailingDialog.js
-modules/mailings/EmailTemplateDialog.js
 modules/mailings/MailingGrids.js
 modules/mailings/SelectMailingsPanel.js
 modules/mailings/SelectMailingGroupWindow.js
