@@ -801,6 +801,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if($vobject->location)
 			$event->location=(string) $vobject->location;
 		
+		//var_dump($vobject->status);
 		if($vobject->status)
 			$event->status=(string) $vobject->status;
 		
@@ -819,7 +820,45 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 		
 		$event->setAttributes($attributes);
+		
+		
+		$recurrenceIds = $vobject->select('recurrence-id');
+		if(count($recurrenceIds)){
+			
+			//this is a single instance of a recurring series.
+			//attempt to find the exception of the recurring series event by uuid
+			//and recurrence time so we can set the relation cal_exceptions.exception_event_id=cal_events.id
+			
+			$firstMatch = array_shift($recurrenceIds);
+			$recurrenceTime=$firstMatch->getDateTime()->format('U');
+			
+			$whereCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('uuid', $event->uuid,'=','ev')
+							->addCondition('time', $recurrenceTime,'=','t');
+			
+			$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('event_id', 'ev.id','=','t',true, true);
+			
+			
+			$findParams = GO_Base_Db_FindParams::newInstance()
+							->single()
+							->criteria($whereCriteria)
+							->join(GO_Calendar_Model_Event::model()->tableName(),$joinCriteria,'ev');
+			
+			$exception = GO_Calendar_Model_Exception::model()->find($findParams);
+			
+			$event->exception_for_event_id=$exception->event_id;
+		}
+		
+		
+		
 		$event->save();
+		
+		if(!empty($exception)){			
+			//save the exception we found by recurrence-id
+			$exception->exception_event_id=$event->id;
+			$exception->save();
+		}		
 		
 	
 		if($vobject->organizer){
@@ -830,11 +869,15 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$attendees = $vobject->select('attendee');
 		foreach($attendees as $attendee)
 			$this->importVObjectAttendee($event, $attendee, false);
-		
-		
+
 		if($vobject->exdate){
-			
+			$exDateTimes = $vobject->exdate->getDateTimes();
+			foreach($exDateTimes as $dt){
+				$event->addException($dt->format('U'));
+			}
 		}
+		
+		
 		
 		
 		return $event;
@@ -912,7 +955,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	private function _vobjectAttendeeToParticipantAttributes(Sabre_VObject_Property $vattendee){
 		return array(
 				'name'=>(string) $vattendee['CN'],
-				'email'=>str_replace('mailto:','', (string) $vattendee),
+				'email'=>str_replace('mailto:','', strtolower((string) $vattendee)),
 				'status'=>$this->_importVObjectStatus((string) $vattendee['PARTSTAT']),
 				'role'=>(string) $vattendee['ROLE']
 		);
@@ -927,7 +970,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			'TENTATIVE' => GO_Calendar_Model_Participant::STATUS_TENTATIVE
 		);
 
-		return $statuses[$status];
+		return isset($statuses[$status]) ? $statuses[$status] : GO_Calendar_Model_Participant::STATUS_PENDING;
 	}
 	private function _exportVObjectStatus($status)
 	{
@@ -938,7 +981,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			GO_Calendar_Model_Participant::STATUS_TENTATIVE=>'TENTATIVE'
 		);
 
-		return $statuses[$status];
+		return isset($statuses[$status]) ? $statuses[$status] : 'NEEDS-ACTION';
 	}
 	
 

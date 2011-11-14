@@ -455,20 +455,14 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	private function _getVObjectFromMail($params){
 		$account = GO_Email_Model_Account::model()->findByPk($params['account_id']);		
 		$message = GO_Email_Model_ImapMessage::model()->findByUid($account, $params['mailbox'],$params['uid']);
-		
-		//$response = $message->toOutputArray();
-		//var_dump($response);
-		
+
 		$attachments = $message->getAttachments();
 		
 		foreach($attachments as $attachment){
 			if($attachment['mime']=='text/calendar'){
 				$data = $message->getImapConnection()->get_message_part_decoded($message->uid, $attachment['number'], $attachment['encoding']);
 				
-				//require vendor lib SabreDav vobject
-				require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
-
-				$vcalendar = Sabre_VObject_Reader::read($data);
+				$vcalendar = GO_Base_VObject_Reader::read($data);
 
 				return $vcalendar->vevent[0];
 			}
@@ -569,33 +563,17 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 	
 	
 	public function actionImportIcs($params){
-		//require vendor lib SabreDav vobject
-		require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
 		
 		$file = new GO_Base_Fs_File($params['file']);
 		
-		if(!$file->exists()){
-			
-			$shortopts  = "";
-
-
-$longopts  = array(
-    "file",     // Required value    
-);
-$options = getopt($shortopts, $longopts);
-var_dump($options);
-			
-			var_dump($GLOBALS['argv']);
-			die("File does not exist");
-		}
-		
 		$data = $file->getContents();
 		
-		var_dump($data);
+		//var_dump($data);
 
-		$vcalendar = Sabre_VObject_Reader::read($data);
+		$vcalendar = GO_Base_VObject_Reader::read($data);
 		
-		$event = GO_Calendar_Model_Event::model()->importVObject($vcalendar->vevent[0]);
+		foreach($vcalendar->vevent as $vevent)
+			$event = GO_Calendar_Model_Event::model()->importVObject($vevent);
 	}
 	
 	
