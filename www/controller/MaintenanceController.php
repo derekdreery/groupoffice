@@ -172,7 +172,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			
 			foreach ($updateQuerySet as $module => $queries) {
 				
-				echo "Getting updates for ".$module."\n";
+				//echo "Getting updates for ".$module."\n";
 				
 				if(!is_array($queries)){
 					exit("Invalid queries in module: ".$module);
