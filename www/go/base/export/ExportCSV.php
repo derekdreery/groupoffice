@@ -20,9 +20,10 @@
 class GO_Base_Export_ExportCSV implements GO_Base_Export_ExportInterface{	
 	private $_fp;
 
+	private $_filename;
 	
 	public function __construct($filename, $addKeysAsHeaders=true){
-		header('Content-Disposition: attachment; filename="'.$filename.'.csv"');
+		$this->_filename=$filename;
 		
 		$this->sendHeaders();
 		
@@ -34,6 +35,7 @@ class GO_Base_Export_ExportCSV implements GO_Base_Export_ExportInterface{
 	}
 	
 	public function sendHeaders(){
+		header('Content-Disposition: attachment; filename="'.$this->_filename.'.csv"');
 		header('Content-Type: text/x-csv; charset=UTF-8');
 		//header('Content-Type: text/plain; charset=UTF-8');
 	}
