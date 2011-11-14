@@ -132,6 +132,27 @@ class GO_Base_Data_ColumnModel {
 	public function getColumns() {
 		return $this->_columns;
 	}
+	
+	/**
+	 * Give an array with the columnheaders in the order that you want.
+	 * The existing columns will be ordered to the given columnheaders array.
+	 * 
+	 * Columns that are set in the existing columns and that are not given in the 
+	 * culumnNames array will be pasted at the end.
+	 * 
+	 * @param array $columnNames  
+	 */
+	public function setColumnOrder($columnNames){
+		$unsorted = $this->_columns;
+		$this->_columns=array();
+		foreach($columnNames as $c){
+			$this->_columns[$c]=$unsorted[$c];
+			unset($unsorted[$c]);
+		}
+		foreach($unsorted as $c=>$attr){
+			$this->_columns[$c]=$unsorted[$c];
+		}
+	}
 
 	public function getSortAlias($alias) {
 		if (isset($this->_sortFieldsAliases[$alias]))
