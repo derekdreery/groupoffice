@@ -1750,8 +1750,9 @@ GO.mainLayout.onReady(function(){
 	GO.email.search_type_default = 'any';
 
 
+
 	//GO.checker is not available in some screens like accept invitation from calendar
-	if(GO.checker){
+	if(true){
 		//create notify icon
 		var notificationArea = Ext.get('notification-area');
 		if(notificationArea)
@@ -1766,40 +1767,52 @@ GO.mainLayout.onReady(function(){
 				GO.mainLayout.openModule('email');
 			}, this);
 		}
+		
+		Ext.TaskMgr.start({
+			run: function(){
+				GO.request({
+					url:'email/account/checkUnseen',
+					scope:this,
+					success:function(options, response, data){
+						var ep = GO.mainLayout.getModulePanel('email');
 
-		GO.checker.on('check', function(checker, data){
-			var ep = GO.mainLayout.getModulePanel('email');
+						var totalUnseen = 0;
+						for(var folder_id in data.email_status)
+						{
+							if(ep){
+								var changed = ep.updateFolderStatus(folder_id, data.email_status[folder_id].unseen);
+								if(changed && ep.messagesGrid.store.baseParams.folder_id==folder_id)
+								{
+									ep.messagesGrid.store.reload();
+								}
+							}
+							totalUnseen += data.email_status[folder_id].unseen;
+						}
 
-			var totalUnseen = 0;
-			for(var folder_id in data.email_status)
-			{
-				if(ep){
-					var changed = ep.updateFolderStatus(folder_id, data.email_status[folder_id].unseen);
-					if(changed && ep.messagesGrid.store.baseParams.folder_id==folder_id)
-					{
-						ep.messagesGrid.store.reload();
+						if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
+						{
+							// Check for muting of new mail sound
+							if(GO.util.empty(GO.settings.mute_new_mail_sound))
+								data.alarm=true;
+							else
+								data.alarm=false;
+
+							data.reminderText+='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', totalUnseen)+'</p>';
+
+							if(!ep || !ep.isVisible())
+								GO.email.notificationEl.setDisplayed(true);
+						}
+
+						GO.email.notificationEl.update(totalUnseen);
+						GO.email.totalUnseen=totalUnseen;
 					}
-				}
-				totalUnseen += data.email_status[folder_id].unseen;
-			}
-
-			if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
-			{
-        // Check for muting of new mail sound
-        if(GO.util.empty(GO.settings.mute_new_mail_sound))
-          data.alarm=true;
-        else
-          data.alarm=false;
-        
-				data.reminderText+='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', totalUnseen)+'</p>';
-
-				if(!ep || !ep.isVisible())
-					GO.email.notificationEl.setDisplayed(true);
-			}
-
-			GO.email.notificationEl.update(totalUnseen);
-			GO.email.totalUnseen=totalUnseen;
+				});
+			},
+			scope:this,
+			interval:120000
 		});
+
+		
 	}
 });
 
