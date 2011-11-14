@@ -34,7 +34,7 @@ class tasks extends db
 
 		$db = new db();
 		
-		$sql = "SELECT count(*) AS active FROM ta_tasks t INNER JOIN ta_lists l ON l.id=t.tasklist_id ".
+		$sql = "SELECT count(*) AS active FROM ta_tasks t INNER JOIN ta_tasklists l ON l.id=t.tasklist_id ".
 			"WHERE t.user_id=".$GLOBALS['GO_SECURITY']->user_id." AND t.completion_time=0 AND t.start_time<".$now;
 						
 		$db->query($sql);
@@ -64,7 +64,7 @@ class tasks extends db
 			$tsk = new tasks();
 			$db = new db();
 
-			$sql = 'SELECT tal.id AS tasklist_id, usr.* FROM ta_lists AS tal INNER JOIN ta_settings AS sett ON sett.default_tasklist_id = tal.id INNER JOIN go_users AS usr ON sett.user_id = usr.id';
+			$sql = 'SELECT tal.id AS tasklist_id, usr.* FROM ta_tasklists AS tal INNER JOIN ta_settings AS sett ON sett.default_tasklist_id = tal.id INNER JOIN go_users AS usr ON sett.user_id = usr.id';
 			$db->query($sql);
 
 			while($tasklist = $db->next_record())
@@ -92,7 +92,7 @@ class tasks extends db
 			require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
 			$files = new files();
 
-			$sql = "SELECT * FROM ta_lists";
+			$sql = "SELECT * FROM ta_tasklists";
 			$db->query($sql);
 			while($tasklist = $db->next_record())
 			{
@@ -104,7 +104,7 @@ class tasks extends db
 				}
 			}
 
-			$db->query("SELECT c.*,a.name AS tasklist_name,a.acl_id FROM ta_tasks c INNER JOIN ta_lists a ON a.id=c.tasklist_id");
+			$db->query("SELECT c.*,a.name AS tasklist_name,a.acl_id FROM ta_tasks c INNER JOIN ta_tasklists a ON a.id=c.tasklist_id");
 			while($task = $db->next_record())
 			{
 				try{
@@ -250,8 +250,8 @@ class tasks extends db
 			$files->check_share('tasks/'.File::strip_invalid_chars($list['name']),$list['user_id'], $list['acl_id']);
 		}	
 		
-		$list['id'] = $this->nextid("ta_lists");	
-		$this->insert_row('ta_lists',$list);
+		$list['id'] = $this->nextid("ta_tasklists");	
+		$this->insert_row('ta_tasklists',$list);
 		return $list['id'];
 	}
 
@@ -270,7 +270,7 @@ class tasks extends db
 			$delete->delete_task($this->f('id'));
 		}
 		
-		$sql= "DELETE FROM ta_lists WHERE id='".$this->escape($list_id)."'";
+		$sql= "DELETE FROM ta_tasklists WHERE id='".$this->escape($list_id)."'";
 		$this->query($sql);
 
 		if(empty($tasklist['shared_acl'])){
@@ -323,12 +323,12 @@ class tasks extends db
 			$GLOBALS['GO_SECURITY']->chown_acl($old_tasklist['acl_id'], $tasklist['user_id']);
 		}
 		
-		return $this->update_row('ta_lists','id', $tasklist);
+		return $this->update_row('ta_tasklists','id', $tasklist);
 	}
 	
 	function get_user_tasklists($user_id)
 	{
-		$sql = "SELECT * FROM ta_lists WHERE user_id='".intval($user_id)."'";
+		$sql = "SELECT * FROM ta_tasklists WHERE user_id='".intval($user_id)."'";
 
 		$this->query($sql);
 		return $this->num_rows();
@@ -345,7 +345,7 @@ class tasks extends db
 		}
 
 		if(!$tasklist){
-			$sql = "SELECT * FROM ta_lists WHERE user_id='".intval($user_id)."' LIMIT 0,1";
+			$sql = "SELECT * FROM ta_tasklists WHERE user_id='".intval($user_id)."' LIMIT 0,1";
 			$this->query($sql);
 			$tasklist = $this->next_record();
 
@@ -417,7 +417,7 @@ class tasks extends db
 	{
 		if($list_id > 0)
 		{
-			$sql = "SELECT * FROM ta_lists WHERE id='".$this->escape($list_id)."'";
+			$sql = "SELECT * FROM ta_tasklists WHERE id='".$this->escape($list_id)."'";
 			$this->query($sql);
 			if ($this->next_record(DB_ASSOC))
 			{
@@ -472,7 +472,7 @@ class tasks extends db
 
 	function get_tasklist_by_name($name, $user_id=0)
 	{
-		$sql = "SELECT * FROM ta_lists WHERE name='".$this->escape($name)."'";
+		$sql = "SELECT * FROM ta_tasklists WHERE name='".$this->escape($name)."'";
 
 		if($user_id>0)
 		{
@@ -498,7 +498,7 @@ class tasks extends db
 				$user_id = $GLOBALS['GO_SECURITY']->user_id;
         
 		$sql = "SELECT l.* ".
-		"FROM ta_lists l ".
+		"FROM ta_tasklists l ".
 
 		"INNER JOIN go_acl a ON (l.acl_id = a.acl_id";
 		if($auth_type=='write'){
@@ -877,7 +877,7 @@ class tasks extends db
 		}
 
 		$sql .= " FROM ta_tasks t "
-			. "INNER JOIN ta_lists l ON (t.tasklist_id=l.id) "
+			. "INNER JOIN ta_tasklists l ON (t.tasklist_id=l.id) "
 			. "LEFT JOIN ta_categories c ON (t.category_id=c.id)";
 
 		if($join_custom_fields && $GLOBALS['GO_MODULES']->has_module('customfields')) {
@@ -1044,7 +1044,7 @@ class tasks extends db
 	}*/
 
 	function get_task($task_id) {
-		$sql = "SELECT t.*, tl.acl_id FROM ta_tasks t INNER JOIN ta_lists tl ON tl.id=t.tasklist_id WHERE t.id='".$this->escape($task_id)."'";
+		$sql = "SELECT t.*, tl.acl_id FROM ta_tasks t INNER JOIN ta_tasklists tl ON tl.id=t.tasklist_id WHERE t.id='".$this->escape($task_id)."'";
 		$this->query($sql);
 		return $this->next_record(DB_ASSOC);
 	}
@@ -1433,7 +1433,7 @@ class tasks extends db
 		$sql = "DELETE FROM ta_settings WHERE user_id=".$tasks->escape($user['id']);
 		$tasks->query($sql);
 
-		$sql = "SELECT * FROM ta_lists WHERE user_id='".$tasks->escape($user['id'])."'";
+		$sql = "SELECT * FROM ta_tasklists WHERE user_id='".$tasks->escape($user['id'])."'";
 		$tasks->query($sql);
 		while($tasks->next_record())
 		{
@@ -1480,7 +1480,7 @@ class tasks extends db
 		require($GLOBALS['GO_LANGUAGE']->get_language_file('tasks'));
 
 		$sql  = "SELECT DISTINCT t.*, tl.acl_id FROM ta_tasks t ".
-		"INNER JOIN ta_lists tl ON t.tasklist_id=tl.id ".
+		"INNER JOIN ta_tasklists tl ON t.tasklist_id=tl.id ".
 		"WHERE t.id=?";
 
 		$this->query($sql, 'i', $task_id);
@@ -1636,7 +1636,7 @@ class tasks extends db
 		$model = get_model_by_type_id($link_type);
 		
 		$sql = "SELECT DISTINCT t.*, tl.name AS tasklist_name FROM ta_tasks t ".
-			"INNER JOIN ta_lists tl ON tl.id=t.tasklist_id ".
+			"INNER JOIN ta_tasklists tl ON tl.id=t.tasklist_id ".
 			"INNER JOIN go_links_{$model->tableName()} l ON l.model_id=t.id AND l.model_type_id=12 ".
 			"WHERE l.id=? AND t.completion_time=0 ORDER BY due_time ASC";
 
