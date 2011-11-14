@@ -1791,16 +1791,22 @@ GO.mainLayout.onReady(function(){
 
 						if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
 						{
-							// Check for muting of new mail sound
-							if(GO.util.empty(GO.settings.mute_new_mail_sound))
-								data.alarm=true;
-							else
-								data.alarm=false;
-
 							data.reminderText+='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', totalUnseen)+'</p>';
 
 							if(!ep || !ep.isVisible())
 								GO.email.notificationEl.setDisplayed(true);
+							
+							GO.playAlarm();
+							if(!GO.hasFocus && !GO.util.empty(GO.settings.popup_reminders)){
+								GO.reminderPopup = GO.util.popup({
+									width:400,
+									height:300,
+									url:BaseHref+'reminder.php?reminder_text='+encodeURIComponent(data.reminderText),
+									target:'groupofficeReminderPopup',
+									position:'br',
+									closeOnFocus:false
+								});
+							}
 						}
 
 						GO.email.notificationEl.update(totalUnseen);
