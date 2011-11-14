@@ -72,13 +72,15 @@ class GO_Base_Model_Module extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 		
 		if($wasNew){			
-			$this->moduleManager->install();
+			if($this->moduleManager)
+				$this->moduleManager->install();
 		}		
 		return parent::afterSave($wasNew);
 	}
 	
 	protected function afterDelete() {
-		$this->moduleManager->uninstall();
+		if($this->moduleManager)
+			$this->moduleManager->uninstall();
 		
 		return parent::afterDelete();
 	}
