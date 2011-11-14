@@ -492,7 +492,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			$fsFolder->appendNumberToNameIfExists();
 
 			$folder->name = $fsFolder->name();			
-			$folder->folder_id = $destinationFolder->id;
+			$folder->parent_id = $destinationFolder->id;
 			$folder->systemSave = true;
 			$folder->save();
 		}
