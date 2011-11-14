@@ -2437,9 +2437,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$sql = "DELETE FROM `go_links_{$this->tableName()}` WHERE id=:id AND model_type_id=:model_type_id AND model_id=:model_id";
 		
 		$values=array(
-				'id'=>$this->id,
-				'module_type_id'=>$model->modelTypeId(),
-				'model_id'=>$model->id
+				':id'=>$this->id,
+				':model_type_id'=>$model->modelTypeId(),
+				':model_id'=>$model->id
 		);
 		
 		$result = $this->getDbConnection()->prepare($sql);

@@ -36,7 +36,32 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$model = GO::getModel($params['model_name'])->findByPk($params['model_id']);
 	
 		
-		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());			
+		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_SearchCacheRecord::model());
+		
+		//$model->unlink($model);
+		
+		if(!empty($params['unlinks'])){
+			$keys = json_decode($params['unlinks'], true);
+			
+			foreach($keys as $key){
+				$key = explode(':',$key);
+				
+				$linkedModel = GO::getModel($key[0])->findByPk($key[1]);				
+				$model->unlink($linkedModel);				
+			}
+		}
+		
+		if(!empty($params['delete_keys'])){
+			
+			$keys = json_decode($params['delete_keys'], true);
+			
+			foreach($keys as $key){
+				$key = explode(':',$key);
+				
+				$linkedModel = GO::getModel($key[0])->findByPk($key[1]);				
+				$linkedModel->delete();				
+			}
+		}
 		
 		$storeParams = $store->getDefaultParams();
 		
@@ -56,7 +81,10 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$cm->formatColumn('model_name_and_id', '$model->model_name.":".$model->model_id');
 		$cm->formatColumn('link_count','GO::getModel($model->model_name)->countLinks($model->model_id)');
 
-		return $store->getData();
+		$data = $store->getData();
+		
+		$data['permissionLevel']=$model->getPermissionLevel();
+		return $data;
 	}
 	
 	
