@@ -20,6 +20,8 @@ GO.tasks.TaskDialog = function() {
 	};
 
 	this.goDialogId='task';
+	
+	this.remind_before = '';
 
 	this.win = new GO.Window({
 		layout : 'fit',
@@ -115,6 +117,8 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 					this.win.show();
 					this.changeRepeat(action.result.data.freq);
 					this.setValues(config.values);
+					
+					this.remind_before = action.result.data.remind_before;
 
 				//	this.selectTaskList.setRemoteText(action.result.data.tasklist_name);
 					this.selectTaskList.setRemoteText(action.result.remoteComboTexts.tasklist_id);
@@ -271,7 +275,7 @@ Ext.extend(GO.tasks.TaskDialog, Ext.util.Observable, {
 				}
 			}
 
-			var remindDate = startDate.getValue().add(Date.DAY, -GO.tasks.reminderDaysBefore);
+			var remindDate = startDate.getValue().add(Date.DAY, -this.remind_before);
 			
 			formPanel.form.findField('remind_date').setValue(remindDate);
 
