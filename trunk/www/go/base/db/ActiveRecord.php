@@ -1530,6 +1530,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Input may be in regional format and the model will translate it to the
 	 * database format.
 	 * 
+	 * All attributes will be set even if the attributes don't exist in the model.
+	 * The only exception if for relations. You can't set an attribute named 
+	 * "someRelation" if it exists in the relations.
+	 * 
 	 * @param array $attributes attributes to set on this object
 	 */
 	
@@ -1538,18 +1542,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->_hasCustomfieldValue($attributes) && $this->customfieldsRecord)
 			$this->customfieldsRecord->setAttributes($attributes, $format);
 		
-		$related=array();
+		//$related=array();
 		
 		if($format)
 			$attributes = $this->formatInputValues($attributes);
 		
+		$relations = $this->relations();
+		
 		foreach($attributes as $key=>$value){
-			//if(isset($this->columns[$key])){
-				$this->$key=$value;
-			//}		
-		}
-		
-		
+			//don't set a value for a relation. Otherwise getting the relation won't
+			//work anymore.
+			if(!isset($relations[$key]))
+				$this->$key=$value;			
+		}		
 	}
 	
 	
