@@ -2807,7 +2807,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				throw new Exception("Relation '$relationName' not found in GO_Base_Db_ActiveRecord::addManyMany()");
 			
 			$linkModel = new $r['linkModel'];
-			$linkModel->{$r['field']} = $this->id;
+			$linkModel->{$r['field']} = $this->pk;
 			
 			$keys = $linkModel->primaryKey();
 			
