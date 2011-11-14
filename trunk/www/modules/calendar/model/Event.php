@@ -821,7 +821,6 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$event->setAttributes($attributes);
 		
-		
 		$recurrenceIds = $vobject->select('recurrence-id');
 		if(count($recurrenceIds)){
 			
@@ -849,9 +848,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			
 			$event->exception_for_event_id=$exception->event_id;
 		}
-		
-		
-		
+
 		$event->save();
 		
 		if(!empty($exception)){			
@@ -859,10 +856,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$exception->exception_event_id=$event->id;
 			$exception->save();
 		}		
-		
 	
 		if($vobject->organizer){
-	//		var_dump($vobject->organizer);
 			$this->importVObjectAttendee($event, $vobject->organizer, true);
 		}
 		
@@ -876,13 +871,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$event->addException($dt->format('U'));
 			}
 		}
-		
-		
-		
-		
+
 		return $event;
-		
-		//var_dump($event);
 	}
 	
 	private function _parseDuration($duration){
