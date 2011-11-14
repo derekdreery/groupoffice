@@ -209,8 +209,13 @@ class GO_Base_Data_ColumnModel {
 				$result = '';
 				eval('$result=' . $attributes['format'] . ';');
 				$formattedRecord[$colName] = $result;
-			} elseif (isset($array[$colName]))
+			} elseif (isset($array[$colName])){
 				$formattedRecord[$colName] = $array[$colName];
+			}else
+			{
+				$formattedRecord[$colName] = "";
+			}
+			
 		}
 
 		error_reporting($oldLevel);

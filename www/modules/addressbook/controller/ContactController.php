@@ -145,6 +145,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('name','$model->name', array(),array('first_name','last_name'));
+		$columnModel->formatColumn('company_name','$model->company->name');
 		$columnModel->formatColumn('cf', '$model->id.":".$model->name');//special field used by custom fields. They need an id an value in one.)
 		return parent::formatColumns($columnModel);
 	}
@@ -181,14 +182,15 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				}
 				GO::config()->save_setting('ms_addresslist_filter', implode(',',$addresslist_filter), GO::user()->id);
 			}
-			elseif ($addresslist_filter = GO::config()->get_setting('ms_addresslist_filter', GO::user()->id))
-			{	
-				$addresslist_filter = empty($addresslist_filter) ? array() : explode(',', $addresslist_filter);
-				$storeParams->join(GO_Addressbook_Model_AddresslistContact::model()->tableName(),
-						GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.contact_id', '=', 't', true, true),
-						'ac'
-					)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter,'ac');
-			}
+			//we should only add it if it's passed.
+//			elseif ($addresslist_filter = GO::config()->get_setting('ms_addresslist_filter', GO::user()->id))
+//			{	
+//				$addresslist_filter = empty($addresslist_filter) ? array() : explode(',', $addresslist_filter);
+//				$storeParams->join(GO_Addressbook_Model_AddresslistContact::model()->tableName(),
+//						GO_Base_Db_FindCriteria::newInstance()->addCondition('id', 'ac.contact_id', '=', 't', true, true),
+//						'ac'
+//					)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter,'ac');
+//			}
 		//}
 		return $storeParams;
 		

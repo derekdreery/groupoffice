@@ -294,8 +294,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$response=array();
 		
 		$response = $this->beforeStore($response, $params, $store);
-		
-		if($multiSelectProperties =$this->getStoremultiSelectProperties()){
+
+		if(($multiSelectProperties =$this->getStoremultiSelectProperties()) && empty($params['noMultiSelectFilter'])){
 
 			if(isset($params[$multiSelectProperties['requestParam']])){
 				$this->multiselectIds=json_decode($params[$multiSelectProperties['requestParam']], true);
