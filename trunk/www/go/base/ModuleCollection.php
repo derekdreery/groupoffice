@@ -38,7 +38,7 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 		foreach($folders as $folder){
 			$ucfirst = ucfirst($folder->name());
 			$moduleClass = $folder->path().'/'.$ucfirst.'Module.php';
-			if(file_exists($moduleClass) && !GO_Base_Model_Module::model()->findByPk($folder->name())){
+			if(file_exists($moduleClass) && !GO_Base_Model_Module::model()->findByPk($folder->name(), false, true)){
 				$modules[]='GO_'.$ucfirst.'_'.$ucfirst.'Module';
 			}
 		}
