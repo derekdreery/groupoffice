@@ -27,19 +27,12 @@ class Sabre_VObject_Reader {
      * @var array
      */
     static public $elementMap = array(
+        'DTSTART'   => 'Sabre_VObject_Element_DateTime',
+        'DTEND'     => 'Sabre_VObject_Element_DateTime',
         'COMPLETED' => 'Sabre_VObject_Element_DateTime',
-        'CREATED' => 'Sabre_VObject_Element_DateTime',
-        'DTEND' => 'Sabre_VObject_Element_DateTime',
-        'DTSTAMP' => 'Sabre_VObject_Element_DateTime',
-        'DTSTART' => 'Sabre_VObject_Element_DateTime',
-        'DUE' => 'Sabre_VObject_Element_DateTime',
-        'EXDATE' => 'Sabre_VObject_Element_MultiDateTime',
-        'LAST-MODIFIED' => 'Sabre_VObject_Element_DateTime',
-				'RECURRENCE-ID' => 'Sabre_VObject_Element_DateTime',
-        'TRIGGER' => 'Sabre_VObject_Element_DateTime',
+        'DUE'       => 'Sabre_VObject_Element_DateTime',
+        'EXDATE'    => 'Sabre_VObject_Element_MultiDateTime',
     );
-
-
 
     /**
      * Parses the file and returns the top component 
@@ -102,7 +95,7 @@ class Sabre_VObject_Reader {
 
             while(stripos($nextLine,"END:")!==0) {
 
-                $obj->children[] = self::readLine($lines);
+                $obj->add(self::readLine($lines));
                 $nextLine = current($lines);
 
                 if ($nextLine===false) 
@@ -147,7 +140,9 @@ class Sabre_VObject_Reader {
 
         if ($matches['parameters']) {
 
-            $obj->parameters = self::readParameters($matches['parameters']);
+            foreach(self::readParameters($matches['parameters']) as $param) {
+                $obj->add($param);
+            }
         } 
 
         return $obj;
