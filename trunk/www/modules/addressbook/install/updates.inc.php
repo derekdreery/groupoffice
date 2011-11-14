@@ -81,3 +81,11 @@ $updates["201110281132"][]="UPDATE ab_companies SET email_allowed=1 where email_
 $updates["201110281132"][]="ALTER TABLE `ab_companies` CHANGE `crn` `crn` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";
 $updates["201110281132"][]="ALTER TABLE `ab_companies` CHANGE `iban` `iban` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";
 $updates["201110281132"][]="ALTER TABLE `ab_contacts` DROP `default_salutation`";
+
+
+$updates["201111141132"][]="CREATE TABLE IF NOT EXISTS `ab_default_email_templates` (
+  `user_id` int(11) NOT NULL,
+  `template_id` int(11) NOT NULL,
+  PRIMARY KEY  (`user_id`),
+  KEY `template_id` (`template_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;"; // Added because with an existing installation with the addressbook this table was not created (Wesley).
