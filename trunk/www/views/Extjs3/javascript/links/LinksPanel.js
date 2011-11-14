@@ -166,7 +166,7 @@ GO.grid.LinksPanel = function(config){
 	
 	this.linksGrid.store.on('load', function(){
 		
-		this.setWritePermission(this.linksGrid.store.reader.jsonData.write_permission);
+		this.setWritePermission(this.linksGrid.store.reader.jsonData.permissionLevel>GO.permissionLevels.read);
 		
 	}, this);
 	
@@ -211,13 +211,13 @@ GO.grid.LinksPanel = function(config){
 		region:'west',
 		width:160,
 		layout:'border',
-		id:config.id+'_west',
-		store:new GO.data.JsonStore({
-			root: 'results',
-			data: {"results":GO.linkTypes}, //defined in /default_scripts.inc.php
-			fields: ['id','name', 'checked'],
-			id:'id'
-		})
+		id:config.id+'_west'
+//		store:new GO.data.JsonStore({
+//			root: 'results',
+//			data: {"results":GO.linkTypes}, //defined in /default_scripts.inc.php
+//			fields: ['id','name', 'checked'],
+//			id:'id'
+//		})
 	});
 	this.linkTypeFilter.on('change', function(grid, types){
 		this.linksGrid.store.baseParams.types = Ext.encode(types);
@@ -293,20 +293,22 @@ GO.grid.LinksPanel = function(config){
 				},
 				scope: this
 				
-			}),this.newFolderButton = new Ext.Button({
-				iconCls: 'btn-add',
-				text: GO.lang.newFolder,
-				cls: 'x-btn-text-icon',
-				handler: function() {
-					
-					this.folderWindow.show({
-						model_id : this.model_id,
-						model_name : this.model_name,
-						parent_id : this.folder_id
-					});
-				},
-				scope: this
-			}),this.unlinkButton = new Ext.Button({
+			}),
+//			this.newFolderButton = new Ext.Button({
+//				iconCls: 'btn-add',
+//				text: GO.lang.newFolder,
+//				cls: 'x-btn-text-icon',
+//				handler: function() {
+//					
+//					this.folderWindow.show({
+//						model_id : this.model_id,
+//						model_name : this.model_name,
+//						parent_id : this.folder_id
+//					});
+//				},
+//				scope: this
+//			})
+			this.unlinkButton = new Ext.Button({
 				iconCls: 'btn-unlink',
 				text: GO.lang['cmdUnlink'],
 				cls: 'x-btn-text-icon',
@@ -325,15 +327,17 @@ GO.grid.LinksPanel = function(config){
 				},
 				scope: this
 
-			}/*'-',this.deleteButton = new Ext.Button({
-				iconCls: 'btn-delete',
-				text: GO.lang['cmdDelete'],
-				cls: 'x-btn-text-icon',
-				handler: function(){
-					this.linksGrid.deleteSelected();
-				},
-				scope: this
-			})*/
+			
+			}
+//			,'-',this.deleteButton = new Ext.Button({
+//				iconCls: 'btn-delete',
+//				text: GO.lang['cmdDelete'],
+//				cls: 'x-btn-text-icon',
+//				handler: function(){
+//					this.linksGrid.deleteSelected();
+//				},
+//				scope: this
+//			})
 		];
 		
 	if(GO.links && GO.links.SettingsDialog)
@@ -526,7 +530,7 @@ Ext.extend(GO.grid.LinksPanel, Ext.Panel, {
 	setWritePermission : function(writePermission){
 		this.linkButton.setDisabled(!writePermission);
 		this.unlinkButton.setDisabled(!writePermission);
-		this.newFolderButton.setDisabled(!writePermission);
+		//this.newFolderButton.setDisabled(!writePermission);
 		//this.deleteButton.setDisabled(!writePermission);
 		
 		this.write_permission=writePermission;
