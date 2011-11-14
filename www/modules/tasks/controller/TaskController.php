@@ -39,11 +39,18 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 			$response['data'] = array_merge($response['data'],$createdRule);
 		}
 		
-		if(!empty($response['data']['remind'])) {			
+		$settings = GO_Tasks_Model_Settings::model()->findByPk(GO::user()->id);
+		$response['data']['remind_before'] = $settings->reminder_days;
+		
+		if(!empty($response['data']['reminder'])) {			
 			$response['data']['remind']=1;
+			$response['data']['remind_date']=date(GO::user()->completeDateFormat, strtotime($response['data']['reminder']));
+			$response['data']['remind_time']=date(GO::user()->time_format, strtotime($response['data']['reminder']));
+		}	else {
+			$response['data']['remind_date']=date(GO::user()->completeDateFormat, $model->getDefaultReminder($model->start_time));
+			$response['data']['remind_time']=date(GO::user()->time_format, $model->getDefaultReminder($model->start_time));
 		}
-
-		$response['data']['remind_date']=date(GO::user()->completeDateFormat, strtotime($response['data']['reminder']));
+			
 		$response['data']['remind_time']=date(GO::user()->time_format, strtotime($response['data']['reminder']));
 		
 		return parent::afterLoad($response, $model, $params);

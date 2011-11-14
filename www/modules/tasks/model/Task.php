@@ -176,9 +176,14 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 				'start_time'=> time(),
 				'due_time'=> time(),
 				'tasklist_id'=>$settings->default_tasklist_id,
-				'reminder' => strtotime(date('Y-m-d', GO_Base_Util_Date::date_add(time(), -$settings->reminder_days)).' '.$settings->reminder_time)
+				'reminder' =>$this->getDefaultReminder(time())
 		);
 		
 		return $defaults;
+	}
+	
+	public function getDefaultReminder($startTime){
+		$settings = GO_Tasks_Model_Settings::model()->findByPk(GO::user()->id);
+		return  strtotime(date('Y-m-d', GO_Base_Util_Date::date_add($startTime, -$settings->reminder_days)).' '.$settings->reminder_time);
 	}
 }
