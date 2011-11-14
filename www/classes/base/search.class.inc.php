@@ -468,10 +468,10 @@ class search extends db {
 	{
 		global $lang;
 
-		if(isset($result['keywords']) && strlen($result['keywords'])>255)
-		{
-			$result['keywords']=substr($result['keywords'],0,255);
-		}
+//		if(isset($result['keywords']) && strlen($result['keywords'])>255)
+//		{
+//			$result['keywords']=substr($result['keywords'],0,255);
+//		}
 
 		//$result['link_count']=$GO_LINKS->count_links($result['id'], $result['link_type']);
 
