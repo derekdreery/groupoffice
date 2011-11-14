@@ -220,7 +220,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 						->joinCustomFields()
 						->order($sort, !empty($_REQUEST['dir']) ? $_REQUEST['dir'] : $this->_defaultSortDirection);
 		if(!empty($_REQUEST['query']))
-			$findParams->searchQuery ('%' . $_REQUEST['query'] . '%');
+			$findParams->searchQuery ('%'.preg_replace ('/[\s]*/','%', $_REQUEST['query']).'%');
 		
 		if(!empty($_REQUEST['limit']))
 			$findParams->limit ($_REQUEST['limit']);

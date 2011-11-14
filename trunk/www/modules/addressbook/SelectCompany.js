@@ -38,7 +38,8 @@ GO.addressbook.SelectCompany = function(config){
 		this.store = new GO.data.JsonStore({
 			url: GO.url("addressbook/company/store"),
 			baseParams: {				
-				'addressbook_id' : this.addressbook_id				
+				addressbook_id : this.addressbook_id,		
+				noMultiSelectFilter:true
 			},
 			root: 'results',
 			id: 'id',

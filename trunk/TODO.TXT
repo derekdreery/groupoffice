@@ -8,8 +8,6 @@ Complete Links browser
 Project report custom fields and advanced search panel...!?
 ticket facturatie
 
-Checker: tickets, tasks, email en calendar
-
 E-mail files functie
 
 

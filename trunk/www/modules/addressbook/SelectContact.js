@@ -30,8 +30,9 @@ GO.addressbook.SelectContact = function(config){
 	config.store = new GO.data.JsonStore({
 	    url: GO.url("addressbook/contact/store"),
 	    baseParams: {	    	
-				'addressbook_id' : config.addressbook_id
-				},
+				addressbook_id : config.addressbook_id,
+				noMultiSelectFilter:true
+			},
 	    root: 'results',
 	    id: 'id',
 	    totalProperty:'total',	    
