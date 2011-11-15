@@ -73,7 +73,19 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * Checks a token that is generated for each session.
 	 */
 	protected function checkSecurityToken(){
-		if(!GO::config()->debug && !GO::config()->disable_security_token_check && GO::user() && !empty($_REQUEST['r']) && $_REQUEST['security_token']!=GO::session()->values['security_token']){
+		
+		//only check token when we are:
+		// 1. Not in debug mode
+		// 2. There's a logged in user.
+		// 3. A route to a controller has been given. Because we don't want to block the default page when entered manually.
+		
+		if(
+						!GO::config()->debug && 
+						!GO::config()->disable_security_token_check && 
+						GO::user() && 
+						!empty($_REQUEST['r']) && 
+						$_REQUEST['security_token']!=GO::session()->values['security_token']
+			){
 			//GO::session()->logout();			
 			trigger_error('Fatal error: Security token mismatch. Possible cross site request forgery attack!', E_USER_ERROR);
 		}
