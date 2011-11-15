@@ -13,24 +13,23 @@
  */
 
 // settings
-require('../../Group-Office.php');
+require('../../GO.php');
 
-session_write_close();
+//session_write_close();
 
 // If you want to run the SabreDAV server in a custom location (using mod_rewrite for instance)
 // You can override the baseUri here.
 // $baseUri = '/';
 
-if(!isset($GLOBALS['GO_MODULES']->modules['dav']))
+
+
+if(!GO::modules()->dav)
 	die('DAV module not installed. Install it at Start menu -> Modules');
 
-
 // Files we need
-require_once 'SabreDAV/lib/Sabre/autoload.php';
-require('autoload.php');
+require_once GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/autoload.php';
+//require('autoload.php');
 
-require_once ($GLOBALS['GO_MODULES']->modules['files']['class_path']."files.class.inc.php");
-$files = new files();
 
 //ini_set('memory_limit','100M');
 
@@ -42,31 +41,31 @@ $files = new files();
 //$root = new GO_DAV_Root_Directory('/');
 
 // Authentication backend
-$authBackend = new GO_DAV_Auth_Backend();
+$authBackend = new GO_Dav_Auth_Backend();
 $userpass = $authBackend->getUserPass();
 
 
 $children = array();
 //if($GLOBALS['GO_SECURITY']->logged_in()){
-$children[] = new GO_DAV_FS_Directory('users/' . $userpass[0]);
-$children[] = new GO_DAV_Shared_Directory();
+$children[] = new GO_Dav_Fs_Directory('users/' . $userpass[0]);
+$children[] = new GO_Dav_Fs_SharedDirectory();
 
 //}
 
-$root = new Sabre_DAV_SimpleDirectory('root',$children);
+$root = new Sabre_DAV_SimpleCollection('root',$children);
 
-$tree = new GO_DAV_ObjectTree($root);
+$tree = new GO_Dav_ObjectTree($root);
 
 // The rootnode needs in turn to be passed to the server class
 $server = new Sabre_DAV_Server($tree);
 
 //baseUri can also be /webdav/ with:
 //Alias /webdav/ /path/to/files.php
-$baseUri = strpos($_SERVER['REQUEST_URI'],'files.php') ? $GLOBALS['GO_MODULES']->modules['dav']['url'].'files.php/' : '/webdav/';
+$baseUri = strpos($_SERVER['REQUEST_URI'],'files.php') ? GO::config()->host.'modules/dav/files.php/' : '/webdav/';
 $server->setBaseUri($baseUri);
 
 // Support for LOCK and UNLOCK
-$lockBackend = new Sabre_DAV_Locks_Backend_FS($GO_CONFIG->tmpdir);
+$lockBackend = new Sabre_DAV_Locks_Backend_FS(GO::config()->tmpdir);
 $lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
 $server->addPlugin($lockPlugin);
 
@@ -78,7 +77,7 @@ $auth = new Sabre_DAV_Auth_Plugin($authBackend,'Group-Office WebDAV server');
 $server->addPlugin($auth);
 
 // Temporary file filter
-$tempFF = new Sabre_DAV_TemporaryFileFilterPlugin($GLOBALS['GO_CONFIG']->tmpdir);
+$tempFF = new Sabre_DAV_TemporaryFileFilterPlugin(GO::config()->tmpdir);
 $server->addPlugin($tempFF);
 
 // And off we go!
