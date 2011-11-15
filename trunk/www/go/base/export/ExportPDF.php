@@ -10,50 +10,78 @@
  */
 
 /**
- * CSV Output stream.
+ * PDF Output stream.
  * 
- * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
+ * @version $Id: ExportPDF.php 7607 2011-08-04 13:41:42Z wsmits $
  * @copyright Copyright Intermesh BV.
- * @author Merijn Schering <mschering@intermesh.nl>
+ * @author Wesley Smits <wsmits@intermesh.nl>
  * @package GO.base.export
  */
-class GO_Base_Export_ExportPDF implements GO_Base_Export_ExportInterface{	
-
-	private $_pdfWriter;
-	
-	public function __construct($filename, $addKeysAsHeaders=true){
-		
-		$this->_pdfWriter = new GO_Base_Util_Pdf();
-		$this->sendHeaders();
-		
-		$this->_addKeysAsHeaders=$addKeysAsHeaders;
-	}
-	
+class GO_Base_Export_ExportPDF extends GO_Base_Export_AbstractExport {
 
 	
-	public function sendHeaders(){
-		//header('Content-Type: text/x-csv; charset=UTF-8');
-		header('Content-Type: text/plain; charset=UTF-8');
+	
+	
+	public function showInView(){
+		return true;
 	}
 
-	
-	public function write($data){
-		if(!isset($this->_fp)){
-			$this->_fp=fopen('php://output','w+');
-			
-			if($this->_addKeysAsHeaders)
-				fputcsv($this->_fp, array_keys($data), GO::user()->list_separator, GO::user()->text_separator);
+	private function _write($data) {
+		$html = '';
+		if($this->_writeHeader) {
+			$html .= '<tr nobr="true">';
+			foreach($data as $column)
+				$html .=  "<th>$column</th>";
+			$html .=  "</tr>";
+			$this->_writeHeader = false;
+		} else {
+			$html .=  '<tr nobr="true">';
+			foreach($data as $column)
+				$html .=  "<td>$column</td>";
+			$html .=  "</tr>";
 		}
-		
-		fputcsv($this->_fp, $data, GO::user()->list_separator, GO::user()->text_separator);
+		return $html;
 	}	
 	
-	public function flush(){
+	public function output(){
 		
+		$html = '<table border="1" cellspacing="0" cellpadding="2">';
+		
+		if($this->header) {
+			$this->_writeHeader = true;
+			$html .= $this->_write($this->getLabels());
+		}
+		
+		while($record = $this->store->nextRecord()){
+			$html .= $this->_write($record);
+		}
+		
+		$html .= "</table>";
+		
+		$this->_createPDF($html);
 	}
 	
-	public function endFlush(){
+	private function _createPDF($html) {
+		// The standard orientation is Portret
+		$orientation='P';
 		
+		if(!empty($this->orientation)){
+			$orientation = $this->orientation;
+		}
+		
+		$pdf = new GO_Base_Util_Pdf($orientation, $unit='mm', $format='A4', $unicode=true, $encoding='UTF-8', $diskcache=false, $pdfa=false);
+
+		$pdf->SetTitle($this->title);
+		$pdf->SetSubject($this->title);
+		$pdf->SetAuthor($this->title);
+		$pdf->SetCreator($this->title);
+		$pdf->SetKeywords($this->title);
+		
+
+		$pdf->AddPage();
+		$pdf->writeHTML($html, true, false, true, false, '');
+		
+		$pdf->Output($this->title.'.pdf');
 	}
 	
 	public function getName() {
@@ -61,10 +89,6 @@ class GO_Base_Export_ExportPDF implements GO_Base_Export_ExportInterface{
 	}
 	
 	public function useOrientation(){
-		return true;
-	}
-	
-	public function showInView(){
 		return true;
 	}
 }
