@@ -150,6 +150,9 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return parent::formatColumns($columnModel);
 	}
 	
+	/*
+	 * This function initiates the contact filter by checked addressbooks.
+	 */
 	protected function getStoreMultiSelectProperties(){
 		return array(
 			'requestParam'=>'books',
@@ -158,12 +161,19 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		);
 	}	
 	
+	/*
+	 * This function initiates the contact filters by:
+	 * - search query (happens automatically in GO base class)
+	 * - by clicked letter
+	 * - checked addresslists
+	 */
 	protected function getStoreParams($params) {	
 	
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
 			->addModel(GO_Addressbook_Model_Contact::model(),'t')
 			->addInCondition('addressbook_id', $this->multiselectIds);
 		
+		// Filter by clicked letter
 		if (!empty($params['clicked_letter'])) {
 			if ($params['clicked_letter'] == '[0-9]') {
 				$query = '^[0-9].*$';
@@ -187,6 +197,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			));
 		
 		//if(empty($params['enable_addresslist_filter'])){
+		
+		// Filter by addresslist
 			if(isset($params['addresslist_filter']))
 			{
 				$addresslist_filter = json_decode($params['addresslist_filter'],true);
@@ -198,6 +210,9 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				}
 				GO::config()->save_setting('ms_addresslist_filter', implode(',',$addresslist_filter), GO::user()->id);
 			}
+			
+			
+			
 			//we should only add it if it's passed.
 //			elseif ($addresslist_filter = GO::config()->get_setting('ms_addresslist_filter', GO::user()->id))
 //			{	
@@ -208,8 +223,6 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 //					)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter,'ac');
 //			}
 		//}
-			
-		$storeParams->debugSql();
 			
 		return $storeParams;
 		
