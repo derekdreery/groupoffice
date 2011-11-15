@@ -159,39 +159,26 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	}	
 	
 	protected function getStoreParams($params) {	
-		$query = !empty($params['query']) ? ($params['query']) : null;
-		$field = isset($params['field']) ? ($params['field']) : 'name';
-		$clicked_letter = isset($params['clicked_letter']) ? ($params['clicked_letter']) : false;
-		
-		$query_type = 'LIKE';
-		if(!empty($clicked_letter))
-		{
-			if($clicked_letter=='[0-9]')
-			{
-				$query = '^[0-9].*$';
-				$query_type = 'REGEXP';
-			}else
-			{
-				$query= $clicked_letter.'%';
-			}
-		} else {
-			$query = !empty($query) ? '%'.$query.'%' : '';
-		}
-
+	
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
 			->addModel(GO_Addressbook_Model_Contact::model(),'t')
 			->addInCondition('addressbook_id', $this->multiselectIds);
 		
-		if (!empty($query)) {
-			if ($field=='name') {
-				$criteria->addRawCondition('CONCAT_WS(`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`)','\''.$query.'\'',$query_type);
+		if (!empty($params['clicked_letter'])) {
+			if ($params['clicked_letter'] == '[0-9]') {
+				$query = '^[0-9].*$';
+				$query_type = 'REGEXP';
 			} else {
-				$criteria->addCondition($field,$query,$query_type);
+				$query = $params['clicked_letter'] . '%';
+				$query_type = 'LIKE';
 			}
+			$criteria->addRawCondition('CONCAT_WS(`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`)', ':query', $query_type);
+			$criteria->addParams(array(':query', $query));
 		}
+		
 
 		$storeParams = GO_Base_Db_FindParams::newInstance()
-			->criteria($criteria)
+			->criteria($criteria)						
 			->select('t.*t, ab.name AS addressbook_name')
 			->joinModel(array(
 				'model'=>'GO_Addressbook_Model_Addressbook',					
@@ -221,6 +208,9 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 //					)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter,'ac');
 //			}
 		//}
+			
+		$storeParams->debugSql();
+			
 		return $storeParams;
 		
 	}

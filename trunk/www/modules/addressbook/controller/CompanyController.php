@@ -100,31 +100,21 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	}	
 	
 	protected function getStoreParams($params) {
-		$query = !empty($params['query']) ? ($params['query']) : null;
-		$field = isset($params['field']) ? ($params['field']) : 'name';
-		$clicked_letter = isset($params['clicked_letter']) ? ($params['clicked_letter']) : false;
 		
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
 			->addModel(GO_Addressbook_Model_Company::model(),'t')
 			->addInCondition('addressbook_id', $this->multiselectIds);
 		
-		$query_type = 'LIKE';
-		if(!empty($clicked_letter))
-		{
-			if($clicked_letter=='[0-9]')
-			{
+		if (!empty($params['clicked_letter'])) {
+			if ($params['clicked_letter'] == '[0-9]') {
 				$query = '^[0-9].*$';
 				$query_type = 'REGEXP';
-			}else
-			{
-				$query= $clicked_letter.'%';
+			} else {
+				$query = $params['clicked_letter'] . '%';
+				$query_type = 'LIKE';
 			}
-		} else {
-			$query = !empty($query) ? '%'.$query.'%' : '';
-		}
-
-		if (!empty($query))
-			$criteria->addCondition($field,$query,$query_type);
+			$criteria->addCondition('name', $query, $query_type);
+		}		
 		
 		$storeParams = GO_Base_Db_FindParams::newInstance()
 			->criteria($criteria)
