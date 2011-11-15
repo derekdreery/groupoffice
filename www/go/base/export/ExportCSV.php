@@ -12,52 +12,38 @@
 /**
  * CSV Output stream.
  * 
- * @version $Id: Group.php 7607 2011-08-04 13:41:42Z mschering $
+ * @version $Id: ExportCSV.php 7607 2011-08-04 13:41:42Z wsmits $
  * @copyright Copyright Intermesh BV.
- * @author Merijn Schering <mschering@intermesh.nl>
+ * @author Wesley Smits <wsmits@intermesh.nl>
  * @package GO.base.export
  */
-class GO_Base_Export_ExportCSV implements GO_Base_Export_ExportInterface{	
-	private $_fp;
-
-	private $_filename;
-	
-	public function __construct($filename, $addKeysAsHeaders=true){
-		$this->_filename=$filename;
-		
-		$this->sendHeaders();
-		
-		$this->_addKeysAsHeaders=$addKeysAsHeaders;
-	}
+class GO_Base_Export_ExportCSV extends GO_Base_Export_AbstractExport {
 	
 	public function showInView(){
 		return true;
 	}
 	
-	public function sendHeaders(){
-		header('Content-Disposition: attachment; filename="'.$this->_filename.'.csv"');
+	private function _sendHeaders(){
+		header('Content-Disposition: attachment; filename="'.$this->title.'.csv"');
 		header('Content-Type: text/x-csv; charset=UTF-8');
-		//header('Content-Type: text/plain; charset=UTF-8');
 	}
 
-	
-	public function write($data){
+	private function _write($data){
 		if(!isset($this->_fp)){
-			$this->_fp=fopen('php://output','w+');
-			
-			if($this->_addKeysAsHeaders)
-				fputcsv($this->_fp, array_keys($data), GO::user()->list_separator, GO::user()->text_separator);
-		}
-		
+			$this->_fp=fopen('php://output','w+');		
+		}		
 		fputcsv($this->_fp, $data, GO::user()->list_separator, GO::user()->text_separator);
 	}	
 	
-	public function flush(){
+	public function output(){
+		$this->_sendHeaders();
 		
-	}
-	
-	public function endFlush(){
+		if($this->header)
+			$this->_write($this->getLabels());
 		
+		while($record = $this->store->nextRecord()){
+			$this->_write($record);
+		}
 	}
 	
 	public function getName() {
