@@ -100,10 +100,34 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	}	
 	
 	protected function getStoreParams($params) {
+		$query = !empty($params['query']) ? ($params['query']) : null;
+		$field = isset($params['field']) ? ($params['field']) : 'name';
+		$clicked_letter = isset($params['clicked_letter']) ? ($params['clicked_letter']) : false;
+		
+		$criteria = GO_Base_Db_FindCriteria::newInstance()
+			->addModel(GO_Addressbook_Model_Company::model(),'t')
+			->addInCondition('addressbook_id', $this->multiselectIds);
+		
+		$query_type = 'LIKE';
+		if(!empty($clicked_letter))
+		{
+			if($clicked_letter=='[0-9]')
+			{
+				$query = '^[0-9].*$';
+				$query_type = 'REGEXP';
+			}else
+			{
+				$query= $clicked_letter.'%';
+			}
+		} else {
+			$query = !empty($query) ? '%'.$query.'%' : '';
+		}
+
+		if (!empty($query))
+			$criteria->addCondition($field,$query,$query_type);
+		
 		$storeParams = GO_Base_Db_FindParams::newInstance()
-			->criteria(GO_Base_Db_FindCriteria::newInstance()
-				->addModel(GO_Addressbook_Model_Company::model(),'t')
-				->addInCondition('addressbook_id', $this->multiselectIds))
+			->criteria($criteria)
 			->select('t.*t, ab.name AS addressbook_name')
 			->joinModel(array(
 				'model'=>'GO_Addressbook_Model_Addressbook',					
@@ -132,9 +156,36 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 					)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter,'ac');
 			}
 		//}
-			
+			$storeParams->debugSql();
 		return $storeParams;
 		
+	}
+	
+	public function actionChangeAddressbook($params) {
+		$ids = json_decode($params['items']);
+		
+		$response['success'] = true;
+		$response['failedToMove'] = array();
+		
+		foreach ($ids as $id) {
+			$model = GO_Addressbook_Model_Company::model()->findByPk($id);
+			$failed_id = !($model->setAttribute('addressbook_id',$params['book_id']) && $model->save()) ? $id : null;
+			
+			if ($failed_id) {
+				$response['failedToMove'][] = $failed_id;
+				$response['success'] = false;
+			}
+			
+			foreach ($model->contacts as $contact) {
+				$failed_id = !($contact->setAttribute('addressbook_id',$params['book_id']) && $contact->save()) ? $id : null;
+				if ($failed_id) {
+					$response['failedToMove'][] = $failed_id;
+					$response['success'] = false;
+				}
+			}
+		}
+		
+		return $response;
 	}
 }
 

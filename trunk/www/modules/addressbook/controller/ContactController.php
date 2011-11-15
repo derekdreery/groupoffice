@@ -158,18 +158,47 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		);
 	}	
 	
-	protected function getStoreParams($params) {
+	protected function getStoreParams($params) {	
+		$query = !empty($params['query']) ? ($params['query']) : null;
+		$field = isset($params['field']) ? ($params['field']) : 'name';
+		$clicked_letter = isset($params['clicked_letter']) ? ($params['clicked_letter']) : false;
+		
+		$query_type = 'LIKE';
+		if(!empty($clicked_letter))
+		{
+			if($clicked_letter=='[0-9]')
+			{
+				$query = '^[0-9].*$';
+				$query_type = 'REGEXP';
+			}else
+			{
+				$query= $clicked_letter.'%';
+			}
+		} else {
+			$query = !empty($query) ? '%'.$query.'%' : '';
+		}
+
+		$criteria = GO_Base_Db_FindCriteria::newInstance()
+			->addModel(GO_Addressbook_Model_Contact::model(),'t')
+			->addInCondition('addressbook_id', $this->multiselectIds);
+		
+		if (!empty($query)) {
+			if ($field=='name') {
+				$criteria->addRawCondition('CONCAT_WS(`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`)','\''.$query.'\'',$query_type);
+			} else {
+				$criteria->addCondition($field,$query,$query_type);
+			}
+		}
+
 		$storeParams = GO_Base_Db_FindParams::newInstance()
-			->criteria(GO_Base_Db_FindCriteria::newInstance()
-				->addModel(GO_Addressbook_Model_Contact::model(),'t')
-				->addInCondition('addressbook_id', $this->multiselectIds))
+			->criteria($criteria)
 			->select('t.*t, ab.name AS addressbook_name')
 			->joinModel(array(
 				'model'=>'GO_Addressbook_Model_Addressbook',					
 				'localField'=>'addressbook_id',
 				'tableAlias'=>'ab' //Optional table alias
-			));	
-
+			));
+		
 		//if(empty($params['enable_addresslist_filter'])){
 			if(isset($params['addresslist_filter']))
 			{
@@ -246,6 +275,25 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 						->mergeWith($this->getStoreParams($params));
 		$store->setStatement(call_user_func(array('GO_Addressbook_Model_Contact','model'))->find($storeParams));
 		return array_merge($response, $store->getData());
+	}
+	
+	public function actionChangeAddressbook($params) {
+		$ids = json_decode($params['items']);
+		
+		$response['success'] = true;
+		$response['failedToMove'] = array();
+		
+		foreach ($ids as $id) {
+			$model = GO_Addressbook_Model_Contact::model()->findByPk($id);
+			$failed_id = !$model->setAttribute('addressbook_id',$params['book_id']) ? $id : null;
+			$failed_id = !$model->save() ? $id : null;
+			if ($failed_id) {
+				$response['failedToMove'][] = $failed_id;
+				$response['success'] = false;
+			}
+		}
+		
+		return $response;
 	}
 }
 
