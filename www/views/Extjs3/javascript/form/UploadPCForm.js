@@ -7,6 +7,9 @@ GO.UploadPCForm = function(config)
 	if(!config.addText){
 		config.addText=GO.email.lang.attachFilesPC;
 	}
+	
+	if(!config.url)
+		config.url = GO.url('core/upload');
 
 	if(!config.iconCls)
 		config.iconCls='btn-computer go-upload-pc-form';
@@ -41,8 +44,7 @@ Ext.extend(GO.UploadPCForm, Ext.form.FormPanel, {
 
 	uploadHandler : function(){
 
-		this.form.submit({
-			url:GO.url('core/upload'),
+		this.form.submit({			
 			waitMsg: GO.lang.waitMsgUpload,
 			success:function(form, action){
 				this.uploadFile.clearQueue();

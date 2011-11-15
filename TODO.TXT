@@ -1,5 +1,8 @@
 
-Calendar delete exception
+Calendar cancel and decline notifications.
+
+DAV
+SyncML
 
 Advanced search panel
 Settings panels
@@ -26,8 +29,6 @@ webshop integratie (event bij mail template parsen)
 Files versioning
 
 Incomplete objects. Geen select * maar text en blobs niet meenemen.
-
-sync
 
 serverclient
 
