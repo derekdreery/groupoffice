@@ -54,13 +54,29 @@ abstract class GO_Base_Data_AbstractStore {
 		return $this->_columnModel;
 	}
 	
+	/**
+	 * Return an array with all the records and the total number of rows in the store.
+	 * 
+	 * array('results'=>array(),'total'=>0);
+	 * 
+	 * @return array
+	 */
+	abstract public function getData();
 	
-//	public function nextRecord(){
-//		
-//	}
-//	
-//	public function getTotal(){
-//		
-//	}
+	/**
+	 * 
+	 * Return the next record in the store.
+	 * 
+	 * @return array
+	 */
+  abstract public function nextRecord();
+	
+	/**
+	 * Return the total number of records in the store.
+	 * 
+	 * @return int
+	 */
+	abstract public function getTotal();
+
 	
 }

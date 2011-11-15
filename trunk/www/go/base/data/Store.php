@@ -167,6 +167,16 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	}
 	
 
+	public function nextRecord() {
+		
+		$model = $this->_stmt->fetch();
+		
+		return $model ? $this->getColumnModel()->formatModel($model) : false;
+	}
+	
+	public function getTotal() {
+		return isset($this->_stmt->foundRows) ? $this->_stmt->foundRows : $this->_stmt->rowCount();
+	}
 
   /**
    * Returns the data for the grid.
@@ -192,10 +202,10 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		//I got this error on php 5.2
 		//SQLSTATE[HY000]: General error: 2014 Cannot execute queries while other unbuffered queries are active. Consider using PDOStatement::fetchAll(). Alternatively, if your code is only ever going to run against mysql, you may enable query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute.
 		
-		while ($model = $this->_stmt->fetch()) {
-			$this->_response['results'][] = $this->getColumnModel()->formatModel($model);
+		while ($record = $this->nextRecord()) {
+			$this->_response['results'][] = $record;
 		}
-		$this->_response['total']=isset($this->_stmt->foundRows) ? $this->_stmt->foundRows : $this->_stmt->rowCount();
+		$this->_response['total']=$this->getTotal();
 
 
     return $this->_response;
@@ -213,7 +223,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		
 		$sort = !empty($_REQUEST['sort']) ? $_REQUEST['sort'] : $this->_defaultSortOrder;
 		
-		$sort = $this->getColumnModel()->getSortAlias($sort);
+		$sort = $this->getColumnModel()->getSortColumn($sort);
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->calcFoundRows()

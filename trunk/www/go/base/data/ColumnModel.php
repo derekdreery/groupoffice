@@ -25,9 +25,11 @@ class GO_Base_Data_ColumnModel {
 	 *
 	 * @var Array 
 	 */
-	private $_columns = array();
+	private $_columns;
 	
-	private $_sortFieldsAliases=array();
+	private $_columnSort;
+	
+	//private $_sortFieldsAliases=array();
 
 	private $_modelFormatType='formatted';
 
@@ -61,13 +63,13 @@ class GO_Base_Data_ColumnModel {
 	 */
 	public function setColumnsFromModel(GO_Base_Db_ActiveRecord $model, $excludeColumns=array(), $includeColumns=array()) {
 
-		if (!count($includeColumns)) {
 			$attributes = $model->getAttributes();
-			$columns = array();
-			foreach (array_keys($attributes) as $colName) {
-				$columns[$colName] = array(
-						'label' => $model->getAttributeLabel($colName)
-				);
+
+			foreach (array_keys($attributes) as $colName) {				
+				if(!in_array($colName, $excludeColumns) && (!count($includeColumns) || in_array($colName, $includeColumns))){
+					$column = new GO_Base_Data_Column($colName, $model->getAttributeLabel($colName));
+					$this->addColumn($column);
+				}
 			}
 
 			if ($model->customfieldsRecord) {
@@ -75,22 +77,13 @@ class GO_Base_Data_ColumnModel {
 				array_shift($cfAttributes); //remove model_id column
 
 				foreach ($cfAttributes as $colName) {
-					$columns[$colName] = array(
-							'label' => $model->customfieldsRecord->getAttributeLabel($colName)
-					);
+
+					if(!in_array($colName, $excludeColumns) && (!count($includeColumns) || in_array($colName, $includeColumns))){
+						$column = new GO_Base_Data_Column($colName, $model->customfieldsRecord->getAttributeLabel($colName));
+						$this->addColumn($column);
+					}
 				}
 			}
-		} else {
-			$columns = $includeColumns;
-		}
-
-		foreach ($excludeColumns as $excl) {
-			$offset = array_search($excl, $columns);
-			if ($offset !== false)
-				array_splice($columns, $offset, 1);
-		}
-
-		$this->_columns = array_merge($this->_columns, $columns);
 	}
 
 	/**
@@ -106,6 +99,7 @@ class GO_Base_Data_ColumnModel {
 	 * The sortfield param is optional an can be set if you want to set the default field for Sorting the columns
 	 *  
 	 * @todo column object
+	 * @deprecated
 	 * 
 	 * @param String $column
 	 * @param String $format
@@ -113,23 +107,44 @@ class GO_Base_Data_ColumnModel {
 	 * @param String $sortfield 
 	 */
 	public function formatColumn($column, $format, $extraVars=array(), $sortfield='', $label='') {
-		$this->_columns[$column]['format'] = $format;
-		$this->_columns[$column]['extraVars'] = $extraVars;
-		$this->_columns[$column]['label'] = empty($label) ? $column : $label;
-
-		if (!empty($sortfield)) {
-			$this->_sortFieldsAliases[$column] = $sortfield;
-		}
+		
+		
+		$column = new GO_Base_Data_Column($column, $label);
+		$column->setFormat($format, $extraVars);
+		if(!empty($sortfield))
+			$column->setSortAlias($sortfield);
+		
+		$this->addColumn($column);
+//		$this->_columns[$column]['format'] = $format;
+//		$this->_columns[$column]['extraVars'] = $extraVars;
+//		$this->_columns[$column]['label'] = empty($label) ? $column : $label;
+//
+//		if (!empty($sortfield)) {
+//			$this->_sortFieldsAliases[$column] = $sortfield;
+//		}
 	}
-
+	
+	/**
+	 *
+	 * @param GO_Base_Data_Column $column
+	 * @return GO_Base_Data_ColumnModel 
+	 */
+	public function addColumn(GO_Base_Data_Column $column){
+		$this->_columns[$column->getDataIndex()]=$column;
+		$this->_columnSort[$column->getDataIndex()]=$column->getSortIndex();
+		
+		return $this;
+	}
+	
 	/**
 	 * Get the columns of this columnModel.
 	 * 
 	 * This function returns all columns that are set in this columnModel as an array.
 	 *  
-	 * @return Array 
+	 * @return GO_Base_Data_Column[]
 	 */
 	public function getColumns() {
+		$this->_sortColumns();					
 		return $this->_columns;
 	}
 	
@@ -142,23 +157,22 @@ class GO_Base_Data_ColumnModel {
 	 * 
 	 * @param array $columnNames  
 	 */
-	public function setColumnOrder($columnNames){
-		$unsorted = $this->_columns;
-		$this->_columns=array();
-		foreach($columnNames as $c){
-			$this->_columns[$c]=$unsorted[$c];
-			unset($unsorted[$c]);
-		}
-		foreach($unsorted as $c=>$attr){
-			$this->_columns[$c]=$unsorted[$c];
+	private function _sortColumns(){
+		
+		if(isset($this->_columnSort)){
+			asort($this->_columnSort);	
+
+			$sorted = array();
+			foreach($this->_columnSort as $column=>$sort){
+				$sorted[$column] = $this->_columns[$column];
+			}
+			$this->_columns = $sorted;
+			unset($this->_columnSort);
 		}
 	}
 
-	public function getSortAlias($alias) {
-		if (isset($this->_sortFieldsAliases[$alias]))
-			$alias = $this->_sortFieldsAliases[$alias];
-
-		return $alias;
+	public function getSortColumn($alias) {		
+		return isset($this->_columns[$alias]) ? $this->_columns[$alias]->getSortColumn() : $alias;
 	}
 
 	public function removeColumn($columnName) {
@@ -177,51 +191,24 @@ class GO_Base_Data_ColumnModel {
 	public function formatModel($model) {
 
 		$oldLevel = error_reporting(E_ERROR); //suppress errors in the eval'd code
-
-		$array = $model->getAttributes($this->_modelFormatType);
-
-		/**
-		 * The extract function makes the array keys available as variables in the current function scope.
-		 * we need this for the eval functoion.
-		 * 
-		 * example $array = array('name'=>'Pete'); becomes $name='Pete';
-		 * 
-		 * In the column definition we can supply a format like this:
-		 * 
-		 * 'format'=>'$name'
-		 */
-		extract($array);
-
+		
 		$formattedRecord = array();
 		$columns = $this->getColumns();
 
-		foreach ($columns as $colName => $attributes) {
-			if (!is_array($attributes)) {
-				$colName = $attributes;
-				$attributes = array();
-			}
-
-			if (isset($attributes['extraVars'])) {
-				extract($attributes['extraVars']);
-			}
-
-			if (isset($attributes['format'])) {
-				$result = '';
-				eval('$result=' . $attributes['format'] . ';');
-				$formattedRecord[$colName] = $result;
-			} elseif (isset($array[$colName])){
-				$formattedRecord[$colName] = $array[$colName];
-			}else
-			{
-				$formattedRecord[$colName] = "";
-			}
+		foreach($columns as $column){	
 			
+			$column->setModelFormatType($this->_modelFormatType);
+			
+			$formattedRecord[$column->getDataIndex()]=$column->render($model);			
 		}
-
-		error_reporting($oldLevel);
-
-		if (isset($this->_formatRecordFunction)) {
+			
+		error_reporting($oldLevel);		
+		
+		if (isset($this->_formatRecordFunction)){
 			$formattedRecord = call_user_func($this->_formatRecordFunction, $formattedRecord, $model, $this);
+			
+			if(!$formattedRecord)
+				throw new Exception("Fatal error: ".$this->_formatRecordFunction." should return the record");
 		}
 
 		return $formattedRecord;
@@ -239,11 +226,15 @@ class GO_Base_Data_ColumnModel {
 	 * Set a function that will be called with call_user_func to format a record.
 	 * The function will be called with parameters:
 	 * 
-	 * Array $formattedRecord, GO_Base_Db_ActiveRecord $model, GO_Base_Data_Store $store
+	 * Array $formattedRecord, GO_Base_Db_ActiveRecord $model, GO_Base_Data_ColumnModel $cm
 	 * 
 	 * @param mixed $func Function name string or array($object, $functionName)
+	 * 
+	 * @return GO_Base_Data_ColumnModel
 	 */
 	public function setFormatRecordFunction($func) {
 		$this->_formatRecordFunction = $func;
+		
+		return $this;
 	}
 }
