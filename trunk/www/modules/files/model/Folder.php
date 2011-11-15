@@ -184,7 +184,6 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 				//unset($this->_path);
 				
 				$newRelPath = $this->getPath(true);
-				var_dump($newRelPath);
 				
 				$newFsFolder = new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($newRelPath));
 				
