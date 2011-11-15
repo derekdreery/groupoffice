@@ -1080,11 +1080,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
     $result->model=$this;
     $result->findParams=$params;
     if(isset($params['relation']))
-      $result->relation=$params['relation'];
-    
+      $result->relation=$params['relation'];    
 
-    return $result;
-		
+    return $result;		
 	}
 	
 	
@@ -1100,10 +1098,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	private function _quoteColumnName($name){
+	
+		//disallow \ ` and \00  : http://stackoverflow.com/questions/1542627/escaping-field-names-in-pdo-statements
+		if(preg_match("/[`\\\\\\000]/", $name))
+			throw new Exception("Invalid characters found in column name: ".$name);
+		
 		$arr = explode('.',$name);
 		
 //		for($i=0,$max=count($arr);$i<$max;$i++)
-//			$arr[$i]=$this->getDbConnection ()->quote ($arr[$i]);
+//			$arr[$i]=$this->getDbConnection ()->quote($arr[$i], PDO::PARAM_STR);
 		
 		return '`'.implode('`.`',$arr).'`';
 	}
