@@ -204,10 +204,11 @@ GO.email.EmailComposer = function(config) {
 			addText: GO.email.lang.attachFilesPC,
 			url:GO.settings.modules.email.url+'action.php'
 		});
-		this.uploadForm.on('upload', function(e, file)
+		this.uploadForm.on('upload', function(e, files, action)
 		{
+			//console.log(files);
 			this.attachmentsStore.loadData({
-				'results' : file
+				'results' : files
 			}, true);
 
 			this.attachmentMenu.hide();
