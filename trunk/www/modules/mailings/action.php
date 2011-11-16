@@ -34,7 +34,7 @@ try {
 		
 		case 'sendmail':
 
-			if(empty($_POST['mailing_group_id'])) {
+			if(empty($_POST['addresslist_id'])) {
 				throw new Exception($lang['email']['feedbackNoReciepent']);
 			}else {
 				try {
@@ -118,7 +118,7 @@ try {
 					$mailing['sent']=0;
 					$mailing['errors']=0;
 					$mailing['total']=0;
-					$mailing['mailing_group_id']=$_POST['mailing_group_id'];
+					$mailing['addresslist_id']=$_POST['addresslist_id'];
 					$mailing['message_path']=$GLOBALS['GO_CONFIG']->file_storage_path.'mailings/'.$GLOBALS['GO_SECURITY']->user_id.'_'.date('Ymd_Gis').'.eml';
 
 					if(!is_dir(dirname($mailing['message_path'])))

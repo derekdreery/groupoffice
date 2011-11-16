@@ -30,7 +30,7 @@ switch($_GET['type'])
 			{
 				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 				$ml = new mailings();
-				$ml->remove_user_from_group($user['id'], $_REQUEST['mailing_group_id']);
+				$ml->remove_user_from_group($user['id'], $_REQUEST['addresslist_id']);
 				
 				$smarty->assign('signedoff', true);
 			}
@@ -49,7 +49,7 @@ switch($_GET['type'])
 			{
 				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 				$ml = new mailings();
-				$ml->remove_company_from_group($company['id'], $_REQUEST['mailing_group_id']);
+				$ml->remove_company_from_group($company['id'], $_REQUEST['addresslist_id']);
 				
 				$smarty->assign('signedoff', true);
 			}
@@ -68,7 +68,7 @@ switch($_GET['type'])
 			{
 				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
 				$ml = new mailings();
-				$ml->remove_contact_from_group($contact['id'], $_REQUEST['mailing_group_id']);
+				$ml->remove_contact_from_group($contact['id'], $_REQUEST['addresslist_id']);
 				
 				$smarty->assign('signedoff', true);
 			}

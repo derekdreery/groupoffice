@@ -171,18 +171,18 @@ class templates extends db {
 
 
 
-	private function build_unsubscribe_href($mailing_group_id, $recipient_type, $recipient_id, $ctime) {
+	private function build_unsubscribe_href($addresslist_id, $recipient_type, $recipient_id, $ctime) {
 		global $GO_MODULES;
 
-		return $GLOBALS['GO_MODULES']->modules['mailings']['full_url'].'extern/unsubscribe.php?mailing_group_id='.$mailing_group_id
-						.'&recipient_type='.$recipient_type.'&recipient_id='.$recipient_id.'&hash='.$this->get_unsubscribe_hash($ctime,$mailing_group_id,$recipient_type,$recipient_id);
+		return $GLOBALS['GO_MODULES']->modules['mailings']['full_url'].'extern/unsubscribe.php?addresslist_id='.$addresslist_id
+						.'&recipient_type='.$recipient_type.'&recipient_id='.$recipient_id.'&hash='.$this->get_unsubscribe_hash($ctime,$addresslist_id,$recipient_type,$recipient_id);
 	}
 
-	public function get_unsubscribe_hash($ctime,$mailing_group_id,$recipient_type,$recipient_id) {
-		return md5($ctime.$mailing_group_id.$recipient_type.$recipient_id);
+	public function get_unsubscribe_hash($ctime,$addresslist_id,$recipient_type,$recipient_id) {
+		return md5($ctime.$addresslist_id.$recipient_type.$recipient_id);
 	}
 
-	function replace_contact_data_fields($input, $contact_id=0, $htmlspecialchars=false, $mailing_group_id=0, $skip_empty=false) {
+	function replace_contact_data_fields($input, $contact_id=0, $htmlspecialchars=false, $addresslist_id=0, $skip_empty=false) {
 		$ab = new addressbook();
 
 		if(is_array($contact_id))
@@ -207,13 +207,13 @@ class templates extends db {
 			/**
 			 * this value must be passed so that an unsubscribe link can be generated
 			 */
-			if(!empty($mailing_group_id)) {
+			if(!empty($addresslist_id)) {
 
 				global $GO_LANGUAGE, $lang;
 				if(!isset($lang['mailings']))
 					require($GLOBALS['GO_LANGUAGE']->get_language_file('mailings'));
 
-				$contact['unsubscribe_href']=$this->build_unsubscribe_href($mailing_group_id, 'contact', $contact_id, $contact['ctime']);
+				$contact['unsubscribe_href']=$this->build_unsubscribe_href($addresslist_id, 'contact', $contact_id, $contact['ctime']);
 				$contact['unsubscribe_link'] = '<a href="'.$contact['unsubscribe_href'].'">'.$lang['mailings']['unsubscription']."</a>";
 			}
 		}else {
@@ -235,9 +235,9 @@ class templates extends db {
 		return $input;
 	}
 
-	function replace_company_data_fields($input, $company_id=0, $htmlspecialchars=false, $mailing_group_id=0, $skip_empty=false) {
+	function replace_company_data_fields($input, $company_id=0, $htmlspecialchars=false, $addresslist_id=0, $skip_empty=false) {
 
-		//$this->replace_unsubscription_field($input, $mailing['mailing_group_id'], 'company', $company_id, $htmlspecialchars);
+		//$this->replace_unsubscription_field($input, $mailing['addresslist_id'], 'company', $company_id, $htmlspecialchars);
 
 		$ab = new addressbook();
 
@@ -274,13 +274,13 @@ class templates extends db {
 				$cf=false;
 			}
 
-			if(!empty($mailing_group_id)) {
+			if(!empty($addresslist_id)) {
 
 				global $GO_LANGUAGE, $lang;
 				if(!isset($lang['mailings']))
 					require($GLOBALS['GO_LANGUAGE']->get_language_file('mailings'));
 
-				$company['unsubscribe_href']=$this->build_unsubscribe_href($mailing_group_id, 'company', $company_id, $company['ctime']);
+				$company['unsubscribe_href']=$this->build_unsubscribe_href($addresslist_id, 'company', $company_id, $company['ctime']);
 				$company['unsubscribe_link'] = '<a href="'.$company['unsubscribe_href'].'">'.$lang['mailings']['unsubscription']."</a>";
 			}
 
@@ -297,7 +297,7 @@ class templates extends db {
 		return $input;
 	}
 
-	function replace_user_data_fields($input, $user_id=0, $mailing_group_id=0) {
+	function replace_user_data_fields($input, $user_id=0, $addresslist_id=0) {
 		global $GO_CONFIG, $GO_MODULES, $GO_SECURITY, $sir_madam;
 
 		require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
@@ -305,13 +305,13 @@ class templates extends db {
 
 		if ($user_id > 0 && $user = $GO_USERS->get_user($user_id))
 		{
-			if(!empty($mailing_group_id)){
+			if(!empty($addresslist_id)){
 
 				global $GO_LANGUAGE, $lang;
 				if(!isset($lang['mailings']))
 					require($GLOBALS['GO_LANGUAGE']->get_language_file('mailings'));
 
-				$user['unsubscribe_href']=$this->build_unsubscribe_href($mailing_group_id, 'user', $user_id, $user['registration_time']);
+				$user['unsubscribe_href']=$this->build_unsubscribe_href($addresslist_id, 'user', $user_id, $user['registration_time']);
 				$user['unsubscribe_link'] = '<a href="'.$user['unsubscribe_href'].'">'.$lang['mailings']['unsubscription']."</a>";
 			}
 			global $GO_MODULES;
