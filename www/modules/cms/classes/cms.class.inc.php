@@ -1497,7 +1497,7 @@ class cms extends db {
 			"file_id='".intval($file_id)."' AND category_id='".intval($category_id)."'");
 	}
 
-	public function get_child_categories($category_id, $site_id, $return_first_item=false, $sortby=false, $sortdirection=false) {
+	public function get_child_categories($category_id, $site_id, $return_last_item=false, $sortby=false, $sortdirection=false) {
 			$sql = "SELECT c.* FROM cms_categories c ".
 				"WHERE c.parent_id='".intval($category_id)."' ";
 //		else
@@ -1522,11 +1522,11 @@ class cms extends db {
 			$record['active'] = isset($_GET['filter_category_id']) && $record['id']==$_GET['filter_category_id'];
 			$record['active_class_name'] = $record['active'] ? 'active_category_filter' : '';
 			
-			if($return_first_item){
-				$sql = "SELECT * FROM cms_files f INNER JOIN cms_files_categories c ON c.file_id=f.id WHERE c.category_id=".intval($record['id'])." ORDER BY f.sort_time ASC LIMIT 0,1";
+			if($return_last_item){
+				$sql = "SELECT * FROM cms_files f INNER JOIN cms_files_categories c ON c.file_id=f.id WHERE c.category_id=".intval($record['id'])." ORDER BY f.sort_time DESC LIMIT 0,1";
 				$cms2->query($sql);
-				$record['first_item']=$cms2->next_record();
-				$record['first_item']['href']=$cms2->create_href_by_file($record['first_item']);
+				$record['last_item']=$cms2->next_record();
+				$record['last_item']['href']=$cms2->create_href_by_file($record['last_item']);
 			}
 			
 			$categories[] = $record;
