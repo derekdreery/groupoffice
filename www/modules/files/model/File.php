@@ -123,35 +123,6 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return parent::beforeSave();
 	}
 
-	protected function afterSave($wasNew) {
-
-		if ($wasNew) {
-			//$this->fsFile->create();
-		} else {
-			
-//			if($this->isModified('name')){				
-//				//rename filesystem file.
-//				$oldFsFile = new GO_Base_Fs_File(dirname($this->fsFile->path()).'/'.$this->getOldAttributeValue('name'));				
-//				$oldFsFile->rename($this->name);
-//			}
-//			
-//			if($this->isModified('folder_id')){
-//				//file will be moved so we need the old folder path.
-//				$oldFolderId = $this->getOldAttributeValue('folder_id');
-//				$oldFolder = GO_Files_Model_Folder::model()->findByPk($oldFolderId);				
-//				$oldRelPath = $oldFolder->path;				
-//				$oldPath = GO::config()->file_storage_path . $oldRelPath . '/' . $this->name;
-//				
-//				$fsFile= new GO_Base_Fs_File($oldPath);
-//				
-//				if (!$fsFile->move(new GO_Base_Fs_Folder(GO::config()->file_storage_path . dirname($this->path))))
-//					throw new Exception("Could not rename folder on the filesystem");
-//			}
-		}
-
-		return parent::afterSave($wasNew);
-	}
-
 	protected function getPath() {
 		return $this->folder->path . '/' . $this->name;
 	}
@@ -188,21 +159,50 @@ class GO_Files_Model_File extends GO_Base_Db_ActiveRecord {
 		return $this->save();
 	}
 	
+	/**
+	 * Copy a file to another folder.
+	 * 
+	 * @param GO_Files_Model_Folder $destinationFolder
+	 * @return GO_Files_Model_File 
+	 */
 	public function copy($destinationFolder){
 		
 		$copy = $this->duplicate(array('folder_id'=>$destinationFolder->id), false);
 		$this->fsFile->copy($copy->fsFile->parent());
 		$copy->save();
 		
-		return true;
+		return $copy;
 	}
 	
-	
+	/**
+	 * Import a filesystem file into the database.
+	 * 
+	 * @param GO_Base_Fs_File $fsFile
+	 * @return GO_Files_Model_File 
+	 */
 	public static function importFromFilesystem($fsFile){
 		
 		$folderPath = str_replace(GO::config()->file_storage_path,"",$fsFile->parent()->path());
 		
 		$folder = GO_Files_Model_Folder::model()->findByPath($folderPath, true);
 		return $folder->addFile($fsFile->name());	
+	}
+	
+	
+	/**
+	 * Find the file model by relative path.
+	 * 
+	 * @param string $relpath Relative path from GO::config()->file_storage_path
+	 * @return GO_Files_Model_File 
+	 */
+	public function findByPath($relpath){
+		$folder = GO_Files_Model_Folder::model()->findByPath(dirname($relpath));
+		if(!$folder)
+			return false;
+		else
+		{
+			return $folder->hasFile(GO_Base_Fs_File::utf8Basename($relpath));
+		}
+		
 	}
 }

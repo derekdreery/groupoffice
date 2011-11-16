@@ -49,6 +49,8 @@ class GO_Dav_Auth_Backend implements Sabre_DAV_Auth_IBackend {
 	 * @return bool
 	 */
 	public function authenticate(Sabre_DAV_Server $server, $realm) {
+		
+		GO::debug("auth");
 
 		require_once(GO::config()->root_path.'Group-Office.php');
 		
@@ -87,9 +89,10 @@ class GO_Dav_Auth_Backend implements Sabre_DAV_Auth_IBackend {
 	 */
 	public function getUserPass() {
 
+		//GO::debug($_SERVER['PHP_AUTH_USER']);
 		// Apache and mod_php
 		if (($user = $this->httpRequest->getRawServerValue('PHP_AUTH_USER')) && ($pass = $this->httpRequest->getRawServerValue('PHP_AUTH_PW'))) {
-
+			
 			return array($user, $pass);
 		}
 

@@ -127,7 +127,7 @@ class Sabre_DAV_Server {
      *
      * @var bool 
      */
-    public $debugExceptions = false;
+    public $debugExceptions = true;
 
     /**
      * This property allows you to automatically add the 'resourcetype' value 
@@ -237,6 +237,9 @@ class Sabre_DAV_Server {
             $this->httpResponse->sendStatus($httpCode);
             $this->httpResponse->setHeaders($headers);
             $this->httpResponse->sendBody($DOM->saveXML());
+						
+						GO::debug($e->getMessage());
+						GO::debug($e->getTraceAsString());
 
         }
 

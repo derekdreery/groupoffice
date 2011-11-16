@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright Intermesh
  *
@@ -13,245 +14,236 @@
  */
 class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollection, Sabre_DAV_IQuota {
 
-	protected $files;
-	protected $folder;
-	protected $write_permission;
+	protected $_folder;
 	protected $relpath;
 
-	public function __construct($path){
-		global $GO_CONFIG;
-		
+	public function __construct($path) {
+
 		$path = rtrim($path, '/');
 
-		$this->relpath=$path;
-		$path = GO::config()->file_storage_path.$path;
+		$this->relpath = $path;
+		$path = GO::config()->file_storage_path . $path;
+		
+		if(!$this->_getFolder()->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
+				throw new Sabre_DAV_Exception_Forbidden ();
 
 		parent::__construct($path);
 	}
 
-	private function getFolder(){
-		global $files;
-		if(!isset($this->folder)){
-			
-			$this->folder=$files->resolve_path($this->relpath);
+	/**
+	 *
+	 * @return GO_Files_Model_Folder 
+	 */
+	private function _getFolder() {
+		if (!isset($this->_folder)) {
 
-			if(!$this->folder){
-				throw new Sabre_DAV_Exception_FileNotFound('File not found: '.$this->relpath);
+			$this->_folder = GO_Files_Model_Folder::model()->findByPath($this->relpath);
+
+			if (!$this->_folder) {
+				throw new Sabre_DAV_Exception_FileNotFound('Folder not found: ' . $this->relpath);
 			}
 		}
-		return $this->folder;
+		return $this->_folder;
 	}
-    /**
-     * Creates a new file in the directory
-     *
-     * data is a readable stream resource
-     *
-     * @param string $name Name of the file
-     * @param resource $data Initial payload
-     * @return void
-     */
-    public function createFile($name, $data = null) {
-		
-		global $GO_SECURITY, $files;
-
-		if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->getFolder()))
-			throw new Sabre_DAV_Exception_Forbidden();
-
-        $newPath = $this->path . '/' . $name;
-        file_put_contents($newPath,$data);
-				$file_id = $files->import_file($newPath, $this->folder['id']);
-    }
 
 	/**
-     * Renames the node
-     *
-     * @param string $name The new name
-     * @return void
-     */
-    public function setName($name) {
-		global $GO_SECURITY, $files;
+	 * Creates a new file in the directory
+	 *
+	 * data is a readable stream resource
+	 *
+	 * @param string $name Name of the file
+	 * @param resource $data Initial payload
+	 * @return void
+	 */
+	public function createFile($name, $data = null) {
 
-		if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->getFolder()))
+		$folder = $this->_getFolder();
+
+		if ($folder->getPermissionLevel() < GO_Base_Model_Acl::WRITE_PERMISSION)
 			throw new Sabre_DAV_Exception_Forbidden();
 
-        parent::setName($name);
+		$newFile = new GO_Base_Fs_File($this->path . '/' . $name);
+		$newFile->putContents($data);
 
-		$this->relpath = $files->strip_server_path($this->path);
-    }
+		$folder->addFile($name);
+	}
 
-	public function getServerPath(){
+	/**
+	 * Renames the node
+	 *
+	 * @param string $name The new name
+	 * @return void
+	 */
+	public function setName($name) {
+
+		$folder = $this->_getFolder();
+
+		if ($folder->getPermissionLevel() < GO_Base_Model_Acl::WRITE_PERMISSION)
+			throw new Sabre_DAV_Exception_Forbidden();
+		
+		$folder->name = $name;
+		$folder->save();
+
+		$this->relpath = $folder->getPath();
+		$this->path = GO::config()->file_storage_path.$this->relpath;
+	}
+
+	public function getServerPath() {
 		return $this->path;
 	}
 
 	/**
-     * Movesthe node
-     *
-     * @param string $name The new name
-     * @return void
-     */
-    public function move($newPath) {
+	 * Moves the node
+	 *
+	 * @param string $name The new name
+	 * @return void
+	 */
+	public function move($newPath) {
 
 		go_debug("FSD::move($newPath)");
 
-		if(!is_dir(dirname($newPath)))
-				throw new Exception('Invalid move!');
+		if (!is_dir(dirname($newPath)))
+			throw new Exception('Invalid move!');
 
-		global $GO_SECURITY, $files;
+		$folder = $this->_getFolder();
 
-		if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->getFolder()))
+		if ($folder->getPermissionLevel() < GO_Base_Model_Acl::WRITE_PERMISSION)
+			throw new Sabre_DAV_Exception_Forbidden();
+	
+		$destFsFolder = new GO_Base_Fs_Folder($newPath);		
+		
+		//GO::debug("Dest folder: ".$destFsFolder->stripFileStoragePath());
+		
+		$destFolder = GO_Files_Model_Folder::model()->findByPath($destFsFolder->parent()->stripFileStoragePath());
+		
+		$folder->parent_id=$destFolder->id;
+		$folder->name = $destFsFolder->name();
+		$folder->save();
+
+		$this->relpath = $folder->path;
+		$this->path = GO::config()->file_storage_path.$this->relpath;
+		
+	}
+
+	/**
+	 * Creates a new subdirectory
+	 *
+	 * @param string $name
+	 * @return void
+	 */
+	public function createDirectory($name) {
+
+		$folder = $this->_getFolder();
+
+		if ($folder->getPermissionLevel() < GO_Base_Model_Acl::WRITE_PERMISSION)
 			throw new Sabre_DAV_Exception_Forbidden();
 
-		rename($this->path, $newPath);
+		$folder->addFolder($name);
+	}
 
-		$destFolder = $files->resolve_path($files->strip_server_path(dirname($newPath)));
-
-		$sourceFolder = $this->getFolder();
-		$sourceFolder['name']=utf8_basename($newPath);
-
-		$files->move_folder($sourceFolder, $destFolder);
-
-		$this->path = $newPath;
-		$this->relpath = $files->strip_server_path($this->path);
-    }
-
-    /**
-     * Creates a new subdirectory
-     *
-     * @param string $name
-     * @return void
-     */
-    public function createDirectory($name) {
-
-		global $GO_SECURITY, $files;
-
-		if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->getFolder()))
-			throw new Sabre_DAV_Exception_Forbidden();
-
-        //$newPath = $this->path . '/' . $name;
-        //mkdir($newPath);
-
-		$files->mkdir($this->getFolder(), $name);
-    }
-
-    /**
-     * Returns a specific child node, referenced by its name
-     *
-     * @param string $name
-     * @throws Sabre_DAV_Exception_FileNotFound
-     * @return Sabre_DAV_INode
-     */
-    public function getChild($name) {
-
-		global $GO_CONFIG;
-
-        $path = $this->path.'/'.$name;
-
-		go_debug("FSD:getChild($path)");
-    
-        if (is_dir($path)) {
-            return new GO_Dav_Fs_Directory($this->relpath . '/'. $name);
-        } else if(file_exists($path)) {
-            return new GO_Dav_Fs_File($this->relpath . '/' . $name);
-        }else
-		{
-			throw new Sabre_DAV_Exception_FileNotFound('File with name ' . $path . ' could not be located');
-		}
-
-    }
-	 /**
-     * Checks is a child-node exists.
-     *
-     * It is generally a good idea to try and override this. Usually it can be optimized.
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function childExists($name) {
+	/**
+	 * Returns a specific child node, referenced by its name
+	 *
+	 * @param string $name
+	 * @throws Sabre_DAV_Exception_FileNotFound
+	 * @return Sabre_DAV_INode
+	 */
+	public function getChild($name) {
 
 		$path = $this->path . '/' . $name;
 
-        try {
-			if(!file_exists($path))
+		go_debug("FSD:getChild($path)");
+
+		if (is_dir($path)) {
+			return new GO_Dav_Fs_Directory($this->relpath . '/' . $name);
+		} else if (file_exists($path)) {
+			return new GO_Dav_Fs_File($this->relpath . '/' . $name);
+		} else {
+			throw new Sabre_DAV_Exception_FileNotFound('File with name ' . $path . ' could not be located');
+		}
+	}
+
+	/**
+	 * Checks is a child-node exists.
+	 *
+	 * It is generally a good idea to try and override this. Usually it can be optimized.
+	 *
+	 * @param string $name
+	 * @return bool
+	 */
+	public function childExists($name) {
+
+		$path = $this->path . '/' . $name;
+
+		try {
+			if (!file_exists($path))
 				throw new Sabre_DAV_Exception_FileNotFound('File with name ' . $path . ' could not be located');
 
 			return true;
+		} catch (Sabre_DAV_Exception_FileNotFound $e) {
 
-        } catch(Sabre_DAV_Exception_FileNotFound $e) {
+			return false;
+		}
+	}
 
-            return false;
-
-        }
-
-    }
-
-    /**
-     * Returns an array with all the child nodes
-     *
-     * @return Sabre_DAV_INode[]
-     */
-    public function getChildren() {
+	/**
+	 * Returns an array with all the child nodes
+	 *
+	 * @return Sabre_DAV_INode[]
+	 */
+	public function getChildren() {
 
 		//go_debug('FSD::getChildren');
+		$nodes = array();
+		//foreach(scandir($this->path) as $node) if($node!='.' && $node!='..') $nodes[] = $this->getChild($node);
 
-		global $files;
-        $nodes = array();
-        //foreach(scandir($this->path) as $node) if($node!='.' && $node!='..') $nodes[] = $this->getChild($node);
+		$f = $this->_getFolder();
 
-		$f = $this->getFolder();
+		if (!$f) {
+			throw new Sabre_DAV_Exception_FileNotFound("Folder not found in database");
+		}
+		
+		$stmt = $f->folders();
 
-		if(!$f)
-		{
-			go_debug('Could not get: '.$this->relpath);
+		while ($folder = $stmt->fetch()) {
+			$nodes[] = $this->getChild($folder->name);
 		}
 
-		$files->check_folder_sync($f, $this->relpath);
-		$files->get_folders($f['id'],'name','ASC',0,0,true);
-
-		while($folder = $files->next_record()) {
-			$nodes[]=$this->getChild($folder['name']);
+		$stmt = $f->files();
+		while ($file = $stmt->fetch()) {
+			$nodes[] = $this->getChild($file->name);
 		}
 
-		$files->get_files($f['id'], 'name', 'ASC', 0, 0);
-		while($file = $files->next_record()) {
-			$nodes[]=$this->getChild($file['name']);
-		}
+		return $nodes;
+	}
 
-        return $nodes;
+	/**
+	 * Deletes all files in this directory, and then itself
+	 *
+	 * @return void
+	 */
+	public function delete() {
 
-    }
-
-    /**
-     * Deletes all files in this directory, and then itself
-     *
-     * @return void
-     */
-    public function delete() {
-
-		global $GO_SECURITY, $files;
-
-		if(!$files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->getFolder()))
+		$folder = $this->_getFolder();
+		
+		if ($folder->getPermissionLevel() < GO_Base_Model_Acl::DELETE_PERMISSION)
 			throw new Sabre_DAV_Exception_Forbidden();
 
 
-        //foreach($this->getChildren() as $child) $child->delete();
-       // rmdir($this->path);
+		$folder->delete();
+	}
 
-		$files->delete_folder($this->getFolder());
+	/**
+	 * Returns available diskspace information
+	 *
+	 * @return array
+	 */
+	public function getQuotaInfo() {
 
-    }
-
-    /**
-     * Returns available diskspace information
-     *
-     * @return array
-     */
-    public function getQuotaInfo() {
-
-        return array(
-            disk_total_space($this->path)-disk_free_space($this->path),
-            disk_free_space($this->path)
-            );
-
-    }
+		return array(
+				disk_total_space($this->path) - disk_free_space($this->path),
+				disk_free_space($this->path)
+		);
+	}
 
 }

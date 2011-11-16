@@ -23,8 +23,6 @@ require('../../GO.php');
 
 
 
-if(!GO::modules()->dav)
-	die('DAV module not installed. Install it at Start menu -> Modules');
 
 // Files we need
 require_once GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/autoload.php';
@@ -44,15 +42,19 @@ require_once GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/autoload.php'
 $authBackend = new GO_Dav_Auth_Backend();
 $userpass = $authBackend->getUserPass();
 
+//if(!GO::modules()->dav)
+//	trigger_error('DAV module not installed. Install it at Start menu -> Modules', E_USER_ERROR);
 
-$children = array();
-//if($GLOBALS['GO_SECURITY']->logged_in()){
-$children[] = new GO_Dav_Fs_Directory('users/' . $userpass[0]);
-$children[] = new GO_Dav_Fs_SharedDirectory();
 
-//}
 
-$root = new Sabre_DAV_SimpleCollection('root',$children);
+//$children = array();
+////if($GLOBALS['GO_SECURITY']->logged_in()){
+//$children[] = new GO_Dav_Fs_Directory('users/' . $userpass[0]);
+//$children[] = new GO_Dav_Fs_SharedDirectory();
+//
+////}
+
+$root = new GO_Dav_Fs_RootDirectory();
 
 $tree = new GO_Dav_ObjectTree($root);
 

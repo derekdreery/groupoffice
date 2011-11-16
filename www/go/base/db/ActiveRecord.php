@@ -698,7 +698,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	public function findSingleByAttributes($attributes, $findParams=false){
 		
 		$newParams = GO_Base_Db_FindParams::newInstance();
-		$criteria = $newParams->getCriteria();
+		$criteria = $newParams->getCriteria()->addModel($this);
 		
 		foreach($attributes as $attributeName=>$value)
 			$criteria->addCondition($attributeName, $value);
@@ -706,7 +706,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($findParams)
 			$newParams->mergeWith ($findParams);
 		
-		$newParams->ignoreAcl()->limit(1)->debugSql();
+		$newParams->ignoreAcl()->limit(1);
 				
 		$stmt = $this->find($newParams);
 		
