@@ -44,14 +44,14 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		
 		if(!empty($response['data']['reminder'])) {			
 			$response['data']['remind']=1;
-			$response['data']['remind_date']=date(GO::user()->completeDateFormat, strtotime($response['data']['reminder']));
-			$response['data']['remind_time']=date(GO::user()->time_format, strtotime($response['data']['reminder']));
+			$response['data']['remind_date']=date(GO::user()->completeDateFormat, $model->reminder);
+			$response['data']['remind_time']=date(GO::user()->time_format, $model->reminder);
 		}	else {
 			$response['data']['remind_date']=date(GO::user()->completeDateFormat, $model->getDefaultReminder($model->start_time));
 			$response['data']['remind_time']=date(GO::user()->time_format, $model->getDefaultReminder($model->start_time));
 		}
 			
-		$response['data']['remind_time']=date(GO::user()->time_format, strtotime($response['data']['reminder']));
+		//$response['data']['remind_time']=date(GO::user()->time_format, strtotime($response['data']['reminder']));
 		
 		return parent::afterLoad($response, $model, $params);
 	}
@@ -175,7 +175,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 										->addModel(GO_Tasks_Model_Task::model(),'t')
 										->addInCondition('tasklist_id', $this->multiselectIds))										
 										
-						->select('t.*t, tl.name AS tasklist_name')
+						->select('t.*, tl.name AS tasklist_name')
 						->joinModel(array(
 							'model'=>'GO_Tasks_Model_Tasklist',					
 							'localField'=>'tasklist_id',
