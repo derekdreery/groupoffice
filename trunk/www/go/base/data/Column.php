@@ -1,51 +1,78 @@
 <?php
+/*
+ * Copyright Intermesh
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ *
+ */
+
+/**
+ * Class for the column object
+ * 
+ * 
+ * @package GO.base.data
+ * @version $Id: Column.php 7607 2011-11-16 09:17:42Z wsmits $
+ * @copyright Copyright Intermesh BV.
+ * @author Wesley Smits <wsmits@intermesh.nl> 
+ * 
+ */
 
 class GO_Base_Data_Column {
 	
 	/**
+	 * The dataindex name of this column
 	 *
-	 * @var type 
+	 * @var String 
 	 */
 	private $_dataindex;
 	
 	/**
+	 * The label for this column (Column Header)
 	 *
-	 * @var type 
+	 * @var String 
 	 */
 	private $_label;
 	
 	/**
-	 *
-	 * @var type 
+	 * The index on which the column will be sorted
+	 * 
+	 * @var int 
 	 */
 	private $_sortIndex;
 	
 	/**
-	 *
-	 * @var type 
+	 * The string with the information how this column will show the data.
+	 * 
+	 * @var String 
 	 */
 	private $_format;
 	
 	/**
-	 *
-	 * @var type 
+	 * Extra options that can be passed to this column
+	 * 
+	 * @var Array 
 	 */
 	private $_extraVars = array();
 	
 	/**
-	 *
-	 * @var type 
+	 * The sortAlias for this column
+	 * 
+	 * @var String 
 	 */
 	private $_sortAlias;
 	
 	/**
-	 *
+	 * TODO: Create this description
 	 * @var type 
 	 */
 	private $_modelFormatType;
 	
 	/**
-	 *
+	 * Returns a new instance of a column with the given values
+	 * 
 	 * @param string $dataindex
 	 * @param string $label
 	 * @param int $sortIndex
@@ -56,10 +83,11 @@ class GO_Base_Data_Column {
 	}
 	
 	/**
-	 *
-	 * @param type $dataindex
-	 * @param type $label
-	 * @param type $sortIndex 
+	 * Constructor for this class
+	 * 
+	 * @param string $dataindex
+	 * @param string $label
+	 * @param int $sortIndex 
 	 */
 	public function __construct($dataindex, $label='', $sortIndex=0){
 		$this->_dataindex = $dataindex;
@@ -68,35 +96,38 @@ class GO_Base_Data_Column {
 	}
 	
 	/**
-	 *
+	 * TODO: Create this description
+	 * 
 	 * @param type $type 
 	 */
 	public function setModelFormatType($type){
 		$this->_modelFormatType=$type;
-		
-		
 	}
 	
 	/**
-	 *
-	 * @return type 
+	 * Returns the sort index of this column
+	 * 
+	 * @return int 
 	 */
 	public function getSortIndex(){
 		return $this->_sortIndex;
 	}
 	
 	/**
-	 *
-	 * @return type 
+	 * Returns the sortAlias for this column, of no sortAlias is provided the 
+	 * Dataindex will be returned.
+	 * 
+	 * @return String 
 	 */
 	public function getSortColumn(){
 		return isset($this->_sortAlias) ? $this->_sortAlias : $this->getDataIndex();
 	}
 	
 	/**
-	 *
-	 * @param type $format
-	 * @param type $extraVars
+	 * Give the format for this column to display it's data.
+	 * 
+	 * @param String $format
+	 * @param Array $extraVars
 	 * @return GO_Base_Data_Column 
 	 */
 	public function setFormat($format, $extraVars=array()){
@@ -105,8 +136,10 @@ class GO_Base_Data_Column {
 	}
 	
 	/**
-	 *
-	 * @param type $sortAlias
+	 * Give this column a sortalias.
+	 * Returns the whole column object
+	 * 
+	 * @param String $sortAlias
 	 * @return GO_Base_Data_Column 
 	 */
 	public function setSortAlias($sortAlias){
@@ -115,23 +148,26 @@ class GO_Base_Data_Column {
 	}
 	
 	/**
-	 *
-	 * @return type 
+	 * Get the current label for this column
+	 * 
+	 * @return string 
 	 */
 	public function getLabel(){
 		return $this->_label;
 	}
 	
 	/**
-	 *
-	 * @return type 
+	 * Get the dataindex for this column
+	 * 
+	 * @return string 
 	 */
 	public function getDataIndex(){
 		return $this->_dataindex;
 	}
 	
 	/**
-	 *
+	 * TODO: Create this description
+	 * 
 	 * @param type $model
 	 * @return string 
 	 */
