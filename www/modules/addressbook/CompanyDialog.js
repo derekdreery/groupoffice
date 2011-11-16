@@ -125,9 +125,10 @@ GO.addressbook.CompanyDialog = function(config)
 
 				this.moveEmpForm = new Ext.FormPanel({
 					cls:'go-form-panel',
-					url:GO.settings.modules.addressbook.url+'action.php',
+//					url:GO.settings.modules.addressbook.url+'action.php',
+					url: GO.url('addressbook/company/moveEmployees'),
 					baseParams:{
-						task:'move_employees',
+//						task:'move_employees',
 						from_company_id:0
 					},
 					waitMsgTarget:true,

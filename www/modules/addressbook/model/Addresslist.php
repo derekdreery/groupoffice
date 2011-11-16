@@ -33,7 +33,8 @@ class GO_Addressbook_Model_Addresslist extends GO_Base_Db_ActiveRecord {
 	public function relations(){
 		return array(
 				'contacts' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'addresslist_id', 'linkModel' => 'GO_Addressbook_Model_AddresslistContact'),
-				'companies' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'addresslist_id', 'linkModel' => 'GO_Addressbook_Model_AddresslistCompany')
+				'companies' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'addresslist_id', 'linkModel' => 'GO_Addressbook_Model_AddresslistCompany'),
+				'sentMailings' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_SentMailing','field'=>'addresslist_id')
 		);
 	}
 	

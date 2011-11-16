@@ -10,9 +10,9 @@
  * @copyright Copyright Intermesh
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
  */
-class GO_Addressbook_Controller_EmailTemplate extends GO_Base_Controller_AbstractModelController{
+class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractModelController{
 	
-	protected $model = 'GO_Addressbook_Model_EmailTemplate';	
+	protected $model = 'GO_Addressbook_Model_Template';	
 	
 	protected function remoteComboFields() {
 		return array(
@@ -49,6 +49,11 @@ class GO_Addressbook_Controller_EmailTemplate extends GO_Base_Controller_Abstrac
 		$response['data'] = array_merge($response['data'], $message->toOutputArray());
 
 		return parent::afterLoad($response, $model, $params);
+	}
+	
+	public function formatStoreRecord($record, $model, $store) {
+		$record['owner']=$model->user->name;
+		return parent::formatStoreRecord($record, $model, $store);
 	}
 	
 }

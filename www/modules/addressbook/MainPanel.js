@@ -219,14 +219,14 @@ GO.addressbook.MainPanel = function(config)
 
 	config.layout='border';
 	config.border=false;
-
-	if(GO.mailings)
-	{
+//
+//	if(GO.mailings)
+//	{
 
 		this.mailingsFilterPanel= new GO.grid.MultiSelectGrid({
 			region:'center',
 			id:'ab-mailingsfilter-panel',
-			title:GO.mailings.lang.filterMailings,
+			title:GO.addressbook.lang.filterMailings,
 			loadMask:true,
 			store:GO.addressbook.readableAddresslistsStore,
 			allowNoSelection:true
@@ -261,14 +261,14 @@ GO.addressbook.MainPanel = function(config)
 		westPanel,
 		this.tabPanel
 		];
-	}else
-	{
-		config.items= [
-		this.searchPanel,
-		this.addressbooksGrid,
-		this.tabPanel
-		];
-	}
+//	}else
+//	{
+//		config.items= [
+//		this.searchPanel,
+//		this.addressbooksGrid,
+//		this.tabPanel
+//		];
+//	}
 
 	var tbar=[
 	{
@@ -422,17 +422,17 @@ GO.addressbook.MainPanel = function(config)
 		)
 	}
 
-	if(GO.mailings && GO.email)
+	if(GO.email)
 	{
 		tbar.push('-');
 		tbar.push({
 			iconCls: 'ml-btn-mailings',
-			text: GO.mailings.lang.newsletters,
+			text: GO.addressbook.lang.newsletters,
 			cls: 'x-btn-text-icon',
 			handler: function(){
 				if(!this.mailingStatusWindow)
 				{
-					this.mailingStatusWindow = new GO.mailings.MailingStatusWindow();
+					this.mailingStatusWindow = new GO.addressbook.MailingStatusWindow();
 				}
 				this.mailingStatusWindow.show();
 			},
@@ -492,11 +492,11 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 			success: function(options, response, result)
 			{
 				GO.addressbook.readableAddressbooksStore.loadData(result.addressbooks);
-				if(GO.mailings)
-				{
+//				if(GO.mailings)
+//				{
 					GO.addressbook.readableAddresslistsStore.loadData(result.readable_addresslists);
 					GO.addressbook.writableAddresslistsStore.loadData(result.writable_addresslists);
-				}
+//				}
 				this.getEl().unmask();
 			},
 			scope:this
@@ -589,9 +589,8 @@ GO.addressbook.showCompanyDialog = function(company_id){
 }
 
 GO.addressbook.searchSenderStore = new GO.data.JsonStore({
-	url: GO.settings.modules.addressbook.url+ 'json.php',
+	url: GO.url('addressbook/addressbook/searchSender'),
 	baseParams: {
-		'task': 'search_sender',
 		email:''
 	},
 	root: 'results',

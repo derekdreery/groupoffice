@@ -25,9 +25,9 @@ GO.addressbook.ManageDialog = function(config)
 		];
 		
 	this.templatesGrid = new GO.addressbook.TemplatesGrid();
-	this.mailingsGrid = new GO.mailings.MailingsGrid();
+	this.addresslistsGrid = new GO.addressbook.AddresslistsGrid();
 	items.push(this.templatesGrid);
-	items.push(this.mailingsGrid);
+	items.push(this.addresslistsGrid);
 
 	if(GO.settings.has_admin_permission)
 	{

@@ -89,7 +89,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 		if(this.email_template_id>0)
 		{
 			this.formPanel.load({
-				url: GO.url('addressbook/emailTemplate/load'),
+				url: GO.url('addressbook/template/load'),
 				
 				success:function(form, action)
 				{
@@ -134,7 +134,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 
 		this.formPanel.form.submit(
 		{
-			url: GO.url('addressbook/emailTemplate/submit'),
+			url: GO.url('addressbook/template/submit'),
 //			params: {
 //				inline_attachments: Ext.encode(this.inline_attachments)
 //			},
