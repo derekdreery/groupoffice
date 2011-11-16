@@ -60,7 +60,7 @@ try
 					$site['domain'].='/';
 					
 				$smarty->assign('viewurl', 'http://'.$site['domain'].$path);
-				$smarty->assign('signoffurl', 'http://'.substr($site['domain'],0,-1).$GLOBALS['GO_MODULES']->modules['mailings']['url'].'signoff.php?mailing_group_id='.$_POST['mailing_group_id'].'&site_id='.$site['id'].'&type=%type%&id=%id%&hash=%hash%');
+				$smarty->assign('signoffurl', 'http://'.substr($site['domain'],0,-1).$GLOBALS['GO_MODULES']->modules['mailings']['url'].'signoff.php?addresslist_id='.$_POST['addresslist_id'].'&site_id='.$site['id'].'&type=%type%&id=%id%&hash=%hash%');
 				$smarty->assign('settingsurl', 'http://'.substr($site['domain'],0,-1).$GLOBALS['GO_MODULES']->modules['mailings']['url'].'settings.php?site_id='.$site['id'].'&type=%type%&id=%id%&hash=%hash%');
 				$smarty->assign('file', $file);
 				
@@ -226,7 +226,7 @@ try
 			$user_id = $GLOBALS['GO_MODULES']->modules['mailings']['write_permission'] ? 0 : $GLOBALS['GO_SECURITY']->user_id;
 
 
-			$response['total'] = $ml->get_mailings($_POST['mailing_group_id'],$user_id, $start, $limit, $sort, $dir);
+			$response['total'] = $ml->get_mailings($_POST['addresslist_id'],$user_id, $start, $limit, $sort, $dir);
 			$response['results'] = array();
 				
 			$lang['mailings']['statuses']=array(

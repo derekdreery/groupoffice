@@ -34,7 +34,7 @@ $email = new email();
 $ab = new addressbook();
 
 $mailing = $ml->get_mailing($mailing_id);
-$mailing_group = $ml->get_mailing_group($mailing['mailing_group_id']);
+$mailing_group = $ml->get_mailing_group($mailing['addresslist_id']);
 
 require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
 $GO_USERS = new GO_USERS();
@@ -139,7 +139,7 @@ if($ml->get_contacts_for_send($mailing['id'])) {
 	while($record = $ml->next_record()) {
 		send('contact',
 				$record['id'],
-				$tp->replace_contact_data_fields($swift->body, $record['id'], false,$mailing['mailing_group_id']),
+				$tp->replace_contact_data_fields($swift->body, $record['id'], false,$mailing['addresslist_id']),
 				$RFC822->write_address(String::format_name($record),$record['email'])
 		);
 	}
@@ -148,11 +148,11 @@ if($ml->get_companies_for_send($mailing['id'])) {
 
 	while($record = $ml->next_record()) {
 
-		$record['mailing_group_id']=$mailing['mailing_group_id'];
+		$record['addresslist_id']=$mailing['addresslist_id'];
 
 		send('company', 
 				$record['id'],
-				$tp->replace_company_data_fields($swift->body, $record['id'], false,$mailing['mailing_group_id']),
+				$tp->replace_company_data_fields($swift->body, $record['id'], false,$mailing['addresslist_id']),
 				$RFC822->write_address($record['name'],$record['email']));
 	}
 }
@@ -162,11 +162,11 @@ if($ml->get_users_for_send($mailing['id'])) {
 
 	while($record = $ml->next_record()) {
 
-		$record['mailing_group_id']=$mailing['mailing_group_id'];
+		$record['addresslist_id']=$mailing['addresslist_id'];
 
 		send('user', 
 				$record['id'],
-				$tp->replace_user_data_fields($swift->body, $record['id'], $mailing['mailing_group_id']),
+				$tp->replace_user_data_fields($swift->body, $record['id'], $mailing['addresslist_id']),
 				$RFC822->write_address(String::format_name($record),$record['email']));
 	}
 }
