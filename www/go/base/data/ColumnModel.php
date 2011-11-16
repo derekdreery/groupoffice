@@ -65,10 +65,13 @@ class GO_Base_Data_ColumnModel {
 
 			$attributes = $model->getAttributes();
 
-			foreach (array_keys($attributes) as $colName) {				
-				if(!in_array($colName, $excludeColumns) && (!count($includeColumns) || in_array($colName, $includeColumns))){
-					$column = new GO_Base_Data_Column($colName, $model->getAttributeLabel($colName));
-					$this->addColumn($column);
+			foreach (array_keys($attributes) as $colName) {					
+				if(!in_array($colName, $excludeColumns)){					
+					$sortIndex = empty($includeColumns) ? 0 : array_search($colName, $includeColumns);				
+					if($sortIndex!==false){
+						$column = new GO_Base_Data_Column($colName, $model->getAttributeLabel($colName),$sortIndex);					
+						$this->addColumn($column);
+					}
 				}
 			}
 
@@ -77,10 +80,13 @@ class GO_Base_Data_ColumnModel {
 				array_shift($cfAttributes); //remove model_id column
 
 				foreach ($cfAttributes as $colName) {
-
-					if(!in_array($colName, $excludeColumns) && (!count($includeColumns) || in_array($colName, $includeColumns))){
-						$column = new GO_Base_Data_Column($colName, $model->customfieldsRecord->getAttributeLabel($colName));
-						$this->addColumn($column);
+					if(!in_array($colName, $excludeColumns)){
+					
+						$sortIndex = empty($includeColumns) ? 0 : array_search($colName, $includeColumns);				
+						if($sortIndex!==false){
+							$column = new GO_Base_Data_Column($colName, $model->customfieldsRecord->getAttributeLabel($colName), $sortIndex);
+							$this->addColumn($column);
+						}
 					}
 				}
 			}
