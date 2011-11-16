@@ -19,9 +19,9 @@
  */
 class GO_Base_Export_ExportCSV extends GO_Base_Export_AbstractExport {
 	
-	public function showInView(){
-		return true;
-	}
+	public static $showInView = true;
+	public static $name = "CSV";
+	public static $useOrientation=false;
 	
 	private function _sendHeaders(){
 		header('Content-Disposition: attachment; filename="'.$this->title.'.csv"');
@@ -45,12 +45,5 @@ class GO_Base_Export_ExportCSV extends GO_Base_Export_AbstractExport {
 			$this->_write($record);
 		}
 	}
-	
-	public function getName() {
-		return 'CSV';
-	}
-		
-	public function useOrientation(){
-		return false;
-	}
+
 }

@@ -19,21 +19,18 @@
  */
 class GO_Base_Export_ExportPDF extends GO_Base_Export_AbstractExport {
 
-	
-	
-	
-	public function showInView(){
-		return true;
-	}
+	public static $showInView = true;
+	public static $name = "PDF";
+	public static $useOrientation=true;
 
 	private function _write($data) {
 		$html = '';
-		if($this->_writeHeader) {
+		if($this->header) {
 			$html .= '<tr nobr="true">';
 			foreach($data as $column)
 				$html .=  "<th>$column</th>";
 			$html .=  "</tr>";
-			$this->_writeHeader = false;
+			$this->header = false;
 		} else {
 			$html .=  '<tr nobr="true">';
 			foreach($data as $column)
@@ -48,7 +45,7 @@ class GO_Base_Export_ExportPDF extends GO_Base_Export_AbstractExport {
 		$html = '<table border="1" cellspacing="0" cellpadding="2">';
 		
 		if($this->header) {
-			$this->_writeHeader = true;
+			$this->header = true;
 			$html .= $this->_write($this->getLabels());
 		}
 		
@@ -83,12 +80,5 @@ class GO_Base_Export_ExportPDF extends GO_Base_Export_AbstractExport {
 		
 		$pdf->Output($this->title.'.pdf');
 	}
-	
-	public function getName() {
-		return 'PDF';
-	}
-	
-	public function useOrientation(){
-		return true;
-	}
+
 }
