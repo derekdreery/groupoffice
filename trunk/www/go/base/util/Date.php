@@ -711,7 +711,7 @@ class GO_Base_Util_Date {
 			}
 		}*/
 
-		$date_format = $with_time ?  $_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'] : $_SESSION['GO_SESSION']['date_format'];
+		$date_format = $with_time ?  GO::user()->completeDateFormat.' '.GO::user()->time_format : GO::user()->completeDateFormat;
 
 		return date($date_format, strtotime($time));
 	}

@@ -28,7 +28,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if (!empty($params['exception_date'])) {
 			//$params['recurrenceExceptionDate'] is a unixtimestamp. We should return this event with an empty id and the exception date.			
 			//this parameter is sent by the view when it wants to edit a single occurence of a repeating event.
-			$model = $model->getExceptionEvent($params['exception_date']);
+			$recurringEvent = GO_Calendar_Model_Event::model()->findByPk($params['exception_for_event_id']);
+			$model = $recurringEvent->getExceptionEvent($params['exception_date']);
 			unset($params['exception_date']);
 			unset($params['id']);
 		}
@@ -541,7 +542,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			}
 			
 			//import it
-			$event = GO_Calendar_Model_Event::model()->importVObject($vevent, $importAttributes);
+			$event = new GO_Calendar_Model_Event();
+			$event->importVObject($vevent, $importAttributes);
 
 			if(!empty($params['status'])){
 				//Update participant status.
@@ -573,7 +575,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		$vcalendar = GO_Base_VObject_Reader::read($data);
 		
 		foreach($vcalendar->vevent as $vevent)
-			$event = GO_Calendar_Model_Event::model()->importVObject($vevent);
+			$event = new GO_Calendar_Model_Event();
+			$event->importVObject($vevent);
 	}
 	
 	

@@ -57,7 +57,7 @@ class GO_Dav_Auth_Backend implements Sabre_DAV_Auth_IBackend {
 
 		$cred = $this->getUserPass();
 		if ($cred) {
-			$user = GO::session()->login($cred[0], $cred[1]);
+			$user = GO::session()->login($cred[0], $cred[1], false);
 			if($user)
 				return true;
 		}

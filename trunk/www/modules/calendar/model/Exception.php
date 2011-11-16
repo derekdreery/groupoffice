@@ -32,6 +32,12 @@ class GO_Calendar_Model_Exception extends GO_Base_Db_ActiveRecord{
 	{	
 		return parent::model($className);
 	}
+	
+	protected function init() {
+		parent::init();
+		
+		$this->columns['time']['required']=true;
+	}
 
 
 	/**

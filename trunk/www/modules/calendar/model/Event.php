@@ -20,7 +20,9 @@
 class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 
 	/**
-	 * The date where the exception needs to be created
+	 * The date where the exception needs to be created. If this is set on a new event
+	 * an exception will automatically be created for the recurring series. exception_for_event_id needs to be set too.
+	 * 
 	 * @var timestamp 
 	 */
 	public $exception_date;
@@ -224,7 +226,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	protected function afterSave($wasNew) {
 		
 		//add exception model for the original recurring event
-		if ($wasNew && $this->exception_for_event_id > 0) {
+		if ($wasNew && $this->exception_for_event_id > 0 && !empty($this->exception_date)) {
 			
 			$newExeptionEvent = GO_Calendar_Model_Event::model()->findByPk($this->exception_for_event_id);
 			$newExeptionEvent->addException($this->exception_date, $this->id);
@@ -401,12 +403,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if (!$findParams)
 			$findParams = GO_Base_Db_FindParams::newInstance();
 
-		$findParams
-						->order('start_time', 'ASC');
-
-		$findParams->getCriteria()
-						->addModel(GO_Calendar_Model_Event::model())
-						->addCondition('end_time', $periodStartTime, '>');
+		$findParams->order('start_time', 'ASC');
 		
 		if($periodEndTime)
 			$findParams->addCondition('start_time', $periodEndTime, '<');
@@ -424,8 +421,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$recurringEventsCriteria = GO_Base_Db_FindCriteria::newInstance()
 					->addModel(GO_Calendar_Model_Event::model())
 					->addCondition('rrule', "", '!=')
-					->addCondition('repeat_end_time', $periodStartTime, '>')
-					->addCondition('start_time', $periodStartTime, '>');
+					->mergeWith(
+									GO_Base_Db_FindCriteria::newInstance()
+										->addCondition('repeat_end_time', $periodStartTime, '>')
+										->addCondition('repeat_end_time', 0,'=','t',false))
+					->addCondition('start_time', $periodStartTime, '<');
 		
 		$normalEventsCriteria->mergeWith($recurringEventsCriteria, false);
 		
@@ -512,6 +512,9 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$params->join(GO_Calendar_Model_Exception::model()->tableName(),$exceptionJoinCriteria,'e');
 			
 			$whereCriteria->addCondition('time', $exceptionDate,'=','e');			
+		}else
+		{
+			$whereCriteria->addCondition('exception_for_event_id', 0);
 		}
 
 		$params->criteria($whereCriteria);
@@ -651,18 +654,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		//$dtend->offsetUnset('VALUE');
 		$e->add($dtend);
 		
-		$e->description=$this->description;
+		$e->description=(string)$this->description;
 		//$e->location=$this->location;
 		
 		//todo exceptions
 		if(!empty($this->rrule)){
 			$e->rrule=str_replace('RRULE:','',$this->rrule);					
-			$stmt = $this->exceptions();
-			while($exception = $stmt->fetch()){
-				$exdate = new Sabre_VObject_Element_DateTime('exdate',Sabre_VObject_Element_DateTime::DATE);
-				$exdate->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($exception->time));		
-				$e->add($exdate);
-			}
+//			$stmt = $this->exceptions(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('exception_event_id', 0)));
+//			while($exception = $stmt->fetch()){
+//				$exdate = new Sabre_VObject_Element_DateTime('exdate',Sabre_VObject_Element_DateTime::DATE);
+//				$exdate->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($exception->time));		
+//				$e->add($exdate);
+//			}
 		}
 		
 		$stmt = $this->participants();
@@ -724,46 +727,46 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @return GO_Calendar_Model_Event 
 	 */
 	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()){
-		$event = new GO_Calendar_Model_Event();
+		//$event = new GO_Calendar_Model_Event();
 		
-		$event->uuid = (string) $vobject->uid;
-		$event->name = (string) $vobject->summary;
-		$event->description = (string) $vobject->description;
-		$event->start_time = $vobject->dtstart->getDateTime()->format('U');
-		$event->end_time = $vobject->dtend->getDateTime()->format('U');
+		$this->uuid = (string) $vobject->uid;
+		$this->name = (string) $vobject->summary;
+		$this->description = (string) $vobject->description;
+		$this->start_time = $vobject->dtstart->getDateTime()->format('U');
+		$this->end_time = $vobject->dtend->getDateTime()->format('U');
 		
 		if($vobject->rrule){			
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
-			$rrule->readIcalendarRruleString($event->start_time, (string) $vobject->rrule);			
-			$event->rrule = $rrule->createRrule();
-			$event->repeat_end_time = $rrule->until;
+			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);			
+			$this->rrule = $rrule->createRrule();
+			$this->repeat_end_time = $rrule->until;
 		}
 		
 		if($vobject->dtstamp)
-			$event->mtime=$vobject->dtstamp->getDateTime()->format('U');
+			$this->mtime=$vobject->dtstamp->getDateTime()->format('U');
 		
 		if($vobject->location)
-			$event->location=(string) $vobject->location;
+			$this->location=(string) $vobject->location;
 		
 		//var_dump($vobject->status);
 		if($vobject->status)
-			$event->status=(string) $vobject->status;
+			$this->status=(string) $vobject->status;
 		
 		if($vobject->duration){
 			$duration = $this->_parseDuration($vobject->duration);
-			$event->end_time = $event->start_time+$duration;
+			$this->end_time = $this->start_time+$duration;
 		}
 		
-		$event->all_day_event = isset($vobject->dtstart['VALUE']) && $vobject->dtstart['VALUE']=='DATE';
+		$this->all_day_event = isset($vobject->dtstart['VALUE']) && $vobject->dtstart['VALUE']=='DATE';
 		
 		if($vobject->valarm){
 			
 		}else
 		{
-			$event->reminder=0;
+			$this->reminder=0;
 		}
 		
-		$event->setAttributes($attributes);
+		$this->setAttributes($attributes);
 		
 		$recurrenceIds = $vobject->select('recurrence-id');
 		if(count($recurrenceIds)){
@@ -776,7 +779,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$recurrenceTime=$firstMatch->getDateTime()->format('U');
 			
 			$whereCriteria = GO_Base_Db_FindCriteria::newInstance()
-							->addCondition('uuid', $event->uuid,'=','ev')
+							->addCondition('uuid', $this->uuid,'=','ev')
 							->addCondition('time', $recurrenceTime,'=','t');
 			
 			$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
@@ -789,34 +792,49 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 							->join(GO_Calendar_Model_Event::model()->tableName(),$joinCriteria,'ev');
 			
 			$exception = GO_Calendar_Model_Exception::model()->find($findParams);
+			if($exception){
+				$this->exception_for_event_id=$exception->event_id;
+			}else
+			{
+				//exception was not found for this recurrence. Find the recurring series and add the exception.
+				$recurringEvent = GO_Calendar_Model_Event::model()->findByUuid($this->uuid, 0, $this->calendar_id);
+				if($recurringEvent){
+					$this->exception_for_event_id=$recurringEvent->id;
+					$this->exception_date=strtotime(date('Y-m-d', $this->start_time).' '.date('G:i', $recurringEvent->start_time));
+									
+//					$exception = new GO_Calendar_Model_Exception();
+//					$exception->event_id=$this->exception_for_event_id;
+//					$exception->time=$this->start_time;
+//					//$exception->save();
+				}
+			}
 			
-			$event->exception_for_event_id=$exception->event_id;
 		}
 
-		$event->save();
+		$this->save();
 		
 		if(!empty($exception)){			
 			//save the exception we found by recurrence-id
-			$exception->exception_event_id=$event->id;
+			$exception->exception_event_id=$this->id;
 			$exception->save();
 		}		
 	
 		if($vobject->organizer){
-			$this->importVObjectAttendee($event, $vobject->organizer, true);
+			$this->importVObjectAttendee($this, $vobject->organizer, true);
 		}
 		
 		$attendees = $vobject->select('attendee');
 		foreach($attendees as $attendee)
-			$this->importVObjectAttendee($event, $attendee, false);
+			$this->importVObjectAttendee($this, $attendee, false);
 
 		if($vobject->exdate){
 			$exDateTimes = $vobject->exdate->getDateTimes();
 			foreach($exDateTimes as $dt){
-				$event->addException($dt->format('U'));
+				$this->addException($dt->format('U'));
 			}
 		}
 
-		return $event;
+		return $this;
 	}
 	
 	private function _parseDuration($duration){

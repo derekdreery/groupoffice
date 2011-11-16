@@ -692,7 +692,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($findParams)
 			$newParams->mergeWith ($findParams);
 		
-		$newParams->ignoreAcl()->limit(1);
+		$newParams->ignoreAcl();
 				
 		return $this->find($newParams);
 	}
@@ -1747,8 +1747,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		/*
 		 * Set some common column values
 		*/
-
-		if(isset($this->columns['mtime']))
+//GO::debug($this->mtime);
+		if(isset($this->columns['mtime']) && (!$this->isModified('mtime') || empty($this->mtime)))//Don't update if mtime was manually set.
 			$this->mtime=time();
 		if(isset($this->columns['ctime']) && empty($this->ctime)){
 			$this->ctime=time();
@@ -2570,21 +2570,19 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return false;
 	}
 	
-	/**
-	 * 
-	 */
-	public function deleteBy($params){
-		
-		$sql = 'DELETE FROM `'.$this->tableName().'` WHERE 1 ';
-		
-		$sql = $this->_appendByParamsToSQL($sql, $params);
-		
-		if($this->_debugSql)
-			GO::debug($sql);
-		
-		$GLOBALS['query_count']++;
-		return $this->getDbConnection()->query($sql);
-	}
+
+//	public function deleteBy($params){
+//		
+//		$sql = 'DELETE FROM `'.$this->tableName().'` WHERE 1 ';
+//		
+//		$sql = $this->_appendByParamsToSQL($sql, $params);
+//		
+//		if($this->_debugSql)
+//			GO::debug($sql);
+//		
+//		$GLOBALS['query_count']++;
+//		return $this->getDbConnection()->query($sql);
+//	}
 	
 //	public function checkFilesFolder(){
 //		if($this->hasFiles()){
