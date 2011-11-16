@@ -217,5 +217,23 @@ abstract class GO_Base_Fs_Base{
 			return false;
 		}		
 	}
+	
+	/**
+	 * Get the path without GO::config()->file_storage_path.
+	 * 
+	 * @return string 
+	 */
+	public function stripFileStoragePath(){
+		return str_replace(GO::config()->file_storage_path,'', $this->path());
+	}
+	
+	/**
+	 * Get the path without GO::config()->tmpdir.
+	 * 
+	 * @return string 
+	 */
+	public function stripTempPath(){
+		return str_replace(GO::config()->tmpdir,'', $this->path());
+	}
 
 }

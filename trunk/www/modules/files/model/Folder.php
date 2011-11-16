@@ -528,6 +528,7 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	}
 
 	/**
+	 * Find all shared folders for the current user
 	 * 
 	 * @param GO_Base_Db_FindParams $findParams
 	 * @return GO_Base_Db_ActiveStatement

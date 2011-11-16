@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright Intermesh
  *
@@ -13,157 +14,154 @@
  */
 class GO_Dav_Fs_File extends Sabre_DAV_FS_Node implements Sabre_DAV_IFile {
 
-	protected $files;
 	protected $folder;
 	protected $write_permission;
 	protected $relpath;
 
-	public function __construct($path){
-		global $GO_CONFIG;
+	public function __construct($path) {
 
-		$this->relpath=$path;
-		$path = GO::config()->file_storage_path.$path;
+		$this->relpath = $path;
+		$path = GO::config()->file_storage_path . $path;
 
 		parent::__construct($path);
 	}
 
-	public function checkWritePermission($delete=false){
-		global $GO_SECURITY, $files;
+	public function checkWritePermission($delete=false) {
 
-		$this->folder=$files->resolve_path(dirname($this->relpath));
-		if(!$files->has_write_permission($GO_SECURITY->user_id, $this->folder))
-				throw new Sabre_DAV_Exception_Forbidden();
+		$fsFile = new GO_Base_Fs_File($this->path);
 
-		/*if($delete){
-			if(!$this->files->has_delete_permission($GLOBALS['GO_SECURITY']->user_id, $this->folder))
-				throw new Sabre_DAV_Exception_Forbidden();
-		}else {
-			if(!$this->files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->folder))
-				throw new Sabre_DAV_Exception_Forbidden();
-		}*/
+		$this->folder = GO_Files_Model_Folder::model()->findByPath($fsFile->parent()->stripFileStoragePath());
+		if ($this->folder->getPermissionLevel() < GO_Base_Model_Acl::WRITE_PERMISSION)
+			throw new Sabre_DAV_Exception_Forbidden();
+
+		/* if($delete){
+		  if(!$this->files->has_delete_permission($GLOBALS['GO_SECURITY']->user_id, $this->folder))
+		  throw new Sabre_DAV_Exception_Forbidden();
+		  }else {
+		  if(!$this->files->has_write_permission($GLOBALS['GO_SECURITY']->user_id, $this->folder))
+		  throw new Sabre_DAV_Exception_Forbidden();
+		  } */
 	}
 
-    /**
-     * Updates the data
-     *
-     * @param resource $data
-     * @return void
-     */
-    public function put($data) {
-      global $files;
-      $this->checkWritePermission();
-
-
-      file_put_contents($this->path,$data);
-      $file_id = $files->import_file($this->path, $this->folder['id']);
-      go_debug('ADDED FILE WITH WEBDAV -> FILE_ID: '.$file_id);
-
-    }
-
 	/**
-     * Renames the node
-     *
-     * @param string $name The new name
-     * @return void
-     */
-    public function setName($name) {
-		global $files;
+	 * Updates the data
+	 *
+	 * @param resource $data
+	 * @return void
+	 */
+	public function put($data) {
 		$this->checkWritePermission();
 
-        parent::setName($name);
+		file_put_contents($this->path, $data);
 
-		$this->relpath = $files->strip_server_path($this->path);
-    }
+		//GO_Files_Model_File::model()->findByPath($this->relpath);
 
-	public function getServerPath(){
+		//GO::debug('ADDED FILE WITH WEBDAV -> FILE_ID: ' . $file_id);
+	}
+
+	/**
+	 * Renames the node
+	 *
+	 * @param string $name The new name
+	 * @return void
+	 */
+	public function setName($name) {
+		$this->checkWritePermission();
+
+		parent::setName($name);
+		
+		$file = GO_Files_Model_File::model()->findByPath($this->relpath);
+		$file->name=$name;
+		$file->save();
+		
+		$this->relpath = $file->path;
+		$this->path = GO::config()->file_storage_path.$this->relpath;
+	}
+
+	public function getServerPath() {
 		return $this->path;
 	}
 
 	/**
-     * Movesthe node
-     *
-     * @param string $name The new name
-     * @return void
-     */
-    public function move($newPath) {
-		global $files;
+	 * Movesthe node
+	 *
+	 * @param string $name The new name
+	 * @return void
+	 */
+	public function move($newPath) {
 		$this->checkWritePermission();
 
-		go_debug('FSFile::move('.$this->path.' -> '.$newPath.')');
+		GO::debug('FSFile::move(' . $this->path . ' -> ' . $newPath . ')');
+		
+		$destFsFolder = new GO_Base_Fs_Folder(dirname($newPath));		
+		$destFolder = GO_Files_Model_Folder::model()->findByPath($destFsFolder->stripFileStoragePath());
+		
+		$file = GO_Files_Model_File::model()->findByPath($this->relpath);
+		$file->folder_id=$destFolder->id;
+		$file->name = GO_Base_Fs_File::utf8Basename($newPath);
+		$file->save();
+		
+		$this->relpath = $file->path;
+		$this->path = GO::config()->file_storage_path.$this->relpath;
+	}
 
-		if(!rename($this->path, $newPath)){
-			go_debug('Failed to rename');
-			throw new Exception('Failed to rename!');
-		}
+	/**
+	 * Returns the data
+	 *
+	 * @return string
+	 */
+	public function get() {
 
-		$destFolder = $files->resolve_path($files->strip_server_path(dirname($newPath)));
-    $this->file=$files->resolve_path($this->relpath);
-		$files->move_file($this->file, $destFolder);
+		return fopen($this->path, 'r');
+	}
 
-		$this->path = $newPath;
-		$this->relpath = $files->strip_server_path($this->path);
-    }
-
-    /**
-     * Returns the data
-     *
-     * @return string
-     */
-    public function get() {
-
-        return fopen($this->path,'r');
-
-    }
-
-    /**
-     * Delete the current file
-     *
-     * @return void
-     */
-    public function delete() {
+	/**
+	 * Delete the current file
+	 *
+	 * @return void
+	 */
+	public function delete() {
 		$this->checkWritePermission(true);
-        unlink($this->path);
+		$file = GO_Files_Model_File::model()->findByPath($this->relpath);
+		$file->delete();
+	}
 
-    }
+	/**
+	 * Returns the size of the node, in bytes
+	 *
+	 * @return int
+	 */
+	public function getSize() {
 
-    /**
-     * Returns the size of the node, in bytes
-     *
-     * @return int
-     */
-    public function getSize() {
+		return filesize($this->path);
+	}
 
-        return filesize($this->path);
+	/**
+	 * Returns the ETag for a file
+	 *
+	 * An ETag is a unique identifier representing the current version of the file. If the file changes, the ETag MUST change.
+	 *
+	 * Return null if the ETag can not effectively be determined
+	 *
+	 * @return mixed
+	 */
+	public function getETag() {
+		return '"' . md5_file($this->path) . '"';
+	}
 
-    }
+	/**
+	 * Returns the mime-type for a file
+	 *
+	 * If null is returned, we'll assume application/octet-stream
+	 *
+	 * @return mixed
+	 */
+	public function getContentType() {
+		
+		$fsFile = new GO_Base_Fs_File($this->path);
 
-    /**
-     * Returns the ETag for a file
-     *
-     * An ETag is a unique identifier representing the current version of the file. If the file changes, the ETag MUST change.
-     *
-     * Return null if the ETag can not effectively be determined
-     *
-     * @return mixed
-     */
-    public function getETag() {
-        return '"' . md5_file($this->path) . '"';
-    }
-
-    /**
-     * Returns the mime-type for a file
-     *
-     * If null is returned, we'll assume application/octet-stream
-     *
-     * @return mixed
-     */
-    public function getContentType() {
-
-		return File::get_mime($this->path);
-
-        //return null;
-
-    }
+		return $fsFile->mimeType();
+	}
 
 }
 
