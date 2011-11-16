@@ -89,3 +89,6 @@ $updates["201111141132"][]="CREATE TABLE IF NOT EXISTS `ab_default_email_templat
   PRIMARY KEY  (`user_id`),
   KEY `template_id` (`template_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;"; // Added because with an existing installation with the addressbook this table was not created (Wesley).
+
+$updates["201111141037"][]="ALTER TABLE `ab_contacts` CHANGE `comment` `comment` TEXT NOT NULL DEFAULT '';";
+$updates["201111141037"][]="ALTER TABLE `ab_companies` CHANGE `comment` `comment` TEXT NOT NULL DEFAULT '';";

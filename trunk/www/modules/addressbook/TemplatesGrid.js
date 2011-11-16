@@ -98,7 +98,7 @@ GO.addressbook.TemplatesGrid = function(config)
 	};
 	
 	config.store = new GO.data.JsonStore({
-		url: GO.url('addressbook/emailTemplate/store'),
+		url: GO.url('addressbook/template/store'),
 		baseParams: {
 			permissionLevel: GO.permissionLevels.write
 		},

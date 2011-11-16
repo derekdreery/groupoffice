@@ -21,6 +21,7 @@ GO.addressbook.SearchQueryPanel = function(config)
 
 		this.typesStore = new GO.data.JsonStore({
 			url: GO.settings.modules.addressbook.url+'json.php',
+//			url: GO.url('addressbook/addressbook/addressbookFields'),
 			baseParams: {
 				task: "ab_fields",
 				type:""

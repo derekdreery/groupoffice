@@ -183,9 +183,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				$query_type = 'LIKE';
 			}
 			$criteria->addRawCondition('CONCAT_WS(`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`)', ':query', $query_type);
-			$criteria->addParams(array(':query', $query));
+			$criteria->addBindParameter(':query', $query);
 		}
-		
 
 		$storeParams = GO_Base_Db_FindParams::newInstance()
 			->criteria($criteria)						

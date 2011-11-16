@@ -28,3 +28,12 @@ modules/addressbook/GlobalSettings.js
 modules/addressbook/ContextMenu.js
 modules/addressbook/TemplatesGrid.js
 modules/addressbook/EmailTemplateDialog.js
+modules/addressbook/SentMailingsGrid.js
+modules/addressbook/MailingDialog.js
+modules/addressbook/AddresslistGrids.js
+modules/addressbook/AddresslistsGrid.js
+modules/addressbook/SelectAddresslistWindow.js
+modules/addressbook/MailingStatusWindow.js
+modules/addressbook/SelectAddressbookDialog.js
+modules/addressbook/SelectMailingsPanel.js
+modules/addressbook/AddresslistsFilterPanel.js

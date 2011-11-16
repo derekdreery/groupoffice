@@ -73,9 +73,9 @@ Ext.extend(GO.addressbook.AddresbooksGrid, GO.grid.MultiSelectGrid, {
 		if(book_id > 0 && (!show_confirm || confirm(GO.addressbook.lang.moveAll)))
 		{
 			Ext.Ajax.request({
-				url: GO.settings.modules.addressbook.url+'action.php',
+				url: GO.url('addressbook/'+this.type+'/changeAddressbook'),
 				params: {
-					task:'drop_' + this.type,
+//					task:'drop_' + this.type,
 					book_id:book_id,
 					items:Ext.encode(move_items)
 				}

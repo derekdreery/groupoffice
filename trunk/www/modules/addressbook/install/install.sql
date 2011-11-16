@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `fax` varchar(30) DEFAULT NULL,
   `email` varchar(75) DEFAULT NULL,
   `homepage` varchar(100) DEFAULT NULL,
-  `comment` text,
+  `comment` text NOT NULL DEFAULT '',
   `bank_no` varchar(50) DEFAULT NULL,
   `vat_no` varchar(30) DEFAULT NULL,
   `iban` varchar(100) DEFAULT NULL,
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `zip` varchar(10) DEFAULT NULL,
   `address` varchar(100) DEFAULT NULL,
   `address_no` varchar(100) DEFAULT NULL,
-  `comment` text,
+  `comment` text NOT NULL DEFAULT '',
   `ctime` int(11) NOT NULL DEFAULT '0',
   `mtime` int(11) NOT NULL DEFAULT '0',
   `salutation` varchar(50) DEFAULT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
 
 DROP TABLE IF EXISTS `ab_sql`;
 CREATE TABLE IF NOT EXISTS `ab_sql` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `companies` tinyint(1) NOT NULL,
   `name` varchar(32) DEFAULT NULL,
@@ -143,12 +143,12 @@ CREATE TABLE IF NOT EXISTS `ab_sql` (
 
 DROP TABLE IF EXISTS `ab_sent_mailings`;
 CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `subject` varchar(100) default NULL,
   `message_path` varchar(255) default NULL,
   `ctime` int(11) NOT NULL,
-  `mailing_group_id` int(11) NOT NULL,
+  `addresslist_id` int(11) NOT NULL,
   `alias_id` int(11) NOT NULL,
   `status` tinyint(4) NOT NULL,
   `total` int(11) default NULL,
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
 
 DROP TABLE IF EXISTS `ab_addresslists`;
 CREATE TABLE IF NOT EXISTS `ab_addresslists` (
-  `id` int(11) NOT NULL default '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL default '0',
   `acl_id` int(11) NOT NULL default '0',
   `name` varchar(255) default NULL,
@@ -182,14 +182,14 @@ CREATE TABLE IF NOT EXISTS `ab_addresslists` (
 
 DROP TABLE IF EXISTS `ab_addresslist_contacts`;
 CREATE TABLE IF NOT EXISTS `ab_addresslist_contacts` (
-  `group_id` int(11) NOT NULL DEFAULT '0',
+  `group_id` int(11) NOT NULL AUTO_INCREMENT,
   `contact_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`group_id`,`contact_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `ab_addresslist_companies`;
 CREATE TABLE IF NOT EXISTS `ab_addresslist_companies` (
-  `group_id` int(11) NOT NULL DEFAULT '0',
+  `group_id` int(11) NOT NULL AUTO_INCREMENT,
   `company_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`group_id`,`company_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -203,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `ab_addresslist_companies` (
 
 DROP TABLE IF EXISTS `ab_email_templates`;
 CREATE TABLE IF NOT EXISTS `ab_email_templates` (
-  `id` int(11) NOT NULL default '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL default '0',
   `type` tinyint(4) NOT NULL default '0',
   `name` varchar(100) default NULL,

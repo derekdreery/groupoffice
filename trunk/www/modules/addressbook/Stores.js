@@ -64,4 +64,4 @@ GO.addressbook.readableAddresslistsStore = new GO.data.JsonStore({
     fields: ['id', 'name', 'owner','acl_id', 'checked'],
     remoteSort: true
 });
-		
+

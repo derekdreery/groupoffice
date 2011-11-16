@@ -41,10 +41,8 @@ GO.addressbook.SelectContactDialog = function(config){
 		region:'west',
 		width:180,
 		store:new GO.data.JsonStore({
-			url: GO.settings.modules.addressbook.url+ 'json.php'	,
+			url: GO.url('addressbook/addressbook/store'),
 			baseParams: {
-				
-				'task':'addressbooks',
 				'auth_type' : 'read'
 				},
 			root: 'results',

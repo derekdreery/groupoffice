@@ -189,5 +189,32 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		
 		return $response;
 	}
+	
+	public function actionMoveEmployees($params) {
+		$to_company = GO_Addressbook_Model_Company::model()->findByPk($params['to_company_id']);
+//		$to_company = $ab->get_company($_POST['to_company_id']);
+//		$ab2 = new addressbook();
+//		$ab->get_company_contacts($_POST['from_company_id']);
+		
+		$contacts = GO_Addressbook_Model_Contacts::model()->find(
+			GO_Base_Db_FindCriteria::newInstance()
+				->addCondition('company_id',$params['from_company_id'])
+		);
+		
+		
+		foreach ($contacts as $contact) {
+			$attributes = array(
+//				'id' => $contact->id,
+				'addressbook_id' => $to_company->addressbook_id,
+				'company_id' => $to_company->id
+			);
+			$contact->setAttributes($attributes);
+			$contact->save();
+//			$ab2->update_contact($up, false, $contact);
+		}
+
+		$response['success'] = true;
+		return $response;
+	}
 }
 
