@@ -19,12 +19,12 @@
  */
 class GO_Base_Export_ExportHTML extends GO_Base_Export_AbstractExport {	
 	
+	public static $showInView = true;
+	public static $name = "HTML";
+	public static $useOrientation=false;
+	
 	private $_writeHeader;
-	
-	public function showInView() {
-		return true;
-	}
-	
+
 	private function _sendHeaders() {
 		header('Content-Type: text/html; charset=UTF-8');
 	}
@@ -38,12 +38,12 @@ class GO_Base_Export_ExportHTML extends GO_Base_Export_AbstractExport {
 	
 	private function _write($data) {
 		
-		if($this->_writeHeader) {
+		if($this->header) {
 			echo "<tr>\n";
 			foreach($data as $column)
 				echo "<th style='padding:2px; font-weight:bold;'>$column</th>";
 			echo "</tr>\n";
-			$this->_writeHeader = false;
+			$this->header = false;
 		} else {
 			echo "<tr>\n";
 			foreach($data as $column)
@@ -63,7 +63,7 @@ class GO_Base_Export_ExportHTML extends GO_Base_Export_AbstractExport {
 		$this->_renderHead();
 		
 		if($this->header) {
-			$this->_writeHeader = true;
+			$this->header = true;
 			$this->_write($this->getLabels());
 		}
 		
@@ -72,13 +72,5 @@ class GO_Base_Export_ExportHTML extends GO_Base_Export_AbstractExport {
 		}
 		
 		$this->_renderFooter();
-	}
-	
-	public function getName() {
-		return 'HTML';
-	}
-		
-	public function useOrientation(){
-		return false;
 	}
 }

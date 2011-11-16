@@ -31,6 +31,11 @@ abstract class GO_Base_Export_AbstractExport {
 	 */
 	protected $orientation;
 	
+	
+	public static $showInView=false;
+	public static $name="No name given";
+	public static $useOrientation=false;
+	
 	public function __construct($store, $columnModel, $header=true, $title=false, $orientation=false) {
 		$this->store = $store;
 		$this->columnModel = $columnModel;
@@ -48,20 +53,9 @@ abstract class GO_Base_Export_AbstractExport {
 		return $labels;
 	}
 	
-	abstract public function showInView();
-	
 	/**
 	 * Output's all data to the browser.
 	 */
 	abstract public function output();
-	
-	/**
-	 * The name presented in the user interface for this export type.
-	 * 
-	 * @return string
-	 */
-	abstract public function getName();
-	
-	abstract public function useOrientation();
 	
 }
