@@ -50,28 +50,17 @@ class GO_Dav_Auth_Backend implements Sabre_DAV_Auth_IBackend {
 	 */
 	public function authenticate(Sabre_DAV_Server $server, $realm) {
 		
-		GO::debug("auth");
-
-		require_once(GO::config()->root_path.'Group-Office.php');
-		
-		global $GO_SECURITY;
-
-		if ($GLOBALS['GO_SECURITY']->user_id > 0)
+		if (GO::user())
 			return true;
 
 		$this->realm = $realm;
 
 		$cred = $this->getUserPass();
 		if ($cred) {
-			global $GO_CONFIG;
-			require_once(GO::config()->class_path . 'base/auth.class.inc.php');
-			$GO_AUTH = new GO_AUTH();
-
-			if ($GO_AUTH->login($cred[0], $cred[1], 'normal', false)) {
+			$user = GO::session()->login($cred[0], $cred[1]);
+			if($user)
 				return true;
-			}
 		}
-
 
 		$this->requireLogin();
 	}

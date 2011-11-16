@@ -23,16 +23,14 @@ class GO_Dav_Fs_SharedDirectory extends Sabre_DAV_FS_Directory implements Sabre_
 
 	public function getChild($name) {
 
-		go_debug('Shared::getChild('.$name.')');
-
-		global $files, $GO_SECURITY;
-
-		$r= $files->get_cached_share($GLOBALS['GO_SECURITY']->user_id, $name);
+		GO::debug('Shared::getChild('.$name.')');
 		
-		if (!$r)
+		$folder = GO_Files_Model_Folder::model()->findShares(GO_Base_Db_FindParams::newInstance()->single()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('name', $name)));
+		
+		if (!$folder)
 			throw new Sabre_DAV_Exception_FileNotFound('File with name ' . $name . ' could not be located');
 
-		return new GO_DAV_FS_Directory($r['path']);
+		return new GO_DAV_FS_Directory($folder->path);
 	}
 
 	/**
@@ -41,16 +39,12 @@ class GO_Dav_Fs_SharedDirectory extends Sabre_DAV_FS_Directory implements Sabre_
 	 * @return Sabre_DAV_INode[]
 	 */
 	public function getChildren() {
-
-		go_debug('Shared::geChildren');
-		
-		global $GO_SECURITY,$GO_CONFIG, $files;
-
-		$files->get_cached_shares($GLOBALS['GO_SECURITY']->user_id);
+		GO::debug('Shared::getChildren()');
+		$stmt = GO_Files_Model_Folder::model()->findShares();
 
 		$nodes = array();
-		while($r=$files->next_record()){
-			$nodes[]=new GO_DAV_FS_Directory($r['path']);
+		while($folder = $stmt->fetch()){
+			$nodes[]=new GO_DAV_FS_Directory($folder->path);
 		}
 
 		return $nodes;
