@@ -533,8 +533,10 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @param GO_Base_Db_FindParams $findParams
 	 * @return GO_Base_Db_ActiveStatement
 	 */
-	public function findShares($findParams){
+	public function findShares($findParams=false){
 		
+		if(!$findParams)
+			$findParams = new GO_Base_Db_FindParams();
 				
 		 $findParams->getCriteria()
 					->addModel(GO_Files_Model_Folder::model())

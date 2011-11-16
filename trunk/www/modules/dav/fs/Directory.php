@@ -152,7 +152,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 
 		$path = $this->path . '/' . $name;
 
-		go_debug("FSD:getChild($path)");
+		GO::debug("FSD:getChild($path)");
 
 		if (is_dir($path)) {
 			return new GO_Dav_Fs_Directory($this->relpath . '/' . $name);
