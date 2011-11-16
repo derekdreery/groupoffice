@@ -372,24 +372,10 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param boolean $onlyBusyEvents
 	 * @return array Note, this are not models but arrays of attributes.
 	 */
-	public function findForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents=false) {
+	public function findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, $onlyBusyEvents=false) {
 
-		if (!$findParams)
-			$findParams = GO_Base_Db_FindParams::newInstance();
-
-		$findParams
-						->order('start_time', 'ASC');
-
-		$findParams->getCriteria()
-						->addModel(GO_Calendar_Model_Event::model())
-						->addCondition('start_time', $periodEndTime, '<')
-						->addCondition('end_time', $periodStartTime, '>');
-
-		if ($onlyBusyEvents)
-			$findParams->getCriteria()->addCondition('busy', 1);
-
-		$stmt = $this->find($findParams);
-
+		
+		$stmt = $this->findForPeriod($findParams, $periodStartTime, $periodEndTime);
 
 		$this->_calculatedEvents = array();
 
@@ -398,6 +384,56 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 
 		return array_values($this->_calculatedEvents);
+	}
+	
+	/**
+	 * Find events that occur in a given time period.
+	 * 
+	 * Recurring events are not calculated.
+	 * 
+	 * @param GO_Base_Db_FindParams $findParams
+	 * @param int $periodStartTime
+	 * @param int $periodEndTime
+	 * @param boolean $onlyBusyEvents
+	 * @return GO_Calendar_Model_Event[] 
+	 */
+	public function findForPeriod($findParams, $periodStartTime, $periodEndTime=0, $onlyBusyEvents=false){
+		if (!$findParams)
+			$findParams = GO_Base_Db_FindParams::newInstance();
+
+		$findParams
+						->order('start_time', 'ASC');
+
+		$findParams->getCriteria()
+						->addModel(GO_Calendar_Model_Event::model())
+						->addCondition('end_time', $periodStartTime, '>');
+		
+		if($periodEndTime)
+			$findParams->addCondition('start_time', $periodEndTime, '<');
+		
+		if ($onlyBusyEvents)
+			$findParams->getCriteria()->addCondition('busy', 1);
+		
+		$normalEventsCriteria = GO_Base_Db_FindCriteria::newInstance()
+					->addModel(GO_Calendar_Model_Event::model())					
+					->addCondition('end_time', $periodStartTime, '>');
+		
+		if($periodEndTime)
+			$normalEventsCriteria->addCondition('start_time', $periodEndTime, '<');
+		
+		$recurringEventsCriteria = GO_Base_Db_FindCriteria::newInstance()
+					->addModel(GO_Calendar_Model_Event::model())
+					->addCondition('rrule', "", '!=')
+					->addCondition('repeat_end_time', $periodStartTime, '>')
+					->addCondition('start_time', $periodStartTime, '>');
+		
+		$normalEventsCriteria->mergeWith($recurringEventsCriteria, false);
+		
+		$findParams->getCriteria()->mergeWith($normalEventsCriteria);
+
+		
+
+		return $this->find($findParams);
 	}
 
 	private function _calculateRecurrences($event, $periodStartTime, $periodEndTime) {
@@ -555,127 +591,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	
-	private function _formatVtimezoneTransitionHour($hour){		
-
-		if($hour<0){
-			$prefix = '-';
-			$hour = $hour*-1;
-		}else
-		{
-			$prefix = '+';
-		}
-
-		if($hour<10)
-			$hour = '0'.$hour;
-
-		$hour = $prefix.$hour;
-
-		return $hour;
-	}
-	
-	private function _getVtimezone(){
-		//$timezone = date_default_timezone_get();
-
-		$tz = new DateTimeZone(GO::user()->timezone);
-    //$tz = new DateTimeZone("Europe/Amsterdam");
-		$transitions = $tz->getTransitions();
-
-		$start_of_year = mktime(0,0,0,1,1);
-
-    $to = GO_Base_Util_Date::get_timezone_offset(time());
-    if($to<0){
-      if(strlen($to)==2)
-        $to='-0'.($to*-1);
-    }else
-    {
-      if(strlen($to)==1)
-        $to='0'.$to;
-
-      $to='+'.$to;
-    }
-
-		$STANDARD_TZOFFSETFROM=$STANDARD_TZOFFSETTO=$DAYLIGHT_TZOFFSETFROM=$DAYLIGHT_TZOFFSETTO=$to;
-
-		$STANDARD_RRULE='';
-		$DAYLIGHT_RRULE='';
-
-		for($i=0,$max=count($transitions);$i<$max;$i++) {
-			if($transitions[$i]['ts']>$start_of_year) {
-				$dst_end = $transitions[$i];
-				$dst_start = $transitions[$i+1];				
-
-				$STANDARD_TZOFFSETFROM=$this->_formatVtimezoneTransitionHour($dst_end['offset']/3600);
-				$STANDARD_TZOFFSETTO=$this->_formatVtimezoneTransitionHour($dst_start['offset']/3600);
-
-				$DAYLIGHT_TZOFFSETFROM=$this->_formatVtimezoneTransitionHour($dst_start['offset']/3600);
-				$DAYLIGHT_TZOFFSETTO=$this->_formatVtimezoneTransitionHour($dst_end['offset']/3600);
-
-				$DAYLIGHT_RRULE = "FREQ=YEARLY;BYDAY=-1SU;BYMONTH=".date('n', $dst_end['ts']);
-				$STANDARD_RRULE="FREQ=YEARLY;BYDAY=-1SU;BYMONTH=".date('n', $dst_start['ts']);
-
-
-				break;
-			}
-		}
-
-//		$timezone_name = $tz->getName();
-//		
-//		//hack for outlook. It only treats recurring events right with this name. When a daily recurring event goes from daylight to standard time it shifts.
-//		if($timezone_name=='Europe/Amsterdam' || $timezone_name=='Europe/Brussels' || $timezone_name=='Europe/Berlin')
-//			$timezone_name = 'W. Europe Standard Time';
-//		
-		$t=new Sabre_VObject_Component('vtimezone');
-		
-		$t->tzid=$tz->getName();
-		$t->add("last-modified","19870101T000000Z");
-		
-		$s = new Sabre_VObject_Component("standard");
-		$s->dtstart="16010101T000000";
-		$s->rrule = $STANDARD_RRULE;
-		$s->tzoffsetfrom=$STANDARD_TZOFFSETFROM."00";
-		$s->tzoffsetto=$STANDARD_TZOFFSETFROM."00";
-		
-		$t->add($s);
-		
-		$s = new Sabre_VObject_Component("daylight");
-		$s->dtstart="16010101T000000";
-		$s->rrule = $DAYLIGHT_RRULE;
-		$s->tzoffsetfrom=$DAYLIGHT_TZOFFSETTO."00";
-		$s->tzoffsetto=$STANDARD_TZOFFSETFROM."00";
-		
-		$t->add($s);
-		
-		return $t;
-		
-	}
-	
-
 	/**
-	 *
-	 * @param string $method REQUEST or CANCEL
-	 * @param int $forRecurrenceId 
+	 * Get this event as a VObject. This can be turned into a vcalendar file data.
 	 * 
-	 * Set this to a unix timestamp of the start of an occurence if it's an update
-	 * for a particular recurrence date.
-	 * 
-	 * @return type 
+	 * @param string $method REQUEST, REPLY or CANCEL
+	 * @return Sabre_VObject_Component 
 	 */
-	public function toICS($method='REQUEST') {
-		
-		//require vendor lib SabreDav vobject
-		require_once(GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/VObject/includes.php');
-		
-		$c = new Sabre_VObject_Component('vcalendar');
-		$c->version='2.0';
-		$c->prodid='-//Intermesh//NONSGML Group-Office//EN';
-		$c->calscale='GREGORIAN';
-		$c->method=$method;
-		
-		$c->add($this->_getVtimezone());
-		
-		
+	public function toVObject($method='REQUEST'){
 		$e=new Sabre_VObject_Component('vevent');
 		$e->uid=$this->uuid;		
+		
+		if(isset($this->sequence))
+			$e->sequence=$this->sequence;
 		
 		$dtstamp = new Sabre_VObject_Element_DateTime('dtstamp');
 		$dtstamp->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::UTC);		
@@ -738,8 +665,6 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			}
 		}
 		
-    $c->add($e);
-		
 		$stmt = $this->participants();
 		while($participant=$stmt->fetch()){
 			if($participant->is_organizer){
@@ -758,6 +683,25 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$e->add($p);
 		}
 		
+		return $e;
+	}
+	
+
+	/**
+	 *
+	 * @param string $method REQUEST, REPLY or CANCEL
+	 * @param int $forRecurrenceId 
+	 * 
+	 * Set this to a unix timestamp of the start of an occurence if it's an update
+	 * for a particular recurrence date.
+	 * 
+	 * @return type 
+	 */
+	public function toICS($method='REQUEST') {		
+		
+		$c = new GO_Base_VObject_VCalendar();		
+		$c->method=$method;
+		$c->add($this->toVObject($method));		
 		return $c->serialize();
 		
 	}

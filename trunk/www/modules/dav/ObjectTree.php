@@ -21,7 +21,7 @@ class GO_Dav_ObjectTree extends Sabre_DAV_ObjectTree{
      */
     public function move($sourcePath, $destinationPath) {
 
-		go_debug("ObjectTree::move($sourcePath, $destinationPath)");
+		GO::debug("ObjectTree::move($sourcePath, $destinationPath)");
 
 		$moveable = $this->getNodeForPath($sourcePath);
 

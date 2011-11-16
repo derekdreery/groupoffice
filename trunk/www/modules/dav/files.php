@@ -15,28 +15,11 @@
 // settings
 require('../../GO.php');
 
-//session_write_close();
+//session writing doesn't make any sense because
+GO::session()->closeWriting();
 
-// If you want to run the SabreDAV server in a custom location (using mod_rewrite for instance)
-// You can override the baseUri here.
-// $baseUri = '/';
-
-
-
-
-// Files we need
 require_once GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/autoload.php';
-//require('autoload.php');
 
-
-//ini_set('memory_limit','100M');
-
-//$_SESSION['GO_SESSION']['username']='admin';
-//$GLOBALS['GO_SECURITY']->user_id=1;
-//
-//
-// Create the root node
-//$root = new GO_DAV_Root_Directory('/');
 
 // Authentication backend
 $authBackend = new GO_Dav_Auth_Backend();
@@ -45,14 +28,6 @@ $userpass = $authBackend->getUserPass();
 //if(!GO::modules()->dav)
 //	trigger_error('DAV module not installed. Install it at Start menu -> Modules', E_USER_ERROR);
 
-
-
-//$children = array();
-////if($GLOBALS['GO_SECURITY']->logged_in()){
-//$children[] = new GO_Dav_Fs_Directory('users/' . $userpass[0]);
-//$children[] = new GO_Dav_Fs_SharedDirectory();
-//
-////}
 
 $root = new GO_Dav_Fs_RootDirectory();
 

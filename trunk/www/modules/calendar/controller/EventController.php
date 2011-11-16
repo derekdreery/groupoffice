@@ -413,7 +413,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 //	}	
 
 	public function actionStore($params) {
-		$events = GO_Calendar_Model_Event::model()->findForPeriod(false, strtotime("2011-10-03"), strtotime("2011-10-10"));
+		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod(false, strtotime("2011-10-03"), strtotime("2011-10-10"));
 
 		var_dump($events);
 	}

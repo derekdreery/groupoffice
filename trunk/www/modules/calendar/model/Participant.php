@@ -123,7 +123,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 							;
 		}
 		
-		$events = GO_Calendar_Model_Event::model()->findForPeriod($findParams, $periodStartTime, $periodEndTime, true);
+		$events = GO_Calendar_Model_Event::model()->findCalculatedForPeriod($findParams, $periodStartTime, $periodEndTime, true);
 
 		return count($events)==0;
 	}
