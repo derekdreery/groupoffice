@@ -10,7 +10,7 @@
  */
 
 /**
- * Abstract class to export data in GO
+ * class to export data in GO
  * 
  * 
  * @package GO.base.controller
@@ -21,6 +21,12 @@
  */
 class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController { 
 
+	/**
+	 * Get the exporttypes that can be used
+	 * 
+	 * @param array $params
+	 * @return array 
+	 */
 	public function actionTypes($params=false) {
 		$types = array();
 		
@@ -39,10 +45,21 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 		return $response;
 	}
 	
+	/**
+	 * TODO: Create the description for this function
+	 * @param GO_Base_Db_ActiveRecord $model
+	 * @return array 
+	 */
 	private function _getExportTypesFromModel($model) {
 		return array();
 	}
 	
+	/**
+	 * Return the default found exportclasses that are available in the export 
+	 * folder and where the showInView parameter is true
+	 * 
+	 * @return array 
+	 */
 	private function _getDefaultExportTypes() {
 		
 		$defaultTypes = array();
@@ -55,16 +72,13 @@ class GO_Core_Controller_Export extends GO_Base_Controller_AbstractController {
 				$classname = 'GO_Base_Export_'.$exporter->nameWithoutExtension();
 				if($classname != 'GO_Base_Export_ExportInterface')
 				{
-					$export = new $classname('temp');
-					if($export->showInView())
-						$defaultTypes[$classname] = array('name'=>$export->getName(),'useOrientation'=>$export->useOrientation());
+					//$export = new $classname('temp');
+					if($classname::$showInView)
+						$defaultTypes[$classname] = array('name'=>$classname::$name,'useOrientation'=>$classname::$useOrientation);
 				}
 			}
 		}
 
 		return $defaultTypes;
 	}
-	
-	
-	
 }
