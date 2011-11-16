@@ -22,21 +22,34 @@ class GO_Base_Session extends GO_Base_Observable{
 	
 	public $values;
 	
+	/**
+	 * In some cases it doesn't make sense to use the session because the client is
+	 * not capable. (WebDAV for example).
+	 * 
+	 * @todo this can't be used because GO.php always initializes the session right away.
+	 * 
+	 * @var boolean 
+	 */
+	public static $enableSession=true;
+	
 	public function __construct(){
 		//start session
 		
-		if(session_id()==''){
-			
-			//TODO Check if this is dangerous.
-			if (!empty($_REQUEST['sid'])) {
-				session_id($_REQUEST['sid']);
+		if(GO_Base_Session::$enableSession){
+			if(session_id()==''){
+
+				//TODO Check if this is dangerous. We need this for GOTA.
+				//Gota should use cookies for the session.
+				if (!empty($_REQUEST['sid'])) {
+					session_id($_REQUEST['sid']);
+				}
+
+				session_name('groupoffice');
+				session_start();
 			}
 
-			session_name('groupoffice');
-			session_start();
+			GO::debug("Started session");
 		}
-		
-		GO::debug("Started session");
 		
 		$this->values = &$_SESSION['GO_SESSION'];
 		

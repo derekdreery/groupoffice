@@ -668,27 +668,50 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 
 	 * @param string $attributeName
 	 * @param mixed $value
-	 * @param array $findParams Extra parameters to send to the find function.
+	 * @param GO_Base_Db_FindParams $findParams Extra parameters to send to the find function.
 	 * @return GO_Base_Db_ActiveRecord 
 	 */
-	public function findSingleByAttribute($attributeName, $value, $findParams=array()){
+	public function findByAttribute($attributeName, $value, $findParams=false){		
+		return $this->findByAttributes(array($attributeName=>$value), $findParams);
+	}
+	
+	/**
+	 * Finds a models by an attribute=>value array.
+	 * 
+	 * @param array $attributes
+	 * @param GO_Base_Db_FindParams $findParams
+	 * @return GO_Base_Db_ActiveStatement 
+	 */
+	public function findByAttributes($attributes, $findParams=false){
+		$newParams = GO_Base_Db_FindParams::newInstance();
+		$criteria = $newParams->getCriteria()->addModel($this);
 		
-		$params = array_merge(array(
-				"by"=>array(array($attributeName,$value,'=')),
-				"ignoreAcl"=>true,
-				"limit"=>1
-		), $findParams);		
+		foreach($attributes as $attributeName=>$value)
+			$criteria->addCondition($attributeName, $value);
+		
+		if($findParams)
+			$newParams->mergeWith ($findParams);
+		
+		$newParams->ignoreAcl()->limit(1);
 				
-		$stmt = $this->find($params);
-		
-		$model = $stmt->fetch();
-		
-		return $model;		
+		return $this->find($newParams);
+	}
+	
+	/**
+	 * Finds a single model by an attribute name and value.
+	 * 
+	 * @param string $attributeName
+	 * @param mixed $value
+	 * @param GO_Base_Db_FindParams $findParams Extra parameters to send to the find function.
+	 * @return GO_Base_Db_ActiveRecord 
+	 */
+	public function findSingleByAttribute($attributeName, $value, $findParams=false){		
+		return $this->findSingleByAttributes(array($attributeName=>$value), $findParams);
 	}
 	
 	
 	/**
-	 * Finds a single model by an attribute name and value.
+	 * Finds a single model by an attribute=>value array.
 	 * 
 	 * @param string $attributeName
 	 * @param mixed $value

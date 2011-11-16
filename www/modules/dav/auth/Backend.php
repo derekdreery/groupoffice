@@ -147,12 +147,12 @@ class GO_Dav_Auth_Backend implements Sabre_DAV_Auth_IBackend {
 //		require_once(GO::config()->class_path.'base/users.class.inc.php');
 //		$GO_USERS = new GO_USERS();
 //
-//		go_debug('GO_DAV_Auth_Backend::getUsers()');
+//		GO::debug('GO_DAV_Auth_Backend::getUsers()');
 //
 //		if(!isset($this->users)){
 //
 //			$this->users=array($this->recordToDAVUser($GO_USERS->get_user($GLOBALS['GO_SECURITY']->user_id)));
-//			go_debug('Fetching users from database');
+//			GO::debug('Fetching users from database');
 //			/*$GO_USERS->get_authorized_users($GLOBALS['GO_SECURITY']->user_id, 'username');
 //			//$GO_USERS->get_users('username', 'asc',0,10);
 //			while($user=$GO_USERS->next_record()){

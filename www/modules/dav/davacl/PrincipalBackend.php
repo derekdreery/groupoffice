@@ -17,14 +17,14 @@
  */
 class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
 
-	private function recordToDAVUser($record){
+	private function _modelToDAVUser(GO_Base_Model_User $user){
 
 		return array(
-			'uri'=>'principals/'.$record['username'],
-			'{DAV:}displayname' => $record['username'],
-			'{http://sabredav.org/ns}email-address'=>$record['email'],
-			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$record['username'].'/inbox'),
-			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$record['username'].'/outbox')
+			'uri'=>'principals/'.$user->username,
+			'{DAV:}displayname' => $user->username,
+			'{http://sabredav.org/ns}email-address'=>$user->email,
+			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$user->username.'/inbox'),
+			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL'=>new Sabre_DAV_Property_Href('principals/'.$user->username.'/outbox')
 		);
 
 	}
@@ -46,25 +46,11 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
      */
     public function getPrincipalsByPrefix($prefixPath) {
 
-		global $GO_SECURITY, $GO_CONFIG;
-
-		require_once(GO::config()->class_path . 'base/users.class.inc.php');
-		$GO_USERS = new GO_USERS();
-
-		go_debug('GO_DAV_Auth_Backend::getUsers()');
+		GO::debug('GO_DAV_Auth_Backend::getUsers()');
 
 		if (!isset($this->users)) {
-
-			$this->users = array($this->recordToDAVUser($GO_USERS->get_user($GLOBALS['GO_SECURITY']->user_id)));
-			go_debug('Fetching users from database');
-			/* $GO_USERS->get_authorized_users($GLOBALS['GO_SECURITY']->user_id, 'username');
-			  //$GO_USERS->get_users('username', 'asc',0,10);
-			  while($user=$GO_USERS->next_record()){
-
-			  $this->users[]=$this->recordToDAVUser($user);
-			  } */
+			$this->users = array($this->_modelToDAVUser(GO::user()));
 		}
-
 		return $this->users;
 	}
 
@@ -80,16 +66,11 @@ class GO_Dav_DavAcl_PrincipalBackend implements Sabre_DAVACL_IPrincipalBackend {
 
 			$username = basename($path);
 
-			global $GO_CONFIG;
-
-			require_once(GO::config()->class_path . 'base/users.class.inc.php');
-			$GO_USERS = new GO_USERS();
-
-			$user = $GO_USERS->get_user_by_username($username);
+			$user = GO_Base_Model_User::model()->findSingleByAttribute('username', $username);
 			if (!$user)
 				return false;
 			else
-				return $this->recordToDAVUser($user);
+				return $this->_modelToDAVUser($user);
 		}
 
     /**

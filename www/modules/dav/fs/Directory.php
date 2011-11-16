@@ -100,7 +100,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 	 */
 	public function move($newPath) {
 
-		go_debug("FSD::move($newPath)");
+		GO::debug("FSD::move($newPath)");
 
 		if (!is_dir(dirname($newPath)))
 			throw new Exception('Invalid move!');
@@ -193,7 +193,7 @@ class GO_Dav_Fs_Directory extends Sabre_DAV_FS_Node implements Sabre_DAV_ICollec
 	 */
 	public function getChildren() {
 
-		//go_debug('FSD::getChildren');
+		//GO::debug('FSD::getChildren');
 		$nodes = array();
 		//foreach(scandir($this->path) as $node) if($node!='.' && $node!='..') $nodes[] = $this->getChild($node);
 
