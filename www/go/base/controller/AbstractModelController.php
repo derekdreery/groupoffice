@@ -584,56 +584,47 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	 * @param Array $params 
 	 */
 	public function actionExport($params) {
-		$incHead = false;
+	
+		$showHeader = false;
+		$orientation = false;
+		
+		if(!empty($params['exportOrientation']) && ($params['exportOrientation']=="Horizontaal"))
+			$orientation = 'L'; // Set the orientation to Landscape
+		else
+			$orientation = 'P'; // Set the orientation to Portrait
 
 		if(!empty($params['documentTitle']))
 			$title = $params['documentTitle'];
 		else
 			$title = GO::session()->values[$params['name']]['name'];
-		
+	
 		if(!empty($params['includeHeaders']))
-			$incHead = true;
+			$showHeader = true;
 		
-		if(!empty($params['type']))
-			$export = new $params['type']($title,$incHead);
-		else
-			$export = new GO_Base_Export_ExportCSV($title,$incHead); // The default Export is the CSV outputter.
-		
-		$filter = GO::session()->values[$params['name']]['findParams'];
+		$findParams = GO::session()->values[$params['name']]['findParams'];
+		$findParams['limit']=0; // Let the export handle all found records without a limit
 		$model = GO::getModel(GO::session()->values[$params['name']]['model']);
 		
-		$filter['limit'] = 0; // Let the export handle all found records without a limit
-		
-		$columnModel = new GO_Base_Data_ColumnModel();
-		$columnModel->setColumnsFromModel($model);
+		$store = new GO_Base_Data_Store();
 
-		$columnModel = $this->formatColumns($columnModel);
-		
-		if(!empty($params['columns'])) {		
-			
-			$requestedCols = explode(',',$params['columns']);
-			
-			$columns = $columnModel->getColumns();
+		$stmt = $model->find($findParams);
+		$store->setStatement($stmt);
 
-			foreach($columns as $colName=>$attr) {
-				if(!in_array($colName, $requestedCols)){
-					$columnModel->removeColumn($colName);
-				}
-			}
+		$columnModel = $store->getColumnModel();
+
+		if(!empty($params['columns'])) {
+			$includeColumns = explode(',',$params['columns']);
+			$columnModel->setColumnsFromModel($model, array(), $includeColumns);
+		} else {
+			$columnModel->setColumnsFromModel($model);
 		}
-		
-		$header = array();				
-		foreach($columnModel->getColumns() as $colName=>$attr)
-			$header[] = $attr['label'];
-		
-		$export->write($header);
-		
-		$stmt = $model->find($filter);
-		
-		while($obj = $stmt->fetch()) 
-			$export->write($columnModel->formatModel($obj));
-		
-		$export->endFlush();
+
+		if(!empty($params['type']))
+			$export = new $params['type']($store, $columnModel,$showHeader, $title, $orientation);
+		else
+			$export = new GO_Base_Export_ExportCSV($store, $columnModel,$showHeader, $title, $orientation); // The default Export is the CSV outputter.
+
+		$export->output();
 	}
 	
 	
