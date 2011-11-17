@@ -289,11 +289,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 
     $store = new GO_Base_Data_Store($this->getStoreColumnModel());	
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatStoreRecord'));		
-		$this->processStoreDelete($store, $params);
+		
 		
 		$response=array();
 		
 		$response = $this->beforeStore($response, $params, $store);
+		
+		$this->processStoreDelete($store, $params);
 
 		if(($multiSelectProperties =$this->getStoremultiSelectProperties()) && empty($params['noMultiSelectFilter'])){
 
