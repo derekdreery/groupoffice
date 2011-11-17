@@ -147,6 +147,8 @@ class GO_Base_Db_FindCriteria {
 	 * 
 	 * WARNING: This function does not do any sanity checks on the input! It just 
 	 * inserts the plain values so user input may not be passed to this function.
+	 * You can use parameter tags like :paramName and use the addBindParameter function.
+	 *
 	 * 
 	 * @param String $value1 The field value where this condition is for.
 	 * @param String $value The value of the field for this condition.
@@ -158,6 +160,17 @@ class GO_Base_Db_FindCriteria {
 		$this->_appendOperator($useAnd);
 		$this->_appendRawConditionString($value1, $value2, $comparator);		
 		return $this;
+	}
+	
+	/**
+	 * Add a custom bind parameter. Only useful in combination with addRawCondition.
+	 * 
+	 * @param string $paramTag eg. ":paramName"
+	 * @param mixed $value
+	 * @param int $pdoType
+	 */
+	public function addBindParameter($paramTag, $value, $pdoType=PDO::PARAM_STR){
+		$this->addParams(array($paramTag=>array($value, $pdoType)));
 	}
 	
 	/**
