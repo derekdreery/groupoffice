@@ -99,3 +99,5 @@ $updates["201111101938"][]="ALTER TABLE `cal_participants` CHANGE `event_id` `ev
 $updates["201111101938"][]="ALTER TABLE `cal_events` CHANGE `busy` `busy` TINYINT( 1 ) NOT NULL DEFAULT '1'";
 
 $updates["201111101938"][]="ALTER TABLE `cal_exceptions` ADD `exception_event_id` INT NOT NULL DEFAULT '0'";
+
+$updates["201111101938"][]="ALTER TABLE `cal_events` ADD `owner_status` TINYINT NOT NULL DEFAULT '1'";

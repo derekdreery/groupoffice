@@ -248,9 +248,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 			while ($participant = $stmt->fetch()) {
 				
-				if($method=='REQUEST' || $participant->is_organizer){
+				if($event->is_organizer || $participant->is_organizer){
 
-					if (true || $participant->user_id != GO::user()->id) {
+					if ($participant->user_id != GO::user()->id) {
 						$subject = $isNewEvent ? GO::t('invitation', 'calendar') : GO::t('invitation_update', 'calendar');
 
 						$body = '<p>' . GO::t('invited', 'calendar') . '</p>' .
@@ -432,7 +432,18 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		if(!empty($params['send_cancellation']))
 		{
-			//todo
+			if($event->is_organizer)
+				$this->_sendInvitation(array(), $event, false, array(),'CANCEL');
+			else
+			{
+				$participant = GO_Calendar_Model_Participant::model()
+							->findSingleByAttributes(array('event_id'=>$event->id, 'user_id'=>$event->user_id));
+				if($participant){
+					$participant->status=GO_Calendar_Model_Participant::STATUS_DECLINED;
+					$participant->save();
+					$this->_sendInvitation(array(), $event, false, array(),'REPLY');
+				}				
+			}
 		}
 		
 		if(!empty($params['exception_date'])){
@@ -523,7 +534,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 		}else
 		{	
-			$importAttributes=array();
+			$importAttributes=array('is_organizer'=>false);
 			if($recurrenceDate){
 				//if a particular recurrence-id was send then we queried for that particular
 				//recurrence. We need to get the master event to add a new exception.
@@ -543,8 +554,11 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			
 			//import it
 			$event = new GO_Calendar_Model_Event();
+			if(!empty($params['status'])){
+				$importAttributes['owner_status']=$params['status'];
+			}
 			$event->importVObject($vevent, $importAttributes);
-
+			
 			if(!empty($params['status'])){
 				//Update participant status.
 				$participant = GO_Calendar_Model_Participant::model()
