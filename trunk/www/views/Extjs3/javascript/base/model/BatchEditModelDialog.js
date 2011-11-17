@@ -3,7 +3,8 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		
 		Ext.apply(this, {
 			title:GO.lang.batchEdit,
-			formControllerUrl: 'batchEdit/update'
+			formControllerUrl: 'batchEdit',
+			loadOnNewModel:false
 		});
 		
 		GO.base.model.BatchEditModelDialog.superclass.initComponent.call(this);	
@@ -11,7 +12,19 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 
 	setModels : function(model_name, keys){
 		this.formPanel.baseParams.model_name=model_name;
+		this.store.baseParams.model_name=model_name;
 		this.formPanel.baseParams.keys=keys;
+	},
+	
+	show : function(){
+		this.store.load();
+		GO.base.model.BatchEditModelDialog.superclass.show.call(this);	
+	},
+	
+	setEditor : function(gotype){
+		var col = this.editGrid.getColumnModel().getColumnById('value');
+		var editor = GO.base.form.getFormFieldByType(gotype);
+		col.setEditor(editor);
 	},
 	
 	buildForm : function(){
@@ -20,7 +33,7 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			baseParams:{
 				model_name: '' // config.modelType example: GO_Addressbook_Model_Company
 			},
-			fields: ['name','label','edit','value'],
+			fields: ['name','label','edit','value','gotype'],
 			remoteSort: true
 		});
 	
@@ -28,21 +41,23 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			header: '&nbsp;',
 			id:'edit',
 			dataIndex: 'edit',
-			width: 20
+			width: 20,
+			sortable:false,
+			hideable:false
 		});
 	
 		var fields ={
-			fields:['name','label','edit','value'],
+			fields:['name','label','edit','value','gotype'],
 			columns:[
 			checkColumn,{
-				header:GO.lang['strLabel'],
+				header:GO.lang['label'],
 				dataIndex: 'label',
 				sortable:false,
 				hideable:false,
 				editable:false,
 				id:'label'
 			},{
-				header:GO.lang['strValue'],
+				header:GO.lang['value'],
 				dataIndex: 'value',
 				sortable:false,
 				hideable:false,
@@ -71,7 +86,13 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			}),
 			sm:new Ext.grid.RowSelectionModel(),
 			loadMask:true,
-			clicksToEdit:1
+			clicksToEdit:1,
+			listeners:{
+				beforeedit:function(e){			
+					this.setEditor(e.record.get('gotype'));
+					return true;
+				},scope:this
+			}
 		});	
 		
 		this.addPanel(this.editGrid);

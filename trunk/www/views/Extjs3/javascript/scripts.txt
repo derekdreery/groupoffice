@@ -138,3 +138,4 @@ views/Extjs3/javascript/panels/Ext.ux.tot2ivn.VrTabPanel.js
 views/Extjs3/javascript/base/email/EmailEditorPanel.js
 
 views/Extjs3/javascript/base/model/BatchEditModelDialog.js
+views/Extjs3/javascript/base/Form.js
