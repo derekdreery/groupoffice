@@ -37,7 +37,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		if (isset($params['subject']))
 			$params['name'] = $params['subject'];
 
-		if (isset($params['start_time'])) {
+		if (isset($params['start_date'])) {
 			if (isset($params['all_day_event'])) {
 				$params['all_day_event'] = '1';
 				$start_time = "00:00";
