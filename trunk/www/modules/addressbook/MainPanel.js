@@ -39,13 +39,13 @@ GO.addressbook.MainPanel = function(config)
 	}, this);
 
 	if (GO.email) {
-		this.contactsGrid.on("cellcontextmenu",function(grid,row,cell,e){
+		this.contactsGrid.on("rowcontextmenu",function(grid,row,e){
 			{
 				if(typeof(this.contactsGrid.contextMenu)=='undefined')
 				{
 					this.contactsGrid.contextMenu = new GO.addressbook.ContextMenu();
 				}
-				this.contactsGrid.contextMenu.setSelected(grid.selModel.getSelections());
+				this.contactsGrid.contextMenu.setSelected(grid.selModel.getSelections(), "GO_Addressbook_Model_Contact");
 				e.stopEvent();
 				this.contactsGrid.contextMenu.showAt(e.getXY());
 			}
@@ -66,13 +66,13 @@ GO.addressbook.MainPanel = function(config)
 	}, this);
 
 	if (GO.email) {
-		this.companiesGrid.on("cellcontextmenu",function(grid,row,cell,e){
+		this.companiesGrid.on("rowcontextmenu",function(grid,row,e){
 			{
 				if(typeof(this.companiesGrid.contextMenu)=='undefined')
 				{
 					this.companiesGrid.contextMenu = new GO.addressbook.ContextMenu();
 				}
-				this.companiesGrid.contextMenu.setSelected(grid.selModel.getSelections());
+				this.companiesGrid.contextMenu.setSelected(grid.selModel.getSelections(), "GO_Addressbook_Model_Company");
 				e.stopEvent();
 				this.companiesGrid.contextMenu.showAt(e.getXY());
 			}
