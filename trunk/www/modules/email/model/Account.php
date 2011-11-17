@@ -82,4 +82,24 @@ class GO_Email_Model_Account extends GO_Base_Db_ActiveRecord {
 		
 		return $this->_imap;		
 	}
+	
+	/**
+	 * Find an account by e-mail address.
+	 * 
+	 * @param string $email
+	 * @return GO_Email_Model_Account 
+	 */
+	public function findByEmail($email){
+		
+		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addRawCondition('t.id', 'a.account_id');
+		
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->single()
+						->debugSql()
+						->join(GO_Email_Model_Alias::model()->tableName(), $joinCriteria,'a')
+						->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('email', $email,'=','a'));
+		
+		return $this->find($findParams);
+	}
 }

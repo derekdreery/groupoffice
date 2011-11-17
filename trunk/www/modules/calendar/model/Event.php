@@ -12,6 +12,8 @@
  * @property int $reminder The number of seconds prior to the start of the event.
  * @property int $exception_event_id If this event is an exception it holds the id of the original event
  * @property int $recurrence_id If this event is an exception it holds the date (not the time) of the original recurring instance. It can be used to identity it with an vcalendar file.
+ * @property boolean $is_organizer True if the owner of this event is also the organizer.
+ * @property string $owner_status The status of the owner of this event if this was an invitation
  * 
  * @copyright Copyright Intermesh
  * @author Merijn Schering <mschering@intermesh.nl>
@@ -406,7 +408,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$findParams->order('start_time', 'ASC');
 		
 		if($periodEndTime)
-			$findParams->addCondition('start_time', $periodEndTime, '<');
+			$findParams->getCriteria()->addCondition('start_time', $periodEndTime, '<');
 		
 		if ($onlyBusyEvents)
 			$findParams->getCriteria()->addCondition('busy', 1);
@@ -863,10 +865,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		if(!$p){
 			$p = new GO_Calendar_Model_Participant();
 			$p->is_organizer=$isOrganizer;		
-			$p->event_id=$event->id;					
-			$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $p->email);
-			if($user)
-				$p->user_id=$user->id;
+			$p->event_id=$event->id;			
+			if(GO::modules()->email){
+				$account = GO_Email_Model_Account::model()->findByEmail($attributes['email']);
+				if($account)
+					$p->user_id=$account->user_id;
+			}
+			
+			if(!$p->user_id){
+				$user = GO_Base_Model_User::model()->findSingleByAttribute('email', $attributes['email']);
+				if($user)
+					$p->user_id=$user->id;
+			}		
 		}		
 		
 		$p->setAttributes($attributes);
