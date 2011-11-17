@@ -241,27 +241,8 @@ Ext.extend(GO.query.QueryPanel, GO.grid.EditorGridPanel,{
 		
 		var col = this.getColumnModel().getColumnAt(this.valueCol);
 		
-		//if(!this.editors[gotype]){
-			switch(gotype){
-				case 'unixtimestamp':
-				case 'unixdate':
-					this.editors[gotype] = new Ext.form.DateField();
-					break;
-					
-				case 'number':
-					this.editors[gotype] = new GO.form.NumberField();
-				break;
-					
-				case 'boolean':
-					this.editors[gotype] = new Ext.form.CheckBox();
-				break;
-
-				default:
-					this.editors[gotype] = new Ext.form.TextField();
-					break;				
-			}
-		//}
+		var editor = GO.base.form.getFormFieldByType(gotype);
 		
-		col.setEditor(this.editors[gotype]);
+		col.setEditor(editor);
 	}
 });
