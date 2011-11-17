@@ -720,6 +720,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	public function findSingleByAttributes($attributes, $findParams=false){
 		
+		$cacheKey = md5(serialize($attributes));
+		//Use cache so identical findByPk calls are only executed once per script request
+		$cachedModel =  GO::modelCache()->get($this->className(), $cacheKey);
+		if($cachedModel)
+			return $cachedModel;
+		
 		$newParams = GO_Base_Db_FindParams::newInstance();
 		$criteria = $newParams->getCriteria()->addModel($this);
 		
@@ -735,11 +741,15 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$model = $stmt->fetch();
 		
+		GO::modelCache()->add($this->className(), $model, $cacheKey);
+		
 		return $model;		
 	}
 	
 	/**
 	 * Finds a single model by an attribute name and value.
+	 * 
+	 * @todo FindSingleByAttributes should use this function when this one uses the FindParams object too.
 	 * 
 	 * @param string $attributeName
 	 * @param mixed $value
@@ -817,7 +827,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				
 		if(!empty($params['debugSql'])){
 			$this->_debugSql=true;
-			GO::debug($params);
+			//GO::debug($params);
 		}
 		
 		
@@ -1972,7 +1982,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			//GO::debug($attr);
 
-			$model->setAttributes($attr);
+			$model->setAttributes($attr, false);
 			return $model->save();
 			
 		}
