@@ -628,6 +628,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
     $e->summary = $this->name;
 		
+		$e->status = $this->status;
+		
 		$dateType = $this->all_day_event ? Sabre_VObject_Element_DateTime::DATE : Sabre_VObject_Element_DateTime::LOCALTZ;
 		
 		if($this->exception_for_event_id>0){
@@ -654,18 +656,21 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		//$dtend->offsetUnset('VALUE');
 		$e->add($dtend);
 		
-		$e->description=(string)$this->description;
-		//$e->location=$this->location;
+		if(!empty($this->description))
+			$e->description=$this->description;
+		
+		if(!empty($this->location))
+			$e->location=$this->location;
 		
 		//todo exceptions
 		if(!empty($this->rrule)){
 			$e->rrule=str_replace('RRULE:','',$this->rrule);					
-//			$stmt = $this->exceptions(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('exception_event_id', 0)));
-//			while($exception = $stmt->fetch()){
-//				$exdate = new Sabre_VObject_Element_DateTime('exdate',Sabre_VObject_Element_DateTime::DATE);
-//				$exdate->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($exception->time));		
-//				$e->add($exdate);
-//			}
+			$stmt = $this->exceptions(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('exception_event_id', 0)));
+			while($exception = $stmt->fetch()){
+				$exdate = new Sabre_VObject_Element_DateTime('exdate',Sabre_VObject_Element_DateTime::DATE);
+				$exdate->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($exception->time));		
+				$e->add($exdate);
+			}
 		}
 		
 		$stmt = $this->participants();
@@ -691,7 +696,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 
 	/**
-	 *
+	 * Get vcalendar data for an *.ics file.
+	 * 
 	 * @param string $method REQUEST, REPLY or CANCEL
 	 * @param int $forRecurrenceId 
 	 * 
@@ -753,7 +759,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->status=(string) $vobject->status;
 		
 		if($vobject->duration){
-			$duration = $this->_parseDuration($vobject->duration);
+			$duration = GO_Base_VObject_Reader::parseDuration($vobject->duration);
 			$this->end_time = $this->start_time+$duration;
 		}
 		
@@ -835,44 +841,8 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		}
 
 		return $this;
-	}
+	}	
 	
-	private function _parseDuration($duration){
-		preg_match('/(-?)P([0-9]+[WD])?T?([0-9]+H)?([0-9]+M)?([0-9]+S)?/', (string) $duration, $matches);
-		//var_dump($matches);
-
-
-		$negative = $matches[1]=='-' ? -1 : 1;
-
-		$days = 0;
-		$weeks = 0;
-		$hours=0;
-		$mins=0;
-		$secs = 0;
-		for($i=2;$i<count($matches);$i++){
-			$d = substr($matches[$i],-1);
-			switch($d){
-				case 'D':
-					$days += intval($matches[$i]);
-					break;
-				case 'W':
-					$weeks += intval($matches[$i]);
-					break;
-				case 'H':
-					$hours += intval($matches[$i]);
-					break;
-				case 'M':
-					$mins += intval($matches[$i]);
-					break;
-				case 'S':
-					$secs += intval($matches[$i]);
-					break;
-			}
-		}
-
-		return $negative*(($weeks * 60 * 60 * 24 * 7) + ($days * 60 * 60 * 24) + ($hours * 60 * 60) + ($mins * 60) + ($secs));
-	
-	}
 	
 	/**
 	 * Will import an attendee from a VObject to a given event. If the attendee

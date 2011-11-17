@@ -47,6 +47,10 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	const STATUS_DELEGATED = "DELEGATED";
 	const STATUS_IN_PROCESS = "IN-PROCESS";
 	
+	const PRIORITY_LOW = 0;
+	const PRIORITY_NORMAL = 1;
+	const PRIORITY_HIGH = 2;
+	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -189,4 +193,175 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		$time = strtotime($dateString);
 		return $time;
 	}
+	
+	
+	/**
+	 * Get vcalendar data for an *.ics file.
+	 * 
+	 * @return string 
+	 */
+	public function toICS() {		
+		
+		$c = new GO_Base_VObject_VCalendar();		
+		$c->add($this->toVObject());		
+		return $c->serialize();		
+	}
+	
+	
+	/**
+	 * Get this task as a VObject. This can be turned into a vcalendar file data.
+	 * 
+	 * @return Sabre_VObject_Component 
+	 */
+	public function toVObject(){
+		$e=new Sabre_VObject_Component('vtodo');
+		$e->uid=$this->uuid;	
+		
+		$dtstamp = new Sabre_VObject_Element_DateTime('dtstamp');
+		$dtstamp->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::UTC);		
+		$e->add($dtstamp);
+		
+		$mtimeDateTime = new DateTime();
+		$mtimeDateTime->setTimestamp($this->mtime);
+		$lm = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
+		$lm->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
+		$e->add($lm);
+		
+		$ctimeDateTime = new DateTime();
+		$ctimeDateTime->setTimestamp($this->mtime);
+		$ct = new Sabre_VObject_Element_DateTime('created');
+		$ct->setDateTime($ctimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
+		$e->add($ct);
+		
+    $e->summary = $this->name;
+		
+		$e->status = $this->status;
+		
+		$dateType = Sabre_VObject_Element_DateTime::DATE;
+		
+		$dtstart = new Sabre_VObject_Element_DateTime('dtstart',$dateType);
+		$dtstart->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->start_time));		
+		$e->add($dtstart);
+		
+		$due = new Sabre_VObject_Element_DateTime('due',$dateType);
+		$due->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->due_time));		
+		$e->add($due);
+		
+		if($this->completion_time>0){
+			$completed = new Sabre_VObject_Element_DateTime('completed',Sabre_VObject_Element_DateTime::LOCALTZ);
+			$completed->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->completion_time));		
+			$e->add($completed);
+		}
+		
+		if(!empty($this->description))
+			$e->description=$this->description;
+		
+		//todo exceptions
+		if(!empty($this->rrule)){
+			$e->rrule=str_replace('RRULE:','',$this->rrule);					
+		}
+		
+		switch($this->priority){
+			case self::PRIORITY_HIGH:
+				$e->priority=1;
+				break;
+			
+			case self::PRIORITY_LOW:
+				$e->priority=10;
+				break;
+			
+			default:
+				$e->priority=5;
+				break;
+		}
+		
+		return $e;
+	}
+	
+	
+	/**
+	 * Import a task from a VObject 
+	 * 
+	 * @param Sabre_VObject_Component $vobject
+	 * @param array $attributes Extra attributes to apply to the event
+	 * @return GO_Tasks_Model_Task 
+	 */
+	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()){
+		//$event = new GO_Calendar_Model_Event();
+		
+		$this->uuid = (string) $vobject->uid;
+		$this->name = (string) $vobject->summary;
+		$this->description = (string) $vobject->description;
+		if(!empty($vobject->dtstart))
+			$this->start_time = $vobject->dtstart->getDateTime()->format('U');
+		
+		if(!empty($vobject->dtend))
+			$this->due_time = $vobject->dtend->getDateTime()->format('U');
+		
+		if(!empty($vobject->due))
+			$this->due_time = $vobject->due->getDateTime()->format('U');
+				
+		if($vobject->dtstamp)
+			$this->mtime=$vobject->dtstamp->getDateTime()->format('U');
+		
+		if(empty($this->due_time))
+			$this->due_time=time();
+		
+		if(empty($this->start_time))
+			$this->start_time=$this->due_time;
+		
+		if($vobject->rrule){			
+			$rrule = new GO_Base_Util_Icalendar_Rrule();
+			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);			
+			$this->rrule = $rrule->createRrule();
+			$this->repeat_end_time = $rrule->until;
+		}		
+		
+		//var_dump($vobject->status);
+		if($vobject->status)
+			$this->status=(string) $vobject->status;
+		
+		if($vobject->duration){
+			$duration = GO_Base_VObject_Reader::parseDuration($vobject->duration);
+			$this->end_time = $this->start_time+$duration;
+		}
+		
+		if(!empty($vobject->priority))
+		{			
+			if((string) $vobject->priority>5)
+			{
+				$this->priority=self::PRIORITY_LOW;
+			}elseif((string) $vobject->priority==5)
+			{
+				$this->priority=self::PRIORITY_NORMAL;
+			}else
+			{
+				$this->priority=self::PRIORITY_HIGH;
+			}
+		}
+		
+		if(!empty($vobject->completed)){
+			$this->completion_time=$vobject->completed->getDateTime()->format('U');
+			$this->status='COMPLETED';
+		}else
+		{
+			$this->completion_time=0;
+		}
+		
+		if($this->status=='COMPLETED' && empty($this->completion_time))
+			$this->completion_time=time();
+		
+		if($vobject->valarm){
+			
+		}else
+		{
+			$this->reminder=0;
+		}		
+		
+		$this->setAttributes($attributes);
+		
+		$this->save();
+		
+		return $this;
+	}	
 }
