@@ -75,6 +75,12 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 		return $imapMessage;
 	}
 
+	/**
+	 * Save the message source to a file.
+	 * 
+	 * @param string $path
+	 * @return boolean 
+	 */
 	public function saveToFile($path) {
 		$imap = $this->account->openImapConnection($this->mailbox);
 
