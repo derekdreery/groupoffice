@@ -26,7 +26,8 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	
 	public function __construct(){
 		$this->_file = GO::config()->file_storage_path.'cache/diskCache.txt';
-		$this->_load();
+		if(!GO::config()->debug)
+			$this->_load();
 	}
 	
 	private function _load(){
@@ -63,7 +64,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	}
 	
 	public function __destruct(){
-		if($this->_dirty)
+		if($this->_dirty && !GO::config()->debug)
 			file_put_contents($this->_file, serialize($this->_values));
 	}
 }
