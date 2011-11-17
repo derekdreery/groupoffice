@@ -1002,7 +1002,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	},
 	
 	autoSave : function(){
-		if(GO.util.empty(this.sendParams.mailing_group_id) && this.lastAutoSave && this.lastAutoSave!=this.editor.getValue())
+		if(GO.util.empty(this.sendParams.addresslist_id) && this.lastAutoSave && this.lastAutoSave!=this.editor.getValue())
 		{
 			this.sendMail(true,true);
 		}
@@ -1047,7 +1047,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	reset : function(keepAttachmentsAndOptions) {
 		if(!keepAttachmentsAndOptions){
 			this.sendParams = {
-				'task' : 'sendmail',
+//				'task' : 'sendmail',
 				inline_attachments : {},
 				inline_temp_attachments : {},
 				notification : 'false',
@@ -1071,7 +1071,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		{
 			//keep options when switching from text <> html
 			this.sendParams={
-				'task' : 'sendmail',
+//				'task' : 'sendmail',
 				inline_attachments : {},
 				inline_temp_attachments : {},
 				notification : this.sendParams.notification,
@@ -1287,9 +1287,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			
 			
 			// for mailings plugin
-			if (config.mailing_group_id > 0) {
-				this.sendURL = GO.settings.modules.mailings.url
-				+ 'action.php';
+			if (config.addresslist_id > 0) {
+				this.sendURL = GO.url("addressbook/addresslist/sendMailing");
 
 				this.toComboVisible = false;
 				this.showMenuButton.setDisabled(true);
@@ -1297,7 +1296,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				this.showCC(false);
 				this.showBCC(false);
 
-				this.sendParams.mailing_group_id = config.mailing_group_id;
+				this.sendParams.addresslist_id = config.addresslist_id;
 
 				this.saveButton.setDisabled(true);
 			}else
@@ -1335,9 +1334,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 				if(config.contact_id)
 					params.contact_id=config.contact_id;
 				
-				if (config.mailing_group_id > 0) {
+				if (config.addresslist_id > 0) {
 					// so that template loading won't replace fields
-					params.mailing_group_id = config.mailing_group_id;
+					params.addresslist_id = config.addresslist_id;
 				}
 
 				//if (config.template_id>0) {
