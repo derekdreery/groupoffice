@@ -479,3 +479,4 @@ $l['upload_file_to_big']='The file you tried to upload was larger then the maxim
 $l["batchEdit"]="Batch edit";
 $l["batchSelectOne"]="Select at least one item!";
 $l["batchSelectionError"]="Nothing selected!";
+$l["label"]="Label";
