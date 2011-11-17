@@ -40,10 +40,12 @@ GO.addressbook.ContextMenu = function(config){
 Ext.extend(GO.addressbook.ContextMenu, Ext.menu.Menu, {
 	model_name : '',
 	selected  : [],
+	grid : '',
 
-	setSelected : function (selected, model_name) {
-		this.selected = selected;
+	setSelected : function (grid, model_name) {
+		this.selected = grid.selModel.getSelections();
 		this.model_name=model_name;
+		this.grid = grid;
 	},
 
 	getSelected : function () {
@@ -84,6 +86,6 @@ Ext.extend(GO.addressbook.ContextMenu, Ext.menu.Menu, {
 				ids.push(selected[i].data.id);
 		}
 		
-		GO.base.model.showBatchEditModelDialog(this.model_name, ids);
+		GO.base.model.showBatchEditModelDialog(this.model_name, ids, this.grid);
 	}
 });
