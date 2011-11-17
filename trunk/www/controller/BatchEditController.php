@@ -29,7 +29,7 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 	 * <code>
 	 * $params['data'] = The new values that need to be set
 	 * $params['keys'] = The keys of the records that need to get the new data
-	 * $params['model']= The model classname of the records that need to be updated
+	 * $params['model_name']= The model classname of the records that need to be updated
 	 * </code>
 	 */
 	public function actionSubmit($params) {
@@ -76,7 +76,7 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 	 * 
 	 * @param array $params 
 	 * <code>
-	 * $params['model']= The model classname of the records that need to be updated
+	 * $params['model_name']= The model classname of the records that need to be updated
 	 * </code>
 	 */
 	public function actionAttributesStore($params) {
@@ -101,7 +101,28 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 			}
 		}
 		
-		$response['results'] = $rows;
+		// Get the customfields for this model
+		$cf = $tmpModel->getCustomfieldsRecord();
+		$cfcolumns = $cf->getColumns();
+		
+		$cfrows = array();
+		foreach($cfcolumns as $key=>$value) {
+			if(!empty($value['gotype']) && $key != 'model_id') {
+				$row = array();
+
+				$row['name']= $key;
+				$row['label']= $cf->getAttributeLabel($key);
+				$row['value']='';
+				$row['edit']='';
+				$row['gotype']=$value['gotype'];
+
+				$cfrows[] = $row;
+			}
+		}
+		
+		
+		
+		$response['results'] = array_merge($rows,$cfrows);
 						
 		return $response;
 	}
