@@ -1047,7 +1047,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	reset : function(keepAttachmentsAndOptions) {
 		if(!keepAttachmentsAndOptions){
 			this.sendParams = {
-//				'task' : 'sendmail',
+				task : 'sendmail',
 				inline_attachments : {},
 				inline_temp_attachments : {},
 				notification : 'false',
