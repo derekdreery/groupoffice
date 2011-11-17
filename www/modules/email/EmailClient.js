@@ -1340,38 +1340,38 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 						break;
 					}
 				
-				case 'vcs':
-				case 'ics':
-					if(!forceDownload)
-					{
-						params.task='icalendar_attachment';
-						Ext.Ajax.request({
-							url: GO.settings.modules.email.url+'json.php',
-							params: params,
-							callback: function(options, success, response)
-							{
-								if(success)
-								{
-									var values = Ext.decode(response.responseText);
-									
-									if(!values.success)
-									{
-										alert(values.feedback);
-									}else
-									{
-										GO.calendar.showEventDialog({
-											values: values
-										});
-									}
-								}else
-								{
-									alert( GO.lang.strRequestError);
-								}
-							},
-							scope: this
-						});
-						break;
-					}
+//				case 'vcs':
+//				case 'ics':
+//					if(!forceDownload)
+//					{
+//						params.task='icalendar_attachment';
+//						Ext.Ajax.request({
+//							url: GO.settings.modules.email.url+'json.php',
+//							params: params,
+//							callback: function(options, success, response)
+//							{
+//								if(success)
+//								{
+//									var values = Ext.decode(response.responseText);
+//									
+//									if(!values.success)
+//									{
+//										alert(values.feedback);
+//									}else
+//									{
+//										GO.calendar.showEventDialog({
+//											values: values
+//										});
+//									}
+//								}else
+//								{
+//									alert( GO.lang.strRequestError);
+//								}
+//							},
+//							scope: this
+//						});
+//						break;
+//					}
 				
 				case 'bmp':
 				case 'png':
