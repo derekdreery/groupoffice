@@ -61,7 +61,7 @@ class GO_Base_Mail_Message extends Swift_Message{
    * @param string $body
    * @param string $contentType
    * @param string $charset
-   * @return Swift_Mime_Message
+   * @return GO_Base_Mail_Message
    */
   public static function newInstance($subject = null, $body = null,
     $contentType = null, $charset = null)
@@ -299,7 +299,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 * inlineAttachments (string).
 	 */
 	public function handleEmailFormInput($params){
-		
+
 		//inlineAttachments is an array(array('url'=>'',tmp_file=>'relative/path/');
 		if(!empty($params['inlineAttachments'])){
 			$inlineAttachments = json_decode($params['inlineAttachments'], true);
@@ -311,7 +311,7 @@ class GO_Base_Mail_Message extends Swift_Message{
 
 				$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
 
-				if ($tmpFile->exists()) {
+				if ($tmpFile->exists()) {				
 					//Different browsers reformat URL's to absolute or relative. So a pattern match on the filename.
 					$filename = urlencode($tmpFile->name());
 					$result = preg_match('/="([^"]*'.preg_quote($filename).'[^"]*)"/',$params['body'],$matches);
@@ -325,6 +325,19 @@ class GO_Base_Mail_Message extends Swift_Message{
 				}
 			}
 		}
+		
+		if (!empty($params['attachments'])) {
+			$attachments = json_decode($params['attachments']);
+			foreach ($attachments as $att) {
+				$tmpFile = new GO_Base_Fs_File($att);
+				if ($tmpFile->exists()) {
+					$file = Swift_Attachment::fromPath($tmpFile->path());
+					$file->setContentType($tmpFile->mimeType());
+					$contentId = $this->attach($file);
+				}
+			}
+		}
+		
 		$this->setHtmlAlternateBody($params['body']);
 	}
 	
