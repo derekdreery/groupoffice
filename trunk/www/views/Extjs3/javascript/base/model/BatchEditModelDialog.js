@@ -1,4 +1,6 @@
 GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
+	grid: false,
+	
 	initComponent : function(){
 		
 		Ext.apply(this, {
@@ -10,10 +12,11 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		GO.base.model.BatchEditModelDialog.superclass.initComponent.call(this);	
 	},
 
-	setModels : function(model_name, keys){
+	setModels : function(model_name, keys, grid){
 		this.formPanel.baseParams.model_name=model_name;
 		this.store.baseParams.model_name=model_name;
-		this.formPanel.baseParams.keys=keys;
+		this.formPanel.baseParams.keys=Ext.encode(keys);
+		this.grid = grid;
 	},
 	
 	show : function(){
@@ -27,16 +30,17 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		col.setEditor(editor);
 	},
 	
-	buildForm : function(){
-		this.store = new GO.data.JsonStore({
-			url: GO.url('batchEdit/attributesStore'),
-			baseParams:{
-				model_name: '' // config.modelType example: GO_Addressbook_Model_Company
-			},
-			fields: ['name','label','edit','value','gotype'],
-			remoteSort: true
-		});
+	afterSubmit : function(){
+		if(this.grid)
+			this.grid.store.reload();
+	},
 	
+	getSubmitParams : function(){
+		return {data:Ext.encode(this.editGrid.getGridData())}
+	},
+	
+	buildForm : function(){
+		
 		var checkColumn = new GO.grid.CheckColumn({
 			header: '&nbsp;',
 			id:'edit',
@@ -67,7 +71,18 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			}		
 			]
 		};
+		
+		this.store = new GO.data.JsonStore({
+			url: GO.url('batchEdit/attributesStore'),
+			baseParams:{
+				model_name: '' // config.modelType example: GO_Addressbook_Model_Company
+			},
+			fields: fields.fields,
+			//fields: ['name','label','edit','value','gotype'],
+			remoteSort: true
+		});
 	
+		
 		var columnModel =  new Ext.grid.ColumnModel({
 			defaults:{
 				sortable:true
@@ -75,8 +90,8 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			columns:fields.columns
 		});
 
-		this.editGrid = new Ext.grid.EditorGridPanel({
-			fields:fields,
+		this.editGrid = new GO.grid.EditorGridPanel({
+			fields:fields.fields,
 			store:this.store,
 			cm:columnModel,
 			view:new Ext.grid.GridView({
@@ -99,7 +114,7 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 	}
 });
 
-GO.base.model.showBatchEditModelDialog=function(model_name, keys){
+GO.base.model.showBatchEditModelDialog=function(model_name, keys, grid){
 	
 	if (keys.length<=0) {
 			Ext.Msg.alert(GO.lang.batchSelectionError, GO.lang.batchSelectOne);
@@ -109,6 +124,6 @@ GO.base.model.showBatchEditModelDialog=function(model_name, keys){
 	if(!GO.base.model.batchEditModelDialog){
 		GO.base.model.batchEditModelDialog = new GO.base.model.BatchEditModelDialog();
 	}
-	GO.base.model.batchEditModelDialog.setModels(model_name, keys);
+	GO.base.model.batchEditModelDialog.setModels(model_name, keys, grid);
 	GO.base.model.batchEditModelDialog.show();
 }
