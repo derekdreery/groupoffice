@@ -451,15 +451,15 @@ GO.cms.MainPanel = function(config){
 				if(!this.selectMailingGroupWindow)
 				{
 					this.selectMailingGroupWindow=new GO.mailings.SelectMailingGroupWindow();
-					this.selectMailingGroupWindow.on("select", function(win, mailing_group_id){
+					this.selectMailingGroupWindow.on("select", function(win, addresslist_id){
 						GO.email.showComposer({
 							loadUrl: GO.settings.modules.mailings.url+'json.php',
 							loadParams:{
 								task:'sendcmsfile',
 								file_id: this.editorPanel.baseParams.file_id,
-								mailing_group_id:mailing_group_id
+								addresslist_id:addresslist_id
 							},
-							mailing_group_id:mailing_group_id
+							addresslist_id:addresslist_id
 						});
 					}, this);
 				}
