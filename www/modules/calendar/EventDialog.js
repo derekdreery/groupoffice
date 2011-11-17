@@ -328,15 +328,15 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 				i = '00';
 			}
 
-			if (!params.start_date)
-				params['start_date'] = new Date();
-			if (!params.start_time)
-				params['start_time'] = date.format(GO.settings.time_format);
-
-			if (!params.end_date)
-				params['end_date'] = new Date();
-			if (!params.end_time)
-				params['end_time'] = date.add(Date.HOUR, 1).format(GO.settings.time_format);
+//			if (!params.start_date)
+//				params['start_date'] = new Date();
+//			if (!params.start_time)
+//				params['start_time'] = date.format(GO.settings.time_format);
+//
+//			if (!params.end_date)
+//				params['end_date'] = new Date();
+//			if (!params.end_time)
+//				params['end_time'] = date.add(Date.HOUR, 1).format(GO.settings.time_format);
 
 		}
 		
