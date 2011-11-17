@@ -25,5 +25,6 @@ $languages['fi']='Suomi - Finland';
 $languages['sv']='Svenska';
 $languages['tr']='Türkçe';
 $languages['th']='ไทย';
+$languages['vi']='Tiếng Việt';
 
 $language_aliases['no']='nb';
