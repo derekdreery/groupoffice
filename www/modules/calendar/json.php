@@ -635,7 +635,9 @@ try {
 						$cal->get_bdays($start_time, $end_time ,$abooks);
 						while($contact = $cal->next_record()) {
 							$name = String::format_name($contact['last_name'], $contact['first_name'], $contact['middle_name']);
-
+							$start_arr = explode('-',$contact['upcoming']);
+							$start_unixtime = mktime(0,0,0,$start_arr[1],$start_arr[2],$start_arr[1]);
+							
 							if(!in_array($contact['id'], $contacts))
 							{
 								$contacts[] = $contact['id'];
@@ -643,11 +645,11 @@ try {
 												'id'=>$response['count']++,
 												'name'=>htmlspecialchars(str_replace('{NAME}',$name,$lang['calendar']['birthday_name']), ENT_COMPAT, 'UTF-8'),
 												'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$contact['upcoming']-$contact['birthday']), $lang['calendar']['birthday_desc']), ENT_COMPAT, 'UTF-8'),
-												'time'=>'',												
+												'time'=>date($_SESSION['GO_SESSION']['date_format'], $start_unixtime),												
 												'start_time'=>$contact['upcoming'].' 00:00',
 												'end_time'=>$contact['upcoming'].' 23:59',
 												'background'=>'EBF1E2',
-												'day'=>$lang['common']['full_days'][date('w', $start_time)].' '.date($_SESSION['GO_SESSION']['date_format'], $start_time),
+												'day'=>$lang['common']['full_days'][date('w', $start_unixtime)].' '.date($_SESSION['GO_SESSION']['date_format'], $start_unixtime),
 												'read_only'=>true,
 												'contact_id'=>$contact['id']
 								);
