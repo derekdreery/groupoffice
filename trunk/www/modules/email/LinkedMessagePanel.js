@@ -131,6 +131,8 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 			if(attachment.type=='message')
 			{
 				this.remoteMessage.part_number=attachment.number+".0";
+				// TODO: Replace GO.linkHandlers[9] index with model name of table
+				// em_links, when that is created.
 				GO.linkHandlers[9].call(panel, panel.messageId, panel.remoteMessage);
 			}else
 			{
