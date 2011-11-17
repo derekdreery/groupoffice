@@ -297,6 +297,28 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		
 		return $params;
 	}
+	
+	
+	
+	public function actionImportIcs($params){
+		
+		$file = new GO_Base_Fs_File($params['file']);
+		
+		$data = $file->getContents();
+
+
+		$vcalendar = GO_Base_VObject_Reader::read($data);
+		
+		foreach($vcalendar->vtodo as $vtodo)
+			$task = new GO_Tasks_Model_Task();
+			$task->importVObject($vtodo);
+	}
+	
+	public function actionIcs($params) {
+		$task = GO_Tasks_Model_Task::model()->findByPk($params['id']);
+		header('Content-Type: text/plain');
+		echo $task->toICS();
+	}
 
 }
 	
