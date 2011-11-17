@@ -334,7 +334,7 @@ class mailings extends db
 		
 		$log .= $mailing_id.'.log';
 
-		$cmd = $GLOBALS['GO_CONFIG']->cmd_php.' '.$GLOBALS['GO_MODULES']->modules['mailings']['path'].'sendmailing.php '.$GLOBALS['GO_CONFIG']->get_config_file().' '.$mailing_id.' >> '.$log;
+		$cmd = $GLOBALS['GO_CONFIG']->cmd_php.' '.$GLOBALS['GO_MODULES']->modules['addressbook']['path'].'sendmailing.php '.$GLOBALS['GO_CONFIG']->get_config_file().' '.$mailing_id.' >> '.$log;
 
 		if (!is_windows()) {
 		 $cmd .= ' 2>&1 &';
