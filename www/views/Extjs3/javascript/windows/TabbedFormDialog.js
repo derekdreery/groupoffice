@@ -17,6 +17,12 @@
  
 GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	
+	/**
+	 * Set to false if you don't want to load the form on show when creating a new
+	 * model.
+	 */
+	loadOnNewModel : true,
+	
 	remoteModelId : 0,
 
 	/**
@@ -233,8 +239,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 			
 		this.setRemoteModelId(remoteModelId);
 		
-//		if(this.remoteModelId>0)
-//		{
+		if(this.loadOnNewModel)
+		{
 			this.formPanel.load({
 				params:config.loadParams,
 				url:GO.url(this.formControllerUrl+'/load'),
@@ -264,17 +270,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				},
 				scope: this				
 			});
-//		}else 
-//		{			
-//			this.formPanel.form.setValues(config.values);
-//			
-//			if(this.permissionsPanel)
-//				this.permissionsPanel.setAcl(0);
-//			
-//			this.afterLoad(remoteModelId, config);
-//			
-//			GO.dialog.TabbedFormDialog.superclass.show.call(this);
-//		}
+		} else {
+			GO.dialog.TabbedFormDialog.superclass.show.call(this);
+		}
 		
 		//if the newMenuButton from another passed a linkTypeId then set this value in the select link field
 		if(this.selectLinkField && config && config.link_config)
