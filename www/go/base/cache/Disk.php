@@ -26,6 +26,7 @@ class GO_Base_Cache_Disk implements GO_Base_Cache_Interface{
 	
 	public function __construct(){
 		$this->_file = GO::config()->file_storage_path.'cache/diskCache.txt';
+		$this->_load();
 	}
 	
 	private function _load(){
