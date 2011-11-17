@@ -2,6 +2,10 @@
 Calendar:
 Distinguish declined and cancelled events in grid.
 remove cal_events_declined
+invitation.php
+alarm import
+
+Installer
 
 
 SyncML

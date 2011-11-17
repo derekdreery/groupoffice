@@ -2,6 +2,33 @@
 class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelController{
 	protected $model = 'GO_Base_Model_SearchCacheRecord';
 	
+	protected function beforeStore(&$response, &$params, &$store) {
+		//handle deletes for searching differently
+		
+		if(!empty($params['delete_keys'])){
+			
+			try{
+				$keys = json_decode($params['delete_keys'], true);
+				unset($params['delete_keys']);
+				foreach($keys as $key){
+					$key = explode(':',$key);
+
+					$linkedModel = GO::getModel($key[0])->findByPk($key[1]);				
+					$linkedModel->delete();				
+				}
+				unset($params['delete_keys']);
+				$response['deleteSuccess']=true;
+			}
+			catch(Exception $e){
+				$response['deleteSuccess']=false;
+				$response['deleteFeedback']=$e->getMessage();
+			}
+		}
+	
+		
+		return parent::beforeStore($response, $params, $store);
+	}
+	
 	protected function getStoreParams($params) {
 		$storeParams = GO_Base_Db_FindParams::newInstance();
 		if(isset($params['types'])){
