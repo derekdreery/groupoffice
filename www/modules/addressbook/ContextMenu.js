@@ -20,15 +20,30 @@ GO.addressbook.ContextMenu = function(config){
 		});
 		config.items.push(this.actionCreateMail);
 	}
+	
+	this.actionBatchEdit = new Ext.menu.Item({
+		iconCls: 'btn-email',
+		text: GO.lang.batchEdit,
+		cls: 'x-btn-text-icon',
+		scope:this,
+		handler: function()
+		{
+			this.showBatchEditDialog();
+		}
+	});
+	config.items.push(this.actionBatchEdit);
 
 	GO.addressbook.ContextMenu.superclass.constructor.call(this,config);
 
 }
 
 Ext.extend(GO.addressbook.ContextMenu, Ext.menu.Menu, {
+	model_name : '',
+	selected  : [],
 
-	setSelected : function (selected) {
+	setSelected : function (selected, model_name) {
 		this.selected = selected;
+		this.model_name=model_name;
 	},
 
 	getSelected : function () {
@@ -59,5 +74,16 @@ Ext.extend(GO.addressbook.ContextMenu, Ext.menu.Menu, {
 				}				
 			});
 		}
+	},
+	
+	showBatchEditDialog : function() {
+		var ids = [];
+		var selected = this.getSelected();
+		for (var i = 0; i < selected.length; i++) {
+			if (!GO.util.empty(selected[i].data.id))
+				ids.push(selected[i].data.id);
+		}
+		
+		GO.base.model.showBatchEditModelDialog(this.model_name, ids);
 	}
 });
