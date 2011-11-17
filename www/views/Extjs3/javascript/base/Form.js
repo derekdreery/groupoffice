@@ -1,4 +1,4 @@
-GO.base.form.getFormFieldByType = function(gotype){
+GO.base.form.getFormFieldByType = function(gotype, colName){
 	var editor;
 	switch(gotype){
 				case 'unixtimestamp':
@@ -12,6 +12,11 @@ GO.base.form.getFormFieldByType = function(gotype){
 					
 		case 'boolean':
 			editor = new Ext.form.Checkbox();
+			break;
+			
+		case 'customfield':
+			editor = new GO.customfields.getFormField(GO.customfields.columnMap[colName]);
+			//editor = new Ext.form.Checkbox();
 			break;
 
 		default:

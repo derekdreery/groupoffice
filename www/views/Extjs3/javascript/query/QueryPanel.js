@@ -210,7 +210,7 @@ GO.query.QueryPanel = function(config){
 		},
 		beforeedit:function(e){			
 			if(e.column==this.valueCol)
-				this.setEditor(e.record.get('gotype'));
+				this.setEditor(e.record.get('gotype'), e.record.get('field'));
 			
 			return true;
 		}
@@ -237,11 +237,11 @@ Ext.extend(GO.query.QueryPanel, GO.grid.EditorGridPanel,{
 		return val;
 	},
 	
-	setEditor : function(gotype){
+	setEditor : function(gotype, colName){
 		
 		var col = this.getColumnModel().getColumnAt(this.valueCol);
 		
-		var editor = GO.base.form.getFormFieldByType(gotype);
+		var editor = GO.base.form.getFormFieldByType(gotype, colName);
 		
 		col.setEditor(editor);
 	}

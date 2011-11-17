@@ -24,9 +24,9 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		GO.base.model.BatchEditModelDialog.superclass.show.call(this);	
 	},
 	
-	setEditor : function(gotype){
+	setEditor : function(gotype, colName){
 		var col = this.editGrid.getColumnModel().getColumnById('value');
-		var editor = GO.base.form.getFormFieldByType(gotype);
+		var editor = GO.base.form.getFormFieldByType(gotype, colName);
 		col.setEditor(editor);
 	},
 	
@@ -104,7 +104,7 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			clicksToEdit:1,
 			listeners:{
 				beforeedit:function(e){			
-					this.setEditor(e.record.get('gotype'));
+					this.setEditor(e.record.get('gotype'), e.record.get('name'));
 					return true;
 				},scope:this
 			}
