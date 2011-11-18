@@ -34,3 +34,6 @@ Incomplete objects. Geen select * maar text en blobs niet meenemen.
 serverclient
 overige modules mvc
 Freebusy support in sabredav 1.6
+
+
+Autoload cachen

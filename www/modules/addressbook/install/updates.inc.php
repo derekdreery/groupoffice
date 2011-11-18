@@ -92,3 +92,8 @@ $updates["201111141132"][]="CREATE TABLE IF NOT EXISTS `ab_default_email_templat
 
 $updates["201111141037"][]="ALTER TABLE `ab_contacts` CHANGE `comment` `comment` TEXT NOT NULL DEFAULT '';";
 $updates["201111141037"][]="ALTER TABLE `ab_companies` CHANGE `comment` `comment` TEXT NOT NULL DEFAULT '';";
+
+$updates["201111180945"][]="DROP TABLE IF EXISTS `cf_addressbook_limits`;";
+
+$updates["201111180945"][]="DROP TABLE IF EXISTS `cf_companies_cf_categories`;";
+$updates["201111180945"][]="DROP TABLE IF EXISTS `cf_contacts_cf_categories`;";

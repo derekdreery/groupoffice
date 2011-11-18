@@ -57,3 +57,6 @@ $updates["201109271656"][]="ALTER TABLE `fs_templates` CHANGE `extension` `exten
 $updates["201109271656"][]="ALTER TABLE `fs_templates` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT";
 
 $updates["201110211041"][]="ALTER TABLE `fs_files` CHANGE `extension` `extension` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ";
+
+$updates["201111180948"][]="DROP TABLE IF EXISTS `cf_folder_content_cf_categories`;";
+$updates["201111180948"][]="DROP TABLE IF EXISTS `cf_folder_limits`;";

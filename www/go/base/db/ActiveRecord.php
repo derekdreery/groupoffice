@@ -1571,6 +1571,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * The only exception if for relations. You can't set an attribute named 
 	 * "someRelation" if it exists in the relations.
 	 * 
+	 * The attributes array may also contain custom fields. They will be saved
+	 * automatically.
+	 * 
 	 * @param array $attributes attributes to set on this object
 	 */
 	

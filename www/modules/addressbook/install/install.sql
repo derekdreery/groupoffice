@@ -1,4 +1,3 @@
-
 --
 -- Tabelstructuur voor tabel `ab_addressbooks`
 --
@@ -10,13 +9,54 @@ CREATE TABLE IF NOT EXISTS `ab_addressbooks` (
   `name` varchar(50) DEFAULT NULL,
   `acl_id` int(11) NOT NULL DEFAULT '0',
   `shared_acl` tinyint(1) NOT NULL,
-  `default_iso_address_format` varchar(2) NOT NULL,
   `default_salutation` varchar(255) NOT NULL,
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
-  `users` tinyint(1) NOT NULL,
+  `users` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ab_addresslists`
+--
+
+DROP TABLE IF EXISTS `ab_addresslists`;
+CREATE TABLE IF NOT EXISTS `ab_addresslists` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `acl_id` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(255) DEFAULT NULL,
+  `default_salutation` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ab_addresslist_companies`
+--
+
+DROP TABLE IF EXISTS `ab_addresslist_companies`;
+CREATE TABLE IF NOT EXISTS `ab_addresslist_companies` (
+  `addresslist_id` int(11) NOT NULL,
+  `company_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`addresslist_id`,`company_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ab_addresslist_contacts`
+--
+
+DROP TABLE IF EXISTS `ab_addresslist_contacts`;
+CREATE TABLE IF NOT EXISTS `ab_addresslist_contacts` (
+  `addresslist_id` int(11) NOT NULL,
+  `contact_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`addresslist_id`,`contact_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -48,21 +88,21 @@ CREATE TABLE IF NOT EXISTS `ab_companies` (
   `fax` varchar(30) DEFAULT NULL,
   `email` varchar(75) DEFAULT NULL,
   `homepage` varchar(100) DEFAULT NULL,
-  `comment` text NOT NULL DEFAULT '',
+  `comment` text NOT NULL,
   `bank_no` varchar(50) DEFAULT NULL,
   `vat_no` varchar(30) DEFAULT NULL,
   `iban` varchar(100) DEFAULT NULL,
   `crn` varchar(50) DEFAULT NULL,
   `ctime` int(11) NOT NULL DEFAULT '0',
   `mtime` int(11) NOT NULL DEFAULT '0',
-  `email_allowed` enum('0','1') NOT NULL,
+  `email_allowed` tinyint(1) NOT NULL DEFAULT '1',
   `files_folder_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `addressbook_id` (`addressbook_id`),
   KEY `link_id` (`link_id`),
   KEY `email` (`email`),
   KEY `name` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -99,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `zip` varchar(10) DEFAULT NULL,
   `address` varchar(100) DEFAULT NULL,
   `address_no` varchar(100) DEFAULT NULL,
-  `comment` text NOT NULL DEFAULT '',
+  `comment` text NOT NULL,
   `ctime` int(11) NOT NULL DEFAULT '0',
   `mtime` int(11) NOT NULL DEFAULT '0',
   `salutation` varchar(50) DEFAULT NULL,
@@ -113,105 +153,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   KEY `email3` (`email3`),
   KEY `last_name` (`last_name`),
   KEY `go_user_id` (`go_user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
-
--- --------------------------------------------------------
-
---
--- Tabelstructuur voor tabel `ab_sql`
---
-
-DROP TABLE IF EXISTS `ab_sql`;
-CREATE TABLE IF NOT EXISTS `ab_sql` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `companies` tinyint(1) NOT NULL,
-  `name` varchar(32) DEFAULT NULL,
-  `sql` text,
-  PRIMARY KEY (`id`),
-  KEY `companies` (`companies`),
-  KEY `user_id` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
-
--- --------------------------------------------------------
-
---
--- Tabel structuur voor tabel `ab_sent_mailings`
---
-
-DROP TABLE IF EXISTS `ab_sent_mailings`;
-CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `subject` varchar(100) default NULL,
-  `message_path` varchar(255) default NULL,
-  `ctime` int(11) NOT NULL,
-  `addresslist_id` int(11) NOT NULL,
-  `alias_id` int(11) NOT NULL,
-  `status` tinyint(4) NOT NULL,
-  `total` int(11) default NULL,
-  `sent` int(11) default NULL,
-  `errors` int(11) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
-
--- --------------------------------------------------------
-
---
--- Tabel structuur voor tabel `ab_addresslists`
---
-
-DROP TABLE IF EXISTS `ab_addresslists`;
-CREATE TABLE IF NOT EXISTS `ab_addresslists` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL default '0',
-  `acl_id` int(11) NOT NULL default '0',
-  `name` varchar(255) default NULL,
-  `default_salutation` varchar(50) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
-
-
-DROP TABLE IF EXISTS `ab_addresslist_contacts`;
-CREATE TABLE IF NOT EXISTS `ab_addresslist_contacts` (
-  `group_id` int(11) NOT NULL AUTO_INCREMENT,
-  `contact_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`group_id`,`contact_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `ab_addresslist_companies`;
-CREATE TABLE IF NOT EXISTS `ab_addresslist_companies` (
-  `group_id` int(11) NOT NULL AUTO_INCREMENT,
-  `company_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`group_id`,`company_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
--- --------------------------------------------------------
-
---
--- Tabel structuur voor tabel `ab_email_templates`
---
-
-DROP TABLE IF EXISTS `ab_email_templates`;
-CREATE TABLE IF NOT EXISTS `ab_email_templates` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL default '0',
-  `type` tinyint(4) NOT NULL default '0',
-  `name` varchar(100) default NULL,
-  `acl_id` int(11) NOT NULL default '0',
-  `content` longblob NOT NULL,
-	`extension` VARCHAR( 4 ) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -223,6 +165,201 @@ DROP TABLE IF EXISTS `ab_default_email_templates`;
 CREATE TABLE IF NOT EXISTS `ab_default_email_templates` (
   `user_id` int(11) NOT NULL,
   `template_id` int(11) NOT NULL,
-  PRIMARY KEY  (`user_id`),
+  PRIMARY KEY (`user_id`),
   KEY `template_id` (`template_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ab_email_templates`
+--
+
+DROP TABLE IF EXISTS `ab_email_templates`;
+CREATE TABLE IF NOT EXISTS `ab_email_templates` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `type` tinyint(4) NOT NULL DEFAULT '0',
+  `name` varchar(100) DEFAULT NULL,
+  `acl_id` int(11) NOT NULL DEFAULT '0',
+  `content` longblob NOT NULL,
+  `extension` varchar(4) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ab_sent_mailings`
+--
+
+DROP TABLE IF EXISTS `ab_sent_mailings`;
+CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `subject` varchar(100) DEFAULT NULL,
+  `message_path` varchar(255) DEFAULT NULL,
+  `ctime` int(11) NOT NULL,
+  `addresslist_id` int(11) NOT NULL,
+  `alias_id` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL,
+  `total` int(11) DEFAULT NULL,
+  `sent` int(11) DEFAULT NULL,
+  `errors` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ab_sql`
+--
+
+DROP TABLE IF EXISTS `ab_sql`;
+CREATE TABLE IF NOT EXISTS `ab_sql` (
+  `id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL,
+  `companies` tinyint(1) NOT NULL,
+  `name` varchar(32) DEFAULT NULL,
+  `sql` text,
+  PRIMARY KEY (`id`),
+  KEY `companies` (`companies`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+
+
+--
+-- Tabelstructuur voor tabel `cf_ab_companies`
+--
+
+DROP TABLE IF EXISTS `cf_ab_companies`;
+CREATE TABLE IF NOT EXISTS `cf_ab_companies` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `cf_ab_contacts`
+--
+
+DROP TABLE IF EXISTS `cf_ab_contacts`;
+CREATE TABLE IF NOT EXISTS `cf_ab_contacts` (
+  `model_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`model_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+
+
+--
+-- Tabelstructuur voor tabel `go_links_ab_companies`
+--
+
+DROP TABLE IF EXISTS `go_links_ab_companies`;
+CREATE TABLE IF NOT EXISTS `go_links_ab_companies` (
+  `id` int(11) NOT NULL,
+  `folder_id` int(11) NOT NULL,
+  `model_id` int(11) NOT NULL,
+  `model_type_id` int(11) NOT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `ctime` int(11) NOT NULL,
+  KEY `link_id` (`model_id`,`model_type_id`),
+  KEY `id` (`id`,`folder_id`),
+  KEY `ctime` (`ctime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `go_links_ab_contacts`
+--
+
+DROP TABLE IF EXISTS `go_links_ab_contacts`;
+CREATE TABLE IF NOT EXISTS `go_links_ab_contacts` (
+  `id` int(11) NOT NULL,
+  `folder_id` int(11) NOT NULL,
+  `model_id` int(11) NOT NULL,
+  `model_type_id` int(11) NOT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `ctime` int(11) NOT NULL,
+  KEY `link_id` (`model_id`,`model_type_id`),
+  KEY `id` (`id`,`folder_id`),
+  KEY `ctime` (`ctime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+
+
+
+--
+-- Tabelstructuur voor tabel `ml_default_templates`
+--
+
+DROP TABLE IF EXISTS `ml_default_templates`;
+CREATE TABLE IF NOT EXISTS `ml_default_templates` (
+  `user_id` int(11) NOT NULL,
+  `template_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`),
+  KEY `template_id` (`template_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ml_mailing_users`
+--
+
+DROP TABLE IF EXISTS `ml_mailing_users`;
+CREATE TABLE IF NOT EXISTS `ml_mailing_users` (
+  `group_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`group_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ml_sendmailing_companies`
+--
+
+DROP TABLE IF EXISTS `ml_sendmailing_companies`;
+CREATE TABLE IF NOT EXISTS `ml_sendmailing_companies` (
+  `mailing_id` int(11) NOT NULL DEFAULT '0',
+  `company_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`mailing_id`,`company_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ml_sendmailing_contacts`
+--
+
+DROP TABLE IF EXISTS `ml_sendmailing_contacts`;
+CREATE TABLE IF NOT EXISTS `ml_sendmailing_contacts` (
+  `mailing_id` int(11) NOT NULL DEFAULT '0',
+  `contact_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`mailing_id`,`contact_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `ml_sendmailing_users`
+--
+
+DROP TABLE IF EXISTS `ml_sendmailing_users`;
+CREATE TABLE IF NOT EXISTS `ml_sendmailing_users` (
+  `mailing_id` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`mailing_id`,`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
