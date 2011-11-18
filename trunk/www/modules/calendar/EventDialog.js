@@ -889,7 +889,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			}
 		});
 
-		this.busy = new Ext.form.Checkbox({
+		this.busy = new Ext.ux.form.XCheckbox({
 			boxLabel : GO.calendar.lang.busy,
 			name : 'busy',
 			checked : true,
