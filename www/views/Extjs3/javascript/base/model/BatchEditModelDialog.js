@@ -24,9 +24,13 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		GO.base.model.BatchEditModelDialog.superclass.show.call(this);	
 	},
 	
-	setEditor : function(gotype, colName){
+	setEditor : function(record){
 		var col = this.editGrid.getColumnModel().getColumnById('value');
-		var editor = GO.base.form.getFormFieldByType(gotype, colName);
+		var config ={};
+		if(!GO.util.empty(record.get('regex')))
+			config = {regex: new RegExp(record.get('regex'),record.get('regex_flags'))};
+		
+		var editor = GO.base.form.getFormFieldByType(record.get('gotype'), record.get('name'), config);
 		col.setEditor(editor);
 	},
 	
@@ -51,7 +55,7 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 		});
 	
 		var fields ={
-			fields:['name','label','edit','value','gotype'],
+			fields:['name','label','edit','value','gotype','regex','regex_flags'],
 			columns:[
 			checkColumn,{
 				header:GO.lang['label'],
@@ -104,9 +108,14 @@ GO.base.model.BatchEditModelDialog = Ext.extend(GO.dialog.TabbedFormDialog, {
 			clicksToEdit:1,
 			listeners:{
 				beforeedit:function(e){			
-					this.setEditor(e.record.get('gotype'), e.record.get('name'));
+					this.setEditor(e.record);
 					return true;
-				},scope:this
+				},scope:this,
+				afteredit:function(e){
+					var t = e.record.get('gotype');
+					if(t=='date' || t=='unixtimestamp' || t=='unixdate')
+						e.record.set(e.field,e.value.format(GO.settings.date_format));
+				}
 			}
 		});	
 		
