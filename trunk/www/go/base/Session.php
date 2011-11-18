@@ -171,8 +171,7 @@ class GO_Base_Session extends GO_Base_Observable{
 		if(!$user->checkPassword($password))
 			return false;
 		
-		//remember user id in session
-		$this->values['user_id']=$user->id;
+		$this->setCurrentUser($user->id);
 		
 		if($countLogin){
 			$user->last_login=time();
@@ -191,6 +190,15 @@ class GO_Base_Session extends GO_Base_Observable{
 	public function closeWriting(){
 		
 		session_write_close();
+	}
+	
+	/**
+	 * Sets current user. Use it wisely!
+	 * @param int $user_id
+	 */
+	public function setCurrentUser($user_id) {
+		//remember user id in session
+		$this->values['user_id']=$user_id;
 	}
 
 }
