@@ -32,19 +32,29 @@ GO::init();
 
 
 //check if GO is installed
-$installed=true;
-if(!GO::config()->get_config_file() || empty(GO::config()->db_user)){			
-	$installed=false;
-}else
-{
-	$stmt = GO::getDbConnection()->query("SHOW TABLES");
-	if(!$stmt->rowCount())
-		$installed=false;
-}
-if(!$installed){
-	header('Location: '.GO::config()->host.'install/');				
-	exit();
-}
+//$installed=true;
+//if(!GO::config()->get_config_file() || empty(GO::config()->db_user)){			
+//	$installed=false;
+//}else
+//{
+//	$stmt = GO::getDbConnection()->query("SHOW TABLES");
+//	if(!$stmt->rowCount())
+//		$installed=false;
+//}
+//if(!$installed){
+//	header('Location: '.GO::config()->host.'install/');				
+//	exit();
+//}
+//
+////check for database upgrades
+//$mtime = GO::config()->get_setting('upgrade_mtime');
+//
+//if($mtime!=GO::config()->mtime)
+//{
+//	GO::infolog("Running system update");
+//	header('Location: '.GO::url('maintenance/upgrade'));
+//	exit();
+//}
 
 //run controller.
 $router = new GO_Base_Router();
