@@ -235,12 +235,13 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			if (!$folder) {
 				if (!$autoCreate)
 					return false;
-
+				GO::$ignoreAclPermissions=true;
 				$folder = new GO_Files_Model_Folder();
 				$folder->name = $folderName;
 				$folder->parent_id = $parent_id;
-				if (!$folder->save())
-					throw new GO_Base_Exception_Save($relpath);
+				$folder->save();
+				GO::$ignoreAclPermissions=false;
+					
 			}
 
 			$parent_id = $folder->id;
@@ -254,18 +255,19 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * @param GO_Base_Model_User $user 
 	 */
 	public function findHomeFolder($user){
+		
 		$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
+		
 		if(empty($folder->acl_id)){
 				$folder->setNewAcl($user->id);
-		}
-		
+		}		
 		
 		$folder->user_id=$user->id;
 		$folder->visible=1;
 		$folder->readonly=1;
-		
-		if(!$folder->save())
-			die("Save error");
+		GO::$ignoreAclPermissions=true;
+		$folder->save();			
+		GO::$ignoreAclPermissions=false;
 		
 		return $folder;
 	}

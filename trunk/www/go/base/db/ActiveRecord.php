@@ -1748,11 +1748,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return false;
 		}
 		
-		if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
-			$fc = new GO_Files_Controller_Folder();
-			$this->files_folder_id = $fc->checkModelFolder($this);
-		}	
-		
 		//Don't do anything if nothing has been modified.
 		if(!$this->isModified() && (!$this->customfieldsRecord || !$this->customfieldsRecord->isModified()))
 			return true;
@@ -1792,6 +1787,12 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 				$this->setNewAcl(!empty($this->user_id) ? $this->user_id : 1);
 			}				
+			
+			if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
+				//ACL must be generated here.
+				$fc = new GO_Files_Controller_Folder();
+				$this->files_folder_id = $fc->checkModelFolder($this);
+			}
 
 			if(!$this->beforeSave()){
 				GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
@@ -1814,6 +1815,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}else
 		{
 			$wasNew=false;
+			
+			
+			if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
+				//ACL must be generated here.
+				$fc = new GO_Files_Controller_Folder();
+				$this->files_folder_id = $fc->checkModelFolder($this);
+			}
 
 			if(!$this->beforeSave()){
 				GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
@@ -1832,8 +1840,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 			$this->customfieldsRecord->save();
 		}
-
-
+		
 
 		if(!$this->afterSave($wasNew)){
 			GO::debug("WARNING: GO_Base_Db_Active::afterSave returned false or no value");
@@ -2609,7 +2616,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Generally this is called by r=maintenance/checkDabase
 	 */
 	public function checkDatabase(){		
-		$this->save();		
+		//$this->save();		
 
 		if($this->aclField() && !$this->joinAclField){
 
@@ -2625,6 +2632,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			}
 		}
 		
+		if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
+			//ACL must be generated here.
+			$fc = new GO_Files_Controller_Folder();
+			$this->files_folder_id = $fc->checkModelFolder($this);
+		}
+		
+		$this->save();		
 	}
 	
 	

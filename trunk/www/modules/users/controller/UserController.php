@@ -19,8 +19,8 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 
 		//Join the contact that belongs to the user in the form response.
-		if (GO::modules()->addressbook) {
-			$contact = $model->contact();
+		if(!empty($model->id)){
+			$contact = $model->contact;
 			if ($contact) {
 				$attr = $contact->getAttributes();
 
@@ -65,22 +65,14 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 
 
-
 		//Save the contact fields to the contact.
-		if (GO::modules()->addressbook) {
-			$contact = $model->contact();
-			if (!$contact) {
-				$contact = new GO_Addressbook_Model_Contact();
-				$addressbook = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', 1);
-				$contact->go_user_id = $model->id;
-				$contact->addressbook_id = $addressbook->id;
-			}
-
+		
+		$contact = $model->createContact();
+		if($contact){
 			unset($params['addressbook_id'], $params['id']);
 			$contact->setAttributes($params);
 			$contact->save();
 		}
-
 
 
 		if (isset($_POST['modules'])) {
@@ -181,7 +173,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			$ab->save();
 		}
 
-		$pdo = GO::getDbConnection();
+		//$pdo = GO::getDbConnection();
 
 		$stmt = GO_Base_Model_User::model()->find();
 		while ($user = $stmt->fetch()) {

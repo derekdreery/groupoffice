@@ -50,7 +50,10 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	}
 
 	/**
-	 * Creates a default model for the user.
+	 * Creates a default model for the user. 
+	 * 
+	 * This function is automaticall called in afterSave of the user model and
+	 * after a module is installed.
 	 * 
 	 * @param GO_Base_Model_User $user
 	 * @return GO_Base_Model_AbstractUserDefaultModel 

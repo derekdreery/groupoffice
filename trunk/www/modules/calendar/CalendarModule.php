@@ -11,6 +11,10 @@ class GO_Calendar_CalendarModule extends GO_Base_Module{
 		return 'mschering@intermesh.nl';
 	}
 	
+	public function autoInstall() {
+		return true;
+	}
+	
 	/**
 	 * 
 	 * When a user is created, updated or logs in this function will be called.

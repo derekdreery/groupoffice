@@ -73,5 +73,22 @@
 		
 		return parent::beforeDelete();
 	}
+	
+	/**
+	 * Get the addressbook for the user profiles. If it doesn't exist it will be
+	 * created.
+	 * 
+	 * @return GO_Addressbook_Model_Addressbook 
+	 */
+	public function getUsersAddressbook(){
+		$ab = GO_Addressbook_Model_Addressbook::model()->findSingleByAttribute('users', '1'); //GO::t('users','base'));
+		if (!$ab) {
+			$ab = new GO_Addressbook_Model_Addressbook();
+			$ab->name = GO::t('users');
+			$ab->users = true;
+			$ab->save();
+		}
+		return $ab;
+	}
 
 }

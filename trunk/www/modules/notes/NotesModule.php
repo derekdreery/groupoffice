@@ -8,6 +8,10 @@ class GO_Notes_NotesModule extends GO_Base_Module{
 //		GO_Base_Model_User::model()->addListener('delete', 'GO_Notes_NotesModule', 'deleteUser');		
 	}	
 	
+	public function autoInstall() {
+		return true;
+	}
+	
 	public function author() {
 		return 'Merijn Schering';
 	}

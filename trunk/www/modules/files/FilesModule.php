@@ -29,7 +29,7 @@ class GO_Files_FilesModule extends GO_Base_Module{
 			$folder = GO_Files_Model_Folder::model()->findHomeFolder($user);
 			$folder->syncFilesystem();
 			
-			$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
+			//$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
 			if(!$folder->acl){
 				$folder->setNewAcl($user->id);
 				$folder->user_id=$user->id;
@@ -53,6 +53,10 @@ class GO_Files_FilesModule extends GO_Base_Module{
 		$folder = GO_Files_Model_Folder::model()->findByPath('users/'.$user->username, true);
 		if($folder)
 			$folder->delete();
+	}
+	
+	public function autoInstall() {
+		return true;
 	}
 	
 }

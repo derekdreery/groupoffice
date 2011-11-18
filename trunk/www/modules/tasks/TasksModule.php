@@ -5,6 +5,10 @@ class GO_Tasks_TasksModule extends GO_Base_Module{
 		//todo create default tasklist on user create and delete. See notes.
 	}
 
+	public function autoInstall() {
+		return true;
+	}
+	
 	public static function submitSettings(&$settingsController, &$params, &$response) {
 		
 		$settings = GO_Tasks_Model_Settings::model()->findByPk($params['id']);

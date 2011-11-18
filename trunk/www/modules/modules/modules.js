@@ -240,7 +240,7 @@ Ext.extend(GO.modules.MainPanel, GO.grid.GridPanel, {
 			GO.request({
 				url : 'modules/module/install',		
 				params:{
-					modules:keys
+					modules:Ext.encode(keys)
 				},
 				success: function(options, success, response) {
 					grid.container.unmask();

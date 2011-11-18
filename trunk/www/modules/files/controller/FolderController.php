@@ -503,10 +503,21 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	private function _createNewModelFolder($model) {
 
 		$f = new GO_Base_Fs_Folder(GO::config()->file_storage_path . $model->buildFilesPath());
-		$fullPath = $f->appendNumberToNameIfExists();
-		$relPath = str_replace(GO::config()->file_storage_path, '', $fullPath);
+		//$fullPath = $f->appendNumberToNameIfExists();
+		$relPath = $f->stripFileStoragePath();
 
-		$folder = GO_Files_Model_Folder::model()->findByPath($relPath, true);
+		$parentFolder = GO_Files_Model_Folder::model()->findByPath(dirname($relPath), true);
+		$name = $f->name();
+		$i=1;
+		while($parentFolder->hasFolder($name)){
+			$name = $f->name().' ('.$i.')';
+			$i++;
+		}
+		
+		$folder = new GO_Files_Model_Folder();
+		$folder->name=$name;
+		$folder->parent_id=$parentFolder->id;
+		
 		if (!$folder->acl_id && isset($model->acl_id)) {
 			$folder->acl_id = $model->acl_id;
 		}
