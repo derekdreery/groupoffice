@@ -127,6 +127,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 //				this.formPanel.bodyStyle=this._panels[0].bodyStyle;
 //			
 //			delete this._panels[0];
+
+			delete this._panels[0].title;
+
 			this.formPanel.add(this._panels[0]);
 		}
 		
