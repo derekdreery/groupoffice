@@ -161,7 +161,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 //		
 //		var_dump($u);
 //		exit();
-
+		
 		$currentCoreVersion = GO::config()->get_setting('version');
 		if (!$currentCoreVersion)
 			$currentCoreVersion = 0;

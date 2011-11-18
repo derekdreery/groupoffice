@@ -1,7 +1,6 @@
-
 DROP TABLE IF EXISTS `bm_bookmarks`;
 CREATE TABLE IF NOT EXISTS `bm_bookmarks` (
-  `id` INT( 11 ) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `category_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(64) NOT NULL,
@@ -15,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `bm_bookmarks` (
   KEY `user_id` (`user_id`),
   KEY `category_id` (`category_id`),
   FULLTEXT KEY `content` (`content`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -30,4 +29,6 @@ CREATE TABLE IF NOT EXISTS `bm_categories` (
   `acl_id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------

@@ -1,3 +1,7 @@
+--
+-- Tabelstructuur voor tabel `co_comments`
+--
+
 DROP TABLE IF EXISTS `co_comments`;
 CREATE TABLE IF NOT EXISTS `co_comments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -9,4 +13,6 @@ CREATE TABLE IF NOT EXISTS `co_comments` (
   `comments` text,
   PRIMARY KEY (`id`),
   KEY `link_id` (`model_id`,`model_type_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------

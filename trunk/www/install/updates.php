@@ -126,3 +126,5 @@ $updates["201111011221"][]="ALTER TABLE `go_reminders` CHANGE `text` `text` TEXT
 
 $updates["201111112300"][]="ALTER TABLE `go_users` CHANGE `files_folder_id` `files_folder_id` INT( 11 ) NOT NULL DEFAULT '0'";
 $updates["201111112300"][]="ALTER TABLE `go_users` CHANGE `password` `password` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
+
+$updates["201111112300"][]="DROP TABLE IF EXISTS `go_iso_address_format`;";
