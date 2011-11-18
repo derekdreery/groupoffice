@@ -16,8 +16,8 @@ function printHead()
 	'</head>'.
 	'<body style="font-family: Arial,Helvetica;background-color:#f1f1f1">';
 	echo '<form method="post">';
-	echo '<div style="width:600px;padding:20px;margin:10px auto;background-color:white">';
-	echo '<img src="logo.gif" border="0" align="middle" style="margin:10px" />';
+	echo '<div style="width:800px;padding:20px;margin:10px auto;background-color:white">';
+	echo '<img src="logo.gif" border="0" align="middle" style="margin:0px;margin-bottom:20px;" />';
 	
 }
 

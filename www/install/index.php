@@ -8,7 +8,11 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 printHead();
 
 ?>
-<h1>System test</h1>
+<h1>Thank you for installing <?php echo GO::config()->product_name; ?>!</h1>
+<p>This page checks if your system meets the requirements to run <?php echo GO::config()->product_name; ?>.</p>
+<p>If this page prints errors or warnings, please visit this page for more information: <a target="_blank" href="http://www.group-office.com/wiki/Installation">http://www.group-office.com/wiki/Installation</a></p>
+
+<h2>System test</h2>
 <?php
 
 require('gotest.php');

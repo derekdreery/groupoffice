@@ -37,7 +37,7 @@ if(!$configFile){
 }else
 {
 	try{
-		if($_SERVER['REQUEST_METHOD']=='POST'){
+		if(!empty($_POST['submitted'])){
 
 				$f = new GO_Base_Fs_Folder($_POST['file_storage_path']);
 				if(!$f->exists())
@@ -65,6 +65,7 @@ if(!$configFile){
 	if(isset($error)) errorMessage($error);
 	
 	?>
+	<input type="hidden" name="submitted" value="1" />
 	<p>
 	<?php echo GO::config()->product_name; ?> needs a place to store protected data. This folder should not be accessible through the webserver. Create a writable path for this purpose now and enter it in the box below.<br />
 	The path should be have 0777 permissions or should be owned by the webserver user. You probably need to be root to do the last.
