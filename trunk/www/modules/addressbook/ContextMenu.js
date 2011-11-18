@@ -22,7 +22,7 @@ GO.addressbook.ContextMenu = function(config){
 	}
 	
 	this.actionBatchEdit = new Ext.menu.Item({
-		iconCls: 'btn-email',
+		iconCls: 'btn-settings',
 		text: GO.lang.batchEdit,
 		cls: 'x-btn-text-icon',
 		scope:this,
