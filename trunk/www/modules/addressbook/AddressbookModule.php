@@ -26,5 +26,8 @@ class GO_Addressbook_AddressbookModule extends GO_Base_Module{
 		GO_Addressbook_Model_Addresslist::model()->deleteByAttribute('user_id', $user->id);
 		GO_Addressbook_Model_Template::model()->deleteByAttribute('user_id', $user->id);		
 	}
-
+	
+	public function autoInstall() {
+		return true;
+	}
 }

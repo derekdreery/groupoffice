@@ -16,7 +16,7 @@
 require('../../GO.php');
 
 //session writing doesn't make any sense because
-GO::session()->closeWriting();
+define("GO_NO_SESSION", true);
 
 require_once GO::config()->root_path.'go/vendor/SabreDAV/lib/Sabre/autoload.php';
 

@@ -99,6 +99,23 @@ class GO_Base_Module extends GO_Base_Observable {
 	}
 	
 	/**
+	 *
+	 * @return boolean 
+	 */
+	public function hasInterface(){
+		return true;
+	}
+	
+	/**
+	 * Automatically install this module on installation.
+	 * 
+	 * @return boolean 
+	 */
+	public function autoInstall(){
+		return false;
+	}
+	
+	/**
 	 * Return the number of update queries.
 	 * 
 	 * @return integer 

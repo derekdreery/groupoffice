@@ -128,3 +128,6 @@ $updates["201111112300"][]="ALTER TABLE `go_users` CHANGE `files_folder_id` `fil
 $updates["201111112300"][]="ALTER TABLE `go_users` CHANGE `password` `password` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ";
 
 $updates["201111112300"][]="DROP TABLE IF EXISTS `go_iso_address_format`;";
+
+$updates["201111112300"][]="ALTER TABLE `go_groups` CHANGE `name` `name` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL";
+$updates["201111112300"][]="ALTER TABLE `go_groups` CHANGE `admin_only` `admin_only` TINYINT( 1 ) NOT NULL DEFAULT '0'";

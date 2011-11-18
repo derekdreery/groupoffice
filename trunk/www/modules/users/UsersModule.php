@@ -7,4 +7,7 @@ class GO_Users_UsersModule extends GO_Base_Module{
 	public function authorEmail() {
 		return 'mschering@intermesh.nl';
 	}
+	public function autoInstall() {
+		return true;
+	}
 }

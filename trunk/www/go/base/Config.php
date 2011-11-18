@@ -889,11 +889,13 @@ class GO_Base_Config {
 
 		if(empty($this->db_user)) {
 		//Detect some default values for installation if root_path is not set yet
-			$this->host = dirname(dirname($_SERVER['PHP_SELF']));
+			$this->host = dirname($_SERVER['PHP_SELF']);
+			if(basename($this->host)=='install')
+				$this->host = dirname($this->host);
 			
-			if(substr($this->host,-1) != '/') {
+			//if(substr($this->host,-1) != '/') {
 				$this->host .= '/';
-			}
+			//}
 
 			$this->db_host='localhost';
 
@@ -1273,5 +1275,39 @@ class GO_Base_Config {
 
 
 		return $response;
+	}
+	
+	/**
+	 * Save the current configuraton to the config.php file.
+	 * 
+	 * @return boolean 
+	 */
+	public function save() {	
+	
+		$values = get_object_vars(GO::config());
+		$config=array();
+		foreach($values as $key=>$value)
+		{
+			if($key == 'version')
+			break;
+
+			if(!is_object($value))
+			{
+				$config[$key]=$value;
+			}
+		}
+		
+		$configData = "<?php\n";
+		foreach ($config as $key => $value) {
+			if ($value === true) {
+				$configData .= '$config["' . $key . '"]=true;' . "\n";
+			} elseif ($value === false) {
+				$configData .= '$config["'. $key . '"]=false;' . "\n";
+			} else {
+				$configData .= '$config["' . $key . '"]="' . $value . '";' . "\n";
+			}
+		}
+		
+		return file_put_contents(GO::config()->get_config_file(), $configData);
 	}
 }
