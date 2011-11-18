@@ -97,3 +97,6 @@ $updates["201111180945"][]="DROP TABLE IF EXISTS `cf_addressbook_limits`;";
 
 $updates["201111180945"][]="DROP TABLE IF EXISTS `cf_companies_cf_categories`;";
 $updates["201111180945"][]="DROP TABLE IF EXISTS `cf_contacts_cf_categories`;";
+
+$updates["201111180945"][]="ALTER TABLE `ab_contacts` CHANGE `comment` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";
+$updates["201111180945"][]="ALTER TABLE `ab_companies` CHANGE `comment` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";

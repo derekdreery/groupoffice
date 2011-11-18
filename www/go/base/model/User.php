@@ -355,5 +355,32 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		
 		return $attr;
 	}
+	
+	/**
+	 * Get the contact model of this user. All the user profiles are stored in the
+	 * addressbook.
+	 * 
+	 * @return GO_Addressbook_Model_Contact 
+	 */
+	public function createContact(){
+		if (GO::modules()->isInstalled("addressbook")) {
+			$contact = $this->contact();
+			if (!$contact) {
+				$contact = new GO_Addressbook_Model_Contact();
+				$addressbook = GO_Addressbook_Model_Addressbook::model()->getUsersAddressbook();
+				$contact->go_user_id = $this->id;
+				$contact->addressbook_id = $addressbook->id;
+				$contact->first_name = $this->first_name;
+				$contact->middle_name = $this->middle_name;
+				$contact->last_name = $this->last_name;
+				$contact->email = $this->email;
+				$contact->save();
+			}			
+			return $contact;
+		}else
+		{
+			return false;
+		}
+	}
 }
 

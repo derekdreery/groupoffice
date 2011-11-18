@@ -54,13 +54,22 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 	
 	
 	public function actionInstall($params){
-		$modules = explode(',', $params['modules']);
+		$modules = json_decode($params['modules'], true);
 		foreach($modules as $moduleId)
 		{
 			$module = new GO_Base_Model_Module();
 			$module->id=$moduleId;
 			if(!$module->save())
 				throw new GO_Base_Exception_Save();			
+		}
+		
+		$defaultModels = GO_Base_Model_AbstractUserDefaultModel::getAllUserDefaultModels();
+		
+		$stmt = GO_Base_Model_User::model()->find(array('ignoreAcl'=>true));		
+		while($user = $stmt->fetch()){
+			foreach($defaultModels as $model){
+				$model->getDefault($user);
+			}
 		}
 		
 		return array('success'=>true);

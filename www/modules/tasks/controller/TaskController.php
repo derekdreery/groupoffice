@@ -142,7 +142,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	}
 	
 	protected function getStoreMultiSelectDefault() {
-		$settings = GO_Tasks_Model_Settings::model()->findByPk(GO::user()->id);
+		$settings = GO_Tasks_Model_Settings::model()->getDefault(GO::user());
 		
 		
 		return $settings->default_tasklist_id;	
