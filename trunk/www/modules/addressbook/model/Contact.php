@@ -49,6 +49,15 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		return true;
 	}
 	
+	protected function init() {
+		
+		$this->columns['email']['regex']=GO_Base_Util_String::get_email_validation_regex();
+		$this->columns['email2']['regex']=GO_Base_Util_String::get_email_validation_regex();
+		$this->columns['email3']['regex']=GO_Base_Util_String::get_email_validation_regex();
+		
+		return parent::init();
+	}
+	
 	public function getFindSearchQueryParamFields($prefixTable = 't', $withCustomFields = true) {
 		$fields = parent::getFindSearchQueryParamFields($prefixTable, $withCustomFields);
 		$fields[]="CONCAT(t.first_name,t.middle_name,t.last_name)";
