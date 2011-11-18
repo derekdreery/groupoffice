@@ -36,9 +36,9 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 		if(empty($params['data']) || empty($params['keys']) || empty($params['model_name']))
 			return false;
 		
-		$data = json_decode($params['data']);
+		$data = json_decode($params['data'], true);
 		
-		$keys = json_decode($params['keys']);
+		$keys = json_decode($params['keys'], true);
 		
 		if(is_array($keys)) {
 			foreach($keys as $key) {
@@ -60,12 +60,17 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 	 * @return Boolean 
 	 */
 	private function _updateModel($model, $data) {
+		
+		$changeAttributes = array();
+		
 		foreach($data as $attr=>$value){
-			if($value->edit){
-				$attribute = $value->name;
-				$model->$attribute = $value->value;
+			if($value['edit']){
+				$changeAttributes[$value['name']] = $value['value'];
 			}
 		}
+		
+		$model->setAttributes($changeAttributes);
+
 		return $model->save();
 	}
 	
@@ -96,6 +101,18 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 				$row['value']='';
 				$row['edit']='';
 				$row['gotype']=$value['gotype'];
+				if(!empty($value['regex'])){
+					$regexDelimiter = substr($value['regex'], 0,1);
+					$parts = explode($regexDelimiter, $value['regex']);
+					$row['regex']=$parts[1];
+					$row['regex_flags']=$parts[2];					
+				}else
+				{
+					$row['regex_flags']='';
+					$row['regex']='';
+				}
+				
+				
 
 				$rows[] = $row;
 			}
