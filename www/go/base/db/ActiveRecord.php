@@ -232,6 +232,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * 'validator'=><a function to call to validate the value>,
 	 * 'gotype'=>'number|text|unixtimestamp', //Autodetected from db as far as possible. See loadColumns()
 	 * 'decimals'=>2//only for gotype=number)
+	 * 'regex'=>'A preg_match expression for validation'
 	 * 
 	 * The validator looks like this:
 	 * 
