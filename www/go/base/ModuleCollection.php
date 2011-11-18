@@ -75,4 +75,14 @@ class GO_Base_ModuleCollection extends GO_Base_Model_ModelCollection{
 			}
 		}
 	}
+	
+	/**
+	 * Check if a module is installed.
+	 * 
+	 * @param string $moduleId
+	 * @return GO_Base_Model_Module 
+	 */
+	public function isInstalled($moduleId){
+		return $this->model->findByPk($moduleId);
+	}
 }

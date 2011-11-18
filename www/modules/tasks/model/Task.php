@@ -171,7 +171,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function defaultAttributes() {
-		$settings = GO_Tasks_Model_Settings::model()->findByPk(GO::user()->id);
+		$settings = GO_Tasks_Model_Settings::model()->getDefault(GO::user());
 		
 		$defaults = array(
 				//'description'=>'DIT IS DE BESCHRIJVING DIE STANDAARD WORDT INGEVULD',
@@ -187,7 +187,8 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function getDefaultReminder($startTime){
-		$settings = GO_Tasks_Model_Settings::model()->findByPk(GO::user()->id);
+		$settings = GO_Tasks_Model_Settings::model()->getDefault(GO::user());
+		
 		$tmp = GO_Base_Util_Date::date_add($startTime, -$settings->reminder_days);
 		$dateString = date('Y-m-d', $tmp).' '.$settings->reminder_time;
 		$time = strtotime($dateString);

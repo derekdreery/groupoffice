@@ -30,7 +30,13 @@ abstract class GO_Base_Fs_Base{
 		if(!self::checkPathInput($path))
 			throw new Exception("The supplied path '$path' was invalid");
 		
-		$this->path = dirname($path) . '/' . self::utf8Basename($path);
+		$parent = dirname($path);
+		if($parent != '/')
+			$this->path=$parent;
+		else
+			$this->path='';
+		
+		$this->path .= '/'.self::utf8Basename($path);
 	}
 	
 	

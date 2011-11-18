@@ -12,7 +12,7 @@
  * @author Merijn Schering <mschering@intermesh.nl>
  */
 
-$product_name = isset($GLOBALS['GO_CONFIG']->product_name) ? $GLOBALS['GO_CONFIG']->product_name : 'Group-Office';
+$product_name = class_exists('GO') ? GO::config()->product_name : 'Group-Office';
 
 /**
 * Format a size to a human readable format.
@@ -53,7 +53,7 @@ if(!function_exists('format_size'))
 
 function test_system(){
 
-	global $GO_CONFIG, $product_name;
+	global $product_name;
 	
 	$tests=array();
 
@@ -192,10 +192,10 @@ function test_system(){
 
 	$tests[]=$test;
 	$test['name']='libwbxml';
-	if(isset($GO_CONFIG))
+	if(class_exists('GO'))
 	{
-		$wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : $GLOBALS['GO_CONFIG']->cmd_wbxml2xml;
-		$xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : $GLOBALS['GO_CONFIG']->cmd_xml2wbxml;
+		$wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : GO::config()->cmd_wbxml2xml;
+		$xml2wbxml = whereis('xml2wbxml') ? whereis('xml2wbxml') : GO::config()->cmd_xml2wbxml;
 	}else
 	{
 		$wbxml2xml = whereis('wbxml2xml') ? whereis('wbxml2xml') : '/usr/bin/wbxml2xml';
@@ -219,9 +219,9 @@ function test_system(){
 
 	$tests[]=$test;
 	$test['name']='TAR Compression';
-	if(isset($GO_CONFIG))
+	if(class_exists('GO'))
 	{
-		$tar = whereis('tar') ? whereis('tar') : $GLOBALS['GO_CONFIG']->cmd_tar;
+		$tar = whereis('tar') ? whereis('tar') : GO::config()->cmd_tar;
 	}else
 	{
 		$tar = whereis('tar') ? whereis('tar') : '/bin/tar';
@@ -233,9 +233,9 @@ function test_system(){
 
 	$tests[]=$test;
 	$test['name']='ZIP Compression';
-	if(isset($GO_CONFIG))
+	if(class_exists('GO'))
 	{
-		$zip = whereis('zip') ? whereis('zip') : $GLOBALS['GO_CONFIG']->cmd_zip;
+		$zip = whereis('zip') ? whereis('zip') : GO::config()->cmd_zip;
 	}else
 	{
 		$zip = whereis('zip') ? whereis('zip') : '/usr/bin/zip';
@@ -246,9 +246,9 @@ function test_system(){
 
 	$tests[]=$test;
 	$test['name']='TNEF';
-	if(isset($GO_CONFIG))
+	if(class_exists('GO'))
 	{
-		$tnef = whereis('tnef') ? whereis('tnef') : $GLOBALS['GO_CONFIG']->cmd_tnef;
+		$tnef = whereis('tnef') ? whereis('tnef') : GO::config()->cmd_tnef;
 	}else
 	{
 		$tnef = whereis('tnef') ? whereis('tnef') : '/usr/bin/tnef';
@@ -265,10 +265,10 @@ function test_system(){
 
 	$tests[]=$test;
 
-	if(is_dir('../modules/professional') && isset($GO_CONFIG))
+	if(is_dir('../modules/professional') && class_exists('GO'))
 	{
 		$test['name']='Professional license';
-		$check_url = $GLOBALS['GO_CONFIG']->full_url.'modules/professional/checklicense.php';
+		$check_url = GO::config()->full_url.'modules/professional/checklicense.php';
 		$content = @file_get_contents($check_url);
 		if(empty($content)){
 			$test['feedback']='Warning: Could not determine if your license file works properly. Probably becuase URL file-access is disabled in your server configuration. This is not really a problem but you should check it manually now. <a target="_blank" href="'.$check_url.'">Click here to check it</a>. The output from the server was: '.$content;
@@ -309,10 +309,10 @@ function test_system(){
 
 	
 	
-	if(!empty($GLOBALS['GO_CONFIG']->title))
+	if(!empty(GO::config()->title))
 	{		
 		$test['name']='Protected files path';
-		$test['pass']=is_writable($GLOBALS['GO_CONFIG']->file_storage_path);
+		$test['pass']=is_writable(GO::config()->file_storage_path);
 		$test['feedback']='Fatal error: the file_storage_path setting in config.php is not writable. You must correct this or '.$product_name.' will not run.';
 		$test['fatal']=false;
 		$tests[]=$test;
@@ -635,7 +635,7 @@ function return_bytes($val) {
 }
 
 //check if we are included
-if(!isset($GO_CONFIG))
+if(!class_exists('GO'))
 {
 	echo '<h1 style="font-family: Arial, Helvetica;font-size: 18px;">'.$product_name.' test script</h1>';
 	output_system_test();

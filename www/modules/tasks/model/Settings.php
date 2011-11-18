@@ -23,7 +23,7 @@
  * @property int $default_tasklist_id
  */
 
-class GO_Tasks_Model_Settings extends GO_Base_Db_ActiveRecord {
+class GO_Tasks_Model_Settings extends GO_Base_Model_AbstractUserDefaultModel {
 
 	/**
 	 * Returns a static model of itself

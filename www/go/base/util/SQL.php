@@ -62,5 +62,13 @@ class GO_Base_Util_SQL {
 		}
 		return $queries;
 	}
+	
+	public static function executeSqlFile($file){
+		$queries = self::getSqlQueries($file);
+		foreach($queries as $query)
+			GO::getDbConnection ()->query($query);
+		
+		return true;
+	}
 
 }

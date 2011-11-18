@@ -105,12 +105,12 @@ CREATE TABLE IF NOT EXISTS `go_db_sequence` (
 DROP TABLE IF EXISTS `go_groups`;
 CREATE TABLE IF NOT EXISTS `go_groups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL,
+  `name` varchar(50) NOT NULL,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `acl_id` int(11) NOT NULL,
-  `admin_only` tinyint(1) NOT NULL,
+  `admin_only` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 

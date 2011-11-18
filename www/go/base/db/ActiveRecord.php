@@ -1748,7 +1748,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			return false;
 		}
 		
-		if ($this->hasFiles()) {
+		if ($this->hasFiles() && GO::modules()->isInstalled('files')) {
 			$fc = new GO_Files_Controller_Folder();
 			$this->files_folder_id = $fc->checkModelFolder($this);
 		}	
@@ -2234,7 +2234,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		}	
 		
 		
-		if(isset(GO::modules()->files) && $this->hasFiles() && $this->files_folder_id > 0){
+		if($this->hasFiles() && $this->files_folder_id > 0 && GO::modules()->isInstalled('files')){
 			$folder = GO_Files_Model_Folder::model()->findByPk($this->files_folder_id);
 			$folder->delete();
 		}
@@ -2752,7 +2752,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$sql = "LOCK TABLES `".$this->tableName()."` AS t $mode";
 		$this->getDbConnection()->query($sql);
 		
-		if($this->hasFiles()){
+		if($this->hasFiles() && GO::modules()->isInstalled('files')){
 			$sql = "LOCK TABLES `fs_folders` AS t $mode";
 			$this->getDbConnection()->query($sql);
 		}
