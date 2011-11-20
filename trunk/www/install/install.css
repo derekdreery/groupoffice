@@ -125,6 +125,15 @@ td.label{
 	background-color:#f1f1f1;
 }
 
+label .error{
+	border:0;
+	padding:0;
+	background-color:transparent;
+	color: red;
+	display: inline;
+	margin-left:10px;
+}
+
 .cmd{
 	color:#003399;
 	background-color:#f1f1f1;
