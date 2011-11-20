@@ -186,6 +186,10 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			$everyoneGroup = GO_Base_Model_Group::model()->findByPk(GO::config()->group_everyone);		
 			$everyoneGroup->addUser($this->id);			
 			
+			$internalGroup = GO_Base_Model_Group::model()->findByPk(GO::config()->group_internal);
+			if($internalgroup)
+				$internalGroup->addUser($this->id);
+			
 			$this->acl->user_id=$this->id;
 			$this->acl->save();
 			
