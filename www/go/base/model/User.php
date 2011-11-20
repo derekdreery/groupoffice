@@ -155,37 +155,6 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 			if (($this->isNew && $existing) || $existing && $existing->id != $this->id )
 				throw new Exception(GO::t('error_username_exists', 'users'));
 			
-			if (!isset($this->language))
-				$this->language = GO::config()->language;
-
-			if (!isset($this->currency))
-				$this->currency = GO::config()->default_currency;
-
-			if (!isset($this->decimal_separator))
-				$this->decimal_separator = GO::config()->default_decimal_separator;
-
-			if (!isset($this->thousands_separator))
-				$this->thousands_separator = GO::config()->default_thousands_separator;
-
-			if (!isset($this->time_format))
-				$this->time_format = GO::config()->default_time_format;
-
-			if (!isset($this->date_format))
-				$this->date_format = GO::config()->default_date_format;
-
-			if (!isset($this->date_separator))
-				$this->date_separator = GO::config()->default_date_separator;
-
-			if (!isset($this->first_weekday))
-				$this->first_weekday = GO::config()->default_first_weekday;
-
-			if (!isset($this->timezone))
-				$this->timezone = GO::config()->default_timezone;
-
-			if (!isset($this->sort_name))
-				$this->sort_name = GO::config()->default_sort_name;
-
-
 			if (empty($this->password)) {
 				$this->password = GO_Base_Util_String::random_password();
 				$this->generatedRandomPassword = true;
