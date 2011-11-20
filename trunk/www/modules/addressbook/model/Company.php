@@ -50,6 +50,13 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		
 		return "GO_Addressbook_Model_CompanyCustomFieldsRecord";
 	}
+	
+	public function defaultAttributes() {
+		return array(
+				'country'=>GO::config()->default_country,
+				'post_country'=>GO::config()->default_country
+		);
+	}
 
 	public function relations(){
 		return array(

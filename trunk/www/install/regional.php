@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			GO::config()->$key=$value;
 		
 		GO::config()->save();
-		redirect("database.php");
+		redirect("smtp.php");
 	}
 }
 

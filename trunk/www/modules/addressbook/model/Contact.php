@@ -49,6 +49,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		return true;
 	}
 	
+	public function defaultAttributes() {
+		return array(
+				'country'=>GO::config()->default_country
+		);
+	}
+	
 	protected function init() {
 		
 		$this->columns['email']['regex']=GO_Base_Util_String::get_email_validation_regex();
