@@ -235,13 +235,11 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 			if (!$folder) {
 				if (!$autoCreate)
 					return false;
-				GO::$ignoreAclPermissions=true;
+
 				$folder = new GO_Files_Model_Folder();
 				$folder->name = $folderName;
 				$folder->parent_id = $parent_id;
-				$folder->save();
-				GO::$ignoreAclPermissions=false;
-					
+				$folder->save();					
 			}
 
 			$parent_id = $folder->id;
