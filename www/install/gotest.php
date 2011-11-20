@@ -328,14 +328,12 @@ function output_system_test(){
 	
 	$fatal = false;
 	
-	echo '<table border="0" style="font-family: Arial, Helvetica;font-size:12px;">';
 	
 	foreach($tests as $test)
 	{
 		if(!$test['pass'])
 		{
-			echo '<tr><td valign="top">'.$test['name'].'</td>'.
-				'<td style="color:red">: '.$test['feedback'].'</td></tr>';
+			echo '<p style="color:red">'.$test['feedback'].'</p>';
 			
 			if($test['fatal'])
 				$fatal=true;
@@ -344,14 +342,14 @@ function output_system_test(){
 
 	if($fatal)
 	{
-		echo '<tr><td colspan="2" style="color:red"><br />Fatal errors occured. '.$product_name.' will not run properly with current system setup!</td></tr>';
+		echo '<p style="color:red">Fatal errors occured. '.$product_name.' will not run properly with current system setup!</p>';
 	}else
 	{
-		echo '<tr><td colspan="2"><br /><b>Passed!</b> '.$product_name.' should run on this machine</td></tr>';
+		echo '<p><b>Passed!</b> '.$product_name.' should run on this machine</p>';
 	}
 	
 	
-	echo '<tr>
+	echo '<table><tr>
 	<td colspan="2">
 	<br />
 	<b>Use this information for your '.$product_name.' Professional license:</b>
