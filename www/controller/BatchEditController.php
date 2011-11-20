@@ -120,26 +120,27 @@ class GO_Core_Controller_BatchEdit extends GO_Base_Controller_AbstractController
 		
 		// Get the customfields for this model
 		$cf = $tmpModel->getCustomfieldsRecord();
-		$cfcolumns = $cf->getColumns();
-		
-		$cfrows = array();
-		foreach($cfcolumns as $key=>$value) {
-			if(!empty($value['gotype']) && $key != 'model_id') {
-				$row = array();
+		if($cf){
+			$cfcolumns = $cf->getColumns();
 
-				$row['name']= $key;
-				$row['label']= $cf->getAttributeLabel($key);
-				$row['value']='';
-				$row['edit']='';
-				$row['gotype']=$value['gotype'];
+			$cfrows = array();
+			foreach($cfcolumns as $key=>$value) {
+				if(!empty($value['gotype']) && $key != 'model_id') {
+					$row = array();
 
-				$cfrows[] = $row;
+					$row['name']= $key;
+					$row['label']= $cf->getAttributeLabel($key);
+					$row['value']='';
+					$row['edit']='';
+					$row['gotype']=$value['gotype'];
+
+					$cfrows[] = $row;
+				}
 			}
+		
+			$rows = array_merge($rows,$cfrows);
 		}
-		
-		
-		
-		$response['results'] = array_merge($rows,$cfrows);
+		$response['results'] = $rows;
 						
 		return $response;
 	}
