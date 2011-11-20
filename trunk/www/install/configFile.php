@@ -23,7 +23,7 @@ if(!$configFile){
 	echo '<p>This is to make sure it always finds your configuration file at the correct location.';
 	echo '</p>><div class="cmd">';
 	echo '$ touch config.php (Or FTP an empty config.php to the server)<br />';
-	echo '$ chmod 666 config.php</i></div>';
+	echo '$ chmod 666 config.php</div>';
 	echo '<p>If it does exist and you still see this message then it might be that safe_mode is enabled and the config.php is owned by another user then the '.GO::config()->product_name.' files.</p>';
 	
 }elseif(!is_writable($configFile))
@@ -31,7 +31,7 @@ if(!$configFile){
 	printHead();
 	echo '<h1>Config file not writable</h1>';	
 	echo '<p>The configuration file \''.$configFile.'\' exists but is not writable. If you wish to make changes then you have to make \''.$configFile.'\' writable during the configuration process.';
-	echo '<br /><br />Correct this and refresh this page.</p>';
+	echo '<br /><br />Correct this and click on continue.</p>';
 	echo '<div class="cmd">$ chmod 666 '.$configFile.'</div>';
 }else
 {

@@ -21,6 +21,11 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 	$internalGroup->id=3;
 	$internalGroup->name = GO::t('group_internal');
 	$internalGroup->save();
+	
+	
+	GO::config()->register_user_groups=GO::t('group_internal');
+	GO::config()->register_visible_user_groups=GO::t('group_internal');
+	GO::config()->save();
 		
 	
 	$modules = GO::modules()->getAvailableModules();
