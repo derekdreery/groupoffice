@@ -110,6 +110,13 @@ class GO_Base_Html_Input {
 		if(empty($this->attributes['type'])){
 			$this->attributes['type']='text';
 		}
+		
+		$this->init();
+		
+	}
+	
+	protected function init(){
+		return true;
 	}
 	
 	protected function renderInput(){
@@ -142,27 +149,30 @@ class GO_Base_Html_Input {
 	}
 
 	public function getHtml() {
-		
-		
 		$html = '';
 		
+		$this->attributes['label'] .= self::getError($this->attributes['name']);
+		
+		if(!empty($this->attributes['label'])){			
+			$html .= '<label>';
+			if($this->attributes['type']!='checkbox')
+				$html .= $this->attributes['label'].':';
+		}
 		
 		
-		if(!empty($this->attributes['label']))				
-			$html .= '<label>'.$this->attributes['label'].':';
-		
-		$html .= self::getError($this->attributes['name']);
 		
 		$html .= $this->renderInput();
+		
+		if(!empty($this->attributes['label'])){
+			if($this->attributes['type']=='checkbox')
+				$html .= $this->attributes['label'];
+			
+			$html .= '</label>';
+		}
 
 		if ($this->attributes['required'] && ($this->attributes['required'] == 'true' || $this->attributes['required'] == '1')) {
 			$html .= '<input type="hidden" name="required[]" value="' . $this->attributes['name'] . '" />';
 		}
-
-		if(!empty($this->attributes['label'])){
-			$html .= '</label>';
-		}
-
 		return $html;
 	}
 
