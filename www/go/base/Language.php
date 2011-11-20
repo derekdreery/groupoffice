@@ -151,4 +151,15 @@ class GO_Base_Language{
 		return $this->_lang;
 	}
 	
+	/**
+	 * Get all supported languages.
+	 * 
+	 * @return array array('en'=>'English');
+	 */
+	public static function getLanguages(){
+		require(GO::config()->root_path.'language/languages.inc.php');
+		asort($languages);
+		return $languages;
+	}
+	
 }

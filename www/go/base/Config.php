@@ -912,6 +912,14 @@ class GO_Base_Config {
 			if(empty($config['tmpdir']) && function_exists('sys_get_temp_dir')) {
 				$this->tmpdir = str_replace('\\','/', sys_get_temp_dir());
 			}
+			
+			$this->default_timezone=date_default_timezone_get();
+			
+			$lc = localeconv();
+			
+			$this->default_currency=$lc['currency_symbol'];
+			$this->default_decimal_separator=$lc['decimal_point'];
+			$this->default_thousands_separator=$lc['thousands_sep'];
 		}
 
 
