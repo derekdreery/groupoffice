@@ -8,7 +8,7 @@ class GO_Base_Html_Select extends GO_Base_Html_Input {
 	}
 
 	protected function renderInput() {
-		$html = '<select class="' . $this->attributes['class'] . '" name="' . $this->attributes['name'] . '"' . $this->attributes['extra'] . '>';
+		$html = '<select class="' . $this->attributes['class'] . '" name="' . $this->attributes['name'] . '" ' . $this->attributes['extra'] . '>';
 
 		foreach ($this->attributes['options'] as $value => $label){
 			

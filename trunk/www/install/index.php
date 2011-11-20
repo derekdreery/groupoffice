@@ -1,7 +1,7 @@
 <?php
 require('header.php');
 if($_SERVER['REQUEST_METHOD']=='POST'){
-	redirect("configFile.php");
+	redirect("license.php");
 }
 
 

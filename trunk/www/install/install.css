@@ -90,6 +90,9 @@ input, textarea, select, file{
 .textbox{
 	display:block;
 }
+.checkbox{
+	vertical-align: middle;
+}
 .textarea{
 	display:block;
 	height:100px;
