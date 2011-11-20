@@ -10,7 +10,12 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 	}
 
 	protected function remoteComboFields() {
-		return array('addressbook_id' => '$model->contact->addressbook->name');
+		if(GO::modules()->isInstalled('addressbook')){
+			return array(
+					'addressbook_id' => '$model->contact->addressbook->name',
+					'company_id' => '$model->contact->company->name'
+					);
+		}
 	}
 
 	//GRID
@@ -24,14 +29,20 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 
 		//Join the contact that belongs to the user in the form response.
-		if(!empty($model->id)){
-			$contact = $model->contact;
+		if(GO::modules()->isInstalled('addressbook')){
+			if(!empty($model->id)){
+				$contact = $model->contact;
+			}else
+			{
+				$contact = new GO_Addressbook_Model_Contact();
+			}
 			if ($contact) {
 				$attr = $contact->getAttributes();
 
 				$response['data'] = array_merge($attr, $response['data']);
 			}
 		}
+		
 
 		return parent::afterLoad($response, $model, $params);
 	}
