@@ -36,123 +36,123 @@ $records = array();
 
 switch($task)
 {
-	case 'user_with_items':
-	case 'user':
-
-		
-		$response['success'] = false;
-		$response['data'] = $GO_USERS->get_user($user_id);
-
-		//if(!$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $response['data']['acl_id'])){
-		if(!$GLOBALS['GO_MODULES']->modules['users']['read_permission']){
-			throw new AccessDeniedException();
-		}
-
-		$response['data']['write_permission']=$GLOBALS['GO_MODULES']->modules['users']['read_permission'];
-
-
-		//$response['data']['birthday']=Date::format($response['data']['birthday'], false);
-	
-		//$temp = $GLOBALS['GO_LANGUAGE']->get_language($response['data']['language']);
-		//$response['data']['language_name'] = $temp['description'];
-		
-		$response['data']['start_module_name'] = isset($GLOBALS['GO_MODULES']->modules[$response['data']['start_module']]['humanName']) ? $GLOBALS['GO_MODULES']->modules[$response['data']['start_module']]['humanName'] : '';
-		
-		$response['data']['registration_time'] = Date::get_timestamp($response['data']['registration_time']);
-		$response['data']['lastlogin'] = ($response['data']['lastlogin']) ? Date::get_timestamp($response['data']['lastlogin']) : '-';
-		if($response['data'])
-		{
-			$response['success']=true;
-		}
-
-		if($task=='user'){
-			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
-			{
-				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
-				$cf = new customfields();
-				$values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 8, $user_id);
-
-				if(count($values))
-					$response['data']=array_merge($response['data'], $values);
-			}
-
-			if($GLOBALS['GO_MODULES']->has_module('mailings'))
-			{
-				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
-
-				$ml = new mailings();
-				$ml2 = new mailings();
-
-				$count = $ml->get_authorized_mailing_groups('write', $GLOBALS['GO_SECURITY']->user_id, 0,0);
-
-				while($ml->next_record())
-				{
-					$response['data']['mailing_'.$ml->f('id')]=$ml2->user_is_in_group($user_id, $ml->f('id')) ? true : false;
-				}
-			}
-		}else
-		{
-			if($GLOBALS['GO_MODULES']->has_module('customfields'))
-			{
-				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
-				$cf = new customfields();
-				$response['data']['customfields']=$cf->get_all_fields_with_values($GLOBALS['GO_SECURITY']->user_id, 8, $response['data']['id']);
-			}
-
-			if($GLOBALS['GO_MODULES']->has_module('comments'))
-			{
-				require_once ($GLOBALS['GO_MODULES']->modules['comments']['class_path'].'comments.class.inc.php');
-				$comments = new comments();
-
-				$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 8);
-			}
-
-			$response['data']['links'] = array();
-			/* loadContactDetails - contact sidepanel */
-
-
-			require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
-			$search = new search();
-
-			$links_json = $search->get_latest_links_json($GLOBALS['GO_SECURITY']->user_id, $response['data']['id'], 8);
-
-			$response['data']['links']=$links_json['results'];
-
-			if(isset($GLOBALS['GO_MODULES']->modules['files']))
-			{
-				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
-				$fs = new files();
-				$response['data']['files']=$fs->get_content_json($response['data']['files_folder_id']);
-			}else
-			{
-				$response['data']['files']=array();
-			}
-
-
-			$values = array('address_no', 'address', 'zip', 'city', 'state', 'country');
-
-			$af = $GLOBALS['GO_LANGUAGE']->get_address_format_by_iso($GLOBALS['GO_CONFIG']->language);
-
-			$response['data']['formatted_address'] = $af['format'];
-
-			foreach($values as $val)
-				$response['data']['formatted_address'] = str_replace('{'.$val.'}', $response['data'][$val], $response['data']['formatted_address']);
-
-			$response['data']['formatted_address'] = preg_replace("/(\r\n)+|(\n|\r)+/", "<br />", $response['data']['formatted_address']);
-			$response['data']['google_maps_link']='http://maps.google.com/maps?q=';
-
-			$response['data']['google_maps_link']=google_maps_link($response['data']['address'], $response['data']['address_no'], $response['data']['city'], $response['data']['country']);
-
-			$response['data']['name']=String::format_name($response['data']);
-			
-		}
-		
-		$params['response']=&$response;
-		
-		$GLOBALS['GO_EVENTS']->fire_event('load_user', $params);
-		
-		echo json_encode($response);
-		break;
+//	case 'user_with_items':
+//	case 'user':
+//
+//		
+//		$response['success'] = false;
+//		$response['data'] = $GO_USERS->get_user($user_id);
+//
+//		//if(!$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $response['data']['acl_id'])){
+//		if(!$GLOBALS['GO_MODULES']->modules['users']['read_permission']){
+//			throw new AccessDeniedException();
+//		}
+//
+//		$response['data']['write_permission']=$GLOBALS['GO_MODULES']->modules['users']['read_permission'];
+//
+//
+//		//$response['data']['birthday']=Date::format($response['data']['birthday'], false);
+//	
+//		//$temp = $GLOBALS['GO_LANGUAGE']->get_language($response['data']['language']);
+//		//$response['data']['language_name'] = $temp['description'];
+//		
+//		$response['data']['start_module_name'] = isset($GLOBALS['GO_MODULES']->modules[$response['data']['start_module']]['humanName']) ? $GLOBALS['GO_MODULES']->modules[$response['data']['start_module']]['humanName'] : '';
+//		
+//		$response['data']['registration_time'] = Date::get_timestamp($response['data']['registration_time']);
+//		$response['data']['lastlogin'] = ($response['data']['lastlogin']) ? Date::get_timestamp($response['data']['lastlogin']) : '-';
+//		if($response['data'])
+//		{
+//			$response['success']=true;
+//		}
+//
+//		if($task=='user'){
+//			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
+//			{
+//				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
+//				$cf = new customfields();
+//				$values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, 8, $user_id);
+//
+//				if(count($values))
+//					$response['data']=array_merge($response['data'], $values);
+//			}
+//
+//			if($GLOBALS['GO_MODULES']->has_module('mailings'))
+//			{
+//				require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'mailings.class.inc.php');
+//
+//				$ml = new mailings();
+//				$ml2 = new mailings();
+//
+//				$count = $ml->get_authorized_mailing_groups('write', $GLOBALS['GO_SECURITY']->user_id, 0,0);
+//
+//				while($ml->next_record())
+//				{
+//					$response['data']['mailing_'.$ml->f('id')]=$ml2->user_is_in_group($user_id, $ml->f('id')) ? true : false;
+//				}
+//			}
+//		}else
+//		{
+//			if($GLOBALS['GO_MODULES']->has_module('customfields'))
+//			{
+//				require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
+//				$cf = new customfields();
+//				$response['data']['customfields']=$cf->get_all_fields_with_values($GLOBALS['GO_SECURITY']->user_id, 8, $response['data']['id']);
+//			}
+//
+//			if($GLOBALS['GO_MODULES']->has_module('comments'))
+//			{
+//				require_once ($GLOBALS['GO_MODULES']->modules['comments']['class_path'].'comments.class.inc.php');
+//				$comments = new comments();
+//
+//				$response['data']['comments']=$comments->get_comments_json($response['data']['id'], 8);
+//			}
+//
+//			$response['data']['links'] = array();
+//			/* loadContactDetails - contact sidepanel */
+//
+//
+//			require_once($GLOBALS['GO_CONFIG']->class_path.'/base/search.class.inc.php');
+//			$search = new search();
+//
+//			$links_json = $search->get_latest_links_json($GLOBALS['GO_SECURITY']->user_id, $response['data']['id'], 8);
+//
+//			$response['data']['links']=$links_json['results'];
+//
+//			if(isset($GLOBALS['GO_MODULES']->modules['files']))
+//			{
+//				require_once($GLOBALS['GO_MODULES']->modules['files']['class_path'].'files.class.inc.php');
+//				$fs = new files();
+//				$response['data']['files']=$fs->get_content_json($response['data']['files_folder_id']);
+//			}else
+//			{
+//				$response['data']['files']=array();
+//			}
+//
+//
+//			$values = array('address_no', 'address', 'zip', 'city', 'state', 'country');
+//
+//			$af = $GLOBALS['GO_LANGUAGE']->get_address_format_by_iso($GLOBALS['GO_CONFIG']->language);
+//
+//			$response['data']['formatted_address'] = $af['format'];
+//
+//			foreach($values as $val)
+//				$response['data']['formatted_address'] = str_replace('{'.$val.'}', $response['data'][$val], $response['data']['formatted_address']);
+//
+//			$response['data']['formatted_address'] = preg_replace("/(\r\n)+|(\n|\r)+/", "<br />", $response['data']['formatted_address']);
+//			$response['data']['google_maps_link']='http://maps.google.com/maps?q=';
+//
+//			$response['data']['google_maps_link']=google_maps_link($response['data']['address'], $response['data']['address_no'], $response['data']['city'], $response['data']['country']);
+//
+//			$response['data']['name']=String::format_name($response['data']);
+//			
+//		}
+//		
+//		$params['response']=&$response;
+//		
+//		$GLOBALS['GO_EVENTS']->fire_event('load_user', $params);
+//		
+//		echo json_encode($response);
+//		break;
 	case 'modules':
 
 			if(empty($user_id))

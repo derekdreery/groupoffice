@@ -132,6 +132,7 @@ class GO_Base_Data_Column {
 	 */
 	public function setFormat($format, $extraVars=array()){
 		$this->_format = $format;
+		$this->_extraVars=$extraVars;
 		return $this;
 	}
 	

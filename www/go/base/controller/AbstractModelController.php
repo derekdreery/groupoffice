@@ -306,7 +306,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			{			
 				$this->multiselectIds = GO::config()->get_setting('ms_'.$multiSelectProperties['requestParam'], GO::session()->values['user_id']);
 				$this->multiselectIds  = $this->multiselectIds ? explode(',',$this->multiselectIds) : array();
-				//$this->multiselectIds=array();
+//				$this->multiselectIds=array();
 			}
 		
 			
@@ -315,7 +315,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$default = $this->getStoreMultiSelectDefault();
 				if($default){
 					$this->multiselectIds = array($default);
-					GO::config()->save_setting($multiSelectProperties['requestParam'],implode(',', $this->multiselectIds), GO::user()->id);
+					GO::config()->save_setting('ms_'.$multiSelectProperties['requestParam'],implode(',', $this->multiselectIds), GO::user()->id);
 				}
 			}
 			
