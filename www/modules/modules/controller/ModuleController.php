@@ -72,6 +72,11 @@ class GO_Modules_Controller_Module extends GO_Base_Controller_AbstractModelContr
 			}
 		}
 		
+		//todo make this irrelevant
+		//backwards compat
+		require_once(GO::config()->root_path.'Group-Office.php');
+		$GO_MODULES->load_modules();
+		
 		return array('success'=>true);
 	}
 }
