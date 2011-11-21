@@ -495,6 +495,9 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		//if a recurrence-id if passed then convert it to a unix time stamp.
 		//it is an update just for a particular occurrence.
+		
+		//todo check if $vevent->{'recurrence-id'} works
+		
 		$recurrenceDate=false;
 		$recurrence = $vevent->select('recurrence-id');
 		//var_dump($recurrence);exit();
