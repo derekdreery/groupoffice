@@ -78,17 +78,17 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 			}
 		}
 		
-		if(!empty($params['delete_keys'])){
-			
-			$keys = json_decode($params['delete_keys'], true);
-			
-			foreach($keys as $key){
-				$key = explode(':',$key);
-				
-				$linkedModel = GO::getModel($key[0])->findByPk($key[1]);				
-				$linkedModel->delete();				
-			}
-		}
+//		if(!empty($params['delete_keys'])){
+//			
+//			$keys = json_decode($params['delete_keys'], true);
+//			
+//			foreach($keys as $key){
+//				$key = explode(':',$key);
+//				
+//				$linkedModel = GO::getModel($key[0])->findByPk($key[1]);				
+//				$linkedModel->delete();				
+//			}
+//		}
 		
 		$storeParams = $store->getDefaultParams();
 		
