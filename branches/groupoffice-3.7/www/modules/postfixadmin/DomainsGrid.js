@@ -57,10 +57,12 @@ GO.postfixadmin.DomainsGrid = function(config){
 			dataIndex: 'mailboxes'
 		},			{
 			header: GO.postfixadmin.lang.quota, 
-			dataIndex: 'quota'
+			dataIndex: 'quota',
+			sortable:false
 		},			{
 			header: GO.postfixadmin.lang.usage,
-			dataIndex: 'usage'
+			dataIndex: 'usage',
+			sortable:false
 		},	{
 			header: GO.postfixadmin.lang.active, 
 			dataIndex: 'active'
