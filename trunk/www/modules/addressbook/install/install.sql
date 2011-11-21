@@ -302,8 +302,8 @@ CREATE TABLE IF NOT EXISTS `go_links_ab_contacts` (
 -- Tabelstructuur voor tabel `ml_default_templates`
 --
 
-DROP TABLE IF EXISTS `ml_default_templates`;
-CREATE TABLE IF NOT EXISTS `ml_default_templates` (
+DROP TABLE IF EXISTS `ab_default_email_templates`;
+CREATE TABLE IF NOT EXISTS `ab_default_email_templates` (
   `user_id` int(11) NOT NULL,
   `template_id` int(11) NOT NULL,
   PRIMARY KEY (`user_id`),
@@ -313,25 +313,12 @@ CREATE TABLE IF NOT EXISTS `ml_default_templates` (
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `ml_mailing_users`
+-- Tabelstructuur voor tabel `ab_sendmailing_companies`
 --
 
-DROP TABLE IF EXISTS `ml_mailing_users`;
-CREATE TABLE IF NOT EXISTS `ml_mailing_users` (
-  `group_id` int(11) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`group_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Tabelstructuur voor tabel `ml_sendmailing_companies`
---
-
-DROP TABLE IF EXISTS `ml_sendmailing_companies`;
+DROP TABLE IF EXISTS `ab_sendmailing_companies`;
 CREATE TABLE IF NOT EXISTS `ml_sendmailing_companies` (
-  `mailing_id` int(11) NOT NULL DEFAULT '0',
+  `addresslist_id` int(11) NOT NULL DEFAULT '0',
   `company_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`mailing_id`,`company_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -339,27 +326,12 @@ CREATE TABLE IF NOT EXISTS `ml_sendmailing_companies` (
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `ml_sendmailing_contacts`
+-- Tabelstructuur voor tabel `ab_sendmailing_contacts`
 --
 
-DROP TABLE IF EXISTS `ml_sendmailing_contacts`;
-CREATE TABLE IF NOT EXISTS `ml_sendmailing_contacts` (
-  `mailing_id` int(11) NOT NULL DEFAULT '0',
+DROP TABLE IF EXISTS `ab_sendmailing_contacts`;
+CREATE TABLE IF NOT EXISTS `ab_sendmailing_contacts` (
+  `addresslist_id` int(11) NOT NULL DEFAULT '0',
   `contact_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`mailing_id`,`contact_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Tabelstructuur voor tabel `ml_sendmailing_users`
---
-
-DROP TABLE IF EXISTS `ml_sendmailing_users`;
-CREATE TABLE IF NOT EXISTS `ml_sendmailing_users` (
-  `mailing_id` int(11) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`mailing_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------

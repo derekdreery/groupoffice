@@ -1,5 +1,15 @@
 <?php
-class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractModelController{
+/** 
+ * Copyright Intermesh
+ * 
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ * 
+ * If you have questions write an e-mail to info@intermesh.nl
+ * 
+ * @copyright Copyright Intermesh
+ * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ */class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractModelController{
 	
 	protected $model = 'GO_Addressbook_Model_Addresslist';	
 
@@ -46,8 +56,6 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 			throw new Exception(GO::t('feedbackNoReciepent','email'));
 		}else {
 			try {
-				
-				// 
 				$params = $this->_convertOldParams($params);
 				
 				$message = GO_Base_Mail_Message::newInstance();
@@ -56,20 +64,18 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 				// (See also $swift->message->setReadReceiptTo($swift->account['email']));
 			
 				$mailing['alias_id']=$params['alias_id'];
-				$mailing['user_id']=GO::user()->id;
 				$mailing['subject']=$params['subject'];
-				$mailing['ctime']=time();
-				$mailing['status']=0;
-				$mailing['sent']=0;
-				$mailing['errors']=0;
-				$mailing['total']=0;
+//				$mailing['status']=0;
+//				$mailing['sent']=0;
+//				$mailing['errors']=0;
+//				$mailing['total']=0;
 				$mailing['addresslist_id']=$params['addresslist_id'];
 				$mailing['message_path']=GO::config()->file_storage_path.'mailings/'.GO::user()->id.'_'.date('Ymd_Gis').'.eml';
-
 				
-				// Set From to webmaster email address in config.php, for the moment.
-				// This should be the alias email address later on.
-				$message->setFrom(GO::config()->webmaster_email,GO::config()->host);
+						
+				// Set From address
+				$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);
+				$message->setFrom($alias->email,$alias->name);
 
 				// Set the message subject
 				if (!empty($params['subject']))
@@ -96,12 +102,71 @@ class GO_Addressbook_Controller_Addresslist extends GO_Base_Controller_AbstractM
 				$sentMailing->setAttributes($mailing);
 				$sentMailing->save();
 				
-				$mailing_id = $sentMailing->id;
-				// TODO: Write MVC version of $ml->launch_mailing($mailing_id);
+				$nMailsToSend = 0;
 				
+				// Clear list of company recipients to send to, if there are any in this list
+				$sendmailingCompany = GO_Addressbook_Model_SendmailingCompany::model();
+				$sendmailingCompany->deleteByAttribute('addresslist_id', $sentMailing->id);
+
+				// Add company recipients to this list and count them
+				$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($sentMailing->addresslist_id)->companies();
+				while ($alCompany = $stmt->fetch()) {
+					if (!empty($alCompany->email) && !empty($alCompany->email_allowed)) {
+						$sendmailingCompany->setAttributes(
+							array(
+								'addresslist_id' => $sentMailing->addresslist_id,
+								'company_id' => $alCompany->id
+							));
+						$sendmailingCompany->save();
+						$nMailsToSend++;
+					}
+				}
+
+				// Clear list of contact recipients to send to, if there are any in this list
+				$sendmailingContact = GO_Addressbook_Model_SendmailingContact::model();
+				$sendmailingContact->deleteByAttribute('addresslist_id', $sentMailing->id);
+
+				// Add contact recipients to this list and count them
+				$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($sentMailing->addresslist_id)->contacts();
+				while ($alContact = $stmt->fetch()) {
+					if (!empty($alContact->email) && !empty($alContact->email_allowed)) {
+						$sendmailingContact->setAttributes(
+							array(
+								'addresslist_id' => $sentMailing->addresslist_id,
+								'contact_id' => $alContact->id
+							));
+						$sendmailingContact->save();
+						$nMailsToSend++;
+					}
+				}
+				
+				$sentMailing->setAttributes(
+						array(
+							"status" => 1,
+							"total" => $nMailsToSend
+						)
+					);
+				$sentMailing->save();
+				
+				// MVC version of $ml->launch_mailing($mailing_id); ......
+				$log = GO::config()->file_storage_path.'log/mailings/';
+				if(!is_dir($log))
+					mkdir($log, 0755,true);
+
+				$log .= $sentMailing->id.'.log';
+				$cmd = GO::config()->cmd_php.' '.GO::modules()->addressbook->path.'sendmailing.php '.GO::config()->get_config_file().' '.$sentMailing->id.' >> '.$log;
+
+				if (!is_windows())
+					$cmd .= ' 2>&1 &';
+
+				file_put_contents($log, Date::get_timestamp(time())."\r\n".$cmd."\r\n\r\n", FILE_APPEND);
+				if(is_windows())
+					pclose(popen("start /B ". $cmd, "r"));
+				else
+					exec($cmd);
+
 				$response['success']=true;
 			} catch (Exception $e) {
-				require($GLOBALS['GO_LANGUAGE']->get_language_file('email'));
 				$response['feedback'] = GO::t('feedbackUnexpectedError','email') . $e->getMessage();
 			}
 		}
