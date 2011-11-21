@@ -88,7 +88,7 @@ class XML_WBXML {
      *
      * Use long because it is unsigned.
      */
-    function MBUInt32ToInt($in, &$pos)
+    public static function MBUInt32ToInt($in, &$pos)
     {
         $val = 0;
 
@@ -104,7 +104,7 @@ class XML_WBXML {
     /**
      * Encoding Multi-byte Integers from Section 5.1
      */
-    function intToMBUInt32(&$out, $i)
+    public static function intToMBUInt32(&$out, $i)
     {
         if ($i > 268435455) {
             $bytes0 = 0 | XML_WBXML::getBits(0, $i);
@@ -139,7 +139,7 @@ class XML_WBXML {
         }
     }
 
-    function getBits($num, $l)
+    public static function getBits($num, $l)
     {
         switch ($num) {
         case 0:
@@ -161,7 +161,7 @@ class XML_WBXML {
         return 0;
     }
 
-    function getDPIString($i)
+    public static function getDPIString($i)
     {
         /**
          * ADD CHAPTER
@@ -197,7 +197,7 @@ class XML_WBXML {
         return isset($DPIString[$i]) ? $DPIString[$i] : null;
     }
 
-    function getDPIInt($dpi)
+    public static function getDPIInt($dpi)
     {
         /**
          * ADD CHAPTER
@@ -240,7 +240,7 @@ class XML_WBXML {
      * from http://www.iana.org/assignments/character-sets
      * and http://java.sun.com/j2se/1.4.2/docs/api/java/nio/charset/Charset.html
      */
-    function getCharsetString($cs)
+    public static function getCharsetString($cs)
     {
         /**
          * From http://www.iana.org/assignments/character-sets
@@ -263,7 +263,7 @@ class XML_WBXML {
      * From http://www.iana.org/assignments/character-sets and
      * http://java.sun.com/j2se/1.4.2/docs/api/java/nio/charset/Charset.html
      */
-    function getCharsetInt($cs)
+    public static function getCharsetInt($cs)
     {
         /**
          * From http://www.iana.org/assignments/character-sets

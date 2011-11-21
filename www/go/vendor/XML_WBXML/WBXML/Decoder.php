@@ -1,8 +1,7 @@
 <?php
-
-include_once 'XML/WBXML.php';
-include_once 'XML/WBXML/DTDManager.php';
-include_once 'XML/WBXML/ContentHandler.php';
+include_once GO::config()->root_path.'go/vendor/XML_WBXML/WBXML.php';
+include_once GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/DTDManager.php';
+include_once GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/ContentHandler.php';
 
 /**
  * From Binary XML Content Format Specification Version 1.3, 25 July 2001
@@ -76,7 +75,7 @@ class XML_WBXML_Decoder extends XML_WBXML_ContentHandler {
      */
     function XML_WBXML_Decoder()
     {
-        $this->_dtdManager = &new XML_WBXML_DTDManager();
+        $this->_dtdManager = new XML_WBXML_DTDManager();
     }
 
     /**
@@ -111,7 +110,7 @@ class XML_WBXML_Decoder extends XML_WBXML_ContentHandler {
      */
     function decodeToString($wbxml)
     {
-        $this->_ch = &new XML_WBXML_ContentHandler();
+        $this->_ch = new XML_WBXML_ContentHandler();
 
         $r = $this->decode($wbxml);
         if (is_a($r, 'PEAR_Error')) {
@@ -170,7 +169,7 @@ class XML_WBXML_Decoder extends XML_WBXML_ContentHandler {
 
 
         // Default content handler.
-        $this->_dtdManager = &new XML_WBXML_DTDManager();
+        $this->_dtdManager = new XML_WBXML_DTDManager();
 
         // Get the starting DTD.
         $this->_tagDTD = $this->_dtdManager->getInstance($this->_dpi);
@@ -377,7 +376,7 @@ class XML_WBXML_Decoder extends XML_WBXML_ContentHandler {
                 // document and thus start a new wbxml decoder instance on it.
 
                 if ($size > 0 && $this->_isData && ord($b) <= 10) {
-                    $decoder = &new XML_WBXML_Decoder(true);
+                    $decoder = new XML_WBXML_Decoder(true);
                     $decoder->setContentHandler($this->_ch);
                     $s = $decoder->decode($b);
             //                /* // @todo: FIXME currently we can't decode Nokia
@@ -624,13 +623,13 @@ class XML_WBXML_Decoder extends XML_WBXML_ContentHandler {
 
     function switchElementCodePage($codePage)
     {
-        $this->_tagDTD = &$this->_dtdManager->getInstance($this->_tagDTD->toCodePageStr($codePage));
+        $this->_tagDTD = $this->_dtdManager->getInstance($this->_tagDTD->toCodePageStr($codePage));
         $this->switchAttributeCodePage($codePage);
     }
 
     function switchAttributeCodePage($codePage)
     {
-        $this->_attributeDTD = &$this->_dtdManager->getInstance($this->_attributeDTD->toCodePageStr($codePage));
+        $this->_attributeDTD = $this->_dtdManager->getInstance($this->_attributeDTD->toCodePageStr($codePage));
     }
 
     /**
