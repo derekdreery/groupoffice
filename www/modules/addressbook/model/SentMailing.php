@@ -34,7 +34,10 @@
 	
 	public function relations(){
 		return array(
-				'addresslist' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Addresslist', 'field'=>'addresslist_id'),
+				'addresslist' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Addresslist', 'field'=>'addresslist_id')
+//				,
+//				'contacts' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'contact_id', 'linkModel' => 'GO_Addressbook_Model_SendmailingContact'),
+//				'company' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'company_id', 'linkModel' => 'GO_Addressbook_Model_SendmailingCompany')z
 		);
 	}
 }

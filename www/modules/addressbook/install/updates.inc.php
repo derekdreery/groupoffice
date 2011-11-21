@@ -100,3 +100,8 @@ $updates["201111180945"][]="DROP TABLE IF EXISTS `cf_contacts_cf_categories`;";
 
 $updates["201111180945"][]="ALTER TABLE `ab_contacts` CHANGE `comment` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";
 $updates["201111180945"][]="ALTER TABLE `ab_companies` CHANGE `comment` `comment` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";
+
+$updates["201111211405"][]="RENAME TABLE `ml_sendmailing_contacts` TO `ab_sendmailing_contacts`;";
+$updates["201111211405"][]="RENAME TABLE `ml_sendmailing_companies` TO `ab_sendmailing_companies`;";
+$updates["201111211405"][]="ALTER TABLE `ab_sendmailing_contacts` CHANGE `mailing_id` `addresslist_id` INT(11) NOT NULL DEFAULT '0' ";
+$updates["201111211405"][]="ALTER TABLE `ab_sendmailing_companies` CHANGE `mailing_id` `addresslist_id` INT(11) NOT NULL DEFAULT '0' ";
