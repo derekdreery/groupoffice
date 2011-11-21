@@ -12,6 +12,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	public function actionGetNewAcl($params){
 		$acl = new GO_Base_Model_Acl();
 		$acl->user_id=isset($params['user_id']) ? $params['user_id'] : GO::user()->id;
+		$acl->description=$params['description'];
 		$acl->save();
 		
 		echo $acl->id;
