@@ -1,8 +1,8 @@
 <?php
 
-include_once 'XML/WBXML.php';
-include_once 'XML/WBXML/ContentHandler.php';
-include_once 'XML/WBXML/DTDManager.php';
+include_once GO::config()->root_path.'go/vendor/XML_WBXML/WBXML.php';
+include_once GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/ContentHandler.php';
+include_once GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/DTDManager.php';
 
 /**
  * From Binary XML Content Format Specification Version 1.3, 25 July 2001
@@ -58,8 +58,8 @@ class XML_WBXML_Encoder extends XML_WBXML_ContentHandler {
      */
     function XML_WBXML_Encoder()
     {
-        $this->_dtdManager = &new XML_WBXML_DTDManager();
-        $this->_stringTable = &new XML_WBXML_HashTable();
+        $this->_dtdManager = new XML_WBXML_DTDManager();
+        $this->_stringTable = new XML_WBXML_HashTable();
     }
 
     /**
@@ -96,7 +96,7 @@ class XML_WBXML_Encoder extends XML_WBXML_ContentHandler {
      */
     function writeHeader($uri)
     {
-        $this->_dtd = &$this->_dtdManager->getInstanceURI($uri);
+        $this->_dtd = $this->_dtdManager->getInstanceURI($uri);
         if (!$this->_dtd) {
             // TODO: proper error handling
             die('Unable to find dtd for ' . $uri);
@@ -392,14 +392,14 @@ class XML_WBXML_Encoder extends XML_WBXML_ContentHandler {
 
         $cp = $this->_dtd->toCodePageURI($uri);
         if (strlen($cp)) {
-            $this->_dtd = &$this->_dtdManager->getInstanceURI($uri);
+            $this->_dtd = $this->_dtdManager->getInstanceURI($uri);
 
             $this->_output .= chr(XML_WBXML_GLOBAL_TOKEN_SWITCH_PAGE);
             $this->_output .= chr($cp);
             $this->_currentURI = $uri;
 
         } else {
-            $this->_subParser = &new XML_WBXML_Encoder(true);
+            $this->_subParser = new XML_WBXML_Encoder(true);
             $this->_subParserStack = 1;
         }
     }

@@ -1,8 +1,8 @@
 <?php
 
-include_once 'XML/WBXML/DTD/SyncML.php';
-include_once 'XML/WBXML/DTD/SyncMLMetInf.php';
-include_once 'XML/WBXML/DTD/SyncMLDevInf.php';
+include_once GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/DTD/SyncML.php';
+include_once GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/DTD/SyncMLMetInf.php';
+include_once GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/DTD/SyncMLDevInf.php';
 
 /**
  * From Binary XML Content Format Specification Version 1.3, 25 July 2001
@@ -53,7 +53,7 @@ class XML_WBXML_DTDManager {
     {
         $publicIdentifier = strtolower($publicIdentifier);
         if (isset($this->_strDTD[$publicIdentifier])) {
-            $dtd = &$this->_strDTD[$publicIdentifier];
+            $dtd = $this->_strDTD[$publicIdentifier];
         } else {
             $dtd = null;
         }
@@ -78,7 +78,7 @@ class XML_WBXML_DTDManager {
         }
 
         if (isset($this->_strDTDURI[$uri])) {
-            $dtd = &$this->_strDTDURI[$uri];
+            $dtd = $this->_strDTDURI[$uri];
         } else {
             $dtd = null;
         }

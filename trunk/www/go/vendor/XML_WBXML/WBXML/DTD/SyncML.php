@@ -1,6 +1,6 @@
 <?php
 
-include_once 'XML/WBXML/DTD.php';
+include_once GO::config()->root_path.'go/vendor/XML_WBXML/WBXML/DTD.php';
 
 /**
  * From Binary XML Content Format Specification Version 1.3, 25 July 2001
