@@ -47,8 +47,8 @@ $lang['email']['noSaveWithPop3']='Message could not be saved because a POP3 acco
 
 $lang['email']['goAlreadyStarted']='Group-Office has already been started. The e-mail composer is now loaded in Group-Office. Close this window and compose your message in Group-Office.';
 
-//At Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
-$lang['email']['replyHeader']='At %s, %s on %s %s wrote:';
+//On Tuesday, 07-04-2009 on 8:58 Group-Office Administrator <test@intermeshdev.nl> wrote:
+$lang['email']['replyHeader']='On %s, %s on %s %s wrote:';
 $lang['email']['alias']='Alias';
 $lang['email']['aliases']='Aliases';
 $lang['email']['alias']='Alias';
