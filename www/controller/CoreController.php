@@ -8,8 +8,16 @@
  * views in modules should register client scripts and css files.
  */
 class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
+	
+	public function actionGetNewAcl($params){
+		$acl = new GO_Base_Model_Acl();
+		$acl->user_id=isset($params['user_id']) ? $params['user_id'] : GO::user()->id;
+		$acl->save();
+		
+		echo $acl->id;
+	}
 
-		public function actionLink($params) {
+	public function actionLink($params) {
 
 		$fromLinks = json_decode($_POST['fromLinks'], true);
 		$toLinks = json_decode($_POST['toLinks'], true);
