@@ -7,6 +7,9 @@ class GO_Email_Controller_Account extends GO_Base_Controller_AbstractController 
 		require_once(GO::config()->root_path.'Group-Office.php');
 		global $GO_SECURITY, $GO_MODULES;
 		
+		GO::session()->closeWriting();
+		
+		
 		require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path'] . "email.class.inc.php");
 		require_once ($GLOBALS['GO_MODULES']->modules['email']['class_path'] . "cached_imap.class.inc.php");
 
