@@ -31,13 +31,6 @@ class GO_Base_Session extends GO_Base_Observable{
 		//not capable. (WebDAV for example).
 		if(!defined("GO_NO_SESSION")){
 			if(session_id()==''){
-
-				//TODO Check if this is dangerous. We need this for GOTA.
-				//Gota should use cookies for the session.
-				if (!empty($_REQUEST['sid'])) {
-					session_id($_REQUEST['sid']);
-				}
-
 				session_name('groupoffice');
 				session_start();
 			}
