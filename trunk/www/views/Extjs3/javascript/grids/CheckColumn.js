@@ -27,7 +27,7 @@ GO.grid.CheckColumn = Ext.extend(Ext.grid.Column, {
      * Process and refire events routed from the GridView's processEvent method.
      */
     processEvent : function(name, e, grid, rowIndex, colIndex){
-        if (name == 'mousedown') {
+        if (name == 'click') {
             var record = grid.store.getAt(rowIndex);
 						var disabled = record.get(this.disabled_field);
             
