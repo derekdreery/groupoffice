@@ -174,15 +174,15 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 			will_be_checked= select_records && select_records!='clear' && (select_records=='all' || select_records.indexOf(current_record_id)>-1);
 
 			if(select_records && !will_be_checked){
-				checked="0";
-				if(this.store.data.items[i].data.checked=="1"){
-					this.store.data.items[i].data.checked="0";
+				checked=false;
+				if(this.store.data.items[i].data.checked){
+					this.store.data.items[i].data.checked=false;
 					changedRecords.push(this.store.data.items[i]);
 				}
 			}else
 			{
 				if(will_be_checked){
-					checked="1";
+					checked=true;
 					if(GO.util.empty(this.store.data.items[i].data.checked)){					
 						this.store.data.items[i].data.checked="1";
 						changedRecords.push(this.store.data.items[i]);
@@ -192,7 +192,7 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 					checked = this.store.data.items[i].data.checked;
 				}
 			}
-			if(checked=="1")
+			if(checked)
 			{
 				this.lastSelectedIndex = i;
 				ids.push(this.store.data.items[i].id);
@@ -205,7 +205,7 @@ Ext.extend(GO.grid.MultiSelectGrid, GO.grid.GridPanel,{
 			alert(GO.lang.noItemSelectedWarning);
 
 			if(this.lastRecordClicked){
-				this.lastRecordClicked.set('checked', "1");
+				this.lastRecordClicked.set('checked', true);
 				this.lastRecordClicked.commit();
 			}
 
