@@ -445,11 +445,19 @@ class GO{
 	 * @param boolean $found Pass by reference to determine if the language variable was found in the language file.
 	 */
 	public static function t($name, $module='base', $basesection='common', &$found=false){
+		
+		return self::language()->getTranslation($name, $module, $basesection, $found);
+	}
+	
+	/**
+	 *
+	 * @return GO_Base_Language 
+	 */
+	public static function language(){
 		if(!isset(self::$_language)){
 			self::$_language=new GO_Base_Language();
 		}
-		
-		return self::$_language->getTranslation($name, $module, $basesection, $found);
+		return self::$_language;
 	}
 
 	

@@ -20,7 +20,28 @@
  
 class GO_Base_Language{
 	
+	private $_langIso='en';
 	private $_lang;
+	
+	
+	public function __construct() {
+		$this->setLanguage();
+	}
+	
+	/**
+	 * Set the language to translate into. Clears the cached language strings too.
+	 * 
+	 * @param string $isoCode Leave empty to set the default user language.
+	 */
+	public function setLanguage($isoCode=false){
+		if(!$isoCode){
+			$this->_langIso=GO::user() ? GO::user()->language : GO::config()->language;
+		}else
+		{
+			$this->_langIso=$isoCode;
+		}
+		$this->_lang=array();
+	}
 	
 	/**
 	 * Translates a language variable name into the local language
@@ -63,15 +84,15 @@ class GO_Base_Language{
 			if($file)
 				require($file);
 			
-			$langcode = GO::user() ? GO::user()->language : GO::config()->language;
-			if($langcode!='en')
+			//$langcode = GO::user() ? GO::user()->language : GO::config()->language;
+			if($this->_langIso!='en')
 			{
-				$file = $this->_find_file($langcode, $module, $basesection);
+				$file = $this->_find_file($this->_langIso, $module, $basesection);
 				if($file)
 					require($file);
 			}		
 			
-			$file = $this->_find_override_file($langcode, $module, $basesection);
+			$file = $this->_find_override_file($this->_langIso, $module, $basesection);
 			if($file)
 				require($file);
 			
