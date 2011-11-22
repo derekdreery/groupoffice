@@ -63,8 +63,9 @@ class GO{
 			$dbname = GO::config()->db_name;
 			$dbuser = GO::config()->db_user;
 			$dbpass = GO::config()->db_pass;
+			$dbhost = GO::config()->db_host;
 			
-			self::$db = new PDO("mysql:host=localhost;dbname=$dbname", $dbuser, $dbpass);
+			self::$db = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass);
 			self::$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
       self::$db->setAttribute( PDO::ATTR_STATEMENT_CLASS, array( 'GO_Base_Db_ActiveStatement', array() ) );
 			
