@@ -97,11 +97,14 @@ try {
 				$file['name']=File::strip_invalid_chars($file['name']);
 				$tmp_file = $dir.$file['name'];
 				move_uploaded_file($file['tmp_name'], $tmp_file);
-
+				if (substr($dir,0,1)=='/')
+					$dir = substr($dir,1,strlen($dir)-2);
+				$dir_arr = explode('/',$dir);
 				$extension = File::get_extension($file['name']);
 				$response['file'] = array(
 					'tmp_name'=>$tmp_file,
 					'name'=>$file['name'],
+					'last_dir'=>$dir_arr[count($dir_arr)-1],
 					'size'=>$file['size'],
 					'type'=>File::get_filetype_description($extension),
 					'extension'=>$extension,

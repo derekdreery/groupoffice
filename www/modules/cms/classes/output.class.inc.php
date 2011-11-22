@@ -407,6 +407,7 @@ class cms_output extends cms {
 		$sort_time = !empty($params['sort_time']) ? $params['sort_time'] : '';
 		$filter_by_get_year = !empty($params['filter_by_get_year']) ? $_GET['filter_year'] : false;
 		$filter_by_get_category_id = !empty($params['filter_by_get_category_id']) ? $_GET['filter_category_id'] : false;
+		$all_subfolder_content = !empty($params['all_subfolder_content']);
 
 		/*
 		 * lastfile is used to record the previous and next file of the currently viewed file
@@ -667,7 +668,7 @@ class cms_output extends cms {
 					$html .= $item_html;
 				}
 
-				if($item['fstype']=='folder' && $current_level < $expand_levels && ($is_in_path || $expand_all)) {
+				if($item['fstype']=='folder' && ($all_subfolder_content || ($current_level < $expand_levels && ($is_in_path || $expand_all)))) {
 					$href_path = empty($path) ? '' : $path.'/';
 					$html .= $this->print_items($params, $smarty, $current_level+1,$item['id'],$href_path.urlencode($item['name']), $item);
 				}
@@ -757,6 +758,8 @@ class cms_output extends cms {
 		$category_path = !empty($params['category_path']) ? $params['category_path'] : '';
 //		$category_name = !empty($params['category_name']) ? $params['category_name'] : '';
 		$category_id = !empty($params['category_id']) ? intval($params['category_id']) : '';
+		$sort_by = !empty($params['sort_by']) ? $params['sort_by'] : false;
+		$sort_order = !empty($params['sort_order']) ? $params['sort_order'] : false;
 		$random = !empty($params['random']);
 		
 //		if ($category_name=='Root') {
@@ -765,7 +768,7 @@ class cms_output extends cms {
 //		}
 		
 		if ($category_id = $this->get_category_id_by_path($category_path)) {
-			$params['items'] = $this->get_child_categories($category_id,$this->site['id']);
+			$params['items'] = $this->get_child_categories($category_id,$this->site['id'],!empty($params['return_first_item']),$sort_by,$sort_order);
 		}
 //		else if (!empty($category_name)) {
 //			$category_name = trim($category_name);
@@ -775,7 +778,7 @@ class cms_output extends cms {
 //			$category_id = $this->get_category_by_name($category_name);
 //						
 //		} 
-		$params['items'] = $this->get_child_categories($category_id,$this->site['id'],!empty($params['return_first_item']));
+		$params['items'] = $this->get_child_categories($category_id,$this->site['id'],!empty($params['return_first_item']),$sort_by,$sort_order);
 
 		if($random)
 			shuffle($params['items']);

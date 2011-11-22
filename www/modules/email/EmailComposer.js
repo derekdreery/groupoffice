@@ -721,7 +721,7 @@ GO.email.EmailComposer = function(config) {
 			task : 'attachments'
 		},
 		root : 'results',
-		fields : ['tmp_name', 'name', 'size', 'type', 'extension', 'human_size'],
+		fields : ['tmp_name', 'name', 'size', 'type', 'extension', 'human_size', 'last_dir'],
 		id : 'tmp_name'
 	});
 
@@ -2065,8 +2065,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 						}else
 						{
 							var jsonData = Ext.decode(response.responseText);
-							var code = jsonData.code;						
-							document.location=GO.settings.modules.email.url+'download_file.php?filename='+encodeURIComponent(record.data.name)+'&code='+code;
+							var code = jsonData.code;
+							document.location=GO.settings.modules.email.url+'download_file.php?last_dir='+record.data.last_dir+'&filename='+encodeURIComponent(record.data.name)+'&code='+code;
 						}
 					},
 					scope:this

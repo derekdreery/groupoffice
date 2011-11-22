@@ -11,7 +11,7 @@ if (empty($_REQUEST['code']) || md5($user['username'].$user['password'].$_REQUES
 
 $browser = detect_browser();
 
-$path = $GLOBALS['GO_CONFIG']->tmpdir.'attachments/'.$_REQUEST['filename'];
+$path = $GO_CONFIG->tmpdir.'attachments/'.$_REQUEST['last_dir'].'/'.$_REQUEST['filename'];
 
 $extension = File::get_extension($path);
 $filename = utf8_basename($path);
