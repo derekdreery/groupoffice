@@ -189,11 +189,16 @@ class servermanager extends db {
 					$sql = "SELECT count(*) AS count_users, MIN(registration_time) AS install_time, MAX(lastlogin) AS lastlogin, SUM(logins) AS total_logins FROM  $users_table";
 					$db2->query($sql);
 					$record = $db2->next_record();
-
-					foreach($record as $key=>$value) {
-						if(empty($value)) {
-							$record[$key]=0;
+					if($record){
+						foreach($record as $key=>$value) {
+							if(empty($value)) {
+								$record[$key]=0;
+							}
 						}
+					}else
+					{
+						//can go wrong when table structure changes
+						$record=array();
 					}
 
 					$installation = array_merge($record, $installation);

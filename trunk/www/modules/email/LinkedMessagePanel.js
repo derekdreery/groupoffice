@@ -123,7 +123,7 @@ GO.email.LinkedMessagePanel = Ext.extend(GO.email.MessagePanel,{
 	},
 	listeners:{
 		scope:this,
-		linkedClicked: function(href){
+		linkClicked: function(href){
 			var win = window.open(href);
 			win.focus();
 		},

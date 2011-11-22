@@ -1,3 +1,7 @@
+17-10-2011 3.7.35
+- Several small bug fixes
+- Added Vietnamese
+
 18-10-2011 3.7.34
 - Creating initial sieve script was broken
 - ldapauth and z-push could trigger an endless logout loop.

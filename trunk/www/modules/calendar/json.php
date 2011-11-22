@@ -513,23 +513,20 @@ try {
 			$permission_levels=array();
 
 			foreach($check_calendars as $calendar_id){
-
 				$calendar = $calendar_props[] = $cal->get_calendar($calendar_id);
+				if (!isset($response['permission_level']) || $response['permission_level']<GO_SECURITY::WRITE_PERMISSION) {
 
-				if(!isset($response['calendar_id'])){
 					$response['comment']=$calendar['comment'];
 					$response['calendar_id']=$calendar['id'];
 					$response['calendar_name']=$calendar['name'];
+					$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
+
+					$permission_levels[$calendar_id]=$response['permission_level'];
+
+					if($response['permission_level']>1){
+						$response['write_permission']=true;
+					}
 				}
-
-				$response['permission_level']=$GLOBALS['GO_SECURITY']->has_permission($GLOBALS['GO_SECURITY']->user_id, $calendar['acl_id']);
-
-				$permission_levels[$calendar_id]=$response['permission_level'];
-
-				if($response['permission_level']>1){
-					$response['write_permission']=true;
-				}
-
 				if($response['permission_level']) {
 					$calendars[]=$calendar_id;
 					$calendar_names[$calendar_id]=$calendar['name'];
@@ -652,7 +649,9 @@ try {
 						$cal->get_bdays($start_time, $end_time ,$abooks);
 						while($contact = $cal->next_record()) {
 							$name = String::format_name($contact['last_name'], $contact['first_name'], $contact['middle_name']);
-
+							$start_arr = explode('-',$contact['upcoming']);
+							$start_unixtime = mktime(0,0,0,$start_arr[1],$start_arr[2],$start_arr[1]);
+							
 							if(!in_array($contact['id'], $contacts))
 							{
 								$contacts[] = $contact['id'];
@@ -660,11 +659,11 @@ try {
 												'id'=>$response['count']++,
 												'name'=>htmlspecialchars(str_replace('{NAME}',$name,$lang['calendar']['birthday_name']), ENT_COMPAT, 'UTF-8'),
 												'description'=>htmlspecialchars(str_replace(array('{NAME}','{AGE}'), array($name,$contact['upcoming']-$contact['birthday']), $lang['calendar']['birthday_desc']), ENT_COMPAT, 'UTF-8'),
-												'time'=>'',												
+												'time'=>date($_SESSION['GO_SESSION']['date_format'], $start_unixtime),												
 												'start_time'=>$contact['upcoming'].' 00:00',
 												'end_time'=>$contact['upcoming'].' 23:59',
 												'background'=>'EBF1E2',
-												'day'=>$lang['common']['full_days'][date('w', $start_time)].' '.date($_SESSION['GO_SESSION']['date_format'], $start_time),
+												'day'=>$lang['common']['full_days'][date('w', $start_unixtime)].' '.date($_SESSION['GO_SESSION']['date_format'], $start_unixtime),
 												'read_only'=>true,
 												'contact_id'=>$contact['id']
 								);
@@ -903,14 +902,14 @@ try {
 						}
 					}
 
-					if($event['category_id'])
-					{
-						$category = $cal2->get_category($event['category_id']);
-						if($category)
-						{
-							$event['background'] = $category['color'];
-						}
-					}
+//					if($event['category_id'])
+//					{
+//						$category = $cal2->get_category($event['category_id']);
+//						if($category)
+//						{
+//							$event['background'] = $category['color'];
+//						}
+//					}
 
 
 					$private = ($event['private']=='1' && $GLOBALS['GO_SECURITY']->user_id != $event['user_id']);

@@ -241,8 +241,8 @@ function find_alias_and_recipients() {
 				if(isset($aliases[$address])) {
 					$response['data']['alias_id']=$aliases[$address];
 				}
-
-				if($fill_to && (!isset($aliases[$address]) || $task=='opendraft')) {
+ 
+				if($fill_to && (!isset($aliases[$address]) || $task=='opendraft') && strpos($response['data']['to'], $content["to"][$i]['email'])===false) {
 					if (!$first) {
 						$first = true;
 					}else {
@@ -402,7 +402,7 @@ try {
 				break;
 		}
 
-		if(!empty($uid))
+		//if(!empty($uid))
 			find_alias_and_recipients();
 
 		if(isset($content)){
