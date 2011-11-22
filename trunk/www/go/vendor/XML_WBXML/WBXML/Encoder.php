@@ -99,7 +99,7 @@ class XML_WBXML_Encoder extends XML_WBXML_ContentHandler {
         $this->_dtd = $this->_dtdManager->getInstanceURI($uri);
         if (!$this->_dtd) {
             // TODO: proper error handling
-            die('Unable to find dtd for ' . $uri);
+            throw new Exception('Unable to find dtd for ' . $uri);
         }
         $dpiString = $this->_dtd->getDPI();
 

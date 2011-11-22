@@ -40,10 +40,7 @@ class XML_WBXML_ContentHandler {
      */
     function raiseError($error)
     {
-        if (!class_exists('PEAR')) {
-            require 'PEAR.php';
-        }
-        return PEAR::raiseError($error);
+        throw new Exception($error);
     }
 
     function getCharsetStr()
