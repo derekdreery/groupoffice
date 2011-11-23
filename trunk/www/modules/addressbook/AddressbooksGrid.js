@@ -61,7 +61,7 @@ Ext.extend(GO.addressbook.AddresbooksGrid, GO.grid.MultiSelectGrid, {
 			if(selections[i].json.company_id > 0)
 			{
 				show_confirm = true;
-				company_id = selections[i].json.company_id;
+				//company_id = selections[i].json.company_id;
 			}
 		}
 		
