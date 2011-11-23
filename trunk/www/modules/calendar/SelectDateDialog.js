@@ -84,22 +84,22 @@ Ext.extend(GO.calendar.SelectDateDialog, Ext.Window, {
 			this.event.calendar_id = this.formPanel.form.baseParams.update_calendar_id = update_calendar_id;
 		}
 		
+		this.formPanel.form.baseParams.id = this.event.event_id;
+			this.formPanel.form.baseParams.offset_days = this.offset;
+			
 		if(this.isCopy)
 		{
-			this.formPanel.form.baseParams.task = 'copy_event';
-			this.formPanel.form.baseParams.event_id = this.event.event_id;
-			this.formPanel.form.baseParams.offset = this.offset;
+			this.formPanel.form.baseParams.duplicate = true;		
 		}else
 		{
-			this.formPanel.form.baseParams.task = 'update_grid_event';
-			this.formPanel.form.baseParams.update_event_id = this.event.event_id;
-			this.formPanel.form.baseParams.offsetDays = this.offset;
+			delete this.formPanel.form.baseParams.duplicate;			
 			
 			if(this.event.repeats && !this.repeats)
-			{
-				this.formPanel.form.baseParams.repeats = true;
-				this.formPanel.form.baseParams.createException = true;
-				this.formPanel.form.baseParams.exceptionDate = this.event.startDate.format(GO.calendar.daysGrid.dateTimeFormat);
+			{//				this.formPanel.form.baseParams.repeats = true;
+//				this.formPanel.form.baseParams.createException = true;
+
+				this.formPanel.form.baseParams.exception_for_event_id = this.event.event_id;
+				this.formPanel.form.baseParams.exception_date = this.event.startDate.format("U");
 			}
 		}
 		
@@ -171,7 +171,7 @@ Ext.extend(GO.calendar.SelectDateDialog, Ext.Window, {
 	    	});
 		
 		this.formPanel = new Ext.form.FormPanel({
-			url: GO.settings.modules.calendar.url+'action.php',
+			url: GO.url("calendar/event/submit"),
 			baseParams:{},
 			cls:'go-form-panel',
 			labelWidth:75,
