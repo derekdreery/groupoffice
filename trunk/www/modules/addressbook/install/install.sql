@@ -320,7 +320,7 @@ DROP TABLE IF EXISTS `ab_sendmailing_companies`;
 CREATE TABLE IF NOT EXISTS `ml_sendmailing_companies` (
   `addresslist_id` int(11) NOT NULL DEFAULT '0',
   `company_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`mailing_id`,`company_id`)
+  PRIMARY KEY (`addresslist_id`,`company_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -333,5 +333,5 @@ DROP TABLE IF EXISTS `ab_sendmailing_contacts`;
 CREATE TABLE IF NOT EXISTS `ab_sendmailing_contacts` (
   `addresslist_id` int(11) NOT NULL DEFAULT '0',
   `contact_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`mailing_id`,`contact_id`)
+  PRIMARY KEY (`addresslist_id`,`contact_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
