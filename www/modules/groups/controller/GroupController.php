@@ -45,7 +45,7 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
     $store = GO_Base_Data_Store::newInstance(GO_Base_Model_User::model());				
 		$store->getColumnModel()->formatColumn('name', '$model->name');
 		
-		$storeParams = $store->getDefaultParams()->joinCustomFields(false);
+		$storeParams = $store->getDefaultParams($params)->joinCustomFields(false);
 
     // The users in the group "everyone" cannot be deleted
 

@@ -51,7 +51,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		if(!isset($params['permissionLevel']))
 			$params['permissionLevel']=GO_Base_Model_Acl::READ_PERMISSION;
 		
-		$findParams = $store->getDefaultParams()
+		$findParams = $store->getDefaultParams($params)
 						->join(GO_Calendar_Model_Group::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('group_id', 'g.id', '=', 't', true, true),'g')
 						->order(array('g.name','t.name'))
 						->select('t.*,g.name AS group_name')

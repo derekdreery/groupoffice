@@ -484,7 +484,7 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 				requests:Ext.encode({
 //					contacts:{r:"addressbook/contact/store"},
 //					companies:{r:"addressbook/company/store"},
-					addressbooks:{r:"addressbook/addressbook/store"},
+					addressbooks:{r:"addressbook/addressbook/store", limit: GO.settings.config.nav_page_size},
 					writable_addresslists:{r:"addressbook/addresslist/store",permissionLevel: GO.permissionLevels.write},
 					readable_addresslists:{r:"addressbook/addresslist/store",permissionLevel: GO.permissionLevels.read}
 				})

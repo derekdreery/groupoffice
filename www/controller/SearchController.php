@@ -51,7 +51,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 		$store = GO_Base_Data_Store::newInstance(GO_Base_Model_ModelType::model());			
 		$store->getColumnModel()->formatColumn('name', 'GO::getModel($model->model_name)->localizedName');
 
-		$store->setStatement (GO_Base_Model_ModelType::model()->find($store->getDefaultParams()));
+		$store->setStatement (GO_Base_Model_ModelType::model()->find($store->getDefaultParams($params)));
 		
 		return $store->getData();		
 	}
@@ -90,7 +90,7 @@ class GO_Core_Controller_Search extends GO_Base_Controller_AbstractModelControll
 //			}
 //		}
 		
-		$storeParams = $store->getDefaultParams();
+		$storeParams = $store->getDefaultParams($params);
 		
 		if(isset($params['types'])){
 			$types = json_decode($params['types'], true);

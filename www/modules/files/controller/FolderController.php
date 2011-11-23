@@ -326,11 +326,11 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		return array('files' => $fileIds, 'folders' => $folderIds);
 	}
 
-	private function _listShares() {
+	private function _listShares($params) {
 
 		$store = GO_Base_Data_Store::newInstance(GO_Files_Model_Folder::model());
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatListRecord'));
-		$findParams = $store->getDefaultParams();
+		$findParams = $store->getDefaultParams($params);
 		$stmt = GO_Files_Model_Folder::model()->findShares($findParams);
 		$store->setStatement($stmt);
 
@@ -340,7 +340,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 	public function actionList($params) {
 
 		if ($params['folder_id'] == 'shared')
-			return $this->_listShares();
+			return $this->_listShares($params);
 
 		//get the folder that contains the files and folders to list.
 		//This will check permissions too.
@@ -373,7 +373,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 
 		$store->getColumnModel()->setFormatRecordFunction(array($this, 'formatListRecord'));
 		
-		$findParams = $store->getDefaultParams()
+		$findParams = $store->getDefaultParams($params)
 						->ignoreAcl();
 		
 		$findParamsArray = $findParams->getParams();
@@ -404,7 +404,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 		}
 
 		if ($fileStart >= 0) {
-			$findParams = $store->getDefaultParams()
+			$findParams = $store->getDefaultParams($params)
 							->limit($fileLimit)
 							->start($fileStart);
 
