@@ -109,8 +109,8 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					GO.linkBrowser = new GO.LinkBrowser();
 				}
 				GO.linkBrowser.show({
-					link_id : this.event_id,
-					link_type : "1",
+					model_id : this.event_id,
+					model_name : "GO_Calendar_Model_Event",
 					folder_id : "0"
 				});
 			},
