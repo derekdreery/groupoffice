@@ -6,8 +6,8 @@
  */
 class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractController {
 	
-	protected function checkPermission($action) {
-		return true;
+	protected function allowGuests() {
+		return array('upgrade','checkdatabase');
 	}
 
 	protected function init() {

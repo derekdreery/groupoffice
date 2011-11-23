@@ -28,8 +28,8 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	protected $lastPath;
 	
 	
-	protected function checkPermission() {
-		
+	protected function allowGuests() {
+		return array('index');
 	}
 	
 	protected function init() {
