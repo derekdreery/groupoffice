@@ -2,8 +2,6 @@
 
 /**
  * 
- * WARNING: This controller does not check permissions.
- * 
  * TODO
  * 
  * The whole init process of Group-Office has to be remodelled.
@@ -14,8 +12,13 @@ class GO_Core_Controller_Auth extends GO_Base_Controller_AbstractController {
 
 	protected $defaultAction = 'Init';
 	
-	protected function checkPermission($action='*') {
-		return true;
+	/**
+	 * Guests need to access these actions.
+	 * 
+	 * @return array. 
+	 */
+	protected function allowGuests() {
+		return array('init', 'setview','logout','login');
 	}
 
 	private function loadInit() {

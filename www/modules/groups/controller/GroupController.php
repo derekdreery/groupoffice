@@ -14,6 +14,10 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 //    return $store;
 //  }
 	
+	protected function allowWithoutModuleAccess() {
+		return array('getusers');
+	}
+	
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		$columnModel->formatColumn('user_name','$model->user->name');
 		return parent::formatColumns($columnModel);
@@ -27,7 +31,8 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
    */
   public function actionGetUsers($params)
   { 
-    $group = GO_Base_Model_Group::model()->findByPk($params['id']);
+		//don't check ACL here because this method may be called by anyone.
+    $group = GO_Base_Model_Group::model()->findByPk($params['id'], false, true);
     
     if(empty($group))
       $group = new GO_Base_Model_Group();
@@ -47,18 +52,22 @@ class GO_Groups_Controller_Group extends GO_Base_Controller_AbstractModelControl
 		
 		$storeParams = $store->getDefaultParams($params)->joinCustomFields(false);
 
-    // The users in the group "everyone" cannot be deleted
-
-    $delresponse = array();
-    if($group->id != GO::config()->group_everyone)
-    { 
-      $store->processDeleteActions($params, 'GO_Base_Model_UserGroup', array('group_id'=>$group->id));
-    }
-    else
-    {
-      $delresponse['deleteSuccess'] = false;
-      $delresponse['deleteFeedback'] = 'Members of the group everyone cannot be deleted.';
-    }
+    
+		$delresponse = array();
+		//manually check permission here because this method may be accessed by any logged in user. allowWithoutModuleAccess is used above.
+		if(GO::modules()->groups->checkPermissionLevel(GO_Base_Model_Acl::WRITE_PERMISSION)){
+			
+			// The users in the group "everyone" cannot be deleted
+			if($group->id != GO::config()->group_everyone)
+			{ 
+				$store->processDeleteActions($params, 'GO_Base_Model_UserGroup', array('group_id'=>$group->id));
+			}
+			else
+			{
+				$delresponse['deleteSuccess'] = false;
+				$delresponse['deleteFeedback'] = 'Members of the group everyone cannot be deleted.';
+			}
+		}
     
     $stmt = $group->users($storeParams);
     $store->setStatement($stmt);

@@ -68,6 +68,23 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		
 	}
 	
+	/**
+	 * Return array with actions (in lowercase!) that may be accessed by a guest that is not logged in.	
+	 * 
+	 * @return array
+	 */
+	protected function allowGuests(){
+		return array();
+	}
+	
+	/**
+	 * Return array with actions (in lowercase!) that may be accessed without the user having access to the module.
+	 * 
+	 * @return array
+	 */
+	protected function allowWithoutModuleAccess(){
+		return array();
+	}
 	
 	/**
 	 * Checks a token that is generated for each session.
@@ -173,22 +190,38 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @param string $action
 	 * @return boolean boolean
 	 */
-	protected function checkPermission($action){
-
-		//check for logged in user
-		if(!GO::user())
-			return false;
-			
-		//check module permission
-		$module = $this->getModule();		
-		if($module && !$module->permissionLevel)
-			return false;
+	private function _checkPermission($action){
 		
+		if(!in_array($action, $this->allowGuests())){
+			//check for logged in user
+			if(!GO::user())
+				return false;			
+			
+			//check module permission
+			if(!in_array($action, $this->allowWithoutModuleAccess()))
+			{
+				$module = $this->getModule();		
+				if($module && !$module->permissionLevel)
+					return false;
+			}
+		}
+		
+		return $this->_checkRequiredPermissionLevels($action);
+		
+	}
+	
+	/**
+	 * Check the ACL permission levels manually added by addRequiredPermissionLevel();
+	 * 
+	 * @param string $action
+	 * @return boolean 
+	 */
+	private function _checkRequiredPermissionLevels($action){
 		//check action permission
 		if(isset($this->requiredPermissionLevels[$action])){
 			return GO_Base_Model_Acl::getUserPermissionLevel($this->requiredPermissionLevels[$action]['aclId'])>=$this->requiredPermissionLevels[$action]['requiredPermissionLevel'];
 		}elseif($action!='*'){
-			return $this->checkPermission('*');
+			return $this->_checkRequiredPermissionLevels('*');
 		}else
 		{
 			return true;
@@ -204,14 +237,14 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	public function run($action='', $params){
 
 		try {
-			if(!$this->checkPermission($action)){
+			if(empty($action))
+				$action=strtolower($this->defaultAction);
+			else
+				$action=strtolower($action);
+			
+			if(!$this->_checkPermission($action)){
 				throw new GO_Base_Exception_AccessDenied();
 			}
-
-			if(empty($action))
-				$action=$this->defaultAction;
-			else
-				$action=ucfirst($action);
 
 			$methodName='action'.$action;
 			
