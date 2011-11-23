@@ -233,8 +233,10 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	function actionEmployees($params) {
 		$result['success'] = false;
 		$company = GO_Addressbook_Model_Company::model()->findByPk($params['company_id']);
+		
 		if(GO_Base_Model_Acl::getUserPermissionLevel($company->getAcl()->id,GO::user()->id)<GO_Base_Model_Acl::WRITE_PERMISSION)
 			throw new GO_Base_Exception_AccessDenied();
+		
 		if(isset($params['delete_keys']))
 		{
 			$response['deleteSuccess'] = true;
@@ -270,9 +272,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$params['field'] = isset($params['field']) ? ($params['field']) : 'addressbook_name';
 
 		$store = new GO_Base_Data_Store($this->getStoreColumnModel());	
+		$this->formatColumns($store->getColumnModel());
 
-		$this->prepareStore($store);
-		
 		$response['success']=true;
 		
 		$storeParams = $store->getDefaultParams($params)->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('company_id',$params['company_id']))
