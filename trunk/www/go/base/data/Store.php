@@ -219,32 +219,32 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
    * @var GO_Base_Db_FindParams $params Supply parameters to add to or override the default ones
    * @return GO_Base_Db_FindParams defaultParams 
    */
-  public function getDefaultParams($params=false) {
+  public function getDefaultParams($requestParams, $extraFindParams=false) {
 		
-		$sort = !empty($_REQUEST['sort']) ? $_REQUEST['sort'] : $this->_defaultSortOrder;
+		$sort = !empty($requestParams['sort']) ? $requestParams['sort'] : $this->_defaultSortOrder;
 		
 		$sort = $this->getColumnModel()->getSortColumn($sort);
 		
 		$findParams = GO_Base_Db_FindParams::newInstance()
 						->calcFoundRows()
 						->joinCustomFields()
-						->order($sort, !empty($_REQUEST['dir']) ? $_REQUEST['dir'] : $this->_defaultSortDirection);
-		if(!empty($_REQUEST['query']))
-			$findParams->searchQuery ('%'.preg_replace ('/[\s]+/','%', $_REQUEST['query']).'%');
+						->order($sort, !empty($requestParams['dir']) ? $requestParams['dir'] : $this->_defaultSortDirection);
+		if(!empty($requestParams['query']))
+			$findParams->searchQuery ('%'.preg_replace ('/[\s]+/','%', $requestParams['query']).'%');
 		
-		if(!empty($_REQUEST['limit']))
-			$findParams->limit ($_REQUEST['limit']);
+		if(!empty($requestParams['limit']))
+			$findParams->limit ($requestParams['limit']);
 		else
 			$findParams->limit (GO::user()->max_rows_list);
 		
-		if(!empty($_REQUEST['start']))
-			$findParams->start ($_REQUEST['start']);
+		if(!empty($requestParams['start']))
+			$findParams->start ($requestParams['start']);
 		
-		if(isset($_REQUEST['permissionLevel']))
-			$findParams->permissionLevel ($_REQUEST['permissionLevel']);
+		if(isset($requestParams['permissionLevel']))
+			$findParams->permissionLevel ($requestParams['permissionLevel']);
 		
-		if($params)
-			$findParams->mergeWith($params);
+		if($extraFindParams)
+			$findParams->mergeWith($extraFindParams);
 		
 		return $findParams;
 		

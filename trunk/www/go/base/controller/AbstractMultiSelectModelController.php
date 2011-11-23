@@ -74,7 +74,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 			->addCondition($this->_getRemoteKey(), $params['model_id'],'=','lt')
 			->addCondition($model->primaryKey(), 'lt.'.$this->linkModelField(), '=', 't', true, true);			
 		
-		$findParams = $store->getDefaultParams();
+		$findParams = $store->getDefaultParams($params);
 		$findParams->join($linkModel->tableName(), $joinCriteria, 'lt', 'LEFT');
 		
 		$findCriteria = GO_Base_Db_FindCriteria::newInstance()
@@ -131,7 +131,7 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 			->addCondition($model->primaryKey(), 'lt.'.$this->linkModelField(), '=', 't', true, true)
 			->addCondition($this->_getRemoteKey(), $params['model_id'],'=','lt');			
 		
-		$findParams = $store->getDefaultParams()->ignoreAcl()->debugSql();
+		$findParams = $store->getDefaultParams($params)->ignoreAcl()->debugSql();
 		$findParams->join($linkModel->tableName(), $joinCriteria, 'lt', 'INNER');
 
 		$selectedModels = $model->find($findParams);

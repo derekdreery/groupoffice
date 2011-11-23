@@ -290,7 +290,7 @@
 				$model->addManyMany('contacts',$add_key);
 		}
 			
-		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id'])->contacts($store->getDefaultParams());
+		$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($params['addresslist_id'])->contacts($store->getDefaultParams($params));
 		
 		$store->setDefaultSortOrder('name', 'ASC');
 		$store->setStatement ($stmt);

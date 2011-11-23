@@ -273,7 +273,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		$response['success']=true;
 		
-		$storeParams = $store->getDefaultParams()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('company_id',$params['company_id']))
+		$storeParams = $store->getDefaultParams($params)->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('company_id',$params['company_id']))
 						->mergeWith($this->getStoreParams($params));
 		$store->setStatement(call_user_func(array('GO_Addressbook_Model_Contact','model'))->find($storeParams));
 		return array_merge($response, $store->getData());

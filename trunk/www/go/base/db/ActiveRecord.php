@@ -660,7 +660,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	private function _getFindQueryUid($params){
 		//create unique query id
+		
 		unset($params['start']);
+		if(isset($params['criteriaObject'])){
+			$params['criteriaParams']=$params['criteriaObject']->getParams();
+			$params['criteriaParams']=$params['criteriaObject']->getCondition();
+			unset($params['criteriaObject']);
+		}
+		//GO::debug($params);
 		return md5(serialize($params).$this->className());
 	}
 	
@@ -1091,8 +1098,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					$sql = "SELECT FOUND_ROWS() as found;";			
 					$r2 = $this->getDbConnection()->query($sql);
 					$record = $r2->fetch(PDO::FETCH_ASSOC);
+					//$foundRows = intval($record['found']);
 					$foundRows = GO::session()->values[$queryUid]=intval($record['found']);	
-				}else
+				}
+				else
 				{
 					$foundRows=GO::session()->values[$queryUid];
 				}

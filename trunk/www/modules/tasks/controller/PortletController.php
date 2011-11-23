@@ -67,7 +67,7 @@ class GO_Tasks_Controller_Portlet extends GO_Base_Controller_AbstractMultiSelect
 		$tasklistJoinCriteria = GO_Base_Db_FindCriteria::newInstance()
 						->addCondition('tasklist_id', 'tl.id', '=', 't', true, true);
 		
-		$findParams = $store->getDefaultParams()
+		$findParams = $store->getDefaultParams($params)
 						->select('t.*, tl.name AS tasklist_name')
 						->criteria($findCriteria)
 						->order(array('tasklist_name', $sort), $dir)
