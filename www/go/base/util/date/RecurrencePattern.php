@@ -160,6 +160,13 @@ class GO_Base_Util_Date_RecurrencePattern{
 	}
 	
 	protected function _getNextRecurrenceWeekly($startTime){
+		
+		
+		if(empty($this->_byday))
+		{
+			//this rrule is invalid. no days set for weekly recurrence.
+			return false;
+		}
 				
 		/*
 		 * eg. Recurs every 2 weeks on Wednesday. Starting on 04-09-2011.
