@@ -306,13 +306,12 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		this.setEventId(config.event_id);
 		
 		
-		var params = config.values || {};
-		
-		
+		var params = {};
 		
 		if(!config.event_id){
 			
-			params.calendar_id=config.calendar_id;
+			if(config.calendar_id)
+				params.calendar_id=config.calendar_id;
 
 			var date = new Date();
 
