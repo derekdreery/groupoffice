@@ -1373,7 +1373,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!isset($r[$name]['findParams']))
 			$r[$name]['findParams']=array();
 		
-		if($r[$name]['type']==self::BELONGS_TO || $r[$name]['type']==self::HAS_ONE){
+		if($r[$name]['type']==self::BELONGS_TO){
 		
 			$joinAttribute = $r[$name]['field'];
 			
@@ -1387,9 +1387,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			 */
 			
 			//append join attribute so cache is void automatically when this attribute changes.
-			$cacheKey = $name;
-			if($r[$name]['type']==self::BELONGS_TO)			
-				$cacheKey .= ':'.$this->_attributes[$joinAttribute];
+			$cacheKey = $name.':'.$this->_attributes[$joinAttribute];
 				
 			if(isset($this->_relatedCache[$cacheKey])){			
 
@@ -1397,24 +1395,21 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 					$attr = $this->_relatedCache[$cacheKey];
 
 					$this->_relatedCache[$cacheKey]=new $model;
-					$this->_relatedCache[$cacheKey]->setAttributes($attr, false);				
-				}
-
-			}else
-			{			
+					$this->_relatedCache[$cacheKey]->setAttributes($attr, false);					
+				}				
 				
-				if($r[$name]['type']==self::BELONGS_TO)
-				{
-					//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
-					$this->_relatedCache[$cacheKey]= GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true);
-				}else
-				{
-					//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
-					$this->_relatedCache[$cacheKey]= GO::getModel($model)->findSingleByAttribute($r[$name]['field'], $this->pk, array('relation'=>$name));
-				}
+			}else
+			{	
+				//In a belongs to relationship the primary key of the remote model is stored in this model in the attribute "field".
+				$this->_relatedCache[$cacheKey] = GO::getModel($model)->findByPk($this->_attributes[$joinAttribute], array('relation'=>$name), true);
 			}
-
 			return $this->_relatedCache[$cacheKey];
+			
+		}elseif($r[$name]['type']==self::HAS_ONE){			
+			//We can't put this in the related cache because there's no reliable way to check if the situation has changed.
+		
+			//In a has one to relation ship the primary key of this model is stored in the "field" attribute of the related model.					
+			return GO::getModel($model)->findSingleByAttribute($r[$name]['field'], $this->pk, array('relation'=>$name));			
 		}elseif($r[$name]['type']==self::HAS_MANY)
 		{									
 			$remoteFieldThatHoldsMyPk = $r[$name]['field'];
