@@ -41,6 +41,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		
 		if(!empty($model->name2))
 			$record['name_and_name2'] .= ' - '.$model->name2;
+		
 		$record['ab_name']=$model->addressbook->name;
 		
 		return parent::formatStoreRecord($record, $model, $store);
