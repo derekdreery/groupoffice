@@ -117,7 +117,7 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
 						->addRawCondition('t.calendar_id', 'c.id');
 				
-		$findParams->join(GO_Calendar_Model_Calendar::model()->tableName, $joinCriteria, 'c');
+		$findParams->join(GO_Calendar_Model_Calendar::model()->tableName(), $joinCriteria, 'c');
 		
 		$findParams->getCriteria()->addCondition('user_id', $userId,'=','c');
 		
