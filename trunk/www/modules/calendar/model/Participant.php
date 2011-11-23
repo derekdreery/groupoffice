@@ -108,12 +108,18 @@ class GO_Calendar_Model_Participant extends GO_Base_Db_ActiveRecord {
 	 * @param type $ignoreEvent
 	 * @return boolean 
 	 */
-	public static function userIsAvailable($periodStartTime, $periodEndTime, $userId=0, $ignoreEvent=false) {
+	public static function userIsAvailable($periodStartTime, $periodEndTime, $userId, $ignoreEvent=false) {
 			
-		$findParams = GO_Base_Db_FindParams::newInstance()->debugSql();
+		$findParams = GO_Base_Db_FindParams::newInstance()
+						->debugSql()
+						->ignoreAcl();
 		
-		if($userId>0)
-			$findParams->permissionLevel (GO_Base_Model_Acl::READ_PERMISSION, $userId);
+		$joinCriteria = GO_Base_Db_FindCriteria::newInstance()
+						->addRawCondition('t.calendar_id', 'c.id');
+				
+		$findParams->join(GO_Calendar_Model_Calendar::model()->tableName, $joinCriteria, 'c');
+		
+		$findParams->getCriteria()->addCondition('user_id', $userId,'=','c');
 		
 		if($ignoreEvent){
 			$findParams->getCriteria()
