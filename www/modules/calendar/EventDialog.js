@@ -615,9 +615,9 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 			waitMsg : GO.lang.waitMsgSave,
 			success : function(form, action) {
 
-				if (action.result.event_id) {
+				if (action.result.id) {
 					this.files_folder_id = action.result.files_folder_id;
-					this.setEventId(action.result.event_id);
+					this.setEventId(action.result.id);
 				}
 
 				var startDate = this.getStartDate();

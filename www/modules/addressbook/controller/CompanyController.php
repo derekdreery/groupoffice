@@ -33,16 +33,6 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		return parent::afterDisplay($response, $model, $params);
 	}
 	
-//	protected function getStoreParams($params) {
-//		
-//		$storeParams = GO_Base_Db_FindParams::newInstance();
-//		
-//		if(isset($params['addressbook_id'])){
-//			$storeParams->getCriteria()->addCondition('addressbook_id', $params['addressbook_id']);
-//		}
-//		
-//		return $storeParams;		
-//	}
 	
 	
 	public function formatStoreRecord($record, $model, $store) {
@@ -51,6 +41,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		
 		if(!empty($model->name2))
 			$record['name_and_name2'] .= ' - '.$model->name2;
+		$record['ab_name']=$model->addressbook->name;
 		
 		return parent::formatStoreRecord($record, $model, $store);
 	}
@@ -109,6 +100,7 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	 * - checked addresslists
 	 */
 	protected function getStoreParams($params) {
+
 		
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
 			->addModel(GO_Addressbook_Model_Company::model(),'t')
@@ -134,6 +126,11 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 				'localField'=>'addressbook_id',
 				'tableAlias'=>'ab', //Optional table alias
 			));	
+
+		if(isset($params['addressbook_id'])){
+                        $storeParams->getCriteria()->addCondition('addressbook_id', $params['addressbook_id']);
+                }
+
 
 		//if(empty($params['enable_addresslist_filter'])){
 		

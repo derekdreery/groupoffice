@@ -191,27 +191,11 @@ class GO_USERS extends db
 		if($user_id > 0)
 		{
 			
-			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
-			{
-				$sql .= ", cf_8.* ";
-			}
 			$sql .=" FROM go_users u INNER JOIN go_acl a ON (u.acl_id = a.acl_id AND (a.user_id=".intval($user_id)." OR a.group_id IN (".implode(',',$GLOBALS['GO_SECURITY']->get_user_group_ids($user_id))."))) ";
 			
-			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
-			{
-				$sql .= "LEFT JOIN cf_8 ON cf_8.link_id=u.id ";
-			}
 		}else
 		{		
-			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
-			{
-				$sql .= ", cf_8.* ";
-			}
 			$sql .= " FROM go_users u ";
-			if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
-			{
-				$sql .= " LEFT JOIN cf_8 ON cf_8.link_id=u.id ";
-			}			
 		}
 		
 		if($query!='')
@@ -230,15 +214,6 @@ class GO_USERS extends db
 					$fields[]='city';
 					
 					
-					if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission'])
-					{
-						$fields_sql = "SHOW FIELDS FROM cf_8";
-						$this->query($fields_sql);
-						while ($this->next_record()) {
-							$fields[]='cf_8.'.$this->f('Field');
-						}
-						
-					}
 				}else {
 					$fields[]=$field;
 				}
