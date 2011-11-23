@@ -137,7 +137,8 @@ class GO_Base_Session extends GO_Base_Observable{
 
 		unset($_SESSION, $_COOKIE['GO_UN'], $_COOKIE['GO_PW']);
 
-		@session_destroy();
+		if(session_id()!='')
+			session_destroy();
 
 		$this->fireEvent('logout', array($old_session));
 	}
