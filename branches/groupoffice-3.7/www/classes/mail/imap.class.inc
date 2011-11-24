@@ -224,7 +224,7 @@ class imap extends imap_bodystruct {
 
 	public function get_acl($mailbox){
 
-		$mailbox = $this->utf7_encode(str_replace('"', '\"', $mailbox));
+		$mailbox = $this->utf7_encode($this->_escape( $mailbox));
 		$this->clean($mailbox, 'mailbox');
 
 		$command = "GETACL $mailbox\r\n";
@@ -247,7 +247,7 @@ class imap extends imap_bodystruct {
 
 	public function set_acl($mailbox, $identifier, $permissions){
 
-		$mailbox = $this->utf7_encode(str_replace('"', '\"', $mailbox));
+		$mailbox = $this->utf7_encode($this->_escape( $mailbox));
 		$this->clean($mailbox, 'mailbox');
 
 		$command = "SETACL $mailbox $identifier $permissions\r\n";
@@ -436,7 +436,7 @@ class imap extends imap_bodystruct {
 			$this->touched_folders[]=$mailbox_name;
 
 
-		$box = $this->utf7_encode(str_replace('"', '\"', $mailbox_name));
+		$box = $this->utf7_encode($this->_escape( $mailbox_name));
 		$this->clean($box, 'mailbox');
 
 		$command = "SELECT \"$box\"\r\n";
@@ -1809,7 +1809,7 @@ class imap extends imap_bodystruct {
 	}
 
 	private function addslashes($mailbox){
-		return str_replace('"', '\"', $mailbox);
+		return $this->_escape( $mailbox);
 	}
 
 	/**
