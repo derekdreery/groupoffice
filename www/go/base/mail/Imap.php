@@ -158,7 +158,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 				fputs($this->handle, $challenge_response."\r\n");
 				break;
 			default:
-				$login = 'A'.$this->command_number().' LOGIN "'.str_replace('"', '\"', $username).'" "'.str_replace('"', '\"', $pass). "\"\r\n";
+				$login = 'A'.$this->command_number().' LOGIN "'.$this->_escape( $username).'" "'.$this->_escape( $pass). "\"\r\n";
 				$this->commands[trim(str_replace($pass, 'xxxx', $login))] = GO_Base_Util_Date::getmicrotime();
 				fputs($this->handle, $login);
 				break;
@@ -194,6 +194,9 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		return $authed;
 	}
 
+	private function _escape($str){
+		return str_replace(array('"','\\'), array('\"','\\\\'), $str);
+	}
 	/**
 	 * Get's the capabilities of the IMAP server. Useful to determine if the
 	 * IMAP server supports server side sorting.
@@ -219,7 +222,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 	public function get_acl($mailbox){
 
-		$mailbox = $this->utf7_encode(str_replace('"', '\"', $mailbox));
+		$mailbox = $this->utf7_encode($this->_escape( $mailbox));
 		$this->clean($mailbox, 'mailbox');
 
 		$command = "GETACL $mailbox\r\n";
@@ -242,7 +245,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 	public function set_acl($mailbox, $identifier, $permissions){
 
-		$mailbox = $this->utf7_encode(str_replace('"', '\"', $mailbox));
+		$mailbox = $this->utf7_encode($this->_escape( $mailbox));
 		$this->clean($mailbox, 'mailbox');
 
 		$command = "SETACL $mailbox $identifier $permissions\r\n";
@@ -431,7 +434,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 			$this->touched_folders[]=$mailbox_name;
 
 
-		$box = $this->utf7_encode(str_replace('"', '\"', $mailbox_name));
+		$box = $this->utf7_encode($this->_escape( $mailbox_name));
 		$this->clean($box, 'mailbox');
 
 		$command = "SELECT \"$box\"\r\n";
@@ -1812,7 +1815,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 
 	private function addslashes($mailbox){
-		return str_replace('"', '\"', $mailbox);
+		return $this->_escape( $mailbox);
 	}
 
 	/**
