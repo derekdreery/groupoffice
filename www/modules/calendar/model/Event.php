@@ -65,7 +65,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function defaultAttributes() {
-		$settings = GO_Calendar_Model_Settings::model()->findByPk(GO::user()->id);
+		$settings = GO_Calendar_Model_Settings::model()->getDefault(GO::user());
 		
 		$defaults = array(
 				//'description'=>'DIT IS DE BESCHRIJVING DIE STANDAARD WORDT INGEVULD',
