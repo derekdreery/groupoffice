@@ -121,3 +121,10 @@ $updates[]="ALTER TABLE  `cal_groups` ADD `show_not_as_busy` BOOL NOT NULL ;";
 
 $updates[]="ALTER TABLE `cal_events` ADD `exception_for_event_id` INT NOT NULL";
 $updates[]="ALTER TABLE `cal_events` ADD INDEX ( `exception_for_event_id` ) ";
+
+$updates[]="CREATE TABLE IF NOT EXISTS `cal_calendar_user_colors` (
+  `user_id` int(11) NOT NULL,
+  `calendar_id` int(11) NOT NULL,
+  `color` varchar(6) NOT NULL,
+  PRIMARY KEY (`user_id`,`calendar_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

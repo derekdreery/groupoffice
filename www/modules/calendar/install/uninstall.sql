@@ -14,3 +14,4 @@ DROP TABLE IF EXISTS `cal_visible_tasklists`;
 DROP TABLE IF EXISTS `cal_holidays`;
 DROP TABLE IF EXISTS `cal_categories`;
 DROP TABLE IF EXISTS `cal_events_declined`;
+DROP TABLE IF EXISTS `cal_calendar_user_colors`;

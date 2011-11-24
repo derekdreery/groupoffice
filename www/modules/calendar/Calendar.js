@@ -194,6 +194,21 @@ GO.calendar.MainPanel = function(config){
 		title:GO.calendar.lang.calendars,
 		store: this.calendarsStore,
 		allowNoSelection:true,
+		tools: [{
+			text:GO.calendar.lang.colors,
+			id:'gear',
+			qtip:GO.calendar.lang.setColors,
+			handler:function(){
+				if(!GO.calendar.colorPickerDialog){
+					GO.calendar.colorPickerDialog = new GO.calendar.ColorPickerDialog();
+				}
+				GO.calendar.colorPickerDialog.show();
+				GO.calendar.colorPickerDialog.on("hide", function(){
+					this.refresh();
+				},this);
+			},
+			scope: this
+		}],
 		bbar: new GO.SmallPagingToolbar({
 			items:[this.searchField = new GO.form.SearchField({
 				store: this.calendarsStore,
