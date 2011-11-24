@@ -263,9 +263,9 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 		$folder->user_id=$user->id;
 		$folder->visible=1;
 		$folder->readonly=1;
-		GO::$ignoreAclPermissions=true;
+		//GO::$ignoreAclPermissions=true;
 		$folder->save();			
-		GO::$ignoreAclPermissions=false;
+		//GO::$ignoreAclPermissions=false;
 		
 		return $folder;
 	}

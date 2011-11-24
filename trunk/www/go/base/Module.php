@@ -224,9 +224,11 @@ class GO_Base_Module extends GO_Base_Observable {
 		$models=$this->getModels();
 
 		foreach($models as $model){
-			echo $response[] = "Processing ".$model->getName()."\n";
-			$stmt = call_user_func(array($model->getName(),'model'))->rebuildSearchCache();
-			//$stmt->callOnEach('rebuildSearchCache');
+			if($model->isSubclassOf("GO_Base_Db_ActiveRecord")){
+				echo $response[] = "Processing ".$model->getName()."\n";
+				$stmt = GO::getModel($model->getName())->rebuildSearchCache();
+			
+			}
 		}
 	}
 	
