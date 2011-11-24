@@ -21,7 +21,7 @@ GO.email.MessageDialog = function(config){
 				uid: this.messagePanel.uid,
 				task: 'reply',
 				mailbox: this.messagePanel.mailbox,
-				account_id: this.account_id
+				account_id: this.messagePanel.account_id
 			});
 		},
 		scope: this
@@ -35,7 +35,7 @@ GO.email.MessageDialog = function(config){
 				uid: this.messagePanel.uid,
 				task: 'reply_all',
 				mailbox: this.messagePanel.mailbox,
-				account_id: this.account_id
+				account_id: this.messagePanel.account_id
 
 			});
 		},
@@ -50,7 +50,7 @@ GO.email.MessageDialog = function(config){
 				uid: this.messagePanel.uid,
 				task: 'forward',
 				mailbox: this.messagePanel.mailbox,
-				account_id: this.account_id
+				account_id: this.messagePanel.account_id
 			});
 		},
 		scope: this
