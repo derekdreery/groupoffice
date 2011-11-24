@@ -159,7 +159,7 @@ class imap extends imap_bodystruct {
 				fputs($this->handle, $challenge_response."\r\n");
 				break;
 			default:
-				$login = 'A'.$this->command_number().' LOGIN "'.str_replace('"', '\"', $username).'" "'.str_replace('"', '\"', $pass). "\"\r\n";
+				$login = 'A'.$this->command_number().' LOGIN "'.$this->_escape($username).'" "'.$this->_escape($pass). "\"\r\n";
 				$this->commands[trim(str_replace($pass, 'xxxx', $login))] = getmicrotime();
 				fputs($this->handle, $login);
 				break;
@@ -193,6 +193,10 @@ class imap extends imap_bodystruct {
 			}
 		}
 		return $authed;
+	}
+	
+	private function _escape($str){
+		return str_replace(array('"','\\'), array('\"','\\\\'), $str);
 	}
 
 	/**
