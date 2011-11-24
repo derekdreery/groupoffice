@@ -129,6 +129,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 //			delete this._panels[0];
 
 			delete this._panels[0].title;
+			this._panels[0].header=false;
+			this._panels[0].elements=this._panels[0].elements.replace(',header','');
 
 			this.formPanel.add(this._panels[0]);
 		}
@@ -261,6 +263,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 					
 					if(this.permissionsPanel && action.result.data[this.permissionsPanel.fieldName])
 						this.permissionsPanel.setAcl(action.result.data[this.permissionsPanel.fieldName]);
+					
+					if(config && config.values)
+						this.formPanel.form.setValues(config.values);
 
 					GO.dialog.TabbedFormDialog.superclass.show.call(this);
 					this.afterLoad(remoteModelId, config, action);
