@@ -5,9 +5,9 @@ class GO_Base_Util_Pdf extends TCPDF {
 
 	public function __construct($orientation = 'P') {
 		
-		parent::__construct($orientation);
+		parent::__construct($orientation,'pt');
 		
-		$this->_init();
+		$this->init();
 	}
 	
 	protected $font = 'helvetica';
@@ -17,7 +17,7 @@ class GO_Base_Util_Pdf extends TCPDF {
 	protected $subtitle="";
 	
 	
-	private function _init() {
+	protected function init() {
 
 		//set image scale factor
 		$this->setImageScale(PDF_IMAGE_SCALE_RATIO);
@@ -30,6 +30,10 @@ class GO_Base_Util_Pdf extends TCPDF {
 
 		$this->setJPEGQuality(100);
 		$this->SetMargins(30,60,30);
+		
+		if (!empty(GO::config()->tcpdf_font)) {
+			$this->font = GO::config()->tcpdf_font;
+		}
 
 		$this->SetFont($this->font,'',$this->font_size);
 
