@@ -244,12 +244,12 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 		{
 			GO.addressbook.writableAddresslistsStore.load({
 				callback:function(){
-					var values = GO.util.empty(contact_id) ? this.formPanel.form.getValues() : {};
-					this.show(contact_id);
-					delete values.addressbook_id;
-					delete values.iso_address_format;
-					delete values.salutation;
-					this.formPanel.form.setValues(values);
+					//var values = GO.util.empty(contact_id) ? this.formPanel.form.getValues() : {};
+					this.show(contact_id, config);
+//					delete values.addressbook_id;
+//					delete values.iso_address_format;
+//					delete values.salutation;
+//					this.formPanel.form.setValues(values);
 				},
 				scope:this
 			});
@@ -258,12 +258,12 @@ Ext.extend(GO.addressbook.ContactDialog, GO.Window, {
 			GO.addressbook.writableAddressbooksStore.load(
 			{
 				callback:function(){
-					var values = GO.util.empty(contact_id) ? this.formPanel.form.getValues() : {};
-					this.show(contact_id);
-					delete values.addressbook_id;
-					delete values.iso_address_format;
-					delete values.salutation;
-					this.formPanel.form.setValues(values);
+					//var values = GO.util.empty(contact_id) ? this.formPanel.form.getValues() : {};
+					this.show(contact_id, config);
+//					delete values.addressbook_id;
+//					delete values.iso_address_format;
+//					delete values.salutation;
+//					this.formPanel.form.setValues(values);
 				},
 				scope:this
 			});
