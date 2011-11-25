@@ -189,6 +189,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		}
 
 		$storeParams = GO_Base_Db_FindParams::newInstance()
+			->export("contact")
 			->criteria($criteria)						
 			->select('t.*t, ab.name AS addressbook_name')
 			->joinModel(array(
