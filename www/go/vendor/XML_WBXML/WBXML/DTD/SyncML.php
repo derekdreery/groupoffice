@@ -91,6 +91,7 @@ class XML_WBXML_DTD_SyncML extends XML_WBXML_DTD {
         } elseif ($this->version == 2) {
             $this->setCodePage(0, DPI_DTD_SYNCML_1_2, 'syncml:syncml1.2');
             $this->setCodePage(1, DPI_DTD_METINF_1_2, 'syncml:metinf1.2');
+						$this->setCodePage(2, DPI_DTD_DEVINF_1_2, 'syncml:devinf1.2');
             $this->setURI('syncml:syncml1.2');
         } else {
             $this->setCodePage(0, DPI_DTD_SYNCML_1_0, 'syncml:syncml1.0');

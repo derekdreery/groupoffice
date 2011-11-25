@@ -91,7 +91,7 @@ class XML_WBXML_DTD {
     {
         $uri = strtolower($uri);
         if (!isset($this->strCodePagesURI[$uri])) {
-					GO::debug($this->strCodePagesURI);
+					GO::debug($this);
             throw new Exception("unable to find codepage for $uri!\n");
         }
 
