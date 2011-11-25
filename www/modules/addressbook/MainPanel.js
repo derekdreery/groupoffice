@@ -345,77 +345,103 @@ GO.addressbook.MainPanel = function(config)
 				cls: 'x-btn-text-icon',
 				handler:function(){
 					var activetab = this.tabPanel.getActiveTab();
-					var config = {};
+//					var config = {};
+					var url;
+					var name;
+					var title;
+					var colmodel;
 					switch(activetab.id)
 					{
 						case 'ab-contacts-grid':
-							config.query='search_contacts';
-							config.colModel = this.contactsGrid.getColumnModel();
+							url = 'addressbook/contact/export';
+							name = 'contact';
+							title = 'ExportContact';
+							colmodel = this.contactsGrid.getColumnModel();
+							
+							
+//							config.query='search_contacts';
+//							config.colModel = this.contactsGrid.getColumnModel();
 
 							break;
 						case 'ab-company-grid':
-							config.query='search_companies';
-							config.colModel = this.companiesGrid.getColumnModel();
+							url = 'addressbook/company/export';
+							name = 'company';
+							title = 'ExportCompany';
+							colmodel = this.companiesGrid.getColumnModel();
+//							config.query='search_companies';
+//							config.colModel = this.companiesGrid.getColumnModel();
 							break;
 					}
 
-
-					config.title = activetab.title;
-					var query = this.searchPanel.queryField.getValue();
-					if(!GO.util.empty(query))
-					{
-						config.subtitle= GO.lang.searchQuery+': '+query;
-					}else
-					{
-						config.subtile='';
-					}
-
-					if(activetab.id == 'ab-contacts-grid')
-					{
-						if(!this.exportDialogExtended)
-						{
-							var columns=[];
-							for (var i = 0; i < this.companiesGrid.colModel.getColumnCount(); i++) {
-								var c = this.companiesGrid.colModel.config[i];
-								columns.push(c.dataIndex + ':' + GO.addressbook.lang.company +' '+c.header);
-							}
-
-							this.exportDialogExtended = new GO.ExportQueryDialog({
-								query:'contactsearch',
-								loadParams:{
-									export_directory:'modules/addressbook/exporters/',
-									books:this.contactsGrid.store.baseParams.books,
-									companyColumns:columns
-								},
-								customTypes:[{
-									boxLabel : GO.addressbook.lang.exportWithCompanies,
-									name : 'type',
-									inputValue : 'with_companies_export_query'
-								}]
-							});
-
-							config.subtitle= GO.lang.searchQuery+': '+query;
-						}else
-						{
-							config.subtitle='';
-						}
+				if(!this.exportDialog)
+				{
+					this.exportDialog = new GO.ExportGridDialog({
+						url: url,
+						name: name,
+						documentTitle: title,
+						colModel: colmodel
+					});
+				}
+				
+				this.exportDialog.show();
 
 
-						//config.showAllFields=true;
-
-
-						this.exportDialogExtended.show(config);
-					}else
-					{
-						if(!this.exportDialog)
-						{
-							this.exportDialog = new GO.ExportQueryDialog({
-								query:config.query
-							});
-						}
-
-						this.exportDialog.show(config);
-					}
+//					config.title = activetab.title;
+//					var query = this.searchPanel.queryField.getValue();
+//					if(!GO.util.empty(query))
+//					{
+//						config.subtitle= GO.lang.searchQuery+': '+query;
+//					}else
+//					{
+//						config.subtile='';
+//					}
+//
+//					if(activetab.id == 'ab-contacts-grid')
+//					{
+//						if(!this.exportDialogExtended)
+//						{
+//							var columns=[];
+//							for (var i = 0; i < this.companiesGrid.colModel.getColumnCount(); i++) {
+//								var c = this.companiesGrid.colModel.config[i];
+//								columns.push(c.dataIndex + ':' + GO.addressbook.lang.company +' '+c.header);
+//							}
+//
+//							this.exportDialogExtended = new GO.ExportQueryDialog({
+//								query:'contactsearch',
+//								loadParams:{
+//									export_directory:'modules/addressbook/exporters/',
+//									books:this.contactsGrid.store.baseParams.books,
+//									companyColumns:columns
+//								},
+//								customTypes:[{
+//									boxLabel : GO.addressbook.lang.exportWithCompanies,
+//									name : 'type',
+//									inputValue : 'with_companies_export_query'
+//								}]
+//							});
+//
+//							config.subtitle= GO.lang.searchQuery+': '+query;
+//						}else
+//						{
+//							config.subtitle='';
+//						}
+//
+//
+//						//config.showAllFields=true;
+//
+//
+//						this.exportDialogExtended.show(config);
+//					}else
+//					{
+//						if(!this.exportDialog)
+//						{
+//							this.exportDialog = new GO.ExportQueryDialog({
+//								query:config.query
+//							});
+//						}
+//
+//						this.exportDialog.show(config);
+//					}
 				},
 				scope: this
 			})
