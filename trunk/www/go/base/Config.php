@@ -977,33 +977,18 @@ class GO_Base_Config {
 	
 
 	}
-
+	
 	/**
-	 * This function sets some default session variables. When a user logs in
-	 * they are overridden by the user settings.
+	 * Get the temporary files folder.
+	 * 
+	 * @return GO_Base_Fs_Folder 
 	 */
-	public function set_default_session(){
-
-		if(!isset($_SESSION['GO_SESSION']['security_token']))
-		{
-			$_SESSION['GO_SESSION']['decimal_separator'] = $this->default_decimal_separator;
-			$_SESSION['GO_SESSION']['thousands_separator'] = $this->default_thousands_separator;
-			$_SESSION['GO_SESSION']['date_separator'] = $this->default_date_separator;
-			$_SESSION['GO_SESSION']['date_format'] = GO_Base_Util_Date::get_dateformat( $this->default_date_format, $_SESSION['GO_SESSION']['date_separator']);
-			$_SESSION['GO_SESSION']['time_format'] = $this->default_time_format;
-			$_SESSION['GO_SESSION']['currency'] = $this->default_currency;
-			$_SESSION['GO_SESSION']['timezone'] = $this->default_timezone;
-			$_SESSION['GO_SESSION']['country'] = $this->default_country;
-			$_SESSION['GO_SESSION']['sort_name'] = 'last_name';
-			$_SESSION['GO_SESSION']['auth_token']=GO_Base_Util_String::random_password('a-z,1-9', '', 30);
-			//some url's require this token to be appended
-			$_SESSION['GO_SESSION']['security_token']=GO_Base_Util_String::random_password('a-z,1-9', '', 10);
-
-			GO::debug('Setup new session '.$_SESSION['GO_SESSION']['security_token']);
-		}
-
-		
+	public function getTempFolder(){
+		$folder = new GO_Base_Fs_Folder($this->tmpdir);
+		$folder->create();
+		return $folder;
 	}
+
 
 	function __destruct() {
 		if($this->debug_log) {
