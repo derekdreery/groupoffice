@@ -13,7 +13,8 @@ class GO_Notes_Controller_Note extends GO_Base_Controller_AbstractModelControlle
 	
 	protected function getStoreParams($params){
 		
-		$findParams = GO_Base_Db_FindParams::newInstance()						
+		$findParams = GO_Base_Db_FindParams::newInstance()					
+//						->export('notes')
 						->joinCustomFields()
 						->debugSql();
 		

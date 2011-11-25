@@ -127,7 +127,26 @@ GO.notes.MainPanel = function(config){
 			},
 			scope: this
 				
-		}]
+		}
+//		,{
+//				iconCls: 'btn-export',
+//				text: GO.lang.cmdExport,
+//				cls: 'x-btn-text-icon',
+//				handler:function(){				
+//					if(!this.exportDialog)
+//					{
+//						this.exportDialog = new GO.ExportGridDialog({
+//							url: 'notes/note/export',
+//							name: 'notes',
+//							documentTitle:'ExportNote',
+//							colModel: this.centerPanel.getColumnModel()
+//						});
+//					}		
+//					this.exportDialog.show();
+//				},
+//				scope: this
+//			}
+		]
 		});
 
 	config.items=[
