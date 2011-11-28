@@ -661,7 +661,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private function _getFindQueryUid($params){
 		//create unique query id
 		
-		unset($params['start']);
+		unset($params['start'], $params['orderDirection'], $params['order']);
 		if(isset($params['criteriaObject'])){
 			$params['criteriaParams']=$params['criteriaObject']->getParams();
 			$params['criteriaParams']=$params['criteriaObject']->getCondition();
