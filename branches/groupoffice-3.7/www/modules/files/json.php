@@ -390,7 +390,7 @@ try {
 					$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
 					$folder['type']=$lang['files']['folder'];
 					$folder['timestamp']=$folder['ctime'];
-					$folder['mtime']=Date::get_timestamp($folder['ctime']);
+					$folder['mtime']=Date::get_timestamp($folder['mtime']);
 					$folder['size']='-';
 					$folder['extension']='folder';
 					if($folder['readonly']=='1') {
@@ -660,7 +660,7 @@ try {
 					//$folder['grid_display']='<div class="go-grid-icon '.$class.'">'.$folder['name'].'</div>';
 					$folder['type']=$lang['files']['folder'];
 					$folder['timestamp']=$folder['ctime'];
-					$folder['mtime']=Date::get_timestamp($folder['ctime']);
+					$folder['mtime']=Date::get_timestamp(filemtime($GO_CONFIG->file_storage_path.$folder['path']));
 					$folder['size']='-';
 					$folder['extension']='folder';
 					$response['results'][]=$folder;
