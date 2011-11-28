@@ -17,7 +17,8 @@
  * @package GO.base.controller
  * @version $Id: File.class.inc.php 7607 2011-06-15 09:17:42Z mschering $
  * @copyright Copyright Intermesh BV.
- * @author Merijn Schering <mschering@intermesh.nl> 
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @author Wilmar van Beusekom <wilmar@intermesh.nl>
  *
  */
 class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_AbstractController {
@@ -282,7 +283,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 	}
   
   /**
-   * The default grid action for the current model.
+   * The default grid action for the current model. This action also handles:
+	 * 
+	 * 1. Multiselection of related BELONGS_TO models (See getMultiSelectProperties).
+	 * 2. Advanced queries. See _handleAdvancedQuery, the contacts advanced search
+	 * use case in Group-Office, and
+	 * GO_Addressbook_Controller_Contact::beforeIntegrateRegularSql.
+	 * 3. Deleting models
    */
   public function actionStore($params){	
     $modelName = $this->model;  
@@ -353,6 +360,9 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		$storeParams = $store->getDefaultParams($params)->mergeWith($this->getStoreParams($params));
 		
+		if (!empty($params['advancedQueryData'])) {		
+			$this->_handleAdvancedQuery($params['advancedQueryData'],$storeParams);
+		}
 			
 		$store->setStatement(call_user_func(array($modelName,'model'))->find($storeParams));
 		
@@ -714,5 +724,177 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		
 		return $field->columnName();
 	}
-}
+	
+	
+	public function actionAttributes($params){
+		
+		if(!isset($params['exclude']))
+			$params['exclude']=array();
+		else
+			$params['exclude']=explode(',', $params['exclude']);
+		
+		$response['results']=array();
+		
+		$model = GO::getModel($this->model);
+		$labels = $model->attributeLabels();
+		
+		$attributes = array();
+		
+		$columns = $model->getColumns();
+		foreach($columns as $name=>$attr){
+			if($name!='id' && $name!='user_id' && $name!='acl_id' && !in_array($name, $params['exclude']))
+				$attributes['t.'.$name]=$model->getAttributeLabel($name);				
+		}
+		
+		if($model->customfieldsRecord){
+			$columns = $model->customfieldsRecord->getColumns();
+			foreach($columns as $name=>$attr){
+				if($name != 'model_id' && !in_array($name, $params['exclude'])){					
+					$attributes['cf.'.$name]=$model->customfieldsRecord->getAttributeLabel($name);					
+				}
+			}
+		}
+		
+		$this->afterAttributes($attributes, $response, $params, $model);
+		
+		asort($attributes);
+		
+		foreach($attributes as $field=>$label)
+			$response['results'][]=array('name'=>$field,'label'=>$label);
+		
+		return $response;		
+	}
+	
+	/**
+	 * Customizations to the attributes in the store for the view can be done
+	 * here. This function should be used in your controller in conjunction with
+	 * beforeIntegrateRegularSql(). See for an example: the advanced search use
+	 * case in Group-Office, GO_Addressbook_Controller_Contact::afterAttributes
+	 * and GO_Addressbook_Controller_Contact::beforeIntegrateRegularSql().
+	 * @param Array $attributes Array of attributes. Keys of the array are how the
+	 * attributes will be known as search record field names after the
+	 * view passes an advanced search record to the controller. Values of the
+	 * array are how they will be named in the view's advanced search dialog's
+	 * select box.
+	 * @param Array $response The response to be passed to the client.
+	 * @param type $params The request parameters from the client.
+	 * @param GO_Base_Db_ActiveRecord $model 
+	 */
+	protected function afterAttributes(&$attributes, &$response, &$params, GO_Base_Db_ActiveRecord $model)
+	{
+	//unset($attributes['t.company_id']);
+	//$attributes['companies.name']=GO::t('company','addressbook');
+	//return parent::afterAttributes($attributes, $response, $params, $model);
+	}
+	
+	/**
+	 * Adds advanced query request parameters to a findCriteria object. 
+	 * The advanced query panel view can be found in GO.query.QueryPanel
+	 * 
+	 * @param String-or-array $advancedQueryData 
+	 * @param GO_Base_Db_FindParams $storeParams
+	 */
+	private function _handleAdvancedQuery($advancedQueryData, &$storeParams){
+		$advancedQueryData = is_string($advancedQueryData) ? json_decode($advancedQueryData, true) : $advancedQueryData;
+		$findCriteria = $storeParams->getCriteria();
+		
+		$criteriaGroup = GO_Base_Db_FindCriteria::newInstance();
+		$criteriaGroupAnd=true;
+		for($i=0,$count=count($advancedQueryData);$i<$count;$i++){
+			
+			$advQueryRecord=$advancedQueryData[$i];
+			
+			if($i==0 || $advQueryRecord['close_group']){
+				$findCriteria->mergeWith($criteriaGroup,$criteriaGroupAnd);
+				$criteriaGroupAnd=$advQueryRecord['andor']=='AND';
+				$criteriaGroup = GO_Base_Db_FindCriteria::newInstance();
+			}
+			
+			if(!empty($advQueryRecord['field'])){	
+				// Give the record a unique id, to enable the programmers to
+				// discriminate between advanced search query records of the same field
+				// type.
+				$advQueryRecord['id'] = $i;
+				// Check if current adv. search record should be handled in the standard
+				// manner.
+				if($this->beforeHandleAdvancedQuery($advQueryRecord, $criteriaGroup ,$storeParams)){
+					
+					$fieldParts = explode('.',$advQueryRecord['field']);
+				
+					if(count($fieldParts)==2){
+						$field = $fieldParts[1];
+						$tableAlias=$fieldParts[0];
+					}else
+					{
+						$field = $fieldParts[0];
+						$tableAlias=false;
+					}
 
+					if($tableAlias=='t'){
+						$advQueryRecord['value']=GO::getModel($this->model)->formatInput($field, $advQueryRecord['value']);
+					}
+					$criteriaGroup->addCondition($field, $advQueryRecord['value'], $advQueryRecord['comparator'],$tableAlias,$advQueryRecord['andor']=='AND');
+					
+				}
+			}
+		}
+			
+		$findCriteria->mergeWith($criteriaGroup,$criteriaGroupAnd);
+		
+		$storeParams->debugSql();
+	}
+	
+	/**
+	 * If this function is not overridden in your controller, advanced search will
+	 * be only possible for model fields that correspond directly to fields in the
+	 * model's database table.
+	 * You can catch advanced search query records that have to be handled
+	 * differently by overriding this function. For example, if the purpose is to
+	 * search through fields of models related to the current model, such as
+	 * 'company name' for 'contacts', you can handle it here and return false. The
+	 * resulting overridden function should be a switch.
+	 * In your controller, this should be used in conjunction with
+	 * afterAttributes(). See for an example: the advanced search use case in
+	 * Group-Office, GO_Addressbook_Controller_Contact::afterAttributes and
+	 * GO_Addressbook_Controller_Contact::beforeIntegrateRegularSql().
+	 * @param Array $advQueryRecord
+	 * @param GO_Base_Db_FindCriteria $findCriteria
+	 * @param GO_Base_Db_FindParams $storeParams
+	 * @return boolean Return true if the current $advQueryRecord must be handled
+	 * in the regular way, return false after it has been handled differently.
+	 */
+	protected function beforeHandleAdvancedQuery($advQueryRecord, GO_Base_Db_FindCriteria &$findCriteria, GO_Base_Db_FindParams &$storeParams){
+		return true;
+	}
+	
+	/**
+	 * Checks if query data $advancedQueryData contains a field with name $fieldName,
+	 * and returns the record with that name, if any.
+	 * @param String $fieldName
+	 * @param Array $advancedQueryData
+	 * @return Array The advanced query record, or false if not found. 
+	 */
+//	protected function getAdvancedQueryRecord($fieldName, $advancedQueryData) {
+//		$advancedQueryData = json_decode($advancedQueryData, true);
+//		foreach ($advancedQueryData as $record) {
+//			if ($record['field']==$fieldName)
+//				return $record;
+//		}
+//		return false;
+//	}
+	
+		/**
+	 * Removes record with name $fieldName from $advancedQueryData contains.
+	 * @param String $fieldName
+	 * @param Array $advancedQueryData
+	 */
+//	protected function removeAdvancedQueryRecord($fieldName, &$advancedQueryData) {
+//		$advancedQueryData = json_decode($advancedQueryData, true);
+//		foreach ($advancedQueryData as $k=>$record) {
+//			if ($record['field']==$fieldName)
+//				unset($advancedQueryData[$k]);
+//		}
+//		$advancedQueryData = json_encode($advancedQueryData);
+//	}
+	
+}
