@@ -453,7 +453,7 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 				
 				this.scheduleCallItem.setLinkConfig({
 					name: name,
-					links:[{model_id: this.data.id, model_name:"GO_Addressbook_Model_Company"}],
+					link:[{model_id: this.data.id, model_name:"GO_Addressbook_Model_Company"}],
 					callback:this.reload,
 					scope: this
 				});
