@@ -1516,17 +1516,17 @@ class cms extends db {
 
 		$cms2= new cms_output();
 		
-		$this->query($sql);
+		$cms2->query($sql);
 		$categories = array();
-		while ($record = $this->next_record()) {
+		while ($record = $cms2->next_record()) {
 			$record['active'] = isset($_GET['filter_category_id']) && $record['id']==$_GET['filter_category_id'];
 			$record['active_class_name'] = $record['active'] ? 'active_category_filter' : '';
 			
 			if($return_last_item){
 				$sql = "SELECT * FROM cms_files f INNER JOIN cms_files_categories c ON c.file_id=f.id WHERE c.category_id=".intval($record['id'])." ORDER BY f.sort_time DESC LIMIT 0,1";
-				$cms2->query($sql);
-				$record['last_item']=$cms2->next_record();
-				$record['last_item']['href']=$cms2->create_href_by_file($record['last_item']);
+				$this->query($sql);
+				$record['last_item']=$this->next_record();
+				$record['last_item']['href']=$this->create_href_by_file($record['last_item']);
 			}
 			
 			$categories[] = $record;
