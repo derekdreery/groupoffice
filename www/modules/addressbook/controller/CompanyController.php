@@ -226,27 +226,21 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	protected function beforeHandleAdvancedQuery($advQueryRecord, GO_Base_Db_FindCriteria &$criteriaGroup, GO_Base_Db_FindParams &$storeParams) {
 		switch ($advQueryRecord['field']) {
 			case 'employees.name':
-	
-					// TODO: add the below employee fields between SELECT and FROM.
-					// $storeParams->appendToSelect('`employees`.`first_name`, `employees`.`middle_name`, `employees`.`last_name`');
 					$storeParams->join(
-							GO_Addressbook_Model_Contact::model()->tableName(),
-							GO_Base_Db_FindCriteria::newInstance()->addRawCondition('`t`.`id`','`employees'.$advQueryRecord['id'].'`.`company_id`'),
-							'employees'.$advQueryRecord['id']
+						GO_Addressbook_Model_Contact::model()->tableName(),
+						GO_Base_Db_FindCriteria::newInstance()->addRawCondition('`t`.`id`','`employees'.$advQueryRecord['id'].'`.`company_id`'),
+						'employees'.$advQueryRecord['id']
 					);
-					// addRawCondition($value1, $value2='', $comparator='=', $useAnd=true)
 					$criteriaGroup->addRawCondition(
 						'CONCAT_WS(\' \',`employees'.$advQueryRecord['id'].'`.`first_name`,`employees'.$advQueryRecord['id'].'`.`middle_name`,`employees'.$advQueryRecord['id'].'`.`last_name`)',
 						':employee'.$advQueryRecord['id'],
 						$advQueryRecord['comparator'],
 						$advQueryRecord['andor']=='AND'
 					);
-					$criteriaGroup->addBindParameter(':employee'.$advQueryRecord['id'], $advQueryRecord['value']);
-				
+					$criteriaGroup->addBindParameter(':employee'.$advQueryRecord['id'], $advQueryRecord['value']);				
 				return false;
 				break;
 			default:
-				//parent::integrateInSqlSearch($advQueryRecord, $findCriteria, $storeParams);
 				return true;
 				break;
 		}

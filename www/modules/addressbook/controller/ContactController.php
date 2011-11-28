@@ -353,7 +353,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return $response;
 	}
 
-	protected function beforeHandleAdvancedQuery ($advQueryRecord, GO_Base_Db_FindCriteria &$findCriteria, GO_Base_Db_FindParams &$storeParams) {
+	protected function beforeHandleAdvancedQuery ($advQueryRecord, GO_Base_Db_FindCriteria &$criteriaGroup, GO_Base_Db_FindParams &$storeParams) {
 		switch ($advQueryRecord['field']) {
 			case 'companies.name':
 				$storeParams->join(
@@ -361,21 +361,23 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 					GO_Base_Db_FindCriteria::newInstance()->addRawCondition('`t`.`company_id`','`companies'.$advQueryRecord['id'].'`.`id`'),
 					'companies'.$advQueryRecord['id']
 				);
-				$findCriteria->addRawCondition(
+				$criteriaGroup->addRawCondition(
 					'companies'.$advQueryRecord['id'].'.name',
-					'\''.$advQueryRecord['value'].'\'',
+					':company_name'.$advQueryRecord['id'],
 					$advQueryRecord['comparator'],
 					$advQueryRecord['andor']=='AND'
 				);
+				$criteriaGroup->addBindParameter(':company_name'.$advQueryRecord['id'], $advQueryRecord['value']);
 				return false;
 				break;
 			case 'contact_name':
-				$findCriteria->addRawCondition(
+				$criteriaGroup->addRawCondition(
 					'CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`)',
-					'\''.$advQueryRecord['value'].'\'',
+					':contact_name'.$advQueryRecord['id'],
 					$advQueryRecord['comparator'],
 					$advQueryRecord['andor']=='AND'
 				);
+				$criteriaGroup->addBindParameter(':contact_name'.$advQueryRecord['id'], $advQueryRecord['value']);
 				return false;
 				break;
 			default:
