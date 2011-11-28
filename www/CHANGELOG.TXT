@@ -1,4 +1,10 @@
-17-10-2011 3.7.35
+29-11-2011 3.7.36
+- GOTA was broken in latest releases.
+- Calendar colors with multiple selection can be defined by the user.
+- UID of calendar items got lost when syncing with ActiveSync. This caused problems with CalDAV.
+- Forwarding inline images that came from Apple imail failed sometimes.
+
+17-11-2011 3.7.35
 - Several small bug fixes
 - Added Vietnamese
 

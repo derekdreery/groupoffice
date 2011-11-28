@@ -553,6 +553,8 @@ class cached_imap extends imap{
 
 		//go_debug($struct);
 
+		//$message['attachments']=$this->find_message_attachments($struct, $message['body_ids']);
+		//don't pass body ids for inline attachment in apple's flowed mails.
 		$message['attachments']=$this->find_message_attachments($struct, $message['body_ids']);
 
 		$message['smime_signed']=false;
@@ -623,6 +625,13 @@ class cached_imap extends imap{
 				}
 			}
 
+			if(isset($message['html_body'])){
+				//see line 826 get_body_parts. Some don't have content id's but are flowed inline.
+				$cid = 'flowed_inline_'.$message['attachments'][$i]['imap_id'];
+				if(strpos($message['html_body'], $cid)){
+					$message['attachments'][$i]["id"]=$cid;
+				}
+			}
 
 			if (!empty($message['attachments'][$i]["id"])) {
 				//when an image has an id it belongs somewhere in the text we gathered above so replace the
@@ -792,8 +801,9 @@ class cached_imap extends imap{
 		{
 			if(empty($plain_parts['parts'][$i]['charset']))
 				$plain_parts['parts'][$i]['charset']=$this->default_charset;
-
-			$message['body_ids'][]=$plain_parts['parts'][$i]['imap_id'];
+			if($plain_parts['parts'][$i]['type']=='text')
+				$message['body_ids'][]=$plain_parts['parts'][$i]['imap_id'];
+			
 		}
 		for($i=0,$max=count($html_parts['parts']);$i<$max;$i++)
 		{
@@ -817,10 +827,14 @@ class cached_imap extends imap{
 						$message['plain_body'].= "\n";
 
 					$message['plain_body'].=$this->get_message_part_decoded($message['uid'],$plain_part['imap_id'],$plain_part['encoding'], $plain_part['charset'],$peek, 512000);
+					//$message['body_ids'][]=$plain_part['imap_id'];
 				}else
-				{
+				{								
+					
 					$message['plain_body'].='{inline_'.count($inline_images).'}';
-					$inline_images[]='<img alt="'.$plain_part['name'].'" src="'.$this->get_attachment_url($message['uid'], $plain_part).'" style="display:block;margin:10px 0;" />';
+					$cid='flowed_inline_'.$plain_part['imap_id'];
+					$inline_images[]='<img alt="'.$plain_part['name'].'" src="cid:'.$cid.'" style="display:block;margin:10px 0;" />';
+					
 				}
 
 				$uuencoded_attachments = $this->extract_uuencoded_attachments($message['plain_body']);
