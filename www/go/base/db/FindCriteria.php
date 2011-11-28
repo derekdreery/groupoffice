@@ -109,6 +109,8 @@ class GO_Base_Db_FindCriteria {
 	 */
 	private function _appendConditionString($tableAlias, $field, $value, $comparator, $valueIsColumn){
 		
+		$this->_validateComparator($comparator);
+		
 		if(is_null($value)){
 			$paramTag = "NULL";
 		}elseif(!$valueIsColumn){
@@ -122,7 +124,11 @@ class GO_Base_Db_FindCriteria {
 		$this->_condition .= ' `'.$tableAlias.'`.`'.$field.'` '.$comparator.' '.$paramTag;
 	}
 	
-
+	
+	private function _validateComparator($comparator){
+		if(!preg_match("/[=!><a-z]/i", $comparator))
+			throw new Exception("Invalid comparator: ".$comparator);
+	}
 	
 	/**
 	 * Adds a condition to this object and returns itself.
@@ -156,7 +162,9 @@ class GO_Base_Db_FindCriteria {
 	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true. 
 	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
 	 */
-	public function addRawCondition($value1, $value2, $comparator='=', $useAnd=true) {
+	public function addRawCondition($value1, $value2='', $comparator='=', $useAnd=true) {
+		if (empty($value2))
+			$comparator = '';
 		$this->_appendOperator($useAnd);
 		$this->_appendRawConditionString($value1, $value2, $comparator);		
 		return $this;
@@ -184,6 +192,7 @@ class GO_Base_Db_FindCriteria {
 	 * @param String $comparator How needs this field be compared with the value. Can be ('<','>','<>','=<','>=','=').
 	 */
 	private function _appendRawConditionString($value1, $value2, $comparator) {
+		$this->_validateComparator($comparator);
 		$this->_condition .= ' '.$value1.' '.$comparator.' '.$value2;
 	}
 	
