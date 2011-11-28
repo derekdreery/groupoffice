@@ -94,6 +94,9 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	}
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {		
+		if(isset($params['comment']))
+			// TODO: Een nieuwe comment toevoegen aan deze taak.
+		
 		
 		 if(GO::modules()->files){
 			 $f = new GO_Files_Controller_Folder();

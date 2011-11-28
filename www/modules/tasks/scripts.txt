@@ -16,3 +16,4 @@ modules/tasks/TaskListsGrid.js
 modules/tasks/TasksTemplate.js
 modules/tasks/AddTaskPanel.js
 modules/tasks/GlobalSettings.js
+modules/tasks/ScheduleCallMenuItem.js
