@@ -23,9 +23,9 @@ GO.addressbook.SavedQueryGrid = function(config)
 		config.border=false;
 
 		config.store = new GO.data.JsonStore({
-			url: GO.settings.modules.addressbook.url+'json.php',
+			url: GO.url('addressbook/searchQuery/store'),
 			baseParams: {
-				task: "sqls",
+//				task: "sqls",
 				companies:0
 			},
 			root: 'results',

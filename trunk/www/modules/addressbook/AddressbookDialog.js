@@ -694,10 +694,10 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 	{
 		this.addressbookImportPanel.form.submit({
 			waitMsg: GO.lang.waitMsgUpload,
-			url:GO.settings.modules.addressbook.url+ 'action.php',
+			url: GO.url('addressbook/addressbook/upload'),
 			params:
 			{
-				task : 'upload',
+				// task : 'upload',
 				addressbook_id : this.addressbook_id
 			},
 			success:function(form, action){

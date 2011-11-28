@@ -20,10 +20,9 @@ GO.addressbook.SearchQueryPanel = function(config)
 		config.title = GO.addressbook.lang.newSearch;
 
 		this.typesStore = new GO.data.JsonStore({
-			url: GO.settings.modules.addressbook.url+'json.php',
-//			url: GO.url('addressbook/addressbook/addressbookFields'),
+			url: GO.url('addressbook/searchQuery/addressbookFields'),
 			baseParams: {
-				task: "ab_fields",
+//				task: "ab_fields",
 				type:""
 			},
 			root: 'results',
@@ -140,9 +139,10 @@ GO.addressbook.SearchQueryPanel = function(config)
 				{
 					Ext.Msg.prompt(GO.addressbook.lang.searchQueryName, GO.addressbook.lang.enterSearchQueryName, function(btn, text){
 						Ext.Ajax.request({
-							url:GO.settings.modules.addressbook.url +'action.php',
+							//url:GO.settings.modules.addressbook.url +'action.php',
+							url: GO.url('addressbook/searchQuery/submit'),
 							params:{
-								task:'save_sql',
+								//task:'save_sql',
 								sql: GO.addressbook.queryField.getValue(),
 								name: text,
 								companies:this.typesStore.baseParams.type=='companies' ? '1' : '0'
