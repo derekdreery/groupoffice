@@ -53,6 +53,11 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	 */
 	permissionsPanel : false,
 	
+	/**
+	 * Config variable that is passed on the show function of this dialog.
+	 */
+	showConfig : false,
+	
 
 	_panels : false,
 	
@@ -163,7 +168,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	},
 	
 	getSubmitParams : function(){
-		
+		return {};
 	},
 	
 	beforeSubmit : function(params){
@@ -199,8 +204,12 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 				this.fireEvent('save', this, this.remoteModelId);
 				
 				if(this.link_config && this.link_config.callback)
-				{					
-					this.link_config.callback.call(this);					
+				{	
+					if(!this.link_config.scope)
+						this.link_config.scope = this;
+					
+					this.link_config.callback.call(this.link_config.scope);
+						
 				}	
 			},		
 			failure: function(form, action) {
@@ -222,6 +231,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	show : function (remoteModelId, config) {
 
 		config = config || {};
+		
+		this.showConfig = config;
     
 		this.beforeLoad(remoteModelId, config);
 
@@ -283,15 +294,16 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		}
 		
 		//if the newMenuButton from another passed a linkTypeId then set this value in the select link field
-		if(this.selectLinkField && config && config.link_config)
-		{
-			this.selectLinkField.container.up('div.x-form-item').setDisplayed(remoteModelId==0);
-			
+		if(config && config.link_config)
+		{	
 			this.link_config=config.link_config;
-			if(config.link_config.modelNameAndId)
-			{
-				this.selectLinkField.setValue(config.link_config.modelNameAndId);
-				this.selectLinkField.setRemoteText(config.link_config.text);
+			if(this.selectLinkField){
+				this.selectLinkField.container.up('div.x-form-item').setDisplayed(remoteModelId==0);
+				if(config.link_config.modelNameAndId)
+				{
+					this.selectLinkField.setValue(config.link_config.modelNameAndId);
+					this.selectLinkField.setRemoteText(config.link_config.text);
+				}
 			}
 		}
 	},
