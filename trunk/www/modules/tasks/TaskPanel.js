@@ -101,7 +101,7 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 				if(!this.continueTaskDialog){
 					this.continueTaskDialog = new GO.tasks.ContinueTaskDialog({
 						listeners:{
-							save:function(){
+							submit:function(){
 								this.reload();
 								var tasksModulePanel =GO.mainLayout.getModulePanel('tasks');
 								if(tasksModulePanel && tasksModulePanel.rendered){
@@ -113,7 +113,7 @@ GO.tasks.TaskPanel = Ext.extend(GO.DisplayPanel,{
 					});
 				}
 
-				this.continueTaskDialog.show(this.data);
+				this.continueTaskDialog.show(this.data.id,this.data);
 			},
 			scope:this,
 			disabled:true
