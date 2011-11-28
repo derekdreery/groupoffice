@@ -2494,6 +2494,9 @@ class calendar extends db {
 		while($cal->next_record()) {
 			$delete->delete_calendar($cal->f('id'));
 		}
+		
+		$sql = "DELETE FROM cal_calendar_user_colors WHERE user_id=".$cal->escape($user['id']);
+		$cal->query($sql);
 
 		$sql = "DELETE FROM cal_settings WHERE user_id=".$cal->escape($user['id']);
 		$cal->query($sql);
