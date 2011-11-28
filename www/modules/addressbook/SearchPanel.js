@@ -125,20 +125,17 @@ GO.addressbook.SearchPanel = function(config)
 					if(!this.advancedSearchWindow)
 					{
 						this.advancedSearchWindow = GO.addressbook.advancedSearchWindow = new GO.addressbook.AdvancedSearchWindow();
-						this.advancedSearchWindow.on('ok', function(win){
-
-							//See bug report:
-							//https://sourceforge.net/tracker/?func=detail&aid=2871777&group_id=76359&atid=547651
-							win.grid.stopEditing();
-
-							this.fireEvent('queryChange', {
-								advancedQuery:GO.addressbook.searchQueryPanel.queryField.getValue()
-								});
-						//this.fireEvent('queryChange', {advancedQuery:Ext.encode(win.getGridData())});
-						}, this)
+//						this.advancedSearchWindow.on('ok', function(win){
+//							this.fireEvent('queryChange', {
+//								advancedQuery:GO.addressbook.searchQueryPanel.queryField.getValue()
+//								});
+//						}, this);
 					}
 					var type = this.ab.tabPanel.getActiveTab().id=='ab-contacts-grid' ? 'contacts' : 'companies';
-					this.advancedSearchWindow.show(type);
+					this.advancedSearchWindow.show({
+						dataType : type,
+						masterPanel : GO.mainLayout.getModulePanel('addressbook')
+					});
 				},
 				text: GO.addressbook.lang.advancedSearch,
 				scope: this
@@ -160,22 +157,22 @@ GO.addressbook.SearchPanel = function(config)
 	
 		GO.addressbook.SearchPanel.superclass.constructor.call(this, config);
 	
-		this.addEvents({
-			queryChange : true
-		});
+//		this.addEvents({
+//			queryChange : true
+//		});
 	}
 
 Ext.extend(GO.addressbook.SearchPanel, Ext.Panel, {
-	selectedLetter : '',
-	
-	fireQueryEvent : function(){
-		var params = {
-			clicked_letter : this.selectedLetter,
-			query : this.queryField.getValue(),
-			advancedQuery : ''
-		};
-		
-		this.fireEvent('queryChange', params);
-	}
+	selectedLetter : ''
+//	,
+//	fireQueryEvent : function(){
+//		var params = {
+//			clicked_letter : this.selectedLetter,
+//			query : this.queryField.getValue(),
+//			advancedQuery : ''
+//		};
+//		
+//		this.fireEvent('queryChange', params);
+//	}
 	
 });

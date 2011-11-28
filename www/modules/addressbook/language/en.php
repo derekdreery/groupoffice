@@ -219,7 +219,6 @@ $l["copyingMessages"]='Copying messages...';
 
 
 $l["companyId"] = "ID";
-$l["companyLink_id"] = "Company";
 $l["companyUser_id"] = "User";
 $l["companyAddressbook_id"] = "Addressbook";
 $l["companyName"] = "Name";

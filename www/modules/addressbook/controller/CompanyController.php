@@ -1,4 +1,11 @@
 <?php
+/**
+ * @copyright Copyright Intermesh BV.
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ *
+ */
+
 class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModelController{
 	
 	protected $model = 'GO_Addressbook_Model_Company';
@@ -214,6 +221,41 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 
 		$response['success'] = true;
 		return $response;
+	}
+	
+	protected function beforeHandleAdvancedQuery($advQueryRecord, GO_Base_Db_FindCriteria &$criteriaGroup, GO_Base_Db_FindParams &$storeParams) {
+		switch ($advQueryRecord['field']) {
+			case 'employees.name':
+	
+					// TODO: add the below employee fields between SELECT and FROM.
+					// $storeParams->appendToSelect('`employees`.`first_name`, `employees`.`middle_name`, `employees`.`last_name`');
+					$storeParams->join(
+							GO_Addressbook_Model_Contact::model()->tableName(),
+							GO_Base_Db_FindCriteria::newInstance()->addRawCondition('`t`.`id`','`employees'.$advQueryRecord['id'].'`.`company_id`'),
+							'employees'.$advQueryRecord['id']
+					);
+					// addRawCondition($value1, $value2='', $comparator='=', $useAnd=true)
+					$criteriaGroup->addRawCondition(
+						'CONCAT_WS(\' \',`employees'.$advQueryRecord['id'].'`.`first_name`,`employees'.$advQueryRecord['id'].'`.`middle_name`,`employees'.$advQueryRecord['id'].'`.`last_name`)',
+						':employee'.$advQueryRecord['id'],
+						$advQueryRecord['comparator'],
+						$advQueryRecord['andor']=='AND'
+					);
+					$criteriaGroup->addBindParameter(':employee'.$advQueryRecord['id'], $advQueryRecord['value']);
+				
+				return false;
+				break;
+			default:
+				//parent::integrateInSqlSearch($advQueryRecord, $findCriteria, $storeParams);
+				return true;
+				break;
+		}
+	}
+	
+	protected function afterAttributes(&$attributes, &$response, &$params, GO_Base_Db_ActiveRecord $model) {
+		//unset($attributes['t.company_id']);
+		$attributes['employees.name']=GO::t('cmdPanelEmployee','addressbook');
+		return parent::afterAttributes($attributes, $response, $params, $model);
 	}
 }
 

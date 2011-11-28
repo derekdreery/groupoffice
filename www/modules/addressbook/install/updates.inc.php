@@ -105,6 +105,9 @@ $updates["201111180945"][]="ALTER TABLE `ab_companies` CHANGE `comment` `comment
 $updates["201111211405"][]="RENAME TABLE `ml_sendmailing_contacts` TO `ab_sendmailing_contacts`;";
 $updates["201111211405"][]="RENAME TABLE `ml_sendmailing_companies` TO `ab_sendmailing_companies`;";
 $updates["201111211405"][]="ALTER TABLE `ab_sendmailing_contacts` CHANGE `mailing_id` `addresslist_id` INT(11) NOT NULL DEFAULT '0' ";
+
+$updates["201111211405"][]="ALTER TABLE `ab_sendmailing_companies` CHANGE `mailing_id` `addresslist_id` INT(11) NOT NULL DEFAULT '0' ";
+
 $updates["201111211405"][]="ALTER TABLE `ab_sendmailing_companies` CHANGE `mailing_id` `addresslist_id` INT(11) NOT NULL DEFAULT '0' ";
 
 $updates["201111211405"][]="CREATE TABLE IF NOT EXISTS `ab_email_templates` (
@@ -153,3 +156,11 @@ $updates["201111211405"][]="CREATE TABLE IF NOT EXISTS `ab_sendmailing_contacts`
   `contact_id` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`addresslist_id`,`contact_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates["201111211715"][]="ALTER TABLE `ab_sent_mailings` CHANGE `status` `status` tinyint(4) DEFAULT '0' ";
+$updates["201111211715"][]="ALTER TABLE `ab_sent_mailings` CHANGE `total` `total` tinyint(4) DEFAULT '0' ";
+$updates["201111211715"][]="ALTER TABLE `ab_sent_mailings` CHANGE `sent` `sent` tinyint(4) DEFAULT '0' ";
+$updates["201111211715"][]="ALTER TABLE `ab_sent_mailings` CHANGE `errors` `errors` tinyint(4) DEFAULT '0' ";
+
+$updates["201111221545"][]="RENAME TABLE `ab_sql` to `ab_search_queries` ";
+$updates["201111221610"][]="ALTER TABLE `ab_search_queries` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";

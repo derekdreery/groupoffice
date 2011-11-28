@@ -1,8 +1,24 @@
 <?php
+/*
+ * Copyright Intermesh BV
+ *
+ * This file is part of Group-Office. You should have received a copy of the
+ * Group-Office license along with Group-Office. See the file /LICENSE.TXT
+ *
+ * If you have questions write an e-mail to info@intermesh.nl
+ */
+
+/**
+ * @copyright Copyright Intermesh BV.
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ *
+ */
+
 class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModelController{
 	
 	protected $model = 'GO_Addressbook_Model_Contact';	
-	
+		
 	protected function beforeSubmit(&$response, &$model, &$params) {
 				
 		if(!empty($params['company_id']) && $params['company_id']==$params['company']){			
@@ -163,6 +179,45 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		);
 	}	
 	
+	/**
+	 *
+	 * @param GO_Base_Db_FindCriteria $c
+	 * @param type $advancedQueryData 
+	 */
+//	private function _handleAdvancedQuery($c, $advancedQueryData){
+//		$advancedQueryData = json_decode($advancedQueryData, true);
+//		
+//		foreach($advancedQueryData as $record){
+//			if(!empty($record['field'])){
+//				//
+//				
+//				
+//				$isCustomField = substr($record['field'],0,4)=='col_';
+//				
+//				if ($record['comparator']=='LIKE')
+//					$record['value'] = '%'.$record['value'].'%';
+//				
+//				if($isCustomField){
+//					$tableAlias = 'cf';
+//				}else
+//				{
+//					$tableAlias = 't';
+//					$record['value']=GO_Filesearch_Model_Filesearch::model()->formatInput($record['field'], $record['value']);
+//				}
+//				
+//				if($record['close_group']){
+//					//$oldC = clone $c;
+//					$c->mergeWith(GO_Base_Db_FindCriteria::newInstance()->addCondition($record['field'], $record['value'], $record['comparator'],$tableAlias,$record['andor']=='AND'),$record['andor']=='AND');
+//				}else
+//				{								
+//					$c->addCondition($record['field'], $record['value'], $record['comparator'],$tableAlias,$record['andor']=='AND');
+//				}
+//			}
+//		}
+//		
+//		return $c;
+//	}
+	
 	/*
 	 * This function initiates the contact filters by:
 	 * - search query (happens automatically in GO base class)
@@ -174,7 +229,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$criteria = GO_Base_Db_FindCriteria::newInstance()
 			->addModel(GO_Addressbook_Model_Contact::model(),'t')
 			->addInCondition('addressbook_id', $this->multiselectIds);
-		
+				
 		// Filter by clicked letter
 		if (!empty($params['clicked_letter'])) {
 			if ($params['clicked_letter'] == '[0-9]') {
@@ -184,19 +239,15 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				$query = $params['clicked_letter'] . '%';
 				$query_type = 'LIKE';
 			}
-			$criteria->addRawCondition('CONCAT_WS(`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`)', ':query', $query_type);
+			//$criteria->addRawCondition('CONCAT_WS(`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`)', ':query', $query_type);
+			$criteria->addRawCondition('name', ':query', $query_type);
 			$criteria->addBindParameter(':query', $query);
 		}
-
+	
 		$storeParams = GO_Base_Db_FindParams::newInstance()
 			->export("contact")
 			->criteria($criteria)						
-			->select('t.*t, ab.name AS addressbook_name')
-			->joinModel(array(
-				'model'=>'GO_Addressbook_Model_Addressbook',					
-				'localField'=>'addressbook_id',
-				'tableAlias'=>'ab' //Optional table alias
-			));
+			->select('t.*t, addressbook.name AS addressbook_name, CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`) AS name');
 		
 		//if(empty($params['enable_addresslist_filter'])){
 		
@@ -225,7 +276,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 //					)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter,'ac');
 //			}
 		//}
-			
+
 		return $storeParams;
 		
 	}
@@ -301,5 +352,46 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		return $response;
 	}
+
+	protected function beforeHandleAdvancedQuery ($advQueryRecord, GO_Base_Db_FindCriteria &$findCriteria, GO_Base_Db_FindParams &$storeParams) {
+		switch ($advQueryRecord['field']) {
+			case 'companies.name':
+				$storeParams->join(
+					GO_Addressbook_Model_Company::model()->tableName(),
+					GO_Base_Db_FindCriteria::newInstance()->addRawCondition('`t`.`company_id`','`companies'.$advQueryRecord['id'].'`.`id`'),
+					'companies'.$advQueryRecord['id']
+				);
+				$findCriteria->addRawCondition(
+					'companies'.$advQueryRecord['id'].'.name',
+					'\''.$advQueryRecord['value'].'\'',
+					$advQueryRecord['comparator'],
+					$advQueryRecord['andor']=='AND'
+				);
+				return false;
+				break;
+			case 'contact_name':
+				$findCriteria->addRawCondition(
+					'CONCAT_WS(\' \',`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`)',
+					'\''.$advQueryRecord['value'].'\'',
+					$advQueryRecord['comparator'],
+					$advQueryRecord['andor']=='AND'
+				);
+				return false;
+				break;
+			default:
+				//parent::integrateInSqlSearch($advQueryRecord, $findCriteria, $storeParams);
+				return true;
+				break;
+		}
+	}
+	
+	protected function afterAttributes(&$attributes, &$response, &$params, GO_Base_Db_ActiveRecord $model) {
+		unset($attributes['t.company_id']);
+		//$attributes['name']=GO::t('strName');
+		$attributes['companies.name']=GO::t('company','addressbook');
+		$attributes['contact_name']=GO::t('name');
+		return parent::afterAttributes($attributes, $response, $params, $model);
+	}
+	
 }
 

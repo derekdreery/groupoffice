@@ -202,22 +202,22 @@ CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
   `ctime` int(11) NOT NULL,
   `addresslist_id` int(11) NOT NULL,
   `alias_id` int(11) NOT NULL,
-  `status` tinyint(4) NOT NULL,
-  `total` int(11) DEFAULT NULL,
-  `sent` int(11) DEFAULT NULL,
-  `errors` int(11) DEFAULT NULL,
+  `status` tinyint(4) DEFAULT '0',
+  `total` int(11) DEFAULT '0',
+  `sent` int(11) DEFAULT '0',
+  `errors` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `ab_sql`
+-- Tabelstructuur voor tabel `ab_search_queries`
 --
 
-DROP TABLE IF EXISTS `ab_sql`;
+DROP TABLE IF EXISTS `ab_search_queries`;
 CREATE TABLE IF NOT EXISTS `ab_sql` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) DEFAULT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `companies` tinyint(1) NOT NULL,
   `name` varchar(32) DEFAULT NULL,

@@ -107,7 +107,7 @@
 				// Clear list of company recipients to send to, if there are any in this list
 				$sendmailingCompany = GO_Addressbook_Model_SendmailingCompany::model();
 				$sendmailingCompany->deleteByAttribute('addresslist_id', $sentMailing->id);
-
+				
 				// Add company recipients to this list and count them
 				$stmt = GO_Addressbook_Model_Addresslist::model()->findByPk($sentMailing->addresslist_id)->companies();
 				while ($alCompany = $stmt->fetch()) {
