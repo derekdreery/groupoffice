@@ -20,7 +20,8 @@ GO.query.QueryPanel = function(config){
 	}
 	
 	this.typesStore = new GO.data.JsonStore({
-		url: GO.url("core/modelAttributes"),
+		//url: GO.url("core/modelAttributes"),
+		url:config.modelAttributesUrl,
 		id:'name',
 		baseParams:{
 			modelName:config.modelName
@@ -40,7 +41,7 @@ GO.query.QueryPanel = function(config){
 //	});
 
 	var fields ={
-		fields:['andor','field','comparator', 'value','close_group','gotype'],
+		fields:['andor','field','comparator', 'value','start_group','gotype'],
 		columns:[	{
 			width: 40,
 			header: 'AND / OR',
@@ -125,8 +126,9 @@ GO.query.QueryPanel = function(config){
 			})
 		},
 		{
-			width:50,
-			dataIndex: 'close_group',
+			header: 'Start group',
+			width:100,
+			dataIndex: 'start_group',
 			editor: new Ext.form.Checkbox()
 		}]
 	};
@@ -169,7 +171,7 @@ GO.query.QueryPanel = function(config){
 		name: 'value',
 		type:'string'
 	},{
-		name: 'close_group',
+		name: 'start_group',
 		type:'string'
 	}]);
 
@@ -181,7 +183,7 @@ GO.query.QueryPanel = function(config){
 			var e = new Criteria({
 				andor:'AND',
 				comparator:'LIKE',
-				close_group:false
+				start_group:false
 			});
 			this.stopEditing();
 			var count = this.store.getCount();
