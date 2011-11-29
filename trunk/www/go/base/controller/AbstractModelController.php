@@ -804,7 +804,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			
 			$advQueryRecord=$advancedQueryData[$i];
 			
-			if($i==0 || $advQueryRecord['close_group']){
+			if($i==0 || $advQueryRecord['start_group']){
 				$findCriteria->mergeWith($criteriaGroup,$criteriaGroupAnd);
 				$criteriaGroupAnd=$advQueryRecord['andor']=='AND';
 				$criteriaGroup = GO_Base_Db_FindCriteria::newInstance();
