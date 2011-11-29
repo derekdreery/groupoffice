@@ -24,7 +24,8 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	protected function afterDisplay(&$response, &$model,&$params) {
 		$response['data']['user_name']=$model->user->name;
 		$response['data']['tasklist_name']=$model->tasklist->name;
-		$response['data']['status_text']=GO::t($model->status,'tasks');
+		$statuses = GO::t('statuses','tasks');
+		$response['data']['status_text']=$statuses[$model->status];
 		
 		return parent::afterDisplay($response, $model, $params);
 	}
@@ -94,14 +95,24 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	}
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {		
-		if(isset($params['comment']))
-			// TODO: Een nieuwe comment toevoegen aan deze taak.
+		if(isset($params['comment'])){
+			// TODO: Controleren of de comments module geinstalleerd is.
+			// TODO: Een nieuw comment model opbouwen en opslaan 
+			$comment = new GO_Comments_Model_Comment();
+			// $comment->id 	
+			$comment->model_id = $model->id;
+			$comment->model_type_id = $model->modelTypeId();
+			$comment->user_id = $model->user_id;
+			// $comment->ctime 
+			// $comment->mtime 
+			$comment->comments = $params['comment'];
+			$comment->save();
+		}
 		
-		
-		 if(GO::modules()->files){
-			 $f = new GO_Files_Controller_Folder();
-			 $f->processAttachments($response, $model, $params);
-		 }
+		if(GO::modules()->files){
+		 $f = new GO_Files_Controller_Folder();
+		 $f->processAttachments($response, $model, $params);
+		}
 		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
 	}
@@ -137,6 +148,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
 		
 		$columnModel->formatColumn('completed','$model->status=="COMPLETED" ? 1 : 0');
+//		$columnModel->formatColumn('status', '$l["statuses[\'".$model->status."\']"');
 		$columnModel->formatColumn('category_name','$model->category->name',array(),'category_id');
 		$columnModel->formatColumn('tasklist_name','$model->tasklist_name');
 		$columnModel->formatColumn('late','$model->due_time<time() ? 1 : 0;');
