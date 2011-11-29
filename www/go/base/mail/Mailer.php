@@ -23,12 +23,18 @@ class GO_Base_Mail_Mailer extends Swift_Mailer{
 	/**
    * Create a new Mailer instance.
    * 
+	 * @var Swift_SmtpTransport $transport. 
+	 * Optionally supply a transport class. If omitted a GO_Base_Mail_Transport 
+	 * object will be created that uses the smtp settings from config.php
+	 * 
    * @return GO_Base_Mail_Mailer
    */
-  public static function newGoInstance()
+  public static function newGoInstance($transport=false)
   {
+		if(!$transport)
+			$transport=GO_Base_Mail_Transport::newGoInstance();
 		
-    return new self(GO_Base_Mail_Transport::newGoInstance());
+    return new self($transport);
   }
 	
 }
