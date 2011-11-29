@@ -98,7 +98,10 @@ GO.tasks.TasksPanel = function(config)
 			},{
 				header: GO.lang.strStatus,
 				dataIndex: 'status',
-				width:110
+				width:110,
+				renderer:function(value, p, record){
+					return GO.tasks.lang.statuses[value];
+				}
 			},{
 				header: GO.lang.strCtime,
 				dataIndex: 'ctime',
