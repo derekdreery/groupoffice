@@ -1,5 +1,5 @@
-groupoffice-com (3.7.35) threeseven; urgency=low
+groupoffice-com (3.7.36) threeseven; urgency=low
 
   * Changes can be found in /usr/share/groupoffice/CHANGELOG.TXT
 
- -- Merijn Schering <mschering@intermesh.nl>  Mon, 21 Nov 2011 11:30:54 +0100
+ -- Merijn Schering <mschering@intermesh.nl>  Tue, 29 Nov 2011 17:31:08 +0100
