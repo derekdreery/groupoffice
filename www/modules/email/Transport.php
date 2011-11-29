@@ -21,8 +21,8 @@
 class GO_Email_Transport extends Swift_SmtpTransport{
 	
 	public static function newGoInstance(GO_Email_Model_Account $account){
-		
-		$o = self::newInstance($account->smtp_server, $account->smtp_port, $account->smtp_encryption);
+		$encryption = empty($account->smtp_encryption) ? null : $account->smtp_encryption;
+		$o = self::newInstance($account->smtp_host, $account->smtp_port, $encryption);
 		
 		if(!empty(GO::config()->smtp_username)){
 			$o->setUsername(GO::config()->smtp_username)
