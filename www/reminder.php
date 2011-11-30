@@ -30,7 +30,9 @@ else
 
 $title=$lang['common']['alert'].' - '.$GLOBALS['GO_CONFIG']->product_name;
 
-$reminders= $_REQUEST['count']==1 ? $lang['common']['oneReminder'] : sprintf($lang['common']['nReminders'], $_REQUEST['count']);
+$count = intval($_REQUEST['count']);
+
+$reminders= $count==1 ? $lang['common']['oneReminder'] : sprintf($lang['common']['nReminders'], $count);
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -48,7 +50,7 @@ $reminders= $_REQUEST['count']==1 ? $lang['common']['oneReminder'] : sprintf($la
 		if($_REQUEST['count']>0)
 			echo '<p>'.sprintf($lang['common']['youHaveReminders'], $reminders, $GLOBALS['GO_CONFIG']->product_name).'</p>';
 
-		echo $_REQUEST['reminder_text'];
+		echo strip_tags($_REQUEST['reminder_text']);
 		?>
 		</div>
 

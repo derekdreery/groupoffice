@@ -288,9 +288,8 @@ class GO{
 
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
 		
-			$log = '['.date('Y-m-d G:i').'] Start of new request: '.$_SERVER['PHP_SELF'].'?';
-			if(isset($_SERVER['QUERY_STRING']))
-				$log .= $_SERVER['QUERY_STRING'];
+			$log = '['.date('Y-m-d G:i').'] Start of new request: '.$_SERVER['REQUEST_URI'];
+
 			GO::debug($log);
 
 			//undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!

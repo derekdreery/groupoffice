@@ -122,7 +122,7 @@ if(!is_int($_SESSION['GO_SESSION']['timezone']))
 }
 //after date_default_timezone otherwise date function might raise an error
 if(!class_exists('GO'))
-	go_debug('['.date('Y-m-d G:i').'] Start of new request: '.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']);
+	go_debug('['.date('Y-m-d G:i').'] Start of new request: '.$_SERVER['REQUEST_URI']);
 //go_debug($_POST);
 if($GO_CONFIG->debug){
 	function groupoffice_error_handler($errno, $errstr, $errfile, $errline, $errcontext) {
