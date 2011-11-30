@@ -22,7 +22,12 @@ GO.tasks.ContinueTaskDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 			formControllerUrl: 'tasks/task'
 		});
 		
-		GO.tasks.ContinueTaskDialog.superclass.initComponent.call(this);	
+		GO.tasks.ContinueTaskDialog.superclass.initComponent.call(this);
+		
+		this.formPanel.baseParams.remind = 'on';
+	},
+	beforeSubmit: function(params){
+		this.formPanel.baseParams.remind_date = this.formPanel.baseParams.due_time;
 	},
 	buildForm : function () {
 
@@ -35,18 +40,16 @@ GO.tasks.ContinueTaskDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					name:'due_time',
 					format: GO.settings.date_format,
 					fieldLabel:GO.lang.strDate
-
 				});
 
 		datePicker.setValue(tomorrow);
 
-		datePicker.on("select", function(DatePicker, DateObj){						
-				this.formPanel.baseParams.due_time=DateObj.format(GO.settings.date_format);			
+		datePicker.on("select", function(DatePicker, DateObj){
+				this.formPanel.baseParams.due_time=DateObj.format(GO.settings.date_format);		
 		},this);
 		this.propertiesPanel = new Ext.Panel({
 			autoHeight:true,
 			border: false,
-//			baseParams: {date: tomorrow.format(GO.settings.date_format), name: 'TEST'},			
 			cls:'go-form-panel',
 			layout:'form',
 			waitMsgTarget:true,			
@@ -61,11 +64,11 @@ GO.tasks.ContinueTaskDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 					format: GO.settings.time_format,
 					value:eight.format(GO.settings['time_format']),
 					fieldLabel:GO.lang.strTime,
-				//anchor:'100%'
-				},new GO.tasks.SelectTaskStatus(),{
+				anchor:'100%'
+				},new GO.tasks.SelectTaskStatus({anchor:'100%'}),{
 					xtype: 'textarea',
 					name: 'comment',
-				//anchor: '100%',
+				anchor: '100%',
 					width:300,
 					height:100,
 					fieldLabel: GO.lang.strDescription
