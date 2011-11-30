@@ -54,29 +54,30 @@ if(isset($_SESSION['GO_SESSION']['security_token'])){
 	echo 'GO.securityToken="'.$_SESSION['GO_SESSION']['security_token'].'";';
 }
 
-if(isset($_REQUEST['after_login_url'])) {
-	$after_login_url = $_REQUEST['after_login_url'];
-}else {
-	$after_login_url = $_SERVER['PHP_SELF'];
-
-	$params = array();
-	foreach($_GET as $key=>$value) {
-		if($key!='task' || $value!='logout') {
-			$params[] =$key.'='.urlencode($value);
-		}
-	}
-
-	if(count($params)) {
-		$after_login_url .= '?'.implode('&', $params);
-	}
-}
+//if(isset($_REQUEST['after_login_url'])) {
+//	$after_login_url = $_REQUEST['after_login_url'];
+//	
+//}else {
+//	$after_login_url = $_SERVER['PHP_SELF'];
+//
+//	$params = array();
+//	foreach($_GET as $key=>$value) {
+//		if($key!='task' || $value!='logout') {
+//			$params[] =$key.'='.urlencode($value);
+//		}
+//	}
+//
+//	if(count($params)) {
+//		$after_login_url .= '?'.implode('&', $params);
+//	}
+//}
 
 //$_SESSION['GO_SESSION']['after_login_url']=$after_login_url;
 
-if(isset($_REQUEST['SET_LANGUAGE']))
+if(isset($_REQUEST['SET_LANGUAGE']) && preg_match('/[a-z_]/', $_REQUEST['SET_LANGUAGE']))
 	echo 'GO.loginSelectedLanguage="'.$_REQUEST['SET_LANGUAGE'].'";';
 
-echo 'GO.afterLoginUrl="'.$after_login_url.'";';
+//echo 'GO.afterLoginUrl="'.$after_login_url.'";';
 
 $fullscreen = isset($_COOKIE['GO_FULLSCREEN']) && $_COOKIE['GO_FULLSCREEN']=='1' ? 'true' : 'false';
 echo 'GO.fullscreen='.$fullscreen.';';
@@ -88,7 +89,7 @@ echo 'GO.fullscreen='.$fullscreen.';';
  * In themes/Default/layout.inc.php we handle this var.
  */
 if($GLOBALS['GO_SECURITY']->logged_in() && $fullscreen=='true' && !isset($_REQUEST['fullscreen_loaded'])) {
-	$popup_groupoffice = isset($_REQUEST['after_login_url']) ? smart_stripslashes($_REQUEST['after_login_url']) : $GLOBALS['GO_CONFIG']->host;
+	//$popup_groupoffice = isset($_REQUEST['after_login_url']) ? smart_stripslashes($_REQUEST['after_login_url']) : $GLOBALS['GO_CONFIG']->host;
 	$popup_groupoffice = String::add_params_to_url($popup_groupoffice, 'fullscreen_loaded=true');
 }
 

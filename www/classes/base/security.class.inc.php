@@ -255,8 +255,10 @@ class GO_SECURITY extends db {
 		$authenticated = $this->authenticate();
 		if($authenticated!='AUTHORIZED') {
 			global $GO_CONFIG;
+			
+			$_SESSION['GO_SESSION']['after_login_url']=$_SERVER['REQUEST_URI'];
 
-			header('Location: '.$GLOBALS['GO_CONFIG']->host.'?after_login_url='.urlencode($_SERVER['REQUEST_URI']));
+			header('Location: '.$GLOBALS['GO_CONFIG']->host);
 
 			exit();
 		}

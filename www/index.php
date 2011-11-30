@@ -30,6 +30,13 @@ if(PHP_SAPI=='cli'){
 require_once($root.'go/GO.php');
 GO::init();
 
+if(GO::user() && isset($_SESSION['GO_SESSION']['after_login_url'])){
+	$url = GO::session()->values['after_login_url'];
+	unset(GO::session()->values['after_login_url']);
+	header('Location: '.$url);
+	exit();
+}
+
 
 //check if GO is installed
 //$installed=true;

@@ -100,7 +100,8 @@ Ext.extend(GO.MainLayout, Ext.util.Observable, {
 	createLoginCallback : function(){
 		
 		GO.loginDialog.addCallback(function(){
-				var url = GO.afterLoginUrl ? GO.afterLoginUrl : GO.settings.config.host;
+				//var url = GO.afterLoginUrl ? GO.afterLoginUrl : GO.settings.config.host;
+				var url = GO.settings.config.host;
 				if(GO.loginDialog.fullscreenField.getValue() && window.name!='groupoffice')
 				{
 					url = GO.util.addParamToUrl(url, 'fullscreen_loaded','true');

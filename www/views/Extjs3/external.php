@@ -2,7 +2,7 @@
 extract($data);
 
 $module = isset($m) && preg_match('/[a-z]+/', $m) ? $m : '';
-$function = isset($f) ? $f : '';
+$function = isset($f) && preg_match('/[a-z]+/i', $m) ? $f : '';
 $funcParams = isset($p) ? $p : '';
 
 //if(strpos($_SERVER['QUERY_STRING'], '<script') || strpos(urldecode($_SERVER['QUERY_STRING']), '<script'))
@@ -25,7 +25,10 @@ function launchGO(){
 	}else
 	{
 		//the parameters will be handled in default_scripts.inc.php
-		win.location.href="<?php echo GO::config()->host; ?>?<?php echo str_replace('r=external/index&','',$_SERVER['QUERY_STRING']); ?>";
+		<?php
+		GO::setAfterLoginUrl(GO::createExternalUrl($module,$function, $funcParams, true));
+		?>
+		win.location.href="<?php echo GO::config()->host; ?>";
 	}
 
 	self.close();
