@@ -1373,6 +1373,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 //						break;
 //					}
 				
+				case 'png':
 				case 'bmp':
 				case 'png':
 				case 'gif':
