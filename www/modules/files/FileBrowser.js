@@ -1291,10 +1291,9 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 			//this.expireForm.items.get('expire_unixtime').setValue(parseInt(date.setDate(date.getDate())/1000));
 
 			GO.email.showComposer({
-							loadUrl:GO.settings.modules.files.url+'json.php',
+							loadUrl:GO.url('files/file/emailDownloadLink'),
 							loadParams:{
-								task:'sendfile',
-								file_id:this.file_data.id,
+								id:this.file_data.id,
 								expire_time: parseInt(date.setDate(date.getDate())/1000)
 							}
 						});

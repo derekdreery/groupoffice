@@ -59,8 +59,6 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	);
 	
 	public function __construct() {
-		$this->checkSecurityToken();
-	//	$this->checkPermission();
 		$this->init();
 	}
 	
@@ -89,7 +87,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	/**
 	 * Checks a token that is generated for each session.
 	 */
-	protected function checkSecurityToken(){
+	private function _checkSecurityToken(){
 		
 		//only check token when we are:
 		// 1. Not in debug mode
@@ -99,7 +97,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		if(
 						!GO::config()->debug && 
 						!GO::config()->disable_security_token_check && 
-						GO::user() && 
+//						GO::user() && No longer needed. We only check token when action requires a logged in user
 						!empty($_REQUEST['r']) && 
 						$_REQUEST['security_token']!=GO::session()->values['security_token']
 			){
@@ -138,11 +136,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @param array $data 
 	 * An associative array of which the keys become available variables in the view file.
 	 */
-	protected function render($viewName, $data=array()){		
-		//header('Content-Type: text/html; charset=UTF-8');
-		
-		//extract($data);
-		
+	protected function render($viewName, $data=array()){				
 		$module = $this->getModule();
 		
 		if(!$module){
@@ -154,10 +148,12 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		
 		if(file_exists($file)){
 			require($file);
-		}else
+		}elseif(($file = GO::config()->root_path.'views/'.GO::view().'/'.$viewName.'.php') && file_exists($file))
 		{
-			$file = GO::config()->root_path.'views/'.GO::view().'/Default.php';
-			
+			require($file);
+		}else
+		{			
+			$file = GO::config()->root_path.'views/'.GO::view().'/Default.php';			
 			require($file);
 		}
 	}
@@ -192,10 +188,12 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 */
 	private function _checkPermission($action){
 		
-		if(!in_array($action, $this->allowGuests())){
+		if(!in_array($action, $this->allowGuests())){			
 			//check for logged in user
 			if(!GO::user())
 				return false;			
+			
+			$this->_checkSecurityToken();
 			
 			//check module permission
 			if(!in_array($action, $this->allowWithoutModuleAccess()))
@@ -276,14 +274,16 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			
 			GO::debug("EXCEPTION: ".$e->getMessage());
 			
+					
 			$response['success'] = false;
 			$response['feedback'] = !empty($response['feedback']) ? $response['feedback'] : '';
 			$response['feedback'] .= "\r\n\r\n".$e->getMessage();
-			
+
 			if(GO::config()->debug)
 				$response['trace']=$e->getTraceAsString();
-			
-			$this->render('exception', $response);
+
+			$this->render('Exception', $response);
+
 			//exit();
 		}
 	}

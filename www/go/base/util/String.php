@@ -1035,11 +1035,10 @@ class GO_Base_Util_String {
 	 *
 	 * @return string
 	 */
-	static function random_password( $characters_allow = 'a-z,1-9', $characters_disallow = 'i,o', $password_length = 0, $repeat = 0 ) {
+	static function randomPassword($password_length = 0, $characters_allow = 'a-z,1-9', $characters_disallow = 'i,o' ) {
 
 		if($password_length==0)
 		{
-			global $GO_CONFIG;
 			$password_length=GO::config()->default_password_length;
 		}
 
@@ -1095,13 +1094,13 @@ class GO_Base_Util_String {
 
 			// If characters are not allowed to repeat,
 			// only add character if not found in partial password string.
-			if ($repeat == 0) {
+//			if ($repeat == 0) {
 				if (substr_count($password, $array_allow[$character]) == 0) {
 					$password .= $array_allow[$character];
 				}
-			} else {
-				$password .= $array_allow[$character];
-			}
+//			} else {
+//				$password .= $array_allow[$character];
+//			}
 		}
 		return $password;
 	}
