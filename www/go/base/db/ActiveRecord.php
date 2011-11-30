@@ -1465,7 +1465,13 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $formatted;
 	}
 	
-	
+	/**
+	 * Formats user input for the database.
+	 * 
+	 * @param string $column
+	 * @param mixed $value
+	 * @return array 
+	 */
 	public function formatInput($column, $value){
 			if(!isset($this->columns[$column]['gotype'])){
 				//don't process unknown columns. But keep them for flexibility.
@@ -1486,7 +1492,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				case 'date':
 					return  GO_Base_Util_Date::to_db_date($value);
 					break;				
-				
 				default:
 					if($this->columns[$column]['type']==PDO::PARAM_INT)
 						$value = intval($value);
@@ -1549,8 +1554,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				break;
 			
 			case 'html':
-			default:
 				return $value;
+				break;
+			default:
+				return $html ? htmlentities($value, ENT_COMPAT,'UTF-8') : $value;
 				break;
 		}		
 	}
@@ -2319,14 +2326,14 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * Group-Office user preferences.
 	 * 
 	 * @param String $attributeName
-	 * @param String $outputType raw or formatted
+	 * @param String $outputType raw, formatted or html
 	 * @return mixed 
 	 */
 	public function getAttribute($attributeName, $outputType='raw'){
 		if(!isset($this->_attributes[$attributeName]))						
 			return false;
 		
-		return $outputType=='raw' ?  $this->_attributes[$attributeName] : $this->formatAttribute($attributeName, $this->_attributes[$attributeName]);
+		return $outputType=='raw' ?  $this->_attributes[$attributeName] : $this->formatAttribute($attributeName, $this->_attributes[$attributeName],$outputType=='html');
 	}
 	
 	

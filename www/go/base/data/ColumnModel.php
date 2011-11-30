@@ -31,7 +31,7 @@ class GO_Base_Data_ColumnModel {
 	
 	//private $_sortFieldsAliases=array();
 
-	private $_modelFormatType='formatted';
+	private $_modelFormatType='html';
 
 	/**
 	 * Constructor of the ColumnModel class.
