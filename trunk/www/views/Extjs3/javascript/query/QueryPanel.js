@@ -125,12 +125,12 @@ GO.query.QueryPanel = function(config){
 				
 			})
 		},
-		{
+		new GO.grid.CheckColumn({
 			header: 'Start group',
 			width:100,
-			dataIndex: 'start_group',
-			editor: new Ext.form.Checkbox()
-		}]
+			dataIndex: 'start_group'
+		})
+		]
 	};
 	config.store = new GO.data.JsonStore({
 		fields: fields.fields,
