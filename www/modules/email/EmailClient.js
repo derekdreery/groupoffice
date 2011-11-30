@@ -1260,6 +1260,7 @@ Ext.extend(GO.email.EmailClient, Ext.Panel,{
 	{
 
 		var params = {
+			action:'attachment',
 			account_id: this.account_id,
 			mailbox: this.mailbox,
 			uid: this.messagePanel.uid,
@@ -1928,8 +1929,6 @@ GO.email.showAddressMenu = function(e, email, name)
 	e.preventDefault();
 	GO.email.addressContextMenu.showAt(e.getXY(), email, name);
 }
-
-
 
 GO.newMenuItems.push({
 	text: GO.email.lang.email,
