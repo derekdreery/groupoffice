@@ -310,7 +310,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 		
 		if(!config.event_id){
 			
-			if(config.calendar_id)
+			if(!GO.util.empty(config.calendar_id))
 				params.calendar_id=config.calendar_id;
 
 			var date = new Date();
