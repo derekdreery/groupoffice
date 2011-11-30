@@ -194,241 +194,109 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * 
 	 * @param Sabre_VObject_Component $vobject
 	 * @param array $attributes Extra attributes to apply to the event
-	 * @return GO_Tasks_Model_Task 
+	 * @return GO_Addressbook_Model_Contact
 	 */
-//	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()){
-//		//$event = new GO_Calendar_Model_Event();
-//		
-//		$this->uuid = (string) $vobject->uid;
-//		$this->name = (string) $vobject->summary;
-//		$this->description = (string) $vobject->description;
-//		if(!empty($vobject->dtstart))
-//			$this->start_time = $vobject->dtstart->getDateTime()->format('U');
-//		
-//		if(!empty($vobject->dtend))
-//			$this->due_time = $vobject->dtend->getDateTime()->format('U');
-//		
-//		if(!empty($vobject->due))
-//			$this->due_time = $vobject->due->getDateTime()->format('U');
-//				
-//		if($vobject->dtstamp)
-//			$this->mtime=$vobject->dtstamp->getDateTime()->format('U');
-//		
-//		if(empty($this->due_time))
-//			$this->due_time=time();
-//		
-//		if(empty($this->start_time))
-//			$this->start_time=$this->due_time;
-//		
-//		if($vobject->rrule){			
-//			$rrule = new GO_Base_Util_Icalendar_Rrule();
-//			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);			
-//			$this->rrule = $rrule->createRrule();
-//			$this->repeat_end_time = $rrule->until;
-//		}		
-//		
-//		//var_dump($vobject->status);
-//		if($vobject->status)
-//			$this->status=(string) $vobject->status;
-//		
-//		if($vobject->duration){
-//			$duration = GO_Base_VObject_Reader::parseDuration($vobject->duration);
-//			$this->end_time = $this->start_time+$duration;
-//		}
-//		
-//		if(!empty($vobject->priority))
-//		{			
-//			if((string) $vobject->priority>5)
-//			{
-//				$this->priority=self::PRIORITY_LOW;
-//			}elseif((string) $vobject->priority==5)
-//			{
-//				$this->priority=self::PRIORITY_NORMAL;
-//			}else
-//			{
-//				$this->priority=self::PRIORITY_HIGH;
-//			}
-//		}
-//		
-//		if(!empty($vobject->completed)){
-//			$this->completion_time=$vobject->completed->getDateTime()->format('U');
-//			$this->status='COMPLETED';
-//		}else
-//		{
-//			$this->completion_time=0;
-//		}
-//		
-//		if($this->status=='COMPLETED' && empty($this->completion_time))
-//			$this->completion_time=time();
-//		
-//		if($vobject->valarm){
-//			
-//		}else
-//		{
-//			$this->reminder=0;
-//		}		
-//		
-//		$this->setAttributes($attributes);
-//		
-//		$this->save();
-//		
-//		////////////////////////////////////////////////////////////////////////////
-//		
-//		ini_set('max_execution_time', 360);
-//
-//	    $addressbook_id = isset($_REQUEST['addressbook_id']) ? ($_REQUEST['addressbook_id']) : 0;
-//	    $separator	= isset($_REQUEST['separator']) ? ($_REQUEST['separator']) : ',';
-//	    $quote	= isset($_REQUEST['quote']) ? ($_REQUEST['quote']) : '"';
-//	    $import_type = isset($_REQUEST['import_type']) ? ($_REQUEST['import_type']) : '';
-//	    $import_filetype = isset($_REQUEST['import_filetype']) ? ($_REQUEST['import_filetype']) : '';
-//
-//	    $addressbook = $ab->get_addressbook($addressbook_id);
-//					ini_set('memory_limit', '256M');
-//
-//	    $result['success'] = true;
-//	    $result['feedback'] = $feedback;
-//
-//	    switch($import_filetype) {
-//		case 'vcf':
-//
-//		    break;
-//		case 'csv':
-//
-//		    if(isset($GLOBALS['GO_MODULES']->modules['customfields']) && $GLOBALS['GO_MODULES']->modules['customfields']['read_permission']) {
-//			require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
-//			$cf = new customfields();
-//			$company_customfields = $cf->get_authorized_fields($GLOBALS['GO_SECURITY']->user_id, 3);
-//			$contact_customfields = $cf->get_authorized_fields($GLOBALS['GO_SECURITY']->user_id, 2);
-//		    }
-//
-//		    $fp = fopen($_SESSION['GO_SESSION']['addressbook']['import_file'], "r");
-//
-//		    if (!$fp || !$addressbook = $ab->get_addressbook($addressbook_id)) {
-//			unlink($_SESSION['GO_SESSION']['addressbook']['import_file']);
-//			throw new Exception($lang['comon']['selectError']);
-//		    }
-//
-//		    fgets($fp, 4096);
-//		    while (!feof($fp)) {
-//			$record = fgetcsv($fp, 4096, $separator, $quote);
-//
-//			$new_id=0;
-//
-//			if ($import_type == 'contacts') {
-//			    if ((isset ($record[$_POST['first_name']]) && $record[$_POST['first_name']] != "") || (isset ($record[$_POST['last_name']]) && $record[$_POST['last_name']] != '')) {
-//				$contact=array();
-//				$contact['email_allowed']='1';
-//				
-//				$this->title = $vobject->title;
-//				$this->first_name = $vobject->first_name;
-//				$this->middle_name = $vobject->middle_name;
-//				$this->last_name = $vobject->last_name;
-//				$this->initials = $vobject->initials;
-//				$this->sex = $vobject->sex;
-//				$this->birthday = $vobject->birthday;
-//				$this->email = $vobject->email;
-//				$this->email2 = $vobject->email2;
-//				$this->email3 = $vobject->email3;
-//				$this->work_phone = $vobject->work_phone;
-//				$this->home_phone = $vobject->home_phone;
-//				$this->fax = $vobject->fax;
-//				$this->work_fax = $vobject->work_fax;
-//				$this->cellular = $vobject->cellular;
-//				$this->country = $vobject->country;
-//				$this->state = $vobject->state;
-//				$this->city = $vobject->city;
-//				$this->zip = $vobject->zip;
-//				$this->address = $vobject->address;
-//				$this->address_no = $vobject->address_no;
-//				$this->department = $vobject->department;
-//				$this->function = $vobject->function;
-//				$this->salutation = $vobject->salutation;
-//				$this->comment = $vobject->comment;
-//
-//				if (isset($vobject->company_name) || isset($vobject->company_name2)) {
-//					$company = GO_Addressbook_Model_Company::model()->findByAttributes(
-//							array(
-//								'addressbook_id' => $attributes['addressbook_id'],
-//								'company_name' =>
-//							)
-//						);
-//					if (isset($vobject->company_name))
-//						$company->setAttribute('company_name',$vobject->company_name);
-//					if (isset($vobject->company_name2))
-//						$company->setAttribute('company_name2',$vobject->company_name2);
-//				}
-//				
-//				$company_name = isset ($record[$_POST['company_name']]) ? trim($record[$_POST['company_name']]) : '';
-//				$company_name2 = isset ($record[$_POST['company_name2']]) ? trim($record[$_POST['company_name2']]) : '';
-//				if ($company_name != '') {
-//				    $contact['company_id'] = $ab->get_company_id_by_name($company_name, $addressbook_id);
-//				    if(!$contact['company_id']) {
-//							$company=array();
-//							$company['addressbook_id']=$addressbook_id;
-//							$company['name']=$company_name;
-//							$company['name2']=$company_name2;
-//							$contact['company_id']=$ab->add_company($company);
-//				    }
-//				}else {
-//				    $contact['company_id']=0;
-//				}
-//
-//				$contact['addressbook_id'] = $addressbook_id;
-//				$new_id=$ab->add_contact($contact, $addressbook);
-//				$new_type=2;
-//			    }
-//			} else {
-//			    if (isset ($record[$_POST['name']]) && $record[$_POST['name']] != '') {
-//				$company=array();
-//				$company['name'] = trim($record[$_POST['name']]);
-//				$company['name2'] = trim($record[$_POST['name2']]);
-//
-//				//if (!$ab->get_company_by_name($_POST['addressbook_id'], $company['name']))
-//				{
-//
-//				    $company['email_allowed']='1';
-//				    $company['email'] = isset ($record[$_POST['email']]) ? String::get_email_from_string($record[$_POST['email']]) : '';
-//				    $company['phone'] = isset ($record[$_POST['phone']]) ? trim($record[$_POST['phone']]) : '';
-//				    $company['fax'] = isset ($record[$_POST['fax']]) ? trim($record[$_POST['fax']]) : '';
-//				    $company['country'] = isset ($record[$_POST['country']]) ? trim($record[$_POST['country']]) : '';
-//				    $company['state'] = isset ($record[$_POST['state']]) ? trim($record[$_POST['state']]) : '';
-//				    $company['city'] = isset ($record[$_POST['city']]) ? trim($record[$_POST['city']]) : '';
-//				    $company['zip'] = isset ($record[$_POST['zip']]) ? trim($record[$_POST['zip']]) : '';
-//				    $company['address'] = isset ($record[$_POST['address']]) ? trim($record[$_POST['address']]) : '';
-//				    $company['address_no'] = isset ($record[$_POST['address_no']]) ? trim($record[$_POST['address_no']]) : '';
-//				    $company['post_country'] = isset ($record[$_POST['post_country']]) ? trim($record[$_POST['post_country']]) : '';
-//				    $company['post_state'] = isset ($record[$_POST['post_state']]) ? trim($record[$_POST['post_state']]) : '';
-//				    $company['post_city'] = isset ($record[$_POST['post_city']]) ? trim($record[$_POST['post_city']]) : '';
-//				    $company['post_zip'] = isset ($record[$_POST['post_zip']]) ? trim($record[$_POST['post_zip']]) : '';
-//				    $company['post_address'] = isset ($record[$_POST['post_address']]) ? trim($record[$_POST['post_address']]) : '';
-//				    $company['post_address_no'] = isset ($record[$_POST['post_address_no']]) ? trim($record[$_POST['post_address_no']]) : '';
-//				    $company['homepage'] = isset ($record[$_POST['homepage']]) ? trim($record[$_POST['homepage']]) : '';
-//				    $company['bank_no'] = isset ($record[$_POST['bank_no']]) ? trim($record[$_POST['bank_no']]) : '';
-//				    $company['vat_no'] = isset ($record[$_POST['vat_no']]) ? trim($record[$_POST['vat_no']]) : '';
-//				    $company['addressbook_id']  = $_POST['addressbook_id'];
-//
-//				    $new_id=$ab->add_company($company, $addressbook);
-//				    $new_type=3;
-//				}
-//			    }
-//			}
-//
-//			if($new_id>0) {
-//			    if(isset($cf)) {
-//				$customfields = $new_type==2 ? $contact_customfields : $company_customfields;
-//				$cf_record=array('link_id'=>$new_id);
-//				foreach($customfields as $field) {
-//				    if(isset($_POST[$field['dataname']]) && isset($record[$_POST[$field['dataname']]]))
-//					$cf_record[$field['dataname']]=$record[$_POST[$field['dataname']]];
-//				}
-//				$cf->insert_row('cf_'.$new_type,$cf_record);
-//			    }
-//			}
-//		    }
-//		    break;
-//	    }
-//		
-//		return $this;
-//	}
+	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()) {
+		//$event = new GO_Calendar_Model_Event();
+		$companyAttributes = array();
+		if (!empty($attributes['addressbook_id'])) {
+			$companyAttributes['addressbook_id'] = $attributes['addressbook_id'];
+		} elseif (isset($attributes['addressbook_id'])) {
+			unset($attributes['addressbook_id']);
+		}
+		
+		foreach ($vobject->children as $vobjProp) {
+			switch ($vobjProp->name) {
+				case 'N':
+					$nameArr = explode(';',$vobjProp->value);
+					$attributes['last_name'] = $nameArr[0];
+					$attributes['first_name'] = $nameArr[1];
+					$attributes['middle_name'] = !empty($nameArr[2]) ? $nameArr[2] : '' ;
+					break;
+				case 'ORG':
+					$companyAttributes['name'] = $vobjProp->value;
+					break;
+				case 'TITLE':
+					$attributes['title'] = $vobjProp->value;
+					break;
+				case 'TEL':
+					foreach ($vobjProp->parameters as $param) {
+						if ($param->name=='TYPE')
+							$types = explode(',',strtolower($param->value));
+					}
+					if(in_array('work',$types))
+						$attributes['work_phone'] = $vobjProp->value;
+					if(in_array('cell',$types))
+						$attributes['cellular'] = $vobjProp->value;
+					if(in_array('fax',$types) && in_array('home',$types))
+						$attributes['fax'] = $vobjProp->value;
+					if(in_array('fax',$types) && in_array('work',$types))
+						$companyAttributes['fax'] = $vobjProp->value;
+					if(in_array('home',$types))
+						$attributes['home_phone'] = $vobjProp->value;
+					
+//					foreach ($vobjProp->parameters as $param) {
+//						if ($param['name']=='TYPE') {
+//							switch (susbstr($param['value'],0,4)) {
+//								case 'work':
+//									$attributes['work_phone'] = $vobjProp->value;
+//									break;
+//								default:
+//									$attributes['home_phone'] = $vobjProp->value;
+//									break;
+//							}
+//						}
+//					}
+					break;
+//				case 'LABEL':
+				case 'ADR':
+					foreach ($vobjProp->parameters as $param) {
+						if ($param->name=='TYPE')
+							$types = explode(',',strtolower($param->value));
+					}
+					if(in_array('work',$types)) {
+						$addrArr = explode(';',$vobjProp->value);
+						$companyAttributes['address'] = $addrArr[2];
+						$companyAttributes['city'] = $addrArr[3];
+						$companyAttributes['state'] = $addrArr[4];
+						$companyAttributes['zip'] = $addrArr[5];
+						$companyAttributes['country'] = $addrArr[6];
+					}
+					if(in_array('home',$types)) {
+						$addrArr = explode(';',$vobjProp->value);
+						$attributes['address'] = $addrArr[2];
+						$attributes['city'] = $addrArr[3];
+						$attributes['state'] = $addrArr[4];
+						$attributes['zip'] = $addrArr[5];
+						$attributes['country'] = $addrArr[6];
+					}
+					break;
+				case 'EMAIL':
+					$attributes['email'] = $vobjProp->value;
+					break;
+				case 'ROLE':
+					$attributes['function'] = $vobjProp->value;
+					break;
+				default:
+					break;
+			}
+		}
+
+		$this->setAttributes($attributes);
+		$this->save();
+		
+		if (isset($companyAttributes['name'])) {
+			$stmt = GO_Addressbook_Model_Company::model()->findByAttribute('name', $companyAttributes['name']);
+			$company = $stmt->fetch();
+			if (empty($company))
+				$company = GO_Addressbook_Model_Company::model();
+			$company->setAttributes($companyAttributes);
+			$company->save();
+			$this->setAttribute('company_id',$company->id);
+			$this->save();
+		}
+		
+		return $this;
+	}
 
 }
