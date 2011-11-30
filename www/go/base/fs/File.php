@@ -293,7 +293,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	 * 
 	 * @return string 
 	 */
-	public function detectEncoding(){
+	public function detectEncoding($str){
 		$enc = false;
 		if(function_exists('mb_detect_encoding'))
 		{
@@ -313,14 +313,14 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		if(!is_writable($this->path()))
 			return false;
 		
-		$enc = $this->detectEncoding();
-		if(!$enc)
-			$enc='UTF-8';
-		
 		$str = $this->getContents();
 		if(!$str){
 			return false;
 		}
+		
+		$enc = $this->detectEncoding($str);
+		if(!$enc)
+			$enc='UTF-8';
 		
 		return $this->putContents(GO_Base_Util_String::clean_utf8($str, $enc));
 	}
