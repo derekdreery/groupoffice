@@ -14,36 +14,6 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	
 	protected $model = 'GO_Addressbook_Model_Addressbook';
 	
-//	protected function actionUpload($params) {
-//		$addressbook_id = isset($params['addressbook_id']) ? ($params['addressbook_id']) : 0;
-//		$import_filetype = isset($params['import_filetype']) ? ($params['import_filetype']) : null;
-//		$import_filename = isset($_FILES['import_file']['tmp_name']) ? ($_FILES['import_file']['tmp_name']) : null;
-//		$separator	= isset($params['separator']) ? ($params['separator']) : ',';
-//		$quote	= isset($params['quote']) ? ($params['quote']) : '"';
-//
-//	  $response['success'] = true;
-//
-//		$_SESSION['GO_SESSION']['addressbook']['import_file'] =GO::config()->tmpdir.uniqid(time());
-//		GO::debug($import_filename);
-//
-//		if(!move_uploaded_file($import_filename, $_SESSION['GO_SESSION']['addressbook']['import_file'])) {
-//			throw new Exception('Could not move '.$import_filename);
-//	  }
-//	  File::convert_to_utf8($_SESSION['GO_SESSION']['addressbook']['import_file']);
-//
-//	  switch($import_filetype) {
-//			case 'vcf':
-//				ini_set('max_execution_time', 360);
-//				ini_set('memory_limit', '256M');
-//				require_once (GO::modules()->path."classes/vcard.class.inc.php");
-//				$vcard = new vcard();
-//				$response['success'] = $this->_importVCF($_SESSION['GO_SESSION']['addressbook']['import_file'], $GLOBALS['GO_SECURITY']->user_id, ($_POST['addressbook_id']));
-//				break;
-//	  }
-//
-//		return $response;
-//	}
-	
 	public function actionSearchSender($params) {
 		$addressbooks = GO_Addressbook_Model_Addressbook::model()->find(
 			GO_Base_Db_FindCriteria::newInstance()
@@ -85,22 +55,62 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 		return parent::formatStoreRecord($record, $model, $store);
 	}
 	
+	protected function actionUpload($params) {
+		$params['a'] = $addressbook_id = $params['addressbook_id'];
+		$import_filetype = isset($params['import_filetype']) ? ($params['import_filetype']) : null;
+		$import_filename = isset($_FILES['import_file']['tmp_name']) ? ($_FILES['import_file']['tmp_name']) : null;
+		$separator	= isset($params['separator']) ? ($params['separator']) : ',';
+		$quote	= isset($params['quote']) ? ($params['quote']) : '"';
+		$params['file'] = $_SESSION['GO_SESSION']['addressbook']['import_file'] =GO::config()->tmpdir.uniqid(time());
+		$response['success'] = true;
+		GO::debug($import_filename);
+
+		if(!move_uploaded_file($import_filename, $_SESSION['GO_SESSION']['addressbook']['import_file'])) {
+			throw new Exception('Could not move '.$import_filename);
+	  }
+
+		$file = new GO_Base_Fs_File($_SESSION['GO_SESSION']['addressbook']['import_file']);
+	  $file->convertToUtf8();
+
+	  switch($import_filetype) {
+			case 'vcf':
+				ini_set('max_execution_time', 360);
+				ini_set('memory_limit', '256M');
+				$response = array_merge($response,$this->actionImportVcf($params));
+				break;
+	  }		
+		return $response;
+	}
+	
 	/**
 	 * Imports VCF file.
-	 * Command line call: /path/to/groupoffice/groupoffice addressbook/addressbook/importVcf --file=filename.txt
+	 * Example command line call: /path/to/groupoffice/groupoffice addressbook/addressbook/importVcf --file=filename.txt --addressbook_id=1
 	 * @param Array $params Parameters. MUST contain string $params['file'].
 	 */
 	public function actionImportVcf($params){
-		
 		$file = new GO_Base_Fs_File($params['file']);
 		$data = $file->getContents();
-
-		$vcalendar = GO_Base_VObject_Reader::read($data);
+		$contact = new GO_Addressbook_Model_Contact();
+		$vcard = GO_Base_VObject_Reader::read($data);
+		$params['a'] = !empty($params['a']) ? $params['a'] : 1;
 		
-		foreach($vcalendar->vtodo as $vtodo) {
-			$task = new GO_Task_Model_Task();
-			$task->importVObject($vtodo);
+		if (is_array($vcard)) {
+			foreach ($vcard as $item) {
+				$contact->importVObject(
+					$item,
+					array(
+						'addressbook_id' => $params['a']
+					)
+				);
+			}
+		} else {
+			$contact->importVObject(
+				$vcard,
+				array(
+					'addressbook_id' => $params['a']
+				)
+			);
 		}
+		return array('success'=>true);
 	}
 }
-
