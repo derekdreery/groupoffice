@@ -498,14 +498,35 @@ class GO{
 	 * @param array $params
 	 * @return string 
 	 */
-	public static function createExternalUrl($module, $function, $params)
+	public static function createExternalUrl($module, $function, $params,$toLoginDialog=false)
 	{		
 		//$p = 'm='.urlencode($module).'&f='.urlencode($function).'&p='.urlencode(base64_encode(json_encode($params)));
 		
+		if(GO::config()->debug){
+			if(!preg_match('/[a-z]+/', $module))
+				throw new Exception('$module param may only contain a-z characters.');
+
+			if(!preg_match('/[a-z]+/i', $function))
+				throw new Exception('$function param may only contain a-z characters.');
+		}
+		
 		$p = array('m'=>$module,'f'=>$function, 'p'=>$params);
 		
-		$url = GO::config()->orig_full_url.'?r=external/index&f='.urlencode(GO_Base_Util_Crypt::encrypt($p));
+		$r = $toLoginDialog ? '' : 'external/index';
+		
+		$url = GO::config()->orig_full_url.'?r='.$r.'&f='.urlencode(GO_Base_Util_Crypt::encrypt($p));
 		return $url;
+	}
+	
+	/**
+	 * Set the URL to redirect to after login. 
+	 * 
+	 * This is handled by the main index.php
+	 * 
+	 * @param string $url 
+	 */
+	public static function setAfterLoginUrl($url){
+		GO::session()->values['after_login_url']=$url;
 	}
 	
 	/**

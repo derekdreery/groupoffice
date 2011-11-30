@@ -1143,7 +1143,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	private function _quoteColumnName($name){
 	
 		//disallow \ ` and \00  : http://stackoverflow.com/questions/1542627/escaping-field-names-in-pdo-statements
-		if(preg_match("/[`\\\\\\000]/", $name))
+		if(preg_match("/[`\\\\\\000\(\),]/", $name))
 			throw new Exception("Invalid characters found in column name: ".$name);
 		
 		$arr = explode('.',$name);

@@ -34,7 +34,7 @@ function afterUpload(success){
             echo isset($lang['jupload_lang']) ? $lang['jupload_lang'] : $GLOBALS['GO_LANGUAGE']->language;            
             ?>" />
             <!-- <param name="lookAndFeel" value="system" /> -->
-            <param name="postURL" value="upload.php?id=<?php echo $_REQUEST['id']; ?>" />
+            <param name="postURL" value="upload.php?id=<?php echo intval($_REQUEST['id']); ?>" />
             <param name="afterUploadURL" value="javascript:afterUpload(%success%);" />
             <param name="showLogWindow" value="false" />
             <param name="maxChunkSize" value="1048576" />    
