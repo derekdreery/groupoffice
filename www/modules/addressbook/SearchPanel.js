@@ -157,22 +157,22 @@ GO.addressbook.SearchPanel = function(config)
 	
 		GO.addressbook.SearchPanel.superclass.constructor.call(this, config);
 	
-//		this.addEvents({
-//			queryChange : true
-//		});
+		this.addEvents({
+			queryChange : true
+		});
 	}
 
 Ext.extend(GO.addressbook.SearchPanel, Ext.Panel, {
 	selectedLetter : ''
-//	,
-//	fireQueryEvent : function(){
-//		var params = {
-//			clicked_letter : this.selectedLetter,
-//			query : this.queryField.getValue(),
-//			advancedQuery : ''
-//		};
-//		
-//		this.fireEvent('queryChange', params);
-//	}
+	,
+	fireQueryEvent : function(){
+		var params = {
+			clicked_letter : this.selectedLetter,
+			query : this.queryField.getValue(),
+			advancedQueryData : ''
+		};
+		
+		this.fireEvent('queryChange', params);
+	}
 	
 });
