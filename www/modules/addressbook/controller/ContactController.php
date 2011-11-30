@@ -240,8 +240,12 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				$query_type = 'LIKE';
 			}
 			//$criteria->addRawCondition('CONCAT_WS(`t`.`first_name`,`t`.`middle_name`,`t`.`last_name`)', ':query', $query_type);
-			$criteria->addRawCondition('name', ':query', $query_type);
-			$criteria->addBindParameter(':query', $query);
+			$queryCrit = GO_Base_Db_FindCriteria::newInstance();
+			$queryCrit->addRawCondition('first_name', ':query', $query_type)
+				->addRawCondition('middle_name', ':query', $query_type, false)
+				->addRawCondition('last_name', ':query', $query_type, false);
+			$queryCrit->addBindParameter(':query', $query);
+			$criteria->mergeWith($queryCrit);
 		}
 	
 		$storeParams = GO_Base_Db_FindParams::newInstance()
@@ -276,7 +280,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 //					)->getCriteria()->addInCondition('addresslist_id', $addresslist_filter,'ac');
 //			}
 		//}
-
+		$storeParams->debugSql();
 		return $storeParams;
 		
 	}
