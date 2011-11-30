@@ -3,6 +3,10 @@
 class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelController {
 
 	protected $model = 'GO_Files_Model_File';
+	
+	protected function allowGuests() {
+		return array('download'); //permissions will be checked manually in that action
+	}
 
 	protected function afterDisplay(&$response, &$model, &$params) {
 
@@ -61,8 +65,24 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 
 	public function actionDownload($params) {
 		GO::session()->closeWriting();
+		
+		
+		
+		$file = GO_Files_Model_File::model()->findByPk($params['id'], false, true);
+		
+		if(!empty($params['random_code'])){
+			if($file->random_code!=$params['random_code'])
+				throw new Exception("Invalid download link");
+			
+			if(time()>$file->expire_time)
+				throw new Exception("Sorry, the download link has expired");				
+		}else
+		{
+			if(!$file->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
+				throw new GO_Base_Exception_AccessDenied();
+		}
 
-		$file = GO_Files_Model_File::model()->findByPk($params['id']);
+		
 		GO_Base_Util_Common::outputDownloadHeaders($file->fsFile, false, !empty($params['cache']));
 		$file->fsFile->output();
 	}
@@ -75,6 +95,47 @@ class GO_Files_Controller_File extends GO_Base_Controller_AbstractModelControlle
 	 */
 	public function actionEmailDownloadLink($params){
 		
+		$file = GO_Files_Model_File::model()->findByPk($params['id']);
+		$file->random_code=GO_Base_Util_String::randomPassword(11);
+		$file->expire_time = $params['expire_time'];
+		$file->save();
+		
+		$html = $params['content_type']=='html';
+		
+		$url = GO::url('files/file/download',array('id'=>$file->id,'random_code'=>$file->random_code),false, $html);
+		
+		if($html){
+			$url = '<a href="'.$url.'">'.$file->name.'</a>';
+			$lb='<br />';
+		}else
+		{
+			$lb = "\n";
+		}
+		
+		$text = $url.' ('.GO::t('possibleUntil','files').' '.GO_Base_Util_Date::get_timestamp($file->expire_time, false).')'.$lb.$lb;
+
+		
+		if($params['template_id'] && ($template = GO_Addressbook_Model_Template::model()->findByPk($params['template_id']))){
+			$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($template->content);
+	
+			$response['data']=$message->toOutputArray($html, true);
+			$response['data']['body'] = GO_Addressbook_Model_Template::model()->replaceCustomTags($response['data']['body'], array('body'=>$text));
+		}else
+		{
+			$response['data']['body']=$text;	
+		}
+		
+		if(!$html){
+			$response['data']['textbody']=$response['data']['body'];
+			unset($response['data']['body']);
+		}
+		
+		if (empty($response['data']['subject']))
+			$response['data']['subject'] = GO::t('downloadLink','files').' '.$file->name;
+
+		$response['success']=true;
+		
+		return $response;
 	}
 	
 

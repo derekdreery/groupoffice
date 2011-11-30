@@ -178,7 +178,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 * plain text. Defaults to true.
 	 * @return Array
 	 */
-	public function toOutputArray($html=true) {
+	public function toOutputArray($html=true, $recipientsAsString=false) {
 
 		$from = $this->from->getAddresses();
 		
@@ -188,19 +188,17 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$response['subject'] = $this->subject;
 		$response['from'] = $this->from->getPersonal();
 		$response['sender'] = $this->from->getEmail();
-		$response['to'] = $this->to->getAddresses();
-		$response['cc'] = $this->cc->getAddresses();
-		$response['bcc'] = $this->bcc->getAddresses();
+		$response['to'] = $recipientsAsString ? (string) $this->to : $this->to->getAddresses();
+		$response['cc'] = $recipientsAsString ? (string) $this->cc : $this->cc->getAddresses();
+		$response['bcc'] = $recipientsAsString ? (string) $this->bcc :  $this->bcc->getAddresses();
 		$response['reply_to'] = (string) $this->reply_to;
 		$response['message_id'] = $this->message_id;
 		$response['date'] = $this->date;
 
 		$response['to_string'] = (string) $this->to;
 
-
-		if (empty($response['to'])) {
+		if (!$recipientsAsString && empty($response['to']))
 			$response['to'][] = array('email' => '', 'personal' => GO::t('no_recipients', 'email'));
-		}
 
 		$response['full_from'] = (string) $this->from;
 		$response['priority'] = intval($this->x_priority);

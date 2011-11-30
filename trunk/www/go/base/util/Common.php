@@ -156,4 +156,14 @@ class GO_Base_Util_Common {
 			}
 		}
 	}
+	
+	/**
+	 * Check if the request was made with ajax.
+	 * 
+	 * @return boolean 
+	 */
+	public static function isAjaxRequest(){
+		return isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest";  
+	}
+
 }

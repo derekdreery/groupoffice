@@ -147,6 +147,23 @@ class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 		$templateParser = new GO_Base_Util_TemplateParser();
 		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
 	}
+	
+	/**
+	 * Replaces customtags
+	 * 
+	 * Tags look like this:
+	 * 
+	 * {$key}
+	 * 
+	 * @param string $content Containing the tags
+	 * @param array $attributes
+	 * @param boolean $leaveEmptyTags Set to true if you don't want unreplaced tags to be cleaned up.
+	 * @return string 
+	 */
+	public function replaceCustomTags($content, $attributes, $leaveEmptyTags=false){
+		$templateParser = new GO_Base_Util_TemplateParser();
+		return $templateParser->parse($content, $attributes, $leaveEmptyTags);
+	}
 
 //	/**
 //	 * @return GO_Email_Model_SavedMessage
