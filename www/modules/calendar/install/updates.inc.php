@@ -135,3 +135,17 @@ $updates[]="CREATE TABLE IF NOT EXISTS `cal_calendar_user_colors` (
   `color` varchar(6) NOT NULL,
   PRIMARY KEY (`user_id`,`calendar_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="CREATE TABLE IF NOT EXISTS `cal_calendar_user_colors` (
+  `user_id` int(11) NOT NULL,
+  `calendar_id` int(11) NOT NULL,
+  `color` varchar(6) NOT NULL,
+  PRIMARY KEY (`user_id`,`calendar_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+$updates[]="CREATE TABLE IF NOT EXISTS `cal_calendar_user_colors` (
+  `user_id` int(11) NOT NULL,
+  `calendar_id` int(11) NOT NULL,
+  `color` varchar(6) NOT NULL,
+  PRIMARY KEY (`user_id`,`calendar_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
