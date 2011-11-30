@@ -117,6 +117,22 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 		return parent::beforeSave();
 	}
 	
+	public function afterSave($wasNew) {
+		
+		if($this->reminder>0){
+			$this->deleteReminders();
+			$this->addReminder($this->name, $this->reminder, $this->user_id);
+		}	
+		
+		return parent::afterSave($wasNew);
+	}
+	
+	protected function afterDelete() {
+		$this->deleteReminders();
+		return parent::afterDelete();
+	}
+	
+	
 	protected function afterDbInsert() {
 		$this->uuid = GO_Base_Util_UUID::create('task', $this->id);
 		return true;

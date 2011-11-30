@@ -66,38 +66,16 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		}
 				
 		if(isset($params['remind'])) // Check for a setted reminder
-		{
 			$model->reminder= GO_Base_Util_Date::to_unixtime($params['remind_date'].' '.$params['remind_time']);
-			
-			// Todo: Create the new reminder if it does not exist yet.
-			//OUDE CODE UIT ACTION.PHP
-			//			if(isset($_POST['remind'])) {
-			//				$task['reminder']=Date::to_unixtime($_POST['remind_date'].' '.$_POST['remind_time']);
-			//			}elseif(!isset($_POST['status'])) {
-			//				//this task is added with the quick add option
-			//				$settings=$tasks->get_settings($GLOBALS['GO_SECURITY']->user_id);
-			//				if(!empty($settings['remind'])) {
-			//					$reminder_day = $task['due_time'];
-			//					if(!empty($settings['reminder_days']))
-			//						$reminder_day = Date::date_add($reminder_day,-$settings['reminder_days']);
-			//
-			//					$task['reminder']=Date::to_unixtime(Date::get_timestamp($reminder_day, false).' '.$settings['reminder_time']);
-			//				}
-			//			}else {
-			//				$task['reminder']=0;
-			//			}		
-		}
-		else {
+		else 
 			$model->reminder = 0;
-		}
 		
 		return parent::beforeSubmit($response, $model, $params);
 	}
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {		
-		if(isset($params['comment'])){
-			// TODO: Controleren of de comments module geinstalleerd is.
-			// TODO: Een nieuw comment model opbouwen en opslaan 
+		if(isset($params['comment']) && GO::modules()->comments){
+				
 			$comment = new GO_Comments_Model_Comment();
 			// $comment->id 	
 			$comment->model_id = $model->id;
