@@ -739,17 +739,18 @@ try {
 				if($folder = $email->get_folder_by_id($parent_id)) {
 					if($email->is_mbroot($folder['name'],$delimiter, $account['mbroot'])) {
 						$parent_id=0;
+						$response['is_mbroot'] = true;
 					}
 					$new_folder_name=$folder['name'].$delimiter.$new_folder_name;
 				}else {
 					$response['success']=false;
-					$response['feedback']=$lang['comon']['selectError'];
+					$response['feedback']=$lang['common']['selectError'];
 					echo json_encode($response);
 					exit();
 				}
 
 			}else {
-				$new_folder_name=$account['mbroot'].$_POST['new_folder_name'];
+				$new_folder_name=$account['mbroot'].$delimiter.$_POST['new_folder_name'];
 			}
 
 			if($imap->create_folder($new_folder_name)) {
