@@ -1,3 +1,6 @@
+30-11-2011 3.7.37
+- Missing table on calendar bug.
+
 29-11-2011 3.7.36
 - GOTA was broken in latest releases.
 - Calendar colors with multiple selection can be defined by the user.
