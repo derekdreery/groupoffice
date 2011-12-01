@@ -537,7 +537,7 @@ try {
 				$calendar = $calendar_props[] = $cal->get_calendar($calendar_id);
 				
 				$permissionLevel = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
-				if($permissionLevel>GO_SECURITY::READ_PERMISSION){
+				if($permissionLevel>=GO_SECURITY::READ_PERMISSION){
 					if ($GO_SECURITY->user_id==$calendar['user_id']
 							|| ( !isset($response['calendar_id']) && (!isset($response['permission_level']) || $response['permission_level']<GO_SECURITY::WRITE_PERMISSION) )
 						) {
