@@ -392,6 +392,13 @@ class GO_CONFIG {
 	 * @access  public
 	 */
 	var $quota = 0;
+	
+	/**
+	 * Limit the maximum results for user to a fixed number. When enabled a search query must be entered to get results.
+	 * 
+	 * @var int 
+	 */
+	var $limit_usersearch=0;
 
 
 	#database configuration
