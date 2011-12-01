@@ -190,7 +190,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	}
 	
 	/**
-	 * Import a task from a VObject 
+	 * Import a contact (with or without company) from a VObject 
 	 * 
 	 * @param Sabre_VObject_Component $vobject
 	 * @param array $attributes Extra attributes to apply to the event
@@ -299,4 +299,48 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		return $this;
 	}
 
+		/**
+	 * Get this task as a VObject. This can be turned into a vcard file data.
+	 * 
+	 * @return Sabre_VObject_Component 
+	 */
+	public function toVObject(){
+		$e=new Sabre_VObject_Component('vcard');
+		
+		$dtstamp = new Sabre_VObject_Element_DateTime('dtstamp');
+		$dtstamp->setDateTime(new DateTime(), Sabre_VObject_Element_DateTime::UTC);		
+		$e->add($dtstamp);
+		
+		$mtimeDateTime = new DateTime();
+		$mtimeDateTime->setTimestamp($this->mtime);
+		$lm = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
+		$lm->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
+		$e->add($lm);
+		
+		$ctimeDateTime = new DateTime();
+		$ctimeDateTime->setTimestamp($this->mtime);
+		$ct = new Sabre_VObject_Element_DateTime('created');
+		$ct->setDateTime($ctimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
+		$e->add($ct);
+		
+		$n = new Sabre_VObject_Property('N');
+		$n->setValue($this->last_name.";".$this->first_name.";".$this->middle_name);
+		$e->add($n);
+		
+		$fn = new Sabre_VObject_Property('FN');
+		$fn->setValue($this->name);
+		$e->add($fn);
+		
+		if (!empty($this->company)) {
+			$org = new Sabre_VObject_Property('ORG');
+			$org->setValue($this->company->name);
+			$e->add($org);
+			$adr = new Sabre_VObject_Property('ADR');
+			$adr->setValue("");
+			$e->add($org);
+		}
+		
+		return $e;
+	}
+	
 }

@@ -177,13 +177,13 @@ CREATE TABLE IF NOT EXISTS `ab_default_email_templates` (
 
 DROP TABLE IF EXISTS `ab_email_templates`;
 CREATE TABLE IF NOT EXISTS `ab_email_templates` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL DEFAULT '0',
   `type` tinyint(4) NOT NULL DEFAULT '0',
   `name` varchar(100) DEFAULT NULL,
   `acl_id` int(11) NOT NULL DEFAULT '0',
   `content` longblob NOT NULL,
-  `extension` varchar(4) NOT NULL,
+  `extension` varchar(4) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -195,7 +195,7 @@ CREATE TABLE IF NOT EXISTS `ab_email_templates` (
 
 DROP TABLE IF EXISTS `ab_sent_mailings`;
 CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `subject` varchar(100) DEFAULT NULL,
   `message_path` varchar(255) DEFAULT NULL,
@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `ab_sent_mailings` (
 
 DROP TABLE IF EXISTS `ab_search_queries`;
 CREATE TABLE IF NOT EXISTS `ab_sql` (
-  `id` int(11) DEFAULT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `companies` tinyint(1) NOT NULL,
   `name` varchar(32) DEFAULT NULL,

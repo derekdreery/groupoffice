@@ -164,3 +164,8 @@ $updates["201111211715"][]="ALTER TABLE `ab_sent_mailings` CHANGE `errors` `erro
 
 $updates["201111221545"][]="RENAME TABLE `ab_sql` to `ab_search_queries` ";
 $updates["201111221610"][]="ALTER TABLE `ab_search_queries` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT ";
+
+$updates["201112011557"][]="ALTER TABLE `ab_email_templates` CHANGE `extension` `extension` varchar(4) NOT NULL DEFAULT '';";
+$updates["201112011632"][]="ALTER TABLE `ab_email_templates` CHANGE `id` `id` int(11) NOT NULL AUTO_INCREMENT;";
+$updates["201112011632"][]="ALTER TABLE `ab_sent_mailings` CHANGE `id` `id` int(11) NOT NULL AUTO_INCREMENT;";
+$updates["201112011632"][]="ALTER TABLE `ab_search_queries` CHANGE `id` `id` int(11) NOT NULL AUTO_INCREMENT;";

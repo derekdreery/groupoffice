@@ -770,7 +770,7 @@ Ext.extend(GO.addressbook.AddressbookDialog, GO.Window,{
 			action:GO.settings.modules.addressbook.url+'export.php?addressbook_id='+this.addressbook_id
 			});
 		this.addressbookExportPanel.form.submit();		
-	},
+	}
 
 	
 });	
