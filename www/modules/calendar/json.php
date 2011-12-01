@@ -535,25 +535,26 @@ try {
 
 			foreach($check_calendars as $calendar_id){
 				$calendar = $calendar_props[] = $cal->get_calendar($calendar_id);
+				
+				$permissionLevel = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
+				if($permissionLevel>GO_SECURITY::READ_PERMISSION){
+					if ($GO_SECURITY->user_id==$calendar['user_id']
+							|| ( !isset($response['calendar_id']) && (!isset($response['permission_level']) || $response['permission_level']<GO_SECURITY::WRITE_PERMISSION) )
+						) {
+							$response['comment']=$calendar['comment'];
+							$response['calendar_id']=$calendar['id'];
+							$response['calendar_name']=$calendar['name'];
 
-				if ($GO_SECURITY->user_id==$calendar['user_id']
-						|| ( !isset($response['calendar_id']) && (!isset($response['permission_level']) || $response['permission_level']<GO_SECURITY::WRITE_PERMISSION) )
-					) {
-						$response['comment']=$calendar['comment'];
-						$response['calendar_id']=$calendar['id'];
-						$response['calendar_name']=$calendar['name'];
-
-					$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
-					if($response['permission_level']>1){
-						$response['write_permission']=true;
+						$response['permission_level']=$permissionLevel;
+						if($response['permission_level']>1){
+							$response['write_permission']=true;
+						}					
 					}
+					$calendars[]=$calendar_id;
+					$calendar_names[$calendar_id]=$calendar['name'];
 
-					if($response['permission_level']) {
-						$calendars[]=$calendar_id;
-						$calendar_names[$calendar_id]=$calendar['name'];
-					}
+					$permission_levels[$calendar_id]=$permissionLevel;
 				}
-				$permission_levels[$calendar_id]=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
 			}
 
 	
