@@ -65,17 +65,29 @@ switch($task)
 		$response['results']=array();
 		$response['total']=0;
 		
+		if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+				$GO_CONFIG->limit_usersearch=0;
+		
 		// Check for the value "limit_usersearch" in the group-office config file and then add the limit.
-		if(!empty($GO_CONFIG->limit_usersearch) && !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
-			$limit = $GO_CONFIG->limit_usersearch;
+		if(!empty($GO_CONFIG->limit_usersearch)){
+			if($limit>$GO_CONFIG->limit_usersearch)
+				$limit = $GO_CONFIG->limit_usersearch;			
+			
+			if($start+$limit>$GO_CONFIG->limit_usersearch)
+				$start=0;
+		}
+		
 
-		if(!empty($GO_CONFIG->limit_usersearch) && !empty($_REQUEST['query']) || empty($GO_CONFIG->limit_usersearch) || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+		if(empty($GO_CONFIG->limit_usersearch) || !empty($_REQUEST['query']))
 		{
 			$user_id = (!$GO_MODULES->modules['users']['read_permission']) ? $GO_SECURITY->user_id : 0;
 
 			//if($user_id==0 || !empty($query)){
 
 			$response['total'] = $GO_USERS->search($query, $search_field, $user_id, $start, $limit, $sort,$dir);
+			if(!empty($GO_CONFIG->limit_usersearch) && $response['total']>$GO_CONFIG->limit_usersearch)
+				$response['total']=$GO_CONFIG->limit_usersearch;	
+			
 
 			if($GO_MODULES->has_module('customfields')) {
 				require_once($GO_MODULES->modules['customfields']['class_path'].'customfields.class.inc.php');
