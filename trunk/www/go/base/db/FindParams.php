@@ -237,13 +237,13 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
-	 * Adds a group by clause
+	 * Adds a group by clause.
 	 * 
-	 * @param string $field
+	 * @param array $fields
 	 * @return GO_Base_Db_FindParams 
 	 */
-	public function group($field){
-		$this->_params['group']=$field;
+	public function group($fields){
+		$this->_params['group']=$fields;
 		return $this;
 	}
 	

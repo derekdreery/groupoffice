@@ -1037,7 +1037,7 @@ class GO_CONFIG {
 	 */
 	public function set_default_session(){
 
-		if(!isset($_SESSION['GO_SESSION']['security_token']))
+		if(!isset($_SESSION['GO_SESSION']['timezone']))
 		{
 			$_SESSION['GO_SESSION']['decimal_separator'] = $this->default_decimal_separator;
 			$_SESSION['GO_SESSION']['thousands_separator'] = $this->default_thousands_separator;

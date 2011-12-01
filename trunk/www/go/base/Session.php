@@ -30,15 +30,17 @@ class GO_Base_Session extends GO_Base_Observable{
 		//In some cases it doesn't make sense to use the session because the client is
 		//not capable. (WebDAV for example).
 		if(!defined("GO_NO_SESSION")){
-			if(session_id()==''){
+			if(!isset($_SESSION)) {
 				session_name('groupoffice');
 				session_start();
 			}
-
 			GO::debug("Started session");
 		}
 		
 		$this->values = &$_SESSION['GO_SESSION'];
+		
+		if(!isset($this->values['security_token']))
+			$this->values['security_token']=GO_Base_Util_String::randomPassword(10);
 		
 		//$this->setDefaults();
 		
@@ -60,33 +62,33 @@ class GO_Base_Session extends GO_Base_Observable{
 	 * This function sets some default session variables. When a user logs in
 	 * they are overridden by the user settings.
 	 */
-	public function setDefaults(){
-
-		if(!isset(self::$values['security_token']))
-		{
-			self::$values['decimal_separator'] = GO::config()->default_decimal_separator;
-			self::$values['thousands_separator'] = GO::config()->default_thousands_separator;
-			self::$values['date_separator'] = GO::config()->default_date_separator;
-			self::$values['date_format'] = GO_Base_Util_Date::get_dateformat( GO::config()->default_date_format, self::$values['date_separator']);
-			self::$values['time_format'] = GO::config()->default_time_format;
-			self::$values['currency'] = GO::config()->default_currency;
-			self::$values['timezone'] = GO::config()->default_timezone;
-			self::$values['country'] = GO::config()->default_country;
-			self::$values['sort_name'] = 'last_name';
-			self::$values['auth_token']=GO_Base_Util_String::random_password('a-z,1-9', '', 30);
-			//some url's require this token to be appended
-			self::$values['security_token']=GO_Base_Util_String::random_password('a-z,1-9', '', 10);
-			
-			if (!is_int($this->values['timezone'])) {
-				//set user timezone setting after user class is loaded
-				date_default_timezone_set(self::$values['timezone']);
-			}
-
-			GO::debug('Setup new session '.self::$values['security_token']);
-		}
-
-		
-	}
+//	public function setDefaults(){
+//
+//		if(!isset(self::$values['security_token']))
+//		{
+//			self::$values['decimal_separator'] = GO::config()->default_decimal_separator;
+//			self::$values['thousands_separator'] = GO::config()->default_thousands_separator;
+//			self::$values['date_separator'] = GO::config()->default_date_separator;
+//			self::$values['date_format'] = GO_Base_Util_Date::get_dateformat( GO::config()->default_date_format, self::$values['date_separator']);
+//			self::$values['time_format'] = GO::config()->default_time_format;
+//			self::$values['currency'] = GO::config()->default_currency;
+//			self::$values['timezone'] = GO::config()->default_timezone;
+//			self::$values['country'] = GO::config()->default_country;
+//			self::$values['sort_name'] = 'last_name';
+//			self::$values['auth_token']=GO_Base_Util_String::random_password('a-z,1-9', '', 30);
+//			//some url's require this token to be appended
+//			self::$values['security_token']=GO_Base_Util_String::random_password('a-z,1-9', '', 10);
+//			
+//			if (!is_int($this->values['timezone'])) {
+//				//set user timezone setting after user class is loaded
+//				date_default_timezone_set(self::$values['timezone']);
+//			}
+//
+//			GO::debug('Setup new session '.self::$values['security_token']);
+//		}
+//
+//		
+//	}
 	
 	
 // Doesn't work well because you can't change magic properties directly.

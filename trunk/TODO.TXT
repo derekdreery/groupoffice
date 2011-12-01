@@ -5,13 +5,9 @@ invitation.php
 alarm import
 
 
-
 SyncML
 
-Advanced search panel
-
 Project report custom fields and advanced search panel...!?
-ticket facturatie
 
 E-mail files functie
 
@@ -27,10 +23,8 @@ Files versioning
 
 Incomplete objects. Geen select * maar text en blobs niet meenemen.
 
-
 serverclient
 overige modules mvc
 Freebusy support in sabredav 1.6
-
 
 Autoload cachen
