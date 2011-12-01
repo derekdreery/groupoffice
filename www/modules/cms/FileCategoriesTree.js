@@ -22,7 +22,6 @@ GO.cms.FileCategoriesTree = function(config){
 	config.border = false;
 	config.autoScroll = true;
 	config.rootVisible = false;
-	config.height = '100%';
 	config.split=true;
 	config.enableDD = true;
 	
