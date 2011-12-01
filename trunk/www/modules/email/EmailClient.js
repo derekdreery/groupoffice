@@ -1793,7 +1793,7 @@ GO.mainLayout.onReady(function(){
 
 						if(totalUnseen!=GO.email.totalUnseen && totalUnseen>0)
 						{
-							data.reminderText+='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', totalUnseen)+'</p>';
+							data.reminderText='<p>'+GO.email.lang.youHaveNewMails.replace('{new}', totalUnseen)+'</p>';
 
 							if(!ep || !ep.isVisible())
 								GO.email.notificationEl.setDisplayed(true);
@@ -1803,7 +1803,7 @@ GO.mainLayout.onReady(function(){
 								GO.reminderPopup = GO.util.popup({
 									width:400,
 									height:300,
-									url:BaseHref+'reminder.php?reminder_text='+encodeURIComponent(data.reminderText),
+									url:BaseHref+'reminder.php?reminder_text='+encodeURIComponent(data.reminderText)+"&count=0",
 									target:'groupofficeReminderPopup',
 									position:'br',
 									closeOnFocus:false
