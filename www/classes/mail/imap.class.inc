@@ -159,7 +159,7 @@ class imap extends imap_bodystruct {
 				fputs($this->handle, $challenge_response."\r\n");
 				break;
 			default:
-				$login = 'A'.$this->command_number().' LOGIN "'.str_replace('"', '\"', $username).'" "'.str_replace('"', '\"', $pass). "\"\r\n";
+				$login = 'A'.$this->command_number().' LOGIN "'.$this->_escape($username).'" "'.$this->_escape($pass). "\"\r\n";
 				$this->commands[trim(str_replace($pass, 'xxxx', $login))] = getmicrotime();
 				fputs($this->handle, $login);
 				break;
@@ -194,6 +194,10 @@ class imap extends imap_bodystruct {
 		}
 		return $authed;
 	}
+	
+	private function _escape($str){
+		return str_replace(array('\\','"'), array('\\\\','\"'), $str);
+	}
 
 	/**
 	 * Get's the capabilities of the IMAP server. Useful to determine if the
@@ -220,7 +224,7 @@ class imap extends imap_bodystruct {
 
 	public function get_acl($mailbox){
 
-		$mailbox = $this->utf7_encode(str_replace('"', '\"', $mailbox));
+		$mailbox = $this->utf7_encode($this->_escape( $mailbox));
 		$this->clean($mailbox, 'mailbox');
 
 		$command = "GETACL $mailbox\r\n";
@@ -243,7 +247,7 @@ class imap extends imap_bodystruct {
 
 	public function set_acl($mailbox, $identifier, $permissions){
 
-		$mailbox = $this->utf7_encode(str_replace('"', '\"', $mailbox));
+		$mailbox = $this->utf7_encode($this->_escape( $mailbox));
 		$this->clean($mailbox, 'mailbox');
 
 		$command = "SETACL $mailbox $identifier $permissions\r\n";
@@ -432,7 +436,7 @@ class imap extends imap_bodystruct {
 			$this->touched_folders[]=$mailbox_name;
 
 
-		$box = $this->utf7_encode(str_replace('"', '\"', $mailbox_name));
+		$box = $this->utf7_encode($this->_escape( $mailbox_name));
 		$this->clean($box, 'mailbox');
 
 		$command = "SELECT \"$box\"\r\n";
@@ -1805,7 +1809,7 @@ class imap extends imap_bodystruct {
 	}
 
 	private function addslashes($mailbox){
-		return str_replace('"', '\"', $mailbox);
+		return $this->_escape( $mailbox);
 	}
 
 	/**
