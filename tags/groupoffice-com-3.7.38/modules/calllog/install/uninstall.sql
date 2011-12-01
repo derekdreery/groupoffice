@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS `cl_calls`;
+DROP TABLE IF EXISTS `cf_18`;
