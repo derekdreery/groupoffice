@@ -196,7 +196,7 @@ class imap extends imap_bodystruct {
 	}
 	
 	private function _escape($str){
-		return str_replace(array('"','\\'), array('\"','\\\\'), $str);
+		return str_replace(array('\\','"'), array('\\\\','\"'), $str);
 	}
 
 	/**
