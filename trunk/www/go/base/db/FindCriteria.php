@@ -162,9 +162,7 @@ class GO_Base_Db_FindCriteria {
 	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true. 
 	 * @return GO_Base_Db_FindCriteria The complete GO_Base_Db_FindCriteria object is given as a return value.
 	 */
-	public function addRawCondition($value1, $value2='', $comparator='=', $useAnd=true) {
-		if (empty($value2))
-			$comparator = '';
+	public function addRawCondition($value1, $value2, $comparator='=', $useAnd=true) {
 		$this->_appendOperator($useAnd);
 		$this->_appendRawConditionString($value1, $value2, $comparator);		
 		return $this;
