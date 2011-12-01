@@ -996,7 +996,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$pk = is_array($this->primaryKey()) ? $this->primaryKey() : array($this->primaryKey());
 			
 			$sql .= "\nGROUP BY t.`".implode('`,t.`', $pk)."` ";			
-			if(isset($query['group']))
+			if(isset($params['group']))
 				$sql .= ", ";
 			
 							
@@ -1004,8 +1004,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$sql .= "\nGROUP BY ";
 		}
 		
-		if(isset($params['group']))
-			$sql .= $params['group'];		
+		if(isset($params['group'])){
+			if(!is_array($params['group']))
+				$params['group']=array($params['group']);
+			
+			for($i=0;$i<count($params['group']);$i++){
+				if($i>0)
+					$sql .= ', ';
+				
+				$sql .= $this->_quoteColumnName($params['group'][$i]).' ';
+			}
+		}
 		
 		if(isset($params['having']))
 			$sql.="\nHAVING ".$params['having'];
