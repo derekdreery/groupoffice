@@ -1,3 +1,6 @@
+01-12-2011 3.7.38
+- Bug in calendar events display with multiselect
+
 30-11-2011 3.7.37
 - Missing table on calendar bug.
 
