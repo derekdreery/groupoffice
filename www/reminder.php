@@ -30,7 +30,7 @@ else
 
 $title=$lang['common']['alert'].' - '.$GLOBALS['GO_CONFIG']->product_name;
 
-$count = intval($_REQUEST['count']);
+$count = empty($_REQUEST['count']) ? 0 : intval($_REQUEST['count']);
 
 $reminders= $count==1 ? $lang['common']['oneReminder'] : sprintf($lang['common']['nReminders'], $count);
 
@@ -47,10 +47,10 @@ $reminders= $count==1 ? $lang['common']['oneReminder'] : sprintf($lang['common']
 
 		<div id="reminderText">
 		<?php
-		if($_REQUEST['count']>0)
+		if($count>0)
 			echo '<p>'.sprintf($lang['common']['youHaveReminders'], $reminders, $GLOBALS['GO_CONFIG']->product_name).'</p>';
 
-		echo strip_tags($_REQUEST['reminder_text']);
+		echo strip_tags($_REQUEST['reminder_text'],'<p><div>');
 		?>
 		</div>
 
