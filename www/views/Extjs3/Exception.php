@@ -5,4 +5,6 @@ if($this->isAjax()){
 {
 	echo '<h1>Error</h1>';
 	echo '<p style="color:red">'.$data['feedback'].'</p>';
+	if(GO::config()->debug)
+		echo '<pre>'.$data['trace'].'</pre>';
 }
