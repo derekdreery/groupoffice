@@ -217,10 +217,15 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 	 * Find a folder by path relative to GO::config()->file_storage_path
 	 * 
 	 * @param String $relpath 
-	 * @param boolean $autoCreate
+	 * @param boolean $autoCreate True to auto create the folders. ACL's will be ignored.
 	 * @return GO_Files_Model_Folder 
 	 */
 	public function findByPath($relpath, $autoCreate=false) {
+		
+
+		$oldIgnoreAcl = GO::$ignoreAclPermissions;
+		GO::$ignoreAclPermissions=true;
+		
 		$folder=false;
 		if (substr($relpath, -1) == '/') {
 			$relpath = substr($relpath, 0, -1);
@@ -244,6 +249,8 @@ class GO_Files_Model_Folder extends GO_Base_Db_ActiveRecord {
 
 			$parent_id = $folder->id;
 		}
+		
+		GO::$ignoreAclPermissions=$oldIgnoreAcl;
 
 		return $folder;
 	}
