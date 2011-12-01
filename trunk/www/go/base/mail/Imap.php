@@ -195,7 +195,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	}
 
 	private function _escape($str){
-		return str_replace(array('"','\\'), array('\"','\\\\'), $str);
+		return str_replace(array('\\','"'), array('\\\\','\"'), $str);
 	}
 	/**
 	 * Get's the capabilities of the IMAP server. Useful to determine if the
