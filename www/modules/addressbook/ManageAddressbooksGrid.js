@@ -71,7 +71,7 @@ GO.addressbook.ManageAddressbooksGrid = function(config){
 	this.on('rowdblclick', function(grid, rowIndex){
 		var record = grid.getStore().getAt(rowIndex);	
 		
-		this.addressbookDialog.show(record);
+		this.addressbookDialog.show(record.id);
 		
 		}, this);
 
