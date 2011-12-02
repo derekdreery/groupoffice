@@ -297,7 +297,7 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 		$enc = false;
 		if(function_exists('mb_detect_encoding'))
 		{
-			$enc = mb_detect_encoding($str, "ASCII,JIS,UTF-8,ISO-8859-1,ISO-8859-15,EUC-JP,SJIS");
+			$enc = mb_detect_encoding($this->getContents(), "ASCII,JIS,UTF-8,ISO-8859-1,ISO-8859-15,EUC-JP,SJIS");
 		}
 		
 		return $enc;
