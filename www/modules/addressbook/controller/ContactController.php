@@ -399,5 +399,18 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return parent::afterAttributes($attributes, $response, $params, $model);
 	}
 	
+		
+	protected function beforeImport(&$model, &$attributes, $record) {
+		
+		if(!empty($attributes['company'])){
+				$company = GO_Addressbook_Model_Company::model()->findSingleByAttribute('name', $attributes['company']);
+			
+			if($company)
+				$model->company_id = $company->id;
+		}
+		
+		return parent::beforeImport($model, $attributes, $record);
+	}
+	
 }
 
