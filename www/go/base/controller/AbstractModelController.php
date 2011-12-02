@@ -714,8 +714,8 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 						$attributes[$col]=strtotime($attributes[$col]);
 					}
 				}
-				
-				$model->setAttributes($attributes, false);
+				// True is set because import needs to be checked by the model.
+				$model->setAttributes($attributes, true);
 				
 				// If there are given baseparams to the importer
 				if(isset($params['importBaseParams'])) {
