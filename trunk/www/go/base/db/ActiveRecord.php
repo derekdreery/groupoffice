@@ -2411,6 +2411,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			$this->$name=$value;
 		}elseif(isset($this->columns[$name])){
 			
+			if(GO::config()->debug){
+				if(is_object($value) || is_array($value))
+					throw new Exception("Invalid attribute value for ".$name.". Type was: ".gettype($value));
+			}
 			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!=$value) && !$this->isModified($name))
 			{
 				$this->_modifiedAttributes[$name]=isset($this->_attributes[$name]) ? $this->_attributes[$name] : false;
