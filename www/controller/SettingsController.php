@@ -3,10 +3,16 @@
 class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController {
 	
 	public function actionSubmit($params){
+			
+		if(!empty($params["dateformat"])){
+			$dateparts = explode(':',$params["dateformat"]);
+			$params['date_separator'] = $dateparts[0];
+			$params['date_format'] = $dateparts[1];
+		}
 		
 		$user = GO_Base_Model_User::model()->findByPk($params['id']);
 		$user->setAttributes($params);
-		
+					
 		if (!empty($params["password1"]) || !empty($params["password2"])) {
 			
 			if(!$user->checkPassword($params['current_password']))
@@ -38,6 +44,10 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 		
 		if($user->contact)
 			$response['data']=array_merge($response['data'],$user->contact->getAttributes('formatted'));
+		
+		if(!empty($response['data']['date_separator'])&& !empty($response['data']['date_format'])){
+			$response['data']['dateformat'] = $response['data']['date_separator'].':'.$response['data']['date_format'];
+		}
 		
 		$response['success']=true;
 		
