@@ -86,8 +86,10 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 			waitMsgTarget:true,			
 			border: false,
 			margin: 10,
+			baseParams:{},
 			padding: 10,
 			labelWidth: 160,
+			autoHeight:true,
 			items: [
 				this.radioGroup,
 				this.includeHidden,
@@ -184,6 +186,12 @@ GO.ExportGridDialog = Ext.extend(GO.Window , {
 		
 		this.syncShadow();
 		
+	},
+	addFormElement : function(elementToAdd){
+		this.formPanel.add(elementToAdd);
+	},
+	insertFormElement : function(targetIndex, elementToAdd){
+		this.formPanel.insert(targetIndex, elementToAdd);
 	},
 	submitForm : function(hide) {
 		this.formPanel.form.getEl().dom.target='_blank';

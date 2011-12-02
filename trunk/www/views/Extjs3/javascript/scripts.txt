@@ -139,3 +139,4 @@ views/Extjs3/javascript/base/email/EmailEditorPanel.js
 
 views/Extjs3/javascript/base/model/BatchEditModelDialog.js
 views/Extjs3/javascript/base/Form.js
+views/Extjs3/javascript/base/model/ImportPanel.js
