@@ -24,25 +24,36 @@ GO.users.RegionalSettingsPanel = function(config)
 
 	
 
-	/*  dateformat */
+//	/*  dateformat */
+//	var dateFormatData = new Ext.data.SimpleStore({
+//		fields: ['id', 'date_format'],		
+//		data : [
+//		['dmY', GO.users.lang.dmy],
+//		['mdY', GO.users.lang.mdy],
+//		['Ymd', GO.users.lang.jmd]
+//		]
+//	});
+//
+//	/* dateseparator */
+//	var dateSeperatorData = new Ext.data.SimpleStore({
+//		fields: ['id', 'date_separator'],
+//		data : [
+//		['-', '-'],
+//		['.', '.'],
+//		['/', '/']
+//		]
+//	});
+	
+	/* dateformat */
 	var dateFormatData = new Ext.data.SimpleStore({
-		fields: ['id', 'date_format'],		
+		fields: ['id', 'dateformat'],
 		data : [
-		['dmY', GO.users.lang.dmy],
-		['mdY', GO.users.lang.mdy],
-		['Ymd', GO.users.lang.jmd]
+		['-:dmY', GO.users.lang.dashdmy],
+		['/:mdY', GO.users.lang.slashmdy],
+		['.:dmY', GO.users.lang.dotdmy],
 		]
 	});
-
-	/* dateseparator */
-	var dateSeperatorData = new Ext.data.SimpleStore({
-		fields: ['id', 'date_separator'],
-		data : [
-		['-', '-'],
-		['.', '.'],
-		['/', '/']
-		]
-	});
+	
 
 	/* timeformat */
 	var 	timeFormatData = new Ext.data.SimpleStore({
@@ -110,33 +121,48 @@ var dateFormat = GO.settings.date_format.substring(0,1)+GO.settings.date_format.
 					forceSelection: true,
 					value: GO.settings.timezone
 				}),
+//				new Ext.form.ComboBox({
+//					fieldLabel: GO.users.lang['cmdFormLabelDateFormat'],
+//					name: 'date_format',
+//					store: dateFormatData,
+//					displayField: 'date_format',
+//					value: dateFormat,
+//					valueField: 'id',
+//					hiddenName: 'date_format',
+//					mode: 'local',
+//					triggerAction: 'all',
+//					editable: false,
+//					selectOnFocus: true,
+//					forceSelection: true
+//				}),
+//				new Ext.form.ComboBox({
+//					fieldLabel: GO.users.lang['cmdFormLabelDateSeperator'],
+//					name: 'date_separator_name',
+//					store: dateSeperatorData,
+//					displayField: 'date_separator',			
+//					value: GO.settings.date_separator,
+//					valueField: 'id',
+//					hiddenName: 'date_separator',
+//					mode: 'local',
+//					triggerAction: 'all',
+//					editable: false,
+//					selectOnFocus: true,
+//					forceSelection: true
+//				}),
 				new Ext.form.ComboBox({
-					fieldLabel: GO.users.lang['cmdFormLabelDateFormat'],
-					name: 'date_format',
+					fieldLabel: GO.users.lang.cmdFormLabelDateFormat,
+					name: 'date_format_name',
 					store: dateFormatData,
-					displayField: 'date_format',
-					value: dateFormat,
+					displayField: 'dateformat',
 					valueField: 'id',
-					hiddenName: 'date_format',
+					hiddenName: 'dateformat',
 					mode: 'local',
 					triggerAction: 'all',
 					editable: false,
 					selectOnFocus: true,
-					forceSelection: true
-				}),
-				new Ext.form.ComboBox({
-					fieldLabel: GO.users.lang['cmdFormLabelDateSeperator'],
-					name: 'date_separator_name',
-					store: dateSeperatorData,
-					displayField: 'date_separator',			
-					value: GO.settings.date_separator,
-					valueField: 'id',
-					hiddenName: 'date_separator',
-					mode: 'local',
-					triggerAction: 'all',
-					editable: false,
-					selectOnFocus: true,
-					forceSelection: true
+					value: GO.settings.dateformat,
+					forceSelection: true,
+					allowBlank: true
 				}),
 				new Ext.form.ComboBox({
 					fieldLabel: GO.users.lang.timeFormat,

@@ -108,3 +108,7 @@ Your login details are:
 Username: {username};
 Password: {password}';
 $l['max_users_reached']='The maximum number of users has been reached for this system.';
+
+$l['dashdmy']='Day-Month-Year';
+$l['slashmdy']='Month/Day/Year';
+$l['dotdmy']='Day.Month.Year';
