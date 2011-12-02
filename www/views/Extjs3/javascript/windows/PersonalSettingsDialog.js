@@ -65,5 +65,9 @@ GO.PersonalSettingsDialog = Ext.extend(GO.dialog.TabbedFormDialog , {
 		
 		remoteModelId = GO.settings.user_id;
 		GO.PersonalSettingsDialog.superclass.show.call(this, remoteModelId, config);	
+	},
+	afterSubmit : function(action) {	
+		// Reload Groupoffice to use the new settings
+		document.location = GO.url('');
 	}
 });
