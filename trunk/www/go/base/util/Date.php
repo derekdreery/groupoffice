@@ -581,20 +581,22 @@ class GO_Base_Util_Date {
 
 
 	public static function to_unixtime($date_string) {
-		if(empty($date_string) || $date_string=='0000-00-00')
-		{
-			return 0;
-		}
-		try{
-			//$d = new DateTime(GO_Base_Util_Date::to_input_format($date_string));
-			//return $d->format('U');
-
-			$time = strtotime(GO_Base_Util_Date::to_input_format($date_string));			
-			return $time;
-		}catch(Exception $e)
-		{
-			return false;
-		}
+		return strtotime($date_string);
+		
+//		if(empty($date_string) || $date_string=='0000-00-00')
+//		{
+//			return 0;
+//		}
+//		try{
+//			//$d = new DateTime(GO_Base_Util_Date::to_input_format($date_string));
+//			//return $d->format('U');
+//
+//			$time = strtotime(GO_Base_Util_Date::to_input_format($date_string));			
+//			return $time;
+//		}catch(Exception $e)
+//		{
+//			return false;
+//		}
 	}
 
 	/**
