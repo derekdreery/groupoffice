@@ -83,6 +83,27 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$model->link($linkModel);			
 		}
 
+		if(!empty($_FILES['importFiles'])){
+			
+			$attachments = $_FILES['importFiles'];
+			$count = count($attachments['name']);
+			
+			$params['enclosure'] = $params['importEnclosure'];
+			$params['delimiter'] = $params['importDelimiter'];
+			
+			for($i=0;$i<$count;$i++){
+				if(is_uploaded_file($attachments['tmp_name'][$i])) {
+					$params['file']= $attachments['tmp_name'][$i];
+					//$params['model'] = $params['importModel'];
+					
+					$controller = new $params['importController'];
+					
+					$controller->actionImport($params);
+				}
+			}
+		}
+		
+		
 		$this->afterSubmit($response, $model, $params, $modifiedAttributes);
 
 		return $response;
@@ -639,10 +660,26 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$export->output();
 	}
 	
-	
+	/**
+	 *
+	 * Defaults to a CSV import.
+	 * 
+	 * Custom fields can be specified in the header with cf\$categoryName\$fieldName
+	 * 
+	 * eg. name,attribute,cf\Test\Textfield
+	 * 
+	 * @param array $params 
+	 */
 	public function actionImport($params) {
 
 		$importFile = new GO_Base_Fs_CsvFile($params['file']);
+		
+		if(!empty($params['delimiter']))
+			$importFile->delimiter = $params['delimiter'];
+		
+		if(!empty($params['enclosure']))
+			$importFile->enclosure = $params['enclosure'];
+			
 		$importFile->convertToUtf8();
 
 		$headers = $importFile->getRecord();
@@ -660,17 +697,13 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				$attributeIndexMap[$i] = $headers[$i];
 			}
 		}
-		
-//		var_dump($attributeIndexMap);
-//		exit();
-						
 
 		while ($record = $importFile->getRecord()) {
 			$attributes = array();
 			foreach($attributeIndexMap as $index=>$attributeName){
 				$attributes[$attributeName]=$record[$index];
 			}
-			
+
 			$model = new $this->model;
 			
 			if($this->beforeImport($model, $attributes, $record)){			
@@ -683,6 +716,17 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 				}
 				
 				$model->setAttributes($attributes, false);
+				
+				// If there are given baseparams to the importer
+				if(isset($params['importBaseParams'])) {
+					$baseParams = json_decode($params['importBaseParams'],true);
+					foreach($baseParams as $attr=>$val){
+						$model->setAttribute($attr,$val);
+					}
+				}
+				
+				$this->_parseImportDates($model);
+				
 				$model->save();			
 			}
 			
@@ -896,5 +940,22 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 //		}
 //		$advancedQueryData = json_encode($advancedQueryData);
 //	}
+	
+	
+	/**
+	 * Checks for dates in the import model and performs an strtotime on it.
+	 * 
+	 * @param GO_Base_Db_ActiveRecord $model 
+	 */
+	private function _parseImportDates(&$model){
+		
+		$columns = $model->getColumns();
+		
+		foreach($columns as $attributeName => $column){
+			if(!empty($column['gotype']) && $column['gotype'] == 'date'){
+				$model->$attributeName = date('Y-m-d',strtotime($model->$attributeName));
+			}
+		}		
+	}
 	
 }
