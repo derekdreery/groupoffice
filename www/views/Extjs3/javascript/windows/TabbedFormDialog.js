@@ -58,6 +58,11 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	 */
 	showConfig : false,
 	
+	/**
+	 * Set to true when files needed to be uploaded
+	 */
+	fileUpload : false,
+	
 
 	_panels : false,
 	
@@ -104,7 +109,8 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		
 		this.formPanel = new Ext.form.FormPanel({
 			waitMsgTarget:true,			
-			border: false,			
+			border: false,
+			fileUpload: this.fileUpload,
 			baseParams : {},
 			layout:'fit'
 		});
@@ -322,7 +328,9 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 	},
 	
 	/**
-	 * Use this function add an GO.panels.PermissionPanel to the form.
+	 * Use this function add an GO.grid.PermissionsPanel to the form.
+	 * 
+	 * @var GO.grid.PermissionsPanel panel
 	 */
 	addPermissionsPanel : function(panel){
 		this.permissionsPanel = panel;
