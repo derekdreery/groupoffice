@@ -52,6 +52,12 @@ GO.addressbook.ContactProfilePanel = function(config)
 			fieldLabel: GO.lang.strTitle,
 			name: 'title'
 		});
+		
+		this.formAfternameTitle = new Ext.form.TextField(
+		{
+			fieldLabel: GO.lang.strTitleAfterName,
+			name: 'aftername_title'
+		});
 	
 		this.formInitials = new Ext.form.TextField(
 		{
@@ -302,7 +308,7 @@ GO.addressbook.ContactProfilePanel = function(config)
 		}
 		
 		this.personalFieldset.add([
-			this.formTitle,this.formInitials,this.sexCombo,
+			this.formTitle,this.formInitials,this.formAfternameTitle,this.sexCombo,
 			this.formSalutation,
 			this.formBirthday							
 			]);

@@ -170,3 +170,5 @@ $updates["201112011632"][]="ALTER TABLE `ab_email_templates` CHANGE `id` `id` in
 $updates["201112011632"][]="ALTER TABLE `ab_sent_mailings` CHANGE `id` `id` int(11) NOT NULL AUTO_INCREMENT;";
 $updates["201112011632"][]="ALTER TABLE `ab_search_queries` CHANGE `id` `id` int(11) NOT NULL AUTO_INCREMENT;";
 $updates["201112021640"][]="ALTER TABLE `ab_contacts` CHANGE `email` `email` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201112051545"][]="ALTER TABLE `ab_contacts` ADD `aftername_title` varchar(50) NOT NULL DEFAULT '';";
