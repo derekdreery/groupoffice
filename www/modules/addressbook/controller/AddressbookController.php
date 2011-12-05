@@ -59,44 +59,25 @@ class GO_Addressbook_Controller_Addressbook extends GO_Base_Controller_AbstractM
 	 * Function exporting addressbook contents to VCFs. Must be called from export.php.
 	 * @param type $params 
 	 */
-	public function export($params) {
-		$addressbook_id = isset($params['addressbook_id']) ? $params['addressbook_id'] : 0;
-		$export_type = isset($params['export_type']) ? " - ".$params['export_type'] : '';
-		$file_type = isset($params['export_filetype']) ? $params['export_filetype'] : 'csv';
-		$response['success'] = true;
-		$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($addressbook_id);
+	public function exportVCard($params) {
+		$addressbook = GO_Addressbook_Model_Addressbook::model()->findByPk($params['addressbook_id']);
 		
-		$browser = detect_browser();
-		$filename = $addressbook->name.$export_type.'.'.$file_type;
-
-		if($file_type == 'csv')
-		{
-			header("Content-type: text/x-csv;charset=UTF-8");
-		} else {
-			header("Content-Type: text/x-vCard; name=".$filename);
-			$a = new GO_Base_VObject_VCard();		
-			foreach ($addressbook->contacts as $contact)
-				$a->add($contact->toVObject());
-			$output = $a->serialize();
-		}
-		
-		if ($browser['name'] == 'MSIE')
-		{
-			header('Content-Disposition: inline; filename="'.$filename.'"');
-			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-			header('Pragma: public');
-		} else {
-			header('Pragma: no-cache');
-			header('Content-Disposition: attachment; filename="'.$filename.'"');
-		}
-		
-		echo $output;
+		$filename = $addressbook->name.'.vcf';
+		GO_Base_Util_Common::outputDownloadHeaders(new GO_Base_FS_File($filename));		
+	
+		foreach ($addressbook->contacts as $contact)
+			echo $contact->toVObject()->serialize();
 	}
 	
 	protected function actionUpload($params) {
 		$params['a'] = $addressbook_id = $params['addressbook_id'];
 		$import_filetype = isset($params['import_filetype']) ? ($params['import_filetype']) : null;
-		$import_filename = isset($_FILES['import_file']['tmp_name']) ? ($_FILES['import_file']['tmp_name']) : null;
+		
+		if (!empty($_FILES['import_file']['tmp_name']))
+			$import_filename = ($_FILES['import_file']['tmp_name']);
+		elseif (!empty($params['import_file']))
+			$import_filename = ($params['import_file']);
+		
 		$separator	= isset($params['separator']) ? ($params['separator']) : ',';
 		$quote	= isset($params['quote']) ? ($params['quote']) : '"';
 		$params['file'] = $_SESSION['GO_SESSION']['addressbook']['import_file'] =GO::config()->tmpdir.uniqid(time());
