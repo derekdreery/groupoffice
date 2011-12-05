@@ -62,11 +62,11 @@ class GO_Base_Router{
 					
 				}elseif(isset($params['u']) && isset($params['p']))
 				{
-					echo "Logging on\n";
 					$user = GO::session()->login($params['u'], $params['p']);
 					if(!$user){
 						die("Login failed for user ".$params['u']."\n");
 					}
+					unset($params['u'],$params['p']);
 				}
 			}else
 			{

@@ -24,6 +24,9 @@ class GO_Base_Util_Common {
 	 * @return array('name','version')
 	 */
 	public static function getBrowser() {
+		if(!isset($_SERVER['HTTP_USER_AGENT']))
+			return array('version'=>0, 'name'=>'OTHER');
+		
 		if (preg_match("'msie ([0-9].[0-9]{1,2})'i", $_SERVER['HTTP_USER_AGENT'], $log_version)) {
 			$browser['version'] = $log_version[1];
 			$browser['name'] = 'MSIE';
