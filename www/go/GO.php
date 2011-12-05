@@ -288,7 +288,9 @@ class GO{
 
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
 		
-			$log = '['.date('Y-m-d G:i').'] Start of new request: '.$_SERVER['REQUEST_URI'];
+			$log = '['.date('Y-m-d G:i').'] Start of new request: ';
+			if(isset($_SERVER['REQUEST_URI']))
+				$log .= $_SERVER['REQUEST_URI'];
 
 			GO::debug($log);
 
