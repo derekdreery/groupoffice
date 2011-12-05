@@ -750,7 +750,10 @@ try {
 				}
 
 			}else {
-				$new_folder_name=$account['mbroot'].$delimiter.$_POST['new_folder_name'];
+				if(!empty($account['mbroot']))
+					$new_folder_name=trim($account['mbroot'],$delimiter).$delimiter.$_POST['new_folder_name'];
+				else
+					$new_folder_name=$_POST['new_folder_name'];
 			}
 
 			if($imap->create_folder($new_folder_name)) {
