@@ -43,6 +43,7 @@ $l["strMiddleName"]= 'Middle name';
 $l["strNo"]= 'No.';
 $l["strLastName"]= 'Last name';
 $l["strTitle"]= 'Title';
+$l["strTitleAfterName"]= 'Title(s) after name';
 $l["strInitials"]= 'Initials';
 $l["strSex"]= 'Sex';
 $l["strBirthday"]= 'Birthday';
