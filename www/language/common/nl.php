@@ -225,6 +225,7 @@ $l["strMiddleName"]= 'Tussenvoegsel';
 $l["strNo"]= 'Nr.';
 $l["strLastName"]= 'Achternaam';
 $l["strTitle"]= 'Titel';
+$l["strTitleAfterName"]= 'Titel(s) na naam';
 $l["strInitials"]= 'Voorletters';
 $l["strSex"]= 'Geslacht';
 $l["strBirthday"]= 'Geboortedatum';
