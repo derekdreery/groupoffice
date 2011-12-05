@@ -424,7 +424,8 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 
 	public function actionIcs($params) {
 		$event = GO_Calendar_Model_Event::model()->findByPk($params['id']);
-		header('Content-Type: text/plain');
+		//header('Content-Type: text/plain');
+		GO_Base_Util_Common::outputDownloadHeaders(new GO_Base_FS_File('calendar.ics'));
 		echo $event->toICS();
 	}
 	
