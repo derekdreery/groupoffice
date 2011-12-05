@@ -412,5 +412,31 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		return parent::beforeImport($model, $attributes, $record);
 	}
 	
+	
+	/**
+	 * Function exporting addressbook contents to VCFs. Must be called from export.php.
+	 * @param type $params 
+	 */
+	public function actionVCard($params) {
+		$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['id']);
+		
+		$filename = $contact->name.'.vcf';
+		GO_Base_Util_Common::outputDownloadHeaders(new GO_Base_FS_File($filename));		
+		
+		echo $contact->toVObject()->serialize();
+	}
+	
+	
+	public function actionImportVCard($params){
+		$contact = new GO_Addressbook_Model_Contact();
+		
+		$file = new GO_Base_Fs_File($params['file']);
+		$data = $file->getContents();
+		$vobject = GO_Base_VObject_Reader::read($data);
+		unset($params['file']);
+	
+		$contact->importVObject($vobject, $params);
+	}
+	
 }
 
