@@ -205,17 +205,16 @@ class GO{
 			$baseClassFile = dirname(dirname(__FILE__)) . '/'.$path.'/'.$file;
 			require($baseClassFile);
 		}  else {
-			
-			$className = str_replace('GO_','', $className);
-
 			if(isset(self::$_classes[$className])){
 				require_once(dirname(dirname(__FILE__)) . '/'.self::$_classes[$className]);
 			}elseif ($forGO)
 			{
 				$arr = explode('_', $className);
+				
+				//remove GO_
+				array_shift($arr);
 
-				$module = strtolower(array_shift($arr));
-			
+				$module = strtolower(array_shift($arr));			
 
 				if($module!='core'){					
 					//$file = self::modules()->$module->path; //doesn't play nice with objects in the session and autoloading
