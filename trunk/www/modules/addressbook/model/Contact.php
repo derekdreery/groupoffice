@@ -193,7 +193,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * Import a contact (with or without company) from a VObject 
 	 * 
 	 * @param Sabre_VObject_Component $vobject
-	 * @param array $attributes Extra attributes to apply to the event
+	 * @param array $attributes Extra attributes to apply to the contact. Raw values should be past. No input formatting is applied.
 	 * @return GO_Addressbook_Model_Contact
 	 */
 	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()) {
@@ -290,7 +290,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$company = $stmt->fetch();
 			if (empty($company))
 				$company = GO_Addressbook_Model_Company::model();
-			$company->setAttributes($companyAttributes);
+			$company->setAttributes($companyAttributes, false);
 			$company->save();
 			$this->setAttribute('company_id',$company->id);
 			$this->save();
