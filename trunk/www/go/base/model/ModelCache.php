@@ -56,6 +56,17 @@ class GO_Base_Model_ModelCache{
 	}
 	
 	/**
+	 * Remove an item from the cache. 
+	 * 
+	 * @param string $modelClassName
+	 * @param string $cacheKey 
+	 */
+	public function remove($modelClassName, $cacheKey){
+		$formatted=$this->_formatCacheKey($cacheKey);
+		unset($this->_models[$modelClassName][$formatted]);
+	}
+	
+	/**
 	 * Get a model from the memory cache
 	 * 
 	 * @param String $modelClassName The GO_Base_Db_ActiveRecord derived class
