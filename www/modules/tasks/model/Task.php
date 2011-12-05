@@ -300,7 +300,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	 * Import a task from a VObject 
 	 * 
 	 * @param Sabre_VObject_Component $vobject
-	 * @param array $attributes Extra attributes to apply to the event
+	 * @param array $attributes Extra attributes to apply to the task. Raw values should be past. No input formatting is applied.
 	 * @return GO_Tasks_Model_Task 
 	 */
 	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()){
@@ -375,7 +375,7 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 			$this->reminder=0;
 		}		
 		
-		$this->setAttributes($attributes);
+		$this->setAttributes($attributes, false);
 		
 		$this->save();
 		

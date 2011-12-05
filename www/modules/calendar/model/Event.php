@@ -732,7 +732,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * Import an event from a VObject 
 	 * 
 	 * @param Sabre_VObject_Component $vobject
-	 * @param array $attributes Extra attributes to apply to the event
+	 * @param array $attributes Extra attributes to apply to the event. Raw values should be past. No input formatting is applied.
 	 * @return GO_Calendar_Model_Event 
 	 */
 	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()){
@@ -775,7 +775,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$this->reminder=0;
 		}
 		
-		$this->setAttributes($attributes);
+		$this->setAttributes($attributes, false);
 		
 		$recurrenceIds = $vobject->select('recurrence-id');
 		if(count($recurrenceIds)){

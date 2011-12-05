@@ -2237,6 +2237,9 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		$sql = "DELETE FROM `".$this->tableName()."` WHERE ";
 		$sql = $this->_appendPkSQL($sql);
 		
+		//remove cached model
+		GO::modelCache()->remove($this->className(), $this->pk);
+		
 		
 		if($this->_debugSql)
 			GO::debug($sql);
