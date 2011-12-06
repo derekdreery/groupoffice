@@ -20,7 +20,14 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	protected $model = 'GO_Addressbook_Model_Contact';	
 		
 	protected function beforeSubmit(&$response, &$model, &$params) {
-				
+		
+		if (!empty($model->id) && !empty($model->addressbook) && $model->addressbook->id != $params['addressbook_id']) {
+			$this->actionChangeAddressbook(array(
+				'items'	=> '["'.$model->id.'"]',
+				'book_id' => $params['addressbook_id']
+			));
+		}
+		
 		if(!empty($params['company_id']) && $params['company_id']==$params['company']){			
 			$company = GO_Addressbook_Model_Company::model()->findSingleByAttributes(array(
 				'addressbook_id'=>$params['addressbook_id'],
@@ -346,11 +353,20 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		
 		foreach ($ids as $id) {
 			$model = GO_Addressbook_Model_Contact::model()->findByPk($id);
-			$failed_id = !$model->setAttribute('addressbook_id',$params['book_id']) ? $id : null;
-			$failed_id = !$model->save() ? $id : null;
-			if ($failed_id) {
-				$response['failedToMove'][] = $failed_id;
-				$response['success'] = false;
+			if (!empty($model->company)) {
+				$companyContr = new GO_Addressbook_Controller_Company();
+				$resp = $companyContr->actionChangeAddressbook(array(
+					'items' => '["'.$model->company->id.'"]',
+					'book_id' => $params['book_id']
+				));
+				array_merge($response['failedToMove'],$resp['failedToMove']);
+			} else {
+				$failed_id = !$model->setAttribute('addressbook_id',$params['book_id']) ? $id : null;
+				$failed_id = !$model->save() ? $id : null;
+				if ($failed_id) {
+					$response['failedToMove'][] = $failed_id;
+					$response['success'] = false;
+				}
 			}
 		}
 		
