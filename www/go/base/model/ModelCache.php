@@ -59,11 +59,9 @@ class GO_Base_Model_ModelCache{
 	 * Remove an item from the cache. 
 	 * 
 	 * @param string $modelClassName
-	 * @param string $cacheKey 
 	 */
-	public function remove($modelClassName, $cacheKey){
-		$formatted=$this->_formatCacheKey($cacheKey);
-		unset($this->_models[$modelClassName][$formatted]);
+	public function remove($modelClassName){		
+		unset($this->_models[$modelClassName]);
 	}
 	
 	/**
