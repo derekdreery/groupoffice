@@ -140,14 +140,24 @@ class GO_Base_Fs_Folder extends GO_Base_Fs_Base {
 	/**
 	 * Create the folder
 	 * 
+	 * @param int $permissionsMode <p>
+	 * Note that mode is not automatically
+	 * assumed to be an octal value, so strings (such as "g+w") will
+	 * not work properly. To ensure the expected operation,
+	 * you need to prefix mode with a zero (0):
+	 * </p>
+	 * 
 	 * @return boolean 
 	 */
-	public function create(){
+	public function create($permissionsMode=false){
 		
 		if(is_dir($this->path))
 			return true;
 		
-		if(mkdir($this->path, GO::config()->folder_create_mode,true)){
+		if(!$permissionsMode)
+			$permissionsMode=GO::config()->folder_create_mode;		
+		
+		if(mkdir($this->path, $permissionsMode,true)){
 			if(GO::config()->file_change_group)
 				chgrp ($this->path, GO::config()->file_change_group);
 			
