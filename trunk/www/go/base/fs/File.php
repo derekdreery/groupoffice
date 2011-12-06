@@ -29,6 +29,41 @@ class GO_Base_Fs_File extends GO_Base_Fs_Base{
 	}
 	
 	/**
+	 * Get the size formatted nicely like 1.5 MB
+	 * 
+	 * @param int $decimals
+	 * @return string 
+	 */
+	public function humanSize($decimals = 1) {
+		$size = $this->size();
+		if($size==0)
+			return 0;
+		
+		switch ($size) {
+			case ($size > 1073741824) :
+				$size = GO_Base_Util_Number::localize($size / 1073741824, $decimals);
+				$size .= " GB";
+				break;
+
+			case ($size > 1048576) :
+				$size = GO_Base_Util_Number::localize($size / 1048576, $decimals);
+				$size .= " MB";
+				break;
+
+			case ($size > 1024) :
+				$size = GO_Base_Util_Number::localize($size / 1024, $decimals);
+				$size .= " KB";
+				break;
+
+			default :
+				$size = GO_Base_Util_Number::localize($size, $decimals);
+				$size .= " bytes";
+				break;
+		}
+		return $size;
+	}
+	
+	/**
 	 * Delete the file
 	 * 
 	 * @return boolean 
