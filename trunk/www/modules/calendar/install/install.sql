@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   `category_id` int(11) NOT NULL DEFAULT '0',
   `sequence` int(11) NOT NULL DEFAULT '0',
   `exception_for_event_id` int(11) NOT NULL DEFAULT '0',
-  `recurrence_id` varchar(20) NOT NULL,
+  `recurrence_id` varchar(20) NOT NULL DEFAULT '',
   `owner_status` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `start_time` (`start_time`),
