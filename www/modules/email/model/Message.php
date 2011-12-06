@@ -20,7 +20,7 @@
  * @property string $x_priority 
  * @property string $message_id
  * @property string $content_type
- * @property array $content_type_attributes
+ * @property array $content_typeattributes
  * @property string $disposition_notification_to
  * @property string $content_transfer_encoding
  * @property string $charset
@@ -33,7 +33,7 @@
  */
 abstract class GO_Email_Model_Message extends GO_Base_Model {
 
-	private $_attributes = array(
+	protected $attributes = array(
 			'to' => '',
 			'cc' => '',
 			'bcc' => '',
@@ -49,7 +49,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 			'reply_to' => '',
 			'message_id' => '',
 			'content_type' => '',
-			'content_type_attributes' => array(),
+			'content_typeattributes' => array(),
 			'disposition_notification_to' => '',
 			'content_transfer_encoding' => '',
 			'charset' => '',
@@ -62,6 +62,14 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	);
 	
 	protected $defaultCharset='UTF-8';
+	
+	public function __construct() {
+		$this->attributes['to'] = new GO_Base_Mail_EmailRecipients($this->attributes['to']);
+		$this->attributes['cc'] = new GO_Base_Mail_EmailRecipients($this->attributes['cc']);
+		$this->attributes['bcc'] = new GO_Base_Mail_EmailRecipients($this->attributes['bcc']);
+		$this->attributes['from'] = new GO_Base_Mail_EmailRecipients($this->attributes['from']);
+		$this->attributes['reply_to'] = new GO_Base_Mail_EmailRecipients($this->attributes['reply_to']);
+	}
 
 	/**
 	 * PHP getter magic method.
@@ -71,9 +79,13 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 * @see getAttribute
 	 */
 	public function __get($name) {
-		if (isset($this->_attributes[$name])) {
-			return $this->_attributes[$name];
+		if (isset($this->attributes[$name])) {
+			return $this->attributes[$name];
 		}
+	}
+	
+	public function __set($name, $value){
+		$this->attributes[$name]=$value;
 	}
 
 	/**
@@ -88,13 +100,13 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 	public function setAttributes($attributes) {
 
-		$this->_attributes = array_merge($this->_attributes, $attributes);
+		$this->attributes = array_merge($this->attributes, $attributes);
 
-		$this->_attributes['to'] = new GO_Base_Mail_EmailRecipients($this->_attributes['to']);
-		$this->_attributes['cc'] = new GO_Base_Mail_EmailRecipients($this->_attributes['cc']);
-		$this->_attributes['bcc'] = new GO_Base_Mail_EmailRecipients($this->_attributes['bcc']);
-		$this->_attributes['from'] = new GO_Base_Mail_EmailRecipients($this->_attributes['from']);
-		$this->_attributes['reply_to'] = new GO_Base_Mail_EmailRecipients($this->_attributes['reply_to']);
+		$this->attributes['to'] = new GO_Base_Mail_EmailRecipients($this->attributes['to']);
+		$this->attributes['cc'] = new GO_Base_Mail_EmailRecipients($this->attributes['cc']);
+		$this->attributes['bcc'] = new GO_Base_Mail_EmailRecipients($this->attributes['bcc']);
+		$this->attributes['from'] = new GO_Base_Mail_EmailRecipients($this->attributes['from']);
+		$this->attributes['reply_to'] = new GO_Base_Mail_EmailRecipients($this->attributes['reply_to']);
 	}
 
 	/**

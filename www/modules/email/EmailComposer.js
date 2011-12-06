@@ -715,6 +715,9 @@ GO.email.EmailComposer = function(config) {
 
 	// store for attachments needs to be created here because a forward action
 	// might attachments
+	
+	//TODO composer should use tmp_file instead of tmp_name
+	
 	this.attachmentsStore = new Ext.data.JsonStore({
 		url : GO.settings.modules.email.url + 'json.php',
 		baseParams : {
