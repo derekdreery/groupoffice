@@ -21,7 +21,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 			echo "Syncing ".$name."\n";
 			
 			$folder = GO_Files_Model_Folder::model()->findByPath($name, true);
-			$folder->syncFilesystem();
+			$folder->syncFilesystem(true);
 		}
 		
 		echo "Done\n";
@@ -72,6 +72,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 					$node = $this->_folderToNode($folder);
 					$node['text'] = GO::t('personal', 'files');
 					$node['iconCls'] = 'folder-home';
+					$node['path'] = $folder->path;
 					$response[] = $node;
 
 
@@ -83,6 +84,7 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 							'allowDrop' => false,
 							'parent_id'=>0,
 							'iconCls' => 'folder-shares',
+							'path'=>$folder->path
 									//						'expanded'=>true,
 									//						'children'=>array()
 					);
@@ -136,7 +138,8 @@ class GO_Files_Controller_Folder extends GO_Base_Controller_AbstractModelControl
 				'draggable' => false,
 				'iconCls' => 'folder-default',
 				'expanded' => $withChildren,
-				'parent_id'=>$folder->parent_id
+				'parent_id'=>$folder->parent_id,
+				'path'=>$folder->path
 		);
 
 		if ($withChildren) {
