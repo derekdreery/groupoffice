@@ -61,61 +61,24 @@ GO.files.FileBrowser = function(config){
 	if(!config.id)
 		config.id=Ext.id();
 	
-	this.treeLoader = new Ext.tree.TreeLoader(
-	{
-		dataUrl:GO.url('files/folder/tree'),
-		baseParams:{
-			root_folder_id:0,
-			expand_folder_id:0
-		},
-		preloadChildren:true
-	});
 
-	this.treeLoader.on('beforeload', function(){
-		var el =this.treePanel.getEl();
-		if(el){
-			el.mask(GO.lang.waitMsgLoad);
-		}
-	}, this);
-	this.treeLoader.on('load', function(){
-		var el =this.treePanel.getEl();
-		if(el){
-			el.unmask();
-		}
-	}, this);
-
-	this.treePanel = new Ext.tree.TreePanel({
+	this.treePanel = new GO.files.TreePanel({
 		region:'west',
-		//title:GO.lang.locations,
-		layout:'fit',
 		split:true,
-		autoScroll:true,
 		width: 200,
-		animate:true,
-		loader: this.treeLoader,
 		collapsed: config.treeCollapsed,
-		rootVisible:false,
-		containerScroll: true,
 		collapsible:true,
 		collapseMode:'mini',
 		header:false,
 		ddAppendOnly: true,
 		ddGroup : 'FilesDD',
-		enableDD:true,
-		selModel:new Ext.tree.MultiSelectionModel()		
-	});
-
-
-	// set the root node
-	this.rootNode = new Ext.tree.AsyncTreeNode({
-		text: '',
-		draggable:false,
-		id: 'root',
-		iconCls : 'folder-default'
+		enableDD:true
 	});
 	
+	
+	
 	//select the first inbox to be displayed in the messages grid
-	this.rootNode.on('load', function(node)
+	this.treePanel.getRootNode().on('load', function(node)
 	{	
 		//var grid_id = !this.treePanel.rootVisible && node.childNodes[0] ? node.childNodes[0].id : node.id;
 		if(!this.folder_id)
@@ -126,7 +89,7 @@ GO.files.FileBrowser = function(config){
 		
 	}, this);
 	
-	this.treePanel.setRootNode(this.rootNode);
+	
 	
 	this.treePanel.on('click', function(node)	{
 		this.setFolderID(node.id, true);
@@ -958,13 +921,13 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 	setRootID : function(rootID, folder_id)
 	{
-		//if(this.treeLoader.baseParams.root_folder_id!=rootID || (folder_id>0 && this.folder_id!=folder_id))                
+		//if(this.treePanel.getLoader().baseParams.root_folder_id!=rootID || (folder_id>0 && this.folder_id!=folder_id))                
                 this.folder_id=folder_id;
-                this.treeLoader.baseParams.root_folder_id=rootID;
-                this.treeLoader.baseParams.expand_folder_id=folder_id;
-                this.rootNode.reload({
+                this.treePanel.getLoader().baseParams.root_folder_id=rootID;
+                this.treePanel.getLoader().baseParams.expand_folder_id=folder_id;
+                this.treePanel.getRootNode().reload({
                         callback:function(){
-                                delete this.treeLoader.baseParams.expand_folder_id;
+                                delete this.treePanel.getLoader().baseParams.expand_folder_id;
                         },
                         scope:this
                 });
@@ -1428,25 +1391,25 @@ Ext.extend(GO.files.FileBrowser, Ext.Panel,{
 	
 		var activeNode = this.treePanel.getNodeById(this.folder_id);
 
-		this.treeLoader.baseParams.expand_folder_id=this.folder_id;
+		this.treePanel.getLoader().baseParams.expand_folder_id=this.folder_id;
 		if(syncFilesystemWithDatabase)
-			this.treeLoader.baseParams.sync_folder_id=this.folder_id;
+			this.treePanel.getLoader().baseParams.sync_folder_id=this.folder_id;
 
 		this.expandPath=false;
 		if(activeNode)
 		{
 			this.expandPath = activeNode.getPath();
 		}
-		this.rootNode.reload((function(){
+		this.treePanel.getRootNode().reload((function(){
 
-			this.treeLoader.baseParams.expand_folder_id=0;
+			this.treePanel.getLoader().baseParams.expand_folder_id=0;
 
 			if(this.expandPath)
 				this.treePanel.expandPath(this.expandPath);
 		}).createDelegate(this));
 
 		if(syncFilesystemWithDatabase)
-			delete this.treeLoader.baseParams.sync_folder_id;
+			delete this.treePanel.getLoader().baseParams.sync_folder_id;
 	},
 	
 	sendOverwrite : function(params){
