@@ -53,6 +53,7 @@ class GO_Base_Util_Number {
 	/**
 	 * Format a size to a human readable format.
 	 *
+	 * @deprecated
 	 * @param	int $size The size in bytes
 	 * @param	int $decimals Number of decimals to display
 	 * @access public
