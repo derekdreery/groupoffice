@@ -110,6 +110,21 @@ abstract class GO_Base_Fs_Base{
 	}
 	
 	/**
+	 *
+	 * @param int $permissionsMode <p>
+	 * Note that mode is not automatically
+	 * assumed to be an octal value, so strings (such as "g+w") will
+	 * not work properly. To ensure the expected operation,
+	 * you need to prefix mode with a zero (0):
+	 * </p>
+	 * 
+	 * @return boolean 
+	 */
+	public function chmod($permissionsMode){
+		return chmod($this->path, $permissionsMode);
+	}
+	
+	/**
 	 * Delete the file
 	 * 
 	 * @return boolean 
