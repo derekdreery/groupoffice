@@ -112,3 +112,4 @@ $l['max_users_reached']='The maximum number of users has been reached for this s
 $l['dashdmy']='Day-Month-Year';
 $l['slashmdy']='Month/Day/Year';
 $l['dotdmy']='Day.Month.Year';
+$l['slashdmy']='Day/Month/Year';

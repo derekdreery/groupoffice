@@ -528,46 +528,55 @@ class GO_Base_Util_Date {
 		if(strpos($date_string,'T')){
 			return $date_string;
 		}
-		if(!isset($date_format)){
-			$date_format=GO::user() ? GO::user()->completeDateFormat : GO::config()->default_date_format;
-		}
-
-		if(!isset($date_separator)){
-			$date_separator=GO::user() ? GO::user()->date_separator : GO::config()->default_date_separator;
-		}
-
 		$date_string = trim($date_string);
 		
-		if ($date_string != '') {
+//		if(!isset($date_format)){
+//			$date_format=GO::user() ? GO::user()->completeDateFormat : GO::config()->default_date_format;
+//		}
+//
+//		if(!isset($date_separator)){
+//			$date_separator=GO::user() ? GO::user()->date_separator : GO::config()->default_date_separator;
+//		}
+		
+		if(GO::user()->date_format=='mdY')
+			$date_string = str_replace(array('-','.'),array('/','/'),$date_string);
+		else
+			$date_string = str_replace(array('/','.'),array('-','-'),$date_string);
+		
+		return $date_string;
 
-			$datetime_array = explode(' ', $date_string);
-
-			$date = array_shift($datetime_array);
-			if(!$date)
-				$date='0000'.$date_separator.'00'.$date_separator.'00';
-
-			$date_array = explode($date_separator, $date);
-			
-			$format = str_replace($date_separator,'',$date_format);
-
-			$year_pos = strpos($format, 'Y');
-			$month_pos = strpos($format, 'm');
-			$day_pos = strpos($format, 'd');
-
-			$year = isset ($date_array[$year_pos]) ? $date_array[$year_pos] : date('Y');
-			$month = isset ($date_array[$month_pos]) ? $date_array[$month_pos] : date('m');
-			$day = isset ($date_array[$day_pos]) ? $date_array[$day_pos] : 0;
-
-			$time = implode(' ', $datetime_array);
-
-			$newdate=$year.'-'.$month.'-'.$day;
-			
-			if(!empty($time))
-				$newdate .= ' '.$time;
-
-			return $newdate;
-		}
-		return false;
+//		$date_string = trim($date_string);
+		
+//		if ($date_string != '') {
+//
+//			$datetime_array = explode(' ', $date_string);
+//
+//			$date = array_shift($datetime_array);
+//			if(!$date)
+//				$date='0000'.$date_separator.'00'.$date_separator.'00';
+//
+//			$date_array = explode($date_separator, $date);
+//			
+//			$format = str_replace($date_separator,'',$date_format);
+//
+//			$year_pos = strpos($format, 'Y');
+//			$month_pos = strpos($format, 'm');
+//			$day_pos = strpos($format, 'd');
+//
+//			$year = isset ($date_array[$year_pos]) ? $date_array[$year_pos] : date('Y');
+//			$month = isset ($date_array[$month_pos]) ? $date_array[$month_pos] : date('m');
+//			$day = isset ($date_array[$day_pos]) ? $date_array[$day_pos] : 0;
+//
+//			$time = implode(' ', $datetime_array);
+//
+//			$newdate=$year.'-'.$month.'-'.$day;
+//			
+//			if(!empty($time))
+//				$newdate .= ' '.$time;
+//
+//			return $newdate;
+//		}
+//		return false;
 
 	}
 
@@ -581,22 +590,12 @@ class GO_Base_Util_Date {
 
 
 	public static function to_unixtime($date_string) {
-		return strtotime($date_string);
-		
-//		if(empty($date_string) || $date_string=='0000-00-00')
-//		{
-//			return 0;
-//		}
-//		try{
-//			//$d = new DateTime(GO_Base_Util_Date::to_input_format($date_string));
-//			//return $d->format('U');
-//
-//			$time = strtotime(GO_Base_Util_Date::to_input_format($date_string));			
-//			return $time;
-//		}catch(Exception $e)
-//		{
-//			return false;
-//		}
+		if(empty($date_string) || $date_string=='0000-00-00')
+		{
+			return 0;
+		}
+		$time = strtotime(GO_Base_Util_Date::to_input_format($date_string));			
+		return $time;		
 	}
 
 	/**
