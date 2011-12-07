@@ -126,13 +126,13 @@ $lang['common']['short_days'][5]='ส';
 $lang['common']['short_days'][6]='อา';
 
 
-$lang['common']['full_days'][0] = 'จันทร์';
-$lang['common']['full_days'][1] = 'อังคาร';
-$lang['common']['full_days'][2] = 'พุธ';
-$lang['common']['full_days'][3] = 'พฤหัสบดี';
-$lang['common']['full_days'][4] = 'ศุกร์';
-$lang['common']['full_days'][5]= 'เสาร์';
-$lang['common']['full_days'][6] = 'อาทิตย์';
+$lang['common']['full_days'][1] = 'จันทร์';
+$lang['common']['full_days'][2] = 'อังคาร';
+$lang['common']['full_days'][3] = 'พุธ';
+$lang['common']['full_days'][4] = 'พฤหัสบดี';
+$lang['common']['full_days'][5] = 'ศุกร์';
+$lang['common']['full_days'][6]= 'เสาร์';
+$lang['common']['full_days'][0] = 'อาทิตย์';
 
 $lang['common']['default']='ค่าเริ่มต้น';
 $lang['common']['description']='คำอธิบาย';
