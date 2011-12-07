@@ -98,6 +98,49 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		}
 		return $rrule;
 	}
+	
+	
+	/**
+	 * Output a vcalendar 1.0 rrule
+	 * 
+	 * @return String $rrule eg.: 'FREQ=DAILY;UNTIL=22-02-2222;INTERVAL=2;
+	 */
+	public function createVCalendarRrule() {
+		
+		$rrule = 'RRULE:';
+
+		switch($this->_freq)
+		{
+			case 'DAILY':
+				$rrule .= 'D'.$this->_interval;
+				break;
+			case 'WEEKLY':
+				$rrule .= "W".$this->_interval." ".implode(',', $this->_byday);
+			break;
+
+			case 'MONTHLY':				
+				if($this->_bymonthday){
+					$rrule .= 'MD'.$this->_interval.' '.date('j', $this->_eventStartTime);
+				}else
+				{
+					$rrule .= 'MP'.$this->_interval.' '.$this->_bysetpos.'+ '.implode(',', $this->_byday);
+				}
+			break;
+			
+			case 'YEARLY':
+				$rrule .= 'YM'.$this->_interval;
+				break;
+		}
+			
+		if ($this->_until>0)
+		{
+			$rrule .= " ".date('Ymd\THis', $this->_until);
+		}else
+		{
+			$rrule .= " #0";
+		}
+		return $rrule;
+	}
 
 	/**
 	 * Set the values of this object from a version 1.0 Icalendar Rrule
@@ -106,7 +149,6 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 	 */
 	private function _parseRruleIcalendarV1($rrule) {
 		
-		$rrule_arr = array(); // An new array of params that need to be set
 		
 		//we are attempting to convert it to icalendar format
 		//GO Supports only one rule everything behind the first rule is chopped
@@ -121,48 +163,51 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 		}
 
 		$expl_rrule = explode(' ', $rrule);
+		
+		GO_Syncml_Server::debug("RRULE: ".$rrule);
 
+		$this->_until=0;
 		//the count or until is always in the last element
 		if ($until = array_pop($expl_rrule)) {
 			if ($until{0} == '#') {
 				$count = substr($until, 1);
 				if ($count > 0) {
-					$rrule_arr['COUNT'] = $count;
+					$this->_count = $count;
 				}
 
 				if (strlen($expl_rrule[count($expl_rrule) - 1]) > 2) {
 					//this must be the end date
-					$rrule_arr['UNTIL'] = array_pop($expl_rrule);
+					$this->_until = GO_Base_Util_Date::parseIcalDate(array_pop($expl_rrule));
 				}
 			} else {
-				$rrule_arr['UNTIL'] = $until;
+				$this->_until = GO_Base_Util_Date::parseIcalDate($until);
 			}
 		}
 
 
-		if ($rrule_arr['FREQ'] = array_shift($expl_rrule)) {
+		if ($this->_freq = array_shift($expl_rrule)) {
 
-			$rrule_arr['INTERVAL'] = '';
+			$this->_interval = '';
 
-			$lastchar = substr($rrule_arr['FREQ'], -1, 1);
+			$lastchar = substr($this->_freq, -1, 1);
 			while (is_numeric($lastchar)) {
-				$rrule_arr['INTERVAL'] = $lastchar . $rrule_arr['INTERVAL'];
-				$rrule_arr['FREQ'] = substr($rrule_arr['FREQ'], 0, strlen($rrule_arr['FREQ']) - 1);
-				$lastchar = substr($rrule_arr['FREQ'], -1, 1);
+				$this->_interval = $lastchar . $this->_interval;
+				$this->_freq = substr($this->_freq, 0, strlen($this->_freq) - 1);
+				$lastchar = substr($this->_freq, -1, 1);
 			}
 
-			switch ($rrule_arr['FREQ']) {
+			switch ($this->_freq) {
 				case 'D':
-					$rrule_arr['FREQ'] = 'DAILY';
+					$this->_freq = 'DAILY';
 					break;
 
 				case 'W':
-					$rrule_arr['FREQ'] = 'WEEKLY';
-					$rrule_arr['BYDAY'] = implode(',', $expl_rrule);
+					$this->_freq = 'WEEKLY';
+					$this->_byday = implode(',', $expl_rrule);
 					break;
 
 				case 'MP':
-					$rrule_arr['FREQ'] = 'MONTHLY';
+					$this->_freq = 'MONTHLY';
 
 					//GO Supports only one position in the month
 					/* if(count($expl_rrule) > 1)
@@ -171,11 +216,11 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 					  } */
 					$month_time = array_shift($expl_rrule);
 					//todo negative month times
-					$rrule_arr['BYDAY'] = substr($month_time, 0, strlen($month_time) - 1) . array_shift($expl_rrule);
+					$this->_byday = substr($month_time, 0, strlen($month_time) - 1) . array_shift($expl_rrule);
 					break;
 
 				case 'MD':
-					$rrule_arr['FREQ'] = 'MONTHLY';
+					$this->_freq = 'MONTHLY';
 					//GO Supports only one position in the month
 					if (count($expl_rrule) > 1) {
 						return false;
@@ -183,18 +228,18 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 
 					$month_time = array_shift($expl_rrule);
 					//todo negative month times
-					//$rrule_arr['BYMONTHDAY'] = substr($month_time, 0, strlen($month_time)-1);
+					//$this->_bymonthday = substr($month_time, 0, strlen($month_time)-1);
 					//for nexthaus
-					$rrule_arr['BYMONTHDAY'] = trim($month_time); //substr($month_time, 0, strlen($month_time)-1);
+					$this->_bymonthday = trim($month_time); //substr($month_time, 0, strlen($month_time)-1);
 					break;
 
 				case 'YM':
-					$rrule_arr['FREQ'] = 'YEARLY';
+					$this->_freq = 'YEARLY';
 					//GO Supports only one position in the month
 					if (count($expl_rrule) > 1) {
 						return false;
 					}
-					$rrule_arr['BYMONTH'] = array_shift($expl_rrule);
+					$this->_bymonth = array_shift($expl_rrule);
 					break;
 
 				case 'YD':

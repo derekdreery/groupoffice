@@ -603,7 +603,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param string $method REQUEST, REPLY or CANCEL
 	 * @return Sabre_VObject_Component 
 	 */
-	public function toVObject($method='REQUEST'){
+	public function toVObject($method='REQUEST', $vcalendar1=false){
 		$e=new Sabre_VObject_Component('vevent');
 		$e->uid=$this->uuid;		
 		
@@ -658,16 +658,24 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		$dtend->setDateTime(GO_Base_Util_Date_DateTime::fromUnixtime($this->end_time));		
 		//$dtend->offsetUnset('VALUE');
 		$e->add($dtend);
-		
+
 		if(!empty($this->description))
 			$e->description=$this->description;
 		
 		if(!empty($this->location))
 			$e->location=$this->location;
-		
-		//todo exceptions
+
 		if(!empty($this->rrule)){
-			$e->rrule=str_replace('RRULE:','',$this->rrule);					
+//			if($vcalendar1)
+//			{
+//				$r = new GO_Base_Util_Icalendar_Rrule();
+//				$r->readIcalendarRruleString($this->start_time, $this->rrule);
+//				
+//				$e->rrule=str_replace('RRULE:','',$r->createVCalendarRrule());					
+//			}else
+//			{
+				$e->rrule=str_replace('RRULE:','',$this->rrule);					
+			//}
 			$stmt = $this->exceptions(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('exception_event_id', 0)));
 			while($exception = $stmt->fetch()){
 				$exdate = new Sabre_VObject_Element_DateTime('exdate',Sabre_VObject_Element_DateTime::DATE);
@@ -694,9 +702,13 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 				$e->add($p);
 		}
 		
+		
+		//todo alarms
+		
 		return $e;
 	}
 	
+
 
 	/**
 	 * Get vcalendar data for an *.ics file.
@@ -713,9 +725,18 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 		
 		$c = new GO_Base_VObject_VCalendar();		
 		$c->method=$method;
-		$c->add($this->toVObject($method));		
-		return $c->serialize();
 		
+		$c->add(new GO_Base_VObject_VTimezone());
+		
+		$c->add($this->toVObject($method));		
+		return $c->serialize();		
+	}
+	
+	public function toVCS(){
+		$c = new GO_Base_VObject_VCalendar();		
+		$c->version='1.0';
+		$c->add($this->toVObject('', true));		
+		return $c->serialize();		
 	}
 	
 	/**
