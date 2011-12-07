@@ -108,6 +108,7 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 		
 		
 		 if(GO::modules()->files){
+			 //handle attachment when event is saved from an email.
 			 $f = new GO_Files_Controller_Folder();
 			 $f->processAttachments($response, $model, $params);
 		 }
