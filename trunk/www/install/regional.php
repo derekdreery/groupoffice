@@ -21,7 +21,7 @@ GO_Base_Html_Select::render(array(
 		'label' => 'Language',
 		'value' => GO::config()->language,
 		'name' => "language",
-		'options' => GO_Base_Language::getLanguages()
+		'options' => GO::language()->getLanguages()
 ));
 
 $tz = array();
