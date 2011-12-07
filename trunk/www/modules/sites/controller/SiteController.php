@@ -86,7 +86,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	}
 	
 	public static function pageUrl($path){
-		return GO::url('sites/site/index', 'p='.urlencode($path));
+		return GO::url('sites/site/index', array('p',$path));
 	}
 	
 	protected function pageRedirect($path = '') {
