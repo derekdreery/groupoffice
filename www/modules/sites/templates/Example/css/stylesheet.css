@@ -477,3 +477,59 @@ div.subkader-block{
     font:normal 11px tahoma, arial, helvetica, sans-serif;
     cursor:wait;
 }
+
+
+
+
+
+
+input{
+	
+}
+input, textarea, select, file{
+	width:250px;
+	float:left;
+}
+.textbox{
+	display:block;
+}
+.checkbox{
+	vertical-align: middle;
+}
+.textarea{
+	display:block;
+	height:100px;
+}
+label{
+	margin-bottom:10px;
+	display:block;
+	line-height: 16px;
+}
+.labeltext{
+	float:left;
+	width:130px;
+}
+
+.radio{
+	width:auto;
+	vertical-align: middle;
+	margin:0px 2px;
+	padding:0px;				
+
+}
+
+div.error{
+	border:1px solid red;
+	padding:8px;
+	background-color:#f1f1f1;
+}
+
+label div.error{
+	border:0;
+	padding:0;
+	background-color:transparent;
+	color: red;
+	display: inline;
+	margin-left:10px;
+}
+
