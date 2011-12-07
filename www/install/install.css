@@ -122,13 +122,13 @@ td.label{
 	padding-top:5px;
 }
 
-.error{
+div.error{
 	border:1px solid red;
 	padding:8px;
 	background-color:#f1f1f1;
 }
 
-label .error{
+label div.error{
 	border:0;
 	padding:0;
 	background-color:transparent;
@@ -136,6 +136,7 @@ label .error{
 	display: inline;
 	margin-left:10px;
 }
+
 
 .cmd{
 	color:#003399;
