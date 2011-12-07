@@ -113,3 +113,6 @@ GO.calendar.lang.publishICS='Alle iCalendar Dateien des letzten Monats und zukü
 GO.calendar.lang.addTimeRegistration='Import in Zeiterfassung';
 GO.calendar.lang.showNotBusy='Zeige neue Buchungen nicht als belegt an';
 GO.calendar.lang.sendEmailParticipants = 'Sende E-Mail an Teilnehmer';
+GO.calendar.lang.calendarColor= 'Kalenderfarbe';
+GO.calendar.lang.colors= 'Farben';
+GO.calendar.lang.setColors= 'Farbe für jeden Kalender einstellen';

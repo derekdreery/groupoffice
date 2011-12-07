@@ -198,14 +198,14 @@ GO.lang.strDeleteSelectedItem= 'ต้องการลบรายการท
 
 GO.lang.strNoWritePermissions = 'ไม่ได้รับสิทธิ์ให้แก้ไขรายการนี้.';
 
-GO.lang.strUnauthorized= 'ไม่ได้ีรับสิทธิ์ในการเข้าถึง';
+GO.lang.strUnauthorized= 'ไม่ได้รับสิทธิ์ในการเข้าถึง';
 GO.lang.strUnauthorizedText= 'ไม่ได้รับสิทธิ์ให้ดำเนินการในรายการนี้';
 GO.lang.strReadPermissions = 'การเพิ่มสิทธิ์ในการอ่าน';
 GO.lang.strWritePermissions = 'การเพิ่มสิทธิ์ในการแก้ไข';
 GO.lang.strPermissions = 'การเพิ่มสิทธิ์';
 GO.lang.strAccessDenied = 'การเข้าถึงถูกปฏิเสธ';
 GO.lang.strAuthorizedGroups = 'กลุ่มที่ได้รับสิทธิ์';
-GO.lang.strAuthorizedUsers = 'ผู้ที่ได้รับสิทธ์ิ';
+GO.lang.strAuthorizedUsers = 'ผู้ที่ได้รับสิทธิ์';
 
 GO.lang.strSelectGroups = 'เลือกกลุ่มผู้ใช้งาน';
 GO.lang.strSelectUsers = 'เลือกผู้ใช้งานรายบุคคล';
