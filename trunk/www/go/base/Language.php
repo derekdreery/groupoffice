@@ -177,10 +177,21 @@ class GO_Base_Language{
 	 * 
 	 * @return array array('en'=>'English');
 	 */
-	public static function getLanguages(){
+	public function getLanguages(){
 		require(GO::config()->root_path.'language/languages.inc.php');
 		asort($languages);
 		return $languages;
+	}
+	
+	/**
+	 * Get all countries
+	 * 
+	 * @return array array('nl'=>'The Netherlands');
+	 */
+	public function getCountries(){
+		$this->_loadSection('base','countries');
+		asort($this->_lang['base']['countries']);
+		return $this->_lang['base']['countries'];
 	}
 	
 }
