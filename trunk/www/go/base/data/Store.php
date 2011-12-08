@@ -156,7 +156,8 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
           }
 
           $model = $staticModel->findByPk($modelPk);
-          $model->delete();
+					if (!empty($model))
+						$model->delete();
         }
         $this->_response['deleteSuccess'] = true;
       } catch (Exception $e) {
