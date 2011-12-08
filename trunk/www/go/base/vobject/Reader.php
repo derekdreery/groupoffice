@@ -51,4 +51,91 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 
 		return $negative*(($weeks * 60 * 60 * 24 * 7) + ($days * 60 * 60 * 24) + ($hours * 60 * 60) + ($mins * 60) + ($secs));	
 	}	
+	
+	/**
+	 * Converts a vcalendar 1.0 component to an icalendar 2.0 component.
+	 * 
+	 * @param Sabre_VObject_Component $vobject 
+	 */
+	public static function convertVCalendarToICalendar(Sabre_VObject_Component $vobject){
+		
+		if($vobject->version=='1.0'){
+			$vobject->version='2.0';
+			foreach($vobject->children() as $child)
+			{
+				if($child instanceof Sabre_VObject_Component){
+					foreach($child->children() as $property){
+						if(isset($property['ENCODING']) && strtoupper($property['ENCODING'])=='QUOTED-PRINTABLE'){
+							$value = quoted_printable_decode($property->value);
+							$value = str_replace("\r","",$value);
+
+							$property->setValue($value);				
+							unset($property['ENCODING']);
+						}
+					}
+					
+					if(isset($child->rrule) && (string) $child->rrule!=''){
+						$rrule = new GO_Base_Util_Icalendar_Rrule();
+						$rrule->readIcalendarRruleString($child->dtstart->getDateTime()->format('U'), (string) $child->rrule);			
+						$child->rrule = str_replace('RRULE:','',$rrule->createRrule());
+					}
+				}					
+			}
+		}	
+	}
+	
+	
+	/**
+	 * Converts an icalendar 2.0 to a vcalendar 1.0 component.
+	 * 
+	 * @param Sabre_VObject_Component $vobject 
+	 */
+	public static function convertICalendarToVCalendar(Sabre_VObject_Component $vobject){
+		
+		$qpProperies = array('location', 'summary', 'description');
+		GO::debug("Vobject version:".$vobject->version);
+		if($vobject->version=='2.0'){
+			$vobject->version=='1.0';
+			foreach($vobject->children() as $child)
+			{
+				if($child instanceof Sabre_VObject_Component){
+					foreach($qpProperies as $propName){
+						if(isset($child->$propName) && $child->$propName!=''){
+							
+							$value =  str_replace(array("\r","\n"), '', quoted_printable_encode((string) $child->$propName));
+							$newProp = new GO_Base_VObject_VCalendar_Property($propName, $value);							
+							$child->$propName->add('ENCODING','QUOTED-PRINTABLE');
+							foreach($child->$propName->parameters as $param){
+								$newProp->add($param);
+							}
+							unset($child->$propName);
+							$child->add($newProp);							
+						}
+					}
+					
+					if(isset($child->rrule) && (string) $child->rrule!=''){
+						$rrule = new GO_Base_Util_Icalendar_Rrule();
+						$rrule->readIcalendarRruleString($child->dtstart->getDateTime()->format('U'), (string) $child->rrule);			
+						$child->rrule = str_replace('RRULE:','',$rrule->createVCalendarRrule());
+					}
+				}
+			}
+		}
+	}
+	
+	
+	
+	/**
+	 * Parses the file and returns the top component. Additionally a version 1.0 
+	 * vcalendar object will be converted to a version 2.0 object.
+	 * 
+	 * @param string $data 
+	 * @return Sabre_VObject_Element 
+	 */
+	public static function read($data) {
+		$vobject = parent::read($data);		
+		self::convertVCalendarToICalendar($vobject);
+		return $vobject;
+	}
+	
 }

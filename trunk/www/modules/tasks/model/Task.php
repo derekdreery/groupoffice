@@ -134,8 +134,13 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	
 	
 	protected function afterDbInsert() {
-		$this->uuid = GO_Base_Util_UUID::create('task', $this->id);
-		return true;
+		if(empty($this->uuid)){
+			$this->uuid = GO_Base_Util_UUID::create('task', $this->id);
+			return true;
+		}else
+		{
+			return false;
+		}
 	}
 	
 	

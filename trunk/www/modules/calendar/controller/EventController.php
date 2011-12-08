@@ -601,6 +601,21 @@ class GO_Calendar_Controller_Event extends GO_Base_Controller_AbstractModelContr
 			$event->importVObject($vevent);
 	}
 	
+	public function actionImportVcs($params){
+		
+		$file = new GO_Base_Fs_File($params['file']);
+		
+		$data = $file->getContents();
+		
+		$vcalendar = GO_Base_VObject_Reader::read($data);
+		
+		GO_Base_VObject_Reader::convertICalendarToVCalendar($vcalendar);
+		
+		foreach($vcalendar->vevent as $vevent)
+			$event = new GO_Calendar_Model_Event();
+			$event->importVObject($vevent);		
+	}
+	
 	
 
 }
