@@ -95,7 +95,7 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 		$qpProperies = array('location', 'summary', 'description');
 		GO::debug("Vobject version:".$vobject->version);
 		if($vobject->version=='2.0'){
-			$vobject->version=='1.0';
+			$vobject->version='1.0';
 			foreach($vobject->children() as $child)
 			{
 				if($child instanceof Sabre_VObject_Component){
