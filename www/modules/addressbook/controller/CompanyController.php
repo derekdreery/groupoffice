@@ -187,15 +187,18 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		
 		foreach ($ids as $id) {
 			$model = GO_Addressbook_Model_Company::model()->findByPk($id);
-			$failed_id = !($model->setAttribute('addressbook_id',$params['book_id']) && $model->save()) ? $id : null;
-			
+			$failed_id = !(
+										$model->setAttribute('addressbook_id',$params['book_id'])
+										&& $model->save()) ? $id : null;
 			if ($failed_id) {
 				$response['failedToMove'][] = $failed_id;
 				$response['success'] = false;
 			}
 			
 			foreach ($model->contacts as $contact) {
-				$failed_id = !($contact->setAttribute('addressbook_id',$params['book_id']) && $contact->save()) ? $id : null;
+				$failed_id = !(
+											$contact->setAttribute('addressbook_id',$params['book_id'])
+											&& $contact->save()) ? $id : null;
 				if ($failed_id) {
 					$response['failedToMove'][] = $failed_id;
 					$response['success'] = false;
