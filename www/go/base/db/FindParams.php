@@ -123,6 +123,8 @@ class GO_Base_Db_FindParams{
 	public function join($tableName, $criteria, $tableAlias = false, $type='INNER'){
 		if(!isset($this->_params['join']))
 			$this->_params['join']='';
+		else
+			$this->_params['join'].="\n";
 		
 		$this->_params['join'].="$type JOIN `$tableName` ";
 		
