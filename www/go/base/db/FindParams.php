@@ -250,13 +250,14 @@ class GO_Base_Db_FindParams{
 	}
 	
 	/**
-	 * Adds a having clause
+	 * Adds a having clause. Warning. RAW SQL is passed to the query. Be careful
+	 * with user input.
 	 * 
-	 * @param string $field
+	 * @param string $rawSQL
 	 * @return GO_Base_Db_FindParams 
 	 */
-	public function having($field){
-		$this->_params['having']=$field;
+	public function having($rawSQL){
+		$this->_params['having']=$rawSQL;
 		return $this;
 	}
 	
