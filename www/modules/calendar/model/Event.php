@@ -180,7 +180,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function afterDbInsert() {
-		if(!$this->uuid){
+		if(empty($this->uuid)){
 			$this->uuid = GO_Base_Util_UUID::create('event', $this->id);
 			return true;
 		}else
@@ -603,7 +603,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 * @param string $method REQUEST, REPLY or CANCEL
 	 * @return Sabre_VObject_Component 
 	 */
-	public function toVObject($method='REQUEST', $vcalendar1=false){
+	public function toVObject($method='REQUEST'){
 		$e=new Sabre_VObject_Component('vevent');
 		$e->uid=$this->uuid;		
 		
@@ -666,16 +666,7 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 			$e->location=$this->location;
 
 		if(!empty($this->rrule)){
-//			if($vcalendar1)
-//			{
-//				$r = new GO_Base_Util_Icalendar_Rrule();
-//				$r->readIcalendarRruleString($this->start_time, $this->rrule);
-//				
-//				$e->rrule=str_replace('RRULE:','',$r->createVCalendarRrule());					
-//			}else
-//			{
-				$e->rrule=str_replace('RRULE:','',$this->rrule);					
-			//}
+			$e->rrule=str_replace('RRULE:','',$this->rrule);					
 			$stmt = $this->exceptions(GO_Base_Db_FindParams::newInstance()->criteria(GO_Base_Db_FindCriteria::newInstance()->addCondition('exception_event_id', 0)));
 			while($exception = $stmt->fetch()){
 				$exdate = new Sabre_VObject_Element_DateTime('exdate',Sabre_VObject_Element_DateTime::DATE);
@@ -734,8 +725,11 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	
 	public function toVCS(){
 		$c = new GO_Base_VObject_VCalendar();		
-		$c->version='1.0';
-		$c->add($this->toVObject('', true));		
+		$vobject = $this->toVObject('');
+		$c->add($vobject);		
+		
+		GO_Base_VObject_Reader::convertICalendarToVCalendar($c);
+		
 		return $c->serialize();		
 	}
 	
@@ -758,20 +752,26 @@ class GO_Calendar_Model_Event extends GO_Base_Db_ActiveRecord {
 	 */
 	public function importVObject(Sabre_VObject_Component $vobject, $attributes=array()){
 		//$event = new GO_Calendar_Model_Event();
+		$uid = (string) $vobject->uid;
+		if(!empty($uid))
+			$this->uuid = $uid;
 		
-		$this->uuid = (string) $vobject->uid;
 		$this->name = (string) $vobject->summary;
 		$this->description = (string) $vobject->description;
 		$this->start_time = $vobject->dtstart->getDateTime()->format('U');
 		$this->end_time = $vobject->dtend->getDateTime()->format('U');
 		
-		if($vobject->rrule){			
+		if((string) $vobject->rrule != ""){			
 			$rrule = new GO_Base_Util_Icalendar_Rrule();
 			$rrule->readIcalendarRruleString($this->start_time, (string) $vobject->rrule);			
 			$this->rrule = $rrule->createRrule();
 			$this->repeat_end_time = $rrule->until;
+		}else
+		{
+			$this->rrule="";
+			$this->repeat_end_time = 0;
 		}
-		
+			
 		if($vobject->dtstamp)
 			$this->mtime=$vobject->dtstamp->getDateTime()->format('U');
 		

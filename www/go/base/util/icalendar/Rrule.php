@@ -164,8 +164,6 @@ class GO_Base_Util_Icalendar_Rrule extends GO_Base_Util_Date_RecurrencePattern
 
 		$expl_rrule = explode(' ', $rrule);
 		
-		GO_Syncml_Server::debug("RRULE: ".$rrule);
-
 		$this->_until=0;
 		//the count or until is always in the last element
 		if ($until = array_pop($expl_rrule)) {
