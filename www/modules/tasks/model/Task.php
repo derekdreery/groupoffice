@@ -225,7 +225,18 @@ class GO_Tasks_Model_Task extends GO_Base_Db_ActiveRecord {
 	public function toICS() {		
 		
 		$c = new GO_Base_VObject_VCalendar();		
+		$c->add(new GO_Base_VObject_VTimezone());
 		$c->add($this->toVObject());		
+		return $c->serialize();		
+	}
+	
+	public function toVCS(){
+		$c = new GO_Base_VObject_VCalendar();		
+		$vobject = $this->toVObject('');
+		$c->add($vobject);		
+		
+		GO_Base_VObject_Reader::convertICalendarToVCalendar($c);
+		
 		return $c->serialize();		
 	}
 	
