@@ -361,8 +361,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 				));
 				array_merge($response['failedToMove'],$resp['failedToMove']);
 			} else {
-				$failed_id = !$model->setAttribute('addressbook_id',$params['book_id']) ? $id : null;
-				$failed_id = !$model->save() ? $id : null;
+				$failed_id = !($model->setAttribute( 'addressbook_id' , $params['book_id'] ) && $model->save()) ? $id : null;
 				if ($failed_id) {
 					$response['failedToMove'][] = $failed_id;
 					$response['success'] = false;

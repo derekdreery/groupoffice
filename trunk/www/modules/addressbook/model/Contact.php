@@ -203,10 +203,6 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			$companyAttributes['addressbook_id'] = $attributes['addressbook_id'];
 		} 
 		
-//		elseif (isset($attributes['addressbook_id'])) {
-//			unset($attributes['addressbook_id']);
-//		}
-//		
 		foreach ($vobject->children as $vobjProp) {
 			switch ($vobjProp->name) {
 				case 'N':
@@ -217,15 +213,26 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					$attributes['aftername_title'] = !empty($nameArr[4]) ? $nameArr[4] : '' ;
 					break;
 				case 'ORG':
-					$companyAttributes['name'] = $vobjProp->value;
+					$companyAttributes['name'] =  null;
+					if (!empty($vobjProp->value)) {
+						$compNameArr = explode(';',$vobjProp->value);
+						if (!empty($compNameArr[0]))
+							$companyAttributes['name'] = $compNameArr[0];
+						if (!empty($compNameArr[1]))
+							$companyAttributes['department'] = $compNameArr[1];
+						if (!empty($compNameArr[2]))
+							$companyAttributes['name2'] = $compNameArr[2];
+					}
 					break;
 				case 'TITLE':
-					$attributes['title'] = $vobjProp->value;
+					$attributes['title'] = !empty($vobjProp->value) ? $vobjProp->value : null;
 					break;
 				case 'TEL':
 					foreach ($vobjProp->parameters as $param) {
 						if ($param->name=='TYPE')
 							$types = explode(',',strtolower($param->value));
+						else
+							$types = array();
 					}
 					if(in_array('work',$types) && ( in_array('voice',$types) || count($types)==1 ) ) {
 						$attributes['work_phone'] = $vobjProp->value;
@@ -260,6 +267,8 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					foreach ($vobjProp->parameters as $param) {
 						if ($param->name=='TYPE')
 							$types = explode(',',strtolower($param->value));
+						else
+							$types = array();
 					}
 					if(in_array('work',$types)) {
 						$addrArr = explode(';',$vobjProp->value);
@@ -282,19 +291,25 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					foreach ($vobjProp->parameters as $param) {
 						if ($param->name=='TYPE')
 							$types = explode(',',strtolower($param->value));
+						else
+							$types = array();
 					}
-					if(in_array('pref',$types))
+					GO_Syncml_Server::debug("WILMAR TEST: \$types=".$param->value);
+					if(in_array('pref',$types)) {
 						$attributes['email'] = $vobjProp->value;
-					if(in_array('home',$types))
+					} elseif(in_array('home',$types)) {
 						$attributes['email2'] = $vobjProp->value;
-					if(in_array('work',$types))
+					} elseif(in_array('work',$types)) {
 						$attributes['email3'] = $vobjProp->value;
+					} else {
+						$attributes['email'] = $vobjProp->value;
+					}
 					break;
 				case 'ROLE':
 					$attributes['function'] = $vobjProp->value;
 					break;
 				case 'BDAY':
-					$attributes['birthday'] = $vobjProp->value;
+					$attributes['birthday'] = !empty($vobjProp->value) ? $vobjProp->value : null;
 					break;
 				default:
 					break;
@@ -388,7 +403,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		}
 		
 		if (!empty($this->company)) {
-			$e->add('ORG',$this->company->name);
+			$e->add('ORG',$this->company->name.';'.$this->department.';'.$this->company->name2);
 			$p = new Sabre_VObject_Property('ADR',';;'.$this->company->address.' '.$this->company->address_no.';'.
 				$this->company->city.';'.$this->company->state.';'.$this->company->zip.';'.$this->company->country);
 			$p->add('TYPE','WORK');
