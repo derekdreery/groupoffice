@@ -17,6 +17,87 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		ini_set('max_execution_time', '300');
 		session_write_close();		
 	}
+	
+	
+	public function actionRemoveDuplicates($params){
+		$checkModels = array(
+				"GO_Calendar_Model_Event"=>array('name', 'start_time', 'end_time', 'calendar_id', 'rrule', 'user_id'),
+				"GO_Tasks_Model_Task"=>array('name', 'start_time', 'due_time', 'tasklist_id', 'rrule', 'user_id'),
+				"GO_Addressbook_Model_Contact"=>array('first_name', 'middle_name', 'last_name', 'addressbook_id', 'company_id', 'email')
+			);
+		
+		foreach($checkModels as $modelName=>$checkFields){
+			
+			echo '<h1>'.$modelName.'</h1>';
+			
+			$checkFieldsStr = 't.'.implode(', t.',$checkFields);
+			$findParams = GO_Base_Db_FindParams::newInstance()
+							->debugSql()
+							->ignoreAcl()
+							->select('t.id, count(*) AS n, '.$checkFieldsStr)
+							->group($checkFields)
+							->having('n>1');
+
+			$stmt1 = GO::getModel($modelName)->find($findParams);
+
+			echo '<table border="1">';
+			echo '<tr><td>ID</th><th>'.implode('</th><th>',$checkFields).'</th></tr>';
+
+			$count = 0;
+
+			while($dupModel = $stmt1->fetch()){
+
+				$findParams = GO_Base_Db_FindParams::newInstance()
+							->ignoreAcl()
+							->select('t.id, '.$checkFieldsStr)
+							->order('id','ASC');
+
+				$criteria=$findParams->getCriteria();
+
+				foreach($checkFields as $field){
+					$criteria->addCondition($field, $dupModel->getAttribute($field));
+				}							
+
+				$stmt = GO::getModel($modelName)->find($findParams);
+
+				$first = true;
+
+				while($model = $stmt->fetch()){
+					echo '<tr><td>';
+					if(!$first)
+						echo '<span style="color:red">';
+					echo $model->id;
+					if(!$first)
+						echo '</span>';
+					echo '</th>';				
+
+					foreach($checkFields as $field)
+					{
+						echo '<td>'.$model->getAttribute($field,'html').'</td>';
+					}
+
+					echo '</tr>';
+
+					if(!$first){
+						if(!empty($params['delete']))
+							$model->delete();
+
+						$count++;
+					}
+
+					$first=false;
+				}
+			}
+
+			echo '</table>';
+
+			echo '<p>Found '.$count.' duplicates</p>';
+		}
+		
+		echo '<br /><br /><a href="'.GO::url($params['r'], array('delete'=>true)).'">Click here to delete the newest duplicates marked in red.</a>';
+
+	}
+	
 	/**
 	 * Calls buildSearchIndex on each Module class.
 	 * @return array 
