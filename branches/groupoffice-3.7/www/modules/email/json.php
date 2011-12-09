@@ -242,7 +242,7 @@ function find_alias_and_recipients() {
 					$response['data']['alias_id']=$aliases[$address];
 				}
  
-				if($fill_to && (!isset($aliases[$address]) || $task=='opendraft') && strpos($response['data']['to'], $content["to"][$i]['email'])===false) {
+				if($fill_to && (!isset($aliases[$address]) || $task=='opendraft') && !empty($content["to"][$i]['email']) && strpos($response['data']['to'], $content["to"][$i]['email'])===false) {
 					if (!$first) {
 						$first = true;
 					}else {
