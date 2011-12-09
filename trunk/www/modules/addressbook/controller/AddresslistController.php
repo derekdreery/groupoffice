@@ -13,9 +13,12 @@
 	
 	protected $model = 'GO_Addressbook_Model_Addresslist';	
 
-	public function formatStoreRecord($record, $model, $store) {
-		$record['user_name']=$model->user->name;
-		return parent::formatStoreRecord($record, $model, $store);
+	
+	protected function formatColumns(GO_Base_Data_ColumnModel $columnModel) {
+		
+		$columnModel->formatColumn('user_name', '$model->user->name');
+		
+		return parent::formatColumns($columnModel);
 	}
 	
 	protected function afterLoad(&$response, &$model, &$params) {
