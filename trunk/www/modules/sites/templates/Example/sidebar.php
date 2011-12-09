@@ -27,7 +27,7 @@ if (!$cart->hasProducts()) {
 	</table>
 	<div class="button-green-side" onmouseover="this.className='button-green-side-hover';"  onmouseout="this.className='button-green-side';">
 		<div class="button-green-side-right">
-			<a href="<?php echo self::pageUrl('checkout'); ?>" class="button-green-side-center"> 
+			<a href="<?php echo self::pageUrl('cart'); ?>" class="button-green-side-center"> 
 				Checkout
 			</a>
 		</div>

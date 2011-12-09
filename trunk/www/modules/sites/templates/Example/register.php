@@ -9,7 +9,7 @@ require('header.php');
 								<p>Fill out this form and click on 'Ok' to register. The fields marked with a * are required.</p>
 								
 								<?php 
-									GO_Base_Html_Form::renderBegin('sites/user/register',true);
+									GO_Base_Html_Form::renderBegin('sites/user/register','register',true);
 								//	echo GO_Base_Html_Error::getError();
 									
 									GO_Base_Html_Input::render(array(
