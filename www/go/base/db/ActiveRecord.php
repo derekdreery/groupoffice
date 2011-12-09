@@ -72,7 +72,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 	private static $db;
 	
-	
+	private $_validationErrors = array();
 
 	private $_attributeLabels;
 	
@@ -1714,27 +1714,71 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 */
 
 	public function validate(){
+				
 		foreach($this->columns as $field=>$attributes){
 			
 			if(!empty($attributes['required']) && empty($this->_attributes[$field])){
-				throw new Exception($field.' is required for '.$this->localizedName);
+				
+				$this->setValidationError($field, $this->getAttributeLabel($field).' is required');
+				
+				//throw new Exception($field.' is required for '.$this->localizedName);
 			}elseif(!empty($attributes['length']) && !empty($this->_attributes[$field]) && strlen($this->_attributes[$field])>$attributes['length'])
 			{
-				throw new Exception($field.' too long '.strlen($this->_attributes[$field]).' > '.$attributes['length']);
+				//throw new Exception($field.' too long '.strlen($this->_attributes[$field]).' > '.$attributes['length']);
+				
+				$this->setValidationError($field, $this->getAttributeLabel($field).' was longer then the maximum allowed size of '.$attributes['length']);
 			}
 //			}elseif(!empty($this->_attributes[$field]) && preg_match('/[<>]+/',$this->_attributes[$field])){
 //				throw new Exception($this->className().' '.$field.' contains invalid characters < or > : '.$this->_attributes[$field]);
 //			}
 			elseif(!empty($attributes['regex']) && !empty($this->_attributes[$field]) && !preg_match($attributes['regex'], $this->_attributes[$field]))
 			{
-				throw new Exception($field.' was not correctly formatted');
+				$this->setValidationError($field, $this->getAttributeLabel($field).' was not correctly formatted');
 			}elseif(!empty($attributes['validator']) && !empty($this->_attributes[$field]) && !call_user_func($attributes['validator'], $this->_attributes[$field]))
 			{
-				throw new Exception($field.' did not validate');
+				$this->setValidationError($field, $this->getAttributeLabel($field).' did not validate');
 			}
 		}
 		
+		$errors = $this->getValidationErrors();
+		if(!empty($errors)){
+			throw new Exception(GO::t('validationErrorsFound')."\n".implode("\n", $errors));
+		}
+		
 		return true;
+	}
+	
+	/**
+	 * Return all validation errors of this model
+	 * 
+	 * @return type 
+	 */
+	public function getValidationErrors(){
+		return $this->_validationErrors;
+	}
+	
+	/**
+	 * Get the validationError for the given attribute
+	 * If the attribute has no error then fals will be returned
+	 * 
+	 * @param string $attribute
+	 * @return mixed 
+	 */
+	public function getValidationError($attribute){
+		if(!empty($this->_validationErrors[$attribute]))
+			return $this->_validationErrors[$attribute];
+		else
+			return false;
+	}
+	
+	/**
+	 * Set a validation error for the given field.
+	 * 
+	 * @param string $attribute
+	 * @param string $message 
+	 */
+	protected function setValidationError($attribute,$message) {
+		$this->_validationErrors[$attribute] = $message;
 	}
 	
 	
