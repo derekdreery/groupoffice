@@ -11,20 +11,21 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 		}
 		
 		$user = GO_Base_Model_User::model()->findByPk($params['id']);
-		$user->setAttributes($params);
+		
 					
-		if (!empty($params["password1"]) || !empty($params["password2"])) {
+		if (!empty($params["password"]) || !empty($params["passwordConfirm"])) {
 			
 			if(!$user->checkPassword($params['current_password']))
 				throw new Exception(GO::t('badPassword'));
 			
-			if ($params["password1"] != $params["password2"]) {
-				throw new Exception(GO::t('error_match_pass', 'users'));
-			}
-			if (!empty($params["password2"])) {
-				$user->setAttribute('password', $_POST['password2']);
-			}
+//			if ($params["password"] != $params["passwordConfirm"]) {
+//				throw new Exception(GO::t('error_match_pass', 'users'));
+//			}
+//			if (!empty($params["passwordConfirm"])) {
+//				$user->setAttribute('password', $_POST['passwordConfirm']);
+//			}
 		}
+		$user->setAttributes($params);
 		
 		$response['success']=$user->save();
 		
@@ -41,6 +42,7 @@ class GO_Core_Controller_Settings extends GO_Base_Controller_AbstractController 
 		
 		
 		$response['data']=$user->getAttributes('formatted');
+		unset($response['data']['password']);
 		
 		if($user->contact)
 			$response['data']=array_merge($response['data'],$user->contact->getAttributes('formatted'));
