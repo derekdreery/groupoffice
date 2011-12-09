@@ -61,50 +61,55 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 		$model->setAttributes($params);
 		
 		$modifiedAttributes = $model->getModifiedAttributes();
+		try{
+			$response['success'] = $model->save();
 
-		$response['success'] = $model->save();
+			$response['id'] = $model->pk;
 
-		$response['id'] = $model->pk;
+			//If the model has it's own ACL id then we return the newly created ACL id.
+			//The model automatically creates it.
+			if ($model->aclField() && !$model->aclFieldJoin) {
+				$response[$model->aclField()] = $model->{$model->aclField()};
+			}
 
-		//If the model has it's own ACL id then we return the newly created ACL id.
-		//The model automatically creates it.
-		if ($model->aclField() && !$model->aclFieldJoin) {
-			$response[$model->aclField()] = $model->{$model->aclField()};
-		}
 
-		
-		if (!empty($params['link'])) {
-			
-			//a link is sent like  GO_Notes_Model_Note:1
-			//where 1 is the id of the model
-			
-			$linkProps = explode(':', $params['link']);			
-			$linkModel = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
-			$model->link($linkModel);			
-		}
+			if (!empty($params['link'])) {
 
-		if(!empty($_FILES['importFiles'])){
-			
-			$attachments = $_FILES['importFiles'];
-			$count = count($attachments['name']);
-			
-			$params['enclosure'] = $params['importEnclosure'];
-			$params['delimiter'] = $params['importDelimiter'];
-			
-			for($i=0;$i<$count;$i++){
-				if(is_uploaded_file($attachments['tmp_name'][$i])) {
-					$params['file']= $attachments['tmp_name'][$i];
-					//$params['model'] = $params['importModel'];
-					
-					$controller = new $params['importController'];
-					
-					$controller->actionImport($params);
+				//a link is sent like  GO_Notes_Model_Note:1
+				//where 1 is the id of the model
+
+				$linkProps = explode(':', $params['link']);			
+				$linkModel = GO::getModel($linkProps[0])->findByPk($linkProps[1]);
+				$model->link($linkModel);			
+			}
+
+			if(!empty($_FILES['importFiles'])){
+
+				$attachments = $_FILES['importFiles'];
+				$count = count($attachments['name']);
+
+				$params['enclosure'] = $params['importEnclosure'];
+				$params['delimiter'] = $params['importDelimiter'];
+
+				for($i=0;$i<$count;$i++){
+					if(is_uploaded_file($attachments['tmp_name'][$i])) {
+						$params['file']= $attachments['tmp_name'][$i];
+						//$params['model'] = $params['importModel'];
+
+						$controller = new $params['importController'];
+
+						$controller->actionImport($params);
+					}
 				}
 			}
+
+
+			$this->afterSubmit($response, $model, $params, $modifiedAttributes);
+		}catch(Exception $e){
+			$response['success']=false;
+			$response['feedback']=nl2br($e->getMessage());
+			$response['validationErrors']=$model->getValidationErrors();
 		}
-		
-		
-		$this->afterSubmit($response, $model, $params, $modifiedAttributes);
 
 		return $response;
 	}
