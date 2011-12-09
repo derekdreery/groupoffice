@@ -27,7 +27,6 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 	protected function afterLoad(&$response, &$model, &$params) {
 
-
 		//Join the contact that belongs to the user in the form response.
 		if(GO::modules()->isInstalled('addressbook')){
 			if(!empty($model->id)){
@@ -41,6 +40,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 				$response['data'] = array_merge($attr, $response['data']);
 			}
+			unset($response['data']['password']);
 		}
 		
 
@@ -66,14 +66,16 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 
-		if (!empty($params["password1"]) || !empty($params["password2"])) {
-			if ($params["password1"] != $params["password2"]) {
-				throw new Exception(GO::t('error_match_pass', 'users'));
-			}
-			if (!empty($params["password2"])) {
-				$model->setAttribute('password', $_POST['password2']);
-			}
-		}
+		
+		
+//		if (!empty($params["password1"]) || !empty($params["password2"])) {
+//			if ($params["password1"] != $params["password2"]) {
+//				throw new Exception(GO::t('error_match_pass', 'users'));
+//			}
+//			if (!empty($params["password2"])) {
+//				$model->setAttribute('password', $_POST['password2']);
+//			}
+//		}
 
 		return parent::beforeSubmit($response, $model, $params);
 	}
@@ -147,13 +149,13 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 
 
-		if (!empty($_POST['send_invitation'])) {
+		if (!empty($params['send_invitation'])) {
 
 			$email = $this->_getRegisterEmail();
 
 			if (!empty($email['register_email_body']) && !empty($email['register_email_subject'])) {
 				
-				$email['register_email_body'] = str_replace('{password}', $params["password1"], $email['register_email_body']);
+				$email['register_email_body'] = str_replace('{password}', $params["password"], $email['register_email_body']);
 
 				foreach ($model->getAttributes() as $key => $value) {
 					if(is_string($value))
