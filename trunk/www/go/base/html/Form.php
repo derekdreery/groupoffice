@@ -10,8 +10,8 @@ class GO_Base_Html_Form {
 //		}
 //	}
 	
-	public static function renderBegin($targetRoute=false,$showErrors=false){
-		echo '<form method="post" >';
+	public static function renderBegin($targetRoute=false,$formName='form',$showErrors=false){
+		echo '<form method="post" name="'.$formName.'" >';
 		echo '<input type="hidden" name="formRoute" value="'.$targetRoute.'" />';
 		if($showErrors){
 			$error = GO_Base_Html_Error::getError();

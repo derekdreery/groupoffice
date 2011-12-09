@@ -30,20 +30,6 @@ class GO_Base_Router{
 	 * If a controller consist of two words then the second word should start with
 	 * a capital letter.
 	 * 
-	 * @todo Handle multi request with:
-	 * 
-	 * ?r=notes/note/grid|notes/category/grid
-	 * 
-	 * array(
-	 * 'notes'=>array(
-	 * r=notes/note/grid
-	 * id=1
-	 * ),
-	 * 'categories'=>array(
-	 * r=>notes/category/grid
-	 * param=>
-	 * )
-	 * )
 	 */
 	
 	
