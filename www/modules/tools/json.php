@@ -17,7 +17,8 @@ try{
 				$response['results']=array();				
 				$response['results'][]=array('name'=>$lang['tools']['dbcheck'], 'script'=>GO::url('maintenance/checkDatabase'));
 				//$response['results'][]=array('name'=>$lang['tools']['checkmodules'], 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'checkmodules.php');
-				$response['results'][]=array('name'=>$lang['tools']['buildsearchcache'], 'script'=>GO::url('maintenance/rebuidSearchCache'));
+				$response['results'][]=array('name'=>$lang['tools']['buildsearchcache'], 'script'=>GO::url('maintenance/buildSearchCache'));
+				$response['results'][]=array('name'=>$lang['tools']['rm_duplicates'], 'script'=>GO::url('maintenance/removeDuplicates'));
 				//$response['results'][]=array('name'=>$lang['tools']['rm_duplicates'], 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'rm_duplicates.php');
 				$response['results'][]=array('name'=>$lang['tools']['resetState'], 'script'=>$GLOBALS['GO_MODULES']->modules['tools']['url'].'reset_state.php');
 				
