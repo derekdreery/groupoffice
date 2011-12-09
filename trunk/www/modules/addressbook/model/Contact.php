@@ -310,7 +310,11 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					break;
 				case 'BDAY':
 					$attributes['birthday'] = !empty($vobjProp->value) ? $vobjProp->value : null;
+					break;				
+				case 'NOTE':
+					$attributes['comment'] = $vobjProp->value;
 					break;
+				
 				default:
 					break;
 			}
@@ -408,11 +412,11 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				$this->company->city.';'.$this->company->state.';'.$this->company->zip.';'.$this->company->country);
 			$p->add('TYPE','WORK');
 			$e->add($p);
-			$p = new Sabre_VObject_Property('LABEL',GO_Base_Util_Common::formatAddress(
-				$this->company->country, $this->company->address, $this->company->address_no,
-				$this->company->zip, $this->company->city, $this->company->state));
-			$p->add('TYPE','WORK');
-			$e->add($p);
+//			$p = new Sabre_VObject_Property('LABEL',GO_Base_Util_Common::formatAddress(
+//				$this->company->country, $this->company->address, $this->company->address_no,
+//				$this->company->zip, $this->company->city, $this->company->state));
+//			$p->add('TYPE','WORK');
+//			$e->add($p);
 		}
 		
 		if ($this->address) {
@@ -420,11 +424,15 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				$this->city.';'.$this->state.';'.$this->zip.';'.$this->country);
 			$p->add('TYPE','HOME');
 			$e->add($p);
-			$p = new Sabre_VObject_Property('LABEL',GO_Base_Util_Common::formatAddress(
-				$this->country, $this->address, $this->address_no,
-				$this->zip, $this->city, $this->state));
-			$p->add('TYPE','HOME');
-			$e->add($p);
+//			$p = new Sabre_VObject_Property('LABEL',GO_Base_Util_Common::formatAddress(
+//				$this->country, $this->address, $this->address_no,
+//				$this->zip, $this->city, $this->state));
+//			$p->add('TYPE','HOME');
+//			$e->add($p);
+		}
+		
+		if(!empty($this->comment)){
+			$e->note=$this->comment;
 		}
 		
 		$mtimeDateTime = new DateTime();
@@ -432,7 +440,6 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$rev = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
 		$rev->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
 		$e->add($rev);
-
 		
 		return $e;
 	}
