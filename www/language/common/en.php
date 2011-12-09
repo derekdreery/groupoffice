@@ -481,3 +481,5 @@ $l["batchEdit"]="Batch edit";
 $l["batchSelectOne"]="Select at least one item!";
 $l["batchSelectionError"]="Nothing selected!";
 $l["label"]="Label";
+
+$l["validationErrorsFound"]="There are validation errors:";
