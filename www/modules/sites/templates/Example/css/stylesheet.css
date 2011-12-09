@@ -483,31 +483,60 @@ div.subkader-block{
 
 
 
-input{
-	
+.formrow {
+	display:block;
+	clear:both;
+	margin-bottom:10px;
+	line-height: 16px;
 }
-input, textarea, select, file{
+
+.formlabel{
+	float:left;
+	display:block;
+	width:130px;
+}
+
+.error {
+	color:red;
+}
+
+label {
+	float:left;
+}
+
+.required {
+	color: #26687C;
+}
+
+.button {
+	width: 100px;
+	float: left;
+	clear:none;
+}
+
+.errortext {
+	float:left;
+	color:red;
+	padding:2px;
+}
+
+.formrow .errortext {
+	float:left;
+	color:red;
+	padding:2px;
+}
+
+.formrow input, .formrow textarea, .formrow select, .formrow file{
 	width:250px;
 	float:left;
 }
-.textbox{
-	display:block;
-}
+
 .checkbox{
 	vertical-align: middle;
 }
 .textarea{
 	display:block;
 	height:100px;
-}
-label{
-	margin-bottom:10px;
-	display:block;
-	line-height: 16px;
-}
-.labeltext{
-	float:left;
-	width:130px;
 }
 
 .radio{
@@ -516,20 +545,5 @@ label{
 	margin:0px 2px;
 	padding:0px;				
 
-}
-
-div.error{
-	border:1px solid red;
-	padding:8px;
-	background-color:#f1f1f1;
-}
-
-label div.error{
-	border:0;
-	padding:0;
-	background-color:transparent;
-	color: red;
-	display: inline;
-	margin-left:10px;
 }
 

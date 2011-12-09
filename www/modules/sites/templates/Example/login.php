@@ -9,27 +9,41 @@ require('header.php');
 								<a href="<?php echo self::pageUrl("register"); ?>">Click here to register once</a>
 								<h1>Login if you are already registered</h1>
 								
-								<form method="post">
 									<?php 
+									GO_Base_Html_Form::renderBegin('sites/user/login',true);
+									//echo GO_Base_Html_Error::getError();
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Username",
 										"name" => "username",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+						
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Password",
 										"name" => "password",
 										"value" => ''
 									));
+									
+									GO_Base_Html_Submit::render(array(
+										"label" => "",
+										"name" => "submit",
+										"value" => 'OK',
+										"renderContainer" => false
+									));
+									
+									GO_Base_Html_Reset::render(array(
+										"label" => "",
+										"name" => "reset",
+										"value" => 'Reset',
+										"renderContainer" => false
+									));
+									
+									GO_Base_Html_Form::renderEnd();
 									?>
 									<a href="<?php echo self::pageUrl("lostpass"); ?>">Lost password?</a>
-									<br /><input type="submit" value="Login" /><input type="reset" value="Cancel" />
-								</form>
 							</div>
 						</div>
 

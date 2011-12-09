@@ -7,184 +7,174 @@ require('header.php');
 
 								<h1>Register at Intermesh Group-Office</h1>								
 								<p>Fill out this form and click on 'Ok' to register. The fields marked with a * are required.</p>
-
-								<form method="post">
-									<p>
-									<?php 
+								
+								<?php 
+									GO_Base_Html_Form::renderBegin('sites/user/register',true);
+								//	echo GO_Base_Html_Error::getError();
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "First Name",
 										"name" => "first_name",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"label" => "Middle Name",
 										"name" => "middle_name",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Last Name",
 										"name" => "last_name",
 										"value" => ''
 									));
-									?>
-									<br />
-									Gender
-									<br />
-									<?php
+									
+									GO_Base_Html_Radio::render(array(
+										"required" => true,
+										"label" => "Gender",
+										"name" => "gender",
+										"value" => 'male',
+										"options" => array(
+												array("label"=>"Male","value"=>"male"),
+												array("label"=>"Female","value"=>"female")
+										)
+									));
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Email",
 										"name" => "email",
 										"value" => ''
 									));
-									?>
-									</p>
-									<br />
-									<p>
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Address",
 										"name" => "address",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Number of house",
 										"name" => "address_nr",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "ZIP/Postal code",
 										"name" => "zip",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "City",
 										"name" => "city",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "State/Province",
 										"name" => "state",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+									
 									GO_Base_Html_Select::render(array(
 										"required" => true,
 										'label' => 'Country',
-										'value' => '',
+										'value' => 'NL',
 										'name' => "country",
 										'options' => GO::language()->getCountries()
 									));
-									?>
-									</p>
-									<br />
-									<p>
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"label" => "Phone",
 										"name" => "phone",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"label" => "Mobile",
 										"name" => "mobile",
 										"value" => ''
 									));
-									?>
-									</p>
-									<br />
-									<p>
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"label" => "Company",
 										"name" => "company",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"label" => "Department",
 										"name" => "department",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"label" => "Function",
 										"name" => "function",
 										"value" => ''
 									));
-									?>
-									</p>
-									<br />
-									<p>
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Username",
 										"name" => "username",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Password",
 										"name" => "password",
 										"value" => ''
 									));
-									?>
-									<br />
-									<?php
+									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Confirm",
-										"name" => "password_confirm",
+										"name" => "passwordConfirm",
 										"value" => ''
 									));
-									?>
-									</p>
-									<br /><input type="submit" value="OK" /><input type="reset" value="Reset" /><input type="reset" value="Cancel" />
-								</form>
+									
+									
+									
+									GO_Base_Html_Submit::render(array(
+										"label" => "",
+										"name" => "submit",
+										"value" => 'OK',
+										"renderContainer" => false
+									));
+									
+									GO_Base_Html_Reset::render(array(
+										"label" => "",
+										"name" => "reset",
+										"value" => 'Reset',
+										"renderContainer" => false
+									));
+									
+									GO_Base_Html_Reset::render(array(
+										"label" => "",
+										"name" => "cancel",
+										"value" => 'Cancel',
+										"renderContainer" => false
+									));
+
+									GO_Base_Html_Form::renderEnd();
+								?>
 							</div>
 						</div>
 

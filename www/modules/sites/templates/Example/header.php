@@ -23,7 +23,12 @@
 		<div class="main-container">
 
 			<div id="login">
-				<a href="<?php echo self::pageUrl("login"); ?>">Login</a> / <a href="<?php echo self::pageUrl("register"); ?>">Register</a>
+				<?php if(!GO::user()) : ?>
+					<a href="<?php echo self::pageUrl("login"); ?>">Login</a>
+				<?php else: ?>
+					<a href="<?php echo GO::url('sites/user/logout'); ?>">Logout</a>
+				<?php endif; ?>
+				/ <a href="<?php echo self::pageUrl("register"); ?>">Register</a>
 			</div>
 
 			<div class="header">

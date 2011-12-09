@@ -40,4 +40,8 @@ class GO_Sites_Model_Site extends GO_Base_Db_ActiveRecord {
 				);
 	}	
 	
+	public function getLoginPath(){
+		return $this->login_page;
+	}
+	
 }
