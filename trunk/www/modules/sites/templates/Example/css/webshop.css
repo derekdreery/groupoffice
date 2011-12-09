@@ -22,7 +22,7 @@ table.cart input.amount{
 }
 
 /* defaults for error messages */
-.error {
+/*.error {
 	color: red;
 }
 
@@ -30,11 +30,11 @@ input.error {
 	border: 1px solid red;
 	background-color: #ffd1d1;
 	width: 250px;
-}
-
+}*/
+/*
 input.textbox {
 	width: 250px;
-}
+}*/
 
 /* licenses */
 

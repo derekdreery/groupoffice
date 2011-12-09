@@ -27,6 +27,8 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	
 	protected $lastPath;
 	
+	protected $notification;
+	
 	
 	protected function allowGuests() {
 		return array('index');
@@ -57,7 +59,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * This default action should be overrriden
 	 */
 	public function actionIndex($params){		
-		$this->renderPage($params['p']);		
+		$this->renderPage($params['p'],$params);		
 	}
 	
 	protected function renderPage($path, $params=array()){
@@ -65,9 +67,20 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		
 		//echo $path.':'.$this->site->id;
 		
+		if($path == $this->site->getLoginPath()){
+			if(GO::session()->values['sites']['lastPath'] == $this->site->getLoginPath())
+					GO::session()->values['sites']['beforeLoginPath']='products'; // TODO: This path needs to be the path to the homepage when that is working
+				else
+					GO::session()->values['sites']['beforeLoginPath']=GO::session()->values['sites']['lastPath'];
+		}
+		
 		GO::session()->values['sites']['lastPath']=$path;
 		
 		$this->page = GO_Sites_Model_Page::model()->findSingleByAttributes(array('site_id'=>$this->site->id, 'path'=>$path));
+		
+		$this->_checkAuth();
+		
+		$this->_handleForm($params);
 		
 		if(!$this->page){
 			$this->notFound();
@@ -81,17 +94,39 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		}
 	}
 	
+	private function _checkAuth() {
+		if($this->page->login_required && !GO::user()){
+			$this->pageRedirect($this->site->getLoginPath());
+		}
+	}
+	
+	private function _handleForm($params){
+		if(isset($params['formRoute'])){
+			$params['r']=$params['formRoute'];
+			$router = new GO_Base_Router();
+			$router->runController($params);
+		}
+	}
+	
 	protected function notFound(){
 		echo '<h1>Not found</h1>';
 	}
 	
 	public static function pageUrl($path){
-		return GO::url('sites/site/index', array('p',$path));
+		return GO::url('sites/site/index', array('p'=>$path));
 	}
 	
 	protected function pageRedirect($path = '') {
 		header('Location: ' .self::pageUrl($path));
 		exit();
+	}
+	
+	protected function setNotification($type, $string){
+		
+	}
+	
+	protected function getNotification(){
+		
 	}
 	
 }

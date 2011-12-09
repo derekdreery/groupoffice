@@ -54,6 +54,5 @@ class GO_Sites_Model_Page extends GO_Base_Db_ActiveRecord {
 	public function getUrl(){
 		
 		return GO_Sites_Controller_Site::pageUrl($this->path);
-		
 	}
 }
