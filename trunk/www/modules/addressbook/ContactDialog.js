@@ -116,7 +116,7 @@ GO.addressbook.ContactDialog = function(config)
 		waitMsgTarget:true,
 		baseParams: {},
 		border: false,
-		//fileUpload : true,
+		fileUpload : true,
 		items: [
 		this.tabPanel = new Ext.TabPanel({
 			border: false,
