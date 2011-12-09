@@ -62,6 +62,7 @@
 class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 
 	public $generatedRandomPassword = false;
+	public $passwordConfirm;
 	
 	/**
 	 * Returns a static model of itself
@@ -140,29 +141,30 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	}
 
 	public function validate() {
-		if (parent::validate()) {
-
-			if ($this->_maxUsersReached())
-				throw new Exception(GO::t('max_users_reached', 'users'));
-
-			if (!GO::config()->allow_duplicate_email) {
-				$existing = $this->findSingleByAttribute('email', $this->email);
-				if (($this->isNew && $existing) || $existing && $existing->id != $this->id )
-					throw new Exception(GO::t('error_email_exists', 'users'));
-			}
-
-			$existing = $this->findSingleByAttribute('username', $this->username);
-			if (($this->isNew && $existing) || $existing && $existing->id != $this->id )
-				throw new Exception(GO::t('error_username_exists', 'users'));
-			
-			if (empty($this->password)) {
-				$this->password = GO_Base_Util_String::random_password();
-				$this->generatedRandomPassword = true;
-			}
-
-
-			return true;
+		
+		if($this->isModified('password') && isset($this->passwordConfirm) && $this->passwordConfirm!=$this->password){
+			$this->setValidationError('passwordConfirm', GO::t('passwordMatchError'));
 		}
+
+		if ($this->_maxUsersReached())				
+			throw new Exception(GO::t('max_users_reached', 'users'));
+
+		if (!GO::config()->allow_duplicate_email) {
+			$existing = $this->findSingleByAttribute('email', $this->email);
+			if (($this->isNew && $existing) || $existing && $existing->id != $this->id )
+				$this->setValidationError('email', GO::t('error_email_exists', 'users'));
+		}
+
+		$existing = $this->findSingleByAttribute('username', $this->username);
+		if (($this->isNew && $existing) || $existing && $existing->id != $this->id )
+			$this->setValidationError('username', GO::t('error_username_exists', 'users'));
+
+		if (empty($this->password)) {
+			$this->password = GO_Base_Util_String::randomPassword();
+			$this->generatedRandomPassword = true;
+		}
+
+		return parent::validate();
 	}
 	
 	public function buildFilesPath() {
