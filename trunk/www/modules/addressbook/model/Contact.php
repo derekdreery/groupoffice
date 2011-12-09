@@ -222,10 +222,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		foreach ($vobject->children as $vobjProp) {
 			switch ($vobjProp->name) {
-				case 'PHOTO':						
-					$file = GO_Base_Fs_File::tempFile('jpg');
-					$file->putContents(base64_decode($vobjProp->value));
-					$this->photoFile=$file;
+				case 'PHOTO':					
+					if(!empty($vobjProp->value)){
+						$file = GO_Base_Fs_File::tempFile('jpg');
+						$file->putContents(base64_decode($vobjProp->value));
+						$this->photoFile=$file;
+					}
 					break;
 				case 'N':
 					$nameArr = explode(';',$vobjProp->value);
