@@ -22,9 +22,11 @@ class GO_Base_Session extends GO_Base_Observable{
 	
 	public $values;
 	
-	
-	
 	public function __construct(){
+		$this->start();
+	}
+	
+	public function start(){
 		//start session
 		
 		//In some cases it doesn't make sense to use the session because the client is
