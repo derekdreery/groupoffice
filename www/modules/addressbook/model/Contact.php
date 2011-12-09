@@ -22,6 +22,8 @@
 class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	
+	public $photoFile;
+	
 	/**
 	 * Returns a static model of itself
 	 * 
@@ -141,7 +143,22 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		return parent::beforeDelete();
 	}
 	
+	protected function afterDelete() {
+		if($this->photo)
+			unlink($this->photo);
+		
+		return parent::afterDelete();
+	}
 	
+	protected function afterSave($wasNew) {
+		
+		if(isset($this->photoFile)){
+			$this->setPhoto($this->photoFile->path());
+			unset($this->photoFile);
+		}
+		
+		return parent::afterSave($wasNew);
+	}
 	
 	/**
 	 * Set the photo
@@ -149,7 +166,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	 * @param String $tmpFile 
 	 */
 	protected function setPhoto($tmpFile){
-				GO::debug("setPhoto($tmpFile)");
+
 		$destination = GO::config()->file_storage_path.'contacts/contact_photos/'.$this->id.'.jpg';
 		
 		if(empty($tmpFile))
@@ -186,7 +203,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	}
 	
 	protected function getPhotoURL(){
-		return GO::url('addressbook/contact/photo', 'id='.$this->id);
+		return $this->photo ? GO::url('addressbook/contact/photo', 'id='.$this->id) : '';
 	}
 	
 	/**
@@ -205,6 +222,11 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		
 		foreach ($vobject->children as $vobjProp) {
 			switch ($vobjProp->name) {
+				case 'PHOTO':						
+					$file = GO_Base_Fs_File::tempFile('jpg');
+					$file->putContents(base64_decode($vobjProp->value));
+					$this->photoFile=$file;
+					break;
 				case 'N':
 					$nameArr = explode(';',$vobjProp->value);
 					$attributes['last_name'] = $nameArr[0];
@@ -294,7 +316,6 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 						else
 							$types = array();
 					}
-					GO_Syncml_Server::debug("WILMAR TEST: \$types=".$param->value);
 					if(in_array('pref',$types)) {
 						$attributes['email'] = $vobjProp->value;
 					} elseif(in_array('home',$types)) {
@@ -320,8 +341,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			}
 		}
 
-		$this->setAttributes($attributes, false);
-		$this->save();
+		$this->setAttributes($attributes, false);		
 		
 		if (isset($companyAttributes['name'])) {
 			$stmt = GO_Addressbook_Model_Company::model()->findByAttribute('name', $companyAttributes['name']);
@@ -333,9 +353,9 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 				$company->setAttribute('addressbook_id', $companyAttributes['addressbook_id']);
 			}
 			$company->save();
-			$this->setAttribute('company_id',$company->id);
-			$this->save();
+			$this->setAttribute('company_id',$company->id);			
 		}
+		$this->save();
 		
 		return $this;
 	}
@@ -440,6 +460,14 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$rev = new Sabre_VObject_Element_DateTime('LAST-MODIFIED');
 		$rev->setDateTime($mtimeDateTime, Sabre_VObject_Element_DateTime::UTC);		
 		$e->add($rev);
+		
+		
+		if($this->photo){
+			$p = new Sabre_VObject_Property('photo', base64_encode(file_get_contents($this->photo)));
+			$p->add('type','jpeg');
+			$p->add('encoding','b');
+			$e->add($p);	
+		}
 		
 		return $e;
 	}

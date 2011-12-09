@@ -142,7 +142,7 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 	protected function afterDisplay(&$response, &$model, &$params) {
 			
 		$response['data']['name']=$model->name;
-		$response['data']['photo_url']=$model->photo_url;
+		$response['data']['photo_url']=$model->photoURL;
 		
 		$company = $model->company();
 		if($company){					
@@ -449,6 +449,8 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 		$data = $file->getContents();
 		$vobject = GO_Base_VObject_Reader::read($data);
 		unset($params['file']);
+		
+		GO_Base_VObject_Reader::convertVCard21ToVCard30($vobject);
 	
 		$contact->importVObject($vobject, $params);
 	}
