@@ -224,6 +224,12 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 					Ext.MessageBox.alert(GO.lang['strError'], GO.lang['strErrorsInForm']);			
 				} else {
 					Ext.MessageBox.alert(GO.lang['strError'], action.result.feedback);
+					
+					if(action.result.validationErrors){
+						for(var field in action.result.validationErrors){
+							form.findField(field).markInvalid(action.result.validationErrors[field]);
+						}
+					}
 				}
 			},
 			scope: this
