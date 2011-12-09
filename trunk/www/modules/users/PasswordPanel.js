@@ -39,12 +39,12 @@ GO.users.PasswordPanel = function(config)
 	this.passwordField1 = new Ext.form.TextField({
 		inputType: 'password',
 		fieldLabel: GO.users.lang.newPassword,
-		name: prefix+'password1'
+		name: prefix+'password'
 		});
 	this.passwordField2 = new Ext.form.TextField({
 		inputType: 'password',
 		fieldLabel: GO.users.lang.confirmPassword,
-		name: prefix+'password2'
+		name: prefix+'passwordConfirm'
 		});
 
 
