@@ -69,7 +69,7 @@ class GO_Base_Html_Input {
 		
 		if(!empty($this->attributes['label'])){
 			if(!empty($this->attributes['required'])){
-				$this->attributes['label'] .= ' <span class="required">*</span>';
+				$this->attributes['label'] .= '<span class="required">*</span>';
 			}		
 		}
 		
@@ -80,9 +80,10 @@ class GO_Base_Html_Input {
 			$this->attributes['extra'] = '';
 
 		if (!isset($this->attributes['class']))
-			$this->attributes['class'] = 'textbox';
+			$this->attributes['class'] = 'input';
 
-		
+		if (!isset($this->attributes['renderContainer']))
+			$this->attributes['renderContainer'] = true;
 
 		$this->attributes['required'] = empty($this->attributes['required']) ? false : true;
 		
@@ -212,13 +213,16 @@ class GO_Base_Html_Input {
 		if(self::getErrorMsg($this->attributes['name']))
 			$this->attributes['class'].=' error';
 		
+		$html = '';
 		
 		// The opening div for the row
-		$html = '<div class="formrow';
-		if(!empty($this->attributes['rowClass']))
-			$html .= ' '.$this->attributes['rowClass'];
-		$html .= '">';
-		
+		if(!empty($this->attributes['renderContainer']))
+		{
+			$html .= '<div class="formrow';
+			if(!empty($this->attributes['rowClass']))
+				$html .= ' '.$this->attributes['rowClass'];
+			$html .= '">';
+		}
 		// The label div
 		if(!empty($this->attributes['label']))
 			$html .= '<div class="formlabel">'.$this->attributes['label'].' :</div>';
@@ -235,11 +239,12 @@ class GO_Base_Html_Input {
 
 		if($this->attributes['required'])
 			$html .= '<input type="hidden" name="required[]" value="'.$this->attributes['name'].'" />';
-			
-		$html .= '<div style="clear:both;"></div>';
 		
 		// Close the row div
-		$html .= '</div>';
+		if(!empty($this->attributes['renderContainer'])) {
+			$html .= '<div style="clear:both;"></div>';
+			$html .= '</div>';
+		}
 		
 		
 		unset(GO::session()->values['formErrors'][$this->attributes['name']]);
