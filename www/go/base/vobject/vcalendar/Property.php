@@ -40,13 +40,20 @@ class GO_Base_VObject_VCalendar_Property extends Sabre_VObject_Property {
         $src = array(
             '\\',
             "\n",
-						";",
+//						";",
         );
         $out = array(
             '\\\\',
             '\n',
-						"\\;",
+//						"\\;",
         );
+				
+				$quoteSemiColonFields = array('note','location','summary','description');
+				if(in_array(strtolower($this->name),$quoteSemiColonFields)){
+					$src[]=';';
+					$out[]='\\;';
+				}
+				
         $str.=':' . str_replace($src, $out, $this->value)."\r\n";
 				
 				//workaround funambol bug. They want it one long big string

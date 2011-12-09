@@ -100,17 +100,7 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 			{
 				if($child instanceof Sabre_VObject_Component){
 					foreach($qpProperies as $propName){
-						if(isset($child->$propName) && $child->$propName!=''){
-							
-							$value =  str_replace(array("\r","\n"), '', quoted_printable_encode((string) $child->$propName));
-							$newProp = new GO_Base_VObject_VCalendar_Property($propName, $value);							
-							$child->$propName->add('ENCODING','QUOTED-PRINTABLE');
-							foreach($child->$propName->parameters as $param){
-								$newProp->add($param);
-							}
-							unset($child->$propName);
-							$child->add($newProp);							
-						}
+						self::_quotedPrintableEncode($child, $propName);
 					}
 					
 					if(isset($child->rrule) && (string) $child->rrule!=''){
@@ -123,19 +113,72 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 		}
 	}
 	
+	/**
+	 * Converts a vcalendar 1.0 component to an icalendar 2.0 component.
+	 * 
+	 * @param Sabre_VObject_Component $vobject 
+	 */
+	public static function convertVCard21ToVCard30(Sabre_VObject_Component $vobject){
+		
+		if($vobject->version=='2.1'){
+			$vobject->version='3.0';
+			foreach($vobject->children() as $property)
+			{
+				if(isset($property['ENCODING']) && strtoupper($property['ENCODING'])=='QUOTED-PRINTABLE'){
+					$value = quoted_printable_decode($property->value);
+					$value = str_replace("\r","",$value);
+
+					$property->setValue($value);				
+					unset($property['ENCODING']);
+				}							
+			}
+		}	
+	}
 	
+	private static function _quotedPrintableEncode($vobject, $propName){
+		if(isset($vobject->$propName) && $vobject->$propName!=''){			
+			$oldValue = (string) $vobject->$propName;
+			$value =  str_replace(array("\r","\n"), '', quoted_printable_encode($oldValue));
+			if($value != $oldValue){
+				$newProp = new GO_Base_VObject_VCalendar_Property($propName, $value);							
+				$vobject->$propName->add('ENCODING','QUOTED-PRINTABLE');
+				foreach($vobject->$propName->parameters as $param){
+					$newProp->add($param);
+				}
+				unset($vobject->$propName);
+				$vobject->add($newProp);
+			}
+		}
+	}
 	
 	/**
-	 * Parses the file and returns the top component. Additionally a version 1.0 
-	 * vcalendar object will be converted to a version 2.0 object.
+	 * Converts a vcalendar 1.0 component to an icalendar 2.0 component.
 	 * 
-	 * @param string $data 
-	 * @return Sabre_VObject_Element 
+	 * @param Sabre_VObject_Component $vobject 
 	 */
-	public static function read($data) {
-		$vobject = parent::read($data);		
-		self::convertVCalendarToICalendar($vobject);
-		return $vobject;
+	public static function convertVCard30toVCard21(Sabre_VObject_Component $vobject){
+		
+		$qpProperies=array('NOTE','FN','N');
+		
+		if($vobject->version=='3.0'){
+			$vobject->version='2.1';
+			foreach($qpProperies as $propName){
+				self::_quotedPrintableEncode($vobject, $propName);
+			}
+		}	
 	}
+	
+//	/**
+//	 * Parses the file and returns the top component. Additionally a version 1.0 
+//	 * vcalendar object will be converted to a version 2.0 object.
+//	 * 
+//	 * @param string $data 
+//	 * @return Sabre_VObject_Element 
+//	 */
+//	public static function read($data) {
+//		$vobject = parent::read($data);		
+//		self::convertVCalendarToICalendar($vobject);
+//		return $vobject;
+//	}
 	
 }
