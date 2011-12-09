@@ -3,12 +3,12 @@
 class GO_Sites_Controller_User extends GO_Sites_Controller_Site{
 	
 	protected function allowGuests() {
-		return array('register','login','logout');
+		return array('register','login','logout','recover');
 	}
 	
 	
 	public function actionRegister($params){
-		GO::$ignoreAclPermissions=true; // To tell to the usermodel that no permissions are required to save a new user.
+		GO::$ignoreAclPermissions=true; // To tell no permissions are required to save a new user.
 
 		$model = new GO_Base_Model_User();
 		$model->setAttributes($params);
@@ -22,6 +22,11 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site{
 			}				
 			GO_Base_Html_Error::setError('Your form has errors');
 		}
+	}
+	
+	public function actionRecover($params){
+		
+		
 	}
 	
 	public function actionLogin($params){

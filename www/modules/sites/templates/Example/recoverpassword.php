@@ -5,45 +5,35 @@ require('header.php');
 						<div class="subkader-small-bottom">
 							<div class="subkader-small-center">						
 
-								<h1>Are you here for the first time?</h1>								
-								<a href="<?php echo self::pageUrl("register"); ?>">Click here to register once</a>
-								<h1>Login if you are already registered</h1>
+								<h1>Recover password</h1>								
+								<p>Enter your e-mail address. If a valid user account with that e-mail address is found, your username and a new password will be sent to your e-mail address.</p>
 								
-									<?php 
-									GO_Base_Html_Form::renderBegin('sites/user/login','login',true);
-									//echo GO_Base_Html_Error::getError();
+								<?php 
+									GO_Base_Html_Form::renderBegin('sites/user/recover','recover',true);
 									
 									GO_Base_Html_Input::render(array(
 										"required" => true,
-										"label" => "Username",
-										"name" => "username",
+										"label" => "Email",
+										"name" => "email",
 										"value" => ''
 									));
-						
-									GO_Base_Html_Input::render(array(
-										"required" => true,
-										"label" => "Password",
-										"name" => "password",
-										"value" => ''
-									));
-									
+								
 									GO_Base_Html_Submit::render(array(
 										"label" => "",
 										"name" => "submit",
 										"value" => 'OK',
 										"renderContainer" => false
 									));
-									
+
 									GO_Base_Html_Reset::render(array(
 										"label" => "",
-										"name" => "reset",
-										"value" => 'Reset',
+										"name" => "cancel",
+										"value" => 'Cancel',
 										"renderContainer" => false
 									));
-									
+
 									GO_Base_Html_Form::renderEnd();
-									?>
-									<a href="<?php echo self::pageUrl("lostpass"); ?>">Lost password?</a>
+								?>
 							</div>
 						</div>
 
