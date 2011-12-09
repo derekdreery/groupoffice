@@ -12,7 +12,7 @@ class GO_Base_Html_Input {
 	 * Set error message for a form input field
 	 */
 	public static function setError($inputName, $errorMsg){
-		self::$errors[$inputName]=$errorMsg;
+		GO::session()->values['formErrors'][$inputName]=$errorMsg;
 	}
 	
 	/**
@@ -21,7 +21,7 @@ class GO_Base_Html_Input {
 	 * @return boolean 
 	 */
 	public static function hasErrors(){
-		return isset(self::$errors);
+		return isset(GO::session()->values['formErrors']);
 	}
 	
 	public static function checkRequired(){
@@ -42,13 +42,13 @@ class GO_Base_Html_Input {
 	 * @return string 
 	 */
 	public static function getErrorMsg($inputName){
-		return isset(self::$errors[$inputName]) ? self::$errors[$inputName] : false;
+		return isset(GO::session()->values['formErrors'][$inputName]) ? GO::session()->values['formErrors'][$inputName] : false;
 	}
 	
 	public static function getError($inputName){
 		$errorMsg = self::getErrorMsg($inputName);
 		if($errorMsg){
-			return '<div class="error">'.$errorMsg.'</div>';
+			return '<div class="errortext">'.$errorMsg.'</div>';
 		}else
 		{
 			return '';
@@ -69,7 +69,7 @@ class GO_Base_Html_Input {
 		
 		if(!empty($this->attributes['label'])){
 			if(!empty($this->attributes['required'])){
-				$this->attributes['label'] .= '*';
+				$this->attributes['label'] .= ' <span class="required">*</span>';
 			}		
 		}
 		
@@ -119,9 +119,9 @@ class GO_Base_Html_Input {
 		return true;
 	}
 	
-	protected function renderInput(){
+	protected function renderNormalInput(){
+		
 		$html = '<input class="'.$this->attributes['class'].'" type="'.$this->attributes['type'].'" name="'.$this->attributes['name'].'" value="'.$this->attributes['value'].'" '.$this->attributes['extra'];
-
 
 		if (!empty($this->attributes['empty_text'])) {
 			$html .= ' onfocus="if(this.value==\'' . $this->attributes['empty_text'] . '\'){this.value=\'\';';
@@ -147,32 +147,103 @@ class GO_Base_Html_Input {
 		
 		return $html;
 	}
-
-	public function getHtml() {
+	
+	protected function renderMultiInput(){
+		
+		if(!empty($this->attributes['options']) && (!isset($this->attributes['options'][0]) || !is_array($this->attributes['options'][0]))){
+			$oldoptions = $this->attributes['options'];
+			$this->attributes['options'] = array();
+			foreach($oldoptions as $value=>$label){
+				
+				$option = array();
+				$option['label']= $label;
+				$option['value']= $value;
+				
+				$this->attributes['options'][] = $option;
+			}
+		}
+		
+		
 		$html = '';
 		
-		$this->attributes['label'] .= self::getError($this->attributes['name']);
+		if($this->attributes['type'] == 'select')
+			$html .= '<select class="'.$this->attributes['class'].'" name="'.$this->attributes['name'].'" value="'.$option['value'].'">';
 		
-		if(!empty($this->attributes['label'])){			
-			$html .= '<label>';
-			if($this->attributes['type']!='checkbox')
-				$html .= $this->attributes['label'].':';
-		}
-		
-		
-		
-		$html .= $this->renderInput();
-		
-		if(!empty($this->attributes['label'])){
-			if($this->attributes['type']=='checkbox')
-				$html .= $this->attributes['label'];
+		foreach($this->attributes['options'] as $option){
+			if($this->attributes['type'] == 'select'){
+				
+				$html .= '<option';
+				
+				$html .= ' value="'.$option['value'].'"';
+				if($this->attributes['value']==$option['value'])
+					$html .= ' selected';
 			
-			$html .= '</label>';
-		}
+				$html .='>';
+				$html .= $option['label'];
+				$html .= '</option>';
+			} else {
+				$html .= '<label>';
+				$html .= '<input class="'.$this->attributes['class'].'" type="'.$this->attributes['type'].'" name="'.$this->attributes['name'].'" value="'.$option['value'].'" ';
+				if(!empty($option['extra']))
+					$html .= $option['extra'];
 
-		if ($this->attributes['required'] && ($this->attributes['required'] == 'true' || $this->attributes['required'] == '1')) {
-			$html .= '<input type="hidden" name="required[]" value="' . $this->attributes['name'] . '" />';
+				if(!empty($this->attributes['value'])){
+					if($this->attributes['value']==$option['value']){
+						if($this->attributes['type'] == 'checkbox' || $this->attributes['type'] == 'radio')
+							$html .= 'checked';						
+					}
+				}
+
+				$html .= '/>';
+				$html .= $option['label'];
+				$html .= '</label>';
+			}
 		}
+		
+		if($this->attributes['type'] == 'select')
+			$html .= '</select>';
+		
+		return $html;
+	}
+
+	public function getHtml() {
+		
+		// Check for errors
+		if(self::getErrorMsg($this->attributes['name']))
+			$this->attributes['class'].=' error';
+		
+		
+		// The opening div for the row
+		$html = '<div class="formrow';
+		if(!empty($this->attributes['rowClass']))
+			$html .= ' '.$this->attributes['rowClass'];
+		$html .= '">';
+		
+		// The label div
+		if(!empty($this->attributes['label']))
+			$html .= '<div class="formlabel">'.$this->attributes['label'].' :</div>';
+		
+		// Check for multiple input fields or not
+		if(!empty($this->attributes['options'])){
+			$html .= $this->renderMultiInput();
+		} else {
+			$html .= $this->renderNormalInput();
+		}
+		
+		// The error div is created when there is an error.
+			$html .= $this->getError($this->attributes['name']);
+
+		if($this->attributes['required'])
+			$html .= '<input type="hidden" name="required[]" value="'.$this->attributes['name'].'" />';
+			
+		$html .= '<div style="clear:both;"></div>';
+		
+		// Close the row div
+		$html .= '</div>';
+		
+		
+		unset(GO::session()->values['formErrors'][$this->attributes['name']]);
+
 		return $html;
 	}
 
