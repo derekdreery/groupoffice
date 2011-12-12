@@ -138,13 +138,18 @@ class GO_Base_VObject_Reader extends Sabre_VObject_Reader{
 	private static function _quotedPrintableEncode($vobject, $propName){
 		if(isset($vobject->$propName) && $vobject->$propName!=''){			
 			$oldValue = (string) $vobject->$propName;
-			$value =  str_replace(array("\r","\n"), '', quoted_printable_encode($oldValue));
+			$value =  str_replace(array("\r","=\n","\n"), '', quoted_printable_encode($oldValue));
+			$value=str_replace('=0A','=0D=0A',$value); //crlf newlines. Didn't work with \r\n before quoted_printable_encode somehow.
 			if($value != $oldValue){
 				$newProp = new GO_Base_VObject_VCalendar_Property($propName, $value);							
 				$vobject->$propName->add('ENCODING','QUOTED-PRINTABLE');
 				foreach($vobject->$propName->parameters as $param){
 					$newProp->add($param);
 				}
+				
+				if(!isset($newProp->charset))
+					$newProp->add('charset','UTF-8');
+				
 				unset($vobject->$propName);
 				$vobject->add($newProp);
 			}
