@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `ab_contacts` (
   `last_name` varchar(50) NOT NULL,
   `initials` varchar(10) DEFAULT NULL,
   `title` varchar(50) DEFAULT NULL,
-	`aftername_title` varchar(50) NOT NULL DEFAULT '',
+	`suffix` varchar(50) NOT NULL DEFAULT '',
   `sex` enum('M','F') NOT NULL DEFAULT 'M',
   `birthday` date DEFAULT NULL,
   `email` varchar(100) NOT NULL,

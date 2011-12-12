@@ -49,8 +49,8 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 											'{title} '+
 										'</tpl>'+
 										'{name}'+
-										'<tpl if="!GO.util.empty(aftername_title)">'+
-											', {aftername_title} '+
+										'<tpl if="!GO.util.empty(suffix)">'+
+											', {suffix} '+
 										'</tpl>'+
 										'<br />'+
 										'<tpl if="!GO.util.empty(google_maps_link)">'+

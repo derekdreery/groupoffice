@@ -55,8 +55,8 @@ GO.addressbook.ContactProfilePanel = function(config)
 		
 		this.formAfternameTitle = new Ext.form.TextField(
 		{
-			fieldLabel: GO.lang.strTitleAfterName,
-			name: 'aftername_title'
+			fieldLabel: GO.lang.strSuffix,
+			name: 'suffix'
 		});
 	
 		this.formInitials = new Ext.form.TextField(
