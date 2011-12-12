@@ -234,7 +234,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 					$attributes['last_name'] = $nameArr[0];
 					$attributes['first_name'] = $nameArr[1];
 					$attributes['middle_name'] = !empty($nameArr[2]) ? $nameArr[2] : '' ;
-					$attributes['aftername_title'] = !empty($nameArr[4]) ? $nameArr[4] : '' ;
+					$attributes['suffix'] = !empty($nameArr[4]) ? $nameArr[4] : '' ;
 					break;
 				case 'ORG':
 					$companyAttributes['name'] =  null;
@@ -374,7 +374,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 		$e=new Sabre_VObject_Component('vcard');
 		
 		$e->add('VERSION','3.0');
-		$e->add('N',$this->last_name.";".$this->first_name.";".$this->middle_name.';;'.$this->aftername_title);
+		$e->add('N',$this->last_name.";".$this->first_name.";".$this->middle_name.';;'.$this->suffix);
 		$e->add('FN',$this->name);
 		
 		if (!empty($this->email)) {

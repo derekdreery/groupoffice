@@ -178,3 +178,5 @@ $updates["201112091545"][]="ALTER TABLE `ab_contacts` CHANGE `work_phone` `work_
 $updates["201112091545"][]="ALTER TABLE `ab_contacts` CHANGE `fax` `fax` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201112091545"][]="ALTER TABLE `ab_contacts` CHANGE `work_fax` `work_fax` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 $updates["201112091545"][]="ALTER TABLE `ab_contacts` CHANGE `cellular` `cellular` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+
+$updates["201112121545"][]="ALTER TABLE `ab_contacts` CHANGE `aftername_title` `suffix` varchar(50) NOT NULL DEFAULT '';";
