@@ -112,10 +112,24 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		echo '<h1>Not found</h1>';
 	}
 	
-	public static function pageUrl($path){
-		return GO::url('sites/site/index', array('p'=>$path));
+	/**
+	 * Generate a URL to a page.
+	 * 
+	 * @param string $path
+	 * @param array $params
+	 * @param boolean $relative
+	 * @return string 
+	 */
+	public static function pageUrl($path, $params=array(), $relative=true){
+		$params['p']=$path;
+		return GO::url('sites/site/index', $params, $relative);
 	}
 	
+	/**
+	 * Redirect to a page.
+	 * 
+	 * @param string $path 
+	 */
 	protected function pageRedirect($path = '') {
 		header('Location: ' .self::pageUrl($path));
 		exit();
