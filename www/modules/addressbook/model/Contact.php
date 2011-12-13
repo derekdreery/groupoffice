@@ -157,6 +157,12 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 			unset($this->photoFile);
 		}
 		
+		if(!$wasNew && $this->isModified('addressbook_id') && ($company=$this->company())){
+			//make sure company is in the same addressbook.
+			$company->addressbook_id=$this->addressbook_id;
+			$company->save();
+		}
+		
 		return parent::afterSave($wasNew);
 	}
 	

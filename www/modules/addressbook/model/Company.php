@@ -87,5 +87,27 @@ class GO_Addressbook_Model_Company extends GO_Base_Db_ActiveRecord {
 		$new_path .= '/'.$new_folder_name;
 		return $new_path;
 	}
+	
+	protected function afterSave($wasNew) {
+		
+		if(!$wasNew && $this->isModified('addressbook_id')){
+			
+			//make sure contacts and companies are in the same addressbook.
+			$whereCriteria = GO_Base_Db_FindCriteria::newInstance()
+							->addCondition('company_id', $this->id)
+							->addCondition('addressbook_id', $this->addressbook_id,'!=');
+			
+			$findParams = GO_Base_Db_FindParams::newInstance()
+							->ignoreAcl()
+							->criteria($whereCriteria);			
+			
+			$stmt = GO_Addressbook_Model_Contact::model()->find($findParams);			
+			while($contact = $stmt->fetch()){
+				$contact->addressbook_id=$this->addressbook_id;
+				$contact->save();
+			}
+		}		
+		return parent::afterSave($wasNew);
+	}
 
 }
