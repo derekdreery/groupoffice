@@ -1102,14 +1102,16 @@ GO.grid.CalendarGrid = Ext.extend(Ext.Panel, {
 				}
 			}, this);
 			
-			event.on('contextmenu', function(e, eventEl)
-			{
-				var event = this.elementToEvent(this.clickedEventId);
-				this.showContextMenu(e, event);
-			}, this);
+			
 
 			if(!eventData.read_only)
 			{
+				event.on('contextmenu', function(e, eventEl)
+				{
+					var event = this.elementToEvent(this.clickedEventId);
+					this.showContextMenu(e, event);
+				}, this);
+
 				event.on('mouseup', function(){
 					this.eventMouseUp=true;
 				}, this);

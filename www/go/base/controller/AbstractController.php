@@ -333,7 +333,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @param string $path 
 	 */
 	protected function redirect($path='', $params=array()){		
-		header('Location: ' .$this->url($path, $params));
+		header('Location: ' .GO::url($path, $params));
 		exit();
 	}
 	

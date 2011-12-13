@@ -4,14 +4,9 @@ remove cal_events_declined
 invitation.php
 alarm import
 
-
-SyncML
-
 Project report custom fields and advanced search panel...!?
 
 E-mail files functie
-
-Adresboek import / export
 
 e-mail mvc
 ldapauth, imapauth

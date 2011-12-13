@@ -6,7 +6,7 @@ GO.calendar.ContextMenu = function(config){
 	}
 
 	config.items=[
-	{
+	this.actionInfo = new Ext.menu.Item({
 		iconCls: 'btn-properties',
 		text:GO.calendar.lang.showInfo,
 		cls: 'x-btn-text-icon',
@@ -15,7 +15,7 @@ GO.calendar.ContextMenu = function(config){
 		{
 			this.showEventInfoDialog();
 		}
-	},new Ext.menu.Separator(),
+	}),new Ext.menu.Separator(),
 	this.actionCopy = new Ext.menu.Item({
 		iconCls: 'btn-copy',
 		text: GO.lang.copy,
@@ -111,19 +111,23 @@ Ext.extend(GO.calendar.ContextMenu, Ext.menu.Menu, {
 	setEvent : function(event, view_id)
 	{
 		this.event = event;
-		
+
 		this.view_id = (view_id) ? view_id : 0;
 
 		this.actionCopy.setDisabled(this.event.read_only);
 		this.actionCut.setDisabled(this.event.read_only);
 		this.actionDelete.setDisabled(this.event.read_only);
+		
+		this.actionInfo.setDisabled(!event.event_id);
+		this.actionAddTimeRegistration.setDisabled(!event.event_id);
+		
 
 		if (GO.email)
 			this.actionCreateMail.setDisabled(event.num_participants==0);
 
 		this.newMenuItem.setLinkConfig({
-			type:1,
-			id:event.event_id
+			model_name:"GO_Calendar_Model_Event",
+			model_id:event.event_id
 		});
 	},
 	
