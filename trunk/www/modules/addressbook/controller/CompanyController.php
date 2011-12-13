@@ -74,16 +74,6 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 		return parent::afterLoad($response, $model, $params);
 	}
 	
-	protected function beforeSubmit(&$response, &$model, &$params) {
-		if (!empty($model->id) && $model->id != $params['addressbook_id']) {
-			$this->actionChangeAddressbook(array(
-				'items'	=> '["'.$model->id.'"]',
-				'book_id' => $params['addressbook_id']
-			));
-		}
-		parent::beforeSubmit($response, $model, $params);
-	}
-	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		$stmt = GO_Addressbook_Model_Addresslist::model()->find();
 		while($addresslist = $stmt->fetch()){
@@ -193,16 +183,6 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 			if ($failed_id) {
 				$response['failedToMove'][] = $failed_id;
 				$response['success'] = false;
-			}
-			
-			foreach ($model->contacts as $contact) {
-				$failed_id = !(
-											$contact->setAttribute('addressbook_id',$params['book_id'])
-											&& $contact->save()) ? $id : null;
-				if ($failed_id) {
-					$response['failedToMove'][] = $failed_id;
-					$response['success'] = false;
-				}
 			}
 		}
 		

@@ -38,10 +38,11 @@ class GO_Addressbook_Controller_Contact extends GO_Base_Controller_AbstractModel
 			{
 				$company = new GO_Addressbook_Model_Company();
 				$company->name=$params['company_id'];
-				$company->addressbook_id=$params['addressbook_id'];
-				if(!$company->save())
-					throw new GO_Base_Exception_Save("Company ".$company->name);
+				$company->addressbook_id=$params['addressbook_id'];			
+				$company->save();
 			}
+			
+			
 			$model->company_id=$company->id;
 			unset($params['company_id']);
 			
