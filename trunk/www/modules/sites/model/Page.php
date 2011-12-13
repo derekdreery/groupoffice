@@ -58,7 +58,7 @@ class GO_Sites_Model_Page extends GO_Base_Db_ActiveRecord {
 		
 		$params['p']=$this->path;
 		
-		return GO::url($route.'/index', $params, $relative);
+		return GO::url($route.'/'.$this->controller_action, $params, $relative);
 		
 		//return call_user_func_array(array($this->controller,'pageUrl'), array($this->path));
 	}
