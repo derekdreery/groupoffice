@@ -58,7 +58,25 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 	 * @param GO_Base_Model_User $user
 	 * @return GO_Base_Model_AbstractUserDefaultModel 
 	 */
-	public function getDefault(GO_Base_Model_User $user) {
+	public function getDefault(GO_Base_Model_User $user) {		
+		
+		$settingsModelName = $this->settingsModelName();
+		if ($settingsModelName) {
+			
+			$settingsModel = GO::getModel($settingsModelName)->findByPk($user->id);
+			if(!$settingsModel){
+				$settingsModel = new $settingsModelName;
+				$settingsModel->user_id=$user->id;
+			}else
+			{
+				$pk = $settingsModel->{$this->settingsPkAttribute()};
+				$defaultModel = $this->findByPk($pk);
+				if($defaultModel)
+					return $defaultModel;
+			}
+		}
+		
+		
 		$defaultModel = $this->findSingleByAttribute('user_id', $user->id);
 		if (!$defaultModel) {
 			$className =$this->className();
@@ -73,15 +91,7 @@ abstract class GO_Base_Model_AbstractUserDefaultModel extends GO_Base_Db_ActiveR
 			$defaultModel->save();
 		}
 
-		$settingsModelName = $this->settingsModelName();
 		if ($settingsModelName) {
-			
-			$settingsModel = GO::getModel($settingsModelName)->findByPk($user->id);
-			if(!$settingsModel){
-				$settingsModel = new $settingsModelName;
-				$settingsModel->user_id=$user->id;
-			}
-			
 			$settingsModel->{$this->settingsPkAttribute()} = $defaultModel->id;
 			$settingsModel->save();
 		}
