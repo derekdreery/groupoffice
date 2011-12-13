@@ -74,7 +74,7 @@ require('header.php');
 									));
 								?>
 								<p>Only enter the following field if you don't live in the Netherlands and you have a valid European Union VAT number.</p>
-								<?php
+								<?php								
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"label" => "EU VAT No.:",
@@ -83,24 +83,9 @@ require('header.php');
 									));
 								?>
 								<h1>Selected products</h1>
-								<table class="cart">
-									<?php
-									$cart = new GO_Webshop_Util_Cart();
-									$cart = $cart->getCart();
-
-									foreach ($cart['products'] as $p) {
-										$language = $p['product']->getLanguage();
-										?>
-										<tr>
-											<td><?php echo $p['amount']; ?></td>
-											<td><?php echo $language->name; ?></td>
-											<td align="right">€&nbsp;<?php echo $p['product']->list_price*$p['amount']; ?></td>
-										</tr>
-										<?php
-									}
-									?>
-									<tr><td colspan="3" class="minicart_total" style="text-align:right;font-weight:bold;">Total: € <?php echo number_format($cart['subtotal']); ?></td></tr>
-								</table>
+								<?php $cart = new GO_Webshop_Util_Cart(); ?>
+								
+								<?php echo $cart->getCartTable(false);?>						
 								<?php
 									GO_Base_Html_Checkbox::render(array(
 										"required" => true,
