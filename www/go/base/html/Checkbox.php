@@ -2,9 +2,12 @@
 
 class GO_Base_Html_Checkbox extends GO_Base_Html_Input {
 
-	public static function render($attributes) {
+	public static function render($attributes,$echo=true) {
 		$i = new self($attributes);
-		echo $i->getHtml();
+		if($echo)
+			echo $i->getHtml();
+		else
+			return $i->getHtml();
 	}
 	
 	protected function init() {

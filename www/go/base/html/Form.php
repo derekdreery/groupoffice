@@ -10,18 +10,28 @@ class GO_Base_Html_Form {
 //		}
 //	}
 	
-	public static function renderBegin($targetRoute=false,$formName='form',$showErrors=false){
-		echo '<form method="post" name="'.$formName.'" >';
-		echo '<input type="hidden" name="formRoute" value="'.$targetRoute.'" />';
+	public static function getHtmlBegin($targetRoute=false,$formName='form',$showErrors=false){
+		$html = '<form method="post" name="'.$formName.'" >';
+		$html .= '<input type="hidden" name="formRoute" value="'.$targetRoute.'" />';
 		if($showErrors){
 			$error = GO_Base_Html_Error::getError();
-			echo $error;
+			$html .= $error;
 		}
+		return $html;
+	}
+	
+	public static function renderBegin($targetRoute=false,$formName='form',$showErrors=false){
+		echo self::getHtmlBegin($targetRoute,$formName,$showErrors);
 	}
 	
 	public static function renderEnd(){
-		echo '<div style="clear:both;"></div>';
-		echo '</form>';
+		echo self::getHtmlEnd();
+	}
+	
+	public static function getHtmlEnd(){
+		$html = '<div style="clear:both;"></div>';
+		$html .= '</form>';
+		return $html;
 	}
 	
 //	
