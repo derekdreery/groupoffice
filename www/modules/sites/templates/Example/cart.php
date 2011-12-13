@@ -12,7 +12,7 @@ require('header.php');
 								<?php if(!$cart->hasProducts()):?>	
 									<p>There are no products in your shopping cart</p>
 								<?php else : ?>
-									<?php GO_Base_Html_Form::renderBegin('sites/user/recover','cart',true); ?>
+									<?php GO_Base_Html_Form::renderBegin('webshop/cart/updatePrices','cart',true); ?>
 									<table class="cart">
 										<tr>
 										<th>Amount</th><th>Name</th><th>Price</th>
@@ -36,15 +36,15 @@ require('header.php');
 												?>
 											</td>
 											<td><?php echo $language->name; ?></td>
-											<td align="left">€&nbsp;<?php echo $p['product']->list_price; ?></td>
+											<td align="left">€&nbsp;<?php echo $p['product']->list_price*$p['amount']; ?></td>
 										</tr>
 										<?php endforeach;?>
 								<?php	endif; ?>
-									<tr><td colspan="3" class="minicart_total" style="text-align:right;font-weight:bold;">Total: € <?php echo number_format($cart['subtotal']); ?> <a target="_blank" href="http://finance.yahoo.com/currency/convert?amt=199&amp;from=EUR&amp;to=USD&amp;submit=Convert">(Convert currency)</a></td></tr>
+									<tr><td colspan="3" class="minicart_total" style="text-align:right;font-weight:bold;">Total: € <?php echo number_format($cart['subtotal']); ?> <a target="_blank" href="http://finance.yahoo.com/currency/convert?amt=<?php echo $cart['subtotal']; ?>&amp;from=EUR&amp;to=USD&amp;submit=Convert">(Convert currency)</a></td></tr>
 									</table>
 								<div onmouseout="this.className='button-green';" onmouseover="this.className='button-green-hover';" class="button-green">
 								<div class="button-green-right">
-									<a class="button-green-center" onclick="document.cart.submit();" href="#"> 
+									<a class="button-green-center" onclick="document.forms['cart'].submit();" href="#"> 
 									Update amounts
 									</a>
 								</div>

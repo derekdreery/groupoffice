@@ -7,73 +7,79 @@ require('header.php');
 								
 								<h1>Order confirmation</h1>
 								<p>Please check if the data below is correct.</p>
-								<?php 
-								GO_Base_Html_Form::renderBegin('sites/user/recover','confirm',true); 
+								<?php 								
+									$contact = GO::user()->createContact();
+									$company = GO_Addressbook_Model_Company::model()->findByPk($contact->id);
+									
+									if(empty($company))
+										$company = new GO_Addressbook_Model_Company();
 								
-								GO_Base_Html_Input::render(array(
-									"required" => true,
-									"label" => "Name",
-									"name" => "name",
-									"value" => ""
-								));
-								
-								GO_Base_Html_Input::render(array(
+									GO_Base_Html_Form::renderBegin('webshop/cart/checkout','confirm',true); 
+
+									GO_Base_Html_Input::render(array(
 										"required" => true,
-										"label" => "Email",
-										"name" => "email",
-										"value" => ""
+										"label" => "Name",
+										"name" => "name",
+										"value" => $company->name
 									));
-								
-								GO_Base_Html_Input::render(array(
+
+									GO_Base_Html_Input::render(array(
+											"required" => true,
+											"label" => "Email",
+											"name" => "email",
+											"value" => $company->email
+										));
+
+									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Address",
 										"name" => "address",
-										"value" => ''
+										"value" => $company->address
 									));
-									
+
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Number of house",
 										"name" => "address_nr",
-										"value" => ''
+										"value" => $company->address
 									));
-									
+
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "ZIP/Postal code",
 										"name" => "zip",
-										"value" => ''
+										"value" => $company->address_no
 									));
-									
+
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "City",
 										"name" => "city",
-										"value" => ''
+										"value" => $company->city
 									));
-									
+
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "State/Province",
 										"name" => "state",
-										"value" => ''
+										"value" => $company->state
 									));
-									
+
 									GO_Base_Html_Select::render(array(
 										"required" => true,
 										'label' => 'Country',
-										'value' => 'NL',
+										'value' => $company->country,
 										'name' => "country",
 										'options' => GO::language()->getCountries()
-									));								
+									));
 								?>
 								<p>Only enter the following field if you don't live in the Netherlands and you have a valid European Union VAT number.</p>
 								<?php
 									GO_Base_Html_Input::render(array(
 										"required" => false,
 										"label" => "EU VAT No.:",
-										"name" => "vat",
-										"value" => ''
+										"name" => "vat_no",
+										"value" => $company->vat_no
 									));
 								?>
 								<h1>Selected products</h1>
@@ -88,7 +94,7 @@ require('header.php');
 										<tr>
 											<td><?php echo $p['amount']; ?></td>
 											<td><?php echo $language->name; ?></td>
-											<td align="right">€&nbsp;<?php echo $p['product']->list_price; ?></td>
+											<td align="right">€&nbsp;<?php echo $p['product']->list_price*$p['amount']; ?></td>
 										</tr>
 										<?php
 									}
@@ -100,13 +106,14 @@ require('header.php');
 										"required" => true,
 										"label" => 'I agree to the <a href="http://www.group-office.com/data/License+agreement" target="_blank">license terms and conditions</a>',
 										"name" => "agreement",
-										"value" => ''
+										"value" => '1',
+										"labelStyle" => "width:240px;"
 									));
 									
 									GO_Base_Html_Submit::render(array(
 										"label" => "",
 										"name" => "submit",
-										"value" => 'Agree',
+										"value" => 'Confirm',
 										"renderContainer" => false
 									));
 									
@@ -130,13 +137,6 @@ require('header.php');
 					<div class="subkader-right">
 						<h1>Secure login</h1>
 						<p>SSL secured connection verified by Equifax Secure Inc. </p>
-						<div class="button-green-side" onmouseover="this.className='button-green-side-hover';"  onmouseout="this.className='button-green-side';">
-							<div class="button-green-side-right">
-								<a href="<?php echo self::pageUrl('continuecheckout'); ?>" class="button-green-side-center"> 
-									Continue checkout
-								</a>
-							</div>
-						</div>
 					</div>
 
 <?php

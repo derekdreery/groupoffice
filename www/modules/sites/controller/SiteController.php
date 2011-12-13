@@ -103,8 +103,10 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	private function _handleForm($params){
 		if(isset($params['formRoute'])){
 			$params['r']=$params['formRoute'];
-			$router = new GO_Base_Router();
-			$router->runController($params);
+			if(GO_Base_Html_Input::checkRequired()){
+				$router = new GO_Base_Router();
+				$router->runController($params);
+			}
 		}
 	}
 	
