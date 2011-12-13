@@ -21,14 +21,23 @@ class GO_Base_Html_Input {
 	 * @return boolean 
 	 */
 	public static function hasErrors(){
-		return isset(GO::session()->values['formErrors']);
+		return !empty(GO::session()->values['formErrors']);
 	}
 	
 	public static function checkRequired(){
+		
+		
 		if(isset($_POST['required'])){
 			foreach($_POST['required'] as $inputName){
-				if(empty($_POST[$inputName])){
-					self::setError($inputName, 'This field is required');
+				if ($pos = strpos($inputName, '[')) {
+					$key1 = substr($inputName, 0, $pos);
+					$key2 = substr($inputName, $pos + 1, -1);
+					if(empty($_POST[$key1][$key2]))
+						self::setError($inputName, 'This field is required');
+				}else
+				{
+					if(empty($_POST[$inputName]))
+						self::setError($inputName, 'This field is required');
 				}
 			}
 		}
@@ -101,8 +110,8 @@ class GO_Base_Html_Input {
 			}
 		}
 		
-		if($this->isPosted && empty($this->attributes['value']) && $this->attributes['required'])
-			self::setError ($this->attributes['name'], "This field is required");
+//		if($this->isPosted && empty($this->attributes['value']) && $this->attributes['required'])
+//			self::setError ($this->attributes['name'], "This field is required");
 		
 
 		if(empty($this->attributes['value']) && !empty($this->attributes['empty_text'])){
@@ -224,8 +233,15 @@ class GO_Base_Html_Input {
 			$html .= '">';
 		}
 		// The label div
-		if(!empty($this->attributes['label']))
-			$html .= '<div class="formlabel">'.$this->attributes['label'].' :</div>';
+		if(!empty($this->attributes['label'])){
+			$html .= '<div class="formlabel';
+			if(!empty($this->attributes['labelClass']))
+				$html .= ' '.$this->attributes['labelClass'];
+			$html .= '"';
+			if(!empty($this->attributes['labelStyle']))
+				$html .= 'style="'.$this->attributes['labelStyle'].'"';
+			$html .= '>'.$this->attributes['label'].' :</div>';
+		}
 		
 		// Check for multiple input fields or not
 		if(!empty($this->attributes['options'])){
