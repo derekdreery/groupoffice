@@ -514,14 +514,14 @@ try {
 
 			foreach($check_calendars as $calendar_id){
 				$calendar = $calendar_props[] = $cal->get_calendar($calendar_id);
+				$permission_levels[$calendar_id]=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
+				
 				if (!isset($response['permission_level']) || $response['permission_level']<GO_SECURITY::WRITE_PERMISSION) {
 
 					$response['comment']=$calendar['comment'];
 					$response['calendar_id']=$calendar['id'];
 					$response['calendar_name']=$calendar['name'];
-					$response['permission_level']=$GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_id']);
-
-					$permission_levels[$calendar_id]=$response['permission_level'];
+					$response['permission_level']=$permission_levels[$calendar_id];
 
 					if($response['permission_level']>1){
 						$response['write_permission']=true;
