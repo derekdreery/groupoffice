@@ -337,9 +337,20 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 		exit();
 	}
 	
-	
-	protected function url($path, $params=array(), $relative=true){
-		return GO::url($path, $params, $relative);
+	/**
+	 * Get the route to this controller. Eg.
+	 * 
+	 * route = addressbook/contact
+	 * 
+	 * @return string 
+	 */
+	public function getRoute(){
+		$arr = explode('_',get_class($this));
+				
+		if($arr[1]!='Core')
+			return strtolower($arr[1].'/'.$arr[3]);				
+		else 
+			return strtolower($arr[3]);				
 	}
 	
 	/**
