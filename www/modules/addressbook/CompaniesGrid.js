@@ -148,7 +148,7 @@ GO.addressbook.CompaniesGrid = function(config){
 	
 	if(GO.customfields)
 	{
-		GO.customfields.addColumns(3, fields);
+		GO.customfields.addColumns("GO_Addressbook_Model_Company", fields);
 	}
 	
 	config.store = new GO.data.JsonStore({
@@ -193,27 +193,6 @@ GO.addressbook.CompaniesGrid = function(config){
 };
 
 
-Ext.extend(GO.addressbook.CompaniesGrid, GO.grid.GridPanel, {
+Ext.extend(GO.addressbook.CompaniesGrid, GO.grid.GridPanel, {	
 	
-	loaded : false,
-	
-	
-	
-	afterRender : function()
-	{
-		GO.addressbook.CompaniesGrid.superclass.afterRender.call(this);
-		
-		if(this.isVisible())
-		{
-			this.onGridShow();
-		}
-	},
-	
-	onGridShow : function(){
-		if(!this.loaded && this.rendered)
-		{
-			this.store.load();
-			this.loaded=true;
-		}
-	}
 });

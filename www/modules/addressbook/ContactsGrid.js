@@ -174,9 +174,8 @@ GO.addressbook.ContactsGrid = function(config){
 	}
 	
 	if(GO.customfields)
-	{
-		GO.customfields.addColumns(2, fields);
-	}
+		GO.customfields.addColumns("GO_Addressbook_Model_Contact", fields);
+	
 	config.store = new GO.data.JsonStore({
 		url: GO.url('addressbook/contact/store'),
 		baseParams: {
@@ -212,30 +211,11 @@ GO.addressbook.ContactsGrid = function(config){
 	
 	config.enableDragDrop=true;
 	config.ddGroup='AddressBooksDD';
-	
+
 	GO.addressbook.ContactsGrid.superclass.constructor.call(this, config);
 };
 
 
 Ext.extend(GO.addressbook.ContactsGrid, GO.grid.GridPanel, {
-	
-	loaded : false,
-	
-	afterRender : function()
-	{
-		GO.addressbook.ContactsGrid.superclass.afterRender.call(this);
-		
-		if(this.isVisible())
-		{
-			this.onGridShow();
-		}
-	},
-	onGridShow : function()
-	{
-		if(!this.loaded && this.rendered)
-		{
-			this.store.load();
-			this.loaded=true;
-		}
-	}
+
 });
