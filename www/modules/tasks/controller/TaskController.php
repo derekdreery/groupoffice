@@ -114,7 +114,7 @@ class GO_Tasks_Controller_Task extends GO_Base_Controller_AbstractModelControlle
 		
 		if(isset($params['completed_task_id'])) {
 			$updateTask = GO_Tasks_Model_Task::model()->findByPk($params['completed_task_id']);
-			if(isset($params['checked']) && $params['checked'] == 1)
+			if(!empty($params['checked']))
 				$updateTask->setCompleted(true);
 			else
 				$updateTask->setCompleted(false);
