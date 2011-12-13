@@ -40,15 +40,15 @@ require('header.php');
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "Number of house",
-										"name" => "address_nr",
-										"value" => $company->address
+										"name" => "address_no",
+										"value" => $company->address_no
 									));
 
 									GO_Base_Html_Input::render(array(
 										"required" => true,
 										"label" => "ZIP/Postal code",
 										"name" => "zip",
-										"value" => $company->address_no
+										"value" => $company->zip
 									));
 
 									GO_Base_Html_Input::render(array(
