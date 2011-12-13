@@ -6,11 +6,17 @@ require('header.php');
 							<div class="subkader-small-center">				
 								
 								<h1>Select payment option</h1>
-								<h2>Credit card or iDeal.</h2>
-								<p>payment option description</p>
 								
-								<h2>Bank transfer</h2>
-								<p>payment option description</p>
+								<?php
+								$webshop = $this->getWebshop();
+								$providers = $webshop->getPaymentProviders();
+								
+								foreach($providers as $provider){
+									echo '<h2>'.$provider->name().'</h2><p>'.$provider->description().'</p>';
+									echo $provider->getPaymentLinkHtml($this->order);
+								}
+								
+								?>								
 								
 							</div>
 						</div>

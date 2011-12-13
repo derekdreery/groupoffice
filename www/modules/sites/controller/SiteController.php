@@ -61,8 +61,13 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	public function actionIndex($params){		
 		$this->renderPage($params['p'],$params);		
 	}
+	protected function beforeRenderPage($path, $params){
+		
+	}
 	
 	protected function renderPage($path, $params=array()){
+		
+		$this->beforeRenderPage($path, $params);
 		extract($params);
 		
 		//echo $path.':'.$this->site->id;
@@ -123,8 +128,11 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * @return string 
 	 */
 	public static function pageUrl($path, $params=array(), $relative=true){
-		$params['p']=$path;
-		return GO::url('sites/site/index', $params, $relative);
+		$params['p']=$path;	
+		
+		$page = GO_Sites_Model_Page::model()->findSingleByAttribute('path', $path);
+		
+		return $page->getUrl($params, $relative);
 	}
 	
 	/**
@@ -132,8 +140,8 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * 
 	 * @param string $path 
 	 */
-	protected function pageRedirect($path = '') {
-		header('Location: ' .self::pageUrl($path));
+	protected function pageRedirect($path = '', $params=array()) {
+		header('Location: ' .self::pageUrl($path, $params));
 		exit();
 	}
 	
@@ -143,6 +151,15 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	
 	protected function getNotification(){
 		
+	}
+	
+	/**
+	 * Get the webshop for this website if it has one.
+	 * 
+	 * @return GO_Webshop_Model_Webshop 
+	 */
+	protected function getWebshop(){
+		return GO_Webshop_Model_Webshop::model()->findSingleByAttribute('site_id',$this->site->id);
 	}
 	
 }
