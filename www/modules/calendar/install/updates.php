@@ -102,3 +102,4 @@ $updates["201111101938"][]="ALTER TABLE `cal_exceptions` ADD `exception_event_id
 
 $updates["201111101938"][]="ALTER TABLE `cal_events` ADD `owner_status` TINYINT NOT NULL DEFAULT '1'";
 $updates["201112061629"][]="ALTER TABLE `cal_events` CHANGE `recurrence_id` `recurrence_id` VARCHAR( 20 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
+$updates["201112121448"][]="ALTER TABLE `cal_events` ADD `is_organizer` BOOLEAN NOT NULL DEFAULT '1'";

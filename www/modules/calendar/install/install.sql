@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS `cal_events` (
   `exception_for_event_id` int(11) NOT NULL DEFAULT '0',
   `recurrence_id` varchar(20) NOT NULL DEFAULT '',
   `owner_status` tinyint(4) NOT NULL DEFAULT '1',
+	`is_organizer` BOOLEAN NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `start_time` (`start_time`),
   KEY `end_time` (`end_time`),
