@@ -39,29 +39,32 @@ if(GO::user() && isset($_SESSION['GO_SESSION']['after_login_url'])){
 
 
 //check if GO is installed
-//$installed=true;
-//if(!GO::config()->get_config_file() || empty(GO::config()->db_user)){			
-//	$installed=false;
-//}else
-//{
-//	$stmt = GO::getDbConnection()->query("SHOW TABLES");
-//	if(!$stmt->rowCount())
-//		$installed=false;
-//}
-//if(!$installed){
-//	header('Location: '.GO::config()->host.'install/');				
-//	exit();
-//}
-//
-////check for database upgrades
-//$mtime = GO::config()->get_setting('upgrade_mtime');
-//
-//if($mtime!=GO::config()->mtime)
-//{
-//	GO::infolog("Running system update");
-//	header('Location: '.GO::url('maintenance/upgrade'));
-//	exit();
-//}
+if(empty($_REQUEST['r']) && PHP_SAPI!='cli'){
+	$installed=true;
+	if(!GO::config()->get_config_file() || empty(GO::config()->db_user)){			
+		$installed=false;
+	}else
+	{
+		$stmt = GO::getDbConnection()->query("SHOW TABLES");
+		if(!$stmt->rowCount())
+			$installed=false;
+	}
+	if(!$installed){
+		header('Location: '.GO::config()->host.'install/');				
+		exit();
+	}
+
+	//check for database upgrades
+	$mtime = GO::config()->get_setting('upgrade_mtime');
+
+	if($mtime!=GO::config()->mtime)
+	{
+		GO::infolog("Running system update");
+		header('Location: '.GO::url('maintenance/upgrade'));
+		exit();
+	}
+}
+
 
 //run controller.
 $router = new GO_Base_Router();
