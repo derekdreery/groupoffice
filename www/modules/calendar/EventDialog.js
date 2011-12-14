@@ -1387,7 +1387,7 @@ Ext.extend(GO.calendar.EventDialog, Ext.util.Observable, {
 					{
 						var enabled_categories = record.customfields.enabled_categories;
 						var disable_categories = record.customfields.disable_categories;
-
+					
 						if (GO.customfields.types["GO_Calendar_Model_Calendar"]) {
 							for(var l=0; l<GO.customfields.types["GO_Calendar_Model_Calendar"].panels.length; l++)
 							{
