@@ -108,7 +108,8 @@ GO.grid.GridPanel =Ext.extend(Ext.grid.GridPanel, {
 				this.setTitle(this.store.reader.jsonData.title);
 		}, this);
 	
-		this.loadMask=true;
+		if(typeof(this.loadMask)=='undefined')
+			this.loadMask=true;
 	
 		if(!this.sm)
 			this.sm=this.selModel=new Ext.grid.RowSelectionModel();

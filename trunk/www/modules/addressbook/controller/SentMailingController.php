@@ -51,7 +51,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 				$mailing['alias_id'] = $params['alias_id'];
 				$mailing['subject'] = $params['subject'];
 				$mailing['addresslist_id'] = $params['addresslist_id'];
-				$mailing['message_path'] = GO::config()->file_storage_path . 'mailings/' . GO::user()->id . '_' . date('Ymd_Gis') . '.eml';
+				$mailing['message_path'] =  'mailings/' . GO::user()->id . '_' . date('Ymd_Gis') . '.eml';
 
 
 				// Set From address
@@ -72,16 +72,18 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 				} else {
 					$message->setBody($params['body']);
 				}
-
-				if (!is_dir(dirname($mailing['message_path'])))
-					mkdir(dirname($mailing['message_path']), 0755, true);
+				
+				$folder = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'mailings');
+				$folder->create();
 
 				// Write message MIME source to message path
-				file_put_contents($mailing['message_path'], $message->toString());
+				file_put_contents(GO::config()->file_storage_path.$mailing['message_path'], $message->toString());
 
 				$sentMailing = new GO_Addressbook_Model_SentMailing();
 				$sentMailing->setAttributes($mailing);
 				$sentMailing->save();				
+				
+				$this->_launchBatchSend($sentMailing->id);
 
 				$response['success'] = true;
 			} catch (Exception $e) {
@@ -137,7 +139,7 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		
 
 		//$addresslist = GO_Addressbook_Model_Addresslist::model()->findByPk($mailing->addresslist_id);
-		$mimeData = file_get_contents($mailing->message_path);
+		$mimeData = file_get_contents(GO::config()->file_storage_path .$mailing->message_path);
 		$message = GO_Base_Mail_Message::newInstance()
 						->loadMimeMessage($mimeData);
 
@@ -244,7 +246,10 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 
 		if (!empty($params['pause_mailing_id'])) {
 			$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($params['pause_mailing_id']);
-			$mailing->status = GO_Addressbook_Model_SentMailing::STATUS_PAUSED;
+			if($mailing->status==GO_Addressbook_Model_SentMailing::STATUS_RUNNING){
+				$mailing->status = GO_Addressbook_Model_SentMailing::STATUS_PAUSED;
+				$mailing->save();
+			}
 		}
 
 		if (!empty($params['start_mailing_id'])) {
@@ -259,6 +264,17 @@ class GO_Addressbook_Controller_SentMailing extends GO_Base_Controller_AbstractM
 		$record['addresslist'] = !empty($model->addresslist) ? $model->addresslist->name : '';
 		$record['user_name'] = !empty($model->user) ? $model->user->name : '';
 		return parent::formatStoreRecord($record, $model, $store);
+	}
+	
+	public function actionViewLog($params){
+		$mailing = GO_Addressbook_Model_SentMailing::model()->findByPk($params['mailing_id']);
+		
+		if($mailing->user_id != GO::user()->id && !GO::user()->isAdmin())
+			throw new GO_Base_Exception_AccessDenied();				
+		
+		$file = new GO_Base_Fs_File(GO::config()->file_storage_path.'log/mailings/'.$mailing->id.'.log');		
+		GO_Base_Util_Common::outputDownloadHeaders($file);
+		$file->output();
 	}
 
 }

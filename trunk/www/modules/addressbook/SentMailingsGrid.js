@@ -61,12 +61,10 @@ GO.addressbook.SentMailingsGrid = function(config){
 
 					break;
 				case 'ml-btn-view':
-					// TODO: Replace GO.linkHandlers[9] index with model name of table
-					// em_links, when that is created.
-					GO.linkHandlers[9].call(this, 0, {path:record.get('message_path')});
+					GO.linkHandlers["GO_Savemailas_Model_LinkedEmail"].call(this, 0, {action: "path", path:record.get('message_path')});
 					break;
 				case 'ml-btn-view-log':
-					document.location=GO.settings.modules.addressbook.url+'log_mailing.php?mailing_id='+record.id;
+					document.location=GO.url("addressbook/sentMailing/viewLog",{'mailing_id': record.id});//GO.settings.modules.addressbook.url+'log_mailing.php?mailing_id='+record.id;
 					break;
 			}
 		}
@@ -94,7 +92,10 @@ GO.addressbook.SentMailingsGrid = function(config){
 			dataIndex: 'ctime'
 		},		{
 			header: GO.addressbook.lang['status'], 
-			dataIndex: 'status'
+			dataIndex: 'status',
+			renderer:function(v){
+				return GO.addressbook.lang.mailingStatus[v];
+			}
 		},		{
 			header: GO.addressbook.lang.sent, 
 			dataIndex: 'sent',
@@ -123,7 +124,7 @@ GO.addressbook.SentMailingsGrid = function(config){
 		emptyText: GO.lang['strNoItems']		
 	}),
 	config.sm=new Ext.grid.RowSelectionModel();
-	config.loadMask=true;
+	config.loadMask=false;
 
 	
 	GO.addressbook.SentMailingsGrid.superclass.constructor.call(this, config);
@@ -134,9 +135,5 @@ Ext.extend(GO.addressbook.SentMailingsGrid, GO.grid.GridPanel,{
 	setMailingId : function(addresslist_id){
 		this.store.baseParams.addresslist_id=addresslist_id;
 		this.store.loaded=false;
-	},
-	afterRender : function(){
-		GO.addressbook.SentMailingsGrid.superclass.afterRender.call(this);
-		this.store.load();
 	}
 });
