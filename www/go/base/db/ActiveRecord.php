@@ -1287,16 +1287,18 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return GO_Base_Db_ActiveRecord 
 	 */
 	
-	public function findByPk($primaryKey, $findParams=false, $ignoreAcl=false){		
+	public function findByPk($primaryKey, $findParams=false, $ignoreAcl=false, $noCache=false){		
 		
 		//GO::debug($this->className()."::findByPk($primaryKey)");
 		if(empty($primaryKey))
 			return false;
 		
 		//Use cache so identical findByPk calls are only executed once per script request
-		$cachedModel =  GO::modelCache()->get($this->className(), $primaryKey);
-		if($cachedModel)
-			return $cachedModel;
+		if(!$noCache){
+			$cachedModel =  GO::modelCache()->get($this->className(), $primaryKey);
+			if($cachedModel)
+				return $cachedModel;
+		}
 		
 		$sql = "SELECT * FROM `".$this->tableName()."` WHERE ";
 		
@@ -2935,7 +2937,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			$keys = $linkModel->primaryKey();
 			
-			$foreignField = $keys[0]==$r['field'] ? $keys[1] : $keys[2];
+			$foreignField = $keys[0]==$r['field'] ? $keys[1] : $keys[0];
 			
 			$linkModel->$foreignField = $foreignPk;
 			
@@ -2992,7 +2994,10 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		$linkModel = GO::getModel($r['linkModel']);
 		$keys = $linkModel->primaryKey();	
-		$foreignField = $keys[0]==$r['field'] ? $keys[1] : $keys[2];
+		if(count($keys)!=2){
+			throw new Exception("Primary key of many many linkModel ".$r['linkModel']." must be an array of two fields");
+		}
+		$foreignField = $keys[0]==$r['field'] ? $keys[1] : $keys[0];
 		
 		$primaryKey = array($r['field']=>$this->pk, $foreignField=>$foreignPk);
 		

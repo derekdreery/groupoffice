@@ -1291,7 +1291,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			
 			// for mailings plugin
 			if (config.addresslist_id > 0) {
-				this.sendURL = GO.url("addressbook/addresslist/sendMailing");
+				this.sendURL = GO.url("addressbook/sentMailing/send");
 
 				this.toComboVisible = false;
 				this.showMenuButton.setDisabled(true);

@@ -67,7 +67,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	}
 	
 	/**
-	 * Return array with actions (in lowercase!) that may be accessed by a guest that is not logged in.	
+	 * Return array with actions (in lowercase and without "action" prefix!) that may be accessed by a guest that is not logged in.	
 	 * 
 	 * @return array
 	 */
@@ -76,7 +76,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	}
 	
 	/**
-	 * Return array with actions (in lowercase!) that may be accessed without the user having access to the module.
+	 * Return array with actions (in lowercase and without "action" prefix!) that may be accessed without the user having access to the module.
 	 * 
 	 * @return array
 	 */
@@ -187,7 +187,6 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * @return boolean boolean
 	 */
 	private function _checkPermission($action){
-		
 		if(!in_array($action, $this->allowGuests())){			
 			//check for logged in user
 			if(!GO::user())
@@ -230,7 +229,7 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	 * Runs a method of this controller. If $action is save then it will run
 	 * actionSave of your extended class.
 	 * 
-	 * @param string $action 
+	 * @param string $action Without "action" prefix.
 	 */
 	public function run($action='', $params){
 

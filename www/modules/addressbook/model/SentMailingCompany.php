@@ -12,7 +12,7 @@
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
  */
 
-class GO_Addressbook_Model_SendmailingContact extends GO_Base_Db_ActiveRecord {
+class GO_Addressbook_Model_SentMailingCompany extends GO_Base_Db_ActiveRecord {
 	
 	/**
 	 * Returns a static model of itself
@@ -26,15 +26,15 @@ class GO_Addressbook_Model_SendmailingContact extends GO_Base_Db_ActiveRecord {
 	}
 	
 	public function tableName(){
-		return 'ab_sendmailing_contacts';
+		return 'ab_sent_mailing_companies';
 	}
 	
 	public function primaryKey() {
-		return array('addresslist_id','contact_id');
+		return array('sent_mailing_id','company_id');
 	}
 	
 	public function relations() {
-	 return array();
+		return array();
 	}
 	
 }
