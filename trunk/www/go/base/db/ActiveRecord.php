@@ -625,7 +625,8 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if(!$this->aclField())
 			return -1;	
 		
-		if($this->isNew && !$this->joinAclField){
+		//if($this->isNew && !$this->joinAclField){
+		if(empty($this->{$this->aclField()}) && !$this->joinAclField){
 			//the new model has it's own ACL but it's not created yet.
 			//In this case we will check the module permissions.
 			$module = $this->getModule();
