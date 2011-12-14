@@ -3,6 +3,10 @@ require('header.php');
 
 if($_SERVER['REQUEST_METHOD']=="POST"){
 	
+	if(isset($_POST['upgrade'])){
+		redirect('upgrade.php');
+	}
+	
 	if($_POST['password1']!=$_POST['password2'])
 		GO_Base_Html_Input::setError ('password1', "The passwords didn't match");
 	
@@ -63,16 +67,28 @@ printHead();
 
 ?>
 <h1>Installation</h1>
-<p>
-<?php echo GO::config()->product_name; ?> successfully connected to your database!<br />
-Enter the administrator account details and click on 'Continue' to create the database for <?php echo GO::config()->product_name; ?>. This can take some time. Don't interrupt this process.
-</p>
+
 <?php
 $stmt = GO::getDbConnection()->query("SHOW TABLES");
-if($stmt->rowCount())
-	errorMessage ("Database is not empty. Please use an empty database.");
-else{
+if($stmt->rowCount()){
+	
+	if(!GO_Base_Db_Utils::tableExists('go_users')){
+		errorMessage("Your database is not empty and doesn't contain a valid ".GO::config()->product_name." database. Please use an empty database for a fresh install.");
+	}else
+	{
+		?>
+		<p><?php echo GO::config()->product_name; ?> successfully connected to your database!<br />
+		A previous version has been detected. Press continue to perform an upgrade.</p>
+		<input type="hidden" name="upgrade" value="1" />
+		<?php
+		continueButton();
+	}
+}else{
 	?>
+	<p>
+	<?php echo GO::config()->product_name; ?> successfully connected to your database!<br />
+	Enter the administrator account details and click on 'Continue' to create the database for <?php echo GO::config()->product_name; ?>. This can take some time. Don't interrupt this process.
+	</p>
 	<h2>Administrator</h2>
 	<?php
 	

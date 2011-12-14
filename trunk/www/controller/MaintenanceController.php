@@ -171,10 +171,43 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 		}
 	}
 	
+	private function _checkV3(){
+		
+		if(!GO_Base_Db_Utils::tableExists('go_model_types')){
+			
+			echo "Older version of Group-Office detected. Preparing database for 4.0 upgrade\n";
+		
+			$queries[]="TRUNCATE TABLE `go_state`";
+			$queries[]="delete from go_settings where name='version'";
+
+			$queries[]="ALTER TABLE `go_users` ADD `mute_reminder_sound` ENUM( '0', '1' ) NOT NULL AFTER `mute_sound` ,
+			ADD `mute_new_mail_sound` ENUM( '0', '1' ) NOT NULL AFTER `mute_reminder_sound`";
+
+			$queries[]="ALTER TABLE `go_users` ADD `show_smilies` ENUM( '0', '1' ) NOT NULL DEFAULT '1' AFTER `mute_new_mail_sound`";
+			$queries[]="ALTER TABLE `go_users` CHANGE `password` `password` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL";
+
+			foreach($queries as $query){
+				try {
+					GO::getDbConnection()->query($query);
+				} catch (PDOException $e) {
+					echo $e->getMessage() . "\n";
+				}
+			}
+			
+			echo "Done.\n";
+		}
+	}
+	
 	public function actionUpgrade($params) {
 		
 		//don't be strict in upgrade process
 		GO::getDbConnection()->query("SET sql_mode=''");
+		
+		if(php_sapi_name() != 'cli'){
+			echo '<pre>';
+		}
+		
+		$this->_checkV3();
 		
 		$logDir = new GO_Base_Fs_Folder(GO::config()->file_storage_path.'log/upgrade/');
 		$logDir->create();
@@ -195,9 +228,7 @@ class GO_Core_Controller_Maintenance extends GO_Base_Controller_AbstractControll
 			return $buffer;
 		}
 		
-		if(php_sapi_name() != 'cli'){
-			echo '<pre>';
-		}
+		
 		ob_start("ob_upgrade_log");
 		
 		echo "Removing cached javascripts...\n";

@@ -17,6 +17,7 @@ div, p, td{
 	font-family: Verdana, Arial, Sans-serif;
 	font-size:12px;
 	color: black;
+	line-height:18px;
 }
 
 
@@ -97,10 +98,15 @@ input, textarea, select, file{
 	display:block;
 	height:100px;
 }
-label{
-	margin-bottom:10px;
-	display:block;
-	line-height: 16px;
+
+.formrow{
+	height:30px;
+}
+
+.formlabel{
+	float:left;
+	width:250px;
+	margin-right:6px;
 }
 
 .radio{
@@ -115,14 +121,11 @@ label{
 
 }
 td{
-
 	vertical-align:top;
 }
-td.label{
-	padding-top:5px;
-}
 
-div.error{
+
+div.error, p.error{
 	border:1px solid red;
 	padding:8px;
 	background-color:#f1f1f1;
