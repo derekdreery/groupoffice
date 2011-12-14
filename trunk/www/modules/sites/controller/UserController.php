@@ -31,7 +31,7 @@ class GO_Sites_Controller_User extends GO_Sites_Controller_Site{
 	
 	public function actionLogin($params){
 		$user = GO::session()->login($params['username'], $params['password']);
-
+				
 		$response['success'] = $user != false;
 
 		if (empty($response['success'])) {

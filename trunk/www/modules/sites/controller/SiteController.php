@@ -59,6 +59,7 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 	 * This default action should be overrriden
 	 */
 	public function actionIndex($params){		
+		GO::$ignoreAclPermissions=true;
 		$this->renderPage($params['p'],$params);		
 	}
 	protected function beforeRenderPage($path, $params){
@@ -82,14 +83,14 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		GO::session()->values['sites']['lastPath']=$path;
 		
 		$this->page = GO_Sites_Model_Page::model()->findSingleByAttributes(array('site_id'=>$this->site->id, 'path'=>$path));
-		
-		$this->_checkAuth();
-		
-		$this->_handleForm($params);
-		
+			
 		if(!$this->page){
 			$this->notFound();
 		}else{
+			
+			$this->_checkAuth();
+		
+			$this->_handleForm($params);
 		
 			//var_dump($this->page);
 
@@ -132,6 +133,8 @@ class GO_Sites_Controller_Site extends GO_Base_Controller_AbstractController{
 		
 		$page = GO_Sites_Model_Page::model()->findSingleByAttribute('path', $path);
 		
+		if(!$page)
+			throw new Exception('NOT FOUND');
 		return $page->getUrl($params, $relative);
 	}
 	
