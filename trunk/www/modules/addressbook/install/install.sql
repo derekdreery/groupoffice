@@ -317,22 +317,22 @@ CREATE TABLE IF NOT EXISTS `ab_default_email_templates` (
 -- Tabelstructuur voor tabel `ab_sendmailing_companies`
 --
 
-DROP TABLE IF EXISTS `ab_sendmailing_companies`;
-CREATE TABLE IF NOT EXISTS `ml_sendmailing_companies` (
-  `addresslist_id` int(11) NOT NULL DEFAULT '0',
+DROP TABLE IF EXISTS `ab_sent_mailing_companies`;
+CREATE TABLE IF NOT EXISTS `ab_sent_mailing_companies` (
+  `sent_mailing_id` int(11) NOT NULL DEFAULT '0',
   `company_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`addresslist_id`,`company_id`)
+  PRIMARY KEY (`sent_mailing_id`,`company_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `ab_sendmailing_contacts`
+-- Tabelstructuur voor tabel `ab_sent_mailing_contacts`
 --
 
-DROP TABLE IF EXISTS `ab_sendmailing_contacts`;
-CREATE TABLE IF NOT EXISTS `ab_sendmailing_contacts` (
-  `addresslist_id` int(11) NOT NULL DEFAULT '0',
+DROP TABLE IF EXISTS `ab_sent_mailing_contacts`;
+CREATE TABLE IF NOT EXISTS `ab_sent_mailing_contacts` (
+  `sent_mailing_id` int(11) NOT NULL DEFAULT '0',
   `contact_id` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`addresslist_id`,`contact_id`)
+  PRIMARY KEY (`sent_mailing_id`,`contact_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

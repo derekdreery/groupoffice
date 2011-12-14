@@ -180,3 +180,9 @@ $updates["201112091545"][]="ALTER TABLE `ab_contacts` CHANGE `work_fax` `work_fa
 $updates["201112091545"][]="ALTER TABLE `ab_contacts` CHANGE `cellular` `cellular` VARCHAR( 30 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT ''";
 
 $updates["201112121545"][]="ALTER TABLE `ab_contacts` CHANGE `aftername_title` `suffix` varchar(50) NOT NULL DEFAULT '';";
+
+$updates["201112141253"][]="ALTER TABLE `ab_sendmailing_companies` CHANGE `addresslist_id` `sent_mailing_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates["201112141253"][]="RENAME TABLE `ab_sendmailing_companies` TO `ab_sent_mailing_companies` ;";
+
+$updates["201112141253"][]="ALTER TABLE `ab_sendmailing_contacts` CHANGE `addresslist_id` `sent_mailing_id` INT( 11 ) NOT NULL DEFAULT '0'";
+$updates["201112141253"][]="RENAME TABLE `ab_sendmailing_contacts` TO `ab_sent_mailing_contacts` ;";
