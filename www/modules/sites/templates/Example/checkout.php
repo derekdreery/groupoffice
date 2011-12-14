@@ -9,8 +9,8 @@ require('header.php');
 								<p>Please check if the data below is correct.</p>
 								<?php 								
 									$contact = GO::user()->createContact();
-									$company = GO_Addressbook_Model_Company::model()->findByPk($contact->id);
-									
+									$company = $contact->company();
+
 									if(empty($company))
 										$company = new GO_Addressbook_Model_Company();
 								
