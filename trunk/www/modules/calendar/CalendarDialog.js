@@ -192,11 +192,11 @@ GO.calendar.CalendarDialog = function(config)
 	items.push(this.readPermissionsTab);
 	items.push(this.importTab);
 
-	if(GO.customfields && GO.customfields.types["GO_Calendar_Model_Event"])
+	if(GO.customfields && GO.customfields.types["GO_Calendar_Model_Calendar"])
 	{
-		for(var i=0;i<GO.customfields.types["GO_Calendar_Model_Event"].panels.length;i++)
+		for(var i=0;i<GO.customfields.types["GO_Calendar_Model_Calendar"].panels.length;i++)
 		{
-			var panel = GO.customfields.types["GO_Calendar_Model_Event"].panels[i];
+			var panel = GO.customfields.types["GO_Calendar_Model_Calendar"].panels[i];
 			panel.autoScroll = true;
 			items.push(panel);
 		}

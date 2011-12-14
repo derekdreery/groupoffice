@@ -43,6 +43,11 @@ try {
 			$cal->get_views_json($response['views']);
 			$cal->get_calendars_json($response['calendars']);
 			$cal->get_calendars_json($response['resources'], true);
+			
+//			require_once('../../GO.php');
+//			$calCon=new GO_Calendar_Controller_Calendar();
+//			$response['resources']=$calCon->actionCalendarsWithGroup(array());
+
 			$cal->get_calendars_json($response['project_calendars'], false,true);
 
 			$response['categories']['results']=array();

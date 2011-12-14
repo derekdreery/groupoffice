@@ -53,7 +53,7 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 		
 		$findParams = $store->getDefaultParams($params)
 						->join(GO_Calendar_Model_Group::model()->tableName(), GO_Base_Db_FindCriteria::newInstance()->addCondition('group_id', 'g.id', '=', 't', true, true),'g')
-						->order(array('g.name','t.name'))
+						->order(array('g.name','t.name'))						
 						->select('t.*,g.name AS group_name')
 						->permissionLevel($params['permissionLevel']);
 		
@@ -84,14 +84,15 @@ class GO_Calendar_Controller_Calendar extends GO_Base_Controller_AbstractModelCo
 	
 	public function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 			
-		if(isset($params['tasklists']))
+		if(!empty($params['tasklists'])){
 			$visible_tasklists = json_decode($params['tasklists']);
 		
-		foreach($visible_tasklists as $vtsklst) {
-			if($vtsklst->visible)
-				$model->addManyMany('visible_tasklists', $vtsklst->id);
-			else
-				$model->removeManyMany ('visible_tasklists', $vtsklst->id);
+			foreach($visible_tasklists as $vtsklst) {
+				if($vtsklst->visible)
+					$model->addManyMany('visible_tasklists', $vtsklst->id);
+				else
+					$model->removeManyMany ('visible_tasklists', $vtsklst->id);
+			}
 		}
 		
 		return parent::afterSubmit($response, $model, $params, $modifiedAttributes);
