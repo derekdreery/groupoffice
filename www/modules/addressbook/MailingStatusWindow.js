@@ -9,6 +9,25 @@ GO.addressbook.MailingStatusWindow = function(config){
 	config.height=500;
 
 	config.layout='fit';
+	
+	config.listeners={
+		scope:this,
+		show:function(){
+			Ext.TaskMgr.start(this.refreshTask);
+		},
+		hide:function(){
+			Ext.TaskMgr.stop(this.refreshTask);
+		}
+	};
+	
+	this.refreshTask = {
+			run: function(){
+				this.sentMailingsGrid.store.load()
+			},
+			scope:this,
+			interval:5000
+		};
+	
 
 	config.items=this.sentMailingsGrid = new GO.addressbook.SentMailingsGrid();
 
@@ -36,4 +55,6 @@ GO.addressbook.MailingStatusWindow = function(config){
 	GO.addressbook.MailingStatusWindow.superclass.constructor.call(this, config);
 }
 
-Ext.extend(GO.addressbook.MailingStatusWindow, GO.Window);
+Ext.extend(GO.addressbook.MailingStatusWindow, GO.Window,{
+	refreshTask : false
+});
