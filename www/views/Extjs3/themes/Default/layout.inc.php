@@ -37,13 +37,12 @@ require($GLOBALS['GO_CONFIG']->root_path.'views/Extjs3/default_scripts.inc.php')
  * 
  * When $popup_groupoffice is set in /default_scripts.inc.php we need to display the login dialog and launch GO in a popup.
  */
-
-if($GLOBALS['GO_SECURITY']->logged_in() && trim($_SESSION['GO_SESSION']['name']) != '' && !isset($popup_groupoffice))
+if($GLOBALS['GO_SECURITY']->logged_in() && !isset($popup_groupoffice))
 {
 	?>
 	<div id="mainNorthPanel">
 		<div id="headerLeft">
-			<?php echo $lang['common']['loggedInAs'].' '.htmlspecialchars($_SESSION['GO_SESSION']['name']); ?>
+			<?php echo $lang['common']['loggedInAs'].' '.htmlspecialchars(GO::user()->name); ?>
 		</div>
 		<div id="headerRight">
 			
