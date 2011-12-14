@@ -3,6 +3,8 @@
 class GO_Base_Html_Input {
 	
 	public static $errors;
+	
+	public static $id=1;
 
 	protected $attributes;
 	
@@ -124,6 +126,11 @@ class GO_Base_Html_Input {
 			$this->attributes['type']='text';
 		}
 		
+		if(!isset($this->attributes['id'])){
+			self::$id++;
+			$this->attributes['id']='form_'.self::$id;
+		}
+		
 		$this->init();
 		
 	}
@@ -134,7 +141,7 @@ class GO_Base_Html_Input {
 	
 	protected function renderNormalInput(){
 		
-		$html = '<input class="'.$this->attributes['class'].'" type="'.$this->attributes['type'].'" name="'.$this->attributes['name'].'" value="'.$this->attributes['value'].'" '.$this->attributes['extra'];
+		$html = '<input id="'.$this->attributes['id'].'" class="'.$this->attributes['class'].'" type="'.$this->attributes['type'].'" name="'.$this->attributes['name'].'" value="'.$this->attributes['value'].'" '.$this->attributes['extra'];
 
 		if (!empty($this->attributes['empty_text'])) {
 			$html .= ' onfocus="if(this.value==\'' . $this->attributes['empty_text'] . '\'){this.value=\'\';';
@@ -243,7 +250,17 @@ class GO_Base_Html_Input {
 			$html .= '"';
 			if(!empty($this->attributes['labelStyle']))
 				$html .= 'style="'.$this->attributes['labelStyle'].'"';
-			$html .= '>'.$this->attributes['label'].' :</div>';
+			$html .= '>';
+			
+			if($this->attributes['type']=='checkbox')
+				$html .= '<label for="'.$this->attributes['id'].'">';
+			
+			$html .= $this->attributes['label'].' :';
+			
+			if($this->attributes['type']=='checkbox')
+				$html .= '</label>';
+			
+			$html .= '</div>';
 		}
 		
 		// Check for multiple input fields or not
