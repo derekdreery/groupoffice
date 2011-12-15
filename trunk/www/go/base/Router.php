@@ -56,7 +56,7 @@ class GO_Base_Router{
 				}
 			}else
 			{
-				$params=$_REQUEST;
+				$params=$_REQUEST;				
 			}
 		}
 		
