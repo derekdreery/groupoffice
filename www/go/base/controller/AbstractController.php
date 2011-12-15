@@ -261,6 +261,9 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 					GO::session()->values['firstRunDone'][$module->id]=true;
 				}
 			}
+			
+			//Unset some system parameters not intended for the controller action.
+			unset($params['security_token'], $params['r']);
 
 			$response =  $this->$methodName($params);
 
