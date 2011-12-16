@@ -28,10 +28,22 @@ GO.users.AccountPanel = function(config)
 	//config.cls='go-form-panel';
 	config.labelWidth=140;
 	
-	this.passwordField1 = new Ext.form.TextField({
+	this.passwordField1 = new Ext.form.TriggerField({
 		inputType: 'password', 
 		fieldLabel: GO.users.lang['cmdFormLabelPassword'], 
-		name: 'password'
+		name: 'password',
+		panel:this,
+		triggerConfig:{
+			tag: "img",
+			src: Ext.BLANK_IMAGE_URL,
+			cls: "x-form-trigger x-form-trigger-plus",
+			'ext:qtip':GO.users.lang.generatePassword
+		},
+		onTriggerClick:function(){
+			var pass = this.panel.randomPassword(6);
+			this.panel.passwordField1.setValue(pass);
+			this.panel.passwordField2.setValue(pass);
+		}
 		});
 	this.passwordField2 = new Ext.form.TextField({
 		inputType: 'password', 
@@ -91,7 +103,17 @@ GO.users.AccountPanel = function(config)
 
 
 Ext.extend(GO.users.AccountPanel, Ext.form.FieldSet,{
-	
+	randomPassword : function(length){
+		var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		var pass = "";
+		var i;
+		for(var x=0;x<length;x++)
+		{
+			i = Math.floor(Math.random() * 62);
+			pass += chars.charAt(i);
+		}
+		return pass;
+	},
 	setUserId : function(user_id)
 	{
 		this.invitationField.setDisabled(user_id>0);

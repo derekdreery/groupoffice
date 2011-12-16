@@ -1911,3 +1911,9 @@ body.ext-ie6 .x-superboxselect-item {margin: 2px 1px 2px 1px; line-height: 1.2em
 .x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-left{background:transparent url(images/extjs/tabs/tabs-sprite.gif) no-repeat right -351px;}
 .x-tot2ivn-vr-tab-panel .x-tab-strip-top .x-tab-strip-inner{background:transparent url(images/extjs/tabs/tabs-sprite.gif) repeat-x 0 -201px;}*/
 
+
+
+
+.x-form-trigger-plus{
+	background-image:url(images/trigger-plus.gif) !important;
+}
