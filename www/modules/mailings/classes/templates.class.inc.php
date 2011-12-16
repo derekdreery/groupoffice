@@ -49,15 +49,16 @@ class templates extends db {
 		}
 
 		$sql .= " ORDER BY ml_templates.".$name." ".$dir;
+		
+		$this->query($sql);
+		$count = $this->num_rows();
 
 		if($offset > 0 ) {
 			$sql .= " LIMIT ".intval($start).",".intval($offset);
 			$this->query($sql);
-			return $this->num_rows();
-		}else {
-			$this->query($sql);
-			return $this->num_rows();
 		}
+		
+		return $count;
 	}
 
 	function get_templates_json(&$response){
