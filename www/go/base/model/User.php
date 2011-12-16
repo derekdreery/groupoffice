@@ -65,6 +65,13 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	public $passwordConfirm;
 	
 	/**
+	 * If this is set on a new user then it will be connected to this contact.
+	 * 
+	 * @var int 
+	 */
+	public $contact_id;
+	
+	/**
 	 * Returns a static model of itself
 	 * 
 	 * @param String $className
@@ -227,7 +234,7 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 		}
 		
 		GO::modules()->callModuleMethod('deleteUser', array(&$this));
-		
+
 		return parent::afterDelete();
 	}
 		
@@ -341,6 +348,16 @@ class GO_Base_Model_User extends GO_Base_Db_ActiveRecord {
 	 */
 	public function createContact(){
 		if (GO::modules()->isInstalled("addressbook")) {
+			
+			if(!empty($this->contact_id)){
+				$contact = GO_Addressbook_Model_Contact::model()->findByPk($this->contact_id);
+				if($contact){
+					$contact->go_user_id=$this->id;
+					$contact->save();
+					return $contact;
+				}
+			}
+			
 			$contact = $this->contact();
 			if (!$contact) {
 				$contact = new GO_Addressbook_Model_Contact();

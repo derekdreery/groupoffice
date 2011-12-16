@@ -288,3 +288,6 @@ $l['mailingStatus'][0]="Waiting to start";
 $l['mailingStatus'][1]="Running";
 $l['mailingStatus'][2]="Finished";
 $l['mailingStatus'][3]="Paused";
+
+$l['createUser']='Create user';
+$l['editUser']='Edit user';

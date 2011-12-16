@@ -42,6 +42,9 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 								'<tr>'+
 									'<td>ID:</td><td>{id}</td>'+
 								'</tr>'+
+								'<tr>'+
+									'<td>'+GO.addressbook.lang.addressbook+':</td><td>{addressbook_name}</td>'+
+								'</tr>'+
 								//NAME
 								'<tr>'+
 									'<td>' +
@@ -369,12 +372,61 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 			this.newMenuButton.menu.add(this.scheduleCallItem);
 		}
 	},
+	
+	createTopToolbar : function(){
+		var tbar = GO.addressbook.ContactReadPanel.superclass.createTopToolbar.call(this);
+		
+		if(GO.settings.modules.users.read_permission){
+			tbar.splice(tbar.length-2,0,this.createUserButton = new Ext.Button({
+					iconCls:'btn-save',
+					text:GO.addressbook.lang.createUser,
+					disabled:true,
+					handler:function(){
+						
+						if(!this.data.go_user_id){
+
+							var username =this.data.last_name;
+
+							var arr = this.data.email.split('@');
+							if(arr[0])
+								username = arr[0];
+
+							GO.users.showUserDialog(0, {
+								values:{
+									first_name:this.data.first_name,
+									middle_name:this.data.middle_name,
+									last_name:this.data.last_name,
+									email:this.data.email,
+									username:username
+								}
+							});		
+
+							GO.users.userDialog.formPanel.baseParams.contact_id=this.data.id;
+						}else
+						{
+							GO.users.showUserDialog(this.data.go_user_id);
+						}
+					},
+					scope:this
+				}));
+		}
+		return tbar;
+	},
+	
 	setData : function(data)
 	{
 		GO.addressbook.ContactReadPanel.superclass.setData.call(this, data);
 		
 		if(GO.documenttemplates && !GO.documenttemplates.ooTemplatesStore.loaded)
 			GO.documenttemplates.ooTemplatesStore.load();
+		
+		if(this.createUserButton){
+			this.createUserButton.setDisabled(false);
+			if(GO.util.empty(this.data.go_user_id))
+				this.createUserButton.setText(GO.addressbook.lang.createUser);
+			else
+				this.createUserButton.setText(GO.addressbook.lang.editUser);
+		}
 		
 		if(data.write_permission)
 		{
