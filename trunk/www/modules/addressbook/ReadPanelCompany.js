@@ -51,7 +51,9 @@ GO.addressbook.CompanyReadPanel = Ext.extend(GO.DisplayPanel,{
 					'<tpl if="this.isCompanySecondColumn(values) == false">'+
 						'<td>'+
 					'</tpl>'+
-					'<table><tr><td>ID:</td><td colspan="2">{id}</td></tr></table>'+
+					'<table><tr><td>ID:</td><td>{id}</td>'+
+								'<td>'+GO.addressbook.lang.addressbook+':</td><td>{addressbook_name}</td>'+
+								'</tr></table>'+
 					'</td>'+
 				'</tr>'+
 				'<tr>'+

@@ -104,7 +104,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * array(
 				'contacts' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'addressbook_id', 'delete'=>true //with this enabled the relation will be deleted along with the model),
 				'companies' => array('type'=>self::HAS_MANY, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'addressbook_id', 'delete'=>true),
-				'user' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'user_id')
+				'contact' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Contact', 'field'=>'contact_id')
 				'users' => array('type'=>self::MANY_MANY, 'model'=>'GO_Base_Model_User', 'field'=>'group_id', 'linkModel' => 'GO_Base_Model_UserGroup'), // The "field" property is the key of the current model that is defined in the linkModel
 		);
 	 * 
@@ -1374,10 +1374,26 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		return $r[$name];
 	}
+		
+	private function _checkRelations($r){
+		if(GO::config()->debug){
+			foreach($r as $name => $attr){
+				if(isset($this->columns[$name]))
+					throw new Exception("Relation $name conflicts with column attribute in ".$this->className());
+				
+				$method = 'get'.ucfirst($name);
+				if(method_exists($this, $method))
+					throw new Exception("Relation $name conflicts with getter function $method ".$this->className());
+				
+			}
+		}
+	}
 	
 	private function _getRelated($name, $extraFindParams=array()){
 		 //$name::findByPk($hit-s)
 		$r= $this->relations();
+		
+		$this->_checkRelations($r);
 		
 		if(!isset($r[$name]))
 			return false;
@@ -2271,7 +2287,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 
 				$stmt = $this->$name;
 				while($child = $stmt->fetch()){				
-						$child->delete();
+					$child->delete();
+				}
+			}  else {
+				if($attr['type']==self::HAS_ONE){
+					//set the foreign field to 0. Because it doesn't exist anymore.
+					$model = $this->$name;
+					if($model){
+						$model->{$attr['field']}=0;
+						$model->save();
+					}
 				}
 			}
 			

@@ -29,9 +29,14 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 
 		//Join the contact that belongs to the user in the form response.
 		if(GO::modules()->isInstalled('addressbook')){
+			$contact=false;
 			if(!empty($model->id)){
 				$contact = $model->contact;
-			}else
+			}elseif($params['contact_id']){
+				$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['contact_id']);
+				$response['data']['contact_id']=$contact->id;
+			}
+			if(!$contact)
 			{
 				$contact = new GO_Addressbook_Model_Contact();
 			}

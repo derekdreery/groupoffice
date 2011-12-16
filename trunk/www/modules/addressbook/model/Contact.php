@@ -80,6 +80,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 
 	public function relations(){
             return array(
+								'goUser' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Base_Model_User', 'field'=>'go_user_id'),
                 'addressbook' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Addressbook', 'field'=>'addressbook_id'),
                 'company' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Addressbook_Model_Company', 'field'=>'company_id'),
 								'addresslists' => array('type'=>self::MANY_MANY, 'model'=>'GO_Addressbook_Model_Addresslist', 'field'=>'contact_id', 'linkModel' => 'GO_Addressbook_Model_AddresslistContact'),
@@ -137,7 +138,7 @@ class GO_Addressbook_Model_Contact extends GO_Base_Db_ActiveRecord {
 	
 	public function beforeDelete() {
 		
-		if($this->go_user_id>0)			
+		if($this->goUser()>0)			
 			throw new Exception("This contact belongs to a user account. Please delete this account first.");
 		
 		return parent::beforeDelete();

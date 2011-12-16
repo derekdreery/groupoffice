@@ -65,6 +65,8 @@
 		this.permissionsTab.setUserId(remoteModelId);
 		this.accountTab.setUserId(remoteModelId);
 		
+		this.formPanel.baseParams.contact_id=action.result.data.contact_id;
+		
 		if(this.serverclientFieldSet)
 		{
 			var visible = remoteModelId>0;

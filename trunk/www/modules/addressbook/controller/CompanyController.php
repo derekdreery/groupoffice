@@ -12,6 +12,8 @@ class GO_Addressbook_Controller_Company extends GO_Base_Controller_AbstractModel
 	
 	protected function afterDisplay(&$response, &$model, &$params) {
 				
+		$response['data']['addressbook_name']=$model->addressbook->name;
+		
 		$response['data']['google_maps_link']=GO_Base_Util_Common::googleMapsLink(
 						$model->address, $model->address_no,$model->city, $model->country);
 		
