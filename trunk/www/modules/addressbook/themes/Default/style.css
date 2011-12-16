@@ -185,3 +185,28 @@ td.table_header_links
 {
 	background-color: #f1f1f1;
 }
+
+
+.ml-btn-mailings{
+	background-image:url('images/16x16/new_mailing.png') !important;
+}
+
+
+.ml-template-default-spacer {
+	border-bottom:1px solid #D0D0D0 !important;
+	margin:10px 0px !important;
+}
+.ml-btn-pause{
+	background-image:url('images/16x16/pause.png') !important;
+}
+.ml-btn-play{
+	background-image:url('images/16x16/play.png') !important;
+}
+
+.ml-btn-view-log{
+	background-image:url('images/16x16/log.png') !important;
+}
+
+.ml-btn-view{
+	background-image:url('images/16x16/view.png') !important;
+}

@@ -399,8 +399,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 							$gotype = 'number';
 							break;
 						
+						case 'mediumtext':
+						case 'longtext':
 						case 'text':
 							$gotype = 'textarea';
+							break;
+						
+						case 'mediumblob':
+						case 'longblob':
+						case 'blob':
+							$gotype = 'blob';
 							break;
 						
 						case 'date':
@@ -786,6 +794,16 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $model;		
 	}
 	
+	private function _getDefaultFindSelectFields(){
+		foreach($this->columns as $name=>$attr){
+			GO::debug($name.': '.$attr['gotype']);
+			if($attr['gotype']!='blob' && $attr['gotype']!='textarea')
+				$fields[]=$name;
+		}
+		
+		return "`t`.`".implode('`, `t`.`', $fields)."`";
+	}
+	
 
 	/**
 	 * Find models
@@ -872,7 +890,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		
 		if(empty($params['fields'])){
-			$params['fields']='t.*';
+			$params['fields']=$this->_getDefaultFindSelectFields();
 			$fetchObject= true;
 		}else
 		{

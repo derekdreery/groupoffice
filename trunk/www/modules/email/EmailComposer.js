@@ -820,9 +820,9 @@ GO.email.EmailComposer = function(config) {
 
 	if (GO.mailings) {
 		this.templatesStore = new GO.data.JsonStore({
-			url : GO.settings.modules.mailings.url + 'json.php',
+			url : GO.url("addressbook/template/store"),
 			baseParams : {
-				'task' : 'authorized_templates'
+				'type':"0"
 			},
 			root : 'results',
 			totalProperty : 'total',

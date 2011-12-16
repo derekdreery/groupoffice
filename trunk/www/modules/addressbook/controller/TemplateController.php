@@ -19,6 +19,17 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 				'user_name'=>'$model->user->name'
 				);
 	}
+	
+	protected function getStoreParams($params) {
+		if(isset($params['type'])){
+			$findParams = GO_Base_Db_FindParams::newInstance();
+			
+			$findParams->getCriteria()->addCondition('type', $params['type']);
+			return $findParams;
+		}
+		
+		//return parent::getStoreParams($params);
+	}
 
 	protected function beforeSubmit(&$response, &$model, &$params) {
 		
