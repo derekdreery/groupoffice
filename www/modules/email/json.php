@@ -1319,7 +1319,7 @@ try {
 
 				if($response['data']) {
 					$response['data']['user_name']=$GO_USERS->get_user_realname($response['data']['user_id']);
-					$response['data']['mbroot'] = trim($response['data']['mbroot'],'.');
+					$response['data']['mbroot'] = trim($response['data']['mbroot'],'./');
 
 					try {
 						$server_response = $email->get_servermanager_mailbox_info($response['data']);
