@@ -245,7 +245,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		config = config || {};
 		
 		this.showConfig = config;
-    
+		
 		this.beforeLoad(remoteModelId, config);
 
 		//tmpfiles on the remoteModel ({name:'Name',tmp_file:/tmp/name.ext} will be attached)
@@ -269,6 +269,7 @@ GO.dialog.TabbedFormDialog = Ext.extend(GO.Window, {
 		
 		if(this.loadOnNewModel)
 		{
+			
 			this.formPanel.load({
 				params:config.loadParams,
 				url:GO.url(this.formControllerUrl+'/load'),

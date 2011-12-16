@@ -383,7 +383,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 					disabled:true,
 					handler:function(){
 						
-						if(!this.data.go_user_id){
+						if(GO.util.empty(this.data.go_user_id)){
 
 							var username =this.data.last_name;
 
@@ -392,6 +392,7 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 								username = arr[0];
 
 							GO.users.showUserDialog(0, {
+								loadParams:{contact_id: this.data.id},
 								values:{
 									first_name:this.data.first_name,
 									middle_name:this.data.middle_name,
@@ -401,7 +402,6 @@ GO.addressbook.ContactReadPanel = Ext.extend(GO.DisplayPanel,{
 								}
 							});		
 
-							GO.users.userDialog.formPanel.baseParams.contact_id=this.data.id;
 						}else
 						{
 							GO.users.showUserDialog(this.data.go_user_id);
