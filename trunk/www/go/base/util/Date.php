@@ -99,11 +99,12 @@ class GO_Base_Util_Date {
 
 
 	public static function format_long_date($time,$add_time=true){
-		global $lang;
-
-		$str  = $lang['common']['full_days'][date('w', $time)].' '.date('d', $time).' '.$lang['common']['months'][date('n', $time)].' ';
+		
+		$days = GO::t('full_days');
+		$months = GO::t('months');
+		$str  = $days[date('w', $time)].' '.date('d', $time).' '.$months[date('n', $time)].' ';
 		if ($add_time)
-			return $str.date('Y - '.$_SESSION['GO_SESSION']['time_format'], $time);
+			return $str.date('Y - '.GO::user()->time_format, $time);
 		else
 			return $str.date('Y', $time);
 	}

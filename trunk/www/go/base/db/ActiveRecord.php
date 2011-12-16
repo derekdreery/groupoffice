@@ -685,7 +685,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	/**
-	 * Finds a models by an attribute=>value array.
+	 * Finds models by an attribute=>value array.
 	 * 
 	 * @param array $attributes
 	 * @param GO_Base_Db_FindParams $findParams
@@ -1246,7 +1246,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	private function _appendPkSQL($sql, $primaryKey=false){
-		
+		GO::debug($this->columns);
 		if(!$primaryKey)
 			$primaryKey=$this->pk;
 					
@@ -1310,23 +1310,30 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		//GO::debug($sql);
 		$GLOBALS['query_count']++;
-		$result = $this->getDbConnection()->query($sql);
-		$result->model=$this;
-    $result->findParams=$findParams;
-  
-		$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
+		try{
+			$result = $this->getDbConnection()->query($sql);
+			$result->model=$this;
+			$result->findParams=$findParams;
+
+			$result->setFetchMode(PDO::FETCH_CLASS, $this->className(),array(false));
+
+			$models =  $result->fetchAll();
+			$model = isset($models[0]) ? $models[0] : false;
 		
-		$models =  $result->fetchAll();
-		$model = isset($models[0]) ? $models[0] : false;
+			//todo check read permissions
+			if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
+				throw new GO_Base_Exception_AccessDenied();
+
+			if($model)
+				GO::modelCache()->add($this->className(), $model);
+
+			return $model;
+		}
+		catch(Exception $e){
+			$msg = $e->getMessage()."\n\nFull SQL Query: ".$sql;			
 		
-    //todo check read permissions
-    if($model && !$ignoreAcl && !$model->checkPermissionLevel(GO_Base_Model_Acl::READ_PERMISSION))
-			throw new GO_Base_Exception_AccessDenied();
-		
-		if($model)
-			GO::modelCache()->add($this->className(), $model);
-		
-		return $model;
+			throw new Exception($msg);
+		}
 		
 		/**
 		 * Useful event for modules. For example custom fields can be loaded or a files folder.
@@ -2463,7 +2470,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			if(GO::config()->debug){
 				if(is_object($value) || is_array($value))
-					throw new Exception("Invalid attribute value for ".$name.". Type was: ".gettype($value));
+					throw new Exception($this->className()."::setAttribute : Invalid attribute value for ".$name.". Type was: ".gettype($value));
 			}
 			if((!isset($this->_attributes[$name]) || $this->_attributes[$name]!=$value) && !$this->isModified($name))
 			{
