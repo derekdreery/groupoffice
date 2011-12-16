@@ -113,9 +113,9 @@ class String {
 		if(empty($str))
 			return $str;
 		
-		
-		if(function_exists('mb_check_encoding') && mb_check_encoding($str,'UTF-8'))
-			return $str;
+//		Went wrong on some servers maybe php 5.2 related?
+//		if(function_exists('mb_check_encoding') && mb_check_encoding($str,'UTF-8'))
+//			return $str;
 		
 		
 		if($from_charset=='UTF-8'){
