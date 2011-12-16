@@ -1897,7 +1897,7 @@ GO.files.openFile = function(record, store,e)
 //				break;
 
 			case 'eml':
-				if(GO.mailings)
+				if(GO.savemailas)
 				{
 					GO.linkHandlers["GO_Savemailas_Model_LinkedEmail"].call(this, record.data.id, {
 						action:'file'
