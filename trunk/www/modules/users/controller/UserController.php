@@ -32,7 +32,7 @@ class GO_Users_Controller_User extends GO_Base_Controller_AbstractModelControlle
 			$contact=false;
 			if(!empty($model->id)){
 				$contact = $model->contact;
-			}elseif($params['contact_id']){
+			}elseif(!empty($params['contact_id'])){
 				$contact = GO_Addressbook_Model_Contact::model()->findByPk($params['contact_id']);
 				$response['data']['contact_id']=$contact->id;
 			}

@@ -113,3 +113,5 @@ $l['dashdmy']='Day-Month-Year';
 $l['slashmdy']='Month/Day/Year';
 $l['dotdmy']='Day.Month.Year';
 $l['slashdmy']='Day/Month/Year';
+
+$l['generatePassword']='Generate password';
