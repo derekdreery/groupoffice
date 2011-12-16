@@ -1,3 +1,6 @@
+16-12-2011 3.7.40
+- Bug with mail headers on some servers
+
 07-12-2011 3.7.39
 - Create mail folders was broken
 - Download of email attachments bug
