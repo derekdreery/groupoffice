@@ -213,8 +213,15 @@ class GO_Base_Data_ColumnModel {
 		if (isset($this->_formatRecordFunction)){
 			$formattedRecord = call_user_func($this->_formatRecordFunction, $formattedRecord, $model, $this);
 			
-			if(!$formattedRecord)
-				throw new Exception("Fatal error: ".$this->_formatRecordFunction." should return the record");
+			if(!$formattedRecord){
+				if(is_array($this->_formatRecordFunction)){
+					$str = $this->_formatRecordFunction[1];
+				}else
+				{
+					$str = $this->_formatRecordFunction;
+				}
+				throw new Exception("Fatal error: $str should return the record");
+			}
 		}
 
 		return $formattedRecord;

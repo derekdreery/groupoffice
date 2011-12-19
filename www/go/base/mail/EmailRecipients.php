@@ -7,7 +7,7 @@ class GO_Base_Mail_EmailRecipients{
 	 * 
 	 * @param string $emailRecipientList 
 	 */
-	public function __construct($emailRecipientList){
+	public function __construct($emailRecipientList=''){
 		$this->addString($emailRecipientList);
 	}
 	

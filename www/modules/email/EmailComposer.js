@@ -815,22 +815,18 @@ GO.email.EmailComposer = function(config) {
 		single:true
 	});
 
-	
-		
 
-	if (GO.mailings) {
-		this.templatesStore = new GO.data.JsonStore({
-			url : GO.url("addressbook/template/store"),
-			baseParams : {
-				'type':"0"
-			},
-			root : 'results',
-			totalProperty : 'total',
-			id : 'id',
-			fields : ['id', 'name', 'group', 'text','template_id','checked'],
-			remoteSort : true
-		});
-	}
+	this.templatesStore = new GO.data.JsonStore({
+		url : GO.url("addressbook/template/emailSelection"),
+		baseParams : {
+			'type':"0"
+		},
+		root : 'results',
+		totalProperty : 'total',
+		id : 'id',
+		fields : ['id', 'name', 'group', 'text','template_id','checked'],
+		remoteSort : true
+	});
 
 	var tbar = [this.sendButton = new Ext.Button({
 		text : GO.email.lang.send,
@@ -1139,7 +1135,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	show : function(config) {
 
 		//TODO enable after testing
-		//Ext.getBody().mask(GO.lang.waitMsgLoad);
+		Ext.getBody().mask(GO.lang.waitMsgLoad);
 
 		delete this.link_config;
 
@@ -1147,46 +1143,41 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		
 		if (!this.rendered) {
 				
-			Ext.Ajax.request({
-				url: GO.settings.modules.email.url+'json.php',
+			GO.request({
+				url: 'core/multiRequest',
 				params:{
-					task:'init_composer'
+					requests:Ext.encode({
+						templates:{r:'addressbook/template/emailSelection'},
+						aliases:{r:'email/alias/store'}
+					})
 				},
-				callback: function(options, success, response)
+				success: function(options, response, result)
 				{
 
-					if(!success)
-					{
-						alert( GO.lang['strRequestError']);
-					}else
-					{
-						var jsonData = Ext.decode(response.responseText);
+					this.fromCombo.store.loadData(result.aliases);
 
+					if(this.templatesStore)
+						this.templatesStore.loadData(result.templates);              
+					
+					Ext.getBody().unmask();
 
-						this.fromCombo.store.loadData(jsonData.aliases);
-
-						if(this.templatesStore)
-							this.templatesStore.loadData(jsonData.templates);                                                
-
-						var records = this.fromCombo.store.getRange();
-						if (records.length) {
-							if (!config.account_id) {
-								this.showConfig.account_id = records[0].data.account_id;
-							}
-
-							this.render(Ext.getBody());
-							this.show(this.showConfig);
-
-							return;
-
-						} else {
-							Ext.getBody().unmask();
-							Ext.Msg.alert(GO.email.lang.noAccountTitle,
-								GO.email.lang.noAccount);
+					var records = this.fromCombo.store.getRange();
+					if (records.length) {
+						if (!config.account_id) {
+							this.showConfig.account_id = records[0].data.account_id;
 						}
 
+						this.render(Ext.getBody());
+						this.show(this.showConfig);
 
+						return;
+
+					} else {
+						Ext.getBody().unmask();
+						Ext.Msg.alert(GO.email.lang.noAccountTitle,
+							GO.email.lang.noAccount);
 					}
+					
 				},
 				scope:this
 			});
