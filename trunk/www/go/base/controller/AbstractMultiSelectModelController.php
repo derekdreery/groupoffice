@@ -85,8 +85,14 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		$availableModels = $model->find($findParams);
 		
 		$store->setStatement($availableModels);
+		
+		$this->formatColumns($store->getColumnModel());
 
 		return $store->getData();
+	}
+	
+	protected function formatColumns(GO_Base_Data_ColumnModel $cm){
+		
 	}
 	
 	/**
@@ -137,6 +143,8 @@ abstract class GO_Base_Controller_AbstractMultiSelectModelController extends GO_
 		$selectedModels = $model->find($findParams);
 		
 		$store->setStatement($selectedModels);
+		
+		$this->formatColumns($store->getColumnModel());
 
 		return $store->getData();
 	}
