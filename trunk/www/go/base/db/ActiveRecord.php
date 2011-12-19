@@ -1401,7 +1401,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				
 				$method = 'get'.ucfirst($name);
 				if(method_exists($this, $method))
-					throw new Exception("Relation $name conflicts with getter function $method ".$this->className());
+					throw new Exception("Relation $name conflicts with getter function $method in ".$this->className());
 				
 			}
 		}
