@@ -25,6 +25,7 @@ Ext.namespace('GO.mailFunctions');
 Ext.namespace('GO.menu');
 Ext.namespace('GO.base.email');
 Ext.namespace('GO.base.model');
+Ext.namespace('GO.base.model.multiselect');
 Ext.namespace("GO.base.form");
 
 //An object of functions that open a particular link.
