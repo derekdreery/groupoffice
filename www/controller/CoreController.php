@@ -399,7 +399,7 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 	 */
 	public function actionDownloadTempfile($params){		
 		$file = new GO_Base_Fs_File(GO::config()->tmpdir.$params['path']);
-		GO_Base_Util_Common::outputDownloadHeaders($file, false, !empty($params['cache']));
+		//GO_Base_Util_Common::outputDownloadHeaders($file, false, !empty($params['cache']));
 		$file->output();		
 	}
 	
@@ -476,6 +476,127 @@ class GO_Core_Controller_Core extends GO_Base_Controller_AbstractController {
 		}
 
 		return array('success' => true, 'files'=>$relativeFiles);
+	}
+	
+	
+	public function actionPlupload($params) {
+		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
+		//$tmpFolder->delete();
+		$tmpFolder->create();
+
+//		$files = GO_Base_Fs_File::moveUploadedFiles($_FILES['attachments'], $tmpFolder);
+//		GO::session()->values['files']['uploadqueue'] = array();
+//		foreach ($files as $file) {
+//			GO::session()->values['files']['uploadqueue'][] = $file->path();
+//		}
+
+		if(!isset(GO::session()->values['files']['uploadqueue']))
+			GO::session()->values['files']['uploadqueue'] = array();	
+
+		$targetDir=$tmpFolder->path();
+
+		// Get parameters
+		$chunk = isset($params["chunk"]) ? $params["chunk"] : 0;
+		$chunks = isset($params["chunks"]) ? $params["chunks"] : 0;
+		$fileName = isset($params["name"]) ? $params["name"] : '';
+
+// Clean the fileName for security reasons
+		$fileName = preg_replace('/[^\w\._]+/', '', $fileName);
+
+// Make sure the fileName is unique but only if chunking is disabled
+		if ($chunks < 2 && file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName)) {
+			$ext = strrpos($fileName, '.');
+			$fileName_a = substr($fileName, 0, $ext);
+			$fileName_b = substr($fileName, $ext);
+
+			$count = 1;
+			while (file_exists($targetDir . DIRECTORY_SEPARATOR . $fileName_a . '_' . $count . $fileName_b))
+				$count++;
+
+			$fileName = $fileName_a . '_' . $count . $fileName_b;
+		}
+
+
+// Look for the content type header
+		if (isset($_SERVER["HTTP_CONTENT_TYPE"]))
+			$contentType = $_SERVER["HTTP_CONTENT_TYPE"];
+
+		if (isset($_SERVER["CONTENT_TYPE"]))
+			$contentType = $_SERVER["CONTENT_TYPE"];
+		
+		if(!in_array($targetDir . DIRECTORY_SEPARATOR . $fileName, GO::session()->values['files']['uploadqueue']))
+				GO::session()->values['files']['uploadqueue'][]=$targetDir . DIRECTORY_SEPARATOR . $fileName;
+
+// Handle non multipart uploads older WebKit versions didn't support multipart in HTML5
+		if (strpos($contentType, "multipart") !== false) {
+			if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
+				// Open temp file
+				$out = fopen($targetDir . DIRECTORY_SEPARATOR . $fileName, $chunk == 0 ? "wb" : "ab");
+				if ($out) {
+					// Read binary input stream and append it to temp file
+					$in = fopen($_FILES['file']['tmp_name'], "rb");
+
+					if ($in) {
+						while ($buff = fread($in, 4096))
+							fwrite($out, $buff);
+					} else
+						die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+					fclose($in);
+					fclose($out);
+					@unlink($_FILES['file']['tmp_name']);
+				} else
+					die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
+			} else
+				die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
+		} else {
+			// Open temp file
+			$out = fopen($targetDir . DIRECTORY_SEPARATOR . $fileName, $chunk == 0 ? "wb" : "ab");
+			if ($out) {
+				// Read binary input stream and append it to temp file
+				$in = fopen("php://input", "rb");
+
+				if ($in) {
+					while ($buff = fread($in, 4096))
+						fwrite($out, $buff);
+				} else
+					die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+
+				fclose($in);
+				fclose($out);
+			} else
+				die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
+		}
+
+// Return JSON-RPC response
+		die('{"jsonrpc" : "2.0", "result": null, "success":true, "id" : "id"}');
+
+		//return array('success' => true);
+	}
+	
+	public function actionPluploads($params){
+		
+		$response['results']=array();
+		
+		if(!empty(GO::session()->values['files']['uploadqueue'])){
+			foreach(GO::session()->values['files']['uploadqueue'] as $path){
+				
+				$file = new GO_Base_Fs_File($path);
+				
+				$response['results'][]=array(
+						'tmp_file'=>$file->stripTempPath(),
+						'human_size'=>$file->humanSize(),
+						'extension'=>$file->extension(),
+						'size'=>$file->size(),
+						'type'=>$file->mimeType(),
+						'name'=>$file->name()
+				);
+			}
+		}
+		$response['total']=count($response['results']);
+		
+		unset(GO::session()->values['files']['uploadqueue']);
+		
+		return $response;
 	}
 
 }

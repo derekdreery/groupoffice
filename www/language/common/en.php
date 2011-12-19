@@ -483,3 +483,4 @@ $l["batchSelectionError"]="Nothing selected!";
 $l["label"]="Label";
 
 $l["validationErrorsFound"]="There are validation errors:";
+$l['attachFiles']='Attach files';

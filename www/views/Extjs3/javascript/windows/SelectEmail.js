@@ -244,7 +244,7 @@ GO.dialog.SelectEmail = function(config) {
 		if (GO.addressbook) {
 			this.mailingsGrid = new GO.grid.GridPanel({
 				id : 'select-mailings-grid',
-				title : GO.mailings.lang.cmdPanelMailings,
+				title : GO.addressbook.lang.cmdPanelMailings,
 				paging : false,
 				border : false,
 				store : GO.addressbook.readableAddresslistsStore,
@@ -261,8 +261,8 @@ GO.dialog.SelectEmail = function(config) {
 				sm : new Ext.grid.RowSelectionModel()
 			});
 			this.mailingsGrid.on('show', function() {
-				if(!GO.mailings.readableMailingsStore.loaded)
-					GO.mailings.readableMailingsStore.load();
+				if(!GO.addressbook.readableMailingsStore.loaded)
+					GO.addressbook.readableMailingsStore.load();
 			}, this);
 			this.mailingsGrid.on('rowdblclick', function(){
 				this.callHandler(true);

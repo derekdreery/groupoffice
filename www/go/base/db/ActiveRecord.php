@@ -796,7 +796,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	
 	private function _getDefaultFindSelectFields(){
 		foreach($this->columns as $name=>$attr){
-			GO::debug($name.': '.$attr['gotype']);
 			if($attr['gotype']!='blob' && $attr['gotype']!='textarea')
 				$fields[]=$name;
 		}
@@ -1264,7 +1263,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	}
 	
 	private function _appendPkSQL($sql, $primaryKey=false){
-		GO::debug($this->columns);
 		if(!$primaryKey)
 			$primaryKey=$this->pk;
 					

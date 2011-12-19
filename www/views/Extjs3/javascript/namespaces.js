@@ -27,6 +27,7 @@ Ext.namespace('GO.base.email');
 Ext.namespace('GO.base.model');
 Ext.namespace('GO.base.model.multiselect');
 Ext.namespace("GO.base.form");
+Ext.namespace("GO.base.upload");
 
 //An object of functions that open a particular link.
 //the index is the link type and the function gets the id as a parameter

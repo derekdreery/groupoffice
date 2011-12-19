@@ -190,7 +190,7 @@ GO.email.AddressbookDialog = function(config) {
 
 	if (GO.addressbook) {
 		this.mailingsGrid = new GO.grid.GridPanel({
-			title : GO.mailings.lang.cmdPanelMailings,
+			title : GO.addressbook.lang.cmdPanelMailings,
 			paging : false,
 			border : false,
 			store : GO.addressbook.readableAddresslistsStore,

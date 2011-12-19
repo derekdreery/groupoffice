@@ -8,6 +8,7 @@
  * 
  * @copyright Copyright Intermesh
  * @author Wilmar van Beusekom <wilmar@intermesh.nl>
+ * @author Merijn Schering <mschering@intermesh.nl>
  */
 
 // parameter attachments must be passed by reference
@@ -44,17 +45,18 @@ GO.base.email.EmailEditorPanel = function(config){
 	
 	config.htmlEditorConfig = config.htmlEditorConfig || {};
 			
-	this._initItems(config);
+	this.buildForm(config);
 	
 	config.layout='form';
 	config.border=false;
 	
 	config.listeners = {
+
 		render:function(){
 			var formPanel = this.findParentByType(Ext.form.FormPanel);
 			formPanel.form.on('actioncomplete', function(form, action){
 				if(action.type=='load'){
-					this._afterLoad(action);
+					this.afterLoad(action);
 				}
 			}, this);
 		},
@@ -63,6 +65,7 @@ GO.base.email.EmailEditorPanel = function(config){
 	
 	GO.base.email.EmailEditorPanel.superclass.constructor.call(this,config);
 	
+	this.addEvents({submit : true});
 };
 
 Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
@@ -70,76 +73,350 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 	// [ [url:"",tmp_file:"relative/path"]]
 	inlineAttachments : [],
 	
-	_afterLoad : function(action){
+	afterLoad : function(action){
 		this.setInlineAttachments(action.result.data.inlineAttachments);
+		this.setAttachments(action.result.data.attachments);		
 	},
 	
-	_initItems : function(config) {
+	buildForm : function(config) {
 
 		config.items = config.items || new Array();
-
+		
 		var htmlEditorConfig = Ext.apply({
 			hideLabel: true,
 			name: 'body',
 			defaultFont:'arial',
 			border: false,				
 			style: 'font: 12px Arial, Helvetica, sans-serif;',
-			anchor: '100% 100%'
+			anchor: '100% 100%',
+			defaultFont:'arial',
+			listeners:{
+				activate:function(){
+
+					var doc = this.htmlEditor.getDoc();				
+					if (Ext.isGecko){					
+						Ext.EventManager.on(doc, {
+							keypress: this.fireSubmit,
+							scope: this
+						});
+					}
+					if (Ext.isIE || Ext.isWebKit || Ext.isOpera) {
+						Ext.EventManager.on(doc, 'keydown', this.fireSubmit,
+							this);
+					}
+				},
+				scope:this
+			},
+
+		
+			onFirstFocus : function(){
+				this.activated = true;
+				this.disableItems(this.readOnly);
+				if(Ext.isGecko){ // prevent silly gecko errors
+					/*this.win.focus();
+            var s = this.win.getSelection();
+            if(!s.focusNode || s.focusNode.nodeType != 3){
+                var r = s.getRangeAt(0);
+                r.selectNodeContents(this.getEditorBody());
+                r.collapse(true);
+                this.deferFocus();
+            }*/
+					try{
+						this.execCmd('useCSS', true);
+						this.execCmd('styleWithCSS', false);
+					}catch(e){}
+				}
+				this.fireEvent('activate', this);
+			},
+			createToolbar : Ext.form.HtmlEditor.prototype.createToolbar.createSequence(function(editor){
+				this.tb.enableOverflow=true;
+			}),
+
+			getDocMarkup : function(){
+				var h = Ext.fly(this.iframe).getHeight() - this.iframePad * 2;
+				return String.format('<html><head><style type="text/css">body{border: 0; margin: 0; padding: {0}px; height: {1}px; cursor: text}body p{margin:0px;}</style></head><body></body></html>', this.iframePad, h);
+			},
+			fixKeys : function(){ // load time branching for fastest keydown performance
+				if(Ext.isIE){
+					return function(e){
+						var k = e.getKey(),
+						doc = this.getDoc(),
+						r;
+						if(k == e.TAB){
+							e.stopEvent();
+							r = doc.selection.createRange();
+							if(r){
+								r.collapse(true);
+								r.pasteHTML('&nbsp;&nbsp;&nbsp;&nbsp;');
+								this.deferFocus();
+							}
+						}else if(k == e.ENTER){
+					//                    r = doc.selection.createRange();
+					//                    if(r){
+					//                        var target = r.parentElement();
+					//                        if(!target || target.tagName.toLowerCase() != 'li'){
+					//                            e.stopEvent();
+					//                            r.pasteHTML('<br />');
+					//                            r.collapse(false);
+					//                            r.select();
+					//                        }
+					//                    }
+					}
+					};
+				}else if(Ext.isOpera){
+					return function(e){
+						var k = e.getKey();
+						if(k == e.TAB){
+							e.stopEvent();
+							this.win.focus();
+							this.execCmd('InsertHTML','&nbsp;&nbsp;&nbsp;&nbsp;');
+							this.deferFocus();
+						}
+					};
+				}else if(Ext.isWebKit){ 
+					return function(e){
+						var k = e.getKey();
+						if(k == e.TAB){
+							e.stopEvent();
+							this.execCmd('InsertText','\t');
+							this.deferFocus();
+						}else if(k == e.ENTER){
+							e.stopEvent();
+							var doc = this.getDoc();
+							if (doc.queryCommandState('insertorderedlist') ||
+								doc.queryCommandState('insertunorderedlist')) {
+								this.execCmd('InsertHTML', '</li><br /><li>');
+							} else {
+								this.execCmd('InsertHtml','<br />&nbsp;');
+								this.execCmd('delete');
+							}
+							this.deferFocus();
+						}
+					};
+				}
+			}(),
+			updateToolbar: function(){
+
+				/*
+				 * I override the default function here to increase performance.
+				 * ExtJS syncs value every 100ms while typing. This is slow with large
+				 * html documents. I manually call syncvalue when the message is sent
+				 * so it's certain the right content is submitted.
+				 */
+
+				if(this.readOnly){
+					return;
+				}
+
+				if(!this.activated){
+					this.onFirstFocus();
+					return;
+				}
+
+				var btns = this.tb.items.map,
+				doc = this.getDoc();
+
+				if(this.enableFont && !Ext.isSafari2){
+					var name = (doc.queryCommandValue('FontName')||this.defaultFont).toLowerCase();
+					if(name != this.fontSelect.dom.value){
+						this.fontSelect.dom.value = name;
+					}
+				}
+				if(this.enableFormat){
+					btns.bold.toggle(doc.queryCommandState('bold'));
+					btns.italic.toggle(doc.queryCommandState('italic'));
+					btns.underline.toggle(doc.queryCommandState('underline'));
+				}
+				if(this.enableAlignments){
+					btns.justifyleft.toggle(doc.queryCommandState('justifyleft'));
+					btns.justifycenter.toggle(doc.queryCommandState('justifycenter'));
+					btns.justifyright.toggle(doc.queryCommandState('justifyright'));
+				}
+				if(!Ext.isSafari2 && this.enableLists){
+					btns.insertorderedlist.toggle(doc.queryCommandState('insertorderedlist'));
+					btns.insertunorderedlist.toggle(doc.queryCommandState('insertunorderedlist'));
+				}
+
+				Ext.menu.MenuMgr.hideAll();
+
+				//This property is set in javascript/focus.js. When the mouse goes into
+				//the editor iframe it thinks it has lost the focus.
+				GO.hasFocus=true;
+
+			//this.syncValue();
+			}
 		}, config.htmlEditorConfig);
 
-		if (htmlEditorConfig.enableInlineAttachments || config.enableInlineAttachments) {
-			this.inlineAttachments = new Array();
-			this.hiddenInlineImagesField = new Ext.form.TextField({
-				hidden: true,
-				name: 'inlineAttachments'
-			});
-			config.items.push(this.inlineAttachments);
-			config.items.push(this.hiddenInlineImagesField);
-			
-			htmlEditorConfig.plugins = this._initHtmlEditorPlugins();
-		}
+	this.inlineAttachments = new Array();
+	this.hiddenInlineImagesField = new Ext.form.Hidden({
+		name: 'inlineAttachments'
+	});
 
-		this.htmlEditor = new Ext.form.HtmlEditor(htmlEditorConfig);
+	this.attachments = new Array();
+	this.hiddenAttachmentsField = new Ext.form.Hidden({
+		name: 'attachments'
+	});
 
-		config.items.push(this.htmlEditor);
+	config.items.push(this.hiddenAttachmentsField);
+	config.items.push(this.hiddenInlineImagesField);
 
-	},
-	
-	_initHtmlEditorPlugins : function(htmlEditorConfig) {
-		htmlEditorConfig = htmlEditorConfig || {};
+	htmlEditorConfig.plugins = this.initHtmlEditorPlugins();
+
+
+	this.htmlEditor = new Ext.form.HtmlEditor(htmlEditorConfig);
+
+	config.items.push(this.htmlEditor);
 		
-		if (typeof(this.inlineAttachments)!='undefined') {
-			// optional image attachment
-			this.imageAttachPlugin = new GO.plugins.HtmlEditorImageInsert();
-			this.imageAttachPlugin.on('insert', function(plugin, path, url) {
-				this.inlineAttachments.push({
-					tmp_file : path,
-					url : url
-				});
-				
-				this.setInlineAttachments(this.inlineAttachments);
-				
-	
-			}, this);
-
-			if (htmlEditorConfig.plugins)
-				htmlEditorConfig.plugins.push(this.imageAttachPlugin);
-			else
-				htmlEditorConfig.plugins = new Array(this.imageAttachPlugin);
-		} else {
-			htmlEditorConfig.plugins = htmlEditorConfig.plugins || new Array();
+	this.attachmentsView = new GO.base.email.EmailEditorAttachmentsView({
+		autoHeight:true,
+		listeners:{
+			attachmentschanged:function(av){
+				this.setEditorHeight();
+				var records = av.store.getRange();
+					
+				this.attachments=[];
+				for(var i=0;i<records.length;i++)
+					this.attachments.push({
+						tmp_file:records[i].data.tmp_file
+					});
+					
+				this.hiddenAttachmentsField.setValue(Ext.encode(this.attachments));
+			},
+			scope:this
 		}
-		return htmlEditorConfig.plugins;
-	},
-	
-	getHtmlEditor : function() {
-		return this.htmlEditor;
-	},
-	
-	setInlineAttachments : function(inlineAttachments){
-		this.inlineAttachments = inlineAttachments;
-		this.hiddenInlineImagesField.setValue(Ext.encode(this.inlineAttachments));
+	});
+	config.items.push(this.attachmentsView);
+
+},
+
+
+fireSubmit : function(e) {
+	if (e.ctrlKey && Ext.EventObject.ENTER == e.getKey()) {
+		//e.stopEvent();
+		this.fireEvent('submit',this);
 	}
+},
+	
+setEditorHeight : function() {
+
+	var height=0;
+		
+	var attachmentsEl = this.attachmentsView.getEl();
+	attachmentsEl.setHeight("auto");
+	var attachmentsElHeight = attachmentsEl.getHeight();
+		
+	if(attachmentsElHeight > 89)
+	{
+		attachmentsElHeight = 89;
+		this.attachmentsView.getEl().setHeight(attachmentsElHeight);
+	}			
+	height += attachmentsElHeight+attachmentsEl.getMargins('tb');
+		
+	var newAnchor = "100% -"+height;
+		
+	//reset anchor and delete cached anchorSpec
+	this.htmlEditor.anchor=newAnchor;
+	delete this.htmlEditor.anchorSpec;
+		
+	this.htmlEditor.syncSize();
+	this.ownerCt.doLayout();
+},
+	
+initHtmlEditorPlugins : function(htmlEditorConfig) {		
+	// optional image attachment
+	var imageInsertPlugin = new GO.plugins.HtmlEditorImageInsert();
+	imageInsertPlugin.on('insert', function(plugin, path, url) {
+		this.inlineAttachments.push({
+			tmp_file : path,
+			url : url
+		});				
+		this.setInlineAttachments(this.inlineAttachments);	
+	}, this);
+	
+	var spellcheckInsertPlugin = new GO.plugins.HtmlEditorSpellCheck(this);
+	var wordPastePlugin = new Ext.ux.form.HtmlEditor.Word();
+	//var dividePlugin = new Ext.ux.form.HtmlEditor.Divider();
+	//var tablePlugin = new Ext.ux.form.HtmlEditor.Table();
+	var hrPlugin = new Ext.ux.form.HtmlEditor.HR();
+	var ioDentPlugin = new Ext.ux.form.HtmlEditor.IndentOutdent();
+	var ssScriptPlugin = new Ext.ux.form.HtmlEditor.SubSuperScript();
+	var rmFormatPlugin = new Ext.ux.form.HtmlEditor.RemoveFormat();
+	
+	var plugins = [
+	imageInsertPlugin];
+	
+	if(GO.email.pspellSupport)
+		plugins.push(spellcheckInsertPlugin);
+
+	plugins.push(
+		wordPastePlugin,
+		hrPlugin,
+		ioDentPlugin,
+		rmFormatPlugin,
+		ssScriptPlugin
+		);
+	return plugins;
+},
+	
+getHtmlEditor : function() {
+	return this.htmlEditor;
+},
+	
+setInlineAttachments : function(inlineAttachments){
+	this.inlineAttachments = inlineAttachments;
+	this.hiddenInlineImagesField.setValue(Ext.encode(this.inlineAttachments));
+},
+	
+setAttachments : function(attachments){
+		
+	this.attachments=[];
+		
+	if(attachments){
+		for(var i=0;i<attachments.length;i++)
+			this.attachments.push({
+				tmp_file: attachments[i].tmp_file
+			});
+
+		this.attachmentsView.store.loadData({
+			results:attachments
+		});
+
+		this.hiddenAttachmentsField.setValue(Ext.encode(this.attachments));
+	}else
+	{
+		this.attachmentsView.store.loadData({
+			results:[]
+		});
+	}
+	this.hiddenAttachmentsField.setValue(Ext.encode(this.attachments));
+},	
+
+reset : function(){
+	this.setAttachments();
+	this.setInlineAttachments();
+},
+	
+isFormField:true,
+	
+getAttachmentsButton : function(){
+	return new GO.base.upload.PluploadButton({
+		text:GO.lang.attachFiles,
+		upload_config: {
+			listeners: {
+				scope:this,
+				uploadcomplete: function(uploadpanel, success, failures) {
+					if (success.length){
+						this.attachmentsView.afterUpload();
+						if(!failures.length){
+							uploadpanel.onDeleteAll();
+							uploadpanel.ownerCt.hide();
+						}
+					}
+				}
+			}
+		}
+	});
+}
 });
 
 

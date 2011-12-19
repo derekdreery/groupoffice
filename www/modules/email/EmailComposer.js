@@ -883,11 +883,11 @@ GO.email.EmailComposer = function(config) {
 		});
 	}
 
-	if(GO.mailings){
+	if(GO.addressbook){
 		tbar.push(this.templatesBtn = new Ext.Button({
 
 			iconCls:'ml-btn-mailings',
-			text:GO.mailings.lang.emailTemplate,
+			text:GO.addressbook.lang.emailTemplate,
 			menu:this.templatesMenu = new GO.menu.JsonMenu({
 				store:this.templatesStore,
 				listeners:{
@@ -2103,7 +2103,7 @@ GO.email.TemplatesList = function(config) {
 
 	Ext.apply(config);
 	var tpl = new Ext.XTemplate(
-		'<div id="template-0" class="go-item-wrap">'+GO.mailings.lang.noTemplate+'</div>',
+		'<div id="template-0" class="go-item-wrap">'+GO.addressbook.lang.noTemplate+'</div>',
 		'<tpl for=".">',
 		'<div id="template-{id}" class="go-item-wrap"">{name}</div>',
 		'<tpl if="!GO.util.empty(default_template)"><div class="ml-template-default-spacer"></div></tpl>',

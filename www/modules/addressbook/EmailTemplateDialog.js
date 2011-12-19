@@ -30,7 +30,7 @@ GO.addressbook.EmailTemplateDialog = function(config){
 	config.maximizable=true;
 	config.layout='fit';
 	config.modal=false;
-	config.resizable=false;
+	config.resizable=true;
 	config.width=760;
 	config.height=500;
 	config.closeAction='hide';
@@ -93,12 +93,11 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 				
 				success:function(form, action)
 				{
-
 					this.readPermissionsTab.setAcl(action.result.data.acl_id);
 					
 					this.selectUser.setRemoteText(action.result.data.user_name);
 					
-					this.htmlEditPanel.setInlineAttachments(action.result.data.inlineAttachments);	
+					//this.htmlEditPanel.setInlineAttachments(action.result.data.inlineAttachments);	
 					
 					GO.addressbook.EmailTemplateDialog.superclass.show.call(this);
 				},
@@ -150,7 +149,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 					this.hide();	
 				}else
 				{
-					this.htmlEditPanel.getHtmlEditor().setValue(action.result.body);
+					//this.htmlEditPanel.getHtmlEditor().setValue(action.result.body);
 					
 					if(action.result.id)
 					{
@@ -279,16 +278,16 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 
 		if(GO.customfields){
 			autodata=[];
-			if(GO.customfields.types["2"] && GO.customfields.types["2"].panels.length)
-			{
-				for(var i=0;i<GO.customfields.types["2"].panels.length;i++)
-				{
-					var p = GO.customfields.types["2"].panels[i];
-					for(var c=0;c<p.customfields.length;c++){
-						autodata.push(['{'+p.customfields[c].dataname+'}',p.customfields[c].name]);
-					}
-				}
-			}
+//			if(GO.customfields.types["2"] && GO.customfields.types["2"].panels.length)
+//			{
+//				for(var i=0;i<GO.customfields.types["2"].panels.length;i++)
+//				{
+//					var p = GO.customfields.types["2"].panels[i];
+//					for(var c=0;c<p.customfields.length;c++){
+//						autodata.push(['{'+p.customfields[c].dataname+'}',p.customfields[c].name]);
+//					}
+//				}
+//			}
 			if(autodata.length){
 				items.push(new Ext.Panel({
 					autoScroll:true,
@@ -312,16 +311,16 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 			}
 
 			autodata=[];
-			if(GO.customfields.types["3"] && GO.customfields.types["3"].panels.length)
-			{
-				for(var i=0;i<GO.customfields.types["3"].panels.length;i++)
-				{
-					var p = GO.customfields.types["3"].panels[i];
-					for(var c=0;c<p.customfields.length;c++){
-						autodata.push(['{'+p.customfields[c].dataname+'}',p.customfields[c].name]);
-					}
-				}
-			}
+//			if(GO.customfields.types["GO_B"] && GO.customfields.types["3"].panels.length)
+//			{
+//				for(var i=0;i<GO.customfields.types["3"].panels.length;i++)
+//				{
+//					var p = GO.customfields.types["3"].panels[i];
+//					for(var c=0;c<p.customfields.length;c++){
+//						autodata.push(['{'+p.customfields[c].dataname+'}',p.customfields[c].name]);
+//					}
+//				}
+//			}
 			if(autodata.length){
 				items.push(new Ext.Panel({
 					autoScroll:true,
@@ -346,16 +345,16 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 			
 			
 			autodata=[];
-			if(GO.customfields.types["8"] && GO.customfields.types["8"].panels.length)
-			{
-				for(var i=0;i<GO.customfields.types["8"].panels.length;i++)
-				{
-					var p = GO.customfields.types["8"].panels[i];
-					for(var c=0;c<p.customfields.length;c++){
-						autodata.push(['{my_'+p.customfields[c].dataname+'}',p.customfields[c].name]);
-					}
-				}
-			}
+//			if(GO.customfields.types["8"] && GO.customfields.types["8"].panels.length)
+//			{
+//				for(var i=0;i<GO.customfields.types["8"].panels.length;i++)
+//				{
+//					var p = GO.customfields.types["8"].panels[i];
+//					for(var c=0;c<p.customfields.length;c++){
+//						autodata.push(['{my_'+p.customfields[c].dataname+'}',p.customfields[c].name]);
+//					}
+//				}
+//			}
 			if(autodata.length){
 				items.push(new Ext.Panel({
 					autoScroll:true,
@@ -393,30 +392,36 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 		this.propertiesPanel = new Ext.Panel({
 			region:'center',
 			border: false,
-			cls:'go-form-panel',			
-			layout:'form',
+			layout:'border',
 			items:[{
-				xtype: 'textfield',
-				name: 'name',
-				anchor: '100%',
-				allowBlank:false,
-				fieldLabel: GO.lang.strName
-			},this.selectUser = new GO.form.SelectUser({
-				fieldLabel:GO.lang.strOwner,
-				disabled: !GO.settings.modules['addressbook']['write_permission'],
-				value: GO.settings.user_id,
-				anchor: '100%'
-			}),
-
+				region:'north',
+				height:60,
+				layout:'form',
+				border: false,
+				cls:'go-form-panel',			
+				items:[{
+					xtype: 'textfield',
+					name: 'name',
+					anchor: '100%',
+					allowBlank:false,
+					fieldLabel: GO.lang.strName
+				},this.selectUser = new GO.form.SelectUser({
+					fieldLabel:GO.lang.strOwner,
+					disabled: !GO.settings.modules['addressbook']['write_permission'],
+					value: GO.settings.user_id,
+					anchor: '100%'
+				})]
+			},
 			this.htmlEditPanel = new GO.base.email.EmailEditorPanel({
-				enableInlineAttachments : true
+				region:'center'
 			})]
 				
 		});
 
 		var borderLayoutPanel = new Ext.Panel({
 			layout:'border',
-			title:GO.lang['strProperties'],		
+			title:GO.lang['strProperties'],	
+			tbar:[this.htmlEditPanel.getAttachmentsButton()],
 			items: [this.propertiesPanel, this.autoDataPanel]			
 		});
 		

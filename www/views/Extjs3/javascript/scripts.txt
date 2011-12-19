@@ -133,10 +133,14 @@ views/Extjs3/javascript/plupload/ext.ux.plupload.js
 views/Extjs3/javascript/panels/Ext.ux.tot2ivn.VrTabPanel.js
 
 views/Extjs3/javascript/base/email/EmailEditorPanel.js
+views/Extjs3/javascript/base/email/EmailEditorAttachmentsView.js
 
 views/Extjs3/javascript/base/model/BatchEditModelDialog.js
 views/Extjs3/javascript/base/Form.js
+
 views/Extjs3/javascript/base/model/ImportPanel.js
+
+views/Extjs3/javascript/base/upload/PluploadButton.js
 
 views/Extjs3/javascript/base/model/multiselect/AddDialog.js
 views/Extjs3/javascript/base/model/multiselect/Dialog.js
