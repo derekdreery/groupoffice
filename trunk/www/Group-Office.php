@@ -25,6 +25,9 @@
  * @package go.basic
  * @access public
  */
+//throw new Exception('hier');
+
+
 
 global $GO_CONFIG, $GO_INCLUDES, $GO_MODULES, $GO_SECURITY, $GO_LANGUAGE, $GO_EVENTS, $GO_THEME, $lang;
 
@@ -87,6 +90,11 @@ if($GO_CONFIG->debug)
 {
 	$_SESSION['connect_count']=0;
 	$_SESSION['query_count']=0;
+	
+	if(class_exists('GO')){
+		$trace = debug_backtrace();
+		GO::debug("Warning: old Group-Office.php included\n".var_export($trace[0], true)."\n");
+	}	
 }
 
 

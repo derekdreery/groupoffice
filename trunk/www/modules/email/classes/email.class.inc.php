@@ -53,28 +53,16 @@
 
 function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $imap, $_POST;
-
-	require_once ($GLOBALS['GO_CONFIG']->class_path.'mail/mimeDecode.class.inc');
-	require_once($GLOBALS['GO_MODULES']->modules['addressbook']['class_path'].'addressbook.class.inc.php');
-	require_once($GLOBALS['GO_MODULES']->modules['mailings']['class_path'].'templates.class.inc.php');
-
-	if($GLOBALS['GO_MODULES']->has_module('customfields')) {
-		require_once($GLOBALS['GO_MODULES']->modules['customfields']['class_path'].'customfields.class.inc.php');
-		$cf = new customfields();
-	}else {
-		$cf = false;
-	}
-
-	$ab = new addressbook();
-	$tp = new templates();
-
+	
 	$template_body = '';
-
-	$template = $tp->get_template($template_id);
-
-	require_once($GLOBALS['GO_CONFIG']->class_path.'mail/Go2Mime.class.inc.php');
-	$go2mime = new Go2Mime();
-	$response['data'] = $go2mime->mime2GO($template['content'], $GLOBALS['GO_MODULES']->modules['mailings']['url'].'mimepart.php?template_id='.$template_id, true, true);
+	
+	$template = GO_Addressbook_Model_Template::model()->findByPk($template_id);
+	
+	$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($template->content);
+	$response['data']=$message->toOutputArray();
+	
+	//for compativbility with old lib
+	$response['data']['inline_attachtments']=$response['data']['inlineAttachments'];
 
 	$presetbody = isset($_POST['body']) ? $_POST['body'] : '';
 	if(!empty($presetbody) && strpos($response['data']['body'],'{body}')==false){
@@ -83,8 +71,6 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 	{
 		$response['data']['body'] = str_replace('{body}', $presetbody, $response['data']['body']);
 	}
-	
-
 
 	unset($response['data']['to'],$response['data']['cc'], $response['data']['bcc'],$response['data']['subject']);
 
@@ -100,61 +86,25 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 			}else
 			{
 				$email = GO_Base_Util_String::get_email_from_string($to);
-				$contact = GO_Addressbook_Model_Contact::model()->findSingleByAttribute('email', $email);
-				
-//				$contact = $ab->get_contact_by_email($to, $GLOBALS['GO_SECURITY']->user_id);
+				$contact = GO_Addressbook_Model_Contact::model()->findSingleByAttribute('email', $email);			
 			}
 
-
-			if ($contact) {
-				//$response['data']['body']=$tp->replace_contact_data_fields($response['data']['body'], $contact['id'], true);
+			if ($contact) {				
 				$response['data']['body']= GO_Addressbook_Model_Template::model()->replaceContactTags($response['data']['body'], $contact);
 			}  else {
-				
-				//echo 'ja';
-				$response['data']['body']= GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['body']);
-				
+				$response['data']['body']= GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['body']);				
 			}	
-			//else
-//			{
-//				require_once($GLOBALS['GO_CONFIG']->class_path.'base/users.class.inc.php');
-//				$GO_USERS = new GO_USERS();
-//
-//				if($user = $GO_USERS->get_user_by_email($to)) {
-//					$response['data']['body']=$tp->replace_user_data_fields($response['data']['body'], $user['id'], true);
-//				}else {
-//					$ab->search_companies($GLOBALS['GO_SECURITY']->user_id, $to, 'email',0,0,1);
-//					if($company= $ab->next_record()) {
-//						$response['data']['body']=$tp->replace_company_data_fields($response['data']['body'], $company['id'], true);
-//					}else
-//					{
-//						//this will remove the tags
-//						$tp->replace_fields($response['data']['body'],array());
-//					}
-//				}
-//			}
+			
 		}else
 		{
-			//this will remove the tags
-			//$tp->replace_fields($response['data']['body'],array());
-			$response['data']['body']= GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['body']);
-				
-		}
-		
-		/*if($cf && !empty($link_id)) {
-			$cf_values = $cf->get_values($GLOBALS['GO_SECURITY']->user_id, $link_type, $link_id);
-			$values = array_merge($values, $cf_values);
-		}
-
-		$tp->replace_fields($response['data']['body'], $values);*/
+			$response['data']['body']= GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['body']);				
+		}		
 	}
 
 	if($_POST['content_type']=='plain') {
 		$response['data']['body']=String::html_to_text($response['data']['body'], false);
 	}
-
-	//$response['data']['to']=$to;
-
+	
 	return $response;
 }
 

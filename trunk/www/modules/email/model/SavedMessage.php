@@ -8,7 +8,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 	 * Returns the static model of the specified AR class.
 	 * Every child of this class must override it.
 	 * 
-	 * @return GO_Base_Model the static model class
+	 * @return GO_Email_Model_SavedMessage the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{		
@@ -82,14 +82,17 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 
 		$this->setAttributes($attributes);
 		
-		$this->_tmpDir=GO::config()->tmpdir.'saved_messages/'.uniqid(time()).'/';
-		if(!is_dir($this->_tmpDir))
-			mkdir($this->_tmpDir, 0755, true);
-
 		$this->_getParts($structure);
 		
 		//TODO make style rules valid in the container.
 		$this->_loadedBody=GO_Base_Util_String::sanitizeHtml($this->_loadedBody);
+	}
+	
+	private function _getTempDir(){
+		$this->_tmpDir=GO::config()->tmpdir.'saved_messages/'.uniqid(time()).'/';
+		if(!is_dir($this->_tmpDir))
+			mkdir($this->_tmpDir, 0755, true);
+		return $this->_tmpDir;
 	}
 	
 	public function getHtmlBody(){
@@ -161,7 +164,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 					}
 					
 					if(!empty($part->body)){
-						$tmp_file = $this->_tmpDir.$filename;
+						$tmp_file = $this->_getTempDir().$filename;
 						file_put_contents($tmp_file, $part->body);
 					}else
 					{

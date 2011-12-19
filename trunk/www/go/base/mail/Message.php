@@ -319,6 +319,8 @@ class GO_Base_Mail_Message extends Swift_Message{
 						$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
 						$img->setContentType($tmpFile->mimeType());
 						$contentId = $this->embed($img);
+						
+						//$tmpFile->delete();
 
 						$params['body'] = str_replace($matches[1], $contentId, $params['body']);
 					}
@@ -329,11 +331,13 @@ class GO_Base_Mail_Message extends Swift_Message{
 		if (!empty($params['attachments'])) {
 			$attachments = json_decode($params['attachments']);
 			foreach ($attachments as $att) {
-				$tmpFile = new GO_Base_Fs_File($att);
+				$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$att->tmp_file);
 				if ($tmpFile->exists()) {
 					$file = Swift_Attachment::fromPath($tmpFile->path());
 					$file->setContentType($tmpFile->mimeType());
-					$contentId = $this->attach($file);
+					$this->attach($file);
+					
+					//$tmpFile->delete();
 				}
 			}
 		}

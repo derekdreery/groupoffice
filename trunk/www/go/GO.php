@@ -287,12 +287,15 @@ class GO{
 
 		if(!defined('GO_LOADED')){ //check if old Group-Office.php was loaded
 		
-			$log = '['.date('Y-m-d G:i').'] Start of new request: ';
-			if(isset($_SERVER['REQUEST_URI']))
-				$log .= $_SERVER['REQUEST_URI'];
+			if(GO::config()->debug){
+				$username = GO::user() ? GO::user()->username : 'nobody';
 
-			GO::debug($log);
+				$log = '['.date('Y-m-d G:i').']['.$username.'] Start of new request: ';
+				if(isset($_SERVER['REQUEST_URI']))
+					$log .= $_SERVER['REQUEST_URI'];
 
+				GO::debug($log);
+			}
 			//undo magic quotes if magic_quotes_gpc is enabled. It should be disabled!
 			if (get_magic_quotes_gpc()) {
 
@@ -332,19 +335,17 @@ class GO{
 				openlog('[Group-Office][' . date('Ymd G:i') . '][' . $username . ']', LOG_PERROR, LOG_USER);
 			}
 
-			if (!empty(self::session()->values['user_id'])) {
-				self::config()->tmpdir = self::config()->tmpdir . self::session()->values['user_id'] . '/';
-			}
-
 			if (function_exists('mb_internal_encoding'))
 				mb_internal_encoding("UTF-8");
 
 
 			if (!GO::config()->enabled) {
 				die('<h1>Disabled</h1>This Group-Office installation has been disabled');
-			}
-
-			
+			}			
+		}
+		
+		if (!empty(self::session()->values['user_id'])) {
+			self::config()->tmpdir = self::config()->tmpdir . self::session()->values['user_id'] . '/';
 		}
 		
 		if (GO::config()->debug) {
@@ -429,6 +430,16 @@ class GO{
 
 			if ($text == '')
 				$text = '(empty string)';
+			
+			//$username=GO::user() ? GO::user()->username : 'nobody';
+			
+			//$trace = debug_backtrace();
+			
+			//$prefix = "\n[".date("Ymd G:i:s")."][".$trace[0]['file'].":".$trace[0]['line']."]\n";
+			
+//			$lines = explode("\n", $text);
+
+			//$text = $prefix.$text;
 
 			file_put_contents(self::config()->file_storage_path . 'debug.log', $text . "\n", FILE_APPEND);
 		}

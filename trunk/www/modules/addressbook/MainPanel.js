@@ -227,7 +227,7 @@ GO.addressbook.MainPanel = function(config)
 	config.layout='border';
 	config.border=false;
 //
-//	if(GO.mailings)
+//	if(GO.addressbook)
 //	{
 
 		this.mailingsFilterPanel= new GO.grid.MultiSelectGrid({
@@ -526,7 +526,7 @@ Ext.extend(GO.addressbook.MainPanel, Ext.Panel,{
 			{
 				GO.addressbook.readableAddressbooksStore.loadData(result.addressbooks);
 //				this.contactsGrid.store.loadData(result.contacts);
-//				if(GO.mailings)
+//				if(GO.addressbook)
 //				{
 					GO.addressbook.readableAddresslistsStore.loadData(result.readable_addresslists);
 					GO.addressbook.writableAddresslistsStore.loadData(result.writable_addresslists);
