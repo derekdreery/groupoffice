@@ -143,6 +143,9 @@ class GO_Base_Db_FindCriteria {
 	 */
 	public function addCondition($field, $value, $comparator='=',$tableAlias='t', $useAnd=true, $valueIsColumn=false) {
 		
+		if(!is_string($field))
+			throw new Exception("field parameter for addCondition should be a string");
+		
 		$this->_appendOperator($useAnd);
 		$this->_appendConditionString($tableAlias, $field, $value, $comparator, $valueIsColumn);		
 		return $this;
