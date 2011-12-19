@@ -43,7 +43,7 @@ class GO_Addressbook_Controller_Template extends GO_Base_Controller_AbstractMode
 	
 	protected function afterSubmit(&$response, &$model, &$params, $modifiedAttributes) {
 		$message = GO_Email_Model_SavedMessage::model()->createFromMimeData($model->content);
-		$response['body'] = $message->body;
+		$response['body'] = $message->getHtmlBody();
 		
 		// reset the temp folder created by the core controller
 		$tmpFolder = new GO_Base_Fs_Folder(GO::config()->tmpdir . 'uploadqueue');
