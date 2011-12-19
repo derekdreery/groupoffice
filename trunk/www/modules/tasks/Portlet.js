@@ -154,10 +154,11 @@ GO.mainLayout.onReady(function(){
 				handler: function(){
 					if(!this.selectTasklistsWin)
 					{
-						this.selectTasklistsWin = new GO.dialog.MultiSelectDialog({
+						this.selectTasklistsWin = new GO.base.model.multiselect.dialog({
 							url:'tasks/portlet',
 							cm:[{ header: GO.lang['strName'], dataIndex: 'name', sortable: true }],
 							fields:['id','name'],
+							title:'Select',
 							model_id:GO.settings.user_id,
 							listeners:{
 								hide:function(){

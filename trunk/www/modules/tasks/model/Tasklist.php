@@ -54,7 +54,7 @@ class GO_Tasks_Model_Tasklist extends GO_Base_Model_AbstractUserDefaultModel {
 	
 	public function relations() {
 		return array(
-				'tasks' => array('type' => self::HAS_MANY, 'model' => 'GO_Tasks_Model_Task', 'field' => 'category_id', 'delete' => true),			
+				'tasks' => array('type' => self::HAS_MANY, 'model' => 'GO_Tasks_Model_Task', 'field' => 'tasklist_id', 'delete' => true),			
 				);
 	}
 	

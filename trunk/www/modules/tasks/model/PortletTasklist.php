@@ -36,14 +36,13 @@ class GO_Tasks_Model_PortletTasklist extends GO_Base_Db_ActiveRecord {
 		return array('tasklist_id','user_id');
 	}
 	
-	
 	public function tableName() {
 		return 'ta_portlet_tasklists';
 	}
 	
 	public function relations() {
 		return array(
-			'tasklist' => array('type' => self::HAS_ONE, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id', 'delete' => false),
+			'tasklist' => array('type' => self::BELONGS_TO, 'model' => 'GO_Tasks_Model_Tasklist', 'field' => 'tasklist_id', 'delete' => false),
 			);
 	}
 	
