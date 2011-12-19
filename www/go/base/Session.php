@@ -182,9 +182,21 @@ class GO_Base_Session extends GO_Base_Observable{
 			$user->save();
 		}
 		
+		$this->_setCompatibilitySessionVars(); // TODO: REMOVE IF SYSTEM IS FULLY REBUILDED
+		
 		$this->fireEvent('login', array($username, $password, $user));
 		
 		return $user;
+	}
+	
+	/**
+	 * TODO: REMOVE IF SYSTEM IS FULLY REBUILDED
+	 */
+	private function _setCompatibilitySessionVars(){
+		require(GO::config()->root_path.'Group-Office.php');
+		require(GO::config()->root_path.'classes/base/users.class.inc.php');
+		$GO_USERS = new GO_USERS();
+		$GO_USERS->update_session(GO::user()->getAttributes());
 	}
 	
 	/**
