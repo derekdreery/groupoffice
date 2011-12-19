@@ -34,16 +34,6 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	protected $_defaultSortOrder='';
 	protected $_defaultSortDirection='ASC';
   
-  /**
-   *
-   * @var array the relation of the given model.  
-   */
-//  private $_relation;
-	
-	private $_response;
-	
-
-	
 	/**
 	 * Create a new grid with column model and query result
 	 * 
@@ -65,7 +55,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	 * Set the default column to sort on.
 	 * @param String / Array $order 
 	 */
-	public function setDefaultSortOrder($order, $direction){
+	public function setDefaultSortOrder($order, $direction='ASC'){
 		$this->_defaultSortOrder=$order;
 		$this->_defaultSortDirection=$direction;
 	}
@@ -77,7 +67,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 	 * @param String $title 
 	 */
 	public function setTitle($title){
-		$this->_response['title'] = $title;
+		$this->response['title'] = $title;
 	}
 	
 
@@ -159,10 +149,10 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 					if (!empty($model))
 						$model->delete();
         }
-        $this->_response['deleteSuccess'] = true;
+        $this->response['deleteSuccess'] = true;
       } catch (Exception $e) {
-        $this->_response['deleteSuccess'] = false;
-        $this->_response['deleteFeedback'] = $e->getMessage();
+        $this->response['deleteSuccess'] = false;
+        $this->response['deleteFeedback'] = $e->getMessage();
       }
     }
 	}
@@ -183,7 +173,7 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
    * Returns the data for the grid.
    * Also deletes the given delete_keys.
    *
-   * @return array $this->_response 
+   * @return array $this->response 
    */
   public function getData() {
 		
@@ -193,23 +183,14 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
 		$columns = $this->_columnModel->getColumns();
     if (empty($columns))
       throw new Exception('No columns given for this grid.');   
+    			
 
-    
-    $this->_response['results'] = array();		
-		//$models = $this->_stmt->fetchAll();
-		
-		//when using this:
-		//while ($model = $this->_stmt->fetch()) {
-		//I got this error on php 5.2
-		//SQLSTATE[HY000]: General error: 2014 Cannot execute queries while other unbuffered queries are active. Consider using PDOStatement::fetchAll(). Alternatively, if your code is only ever going to run against mysql, you may enable query buffering by setting the PDO::MYSQL_ATTR_USE_BUFFERED_QUERY attribute.
-		
 		while ($record = $this->nextRecord()) {
-			$this->_response['results'][] = $record;
+			$this->response['results'][] = $record;
 		}
-		$this->_response['total']=$this->getTotal();
+		$this->response['total']=$this->getTotal();
 
-
-    return $this->_response;
+    return $this->response;
   }
   
   

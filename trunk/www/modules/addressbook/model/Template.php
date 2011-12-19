@@ -1,6 +1,10 @@
 <?php
 class GO_Addressbook_Model_Template extends GO_Base_Db_ActiveRecord{
 	
+	const TYPE_EMAIL=0;
+	
+	const TYPE_DOCUMENT=1;
+	
 		/**
 	 * Returns a static model of itself
 	 * 

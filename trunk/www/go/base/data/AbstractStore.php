@@ -28,6 +28,21 @@ abstract class GO_Base_Data_AbstractStore {
 	protected $_columnModel=false;
 	
 	
+	/**
+	 * The response object eg.
+	 * 
+	 * array(
+	 *	'results'=>array(
+	 *			array('name'=>'Name','id'=>1)
+	 *		)
+	 *	'total'=>1
+	 * );
+	 * 
+	 * @var array 
+	 */
+	
+	protected $response;
+	
   /**
 	 * The constructor of the Store
 	 * 
@@ -43,6 +58,8 @@ abstract class GO_Base_Data_AbstractStore {
 			$this->_columnModel = $columnModel;
 		else
 			$this->_columnModel = new GO_Base_Data_ColumnModel();
+		
+		$this->response['results'] = array();
   }
 	
 	/**
@@ -77,6 +94,16 @@ abstract class GO_Base_Data_AbstractStore {
 	 * @return int
 	 */
 	abstract public function getTotal();
+	
+	
+	/**
+	 * Add a raw record to the store.
+	 * 
+	 * @param array $attributes 
+	 */
+	public function addRecord($attributes){
+		$this->response['results'][]=$attributes;
+	}
 
 	
 }

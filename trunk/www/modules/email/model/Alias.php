@@ -42,7 +42,13 @@ class GO_Email_Model_Alias extends GO_Base_Db_ActiveRecord {
 	 * See the parent class for a more detailed description of the relations.
 	 */
 	public function relations() {
-		return array();
+		return array(
+				'account' => array('type'=>self::BELONGS_TO, 'model'=>'GO_Email_Model_Account', 'field'=>'account_id')
+		);
+	}
+	
+	public function aclField() {
+		return 'account.acl_id';
 	}
 	
 
