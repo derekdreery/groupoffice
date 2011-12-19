@@ -1,10 +1,12 @@
-GO.dialog.MultiSelectAddDialog = function(config){
+GO.base.model.multiselect.addDialog = function(config){
 	
 	Ext.apply(this, config);
 	
 	this.store = new GO.data.JsonStore({
 		url: GO.url(config.url+'/selectNewStore'),
-		baseParams:{model_id: config.model_id},
+		baseParams:{
+			model_id: 0
+			},
 		fields: config.fields,
 		remoteSort: true
 	});
@@ -17,11 +19,16 @@ GO.dialog.MultiSelectAddDialog = function(config){
 			autoFill: true,
 			forceFit: true
 		}),
-		columns: config.cm,
+		cm: new Ext.grid.ColumnModel({
+			defaults:{
+				sortable:true
+			},
+			columns:config.cm
+		}),
 		sm: new Ext.grid.RowSelectionModel()	
 	});
 	
-	GO.dialog.MultiSelectAddDialog.superclass.constructor.call(this, {
+	GO.base.model.multiselect.addDialog.superclass.constructor.call(this, {
 		layout: 'fit',
 		modal:false,
 		height:300,
@@ -47,12 +54,13 @@ GO.dialog.MultiSelectAddDialog = function(config){
 	});
 };
 
-Ext.extend(GO.dialog.MultiSelectAddDialog, GO.Window, {
-
+Ext.extend(GO.base.model.multiselect.addDialog, GO.Window, {
+	multiSelectPanel: false,
+	
 	show : function(){
-		this.grid.store.removeAll();
+		GO.base.model.multiselect.addDialog.superclass.show.call(this);
+		this.grid.store.baseParams.model_id=this.multiSelectPanel.model_id;
 		this.grid.store.load();
-		GO.dialog.MultiSelectAddDialog.superclass.show.call(this);
 	},
 	//private
 	callHandler : function(hide){

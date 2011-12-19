@@ -1,4 +1,4 @@
-GO.dialog.MultiSelectDialog = function(config){
+GO.base.model.multiselect.panel = function(config){
 	
 	Ext.apply(this, config);
 	
@@ -21,29 +21,29 @@ GO.dialog.MultiSelectDialog = function(config){
 		sm: new Ext.grid.RowSelectionModel()	
 	});
 
-	GO.dialog.MultiSelectDialog.superclass.constructor.call(this, {
+	GO.base.model.multiselect.panel.superclass.constructor.call(this, {
 		layout: 'fit',
 		modal:false,
 		height:400,
 		width:600,
 		closeAction:'hide',
-		title:'Selecteren', // TODO: De juiste titel in een vertaalbestand zetten
+		title:config.title,
 		items: this.grid,
-		buttons: [
-		{
-			text: GO.lang['cmdOk'],
-			handler: function (){
-				this.callHandler(true);
-			},
-			scope:this
-		},
-		{
-			text: GO.lang['cmdClose'],
-			handler: function(){
-				this.hide();
-			},
-			scope: this
-		}],
+//		buttons: [
+//		{
+//			text: GO.lang['cmdOk'],
+//			handler: function (){
+//				this.callHandler(true);
+//			},
+//			scope:this
+//		},
+//		{
+//			text: GO.lang['cmdClose'],
+//			handler: function(){
+//				this.hide();
+//			},
+//			scope: this
+//		}],
 		tbar : [
 		{
 			iconCls: 'btn-add',
@@ -51,8 +51,8 @@ GO.dialog.MultiSelectDialog = function(config){
 			cls: 'add-btn-text-icon',
 			handler: function(){
 				if(!this.addDialog){
-					this.addDialog = new GO.dialog.MultiSelectAddDialog({
-						model_id: config.model_id,
+					this.addDialog = new GO.base.model.multiselect.addDialog({
+						multiSelectPanel:this,
 						url: config.url,
 						fields: config.fields,
 						cm: config.cm,
@@ -87,14 +87,21 @@ GO.dialog.MultiSelectDialog = function(config){
 	});
 };
 
-Ext.extend(GO.dialog.MultiSelectDialog, GO.Window, {
+Ext.extend(GO.base.model.multiselect.panel, Ext.Panel, {
+
+	model_id: 0,
 
 	show : function(){
 		if(!this.grid.store.loaded)
 		{
 			this.grid.store.load();
 		}
-		GO.dialog.MultiSelectDialog.superclass.show.call(this);
+		GO.base.model.multiselect.panel.superclass.show.call(this);
+	},
+	setModelId : function(model_id){
+		this.grid.store.loaded=false;
+		this.model_id=this.store.baseParams.model_id=model_id;
+		this.setDisabled(!model_id);
 	},
 	//private
 	callHandler : function(hide){

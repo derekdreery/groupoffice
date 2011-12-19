@@ -130,9 +130,6 @@ views/Extjs3/javascript/plupload/DataView-more.js
 views/Extjs3/javascript/plupload/plupload/js/plupload.full.js
 views/Extjs3/javascript/plupload/ext.ux.plupload.js
 
-views/Extjs3/javascript/windows/MultiSelectDialog.js
-views/Extjs3/javascript/windows/MultiSelectAddDialog.js
-
 views/Extjs3/javascript/panels/Ext.ux.tot2ivn.VrTabPanel.js
 
 views/Extjs3/javascript/base/email/EmailEditorPanel.js
@@ -140,3 +137,7 @@ views/Extjs3/javascript/base/email/EmailEditorPanel.js
 views/Extjs3/javascript/base/model/BatchEditModelDialog.js
 views/Extjs3/javascript/base/Form.js
 views/Extjs3/javascript/base/model/ImportPanel.js
+
+views/Extjs3/javascript/base/model/multiselect/AddDialog.js
+views/Extjs3/javascript/base/model/multiselect/Dialog.js
+views/Extjs3/javascript/base/model/multiselect/Panel.js
