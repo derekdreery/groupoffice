@@ -201,7 +201,7 @@ class GO_Base_Db_FindCriteria {
 	 * Add an IN condition to this object and returns itself.
 	 * 
 	 * @param String $field The field where this condition is for.
-	 * @param String $value The value of the field for this condition.
+	 * @param Array $value The value of the field for this condition.
 	 * @param String $tableAlias The alias of the table in this SQL statement.
 	 * @param Boolean $useAnd True for 'AND', false for 'OR'. Default: true.
 	 * @param Boolean $useNot True for 'NOT IN', false for 'IN'. Default: false.
