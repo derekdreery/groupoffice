@@ -34,7 +34,8 @@ class GO_Base_Mail_Mailer extends Swift_Mailer{
 		if(!$transport)
 			$transport=GO_Base_Mail_Transport::newGoInstance();
 		
-    return new self($transport);
+    $mailer = new self($transport);		
+		return $mailer;
   }
 	
 }

@@ -1039,13 +1039,14 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 
 						$header = str_replace("\r\n", "\n", $vals[$i]);
 						$header = preg_replace("/\n\s/", " ", $header);
-
+						
 						$lines = explode("\n", $header);
 
 						foreach ($lines as $line) {
 							if(!empty($line)) {
 								$header = trim(strtolower(substr($line, 0, strpos($line, ':'))));
-
+								$header = str_replace('-','_',$header);
+								
 								if (!$header && !empty($last_header)) {
 									$message[$last_header] .= "\n".trim($line);
 								}else {
@@ -1063,7 +1064,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 								$n = 2;
 								while (isset($vals[$i + $n]) && $vals[$i + $n] != ')') {
 									$prop = str_replace('-','_',strtolower(substr($vals[$i + $n],1)));
-
+									GO::debug($prop);
 									if(isset($message[$prop]))
 										$message[$prop]=true;
 

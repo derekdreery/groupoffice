@@ -478,10 +478,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	reset : function(keepAttachmentsAndOptions) {
 		if(!keepAttachmentsAndOptions){
 			this.sendParams = {
-				task : 'sendmail',
-				inline_attachments : {},
-				inline_temp_attachments : {},
-				notification : 'false',
+				notification : false,
 				priority : '3',
 				draft_uid : 0
 			};
@@ -875,27 +872,12 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		if(!draft && !autoSave && !this.fireEvent('beforesendmail', this))
 			return false;
 		
-
-		if (this.uploadDialog && this.uploadDialog.isVisible()) {
-
-			if(autoSave)
-				return false;
-
-			alert(GO.email.lang.closeUploadDialog);
-			this.attachmentsDialog.show();
-			this.uploadDialog.show();
-			return false;
-		}
-
 		this.saveButton.setDisabled(true);
 		this.sendButton.setDisabled(true);
 
 		if (autoSave || this.subjectField.getValue() != ''
 			|| confirm(GO.email.lang.confirmEmptySubject)) {
-			if (this.attachmentsDialog && this.attachmentsDialog.isVisible()) {
-				this.attachmentsDialog.hide();
-			}
-
+			
 			this.sendParams.draft = draft;
 
 			// extra sync to make sure all is in there.

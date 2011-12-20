@@ -750,11 +750,9 @@ class GO_Base_Util_String {
 		return ($text);
 	}
 
-	function html_to_text($text, $link_list=true){
-		global $GO_CONFIG;
-		require_once(GO::config()->class_path.'html2text.class.inc');
+	public static function html_to_text($text, $link_list=true){
 
-		$htmlToText = new Html2Text ($text);
+		$htmlToText = new GO_Base_Util_Html2Text ($text);
 		return $htmlToText->get_text($link_list);
 	}
 

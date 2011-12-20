@@ -15,7 +15,9 @@
 
 /**
  * The GO_Email_Model_Alias model
-
+ * 
+ * @property string $name
+ * @property string $email
  */
 class GO_Email_Model_Alias extends GO_Base_Db_ActiveRecord {
 
