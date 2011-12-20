@@ -935,28 +935,33 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if(isset($params['joinModel'])){
 			
-			$joinModel = GO::getModel($params['joinModel']['model']);
+			if(!is_array($params['joinModel']))
+				$params['joinModel']=array($params['joinModel']);
 			
-			if(!isset($params['joinModel']['foreignField']))
-				$params['joinModel']['foreignField']=$joinModel->primaryKey();
+			foreach($params['joinModel'] as $jm){
 			
-			if(!isset($params['joinModel']['localField']))
-				$params['joinModel']['localField']=$this->primaryKey();
-			
-			if(!isset($params['joinModel']['type']))
-				$params['joinModel']['type']='INNER';
-			
-			
-			
-			$sql .= "\n".$params['joinModel']['type']." JOIN `".$joinModel->tableName()."`";
-			if(isset($params['joinModel']['tableAlias']))
-				$sql .= " `".$params['joinModel']['tableAlias']."`";
-			else
-				$params['joinModel']['tableAlias']=$joinModel->tableName();
-			
-			$sql .= " ON (`".$params['joinModel']['tableAlias']."`.`".$params['joinModel']['foreignField']."`=".
-							"t.`".$params['joinModel']['localField']."`) ";
-			
+				$joinModel = GO::getModel($jm['model']);
+
+				if(!isset($jm['foreignField']))
+					$jm['foreignField']=$joinModel->primaryKey();
+
+				if(!isset($jm['localField']))
+					$jm['localField']=$this->primaryKey();
+
+				if(!isset($jm['type']))
+					$jm['type']='INNER';
+
+
+
+				$sql .= "\n".$jm['type']." JOIN `".$joinModel->tableName()."`";
+				if(isset($jm['tableAlias']))
+					$sql .= " `".$jm['tableAlias']."`";
+				else
+					$jm['tableAlias']=$joinModel->tableName();
+
+				$sql .= " ON (`".$jm['tableAlias']."`.`".$jm['foreignField']."`=".
+								"t.`".$jm['localField']."`) ";
+			}
 		}
 
 		//quick and dirty way to use and in next sql build blocks
