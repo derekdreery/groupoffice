@@ -1,3 +1,5 @@
+Ext.namespace('GO.base.upload');
+
 GO.base.upload.PluploadButton = function(config){
 	
 	config = config || {};
