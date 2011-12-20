@@ -80,6 +80,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 		$imap = $account->openImapConnection($mailbox);
 
 		$attributes = $imap->get_message_header($uid, true);
+		
 		if (!$attributes)
 			return false;
 

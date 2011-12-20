@@ -291,14 +291,53 @@ class GO_Base_Mail_Message extends Swift_Message{
 	/**
 	 * handleEmailFormInput
 	 * 
-	 * Author: Wilmar van Beusekom (wilmar@intermesh.nl)
+
 	 * This method can be used in Models and Controllers. It puts the email body
 	 * and inline (image) attachments from the client in the message, which can
 	 * then be used for storage in the database or sending emails.
+	 * 
 	 * @param Array $params Must contain elements: body (string) and
+	 * 
 	 * inlineAttachments (string).
 	 */
 	public function handleEmailFormInput($params){
+		
+		if(isset($params['subject']))
+			$this->setSubject($params['subject']);		
+		
+		if(isset($params['to'])){		
+			$to = new GO_Base_Mail_EmailRecipients($params['to']);
+			foreach($to->getAddresses() as $email=>$personal)
+				$this->addTo($email,$personal);
+		}
+		if(isset($params['cc'])){		
+			$cc = new GO_Base_Mail_EmailRecipients($params['cc']);
+			foreach($cc->getAddresses() as $email=>$personal)
+				$this->addCc($email,$personal);
+		}
+		if(isset($params['bcc'])){		
+			$bcc = new GO_Base_Mail_EmailRecipients($params['cc']);
+			foreach($bcc->getAddresses() as $email=>$personal)
+				$this->addBcc($email,$personal);
+		}
+		
+		if(isset($params['alias_id'])){
+			$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);	
+			$this->setFrom($alias->email, $alias->name);
+			
+			if(isset($params['notification']))
+				$this->setReadReceiptTo(array($alias->email=>$alias->name));
+		}
+		
+		if(isset($params['priority']))
+			$this->setPriority ($params['priority']);
+		
+		
+		if(isset($params['in_reply_to'])){
+			$headers = $this->getHeaders();
+			$headers->addTextHeader('In-Reply-To', $params['in_reply_to']);
+			$headers->addTextHeader('References', $params['in_reply_to']);
+		}	
 
 		if($params['content_type']=='html'){
 			//inlineAttachments is an array(array('url'=>'',tmp_file=>'relative/path/');

@@ -2,8 +2,51 @@
 
 class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController {
 
+	/**
+	 *
+	 * @todo Save to sent items should be implemented as a Swift outputstream for better memory management
+	 * @param type $params
+	 * @return boolean 
+	 */
 	public function actionSend($params) {
 		
+		$alias = GO_Email_Model_Alias::model()->findByPk($params['alias_id']);		
+		$account = GO_Email_Model_Account::model()->findByPk($alias->account_id);
+
+		$message = new GO_Base_Mail_Message();
+		$message->handleEmailFormInput($params);
+		
+		$message->setFrom($alias->email, $alias->name);
+		
+		$mailer = GO_Base_Mail_Mailer::newGoInstance(GO_Email_Transport::newGoInstance($account));
+		
+		$success = $mailer->send($message);		
+		
+		if($success){
+			if(!empty($params['reply_uid'])){
+				//set \Answered flag on IMAP message
+				$imap = $account->openImapConnection($params['reply_mailbox']);
+				$imap->set_message_flag(array($params['reply_uid']), "\Answered");
+			}
+
+			if(!empty($params['forward_uid'])){
+				//set forwarded flag on IMAP message
+				$imap = $account->openImapConnection($params['forward_mailbox']);
+				$imap->set_message_flag(array($params['forward_uid']), "$Forwarded");
+			}
+
+			if($account->sent){
+				//if a sent items folder is set in the account then save it to the imap folder
+				$imap = $account->openImapConnection($account->sent);
+				$imap->append_message($account->sent, $message->toString(),"\Seen");
+			}
+		}else
+		{
+			throw new Exception("Failed to send the message");
+		}		
+		$response['success']=true;
+		
+		return $response;
 	}
 	
 	private function loadTemplate($params){
@@ -47,7 +90,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		
 
 			if ($params['content_type'] == 'plain') {
-				$response['data']['plainbody'] = String::html_to_text($response['data']['htmlbody'], false);
+				$response['data']['plainbody'] = GO_Base_Util_String::html_to_text($response['data']['htmlbody'], false);
 				unset($response['data']['htmlbody']);
 			}
 		}else
@@ -116,7 +159,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 		}else
 		{
-			$response['data']['plainbody'] .= "\n\n".$replyText."\n".$oldBody;							
+			$response['data']['plainbody'] .= "\n\n".$replyText."\n".$this->_quoteText($imapMessage->getPlainBody());							
 		}
 		
 		//will be set at send action
