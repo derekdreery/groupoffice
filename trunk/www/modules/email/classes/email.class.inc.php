@@ -54,7 +54,7 @@
 function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 	global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $GO_SECURITY, $imap, $_POST;
 	
-	$template_body = '';
+	$template_htmlbody = '';
 	
 	$template = GO_Addressbook_Model_Template::model()->findByPk($template_id);
 	
@@ -64,12 +64,12 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 	//for compativbility with old lib
 	$response['data']['inline_attachtments']=$response['data']['inlineAttachments'];
 
-	$presetbody = isset($_POST['body']) ? $_POST['body'] : '';
-	if(!empty($presetbody) && strpos($response['data']['body'],'{body}')==false){
-		$response['data']['body'] = $_POST['body'].'<br />'.$response['data']['body'];
+	$presethtmlbody = isset($_POST['htmlbody']) ? $_POST['htmlbody'] : '';
+	if(!empty($presethtmlbody) && strpos($response['data']['htmlbody'],'{htmlbody}')==false){
+		$response['data']['htmlbody'] = $_POST['htmlbody'].'<br />'.$response['data']['htmlbody'];
 	}else
 	{
-		$response['data']['body'] = str_replace('{body}', $presetbody, $response['data']['body']);
+		$response['data']['htmlbody'] = str_replace('{htmlbody}', $presethtmlbody, $response['data']['htmlbody']);
 	}
 
 	unset($response['data']['to'],$response['data']['cc'], $response['data']['bcc'],$response['data']['subject']);
@@ -90,20 +90,20 @@ function load_template($template_id, $to='', $keep_tags=false, $contact_id=0) {
 			}
 
 			if ($contact) {				
-				$response['data']['body']= GO_Addressbook_Model_Template::model()->replaceContactTags($response['data']['body'], $contact);
+				$response['data']['htmlbody']= GO_Addressbook_Model_Template::model()->replaceContactTags($response['data']['htmlbody'], $contact);
 			}  else {
-				$response['data']['body']= GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['body']);				
+				$response['data']['htmlbody']= GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['htmlbody']);				
 			}	
 			
 		}else
 		{
-			$response['data']['body']= GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['body']);				
+			$response['data']['htmlbody']= GO_Addressbook_Model_Template::model()->replaceUserTags($response['data']['htmlbody']);				
 		}		
 	}
 
-	if($_POST['content_type']=='plain') {
-		$response['data']['body']=String::html_to_text($response['data']['body'], false);
-	}
+//	if($_POST['content_type']=='plain') {
+//		$response['data']['htmlbody']=String::html_to_text($response['data']['htmlbody'], false);
+//	}
 	
 	return $response;
 }

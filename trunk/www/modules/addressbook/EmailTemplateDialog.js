@@ -418,6 +418,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 				
 		});
 
+		//{text:'Toggle HTML',handler:function(){this.htmlEditPanel.setContentTypeHtml(this.htmlEditPanel.getContentType()!='html')}, scope:this}
 		var borderLayoutPanel = new Ext.Panel({
 			layout:'border',
 			title:GO.lang['strProperties'],	

@@ -1599,14 +1599,17 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 	 * @param <type> $message_part
 	 * @return <type>
 	 */
-	public function get_message_part_start($uid, $message_part=0) {
+	public function get_message_part_start($uid, $message_part=0, $peek=false) {
 		$this->clean($uid, 'uid');
+		
+		$peek_str = $peek ? '.PEEK' : '';
+		
 		if (empty($message_part)) {
-			$command = "UID FETCH $uid BODY[]\r\n";
+			$command = "UID FETCH $uid BODY".$peek_str."[]\r\n";
 		}
 		else {
 			//$this->clean($message_part, 'msg_part');
-			$command = "UID FETCH $uid BODY[$message_part]\r\n";
+			$command = "UID FETCH $uid BODY".$peek_str."[$message_part]\r\n";
 		}
 		$this->send_command($command);
 		$result = fgets($this->handle);
@@ -1646,7 +1649,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		return $res;
 	}
 
-	public function save_to_file($uid, $path, $imap_part_id=-1, $encoding=''){
+	public function save_to_file($uid, $path, $imap_part_id=-1, $encoding='', $peek=false){
 
 		$fp = fopen($path, 'w+');
 
@@ -1660,7 +1663,7 @@ class GO_Base_Mail_Imap extends GO_Base_Mail_ImapBodyStruct {
 		 * That's why I first fetch the header and then the text.
 		 */
 		if($imap_part_id==-1){
-			$header = $this->get_message_part($uid, 'HEADER')."\r\n\r\n";
+			$header = $this->get_message_part($uid, 'HEADER', $peek)."\r\n\r\n";
 			
 			if(empty($header))
 				return false;
