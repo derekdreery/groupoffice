@@ -8,7 +8,7 @@
  * @property GO_Base_Mail_EmailRecipients $to
  * @property GO_Base_Mail_EmailRecipients $cc
  * @property GO_Base_Mail_EmailRecipients $bcc
- * @property GO_Base_Mail_EmailRecipientstring $from
+ * @property GO_Base_Mail_EmailRecipients $from
  * @property GO_Base_Mail_EmailRecipients $reply_to
  * @property string $subject
  * @property int $uid
@@ -40,6 +40,23 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 	 * @var boolean 
 	 */
 	public $peek=false;
+	
+	
+	/**
+	 * Set this to true to get temporary files when using toOutputArray() or
+	 * getAttachments.
+	 * 
+	 * @var boolean 
+	 */
+	public $createTempFilesForInlineAttachments=false;
+	
+	/**
+	 * Set this to true to get temporary files when using toOutputArray() or
+	 * getAttachments.
+	 * 
+	 * @var boolean 
+	 */
+	public $createTempFilesForAttachments=false;
 	
 	
 	/**
@@ -160,7 +177,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 			if(!$hasAlternative && count($this->_htmlParts['parts']) && count($this->_plainParts['parts'])){
 				//this is not very neat but we found some text attachments as body parts. Let's correct that.
 
-				if($this->_plainParts['parts'][0]['imap_id']>$this->_htmlParts['parts'][0]['imap_id']){
+				if($this->_plainParts['parts'][0]['number']>$this->_htmlParts['parts'][0]['number']){
 					$this->_plainParts=array('parts'=>array(), 'text_found'=>false);
 				}else
 				{
@@ -227,7 +244,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 	public function getPlainBody($asHtml=false){
 		
 		if(!isset($this->_plainBody)){
-			//$imap = $this->getImapConnection();		
+			$imap = $this->getImapConnection();		
 			$this->_loadBodyParts();
 
 
@@ -336,9 +353,17 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 				}
 				
 				$f = new GO_Base_Fs_File($a['name']);
-				
+				if(($this->createTempFilesForInlineAttachments && !empty($a['content_id'])) || ($this->createTempFilesForAttachments && empty($a['content_id']))){
+					$tmpFile = GO_Base_Fs_File::tempFile();				
+					$imap->save_to_file($this->uid, $tmpFile->path(),  $part['number'], '', true);
+					$a['tmp_file']=$tmpFile->path();
+				}else
+				{
+					$a['tmp_file']=false;
+				}
+							
 				$a['mime']=$part['type'] . '/' . $part['subtype'];
-				$a['tmp_file']=false;
+				
 				$a['index']=count($this->_attachments);
 				$a['size']=$part['size'];
 				$a['human_size']= GO_Base_Util_Number::formatSize($a['size']);
@@ -353,6 +378,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 		
 		return $this->_attachments;
 	}
+	
+	
+	
 	
 	protected function getAttachmentUrl($attachment) {
 		

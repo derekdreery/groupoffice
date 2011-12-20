@@ -168,7 +168,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 */
 	public function getAttachment($number){
 		$att = $this->getAttachments();
-		
+		GO::debug($att);
 		return $att[$number];
 	}
 
@@ -192,14 +192,14 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	 */
 	public function toOutputArray($html=true, $recipientsAsString=false) {
 
-		$from = $this->from->getAddresses();
-		
-		
+		$from = $this->from->getAddresses();		
 
 		$response['notification'] = $this->disposition_notification_to;
 		$response['subject'] = $this->subject;
-		$response['from'] = $this->from->getPersonal();
-		$response['sender'] = $this->from->getEmail();
+				
+		$from = $this->from->getAddress();
+		$response['from'] = $from['personal'];
+		$response['sender'] = $from['email'];
 		$response['to'] = $recipientsAsString ? (string) $this->to : $this->to->getAddresses();
 		$response['cc'] = $recipientsAsString ? (string) $this->cc : $this->cc->getAddresses();
 		$response['bcc'] = $recipientsAsString ? (string) $this->bcc :  $this->bcc->getAddresses();
@@ -222,7 +222,8 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 		$response['inlineAttachments'] = array();
 
-		$response['body'] = $html ? $this->getHtmlBody() : $this->getPlainBody();
+		$response['htmlbody'] = $this->getHtmlBody();
+		$response['plainbody'] =$this->getPlainBody();
 
 		$response['smime_signed'] = false;
 
@@ -233,7 +234,7 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 
 			
 			if (!empty($a['content_id']))
-				$response['body'] = str_replace('cid:' . $a['content_id'], $a['url'], $response['body'], $replaceCount);
+				$response['htmlbody'] = str_replace('cid:' . $a['content_id'], $a['url'], $response['htmlbody'], $replaceCount);
 
 			if ($a['name'] == 'smime.p7s') {
 				$response['smime_signed'] = true;

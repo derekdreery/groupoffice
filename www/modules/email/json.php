@@ -299,8 +299,6 @@ function find_alias_and_recipients() {
 	}
 }
 
-
-
 try {
 
 	$task = $_REQUEST['task'];
@@ -484,7 +482,7 @@ try {
 			$contact_id = isset($_POST['contact_id']) ? $_POST['contact_id'] : 0;
 			$template = load_template($template_id, $to, isset($_POST['addresslist_id']) && $_POST['addresslist_id']>0, $contact_id);
 
-			$response['data']['body'] = $template['data']['body'].$response['data']['body'];
+			$response['data']['body'] = $template['data']['htmlbody'].$response['data']['body'];
 			$content['attachments']=array_merge($content['attachments'], $template['data']['attachments']);
 		}
 

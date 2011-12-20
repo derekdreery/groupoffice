@@ -300,33 +300,39 @@ class GO_Base_Mail_Message extends Swift_Message{
 	 */
 	public function handleEmailFormInput($params){
 
-		//inlineAttachments is an array(array('url'=>'',tmp_file=>'relative/path/');
-		if(!empty($params['inlineAttachments'])){
-			$inlineAttachments = json_decode($params['inlineAttachments'], true);
+		if($params['content_type']=='html'){
+			//inlineAttachments is an array(array('url'=>'',tmp_file=>'relative/path/');
+			if(!empty($params['inlineAttachments'])){
+				$inlineAttachments = json_decode($params['inlineAttachments'], true);
 
-			/* inline attachments must of course exist as a file, and also be used in
-			 * the message body
-			 */
-			foreach ($inlineAttachments as $ia) {
+				/* inline attachments must of course exist as a file, and also be used in
+				 * the message body
+				 */
+				foreach ($inlineAttachments as $ia) {
 
-				$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
+					$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
 
-				if ($tmpFile->exists()) {				
-					//Different browsers reformat URL's to absolute or relative. So a pattern match on the filename.
-					$filename = urlencode($tmpFile->name());
-					$result = preg_match('/="([^"]*'.preg_quote($filename).'[^"]*)"/',$params['body'],$matches);
-					if($result){
-						$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
-						$img->setContentType($tmpFile->mimeType());
-						$contentId = $this->embed($img);
-						
-						//$tmpFile->delete();
+					if ($tmpFile->exists()) {				
+						//Different browsers reformat URL's to absolute or relative. So a pattern match on the filename.
+						$filename = urlencode($tmpFile->name());
+						$result = preg_match('/="([^"]*'.preg_quote($filename).'[^"]*)"/',$params['htmlbody'],$matches);
+						if($result){
+							$img = Swift_EmbeddedFile::fromPath($tmpFile->path());
+							$img->setContentType($tmpFile->mimeType());
+							$contentId = $this->embed($img);
 
-						$params['body'] = str_replace($matches[1], $contentId, $params['body']);
+							//$tmpFile->delete();
+
+							$params['htmlbody'] = str_replace($matches[1], $contentId, $params['htmlbody']);
+						}
 					}
 				}
 			}
-		}
+			$this->setHtmlAlternateBody($params['htmlbody']);
+		}else
+		{
+			$this->setBody($params['textbody'], 'text/plain');
+		}		
 		
 		if (!empty($params['attachments'])) {
 			$attachments = json_decode($params['attachments']);
@@ -341,8 +347,6 @@ class GO_Base_Mail_Message extends Swift_Message{
 				}
 			}
 		}
-		
-		$this->setHtmlAlternateBody($params['body']);
 	}
 	
 }

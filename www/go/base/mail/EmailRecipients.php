@@ -19,9 +19,21 @@ class GO_Base_Mail_EmailRecipients{
 	 */
 	public function addRecipient($email, $personal=''){
 		//echo $email.' '.$personal.'<br />';
-		$this->_addresses[]=array('email'=>trim($email),'personal'=>trim($personal));
-	}	
+		$this->_addresses[trim($email)]=trim($personal);
+	}
+
+	public function count(){
+		return count($this->_addresses);
+	}
 	
+	/**
+	 * Remove a recipient from the list.
+	 * 
+	 * @param string $email 
+	 */
+	public function removeRecipient($email){
+		unset($this->_addresses[trim($email)]);
+	}
 	/**
 	 * Get the addresses in an array(array('email'=>'email@address.com','personal'=>'Personal'))
 	 * 
@@ -31,22 +43,33 @@ class GO_Base_Mail_EmailRecipients{
 		return $this->_addresses;
 	}
 	
-	public function getEmail($index=0){
-		return isset($this->_addresses[$index]['email']) ? $this->_addresses[$index]['email'] : '';
+	/**
+	 * Get the next address as array('email'=>'example@domain.com','personal'=>'Example name');
+	 * 
+	 * @return array  
+	 */
+	public function getAddress(){
+		$each = each($this->_addresses);
+		
+		return array('email'=>$each['key'], 'personal'=>$each['value']);
 	}
 	
-	public function getPersonal($index=0){
-		return isset($this->_addresses[$index]['personal']) ? $this->_addresses[$index]['personal'] : '';
-	}
+//	public function getEmail($index=0){
+//		return isset($this->_addresses[$index]['email']) ? $this->_addresses[$index]['email'] : '';
+//	}
+//	
+//	public function getPersonal($index=0){
+//		return isset($this->_addresses[$index]['personal']) ? $this->_addresses[$index]['personal'] : '';
+//	}
 	
 	public function __toString() {
 		$str = '';
-		foreach($this->_addresses as $a){
-			if(!empty($a['personal'])){
-				$str .= '"'.$a['personal'].'" <'.$a['email'].'>, ';
+		foreach($this->_addresses as $email=>$personal){
+			if(!empty($personal)){
+				$str .= '"'.$personal.'" <'.$email.'>, ';
 			}else
 			{
-				$str .= $a['email'].', ';
+				$str .= $email.', ';
 			}
 		}
 		
@@ -192,5 +215,17 @@ class GO_Base_Mail_EmailRecipients{
 		{
 			$this->_buffer .= $char;			
 		}
+	}
+	
+	/**
+	 * Merge two address strings
+	 * 
+	 * @param GO_Base_Mail_EmailRecipients $recipients
+	 * @return GO_Base_Mail_EmailRecipients 
+	 */
+	public function mergeWith(GO_Base_Mail_EmailRecipients $recipients){
+		$this->_addresses = array_merge($this->_addresses, $recipients->getAddresses());
+		
+		return $this;
 	}
 }
