@@ -241,7 +241,7 @@ class GO_Base_Db_FindParams{
 	/**
 	 * Adds a group by clause.
 	 * 
-	 * @param array $fields
+	 * @param array $fields eg. array('t.id');
 	 * @return GO_Base_Db_FindParams 
 	 */
 	public function group($fields){
@@ -285,10 +285,15 @@ class GO_Base_Db_FindParams{
 	 *			'type'=>'INNER' //defaults to INNER
 	 *			)
 	 * 
+	 * @todo Maybe add separate parameters for each config value?? public function joinModel($model,$foreignField,$localField,tableAlias='t',$type='INNER'){}
+	 * 
 	 * @return GO_Base_Db_FindParams 
 	 */
 	public function joinModel($config){
-		$this->_params['joinModel']=$config;
+		if(!isset($this->_params['joinModel']))
+			$this->_params['joinModel']=array();
+		
+		$this->_params['joinModel'][]=$config;
 		return $this;
 	}
 	

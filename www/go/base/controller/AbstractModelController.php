@@ -390,7 +390,7 @@ class GO_Base_Controller_AbstractModelController extends GO_Base_Controller_Abst
 			$this->_handleAdvancedQuery($params['advancedQueryData'],$storeParams);
 		}
 			
-		$store->setStatement(call_user_func(array($modelName,'model'))->find($storeParams));
+		$store->setStatement(GO::getModel($modelName)->find($storeParams));
 		
 		$response = array_merge($response, $store->getData());
 		
