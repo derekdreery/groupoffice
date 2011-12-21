@@ -892,12 +892,13 @@ try {
 
 
 			$cal2 = new calendar();
+			$user_cal_settings = $cal2->get_settings($GO_SECURITY->user_id);
 			$response['results']=array();
 			$count=0;
 			$cal->get_view_calendars($view_id);
 			while($view_calendar = $cal->next_record()) {
 
-				if(!isset($response['calendar_id'])){
+				if($user_cal_settings['calendar_id']==$view_calendar['id'] || !isset($response['calendar_id'])){
 					$response['calendar_id']=$view_calendar['id'];
 					$response['calendar_name']=$view_calendar['name'];
 				}
