@@ -291,7 +291,7 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 	}
 	
 	private function _getTempDir(){
-		$this->_tmpDir=GO::config()->tmpdir.'saved_messages/'.uniqid(time()).'/';
+		$this->_tmpDir=GO::config()->tmpdir.'imap_messages/'.$this->account->id.'-'.$this->mailbox.'-'.$this->uid.'/';
 		if(!is_dir($this->_tmpDir))
 			mkdir($this->_tmpDir, 0755, true);
 		return $this->_tmpDir;
@@ -363,7 +363,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 				$f = new GO_Base_Fs_File($a['name']);
 				if(($this->createTempFilesForInlineAttachments && !empty($a['content_id'])) || ($this->createTempFilesForAttachments && empty($a['content_id']))){
 					$tmpFile = new GO_Base_Fs_File($this->_getTempDir().$a['name']);				
-					$imap->save_to_file($this->uid, $tmpFile->path(),  $part['number'], $part['encoding'], true);
+					if(!$tmpFile->exists())
+						$imap->save_to_file($this->uid, $tmpFile->path(),  $part['number'], $part['encoding'], true);
+					
 					$a['tmp_file']=$tmpFile->stripTempPath();
 				}else
 				{
