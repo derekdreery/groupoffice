@@ -360,7 +360,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			if(!$this->columns){
 			
 				$sql = "SHOW COLUMNS FROM `" . $this->tableName() . "`;";
-				$GLOBALS['query_count']++;
 				$stmt = $this->getDbConnection()->query($sql);
 				while ($field = $stmt->fetch()) {
 					preg_match('/([a-zA-Z].*)\(([1-9].*)\)/', $field['Type'], $matches);
@@ -1079,10 +1078,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->_debugSql)
 				GO::debug($sql);
 
-		//$sql .= "WHERE `".$this->primaryKey().'`='.intval($primaryKey);
-		
-		$GLOBALS['query_count']++;
-		
 		try{
 			
 			$result = $this->getDbConnection()->prepare($sql);
@@ -1333,8 +1328,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		if($this->_debugSql)
 				GO::debug($sql);
 		
-		//GO::debug($sql);
-		$GLOBALS['query_count']++;
 		try{
 			$result = $this->getDbConnection()->query($sql);
 			$result->model=$this;
@@ -1372,7 +1365,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 	 * @return int  
 	 */
 	public function count(){
-		$GLOBALS['query_count']++;
 		$stmt = $this->getDbConnection()->query("SELECT count(*) AS count FROM `".$this->tableName()."`");
 		$record = $stmt->fetch();
 		return $record['count'];		
@@ -2087,7 +2079,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 				'module'=>$this->module,
 				'model_name'=>$this->className(),
 				'name' => '',
-				'link_type'=>$this->modelTypeId(),
+				//'link_type'=>$this->modelTypeId(),
 				'description'=>'',		
 				'type'=>$this->localizedName, //deprecated, for backwards compatibilty
 				'keywords'=>$this->getSearchCacheKeywords($this->localizedName),
@@ -2191,7 +2183,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			GO::debug($sql);
 			GO::debug($this->_attributes);
 		}
-		$GLOBALS['query_count']++;
 		
 		try{
 			$stmt = $this->getDbConnection()->prepare($sql);
@@ -2255,8 +2246,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			GO::debug($sql);
 			GO::debug($this->_attributes);
 		}
-		
-		$GLOBALS['query_count']++;
 
 		try{
 			$stmt = $this->getDbConnection()->prepare($sql);
@@ -2355,8 +2344,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		if($this->_debugSql)
 			GO::debug($sql);
-		
-		$GLOBALS['query_count']++;
+
 		$success = $this->getDbConnection()->query($sql);		
 		
 		$attr = $this->getCacheAttributes();
@@ -2729,26 +2717,6 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		else
 			return false;
 	}
-	
-
-//	public function deleteBy($params){
-//		
-//		$sql = 'DELETE FROM `'.$this->tableName().'` WHERE 1 ';
-//		
-//		$sql = $this->_appendByParamsToSQL($sql, $params);
-//		
-//		if($this->_debugSql)
-//			GO::debug($sql);
-//		
-//		$GLOBALS['query_count']++;
-//		return $this->getDbConnection()->query($sql);
-//	}
-	
-//	public function checkFilesFolder(){
-//		if($this->hasFiles()){
-//			GO_Files_Controller_Folder::checkModelFolder($this);						
-//		}
-//	}
 	
 	/**
 	 * A function that checks the consistency with the database.
