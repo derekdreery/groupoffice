@@ -16,6 +16,11 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 		GO::$ignoreAclPermissions=true;
 
 		GO_Base_Util_SQL::executeSqlFile('install.sql');
+		
+		$dbVersion = GO_Base_Util_Common::countUpgradeQueries("updates.php");
+		
+		GO::config()->save_setting('version', $dbVersion);
+		GO::config()->save_setting('upgrade_mtime', GO::config()->mtime);
 
 		$adminGroup = new GO_Base_Model_Group();
 		$adminGroup->id=1;

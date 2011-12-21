@@ -122,15 +122,10 @@ class GO_Base_Module extends GO_Base_Observable {
 	 */
 	public function databaseVersion(){
 		$updatesFile = $this->path() . 'install/updates.php';
-		if(file_exists($updatesFile))
-		{
-			require($updatesFile);
-			if(isset($updates))
-				return count($updates);
-		}else
-		{
-			return 0;
-		}
+		if(!file_exists($updatesFile))
+			$updatesFile = $this->path() . 'install/updates.inc.php';
+		
+		return GO_Base_Util_Common::countUpgradeQueries($updatesFile);
 	}
 
 	/**
@@ -145,6 +140,7 @@ class GO_Base_Module extends GO_Base_Observable {
 		if(file_exists($sqlFile))
 		{
 			$queries = GO_Base_Util_SQL::getSqlQueries($sqlFile);
+			
 			foreach($queries as $query)
 				GO::getDbConnection ()->query($query);
 		}

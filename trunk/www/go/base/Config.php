@@ -955,10 +955,10 @@ class GO_Base_Config {
 		}
 
 		// database class library
-		require_once($this->class_path.'database/base_db.class.inc.php');
-		require_once($this->class_path.'database/'.$this->db_type.'.class.inc.php');
-
-		$this->db = new db($this);
+//		require_once($this->class_path.'database/base_db.class.inc.php');
+//		require_once($this->class_path.'database/'.$this->db_type.'.class.inc.php');
+//
+//		$this->db = new db($this);
 
 		if(is_string($this->file_create_mode)) {
 			$this->file_create_mode=octdec($this->file_create_mode);
@@ -992,7 +992,7 @@ class GO_Base_Config {
 
 	function __destruct() {
 		if($this->debug_log) {
-			GO::debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
+			//GO::debug('Performed '.$GLOBALS['query_count'].' database queries', $this);
 
 			GO::debug('Page load took: '.(GO_Base_Util_Date::getmicrotime()-$this->loadstart).'ms', $this);
 
@@ -1149,28 +1149,17 @@ class GO_Base_Config {
 	 * @return string Configuration key value
 	 */
 	function get_setting($name, $user_id=0) {
-		$this->db->query("SELECT * FROM go_settings WHERE name='".$this->db->escape($name)."' AND user_id=".$this->db->escape($user_id));
-		if ( $this->db->next_record() ) {
-			return $this->db->f('value');
+		$attributes['name']=$name;
+		$attributes['user_id']=$user_id;
+		
+		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
+		if ($setting) {
+			return $setting->value;
 		}
 		return false;
 	}
 
-	/**
-	 * Gets all custom saved user settings from the database
-	 *
-	 * @param  user_id The user ID to get the settings for.
-	 * @access public
-	 * @return array Configurations with key and value
-	 */
-	function get_settings($user_id) {
-		$settings=array();
-		$this->db->query("SELECT * FROM go_settings WHERE user_id=".$this->db->escape($user_id));
-		while($this->db->next_record()) {
-			$settings[$this->db->f('name')]=$this->db->f('value');
-		}
-		return $settings;
-	}
+
 
 	/**
 	 * Saves a custom setting to the database
@@ -1181,11 +1170,23 @@ class GO_Base_Config {
 	 * @return bool Returns true on succes
 	 */
 	function save_setting( $name, $value, $user_id=0) {
-		if ( $this->get_setting($name, $user_id) === false ) {
-			return $this->db->query("INSERT INTO go_settings (name, value, user_id) VALUES ('".$this->db->escape($name)."', '".$this->db->escape($value)."', ".intval($user_id).")");
-		} else {
-			return $this->db->query("UPDATE go_settings SET value='".$this->db->escape($value)."' WHERE name='".$this->db->escape($name)."' AND user_id='".$this->db->escape($user_id)."'");
-		}
+		
+		$attributes['name']=$name;
+		$attributes['user_id']=$user_id;
+		
+		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
+		if(!$setting)
+			$setting = new GO_Base_Model_Setting();
+		
+		$setting->value=$value;
+		$setting->save();
+		
+		
+//		if ( $this->get_setting($name, $user_id) === false ) {
+//			return $this->db->query("INSERT INTO go_settings (name, value, user_id) VALUES ('".$this->db->escape($name)."', '".$this->db->escape($value)."', ".intval($user_id).")");
+//		} else {
+//			return $this->db->query("UPDATE go_settings SET value='".$this->db->escape($value)."' WHERE name='".$this->db->escape($name)."' AND user_id='".$this->db->escape($user_id)."'");
+//		}
 	}
 
 	/**
@@ -1195,81 +1196,16 @@ class GO_Base_Config {
 	 * @access public
 	 * @return bool Returns true on succes
 	 */
-	function delete_setting( $name ) {
-		return $this->db->query("DELETE FROM go_settings WHERE name='".$this->db->escape($name)."'");
+	function delete_setting( $name , $user_id=0) {
+		$attributes['name']=$name;
+		$attributes['user_id']=$user_id;
+		
+		$setting = GO_Base_Model_Setting::model()->findSingleByAttributes($attributes);
+		return $setting->delete();
 	}
 
-	function save_state($user_id, $name, $value) {
-		$state['user_id']=$user_id;
-		$state['name']=$name;
-		$state['value']=$value;
-
-		return $this->db->replace_row('go_state',$state);
-	}
-
-	function get_state($user_id, $index) {
-		$state = array();
-		$sql = "SELECT * FROM go_state WHERE user_id=".$this->db->escape($user_id);
-		$this->db->query($sql);
-
-		while($this->db->next_record(DB_ASSOC)) {
-			$state[$this->db->f('name')]=$this->db->f('value');
-		}
-		return $state;
-	}
-
-
-
-	function get_client_settings() {
-		global $GO_SECURITY, $GO_MODULES, $GO_LANGUAGE;
-
-		require_once($this->class_path.'base/theme.class.inc.php');
-		$GLOBALS['GO_THEME'] = new GO_THEME();
-
-
-		$response['state_index'] = 'go';
-
-		$response['language']=$GLOBALS['GO_LANGUAGE']->language;
-		$response['state']=array();
-		if($GLOBALS['GO_SECURITY']->logged_in()) {
-			//state for Ext components
-			$response['state'] = $this->get_state(GO::session()->values['user_id'], $response['state_index']);
-
-			$response['has_admin_permission']=$GLOBALS['GO_SECURITY']->has_admin_permission(GO::session()->values['user_id']);
-		}
-		foreach($_SESSION['GO_SESSION'] as $key=>$value) {
-			if(!is_array($value)) {
-				$response[$key]=$value;
-			}
-		}
-
-		//$response['modules']=GO::modules()->modules;
-		$response['config']['theme_url']=$GLOBALS['GO_THEME']->theme_url;
-		$response['config']['theme']=$GLOBALS['GO_THEME']->theme;
-		$response['config']['product_name']=$this->product_name;
-		$response['config']['product_version']=$this->version;
-		$response['config']['host']=$this->host;
-		$response['config']['title']=$this->title;
-		$response['config']['webmaster_email']=$this->webmaster_email;
-
-		$response['config']['allow_password_change']=$this->allow_password_change;
-		$response['config']['allow_themes']=$this->allow_themes;
-		$response['config']['allow_profile_edit']=$this->allow_profile_edit;
-
-		$response['config']['max_users']=$this->max_users;
-
-		$response['config']['debug']=$this->debug;
-		$response['config']['disable_flash_upload']=$this->disable_flash_upload;		
-
-		$response['config']['max_attachment_size']=$this->max_attachment_size;
-		$response['config']['max_file_size']=$this->max_file_size;
-		$response['config']['help_link']=$this->help_link;
-		$response['config']['nav_page_size']=intval($this->nav_page_size);
-
-
-		return $response;
-	}
 	
+
 	/**
 	 * Save the current configuraton to the config.php file.
 	 * 

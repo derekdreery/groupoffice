@@ -169,4 +169,19 @@ class GO_Base_Util_Common {
 		return isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && $_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest";  
 	}
 
+	
+	public static function countUpgradeQueries($updatesFile){
+		$count=0;
+		if(file_exists($updatesFile))
+		{
+			require($updatesFile);
+			
+			if(isset($updates)){
+				foreach($updates as $timestamp=>$queries)
+					$count+=count($queries);
+			}
+		}
+		
+		return $count;		
+	}
 }

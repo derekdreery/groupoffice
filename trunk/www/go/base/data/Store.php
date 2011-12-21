@@ -153,6 +153,8 @@ class GO_Base_Data_Store extends GO_Base_Data_AbstractStore {
       } catch (Exception $e) {
         $this->response['deleteSuccess'] = false;
         $this->response['deleteFeedback'] = $e->getMessage();
+				if(GO::config()->debug)
+					$this->response['deleteTrace'] = $e->getTraceAsString ();
       }
     }
 	}
