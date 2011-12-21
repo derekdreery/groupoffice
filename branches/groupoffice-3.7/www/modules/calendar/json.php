@@ -61,6 +61,8 @@ try {
 				if(!$color){
 					$color = $default_colors[$i];
 					$i++;
+					if($i > $default_colors_count)
+						$i = 0;
 				}
 				
 				$record['color'] = $color;
@@ -514,6 +516,8 @@ try {
 				if(!$color){
 					$color = $default_colors[$i];
 					$i++;
+					if($i > $default_colors_count)
+					$i = 0;
 				}
 
 				$default_bg[$cal_id] = $color;
