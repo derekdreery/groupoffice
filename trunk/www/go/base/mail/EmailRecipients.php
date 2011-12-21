@@ -12,6 +12,23 @@ class GO_Base_Mail_EmailRecipients{
 	}
 	
 	/**
+	 * Create a list for a sinlge recipient.
+	 * 
+	 * Useful to format a single addres like this:
+	 * 
+	 * (string) GO_Base_Mail_EmailRecipients::createSingle("john@example.com", "John Smith");
+	 * 
+	 * @param string $email
+	 * @param string $personal
+	 * @return GO_Base_Mail_EmailRecipients 
+	 */
+	public static function createSingle($email, $personal){
+		$l = new GO_Base_Mail_EmailRecipients();
+		$l->addRecipient($email, $personal);
+		return $l;
+	}
+	
+	/**
 	 * Add a recipient to the list.
 	 * 
 	 * @param string $email

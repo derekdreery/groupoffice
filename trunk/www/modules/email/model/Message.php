@@ -181,6 +181,14 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 	protected function getAttachmentUrl($attachment) {
 		return '';
 	}
+	
+	private function _convertRecipientArray($r){
+		$new = array();
+		foreach($r as $email=>$personal)
+			$new[]=array('email'=>$email, 'personal'=>$personal);
+		
+		return $new;
+	}
 
 	/**
 	 * Returns MIME fields contained in this class's instance as an associative
@@ -200,9 +208,9 @@ abstract class GO_Email_Model_Message extends GO_Base_Model {
 		$from = $this->from->getAddress();
 		$response['from'] = $from['personal'];
 		$response['sender'] = $from['email'];
-		$response['to'] = $recipientsAsString ? (string) $this->to : $this->to->getAddresses();
-		$response['cc'] = $recipientsAsString ? (string) $this->cc : $this->cc->getAddresses();
-		$response['bcc'] = $recipientsAsString ? (string) $this->bcc :  $this->bcc->getAddresses();
+		$response['to'] = $recipientsAsString ? (string) $this->to : $this->_convertRecipientArray($this->to->getAddresses());
+		$response['cc'] = $recipientsAsString ? (string) $this->cc : $this->_convertRecipientArray($this->cc->getAddresses());
+		$response['bcc'] = $recipientsAsString ? (string) $this->bcc :  $this->_convertRecipientArray($this->bcc->getAddresses());
 		$response['reply_to'] = (string) $this->reply_to;
 		$response['message_id'] = $this->message_id;
 		$response['date'] = $this->date;

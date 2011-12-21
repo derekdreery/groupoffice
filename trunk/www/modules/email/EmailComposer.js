@@ -75,42 +75,42 @@ GO.email.EmailComposer = function(config) {
 		}
 	})];
 						
-	if(GO.gnupg)
-	{
-		optionsMenuItems.push('-');
-			
-		optionsMenuItems.push(this.encryptCheck = new Ext.menu.CheckItem({
-			text:GO.gnupg.lang.encryptMessage,
-			checked: false,
-			listeners : {
-				checkchange: function(check, checked) {
-					if(this.formPanel.baseParams.content_type=='html')
-					{
-						if(!confirm(GO.gnupg.lang.confirmChangeToText))
-						{
-							check.setChecked(!checked, true);
-							return false;
-						}else
-						{
-							this.emailEditor.setContentTypeHtml(false);
-							this.htmlCheck.setChecked(false, true);
-							this.showConfig.keepEditingMode=true;
-							this.show(this.showConfig);
-						}
-					}
-						
-					this.htmlCheck.setDisabled(checked);
-						
-					this.sendParams['encrypt'] = checked
-					? '1'
-					: '0';
-								
-					return true;
-				},
-				scope:this
-			}
-		}));
-	}
+//	if(GO.gnupg)
+//	{
+//		optionsMenuItems.push('-');
+//			
+//		optionsMenuItems.push(this.encryptCheck = new Ext.menu.CheckItem({
+//			text:GO.gnupg.lang.encryptMessage,
+//			checked: false,
+//			listeners : {
+//				checkchange: function(check, checked) {
+//					if(this.formPanel.baseParams.content_type=='html')
+//					{
+//						if(!confirm(GO.gnupg.lang.confirmChangeToText))
+//						{
+//							check.setChecked(!checked, true);
+//							return false;
+//						}else
+//						{
+//							this.emailEditor.setContentTypeHtml(false);
+//							this.htmlCheck.setChecked(false, true);
+//							this.showConfig.keepEditingMode=true;
+//							this.show(this.showConfig);
+//						}
+//					}
+//						
+//					this.htmlCheck.setDisabled(checked);
+//						
+//					this.sendParams['encrypt'] = checked
+//					? '1'
+//					: '0';
+//								
+//					return true;
+//				},
+//				scope:this
+//			}
+//		}));
+//	}
 
 	this.optionsMenu = new Ext.menu.Menu({
 		items : optionsMenuItems
@@ -252,7 +252,13 @@ GO.email.EmailComposer = function(config) {
 	}));
 
 	this.emailEditor = new GO.base.email.EmailEditorPanel({
-		region:'center'
+		region:'center',
+		listeners:{
+			submitshortcut:function(){
+				this.sendMail(false, false);
+			},
+			scope:this
+		}
 	});
 	
 	this.formPanel = new Ext.form.FormPanel({
@@ -297,6 +303,7 @@ GO.email.EmailComposer = function(config) {
 	var tbar = [this.sendButton = new Ext.Button({
 		text : GO.email.lang.send,
 		iconCls : 'btn-send',
+		tooltip:'CTRL+ENTER',
 		handler : function() {
 			this.sendMail();
 		},
@@ -416,7 +423,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	
 	defaultSendParams : {
 		priority : 3,
-		notification : false,
+		notification : 0,
 		draft_uid : 0,
 		reply_uid : 0,
 		reply_mailbox : "",
