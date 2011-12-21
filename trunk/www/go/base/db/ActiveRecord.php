@@ -794,7 +794,11 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		return $model;		
 	}
 	
-	private function _getDefaultFindSelectFields(){
+	private function _getDefaultFindSelectFields($single=false){
+		
+		if($single)
+			return 't.*';
+		
 		foreach($this->columns as $name=>$attr){
 			if($attr['gotype']!='blob' && $attr['gotype']!='textarea')
 				$fields[]=$name;
@@ -889,7 +893,7 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 		
 		
 		if(empty($params['fields'])){
-			$params['fields']=$this->_getDefaultFindSelectFields();
+			$params['fields']=$this->_getDefaultFindSelectFields(isset($params['limit']) && $params['limit']==1);
 			$fetchObject= true;
 		}else
 		{
