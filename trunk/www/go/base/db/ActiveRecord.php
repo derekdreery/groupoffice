@@ -2310,9 +2310,17 @@ abstract class GO_Base_Db_ActiveRecord extends GO_Base_Model{
 			
 			if(!empty($attr['delete'])){
 
-				$stmt = $this->$name;
-				while($child = $stmt->fetch()){				
-					$child->delete();
+				$result = $this->$name;
+				
+				if($result instanceof GO_Base_Db_ActiveStatement){	
+					//has_many relations result in a statement.
+					while($child = $stmt->fetch()){				
+						$child->delete();
+					}
+				}elseif($result)
+				{
+					//single relations return a model.
+					$result->delete();
 				}
 			}  else {
 				if($attr['type']==self::HAS_ONE){
