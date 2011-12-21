@@ -89,7 +89,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 	}
 	
 	private function _getTempDir(){
-		$this->_tmpDir=GO::config()->tmpdir.'saved_messages/'.uniqid(time()).'/';
+		$this->_tmpDir=GO::config()->tmpdir.'saved_messages/'.md5(serialize($this->attributes)).'/';
 		if(!is_dir($this->_tmpDir))
 			mkdir($this->_tmpDir, 0755, true);
 		return $this->_tmpDir;
@@ -163,9 +163,11 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 						$content_id='';						
 					}
 					
+					$tmp_file = new GO_Base_Fs_File($this->_getTempDir().$filename);
 					if(!empty($part->body)){
-						$tmp_file = $this->_getTempDir().$filename;
-						file_put_contents($tmp_file, $part->body);
+						$tmp_file = new GO_Base_Fs_File($this->_getTempDir().$filename);
+						if(!$tmp_file->exists())
+							$tmp_file->putContents($part->body);
 					}else
 					{
 						$tmp_file=false;
@@ -178,7 +180,7 @@ class GO_Email_Model_SavedMessage extends GO_Email_Model_Message {
 					$a['number']=$part_number_prefix.$part_number;
 					$a['content_id']=$content_id;
 					$a['mime']=$mime_type;
-					$a['tmp_file']=str_replace(GO::config()->tmpdir,'',$tmp_file);
+					$a['tmp_file']=$tmp_file ? $tmp_file->stripTempPath() : false;
 					$a['index']=count($this->_attachments);
 					$a['size']=isset($part->body) ? strlen($part->body) : 0;
 					$a['human_size']= GO_Base_Util_Number::formatSize($a['size']);
