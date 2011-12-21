@@ -67,7 +67,11 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 	}
 	
 	/**
-	 * Return array with actions (in lowercase and without "action" prefix!) that may be accessed by a guest that is not logged in.	
+	 * Return array with actions (in lowercase and without "action" prefix!) that 
+	 * may be accessed by a guest that is not logged in.
+	 * 
+	 * WARNING: All permissions will be ignored within this controller action.
+	 * GO::$ignoreAclPermissions is set to true.
 	 * 
 	 * @return array
 	 */
@@ -242,6 +246,14 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 			if(!$this->_checkPermission($action)){
 				throw new GO_Base_Exception_AccessDenied();
 			}
+			
+			$allowGuests = in_array($action, $this->allowGuests());
+			if($allowGuests){		
+				$oldIgnore = GO::$ignoreAclPermissions;
+				//ignore all permissions when guest access is allowed
+				GO::$ignoreAclPermissions=true;
+			}
+			
 
 			$methodName='action'.$action;
 			
@@ -269,6 +281,10 @@ abstract class GO_Base_Controller_AbstractController extends GO_Base_Observable 
 
 			if(isset($response))
 				$this->render($action, $response);
+			
+			//restore old value for acl permissions if this method was allowed for guests.
+			if(isset($oldIgnore))
+				GO::$ignoreAclPermissions=$oldIgnore;
 
 			return $response;
 			
