@@ -111,6 +111,7 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 		}else 
 		{			
 			this.formPanel.form.reset();
+			this.htmlEditPanel.reset();
 			this.readPermissionsTab.setAcl(0);
 
 			GO.addressbook.EmailTemplateDialog.superclass.show.call(this);
@@ -128,33 +129,25 @@ Ext.extend(GO.addressbook.EmailTemplateDialog, Ext.Window,{
 	submitForm : function(hide){
 
 		//won't toggle if not done twice...
-		this.htmlEditPanel.getHtmlEditor().toggleSourceEdit(false);
-		this.htmlEditPanel.getHtmlEditor().toggleSourceEdit(false);
+//		this.htmlEditPanel.getHtmlEditor().toggleSourceEdit(false);
+//		this.htmlEditPanel.getHtmlEditor().toggleSourceEdit(false);
 
 		this.formPanel.form.submit(
 		{
 			url: GO.url('addressbook/template/submit'),
-//			params: {
-//				inline_attachments: Ext.encode(this.inline_attachments)
-//			},
 			waitMsg:GO.lang['waitMsgSave'],
 			success:function(form, action){
 				
 				this.fireEvent('save', this);
-//				
-//				this.inline_attachments = action.result.inline_attachments;
-				
+
 				if(hide)
 				{
 					this.hide();	
 				}else
 				{
-					//this.htmlEditPanel.getHtmlEditor().setValue(action.result.body);
-					
 					if(action.result.id)
 					{
-						this.setEmailTemplateId(action.result.id);
-						
+						this.setEmailTemplateId(action.result.id);						
 						this.readPermissionsTab.setAcl(action.result.acl_id);
 					}
 				}	

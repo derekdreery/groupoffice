@@ -97,20 +97,39 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 		{
 			$response['data']=array();
 			if ($params['content_type'] == 'plain') {
-				$response['plainbody']='';
+				$response['data']['plainbody']='';
 			}else
 			{
-				$response['htmlbody']='';
+				
+				$response['data']['htmlbody']='';
 			}
-		}
-		
+		}		
 		$response['success']=true;
 		
 		return $response;
 	}
+	
+	/**
+	 * When changing content type or template in email composer we don't want to 
+	 * reset some header fields.
+	 * 
+	 * @param type $response
+	 * @param type $params 
+	 */
+	private function _keepHeaders(&$response, $params){
+		if(!empty($params['keepHeaders'])){
+			unset(
+						$response['data']['to'],
+						$response['data']['cc'], 
+						$response['data']['bcc'], 
+						$response['data']['subject']
+						);
+		}
+	}
 
 	public function actionTemplate($params) {
 		$response = $this->loadTemplate ($params);		
+		$this->_keepHeaders($response, $params);
 		return $response;
 	}
 	
@@ -187,14 +206,20 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$toList->removeRecipient($to['email']);
 			
 			$response['data']['to']=(string) $toList;	
+			
+			$imapMessage->cc->removeRecipient($to['email']);
+			$response['data']['cc']=(string) $imapMessage->cc;	
+			
 		}else
 		{
 			$response['data']['to']=(string) $imapMessage->from;	
 		}
 		
 		//for saving sent items in actionSend
-		$response['data']['reply_uid']=$imapMessage->uid;
-		$response['data']['reply_mailbox']=$params['mailbox'];
+		$response['sendParams']['reply_uid']=$imapMessage->uid;
+		$response['sendParams']['reply_mailbox']=$params['mailbox'];
+		
+		$this->_keepHeaders($response, $params);
 		
 		return $response;		
 	}
@@ -241,6 +266,13 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			
 			$response['data']['plainbody'] .= $header.$oldBody;
 		}
+		
+		//for saving sent items in actionSend
+		$response['sendParams']['forward_uid']=$imapMessage->uid;
+		$response['sendParams']['forward_mailbox']=$params['mailbox'];
+		
+		
+		$this->_keepHeaders($response, $params);
 		
 		return $response;
 		

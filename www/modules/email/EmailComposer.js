@@ -24,8 +24,8 @@ GO.email.EmailComposer = function(config) {
 		checked : false,
 		checkHandler : function(check, checked) {
 			this.sendParams['notification'] = checked
-			? 'true'
-			: 'false';
+			? 1
+			: 0;
 		},
 		scope : this
 	}),
@@ -61,23 +61,11 @@ GO.email.EmailComposer = function(config) {
 		listeners : {
 			checkchange: function(check, checked) {
 								 	
-				if(this.emailEditor.isDirty() || confirm(GO.email.lang.confirmLostChanges))
+				if(!this.emailEditor.isDirty() || confirm(GO.email.lang.confirmLostChanges))
 				{
 					this.emailEditor.setContentTypeHtml(checked);
-					/**
-					 * reload dialog for text or html
-					 */
-					this.showConfig.keepEditingMode=true;
-					var v = this.formPanel.form.getValues();
-					delete v.body;
-					delete v.textbody;
-					
-					if(!this.showConfig.values) this.showConfig.values={};
-					Ext.apply(this.showConfig.values, v);
-
-					
-					delete this.showConfig.move;
-					this.show(this.showConfig);
+					this.lastLoadParams.keepHeaders=1;
+					this.loadForm(this.lastLoadUrl, this.lastLoadParams);
 				}else
 				{
 					check.setChecked(!checked, true);
@@ -367,11 +355,11 @@ GO.email.EmailComposer = function(config) {
 							this.templatesStore.baseParams.default_template_id=this.showConfig.template_id;
 							this.templatesStore.load();
 							delete this.templatesStore.baseParams.default_template_id;
-						}else if(this.emailEditor.isDirty() || confirm(GO.email.lang.confirmLostChanges))
-						{
-							this.showConfig.template_id=item.template_id;
-							this.showConfig.keepEditingMode=true;
-							this.show(this.showConfig);
+						}else if(!this.emailEditor.isDirty() || confirm(GO.email.lang.confirmLostChanges))
+						{							
+							this.lastLoadParams.template_id=item.template_id;
+							this.lastLoadParams.keepHeaders=1;
+							this.loadForm(this.lastLoadUrl, this.lastLoadParams);							
 						}else
 						{
 							return false;							
@@ -425,6 +413,19 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 	autoSaveTask : {},
 	
 	lastAutoSave : false,
+	
+	defaultSendParams : {
+		priority : 3,
+		notification : false,
+		draft_uid : 0,
+		reply_uid : 0,
+		reply_mailbox : "",
+		in_reply_to : "",
+		forward_uid : 0,
+		forward_mailbox : ""
+	},
+	
+	sendParams : {},
 
 	/*
 	 *handles ctrl+enter from html editor
@@ -475,42 +476,27 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 	toComboVisible : true,
 
-	reset : function(keepAttachmentsAndOptions) {
-		if(!keepAttachmentsAndOptions){
-			this.sendParams = {
-				notification : false,
-				priority : '3',
-				draft_uid : 0
-			};
+	reset : function() {
 
-			this.showCC((GO.email.showCCfield == '1') ? true : false);
-			this.showBCC((GO.email.showBCCfield == '1') ? true : false);			
-			this.ccFieldCheck.setChecked((GO.email.showCCfield == '1') ? true : false);
-			this.bccFieldCheck.setChecked((GO.email.showBCCfield == '1') ? true : false);
-			
-			if (this.defaultAcccountId) {
-				this.fromCombo.setValue(this.defaultAcccountId);
-			}
-			this.notifyCheck.setChecked(false);
-			this.normalPriorityCheck.setChecked(true);
-	
-		}else
-		{
-			//keep options when switching from text <> html
-			this.sendParams={
-				notification : this.sendParams.notification,
-				priority : this.sendParams.priority,
-				draft_uid : this.sendParams.draft_uid,
-				reply_uid : this.sendParams.reply_uid,
-				reply_mailbox : this.sendParams.reply_mailbox,
-				in_reply_to : this.sendParams.in_reply_to,
-				forward_uid : this.sendParams.forward_uid,
-				forward_mailbox : this.sendParams.forward_mailbox
-			};
-			
+		this.sendParams = {};
+		Ext.apply(this.sendParams, this.defaultSendParams);
+
+		GO.email.showCCfield = false;
+		GO.email.showBCCfield = false;
+
+		this.showCC(GO.email.showCCfield);
+		this.showBCC(GO.email.showBCCfield);			
+		this.ccFieldCheck.setChecked(GO.email.showCCfield);
+		this.bccFieldCheck.setChecked(GO.email.showBCCfield);
+
+		if (this.defaultAcccountId) {
+			this.fromCombo.setValue(this.defaultAcccountId);
 		}
+		this.notifyCheck.setChecked(false);
+		this.normalPriorityCheck.setChecked(true);
 
 		this.formPanel.form.reset();
+		this.emailEditor.reset();
 		
 		this.fireEvent("reset", this);
 	},
@@ -652,7 +638,7 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 			this.initTemplateMenu(config);
 			
 			//keep attachments when switchting from text <> html
-			this.reset(config.keepEditingMode);
+			this.reset();
 			
 			//save the mail to a file location
 			if(config.saveToPath){
@@ -763,6 +749,9 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 				if (typeof(config.values)!='undefined' && typeof(config.values.body)!='undefined')
 					params.body = config.values.body;
+				
+				this.lastLoadUrl = url;
+				this.lastLoadParams = params;
 
 				this.formPanel.form.load({
 					url : url,
@@ -775,23 +764,10 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 					},
 					success : function(form, action) {
 
-						if (config.task == 'reply'
-							|| config.task == 'reply_all') {
-							this.sendParams['reply_uid'] = config.uid;
-							this.sendParams['reply_mailbox'] = config.mailbox;
-							this.sendParams['in_reply_to']=action.result.data.in_reply_to;
-						}else if (config.task == 'forward'){
-							this.sendParams['forward_uid'] = config.uid;
-							this.sendParams['forward_mailbox'] = config.mailbox;
-						}
-
-//						if (!config.keepEditingMode && action.result.data.attachments) {
-//							this.attachmentsStore.loadData({
-//								results : action.result.data.attachments
-//							}, true);
-//						}
-
-						this.afterShowAndLoad(params.task!='opendraft', config);
+						if(action.result.sendParams)
+							Ext.apply(this.sendParams, action.result.sendParams);
+						
+						this.afterShowAndLoad(config);
 
 						this.fireEvent('dialog_ready', this);
 					},
@@ -800,7 +776,8 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 
 			}else
 			{
-				this.afterShowAndLoad(true, config);
+				this.afterShowAndLoad(config);
+				
 			}
 			if (config.link_config) {
 				this.link_config = config.link_config;
@@ -812,9 +789,31 @@ Ext.extend(GO.email.EmailComposer, GO.Window, {
 		}
 	},
 	
+	
+	loadForm : function(url, params){
+		
+		params.content_type = this.emailEditor.getContentType();
+		
+		this.formPanel.form.load({
+					url : url,
+					params : params,
+					waitMsg : GO.lang.waitMsgLoad,
+					failure:function(form, action)
+					{
+						Ext.getBody().unmask();
+						Ext.Msg.alert(GO.lang['strError'], action.result.feedback)
+					},
+					success : function(form, action) {
+
+						if(action.result.sendParams)
+							Ext.apply(this.sendParams, action.result.sendParams);
+					},
+					scope : this
+				});
+	},
 
 	
-	afterShowAndLoad : function(addSignature, config){
+	afterShowAndLoad : function(config){
 
 		//this.startAutoSave();
 
