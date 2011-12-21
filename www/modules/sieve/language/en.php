@@ -1,7 +1,7 @@
 <?php
 
 
-$l["name"]= 'Name';
+$l["name"]= 'Sieve';
 $l["scriptname"]= 'Script name';
 $l["index"]= 'Index';
 $l["test"]= 'Test';
