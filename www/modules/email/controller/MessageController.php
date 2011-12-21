@@ -117,7 +117,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			if(!empty($params['forward_uid'])){
 				//set forwarded flag on IMAP message
 				$imap = $account->openImapConnection($params['forward_mailbox']);
-				$imap->set_message_flag(array($params['forward_uid']), "$Forwarded");
+				$imap->set_message_flag(array($params['forward_uid']), "\$Forwarded");
 			}
 
 			if($account->sent){
@@ -344,7 +344,7 @@ class GO_Email_Controller_Message extends GO_Base_Controller_AbstractController 
 			$response['data']['htmlbody'] .= $header.$this->_quoteHtml($oldMessage['htmlbody']);
 			
 			$response['data']['inlineAttachments']=array_merge($response['data']['inlineAttachments'],$oldMessage['inlineAttachments']);
-			$response['data']['attachments']=array_merge($response['data']['inlineAttachments'],$oldMessage['attachments']);
+			$response['data']['attachments']=array_merge($response['data']['attachments'],$oldMessage['attachments']);
 			
 		}else
 		{

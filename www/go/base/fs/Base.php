@@ -256,5 +256,14 @@ abstract class GO_Base_Fs_Base{
 	public function stripTempPath(){
 		return str_replace(GO::config()->tmpdir,'', $this->path());
 	}
+	
+	/**
+	 * Check if this is a temporary file.
+	 * 
+	 * @return boolean 
+	 */
+	public function isTempFile(){
+		return strpos($this->path(), GO::config()->tmpdir)===0;
+	}
 
 }

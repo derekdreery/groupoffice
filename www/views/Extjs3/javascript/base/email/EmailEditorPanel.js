@@ -53,14 +53,14 @@ GO.base.email.EmailEditorPanel = function(config){
 	GO.base.email.EmailEditorPanel.superclass.constructor.call(this,config);
 	
 	this.on("render", function(){
-			var formPanel = this.findParentByType(Ext.form.FormPanel);
-			formPanel.form.on('actioncomplete', function(form, action){
-				if(action.type=='load'){
-					this.afterLoad(action);
-				}
-			}, this);		
+		var formPanel = this.findParentByType(Ext.form.FormPanel);
+		formPanel.form.on('actioncomplete', function(form, action){
+			if(action.type=='load'){
+				this.afterLoad(action);
+			}
+		}, this);		
 			
-		}, this);
+	}, this);
 	
 	this.addEvents({
 		submitshortcut : true
@@ -167,7 +167,8 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 					this.attachments=[];
 					for(var i=0;i<records.length;i++)
 						this.attachments.push({
-							tmp_file:records[i].data.tmp_file
+							tmp_file:records[i].data.tmp_file,
+							from_file_storage: records[i].data.from_file_storage
 						});
 					
 					this.hiddenAttachmentsField.setValue(Ext.encode(this.attachments));
@@ -200,7 +201,7 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		else
 			this.textEditor.selectText(0,0);
 
-		//this.editor = html ? this.htmlEditor : this.textEditor;
+	//this.editor = html ? this.htmlEditor : this.textEditor;
 	},
 
 	insertDefaultFont : function(){
@@ -288,7 +289,8 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		if(attachments){
 			for(var i=0;i<attachments.length;i++)
 				this.attachments.push({
-					tmp_file: attachments[i].tmp_file
+					tmp_file: attachments[i].tmp_file,
+					from_file_storage:false
 				});
 
 			this.attachmentsView.store.loadData({
@@ -308,46 +310,86 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 	
 	getAttachmentsButton : function(){
 		
-//		
-//		if(GO.files)
-//	{
-//		uploadItems.push({
-//			iconCls:'btn-groupoffice',
-//			text : GO.email.lang.attachFilesGO.replace('{product_name}', GO.settings.config.product_name),
-//			handler : function()
-//			{
-//				if(GO.files)
-//				{
-//					GO.files.createSelectFileBrowser();
-//
-//					GO.selectFileBrowser.setFileClickHandler(this.addRemoteFiles, this);
-//
-//					GO.selectFileBrowser.setFilesFilter('');
-//					GO.selectFileBrowser.setRootID(0,0);
-//					GO.selectFileBrowserWindow.show();
-//				}
-//			},
-//			scope : this
-//		});
-//	}
 		
-		return new GO.base.upload.PluploadButton({
-			text:GO.lang.attachFiles,
-			upload_config: {
-				listeners: {
-					scope:this,
-					uploadcomplete: function(uploadpanel, success, failures) {
-						if (success.length){
-							this.attachmentsView.afterUpload();
-							if(!failures.length){
-								uploadpanel.onDeleteAll();
-								uploadpanel.ownerCt.hide();
+		if(GO.files)
+		{
+			var uploadItems = [];
+		
+			uploadItems.push(new GO.base.upload.PluploadMenuItem({
+					text:"Upload",
+					upload_config: {
+						listeners: {
+							scope:this,
+							uploadcomplete: function(uploadpanel, success, failures) {
+								if (success.length){
+									this.attachmentsView.afterUpload();
+									if(!failures.length){
+										uploadpanel.onDeleteAll();
+										uploadpanel.ownerCt.hide();
+									}
+								}
+							}
+						}
+					}
+				})
+			);
+		
+			uploadItems.push({
+				iconCls:'btn-groupoffice',
+				text : GO.email.lang.attachFilesGO.replace('{product_name}', GO.settings.config.product_name),
+				handler : function()
+				{
+					if(GO.files)
+					{
+						GO.files.createSelectFileBrowser();
+
+						GO.selectFileBrowser.setFileClickHandler(function(){	
+
+							var paths = [];
+							var selections = GO.selectFileBrowser.getSelectedGridRecords();
+							for (var i = 0; i < selections.length; i++)
+								paths.push(selections[i].data.path);
+							
+							this.attachmentsView.afterUpload({addFileStorageFiles:Ext.encode(paths)});
+							
+						}, this);
+
+						GO.selectFileBrowser.setFilesFilter('');
+						GO.selectFileBrowser.setRootID(0,0);
+						GO.selectFileBrowserWindow.show();
+					}
+				},
+				scope : this
+			});
+			
+			return new Ext.Button({
+				iconCls:'btn-attach',
+				text: GO.lang.attachFiles,
+				menu:{
+					items:uploadItems
+				}
+			});
+			
+		}else
+		{		
+			return new GO.base.upload.PluploadButton({
+				text:GO.lang.attachFiles,
+				upload_config: {
+					listeners: {
+						scope:this,
+						uploadcomplete: function(uploadpanel, success, failures) {
+							if (success.length){
+								this.attachmentsView.afterUpload();
+								if(!failures.length){
+									uploadpanel.onDeleteAll();
+									uploadpanel.ownerCt.hide();
+								}
 							}
 						}
 					}
 				}
-			}
-		});
+			});
+		}
 	}
 });
 

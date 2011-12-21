@@ -369,15 +369,15 @@ class cached_imap extends imap{
 		return parent::get_message_part($uid, $message_part, $peek, $max);
 	}
 
-	public function get_message_header($uid, $full_data=false){
-		$this->get_cached_messages($this->folder['id'], array($uid));
-		$record = $this->email->next_record();
-
-		if($record)
-			return $record;
-		else
-			return parent::get_message_header($uid, $full_data);
-	}
+//	public function get_message_header($uid, $full_data=false){
+//		$this->get_cached_messages($this->folder['id'], array($uid));
+//		$record = $this->email->next_record();
+//
+//		if($record)
+//			return $record;
+//		else
+//			return parent::get_message_header($uid, $full_data);
+//	}
 
 
 	public function get_message_with_body($uid, $create_temporary_attachment_files=false, $create_temporary_inline_attachment_files=false, $peek=false, $plain_body_requested=true, $html_body_requested=true) {
@@ -398,54 +398,54 @@ class cached_imap extends imap{
 		/*
 		 * Check cache
 		 */
-		$this->get_cached_messages($this->folder['id'], array($uid), true);
-		$values=$this->email->next_record();
-		if(!$this->disable_message_cache && !empty($values['serialized_message_object']) && $message =  json_decode($values['serialized_message_object'], true)){
+//		$this->get_cached_messages($this->folder['id'], array($uid), true);
+//		$values=$this->email->next_record();
+//		if(!$this->disable_message_cache && !empty($values['serialized_message_object']) && $message =  json_decode($values['serialized_message_object'], true)){
 
-			go_debug('got cached message');		
-
-	
-			
-			$ret = $this->get_body_parts($plain_body_requested,$html_body_requested, $struct, $message, $peek);
-			if($ret['html_body_fetched'] || $ret['plain_body_fetched'])
-			{
-				if($ret['html_body_fetched']){
-					$message['html_body']=$this->replace_inline_images($message['html_body'], $message['attachments']);
-				}
-				//additional body part added
-				$cached_message['uid']=$uid;
-				$cached_message['folder_id']=$this->folder['id'];
-				$cached_message['serialized_message_object']=json_encode($message);
-				
-				$this->update_cached_message($cached_message);
-			}
-
-
-			$message['from_cache']=true;
-			$message['new']=$values['new'];
-
-
-			for ($i = 0; $i < count($message['attachments']); $i ++) {
-				if(($create_temporary_attachment_files && empty($message['attachments'][$i]['replacement_url'])) || ($create_temporary_inline_attachment_files && !empty($message['attachments'][$i]['replacement_url']))){
-					$tmp_file = File::checkfilename($GLOBALS['GO_CONFIG']->tmpdir.'attachments/'.$message['attachments'][$i]['name']);
-					$data = $this->get_message_part_decoded(
-									$uid,
-									$message['attachments'][$i]['imap_id'],
-									$message['attachments'][$i]['encoding'],
-									'',//$message['attachments'][$i]['charset'], might break attachments
-									$peek);
-
-					if($data && file_put_contents($tmp_file, $data)) {
-						$message['attachments'][$i]['tmp_file']=$tmp_file;
-					}
-				}
-			}
-			
-			$GLOBALS['GO_EVENTS']->fire_event('get_message_with_body', array(&$message, $this));
-
-			//go_debug($message);
-			return $message;
-		}
+//			go_debug('got cached message');		
+//
+//	
+//			
+//			$ret = $this->get_body_parts($plain_body_requested,$html_body_requested, $struct, $message, $peek);
+//			if($ret['html_body_fetched'] || $ret['plain_body_fetched'])
+//			{
+//				if($ret['html_body_fetched']){
+//					$message['html_body']=$this->replace_inline_images($message['html_body'], $message['attachments']);
+//				}
+//				//additional body part added
+//				$cached_message['uid']=$uid;
+//				$cached_message['folder_id']=$this->folder['id'];
+//				$cached_message['serialized_message_object']=json_encode($message);
+//				
+//				$this->update_cached_message($cached_message);
+//			}
+//
+//
+//			$message['from_cache']=true;
+//			$message['new']=$values['new'];
+//
+//
+//			for ($i = 0; $i < count($message['attachments']); $i ++) {
+//				if(($create_temporary_attachment_files && empty($message['attachments'][$i]['replacement_url'])) || ($create_temporary_inline_attachment_files && !empty($message['attachments'][$i]['replacement_url']))){
+//					$tmp_file = File::checkfilename($GLOBALS['GO_CONFIG']->tmpdir.'attachments/'.$message['attachments'][$i]['name']);
+//					$data = $this->get_message_part_decoded(
+//									$uid,
+//									$message['attachments'][$i]['imap_id'],
+//									$message['attachments'][$i]['encoding'],
+//									'',//$message['attachments'][$i]['charset'], might break attachments
+//									$peek);
+//
+//					if($data && file_put_contents($tmp_file, $data)) {
+//						$message['attachments'][$i]['tmp_file']=$tmp_file;
+//					}
+//				}
+//			}
+//			
+//			$GLOBALS['GO_EVENTS']->fire_event('get_message_with_body', array(&$message, $this));
+//
+//			//go_debug($message);
+//			return $message;
+		//}
 
 		if(!$this->handle){
 			if(!$this->open($this->account, $this->folder['name'])){
@@ -897,14 +897,14 @@ class cached_imap extends imap{
 
 		if(count($uids))
 		{
-			$this->get_cached_messages($this->folder['id'], $uids);
-
-			//get messages from cache
-			while($message = $this->email->next_record())
-			{
-				$message['cached']=true;
-				$messages[$message['uid']]=$message;
-			}
+//			$this->get_cached_messages($this->folder['id'], $uids);
+//
+//			//get messages from cache
+//			while($message = $this->email->next_record())
+//			{
+//				$message['cached']=true;
+//				$messages[$message['uid']]=$message;
+//			}
 
 			//go_debug('Got '.count($messages).' from cache');
 
@@ -927,7 +927,7 @@ class cached_imap extends imap{
 					
 					//trim values for mysql insertion
 					$message = $this->imap_message_to_cache($message);
-					$this->add_cached_message($message);
+					//$this->add_cached_message($message);
 					$messages[$message['uid']]=$message;
 				}
 			}
@@ -1076,7 +1076,7 @@ class cached_imap extends imap{
 			$this->count-=count($this->filtered);
 				
 
-			$this->delete_cached_messages($this->filtered);
+			//$this->delete_cached_messages($this->filtered);
 		}
 
 
@@ -1107,26 +1107,26 @@ class cached_imap extends imap{
 
 	public function add_cached_message($cached_message)
 	{
-		return $this->email->replace_row('em_messages_cache', $cached_message);
+		//return $this->email->replace_row('em_messages_cache', $cached_message);
 	}
 
 
 	public function clear_cache($folder_id=0){
-		if($folder_id==0)
-		{
-			$sql = "DELETE FROM em_messages_cache WHERE account_id=?";
-			$this->email->query($sql, 'i', $this->account['id']);
-
-			$sql = "UPDATE em_folders SET sort='' WHERE account_id=?";
-			$this->email->query($sql, 'i', $this->account['id']);
-		}else
-		{
-			$sql = "DELETE FROM em_messages_cache WHERE folder_id=?";
-			$this->email->query($sql, 'i', $folder_id);
-
-			$sql = "UPDATE em_folders SET sort='' WHERE id=?";
-			$this->email->query($sql, 'i', $folder_id);
-		}
+//		if($folder_id==0)
+//		{
+//			$sql = "DELETE FROM em_messages_cache WHERE account_id=?";
+//			$this->email->query($sql, 'i', $this->account['id']);
+//
+//			$sql = "UPDATE em_folders SET sort='' WHERE account_id=?";
+//			$this->email->query($sql, 'i', $this->account['id']);
+//		}else
+//		{
+//			$sql = "DELETE FROM em_messages_cache WHERE folder_id=?";
+//			$this->email->query($sql, 'i', $folder_id);
+//
+//			$sql = "UPDATE em_folders SET sort='' WHERE id=?";
+//			$this->email->query($sql, 'i', $folder_id);
+//		}
 	}
 
 	/**
@@ -1140,7 +1140,7 @@ class cached_imap extends imap{
 
 	public function update_cached_message($cached_message)
 	{
-		return $this->email->update_row('em_messages_cache', array('uid', 'folder_id'), $cached_message);
+		//return $this->email->update_row('em_messages_cache', array('uid', 'folder_id'), $cached_message);
 	}
 
 	/**
@@ -1154,6 +1154,7 @@ class cached_imap extends imap{
 
 	public function get_cached_messages($folder_id, $uids, $with_full_cached_message=false)
 	{
+		return false;
 		$sql = "SELECT `folder_id`,`uid`,`account_id`,`new`,`subject`,`from`,".
 			"`size`,`udate`,`attachments`,`flagged`,`answered`,`forwarded`,`priority`,".
 			"`to`";

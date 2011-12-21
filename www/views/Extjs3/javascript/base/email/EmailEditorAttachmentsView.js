@@ -2,7 +2,7 @@ GO.base.email.EmailEditorAttachmentsView = function(config){
 		config=config||{};
 		config.store = new GO.data.JsonStore({
 			url:GO.url('core/pluploads'),
-			fields : ['tmp_file', 'name', 'size', 'type', 'extension', 'human_size'],
+			fields : ['tmp_file', 'name', 'size', 'type', 'extension', 'human_size','from_file_storage'],
 			id : 'tmp_file'
 		});
 		
@@ -51,8 +51,9 @@ GO.base.email.EmailEditorAttachmentsView = function(config){
 	}
 Ext.extend(GO.base.email.EmailEditorAttachmentsView, Ext.DataView, {
 	
-	afterUpload : function(){
-		this.store.load({add:true});
+	afterUpload : function(loadParams){
+		var params = {add:true, params:loadParams};
+		this.store.load(params);
 	},
 	removeSelectedAttachments : function(){
 		var records = this.getSelectedRecords();

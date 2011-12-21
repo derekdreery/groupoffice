@@ -342,14 +342,17 @@ class GO_Base_Mail_Message extends Swift_Message{
 		if($params['content_type']=='html'){
 			//inlineAttachments is an array(array('url'=>'',tmp_file=>'relative/path/');
 			if(!empty($params['inlineAttachments'])){
-				$inlineAttachments = json_decode($params['inlineAttachments'], true);
+				$inlineAttachments = json_decode($params['inlineAttachments']);
 
 				/* inline attachments must of course exist as a file, and also be used in
 				 * the message body
 				 */
 				foreach ($inlineAttachments as $ia) {
 
-					$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
+					//$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$ia['tmp_file']);
+					
+					$path = empty($ia->from_file_storage) ? GO::config()->tmpdir.$ia->tmp_file : GO::config()->file_storage_path.$ia->tmp_file;
+					$tmpFile = new GO_Base_Fs_File($path);
 
 					if ($tmpFile->exists()) {				
 						//Different browsers reformat URL's to absolute or relative. So a pattern match on the filename.
@@ -376,7 +379,8 @@ class GO_Base_Mail_Message extends Swift_Message{
 		if (!empty($params['attachments'])) {
 			$attachments = json_decode($params['attachments']);
 			foreach ($attachments as $att) {
-				$tmpFile = new GO_Base_Fs_File(GO::config()->tmpdir.$att->tmp_file);
+				$path = empty($att->from_file_storage) ? GO::config()->tmpdir.$att->tmp_file : GO::config()->file_storage_path.$att->tmp_file;
+				$tmpFile = new GO_Base_Fs_File($path);
 				if ($tmpFile->exists()) {
 					$file = Swift_Attachment::fromPath($tmpFile->path());
 					$file->setContentType($tmpFile->mimeType());
