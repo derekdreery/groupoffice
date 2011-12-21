@@ -106,7 +106,7 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 
 		var html = '<img src="'+this.selectedUrl+'" border="0" />';
 
-		this.fireEvent('insert', this,  this.selectedPath, this.selectedUrl);
+		this.fireEvent('insert', this,  this.selectedPath, true);
 		
 		this.menu.hide();
 
@@ -116,22 +116,22 @@ Ext.extend(GO.plugins.HtmlEditorImageInsert, Ext.util.Observable, {
 	
 	selectImage : function(r){	
 		
-		alert("Todo copy file to temp file");
 
-//		this.selectedRecord = r;
-//		this.selectedPath = r.data.path;
-//		this.selectedUrl = GO.settings.modules.files.url+'download.php?id='+this.selectedRecord.get('id');
-//		this.isTempFile=false;
-//				
-//		var html = '<img src="'+this.selectedUrl+'" border="0" />';
-//								
-//		this.fireEvent('insert', this, this.selectedPath, this.selectedUrl, this.isTempFile, r.data.id);
-//
-//		this.editor.focus();
-//			
-//		this.editor.insertAtCursor(html);
-//		
-//		GO.selectFileBrowserWindow.hide();
+		this.selectedRecord = r;
+		this.selectedPath = r.data.path;
+		
+		//filename is added as parameter. This is only for matching the url in the body of the html in GO_Base_Mail_Message::handleEmailFormInput with preg_match.
+		this.selectedUrl = GO.url("files/file/download",{id:r.data.id,filename:r.data.name});
+						
+		var html = '<img src="'+this.selectedUrl+'" border="0" />';
+								
+		this.fireEvent('insert', this, this.selectedPath, false);
+
+		this.editor.focus();
+			
+		this.editor.insertAtCursor(html);
+		
+		GO.selectFileBrowserWindow.hide();
 	}
 	
 });

@@ -290,6 +290,13 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 		}
 	}
 	
+	private function _getTempDir(){
+		$this->_tmpDir=GO::config()->tmpdir.'saved_messages/'.uniqid(time()).'/';
+		if(!is_dir($this->_tmpDir))
+			mkdir($this->_tmpDir, 0755, true);
+		return $this->_tmpDir;
+	}
+	
 	
 	private $_attachments;
 
@@ -355,9 +362,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 				
 				$f = new GO_Base_Fs_File($a['name']);
 				if(($this->createTempFilesForInlineAttachments && !empty($a['content_id'])) || ($this->createTempFilesForAttachments && empty($a['content_id']))){
-					$tmpFile = GO_Base_Fs_File::tempFile();				
-					$imap->save_to_file($this->uid, $tmpFile->path(),  $part['number'], '', true);
-					$a['tmp_file']=$tmpFile->path();
+					$tmpFile = new GO_Base_Fs_File($this->_getTempDir().$a['name']);				
+					$imap->save_to_file($this->uid, $tmpFile->path(),  $part['number'], $part['encoding'], true);
+					$a['tmp_file']=$tmpFile->stripTempPath();
 				}else
 				{
 					$a['tmp_file']=false;
@@ -384,6 +391,9 @@ class GO_Email_Model_ImapMessage extends GO_Email_Model_Message {
 	
 	
 	protected function getAttachmentUrl($attachment) {
+		
+		if(!empty($attachment['tmp_file']))
+			return GO::url('core/downloadTempFile', array('path'=>$attachment['tmp_file']));
 		
 		$mime = explode('/',$attachment['mime']);
 		
