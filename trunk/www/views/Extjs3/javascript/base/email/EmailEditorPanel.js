@@ -57,7 +57,8 @@ GO.base.email.EmailEditorPanel = function(config){
 				if(action.type=='load'){
 					this.afterLoad(action);
 				}
-			}, this);			
+			}, this);		
+			
 		},
 		scope:this
 	}
@@ -70,14 +71,17 @@ GO.base.email.EmailEditorPanel = function(config){
 };
 
 Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
-
+	
 	// [ [url:"",tmp_file:"relative/path"]]
 	inlineAttachments : [],
 	
+	originalValue : "",
+	
 	afterLoad : function(action){
-		this.reset();
 		this.setInlineAttachments(action.result.data.inlineAttachments);
-		this.setAttachments(action.result.data.attachments);			
+		this.setAttachments(action.result.data.attachments);		
+		
+		this.setOriginalValue();
 	},
 	
 	focus : function(){
@@ -119,8 +123,9 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 			name:'htmlbody',
 			hideLabel: true,
 			anchor: '100% 100%',
-			plugins:this.initHtmlEditorPlugins(),
+			plugins:this.initHtmlEditorPlugins(),			
 			listeners:{
+				
 				activate:function(){
 
 					var doc = this.htmlEditor.getDoc();				
@@ -134,13 +139,15 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 						Ext.EventManager.on(doc, 'keydown', this.fireSubmit,
 							this);
 					}
+					
+					this.setOriginalValue();
 				},
 				scope:this
 			}
 		});
 		
 		this.textEditor = new Ext.form.TextArea({
-			name: 'textbody',
+			name: 'plainbody',
 			anchor : '100% 100%',
 			hideLabel : true,
 			cls:'em-plaintext-body-field'
@@ -152,6 +159,10 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		this.attachmentsView = new GO.base.email.EmailEditorAttachmentsView({
 			autoHeight:true,
 			listeners:{
+				render:function(){
+					//reset this element on render of last element.
+					this.setContentTypeHtml(true);
+				},
 				attachmentschanged:function(av){
 					this.setEditorHeight();
 					var records = av.store.getRange();
@@ -169,6 +180,12 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		});
 		config.items.push(this.attachmentsView);
 
+	},
+	
+	reset : function(){
+		this.setAttachments();
+		this.setInlineAttachments();
+		this.setOriginalValue();
 	},
 	
 	getContentType : function(){
@@ -260,8 +277,12 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		this.hiddenInlineImagesField.setValue(Ext.encode(this.inlineAttachments));
 	},
 	
+	setOriginalValue : function(){		
+		this.originalValue=this.getActiveEditor().getValue();
+	},
+	
 	isDirty : function(){
-		return false;
+		return this.originalValue!=this.getActiveEditor().getValue();
 	},
 	
 	setAttachments : function(attachments){
@@ -288,13 +309,6 @@ Ext.extend(GO.base.email.EmailEditorPanel, Ext.Panel, {
 		this.hiddenAttachmentsField.setValue(Ext.encode(this.attachments));
 	},	
 
-	reset : function(){
-		this.setAttachments();
-		this.setInlineAttachments();
-		this.setContentTypeHtml(true);
-	},
-	
-	isFormField:true,
 	
 	getAttachmentsButton : function(){
 		

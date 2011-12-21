@@ -114,7 +114,7 @@ class GO_Base_Util_Html2Text
 	 *  @var string $html
 	 *  @access public
 	 */
-	var $html;
+	private $html;
 
 	/**
 	 *  Contains the converted, formatted text.
@@ -122,7 +122,7 @@ class GO_Base_Util_Html2Text
 	 *  @var string $text
 	 *  @access public
 	 */
-	var $text;
+	private $text;
 
 	/**
 	 *  Maximum width of the formatted text, in columns.
@@ -133,7 +133,7 @@ class GO_Base_Util_Html2Text
 	 *  @var integer $width
 	 *  @access public
 	 */
-	var $width = 70;
+	public $width = 70;
 
 	/**
 	 *  List of preg* regular expression patterns to search for,
@@ -143,7 +143,7 @@ class GO_Base_Util_Html2Text
 	 *  @access public
 	 *  @see $replace
 	 */
-	var $search = array(
+	private $search = array(
         "/\r/",                                  // Non-legal carriage return
         "/[\n\t]+/",                             // Newlines and tabs
         '/\s\s+/',                             // Runs of spaces, pre-handling
@@ -197,7 +197,7 @@ class GO_Base_Util_Html2Text
 	 *  @access public
 	 *  @see $search
 	 */
-	var $replace = array(
+	private $replace = array(
         '',                                     // Non-legal carriage return
         '',                                    // Newlines and tabs
         ' ',                                    // Runs of spaces, pre-handling
@@ -251,7 +251,7 @@ class GO_Base_Util_Html2Text
 	 *  @access public
 	 *  @see set_allowed_tags()
 	 */
-	var $allowed_tags = '';
+	public $allowed_tags = '';
 
 	/**
 	 *  Contains the base URL that relative links should resolve to.
@@ -259,7 +259,7 @@ class GO_Base_Util_Html2Text
 	 *  @var string $url
 	 *  @access public
 	 */
-	var $url;
+	public $url;
 
 	/**
 	 *  Indicates whether content in the $html variable has been converted yet.
@@ -268,7 +268,7 @@ class GO_Base_Util_Html2Text
 	 *  @access private
 	 *  @see $html, $text
 	 */
-	var $_converted = false;
+	private $_converted = false;
 
 	/**
 	 *  Contains URL addresses from links to be rendered in plain text.
@@ -277,7 +277,7 @@ class GO_Base_Util_Html2Text
 	 *  @access private
 	 *  @see _build_link_list()
 	 */
-	var $_link_list = '';
+	private $_link_list = '';
 
 	/**
 	 *  Number of valid links detected in the text, used for plain text
@@ -287,7 +287,7 @@ class GO_Base_Util_Html2Text
 	 *  @access private
 	 *  @see _build_link_list()
 	 */
-	var $_link_count = 0;
+	private $_link_count = 0;
 	
 	/**
 	 * Contains a map of links to a number. It is used to use a link reference multiple times
@@ -295,7 +295,7 @@ class GO_Base_Util_Html2Text
 	 * @var Array
 	 */
 	
-	var $refmap = array();
+	private $refmap = array();
 
 	/**
 	 *  Constructor.
@@ -309,7 +309,7 @@ class GO_Base_Util_Html2Text
 	 *  @access public
 	 *  @return void
 	 */
-	function html2text( $source = '', $from_file = false )
+	public function __construct( $source = '', $from_file = false )
 	{
 		if ( !empty($source) ) {
 			$this->set_html($source, $from_file);
@@ -325,7 +325,7 @@ class GO_Base_Util_Html2Text
 	 *  @access public
 	 *  @return void
 	 */
-	function set_html( $source, $from_file = false )
+	public function set_html( $source, $from_file = false )
 	{
 		$this->html = $source;
 
@@ -344,7 +344,7 @@ class GO_Base_Util_Html2Text
 	 *  @access public
 	 *  @return string
 	 */
-	function get_text($link_list=true)
+	public function get_text($link_list=true)
 	{
 		if ( !$this->_converted ) {
 			$this->_convert($link_list);
@@ -359,7 +359,7 @@ class GO_Base_Util_Html2Text
 	 *  @access public
 	 *  @return void
 	 */
-	function print_text($link_list=true)
+	public function print_text($link_list=true)
 	{
 		print $this->get_text($link_list);
 	}
@@ -372,7 +372,7 @@ class GO_Base_Util_Html2Text
 	 *  @access public
 	 *  @return void
 	 */
-	function set_allowed_tags( $allowed_tags = '' )
+	public function set_allowed_tags( $allowed_tags = '' )
 	{
 		if ( !empty($allowed_tags) ) {
 			$this->allowed_tags = $allowed_tags;
@@ -385,7 +385,7 @@ class GO_Base_Util_Html2Text
 	 *  @access public
 	 *  @return void
 	 */
-	function set_base_url( $url = '' )
+	public function set_base_url( $url = '' )
 	{
 		if ( empty($url) ) {
 			if ( !empty($_SERVER['HTTP_HOST']) ) {
@@ -414,7 +414,7 @@ class GO_Base_Util_Html2Text
 	 *  @access private
 	 *  @return void
 	 */
-	function _convert($link_list=true)
+	private function _convert($link_list=true)
 	{
 		// Variables used for building the link list
 		$this->_link_count = 1;
@@ -471,7 +471,7 @@ class GO_Base_Util_Html2Text
 	 *  @access private
 	 *  @return string
 	 */
-	function _build_link_list( $link, $display )
+	private function _build_link_list( $link, $display )
 	{
 		$link = trim($link);
 		$display=trim(strip_tags($display));
@@ -502,5 +502,3 @@ class GO_Base_Util_Html2Text
 	}
 
 }
-
-?>
